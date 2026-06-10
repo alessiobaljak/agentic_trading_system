@@ -90,6 +90,49 @@ def info_others() -> None:
     else:
         _line("Telegram", SKIP)
 
+    # Binance Futures — endpoint PUBBLICO klines (nessuna chiave necessaria):
+    # conferma se il runner/host raggiunge Binance (per il backtest e i dati live).
+    try:
+        r = requests.get("https://fapi.binance.com/fapi/v1/klines",
+                         params={"symbol": "BTCUSDT", "interval": "1d", "limit": 2}, timeout=10)
+        ok = r.status_code == 200 and isinstance(r.json(), list)
+        _line("Binance (klines pubbliche)", OK if ok else FAIL, f"HTTP {r.status_code}")
+    except Exception as exc:  # noqa: BLE001
+        _line("Binance (klines pubbliche)", FAIL, str(exc)[:100])
+
+    # LunarCrush / Coinglass / NewsAPI — testati solo se la chiave è presente.
+    if settings.LUNARCRUSH_API_KEY:
+        try:
+            r = requests.get("https://lunarcrush.com/api4/public/coins/BTC/v1",
+                             headers={"Authorization": f"Bearer {settings.LUNARCRUSH_API_KEY}"},
+                             timeout=10)
+            _line("LunarCrush", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
+        except Exception as exc:  # noqa: BLE001
+            _line("LunarCrush", FAIL, str(exc)[:100])
+    else:
+        _line("LunarCrush", SKIP)
+
+    if settings.COINGLASS_API_KEY:
+        try:
+            r = requests.get("https://open-api-v3.coinglass.com/api/futures/supported-coins",
+                             headers={"coinglassSecret": settings.COINGLASS_API_KEY}, timeout=10)
+            _line("Coinglass", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
+        except Exception as exc:  # noqa: BLE001
+            _line("Coinglass", FAIL, str(exc)[:100])
+    else:
+        _line("Coinglass", SKIP)
+
+    if settings.NEWSAPI_KEY:
+        try:
+            r = requests.get("https://newsapi.org/v2/everything",
+                             params={"q": "bitcoin", "pageSize": 1, "apiKey": settings.NEWSAPI_KEY},
+                             timeout=10)
+            _line("NewsAPI", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
+        except Exception as exc:  # noqa: BLE001
+            _line("NewsAPI", FAIL, str(exc)[:100])
+    else:
+        _line("NewsAPI", SKIP)
+
 
 def main() -> int:
     print("=" * 60)

@@ -1,20 +1,23 @@
 name: gate1-backtest
 
-# GATE 1: esegue il backtest. Se le strategie non sono profittevoli il job
-# fallisce (exit code 1), bloccando di fatto l'avanzamento all'execution.
+# GATE 1: esegue il backtest su dati STORICI REALI (Binance -> Bybit -> OKX).
+# Se le strategie non sono profittevoli il job fallisce (exit 1): è il gate.
 on:
   workflow_dispatch:
     inputs:
       symbol:
-        description: "Simbolo da testare"
+        description: "Simbolo"
         default: "BTCUSDT"
       source:
-        description: "Fonte dati (binance/coinmetrics/synthetic)"
+        description: "Fonte (binance/bybit/okx/coinmetrics/synthetic)"
         default: "binance"
       start:
         default: "2022-01-01"
       end:
         default: "2026-01-01"
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+    paths: ["backtesting/**", "bot/strategies/**", ".github/workflows/backtest.yml"]
 
 jobs:
   backtest:
@@ -30,10 +33,10 @@ jobs:
       - name: Run backtest (GATE 1)
         run: >
           python -m backtesting.run
-          --symbol ${{ inputs.symbol }}
-          --source ${{ inputs.source }}
-          --start ${{ inputs.start }}
-          --end ${{ inputs.end }}
+          --symbol ${{ inputs.symbol || 'BTCUSDT' }}
+          --source ${{ inputs.source || 'binance' }}
+          --start ${{ inputs.start || '2022-01-01' }}
+          --end ${{ inputs.end || '2026-01-01' }}
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v4

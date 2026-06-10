@@ -24,7 +24,7 @@ def main() -> int:
     p.add_argument("--start", default="2022-01-01")
     p.add_argument("--end", default="2026-01-01")
     p.add_argument("--source", default="binance",
-                   choices=["binance", "coinmetrics", "synthetic"])
+                   choices=["binance", "bybit", "okx", "coinmetrics", "synthetic"])
     p.add_argument("--capital", type=float, default=10_000.0)
     args = p.parse_args()
 
