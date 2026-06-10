@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Env / secrets
+.env
+*.env
+!.env.example
+firebase-service-account.json
+*service-account*.json
+
+# Backtesting / runtime output
+backtesting/output/
+*.log
+data_cache/
+
+# Node / Next.js
+dashboard/node_modules/
+dashboard/.next/
+dashboard/out/
+dashboard/.vercel/
+node_modules/
+
+# OS
+.DS_Store
