@@ -1,6 +1,6 @@
 """
 Connectivity check per la CI (GitHub Actions).
-(re-run trigger)
+(re-run trigger v2)
 
 A differenza di verify_keys (che è informativo e non fallisce mai), questo script
 ESCE CON CODICE != 0 se la connessione a Firebase non funziona — così l'esito del
