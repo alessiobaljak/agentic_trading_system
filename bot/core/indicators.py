@@ -81,6 +81,48 @@ def vwap(df: pd.DataFrame) -> pd.Series:
     return (typical * df["volume"]).cumsum() / cum_vol
 
 
+def compute_indicator_frame(candles: list[Candle]) -> pd.DataFrame:
+    """
+    Calcola TUTTI gli indicatori sull'INTERA serie in una sola passata (vettoriale).
+    Usato dal backtester per evitare di ricalcolare la finestra ad ogni barra.
+    Ritorna un DataFrame con una riga per candela e una colonna per indicatore.
+    """
+    df = candles_to_df(candles)
+    if df.empty:
+        return df
+    close = df["close"]
+    macd_line, signal_line, hist = macd(close)
+    bb_u, bb_m, bb_l = bollinger(close)
+    df["ema_fast"] = ema(close, 9)
+    df["ema_slow"] = ema(close, 21)
+    df["rsi"] = rsi(close, 14)
+    df["macd"] = macd_line
+    df["macd_signal"] = signal_line
+    df["macd_hist"] = hist
+    df["bb_upper"] = bb_u
+    df["bb_mid"] = bb_m
+    df["bb_lower"] = bb_l
+    df["atr"] = atr(df, 14)
+    df["vwap"] = vwap(df)
+    df["volume_sma"] = df["volume"].rolling(20).mean()
+    return df
+
+
+def snapshot_from_row(row, timeframe: str) -> IndicatorSnapshot:
+    """Costruisce un IndicatorSnapshot da una riga di compute_indicator_frame."""
+    def g(col):
+        v = row.get(col)
+        return None if v is None or pd.isna(v) else float(v)
+    return IndicatorSnapshot(
+        timeframe=timeframe,
+        ema_fast=g("ema_fast"), ema_slow=g("ema_slow"), rsi=g("rsi"),
+        macd=g("macd"), macd_signal=g("macd_signal"), macd_hist=g("macd_hist"),
+        bb_upper=g("bb_upper"), bb_mid=g("bb_mid"), bb_lower=g("bb_lower"),
+        atr=g("atr"), vwap=g("vwap"), close=g("close"),
+        volume=g("volume"), volume_sma=g("volume_sma"),
+    )
+
+
 def compute_snapshot(candles: list[Candle], timeframe: str) -> IndicatorSnapshot:
     """
     Calcola TUTTI gli indicatori richiesti (EMA 9/21, RSI, MACD, Bollinger,
