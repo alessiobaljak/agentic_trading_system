@@ -4,6 +4,9 @@ name: connectivity-check
 # Secrets (senza mai esporne i valori). Esito success => GitHub <-> Firebase OK.
 on:
   workflow_dispatch: {}
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+    paths: [".github/workflows/connectivity.yml", "scripts/connectivity_check.py"]
 
 jobs:
   connectivity:
