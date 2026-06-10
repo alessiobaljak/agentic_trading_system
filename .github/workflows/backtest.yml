@@ -1,13 +1,13 @@
 name: gate1-backtest
 
-# GATE 1: esegue il backtest su dati STORICI REALI (Binance -> Bybit -> OKX).
-# Se le strategie non sono profittevoli il job fallisce (exit 1): è il gate.
+# GATE 1: backtest MULTI-ASSET su dati storici reali (Binance -> Bybit -> OKX).
+# Aggrega per strategia su più cripto. Se non profittevole il job fallisce (gate).
 on:
   workflow_dispatch:
     inputs:
-      symbol:
-        description: "Simbolo"
-        default: "BTCUSDT"
+      symbols:
+        description: "Paniere (separato da virgole)"
+        default: "BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT,XRPUSDT"
       source:
         description: "Fonte (binance/bybit/okx/coinmetrics/synthetic)"
         default: "binance"
@@ -22,7 +22,7 @@ on:
 jobs:
   backtest:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,10 +30,10 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Run backtest (GATE 1)
+      - name: Run backtest (GATE 1, multi-asset)
         run: >
           python -m backtesting.run
-          --symbol ${{ inputs.symbol || 'BTCUSDT' }}
+          --symbols ${{ inputs.symbols || 'BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT,XRPUSDT' }}
           --source ${{ inputs.source || 'binance' }}
           --start ${{ inputs.start || '2022-01-01' }}
           --end ${{ inputs.end || '2026-01-01' }}
