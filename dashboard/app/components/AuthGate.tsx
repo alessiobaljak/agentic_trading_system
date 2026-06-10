@@ -1,0 +1,85 @@
+'use client';
+
+/**
+ * AuthGate — secondo strato di sicurezza (oltre alla protezione Vercel).
+ *
+ * Le security rules di Firestore/RTDB richiedono un utente autenticato per
+ * leggere lo stato e per scrivere kill switch / risk settings. Questo gate fa
+ * il login con Google e mostra i contenuti solo a sessione autenticata.
+ *
+ * Hardening consigliato: in firebase/firestore.rules e database.rules.json
+ * blocca l'accesso al TUO solo UID (vedi commenti in quei file).
+ */
+import { useEffect, useState } from 'react';
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+  type User,
+} from 'firebase/auth';
+import { getAuthInstance } from '../lib/firebase';
+
+export default function AuthGate({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const unsub = onAuthStateChanged(getAuthInstance(), (u) => {
+        setUser(u);
+        setLoading(false);
+      });
+      return () => unsub();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+      setLoading(false);
+    }
+  }, []);
+
+  async function login() {
+    setError(null);
+    try {
+      await signInWithPopup(getAuthInstance(), new GoogleAuthProvider());
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  }
+
+  if (loading) {
+    return <div className="notice">Caricamento…</div>;
+  }
+
+  if (!user) {
+    return (
+      <div className="notice">
+        <h2 style={{ marginTop: 0 }}>Accesso richiesto</h2>
+        <p>Accedi per vedere lo stato del bot e usare i controlli di rischio.</p>
+        <button onClick={login} className="btn">
+          Accedi con Google
+        </button>
+        {error && (
+          <p className="muted" style={{ marginTop: 12 }}>
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div
+        className="header-bar"
+        style={{ justifyContent: 'flex-end', gap: 12, marginBottom: 8, fontSize: 12 }}
+      >
+        <span className="muted">{user.email ?? user.uid}</span>
+        <button onClick={() => signOut(getAuthInstance())} className="btn btn-ghost">
+          Esci
+        </button>
+      </div>
+      {children}
+    </>
+  );
+}

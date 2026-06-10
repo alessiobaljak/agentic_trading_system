@@ -342,3 +342,13 @@ input[type='range'] {
   justify-content: flex-end;
   margin-top: 20px;
 }
+
+/* Ghost button (used by the auth gate sign-out) */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border, #333);
+  color: inherit;
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+}

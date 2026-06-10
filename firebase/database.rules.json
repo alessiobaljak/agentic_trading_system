@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": false,
+
+    "commands": {
+      "kill_switch": {
+        ".read": "auth != null",
+        ".write": "auth != null && newData.isBoolean()"
+      }
+    }
+  }
+}

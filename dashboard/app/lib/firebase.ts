@@ -9,6 +9,7 @@
 import { getApp, getApps, initializeApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 import { getDatabase, type Database } from 'firebase/database';
+import { getAuth, type Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -46,11 +47,13 @@ export const missingFirebaseVars: string[] = (
 let app: FirebaseApp | null = null;
 let firestoreInstance: Firestore | null = null;
 let rtdbInstance: Database | null = null;
+let authInstance: Auth | null = null;
 
 if (firebaseReady) {
   app = getApps().length ? getApp() : initializeApp(firebaseConfig as Record<string, string>);
   firestoreInstance = getFirestore(app);
   rtdbInstance = getDatabase(app);
+  authInstance = getAuth(app);
 }
 
 /**
@@ -73,4 +76,11 @@ export function getRtdb(): Database {
   return rtdbInstance;
 }
 
-export { app, firestoreInstance as firestore, rtdbInstance as rtdb };
+export function getAuthInstance(): Auth {
+  if (!authInstance) {
+    throw new Error('Auth not initialized: Firebase env vars are missing.');
+  }
+  return authInstance;
+}
+
+export { app, firestoreInstance as firestore, rtdbInstance as rtdb, authInstance as auth };

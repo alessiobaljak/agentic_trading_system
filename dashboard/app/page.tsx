@@ -1,4 +1,5 @@
 import { firebaseReady, missingFirebaseVars } from './lib/firebase';
+import AuthGate from './components/AuthGate';
 import BotStatus from './components/BotStatus';
 import Positions from './components/Positions';
 import EquityCurve from './components/EquityCurve';
@@ -53,25 +54,27 @@ export default function Page() {
       {!firebaseReady ? (
         <ConfigureNotice />
       ) : (
-        <div className="grid">
-          <BotStatus />
+        <AuthGate>
+          <div className="grid">
+            <BotStatus />
 
-          <div className="grid grid-2">
-            <RiskControl />
-            <KillSwitch />
+            <div className="grid grid-2">
+              <RiskControl />
+              <KillSwitch />
+            </div>
+
+            <Positions />
+
+            <div className="grid grid-2">
+              <EquityCurve />
+              <StrategyWeights />
+            </div>
+
+            <Heatmap />
+
+            <Insights />
           </div>
-
-          <Positions />
-
-          <div className="grid grid-2">
-            <EquityCurve />
-            <StrategyWeights />
-          </div>
-
-          <Heatmap />
-
-          <Insights />
-        </div>
+        </AuthGate>
       )}
 
       <footer className="muted" style={{ fontSize: 11, marginTop: 24, textAlign: 'center' }}>

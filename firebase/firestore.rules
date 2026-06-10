@@ -1,0 +1,50 @@
+rules_version = '2';
+
+// ============================================================================
+// Firestore security rules — dashboard (client) vs bot (Admin SDK).
+//
+// IMPORTANTE: il BOT usa il Firebase Admin SDK (service account) che BYPASSA
+// completamente queste regole. Quindi queste regole governano SOLO il client
+// (la dashboard Next.js). Il bot può scrivere trades/memory/weights liberamente.
+//
+// Modello:
+//   * lettura: solo utenti autenticati (la dashboard fa login con Google)
+//   * scrittura dal client: consentita SOLO su user_risk_settings, e solo entro
+//     gli hard bound di sicurezza (difesa in profondità: stessi cap del codice)
+//   * tutto il resto: NON scrivibile dal client
+// ============================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // --- HARDENING opzionale (consigliato): blocca tutto al TUO UID ---
+    // Dopo il primo login, copia il tuo UID (Firebase Console > Authentication)
+    // e sostituiscilo qui sotto, poi usa isOwner() al posto di signedIn().
+    // function isOwner() {
+    //   return signedIn() && request.auth.uid == 'INSERISCI_IL_TUO_UID';
+    // }
+
+    // Parametri di rischio regolabili dall'utente: la dashboard può scriverli,
+    // ma SOLO entro i limiti hardcoded (leverage <= 5, risk_per_trade <= 3%).
+    match /user_risk_settings/{doc} {
+      allow read: if signedIn();
+      allow write: if signedIn()
+        && request.resource.data.leverage is number
+        && request.resource.data.leverage >= 1
+        && request.resource.data.leverage <= 5
+        && request.resource.data.risk_per_trade is number
+        && request.resource.data.risk_per_trade > 0
+        && request.resource.data.risk_per_trade <= 0.03;
+    }
+
+    // Tutto il resto (trades, memory, strategy_weights, insights, ...):
+    // leggibile dalla dashboard, NON scrivibile dal client (lo scrive il bot).
+    match /{document=**} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+  }
+}
