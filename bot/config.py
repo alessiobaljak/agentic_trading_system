@@ -48,8 +48,12 @@ class Settings:
     QUOTE_ASSET: str = "USDT"  # universo: tutti i perpetual *USDT
 
     # ---- Anthropic / Claude ----
+    # NB: usiamo `or` (non il default di getenv) perché nei workflow GitHub una
+    # variabile mappata a un secret inesistente arriva come STRINGA VUOTA, non
+    # come assente — e una stringa vuota farebbe fallire l'API ("model: String
+    # should have at least 1 character").
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
-    ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL", "claude-opus-4-8")
+    ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL") or "claude-opus-4-8"
 
     # ---- Data agents ----
     LUNARCRUSH_API_KEY: str = os.getenv("LUNARCRUSH_API_KEY", "")

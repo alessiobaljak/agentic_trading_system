@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
   push:
     branches: ["claude/brave-albattani-1b12fv"]
-    paths: [".github/workflows/connectivity.yml", "scripts/connectivity_check.py"]
+    paths: [".github/workflows/connectivity.yml", "scripts/connectivity_check.py", "bot/config.py"]
 
 jobs:
   connectivity:
