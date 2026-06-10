@@ -73,9 +73,10 @@ def info_others() -> None:
             anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY).messages.create(
                 model=settings.ANTHROPIC_MODEL, max_tokens=5,
                 messages=[{"role": "user", "content": "ping"}])
-            _line("Anthropic", OK)
+            _line("Anthropic", OK, f"model={settings.ANTHROPIC_MODEL}")
         except Exception as exc:  # noqa: BLE001
-            _line("Anthropic", FAIL, str(exc)[:100])
+            # messaggio completo per diagnosi (nessun segreto qui)
+            _line("Anthropic", FAIL, f"model={settings.ANTHROPIC_MODEL} :: {str(exc)[:300]}")
     else:
         _line("Anthropic", SKIP)
     # Telegram (alert)
