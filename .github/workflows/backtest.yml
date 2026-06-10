@@ -1,0 +1,42 @@
+name: gate1-backtest
+
+# GATE 1: esegue il backtest. Se le strategie non sono profittevoli il job
+# fallisce (exit code 1), bloccando di fatto l'avanzamento all'execution.
+on:
+  workflow_dispatch:
+    inputs:
+      symbol:
+        description: "Simbolo da testare"
+        default: "BTCUSDT"
+      source:
+        description: "Fonte dati (binance/coinmetrics/synthetic)"
+        default: "binance"
+      start:
+        default: "2022-01-01"
+      end:
+        default: "2026-01-01"
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run backtest (GATE 1)
+        run: >
+          python -m backtesting.run
+          --symbol ${{ inputs.symbol }}
+          --source ${{ inputs.source }}
+          --start ${{ inputs.start }}
+          --end ${{ inputs.end }}
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-report
+          path: backtesting/output/

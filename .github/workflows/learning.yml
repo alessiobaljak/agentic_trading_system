@@ -1,0 +1,29 @@
+name: nightly-learning-loop
+
+# Learning Loop notturno (il cuore adattivo). Ogni notte alle 02:00 UTC legge i
+# trade da Firebase, calcola le metriche segmentate, aggiorna il memory_report e
+# i pesi dinamici per strategia × regime, e (la domenica) genera l'insight RAG.
+on:
+  schedule:
+    - cron: "0 2 * * *"      # 02:00 UTC ogni giorno
+  workflow_dispatch: {}       # esecuzione manuale on-demand
+
+jobs:
+  learn:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Run learning loop
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+        run: python -m bot.learning.learning_loop
