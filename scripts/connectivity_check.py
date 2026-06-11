@@ -91,15 +91,32 @@ def info_others() -> None:
     else:
         _line("Telegram", SKIP)
 
-    # Binance Futures — endpoint PUBBLICO klines (nessuna chiave necessaria):
-    # conferma se il runner/host raggiunge Binance (per il backtest e i dati live).
+    # Binance Futures — endpoint PUBBLICI (nessuna chiave): klines + futures-data.
     try:
         r = requests.get("https://fapi.binance.com/fapi/v1/klines",
                          params={"symbol": "BTCUSDT", "interval": "1d", "limit": 2}, timeout=10)
         ok = r.status_code == 200 and isinstance(r.json(), list)
-        _line("Binance (klines pubbliche)", OK if ok else FAIL, f"HTTP {r.status_code}")
+        _line("Binance klines (pubblico)", OK if ok else FAIL, f"HTTP {r.status_code}")
     except Exception as exc:  # noqa: BLE001
-        _line("Binance (klines pubbliche)", FAIL, str(exc)[:100])
+        _line("Binance klines (pubblico)", FAIL, str(exc)[:100])
+    try:
+        r = requests.get("https://fapi.binance.com/futures/data/globalLongShortAccountRatio",
+                         params={"symbol": "BTCUSDT", "period": "1h", "limit": 1}, timeout=10)
+        ok = r.status_code == 200 and isinstance(r.json(), list)
+        _line("Binance futures-data OI/LS (pubblico)", OK if ok else FAIL, f"HTTP {r.status_code}")
+    except Exception as exc:  # noqa: BLE001
+        _line("Binance futures-data OI/LS (pubblico)", FAIL, str(exc)[:100])
+
+    # CoinGecko — fonte sentiment GRATUITA e senza chiave (sostituisce LunarCrush).
+    try:
+        r = requests.get("https://api.coingecko.com/api/v3/coins/bitcoin",
+                         params={"localization": "false", "tickers": "false",
+                                 "market_data": "false", "community_data": "false",
+                                 "developer_data": "false"}, timeout=10)
+        ok = r.status_code == 200 and "sentiment_votes_up_percentage" in r.json()
+        _line("CoinGecko sentiment (gratis)", OK if ok else FAIL, f"HTTP {r.status_code}")
+    except Exception as exc:  # noqa: BLE001
+        _line("CoinGecko sentiment (gratis)", FAIL, str(exc)[:100])
 
     # LunarCrush / Coinglass / NewsAPI — testati solo se la chiave è presente.
     if settings.LUNARCRUSH_API_KEY:
@@ -116,21 +133,21 @@ def info_others() -> None:
                 ok = r2.status_code == 200
             else:
                 ok = True
-            _line("LunarCrush", OK if ok else FAIL, detail)
+            _line("LunarCrush (opzionale)", OK if ok else FAIL, detail)
         except Exception as exc:  # noqa: BLE001
             _line("LunarCrush", FAIL, str(exc)[:100])
     else:
-        _line("LunarCrush", SKIP)
+        _line("LunarCrush (opzionale)", SKIP)
 
     if settings.COINGLASS_API_KEY:
         try:
             r = requests.get("https://open-api-v3.coinglass.com/api/futures/supported-coins",
                              headers={"coinglassSecret": settings.COINGLASS_API_KEY}, timeout=10)
-            _line("Coinglass", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
+            _line("Coinglass (opzionale)", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
         except Exception as exc:  # noqa: BLE001
-            _line("Coinglass", FAIL, str(exc)[:100])
+            _line("Coinglass (opzionale)", FAIL, str(exc)[:100])
     else:
-        _line("Coinglass", SKIP)
+        _line("Coinglass (opzionale)", SKIP)
 
     if settings.NEWSAPI_KEY:
         try:

@@ -86,7 +86,13 @@ class MarketScanner:
         score = sum(WEIGHTS[k] * comp[k] for k in WEIGHTS)
         return score, comp
 
-    def scan(self, symbols: Optional[list[str]] = None) -> list[ScanResult]:
+    def scan(self, symbols: Optional[list[str]] = None,
+             fetch_sentiment: bool = False) -> list[ScanResult]:
+        """
+        Scansiona l'universo. Di default NON interroga la fonte sentiment per ogni
+        simbolo (sarebbero decine di chiamate -> rate limit CoinGecko): il sentiment
+        viene preso solo per i pochi asset selezionati, nel loop principale.
+        """
         if symbols is None:
             symbols = self.price.list_perpetual_symbols()[: self.max_symbols]
         results: list[ScanResult] = []
@@ -94,9 +100,10 @@ class MarketScanner:
             snap = self.price.build_snapshot(sym)
             if snap is None:
                 continue
-            sent = self.sentiment.get_sentiment(sym)
-            snap.sentiment_score = sent.get("sentiment_score")
-            snap.social_volume = sent.get("social_volume")
+            if fetch_sentiment:
+                sent = self.sentiment.get_sentiment(sym)
+                snap.sentiment_score = sent.get("sentiment_score")
+                snap.social_volume = sent.get("social_volume")
             score, comp = self._score(snap)
             results.append(ScanResult(symbol=sym, score=score, components=comp, snapshot=snap))
         results.sort(key=lambda r: r.score, reverse=True)

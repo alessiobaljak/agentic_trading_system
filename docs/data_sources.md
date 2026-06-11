@@ -2,13 +2,18 @@
 
 | Agente | Fonte | Chiave | Note |
 |--------|-------|--------|------|
-| Price & Futures | Binance Futures REST/WS | `BINANCE_API_*` | klines multi-TF, mark price, funding, OI; WS per liquidation stream (estensione) |
-| Sentiment | LunarCrush API v4 | `LUNARCRUSH_API_KEY` | social volume + sentiment, normalizzato 0..1 |
-| On-Chain | Coinglass | `COINGLASS_API_KEY` | open interest, liquidation heatmap, funding |
+| Price & Futures | Binance Futures REST/WS | `BINANCE_API_*` (dati pubblici senza chiave) | klines multi-TF, mark price, funding, OI |
+| **Sentiment** | **CoinGecko** | **— (gratis)** | `sentiment_votes_up_percentage` per-coin → 0..1; fonte primaria |
+| **On-Chain** | **Binance public futures-data** | **— (gratis)** | open interest, funding, long/short ratio |
 | On-Chain | Alternative.me F&G | — | Fear & Greed Index 0..100, senza chiave |
-| On-Chain | CoinMetrics community | — | metriche/prezzi reference rate (anche per il backtest) |
-| Macro & News | NewsAPI free | `NEWSAPI_KEY` | headline crypto |
+| Macro & News | NewsAPI.org | `NEWSAPI_KEY` | headline crypto (opzionale) |
 | Macro & News | Claude | `ANTHROPIC_API_KEY` | classificazione impatto news (low/medium/high) |
+| Sentiment (opz.) | LunarCrush API v4 | `LUNARCRUSH_API_KEY` | **a pagamento**; usato solo se la chiave risponde, altrimenti CoinGecko |
+| On-Chain (opz.) | Coinglass | `COINGLASS_API_KEY` | **a pagamento**; non necessario, sostituito da Binance public |
+
+> **Tutte le fonti necessarie sono gratuite e senza chiave** (Binance pubblico,
+> CoinGecko, Alternative.me). LunarCrush e Coinglass sono opzionali a pagamento e
+> NON servono: il sistema degrada con grazia e usa le alternative free.
 
 ## Degradazione graceful
 Ogni agente ritorna `None`/valori vuoti se la chiave manca o la richiesta

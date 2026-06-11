@@ -24,6 +24,7 @@ from bot.agents.market_scanner import MarketScanner
 from bot.agents.onchain_agent import OnChainAgent
 from bot.agents.price_agent import PriceAgent
 from bot.agents.regime_detector import RegimeDetector
+from bot.agents.sentiment_agent import SentimentAgent
 from bot.execution.executor import ExecutionEngine
 from bot.execution.notifier import TelegramNotifier
 from bot.learning.adaptation import AdaptationEngine
@@ -38,7 +39,8 @@ class TradingBot:
         self.fb = get_firebase()
         self.price = PriceAgent()
         self.onchain = OnChainAgent()
-        self.scanner = MarketScanner(self.price)
+        self.sentiment = SentimentAgent()
+        self.scanner = MarketScanner(self.price, self.sentiment)
         self.regime_detector = RegimeDetector()
         self.adaptation = AdaptationEngine(self.fb)
         self.orchestrator = Orchestrator(self.adaptation)
@@ -105,6 +107,10 @@ class TradingBot:
             if snap:
                 snap.regime = self.regime
                 snap.fear_greed = fng
+                # sentiment solo per i pochi asset selezionati (CoinGecko, gratis)
+                sent = self.sentiment.get_sentiment(sym)
+                snap.sentiment_score = sent.get("sentiment_score")
+                snap.social_volume = sent.get("social_volume")
                 self.selected[sym] = snap
 
     # ------------------------------------------------------------------ #

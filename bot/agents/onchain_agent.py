@@ -1,9 +1,12 @@
 """
-On-Chain Agent — Coinglass (OI, funding, liquidation) + Alternative.me (Fear & Greed).
+On-Chain / Derivatives Agent — fonti GRATUITE e senza chiave.
 
-Il Fear & Greed Index di Alternative.me è gratuito e senza chiave: è la fonte
-principale qui. Coinglass richiede una chiave (open interest / liquidation heatmap)
-e degrada a None se assente.
+  * Open Interest, Funding, Long/Short ratio -> Binance public futures data
+    (endpoint pubblici di fapi.binance.com, NESSUNA chiave necessaria).
+  * Fear & Greed Index -> Alternative.me (gratis, senza chiave).
+
+Coinglass resta supportato come fonte OPZIONALE (se `COINGLASS_API_KEY` è
+presente), ma NON è più necessario: i dati equivalenti arrivano da Binance.
 """
 from __future__ import annotations
 
@@ -14,6 +17,8 @@ import requests
 from bot.config import settings
 
 ALT_FNG = "https://api.alternative.me/fng/"
+# dati pubblici futures Binance (mainnet, validi anche se il bot opera su testnet)
+FAPI = "https://fapi.binance.com"
 COINGLASS_BASE = "https://open-api-v3.coinglass.com/api"
 
 
@@ -22,34 +27,60 @@ class OnChainAgent:
         self.coinglass_key = coinglass_key
         self.timeout = timeout
 
-    def fear_greed(self) -> Optional[int]:
-        """Fear & Greed Index 0-100 (0=extreme fear, 100=extreme greed)."""
+    def _get(self, url: str, params: dict) -> Optional[object]:
         try:
-            r = requests.get(ALT_FNG, params={"limit": 1}, timeout=self.timeout)
+            r = requests.get(url, params=params, timeout=self.timeout)
             r.raise_for_status()
-            data = r.json().get("data", [])
-            if data:
-                return int(data[0]["value"])
+            return r.json()
         except Exception as exc:  # noqa: BLE001
-            print(f"[onchain_agent] fear&greed fallito: {exc}")
+            print(f"[onchain_agent] GET {url} fallito: {exc}")
+            return None
+
+    # ---- Fear & Greed (gratis) ----
+    def fear_greed(self) -> Optional[int]:
+        data = self._get(ALT_FNG, {"limit": 1})
+        try:
+            if data and data.get("data"):
+                return int(data["data"][0]["value"])
+        except Exception:  # noqa: BLE001
+            pass
         return None
 
+    # ---- Open Interest (Binance public, gratis) ----
     def open_interest(self, symbol: str) -> Optional[float]:
-        """OI aggregato da Coinglass (richiede chiave)."""
+        data = self._get(f"{FAPI}/fapi/v1/openInterest", {"symbol": symbol})
+        if isinstance(data, dict) and data.get("openInterest") is not None:
+            return float(data["openInterest"])
+        # fallback opzionale Coinglass
+        return self._coinglass_oi(symbol)
+
+    # ---- Funding rate (Binance public, gratis) ----
+    def funding_rate(self, symbol: str) -> Optional[float]:
+        data = self._get(f"{FAPI}/fapi/v1/premiumIndex", {"symbol": symbol})
+        if isinstance(data, dict) and data.get("lastFundingRate") is not None:
+            return float(data["lastFundingRate"])
+        return None
+
+    # ---- Long/Short account ratio (Binance public, gratis) ----
+    def long_short_ratio(self, symbol: str, period: str = "1h") -> Optional[float]:
+        data = self._get(f"{FAPI}/futures/data/globalLongShortAccountRatio",
+                         {"symbol": symbol, "period": period, "limit": 1})
+        if isinstance(data, list) and data:
+            try:
+                return float(data[-1]["longShortRatio"])
+            except Exception:  # noqa: BLE001
+                return None
+        return None
+
+    # ---- Coinglass (opzionale) ----
+    def _coinglass_oi(self, symbol: str) -> Optional[float]:
         if not self.coinglass_key:
             return None
         coin = symbol.replace(settings.QUOTE_ASSET, "")
-        try:
-            r = requests.get(
-                f"{COINGLASS_BASE}/futures/openInterest",
-                headers={"coinglassSecret": self.coinglass_key},
-                params={"symbol": coin},
-                timeout=self.timeout,
-            )
-            r.raise_for_status()
-            data = r.json().get("data", {})
-            if isinstance(data, dict):
-                return data.get("openInterest")
-        except Exception as exc:  # noqa: BLE001
-            print(f"[onchain_agent] OI {coin} fallito: {exc}")
+        data = self._get(f"{COINGLASS_BASE}/futures/openInterest",
+                         {"symbol": coin})  # header non passato: best-effort
+        if isinstance(data, dict):
+            d = data.get("data")
+            if isinstance(d, dict):
+                return d.get("openInterest")
         return None

@@ -57,27 +57,53 @@ def check_anthropic() -> None:
 
 def check_lunarcrush() -> None:
     if not settings.LUNARCRUSH_API_KEY:
-        return _line("LunarCrush", SKIP)
+        return _line("LunarCrush (opzionale)", SKIP)
     import requests
     try:
         r = requests.get("https://lunarcrush.com/api4/public/coins/BTC/v1",
                          headers={"Authorization": f"Bearer {settings.LUNARCRUSH_API_KEY}"},
                          timeout=10)
-        _line("LunarCrush", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
+        _line("LunarCrush (opzionale)", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
     except Exception as exc:  # noqa: BLE001
-        _line("LunarCrush", FAIL, str(exc)[:120])
+        _line("LunarCrush (opzionale)", FAIL, str(exc)[:120])
+
+
+def check_coingecko() -> None:
+    """Fonte sentiment GRATUITA (sostituisce LunarCrush). Sempre testata."""
+    import requests
+    try:
+        r = requests.get("https://api.coingecko.com/api/v3/coins/bitcoin",
+                         params={"localization": "false", "tickers": "false",
+                                 "market_data": "false", "community_data": "false",
+                                 "developer_data": "false"}, timeout=10)
+        ok = r.status_code == 200 and "sentiment_votes_up_percentage" in r.json()
+        _line("CoinGecko sentiment (gratis)", OK if ok else FAIL, f"HTTP {r.status_code}")
+    except Exception as exc:  # noqa: BLE001
+        _line("CoinGecko sentiment (gratis)", FAIL, str(exc)[:120])
+
+
+def check_binance_futures_data() -> None:
+    """OI / long-short pubblici di Binance (gratis, sostituiscono Coinglass)."""
+    import requests
+    try:
+        r = requests.get("https://fapi.binance.com/futures/data/globalLongShortAccountRatio",
+                         params={"symbol": "BTCUSDT", "period": "1h", "limit": 1}, timeout=10)
+        ok = r.status_code == 200 and isinstance(r.json(), list)
+        _line("Binance futures-data (gratis)", OK if ok else FAIL, f"HTTP {r.status_code}")
+    except Exception as exc:  # noqa: BLE001
+        _line("Binance futures-data (gratis)", FAIL, str(exc)[:120])
 
 
 def check_coinglass() -> None:
     if not settings.COINGLASS_API_KEY:
-        return _line("Coinglass", SKIP)
+        return _line("Coinglass (opzionale)", SKIP)
     import requests
     try:
         r = requests.get("https://open-api-v3.coinglass.com/api/futures/supported-coins",
                          headers={"coinglassSecret": settings.COINGLASS_API_KEY}, timeout=10)
-        _line("Coinglass", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
+        _line("Coinglass (opzionale)", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
     except Exception as exc:  # noqa: BLE001
-        _line("Coinglass", FAIL, str(exc)[:120])
+        _line("Coinglass (opzionale)", FAIL, str(exc)[:120])
 
 
 def check_newsapi() -> None:
@@ -150,11 +176,15 @@ def main() -> int:
     print("=" * 60)
     check_binance()
     check_anthropic()
-    check_lunarcrush()
-    check_coinglass()
-    check_newsapi()
     check_firebase()
     check_telegram()
+    print("--- fonti dati gratuite (sentiment / on-chain) ---")
+    check_coingecko()
+    check_binance_futures_data()
+    check_newsapi()
+    print("--- opzionali a pagamento (non necessari) ---")
+    check_lunarcrush()
+    check_coinglass()
     check_vercel_client()
     print("=" * 60)
     print("Nota: 'assente' = credenziale non configurata in questo ambiente.")
