@@ -21,10 +21,31 @@ Schema (vedi docs/firebase_schema.md):
 from __future__ import annotations
 
 import json
+import os
 import threading
 from typing import Any, Optional
 
 from bot.config import settings
+
+
+def resolve_service_account(raw: str) -> Optional[dict]:
+    """
+    Accetta il service account Firebase in DUE forme:
+      * JSON inline (la stringa intera, es. dai GitHub Secrets)
+      * un PERCORSO a un file .json (più comodo sulla VPS)
+    Ritorna il dict, o None se vuoto/non valido.
+    """
+    raw = (raw or "").strip()
+    if not raw:
+        return None
+    if raw.startswith("{"):
+        return json.loads(raw)
+    if os.path.exists(raw):
+        with open(raw, "r", encoding="utf-8") as f:
+            return json.load(f)
+    # ultimo tentativo: provalo come JSON comunque (solleva se non lo è)
+    return json.loads(raw)
+
 
 
 class _InMemoryStore:
@@ -77,7 +98,7 @@ class FirebaseClient:
             import firebase_admin
             from firebase_admin import credentials, db, firestore
 
-            cred_dict = json.loads(settings.FIREBASE_SERVICE_ACCOUNT)
+            cred_dict = resolve_service_account(settings.FIREBASE_SERVICE_ACCOUNT)
             cred = credentials.Certificate(cred_dict)
             opts = {}
             if settings.FIREBASE_RTDB_URL:

@@ -97,9 +97,11 @@ def check_firebase() -> None:
     if not settings.FIREBASE_SERVICE_ACCOUNT:
         return _line("Firebase (service account)", SKIP)
     try:
-        json.loads(settings.FIREBASE_SERVICE_ACCOUNT)  # valida il JSON
-    except Exception:  # noqa: BLE001
-        return _line("Firebase (service account)", FAIL, "JSON non valido")
+        from bot.core.firebase_client import resolve_service_account
+        if resolve_service_account(settings.FIREBASE_SERVICE_ACCOUNT) is None:
+            raise ValueError("vuoto")
+    except Exception as exc:  # noqa: BLE001
+        return _line("Firebase (service account)", FAIL, f"JSON/file non valido: {str(exc)[:60]}")
     try:
         from bot.core.firebase_client import FirebaseClient
         fb = FirebaseClient()

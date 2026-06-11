@@ -30,10 +30,11 @@ def check_firebase() -> bool:
         _line("Firebase", FAIL, "secret FIREBASE_SERVICE_ACCOUNT NON impostato")
         return False
     try:
-        import json
-        json.loads(settings.FIREBASE_SERVICE_ACCOUNT)
-    except Exception:  # noqa: BLE001
-        _line("Firebase", FAIL, "FIREBASE_SERVICE_ACCOUNT non è JSON valido")
+        from bot.core.firebase_client import resolve_service_account
+        if resolve_service_account(settings.FIREBASE_SERVICE_ACCOUNT) is None:
+            raise ValueError("vuoto")
+    except Exception as exc:  # noqa: BLE001
+        _line("Firebase", FAIL, f"FIREBASE_SERVICE_ACCOUNT non valido: {str(exc)[:60]}")
         return False
     try:
         from bot.core.firebase_client import FirebaseClient
