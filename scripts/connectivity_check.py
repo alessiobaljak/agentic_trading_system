@@ -102,11 +102,20 @@ def info_others() -> None:
 
     # LunarCrush / Coinglass / NewsAPI — testati solo se la chiave è presente.
     if settings.LUNARCRUSH_API_KEY:
+        h = {"Authorization": f"Bearer {settings.LUNARCRUSH_API_KEY}"}
         try:
+            # prova endpoint per-coin; se non-200 prova la lista (spesso nel free tier)
             r = requests.get("https://lunarcrush.com/api4/public/coins/BTC/v1",
-                             headers={"Authorization": f"Bearer {settings.LUNARCRUSH_API_KEY}"},
-                             timeout=10)
-            _line("LunarCrush", OK if r.status_code == 200 else FAIL, f"HTTP {r.status_code}")
+                             headers=h, timeout=10)
+            detail = f"coins/BTC -> HTTP {r.status_code}"
+            if r.status_code != 200:
+                r2 = requests.get("https://lunarcrush.com/api4/public/coins/list/v1",
+                                  headers=h, timeout=10)
+                detail += f" | coins/list -> HTTP {r2.status_code}"
+                ok = r2.status_code == 200
+            else:
+                ok = True
+            _line("LunarCrush", OK if ok else FAIL, detail)
         except Exception as exc:  # noqa: BLE001
             _line("LunarCrush", FAIL, str(exc)[:100])
     else:
