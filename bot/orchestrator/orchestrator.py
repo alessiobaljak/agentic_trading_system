@@ -36,13 +36,21 @@ class Orchestrator:
     def collect_signals(
         self, assets: dict[str, AssetSnapshot], regime: Regime
     ) -> list[dict]:
-        """Raccoglie i segnali delle strategie attive nel regime corrente."""
+        """
+        Raccoglie i segnali delle strategie attive nel regime corrente.
+        Per OGNI asset istanzia le strategie con i PARAMETRI OTTIMIZZATI per quel
+        coin (walk-forward) e opera solo le coppie (asset, strategia) che hanno
+        passato la validazione out-of-sample.
+        """
         ctx = StrategyContext(all_assets=assets, regime=regime)
         signals = []
-        for strat in self.strategies:
-            if not strat.is_active_in(regime):
-                continue
-            for sym, asset in assets.items():
+        for sym, asset in assets.items():
+            params_by_strat = self.adaptation.params_for(sym)
+            for strat in get_all_strategies(params_by_strat):
+                if not strat.is_active_in(regime):
+                    continue
+                if not self.adaptation.is_enabled(sym, strat.name):
+                    continue
                 sig = strat.generate_signal(asset, ctx)
                 if sig is None:
                     continue

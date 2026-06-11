@@ -1,0 +1,41 @@
+name: strategy-optimizer
+
+# Job AUTONOMO "test -> learn -> iterate": ogni giorno ri-ottimizza i parametri
+# delle strategie per ogni asset (walk-forward, validazione out-of-sample) e
+# scrive i migliori su Firebase. Nessuna validazione manuale.
+on:
+  schedule:
+    - cron: "0 3 * * *"      # ogni giorno alle 03:00 UTC (dopo il learning loop)
+  workflow_dispatch:
+    inputs:
+      symbols:
+        description: "Paniere (virgole)"
+        default: "BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT,XRPUSDT"
+      windows:
+        description: "Finestre walk-forward"
+        default: "3"
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+    paths: ["backtesting/optimizer.py", "scripts/optimize.py",
+            "bot/strategies/**", ".github/workflows/optimize.yml"]
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Walk-forward optimization (autonomo)
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+        run: >
+          python -m scripts.optimize
+          --symbols ${{ inputs.symbols || 'BTCUSDT,ETHUSDT,SOLUSDT' }}
+          --windows ${{ inputs.windows || '3' }}
+          --start 2023-01-01 --end 2026-01-01

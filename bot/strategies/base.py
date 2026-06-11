@@ -42,6 +42,19 @@ class Strategy(ABC):
     active_regimes: set[Regime] = set()
     #: descrizione human-readable
     description: str = ""
+    #: parametri DEFAULT (soglie). L'ottimizzatore li sovrascrive per asset.
+    default_params: dict = {}
+    #: griglia di valori da provare in ottimizzazione (walk-forward).
+    #: es. {"rsi_oversold": [25, 30, 35], "atr_mult": [1.0, 1.5, 2.0]}
+    param_grid: dict[str, list] = {}
+
+    def __init__(self, params: Optional[dict] = None) -> None:
+        # i parametri effettivi = default + override (da ottimizzazione)
+        self.params: dict = {**self.default_params, **(params or {})}
+
+    def p(self, key: str, fallback=None):
+        """Legge un parametro (con fallback su default_params)."""
+        return self.params.get(key, self.default_params.get(key, fallback))
 
     def is_active_in(self, regime: Optional[Regime]) -> bool:
         if regime is None:
@@ -106,6 +119,11 @@ def register_strategy(cls: Type[Strategy]) -> Type[Strategy]:
     return cls
 
 
-def get_all_strategies() -> list[Strategy]:
-    """Istanzia tutte le strategie registrate."""
-    return [cls() for cls in STRATEGY_REGISTRY.values()]
+def get_all_strategies(params_by_strategy: Optional[dict[str, dict]] = None) -> list[Strategy]:
+    """
+    Istanzia tutte le strategie registrate.
+    `params_by_strategy`: {strategy_name: {param: value}} per applicare i parametri
+    ottimizzati (letti da Firebase). Le strategie non presenti usano i default.
+    """
+    params_by_strategy = params_by_strategy or {}
+    return [cls(params_by_strategy.get(cls.name)) for cls in STRATEGY_REGISTRY.values()]

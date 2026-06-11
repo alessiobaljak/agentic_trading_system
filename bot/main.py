@@ -55,6 +55,7 @@ class TradingBot:
         self.last_scan = 0.0
         self.last_regime = 0.0
         self.last_decision = 0.0
+        self.last_adapt_reload = 0.0
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
@@ -205,6 +206,11 @@ class TradingBot:
         while max_iterations is None or it < max_iterations:
             now = time.time()
             try:
+                # ricarica pesi + parametri ottimizzati (dal job notturno) ogni 6h
+                if now - self.last_adapt_reload >= 6 * 3600:
+                    self.adaptation.load_weights()
+                    self.adaptation.load_params()
+                    self.last_adapt_reload = now
                 if now - self.last_regime >= settings.REGIME_INTERVAL_MINUTES * 60 or not self.regime:
                     self.refresh_regime(now)
                 self.maybe_scan(now)

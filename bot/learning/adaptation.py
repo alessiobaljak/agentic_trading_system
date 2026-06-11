@@ -29,7 +29,11 @@ class AdaptationEngine:
     def __init__(self, firebase=None) -> None:
         self.fb = firebase or get_firebase()
         self._weights: dict[str, float] = {}   # chiave "strategy|regime" -> peso
+        self._params: dict[str, dict] = {}     # chiave "SYMBOL|strategy" -> params ottimizzati
+        self._passed: set[str] = set()         # coppie "SYMBOL|strategy" che hanno passato OOS
+        self._has_opt_data: bool = False
         self.load_weights()
+        self.load_params()
 
     # ------------------------------------------------------------------ #
     def load_weights(self) -> None:
@@ -55,6 +59,38 @@ class AdaptationEngine:
         if baseline:
             return 1.0
         return self._weights.get(f"{strategy}|{regime.value}", 1.0)
+
+    # ------------------------------------------------------------------ #
+    # Parametri ottimizzati per-asset (walk-forward, job autonomo)        #
+    # ------------------------------------------------------------------ #
+    def load_params(self) -> None:
+        doc = self.fb.get_doc("strategy_params", "current") or {}
+        entries = doc.get("entries", {}) or {}
+        self._params = {}
+        self._passed = set(doc.get("passed", []) or [])
+        for key, e in entries.items():
+            self._params[key] = e.get("params", {}) or {}
+        self._has_opt_data = bool(entries)
+
+    def params_for(self, symbol: str) -> dict[str, dict]:
+        """{strategy: params} per l'asset (solo coppie ottimizzate)."""
+        out: dict[str, dict] = {}
+        prefix = f"{symbol}|"
+        for key, params in self._params.items():
+            if key.startswith(prefix):
+                out[key[len(prefix):]] = params
+        return out
+
+    def is_enabled(self, symbol: str, strategy: str) -> bool:
+        """
+        True se la coppia (asset, strategia) è abilitata a operare.
+        Finché non esistono dati di ottimizzazione, TUTTO è abilitato (il bot
+        funziona coi default). Quando l'ottimizzazione ha girato, opera SOLO le
+        coppie che hanno passato la validazione out-of-sample.
+        """
+        if not self._has_opt_data:
+            return True
+        return f"{symbol}|{strategy}" in self._passed
 
     def is_baseline_cycle(self, rng: Optional[random.Random] = None) -> bool:
         """

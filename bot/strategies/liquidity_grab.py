@@ -20,7 +20,8 @@ class LiquidityGrab(Strategy):
     active_regimes = {Regime.HIGH_UNCERTAINTY, Regime.SIDEWAYS}
     description = "Fade dei falsi breakout (stop hunt) con rientro nel range e volume anomalo."
 
-    VOLUME_SPIKE = 2.0
+    default_params = {"volume_spike": 2.0, "atr_mult_stop": 1.0}
+    param_grid = {"volume_spike": [2.0, 2.5, 3.0], "atr_mult_stop": [0.8, 1.0, 1.5]}
 
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
@@ -33,19 +34,16 @@ class LiquidityGrab(Strategy):
             return None
 
         price = asset.price
-        vol_spike = i.volume > self.VOLUME_SPIKE * i.volume_sma
-        if not vol_spike:
+        if i.volume <= self.p("volume_spike") * i.volume_sma:
             return None
+        am = self.p("atr_mult_stop")
 
-        # Falso breakout rialzista: il prezzo ha toccato/superato la banda superiore con
-        # volume anomalo ma ha richiuso dentro il range (close < bb_upper) -> stop hunt -> short.
         if price >= i.bb_upper * 0.995 and i.close < i.bb_upper and i.close > i.bb_mid:
             return self._signal(asset, Direction.SHORT, 58,
                                 "Sospetto stop hunt sopra la resistenza, rientro nel range",
-                                stop=price + i.atr * 1.0, target=i.bb_mid)
-        # Falso breakout ribassista: stop hunt sotto il supporto -> long.
+                                stop=price + i.atr * am, target=i.bb_mid)
         if price <= i.bb_lower * 1.005 and i.close > i.bb_lower and i.close < i.bb_mid:
             return self._signal(asset, Direction.LONG, 58,
                                 "Sospetto stop hunt sotto il supporto, rientro nel range",
-                                stop=price - i.atr * 1.0, target=i.bb_mid)
+                                stop=price - i.atr * am, target=i.bb_mid)
         return None

@@ -13,6 +13,16 @@ class MeanReversion(Strategy):
     active_regimes = {Regime.SIDEWAYS, Regime.HIGH_UNCERTAINTY}
     description = "Rientro verso la media quando il prezzo tocca le bande di Bollinger con RSI estremo."
 
+    default_params = {
+        "rsi_oversold": 30.0, "rsi_overbought": 70.0,
+        "atr_mult_stop": 1.2,
+    }
+    param_grid = {
+        "rsi_oversold": [20.0, 25.0, 30.0],
+        "rsi_overbought": [70.0, 75.0, 80.0],
+        "atr_mult_stop": [1.0, 1.2, 1.8],
+    }
+
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
     ) -> Optional[StrategySignal]:
@@ -20,19 +30,17 @@ class MeanReversion(Strategy):
         if not i or None in (i.bb_upper, i.bb_lower, i.bb_mid, i.rsi):
             return None
         price = asset.price
+        oversold, overbought = self.p("rsi_oversold"), self.p("rsi_overbought")
+        am = self.p("atr_mult_stop")
 
-        # LONG: prezzo sotto banda inferiore + RSI oversold -> ritorno alla media
-        if price <= i.bb_lower and i.rsi <= 30:
-            conf = 55 + min(25, (30 - i.rsi))
+        if price <= i.bb_lower and i.rsi <= oversold:
+            conf = 55 + min(25, (oversold - i.rsi))
             return self._signal(asset, Direction.LONG, conf,
                                 f"Prezzo sotto BB inferiore, RSI={i.rsi:.0f} oversold",
-                                stop=price - (i.atr or 0) * 1.2 if i.atr else None,
-                                target=i.bb_mid)
-        # SHORT: prezzo sopra banda superiore + RSI overbought
-        if price >= i.bb_upper and i.rsi >= 70:
-            conf = 55 + min(25, (i.rsi - 70))
+                                stop=price - (i.atr or 0) * am if i.atr else None, target=i.bb_mid)
+        if price >= i.bb_upper and i.rsi >= overbought:
+            conf = 55 + min(25, (i.rsi - overbought))
             return self._signal(asset, Direction.SHORT, conf,
                                 f"Prezzo sopra BB superiore, RSI={i.rsi:.0f} overbought",
-                                stop=price + (i.atr or 0) * 1.2 if i.atr else None,
-                                target=i.bb_mid)
+                                stop=price + (i.atr or 0) * am if i.atr else None, target=i.bb_mid)
         return None

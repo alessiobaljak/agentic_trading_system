@@ -13,7 +13,14 @@ class VwapReversion(Strategy):
     active_regimes = {Regime.SIDEWAYS, Regime.BULL_TRENDING, Regime.BEAR_TRENDING}
     description = "Quando il prezzo si allontana troppo dal VWAP (in ATR), fade verso il VWAP."
 
-    DEVIATION_ATR = 1.5   # distanza minima dal VWAP in multipli di ATR
+    default_params = {
+        "deviation_atr": 1.5,   # distanza minima dal VWAP (in ATR)
+        "atr_mult_stop": 1.5,
+    }
+    param_grid = {
+        "deviation_atr": [1.5, 2.0, 2.5, 3.0],   # soglie più alte = meno trade, più selettivo
+        "atr_mult_stop": [1.0, 1.5, 2.0],
+    }
 
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
@@ -23,17 +30,17 @@ class VwapReversion(Strategy):
             return None
         price = asset.price
         dev = (price - i.vwap) / i.atr
+        threshold = self.p("deviation_atr")
+        am = self.p("atr_mult_stop")
 
-        # prezzo molto sopra il VWAP -> short verso il VWAP
-        if dev >= self.DEVIATION_ATR:
-            conf = 55 + min(25, (dev - self.DEVIATION_ATR) * 15)
+        if dev >= threshold:
+            conf = 55 + min(25, (dev - threshold) * 15)
             return self._signal(asset, Direction.SHORT, conf,
                                 f"Prezzo {dev:.1f} ATR sopra VWAP: reversion",
-                                stop=price + i.atr * 1.5, target=i.vwap)
-        # prezzo molto sotto il VWAP -> long verso il VWAP
-        if dev <= -self.DEVIATION_ATR:
-            conf = 55 + min(25, (abs(dev) - self.DEVIATION_ATR) * 15)
+                                stop=price + i.atr * am, target=i.vwap)
+        if dev <= -threshold:
+            conf = 55 + min(25, (abs(dev) - threshold) * 15)
             return self._signal(asset, Direction.LONG, conf,
                                 f"Prezzo {abs(dev):.1f} ATR sotto VWAP: reversion",
-                                stop=price - i.atr * 1.5, target=i.vwap)
+                                stop=price - i.atr * am, target=i.vwap)
         return None

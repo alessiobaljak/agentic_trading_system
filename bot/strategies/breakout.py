@@ -13,9 +13,18 @@ class Breakout(Strategy):
     active_regimes = {Regime.BULL_TRENDING, Regime.BEAR_TRENDING, Regime.HIGH_UNCERTAINTY}
     description = "Rottura delle bande di Bollinger dopo compressione di volatilità, con spike di volume."
 
-    # soglia: ATR corrente < 70% della banda media implica compressione
-    COMPRESSION_RATIO = 0.7
-    VOLUME_SPIKE = 1.8
+    default_params = {
+        "compression": 0.07,   # banda/mid sotto questa soglia = compressione
+        "volume_spike": 1.8,   # volume > x * media
+        "atr_mult_stop": 1.0,
+        "rr": 2.5,
+        "confidence": 65.0,
+    }
+    param_grid = {
+        "compression": [0.05, 0.07, 0.10],
+        "volume_spike": [1.5, 1.8, 2.5],
+        "rr": [1.5, 2.0, 2.5, 3.0],
+    }
 
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
@@ -28,19 +37,21 @@ class Breakout(Strategy):
             return None
 
         band_width = (i.bb_upper - i.bb_lower)
-        compressed = band_width / i.bb_mid < self.COMPRESSION_RATIO * 0.1  # banda stretta
-        vol_spike = i.volume > self.VOLUME_SPIKE * i.volume_sma
+        compressed = band_width / i.bb_mid < self.p("compression")
+        vol_spike = i.volume > self.p("volume_spike") * i.volume_sma
         price = asset.price
 
         if not (compressed and vol_spike):
             return None
 
         if price > i.bb_upper:
-            stop, target = self._atr_stop_target(asset, Direction.LONG, atr_mult_stop=1.0, rr=2.5)
-            return self._signal(asset, Direction.LONG, 65,
+            stop, target = self._atr_stop_target(asset, Direction.LONG,
+                                                  atr_mult_stop=self.p("atr_mult_stop"), rr=self.p("rr"))
+            return self._signal(asset, Direction.LONG, self.p("confidence"),
                                 "Breakout rialzista dopo compressione, volume spike", stop, target)
         if price < i.bb_lower:
-            stop, target = self._atr_stop_target(asset, Direction.SHORT, atr_mult_stop=1.0, rr=2.5)
-            return self._signal(asset, Direction.SHORT, 65,
+            stop, target = self._atr_stop_target(asset, Direction.SHORT,
+                                                  atr_mult_stop=self.p("atr_mult_stop"), rr=self.p("rr"))
+            return self._signal(asset, Direction.SHORT, self.p("confidence"),
                                 "Breakout ribassista dopo compressione, volume spike", stop, target)
         return None
