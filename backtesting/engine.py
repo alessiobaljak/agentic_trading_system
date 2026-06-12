@@ -90,9 +90,13 @@ class StrategyStats:
 
 
 class Backtester:
-    def __init__(self, window: int = 200, capital: float = 10_000.0) -> None:
+    def __init__(self, window: int = 200, capital: float = 10_000.0,
+                 cost_per_trade: float = 0.0008) -> None:
         self.window = window
         self.capital = capital
+        # costo round-trip (fee + slippage) come frazione del nozionale.
+        # 0.0008 = 0.08% (taker ~0.04%/lato + slippage). Sottratto a OGNI trade.
+        self.cost_per_trade = cost_per_trade
         self.regime_detector = RegimeDetector()
         self.strategies = get_all_strategies()
 
@@ -150,6 +154,7 @@ class Backtester:
                 j += 1
 
             pnl_pct = (exit_price - entry) / entry if long else (entry - exit_price) / entry
+            pnl_pct -= self.cost_per_trade   # al netto di fee + slippage (round-trip)
             stats.trades.append(SimTrade(
                 strategy=strategy.name, regime=regime.value, direction=sig.direction.value,
                 entry_price=entry, exit_price=exit_price, pnl_pct=pnl_pct,
