@@ -1,6 +1,7 @@
 import { firebaseReady, missingFirebaseVars } from './lib/firebase';
 import AuthGate from './components/AuthGate';
 import BotStatus from './components/BotStatus';
+import OptimizedStrategies from './components/OptimizedStrategies';
 import Positions from './components/Positions';
 import EquityCurve from './components/EquityCurve';
 import Heatmap from './components/Heatmap';
@@ -71,6 +72,8 @@ export default function Page() {
             </div>
 
             <Heatmap />
+
+            <OptimizedStrategies />
 
             <Insights />
           </div>

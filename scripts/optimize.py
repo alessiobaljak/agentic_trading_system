@@ -110,7 +110,30 @@ def main() -> int:
         print(f"   ✅ {k}  -> {out[k]['params']}")
     print("[optimize] parametri scritti su Firebase strategy_params/current")
     print("=" * 60)
+
+    # --- report automatico su Telegram (nessuna copia manuale) ---
+    _notify_telegram(out, summary_passed)
     return 0
+
+
+def _notify_telegram(out: dict, passed: list[str]) -> None:
+    try:
+        from bot.execution.notifier import TelegramNotifier
+        notifier = TelegramNotifier()
+        # ordina i passati per PnL OOS decrescente
+        top = sorted((out[k] for k in passed), key=lambda e: e["oos_pnl_pct"], reverse=True)[:10]
+        lines = [f"🧠 <b>Ottimizzazione completata</b>",
+                 f"{len(passed)}/{len(out)} coppie hanno passato out-of-sample (netto fee).", ""]
+        if top:
+            lines.append("<b>Migliori (coin · strategia · pf · pnl):</b>")
+            for e in top:
+                lines.append(f"✅ {e['symbol']} · {e['strategy']} · pf {e['oos_pf']:.2f} · "
+                             f"{e['oos_pnl_pct']*100:+.0f}% ({e['oos_trades']} trade)")
+        else:
+            lines.append("Nessuna coppia ha passato: strategie/parametri da rivedere.")
+        notifier.send("\n".join(lines))
+    except Exception as exc:  # noqa: BLE001
+        print(f"[optimize] notifica Telegram saltata: {exc}")
 
 
 if __name__ == "__main__":
