@@ -8,21 +8,17 @@ on:
     - cron: "0 3 * * *"      # ogni giorno alle 03:00 UTC (dopo il learning loop)
   workflow_dispatch:
     inputs:
-      symbols:
-        description: "Paniere (virgole)"
-        default: "BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT,XRPUSDT"
+      top:
+        description: "Top-N future per volume (universo)"
+        default: "40"
       windows:
         description: "Finestre walk-forward"
         default: "3"
-  push:
-    branches: ["claude/brave-albattani-1b12fv"]
-    paths: ["backtesting/optimizer.py", "scripts/optimize.py",
-            "bot/strategies/**", ".github/workflows/optimize.yml"]
 
 jobs:
   optimize:
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 320
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,12 +26,13 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Walk-forward optimization (autonomo)
+      - name: Walk-forward optimization (autonomo, universo top-N)
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
         run: >
           python -m scripts.optimize
-          --symbols ${{ inputs.symbols || 'BTCUSDT,ETHUSDT,SOLUSDT' }}
+          --top ${{ inputs.top || '40' }}
           --windows ${{ inputs.windows || '3' }}
+          --max-combos 12
           --start 2023-01-01 --end 2026-01-01

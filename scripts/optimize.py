@@ -19,23 +19,58 @@ from __future__ import annotations
 import argparse
 import time
 
+import requests
+
 from backtesting.data_loader import load_candles
 from backtesting.optimizer import WalkForwardOptimizer
 from bot.core.firebase_client import get_firebase
+
+FAPI = "https://fapi.binance.com"
+
+
+def top_symbols_by_volume(n: int) -> list[str]:
+    """
+    Universo = i top-N perpetual USDT per volume 24h (Layer 2: scansiona TUTTO
+    l'universo, non un set fisso). Usa endpoint pubblici Binance, nessuna chiave.
+    """
+    try:
+        info = requests.get(f"{FAPI}/fapi/v1/exchangeInfo", timeout=20).json()
+        perp = {
+            s["symbol"] for s in info.get("symbols", [])
+            if s.get("contractType") == "PERPETUAL" and s.get("quoteAsset") == "USDT"
+            and s.get("status") == "TRADING"
+        }
+        tickers = requests.get(f"{FAPI}/fapi/v1/ticker/24hr", timeout=20).json()
+        ranked = sorted(
+            (t for t in tickers if t.get("symbol") in perp),
+            key=lambda t: float(t.get("quoteVolume", 0)), reverse=True,
+        )
+        return [t["symbol"] for t in ranked[:n]]
+    except Exception as exc:  # noqa: BLE001
+        print(f"[optimize] impossibile ottenere l'universo Binance ({exc}); uso il default")
+        return []
 
 
 def main() -> int:
     p = argparse.ArgumentParser(description="Ottimizzazione walk-forward autonoma")
     p.add_argument("--symbols", default="BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT,XRPUSDT")
+    p.add_argument("--top", type=int, default=0,
+                   help="se >0, ottimizza i top-N future per volume (ignora --symbols)")
     p.add_argument("--interval", default="1h")
     p.add_argument("--start", default="2023-01-01")
     p.add_argument("--end", default="2026-01-01")
     p.add_argument("--source", default="binance")
     p.add_argument("--windows", type=int, default=3)
+    p.add_argument("--max-combos", type=int, default=12,
+                   help="max combinazioni di parametri provate per strategia (0=tutte)")
     args = p.parse_args()
 
-    symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
-    opt = WalkForwardOptimizer(n_windows=args.windows)
+    if args.top > 0:
+        symbols = top_symbols_by_volume(args.top)
+        print(f"[optimize] universo: top {args.top} per volume -> {len(symbols)} coin")
+    if not args.top or not symbols:
+        symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
+    opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos)
     fb = get_firebase()
 
     out: dict[str, dict] = {}

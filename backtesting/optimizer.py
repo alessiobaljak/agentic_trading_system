@@ -17,6 +17,7 @@ Output pensato per essere scritto su Firebase e letto dal bot:
 from __future__ import annotations
 
 import itertools
+import random
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -55,12 +56,18 @@ class WalkForwardOptimizer:
         pf_threshold: float = 1.10,
         capital: float = 10_000.0,
         warmup: int = 200,
+        max_combos: int = 0,
+        seed: int = 7,
     ) -> None:
         self.n_windows = n_windows
         self.min_trades_train = min_trades_train
         self.min_trades_oos = min_trades_oos
         self.pf_threshold = pf_threshold
         self.bt = Backtester(window=warmup, capital=capital)
+        # se >0, campiona al massimo questo numero di combinazioni per strategia
+        # (per tenere i tempi gestibili quando si ottimizzano molti coin)
+        self.max_combos = max_combos
+        self._rng = random.Random(seed)
 
     # ------------------------------------------------------------------ #
     def _windows(self, n: int) -> list[tuple[int, int, int, int]]:
@@ -95,6 +102,8 @@ class WalkForwardOptimizer:
             combos = _param_combos(getattr(cls, "param_grid", {}))
             if not combos:
                 continue  # strategia non ottimizzabile (nessuna griglia)
+            if self.max_combos and len(combos) > self.max_combos:
+                combos = self._rng.sample(combos, self.max_combos)
 
             oos = StrategyStats(strategy=name)
             history: list[dict] = []

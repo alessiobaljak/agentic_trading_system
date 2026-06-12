@@ -57,6 +57,30 @@ RestartSec=10
 [Install]
 WantedBy=multi-user.target
 EOF
+
+echo "[setup] timer notturno di ottimizzazione strategie (universo top-N)..."
+cat > /etc/systemd/system/trading-optimizer.service <<EOF
+[Unit]
+Description=Agentic Trading - Strategy Optimizer (walk-forward, autonomo)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=$APP_DIR
+EnvironmentFile=$APP_DIR/.env
+ExecStart=$APP_DIR/.venv/bin/python -m scripts.optimize --top 40 --windows 3 --max-combos 12
+EOF
+cat > /etc/systemd/system/trading-optimizer.timer <<EOF
+[Unit]
+Description=Esegue l'ottimizzatore ogni notte alle 03:00
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
 systemctl daemon-reload
 
 cat <<EOF
@@ -71,5 +95,7 @@ Setup completato. Prossimi passi (li fai tu):
      # avvia il bot in paper trading 24/7
   4) journalctl -u trading-bot -f
      # guarda i log live
+  5) systemctl enable --now trading-optimizer.timer
+     # attiva la ri-ottimizzazione autonoma ogni notte alle 03:00
 ============================================================
 EOF
