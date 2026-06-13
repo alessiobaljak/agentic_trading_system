@@ -60,11 +60,13 @@ def build() -> str:
     pairs = reg.get("pairs", {}) or {}
     validated = reg.get("validated", []) or []
     ready = reg.get("ready", False)
+    cov = reg.get("coverage", 0) * 100
+    target = reg.get("ready_fraction", 0.6) * 100
     lines += [
         "## GATE 1 — Validazione strategie",
         f"- stato: **{'✅ SUPERATO — pronti per il paper trading' if ready else '🔄 in corso'}**",
-        f"- crypto con strategia validata: **{reg.get('coins_covered', 0)} / "
-        f"{reg.get('ready_coins', 5)}**",
+        f"- copertura universo: **{reg.get('coins_covered', 0)}/{reg.get('universe_size', 0)} "
+        f"crypto ({cov:.0f}%)** · obiettivo ≥ {target:.0f}%",
         f"- coppie validate (>= {reg.get('min_passes', 3)} pass OOS): **{len(validated)}**",
         f"- aggiornato: {_ts(reg.get('updated_at'))}",
         "",

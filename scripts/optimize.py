@@ -119,12 +119,13 @@ def main() -> int:
     # --- registro di validazione cumulativo (robustezza nel tempo) ---
     reg = update_registry(fb, out, summary_passed)
 
+    cov_pct = reg["coverage"] * 100
     gate_str = ("SUPERATO ✅" if reg["ready"]
-                else f"in corso ({reg['coins_covered']}/{READY_COINS} crypto)")
+                else f"in corso ({cov_pct:.0f}% < {READY_FRACTION*100:.0f}%)")
     print("\n" + "=" * 60)
     print(f"[optimize] {len(out)} coppie valutate, {len(summary_passed)} passate in QUESTO run.")
-    print(f"[optimize] REGISTRO: {len(reg['validated'])} coppie VALIDATE "
-          f"(>= {MIN_PASSES} pass) su {reg['coins_covered']} crypto. GATE 1 {gate_str}")
+    print(f"[optimize] REGISTRO: {reg['coins_covered']}/{reg['universe_size']} crypto "
+          f"({cov_pct:.0f}%) con strategia validata (>= {MIN_PASSES} pass). GATE 1 {gate_str}")
     for k in reg["validated"]:
         print(f"   ✅ {k}  passes={reg['pairs'][k]['pass_count']}  -> {reg['pairs'][k]['last_params']}")
     print("=" * 60)
@@ -138,10 +139,14 @@ import os
 
 # numero di run in cui una coppia deve passare l'OOS per essere "validata"
 MIN_PASSES = int(os.getenv("OPTIMIZER_MIN_PASSES", "3"))
-# numero di crypto distinte con strategia validata per dire "GATE 1 superato".
-# Default 15: validare il modello significa avere strategie robuste su una fetta
-# ampia dell'universo scansionato, non su poche crypto. Regolabile via env.
-READY_COINS = int(os.getenv("OPTIMIZER_READY_COINS", "15"))
+# GATE 1 in PERCENTUALE: pronto quando la frazione dei coin scansionati ORA che
+# hanno almeno una strategia validata supera questa soglia. Si adatta se cambiano
+# le crypto nell'universo (non un numero fisso). Regolabile via env.
+READY_FRACTION = float(os.getenv("OPTIMIZER_READY_FRACTION", "0.60"))
+# minimi di sicurezza: non dichiarare "ready" se l'universo è troppo piccolo o se
+# le crypto validate in assoluto sono troppo poche.
+MIN_UNIVERSE = int(os.getenv("OPTIMIZER_MIN_UNIVERSE", "10"))
+MIN_COVERED = int(os.getenv("OPTIMIZER_MIN_COVERED", "5"))
 
 
 def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
@@ -169,18 +174,29 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         pairs[key] = rec
 
     validated = sorted(k for k, r in pairs.items() if r.get("pass_count", 0) >= MIN_PASSES)
-    coins = sorted({pairs[k]["symbol"] for k in validated})
-    ready = len(coins) >= READY_COINS
+    validated_coins = {pairs[k]["symbol"] for k in validated}
+
+    # universo SCANSIONATO in questo run (denominatore della percentuale)
+    current_coins = sorted({e["symbol"] for e in out.values()})
+    covered = [c for c in current_coins if c in validated_coins]
+    coverage = (len(covered) / len(current_coins)) if current_coins else 0.0
+    ready = (coverage >= READY_FRACTION
+             and len(current_coins) >= MIN_UNIVERSE
+             and len(covered) >= MIN_COVERED)
 
     registry = {
         "updated_at": time.time(),
         "pairs": pairs,
         "validated": validated,
-        "coins_covered": len(coins),
-        "coins": coins,
+        "coins_covered": len(covered),
+        "coins": covered,
+        "universe_size": len(current_coins),
+        "coverage": round(coverage, 3),
         "ready": ready,
         "min_passes": MIN_PASSES,
-        "ready_coins": READY_COINS,
+        "ready_fraction": READY_FRACTION,
+        "min_universe": MIN_UNIVERSE,
+        "min_covered": MIN_COVERED,
     }
     fb.set_doc("strategy_registry", "validated", registry)
     return registry
@@ -191,11 +207,12 @@ def _notify_telegram(out: dict, passed: list[str], reg: dict) -> None:
         from bot.execution.notifier import TelegramNotifier
         notifier = TelegramNotifier()
         top = sorted((out[k] for k in passed), key=lambda e: e["oos_pnl_pct"], reverse=True)[:8]
+        cov_pct = reg["coverage"] * 100
         lines = ["🧠 <b>Ottimizzazione completata</b>",
                  f"{len(passed)}/{len(out)} coppie passate in questo run (netto fee).",
-                 f"📚 Registro: <b>{len(reg['validated'])} validate</b> su "
-                 f"<b>{reg['coins_covered']} crypto</b> (servono {reg['min_passes']} pass; "
-                 f"obiettivo {reg['ready_coins']} crypto).", ""]
+                 f"📚 GATE 1: <b>{reg['coins_covered']}/{reg['universe_size']} crypto "
+                 f"({cov_pct:.0f}%)</b> con strategia validata "
+                 f"(obiettivo {reg['ready_fraction']*100:.0f}%).", ""]
         if top:
             lines.append("<b>Migliori in questo run:</b>")
             for e in top:
