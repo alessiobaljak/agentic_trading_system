@@ -64,6 +64,16 @@ class AdaptationEngine:
     # Parametri ottimizzati per-asset (walk-forward, job autonomo)        #
     # ------------------------------------------------------------------ #
     def load_params(self) -> None:
+        # preferisci il REGISTRO validato (coppie robuste, passate piu' volte);
+        # se assente, ricadi sull'ultimo run (strategy_params/current).
+        reg = self.fb.get_doc("strategy_registry", "validated") or {}
+        validated = reg.get("validated") or []
+        pairs = reg.get("pairs", {}) or {}
+        if validated:
+            self._passed = set(validated)
+            self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in validated}
+            self._has_opt_data = True
+            return
         doc = self.fb.get_doc("strategy_params", "current") or {}
         entries = doc.get("entries", {}) or {}
         self._params = {}

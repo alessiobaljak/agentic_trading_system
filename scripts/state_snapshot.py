@@ -55,29 +55,54 @@ def build() -> str:
                          f"@ {p.get('entry_price')} uPnL={p.get('unrealized_pnl')}")
         lines.append("")
 
-    # --- strategie ottimizzate (Firestore) ---
+    # --- GATE 1: registro di validazione cumulativo ---
+    reg = fb.get_doc("strategy_registry", "validated") or {}
+    pairs = reg.get("pairs", {}) or {}
+    validated = reg.get("validated", []) or []
+    ready = reg.get("ready", False)
+    lines += [
+        "## GATE 1 — Validazione strategie",
+        f"- stato: **{'✅ SUPERATO — pronti per il paper trading' if ready else '🔄 in corso'}**",
+        f"- crypto con strategia validata: **{reg.get('coins_covered', 0)} / "
+        f"{reg.get('ready_coins', 5)}**",
+        f"- coppie validate (>= {reg.get('min_passes', 3)} pass OOS): **{len(validated)}**",
+        f"- aggiornato: {_ts(reg.get('updated_at'))}",
+        "",
+    ]
+    if validated:
+        lines.append("### Strategie VALIDATE (operate dal bot)")
+        lines.append("| Coin | Strategia | Passes | PF | PnL OOS | Parametri |")
+        lines.append("|---|---|---|---|---|---|")
+        rows = sorted((pairs[k] for k in validated),
+                      key=lambda e: e.get("last_pnl_pct", 0), reverse=True)
+        for e in rows:
+            params = ", ".join(f"{k}={v}" for k, v in (e.get("last_params") or {}).items())
+            lines.append(f"| {e.get('symbol')} | {e.get('strategy')} | {e.get('pass_count')} | "
+                         f"{e.get('last_pf')} | {e.get('last_pnl_pct', 0)*100:.0f}% | {params} |")
+        lines.append("")
+
+    # --- ultimo run (snapshot corrente) ---
     sp = fb.get_doc("strategy_params", "current") or {}
     entries = sp.get("entries", {}) or {}
     passed = sp.get("passed", []) or []
     lines += [
-        "## Strategie ottimizzate (walk-forward, netto fee)",
+        "## Ultimo run di ottimizzazione",
         f"_aggiornato: {_ts(sp.get('updated_at'))} · {len(entries)} coppie valutate, "
-        f"{len(passed)} passate OOS_",
+        f"{len(passed)} passate in questo run_",
         "",
     ]
     if entries:
         rows = sorted((entries[k] for k in passed if k in entries),
                       key=lambda e: e.get("oos_pnl_pct", 0), reverse=True)
         if rows:
-            lines.append("| Coin | Strategia | PF | PnL OOS | Trade | Win | Parametri |")
-            lines.append("|---|---|---|---|---|---|---|")
+            lines.append("| Coin | Strategia | PF | PnL OOS | Trade | Win |")
+            lines.append("|---|---|---|---|---|---|")
             for e in rows:
-                params = ", ".join(f"{k}={v}" for k, v in (e.get("params") or {}).items())
                 lines.append(f"| {e.get('symbol')} | {e.get('strategy')} | "
                              f"{e.get('oos_pf')} | {e.get('oos_pnl_pct', 0)*100:.0f}% | "
-                             f"{e.get('oos_trades')} | {e.get('oos_win_rate', 0)*100:.0f}% | {params} |")
+                             f"{e.get('oos_trades')} | {e.get('oos_win_rate', 0)*100:.0f}% |")
         else:
-            lines.append("_Nessuna coppia ha passato la validazione out-of-sample._")
+            lines.append("_Nessuna coppia ha passato in questo run._")
     else:
         lines.append("_Nessun risultato di ottimizzazione ancora presente su Firebase._")
     lines.append("")

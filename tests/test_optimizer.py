@@ -56,3 +56,28 @@ def test_adaptation_loads_optimized_params():
     assert eng.is_enabled("ETHUSDT", "grid_trading") is False
     # strategia non ottimizzata su un asset noto -> disabilitata (ci sono dati)
     assert eng.is_enabled("BTCUSDT", "mean_reversion") is False
+
+
+def test_registry_accumulates_and_gates():
+    from scripts.optimize import update_registry, MIN_PASSES
+    from bot.core.firebase_client import FirebaseClient
+    fb = FirebaseClient()
+    out = {
+        "SOLUSDT|breakout": {"symbol": "SOLUSDT", "strategy": "breakout",
+                             "params": {"rr": 2.5}, "oos_pf": 1.2, "oos_pnl_pct": 0.3, "oos_trades": 100},
+        "BTCUSDT|breakout": {"symbol": "BTCUSDT", "strategy": "breakout",
+                             "params": {"rr": 3.0}, "oos_pf": 0.9, "oos_pnl_pct": -0.1, "oos_trades": 50},
+    }
+    reg = {}
+    for _ in range(MIN_PASSES):
+        reg = update_registry(fb, out, passed_now=["SOLUSDT|breakout"])
+    assert "SOLUSDT|breakout" in reg["validated"]
+    assert "BTCUSDT|breakout" not in reg["validated"]
+    assert reg["pairs"]["SOLUSDT|breakout"]["pass_count"] == MIN_PASSES
+    assert reg["coins_covered"] == 1 and reg["ready"] is False
+
+    from bot.learning.adaptation import AdaptationEngine
+    eng = AdaptationEngine(fb)
+    assert eng.is_enabled("SOLUSDT", "breakout") is True
+    assert eng.is_enabled("BTCUSDT", "breakout") is False
+    assert eng.params_for("SOLUSDT") == {"breakout": {"rr": 2.5}}

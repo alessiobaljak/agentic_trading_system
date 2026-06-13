@@ -72,10 +72,10 @@ ExecStart=$APP_DIR/.venv/bin/python -m scripts.optimize --top 40 --windows 3 --m
 EOF
 cat > /etc/systemd/system/trading-optimizer.timer <<EOF
 [Unit]
-Description=Esegue l'ottimizzatore ogni notte alle 03:00
+Description=Esegue l'ottimizzatore in continuazione (ogni 8h) per accumulare validazioni
 
 [Timer]
-OnCalendar=*-*-* 03:00:00
+OnCalendar=*-*-* 00,08,16:00:00
 Persistent=true
 
 [Install]

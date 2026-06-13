@@ -103,34 +103,90 @@ def main() -> int:
         "passed": summary_passed,
     })
 
+    # --- registro di validazione cumulativo (robustezza nel tempo) ---
+    reg = update_registry(fb, out, summary_passed)
+
+    gate_str = ("SUPERATO ✅" if reg["ready"]
+                else f"in corso ({reg['coins_covered']}/{READY_COINS} crypto)")
     print("\n" + "=" * 60)
-    print(f"[optimize] {len(out)} coppie (asset×strategia) valutate, "
-          f"{len(summary_passed)} hanno passato out-of-sample:")
-    for k in summary_passed:
-        print(f"   ✅ {k}  -> {out[k]['params']}")
-    print("[optimize] parametri scritti su Firebase strategy_params/current")
+    print(f"[optimize] {len(out)} coppie valutate, {len(summary_passed)} passate in QUESTO run.")
+    print(f"[optimize] REGISTRO: {len(reg['validated'])} coppie VALIDATE "
+          f"(>= {MIN_PASSES} pass) su {reg['coins_covered']} crypto. GATE 1 {gate_str}")
+    for k in reg["validated"]:
+        print(f"   ✅ {k}  passes={reg['pairs'][k]['pass_count']}  -> {reg['pairs'][k]['last_params']}")
     print("=" * 60)
 
-    # --- report automatico su Telegram (nessuna copia manuale) ---
-    _notify_telegram(out, summary_passed)
+    # --- report automatico su Telegram ---
+    _notify_telegram(out, summary_passed, reg)
     return 0
 
 
-def _notify_telegram(out: dict, passed: list[str]) -> None:
+# numero di run in cui una coppia deve passare l'OOS per essere "validata"
+MIN_PASSES = 3
+# numero di crypto distinte con almeno una strategia validata per dire "GATE 1 superato"
+READY_COINS = 5
+
+
+def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
+    """
+    Accumula nel tempo: ogni run incrementa il pass_count delle coppie che passano.
+    Una coppia è VALIDATA con pass_count >= MIN_PASSES. Il modello è "ready" quando
+    ci sono strategie validate su >= READY_COINS crypto distinte.
+    """
+    doc = fb.get_doc("strategy_registry", "validated") or {}
+    pairs: dict = doc.get("pairs", {}) or {}
+    passed_set = set(passed_now)
+
+    for key, e in out.items():
+        rec = pairs.get(key, {"pass_count": 0})
+        if key in passed_set:
+            rec["pass_count"] = rec.get("pass_count", 0) + 1
+            rec["last_params"] = e["params"]
+            rec["last_pf"] = e["oos_pf"]
+            rec["last_pnl_pct"] = e["oos_pnl_pct"]
+            rec["last_trades"] = e["oos_trades"]
+            rec["last_passed_at"] = time.time()
+        rec["symbol"] = e["symbol"]
+        rec["strategy"] = e["strategy"]
+        rec["last_seen_at"] = time.time()
+        pairs[key] = rec
+
+    validated = sorted(k for k, r in pairs.items() if r.get("pass_count", 0) >= MIN_PASSES)
+    coins = sorted({pairs[k]["symbol"] for k in validated})
+    ready = len(coins) >= READY_COINS
+
+    registry = {
+        "updated_at": time.time(),
+        "pairs": pairs,
+        "validated": validated,
+        "coins_covered": len(coins),
+        "coins": coins,
+        "ready": ready,
+        "min_passes": MIN_PASSES,
+        "ready_coins": READY_COINS,
+    }
+    fb.set_doc("strategy_registry", "validated", registry)
+    return registry
+
+
+def _notify_telegram(out: dict, passed: list[str], reg: dict) -> None:
     try:
         from bot.execution.notifier import TelegramNotifier
         notifier = TelegramNotifier()
-        # ordina i passati per PnL OOS decrescente
-        top = sorted((out[k] for k in passed), key=lambda e: e["oos_pnl_pct"], reverse=True)[:10]
-        lines = [f"🧠 <b>Ottimizzazione completata</b>",
-                 f"{len(passed)}/{len(out)} coppie hanno passato out-of-sample (netto fee).", ""]
+        top = sorted((out[k] for k in passed), key=lambda e: e["oos_pnl_pct"], reverse=True)[:8]
+        lines = ["🧠 <b>Ottimizzazione completata</b>",
+                 f"{len(passed)}/{len(out)} coppie passate in questo run (netto fee).",
+                 f"📚 Registro: <b>{len(reg['validated'])} validate</b> su "
+                 f"<b>{reg['coins_covered']} crypto</b> (servono {reg['min_passes']} pass; "
+                 f"obiettivo {reg['ready_coins']} crypto).", ""]
         if top:
-            lines.append("<b>Migliori (coin · strategia · pf · pnl):</b>")
+            lines.append("<b>Migliori in questo run:</b>")
             for e in top:
-                lines.append(f"✅ {e['symbol']} · {e['strategy']} · pf {e['oos_pf']:.2f} · "
-                             f"{e['oos_pnl_pct']*100:+.0f}% ({e['oos_trades']} trade)")
-        else:
-            lines.append("Nessuna coppia ha passato: strategie/parametri da rivedere.")
+                lines.append(f"• {e['symbol']} · {e['strategy']} · pf {e['oos_pf']:.2f} · "
+                             f"{e['oos_pnl_pct']*100:+.0f}%")
+        if reg["ready"]:
+            lines += ["", "🎯 <b>GATE 1 SUPERATO</b>: modello validato su abbastanza crypto. "
+                      "Si può passare al PAPER TRADING."]
         notifier.send("\n".join(lines))
     except Exception as exc:  # noqa: BLE001
         print(f"[optimize] notifica Telegram saltata: {exc}")

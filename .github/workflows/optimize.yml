@@ -32,7 +32,7 @@ jobs:
           FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
         run: >
           python -m scripts.optimize
-          --top ${{ inputs.top || '40' }}
+          --top ${{ inputs.top || '10' }}
           --windows ${{ inputs.windows || '3' }}
           --max-combos 12
           --start 2023-01-01 --end 2026-01-01
