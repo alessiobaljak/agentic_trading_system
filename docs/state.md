@@ -1,5 +1,5 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-13 17:46 UTC_
+_Generato: 2026-06-13 18:29 UTC_
 
 ## Bot
 - stato: **—** (🔴 offline)
@@ -9,7 +9,7 @@ _Generato: 2026-06-13 17:46 UTC_
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
-- crypto con strategia validata: **0 / 15**
+- copertura universo: **0/0 crypto (0%)** · obiettivo ≥ 60%
 - coppie validate (>= 3 pass OOS): **0**
 - aggiornato: 2026-06-13 15:40 UTC
 
