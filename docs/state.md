@@ -1,5 +1,5 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-13 19:55 UTC_
+_Generato: 2026-06-13 21:38 UTC_
 
 ## Bot
 - stato: **—** (🔴 offline)
@@ -17,23 +17,23 @@ _Generato: 2026-06-13 19:55 UTC_
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
 |---|---|---|---|---|---|
 | TURBOUSDT | trend_following | 3 | 1.258 | 208% | atr_mult_stop=1.5, rr=2.5, require_volume=False, rsi_hi=75.0 |
-| KATUSDT | vwap_reversion | 3 | 1.268 | 195% | atr_mult_stop=1.0, deviation_atr=2.0 |
-| SPACEUSDT | vwap_reversion | 3 | 1.268 | 195% | atr_mult_stop=1.0, deviation_atr=2.0 |
+| KATUSDT | vwap_reversion | 3 | 1.268 | 195% | deviation_atr=2.0, atr_mult_stop=1.0 |
+| SPACEUSDT | vwap_reversion | 3 | 1.268 | 195% | deviation_atr=2.0, atr_mult_stop=1.0 |
 | SATSUSDT | trend_following | 3 | 1.211 | 156% | atr_mult_stop=2.0, rr=2.0, require_volume=False, rsi_hi=70.0 |
-| PENGUUSDT | vwap_reversion | 3 | 1.278 | 114% | atr_mult_stop=1.5, deviation_atr=2.5 |
-| SATSUSDT | mean_reversion | 3 | 1.38 | 57% | atr_mult_stop=1.2, rsi_overbought=70.0, rsi_oversold=20.0 |
-| SHIBUSDT | breakout | 3 | 1.395 | 55% | volume_spike=1.5, rr=2.5, compression=0.05 |
-| NOTUSDT | mean_reversion | 3 | 1.816 | 49% | atr_mult_stop=1.8, rsi_overbought=75.0, rsi_oversold=30.0 |
-| BONKUSDT | mean_reversion | 3 | 1.411 | 43% | atr_mult_stop=1.0, rsi_overbought=70.0, rsi_oversold=30.0 |
-| BOMEUSDT | mean_reversion | 3 | 1.3 | 42% | atr_mult_stop=1.0, rsi_overbought=70.0, rsi_oversold=25.0 |
-| BONKUSDT | breakout | 3 | 1.391 | 40% | volume_spike=1.5, rr=3.0, compression=0.05 |
-| HMSTRUSDT | liquidity_grab | 3 | 3.334 | 39% | atr_mult_stop=1.5, volume_spike=2.5 |
-| BOMEUSDT | breakout | 3 | 1.287 | 39% | volume_spike=1.5, rr=3.0, compression=0.07 |
-| FLOKIUSDT | liquidity_grab | 3 | 1.254 | 18% | atr_mult_stop=0.8, volume_spike=2.0 |
-| PEPEUSDT | mean_reversion | 3 | 1.132 | 16% | atr_mult_stop=1.8, rsi_overbought=70.0, rsi_oversold=20.0 |
-| NOTUSDT | liquidity_grab | 3 | 1.349 | 12% | atr_mult_stop=0.8, volume_spike=2.0 |
-| BONKUSDT | liquidity_grab | 3 | 1.201 | 11% | atr_mult_stop=0.8, volume_spike=2.5 |
-| LINEAUSDT | breakout | 3 | 1.106 | 4% | volume_spike=1.5, rr=1.5, compression=0.1 |
+| PENGUUSDT | vwap_reversion | 3 | 1.278 | 114% | deviation_atr=2.5, atr_mult_stop=1.5 |
+| SATSUSDT | mean_reversion | 3 | 1.38 | 57% | rsi_overbought=70.0, rsi_oversold=20.0, atr_mult_stop=1.2 |
+| SHIBUSDT | breakout | 3 | 1.395 | 55% | rr=2.5, compression=0.05, volume_spike=1.5 |
+| NOTUSDT | mean_reversion | 3 | 1.816 | 49% | rsi_overbought=75.0, rsi_oversold=30.0, atr_mult_stop=1.8 |
+| BONKUSDT | mean_reversion | 3 | 1.411 | 43% | rsi_overbought=70.0, rsi_oversold=30.0, atr_mult_stop=1.0 |
+| BOMEUSDT | mean_reversion | 3 | 1.3 | 42% | rsi_overbought=70.0, rsi_oversold=25.0, atr_mult_stop=1.0 |
+| BONKUSDT | breakout | 3 | 1.391 | 40% | rr=3.0, compression=0.05, volume_spike=1.5 |
+| HMSTRUSDT | liquidity_grab | 3 | 3.334 | 39% | volume_spike=2.5, atr_mult_stop=1.5 |
+| BOMEUSDT | breakout | 3 | 1.287 | 39% | rr=3.0, compression=0.07, volume_spike=1.5 |
+| FLOKIUSDT | liquidity_grab | 3 | 1.254 | 18% | volume_spike=2.0, atr_mult_stop=0.8 |
+| PEPEUSDT | mean_reversion | 3 | 1.132 | 16% | rsi_overbought=70.0, rsi_oversold=20.0, atr_mult_stop=1.8 |
+| NOTUSDT | liquidity_grab | 3 | 1.349 | 12% | volume_spike=2.0, atr_mult_stop=0.8 |
+| BONKUSDT | liquidity_grab | 3 | 1.201 | 11% | volume_spike=2.5, atr_mult_stop=0.8 |
+| LINEAUSDT | breakout | 3 | 1.106 | 4% | rr=1.5, compression=0.1, volume_spike=1.5 |
 
 ## Ultimo run di ottimizzazione
 _aggiornato: 2026-06-13 19:54 UTC · 120 coppie valutate, 22 passate in questo run_
