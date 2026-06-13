@@ -1,24 +1,29 @@
 name: strategy-optimizer
 
-# Job AUTONOMO "test -> learn -> iterate": ogni giorno ri-ottimizza i parametri
-# delle strategie per ogni asset (walk-forward, validazione out-of-sample) e
-# scrive i migliori su Firebase. Nessuna validazione manuale.
+# Motore di validazione AUTONOMO (test -> learn -> iterate). Gira ogni 6h su
+# GitHub (nessuna VPS necessaria in questa fase): ottimizza un universo ampio di
+# crypto via walk-forward out-of-sample e ACCUMULA un registro di validazione su
+# Firebase. Quando ci sono strategie validate su abbastanza crypto -> GATE 1.
 on:
   schedule:
-    - cron: "0 3 * * *"      # ogni giorno alle 03:00 UTC (dopo il learning loop)
+    - cron: "0 */6 * * *"      # ogni 6 ore
   workflow_dispatch:
     inputs:
       top:
         description: "Top-N future per volume (universo)"
-        default: "40"
+        default: "20"
       windows:
         description: "Finestre walk-forward"
         default: "3"
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+    paths: ["backtesting/optimizer.py", "scripts/optimize.py",
+            "bot/strategies/**", ".github/workflows/optimize.yml"]
 
 jobs:
   optimize:
     runs-on: ubuntu-latest
-    timeout-minutes: 320
+    timeout-minutes: 330
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,9 +35,11 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: >
           python -m scripts.optimize
-          --top ${{ inputs.top || '10' }}
+          --top ${{ inputs.top || '20' }}
           --windows ${{ inputs.windows || '3' }}
           --max-combos 12
-          --start 2023-01-01 --end 2026-01-01
+          --start 2024-01-01 --end 2026-01-01

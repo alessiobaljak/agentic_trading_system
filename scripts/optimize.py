@@ -26,13 +26,16 @@ from backtesting.optimizer import WalkForwardOptimizer
 from bot.core.firebase_client import get_firebase
 
 FAPI = "https://fapi.binance.com"
+OKX = "https://www.okx.com"
 
 
 def top_symbols_by_volume(n: int) -> list[str]:
     """
     Universo = i top-N perpetual USDT per volume 24h (Layer 2: scansiona TUTTO
-    l'universo, non un set fisso). Usa endpoint pubblici Binance, nessuna chiave.
+    l'universo, non un set fisso). Prova Binance; se bloccata (es. geo-block sui
+    runner GitHub) ricade su OKX. Nessuna chiave.
     """
+    # --- Binance ---
     try:
         info = requests.get(f"{FAPI}/fapi/v1/exchangeInfo", timeout=20).json()
         perp = {
@@ -41,13 +44,23 @@ def top_symbols_by_volume(n: int) -> list[str]:
             and s.get("status") == "TRADING"
         }
         tickers = requests.get(f"{FAPI}/fapi/v1/ticker/24hr", timeout=20).json()
-        ranked = sorted(
-            (t for t in tickers if t.get("symbol") in perp),
-            key=lambda t: float(t.get("quoteVolume", 0)), reverse=True,
-        )
-        return [t["symbol"] for t in ranked[:n]]
+        if isinstance(tickers, list) and perp:
+            ranked = sorted((t for t in tickers if t.get("symbol") in perp),
+                            key=lambda t: float(t.get("quoteVolume", 0)), reverse=True)
+            if ranked:
+                return [t["symbol"] for t in ranked[:n]]
     except Exception as exc:  # noqa: BLE001
-        print(f"[optimize] impossibile ottenere l'universo Binance ({exc}); uso il default")
+        print(f"[optimize] universo Binance non disponibile ({str(exc)[:60]}); provo OKX")
+
+    # --- OKX fallback (USDT perpetual swap) ---
+    try:
+        data = requests.get(f"{OKX}/api/v5/market/tickers",
+                            params={"instType": "SWAP"}, timeout=20).json().get("data", [])
+        usdt = [t for t in data if t.get("instId", "").endswith("-USDT-SWAP")]
+        ranked = sorted(usdt, key=lambda t: float(t.get("volCcy24h", 0) or 0), reverse=True)
+        return [t["instId"].replace("-USDT-SWAP", "") + "USDT" for t in ranked[:n]]
+    except Exception as exc:  # noqa: BLE001
+        print(f"[optimize] universo OKX non disponibile ({str(exc)[:60]}); uso il default")
         return []
 
 
@@ -121,10 +134,14 @@ def main() -> int:
     return 0
 
 
+import os
+
 # numero di run in cui una coppia deve passare l'OOS per essere "validata"
-MIN_PASSES = 3
-# numero di crypto distinte con almeno una strategia validata per dire "GATE 1 superato"
-READY_COINS = 5
+MIN_PASSES = int(os.getenv("OPTIMIZER_MIN_PASSES", "3"))
+# numero di crypto distinte con strategia validata per dire "GATE 1 superato".
+# Default 15: validare il modello significa avere strategie robuste su una fetta
+# ampia dell'universo scansionato, non su poche crypto. Regolabile via env.
+READY_COINS = int(os.getenv("OPTIMIZER_READY_COINS", "15"))
 
 
 def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
