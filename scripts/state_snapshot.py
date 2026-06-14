@@ -68,6 +68,7 @@ def build() -> str:
         f"- copertura universo: **{reg.get('coins_covered', 0)}/{reg.get('universe_size', 0)} "
         f"crypto ({cov:.0f}%)** · obiettivo ≥ {target:.0f}%",
         f"- coppie validate (>= {reg.get('min_passes', 3)} pass OOS): **{len(validated)}**",
+        f"- universo scansionato: {', '.join(reg.get('universe_coins', [])) or '—'}",
         f"- aggiornato: {_ts(reg.get('updated_at'))}",
         "",
     ]

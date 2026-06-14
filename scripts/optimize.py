@@ -80,15 +80,22 @@ def main() -> int:
     p.add_argument("--windows", type=int, default=3)
     p.add_argument("--max-combos", type=int, default=12,
                    help="max combinazioni di parametri provate per strategia (0=tutte)")
+    p.add_argument("--reset-registry", action="store_true",
+                   help="azzera il registro validato prima di accumulare (ripartenza pulita)")
     args = p.parse_args()
 
+    symbols = []
     if args.top > 0:
         symbols = top_symbols_by_volume(args.top)
         print(f"[optimize] universo: top {args.top} per volume -> {len(symbols)} coin")
-    if not args.top or not symbols:
+    if not symbols:
         symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
+    print(f"[optimize] universo scansionato: {', '.join(symbols)}")
     opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos)
     fb = get_firebase()
+    if args.reset_registry:
+        fb.set_doc("strategy_registry", "validated", {})
+        print("[optimize] registro azzerato (ripartenza pulita)")
 
     out: dict[str, dict] = {}
     summary_passed: list[str] = []
@@ -207,6 +214,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         "coins_covered": len(covered),
         "coins": covered,
         "universe_size": len(current_coins),
+        "universe_coins": current_coins,
         "coverage": round(coverage, 3),
         "ready": ready,
         "min_passes": MIN_PASSES,
@@ -228,7 +236,8 @@ def _notify_telegram(out: dict, passed: list[str], reg: dict) -> None:
                  f"{len(passed)}/{len(out)} coppie passate in questo run (netto fee).",
                  f"📚 GATE 1: <b>{reg['coins_covered']}/{reg['universe_size']} crypto "
                  f"({cov_pct:.0f}%)</b> con strategia validata "
-                 f"(obiettivo {reg['ready_fraction']*100:.0f}%).", ""]
+                 f"(obiettivo {reg['ready_fraction']*100:.0f}%).",
+                 "🌐 Universo scansionato: " + ", ".join(reg.get("universe_coins", [])[:14]), ""]
         if top:
             lines.append("<b>Migliori in questo run:</b>")
             for e in top:
