@@ -1,5 +1,5 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-14 20:55 UTC_
+_Generato: 2026-06-14 21:40 UTC_
 
 ## Bot
 - stato: **—** (🔴 offline)
@@ -17,32 +17,32 @@ _Generato: 2026-06-14 20:55 UTC_
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
 |---|---|---|---|---|---|
-| TURBOUSDT | trend_following | 7 | 1.28 | 228% | rr=2.0, atr_mult_stop=1.5, require_volume=False, rsi_hi=75.0 |
+| TURBOUSDT | trend_following | 7 | 1.28 | 228% | atr_mult_stop=1.5, rsi_hi=75.0, require_volume=False, rr=2.0 |
 | KATUSDT | vwap_reversion | 3 | 1.268 | 195% | atr_mult_stop=1.0, deviation_atr=2.0 |
 | MEGAUSDT | vwap_reversion | 6 | 1.247 | 181% | atr_mult_stop=1.0, deviation_atr=2.0 |
 | SPACEUSDT | vwap_reversion | 7 | 1.247 | 181% | atr_mult_stop=1.0, deviation_atr=2.0 |
-| SATSUSDT | trend_following | 7 | 1.197 | 146% | rr=2.0, atr_mult_stop=2.0, require_volume=False, rsi_hi=70.0 |
+| SATSUSDT | trend_following | 7 | 1.197 | 146% | atr_mult_stop=2.0, rsi_hi=70.0, require_volume=False, rr=2.0 |
 | PENGUUSDT | vwap_reversion | 4 | 1.278 | 114% | atr_mult_stop=1.5, deviation_atr=2.5 |
-| NOTUSDT | mean_reversion | 7 | 2.212 | 88% | atr_mult_stop=1.0, rsi_overbought=75.0, rsi_oversold=30.0 |
-| DOGEUSDT | trend_following | 5 | 1.124 | 79% | rr=2.5, atr_mult_stop=1.5, require_volume=False, rsi_hi=70.0 |
-| SATSUSDT | mean_reversion | 7 | 1.371 | 56% | atr_mult_stop=1.2, rsi_overbought=70.0, rsi_oversold=20.0 |
-| SHIBUSDT | breakout | 7 | 1.381 | 53% | rr=2.5, volume_spike=1.5, compression=0.05 |
-| PEPEUSDT | mean_reversion | 9 | 1.334 | 50% | atr_mult_stop=1.8, rsi_overbought=70.0, rsi_oversold=30.0 |
-| BOMEUSDT | mean_reversion | 7 | 1.339 | 44% | atr_mult_stop=1.2, rsi_overbought=80.0, rsi_oversold=30.0 |
-| BONKUSDT | mean_reversion | 7 | 1.401 | 42% | atr_mult_stop=1.0, rsi_overbought=70.0, rsi_oversold=30.0 |
-| PUMPUSDT | breakout | 5 | 1.614 | 41% | rr=3.0, volume_spike=1.5, compression=0.07 |
-| BONKUSDT | breakout | 7 | 1.381 | 40% | rr=3.0, volume_spike=1.5, compression=0.05 |
+| NOTUSDT | mean_reversion | 7 | 2.212 | 88% | atr_mult_stop=1.0, rsi_oversold=30.0, rsi_overbought=75.0 |
+| DOGEUSDT | trend_following | 5 | 1.124 | 79% | atr_mult_stop=1.5, rsi_hi=70.0, require_volume=False, rr=2.5 |
+| SATSUSDT | mean_reversion | 7 | 1.371 | 56% | atr_mult_stop=1.2, rsi_oversold=20.0, rsi_overbought=70.0 |
+| SHIBUSDT | breakout | 7 | 1.381 | 53% | compression=0.05, rr=2.5, volume_spike=1.5 |
+| PEPEUSDT | mean_reversion | 9 | 1.334 | 50% | atr_mult_stop=1.8, rsi_oversold=30.0, rsi_overbought=70.0 |
+| BOMEUSDT | mean_reversion | 7 | 1.339 | 44% | atr_mult_stop=1.2, rsi_oversold=30.0, rsi_overbought=80.0 |
+| BONKUSDT | mean_reversion | 7 | 1.401 | 42% | atr_mult_stop=1.0, rsi_oversold=30.0, rsi_overbought=70.0 |
+| PUMPUSDT | breakout | 5 | 1.614 | 41% | compression=0.07, rr=3.0, volume_spike=1.5 |
+| BONKUSDT | breakout | 7 | 1.381 | 40% | compression=0.05, rr=3.0, volume_spike=1.5 |
 | HMSTRUSDT | liquidity_grab | 7 | 3.31 | 39% | atr_mult_stop=1.5, volume_spike=2.5 |
-| GALAUSDT | mean_reversion | 4 | 1.956 | 39% | atr_mult_stop=1.2, rsi_overbought=80.0, rsi_oversold=30.0 |
-| BOMEUSDT | breakout | 7 | 1.279 | 38% | rr=3.0, volume_spike=1.5, compression=0.07 |
-| MEMEUSDT | breakout | 4 | 1.314 | 34% | rr=3.0, volume_spike=1.8, compression=0.05 |
-| PUMPUSDT | mean_reversion | 3 | 1.476 | 23% | atr_mult_stop=1.8, rsi_overbought=70.0, rsi_oversold=30.0 |
-| MEMEUSDT | mean_reversion | 3 | 1.152 | 21% | atr_mult_stop=1.8, rsi_overbought=70.0, rsi_oversold=20.0 |
+| GALAUSDT | mean_reversion | 4 | 1.956 | 39% | atr_mult_stop=1.2, rsi_oversold=30.0, rsi_overbought=80.0 |
+| BOMEUSDT | breakout | 7 | 1.279 | 38% | compression=0.07, rr=3.0, volume_spike=1.5 |
+| MEMEUSDT | breakout | 4 | 1.314 | 34% | compression=0.05, rr=3.0, volume_spike=1.8 |
+| PUMPUSDT | mean_reversion | 3 | 1.476 | 23% | atr_mult_stop=1.8, rsi_oversold=30.0, rsi_overbought=70.0 |
+| MEMEUSDT | mean_reversion | 3 | 1.152 | 21% | atr_mult_stop=1.8, rsi_oversold=20.0, rsi_overbought=70.0 |
 | FLOKIUSDT | liquidity_grab | 7 | 1.248 | 17% | atr_mult_stop=0.8, volume_spike=2.0 |
-| GALAUSDT | breakout | 3 | 1.132 | 15% | rr=2.0, volume_spike=1.8, compression=0.05 |
+| GALAUSDT | breakout | 3 | 1.132 | 15% | compression=0.05, rr=2.0, volume_spike=1.8 |
 | NOTUSDT | liquidity_grab | 7 | 1.343 | 12% | atr_mult_stop=0.8, volume_spike=2.0 |
 | BONKUSDT | liquidity_grab | 7 | 1.196 | 11% | atr_mult_stop=0.8, volume_spike=2.5 |
-| LINEAUSDT | breakout | 4 | 1.105 | 4% | rr=1.5, volume_spike=1.5, compression=0.1 |
+| LINEAUSDT | breakout | 4 | 1.105 | 4% | compression=0.1, rr=1.5, volume_spike=1.5 |
 
 ## Ultimo run di ottimizzazione
 _aggiornato: 2026-06-14 20:25 UTC · 204 coppie valutate, 32 passate in questo run_
