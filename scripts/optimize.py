@@ -57,7 +57,11 @@ def top_symbols_by_volume(n: int) -> list[str]:
         data = requests.get(f"{OKX}/api/v5/market/tickers",
                             params={"instType": "SWAP"}, timeout=20).json().get("data", [])
         usdt = [t for t in data if t.get("instId", "").endswith("-USDT-SWAP")]
-        ranked = sorted(usdt, key=lambda t: float(t.get("volCcy24h", 0) or 0), reverse=True)
+        # ordina per VOLUME IN USD (volume base × prezzo): altrimenti i coin a
+        # basso prezzo (meme) gonfiano il ranking e i major spariscono.
+        def _usd_vol(t):
+            return float(t.get("volCcy24h", 0) or 0) * float(t.get("last", 0) or 0)
+        ranked = sorted(usdt, key=_usd_vol, reverse=True)
         return [t["instId"].replace("-USDT-SWAP", "") + "USDT" for t in ranked[:n]]
     except Exception as exc:  # noqa: BLE001
         print(f"[optimize] universo OKX non disponibile ({str(exc)[:60]}); uso il default")
@@ -92,9 +96,10 @@ def main() -> int:
     for sym in symbols:
         print(f"\n[optimize] === {sym} ===")
         candles = load_candles(sym, args.interval, args.start, args.end, prefer=args.source)
-        # storia minima: escludi token troppo recenti (validazione non affidabile su
-        # poche settimane di dati). ~10000 candele 1h ≈ 14 mesi. Regolabile via env.
-        min_history = int(os.getenv("OPTIMIZER_MIN_HISTORY", "10000"))
+        # storia minima per poter fare un walk-forward sensato. ~2500 candele 1h
+        # ≈ 3-4 mesi: tiene dentro i meme/nuovi con un minimo di storia, esclude
+        # solo quelli appena listati (non validabili). Regolabile via env.
+        min_history = int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500"))
         if len(candles) < min_history:
             print(f"[optimize] {sym}: storia insufficiente ({len(candles)} < {min_history}), "
                   f"salto (token troppo recente)")
