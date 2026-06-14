@@ -15,6 +15,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
   signOut,
   type User,
 } from 'firebase/auth';
@@ -40,10 +41,26 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
 
   async function login() {
     setError(null);
+    const auth = getAuthInstance();
+    const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(getAuthInstance(), new GoogleAuthProvider());
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      await signInWithPopup(auth, provider);
+    } catch (e: unknown) {
+      const code = (e as { code?: string })?.code ?? '';
+      // se il browser blocca/chiude il popup, usa il redirect (mai bloccato)
+      if (
+        code === 'auth/popup-blocked' ||
+        code === 'auth/popup-closed-by-user' ||
+        code === 'auth/cancelled-popup-request'
+      ) {
+        try {
+          await signInWithRedirect(auth, provider);
+        } catch (e2) {
+          setError(e2 instanceof Error ? e2.message : String(e2));
+        }
+      } else {
+        setError(e instanceof Error ? e.message : String(e));
+      }
     }
   }
 
