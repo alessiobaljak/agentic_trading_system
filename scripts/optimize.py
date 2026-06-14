@@ -92,8 +92,12 @@ def main() -> int:
     for sym in symbols:
         print(f"\n[optimize] === {sym} ===")
         candles = load_candles(sym, args.interval, args.start, args.end, prefer=args.source)
-        if len(candles) < 1000:
-            print(f"[optimize] {sym}: dati insufficienti ({len(candles)}), salto")
+        # storia minima: escludi token troppo recenti (validazione non affidabile su
+        # poche settimane di dati). ~10000 candele 1h ≈ 14 mesi. Regolabile via env.
+        min_history = int(os.getenv("OPTIMIZER_MIN_HISTORY", "10000"))
+        if len(candles) < min_history:
+            print(f"[optimize] {sym}: storia insufficiente ({len(candles)} < {min_history}), "
+                  f"salto (token troppo recente)")
             continue
         results = opt.optimize_symbol(sym, candles)
         for r in results:
@@ -147,6 +151,9 @@ READY_FRACTION = float(os.getenv("OPTIMIZER_READY_FRACTION", "0.60"))
 # le crypto validate in assoluto sono troppo poche.
 MIN_UNIVERSE = int(os.getenv("OPTIMIZER_MIN_UNIVERSE", "10"))
 MIN_COVERED = int(os.getenv("OPTIMIZER_MIN_COVERED", "5"))
+# una coppia resta "validata" solo se rivista entro questi giorni (auto-pulizia:
+# i coin usciti dall'universo decadono e il bot smette di operarli).
+FRESH_DAYS = float(os.getenv("OPTIMIZER_FRESH_DAYS", "3"))
 
 
 def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
@@ -173,7 +180,11 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         rec["last_seen_at"] = time.time()
         pairs[key] = rec
 
-    validated = sorted(k for k, r in pairs.items() if r.get("pass_count", 0) >= MIN_PASSES)
+    validated = sorted(
+        k for k, r in pairs.items()
+        if r.get("pass_count", 0) >= MIN_PASSES
+        and (time.time() - r.get("last_seen_at", 0)) < FRESH_DAYS * 86400
+    )
     validated_coins = {pairs[k]["symbol"] for k in validated}
 
     # universo SCANSIONATO in questo run (denominatore della percentuale)
