@@ -91,12 +91,20 @@ class StrategyStats:
 
 class Backtester:
     def __init__(self, window: int = 200, capital: float = 10_000.0,
-                 cost_per_trade: float = 0.0008) -> None:
+                 cost_per_trade: float = None, funding_per_8h: float = None,
+                 interval_hours: float = 1.0) -> None:
+        import os
         self.window = window
         self.capital = capital
-        # costo round-trip (fee + slippage) come frazione del nozionale.
-        # 0.0008 = 0.08% (taker ~0.04%/lato + slippage). Sottratto a OGNI trade.
-        self.cost_per_trade = cost_per_trade
+        # costo round-trip (fee + slippage) come frazione del nozionale, per trade.
+        # default 0.08% (taker ~0.04%/lato + slippage). Configurabile via env.
+        self.cost_per_trade = (cost_per_trade if cost_per_trade is not None
+                               else float(os.getenv("BACKTEST_COST_PER_TRADE", "0.0008")))
+        # funding sui perpetual: costo ricorrente ogni 8h sulle posizioni aperte.
+        # default 0.01%/8h (stima conservativa). Configurabile via env.
+        self.funding_per_8h = (funding_per_8h if funding_per_8h is not None
+                               else float(os.getenv("BACKTEST_FUNDING_PER_8H", "0.0001")))
+        self.interval_hours = interval_hours
         self.regime_detector = RegimeDetector()
         self.strategies = get_all_strategies()
 
@@ -154,7 +162,10 @@ class Backtester:
                 j += 1
 
             pnl_pct = (exit_price - entry) / entry if long else (entry - exit_price) / entry
-            pnl_pct -= self.cost_per_trade   # al netto di fee + slippage (round-trip)
+            # uscite reali: fee+slippage (round-trip) + funding sui perpetual.
+            held_hours = max(0, (min(j, horizon) - i)) * self.interval_hours
+            funding = (held_hours / 8.0) * self.funding_per_8h
+            pnl_pct -= (self.cost_per_trade + funding)
             stats.trades.append(SimTrade(
                 strategy=strategy.name, regime=regime.value, direction=sig.direction.value,
                 entry_price=entry, exit_price=exit_price, pnl_pct=pnl_pct,
