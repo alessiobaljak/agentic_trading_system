@@ -15,7 +15,6 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
-  signInWithRedirect,
   signOut,
   type User,
 } from 'firebase/auth';
@@ -47,17 +46,13 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
       await signInWithPopup(auth, provider);
     } catch (e: unknown) {
       const code = (e as { code?: string })?.code ?? '';
-      // se il browser blocca/chiude il popup, usa il redirect (mai bloccato)
-      if (
-        code === 'auth/popup-blocked' ||
-        code === 'auth/popup-closed-by-user' ||
-        code === 'auth/cancelled-popup-request'
-      ) {
-        try {
-          await signInWithRedirect(auth, provider);
-        } catch (e2) {
-          setError(e2 instanceof Error ? e2.message : String(e2));
-        }
+      if (code === 'auth/popup-blocked') {
+        setError(
+          'Il browser ha bloccato il popup di accesso. Clicca l’icona "popup bloccato" ' +
+            'nella barra degli indirizzi e consenti i popup per questo sito, poi riprova.',
+        );
+      } else if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+        setError('Accesso annullato. Riprova.');
       } else {
         setError(e instanceof Error ? e.message : String(e));
       }
