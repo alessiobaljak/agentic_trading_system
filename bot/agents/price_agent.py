@@ -82,6 +82,17 @@ class PriceAgent:
         data = self._get("/fapi/v1/ticker/24hr", {"symbol": symbol}) or {}
         return data if isinstance(data, dict) else {}
 
+    def get_mark_price(self, symbol: str) -> Optional[float]:
+        """Solo il mark price corrente (1 richiesta). Usato per gestire le
+        posizioni aperte a ogni tick senza ricostruire lo snapshot completo,
+        così SL/TP/trailing reagiscono al prezzo VIVO e non a uno vecchio di 15m."""
+        premium = self.get_premium(symbol)
+        mp = premium.get("markPrice")
+        try:
+            return float(mp) if mp is not None else None
+        except (TypeError, ValueError):
+            return None
+
     def get_open_interest(self, symbol: str) -> Optional[float]:
         data = self._get("/fapi/v1/openInterest", {"symbol": symbol})
         if data and isinstance(data, dict) and "openInterest" in data:

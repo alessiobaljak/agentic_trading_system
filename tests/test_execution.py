@@ -65,6 +65,31 @@ def test_gate_rejected_params_not_opened():
     assert not eng.open_positions
 
 
+def test_restore_open_positions_after_restart():
+    # stesso store Firebase condiviso = simula un riavvio del processo
+    fb = FirebaseClient()
+    eng1 = ExecutionEngine(firebase=fb, dry_run=True)
+    eng1.open_position(_asset(100, atr=2.0), "breakout", Direction.LONG, _params(qty=2.0, stop=98, tp=104))
+    # scale-out parziale per avere stato dinamico non banale
+    eng1.update_position("BTCUSDT", 104.0)
+    src = eng1.open_positions["BTCUSDT"]
+
+    # "riavvio": nuovo engine, open_positions deve ripartire da Firebase
+    eng2 = ExecutionEngine(firebase=fb, dry_run=True)
+    assert "BTCUSDT" in eng2.open_positions, "posizione orfana dopo il restart!"
+    p = eng2.open_positions["BTCUSDT"]
+    assert p.position_id == src.position_id
+    assert p.entry_price == src.entry_price
+    assert p.quantity == src.quantity            # quantità originale preservata
+    assert p.remaining_qty == src.remaining_qty  # stato post scale-out preservato
+    assert p.scaled_out is True
+    assert p.trailing_active == src.trailing_active
+    assert p.stop_price == src.stop_price and p.take_profit_price == src.take_profit_price
+    # la posizione ripristinata si gestisce normalmente (chiude allo stop)
+    closed = eng2.update_position("BTCUSDT", 97.0)
+    assert closed is not None and closed.exit_reason == ExitReason.STOP_LOSS
+
+
 def test_kill_switch_closes_all():
     eng = _engine()
     eng.open_position(_asset(100), "x", Direction.LONG, _params())

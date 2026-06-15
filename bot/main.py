@@ -117,11 +117,16 @@ class TradingBot:
     # ------------------------------------------------------------------ #
     def trading_cycle(self, now: float) -> None:
         # 1) gestione posizioni aperte (trailing/scale-out/SL/TP)
+        # Usa il MARK PRICE FRESCO a ogni tick (1 richiesta): le posizioni vanno
+        # gestite sul prezzo vivo, non sullo snapshot che si aggiorna ogni 15m.
         for sym, pos in list(self.executor.open_positions.items()):
-            snap = self.selected.get(sym) or self.price.build_snapshot(sym)
-            if not snap:
+            price = self.price.get_mark_price(sym)
+            if price is None:
+                snap = self.selected.get(sym) or self.price.build_snapshot(sym)
+                price = snap.price if snap else None
+            if price is None:
                 continue
-            closed = self.executor.update_position(sym, snap.price)
+            closed = self.executor.update_position(sym, price)
             if closed:
                 self.logger.log(closed)
                 was_sl = closed.exit_reason in (ExitReason.STOP_LOSS,)

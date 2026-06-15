@@ -77,7 +77,17 @@ class _InMemoryStore:
 
     def get_rtdb(self, path: str) -> Any:
         with self._lock:
-            return self._rtdb.get(path)
+            if path in self._rtdb:
+                return self._rtdb[path]
+            # emula la gerarchia RTDB: leggere un nodo padre ritorna i figli
+            # diretti come dict (es. /positions -> {BTCUSDT: {...}, ...}).
+            prefix = path.rstrip("/") + "/"
+            children: dict[str, Any] = {}
+            for k, v in self._rtdb.items():
+                if k.startswith(prefix) and v is not None:
+                    child = k[len(prefix):].split("/", 1)[0]
+                    children[child] = v
+            return children or None
 
 
 class FirebaseClient:

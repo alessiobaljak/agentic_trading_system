@@ -70,6 +70,11 @@ class ExecutionEngine:
         self._client = None
         if not self.dry_run:
             self._init_binance()
+        # CRITICO: ricarica le posizioni aperte da Firebase. Senza questo, ogni
+        # riavvio del processo (anche un auto-restart di systemd dopo un crash)
+        # parte con open_positions VUOTO -> le posizioni aperte prima diventano
+        # orfane: ri-aperte con un nuovo entry e mai chiuse/loggate.
+        self.restore_open_positions()
 
     def _init_binance(self) -> None:
         try:
@@ -272,4 +277,72 @@ class ExecutionEngine:
             "unrealized_pnl": unreal, "trailing_active": pos.trailing_active,
             "scaled_out": pos.scaled_out, "dry_run": self.dry_run,
             "updated_at": time.time(),
+            # --- campi extra per ricostruire la posizione dopo un restart ---
+            "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
+            "entry_time": pos.entry_time.isoformat(),
+            "regime_at_entry": pos.regime_at_entry.value,
+            "atr": pos.atr, "high_water": pos.high_water,
+            "indicators_at_entry": pos.indicators_at_entry,
+            "sentiment_at_entry": pos.sentiment_at_entry,
+            "fear_greed_at_entry": pos.fear_greed_at_entry,
+            "funding_at_entry": pos.funding_at_entry,
+            "confidence_at_entry": pos.confidence_at_entry,
         })
+
+    # ------------------------------------------------------------------ #
+    # Ripristino stato dopo un riavvio                                   #
+    # ------------------------------------------------------------------ #
+    def restore_open_positions(self) -> int:
+        """Ricarica le posizioni aperte da Firebase (/positions) in memoria.
+        Idempotente: salta i simboli già presenti. Ritorna quante ne ha caricate."""
+        data = self.fb.get_rtdb("/positions")
+        if not isinstance(data, dict) or not data:
+            return 0
+        restored = 0
+        for sym, p in data.items():
+            if not isinstance(p, dict) or sym in self.open_positions:
+                continue
+            try:
+                self.open_positions[sym] = self._position_from_state(p)
+                restored += 1
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] impossibile ricaricare la posizione {sym}: {exc}")
+        if restored:
+            print(f"[execution] ricaricate {restored} posizioni aperte da Firebase "
+                  f"(no orfani al riavvio): {list(self.open_positions.keys())}")
+        return restored
+
+    def _position_from_state(self, p: dict) -> Position:
+        original_qty = float(p.get("original_quantity", p.get("quantity", 0.0)))
+        pos = Position(
+            position_id=p.get("position_id") or str(uuid.uuid4()),
+            symbol=p["symbol"], strategy=p.get("strategy", "unknown"),
+            direction=Direction(p["direction"]),
+            entry_price=float(p["entry_price"]), quantity=original_qty,
+            leverage=float(p.get("leverage", 1) or 1),
+            stop_price=float(p.get("stop_price", 0.0) or 0.0),
+            take_profit_price=float(p.get("take_profit_price", 0.0) or 0.0),
+            entry_time=self._parse_dt(p.get("entry_time")),
+            regime_at_entry=Regime(p.get("regime_at_entry", Regime.SIDEWAYS.value)),
+            indicators_at_entry=p.get("indicators_at_entry") or {},
+            sentiment_at_entry=p.get("sentiment_at_entry"),
+            fear_greed_at_entry=p.get("fear_greed_at_entry"),
+            funding_at_entry=p.get("funding_at_entry"),
+            confidence_at_entry=p.get("confidence_at_entry"),
+            atr=float(p.get("atr", 0.0) or 0.0),
+        )
+        # __post_init__ azzera remaining_qty/high_water: ripristino lo stato vivo
+        pos.remaining_qty = float(p.get("remaining_qty", original_qty))
+        pos.high_water = float(p.get("high_water", pos.entry_price) or pos.entry_price)
+        pos.scaled_out = bool(p.get("scaled_out", False))
+        pos.trailing_active = bool(p.get("trailing_active", False))
+        return pos
+
+    @staticmethod
+    def _parse_dt(v) -> datetime:
+        if isinstance(v, str):
+            try:
+                return datetime.fromisoformat(v)
+            except ValueError:
+                pass
+        return datetime.now(timezone.utc)
