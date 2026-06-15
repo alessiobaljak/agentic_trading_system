@@ -3,6 +3,7 @@ import AuthGate from './components/AuthGate';
 import BotStatus from './components/BotStatus';
 import OptimizedStrategies from './components/OptimizedStrategies';
 import Positions from './components/Positions';
+import ClosedTrades from './components/ClosedTrades';
 import EquityCurve from './components/EquityCurve';
 import Heatmap from './components/Heatmap';
 import StrategyWeights from './components/StrategyWeights';
@@ -65,6 +66,8 @@ export default function Page() {
             </div>
 
             <Positions />
+
+            <ClosedTrades />
 
             <div className="grid grid-2">
               <EquityCurve />
