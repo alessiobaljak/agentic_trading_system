@@ -1,21 +1,66 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-15 12:44 UTC_
+_Generato: 2026-06-15 18:47 UTC_
 
 ## Bot
-- stato: **—** (🔴 offline)
-- regime: —
-- DRY_RUN: —
-- ultimo heartbeat: —
+- stato: **running** (🟢 online)
+- regime: bull_trending
+- DRY_RUN: True
+- ultimo heartbeat: 2026-06-15 18:47 UTC
+
+## Posizioni aperte
+- ETHUSDT: long qty=2.409785426961468 @ 1826.42 uPnL=8.62703182852188
+- SOLUSDT: long qty=52.778333477594366 @ 75.23 uPnL=21.111333391037295
+- XRPUSDT: long qty=1904.8459155057085 @ 1.2788 uPnL=6.285991521168992
 
 ## GATE 1 — Validazione strategie
-- stato: **🔄 in corso**
-- copertura universo: **0/39 crypto (0%)** · obiettivo ≥ 60%
-- coppie validate (>= 3 pass OOS): **0**
+- stato: **✅ SUPERATO — pronti per il paper trading**
+- copertura universo: **26/39 crypto (67%)** · obiettivo ≥ 60%
+- coppie validate (>= 3 pass OOS): **36**
 - universo scansionato: AAVEUSDT, ADAUSDT, APTUSDT, ARBUSDT, ATOMUSDT, AVAXUSDT, BCHUSDT, BNBUSDT, BTCUSDT, DOGEUSDT, DOTUSDT, ENAUSDT, ETCUSDT, ETHUSDT, FILUSDT, GALAUSDT, HBARUSDT, ICPUSDT, IMXUSDT, INJUSDT, JUPUSDT, LINKUSDT, LTCUSDT, NEARUSDT, OPUSDT, ORDIUSDT, PEPEUSDT, PYTHUSDT, SANDUSDT, SHIBUSDT, SOLUSDT, STXUSDT, SUIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, WLDUSDT, XRPUSDT
-- aggiornato: 2026-06-15 06:51 UTC
+- aggiornato: 2026-06-15 13:24 UTC
+
+### Strategie VALIDATE (operate dal bot)
+| Coin | Strategia | Passes | PF | PnL OOS | Parametri |
+|---|---|---|---|---|---|
+| XRPUSDT | trend_following | 3 | 1.343 | 167% | rr=2.5, require_volume=False, atr_mult_stop=2.0, rsi_hi=75.0 |
+| WLDUSDT | trend_following | 3 | 1.175 | 156% | rr=2.5, require_volume=False, atr_mult_stop=1.0, rsi_hi=75.0 |
+| PEPEUSDT | trend_following | 3 | 1.112 | 95% | rr=1.5, require_volume=True, atr_mult_stop=2.0, rsi_hi=75.0 |
+| LINKUSDT | vwap_reversion | 3 | 1.141 | 92% | deviation_atr=2.0, atr_mult_stop=1.5 |
+| LTCUSDT | vwap_reversion | 3 | 1.121 | 70% | deviation_atr=3.0, atr_mult_stop=1.5 |
+| INJUSDT | mean_reversion | 3 | 1.652 | 55% | rsi_overbought=75.0, atr_mult_stop=1.0, rsi_oversold=30.0 |
+| XRPUSDT | vwap_reversion | 3 | 1.103 | 54% | deviation_atr=1.5, atr_mult_stop=1.0 |
+| PEPEUSDT | mean_reversion | 3 | 1.791 | 52% | rsi_overbought=70.0, atr_mult_stop=1.2, rsi_oversold=30.0 |
+| GALAUSDT | mean_reversion | 3 | 1.89 | 47% | rsi_overbought=80.0, atr_mult_stop=1.0, rsi_oversold=30.0 |
+| ORDIUSDT | mean_reversion | 3 | 1.281 | 43% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=20.0 |
+| ARBUSDT | mean_reversion | 3 | 1.652 | 43% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
+| ETCUSDT | mean_reversion | 3 | 1.845 | 42% | rsi_overbought=80.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
+| PYTHUSDT | mean_reversion | 3 | 1.505 | 41% | rsi_overbought=70.0, atr_mult_stop=1.8, rsi_oversold=25.0 |
+| AVAXUSDT | breakout | 3 | 1.323 | 37% | volume_spike=1.8, rr=2.5, compression=0.05 |
+| IMXUSDT | mean_reversion | 3 | 1.469 | 36% | rsi_overbought=80.0, atr_mult_stop=1.2, rsi_oversold=30.0 |
+| OPUSDT | breakout | 3 | 1.31 | 33% | volume_spike=1.8, rr=3.0, compression=0.05 |
+| ADAUSDT | mean_reversion | 3 | 1.683 | 30% | rsi_overbought=70.0, atr_mult_stop=1.0, rsi_oversold=30.0 |
+| ATOMUSDT | mean_reversion | 3 | 1.697 | 30% | rsi_overbought=70.0, atr_mult_stop=1.8, rsi_oversold=25.0 |
+| SUIUSDT | breakout | 3 | 1.223 | 27% | volume_spike=1.8, rr=1.5, compression=0.1 |
+| NEARUSDT | breakout | 3 | 1.15 | 25% | volume_spike=1.8, rr=2.5, compression=0.05 |
+| AVAXUSDT | mean_reversion | 3 | 1.503 | 23% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=25.0 |
+| ARBUSDT | liquidity_grab | 3 | 1.708 | 15% | volume_spike=2.5, atr_mult_stop=1.5 |
+| INJUSDT | liquidity_grab | 3 | 1.524 | 15% | volume_spike=2.0, atr_mult_stop=0.8 |
+| GALAUSDT | breakout | 3 | 1.143 | 15% | volume_spike=1.8, rr=3.0, compression=0.05 |
+| JUPUSDT | mean_reversion | 3 | 1.175 | 14% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
+| UNIUSDT | mean_reversion | 3 | 1.241 | 14% | rsi_overbought=70.0, atr_mult_stop=1.0, rsi_oversold=30.0 |
+| AAVEUSDT | liquidity_grab | 3 | 1.314 | 13% | volume_spike=2.0, atr_mult_stop=1.0 |
+| DOTUSDT | liquidity_grab | 3 | 1.619 | 12% | volume_spike=2.5, atr_mult_stop=0.8 |
+| TRXUSDT | breakout | 3 | 1.27 | 12% | volume_spike=1.8, rr=2.5, compression=0.07 |
+| APTUSDT | mean_reversion | 3 | 1.126 | 11% | rsi_overbought=75.0, atr_mult_stop=1.2, rsi_oversold=30.0 |
+| LTCUSDT | mean_reversion | 3 | 1.202 | 11% | rsi_overbought=70.0, atr_mult_stop=1.2, rsi_oversold=25.0 |
+| AAVEUSDT | mean_reversion | 3 | 1.199 | 11% | rsi_overbought=70.0, atr_mult_stop=1.0, rsi_oversold=30.0 |
+| LINKUSDT | liquidity_grab | 3 | 1.261 | 9% | volume_spike=2.0, atr_mult_stop=1.5 |
+| ICPUSDT | mean_reversion | 3 | 1.129 | 9% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=20.0 |
+| PYTHUSDT | liquidity_grab | 3 | 1.121 | 6% | volume_spike=2.5, atr_mult_stop=1.0 |
+| TONUSDT | mean_reversion | 3 | 1.117 | 5% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=25.0 |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-06-15 06:51 UTC · 234 coppie valutate, 36 passate in questo run_
+_aggiornato: 2026-06-15 13:24 UTC · 234 coppie valutate, 36 passate in questo run_
 
 | Coin | Strategia | PF | PnL OOS | Trade | Win |
 |---|---|---|---|---|---|
