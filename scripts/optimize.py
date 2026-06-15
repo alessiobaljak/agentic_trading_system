@@ -31,11 +31,11 @@ OKX = "https://www.okx.com"
 
 def top_symbols_by_volume(n: int) -> list[str]:
     """
-    Universo = i top-N perpetual USDT per volume 24h (Layer 2: scansiona TUTTO
-    l'universo, non un set fisso). Prova Binance; se bloccata (es. geo-block sui
-    runner GitHub) ricade su OKX. Nessuna chiave.
+    Universo = perpetual USDT di BINANCE (dove il bot opera davvero).
+    Prova il ranking dinamico per volume su Binance; se Binance non è raggiungibile
+    (es. geo-block sui runner GitHub) usa una lista CURATA e ampia di perp Binance
+    reali (major + alt + meme) — MAI OKX, che lista anche oro/azioni/coin non-Binance.
     """
-    # --- Binance ---
     try:
         info = requests.get(f"{FAPI}/fapi/v1/exchangeInfo", timeout=20).json()
         perp = {
@@ -50,22 +50,23 @@ def top_symbols_by_volume(n: int) -> list[str]:
             if ranked:
                 return [t["symbol"] for t in ranked[:n]]
     except Exception as exc:  # noqa: BLE001
-        print(f"[optimize] universo Binance non disponibile ({str(exc)[:60]}); provo OKX")
+        print(f"[optimize] ranking Binance non disponibile ({str(exc)[:60]}); uso lista curata")
+    return BINANCE_PERPS[:n]
 
-    # --- OKX fallback (USDT perpetual swap) ---
-    try:
-        data = requests.get(f"{OKX}/api/v5/market/tickers",
-                            params={"instType": "SWAP"}, timeout=20).json().get("data", [])
-        usdt = [t for t in data if t.get("instId", "").endswith("-USDT-SWAP")]
-        # ordina per VOLUME IN USD (volume base × prezzo): altrimenti i coin a
-        # basso prezzo (meme) gonfiano il ranking e i major spariscono.
-        def _usd_vol(t):
-            return float(t.get("volCcy24h", 0) or 0) * float(t.get("last", 0) or 0)
-        ranked = sorted(usdt, key=_usd_vol, reverse=True)
-        return [t["instId"].replace("-USDT-SWAP", "") + "USDT" for t in ranked[:n]]
-    except Exception as exc:  # noqa: BLE001
-        print(f"[optimize] universo OKX non disponibile ({str(exc)[:60]}); uso il default")
-        return []
+
+# Lista curata di perpetual USDT REALI su Binance (major + alt consolidate + meme
+# liquide). Usata quando il ranking dinamico Binance non è raggiungibile.
+BINANCE_PERPS = [
+    "BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT",
+    "AVAXUSDT", "LINKUSDT", "DOTUSDT", "TRXUSDT", "LTCUSDT", "BCHUSDT", "NEARUSDT",
+    "SUIUSDT", "APTUSDT", "ARBUSDT", "OPUSDT", "ATOMUSDT", "UNIUSDT", "INJUSDT",
+    "TIAUSDT", "SEIUSDT", "FILUSDT", "ETCUSDT", "AAVEUSDT", "TONUSDT", "HBARUSDT",
+    "ICPUSDT", "IMXUSDT", "STXUSDT", "GALAUSDT", "SANDUSDT", "WLDUSDT", "ENAUSDT",
+    "JUPUSDT", "PYTHUSDT", "ORDIUSDT", "SHIBUSDT", "PEPEUSDT", "WIFUSDT", "BONKUSDT",
+    "FLOKIUSDT", "RUNEUSDT", "ALGOUSDT", "FTMUSDT", "XLMUSDT", "VETUSDT", "EGLDUSDT",
+    "AXSUSDT",
+]
+
 
 
 def main() -> int:

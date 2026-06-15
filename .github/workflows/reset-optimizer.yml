@@ -1,0 +1,33 @@
+name: reset-optimizer
+
+# ONE-SHOT: azzera il registro delle validazioni e ricostruisce da zero sull'universo
+# Binance pulito. Parte una volta col push su questo file (o a mano). Non ricorre:
+# l'ottimizzatore regolare (optimize.yml) continua ad accumulare ogni 6h.
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+    paths: [".github/workflows/reset-optimizer.yml"]
+
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Reset registry + rebuild on clean Binance universe
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: >
+          python -m scripts.optimize
+          --top 40 --windows 3 --max-combos 12
+          --start 2024-01-01 --end 2026-01-01
+          --reset-registry
