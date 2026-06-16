@@ -74,6 +74,19 @@ class TradingBot:
         eq = self.fb.get_rtdb("/account/equity")
         return float(eq) if eq else 10_000.0
 
+    def reconcile_equity(self) -> float:
+        """All'avvio ricalcola l'equity dalla fonte di verità (i trade chiusi):
+        equity = capitale iniziale + somma di TUTTI i PnL realizzati. Così è
+        sempre coerente coi trade chiusi (anche quelli chiusi prima di questa
+        logica) e si auto-corregge dopo ogni riavvio."""
+        base = self.fb.get_rtdb("/account/starting_equity")
+        base = float(base) if base else 10_000.0
+        realized = sum(float(t.get("pnl", 0.0)) for t in self.logger.all_since(0.0))
+        eq = base + realized
+        self.fb.set_rtdb("/account/equity", eq)
+        print(f"[main] equity riconciliata: {eq:.2f} (base {base:.2f} + realizzato {realized:+.2f})")
+        return eq
+
     def apply_realized_pnl(self, pnl: float) -> float:
         """Aggiorna l'equity col PnL realizzato di un trade chiuso e la persiste.
         Così il sizing dei trade successivi compone (equity sale -> rischio in $
@@ -225,6 +238,7 @@ class TradingBot:
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
         print(f"[main] avvio bot @ {datetime.now(timezone.utc).isoformat()} "
               f"DRY_RUN={settings.DRY_RUN}")
+        self.reconcile_equity()
         self.notifier.send(f"🟢 Bot avviato (DRY_RUN={settings.DRY_RUN})")
         it = 0
         while max_iterations is None or it < max_iterations:

@@ -59,6 +59,7 @@ def main() -> int:
         fb.delete_doc("trades", tid)
     fb.set_rtdb("/risk_state", None)
     fb.set_rtdb("/account/equity", args.equity)
+    fb.set_rtdb("/account/starting_equity", args.equity)
     fb.set_rtdb("/bot_status", None)
     fb.set_rtdb("/commands/kill_switch", False)
 
