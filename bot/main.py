@@ -74,6 +74,14 @@ class TradingBot:
         eq = self.fb.get_rtdb("/account/equity")
         return float(eq) if eq else 10_000.0
 
+    def apply_realized_pnl(self, pnl: float) -> float:
+        """Aggiorna l'equity col PnL realizzato di un trade chiuso e la persiste.
+        Così il sizing dei trade successivi compone (equity sale -> rischio in $
+        sale, e viceversa) e la dashboard mostra l'equity vera."""
+        new_eq = self.account_equity() + float(pnl)
+        self.fb.set_rtdb("/account/equity", new_eq)
+        return new_eq
+
     def kill_switch_active(self) -> bool:
         return bool(self.fb.get_rtdb("/commands/kill_switch"))
 
@@ -129,6 +137,7 @@ class TradingBot:
             closed = self.executor.update_position(sym, price)
             if closed:
                 self.logger.log(closed)
+                self.apply_realized_pnl(closed.pnl)
                 self.notifier.trade_closed(
                     closed.symbol, closed.strategy, closed.direction.value,
                     closed.exit_price, closed.pnl, closed.pnl_pct,
@@ -145,6 +154,7 @@ class TradingBot:
             closed = self.executor.force_close_all(prices, ExitReason.KILL_SWITCH)
             for t in closed:
                 self.logger.log(t)
+                self.apply_realized_pnl(t.pnl)
             self.notifier.kill_switch()
             self.fb.set_rtdb("/commands/kill_switch", False)
             return
