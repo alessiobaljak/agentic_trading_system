@@ -1,6 +1,7 @@
 import { firebaseReady, missingFirebaseVars } from './lib/firebase';
 import AuthGate from './components/AuthGate';
 import BotStatus from './components/BotStatus';
+import DecisionStatus from './components/DecisionStatus';
 import OptimizedStrategies from './components/OptimizedStrategies';
 import Positions from './components/Positions';
 import ClosedTrades from './components/ClosedTrades';
@@ -59,6 +60,8 @@ export default function Page() {
         <AuthGate>
           <div className="grid">
             <BotStatus />
+
+            <DecisionStatus />
 
             <div className="grid grid-2">
               <RiskControl />

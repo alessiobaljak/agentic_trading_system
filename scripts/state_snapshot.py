@@ -47,6 +47,24 @@ def build() -> str:
         "",
     ]
 
+    # --- ultima decisione orchestratore (RTDB) ---
+    dec = fb.get_rtdb("/decision_status") or {}
+    if isinstance(dec, dict) and dec:
+        outcome = dec.get("outcome", "—")
+        icon = "🟢 APERTA" if outcome == "opened" else "⚪ FLAT"
+        best = ""
+        if dec.get("best_symbol"):
+            best = (f" · miglior segnale {dec.get('best_symbol')} {dec.get('best_strategy','')} "
+                    f"(conf. {dec.get('best_adjusted')}/soglia {dec.get('threshold')})")
+        lines += [
+            "## Ultima decisione",
+            f"- esito: **{icon}** ({_ts(dec.get('ts'))})",
+            f"- motivo: {dec.get('reason', '—')}",
+            f"- asset valutati: {dec.get('assets_evaluated', 0)} · "
+            f"segnali: {dec.get('signals_found', 0)}{best}",
+            "",
+        ]
+
     # --- posizioni aperte (RTDB) ---
     positions = fb.get_rtdb("/positions") or {}
     if isinstance(positions, dict) and positions:

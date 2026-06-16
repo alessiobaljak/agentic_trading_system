@@ -15,6 +15,7 @@ senza spesa LLM). Il comportamento è documentato in docs/orchestrator.md.
 from __future__ import annotations
 
 import json
+import time
 from typing import Optional
 
 from bot.config import settings
@@ -28,9 +29,33 @@ from bot.strategies.base import StrategyContext
 
 
 class Orchestrator:
+    DECISION_THRESHOLD = 30  # confidenza aggiustata minima per agire (fallback)
+
     def __init__(self, adaptation: Optional[AdaptationEngine] = None) -> None:
         self.adaptation = adaptation or AdaptationEngine()
         self.strategies = get_all_strategies()
+        # esito dell'ULTIMA decisione (osservabilità): pubblicato su Firebase da main
+        self.last_status: dict = {}
+
+    def _record_status(self, regime: Regime, n_assets: int, signals: list[dict],
+                       outcome: str, reason: str,
+                       decision: Optional[OrchestratorDecision] = None) -> None:
+        best = signals[0] if signals else None
+        self.last_status = {
+            "ts": time.time(),
+            "regime": regime.value,
+            "assets_evaluated": n_assets,
+            "signals_found": len(signals),
+            "best_symbol": best["symbol"] if best else None,
+            "best_strategy": best["strategy"] if best else None,
+            "best_confidence": round(float(best["confidence"]), 1) if best else None,
+            "best_adjusted": round(float(best["adjusted_confidence"]), 1) if best else None,
+            "threshold": self.DECISION_THRESHOLD,
+            "outcome": outcome,            # "flat" | "decided"
+            "reason": reason,
+            "chosen_asset": decision.asset if decision else None,
+            "chosen_strategy": decision.strategy if decision else None,
+        }
 
     # ------------------------------------------------------------------ #
     def collect_signals(
@@ -75,6 +100,8 @@ class Orchestrator:
     ) -> Optional[OrchestratorDecision]:
         signals = self.collect_signals(assets, regime)
         if not signals:
+            self._record_status(regime, len(assets), signals, "flat",
+                                "nessun segnale dalle strategie attive in questo regime")
             return None
 
         if settings.ANTHROPIC_API_KEY:
@@ -86,6 +113,11 @@ class Orchestrator:
             decision = self._decide_fallback(signals)
 
         if decision is None:
+            best_adj = signals[0]["adjusted_confidence"]
+            self._record_status(
+                regime, len(assets), signals, "flat",
+                f"miglior segnale {best_adj:.0f} sotto soglia {self.DECISION_THRESHOLD} "
+                "(o LLM ha scelto flat)")
             return None
 
         # --- adattamento: aggiusta la confidenza col peso del learning ---
@@ -93,7 +125,11 @@ class Orchestrator:
         decision.adjusted_confidence = decision.confidence * weight
         # strategia di fatto disattivata in questo regime
         if weight <= 0.0:
+            self._record_status(regime, len(assets), signals, "flat",
+                                f"{decision.strategy} disattivata dal learning (peso 0)")
             return None
+        self._record_status(regime, len(assets), signals, "decided",
+                            "segnale valido sopra soglia", decision)
         return decision
 
     # ------------------------------------------------------------------ #

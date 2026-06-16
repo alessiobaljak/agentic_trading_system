@@ -184,14 +184,21 @@ class TradingBot:
         recent = self.logger.recent(20)
         decision = self.orchestrator.decide(self.selected, self.regime, memory, recent)
         if decision is None:
+            self._publish_decision_status()  # flat: motivo già in last_status
             return
         if decision.asset in self.executor.open_positions:
+            self._publish_decision_status(
+                {"outcome": "flat", "reason": f"{decision.asset} già aperto"})
             return
         if len(self.executor.open_positions) >= settings.MAX_OPEN_POSITIONS:
+            self._publish_decision_status(
+                {"outcome": "flat",
+                 "reason": f"raggiunto il max di posizioni ({settings.MAX_OPEN_POSITIONS})"})
             return
 
         asset = self.selected.get(decision.asset)
         if not asset:
+            self._publish_decision_status({"outcome": "flat", "reason": "snapshot asset mancante"})
             return
 
         # 4) RISK GATE — ultimo controllo prima dell'ordine
@@ -200,11 +207,16 @@ class TradingBot:
                                     volatility_sigma=self._volatility_sigma(asset))
         if not params.approved:
             print(f"[main] trade bloccato dal gate: {params.reject_reason}")
+            self._publish_decision_status(
+                {"outcome": "flat", "reason": f"bloccato dal risk gate: {params.reject_reason}"})
             return
 
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,
                                           params, confidence=decision.confidence)
         if pos is not None:
+            self._publish_decision_status(
+                {"outcome": "opened",
+                 "reason": f"aperta {pos.symbol} {pos.direction.value} ({pos.strategy})"})
             self.notifier.trade_opened(
                 pos.symbol, pos.strategy, pos.direction.value,
                 pos.entry_price, pos.quantity, pos.leverage,
@@ -233,6 +245,15 @@ class TradingBot:
 
     def _persist_risk_state(self) -> None:
         self.fb.set_rtdb("/risk_state", self.circuit_breakers.to_dict())
+
+    def _publish_decision_status(self, extra: dict | None = None) -> None:
+        """Pubblica su Firebase l'esito dell'ultima decisione (perché flat/aperto),
+        così è leggibile dalla dashboard senza SSH."""
+        status = dict(self.orchestrator.last_status)
+        if extra:
+            status.update(extra)
+        if status:
+            self.fb.set_rtdb("/decision_status", status)
 
     # ------------------------------------------------------------------ #
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
