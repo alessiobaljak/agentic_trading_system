@@ -35,11 +35,14 @@ def build() -> str:
     status = fb.get_rtdb("/bot_status") or {}
     hb = status.get("heartbeat")
     online = hb and (time.time() - float(hb) < 180)
+    equity = fb.get_rtdb("/account/equity")
+    eq_str = f"${float(equity):,.2f}" if equity is not None else "—"
     lines += [
         "## Bot",
         f"- stato: **{status.get('state', '—')}** ({'🟢 online' if online else '🔴 offline'})",
         f"- regime: {status.get('regime', '—')}",
         f"- DRY_RUN: {status.get('dry_run', '—')}",
+        f"- equity: **{eq_str}**",
         f"- ultimo heartbeat: {_ts(hb)}",
         "",
     ]
