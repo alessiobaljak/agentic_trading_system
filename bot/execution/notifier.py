@@ -40,3 +40,27 @@ class TelegramNotifier:
 
     def kill_switch(self) -> None:
         self.send("🛑 <b>KILL SWITCH</b> attivato — tutte le posizioni chiuse.")
+
+    def trade_opened(self, symbol: str, strategy: str, direction: str,
+                     entry: float, qty: float, leverage: float,
+                     stop: float, take_profit: float, dry_run: bool = True) -> None:
+        tag = "📝 PAPER" if dry_run else "🔴 LIVE"
+        arrow = "🟢 LONG" if str(direction).lower() == "long" else "🔻 SHORT"
+        self.send(
+            f"{tag} · <b>APERTA</b> {arrow} <b>{symbol}</b>\n"
+            f"strategia: {strategy}\n"
+            f"entry: {entry:g} · qty: {qty:g} · leva: {leverage:g}x\n"
+            f"SL: {stop:g} · TP: {take_profit:g}"
+        )
+
+    def trade_closed(self, symbol: str, strategy: str, direction: str,
+                     exit_price: float, pnl: float, pnl_pct: float,
+                     reason: str, dry_run: bool = True) -> None:
+        tag = "📝 PAPER" if dry_run else "🔴 LIVE"
+        emoji = "✅" if pnl >= 0 else "❌"
+        self.send(
+            f"{tag} · <b>CHIUSA</b> {emoji} <b>{symbol}</b> ({reason})\n"
+            f"strategia: {strategy} · {direction}\n"
+            f"uscita: {exit_price:g}\n"
+            f"PnL: <b>{pnl:+.2f} USDT</b> ({pnl_pct*100:+.1f}%)"
+        )

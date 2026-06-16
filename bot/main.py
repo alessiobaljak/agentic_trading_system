@@ -129,6 +129,10 @@ class TradingBot:
             closed = self.executor.update_position(sym, price)
             if closed:
                 self.logger.log(closed)
+                self.notifier.trade_closed(
+                    closed.symbol, closed.strategy, closed.direction.value,
+                    closed.exit_price, closed.pnl, closed.pnl_pct,
+                    closed.exit_reason.value, dry_run=settings.DRY_RUN)
                 was_sl = closed.exit_reason in (ExitReason.STOP_LOSS,)
                 self.circuit_breakers.register_trade_result(closed.pnl_pct, was_sl)
                 self._persist_risk_state()
@@ -175,8 +179,13 @@ class TradingBot:
             print(f"[main] trade bloccato dal gate: {params.reject_reason}")
             return
 
-        self.executor.open_position(asset, decision.strategy, decision.direction,
-                                    params, confidence=decision.confidence)
+        pos = self.executor.open_position(asset, decision.strategy, decision.direction,
+                                          params, confidence=decision.confidence)
+        if pos is not None:
+            self.notifier.trade_opened(
+                pos.symbol, pos.strategy, pos.direction.value,
+                pos.entry_price, pos.quantity, pos.leverage,
+                pos.stop_price, pos.take_profit_price, dry_run=settings.DRY_RUN)
 
     # ------------------------------------------------------------------ #
     def _load_memory(self):
