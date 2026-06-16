@@ -229,7 +229,11 @@ class ExecutionEngine:
 
         trade = self._build_closed_trade(pos, price, reason)
         self.open_positions.pop(pos.symbol, None)
-        self.fb.set_rtdb(f"/positions/{pos.symbol}", None)
+        # la rimozione del nodo non deve MAI impedire il logging del trade
+        try:
+            self.fb.set_rtdb(f"/positions/{pos.symbol}", None)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] pulizia nodo posizione {pos.symbol} fallita: {exc}")
         return trade
 
     def force_close_all(self, prices: dict[str, float], reason: ExitReason) -> list[ClosedTrade]:

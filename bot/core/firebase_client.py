@@ -73,7 +73,11 @@ class _InMemoryStore:
     # RTDB-like
     def set_rtdb(self, path: str, data: Any) -> None:
         with self._lock:
-            self._rtdb[path] = data
+            if data is None:
+                # come il RTDB vero: scrivere None = cancellare il nodo
+                self._rtdb.pop(path, None)
+            else:
+                self._rtdb[path] = data
 
     def get_rtdb(self, path: str) -> Any:
         with self._lock:
@@ -160,7 +164,15 @@ class FirebaseClient:
     # ---- Realtime DB (stato live) ----
     def set_rtdb(self, path: str, data: Any) -> None:
         if self._live and self._db is not None:
-            self._db.reference(path).set(data)
+            # ATTENZIONE: il RTDB lancia "Value must not be None" se passi None
+            # a .set(). Per cancellare un nodo (es. posizione chiusa) si usa
+            # .delete(). Senza questo, la chiusura di una posizione crashava e il
+            # trade non veniva mai loggato.
+            ref = self._db.reference(path)
+            if data is None:
+                ref.delete()
+            else:
+                ref.set(data)
         else:
             self._memory.set_rtdb(path, data)
 

@@ -26,6 +26,27 @@ def _engine():
     return ExecutionEngine(firebase=FirebaseClient(), dry_run=True)
 
 
+class _StrictRtdbFirebase(FirebaseClient):
+    """Simula il RTDB VERO: set_rtdb(None) solleva, come Firebase Admin.
+    Riproduce il bug per cui la chiusura crashava e il trade non veniva loggato."""
+
+    def set_rtdb(self, path, data):
+        if data is None:
+            raise ValueError("Value must not be None.")
+        super().set_rtdb(path, data)
+
+
+def test_close_logs_trade_even_if_node_delete_fails():
+    # con il Firebase "stretto", chiudere una posizione NON deve sollevare e
+    # DEVE restituire il ClosedTrade (così il logger lo registra).
+    eng = ExecutionEngine(firebase=_StrictRtdbFirebase(), dry_run=True)
+    eng.open_position(_asset(100), "trend_following", Direction.LONG, _params(stop=98, tp=110))
+    closed = eng.update_position("BTCUSDT", 97.0)  # tocca lo stop
+    assert closed is not None
+    assert closed.exit_reason == ExitReason.STOP_LOSS
+    assert "BTCUSDT" not in eng.open_positions
+
+
 def test_open_and_stop_loss():
     eng = _engine()
     pos = eng.open_position(_asset(100), "trend_following", Direction.LONG, _params(stop=98, tp=110))
