@@ -111,6 +111,17 @@ def test_restore_open_positions_after_restart():
     assert closed is not None and closed.exit_reason == ExitReason.STOP_LOSS
 
 
+def test_breakeven_exit_is_net_negative_due_to_fees():
+    # uscita ESATTAMENTE al prezzo d'ingresso: il gross e' 0, ma il PnL netto
+    # deve essere < 0 per via di fee+slippage (come sarebbe live), non 0.00.
+    eng = _engine()
+    eng.open_position(_asset(100), "vwap_reversion", Direction.LONG, _params(qty=10.0, stop=98, tp=104))
+    closed = eng.force_close_all({"BTCUSDT": 100.0}, ExitReason.KILL_SWITCH)[0]
+    assert closed.pnl < 0, "il breakeven deve costare le commissioni"
+    # costo atteso ~ cost_per_trade * notional = 0.0008 * (100*10) = 0.8
+    assert abs(closed.pnl + 0.8) < 0.05
+
+
 def test_kill_switch_closes_all():
     eng = _engine()
     eng.open_position(_asset(100), "x", Direction.LONG, _params())

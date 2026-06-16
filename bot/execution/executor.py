@@ -18,6 +18,7 @@ passati dal RiskManager (final gate). Non c'è percorso che bypassi il gate.
 """
 from __future__ import annotations
 
+import os
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -68,6 +69,11 @@ class ExecutionEngine:
         self.dry_run = settings.DRY_RUN if dry_run is None else dry_run
         self.open_positions: dict[str, Position] = {}
         self._client = None
+        # STESSI costi del backtester (GATE 1): fee+slippage round-trip come
+        # frazione del notional + funding sui perpetual proporzionale alle ore.
+        # Così il PnL del paper è NETTO e coerente con la validazione.
+        self.cost_per_trade = float(os.getenv("BACKTEST_COST_PER_TRADE", "0.0008"))
+        self.funding_per_8h = float(os.getenv("BACKTEST_FUNDING_PER_8H", "0.0001"))
         if not self.dry_run:
             self._init_binance()
         # CRITICO: ricarica le posizioni aperte da Firebase. Senza questo, ogni
@@ -248,9 +254,15 @@ class ExecutionEngine:
     def _build_closed_trade(self, pos: Position, exit_price: float, reason: ExitReason) -> ClosedTrade:
         long = pos.direction == Direction.LONG
         gross = (exit_price - pos.entry_price) if long else (pos.entry_price - exit_price)
-        pnl = gross * pos.quantity
+        gross_pnl = gross * pos.quantity
+        # --- costi reali (come il backtester): fee+slippage round-trip + funding ---
+        notional = pos.entry_price * pos.quantity
+        held_hours = max(0.0, (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0)
+        funding = (held_hours / 8.0) * self.funding_per_8h
+        cost = (self.cost_per_trade + funding) * notional
+        pnl = gross_pnl - cost                       # PnL NETTO in USDT
         # PnL% sul margine impegnato (notional/leverage)
-        margin = (pos.entry_price * pos.quantity) / max(pos.leverage, 1)
+        margin = notional / max(pos.leverage, 1)
         pnl_pct = pnl / margin if margin else 0.0
         from bot.core.models import IndicatorSnapshot
         ind = {k: IndicatorSnapshot(**v) for k, v in pos.indicators_at_entry.items()}
