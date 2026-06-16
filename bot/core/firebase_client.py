@@ -161,6 +161,18 @@ class FirebaseClient:
             docs = docs[:limit]
         return docs
 
+    def list_doc_ids(self, collection: str) -> list[str]:
+        if self._live:
+            return [d.id for d in self._fs.collection(collection).stream()]
+        prefix = f"{collection}/"
+        return [k[len(prefix):] for k in self._memory._docs if k.startswith(prefix)]
+
+    def delete_doc(self, collection: str, doc_id: str) -> None:
+        if self._live:
+            self._fs.collection(collection).document(doc_id).delete()
+        else:
+            self._memory._docs.pop(f"{collection}/{doc_id}", None)
+
     # ---- Realtime DB (stato live) ----
     def set_rtdb(self, path: str, data: Any) -> None:
         if self._live and self._db is not None:
