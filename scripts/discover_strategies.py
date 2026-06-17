@@ -52,34 +52,46 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
 
 
 def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
-    """Aggiunge le coppie generate al registro (accumula pass_count) e RICALCOLA
-    la lista validated su TUTTE le coppie, PRESERVANDO i campi di copertura del
-    GATE 1 (universe/coverage/ready) che spettano a optimize.py."""
+    """Aggiunge SOLO le coppie generate che PASSANO (accumula pass_count) e pota
+    quelle generate inutili/stantie, evitando crescita illimitata del documento.
+    Ricalcola la lista validated PRESERVANDO i campi di copertura del GATE 1
+    (universe/coverage/ready) che spettano a optimize.py."""
     doc = fb.get_doc("strategy_registry", "validated") or {}
     pairs = doc.get("pairs", {}) or {}
-    passed_set = set(passed_now)
-    for key, e in out.items():
+    now = time.time()
+    # 1) upsert SOLO delle coppie passate (non sporco il registro con i fallimenti)
+    for key in passed_now:
+        e = out[key]
         rec = pairs.get(key, {"pass_count": 0})
-        if key in passed_set:
-            rec["pass_count"] = rec.get("pass_count", 0) + 1
-            rec["last_params"] = e["params"]
-            rec["last_pf"] = e["oos_pf"]
-            rec["last_pnl_pct"] = e["oos_pnl_pct"]
-            rec["last_trades"] = e["oos_trades"]
-            rec["last_passed_at"] = time.time()
+        rec["pass_count"] = rec.get("pass_count", 0) + 1
+        rec["last_params"] = e["params"]
+        rec["last_pf"] = e["oos_pf"]
+        rec["last_pnl_pct"] = e["oos_pnl_pct"]
+        rec["last_trades"] = e["oos_trades"]
         rec["symbol"] = e["symbol"]
         rec["strategy"] = e["strategy"]
         rec["generated"] = True
-        rec["last_seen_at"] = time.time()
+        rec["last_seen_at"] = now
+        rec["last_passed_at"] = now
         pairs[key] = rec
+    # 2) potatura: scarta le coppie GENERATE senza valore (pass_count 0) o stantie
+    #    e non validate. Le coppie BASE (optimize.py, senza flag generated) restano.
+    stale_before = now - FRESH_DAYS * 86400 * 2
+    pairs = {
+        k: r for k, r in pairs.items()
+        if not (r.get("generated") and (
+            r.get("pass_count", 0) == 0
+            or (r.get("pass_count", 0) < MIN_PASSES and r.get("last_seen_at", 0) < stale_before)
+        ))
+    }
     validated = sorted(
         k for k, r in pairs.items()
         if r.get("pass_count", 0) >= MIN_PASSES
-        and (time.time() - r.get("last_seen_at", 0)) < FRESH_DAYS * 86400
+        and (now - r.get("last_seen_at", 0)) < FRESH_DAYS * 86400
     )
     doc["pairs"] = pairs
     doc["validated"] = validated
-    doc["updated_at"] = time.time()
+    doc["updated_at"] = now
     fb.set_doc("strategy_registry", "validated", doc)
     return validated
 
@@ -186,8 +198,15 @@ def main() -> int:
     if specs_to_save:
         persist_specs(fb, specs_to_save)
     validated = merge_into_registry(fb, out, passed_keys)
+    # riepilogo COMPATTO (niente spec/entry per ogni coppia: sforerebbe il limite
+    # di 1 MiB di Firestore). Le spec complete stanno in discovered_strategies/specs.
     fb.set_doc("strategy_params", "discovered_last_run", {
-        "updated_at": time.time(), "entries": out, "passed": passed_keys,
+        "updated_at": time.time(),
+        "n_eval": n_eval,
+        "n_passed": len(passed_keys),
+        "passed": [{"symbol": out[k]["symbol"], "id": out[k]["strategy"],
+                    "pf": out[k]["oos_pf"], "pnl": out[k]["oos_pnl_pct"]}
+                   for k in passed_keys],
     })
 
     print("\n" + "=" * 60)

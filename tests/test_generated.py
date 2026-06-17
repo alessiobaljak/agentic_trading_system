@@ -72,6 +72,43 @@ def test_mutate_produces_valid_spec():
     assert GeneratedStrategy(child) is not None
 
 
+def test_merge_into_registry_only_passed_and_accumulates():
+    from scripts.discover_strategies import merge_into_registry
+    fb = FirebaseClient()
+    out = {
+        "BTCUSDT|gen_aaa": {"symbol": "BTCUSDT", "strategy": "gen_aaa", "params": {},
+                            "oos_pf": 1.3, "oos_pnl_pct": 0.2, "oos_trades": 40, "passed": True},
+        "BTCUSDT|gen_bbb": {"symbol": "BTCUSDT", "strategy": "gen_bbb", "params": {},
+                            "oos_pf": 0.9, "oos_pnl_pct": -0.1, "oos_trades": 30, "passed": False},
+    }
+    merge_into_registry(fb, out, passed_now=["BTCUSDT|gen_aaa"])
+    reg = fb.get_doc("strategy_registry", "validated")
+    # solo la passata entra; la fallita NON sporca il registro
+    assert "BTCUSDT|gen_aaa" in reg["pairs"]
+    assert "BTCUSDT|gen_bbb" not in reg["pairs"]
+    assert "BTCUSDT|gen_aaa" not in reg["validated"]  # serve >=3 pass
+    # dopo 3 pass diventa validata/operabile
+    merge_into_registry(fb, out, passed_now=["BTCUSDT|gen_aaa"])
+    merge_into_registry(fb, out, passed_now=["BTCUSDT|gen_aaa"])
+    reg = fb.get_doc("strategy_registry", "validated")
+    assert reg["pairs"]["BTCUSDT|gen_aaa"]["pass_count"] == 3
+    assert "BTCUSDT|gen_aaa" in reg["validated"]
+
+
+def test_merge_preserves_base_pairs_and_gate1():
+    from scripts.discover_strategies import merge_into_registry
+    fb = FirebaseClient()
+    # coppia BASE (senza flag generated) + campi GATE 1: non vanno toccati
+    fb.set_doc("strategy_registry", "validated", {
+        "pairs": {"ETHUSDT|trend_following": {"pass_count": 5, "last_seen_at": 0}},
+        "validated": [], "coverage": 0.67, "ready": True,
+    })
+    merge_into_registry(fb, {}, passed_now=[])
+    reg = fb.get_doc("strategy_registry", "validated")
+    assert "ETHUSDT|trend_following" in reg["pairs"]
+    assert reg["coverage"] == 0.67 and reg["ready"] is True
+
+
 def test_adaptation_loads_and_enables_generated():
     fb = FirebaseClient()
     spec = _rsi_spec()
