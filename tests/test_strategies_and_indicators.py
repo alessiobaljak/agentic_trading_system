@@ -45,6 +45,17 @@ def test_vwap_is_rolling_not_cumulative():
     assert abs(v - last_price) / last_price < 0.10
 
 
+def test_adx_and_stochastic_in_frame():
+    from bot.core.indicators import compute_indicator_frame
+    df = compute_indicator_frame(_synthetic_candles(120, trend=0.5))
+    assert "adx" in df.columns and "stoch_k" in df.columns and "stoch_d" in df.columns
+    # stocastico è limitato a 0-100
+    sk = df["stoch_k"].dropna()
+    assert (sk >= -0.01).all() and (sk <= 100.01).all()
+    # adx non negativo
+    assert (df["adx"].dropna() >= -0.01).all()
+
+
 def test_rsi_bounds():
     s = pd.Series(np.linspace(100, 200, 100))  # solo salite
     r = rsi(s)

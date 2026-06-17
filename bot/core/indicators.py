@@ -88,6 +88,34 @@ def vwap(df: pd.DataFrame, window: int = 48) -> pd.Series:
     return pv / vol
 
 
+def adx(df: pd.DataFrame, period: int = 14) -> pd.Series:
+    """ADX (Average Directional Index): forza del trend, 0-100.
+    >25 trend forte, <20 mercato debole/laterale. Direzione-neutro."""
+    high, low, close = df["high"], df["low"], df["close"]
+    up = high.diff()
+    down = -low.diff()
+    plus_dm = ((up > down) & (up > 0)) * up.clip(lower=0)
+    minus_dm = ((down > up) & (down > 0)) * down.clip(lower=0)
+    tr = pd.concat([(high - low),
+                    (high - close.shift()).abs(),
+                    (low - close.shift()).abs()], axis=1).max(axis=1)
+    atr_ = tr.rolling(period, min_periods=1).mean().replace(0, np.nan)
+    plus_di = 100 * plus_dm.rolling(period, min_periods=1).mean() / atr_
+    minus_di = 100 * minus_dm.rolling(period, min_periods=1).mean() / atr_
+    dx = 100 * (plus_di - minus_di).abs() / (plus_di + minus_di).replace(0, np.nan)
+    return dx.rolling(period, min_periods=1).mean()
+
+
+def stochastic(df: pd.DataFrame, k: int = 14, d: int = 3) -> tuple[pd.Series, pd.Series]:
+    """Oscillatore stocastico %K/%D (0-100): posizione del close nel range recente."""
+    low_k = df["low"].rolling(k, min_periods=1).min()
+    high_k = df["high"].rolling(k, min_periods=1).max()
+    rng = (high_k - low_k).replace(0, np.nan)
+    pct_k = 100 * (df["close"] - low_k) / rng
+    pct_d = pct_k.rolling(d, min_periods=1).mean()
+    return pct_k, pct_d
+
+
 def compute_indicator_frame(candles: list[Candle]) -> pd.DataFrame:
     """
     Calcola TUTTI gli indicatori sull'INTERA serie in una sola passata (vettoriale).
@@ -112,6 +140,10 @@ def compute_indicator_frame(candles: list[Candle]) -> pd.DataFrame:
     df["atr"] = atr(df, 14)
     df["vwap"] = vwap(df)
     df["volume_sma"] = df["volume"].rolling(20).mean()
+    df["adx"] = adx(df, 14)
+    stoch_k, stoch_d = stochastic(df, 14, 3)
+    df["stoch_k"] = stoch_k
+    df["stoch_d"] = stoch_d
     return df
 
 
@@ -127,6 +159,7 @@ def snapshot_from_row(row, timeframe: str) -> IndicatorSnapshot:
         bb_upper=g("bb_upper"), bb_mid=g("bb_mid"), bb_lower=g("bb_lower"),
         atr=g("atr"), vwap=g("vwap"), close=g("close"),
         volume=g("volume"), volume_sma=g("volume_sma"),
+        adx=g("adx"), stoch_k=g("stoch_k"), stoch_d=g("stoch_d"),
     )
 
 
@@ -162,4 +195,8 @@ def compute_snapshot(candles: list[Candle], timeframe: str) -> IndicatorSnapshot
     snap.atr = last(atr(df, 14))
     snap.vwap = last(vwap(df))
     snap.volume_sma = last(df["volume"].rolling(20).mean())
+    snap.adx = last(adx(df, 14))
+    sk, sd = stochastic(df, 14, 3)
+    snap.stoch_k = last(sk)
+    snap.stoch_d = last(sd)
     return snap

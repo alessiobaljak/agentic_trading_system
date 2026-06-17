@@ -63,6 +63,25 @@ def test_generator_unique_and_coherent():
         # nessuna coppia incompatibile (es. bb_touch + bb_break)
         assert not ({"bb_touch", "bb_break"} <= set(kinds))
         assert not ({"vwap_momentum", "vwap_reversion"} <= set(kinds))
+        assert not ({"stoch_extreme", "stoch_momentum"} <= set(kinds))
+
+
+def test_new_features_and_adx_filter():
+    from bot.core.models import IndicatorSnapshot
+    # stoch_extreme: stoch_k basso -> LONG
+    spec = {"features": [{"kind": "stoch_extreme", "low": 20.0, "high": 80.0}],
+            "atr_mult_stop": 1.5, "rr": 2.0}
+    spec["id"] = spec_id(spec)
+    a = _asset()
+    a.indicators["15m"] = IndicatorSnapshot(timeframe="15m", atr=2.0, close=100.0,
+                                            stoch_k=10.0, stoch_d=15.0, adx=30.0)
+    assert GeneratedStrategy(spec).generate_signal(a).direction == Direction.LONG
+    # filtro ADX: con min_adx alto e adx basso -> nessun segnale
+    spec2 = {"features": [{"kind": "stoch_extreme", "low": 20.0, "high": 80.0}],
+             "min_adx": 25.0, "atr_mult_stop": 1.5, "rr": 2.0}
+    spec2["id"] = spec_id(spec2)
+    a.indicators["15m"].adx = 10.0  # trend debole
+    assert GeneratedStrategy(spec2).generate_signal(a) is None
 
 
 def test_mutate_produces_valid_spec():

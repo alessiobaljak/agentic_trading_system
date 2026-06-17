@@ -73,6 +73,9 @@ class IndicatorSnapshot(BaseModel):
     close: Optional[float] = None
     volume: Optional[float] = None
     volume_sma: Optional[float] = None
+    adx: Optional[float] = None            # forza del trend (0-100)
+    stoch_k: Optional[float] = None        # stocastico %K (0-100)
+    stoch_d: Optional[float] = None        # stocastico %D (0-100)
 
 
 class AssetSnapshot(BaseModel):
