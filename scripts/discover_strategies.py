@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import os
 import time
+from datetime import date
 
 from backtesting.data_loader import load_candles
 from backtesting.engine import StrategyStats
@@ -122,21 +123,30 @@ def main() -> int:
                     help="seed generazione (varia per esplorare strategie diverse a ogni run)")
     ap.add_argument("--interval", default="1h")
     ap.add_argument("--start", default="2024-01-01")
-    ap.add_argument("--end", default="2026-01-01")
+    ap.add_argument("--end", default=None,
+                    help="fine finestra dati (default: oggi). Far avanzare la finestra "
+                         "rende la ri-validazione VERA su dati nuovi a ogni run.")
     ap.add_argument("--source", default="auto")
+    ap.add_argument("--reeval-cap", type=int, default=80,
+                    help="max strategie già scoperte da ri-validare per run (bound sui tempi)")
     args = ap.parse_args()
+    end = args.end or date.today().isoformat()
 
     fb = get_firebase()
     opt = WalkForwardOptimizer(n_windows=args.windows)
 
-    # genera candidate nuove + qualche mutazione delle migliori già scoperte
+    # 1) candidate NUOVE  2) RI-VALUTA le scoperte precedenti (così accumulano i
+    # pass e diventano operabili)  3) mutazioni per evolvere attorno alle vincenti.
     specs = generate_specs(args.generate, seed=args.seed)
     existing = (fb.get_doc("discovered_strategies", "specs") or {}).get("specs", {}) or {}
-    for i, base in enumerate(list(existing.values())[:10]):
+    existing_list = list(existing.values())[: args.reeval_cap]
+    specs.extend(existing_list)
+    for i, base in enumerate(existing_list[:10]):
         specs.append(mutate(base, seed=args.seed + i + 1))
     # de-dup per id
     specs = list({s["id"]: s for s in specs}.values())
-    print(f"[discover] {len(specs)} strategie candidate generate (seed={args.seed})")
+    print(f"[discover] {len(specs)} candidate ({len(existing_list)} ri-validate) "
+          f"seed={args.seed} finestra {args.start}->{end}")
 
     symbols = top_symbols_by_volume(args.top)
     min_history = int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500"))
@@ -147,7 +157,7 @@ def main() -> int:
     n_eval = 0
 
     for sym in symbols:
-        candles = load_candles(sym, args.interval, args.start, args.end, prefer=args.source)
+        candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
         if len(candles) < min_history:
             print(f"[discover] {sym}: storia insufficiente, salto")
             continue

@@ -43,4 +43,4 @@ jobs:
           --top ${{ inputs.top || '25' }}
           --generate ${{ inputs.generate || '40' }}
           --windows 3
-          --start 2024-01-01 --end 2026-01-01
+          --start 2024-01-01
