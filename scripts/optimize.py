@@ -105,6 +105,17 @@ def main() -> int:
         fb.set_doc("strategy_params", "current", {})
         print("[optimize] reset TOTALE: registro + strategie scoperte + ultimo run azzerati")
 
+    # contesto BTC (open_time -> snapshot) per le strategie cross-asset
+    # (momentum_cross_asset): caricato UNA volta, riusato per ogni coin.
+    btc_ctx = None
+    try:
+        btc_candles = load_candles("BTCUSDT", args.interval, args.start, end, prefer=args.source)
+        if len(btc_candles) >= 200:
+            btc_ctx = opt.bt.build_context("BTCUSDT", btc_candles)
+            print(f"[optimize] contesto BTC pronto ({len(btc_ctx)} barre) per cross-asset")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[optimize] contesto BTC non disponibile: {exc}")
+
     out: dict[str, dict] = {}
     summary_passed: list[str] = []
 
@@ -119,7 +130,7 @@ def main() -> int:
             print(f"[optimize] {sym}: storia insufficiente ({len(candles)} < {min_history}), "
                   f"salto (token troppo recente)")
             continue
-        results = opt.optimize_symbol(sym, candles)
+        results = opt.optimize_symbol(sym, candles, context_by_ts=btc_ctx)
         for r in results:
             key = f"{sym}|{r.strategy}"
             out[key] = {

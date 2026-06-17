@@ -118,7 +118,19 @@ class Backtester:
         snap.indicators["5m"] = ind15
         return snap
 
-    def run_strategy(self, strategy, symbol: str, candles: list[Candle], frame=None) -> StrategyStats:
+    def build_context(self, symbol: str, candles: list[Candle], frame=None) -> dict:
+        """Mappa open_time -> AssetSnapshot per un asset di CONTESTO (es. BTC), così
+        strategie cross-asset (momentum_cross_asset) sono validabili nel backtest."""
+        if frame is None:
+            frame = compute_indicator_frame(candles)
+        out: dict = {}
+        for idx in range(len(frame)):
+            snap = self._snapshot_from_frame(symbol, frame, idx)
+            out[frame.iloc[idx]["open_time"]] = snap
+        return out
+
+    def run_strategy(self, strategy, symbol: str, candles: list[Candle], frame=None,
+                     context_by_ts: dict | None = None) -> StrategyStats:
         stats = StrategyStats(strategy=strategy.name)
         if frame is None:
             frame = compute_indicator_frame(candles)
@@ -131,7 +143,12 @@ class Backtester:
             if not strategy.is_active_in(regime):
                 i += 1
                 continue
-            sig = strategy.generate_signal(snap, StrategyContext({symbol: snap}, regime))
+            ctx_assets = {symbol: snap}
+            if context_by_ts:
+                ctx_snap = context_by_ts.get(candles[i].open_time)
+                if ctx_snap is not None:
+                    ctx_assets[ctx_snap.symbol] = ctx_snap
+            sig = strategy.generate_signal(snap, StrategyContext(ctx_assets, regime))
             if sig is None:
                 i += 1
                 continue

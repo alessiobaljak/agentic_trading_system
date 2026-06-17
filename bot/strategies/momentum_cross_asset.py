@@ -21,7 +21,12 @@ class MomentumCrossAsset(Strategy):
     active_regimes = {Regime.BULL_TRENDING, Regime.BEAR_TRENDING}
     description = "Anticipa le altcoin sul momentum di BTC (lag 15-30m)."
 
-    BTC_MOVE_THRESHOLD = 0.6   # |MACD hist| / ATR di BTC
+    default_params = {"btc_move_threshold": 0.6, "atr_mult_stop": 1.5, "rr": 2.0}
+    param_grid = {
+        "btc_move_threshold": [0.4, 0.6, 0.8],
+        "atr_mult_stop": [1.0, 1.5, 2.0],
+        "rr": [1.5, 2.0, 2.5],
+    }
 
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
@@ -40,18 +45,20 @@ class MomentumCrossAsset(Strategy):
         if btc_i.atr == 0:
             return None
 
+        thr = self.p("btc_move_threshold")
+        am, rr = self.p("atr_mult_stop"), self.p("rr")
         btc_momo = btc_i.macd_hist / btc_i.atr
         btc_up = btc_i.ema_fast > btc_i.ema_slow
 
         # altcoin "in ritardo": la sua EMA non ha ancora confermato la direzione di BTC
         alt_up = (alt_i.ema_fast or 0) > (alt_i.ema_slow or 0)
 
-        if btc_up and btc_momo >= self.BTC_MOVE_THRESHOLD and not alt_up:
-            stop, target = self._atr_stop_target(asset, Direction.LONG, atr_mult_stop=1.5, rr=2.0)
+        if btc_up and btc_momo >= thr and not alt_up:
+            stop, target = self._atr_stop_target(asset, Direction.LONG, atr_mult_stop=am, rr=rr)
             return self._signal(asset, Direction.LONG, 60,
                                 "BTC momentum rialzista forte, altcoin in ritardo", stop, target)
-        if (not btc_up) and btc_momo <= -self.BTC_MOVE_THRESHOLD and alt_up:
-            stop, target = self._atr_stop_target(asset, Direction.SHORT, atr_mult_stop=1.5, rr=2.0)
+        if (not btc_up) and btc_momo <= -thr and alt_up:
+            stop, target = self._atr_stop_target(asset, Direction.SHORT, atr_mult_stop=am, rr=rr)
             return self._signal(asset, Direction.SHORT, 60,
                                 "BTC momentum ribassista forte, altcoin in ritardo", stop, target)
         return None

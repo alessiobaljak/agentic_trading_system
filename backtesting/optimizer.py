@@ -90,7 +90,8 @@ class WalkForwardOptimizer:
         # obiettivo: ritorno netto OOS, con piccolo bonus per profit factor
         return stats.total_pnl_pct() + 0.1 * (stats.profit_factor() - 1.0)
 
-    def optimize_symbol(self, symbol: str, candles: list[Candle]) -> list[OptResult]:
+    def optimize_symbol(self, symbol: str, candles: list[Candle],
+                        context_by_ts: dict | None = None) -> list[OptResult]:
         results: list[OptResult] = []
         frame = compute_indicator_frame(candles)
         windows = self._windows(len(candles))
@@ -113,14 +114,16 @@ class WalkForwardOptimizer:
                 # grid search sul train
                 best_combo, best_score = combos[0], -1e18
                 for combo in combos:
-                    st = self.bt.run_strategy(cls(combo), symbol, train_c, frame=train_f)
+                    st = self.bt.run_strategy(cls(combo), symbol, train_c, frame=train_f,
+                                              context_by_ts=context_by_ts)
                     sc = self._score(st, self.min_trades_train)
                     if sc > best_score:
                         best_score, best_combo = sc, combo
                 # applica i migliori sul TEST (out-of-sample)
                 test_c = candles[sa:sb]
                 test_f = frame.iloc[sa:sb].reset_index(drop=True)
-                st_oos = self.bt.run_strategy(cls(best_combo), symbol, test_c, frame=test_f)
+                st_oos = self.bt.run_strategy(cls(best_combo), symbol, test_c, frame=test_f,
+                                              context_by_ts=context_by_ts)
                 oos.trades.extend(st_oos.trades)
                 history.append(best_combo)
 
