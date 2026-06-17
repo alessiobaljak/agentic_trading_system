@@ -77,7 +77,10 @@ class Settings:
     ORCHESTRATOR_TIMEFRAME: str = "15m"   # l'orchestratore gira ad ogni 15m chiusa
     SCAN_INTERVAL_HOURS: int = 4          # market scanner ogni 4h
     REGIME_INTERVAL_MINUTES: int = 60     # regime detector ogni ora
-    MAX_OPEN_POSITIONS: int = 5           # 3-5 asset concentrati
+    MAX_OPEN_POSITIONS: int = 5           # 3-5 asset concentrati (cap posizioni APERTE)
+    # su quante crypto (tra le più liquide scansionate) cercare un SEGNALE a ogni
+    # ciclo. Disaccoppiato dal cap posizioni: valuti molte, apri al massimo 5.
+    SELECT_UNIVERSE: int = int(os.getenv("SELECT_UNIVERSE", "20"))
     MAX_CORRELATED_POSITIONS: int = 3     # correlazione >0.85
     CORRELATION_THRESHOLD: float = 0.85
 

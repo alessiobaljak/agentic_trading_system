@@ -116,10 +116,12 @@ class MarketScanner:
         self, scan_results: list[ScanResult], regime: Regime, top_n: Optional[int] = None
     ) -> list[ScanResult]:
         """
-        Seleziona i migliori asset concentrando il capitale dove il segnale è forte.
-        top_n default = MAX_OPEN_POSITIONS (3-5).
+        Restituisce l'universo di VALUTAZIONE: le migliori `top_n` crypto per
+        punteggio, su cui l'orchestratore cercherà un segnale a ogni ciclo.
+        NB: questo NON è il numero di posizioni aperte (cap = MAX_OPEN_POSITIONS):
+        si valutano molte crypto, se ne aprono al massimo 5. Default = SELECT_UNIVERSE.
         """
-        top_n = top_n or settings.MAX_OPEN_POSITIONS
+        top_n = top_n or settings.SELECT_UNIVERSE
         for r in scan_results:
             r.snapshot.regime = regime
         return scan_results[:top_n]
