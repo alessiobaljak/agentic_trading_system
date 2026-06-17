@@ -57,6 +57,28 @@ class PriceAgent:
                 out.append(s["symbol"])
         return out
 
+    def list_perpetual_symbols_by_volume(self) -> list[str]:
+        """Perpetual USDT ORDINATI per volume 24h (decrescente). Una sola chiamata
+        extra (/ticker/24hr senza symbol = tutti i ticker) per coprire la parte
+        LIQUIDA del mercato (incluse le memecoin grosse), non i primi N a caso.
+        Se il ranking fallisce, ricade sull'ordine grezzo."""
+        perps = set(self.list_perpetual_symbols())
+        if not perps:
+            return []
+        tickers = self._get("/fapi/v1/ticker/24hr", {})
+        if not isinstance(tickers, list):
+            return sorted(perps)
+        ranked: list[tuple[str, float]] = []
+        for t in tickers:
+            sym = t.get("symbol")
+            if sym in perps:
+                try:
+                    ranked.append((sym, float(t.get("quoteVolume", 0.0))))
+                except (TypeError, ValueError):
+                    continue
+        ranked.sort(key=lambda x: x[1], reverse=True)
+        return [s for s, _ in ranked] or sorted(perps)
+
     # ---- candele ----
     def get_candles(self, symbol: str, interval: str, limit: int = 200) -> list[Candle]:
         data = self._get("/fapi/v1/klines",

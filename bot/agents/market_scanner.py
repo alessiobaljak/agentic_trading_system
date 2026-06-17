@@ -1,8 +1,8 @@
 """
 Market Scanner & Asset Selector (Layer 2).
 
-Ogni 4h scansiona TUTTO l'universo dei perpetual USDT su Binance e calcola per
-ogni asset un punteggio composito:
+Ogni 4h scansiona le crypto più LIQUIDE (perpetual USDT ordinati per volume 24h,
+fino a SCAN_MAX_SYMBOLS) e calcola per ogni asset un punteggio composito:
     score = w1*momentum_tecnico + w2*social_momentum + w3*volume + w4*|funding| + w5*volatilità
 
 L'Asset Selector restituisce i 3-5 asset col setup migliore per le strategie
@@ -10,6 +10,7 @@ attualmente favorevoli (regime corrente).
 """
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from typing import Optional
 
@@ -48,12 +49,13 @@ class MarketScanner:
         self,
         price_agent: Optional[PriceAgent] = None,
         sentiment_agent: Optional[SentimentAgent] = None,
-        max_symbols: int = 60,
+        max_symbols: Optional[int] = None,
     ) -> None:
         self.price = price_agent or PriceAgent()
         self.sentiment = sentiment_agent or SentimentAgent()
-        # limita per non saturare i rate limit; i top liquidi sono scansionati comunque
-        self.max_symbols = max_symbols
+        # quante crypto scansionare per ciclo, ORDINATE PER VOLUME (le più liquide).
+        # Cap per non saturare i rate limit Binance; alzabile via env SCAN_MAX_SYMBOLS.
+        self.max_symbols = max_symbols or int(os.getenv("SCAN_MAX_SYMBOLS", "100"))
 
     def _score(self, snap: AssetSnapshot) -> tuple[float, dict[str, float]]:
         i = snap.ind("15m")
@@ -94,7 +96,8 @@ class MarketScanner:
         viene preso solo per i pochi asset selezionati, nel loop principale.
         """
         if symbols is None:
-            symbols = self.price.list_perpetual_symbols()[: self.max_symbols]
+            # le N crypto più liquide per VOLUME (non i primi N in ordine d'API)
+            symbols = self.price.list_perpetual_symbols_by_volume()[: self.max_symbols]
         results: list[ScanResult] = []
         for sym in symbols:
             snap = self.price.build_snapshot(sym)
