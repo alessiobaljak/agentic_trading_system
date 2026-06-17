@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from bot.core.indicators import atr, bollinger, compute_snapshot, ema, rsi
+from bot.core.indicators import atr, bollinger, compute_snapshot, ema, rsi, vwap
 from bot.core.models import AssetSnapshot, Candle, IndicatorSnapshot, Regime
 from datetime import datetime, timedelta, timezone
 
@@ -27,6 +27,22 @@ def test_indicators_compute():
     assert 0 <= snap.rsi <= 100
     assert snap.atr is not None and snap.atr > 0
     assert snap.vwap is not None
+
+
+def test_vwap_is_rolling_not_cumulative():
+    # serie fortemente trendata: un VWAP cumulativo resterebbe ancorato all'inizio
+    # (lontanissimo dal prezzo). Il rolling deve restare VICINO al prezzo recente.
+    n = 500
+    df = pd.DataFrame({
+        "high": [100 + i for i in range(n)],
+        "low": [99 + i for i in range(n)],
+        "close": [100 + i for i in range(n)],
+        "volume": [1000.0] * n,
+    })
+    v = vwap(df, window=48).iloc[-1]
+    last_price = df["close"].iloc[-1]  # ~599
+    # rolling su 48 barre: VWAP entro pochi % dal prezzo; cumulativo darebbe ~350
+    assert abs(v - last_price) / last_price < 0.10
 
 
 def test_rsi_bounds():

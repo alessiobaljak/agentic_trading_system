@@ -80,7 +80,7 @@ class Settings:
     MAX_OPEN_POSITIONS: int = 5           # 3-5 asset concentrati (cap posizioni APERTE)
     # su quante crypto (tra le più liquide scansionate) cercare un SEGNALE a ogni
     # ciclo. Disaccoppiato dal cap posizioni: valuti molte, apri al massimo 5.
-    SELECT_UNIVERSE: int = int(os.getenv("SELECT_UNIVERSE", "20"))
+    SELECT_UNIVERSE: int = int(os.getenv("SELECT_UNIVERSE", "30"))
     MAX_CORRELATED_POSITIONS: int = 3     # correlazione >0.85
     CORRELATION_THRESHOLD: float = 0.85
 

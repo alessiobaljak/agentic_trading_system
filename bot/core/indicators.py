@@ -74,11 +74,18 @@ def atr(df: pd.DataFrame, period: int = 14) -> pd.Series:
     return tr.ewm(alpha=1 / period, adjust=False).mean()
 
 
-def vwap(df: pd.DataFrame) -> pd.Series:
-    """VWAP intraday cumulativo sulle candele fornite."""
+def vwap(df: pd.DataFrame, window: int = 48) -> pd.Series:
+    """VWAP ROLLING su `window` barre (default 48).
+
+    NB: deve essere ROLLING, non cumulativo sull'intera serie. Un VWAP cumulativo
+    su mesi/anni si ancora ai prezzi iniziali e finisce lontanissimo dal prezzo
+    corrente: come trigger/target di mean-reversion generava trade con pnl
+    assurdo (+100/300%) e PF irreali nel backtest. La finestra mobile tiene il
+    VWAP vicino al prezzo recente e rende il backtest coerente col live."""
     typical = (df["high"] + df["low"] + df["close"]) / 3.0
-    cum_vol = df["volume"].cumsum().replace(0, np.nan)
-    return (typical * df["volume"]).cumsum() / cum_vol
+    pv = (typical * df["volume"]).rolling(window, min_periods=1).sum()
+    vol = df["volume"].rolling(window, min_periods=1).sum().replace(0, np.nan)
+    return pv / vol
 
 
 def compute_indicator_frame(candles: list[Candle]) -> pd.DataFrame:
