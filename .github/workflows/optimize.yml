@@ -43,4 +43,4 @@ jobs:
           --top ${{ inputs.top || '40' }}
           --windows ${{ inputs.windows || '3' }}
           --max-combos 12
-          --start 2024-01-01 --end 2026-01-01
+          --start 2024-01-01

@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import time
+from datetime import date
 
 import requests
 
@@ -76,7 +77,7 @@ def main() -> int:
                    help="se >0, ottimizza i top-N future per volume (ignora --symbols)")
     p.add_argument("--interval", default="1h")
     p.add_argument("--start", default="2023-01-01")
-    p.add_argument("--end", default="2026-01-01")
+    p.add_argument("--end", default=None, help="default: oggi (finestra che avanza)")
     p.add_argument("--source", default="binance")
     p.add_argument("--windows", type=int, default=3)
     p.add_argument("--max-combos", type=int, default=12,
@@ -84,6 +85,7 @@ def main() -> int:
     p.add_argument("--reset-registry", action="store_true",
                    help="azzera il registro validato prima di accumulare (ripartenza pulita)")
     args = p.parse_args()
+    end = args.end or date.today().isoformat()
 
     symbols = []
     if args.top > 0:
@@ -95,15 +97,20 @@ def main() -> int:
     opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos)
     fb = get_firebase()
     if args.reset_registry:
+        # pulizia TOTALE del GATE 1: registro validato, strategie scoperte e
+        # ultimo run. Necessaria dopo un cambio di indicatori (es. fix VWAP) che
+        # invalida i backtest precedenti: si riparte davvero da zero.
         fb.set_doc("strategy_registry", "validated", {})
-        print("[optimize] registro azzerato (ripartenza pulita)")
+        fb.set_doc("discovered_strategies", "specs", {"specs": {}})
+        fb.set_doc("strategy_params", "current", {})
+        print("[optimize] reset TOTALE: registro + strategie scoperte + ultimo run azzerati")
 
     out: dict[str, dict] = {}
     summary_passed: list[str] = []
 
     for sym in symbols:
         print(f"\n[optimize] === {sym} ===")
-        candles = load_candles(sym, args.interval, args.start, args.end, prefer=args.source)
+        candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
         # storia minima per poter fare un walk-forward sensato. ~2500 candele 1h
         # ≈ 3-4 mesi: tiene dentro i meme/nuovi con un minimo di storia, esclude
         # solo quelli appena listati (non validabili). Regolabile via env.
