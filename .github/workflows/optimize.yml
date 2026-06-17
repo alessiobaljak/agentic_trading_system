@@ -17,8 +17,9 @@ on:
         default: "3"
   push:
     branches: ["claude/brave-albattani-1b12fv"]
-    paths: ["backtesting/optimizer.py", "scripts/optimize.py",
-            "bot/strategies/**", ".github/workflows/optimize.yml"]
+    paths: ["backtesting/optimizer.py", "backtesting/engine.py", "scripts/optimize.py",
+            "bot/strategies/**", "bot/core/indicators.py",
+            ".github/workflows/optimize.yml"]
 
 jobs:
   optimize:

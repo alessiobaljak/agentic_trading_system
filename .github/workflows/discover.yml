@@ -19,6 +19,7 @@ on:
   push:
     branches: ["claude/brave-albattani-1b12fv"]
     paths: ["bot/strategies/generated.py", "bot/strategies/generator.py",
+            "bot/core/indicators.py", "backtesting/engine.py",
             "scripts/discover_strategies.py", ".github/workflows/discover.yml"]
 
 jobs:
