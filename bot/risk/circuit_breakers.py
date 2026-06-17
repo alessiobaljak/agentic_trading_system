@@ -51,9 +51,9 @@ class CircuitBreakers:
         now = now_ts or time.time()
 
         if self.state.halted_for_day:
-            return (f"Daily loss limit raggiunto "
-                    f"({self.state.daily_pnl_pct*100:.2f}% <= -{hard_limits.DAILY_LOSS_LIMIT*100:.0f}%): "
-                    f"stop totale fino a domani")
+            return (f"Stop giornaliero attivo: oggi la perdita ha toccato il limite "
+                    f"-{hard_limits.DAILY_LOSS_LIMIT*100:.0f}% del capitale "
+                    f"(PnL giorno ora {self.state.daily_pnl_pct*100:.2f}%). Riprende domani (UTC).")
         if now < self.state.paused_until_ts:
             mins = int((self.state.paused_until_ts - now) / 60)
             return f"Pausa dopo {hard_limits.CONSECUTIVE_SL_LIMIT} SL consecutivi: {mins} min rimanenti"
@@ -66,10 +66,12 @@ class CircuitBreakers:
         return self.blocking_reason(now_ts) is None
 
     # ---- aggiornamenti di stato ----
-    def register_trade_result(self, pnl_pct: float, was_stop_loss: bool) -> None:
-        """Da chiamare alla chiusura di OGNI trade."""
+    def register_trade_result(self, pnl_frac_equity: float, was_stop_loss: bool) -> None:
+        """Da chiamare alla chiusura di OGNI trade.
+        `pnl_frac_equity` = PnL del trade come FRAZIONE DEL CAPITALE (pnl_usdt/equity),
+        NON il rendimento sul margine (che la leva amplifica)."""
         self._maybe_roll_day()
-        self.state.daily_pnl_pct += pnl_pct
+        self.state.daily_pnl_pct += pnl_frac_equity
 
         if self.state.daily_pnl_pct <= -hard_limits.DAILY_LOSS_LIMIT:
             self.state.halted_for_day = True

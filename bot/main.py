@@ -150,13 +150,17 @@ class TradingBot:
             closed = self.executor.update_position(sym, price)
             if closed:
                 self.logger.log(closed)
+                eq = self.account_equity()
                 self.apply_realized_pnl(closed.pnl)
                 self.notifier.trade_closed(
                     closed.symbol, closed.strategy, closed.direction.value,
                     closed.exit_price, closed.pnl, closed.pnl_pct,
                     closed.exit_reason.value, dry_run=settings.DRY_RUN)
                 was_sl = closed.exit_reason in (ExitReason.STOP_LOSS,)
-                self.circuit_breakers.register_trade_result(closed.pnl_pct, was_sl)
+                # perdita giornaliera come % del CAPITALE (USDT/equity), NON come
+                # somma dei rendimenti-su-margine (che la leva amplifica ~Nx e
+                # faceva scattare il breaker troppo presto).
+                self.circuit_breakers.register_trade_result(closed.pnl / eq if eq else 0.0, was_sl)
                 self._persist_risk_state()
                 if self.circuit_breakers.state.daily_pnl_pct <= -0.03:
                     self.notifier.daily_loss(abs(self.circuit_breakers.state.daily_pnl_pct))

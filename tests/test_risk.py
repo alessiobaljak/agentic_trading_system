@@ -74,17 +74,27 @@ def test_size_multiplier_scales_risk():
 
 def test_circuit_breaker_daily_loss_halts():
     cb = CircuitBreakers()
-    cb.register_trade_result(pnl_pct=-0.06, was_stop_loss=True)  # -6% > 5% limite
+    cb.register_trade_result(-0.06, was_stop_loss=True)  # -6% del capitale > 5% limite
     rm = RiskManager(circuit_breakers=cb)
     params = rm.evaluate(_decision(), RiskSettings(), _asset(), 10_000)
     assert params.approved is False
     assert "circuit_breaker" in (params.reject_reason or "")
 
 
+def test_circuit_breaker_does_not_halt_on_small_equity_losses():
+    # qualche stop-loss piccolo (% del capitale) NON deve bloccare la giornata:
+    # prima il bug sommava i rendimenti-su-margine e scattava troppo presto.
+    cb = CircuitBreakers()
+    for _ in range(3):
+        cb.register_trade_result(-0.007, was_stop_loss=False)  # -0.7% del capitale l'uno
+    assert cb.state.halted_for_day is False  # -2.1% totale, sotto il -5%
+    assert cb.can_trade() is True
+
+
 def test_circuit_breaker_consecutive_sl_pause():
     cb = CircuitBreakers()
     for _ in range(3):
-        cb.register_trade_result(pnl_pct=-0.005, was_stop_loss=True)
+        cb.register_trade_result(-0.005, was_stop_loss=True)
     assert cb.can_trade() is False
     assert "consecut" in cb.blocking_reason().lower() or "SL" in cb.blocking_reason()
 
