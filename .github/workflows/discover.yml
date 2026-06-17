@@ -12,7 +12,7 @@ on:
     inputs:
       top:
         description: "Crypto su cui validare"
-        default: "25"
+        default: "50"
       generate:
         description: "Strategie candidate da generare"
         default: "40"
@@ -41,7 +41,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: >
           python -m scripts.discover_strategies
-          --top ${{ inputs.top || '25' }}
+          --top ${{ inputs.top || '50' }}
           --generate ${{ inputs.generate || '40' }}
           --windows 3
           --start 2024-01-01
