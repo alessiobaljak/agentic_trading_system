@@ -32,8 +32,10 @@ class AdaptationEngine:
         self._params: dict[str, dict] = {}     # chiave "SYMBOL|strategy" -> params ottimizzati
         self._passed: set[str] = set()         # coppie "SYMBOL|strategy" che hanno passato OOS
         self._has_opt_data: bool = False
+        self._generated_specs: dict[str, dict] = {}  # gen_id -> spec (strategie scoperte)
         self.load_weights()
         self.load_params()
+        self.load_generated()
 
     # ------------------------------------------------------------------ #
     def load_weights(self) -> None:
@@ -89,6 +91,23 @@ class AdaptationEngine:
         for key, params in self._params.items():
             if key.startswith(prefix):
                 out[key[len(prefix):]] = params
+        return out
+
+    # ------------------------------------------------------------------ #
+    # Strategie GENERATE (scoperte dal motore di discovery)              #
+    # ------------------------------------------------------------------ #
+    def load_generated(self) -> None:
+        doc = self.fb.get_doc("discovered_strategies", "specs") or {}
+        self._generated_specs = doc.get("specs", {}) or {}
+
+    def generated_strategies_for(self, symbol: str) -> list:
+        """Istanzia le strategie GENERATE che sono validate e abilitate per questo
+        asset. Vengono trattate come tutte le altre (gate + pesi del learning)."""
+        from bot.strategies.generated import GeneratedStrategy
+        out = []
+        for gen_id, spec in self._generated_specs.items():
+            if self.is_enabled(symbol, gen_id):
+                out.append(GeneratedStrategy(spec))
         return out
 
     def is_enabled(self, symbol: str, strategy: str) -> bool:

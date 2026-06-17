@@ -71,7 +71,10 @@ class Orchestrator:
         signals = []
         for sym, asset in assets.items():
             params_by_strat = self.adaptation.params_for(sym)
-            for strat in get_all_strategies(params_by_strat):
+            # strategie base (6) + strategie GENERATE validate per questo asset
+            strategies = get_all_strategies(params_by_strat)
+            strategies += self.adaptation.generated_strategies_for(sym)
+            for strat in strategies:
                 if not strat.is_active_in(regime):
                     continue
                 if not self.adaptation.is_enabled(sym, strat.name):

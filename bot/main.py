@@ -269,6 +269,7 @@ class TradingBot:
                 if now - self.last_adapt_reload >= 6 * 3600:
                     self.adaptation.load_weights()
                     self.adaptation.load_params()
+                    self.adaptation.load_generated()
                     self.last_adapt_reload = now
                 if now - self.last_regime >= settings.REGIME_INTERVAL_MINUTES * 60 or not self.regime:
                     self.refresh_regime(now)

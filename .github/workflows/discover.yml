@@ -1,0 +1,46 @@
+name: strategy-discovery
+
+# Il "cervello" che INVENTA nuove strategie. Gira ogni 12h su GitHub: genera
+# strategie candidate (combinazioni di feature su indicatori) e le valida con lo
+# STESSO gate del backtest (walk-forward OOS, al netto dei costi). Le vincenti
+# vengono aggiunte al registro validato e diventano operabili dal bot. NON tocca
+# le strategie esistenti né la copertura del GATE 1.
+on:
+  schedule:
+    - cron: "0 2,14 * * *"      # ogni 12 ore (sfasato rispetto all'ottimizzatore)
+  workflow_dispatch:
+    inputs:
+      top:
+        description: "Crypto su cui validare"
+        default: "25"
+      generate:
+        description: "Strategie candidate da generare"
+        default: "40"
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+    paths: ["bot/strategies/generated.py", "bot/strategies/generator.py",
+            "scripts/discover_strategies.py", ".github/workflows/discover.yml"]
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Discovery + validazione OOS di nuove strategie
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: >
+          python -m scripts.discover_strategies
+          --top ${{ inputs.top || '25' }}
+          --generate ${{ inputs.generate || '40' }}
+          --windows 3
+          --start 2024-01-01 --end 2026-01-01
