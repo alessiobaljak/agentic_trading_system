@@ -126,6 +126,44 @@ def _notify(passed: list[dict], n_eval: int, n_specs: int, n_coins: int) -> None
         print(f"[discover] telegram fallito: {exc}")
 
 
+def _merge_discover_shards(fb, args) -> int:
+    """Riunisce gli shard di discovery e aggiorna il registro UNA volta sola."""
+    run_id = os.getenv("GITHUB_RUN_ID", "")
+    combined_out: dict = {}
+    passed_keys: list[str] = []
+    combined_specs: dict = {}
+    n_eval = 0
+    used = 0
+    for i in range(args.num_shards):
+        d = fb.get_doc("discover_shards", str(i)) or {}
+        if not d:
+            print(f"[merge] shard {i}: assente, salto")
+            continue
+        if run_id and d.get("run_id") and d.get("run_id") != run_id:
+            print(f"[merge] shard {i}: run_id diverso (stantio), salto")
+            continue
+        combined_out.update(d.get("passed_entries", {}) or {})
+        passed_keys.extend(d.get("passed_keys", []) or [])
+        combined_specs.update(d.get("specs", {}) or {})
+        n_eval += int(d.get("n_eval", 0) or 0)
+        used += 1
+    print(f"[merge] {used}/{args.num_shards} shard uniti: {len(passed_keys)} coppie passate")
+    if combined_specs:
+        persist_specs(fb, combined_specs)
+    validated = merge_into_registry(fb, combined_out, passed_keys)
+    summary = [{"symbol": e["symbol"], "id": e["strategy"], "pf": e["oos_pf"],
+                "pnl": e["oos_pnl_pct"], "desc": GeneratedStrategy(e["spec"]).description}
+               for e in combined_out.values()]
+    fb.set_doc("strategy_params", "discovered_last_run", {
+        "updated_at": time.time(), "n_eval": n_eval, "n_passed": len(passed_keys),
+        "passed": [{"symbol": s["symbol"], "id": s["id"], "pf": s["pf"], "pnl": s["pnl"]}
+                   for s in summary],
+    })
+    print(f"[merge] coppie validate totali nel registro (base+generate): {len(validated)}")
+    _notify(summary, n_eval, len(combined_specs), args.num_shards)
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Scoperta autonoma di nuove strategie.")
     ap.add_argument("--top", type=int, default=25, help="numero di crypto su cui validare")
@@ -141,10 +179,16 @@ def main() -> int:
     ap.add_argument("--source", default="auto")
     ap.add_argument("--reeval-cap", type=int, default=80,
                     help="max strategie già scoperte da ri-validare per run (bound sui tempi)")
+    ap.add_argument("--shard", type=int, default=0)
+    ap.add_argument("--num-shards", type=int, default=1)
+    ap.add_argument("--merge", action="store_true",
+                    help="modalita' MERGE: riunisce gli shard di discovery nel registro")
     args = ap.parse_args()
     end = args.end or date.today().isoformat()
 
     fb = get_firebase()
+    if args.merge:
+        return _merge_discover_shards(fb, args)
     opt = WalkForwardOptimizer(n_windows=args.windows)
 
     # 1) candidate NUOVE  2) RI-VALUTA le scoperte precedenti (così accumulano i
@@ -160,7 +204,11 @@ def main() -> int:
     print(f"[discover] {len(specs)} candidate ({len(existing_list)} ri-validate) "
           f"seed={args.seed} finestra {args.start}->{end}")
 
-    symbols = top_symbols_by_volume(args.top)
+    full_symbols = top_symbols_by_volume(args.top)
+    # SHARDING: ogni shard valida le candidate su una fetta dell'universo; il merge
+    # riunisce. Così copriamo l'INTERO universo restando nel timeout.
+    symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
+    print(f"[discover] shard {args.shard}/{args.num_shards}: {len(symbols)}/{len(full_symbols)} coin")
     min_history = int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500"))
     out: dict[str, dict] = {}
     passed_summary: list[dict] = []
@@ -193,6 +241,18 @@ def main() -> int:
                                        "pnl": r["pnl"], "desc": gs.description})
                 print(f"  {flag} {spec['id']} pf={r['pf']} pnl={r['pnl']*100:+.1f}% "
                       f"trades={r['trades']}  {gs.description}")
+
+    # SHARD: scrive il proprio risultato; il merge riunisce e aggiorna il registro.
+    if args.num_shards > 1:
+        fb.set_doc("discover_shards", str(args.shard), {
+            "run_id": os.getenv("GITHUB_RUN_ID", ""),
+            "passed_entries": {k: out[k] for k in passed_keys},
+            "passed_keys": passed_keys, "specs": specs_to_save,
+            "n_eval": n_eval, "updated_at": time.time(),
+        })
+        print(f"[discover] shard {args.shard} scritto: {len(passed_keys)} coppie passate. "
+              f"Il merge aggiornera' il registro.")
+        return 0
 
     # persisti: spec scoperte + merge nel registro validato
     if specs_to_save:

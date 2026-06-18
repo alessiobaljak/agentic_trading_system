@@ -1,9 +1,9 @@
 name: strategy-optimizer
 
 # Motore di validazione AUTONOMO (test -> learn -> iterate). Gira ogni 6h su
-# GitHub (nessuna VPS necessaria in questa fase): ottimizza un universo ampio di
-# crypto via walk-forward out-of-sample e ACCUMULA un registro di validazione su
-# Firebase. Quando ci sono strategie validate su abbastanza crypto -> GATE 1.
+# GitHub. PARALLELIZZATO in shard: ogni job ottimizza una fetta dell'universo,
+# poi il job `merge` riunisce i risultati e aggiorna il registro UNA volta sola.
+# Così copriamo l'INTERO universo (top 75, 4 anni, max-combos 12) nel timeout.
 on:
   schedule:
     - cron: "0 */6 * * *"      # ogni 6 ore
@@ -12,17 +12,22 @@ on:
       top:
         description: "Top-N future per volume (universo)"
         default: "75"
-      windows:
-        description: "Finestre walk-forward"
-        default: "3"
   push:
     branches: ["claude/brave-albattani-1b12fv"]
     paths: ["backtesting/optimizer.py", "backtesting/engine.py", "scripts/optimize.py",
             "bot/strategies/**", "bot/core/indicators.py",
             ".github/workflows/optimize.yml"]
 
+env:
+  NUM_SHARDS: "3"
+  TOP: "75"
+
 jobs:
   optimize:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2]
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -32,15 +37,32 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Walk-forward optimization (autonomo, universo top-N)
+      - name: Walk-forward shard ${{ matrix.shard }}
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+        run: >
+          python -m scripts.optimize
+          --top ${{ inputs.top || env.TOP }}
+          --windows 3 --max-combos 12 --start 2022-01-01
+          --shard ${{ matrix.shard }} --num-shards ${{ env.NUM_SHARDS }}
+
+  merge:
+    needs: optimize
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Merge shard results into registry
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: >
-          python -m scripts.optimize
-          --top ${{ inputs.top || '75' }}
-          --windows ${{ inputs.windows || '3' }}
-          --max-combos 10
-          --start 2022-01-01
+        run: python -m scripts.optimize --merge --num-shards ${{ env.NUM_SHARDS }}

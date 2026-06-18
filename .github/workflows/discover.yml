@@ -1,10 +1,8 @@
 name: strategy-discovery
 
-# Il "cervello" che INVENTA nuove strategie. Gira ogni 12h su GitHub: genera
-# strategie candidate (combinazioni di feature su indicatori) e le valida con lo
-# STESSO gate del backtest (walk-forward OOS, al netto dei costi). Le vincenti
-# vengono aggiunte al registro validato e diventano operabili dal bot. NON tocca
-# le strategie esistenti né la copertura del GATE 1.
+# Il "cervello" che INVENTA nuove strategie. Gira ogni 12h, PARALLELIZZATO in
+# shard: ogni job valida le candidate su una fetta dell'universo, poi `merge`
+# riunisce e aggiorna il registro. Copre l'INTERO universo (top 75, 4 anni).
 on:
   schedule:
     - cron: "0 2,14 * * *"      # ogni 12 ore (sfasato rispetto all'ottimizzatore)
@@ -12,7 +10,7 @@ on:
     inputs:
       top:
         description: "Crypto su cui validare"
-        default: "50"
+        default: "75"
       generate:
         description: "Strategie candidate da generare"
         default: "40"
@@ -22,8 +20,16 @@ on:
             "bot/core/indicators.py", "backtesting/engine.py",
             "scripts/discover_strategies.py", ".github/workflows/discover.yml"]
 
+env:
+  NUM_SHARDS: "3"
+  TOP: "75"
+
 jobs:
   discover:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2]
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -33,15 +39,33 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Discovery + validazione OOS di nuove strategie
+      - name: Discovery shard ${{ matrix.shard }}
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+        run: >
+          python -m scripts.discover_strategies
+          --top ${{ inputs.top || env.TOP }}
+          --generate ${{ inputs.generate || '40' }}
+          --windows 3 --start 2022-01-01
+          --shard ${{ matrix.shard }} --num-shards ${{ env.NUM_SHARDS }}
+
+  merge:
+    needs: discover
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Merge discovery shards into registry
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: >
-          python -m scripts.discover_strategies
-          --top ${{ inputs.top || '50' }}
-          --generate ${{ inputs.generate || '40' }}
-          --windows 3
-          --start 2022-01-01
+        run: python -m scripts.discover_strategies --merge --num-shards ${{ env.NUM_SHARDS }}

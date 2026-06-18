@@ -84,25 +84,33 @@ def main() -> int:
                    help="max combinazioni di parametri provate per strategia (0=tutte)")
     p.add_argument("--reset-registry", action="store_true",
                    help="azzera il registro validato prima di accumulare (ripartenza pulita)")
+    p.add_argument("--shard", type=int, default=0, help="indice shard (parallelizzazione)")
+    p.add_argument("--num-shards", type=int, default=1, help="numero totale di shard")
+    p.add_argument("--merge", action="store_true",
+                   help="modalita' MERGE: riunisce i risultati degli shard nel registro")
     args = p.parse_args()
     end = args.end or date.today().isoformat()
 
-    symbols = []
+    fb = get_firebase()
+    if args.merge:
+        return _merge_shards(fb, args)
+
+    full_symbols = []
     if args.top > 0:
-        symbols = top_symbols_by_volume(args.top)
-        print(f"[optimize] universo: top {args.top} per volume -> {len(symbols)} coin")
-    if not symbols:
-        symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
-    print(f"[optimize] universo scansionato: {', '.join(symbols)}")
+        full_symbols = top_symbols_by_volume(args.top)
+        print(f"[optimize] universo: top {args.top} per volume -> {len(full_symbols)} coin")
+    if not full_symbols:
+        full_symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
+    # SHARDING: ogni shard processa una fetta dell'universo (round-robin), il merge
+    # le riunisce. Così l'intero universo è coperto restando nel timeout di GitHub.
+    symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
+    print(f"[optimize] shard {args.shard}/{args.num_shards}: {len(symbols)}/{len(full_symbols)} coin")
     # seed variabile per run: le combinazioni di parametri campionate cambiano
     # ad ogni esecuzione, così con max-combos ridotto si esplora tutto nel tempo.
     opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos,
                                seed=int(time.time()) % 100000)
-    fb = get_firebase()
-    if args.reset_registry:
-        # pulizia TOTALE del GATE 1: registro validato, strategie scoperte e
-        # ultimo run. Necessaria dopo un cambio di indicatori (es. fix VWAP) che
-        # invalida i backtest precedenti: si riparte davvero da zero.
+    if args.reset_registry and args.num_shards <= 1:
+        # pulizia TOTALE del GATE 1 (solo non-sharded; in sharded la fa il merge).
         fb.set_doc("strategy_registry", "validated", {})
         fb.set_doc("discovered_strategies", "specs", {"specs": {}})
         fb.set_doc("strategy_params", "current", {})
@@ -148,6 +156,16 @@ def main() -> int:
             if r.passed:
                 summary_passed.append(key)
 
+    # SHARD: scrive il proprio risultato in un doc separato; il merge li riunisce.
+    if args.num_shards > 1:
+        fb.set_doc("optimize_shards", str(args.shard), {
+            "run_id": os.getenv("GITHUB_RUN_ID", ""),
+            "out": out, "passed": summary_passed, "updated_at": time.time(),
+        })
+        print(f"[optimize] shard {args.shard} scritto: {len(out)} coppie, "
+              f"{len(summary_passed)} passate. Il merge aggiornera' il registro.")
+        return 0
+
     fb.set_doc("strategy_params", "current", {
         "updated_at": time.time(),
         "entries": out,
@@ -170,6 +188,42 @@ def main() -> int:
 
     # --- report automatico su Telegram ---
     _notify_telegram(out, summary_passed, reg)
+    return 0
+
+
+def _merge_shards(fb, args) -> int:
+    """Riunisce i risultati degli shard (optimize_shards/*) e aggiorna il registro
+    UNA volta sola (niente race tra job paralleli). La copertura GATE 1 è calcolata
+    sull'unione dell'intero universo coperto dagli shard."""
+    run_id = os.getenv("GITHUB_RUN_ID", "")
+    combined_out: dict = {}
+    combined_passed: list[str] = []
+    used = 0
+    for i in range(args.num_shards):
+        d = fb.get_doc("optimize_shards", str(i)) or {}
+        if not d:
+            print(f"[merge] shard {i}: assente, salto")
+            continue
+        if run_id and d.get("run_id") and d.get("run_id") != run_id:
+            print(f"[merge] shard {i}: run_id diverso (stantio), salto")
+            continue
+        combined_out.update(d.get("out", {}) or {})
+        combined_passed.extend(d.get("passed", []) or [])
+        used += 1
+    print(f"[merge] {used}/{args.num_shards} shard uniti: {len(combined_out)} coppie, "
+          f"{len(combined_passed)} passate")
+    if args.reset_registry:
+        fb.set_doc("strategy_registry", "validated", {})
+        fb.set_doc("discovered_strategies", "specs", {"specs": {}})
+        print("[merge] reset TOTALE del registro prima di applicare i risultati")
+    fb.set_doc("strategy_params", "current", {
+        "updated_at": time.time(), "entries": combined_out, "passed": combined_passed,
+    })
+    reg = update_registry(fb, combined_out, combined_passed)
+    cov_pct = reg["coverage"] * 100
+    print(f"[merge] REGISTRO: {reg['coins_covered']}/{reg['universe_size']} crypto "
+          f"({cov_pct:.0f}%). GATE 1 {'SUPERATO ✅' if reg['ready'] else 'in corso'}")
+    _notify_telegram(combined_out, combined_passed, reg)
     return 0
 
 
