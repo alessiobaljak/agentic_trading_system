@@ -94,7 +94,10 @@ def main() -> int:
     if not symbols:
         symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
     print(f"[optimize] universo scansionato: {', '.join(symbols)}")
-    opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos)
+    # seed variabile per run: le combinazioni di parametri campionate cambiano
+    # ad ogni esecuzione, così con max-combos ridotto si esplora tutto nel tempo.
+    opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos,
+                               seed=int(time.time()) % 100000)
     fb = get_firebase()
     if args.reset_registry:
         # pulizia TOTALE del GATE 1: registro validato, strategie scoperte e

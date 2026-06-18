@@ -12,7 +12,7 @@ on:
     inputs:
       top:
         description: "Crypto su cui validare"
-        default: "40"
+        default: "50"
       generate:
         description: "Strategie candidate da generare"
         default: "40"
@@ -25,7 +25,7 @@ on:
 jobs:
   discover:
     runs-on: ubuntu-latest
-    timeout-minutes: 330
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -41,7 +41,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: >
           python -m scripts.discover_strategies
-          --top ${{ inputs.top || '40' }}
+          --top ${{ inputs.top || '50' }}
           --generate ${{ inputs.generate || '40' }}
           --windows 3
           --start 2022-01-01

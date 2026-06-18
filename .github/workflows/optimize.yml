@@ -11,7 +11,7 @@ on:
     inputs:
       top:
         description: "Top-N future per volume (universo)"
-        default: "60"
+        default: "75"
       windows:
         description: "Finestre walk-forward"
         default: "3"
@@ -24,7 +24,7 @@ on:
 jobs:
   optimize:
     runs-on: ubuntu-latest
-    timeout-minutes: 330
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -40,7 +40,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: >
           python -m scripts.optimize
-          --top ${{ inputs.top || '60' }}
+          --top ${{ inputs.top || '75' }}
           --windows ${{ inputs.windows || '3' }}
-          --max-combos 12
+          --max-combos 10
           --start 2022-01-01
