@@ -29,5 +29,5 @@ jobs:
         run: >
           python -m scripts.optimize
           --top 40 --windows 3 --max-combos 12
-          --start 2024-01-01
+          --start 2022-01-01
           --reset-registry

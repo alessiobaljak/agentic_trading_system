@@ -134,7 +134,7 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=int(time.time()) % 100000,
                     help="seed generazione (varia per esplorare strategie diverse a ogni run)")
     ap.add_argument("--interval", default="1h")
-    ap.add_argument("--start", default="2024-01-01")
+    ap.add_argument("--start", default="2022-01-01")
     ap.add_argument("--end", default=None,
                     help="fine finestra dati (default: oggi). Far avanzare la finestra "
                          "rende la ri-validazione VERA su dati nuovi a ogni run.")

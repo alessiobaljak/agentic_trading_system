@@ -76,7 +76,7 @@ def main() -> int:
     p.add_argument("--top", type=int, default=0,
                    help="se >0, ottimizza i top-N future per volume (ignora --symbols)")
     p.add_argument("--interval", default="1h")
-    p.add_argument("--start", default="2023-01-01")
+    p.add_argument("--start", default="2022-01-01")
     p.add_argument("--end", default=None, help="default: oggi (finestra che avanza)")
     p.add_argument("--source", default="binance")
     p.add_argument("--windows", type=int, default=3)
