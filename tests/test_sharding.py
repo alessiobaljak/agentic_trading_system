@@ -1,7 +1,7 @@
 """Test dello sharding: il merge riunisce i risultati senza perdere nulla."""
 from argparse import Namespace
 
-from bot.core.firebase_client import FirebaseClient
+from bot.core.firebase_client import FirebaseClient, decode_pairs
 
 
 def _entry(sym, strat, pf=1.3, pnl=0.2):
@@ -24,8 +24,9 @@ def test_optimize_merge_combines_shards():
     sp = fb.get_doc("strategy_params", "current")
     assert set(sp["entries"].keys()) == {"BTCUSDT|trend_following", "ETHUSDT|breakout"}
     reg = fb.get_doc("strategy_registry", "validated")
-    assert "BTCUSDT|trend_following" in reg["pairs"]
-    assert "ETHUSDT|breakout" in reg["pairs"]
+    pairs = decode_pairs(reg["pairs"])
+    assert "BTCUSDT|trend_following" in pairs
+    assert "ETHUSDT|breakout" in pairs
     # copertura calcolata sull'intero universo coperto dagli shard (2 coin)
     assert reg["universe_size"] == 2
 
@@ -51,4 +52,5 @@ def test_discover_merge_combines_shards():
     specs = fb.get_doc("discovered_strategies", "specs")["specs"]
     assert spec_a["id"] in specs and spec_b["id"] in specs  # spec di entrambi gli shard salvate
     reg = fb.get_doc("strategy_registry", "validated")
-    assert ka in reg["pairs"] and kb in reg["pairs"]
+    pairs = decode_pairs(reg["pairs"])
+    assert ka in pairs and kb in pairs

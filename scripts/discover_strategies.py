@@ -24,7 +24,7 @@ from datetime import date
 from backtesting.data_loader import load_candles
 from backtesting.engine import StrategyStats
 from backtesting.optimizer import WalkForwardOptimizer
-from bot.core.firebase_client import get_firebase
+from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
 from bot.strategies.generator import generate_specs, mutate
@@ -57,7 +57,7 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
     Ricalcola la lista validated PRESERVANDO i campi di copertura del GATE 1
     (universe/coverage/ready) che spettano a optimize.py."""
     doc = fb.get_doc("strategy_registry", "validated") or {}
-    pairs = doc.get("pairs", {}) or {}
+    pairs = decode_pairs(doc.get("pairs"))
     now = time.time()
     # 1) upsert SOLO delle coppie passate (non sporco il registro con i fallimenti)
     for key in passed_now:
@@ -84,12 +84,22 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
             or (r.get("pass_count", 0) < MIN_PASSES and r.get("last_seen_at", 0) < stale_before)
         ))
     }
+    # cap: limita il numero di coppie per non superare 1 MiB di documento. Tiene
+    # le validate (>=3 pass) e le piu' promettenti (pass alto, viste di recente).
+    max_pairs = int(os.getenv("OPTIMIZER_MAX_PAIRS", "3000"))
+    if len(pairs) > max_pairs:
+        ranked = sorted(
+            pairs.items(),
+            key=lambda kv: (kv[1].get("pass_count", 0) >= MIN_PASSES,
+                            kv[1].get("pass_count", 0), kv[1].get("last_seen_at", 0)),
+            reverse=True)
+        pairs = dict(ranked[:max_pairs])
     validated = sorted(
         k for k, r in pairs.items()
         if r.get("pass_count", 0) >= MIN_PASSES
         and (now - r.get("last_seen_at", 0)) < FRESH_DAYS * 86400
     )
-    doc["pairs"] = pairs
+    doc["pairs"] = encode_pairs(pairs)
     doc["validated"] = validated
     doc["updated_at"] = now
     fb.set_doc("strategy_registry", "validated", doc)

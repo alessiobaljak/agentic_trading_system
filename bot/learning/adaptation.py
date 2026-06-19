@@ -21,7 +21,7 @@ import random
 from typing import Optional
 
 from bot.config import settings
-from bot.core.firebase_client import get_firebase
+from bot.core.firebase_client import decode_pairs, get_firebase
 from bot.core.models import Regime, StrategyRegimeWeight
 
 
@@ -70,7 +70,7 @@ class AdaptationEngine:
         # se assente, ricadi sull'ultimo run (strategy_params/current).
         reg = self.fb.get_doc("strategy_registry", "validated") or {}
         validated = reg.get("validated") or []
-        pairs = reg.get("pairs", {}) or {}
+        pairs = decode_pairs(reg.get("pairs"))
         if validated:
             self._passed = set(validated)
             self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in validated}

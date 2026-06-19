@@ -14,7 +14,7 @@ from __future__ import annotations
 import time
 from datetime import datetime, timezone
 
-from bot.core.firebase_client import get_firebase
+from bot.core.firebase_client import decode_pairs, get_firebase
 
 OUT = "docs/state.md"
 
@@ -78,7 +78,7 @@ def build() -> str:
 
     # --- GATE 1: registro di validazione cumulativo ---
     reg = fb.get_doc("strategy_registry", "validated") or {}
-    pairs = reg.get("pairs", {}) or {}
+    pairs = decode_pairs(reg.get("pairs"))
     validated = reg.get("validated", []) or []
     ready = reg.get("ready", False)
     cov = reg.get("coverage", 0) * 100

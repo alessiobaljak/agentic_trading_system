@@ -24,7 +24,7 @@ import requests
 
 from backtesting.data_loader import load_candles
 from backtesting.optimizer import WalkForwardOptimizer
-from bot.core.firebase_client import get_firebase
+from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 
 FAPI = "https://fapi.binance.com"
 OKX = "https://www.okx.com"
@@ -251,7 +251,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     ci sono strategie validate su >= READY_COINS crypto distinte.
     """
     doc = fb.get_doc("strategy_registry", "validated") or {}
-    pairs: dict = doc.get("pairs", {}) or {}
+    pairs: dict = decode_pairs(doc.get("pairs"))
     passed_set = set(passed_now)
 
     for key, e in out.items():
@@ -285,7 +285,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
 
     registry = {
         "updated_at": time.time(),
-        "pairs": pairs,
+        "pairs": encode_pairs(pairs),
         "validated": validated,
         "coins_covered": len(covered),
         "coins": covered,

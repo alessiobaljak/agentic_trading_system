@@ -28,6 +28,23 @@ from typing import Any, Optional
 from bot.config import settings
 
 
+def encode_pairs(pairs: dict) -> str:
+    """Serializza la mappa `pairs` del registro come stringa JSON: Firestore la
+    indicizza come UN singolo campo invece di indicizzare ogni sottocampo di ogni
+    coppia (che con centinaia di strategie supera il limite di 40k voci d'indice)."""
+    return json.dumps(pairs or {})
+
+
+def decode_pairs(value) -> dict:
+    """Legge `pairs` sia come stringa JSON (nuovo formato) sia come mappa (vecchio)."""
+    if isinstance(value, str):
+        try:
+            return json.loads(value) or {}
+        except Exception:  # noqa: BLE001
+            return {}
+    return value or {}
+
+
 def resolve_service_account(raw: str) -> Optional[dict]:
     """
     Accetta il service account Firebase in DUE forme:

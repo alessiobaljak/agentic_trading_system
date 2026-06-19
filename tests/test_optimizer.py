@@ -73,7 +73,8 @@ def test_registry_accumulates_and_gates():
         reg = update_registry(fb, out, passed_now=["SOLUSDT|breakout"])
     assert "SOLUSDT|breakout" in reg["validated"]
     assert "BTCUSDT|breakout" not in reg["validated"]
-    assert reg["pairs"]["SOLUSDT|breakout"]["pass_count"] == MIN_PASSES
+    from bot.core.firebase_client import decode_pairs
+    assert decode_pairs(reg["pairs"])["SOLUSDT|breakout"]["pass_count"] == MIN_PASSES
     assert reg["coins_covered"] == 1 and reg["ready"] is False
 
     from bot.learning.adaptation import AdaptationEngine
