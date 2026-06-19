@@ -1,20 +1,20 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-19 21:35 UTC_
+_Generato: 2026-06-19 23:15 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: high_uncertainty
 - DRY_RUN: True
-- equity: **$9,992.82**
-- ultimo heartbeat: 2026-06-19 21:34 UTC
+- equity: **$10,009.00**
+- ultimo heartbeat: 2026-06-19 23:15 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-06-19 21:21 UTC)
-- motivo: ORDIUSDT già aperto
-- asset valutati: 30 · segnali: 1 · miglior segnale ORDIUSDT gen_edacce68 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-06-19 23:07 UTC)
+- motivo: nessun segnale dalle strategie attive in questo regime
+- asset valutati: 30 · segnali: 0
 
 ## Posizioni aperte
-- ORDIUSDT: short qty=576.4264839468786 @ 3.585 uPnL=36.35707443580803
+- ORDIUSDT: short qty=647.7705120108742 @ 3.529 uPnL=-40.209622552396354
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
