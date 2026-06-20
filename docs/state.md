@@ -1,20 +1,17 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-19 23:15 UTC_
+_Generato: 2026-06-20 04:41 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: high_uncertainty
+- regime: sideways
 - DRY_RUN: True
-- equity: **$10,009.00**
-- ultimo heartbeat: 2026-06-19 23:15 UTC
+- equity: **$9,950.90**
+- ultimo heartbeat: 2026-06-20 04:41 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-06-19 23:07 UTC)
+- esito: **⚪ FLAT** (2026-06-20 04:27 UTC)
 - motivo: nessun segnale dalle strategie attive in questo regime
 - asset valutati: 30 · segnali: 0
-
-## Posizioni aperte
-- ORDIUSDT: short qty=647.7705120108742 @ 3.529 uPnL=-40.209622552396354
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
