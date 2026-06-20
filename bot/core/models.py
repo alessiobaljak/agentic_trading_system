@@ -34,6 +34,7 @@ class ExitReason(str, Enum):
     STOP_LOSS = "stop_loss"
     TRAILING_STOP = "trailing_stop"
     SCALE_OUT = "scale_out"
+    TIME_EXIT = "time_exit"
     MANUAL = "manual"
     KILL_SWITCH = "kill_switch"
     CIRCUIT_BREAKER = "circuit_breaker"

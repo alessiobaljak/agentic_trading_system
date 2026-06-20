@@ -74,6 +74,8 @@ class ExecutionEngine:
         # Così il PnL del paper è NETTO e coerente con la validazione.
         self.cost_per_trade = float(os.getenv("BACKTEST_COST_PER_TRADE", "0.0008"))
         self.funding_per_8h = float(os.getenv("BACKTEST_FUNDING_PER_8H", "0.0001"))
+        # max holding: come l'orizzonte del backtest (96 barre da 1h). Oltre, esce.
+        self.max_hold_hours = float(os.getenv("EXEC_MAX_HOLD_HOURS", "96"))
         if not self.dry_run:
             self._init_binance()
         # CRITICO: ricarica le posizioni aperte da Firebase. Senza questo, ogni
@@ -153,56 +155,40 @@ class ExecutionEngine:
             )
             self._client.futures_create_order(
                 symbol=pos.symbol, side=opp, type="TAKE_PROFIT_MARKET", reduceOnly=True,
-                stopPrice=round(pos.take_profit_price, 6), quantity=round(pos.quantity / 2, 6),
+                stopPrice=round(pos.take_profit_price, 6), quantity=round(pos.quantity, 6),
             )
         except Exception as exc:  # noqa: BLE001
             print(f"[execution] errore ordine live {pos.symbol}: {exc}")
 
     # ------------------------------------------------------------------ #
-    # Gestione posizione (trailing, scale-out, exit)                     #
+    # Gestione posizione — ALLINEATA AL BACKTEST (GATE 1)                 #
     # ------------------------------------------------------------------ #
     def update_position(self, symbol: str, mark_price: float) -> Optional[ClosedTrade]:
         """
-        Aggiorna una posizione col prezzo corrente. Gestisce SL/TP/trailing/scale-out.
-        Ritorna un ClosedTrade se la posizione si chiude del tutto.
+        Esce TUTTA la posizione allo stop fisso o al take-profit PIENO, esattamente
+        come il backtest che valida le strategie (niente trailing/scale-out): così
+        il bot trada ciò che è stato validato. Uscita anche a fine orizzonte (max
+        holding), come le 96 barre del backtester.
         """
         pos = self.open_positions.get(symbol)
         if pos is None:
             return None
         long = pos.direction == Direction.LONG
-        favorable = (mark_price - pos.entry_price) if long else (pos.entry_price - mark_price)
 
-        # aggiorna high water mark
-        if long:
-            pos.high_water = max(pos.high_water, mark_price)
-        else:
-            pos.high_water = min(pos.high_water, mark_price)
-
-        # attivazione trailing a +1 ATR di profitto
-        if not pos.trailing_active and pos.atr > 0 and favorable >= pos.atr:
-            pos.trailing_active = True
-
-        # scale-out parziale 50% al primo target (TP)
-        if not pos.scaled_out:
-            hit_tp = (mark_price >= pos.take_profit_price) if long else (mark_price <= pos.take_profit_price)
-            if hit_tp:
-                self._partial_close(pos, mark_price, 0.5)
-                pos.scaled_out = True
-                self._write_position_state(pos, mark_price)
-                # il resto continua con trailing
-                return None
-
-        # stop loss
+        # stop loss (uscita AL prezzo di stop, come il backtest)
         hit_sl = (mark_price <= pos.stop_price) if long else (mark_price >= pos.stop_price)
         if hit_sl:
-            return self._close(pos, mark_price, ExitReason.STOP_LOSS)
+            return self._close(pos, pos.stop_price, ExitReason.STOP_LOSS)
 
-        # trailing stop: chiude se ritraccia di 1 ATR dal high water
-        if pos.trailing_active and pos.atr > 0:
-            give_back = (pos.high_water - mark_price) if long else (mark_price - pos.high_water)
-            if give_back >= pos.atr:
-                reason = ExitReason.TRAILING_STOP if pos.scaled_out else ExitReason.TRAILING_STOP
-                return self._close(pos, mark_price, reason)
+        # take profit PIENO (tutta la posizione al target, RR pieno)
+        hit_tp = (mark_price >= pos.take_profit_price) if long else (mark_price <= pos.take_profit_price)
+        if hit_tp:
+            return self._close(pos, pos.take_profit_price, ExitReason.TAKE_PROFIT)
+
+        # uscita a fine orizzonte (come l'orizzonte del backtest)
+        held_h = (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0
+        if held_h >= self.max_hold_hours:
+            return self._close(pos, mark_price, ExitReason.TIME_EXIT)
 
         self._write_position_state(pos, mark_price)
         return None

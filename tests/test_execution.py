@@ -59,21 +59,25 @@ def test_open_and_stop_loss():
     assert "BTCUSDT" not in eng.open_positions
 
 
-def test_scale_out_then_trailing():
+def test_take_profit_full_exit():
+    # allineato al backtest: al TP esce TUTTA la posizione (niente scale-out/trailing)
     eng = _engine()
     eng.open_position(_asset(100, atr=2.0), "breakout", Direction.LONG, _params(qty=2.0, stop=98, tp=104))
-    # raggiunge il TP -> scale-out 50%, posizione resta aperta
-    assert eng.update_position("BTCUSDT", 104.0) is None
-    pos = eng.open_positions["BTCUSDT"]
-    assert pos.scaled_out is True
-    assert pos.remaining_qty == 1.0
-    assert pos.trailing_active is True
-    # sale ancora (high water), poi ritraccia > 1 ATR -> trailing stop chiude
-    eng.update_position("BTCUSDT", 108.0)
-    closed = eng.update_position("BTCUSDT", 105.5)  # give back 2.5 > ATR 2.0
+    closed = eng.update_position("BTCUSDT", 104.5)  # supera il TP
     assert closed is not None
-    assert closed.exit_reason == ExitReason.TRAILING_STOP
+    assert closed.exit_reason == ExitReason.TAKE_PROFIT
     assert closed.pnl > 0
+    assert "BTCUSDT" not in eng.open_positions
+    # esce AL prezzo di target (104), non al mark: (104-100)*2 - costi
+    assert closed.exit_price == 104.0
+
+
+def test_no_exit_between_sl_and_tp():
+    eng = _engine()
+    eng.open_position(_asset(100, atr=2.0), "breakout", Direction.LONG, _params(qty=2.0, stop=98, tp=104))
+    # prezzo tra stop e target -> resta aperta
+    assert eng.update_position("BTCUSDT", 101.0) is None
+    assert "BTCUSDT" in eng.open_positions
 
 
 def test_gate_rejected_params_not_opened():
@@ -91,8 +95,8 @@ def test_restore_open_positions_after_restart():
     fb = FirebaseClient()
     eng1 = ExecutionEngine(firebase=fb, dry_run=True)
     eng1.open_position(_asset(100, atr=2.0), "breakout", Direction.LONG, _params(qty=2.0, stop=98, tp=104))
-    # scale-out parziale per avere stato dinamico non banale
-    eng1.update_position("BTCUSDT", 104.0)
+    # prezzo tra stop e TP: resta aperta, scrive lo stato (per il restore)
+    eng1.update_position("BTCUSDT", 101.0)
     src = eng1.open_positions["BTCUSDT"]
 
     # "riavvio": nuovo engine, open_positions deve ripartire da Firebase
@@ -101,10 +105,7 @@ def test_restore_open_positions_after_restart():
     p = eng2.open_positions["BTCUSDT"]
     assert p.position_id == src.position_id
     assert p.entry_price == src.entry_price
-    assert p.quantity == src.quantity            # quantità originale preservata
-    assert p.remaining_qty == src.remaining_qty  # stato post scale-out preservato
-    assert p.scaled_out is True
-    assert p.trailing_active == src.trailing_active
+    assert p.quantity == src.quantity            # quantità preservata
     assert p.stop_price == src.stop_price and p.take_profit_price == src.take_profit_price
     # la posizione ripristinata si gestisce normalmente (chiude allo stop)
     closed = eng2.update_position("BTCUSDT", 97.0)
