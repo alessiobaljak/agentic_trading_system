@@ -204,6 +204,16 @@ class TradingBot:
             self._publish_decision_status({"outcome": "flat", "reason": "snapshot asset mancante"})
             return
 
+        # sentiment/social SOLO per la coin che sta per essere tradata (1 chiamata,
+        # non 100): arricchisce il contesto del trade (sentiment_at_entry) ed è il
+        # segnale che il layer LLM usa quando attivo. I dati tecnici restano la base.
+        try:
+            sent = self.sentiment.get_sentiment(decision.asset)
+            asset.sentiment_score = sent.get("sentiment_score")
+            asset.social_volume = sent.get("social_volume")
+        except Exception:  # noqa: BLE001
+            pass
+
         # 4) RISK GATE — ultimo controllo prima dell'ordine
         user = self.read_user_risk()
         params = self.risk.evaluate(decision, user, asset, self.account_equity(),
