@@ -5,10 +5,9 @@ import { collection, doc, limit, onSnapshot, orderBy, query } from 'firebase/fir
 import { getDb } from '../lib/firebase';
 
 /**
- * GATE 1 — vetrina PER STRATEGIA, a schede (card grid). Ogni strategia (base o
- * generata) ha: un mini-grafico generato, una descrizione di cosa fa, e i KPI
- * aggregati sulle crypto validate (success rate, PF, n. crypto, trade).
- * Dati: strategy_registry/validated (+ discovered_strategies/specs per le gen_*).
+ * Catalogo strategie. Vista PRODUZIONE (default): solo le strategie che hanno
+ * davvero tradato in paper, con la loro EQUITY CURVE reale (PnL cumulato) e i
+ * risultati veri. Toggle per vedere anche tutte le validate (GATE 1).
  */
 type PairRec = {
   symbol: string;
@@ -27,28 +26,20 @@ type Reg = {
   coins_covered?: number;
   universe_size?: number;
   ready?: boolean;
-  updated_at?: number;
 };
 type Feature = { kind: string } & Record<string, unknown>;
 type Spec = { features?: Feature[]; volume_mult?: number; min_adx?: number; atr_mult_stop?: number; rr?: number };
 type SpecsDoc = { specs?: Record<string, Spec> };
+type Prod = { n: number; wins: number; pnl: number; points: Array<[number, number]> }; // [exit_ts, pnl]
+type TradeDoc = { strategy?: string; pnl?: number; is_win?: boolean; exit_ts?: number };
 type Card = {
   strategy: string;
   generated: boolean;
   desc: string;
   coins: PairRec[];
   avgPf: number;
-  avgWin: number | null;
   totTrades: number;
 };
-type Prod = { n: number; wins: number; pnl: number };
-type TradeDoc = { strategy?: string; pnl?: number; is_win?: boolean };
-
-function robustness(nCoins: number): { label: string; color: string; bg: string } {
-  if (nCoins >= 8) return { label: `🛡️ robusta · ${nCoins}`, color: '#8fd18f', bg: '#1c2e1c' };
-  if (nCoins >= 3) return { label: `solida · ${nCoins}`, color: '#cdd6e2', bg: '#1d2533' };
-  return { label: `${nCoins} crypto`, color: '#c9a24b', bg: '#2e2613' };
-}
 
 const BASE_DESC: Record<string, string> = {
   trend_following: 'Segue i trend di mercato (EMA + momentum): entra nella direzione del movimento dominante e lascia correre i profitti.',
@@ -86,11 +77,14 @@ function describe(name: string, generated: boolean, spec?: Spec): string {
   const tail: string[] = [];
   if (spec?.atr_mult_stop) tail.push(`stop ${spec.atr_mult_stop} ATR`);
   if (spec?.rr) tail.push(`R/R ${spec.rr}`);
-  if (spec?.min_adx) tail.push(`solo trend forte (ADX≥${spec.min_adx})`);
   return tail.length ? `${base} ${tail.join(', ')}.` : base;
 }
 
-// PRNG deterministico per un mini-grafico stabile e unico per strategia
+function robustness(nCoins: number): { label: string; color: string; bg: string } {
+  if (nCoins >= 8) return { label: `🛡️ robusta · ${nCoins}`, color: '#8fd18f', bg: '#1c2e1c' };
+  if (nCoins >= 3) return { label: `solida · ${nCoins}`, color: '#cdd6e2', bg: '#1d2533' };
+  return { label: `${nCoins} crypto`, color: '#c9a24b', bg: '#2e2613' };
+}
 function hashStr(s: string): number {
   let h = 2166136261;
   for (let i = 0; i < s.length; i++) {
@@ -99,25 +93,23 @@ function hashStr(s: string): number {
   }
   return h >>> 0;
 }
-function mulberry32(a: number) {
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-function spark(seed: number, w = 100, h = 44, n = 30) {
-  const rnd = mulberry32(seed);
-  let y = h * 0.72;
-  const pts: [number, number][] = [];
-  for (let i = 0; i < n; i++) {
-    y += (rnd() - 0.46) * (h * 0.14); // leggera deriva verso l'alto
-    y = Math.max(h * 0.12, Math.min(h * 0.9, y));
-    pts.push([(i / (n - 1)) * w, y]);
-  }
+
+// equity curve REALE dal PnL cumulato dei trade in produzione
+function realSpark(points: Array<[number, number]>, w = 100, h = 44) {
+  const ordered = [...points].sort((a, b) => a[0] - b[0]);
+  const cum: number[] = [0];
+  for (const [, pnl] of ordered) cum.push(cum[cum.length - 1] + pnl);
+  const min = Math.min(...cum);
+  const max = Math.max(...cum);
+  const range = max - min || 1;
+  const n = cum.length;
+  const pts = cum.map((v, i) => {
+    const x = n > 1 ? (i / (n - 1)) * w : w / 2;
+    const y = h - 6 - ((v - min) / range) * (h - 12);
+    return [x, y] as [number, number];
+  });
   const line = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
-  return { line, area: `${line} L ${w} ${h} L 0 ${h} Z` };
+  return { line, area: `${line} L ${w} ${h} L 0 ${h} Z`, positive: cum[cum.length - 1] >= 0 };
 }
 
 const fmtTrades = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : `${n}`);
@@ -126,6 +118,7 @@ export default function OptimizedStrategies() {
   const [reg, setReg] = useState<Reg | null>(null);
   const [specsDoc, setSpecsDoc] = useState<SpecsDoc | null>(null);
   const [prod, setProd] = useState<Record<string, Prod>>({});
+  const [view, setView] = useState<'prod' | 'all'>('prod');
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -141,7 +134,6 @@ export default function OptimizedStrategies() {
     const u2 = onSnapshot(doc(db, 'discovered_strategies', 'specs'), (snap) => {
       setSpecsDoc(snap.exists() ? (snap.data() as SpecsDoc) : null);
     });
-    // risultati REALI in produzione (paper): aggrega i trade chiusi per strategia
     const u3 = onSnapshot(
       query(collection(db, 'trades'), orderBy('exit_ts', 'desc'), limit(500)),
       (snap) => {
@@ -150,10 +142,11 @@ export default function OptimizedStrategies() {
           const t = d.data() as TradeDoc;
           const s = t.strategy;
           if (!s) return;
-          if (!agg[s]) agg[s] = { n: 0, wins: 0, pnl: 0 };
+          if (!agg[s]) agg[s] = { n: 0, wins: 0, pnl: 0, points: [] };
           agg[s].n += 1;
           if (t.is_win) agg[s].wins += 1;
           agg[s].pnl += t.pnl ?? 0;
+          agg[s].points.push([t.exit_ts ?? 0, t.pnl ?? 0]);
         });
         setProd(agg);
       },
@@ -186,107 +179,109 @@ export default function OptimizedStrategies() {
     for (const [strategy, coins] of byStrat) {
       const generated = strategy.startsWith('gen_');
       const pfs = coins.map((c) => c.last_pf ?? 0).filter((v) => v > 0);
-      const wins = coins.map((c) => c.last_win_rate).filter((v): v is number => v != null);
       out.push({
         strategy,
         generated,
         desc: describe(strategy, generated, specs[strategy]),
         coins: coins.sort((a, b) => (b.last_pnl_pct ?? 0) - (a.last_pnl_pct ?? 0)),
         avgPf: pfs.length ? pfs.reduce((s, v) => s + v, 0) / pfs.length : 0,
-        avgWin: wins.length ? wins.reduce((s, v) => s + v, 0) / wins.length : null,
         totTrades: coins.reduce((s, c) => s + (c.last_trades ?? 0), 0),
       });
     }
     return out.sort((a, b) => b.coins.length - a.coins.length);
   }, [reg, specsDoc]);
 
+  const shown = useMemo(
+    () => (view === 'prod' ? cards.filter((c) => (prod[c.strategy]?.n ?? 0) > 0) : cards),
+    [cards, prod, view],
+  );
+
   const cov = reg?.coverage != null ? Math.round(reg.coverage * 100) : null;
+  const btn = (active: boolean): React.CSSProperties => ({
+    fontSize: 11,
+    padding: '3px 10px',
+    borderRadius: 6,
+    cursor: 'pointer',
+    border: '1px solid #28303d',
+    background: active ? '#1f2a44' : 'transparent',
+    color: active ? '#cfe0ff' : '#8b96a5',
+  });
 
   return (
     <div className="panel">
-      <h2>Catalogo strategie validate (GATE 1)</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+        <h2 style={{ margin: 0 }}>Catalogo strategie</h2>
+        <div style={{ display: 'flex', gap: 6 }}>
+          <button style={btn(view === 'prod')} onClick={() => setView('prod')}>In produzione</button>
+          <button style={btn(view === 'all')} onClick={() => setView('all')}>Tutte le validate</button>
+        </div>
+      </div>
       <p className="subtitle">
-        Una scheda per strategia · cosa fa + KPI sulle crypto validate.
+        {view === 'prod'
+          ? 'Solo strategie che hanno tradato in paper · grafico = equity curve reale'
+          : 'Tutte le coppie validate dal GATE 1'}
         {cov != null ? ` · copertura ${reg?.coins_covered}/${reg?.universe_size} (${cov}%)` : ''}
-        {reg?.ready ? ' · ✅ SUPERATO' : ''}
       </p>
       {!loaded ? (
         <p className="muted">Loading…</p>
-      ) : cards.length === 0 ? (
-        <p className="muted">Nessuna strategia validata ancora.</p>
+      ) : shown.length === 0 ? (
+        <p className="muted">
+          {view === 'prod'
+            ? 'Nessuna strategia ancora in produzione: i primi trade paper compariranno qui.'
+            : 'Nessuna strategia validata ancora.'}
+        </p>
       ) : (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-            gap: 12,
-          }}
-        >
-          {cards.map((c) => {
-            const sp = spark(hashStr(c.strategy));
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
+          {shown.map((c) => {
             const gid = `g-${hashStr(c.strategy)}`;
             const coinNames = c.coins.map((x) => x.symbol.replace('USDT', ''));
             const rob = robustness(c.coins.length);
             const p = prod[c.strategy];
+            const curve = p && p.points.length ? realSpark(p.points) : null;
+            const stroke = curve ? (curve.positive ? '#3fb950' : '#f85149') : '#2a3340';
             return (
-              <div
-                key={c.strategy}
-                style={{ border: '1px solid #28303d', borderRadius: 10, overflow: 'hidden', background: '#0e1420' }}
-              >
-                {/* mini-grafico */}
+              <div key={c.strategy} style={{ border: '1px solid #28303d', borderRadius: 10, overflow: 'hidden', background: '#0e1420' }}>
+                {/* equity curve REALE (o piatta se nessun trade) */}
                 <svg viewBox="0 0 100 44" preserveAspectRatio="none" style={{ width: '100%', height: 70, display: 'block', background: '#0a0f18' }}>
-                  <defs>
-                    <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#1f6f43" stopOpacity="0.55" />
-                      <stop offset="100%" stopColor="#1f6f43" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <path d={sp.area} fill={`url(#${gid})`} />
-                  <path d={sp.line} fill="none" stroke="#3fb950" strokeWidth="1.4" />
+                  {curve ? (
+                    <>
+                      <defs>
+                        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={stroke} stopOpacity="0.5" />
+                          <stop offset="100%" stopColor={stroke} stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
+                      <path d={curve.area} fill={`url(#${gid})`} />
+                      <path d={curve.line} fill="none" stroke={stroke} strokeWidth="1.4" />
+                    </>
+                  ) : (
+                    <>
+                      <line x1="0" y1="36" x2="100" y2="36" stroke="#2a3340" strokeWidth="1" strokeDasharray="2 2" />
+                      <text x="50" y="24" fill="#5a6473" fontSize="6" textAnchor="middle">nessun trade ancora</text>
+                    </>
+                  )}
                 </svg>
 
                 <div style={{ padding: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                     <strong style={{ fontSize: 13 }}>{c.strategy}</strong>
-                    <span
-                      style={{
-                        fontSize: 9,
-                        padding: '1px 5px',
-                        borderRadius: 4,
-                        background: c.generated ? '#1f2a44' : '#23331f',
-                        color: c.generated ? '#8ab4ff' : '#8fd18f',
-                      }}
-                    >
+                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: c.generated ? '#1f2a44' : '#23331f', color: c.generated ? '#8ab4ff' : '#8fd18f' }}>
                       {c.generated ? '🧠 AI' : 'base'}
                     </span>
-                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: rob.bg, color: rob.color }}>
-                      {rob.label}
-                    </span>
+                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: rob.bg, color: rob.color }}>{rob.label}</span>
                   </div>
 
-                  <p
-                    style={{
-                      fontSize: 11.5,
-                      color: '#aeb7c4',
-                      margin: '6px 0 8px',
-                      lineHeight: 1.4,
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      minHeight: 48,
-                    }}
-                  >
+                  <p style={{ fontSize: 11.5, color: '#aeb7c4', margin: '6px 0 8px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: 48 }}>
                     {c.desc}
                   </p>
 
-                  {/* KPI */}
+                  {/* PRODUZIONE: i risultati reali in primo piano */}
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4, textAlign: 'center' }}>
                     {[
-                      { l: 'Success', v: c.avgWin != null ? `${Math.round(c.avgWin * 100)}%` : '—', col: '#cdd6e2' },
-                      { l: 'PF', v: c.avgPf ? c.avgPf.toFixed(2) : '—', col: '#3fb950' },
-                      { l: 'Crypto', v: `${c.coins.length}`, col: '#cdd6e2' },
-                      { l: 'Trade', v: fmtTrades(c.totTrades), col: '#8b96a5' },
+                      { l: 'PnL', v: p ? `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(0)}$` : '—', col: p ? (p.pnl >= 0 ? '#3fb950' : '#f85149') : '#7b8696' },
+                      { l: 'Win', v: p && p.n ? `${Math.round((p.wins / p.n) * 100)}%` : '—', col: '#cdd6e2' },
+                      { l: 'Trade', v: p ? `${p.n}` : '0', col: '#cdd6e2' },
+                      { l: 'PF bt', v: c.avgPf ? c.avgPf.toFixed(2) : '—', col: '#8b96a5' },
                     ].map((k) => (
                       <div key={k.l} style={{ background: '#121a28', borderRadius: 6, padding: '4px 2px' }}>
                         <div style={{ fontSize: 13, fontWeight: 700, color: k.col }}>{k.v}</div>
@@ -295,34 +290,9 @@ export default function OptimizedStrategies() {
                     ))}
                   </div>
 
-                  {/* risultati REALI in produzione (paper) */}
-                  <div
-                    style={{
-                      marginTop: 8,
-                      paddingTop: 8,
-                      borderTop: '1px dashed #28303d',
-                      fontSize: 10.5,
-                    }}
-                  >
-                    {p && p.n > 0 ? (
-                      <span>
-                        <span style={{ color: '#3fb950' }}>● in produzione</span>
-                        <span style={{ color: '#aeb7c4' }}>
-                          {' '}· {p.n} trade · win {Math.round((p.wins / p.n) * 100)}% ·{' '}
-                        </span>
-                        <span style={{ color: p.pnl >= 0 ? '#3fb950' : '#f85149', fontWeight: 700 }}>
-                          {p.pnl >= 0 ? '+' : ''}
-                          {p.pnl.toFixed(0)}$
-                        </span>
-                      </span>
-                    ) : (
-                      <span style={{ color: '#7b8696' }}>○ non ancora usata in produzione</span>
-                    )}
-                  </div>
-
-                  <div style={{ fontSize: 10, color: '#7b8696', marginTop: 6 }}>
-                    {coinNames.slice(0, 6).join(' · ')}
-                    {coinNames.length > 6 ? ` +${coinNames.length - 6}` : ''}
+                  <div style={{ fontSize: 10, color: '#7b8696', marginTop: 8 }}>
+                    Validata su {c.coins.length}: {coinNames.slice(0, 5).join(' · ')}
+                    {coinNames.length > 5 ? ` +${coinNames.length - 5}` : ''}
                   </div>
                 </div>
               </div>
