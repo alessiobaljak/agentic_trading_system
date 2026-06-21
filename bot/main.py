@@ -56,7 +56,9 @@ class TradingBot:
         self.last_regime = 0.0
         self.last_decision = 0.0
         self.last_adapt_reload = 0.0
-        self._coin_cooldown: dict[str, float] = {}  # symbol -> epoch fino a cui in cooldown
+        self._coin_cooldown: dict[str, float] = {}    # symbol -> epoch in cooldown
+        self._strat_streak: dict[str, int] = {}       # strategia -> stop consecutivi
+        self._strat_cooldown: dict[str, float] = {}   # strategia -> epoch in panchina
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
@@ -161,6 +163,19 @@ class TradingBot:
                 # non rientrare su quella coin per qualche ora (evita il tritacarne).
                 if was_sl:
                     self._coin_cooldown[closed.symbol] = now + settings.COOLDOWN_HOURS * 3600
+                # adattamento real-time: una STRATEGIA che perde N volte di fila va
+                # in panchina (il bot NON si ferma, continua con le altre strategie).
+                st = closed.strategy
+                if was_sl:
+                    self._strat_streak[st] = self._strat_streak.get(st, 0) + 1
+                    if self._strat_streak[st] >= settings.STRATEGY_LOSS_STREAK:
+                        self._strat_cooldown[st] = now + settings.STRATEGY_COOLDOWN_HOURS * 3600
+                        self._strat_streak[st] = 0
+                        print(f"[main] strategia {st} in panchina dopo "
+                              f"{settings.STRATEGY_LOSS_STREAK} stop consecutivi")
+                else:  # vincita -> la strategia funziona di nuovo
+                    self._strat_streak[st] = 0
+                    self._strat_cooldown.pop(st, None)
                 # perdita giornaliera come % del CAPITALE (USDT/equity), NON come
                 # somma dei rendimenti-su-margine (che la leva amplifica ~Nx e
                 # faceva scattare il breaker troppo presto).
@@ -190,7 +205,10 @@ class TradingBot:
         self.refresh_selected_snapshots()
         memory = self._load_memory()
         recent = self.logger.recent(20)
-        decision = self.orchestrator.decide(self.selected, self.regime, memory, recent)
+        # strategie temporaneamente in panchina (adattamento real-time)
+        disabled = {s for s, until in self._strat_cooldown.items() if now < until}
+        decision = self.orchestrator.decide(self.selected, self.regime, memory, recent,
+                                            disabled=disabled)
         if decision is None:
             self._publish_decision_status()  # flat: motivo già in last_status
             return

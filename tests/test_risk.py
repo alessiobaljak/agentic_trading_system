@@ -92,8 +92,9 @@ def test_circuit_breaker_does_not_halt_on_small_equity_losses():
 
 
 def test_circuit_breaker_consecutive_sl_pause():
+    from bot.risk import hard_limits
     cb = CircuitBreakers()
-    for _ in range(3):
+    for _ in range(hard_limits.CONSECUTIVE_SL_LIMIT):
         cb.register_trade_result(-0.005, was_stop_loss=True)
     assert cb.can_trade() is False
     assert "consecut" in cb.blocking_reason().lower() or "SL" in cb.blocking_reason()

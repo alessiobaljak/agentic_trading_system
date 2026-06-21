@@ -59,14 +59,17 @@ class Orchestrator:
 
     # ------------------------------------------------------------------ #
     def collect_signals(
-        self, assets: dict[str, AssetSnapshot], regime: Regime
+        self, assets: dict[str, AssetSnapshot], regime: Regime,
+        disabled: Optional[set] = None,
     ) -> list[dict]:
         """
         Raccoglie i segnali delle strategie attive nel regime corrente.
         Per OGNI asset istanzia le strategie con i PARAMETRI OTTIMIZZATI per quel
         coin (walk-forward) e opera solo le coppie (asset, strategia) che hanno
-        passato la validazione out-of-sample.
+        passato la validazione out-of-sample. Le strategie in `disabled` (messe in
+        panchina dall'adattamento real-time dopo perdite consecutive) sono saltate.
         """
+        disabled = disabled or set()
         ctx = StrategyContext(all_assets=assets, regime=regime)
         signals = []
         for sym, asset in assets.items():
@@ -75,6 +78,8 @@ class Orchestrator:
             strategies = get_all_strategies(params_by_strat)
             strategies += self.adaptation.generated_strategies_for(sym)
             for strat in strategies:
+                if strat.name in disabled:
+                    continue
                 if not strat.is_active_in(regime):
                     continue
                 if not self.adaptation.is_enabled(sym, strat.name):
@@ -100,8 +105,9 @@ class Orchestrator:
         memory_report: Optional[MemoryReport] = None,
         recent_trades: Optional[list[dict]] = None,
         macro_events: Optional[list[dict]] = None,
+        disabled: Optional[set] = None,
     ) -> Optional[OrchestratorDecision]:
-        signals = self.collect_signals(assets, regime)
+        signals = self.collect_signals(assets, regime, disabled=disabled)
         if not signals:
             self._record_status(regime, len(assets), signals, "flat",
                                 "nessun segnale dalle strategie attive in questo regime")

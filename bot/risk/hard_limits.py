@@ -18,9 +18,12 @@ MAX_LEVERAGE: float = 5.0           # leva massima assoluta, mai superabile
 MAX_RISK_PER_TRADE: float = 0.03    # 3% del capitale a rischio per trade, mai superabile
 
 # --- Circuit breakers ---
-DAILY_LOSS_LIMIT: float = 0.05      # stop totale se perdita giornaliera > 5%
-CONSECUTIVE_SL_LIMIT: int = 3       # n. di stop loss consecutivi che innescano la pausa
-CONSECUTIVE_SL_PAUSE: int = 4 * 3600  # pausa di 4 ore (secondi) dopo gli SL consecutivi
+DAILY_LOSS_LIMIT: float = 0.05      # stop totale se perdita giornaliera > 5% (catastrofe)
+# pausa GLOBALE: ora è solo un backstop di sicurezza per un crollo sistemico (molti
+# stop di fila su TUTTE le strategie). L'adattamento normale è per-strategia (panchina),
+# così il bot non si ferma del tutto: continua con le strategie che funzionano.
+CONSECUTIVE_SL_LIMIT: int = 6       # n. di stop loss consecutivi che innescano la pausa
+CONSECUTIVE_SL_PAUSE: int = 2 * 3600  # pausa di 2 ore (secondi) dopo gli SL consecutivi
 HIGH_VOL_SIGMA: float = 3.0         # volatilità > 3 sigma -> size dimezzata
 HIGH_VOL_SIZE_FACTOR: float = 0.5   # fattore di riduzione size in alta volatilità
 MACRO_FLAT_HOURS: float = 2.0       # flat obbligatorio 2h prima/dopo evento macro high-impact

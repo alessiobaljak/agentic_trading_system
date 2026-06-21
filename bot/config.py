@@ -83,6 +83,10 @@ class Settings:
     SELECT_UNIVERSE: int = int(os.getenv("SELECT_UNIVERSE", "100"))
     # cooldown anti-whipsaw: ore di stop su una coin dopo uno STOP LOSS (no rientro)
     COOLDOWN_HOURS: float = float(os.getenv("COOLDOWN_HOURS", "4"))
+    # adattamento real-time: dopo N stop consecutivi una STRATEGIA va in panchina
+    # (il bot continua con le altre), per STRATEGY_COOLDOWN_HOURS.
+    STRATEGY_LOSS_STREAK: int = int(os.getenv("STRATEGY_LOSS_STREAK", "3"))
+    STRATEGY_COOLDOWN_HOURS: float = float(os.getenv("STRATEGY_COOLDOWN_HOURS", "8"))
     MAX_CORRELATED_POSITIONS: int = 3     # correlazione >0.85
     CORRELATION_THRESHOLD: float = 0.85
 
