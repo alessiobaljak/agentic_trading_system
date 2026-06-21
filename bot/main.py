@@ -176,6 +176,7 @@ class TradingBot:
                 else:  # vincita -> la strategia funziona di nuovo
                     self._strat_streak[st] = 0
                     self._strat_cooldown.pop(st, None)
+                self._save_adapt_state()  # persiste i cooldown (sopravvivono ai riavvii)
                 # perdita giornaliera come % del CAPITALE (USDT/equity), NON come
                 # somma dei rendimenti-su-margine (che la leva amplifica ~Nx e
                 # faceva scattare il breaker troppo presto).
@@ -265,6 +266,32 @@ class TradingBot:
                 pos.stop_price, pos.take_profit_price, dry_run=settings.DRY_RUN)
 
     # ------------------------------------------------------------------ #
+    def _load_adapt_state(self) -> None:
+        """Ricarica cooldown coin/strategia da Firebase: così SOPRAVVIVONO ai
+        riavvii del bot (prima erano solo in memoria e si azzeravano a ogni restart)."""
+        d = self.fb.get_rtdb("/adapt_state") or {}
+        try:
+            self._coin_cooldown = {k: float(v) for k, v in (d.get("coin_cooldown") or {}).items()}
+            self._strat_streak = {k: int(v) for k, v in (d.get("strat_streak") or {}).items()}
+            self._strat_cooldown = {k: float(v) for k, v in (d.get("strat_cooldown") or {}).items()}
+            n = sum(1 for v in self._coin_cooldown.values() if v > time.time())
+            m = sum(1 for v in self._strat_cooldown.values() if v > time.time())
+            print(f"[main] cooldown ricaricati: {n} coin, {m} strategie in panchina")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[main] cooldown non ricaricati: {exc}")
+
+    def _save_adapt_state(self) -> None:
+        now = time.time()
+        # tieni solo i cooldown ancora attivi (pulizia)
+        self._coin_cooldown = {k: v for k, v in self._coin_cooldown.items() if v > now}
+        self._strat_cooldown = {k: v for k, v in self._strat_cooldown.items() if v > now}
+        self.fb.set_rtdb("/adapt_state", {
+            "coin_cooldown": self._coin_cooldown,
+            "strat_streak": self._strat_streak,
+            "strat_cooldown": self._strat_cooldown,
+            "updated_at": now,
+        })
+
     def _load_memory(self):
         from bot.core.models import MemoryReport
         doc = self.fb.get_doc("memory", "30")
@@ -302,6 +329,7 @@ class TradingBot:
         print(f"[main] avvio bot @ {datetime.now(timezone.utc).isoformat()} "
               f"DRY_RUN={settings.DRY_RUN}")
         self.reconcile_equity()
+        self._load_adapt_state()
         self.notifier.send(f"🟢 Bot avviato (DRY_RUN={settings.DRY_RUN})")
         it = 0
         while max_iterations is None or it < max_iterations:
