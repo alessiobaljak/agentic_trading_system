@@ -40,10 +40,11 @@ def test_ranked_by_volume_desc():
 def test_eval_universe_decoupled_from_max_positions():
     # la selezione per la VALUTAZIONE segnali usa SELECT_UNIVERSE, non
     # MAX_OPEN_POSITIONS: si valutano molte crypto, se ne aprono al massimo 5.
+    n = settings.SELECT_UNIVERSE + 20
     results = [
-        ScanResult(symbol=f"C{i}USDT", score=1.0 - i / 100,
+        ScanResult(symbol=f"C{i}USDT", score=1.0 - i / 1000,
                    components={}, snapshot=AssetSnapshot(symbol=f"C{i}USDT", price=1.0))
-        for i in range(60)
+        for i in range(n)
     ]
     sel = MarketScanner(price_agent=_StubPrice()).select_assets(results, Regime.SIDEWAYS)
     assert len(sel) == settings.SELECT_UNIVERSE

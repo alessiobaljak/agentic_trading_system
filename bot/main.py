@@ -129,10 +129,9 @@ class TradingBot:
             if snap:
                 snap.regime = self.regime
                 snap.fear_greed = fng
-                # sentiment solo per i pochi asset selezionati (CoinGecko, gratis)
-                sent = self.sentiment.get_sentiment(sym)
-                snap.sentiment_score = sent.get("sentiment_score")
-                snap.social_volume = sent.get("social_volume")
+                # NB: niente sentiment per-coin qui. Le strategie usano SOLO indicatori
+                # tecnici (RSI/Bollinger/MACD/…), non il sentiment: evitarlo permette di
+                # valutare l'INTERO mercato liquido a ogni ciclo senza saturare CoinGecko.
                 self.selected[sym] = snap
 
     # ------------------------------------------------------------------ #
