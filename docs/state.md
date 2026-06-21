@@ -1,29 +1,28 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-21 17:53 UTC_
+_Generato: 2026-06-21 20:03 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$9,593.49**
-- ultimo heartbeat: 2026-06-21 17:53 UTC
+- equity: **$9,529.21**
+- ultimo heartbeat: 2026-06-21 20:03 UTC
 
 ## Ultima decisione
-- esito: **🟢 APERTA** (2026-06-21 17:45 UTC)
-- motivo: aperta WLDUSDT long (gen_54773909)
-- asset valutati: 100 · segnali: 33 · miglior segnale WLDUSDT gen_54773909 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-06-21 19:56 UTC)
+- motivo: nessun segnale dalle strategie attive in questo regime
+- asset valutati: 100 · segnali: 0
 
 ## Posizioni aperte
-- FILUSDT: short qty=6367.408807278199 @ 0.808 uPnL=31.83704403639102
-- SOLUSDT: long qty=111.84897622767637 @ 74.52 uPnL=-21.251305483258257
-- WLDUSDT: long qty=4460.858437885307 @ 0.6296 uPnL=-5.513531812057595
+- FILUSDT: short qty=6367.408807278199 @ 0.808 uPnL=54.21988682391175
+- WLDUSDT: long qty=4460.858437885307 @ 0.6296 uPnL=37.055904957669476
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
 - copertura universo: **15/80 crypto (19%)** · obiettivo ≥ 60%
 - coppie validate (>= 3 pass OOS): **17**
 - universo scansionato: 1INCHUSDT, AAVEUSDT, ADAUSDT, ALGOUSDT, APEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, BCHUSDT, BNBUSDT, BONKUSDT, BTCUSDT, CHZUSDT, COMPUSDT, CRVUSDT, DASHUSDT, DOGEUSDT, DOTUSDT, DYDXUSDT, EGLDUSDT, ENAUSDT, ENSUSDT, EOSUSDT, ETCUSDT, ETHUSDT, FETUSDT, FILUSDT, FLOKIUSDT, FLOWUSDT, FTMUSDT, GALAUSDT, GMTUSDT, GRTUSDT, HBARUSDT, ICPUSDT, IMXUSDT, INJUSDT, IOTAUSDT, JUPUSDT, KAVAUSDT, LDOUSDT, LINKUSDT, LTCUSDT, MANAUSDT, MASKUSDT, MINAUSDT, MKRUSDT, NEARUSDT, NEOUSDT, OPUSDT, ORDIUSDT, PEOPLEUSDT, PEPEUSDT, PYTHUSDT, RENDERUSDT, ROSEUSDT, RUNEUSDT, SANDUSDT, SEIUSDT, SHIBUSDT, SNXUSDT, SOLUSDT, STXUSDT, SUIUSDT, SUSHIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, VETUSDT, WAVESUSDT, WIFUSDT, WLDUSDT, XLMUSDT, XRPUSDT, YFIUSDT, ZECUSDT
-- aggiornato: 2026-06-21 16:23 UTC
+- aggiornato: 2026-06-21 18:22 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
