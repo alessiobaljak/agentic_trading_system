@@ -5,11 +5,10 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { getDb } from '../lib/firebase';
 
 /**
- * GATE 1 — vista PER STRATEGIA. Una scheda per strategia (base o generata),
- * con la sua logica/parametri e l'elenco delle crypto su cui ha dato esito
- * positivo (PF, PnL OOS, win rate, trade, pass). Legge il registro validato
- * (strategy_registry/validated, `pairs` come stringa JSON) e, per le strategie
- * generate, la loro spec da discovered_strategies/specs.
+ * GATE 1 — vetrina PER STRATEGIA, a schede (card grid). Ogni strategia (base o
+ * generata) ha: un mini-grafico generato, una descrizione di cosa fa, e i KPI
+ * aggregati sulle crypto validate (success rate, PF, n. crypto, trade).
+ * Dati: strategy_registry/validated (+ discovered_strategies/specs per le gen_*).
  */
 type PairRec = {
   symbol: string;
@@ -31,37 +30,89 @@ type Reg = {
   updated_at?: number;
 };
 type Feature = { kind: string } & Record<string, unknown>;
-type Spec = {
-  features?: Feature[];
-  volume_mult?: number;
-  min_adx?: number;
-  atr_mult_stop?: number;
-  rr?: number;
-};
+type Spec = { features?: Feature[]; volume_mult?: number; min_adx?: number; atr_mult_stop?: number; rr?: number };
 type SpecsDoc = { specs?: Record<string, Spec> };
+type Card = {
+  strategy: string;
+  generated: boolean;
+  desc: string;
+  coins: PairRec[];
+  avgPf: number;
+  avgWin: number | null;
+  totTrades: number;
+};
 
-type Group = { strategy: string; generated: boolean; spec?: Spec; coins: PairRec[] };
+const BASE_DESC: Record<string, string> = {
+  trend_following: 'Segue i trend di mercato (EMA + momentum): entra nella direzione del movimento dominante e lascia correre i profitti.',
+  mean_reversion: 'Gioca gli eccessi: rientro verso la media quando il prezzo tocca le bande di Bollinger con RSI estremo.',
+  breakout: 'Cattura le rotture di volatilità dopo fasi di compressione, con conferma di volume.',
+  vwap_reversion: 'Fade verso il VWAP quando il prezzo se ne allontana troppo (logica istituzionale).',
+  grid_trading: 'Griglia di ordini per mercati laterali: accumula sulle oscillazioni dentro un range.',
+  liquidity_grab: 'Sfrutta gli sweep di liquidità e la caccia agli stop loss.',
+  momentum_cross_asset: 'Anticipa le altcoin sul momentum di BTC (lag 15-30 minuti).',
+  funding_arbitrage: 'Sfrutta i funding rate estremi: fade del posizionamento sovra-affollato.',
+};
+const FEATURE_PHRASE: Record<string, string> = {
+  rsi_extreme: 'RSI agli estremi',
+  rsi_momentum: 'RSI in momentum',
+  bb_touch: 'tocco delle bande di Bollinger',
+  bb_break: 'rottura delle bande di Bollinger',
+  vwap_momentum: 'spinta oltre il VWAP',
+  vwap_reversion: 'ritorno verso il VWAP',
+  ema_cross: 'incrocio delle EMA',
+  macd_cross: 'incrocio del MACD',
+  macd_hist: 'istogramma MACD',
+  macd_zero: 'MACD oltre lo zero',
+  price_ema: 'prezzo vs EMA',
+  price_bb_mid: 'prezzo vs media Bollinger',
+  stoch_extreme: 'Stocastico agli estremi',
+  stoch_momentum: 'Stocastico in momentum',
+};
 
-function describeSpec(spec?: Spec): string {
-  if (!spec) return '—';
-  const parts = (spec.features ?? []).map((f) => {
-    const extra = Object.entries(f)
-      .filter(([k]) => k !== 'kind')
-      .map(([k, v]) => `${k}=${v}`)
-      .join(' ');
-    return extra ? `${f.kind} ${extra}` : f.kind;
-  });
-  let s = parts.join(' AND ') || '—';
+function describe(name: string, generated: boolean, spec?: Spec): string {
+  if (!generated) return BASE_DESC[name] ?? 'Strategia tecnica.';
+  const feats = (spec?.features ?? []).map((f) => FEATURE_PHRASE[f.kind] ?? f.kind);
+  const base = feats.length
+    ? `Strategia generata dall'AI: opera quando si allineano ${feats.join(' + ')}.`
+    : 'Strategia generata dall’AI.';
   const tail: string[] = [];
-  if (spec.min_adx) tail.push(`ADX≥${spec.min_adx}`);
-  if (spec.volume_mult) tail.push(`vol×${spec.volume_mult}`);
-  if (spec.atr_mult_stop) tail.push(`stop ${spec.atr_mult_stop} ATR`);
-  if (spec.rr) tail.push(`RR ${spec.rr}`);
-  if (tail.length) s += ` · ${tail.join(' · ')}`;
-  return s;
+  if (spec?.atr_mult_stop) tail.push(`stop ${spec.atr_mult_stop} ATR`);
+  if (spec?.rr) tail.push(`R/R ${spec.rr}`);
+  if (spec?.min_adx) tail.push(`solo trend forte (ADX≥${spec.min_adx})`);
+  return tail.length ? `${base} ${tail.join(', ')}.` : base;
 }
 
-const pct = (v?: number) => (v != null ? `${(v * 100).toFixed(0)}%` : '—');
+// PRNG deterministico per un mini-grafico stabile e unico per strategia
+function hashStr(s: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function mulberry32(a: number) {
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function spark(seed: number, w = 100, h = 44, n = 30) {
+  const rnd = mulberry32(seed);
+  let y = h * 0.72;
+  const pts: [number, number][] = [];
+  for (let i = 0; i < n; i++) {
+    y += (rnd() - 0.46) * (h * 0.14); // leggera deriva verso l'alto
+    y = Math.max(h * 0.12, Math.min(h * 0.9, y));
+    pts.push([(i / (n - 1)) * w, y]);
+  }
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+  return { line, area: `${line} L ${w} ${h} L 0 ${h} Z` };
+}
+
+const fmtTrades = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : `${n}`);
 
 export default function OptimizedStrategies() {
   const [reg, setReg] = useState<Reg | null>(null);
@@ -87,7 +138,7 @@ export default function OptimizedStrategies() {
     };
   }, []);
 
-  const groups = useMemo<Group[]>(() => {
+  const cards = useMemo<Card[]>(() => {
     if (!reg) return [];
     let pairs: Record<string, PairRec> = {};
     try {
@@ -96,113 +147,129 @@ export default function OptimizedStrategies() {
       pairs = {};
     }
     const specs = specsDoc?.specs ?? {};
-    const byStrat = new Map<string, Group>();
+    const byStrat = new Map<string, PairRec[]>();
     for (const key of reg.validated ?? []) {
       const rec = pairs[key];
       if (!rec) continue;
-      const name = rec.strategy;
-      if (!byStrat.has(name)) {
-        const generated = name.startsWith('gen_');
-        byStrat.set(name, { strategy: name, generated, spec: generated ? specs[name] : undefined, coins: [] });
-      }
-      byStrat.get(name)!.coins.push(rec);
+      if (!byStrat.has(rec.strategy)) byStrat.set(rec.strategy, []);
+      byStrat.get(rec.strategy)!.push(rec);
     }
-    const out = Array.from(byStrat.values());
-    for (const g of out) g.coins.sort((a, b) => (b.last_pnl_pct ?? 0) - (a.last_pnl_pct ?? 0));
-    // strategie più "robuste" prima: più crypto validate, poi PnL medio
-    out.sort((a, b) => b.coins.length - a.coins.length);
-    return out;
+    const out: Card[] = [];
+    for (const [strategy, coins] of byStrat) {
+      const generated = strategy.startsWith('gen_');
+      const pfs = coins.map((c) => c.last_pf ?? 0).filter((v) => v > 0);
+      const wins = coins.map((c) => c.last_win_rate).filter((v): v is number => v != null);
+      out.push({
+        strategy,
+        generated,
+        desc: describe(strategy, generated, specs[strategy]),
+        coins: coins.sort((a, b) => (b.last_pnl_pct ?? 0) - (a.last_pnl_pct ?? 0)),
+        avgPf: pfs.length ? pfs.reduce((s, v) => s + v, 0) / pfs.length : 0,
+        avgWin: wins.length ? wins.reduce((s, v) => s + v, 0) / wins.length : null,
+        totTrades: coins.reduce((s, c) => s + (c.last_trades ?? 0), 0),
+      });
+    }
+    return out.sort((a, b) => b.coins.length - a.coins.length);
   }, [reg, specsDoc]);
 
-  const updated = reg?.updated_at ? new Date(reg.updated_at * 1000).toLocaleString() : null;
   const cov = reg?.coverage != null ? Math.round(reg.coverage * 100) : null;
 
   return (
     <div className="panel">
-      <h2>GATE 1 — Strategie validate (per strategia)</h2>
+      <h2>Catalogo strategie validate (GATE 1)</h2>
       <p className="subtitle">
-        Una scheda per strategia · logica/parametri + crypto con esito positivo.
+        Una scheda per strategia · cosa fa + KPI sulle crypto validate.
         {cov != null ? ` · copertura ${reg?.coins_covered}/${reg?.universe_size} (${cov}%)` : ''}
         {reg?.ready ? ' · ✅ SUPERATO' : ''}
-        {updated ? ` · agg. ${updated}` : ''}
       </p>
       {!loaded ? (
         <p className="muted">Loading…</p>
-      ) : groups.length === 0 ? (
+      ) : cards.length === 0 ? (
         <p className="muted">Nessuna strategia validata ancora.</p>
       ) : (
-        <div style={{ display: 'grid', gap: 12 }}>
-          {groups.map((g) => (
-            <div
-              key={g.strategy}
-              style={{ border: '1px solid #28303d', borderRadius: 8, padding: 12, background: '#0e1420' }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <strong style={{ fontSize: 14 }}>{g.strategy}</strong>
-                <span
-                  style={{
-                    fontSize: 10,
-                    padding: '2px 6px',
-                    borderRadius: 4,
-                    background: g.generated ? '#1f2a44' : '#23331f',
-                    color: g.generated ? '#8ab4ff' : '#8fd18f',
-                  }}
-                >
-                  {g.generated ? '🧠 generata' : 'base'}
-                </span>
-                <span className="muted" style={{ fontSize: 12 }}>
-                  {g.coins.length} crypto validate
-                </span>
-              </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+            gap: 12,
+          }}
+        >
+          {cards.map((c) => {
+            const sp = spark(hashStr(c.strategy));
+            const gid = `g-${hashStr(c.strategy)}`;
+            const coinNames = c.coins.map((x) => x.symbol.replace('USDT', ''));
+            return (
+              <div
+                key={c.strategy}
+                style={{ border: '1px solid #28303d', borderRadius: 10, overflow: 'hidden', background: '#0e1420' }}
+              >
+                {/* mini-grafico */}
+                <svg viewBox="0 0 100 44" preserveAspectRatio="none" style={{ width: '100%', height: 70, display: 'block', background: '#0a0f18' }}>
+                  <defs>
+                    <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#1f6f43" stopOpacity="0.55" />
+                      <stop offset="100%" stopColor="#1f6f43" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d={sp.area} fill={`url(#${gid})`} />
+                  <path d={sp.line} fill="none" stroke="#3fb950" strokeWidth="1.4" />
+                </svg>
 
-              <div style={{ fontSize: 12, color: '#aeb7c4', marginTop: 6 }}>
-                {g.generated ? (
-                  <>Logica: <span style={{ color: '#cdd6e2' }}>{describeSpec(g.spec)}</span></>
-                ) : (
-                  <span className="muted">Parametri ottimizzati per ogni crypto (vedi sotto)</span>
-                )}
-              </div>
+                <div style={{ padding: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <strong style={{ fontSize: 13 }}>{c.strategy}</strong>
+                    <span
+                      style={{
+                        fontSize: 9,
+                        padding: '1px 5px',
+                        borderRadius: 4,
+                        background: c.generated ? '#1f2a44' : '#23331f',
+                        color: c.generated ? '#8ab4ff' : '#8fd18f',
+                      }}
+                    >
+                      {c.generated ? '🧠 AI' : 'base'}
+                    </span>
+                  </div>
 
-              <div style={{ overflowX: 'auto', marginTop: 8 }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-                  <thead>
-                    <tr style={{ textAlign: 'left', color: '#8b96a5' }}>
-                      <th style={{ padding: '4px 6px' }}>Coin</th>
-                      <th style={{ padding: '4px 6px' }}>PF</th>
-                      <th style={{ padding: '4px 6px' }}>PnL OOS</th>
-                      <th style={{ padding: '4px 6px' }}>Win</th>
-                      <th style={{ padding: '4px 6px' }}>Trade</th>
-                      <th style={{ padding: '4px 6px' }}>Pass</th>
-                      {!g.generated && <th style={{ padding: '4px 6px' }}>Parametri</th>}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {g.coins.map((c) => (
-                      <tr key={c.symbol} style={{ borderTop: '1px solid #1c2430' }}>
-                        <td style={{ padding: '4px 6px', fontWeight: 600 }}>{c.symbol}</td>
-                        <td style={{ padding: '4px 6px' }}>{c.last_pf?.toFixed(2) ?? '—'}</td>
-                        <td
-                          style={{ padding: '4px 6px', color: (c.last_pnl_pct ?? 0) >= 0 ? '#3fb950' : '#f85149' }}
-                        >
-                          {pct(c.last_pnl_pct)}
-                        </td>
-                        <td style={{ padding: '4px 6px' }}>{pct(c.last_win_rate)}</td>
-                        <td style={{ padding: '4px 6px' }}>{c.last_trades ?? '—'}</td>
-                        <td style={{ padding: '4px 6px' }}>{c.pass_count ?? '—'}</td>
-                        {!g.generated && (
-                          <td style={{ padding: '4px 6px', color: '#8b96a5', fontSize: 11 }}>
-                            {Object.entries(c.last_params ?? {})
-                              .map(([k, v]) => `${k}=${v}`)
-                              .join(', ')}
-                          </td>
-                        )}
-                      </tr>
+                  <p
+                    style={{
+                      fontSize: 11.5,
+                      color: '#aeb7c4',
+                      margin: '6px 0 8px',
+                      lineHeight: 1.4,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      minHeight: 48,
+                    }}
+                  >
+                    {c.desc}
+                  </p>
+
+                  {/* KPI */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4, textAlign: 'center' }}>
+                    {[
+                      { l: 'Success', v: c.avgWin != null ? `${Math.round(c.avgWin * 100)}%` : '—', col: '#cdd6e2' },
+                      { l: 'PF', v: c.avgPf ? c.avgPf.toFixed(2) : '—', col: '#3fb950' },
+                      { l: 'Crypto', v: `${c.coins.length}`, col: '#cdd6e2' },
+                      { l: 'Trade', v: fmtTrades(c.totTrades), col: '#8b96a5' },
+                    ].map((k) => (
+                      <div key={k.l} style={{ background: '#121a28', borderRadius: 6, padding: '4px 2px' }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: k.col }}>{k.v}</div>
+                        <div style={{ fontSize: 9, color: '#7b8696' }}>{k.l}</div>
+                      </div>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+
+                  <div style={{ fontSize: 10, color: '#7b8696', marginTop: 8 }}>
+                    {coinNames.slice(0, 6).join(' · ')}
+                    {coinNames.length > 6 ? ` +${coinNames.length - 6}` : ''}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
