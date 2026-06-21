@@ -1,21 +1,20 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-21 20:03 UTC_
+_Generato: 2026-06-21 21:43 UTC_
 
 ## Bot
-- stato: **running** (🟢 online)
+- stato: **running** (🔴 offline)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$9,529.21**
-- ultimo heartbeat: 2026-06-21 20:03 UTC
+- equity: **$9,580.02**
+- ultimo heartbeat: 2026-06-21 21:39 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-06-21 19:56 UTC)
+- esito: **⚪ FLAT** (2026-06-21 21:43 UTC)
 - motivo: nessun segnale dalle strategie attive in questo regime
 - asset valutati: 100 · segnali: 0
 
 ## Posizioni aperte
-- FILUSDT: short qty=6367.408807278199 @ 0.808 uPnL=54.21988682391175
-- WLDUSDT: long qty=4460.858437885307 @ 0.6296 uPnL=37.055904957669476
+- ETCUSDT: long qty=1310.7717966127339 @ 7.267 uPnL=87.82171037305223
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
