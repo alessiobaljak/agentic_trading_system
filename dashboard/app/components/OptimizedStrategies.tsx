@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { collection, doc, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getDb } from '../lib/firebase';
 
 /**
@@ -41,6 +41,14 @@ type Card = {
   avgWin: number | null;
   totTrades: number;
 };
+type Prod = { n: number; wins: number; pnl: number };
+type TradeDoc = { strategy?: string; pnl?: number; is_win?: boolean };
+
+function robustness(nCoins: number): { label: string; color: string; bg: string } {
+  if (nCoins >= 8) return { label: `🛡️ robusta · ${nCoins}`, color: '#8fd18f', bg: '#1c2e1c' };
+  if (nCoins >= 3) return { label: `solida · ${nCoins}`, color: '#cdd6e2', bg: '#1d2533' };
+  return { label: `${nCoins} crypto`, color: '#c9a24b', bg: '#2e2613' };
+}
 
 const BASE_DESC: Record<string, string> = {
   trend_following: 'Segue i trend di mercato (EMA + momentum): entra nella direzione del movimento dominante e lascia correre i profitti.',
@@ -117,6 +125,7 @@ const fmtTrades = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : `${n
 export default function OptimizedStrategies() {
   const [reg, setReg] = useState<Reg | null>(null);
   const [specsDoc, setSpecsDoc] = useState<SpecsDoc | null>(null);
+  const [prod, setProd] = useState<Record<string, Prod>>({});
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -132,9 +141,28 @@ export default function OptimizedStrategies() {
     const u2 = onSnapshot(doc(db, 'discovered_strategies', 'specs'), (snap) => {
       setSpecsDoc(snap.exists() ? (snap.data() as SpecsDoc) : null);
     });
+    // risultati REALI in produzione (paper): aggrega i trade chiusi per strategia
+    const u3 = onSnapshot(
+      query(collection(db, 'trades'), orderBy('exit_ts', 'desc'), limit(500)),
+      (snap) => {
+        const agg: Record<string, Prod> = {};
+        snap.forEach((d) => {
+          const t = d.data() as TradeDoc;
+          const s = t.strategy;
+          if (!s) return;
+          if (!agg[s]) agg[s] = { n: 0, wins: 0, pnl: 0 };
+          agg[s].n += 1;
+          if (t.is_win) agg[s].wins += 1;
+          agg[s].pnl += t.pnl ?? 0;
+        });
+        setProd(agg);
+      },
+      () => {},
+    );
     return () => {
       u1();
       u2();
+      u3();
     };
   }, []);
 
@@ -198,6 +226,8 @@ export default function OptimizedStrategies() {
             const sp = spark(hashStr(c.strategy));
             const gid = `g-${hashStr(c.strategy)}`;
             const coinNames = c.coins.map((x) => x.symbol.replace('USDT', ''));
+            const rob = robustness(c.coins.length);
+            const p = prod[c.strategy];
             return (
               <div
                 key={c.strategy}
@@ -228,6 +258,9 @@ export default function OptimizedStrategies() {
                       }}
                     >
                       {c.generated ? '🧠 AI' : 'base'}
+                    </span>
+                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: rob.bg, color: rob.color }}>
+                      {rob.label}
                     </span>
                   </div>
 
@@ -262,7 +295,32 @@ export default function OptimizedStrategies() {
                     ))}
                   </div>
 
-                  <div style={{ fontSize: 10, color: '#7b8696', marginTop: 8 }}>
+                  {/* risultati REALI in produzione (paper) */}
+                  <div
+                    style={{
+                      marginTop: 8,
+                      paddingTop: 8,
+                      borderTop: '1px dashed #28303d',
+                      fontSize: 10.5,
+                    }}
+                  >
+                    {p && p.n > 0 ? (
+                      <span>
+                        <span style={{ color: '#3fb950' }}>● in produzione</span>
+                        <span style={{ color: '#aeb7c4' }}>
+                          {' '}· {p.n} trade · win {Math.round((p.wins / p.n) * 100)}% ·{' '}
+                        </span>
+                        <span style={{ color: p.pnl >= 0 ? '#3fb950' : '#f85149', fontWeight: 700 }}>
+                          {p.pnl >= 0 ? '+' : ''}
+                          {p.pnl.toFixed(0)}$
+                        </span>
+                      </span>
+                    ) : (
+                      <span style={{ color: '#7b8696' }}>○ non ancora usata in produzione</span>
+                    )}
+                  </div>
+
+                  <div style={{ fontSize: 10, color: '#7b8696', marginTop: 6 }}>
                     {coinNames.slice(0, 6).join(' · ')}
                     {coinNames.length > 6 ? ` +${coinNames.length - 6}` : ''}
                   </div>
