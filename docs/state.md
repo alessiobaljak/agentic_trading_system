@@ -1,17 +1,20 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-20 23:36 UTC_
+_Generato: 2026-06-21 05:21 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$10,000.00**
-- ultimo heartbeat: 2026-06-20 23:36 UTC
+- equity: **$9,814.92**
+- ultimo heartbeat: 2026-06-21 05:21 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-06-20 23:24 UTC)
+- esito: **⚪ FLAT** (2026-06-21 05:12 UTC)
 - motivo: nessun segnale dalle strategie attive in questo regime
 - asset valutati: 30 · segnali: 0
+
+## Posizioni aperte
+- ETHUSDT: long qty=10.596556404189363 @ 1732.01 uPnL=-5.404243766136479
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
