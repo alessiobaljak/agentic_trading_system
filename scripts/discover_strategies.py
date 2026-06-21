@@ -68,6 +68,7 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
         rec["last_pf"] = e["oos_pf"]
         rec["last_pnl_pct"] = e["oos_pnl_pct"]
         rec["last_trades"] = e["oos_trades"]
+        rec["last_win_rate"] = e.get("oos_win_rate")
         rec["symbol"] = e["symbol"]
         rec["strategy"] = e["strategy"]
         rec["generated"] = True
