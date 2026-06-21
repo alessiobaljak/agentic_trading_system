@@ -10,7 +10,7 @@ on:
     inputs:
       top:
         description: "Crypto su cui validare"
-        default: "75"
+        default: "80"
       generate:
         description: "Strategie candidate da generare"
         default: "40"
@@ -22,7 +22,7 @@ on:
 
 env:
   NUM_SHARDS: "3"
-  TOP: "75"
+  TOP: "80"
 
 jobs:
   discover:

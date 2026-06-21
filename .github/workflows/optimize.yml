@@ -11,7 +11,7 @@ on:
     inputs:
       top:
         description: "Top-N future per volume (universo)"
-        default: "75"
+        default: "80"
   push:
     branches: ["claude/brave-albattani-1b12fv"]
     paths: ["backtesting/optimizer.py", "backtesting/engine.py", "scripts/optimize.py",
@@ -20,7 +20,7 @@ on:
 
 env:
   NUM_SHARDS: "3"
-  TOP: "75"
+  TOP: "80"
 
 jobs:
   optimize:

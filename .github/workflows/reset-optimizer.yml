@@ -11,7 +11,7 @@ on:
 
 env:
   NUM_SHARDS: "3"
-  TOP: "75"
+  TOP: "80"
 
 jobs:
   shards:

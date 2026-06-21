@@ -56,6 +56,7 @@ class TradingBot:
         self.last_regime = 0.0
         self.last_decision = 0.0
         self.last_adapt_reload = 0.0
+        self._coin_cooldown: dict[str, float] = {}  # symbol -> epoch fino a cui in cooldown
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
@@ -156,6 +157,10 @@ class TradingBot:
                     closed.exit_price, closed.pnl, closed.pnl_pct,
                     closed.exit_reason.value, dry_run=settings.DRY_RUN)
                 was_sl = closed.exit_reason in (ExitReason.STOP_LOSS,)
+                # cooldown anti-whipsaw: dopo uno STOP, la coin è "calda"/choppy →
+                # non rientrare su quella coin per qualche ora (evita il tritacarne).
+                if was_sl:
+                    self._coin_cooldown[closed.symbol] = now + settings.COOLDOWN_HOURS * 3600
                 # perdita giornaliera come % del CAPITALE (USDT/equity), NON come
                 # somma dei rendimenti-su-margine (che la leva amplifica ~Nx e
                 # faceva scattare il breaker troppo presto).
@@ -192,6 +197,12 @@ class TradingBot:
         if decision.asset in self.executor.open_positions:
             self._publish_decision_status(
                 {"outcome": "flat", "reason": f"{decision.asset} già aperto"})
+            return
+        cd_until = self._coin_cooldown.get(decision.asset, 0.0)
+        if now < cd_until:
+            self._publish_decision_status(
+                {"outcome": "flat",
+                 "reason": f"cooldown su {decision.asset} dopo stop ({int((cd_until - now) / 60)}m)"})
             return
         if len(self.executor.open_positions) >= settings.MAX_OPEN_POSITIONS:
             self._publish_decision_status(

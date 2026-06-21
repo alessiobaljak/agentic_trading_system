@@ -81,6 +81,8 @@ class Settings:
     # su quante crypto (tra le più liquide scansionate) cercare un SEGNALE a ogni
     # ciclo. Disaccoppiato dal cap posizioni: valuti TUTTO il mercato liquido, apri max 5.
     SELECT_UNIVERSE: int = int(os.getenv("SELECT_UNIVERSE", "100"))
+    # cooldown anti-whipsaw: ore di stop su una coin dopo uno STOP LOSS (no rientro)
+    COOLDOWN_HOURS: float = float(os.getenv("COOLDOWN_HOURS", "4"))
     MAX_CORRELATED_POSITIONS: int = 3     # correlazione >0.85
     CORRELATION_THRESHOLD: float = 0.85
 
