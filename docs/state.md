@@ -1,82 +1,135 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-21 16:11 UTC_
+_Generato: 2026-06-21 17:53 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$9,655.18**
-- ultimo heartbeat: 2026-06-21 16:10 UTC
+- equity: **$9,593.49**
+- ultimo heartbeat: 2026-06-21 17:53 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-06-21 15:58 UTC)
-- motivo: bloccato dal risk gate: [circuit_breaker] Pausa dopo 3 SL consecutivi: 58 min rimanenti
-- asset valutati: 100 · segnali: 20 · miglior segnale LTCUSDT mean_reversion (conf. 68.1/soglia 30)
+- esito: **🟢 APERTA** (2026-06-21 17:45 UTC)
+- motivo: aperta WLDUSDT long (gen_54773909)
+- asset valutati: 100 · segnali: 33 · miglior segnale WLDUSDT gen_54773909 (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- AXSUSDT: long qty=3088.2757348594396 @ 1.121 uPnL=-43.23586028803219
+- FILUSDT: short qty=6367.408807278199 @ 0.808 uPnL=31.83704403639102
+- SOLUSDT: long qty=111.84897622767637 @ 74.52 uPnL=-21.251305483258257
+- WLDUSDT: long qty=4460.858437885307 @ 0.6296 uPnL=-5.513531812057595
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
-- copertura universo: **0/54 crypto (0%)** · obiettivo ≥ 60%
-- coppie validate (>= 3 pass OOS): **0**
-- universo scansionato: 1INCHUSDT, AAVEUSDT, ADAUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, BCHUSDT, BNBUSDT, BTCUSDT, CHZUSDT, CRVUSDT, DASHUSDT, DOTUSDT, DYDXUSDT, EGLDUSDT, ENAUSDT, ENSUSDT, ETCUSDT, ETHUSDT, FLOKIUSDT, FLOWUSDT, FTMUSDT, GALAUSDT, GMTUSDT, GRTUSDT, HBARUSDT, ICPUSDT, IOTAUSDT, KAVAUSDT, MASKUSDT, MINAUSDT, MKRUSDT, NEARUSDT, ORDIUSDT, PEPEUSDT, PYTHUSDT, RENDERUSDT, ROSEUSDT, RUNEUSDT, SEIUSDT, STXUSDT, SUSHIUSDT, TIAUSDT, TRXUSDT, UNIUSDT, WAVESUSDT, WIFUSDT, WLDUSDT, XLMUSDT, XRPUSDT, ZECUSDT
-- aggiornato: 2026-06-21 16:07 UTC
+- copertura universo: **15/80 crypto (19%)** · obiettivo ≥ 60%
+- coppie validate (>= 3 pass OOS): **17**
+- universo scansionato: 1INCHUSDT, AAVEUSDT, ADAUSDT, ALGOUSDT, APEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, BCHUSDT, BNBUSDT, BONKUSDT, BTCUSDT, CHZUSDT, COMPUSDT, CRVUSDT, DASHUSDT, DOGEUSDT, DOTUSDT, DYDXUSDT, EGLDUSDT, ENAUSDT, ENSUSDT, EOSUSDT, ETCUSDT, ETHUSDT, FETUSDT, FILUSDT, FLOKIUSDT, FLOWUSDT, FTMUSDT, GALAUSDT, GMTUSDT, GRTUSDT, HBARUSDT, ICPUSDT, IMXUSDT, INJUSDT, IOTAUSDT, JUPUSDT, KAVAUSDT, LDOUSDT, LINKUSDT, LTCUSDT, MANAUSDT, MASKUSDT, MINAUSDT, MKRUSDT, NEARUSDT, NEOUSDT, OPUSDT, ORDIUSDT, PEOPLEUSDT, PEPEUSDT, PYTHUSDT, RENDERUSDT, ROSEUSDT, RUNEUSDT, SANDUSDT, SEIUSDT, SHIBUSDT, SNXUSDT, SOLUSDT, STXUSDT, SUIUSDT, SUSHIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, VETUSDT, WAVESUSDT, WIFUSDT, WLDUSDT, XLMUSDT, XRPUSDT, YFIUSDT, ZECUSDT
+- aggiornato: 2026-06-21 16:23 UTC
+
+### Strategie VALIDATE (operate dal bot)
+| Coin | Strategia | Passes | PF | PnL OOS | Parametri |
+|---|---|---|---|---|---|
+| MKRUSDT | trend_following | 3 | 1.114 | 237% | require_volume=True, rsi_hi=70.0, atr_mult_stop=2.0, rr=2.5 |
+| FTMUSDT | trend_following | 3 | 1.104 | 235% | require_volume=False, rsi_hi=70.0, atr_mult_stop=2.0, rr=2.0 |
+| 1INCHUSDT | mean_reversion | 3 | 1.659 | 68% | rsi_overbought=70.0, atr_mult_stop=1.8, rsi_oversold=25.0 |
+| STXUSDT | mean_reversion | 3 | 1.563 | 65% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
+| IOTAUSDT | mean_reversion | 3 | 1.42 | 59% | rsi_overbought=80.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
+| APTUSDT | mean_reversion | 3 | 1.58 | 57% | rsi_overbought=75.0, atr_mult_stop=1.0, rsi_oversold=25.0 |
+| EGLDUSDT | mean_reversion | 3 | 1.591 | 49% | rsi_overbought=70.0, atr_mult_stop=1.0, rsi_oversold=20.0 |
+| ATOMUSDT | mean_reversion | 3 | 1.64 | 43% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=20.0 |
+| ADAUSDT | mean_reversion | 3 | 1.313 | 35% | rsi_overbought=80.0, atr_mult_stop=1.0, rsi_oversold=20.0 |
+| FLOKIUSDT | mean_reversion | 3 | 1.106 | 31% | rsi_overbought=75.0, atr_mult_stop=1.8, rsi_oversold=25.0 |
+| ZECUSDT | trend_following | 3 | 1.133 | 29% | require_volume=False, rsi_hi=65.0, atr_mult_stop=1.5, rr=2.5 |
+| CHZUSDT | mean_reversion | 3 | 1.172 | 19% | rsi_overbought=80.0, atr_mult_stop=1.0, rsi_oversold=30.0 |
+| ETCUSDT | mean_reversion | 3 | 1.206 | 18% | rsi_overbought=80.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
+| 1INCHUSDT | liquidity_grab | 3 | 1.397 | 17% | volume_spike=3.0, atr_mult_stop=1.5 |
+| PYTHUSDT | liquidity_grab | 3 | 1.215 | 11% | volume_spike=2.5, atr_mult_stop=1.5 |
+| TIAUSDT | liquidity_grab | 3 | 1.111 | 6% | volume_spike=2.0, atr_mult_stop=0.8 |
+| ZECUSDT | liquidity_grab | 3 | 1.318 | 4% | volume_spike=2.0, atr_mult_stop=0.8 |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-06-21 16:07 UTC · 378 coppie valutate, 52 passate in questo run_
+_aggiornato: 2026-06-21 16:23 UTC · 560 coppie valutate, 82 passate in questo run_
 
 | Coin | Strategia | PF | PnL OOS | Trade | Win |
 |---|---|---|---|---|---|
-| RUNEUSDT | trend_following | 1.171 | 387% | 1392 | 33% |
-| FTMUSDT | trend_following | 1.146 | 324% | 1367 | 33% |
-| ROSEUSDT | trend_following | 1.146 | 317% | 1329 | 33% |
-| KAVAUSDT | trend_following | 1.114 | 253% | 1352 | 32% |
-| WAVESUSDT | trend_following | 1.115 | 243% | 1300 | 34% |
-| MKRUSDT | trend_following | 1.104 | 235% | 1432 | 35% |
-| WLDUSDT | trend_following | 1.186 | 203% | 536 | 37% |
-| ARUSDT | trend_following | 1.137 | 174% | 696 | 36% |
-| IOTAUSDT | mean_reversion | 1.859 | 133% | 59 | 49% |
+| EOSUSDT | trend_following | 1.149 | 310% | 1426 | 34% |
+| RUNEUSDT | trend_following | 1.128 | 273% | 1539 | 34% |
+| ROSEUSDT | trend_following | 1.141 | 271% | 1056 | 33% |
+| FETUSDT | trend_following | 1.134 | 269% | 1102 | 33% |
+| STXUSDT | trend_following | 1.191 | 250% | 609 | 34% |
+| TONUSDT | trend_following | 1.113 | 247% | 1325 | 32% |
+| MKRUSDT | trend_following | 1.114 | 237% | 1236 | 38% |
+| FTMUSDT | trend_following | 1.104 | 235% | 1432 | 35% |
+| VETUSDT | trend_following | 1.104 | 235% | 1432 | 35% |
+| KAVAUSDT | trend_following | 1.11 | 221% | 1129 | 34% |
+| WAVESUSDT | trend_following | 1.101 | 200% | 1104 | 34% |
+| ALGOUSDT | mean_reversion | 1.949 | 149% | 71 | 41% |
 | GRTUSDT | mean_reversion | 1.846 | 127% | 65 | 49% |
-| WIFUSDT | breakout | 1.312 | 95% | 237 | 32% |
-| MINAUSDT | mean_reversion | 1.521 | 74% | 44 | 39% |
-| AVAXUSDT | breakout | 1.194 | 70% | 454 | 40% |
+| NEOUSDT | mean_reversion | 1.847 | 105% | 56 | 48% |
+| GALAUSDT | mean_reversion | 1.562 | 86% | 70 | 33% |
+| SUIUSDT | mean_reversion | 1.441 | 79% | 66 | 42% |
 | 1INCHUSDT | mean_reversion | 1.659 | 68% | 43 | 44% |
-| ENSUSDT | mean_reversion | 1.293 | 63% | 84 | 37% |
+| STXUSDT | mean_reversion | 1.563 | 65% | 49 | 39% |
+| IOTAUSDT | mean_reversion | 1.42 | 59% | 46 | 37% |
+| AVAXUSDT | breakout | 1.141 | 59% | 516 | 42% |
+| YFIUSDT | mean_reversion | 1.561 | 58% | 50 | 36% |
+| MINAUSDT | mean_reversion | 1.383 | 58% | 43 | 40% |
+| APTUSDT | mean_reversion | 1.58 | 57% | 49 | 35% |
+| LTCUSDT | mean_reversion | 1.444 | 57% | 88 | 40% |
+| NEARUSDT | breakout | 1.137 | 50% | 387 | 38% |
+| SUIUSDT | breakout | 1.228 | 50% | 222 | 35% |
+| EGLDUSDT | mean_reversion | 1.591 | 49% | 39 | 36% |
+| FILUSDT | mean_reversion | 1.413 | 49% | 47 | 34% |
 | GALAUSDT | breakout | 1.123 | 48% | 360 | 32% |
-| APTUSDT | mean_reversion | 1.59 | 47% | 36 | 33% |
-| GALAUSDT | mean_reversion | 1.246 | 45% | 59 | 37% |
-| CHZUSDT | mean_reversion | 1.46 | 44% | 44 | 27% |
-| ZECUSDT | trend_following | 1.187 | 44% | 117 | 37% |
-| 1INCHUSDT | breakout | 1.121 | 43% | 371 | 29% |
-| PEPEUSDT | breakout | 1.143 | 42% | 256 | 32% |
-| ETCUSDT | mean_reversion | 1.318 | 41% | 75 | 33% |
-| DOTUSDT | mean_reversion | 1.528 | 37% | 43 | 35% |
-| KAVAUSDT | breakout | 1.16 | 36% | 249 | 34% |
-| FLOKIUSDT | mean_reversion | 1.184 | 35% | 49 | 37% |
+| DASHUSDT | trend_following | 1.267 | 47% | 99 | 41% |
+| INJUSDT | mean_reversion | 1.421 | 46% | 39 | 38% |
+| OPUSDT | mean_reversion | 1.256 | 46% | 74 | 35% |
+| ATOMUSDT | mean_reversion | 1.64 | 43% | 24 | 42% |
+| BONKUSDT | breakout | 1.268 | 43% | 160 | 32% |
+| PYTHUSDT | mean_reversion | 1.384 | 42% | 43 | 42% |
+| DOGEUSDT | mean_reversion | 1.192 | 38% | 81 | 40% |
+| JUPUSDT | breakout | 1.162 | 36% | 211 | 33% |
+| CRVUSDT | mean_reversion | 1.201 | 36% | 77 | 29% |
+| SNXUSDT | mean_reversion | 1.201 | 36% | 69 | 22% |
 | ADAUSDT | mean_reversion | 1.313 | 35% | 43 | 44% |
-| DASHUSDT | breakout | 1.678 | 34% | 49 | 43% |
-| ATOMUSDT | mean_reversion | 1.365 | 34% | 37 | 38% |
-| EGLDUSDT | mean_reversion | 1.266 | 33% | 52 | 35% |
-| STXUSDT | mean_reversion | 1.286 | 32% | 51 | 31% |
-| KAVAUSDT | momentum_cross_asset | 1.313 | 29% | 96 | 41% |
-| RENDERUSDT | mean_reversion | 1.485 | 28% | 24 | 25% |
-| AAVEUSDT | mean_reversion | 1.237 | 25% | 42 | 38% |
-| XLMUSDT | mean_reversion | 1.134 | 25% | 62 | 36% |
-| DYDXUSDT | mean_reversion | 1.111 | 20% | 63 | 29% |
-| SEIUSDT | breakout | 1.357 | 20% | 64 | 38% |
+| SUSHIUSDT | mean_reversion | 1.156 | 33% | 81 | 31% |
+| MKRUSDT | breakout | 1.145 | 32% | 262 | 38% |
+| AAVEUSDT | mean_reversion | 1.366 | 32% | 38 | 45% |
+| MANAUSDT | liquidity_grab | 1.514 | 32% | 85 | 52% |
+| FLOKIUSDT | mean_reversion | 1.106 | 31% | 76 | 40% |
+| MKRUSDT | momentum_cross_asset | 1.313 | 29% | 96 | 41% |
+| ZECUSDT | trend_following | 1.133 | 29% | 113 | 34% |
+| LINKUSDT | mean_reversion | 1.309 | 28% | 40 | 38% |
+| WIFUSDT | breakout | 1.103 | 27% | 205 | 32% |
+| XLMUSDT | mean_reversion | 1.219 | 25% | 58 | 31% |
+| FETUSDT | momentum_cross_asset | 1.317 | 24% | 97 | 42% |
+| MANAUSDT | mean_reversion | 1.239 | 24% | 37 | 32% |
+| LDOUSDT | liquidity_grab | 1.191 | 24% | 151 | 48% |
+| IMXUSDT | mean_reversion | 1.204 | 24% | 42 | 33% |
+| XRPUSDT | mean_reversion | 1.189 | 22% | 66 | 30% |
+| RUNEUSDT | breakout | 1.118 | 21% | 219 | 39% |
+| LDOUSDT | mean_reversion | 1.132 | 21% | 58 | 31% |
+| DASHUSDT | breakout | 1.68 | 20% | 36 | 47% |
+| ROSEUSDT | momentum_cross_asset | 1.147 | 20% | 135 | 40% |
+| MASKUSDT | mean_reversion | 1.101 | 20% | 62 | 37% |
+| ALGOUSDT | liquidity_grab | 1.409 | 19% | 79 | 62% |
+| CHZUSDT | mean_reversion | 1.172 | 19% | 45 | 27% |
 | ARBUSDT | liquidity_grab | 1.906 | 19% | 39 | 64% |
-| DASHUSDT | mean_reversion | 1.457 | 18% | 15 | 40% |
-| HBARUSDT | mean_reversion | 1.131 | 17% | 35 | 37% |
+| ETCUSDT | mean_reversion | 1.206 | 18% | 39 | 31% |
 | WIFUSDT | liquidity_grab | 1.364 | 17% | 44 | 64% |
 | 1INCHUSDT | liquidity_grab | 1.397 | 17% | 76 | 68% |
 | ARBUSDT | mean_reversion | 1.147 | 16% | 40 | 30% |
-| ENAUSDT | breakout | 1.365 | 16% | 51 | 39% |
-| WAVESUSDT | momentum_cross_asset | 1.255 | 15% | 51 | 39% |
-| TIAUSDT | mean_reversion | 1.137 | 14% | 29 | 31% |
+| RENDERUSDT | breakout | 1.19 | 16% | 91 | 33% |
+| JUPUSDT | mean_reversion | 1.209 | 15% | 25 | 32% |
+| DASHUSDT | mean_reversion | 1.268 | 14% | 19 | 37% |
 | ENSUSDT | liquidity_grab | 1.153 | 13% | 125 | 49% |
+| TONUSDT | momentum_cross_asset | 1.127 | 13% | 95 | 43% |
+| ENAUSDT | breakout | 1.242 | 12% | 53 | 32% |
 | PYTHUSDT | liquidity_grab | 1.215 | 11% | 53 | 57% |
 | ETHUSDT | mean_reversion | 1.122 | 11% | 92 | 39% |
+| IMXUSDT | liquidity_grab | 1.148 | 8% | 79 | 53% |
 | TIAUSDT | liquidity_grab | 1.111 | 6% | 71 | 48% |
+| SOLUSDT | liquidity_grab | 1.105 | 5% | 78 | 53% |
 | ZECUSDT | liquidity_grab | 1.318 | 4% | 18 | 50% |
-| MKRUSDT | mean_reversion | 1.109 | 1% | 12 | 33% |
+| FTMUSDT | mean_reversion | 1.109 | 1% | 12 | 33% |
+| ROSEUSDT | mean_reversion | 1.109 | 1% | 12 | 33% |
+| VETUSDT | mean_reversion | 1.109 | 1% | 12 | 33% |
