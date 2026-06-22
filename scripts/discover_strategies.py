@@ -206,14 +206,21 @@ def main() -> int:
     # pass e diventano operabili)  3) mutazioni per evolvere attorno alle vincenti.
     specs = generate_specs(args.generate, seed=args.seed)
     existing = (fb.get_doc("discovered_strategies", "specs") or {}).get("specs", {}) or {}
-    existing_list = list(existing.values())[: args.reeval_cap]
+    # PRIORITÀ: ri-valida SEMPRE le generate GIÀ VALIDATE (in ogni shard), così non
+    # scadono per freshness e non vengono "cancellate" dal registro. Poi riempi col
+    # resto fino al cap.
+    reg = fb.get_doc("strategy_registry", "validated") or {}
+    validated_gen = {k.split("|", 1)[1] for k in (reg.get("validated") or []) if "|gen_" in k}
+    priority = [existing[g] for g in validated_gen if g in existing]
+    rest = [s for gid, s in existing.items() if gid not in validated_gen]
+    existing_list = priority + rest[: max(0, args.reeval_cap - len(priority))]
     specs.extend(existing_list)
     for i, base in enumerate(existing_list[:10]):
         specs.append(mutate(base, seed=args.seed + i + 1))
     # de-dup per id
     specs = list({s["id"]: s for s in specs}.values())
-    print(f"[discover] {len(specs)} candidate ({len(existing_list)} ri-validate) "
-          f"seed={args.seed} finestra {args.start}->{end}")
+    print(f"[discover] {len(specs)} candidate ({len(priority)} validate ri-validate + "
+          f"{len(existing_list) - len(priority)} altre) seed={args.seed} {args.start}->{end}")
 
     full_symbols = top_symbols_by_volume(args.top)
     # SHARDING: ogni shard valida le candidate su una fetta dell'universo; il merge
