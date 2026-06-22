@@ -345,9 +345,13 @@ class TradingBot:
                     self.refresh_regime(now)
                 self.maybe_scan(now)
                 self.trading_cycle(now)
-                self.fb.set_rtdb("/bot_status/heartbeat", now)
             except Exception as exc:  # noqa: BLE001
                 print(f"[main] errore nel ciclo: {exc}")
+            finally:
+                # heartbeat SEMPRE aggiornato a ogni iterazione, anche se il ciclo
+                # ha lanciato un'eccezione o lo scan ha bloccato a lungo: indica
+                # "il loop è vivo", non "il ciclo è andato a buon fine".
+                self.fb.set_rtdb("/bot_status/heartbeat", time.time())
             it += 1
             if max_iterations is not None and it >= max_iterations:
                 break

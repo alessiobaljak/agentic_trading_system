@@ -5,7 +5,10 @@ import { onValue, ref } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
 import { toMillis, type BotStatus as BotStatusT, type RiskState } from '../lib/types';
 
-const HEARTBEAT_STALE_MS = 2 * 60 * 1000; // 2 minutes
+// 5 min: lo scan di mercato (ogni 4h) puo' bloccare il ciclo 1-3 min mentre
+// scarica le candele dell'intero universo; 2 min era troppo stretto e faceva
+// sfarfallare il badge su OFFLINE pur essendo il bot vivo.
+const HEARTBEAT_STALE_MS = 5 * 60 * 1000; // 5 minutes
 
 function timeAgo(ms: number | null): string {
   if (ms == null) return 'unknown';
