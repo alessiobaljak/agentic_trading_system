@@ -39,6 +39,7 @@ type Card = {
   coins: PairRec[];
   avgPf: number;
   totTrades: number;
+  validatedNow: boolean;
 };
 
 const BASE_DESC: Record<string, string> = {
@@ -186,15 +187,37 @@ export default function OptimizedStrategies() {
         coins: coins.sort((a, b) => (b.last_pnl_pct ?? 0) - (a.last_pnl_pct ?? 0)),
         avgPf: pfs.length ? pfs.reduce((s, v) => s + v, 0) / pfs.length : 0,
         totTrades: coins.reduce((s, c) => s + (c.last_trades ?? 0), 0),
+        validatedNow: true,
       });
     }
     return out.sort((a, b) => b.coins.length - a.coins.length);
   }, [reg, specsDoc]);
 
-  const shown = useMemo(
-    () => (view === 'prod' ? cards.filter((c) => (prod[c.strategy]?.n ?? 0) > 0) : cards),
-    [cards, prod, view],
-  );
+  // vista PRODUZIONE: parte da CHI HA TRADATO (anche se non più validato ora),
+  // arricchita coi dati di validazione dove ci sono. Lo storico reale non sparisce.
+  const prodCards = useMemo<Card[]>(() => {
+    const byStrat = new Map(cards.map((c) => [c.strategy, c]));
+    return Object.keys(prod)
+      .filter((s) => (prod[s]?.n ?? 0) > 0)
+      .map((s) => {
+        const c = byStrat.get(s);
+        const generated = s.startsWith('gen_');
+        return (
+          c ?? {
+            strategy: s,
+            generated,
+            desc: describe(s, generated, specsDoc?.specs?.[s]),
+            coins: [] as PairRec[],
+            avgPf: 0,
+            totTrades: 0,
+            validatedNow: false,
+          }
+        );
+      })
+      .sort((a, b) => (prod[b.strategy].pnl ?? 0) - (prod[a.strategy].pnl ?? 0));
+  }, [cards, prod, specsDoc]);
+
+  const shown = view === 'prod' ? prodCards : cards;
 
   const cov = reg?.coverage != null ? Math.round(reg.coverage * 100) : null;
   const btn = (active: boolean): React.CSSProperties => ({
@@ -268,7 +291,11 @@ export default function OptimizedStrategies() {
                     <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: c.generated ? '#1f2a44' : '#23331f', color: c.generated ? '#8ab4ff' : '#8fd18f' }}>
                       {c.generated ? '🧠 AI' : 'base'}
                     </span>
-                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: rob.bg, color: rob.color }}>{rob.label}</span>
+                    {c.validatedNow ? (
+                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: rob.bg, color: rob.color }}>{rob.label}</span>
+                    ) : (
+                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: '#33261b', color: '#c98b4b' }}>storico · non validata ora</span>
+                    )}
                   </div>
 
                   <p style={{ fontSize: 11.5, color: '#aeb7c4', margin: '6px 0 8px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: 48 }}>
@@ -291,8 +318,14 @@ export default function OptimizedStrategies() {
                   </div>
 
                   <div style={{ fontSize: 10, color: '#7b8696', marginTop: 8 }}>
-                    Validata su {c.coins.length}: {coinNames.slice(0, 5).join(' · ')}
-                    {coinNames.length > 5 ? ` +${coinNames.length - 5}` : ''}
+                    {c.validatedNow ? (
+                      <>
+                        Validata su {c.coins.length}: {coinNames.slice(0, 5).join(' · ')}
+                        {coinNames.length > 5 ? ` +${coinNames.length - 5}` : ''}
+                      </>
+                    ) : (
+                      'Non più nel GATE 1 · qui resta lo storico reale in produzione'
+                    )}
                   </div>
                 </div>
               </div>
