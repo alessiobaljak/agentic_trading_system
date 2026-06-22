@@ -99,9 +99,16 @@ class MarketScanner:
             # le N crypto più liquide per VOLUME (non i primi N in ordine d'API)
             symbols = self.price.list_perpetual_symbols_by_volume()[: self.max_symbols]
         results: list[ScanResult] = []
+        min_vol = settings.SCAN_MIN_VOLUME_24H
+        skipped_illiquid = 0
         for sym in symbols:
             snap = self.price.build_snapshot(sym)
             if snap is None:
+                continue
+            # filtro liquidità: scarta i listing illiquidi (volume 24h sotto soglia).
+            # Tiene fuori la spazzatura appena quotata e accorcia lo scan.
+            if min_vol > 0 and (snap.volume_24h or 0.0) < min_vol:
+                skipped_illiquid += 1
                 continue
             if fetch_sentiment:
                 sent = self.sentiment.get_sentiment(sym)
@@ -109,6 +116,9 @@ class MarketScanner:
                 snap.social_volume = sent.get("social_volume")
             score, comp = self._score(snap)
             results.append(ScanResult(symbol=sym, score=score, components=comp, snapshot=snap))
+        if skipped_illiquid:
+            print(f"[scanner] {skipped_illiquid} coin scartate per liquidità "
+                  f"(< {min_vol:,.0f} vol 24h), {len(results)} valutate")
         results.sort(key=lambda r: r.score, reverse=True)
         return results
 

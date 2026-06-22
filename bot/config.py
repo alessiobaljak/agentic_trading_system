@@ -81,6 +81,15 @@ class Settings:
     # su quante crypto (tra le più liquide scansionate) cercare un SEGNALE a ogni
     # ciclo. Disaccoppiato dal cap posizioni: valuti TUTTO il mercato liquido, apri max 5.
     SELECT_UNIVERSE: int = int(os.getenv("SELECT_UNIVERSE", "100"))
+    # filtro liquidità scanner: scarta dall'universo di valutazione le coin con
+    # volume 24h (in USDT) sotto questa soglia. Tiene fuori i listing nuovi e
+    # illiquidi (memecoin appena quotate) e velocizza lo scan. 0 = disattivato.
+    SCAN_MIN_VOLUME_24H: float = float(os.getenv("SCAN_MIN_VOLUME_24H", "25000000"))
+    # FAIL-SAFE di validazione: quando esiste un registro validato, opera SOLO le
+    # coppie (coin, strategia) che hanno passato il gate. Se True (default) e il
+    # registro non è caricato (errore transitorio / reset), il bot resta FLAT
+    # invece di tradare tutto senza validazione. Mettere False solo in bootstrap.
+    REQUIRE_VALIDATED_PAIRS: bool = os.getenv("REQUIRE_VALIDATED_PAIRS", "true").lower() == "true"
     # cooldown anti-whipsaw: ore di stop su una coin dopo uno STOP LOSS (no rientro)
     COOLDOWN_HOURS: float = float(os.getenv("COOLDOWN_HOURS", "4"))
     # adattamento real-time: dopo N stop consecutivi una STRATEGIA va in panchina

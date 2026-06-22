@@ -37,6 +37,29 @@ def test_ranked_by_volume_desc():
     assert ranked == ["BBBUSDT", "CCCUSDT", "AAAUSDT"]
 
 
+def test_liquidity_filter_excludes_low_volume():
+    # scanner scarta le coin sotto SCAN_MIN_VOLUME_24H: i listing illiquidi non
+    # finiscono nell'universo di valutazione.
+    vols = {"LIQUSDT": 5e8, "MIDUSDT": 3e7, "JUNKUSDT": 1e5}
+
+    class _VolScanner(MarketScanner):
+        def __init__(self):
+            super().__init__(price_agent=_StubPrice())
+
+    sc = _VolScanner()
+    sc.price.build_snapshot = lambda sym: AssetSnapshot(  # type: ignore
+        symbol=sym, price=1.0, volume_24h=vols[sym])
+    sc.sentiment.get_sentiment = lambda sym: {}  # type: ignore
+
+    old = settings.SCAN_MIN_VOLUME_24H
+    settings.SCAN_MIN_VOLUME_24H = 25_000_000
+    try:
+        res = {r.symbol for r in sc.scan(symbols=list(vols))}
+    finally:
+        settings.SCAN_MIN_VOLUME_24H = old
+    assert res == {"LIQUSDT", "MIDUSDT"}  # JUNK (1e5) sotto soglia -> scartata
+
+
 def test_eval_universe_decoupled_from_max_positions():
     # la selezione per la VALUTAZIONE segnali usa SELECT_UNIVERSE, non
     # MAX_OPEN_POSITIONS: si valutano molte crypto, se ne aprono al massimo 5.

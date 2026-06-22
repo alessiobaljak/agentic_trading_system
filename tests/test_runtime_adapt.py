@@ -13,6 +13,10 @@ def _asset():
 
 def test_disabled_strategy_is_skipped():
     o = Orchestrator()
+    # col fail-safe REQUIRE_VALIDATED_PAIRS attivo serve un registro validato:
+    # abilitiamo la coppia BTCUSDT|mean_reversion (le altre restano fuori dal gate).
+    o.adaptation._passed = {"BTCUSDT|mean_reversion"}
+    o.adaptation._has_opt_data = True
     assets = {"BTCUSDT": _asset()}
     names = {s["strategy"] for s in o.collect_signals(assets, Regime.SIDEWAYS)}
     assert "mean_reversion" in names  # normalmente scatta

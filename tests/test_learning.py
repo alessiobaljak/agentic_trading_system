@@ -59,6 +59,32 @@ def test_confidence_outcome_correlation():
     assert corr is not None and corr > 0.5
 
 
+def test_is_enabled_failsafe_when_registry_missing():
+    # FAIL-SAFE: senza dati di ottimizzazione (registro non caricato) e con
+    # REQUIRE_VALIDATED_PAIRS attivo, NESSUNA coppia è abilitata (bot resta flat).
+    from bot.config import settings
+    eng = AdaptationEngine(FirebaseClient())
+    eng._has_opt_data = False
+    old = settings.REQUIRE_VALIDATED_PAIRS
+    settings.REQUIRE_VALIDATED_PAIRS = True
+    try:
+        assert eng.is_enabled("BTCUSDT", "trend_following") is False
+        settings.REQUIRE_VALIDATED_PAIRS = False  # bootstrap -> coi default tutto attivo
+        assert eng.is_enabled("BTCUSDT", "trend_following") is True
+    finally:
+        settings.REQUIRE_VALIDATED_PAIRS = old
+
+
+def test_is_enabled_only_validated_pairs_when_registry_present():
+    # con registro presente: SOLO le coppie validate operano.
+    eng = AdaptationEngine(FirebaseClient())
+    eng._has_opt_data = True
+    eng._passed = {"BTCUSDT|trend_following"}
+    assert eng.is_enabled("BTCUSDT", "trend_following") is True
+    assert eng.is_enabled("ETHUSDT", "trend_following") is False   # non validata
+    assert eng.is_enabled("BTCUSDT", "mean_reversion") is False    # non validata
+
+
 def test_learning_loop_end_to_end_with_memory_firebase():
     fb = FirebaseClient()  # in-memory (nessun service account in test)
     logger = TradeLogger(fb)

@@ -113,12 +113,15 @@ class AdaptationEngine:
     def is_enabled(self, symbol: str, strategy: str) -> bool:
         """
         True se la coppia (asset, strategia) è abilitata a operare.
-        Finché non esistono dati di ottimizzazione, TUTTO è abilitato (il bot
-        funziona coi default). Quando l'ottimizzazione ha girato, opera SOLO le
-        coppie che hanno passato la validazione out-of-sample.
+        Quando l'ottimizzazione ha girato, opera SOLO le coppie che hanno passato
+        la validazione out-of-sample.
+        FAIL-SAFE: se NON ci sono dati di ottimizzazione (registro non caricato:
+        errore transitorio, reset, churn) e REQUIRE_VALIDATED_PAIRS è True, il bot
+        resta FLAT invece di tradare tutto senza validazione. Solo in bootstrap
+        (flag False) si opera coi default in attesa del primo run di ottimizzazione.
         """
         if not self._has_opt_data:
-            return True
+            return not settings.REQUIRE_VALIDATED_PAIRS
         return f"{symbol}|{strategy}" in self._passed
 
     def is_baseline_cycle(self, rng: Optional[random.Random] = None) -> bool:
