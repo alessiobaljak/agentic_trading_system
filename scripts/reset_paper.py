@@ -9,6 +9,7 @@ Cancella:
   * /account/equity       (RTDB)  reimpostata all'equity iniziale di paper
   * /bot_status           (RTDB)  verrà riscritto dal bot al riavvio
   * /commands/kill_switch (RTDB)  riportato a False
+  * /adapt_state          (RTDB)  cooldown coin/strategie (panchina) azzerati
 
 NON tocca (resta tutto): strategy_registry/validated (GATE 1), strategy_params,
 strategy_weights, memory, insights, user_risk_settings.
@@ -62,6 +63,7 @@ def main() -> int:
     fb.set_rtdb("/account/starting_equity", args.equity)
     fb.set_rtdb("/bot_status", None)
     fb.set_rtdb("/commands/kill_switch", False)
+    fb.set_rtdb("/adapt_state", None)   # cooldown coin/strategie azzerati
 
     print(f"[reset] FATTO. Rimosse {n_pos} posizioni e {n_trades} trade chiusi. "
           f"Equity paper = {args.equity:g}. Le strategie validate (GATE 1) restano.")
