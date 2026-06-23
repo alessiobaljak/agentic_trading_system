@@ -17,6 +17,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import os
 import time
 from datetime import date
 
@@ -24,10 +25,52 @@ import requests
 
 from backtesting.data_loader import load_candles
 from backtesting.optimizer import WalkForwardOptimizer
+from backtesting.parallel import n_workers, parallel_map
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 
 FAPI = "https://fapi.binance.com"
 OKX = "https://www.okx.com"
+
+# stato pesante per-worker (optimizer + contesto BTC), costruito una volta per
+# processo dall'initializer. Vedi _opt_init / _opt_one (parallelizzazione GATE 1).
+_W: dict = {}
+
+
+def _opt_init(args, end: str) -> None:
+    """Costruisce lo stato del worker UNA volta: optimizer + contesto BTC cross-asset."""
+    opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos,
+                               seed=int(time.time() * 1000) % 100000)
+    btc_ctx = None
+    try:
+        btc_candles = load_candles("BTCUSDT", args.interval, args.start, end, prefer=args.source)
+        if len(btc_candles) >= 200:
+            btc_ctx = opt.bt.build_context("BTCUSDT", btc_candles)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[optimize] contesto BTC non disponibile nel worker: {exc}")
+    _W.update(opt=opt, btc_ctx=btc_ctx, args=args, end=end,
+              min_history=int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500")))
+
+
+def _opt_one(sym: str) -> tuple[str, dict, list]:
+    """Ottimizza un singolo simbolo (eseguito nei worker). Ritorna (sym, entries, passed)."""
+    args, end = _W["args"], _W["end"]
+    candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
+    if len(candles) < _W["min_history"]:
+        return (sym, {}, [])
+    results = _W["opt"].optimize_symbol(sym, candles, context_by_ts=_W["btc_ctx"])
+    entries: dict = {}
+    passed: list = []
+    for r in results:
+        key = f"{sym}|{r.strategy}"
+        entries[key] = {
+            "symbol": sym, "strategy": r.strategy, "params": r.best_params,
+            "oos_pf": r.oos_pf, "oos_pnl_pct": r.oos_pnl_pct,
+            "oos_trades": r.oos_trades, "oos_win_rate": r.oos_win_rate,
+            "passed": r.passed,
+        }
+        if r.passed:
+            passed.append(key)
+    return (sym, entries, passed)
 
 
 def top_symbols_by_volume(n: int) -> list[str]:
@@ -111,10 +154,6 @@ def main() -> int:
     # le riunisce. Così l'intero universo è coperto restando nel timeout di GitHub.
     symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
     print(f"[optimize] shard {args.shard}/{args.num_shards}: {len(symbols)}/{len(full_symbols)} coin")
-    # seed variabile per run: le combinazioni di parametri campionate cambiano
-    # ad ogni esecuzione, così con max-combos ridotto si esplora tutto nel tempo.
-    opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos,
-                               seed=int(time.time()) % 100000)
     if args.reset_registry and args.num_shards <= 1:
         # pulizia TOTALE del GATE 1 (solo non-sharded; in sharded la fa il merge).
         fb.set_doc("strategy_registry", "validated", {})
@@ -122,45 +161,24 @@ def main() -> int:
         fb.set_doc("strategy_params", "current", {})
         print("[optimize] reset TOTALE: registro + strategie scoperte + ultimo run azzerati")
 
-    # contesto BTC (open_time -> snapshot) per le strategie cross-asset
-    # (momentum_cross_asset): caricato UNA volta, riusato per ogni coin.
-    btc_ctx = None
-    try:
-        btc_candles = load_candles("BTCUSDT", args.interval, args.start, end, prefer=args.source)
-        if len(btc_candles) >= 200:
-            btc_ctx = opt.bt.build_context("BTCUSDT", btc_candles)
-            print(f"[optimize] contesto BTC pronto ({len(btc_ctx)} barre) per cross-asset")
-    except Exception as exc:  # noqa: BLE001
-        print(f"[optimize] contesto BTC non disponibile: {exc}")
-
     out: dict[str, dict] = {}
     summary_passed: list[str] = []
 
-    for sym in symbols:
-        print(f"\n[optimize] === {sym} ===")
-        candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
-        # storia minima per poter fare un walk-forward sensato. ~2500 candele 1h
-        # ≈ 3-4 mesi: tiene dentro i meme/nuovi con un minimo di storia, esclude
-        # solo quelli appena listati (non validabili). Regolabile via env.
-        min_history = int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500"))
-        if len(candles) < min_history:
-            print(f"[optimize] {sym}: storia insufficiente ({len(candles)} < {min_history}), "
-                  f"salto (token troppo recente)")
+    # PARALLELO: i simboli sono indipendenti -> li distribuiamo su tutti i core del
+    # runner (process pool). Ogni worker costruisce il proprio optimizer + contesto
+    # BTC una volta sola. Fallback sequenziale automatico se BACKTEST_WORKERS=1.
+    workers = n_workers()
+    print(f"[optimize] {len(symbols)} coin su {workers} worker (core)")
+    for sym, entries, passed in parallel_map(
+        _opt_one, symbols, workers=workers, initializer=_opt_init, initargs=(args, end)
+    ):
+        if not entries:
+            print(f"[optimize] {sym}: storia insufficiente, saltato")
             continue
-        results = opt.optimize_symbol(sym, candles, context_by_ts=btc_ctx)
-        for r in results:
-            key = f"{sym}|{r.strategy}"
-            out[key] = {
-                "symbol": sym, "strategy": r.strategy, "params": r.best_params,
-                "oos_pf": r.oos_pf, "oos_pnl_pct": r.oos_pnl_pct,
-                "oos_trades": r.oos_trades, "oos_win_rate": r.oos_win_rate,
-                "passed": r.passed,
-            }
-            flag = "✅" if r.passed else "  "
-            print(f"  {flag} {r.strategy:22s} pf={r.oos_pf:4.2f} pnl={r.oos_pnl_pct*100:+7.1f}% "
-                  f"trades={r.oos_trades:4d} params={r.best_params}")
-            if r.passed:
-                summary_passed.append(key)
+        out.update(entries)
+        summary_passed.extend(passed)
+        print(f"[optimize] {sym}: {len(entries)} coppie, {len(passed)} passate "
+              f"{'✅' if passed else ''}")
 
     # SHARD: scrive il proprio risultato in un doc separato; il merge li riunisce.
     if args.num_shards > 1:

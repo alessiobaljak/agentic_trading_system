@@ -40,7 +40,15 @@ type Card = {
   avgPf: number;
   totTrades: number;
   validatedNow: boolean;
+  simProfit10k: number;   // profitto GATE 1 simulando 10k (media per coin), in $
+  bestProfit10k: number;  // miglior coin, in $
 };
+
+const GATE_EQUITY = 10_000;
+// PnL economico GATE 1 su una equity di 10k: last_pnl_pct e' la somma dei rendimenti
+// per-trade OOS, coerente col motore (SimTrade.pnl = pnl_pct * 10k).
+const profit10k = (r: PairRec) => (r.last_pnl_pct ?? 0) * GATE_EQUITY;
+const fmtMoney = (v: number) => `${v >= 0 ? '+' : ''}$${Math.round(v).toLocaleString()}`;
 
 const BASE_DESC: Record<string, string> = {
   trend_following: 'Segue i trend di mercato (EMA + momentum): entra nella direzione del movimento dominante e lascia correre i profitti.',
@@ -180,6 +188,7 @@ export default function OptimizedStrategies() {
     for (const [strategy, coins] of byStrat) {
       const generated = strategy.startsWith('gen_');
       const pfs = coins.map((c) => c.last_pf ?? 0).filter((v) => v > 0);
+      const profits = coins.map(profit10k);
       out.push({
         strategy,
         generated,
@@ -188,6 +197,8 @@ export default function OptimizedStrategies() {
         avgPf: pfs.length ? pfs.reduce((s, v) => s + v, 0) / pfs.length : 0,
         totTrades: coins.reduce((s, c) => s + (c.last_trades ?? 0), 0),
         validatedNow: true,
+        simProfit10k: profits.length ? profits.reduce((s, v) => s + v, 0) / profits.length : 0,
+        bestProfit10k: profits.length ? Math.max(...profits) : 0,
       });
     }
     return out.sort((a, b) => b.coins.length - a.coins.length);
@@ -211,6 +222,8 @@ export default function OptimizedStrategies() {
             avgPf: 0,
             totTrades: 0,
             validatedNow: false,
+            simProfit10k: 0,
+            bestProfit10k: 0,
           }
         );
       })
@@ -316,6 +329,27 @@ export default function OptimizedStrategies() {
                       </div>
                     ))}
                   </div>
+
+                  {/* GATE 1: profitto economico simulando 10k di equity di partenza */}
+                  {c.validatedNow && c.coins.length > 0 && (
+                    <div style={{
+                      marginTop: 8, padding: '6px 8px', borderRadius: 6,
+                      background: c.simProfit10k >= 0 ? '#11210f' : '#27120f',
+                      border: `1px solid ${c.simProfit10k >= 0 ? '#214d1d' : '#5a2620'}`,
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    }}>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 700, color: c.simProfit10k >= 0 ? '#3fb950' : '#f85149' }}>
+                          {fmtMoney(c.simProfit10k)}
+                        </div>
+                        <div style={{ fontSize: 9, color: '#7b8696' }}>GATE 1 su $10k · media/coin</div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: 11, fontWeight: 600, color: '#8fd18f' }}>{fmtMoney(c.bestProfit10k)}</div>
+                        <div style={{ fontSize: 9, color: '#7b8696' }}>miglior coin</div>
+                      </div>
+                    </div>
+                  )}
 
                   <div style={{ fontSize: 10, color: '#7b8696', marginTop: 8 }}>
                     {c.validatedNow ? (

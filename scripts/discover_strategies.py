@@ -24,11 +24,51 @@ from datetime import date
 from backtesting.data_loader import load_candles
 from backtesting.engine import StrategyStats, passes_gate
 from backtesting.optimizer import WalkForwardOptimizer
+from backtesting.parallel import n_workers, parallel_map
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
 from bot.strategies.generator import generate_specs, mutate
 from scripts.optimize import FRESH_DAYS, MIN_PASSES, top_symbols_by_volume
+
+# stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
+# processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
+_W: dict = {}
+
+
+def _disc_init(args, end: str, specs: list) -> None:
+    _W.update(opt=WalkForwardOptimizer(n_windows=args.windows), args=args, end=end,
+              specs=specs, min_history=int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500")))
+
+
+def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list]:
+    """Valuta TUTTE le spec su un simbolo (nei worker).
+    Ritorna (sym, passed_entries, passed_keys, specs_passed, n_eval, summary)."""
+    args, end, specs = _W["args"], _W["end"], _W["specs"]
+    candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
+    if len(candles) < _W["min_history"]:
+        return (sym, {}, [], {}, 0, [])
+    frame = compute_indicator_frame(candles)
+    entries: dict = {}
+    passed_keys: list = []
+    specs_passed: dict = {}
+    summary: list = []
+    n_eval = 0
+    for spec in specs:
+        r = evaluate_spec(_W["opt"], sym, candles, frame, spec)
+        n_eval += 1
+        if r["passed"]:
+            key = f"{sym}|{spec['id']}"
+            entries[key] = {
+                "symbol": sym, "strategy": spec["id"], "params": {}, "spec": spec,
+                "oos_pf": r["pf"], "oos_pnl_pct": r["pnl"],
+                "oos_trades": r["trades"], "oos_win_rate": r["win"], "passed": True,
+            }
+            passed_keys.append(key)
+            specs_passed[spec["id"]] = spec
+            summary.append({"symbol": sym, "id": spec["id"], "pf": r["pf"],
+                            "pnl": r["pnl"], "desc": GeneratedStrategy(spec).description})
+    return (sym, entries, passed_keys, specs_passed, n_eval, summary)
 
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict):
@@ -200,7 +240,6 @@ def main() -> int:
     fb = get_firebase()
     if args.merge:
         return _merge_discover_shards(fb, args)
-    opt = WalkForwardOptimizer(n_windows=args.windows)
 
     # 1) candidate NUOVE  2) RI-VALUTA le scoperte precedenti (così accumulano i
     # pass e diventano operabili)  3) mutazioni per evolvere attorno alle vincenti.
@@ -227,38 +266,26 @@ def main() -> int:
     # riunisce. Così copriamo l'INTERO universo restando nel timeout.
     symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
     print(f"[discover] shard {args.shard}/{args.num_shards}: {len(symbols)}/{len(full_symbols)} coin")
-    min_history = int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500"))
     out: dict[str, dict] = {}
     passed_summary: list[dict] = []
     passed_keys: list[str] = []
     specs_to_save: dict = {}
     n_eval = 0
 
-    for sym in symbols:
-        candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
-        if len(candles) < min_history:
-            print(f"[discover] {sym}: storia insufficiente, salto")
-            continue
-        frame = compute_indicator_frame(candles)
-        print(f"\n[discover] === {sym} ===")
-        for spec in specs:
-            r = evaluate_spec(opt, sym, candles, frame, spec)
-            n_eval += 1
-            key = f"{sym}|{spec['id']}"
-            out[key] = {
-                "symbol": sym, "strategy": spec["id"], "params": {}, "spec": spec,
-                "oos_pf": r["pf"], "oos_pnl_pct": r["pnl"],
-                "oos_trades": r["trades"], "oos_win_rate": r["win"], "passed": r["passed"],
-            }
-            if r["passed"]:
-                flag = "✅"
-                passed_keys.append(key)
-                specs_to_save[spec["id"]] = spec
-                gs = GeneratedStrategy(spec)
-                passed_summary.append({"symbol": sym, "id": spec["id"], "pf": r["pf"],
-                                       "pnl": r["pnl"], "desc": gs.description})
-                print(f"  {flag} {spec['id']} pf={r['pf']} pnl={r['pnl']*100:+.1f}% "
-                      f"trades={r['trades']}  {gs.description}")
+    # PARALLELO: ogni simbolo valuta tutte le spec, indipendente dagli altri ->
+    # distribuito su tutti i core del runner. Fallback sequenziale se BACKTEST_WORKERS=1.
+    workers = n_workers()
+    print(f"[discover] {len(symbols)} coin x {len(specs)} spec su {workers} worker (core)")
+    for sym, entries, p_keys, p_specs, n_ev, summary in parallel_map(
+        _disc_one, symbols, workers=workers, initializer=_disc_init, initargs=(args, end, specs)
+    ):
+        n_eval += n_ev
+        out.update(entries)
+        passed_keys.extend(p_keys)
+        specs_to_save.update(p_specs)
+        passed_summary.extend(summary)
+        if p_keys:
+            print(f"[discover] {sym}: {len(p_keys)} coppie passate ✅")
 
     # SHARD: scrive il proprio risultato; il merge riunisce e aggiorna il registro.
     if args.num_shards > 1:

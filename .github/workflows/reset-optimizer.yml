@@ -10,7 +10,7 @@ on:
     paths: [".github/workflows/reset-optimizer.yml"]
 
 env:
-  NUM_SHARDS: "3"
+  NUM_SHARDS: "6"
   TOP: "80"
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [0, 1, 2]
+        shard: [0, 1, 2, 3, 4, 5]
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
