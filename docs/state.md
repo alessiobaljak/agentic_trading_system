@@ -1,5 +1,5 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-23 20:22 UTC_
+_Generato: 2026-06-23 23:31 UTC_
 
 ## Bot
 - stato: **—** (🔴 offline)
@@ -15,21 +15,25 @@ _Generato: 2026-06-23 20:22 UTC_
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
-- copertura universo: **2/48 crypto (4%)** · obiettivo ≥ 60%
+- copertura universo: **2/54 crypto (4%)** · obiettivo ≥ 60%
 - coppie validate (>= 3 pass OOS): **2**
-- universo scansionato: 1INCHUSDT, ADAUSDT, APTUSDT, ARBUSDT, ATOMUSDT, AVAXUSDT, BCHUSDT, BNBUSDT, BTCUSDT, CHZUSDT, COMPUSDT, DOGEUSDT, DOTUSDT, DYDXUSDT, EGLDUSDT, ENSUSDT, EOSUSDT, ETHUSDT, FETUSDT, FILUSDT, FLOKIUSDT, FTMUSDT, GRTUSDT, INJUSDT, KAVAUSDT, LINKUSDT, LTCUSDT, MINAUSDT, MKRUSDT, NEARUSDT, NEOUSDT, OPUSDT, PEOPLEUSDT, RENDERUSDT, ROSEUSDT, RUNEUSDT, SEIUSDT, SNXUSDT, SOLUSDT, SUIUSDT, SUSHIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, VETUSDT, WAVESUSDT, XRPUSDT
-- aggiornato: 2026-06-23 16:48 UTC
+- universo scansionato: AAVEUSDT, ADAUSDT, APEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, BCHUSDT, BNBUSDT, BTCUSDT, COMPUSDT, CRVUSDT, DASHUSDT, DOGEUSDT, DOTUSDT, EOSUSDT, ETHUSDT, FETUSDT, FILUSDT, FLOWUSDT, FTMUSDT, GMTUSDT, IMXUSDT, INJUSDT, IOTAUSDT, KAVAUSDT, LDOUSDT, LINKUSDT, LTCUSDT, MANAUSDT, MASKUSDT, MINAUSDT, MKRUSDT, NEARUSDT, NEOUSDT, OPUSDT, PEOPLEUSDT, ROSEUSDT, RUNEUSDT, SEIUSDT, SNXUSDT, SOLUSDT, SUIUSDT, SUSHIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, VETUSDT, WAVESUSDT, XRPUSDT, YFIUSDT
+- aggiornato: 2026-06-23 20:33 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
 |---|---|---|---|---|---|
 | MINAUSDT | mean_reversion | 3 | 1.452 | 53% | rsi_oversold=25.0, atr_mult_stop=1.2, rsi_overbought=75.0 |
-| NEOUSDT | mean_reversion | 5 | 1.558 | 46% | rsi_overbought=80.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
+| NEOUSDT | mean_reversion | 6 | 1.615 | 48% | rsi_oversold=30.0, atr_mult_stop=1.8, rsi_overbought=80.0 |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-06-23 15:16 UTC · 336 coppie valutate, 2 passate in questo run_
+_aggiornato: 2026-06-23 20:33 UTC · 378 coppie valutate, 6 passate in questo run_
 
 | Coin | Strategia | PF | PnL OOS | Trade | Win |
 |---|---|---|---|---|---|
-| NEOUSDT | mean_reversion | 1.558 | 46% | 42 | 48% |
-| INJUSDT | breakout | 1.681 | 18% | 43 | 56% |
+| AAVEUSDT | trend_following | 2.112 | 503% | 349 | 52% |
+| IMXUSDT | vwap_reversion | 2.791 | 424% | 355 | 52% |
+| IMXUSDT | grid_trading | 1.664 | 58% | 205 | 56% |
+| AAVEUSDT | breakout | 4.386 | 56% | 38 | 66% |
+| NEOUSDT | mean_reversion | 1.615 | 48% | 42 | 45% |
+| UNIUSDT | breakout | 1.433 | 16% | 62 | 56% |
