@@ -1,5 +1,5 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-23 10:03 UTC_
+_Generato: 2026-06-23 12:47 UTC_
 
 ## Bot
 - stato: **—** (🔴 offline)
@@ -15,33 +15,32 @@ _Generato: 2026-06-23 10:03 UTC_
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
-- copertura universo: **2/80 crypto (2%)** · obiettivo ≥ 60%
+- copertura universo: **2/59 crypto (3%)** · obiettivo ≥ 60%
 - coppie validate (>= 3 pass OOS): **2**
-- universo scansionato: 1INCHUSDT, AAVEUSDT, ADAUSDT, ALGOUSDT, APEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, BCHUSDT, BNBUSDT, BONKUSDT, BTCUSDT, CHZUSDT, COMPUSDT, CRVUSDT, DASHUSDT, DOGEUSDT, DOTUSDT, DYDXUSDT, EGLDUSDT, ENAUSDT, ENSUSDT, EOSUSDT, ETCUSDT, ETHUSDT, FETUSDT, FILUSDT, FLOKIUSDT, FLOWUSDT, FTMUSDT, GALAUSDT, GMTUSDT, GRTUSDT, HBARUSDT, ICPUSDT, IMXUSDT, INJUSDT, IOTAUSDT, JUPUSDT, KAVAUSDT, LDOUSDT, LINKUSDT, LTCUSDT, MANAUSDT, MASKUSDT, MINAUSDT, MKRUSDT, NEARUSDT, NEOUSDT, OPUSDT, ORDIUSDT, PEOPLEUSDT, PEPEUSDT, PYTHUSDT, RENDERUSDT, ROSEUSDT, RUNEUSDT, SANDUSDT, SEIUSDT, SHIBUSDT, SNXUSDT, SOLUSDT, STXUSDT, SUIUSDT, SUSHIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, VETUSDT, WAVESUSDT, WIFUSDT, WLDUSDT, XLMUSDT, XRPUSDT, YFIUSDT, ZECUSDT
-- aggiornato: 2026-06-23 07:37 UTC
+- universo scansionato: 1INCHUSDT, ADAUSDT, ALGOUSDT, APEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, BCHUSDT, BNBUSDT, BTCUSDT, CHZUSDT, COMPUSDT, DOGEUSDT, DOTUSDT, DYDXUSDT, EGLDUSDT, ENSUSDT, EOSUSDT, ETHUSDT, FETUSDT, FILUSDT, FTMUSDT, GMTUSDT, GRTUSDT, IMXUSDT, INJUSDT, IOTAUSDT, KAVAUSDT, LDOUSDT, LINKUSDT, LTCUSDT, MANAUSDT, MASKUSDT, MINAUSDT, MKRUSDT, NEARUSDT, NEOUSDT, OPUSDT, PEOPLEUSDT, RENDERUSDT, ROSEUSDT, RUNEUSDT, SANDUSDT, SEIUSDT, SNXUSDT, SOLUSDT, SUIUSDT, SUSHIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, VETUSDT, WAVESUSDT, XLMUSDT, XRPUSDT, ZECUSDT
+- aggiornato: 2026-06-23 10:11 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
 |---|---|---|---|---|---|
-| NEOUSDT | mean_reversion | 3 | 1.688 | 59% | rsi_oversold=30.0, atr_mult_stop=1.8, rsi_overbought=80.0 |
+| NEOUSDT | mean_reversion | 4 | 1.895 | 67% | rsi_oversold=30.0, rsi_overbought=75.0, atr_mult_stop=1.0 |
 | MINAUSDT | mean_reversion | 3 | 1.452 | 53% | rsi_oversold=25.0, atr_mult_stop=1.2, rsi_overbought=75.0 |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-06-23 07:33 UTC · 560 coppie valutate, 14 passate in questo run_
+_aggiornato: 2026-06-23 10:11 UTC · 413 coppie valutate, 13 passate in questo run_
 
 | Coin | Strategia | PF | PnL OOS | Trade | Win |
 |---|---|---|---|---|---|
-| ALGOUSDT | mean_reversion | 1.879 | 100% | 62 | 64% |
-| AVAXUSDT | breakout | 1.34 | 74% | 352 | 50% |
-| ZECUSDT | trend_following | 1.371 | 67% | 140 | 54% |
-| ATOMUSDT | mean_reversion | 2.387 | 64% | 37 | 54% |
-| SUIUSDT | breakout | 1.386 | 63% | 202 | 46% |
-| GRTUSDT | mean_reversion | 1.586 | 62% | 52 | 56% |
-| NEOUSDT | mean_reversion | 1.688 | 59% | 42 | 55% |
-| MANAUSDT | mean_reversion | 1.607 | 54% | 38 | 47% |
-| ARBUSDT | mean_reversion | 1.606 | 53% | 39 | 49% |
-| MINAUSDT | mean_reversion | 1.452 | 53% | 62 | 48% |
-| STXUSDT | mean_reversion | 1.686 | 52% | 42 | 60% |
-| IMXUSDT | mean_reversion | 1.353 | 45% | 56 | 54% |
-| ARUSDT | breakout | 1.316 | 33% | 160 | 60% |
-| SEIUSDT | breakout | 1.283 | 16% | 78 | 49% |
+| MANAUSDT | vwap_reversion | 3.066 | 3519% | 2738 | 56% |
+| MANAUSDT | trend_following | 1.664 | 1825% | 2214 | 46% |
+| IMXUSDT | trend_following | 2.091 | 476% | 352 | 49% |
+| MANAUSDT | grid_trading | 1.871 | 379% | 1201 | 56% |
+| IMXUSDT | vwap_reversion | 2.057 | 224% | 297 | 50% |
+| MANAUSDT | breakout | 2.202 | 209% | 224 | 46% |
+| MANAUSDT | mean_reversion | 3.722 | 105% | 24 | 54% |
+| ALGOUSDT | mean_reversion | 1.84 | 96% | 62 | 60% |
+| MANAUSDT | liquidity_grab | 2.485 | 75% | 102 | 54% |
+| NEOUSDT | mean_reversion | 1.895 | 67% | 48 | 46% |
+| IMXUSDT | breakout | 2.43 | 32% | 34 | 53% |
+| UNIUSDT | breakout | 1.533 | 19% | 62 | 58% |
+| FETUSDT | breakout | 1.43 | 16% | 62 | 55% |
