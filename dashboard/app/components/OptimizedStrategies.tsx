@@ -129,6 +129,7 @@ export default function OptimizedStrategies() {
   const [prod, setProd] = useState<Record<string, Prod>>({});
   const [view, setView] = useState<'prod' | 'all'>('prod');
   const [loaded, setLoaded] = useState(false);
+  const [openCard, setOpenCard] = useState<string | null>(null);   // dettaglio coppie aperto
 
   useEffect(() => {
     const db = getDb();
@@ -270,7 +271,6 @@ export default function OptimizedStrategies() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
           {shown.map((c) => {
             const gid = `g-${hashStr(c.strategy)}`;
-            const coinNames = c.coins.map((x) => x.symbol.replace('USDT', ''));
             const rob = robustness(c.coins.length);
             const p = prod[c.strategy];
             const curve = p && p.points.length ? realSpark(p.points) : null;
@@ -351,16 +351,54 @@ export default function OptimizedStrategies() {
                     </div>
                   )}
 
-                  <div style={{ fontSize: 10, color: '#7b8696', marginTop: 8 }}>
-                    {c.validatedNow ? (
-                      <>
-                        Validata su {c.coins.length}: {coinNames.slice(0, 5).join(' · ')}
-                        {coinNames.length > 5 ? ` +${coinNames.length - 5}` : ''}
-                      </>
-                    ) : (
-                      'Non più nel GATE 1 · qui resta lo storico reale in produzione'
-                    )}
-                  </div>
+                  {c.validatedNow && c.coins.length > 0 ? (
+                    <>
+                      <button
+                        onClick={() => setOpenCard(openCard === c.strategy ? null : c.strategy)}
+                        style={{
+                          marginTop: 8, width: '100%', textAlign: 'left', cursor: 'pointer',
+                          background: 'transparent', border: 'none', color: '#8b96a5', fontSize: 10,
+                          padding: 0,
+                        }}
+                      >
+                        {openCard === c.strategy ? '▾' : '▸'} dettaglio per coppia ({c.coins.length})
+                      </button>
+                      {openCard === c.strategy && (
+                        <div style={{ marginTop: 6, maxHeight: 168, overflowY: 'auto' }}>
+                          {/* profitto economico su 10k PER OGNI COPPIA (strategia × coin) */}
+                          {c.coins.map((coin) => {
+                            const prof = profit10k(coin);
+                            return (
+                              <div key={coin.symbol} style={{
+                                display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: 6,
+                                alignItems: 'center', padding: '3px 4px', fontSize: 10,
+                                borderBottom: '1px solid #1a2230',
+                              }}>
+                                <span style={{ color: '#cdd6e2', fontWeight: 600 }}>{coin.symbol.replace('USDT', '')}</span>
+                                <span style={{ color: prof >= 0 ? '#3fb950' : '#f85149', fontWeight: 700, textAlign: 'right', minWidth: 56 }}>
+                                  {fmtMoney(prof)}
+                                </span>
+                                <span style={{ color: '#7b8696', textAlign: 'right' }} title="profit factor">
+                                  pf {coin.last_pf != null ? coin.last_pf.toFixed(2) : '—'}
+                                </span>
+                                <span style={{ color: '#7b8696', textAlign: 'right' }} title="win-rate · trade">
+                                  {coin.last_win_rate != null ? `${Math.round(coin.last_win_rate * 100)}%` : '—'}
+                                  {coin.last_trades != null ? `·${coin.last_trades}` : ''}
+                                </span>
+                              </div>
+                            );
+                          })}
+                          <div style={{ fontSize: 9, color: '#5a6473', marginTop: 4 }}>
+                            $ = profitto GATE 1 su $10k · pf = profit factor · % = win-rate · n = trade
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div style={{ fontSize: 10, color: '#7b8696', marginTop: 8 }}>
+                      Non più nel GATE 1 · qui resta lo storico reale in produzione
+                    </div>
+                  )}
                 </div>
               </div>
             );
