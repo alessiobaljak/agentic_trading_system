@@ -21,7 +21,7 @@ import random
 from dataclasses import dataclass, field
 from typing import Optional
 
-from backtesting.engine import Backtester, StrategyStats
+from backtesting.engine import Backtester, StrategyStats, passes_gate
 from bot.core.indicators import compute_indicator_frame
 from bot.core.models import Candle
 from bot.strategies.base import STRATEGY_REGISTRY
@@ -108,6 +108,7 @@ class WalkForwardOptimizer:
 
             oos = StrategyStats(strategy=name)
             history: list[dict] = []
+            window_pnls: list[float] = []   # ritorno OOS per finestra (consistenza)
             for (ta, tb, sa, sb) in windows:
                 train_c = candles[ta:tb]
                 train_f = frame.iloc[ta:tb].reset_index(drop=True)
@@ -125,11 +126,12 @@ class WalkForwardOptimizer:
                 st_oos = self.bt.run_strategy(cls(best_combo), symbol, test_c, frame=test_f,
                                               context_by_ts=context_by_ts)
                 oos.trades.extend(st_oos.trades)
+                window_pnls.append(sum(t.pnl_pct for t in st_oos.trades))
                 history.append(best_combo)
 
             pf = oos.profit_factor()
             pnl = oos.total_pnl_pct()
-            passed = (len(oos.trades) >= self.min_trades_oos and pf >= self.pf_threshold and pnl > 0)
+            passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl)
             results.append(OptResult(
                 symbol=symbol, strategy=name,
                 best_params=history[-1] if history else {},

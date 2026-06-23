@@ -22,7 +22,7 @@ import time
 from datetime import date
 
 from backtesting.data_loader import load_candles
-from backtesting.engine import StrategyStats
+from backtesting.engine import StrategyStats, passes_gate
 from backtesting.optimizer import WalkForwardOptimizer
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
@@ -30,21 +30,21 @@ from bot.strategies.generated import GeneratedStrategy
 from bot.strategies.generator import generate_specs, mutate
 from scripts.optimize import FRESH_DAYS, MIN_PASSES, top_symbols_by_volume
 
-PF_THRESHOLD = 1.10
-MIN_OOS_TRADES = 10
-
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict):
-    """Aggrega le performance del spec sulle SOLE finestre out-of-sample."""
+    """Aggrega le performance del spec sulle SOLE finestre out-of-sample e applica
+    il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra)."""
     oos = StrategyStats(strategy=spec["id"])
+    window_pnls: list[float] = []   # ritorno OOS per finestra (consistenza)
     for (_ta, _tb, sa, sb) in opt._windows(len(candles)):
         test_c = candles[sa:sb]
         test_f = frame.iloc[sa:sb].reset_index(drop=True)
         st = opt.bt.run_strategy(GeneratedStrategy(spec), symbol, test_c, frame=test_f)
         oos.trades.extend(st.trades)
+        window_pnls.append(sum(t.pnl_pct for t in st.trades))
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()
-    passed = (len(oos.trades) >= MIN_OOS_TRADES and pf >= PF_THRESHOLD and pnl > 0)
+    passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl)
     return {
         "pf": round(pf, 3), "pnl": round(pnl, 4),
         "trades": len(oos.trades), "win": round(oos.win_rate(), 3), "passed": passed,

@@ -123,6 +123,34 @@ def test_breakeven_exit_is_net_negative_due_to_fees():
     assert abs(closed.pnl + 0.8) < 0.05
 
 
+def test_profit_lock_protects_gains_on_retrace():
+    # la posizione va in profitto oltre il trigger (metà strada verso il TP) e poi
+    # ritraccia: il profit-lock chiude IN PROFITTO (TRAILING_STOP), non la riporta in
+    # perdita né aspetta che torni allo stop iniziale.
+    eng = _engine()
+    eng.open_position(_asset(100), "trend_following", Direction.LONG, _params(qty=10.0, stop=98, tp=110))
+    # sale a 106: fav_move=6 >= trigger 0.5*10=5 -> armato, stop sale a 100+0.5*6=103
+    assert eng.update_position("BTCUSDT", 106.0) is None
+    assert eng.open_positions["BTCUSDT"].trailing_active is True
+    # ritraccia a 103: tocca lo stop bloccato -> esce in profitto
+    closed = eng.update_position("BTCUSDT", 103.0)
+    assert closed is not None
+    assert closed.exit_reason == ExitReason.TRAILING_STOP
+    assert closed.exit_price == 103.0
+    assert closed.pnl > 0   # profitto bloccato, al netto dei costi
+
+
+def test_profit_lock_not_armed_below_trigger():
+    # piccolo profitto sotto il trigger: lo stop resta quello iniziale (no arming).
+    eng = _engine()
+    eng.open_position(_asset(100), "trend_following", Direction.LONG, _params(qty=10.0, stop=98, tp=110))
+    assert eng.update_position("BTCUSDT", 103.0) is None         # fav 3 < trigger 5
+    assert eng.open_positions["BTCUSDT"].trailing_active is False
+    # ritraccia a 99 (sopra lo stop 98): resta aperta, non c'è ancora protezione
+    assert eng.update_position("BTCUSDT", 99.0) is None
+    assert "BTCUSDT" in eng.open_positions
+
+
 def test_kill_switch_closes_all():
     eng = _engine()
     eng.open_position(_asset(100), "x", Direction.LONG, _params())

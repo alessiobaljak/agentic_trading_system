@@ -2,7 +2,26 @@
 from datetime import datetime, timezone
 
 from backtesting.data_loader import _synthetic
-from backtesting.engine import Backtester
+from backtesting.engine import Backtester, passes_gate
+from bot.config import settings
+
+
+def test_gate_requires_pf_winrate_consistency_and_return():
+    # coppia "buona": abbastanza trade, PF e win-rate alti, ritorno ampio,
+    # ogni finestra positiva -> passa.
+    good = dict(window_pnls=[0.10, 0.08, 0.12], n_trades=30, pf=1.4,
+                win_rate=0.55, total_return=0.30)
+    assert passes_gate(**good) is True
+    # pochi trade -> bocciata
+    assert passes_gate(**{**good, "n_trades": settings.GATE_MIN_TRADES - 1}) is False
+    # PF sotto soglia -> bocciata
+    assert passes_gate(**{**good, "pf": settings.GATE_PF_THRESHOLD - 0.01}) is False
+    # win-rate sotto il floor -> bocciata
+    assert passes_gate(**{**good, "win_rate": settings.GATE_WIN_RATE_FLOOR - 0.01}) is False
+    # ritorno totale troppo piccolo -> bocciata ("profittevole, e di tanto")
+    assert passes_gate(**{**good, "total_return": settings.GATE_MIN_TOTAL_RETURN - 0.01}) is False
+    # una finestra in perdita (in perdita un anno, recupero il dopo) -> bocciata
+    assert passes_gate(**{**good, "window_pnls": [0.30, -0.05, 0.05]}) is False
 
 
 def test_backtester_runs_and_segments():

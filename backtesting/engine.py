@@ -22,10 +22,40 @@ from typing import Optional
 from bot.agents.regime_detector import RegimeDetector
 from bot.core.indicators import compute_indicator_frame, snapshot_from_row
 from bot.core.models import AssetSnapshot, Candle, Direction, Regime
+from bot.config import settings
+from bot.execution.exit_logic import locked_stop
 from bot.strategies import get_all_strategies
 from bot.strategies.base import StrategyContext
 
 LEVERAGE_LEVELS = (2, 3, 5, 10, 20)
+
+
+def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
+                win_rate: float, total_return: float) -> bool:
+    """
+    Verdetto GATE 1 per una coppia (coin, strategia), fuori campione (OOS).
+    Tutte le condizioni (soglie in config) devono valere:
+      * almeno GATE_MIN_TRADES trade;
+      * profit factor >= GATE_PF_THRESHOLD;
+      * win-rate >= GATE_WIN_RATE_FLOOR;
+      * ritorno OOS totale >= GATE_MIN_TOTAL_RETURN ("profittevole, e di tanto");
+      * profittevole in OGNI (o quasi) finestra OOS — almeno
+        GATE_CONSISTENCY_FRACTION delle finestre > 0: niente "in perdita un anno e
+        recupero il dopo".
+    """
+    if n_trades < settings.GATE_MIN_TRADES:
+        return False
+    if pf < settings.GATE_PF_THRESHOLD:
+        return False
+    if win_rate < settings.GATE_WIN_RATE_FLOOR:
+        return False
+    if total_return < settings.GATE_MIN_TOTAL_RETURN:
+        return False
+    if window_pnls:
+        positive = sum(1 for w in window_pnls if w > 0)
+        if positive < len(window_pnls) * settings.GATE_CONSISTENCY_FRACTION - 1e-9:
+            return False
+    return True
 # soglia di liquidazione approssimata: ~ (1/leva) meno un buffer di mantenimento
 MAINTENANCE_BUFFER = 0.005
 
@@ -163,18 +193,25 @@ class Backtester:
             exit_price = entry
             j = i + 1
             horizon = min(n - 1, i + 96)
+            # miglior prezzo a favore visto FINORA (per il profit-lock). Usa solo le
+            # barre PRECEDENTI quando calcola lo stop, così niente look-ahead.
+            best_fav = entry
             while j <= horizon:
                 c = candles[j]
+                # stop effettivo: base o alzato dal profit-lock (sui massimi passati)
+                eff_stop = locked_stop(entry, target, long, best_fav, stop)
                 adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
                 max_adverse = max(max_adverse, adverse)
-                if long and c.low <= stop:
-                    exit_price = stop; break
+                if long and c.low <= eff_stop:
+                    exit_price = eff_stop; break
                 if long and c.high >= target:
                     exit_price = target; break
-                if (not long) and c.high >= stop:
-                    exit_price = stop; break
+                if (not long) and c.high >= eff_stop:
+                    exit_price = eff_stop; break
                 if (not long) and c.low <= target:
                     exit_price = target; break
+                # aggiorna il miglior prezzo a favore DOPO i controlli di uscita
+                best_fav = max(best_fav, c.high) if long else min(best_fav, c.low)
                 exit_price = c.close
                 j += 1
 

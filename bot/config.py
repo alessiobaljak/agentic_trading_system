@@ -111,6 +111,33 @@ class Settings:
     # ---- Timeframes raccolti dal price agent ----
     TIMEFRAMES: tuple[str, ...] = ("1m", "5m", "15m", "1h")
 
+    # ---- Protezione profitto (profit-lock) ----
+    # Quando una posizione va in profitto ma non tocca il TP, blocca una parte del
+    # guadagno invece di restituirlo. STESSI parametri nel backtest (GATE 1) e nel
+    # live, così il paper resta coerente con ciò che è stato validato.
+    #   - ENABLED: attiva/disattiva il meccanismo
+    #   - TRIGGER: frazione della distanza entry->TP raggiunta la quale si "arma"
+    #     (0.5 = a metà strada verso il take profit)
+    #   - KEEP: frazione del MIGLIOR profitto visto che viene bloccata come stop
+    #     (0.5 = se il picco era +2%, lo stop sale a +1%)
+    PROFIT_LOCK_ENABLED: bool = os.getenv("PROFIT_LOCK_ENABLED", "true").lower() == "true"
+    PROFIT_LOCK_TRIGGER: float = float(os.getenv("PROFIT_LOCK_TRIGGER", "0.5"))
+    PROFIT_LOCK_KEEP: float = float(os.getenv("PROFIT_LOCK_KEEP", "0.5"))
+
+    # ---- GATE 1 (soglie di validazione) ----
+    # Una coppia (coin, strategia) è validata SOLO se, fuori campione (OOS):
+    #   - ha almeno GATE_MIN_TRADES trade
+    #   - profit factor >= GATE_PF_THRESHOLD
+    #   - win-rate >= GATE_WIN_RATE_FLOOR
+    #   - ritorno OOS totale >= GATE_MIN_TOTAL_RETURN ("profittevole, e di tanto")
+    #   - è profittevole in OGNI finestra OOS (no "in perdita un anno, recupero il
+    #     dopo"): almeno GATE_CONSISTENCY_FRACTION delle finestre dev'essere > 0
+    GATE_PF_THRESHOLD: float = float(os.getenv("GATE_PF_THRESHOLD", "1.25"))
+    GATE_MIN_TRADES: int = int(os.getenv("GATE_MIN_TRADES", "20"))
+    GATE_WIN_RATE_FLOOR: float = float(os.getenv("GATE_WIN_RATE_FLOOR", "0.45"))
+    GATE_MIN_TOTAL_RETURN: float = float(os.getenv("GATE_MIN_TOTAL_RETURN", "0.15"))
+    GATE_CONSISTENCY_FRACTION: float = float(os.getenv("GATE_CONSISTENCY_FRACTION", "1.0"))
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

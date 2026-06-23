@@ -30,6 +30,7 @@ from bot.core.firebase_client import get_firebase
 from bot.core.models import (
     AssetSnapshot, ClosedTrade, Direction, EffectiveRiskParams, ExitReason, Regime,
 )
+from bot.execution.exit_logic import locked_stop
 
 
 @dataclass
@@ -165,20 +166,29 @@ class ExecutionEngine:
     # ------------------------------------------------------------------ #
     def update_position(self, symbol: str, mark_price: float) -> Optional[ClosedTrade]:
         """
-        Esce TUTTA la posizione allo stop fisso o al take-profit PIENO, esattamente
-        come il backtest che valida le strategie (niente trailing/scale-out): così
-        il bot trada ciò che è stato validato. Uscita anche a fine orizzonte (max
-        holding), come le 96 barre del backtester.
+        Esce TUTTA la posizione allo stop o al take-profit PIENO, esattamente come
+        il backtest che valida le strategie. Lo stop può essere ALZATO dal
+        profit-lock (stessa logica del backtest, bot/execution/exit_logic.py): se la
+        posizione è andata in profitto blocca parte del guadagno invece di restituirlo.
+        Uscita anche a fine orizzonte (max holding), come le 96 barre del backtester.
         """
         pos = self.open_positions.get(symbol)
         if pos is None:
             return None
         long = pos.direction == Direction.LONG
 
-        # stop loss (uscita AL prezzo di stop, come il backtest)
-        hit_sl = (mark_price <= pos.stop_price) if long else (mark_price >= pos.stop_price)
+        # aggiorna il miglior prezzo a favore visto, poi calcola lo stop effettivo
+        pos.high_water = max(pos.high_water, mark_price) if long else min(pos.high_water, mark_price)
+        eff_stop = locked_stop(pos.entry_price, pos.take_profit_price, long,
+                               pos.high_water, pos.stop_price)
+        pos.trailing_active = eff_stop != pos.stop_price
+
+        # stop (base o alzato dal profit-lock). Se è stato alzato, l'uscita è in
+        # profitto -> TRAILING_STOP; altrimenti è lo stop-loss vero e proprio.
+        hit_sl = (mark_price <= eff_stop) if long else (mark_price >= eff_stop)
         if hit_sl:
-            return self._close(pos, pos.stop_price, ExitReason.STOP_LOSS)
+            reason = ExitReason.TRAILING_STOP if pos.trailing_active else ExitReason.STOP_LOSS
+            return self._close(pos, eff_stop, reason)
 
         # take profit PIENO (tutta la posizione al target, RR pieno)
         hit_tp = (mark_price >= pos.take_profit_price) if long else (mark_price <= pos.take_profit_price)
