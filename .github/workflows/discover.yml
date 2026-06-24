@@ -14,15 +14,14 @@ on:
       generate:
         description: "Strategie candidate da generare"
         default: "40"
-  push:
-    branches: ["claude/brave-albattani-1b12fv"]
-    paths: ["bot/strategies/generated.py", "bot/strategies/generator.py",
-            "bot/core/indicators.py", "backtesting/engine.py",
-            "scripts/discover_strategies.py", ".github/workflows/discover.yml"]
+  # NIENTE trigger-su-push: evita la contesa runner/shard col reset-optimizer.
+  # Gira a schedule (ogni 12h) o a mano (workflow_dispatch).
 
 env:
   NUM_SHARDS: "6"
   TOP: "80"
+  # coerente col reset: una passata basta (gate severo + consistenza + profit-lock).
+  OPTIMIZER_MIN_PASSES: "1"
 
 jobs:
   discover:

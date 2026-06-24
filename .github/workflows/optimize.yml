@@ -12,15 +12,14 @@ on:
       top:
         description: "Top-N future per volume (universo)"
         default: "80"
-  push:
-    branches: ["claude/brave-albattani-1b12fv"]
-    paths: ["backtesting/optimizer.py", "backtesting/engine.py", "scripts/optimize.py",
-            "bot/strategies/**", "bot/core/indicators.py",
-            ".github/workflows/optimize.yml"]
+  # NIENTE trigger-su-push: evita la contesa runner/shard col reset-optimizer.
+  # Gira a schedule (ogni 6h) o a mano (workflow_dispatch).
 
 env:
   NUM_SHARDS: "6"
   TOP: "80"
+  # coerente col reset: una passata basta (gate severo + consistenza + profit-lock).
+  OPTIMIZER_MIN_PASSES: "1"
 
 jobs:
   optimize:

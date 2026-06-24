@@ -10,15 +10,18 @@ on:
     paths: [".github/workflows/reset-optimizer.yml"]
 
 env:
-  NUM_SHARDS: "6"
+  NUM_SHARDS: "8"
   TOP: "80"
+  # rebuild one-shot: 1 passata basta (la robustezza la dà il gate severo + la
+  # consistenza per finestra + il profit-lock, non il ripetere lo stesso run).
+  OPTIMIZER_MIN_PASSES: "1"
 
 jobs:
   shards:
     strategy:
       fail-fast: false
       matrix:
-        shard: [0, 1, 2, 3, 4, 5]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
