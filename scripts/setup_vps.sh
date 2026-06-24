@@ -59,25 +59,36 @@ RestartSec=10
 WantedBy=multi-user.target
 EOF
 
-echo "[setup] timer notturno di ottimizzazione strategie (universo top-N)..."
+echo "[setup] timer notturno GATE 1 (optimize + discover su dati reali Binance)..."
+# IMPORTANTE: la validazione gira sul VPS (non su GitHub) perche' qui Binance e'
+# raggiungibile -> dati reali a 4 anni. Mai dati sintetici (BACKTEST_ALLOW_SYNTHETIC
+# =false): senza dato reale la coin viene saltata, non validata su rumore.
 cat > /etc/systemd/system/trading-optimizer.service <<EOF
 [Unit]
-Description=Agentic Trading - Strategy Optimizer (walk-forward, autonomo)
+Description=Agentic Trading - GATE 1 (optimize + discover, dati reali, autonomo)
 After=network-online.target
 
 [Service]
 Type=oneshot
 WorkingDirectory=$APP_DIR
 EnvironmentFile=$APP_DIR/.env
-ExecStart=$APP_DIR/.venv/bin/python -m scripts.optimize --top 40 --windows 3 --max-combos 12
+Environment=PYTHONUNBUFFERED=1
+Environment=BACKTEST_ALLOW_SYNTHETIC=false
+Environment=OPTIMIZER_MIN_PASSES=1
+# priorita' bassa: non deve mai rubare CPU/IO al bot live
+Nice=15
+IOSchedulingClass=idle
+ExecStart=$APP_DIR/.venv/bin/python -m scripts.optimize --top 80 --windows 3 --max-combos 12 --start 2022-01-01
+ExecStart=$APP_DIR/.venv/bin/python -m scripts.discover_strategies --top 80 --generate 40 --windows 3 --start 2022-01-01
 EOF
 cat > /etc/systemd/system/trading-optimizer.timer <<EOF
 [Unit]
-Description=Esegue l'ottimizzatore in continuazione (ogni 8h) per accumulare validazioni
+Description=GATE 1 validazione notturna (dati reali Binance) - accumula validazioni
 
 [Timer]
-OnCalendar=*-*-* 00,08,16:00:00
+OnCalendar=*-*-* 03:00:00
 Persistent=true
+RandomizedDelaySec=600
 
 [Install]
 WantedBy=timers.target
