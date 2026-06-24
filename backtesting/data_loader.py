@@ -15,6 +15,7 @@ Restituisce sempre una lista di Candle ordinate per tempo.
 """
 from __future__ import annotations
 
+import os
 from datetime import datetime, timedelta, timezone
 from typing import Callable
 
@@ -166,7 +167,12 @@ def _coinmetrics(symbol: str, start: str, end: str) -> list[Candle]:
 # Sintetico (offline / CI)                                                     #
 # --------------------------------------------------------------------------- #
 def _synthetic(start: datetime, end: datetime, interval_min: int = 60,
-               seed: int = 7, start_px: float = 30000.0) -> list[Candle]:
+               seed: int = 7, start_px: float = 30000.0,
+               symbol: str | None = None) -> list[Candle]:
+    # seed derivato dal simbolo: così le coin NON condividono la stessa serie finta
+    # (un seed fisso rendeva ogni coin identica -> "robusta su N" fasullo).
+    if symbol:
+        seed = (seed + sum(ord(ch) for ch in symbol) * 2654435761) % (2 ** 32)
     rng = np.random.default_rng(seed)
     n = int((end - start).total_seconds() / (interval_min * 60))
     candles = []
@@ -194,17 +200,26 @@ def load_candles(
     start: str = "2022-01-01",
     end: str = "2026-01-01",
     prefer: str = "binance",
+    allow_synthetic: bool | None = None,
 ) -> list[Candle]:
     """
     Carica candele storiche reali con fallback automatico tra exchange gratuiti.
     `prefer`: binance | bybit | okx | coinmetrics | synthetic | auto.
+
+    `allow_synthetic`: se False, quando NESSUNA fonte reale è raggiungibile ritorna
+    [] invece dei dati sintetici. CRITICO per il GATE 1: validare su una serie finta
+    (random walk) produce coppie "validate" fasulle. Default: env
+    BACKTEST_ALLOW_SYNTHETIC (true), così i test restano invariati ma i job di
+    validazione lo mettono a false.
     """
+    if allow_synthetic is None:
+        allow_synthetic = os.getenv("BACKTEST_ALLOW_SYNTHETIC", "true").lower() == "true"
     start_dt = datetime.fromisoformat(start).replace(tzinfo=timezone.utc)
     end_dt = datetime.fromisoformat(end).replace(tzinfo=timezone.utc)
     sms, ems = int(start_dt.timestamp() * 1000), int(end_dt.timestamp() * 1000)
 
     if prefer == "synthetic":
-        return _synthetic(start_dt, end_dt)
+        return _synthetic(start_dt, end_dt, symbol=symbol)
     if prefer == "coinmetrics":
         c = _coinmetrics(symbol, start, end)
         if c:
@@ -226,5 +241,9 @@ def load_candles(
             print(f"[backtest] dati da {name}: {len(candles)} candele")
             return candles
 
+    if not allow_synthetic:
+        print(f"[backtest] {symbol}: nessuna fonte reale raggiungibile e sintetici "
+              f"DISABILITATI -> skip (niente validazione su dati finti)")
+        return []
     print("[backtest] nessuna fonte reale raggiungibile -> dati sintetici (offline)")
-    return _synthetic(start_dt, end_dt)
+    return _synthetic(start_dt, end_dt, symbol=symbol)

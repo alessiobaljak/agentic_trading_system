@@ -15,6 +15,8 @@ env:
   # rebuild one-shot: 1 passata basta (la robustezza la dà il gate severo + la
   # consistenza per finestra + il profit-lock, non il ripetere lo stesso run).
   OPTIMIZER_MIN_PASSES: "1"
+  # MAI validare GATE 1 su dati finti: se gli exchange non rispondono, salta la coin.
+  BACKTEST_ALLOW_SYNTHETIC: "false"
 
 jobs:
   shards:

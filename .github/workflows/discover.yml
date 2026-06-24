@@ -22,6 +22,8 @@ env:
   TOP: "80"
   # coerente col reset: una passata basta (gate severo + consistenza + profit-lock).
   OPTIMIZER_MIN_PASSES: "1"
+  # MAI validare GATE 1 su dati finti: se gli exchange non rispondono, salta la coin.
+  BACKTEST_ALLOW_SYNTHETIC: "false"
 
 jobs:
   discover:
