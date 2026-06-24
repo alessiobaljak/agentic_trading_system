@@ -1,12 +1,12 @@
 {
   "rules": {
-    ".read": "auth != null",
+    ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
     ".write": false,
 
     "commands": {
       "kill_switch": {
-        ".read": "auth != null",
-        ".write": "auth != null && newData.isBoolean()"
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID' && newData.isBoolean()"
       }
     }
   }

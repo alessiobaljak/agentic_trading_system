@@ -20,18 +20,18 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // --- HARDENING opzionale (consigliato): blocca tutto al TUO UID ---
-    // Dopo il primo login, copia il tuo UID (Firebase Console > Authentication)
-    // e sostituiscilo qui sotto, poi usa isOwner() al posto di signedIn().
-    // function isOwner() {
-    //   return signedIn() && request.auth.uid == 'INSERISCI_IL_TUO_UID';
-    // }
+    // Solo il PROPRIETARIO (il tuo account Google) può leggere/scrivere.
+    // Trova il tuo UID in Firebase Console > Authentication > Users e sostituiscilo
+    // qui sotto a REPLACE_WITH_YOUR_FIREBASE_UID.
+    function isOwner() {
+      return signedIn() && request.auth.uid == 'REPLACE_WITH_YOUR_FIREBASE_UID';
+    }
 
     // Parametri di rischio regolabili dall'utente: la dashboard può scriverli,
     // ma SOLO entro i limiti hardcoded (leverage <= 5, risk_per_trade <= 3%).
     match /user_risk_settings/{doc} {
-      allow read: if signedIn();
-      allow write: if signedIn()
+      allow read: if isOwner();
+      allow write: if isOwner()
         && request.resource.data.leverage is number
         && request.resource.data.leverage >= 1
         && request.resource.data.leverage <= 5
@@ -41,9 +41,9 @@ service cloud.firestore {
     }
 
     // Tutto il resto (trades, memory, strategy_weights, insights, ...):
-    // leggibile dalla dashboard, NON scrivibile dal client (lo scrive il bot).
+    // leggibile SOLO dal proprietario, NON scrivibile dal client (lo scrive il bot).
     match /{document=**} {
-      allow read: if signedIn();
+      allow read: if isOwner();
       allow write: if false;
     }
   }
