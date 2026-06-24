@@ -1,5 +1,5 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-24 09:51 UTC_
+_Generato: 2026-06-24 12:30 UTC_
 
 ## Bot
 - stato: **—** (🔴 offline)
@@ -15,14 +15,20 @@ _Generato: 2026-06-24 09:51 UTC_
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
-- copertura universo: **3/54 crypto (6%)** · obiettivo ≥ 60%
-- coppie validate (>= 1 pass OOS): **128**
-- universo scansionato: AAVEUSDT, ADAUSDT, ALGOUSDT, APEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, BNBUSDT, BTCUSDT, CHZUSDT, DASHUSDT, DOGEUSDT, DOTUSDT, EOSUSDT, ETCUSDT, ETHUSDT, FETUSDT, FILUSDT, FTMUSDT, GALAUSDT, GRTUSDT, HBARUSDT, IMXUSDT, IOTAUSDT, KAVAUSDT, LINKUSDT, LTCUSDT, MASKUSDT, MINAUSDT, MKRUSDT, NEARUSDT, NEOUSDT, OPUSDT, ORDIUSDT, PEOPLEUSDT, PEPEUSDT, PYTHUSDT, ROSEUSDT, RUNEUSDT, SEIUSDT, SNXUSDT, SOLUSDT, STXUSDT, SUIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, VETUSDT, WAVESUSDT, YFIUSDT, ZECUSDT
-- aggiornato: 2026-06-24 06:11 UTC
+- copertura universo: **20/56 crypto (36%)** · obiettivo ≥ 60%
+- coppie validate (>= 1 pass OOS): **135**
+- universo scansionato: 1INCHUSDT, AAVEUSDT, ADAUSDT, APEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, BCHUSDT, BNBUSDT, BTCUSDT, COMPUSDT, CRVUSDT, DASHUSDT, DOGEUSDT, DOTUSDT, DYDXUSDT, ENSUSDT, EOSUSDT, ETHUSDT, FETUSDT, FILUSDT, FTMUSDT, GALAUSDT, GMTUSDT, GRTUSDT, INJUSDT, IOTAUSDT, KAVAUSDT, LINKUSDT, LTCUSDT, MASKUSDT, MINAUSDT, MKRUSDT, NEARUSDT, NEOUSDT, OPUSDT, PEOPLEUSDT, RENDERUSDT, ROSEUSDT, RUNEUSDT, SEIUSDT, SNXUSDT, SOLUSDT, SUIUSDT, SUSHIUSDT, TIAUSDT, TONUSDT, TRXUSDT, UNIUSDT, VETUSDT, WAVESUSDT, XLMUSDT, XRPUSDT
+- aggiornato: 2026-06-24 09:57 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
 |---|---|---|---|---|---|
+| AAVEUSDT | trend_following | 1 | 2.399 | 1703% | require_volume=False, rr=2.5, atr_mult_stop=2.0, rsi_hi=70.0 |
+| GALAUSDT | trend_following | 1 | 2.638 | 1672% | require_volume=False, rr=2.5, atr_mult_stop=2.0, rsi_hi=75.0 |
+| CRVUSDT | vwap_reversion | 1 | 3.013 | 1388% | atr_mult_stop=1.0, deviation_atr=1.5 |
+| CRVUSDT | trend_following | 1 | 2.483 | 1236% | require_volume=False, rr=2.5, atr_mult_stop=1.5, rsi_hi=65.0 |
+| AAVEUSDT | vwap_reversion | 1 | 2.626 | 1137% | atr_mult_stop=1.0, deviation_atr=1.5 |
+| GALAUSDT | vwap_reversion | 1 | 4.316 | 688% | atr_mult_stop=1.0, deviation_atr=2.5 |
 | BONKUSDT | gen_a2f726be | 1 | 1.277 | 553% |  |
 | ENAUSDT | gen_a2f726be | 1 | 1.277 | 553% |  |
 | ETCUSDT | gen_a2f726be | 1 | 1.277 | 553% |  |
@@ -107,7 +113,7 @@ _Generato: 2026-06-24 09:51 UTC_
 | SHIBUSDT | gen_dd3842cb | 1 | 1.62 | 57% |  |
 | TONUSDT | gen_dd3842cb | 1 | 1.62 | 57% |  |
 | ORDIUSDT | grid_trading | 1 | 2.382 | 51% | stop_pad=0.1, high_band=0.65, low_band=0.15 |
-| NEOUSDT | mean_reversion | 1 | 1.558 | 46% | rsi_overbought=80.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
+| NEOUSDT | mean_reversion | 2 | 1.558 | 46% | rsi_overbought=80.0, atr_mult_stop=1.8, rsi_oversold=30.0 |
 | PEPEUSDT | breakout | 1 | 3.654 | 43% | compression=0.07, rr=3.0, volume_spike=1.8 |
 | ALGOUSDT | gen_1d04e67d | 1 | 1.357 | 41% |  |
 | EOSUSDT | gen_1d04e67d | 1 | 1.357 | 41% |  |
@@ -115,6 +121,7 @@ _Generato: 2026-06-24 09:51 UTC_
 | SANDUSDT | gen_1d04e67d | 1 | 1.357 | 41% |  |
 | SHIBUSDT | gen_1d04e67d | 1 | 1.357 | 41% |  |
 | TONUSDT | gen_1d04e67d | 1 | 1.357 | 41% |  |
+| MINAUSDT | mean_reversion | 1 | 1.265 | 36% | rsi_overbought=75.0, atr_mult_stop=1.2, rsi_oversold=25.0 |
 | BONKUSDT | gen_4250812b | 1 | 1.289 | 28% |  |
 | ENAUSDT | gen_4250812b | 1 | 1.289 | 28% |  |
 | ETCUSDT | gen_4250812b | 1 | 1.289 | 28% |  |
@@ -153,13 +160,15 @@ _Generato: 2026-06-24 09:51 UTC_
 | XLMUSDT | gen_f69f6631 | 1 | 1.408 | 25% |  |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-06-24 05:24 UTC · 378 coppie valutate, 6 passate in questo run_
+_aggiornato: 2026-06-24 09:57 UTC · 392 coppie valutate, 8 passate in questo run_
 
 | Coin | Strategia | PF | PnL OOS | Trade | Win |
 |---|---|---|---|---|---|
-| ORDIUSDT | trend_following | 2.732 | 461% | 199 | 53% |
-| PEPEUSDT | vwap_reversion | 1.994 | 136% | 220 | 50% |
-| PEPEUSDT | trend_following | 1.8 | 128% | 164 | 48% |
-| ORDIUSDT | grid_trading | 2.382 | 51% | 105 | 63% |
+| AAVEUSDT | trend_following | 2.399 | 1703% | 871 | 48% |
+| GALAUSDT | trend_following | 2.638 | 1672% | 779 | 51% |
+| CRVUSDT | vwap_reversion | 3.013 | 1388% | 1067 | 55% |
+| CRVUSDT | trend_following | 2.483 | 1236% | 776 | 51% |
+| AAVEUSDT | vwap_reversion | 2.626 | 1137% | 1062 | 54% |
+| GALAUSDT | vwap_reversion | 4.316 | 688% | 332 | 58% |
 | NEOUSDT | mean_reversion | 1.558 | 46% | 42 | 48% |
-| PEPEUSDT | breakout | 3.654 | 43% | 32 | 62% |
+| MINAUSDT | mean_reversion | 1.265 | 36% | 66 | 46% |
