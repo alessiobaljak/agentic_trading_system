@@ -4,8 +4,10 @@ name: strategy-discovery
 # shard: ogni job valida le candidate su una fetta dell'universo, poi `merge`
 # riunisce e aggiorna il registro. Copre l'INTERO universo (top 75, 4 anni).
 on:
-  schedule:
-    - cron: "0 2,14 * * *"      # ogni 12 ore (sfasato rispetto all'ottimizzatore)
+  # SCHEDULE DISABILITATO: i runner GitHub non ottengono dati reali (Binance 451,
+  # Bybit 403, OKX 429). La discovery va eseguita dove Binance e' raggiungibile (VPS).
+  # schedule:
+  #   - cron: "0 2,14 * * *"
   workflow_dispatch:
     inputs:
       top:

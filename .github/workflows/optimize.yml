@@ -5,15 +5,16 @@ name: strategy-optimizer
 # poi il job `merge` riunisce i risultati e aggiorna il registro UNA volta sola.
 # Così copriamo l'INTERO universo (top 75, 4 anni, max-combos 12) nel timeout.
 on:
-  schedule:
-    - cron: "0 */6 * * *"      # ogni 6 ore
+  # SCHEDULE DISABILITATO: i runner GitHub sono geo-bloccati/rate-limited (Binance
+  # 451, Bybit 403, OKX 429) e NON ottengono dati reali -> la validazione va fatta
+  # dove Binance e' raggiungibile (la VPS). Lasciato solo il trigger manuale.
+  # schedule:
+  #   - cron: "0 */6 * * *"
   workflow_dispatch:
     inputs:
       top:
         description: "Top-N future per volume (universo)"
         default: "80"
-  # NIENTE trigger-su-push: evita la contesa runner/shard col reset-optimizer.
-  # Gira a schedule (ogni 6h) o a mano (workflow_dispatch).
 
 env:
   NUM_SHARDS: "6"
