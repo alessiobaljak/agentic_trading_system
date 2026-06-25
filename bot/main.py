@@ -330,6 +330,9 @@ class TradingBot:
               f"DRY_RUN={settings.DRY_RUN}")
         self.reconcile_equity()
         self._load_adapt_state()
+        # esce dalla manutenzione: il bot e' di nuovo su -> il monitoraggio "offline"
+        # torna attivo da solo (vedi scripts/monitor.py).
+        self.fb.set_rtdb("/commands/maintenance", False)
         self.notifier.send(f"🟢 Bot avviato (DRY_RUN={settings.DRY_RUN})")
         it = 0
         while max_iterations is None or it < max_iterations:

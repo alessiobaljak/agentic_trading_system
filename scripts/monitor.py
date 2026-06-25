@@ -19,6 +19,13 @@ def main() -> None:
     fb = get_firebase()
     notifier = TelegramNotifier()
 
+    # manutenzione: se il bot e' fermo di proposito (rebuild GATE 1, deploy, ecc.)
+    # non sparare l'alert "offline" ogni 15 min. Il bot AZZERA questo flag da solo
+    # all'avvio, quindi il monitoraggio torna attivo per il live senza interventi.
+    if fb.get_rtdb("/commands/maintenance"):
+        print("[monitor] modalita' manutenzione attiva -> nessun alert (bot fermo apposta)")
+        return
+
     status = fb.get_rtdb("/bot_status") or {}
     heartbeat = status.get("heartbeat")
     now = time.time()
