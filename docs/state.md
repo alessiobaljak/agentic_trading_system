@@ -1,5 +1,5 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-25 12:33 UTC_
+_Generato: 2026-06-25 16:36 UTC_
 
 ## Bot
 - stato: **—** (🔴 offline)
