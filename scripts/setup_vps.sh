@@ -70,6 +70,8 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+# la validazione dura 30-90 min: senza questo un oneshot verrebbe ucciso a 90s
+TimeoutStartSec=infinity
 WorkingDirectory=$APP_DIR
 EnvironmentFile=$APP_DIR/.env
 Environment=PYTHONUNBUFFERED=1
