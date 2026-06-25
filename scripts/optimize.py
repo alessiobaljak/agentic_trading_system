@@ -206,8 +206,10 @@ def main() -> int:
     print(f"[optimize] {len(out)} coppie valutate, {len(summary_passed)} passate in QUESTO run.")
     print(f"[optimize] REGISTRO: {reg['coins_covered']}/{reg['universe_size']} crypto "
           f"({cov_pct:.0f}%) con strategia validata (>= {MIN_PASSES} pass). GATE 1 {gate_str}")
+    reg_pairs = decode_pairs(reg["pairs"])   # 'pairs' e' codificato (stringa) nel registro
     for k in reg["validated"]:
-        print(f"   ✅ {k}  passes={reg['pairs'][k]['pass_count']}  -> {reg['pairs'][k]['last_params']}")
+        rec = reg_pairs.get(k, {})
+        print(f"   ✅ {k}  passes={rec.get('pass_count')}  -> {rec.get('last_params')}")
     print("=" * 60)
 
     # --- report automatico su Telegram ---
