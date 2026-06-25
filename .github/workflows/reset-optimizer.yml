@@ -1,13 +1,13 @@
 name: reset-optimizer
 
-# ONE-SHOT: azzera il registro e ricostruisce da zero sull'INTERO universo (top 75,
-# 4 anni), parallelizzato in shard. Il merge fa il reset e applica i risultati.
-# Parte col push su questo file (o a mano). L'optimizer regolare continua ogni 6h.
+# DISATTIVATO SU GITHUB. I runner GitHub sono geo-bloccati/rate-limited (Binance
+# 451, Bybit 403, OKX 429): qui NON ci sono dati reali, e con --reset-registry
+# questo workflow AZZEREREBBE il registro buono (validato sul VPS) scrivendo vuoto.
+# La validazione/rebuild va fatta SUL VPS (dove Binance e' raggiungibile):
+#   sudo systemctl start trading-optimizer.service
+# Lasciato solo il trigger manuale come scorciatoia di emergenza (da NON usare qui).
 on:
   workflow_dispatch: {}
-  push:
-    branches: ["claude/brave-albattani-1b12fv"]
-    paths: [".github/workflows/reset-optimizer.yml"]
 
 env:
   NUM_SHARDS: "8"
