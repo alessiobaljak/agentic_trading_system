@@ -85,10 +85,10 @@ ExecStart=$APP_DIR/.venv/bin/python -m scripts.discover_strategies --top 80 --ge
 EOF
 cat > /etc/systemd/system/trading-optimizer.timer <<EOF
 [Unit]
-Description=GATE 1 validazione notturna (dati reali Binance) - accumula validazioni
+Description=GATE 1 validazione ogni 8h (dati reali Binance) - accumula validazioni
 
 [Timer]
-OnCalendar=*-*-* 03:00:00
+OnCalendar=*-*-* 00,08,16:00:00
 Persistent=true
 RandomizedDelaySec=600
 
