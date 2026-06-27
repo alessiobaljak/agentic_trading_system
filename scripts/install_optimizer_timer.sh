@@ -27,6 +27,7 @@ EnvironmentFile=$APP_DIR/.env
 Environment=PYTHONUNBUFFERED=1
 Environment=BACKTEST_ALLOW_SYNTHETIC=false
 Environment=OPTIMIZER_MIN_PASSES=3
+Environment=OPTIMIZER_MIN_HISTORY=17520
 # priorita' bassa: non deve mai rubare CPU/IO al bot live
 Nice=15
 IOSchedulingClass=idle
