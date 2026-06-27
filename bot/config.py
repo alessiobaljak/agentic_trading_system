@@ -138,6 +138,13 @@ class Settings:
     GATE_MIN_TOTAL_RETURN: float = float(os.getenv("GATE_MIN_TOTAL_RETURN", "0.15"))
     GATE_CONSISTENCY_FRACTION: float = float(os.getenv("GATE_CONSISTENCY_FRACTION", "1.0"))
 
+    # ---- Selezione per il PAPER/LIVE: robustezza minima ----
+    # Una coppia (coin, strategia) e' tradabile SOLO se la sua STRATEGIA e' validata
+    # su >= MIN_COINS_PER_STRATEGY coin distinte (filtra i flukes a coin singola, che
+    # sono i piu' a rischio overfit). 3 = "solida+robusta" nel dashboard. 1 = nessun
+    # filtro (trada tutte le validate).
+    MIN_COINS_PER_STRATEGY: int = int(os.getenv("MIN_COINS_PER_STRATEGY", "3"))
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

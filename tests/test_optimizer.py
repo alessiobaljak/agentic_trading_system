@@ -38,7 +38,9 @@ def test_walkforward_runs_and_validates_oos():
         assert isinstance(r.passed, bool)
 
 
-def test_adaptation_loads_optimized_params():
+def test_adaptation_loads_optimized_params(monkeypatch):
+    from bot.config import settings as _s
+    monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 1)  # qui non testiamo il filtro robustezza
     fb = FirebaseClient()
     fb.set_doc("strategy_params", "current", {
         "entries": {
@@ -58,9 +60,11 @@ def test_adaptation_loads_optimized_params():
     assert eng.is_enabled("BTCUSDT", "mean_reversion") is False
 
 
-def test_registry_accumulates_and_gates():
+def test_registry_accumulates_and_gates(monkeypatch):
     from scripts.optimize import update_registry, MIN_PASSES
     from bot.core.firebase_client import FirebaseClient
+    from bot.config import settings as _s
+    monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 1)  # qui non testiamo il filtro robustezza
     fb = FirebaseClient()
     out = {
         "SOLUSDT|breakout": {"symbol": "SOLUSDT", "strategy": "breakout",

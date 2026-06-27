@@ -65,23 +65,38 @@ class AdaptationEngine:
     # ------------------------------------------------------------------ #
     # Parametri ottimizzati per-asset (walk-forward, job autonomo)        #
     # ------------------------------------------------------------------ #
+    @staticmethod
+    def _robust_only(keys) -> set:
+        """Tiene solo le coppie 'SYMBOL|strategia' la cui STRATEGIA e' validata su
+        >= MIN_COINS_PER_STRATEGY coin distinte (filtra i flukes a coin singola).
+        Soglia <= 1 -> nessun filtro."""
+        keys = [k for k in keys if "|" in k]
+        n = settings.MIN_COINS_PER_STRATEGY
+        if n <= 1:
+            return set(keys)
+        coins_per_strat: dict[str, set] = {}
+        for k in keys:
+            sym, strat = k.split("|", 1)
+            coins_per_strat.setdefault(strat, set()).add(sym)
+        robust = {s for s, c in coins_per_strat.items() if len(c) >= n}
+        return {k for k in keys if k.split("|", 1)[1] in robust}
+
     def load_params(self) -> None:
         # preferisci il REGISTRO validato (coppie robuste, passate piu' volte);
         # se assente, ricadi sull'ultimo run (strategy_params/current).
+        # In entrambi i casi tradiamo SOLO strategie robuste (>= N coin distinte).
         reg = self.fb.get_doc("strategy_registry", "validated") or {}
         validated = reg.get("validated") or []
         pairs = decode_pairs(reg.get("pairs"))
         if validated:
-            self._passed = set(validated)
-            self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in validated}
+            self._passed = self._robust_only(validated)
+            self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in self._passed}
             self._has_opt_data = True
             return
         doc = self.fb.get_doc("strategy_params", "current") or {}
         entries = doc.get("entries", {}) or {}
-        self._params = {}
-        self._passed = set(doc.get("passed", []) or [])
-        for key, e in entries.items():
-            self._params[key] = e.get("params", {}) or {}
+        self._passed = self._robust_only(doc.get("passed", []) or [])
+        self._params = {k: (entries.get(k, {}).get("params", {}) or {}) for k in self._passed}
         self._has_opt_data = bool(entries)
 
     def params_for(self, symbol: str) -> dict[str, dict]:

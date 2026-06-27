@@ -138,7 +138,29 @@ def test_merge_preserves_base_pairs_and_recomputes_coverage():
     assert reg["coverage"] == round(1 / 10, 3)                       # ricalcolata, non stantia
 
 
-def test_adaptation_loads_and_enables_generated():
+def test_robustness_filter_excludes_single_coin_strategies(monkeypatch):
+    """Col filtro a 3: una strategia validata su <3 coin NON e' tradabile; su >=3 si'."""
+    from bot.config import settings as _s
+    monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 3)
+    fb = FirebaseClient()
+    # 'breakout' validata su 3 coin (robusta) -> abilitata
+    # 'mean_reversion' validata su 2 coin (sotto soglia) -> NON abilitata
+    validated = ["BTCUSDT|breakout", "ETHUSDT|breakout", "SOLUSDT|breakout",
+                 "BTCUSDT|mean_reversion", "ETHUSDT|mean_reversion"]
+    fb.set_doc("strategy_registry", "validated", {
+        "validated": validated,
+        "pairs": {k: {"pass_count": 3, "last_params": {}} for k in validated},
+    })
+    eng = AdaptationEngine(fb)
+    assert eng.is_enabled("BTCUSDT", "breakout") is True          # 3 coin -> robusta
+    assert eng.is_enabled("SOLUSDT", "breakout") is True
+    assert eng.is_enabled("BTCUSDT", "mean_reversion") is False   # 2 coin -> esclusa
+    assert eng.is_enabled("ETHUSDT", "mean_reversion") is False
+
+
+def test_adaptation_loads_and_enables_generated(monkeypatch):
+    from bot.config import settings as _s
+    monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 1)  # qui non testiamo il filtro robustezza
     fb = FirebaseClient()
     spec = _rsi_spec()
     gid = spec["id"]
