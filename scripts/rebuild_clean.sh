@@ -21,6 +21,11 @@ export BACKTEST_ALLOW_SYNTHETIC=false
 export OPTIMIZER_MIN_PASSES=3
 export OPTIMIZER_MIN_HISTORY="${OPTIMIZER_MIN_HISTORY:-17520}"   # ~2 anni di candele 1h
 
+# evita run concorrenti: ferma il timer (e un eventuale run in corso) durante la
+# ricostruzione, e RIATTIVA il timer all'uscita (anche se lo script fallisce).
+systemctl stop trading-optimizer.timer trading-optimizer.service 2>/dev/null || true
+trap 'systemctl start trading-optimizer.timer 2>/dev/null || true; echo "[rebuild] timer riattivato"' EXIT
+
 echo "[rebuild] min_history=$OPTIMIZER_MIN_HISTORY · $N passate · inizio $(date -u)"
 for i in $(seq 1 "$N"); do
   RESET=""
