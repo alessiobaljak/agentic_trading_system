@@ -332,7 +332,7 @@ export default function OptimizedStrategies() {
 
                   {/* GATE 1: profitto economico simulando 10k di equity di partenza */}
                   {c.validatedNow && c.coins.length > 0 && (
-                    <div style={{
+                    <div title="Rendimento di BACKTEST su $10k fissi per trade, SENZA leva e non composto: serve a confrontare/classificare le strategie, NON e' una previsione del PnL live (che usa leva e sizing del rischio diversi)." style={{
                       marginTop: 8, padding: '6px 8px', borderRadius: 6,
                       background: c.simProfit10k >= 0 ? '#11210f' : '#27120f',
                       border: `1px solid ${c.simProfit10k >= 0 ? '#214d1d' : '#5a2620'}`,
@@ -342,7 +342,7 @@ export default function OptimizedStrategies() {
                         <div style={{ fontSize: 14, fontWeight: 700, color: c.simProfit10k >= 0 ? '#3fb950' : '#f85149' }}>
                           {fmtMoney(c.simProfit10k)}
                         </div>
-                        <div style={{ fontSize: 9, color: '#7b8696' }}>GATE 1 su $10k · media/coin</div>
+                        <div style={{ fontSize: 9, color: '#7b8696' }}>backtest su $10k · media/coin · no leva</div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
                         <div style={{ fontSize: 11, fontWeight: 600, color: '#8fd18f' }}>{fmtMoney(c.bestProfit10k)}</div>

@@ -108,7 +108,12 @@ class StrategyStats:
     def profit_factor(self) -> float:
         gains = sum(t.pnl_pct for t in self.trades if t.pnl_pct > 0)
         losses = -sum(t.pnl_pct for t in self.trades if t.pnl_pct < 0)
-        return gains / losses if losses > 0 else (gains if gains else 0.0)
+        if losses > 0:
+            return gains / losses
+        # nessuna perdita: PF "infinito" -> cap alto (JSON-safe), cosi' una strategia
+        # senza perdite NON viene bocciata dal gate (prima ritornava 'gains', spesso
+        # < soglia -> bocciata pur essendo perfetta).
+        return 999.0 if gains > 0 else 0.0
 
     def liquidations_at_leverage(self) -> dict[int, int]:
         """Quante volte saresti stato liquidato a ciascun livello di leva."""

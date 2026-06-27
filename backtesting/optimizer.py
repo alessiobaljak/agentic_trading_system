@@ -120,13 +120,20 @@ class WalkForwardOptimizer:
                     sc = self._score(st, self.min_trades_train)
                     if sc > best_score:
                         best_score, best_combo = sc, combo
+                # se NESSUNA combo ha abbastanza trade sul train (score sentinella),
+                # salta la finestra: non applichiamo parametri non validati all'OOS.
+                if best_score < -1e8:
+                    continue
                 # applica i migliori sul TEST (out-of-sample)
                 test_c = candles[sa:sb]
                 test_f = frame.iloc[sa:sb].reset_index(drop=True)
                 st_oos = self.bt.run_strategy(cls(best_combo), symbol, test_c, frame=test_f,
                                               context_by_ts=context_by_ts)
                 oos.trades.extend(st_oos.trades)
-                window_pnls.append(sum(t.pnl_pct for t in st_oos.trades))
+                # consistenza: conta SOLO le finestre che hanno prodotto trade. Una
+                # finestra senza segnali non e' "una perdita", e' "nessun dato".
+                if st_oos.trades:
+                    window_pnls.append(sum(t.pnl_pct for t in st_oos.trades))
                 history.append(best_combo)
 
             pf = oos.profit_factor()

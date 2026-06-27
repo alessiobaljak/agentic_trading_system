@@ -81,7 +81,10 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         test_f = frame.iloc[sa:sb].reset_index(drop=True)
         st = opt.bt.run_strategy(GeneratedStrategy(spec), symbol, test_c, frame=test_f)
         oos.trades.extend(st.trades)
-        window_pnls.append(sum(t.pnl_pct for t in st.trades))
+        # consistenza: solo le finestre con trade (una finestra senza segnali non e'
+        # una perdita -> non deve far fallire il gate).
+        if st.trades:
+            window_pnls.append(sum(t.pnl_pct for t in st.trades))
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()
     passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl)
