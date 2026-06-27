@@ -302,12 +302,15 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     )
     validated_coins = {pairs[k]["symbol"] for k in validated}
 
-    # universo SCANSIONATO in questo run (denominatore della percentuale)
+    # COPERTURA = tutte le coin che hanno almeno una strategia validata (coerente
+    # col dashboard), NON solo quelle che capitano nel top-80 di oggi. Denominatore:
+    # l'universo scansionato in questo run (o le coin validate, se piu' grande).
     current_coins = sorted({e["symbol"] for e in out.values()})
-    covered = [c for c in current_coins if c in validated_coins]
-    coverage = (len(covered) / len(current_coins)) if current_coins else 0.0
+    covered = sorted(validated_coins)
+    universe = max(len(current_coins), len(covered)) or 1
+    coverage = len(covered) / universe
     ready = (coverage >= READY_FRACTION
-             and len(current_coins) >= MIN_UNIVERSE
+             and universe >= MIN_UNIVERSE
              and len(covered) >= MIN_COVERED)
 
     registry = {
@@ -316,7 +319,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         "validated": validated,
         "coins_covered": len(covered),
         "coins": covered,
-        "universe_size": len(current_coins),
+        "universe_size": universe,
         "universe_coins": current_coins,
         "coverage": round(coverage, 3),
         "ready": ready,

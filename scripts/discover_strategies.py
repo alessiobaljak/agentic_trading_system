@@ -140,8 +140,17 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
         if r.get("pass_count", 0) >= MIN_PASSES
         and (now - r.get("last_seen_at", 0)) < FRESH_DAYS * 86400
     )
+    # tiene COPERTURA/coins coerenti col nuovo set validato (incluse le generate),
+    # cosi' Telegram e dashboard mostrano gli stessi numeri. Il denominatore
+    # (universe_size) resta quello di optimize.
+    validated_coins = sorted({pairs[k].get("symbol") or k.split("|", 1)[0] for k in validated})
+    universe = max(doc.get("universe_size", 0) or 0, len(validated_coins)) or 1
     doc["pairs"] = encode_pairs(pairs)
     doc["validated"] = validated
+    doc["coins_covered"] = len(validated_coins)
+    doc["coins"] = validated_coins
+    doc["universe_size"] = universe
+    doc["coverage"] = round(len(validated_coins) / universe, 3)
     doc["updated_at"] = now
     fb.set_doc("strategy_registry", "validated", doc)
     return validated

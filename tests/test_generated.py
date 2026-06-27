@@ -115,18 +115,27 @@ def test_merge_into_registry_only_passed_and_accumulates():
     assert "BTCUSDT|gen_aaa" in reg["validated"]
 
 
-def test_merge_preserves_base_pairs_and_gate1():
+def test_merge_preserves_base_pairs_and_recomputes_coverage():
+    import time
     from scripts.discover_strategies import merge_into_registry
     fb = FirebaseClient()
-    # coppia BASE (senza flag generated) + campi GATE 1: non vanno toccati
+    now = time.time()
+    # coppia BASE (senza flag generated) FRESCA e validata (pass>=3): va preservata,
+    # e la copertura dev'essere RICALCOLATA sul set validato (Telegram e dashboard
+    # leggono lo stesso campo: non puo' restare un valore stantio).
     fb.set_doc("strategy_registry", "validated", {
-        "pairs": {"ETHUSDT|trend_following": {"pass_count": 5, "last_seen_at": 0}},
-        "validated": [], "coverage": 0.67, "ready": True,
+        "pairs": {"ETHUSDT|trend_following": {
+            "pass_count": 5, "last_seen_at": now,
+            "symbol": "ETHUSDT", "strategy": "trend_following"}},
+        "validated": ["ETHUSDT|trend_following"],
+        "universe_size": 10, "coverage": 0.0, "ready": False,
     })
     merge_into_registry(fb, {}, passed_now=[])
     reg = fb.get_doc("strategy_registry", "validated")
-    assert "ETHUSDT|trend_following" in decode_pairs(reg["pairs"])
-    assert reg["coverage"] == 0.67 and reg["ready"] is True
+    assert "ETHUSDT|trend_following" in decode_pairs(reg["pairs"])   # base preservata
+    assert "ETHUSDT|trend_following" in reg["validated"]             # resta validata
+    assert reg["coins_covered"] == 1                                 # 1 coin validata
+    assert reg["coverage"] == round(1 / 10, 3)                       # ricalcolata, non stantia
 
 
 def test_adaptation_loads_and_enables_generated():
