@@ -1,5 +1,5 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-28 14:16 UTC_
+_Generato: 2026-06-28 17:36 UTC_
 
 ## Bot
 - stato: **—** (🔴 offline)
@@ -14,11 +14,11 @@ _Generato: 2026-06-28 14:16 UTC_
 - asset valutati: 67 · segnali: 9 · miglior segnale WLDUSDT gen_41456656 (conf. 60.0/soglia 30)
 
 ## GATE 1 — Validazione strategie
-- stato: **🔄 in corso**
-- copertura universo: **24/41 crypto (58%)** · obiettivo ≥ 60%
-- coppie validate (>= 3 pass OOS): **48**
-- universo scansionato: 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ADAUSDT, AGLDUSDT, ALGOUSDT, AVAXUSDT, BCHUSDT, BELUSDT, BNBUSDT, BTCUSDT, DOGEUSDT, DOTUSDT, ENAUSDT, ETHUSDT, FETUSDT, FILUSDT, HOTUSDT, IDUSDT, INJUSDT, JTOUSDT, LINKUSDT, LTCUSDT, NEARUSDT, NFPUSDT, ONDOUSDT, PORTALUSDT, POWRUSDT, SNXUSDT, SOLUSDT, SUIUSDT, TAOUSDT, TIAUSDT, TRXUSDT, UNIUSDT, WIFUSDT, WLDUSDT, XLMUSDT, XMRUSDT, XRPUSDT, ZECUSDT
-- aggiornato: 2026-06-28 12:30 UTC
+- stato: **✅ SUPERATO — pronti per il paper trading**
+- copertura universo: **26/38 crypto (68%)** · obiettivo ≥ 60%
+- coppie validate (>= 3 pass OOS): **50**
+- universo scansionato: 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ADAUSDT, AGLDUSDT, AVAXUSDT, BCHUSDT, BELUSDT, BNBUSDT, BTCUSDT, DOGEUSDT, DOTUSDT, ENAUSDT, ETHUSDT, FETUSDT, FILUSDT, HOTUSDT, INJUSDT, JTOUSDT, LINKUSDT, LTCUSDT, MANTAUSDT, NEARUSDT, ONDOUSDT, POWRUSDT, SNXUSDT, SOLUSDT, SUIUSDT, TAOUSDT, TIAUSDT, TRXUSDT, UNIUSDT, WIFUSDT, WLDUSDT, XLMUSDT, XMRUSDT, XRPUSDT, ZECUSDT
+- aggiornato: 2026-06-28 17:04 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
@@ -42,22 +42,24 @@ _Generato: 2026-06-28 14:16 UTC_
 | NFPUSDT | gen_38823bf0 | 4 | 1.762 | 116% |  |
 | XMRUSDT | gen_a90c9d28 | 4 | 1.281 | 112% |  |
 | HOTUSDT | gen_38823bf0 | 4 | 1.437 | 109% |  |
+| HOTUSDT | mean_reversion | 5 | 1.973 | 103% | rsi_oversold=25.0, rsi_overbought=80.0, atr_mult_stop=1.8 |
+| BELUSDT | mean_reversion | 4 | 1.632 | 99% | rsi_oversold=25.0, rsi_overbought=75.0, atr_mult_stop=1.2 |
 | XMRUSDT | gen_38823bf0 | 4 | 1.877 | 99% |  |
 | AVAXUSDT | gen_d5877438 | 3 | 1.265 | 97% |  |
-| BELUSDT | mean_reversion | 3 | 1.449 | 88% | rsi_oversold=20.0, rsi_overbought=75.0, atr_mult_stop=1.8 |
+| INJUSDT | mean_reversion | 5 | 1.633 | 94% | rsi_oversold=30.0, rsi_overbought=75.0, atr_mult_stop=1.2 |
 | NEARUSDT | gen_310b9829 | 4 | 2.427 | 80% |  |
+| AGLDUSDT | mean_reversion | 3 | 1.801 | 79% | rsi_oversold=25.0, rsi_overbought=70.0, atr_mult_stop=1.2 |
 | INJUSDT | gen_00a9343b | 3 | 1.915 | 73% |  |
-| HOTUSDT | mean_reversion | 4 | 1.547 | 69% | rsi_oversold=25.0, rsi_overbought=75.0, atr_mult_stop=1.8 |
 | WLDUSDT | gen_00a9343b | 3 | 1.825 | 66% |  |
 | PORTALUSDT | gen_c4c2e166 | 3 | 1.527 | 47% |  |
-| INJUSDT | mean_reversion | 4 | 1.292 | 45% | rsi_oversold=30.0, rsi_overbought=80.0, atr_mult_stop=1.0 |
 | FETUSDT | gen_310b9829 | 4 | 1.854 | 45% |  |
 | POWRUSDT | gen_310b9829 | 4 | 2.821 | 40% |  |
 | LINKUSDT | gen_a10c8df2 | 4 | 3.68 | 40% |  |
 | AVAXUSDT | gen_310b9829 | 4 | 1.746 | 38% |  |
 | LTCUSDT | gen_c4c2e166 | 3 | 1.434 | 36% |  |
-| ENAUSDT | liquidity_grab | 4 | 1.918 | 36% | volume_spike=2.0, atr_mult_stop=1.0 |
+| ENAUSDT | liquidity_grab | 5 | 1.918 | 36% | volume_spike=2.0, atr_mult_stop=1.0 |
 | LINKUSDT | breakout | 3 | 1.355 | 35% | compression=0.07, volume_spike=2.5, rr=1.5 |
+| SUIUSDT | mean_reversion | 3 | 1.37 | 33% | rsi_oversold=20.0, rsi_overbought=70.0, atr_mult_stop=1.2 |
 | PORTALUSDT | gen_3fe711a5 | 3 | 3.94 | 33% |  |
 | BCHUSDT | gen_0cc5c300 | 3 | 1.481 | 32% |  |
 | DOGEUSDT | gen_310b9829 | 4 | 1.635 | 30% |  |
@@ -73,17 +75,14 @@ _Generato: 2026-06-28 14:16 UTC_
 | XMRUSDT | gen_1aed5fa6 | 3 | 2.151 | 17% |  |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-06-28 11:41 UTC · 287 coppie valutate, 10 passate in questo run_
+_aggiornato: 2026-06-28 17:04 UTC · 266 coppie valutate, 7 passate in questo run_
 
 | Coin | Strategia | PF | PnL OOS | Trade | Win |
 |---|---|---|---|---|---|
-| XMRUSDT | grid_trading | 1.259 | 233% | 3648 | 73% |
-| AGLDUSDT | mean_reversion | 2.406 | 107% | 44 | 55% |
-| BELUSDT | mean_reversion | 1.449 | 88% | 66 | 53% |
-| HOTUSDT | mean_reversion | 1.547 | 69% | 62 | 55% |
-| ENAUSDT | breakout | 1.447 | 66% | 184 | 56% |
-| ALGOUSDT | mean_reversion | 1.446 | 47% | 60 | 47% |
-| SUIUSDT | mean_reversion | 1.477 | 46% | 47 | 49% |
-| INJUSDT | mean_reversion | 1.292 | 45% | 65 | 54% |
-| 1000PEPEUSDT | breakout | 1.265 | 44% | 216 | 53% |
+| HOTUSDT | mean_reversion | 1.973 | 103% | 51 | 61% |
+| BELUSDT | mean_reversion | 1.632 | 99% | 60 | 50% |
+| INJUSDT | mean_reversion | 1.633 | 94% | 67 | 57% |
+| AGLDUSDT | mean_reversion | 1.801 | 79% | 47 | 47% |
+| SUIUSDT | breakout | 1.331 | 67% | 256 | 47% |
 | ENAUSDT | liquidity_grab | 1.918 | 36% | 58 | 71% |
+| SUIUSDT | mean_reversion | 1.37 | 33% | 39 | 49% |
