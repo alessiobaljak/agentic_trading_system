@@ -1,20 +1,22 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-29 21:44 UTC_
+_Generato: 2026-06-29 23:16 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: high_uncertainty
 - DRY_RUN: True
 - equity: **$9,977.49**
-- ultimo heartbeat: 2026-06-29 21:44 UTC
+- ultimo heartbeat: 2026-06-29 23:16 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-06-29 21:36 UTC)
-- motivo: nessun segnale dalle strategie attive in questo regime
-- asset valutati: 70 · segnali: 0
+- esito: **⚪ FLAT** (2026-06-29 23:07 UTC)
+- motivo: ADAUSDT già aperto
+- asset valutati: 70 · segnali: 1 · miglior segnale ADAUSDT gen_e87281e1 (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- SUIUSDT: long qty=7600.097101901375 @ 0.7059 uPnL=-6.43857426181785
+- ADAUSDT: long qty=56799.25210198244 @ 0.1462 uPnL=-5.679925210197618
+- ETHUSDT: long qty=5.831869701231566 @ 1613.29 uPnL=-9.49672509426211
+- SUIUSDT: long qty=7600.097101901375 @ 0.7059 uPnL=-38.76049521969696
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
