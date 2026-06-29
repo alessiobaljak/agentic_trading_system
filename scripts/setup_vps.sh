@@ -81,8 +81,8 @@ Environment=OPTIMIZER_MIN_HISTORY=17520
 # priorita' bassa: non deve mai rubare CPU/IO al bot live
 Nice=15
 IOSchedulingClass=idle
-ExecStart=$APP_DIR/.venv/bin/python -m scripts.optimize --top 80 --windows 3 --max-combos 12 --start 2022-01-01
-ExecStart=$APP_DIR/.venv/bin/python -m scripts.discover_strategies --top 80 --generate 40 --windows 3 --start 2022-01-01
+ExecStart=$APP_DIR/.venv/bin/python -m scripts.optimize --top 400 --windows 3 --max-combos 12 --start 2022-01-01
+ExecStart=$APP_DIR/.venv/bin/python -m scripts.discover_strategies --top 400 --generate 40 --windows 3 --start 2022-01-01
 EOF
 cat > /etc/systemd/system/trading-optimizer.timer <<EOF
 [Unit]
