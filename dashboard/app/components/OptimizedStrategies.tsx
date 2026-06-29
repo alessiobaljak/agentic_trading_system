@@ -231,7 +231,12 @@ export default function OptimizedStrategies() {
       .sort((a, b) => (prod[b.strategy].pnl ?? 0) - (prod[a.strategy].pnl ?? 0));
   }, [cards, prod, specsDoc]);
 
-  const shown = view === 'prod' ? prodCards : cards;
+  // Vista "validate": mostra SOLO le strategie robuste/solide (validate su >= 3 coin
+  // distinte = quelle che il bot opera davvero). Le altre (1-2 coin) non si mostrano.
+  const MIN_COINS_ROBUST = 3;
+  const shown = view === 'prod'
+    ? prodCards
+    : cards.filter((c) => c.coins.length >= MIN_COINS_ROBUST);
 
   const cov = reg?.coverage != null ? Math.round(reg.coverage * 100) : null;
   const btn = (active: boolean): React.CSSProperties => ({
@@ -250,13 +255,13 @@ export default function OptimizedStrategies() {
         <h2 style={{ margin: 0 }}>Catalogo strategie</h2>
         <div style={{ display: 'flex', gap: 6 }}>
           <button style={btn(view === 'prod')} onClick={() => setView('prod')}>In produzione</button>
-          <button style={btn(view === 'all')} onClick={() => setView('all')}>Tutte le validate</button>
+          <button style={btn(view === 'all')} onClick={() => setView('all')}>Robuste (operate)</button>
         </div>
       </div>
       <p className="subtitle">
         {view === 'prod'
           ? 'Solo strategie che hanno tradato in paper · grafico = equity curve reale'
-          : 'Tutte le coppie validate dal GATE 1'}
+          : `Solo strategie robuste (validate su ≥ ${MIN_COINS_ROBUST} coin, 3 pass) — quelle operate dal bot`}
         {cov != null ? ` · copertura ${reg?.coins_covered}/${reg?.universe_size} (${cov}%)` : ''}
       </p>
       {!loaded ? (
@@ -265,7 +270,7 @@ export default function OptimizedStrategies() {
         <p className="muted">
           {view === 'prod'
             ? 'Nessuna strategia ancora in produzione: i primi trade paper compariranno qui.'
-            : 'Nessuna strategia validata ancora.'}
+            : `Nessuna strategia robusta ancora (serve validazione su ≥ ${MIN_COINS_ROBUST} coin).`}
         </p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
