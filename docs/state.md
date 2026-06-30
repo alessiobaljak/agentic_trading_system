@@ -1,21 +1,22 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-30 10:01 UTC_
+_Generato: 2026-06-30 12:24 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: high_uncertainty
+- regime: bear_trending
 - DRY_RUN: True
-- equity: **$10,042.07**
-- ultimo heartbeat: 2026-06-30 10:01 UTC
+- equity: **$10,073.64**
+- ultimo heartbeat: 2026-06-30 12:24 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-06-30 09:53 UTC)
-- motivo: nessun segnale valido sopra soglia
-- asset valutati: 70 · segnali: 0
+- esito: **⚪ FLAT** (2026-06-30 12:11 UTC)
+- motivo: parita' backtest: 1 segnali validi aperti
+- asset valutati: 68 · segnali: 1 · miglior segnale SUIUSDT breakout (conf. 65.0/soglia 30)
 
 ## Posizioni aperte
-- ENAUSDT: short qty=27527.61575288552 @ 0.07296 uPnL=5.59223514019867
-- INJUSDT: short qty=434.15798645277283 @ 4.626 uPnL=-0.8214920340665096
+- ENAUSDT: short qty=27527.61575288552 @ 0.07296 uPnL=41.37400647658667
+- INJUSDT: short qty=434.15798645277283 @ 4.626 uPnL=32.561848983958036
+- SUIUSDT: short qty=2919.63198914163 @ 0.6879 uPnL=19.37511582474209
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
