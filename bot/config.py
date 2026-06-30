@@ -145,6 +145,13 @@ class Settings:
     # filtro (trada tutte le validate).
     MIN_COINS_PER_STRATEGY: int = int(os.getenv("MIN_COINS_PER_STRATEGY", "3"))
 
+    # ---- Parità col backtest (fase di validazione paper) ----
+    # Quando True, il bot DISATTIVA i controlli che il backtest non modella (cooldown
+    # post-stop, panchina strategia, circuit breaker giornaliero) così il paper
+    # riproduce le stesse condizioni del GATE 1 e il confronto e' valido. Per il
+    # trading con soldi VERI va rimesso a False (controlli di sicurezza riattivi).
+    BACKTEST_PARITY: bool = os.getenv("BACKTEST_PARITY", "false").lower() == "true"
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

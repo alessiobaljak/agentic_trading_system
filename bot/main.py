@@ -206,8 +206,10 @@ class TradingBot:
         self.refresh_selected_snapshots()
         memory = self._load_memory()
         recent = self.logger.recent(20)
-        # strategie temporaneamente in panchina (adattamento real-time)
-        disabled = {s for s, until in self._strat_cooldown.items() if now < until}
+        # strategie temporaneamente in panchina (adattamento real-time).
+        # In parita' col backtest il bench e' disattivato (il bt non lo ha).
+        disabled = set() if settings.BACKTEST_PARITY else {
+            s for s, until in self._strat_cooldown.items() if now < until}
         decision = self.orchestrator.decide(self.selected, self.regime, memory, recent,
                                             disabled=disabled)
         if decision is None:
@@ -218,7 +220,7 @@ class TradingBot:
                 {"outcome": "flat", "reason": f"{decision.asset} già aperto"})
             return
         cd_until = self._coin_cooldown.get(decision.asset, 0.0)
-        if now < cd_until:
+        if not settings.BACKTEST_PARITY and now < cd_until:
             self._publish_decision_status(
                 {"outcome": "flat",
                  "reason": f"cooldown su {decision.asset} dopo stop ({int((cd_until - now) / 60)}m)"})

@@ -47,6 +47,9 @@ class CircuitBreakers:
     # ---- valutazione ----
     def blocking_reason(self, now_ts: Optional[float] = None) -> Optional[str]:
         """Ritorna il motivo del blocco se un breaker è attivo, altrimenti None."""
+        from bot.config import settings
+        if settings.BACKTEST_PARITY:
+            return None  # parita' col backtest: nessun circuit breaker (il bt non li ha)
         self._maybe_roll_day()
         now = now_ts or time.time()
 
