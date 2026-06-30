@@ -1,27 +1,24 @@
 # Stato sistema (snapshot)
-_Generato: 2026-06-30 20:19 UTC_
+_Generato: 2026-06-30 23:38 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: bear_trending
+- regime: high_uncertainty
 - DRY_RUN: True
-- equity: **$10,114.69**
-- ultimo heartbeat: 2026-06-30 20:19 UTC
+- equity: **$10,012.16**
+- ultimo heartbeat: 2026-06-30 23:38 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-06-30 20:15 UTC)
+- esito: **⚪ FLAT** (2026-06-30 23:33 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 67 · segnali: 0
-
-## Posizioni aperte
-- RIFUSDT: short qty=20208.13920302354 @ 0.08396 uPnL=-69.11183607434036
+- asset valutati: 68 · segnali: 0
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
-- copertura universo: **149/163 crypto (91%)** · obiettivo ≥ 60%
-- coppie validate (>= 3 pass OOS): **584**
-- universo scansionato: 1000BONKUSDT, 1000FLOKIUSDT, 1000LUNCUSDT, 1000PEPEUSDT, 1000RATSUSDT, 1000SATSUSDT, 1000SHIBUSDT, 1000XECUSDT, AAVEUSDT, ACEUSDT, ACHUSDT, ADAUSDT, AEVOUSDT, AGLDUSDT, ALGOUSDT, ALICEUSDT, ALTUSDT, APEUSDT, API3USDT, APTUSDT, ARBUSDT, ARKMUSDT, ARKUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXLUSDT, AXSUSDT, BATUSDT, BBUSDT, BCHUSDT, BEAMXUSDT, BELUSDT, BICOUSDT, BIGTIMEUSDT, BLURUSDT, BNBUSDT, BOMEUSDT, BSVUSDT, BTCDOMUSDT, BTCUSDT, CAKEUSDT, CELOUSDT, CFXUSDT, CHZUSDT, COMPUSDT, CRVUSDT, CYBERUSDT, DASHUSDT, DODOXUSDT, DOGEUSDT, DOTUSDT, DUSKUSDT, DYDXUSDT, DYMUSDT, EDUUSDT, EGLDUSDT, ENAUSDT, ENJUSDT, ENSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FETUSDT, FILUSDT, GALAUSDT, GASUSDT, GLMUSDT, GMTUSDT, GRTUSDT, HBARUSDT, HFTUSDT, HOTUSDT, ICPUSDT, ICXUSDT, IDUSDT, IMXUSDT, INJUSDT, IOTAUSDT, IOUSDT, JASMYUSDT, JTOUSDT, JUPUSDT, KASUSDT, KAVAUSDT, KSMUSDT, LDOUSDT, LINKUSDT, LISTAUSDT, LPTUSDT, LTCUSDT, MAGICUSDT, MANAUSDT, MANTAUSDT, MEMEUSDT, MOVRUSDT, MTLUSDT, NEARUSDT, NEOUSDT, NFPUSDT, NMRUSDT, NOTUSDT, ONDOUSDT, ONGUSDT, ONTUSDT, OPUSDT, ORDIUSDT, PENDLEUSDT, PEOPLEUSDT, PIXELUSDT, POLYXUSDT, PORTALUSDT, POWRUSDT, PYTHUSDT, QNTUSDT, QTUMUSDT, RIFUSDT, RONINUSDT, ROSEUSDT, RSRUSDT, RUNEUSDT, RVNUSDT, SAGAUSDT, SANDUSDT, SEIUSDT, SFPUSDT, SKLUSDT, SNXUSDT, SOLUSDT, SPELLUSDT, STEEMUSDT, STGUSDT, STORJUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUPERUSDT, SUSHIUSDT, TAOUSDT, THETAUSDT, TIAUSDT, TNSRUSDT, TRBUSDT, TRXUSDT, TURBOUSDT, UNIUSDT, USDCUSDT, VETUSDT, WIFUSDT, WLDUSDT, WUSDT, XLMUSDT, XMRUSDT, XRPUSDT, XTZUSDT, XVGUSDT, YFIUSDT, YGGUSDT, ZECUSDT, ZENUSDT, ZILUSDT, ZKUSDT, ZROUSDT
-- aggiornato: 2026-06-30 18:04 UTC
+- copertura universo: **151/160 crypto (94%)** · obiettivo ≥ 60%
+- coppie validate (>= 3 pass OOS): **590**
+- universo scansionato: 1000BONKUSDT, 1000FLOKIUSDT, 1000LUNCUSDT, 1000PEPEUSDT, 1000SATSUSDT, 1000SHIBUSDT, 1000XECUSDT, AAVEUSDT, ACEUSDT, ACHUSDT, ADAUSDT, AEVOUSDT, AGLDUSDT, ALGOUSDT, ALICEUSDT, ALTUSDT, ANKRUSDT, APEUSDT, API3USDT, APTUSDT, ARBUSDT, ARKMUSDT, ARKUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, BATUSDT, BCHUSDT, BEAMXUSDT, BELUSDT, BICOUSDT, BIGTIMEUSDT, BNBUSDT, BOMEUSDT, BSVUSDT, BTCDOMUSDT, BTCUSDT, CAKEUSDT, CELOUSDT, CFXUSDT, CHZUSDT, COMPUSDT, CRVUSDT, CYBERUSDT, DASHUSDT, DODOXUSDT, DOGEUSDT, DOTUSDT, DUSKUSDT, DYDXUSDT, DYMUSDT, EDUUSDT, EGLDUSDT, ENAUSDT, ENJUSDT, ENSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FETUSDT, FILUSDT, GALAUSDT, GASUSDT, GLMUSDT, GMTUSDT, GMXUSDT, GRTUSDT, HBARUSDT, HFTUSDT, HOTUSDT, ICPUSDT, ICXUSDT, IDUSDT, ILVUSDT, IMXUSDT, INJUSDT, IOTAUSDT, IOUSDT, JASMYUSDT, JTOUSDT, JUPUSDT, KASUSDT, KSMUSDT, LDOUSDT, LINKUSDT, LPTUSDT, LTCUSDT, LUNA2USDT, MAGICUSDT, MANAUSDT, MANTAUSDT, MEMEUSDT, MOVRUSDT, MTLUSDT, NEARUSDT, NEOUSDT, NFPUSDT, NMRUSDT, NOTUSDT, ONDOUSDT, ONGUSDT, ONTUSDT, OPUSDT, ORDIUSDT, PENDLEUSDT, PEOPLEUSDT, PIXELUSDT, POLYXUSDT, PORTALUSDT, POWRUSDT, PYTHUSDT, QNTUSDT, QTUMUSDT, RIFUSDT, RONINUSDT, ROSEUSDT, RSRUSDT, RUNEUSDT, SAGAUSDT, SANDUSDT, SEIUSDT, SFPUSDT, SKLUSDT, SNXUSDT, SOLUSDT, SPELLUSDT, STEEMUSDT, STGUSDT, STORJUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUPERUSDT, SUSHIUSDT, TAOUSDT, THETAUSDT, TIAUSDT, TNSRUSDT, TRBUSDT, TRXUSDT, TURBOUSDT, UNIUSDT, USDCUSDT, VANRYUSDT, VETUSDT, WAXPUSDT, WIFUSDT, WLDUSDT, WUSDT, XLMUSDT, XMRUSDT, XRPUSDT, XTZUSDT, YGGUSDT, ZECUSDT, ZENUSDT, ZILUSDT, ZKUSDT, ZROUSDT
+- aggiornato: 2026-06-30 22:00 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
@@ -38,7 +35,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | PORTALUSDT | gen_20c4789d | 5 | 1.252 | 269% |  |
 | WLDUSDT | gen_5d7ab58c | 9 | 1.301 | 268% |  |
 | PIXELUSDT | gen_f3d6333d | 4 | 1.303 | 264% |  |
-| XMRUSDT | grid_trading | 9 | 1.265 | 259% | low_band=0.35, high_band=0.65, stop_pad=0.25 |
+| XMRUSDT | grid_trading | 10 | 1.265 | 259% | low_band=0.35, high_band=0.65, stop_pad=0.25 |
 | 1000RATSUSDT | gen_6e11bdfe | 3 | 1.31 | 255% |  |
 | TIAUSDT | gen_6dff3cfe | 4 | 1.368 | 250% |  |
 | 1000FLOKIUSDT | gen_baf73492 | 4 | 1.281 | 245% |  |
@@ -107,6 +104,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | ZROUSDT | gen_604d5cf7 | 3 | 1.412 | 130% |  |
 | LDOUSDT | gen_d5877438 | 4 | 1.33 | 129% |  |
 | POLYXUSDT | gen_604d5cf7 | 3 | 1.404 | 128% |  |
+| ACHUSDT | mean_reversion | 4 | 2.069 | 127% | rsi_oversold=25.0, rsi_overbought=80.0, atr_mult_stop=1.8 |
 | FETUSDT | gen_56d00e52 | 9 | 8.231 | 127% |  |
 | PORTALUSDT | gen_604d5cf7 | 3 | 1.261 | 126% |  |
 | SFPUSDT | gen_0b6985fe | 3 | 1.291 | 125% |  |
@@ -116,13 +114,13 @@ _Generato: 2026-06-30 20:19 UTC_
 | IDUSDT | gen_f5f7afef | 5 | 1.302 | 122% |  |
 | BELUSDT | mean_reversion | 5 | 1.729 | 120% | rsi_oversold=20.0, rsi_overbought=75.0, atr_mult_stop=1.2 |
 | CFXUSDT | gen_89cf35e5 | 4 | 1.277 | 119% |  |
+| HOTUSDT | mean_reversion | 9 | 2.119 | 119% | rsi_oversold=30.0, rsi_overbought=80.0, atr_mult_stop=1.8 |
 | POLYXUSDT | gen_7eabf801 | 4 | 1.458 | 118% |  |
 | QTUMUSDT | gen_18e852ba | 3 | 1.9 | 118% |  |
 | GRTUSDT | gen_d5877438 | 4 | 1.33 | 118% |  |
 | ENJUSDT | gen_38823bf0 | 4 | 1.404 | 117% |  |
 | QNTUSDT | gen_7eabf801 | 4 | 1.472 | 117% |  |
 | ONDOUSDT | gen_ff611f40 | 9 | 1.264 | 117% |  |
-| AGLDUSDT | mean_reversion | 7 | 2.83 | 116% | rsi_oversold=30.0, rsi_overbought=80.0, atr_mult_stop=1.0 |
 | APEUSDT | gen_ac5688b6 | 4 | 1.952 | 116% |  |
 | SFPUSDT | gen_4d626f1f | 3 | 1.67 | 115% |  |
 | LDOUSDT | gen_669a3ced | 4 | 1.576 | 114% |  |
@@ -142,6 +140,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | NFPUSDT | gen_38823bf0 | 8 | 1.689 | 105% |  |
 | SAGAUSDT | gen_89cf35e5 | 4 | 1.296 | 105% |  |
 | ZROUSDT | gen_4d626f1f | 4 | 1.754 | 104% |  |
+| STEEMUSDT | mean_reversion | 5 | 2.628 | 104% | rsi_oversold=25.0, rsi_overbought=70.0, atr_mult_stop=1.8 |
 | PEOPLEUSDT | gen_9110ae06 | 4 | 1.639 | 103% |  |
 | BIGTIMEUSDT | gen_18e852ba | 3 | 1.672 | 103% |  |
 | BICOUSDT | gen_89cf35e5 | 4 | 1.285 | 102% |  |
@@ -157,12 +156,10 @@ _Generato: 2026-06-30 20:19 UTC_
 | XMRUSDT | gen_18e852ba | 5 | 2.006 | 97% |  |
 | POWRUSDT | gen_0b6985fe | 8 | 1.347 | 96% |  |
 | AEVOUSDT | gen_4d626f1f | 4 | 1.59 | 93% |  |
-| ACHUSDT | mean_reversion | 3 | 1.511 | 92% | rsi_oversold=25.0, rsi_overbought=80.0, atr_mult_stop=1.8 |
 | POWRUSDT | gen_8bce9d48 | 3 | 1.287 | 92% |  |
 | ACHUSDT | gen_669a3ced | 3 | 1.631 | 92% |  |
 | POWRUSDT | gen_4d626f1f | 7 | 1.707 | 91% |  |
 | HOTUSDT | gen_4d626f1f | 6 | 1.312 | 91% |  |
-| NEOUSDT | mean_reversion | 3 | 2.151 | 90% | rsi_oversold=30.0, rsi_overbought=75.0, atr_mult_stop=1.8 |
 | DUSKUSDT | gen_c584a061 | 4 | 1.347 | 89% |  |
 | WUSDT | gen_ac5688b6 | 4 | 2.313 | 88% |  |
 | API3USDT | gen_ac5688b6 | 4 | 1.707 | 88% |  |
@@ -171,17 +168,19 @@ _Generato: 2026-06-30 20:19 UTC_
 | INJUSDT | gen_18e852ba | 5 | 1.705 | 87% |  |
 | ZROUSDT | gen_7eabf801 | 4 | 1.391 | 86% |  |
 | LPTUSDT | gen_9a85b447 | 4 | 2.011 | 86% |  |
+| ENAUSDT | breakout | 7 | 1.563 | 86% | compression=0.07, volume_spike=1.5, rr=3.0 |
 | SFPUSDT | gen_38823bf0 | 3 | 1.585 | 86% |  |
-| INJUSDT | mean_reversion | 6 | 1.545 | 86% | rsi_oversold=30.0, rsi_overbought=75.0, atr_mult_stop=1.0 |
 | ZILUSDT | gen_4d626f1f | 4 | 1.34 | 85% |  |
-| STEEMUSDT | mean_reversion | 4 | 2.429 | 85% | rsi_oversold=30.0, rsi_overbought=70.0, atr_mult_stop=1.8 |
-| HOTUSDT | mean_reversion | 8 | 1.671 | 84% | rsi_oversold=30.0, rsi_overbought=75.0, atr_mult_stop=1.8 |
+| ROSEUSDT | breakout | 3 | 1.367 | 84% | compression=0.1, volume_spike=2.5, rr=3.0 |
 | ENJUSDT | gen_5a5c669a | 4 | 1.789 | 83% |  |
 | AXSUSDT | gen_310b9829 | 4 | 2.967 | 83% |  |
 | WUSDT | gen_87b6ed1c | 4 | 2.948 | 82% |  |
 | POWRUSDT | gen_eae88869 | 3 | 1.314 | 82% |  |
+| ALGOUSDT | mean_reversion | 5 | 1.669 | 82% | rsi_oversold=25.0, rsi_overbought=70.0, atr_mult_stop=1.8 |
 | API3USDT | gen_60e37191 | 4 | 1.334 | 82% |  |
 | PORTALUSDT | gen_18e852ba | 4 | 1.543 | 81% |  |
+| AGLDUSDT | mean_reversion | 8 | 1.724 | 80% | rsi_oversold=30.0, rsi_overbought=80.0, atr_mult_stop=1.8 |
+| KASUSDT | mean_reversion | 3 | 2.885 | 80% | rsi_oversold=30.0, rsi_overbought=70.0, atr_mult_stop=1.0 |
 | ICPUSDT | gen_716570b1 | 4 | 1.633 | 80% |  |
 | NEARUSDT | gen_310b9829 | 10 | 2.427 | 80% |  |
 | COMPUSDT | gen_c584a061 | 4 | 1.449 | 79% |  |
@@ -203,10 +202,10 @@ _Generato: 2026-06-30 20:19 UTC_
 | 1000BONKUSDT | gen_0e6725eb | 4 | 1.536 | 70% |  |
 | BATUSDT | gen_18e852ba | 4 | 1.581 | 69% |  |
 | WLDUSDT | gen_c584a061 | 6 | 1.484 | 69% |  |
-| POLYXUSDT | mean_reversion | 4 | 1.897 | 69% | rsi_oversold=30.0, rsi_overbought=70.0, atr_mult_stop=1.0 |
 | MANAUSDT | gen_ac5688b6 | 4 | 1.64 | 69% |  |
 | SKLUSDT | gen_310b9829 | 3 | 2.522 | 69% |  |
 | VETUSDT | gen_0e6725eb | 4 | 1.446 | 69% |  |
+| INJUSDT | mean_reversion | 7 | 1.654 | 69% | rsi_oversold=30.0, rsi_overbought=75.0, atr_mult_stop=1.0 |
 | KNCUSDT | gen_310b9829 | 3 | 2.488 | 69% |  |
 | LPTUSDT | gen_310b9829 | 4 | 2.72 | 69% |  |
 | PEOPLEUSDT | gen_0e6725eb | 4 | 1.352 | 68% |  |
@@ -217,11 +216,13 @@ _Generato: 2026-06-30 20:19 UTC_
 | DYMUSDT | gen_0e6725eb | 4 | 1.818 | 67% |  |
 | LDOUSDT | gen_4c0331ed | 4 | 2.606 | 67% |  |
 | ONTUSDT | gen_18e852ba | 4 | 1.345 | 67% |  |
+| ARUSDT | mean_reversion | 5 | 1.417 | 66% | rsi_oversold=30.0, rsi_overbought=80.0, atr_mult_stop=1.2 |
 | WLDUSDT | gen_00a9343b | 9 | 1.825 | 66% |  |
 | API3USDT | gen_5a5c669a | 4 | 1.351 | 66% |  |
 | DYMUSDT | gen_4d626f1f | 4 | 1.254 | 65% |  |
 | CRVUSDT | gen_180184dd | 4 | 1.394 | 64% |  |
 | LDOUSDT | gen_310b9829 | 4 | 2.162 | 64% |  |
+| ANKRUSDT | mean_reversion | 3 | 1.661 | 64% | rsi_oversold=20.0, rsi_overbought=70.0, atr_mult_stop=1.2 |
 | QTUMUSDT | gen_180184dd | 3 | 1.515 | 63% |  |
 | POWRUSDT | gen_1954d3f3 | 7 | 1.322 | 63% |  |
 | TURBOUSDT | gen_d5877438 | 4 | 1.314 | 63% |  |
@@ -229,13 +230,13 @@ _Generato: 2026-06-30 20:19 UTC_
 | KNCUSDT | gen_0e6725eb | 3 | 1.462 | 62% |  |
 | AAVEUSDT | gen_716570b1 | 6 | 1.35 | 62% |  |
 | DASHUSDT | gen_180184dd | 4 | 1.482 | 62% |  |
+| BATUSDT | mean_reversion | 3 | 1.925 | 61% | rsi_oversold=25.0, rsi_overbought=75.0, atr_mult_stop=1.0 |
 | ZROUSDT | gen_9a85b447 | 4 | 3.065 | 60% |  |
 | JUPUSDT | gen_0e6725eb | 4 | 1.611 | 60% |  |
 | ZKUSDT | gen_00a9343b | 4 | 3.137 | 60% |  |
 | QNTUSDT | gen_18e852ba | 4 | 2.066 | 60% |  |
 | FETUSDT | gen_60e37191 | 5 | 1.335 | 60% |  |
 | INJUSDT | gen_9a85b447 | 5 | 1.626 | 59% |  |
-| BOMEUSDT | mean_reversion | 3 | 1.756 | 59% | rsi_oversold=20.0, rsi_overbought=70.0, atr_mult_stop=1.0 |
 | KASUSDT | gen_5a5c669a | 4 | 2.543 | 59% |  |
 | ROSEUSDT | gen_18e852ba | 4 | 1.427 | 58% |  |
 | QTUMUSDT | gen_ac5688b6 | 3 | 1.453 | 57% |  |
@@ -247,6 +248,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | YGGUSDT | gen_00a9343b | 4 | 2.019 | 56% |  |
 | CHZUSDT | gen_87b6ed1c | 4 | 1.479 | 56% |  |
 | ONGUSDT | gen_d5877438 | 4 | 1.295 | 55% |  |
+| 1000SATSUSDT | mean_reversion | 3 | 1.527 | 55% | rsi_oversold=25.0, rsi_overbought=70.0, atr_mult_stop=1.0 |
 | SUIUSDT | breakout | 4 | 1.267 | 55% | compression=0.1, volume_spike=1.8, rr=2.5 |
 | MANAUSDT | gen_c584a061 | 4 | 1.295 | 55% |  |
 | JASMYUSDT | gen_310b9829 | 4 | 2.224 | 55% |  |
@@ -262,9 +264,9 @@ _Generato: 2026-06-30 20:19 UTC_
 | ARUSDT | gen_310b9829 | 4 | 2.935 | 52% |  |
 | 1000XECUSDT | gen_180184dd | 4 | 1.61 | 52% |  |
 | ICPUSDT | gen_38823bf0 | 4 | 1.258 | 51% |  |
-| ARUSDT | mean_reversion | 4 | 1.265 | 51% | rsi_oversold=30.0, rsi_overbought=80.0, atr_mult_stop=1.2 |
 | SKLUSDT | gen_e87281e1 | 3 | 1.937 | 51% |  |
 | DUSKUSDT | gen_21283d10 | 4 | 1.322 | 51% |  |
+| NEOUSDT | mean_reversion | 4 | 1.411 | 51% | rsi_oversold=30.0, rsi_overbought=80.0, atr_mult_stop=1.8 |
 | ZROUSDT | gen_00a9343b | 4 | 2.584 | 51% |  |
 | ORDIUSDT | gen_ac5688b6 | 4 | 1.462 | 51% |  |
 | ACHUSDT | gen_00a9343b | 3 | 1.752 | 50% |  |
@@ -272,6 +274,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | MANTAUSDT | gen_180184dd | 6 | 1.722 | 50% |  |
 | JUPUSDT | gen_ab121cfe | 4 | 1.58 | 50% |  |
 | 1000XECUSDT | gen_310b9829 | 4 | 2.546 | 50% |  |
+| BOMEUSDT | breakout | 5 | 1.439 | 50% | compression=0.05, volume_spike=1.8, rr=3.0 |
 | SKLUSDT | gen_0cc5c300 | 3 | 1.887 | 50% |  |
 | API3USDT | gen_a10c8df2 | 4 | 2.347 | 49% |  |
 | APEUSDT | gen_c584a061 | 4 | 1.254 | 49% |  |
@@ -279,6 +282,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | BEAMXUSDT | gen_38823bf0 | 4 | 1.306 | 49% |  |
 | ZENUSDT | gen_56d00e52 | 4 | 1.555 | 48% |  |
 | 1000BONKUSDT | gen_310b9829 | 4 | 2.041 | 48% |  |
+| POLYXUSDT | mean_reversion | 5 | 1.607 | 48% | rsi_oversold=30.0, rsi_overbought=70.0, atr_mult_stop=1.8 |
 | STORJUSDT | gen_0e6725eb | 4 | 1.368 | 48% |  |
 | ETHFIUSDT | gen_e87281e1 | 4 | 3.0 | 48% |  |
 | OPUSDT | gen_310b9829 | 4 | 1.855 | 47% |  |
@@ -299,6 +303,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | IDUSDT | gen_ab121cfe | 5 | 1.552 | 46% |  |
 | MANAUSDT | gen_310b9829 | 4 | 2.003 | 46% |  |
 | WLDUSDT | gen_e87281e1 | 7 | 1.849 | 46% |  |
+| BOMEUSDT | mean_reversion | 4 | 1.489 | 46% | rsi_oversold=25.0, rsi_overbought=70.0, atr_mult_stop=1.0 |
 | BLURUSDT | gen_87b6ed1c | 4 | 1.555 | 46% |  |
 | 1000FLOKIUSDT | gen_ac5688b6 | 4 | 1.367 | 46% |  |
 | ONGUSDT | gen_4d626f1f | 4 | 1.306 | 45% |  |
@@ -316,13 +321,11 @@ _Generato: 2026-06-30 20:19 UTC_
 | MEMEUSDT | gen_a10c8df2 | 4 | 2.693 | 44% |  |
 | MANAUSDT | gen_0e6725eb | 4 | 1.274 | 44% |  |
 | ZENUSDT | gen_1aed5fa6 | 4 | 2.329 | 44% |  |
-| BOMEUSDT | breakout | 4 | 1.402 | 43% | compression=0.05, volume_spike=1.8, rr=3.0 |
 | BBUSDT | gen_00a9343b | 3 | 2.869 | 43% |  |
 | EGLDUSDT | gen_310b9829 | 4 | 2.819 | 43% |  |
 | JUPUSDT | gen_4c0331ed | 4 | 3.316 | 43% |  |
 | CFXUSDT | gen_310b9829 | 4 | 1.741 | 43% |  |
 | WIFUSDT | gen_0e6725eb | 5 | 1.407 | 43% |  |
-| ALGOUSDT | mean_reversion | 4 | 1.38 | 42% | rsi_oversold=25.0, rsi_overbought=75.0, atr_mult_stop=1.8 |
 | WLDUSDT | gen_829fd48a | 6 | 2.458 | 42% |  |
 | ICPUSDT | gen_00a9343b | 4 | 1.694 | 42% |  |
 | 1000BONKUSDT | gen_21283d10 | 4 | 1.531 | 42% |  |
@@ -384,7 +387,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | SKLUSDT | gen_9e0719f0 | 3 | 1.692 | 36% |  |
 | NFPUSDT | gen_8b8e5a16 | 6 | 1.254 | 36% |  |
 | PIXELUSDT | gen_829fd48a | 4 | 1.802 | 36% |  |
-| ENAUSDT | liquidity_grab | 10 | 1.918 | 36% | volume_spike=2.0, atr_mult_stop=1.0 |
+| ENAUSDT | liquidity_grab | 11 | 1.918 | 36% | volume_spike=2.0, atr_mult_stop=1.0 |
 | LINKUSDT | breakout | 4 | 1.333 | 36% | compression=0.07, volume_spike=2.5, rr=1.5 |
 | SUSHIUSDT | gen_e87281e1 | 4 | 1.498 | 36% |  |
 | ETCUSDT | gen_5a5c669a | 4 | 1.366 | 36% |  |
@@ -420,11 +423,11 @@ _Generato: 2026-06-30 20:19 UTC_
 | RSRUSDT | gen_9a85b447 | 4 | 1.3 | 32% |  |
 | PEOPLEUSDT | gen_4c0331ed | 4 | 1.562 | 32% |  |
 | PIXELUSDT | gen_0cc5c300 | 4 | 1.597 | 32% |  |
-| ENAUSDT | breakout | 6 | 1.257 | 32% | compression=0.07, volume_spike=2.5, rr=3.0 |
 | CRVUSDT | gen_4c0331ed | 4 | 1.763 | 31% |  |
 | BEAMXUSDT | gen_e87281e1 | 4 | 1.758 | 31% |  |
 | MANAUSDT | gen_00a9343b | 4 | 1.351 | 31% |  |
 | ZKUSDT | gen_9a85b447 | 4 | 1.771 | 31% |  |
+| POWRUSDT | mean_reversion | 3 | 1.632 | 31% | rsi_oversold=30.0, rsi_overbought=70.0, atr_mult_stop=1.0 |
 | AVAXUSDT | gen_4c0331ed | 8 | 1.831 | 31% |  |
 | SANDUSDT | gen_e87281e1 | 4 | 1.37 | 31% |  |
 | PYTHUSDT | gen_ab121cfe | 4 | 1.285 | 30% |  |
@@ -441,7 +444,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | 1000BONKUSDT | gen_3fe711a5 | 4 | 2.669 | 30% |  |
 | SANDUSDT | gen_4c0331ed | 4 | 1.705 | 30% |  |
 | ENJUSDT | gen_e87281e1 | 4 | 1.363 | 30% |  |
-| CELOUSDT | liquidity_grab | 5 | 2.242 | 30% | volume_spike=2.5, atr_mult_stop=1.5 |
+| CELOUSDT | liquidity_grab | 6 | 2.242 | 30% | volume_spike=2.5, atr_mult_stop=1.5 |
 | AEVOUSDT | gen_e87281e1 | 4 | 1.865 | 30% |  |
 | EGLDUSDT | gen_f2ecfec6 | 4 | 2.261 | 29% |  |
 | TAOUSDT | gen_0e6725eb | 5 | 1.342 | 29% |  |
@@ -499,7 +502,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | NFPUSDT | gen_5c3c245a | 6 | 1.773 | 25% |  |
 | ARKUSDT | gen_180184dd | 4 | 1.352 | 25% |  |
 | ETCUSDT | gen_310b9829 | 4 | 1.565 | 25% |  |
-| IOTAUSDT | liquidity_grab | 4 | 1.896 | 25% | volume_spike=2.5, atr_mult_stop=1.0 |
+| IOTAUSDT | liquidity_grab | 5 | 1.896 | 25% | volume_spike=2.5, atr_mult_stop=1.0 |
 | IOTAUSDT | gen_9e0719f0 | 4 | 1.537 | 25% |  |
 | EGLDUSDT | gen_4c0331ed | 4 | 2.481 | 25% |  |
 | STGUSDT | gen_829fd48a | 4 | 1.505 | 25% |  |
@@ -521,7 +524,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | XMRUSDT | gen_21283d10 | 7 | 1.387 | 23% |  |
 | ADAUSDT | gen_e87281e1 | 7 | 1.384 | 23% |  |
 | AXSUSDT | gen_4c0331ed | 4 | 1.673 | 23% |  |
-| GMTUSDT | liquidity_grab | 4 | 1.314 | 23% | volume_spike=2.5, atr_mult_stop=1.5 |
+| GMTUSDT | liquidity_grab | 5 | 1.314 | 23% | volume_spike=2.5, atr_mult_stop=1.5 |
 | FILUSDT | gen_e87281e1 | 7 | 1.304 | 23% |  |
 | UNIUSDT | gen_310b9829 | 10 | 1.359 | 23% |  |
 | ZROUSDT | gen_e87281e1 | 4 | 1.831 | 23% |  |
@@ -581,7 +584,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | MANAUSDT | gen_9e0719f0 | 4 | 1.383 | 18% |  |
 | ONDOUSDT | gen_4c0331ed | 8 | 1.865 | 18% |  |
 | KNCUSDT | gen_b657a106 | 3 | 1.655 | 18% |  |
-| TURBOUSDT | liquidity_grab | 4 | 1.67 | 18% | volume_spike=2.0, atr_mult_stop=0.8 |
+| TURBOUSDT | liquidity_grab | 5 | 1.67 | 18% | volume_spike=2.0, atr_mult_stop=0.8 |
 | NEOUSDT | gen_4c0331ed | 4 | 1.497 | 17% |  |
 | BBUSDT | gen_e87281e1 | 3 | 1.769 | 17% |  |
 | NMRUSDT | gen_4c0331ed | 3 | 1.97 | 17% |  |
@@ -591,7 +594,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | ARKMUSDT | gen_3fe711a5 | 4 | 2.502 | 17% |  |
 | ATOMUSDT | gen_1aed5fa6 | 4 | 1.549 | 17% |  |
 | PIXELUSDT | gen_5c3c245a | 4 | 1.383 | 17% |  |
-| SANDUSDT | liquidity_grab | 4 | 1.576 | 17% | volume_spike=3.0, atr_mult_stop=1.0 |
+| SANDUSDT | liquidity_grab | 5 | 1.576 | 17% | volume_spike=3.0, atr_mult_stop=1.0 |
 | MANAUSDT | gen_b657a106 | 4 | 1.512 | 17% |  |
 | DODOXUSDT | gen_3fe711a5 | 4 | 1.727 | 17% |  |
 | VETUSDT | gen_310b9829 | 4 | 1.298 | 17% |  |
@@ -602,7 +605,7 @@ _Generato: 2026-06-30 20:19 UTC_
 | AEVOUSDT | gen_0cc5c300 | 4 | 1.333 | 16% |  |
 | ALTUSDT | gen_9e0719f0 | 4 | 1.355 | 16% |  |
 | BEAMXUSDT | gen_4c0331ed | 4 | 1.62 | 16% |  |
-| ETCUSDT | liquidity_grab | 4 | 1.462 | 16% | volume_spike=2.5, atr_mult_stop=1.5 |
+| ETCUSDT | liquidity_grab | 5 | 1.462 | 16% | volume_spike=2.5, atr_mult_stop=1.5 |
 | RVNUSDT | gen_9e0719f0 | 3 | 1.353 | 16% |  |
 | MTLUSDT | gen_9e0719f0 | 3 | 1.341 | 16% |  |
 | AXLUSDT | gen_3fe711a5 | 4 | 1.973 | 15% |  |
@@ -612,38 +615,41 @@ _Generato: 2026-06-30 20:19 UTC_
 | EGLDUSDT | gen_829fd48a | 4 | 1.408 | 15% |  |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-06-30 13:04 UTC · 1141 coppie valutate, 31 passate in questo run_
+_aggiornato: 2026-06-30 22:00 UTC · 1120 coppie valutate, 34 passate in questo run_
 
 | Coin | Strategia | PF | PnL OOS | Trade | Win |
 |---|---|---|---|---|---|
 | XMRUSDT | grid_trading | 1.265 | 259% | 4125 | 75% |
-| RONINUSDT | trend_following | 1.252 | 186% | 702 | 63% |
-| AGLDUSDT | mean_reversion | 2.83 | 116% | 38 | 53% |
-| FILUSDT | breakout | 1.25 | 107% | 708 | 59% |
-| ACHUSDT | mean_reversion | 1.511 | 92% | 67 | 46% |
-| NEOUSDT | mean_reversion | 2.151 | 90% | 47 | 66% |
-| STEEMUSDT | mean_reversion | 2.429 | 85% | 53 | 57% |
-| IDUSDT | breakout | 1.255 | 82% | 411 | 48% |
-| 1000RATSUSDT | mean_reversion | 1.33 | 77% | 72 | 50% |
-| POLYXUSDT | mean_reversion | 1.897 | 69% | 46 | 50% |
-| QTUMUSDT | mean_reversion | 1.695 | 69% | 51 | 59% |
-| AVAXUSDT | breakout | 1.265 | 68% | 359 | 45% |
-| ROSEUSDT | breakout | 1.254 | 64% | 313 | 48% |
-| BOMEUSDT | mean_reversion | 1.756 | 59% | 38 | 60% |
-| SUIUSDT | breakout | 1.267 | 55% | 261 | 48% |
-| SAGAUSDT | mean_reversion | 1.286 | 54% | 70 | 50% |
-| ARUSDT | mean_reversion | 1.265 | 51% | 89 | 48% |
-| POWRUSDT | mean_reversion | 1.873 | 50% | 37 | 51% |
-| BOMEUSDT | breakout | 1.402 | 43% | 113 | 50% |
-| KAVAUSDT | mean_reversion | 1.491 | 36% | 43 | 60% |
+| ACHUSDT | mean_reversion | 2.069 | 127% | 50 | 54% |
+| HOTUSDT | mean_reversion | 2.119 | 119% | 54 | 63% |
+| STEEMUSDT | mean_reversion | 2.628 | 104% | 46 | 65% |
+| LUNA2USDT | mean_reversion | 1.378 | 98% | 102 | 51% |
+| 1000FLOKIUSDT | breakout | 1.263 | 92% | 378 | 47% |
+| GMXUSDT | mean_reversion | 2.155 | 87% | 39 | 62% |
+| ENAUSDT | breakout | 1.563 | 86% | 181 | 48% |
+| ROSEUSDT | breakout | 1.367 | 84% | 278 | 48% |
+| ALGOUSDT | mean_reversion | 1.669 | 82% | 67 | 66% |
+| AGLDUSDT | mean_reversion | 1.724 | 80% | 47 | 51% |
+| KASUSDT | mean_reversion | 2.885 | 80% | 32 | 62% |
+| GASUSDT | mean_reversion | 2.293 | 74% | 37 | 51% |
+| FILUSDT | breakout | 1.305 | 69% | 375 | 60% |
+| INJUSDT | mean_reversion | 1.654 | 69% | 49 | 51% |
+| ARUSDT | mean_reversion | 1.417 | 66% | 78 | 50% |
+| ANKRUSDT | mean_reversion | 1.661 | 64% | 53 | 45% |
+| BATUSDT | mean_reversion | 1.925 | 61% | 42 | 50% |
+| 1000SATSUSDT | mean_reversion | 1.527 | 55% | 53 | 47% |
+| MTLUSDT | mean_reversion | 1.72 | 51% | 36 | 53% |
+| NEOUSDT | mean_reversion | 1.411 | 51% | 60 | 55% |
+| MANAUSDT | mean_reversion | 1.654 | 51% | 37 | 54% |
+| ZKUSDT | breakout | 1.272 | 50% | 217 | 47% |
+| BOMEUSDT | breakout | 1.439 | 50% | 113 | 47% |
+| POLYXUSDT | mean_reversion | 1.607 | 48% | 38 | 50% |
+| BOMEUSDT | mean_reversion | 1.489 | 46% | 50 | 56% |
 | ENAUSDT | liquidity_grab | 1.918 | 36% | 58 | 71% |
-| ENAUSDT | breakout | 1.257 | 32% | 147 | 57% |
-| ATOMUSDT | mean_reversion | 1.428 | 30% | 28 | 50% |
+| POWRUSDT | mean_reversion | 1.632 | 31% | 33 | 46% |
 | CELOUSDT | liquidity_grab | 2.242 | 30% | 52 | 81% |
-| EGLDUSDT | mean_reversion | 1.279 | 27% | 43 | 51% |
 | IOTAUSDT | liquidity_grab | 1.896 | 25% | 66 | 64% |
 | GMTUSDT | liquidity_grab | 1.314 | 23% | 123 | 70% |
-| AXLUSDT | liquidity_grab | 1.767 | 22% | 55 | 74% |
 | TURBOUSDT | liquidity_grab | 1.67 | 18% | 46 | 67% |
 | SANDUSDT | liquidity_grab | 1.576 | 17% | 71 | 66% |
 | ETCUSDT | liquidity_grab | 1.462 | 16% | 92 | 78% |
