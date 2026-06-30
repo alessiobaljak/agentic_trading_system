@@ -77,7 +77,12 @@ class Settings:
     ORCHESTRATOR_TIMEFRAME: str = "15m"   # l'orchestratore gira ad ogni 15m chiusa
     SCAN_INTERVAL_HOURS: int = 4          # market scanner ogni 4h
     REGIME_INTERVAL_MINUTES: int = 60     # regime detector ogni ora
-    MAX_OPEN_POSITIONS: int = 5           # 3-5 asset concentrati (cap posizioni APERTE)
+    MAX_OPEN_POSITIONS: int = int(os.getenv("MAX_OPEN_POSITIONS", "5"))  # cap posizioni APERTE
+    # cap per-posizione: una singola posizione usa al massimo questa frazione di
+    # equity come MARGINE -> piu' posizioni coesistono, nessuna prende tutta la
+    # liquidita'. 1.0 = nessun cap (comportamento storico). In BACKTEST_PARITY, se
+    # lasciato a 1.0, si usa in automatico 0.10 (~10 posizioni simultanee).
+    MAX_POSITION_EQUITY_FRACTION: float = float(os.getenv("MAX_POSITION_EQUITY_FRACTION", "1.0"))
     # su quante crypto (tra le più liquide scansionate) cercare un SEGNALE a ogni
     # ciclo. Disaccoppiato dal cap posizioni: valuti TUTTO il mercato liquido, apri max 5.
     SELECT_UNIVERSE: int = int(os.getenv("SELECT_UNIVERSE", "100"))

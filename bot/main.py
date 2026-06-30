@@ -225,7 +225,9 @@ class TradingBot:
                 {"outcome": "flat",
                  "reason": f"cooldown su {decision.asset} dopo stop ({int((cd_until - now) / 60)}m)"})
             return
-        if len(self.executor.open_positions) >= settings.MAX_OPEN_POSITIONS:
+        # cap sul NUMERO di posizioni: in parita' col backtest e' disattivato (il bt
+        # non lo ha) -> a limitare e' solo il cap per-posizione sulla liquidita'.
+        if not settings.BACKTEST_PARITY and len(self.executor.open_positions) >= settings.MAX_OPEN_POSITIONS:
             self._publish_decision_status(
                 {"outcome": "flat",
                  "reason": f"raggiunto il max di posizioni ({settings.MAX_OPEN_POSITIONS})"})

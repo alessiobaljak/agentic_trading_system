@@ -25,6 +25,7 @@ from bot.core.models import (
     OrchestratorDecision,
     RiskSettings,
 )
+from bot.config import settings
 from bot.risk import hard_limits
 from bot.risk.circuit_breakers import CircuitBreakers
 
@@ -96,8 +97,16 @@ class RiskManager:
 
         # vincolo da leva: il nozionale non può eccedere equity * leva
         max_notional = account_equity * eff_lev
+        # cap PER-POSIZIONE: una singola posizione non usa piu' di una frazione
+        # dell'equity come margine -> cosi' piu' strategie operano simultaneamente
+        # e nessuna prende tutta la liquidita'. In parita' col backtest, default 10%.
+        frac = settings.MAX_POSITION_EQUITY_FRACTION
+        if settings.BACKTEST_PARITY and frac >= 1.0:
+            frac = 0.10
+        if frac < 1.0:
+            max_notional = min(max_notional, account_equity * eff_lev * frac)
         if notional > max_notional:
-            notes.append(f"Nozionale limitato dalla leva ({eff_lev}x)")
+            notes.append(f"Nozionale limitato (cap posizione {frac:.0%} equity)")
             notional = max_notional
             quantity = notional / price
 
