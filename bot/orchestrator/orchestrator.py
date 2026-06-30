@@ -142,6 +142,37 @@ class Orchestrator:
         return decision
 
     # ------------------------------------------------------------------ #
+    def decide_all(
+        self, assets: dict[str, AssetSnapshot], regime: Regime,
+        disabled: Optional[set] = None,
+    ) -> list[OrchestratorDecision]:
+        """PARITA' COL BACKTEST: ritorna UNA decisione per OGNI coin con un segnale
+        valido (sopra soglia, peso>0), prendendo la strategia migliore per quella
+        coin. Niente LLM, niente 'scegli il migliore globale': come il backtest che
+        apre ogni segnale indipendentemente. Vincolo conto reale: 1 posizione/coin."""
+        signals = self.collect_signals(assets, regime, disabled=disabled)
+        decisions: list[OrchestratorDecision] = []
+        seen: set = set()
+        for s in signals:  # ordinati per adjusted_confidence desc
+            if s["adjusted_confidence"] < self.DECISION_THRESHOLD or s["weight"] <= 0.0:
+                continue
+            if s["symbol"] in seen:
+                continue
+            seen.add(s["symbol"])
+            d = OrchestratorDecision(
+                asset=s["symbol"], strategy=s["strategy"],
+                direction=Direction(s["direction"]), size_multiplier=1.0,
+                confidence=s["confidence"], reasoning=s.get("reasoning", ""))
+            d.adjusted_confidence = s["adjusted_confidence"]
+            decisions.append(d)
+        self._record_status(
+            regime, len(assets), signals, "decided" if decisions else "flat",
+            f"parita' backtest: {len(decisions)} segnali validi aperti" if decisions
+            else "nessun segnale valido sopra soglia",
+            decisions[0] if decisions else None)
+        return decisions
+
+    # ------------------------------------------------------------------ #
     def _decide_llm(
         self, assets, signals, regime, memory_report, recent_trades, macro_events
     ) -> Optional[OrchestratorDecision]:

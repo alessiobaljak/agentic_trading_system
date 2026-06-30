@@ -210,11 +210,26 @@ class TradingBot:
         # In parita' col backtest il bench e' disattivato (il bt non lo ha).
         disabled = set() if settings.BACKTEST_PARITY else {
             s for s, until in self._strat_cooldown.items() if now < until}
+        # PARITA' COL BACKTEST: il backtest apre OGNI segnale di ogni coppia (non
+        # "il migliore del ciclo"). In parita' apriamo TUTTI i segnali validi del
+        # ciclo (uno per coin); altrimenti la singola decisione migliore (LLM/fallback).
+        if settings.BACKTEST_PARITY:
+            for d in self.orchestrator.decide_all(self.selected, self.regime, disabled=disabled):
+                self._try_open(d, now)
+            self._publish_decision_status()
+            return
         decision = self.orchestrator.decide(self.selected, self.regime, memory, recent,
                                             disabled=disabled)
         if decision is None:
             self._publish_decision_status()  # flat: motivo già in last_status
             return
+        self._try_open(decision, now)
+
+    # ------------------------------------------------------------------ #
+    def _try_open(self, decision, now: float) -> None:
+        """Apre UNA posizione dalla decisione (controlli + risk gate + executor).
+        Se un controllo fallisce fa 'return' (salta questa decisione; in parita' il
+        loop continua con le altre)."""
         if decision.asset in self.executor.open_positions:
             self._publish_decision_status(
                 {"outcome": "flat", "reason": f"{decision.asset} già aperto"})
@@ -225,22 +240,26 @@ class TradingBot:
                 {"outcome": "flat",
                  "reason": f"cooldown su {decision.asset} dopo stop ({int((cd_until - now) / 60)}m)"})
             return
-        # cap sul NUMERO di posizioni: in parita' col backtest e' disattivato (il bt
-        # non lo ha) -> a limitare e' solo il cap per-posizione sulla liquidita'.
+        # cap sul NUMERO di posizioni: in parita' disattivato (il bt non lo ha).
         if not settings.BACKTEST_PARITY and len(self.executor.open_positions) >= settings.MAX_OPEN_POSITIONS:
             self._publish_decision_status(
                 {"outcome": "flat",
                  "reason": f"raggiunto il max di posizioni ({settings.MAX_OPEN_POSITIONS})"})
             return
+        # in parita' niente over-leverage: stop alle aperture quando il margine usato
+        # raggiunge l'equity (conto pienamente investito).
+        if settings.BACKTEST_PARITY:
+            used = sum(p.quantity * p.entry_price / max(p.leverage, 1.0)
+                       for p in self.executor.open_positions.values())
+            if used >= self.account_equity():
+                return
 
         asset = self.selected.get(decision.asset)
         if not asset:
             self._publish_decision_status({"outcome": "flat", "reason": "snapshot asset mancante"})
             return
 
-        # sentiment/social SOLO per la coin che sta per essere tradata (1 chiamata,
-        # non 100): arricchisce il contesto del trade (sentiment_at_entry) ed è il
-        # segnale che il layer LLM usa quando attivo. I dati tecnici restano la base.
+        # sentiment/social SOLO per la coin che sta per essere tradata.
         try:
             sent = self.sentiment.get_sentiment(decision.asset)
             asset.sentiment_score = sent.get("sentiment_score")
@@ -248,7 +267,7 @@ class TradingBot:
         except Exception:  # noqa: BLE001
             pass
 
-        # 4) RISK GATE — ultimo controllo prima dell'ordine
+        # RISK GATE — ultimo controllo prima dell'ordine
         user = self.read_user_risk()
         params = self.risk.evaluate(decision, user, asset, self.account_equity(),
                                     volatility_sigma=self._volatility_sigma(asset))
