@@ -1,17 +1,20 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-01 16:40 UTC_
+_Generato: 2026-07-01 20:15 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: bull_trending
 - DRY_RUN: True
-- equity: **$9,751.19**
-- ultimo heartbeat: 2026-07-01 16:40 UTC
+- equity: **$9,813.22**
+- ultimo heartbeat: 2026-07-01 20:15 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-01 16:35 UTC)
-- motivo: nessun segnale valido sopra soglia
-- asset valutati: 72 · segnali: 0
+- esito: **⚪ FLAT** (2026-07-01 20:08 UTC)
+- motivo: parita' backtest: 1 segnali validi aperti
+- asset valutati: 74 · segnali: 1 · miglior segnale XMRUSDT gen_0b6985fe (conf. 60.0/soglia 30)
+
+## Posizioni aperte
+- XMRUSDT: short qty=6.335198567976257 @ 309.8 uPnL=6.489505886424295
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
