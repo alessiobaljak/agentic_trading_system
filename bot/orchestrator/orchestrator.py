@@ -18,6 +18,7 @@ import json
 import time
 from typing import Optional
 
+from bot.agents.regime_detector import RegimeDetector
 from bot.config import settings
 from bot.core.models import (
     AssetSnapshot, Direction, MemoryReport, OrchestratorDecision, Regime,
@@ -34,6 +35,8 @@ class Orchestrator:
     def __init__(self, adaptation: Optional[AdaptationEngine] = None) -> None:
         self.adaptation = adaptation or AdaptationEngine()
         self.strategies = get_all_strategies()
+        # per il regime PER-COIN in parita' col backtest (stesso detector del bt)
+        self.regime_detector = RegimeDetector()
         # esito dell'ULTIMA decisione (osservabilità): pubblicato su Firebase da main
         self.last_status: dict = {}
 
@@ -70,9 +73,19 @@ class Orchestrator:
         panchina dall'adattamento real-time dopo perdite consecutive) sono saltate.
         """
         disabled = disabled or set()
-        ctx = StrategyContext(all_assets=assets, regime=regime)
+        ctx_global = StrategyContext(all_assets=assets, regime=regime)
         signals = []
         for sym, asset in assets.items():
+            # PARITA' COL BACKTEST: il regime e' rilevato PER-COIN dai dati di quella
+            # coin (come engine.run_strategy), non l'unico macro-BTC. Cosi' su ogni
+            # coin scattano le stesse strategie del GATE 1. Fuori parita': macro unico.
+            if settings.BACKTEST_PARITY:
+                coin_regime = self.regime_detector.detect(asset)
+                asset.regime = coin_regime
+                ctx = StrategyContext(all_assets=assets, regime=coin_regime)
+            else:
+                coin_regime = regime
+                ctx = ctx_global
             params_by_strat = self.adaptation.params_for(sym)
             # strategie base (6) + strategie GENERATE validate per questo asset
             strategies = get_all_strategies(params_by_strat)
@@ -80,14 +93,14 @@ class Orchestrator:
             for strat in strategies:
                 if strat.name in disabled:
                     continue
-                if not strat.is_active_in(regime):
+                if not strat.is_active_in(coin_regime):
                     continue
                 if not self.adaptation.is_enabled(sym, strat.name):
                     continue
                 sig = strat.generate_signal(asset, ctx)
                 if sig is None:
                     continue
-                weight = self.adaptation.weight_for(strat.name, regime)
+                weight = self.adaptation.weight_for(strat.name, coin_regime)
                 signals.append({
                     "strategy": sig.strategy, "symbol": sig.symbol,
                     "direction": sig.direction.value, "confidence": sig.confidence,
