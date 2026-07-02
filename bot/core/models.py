@@ -129,6 +129,11 @@ class OrchestratorDecision(BaseModel):
     reasoning: str = ""
     # confidenza aggiustata dai pesi del learning (riempita dall'adaptation layer)
     adjusted_confidence: Optional[float] = None
+    # SL/TP suggeriti DALLA STRATEGIA (gli stessi del backtest GATE 1). Se presenti,
+    # il risk manager li usa invece di ricalcolarli coi default fissi 1.5ATR/2.0RR,
+    # così il paper replica esattamente lo stop/target validato out-of-sample.
+    suggested_stop: Optional[float] = None
+    suggested_target: Optional[float] = None
     timestamp: datetime = Field(default_factory=_utcnow)
 
     @field_validator("size_multiplier")

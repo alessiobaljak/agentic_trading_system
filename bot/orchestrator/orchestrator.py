@@ -107,6 +107,10 @@ class Orchestrator:
                     "adjusted_confidence": sig.confidence * weight,
                     "weight": weight, "reasoning": sig.reasoning,
                     "coin_regime": coin_regime,   # per il tilt di trend (decide_all)
+                    # SL/TP della STRATEGIA: stessi del backtest -> il risk manager
+                    # li usa invece dei default fissi (parità GATE 1 <-> paper).
+                    "suggested_stop": sig.suggested_stop,
+                    "suggested_target": sig.suggested_target,
                 })
         signals.sort(key=lambda s: s["adjusted_confidence"], reverse=True)
         return signals
@@ -195,7 +199,9 @@ class Orchestrator:
             d = OrchestratorDecision(
                 asset=s["symbol"], strategy=s["strategy"],
                 direction=Direction(s["direction"]), size_multiplier=size_mult,
-                confidence=s["confidence"], reasoning=s.get("reasoning", ""))
+                confidence=s["confidence"], reasoning=s.get("reasoning", ""),
+                suggested_stop=s.get("suggested_stop"),
+                suggested_target=s.get("suggested_target"))
             d.adjusted_confidence = s["adjusted_confidence"]
             decisions.append(d)
         self._record_status(
@@ -250,4 +256,6 @@ class Orchestrator:
             direction=Direction(best["direction"]),
             size_multiplier=size_mult, confidence=best["confidence"],
             reasoning=f"[fallback] {best['reasoning']} (peso={best['weight']:.2f})",
+            suggested_stop=best.get("suggested_stop"),
+            suggested_target=best.get("suggested_target"),
         )

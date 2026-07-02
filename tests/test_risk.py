@@ -115,6 +115,34 @@ def test_final_gate_reclamps_defensively():
     assert out.risk_per_trade == hard_limits.MAX_RISK_PER_TRADE
 
 
+def test_uses_strategy_suggested_stop_target_over_defaults():
+    """PARITA' GATE 1: se la decisione porta suggested_stop/target (dagli stessi
+    atr_mult_stop/rr validati out-of-sample), il risk manager li usa TALI E QUALI
+    invece di ricalcolarli coi default fissi 1.5ATR/2RR."""
+    rm = RiskManager()
+    user = RiskSettings(leverage=3.0, risk_per_trade=0.02)
+    dec = OrchestratorDecision(
+        asset="BTCUSDT", strategy="gen_x", direction=Direction.LONG,
+        size_multiplier=1.0, confidence=80,
+        suggested_stop=95.0, suggested_target=110.0,
+    )
+    params = rm.evaluate(dec, user, _asset(price=100.0, atr=2.0), 10_000)
+    # NON i default (100-1.5*2=97 / 100+3=103): esattamente quelli della strategia
+    assert params.stop_price == pytest.approx(95.0)
+    assert params.take_profit_price == pytest.approx(110.0)
+    # e il sizing deriva dalla distanza dello stop della strategia (5.0/unit)
+    assert params.quantity == pytest.approx((10_000 * params.risk_per_trade) / 5.0, rel=1e-6)
+
+
+def test_falls_back_to_default_stop_when_strategy_gives_none():
+    """Se la strategia non suggerisce SL/TP, si usano i default ATR del risk manager."""
+    rm = RiskManager()
+    user = RiskSettings(leverage=3.0, risk_per_trade=0.02)
+    params = rm.evaluate(_decision(), user, _asset(price=100.0, atr=2.0), 10_000)
+    assert params.stop_price == pytest.approx(97.0)   # 100 - 1.5*2
+    assert params.take_profit_price == pytest.approx(106.0)  # 100 + 2.0*(1.5*2)
+
+
 def test_correlation_guard_blocks_excess_correlated():
     guard = CorrelationGuard(threshold=0.85, max_correlated=3)
     base = [100, 101, 102, 103, 104, 105]

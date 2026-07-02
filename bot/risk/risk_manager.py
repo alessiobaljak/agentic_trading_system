@@ -76,8 +76,15 @@ class RiskManager:
         # il size_multiplier dell'orchestratore scala ulteriormente (<=1)
         eff_risk *= max(0.0, min(1.0, decision.size_multiplier))
 
-        # --- sizing ATR-based ---
-        stop_price, take_profit = self._stop_target(asset, decision.direction)
+        # --- SL/TP: prima scelta = quelli della STRATEGIA (== backtest GATE 1) ---
+        # Se la decisione porta suggested_stop/target (dagli stessi atr_mult_stop/rr
+        # validati out-of-sample), li usiamo TALI E QUALI: così il paper replica lo
+        # stop/target del gate. Solo se assenti si ricade sui default fissi 1.5ATR/2RR.
+        if decision.suggested_stop and decision.suggested_target:
+            stop_price, take_profit = decision.suggested_stop, decision.suggested_target
+        else:
+            stop_price, take_profit = self._stop_target(asset, decision.direction)
+            notes.append("SL/TP dai default risk manager (strategia senza suggested_stop/target)")
         price = asset.price
         risk_amount = account_equity * eff_risk         # $ a rischio
         per_unit_risk = abs(price - stop_price) if stop_price else None
