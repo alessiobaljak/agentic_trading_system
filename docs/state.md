@@ -1,17 +1,20 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-02 21:32 UTC_
+_Generato: 2026-07-02 23:31 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: high_uncertainty
 - DRY_RUN: True
 - equity: **$9,554.94**
-- ultimo heartbeat: 2026-07-02 21:32 UTC
+- ultimo heartbeat: 2026-07-02 23:30 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-02 21:21 UTC)
+- esito: **⚪ FLAT** (2026-07-02 23:25 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 76 · segnali: 0
+- asset valutati: 77 · segnali: 0
+
+## Posizioni aperte
+- SUIUSDT: short qty=2615.6409071024436 @ 0.7306 uPnL=-6.5317000039888455
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
