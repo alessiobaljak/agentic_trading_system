@@ -1,20 +1,17 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-02 19:52 UTC_
+_Generato: 2026-07-02 21:32 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: bull_trending
+- regime: high_uncertainty
 - DRY_RUN: True
-- equity: **$9,540.66**
-- ultimo heartbeat: 2026-07-02 19:52 UTC
+- equity: **$9,554.94**
+- ultimo heartbeat: 2026-07-02 21:32 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-02 19:50 UTC)
+- esito: **⚪ FLAT** (2026-07-02 21:21 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 76 · segnali: 0
-
-## Posizioni aperte
-- JTOUSDT: short qty=2515.0006942952555 @ 0.7587 uPnL=23.290339979569872
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
