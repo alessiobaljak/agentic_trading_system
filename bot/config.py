@@ -157,6 +157,13 @@ class Settings:
     # trading con soldi VERI va rimesso a False (controlli di sicurezza riattivi).
     BACKTEST_PARITY: bool = os.getenv("BACKTEST_PARITY", "false").lower() == "true"
 
+    # ---- Trend come contesto di decisione (SOLO live/paper, non nel backtest) ----
+    # Il trend (coin + mercato) e' un fattore IN PIU' che modula la SIZE, NON un veto:
+    # un segnale CONTROtrend apre lo stesso ma piu' piccolo; in-trend resta pieno.
+    # (size_multiplier e' clampato <=1, quindi il tilt puo' solo ridurre.)
+    TREND_TILT_ENABLED: bool = os.getenv("TREND_TILT_ENABLED", "true").lower() == "true"
+    TREND_TILT_STRENGTH: float = float(os.getenv("TREND_TILT_STRENGTH", "0.5"))
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

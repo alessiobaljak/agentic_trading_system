@@ -106,6 +106,7 @@ class Orchestrator:
                     "direction": sig.direction.value, "confidence": sig.confidence,
                     "adjusted_confidence": sig.confidence * weight,
                     "weight": weight, "reasoning": sig.reasoning,
+                    "coin_regime": coin_regime,   # per il tilt di trend (decide_all)
                 })
         signals.sort(key=lambda s: s["adjusted_confidence"], reverse=True)
         return signals
@@ -155,6 +156,17 @@ class Orchestrator:
         return decision
 
     # ------------------------------------------------------------------ #
+    @staticmethod
+    def _trend_align(regime: Optional[Regime], direction: str) -> float:
+        """+1 se la direzione e' IN TREND, -1 se CONTROtrend, 0 se regime neutro
+        (sideways/incertezza). Usato per il tilt di size sul trend."""
+        if regime == Regime.BULL_TRENDING:
+            return 1.0 if direction == Direction.LONG.value else -1.0
+        if regime == Regime.BEAR_TRENDING:
+            return 1.0 if direction == Direction.SHORT.value else -1.0
+        return 0.0
+
+    # ------------------------------------------------------------------ #
     def decide_all(
         self, assets: dict[str, AssetSnapshot], regime: Regime,
         disabled: Optional[set] = None,
@@ -172,9 +184,17 @@ class Orchestrator:
             if s["symbol"] in seen:
                 continue
             seen.add(s["symbol"])
+            # TREND come contesto: modula la SIZE (non un veto). Il controtrend
+            # (rispetto a trend della coin 60% + mercato 40%) apre piu' piccolo;
+            # in-trend resta pieno. size_multiplier<=1 -> puo' solo ridurre.
+            size_mult = 1.0
+            if settings.TREND_TILT_ENABLED:
+                align = (0.6 * self._trend_align(s.get("coin_regime"), s["direction"])
+                         + 0.4 * self._trend_align(regime, s["direction"]))
+                size_mult = max(0.5, 1.0 + settings.TREND_TILT_STRENGTH * min(0.0, align))
             d = OrchestratorDecision(
                 asset=s["symbol"], strategy=s["strategy"],
-                direction=Direction(s["direction"]), size_multiplier=1.0,
+                direction=Direction(s["direction"]), size_multiplier=size_mult,
                 confidence=s["confidence"], reasoning=s.get("reasoning", ""))
             d.adjusted_confidence = s["adjusted_confidence"]
             decisions.append(d)
