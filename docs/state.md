@@ -1,23 +1,21 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-03 19:49 UTC_
+_Generato: 2026-07-03 21:32 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: sideways
+- regime: bull_trending
 - DRY_RUN: True
-- equity: **$9,712.82**
-- ultimo heartbeat: 2026-07-03 19:47 UTC
+- equity: **$9,821.82**
+- ultimo heartbeat: 2026-07-03 21:32 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-03 19:34 UTC)
+- esito: **⚪ FLAT** (2026-07-03 21:24 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 76 · segnali: 0
+- asset valutati: 78 · segnali: 0
 
 ## Posizioni aperte
-- 1000PEPEUSDT: long qty=767010.867611476 @ 0.0025516 uPnL=32.720683612305834
-- IDUSDT: long qty=52527.86145113567 @ 0.03703 uPnL=13.657243977295083
-- SUIUSDT: long qty=2529.0514522186677 @ 0.7681 uPnL=3.034861742662348
-- WLDUSDT: long qty=4564.035819422387 @ 0.4259 uPnL=19.22841982830113
+- IDUSDT: long qty=52527.86145113567 @ 0.03703 uPnL=-37.907781773441116
+- WLDUSDT: long qty=4564.035819422387 @ 0.4259 uPnL=16.430528949920557
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
