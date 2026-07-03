@@ -18,6 +18,18 @@ type Trade = {
   exit_ts?: number;
 };
 
+/** exit_ts è un timestamp Unix in SECONDI (trade.exit_time.timestamp()). */
+function fmtDate(ts: number | undefined): string {
+  if (ts == null || !Number.isFinite(ts)) return '—';
+  return new Date(ts * 1000).toLocaleString(undefined, {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export default function ClosedTrades() {
   const [rows, setRows] = useState<Trade[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -50,6 +62,7 @@ export default function ClosedTrades() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ textAlign: 'left', color: '#8b96a5' }}>
+                <th style={{ padding: '6px 8px' }}>Data</th>
                 <th style={{ padding: '6px 8px' }}>Coin</th>
                 <th style={{ padding: '6px 8px' }}>Strategia</th>
                 <th style={{ padding: '6px 8px' }}>Side</th>
@@ -60,6 +73,7 @@ export default function ClosedTrades() {
             <tbody>
               {rows.map((t, i) => (
                 <tr key={i} style={{ borderTop: '1px solid #28303d' }}>
+                  <td style={{ padding: '6px 8px', color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtDate(t.exit_ts)}</td>
                   <td style={{ padding: '6px 8px', fontWeight: 600 }}>{t.symbol}</td>
                   <td style={{ padding: '6px 8px' }}>{t.strategy}</td>
                   <td style={{ padding: '6px 8px' }}>{t.direction}</td>
@@ -76,7 +90,7 @@ export default function ClosedTrades() {
                 </tr>
               ))}
               <tr style={{ borderTop: '2px solid #28303d', fontWeight: 700 }}>
-                <td style={{ padding: '6px 8px' }} colSpan={4}>
+                <td style={{ padding: '6px 8px' }} colSpan={5}>
                   Totale realizzato
                 </td>
                 <td

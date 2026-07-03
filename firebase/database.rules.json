@@ -7,6 +7,17 @@
       "kill_switch": {
         ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
         ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID' && newData.isBoolean()"
+      },
+      "close_position": {
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        "$symbol": {
+          ".validate": "newData.isBoolean() || !newData.exists()"
+        }
+      },
+      "close_position_meta": {
+        ".read": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'",
+        ".write": "auth != null && auth.uid === 'REPLACE_WITH_YOUR_FIREBASE_UID'"
       }
     }
   }

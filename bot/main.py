@@ -185,6 +185,34 @@ class TradingBot:
                 if self.circuit_breakers.state.daily_pnl_pct <= -0.03:
                     self.notifier.daily_loss(abs(self.circuit_breakers.state.daily_pnl_pct))
 
+        # 1b) chiusura MANUALE di singole posizioni (richiesta dalla dashboard).
+        # La dashboard scrive /commands/close_position/{symbol}=true; qui chiudiamo
+        # quelle posizioni al mark price con PnL corretto (come un TP/SL), poi
+        # azzeriamo il comando. Non tocca la logica di trading: agisce SOLO su
+        # richiesta esplicita dell'utente.
+        close_req = self.fb.get_rtdb("/commands/close_position") or {}
+        if isinstance(close_req, dict) and close_req:
+            for sym in list(close_req.keys()):
+                pos = self.executor.open_positions.get(sym)
+                if pos is None:
+                    continue
+                price = self.price.get_mark_price(sym)
+                if price is None:
+                    snap = self.selected.get(sym) or self.price.build_snapshot(sym)
+                    price = snap.price if snap else pos.entry_price
+                eq = self.account_equity()
+                closed = self.executor._close(pos, price, ExitReason.MANUAL)
+                self.logger.log(closed)
+                self.apply_realized_pnl(closed.pnl)
+                self.notifier.trade_closed(
+                    closed.symbol, closed.strategy, closed.direction.value,
+                    closed.exit_price, closed.pnl, closed.pnl_pct,
+                    closed.exit_reason.value, dry_run=settings.DRY_RUN)
+                self.circuit_breakers.register_trade_result(
+                    closed.pnl / eq if eq else 0.0, False)
+                self._persist_risk_state()
+            self.fb.set_rtdb("/commands/close_position", None)
+
         # 2) kill switch
         if self.kill_switch_active():
             prices = {s: self.selected[s].price for s in self.selected if s in self.selected}
