@@ -1,22 +1,23 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-04 15:31 UTC_
+_Generato: 2026-07-04 17:19 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$9,624.73**
-- ultimo heartbeat: 2026-07-04 15:31 UTC
+- equity: **$9,680.54**
+- ultimo heartbeat: 2026-07-04 17:19 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-04 15:24 UTC)
-- motivo: parita' backtest: 1 segnali validi aperti
-- asset valutati: 77 · segnali: 1 · miglior segnale TIAUSDT gen_beca522e (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-04 17:11 UTC)
+- motivo: nessun segnale valido sopra soglia
+- asset valutati: 77 · segnali: 0
 
 ## Posizioni aperte
-- BTCUSDT: long qty=0.03099970173209027 @ 62410.5 uPnL=13.162473355445485
-- IDUSDT: short qty=55255.667939619045 @ 0.03511 uPnL=4.973010114565703
-- TIAUSDT: long qty=4837.764137338578 @ 0.3979 uPnL=-3.2864383114181095
+- BTCUSDT: long qty=0.03099970173209027 @ 62410.5 uPnL=14.644225402803665
+- IDUSDT: short qty=55255.667939619045 @ 0.03511 uPnL=4.420453435169727
+- ONDOUSDT: long qty=5704.503881341899 @ 0.3394 uPnL=25.670267466038567
+- SUIUSDT: long qty=2500.9047034520204 @ 0.7697 uPnL=-0.008277994568650344
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
