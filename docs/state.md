@@ -1,20 +1,25 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-04 19:37 UTC_
+_Generato: 2026-07-04 21:14 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: sideways
+- regime: bull_trending
 - DRY_RUN: True
 - equity: **$9,751.95**
-- ultimo heartbeat: 2026-07-04 19:37 UTC
+- ultimo heartbeat: 2026-07-04 21:13 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-04 19:28 UTC)
+- esito: **⚪ FLAT** (2026-07-04 21:01 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 74 · segnali: 0
 
 ## Posizioni aperte
-- IDUSDT: short qty=55255.667939619045 @ 0.03511 uPnL=-12.156246946716077
+- 1000BONKUSDT: long qty=398120.08055280655 @ 0.004899 uPnL=10.87265939989715
+- DOGEUSDT: long qty=24998.593625073045 @ 0.07802 uPnL=2.7498452987580095
+- ENAUSDT: short qty=24700.991320012654 @ 0.07896 uPnL=-6.4222577432031995
+- IDUSDT: short qty=55255.667939619045 @ 0.03511 uPnL=-6.078123473358039
+- TRBUSDT: long qty=121.04451527513184 @ 16.113 uPnL=9.843331509057576
+- WLDUSDT: long qty=4563.383890098735 @ 0.4274 uPnL=11.408459725246848
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
