@@ -1,23 +1,22 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-05 17:32 UTC_
+_Generato: 2026-07-05 19:42 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$9,966.53**
-- ultimo heartbeat: 2026-07-05 17:32 UTC
+- equity: **$9,954.18**
+- ultimo heartbeat: 2026-07-05 19:40 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-05 17:27 UTC)
-- motivo: parita' backtest: 1 segnali validi aperti
-- asset valutati: 68 · segnali: 1 · miglior segnale ENAUSDT gen_89cf35e5 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-05 19:27 UTC)
+- motivo: nessun segnale valido sopra soglia
+- asset valutati: 68 · segnali: 0
 
 ## Posizioni aperte
-- ARPAUSDT: short qty=217062.76796480356 @ 0.0092 uPnL=18.100864220584786
-- ENAUSDT: long qty=25286.133191194916 @ 0.07883 uPnL=-4.781102063790989
-- SUIUSDT: long qty=2605.877316953397 @ 0.7418 uPnL=35.49087641211273
-- WLDUSDT: short qty=4808.358936853196 @ 0.4062 uPnL=15.539654412122191
+- ARPAUSDT: short qty=217062.76796480356 @ 0.0092 uPnL=-6.511883038944218
+- SUIUSDT: long qty=2605.877316953397 @ 0.7418 uPnL=35.700519242261365
+- WLDUSDT: short qty=4808.358936853196 @ 0.4062 uPnL=-3.7154670340958798
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
