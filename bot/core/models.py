@@ -201,6 +201,13 @@ class ClosedTrade(BaseModel):
     slippage: float = 0.0
     exit_reason: ExitReason
 
+    # livelli CONFIGURATI all'apertura (stop base e take-profit ORIGINALI, non lo
+    # stop alzato dal profit-lock). Servono al controfattuale sul trailing stop:
+    # dopo un'uscita trailing, il prezzo avrebbe poi raggiunto questo TP? Se sì il
+    # trailing ha tagliato un vincitore; se no ha protetto un'inversione.
+    take_profit_price: Optional[float] = None
+    stop_price: Optional[float] = None
+
     # contesto all'ENTRATA (fondamentale per il learning)
     regime_at_entry: Regime
     indicators_at_entry: dict[str, IndicatorSnapshot] = Field(default_factory=dict)

@@ -269,6 +269,7 @@ class ExecutionEngine:
             exit_price=exit_price, size=pos.quantity,
             notional=pos.entry_price * pos.quantity, leverage=pos.leverage,
             pnl=pnl, pnl_pct=pnl_pct, exit_reason=reason,
+            take_profit_price=pos.take_profit_price, stop_price=pos.stop_price,
             regime_at_entry=pos.regime_at_entry, indicators_at_entry=ind,
             sentiment_at_entry=pos.sentiment_at_entry,
             fear_greed_at_entry=pos.fear_greed_at_entry,
