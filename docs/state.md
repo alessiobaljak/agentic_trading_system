@@ -1,24 +1,24 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-05 11:47 UTC_
+_Generato: 2026-07-05 14:09 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$9,838.65**
-- ultimo heartbeat: 2026-07-05 11:47 UTC
+- equity: **$9,984.89**
+- ultimo heartbeat: 2026-07-05 14:09 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-05 11:46 UTC)
+- esito: **⚪ FLAT** (2026-07-05 14:03 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 71 · segnali: 0
+- asset valutati: 70 · segnali: 0
 
 ## Posizioni aperte
-- 1000PEPEUSDT: short qty=728940.867443873 @ 0.0026561 uPnL=-0.1895246255352298
-- ONDOUSDT: long qty=5987.600858828228 @ 0.3262 uPnL=-4.191320601179631
-- SUIUSDT: long qty=2605.877316953397 @ 0.7418 uPnL=6.514693292383353
-- VANRYUSDT: long qty=235288.19485950284 @ 0.004932 uPnL=69.9464745678331
-- WLDUSDT: short qty=4808.358936853196 @ 0.4062 uPnL=-9.135881980021134
+- 1000PEPEUSDT: short qty=728940.867443873 @ 0.0026561 uPnL=-20.359318427707223
+- ARPAUSDT: short qty=217062.76796480356 @ 0.0092 uPnL=18.450335277008303
+- ONDOUSDT: long qty=5987.600858828228 @ 0.3262 uPnL=12.573961803539225
+- SUIUSDT: long qty=2605.877316953397 @ 0.7418 uPnL=26.058773169533993
+- WLDUSDT: short qty=4808.358936853196 @ 0.4062 uPnL=-24.041794684266
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
