@@ -1,10 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { onValue, ref } from 'firebase/database';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
-import { getRtdb, getAuthInstance } from '../lib/firebase';
-import { toMillis, type BotStatus as BotStatusT } from '../lib/types';
+import { getAuthInstance } from '../lib/firebase';
 
 import BotStatus from './BotStatus';
 import DecisionStatus from './DecisionStatus';
@@ -18,8 +16,6 @@ import Insights from './Insights';
 import RiskControl from './RiskControl';
 import KillSwitch from './KillSwitch';
 
-const HEARTBEAT_STALE_MS = 5 * 60 * 1000;
-
 type TabId = 'panoramica' | 'operativita' | 'apprendimento' | 'strategie' | 'rischio';
 
 const TABS: { id: TabId; label: string; intro: string }[] = [
@@ -32,50 +28,6 @@ const TABS: { id: TabId; label: string; intro: string }[] = [
 
 function isTab(v: string): v is TabId {
   return TABS.some((t) => t.id === v);
-}
-
-/** Striscia vitali sempre visibile: non perdi mai il polso del bot cambiando tab. */
-function Vitals() {
-  const [status, setStatus] = useState<BotStatusT | null>(null);
-  const [equity, setEquity] = useState<number | null>(null);
-  const [now, setNow] = useState(0);
-
-  useEffect(() => {
-    const db = getRtdb();
-    const unsubStatus = onValue(ref(db, 'bot_status'), (snap) => {
-      setStatus(snap.exists() ? (snap.val() as BotStatusT) : null);
-    });
-    const unsubEquity = onValue(ref(db, 'account/equity'), (snap) => {
-      setEquity(snap.exists() ? Number(snap.val()) : null);
-    });
-    setNow(Date.now());
-    const tick = setInterval(() => setNow(Date.now()), 15000);
-    return () => {
-      unsubStatus();
-      unsubEquity();
-      clearInterval(tick);
-    };
-  }, []);
-
-  const heartbeatMs = toMillis(status?.heartbeat ?? status?.updated_at ?? null);
-  const online = heartbeatMs != null && now > 0 && now - heartbeatMs < HEARTBEAT_STALE_MS;
-  const dryRun = status?.dry_run ?? true;
-
-  return (
-    <div className="vitals">
-      <span className={`badge ${online ? 'green' : 'red'}`}>
-        <span className="dot" style={{ background: online ? 'var(--green)' : 'var(--red)' }} />
-        {online ? 'ONLINE' : 'OFFLINE'}
-      </span>
-      <span className={`badge ${dryRun ? 'amber' : 'red'}`}>{dryRun ? 'DRY_RUN' : 'LIVE'}</span>
-      <span className="badge gray">{status?.regime ?? 'n/a'}</span>
-      {equity != null && (
-        <span className="equity mono">
-          ${equity.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-        </span>
-      )}
-    </div>
-  );
 }
 
 export default function DashboardShell() {
@@ -117,17 +69,14 @@ export default function DashboardShell() {
             Agentic Trading
             <span className="brand-dim">· paper</span>
           </div>
-          <div className="vitals">
-            <Vitals />
-            {user && (
-              <>
-                <span className="muted" style={{ fontSize: 12 }}>{user.email ?? user.uid}</span>
-                <button onClick={() => signOut(getAuthInstance())} className="btn btn-ghost" style={{ padding: '4px 10px', fontSize: 12 }}>
-                  Esci
-                </button>
-              </>
-            )}
-          </div>
+          {user && (
+            <div className="vitals">
+              <span className="muted" style={{ fontSize: 12 }}>{user.email ?? user.uid}</span>
+              <button onClick={() => signOut(getAuthInstance())} className="btn btn-ghost" style={{ padding: '4px 10px', fontSize: 12 }}>
+                Esci
+              </button>
+            </div>
+          )}
         </div>
         <div className="tabs" role="tablist">
           {TABS.map((t) => (

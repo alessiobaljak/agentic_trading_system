@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { onValue, ref } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
-import { toMillis, type BotStatus as BotStatusT, type RiskState } from '../lib/types';
+import { toMillis, type BotStatus as BotStatusT, type Position, type RiskState } from '../lib/types';
 
 // 5 min: lo scan di mercato (ogni 4h) puo' bloccare il ciclo 1-3 min mentre
 // scarica le candele dell'intero universo; 2 min era troppo stretto e faceva
@@ -26,6 +26,7 @@ export default function BotStatus() {
   const [status, setStatus] = useState<BotStatusT | null>(null);
   const [riskState, setRiskState] = useState<RiskState | null>(null);
   const [equity, setEquity] = useState<number | null>(null);
+  const [positions, setPositions] = useState<Position[]>([]);
   const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
@@ -39,15 +40,38 @@ export default function BotStatus() {
     const unsubEquity = onValue(ref(db, 'account/equity'), (snap) => {
       setEquity(snap.exists() ? Number(snap.val()) : null);
     });
+    const unsubPos = onValue(ref(db, 'positions'), (snap) => {
+      const val = snap.val() as Record<string, Position> | null;
+      setPositions(val ? Object.values(val) : []);
+    });
     // re-evaluate heartbeat freshness every 15s even without new data
     const tick = setInterval(() => setNow(Date.now()), 15000);
     return () => {
       unsubStatus();
       unsubRisk();
       unsubEquity();
+      unsubPos();
       clearInterval(tick);
     };
   }, []);
+
+  // --- scomposizione dell'equity ---
+  // Il bot pubblica /account/equity = capitale iniziale + PnL REALIZZATO (non
+  // include il PnL delle posizioni aperte, ne' sottrae il margine). Qui deriviamo
+  // il quadro completo dai dati delle posizioni:
+  //   uPnL aperto        = somma dei PnL non realizzati
+  //   equity mark-to-mkt = bilancio realizzato + uPnL aperto (patrimonio reale ora)
+  //   margine usato      = somma(notional/leva) bloccato come collaterale
+  //   margine libero     = equity MtM - margine usato (liquidita' per nuovi trade)
+  const uPnl = positions.reduce((s, p) => s + (p.unrealized_pnl ?? 0), 0);
+  const marginUsed = positions.reduce((s, p) => {
+    const notional = (p.entry_price ?? 0) * (p.quantity ?? 0);
+    const lev = p.leverage && p.leverage > 0 ? p.leverage : 1;
+    return s + notional / lev;
+  }, 0);
+  const equityMtm = equity != null ? equity + uPnl : null;
+  const freeMargin = equityMtm != null ? equityMtm - marginUsed : null;
+  const usd = (n: number) => `$${n.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
   const heartbeatMs = toMillis(status?.heartbeat ?? status?.updated_at ?? null);
   const online = heartbeatMs != null && now - heartbeatMs < HEARTBEAT_STALE_MS;
@@ -86,16 +110,39 @@ export default function BotStatus() {
         </div>
 
         <div className="kpi">
-          {equity != null && (
+          {equityMtm != null && (
             <div className="item">
-              <div className="label">Equity</div>
-              <div className="value mono">
-                ${equity.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-              </div>
+              <div className="label">Equity (mark-to-market)</div>
+              <div className="value mono">{usd(equityMtm)}</div>
             </div>
           )}
         </div>
       </div>
+
+      {equity != null && (
+        <div className="kpi" style={{ marginTop: 14, gap: 20 }}>
+          <div className="item">
+            <div className="label">Bilancio (realizzato)</div>
+            <div className="value mono" style={{ fontSize: 16 }}>{usd(equity)}</div>
+          </div>
+          <div className="item">
+            <div className="label">uPnL aperto</div>
+            <div className={`value mono ${uPnl >= 0 ? 'pos' : 'neg'}`} style={{ fontSize: 16 }}>
+              {uPnl >= 0 ? '+' : ''}{usd(uPnl).replace('$', '')}
+            </div>
+          </div>
+          <div className="item">
+            <div className="label">Margine usato</div>
+            <div className="value mono" style={{ fontSize: 16 }}>{usd(marginUsed)}</div>
+          </div>
+          <div className="item">
+            <div className="label">Margine libero</div>
+            <div className="value mono" style={{ fontSize: 16 }}>
+              {freeMargin != null ? usd(freeMargin) : '—'}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="muted" style={{ marginTop: 10, fontSize: 12 }}>
         Heartbeat: {timeAgo(heartbeatMs)}
