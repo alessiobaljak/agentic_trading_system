@@ -1,21 +1,20 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-05 21:20 UTC_
+_Generato: 2026-07-05 23:19 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$9,880.58**
-- ultimo heartbeat: 2026-07-05 21:19 UTC
+- equity: **$9,911.34**
+- ultimo heartbeat: 2026-07-05 23:18 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-05 21:15 UTC)
-- motivo: parita' backtest: 1 segnali validi aperti
-- asset valutati: 68 · segnali: 2 · miglior segnale WLDUSDT gen_beca522e (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-05 23:17 UTC)
+- motivo: nessun segnale valido sopra soglia
+- asset valutati: 69 · segnali: 0
 
 ## Posizioni aperte
-- SUIUSDT: long qty=2605.877316953397 @ 0.7418 uPnL=37.03053296606143
-- WLDUSDT: long qty=4769.768997967659 @ 0.4143 uPnL=3.3660736795558805
+- IDUSDT: short qty=53538.34303596305 @ 0.03704 uPnL=-9.636901746473699
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
