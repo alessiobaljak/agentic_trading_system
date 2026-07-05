@@ -15,7 +15,6 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
-  signOut,
   type User,
 } from 'firebase/auth';
 import { getAuthInstance } from '../lib/firebase';
@@ -80,18 +79,7 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return (
-    <>
-      <div
-        className="header-bar"
-        style={{ justifyContent: 'flex-end', gap: 12, marginBottom: 8, fontSize: 12 }}
-      >
-        <span className="muted">{user.email ?? user.uid}</span>
-        <button onClick={() => signOut(getAuthInstance())} className="btn btn-ghost">
-          Esci
-        </button>
-      </div>
-      {children}
-    </>
-  );
+  // La barra utente/logout ora vive nel topbar dello shell (DashboardShell):
+  // qui AuthGate resta puro gate d'accesso, senza duplicare l'header.
+  return <>{children}</>;
 }

@@ -1,16 +1,6 @@
 import { firebaseReady, missingFirebaseVars } from './lib/firebase';
 import AuthGate from './components/AuthGate';
-import BotStatus from './components/BotStatus';
-import DecisionStatus from './components/DecisionStatus';
-import OptimizedStrategies from './components/OptimizedStrategies';
-import Positions from './components/Positions';
-import ClosedTrades from './components/ClosedTrades';
-import EquityCurve from './components/EquityCurve';
-import Heatmap from './components/Heatmap';
-import StrategyWeights from './components/StrategyWeights';
-import Insights from './components/Insights';
-import RiskControl from './components/RiskControl';
-import KillSwitch from './components/KillSwitch';
+import DashboardShell from './components/DashboardShell';
 
 function ConfigureNotice() {
   return (
@@ -45,44 +35,11 @@ function ConfigureNotice() {
 export default function Page() {
   return (
     <main className="container">
-      <div className="grid" style={{ marginBottom: 16 }}>
-        <header className="header-bar" style={{ paddingBottom: 4 }}>
-          <h1 style={{ margin: 0, fontSize: 20 }}>Agentic Trading — Dashboard</h1>
-          <span className="muted" style={{ fontSize: 12 }}>
-            Live Firebase view · risk control · kill switch
-          </span>
-        </header>
-      </div>
-
       {!firebaseReady ? (
         <ConfigureNotice />
       ) : (
         <AuthGate>
-          <div className="grid">
-            <BotStatus />
-
-            <DecisionStatus />
-
-            <div className="grid grid-2">
-              <RiskControl />
-              <KillSwitch />
-            </div>
-
-            <Positions />
-
-            <ClosedTrades />
-
-            <div className="grid grid-2">
-              <EquityCurve />
-              <StrategyWeights />
-            </div>
-
-            <Heatmap />
-
-            <OptimizedStrategies />
-
-            <Insights />
-          </div>
+          <DashboardShell />
         </AuthGate>
       )}
 
