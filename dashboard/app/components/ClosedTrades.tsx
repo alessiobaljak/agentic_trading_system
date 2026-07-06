@@ -26,9 +26,9 @@ type Trade = {
   stop_price?: number;
 };
 
-type Verdict = 'premature' | 'correct' | 'pending' | 'unavailable';
+type Verdict = 'premature' | 'protected' | 'neutral' | 'pending' | 'unavailable';
 
-const EVAL_HOURS = 24; // finestra dopo l'uscita entro cui cerchiamo il TP
+const EVAL_HOURS = 24; // finestra dopo l'uscita entro cui simuliamo "se fossimo rimasti"
 
 /** exit_ts è un timestamp Unix in SECONDI (trade.exit_time.timestamp()). */
 function fmtDate(ts: number | undefined): string {
@@ -47,13 +47,20 @@ function tradeKey(t: Trade): string {
 }
 
 /**
- * Il prezzo ha toccato il TP entro EVAL_HOURS dall'uscita?
- * Ritorna il verdetto controfattuale sul trailing.
+ * Controfattuale: se NON fossimo usciti col trailing, cosa avrebbe toccato PRIMA
+ * il prezzo — il TP configurato o lo stop-loss base? Simula sulle klines Binance
+ * dall'uscita in avanti (finestra EVAL_HOURS), candela per candela in ordine.
+ *   - TP per primo  -> "prematuro"  (avremmo vinto di più tenendo la posizione)
+ *   - SL per primo  -> "corretto"   (tenendo saremmo finiti in stop: il trailing ha protetto)
+ *   - nessuno dei due entro la finestra (completa) -> "neutro"
  */
 async function evalTrailing(t: Trade): Promise<Verdict> {
   const tp = t.take_profit_price;
+  const sl = t.stop_price;
   const exit = t.exit_ts;
-  if (tp == null || !Number.isFinite(tp) || exit == null) return 'unavailable';
+  if (tp == null || sl == null || !Number.isFinite(tp) || !Number.isFinite(sl) || exit == null) {
+    return 'unavailable';
+  }
   const nowSec = Date.now() / 1000;
   const startMs = Math.floor(exit * 1000);
   const endMs = Math.floor(Math.min(nowSec, exit + EVAL_HOURS * 3600) * 1000);
@@ -65,15 +72,19 @@ async function evalTrailing(t: Trade): Promise<Verdict> {
     const res = await fetch(url);
     if (!res.ok) return 'unavailable';
     const kl = (await res.json()) as unknown[][];
-    // kline: [openTime, open, high, low, close, ...] -> high=2, low=3
-    const touched = kl.some((k) => {
+    // klines in ordine cronologico crescente: [openTime, open, high, low, close, ...]
+    for (const k of kl) {
       const high = Number(k[2]);
       const low = Number(k[3]);
-      return long ? high >= tp : low <= tp;
-    });
-    if (touched) return 'premature';
-    // TP mai raggiunto: verdetto definitivo solo se la finestra è completa
-    if (nowSec - exit >= EVAL_HOURS * 3600) return 'correct';
+      const tpHit = long ? high >= tp : low <= tp;
+      const slHit = long ? low <= sl : high >= sl;
+      // stessa candela colpisce entrambi: ordine intra-candela ignoto -> neutro
+      if (tpHit && slHit) return 'neutral';
+      if (tpHit) return 'premature';
+      if (slHit) return 'protected';
+    }
+    // né TP né SL nella finestra: definitivo solo se la finestra è completa
+    if (nowSec - exit >= EVAL_HOURS * 3600) return 'neutral';
     return 'pending';
   } catch {
     return 'unavailable';
@@ -83,15 +94,22 @@ async function evalTrailing(t: Trade): Promise<Verdict> {
 function VerdictBadge({ v }: { v: Verdict | undefined }) {
   if (v === 'premature') {
     return (
-      <span style={{ color: '#f85149' }} title={`Il prezzo ha raggiunto il TP entro ${EVAL_HOURS}h: il trailing ha tagliato un vincitore.`}>
+      <span style={{ color: '#f85149' }} title={`Restando in posizione il prezzo avrebbe toccato il TP entro ${EVAL_HOURS}h: il trailing ha tagliato un vincitore.`}>
         ❌ prematuro
       </span>
     );
   }
-  if (v === 'correct') {
+  if (v === 'protected') {
     return (
-      <span style={{ color: '#3fb950' }} title={`Il prezzo NON ha raggiunto il TP entro ${EVAL_HOURS}h: il trailing ha protetto.`}>
+      <span style={{ color: '#3fb950' }} title={`Restando in posizione il prezzo avrebbe toccato lo STOP LOSS entro ${EVAL_HOURS}h: il trailing ha protetto da una perdita.`}>
         ✅ corretto
+      </span>
+    );
+  }
+  if (v === 'neutral') {
+    return (
+      <span style={{ color: '#8b96a5' }} title={`Entro ${EVAL_HOURS}h il prezzo non ha toccato né TP né SL (o li ha toccati nella stessa candela): esito indifferente.`}>
+        ⚪ neutro
       </span>
     );
   }
@@ -99,7 +117,7 @@ function VerdictBadge({ v }: { v: Verdict | undefined }) {
     return <span style={{ color: '#8b96a5' }} title={`Finestra di ${EVAL_HOURS}h non ancora completa.`}>in valutazione</span>;
   }
   if (v === 'unavailable') {
-    return <span style={{ color: '#8b96a5' }} title="TP non registrato o Binance non raggiungibile dal browser.">n/d</span>;
+    return <span style={{ color: '#8b96a5' }} title="TP/SL non registrati (trade vecchio) o Binance non raggiungibile dal browser.">n/d</span>;
   }
   return <span style={{ color: '#8b96a5' }}>…</span>;
 }
