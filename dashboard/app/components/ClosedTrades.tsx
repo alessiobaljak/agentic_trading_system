@@ -23,6 +23,7 @@ type Trade = {
   exit_price?: number;
   take_profit_price?: number;
   stop_price?: number;
+  entry_time?: string; // ISO 8601 (ClosedTrade.entry_time serializzato)
 };
 
 type Verdict = 'premature' | 'protected' | 'neutral' | 'pending' | 'unavailable';
@@ -33,6 +34,26 @@ const MAX_TRADES = 500; // tetto di sicurezza sulle letture Firestore (copre lo 
 function fmtTime(ts: number | undefined): string {
   if (ts == null || !Number.isFinite(ts)) return '—';
   return new Date(ts * 1000).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+}
+
+/** Ora di apertura (da entry_time ISO). Se aperta in un giorno diverso dalla
+ *  chiusura, antepone la data breve così è chiaro che il trade ha scavallato. */
+function fmtEntry(entryIso: string | undefined, exitTs: number | undefined): string {
+  if (!entryIso) return '—';
+  const d = new Date(entryIso);
+  if (Number.isNaN(d.getTime())) return '—';
+  const hhmm = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  if (exitTs != null) {
+    const ex = new Date(exitTs * 1000);
+    const sameDay =
+      d.getFullYear() === ex.getFullYear() &&
+      d.getMonth() === ex.getMonth() &&
+      d.getDate() === ex.getDate();
+    if (!sameDay) {
+      return `${d.toLocaleDateString(undefined, { day: '2-digit', month: '2-digit' })} ${hhmm}`;
+    }
+  }
+  return hhmm;
 }
 
 function dayKey(ts: number): string {
@@ -235,7 +256,8 @@ export default function ClosedTrades() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ textAlign: 'left', color: '#8b96a5' }}>
-                <th style={cell}>Ora</th>
+                <th style={cell}>Aperta</th>
+                <th style={cell}>Chiusa</th>
                 <th style={cell}>Coin</th>
                 <th style={cell}>Strategia</th>
                 <th style={cell}>Side</th>
@@ -253,7 +275,7 @@ export default function ClosedTrades() {
                       onClick={() => toggle(g.key)}
                       style={{ cursor: 'pointer', borderTop: '2px solid #28303d', background: '#161d2a' }}
                     >
-                      <td colSpan={6} style={{ ...cell, fontWeight: 600 }}>
+                      <td colSpan={7} style={{ ...cell, fontWeight: 600 }}>
                         <span style={{ display: 'inline-block', width: 16, color: '#8b96a5' }}>
                           {open ? '▾' : '▸'}
                         </span>
@@ -270,6 +292,7 @@ export default function ClosedTrades() {
                     {open &&
                       g.trades.map((t, i) => (
                         <tr key={`${g.key}-${i}`} style={{ borderTop: '1px solid #28303d' }}>
+                          <td style={{ ...cell, color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtEntry(t.entry_time, t.exit_ts)}</td>
                           <td style={{ ...cell, color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtTime(t.exit_ts)}</td>
                           <td style={{ ...cell, fontWeight: 600 }}>{t.symbol}</td>
                           <td style={cell}>{t.strategy}</td>
@@ -287,7 +310,7 @@ export default function ClosedTrades() {
                 );
               })}
               <tr style={{ borderTop: '2px solid #28303d', fontWeight: 700 }}>
-                <td style={cell} colSpan={6}>
+                <td style={cell} colSpan={7}>
                   Totale realizzato ({rows.length} trade)
                 </td>
                 <td style={{ ...cell, textAlign: 'right', color: total >= 0 ? '#3fb950' : '#f85149' }}>
