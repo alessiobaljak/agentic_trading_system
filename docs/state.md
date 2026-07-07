@@ -1,17 +1,21 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-07 21:44 UTC_
+_Generato: 2026-07-07 23:15 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$10,362.54**
-- ultimo heartbeat: 2026-07-07 21:44 UTC
+- ultimo heartbeat: 2026-07-07 23:14 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-07 21:31 UTC)
-- motivo: nessun segnale valido sopra soglia
-- asset valutati: 41 · segnali: 0
+- esito: **⚪ FLAT** (2026-07-07 23:04 UTC)
+- motivo: parita' backtest: 1 segnali validi aperti
+- asset valutati: 41 · segnali: 1 · miglior segnale JTOUSDT gen_60e37191 (conf. 60.0/soglia 30)
+
+## Posizioni aperte
+- JTOUSDT: short qty=2823.965153327361 @ 0.7339 uPnL=-3.421883295241268
+- WLDUSDT: short qty=5471.246108835665 @ 0.3788 uPnL=-17.060111341804795
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
