@@ -1,16 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { collection, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getDb } from '../lib/firebase';
 
 /**
- * Trade chiusi (Firestore `trades`), ordinati per uscita. Mostra PnL e motivo.
- * Per le uscite `trailing_stop` calcola un VERDETTO controfattuale: dopo l'uscita
- * il prezzo avrebbe poi raggiunto il TP configurato? Se sì il trailing ha tagliato
- * un vincitore ("prematuro"); se no ha protetto un'inversione ("corretto").
- * Il verdetto usa le klines Binance lato browser: se Binance non è raggiungibile
- * (geo-block/CORS) degrada a "n/d" senza rompere nulla.
+ * Trade chiusi (Firestore `trades`), RAGGRUPPATI per giorno (header cliccabile che
+ * espande/collassa la lista di quel giorno). Per le uscite `trailing_stop` calcola
+ * un VERDETTO controfattuale (TP vs SL, vedi evalTrailing) usando le klines Binance
+ * lato browser; i verdetti si calcolano SOLO per i giorni espansi (niente raffica
+ * di fetch su tutti i trade). Se Binance non è raggiungibile -> "n/d".
  */
 type Trade = {
   trade_id?: string;
@@ -29,17 +28,32 @@ type Trade = {
 type Verdict = 'premature' | 'protected' | 'neutral' | 'pending' | 'unavailable';
 
 const EVAL_HOURS = 24; // finestra dopo l'uscita entro cui simuliamo "se fossimo rimasti"
+const MAX_TRADES = 500; // tetto di sicurezza sulle letture Firestore (copre lo storico attuale)
 
-/** exit_ts è un timestamp Unix in SECONDI (trade.exit_time.timestamp()). */
-function fmtDate(ts: number | undefined): string {
+function fmtTime(ts: number | undefined): string {
   if (ts == null || !Number.isFinite(ts)) return '—';
-  return new Date(ts * 1000).toLocaleString(undefined, {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+  return new Date(ts * 1000).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+}
+
+function dayKey(ts: number): string {
+  const d = new Date(ts * 1000);
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+}
+
+function dayLabel(ts: number): string {
+  const d = new Date(ts * 1000);
+  const now = new Date();
+  const startOf = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const diff = Math.round((startOf(now) - startOf(d)) / 86_400_000);
+  const base = d.toLocaleDateString(undefined, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
   });
+  if (diff === 0) return `Oggi · ${base}`;
+  if (diff === 1) return `Ieri · ${base}`;
+  return base;
 }
 
 function tradeKey(t: Trade): string {
@@ -122,13 +136,17 @@ function VerdictBadge({ v }: { v: Verdict | undefined }) {
   return <span style={{ color: '#8b96a5' }}>…</span>;
 }
 
+type DayGroup = { key: string; label: string; trades: Trade[]; net: number };
+
 export default function ClosedTrades() {
   const [rows, setRows] = useState<Trade[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [verdicts, setVerdicts] = useState<Record<string, Verdict>>({});
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [initDone, setInitDone] = useState(false);
 
   useEffect(() => {
-    const q = query(collection(getDb(), 'trades'), orderBy('exit_ts', 'desc'), limit(30));
+    const q = query(collection(getDb(), 'trades'), orderBy('exit_ts', 'desc'), limit(MAX_TRADES));
     const unsub = onSnapshot(
       q,
       (snap) => {
@@ -140,11 +158,47 @@ export default function ClosedTrades() {
     return () => unsub();
   }, []);
 
-  // calcola i verdetti per le sole uscite trailing_stop non ancora valutate
+  // raggruppa per giorno preservando l'ordine (rows già ordinate per exit_ts desc)
+  const groups = useMemo<DayGroup[]>(() => {
+    const map = new Map<string, DayGroup>();
+    for (const t of rows) {
+      const ts = t.exit_ts ?? 0;
+      const key = dayKey(ts);
+      let g = map.get(key);
+      if (!g) {
+        g = { key, label: dayLabel(ts), trades: [], net: 0 };
+        map.set(key, g);
+      }
+      g.trades.push(t);
+      g.net += t.pnl ?? 0;
+    }
+    return Array.from(map.values());
+  }, [rows]);
+
+  // apri di default il giorno più recente, una sola volta
+  useEffect(() => {
+    if (!initDone && groups.length > 0) {
+      setExpanded(new Set([groups[0].key]));
+      setInitDone(true);
+    }
+  }, [groups, initDone]);
+
+  const toggle = (key: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+
+  // calcola i verdetti SOLO per le uscite trailing dei giorni ESPANSI, non valutate
   useEffect(() => {
     let cancelled = false;
     const todo = rows.filter(
-      (t) => t.exit_reason === 'trailing_stop' && !(tradeKey(t) in verdicts),
+      (t) =>
+        t.exit_reason === 'trailing_stop' &&
+        expanded.has(dayKey(t.exit_ts ?? 0)) &&
+        !(tradeKey(t) in verdicts),
     );
     if (todo.length === 0) return;
     (async () => {
@@ -161,14 +215,17 @@ export default function ClosedTrades() {
     return () => {
       cancelled = true;
     };
-  }, [rows, verdicts]);
+  }, [rows, expanded, verdicts]);
 
   const total = rows.reduce((s, t) => s + (t.pnl ?? 0), 0);
+  const cell = { padding: '6px 8px' } as const;
 
   return (
     <div className="panel">
       <h2>Closed Trades</h2>
-      <p className="subtitle">Ultimi trade chiusi (paper) · PnL realizzato · verdetto trailing</p>
+      <p className="subtitle">
+        {rows.length} trade chiusi (paper) · raggruppati per giorno · clicca un giorno per espanderlo
+      </p>
       {!loaded ? (
         <p className="muted">Loading…</p>
       ) : rows.length === 0 ? (
@@ -178,44 +235,62 @@ export default function ClosedTrades() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ textAlign: 'left', color: '#8b96a5' }}>
-                <th style={{ padding: '6px 8px' }}>Data</th>
-                <th style={{ padding: '6px 8px' }}>Coin</th>
-                <th style={{ padding: '6px 8px' }}>Strategia</th>
-                <th style={{ padding: '6px 8px' }}>Side</th>
-                <th style={{ padding: '6px 8px' }}>Uscita</th>
-                <th style={{ padding: '6px 8px' }}>Trailing?</th>
-                <th style={{ padding: '6px 8px', textAlign: 'right' }}>PnL</th>
+                <th style={cell}>Ora</th>
+                <th style={cell}>Coin</th>
+                <th style={cell}>Strategia</th>
+                <th style={cell}>Side</th>
+                <th style={cell}>Uscita</th>
+                <th style={cell}>Trailing?</th>
+                <th style={{ ...cell, textAlign: 'right' }}>PnL</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((t, i) => (
-                <tr key={i} style={{ borderTop: '1px solid #28303d' }}>
-                  <td style={{ padding: '6px 8px', color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtDate(t.exit_ts)}</td>
-                  <td style={{ padding: '6px 8px', fontWeight: 600 }}>{t.symbol}</td>
-                  <td style={{ padding: '6px 8px' }}>{t.strategy}</td>
-                  <td style={{ padding: '6px 8px' }}>{t.direction}</td>
-                  <td style={{ padding: '6px 8px', color: '#8b96a5' }}>{t.exit_reason}</td>
-                  <td style={{ padding: '6px 8px', whiteSpace: 'nowrap' }}>
-                    {t.exit_reason === 'trailing_stop' ? <VerdictBadge v={verdicts[tradeKey(t)]} /> : null}
-                  </td>
-                  <td
-                    style={{
-                      padding: '6px 8px',
-                      textAlign: 'right',
-                      color: (t.pnl ?? 0) >= 0 ? '#3fb950' : '#f85149',
-                    }}
-                  >
-                    {(t.pnl ?? 0).toFixed(2)}
-                  </td>
-                </tr>
-              ))}
+              {groups.map((g) => {
+                const open = expanded.has(g.key);
+                return (
+                  <Fragment key={g.key}>
+                    <tr
+                      onClick={() => toggle(g.key)}
+                      style={{ cursor: 'pointer', borderTop: '2px solid #28303d', background: '#161d2a' }}
+                    >
+                      <td colSpan={6} style={{ ...cell, fontWeight: 600 }}>
+                        <span style={{ display: 'inline-block', width: 16, color: '#8b96a5' }}>
+                          {open ? '▾' : '▸'}
+                        </span>
+                        {g.label}
+                        <span className="muted" style={{ marginLeft: 10, fontWeight: 400 }}>
+                          {g.trades.length} trade
+                        </span>
+                      </td>
+                      <td style={{ ...cell, textAlign: 'right', fontWeight: 700, color: g.net >= 0 ? '#3fb950' : '#f85149' }}>
+                        {g.net >= 0 ? '+' : ''}
+                        {g.net.toFixed(2)}
+                      </td>
+                    </tr>
+                    {open &&
+                      g.trades.map((t, i) => (
+                        <tr key={`${g.key}-${i}`} style={{ borderTop: '1px solid #28303d' }}>
+                          <td style={{ ...cell, color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtTime(t.exit_ts)}</td>
+                          <td style={{ ...cell, fontWeight: 600 }}>{t.symbol}</td>
+                          <td style={cell}>{t.strategy}</td>
+                          <td style={cell}>{t.direction}</td>
+                          <td style={{ ...cell, color: '#8b96a5' }}>{t.exit_reason}</td>
+                          <td style={{ ...cell, whiteSpace: 'nowrap' }}>
+                            {t.exit_reason === 'trailing_stop' ? <VerdictBadge v={verdicts[tradeKey(t)]} /> : null}
+                          </td>
+                          <td style={{ ...cell, textAlign: 'right', color: (t.pnl ?? 0) >= 0 ? '#3fb950' : '#f85149' }}>
+                            {(t.pnl ?? 0).toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
+                  </Fragment>
+                );
+              })}
               <tr style={{ borderTop: '2px solid #28303d', fontWeight: 700 }}>
-                <td style={{ padding: '6px 8px' }} colSpan={6}>
-                  Totale realizzato
+                <td style={cell} colSpan={6}>
+                  Totale realizzato ({rows.length} trade)
                 </td>
-                <td
-                  style={{ padding: '6px 8px', textAlign: 'right', color: total >= 0 ? '#3fb950' : '#f85149' }}
-                >
+                <td style={{ ...cell, textAlign: 'right', color: total >= 0 ? '#3fb950' : '#f85149' }}>
                   {total.toFixed(2)}
                 </td>
               </tr>
