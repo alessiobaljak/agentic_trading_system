@@ -106,12 +106,24 @@ class TradingBot:
         if now - self.last_scan < settings.SCAN_INTERVAL_HOURS * 3600 and self.selected:
             return
         print("[main] market scan...")
-        results = self.scanner.scan()
-        regime = self.regime or self.refresh_regime(now)
-        selected = self.scanner.select_assets(results, regime)
+        # UNIVERSO LIVE = le coin VALIDATE in GATE 1 (le uniche tradabili), non un
+        # top-N per volume. Cosi' ogni coppia validata ha la possibilita' di generare
+        # un segnale a ogni ciclo, invece di restare invisibile perche' fuori dai piu'
+        # liquidi. Il filtro liquidita' dello scanner resta (scarta le illiquide).
+        # In bootstrap (registro non ancora caricato) si ricade sullo scan per volume.
+        coins = sorted(self.adaptation.validated_coins())
+        if coins:
+            results = self.scanner.scan(symbols=coins)
+            regime = self.regime or self.refresh_regime(now)
+            selected = self.scanner.select_assets(results, regime, top_n=len(results))
+        else:
+            results = self.scanner.scan()
+            regime = self.regime or self.refresh_regime(now)
+            selected = self.scanner.select_assets(results, regime)
         self.selected = {r.symbol: r.snapshot for r in selected}
         self.last_scan = now
-        print(f"[main] selezionati: {list(self.selected.keys())}")
+        print(f"[main] valutate {len(self.selected)} coin validate "
+              f"({len(coins)} nel registro): {list(self.selected.keys())}")
 
     def refresh_regime(self, now: float):
         btc = self.price.build_snapshot("BTCUSDT")

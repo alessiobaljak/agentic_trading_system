@@ -108,6 +108,12 @@ class AdaptationEngine:
                 out[key[len(prefix):]] = params
         return out
 
+    def validated_coins(self) -> set[str]:
+        """Coin distinte con almeno una coppia validata robusta (GATE 1). È l'universo
+        che il bot DEVE valutare a ogni ciclo: sono le uniche coin tradabili, quindi
+        lo scan live va allineato a queste (non a un top-N per volume)."""
+        return {k.split("|", 1)[0] for k in self._passed}
+
     # ------------------------------------------------------------------ #
     # Strategie GENERATE (scoperte dal motore di discovery)              #
     # ------------------------------------------------------------------ #
