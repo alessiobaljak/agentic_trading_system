@@ -1,22 +1,22 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-08 21:31 UTC_
+_Generato: 2026-07-08 23:30 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$10,474.62**
-- ultimo heartbeat: 2026-07-08 21:31 UTC
+- ultimo heartbeat: 2026-07-08 23:30 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-08 21:26 UTC)
+- esito: **⚪ FLAT** (2026-07-08 23:17 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 42 · segnali: 0
+- asset valutati: 43 · segnali: 0
 
 ## Posizioni aperte
-- DASHUSDT: long qty=62.88553161909827 @ 33.51 uPnL=22.638791382875343
-- HBARUSDT: long qty=30412.67375603959 @ 0.06929 uPnL=-10.036182339493394
-- JTOUSDT: long qty=3277.9292346851616 @ 0.6391 uPnL=-36.93141252913504
+- DASHUSDT: long qty=62.88553161909827 @ 33.51 uPnL=45.806761998904335
+- HBARUSDT: long qty=30412.67375603959 @ 0.06929 uPnL=-7.960821482380916
+- JTOUSDT: long qty=3277.9292346851616 @ 0.6391 uPnL=-8.194823086712729
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
