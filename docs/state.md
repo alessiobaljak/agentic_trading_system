@@ -1,23 +1,21 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-08 17:52 UTC_
+_Generato: 2026-07-08 19:55 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: bear_trending
+- regime: high_uncertainty
 - DRY_RUN: True
-- equity: **$10,510.41**
-- ultimo heartbeat: 2026-07-08 17:52 UTC
+- equity: **$10,474.62**
+- ultimo heartbeat: 2026-07-08 19:55 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-08 17:38 UTC)
-- motivo: parita' backtest: 2 segnali validi aperti
-- asset valutati: 44 · segnali: 5 · miglior segnale ZECUSDT gen_c584a061 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-08 19:55 UTC)
+- motivo: nessun segnale valido sopra soglia
+- asset valutati: 42 · segnali: 0
 
 ## Posizioni aperte
-- DASHUSDT: long qty=62.88553161909827 @ 33.51 uPnL=30.419307555580506
-- HBARUSDT: long qty=30412.67375603959 @ 0.06929 uPnL=6.721505026822118
-- JUPUSDT: short qty=9673.640911729073 @ 0.2173 uPnL=12.575733185247753
-- ZECUSDT: short qty=4.494509664568586 @ 467.7 uPnL=6.583987117168224
+- DASHUSDT: long qty=62.88553161909827 @ 33.51 uPnL=29.41191718379557
+- HBARUSDT: long qty=30412.67375603959 @ 0.06929 uPnL=3.404394700250796
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
