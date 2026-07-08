@@ -1,21 +1,23 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-08 06:39 UTC_
+_Generato: 2026-07-08 10:31 UTC_
 
 ## Bot
-- stato: **running** (🔴 offline)
+- stato: **running** (🟢 online)
 - regime: bear_trending
 - DRY_RUN: True
-- equity: **$10,366.23**
-- ultimo heartbeat: —
+- equity: **$10,645.07**
+- ultimo heartbeat: 2026-07-08 10:30 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-08 06:26 UTC)
-- motivo: parita' backtest: 1 segnali validi aperti
-- asset valutati: 40 · segnali: 2 · miglior segnale WLDUSDT gen_ccd7dd86 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-08 10:28 UTC)
+- motivo: nessun segnale valido sopra soglia
+- asset valutati: 40 · segnali: 0
 
 ## Posizioni aperte
-- VANRYUSDT: long qty=238521.18041108956 @ 0.006626 uPnL=35.77817706166343
-- WLDUSDT: short qty=5607.916483219385 @ 0.3697 uPnL=3.9255415382534484
+- DASHUSDT: long qty=62.88553161909827 @ 33.51 uPnL=5.037280121399631
+- HBARUSDT: long qty=30412.67375603959 @ 0.06929 uPnL=-0.27401819054203036
+- SPELLUSDT: short qty=14191580.267646292 @ 0.000107 uPnL=-29.234655351351417
+- WLDUSDT: short qty=5607.916483219385 @ 0.3697 uPnL=-11.325355575356308
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
