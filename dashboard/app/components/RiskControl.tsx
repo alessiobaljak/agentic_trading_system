@@ -22,11 +22,19 @@ import type { RiskSettings } from '../lib/types';
  *
  * risk_per_trade is stored as a fraction (0.01 = 1%); the UI works in percent.
  */
+// Default USATI DAL BOT quando user_risk_settings/current non esiste
+// (bot/config.py: DEFAULT_LEVERAGE=2.0, DEFAULT_RISK_PER_TRADE=0.01). Devono
+// combaciare con quei valori: altrimenti il pannello mostra numeri diversi da
+// quelli realmente applicati dal bot finche' non premi "Save".
+const BOT_DEFAULT_LEVERAGE = 2;
+const BOT_DEFAULT_RISK_PCT = 1.0;
+
 export default function RiskControl() {
-  const [leverage, setLeverage] = useState<number>(MIN_LEVERAGE);
+  const [leverage, setLeverage] = useState<number>(BOT_DEFAULT_LEVERAGE);
   // percent units in the UI; converted to fraction on save
-  const [riskPct, setRiskPct] = useState<number>(MIN_RISK_PER_TRADE * 100);
+  const [riskPct, setRiskPct] = useState<number>(BOT_DEFAULT_RISK_PCT);
   const [loaded, setLoaded] = useState(false);
+  const [hasStored, setHasStored] = useState(false);
   const [saving, setSaving] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -37,6 +45,7 @@ export default function RiskControl() {
     const unsub = onSnapshot(
       doc(db, 'user_risk_settings', 'current'),
       (snap) => {
+        setHasStored(snap.exists());
         if (snap.exists()) {
           const d = snap.data() as RiskSettings;
           if (typeof d.leverage === 'number') setLeverage(clampLeverage(d.leverage));
@@ -114,6 +123,14 @@ export default function RiskControl() {
       </p>
 
       {!loaded && <p className="muted">Loading current settings…</p>}
+
+      {loaded && !hasStored && (
+        <div className="warn">
+          Nessuna impostazione salvata su Firebase: il bot sta usando i suoi default
+          (<strong>{BOT_DEFAULT_LEVERAGE}x</strong> · <strong>{BOT_DEFAULT_RISK_PCT.toFixed(1)}%</strong>).
+          I valori qui sotto NON sono ancora attivi finché non premi «Save settings».
+        </div>
+      )}
 
       <div className="field">
         <div className="field-row">
