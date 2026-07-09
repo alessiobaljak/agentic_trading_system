@@ -1,21 +1,17 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-09 15:34 UTC_
+_Generato: 2026-07-09 18:09 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$10,605.06**
-- ultimo heartbeat: 2026-07-09 15:34 UTC
+- equity: **$10,640.87**
+- ultimo heartbeat: 2026-07-09 18:08 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-09 14:42 UTC)
+- esito: **⚪ FLAT** (2026-07-09 17:42 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 37 · segnali: 0
-
-## Posizioni aperte
-- ETHUSDT: short qty=1.2056324832649694 @ 1752.55 uPnL=11.47072390163994
-- NEARUSDT: short qty=1095.3505487537698 @ 1.929 uPnL=7.4673332960191035
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
