@@ -74,7 +74,11 @@ class Settings:
     DEFAULT_RISK_PER_TRADE: float = 0.01  # 1% del capitale
 
     # ---- Trading loop ----
-    ORCHESTRATOR_TIMEFRAME: str = "15m"   # l'orchestratore gira ad ogni 15m chiusa
+    # TIMEFRAME UNICO del sistema. Le strategie leggono gli indicatori di QUESTO
+    # timeframe (live) e l'optimizer/discover validano su QUESTO stesso intervallo
+    # (default --interval). Un solo knob -> gate e live non possono divergere.
+    # Default 1h = il timeframe su cui e' stato costruito il registro validato.
+    ORCHESTRATOR_TIMEFRAME: str = os.getenv("ORCHESTRATOR_TIMEFRAME", "1h")
     SCAN_INTERVAL_HOURS: int = 4          # market scanner ogni 4h
     REGIME_INTERVAL_MINUTES: int = 60     # regime detector ogni ora
     MAX_OPEN_POSITIONS: int = int(os.getenv("MAX_OPEN_POSITIONS", "5"))  # cap posizioni APERTE

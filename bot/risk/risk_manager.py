@@ -137,7 +137,7 @@ class RiskManager:
         asset: AssetSnapshot, direction: Direction,
         atr_mult: float = 1.5, rr: float = 2.0,
     ) -> tuple[Optional[float], Optional[float]]:
-        ind = asset.ind("15m")
+        ind = asset.ind(settings.ORCHESTRATOR_TIMEFRAME)
         if not ind or not ind.atr:
             return None, None
         price = asset.price

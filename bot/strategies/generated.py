@@ -179,7 +179,7 @@ class GeneratedStrategy(Strategy):
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
     ) -> Optional[StrategySignal]:
-        i = asset.ind("15m")
+        i = asset.ind(self._tf)
         if i is None or not self._features:
             return None
         price = asset.price
@@ -206,6 +206,6 @@ class GeneratedStrategy(Strategy):
         if long_ok == short_ok:
             return None  # nessuna direzione netta (o entrambe -> contraddittorio)
         direction = Direction.LONG if long_ok else Direction.SHORT
-        stop, target = self._atr_stop_target(asset, direction, "15m", self._atr_mult_stop, self._rr)
+        stop, target = self._atr_stop_target(asset, direction, self._tf, self._atr_mult_stop, self._rr)
         return self._signal(asset, direction, confidence=60.0,
                             reasoning=f"[gen] {self.description}", stop=stop, target=target)

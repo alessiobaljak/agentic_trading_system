@@ -36,8 +36,8 @@ class MomentumCrossAsset(Strategy):
         btc = ctx.all_assets.get(BTC_SYMBOL)
         if btc is None:
             return None
-        btc_i = btc.ind("15m")
-        alt_i = asset.ind("15m")
+        btc_i = btc.ind(self._tf)
+        alt_i = asset.ind(self._tf)
         if not btc_i or not alt_i:
             return None
         if None in (btc_i.macd_hist, btc_i.atr, btc_i.ema_fast, btc_i.ema_slow):

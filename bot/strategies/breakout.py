@@ -29,7 +29,7 @@ class Breakout(Strategy):
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
     ) -> Optional[StrategySignal]:
-        i = asset.ind("15m")
+        i = asset.ind(self._tf)
         if not i or None in (i.bb_upper, i.bb_lower, i.bb_mid, i.atr,
                              i.volume, i.volume_sma):
             return None

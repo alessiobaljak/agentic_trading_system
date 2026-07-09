@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 from typing import Optional
 
+from bot.config import settings
 from bot.core.models import AssetSnapshot, MemoryReport, Regime
 
 SYSTEM_PROMPT = """\
@@ -39,7 +40,7 @@ NON inventare nomi di strategie o asset non presenti nell'input.
 
 
 def _asset_brief(a: AssetSnapshot) -> dict:
-    i15 = a.ind("15m")
+    i15 = a.ind(settings.ORCHESTRATOR_TIMEFRAME)
     i1h = a.ind("1h")
     def d(ind):
         if not ind:

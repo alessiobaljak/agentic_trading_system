@@ -28,7 +28,7 @@ class TrendFollowing(Strategy):
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
     ) -> Optional[StrategySignal]:
-        i15 = asset.ind("15m")
+        i15 = asset.ind(self._tf)
         i1h = asset.ind("1h")
         if not i15 or not i1h:
             return None

@@ -56,6 +56,13 @@ class Strategy(ABC):
         """Legge un parametro (con fallback su default_params)."""
         return self.params.get(key, self.default_params.get(key, fallback))
 
+    @property
+    def _tf(self) -> str:
+        """Timeframe UNICO su cui operano le strategie (== quello del gate).
+        Letto dinamicamente da config: cambiarlo allinea live e validazione."""
+        from bot.config import settings
+        return settings.ORCHESTRATOR_TIMEFRAME
+
     def is_active_in(self, regime: Optional[Regime]) -> bool:
         if regime is None:
             return True
@@ -91,10 +98,13 @@ class Strategy(ABC):
 
     @staticmethod
     def _atr_stop_target(
-        asset: AssetSnapshot, direction: Direction, timeframe: str = "15m",
+        asset: AssetSnapshot, direction: Direction, timeframe: Optional[str] = None,
         atr_mult_stop: float = 1.5, rr: float = 2.0,
     ) -> tuple[Optional[float], Optional[float]]:
         """Calcola SL/TP ATR-based con un dato risk:reward."""
+        if timeframe is None:
+            from bot.config import settings
+            timeframe = settings.ORCHESTRATOR_TIMEFRAME
         ind = asset.ind(timeframe)
         if ind is None or ind.atr is None:
             return None, None

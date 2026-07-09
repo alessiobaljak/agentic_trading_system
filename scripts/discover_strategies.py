@@ -25,6 +25,7 @@ from backtesting.data_loader import load_candles
 from backtesting.engine import StrategyStats, passes_gate
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
+from bot.config import settings
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
@@ -234,7 +235,7 @@ def main() -> int:
     ap.add_argument("--windows", type=int, default=3)
     ap.add_argument("--seed", type=int, default=int(time.time()) % 100000,
                     help="seed generazione (varia per esplorare strategie diverse a ogni run)")
-    ap.add_argument("--interval", default="1h")
+    ap.add_argument("--interval", default=settings.ORCHESTRATOR_TIMEFRAME)
     ap.add_argument("--start", default="2022-01-01")
     ap.add_argument("--end", default=None,
                     help="fine finestra dati (default: oggi). Far avanzare la finestra "

@@ -25,7 +25,7 @@ class VwapReversion(Strategy):
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
     ) -> Optional[StrategySignal]:
-        i = asset.ind("5m") or asset.ind("15m")
+        i = asset.ind(self._tf)
         if not i or None in (i.vwap, i.atr) or i.atr == 0:
             return None
         price = asset.price

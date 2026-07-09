@@ -26,6 +26,7 @@ import requests
 from backtesting.data_loader import load_candles
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
+from bot.config import settings
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 
 FAPI = "https://fapi.binance.com"
@@ -124,7 +125,7 @@ def main() -> int:
     p.add_argument("--symbols", default="BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT,XRPUSDT")
     p.add_argument("--top", type=int, default=0,
                    help="se >0, ottimizza i top-N future per volume (ignora --symbols)")
-    p.add_argument("--interval", default="1h")
+    p.add_argument("--interval", default=settings.ORCHESTRATOR_TIMEFRAME)
     p.add_argument("--start", default="2022-01-01")
     p.add_argument("--end", default=None, help="default: oggi (finestra che avanza)")
     p.add_argument("--source", default="binance")

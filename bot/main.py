@@ -56,6 +56,10 @@ class TradingBot:
         self.last_regime = 0.0
         self.last_decision = 0.0
         self.last_adapt_reload = 0.0
+        # intervallo tra decisioni = durata del timeframe unico (es. 1h -> 3600s).
+        # Cosi' l'orchestratore agisce a OGNI candela chiusa del timeframe validato.
+        _tf_secs = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 14400}
+        self._decision_interval_s = _tf_secs.get(settings.ORCHESTRATOR_TIMEFRAME, 3600)
         self._coin_cooldown: dict[str, float] = {}    # symbol -> epoch in cooldown
         self._strat_streak: dict[str, int] = {}       # strategia -> stop consecutivi
         self._strat_cooldown: dict[str, float] = {}   # strategia -> epoch in panchina
@@ -237,7 +241,7 @@ class TradingBot:
             return
 
         # 3) nuova decisione ogni 15m
-        if now - self.last_decision < 15 * 60:
+        if now - self.last_decision < self._decision_interval_s:
             return
         self.last_decision = now
         if not self.regime or not self.selected:
