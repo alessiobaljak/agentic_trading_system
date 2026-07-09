@@ -50,7 +50,7 @@ export default function DecisionStatus() {
   return (
     <div className="panel">
       <h2>Ultima decisione</h2>
-      <p className="subtitle">Perché il bot ha aperto o è rimasto flat · ogni 15m</p>
+      <p className="subtitle">Perché il bot ha aperto o è rimasto flat · ad ogni candela chiusa</p>
       {!loaded ? (
         <p className="muted">Loading…</p>
       ) : !st ? (
