@@ -15,9 +15,10 @@ on:
         default: "2022-01-01"
       end:
         default: "2026-01-01"
-  push:
-    branches: ["claude/brave-albattani-1b12fv"]
-    paths: ["backtesting/**", "bot/strategies/**", ".github/workflows/backtest.yml"]
+  # NIENTE trigger su push: questo job esegue le strategie BASE non ottimizzate su
+  # 5 coin e FALLISCE se non profittevole (esse non lo sono mai, grezze) -> falliva
+  # cronicamente a ogni push spammando notifiche. Il GATE 1 VERO gira sul VPS
+  # (optimize/discover, walk-forward per-coin). Qui resta solo il lancio manuale.
 
 jobs:
   backtest:
