@@ -1,17 +1,17 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-09 18:09 UTC_
+_Generato: 2026-07-09 20:04 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$10,640.87**
-- ultimo heartbeat: 2026-07-09 18:08 UTC
+- ultimo heartbeat: 2026-07-09 20:04 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-09 17:42 UTC)
+- esito: **⚪ FLAT** (2026-07-09 19:43 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 37 · segnali: 0
+- asset valutati: 35 · segnali: 0
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
