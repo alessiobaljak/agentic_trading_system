@@ -29,7 +29,7 @@ def test_backtester_runs_and_segments():
                          datetime(2023, 2, 1, tzinfo=timezone.utc))
     bt = Backtester(window=50)
     stats = bt.run("BTCUSDT", candles)
-    assert len(stats) == 8                      # tutte le 8 strategie testate
+    assert len(stats) == 9                      # tutte le 9 strategie testate
     # almeno una strategia genera trade su una serie con trend
     assert any(len(s.trades) > 0 for s in stats.values())
     # il learning loop produce pesi dai trade simulati

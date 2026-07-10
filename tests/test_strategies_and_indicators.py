@@ -62,11 +62,11 @@ def test_rsi_bounds():
     assert r.iloc[-1] > 70  # forte uptrend -> RSI alto
 
 
-def test_strategy_registry_has_8():
+def test_strategy_registry():
     from bot.strategies import STRATEGY_REGISTRY, get_all_strategies
-    assert len(STRATEGY_REGISTRY) == 8
+    assert len(STRATEGY_REGISTRY) == 9
     names = {s.name for s in get_all_strategies()}
-    assert "trend_following" in names and "grid_trading" in names
+    assert {"trend_following", "grid_trading", "momentum"} <= names
 
 
 def test_every_strategy_declares_regimes():

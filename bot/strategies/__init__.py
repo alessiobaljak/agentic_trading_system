@@ -16,6 +16,7 @@ from bot.strategies.vwap_reversion import VwapReversion            # noqa: F401
 from bot.strategies.momentum_cross_asset import MomentumCrossAsset # noqa: F401
 from bot.strategies.liquidity_grab import LiquidityGrab            # noqa: F401
 from bot.strategies.grid_trading import GridTrading                # noqa: F401
+from bot.strategies.momentum import Momentum                       # noqa: F401
 
 __all__ = [
     "Strategy",
