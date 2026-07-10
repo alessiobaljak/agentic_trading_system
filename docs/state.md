@@ -1,21 +1,21 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-10 15:01 UTC_
+_Generato: 2026-07-10 18:01 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: high_uncertainty
+- regime: sideways
 - DRY_RUN: True
 - equity: **$10,554.56**
-- ultimo heartbeat: 2026-07-10 15:01 UTC
+- ultimo heartbeat: 2026-07-10 18:01 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-10 14:48 UTC)
+- esito: **⚪ FLAT** (2026-07-10 17:49 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 30 · segnali: 1 · miglior segnale 1000PEPEUSDT gen_5d7ab58c (conf. 19.5/soglia 30)
 
 ## Posizioni aperte
-- DOTUSDT: short qty=2138.4351180962267 @ 0.884 uPnL=28.05250510361477
-- SKLUSDT: short qty=238447.97476372318 @ 0.005855 uPnL=120.0967069694969
+- DOTUSDT: short qty=2138.4351180962267 @ 0.884 uPnL=13.818268352221372
+- SKLUSDT: short qty=238447.97476372318 @ 0.005855 uPnL=119.57212142501652
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
