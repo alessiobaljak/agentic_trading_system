@@ -198,7 +198,7 @@ def load_candles(
     symbol: str = "BTCUSDT",
     interval: str = "1h",
     start: str = "2022-01-01",
-    end: str = "2026-01-01",
+    end: str | None = None,   # None => oggi (finestra che avanza)
     prefer: str = "binance",
     allow_synthetic: bool | None = None,
 ) -> list[Candle]:
@@ -214,6 +214,8 @@ def load_candles(
     """
     if allow_synthetic is None:
         allow_synthetic = os.getenv("BACKTEST_ALLOW_SYNTHETIC", "true").lower() == "true"
+    if end is None:
+        end = datetime.now(timezone.utc).strftime("%Y-%m-%d")   # fino a OGGI
     start_dt = datetime.fromisoformat(start).replace(tzinfo=timezone.utc)
     end_dt = datetime.fromisoformat(end).replace(tzinfo=timezone.utc)
     sms, ems = int(start_dt.timestamp() * 1000), int(end_dt.timestamp() * 1000)
