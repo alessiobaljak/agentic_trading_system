@@ -99,7 +99,11 @@ class MarketScanner:
             # le N crypto più liquide per VOLUME (non i primi N in ordine d'API)
             symbols = self.price.list_perpetual_symbols_by_volume()[: self.max_symbols]
         results: list[ScanResult] = []
-        min_vol = settings.SCAN_MIN_VOLUME_24H
+        # PARITA' COL BACKTEST: il GATE 1 non ha filtro di liquidita', e in PAPER non
+        # c'e' slippage reale (si usa lo stesso modello di costo del backtest). Quindi
+        # in parita' il filtro 25M va DISATTIVATO, altrimenti il paper testa solo ~30
+        # delle ~168 coin validate. Coi soldi VERI (parity off) torna attivo (slippage).
+        min_vol = 0.0 if settings.BACKTEST_PARITY else settings.SCAN_MIN_VOLUME_24H
         skipped_illiquid = 0
         for sym in symbols:
             snap = self.price.build_snapshot(sym)
