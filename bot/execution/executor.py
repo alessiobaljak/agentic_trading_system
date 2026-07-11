@@ -26,6 +26,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from bot.config import settings
+from bot.core.costs import liquidity_spread
 from bot.core.firebase_client import get_firebase
 from bot.core.models import (
     AssetSnapshot, ClosedTrade, Direction, EffectiveRiskParams, ExitReason, Regime,
@@ -52,6 +53,8 @@ class Position:
     fear_greed_at_entry: Optional[int] = None
     funding_at_entry: Optional[float] = None
     confidence_at_entry: Optional[float] = None
+    # spread liquidità-dipendente (== backtest): fissato all'apertura dal volume 24h
+    spread_cost: float = 0.0
     # gestione trailing / scale-out
     scaled_out: bool = False
     trailing_active: bool = False
@@ -126,6 +129,7 @@ class ExecutionEngine:
             sentiment_at_entry=asset.sentiment_score, fear_greed_at_entry=asset.fear_greed,
             funding_at_entry=asset.funding_rate, confidence_at_entry=confidence,
             atr=(ind15.atr if ind15 and ind15.atr else 0.0),
+            spread_cost=liquidity_spread(asset.volume_24h),   # == costo backtest
         )
 
         if self.dry_run:
@@ -255,7 +259,7 @@ class ExecutionEngine:
         notional = pos.entry_price * pos.quantity
         held_hours = max(0.0, (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0)
         funding = (held_hours / 8.0) * self.funding_per_8h
-        cost = (self.cost_per_trade + funding) * notional
+        cost = (self.cost_per_trade + pos.spread_cost + funding) * notional
         pnl = gross_pnl - cost                       # PnL NETTO in USDT
         # PnL% sul margine impegnato (notional/leverage)
         margin = notional / max(pos.leverage, 1)

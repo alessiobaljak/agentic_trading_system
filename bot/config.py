@@ -90,10 +90,12 @@ class Settings:
     # su quante crypto (tra le più liquide scansionate) cercare un SEGNALE a ogni
     # ciclo. Disaccoppiato dal cap posizioni: valuti TUTTO il mercato liquido, apri max 5.
     SELECT_UNIVERSE: int = int(os.getenv("SELECT_UNIVERSE", "100"))
-    # filtro liquidità scanner: scarta dall'universo di valutazione le coin con
-    # volume 24h (in USDT) sotto questa soglia. Tiene fuori i listing nuovi e
-    # illiquidi (memecoin appena quotate) e velocizza lo scan. 0 = disattivato.
-    SCAN_MIN_VOLUME_24H: float = float(os.getenv("SCAN_MIN_VOLUME_24H", "25000000"))
+    # SANITY FLOOR di liquidità: la liquidità VERA è gestita dal modello di costo
+    # (bot/core/costs.py, spread più largo sulle coin sottili), che valida ogni coppia
+    # coi suoi costi reali -> l'intero universo validato è tradabile. Questa soglia
+    # esclude solo le coin MORTE/delistate (fill impossibile). Default 1M (basso).
+    # Alzabile via env per i soldi veri se si vuole prudenza extra. 0 = disattivato.
+    SCAN_MIN_VOLUME_24H: float = float(os.getenv("SCAN_MIN_VOLUME_24H", "1000000"))
     # FAIL-SAFE di validazione: quando esiste un registro validato, opera SOLO le
     # coppie (coin, strategia) che hanno passato il gate. Se True (default) e il
     # registro non è caricato (errore transitorio / reset), il bot resta FLAT

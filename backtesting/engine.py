@@ -143,6 +143,21 @@ class Backtester:
         self.regime_detector = RegimeDetector()
         self.strategies = get_all_strategies()
 
+    def _liquidity_cost(self, candles: list[Candle]) -> float:
+        """Costo round-trip LIQUIDITA'-DIPENDENTE: fee fisse + spread stimato che si
+        allarga sulle coin sottili. Cosi' il gate valida ogni coppia coi SUOI costi
+        reali e l'INTERO universo e' tradabile: una coppia passa solo se l'edge batte
+        il proprio costo (niente piu' taglio netto sul volume). Con size piccole lo
+        slippage e' trascurabile: il termine variabile e' lo SPREAD, stimato dal
+        volume 24h in USDT (close*volume medio * candele/giorno)."""
+        if not candles:
+            return self.cost_per_trade
+        from bot.core.costs import liquidity_spread
+        recent = candles[-min(len(candles), 720):]        # ~ultimi 30g su 1h
+        avg_quote = sum(c.close * c.volume for c in recent) / len(recent)
+        daily_vol = avg_quote * (24.0 / max(self.interval_hours, 1e-9))
+        return self.cost_per_trade + liquidity_spread(daily_vol)
+
     def _snapshot_from_frame(self, symbol: str, frame, idx: int) -> AssetSnapshot:
         row = frame.iloc[idx]
         snap = AssetSnapshot(symbol=symbol, price=float(row["close"]))
@@ -169,6 +184,7 @@ class Backtester:
         stats = StrategyStats(strategy=strategy.name)
         if frame is None:
             frame = compute_indicator_frame(candles)
+        cost = self._liquidity_cost(candles)   # costo reale di QUESTA coin (liquidita')
         i = self.window
         n = len(candles)
         while i < n - 1:
@@ -224,7 +240,7 @@ class Backtester:
             # uscite reali: fee+slippage (round-trip) + funding sui perpetual.
             held_hours = max(0, (min(j, horizon) - i)) * self.interval_hours
             funding = (held_hours / 8.0) * self.funding_per_8h
-            pnl_pct -= (self.cost_per_trade + funding)
+            pnl_pct -= (cost + funding)
             stats.trades.append(SimTrade(
                 strategy=strategy.name, regime=regime.value, direction=sig.direction.value,
                 entry_price=entry, exit_price=exit_price, pnl_pct=pnl_pct,
