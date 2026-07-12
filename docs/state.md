@@ -1,23 +1,22 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-12 13:56 UTC_
+_Generato: 2026-07-12 15:16 UTC_
 
 ## Bot
-- stato: **running** (🟢 online)
+- stato: **running** (🔴 offline)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$10,632.90**
-- ultimo heartbeat: 2026-07-12 13:55 UTC
+- equity: **$10,764.28**
+- ultimo heartbeat: —
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-12 13:12 UTC)
-- motivo: parita' backtest: 2 segnali validi aperti
-- asset valutati: 133 · segnali: 2 · miglior segnale FETUSDT gen_60e37191 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-12 14:12 UTC)
+- motivo: nessun segnale valido sopra soglia
+- asset valutati: 133 · segnali: 0
 
 ## Posizioni aperte
-- FETUSDT: short qty=13249.723621475716 @ 0.1605 uPnL=6.624861810737864
-- LTCUSDT: short qty=47.57451098986247 @ 44.7 uPnL=2.8544706593918563
-- TUSDT: short qty=268631.6958354279 @ 0.00593 uPnL=132.71211669357655
-- VANRYUSDT: long qty=172081.91353652065 @ 0.00686 uPnL=-41.29965924876491
+- FETUSDT: short qty=13249.723621475716 @ 0.1605 uPnL=4.628790947162519
+- LTCUSDT: short qty=47.57451098986247 @ 44.7 uPnL=-2.8544706593915183
+- VANRYUSDT: long qty=172081.91353652065 @ 0.00686 uPnL=-78.81351639972647
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
