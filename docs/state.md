@@ -1,22 +1,22 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-12 19:31 UTC_
+_Generato: 2026-07-12 21:07 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$10,764.28**
-- ultimo heartbeat: 2026-07-12 19:31 UTC
+- ultimo heartbeat: 2026-07-12 21:07 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-12 19:18 UTC)
+- esito: **⚪ FLAT** (2026-07-12 20:18 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 129 · segnali: 0
 
 ## Posizioni aperte
-- FETUSDT: short qty=13249.723621475716 @ 0.1605 uPnL=17.86937225933946
-- LTCUSDT: short qty=47.57451098986247 @ 44.7 uPnL=7.016999168234023
-- VANRYUSDT: long qty=172081.91353652065 @ 0.00686 uPnL=-58.67993251595357
+- FETUSDT: short qty=13249.723621475716 @ 0.1605 uPnL=7.949834172885657
+- LTCUSDT: short qty=47.57451098986247 @ 44.7 uPnL=3.3302157692903864
+- VANRYUSDT: long qty=172081.91353652065 @ 0.00686 uPnL=-93.04124901092598
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
