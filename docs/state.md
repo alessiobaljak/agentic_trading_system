@@ -1,20 +1,20 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-12 03:58 UTC_
+_Generato: 2026-07-12 06:46 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$10,609.03**
-- ultimo heartbeat: 2026-07-12 03:58 UTC
+- equity: **$10,632.90**
+- ultimo heartbeat: 2026-07-12 06:46 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-12 03:40 UTC)
-- motivo: nessun segnale valido sopra soglia
-- asset valutati: 28 · segnali: 0
+- esito: **⚪ FLAT** (2026-07-12 06:41 UTC)
+- motivo: parita' backtest: 1 segnali validi aperti
+- asset valutati: 29 · segnali: 2 · miglior segnale VANRYUSDT gen_b615211f (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- AVAXUSDT: long qty=329.56788074745447 @ 6.451 uPnL=22.517643060099765
+- VANRYUSDT: long qty=172081.91353652065 @ 0.00686 uPnL=-25.215162790506326
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
