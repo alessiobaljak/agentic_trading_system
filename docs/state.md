@@ -1,20 +1,21 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-12 10:03 UTC_
+_Generato: 2026-07-12 11:32 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$10,632.90**
-- ultimo heartbeat: 2026-07-12 10:03 UTC
+- ultimo heartbeat: 2026-07-12 11:31 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-12 09:41 UTC)
+- esito: **⚪ FLAT** (2026-07-12 11:16 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 30 · segnali: 0
+- asset valutati: 133 · segnali: 0
 
 ## Posizioni aperte
-- VANRYUSDT: long qty=172081.91353652065 @ 0.00686 uPnL=-53.66718637463464
+- TUSDT: short qty=268631.6958354279 @ 0.00593 uPnL=16.73306833358892
+- VANRYUSDT: long qty=172081.91353652065 @ 0.00686 uPnL=-69.01861388122768
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
