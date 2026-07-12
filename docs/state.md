@@ -1,22 +1,20 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-12 21:07 UTC_
+_Generato: 2026-07-12 23:09 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$10,764.28**
-- ultimo heartbeat: 2026-07-12 21:07 UTC
+- equity: **$10,571.77**
+- ultimo heartbeat: 2026-07-12 23:08 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-12 20:18 UTC)
-- motivo: nessun segnale valido sopra soglia
-- asset valutati: 129 · segnali: 0
+- esito: **⚪ FLAT** (2026-07-12 22:18 UTC)
+- motivo: parita' backtest: 1 segnali validi aperti
+- asset valutati: 129 · segnali: 2 · miglior segnale DODOXUSDT gen_8bce9d48 (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- FETUSDT: short qty=13249.723621475716 @ 0.1605 uPnL=7.949834172885657
-- LTCUSDT: short qty=47.57451098986247 @ 44.7 uPnL=3.3302157692903864
-- VANRYUSDT: long qty=172081.91353652065 @ 0.00686 uPnL=-93.04124901092598
+- FETUSDT: short qty=13249.723621475716 @ 0.1605 uPnL=34.449281415836744
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
