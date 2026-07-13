@@ -269,6 +269,9 @@ MIN_COVERED = int(os.getenv("OPTIMIZER_MIN_COVERED", "5"))
 # una coppia resta "validata" solo se rivista entro questi giorni (auto-pulizia:
 # i coin usciti dall'universo decadono e il bot smette di operarli).
 FRESH_DAYS = float(os.getenv("OPTIMIZER_FRESH_DAYS", "3"))
+# auto-purge: una coppia viene RIMOSSA dal registro dopo N run consecutivi in cui,
+# pur essendo processata, non passa piu' il gate (costi/edge non piu' battuti).
+PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))
 
 
 def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
@@ -285,6 +288,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         rec = pairs.get(key, {"pass_count": 0})
         if key in passed_set:
             rec["pass_count"] = rec.get("pass_count", 0) + 1
+            rec["fail_count"] = 0                      # ripassata -> azzera i fallimenti
             rec["last_params"] = e["params"]
             rec["last_pf"] = e["oos_pf"]
             rec["last_pnl_pct"] = e["oos_pnl_pct"]
@@ -295,10 +299,24 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
             rec["trailing_protected"] = tr.get("protected", 0)
             rec["trailing_neutral"] = tr.get("neutral", 0)
             rec["last_passed_at"] = time.time()
+        else:
+            # PROCESSATA ma NON passata: conta i fallimenti consecutivi (auto-purge)
+            rec["fail_count"] = rec.get("fail_count", 0) + 1
         rec["symbol"] = e["symbol"]
         rec["strategy"] = e["strategy"]
         rec["last_seen_at"] = time.time()
         pairs[key] = rec
+
+    # AUTO-PURGE: rimuove le coppie che falliscono il gate per PURGE_FAILS run
+    # CONSECUTIVI (non piu' il cricchetto che solo aggiunge). Cosi' il registro si
+    # auto-pulisce: chi smette di battere i costi/edge esce da solo, senza script
+    # manuali. 1 fallimento non basta (rumore/dati): serve la conferma.
+    purged = [k for k, r in pairs.items() if r.get("fail_count", 0) >= PURGE_FAILS]
+    for k in purged:
+        del pairs[k]
+    if purged:
+        print(f"[registry] AUTO-PURGE: rimosse {len(purged)} coppie "
+              f"(fallite {PURGE_FAILS}+ run di fila)")
 
     validated = sorted(
         k for k, r in pairs.items()
