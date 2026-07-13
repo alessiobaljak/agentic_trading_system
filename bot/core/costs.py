@@ -11,12 +11,14 @@ from __future__ import annotations
 
 
 def liquidity_spread(daily_quote_vol: float | None) -> float:
-    """Spread round-trip stimato per fascia di volume 24h (USDT)."""
+    """Spread round-trip per fascia di volume 24h (USDT). Valori MISURATI dagli
+    spread bid/ask reali di Binance Futures (scripts/measure_spreads.py), con un
+    piccolo margine per depth/volatilita' (lo snapshot e' a mercato calmo)."""
     v = daily_quote_vol or 0.0
     if v >= 200_000_000:
-        return 0.0002        # major: spread minimo
+        return 0.00012       # misurato 0.0103% -> ~0.012% col buffer
     if v >= 50_000_000:
-        return 0.0005
+        return 0.00025       # misurato 0.0213%
     if v >= 10_000_000:
-        return 0.0010
-    return 0.0020            # sottile: spread largo
+        return 0.00045       # misurato 0.0385%
+    return 0.00080           # misurato 0.0677% (sottile): buffer maggiore

@@ -121,8 +121,8 @@ def test_breakeven_exit_is_net_negative_due_to_fees():
     eng.open_position(a, "vwap_reversion", Direction.LONG, _params(qty=10.0, stop=98, tp=104))
     closed = eng.force_close_all({"BTCUSDT": 100.0}, ExitReason.KILL_SWITCH)[0]
     assert closed.pnl < 0, "il breakeven deve costare le commissioni"
-    # costo = (fee 0.0008 + spread 0.0002) * notional (100*10=1000) = 1.0
-    assert abs(closed.pnl + 1.0) < 0.05
+    # costo = (fee 0.0008 + spread 0.00012 major) * notional (100*10=1000) = 0.92
+    assert abs(closed.pnl + 0.92) < 0.05
 
 
 def test_profit_lock_protects_gains_on_retrace():
