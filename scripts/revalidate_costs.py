@@ -114,6 +114,11 @@ def main() -> int:
     print(f"\n{'='*60}")
     print(f"TENUTE: {len(kept)} coppie · SCARTATE: {len(dropped)} · coin coperte: {len(covered)}")
     print(f"(prima erano {len(old_pairs)} coppie nel registro)")
+    # metrica DECISIVA per confrontare on/off del profit-lock: PnL OOS aggregato
+    agg_pnl = sum(r.get("last_pnl_pct", 0) for r in kept.values())
+    agg_tr = sum(r.get("last_trades", 0) for r in kept.values())
+    print(f"PnL OOS AGGREGATO (somma coppie tenute): {agg_pnl*100:.0f}%  su {agg_tr} trade "
+          f"-> confronta questo numero tra profit-lock ON e OFF")
 
     # riepilogo GLOBALE del trailing: il profit-lock aiuta o danneggia?
     prem = sum(r.get("trailing_premature", 0) for r in kept.values())
