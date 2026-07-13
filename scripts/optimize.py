@@ -67,7 +67,7 @@ def _opt_one(sym: str) -> tuple[str, dict, list]:
             "symbol": sym, "strategy": r.strategy, "params": r.best_params,
             "oos_pf": r.oos_pf, "oos_pnl_pct": r.oos_pnl_pct,
             "oos_trades": r.oos_trades, "oos_win_rate": r.oos_win_rate,
-            "passed": r.passed,
+            "passed": r.passed, "trailing": r.trailing,
         }
         if r.passed:
             passed.append(key)
@@ -290,6 +290,10 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
             rec["last_pnl_pct"] = e["oos_pnl_pct"]
             rec["last_trades"] = e["oos_trades"]
             rec["last_win_rate"] = e.get("oos_win_rate")
+            tr = e.get("trailing") or {}
+            rec["trailing_premature"] = tr.get("premature", 0)
+            rec["trailing_protected"] = tr.get("protected", 0)
+            rec["trailing_neutral"] = tr.get("neutral", 0)
             rec["last_passed_at"] = time.time()
         rec["symbol"] = e["symbol"]
         rec["strategy"] = e["strategy"]

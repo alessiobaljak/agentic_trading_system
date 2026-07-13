@@ -44,6 +44,7 @@ class OptResult:
     oos_trades: int
     oos_win_rate: float
     passed: bool
+    trailing: dict = field(default_factory=dict)   # conteggi verdetto trailing OOS
     params_history: list = field(default_factory=list)
 
 
@@ -144,6 +145,6 @@ class WalkForwardOptimizer:
                 best_params=history[-1] if history else {},
                 oos_pf=round(pf, 3), oos_pnl_pct=round(pnl, 4),
                 oos_trades=len(oos.trades), oos_win_rate=round(oos.win_rate(), 3),
-                passed=passed, params_history=history,
+                passed=passed, trailing=oos.trailing_counts(), params_history=history,
             ))
         return results
