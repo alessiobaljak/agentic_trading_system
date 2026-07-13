@@ -126,10 +126,18 @@ def _winrate_to_weight(wr: float) -> float:
 
 def compute_weights(trades: list[dict]) -> list[StrategyRegimeWeight]:
     """
-    Pesi dinamici per strategia × regime.
-    Una strategia che ha perso 8/10 in un regime (win_rate 0.2) -> peso 0 lì.
-    Campione insufficiente (< MIN_TRADES_PER_WEIGHT) -> peso neutro 1.0.
+    Pesi dinamici per strategia × regime, con SHRINKAGE graduale (niente cliff).
+
+    Il win-rate stimato parte dal PRIOR neutro (0.60 -> peso 1.0, "tradala") e si
+    muove verso l'osservato in proporzione al campione: pochi trade -> resta vicino
+    al neutro; molti -> si avvicina all'osservato. Cosi' il learning inizia SUBITO
+    (anche con 1-2 trade sposta un po') senza reagire al rumore di un campione
+    minuscolo. MIN_TRADES_PER_WEIGHT ora e' la FORZA dello shrinkage (pseudo-conteggio),
+    non piu' una soglia netta.
     """
+    prior_wr = WEIGHT_WINRATE_HIGH          # 0.60 -> peso 1.0 (prior "tradala")
+    k = max(1, settings.MIN_TRADES_PER_WEIGHT)   # forza dello shrinkage
+
     groups: dict[tuple[str, str], list[dict]] = defaultdict(list)
     for t in trades:
         groups[(t.get("strategy", "?"), t.get("regime_at_entry", "?"))].append(t)
@@ -143,14 +151,13 @@ def compute_weights(trades: list[dict]) -> list[StrategyRegimeWeight]:
             continue
         n = len(ts)
         wr = win_rate(ts)
-        if n < settings.MIN_TRADES_PER_WEIGHT:
-            weight = 1.0   # non abbastanza dati: resta neutro
-        else:
-            weight = _winrate_to_weight(wr)
-            # bonus/malus lieve dal R:R realizzato
-            rr = rr_map.get(strat)
-            if rr is not None:
-                weight = max(0.0, min(1.0, weight * (0.75 + min(rr, 3.0) / 6.0)))
+        # win-rate "regolarizzato": media pesata tra osservato (n) e prior (k)
+        shrunk = (n * wr + k * prior_wr) / (n + k)
+        weight = _winrate_to_weight(shrunk)
+        # bonus/malus lieve dal R:R realizzato (solo con un minimo di campione)
+        rr = rr_map.get(strat)
+        if rr is not None and n >= 3:
+            weight = max(0.0, min(1.0, weight * (0.75 + min(rr, 3.0) / 6.0)))
         weights.append(StrategyRegimeWeight(
             strategy=strat, regime=regime_enum, weight=round(weight, 4),
             win_rate=round(wr, 4), avg_rr=rr_map.get(strat), sample_size=n,

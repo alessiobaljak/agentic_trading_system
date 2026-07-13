@@ -40,11 +40,14 @@ def test_winning_strategy_gets_high_weight():
     assert w.weight > 0.5
 
 
-def test_small_sample_stays_neutral():
+def test_small_sample_moves_gradually():
+    # SHRINKAGE: 2 perdite fanno scendere il peso SOTTO 1.0 (impara subito) ma NON
+    # crollare a 0 (non reagisce al rumore di un campione minuscolo). Con piu' dati
+    # si avvicina all'osservato -> vedi gli altri due test (zero / alto).
     trades = [_trade("grid_trading", "sideways", -5) for _ in range(2)]
     weights = metrics.compute_weights(trades)
     w = next(x for x in weights if x.strategy == "grid_trading")
-    assert w.weight == 1.0   # campione troppo piccolo -> neutro
+    assert 0.0 < w.weight < 1.0
 
 
 def test_confidence_outcome_correlation():
