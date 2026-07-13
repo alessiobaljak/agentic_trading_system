@@ -40,3 +40,23 @@ def locked_stop(entry: float, target: float, long: bool,
     locked = entry + lock if long else entry - lock
     # lo stop può solo migliorare: sale per i long, scende per gli short
     return max(base_stop, locked) if long else min(base_stop, locked)
+
+
+def trailing_verdict(candles, stop: float, target: float, long: bool) -> str:
+    """Controfattuale su un'uscita TRAILING: se avessimo TENUTO (stop base + TP),
+    cosa sarebbe arrivato PRIMA scorrendo le candele DALL'uscita in avanti?
+      - TP per primo   -> 'premature' (tagliato un vincitore)
+      - stop base primo-> 'protected' (evitata una perdita)
+      - nessuno / stessa candela -> 'neutral'
+    Condivisa tra backtest (GATE 1) e bot (learning dal paper). `candles`: sequenza
+    con attributi .high e .low."""
+    for c in candles:
+        tp_hit = (c.high >= target) if long else (c.low <= target)
+        sl_hit = (c.low <= stop) if long else (c.high >= stop)
+        if tp_hit and sl_hit:
+            return "neutral"          # stessa candela: ordine intra-candela ignoto
+        if tp_hit:
+            return "premature"
+        if sl_hit:
+            return "protected"
+    return "neutral"

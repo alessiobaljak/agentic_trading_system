@@ -176,22 +176,10 @@ class Backtester:
     @staticmethod
     def _trailing_verdict(candles, j: int, horizon: int, stop: float, target: float,
                           long: bool) -> str:
-        """Se avessimo TENUTO (stop base + TP) dopo l'uscita trailing alla barra j,
-        cosa sarebbe arrivato PRIMA? TP -> 'premature' (tagliato un vincitore);
-        stop base -> 'protected' (evitata una perdita); nessuno -> 'neutral'."""
-        k = j
-        while k <= horizon:
-            c = candles[k]
-            tp_hit = (c.high >= target) if long else (c.low <= target)
-            sl_hit = (c.low <= stop) if long else (c.high >= stop)
-            if tp_hit and sl_hit:
-                return "neutral"      # stessa barra: ordine intra-barra ignoto
-            if tp_hit:
-                return "premature"
-            if sl_hit:
-                return "protected"
-            k += 1
-        return "neutral"
+        """Verdetto controfattuale sul trailing dalla barra j all'orizzonte.
+        Usa la funzione CONDIVISA (bot/execution/exit_logic) = stessa logica del bot."""
+        from bot.execution.exit_logic import trailing_verdict
+        return trailing_verdict(candles[j:horizon + 1], stop, target, long)
 
     def _snapshot_from_frame(self, symbol: str, frame, idx: int) -> AssetSnapshot:
         row = frame.iloc[idx]

@@ -26,6 +26,7 @@ from bot.agents.price_agent import PriceAgent
 from bot.agents.regime_detector import RegimeDetector
 from bot.agents.sentiment_agent import SentimentAgent
 from bot.execution.executor import ExecutionEngine
+from bot.execution.exit_logic import trailing_verdict
 from bot.execution.notifier import TelegramNotifier
 from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
@@ -56,6 +57,7 @@ class TradingBot:
         self.last_regime = 0.0
         self.last_decision = 0.0
         self.last_adapt_reload = 0.0
+        self.last_trailing_eval = 0.0
         # intervallo tra decisioni = durata del timeframe unico (es. 1h -> 3600s).
         # Cosi' l'orchestratore agisce a OGNI candela chiusa del timeframe validato.
         _tf_secs = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 14400}
@@ -392,6 +394,44 @@ class TradingBot:
             self.fb.set_rtdb("/decision_status", status)
 
     # ------------------------------------------------------------------ #
+    def evaluate_pending_trailing(self, now: float, window_h: float = 24.0,
+                                  max_eval: int = 15) -> None:
+        """B1 (learning dal paper): assegna il verdetto trailing (prematuro/protetto)
+        alle uscite TRAILING recenti che non ce l'hanno ancora, dal prezzo SUCCESSIVO
+        reale (Binance). Il dato si accumula sui trade -> il learning potra' usarlo.
+        Gira sul VPS (ha Binance), non nel learning notturno su GitHub (geo-bloccato)."""
+        window_s = window_h * 3600
+        try:
+            trades = self.logger.recent(limit=100)
+        except Exception:  # noqa: BLE001
+            return
+        done = 0
+        for t in trades:
+            if done >= max_eval:
+                break
+            if t.get("exit_reason") != "trailing_stop" or t.get("trailing_verdict") is not None:
+                continue
+            tp, sl, ex = t.get("take_profit_price"), t.get("stop_price"), t.get("exit_ts")
+            if tp is None or sl is None or ex is None or now - ex < window_s:
+                continue   # dati mancanti o finestra di 24h non ancora completa
+            try:
+                candles = self.price.get_candles(t.get("symbol", ""), "15m", limit=300)
+            except Exception:  # noqa: BLE001
+                continue
+            after = [c for c in candles if ex <= c.open_time.timestamp() <= ex + window_s]
+            if not after:
+                continue
+            long = str(t.get("direction", "")).lower() == "long"
+            t["trailing_verdict"] = trailing_verdict(after, float(sl), float(tp), long)
+            try:
+                self.fb.set_doc("trades", t["trade_id"], t)   # riscrive il doc + il campo
+                done += 1
+            except Exception:  # noqa: BLE001
+                pass
+        if done:
+            print(f"[main] verdetto trailing assegnato a {done} trade paper")
+
+    # ------------------------------------------------------------------ #
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
         print(f"[main] avvio bot @ {datetime.now(timezone.utc).isoformat()} "
               f"DRY_RUN={settings.DRY_RUN}")
@@ -406,6 +446,9 @@ class TradingBot:
             now = time.time()
             try:
                 # ricarica pesi + parametri ottimizzati (dal job notturno) ogni 6h
+                if now - self.last_trailing_eval >= 3600:   # verdetto trailing paper (B1)
+                    self.evaluate_pending_trailing(now)
+                    self.last_trailing_eval = now
                 if now - self.last_adapt_reload >= 6 * 3600:
                     self.adaptation.load_weights()
                     self.adaptation.load_params()
