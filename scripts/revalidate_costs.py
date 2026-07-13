@@ -114,6 +114,20 @@ def main() -> int:
     print(f"\n{'='*60}")
     print(f"TENUTE: {len(kept)} coppie · SCARTATE: {len(dropped)} · coin coperte: {len(covered)}")
     print(f"(prima erano {len(old_pairs)} coppie nel registro)")
+
+    # riepilogo GLOBALE del trailing: il profit-lock aiuta o danneggia?
+    prem = sum(r.get("trailing_premature", 0) for r in kept.values())
+    prot = sum(r.get("trailing_protected", 0) for r in kept.values())
+    neu = sum(r.get("trailing_neutral", 0) for r in kept.values())
+    tot = prem + prot + neu
+    if tot:
+        print(f"\nTRAILING (su {tot} uscite trailing):")
+        print(f"  prematuro (tagliato un vincitore): {prem}  ({prem/tot*100:.0f}%)")
+        print(f"  protetto  (evitata una perdita):   {prot}  ({prot/tot*100:.0f}%)")
+        print(f"  neutro:                            {neu}  ({neu/tot*100:.0f}%)")
+        verdict = ("il profit-lock DANNEGGIA (piu' prematuri che protetti)" if prem > prot
+                   else "il profit-lock AIUTA (piu' protetti che prematuri)")
+        print(f"  -> {verdict}")
     if dropped:
         print("\nPrime scartate (PF sotto soglia coi costi nuovi):")
         for k, pf, nt in sorted(dropped, key=lambda x: x[1])[:25]:
