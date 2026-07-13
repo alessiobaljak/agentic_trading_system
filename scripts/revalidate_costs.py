@@ -92,6 +92,7 @@ def main() -> int:
                     window_pnls.append(sum(t.pnl_pct for t in st.trades))
             pf, wr, pnl = agg.profit_factor(), agg.win_rate(), agg.total_pnl_pct()
             if passes_gate(window_pnls, len(agg.trades), pf, wr, pnl):
+                tc = agg.trailing_counts()
                 rec = dict(old_pairs.get(key, {}))
                 rec.update({
                     "symbol": sym, "strategy": strat.name,
@@ -99,6 +100,10 @@ def main() -> int:
                     "last_pf": round(pf, 3), "last_pnl_pct": round(pnl, 4),
                     "last_trades": len(agg.trades), "last_win_rate": round(wr, 3),
                     "last_passed_at": time.time(), "last_seen_at": time.time(),
+                    # verdetto trailing (per il bot: se troppi 'premature' -> allentare)
+                    "trailing_premature": tc["premature"],
+                    "trailing_protected": tc["protected"],
+                    "trailing_neutral": tc["neutral"],
                 })
                 kept[key] = rec
             else:

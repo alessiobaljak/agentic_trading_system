@@ -76,6 +76,10 @@ class SimTrade:
     hour_bucket: int = 0
     confidence_at_entry: Optional[float] = None
     regime_at_entry: str = ""
+    # verdetto controfattuale sull'uscita TRAILING (None se non trailing):
+    # 'premature' = avremmo raggiunto il TP tenendo; 'protected' = avremmo preso lo
+    # stop base; 'neutral' = nessuno dei due entro l'orizzonte.
+    trailing_verdict: Optional[str] = None
 
     def as_trade_dict(self) -> dict:
         """Formato compatibile con bot.learning.metrics."""
@@ -104,6 +108,17 @@ class StrategyStats:
 
     def win_rate(self) -> float:
         return (sum(t.is_win for t in self.trades) / len(self.trades)) if self.trades else 0.0
+
+    def trailing_counts(self) -> dict:
+        """Conteggi del verdetto sulle uscite trailing: prematuro/protetto/neutro.
+        Serve al bot per capire se il profit-lock su questa strategia taglia i
+        vincitori (tanti 'premature' -> andrebbe allentato) o protegge davvero."""
+        out = {"premature": 0, "protected": 0, "neutral": 0, "trailing_total": 0}
+        for t in self.trades:
+            if t.trailing_verdict:
+                out[t.trailing_verdict] += 1
+                out["trailing_total"] += 1
+        return out
 
     def profit_factor(self) -> float:
         gains = sum(t.pnl_pct for t in self.trades if t.pnl_pct > 0)
@@ -157,6 +172,26 @@ class Backtester:
         avg_quote = sum(c.close * c.volume for c in recent) / len(recent)
         daily_vol = avg_quote * (24.0 / max(self.interval_hours, 1e-9))
         return self.cost_per_trade + liquidity_spread(daily_vol)
+
+    @staticmethod
+    def _trailing_verdict(candles, j: int, horizon: int, stop: float, target: float,
+                          long: bool) -> str:
+        """Se avessimo TENUTO (stop base + TP) dopo l'uscita trailing alla barra j,
+        cosa sarebbe arrivato PRIMA? TP -> 'premature' (tagliato un vincitore);
+        stop base -> 'protected' (evitata una perdita); nessuno -> 'neutral'."""
+        k = j
+        while k <= horizon:
+            c = candles[k]
+            tp_hit = (c.high >= target) if long else (c.low <= target)
+            sl_hit = (c.low <= stop) if long else (c.high >= stop)
+            if tp_hit and sl_hit:
+                return "neutral"      # stessa barra: ordine intra-barra ignoto
+            if tp_hit:
+                return "premature"
+            if sl_hit:
+                return "protected"
+            k += 1
+        return "neutral"
 
     def _snapshot_from_frame(self, symbol: str, frame, idx: int) -> AssetSnapshot:
         row = frame.iloc[idx]
@@ -217,18 +252,26 @@ class Backtester:
             # miglior prezzo a favore visto FINORA (per il profit-lock). Usa solo le
             # barre PRECEDENTI quando calcola lo stop, così niente look-ahead.
             best_fav = entry
+            trailing_verdict = None
             while j <= horizon:
                 c = candles[j]
                 # stop effettivo: base o alzato dal profit-lock (sui massimi passati)
                 eff_stop = locked_stop(entry, target, long, best_fav, stop)
+                trailing = eff_stop != stop   # il profit-lock ha alzato lo stop?
                 adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
                 max_adverse = max(max_adverse, adverse)
                 if long and c.low <= eff_stop:
-                    exit_price = eff_stop; break
+                    exit_price = eff_stop
+                    if trailing:
+                        trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
+                    break
                 if long and c.high >= target:
                     exit_price = target; break
                 if (not long) and c.high >= eff_stop:
-                    exit_price = eff_stop; break
+                    exit_price = eff_stop
+                    if trailing:
+                        trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
+                    break
                 if (not long) and c.low <= target:
                     exit_price = target; break
                 # aggiorna il miglior prezzo a favore DOPO i controlli di uscita
@@ -248,6 +291,7 @@ class Backtester:
                 is_win=pnl_pct > 0, pnl=pnl_pct * self.capital, symbol=symbol,
                 hour_bucket=candles[i].open_time.hour,
                 confidence_at_entry=sig.confidence, regime_at_entry=regime.value,
+                trailing_verdict=trailing_verdict,
             ))
             i = j + 1   # niente posizioni sovrapposte
         return stats
