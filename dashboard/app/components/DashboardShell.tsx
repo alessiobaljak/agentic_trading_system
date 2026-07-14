@@ -10,6 +10,7 @@ import EquityCurve from './EquityCurve';
 import Positions from './Positions';
 import ClosedTrades from './ClosedTrades';
 import StrategyWeights from './StrategyWeights';
+import TrailingLearning from './TrailingLearning';
 import Heatmap from './Heatmap';
 import OptimizedStrategies from './OptimizedStrategies';
 import Insights from './Insights';
@@ -117,6 +118,7 @@ export default function DashboardShell() {
               <StrategyWeights />
               <Heatmap />
             </div>
+            <TrailingLearning />
             <Insights />
           </>
         )}

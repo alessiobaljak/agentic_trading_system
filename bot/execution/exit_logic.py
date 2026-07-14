@@ -60,3 +60,43 @@ def trailing_verdict(candles, stop: float, target: float, long: bool) -> str:
         if sl_hit:
             return "protected"
     return "neutral"
+
+
+def _atr(candles, period: int = 14) -> float:
+    """ATR semplice (media dei true range) sulle candele date. 0 se dati insufficienti."""
+    if len(candles) < 2:
+        return 0.0
+    trs, prev = [], candles[0].close
+    for c in candles[1:]:
+        trs.append(max(c.high - c.low, abs(c.high - prev), abs(c.low - prev)))
+        prev = c.close
+    window = trs[-period:] if len(trs) >= period else trs
+    return sum(window) / len(window) if window else 0.0
+
+
+def trailing_reason(during, after, entry: float, exit_price: float,
+                    stop: float, target: float, long: bool) -> dict:
+    """Verdetto trailing + il PERCHE', per capire come ridurre i 'premature'.
+
+    - verdict: 'premature' | 'protected' | 'neutral' (dal prezzo DOPO l'uscita).
+    - miss_to_tp: frazione del tragitto entry->TP lasciata sul tavolo all'uscita
+      (0 = uscito al TP, 1 = uscito all'entrata). Premature con miss piccola = per un
+      soffio, un trail piu' largo lo prende.
+    - knockout_atr: profondita' del ritracciamento che ha fatto scattare il trail
+      (dal massimo/minimo raggiunto fino all'uscita) in MULTIPLI di ATR. < ~1 = rumore
+      (un trail consapevole dell'ATR lo eviterebbe); grande = inversione reale.
+
+    `during` = candele TRA entrata e uscita (per max/min e ATR); `after` = candele
+    DALL'uscita in avanti (per il controfattuale)."""
+    verdict = trailing_verdict(after, stop, target, long)
+    tp_dist = abs(target - entry) or 1e-9
+    miss = min(1.0, abs(target - exit_price) / tp_dist)
+    hw = (max((c.high for c in during), default=exit_price) if long
+          else min((c.low for c in during), default=exit_price))
+    dip = (hw - exit_price) if long else (exit_price - hw)
+    atr = _atr(during)
+    return {
+        "verdict": verdict,
+        "miss_to_tp": round(miss, 3),
+        "knockout_atr": round(dip / atr, 2) if atr > 0 else None,
+    }

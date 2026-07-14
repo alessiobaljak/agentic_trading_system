@@ -24,6 +24,7 @@ type Trade = {
   take_profit_price?: number;
   stop_price?: number;
   entry_time?: string; // ISO 8601 (ClosedTrade.entry_time serializzato)
+  trailing_verdict?: string; // scritto dal bot (B1); se presente si usa questo, niente fetch Binance
 };
 
 type Verdict = 'premature' | 'protected' | 'neutral' | 'pending' | 'unavailable';
@@ -218,6 +219,7 @@ export default function ClosedTrades() {
     const todo = rows.filter(
       (t) =>
         t.exit_reason === 'trailing_stop' &&
+        !t.trailing_verdict && // se il bot ha già scritto il verdetto, non serve Binance
         expanded.has(dayKey(t.exit_ts ?? 0)) &&
         !(tradeKey(t) in verdicts),
     );
@@ -299,7 +301,9 @@ export default function ClosedTrades() {
                           <td style={cell}>{t.direction}</td>
                           <td style={{ ...cell, color: '#8b96a5' }}>{t.exit_reason}</td>
                           <td style={{ ...cell, whiteSpace: 'nowrap' }}>
-                            {t.exit_reason === 'trailing_stop' ? <VerdictBadge v={verdicts[tradeKey(t)]} /> : null}
+                            {t.exit_reason === 'trailing_stop' ? (
+                              <VerdictBadge v={(t.trailing_verdict as Verdict | undefined) ?? verdicts[tradeKey(t)]} />
+                            ) : null}
                           </td>
                           <td style={{ ...cell, textAlign: 'right', color: (t.pnl ?? 0) >= 0 ? '#3fb950' : '#f85149' }}>
                             {(t.pnl ?? 0).toFixed(2)}

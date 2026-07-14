@@ -26,7 +26,7 @@ from bot.agents.price_agent import PriceAgent
 from bot.agents.regime_detector import RegimeDetector
 from bot.agents.sentiment_agent import SentimentAgent
 from bot.execution.executor import ExecutionEngine
-from bot.execution.exit_logic import trailing_verdict
+from bot.execution.exit_logic import trailing_reason
 from bot.execution.notifier import TelegramNotifier
 from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
@@ -418,13 +418,19 @@ class TradingBot:
                 candles = self.price.get_candles(t.get("symbol", ""), "15m", limit=300)
             except Exception:  # noqa: BLE001
                 continue
+            entry_ts = ex - float(t.get("duration_seconds", 0) or 0)
+            during = [c for c in candles if entry_ts <= c.open_time.timestamp() <= ex]
             after = [c for c in candles if ex <= c.open_time.timestamp() <= ex + window_s]
             if not after:
                 continue
             long = str(t.get("direction", "")).lower() == "long"
-            t["trailing_verdict"] = trailing_verdict(after, float(sl), float(tp), long)
+            res = trailing_reason(during, after, float(t.get("entry_price", 0.0)),
+                                  float(t.get("exit_price", 0.0)), float(sl), float(tp), long)
+            t["trailing_verdict"] = res["verdict"]
+            t["trailing_miss_to_tp"] = res["miss_to_tp"]      # quanto tragitto lasciato sul tavolo
+            t["trailing_knockout_atr"] = res["knockout_atr"]  # rumore (<1) vs inversione reale
             try:
-                self.fb.set_doc("trades", t["trade_id"], t)   # riscrive il doc + il campo
+                self.fb.set_doc("trades", t["trade_id"], t)   # riscrive il doc + i campi
                 done += 1
             except Exception:  # noqa: BLE001
                 pass
