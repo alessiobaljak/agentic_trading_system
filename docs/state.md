@@ -1,22 +1,22 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-14 06:25 UTC_
+_Generato: 2026-07-14 10:11 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$10,690.73**
-- ultimo heartbeat: 2026-07-14 06:24 UTC
+- ultimo heartbeat: 2026-07-14 10:10 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-14 05:30 UTC)
-- motivo: parita' backtest: 1 segnali validi aperti
-- asset valutati: 129 · segnali: 1 · miglior segnale NMRUSDT gen_7eabf801 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-14 09:31 UTC)
+- motivo: nessun segnale valido sopra soglia
+- asset valutati: 125 · segnali: 0
 
 ## Posizioni aperte
-- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=-23.74222002000837
-- IDUSDT: short qty=59858.536196420566 @ 0.03572 uPnL=-11.373121877319651
-- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=3.9332633530883907
+- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=-29.74900168507056
+- IDUSDT: short qty=59858.536196420566 @ 0.03572 uPnL=30.224370681658677
+- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=41.79445019267976
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
