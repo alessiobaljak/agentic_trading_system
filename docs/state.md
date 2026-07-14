@@ -1,22 +1,25 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-14 11:45 UTC_
+_Generato: 2026-07-14 14:13 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: sideways
+- regime: bull_trending
 - DRY_RUN: True
-- equity: **$10,690.73**
-- ultimo heartbeat: 2026-07-14 11:45 UTC
+- equity: **$10,650.95**
+- ultimo heartbeat: 2026-07-14 14:13 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-14 11:32 UTC)
-- motivo: nessun segnale valido sopra soglia
-- asset valutati: 125 · segnali: 0
+- esito: **⚪ FLAT** (2026-07-14 13:32 UTC)
+- motivo: parita' backtest: 4 segnali validi aperti
+- asset valutati: 125 · segnali: 5 · miglior segnale REZUSDT gen_ab121cfe (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=-24.691908820808774
-- IDUSDT: short qty=59858.536196420566 @ 0.03572 uPnL=46.091072871243824
-- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=28.505810117161644
+- ANKRUSDT: short qty=591719.1987221391 @ 0.0036 uPnL=12.426103173164774
+- BOMEUSDT: long qty=5085197.219860828 @ 0.0004189 uPnL=-11.89936149447424
+- ENJUSDT: short qty=76846.64918469338 @ 0.02772 uPnL=5.379265442928584
+- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=5.028602200237833
+- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=25.9719603289694
+- REZUSDT: short qty=869110.2062014283 @ 0.002451 uPnL=20.35456102923756
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
