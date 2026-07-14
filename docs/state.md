@@ -1,26 +1,25 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-14 19:43 UTC_
+_Generato: 2026-07-14 21:15 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: bull_trending
 - DRY_RUN: True
-- equity: **$10,626.50**
-- ultimo heartbeat: 2026-07-14 19:41 UTC
+- equity: **$10,646.79**
+- ultimo heartbeat: 2026-07-14 21:15 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-14 18:46 UTC)
+- esito: **⚪ FLAT** (2026-07-14 20:50 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 129 · segnali: 0
+- asset valutati: 126 · segnali: 0
 
 ## Posizioni aperte
-- ANKRUSDT: short qty=591719.1987221391 @ 0.0036 uPnL=11.242664775720595
-- BOMEUSDT: long qty=5085197.219860828 @ 0.0004189 uPnL=-19.730565213059993
-- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=-15.021227762258802
-- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=57.43392853235546
-- REZUSDT: short qty=869110.2062014283 @ 0.002451 uPnL=33.89529804185568
-- SKLUSDT: short qty=494716.10326587973 @ 0.004296 uPnL=99.12626561138435
-- YGGUSDT: short qty=96037.07092770988 @ 0.02213 uPnL=14.885745993794925
+- ANKRUSDT: short qty=591719.1987221391 @ 0.0036 uPnL=15.384699166775606
+- BOMEUSDT: long qty=5085197.219860828 @ 0.0004189 uPnL=-14.899627854192229
+- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=-10.763139742404006
+- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=25.2329208074132
+- SKLUSDT: short qty=494716.10326587973 @ 0.004296 uPnL=94.98549182704907
+- YGGUSDT: short qty=96037.07092770988 @ 0.02213 uPnL=13.021666447088318
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
