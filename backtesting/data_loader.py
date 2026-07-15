@@ -15,6 +15,7 @@ Restituisce sempre una lista di Candle ordinate per tempo.
 """
 from __future__ import annotations
 
+import json
 import os
 from datetime import datetime, timedelta, timezone
 from typing import Callable
@@ -216,6 +217,43 @@ def _synthetic(start: datetime, end: datetime, interval_min: int = 60,
 
 
 # --------------------------------------------------------------------------- #
+# Cache su disco delle candele REALI                                           #
+# --------------------------------------------------------------------------- #
+# Ri-scaricare 2022->oggi a 15m per ~200 coin e' il collo di bottiglia (rete):
+# ~90 chiamate klines per coin. La cache su disco fa si' che un secondo giro, uno
+# shard, o una RIPRESA dopo interruzione leggano dal disco invece che dalla rete.
+# NON riduce cicli/finestre/combo: cambia solo QUANTO velocemente arrivano i dati.
+_CACHE_DIR = os.getenv("BACKTEST_CACHE_DIR", os.path.join(".cache", "candles"))
+_CACHE_ENABLED = os.getenv("BACKTEST_CACHE_CANDLES", "true").lower() == "true"
+
+
+def _cache_file(symbol: str, interval: str, start: str, end: str) -> str:
+    return os.path.join(_CACHE_DIR, f"{symbol}_{interval}_{start}_{end}.json")
+
+
+def _cache_read(path: str) -> list[Candle] | None:
+    try:
+        with open(path) as f:
+            rows = json.load(f)
+        return [_candle(r[0], r[1], r[2], r[3], r[4], r[5]) for r in rows] or None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _cache_write(path: str, candles: list[Candle]) -> None:
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        rows = [[int(c.open_time.timestamp() * 1000), c.open, c.high, c.low, c.close, c.volume]
+                for c in candles]
+        tmp = f"{path}.tmp"
+        with open(tmp, "w") as f:
+            json.dump(rows, f)
+        os.replace(tmp, path)   # scrittura atomica: niente file a metà se interrotti
+    except Exception:  # noqa: BLE001
+        pass
+
+
+# --------------------------------------------------------------------------- #
 # Loader con fallback                                                          #
 # --------------------------------------------------------------------------- #
 def load_candles(
@@ -251,6 +289,14 @@ def load_candles(
         if c:
             return c
 
+    # cache su disco: se abbiamo gia' questi dati REALI, niente rete.
+    cache_path = _cache_file(symbol, interval, start, end)
+    if _CACHE_ENABLED:
+        cached = _cache_read(cache_path)
+        if cached:
+            print(f"[backtest] dati da cache: {len(cached)} candele ({symbol} {interval})")
+            return cached
+
     # ordine di fallback tra exchange OHLCV gratuiti
     chain: list[tuple[str, Callable[[], list[Candle]]]] = [
         ("binance", lambda: _binance(symbol, interval, sms, ems)),
@@ -265,6 +311,8 @@ def load_candles(
         candles = fn()
         if candles:
             print(f"[backtest] dati da {name}: {len(candles)} candele")
+            if _CACHE_ENABLED:
+                _cache_write(cache_path, candles)   # salva per i giri/shard successivi
             return candles
 
     if not allow_synthetic:
