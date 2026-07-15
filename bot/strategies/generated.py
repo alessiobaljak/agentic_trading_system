@@ -140,7 +140,11 @@ FEATURE_LIBRARY = {
 
 def spec_id(spec: dict) -> str:
     """Hash stabile della LOGICA (feature+soglie), così la stessa strategia ha
-    sempre lo stesso id tra run (la validazione cumulativa funziona per nome)."""
+    sempre lo stesso id tra run (la validazione cumulativa funziona per nome).
+    Include il TIMEFRAME: la stessa logica a 15m e a 1h sono strategie DIVERSE
+    (SL/TP/durate diverse) — senza, una spec rigenerata dopo un cambio timeframe
+    erediterebbe pesi e storia della gemella dell'era precedente."""
+    from bot.config import settings
     payload = {
         "features": sorted((f.get("kind"), tuple(sorted((k, v) for k, v in f.items() if k != "kind")))
                            for f in spec.get("features", [])),
@@ -148,6 +152,7 @@ def spec_id(spec: dict) -> str:
         "min_adx": spec.get("min_adx", 0.0),
         "atr_mult_stop": spec.get("atr_mult_stop"),
         "rr": spec.get("rr"),
+        "timeframe": settings.ORCHESTRATOR_TIMEFRAME,
     }
     h = hashlib.sha1(json.dumps(payload, sort_keys=True, default=str).encode()).hexdigest()[:8]
     return f"gen_{h}"

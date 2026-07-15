@@ -32,6 +32,8 @@ class TradeLogger:
         return self.fb.query_collection(self.COLLECTION, order_by="exit_ts", limit=limit)
 
     def all_since(self, since_ts: float) -> list[dict]:
-        """Tutti i trade con exit dopo `since_ts` (per il learning loop)."""
-        docs = self.fb.query_collection(self.COLLECTION, order_by="exit_ts")
-        return [d for d in docs if d.get("exit_ts", 0) >= since_ts]
+        """Tutti i trade con exit dopo `since_ts` (per il learning loop).
+        Filtro server-side: chiamato ogni ora dal refresh pesi, non deve scaricare
+        l'intera collection man mano che lo storico cresce."""
+        return self.fb.query_collection(self.COLLECTION, order_by="exit_ts",
+                                        min_value=since_ts)

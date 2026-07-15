@@ -16,6 +16,7 @@ salta il ciclo invece di crashare.
 """
 from __future__ import annotations
 
+import time
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -35,13 +36,25 @@ class PriceAgent:
         self._session = requests.Session()
 
     def _get(self, path: str, params: dict) -> Optional[object]:
-        try:
-            r = self._session.get(f"{self.base}{path}", params=params, timeout=self.timeout)
-            r.raise_for_status()
-            return r.json()
-        except Exception as exc:  # noqa: BLE001
-            print(f"[price_agent] GET {path} fallito: {exc}")
-            return None
+        """GET con UN retry su rate-limit (429/418: Binance chiede di rallentare).
+        A 200 coin per ciclo il weight e' vicino al limite: senza retry una
+        risposta 429 diventa una coin silenziosamente muta per il ciclo."""
+        for attempt in (0, 1):
+            try:
+                r = self._session.get(f"{self.base}{path}", params=params, timeout=self.timeout)
+                if r.status_code in (429, 418) and attempt == 0:
+                    wait = float(r.headers.get("Retry-After", 2) or 2)
+                    time.sleep(min(wait, 10.0))
+                    continue
+                r.raise_for_status()
+                return r.json()
+            except Exception as exc:  # noqa: BLE001
+                if attempt == 0:
+                    time.sleep(0.5)
+                    continue
+                print(f"[price_agent] GET {path} fallito: {exc}")
+                return None
+        return None
 
     # ---- universo futures ----
     def list_perpetual_symbols(self) -> list[str]:
@@ -125,13 +138,27 @@ class PriceAgent:
     def build_snapshot(self, symbol: str) -> Optional[AssetSnapshot]:
         indicators: dict[str, IndicatorSnapshot] = {}
         price = None
+        now = datetime.now(timezone.utc)
         for tf in settings.TIMEFRAMES:
             candles = self.get_candles(symbol, tf, limit=200)
             if not candles:
                 continue
-            indicators[tf] = compute_snapshot(candles, tf)
+            # PARITA' col backtest: indicatori SOLO su candele CHIUSE. L'ultima
+            # kline di Binance e' quella in formazione: includerla fa "repaintare"
+            # RSI/MACD/BB e soprattutto confronta il volume PARZIALE della barra
+            # corrente con la SMA di barre piene (filtri volume quasi sempre falsi
+            # a inizio barra). Il PREZZO invece resta l'ultimo disponibile (vivo).
             price = candles[-1].close
+            closed = candles[:-1] if (candles[-1].close_time and
+                                      candles[-1].close_time > now) else candles
+            if not closed:
+                continue
+            indicators[tf] = compute_snapshot(closed, tf)
         if price is None:
+            return None
+        # senza il timeframe PRIMARIO le strategie sarebbero mute in silenzio
+        # (.ind(tf) -> None su ogni segnale): meglio nessuno snapshot che uno zoppo.
+        if settings.ORCHESTRATOR_TIMEFRAME not in indicators:
             return None
 
         premium = self.get_premium(symbol)

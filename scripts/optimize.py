@@ -26,8 +26,20 @@ import requests
 from backtesting.data_loader import load_candles
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
-from bot.config import settings
+from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
+
+
+def _min_history(interval: str) -> int:
+    """Minimo di CANDELE perche' una coin sia validabile, definito in GIORNI di
+    storia (default 180) e convertito nel timeframe corrente. Cosi' il requisito
+    NON si indebolisce cambiando timeframe (2500 candele fisse = 104 giorni a 1h
+    ma solo 26 a 15m). OPTIMIZER_MIN_HISTORY (in candele) vince se impostato."""
+    env = os.getenv("OPTIMIZER_MIN_HISTORY")
+    if env:
+        return int(env)
+    days = float(os.getenv("OPTIMIZER_MIN_HISTORY_DAYS", "180"))
+    return int(days * 24.0 / timeframe_hours(interval))
 
 FAPI = "https://fapi.binance.com"
 OKX = "https://www.okx.com"
@@ -49,7 +61,7 @@ def _opt_init(args, end: str) -> None:
     except Exception as exc:  # noqa: BLE001
         print(f"[optimize] contesto BTC non disponibile nel worker: {exc}")
     _W.update(opt=opt, btc_ctx=btc_ctx, args=args, end=end,
-              min_history=int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500")))
+              min_history=_min_history(args.interval))
 
 
 def _opt_one(sym: str) -> tuple[str, dict, list]:

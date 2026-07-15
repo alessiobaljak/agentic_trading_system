@@ -9,12 +9,12 @@ from bot.learning.learning_loop import LearningLoop
 from bot.learning.trade_logger import TradeLogger
 
 
-def _trade(strategy, regime, pnl, conf=70, hour=10, asset="BTCUSDT"):
+def _trade(strategy, regime, pnl, conf=70, hour=10, asset="BTCUSDT", timeframe="15m"):
     win = pnl > 0
     return {
         "trade_id": f"{strategy}-{regime}-{pnl}-{time.time_ns()}",
         "symbol": asset, "strategy": strategy, "regime_at_entry": regime,
-        "direction": "long", "pnl": pnl,
+        "direction": "long", "pnl": pnl, "timeframe": timeframe,
         "pnl_pct": 0.02 if win else -0.01,
         "is_win": win, "hour_bucket": hour, "confidence_at_entry": conf,
         "exit_ts": time.time() - 3600,
@@ -48,6 +48,33 @@ def test_small_sample_moves_gradually():
     weights = metrics.compute_weights(trades)
     w = next(x for x in weights if x.strategy == "grid_trading")
     assert 0.0 < w.weight < 1.0
+
+
+def test_weights_ignore_other_timeframe_trades():
+    # I trade dell'era 1h (o senza campo timeframe) NON devono avvelenare i pesi
+    # del timeframe corrente (15m nei test): al cambio si riparte dal prior.
+    old = [_trade("breakout", "sideways", -5, timeframe="1h") for _ in range(10)]
+    legacy = [_trade("breakout", "sideways", -5) for _ in range(5)]
+    for t in legacy:
+        t.pop("timeframe")   # trade storico senza campo
+    weights = metrics.compute_weights(old + legacy)
+    assert weights == []   # nessun trade del tf corrente -> nessun peso (non zero!)
+    # con anche trade 15m, solo quelli contano
+    weights = metrics.compute_weights(old + [_trade("breakout", "sideways", 10) for _ in range(6)])
+    w = next(x for x in weights if x.strategy == "breakout")
+    assert w.sample_size == 6 and w.win_rate == 1.0 and w.weight == 1.0
+
+
+def test_prior_above_ramp_one_loss_is_gentle():
+    # prior 0.65 SOPRA la rampa: una singola perdita riduce ma non falcia (-40%),
+    # e i perdenti veri (tante perdite, zero vittorie) muoiono comunque.
+    one_loss = metrics.compute_weights([_trade("momentum", "bull_trending", -5)])
+    w = next(x for x in one_loss if x.strategy == "momentum")
+    assert 0.7 < w.weight < 0.9, w.weight
+    many_losses = metrics.compute_weights(
+        [_trade("momentum", "bull_trending", -5) for _ in range(8)])
+    w = next(x for x in many_losses if x.strategy == "momentum")
+    assert w.weight <= 0.05, w.weight
 
 
 def test_confidence_outcome_correlation():
@@ -122,7 +149,8 @@ def test_learning_loop_end_to_end_with_memory_firebase():
         win = i < 7
         logger.log(ClosedTrade(
             trade_id=f"t{i}", symbol="ETHUSDT", strategy="vwap_reversion",
-            direction=Direction.LONG, entry_time=now - timedelta(hours=2),
+            direction=Direction.LONG, timeframe="15m",
+            entry_time=now - timedelta(hours=2),
             exit_time=now - timedelta(hours=1), entry_price=100,
             exit_price=102 if win else 99, size=1, notional=100, leverage=2,
             pnl=2 if win else -1, pnl_pct=0.02 if win else -0.01,

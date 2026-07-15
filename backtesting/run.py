@@ -17,6 +17,7 @@ import sys
 from backtesting.data_loader import load_candles
 from backtesting.engine import Backtester, StrategyStats
 from backtesting.report import write_excel, write_html
+from bot.config import settings, timeframe_hours
 
 
 def main() -> int:
@@ -24,7 +25,7 @@ def main() -> int:
     p.add_argument("--symbols", default="BTCUSDT",
                    help="lista separata da virgole, es: BTCUSDT,ETHUSDT,SOLUSDT")
     p.add_argument("--symbol", default=None, help="(retrocompat) singolo simbolo")
-    p.add_argument("--interval", default="1h")
+    p.add_argument("--interval", default=settings.ORCHESTRATOR_TIMEFRAME)
     p.add_argument("--start", default="2022-01-01")
     p.add_argument("--end", default=None, help="default: oggi")
     p.add_argument("--source", default="binance",
@@ -33,8 +34,7 @@ def main() -> int:
     args = p.parse_args()
 
     symbols = [args.symbol] if args.symbol else [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
-    _ih = {"1m": 1 / 60, "5m": 1 / 12, "15m": 0.25, "30m": 0.5, "1h": 1.0, "4h": 4.0}.get(args.interval, 1.0)
-    bt = Backtester(capital=args.capital, interval_hours=_ih)
+    bt = Backtester(capital=args.capital, interval_hours=timeframe_hours(args.interval))
 
     # stats aggregate per strategia (trade uniti su tutti gli asset)
     aggregated: dict[str, StrategyStats] = {}

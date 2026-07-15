@@ -162,16 +162,24 @@ class FirebaseClient:
         return self._memory.get_doc(collection, doc_id)
 
     def query_collection(
-        self, collection: str, order_by: Optional[str] = None, limit: Optional[int] = None
+        self, collection: str, order_by: Optional[str] = None, limit: Optional[int] = None,
+        min_value: Optional[float] = None,
     ) -> list[dict]:
+        """`min_value`: filtro SERVER-SIDE `order_by >= min_value` (es. exit_ts degli
+        ultimi 30g). Senza, ogni chiamata scarica l'INTERA collection — costo Firestore
+        e latenza che crescono per sempre con lo storico."""
         if self._live:
             q = self._fs.collection(collection)
+            if order_by and min_value is not None:
+                q = q.where(order_by, ">=", min_value)
             if order_by:
                 q = q.order_by(order_by, direction="DESCENDING")
             if limit:
                 q = q.limit(limit)
             return [d.to_dict() for d in q.stream()]
         docs = self._memory.query_collection(collection)
+        if order_by and min_value is not None:
+            docs = [d for d in docs if d.get(order_by, 0) >= min_value]
         if order_by:
             docs = sorted(docs, key=lambda d: d.get(order_by, 0), reverse=True)
         if limit:

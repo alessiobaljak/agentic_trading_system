@@ -103,6 +103,45 @@ class TradingBot:
         print(f"[main] equity riconciliata: {eq:.2f} (base {base:.2f} + realizzato {realized:+.2f})")
         return eq
 
+    def _log_closed(self, closed) -> None:
+        """Registra un trade CHIUSO in modo non perdibile (WAL). Quando arriviamo
+        qui la posizione e' gia' stata rimossa da memoria e da /positions: se
+        logger.log fallisse (Firestore transitorio) il trade sparirebbe per sempre
+        (equity mai piu' riconciliabile). Quindi: 1) record su RTDB /unlogged_trades,
+        2) Firestore + equity, 3) cancella il WAL. I resti vengono recuperati da
+        _replay_unlogged() all'avvio."""
+        wal_path = f"/unlogged_trades/{closed.trade_id}"
+        data = closed.model_dump(mode="json")
+        try:
+            self.fb.set_rtdb(wal_path, data)
+        except Exception:  # noqa: BLE001
+            pass          # WAL best-effort: senza, si procede come prima
+        self.logger.log(closed)
+        self.apply_realized_pnl(closed.pnl)
+        try:
+            self.fb.set_rtdb(wal_path, None)
+        except Exception:  # noqa: BLE001
+            pass
+
+    def _replay_unlogged(self) -> None:
+        """Completa i log rimasti a meta' (crash/errore tra chiusura e Firestore).
+        Va chiamato PRIMA di reconcile_equity: cosi' l'equity ricalcolata include
+        anche i trade recuperati (niente doppio conteggio del PnL)."""
+        try:
+            pending = self.fb.get_rtdb("/unlogged_trades") or {}
+        except Exception:  # noqa: BLE001
+            return
+        if not isinstance(pending, dict):
+            return
+        from bot.core.models import ClosedTrade
+        for tid, data in list(pending.items()):
+            try:
+                self.logger.log(ClosedTrade(**data))
+                self.fb.set_rtdb(f"/unlogged_trades/{tid}", None)
+                print(f"[main] trade {tid} recuperato dal WAL")
+            except Exception as exc:  # noqa: BLE001
+                print(f"[main] replay WAL {tid} fallito: {exc}")
+
     def apply_realized_pnl(self, pnl: float) -> float:
         """Aggiorna l'equity col PnL realizzato di un trade chiuso e la persiste.
         Così il sizing dei trade successivi compone (equity sale -> rischio in $
@@ -153,6 +192,10 @@ class TradingBot:
     def refresh_selected_snapshots(self) -> None:
         fng = self.onchain.fear_greed()
         for sym in list(self.selected.keys()):
+            # pacing leggero: ~7 richieste/coin x 200 coin per ciclo e' vicino al
+            # weight limit Binance (2400/min); 50ms/coin spalma il burst senza
+            # allungare il ciclo in modo percettibile (10s su 200 coin).
+            time.sleep(0.05)
             snap = self.price.build_snapshot(sym)
             if snap:
                 snap.regime = self.regime
@@ -176,9 +219,8 @@ class TradingBot:
                 continue
             closed = self.executor.update_position(sym, price)
             if closed:
-                self.logger.log(closed)
                 eq = self.account_equity()
-                self.apply_realized_pnl(closed.pnl)
+                self._log_closed(closed)
                 self.notifier.trade_closed(
                     closed.symbol, closed.strategy, closed.direction.value,
                     closed.exit_price, closed.pnl, closed.pnl_pct,
@@ -227,8 +269,7 @@ class TradingBot:
                     price = snap.price if snap else pos.entry_price
                 eq = self.account_equity()
                 closed = self.executor._close(pos, price, ExitReason.MANUAL)
-                self.logger.log(closed)
-                self.apply_realized_pnl(closed.pnl)
+                self._log_closed(closed)
                 self.notifier.trade_closed(
                     closed.symbol, closed.strategy, closed.direction.value,
                     closed.exit_price, closed.pnl, closed.pnl_pct,
@@ -238,21 +279,34 @@ class TradingBot:
                 self._persist_risk_state()
             self.fb.set_rtdb("/commands/close_position", None)
 
-        # 2) kill switch
+        # 2) kill switch — prezzi FRESCHI per ogni posizione aperta: gli snapshot
+        # possono essere vecchi di 15m/4h e il fallback all'entry price registrerebbe
+        # un PnL finto proprio nel percorso di emergenza.
         if self.kill_switch_active():
-            prices = {s: self.selected[s].price for s in self.selected if s in self.selected}
+            prices: dict[str, float] = {}
+            for s in list(self.executor.open_positions.keys()):
+                p = self.price.get_mark_price(s)
+                if p is None:
+                    snap = self.selected.get(s)
+                    p = snap.price if snap else None
+                if p is not None:
+                    prices[s] = p
             closed = self.executor.force_close_all(prices, ExitReason.KILL_SWITCH)
             for t in closed:
-                self.logger.log(t)
-                self.apply_realized_pnl(t.pnl)
+                self._log_closed(t)
             self.notifier.kill_switch()
             self.fb.set_rtdb("/commands/kill_switch", False)
             return
 
-        # 3) nuova decisione ogni 15m
-        if now - self.last_decision < self._decision_interval_s:
-            return
-        self.last_decision = now
+        # 3) nuova decisione a OGNI CANDELA CHIUSA del timeframe, ALLINEATA al
+        # confine dell'orologio (xx:00/15/30/45), non a "N secondi dall'avvio del
+        # processo": gli indicatori sono su barre chiuse (parita' col backtest),
+        # quindi si decide subito dopo la chiusura della barra, come nel gate.
+        itv = self._decision_interval_s
+        boundary = (now // itv) * itv          # apertura della candela corrente
+        if boundary <= self.last_decision or now - boundary < 5.0:
+            return                             # barra non ancora chiusa/gia' decisa
+        self.last_decision = boundary
         if not self.regime or not self.selected:
             return
 
@@ -475,6 +529,7 @@ class TradingBot:
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
         print(f"[main] avvio bot @ {datetime.now(timezone.utc).isoformat()} "
               f"DRY_RUN={settings.DRY_RUN}")
+        self._replay_unlogged()   # recupera log a meta' PRIMA di riconciliare
         self.reconcile_equity()
         self._load_adapt_state()
         # esce dalla manutenzione: il bot e' di nuovo su -> il monitoraggio "offline"

@@ -78,8 +78,12 @@ class ExecutionEngine:
         # Così il PnL del paper è NETTO e coerente con la validazione.
         self.cost_per_trade = float(os.getenv("BACKTEST_COST_PER_TRADE", "0.0008"))
         self.funding_per_8h = float(os.getenv("BACKTEST_FUNDING_PER_8H", "0.0001"))
-        # max holding: come l'orizzonte del backtest (96 barre da 1h). Oltre, esce.
-        self.max_hold_hours = float(os.getenv("EXEC_MAX_HOLD_HOURS", "96"))
+        # max holding: come l'orizzonte del backtest = 96 BARRE del timeframe
+        # (24h a 15m, 96h a 1h). In ORE fisse divergerebbe dal gate al cambio
+        # timeframe. EXEC_MAX_HOLD_HOURS (in ore) vince se impostato.
+        from bot.config import timeframe_hours
+        _tf_h = timeframe_hours(settings.ORCHESTRATOR_TIMEFRAME)
+        self.max_hold_hours = float(os.getenv("EXEC_MAX_HOLD_HOURS", str(96 * _tf_h)))
         if not self.dry_run:
             self._init_binance()
         # CRITICO: ricarica le posizioni aperte da Firebase. Senza questo, ogni
@@ -118,7 +122,7 @@ class ExecutionEngine:
             print(f"[execution] ordine rifiutato dal gate: {params.reject_reason}")
             return None
 
-        ind15 = asset.ind("15m")
+        ind15 = asset.ind(settings.ORCHESTRATOR_TIMEFRAME)
         pos = Position(
             position_id=str(uuid.uuid4()),
             symbol=asset.symbol, strategy=strategy, direction=direction,
@@ -271,7 +275,8 @@ class ExecutionEngine:
         ind = {k: IndicatorSnapshot(**v) for k, v in pos.indicators_at_entry.items()}
         return ClosedTrade(
             trade_id=pos.position_id, symbol=pos.symbol, strategy=pos.strategy,
-            direction=pos.direction, entry_time=pos.entry_time,
+            direction=pos.direction, timeframe=settings.ORCHESTRATOR_TIMEFRAME,
+            entry_time=pos.entry_time,
             exit_time=datetime.now(timezone.utc), entry_price=pos.entry_price,
             exit_price=exit_price, size=pos.quantity,
             notional=pos.entry_price * pos.quantity, leverage=pos.leverage,
@@ -309,6 +314,9 @@ class ExecutionEngine:
             "updated_at": time.time(),
             # trasparenza costi sulla posizione aperta (funding maturato + ore)
             "accrued_funding": round(accrued_funding, 4), "held_hours": round(held_hours, 2),
+            # senza questo, dopo un RESTART lo spread sparirebbe dai costi di
+            # chiusura (PnL sovrastimato che avvelena il learning)
+            "spread_cost": pos.spread_cost,
             # --- campi extra per ricostruire la posizione dopo un restart ---
             "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
             "entry_time": pos.entry_time.isoformat(),
@@ -362,6 +370,7 @@ class ExecutionEngine:
             funding_at_entry=p.get("funding_at_entry"),
             confidence_at_entry=p.get("confidence_at_entry"),
             atr=float(p.get("atr", 0.0) or 0.0),
+            spread_cost=float(p.get("spread_cost", 0.0) or 0.0),
         )
         # __post_init__ azzera remaining_qty/high_water: ripristino lo stato vivo
         pos.remaining_qty = float(p.get("remaining_qty", original_qty))

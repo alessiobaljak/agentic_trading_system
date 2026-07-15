@@ -253,6 +253,38 @@ def _cache_write(path: str, candles: list[Candle]) -> None:
         pass
 
 
+def _covers_end(candles: list[Candle], end_dt: datetime) -> bool:
+    """True se la serie arriva 'vicino' a end (ultima candela entro 24h da end).
+    Una serie che si ferma prima e' TRONCATA (429/timeout a meta' paginazione):
+    non va cacheata ne' accettata come buona, altrimenti il gate valida su storia
+    monca per tutto il giorno. Le coin GIOVANI (inizio dopo `start`) sono legittime:
+    qui si controlla solo la coda."""
+    if not candles:
+        return False
+    return candles[-1].open_time >= end_dt - timedelta(hours=24)
+
+
+_PRUNED = False
+
+
+def _prune_cache(max_age_days: float = 3.0) -> None:
+    """Cancella i file di cache piu' vecchi di N giorni (la chiave include end=oggi,
+    quindi i file di ieri non verranno mai piu' letti: senza pulizia il disco cresce
+    di GB al giorno). Una volta per processo."""
+    global _PRUNED
+    if _PRUNED:
+        return
+    _PRUNED = True
+    try:
+        cutoff = datetime.now(timezone.utc).timestamp() - max_age_days * 86400
+        for name in os.listdir(_CACHE_DIR):
+            p = os.path.join(_CACHE_DIR, name)
+            if os.path.isfile(p) and os.path.getmtime(p) < cutoff:
+                os.remove(p)
+    except Exception:  # noqa: BLE001
+        pass
+
+
 # --------------------------------------------------------------------------- #
 # Loader con fallback                                                          #
 # --------------------------------------------------------------------------- #
@@ -289,11 +321,12 @@ def load_candles(
         if c:
             return c
 
-    # cache su disco: se abbiamo gia' questi dati REALI, niente rete.
+    # cache su disco: se abbiamo gia' questi dati REALI e COMPLETI, niente rete.
     cache_path = _cache_file(symbol, interval, start, end)
     if _CACHE_ENABLED:
+        _prune_cache()
         cached = _cache_read(cache_path)
-        if cached:
+        if cached and _covers_end(cached, end_dt):
             print(f"[backtest] dati da cache: {len(cached)} candele ({symbol} {interval})")
             return cached
 
@@ -307,13 +340,22 @@ def load_candles(
     if prefer in ("bybit", "okx", "binance"):
         chain.sort(key=lambda kv: kv[0] != prefer)
 
+    partial: list[Candle] = []   # migliore serie TRONCATA vista (mai cacheata)
     for name, fn in chain:
         candles = fn()
-        if candles:
+        if candles and _covers_end(candles, end_dt):
             print(f"[backtest] dati da {name}: {len(candles)} candele")
             if _CACHE_ENABLED:
                 _cache_write(cache_path, candles)   # salva per i giri/shard successivi
             return candles
+        if len(candles) > len(partial):
+            partial = candles   # troncata (es. 429 a meta' paginazione): prova il prossimo
+
+    if partial:
+        # nessuna fonte completa: serie monca, MAI in cache (un run successivo ritenta)
+        print(f"[backtest] ATTENZIONE {symbol}: solo serie PARZIALE disponibile "
+              f"({len(partial)} candele, ultima {partial[-1].open_time:%Y-%m-%d}) — non cacheata")
+        return partial
 
     if not allow_synthetic:
         print(f"[backtest] {symbol}: nessuna fonte reale raggiungibile e sintetici "

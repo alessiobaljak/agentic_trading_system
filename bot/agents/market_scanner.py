@@ -58,7 +58,7 @@ class MarketScanner:
         self.max_symbols = max_symbols or int(os.getenv("SCAN_MAX_SYMBOLS", "100"))
 
     def _score(self, snap: AssetSnapshot) -> tuple[float, dict[str, float]]:
-        i = snap.ind("15m")
+        i = snap.ind(settings.ORCHESTRATOR_TIMEFRAME)
         comp: dict[str, float] = {}
 
         # momentum tecnico: distanza EMA + RSI deviation dal neutro

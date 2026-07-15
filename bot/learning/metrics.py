@@ -16,6 +16,12 @@ from bot.core.models import Regime, StrategyRegimeWeight
 # Mappa win_rate -> peso: <=LOW => 0 (disattivata), >=HIGH => 1 (piena).
 WEIGHT_WINRATE_LOW = 0.35
 WEIGHT_WINRATE_HIGH = 0.60
+# Prior del win-rate per lo shrinkage, SOPRA il bordo alto della rampa (0.60).
+# Se il prior fosse ESATTAMENTE sul bordo, qualunque evidenza penalizzerebbe subito
+# (1 sola perdita: -40% di peso) e le vittorie non compenserebbero mai. A 0.65 le
+# vittorie contano davvero: 1 perdita -> peso ~0.77 (non 0.60); 4 perdite senza
+# vittorie -> comunque ~0 (i perdenti veri muoiono lo stesso, solo meno isterico).
+PRIOR_WINRATE = 0.65
 
 
 def _is_win(t: dict) -> bool:
@@ -128,15 +134,22 @@ def compute_weights(trades: list[dict]) -> list[StrategyRegimeWeight]:
     """
     Pesi dinamici per strategia × regime, con SHRINKAGE graduale (niente cliff).
 
-    Il win-rate stimato parte dal PRIOR neutro (0.60 -> peso 1.0, "tradala") e si
+    Il win-rate stimato parte dal PRIOR ottimista (0.65 -> peso 1.0, "tradala") e si
     muove verso l'osservato in proporzione al campione: pochi trade -> resta vicino
-    al neutro; molti -> si avvicina all'osservato. Cosi' il learning inizia SUBITO
+    al prior; molti -> si avvicina all'osservato. Cosi' il learning inizia SUBITO
     (anche con 1-2 trade sposta un po') senza reagire al rumore di un campione
     minuscolo. MIN_TRADES_PER_WEIGHT ora e' la FORZA dello shrinkage (pseudo-conteggio),
     non piu' una soglia netta.
     """
-    prior_wr = WEIGHT_WINRATE_HIGH          # 0.60 -> peso 1.0 (prior "tradala")
+    prior_wr = PRIOR_WINRATE
     k = max(1, settings.MIN_TRADES_PER_WEIGHT)   # forza dello shrinkage
+
+    # SOLO i trade del timeframe corrente: l'esperienza fatta a 1h non descrive il
+    # comportamento delle stesse strategie a 15m (SL/TP/durate diversi). I trade
+    # storici senza campo timeframe ("" o assente) sono esclusi: al cambio di
+    # timeframe il learning riparte dal prior invece che avvelenato dal passato.
+    tf = settings.ORCHESTRATOR_TIMEFRAME
+    trades = [t for t in trades if t.get("timeframe") == tf]
 
     groups: dict[tuple[str, str], list[dict]] = defaultdict(list)
     for t in trades:

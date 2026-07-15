@@ -30,7 +30,7 @@ from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
 from bot.strategies.generator import generate_specs, mutate
-from scripts.optimize import FRESH_DAYS, MIN_PASSES, top_symbols_by_volume
+from scripts.optimize import FRESH_DAYS, MIN_PASSES, _min_history, top_symbols_by_volume
 
 # stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
 # processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
@@ -38,8 +38,8 @@ _W: dict = {}
 
 
 def _disc_init(args, end: str, specs: list) -> None:
-    _W.update(opt=WalkForwardOptimizer(n_windows=args.windows), args=args, end=end,
-              specs=specs, min_history=int(os.getenv("OPTIMIZER_MIN_HISTORY", "2500")))
+    _W.update(opt=WalkForwardOptimizer(n_windows=args.windows, interval=args.interval),
+              args=args, end=end, specs=specs, min_history=_min_history(args.interval))
 
 
 def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list]:
@@ -129,16 +129,23 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
             or (r.get("pass_count", 0) < MIN_PASSES and r.get("last_seen_at", 0) < stale_before)
         ))
     }
-    # cap: limita il numero di coppie per non superare 1 MiB di documento. Tiene
-    # le validate (>=3 pass) e le piu' promettenti (pass alto, viste di recente).
+    # cap: limita il numero di coppie per non superare 1 MiB di documento.
+    # SOLO sulle GENERATE: le coppie base sono il prodotto di optimize.py e la
+    # discovery non deve MAI potarle (con --top alto le base da sole superano il
+    # cap e perderebbero pass/fail_count silenziosamente).
     max_pairs = int(os.getenv("OPTIMIZER_MAX_PAIRS", "3000"))
     if len(pairs) > max_pairs:
-        ranked = sorted(
-            pairs.items(),
-            key=lambda kv: (kv[1].get("pass_count", 0) >= MIN_PASSES,
-                            kv[1].get("pass_count", 0), kv[1].get("last_seen_at", 0)),
-            reverse=True)
-        pairs = dict(ranked[:max_pairs])
+        base = {k: r for k, r in pairs.items() if not r.get("generated")}
+        gen = {k: r for k, r in pairs.items() if r.get("generated")}
+        gen_budget = max(0, max_pairs - len(base))
+        if len(gen) > gen_budget:
+            ranked = sorted(
+                gen.items(),
+                key=lambda kv: (kv[1].get("pass_count", 0) >= MIN_PASSES,
+                                kv[1].get("pass_count", 0), kv[1].get("last_seen_at", 0)),
+                reverse=True)
+            gen = dict(ranked[:gen_budget])
+        pairs = {**base, **gen}
     validated = sorted(
         k for k, r in pairs.items()
         if r.get("pass_count", 0) >= MIN_PASSES

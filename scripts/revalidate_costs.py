@@ -19,6 +19,7 @@ import time
 
 from backtesting.data_loader import load_candles
 from backtesting.engine import Backtester, StrategyStats, passes_gate
+from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.learning.adaptation import AdaptationEngine
@@ -39,7 +40,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Ri-valida le coppie esistenti coi costi nuovi.")
     ap.add_argument("--windows", type=int, default=3)
     ap.add_argument("--start", default="2022-01-01")
-    ap.add_argument("--interval", default="1h")
+    # stesso timeframe del sistema: ri-validare un registro 15m su dati 1h
+    # (o viceversa) non ha senso.
+    ap.add_argument("--interval", default=settings.ORCHESTRATOR_TIMEFRAME)
     ap.add_argument("--limit", type=int, default=0, help="0 = tutte le coin validate")
     ap.add_argument("--apply", action="store_true", help="scrive il registro (default: dry-run)")
     args = ap.parse_args()
@@ -58,7 +61,7 @@ def main() -> int:
         print("Registro vuoto / nessuna coin validata.")
         return 1
 
-    ih = {"15m": 0.25, "1h": 1.0}.get(args.interval, 1.0)
+    ih = timeframe_hours(args.interval)
     from backtesting.data_loader import funding_rate_for
     engine = Backtester(interval_hours=ih, funding_rate_provider=funding_rate_for)
     kept: dict[str, dict] = {}

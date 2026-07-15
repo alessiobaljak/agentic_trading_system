@@ -187,6 +187,10 @@ class ClosedTrade(BaseModel):
     symbol: str
     strategy: str
     direction: Direction
+    # timeframe del sistema quando il trade e' stato aperto: il learning pesa SOLO
+    # i trade del timeframe corrente (l'esperienza a 1h non descrive il 15m).
+    # "" = trade storico precedente all'introduzione del campo (escluso dai pesi).
+    timeframe: str = ""
 
     entry_time: datetime
     exit_time: datetime

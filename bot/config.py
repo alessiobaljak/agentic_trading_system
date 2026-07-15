@@ -20,6 +20,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def timeframe_hours(tf: str) -> float:
+    """Durata di UNA candela del timeframe in ORE. Helper CONDIVISO (config, engine,
+    executor, script): un'unica mappa, niente valori 1h hardcoded sparsi."""
+    return {"1m": 1 / 60, "5m": 1 / 12, "15m": 0.25,
+            "30m": 0.5, "1h": 1.0, "4h": 4.0}.get(tf, 1.0)
+
+
 def _get_bool(key: str, default: bool) -> bool:
     val = os.getenv(key)
     if val is None:
@@ -77,7 +84,7 @@ class Settings:
     # TIMEFRAME UNICO del sistema. Le strategie leggono gli indicatori di QUESTO
     # timeframe (live) e l'optimizer/discover validano su QUESTO stesso intervallo
     # (default --interval). Un solo knob -> gate e live non possono divergere.
-    # Default 1h = il timeframe su cui e' stato costruito il registro validato.
+    # Il registro validato DEVE essere ricostruito quando questo valore cambia.
     ORCHESTRATOR_TIMEFRAME: str = os.getenv("ORCHESTRATOR_TIMEFRAME", "15m")
     SCAN_INTERVAL_HOURS: int = 4          # market scanner ogni 4h
     REGIME_INTERVAL_MINUTES: int = 60     # regime detector ogni ora
@@ -101,12 +108,17 @@ class Settings:
     # registro non è caricato (errore transitorio / reset), il bot resta FLAT
     # invece di tradare tutto senza validazione. Mettere False solo in bootstrap.
     REQUIRE_VALIDATED_PAIRS: bool = os.getenv("REQUIRE_VALIDATED_PAIRS", "true").lower() == "true"
-    # cooldown anti-whipsaw: ore di stop su una coin dopo uno STOP LOSS (no rientro)
-    COOLDOWN_HOURS: float = float(os.getenv("COOLDOWN_HOURS", "4"))
+    # cooldown anti-whipsaw: stop su una coin dopo uno STOP LOSS (no rientro).
+    # Espresso in BARRE del timeframe (4 barre: 1h a 15m, 4h a 1h) cosi' il
+    # comportamento non cambia di scala quando si cambia ORCHESTRATOR_TIMEFRAME.
+    # L'env COOLDOWN_HOURS (in ore) vince se impostato.
+    COOLDOWN_HOURS: float = float(os.getenv(
+        "COOLDOWN_HOURS", str(4 * timeframe_hours(ORCHESTRATOR_TIMEFRAME))))
     # adattamento real-time: dopo N stop consecutivi una STRATEGIA va in panchina
-    # (il bot continua con le altre), per STRATEGY_COOLDOWN_HOURS.
+    # (il bot continua con le altre), per STRATEGY_COOLDOWN_HOURS (8 barre).
     STRATEGY_LOSS_STREAK: int = int(os.getenv("STRATEGY_LOSS_STREAK", "3"))
-    STRATEGY_COOLDOWN_HOURS: float = float(os.getenv("STRATEGY_COOLDOWN_HOURS", "8"))
+    STRATEGY_COOLDOWN_HOURS: float = float(os.getenv(
+        "STRATEGY_COOLDOWN_HOURS", str(8 * timeframe_hours(ORCHESTRATOR_TIMEFRAME))))
     MAX_CORRELATED_POSITIONS: int = 3     # correlazione >0.85
     CORRELATION_THRESHOLD: float = 0.85
 

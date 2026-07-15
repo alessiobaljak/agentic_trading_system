@@ -160,6 +160,7 @@ class Backtester:
         # nei run veri; None nei test/offline -> usa il default flat). Cache per simbolo.
         self._funding_provider = funding_rate_provider
         self._funding_rate_cache: dict[str, float] = {}
+        self._htf_cache: dict = {}   # slice -> (frame_1h, h_idx) per la 1h reale
         self.regime_detector = RegimeDetector()
         self.strategies = get_all_strategies()
 
@@ -199,14 +200,78 @@ class Backtester:
         from bot.execution.exit_logic import trailing_verdict
         return trailing_verdict(candles[j:horizon + 1], stop, target, long)
 
-    def _snapshot_from_frame(self, symbol: str, frame, idx: int) -> AssetSnapshot:
+    # ------------------------------------------------------------------ #
+    # 1H REALE nel backtest.
+    # Regime detector e trend_following leggono ind("1h"): live e' la 1h VERA di
+    # Binance, quindi anche il gate deve fornirla VERA (aggregata dalle candele del
+    # timeframe base), non un alias della riga 15m — altrimenti si valida sotto
+    # regimi sbagliati e la conferma dual-timeframe diventa una tautologia.
+    # ------------------------------------------------------------------ #
+    def _resample_1h(self, candles: list[Candle]) -> list[Candle]:
+        """Aggrega le candele del timeframe base in candele 1h (OHLCV standard)."""
+        buckets: dict = {}
+        order: list = []
+        for c in candles:
+            ts = c.open_time.replace(minute=0, second=0, microsecond=0)
+            b = buckets.get(ts)
+            if b is None:
+                buckets[ts] = [c.open, c.high, c.low, c.close, c.volume]
+                order.append(ts)
+            else:
+                b[1] = max(b[1], c.high)
+                b[2] = min(b[2], c.low)
+                b[3] = c.close
+                b[4] += c.volume
+        return [Candle(open_time=ts, open=buckets[ts][0], high=buckets[ts][1],
+                       low=buckets[ts][2], close=buckets[ts][3], volume=buckets[ts][4])
+                for ts in order]
+
+    def _htf_for(self, candles: list[Candle]):
+        """(frame_1h, h_idx) per la serie data: h_idx[i] = indice dell'ULTIMA candela
+        1h CHIUSA alla chiusura della barra i (-1 se nessuna: niente look-ahead sulla
+        1h in formazione — il live, dopo il fix della candela parziale, fa lo stesso).
+        None se il timeframe base e' gia' >= 1h (la riga e' gia' la 1h). Memoizzata
+        per slice: l'optimizer richiama run_strategy molte volte sugli stessi dati."""
+        if self.interval_hours >= 1.0 or not candles:
+            return None
+        key = (candles[0].open_time, candles[-1].open_time, len(candles))
+        hit = self._htf_cache.get(key)
+        if hit is not None:
+            return hit
+        from datetime import timedelta
+        hc = self._resample_1h(candles)
+        frame_1h = compute_indicator_frame(hc)
+        bar = timedelta(hours=self.interval_hours)
+        hour = timedelta(hours=1)
+        h_idx, j = [], -1
+        for c in candles:
+            bar_close = c.open_time + bar
+            while j + 1 < len(hc) and hc[j + 1].open_time + hour <= bar_close:
+                j += 1
+            h_idx.append(j)
+        if len(self._htf_cache) > 8:      # slice diverse (finestre walk-forward)
+            self._htf_cache.clear()
+        self._htf_cache[key] = (frame_1h, h_idx)
+        return self._htf_cache[key]
+
+    def _snapshot_from_frame(self, symbol: str, frame, idx: int,
+                             htf=None) -> AssetSnapshot:
         row = frame.iloc[idx]
         snap = AssetSnapshot(symbol=symbol, price=float(row["close"]))
-        ind15 = snapshot_from_row(row, "15m")
-        ind1h = snapshot_from_row(row, "1h")
-        snap.indicators["15m"] = ind15
-        snap.indicators["1h"] = ind1h
-        snap.indicators["5m"] = ind15
+        tf = settings.ORCHESTRATOR_TIMEFRAME
+        ind = snapshot_from_row(row, tf)
+        snap.indicators[tf] = ind
+        # 1h REALE quando disponibile (timeframe base < 1h e storia sufficiente);
+        # fallback: alias della riga base (comportamento storico, es. tf gia' 1h).
+        ind1h = None
+        if htf is not None:
+            frame_1h, h_idx = htf
+            if 0 <= idx < len(h_idx) and h_idx[idx] >= 0:
+                ind1h = snapshot_from_row(frame_1h.iloc[h_idx[idx]], "1h")
+        snap.indicators["1h"] = ind1h if ind1h is not None else snapshot_from_row(row, "1h")
+        # alias di compatibilita' per consumatori legacy con chiavi fisse
+        snap.indicators.setdefault("15m", ind)
+        snap.indicators.setdefault("5m", ind)
         return snap
 
     def build_context(self, symbol: str, candles: list[Candle], frame=None) -> dict:
@@ -214,9 +279,10 @@ class Backtester:
         strategie cross-asset (momentum_cross_asset) sono validabili nel backtest."""
         if frame is None:
             frame = compute_indicator_frame(candles)
+        htf = self._htf_for(candles)
         out: dict = {}
         for idx in range(len(frame)):
-            snap = self._snapshot_from_frame(symbol, frame, idx)
+            snap = self._snapshot_from_frame(symbol, frame, idx, htf=htf)
             out[frame.iloc[idx]["open_time"]] = snap
         return out
 
@@ -226,10 +292,11 @@ class Backtester:
         if frame is None:
             frame = compute_indicator_frame(candles)
         cost = self._liquidity_cost(candles)   # costo reale di QUESTA coin (liquidita')
+        htf = self._htf_for(candles)           # 1h REALE per regime/dual-timeframe
         i = self.window
         n = len(candles)
         while i < n - 1:
-            snap = self._snapshot_from_frame(symbol, frame, i)
+            snap = self._snapshot_from_frame(symbol, frame, i, htf=htf)
             regime = self.regime_detector.detect(snap)
             snap.regime = regime
             if not strategy.is_active_in(regime):

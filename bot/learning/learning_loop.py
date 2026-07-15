@@ -34,6 +34,10 @@ class LearningLoop:
     def build_report(self, lookback_days: int) -> MemoryReport:
         since_ts = time.time() - lookback_days * 86400
         trades = self.logger.all_since(since_ts)
+        # solo il timeframe CORRENTE: metriche e narrativa devono descrivere il
+        # sistema che gira ora, non mescolare l'era 1h con quella 15m (i pesi in
+        # compute_weights hanno lo stesso filtro).
+        trades = [t for t in trades if t.get("timeframe") == settings.ORCHESTRATOR_TIMEFRAME]
 
         report = MemoryReport(
             lookback_days=lookback_days,
@@ -61,9 +65,12 @@ class LearningLoop:
                   f"win_rate={report.overall_win_rate:.2%}, "
                   f"{len(report.weights)} pesi")
 
-        # i pesi operativi derivano dalla finestra principale (30g)
+        # i pesi operativi derivano dalla finestra principale (30g). MAI azzerare
+        # il doc con una lista vuota (es. 0 trade dopo un cambio timeframe): il
+        # refresh orario del bot fa lo stesso, i due writer restano coerenti.
         primary = reports.get(30) or next(iter(reports.values()))
-        self.adaptation.save_weights(primary.weights)
+        if primary.weights:
+            self.adaptation.save_weights(primary.weights)
 
         # auto-analisi narrativa (settimanale, opzionale via Claude)
         narrative = self._maybe_narrative(primary)

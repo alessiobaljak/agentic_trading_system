@@ -107,6 +107,9 @@ def test_restore_open_positions_after_restart():
     assert p.entry_price == src.entry_price
     assert p.quantity == src.quantity            # quantità preservata
     assert p.stop_price == src.stop_price and p.take_profit_price == src.take_profit_price
+    # lo SPREAD di liquidita' deve sopravvivere al restart (altrimenti i costi di
+    # chiusura post-riavvio lo perdono e il PnL loggato e' sovrastimato)
+    assert p.spread_cost == src.spread_cost and p.spread_cost > 0
     # la posizione ripristinata si gestisce normalmente (chiude allo stop)
     closed = eng2.update_position("BTCUSDT", 97.0)
     assert closed is not None and closed.exit_reason == ExitReason.STOP_LOSS
