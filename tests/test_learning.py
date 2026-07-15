@@ -88,6 +88,30 @@ def test_is_enabled_only_validated_pairs_when_registry_present():
     assert eng.is_enabled("BTCUSDT", "mean_reversion") is False    # non validata
 
 
+def test_refresh_weights_reacts_within_the_hour():
+    # Opzione A: il bot ricalcola i pesi dai trade su Firestore (niente Binance).
+    # 5 perdite in sideways per 'breakout' -> dopo il refresh il peso e' 0 in sideways.
+    from bot.main import TradingBot
+    fb = FirebaseClient()
+    for i in range(5):
+        t = _trade("breakout", "sideways", -5)
+        t["trade_id"] = f"loss{i}"
+        fb.set_doc("trades", t["trade_id"], t)
+    adaptation = AdaptationEngine(fb)
+    # prima del refresh: nessun peso salvato -> default 1.0
+    assert adaptation.weight_for("breakout", Regime.SIDEWAYS) == 1.0
+
+    class _Stub:
+        pass
+    bot = _Stub()
+    bot.logger = TradeLogger(fb)
+    bot.adaptation = adaptation
+    TradingBot.refresh_weights(bot, time.time())
+
+    # dopo il refresh, in-RAM: la strategia perdente e' azzerata in sideways
+    assert adaptation.weight_for("breakout", Regime.SIDEWAYS) == 0.0
+
+
 def test_learning_loop_end_to_end_with_memory_firebase():
     fb = FirebaseClient()  # in-memory (nessun service account in test)
     logger = TradeLogger(fb)

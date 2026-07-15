@@ -58,6 +58,7 @@ class TradingBot:
         self.last_decision = 0.0
         self.last_adapt_reload = 0.0
         self.last_trailing_eval = 0.0
+        self.last_weight_refresh = 0.0
         # intervallo tra decisioni = durata del timeframe unico (es. 1h -> 3600s).
         # Cosi' l'orchestratore agisce a OGNI candela chiusa del timeframe validato.
         _tf_secs = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 14400}
@@ -438,6 +439,24 @@ class TradingBot:
             print(f"[main] verdetto trailing assegnato a {done} trade paper")
 
     # ------------------------------------------------------------------ #
+    def refresh_weights(self, now: float) -> None:
+        """Ricalcola i pesi strategia×regime dai TRADE su Firestore (nessun Binance)
+        e li salva. Stessa identica logica del job notturno (finestra 30g,
+        metrics.compute_weights), ma ogni ora: cosi' le perdite recenti frenano una
+        strategia in poche ore invece di aspettare la notte. E' aritmetica sul nostro
+        registro (win/loss gia' scritti), quindi giralo pure sul VPS nel loop."""
+        from bot.learning import metrics
+        try:
+            trades = self.logger.all_since(now - 30 * 86400)
+            weights = metrics.compute_weights(trades)
+            if weights:
+                self.adaptation.save_weights(weights)   # save_weights ricarica anche in RAM
+                print(f"[main] pesi ricalcolati: {len(weights)} coppie strat×regime "
+                      f"da {len(trades)} trade (30g)")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[main] refresh_weights fallito: {exc}")
+
+    # ------------------------------------------------------------------ #
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
         print(f"[main] avvio bot @ {datetime.now(timezone.utc).isoformat()} "
               f"DRY_RUN={settings.DRY_RUN}")
@@ -455,6 +474,9 @@ class TradingBot:
                 if now - self.last_trailing_eval >= 3600:   # verdetto trailing paper (B1)
                     self.evaluate_pending_trailing(now)
                     self.last_trailing_eval = now
+                if now - self.last_weight_refresh >= 3600:   # ricalcolo pesi ogni ora (opzione A)
+                    self.refresh_weights(now)
+                    self.last_weight_refresh = now
                 if now - self.last_adapt_reload >= 6 * 3600:
                     self.adaptation.load_weights()
                     self.adaptation.load_params()
