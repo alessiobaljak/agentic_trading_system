@@ -85,6 +85,7 @@ export default function Positions() {
                 <th>Lev</th>
                 <th>Stop</th>
                 <th>TP</th>
+                <th title="Ore aperta · funding maturato (già scalato dall'uPnL)">Held / Fund.</th>
                 <th>uPnL</th>
                 <th></th>
               </tr>
@@ -110,6 +111,12 @@ export default function Positions() {
                     <td className="mono">{p.leverage != null ? `${p.leverage}x` : '—'}</td>
                     <td className="mono">{fmt(p.stop_price, 4)}</td>
                     <td className="mono">{fmt(p.take_profit_price, 4)}</td>
+                    <td className="mono muted" style={{ fontSize: 12, whiteSpace: 'nowrap' }}>
+                      {p.held_hours != null ? `${p.held_hours.toFixed(1)}h` : '—'}
+                      {p.accrued_funding != null && p.accrued_funding !== 0
+                        ? ` · -${p.accrued_funding.toFixed(2)}`
+                        : ''}
+                    </td>
                     <td className={`mono ${upnl >= 0 ? 'pos' : 'neg'}`}>
                       {upnl >= 0 ? '+' : ''}
                       {fmt(upnl)}
@@ -132,7 +139,7 @@ export default function Positions() {
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan={9} style={{ textAlign: 'right', fontWeight: 600 }}>
+                <td colSpan={10} style={{ textAlign: 'right', fontWeight: 600 }}>
                   Total unrealized PnL
                 </td>
                 <td className={`mono ${totalUpnl >= 0 ? 'pos' : 'neg'}`} style={{ fontWeight: 700 }}>

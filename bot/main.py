@@ -84,6 +84,12 @@ class TradingBot:
         eq = self.fb.get_rtdb("/account/equity")
         return float(eq) if eq else 10_000.0
 
+    def _used_margin(self) -> float:
+        """Margine iniziale bloccato dalle posizioni aperte = somma(notional/leva).
+        Stessa formula della dashboard e del gate di riserva-margine."""
+        return sum(p.quantity * p.entry_price / max(p.leverage, 1.0)
+                   for p in self.executor.open_positions.values())
+
     def reconcile_equity(self) -> float:
         """All'avvio ricalcola l'equity dalla fonte di verità (i trade chiusi):
         equity = capitale iniziale + somma di TUTTI i PnL realizzati. Così è
@@ -293,13 +299,9 @@ class TradingBot:
                 {"outcome": "flat",
                  "reason": f"raggiunto il max di posizioni ({settings.MAX_OPEN_POSITIONS})"})
             return
-        # in parita' niente over-leverage: stop alle aperture quando il margine usato
-        # raggiunge l'equity (conto pienamente investito).
-        if settings.BACKTEST_PARITY:
-            used = sum(p.quantity * p.entry_price / max(p.leverage, 1.0)
-                       for p in self.executor.open_positions.values())
-            if used >= self.account_equity():
-                return
+        # short-circuit: conto gia' pienamente investito -> inutile valutare oltre.
+        if settings.BACKTEST_PARITY and self._used_margin() >= self.account_equity():
+            return
 
         asset = self.selected.get(decision.asset)
         if not asset:
@@ -322,6 +324,19 @@ class TradingBot:
             print(f"[main] trade bloccato dal gate: {params.reject_reason}")
             self._publish_decision_status(
                 {"outcome": "flat", "reason": f"bloccato dal risk gate: {params.reject_reason}"})
+            return
+
+        # REALISMO PRODUZIONE: Binance rifiuta l'ordine se il margine libero non copre
+        # il margine iniziale richiesto. Il paper fa lo stesso -> nessuna apertura che
+        # in reale verrebbe respinta, niente over-allocazione oltre l'equity.
+        new_margin = params.quantity * asset.price / max(params.leverage, 1.0)
+        used = self._used_margin()
+        eq = self.account_equity()
+        if used + new_margin > eq:
+            self._publish_decision_status(
+                {"outcome": "flat",
+                 "reason": (f"margine insufficiente (Binance rifiuterebbe): usato {used:.0f} + "
+                            f"nuovo {new_margin:.0f} > equity {eq:.0f}")})
             return
 
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,

@@ -96,6 +96,8 @@ export interface Position {
   scaled_out?: boolean;
   dry_run?: boolean;
   updated_at?: number | string;
+  accrued_funding?: number; // funding maturato finora (USDT), gia' scalato dall'uPnL
+  held_hours?: number;      // ore da cui la posizione e' aperta
 }
 
 // ---- helpers ----

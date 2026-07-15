@@ -284,7 +284,16 @@ class ExecutionEngine:
     def _write_position_state(self, pos: Position, mark_price: float) -> None:
         long = pos.direction == Direction.LONG
         gross = (mark_price - pos.entry_price) if long else (pos.entry_price - mark_price)
-        unreal = gross * pos.remaining_qty
+        # UPNL NETTO = quanto incasseresti chiudendo ORA. Sottrae fee round-trip +
+        # spread + funding MATURATO finora (i "mini charge" di Binance sulle perpetual,
+        # proporzionali alle ore aperte). Stessa formula di _build_closed_trade, cosi'
+        # l'UPNL mostrato coincide col PnL reale se chiudi adesso.
+        notional = pos.entry_price * pos.remaining_qty
+        held_hours = max(0.0, (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0)
+        funding = (held_hours / 8.0) * self.funding_per_8h
+        accrued_funding = funding * notional
+        costs = (self.cost_per_trade + pos.spread_cost) * notional + accrued_funding
+        unreal = gross * pos.remaining_qty - costs
         self.fb.set_rtdb(f"/positions/{pos.symbol}", {
             "position_id": pos.position_id, "symbol": pos.symbol,
             "strategy": pos.strategy, "direction": pos.direction.value,
@@ -294,6 +303,8 @@ class ExecutionEngine:
             "unrealized_pnl": unreal, "trailing_active": pos.trailing_active,
             "scaled_out": pos.scaled_out, "dry_run": self.dry_run,
             "updated_at": time.time(),
+            # trasparenza costi sulla posizione aperta (funding maturato + ore)
+            "accrued_funding": round(accrued_funding, 4), "held_hours": round(held_hours, 2),
             # --- campi extra per ricostruire la posizione dopo un restart ---
             "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
             "entry_time": pos.entry_time.isoformat(),

@@ -153,6 +153,21 @@ def test_profit_lock_not_armed_below_trigger():
     assert "BTCUSDT" in eng.open_positions
 
 
+def test_open_position_upnl_is_net_of_costs():
+    # l'uPnL pubblicato per una posizione APERTA deve gia' scalare fee+spread+funding
+    # (quanto incasseresti chiudendo ORA), non il prezzo lordo.
+    fb = FirebaseClient()
+    eng = ExecutionEngine(firebase=fb, dry_run=True)
+    a = _asset(100)
+    a.volume_24h = 300_000_000  # major -> spread minimo
+    eng.open_position(a, "vwap_reversion", Direction.LONG, _params(qty=10.0, stop=98, tp=110))
+    eng.update_position("BTCUSDT", 100.0)  # mark == entry: gross 0
+    node = fb.get_rtdb("/positions/BTCUSDT")
+    # gross 0 ma i costi round-trip rendono l'uPnL negativo (come alla chiusura)
+    assert node["unrealized_pnl"] < 0
+    assert "accrued_funding" in node and "held_hours" in node
+
+
 def test_kill_switch_closes_all():
     eng = _engine()
     eng.open_position(_asset(100), "x", Direction.LONG, _params())
