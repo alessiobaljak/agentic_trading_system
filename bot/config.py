@@ -78,7 +78,7 @@ class Settings:
     # timeframe (live) e l'optimizer/discover validano su QUESTO stesso intervallo
     # (default --interval). Un solo knob -> gate e live non possono divergere.
     # Default 1h = il timeframe su cui e' stato costruito il registro validato.
-    ORCHESTRATOR_TIMEFRAME: str = os.getenv("ORCHESTRATOR_TIMEFRAME", "1h")
+    ORCHESTRATOR_TIMEFRAME: str = os.getenv("ORCHESTRATOR_TIMEFRAME", "15m")
     SCAN_INTERVAL_HOURS: int = 4          # market scanner ogni 4h
     REGIME_INTERVAL_MINUTES: int = 60     # regime detector ogni ora
     MAX_OPEN_POSITIONS: int = int(os.getenv("MAX_OPEN_POSITIONS", "5"))  # cap posizioni APERTE

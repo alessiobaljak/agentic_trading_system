@@ -40,7 +40,7 @@ _W: dict = {}
 def _opt_init(args, end: str) -> None:
     """Costruisce lo stato del worker UNA volta: optimizer + contesto BTC cross-asset."""
     opt = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos,
-                               seed=int(time.time() * 1000) % 100000)
+                               seed=int(time.time() * 1000) % 100000, interval=args.interval)
     btc_ctx = None
     try:
         btc_candles = load_candles("BTCUSDT", args.interval, args.start, end, prefer=args.source)

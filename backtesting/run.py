@@ -33,7 +33,8 @@ def main() -> int:
     args = p.parse_args()
 
     symbols = [args.symbol] if args.symbol else [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
-    bt = Backtester(capital=args.capital)
+    _ih = {"1m": 1 / 60, "5m": 1 / 12, "15m": 0.25, "30m": 0.5, "1h": 1.0, "4h": 4.0}.get(args.interval, 1.0)
+    bt = Backtester(capital=args.capital, interval_hours=_ih)
 
     # stats aggregate per strategia (trade uniti su tutti gli asset)
     aggregated: dict[str, StrategyStats] = {}

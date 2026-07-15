@@ -59,13 +59,18 @@ class WalkForwardOptimizer:
         warmup: int = 200,
         max_combos: int = 0,
         seed: int = 7,
+        interval: str = "1h",
     ) -> None:
         self.n_windows = n_windows
         self.min_trades_train = min_trades_train
         self.min_trades_oos = min_trades_oos
         self.pf_threshold = pf_threshold
         from backtesting.data_loader import funding_rate_for
-        self.bt = Backtester(window=warmup, capital=capital,
+        # durata di UNA candela in ore: guida i calcoli tempo-dipendenti del backtest
+        # (funding sulle ore aperte). DEVE combaciare col --interval dei dati caricati.
+        interval_hours = {"1m": 1 / 60, "5m": 1 / 12, "15m": 0.25,
+                          "30m": 0.5, "1h": 1.0, "4h": 4.0}.get(interval, 1.0)
+        self.bt = Backtester(window=warmup, capital=capital, interval_hours=interval_hours,
                              funding_rate_provider=funding_rate_for)
         # se >0, campiona al massimo questo numero di combinazioni per strategia
         # (per tenere i tempi gestibili quando si ottimizzano molti coin)
