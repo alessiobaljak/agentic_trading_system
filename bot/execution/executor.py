@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from bot.config import settings
-from bot.core.costs import liquidity_spread
+from bot.core.costs import funding_fraction, liquidity_spread
 from bot.core.firebase_client import get_firebase
 from bot.core.models import (
     AssetSnapshot, ClosedTrade, Direction, EffectiveRiskParams, ExitReason, Regime,
@@ -258,7 +258,10 @@ class ExecutionEngine:
         # --- costi reali (come il backtester): fee+slippage round-trip + funding ---
         notional = pos.entry_price * pos.quantity
         held_hours = max(0.0, (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0)
-        funding = (held_hours / 8.0) * self.funding_per_8h
+        # funding REALE con segno: usa il tasso della coin all'entrata; long paga /
+        # short incassa quando il tasso e' positivo (viceversa se negativo).
+        funding = funding_fraction(pos.funding_at_entry, held_hours, long,
+                                   default_rate=self.funding_per_8h)
         cost = (self.cost_per_trade + pos.spread_cost + funding) * notional
         pnl = gross_pnl - cost                       # PnL NETTO in USDT
         # PnL% sul margine impegnato (notional/leverage)
@@ -290,7 +293,8 @@ class ExecutionEngine:
         # l'UPNL mostrato coincide col PnL reale se chiudi adesso.
         notional = pos.entry_price * pos.remaining_qty
         held_hours = max(0.0, (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0)
-        funding = (held_hours / 8.0) * self.funding_per_8h
+        funding = funding_fraction(pos.funding_at_entry, held_hours, long,
+                                   default_rate=self.funding_per_8h)
         accrued_funding = funding * notional
         costs = (self.cost_per_trade + pos.spread_cost) * notional + accrued_funding
         unreal = gross * pos.remaining_qty - costs

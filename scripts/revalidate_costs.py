@@ -59,7 +59,8 @@ def main() -> int:
         return 1
 
     ih = {"15m": 0.25, "1h": 1.0}.get(args.interval, 1.0)
-    engine = Backtester(interval_hours=ih)
+    from backtesting.data_loader import funding_rate_for
+    engine = Backtester(interval_hours=ih, funding_rate_provider=funding_rate_for)
     kept: dict[str, dict] = {}
     dropped: list[tuple[str, float, int]] = []
     print(f"Ri-valido {len(coins)} coin a costi nuovi ({args.interval}, da {args.start})...\n")

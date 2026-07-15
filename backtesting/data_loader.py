@@ -25,9 +25,33 @@ import requests
 from bot.core.models import Candle
 
 BINANCE_KLINES = "https://fapi.binance.com/fapi/v1/klines"
+BINANCE_FUNDING = "https://fapi.binance.com/fapi/v1/fundingRate"
 BYBIT_KLINES = "https://api.bybit.com/v5/market/kline"
 OKX_CANDLES = "https://www.okx.com/api/v5/market/history-candles"
 COINMETRICS = "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics"
+
+_FUNDING_CACHE: dict[str, float | None] = {}
+
+
+def funding_rate_for(symbol: str) -> float | None:
+    """Tasso di funding per-8h REALE della coin: media dello storico funding di
+    Binance Futures (best-effort, cache per-processo). None se non raggiungibile
+    (offline/geo-blocco) -> chi lo usa ricade sul default. Cattura lo SKEW reale di
+    una coin (es. funding cronicamente positivo -> i long pagano di piu')."""
+    if symbol in _FUNDING_CACHE:
+        return _FUNDING_CACHE[symbol]
+    rate: float | None = None
+    try:
+        r = requests.get(BINANCE_FUNDING, params={"symbol": symbol, "limit": 1000}, timeout=15)
+        r.raise_for_status()
+        rows = r.json()
+        vals = [float(x["fundingRate"]) for x in rows if x.get("fundingRate") is not None]
+        if vals:
+            rate = sum(vals) / len(vals)
+    except Exception:  # noqa: BLE001
+        rate = None
+    _FUNDING_CACHE[symbol] = rate
+    return rate
 
 
 def _candle(ts_ms: int, o, h, l, c, v) -> Candle:

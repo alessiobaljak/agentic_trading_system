@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from bot.agents.regime_detector import RegimeDetector
+from bot.core.costs import funding_fraction
 from bot.core.indicators import compute_indicator_frame, snapshot_from_row
 from bot.core.models import AssetSnapshot, Candle, Direction, Regime
 from bot.config import settings
@@ -142,7 +143,7 @@ class StrategyStats:
 class Backtester:
     def __init__(self, window: int = 200, capital: float = 10_000.0,
                  cost_per_trade: float = None, funding_per_8h: float = None,
-                 interval_hours: float = 1.0) -> None:
+                 interval_hours: float = 1.0, funding_rate_provider=None) -> None:
         import os
         self.window = window
         self.capital = capital
@@ -155,8 +156,25 @@ class Backtester:
         self.funding_per_8h = (funding_per_8h if funding_per_8h is not None
                                else float(os.getenv("BACKTEST_FUNDING_PER_8H", "0.0001")))
         self.interval_hours = interval_hours
+        # provider OPZIONALE del tasso funding REALE per-coin (data_loader.funding_rate_for
+        # nei run veri; None nei test/offline -> usa il default flat). Cache per simbolo.
+        self._funding_provider = funding_rate_provider
+        self._funding_rate_cache: dict[str, float] = {}
         self.regime_detector = RegimeDetector()
         self.strategies = get_all_strategies()
+
+    def _symbol_funding(self, symbol: str) -> float:
+        """Tasso funding per-8h da usare per QUESTA coin: reale (dal provider) se
+        disponibile, altrimenti il default flat. Mai None."""
+        if symbol not in self._funding_rate_cache:
+            rate = None
+            if self._funding_provider is not None:
+                try:
+                    rate = self._funding_provider(symbol)
+                except Exception:  # noqa: BLE001
+                    rate = None
+            self._funding_rate_cache[symbol] = self.funding_per_8h if rate is None else rate
+        return self._funding_rate_cache[symbol]
 
     def _liquidity_cost(self, candles: list[Candle]) -> float:
         """Costo round-trip LIQUIDITA'-DIPENDENTE: fee fisse + spread stimato che si
@@ -268,9 +286,11 @@ class Backtester:
                 j += 1
 
             pnl_pct = (exit_price - entry) / entry if long else (entry - exit_price) / entry
-            # uscite reali: fee+slippage (round-trip) + funding sui perpetual.
+            # uscite reali: fee+slippage (round-trip) + funding sui perpetual con SEGNO
+            # per direzione e tasso REALE della coin (long paga / short incassa a tasso>0).
             held_hours = max(0, (min(j, horizon) - i)) * self.interval_hours
-            funding = (held_hours / 8.0) * self.funding_per_8h
+            funding = funding_fraction(self._symbol_funding(symbol), held_hours, long,
+                                       default_rate=self.funding_per_8h)
             pnl_pct -= (cost + funding)
             stats.trades.append(SimTrade(
                 strategy=strategy.name, regime=regime.value, direction=sig.direction.value,

@@ -64,7 +64,9 @@ class WalkForwardOptimizer:
         self.min_trades_train = min_trades_train
         self.min_trades_oos = min_trades_oos
         self.pf_threshold = pf_threshold
-        self.bt = Backtester(window=warmup, capital=capital)
+        from backtesting.data_loader import funding_rate_for
+        self.bt = Backtester(window=warmup, capital=capital,
+                             funding_rate_provider=funding_rate_for)
         # se >0, campiona al massimo questo numero di combinazioni per strategia
         # (per tenere i tempi gestibili quando si ottimizzano molti coin)
         self.max_combos = max_combos

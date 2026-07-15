@@ -22,3 +22,18 @@ def liquidity_spread(daily_quote_vol: float | None) -> float:
     if v >= 10_000_000:
         return 0.00045       # misurato 0.0385%
     return 0.00080           # misurato 0.0677% (sottile): buffer maggiore
+
+
+def funding_fraction(rate_per_8h: float | None, held_hours: float, long: bool,
+                     default_rate: float = 0.0001) -> float:
+    """Funding sui perpetual come FRAZIONE (con segno) del notional — CONDIVISO
+    tra backtest e live per la parita'.
+
+    Binance regola il funding ogni 8h: chi e' LONG PAGA quando il tasso e' positivo,
+    chi e' SHORT INCASSA (e viceversa a tasso negativo). Lo approssimiamo in modo
+    continuo (proporzionale alle ore) col tasso REALE della coin. Ritorna un COSTO
+    da SOTTRARRE al PnL: > 0 = paghi, < 0 = incassi. `rate_per_8h` None -> default.
+    """
+    rate = default_rate if rate_per_8h is None else rate_per_8h
+    sign = 1.0 if long else -1.0
+    return (held_hours / 8.0) * rate * sign
