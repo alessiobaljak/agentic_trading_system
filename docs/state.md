@@ -1,24 +1,27 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-14 23:11 UTC_
+_Generato: 2026-07-15 03:35 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: bull_trending
 - DRY_RUN: True
-- equity: **$10,620.25**
-- ultimo heartbeat: 2026-07-14 23:11 UTC
+- equity: **$10,684.44**
+- ultimo heartbeat: 2026-07-15 03:34 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-14 22:51 UTC)
-- motivo: nessun segnale valido sopra soglia
-- asset valutati: 126 · segnali: 0
+- esito: **⚪ FLAT** (2026-07-15 02:52 UTC)
+- motivo: parita' backtest: 3 segnali validi aperti
+- asset valutati: 124 · segnali: 3 · miglior segnale ARBUSDT gen_a10c8df2 (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- ANKRUSDT: short qty=591719.1987221391 @ 0.0036 uPnL=14.20126076933117
-- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=10.446576808803577
-- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=2.1608100877500633
-- SKLUSDT: short qty=494716.10326587973 @ 0.004296 uPnL=111.80583933808907
-- YGGUSDT: short qty=96037.07092770988 @ 0.02213 uPnL=14.037738657503452
+- ANKRUSDT: short qty=591719.1987221391 @ 0.0036 uPnL=20.710171955274795
+- ARBUSDT: long qty=23505.531071745932 @ 0.09091 uPnL=-1.2620119632422508
+- DODOXUSDT: short qty=21869.879179801395 @ 0.027442 uPnL=13.69557443876707
+- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=11.09394800801597
+- IDUSDT: short qty=61459.752300897555 @ 0.03456 uPnL=44.17911374645441
+- METISUSDT: long qty=747.9481378132385 @ 2.857 uPnL=15.042149548152349
+- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=-13.471199729674755
+- YGGUSDT: short qty=96037.07092770988 @ 0.02213 uPnL=25.49784233130715
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
