@@ -18,6 +18,7 @@ ANTI-OVERFITTING (baseline non adattata):
 from __future__ import annotations
 
 import random
+import time
 from typing import Optional
 
 from bot.config import settings
@@ -46,8 +47,42 @@ class AdaptationEngine:
             self._weights[key] = float(w.get("weight", 1.0))
 
     def save_weights(self, weights: list[StrategyRegimeWeight]) -> None:
+        """Salva i pesi ricalcolati + RIENTRO IN PROVA (probation) dei gruppi senza
+        trade recenti.
+
+        Senza questo, un gruppo strategia×regime ucciso (peso 0) smette di tradare,
+        i suoi trade escono dalla finestra 30g, il gruppo sparisce dal documento e
+        weight_for torna al default 1.0: resurrezione DI COLPO a fiducia piena
+        ("kill con amnesia"), che costa ~4 perdite piene a ogni giro. Qui invece il
+        peso di un gruppo assente dal ricalcolo viene TRASCINATO e recupera
+        gradualmente verso 1.0 (WEIGHT_RECOVERY_DAYS): la strategia rientra prima
+        coi soli segnali FORTI (peso 0.5 passa la soglia solo a confidence alta),
+        e si riabilita del tutto solo col tempo o vincendo. A 1.0 il gruppo viene
+        potato (equivale al default). Il merge sta QUI cosi' copre entrambi gli
+        scrittori (refresh orario del bot e job notturno)."""
+        now = time.time()
+        doc = self.fb.get_doc("strategy_weights", "current") or {}
+        prev_ts = float(doc.get("updated_at", 0) or 0)
+        elapsed_days = max(0.0, (now - prev_ts) / 86400.0) if prev_ts else 0.0
+        recovery = max(1e-9, settings.WEIGHT_RECOVERY_DAYS)
+        fresh = {(w.strategy, w.regime.value) for w in weights}
+        carried: list[StrategyRegimeWeight] = []
+        for e in doc.get("weights", []) or []:
+            key = (e.get("strategy"), e.get("regime"))
+            if key in fresh or not key[0] or not key[1]:
+                continue
+            w_new = min(1.0, float(e.get("weight", 1.0) or 0.0) + elapsed_days / recovery)
+            if w_new >= 1.0:
+                continue   # riabilitata: indistinguibile dal default -> pota
+            try:
+                carried.append(StrategyRegimeWeight(
+                    strategy=key[0], regime=Regime(key[1]), weight=round(w_new, 4),
+                    win_rate=None, avg_rr=None, sample_size=0))   # 0 = "in prova"
+            except ValueError:
+                continue   # regime non piu' valido
         self.fb.set_doc("strategy_weights", "current", {
-            "weights": [w.model_dump(mode="json") for w in weights],
+            "weights": [w.model_dump(mode="json") for w in list(weights) + carried],
+            "updated_at": now,
         })
         self.load_weights()
 

@@ -139,6 +139,35 @@ def test_refresh_weights_reacts_within_the_hour():
     assert adaptation.weight_for("breakout", Regime.SIDEWAYS) == 0.0
 
 
+def test_probation_reentry_instead_of_amnesia():
+    # Un gruppo ucciso (peso 0) che ESCE dalla finestra 30g non deve risorgere
+    # di colpo a 1.0: il peso viene trascinato e recupera gradualmente
+    # (WEIGHT_RECOVERY_DAYS). A recupero completo viene potato (default 1.0).
+    fb = FirebaseClient()
+    eng = AdaptationEngine(fb)
+    # stato precedente: breakout|sideways ucciso 15 giorni fa
+    fb.set_doc("strategy_weights", "current", {
+        "weights": [{"strategy": "breakout", "regime": "sideways", "weight": 0.0}],
+        "updated_at": time.time() - 15 * 86400,
+    })
+    # ricalcolo SENZA quel gruppo (i suoi trade sono usciti dalla finestra)
+    other = metrics.compute_weights([_trade("momentum", "bull_trending", 10) for _ in range(6)])
+    eng.save_weights(other)
+    w = eng.weight_for("breakout", Regime.SIDEWAYS)
+    assert 0.4 < w < 0.6, f"dopo 15/30 giorni deve essere ~0.5, non {w}"
+    # dopo ALTRI 30 giorni di silenzio -> riabilitata e potata dal documento
+    doc = fb.get_doc("strategy_weights", "current")
+    doc["updated_at"] = time.time() - 30 * 86400
+    fb.set_doc("strategy_weights", "current", doc)
+    eng.save_weights(other)
+    assert eng.weight_for("breakout", Regime.SIDEWAYS) == 1.0
+    saved = {(x["strategy"], x["regime"]) for x in
+             fb.get_doc("strategy_weights", "current")["weights"]}
+    assert ("breakout", "sideways") not in saved, "a 1.0 il gruppo va potato"
+    # un gruppo PRESENTE nel ricalcolo non viene toccato dalla probation
+    assert eng.weight_for("momentum", Regime.BULL_TRENDING) == 1.0
+
+
 def test_learning_loop_end_to_end_with_memory_firebase():
     fb = FirebaseClient()  # in-memory (nessun service account in test)
     logger = TradeLogger(fb)

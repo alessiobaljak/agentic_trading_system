@@ -236,6 +236,15 @@ class ExecutionEngine:
                     reduceOnly=True, quantity=round(pos.remaining_qty, 6))
             except Exception as exc:  # noqa: BLE001
                 print(f"[execution] close errore: {exc}")
+            # CANCELLA gli ordini condizionali rimasti (SL/TP piazzati all'apertura):
+            # senza, restano ORFANI su Binance e possono chiudere a prezzi arbitrari
+            # una posizione FUTURA sullo stesso simbolo. Il bot tiene al massimo una
+            # posizione per simbolo, quindi cancel-all sul simbolo e' sicuro.
+            try:
+                self._client.futures_cancel_all_open_orders(symbol=pos.symbol)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] cancel ordini {pos.symbol} fallita: {exc} "
+                      f"(POSSIBILI ORDINI ORFANI: verificare su Binance)")
 
         trade = self._build_closed_trade(pos, price, reason)
         self.open_positions.pop(pos.symbol, None)

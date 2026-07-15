@@ -119,6 +119,10 @@ class Settings:
     STRATEGY_LOSS_STREAK: int = int(os.getenv("STRATEGY_LOSS_STREAK", "3"))
     STRATEGY_COOLDOWN_HOURS: float = float(os.getenv(
         "STRATEGY_COOLDOWN_HOURS", str(8 * timeframe_hours(ORCHESTRATOR_TIMEFRAME))))
+    # rientro in prova (probation): un gruppo strategia×regime SENZA trade recenti
+    # recupera il peso verso 1.0 in questo numero di giorni (invece di risorgere
+    # DI COLPO a 1.0 quando i vecchi trade escono dalla finestra dei 30g).
+    WEIGHT_RECOVERY_DAYS: float = float(os.getenv("WEIGHT_RECOVERY_DAYS", "30"))
     MAX_CORRELATED_POSITIONS: int = 3     # correlazione >0.85
     CORRELATION_THRESHOLD: float = 0.85
 
