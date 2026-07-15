@@ -1,27 +1,30 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-15 03:35 UTC_
+_Generato: 2026-07-15 06:28 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: bull_trending
+- regime: high_uncertainty
 - DRY_RUN: True
 - equity: **$10,684.44**
-- ultimo heartbeat: 2026-07-15 03:34 UTC
+- ultimo heartbeat: 2026-07-15 06:28 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-15 02:52 UTC)
-- motivo: parita' backtest: 3 segnali validi aperti
-- asset valutati: 124 · segnali: 3 · miglior segnale ARBUSDT gen_a10c8df2 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-15 05:59 UTC)
+- motivo: nessun segnale valido sopra soglia
+- asset valutati: 121 · segnali: 0
 
 ## Posizioni aperte
-- ANKRUSDT: short qty=591719.1987221391 @ 0.0036 uPnL=20.710171955274795
-- ARBUSDT: long qty=23505.531071745932 @ 0.09091 uPnL=-1.2620119632422508
-- DODOXUSDT: short qty=21869.879179801395 @ 0.027442 uPnL=13.69557443876707
-- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=11.09394800801597
-- IDUSDT: short qty=61459.752300897555 @ 0.03456 uPnL=44.17911374645441
-- METISUSDT: long qty=747.9481378132385 @ 2.857 uPnL=15.042149548152349
-- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=-13.471199729674755
-- YGGUSDT: short qty=96037.07092770988 @ 0.02213 uPnL=25.49784233130715
+- 1000LUNCUSDT: long qty=35620.73395119891 @ 0.05999 uPnL=11.671284581399913
+- ANKRUSDT: short qty=591719.1987221391 @ 0.0036 uPnL=17.372042316038392
+- ARBUSDT: long qty=23505.531071745932 @ 0.09091 uPnL=-25.614433369598615
+- DODOXUSDT: short qty=21869.879179801395 @ 0.027442 uPnL=40.35330757838128
+- ENJUSDT: short qty=73156.03662213018 @ 0.02921 uPnL=6.705990580735614
+- HBARUSDT: long qty=31656.293360011132 @ 0.06697 uPnL=19.108336645052994
+- IDUSDT: short qty=61459.752300897555 @ 0.03456 uPnL=59.15940468426105
+- INJUSDT: long qty=432.1310070237457 @ 4.945 uPnL=5.181532715220112
+- METISUSDT: long qty=747.9481378132385 @ 2.857 uPnL=16.011792382522113
+- NMRUSDT: short qty=211.15414901601252 @ 10.126 uPnL=-22.014824430060298
+- YGGUSDT: short qty=96037.07092770988 @ 0.02213 uPnL=15.678068087306062
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
