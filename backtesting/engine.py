@@ -160,7 +160,8 @@ class Backtester:
         # nei run veri; None nei test/offline -> usa il default flat). Cache per simbolo.
         self._funding_provider = funding_rate_provider
         self._funding_rate_cache: dict[str, float] = {}
-        self._htf_cache: dict = {}   # slice -> (frame_1h, h_idx) per la 1h reale
+        self._htf_cache: dict = {}    # slice -> (frame_1h, h_idx) per la 1h reale
+        self._prep_cache: dict = {}   # slice -> (snaps, regimes) per barra (riuso tra combo)
         self.regime_detector = RegimeDetector()
         self.strategies = get_all_strategies()
 
@@ -286,19 +287,40 @@ class Backtester:
             out[frame.iloc[idx]["open_time"]] = snap
         return out
 
+    def _prepared(self, symbol: str, frame, candles: list[Candle]):
+        """(snaps, regimes) per barra, MEMOIZZATO per slice. Snapshot e regime NON
+        dipendono dalla strategia/combo: nell'optimizer run_strategy e' chiamata ~108
+        volte per coin sugli STESSI dati -> calcolarli una volta sola e riusarli
+        elimina il costo dominante a 15m (ricostruzione Pydantic barra-per-barra)."""
+        key = (symbol, len(frame), frame.iloc[0]["open_time"], frame.iloc[-1]["open_time"])
+        hit = self._prep_cache.get(key)
+        if hit is not None:
+            return hit
+        htf = self._htf_for(candles)           # 1h REALE per regime/dual-timeframe
+        snaps, regimes = [], []
+        for idx in range(len(frame)):
+            snap = self._snapshot_from_frame(symbol, frame, idx, htf=htf)
+            regime = self.regime_detector.detect(snap)
+            snap.regime = regime
+            snaps.append(snap)
+            regimes.append(regime)
+        if len(self._prep_cache) > 4:          # tiene train+test della coin corrente
+            self._prep_cache.clear()
+        self._prep_cache[key] = (snaps, regimes)
+        return snaps, regimes
+
     def run_strategy(self, strategy, symbol: str, candles: list[Candle], frame=None,
                      context_by_ts: dict | None = None) -> StrategyStats:
         stats = StrategyStats(strategy=strategy.name)
         if frame is None:
             frame = compute_indicator_frame(candles)
         cost = self._liquidity_cost(candles)   # costo reale di QUESTA coin (liquidita')
-        htf = self._htf_for(candles)           # 1h REALE per regime/dual-timeframe
+        snaps, regimes = self._prepared(symbol, frame, candles)
         i = self.window
         n = len(candles)
         while i < n - 1:
-            snap = self._snapshot_from_frame(symbol, frame, i, htf=htf)
-            regime = self.regime_detector.detect(snap)
-            snap.regime = regime
+            snap = snaps[i]
+            regime = regimes[i]
             if not strategy.is_active_in(regime):
                 i += 1
                 continue
