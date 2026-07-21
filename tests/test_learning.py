@@ -89,6 +89,42 @@ def test_confidence_outcome_correlation():
     assert corr is not None and corr > 0.5
 
 
+def test_robust_only_exempts_generated_strategies():
+    # le generate (gen_*) sono coin-specifiche: NON devono cadere per la regola ">=3 coin",
+    # mentre una base su 1 sola coin sì.
+    from bot.core.firebase_client import FirebaseClient
+    from bot.config import settings
+    eng = AdaptationEngine(FirebaseClient())
+    old = settings.MIN_COINS_PER_STRATEGY
+    settings.MIN_COINS_PER_STRATEGY = 3
+    try:
+        keys = ["BTCUSDT|gen_abc", "ETHUSDT|gen_def", "SOLUSDT|trend_following"]
+        robust = eng._robust_only(keys)
+        assert "BTCUSDT|gen_abc" in robust and "ETHUSDT|gen_def" in robust  # generate esentate
+        assert "SOLUSDT|trend_following" not in robust                       # base su 1 coin -> fuori
+    finally:
+        settings.MIN_COINS_PER_STRATEGY = old
+
+
+def test_bootstrap_trades_single_pass_generated_from_registry():
+    # con registro senza coppie a 3 passaggi ma con generate a 1 passaggio,
+    # il bootstrap le rende operative (dati CODIFICATI, decode in lettura).
+    from bot.core.firebase_client import FirebaseClient, encode_pairs
+    fb = FirebaseClient()
+    pairs = {
+        "BTCUSDT|gen_aaa": {"pass_count": 1, "last_params": {"rr": 2.0}},
+        "ETHUSDT|gen_bbb": {"pass_count": 1, "last_params": {"rr": 1.5}},
+        "SOLUSDT|breakout": {"pass_count": 0, "fail_count": 1},   # fallita -> esclusa
+    }
+    fb.set_doc("strategy_registry", "validated",
+               {"validated": [], "pairs": encode_pairs(pairs)})
+    eng = AdaptationEngine(fb)
+    eng.load_params()
+    assert eng._passed == {"BTCUSDT|gen_aaa", "ETHUSDT|gen_bbb"}
+    assert eng._params["BTCUSDT|gen_aaa"]["rr"] == 2.0
+    assert eng.is_enabled("BTCUSDT", "gen_aaa") is True
+
+
 def test_is_enabled_failsafe_when_registry_missing():
     # FAIL-SAFE: senza dati di ottimizzazione (registro non caricato) e con
     # REQUIRE_VALIDATED_PAIRS attivo, NESSUNA coppia è abilitata (bot resta flat).

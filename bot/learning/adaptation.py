@@ -102,24 +102,26 @@ class AdaptationEngine:
     # ------------------------------------------------------------------ #
     @staticmethod
     def _robust_only(keys) -> set:
-        """Tiene solo le coppie 'SYMBOL|strategia' la cui STRATEGIA e' validata su
-        >= MIN_COINS_PER_STRATEGY coin distinte (filtra i flukes a coin singola).
-        Soglia <= 1 -> nessun filtro."""
+        """Tiene le coppie 'SYMBOL|strategia' robuste. Le strategie BASE devono essere
+        passate su >= MIN_COINS_PER_STRATEGY coin distinte (anti-fluke a coin singola).
+        Le strategie GENERATE (gen_*) sono coin-specifiche BY DESIGN — scoperte su una
+        coin e validate dai loro passaggi OOS — quindi ESENTATE dalla regola cross-coin
+        (altrimenti verrebbero scartate tutte). Soglia <= 1 -> nessun filtro."""
         keys = [k for k in keys if "|" in k]
         n = settings.MIN_COINS_PER_STRATEGY
         if n <= 1:
             return set(keys)
+        generated = {k for k in keys if k.split("|", 1)[1].startswith("gen_")}
         coins_per_strat: dict[str, set] = {}
         for k in keys:
             sym, strat = k.split("|", 1)
-            coins_per_strat.setdefault(strat, set()).add(sym)
+            if not strat.startswith("gen_"):
+                coins_per_strat.setdefault(strat, set()).add(sym)
         robust = {s for s, c in coins_per_strat.items() if len(c) >= n}
-        return {k for k in keys if k.split("|", 1)[1] in robust}
+        return generated | {k for k in keys if k.split("|", 1)[1] in robust}
 
     def load_params(self) -> None:
-        # preferisci il REGISTRO validato (coppie robuste, passate piu' volte);
-        # se assente, ricadi sull'ultimo run (strategy_params/current).
-        # In entrambi i casi tradiamo SOLO strategie robuste (>= N coin distinte).
+        # 1) REGISTRO validato: coppie a >= MIN_PASSES passaggi OOS (le piu' robuste).
         reg = self.fb.get_doc("strategy_registry", "validated") or {}
         validated = reg.get("validated") or []
         pairs = decode_pairs(reg.get("pairs"))
@@ -128,10 +130,19 @@ class AdaptationEngine:
             self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in self._passed}
             self._has_opt_data = True
             return
+        # 2) BOOTSTRAP: nessuna coppia ha ancora 3 passaggi. Opera quelle con >= 1
+        # passaggio nel registro (base + generate del run recente), cosi' il paper
+        # PARTE e accumula dati mentre le 3 passate si consolidano. Le flukes vengono
+        # poi purgate dal gate. `pairs` e' gia' decodificato.
+        recent = {k: r for k, r in pairs.items() if r.get("pass_count", 0) >= 1}
+        if recent:
+            self._passed = self._robust_only(recent.keys())
+            self._params = {k: (recent.get(k, {}).get("last_params", {}) or {}) for k in self._passed}
+            self._has_opt_data = True
+            return
+        # 3) ultima spiaggia: l'ultimo run (strategy_params/current). entries/passed
+        # sono CODIFICATI (stringa JSON) -> decode_pairs (retro-compatibile col dict).
         doc = self.fb.get_doc("strategy_params", "current") or {}
-        # entries/passed sono codificati come stringa JSON (decode_pairs legge sia il
-        # nuovo formato-stringa sia il vecchio dict/list) per non sfondare il limite
-        # di 40k voci d'indice di Firestore su strategy_params/current.
         entries = decode_pairs(doc.get("entries"))
         self._passed = self._robust_only(decode_pairs(doc.get("passed")) or [])
         self._params = {k: (entries.get(k, {}).get("params", {}) or {}) for k in self._passed}
@@ -157,6 +168,7 @@ class AdaptationEngine:
     # ------------------------------------------------------------------ #
     def load_generated(self) -> None:
         doc = self.fb.get_doc("discovered_strategies", "specs") or {}
+        # specs codificate come stringa JSON (limite indici Firestore) -> decode.
         self._generated_specs = decode_pairs(doc.get("specs"))
 
     def generated_strategies_for(self, symbol: str) -> list:
