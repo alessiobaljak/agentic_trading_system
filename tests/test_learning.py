@@ -106,10 +106,26 @@ def test_robust_only_exempts_generated_strategies():
         settings.MIN_COINS_PER_STRATEGY = old
 
 
-def test_bootstrap_trades_single_pass_generated_from_registry():
-    # con registro senza coppie a 3 passaggi ma con generate a 1 passaggio,
-    # il bootstrap le rende operative (dati CODIFICATI, decode in lettura).
+def test_default_flat_until_validated():
+    # DEFAULT (bootstrap OFF): senza coppie a 3 passaggi il bot resta FLAT, anche
+    # se il registro ha coppie a 1 passaggio. Non si trada su strategie non validate.
     from bot.core.firebase_client import FirebaseClient, encode_pairs
+    from bot.config import settings
+    fb = FirebaseClient()
+    pairs = {"BTCUSDT|gen_aaa": {"pass_count": 1, "last_params": {"rr": 2.0}}}
+    fb.set_doc("strategy_registry", "validated", {"validated": [], "pairs": encode_pairs(pairs)})
+    assert settings.BOOTSTRAP_TRADE_UNVALIDATED is False   # default
+    eng = AdaptationEngine(fb)
+    eng.load_params()
+    assert eng._passed == set()                            # flat
+    assert eng.is_enabled("BTCUSDT", "gen_aaa") is False
+
+
+def test_bootstrap_opt_in_trades_single_pass_generated():
+    # con BOOTSTRAP_TRADE_UNVALIDATED attivo, le generate a 1 passaggio diventano
+    # operative (dati CODIFICATI, decode in lettura, generate esentate dal filtro).
+    from bot.core.firebase_client import FirebaseClient, encode_pairs
+    from bot.config import settings
     fb = FirebaseClient()
     pairs = {
         "BTCUSDT|gen_aaa": {"pass_count": 1, "last_params": {"rr": 2.0}},
@@ -118,11 +134,16 @@ def test_bootstrap_trades_single_pass_generated_from_registry():
     }
     fb.set_doc("strategy_registry", "validated",
                {"validated": [], "pairs": encode_pairs(pairs)})
-    eng = AdaptationEngine(fb)
-    eng.load_params()
-    assert eng._passed == {"BTCUSDT|gen_aaa", "ETHUSDT|gen_bbb"}
-    assert eng._params["BTCUSDT|gen_aaa"]["rr"] == 2.0
-    assert eng.is_enabled("BTCUSDT", "gen_aaa") is True
+    old = settings.BOOTSTRAP_TRADE_UNVALIDATED
+    settings.BOOTSTRAP_TRADE_UNVALIDATED = True
+    try:
+        eng = AdaptationEngine(fb)
+        eng.load_params()
+        assert eng._passed == {"BTCUSDT|gen_aaa", "ETHUSDT|gen_bbb"}
+        assert eng._params["BTCUSDT|gen_aaa"]["rr"] == 2.0
+        assert eng.is_enabled("BTCUSDT", "gen_aaa") is True
+    finally:
+        settings.BOOTSTRAP_TRADE_UNVALIDATED = old
 
 
 def test_is_enabled_failsafe_when_registry_missing():

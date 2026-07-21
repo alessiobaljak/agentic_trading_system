@@ -130,10 +130,17 @@ class AdaptationEngine:
             self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in self._passed}
             self._has_opt_data = True
             return
-        # 2) BOOTSTRAP: nessuna coppia ha ancora 3 passaggi. Opera quelle con >= 1
-        # passaggio nel registro (base + generate del run recente), cosi' il paper
-        # PARTE e accumula dati mentre le 3 passate si consolidano. Le flukes vengono
-        # poi purgate dal gate. `pairs` e' gia' decodificato.
+        # Nessuna coppia a MIN_PASSES passaggi. DEFAULT: il bot resta FLAT — NON si
+        # trada su strategie non validate (e' il senso stesso del GATE 1). Solo se
+        # BOOTSTRAP_TRADE_UNVALIDATED e' attivo si opera il paper sulle coppie a
+        # >= 1 passaggio, per accumulare dati prima della validazione completa.
+        if not settings.BOOTSTRAP_TRADE_UNVALIDATED:
+            self._passed = set()
+            self._params = {}
+            self._has_opt_data = True    # dati presenti: solo, nulla e' ancora validato
+            return
+        # 2) BOOTSTRAP (opt-in): coppie con >= 1 passaggio nel registro (base +
+        # generate del run recente). `pairs` e' gia' decodificato.
         recent = {k: r for k, r in pairs.items() if r.get("pass_count", 0) >= 1}
         if recent:
             self._passed = self._robust_only(recent.keys())

@@ -108,6 +108,11 @@ class Settings:
     # registro non è caricato (errore transitorio / reset), il bot resta FLAT
     # invece di tradare tutto senza validazione. Mettere False solo in bootstrap.
     REQUIRE_VALIDATED_PAIRS: bool = os.getenv("REQUIRE_VALIDATED_PAIRS", "true").lower() == "true"
+    # se True, PRIMA che il GATE 1 abbia coppie validate (>= MIN_PASSES passaggi) il
+    # bot opera in bootstrap le coppie a 1 passaggio (per accumulare dati paper).
+    # DEFAULT False: non si trada su strategie non validate; il bot resta flat finche'
+    # il gate non e' popolato.
+    BOOTSTRAP_TRADE_UNVALIDATED: bool = os.getenv("BOOTSTRAP_TRADE_UNVALIDATED", "false").lower() == "true"
     # cooldown anti-whipsaw: stop su una coin dopo uno STOP LOSS (no rientro).
     # Espresso in BARRE del timeframe (4 barre: 1h a 15m, 4h a 1h) cosi' il
     # comportamento non cambia di scala quando si cambia ORCHESTRATOR_TIMEFRAME.
