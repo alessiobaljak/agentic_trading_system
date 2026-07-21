@@ -197,16 +197,20 @@ def main() -> int:
     if args.num_shards > 1:
         fb.set_doc("optimize_shards", str(args.shard), {
             "run_id": os.getenv("GITHUB_RUN_ID", ""),
-            "out": out, "passed": summary_passed, "updated_at": time.time(),
+            "out": encode_pairs(out), "passed": encode_pairs(summary_passed),
+            "updated_at": time.time(),
         })
         print(f"[optimize] shard {args.shard} scritto: {len(out)} coppie, "
               f"{len(summary_passed)} passate. Il merge aggiornera' il registro.")
         return 0
 
+    # entries/passed CODIFICATI come stringa JSON: Firestore indicizza UN campo
+    # invece di ogni sottocampo di ogni coppia (200 coin x 9 strat sfondano il
+    # limite di 40k voci d'indice -> "INDEX_ENTRIES_COUNT_LIMIT_EXCEEDED").
     fb.set_doc("strategy_params", "current", {
         "updated_at": time.time(),
-        "entries": out,
-        "passed": summary_passed,
+        "entries": encode_pairs(out),
+        "passed": encode_pairs(summary_passed),
     })
 
     # --- registro di validazione cumulativo (robustezza nel tempo) ---
@@ -246,8 +250,8 @@ def _merge_shards(fb, args) -> int:
         if run_id and d.get("run_id") and d.get("run_id") != run_id:
             print(f"[merge] shard {i}: run_id diverso (stantio), salto")
             continue
-        combined_out.update(d.get("out", {}) or {})
-        combined_passed.extend(d.get("passed", []) or [])
+        combined_out.update(decode_pairs(d.get("out")))
+        combined_passed.extend(decode_pairs(d.get("passed")) or [])
         used += 1
     print(f"[merge] {used}/{args.num_shards} shard uniti: {len(combined_out)} coppie, "
           f"{len(combined_passed)} passate")
@@ -256,7 +260,8 @@ def _merge_shards(fb, args) -> int:
         fb.set_doc("discovered_strategies", "specs", {"specs": {}})
         print("[merge] reset TOTALE del registro prima di applicare i risultati")
     fb.set_doc("strategy_params", "current", {
-        "updated_at": time.time(), "entries": combined_out, "passed": combined_passed,
+        "updated_at": time.time(),
+        "entries": encode_pairs(combined_out), "passed": encode_pairs(combined_passed),
     })
     reg = update_registry(fb, combined_out, combined_passed)
     cov_pct = reg["coverage"] * 100

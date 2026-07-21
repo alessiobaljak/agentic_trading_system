@@ -129,8 +129,11 @@ class AdaptationEngine:
             self._has_opt_data = True
             return
         doc = self.fb.get_doc("strategy_params", "current") or {}
-        entries = doc.get("entries", {}) or {}
-        self._passed = self._robust_only(doc.get("passed", []) or [])
+        # entries/passed sono codificati come stringa JSON (decode_pairs legge sia il
+        # nuovo formato-stringa sia il vecchio dict/list) per non sfondare il limite
+        # di 40k voci d'indice di Firestore su strategy_params/current.
+        entries = decode_pairs(doc.get("entries"))
+        self._passed = self._robust_only(decode_pairs(doc.get("passed")) or [])
         self._params = {k: (entries.get(k, {}).get("params", {}) or {}) for k in self._passed}
         self._has_opt_data = bool(entries)
 
@@ -154,7 +157,7 @@ class AdaptationEngine:
     # ------------------------------------------------------------------ #
     def load_generated(self) -> None:
         doc = self.fb.get_doc("discovered_strategies", "specs") or {}
-        self._generated_specs = doc.get("specs", {}) or {}
+        self._generated_specs = decode_pairs(doc.get("specs"))
 
     def generated_strategies_for(self, symbol: str) -> list:
         """Istanzia le strategie GENERATE che sono validate e abilitate per questo

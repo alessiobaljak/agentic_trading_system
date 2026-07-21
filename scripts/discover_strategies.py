@@ -169,9 +169,10 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
 
 def persist_specs(fb, specs_by_id: dict) -> None:
     doc = fb.get_doc("discovered_strategies", "specs") or {}
-    specs = doc.get("specs", {}) or {}
+    specs = decode_pairs(doc.get("specs"))     # dict annidato -> stringa JSON (limite 40k indici)
     specs.update(specs_by_id)
-    fb.set_doc("discovered_strategies", "specs", {"specs": specs, "updated_at": time.time()})
+    fb.set_doc("discovered_strategies", "specs",
+               {"specs": encode_pairs(specs), "updated_at": time.time()})
 
 
 def _notify(passed: list[dict], n_eval: int, n_specs: int, n_coins: int) -> None:
@@ -213,9 +214,9 @@ def _merge_discover_shards(fb, args) -> int:
         if run_id and d.get("run_id") and d.get("run_id") != run_id:
             print(f"[merge] shard {i}: run_id diverso (stantio), salto")
             continue
-        combined_out.update(d.get("passed_entries", {}) or {})
-        passed_keys.extend(d.get("passed_keys", []) or [])
-        combined_specs.update(d.get("specs", {}) or {})
+        combined_out.update(decode_pairs(d.get("passed_entries")))
+        passed_keys.extend(decode_pairs(d.get("passed_keys")) or [])
+        combined_specs.update(decode_pairs(d.get("specs")))
         n_eval += int(d.get("n_eval", 0) or 0)
         used += 1
     print(f"[merge] {used}/{args.num_shards} shard uniti: {len(passed_keys)} coppie passate")
@@ -264,7 +265,7 @@ def main() -> int:
     # 1) candidate NUOVE  2) RI-VALUTA le scoperte precedenti (così accumulano i
     # pass e diventano operabili)  3) mutazioni per evolvere attorno alle vincenti.
     specs = generate_specs(args.generate, seed=args.seed)
-    existing = (fb.get_doc("discovered_strategies", "specs") or {}).get("specs", {}) or {}
+    existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
     # PRIORITÀ: ri-valida SEMPRE le generate GIÀ VALIDATE (in ogni shard), così non
     # scadono per freshness e non vengono "cancellate" dal registro. Poi riempi col
     # resto fino al cap.
@@ -311,8 +312,9 @@ def main() -> int:
     if args.num_shards > 1:
         fb.set_doc("discover_shards", str(args.shard), {
             "run_id": os.getenv("GITHUB_RUN_ID", ""),
-            "passed_entries": {k: out[k] for k in passed_keys},
-            "passed_keys": passed_keys, "specs": specs_to_save,
+            "passed_entries": encode_pairs({k: out[k] for k in passed_keys}),
+            "passed_keys": encode_pairs(passed_keys),
+            "specs": encode_pairs(specs_to_save),
             "n_eval": n_eval, "updated_at": time.time(),
         })
         print(f"[discover] shard {args.shard} scritto: {len(passed_keys)} coppie passate. "

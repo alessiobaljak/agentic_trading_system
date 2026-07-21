@@ -21,8 +21,10 @@ def test_optimize_merge_combines_shards():
     _merge_shards(fb, Namespace(num_shards=2, reset_registry=False))
 
     # entrambe le coppie finiscono nel run corrente e nel registro
+    # (entries e' codificato come stringa JSON per non sfondare il limite indici Firestore)
     sp = fb.get_doc("strategy_params", "current")
-    assert set(sp["entries"].keys()) == {"BTCUSDT|trend_following", "ETHUSDT|breakout"}
+    assert isinstance(sp["entries"], str)
+    assert set(decode_pairs(sp["entries"]).keys()) == {"BTCUSDT|trend_following", "ETHUSDT|breakout"}
     reg = fb.get_doc("strategy_registry", "validated")
     pairs = decode_pairs(reg["pairs"])
     assert "BTCUSDT|trend_following" in pairs
@@ -49,7 +51,7 @@ def test_discover_merge_combines_shards():
                                 "spec": spec_b, "oos_pf": 1.3, "oos_pnl_pct": 0.4, "oos_trades": 50}},
         "passed_keys": [kb], "specs": {spec_b["id"]: spec_b}})
     _merge_discover_shards(fb, Namespace(num_shards=2))
-    specs = fb.get_doc("discovered_strategies", "specs")["specs"]
+    specs = decode_pairs(fb.get_doc("discovered_strategies", "specs")["specs"])
     assert spec_a["id"] in specs and spec_b["id"] in specs  # spec di entrambi gli shard salvate
     reg = fb.get_doc("strategy_registry", "validated")
     pairs = decode_pairs(reg["pairs"])
