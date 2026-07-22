@@ -28,7 +28,9 @@ export BACKTEST_ALLOW_SYNTHETIC=false      # MAI validare su dati finti
 
 # STESSI parametri del timer -> validazione IDENTICA (nessuna riduzione).
 OPT_ARGS="--top 200 --windows 3 --max-combos 12 --start 2022-01-01"
-DISC_ARGS="--top 200 --generate 100 --windows 3 --start 2022-01-01"
+# reeval-cap ALTO: ri-valuta TUTTE le generate a 1-2 passaggi (non solo 80), cosi'
+# accumulano fino a 3 e la copertura puo' salire oltre ~80 coppie (verso il 60%).
+DISC_ARGS="--top 200 --generate 100 --reeval-cap 500 --windows 3 --start 2022-01-01"
 
 # niente run concorrenti: ferma il timer durante l'accelerazione e RIATTIVALO
 # all'uscita, anche se lo script fallisce o viene interrotto (Ctrl-C).

@@ -34,7 +34,7 @@ Environment=OPTIMIZER_MIN_HISTORY_DAYS=180
 Nice=15
 IOSchedulingClass=idle
 ExecStart=$APP_DIR/.venv/bin/python -m scripts.optimize --top 200 --windows 3 --max-combos 12 --start 2022-01-01
-ExecStart=$APP_DIR/.venv/bin/python -m scripts.discover_strategies --top 200 --generate 100 --windows 3 --start 2022-01-01
+ExecStart=$APP_DIR/.venv/bin/python -m scripts.discover_strategies --top 200 --generate 100 --reeval-cap 500 --windows 3 --start 2022-01-01
 EOF
 
 cat > /etc/systemd/system/trading-optimizer.timer <<EOF
