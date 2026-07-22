@@ -142,6 +142,7 @@ def test_robustness_filter_excludes_single_coin_strategies(monkeypatch):
     """Col filtro a 3: una strategia validata su <3 coin NON e' tradabile; su >=3 si'."""
     from bot.config import settings as _s
     monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 3)
+    monkeypatch.setattr(_s, "REQUIRE_GATE1_READY", False)   # qui testiamo il filtro, non il ready-gate
     fb = FirebaseClient()
     # 'breakout' validata su 3 coin (robusta) -> abilitata
     # 'mean_reversion' validata su 2 coin (sotto soglia) -> NON abilitata
@@ -161,6 +162,7 @@ def test_robustness_filter_excludes_single_coin_strategies(monkeypatch):
 def test_adaptation_loads_and_enables_generated(monkeypatch):
     from bot.config import settings as _s
     monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 1)  # qui non testiamo il filtro robustezza
+    monkeypatch.setattr(_s, "REQUIRE_GATE1_READY", False)
     fb = FirebaseClient()
     spec = _rsi_spec()
     gid = spec["id"]

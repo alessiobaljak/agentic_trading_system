@@ -121,11 +121,33 @@ def test_default_flat_until_validated():
     assert eng.is_enabled("BTCUSDT", "gen_aaa") is False
 
 
-def test_bootstrap_opt_in_trades_single_pass_generated():
-    # con BOOTSTRAP_TRADE_UNVALIDATED attivo, le generate a 1 passaggio diventano
-    # operative (dati CODIFICATI, decode in lettura, generate esentate dal filtro).
+def test_flat_until_gate1_ready(monkeypatch):
+    # Anche con coppie VALIDATE (3 passaggi), se il GATE 1 non e' "ready"
+    # (copertura < soglia) il bot resta FLAT. Diventa operativo solo quando ready.
     from bot.core.firebase_client import FirebaseClient, encode_pairs
-    from bot.config import settings
+    from bot.config import settings as _s
+    monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 1)
+    fb = FirebaseClient()
+    pairs = {"BTCUSDT|gen_aaa": {"pass_count": 3, "last_params": {"rr": 2.0}}}
+    reg = {"validated": ["BTCUSDT|gen_aaa"], "pairs": encode_pairs(pairs), "ready": False}
+    fb.set_doc("strategy_registry", "validated", reg)
+    eng = AdaptationEngine(fb)
+    eng.load_params()
+    assert eng._passed == set()                    # ready=False -> flat
+    # ora il gate e' ready -> la coppia validata diventa operativa
+    reg["ready"] = True
+    fb.set_doc("strategy_registry", "validated", reg)
+    eng.load_params()
+    assert eng._passed == {"BTCUSDT|gen_aaa"}
+
+
+def test_bootstrap_opt_in_trades_single_pass_generated(monkeypatch):
+    # con BOOTSTRAP_TRADE_UNVALIDATED attivo (e ready-gate disattivato), le generate
+    # a 1 passaggio diventano operative (decode, generate esentate dal filtro).
+    from bot.core.firebase_client import FirebaseClient, encode_pairs
+    from bot.config import settings as _s
+    monkeypatch.setattr(_s, "REQUIRE_GATE1_READY", False)
+    monkeypatch.setattr(_s, "BOOTSTRAP_TRADE_UNVALIDATED", True)
     fb = FirebaseClient()
     pairs = {
         "BTCUSDT|gen_aaa": {"pass_count": 1, "last_params": {"rr": 2.0}},
@@ -134,16 +156,11 @@ def test_bootstrap_opt_in_trades_single_pass_generated():
     }
     fb.set_doc("strategy_registry", "validated",
                {"validated": [], "pairs": encode_pairs(pairs)})
-    old = settings.BOOTSTRAP_TRADE_UNVALIDATED
-    settings.BOOTSTRAP_TRADE_UNVALIDATED = True
-    try:
-        eng = AdaptationEngine(fb)
-        eng.load_params()
-        assert eng._passed == {"BTCUSDT|gen_aaa", "ETHUSDT|gen_bbb"}
-        assert eng._params["BTCUSDT|gen_aaa"]["rr"] == 2.0
-        assert eng.is_enabled("BTCUSDT", "gen_aaa") is True
-    finally:
-        settings.BOOTSTRAP_TRADE_UNVALIDATED = old
+    eng = AdaptationEngine(fb)
+    eng.load_params()
+    assert eng._passed == {"BTCUSDT|gen_aaa", "ETHUSDT|gen_bbb"}
+    assert eng._params["BTCUSDT|gen_aaa"]["rr"] == 2.0
+    assert eng.is_enabled("BTCUSDT", "gen_aaa") is True
 
 
 def test_is_enabled_failsafe_when_registry_missing():

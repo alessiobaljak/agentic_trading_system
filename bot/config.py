@@ -113,6 +113,12 @@ class Settings:
     # DEFAULT False: non si trada su strategie non validate; il bot resta flat finche'
     # il gate non e' popolato.
     BOOTSTRAP_TRADE_UNVALIDATED: bool = os.getenv("BOOTSTRAP_TRADE_UNVALIDATED", "false").lower() == "true"
+    # il bot NON va in paper finche' il GATE 1 non e' "ready" (copertura >= soglia
+    # OPTIMIZER_READY_FRACTION, default 60%): resta FLAT anche se qualche singola
+    # coppia e' gia' validata. E' cio' che promette il messaggio Telegram ("GATE 1
+    # SUPERATO -> si puo' passare al paper"). False = trada le validate appena
+    # esistono, senza aspettare la copertura dell'universo.
+    REQUIRE_GATE1_READY: bool = os.getenv("REQUIRE_GATE1_READY", "true").lower() == "true"
     # cooldown anti-whipsaw: stop su una coin dopo uno STOP LOSS (no rientro).
     # Espresso in BARRE del timeframe (4 barre: 1h a 15m, 4h a 1h) cosi' il
     # comportamento non cambia di scala quando si cambia ORCHESTRATOR_TIMEFRAME.

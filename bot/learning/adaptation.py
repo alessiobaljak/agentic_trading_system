@@ -121,10 +121,18 @@ class AdaptationEngine:
         return generated | {k for k in keys if k.split("|", 1)[1] in robust}
 
     def load_params(self) -> None:
-        # 1) REGISTRO validato: coppie a >= MIN_PASSES passaggi OOS (le piu' robuste).
         reg = self.fb.get_doc("strategy_registry", "validated") or {}
         validated = reg.get("validated") or []
         pairs = decode_pairs(reg.get("pairs"))
+        # GATE 0) il bot NON va in paper finche' il GATE 1 non e' "ready" (copertura
+        # dell'universo >= soglia). Resta FLAT anche se qualche coppia e' gia'
+        # validata: e' cio' che promette il Telegram ("GATE 1 SUPERATO -> paper").
+        if settings.REQUIRE_GATE1_READY and not reg.get("ready"):
+            self._passed = set()
+            self._params = {}
+            self._has_opt_data = True
+            return
+        # 1) REGISTRO validato: coppie a >= MIN_PASSES passaggi OOS (le piu' robuste).
         if validated:
             self._passed = self._robust_only(validated)
             self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in self._passed}

@@ -42,8 +42,9 @@ def test_adaptation_loads_optimized_params(monkeypatch):
     from bot.config import settings as _s
     monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 1)  # qui non testiamo il filtro robustezza
     # questo test verifica il fallback su strategy_params (nessuna coppia validata a
-    # 3 passaggi): serve il bootstrap attivo, altrimenti il default e' flat.
+    # 3 passaggi): serve il bootstrap attivo e il ready-gate disattivato.
     monkeypatch.setattr(_s, "BOOTSTRAP_TRADE_UNVALIDATED", True)
+    monkeypatch.setattr(_s, "REQUIRE_GATE1_READY", False)
     fb = FirebaseClient()
     fb.set_doc("strategy_params", "current", {
         "entries": {
@@ -68,6 +69,7 @@ def test_registry_accumulates_and_gates(monkeypatch):
     from bot.core.firebase_client import FirebaseClient
     from bot.config import settings as _s
     monkeypatch.setattr(_s, "MIN_COINS_PER_STRATEGY", 1)  # qui non testiamo il filtro robustezza
+    monkeypatch.setattr(_s, "REQUIRE_GATE1_READY", False)  # qui testiamo l'accumulo/gate per-coppia
     fb = FirebaseClient()
     out = {
         "SOLUSDT|breakout": {"symbol": "SOLUSDT", "strategy": "breakout",
