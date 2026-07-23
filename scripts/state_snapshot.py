@@ -107,8 +107,10 @@ def build() -> str:
 
     # --- ultimo run (snapshot corrente) ---
     sp = fb.get_doc("strategy_params", "current") or {}
-    entries = sp.get("entries", {}) or {}
-    passed = sp.get("passed", []) or []
+    # entries/passed sono CODIFICATI come stringa JSON (limite indici Firestore):
+    # decode_pairs legge sia il nuovo formato-stringa sia il vecchio dict/list.
+    entries = decode_pairs(sp.get("entries"))
+    passed = decode_pairs(sp.get("passed")) or []
     lines += [
         "## Ultimo run di ottimizzazione",
         f"_aggiornato: {_ts(sp.get('updated_at'))} · {len(entries)} coppie valutate, "
