@@ -205,38 +205,24 @@ export default function OptimizedStrategies() {
     return out.sort((a, b) => b.coins.length - a.coins.length);
   }, [reg, specsDoc]);
 
-  // vista PRODUZIONE: parte da CHI HA TRADATO (anche se non più validato ora),
-  // arricchita coi dati di validazione dove ci sono. Lo storico reale non sparisce.
+  // vista PRODUZIONE: strategie che hanno tradato E che sono ANCORA validate nel
+  // GATE 1 attuale. Le vecchie non più valide (era 1h / pre-reset / bootstrap) NON
+  // si mostrano: non sono operabili ora, sarebbero solo rumore.
   const prodCards = useMemo<Card[]>(() => {
     const byStrat = new Map(cards.map((c) => [c.strategy, c]));
     return Object.keys(prod)
-      .filter((s) => (prod[s]?.n ?? 0) > 0)
-      .map((s) => {
-        const c = byStrat.get(s);
-        const generated = s.startsWith('gen_');
-        return (
-          c ?? {
-            strategy: s,
-            generated,
-            desc: describe(s, generated, specsDoc?.specs?.[s]),
-            coins: [] as PairRec[],
-            avgPf: 0,
-            totTrades: 0,
-            validatedNow: false,
-            simProfit10k: 0,
-            bestProfit10k: 0,
-          }
-        );
-      })
+      .filter((s) => (prod[s]?.n ?? 0) > 0 && byStrat.has(s))
+      .map((s) => byStrat.get(s)!)
       .sort((a, b) => (prod[b.strategy].pnl ?? 0) - (prod[a.strategy].pnl ?? 0));
   }, [cards, prod, specsDoc]);
 
-  // Vista "validate": mostra SOLO le strategie robuste/solide (validate su >= 3 coin
-  // distinte = quelle che il bot opera davvero). Le altre (1-2 coin) non si mostrano.
+  // Vista "Robuste (operate)": ESATTAMENTE ciò che il bot opera. Le strategie BASE
+  // devono essere validate su >= 3 coin (anti-fluke); le GENERATE (gen_*) sono
+  // coin-specifiche by design ed ESENTATE (come _robust_only nel bot).
   const MIN_COINS_ROBUST = 3;
   const shown = view === 'prod'
     ? prodCards
-    : cards.filter((c) => c.coins.length >= MIN_COINS_ROBUST);
+    : cards.filter((c) => c.generated || c.coins.length >= MIN_COINS_ROBUST);
 
   const cov = reg?.coverage != null ? Math.round(reg.coverage * 100) : null;
   const btn = (active: boolean): React.CSSProperties => ({
@@ -260,8 +246,8 @@ export default function OptimizedStrategies() {
       </div>
       <p className="subtitle">
         {view === 'prod'
-          ? 'Solo strategie che hanno tradato in paper · grafico = equity curve reale'
-          : `Solo strategie robuste (validate su ≥ ${MIN_COINS_ROBUST} coin, 3 pass) — quelle operate dal bot`}
+          ? 'Strategie ANCORA validate che hanno tradato in paper · grafico = equity curve reale'
+          : `Ciò che il bot opera: generate validate (3 pass) + base su ≥ ${MIN_COINS_ROBUST} coin`}
         {cov != null ? ` · copertura ${reg?.coins_covered}/${reg?.universe_size} (${cov}%)` : ''}
       </p>
       {!loaded ? (
