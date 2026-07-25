@@ -33,19 +33,26 @@ function ConfigureNotice() {
 }
 
 export default function Page() {
-  return (
-    <main className="container">
-      {!firebaseReady ? (
+  if (!firebaseReady) {
+    return (
+      <main className="container">
         <ConfigureNotice />
-      ) : (
-        <AuthGate>
-          <DashboardShell />
-        </AuthGate>
-      )}
+      </main>
+    );
+  }
 
-      <footer className="muted" style={{ fontSize: 11, marginTop: 24, textAlign: 'center' }}>
+  return (
+    <>
+      <AuthGate>
+        <DashboardShell />
+      </AuthGate>
+
+      <footer
+        className="muted"
+        style={{ fontSize: 11, margin: '4px auto 24px', textAlign: 'center', maxWidth: 1600 }}
+      >
         Hard caps enforced client-side (leverage ≤ 5x, risk ≤ 3%) and re-enforced by the bot.
       </footer>
-    </main>
+    </>
   );
 }
