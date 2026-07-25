@@ -100,8 +100,10 @@ export default function DashboardShell() {
         {tab === 'panoramica' && (
           <>
             <BotStatus />
-            <DecisionStatus />
-            <EquityCurve />
+            <div className="grid grid-2">
+              <EquityCurve />
+              <DecisionStatus />
+            </div>
           </>
         )}
 

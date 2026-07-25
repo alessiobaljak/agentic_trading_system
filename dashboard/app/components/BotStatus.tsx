@@ -84,10 +84,11 @@ export default function BotStatus() {
 
   return (
     <div className="panel">
-      <div className="header-bar">
+      <div className="status-strip">
         <div className="left">
           <strong style={{ fontSize: 16 }}>Trading Bot</strong>
-
+        </div>
+        <div className="status-badges">
           <span className={`badge ${running ? 'green' : 'red'}`}>
             <span
               className="dot"
@@ -104,62 +105,73 @@ export default function BotStatus() {
             {dryRun ? 'DRY_RUN' : 'LIVE'}
           </span>
 
-          <span className="badge gray">
-            regime: {status?.regime ?? 'n/a'}
-          </span>
-        </div>
-
-        <div className="kpi">
-          {equityMtm != null && (
-            <div className="item">
-              <div className="label">Equity (mark-to-market)</div>
-              <div className="value mono">{usd(equityMtm)}</div>
-            </div>
-          )}
+          <span className="badge gray">regime: {status?.regime ?? 'n/a'}</span>
         </div>
       </div>
 
-      {equity != null && (
-        <div className="kpi" style={{ marginTop: 14, gap: 20 }}>
-          <div className="item">
-            <div className="label">Bilancio (realizzato)</div>
-            <div className="value mono" style={{ fontSize: 16 }}>{usd(equity)}</div>
-          </div>
-          <div className="item">
-            <div className="label">uPnL aperto</div>
-            <div className={`value mono ${uPnl >= 0 ? 'pos' : 'neg'}`} style={{ fontSize: 16 }}>
-              {uPnl >= 0 ? '+' : ''}{usd(uPnl).replace('$', '')}
+      <div className="stat-grid">
+        {equityMtm != null && (
+          <div className="stat-tile hero accent">
+            <div className="stat-label">Equity · mark-to-market</div>
+            <div className="stat-value">{usd(equityMtm)}</div>
+            <div className="stat-sub">
+              patrimonio reale ora (bilancio + uPnL aperto)
             </div>
           </div>
-          <div className="item">
-            <div className="label">Margine usato</div>
-            <div className="value mono" style={{ fontSize: 16 }}>{usd(marginUsed)}</div>
-          </div>
-          <div className="item">
-            <div className="label">Margine libero</div>
-            <div className="value mono" style={{ fontSize: 16 }}>
-              {freeMargin != null ? usd(freeMargin) : '—'}
+        )}
+
+        {equity != null && (
+          <>
+            <div className="stat-tile">
+              <div className="stat-label">Bilancio · realizzato</div>
+              <div className="stat-value">{usd(equity)}</div>
             </div>
+
+            <div className={`stat-tile ${uPnl >= 0 ? 'good' : 'bad'}`}>
+              <div className="stat-label">uPnL aperto</div>
+              <div className={`stat-value ${uPnl >= 0 ? 'pos' : 'neg'}`}>
+                {uPnl >= 0 ? '+' : ''}
+                {usd(uPnl).replace('$', '')}
+              </div>
+            </div>
+
+            <div className="stat-tile">
+              <div className="stat-label">Margine usato</div>
+              <div className="stat-value">{usd(marginUsed)}</div>
+            </div>
+
+            <div className="stat-tile">
+              <div className="stat-label">Margine libero</div>
+              <div className="stat-value">
+                {freeMargin != null ? usd(freeMargin) : '—'}
+              </div>
+            </div>
+          </>
+        )}
+
+        <div className="stat-tile warnb">
+          <div className="stat-label">Leva effettiva</div>
+          <div className="stat-value">
+            {effLeverage != null ? `${effLeverage}x` : '—'}
+          </div>
+          <div className="stat-sub">
+            {effLeverage != null ? 'guidata da conviction + learning' : 'in attesa di pubblicazione'}
           </div>
         </div>
-      )}
 
-      <div className="muted" style={{ marginTop: 10, fontSize: 12 }}>
+        <div className="stat-tile warnb">
+          <div className="stat-label">Rischio / trade</div>
+          <div className="stat-value">
+            {effRisk != null ? `${(effRisk * 100).toFixed(2)}%` : '—'}
+          </div>
+          <div className="stat-sub">
+            {effRisk != null ? 'sotto i cap di sicurezza' : 'in attesa di pubblicazione'}
+          </div>
+        </div>
+      </div>
+
+      <div className="muted" style={{ marginTop: 12, fontSize: 12 }}>
         Heartbeat: {timeAgo(heartbeatMs)}
-        {' · '}
-        Effective leverage:{' '}
-        {effLeverage != null ? (
-          <strong className="mono">{effLeverage}x</strong>
-        ) : (
-          <span className="muted">shown when the bot publishes it</span>
-        )}
-        {' · '}
-        Effective risk/trade:{' '}
-        {effRisk != null ? (
-          <strong className="mono">{(effRisk * 100).toFixed(2)}%</strong>
-        ) : (
-          <span className="muted">shown when published</span>
-        )}
       </div>
     </div>
   );
