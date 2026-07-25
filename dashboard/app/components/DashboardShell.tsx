@@ -96,7 +96,7 @@ export default function DashboardShell() {
 
       <p className="section-intro">{intro}</p>
 
-      <div className="grid">
+      <div className="grid" key={tab}>
         {tab === 'panoramica' && (
           <>
             <BotStatus />
