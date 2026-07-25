@@ -11,13 +11,17 @@ Cancella:
   * /commands/kill_switch (RTDB)  riportato a False
   * /adapt_state          (RTDB)  cooldown coin/strategie (panchina) azzerati
 
-NON tocca (resta tutto): strategy_registry/validated (GATE 1), strategy_params,
-strategy_weights, memory, insights, user_risk_settings.
+Con --reset-learning azzera ANCHE i pesi appresi (strategy_weights) e i report
+'memory': il learning riparte davvero da zero (utile dopo un cambio timeframe, per
+non trascinare l'apprendimento del vecchio/bootstrap).
 
-Uso sulla VPS:
+NON tocca MAI: strategy_registry/validated (GATE 1), strategy_params, insights,
+user_risk_settings. (E, senza --reset-learning, nemmeno strategy_weights/memory.)
+
+Uso sulla VPS (col BOT FERMO, poi riavvia):
     systemctl stop trading-bot
-    .venv/bin/python -m scripts.reset_paper            # dry-run: mostra e basta
-    .venv/bin/python -m scripts.reset_paper --yes      # esegue davvero
+    .venv/bin/python -m scripts.reset_paper                     # dry-run
+    .venv/bin/python -m scripts.reset_paper --yes --reset-learning   # esegue: paper + learning da zero
     systemctl start trading-bot
 """
 from __future__ import annotations
@@ -39,16 +43,22 @@ def main() -> int:
     ap.add_argument("--yes", action="store_true", help="conferma ed esegue la cancellazione")
     ap.add_argument("--equity", type=float, default=START_EQUITY,
                     help=f"equity paper iniziale (default {START_EQUITY:g})")
+    ap.add_argument("--reset-learning", action="store_true",
+                    help="azzera ANCHE i pesi appresi (strategy_weights) e i report "
+                         "'memory' -> il learning riparte da zero, non sbiadisce dal vecchio")
     args = ap.parse_args()
 
     fb = get_firebase()
     n_trades = len(fb.list_doc_ids("trades"))
     positions = fb.get_rtdb("/positions") or {}
     n_pos = len(positions) if isinstance(positions, dict) else 0
+    keep = [k for k in KEEP if not (args.reset_learning and k in ("strategy_weights", "memory"))]
 
     print("[reset] AZZERO:  /positions, collection 'trades', /risk_state, "
           "/account/equity, /bot_status, /commands/kill_switch")
-    print(f"[reset] CONSERVO: {', '.join(KEEP)}")
+    if args.reset_learning:
+        print("[reset] AZZERO ANCHE (learning): strategy_weights/current, collection 'memory'")
+    print(f"[reset] CONSERVO: {', '.join(keep)}")
     print(f"[reset] stato attuale: {n_pos} posizioni aperte, {n_trades} trade chiusi")
 
     if not args.yes:
@@ -64,9 +74,16 @@ def main() -> int:
     fb.set_rtdb("/bot_status", None)
     fb.set_rtdb("/commands/kill_switch", False)
     fb.set_rtdb("/adapt_state", None)   # cooldown coin/strategie azzerati
+    if args.reset_learning:
+        # updated_at=0 evita che la probation "trascini" i vecchi pesi: partono da zero
+        fb.set_doc("strategy_weights", "current", {"weights": [], "updated_at": 0})
+        for mid in fb.list_doc_ids("memory"):
+            fb.delete_doc("memory", mid)
 
     print(f"[reset] FATTO. Rimosse {n_pos} posizioni e {n_trades} trade chiusi. "
-          f"Equity paper = {args.equity:g}. Le strategie validate (GATE 1) restano.")
+          f"Equity paper = {args.equity:g}."
+          f"{' Learning azzerato (pesi + memory).' if args.reset_learning else ''} "
+          "Le strategie validate (GATE 1) restano.")
     return 0
 
 
