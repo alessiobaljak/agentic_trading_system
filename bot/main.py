@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 
 from bot.config import settings
 from bot.core.firebase_client import get_firebase
-from bot.core.models import ExitReason, RiskSettings
+from bot.core.models import ExitReason, Regime, RiskSettings
 from bot.agents.market_scanner import MarketScanner
 from bot.agents.onchain_agent import OnChainAgent
 from bot.agents.price_agent import PriceAgent
@@ -370,10 +370,17 @@ class TradingBot:
         except Exception:  # noqa: BLE001
             pass
 
-        # RISK GATE — ultimo controllo prima dell'ordine
+        # RISK GATE — ultimo controllo prima dell'ordine.
+        # Size e leva GUIDATE DAI DATI: convinzione del segnale × peso appreso della
+        # strategia nel regime (adaptation.allocation). I cap di sicurezza (volatilita',
+        # hard cap, 10%/posizione) restano tetto invalicabile dentro il risk manager.
         user = self.read_user_risk()
+        rmult, lmult, alloc_note = self.adaptation.allocation(
+            decision.strategy, asset.regime or self.regime or Regime.SIDEWAYS,
+            decision.confidence)
         params = self.risk.evaluate(decision, user, asset, self.account_equity(),
-                                    volatility_sigma=self._volatility_sigma(asset))
+                                    volatility_sigma=self._volatility_sigma(asset),
+                                    risk_mult=rmult, lev_mult=lmult, alloc_note=alloc_note)
         if not params.approved:
             print(f"[main] trade bloccato dal gate: {params.reject_reason}")
             self._publish_decision_status(
@@ -522,6 +529,14 @@ class TradingBot:
                 self.adaptation.save_weights(weights)   # save_weights ricarica anche in RAM
                 print(f"[main] pesi ricalcolati: {len(weights)} coppie strat×regime "
                       f"da {len(trades)} trade (30g)")
+            # B2 — il TRAILING impara: keep del profit-lock per-strategia dai verdetti
+            # (premature/protected + rumore vs inversione). Campione insufficiente ->
+            # mappa senza quella strategia -> default globale validato dal gate.
+            keep = metrics.compute_trailing_keep(trades)
+            self.executor.trailing_keep = keep
+            if keep:
+                self.fb.set_rtdb("/trailing_keep", keep)   # visibilita' dashboard/debug
+                print(f"[main] trailing keep adattato per {len(keep)} strategie: {keep}")
         except Exception as exc:  # noqa: BLE001
             print(f"[main] refresh_weights fallito: {exc}")
 

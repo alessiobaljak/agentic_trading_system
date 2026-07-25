@@ -44,34 +44,44 @@ class RiskManager:
         asset: AssetSnapshot,
         account_equity: float,
         volatility_sigma: float = 0.0,
+        risk_mult: float = 1.0,
+        lev_mult: float = 1.0,
+        alloc_note: str = "",
     ) -> EffectiveRiskParams:
         """
         Calcola leverage/size effettivi e i prezzi di SL/TP.
+        `risk_mult`/`lev_mult` vengono dall'ALLOCAZIONE data-driven (convinzione del
+        segnale × apprendimento, adaptation.allocation): scalano la base utente PRIMA
+        dei cap, che restano tetto invalicabile (possono solo ridurre).
         Documenta nei `notes` cosa ha clampato cosa (tracciabilità).
         """
         notes: list[str] = []
+        if alloc_note:
+            notes.append(alloc_note)
 
-        # (a) valori richiesti dall'utente
+        # (a) base utente, SCALATA dall'allocazione data-driven
         user_lev = float(user_settings.leverage)
         user_risk = float(user_settings.risk_per_trade)
+        alloc_lev = max(1.0, user_lev * max(0.0, lev_mult))
+        alloc_risk = user_risk * max(0.0, risk_mult)
 
         # (b) cap di sicurezza calcolati dal sistema (volatilità)
         sys_lev_cap = hard_limits.safety_leverage_cap(volatility_sigma)
         sys_risk_cap = hard_limits.safety_risk_cap(volatility_sigma)
-        if sys_lev_cap < user_lev:
-            notes.append(f"Leva ridotta da {user_lev}x a {sys_lev_cap}x per volatilità {volatility_sigma:.1f}σ")
-        if sys_risk_cap < user_risk:
+        if sys_lev_cap < alloc_lev:
+            notes.append(f"Leva ridotta da {alloc_lev:.1f}x a {sys_lev_cap}x per volatilità {volatility_sigma:.1f}σ")
+        if sys_risk_cap < alloc_risk:
             notes.append(f"Size ridotta per alta volatilità ({volatility_sigma:.1f}σ)")
 
         # (c) hard cap assoluti (ultima difesa, possono solo ridurre)
-        if user_lev > hard_limits.MAX_LEVERAGE:
-            notes.append(f"Richiesta leva {user_lev}x oltre l'hard cap: limitata a {hard_limits.MAX_LEVERAGE}x")
-        if user_risk > hard_limits.MAX_RISK_PER_TRADE:
-            notes.append(f"Richiesto rischio {user_risk*100:.1f}% oltre l'hard cap: limitato a {hard_limits.MAX_RISK_PER_TRADE*100:.0f}%")
+        if alloc_lev > hard_limits.MAX_LEVERAGE:
+            notes.append(f"Leva {alloc_lev:.1f}x oltre l'hard cap: limitata a {hard_limits.MAX_LEVERAGE}x")
+        if alloc_risk > hard_limits.MAX_RISK_PER_TRADE:
+            notes.append(f"Rischio {alloc_risk*100:.1f}% oltre l'hard cap: limitato a {hard_limits.MAX_RISK_PER_TRADE*100:.0f}%")
 
         # === precedenza: il valore più conservativo (minimo) ===
-        eff_lev = min(user_lev, sys_lev_cap, hard_limits.MAX_LEVERAGE)
-        eff_risk = min(user_risk, sys_risk_cap, hard_limits.MAX_RISK_PER_TRADE)
+        eff_lev = min(alloc_lev, sys_lev_cap, hard_limits.MAX_LEVERAGE)
+        eff_risk = min(alloc_risk, sys_risk_cap, hard_limits.MAX_RISK_PER_TRADE)
 
         # il size_multiplier dell'orchestratore scala ulteriormente (<=1)
         eff_risk *= max(0.0, min(1.0, decision.size_multiplier))
@@ -189,10 +199,14 @@ class RiskManager:
         asset: AssetSnapshot,
         account_equity: float,
         volatility_sigma: float = 0.0,
+        risk_mult: float = 1.0,
+        lev_mult: float = 1.0,
+        alloc_note: str = "",
     ) -> EffectiveRiskParams:
         """resolve_effective_params + final_gate in un solo passaggio."""
         params = self.resolve_effective_params(
-            decision, user_settings, asset, account_equity, volatility_sigma
+            decision, user_settings, asset, account_equity, volatility_sigma,
+            risk_mult=risk_mult, lev_mult=lev_mult, alloc_note=alloc_note,
         )
         if not params.approved:
             return params

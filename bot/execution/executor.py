@@ -90,6 +90,9 @@ class ExecutionEngine:
         # riavvio del processo (anche un auto-restart di systemd dopo un crash)
         # parte con open_positions VUOTO -> le posizioni aperte prima diventano
         # orfane: ri-aperte con un nuovo entry e mai chiuse/loggate.
+        # keep del profit-lock IMPARATO per-strategia (B2): aggiornato ogni ora dal
+        # refresh del learning in main; vuoto = default globale per tutte.
+        self.trailing_keep: dict[str, float] = {}
         self.restore_open_positions()
 
     def _init_binance(self) -> None:
@@ -185,10 +188,13 @@ class ExecutionEngine:
             return None
         long = pos.direction == Direction.LONG
 
-        # aggiorna il miglior prezzo a favore visto, poi calcola lo stop effettivo
+        # aggiorna il miglior prezzo a favore visto, poi calcola lo stop effettivo.
+        # `keep` per-strategia: IMPARATO dai verdetti trailing del paper (B1/B2);
+        # assente dalla mappa (pochi dati) -> default globale validato dal gate.
         pos.high_water = max(pos.high_water, mark_price) if long else min(pos.high_water, mark_price)
         eff_stop = locked_stop(pos.entry_price, pos.take_profit_price, long,
-                               pos.high_water, pos.stop_price)
+                               pos.high_water, pos.stop_price,
+                               keep=self.trailing_keep.get(pos.strategy))
         pos.trailing_active = eff_stop != pos.stop_price
 
         # stop (base o alzato dal profit-lock). Se è stato alzato, l'uscita è in

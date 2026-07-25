@@ -77,6 +77,81 @@ def test_prior_above_ramp_one_loss_is_gentle():
     assert w.weight <= 0.05, w.weight
 
 
+def test_allocation_neutral_without_data_scaled_with_data():
+    # SENZA pesi appresi: learning NEUTRO (nessuna deviazione senza dati); la sola
+    # convinzione muove poco. CON dati: peso alto -> boost, peso basso -> taglio.
+    from bot.core.firebase_client import FirebaseClient
+    eng = AdaptationEngine(FirebaseClient())
+    # nessun dato: a confidenza media il fattore resta vicino a 1
+    r, l, note = eng.allocation("breakout", Regime.SIDEWAYS, confidence=60)
+    assert "neutro" in note and 0.9 < r <= 1.1 and 0.9 < l <= 1.05
+    # dati: peso ALTO + confidenza alta -> risk boost (mai oltre 1.5 / 1.3)
+    eng._weights["breakout|sideways"] = 1.0
+    r_hi, l_hi, _ = eng.allocation("breakout", Regime.SIDEWAYS, confidence=85)
+    assert 1.3 < r_hi <= 1.5 and 1.1 < l_hi <= 1.3
+    # peso BASSO -> riduzione netta anche a confidenza alta
+    eng._weights["breakout|sideways"] = 0.2
+    r_lo, l_lo, _ = eng.allocation("breakout", Regime.SIDEWAYS, confidence=85)
+    assert r_lo < 0.9 and l_lo < 1.0
+    assert r_lo >= 0.5 and l_lo >= 0.7      # mai sotto i floor
+
+
+def test_allocation_respects_hard_caps_in_risk_manager():
+    # anche col boost massimo, leva e rischio NON superano i cap di sicurezza.
+    from bot.risk.risk_manager import RiskManager
+    from bot.risk import hard_limits
+    from bot.core.models import (AssetSnapshot, Direction, IndicatorSnapshot,
+                                 OrchestratorDecision, RiskSettings)
+    rm = RiskManager()
+    asset = AssetSnapshot(symbol="BTCUSDT", price=100.0,
+                          indicators={"15m": IndicatorSnapshot(timeframe="15m", atr=2.0, close=100.0)})
+    dec = OrchestratorDecision(asset="BTCUSDT", strategy="x", direction=Direction.LONG,
+                               size_multiplier=1.0, confidence=90,
+                               suggested_stop=98.0, suggested_target=104.0)
+    user = RiskSettings(leverage=4.0, risk_per_trade=0.025)
+    p = rm.resolve_effective_params(dec, user, asset, 10_000, volatility_sigma=0.0,
+                                    risk_mult=1.5, lev_mult=1.3, alloc_note="test")
+    assert p.leverage <= hard_limits.MAX_LEVERAGE            # 4*1.3=5.2 -> clampata a 5
+    assert p.risk_per_trade <= hard_limits.MAX_RISK_PER_TRADE  # 2.5%*1.5=3.75% -> 3%
+    # e il taglio da learning riduce davvero
+    p_lo = rm.resolve_effective_params(dec, user, asset, 10_000, volatility_sigma=0.0,
+                                       risk_mult=0.5, lev_mult=0.7)
+    assert p_lo.risk_per_trade < p.risk_per_trade
+    assert p_lo.leverage < p.leverage
+
+
+def test_trailing_keep_learns_from_verdicts():
+    from bot.learning.metrics import compute_trailing_keep
+    def tv(strategy, verdict, ko):
+        return {"strategy": strategy, "timeframe": "15m", "exit_reason": "trailing_stop",
+                "trailing_verdict": verdict, "trailing_knockout_atr": ko}
+    # tanti premature DA RUMORE -> keep si ALLENTA (sotto 0.5), mai sotto 0.35
+    noisy = [tv("gen_a", "premature", 0.4) for _ in range(20)] + \
+            [tv("gen_a", "protected", None) for _ in range(4)]
+    # tanti protected -> keep si STRINGE (sopra 0.5), mai sopra 0.65
+    prot = [tv("gen_b", "protected", None) for _ in range(20)] + \
+           [tv("gen_b", "premature", 2.5) for _ in range(4)]
+    # campione piccolo -> NESSUN adattamento (assente dalla mappa)
+    few = [tv("gen_c", "premature", 0.3) for _ in range(3)]
+    keep = compute_trailing_keep(noisy + prot + few)
+    assert 0.35 <= keep["gen_a"] < 0.5
+    assert 0.5 < keep["gen_b"] <= 0.65
+    assert "gen_c" not in keep
+    # trade di un ALTRO timeframe: ignorati
+    old = [dict(t, timeframe="1h") for t in noisy]
+    assert compute_trailing_keep(old) == {}
+
+
+def test_locked_stop_per_strategy_keep():
+    from bot.execution.exit_logic import locked_stop
+    # armato (fav 106 su trigger 0.5*10=5): keep alto blocca PIU' guadagno (stop
+    # piu' vicino), keep basso lascia respirare (stop piu' largo)
+    tight = locked_stop(100, 110, True, 106.0, 98.0, keep=0.65)
+    base = locked_stop(100, 110, True, 106.0, 98.0)            # 0.5 globale
+    loose = locked_stop(100, 110, True, 106.0, 98.0, keep=0.35)
+    assert tight > base > loose > 98.0
+
+
 def test_confidence_outcome_correlation():
     # confidenza alta -> esito positivo (correlazione attesa > 0)
     trades = []

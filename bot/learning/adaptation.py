@@ -87,6 +87,33 @@ class AdaptationEngine:
         self.load_weights()
 
     # ------------------------------------------------------------------ #
+    def allocation(self, strategy: str, regime: Regime, confidence: float) -> tuple[float, float, str]:
+        """(risk_mult, lev_mult, nota): quanto CAPITALE e quanta LEVA merita questo
+        trade, guidato SOLO dai dati — mai oltre i cap di sicurezza (applicati poi
+        dal risk manager, che puo' solo ridurre).
+
+          * CONVINZIONE: la confidence del segnale (forza degli indicatori, scala
+            0-100 validata dal gate). 30 (soglia minima) -> x0.75; 85+ -> x1.25.
+          * APPRENDIMENTO: il peso strategia×regime imparato dai trade REALI.
+            Nessun peso nel documento (= nessun dato) -> x1.0 NEUTRO: senza dati
+            non si devia dal comportamento base, ne' in su ne' in giu'. Col peso:
+            0 -> x0.5 (il kill avviene comunque a monte), 1 -> x1.25.
+
+        La leva scala con la RADICE del fattore (piu' cauta della size): amplifica
+        sia i guadagni sia le perdite, quindi si muove meno."""
+        key = f"{strategy}|{regime.value}"
+        w = self._weights.get(key)
+        conf = max(0.0, min(1.0, (float(confidence or 0) - 30.0) / 55.0))
+        conf_mult = 0.75 + 0.5 * conf
+        learn_mult = 1.0 if w is None else 0.5 + 0.75 * float(w)
+        raw = conf_mult * learn_mult
+        risk_mult = max(0.5, min(1.5, raw))
+        lev_mult = max(0.7, min(1.3, raw ** 0.5))
+        note = (f"alloc: convinzione x{conf_mult:.2f} · learning "
+                f"{'x%.2f' % learn_mult if w is not None else 'neutro (nessun dato)'}")
+        return risk_mult, lev_mult, note
+
+    # ------------------------------------------------------------------ #
     def weight_for(self, strategy: str, regime: Regime, baseline: bool = False) -> float:
         """
         Peso della strategia nel regime. Se `baseline` True (sleeve baseline),

@@ -19,7 +19,8 @@ from bot.config import settings
 
 
 def locked_stop(entry: float, target: float, long: bool,
-                best_favorable_price: float, base_stop: float) -> float:
+                best_favorable_price: float, base_stop: float,
+                keep: float | None = None) -> float:
     """
     Ritorna lo stop EFFETTIVO data la migliore escursione favorevole vista finora.
     Se il profit-lock non è armato (o disattivato) ritorna lo stop base invariato.
@@ -27,6 +28,10 @@ def locked_stop(entry: float, target: float, long: bool,
     `best_favorable_price` è il prezzo più favorevole raggiunto FINORA (il massimo
     per un long, il minimo per uno short), escludendo la barra corrente per evitare
     look-ahead nel backtest.
+
+    `keep`: frazione del miglior guadagno da bloccare. None -> default globale
+    (PROFIT_LOCK_KEEP, il valore VALIDATO dal gate). Il bot live puo' passare il
+    valore IMPARATO per-strategia dai verdetti trailing (metrics.compute_trailing_keep).
     """
     if not settings.PROFIT_LOCK_ENABLED:
         return base_stop
@@ -36,7 +41,7 @@ def locked_stop(entry: float, target: float, long: bool,
     fav_move = (best_favorable_price - entry) if long else (entry - best_favorable_price)
     if fav_move <= 0 or fav_move < settings.PROFIT_LOCK_TRIGGER * tp_dist:
         return base_stop  # non ancora armato
-    lock = settings.PROFIT_LOCK_KEEP * fav_move
+    lock = (settings.PROFIT_LOCK_KEEP if keep is None else keep) * fav_move
     locked = entry + lock if long else entry - lock
     # lo stop può solo migliorare: sale per i long, scende per gli short
     return max(base_stop, locked) if long else min(base_stop, locked)

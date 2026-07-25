@@ -122,6 +122,54 @@ def confidence_outcome_correlation(trades: list[dict]) -> float | None:
     return num / (dx * dy)
 
 
+# limiti dell'adattamento trailing: il lock resta VICINO al 0.5 validato dal gate
+# (deviazione deliberata, guidata dai verdetti B1, mai oltre questi bordi).
+TRAILING_KEEP_MIN = 0.35
+TRAILING_KEEP_MAX = 0.65
+TRAILING_MIN_SAMPLE = 8      # sotto questo campione: NESSUN adattamento (niente dati, niente decisioni)
+
+
+def compute_trailing_keep(trades: list[dict]) -> dict[str, float]:
+    """PROFIT_LOCK_KEEP per-strategia imparato dai VERDETTI trailing del paper (B1).
+
+    Il verdetto dice se il trailing ha tagliato un vincitore ('premature') o evitato
+    una perdita ('protected'); knockout_atr dice se il ritracciamento che ci ha
+    buttato fuori era RUMORE (<1 ATR) o inversione vera.
+      * tanti premature DA RUMORE  -> keep piu' BASSO (lock piu' largo: il rumore
+        non ci butta fuori, i protected veri scattano comunque);
+      * tanti protected            -> keep piu' ALTO (il lock sta lavorando: stringi).
+    Gradualita' col campione (piena forza a ~24 verdetti), bordi [0.35, 0.65]
+    attorno al 0.5 validato, solo trade del timeframe corrente. Nessun campione
+    sufficiente -> strategia ASSENTE dalla mappa -> si usa il default globale."""
+    tf = settings.ORCHESTRATOR_TIMEFRAME
+    by: dict[str, list[int]] = defaultdict(lambda: [0, 0, 0])   # prem, prot, prem_da_rumore
+    for t in trades:
+        if t.get("timeframe") != tf or t.get("exit_reason") != "trailing_stop":
+            continue
+        s = t.get("strategy", "?")
+        v = t.get("trailing_verdict")
+        if v == "premature":
+            by[s][0] += 1
+            ko = t.get("trailing_knockout_atr")
+            if ko is not None and ko < 1.0:
+                by[s][2] += 1
+        elif v == "protected":
+            by[s][1] += 1
+    base = settings.PROFIT_LOCK_KEEP
+    out: dict[str, float] = {}
+    for s, (prem, prot, noise) in by.items():
+        n = prem + prot
+        if n < TRAILING_MIN_SAMPLE:
+            continue
+        prem_ratio = prem / n
+        strength = min(1.0, n / 24.0)
+        delta = (0.5 - prem_ratio) * 0.3 * strength   # prem>50% -> allenta; prot>50% -> stringe
+        if delta < 0 and prem and (noise / prem) < 0.5:
+            delta *= 0.5   # prematuri NON da rumore: allentare aiuterebbe poco -> mezzo passo
+        out[s] = round(max(TRAILING_KEEP_MIN, min(TRAILING_KEEP_MAX, base + delta)), 3)
+    return out
+
+
 def _winrate_to_weight(wr: float) -> float:
     if wr <= WEIGHT_WINRATE_LOW:
         return 0.0
