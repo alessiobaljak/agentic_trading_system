@@ -77,6 +77,23 @@ def test_prior_above_ramp_one_loss_is_gentle():
     assert w.weight <= 0.05, w.weight
 
 
+def test_manual_and_external_exits_excluded_from_weights():
+    # le uscite NON decise dalla strategia (manuale/kill/circuit) NON devono
+    # influenzare il peso: sono interventi esterni, non l'edge della strategia.
+    def t(strategy, pnl, reason):
+        d = _trade(strategy, "sideways", pnl)
+        d["exit_reason"] = reason
+        return d
+    # 6 perdite reali (stop_loss) -> peso basso; + 6 "vittorie" MANUALI ignorate
+    trades = [t("breakout", -5, "stop_loss") for _ in range(6)]
+    trades += [t("breakout", 10, "manual") for _ in range(6)]
+    trades += [t("breakout", 10, "kill_switch") for _ in range(3)]
+    w = next(x for x in metrics.compute_weights(trades) if x.strategy == "breakout")
+    assert w.sample_size == 6            # solo le 6 uscite decise dalla strategia
+    assert w.win_rate == 0.0             # le vittorie manuali NON la salvano
+    assert w.weight < 0.3
+
+
 def test_allocation_neutral_without_data_scaled_with_data():
     # SENZA pesi appresi: learning NEUTRO (nessuna deviazione senza dati); la sola
     # convinzione muove poco. CON dati: peso alto -> boost, peso basso -> taglio.

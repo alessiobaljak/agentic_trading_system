@@ -28,6 +28,18 @@ def _is_win(t: dict) -> bool:
     return bool(t.get("is_win", t.get("pnl", 0) > 0))
 
 
+# Uscite NON decise dalla strategia: interventi ESTERNI (utente / sistema). Il loro
+# esito non descrive l'edge della strategia -> escluse dal learning che ne giudica
+# la performance (restano comunque nell'equity e nello storico).
+_EXTERNAL_EXITS = {"manual", "kill_switch", "circuit_breaker"}
+
+
+def _strategy_determined(t: dict) -> bool:
+    """True se l'uscita e' stata decisa dalla LOGICA (TP/SL/trailing/time-exit) e non
+    da un intervento esterno (chiusura manuale, kill switch, circuit breaker)."""
+    return t.get("exit_reason") not in _EXTERNAL_EXITS
+
+
 def win_rate(trades: Iterable[dict]) -> float:
     trades = list(trades)
     if not trades:
@@ -197,7 +209,7 @@ def compute_weights(trades: list[dict]) -> list[StrategyRegimeWeight]:
     # storici senza campo timeframe ("" o assente) sono esclusi: al cambio di
     # timeframe il learning riparte dal prior invece che avvelenato dal passato.
     tf = settings.ORCHESTRATOR_TIMEFRAME
-    trades = [t for t in trades if t.get("timeframe") == tf]
+    trades = [t for t in trades if t.get("timeframe") == tf and _strategy_determined(t)]
 
     groups: dict[tuple[str, str], list[dict]] = defaultdict(list)
     for t in trades:
