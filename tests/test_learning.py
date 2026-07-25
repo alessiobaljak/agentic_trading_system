@@ -129,6 +129,7 @@ def test_allocation_respects_hard_caps_in_risk_manager():
     p = rm.resolve_effective_params(dec, user, asset, 10_000, volatility_sigma=0.0,
                                     risk_mult=1.5, lev_mult=1.3, alloc_note="test")
     assert p.leverage <= hard_limits.MAX_LEVERAGE            # 4*1.3=5.2 -> clampata a 5
+    assert p.leverage == int(p.leverage) and p.leverage >= 1  # leva INTERA (Binance)
     assert p.risk_per_trade <= hard_limits.MAX_RISK_PER_TRADE  # 2.5%*1.5=3.75% -> 3%
     # e il taglio da learning riduce davvero
     p_lo = rm.resolve_effective_params(dec, user, asset, 10_000, volatility_sigma=0.0,

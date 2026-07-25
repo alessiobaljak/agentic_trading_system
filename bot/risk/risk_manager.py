@@ -81,6 +81,10 @@ class RiskManager:
 
         # === precedenza: il valore più conservativo (minimo) ===
         eff_lev = min(alloc_lev, sys_lev_cap, hard_limits.MAX_LEVERAGE)
+        # la leva sui futures e' un INTERO: Binance non accetta 2.02x. Arrotondo
+        # (>=1) -> la leva dinamica si muove a gradini puliti (1x/2x/3x per
+        # convinzione+learning), niente code decimali, e resta valida per l'ordine reale.
+        eff_lev = float(max(1, min(round(eff_lev), int(hard_limits.MAX_LEVERAGE))))
         eff_risk = min(alloc_risk, sys_risk_cap, hard_limits.MAX_RISK_PER_TRADE)
 
         # il size_multiplier dell'orchestratore scala ulteriormente (<=1)
