@@ -5,9 +5,10 @@ import { collection, doc, limit, onSnapshot, orderBy, query } from 'firebase/fir
 import { getDb } from '../lib/firebase';
 
 /**
- * Catalogo strategie. Vista PRODUZIONE (default): solo le strategie che hanno
- * davvero tradato in paper, con la loro EQUITY CURVE reale (PnL cumulato) e i
- * risultati veri. Toggle per vedere anche tutte le validate (GATE 1).
+ * Catalogo strategie. Con 100+ coppie validate serve gestione: riepilogo in cima,
+ * ricerca, filtri (vista), ordinamento e paginazione (niente scroll infinito).
+ * Vista PRODUZIONE (default): solo strategie che hanno davvero tradato in paper,
+ * con equity curve reale. Toggle per vedere robuste operate o tutte le validate.
  */
 type PairRec = {
   symbol: string;
@@ -40,13 +41,12 @@ type Card = {
   avgPf: number;
   totTrades: number;
   validatedNow: boolean;
-  simProfit10k: number;   // profitto GATE 1 simulando 10k (media per coin), in $
-  bestProfit10k: number;  // miglior coin, in $
+  simProfit10k: number;
+  bestProfit10k: number;
 };
 
 const GATE_EQUITY = 10_000;
-// PnL economico GATE 1 su una equity di 10k: last_pnl_pct e' la somma dei rendimenti
-// per-trade OOS, coerente col motore (SimTrade.pnl = pnl_pct * 10k).
+const PAGE_SIZE = 24;
 const profit10k = (r: PairRec) => (r.last_pnl_pct ?? 0) * GATE_EQUITY;
 const fmtMoney = (v: number) => `${v >= 0 ? '+' : ''}$${Math.round(v).toLocaleString()}`;
 
@@ -103,7 +103,6 @@ function hashStr(s: string): number {
   return h >>> 0;
 }
 
-// equity curve REALE dal PnL cumulato dei trade in produzione
 function realSpark(points: Array<[number, number]>, w = 100, h = 44) {
   const ordered = [...points].sort((a, b) => a[0] - b[0]);
   const cum: number[] = [0];
@@ -121,15 +120,19 @@ function realSpark(points: Array<[number, number]>, w = 100, h = 44) {
   return { line, area: `${line} L ${w} ${h} L 0 ${h} Z`, positive: cum[cum.length - 1] >= 0 };
 }
 
-const fmtTrades = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : `${n}`);
+type SortKey = 'prod_pnl' | 'coins' | 'winrate' | 'trades' | 'bt';
+type View = 'prod' | 'robust' | 'all';
 
 export default function OptimizedStrategies() {
   const [reg, setReg] = useState<Reg | null>(null);
   const [specsDoc, setSpecsDoc] = useState<SpecsDoc | null>(null);
   const [prod, setProd] = useState<Record<string, Prod>>({});
-  const [view, setView] = useState<'prod' | 'all'>('prod');
+  const [view, setView] = useState<View>('prod');
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<SortKey>('prod_pnl');
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const [loaded, setLoaded] = useState(false);
-  const [openCard, setOpenCard] = useState<string | null>(null);   // dettaglio coppie aperto
+  const [openCard, setOpenCard] = useState<string | null>(null);
 
   useEffect(() => {
     const db = getDb();
@@ -169,6 +172,9 @@ export default function OptimizedStrategies() {
     };
   }, []);
 
+  // reset paginazione quando cambiano filtri/ordinamento/ricerca
+  useEffect(() => setVisible(PAGE_SIZE), [view, sort, search]);
+
   const cards = useMemo<Card[]>(() => {
     if (!reg) return [];
     let pairs: Record<string, PairRec> = {};
@@ -202,199 +208,277 @@ export default function OptimizedStrategies() {
         bestProfit10k: profits.length ? Math.max(...profits) : 0,
       });
     }
-    return out.sort((a, b) => b.coins.length - a.coins.length);
+    return out;
   }, [reg, specsDoc]);
 
-  // vista PRODUZIONE: strategie che hanno tradato E che sono ANCORA validate nel
-  // GATE 1 attuale. Le vecchie non più valide (era 1h / pre-reset / bootstrap) NON
-  // si mostrano: non sono operabili ora, sarebbero solo rumore.
   const prodCards = useMemo<Card[]>(() => {
     const byStrat = new Map(cards.map((c) => [c.strategy, c]));
     return Object.keys(prod)
       .filter((s) => (prod[s]?.n ?? 0) > 0 && byStrat.has(s))
-      .map((s) => byStrat.get(s)!)
-      .sort((a, b) => (prod[b.strategy].pnl ?? 0) - (prod[a.strategy].pnl ?? 0));
-  }, [cards, prod, specsDoc]);
+      .map((s) => byStrat.get(s)!);
+  }, [cards, prod]);
 
-  // Vista "Robuste (operate)": ESATTAMENTE ciò che il bot opera. Le strategie BASE
-  // devono essere validate su >= 3 coin (anti-fluke); le GENERATE (gen_*) sono
-  // coin-specifiche by design ed ESENTATE (come _robust_only nel bot).
   const MIN_COINS_ROBUST = 3;
-  const shown = view === 'prod'
-    ? prodCards
-    : cards.filter((c) => c.generated || c.coins.length >= MIN_COINS_ROBUST);
 
+  // riepilogo aggregato
+  const summary = useMemo(() => {
+    const base = cards.filter((c) => !c.generated).length;
+    const ai = cards.filter((c) => c.generated).length;
+    const pairs = (reg?.validated ?? []).length;
+    const prodTrades = Object.values(prod).reduce((s, p) => s + p.n, 0);
+    const prodPnl = Object.values(prod).reduce((s, p) => s + p.pnl, 0);
+    return { base, ai, pairs, prodTrades, prodPnl };
+  }, [cards, reg, prod]);
+
+  const sortFn = useMemo(() => {
+    const pnl = (c: Card) => prod[c.strategy]?.pnl ?? -Infinity;
+    const wr = (c: Card) => {
+      const p = prod[c.strategy];
+      return p && p.n ? p.wins / p.n : -1;
+    };
+    const tr = (c: Card) => prod[c.strategy]?.n ?? 0;
+    const cmp: Record<SortKey, (a: Card, b: Card) => number> = {
+      prod_pnl: (a, b) => pnl(b) - pnl(a),
+      coins: (a, b) => b.coins.length - a.coins.length,
+      winrate: (a, b) => wr(b) - wr(a),
+      trades: (a, b) => tr(b) - tr(a),
+      bt: (a, b) => b.simProfit10k - a.simProfit10k,
+    };
+    return cmp[sort];
+  }, [sort, prod]);
+
+  const filtered = useMemo(() => {
+    let list =
+      view === 'prod'
+        ? prodCards
+        : view === 'robust'
+          ? cards.filter((c) => c.generated || c.coins.length >= MIN_COINS_ROBUST)
+          : cards;
+    const q = search.trim().toLowerCase();
+    if (q) {
+      list = list.filter(
+        (c) =>
+          c.strategy.toLowerCase().includes(q) ||
+          c.coins.some((k) => k.symbol.toLowerCase().includes(q)),
+      );
+    }
+    return [...list].sort(sortFn);
+  }, [view, prodCards, cards, search, sortFn]);
+
+  const shown = filtered.slice(0, visible);
   const cov = reg?.coverage != null ? Math.round(reg.coverage * 100) : null;
-  const btn = (active: boolean): React.CSSProperties => ({
-    fontSize: 11,
-    padding: '3px 10px',
-    borderRadius: 6,
-    cursor: 'pointer',
-    border: '1px solid #28303d',
-    background: active ? '#1f2a44' : 'transparent',
-    color: active ? '#cfe0ff' : '#8b96a5',
-  });
 
   return (
     <div className="panel">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
         <h2 style={{ margin: 0 }}>Catalogo strategie</h2>
-        <div style={{ display: 'flex', gap: 6 }}>
-          <button style={btn(view === 'prod')} onClick={() => setView('prod')}>In produzione</button>
-          <button style={btn(view === 'all')} onClick={() => setView('all')}>Robuste (operate)</button>
-        </div>
+        {reg?.ready != null && (
+          <span className={`badge ${reg.ready ? 'green' : 'amber'}`}>
+            {reg.ready ? 'GATE 1 pronto' : 'GATE 1 in costruzione'}
+          </span>
+        )}
       </div>
       <p className="subtitle">
-        {view === 'prod'
-          ? 'Strategie ANCORA validate che hanno tradato in paper · grafico = equity curve reale'
-          : `Ciò che il bot opera: generate validate (3 pass) + base su ≥ ${MIN_COINS_ROBUST} coin`}
-        {cov != null ? ` · copertura ${reg?.coins_covered}/${reg?.universe_size} (${cov}%)` : ''}
+        Ciò che il bot può operare, validato dal backtest walk-forward
+        {cov != null ? ` · copertura ${reg?.coins_covered}/${reg?.universe_size} coin (${cov}%)` : ''}
       </p>
+
+      {/* riepilogo aggregato */}
+      <div className="stat-grid" style={{ marginBottom: 4 }}>
+        <div className="stat-tile accent">
+          <div className="stat-label">Coppie validate</div>
+          <div className="stat-value">{summary.pairs}</div>
+          <div className="stat-sub">strategia × coin (GATE 1)</div>
+        </div>
+        <div className="stat-tile">
+          <div className="stat-label">Strategie</div>
+          <div className="stat-value">{summary.base + summary.ai}</div>
+          <div className="stat-sub">{summary.base} base · {summary.ai} 🧠 AI</div>
+        </div>
+        <div className="stat-tile">
+          <div className="stat-label">In produzione</div>
+          <div className="stat-value">{prodCards.length}</div>
+          <div className="stat-sub">{summary.prodTrades} trade paper</div>
+        </div>
+        <div className={`stat-tile ${summary.prodPnl >= 0 ? 'good' : 'bad'}`}>
+          <div className="stat-label">PnL produzione</div>
+          <div className={`stat-value ${summary.prodPnl >= 0 ? 'pos' : 'neg'}`}>{fmtMoney(summary.prodPnl)}</div>
+          <div className="stat-sub">somma trade chiusi (500)</div>
+        </div>
+        {cov != null && (
+          <div className="stat-tile warnb">
+            <div className="stat-label">Copertura universo</div>
+            <div className="stat-value">{cov}%</div>
+            <div className="stat-sub">{reg?.coins_covered}/{reg?.universe_size} coin</div>
+          </div>
+        )}
+      </div>
+
+      {/* toolbar: ricerca + vista + ordinamento */}
+      <div className="toolbar">
+        <input
+          className="search"
+          type="text"
+          placeholder="Cerca strategia o coin…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <div className="seg" role="tablist" aria-label="vista">
+          <button className={view === 'prod' ? 'on' : ''} onClick={() => setView('prod')}>In produzione</button>
+          <button className={view === 'robust' ? 'on' : ''} onClick={() => setView('robust')}>Robuste operate</button>
+          <button className={view === 'all' ? 'on' : ''} onClick={() => setView('all')}>Tutte validate</button>
+        </div>
+        <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)} aria-label="ordina per">
+          <option value="prod_pnl">Ordina: PnL produzione</option>
+          <option value="winrate">Ordina: win rate</option>
+          <option value="trades">Ordina: n° trade</option>
+          <option value="coins">Ordina: n° coin</option>
+          <option value="bt">Ordina: profitto backtest</option>
+        </select>
+      </div>
+
       {!loaded ? (
         <p className="muted">Loading…</p>
-      ) : shown.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <p className="muted">
-          {view === 'prod'
-            ? 'Nessuna strategia ancora in produzione: i primi trade paper compariranno qui.'
-            : `Nessuna strategia robusta ancora (serve validazione su ≥ ${MIN_COINS_ROBUST} coin).`}
+          {search
+            ? `Nessuna strategia trovata per «${search}».`
+            : view === 'prod'
+              ? 'Nessuna strategia ancora in produzione: i primi trade paper compariranno qui.'
+              : 'Nessuna strategia in questa vista.'}
         </p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
-          {shown.map((c) => {
-            const gid = `g-${hashStr(c.strategy)}`;
-            const rob = robustness(c.coins.length);
-            const p = prod[c.strategy];
-            const curve = p && p.points.length ? realSpark(p.points) : null;
-            const stroke = curve ? (curve.positive ? '#3fb950' : '#f85149') : '#2a3340';
-            return (
-              <div key={c.strategy} style={{ border: '1px solid #28303d', borderRadius: 10, overflow: 'hidden', background: '#0e1420' }}>
-                {/* equity curve REALE (o piatta se nessun trade) */}
-                <svg viewBox="0 0 100 44" preserveAspectRatio="none" style={{ width: '100%', height: 70, display: 'block', background: '#0a0f18' }}>
-                  {curve ? (
-                    <>
-                      <defs>
-                        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor={stroke} stopOpacity="0.5" />
-                          <stop offset="100%" stopColor={stroke} stopOpacity="0" />
-                        </linearGradient>
-                      </defs>
-                      <path d={curve.area} fill={`url(#${gid})`} />
-                      <path d={curve.line} fill="none" stroke={stroke} strokeWidth="1.4" />
-                    </>
-                  ) : (
-                    <>
-                      <line x1="0" y1="36" x2="100" y2="36" stroke="#2a3340" strokeWidth="1" strokeDasharray="2 2" />
-                      <text x="50" y="24" fill="#5a6473" fontSize="6" textAnchor="middle">nessun trade ancora</text>
-                    </>
-                  )}
-                </svg>
-
-                <div style={{ padding: 10 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                    <strong style={{ fontSize: 13 }}>{c.strategy}</strong>
-                    <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: c.generated ? '#1f2a44' : '#23331f', color: c.generated ? '#8ab4ff' : '#8fd18f' }}>
-                      {c.generated ? '🧠 AI' : 'base'}
-                    </span>
-                    {c.validatedNow ? (
-                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: rob.bg, color: rob.color }}>{rob.label}</span>
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
+            {shown.map((c) => {
+              const gid = `g-${hashStr(c.strategy)}`;
+              const rob = robustness(c.coins.length);
+              const p = prod[c.strategy];
+              const curve = p && p.points.length ? realSpark(p.points) : null;
+              const stroke = curve ? (curve.positive ? '#3fb950' : '#f85149') : '#2a3340';
+              return (
+                <div key={c.strategy} style={{ border: '1px solid var(--border-soft)', borderRadius: 10, overflow: 'hidden', background: 'var(--bg-elev)' }}>
+                  <svg viewBox="0 0 100 44" preserveAspectRatio="none" style={{ width: '100%', height: 70, display: 'block', background: '#0a0f18' }}>
+                    {curve ? (
+                      <>
+                        <defs>
+                          <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={stroke} stopOpacity="0.5" />
+                            <stop offset="100%" stopColor={stroke} stopOpacity="0" />
+                          </linearGradient>
+                        </defs>
+                        <path d={curve.area} fill={`url(#${gid})`} />
+                        <path d={curve.line} fill="none" stroke={stroke} strokeWidth="1.4" />
+                      </>
                     ) : (
-                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: '#33261b', color: '#c98b4b' }}>storico · non validata ora</span>
+                      <>
+                        <line x1="0" y1="36" x2="100" y2="36" stroke="#2a3340" strokeWidth="1" strokeDasharray="2 2" />
+                        <text x="50" y="24" fill="#5a6473" fontSize="6" textAnchor="middle">nessun trade ancora</text>
+                      </>
+                    )}
+                  </svg>
+
+                  <div style={{ padding: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                      <strong style={{ fontSize: 13 }}>{c.strategy}</strong>
+                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: c.generated ? '#1f2a44' : '#23331f', color: c.generated ? '#8ab4ff' : '#8fd18f' }}>
+                        {c.generated ? '🧠 AI' : 'base'}
+                      </span>
+                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: rob.bg, color: rob.color }}>{rob.label}</span>
+                    </div>
+
+                    <p style={{ fontSize: 11.5, color: '#aeb7c4', margin: '6px 0 8px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: 48 }}>
+                      {c.desc}
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4, textAlign: 'center' }}>
+                      {[
+                        { l: 'PnL', v: p ? `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(0)}$` : '—', col: p ? (p.pnl >= 0 ? '#3fb950' : '#f85149') : '#7b8696' },
+                        { l: 'Win', v: p && p.n ? `${Math.round((p.wins / p.n) * 100)}%` : '—', col: '#cdd6e2' },
+                        { l: 'Trade', v: p ? `${p.n}` : '0', col: '#cdd6e2' },
+                        { l: 'PF bt', v: c.avgPf ? c.avgPf.toFixed(2) : '—', col: '#8b96a5' },
+                      ].map((k) => (
+                        <div key={k.l} style={{ background: '#121a28', borderRadius: 6, padding: '4px 2px' }}>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: k.col }}>{k.v}</div>
+                          <div style={{ fontSize: 9, color: '#7b8696' }}>{k.l}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {c.coins.length > 0 && (
+                      <div title="Rendimento di BACKTEST su $10k fissi per trade, SENZA leva e non composto: serve a confrontare/classificare le strategie, NON e' una previsione del PnL live." style={{
+                        marginTop: 8, padding: '6px 8px', borderRadius: 6,
+                        background: c.simProfit10k >= 0 ? '#11210f' : '#27120f',
+                        border: `1px solid ${c.simProfit10k >= 0 ? '#214d1d' : '#5a2620'}`,
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      }}>
+                        <div>
+                          <div style={{ fontSize: 14, fontWeight: 700, color: c.simProfit10k >= 0 ? '#3fb950' : '#f85149' }}>
+                            {fmtMoney(c.simProfit10k)}
+                          </div>
+                          <div style={{ fontSize: 9, color: '#7b8696' }}>backtest su $10k · media/coin · no leva</div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: 11, fontWeight: 600, color: '#8fd18f' }}>{fmtMoney(c.bestProfit10k)}</div>
+                          <div style={{ fontSize: 9, color: '#7b8696' }}>miglior coin</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {c.coins.length > 0 && (
+                      <>
+                        <button
+                          onClick={() => setOpenCard(openCard === c.strategy ? null : c.strategy)}
+                          style={{
+                            marginTop: 8, width: '100%', textAlign: 'left', cursor: 'pointer',
+                            background: 'transparent', border: 'none', color: '#8b96a5', fontSize: 10, padding: 0,
+                          }}
+                        >
+                          {openCard === c.strategy ? '▾' : '▸'} dettaglio per coppia ({c.coins.length})
+                        </button>
+                        {openCard === c.strategy && (
+                          <div style={{ marginTop: 6, maxHeight: 168, overflowY: 'auto' }}>
+                            {c.coins.map((coin) => {
+                              const prof = profit10k(coin);
+                              return (
+                                <div key={coin.symbol} style={{
+                                  display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: 6,
+                                  alignItems: 'center', padding: '3px 4px', fontSize: 10,
+                                  borderBottom: '1px solid #1a2230',
+                                }}>
+                                  <span style={{ color: '#cdd6e2', fontWeight: 600 }}>{coin.symbol.replace('USDT', '')}</span>
+                                  <span style={{ color: prof >= 0 ? '#3fb950' : '#f85149', fontWeight: 700, textAlign: 'right', minWidth: 56 }}>
+                                    {fmtMoney(prof)}
+                                  </span>
+                                  <span style={{ color: '#7b8696', textAlign: 'right' }} title="profit factor">
+                                    pf {coin.last_pf != null ? coin.last_pf.toFixed(2) : '—'}
+                                  </span>
+                                  <span style={{ color: '#7b8696', textAlign: 'right' }} title="win-rate · trade">
+                                    {coin.last_win_rate != null ? `${Math.round(coin.last_win_rate * 100)}%` : '—'}
+                                    {coin.last_trades != null ? `·${coin.last_trades}` : ''}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
-
-                  <p style={{ fontSize: 11.5, color: '#aeb7c4', margin: '6px 0 8px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: 48 }}>
-                    {c.desc}
-                  </p>
-
-                  {/* PRODUZIONE: i risultati reali in primo piano */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4, textAlign: 'center' }}>
-                    {[
-                      { l: 'PnL', v: p ? `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(0)}$` : '—', col: p ? (p.pnl >= 0 ? '#3fb950' : '#f85149') : '#7b8696' },
-                      { l: 'Win', v: p && p.n ? `${Math.round((p.wins / p.n) * 100)}%` : '—', col: '#cdd6e2' },
-                      { l: 'Trade', v: p ? `${p.n}` : '0', col: '#cdd6e2' },
-                      { l: 'PF bt', v: c.avgPf ? c.avgPf.toFixed(2) : '—', col: '#8b96a5' },
-                    ].map((k) => (
-                      <div key={k.l} style={{ background: '#121a28', borderRadius: 6, padding: '4px 2px' }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: k.col }}>{k.v}</div>
-                        <div style={{ fontSize: 9, color: '#7b8696' }}>{k.l}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* GATE 1: profitto economico simulando 10k di equity di partenza */}
-                  {c.validatedNow && c.coins.length > 0 && (
-                    <div title="Rendimento di BACKTEST su $10k fissi per trade, SENZA leva e non composto: serve a confrontare/classificare le strategie, NON e' una previsione del PnL live (che usa leva e sizing del rischio diversi)." style={{
-                      marginTop: 8, padding: '6px 8px', borderRadius: 6,
-                      background: c.simProfit10k >= 0 ? '#11210f' : '#27120f',
-                      border: `1px solid ${c.simProfit10k >= 0 ? '#214d1d' : '#5a2620'}`,
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                    }}>
-                      <div>
-                        <div style={{ fontSize: 14, fontWeight: 700, color: c.simProfit10k >= 0 ? '#3fb950' : '#f85149' }}>
-                          {fmtMoney(c.simProfit10k)}
-                        </div>
-                        <div style={{ fontSize: 9, color: '#7b8696' }}>backtest su $10k · media/coin · no leva</div>
-                      </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: 11, fontWeight: 600, color: '#8fd18f' }}>{fmtMoney(c.bestProfit10k)}</div>
-                        <div style={{ fontSize: 9, color: '#7b8696' }}>miglior coin</div>
-                      </div>
-                    </div>
-                  )}
-
-                  {c.validatedNow && c.coins.length > 0 ? (
-                    <>
-                      <button
-                        onClick={() => setOpenCard(openCard === c.strategy ? null : c.strategy)}
-                        style={{
-                          marginTop: 8, width: '100%', textAlign: 'left', cursor: 'pointer',
-                          background: 'transparent', border: 'none', color: '#8b96a5', fontSize: 10,
-                          padding: 0,
-                        }}
-                      >
-                        {openCard === c.strategy ? '▾' : '▸'} dettaglio per coppia ({c.coins.length})
-                      </button>
-                      {openCard === c.strategy && (
-                        <div style={{ marginTop: 6, maxHeight: 168, overflowY: 'auto' }}>
-                          {/* profitto economico su 10k PER OGNI COPPIA (strategia × coin) */}
-                          {c.coins.map((coin) => {
-                            const prof = profit10k(coin);
-                            return (
-                              <div key={coin.symbol} style={{
-                                display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: 6,
-                                alignItems: 'center', padding: '3px 4px', fontSize: 10,
-                                borderBottom: '1px solid #1a2230',
-                              }}>
-                                <span style={{ color: '#cdd6e2', fontWeight: 600 }}>{coin.symbol.replace('USDT', '')}</span>
-                                <span style={{ color: prof >= 0 ? '#3fb950' : '#f85149', fontWeight: 700, textAlign: 'right', minWidth: 56 }}>
-                                  {fmtMoney(prof)}
-                                </span>
-                                <span style={{ color: '#7b8696', textAlign: 'right' }} title="profit factor">
-                                  pf {coin.last_pf != null ? coin.last_pf.toFixed(2) : '—'}
-                                </span>
-                                <span style={{ color: '#7b8696', textAlign: 'right' }} title="win-rate · trade">
-                                  {coin.last_win_rate != null ? `${Math.round(coin.last_win_rate * 100)}%` : '—'}
-                                  {coin.last_trades != null ? `·${coin.last_trades}` : ''}
-                                </span>
-                              </div>
-                            );
-                          })}
-                          <div style={{ fontSize: 9, color: '#5a6473', marginTop: 4 }}>
-                            $ = profitto GATE 1 su $10k · pf = profit factor · % = win-rate · n = trade
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div style={{ fontSize: 10, color: '#7b8696', marginTop: 8 }}>
-                      Non più nel GATE 1 · qui resta lo storico reale in produzione
-                    </div>
-                  )}
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+
+          <div className="pager">
+            <span>{shown.length} di {filtered.length} strategie</span>
+            {visible < filtered.length && (
+              <button className="btn" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
+                Carica altre {Math.min(PAGE_SIZE, filtered.length - visible)}
+              </button>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

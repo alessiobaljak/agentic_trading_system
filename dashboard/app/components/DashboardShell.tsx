@@ -17,8 +17,10 @@ import Insights from './Insights';
 import RiskControl from './RiskControl';
 import KillSwitch from './KillSwitch';
 import TopVitals from './TopVitals';
+import LearningSummary from './LearningSummary';
 
-type TabId = 'panoramica' | 'operativita' | 'apprendimento' | 'strategie' | 'rischio';
+type TabId = 'panoramica' | 'operativita' | 'apprendimento' | 'strategie' | 'impostazioni';
+type NavId = Exclude<TabId, 'impostazioni'>;
 
 /* --- icone (inline SVG, stroke = currentColor) ---------------------------- */
 function Icon({ id }: { id: TabId }) {
@@ -31,11 +33,7 @@ function Icon({ id }: { id: TabId }) {
         <rect x="3" y="14" width="7" height="7" rx="1.5" />
       </>
     ),
-    operativita: (
-      <>
-        <path d="M3 12h4l3 7 4-14 3 7h4" />
-      </>
-    ),
+    operativita: <path d="M3 12h4l3 7 4-14 3 7h4" />,
     apprendimento: (
       <>
         <path d="M12 3l9 5-9 5-9-5 9-5z" />
@@ -50,9 +48,10 @@ function Icon({ id }: { id: TabId }) {
         <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
       </>
     ),
-    rischio: (
+    impostazioni: (
       <>
-        <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
       </>
     ),
   };
@@ -72,46 +71,44 @@ function Icon({ id }: { id: TabId }) {
   );
 }
 
-const TABS: { id: TabId; label: string; title: string; intro: string }[] = [
-  {
-    id: 'panoramica',
+const META: Record<TabId, { label: string; title: string; intro: string }> = {
+  panoramica: {
     label: 'Panoramica',
     title: 'Panoramica',
     intro: 'Stato del bot, equity mark-to-market, ultima decisione e curva di equity.',
   },
-  {
-    id: 'operativita',
+  operativita: {
     label: 'Operatività',
     title: 'Operatività',
     intro: 'Posizioni aperte e trade chiusi (con verdetto sul trailing).',
   },
-  {
-    id: 'apprendimento',
+  apprendimento: {
     label: 'Apprendimento',
     title: 'Apprendimento',
-    intro: 'Pesi strategia × regime, heatmap e insight del learning.',
+    intro: 'Cosa sta imparando il bot: pesi strategia × regime, trailing adattivo e diario.',
   },
-  {
-    id: 'strategie',
+  strategie: {
     label: 'Strategie',
     title: 'Strategie · GATE 1',
-    intro: 'Registro delle coppie validate dal backtest walk-forward.',
+    intro: 'Catalogo delle strategie validate dal backtest walk-forward.',
   },
-  {
-    id: 'rischio',
-    label: 'Rischio',
-    title: 'Rischio',
-    intro: 'Parametri di rischio e kill switch di emergenza.',
+  impostazioni: {
+    label: 'Impostazioni',
+    title: 'Impostazioni · Rischio',
+    intro: 'Parametri di leva e rischio, entro i cap di sicurezza applicati dal bot.',
   },
-];
+};
+
+const NAV: NavId[] = ['panoramica', 'operativita', 'apprendimento', 'strategie'];
 
 function isTab(v: string): v is TabId {
-  return TABS.some((t) => t.id === v);
+  return v in META;
 }
 
 export default function DashboardShell() {
   const [tab, setTab] = useState<TabId>('panoramica');
   const [user, setUser] = useState<User | null>(null);
+  const [collapsed, setCollapsed] = useState(false);
 
   // deep-link + persistenza al refresh via hash (#operativita)
   useEffect(() => {
@@ -122,6 +119,15 @@ export default function DashboardShell() {
     sync();
     window.addEventListener('hashchange', sync);
     return () => window.removeEventListener('hashchange', sync);
+  }, []);
+
+  // preferenza sidebar compressa
+  useEffect(() => {
+    try {
+      setCollapsed(localStorage.getItem('sidebar_collapsed') === '1');
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   useEffect(() => {
@@ -138,43 +144,74 @@ export default function DashboardShell() {
     if (typeof window !== 'undefined') window.location.hash = id;
   };
 
-  const current = useMemo(() => TABS.find((t) => t.id === tab) ?? TABS[0], [tab]);
+  const toggleCollapse = () => {
+    setCollapsed((c) => {
+      const next = !c;
+      try {
+        localStorage.setItem('sidebar_collapsed', next ? '1' : '0');
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
+
+  const current = useMemo(() => META[tab], [tab]);
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
+      <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-brand">
           <span className="logo" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 15c3 0 3-6 6-6s3 6 6 6 3-4 6-4" />
             </svg>
           </span>
-          <span>
+          <span className="brand-text">
             Agentic Trading
             <span className="brand-sub">crypto futures · autonomo</span>
           </span>
         </div>
 
+        <button className="sidebar-toggle" onClick={toggleCollapse} title={collapsed ? 'Espandi' : 'Comprimi'} aria-label="comprimi/espandi menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: collapsed ? 'rotate(180deg)' : 'none' }}>
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          <span className="toggle-label">Comprimi</span>
+        </button>
+
         <div className="nav-section-label">Navigazione</div>
         <nav className="sidebar-nav" role="tablist">
-          {TABS.map((t) => (
+          {NAV.map((id) => (
             <button
-              key={t.id}
+              key={id}
               role="tab"
-              aria-selected={tab === t.id}
-              className={`nav-item ${tab === t.id ? 'active' : ''}`}
-              onClick={() => select(t.id)}
+              aria-selected={tab === id}
+              title={META[id].label}
+              className={`nav-item ${tab === id ? 'active' : ''}`}
+              onClick={() => select(id)}
             >
-              <Icon id={t.id} />
-              {t.label}
+              <Icon id={id} />
+              <span className="nav-label">{META[id].label}</span>
             </button>
           ))}
         </nav>
 
         <div className="sidebar-footer">
-          <span className="dry-pill">
+          <button
+            role="tab"
+            aria-selected={tab === 'impostazioni'}
+            title="Impostazioni"
+            className={`nav-item ${tab === 'impostazioni' ? 'active' : ''}`}
+            onClick={() => select('impostazioni')}
+          >
+            <Icon id="impostazioni" />
+            <span className="nav-label">Impostazioni</span>
+          </button>
+
+          <span className="dry-pill" title="Paper trading (DRY_RUN)">
             <span className="dot" style={{ background: 'var(--amber)' }} />
-            DRY_RUN · paper
+            <span className="dry-text">DRY_RUN · paper</span>
           </span>
           {user && (
             <>
@@ -186,7 +223,8 @@ export default function DashboardShell() {
                 className="btn btn-ghost"
                 style={{ padding: '6px 12px', fontSize: 12 }}
               >
-                Esci
+                <span className="nav-label">Esci</span>
+                <span aria-hidden="true" style={{ display: collapsed ? 'inline' : 'none' }}>⎋</span>
               </button>
             </>
           )}
@@ -199,7 +237,10 @@ export default function DashboardShell() {
             <div className="page-title">{current.title}</div>
             <span className="page-sub">{current.intro}</span>
           </div>
-          <TopVitals />
+          <div className="top-vitals">
+            <TopVitals />
+            <KillSwitch variant="button" />
+          </div>
         </header>
 
         <div className="grid" key={tab} style={{ marginTop: 16 }}>
@@ -222,6 +263,7 @@ export default function DashboardShell() {
 
           {tab === 'apprendimento' && (
             <>
+              <LearningSummary />
               <div className="grid grid-2">
                 <StrategyWeights />
                 <Heatmap />
@@ -233,11 +275,11 @@ export default function DashboardShell() {
 
           {tab === 'strategie' && <OptimizedStrategies />}
 
-          {tab === 'rischio' && (
-            <div className="grid grid-2">
+          {tab === 'impostazioni' && (
+            <>
               <RiskControl />
               <KillSwitch />
-            </div>
+            </>
           )}
         </div>
       </main>

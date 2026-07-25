@@ -27,14 +27,15 @@ export default function Insights() {
     return () => unsub();
   }, []);
 
+  // Diario del learning: mostrato SOLO quando ci sono voci (scelta UX).
+  if (loaded && items.length === 0) return null;
+
   return (
     <div className="panel">
-      <h2>Weekly Insights</h2>
-      <p className="subtitle">Auto-generated learning narratives, newest first</p>
+      <h2>Diario del learning</h2>
+      <p className="subtitle">Narrative settimanali generate dal loop di apprendimento, dalla più recente</p>
       {!loaded ? (
         <p className="muted">Loading…</p>
-      ) : items.length === 0 ? (
-        <p className="muted">No insights published yet.</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {items.map((it, i) => {
