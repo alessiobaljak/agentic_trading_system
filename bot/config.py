@@ -164,17 +164,19 @@ class Settings:
 
     # ---- SCALE-OUT su multipli di R (TP scaglionati) ----
     # Chiude la posizione a fette a livelli di profitto multipli di R (R = distanza
-    # entry->stop base). Es. default: 50% a 1R, 30% a 2R, 20% a 3R (finale).
-    # Appena scatta il PRIMO TP, lo stop del residuo va a BREAK-EVEN (entry): da lì
-    # il trade è netto positivo anche se inverte, e il residuo corre fino al TP
-    # finale protetto dal profit-lock. DISATTIVO di default: va prima ri-validato
-    # nel GATE 1 (parità engine<->paper) e confrontato col modello attuale.
+    # entry->stop base). Default VINCENTE dall'A/B (scripts/ab_scale_out.py, 2 seed,
+    # fino a 377 coppie): 30% a 1.5R, 30% a 3R, 40% a 5R (finale). Meno aggressivo
+    # del 50/30/20 a 1/2/3 (che cappava i vincitori): lasciare correre il 40% fino a
+    # 5R alza PF, ritorno OOS e n. coppie profittevoli (win-rate piu' basso ma
+    # expectancy migliore). Appena scatta il PRIMO TP lo stop del residuo va a
+    # BREAK-EVEN (entry). DISATTIVO di default: si attiva SOLO dopo la ri-validazione
+    # completa del GATE 1 sotto questo modello (parita' engine<->paper).
     SCALE_OUT_ENABLED: bool = os.getenv("SCALE_OUT_ENABLED", "false").lower() == "true"
     SCALE_OUT_R_MULTIPLES: list[float] = tuple(
-        float(x) for x in os.getenv("SCALE_OUT_R_MULTIPLES", "1,2,3").split(",") if x.strip()
+        float(x) for x in os.getenv("SCALE_OUT_R_MULTIPLES", "1.5,3,5").split(",") if x.strip()
     )
     SCALE_OUT_FRACTIONS: list[float] = tuple(
-        float(x) for x in os.getenv("SCALE_OUT_FRACTIONS", "0.5,0.3,0.2").split(",") if x.strip()
+        float(x) for x in os.getenv("SCALE_OUT_FRACTIONS", "0.3,0.3,0.4").split(",") if x.strip()
     )
     SCALE_OUT_SL_TO_BREAKEVEN: bool = os.getenv("SCALE_OUT_SL_TO_BREAKEVEN", "true").lower() == "true"
 

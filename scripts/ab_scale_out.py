@@ -192,7 +192,11 @@ def main() -> int:
     report.append("[A] BASELINE (TP unico)")
     report.append(_fmt(base))
     report.append("")
-    report.append("[B] SCALE-OUT (50% 1R / 30% 2R / 20% 3R + break-even dopo TP1)")
+    scale_label = "[B] SCALE-OUT (" + " / ".join(
+        f"{int(round(f*100))}% a {m:g}R"
+        for m, f in zip(settings.SCALE_OUT_R_MULTIPLES, settings.SCALE_OUT_FRACTIONS)
+    ) + " + break-even dopo TP1)"
+    report.append(scale_label)
     report.append(_fmt(test))
     report.append("")
     report.append("DELTA (B - A)  [meglio se ▲]")
