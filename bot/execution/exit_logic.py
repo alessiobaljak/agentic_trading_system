@@ -47,6 +47,44 @@ def locked_stop(entry: float, target: float, long: bool,
     return max(base_stop, locked) if long else min(base_stop, locked)
 
 
+def scale_ladder(entry: float, base_stop: float, long: bool,
+                 r_mults=None, fracs=None) -> list[tuple[float, float]]:
+    """Scala di take-profit a MULTIPLI di R (R = |entry - base_stop|).
+
+    Ritorna [(price, fraction), ...] in ordine di R crescente. L'ultimo livello è
+    il TP FINALE. Vuota se R<=0 o scale-out disattivo. CONDIVISA tra backtest e
+    live per garantire la parità GATE 1 <-> paper.
+    """
+    r_mults = settings.SCALE_OUT_R_MULTIPLES if r_mults is None else r_mults
+    fracs = settings.SCALE_OUT_FRACTIONS if fracs is None else fracs
+    R = abs(entry - base_stop)
+    if R <= 0 or not r_mults:
+        return []
+    out: list[tuple[float, float]] = []
+    for m, f in zip(r_mults, fracs):
+        price = entry + m * R if long else entry - m * R
+        out.append((price, f))
+    return out
+
+
+def scale_fills(ladder, stage: int, long: bool, hi: float, lo: float):
+    """Quante fette della scala si riempiono nel range [lo, hi] a partire da `stage`.
+
+    Ritorna (new_stage, fills) con fills = [(price, fraction), ...] nell'ordine.
+    Per il live basta passare hi=lo=mark. I livelli si riempiono in sequenza: un
+    livello superiore non può riempirsi prima di quello inferiore.
+    """
+    fills: list[tuple[float, float]] = []
+    while stage < len(ladder):
+        price, frac = ladder[stage]
+        reached = (hi >= price) if long else (lo <= price)
+        if not reached:
+            break
+        fills.append((price, frac))
+        stage += 1
+    return stage, fills
+
+
 def trailing_verdict(candles, stop: float, target: float, long: bool) -> str:
     """Controfattuale su un'uscita TRAILING: se avessimo TENUTO (stop base + TP),
     cosa sarebbe arrivato PRIMA scorrendo le candele DALL'uscita in avanti?

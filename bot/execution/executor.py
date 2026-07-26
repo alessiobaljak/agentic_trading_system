@@ -31,7 +31,7 @@ from bot.core.firebase_client import get_firebase
 from bot.core.models import (
     AssetSnapshot, ClosedTrade, Direction, EffectiveRiskParams, ExitReason, Regime,
 )
-from bot.execution.exit_logic import locked_stop
+from bot.execution.exit_logic import locked_stop, scale_ladder, scale_fills
 
 
 @dataclass
@@ -61,10 +61,16 @@ class Position:
     high_water: float = 0.0          # miglior prezzo a favore visto
     atr: float = 0.0
     remaining_qty: float = 0.0
+    # scale-out (TP scaglionati su R): livello raggiunto, PnL lordo gia' realizzato
+    # dalle fette chiuse, e stop base ORIGINALE (per calcolare R anche dopo il BE)
+    scale_stage: int = 0
+    realized_gross: float = 0.0
+    orig_stop: float = 0.0
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
         self.high_water = self.entry_price
+        self.orig_stop = self.stop_price
 
 
 class ExecutionEngine:
@@ -192,6 +198,47 @@ class ExecutionEngine:
         # `keep` per-strategia: IMPARATO dai verdetti trailing del paper (B1/B2);
         # assente dalla mappa (pochi dati) -> default globale validato dal gate.
         pos.high_water = max(pos.high_water, mark_price) if long else min(pos.high_water, mark_price)
+        keep = self.trailing_keep.get(pos.strategy)
+
+        # SCALE-OUT su multipli di R (se attivo): scala di TP + break-even dopo il
+        # primo TP. Vuota -> percorso classico a TP unico (sotto). R usa lo stop
+        # ORIGINALE (orig_stop), non quello spostato a break-even.
+        ladder = scale_ladder(pos.entry_price, pos.orig_stop, long) if settings.SCALE_OUT_ENABLED else []
+        if ladder:
+            final_target = ladder[-1][0]
+            eff_stop = locked_stop(pos.entry_price, final_target, long, pos.high_water,
+                                   pos.stop_price, keep=keep)
+            pos.trailing_active = eff_stop != pos.orig_stop
+
+            # 1) stop del RESIDUO (dopo il primo TP pos.stop_price = entry = break-even)
+            hit_sl = (mark_price <= eff_stop) if long else (mark_price >= eff_stop)
+            if hit_sl:
+                reason = ExitReason.TRAILING_STOP if (pos.scaled_out or pos.trailing_active) else ExitReason.STOP_LOSS
+                return self._close(pos, eff_stop, reason)
+
+            # 2) fette di TP raggiunte
+            new_stage, fills = scale_fills(ladder, pos.scale_stage, long, mark_price, mark_price)
+            if fills:
+                reached_final = new_stage >= len(ladder)
+                partials = fills[:-1] if reached_final else fills
+                for price, frac in partials:
+                    self._partial_close(pos, price, pos.quantity * frac)
+                pos.scale_stage = new_stage
+                if settings.SCALE_OUT_SL_TO_BREAKEVEN:
+                    pos.stop_price = pos.entry_price   # break-even sul residuo
+                if reached_final:
+                    last_price = fills[-1][0]
+                    return self._close(pos, last_price, ExitReason.TAKE_PROFIT)
+
+            # 3) uscita a fine orizzonte
+            held_h = (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0
+            if held_h >= self.max_hold_hours:
+                return self._close(pos, mark_price, ExitReason.TIME_EXIT)
+
+            self._write_position_state(pos, mark_price)
+            return None
+
+        # --- percorso classico: TP unico pieno (identico al backtest) ---
         eff_stop = locked_stop(pos.entry_price, pos.take_profit_price, long,
                                pos.high_water, pos.stop_price,
                                keep=self.trailing_keep.get(pos.strategy))
@@ -217,13 +264,23 @@ class ExecutionEngine:
         self._write_position_state(pos, mark_price)
         return None
 
-    def _partial_close(self, pos: Position, price: float, fraction: float) -> None:
-        qty = pos.remaining_qty * fraction
+    def _partial_close(self, pos: Position, price: float, qty: float) -> None:
+        """Chiude una FETTA (qty assoluta) della posizione al prezzo dato e accumula
+        il PnL lordo realizzato. Il residuo continua a correre. La contabilita' del
+        PnL finale (fette + residuo, netto costi) e' in _build_closed_trade."""
+        qty = min(qty, pos.remaining_qty)
+        if qty <= 0:
+            return
+        long = pos.direction == Direction.LONG
+        gross_unit = (price - pos.entry_price) if long else (pos.entry_price - price)
+        pos.realized_gross += gross_unit * qty
         pos.remaining_qty -= qty
+        pos.scaled_out = True
         if self.dry_run:
-            print(f"[DRY_RUN] SCALE-OUT {fraction:.0%} {pos.symbol} @ {price}")
+            print(f"[DRY_RUN] SCALE-OUT {qty:.4f} {pos.symbol} @ {price} "
+                  f"(residuo {pos.remaining_qty:.4f})")
         elif self._client:
-            side = "SELL" if pos.direction == Direction.LONG else "BUY"
+            side = "SELL" if long else "BUY"
             try:
                 self._client.futures_create_order(
                     symbol=pos.symbol, side=side, type="MARKET",
@@ -272,9 +329,12 @@ class ExecutionEngine:
     # ------------------------------------------------------------------ #
     def _build_closed_trade(self, pos: Position, exit_price: float, reason: ExitReason) -> ClosedTrade:
         long = pos.direction == Direction.LONG
-        gross = (exit_price - pos.entry_price) if long else (pos.entry_price - exit_price)
-        gross_pnl = gross * pos.quantity
+        # PnL lordo = fette gia' realizzate (scale-out) + residuo al prezzo d'uscita.
+        # Senza scale-out realized_gross=0 e remaining_qty=quantity -> identico a prima.
+        gross_final = (exit_price - pos.entry_price) if long else (pos.entry_price - exit_price)
+        gross_pnl = pos.realized_gross + gross_final * pos.remaining_qty
         # --- costi reali (come il backtester): fee+slippage round-trip + funding ---
+        # sul notional PIENO (entry una volta + uscite che sommano all'intera size)
         notional = pos.entry_price * pos.quantity
         held_hours = max(0.0, (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0)
         # funding REALE con segno: usa il tasso della coin all'entrata; long paga /
@@ -334,6 +394,9 @@ class ExecutionEngine:
             "spread_cost": pos.spread_cost,
             # --- campi extra per ricostruire la posizione dopo un restart ---
             "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
+            # stato scale-out (per non perdere fette/BE dopo un riavvio)
+            "scale_stage": pos.scale_stage, "realized_gross": pos.realized_gross,
+            "orig_stop": pos.orig_stop,
             "entry_time": pos.entry_time.isoformat(),
             "regime_at_entry": pos.regime_at_entry.value,
             "atr": pos.atr, "high_water": pos.high_water,
@@ -392,6 +455,9 @@ class ExecutionEngine:
         pos.high_water = float(p.get("high_water", pos.entry_price) or pos.entry_price)
         pos.scaled_out = bool(p.get("scaled_out", False))
         pos.trailing_active = bool(p.get("trailing_active", False))
+        pos.scale_stage = int(p.get("scale_stage", 0) or 0)
+        pos.realized_gross = float(p.get("realized_gross", 0.0) or 0.0)
+        pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
         return pos
 
     @staticmethod

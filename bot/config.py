@@ -162,6 +162,22 @@ class Settings:
     PROFIT_LOCK_TRIGGER: float = float(os.getenv("PROFIT_LOCK_TRIGGER", "0.5"))
     PROFIT_LOCK_KEEP: float = float(os.getenv("PROFIT_LOCK_KEEP", "0.5"))
 
+    # ---- SCALE-OUT su multipli di R (TP scaglionati) ----
+    # Chiude la posizione a fette a livelli di profitto multipli di R (R = distanza
+    # entry->stop base). Es. default: 50% a 1R, 30% a 2R, 20% a 3R (finale).
+    # Appena scatta il PRIMO TP, lo stop del residuo va a BREAK-EVEN (entry): da lì
+    # il trade è netto positivo anche se inverte, e il residuo corre fino al TP
+    # finale protetto dal profit-lock. DISATTIVO di default: va prima ri-validato
+    # nel GATE 1 (parità engine<->paper) e confrontato col modello attuale.
+    SCALE_OUT_ENABLED: bool = os.getenv("SCALE_OUT_ENABLED", "false").lower() == "true"
+    SCALE_OUT_R_MULTIPLES: list[float] = tuple(
+        float(x) for x in os.getenv("SCALE_OUT_R_MULTIPLES", "1,2,3").split(",") if x.strip()
+    )
+    SCALE_OUT_FRACTIONS: list[float] = tuple(
+        float(x) for x in os.getenv("SCALE_OUT_FRACTIONS", "0.5,0.3,0.2").split(",") if x.strip()
+    )
+    SCALE_OUT_SL_TO_BREAKEVEN: bool = os.getenv("SCALE_OUT_SL_TO_BREAKEVEN", "true").lower() == "true"
+
     # ---- GATE 1 (soglie di validazione) ----
     # Una coppia (coin, strategia) è validata SOLO se, fuori campione (OOS):
     #   - ha almeno GATE_MIN_TRADES trade

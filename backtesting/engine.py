@@ -24,7 +24,7 @@ from bot.core.costs import funding_fraction
 from bot.core.indicators import compute_indicator_frame, snapshot_from_row
 from bot.core.models import AssetSnapshot, Candle, Direction, Regime
 from bot.config import settings
-from bot.execution.exit_logic import locked_stop
+from bot.execution.exit_logic import locked_stop, scale_ladder, scale_fills
 from bot.strategies import get_all_strategies
 from bot.strategies.base import StrategyContext
 
@@ -339,42 +339,91 @@ class Backtester:
             target = sig.suggested_target or (entry * (1.04 if sig.direction == Direction.LONG else 0.96))
             long = sig.direction == Direction.LONG
 
-            # simula l'evoluzione fino a SL/TP o fine finestra (max 96 barre)
+            # SCALE-OUT su multipli di R (se attivo): scala di TP + break-even dopo
+            # il primo TP. Vuota -> percorso classico a TP unico (sotto).
+            ladder = scale_ladder(entry, stop, long) if settings.SCALE_OUT_ENABLED else []
+
             max_adverse = 0.0
             exit_price = entry
             j = i + 1
             horizon = min(n - 1, i + 96)
-            # miglior prezzo a favore visto FINORA (per il profit-lock). Usa solo le
-            # barre PRECEDENTI quando calcola lo stop, così niente look-ahead.
             best_fav = entry
             trailing_verdict = None
-            while j <= horizon:
-                c = candles[j]
-                # stop effettivo: base o alzato dal profit-lock (sui massimi passati)
-                eff_stop = locked_stop(entry, target, long, best_fav, stop)
-                trailing = eff_stop != stop   # il profit-lock ha alzato lo stop?
-                adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
-                max_adverse = max(max_adverse, adverse)
-                if long and c.low <= eff_stop:
-                    exit_price = eff_stop
-                    if trailing:
-                        trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
-                    break
-                if long and c.high >= target:
-                    exit_price = target; break
-                if (not long) and c.high >= eff_stop:
-                    exit_price = eff_stop
-                    if trailing:
-                        trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
-                    break
-                if (not long) and c.low <= target:
-                    exit_price = target; break
-                # aggiorna il miglior prezzo a favore DOPO i controlli di uscita
-                best_fav = max(best_fav, c.high) if long else min(best_fav, c.low)
-                exit_price = c.close
-                j += 1
 
-            pnl_pct = (exit_price - entry) / entry if long else (entry - exit_price) / entry
+            if ladder:
+                # --- percorso SCALE-OUT (parità con l'executor live) ---
+                final_target = ladder[-1][0]
+                stage = 0
+                taken = 0.0
+                realized_pct = 0.0
+                stop_base = stop
+                done = False
+                while j <= horizon:
+                    c = candles[j]
+                    eff_stop = locked_stop(entry, final_target, long, best_fav, stop_base)
+                    trailing = eff_stop != stop_base
+                    adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
+                    max_adverse = max(max_adverse, adverse)
+                    # 1) stop del RESIDUO (stop_base = entry dopo il primo TP)
+                    stop_hit = (c.low <= eff_stop) if long else (c.high >= eff_stop)
+                    if stop_hit:
+                        ret = (eff_stop - entry) / entry if long else (entry - eff_stop) / entry
+                        realized_pct += (1.0 - taken) * ret
+                        exit_price = eff_stop
+                        if trailing:
+                            trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, final_target, long)
+                        done = True
+                        break
+                    # 2) fette di TP raggiunte in questa barra
+                    stage, fills = scale_fills(ladder, stage, long, c.high, c.low)
+                    for price, frac in fills:
+                        ret = (price - entry) / entry if long else (entry - price) / entry
+                        realized_pct += frac * ret
+                        taken += frac
+                        exit_price = price
+                    if fills and settings.SCALE_OUT_SL_TO_BREAKEVEN:
+                        stop_base = entry   # break-even sul residuo dopo il primo TP
+                    if stage >= len(ladder):
+                        done = True
+                        break
+                    best_fav = max(best_fav, c.high) if long else min(best_fav, c.low)
+                    j += 1
+                if not done:
+                    c = candles[min(j, horizon)]
+                    ret = (c.close - entry) / entry if long else (entry - c.close) / entry
+                    realized_pct += (1.0 - taken) * ret
+                    exit_price = c.close
+                pnl_pct = realized_pct
+            else:
+                # --- percorso classico: TP unico pieno ---
+                # simula l'evoluzione fino a SL/TP o fine finestra (max 96 barre)
+                while j <= horizon:
+                    c = candles[j]
+                    # stop effettivo: base o alzato dal profit-lock (sui massimi passati)
+                    eff_stop = locked_stop(entry, target, long, best_fav, stop)
+                    trailing = eff_stop != stop   # il profit-lock ha alzato lo stop?
+                    adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
+                    max_adverse = max(max_adverse, adverse)
+                    if long and c.low <= eff_stop:
+                        exit_price = eff_stop
+                        if trailing:
+                            trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
+                        break
+                    if long and c.high >= target:
+                        exit_price = target; break
+                    if (not long) and c.high >= eff_stop:
+                        exit_price = eff_stop
+                        if trailing:
+                            trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
+                        break
+                    if (not long) and c.low <= target:
+                        exit_price = target; break
+                    # aggiorna il miglior prezzo a favore DOPO i controlli di uscita
+                    best_fav = max(best_fav, c.high) if long else min(best_fav, c.low)
+                    exit_price = c.close
+                    j += 1
+
+                pnl_pct = (exit_price - entry) / entry if long else (entry - exit_price) / entry
             # uscite reali: fee+slippage (round-trip) + funding sui perpetual con SEGNO
             # per direzione e tasso REALE della coin (long paga / short incassa a tasso>0).
             held_hours = max(0, (min(j, horizon) - i)) * self.interval_hours
