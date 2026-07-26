@@ -160,7 +160,7 @@ function VerdictBadge({ v }: { v: Verdict | undefined }) {
 
 type DayGroup = { key: string; label: string; trades: Trade[]; net: number };
 
-export default function ClosedTrades() {
+export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string) => void } = {}) {
   const [rows, setRows] = useState<Trade[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [verdicts, setVerdicts] = useState<Record<string, Verdict>>({});
@@ -247,7 +247,7 @@ export default function ClosedTrades() {
     <div className="panel">
       <h2>Closed Trades</h2>
       <p className="subtitle">
-        {rows.length} trade chiusi (paper) · raggruppati per giorno · clicca un giorno per espanderlo
+        {rows.length} trade chiusi (paper) · clicca un giorno per espanderlo, un trade per vederlo sul grafico
       </p>
       {!loaded ? (
         <p className="muted">Loading…</p>
@@ -293,7 +293,12 @@ export default function ClosedTrades() {
                     </tr>
                     {open &&
                       g.trades.map((t, i) => (
-                        <tr key={`${g.key}-${i}`} style={{ borderTop: '1px solid #28303d' }}>
+                        <tr
+                          key={`${g.key}-${i}`}
+                          style={{ borderTop: '1px solid #28303d', cursor: onSelect ? 'pointer' : 'default' }}
+                          onClick={onSelect ? () => onSelect(t.symbol) : undefined}
+                          title={onSelect ? 'Mostra sul grafico' : undefined}
+                        >
                           <td style={{ ...cell, color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtEntry(t.entry_time, t.exit_ts)}</td>
                           <td style={{ ...cell, color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtTime(t.exit_ts)}</td>
                           <td style={{ ...cell, fontWeight: 600 }}>{t.symbol}</td>

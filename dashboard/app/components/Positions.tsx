@@ -11,7 +11,7 @@ function fmt(n: number | undefined, digits = 2): string {
   return n.toLocaleString(undefined, { maximumFractionDigits: digits });
 }
 
-export default function Positions() {
+export default function Positions({ onSelect }: { onSelect?: (p: Position) => void } = {}) {
   const [positions, setPositions] = useState<Position[]>([]);
   const [loaded, setLoaded] = useState(false);
   // simboli con una chiusura manuale in coda (il bot non li ha ancora processati)
@@ -70,7 +70,7 @@ export default function Positions() {
   return (
     <div className="panel">
       <h2>Open Positions</h2>
-      <p className="subtitle">Clicca una riga per il grafico prezzo e i dettagli della posizione</p>
+      <p className="subtitle">Clicca una riga per vederla sul grafico qui sopra</p>
       {!loaded ? (
         <p className="muted">Loading…</p>
       ) : positions.length === 0 ? (
@@ -102,9 +102,9 @@ export default function Positions() {
                 return (
                   <tr
                     key={p.symbol}
-                    onClick={() => setDetail(p)}
+                    onClick={() => (onSelect ? onSelect(p) : setDetail(p))}
                     style={{ cursor: 'pointer' }}
-                    title="Apri grafico e dettagli"
+                    title={onSelect ? 'Mostra sul grafico' : 'Apri grafico e dettagli'}
                   >
                     <td>
                       <strong>{p.symbol}</strong>

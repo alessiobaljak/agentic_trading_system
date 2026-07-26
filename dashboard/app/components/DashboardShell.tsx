@@ -7,8 +7,7 @@ import { getAuthInstance } from '../lib/firebase';
 import BotStatus from './BotStatus';
 import DailySnapshot from './DailySnapshot';
 import EquityCurve from './EquityCurve';
-import Positions from './Positions';
-import ClosedTrades from './ClosedTrades';
+import OperativitaTab from './OperativitaTab';
 import StrategyWeights from './StrategyWeights';
 import TrailingLearning from './TrailingLearning';
 import Heatmap from './Heatmap';
@@ -273,12 +272,7 @@ export default function DashboardShell() {
             </>
           )}
 
-          {tab === 'operativita' && (
-            <>
-              <Positions />
-              <ClosedTrades />
-            </>
-          )}
+          {tab === 'operativita' && <OperativitaTab />}
 
           {tab === 'apprendimento' && (
             <>
