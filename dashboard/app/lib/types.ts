@@ -59,6 +59,8 @@ export interface ClosedTrade {
   exit_ts?: unknown;
   regime_at_entry?: string;
   is_win?: boolean;
+  sentiment_at_entry?: number; // [0..1] al momento dell'ingresso
+  fear_greed_at_entry?: number; // 0-100 al momento dell'ingresso
 }
 
 // ---- Realtime Database ----
@@ -72,6 +74,8 @@ export interface BotStatus {
   // Optional: the bot may publish the effective (post-safety) risk values.
   effective_leverage?: number;
   effective_risk_per_trade?: number;
+  // Fear & Greed corrente (0-100), pubblicato per la vista Sentiment.
+  fear_greed?: number;
 }
 
 export interface RiskState {
@@ -98,6 +102,8 @@ export interface Position {
   updated_at?: number | string;
   accrued_funding?: number; // funding maturato finora (USDT), gia' scalato dall'uPnL
   held_hours?: number;      // ore da cui la posizione e' aperta
+  sentiment_at_entry?: number; // [0..1] sentiment della coin all'ingresso
+  fear_greed_at_entry?: number; // 0-100 all'ingresso
 }
 
 // ---- helpers ----

@@ -118,41 +118,41 @@ export default function EquityCurve() {
         <p className="muted">Ancora nessun trade chiuso.</p>
       ) : (
         <>
-          {/* tutti i numeri sopra */}
-          <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))' }}>
-            <div className={`stat-tile ${last >= 0 ? 'good' : 'bad'}`}>
-              <div className="stat-label">PnL cumulato</div>
-              <div className={`stat-value ${last >= 0 ? 'pos' : 'neg'}`}>
+          {/* tutti i numeri sopra, su una sola riga */}
+          <div className="metric-strip">
+            <div className="metric">
+              <span className="m-label">PnL cumulato</span>
+              <span className={`m-val ${last >= 0 ? 'pos' : 'neg'}`}>
                 {last >= 0 ? '+' : ''}
                 {num(last)}
-              </div>
+              </span>
             </div>
-            <div className="stat-tile accent">
-              <div className="stat-label">Trade</div>
-              <div className="stat-value">{data.length}</div>
+            <div className="metric">
+              <span className="m-label">Trade</span>
+              <span className="m-val">{data.length}</span>
             </div>
-            <div className={`stat-tile ${stats.winRate >= 0.5 ? 'good' : 'bad'}`}>
-              <div className="stat-label">Win rate</div>
-              <div className="stat-value">{Math.round(stats.winRate * 100)}%</div>
-              <div className="stat-sub">complessivo</div>
+            <div className="metric">
+              <span className="m-label">Win rate</span>
+              <span className={`m-val ${stats.winRate >= 0.5 ? 'pos' : 'neg'}`}>
+                {Math.round(stats.winRate * 100)}%
+              </span>
             </div>
-            <div className={`stat-tile ${stats.pf >= 1 ? 'good' : 'bad'}`}>
-              <div className="stat-label">Profit factor</div>
-              <div className="stat-value">{stats.pf === Infinity ? '∞' : num(stats.pf)}</div>
-              <div className="stat-sub">lordi / perdite</div>
+            <div className="metric">
+              <span className="m-label">Profit factor</span>
+              <span className={`m-val ${stats.pf >= 1 ? 'pos' : 'neg'}`}>
+                {stats.pf === Infinity ? '∞' : num(stats.pf)}
+              </span>
             </div>
-            <div className="stat-tile bad">
-              <div className="stat-label">Max drawdown</div>
-              <div className="stat-value neg">-{num(stats.maxDD)}</div>
-              <div className="stat-sub">calo max dal picco</div>
+            <div className="metric">
+              <span className="m-label">Max drawdown</span>
+              <span className="m-val neg">-{num(stats.maxDD)}</span>
             </div>
-            <div className={`stat-tile ${stats.expectancy >= 0 ? 'good' : 'bad'}`}>
-              <div className="stat-label">Expectancy</div>
-              <div className={`stat-value ${stats.expectancy >= 0 ? 'pos' : 'neg'}`}>
+            <div className="metric">
+              <span className="m-label">Expectancy</span>
+              <span className={`m-val ${stats.expectancy >= 0 ? 'pos' : 'neg'}`}>
                 {stats.expectancy >= 0 ? '+' : ''}
                 {num(stats.expectancy)}
-              </div>
-              <div className="stat-sub">PnL medio / trade</div>
+              </span>
             </div>
           </div>
 
@@ -174,7 +174,7 @@ export default function EquityCurve() {
               Nessun trade chiuso in questa finestra.
             </p>
           ) : (
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={320}>
               <AreaChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">

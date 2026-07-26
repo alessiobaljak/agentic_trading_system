@@ -1033,6 +1033,106 @@ input[type='range'] {
 }
 .mini-chip .mono { font-size: 11px; color: var(--text-dim); }
 
+/* ------------------------------------------ Striscia metriche (una riga) */
+.metric-strip {
+  display: flex;
+  overflow-x: auto;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev);
+}
+.metric-strip .metric {
+  flex: 1 1 0;
+  min-width: 96px;
+  padding: 10px 13px;
+  border-left: 1px solid var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.metric-strip .metric:first-child { border-left: none; }
+.metric-strip .m-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.metric-strip .m-val {
+  font-size: 17px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* ----------------------------------------------- Sentiment: Fear & Greed */
+.fg-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.fg-num {
+  font-size: 46px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.fg-cls {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.fg-bar {
+  position: relative;
+  height: 12px;
+  border-radius: 999px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #f85149 0%, #e3a92b 35%, #c9c94b 50%, #7ad17a 68%, #3fb950 100%);
+}
+.fg-marker {
+  position: absolute;
+  top: -5px;
+  width: 4px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--text);
+  box-shadow: 0 0 0 2px var(--bg-panel);
+  transform: translateX(-50%);
+  transition: left 0.4s var(--ease);
+}
+.fg-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-faint);
+  margin-top: 6px;
+}
+
+/* barre win-rate per bucket (correlazione sentiment/esito) */
+.bucket-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 76px;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
+.bucket-row .b-label { font-size: 12px; }
+.bucket-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-panel-2);
+  overflow: hidden;
+}
+.bucket-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s var(--ease);
+}
+
 /* ---------------------------------------- Blocco "ultima decisione" grafico */
 .decision-block {
   margin-top: 16px;

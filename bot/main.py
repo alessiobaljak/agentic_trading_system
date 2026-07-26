@@ -186,6 +186,10 @@ class TradingBot:
         self.fb.set_rtdb("/bot_status", {
             "state": "running", "regime": self.regime.value if self.regime else None,
             "dry_run": settings.DRY_RUN, "updated_at": now,
+            # SOLO osservabilita' (dashboard Sentiment): il Fear & Greed corrente.
+            # Gia' calcolato sopra per il regime; qui e' un semplice output, non
+            # influenza alcuna decisione/learning.
+            "fear_greed": fng,
         })
         return self.regime
 

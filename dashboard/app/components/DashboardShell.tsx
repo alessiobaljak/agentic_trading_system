@@ -18,8 +18,15 @@ import RiskControl from './RiskControl';
 import KillSwitch from './KillSwitch';
 import TopVitals from './TopVitals';
 import LearningSummary from './LearningSummary';
+import SentimentAnalysis from './SentimentAnalysis';
 
-type TabId = 'panoramica' | 'operativita' | 'apprendimento' | 'strategie' | 'impostazioni';
+type TabId =
+  | 'panoramica'
+  | 'operativita'
+  | 'apprendimento'
+  | 'sentiment'
+  | 'strategie'
+  | 'impostazioni';
 type NavId = Exclude<TabId, 'impostazioni'>;
 
 /* --- icone (inline SVG, stroke = currentColor) ---------------------------- */
@@ -39,6 +46,13 @@ function Icon({ id }: { id: TabId }) {
         <path d="M12 3l9 5-9 5-9-5 9-5z" />
         <path d="M21 8v5" />
         <path d="M7 10.5V15c0 1.5 2.5 3 5 3s5-1.5 5-3v-4.5" />
+      </>
+    ),
+    sentiment: (
+      <>
+        <path d="M4 16a8 8 0 0 1 16 0" />
+        <path d="M12 16l4-3.5" />
+        <circle cx="12" cy="16" r="1.4" />
       </>
     ),
     strategie: (
@@ -87,6 +101,11 @@ const META: Record<TabId, { label: string; title: string; intro: string }> = {
     title: 'Apprendimento',
     intro: 'Cosa sta imparando il bot: pesi strategia × regime, trailing adattivo e diario.',
   },
+  sentiment: {
+    label: 'Sentiment',
+    title: 'Sentiment analysis',
+    intro: 'Fear & Greed di mercato e sentiment delle coin: la fonte che orienta le decisioni.',
+  },
   strategie: {
     label: 'Strategie',
     title: 'Strategie · GATE 1',
@@ -99,7 +118,7 @@ const META: Record<TabId, { label: string; title: string; intro: string }> = {
   },
 };
 
-const NAV: NavId[] = ['panoramica', 'operativita', 'apprendimento', 'strategie'];
+const NAV: NavId[] = ['panoramica', 'operativita', 'apprendimento', 'sentiment', 'strategie'];
 
 function isTab(v: string): v is TabId {
   return v in META;
@@ -272,6 +291,8 @@ export default function DashboardShell() {
               <Insights />
             </>
           )}
+
+          {tab === 'sentiment' && <SentimentAnalysis />}
 
           {tab === 'strategie' && <OptimizedStrategies />}
 
