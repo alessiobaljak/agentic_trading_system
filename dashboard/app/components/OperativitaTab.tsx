@@ -5,7 +5,7 @@ import { onValue, ref } from 'firebase/database';
 import { collection, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getDb, getRtdb } from '../lib/firebase';
 import type { Position } from '../lib/types';
-import PositionChart from './PositionChart';
+import CandleChart from './CandleChart';
 import PositionMetrics from './PositionMetrics';
 import Positions from './Positions';
 import ClosedTrades from './ClosedTrades';
@@ -108,11 +108,7 @@ export default function OperativitaTab() {
           </p>
         )}
 
-        {selected && (
-          <div className="detail-chart" style={{ height: 460 }}>
-            <PositionChart symbol={selected} interval="60" />
-          </div>
-        )}
+        {selected && <CandleChart symbol={selected} position={selectedPos} height={460} />}
       </div>
 
       <Positions onSelect={(p) => setSelected(p.symbol)} />

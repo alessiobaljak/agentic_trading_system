@@ -1237,6 +1237,38 @@ input[type='range'] {
   background: var(--bg-elev);
 }
 
+/* ---- Grafico a candele nativo (lightweight-charts) ---- */
+.chart-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.chart-legend {
+  font-size: 11px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chart-canvas {
+  position: relative;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-elev);
+}
+.chart-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  pointer-events: none;
+}
+
 /* ---------------------------------------- Blocco "ultima decisione" grafico */
 .decision-block {
   margin-top: 16px;
