@@ -6,20 +6,24 @@ import { getDb } from '../lib/firebase';
 import type { MemoryReport } from '../lib/types';
 
 /**
- * Performance heatmap: strategy (rows) x regime (cols).
- * Reads memory/30 -> win_rate_by_strategy_regime, whose keys are "strategy|regime".
- * Cells are colored on a red->amber->green scale by win rate (0..1).
+ * Win rate per strategia × regime, come pillole colorate (rosso->verde) raggruppate
+ * per strategia. Reads memory/30 -> win_rate_by_strategy_regime (chiavi "strat|regime").
  */
-
-function colorFor(v: number | undefined): { bg: string; fg: string } {
-  if (v == null || !Number.isFinite(v)) return { bg: 'transparent', fg: '#8b96a5' };
-  // clamp 0..1
+function pillColors(v: number): { bg: string; fg: string; bd: string } {
   const x = Math.max(0, Math.min(1, v));
-  // hue 0 (red) -> 130 (green)
-  const hue = x * 130;
-  const bg = `hsla(${hue}, 65%, 45%, ${0.25 + x * 0.5})`;
-  return { bg, fg: '#e6edf3' };
+  const hue = x * 130; // 0 rosso -> 130 verde
+  return {
+    bg: `hsla(${hue}, 60%, 45%, ${0.18 + x * 0.32})`,
+    fg: '#e9eef5',
+    bd: `hsla(${hue}, 60%, 55%, 0.5)`,
+  };
 }
+
+const REG_SHORT: Record<string, string> = {
+  bull_trending: 'BULL',
+  bear_trending: 'BEAR',
+  sideways: 'SIDE',
+};
 
 export default function Heatmap() {
   const [report, setReport] = useState<MemoryReport | null>(null);
@@ -38,67 +42,51 @@ export default function Heatmap() {
     return () => unsub();
   }, []);
 
-  const { strategies, regimes, cells } = useMemo(() => {
+  const rows = useMemo(() => {
     const map = report?.win_rate_by_strategy_regime ?? {};
-    const stratSet = new Set<string>();
-    const regimeSet = new Set<string>();
-    const cellMap = new Map<string, number>();
+    const byStrat = new Map<string, { regime: string; wr: number }[]>();
     for (const [key, val] of Object.entries(map)) {
       const [strategy, regime] = key.split('|');
       if (!strategy || !regime) continue;
-      stratSet.add(strategy);
-      regimeSet.add(regime);
-      cellMap.set(`${strategy}|${regime}`, val);
+      if (!byStrat.has(strategy)) byStrat.set(strategy, []);
+      byStrat.get(strategy)!.push({ regime, wr: val });
     }
-    return {
-      strategies: Array.from(stratSet).sort(),
-      regimes: Array.from(regimeSet).sort(),
-      cells: cellMap,
-    };
+    // ordina le pillole per regime, e le strategie per miglior win-rate
+    for (const arr of byStrat.values()) arr.sort((a, b) => a.regime.localeCompare(b.regime));
+    return Array.from(byStrat.entries())
+      .map(([strategy, cells]) => ({ strategy, cells }))
+      .sort((a, b) => Math.max(...b.cells.map((c) => c.wr)) - Math.max(...a.cells.map((c) => c.wr)));
   }, [report]);
 
   return (
     <div className="panel">
-      <h2>Strategy × Regime Win Rate</h2>
-      <p className="subtitle">From memory/30 · win rate per strategy in each market regime</p>
+      <h2>Win rate · strategia × regime</h2>
+      <p className="subtitle">Da memory/30 · pillola per regime, colore = win rate (rosso → verde)</p>
       {!loaded ? (
         <p className="muted">Loading…</p>
-      ) : strategies.length === 0 ? (
-        <p className="muted">No memory report available yet.</p>
+      ) : rows.length === 0 ? (
+        <p className="muted">Nessun report di memoria disponibile ancora.</p>
       ) : (
-        <div style={{ overflowX: 'auto' }}>
-          <table>
-            <thead>
-              <tr>
-                <th>Strategy</th>
-                {regimes.map((r) => (
-                  <th key={r} style={{ textAlign: 'center' }}>
-                    {r}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {strategies.map((s) => (
-                <tr key={s}>
-                  <td>
-                    <strong>{s}</strong>
-                  </td>
-                  {regimes.map((r) => {
-                    const v = cells.get(`${s}|${r}`);
-                    const { bg, fg } = colorFor(v);
-                    return (
-                      <td key={r} style={{ padding: 4, textAlign: 'center' }}>
-                        <div className="heatmap-cell" style={{ background: bg, color: fg }}>
-                          {v != null ? `${(v * 100).toFixed(0)}%` : '—'}
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ maxHeight: 380, overflowY: 'auto' }}>
+          {rows.map(({ strategy, cells }) => (
+            <div className="rrow" key={strategy}>
+              <span className="rstrat" title={strategy}>{strategy}</span>
+              {cells.map(({ regime, wr }) => {
+                const c = pillColors(wr);
+                return (
+                  <span
+                    key={regime}
+                    className="rpill"
+                    style={{ background: c.bg, color: c.fg, borderColor: c.bd }}
+                    title={`${strategy} · ${regime}: ${(wr * 100).toFixed(0)}%`}
+                  >
+                    <span className="rreg">{REG_SHORT[regime] ?? regime}</span>
+                    <span className="mono" style={{ fontWeight: 700 }}>{(wr * 100).toFixed(0)}%</span>
+                  </span>
+                );
+              })}
+            </div>
+          ))}
         </div>
       )}
     </div>

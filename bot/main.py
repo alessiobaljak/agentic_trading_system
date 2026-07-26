@@ -518,20 +518,26 @@ class TradingBot:
             if t.get("exit_reason") != "trailing_stop" or t.get("trailing_verdict") is not None:
                 continue
             tp, sl, ex = t.get("take_profit_price"), t.get("stop_price"), t.get("exit_ts")
-            if tp is None or sl is None or ex is None or now - ex < window_s:
-                continue   # dati mancanti o finestra di 24h non ancora completa
+            if tp is None or sl is None or ex is None:
+                continue   # dati mancanti
             try:
-                candles = self.price.get_candles(t.get("symbol", ""), "15m", limit=300)
+                candles = self.price.get_candles(
+                    t.get("symbol", ""), settings.ORCHESTRATOR_TIMEFRAME, limit=300)
             except Exception:  # noqa: BLE001
                 continue
             entry_ts = ex - float(t.get("duration_seconds", 0) or 0)
             during = [c for c in candles if entry_ts <= c.open_time.timestamp() <= ex]
             after = [c for c in candles if ex <= c.open_time.timestamp() <= ex + window_s]
-            if not after:
-                continue
+            if len(after) < 2:
+                continue   # servono un paio di candele DOPO l'uscita per il controfattuale
             long = str(t.get("direction", "")).lower() == "long"
             res = trailing_reason(during, after, float(t.get("entry_price", 0.0)),
                                   float(t.get("exit_price", 0.0)), float(sl), float(tp), long)
+            # 'premature'/'protected' sono DEFINITIVI (TP o SL scattato dopo l'uscita)
+            # -> si scrivono SUBITO, niente attesa di 24h. 'neutral' (ne' TP ne' SL)
+            # e' valido solo a finestra piena; altrimenti aspetta piu' candele.
+            if res["verdict"] == "neutral" and now - ex < window_s:
+                continue
             t["trailing_verdict"] = res["verdict"]
             t["trailing_miss_to_tp"] = res["miss_to_tp"]      # quanto tragitto lasciato sul tavolo
             t["trailing_knockout_atr"] = res["knockout_atr"]  # rumore (<1) vs inversione reale
@@ -585,7 +591,9 @@ class TradingBot:
             now = time.time()
             try:
                 # ricarica pesi + parametri ottimizzati (dal job notturno) ogni 6h
-                if now - self.last_trailing_eval >= 3600:   # verdetto trailing paper (B1)
+                # rete di sicurezza: verdetto trailing (B1) ~ogni barra, cosi' i verdetti
+                # disponibili vengono scritti in fretta anche senza nuove chiusure.
+                if now - self.last_trailing_eval >= self._decision_interval_s:
                     self.evaluate_pending_trailing(now)
                     self.last_trailing_eval = now
                 # RETE DI SICUREZZA tempo-based: ricalcolo orario cosi' il recupero
@@ -608,6 +616,11 @@ class TradingBot:
                 # (determinato dalla strategia), ricalcola i pesi SUBITO invece di
                 # aspettare la finestra oraria -> adattamento immediato ad ogni esito.
                 if self._closed_this_cycle:
+                    # 1) assegna i verdetti trailing ora disponibili (premature/protected
+                    #    definitivi appena ci sono 2 candele dopo l'uscita), poi
+                    # 2) ricalcola i pesi + il trailing-keep con i dati freschi.
+                    self.evaluate_pending_trailing(time.time())
+                    self.last_trailing_eval = time.time()
                     self.refresh_weights(time.time())
                     self.last_weight_refresh = time.time()
                     self._closed_this_cycle = False

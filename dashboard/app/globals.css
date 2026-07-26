@@ -1133,6 +1133,78 @@ input[type='range'] {
   transition: width 0.4s var(--ease);
 }
 
+/* ---- Peso appreso: righe strategia×regime con barra ---- */
+.wrow {
+  display: grid;
+  grid-template-columns: minmax(120px, 1.5fr) 2fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 12.5px;
+}
+.wrow:last-child { border-bottom: none; }
+.wrow .wlab {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wrow .wlab .wreg {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+.wrow .wval {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-dim);
+}
+.wtag {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 6px;
+  border-radius: 5px;
+  margin-left: 6px;
+}
+
+/* ---- Win rate per regime: pillole colorate ---- */
+.rrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+.rrow:last-child { border-bottom: none; }
+.rrow .rstrat {
+  flex: 0 0 auto;
+  min-width: 130px;
+  font-weight: 650;
+  font-size: 12.5px;
+}
+.rpill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid var(--border-soft);
+  transition: transform 0.12s var(--ease);
+}
+.rpill:hover { transform: translateY(-1px); }
+.rpill .rreg {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
 /* ---------------------------------------- Blocco "ultima decisione" grafico */
 .decision-block {
   margin-top: 16px;

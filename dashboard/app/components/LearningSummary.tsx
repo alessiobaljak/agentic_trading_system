@@ -14,7 +14,7 @@ import { toMillis, type StrategyWeight, type MemoryReport } from '../lib/types';
  *   - /trailing_keep (RTDB)     (trailing adattato per strategia dal bot)
  * e sintetizza cosa sta imparando il bot: quante combinazioni monitora, quante
  * sta rafforzando / penalizzando / facendo rientrare in prova, e quando ha
- * ricalcolato l'ultima volta (il learning gira ogni ora). Non scrive nulla.
+ * ricalcolato l'ultima volta (il learning gira ad ogni trade chiuso). Non scrive nulla.
  */
 
 type WeightsDoc = { weights?: StrategyWeight[]; updated_at?: number };
@@ -90,7 +90,7 @@ export default function LearningSummary() {
     return (
       <div className="panel">
         <h2>Il cervello del bot · learning</h2>
-        <p className="subtitle">Adattamento pesi strategia × regime · ricalcolo ogni ora</p>
+        <p className="subtitle">Adattamento pesi strategia × regime · ricalcolo ad ogni trade chiuso</p>
         <p className="muted">
           Il learning non ha ancora prodotto pesi: servono trade chiusi determinati dalle strategie.
           Appena arrivano, qui vedrai in tempo reale cosa il bot sta rafforzando e cosa penalizzando.
@@ -103,7 +103,7 @@ export default function LearningSummary() {
     <div className="panel">
       <h2>Il cervello del bot · learning</h2>
       <p className="subtitle">
-        Adattamento dei pesi strategia × regime · il bot ricalcola ogni ora leggendo i propri trade
+        Adattamento dei pesi strategia × regime · il bot ricalcola ad ogni trade chiuso leggendo i propri esiti
       </p>
 
       <div className="stat-grid">
