@@ -21,6 +21,15 @@ interface Point {
   pnl: number;
 }
 
+type RangeId = 'all' | '90d' | '30d' | '7d' | '1d';
+const RANGES: { id: RangeId; label: string; ms: number }[] = [
+  { id: 'all', label: 'Tutto', ms: Infinity },
+  { id: '90d', label: '90g', ms: 90 * 864e5 },
+  { id: '30d', label: '30g', ms: 30 * 864e5 },
+  { id: '7d', label: '7g', ms: 7 * 864e5 },
+  { id: '1d', label: '24h', ms: 864e5 },
+];
+
 /**
  * Equity curve derived from closed trades' cumulative PnL, ordered by exit_ts.
  * The y-axis is cumulative realized PnL (starts at 0). This avoids needing a
@@ -29,6 +38,7 @@ interface Point {
 export default function EquityCurve() {
   const [trades, setTrades] = useState<ClosedTrade[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [range, setRange] = useState<RangeId>('all');
 
   useEffect(() => {
     const db = getDb();
@@ -65,9 +75,8 @@ export default function EquityCurve() {
   const last = data.length ? data[data.length - 1].equity : 0;
 
   // Metriche di performance ALL-TIME derivate dagli stessi trade chiusi.
-  // Nessuna sovrapposizione con lo Snapshot (solo oggi) o con l'header
-  // (PnL cumulato + n trade): qui win rate complessivo, profit factor,
-  // max drawdown (peak-to-valley del PnL cumulato) ed expectancy/trade.
+  // Nessuna sovrapposizione con lo Snapshot (solo oggi): qui win rate
+  // complessivo, profit factor, max drawdown ed expectancy/trade.
   const stats = useMemo(() => {
     const pnls = data.map((d) => d.pnl);
     const n = pnls.length;
@@ -88,85 +97,49 @@ export default function EquityCurve() {
     return { n, winRate, pf, expectancy, maxDD };
   }, [data]);
 
-  const num = (v: number, d = 2) =>
-    v.toLocaleString(undefined, { maximumFractionDigits: d });
+  // dati del grafico filtrati per la finestra scelta (l'equity resta quella
+  // reale, non azzerata: zoom sulla finestra, non ricalcolo da 0)
+  const chartData = useMemo<Point[]>(() => {
+    const r = RANGES.find((x) => x.id === range);
+    if (!r || r.ms === Infinity) return data;
+    const cutoff = Date.now() - r.ms;
+    return data.filter((d) => d.t >= cutoff);
+  }, [data, range]);
+
+  const num = (v: number, d = 2) => v.toLocaleString(undefined, { maximumFractionDigits: d });
 
   return (
     <div className="panel">
       <h2>Equity Curve</h2>
-      <p className="subtitle">Cumulative realized PnL from closed trades</p>
+      <p className="subtitle">PnL realizzato cumulato dai trade chiusi</p>
       {!loaded ? (
         <p className="muted">Loading…</p>
       ) : data.length === 0 ? (
-        <p className="muted">No closed trades yet.</p>
+        <p className="muted">Ancora nessun trade chiuso.</p>
       ) : (
         <>
-          <div className="kpi" style={{ marginBottom: 12 }}>
-            <div className="item">
-              <div className="label">Cumulative PnL</div>
-              <div className={`value mono ${last >= 0 ? 'pos' : 'neg'}`}>
+          {/* tutti i numeri sopra */}
+          <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))' }}>
+            <div className={`stat-tile ${last >= 0 ? 'good' : 'bad'}`}>
+              <div className="stat-label">PnL cumulato</div>
+              <div className={`stat-value ${last >= 0 ? 'pos' : 'neg'}`}>
                 {last >= 0 ? '+' : ''}
-                {last.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                {num(last)}
               </div>
             </div>
-            <div className="item">
-              <div className="label">Trades</div>
-              <div className="value mono">{data.length}</div>
+            <div className="stat-tile accent">
+              <div className="stat-label">Trade</div>
+              <div className="stat-value">{data.length}</div>
             </div>
-          </div>
-          <ResponsiveContainer width="100%" height={240}>
-            <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-              <defs>
-                <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#4f9cf9" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#4f9cf9" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid stroke="#28303d" strokeDasharray="3 3" />
-              <XAxis
-                dataKey="label"
-                stroke="#8b96a5"
-                fontSize={11}
-                tickLine={false}
-                minTickGap={40}
-              />
-              <YAxis stroke="#8b96a5" fontSize={11} tickLine={false} width={56} />
-              <Tooltip
-                contentStyle={{
-                  background: '#141a24',
-                  border: '1px solid #28303d',
-                  borderRadius: 8,
-                  color: '#e6edf3',
-                }}
-                labelStyle={{ color: '#8b96a5' }}
-                formatter={(v: number) => [v.toFixed(2), 'Cum PnL']}
-              />
-              <Area
-                type="monotone"
-                dataKey="equity"
-                stroke="#4f9cf9"
-                strokeWidth={2}
-                fill="url(#equityFill)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-
-          {/* metriche all-time: riempiono lo spazio senza duplicare l'header/Snapshot */}
-          <div
-            className="stat-grid"
-            style={{ marginTop: 16, gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))' }}
-          >
             <div className={`stat-tile ${stats.winRate >= 0.5 ? 'good' : 'bad'}`}>
               <div className="stat-label">Win rate</div>
               <div className="stat-value">{Math.round(stats.winRate * 100)}%</div>
-              <div className="stat-sub">complessivo · {stats.n} trade</div>
+              <div className="stat-sub">complessivo</div>
             </div>
             <div className={`stat-tile ${stats.pf >= 1 ? 'good' : 'bad'}`}>
               <div className="stat-label">Profit factor</div>
-              <div className="stat-value">
-                {stats.pf === Infinity ? '∞' : num(stats.pf)}
-              </div>
-              <div className="stat-sub">profitti lordi / perdite lorde</div>
+              <div className="stat-value">{stats.pf === Infinity ? '∞' : num(stats.pf)}</div>
+              <div className="stat-sub">lordi / perdite</div>
             </div>
             <div className="stat-tile bad">
               <div className="stat-label">Max drawdown</div>
@@ -182,6 +155,62 @@ export default function EquityCurve() {
               <div className="stat-sub">PnL medio / trade</div>
             </div>
           </div>
+
+          {/* filtro periodo del grafico */}
+          <div className="toolbar" style={{ justifyContent: 'flex-end', margin: '16px 0 8px' }}>
+            <span className="muted" style={{ fontSize: 12, marginRight: 'auto' }}>Periodo grafico</span>
+            <div className="seg" role="tablist" aria-label="periodo">
+              {RANGES.map((r) => (
+                <button key={r.id} className={range === r.id ? 'on' : ''} onClick={() => setRange(r.id)}>
+                  {r.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* grafico sotto */}
+          {chartData.length === 0 ? (
+            <p className="muted" style={{ padding: '40px 0', textAlign: 'center' }}>
+              Nessun trade chiuso in questa finestra.
+            </p>
+          ) : (
+            <ResponsiveContainer width="100%" height={240}>
+              <AreaChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#4f9cf9" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#4f9cf9" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="#28303d" strokeDasharray="3 3" />
+                <XAxis dataKey="label" stroke="#8b96a5" fontSize={11} tickLine={false} minTickGap={40} />
+                <YAxis stroke="#8b96a5" fontSize={11} tickLine={false} width={56} />
+                <Tooltip
+                  contentStyle={{
+                    background: '#141a24',
+                    border: '1px solid #28303d',
+                    borderRadius: 8,
+                    color: '#e6edf3',
+                  }}
+                  labelStyle={{ color: '#8b96a5' }}
+                  labelFormatter={(_label: unknown, payload?: ReadonlyArray<{ payload?: Point }>) => {
+                    const t = payload?.[0]?.payload?.t;
+                    return t
+                      ? new Date(t).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })
+                      : '';
+                  }}
+                  formatter={(v: number, _name: unknown, item?: { payload?: Point }) => {
+                    const pnl = item?.payload?.pnl ?? 0;
+                    return [
+                      `${Number(v).toFixed(2)}  (trade ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)})`,
+                      'PnL cumulato',
+                    ] as [string, string];
+                  }}
+                />
+                <Area type="monotone" dataKey="equity" stroke="#4f9cf9" strokeWidth={2} fill="url(#equityFill)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          )}
         </>
       )}
     </div>
