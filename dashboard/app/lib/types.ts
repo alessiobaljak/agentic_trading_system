@@ -104,6 +104,9 @@ export interface Position {
   held_hours?: number;      // ore da cui la posizione e' aperta
   sentiment_at_entry?: number; // [0..1] sentiment della coin all'ingresso
   fear_greed_at_entry?: number; // 0-100 all'ingresso
+  regime_at_entry?: string;     // regime di mercato all'apertura
+  confidence_at_entry?: number; // convinzione del segnale all'apertura
+  funding_at_entry?: number;    // funding rate della coin all'apertura
 }
 
 // ---- helpers ----

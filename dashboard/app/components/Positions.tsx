@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { onValue, ref, serverTimestamp, set } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
 import type { Position } from '../lib/types';
+import PositionDetail from './PositionDetail';
 
 function fmt(n: number | undefined, digits = 2): string {
   if (n == null || !Number.isFinite(n)) return '—';
@@ -19,6 +20,8 @@ export default function Positions() {
   const [confirm, setConfirm] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // posizione di cui è aperto il dettaglio (grafico + metriche)
+  const [detail, setDetail] = useState<Position | null>(null);
 
   useEffect(() => {
     const db = getRtdb();
@@ -67,6 +70,7 @@ export default function Positions() {
   return (
     <div className="panel">
       <h2>Open Positions</h2>
+      <p className="subtitle">Clicca una riga per il grafico prezzo e i dettagli della posizione</p>
       {!loaded ? (
         <p className="muted">Loading…</p>
       ) : positions.length === 0 ? (
@@ -96,7 +100,12 @@ export default function Positions() {
                 const side = (p.direction ?? '').toLowerCase();
                 const isPending = pending.has(p.symbol);
                 return (
-                  <tr key={p.symbol}>
+                  <tr
+                    key={p.symbol}
+                    onClick={() => setDetail(p)}
+                    style={{ cursor: 'pointer' }}
+                    title="Apri grafico e dettagli"
+                  >
                     <td>
                       <strong>{p.symbol}</strong>
                       {p.dry_run ? <span className="badge amber" style={{ marginLeft: 6 }}>sim</span> : null}
@@ -126,7 +135,7 @@ export default function Positions() {
                       <button
                         className="btn btn-danger"
                         style={{ padding: '4px 10px', fontSize: 12 }}
-                        onClick={() => setConfirm(p.symbol)}
+                        onClick={(e) => { e.stopPropagation(); setConfirm(p.symbol); }}
                         disabled={isPending}
                         title={isPending ? 'Chiusura in coda' : 'Chiudi questa posizione'}
                       >
@@ -154,6 +163,8 @@ export default function Positions() {
       )}
 
       {error && <div className="warn">{error}</div>}
+
+      {detail && <PositionDetail position={detail} onClose={() => setDetail(null)} />}
 
       {confirm && (
         <div className="dialog-overlay" role="dialog" aria-modal="true">

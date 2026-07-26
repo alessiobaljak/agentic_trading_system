@@ -1205,6 +1205,38 @@ input[type='range'] {
   color: var(--text-dim);
 }
 
+/* ---- Dettaglio posizione: modale largo con grafico ---- */
+.dialog.dialog-lg {
+  max-width: 1120px;
+  width: calc(100% - 40px);
+  height: 88vh;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  border-color: var(--border);
+}
+.detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.detail-ctx {
+  font-size: 12px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.detail-chart {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-elev);
+}
+
 /* ---------------------------------------- Blocco "ultima decisione" grafico */
 .decision-block {
   margin-top: 16px;
