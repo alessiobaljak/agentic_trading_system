@@ -59,6 +59,9 @@ class TradingBot:
         self.last_adapt_reload = 0.0
         self.last_trailing_eval = 0.0
         self.last_weight_refresh = 0.0
+        # True se in QUESTO ciclo si e' chiuso un trade DETERMINATO dalla strategia
+        # (SL/TP/trailing/time): fa ricalcolare i pesi SUBITO (learning event-driven).
+        self._closed_this_cycle = False
         # intervallo tra decisioni = durata del timeframe unico (es. 1h -> 3600s).
         # Cosi' l'orchestratore agisce a OGNI candela chiusa del timeframe validato.
         _tf_secs = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 14400}
@@ -211,6 +214,7 @@ class TradingBot:
 
     # ------------------------------------------------------------------ #
     def trading_cycle(self, now: float) -> None:
+        self._closed_this_cycle = False   # reset: settato se chiude un trade di strategia
         # 1) gestione posizioni aperte (trailing/scale-out/SL/TP)
         # Usa il MARK PRICE FRESCO a ogni tick (1 richiesta): le posizioni vanno
         # gestite sul prezzo vivo, non sullo snapshot che si aggiorna ogni 15m.
@@ -224,6 +228,8 @@ class TradingBot:
             closed = self.executor.update_position(sym, price)
             if closed:
                 eq = self.account_equity()
+                # uscita DETERMINATA dalla strategia -> il learning va ricalcolato ora
+                self._closed_this_cycle = True
                 self._log_closed(closed)
                 self.notifier.trade_closed(
                     closed.symbol, closed.strategy, closed.direction.value,
@@ -563,7 +569,11 @@ class TradingBot:
                 if now - self.last_trailing_eval >= 3600:   # verdetto trailing paper (B1)
                     self.evaluate_pending_trailing(now)
                     self.last_trailing_eval = now
-                if now - self.last_weight_refresh >= 3600:   # ricalcolo pesi ogni ora (opzione A)
+                # RETE DI SICUREZZA tempo-based: ricalcolo orario cosi' il recupero
+                # in prova (probation, tempo-dipendente) avanza anche senza chiusure.
+                # Il ricalcolo PRINCIPALE e' event-driven: subito dopo ogni trade
+                # chiuso (vedi dopo trading_cycle).
+                if now - self.last_weight_refresh >= 3600:
                     self.refresh_weights(now)
                     self.last_weight_refresh = now
                 if now - self.last_adapt_reload >= 6 * 3600:
@@ -575,6 +585,13 @@ class TradingBot:
                     self.refresh_regime(now)
                 self.maybe_scan(now)
                 self.trading_cycle(now)
+                # LEARNING EVENT-DRIVEN: se in questo ciclo si e' chiuso un trade
+                # (determinato dalla strategia), ricalcola i pesi SUBITO invece di
+                # aspettare la finestra oraria -> adattamento immediato ad ogni esito.
+                if self._closed_this_cycle:
+                    self.refresh_weights(time.time())
+                    self.last_weight_refresh = time.time()
+                    self._closed_this_cycle = False
             except Exception as exc:  # noqa: BLE001
                 print(f"[main] errore nel ciclo: {exc}")
             finally:
