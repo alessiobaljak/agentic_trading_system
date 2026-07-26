@@ -20,8 +20,8 @@ Opzioni utili: --interval (default = timeframe del bot), --start, --max-combos,
 from __future__ import annotations
 
 import argparse
+import gc
 import os
-import time
 
 from bot.config import settings, timeframe_hours
 from backtesting.data_loader import load_candles
@@ -64,26 +64,19 @@ def _aggregate(rows: list) -> dict:
     }
 
 
-def _run(symbols, candles_by_sym, btc_ctx, args, enabled: bool) -> dict:
+def _opt_symbol(sym, candles, btc_ctx, args, enabled: bool) -> list:
+    """Walk-forward su UNA coin per UN modello di uscita. Optimizer FRESCO con seed
+    fisso: baseline e scale-out vedono la STESSA sequenza RNG (stessi split/combo)."""
     settings.SCALE_OUT_ENABLED = enabled
-    label = "SCALE-OUT" if enabled else "BASELINE"
     opt = WalkForwardOptimizer(
         n_windows=args.windows, max_combos=args.max_combos,
         seed=args.seed, interval=args.interval,
     )
-    rows = []
-    for i, sym in enumerate(symbols, 1):
-        candles = candles_by_sym[sym]
-        try:
-            res = opt.optimize_symbol(sym, candles, context_by_ts=btc_ctx)
-            rows.extend(res)
-        except Exception as exc:  # noqa: BLE001
-            print(f"  [{label}] {sym} saltato: {str(exc)[:80]}")
-        print(f"  [{label}] {i}/{len(symbols)} {sym}", end="\r", flush=True)
-    print()
-    agg = _aggregate(rows)
-    agg["rows"] = rows
-    return agg
+    try:
+        return opt.optimize_symbol(sym, candles, context_by_ts=btc_ctx)
+    except Exception as exc:  # noqa: BLE001
+        print(f"  {sym} ({'ON' if enabled else 'OFF'}) saltato: {str(exc)[:80]}")
+        return []
 
 
 def _fmt(a: dict) -> str:
@@ -130,43 +123,49 @@ def main() -> int:
 
     min_hist = _min_history(args.interval)
 
-    # --- carica le candele UNA volta (stessi dati per entrambi i run) ---
-    print("[ab] carico le candele…")
-    candles_by_sym: dict[str, list] = {}
-    for i, sym in enumerate(symbols, 1):
-        try:
-            c = load_candles(sym, args.interval, args.start, end, prefer=args.source)
-        except Exception as exc:  # noqa: BLE001
-            print(f"  {sym} errore caricamento: {str(exc)[:70]}")
-            continue
-        if len(c) < min_hist:
-            print(f"  {sym} storia insufficiente ({len(c)}<{min_hist}), skip")
-            continue
-        candles_by_sym[sym] = c
-        print(f"  {i}/{len(symbols)} {sym} ({len(c)} candele)", end="\r", flush=True)
-    print()
-    symbols = list(candles_by_sym.keys())
-    if not symbols:
-        print("[ab] nessuna coin con storia sufficiente. Interrompo.")
-        return 1
-
-    # contesto BTC (per le strategie cross-asset), condiviso tra i due run
+    # --- contesto BTC (per le strategie cross-asset), caricato UNA volta ---
+    # tenuto in memoria per tutte le coin (come fa l'optimizer di produzione).
     btc_ctx = None
     tmp = WalkForwardOptimizer(n_windows=args.windows, max_combos=args.max_combos,
                                seed=args.seed, interval=args.interval)
-    if "BTCUSDT" in candles_by_sym and len(candles_by_sym["BTCUSDT"]) >= 200:
-        try:
-            btc_ctx = tmp.bt.build_context("BTCUSDT", candles_by_sym["BTCUSDT"])
-        except Exception:  # noqa: BLE001
-            btc_ctx = None
+    try:
+        btc_candles = load_candles("BTCUSDT", args.interval, args.start, end, prefer=args.source)
+        if len(btc_candles) >= 200:
+            btc_ctx = tmp.bt.build_context("BTCUSDT", btc_candles)
+        del btc_candles
+        gc.collect()
+    except Exception as exc:  # noqa: BLE001
+        print(f"[ab] contesto BTC non disponibile ({str(exc)[:60]})")
 
-    # --- RUN A: baseline (TP unico) ---
-    print("\n[ab] RUN A · BASELINE (TP unico)…")
-    base = _run(symbols, candles_by_sym, btc_ctx, args, enabled=False)
-    # --- RUN B: scale-out ---
-    print("[ab] RUN B · SCALE-OUT (1R/2R/3R + break-even)…")
-    test = _run(symbols, candles_by_sym, btc_ctx, args, enabled=True)
+    # --- una coin alla volta: carica -> baseline + scale-out -> LIBERA memoria ---
+    # (stesso footprint della validazione vera; evita l'OOM sulla VPS)
+    rows_base: list = []
+    rows_test: list = []
+    done = 0
+    for i, sym in enumerate(symbols, 1):
+        try:
+            candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  {sym} errore caricamento: {str(exc)[:70]}")
+            continue
+        if len(candles) < min_hist:
+            print(f"  {sym} storia insufficiente ({len(candles)}<{min_hist}), skip")
+            del candles
+            continue
+        rows_base.extend(_opt_symbol(sym, candles, btc_ctx, args, enabled=False))
+        rows_test.extend(_opt_symbol(sym, candles, btc_ctx, args, enabled=True))
+        done += 1
+        print(f"  {i}/{len(symbols)} {sym} ({len(candles)} candele) ✓")
+        del candles
+        gc.collect()
+
     settings.SCALE_OUT_ENABLED = False  # ripristina lo stato di default
+    if done == 0:
+        print("[ab] nessuna coin con storia sufficiente. Interrompo.")
+        return 1
+    print(f"[ab] processate {done} coin. Aggrego…")
+    base = _aggregate(rows_base)
+    test = _aggregate(rows_test)
 
     # --- confronto ---
     report = []
