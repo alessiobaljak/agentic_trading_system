@@ -64,6 +64,33 @@ export default function EquityCurve() {
 
   const last = data.length ? data[data.length - 1].equity : 0;
 
+  // Metriche di performance ALL-TIME derivate dagli stessi trade chiusi.
+  // Nessuna sovrapposizione con lo Snapshot (solo oggi) o con l'header
+  // (PnL cumulato + n trade): qui win rate complessivo, profit factor,
+  // max drawdown (peak-to-valley del PnL cumulato) ed expectancy/trade.
+  const stats = useMemo(() => {
+    const pnls = data.map((d) => d.pnl);
+    const n = pnls.length;
+    const wins = pnls.filter((v) => v > 0);
+    const losses = pnls.filter((v) => v < 0);
+    const grossWin = wins.reduce((s, v) => s + v, 0);
+    const grossLoss = Math.abs(losses.reduce((s, v) => s + v, 0));
+    const winRate = n ? wins.length / n : 0;
+    const pf = grossLoss > 0 ? grossWin / grossLoss : grossWin > 0 ? Infinity : 0;
+    const expectancy = n ? pnls.reduce((s, v) => s + v, 0) / n : 0;
+    let peak = -Infinity;
+    let maxDD = 0;
+    for (const d of data) {
+      if (d.equity > peak) peak = d.equity;
+      const dd = peak - d.equity;
+      if (dd > maxDD) maxDD = dd;
+    }
+    return { n, winRate, pf, expectancy, maxDD };
+  }, [data]);
+
+  const num = (v: number, d = 2) =>
+    v.toLocaleString(undefined, { maximumFractionDigits: d });
+
   return (
     <div className="panel">
       <h2>Equity Curve</h2>
@@ -123,6 +150,38 @@ export default function EquityCurve() {
               />
             </AreaChart>
           </ResponsiveContainer>
+
+          {/* metriche all-time: riempiono lo spazio senza duplicare l'header/Snapshot */}
+          <div
+            className="stat-grid"
+            style={{ marginTop: 16, gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))' }}
+          >
+            <div className={`stat-tile ${stats.winRate >= 0.5 ? 'good' : 'bad'}`}>
+              <div className="stat-label">Win rate</div>
+              <div className="stat-value">{Math.round(stats.winRate * 100)}%</div>
+              <div className="stat-sub">complessivo · {stats.n} trade</div>
+            </div>
+            <div className={`stat-tile ${stats.pf >= 1 ? 'good' : 'bad'}`}>
+              <div className="stat-label">Profit factor</div>
+              <div className="stat-value">
+                {stats.pf === Infinity ? '∞' : num(stats.pf)}
+              </div>
+              <div className="stat-sub">profitti lordi / perdite lorde</div>
+            </div>
+            <div className="stat-tile bad">
+              <div className="stat-label">Max drawdown</div>
+              <div className="stat-value neg">-{num(stats.maxDD)}</div>
+              <div className="stat-sub">calo max dal picco</div>
+            </div>
+            <div className={`stat-tile ${stats.expectancy >= 0 ? 'good' : 'bad'}`}>
+              <div className="stat-label">Expectancy</div>
+              <div className={`stat-value ${stats.expectancy >= 0 ? 'pos' : 'neg'}`}>
+                {stats.expectancy >= 0 ? '+' : ''}
+                {num(stats.expectancy)}
+              </div>
+              <div className="stat-sub">PnL medio / trade</div>
+            </div>
+          </div>
         </>
       )}
     </div>
