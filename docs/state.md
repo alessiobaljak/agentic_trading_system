@@ -1,29 +1,29 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-26 10:13 UTC_
+_Generato: 2026-07-26 11:39 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$10,520.90**
-- ultimo heartbeat: 2026-07-26 10:13 UTC
+- ultimo heartbeat: 2026-07-26 11:39 UTC
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-26 10:05 UTC)
-- motivo: parita' backtest: 4 segnali validi aperti
-- asset valutati: 146 · segnali: 11 · miglior segnale SIRENUSDT gen_6868e6e0 (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-26 11:35 UTC)
+- motivo: parita' backtest: 5 segnali validi aperti
+- asset valutati: 152 · segnali: 11 · miglior segnale EVAAUSDT gen_c8e6b76a (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- CLOUSDT: short qty=16844.217940487826 @ 0.12492 uPnL=27.116425525482235
-- LABUSDT: short qty=13708.011108311006 @ 0.1535 uPnL=3.1575389064137123
-- LITUSDT: long qty=1022.994787951408 @ 2.068 uPnL=-12.823540488157175
-- MAGMAUSDT: short qty=6769.010699897152 @ 0.31082 uPnL=28.227931286739416
-- NIGHTUSDT: long qty=107180.02576373065 @ 0.01963 uPnL=-6.440887706127617
-- POWERUSDT: long qty=23068.957581106373 @ 0.09096 uPnL=-10.108228137289114
-- PROMUSDT: long qty=1031.7088608889658 @ 1.918 uPnL=-9.606514418675996
-- RAVEUSDT: long qty=6871.2922986644535 @ 0.3039 uPnL=-16.62982263571385
-- SIRENUSDT: short qty=70730.06089669847 @ 0.03013 uPnL=-41.343331488242995
-- USELESSUSDT: short qty=35755.43368978815 @ 0.05823 uPnL=-2.6801541339874575
+- CLOUSDT: short qty=16844.217940487826 @ 0.12492 uPnL=36.753093158380246
+- LABUSDT: short qty=13708.011108311006 @ 0.1535 uPnL=-5.728536289311142
+- LITUSDT: long qty=1022.994787951408 @ 2.068 uPnL=-11.428925377050756
+- MAGMAUSDT: short qty=6769.010699897152 @ 0.31082 uPnL=19.148487830031858
+- NIGHTUSDT: long qty=107180.02576373065 @ 0.01963 uPnL=-15.162689635275488
+- POWERUSDT: long qty=23068.957581106373 @ 0.09096 uPnL=9.824687277239846
+- PROMUSDT: long qty=1031.7088608889658 @ 1.918 uPnL=-15.644409858016688
+- RAVEUSDT: long qty=6871.2922986644535 @ 0.3039 uPnL=-11.475057531765337
+- SIRENUSDT: short qty=70730.06089669847 @ 0.03013 uPnL=-0.005254426130008483
+- USELESSUSDT: short qty=35755.43368978815 @ 0.05823 uPnL=23.390556677813713
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
