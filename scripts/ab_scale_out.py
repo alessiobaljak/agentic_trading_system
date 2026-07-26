@@ -37,30 +37,37 @@ def _min_history(interval: str) -> int:
     return int(days * 24.0 / timeframe_hours(interval))
 
 
-def _aggregate(rows: list) -> dict:
-    """rows = lista di OptResult (coppie coin×strategia). Aggrega le metriche GATE."""
-    total = len(rows)
-    passed = [r for r in rows if r.passed]
+def _aggregate(rows: list, min_trades: int) -> dict:
+    """rows = OptResult (coppie coin×strategia). Confronto sull'ECONOMIA OOS di
+    TUTTE le coppie attive (li' si vede l'effetto del modello di uscita), non solo
+    sul GATE pieno: quest'ultimo e' CUMULATIVO (piu' passate) e in una singola
+    passata passa quasi nulla -> darebbe 0 vs 0, cieco."""
+    active = [r for r in rows if r.oos_trades >= min_trades]
+    soft = [r for r in active if r.oos_pf >= 1.10 and r.oos_pnl_pct > 0]
+    strict = [r for r in rows if r.passed]
     coins_all = {r.symbol for r in rows}
-    coins_cov = {r.symbol for r in passed}
-    trades = sum(r.oos_trades for r in rows)
+    coins_soft = {r.symbol for r in soft}
 
     def _avg(vals):
         vals = list(vals)
         return sum(vals) / len(vals) if vals else 0.0
 
     return {
-        "pairs_total": total,
-        "pairs_passed": len(passed),
-        "pass_rate": (len(passed) / total) if total else 0.0,
+        "pairs_total": len(rows),
+        "pairs_active": len(active),
+        "total_trades": sum(r.oos_trades for r in rows),
+        # economia OOS su tutte le coppie attive
+        "total_oos_return": sum(r.oos_pnl_pct for r in active),
+        "avg_oos_return": _avg(r.oos_pnl_pct for r in active),
+        "avg_pf": _avg(r.oos_pf for r in active),
+        "avg_winrate": _avg(r.oos_win_rate for r in active),
+        "pct_positive": (sum(1 for r in active if r.oos_pnl_pct > 0) / len(active)) if active else 0.0,
+        # "soft gate": coppie interessanti in questa passata (pf>=1.1 & ritorno>0)
+        "soft_pass": len(soft),
+        "soft_coins": len(coins_soft),
         "coins_total": len(coins_all),
-        "coins_covered": len(coins_cov),
-        "coin_coverage": (len(coins_cov) / len(coins_all)) if coins_all else 0.0,
-        "avg_pf_passed": _avg(r.oos_pf for r in passed),
-        "avg_winrate_passed": _avg(r.oos_win_rate for r in passed),
-        "total_oos_return_passed": sum(r.oos_pnl_pct for r in passed),
-        "avg_oos_return_passed": _avg(r.oos_pnl_pct for r in passed),
-        "total_trades": trades,
+        # gate PIENO (cumulativo su piu' passate): di norma 0 in una singola passata
+        "strict_pass": len(strict),
     }
 
 
@@ -81,15 +88,17 @@ def _opt_symbol(sym, candles, btc_ctx, args, enabled: bool) -> list:
 
 def _fmt(a: dict) -> str:
     return (
-        f"  coppie validate : {a['pairs_passed']}/{a['pairs_total']} "
-        f"({a['pass_rate']*100:.1f}%)\n"
-        f"  coin coperte    : {a['coins_covered']}/{a['coins_total']} "
-        f"({a['coin_coverage']*100:.1f}%)\n"
-        f"  PF medio (pass) : {a['avg_pf_passed']:.3f}\n"
-        f"  win rate (pass) : {a['avg_winrate_passed']*100:.1f}%\n"
-        f"  ritorno OOS tot : {a['total_oos_return_passed']*100:.1f}%  "
-        f"(medio {a['avg_oos_return_passed']*100:.2f}%/coppia)\n"
-        f"  trade OOS totali: {a['total_trades']}"
+        f"  coppie attive     : {a['pairs_active']}/{a['pairs_total']} "
+        f"(>= trade OOS min)\n"
+        f"  ritorno OOS totale: {a['total_oos_return']*100:.1f}%  "
+        f"(medio {a['avg_oos_return']*100:.2f}%/coppia)\n"
+        f"  PF medio          : {a['avg_pf']:.3f}\n"
+        f"  win rate medio    : {a['avg_winrate']*100:.1f}%\n"
+        f"  coppie positive   : {a['pct_positive']*100:.1f}%  (ritorno OOS > 0)\n"
+        f"  soft-pass         : {a['soft_pass']} su {a['soft_coins']}/{a['coins_total']} coin "
+        f"(pf>=1.1 & ritorno>0)\n"
+        f"  strict-pass (gate pieno, cumulativo): {a['strict_pass']}\n"
+        f"  trade OOS totali  : {a['total_trades']}"
     )
 
 
@@ -112,9 +121,12 @@ def main() -> int:
     p.add_argument("--windows", type=int, default=3)
     p.add_argument("--max-combos", type=int, default=12, dest="max_combos")
     p.add_argument("--seed", type=int, default=12345, help="FISSO per entrambi i run (equità)")
+    p.add_argument("--min-trades", type=int, default=None, dest="min_trades",
+                   help="trade OOS minimi per considerare una coppia (default: GATE_MIN_TRADES)")
     p.add_argument("--out", default=None, help="path report markdown (default: scripts/ab_scale_out_report.md)")
     args = p.parse_args()
 
+    min_trades = args.min_trades if args.min_trades is not None else settings.GATE_MIN_TRADES
     end = args.end
     symbols = top_symbols_by_volume(args.top) if args.top > 0 else \
         [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
@@ -164,16 +176,18 @@ def main() -> int:
         print("[ab] nessuna coin con storia sufficiente. Interrompo.")
         return 1
     print(f"[ab] processate {done} coin. Aggrego…")
-    base = _aggregate(rows_base)
-    test = _aggregate(rows_test)
+    base = _aggregate(rows_base, min_trades)
+    test = _aggregate(rows_test, min_trades)
 
     # --- confronto ---
     report = []
-    report.append("=" * 64)
+    report.append("=" * 66)
     report.append("A/B MODELLO DI USCITA — TP unico (baseline) vs SCALE-OUT su R")
-    report.append("=" * 64)
+    report.append("=" * 66)
     report.append(f"universo {len(symbols)} coin · interval {args.interval} · "
-                  f"windows {args.windows} · seed {args.seed}")
+                  f"windows {args.windows} · seed {args.seed} · min_trades {min_trades}")
+    report.append("Confronto sull'ECONOMIA OOS di TUTTE le coppie (una passata): "
+                  "il gate pieno e' cumulativo e qui darebbe 0 vs 0.")
     report.append("")
     report.append("[A] BASELINE (TP unico)")
     report.append(_fmt(base))
@@ -181,25 +195,29 @@ def main() -> int:
     report.append("[B] SCALE-OUT (50% 1R / 30% 2R / 20% 3R + break-even dopo TP1)")
     report.append(_fmt(test))
     report.append("")
-    report.append("DELTA (B - A)  [meglio se ▲ su coppie/coin/PF/ritorno]")
-    report.append(_delta_line("coppie validate", base["pass_rate"], test["pass_rate"], pct=True))
-    report.append(_delta_line("coin coperte", base["coin_coverage"], test["coin_coverage"], pct=True))
-    report.append(_delta_line("PF medio", base["avg_pf_passed"], test["avg_pf_passed"]))
-    report.append(_delta_line("win rate", base["avg_winrate_passed"], test["avg_winrate_passed"], pct=True))
-    report.append(_delta_line("ritorno OOS tot", base["total_oos_return_passed"],
-                              test["total_oos_return_passed"], pct=True))
+    report.append("DELTA (B - A)  [meglio se ▲]")
+    report.append(_delta_line("ritorno OOS totale", base["total_oos_return"], test["total_oos_return"], pct=True))
+    report.append(_delta_line("PF medio", base["avg_pf"], test["avg_pf"]))
+    report.append(_delta_line("win rate medio", base["avg_winrate"], test["avg_winrate"], pct=True))
+    report.append(_delta_line("coppie positive", base["pct_positive"], test["pct_positive"], pct=True))
+    report.append(_delta_line("soft-pass (n)", base["soft_pass"], test["soft_pass"], dp=0))
     report.append("")
-    # verdetto sintetico
-    better = (test["pass_rate"] >= base["pass_rate"] and
-              test["total_oos_return_passed"] >= base["total_oos_return_passed"] and
-              test["avg_pf_passed"] >= base["avg_pf_passed"])
-    if better:
-        report.append("VERDETTO: lo SCALE-OUT non peggiora nessuna metrica chiave "
-                      "-> candidato a diventare standard (poi ri-validazione completa).")
+    # verdetto: quante metriche chiave migliorano
+    score = 0
+    score += 1 if test["total_oos_return"] > base["total_oos_return"] else 0
+    score += 1 if test["avg_pf"] >= base["avg_pf"] else 0
+    score += 1 if test["pct_positive"] >= base["pct_positive"] else 0
+    score += 1 if test["soft_pass"] >= base["soft_pass"] else 0
+    if score >= 3 and test["total_oos_return"] > base["total_oos_return"]:
+        report.append(f"VERDETTO: SCALE-OUT MEGLIO ({score}/4 metriche chiave a favore) "
+                      "-> candidato standard; conferma con ri-validazione completa.")
+    elif score <= 1:
+        report.append(f"VERDETTO: SCALE-OUT PEGGIO ({score}/4) -> resta il TP unico, "
+                      "oppure ritara i livelli R (SCALE_OUT_R_MULTIPLES/FRACTIONS).")
     else:
-        report.append("VERDETTO: lo SCALE-OUT NON domina il baseline su tutte le metriche "
-                      "-> meglio restare sul TP unico (o ritarare i livelli R).")
-    report.append("=" * 64)
+        report.append(f"VERDETTO: MISTO ({score}/4) -> dipende dalla priorita' "
+                      "(ritorno vs PF/consistenza). Valutare ritaratura dei livelli R.")
+    report.append("=" * 66)
 
     text = "\n".join(report)
     print("\n" + text)
