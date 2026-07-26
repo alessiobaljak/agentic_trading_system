@@ -1033,6 +1033,100 @@ input[type='range'] {
 }
 .mini-chip .mono { font-size: 11px; color: var(--text-dim); }
 
+/* ---------------------------------------- Blocco "ultima decisione" grafico */
+.decision-block {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent), var(--bg-elev);
+  border: 1px solid var(--border-soft);
+}
+.decision-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.decision-outcome {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 750;
+}
+.meter {
+  margin-top: 13px;
+}
+.meter-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+.meter-track {
+  position: relative;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--bg-panel-2);
+}
+.meter-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  transition: width 0.45s var(--ease);
+}
+.meter-thresh {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--text);
+  opacity: 0.7;
+}
+.decision-mini {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 13px;
+}
+
+/* barra vittorie/perdite (snapshot del giorno) */
+.wl-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--bg-panel-2);
+  margin-top: 8px;
+}
+.wl-bar > span { display: block; height: 100%; transition: width 0.4s var(--ease); }
+.wl-bar .win { background: linear-gradient(90deg, var(--green), var(--teal)); }
+.wl-bar .loss { background: var(--red); }
+
+/* elenco compatto posizioni aperte (snapshot) */
+.mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 10px;
+}
+.mini-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: var(--bg-panel-2);
+  font-size: 12.5px;
+}
+.mini-row .sym { font-weight: 650; }
+
 /* --------------------------------------------------------- Responsive shell */
 @media (max-width: 900px) {
   .app-shell {

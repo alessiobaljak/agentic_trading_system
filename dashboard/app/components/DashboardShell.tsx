@@ -5,7 +5,7 @@ import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { getAuthInstance } from '../lib/firebase';
 
 import BotStatus from './BotStatus';
-import DecisionStatus from './DecisionStatus';
+import DailySnapshot from './DailySnapshot';
 import EquityCurve from './EquityCurve';
 import Positions from './Positions';
 import ClosedTrades from './ClosedTrades';
@@ -249,7 +249,7 @@ export default function DashboardShell() {
               <BotStatus />
               <div className="grid grid-2">
                 <EquityCurve />
-                <DecisionStatus />
+                <DailySnapshot />
               </div>
             </>
           )}
