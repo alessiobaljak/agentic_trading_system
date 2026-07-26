@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 
 from bot.config import settings
 from bot.core.firebase_client import get_firebase
-from bot.core.models import ExitReason, Regime, RiskSettings
+from bot.core.models import Direction, ExitReason, Regime, RiskSettings
 from bot.agents.market_scanner import MarketScanner
 from bot.agents.onchain_agent import OnChainAgent
 from bot.agents.price_agent import PriceAgent
@@ -380,6 +380,14 @@ class TradingBot:
         except Exception:  # noqa: BLE001
             pass
 
+        # SENTIMENT TILT (live-only, come il trend tilt): se il sentiment della coin
+        # e' CONTRO la direzione del trade, apri piu' piccolo (solo riduzione, mai
+        # aumento). Niente dato -> nessuna penalita'. Non nel backtest -> parita' GATE1.
+        if settings.SENTIMENT_TILT_ENABLED and asset.sentiment_score is not None:
+            f = self._sentiment_size_factor(asset.sentiment_score, decision.direction)
+            if f < 1.0:
+                decision.size_multiplier = max(0.0, min(1.0, decision.size_multiplier * f))
+
         # RISK GATE — ultimo controllo prima dell'ordine.
         # Size e leva GUIDATE DAI DATI: convinzione del segnale × peso appreso della
         # strategia nel regime (adaptation.allocation). I cap di sicurezza (volatilita',
@@ -467,6 +475,17 @@ class TradingBot:
         atr_pct = i.atr / asset.price
         # mappa atr_pct in "sigma": 1% ~ 1σ, 3% ~ 3σ (euristica documentata)
         return atr_pct / 0.01
+
+    @staticmethod
+    def _sentiment_size_factor(sentiment: float, direction: Direction) -> float:
+        """Fattore di size in [SENTIMENT_TILT_FLOOR, 1.0] dal sentiment (0..1, 0.5
+        neutro). Sentiment allineato alla direzione -> 1.0; contrario -> riduce fino
+        al floor. Come il trend tilt: usa solo la parte CONTRARIA (min(0, align)),
+        quindi puo' solo RIDURRE la size, mai aumentarla."""
+        s = max(0.0, min(1.0, sentiment))
+        align = (s - 0.5) * 2.0 if direction == Direction.LONG else (0.5 - s) * 2.0  # [-1,1]
+        return max(settings.SENTIMENT_TILT_FLOOR,
+                   1.0 + settings.SENTIMENT_TILT_STRENGTH * min(0.0, align))
 
     def _persist_risk_state(self) -> None:
         self.fb.set_rtdb("/risk_state", self.circuit_breakers.to_dict())

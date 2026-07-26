@@ -215,6 +215,17 @@ class Settings:
     TREND_TILT_ENABLED: bool = os.getenv("TREND_TILT_ENABLED", "true").lower() == "true"
     TREND_TILT_STRENGTH: float = float(os.getenv("TREND_TILT_STRENGTH", "0.5"))
 
+    # ---- Sentiment come contesto di decisione (SOLO live/paper, non nel backtest) ----
+    # Overlay di SIZE al final gate, identico nello spirito al trend tilt: il sentiment
+    # per-coin (0..1, 0.5 neutro) e' un fattore IN PIU' che puo' solo RIDURRE la size,
+    # mai aumentarla. Un LONG con sentiment molto negativo (o uno SHORT con sentiment
+    # molto positivo) apre piu' piccolo (fino a SENTIMENT_TILT_FLOOR); allineato/neutro
+    # = size piena. Niente dato -> nessuna penalita' (fattore 1.0). Live-only: non tocca
+    # il GATE 1 (il backtest non ha il sentiment storico) -> nessuna ri-validazione.
+    SENTIMENT_TILT_ENABLED: bool = os.getenv("SENTIMENT_TILT_ENABLED", "true").lower() == "true"
+    SENTIMENT_TILT_STRENGTH: float = float(os.getenv("SENTIMENT_TILT_STRENGTH", "0.5"))
+    SENTIMENT_TILT_FLOOR: float = float(os.getenv("SENTIMENT_TILT_FLOOR", "0.5"))
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
