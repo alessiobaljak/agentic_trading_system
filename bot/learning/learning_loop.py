@@ -34,10 +34,13 @@ class LearningLoop:
     def build_report(self, lookback_days: int) -> MemoryReport:
         since_ts = time.time() - lookback_days * 86400
         trades = self.logger.all_since(since_ts)
-        # solo il timeframe CORRENTE: metriche e narrativa devono descrivere il
-        # sistema che gira ora, non mescolare l'era 1h con quella 15m (i pesi in
-        # compute_weights hanno lo stesso filtro).
-        trades = [t for t in trades if t.get("timeframe") == settings.ORCHESTRATOR_TIMEFRAME]
+        # solo il timeframe CORRENTE e solo esiti DETERMINATI DALLA STRATEGIA (no
+        # kill_switch/manuali/circuit-breaker): metriche e narrativa devono
+        # descrivere il sistema che gira ora e NON far giudicare la strategia da
+        # chiusure esterne — stesso filtro dei pesi in compute_weights.
+        tf = settings.ORCHESTRATOR_TIMEFRAME
+        trades = [t for t in trades
+                  if t.get("timeframe") == tf and metrics._strategy_determined(t)]
 
         report = MemoryReport(
             lookback_days=lookback_days,
