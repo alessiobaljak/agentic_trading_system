@@ -174,7 +174,13 @@ export default function CandleChart({
     };
     add(position.entry_price, '#7db6ff', 'Entry', false);
     add(position.stop_price, '#f85149', 'SL', true);
-    add(position.take_profit_price, '#3fb950', 'TP', true);
+    // TP scaglionati (se presenti): raggiunti in linea piena, in attesa tratteggiati.
+    const ladder = position.tp_ladder;
+    if (ladder && ladder.length > 0) {
+      ladder.forEach((t, i) => add(t.price, '#3fb950', `TP${i + 1}`, !t.hit));
+    } else {
+      add(position.take_profit_price, '#3fb950', 'TP', true);
+    }
   }, [position, symbol, interval, loading]);
 
   return (

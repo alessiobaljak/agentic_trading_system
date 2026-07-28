@@ -30,7 +30,7 @@ import argparse
 
 from bot.core.firebase_client import get_firebase
 
-START_EQUITY = 10_000.0
+START_EQUITY = 1000.0
 
 KEEP = [
     "strategy_registry", "strategy_params", "strategy_weights",

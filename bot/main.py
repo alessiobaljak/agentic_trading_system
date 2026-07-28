@@ -85,7 +85,7 @@ class TradingBot:
     def account_equity(self) -> float:
         """Equity corrente. In DRY_RUN usa un valore di paper (o da Firebase)."""
         eq = self.fb.get_rtdb("/account/equity")
-        return float(eq) if eq else 10_000.0
+        return float(eq) if eq else 1000.0
 
     def _used_margin(self) -> float:
         """Margine iniziale bloccato dalle posizioni aperte = somma(notional/leva).
@@ -99,7 +99,7 @@ class TradingBot:
         sempre coerente coi trade chiusi (anche quelli chiusi prima di questa
         logica) e si auto-corregge dopo ogni riavvio."""
         base = self.fb.get_rtdb("/account/starting_equity")
-        base = float(base) if base else 10_000.0
+        base = float(base) if base else 1000.0
         realized = sum(float(t.get("pnl", 0.0)) for t in self.logger.all_since(0.0))
         eq = base + realized
         self.fb.set_rtdb("/account/equity", eq)

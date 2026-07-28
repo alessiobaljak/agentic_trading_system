@@ -74,6 +74,33 @@ export default function PositionMetrics({ position }: { position: Position }) {
         {p.sentiment_at_entry != null ? ` · sentiment ${fmt(p.sentiment_at_entry)}` : ''}
         {p.fear_greed_at_entry != null ? ` · F&G ${Math.round(p.fear_greed_at_entry)}` : ''}
       </div>
+
+      {p.tp_ladder && p.tp_ladder.length > 0 && (
+        <div style={{ margin: '2px 0 4px' }}>
+          <div className="muted" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
+            Take-profit scaglionati · {p.scale_stage ?? p.tp_ladder.filter((t) => t.hit).length}/{p.tp_ladder.length} raggiunti
+          </div>
+          <div className="chip-row">
+            {p.tp_ladder.map((t, i) => (
+              <span
+                key={i}
+                className="mini-chip"
+                style={
+                  t.hit
+                    ? { background: 'rgba(63,185,80,0.16)', borderColor: 'rgba(63,185,80,0.4)', color: 'var(--green)' }
+                    : undefined
+                }
+                title={`${Math.round(t.fraction * 100)}% della size a ${t.r != null ? `${t.r}R` : ''} ${t.hit ? '· raggiunto' : '· in attesa'}`}
+              >
+                {t.hit ? '✓ ' : ''}TP{i + 1}
+                {t.r != null ? ` · ${t.r}R` : ''}
+                <span className="mono">{fmt(t.price, 4)}</span>
+                <span className="muted" style={{ fontSize: 10 }}>{Math.round(t.fraction * 100)}%</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }

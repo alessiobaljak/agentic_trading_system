@@ -378,12 +378,24 @@ class ExecutionEngine:
         accrued_funding = funding * notional
         costs = (self.cost_per_trade + pos.spread_cost) * notional + accrued_funding
         unreal = gross * pos.remaining_qty - costs
+        # TP scaglionati (scale-out): livelli, quota, R e quali gia' raggiunti (per la
+        # dashboard). Solo osservabilita'. Vuoto se scale-out disattivo (TP unico).
+        tp_ladder = []
+        if settings.SCALE_OUT_ENABLED:
+            _mults = settings.SCALE_OUT_R_MULTIPLES
+            tp_ladder = [
+                {"price": round(pr, 6), "fraction": fr,
+                 "r": (_mults[i] if i < len(_mults) else None),
+                 "hit": i < pos.scale_stage}
+                for i, (pr, fr) in enumerate(scale_ladder(pos.entry_price, pos.orig_stop, long))
+            ]
         self.fb.set_rtdb(f"/positions/{pos.symbol}", {
             "position_id": pos.position_id, "symbol": pos.symbol,
             "strategy": pos.strategy, "direction": pos.direction.value,
             "entry_price": pos.entry_price, "mark_price": mark_price,
             "quantity": pos.remaining_qty, "leverage": pos.leverage,
             "stop_price": pos.stop_price, "take_profit_price": pos.take_profit_price,
+            "tp_ladder": tp_ladder,
             "unrealized_pnl": unreal, "trailing_active": pos.trailing_active,
             "scaled_out": pos.scaled_out, "dry_run": self.dry_run,
             "updated_at": time.time(),
