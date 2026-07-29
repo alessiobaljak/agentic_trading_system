@@ -603,7 +603,11 @@ class TradingBot:
                 if now - self.last_weight_refresh >= 3600:
                     self.refresh_weights(now)
                     self.last_weight_refresh = now
-                if now - self.last_adapt_reload >= 6 * 3600:
+                # ricarica il REGISTRO validato (coppie GATE 1 + specs generate +
+                # params) OGNI ORA: cosi' il bot aggancia in fretta le nuove coppie
+                # validate e il flag "ready" appena la copertura cresce, senza
+                # aspettare 6h. Costo trascurabile (pochi doc). L'orario override.
+                if now - self.last_adapt_reload >= settings.ADAPT_RELOAD_SECONDS:
                     self.adaptation.load_weights()
                     self.adaptation.load_params()
                     self.adaptation.load_generated()

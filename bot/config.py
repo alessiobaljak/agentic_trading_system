@@ -88,6 +88,10 @@ class Settings:
     ORCHESTRATOR_TIMEFRAME: str = os.getenv("ORCHESTRATOR_TIMEFRAME", "15m")
     SCAN_INTERVAL_HOURS: int = 4          # market scanner ogni 4h
     REGIME_INTERVAL_MINUTES: int = 60     # regime detector ogni ora
+    # ogni quanto il bot RICARICA il registro validato (coppie GATE 1 + specs
+    # generate + params + flag ready). Default 1h: aggancia in fretta le nuove
+    # coppie validate quando la copertura cresce (prima era 6h).
+    ADAPT_RELOAD_SECONDS: int = int(os.getenv("ADAPT_RELOAD_SECONDS", "3600"))
     MAX_OPEN_POSITIONS: int = int(os.getenv("MAX_OPEN_POSITIONS", "5"))  # cap posizioni APERTE
     # cap per-posizione: una singola posizione usa al massimo questa frazione di
     # equity come MARGINE -> piu' posizioni coesistono, nessuna prende tutta la
