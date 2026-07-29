@@ -259,8 +259,6 @@ class TradingBot:
                 # faceva scattare il breaker troppo presto).
                 self.circuit_breakers.register_trade_result(closed.pnl / eq if eq else 0.0, was_sl)
                 self._persist_risk_state()
-                if self.circuit_breakers.state.daily_pnl_pct <= -0.03:
-                    self.notifier.daily_loss(abs(self.circuit_breakers.state.daily_pnl_pct))
 
         # 1b) chiusura MANUALE di singole posizioni (richiesta dalla dashboard).
         # La dashboard scrive /commands/close_position/{symbol}=true; qui chiudiamo
