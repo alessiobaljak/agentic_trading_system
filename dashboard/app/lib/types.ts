@@ -108,6 +108,7 @@ export interface Position {
   confidence_at_entry?: number; // convinzione del segnale all'apertura
   funding_at_entry?: number;    // funding rate della coin all'apertura
   scale_stage?: number;         // quanti TP scaglionati già raggiunti
+  realized_partial?: number;    // PnL netto già incassato dalle fette (TP parziali), già in equity
   // TP scaglionati (scale-out): livelli con quota, multiplo di R e se già raggiunti
   tp_ladder?: { price: number; fraction: number; r?: number; hit?: boolean }[];
 }

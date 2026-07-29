@@ -65,6 +65,7 @@ class Position:
     # dalle fette chiuse, e stop base ORIGINALE (per calcolare R anche dopo il BE)
     scale_stage: int = 0
     realized_gross: float = 0.0
+    realized_net: float = 0.0    # PnL NETTO gia' realizzato dalle fette (fee/spread dedotti), gia' accreditato all'equity
     orig_stop: float = 0.0
 
     def __post_init__(self):
@@ -99,7 +100,17 @@ class ExecutionEngine:
         # keep del profit-lock IMPARATO per-strategia (B2): aggiornato ogni ora dal
         # refresh del learning in main; vuoto = default globale per tutte.
         self.trailing_keep: dict[str, float] = {}
+        # coda dei PnL NETTI realizzati (fette scale-out + residuo alla chiusura) che
+        # il loop principale accredita all'equity: come Binance, ogni fill realizza
+        # subito sul saldo. Svuotata da TradingBot dopo ogni update.
+        self.realized_events: list[float] = []
         self.restore_open_positions()
+
+    def pop_realized(self) -> list[float]:
+        """Restituisce e AZZERA gli eventi di realizzo (da accreditare all'equity)."""
+        ev = self.realized_events
+        self.realized_events = []
+        return ev
 
     def _init_binance(self) -> None:
         try:
@@ -274,11 +285,18 @@ class ExecutionEngine:
         long = pos.direction == Direction.LONG
         gross_unit = (price - pos.entry_price) if long else (pos.entry_price - price)
         pos.realized_gross += gross_unit * qty
+        # PnL NETTO della fetta (fee+slippage round-trip sulla sua quota di notional;
+        # il funding e' regolato in blocco alla chiusura finale in _build_closed_trade,
+        # cosi' il PnL LOGGATO resta col modello di costo del backtest -> parita' GATE 1).
+        # Come Binance: questo netto viene ACCREDITATO SUBITO all'equity.
+        net = gross_unit * qty - (self.cost_per_trade + pos.spread_cost) * (pos.entry_price * qty)
+        pos.realized_net += net
+        self.realized_events.append(net)
         pos.remaining_qty -= qty
         pos.scaled_out = True
         if self.dry_run:
             print(f"[DRY_RUN] SCALE-OUT {qty:.4f} {pos.symbol} @ {price} "
-                  f"(residuo {pos.remaining_qty:.4f})")
+                  f"(netto {net:+.4f}, residuo {pos.remaining_qty:.4f})")
         elif self._client:
             side = "SELL" if long else "BUY"
             try:
@@ -310,6 +328,11 @@ class ExecutionEngine:
                       f"(POSSIBILI ORDINI ORFANI: verificare su Binance)")
 
         trade = self._build_closed_trade(pos, price, reason)
+        # Accredita all'equity SOLO la parte non ancora realizzata dalle fette:
+        # trade.pnl e' il TOTALE (fette + residuo, netto costi pieni); realized_net
+        # e' gia' stato accreditato ai TP parziali. Cosi' la somma degli eventi ==
+        # trade.pnl loggato (nessun doppio conteggio) e reconcile resta coerente.
+        self.realized_events.append(trade.pnl - pos.realized_net)
         self.open_positions.pop(pos.symbol, None)
         # la rimozione del nodo non deve MAI impedire il logging del trade
         try:
@@ -396,6 +419,8 @@ class ExecutionEngine:
             "quantity": pos.remaining_qty, "leverage": pos.leverage,
             "stop_price": pos.stop_price, "take_profit_price": pos.take_profit_price,
             "tp_ladder": tp_ladder,
+            # PnL gia' incassato dalle fette (TP parziali), gia' accreditato in equity
+            "realized_partial": round(pos.realized_net, 4),
             "unrealized_pnl": unreal, "trailing_active": pos.trailing_active,
             "scaled_out": pos.scaled_out, "dry_run": self.dry_run,
             "updated_at": time.time(),
@@ -408,6 +433,7 @@ class ExecutionEngine:
             "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
             # stato scale-out (per non perdere fette/BE dopo un riavvio)
             "scale_stage": pos.scale_stage, "realized_gross": pos.realized_gross,
+            "realized_net": pos.realized_net,
             "orig_stop": pos.orig_stop,
             "entry_time": pos.entry_time.isoformat(),
             "regime_at_entry": pos.regime_at_entry.value,
@@ -469,6 +495,7 @@ class ExecutionEngine:
         pos.trailing_active = bool(p.get("trailing_active", False))
         pos.scale_stage = int(p.get("scale_stage", 0) or 0)
         pos.realized_gross = float(p.get("realized_gross", 0.0) or 0.0)
+        pos.realized_net = float(p.get("realized_net", 0.0) or 0.0)
         pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
         return pos
 

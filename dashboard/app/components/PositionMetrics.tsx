@@ -58,6 +58,13 @@ export default function PositionMetrics({ position }: { position: Position }) {
         <M label="uPnL">
           <span className={upnl >= 0 ? 'pos' : 'neg'}>{upnl >= 0 ? '+' : ''}{fmt(upnl)}</span>
         </M>
+        {p.realized_partial != null && p.realized_partial !== 0 && (
+          <M label="Realizzato TP">
+            <span className={p.realized_partial >= 0 ? 'pos' : 'neg'}>
+              {p.realized_partial >= 0 ? '+' : ''}{fmt(p.realized_partial)}
+            </span>
+          </M>
+        )}
         <M label="Notional">${fmt(notional, 0)}</M>
         <M label="Margine">${fmt(margin, 0)}</M>
         <M label="Held">{p.held_hours != null ? `${fmt(p.held_hours, 1)}h` : '—'}</M>

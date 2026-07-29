@@ -99,6 +99,23 @@ def test_scale_out_full_run_to_final_tp(scale_on):
     assert "BTCUSDT" not in eng.open_positions
 
 
+def test_scale_out_equity_realized_incrementally(scale_on):
+    """Ogni fetta (TP parziale) accredita subito il netto all'equity, e la somma
+    di TUTTI gli eventi == PnL del trade loggato (nessun doppio conteggio)."""
+    eng = ExecutionEngine(firebase=FirebaseClient(), dry_run=True)
+    eng.open_position(_asset(100), "breakout", Direction.LONG, _params(qty=1.0, stop=98))
+    # gli eventi si accumulano (in produzione TradingBot li svuota con pop_realized)
+    eng.update_position("BTCUSDT", 103.0)   # TP1 -> evento parziale
+    pos = eng.open_positions["BTCUSDT"]
+    assert pos.realized_net > 0             # incassato subito
+    assert len(eng.realized_events) == 1    # un evento accodato al TP1
+    eng.update_position("BTCUSDT", 106.0)   # TP2 -> secondo evento
+    closed = eng.update_position("BTCUSDT", 110.0)  # TP3 -> chiusura + evento residuo
+    assert len(eng.realized_events) == 3
+    # somma di tutti i realizzi == PnL loggato (coerenza equity <-> trade, no doppi conteggi)
+    assert abs(sum(eng.realized_events) - closed.pnl) < 1e-6
+
+
 def test_scale_out_disabled_keeps_single_tp(monkeypatch):
     monkeypatch.setattr(settings, "SCALE_OUT_ENABLED", False)
     eng = ExecutionEngine(firebase=FirebaseClient(), dry_run=True)

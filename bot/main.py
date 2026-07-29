@@ -88,10 +88,17 @@ class TradingBot:
         return float(eq) if eq else 1000.0
 
     def _used_margin(self) -> float:
-        """Margine iniziale bloccato dalle posizioni aperte = somma(notional/leva).
-        Stessa formula della dashboard e del gate di riserva-margine."""
-        return sum(p.quantity * p.entry_price / max(p.leverage, 1.0)
+        """Margine bloccato dalle posizioni aperte = somma(notional_RESIDUO/leva).
+        Usa la quantita' RESIDUA: come Binance, quando una fetta (TP parziale) si
+        chiude il suo margine si LIBERA subito e torna disponibile per nuovi trade."""
+        return sum(p.remaining_qty * p.entry_price / max(p.leverage, 1.0)
                    for p in self.executor.open_positions.values())
+
+    def _settle_realized(self) -> None:
+        """Accredita all'equity i PnL realizzati (fette scale-out + chiusure) accumulati
+        dall'executor in questo tick — come Binance, ogni fill realizza sul saldo."""
+        for delta in self.executor.pop_realized():
+            self.apply_realized_pnl(delta)
 
     def reconcile_equity(self) -> float:
         """All'avvio ricalcola l'equity dalla fonte di verità (i trade chiusi):
@@ -101,9 +108,14 @@ class TradingBot:
         base = self.fb.get_rtdb("/account/starting_equity")
         base = float(base) if base else 1000.0
         realized = sum(float(t.get("pnl", 0.0)) for t in self.logger.all_since(0.0))
-        eq = base + realized
+        # + PnL delle FETTE gia' realizzate su posizioni ANCORA aperte (scale-out):
+        # il loro trade non e' ancora loggato, ma il netto e' gia' in equity. Cosi'
+        # dopo un restart a meta' trade l'equity resta coerente (nessun salto).
+        open_realized = sum(p.realized_net for p in self.executor.open_positions.values())
+        eq = base + realized + open_realized
         self.fb.set_rtdb("/account/equity", eq)
-        print(f"[main] equity riconciliata: {eq:.2f} (base {base:.2f} + realizzato {realized:+.2f})")
+        print(f"[main] equity riconciliata: {eq:.2f} (base {base:.2f} + realizzato "
+              f"{realized:+.2f} + fette aperte {open_realized:+.2f})")
         return eq
 
     def _log_closed(self, closed) -> None:
@@ -120,7 +132,9 @@ class TradingBot:
         except Exception:  # noqa: BLE001
             pass          # WAL best-effort: senza, si procede come prima
         self.logger.log(closed)
-        self.apply_realized_pnl(closed.pnl)
+        # NB: l'equity NON viene aggiornata qui: il PnL (fette + residuo) e' gia'
+        # accreditato via _settle_realized() dagli eventi di realizzo dell'executor,
+        # evitando il doppio conteggio con le fette parziali dello scale-out.
         try:
             self.fb.set_rtdb(wal_path, None)
         except Exception:  # noqa: BLE001
@@ -226,6 +240,9 @@ class TradingBot:
             if price is None:
                 continue
             closed = self.executor.update_position(sym, price)
+            # accredita subito all'equity le fette realizzate (TP parziali) e/o la
+            # chiusura finale — come Binance, ogni fill va sul saldo all'istante.
+            self._settle_realized()
             if closed:
                 eq = self.account_equity()
                 # uscita DETERMINATA dalla strategia -> il learning va ricalcolato ora
@@ -277,6 +294,7 @@ class TradingBot:
                     price = snap.price if snap else pos.entry_price
                 eq = self.account_equity()
                 closed = self.executor._close(pos, price, ExitReason.MANUAL)
+                self._settle_realized()
                 self._log_closed(closed)
                 self.notifier.trade_closed(
                     closed.symbol, closed.strategy, closed.direction.value,
@@ -300,6 +318,7 @@ class TradingBot:
                 if p is not None:
                     prices[s] = p
             closed = self.executor.force_close_all(prices, ExitReason.KILL_SWITCH)
+            self._settle_realized()
             for t in closed:
                 self._log_closed(t)
             self.notifier.kill_switch()
