@@ -385,6 +385,8 @@ class ExecutionEngine:
             fear_greed_at_entry=pos.fear_greed_at_entry,
             funding_at_entry=pos.funding_at_entry,
             confidence_at_entry=pos.confidence_at_entry,
+            scale_stage_reached=pos.scale_stage,
+            realized_partial=round(pos.realized_net, 6),
         )
 
     def _write_position_state(self, pos: Position, mark_price: float) -> None:

@@ -25,6 +25,8 @@ type Trade = {
   stop_price?: number;
   entry_time?: string; // ISO 8601 (ClosedTrade.entry_time serializzato)
   trailing_verdict?: string; // scritto dal bot (B1); se presente si usa questo, niente fetch Binance
+  scale_stage_reached?: number; // quanti TP scaglionati raggiunti (0 = uscito allo SL prima del TP1)
+  realized_partial?: number;    // PnL netto incassato dalle fette
 };
 
 type Verdict = 'premature' | 'protected' | 'neutral' | 'pending' | 'unavailable';
@@ -264,6 +266,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                 <th style={cell}>Strategia</th>
                 <th style={cell}>Side</th>
                 <th style={cell}>Uscita</th>
+                <th style={cell} title="Quanti TP scaglionati raggiunti prima della chiusura">TP</th>
                 <th style={cell}>Trailing?</th>
                 <th style={{ ...cell, textAlign: 'right' }}>PnL</th>
               </tr>
@@ -277,7 +280,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                       onClick={() => toggle(g.key)}
                       style={{ cursor: 'pointer', borderTop: '2px solid #28303d', background: '#161d2a' }}
                     >
-                      <td colSpan={7} style={{ ...cell, fontWeight: 600 }}>
+                      <td colSpan={8} style={{ ...cell, fontWeight: 600 }}>
                         <span style={{ display: 'inline-block', width: 16, color: '#8b96a5' }}>
                           {open ? '▾' : '▸'}
                         </span>
@@ -306,6 +309,26 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                           <td style={cell}>{t.direction}</td>
                           <td style={{ ...cell, color: '#8b96a5' }}>{t.exit_reason}</td>
                           <td style={{ ...cell, whiteSpace: 'nowrap' }}>
+                            {t.scale_stage_reached != null ? (
+                              t.scale_stage_reached > 0 ? (
+                                <span
+                                  style={{ color: '#3fb950' }}
+                                  title={
+                                    t.realized_partial != null
+                                      ? `incassato dalle fette: ${t.realized_partial >= 0 ? '+' : ''}${t.realized_partial.toFixed(2)}`
+                                      : undefined
+                                  }
+                                >
+                                  ✓ {t.scale_stage_reached}
+                                </span>
+                              ) : (
+                                <span style={{ color: '#8b96a5' }} title="nessun TP raggiunto (uscito prima)">—</span>
+                              )
+                            ) : (
+                              <span style={{ color: '#8b96a5' }}>·</span>
+                            )}
+                          </td>
+                          <td style={{ ...cell, whiteSpace: 'nowrap' }}>
                             {t.exit_reason === 'trailing_stop' ? (
                               <VerdictBadge v={(t.trailing_verdict as Verdict | undefined) ?? verdicts[tradeKey(t)]} />
                             ) : null}
@@ -319,7 +342,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                 );
               })}
               <tr style={{ borderTop: '2px solid #28303d', fontWeight: 700 }}>
-                <td style={cell} colSpan={7}>
+                <td style={cell} colSpan={8}>
                   Totale realizzato ({rows.length} trade)
                 </td>
                 <td style={{ ...cell, textAlign: 'right', color: total >= 0 ? '#3fb950' : '#f85149' }}>

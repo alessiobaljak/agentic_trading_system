@@ -212,6 +212,12 @@ class ClosedTrade(BaseModel):
     take_profit_price: Optional[float] = None
     stop_price: Optional[float] = None
 
+    # scale-out: quanti TP scaglionati sono stati raggiunti prima della chiusura
+    # (0 = nessuno, es. uscito allo SL prima del TP1) e il PnL netto gia' incassato
+    # dalle fette. Servono a capire se/quanto lo scale-out ha lavorato sul trade.
+    scale_stage_reached: int = 0
+    realized_partial: float = 0.0
+
     # contesto all'ENTRATA (fondamentale per il learning)
     regime_at_entry: Regime
     indicators_at_entry: dict[str, IndicatorSnapshot] = Field(default_factory=dict)
