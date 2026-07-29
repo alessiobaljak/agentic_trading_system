@@ -119,7 +119,25 @@ export default function Positions({ onSelect }: { onSelect?: (p: Position) => vo
                     <td className="mono">{fmt(p.quantity, 4)}</td>
                     <td className="mono">{p.leverage != null ? `${p.leverage}x` : '—'}</td>
                     <td className="mono">{fmt(p.stop_price, 4)}</td>
-                    <td className="mono">{fmt(p.take_profit_price, 4)}</td>
+                    <td className="mono">
+                      {p.tp_ladder && p.tp_ladder.length > 0 ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end' }}>
+                          {p.tp_ladder.map((t, i) => (
+                            <span
+                              key={i}
+                              style={{ fontSize: 11, whiteSpace: 'nowrap', color: t.hit ? 'var(--green)' : 'var(--text-dim)' }}
+                              title={`TP${i + 1}${t.r != null ? ` · ${t.r}R` : ''} · ${Math.round(t.fraction * 100)}% ${t.hit ? '· raggiunto' : ''}`}
+                            >
+                              {t.hit ? '✓ ' : ''}
+                              {t.r != null ? `${t.r}R ` : ''}
+                              {fmt(t.price, 4)}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        fmt(p.take_profit_price, 4)
+                      )}
+                    </td>
                     <td className="mono muted" style={{ fontSize: 12, whiteSpace: 'nowrap' }}>
                       {p.held_hours != null ? `${p.held_hours.toFixed(1)}h` : '—'}
                       {p.accrued_funding != null && p.accrued_funding !== 0
