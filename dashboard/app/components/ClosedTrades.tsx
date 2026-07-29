@@ -84,6 +84,24 @@ function tradeKey(t: Trade): string {
   return t.trade_id ?? `${t.symbol}-${t.exit_ts ?? 0}`;
 }
 
+/** Etichetta + colore leggibili per l'exit_reason. `scale_out` = residuo uscito
+ *  DOPO aver bancato >=1 TP (esito netto positivo) -> verde, distinto dal trailing
+ *  protettivo (ambra) e dallo stop-loss pieno (rosso). */
+const EXIT_LABEL: Record<string, { text: string; color: string }> = {
+  take_profit: { text: 'Take profit', color: '#3fb950' },
+  scale_out: { text: 'Scale-out', color: '#3fb950' },
+  trailing_stop: { text: 'Trailing stop', color: '#d29922' },
+  stop_loss: { text: 'Stop loss', color: '#f85149' },
+  time_exit: { text: 'Time exit', color: '#8b96a5' },
+  manual: { text: 'Manuale', color: '#8b96a5' },
+  kill_switch: { text: 'Kill switch', color: '#8b96a5' },
+  circuit_breaker: { text: 'Circuit breaker', color: '#8b96a5' },
+};
+
+function exitLabel(reason: string | undefined): { text: string; color: string } {
+  return EXIT_LABEL[reason ?? ''] ?? { text: reason ?? '—', color: '#8b96a5' };
+}
+
 /**
  * Controfattuale: se NON fossimo usciti col trailing, cosa avrebbe toccato PRIMA
  * il prezzo — il TP configurato o lo stop-loss base? Simula sulle klines Binance
@@ -220,7 +238,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
     let cancelled = false;
     const todo = rows.filter(
       (t) =>
-        t.exit_reason === 'trailing_stop' &&
+        (t.exit_reason === 'trailing_stop' || t.exit_reason === 'scale_out') &&
         !t.trailing_verdict && // se il bot ha già scritto il verdetto, non serve Binance
         expanded.has(dayKey(t.exit_ts ?? 0)) &&
         !(tradeKey(t) in verdicts),
@@ -307,7 +325,11 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                           <td style={{ ...cell, fontWeight: 600 }}>{t.symbol}</td>
                           <td style={cell}>{t.strategy}</td>
                           <td style={cell}>{t.direction}</td>
-                          <td style={{ ...cell, color: '#8b96a5' }}>{t.exit_reason}</td>
+                          <td style={cell}>
+                            <span style={{ color: exitLabel(t.exit_reason).color, fontWeight: 600 }}>
+                              {exitLabel(t.exit_reason).text}
+                            </span>
+                          </td>
                           <td style={{ ...cell, whiteSpace: 'nowrap' }}>
                             {t.scale_stage_reached != null ? (
                               t.scale_stage_reached > 0 ? (
@@ -329,7 +351,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                             )}
                           </td>
                           <td style={{ ...cell, whiteSpace: 'nowrap' }}>
-                            {t.exit_reason === 'trailing_stop' ? (
+                            {t.exit_reason === 'trailing_stop' || t.exit_reason === 'scale_out' ? (
                               <VerdictBadge v={(t.trailing_verdict as Verdict | undefined) ?? verdicts[tradeKey(t)]} />
                             ) : null}
                           </td>

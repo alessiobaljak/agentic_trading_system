@@ -224,7 +224,17 @@ class ExecutionEngine:
             # 1) stop del RESIDUO (dopo il primo TP pos.stop_price = entry = break-even)
             hit_sl = (mark_price <= eff_stop) if long else (mark_price >= eff_stop)
             if hit_sl:
-                reason = ExitReason.TRAILING_STOP if (pos.scaled_out or pos.trailing_active) else ExitReason.STOP_LOSS
+                # tre esiti distinti (l'etichetta descrive COSA e' successo davvero):
+                #  - SCALE_OUT: ha gia' bancato >=1 fetta (TP1/TP2) e il residuo esce
+                #    sullo stop rialzato a break-even/profit-lock -> esito NETTO positivo
+                #  - TRAILING_STOP: profit-lock armato senza aver bancato fette (raro)
+                #  - STOP_LOSS: stoppato prima di qualsiasi TP -> perdita piena
+                if pos.scaled_out:
+                    reason = ExitReason.SCALE_OUT
+                elif pos.trailing_active:
+                    reason = ExitReason.TRAILING_STOP
+                else:
+                    reason = ExitReason.STOP_LOSS
                 return self._close(pos, eff_stop, reason)
 
             # 2) fette di TP raggiunte

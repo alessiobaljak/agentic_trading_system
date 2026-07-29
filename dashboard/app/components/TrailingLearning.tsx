@@ -68,7 +68,8 @@ export default function TrailingLearning() {
     const map = new Map<string, Row>();
     const tot: Row = { strategy: 'TOTALE', n: 0, premature: 0, protected_: 0, neutral: 0, noisePrem: 0, missSum: 0 };
     for (const t of rows) {
-      if (t.exit_reason !== 'trailing_stop' || !t.trailing_verdict) continue; // solo uscite trailing già valutate dal bot
+      // trailing_stop e scale_out: entrambi tagliano il runner -> stesso verdetto controfattuale
+      if ((t.exit_reason !== 'trailing_stop' && t.exit_reason !== 'scale_out') || !t.trailing_verdict) continue;
       const key = t.strategy ?? '—';
       let r = map.get(key);
       if (!r) {

@@ -532,7 +532,10 @@ class TradingBot:
         for t in trades:
             if done >= max_eval:
                 break
-            if t.get("exit_reason") != "trailing_stop" or t.get("trailing_verdict") is not None:
+            # trailing_stop E scale_out: entrambi tagliano il "runner" prima del TP
+            # finale -> il controfattuale (tenere fino a TP3?) allena il keep trailing.
+            if t.get("exit_reason") not in ("trailing_stop", "scale_out") \
+                    or t.get("trailing_verdict") is not None:
                 continue
             tp, sl, ex = t.get("take_profit_price"), t.get("stop_price"), t.get("exit_ts")
             if tp is None or sl is None or ex is None:

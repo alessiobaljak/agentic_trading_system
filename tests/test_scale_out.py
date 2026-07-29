@@ -80,9 +80,23 @@ def test_scale_out_reversal_after_tp1_locks_gain(scale_on):
     eng.update_position("BTCUSDT", 103.0)          # TP1 -> 30% via, stop a BE
     closed = eng.update_position("BTCUSDT", 100.0)  # torna a entry -> stop BE sul residuo
     assert closed is not None
-    assert closed.exit_reason == ExitReason.TRAILING_STOP
+    # ha gia' bancato TP1 (scaled_out) -> l'uscita del residuo e' SCALE_OUT, non un
+    # trailing/stop protettivo: distingue "residuo dopo >=1 TP" da "stop puro".
+    assert closed.exit_reason == ExitReason.SCALE_OUT
     # ho gia' incassato il 30% a +3 -> il trade e' NETTO positivo malgrado il ritorno a entry
     assert closed.pnl > 0
+    assert "BTCUSDT" not in eng.open_positions
+
+
+def test_scale_out_stop_before_tp1_is_full_stop_loss(scale_on):
+    # stoppato PRIMA di qualsiasi fetta (nessun TP bancato) -> STOP_LOSS pieno,
+    # non SCALE_OUT ne' TRAILING_STOP (perdita piena, edge dello stop reale).
+    eng = ExecutionEngine(firebase=FirebaseClient(), dry_run=True)
+    eng.open_position(_asset(100), "trend_following", Direction.LONG, _params(qty=1.0, stop=98))
+    closed = eng.update_position("BTCUSDT", 98.0)   # tocca lo stop base a -1R
+    assert closed is not None
+    assert closed.exit_reason == ExitReason.STOP_LOSS
+    assert closed.pnl < 0
     assert "BTCUSDT" not in eng.open_positions
 
 
