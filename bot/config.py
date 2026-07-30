@@ -199,6 +199,12 @@ class Settings:
     # margine se un ciclo e' lento). La sovrapposizione e' innocua: i fill avanzano
     # per stage e lo stop chiude una volta sola.
     EXEC_WICK_LOOKBACK_1M: int = int(os.getenv("EXEC_WICK_LOOKBACK_1M", "3"))
+    # Stream WebSocket dei trade: elimina l'ultima ambiguita' delle candele, cioe'
+    # l'ORDINE dei prezzi dentro il minuto (se il range tocca sia un TP sia lo stop,
+    # una candela non dice quale sia venuto prima). Alimenta lo stesso range hi/lo,
+    # ma minuto per minuto in tempo reale. Se lo stream non e' sano si ricade
+    # automaticamente sulle candele REST: nessun percorso critico ne dipende.
+    EXEC_PRICE_STREAM_ENABLED: bool = os.getenv("EXEC_PRICE_STREAM_ENABLED", "true").lower() == "true"
 
     # ---- GATE 1 (soglie di validazione) ----
     # Una coppia (coin, strategia) è validata SOLO se, fuori campione (OOS):

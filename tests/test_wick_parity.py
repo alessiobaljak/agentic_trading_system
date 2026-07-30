@@ -154,8 +154,9 @@ class _FakeBot:
     """Minimo indispensabile per esercitare TradingBot._wick_range senza costruire
     tutto il bot (Firebase, agenti, ...)."""
 
-    def __init__(self, price):
+    def __init__(self, price, stream=None):
         self.price = price
+        self.stream = stream        # None = nessuno stream -> ripiego su REST
 
     _wick_range = TradingBot._wick_range
 
@@ -196,3 +197,52 @@ def test_wick_range_returns_none_when_no_fresh_candles(scale_on):
     pos.entry_time = datetime.now(timezone.utc)
     bot = _FakeBot(_StubPrice([_candle(-2, high=104.0, low=99.0)]))
     assert bot._wick_range("BTCUSDT", pos) == (None, None)
+
+
+# ---- stream in tempo reale: priorita' e degradazione --------------------- #
+class _StubStream:
+    """Stream finto: risponde 'sano' o no e restituisce un range prefissato."""
+
+    def __init__(self, healthy: bool, rng=(None, None)):
+        self._healthy = healthy
+        self._rng = rng
+        self.taken: list[str] = []
+
+    def is_healthy(self):
+        return self._healthy
+
+    def take_range(self, symbol):
+        self.taken.append(symbol)
+        return self._rng
+
+
+def test_stream_is_preferred_over_rest_candles(scale_on):
+    """Se lo stream e' sano si usa lui: vede ogni trade e la finestra e' esatta."""
+    eng = _open()
+    pos = eng.open_positions["BTCUSDT"]
+    stream = _StubStream(healthy=True, rng=(107.0, 96.0))
+    bot = _FakeBot(_StubPrice([_candle(+1, high=104.0, low=99.0)]), stream=stream)
+    assert bot._wick_range("BTCUSDT", pos) == (107.0, 96.0)
+    assert stream.taken == ["BTCUSDT"]          # consumato (e azzerato) dallo stream
+
+
+def test_falls_back_to_rest_when_stream_unhealthy(scale_on):
+    """Stream giu' -> candele REST, senza che il bot se ne accorga."""
+    eng = _open()
+    pos = eng.open_positions["BTCUSDT"]
+    pos.entry_time = datetime.now(timezone.utc)
+    stream = _StubStream(healthy=False, rng=(107.0, 96.0))
+    bot = _FakeBot(_StubPrice([_candle(+1, high=104.0, low=99.0)]), stream=stream)
+    assert bot._wick_range("BTCUSDT", pos) == (104.0, 99.0)
+    assert stream.taken == []                   # nemmeno interrogato
+
+
+def test_falls_back_to_rest_when_stream_has_no_data_yet(scale_on):
+    """Stream sano ma nessun trade ancora su QUESTA coin (succede sulle sottili):
+    si ripiega sulle candele invece di restare ciechi."""
+    eng = _open()
+    pos = eng.open_positions["BTCUSDT"]
+    pos.entry_time = datetime.now(timezone.utc)
+    bot = _FakeBot(_StubPrice([_candle(+1, high=104.0, low=99.0)]),
+                   stream=_StubStream(healthy=True, rng=(None, None)))
+    assert bot._wick_range("BTCUSDT", pos) == (104.0, 99.0)

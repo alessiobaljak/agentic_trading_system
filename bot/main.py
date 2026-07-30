@@ -23,6 +23,7 @@ from bot.core.models import Direction, ExitReason, Regime, RiskSettings
 from bot.agents.market_scanner import MarketScanner
 from bot.agents.onchain_agent import OnChainAgent
 from bot.agents.price_agent import PriceAgent
+from bot.agents.price_stream import PriceStream
 from bot.agents.regime_detector import RegimeDetector
 from bot.agents.sentiment_agent import SentimentAgent
 from bot.execution.executor import ExecutionEngine
@@ -39,6 +40,9 @@ class TradingBot:
     def __init__(self) -> None:
         self.fb = get_firebase()
         self.price = PriceAgent()
+        # stream dei trade in tempo reale: da' al paper la SEQUENZA dei prezzi, non
+        # solo gli estremi aggregati di una candela. Degradazione automatica su REST.
+        self.stream = PriceStream() if settings.EXEC_PRICE_STREAM_ENABLED else None
         self.onchain = OnChainAgent()
         self.sentiment = SentimentAgent()
         self.scanner = MarketScanner(self.price, self.sentiment)
@@ -94,19 +98,42 @@ class TradingBot:
         return sum(p.remaining_qty * p.entry_price / max(p.leverage, 1.0)
                    for p in self.executor.open_positions.values())
 
+    def _sync_stream_symbols(self) -> None:
+        """Tiene lo stream iscritto ESATTAMENTE ai simboli con posizioni aperte."""
+        if self.stream is None:
+            return
+        try:
+            self.stream.set_symbols(self.executor.open_positions.keys())
+        except Exception as exc:  # noqa: BLE001
+            print(f"[main] sync stream simboli fallito: {exc}")
+
     def _wick_range(self, symbol: str, pos) -> tuple[float | None, float | None]:
-        """Estremi (high/low) toccati dal prezzo nell'ultimo minuto, dalle candele 1m.
+        """Estremi (high/low) toccati dal prezzo da quando l'abbiamo guardato l'ultima volta.
 
-        Serve per la PARITA' con il GATE, che riempie TP/SL quando l'OMBRA della
-        candela tocca il livello: il bot campiona ogni ~30s e da solo non vedrebbe i
-        movimenti tra due letture. E' anche il comportamento del Binance REALE, dove
-        gli ordini TP/SL restano appoggiati sul book ed è l'ombra a eseguirli.
+        Serve per la PARITA' con il GATE, che riempie TP/SL quando l'OMBRA tocca il
+        livello: il bot campiona ogni ~30s e da solo non vedrebbe i movimenti tra due
+        letture. E' anche il comportamento del Binance REALE, dove gli ordini TP/SL
+        restano appoggiati sul book ed è l'ombra a eseguirli.
 
-        Scarta le candele APERTE PRIMA dell'ingresso: il prezzo di prima che entrassimo
-        non puo' riempire i nostri TP (sarebbero fill inventati). (None, None) se i dati
-        mancano -> l'executor ricade sul solo mark price."""
+        Due fonti, in ordine di qualita':
+          1. STREAM WebSocket — vede ogni singolo trade, e il range e' esattamente la
+             finestra [tick precedente, ora]. E' la fonte che risolve anche l'ORDINE
+             dei prezzi dentro il minuto.
+          2. candele 1m via REST — vede gli estremi ma non il loro ordine. Ripiego se
+             lo stream non e' sano. Scarta le candele APERTE PRIMA dell'ingresso: il
+             prezzo di prima che entrassimo non puo' riempire i nostri TP.
+
+        (None, None) se non ci sono dati -> l'executor ricade sul solo mark price."""
         if not settings.EXEC_WICK_FILLS_ENABLED:
             return None, None
+        # 1) stream in tempo reale: e' la fonte MIGLIORE (vede ogni trade, e il range
+        # e' esattamente la finestra dal tick precedente a ora). take_range azzera,
+        # quindi nessuna sovrapposizione tra tick.
+        if self.stream is not None and self.stream.is_healthy():
+            hi, lo = self.stream.take_range(symbol)
+            if hi is not None:
+                return hi, lo
+        # 2) ripiego: candele 1m via REST (vede gli estremi, non il loro ordine)
         try:
             candles = self.price.get_candles(
                 symbol, "1m", limit=max(2, settings.EXEC_WICK_LOOKBACK_1M))
@@ -230,6 +257,9 @@ class TradingBot:
             # Gia' calcolato sopra per il regime; qui e' un semplice output, non
             # influenza alcuna decisione/learning.
             "fear_greed": fng,
+            # osservabilita': lo stream prezzi e' vivo? Se False il bot sta usando le
+            # candele REST (funziona, ma non risolve l'ORDINE dei prezzi nel minuto).
+            "price_stream": (self.stream.is_healthy() if self.stream is not None else False),
         })
         return self.regime
 
@@ -266,6 +296,8 @@ class TradingBot:
             # sarebbero invisibili (il gate invece li conta) -> +1 richiesta per posizione
             hi, lo = self._wick_range(sym, pos)
             closed = self.executor.update_position(sym, price, high=hi, low=lo)
+            if closed is not None:
+                self._sync_stream_symbols()   # posizione chiusa -> disiscrivi il simbolo
             # accredita subito all'equity le fette realizzate (TP parziali) e/o la
             # chiusura finale — come Binance, ogni fill va sul saldo all'istante.
             self._settle_realized()
@@ -464,6 +496,10 @@ class TradingBot:
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,
                                           params, confidence=decision.confidence)
         if pos is not None:
+            self._sync_stream_symbols()
+            # i prezzi accumulati PRIMA dell'ingresso non possono riempire i suoi TP
+            if self.stream is not None:
+                self.stream.reset(pos.symbol)
             self._publish_decision_status(
                 {"outcome": "opened",
                  "reason": f"aperta {pos.symbol} {pos.direction.value} ({pos.strategy})"})
@@ -631,6 +667,10 @@ class TradingBot:
         # esce dalla manutenzione: il bot e' di nuovo su -> il monitoraggio "offline"
         # torna attivo da solo (vedi scripts/monitor.py).
         self.fb.set_rtdb("/commands/maintenance", False)
+        # stream prezzi: iscritto alle posizioni RIPRISTINATE dal restart
+        if self.stream is not None:
+            self.stream.start()
+            self._sync_stream_symbols()
         self.notifier.send(f"🟢 Bot avviato (DRY_RUN={settings.DRY_RUN})")
         it = 0
         while max_iterations is None or it < max_iterations:

@@ -21,9 +21,21 @@ un'illusione. I punti condivisi con il backtest sono in moduli unici:
 **Ombre (wick).** Il gate riempie un TP/SL quando l'**ombra** della candela tocca il
 livello, anche per un istante — ed è ciò che fa Binance vero, dove gli ordini TP/SL
 stanno appoggiati sul book. Il bot però campiona il prezzo ogni ~30s: da solo non
-vedrebbe i movimenti tra due letture. Per questo a ogni tick rilegge le ultime candele
-1m e valuta i trigger sul loro `high`/`low` (`EXEC_WICK_FILLS_ENABLED`, default on;
-`EXEC_WICK_LOOKBACK_1M` = quante candele). Regole:
+vedrebbe i movimenti tra due letture. Per questo valuta i trigger su un **range**
+`high`/`low` (`EXEC_WICK_FILLS_ENABLED`, default on), da due fonti in cascata:
+
+| Fonte | Vede | Quando si usa |
+|---|---|---|
+| **Stream WebSocket** (`bot/agents/price_stream.py`) | ogni singolo trade, **in ordine** | default (`EXEC_PRICE_STREAM_ENABLED`) |
+| **Candele 1m via REST** | gli estremi, **non** il loro ordine | se lo stream non è sano (`EXEC_WICK_LOOKBACK_1M` candele) |
+
+Lo stream è l'unica fonte che risolve l'**ordine dei prezzi dentro il minuto**: una
+candela non dice se il TP è arrivato prima o dopo lo stop. Se il WebSocket è bloccato
+(firewall/proxy) il bot ripiega da solo sulle candele e continua a funzionare — la
+salute è pubblicata in `/bot_status/price_stream`, e si verifica con
+`python -m scripts.check_price_stream`.
+
+Regole valide per entrambe le fonti:
 - lo **stop si valuta prima** dei TP: se il range tocca entrambi, l'ordine intra-candela
   è ignoto → si assume il caso peggiore (come il gate);
 - il `high_water` (profit-lock) si aggiorna **a fine tick**: un range è un insieme non
