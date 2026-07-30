@@ -94,6 +94,29 @@ class TradingBot:
         return sum(p.remaining_qty * p.entry_price / max(p.leverage, 1.0)
                    for p in self.executor.open_positions.values())
 
+    def _wick_range(self, symbol: str, pos) -> tuple[float | None, float | None]:
+        """Estremi (high/low) toccati dal prezzo nell'ultimo minuto, dalle candele 1m.
+
+        Serve per la PARITA' con il GATE, che riempie TP/SL quando l'OMBRA della
+        candela tocca il livello: il bot campiona ogni ~30s e da solo non vedrebbe i
+        movimenti tra due letture. E' anche il comportamento del Binance REALE, dove
+        gli ordini TP/SL restano appoggiati sul book ed è l'ombra a eseguirli.
+
+        Scarta le candele APERTE PRIMA dell'ingresso: il prezzo di prima che entrassimo
+        non puo' riempire i nostri TP (sarebbero fill inventati). (None, None) se i dati
+        mancano -> l'executor ricade sul solo mark price."""
+        if not settings.EXEC_WICK_FILLS_ENABLED:
+            return None, None
+        try:
+            candles = self.price.get_candles(
+                symbol, "1m", limit=max(2, settings.EXEC_WICK_LOOKBACK_1M))
+        except Exception:  # noqa: BLE001
+            return None, None
+        fresh = [c for c in candles if c.open_time >= pos.entry_time]
+        if not fresh:
+            return None, None
+        return max(c.high for c in fresh), min(c.low for c in fresh)
+
     def _settle_realized(self) -> None:
         """Accredita all'equity i PnL realizzati (fette scale-out + chiusure) accumulati
         dall'executor in questo tick — come Binance, ogni fill realizza sul saldo."""
@@ -239,7 +262,10 @@ class TradingBot:
                 price = snap.price if snap else None
             if price is None:
                 continue
-            closed = self.executor.update_position(sym, price)
+            # ombre dell'ultimo minuto: senza queste i TP/SL toccati TRA due letture
+            # sarebbero invisibili (il gate invece li conta) -> +1 richiesta per posizione
+            hi, lo = self._wick_range(sym, pos)
+            closed = self.executor.update_position(sym, price, high=hi, low=lo)
             # accredita subito all'equity le fette realizzate (TP parziali) e/o la
             # chiusura finale — come Binance, ogni fill va sul saldo all'istante.
             self._settle_realized()

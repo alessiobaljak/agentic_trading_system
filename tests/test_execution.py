@@ -134,10 +134,14 @@ def test_profit_lock_protects_gains_on_retrace():
     # perdita né aspetta che torni allo stop iniziale.
     eng = _engine()
     eng.open_position(_asset(100), "trend_following", Direction.LONG, _params(qty=10.0, stop=98, tp=110))
-    # sale a 106: fav_move=6 >= trigger 0.5*10=5 -> armato, stop sale a 100+0.5*6=103
+    # sale a 106: fav_move=6 >= trigger 0.5*10=5 -> il lock si armera'. Come nel motore
+    # del gate, il miglior prezzo entra in high_water a FINE tick: lo stop bloccato e'
+    # quindi in vigore dal tick DOPO (mai armato e fatto scattare dallo stesso range,
+    # che e' un insieme non ordinato). Qui percio' trailing_active e' ancora False.
     assert eng.update_position("BTCUSDT", 106.0) is None
-    assert eng.open_positions["BTCUSDT"].trailing_active is True
-    # ritraccia a 103: tocca lo stop bloccato -> esce in profitto
+    assert eng.open_positions["BTCUSDT"].trailing_active is False
+    assert eng.open_positions["BTCUSDT"].high_water == 106.0
+    # ritraccia a 103: ORA lo stop bloccato (100+0.5*6=103) e' attivo -> esce in profitto
     closed = eng.update_position("BTCUSDT", 103.0)
     assert closed is not None
     assert closed.exit_reason == ExitReason.TRAILING_STOP

@@ -192,24 +192,43 @@ class ExecutionEngine:
     # ------------------------------------------------------------------ #
     # Gestione posizione — ALLINEATA AL BACKTEST (GATE 1)                 #
     # ------------------------------------------------------------------ #
-    def update_position(self, symbol: str, mark_price: float) -> Optional[ClosedTrade]:
+    def update_position(self, symbol: str, mark_price: float,
+                        high: float | None = None,
+                        low: float | None = None) -> Optional[ClosedTrade]:
         """
         Esce TUTTA la posizione allo stop o al take-profit PIENO, esattamente come
         il backtest che valida le strategie. Lo stop può essere ALZATO dal
         profit-lock (stessa logica del backtest, bot/execution/exit_logic.py): se la
         posizione è andata in profitto blocca parte del guadagno invece di restituirlo.
         Uscita anche a fine orizzonte (max holding), come le 96 barre del backtester.
+
+        `high`/`low`: estremi (OMBRE) del prezzo dall'ultima lettura. Il gate valuta i
+        trigger sul range high/low della candela; il live campiona ogni ~30s e senza
+        questi si perderebbe i movimenti tra due letture. Passandoli si ottiene la
+        PARITA' col gate — e col Binance reale, dove gli ordini TP/SL sul book vengono
+        eseguiti dall'ombra. Omessi -> si ricade sul solo `mark_price` (vecchio
+        comportamento). Vengono sempre ALLARGATI al mark osservato, così nessun
+        trigger che scattava prima puo' sparire.
         """
         pos = self.open_positions.get(symbol)
         if pos is None:
             return None
         long = pos.direction == Direction.LONG
 
-        # aggiorna il miglior prezzo a favore visto, poi calcola lo stop effettivo.
+        # range effettivo del tick: le ombre, mai piu' strette del mark osservato
+        hi = mark_price if high is None else max(high, mark_price)
+        lo = mark_price if low is None else min(low, mark_price)
+
         # `keep` per-strategia: IMPARATO dai verdetti trailing del paper (B1/B2);
         # assente dalla mappa (pochi dati) -> default globale validato dal gate.
-        pos.high_water = max(pos.high_water, mark_price) if long else min(pos.high_water, mark_price)
         keep = self.trailing_keep.get(pos.strategy)
+        # ORDINE (identico al motore del gate): lo stop effettivo si calcola sul
+        # high_water dei tick PRECEDENTI; i trigger si valutano su questo range; il
+        # high_water si aggiorna SOLO a fine tick (come best_fav a fine barra).
+        # Perche': il range di un tick e' un insieme NON ORDINATO. Se l'estremo
+        # favorevole armasse il profit-lock e l'estremo avverso dello stesso range lo
+        # facesse scattare, ci regaleremmo un'uscita in profitto senza sapere quale dei
+        # due sia arrivato prima. Il costo e' che il lock si arma un tick dopo (~30s).
 
         # SCALE-OUT su multipli di R (se attivo): scala di TP + break-even dopo il
         # primo TP. Vuota -> percorso classico a TP unico (sotto). R usa lo stop
@@ -221,8 +240,10 @@ class ExecutionEngine:
                                    pos.stop_price, keep=keep)
             pos.trailing_active = eff_stop != pos.orig_stop
 
-            # 1) stop del RESIDUO (dopo il primo TP pos.stop_price = entry = break-even)
-            hit_sl = (mark_price <= eff_stop) if long else (mark_price >= eff_stop)
+            # 1) stop del RESIDUO (dopo il primo TP pos.stop_price = entry = break-even).
+            #    PRIMA dei TP: se nello stesso range si toccano entrambi, l'ordine
+            #    intra-candela e' ignoto -> si assume il caso PEGGIORE (come il gate).
+            hit_sl = (lo <= eff_stop) if long else (hi >= eff_stop)
             if hit_sl:
                 # tre esiti distinti (l'etichetta descrive COSA e' successo davvero):
                 #  - SCALE_OUT: ha gia' bancato >=1 fetta (TP1/TP2) e il residuo esce
@@ -237,8 +258,9 @@ class ExecutionEngine:
                     reason = ExitReason.STOP_LOSS
                 return self._close(pos, eff_stop, reason)
 
-            # 2) fette di TP raggiunte
-            new_stage, fills = scale_fills(ladder, pos.scale_stage, long, mark_price, mark_price)
+            # 2) fette di TP raggiunte (idempotente: `scale_stage` avanza e non torna,
+            #    quindi rileggere la stessa ombra non riempie due volte lo stesso livello)
+            new_stage, fills = scale_fills(ladder, pos.scale_stage, long, hi, lo)
             if fills:
                 reached_final = new_stage >= len(ladder)
                 partials = fills[:-1] if reached_final else fills
@@ -256,32 +278,36 @@ class ExecutionEngine:
             if held_h >= self.max_hold_hours:
                 return self._close(pos, mark_price, ExitReason.TIME_EXIT)
 
+            # ombre nel high_water solo ORA (dopo i trigger): valgono per i tick
+            # FUTURI, come il gate che aggiorna best_fav a fine barra
+            pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
             self._write_position_state(pos, mark_price)
             return None
 
         # --- percorso classico: TP unico pieno (identico al backtest) ---
         eff_stop = locked_stop(pos.entry_price, pos.take_profit_price, long,
-                               pos.high_water, pos.stop_price,
-                               keep=self.trailing_keep.get(pos.strategy))
+                               pos.high_water, pos.stop_price, keep=keep)
         pos.trailing_active = eff_stop != pos.stop_price
 
         # stop (base o alzato dal profit-lock). Se è stato alzato, l'uscita è in
         # profitto -> TRAILING_STOP; altrimenti è lo stop-loss vero e proprio.
-        hit_sl = (mark_price <= eff_stop) if long else (mark_price >= eff_stop)
+        # Anche qui lo stop viene PRIMA del TP: caso peggiore se il range tocca entrambi.
+        hit_sl = (lo <= eff_stop) if long else (hi >= eff_stop)
         if hit_sl:
             reason = ExitReason.TRAILING_STOP if pos.trailing_active else ExitReason.STOP_LOSS
             return self._close(pos, eff_stop, reason)
 
         # take profit PIENO (tutta la posizione al target, RR pieno)
-        hit_tp = (mark_price >= pos.take_profit_price) if long else (mark_price <= pos.take_profit_price)
+        hit_tp = (hi >= pos.take_profit_price) if long else (lo <= pos.take_profit_price)
         if hit_tp:
             return self._close(pos, pos.take_profit_price, ExitReason.TAKE_PROFIT)
 
-        # uscita a fine orizzonte (come l'orizzonte del backtest)
+        # uscita a fine orizzonte (come l'orizzonte del backtester)
         held_h = (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0
         if held_h >= self.max_hold_hours:
             return self._close(pos, mark_price, ExitReason.TIME_EXIT)
 
+        pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
         self._write_position_state(pos, mark_price)
         return None
 

@@ -184,6 +184,22 @@ class Settings:
     )
     SCALE_OUT_SL_TO_BREAKEVEN: bool = os.getenv("SCALE_OUT_SL_TO_BREAKEVEN", "true").lower() == "true"
 
+    # ---- PARITA' SUI WICK (ombre delle candele) ----
+    # Il GATE valida sulle candele: un TP/SL si riempie se l'OMBRA (high/low) tocca
+    # il livello, anche per un istante. Il bot live invece campiona il prezzo ogni
+    # ~30s: i movimenti tra due letture sono INVISIBILI -> perde fill di TP che il
+    # gate contava (e schiva stop che il gate prendeva). Su Binance REALE gli ordini
+    # TP/SL stanno appoggiati sul book: un'ombra li ESEGUE. Quindi il modello giusto
+    # e' quello del gate, e il paper deve allinearsi: a ogni tick si leggono high/low
+    # delle ultime candele 1m e i trigger si valutano su quel range.
+    # NB: la parita' vale in ENTRAMBE le direzioni (piu' TP riempiti, ma anche piu'
+    # stop presi sulle ombre): serve realismo, non numeri piu' belli.
+    EXEC_WICK_FILLS_ENABLED: bool = os.getenv("EXEC_WICK_FILLS_ENABLED", "true").lower() == "true"
+    # quante candele 1m rileggere a ogni tick (copre il gap tra due letture, con
+    # margine se un ciclo e' lento). La sovrapposizione e' innocua: i fill avanzano
+    # per stage e lo stop chiude una volta sola.
+    EXEC_WICK_LOOKBACK_1M: int = int(os.getenv("EXEC_WICK_LOOKBACK_1M", "3"))
+
     # ---- GATE 1 (soglie di validazione) ----
     # Una coppia (coin, strategia) è validata SOLO se, fuori campione (OOS):
     #   - ha almeno GATE_MIN_TRADES trade
