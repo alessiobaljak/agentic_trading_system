@@ -9,9 +9,18 @@ stato toccato. Leggendo le candele 1m via REST sappiamo SE un livello e' stato
 toccato, ma non in che ORDINE: se in un minuto il prezzo ha sfiorato sia il TP1 sia
 lo stop, la candela non dice quale sia venuto prima, e il bot deve assumere il peggio.
 
-Questo stream elimina proprio quell'ambiguita': riceve OGNI trade in tempo reale e
-tiene il range (max/min) accumulato dall'ultima lettura. Il bot lo consuma a ogni
-tick e vede la sequenza reale dei prezzi.
+Questo stream elimina proprio quell'ambiguita': riceve il prezzo in tempo reale e ne
+tiene il PERCORSO ordinato dall'ultima lettura. Il bot lo consuma a ogni tick e vede la
+sequenza reale dei prezzi, non i soli estremi.
+
+SORGENTE DEL PREZZO (EXEC_STREAM_TYPE, default `bookTicker`)
+Si legge il miglior bid/ask e se ne usa il MID. Due ragioni:
+  * su alcuni IP/provider Binance consegna il BOOK ma non gli stream di trade
+    (`aggTrade`/`kline_*` restano muti pur con la SUBSCRIBE accettata con ACK);
+  * per simulare un fill il book e' comunque piu' pertinente: un ordine si esegue
+    quando il book arriva al prezzo, non quando un trade avviene altrove.
+Si usa il MID e non il lato: il costo dello spread e' gia' modellato in
+bot/core/costs.py, prendere bid/ask lo conteggerebbe DUE volte.
 
 DESIGN
 - La rete gira in un thread separato (asyncio dentro il thread); il bot resta sincrono.
@@ -188,7 +197,8 @@ class PriceStream:
         self._wake()
 
     def _stream_path(self, symbols: set[str]) -> str:
-        streams = "/".join(f"{s.lower()}@aggTrade" for s in sorted(symbols))
+        kind = settings.EXEC_STREAM_TYPE
+        streams = "/".join(f"{s.lower()}@{kind}" for s in sorted(symbols))
         return f"/stream?streams={streams}"
 
     def _handle_raw(self, raw: str) -> None:
@@ -222,13 +232,29 @@ class PriceStream:
             data = msg if isinstance(msg, dict) else None
         if not isinstance(data, dict):
             return skip(f"payload non riconosciuto: {type(msg).__name__}")
-        sym, price = data.get("s"), data.get("p")
-        if not sym or price is None:
-            return skip(f"campi s/p assenti (chiavi: {sorted(data)[:8]})")
+        sym = data.get("s")
+        if not sym:
+            return skip(f"campo 's' assente (chiavi: {sorted(data)[:8]})")
+        # Il prezzo si estrae in base al TIPO di evento. Attenzione: in bookTicker "a"
+        # e' il prezzo ask, in aggTrade "a" e' l'id del trade -> discriminare su "e"
+        # e non sulla presenza delle chiavi.
+        etype = data.get("e")
         try:
-            value = float(price)
-        except (TypeError, ValueError):
-            return skip(f"prezzo non numerico: {price!r}")
+            if etype == "bookTicker" or (etype is None and "b" in data and "a" in data):
+                bid, ask = data.get("b"), data.get("a")
+                if bid is None or ask is None:
+                    return skip("bookTicker senza bid/ask")
+                # MID: lo spread e' gia' un costo a parte, usare il lato lo pagherebbe due volte
+                value = (float(bid) + float(ask)) / 2.0
+            elif data.get("p") is not None:
+                value = float(data["p"])          # aggTrade / markPrice
+            elif isinstance(data.get("k"), dict) and data["k"].get("c") is not None:
+                value = float(data["k"]["c"])     # kline: prezzo di chiusura corrente
+            else:
+                return skip(f"nessun prezzo riconoscibile (e={etype!r}, "
+                            f"chiavi={sorted(data)[:8]})")
+        except (TypeError, ValueError) as exc:
+            return skip(f"prezzo non numerico ({etype}): {exc}")
         self.observe(str(sym).upper(), value)
         with self._lock:
             self._msgs_parsed += 1

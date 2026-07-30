@@ -213,6 +213,14 @@ class Settings:
     EXEC_PATH_REPLAY_ENABLED: bool = os.getenv("EXEC_PATH_REPLAY_ENABLED", "true").lower() == "true"
     EXEC_PATH_MIN_MOVE_FRAC: float = float(os.getenv("EXEC_PATH_MIN_MOVE_FRAC", "0.0002"))
     EXEC_PATH_MAX_POINTS: int = int(os.getenv("EXEC_PATH_MAX_POINTS", "800"))
+    # TIPO di stream da cui leggere il prezzo. Default `bookTicker` (miglior bid/ask):
+    # su alcuni IP/provider Binance consegna il BOOK ma NON gli stream di trade
+    # (`aggTrade`/`kline_*` restano muti pur con la sottoscrizione accettata), e per
+    # simulare un fill il book e' comunque piu' pertinente: un ordine si esegue quando
+    # il book raggiunge il prezzo, non quando avviene un trade altrove.
+    # Si usa il MID (bid+ask)/2: il costo dello spread e' gia' modellato a parte in
+    # bot/core/costs.py, usare il lato del book lo conteggerebbe DUE volte.
+    EXEC_STREAM_TYPE: str = os.getenv("EXEC_STREAM_TYPE", "bookTicker")
 
     # ---- GATE 1 (soglie di validazione) ----
     # Una coppia (coin, strategia) è validata SOLO se, fuori campione (OOS):

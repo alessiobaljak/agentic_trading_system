@@ -6,6 +6,7 @@ con _handle_raw / observe, esattamente come farebbe il WebSocket.
 import json
 import time
 
+from bot.config import settings
 from bot.agents.price_stream import PriceStream
 
 
@@ -138,10 +139,66 @@ def test_set_symbols_forgets_ranges_of_dropped_symbols():
     assert st.take_range("ETHUSDT") == (None, None)
 
 
-def test_stream_path_is_lowercase_aggtrade_list():
+def test_stream_path_uses_configured_type_lowercase():
     st = _stream()
     assert st._stream_path({"BTCUSDT", "ETHUSDT"}) == \
-        "/stream?streams=btcusdt@aggTrade/ethusdt@aggTrade"
+        "/stream?streams=btcusdt@bookTicker/ethusdt@bookTicker"
+
+
+def test_stream_path_follows_config_override(monkeypatch):
+    monkeypatch.setattr(settings, "EXEC_STREAM_TYPE", "aggTrade")
+    st = _stream()
+    assert st._stream_path({"BTCUSDT"}) == "/stream?streams=btcusdt@aggTrade"
+
+
+# ---- estrazione del prezzo per tipo di evento ----------------------------- #
+def test_bookticker_uses_mid_price():
+    """bookTicker -> MID (bid+ask)/2. Non il lato: lo spread e' gia' un costo a parte
+    in bot/core/costs.py, prenderlo qui lo conteggerebbe due volte."""
+    st = _stream()
+    st._handle_raw(json.dumps({"data": {"e": "bookTicker", "s": "BTCUSDT",
+                                        "b": "64003.80", "a": "64003.90"}}))
+    hi, lo = st.take_range("BTCUSDT")
+    assert hi == lo
+    assert abs(hi - 64003.85) < 1e-6      # tolleranza: e' aritmetica in virgola mobile
+
+
+def test_aggtrade_still_parsed_by_price_field():
+    """Retrocompatibilita': dove gli stream di trade funzionano, si usa 'p'."""
+    st = _stream()
+    st._handle_raw(json.dumps({"data": {"e": "aggTrade", "s": "ETHUSDT", "p": "50.25"}}))
+    assert st.take_range("ETHUSDT") == (50.25, 50.25)
+
+
+def test_aggtrade_field_a_is_not_mistaken_for_ask():
+    """TRAPPOLA: in aggTrade 'a' e' l'ID del trade, in bookTicker e' il prezzo ask.
+    Discriminando su 'e' non si puo' confondere un id con un prezzo."""
+    st = _stream()
+    st._handle_raw(json.dumps({"data": {"e": "aggTrade", "s": "BTCUSDT",
+                                        "a": 4025482234, "p": "63988.35"}}))
+    assert st.take_range("BTCUSDT") == (63988.35, 63988.35)
+
+
+def test_kline_uses_current_close():
+    st = _stream()
+    st._handle_raw(json.dumps({"data": {"e": "kline", "s": "BTCUSDT",
+                                        "k": {"c": "100.5"}}}))
+    assert st.take_range("BTCUSDT") == (100.5, 100.5)
+
+
+def test_bookticker_without_both_sides_is_skipped_with_reason():
+    st = _stream()
+    st._handle_raw(json.dumps({"data": {"e": "bookTicker", "s": "BTCUSDT", "b": "10"}}))
+    assert st.take_range("BTCUSDT") == (None, None)
+    assert "bid/ask" in (st.stats()["last_skip"] or "")
+
+
+def test_unknown_event_is_skipped_with_diagnostic():
+    st = _stream()
+    st._handle_raw(json.dumps({"data": {"e": "misteryEvent", "s": "BTCUSDT", "x": 1}}))
+    assert st.take_range("BTCUSDT") == (None, None)
+    skip = st.stats()["last_skip"] or ""
+    assert "nessun prezzo riconoscibile" in skip and "misteryEvent" in skip
 
 
 # ---- percorso ordinato (zigzag) ------------------------------------------- #

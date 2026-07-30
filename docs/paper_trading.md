@@ -26,8 +26,17 @@ vedrebbe i movimenti tra due letture. Per questo valuta i trigger su un **range*
 
 | Fonte | Vede | Quando si usa |
 |---|---|---|
-| **Stream WebSocket** (`bot/agents/price_stream.py`) | ogni singolo trade, **in ordine** | default (`EXEC_PRICE_STREAM_ENABLED`) |
+| **Stream WebSocket** (`bot/agents/price_stream.py`) | il prezzo in continuo, **in ordine** | default (`EXEC_PRICE_STREAM_ENABLED`) |
 | **Candele 1m via REST** | gli estremi, **non** il loro ordine | se lo stream non è sano (`EXEC_WICK_LOOKBACK_1M` candele) |
+
+**Sorgente del prezzo nello stream** (`EXEC_STREAM_TYPE`, default `bookTicker`): si legge
+il miglior bid/ask e se ne usa il **mid**. Due ragioni, una pratica e una di merito:
+su alcuni IP/provider Binance consegna il **book** ma non gli stream di trade
+(`aggTrade`/`kline_*` restano muti *pur con la SUBSCRIBE accettata con ACK* — verificato
+sul VPS con `scripts/diagnose_ws.py --deep`); e per simulare un fill il book è comunque
+più pertinente, perché un ordine si esegue quando il book arriva al prezzo, non quando
+un trade avviene altrove. Si usa il **mid** e non il lato del book perché lo spread è già
+un costo modellato in `bot/core/costs.py`: prenderlo qui lo conteggerebbe due volte.
 
 Se il WebSocket è bloccato (firewall/proxy) il bot ripiega da solo sulle candele e
 continua a funzionare — la salute è pubblicata in `/bot_status/price_stream`, e si
