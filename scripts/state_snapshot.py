@@ -44,6 +44,9 @@ def build() -> str:
         f"- DRY_RUN: {status.get('dry_run', '—')}",
         f"- equity: **{eq_str}**",
         f"- ultimo heartbeat: {_ts(hb)}",
+        # sorgente prezzi: True = stream vivo (ogni variazione, in ordine);
+        # False = ripiego sulle candele 1m (tocchi si', ordine no)
+        f"- stream prezzi: {'🟢 attivo' if status.get('price_stream') else '🟡 candele REST'}",
         "",
     ]
 
@@ -132,7 +135,75 @@ def build() -> str:
     else:
         lines.append("_Nessun risultato di ottimizzazione ancora presente su Firebase._")
     lines.append("")
+    lines += _closed_trades_section(fb)
     return "\n".join(lines)
+
+
+_EXIT_LABEL = {
+    "take_profit": "Take profit (fino all'ultimo gradino)",
+    "scale_out": "Scale-out (>=1 TP incassato, residuo a BE)",
+    "trailing_stop": "Trailing stop",
+    "stop_loss": "Stop loss (prima di qualsiasi TP)",
+    "time_exit": "Time exit (orizzonte scaduto)",
+    "manual": "Manuale", "kill_switch": "Kill switch", "circuit_breaker": "Circuit breaker",
+}
+
+
+def _closed_trades_section(fb) -> list[str]:
+    """PERCHE' usciamo dai trade: e' la diagnosi piu' diretta di come sta andando.
+
+    - la distribuzione di `exit_reason` dice se veniamo stoppati PRIMA di incassare
+      qualcosa (stop_loss) o se usciamo dopo aver bancato dei TP (scale_out);
+    - `scale_stage_reached` dice quanti gradini della scala vengono davvero raggiunti;
+    - `mfe_r` dice DOVE arriva il prezzo in unita' di R: e' il dato su cui si decide
+      se una scala di TP e' raggiungibile per quelle coppie.
+    """
+    from collections import Counter
+    try:
+        from bot.learning.trade_logger import TradeLogger
+        trades = TradeLogger(fb).all_since(0.0)
+    except Exception as exc:  # noqa: BLE001
+        return ["## Trade chiusi", f"_non leggibili: {exc}_", ""]
+    if not trades:
+        return ["## Trade chiusi", "_nessun trade chiuso._", ""]
+
+    n = len(trades)
+    pnl = sum(float(t.get("pnl", 0) or 0) for t in trades)
+    wins = sum(1 for t in trades if float(t.get("pnl", 0) or 0) > 0)
+    out = ["## Trade chiusi — perché usciamo",
+           f"- totale: **{n}** · vinti: {wins} ({wins / n * 100:.0f}%) · "
+           f"PnL realizzato: **{pnl:+.2f}**", ""]
+
+    reasons = Counter(str(t.get("exit_reason", "?")) for t in trades)
+    out += ["| Uscita | Trade | % | PnL |", "|---|---|---|---|"]
+    for r, c in reasons.most_common():
+        rp = sum(float(t.get("pnl", 0) or 0) for t in trades
+                 if str(t.get("exit_reason", "?")) == r)
+        out.append(f"| {_EXIT_LABEL.get(r, r)} | {c} | {c / n * 100:.0f}% | {rp:+.2f} |")
+    out.append("")
+
+    stages = [int(t.get("scale_stage_reached", 0) or 0) for t in trades
+              if t.get("scale_stage_reached") is not None]
+    if stages:
+        sc = Counter(stages)
+        tot = len(stages)
+        desc = " · ".join(f"{k} TP: {sc.get(k, 0)} ({sc.get(k, 0) / tot * 100:.0f}%)"
+                          for k in sorted(sc))
+        out += [f"- gradini raggiunti (su {tot} trade): {desc}", ""]
+
+    mfes = sorted(float(t["mfe_r"]) for t in trades if t.get("mfe_r") is not None)
+    if mfes:
+        med = mfes[len(mfes) // 2]
+        reach = " · ".join(f"≥{r:g}R: {sum(1 for v in mfes if v >= r) / len(mfes) * 100:.0f}%"
+                           for r in (1.0, 1.5, 3.0, 5.0))
+        out += [f"- escursione favorevole (mfe_r, {len(mfes)} trade): mediana "
+                f"**{med:.2f}R** · {reach}",
+                "  _quanto lontano arriva il prezzo, in unità di R: dice se la scala"
+                " di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_", ""]
+    else:
+        out += ["- escursione favorevole (mfe_r): _non ancora disponibile — si popola"
+                " sui trade chiusi dopo l'aggiornamento del bot._", ""]
+    return out
 
 
 def main() -> int:
