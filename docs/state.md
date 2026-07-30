@@ -1,30 +1,30 @@
 # Stato sistema (snapshot)
-_Generato: 2026-07-30 21:32 UTC_
+_Generato: 2026-07-30 23:18 UTC_
 
 ## Bot
-- stato: **running** (🟢 online)
+- stato: **running** (🔴 offline)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$933.44**
-- ultimo heartbeat: 2026-07-30 21:29 UTC
+- equity: **$928.93**
+- ultimo heartbeat: 2026-07-30 23:15 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-07-30 21:20 UTC)
-- motivo: parita' backtest: 4 segnali validi aperti
-- asset valutati: 160 · segnali: 32 · miglior segnale CAKEUSDT gen_f0fea24b (conf. 60.0/soglia 30)
+- esito: **⚪ FLAT** (2026-07-30 23:05 UTC)
+- motivo: parita' backtest: 10 segnali validi aperti
+- asset valutati: 167 · segnali: 69 · miglior segnale ONUSDT gen_143ac5c9 (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- AIAUSDT: long qty=2210.5917328246187 @ 0.05991 uPnL=4.851705468045028
-- CAKEUSDT: long qty=128.48433169673027 @ 1.453 uPnL=-0.18413693535675194
-- FFUSDT: long qty=2963.805982551429 @ 0.06519 uPnL=0.3036977686403068
-- KITEUSDT: short qty=2059.156512633131 @ 0.09317 uPnL=-3.544944432764525
-- LITUSDT: short qty=84.15059296271319 @ 2.2383 uPnL=-1.0383792993787153
-- ONUSDT: long qty=289.4326297806362 @ 0.25736 uPnL=-4.641775098812468
-- RAVEUSDT: short qty=670.0686526606996 @ 0.2822 uPnL=0.9108817726225286
-- SKYAIUSDT: long qty=7370.766826781353 @ 0.02612 uPnL=-1.4965909610583794
-- SOONUSDT: long qty=921.5518503016375 @ 0.204 uPnL=-0.6052877710189815
-- ZAMAUSDT: long qty=3510.179576403368 @ 0.05387 uPnL=4.587902926973532
+- AIAUSDT: long qty=2210.5917328246187 @ 0.05991 uPnL=4.0052479631570765
+- CAKEUSDT: long qty=128.48433169673027 @ 1.453 uPnL=0.29474194134381704
+- FFUSDT: long qty=2963.805982551429 @ 0.06519 uPnL=-0.23190618963467538
+- LITUSDT: short qty=84.15059296271319 @ 2.2383 uPnL=-3.2410593061013846
+- MMTUSDT: short qty=687.8443379769313 @ 0.2701 uPnL=5.083606510825597
+- ONUSDT: long qty=289.4326297806362 @ 0.25736 uPnL=-7.941585588202452
+- RAVEUSDT: short qty=670.0686526606996 @ 0.2822 uPnL=0.44774192940048085
+- SKYAIUSDT: long qty=7370.766826781353 @ 0.02612 uPnL=-3.864792083630825
+- SOONUSDT: long qty=921.5518503016375 @ 0.204 uPnL=2.986702979054466
+- ZAMAUSDT: long qty=3510.179576403368 @ 0.05387 uPnL=2.0424445117485437
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
@@ -806,17 +806,17 @@ _aggiornato: 2026-07-30 17:31 UTC · 1448 coppie valutate, 9 passate in questo r
 | HEIUSDT | momentum_cross_asset | 1.532 | 17% | 45 | 49% |
 
 ## Trade chiusi — perché usciamo
-- totale: **59** · vinti: 23 (39%) · PnL realizzato: **-68.23**
+- totale: **60** · vinti: 23 (38%) · PnL realizzato: **-72.73**
 
 | Uscita | Trade | % | PnL |
 |---|---|---|---|
-| Stop loss (prima di qualsiasi TP) | 36 | 61% | -256.88 |
-| Trailing stop | 11 | 19% | +60.53 |
+| Stop loss (prima di qualsiasi TP) | 37 | 62% | -261.38 |
+| Trailing stop | 11 | 18% | +60.53 |
 | Manuale | 7 | 12% | +76.05 |
 | Take profit (fino all'ultimo gradino) | 3 | 5% | +32.73 |
 | Scale-out (>=1 TP incassato, residuo a BE) | 2 | 3% | +19.33 |
 
-- gradini raggiunti (su 28 trade): 0 TP: 21 (75%) · 1 TP: 4 (14%) · 2 TP: 2 (7%) · 3 TP: 1 (4%)
+- gradini raggiunti (su 29 trade): 0 TP: 22 (76%) · 1 TP: 4 (14%) · 2 TP: 2 (7%) · 3 TP: 1 (3%)
 
-- escursione favorevole (mfe_r, 5 trade): mediana **0.82R** · ≥1R: 20% · ≥1.5R: 0% · ≥3R: 0% · ≥5R: 0%
+- escursione favorevole (mfe_r, 6 trade): mediana **0.98R** · ≥1R: 33% · ≥1.5R: 0% · ≥3R: 0% · ≥5R: 0%
   _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
