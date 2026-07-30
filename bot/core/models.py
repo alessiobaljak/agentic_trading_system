@@ -217,6 +217,11 @@ class ClosedTrade(BaseModel):
     # dalle fette. Servono a capire se/quanto lo scale-out ha lavorato sul trade.
     scale_stage_reached: int = 0
     realized_partial: float = 0.0
+    # massima escursione FAVOREVOLE raggiunta, in unita' di R: dice quanto lontano e'
+    # arrivato il prezzo prima di tornare. Da questo unico numero si sa quali gradini
+    # avrebbe colpito QUALUNQUE scala di TP -> rende decidibile la taratura, senza
+    # dover provare scale diverse ne' sacrificare trade per esplorare.
+    mfe_r: float = 0.0
 
     # contesto all'ENTRATA (fondamentale per il learning)
     regime_at_entry: Regime

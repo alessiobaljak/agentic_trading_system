@@ -87,6 +87,44 @@ Regole valide per entrambe le fonti:
 La parità vale in **entrambe le direzioni**: più TP riempiti, ma anche più stop presi
 sulle ombre. L'obiettivo è il realismo, non numeri più belli.
 
+## Scala di TP dinamica (tarata per coppia dal GATE)
+R è **già normalizzato sulla volatilità** (R = `atr_mult_stop` × ATR), quindi la domanda
+non è "quanto è volatile la coin" ma "quanto **tende**, in unità della sua volatilità".
+Una coppia che ritraccia subito non vedrà mai 5R; una che tende lo supera. Con una scala
+globale la stessa scala è comoda per una e proibitiva per l'altra — per questo la scala
+è un **parametro validato per coppia**, non una costante.
+
+- I candidati sono in `SCALE_LADDER_CANDIDATES` (`bot/execution/exit_logic.py`) e
+  includono l'attuale `1.5/3/5`: una coppia per cui è davvero la migliore la mantiene, e
+  la ri-validazione **non può peggiorarla**. Le quote restano 30/30/40 (validate dall'A/B).
+- Sotto scale-out `effective_param_grid` **sostituisce** `rr` con la scala nello spazio di
+  ricerca. `rr` non ha effetto sulle uscite quando lo scale-out è attivo (il ramo
+  scale-out non usa `target`): lasciarlo diluiva la ricerca — misurato, 67–75% delle
+  combinazioni campionate con `--max-combos` erano cloni. Lo scambio mantiene lo stesso
+  numero di combinazioni.
+- La scala scelta finisce in `last_params` della coppia → `adaptation.params_for` →
+  passata all'apertura della posizione.
+- **Congelata all'ingresso** (`Position.scale_r_mults`, persistita): senza questo una
+  passata dell'ottimizzatore cambierebbe i TP di un trade **già aperto** — si eseguirebbe
+  un piano diverso da quello d'ingresso, la dashboard mostrerebbe altri numeri e in live
+  gli ordini sul book non corrisponderebbero più.
+- Coppia **non ancora ri-validata** → nessuna scala nei params → default globale, cioè
+  esattamente la scala con cui è stata validata. Durante la migrazione il registro è
+  misto ma **coerente**: ogni coppia esegue ciò con cui è stata validata.
+
+### Misura: dove arriva davvero il prezzo (`mfe_r`)
+Ogni trade chiuso registra `mfe_r` — la massima escursione **favorevole** in unità di R
+(sia nel gate, `SimTrade.mfe_r`, sia nel paper, `ClosedTrade.mfe_r`). Da quell'unico
+numero si sa quali gradini avrebbe colpito **qualunque** scala: non serve provarle una
+per una né sacrificare trade per esplorare. È ciò che rende la taratura decidibile sui
+dati invece che a intuito.
+
+`python -m scripts.mfe_report` mostra la distribuzione per strategia/coppia: la frazione
+di trade che raggiunge 0.5R…5R e quale candidata avrebbe incassato di più. Il confronto
+tra candidate usa un modello **semplificato** (gradini raggiunti = incassati, residuo a
+break-even): serve a scegliere le candidate, la validazione vera la fa il gate che simula
+il percorso completo con lo stop che si sposta.
+
 ## Avvio
 ```bash
 DRY_RUN=true python -m bot.main

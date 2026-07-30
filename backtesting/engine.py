@@ -24,7 +24,9 @@ from bot.core.costs import funding_fraction
 from bot.core.indicators import compute_indicator_frame, snapshot_from_row
 from bot.core.models import AssetSnapshot, Candle, Direction, Regime
 from bot.config import settings
-from bot.execution.exit_logic import locked_stop, scale_ladder, scale_fills
+from bot.execution.exit_logic import (
+    locked_stop, scale_ladder, scale_fills, ladder_multiples, mfe_in_r,
+)
 from bot.strategies import get_all_strategies
 from bot.strategies.base import StrategyContext
 
@@ -77,6 +79,10 @@ class SimTrade:
     hour_bucket: int = 0
     confidence_at_entry: Optional[float] = None
     regime_at_entry: str = ""
+    # massima escursione FAVOREVOLE in unita' di R: dice DOVE arriva davvero il prezzo
+    # prima di tornare. E' la misura che rende decidibile la scala dei TP (da questo
+    # numero si sa quali gradini avrebbe colpito qualunque scala).
+    mfe_r: float = 0.0
     # verdetto controfattuale sull'uscita TRAILING (None se non trailing):
     # 'premature' = avremmo raggiunto il TP tenendo; 'protected' = avremmo preso lo
     # stop base; 'neutral' = nessuno dei due entro l'orizzonte.
@@ -341,8 +347,14 @@ class Backtester:
 
             # SCALE-OUT su multipli di R (se attivo): scala di TP + break-even dopo
             # il primo TP. Vuota -> percorso classico a TP unico (sotto).
-            ladder = scale_ladder(entry, stop, long) if settings.SCALE_OUT_ENABLED else []
+            # I multipli vengono dai params della STRATEGIA se li porta (scala tarata
+            # per questa coppia), altrimenti dal default globale: cosi' una coppia non
+            # ancora ri-validata resta identica a come e' stata validata.
+            _mults = ladder_multiples(getattr(strategy, "params", None))
+            ladder = (scale_ladder(entry, stop, long, r_mults=_mults)
+                      if settings.SCALE_OUT_ENABLED else [])
 
+            mfe = entry          # miglior prezzo a favore, per la MISURA (non decide nulla)
             max_adverse = 0.0
             exit_price = entry
             j = i + 1
@@ -364,6 +376,7 @@ class Backtester:
                     trailing = eff_stop != stop_base
                     adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
                     max_adverse = max(max_adverse, adverse)
+                    mfe = max(mfe, c.high) if long else min(mfe, c.low)
                     # 1) stop del RESIDUO (stop_base = entry dopo il primo TP)
                     stop_hit = (c.low <= eff_stop) if long else (c.high >= eff_stop)
                     if stop_hit:
@@ -404,6 +417,7 @@ class Backtester:
                     trailing = eff_stop != stop   # il profit-lock ha alzato lo stop?
                     adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
                     max_adverse = max(max_adverse, adverse)
+                    mfe = max(mfe, c.high) if long else min(mfe, c.low)
                     if long and c.low <= eff_stop:
                         exit_price = eff_stop
                         if trailing:
@@ -438,6 +452,7 @@ class Backtester:
                 hour_bucket=candles[i].open_time.hour,
                 confidence_at_entry=sig.confidence, regime_at_entry=regime.value,
                 trailing_verdict=trailing_verdict,
+                mfe_r=round(mfe_in_r(entry, mfe, stop), 3),
             ))
             i = j + 1   # niente posizioni sovrapposte
         return stats

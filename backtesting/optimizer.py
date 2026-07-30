@@ -108,7 +108,10 @@ class WalkForwardOptimizer:
             return results
 
         for name, cls in STRATEGY_REGISTRY.items():
-            combos = _param_combos(getattr(cls, "param_grid", {}))
+            # griglia EFFETTIVA: sotto scale-out `rr` (morto) viene sostituito dalla
+            # scala dei TP, cosi' la ricerca taratura cio' che decide le uscite
+            from bot.execution.exit_logic import effective_param_grid
+            combos = _param_combos(effective_param_grid(getattr(cls, "param_grid", {})))
             if not combos:
                 continue  # strategia non ottimizzabile (nessuna griglia)
             if self.max_combos and len(combos) > self.max_combos:

@@ -47,6 +47,24 @@ def locked_stop(entry: float, target: float, long: bool,
     return max(base_stop, locked) if long else min(base_stop, locked)
 
 
+# ---- SCALE DI TP CANDIDATE (per la taratura per-coppia dal GATE) ------------ #
+# La scala giusta NON e' la stessa per tutte le coppie: R e' gia' normalizzato sulla
+# volatilita' (R = atr_mult x ATR), quindi la domanda non e' "quanto e' volatile la
+# coin" ma "quanto TENDE, in unita' della sua volatilita'". Una coin che ritraccia
+# subito non vedra' mai 5R; una che tende lo supera. Per questo la scala e' un
+# PARAMETRO da validare per coppia, non una costante globale.
+# Le quote (30/30/40) restano fisse: sono il risultato VALIDATO dall'A/B, e farle
+# variare qui allargherebbe lo spazio di ricerca senza una domanda aperta a cui
+# rispondere. Questo elenco e' un punto di partenza da rivedere sui dati misurati
+# (mfe_r: dove arriva davvero il prezzo, in unita' di R).
+SCALE_LADDER_CANDIDATES: tuple[tuple[float, ...], ...] = (
+    (1.0, 1.5, 2.5),    # molto corta: incassa presto, per coppie che ritracciano
+    (1.0, 2.0, 3.0),    # corta
+    (1.5, 3.0, 5.0),    # attuale (default globale dall'A/B)
+    (2.0, 4.0, 6.0),    # lunga: per coppie che tendono davvero
+)
+
+
 def scale_ladder(entry: float, base_stop: float, long: bool,
                  r_mults=None, fracs=None) -> list[tuple[float, float]]:
     """Scala di take-profit a MULTIPLI di R (R = |entry - base_stop|).
@@ -65,6 +83,54 @@ def scale_ladder(entry: float, base_stop: float, long: bool,
         price = entry + m * R if long else entry - m * R
         out.append((price, f))
     return out
+
+
+def effective_param_grid(grid: dict) -> dict:
+    """Griglia di ricerca EFFETTIVA per una strategia, in base al modello di uscita.
+
+    Sotto scale-out il take-profit non e' piu' `rr` x R: e' la SCALA di gradini. `rr`
+    resta nella griglia ma non ha NESSUN effetto sulle uscite (il ramo scale-out non
+    usa `target`), quindi con `--max-combos` che campiona a caso finirebbe per diluire
+    la ricerca su un parametro morto — misurato: 67-75% delle combinazioni campionate
+    sarebbero cloni. Qui `rr` viene SOSTITUITO dalla scala: stesso numero di
+    combinazioni, ma tarate su cio' che decide davvero le uscite.
+    Senza scale-out la griglia resta identica a prima."""
+    if not settings.SCALE_OUT_ENABLED or "rr" not in grid:
+        return grid
+    out = {k: v for k, v in grid.items() if k != "rr"}
+    out["scale_r_mults"] = list(SCALE_LADDER_CANDIDATES)
+    return out
+
+
+def ladder_multiples(params: dict | None) -> tuple | None:
+    """Multipli di R da usare per QUESTA coppia, letti dai params validati dal gate.
+
+    None -> `scale_ladder` usa il default globale (SCALE_OUT_R_MULTIPLES). E' il caso
+    delle coppie non ancora ri-validate col nuovo spazio di ricerca: continuano a
+    operare con la scala CON CUI SONO STATE VALIDATE, quindi la parita' gate<->paper
+    regge anche a registro misto durante la migrazione."""
+    if not params:
+        return None
+    v = params.get("scale_r_mults")
+    if not v:
+        return None
+    try:
+        out = tuple(float(x) for x in v)
+    except (TypeError, ValueError):
+        return None
+    return out or None
+
+
+def mfe_in_r(entry: float, best_favorable: float, base_stop: float) -> float:
+    """Massima escursione FAVOREVOLE in unita' di R (R = |entry - stop base|).
+
+    E' la misura che rende decidibile la scala: da questo unico numero si sa quali
+    gradini AVREBBE colpito QUALUNQUE scala, senza doverle provare una per una ne'
+    sacrificare trade per esplorare. 0 se R non e' calcolabile."""
+    R = abs(entry - base_stop)
+    if R <= 0:
+        return 0.0
+    return abs(best_favorable - entry) / R
 
 
 def scale_fills(ladder, stage: int, long: bool, hi: float, lo: float):

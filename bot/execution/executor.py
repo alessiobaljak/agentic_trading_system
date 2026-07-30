@@ -31,7 +31,9 @@ from bot.core.firebase_client import get_firebase
 from bot.core.models import (
     AssetSnapshot, ClosedTrade, Direction, EffectiveRiskParams, ExitReason, Regime,
 )
-from bot.execution.exit_logic import locked_stop, scale_ladder, scale_fills
+from bot.execution.exit_logic import (
+    locked_stop, scale_ladder, scale_fills, mfe_in_r,
+)
 
 
 @dataclass
@@ -72,6 +74,13 @@ class Position:
     # SOSTITUIRLO quando lo stop si muove (break-even dopo TP1, profit-lock).
     sl_order_id: Optional[int] = None
     exchange_stop: Optional[float] = None
+    # scala di TP CONGELATA all'ingresso (multipli di R validati per questa coppia).
+    # Congelarla e' essenziale: se venisse riletta dal registro a ogni tick, una
+    # passata dell'ottimizzatore cambierebbe i TP di un trade GIA' APERTO — si
+    # eseguirebbe un piano diverso da quello di ingresso, la dashboard mostrerebbe
+    # altri numeri e in live gli ordini sul book non corrisponderebbero piu'.
+    # None -> default globale (SCALE_OUT_R_MULTIPLES).
+    scale_r_mults: Optional[tuple] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -141,6 +150,7 @@ class ExecutionEngine:
         direction: Direction,
         params: EffectiveRiskParams,
         confidence: Optional[float] = None,
+        scale_r_mults: Optional[tuple] = None,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved)."""
         if not params.approved or params.quantity <= 0:
@@ -159,6 +169,7 @@ class ExecutionEngine:
             funding_at_entry=asset.funding_rate, confidence_at_entry=confidence,
             atr=(ind15.atr if ind15 and ind15.atr else 0.0),
             spread_cost=liquidity_spread(asset.volume_24h),   # == costo backtest
+            scale_r_mults=tuple(scale_r_mults) if scale_r_mults else None,
         )
 
         if self.dry_run:
@@ -204,7 +215,7 @@ class ExecutionEngine:
         alla size effettivamente aperta man mano che le fette si chiudono."""
         opp = self._opposite(pos)
         long = pos.direction == Direction.LONG
-        ladder = scale_ladder(pos.entry_price, pos.orig_stop, long) if settings.SCALE_OUT_ENABLED else []
+        ladder = scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults) if settings.SCALE_OUT_ENABLED else []
         try:
             resp = self._client.futures_create_order(
                 symbol=pos.symbol, side=opp, type="STOP_MARKET", reduceOnly=True,
@@ -312,7 +323,7 @@ class ExecutionEngine:
         # SCALE-OUT su multipli di R (se attivo): scala di TP + break-even dopo il
         # primo TP. Vuota -> percorso classico a TP unico (sotto). R usa lo stop
         # ORIGINALE (orig_stop), non quello spostato a break-even.
-        ladder = scale_ladder(pos.entry_price, pos.orig_stop, long) if settings.SCALE_OUT_ENABLED else []
+        ladder = scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults) if settings.SCALE_OUT_ENABLED else []
         if ladder:
             final_target = ladder[-1][0]
             eff_stop = locked_stop(pos.entry_price, final_target, long, pos.high_water,
@@ -528,6 +539,7 @@ class ExecutionEngine:
             confidence_at_entry=pos.confidence_at_entry,
             scale_stage_reached=pos.scale_stage,
             realized_partial=round(pos.realized_net, 6),
+            mfe_r=round(mfe_in_r(pos.entry_price, pos.high_water, pos.orig_stop), 3),
         )
 
     def _write_position_state(self, pos: Position, mark_price: float) -> None:
@@ -553,7 +565,7 @@ class ExecutionEngine:
                 {"price": round(pr, 6), "fraction": fr,
                  "r": (_mults[i] if i < len(_mults) else None),
                  "hit": i < pos.scale_stage}
-                for i, (pr, fr) in enumerate(scale_ladder(pos.entry_price, pos.orig_stop, long))
+                for i, (pr, fr) in enumerate(scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults))
             ]
         self.fb.set_rtdb(f"/positions/{pos.symbol}", {
             "position_id": pos.position_id, "symbol": pos.symbol,
@@ -576,6 +588,7 @@ class ExecutionEngine:
             "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
             # stato scale-out (per non perdere fette/BE dopo un riavvio)
             "sl_order_id": pos.sl_order_id, "exchange_stop": pos.exchange_stop,
+            "scale_r_mults": list(pos.scale_r_mults) if pos.scale_r_mults else None,
             "scale_stage": pos.scale_stage, "realized_gross": pos.realized_gross,
             "realized_net": pos.realized_net,
             "orig_stop": pos.orig_stop,
@@ -646,6 +659,10 @@ class ExecutionEngine:
         pos.sl_order_id = int(_sid) if _sid is not None else None
         _xs = p.get("exchange_stop")
         pos.exchange_stop = float(_xs) if _xs is not None else None
+        # la scala congelata deve sopravvivere al restart, altrimenti la posizione
+        # ripartirebbe con TP diversi da quelli con cui e' stata aperta
+        _sm = p.get("scale_r_mults")
+        pos.scale_r_mults = tuple(float(x) for x in _sm) if _sm else None
         pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
         return pos
 
