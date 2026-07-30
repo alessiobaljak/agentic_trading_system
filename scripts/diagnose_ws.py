@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import os
 import socket
 import sys
@@ -103,6 +104,101 @@ async def probe(label: str, url: str, seconds: float) -> dict:
     return out
 
 
+async def probe_subscribe(label: str, url: str, streams: list[str],
+                          seconds: float) -> dict:
+    """Si connette all'endpoint NUDO e chiede lo stream con un messaggio SUBSCRIBE.
+
+    Diverso dal mettere lo stream nell'URL: qui Binance risponde con un ACK
+    ({"result":null,"id":..}) oppure con un errore. E' la prova definitiva se la
+    nostra richiesta viene ACCETTATA — con lo stream nell'URL, i futures accettano
+    in silenzio anche cio' che non riconoscono, e non si distingue."""
+    import websockets
+
+    out = {"label": label, "connected": False, "frames": 0, "first": None,
+           "ping": None, "peer": None, "error": None, "ack": None}
+    try:
+        async with websockets.connect(url, ping_interval=None, close_timeout=5) as ws:
+            out["connected"] = True
+            out["peer"] = str(getattr(ws, "remote_address", None))
+            await ws.send(json.dumps({"method": "SUBSCRIBE", "params": streams, "id": 1}))
+            loop = asyncio.get_running_loop()
+            deadline = loop.time() + seconds
+            while loop.time() < deadline:
+                try:
+                    raw = await asyncio.wait_for(ws.recv(),
+                                                 timeout=max(0.1, deadline - loop.time()))
+                except asyncio.TimeoutError:
+                    break
+                except Exception as exc:  # noqa: BLE001
+                    out["error"] = f"recv: {type(exc).__name__}: {exc}"
+                    break
+                text = raw if isinstance(raw, str) else raw.decode("utf-8", "replace")
+                # la risposta alla SUBSCRIBE ha "id"; i dati di mercato no
+                if out["ack"] is None and '"id"' in text:
+                    out["ack"] = text[:200]
+                    continue
+                out["frames"] += 1
+                if out["first"] is None:
+                    out["first"] = text
+    except Exception as exc:  # noqa: BLE001
+        out["error"] = f"{type(exc).__name__}: {exc}"
+    return out
+
+
+async def deep_futures(symbol: str, seconds: float) -> int:
+    """Matrice estesa sui SOLI futures: porta, endpoint nudo + SUBSCRIBE, altri stream.
+    Serve quando spot funziona e futures e' muto: il canale e' sano, quindi la causa
+    e' in COME chiediamo lo stream a quell'host."""
+    s = symbol.lower()
+    host = FUTURES.split("//")[1].split(":")[0]
+    print(f"=== FUTURES APPROFONDITO ({seconds:.0f}s ciascuna) ===")
+    results = []
+
+    # A) stream nell'URL, varianti di porta e di tipo
+    for label, url in [
+        ("porta 9443  /ws", f"wss://{host}:9443/ws/{s}@aggTrade"),
+        ("porta 443   /ws bookTicker", f"{FUTURES}/ws/{s}@bookTicker"),
+        ("porta 443   /ws kline_1m", f"{FUTURES}/ws/{s}@kline_1m"),
+    ]:
+        r = await probe(label, url, seconds)
+        render(r)
+        results.append(r)
+        print()
+
+    # B) endpoint NUDO + SUBSCRIBE (l'unico modo per avere un ACK esplicito)
+    for label, url in [
+        ("SUBSCRIBE su /ws", f"{FUTURES}/ws"),
+        ("SUBSCRIBE su /stream", f"{FUTURES}/stream"),
+    ]:
+        r = await probe_subscribe(label, url, [f"{s}@aggTrade"], seconds)
+        render(r)
+        if r["ack"] is not None:
+            print(f"    ACK  : {r['ack']}")
+        elif r["connected"]:
+            print("    ACK  : NESSUNA risposta alla SUBSCRIBE")
+        results.append(r)
+        print()
+
+    ok = [r for r in results if r["frames"] > 0]
+    print("=== DIAGNOSI FUTURES ===")
+    if ok:
+        print("Varianti futures che ricevono dati:")
+        for r in ok:
+            print(f"  - {r['label'].strip()} ({r['frames']} frame)")
+        print("-> allineare PriceStream a questa variante.")
+        return 0
+    acks = [r for r in results if r.get("ack")]
+    if acks:
+        print("La SUBSCRIBE riceve una risposta ma i dati non arrivano: leggere l'ACK")
+        print("qui sopra — se contiene un errore, dice esattamente cosa rifiuta.")
+    else:
+        print("Nessuna variante futures produce dati e nessun ACK alla SUBSCRIBE.")
+        print("Il canale e' sano (spot funziona, i pong tornano): resta una restrizione")
+        print("lato Binance sugli stream FUTURES per questo IP.")
+        print("-> restare sulle candele 1m via REST (che da questo IP funzionano).")
+    return 1
+
+
 def render(r: dict) -> None:
     if not r["connected"]:
         print(f"[{r['label']}] ❌ non connesso — {r['error']}")
@@ -180,8 +276,12 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbol", default="BTCUSDT")
     ap.add_argument("--seconds", type=float, default=6.0)
+    ap.add_argument("--deep", action="store_true",
+                    help="matrice estesa sui futures (porta, SUBSCRIBE, altri stream)")
     args = ap.parse_args()
     environment()
+    if args.deep:
+        return asyncio.run(deep_futures(args.symbol.upper(), args.seconds))
     return asyncio.run(run(args.symbol.upper(), args.seconds))
 
 
