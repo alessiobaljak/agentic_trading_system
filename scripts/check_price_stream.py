@@ -44,28 +44,56 @@ def main() -> int:
             healthy_at = time.time()
             print(f"[check] ✅ stream SANO dopo ~{args.seconds - (deadline - healthy_at):.1f}s")
 
-    ranges = {s: stream.take_range(s) for s in symbols}
+    taken = {s: stream.take(s) for s in symbols}
+    st = stream.stats()
     stream.stop()
 
     print()
-    if healthy_at is None:
-        print("[check] ❌ stream NON disponibile su questa macchina.")
+    print(f"[check] URL richiesta  : {st['last_url']}")
+    print(f"[check] connesso ora   : {st['connected']}")
+    print(f"[check] messaggi ricevuti  : {st['received']}")
+    print(f"[check] messaggi interpretati: {st['parsed']}")
+    if st["last_error"]:
+        print(f"[check] ultimo errore rete : {st['last_error']}")
+    if st["last_skip"]:
+        print(f"[check] ultimo scarto      : {st['last_skip']}")
+    if st["last_raw"]:
+        print(f"[check] ultimo messaggio   : {st['last_raw'][:300]}")
+    print()
+
+    # Tre fallimenti DIVERSI, con rimedi diversi: distinguerli e' il punto di questo script.
+    if not st["received"] and not st["connected"]:
+        print("[check] ❌ mai connesso: rete/firewall bloccano il WebSocket.")
         print("[check]    Il bot funziona comunque: ripiega sulle candele 1m via REST.")
         print("[check]    Per silenziare i tentativi: EXEC_PRICE_STREAM_ENABLED=false in .env")
         return 1
+    if not st["received"]:
+        print("[check] ❌ connesso ma NESSUN messaggio ricevuto.")
+        print("[check]    Sottoscrizione probabilmente rifiutata (nomi stream/endpoint).")
+        print(f"[check]    Endpoint usato: {WS_BASE} · con BINANCE_TESTNET la base cambia.")
+        return 1
+    if not st["parsed"]:
+        print("[check] ❌ messaggi ricevuti ma NESSUNO interpretato.")
+        print("[check]    Il formato non e' quello atteso: vedi 'ultimo scarto' e")
+        print("[check]    'ultimo messaggio' qui sopra — bastano per correggere il parser.")
+        return 1
 
-    print("[check] range osservato per simbolo (max/min dei trade ricevuti):")
+    print("[check] percorso e range per simbolo:")
     silent = []
-    for sym, (hi, lo) in ranges.items():
+    for sym, (path, hi, lo, trunc) in taken.items():
         if hi is None:
             silent.append(sym)
-            print(f"[check]   {sym}: nessun trade ricevuto")
-        else:
-            print(f"[check]   {sym}: max={hi} min={lo}  (ampiezza {(hi - lo):.8f})")
+            print(f"[check]   {sym}: nessun trade nella finestra")
+            continue
+        print(f"[check]   {sym}: max={hi} min={lo} · {len(path)} punti di percorso"
+              f"{' (TRONCATO)' if trunc else ''}")
     if silent:
-        print(f"[check] nota: {', '.join(silent)} senza trade nella finestra — normale "
-              "su coin sottili, non e' un errore.")
-    print("\n[check] ✅ OK: il paper usera' lo stream (e le candele REST come rete di sicurezza).")
+        print(f"[check] nota: {', '.join(silent)} senza trade — normale su coin sottili.")
+    if healthy_at is None:
+        print("\n[check] ⚠️  messaggi interpretati ma is_healthy() era ancora False "
+              "durante l'ascolto: possibile finestra di attesa troppo breve.")
+        return 1
+    print("\n[check] ✅ OK: il paper rigiochera' il percorso reale dei prezzi, in ordine.")
     return 0
 
 

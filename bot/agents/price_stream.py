@@ -62,6 +62,16 @@ class PriceStream:
         self._last_msg_ts: float = 0.0
         self._generation = 0        # cambia quando cambia l'insieme di simboli
         self._loop: Optional[asyncio.AbstractEventLoop] = None
+        # --- diagnostica: distinguere "mai connesso" da "connesso ma muto" da
+        # "messaggi ricevuti ma non interpretati". Senza questi un fallimento e'
+        # indistinguibile da un altro e si finisce a indovinare.
+        self._connected = False
+        self._msgs_received = 0
+        self._msgs_parsed = 0
+        self._last_raw: Optional[str] = None      # campione dell'ultimo messaggio grezzo
+        self._last_skip: Optional[str] = None     # perche' l'ultimo messaggio e' stato scartato
+        self._last_error: Optional[str] = None    # ultimo errore di connessione
+        self._last_url: Optional[str] = None      # URL richiesta (per vedere cosa chiediamo davvero)
 
     # ------------------------------------------------------------------ #
     # Logica pura (testabile senza rete)                                 #
@@ -178,24 +188,63 @@ class PriceStream:
         return f"/stream?streams={streams}"
 
     def _handle_raw(self, raw: str) -> None:
-        """Parsa un messaggio del combined stream e aggiorna il range.
-        Formato: {"stream": "btcusdt@aggTrade", "data": {"s": "BTCUSDT", "p": "123.4", ...}}"""
+        """Parsa un messaggio del combined stream e aggiorna range + percorso.
+        Formato: {"stream": "btcusdt@aggTrade", "data": {"s": "BTCUSDT", "p": "123.4", ...}}
+
+        Ogni scarto viene REGISTRATO (`_last_skip`): un messaggio che non si interpreta
+        e' la causa piu' probabile di "connesso ma mai sano", e senza traccia sarebbe
+        invisibile."""
+        with self._lock:
+            self._msgs_received += 1
+            if isinstance(raw, (bytes, bytearray)):
+                self._last_raw = raw[:400].decode("utf-8", "replace")
+            else:
+                self._last_raw = str(raw)[:400]
+
+        def skip(why: str) -> None:
+            with self._lock:
+                self._last_skip = why
+
         try:
             msg = json.loads(raw)
-        except Exception:  # noqa: BLE001
-            return
+        except Exception as exc:  # noqa: BLE001
+            return skip(f"JSON non valido: {exc}")
+        # Binance segnala i problemi di sottoscrizione con {"error": {...}}: senza
+        # questo ramo l'errore veniva ignorato e lo stream sembrava solo "muto".
+        if isinstance(msg, dict) and msg.get("error"):
+            return skip(f"errore dal server: {msg['error']}")
         data = msg.get("data") if isinstance(msg, dict) else None
         if not isinstance(data, dict):
             data = msg if isinstance(msg, dict) else None
         if not isinstance(data, dict):
-            return
+            return skip(f"payload non riconosciuto: {type(msg).__name__}")
         sym, price = data.get("s"), data.get("p")
         if not sym or price is None:
-            return
+            return skip(f"campi s/p assenti (chiavi: {sorted(data)[:8]})")
         try:
-            self.observe(str(sym).upper(), float(price))
+            value = float(price)
         except (TypeError, ValueError):
-            return
+            return skip(f"prezzo non numerico: {price!r}")
+        self.observe(str(sym).upper(), value)
+        with self._lock:
+            self._msgs_parsed += 1
+
+    def stats(self) -> dict:
+        """Fotografia diagnostica: serve a capire QUALE dei tre fallimenti possibili
+        e' in corso (mai connesso / connesso ma muto / ricevuti ma non interpretati)."""
+        with self._lock:
+            return {
+                "symbols": sorted(self._symbols),
+                "connected": self._connected,
+                "thread_alive": self._thread is not None and self._thread.is_alive(),
+                "received": self._msgs_received,
+                "parsed": self._msgs_parsed,
+                "last_raw": self._last_raw,
+                "last_skip": self._last_skip,
+                "last_error": self._last_error,
+                "last_url": self._last_url,
+                "last_msg_age_s": (time.time() - self._last_msg_ts) if self._last_msg_ts else None,
+            }
 
     # ------------------------------------------------------------------ #
     # Rete (thread separato)                                             #
@@ -240,8 +289,13 @@ class PriceStream:
                 import websockets
 
                 url = f"{self.base}{self._stream_path(symbols)}"
+                with self._lock:
+                    self._last_url = url
                 async with websockets.connect(url, ping_interval=20, close_timeout=5) as ws:
-                    print(f"[price_stream] connesso · {len(symbols)} simboli")
+                    print(f"[price_stream] connesso · {len(symbols)} simboli · {url}")
+                    with self._lock:
+                        self._connected = True
+                        self._last_error = None
                     backoff = 1.0
                     while not self._stop_evt.is_set():
                         with self._lock:
@@ -254,6 +308,9 @@ class PriceStream:
                         self._handle_raw(raw)
             except Exception as exc:  # noqa: BLE001
                 # rete assente/instabile: si riprova con backoff. Il bot intanto usa REST.
+                with self._lock:
+                    self._connected = False
+                    self._last_error = f"{type(exc).__name__}: {exc}"
                 print(f"[price_stream] disconnesso ({exc}) · riprovo in {backoff:.0f}s")
                 await asyncio.sleep(backoff)
                 backoff = min(backoff * 2, 30.0)
