@@ -41,10 +41,20 @@ WS_BASE = ("wss://stream.binancefuture.com" if settings.BINANCE_TESTNET
 class PriceStream:
     """Range (max/min) vivo per simbolo, alimentato dai trade in tempo reale."""
 
-    def __init__(self, base_url: str = WS_BASE, stale_after_s: float = 60.0) -> None:
+    def __init__(self, base_url: str = WS_BASE, stale_after_s: float = 60.0,
+                 min_move_frac: float | None = None,
+                 max_path_points: int | None = None) -> None:
         self.base = base_url
         self.stale_after_s = stale_after_s
+        # soglia sotto la quale un'inversione e' rumore (rimbalzo bid/ask) e non
+        # apre un punto nuovo nel percorso; e tetto di punti per non crescere senza fine
+        self.min_move_frac = (settings.EXEC_PATH_MIN_MOVE_FRAC
+                              if min_move_frac is None else min_move_frac)
+        self.max_path_points = (settings.EXEC_PATH_MAX_POINTS
+                                if max_path_points is None else max_path_points)
         self._ranges: dict[str, list[float]] = {}     # symbol -> [hi, lo]
+        self._paths: dict[str, list[float]] = {}      # symbol -> percorso ordinato (zigzag)
+        self._truncated: set[str] = set()             # percorsi che hanno toccato il tetto
         self._symbols: set[str] = set()
         self._lock = threading.Lock()
         self._stop_evt = threading.Event()
@@ -57,7 +67,17 @@ class PriceStream:
     # Logica pura (testabile senza rete)                                 #
     # ------------------------------------------------------------------ #
     def observe(self, symbol: str, price: float) -> None:
-        """Registra un prezzo osservato, allargando il range del simbolo."""
+        """Registra un prezzo osservato: allarga il range E prolunga il PERCORSO.
+
+        Il percorso e' la sequenza ORDINATA dei prezzi, compressa a zigzag: finche' il
+        prezzo si muove nella stessa direzione si aggiorna l'ultimo punto (l'estremo
+        raggiunto e' sempre conservato); a ogni INVERSIONE si aggiunge un punto nuovo.
+        Cosi' il replay vede la stessa successione di livelli attraversati che avrebbe
+        visto Binance, senza tenere in memoria ogni singolo trade.
+
+        Le micro-inversioni sotto `min_move_frac` (rimbalzo bid/ask: rumore, non
+        movimento) non creano punti. Non si perde nulla di sostanziale: il range vero
+        continua ad allargarsi, e il chiamante lo usa come rete di sicurezza."""
         if price <= 0:
             return
         with self._lock:
@@ -69,23 +89,60 @@ class PriceStream:
                     r[0] = price
                 if price < r[1]:
                     r[1] = price
+            self._extend_path(symbol, price)
             self._last_msg_ts = time.time()
 
-    def take_range(self, symbol: str) -> tuple[Optional[float], Optional[float]]:
-        """(hi, lo) accumulati dall'ultima chiamata, poi AZZERA per questo simbolo.
+    def _extend_path(self, symbol: str, price: float) -> None:
+        """Zigzag: estende il movimento in corso, o apre un punto nuovo se inverte.
+        Da chiamare col lock GIA' preso."""
+        pts = self._paths.setdefault(symbol, [])
+        if not pts:
+            pts.append(price)
+            return
+        if len(pts) >= self.max_path_points:
+            self._truncated.add(symbol)   # tail coperto solo dal range aggregato
+            return
+        if len(pts) == 1:
+            if price != pts[0]:
+                pts.append(price)
+            return
+        going_up = pts[-1] > pts[-2]
+        if (price > pts[-1]) if going_up else (price < pts[-1]):
+            pts[-1] = price               # stesso verso: estende, non aggiunge
+            return
+        # inversione: solo se e' un movimento VERO, non rimbalzo bid/ask
+        if abs(price - pts[-1]) >= self.min_move_frac * max(abs(pts[-1]), 1e-12):
+            pts.append(price)
+
+    def take(self, symbol: str) -> tuple[list[float], Optional[float], Optional[float], bool]:
+        """(percorso, hi, lo, troncato) accumulati dall'ultima chiamata, poi AZZERA.
 
         Azzerare e' il punto: ogni tick deve vedere la finestra [tick precedente, ora],
-        non una finestra sovrapposta. (None, None) se non e' arrivato nulla -> il
-        chiamante ricade sulle candele REST."""
+        non una finestra sovrapposta. Il percorso serve per l'ORDINE dei livelli, il
+        range come rete di sicurezza (non perde mai un estremo). `troncato` = il
+        percorso ha raggiunto il tetto di punti, quindi la parte finale e' descritta
+        solo dal range."""
         with self._lock:
             r = self._ranges.pop(symbol, None)
-        return (r[0], r[1]) if r else (None, None)
+            path = self._paths.pop(symbol, [])
+            trunc = symbol in self._truncated
+            self._truncated.discard(symbol)
+        if r is None:
+            return [], None, None, False
+        return path, r[0], r[1], trunc
+
+    def take_range(self, symbol: str) -> tuple[Optional[float], Optional[float]]:
+        """Solo (hi, lo), drenando come take(). Per chi non usa il percorso."""
+        _, hi, lo, _ = self.take(symbol)
+        return hi, lo
 
     def reset(self, symbol: str) -> None:
-        """Butta il range accumulato per un simbolo. Da chiamare all'APERTURA di una
+        """Butta quanto accumulato per un simbolo. Da chiamare all'APERTURA di una
         posizione: i prezzi visti PRIMA dell'ingresso non possono riempire i suoi TP."""
         with self._lock:
             self._ranges.pop(symbol, None)
+            self._paths.pop(symbol, None)
+            self._truncated.discard(symbol)
 
     def is_healthy(self) -> bool:
         """True se lo stream e' vivo e ha ricevuto qualcosa di recente. Se False il
@@ -110,6 +167,10 @@ class PriceStream:
             for sym in list(self._ranges):
                 if sym not in new:
                     self._ranges.pop(sym, None)
+            for sym in list(self._paths):
+                if sym not in new:
+                    self._paths.pop(sym, None)
+                    self._truncated.discard(sym)
         self._wake()
 
     def _stream_path(self, symbols: set[str]) -> str:

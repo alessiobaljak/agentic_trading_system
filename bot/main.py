@@ -43,6 +43,8 @@ class TradingBot:
         # stream dei trade in tempo reale: da' al paper la SEQUENZA dei prezzi, non
         # solo gli estremi aggregati di una candela. Degradazione automatica su REST.
         self.stream = PriceStream() if settings.EXEC_PRICE_STREAM_ENABLED else None
+        # range della finestra rigiocata per ultima (rete di sicurezza post-replay)
+        self._last_path_range: tuple[float | None, float | None] = (None, None)
         self.onchain = OnChainAgent()
         self.sentiment = SentimentAgent()
         self.scanner = MarketScanner(self.price, self.sentiment)
@@ -106,6 +108,28 @@ class TradingBot:
             self.stream.set_symbols(self.executor.open_positions.keys())
         except Exception as exc:  # noqa: BLE001
             print(f"[main] sync stream simboli fallito: {exc}")
+
+    def _price_path(self, symbol: str, pos) -> list[float]:
+        """Sequenza ORDINATA dei prezzi dall'ultima lettura, dallo stream.
+
+        E' cio' che permette al paper di cogliere OGNI variazione nell'ordine in cui e'
+        avvenuta, invece di schiacciarla in un massimo/minimo. Vuota se lo stream non
+        c'e'/non e' sano o se il replay e' disattivato -> il chiamante usa il range
+        aggregato delle candele. Memorizza anche il range della stessa finestra
+        (`_last_path_range`) da usare come rete di sicurezza dopo il replay."""
+        self._last_path_range = (None, None)
+        if not (settings.EXEC_WICK_FILLS_ENABLED and settings.EXEC_PATH_REPLAY_ENABLED):
+            return []
+        if self.stream is None or not self.stream.is_healthy():
+            return []
+        path, hi, lo, truncated = self.stream.take(symbol)
+        if hi is None:
+            return []
+        self._last_path_range = (hi, lo)
+        if truncated:
+            print(f"[main] percorso {symbol} troncato al tetto di punti: "
+                  f"la coda e' coperta solo dagli estremi")
+        return path
 
     def _wick_range(self, symbol: str, pos) -> tuple[float | None, float | None]:
         """Estremi (high/low) toccati dal prezzo da quando l'abbiamo guardato l'ultima volta.
@@ -292,10 +316,20 @@ class TradingBot:
                 price = snap.price if snap else None
             if price is None:
                 continue
-            # ombre dell'ultimo minuto: senza queste i TP/SL toccati TRA due letture
-            # sarebbero invisibili (il gate invece li conta) -> +1 richiesta per posizione
-            hi, lo = self._wick_range(sym, pos)
-            closed = self.executor.update_position(sym, price, high=hi, low=lo)
+            # PERCORSO dei prezzi dall'ultima lettura. Se lo stream lo fornisce, si
+            # rigioca punto per punto (ordine reale, come Binance); altrimenti si usa
+            # il range aggregato delle candele 1m (estremi senza ordine -> il peggio).
+            path = self._price_path(sym, pos)
+            if path:
+                closed = self.executor.update_position_path(sym, path, price)
+                # rete di sicurezza: un estremo filtrato dallo zigzag (o la coda di un
+                # percorso troncato) verrebbe comunque colto dal range aggregato
+                if closed is None and self._last_path_range != (None, None):
+                    hi, lo = self._last_path_range
+                    closed = self.executor.update_position(sym, price, high=hi, low=lo)
+            else:
+                hi, lo = self._wick_range(sym, pos)
+                closed = self.executor.update_position(sym, price, high=hi, low=lo)
             if closed is not None:
                 self._sync_stream_symbols()   # posizione chiusa -> disiscrivi il simbolo
             # accredita subito all'equity le fette realizzate (TP parziali) e/o la

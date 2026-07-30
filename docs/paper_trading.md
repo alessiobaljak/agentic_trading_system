@@ -29,11 +29,30 @@ vedrebbe i movimenti tra due letture. Per questo valuta i trigger su un **range*
 | **Stream WebSocket** (`bot/agents/price_stream.py`) | ogni singolo trade, **in ordine** | default (`EXEC_PRICE_STREAM_ENABLED`) |
 | **Candele 1m via REST** | gli estremi, **non** il loro ordine | se lo stream non è sano (`EXEC_WICK_LOOKBACK_1M` candele) |
 
-Lo stream è l'unica fonte che risolve l'**ordine dei prezzi dentro il minuto**: una
-candela non dice se il TP è arrivato prima o dopo lo stop. Se il WebSocket è bloccato
-(firewall/proxy) il bot ripiega da solo sulle candele e continua a funzionare — la
-salute è pubblicata in `/bot_status/price_stream`, e si verifica con
-`python -m scripts.check_price_stream`.
+Se il WebSocket è bloccato (firewall/proxy) il bot ripiega da solo sulle candele e
+continua a funzionare — la salute è pubblicata in `/bot_status/price_stream`, e si
+verifica con `python -m scripts.check_price_stream`.
+
+### Replay del percorso — perché l'ordine conta
+Sapere che il prezzo è passato da 103 **e** da 97 non basta: se è passato *prima* da 103
+il TP1 è stato incassato e il residuo esce a break-even; se è passato *prima* da 97 è
+una perdita piena. Stesso range, esito opposto.
+
+Per questo i prezzi dello stream non vengono schiacciati in un massimo/minimo: vengono
+**rigiocati uno per uno nell'ordine reale** (`executor.update_position_path`), come
+farebbe la matching engine di Binance. Ogni punto è valutato con `high = low = punto`,
+quindi non esiste mai un range ambiguo, e il profit-lock si arma solo sui punti già
+passati (nessun look-ahead). La prima uscita interrompe il replay.
+
+Il percorso è compresso a **zigzag**: un movimento continuo aggiorna l'ultimo punto
+(l'estremo raggiunto non si perde mai), e solo le inversioni creano punti nuovi — quelle
+sotto `EXEC_PATH_MIN_MOVE_FRAC` sono rimbalzo bid/ask, cioè rumore. Così la memoria è
+limitata dal numero di oscillazioni vere, non dal numero di trade. Oltre
+`EXEC_PATH_MAX_POINTS` il percorso si ferma e lo segnala nei log.
+
+Doppia rete di sicurezza: dopo il replay si valuta anche il **range aggregato** della
+stessa finestra, perché un'inversione filtrata dallo zigzag resta comunque compresa in
+`[lo, hi]` — nessun livello attraversato può sfuggire del tutto.
 
 Regole valide per entrambe le fonti:
 - lo **stop si valuta prima** dei TP: se il range tocca entrambi, l'ordine intra-candela

@@ -205,6 +205,14 @@ class Settings:
     # ma minuto per minuto in tempo reale. Se lo stream non e' sano si ricade
     # automaticamente sulle candele REST: nessun percorso critico ne dipende.
     EXEC_PRICE_STREAM_ENABLED: bool = os.getenv("EXEC_PRICE_STREAM_ENABLED", "true").lower() == "true"
+    # REPLAY del percorso: i prezzi dello stream vengono rigiocati UNO PER UNO nella
+    # logica di uscita, nell'ordine in cui sono arrivati — come la matching engine di
+    # Binance. Conoscendo l'ordine non serve piu' assumere il peggio quando un range
+    # tocca due livelli. Il percorso e' compresso a zigzag: sotto questa soglia
+    # un'inversione e' rumore (rimbalzo bid/ask) e non genera un punto.
+    EXEC_PATH_REPLAY_ENABLED: bool = os.getenv("EXEC_PATH_REPLAY_ENABLED", "true").lower() == "true"
+    EXEC_PATH_MIN_MOVE_FRAC: float = float(os.getenv("EXEC_PATH_MIN_MOVE_FRAC", "0.0002"))
+    EXEC_PATH_MAX_POINTS: int = int(os.getenv("EXEC_PATH_MAX_POINTS", "800"))
 
     # ---- GATE 1 (soglie di validazione) ----
     # Una coppia (coin, strategia) è validata SOLO se, fuori campione (OOS):

@@ -268,7 +268,8 @@ class ExecutionEngine:
     # ------------------------------------------------------------------ #
     def update_position(self, symbol: str, mark_price: float,
                         high: float | None = None,
-                        low: float | None = None) -> Optional[ClosedTrade]:
+                        low: float | None = None,
+                        publish: bool = True) -> Optional[ClosedTrade]:
         """
         Esce TUTTA la posizione allo stop o al take-profit PIENO, esattamente come
         il backtest che valida le strategie. Lo stop può essere ALZATO dal
@@ -283,6 +284,10 @@ class ExecutionEngine:
         eseguiti dall'ombra. Omessi -> si ricade sul solo `mark_price` (vecchio
         comportamento). Vengono sempre ALLARGATI al mark osservato, così nessun
         trigger che scattava prima puo' sparire.
+
+        `publish=False`: non scrive lo stato su Firebase e non tocca gli ordini reali.
+        Usato durante il REPLAY del percorso (update_position_path), dove i passi
+        intermedi sono valutazioni, non fotografie da pubblicare.
         """
         pos = self.open_positions.get(symbol)
         if pos is None:
@@ -356,9 +361,10 @@ class ExecutionEngine:
             # FUTURI, come il gate che aggiorna best_fav a fine barra
             pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
             # LIVE: lo stop sul book deve seguire quello deciso qui (break-even/profit-lock)
-            intended = max(eff_stop, pos.stop_price) if long else min(eff_stop, pos.stop_price)
-            self._sync_exchange_stop(pos, intended)
-            self._write_position_state(pos, mark_price)
+            if publish:
+                intended = max(eff_stop, pos.stop_price) if long else min(eff_stop, pos.stop_price)
+                self._sync_exchange_stop(pos, intended)
+                self._write_position_state(pos, mark_price)
             return None
 
         # --- percorso classico: TP unico pieno (identico al backtest) ---
@@ -385,9 +391,30 @@ class ExecutionEngine:
             return self._close(pos, mark_price, ExitReason.TIME_EXIT)
 
         pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
-        self._sync_exchange_stop(pos, eff_stop)   # LIVE: stop sul book = stop deciso qui
-        self._write_position_state(pos, mark_price)
+        if publish:
+            self._sync_exchange_stop(pos, eff_stop)   # LIVE: stop sul book = stop deciso qui
+            self._write_position_state(pos, mark_price)
         return None
+
+    def update_position_path(self, symbol: str, path: list[float],
+                             mark_price: float) -> Optional[ClosedTrade]:
+        """Rigioca il percorso dei prezzi UNO PER UNO, nell'ordine reale.
+
+        E' la differenza tra "so che il prezzo e' passato da 103 e da 97" e "so che
+        e' passato PRIMA da 103 e POI da 97": nel primo caso bisogna assumere il
+        peggio, nel secondo si sa che il TP1 e' stato incassato prima dello stop.
+        Ogni punto viene valutato con high=low=punto, quindi non c'e' nessun range
+        ambiguo: e' la stessa cosa che farebbe la matching engine di Binance.
+
+        La prima uscita interrompe il replay (il resto del percorso e' successo quando
+        la posizione era gia' chiusa). Se nessun punto la chiude, si valuta il mark
+        finale — che pubblica lo stato e allinea gli ordini reali."""
+        for point in path:
+            closed = self.update_position(symbol, point, high=point, low=point,
+                                          publish=False)
+            if closed is not None:
+                return closed
+        return self.update_position(symbol, mark_price)
 
     def _partial_close(self, pos: Position, price: float, qty: float) -> None:
         """Chiude una FETTA (qty assoluta) della posizione al prezzo dato e accumula

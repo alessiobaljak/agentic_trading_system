@@ -246,3 +246,76 @@ def test_falls_back_to_rest_when_stream_has_no_data_yet(scale_on):
     bot = _FakeBot(_StubPrice([_candle(+1, high=104.0, low=99.0)]),
                    stream=_StubStream(healthy=True, rng=(None, None)))
     assert bot._wick_range("BTCUSDT", pos) == (104.0, 99.0)
+
+
+# ---- REPLAY del percorso: l'ORDINE dei prezzi viene rispettato ------------- #
+def test_path_replay_banks_tp1_before_stop_when_it_came_first(scale_on):
+    """IL CUORE. Percorso 100 -> 103.5 (TP1) -> 97.5 (stop): salendo PRIMA, il TP1 va
+    incassato e lo stop del residuo e' a break-even, non a -1R. Con il solo range
+    aggregato si sarebbe assunto il peggio (stop pieno, perdita)."""
+    eng = _open()
+    closed = eng.update_position_path("BTCUSDT", [100.0, 103.5, 97.5], mark_price=97.5)
+    assert closed is not None
+    assert closed.exit_reason == ExitReason.SCALE_OUT   # ha bancato TP1, poi BE
+    assert closed.scale_stage_reached == 1
+    assert closed.realized_partial > 0                 # 30% incassato a +1.5R
+
+
+def test_path_replay_takes_full_stop_when_stop_came_first(scale_on):
+    """Stesso range, ordine OPPOSTO: 100 -> 97.5 (stop) -> 103.5. Lo stop e' scattato
+    prima, quindi e' una perdita piena e il rimbalzo dopo non conta (eravamo fuori)."""
+    eng = _open()
+    closed = eng.update_position_path("BTCUSDT", [100.0, 97.5, 103.5], mark_price=103.5)
+    assert closed is not None
+    assert closed.exit_reason == ExitReason.STOP_LOSS
+    assert closed.scale_stage_reached == 0
+    assert closed.pnl < 0
+
+
+def test_path_replay_walks_the_whole_ladder_in_order(scale_on):
+    """Percorso che sale fino a 5R: le tre fette si riempiono in sequenza e il trade
+    chiude a TAKE_PROFIT (non a trailing/scale-out)."""
+    eng = _open()
+    closed = eng.update_position_path("BTCUSDT", [101.0, 103.0, 106.0, 110.0], mark_price=110.0)
+    assert closed is not None
+    assert closed.exit_reason == ExitReason.TAKE_PROFIT
+    assert closed.scale_stage_reached == 3
+
+
+def test_path_replay_stops_at_first_exit(scale_on):
+    """Dopo l'uscita il resto del percorso e' irrilevante: la posizione era chiusa."""
+    eng = _open()
+    closed = eng.update_position_path("BTCUSDT", [97.5, 103.5, 110.0], mark_price=110.0)
+    assert closed is not None
+    assert closed.exit_reason == ExitReason.STOP_LOSS   # non TAKE_PROFIT
+    assert "BTCUSDT" not in eng.open_positions
+
+
+def test_path_replay_keeps_position_open_and_publishes_once(scale_on):
+    """Percorso che non tocca nulla: posizione aperta, e lo stato viene pubblicato
+    una sola volta (i passi intermedi non sono fotografie da salvare)."""
+    eng = _open()
+    writes = []
+    orig = eng._write_position_state
+    eng._write_position_state = lambda pos, mark: writes.append(mark) or orig(pos, mark)
+    closed = eng.update_position_path("BTCUSDT", [100.2, 101.0, 100.5], mark_price=100.5)
+    assert closed is None
+    assert "BTCUSDT" in eng.open_positions
+    assert len(writes) == 1
+
+
+def test_path_replay_profit_lock_uses_only_past_points(scale_on):
+    """Il profit-lock si arma sui punti GIA' passati, non su quelli futuri: nessun
+    look-ahead. Percorso 100 -> 106 -> 102: a 106 il lock si arma (su high_water dei
+    punti precedenti), il ritorno a 102 lo fa scattare a 103."""
+    eng = _open(tp=110.0)
+    closed = eng.update_position_path("BTCUSDT", [100.0, 106.0, 102.0], mark_price=102.0)
+    assert closed is not None
+    assert abs(closed.exit_price - 103.0) < 1e-9
+
+
+def test_empty_path_falls_back_to_plain_update(scale_on):
+    """Percorso vuoto -> si valuta solo il mark (nessuna eccezione, nessun no-op)."""
+    eng = _open()
+    assert eng.update_position_path("BTCUSDT", [], mark_price=101.0) is None
+    assert "BTCUSDT" in eng.open_positions
