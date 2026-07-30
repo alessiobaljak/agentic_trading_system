@@ -43,9 +43,13 @@ class PriceStream:
 
     def __init__(self, base_url: str = WS_BASE, stale_after_s: float = 60.0,
                  min_move_frac: float | None = None,
-                 max_path_points: int | None = None) -> None:
+                 max_path_points: int | None = None,
+                 silent_after_s: float = 45.0) -> None:
         self.base = base_url
         self.stale_after_s = stale_after_s
+        # una connessione APERTA che non consegna nulla e' inutile quanto una caduta:
+        # dopo questo silenzio si chiude e si riprova (prima restava appesa per sempre)
+        self.silent_after_s = silent_after_s
         # soglia sotto la quale un'inversione e' rumore (rimbalzo bid/ask) e non
         # apre un punto nuovo nel percorso; e tetto di punti per non crescere senza fine
         self.min_move_frac = (settings.EXEC_PATH_MIN_MOVE_FRAC
@@ -297,14 +301,28 @@ class PriceStream:
                         self._connected = True
                         self._last_error = None
                     backoff = 1.0
+                    loop = asyncio.get_running_loop()
+                    last_seen = loop.time()
                     while not self._stop_evt.is_set():
                         with self._lock:
                             if self._generation != generation:
                                 break        # lista simboli cambiata -> riconnetti
                         try:
-                            raw = await asyncio.wait_for(ws.recv(), timeout=30.0)
+                            raw = await asyncio.wait_for(ws.recv(), timeout=5.0)
                         except asyncio.TimeoutError:
-                            continue         # nessun trade: normale su coin sottili
+                            # nessun frame: tollerabile per un po' (coin sottili), ma una
+                            # connessione MUTA a lungo va abbattuta e riaperta, altrimenti
+                            # resta appesa e lo stream non si riprende mai piu'.
+                            if loop.time() - last_seen >= self.silent_after_s:
+                                print(f"[price_stream] connessione MUTA da "
+                                      f"{self.silent_after_s:.0f}s · la richiudo e riprovo")
+                                with self._lock:
+                                    self._last_error = (
+                                        f"nessun frame per {self.silent_after_s:.0f}s "
+                                        f"(handshake ok, dati assenti)")
+                                break
+                            continue
+                        last_seen = loop.time()
                         self._handle_raw(raw)
             except Exception as exc:  # noqa: BLE001
                 # rete assente/instabile: si riprova con backoff. Il bot intanto usa REST.
