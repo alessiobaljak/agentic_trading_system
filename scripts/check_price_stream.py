@@ -79,14 +79,27 @@ def main() -> int:
         return 1
 
     print("[check] percorso e range per simbolo:")
-    silent = []
+    silent, broken = [], []
     for sym, (path, hi, lo, trunc) in taken.items():
         if hi is None:
             silent.append(sym)
             print(f"[check]   {sym}: nessun trade nella finestra")
             continue
-        print(f"[check]   {sym}: max={hi} min={lo} · {len(path)} punti di percorso"
+        # INVARIANTE di fedelta': gli estremi del PERCORSO devono coincidere con quelli
+        # del range. Se coincidono, il percorso copre tutta l'escursione e nessun
+        # attraversamento e' stato perso — e' una PROVA, non un'impressione.
+        # Pochi punti non sono un problema: un tratto monotono collassa in un segmento
+        # e i prezzi identici (il bookTicker aggiorna anche solo le quantita') non
+        # creano punti. Un percorso troncato, invece, per costruzione non la rispetta.
+        ok = bool(path) and abs(max(path) - hi) < 1e-9 and abs(min(path) - lo) < 1e-9
+        if not ok and not trunc:
+            broken.append(sym)
+        print(f"[check]   {sym}: max={hi} min={lo} (ampiezza {hi - lo:.8g}) · "
+              f"{len(path)} punti · fedelta' {'OK' if ok else 'DA VERIFICARE'}"
               f"{' (TRONCATO)' if trunc else ''}")
+    if broken:
+        print(f"[check] ⚠️  {', '.join(broken)}: gli estremi del percorso NON coincidono")
+        print("[check]    col range — il percorso sta perdendo movimenti, va indagato.")
     if silent:
         print(f"[check] nota: {', '.join(silent)} senza trade — normale su coin sottili.")
     if healthy_at is None:

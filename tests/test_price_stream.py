@@ -342,3 +342,17 @@ def test_monotone_run_still_compresses_with_no_filter():
     for p in (100.0, 101.0, 102.0, 103.0, 104.0):
         st.observe("X", p)
     assert st.take("X")[0] == [100.0, 104.0]
+
+
+def test_path_extremes_always_match_the_range():
+    """INVARIANTE di fedelta': gli estremi del percorso coincidono con quelli del range.
+    Se vale, il percorso copre TUTTA l'escursione e nessun attraversamento e' perso —
+    e' cio' che rende verificabile un percorso di pochi punti (un tratto monotono
+    collassa in un segmento, ma i suoi estremi restano)."""
+    st = PriceStream(base_url="wss://x")
+    for p in (100.0, 105.0, 103.0, 103.0, 108.0, 99.0, 101.0, 101.0, 97.0):
+        st.observe("X", p)
+    path, hi, lo, trunc = st.take("X")
+    assert not trunc
+    assert max(path) == hi == 108.0
+    assert min(path) == lo == 97.0
