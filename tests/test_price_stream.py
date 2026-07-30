@@ -300,3 +300,45 @@ def test_reset_clears_the_path():
     st.observe("BTCUSDT", 105.0)
     st.reset("BTCUSDT")
     assert st.take("BTCUSDT") == ([], None, None, False)
+
+
+# ---- REGRESSIONE: il filtro anti-rumore non deve cancellare attraversamenti - #
+def test_default_config_preserves_small_reversals():
+    """Con la config di DEFAULT una micro-inversione DEVE restare nel percorso.
+
+    Il difetto originale: soglia 0.02% = $12.80 su BTC. Un tuffo di pochi dollari sotto
+    uno stop a BREAK-EVEN (che sta esattamente all'entry) veniva cancellato, il replay
+    non lo vedeva, proseguiva e incassava un TP mai raggiunto -> errore OTTIMISTA."""
+    st = PriceStream(base_url="wss://x")          # nessun override: usa i default reali
+    for p in (64000.0, 64010.0, 64008.0, 64020.0):  # inversione di soli 2 dollari
+        st.observe("BTCUSDT", p)
+    path, _, _, _ = st.take("BTCUSDT")
+    assert path == [64000.0, 64010.0, 64008.0, 64020.0]
+
+
+def test_default_config_keeps_break_even_dip_visible():
+    """Scenario reale: stop a break-even a 64000, il prezzo lo perfora di 3$ e risale.
+    Il percorso deve contenere il punto SOTTO il livello, altrimenti l'ordine e' perso."""
+    st = PriceStream(base_url="wss://x")
+    for p in (64050.0, 63997.0, 64900.0):
+        st.observe("BTCUSDT", p)
+    path, _, _, _ = st.take("BTCUSDT")
+    assert min(path) == 63997.0                   # il tuffo sotto il BE e' visibile
+    assert path.index(63997.0) < path.index(64900.0)   # e viene PRIMA del rally
+
+
+def test_identical_consecutive_prices_are_deduplicated():
+    """bookTicker ripete spesso lo stesso mid: nessun punto inutile."""
+    st = PriceStream(base_url="wss://x")
+    for p in (100.0, 100.0, 100.0):
+        st.observe("X", p)
+    assert st.take("X")[0] == [100.0]
+
+
+def test_monotone_run_still_compresses_with_no_filter():
+    """Anche senza filtro, una corsa in un solo verso resta 2 punti: la compressione
+    che serve (memoria) non dipende dalla soglia."""
+    st = PriceStream(base_url="wss://x")
+    for p in (100.0, 101.0, 102.0, 103.0, 104.0):
+        st.observe("X", p)
+    assert st.take("X")[0] == [100.0, 104.0]

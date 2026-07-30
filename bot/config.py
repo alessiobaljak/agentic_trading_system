@@ -211,8 +211,18 @@ class Settings:
     # tocca due livelli. Il percorso e' compresso a zigzag: sotto questa soglia
     # un'inversione e' rumore (rimbalzo bid/ask) e non genera un punto.
     EXEC_PATH_REPLAY_ENABLED: bool = os.getenv("EXEC_PATH_REPLAY_ENABLED", "true").lower() == "true"
-    EXEC_PATH_MIN_MOVE_FRAC: float = float(os.getenv("EXEC_PATH_MIN_MOVE_FRAC", "0.0002"))
-    EXEC_PATH_MAX_POINTS: int = int(os.getenv("EXEC_PATH_MAX_POINTS", "800"))
+    # Soglia sotto la quale un'INVERSIONE non entra nel percorso. Default 0 = nessun
+    # filtro (si comprimono solo i movimenti monotoni e i prezzi identici).
+    # MISURATO: il replay costa ~1.8us per punto -> 1810 punti (un tick da 30s su BTC)
+    # sono 3ms, e con 12 posizioni ~40ms su un tick di 30s (0.13%). Filtrare non fa
+    # risparmiare nulla di percepibile e COSTA fedelta': con una soglia di 0.02%
+    # ($12.80 su BTC) un tuffo di pochi dollari sotto uno stop a break-even veniva
+    # cancellato dal percorso, il replay proseguiva e incassava un TP che non doveva
+    # raggiungere -> errore in direzione OTTIMISTA, la piu' pericolosa.
+    EXEC_PATH_MIN_MOVE_FRAC: float = float(os.getenv("EXEC_PATH_MIN_MOVE_FRAC", "0"))
+    # tetto di punti: ~20k = oltre 5 minuti di bookTicker su BTC, quindi si tocca solo
+    # se un ciclo si blocca a lungo. Oltre, la coda resta coperta dal range aggregato.
+    EXEC_PATH_MAX_POINTS: int = int(os.getenv("EXEC_PATH_MAX_POINTS", "20000"))
     # TIPO di stream da cui leggere il prezzo. Default `bookTicker` (miglior bid/ask):
     # su alcuni IP/provider Binance consegna il BOOK ma NON gli stream di trade
     # (`aggTrade`/`kline_*` restano muti pur con la sottoscrizione accettata), e per

@@ -54,10 +54,20 @@ quindi non esiste mai un range ambiguo, e il profit-lock si arma solo sui punti 
 passati (nessun look-ahead). La prima uscita interrompe il replay.
 
 Il percorso è compresso a **zigzag**: un movimento continuo aggiorna l'ultimo punto
-(l'estremo raggiunto non si perde mai), e solo le inversioni creano punti nuovi — quelle
-sotto `EXEC_PATH_MIN_MOVE_FRAC` sono rimbalzo bid/ask, cioè rumore. Così la memoria è
-limitata dal numero di oscillazioni vere, non dal numero di trade. Oltre
-`EXEC_PATH_MAX_POINTS` il percorso si ferma e lo segnala nei log.
+(l'estremo raggiunto non si perde mai) e i prezzi identici non creano punti, mentre ogni
+inversione apre un punto nuovo. Così la memoria dipende dalle oscillazioni reali, non dal
+numero di messaggi — e la compressione utile non richiede alcun filtro per ampiezza.
+
+`EXEC_PATH_MIN_MOVE_FRAC` scarterebbe le inversioni più piccole di quella frazione, ma il
+default è **0 (nessun filtro)** ed è importante che resti tale: un livello può stare a
+pochi centesimi dal prezzo — lo stop a break-even sta **esattamente** all'entry — quindi
+filtrare per ampiezza cancella attraversamenti reali. Con la vecchia soglia dello 0,02%
+($12.80 su BTC) un tuffo di pochi dollari sotto un break-even spariva dal percorso: il
+replay non lo vedeva, proseguiva e incassava un TP mai raggiunto — errore in direzione
+**ottimista**, la più pericolosa. Il costo del non filtrare è misurato e trascurabile:
+~1.8 µs per punto, cioè ~40 ms per tick con 12 posizioni (0,13% di un tick da 30 s).
+Oltre `EXEC_PATH_MAX_POINTS` (20k, ~5 min di book su BTC) il percorso si ferma e lo
+segnala nei log.
 
 Doppia rete di sicurezza: dopo il replay si valuta anche il **range aggregato** della
 stessa finestra, perché un'inversione filtrata dallo zigzag resta comunque compresa in

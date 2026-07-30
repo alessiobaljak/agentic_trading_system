@@ -98,9 +98,11 @@ class PriceStream:
         Cosi' il replay vede la stessa successione di livelli attraversati che avrebbe
         visto Binance, senza tenere in memoria ogni singolo trade.
 
-        Le micro-inversioni sotto `min_move_frac` (rimbalzo bid/ask: rumore, non
-        movimento) non creano punti. Non si perde nulla di sostanziale: il range vero
-        continua ad allargarsi, e il chiamante lo usa come rete di sicurezza."""
+        Con `min_move_frac` > 0 le inversioni piu' piccole di quella frazione vengono
+        scartate. DEFAULT 0 (nessun filtro): un livello puo' stare a pochi centesimi dal
+        prezzo — lo stop a break-even sta ESATTAMENTE all'entry — quindi filtrare per
+        ampiezza cancellerebbe attraversamenti reali, e il replay incasserebbe TP che non
+        doveva raggiungere. Il costo e' irrisorio (misurato: ~1.8us per punto nel replay)."""
         if price <= 0:
             return
         with self._lock:
@@ -133,7 +135,11 @@ class PriceStream:
         if (price > pts[-1]) if going_up else (price < pts[-1]):
             pts[-1] = price               # stesso verso: estende, non aggiunge
             return
-        # inversione: solo se e' un movimento VERO, non rimbalzo bid/ask
+        if price == pts[-1]:
+            return                        # nessun movimento: niente da registrare
+        # Inversione. Con min_move_frac=0 (default) si registrano TUTTE: un livello puo'
+        # stare a pochi centesimi dal prezzo (lo stop a break-even sta esattamente
+        # all'entry), quindi filtrare per ampiezza cancellerebbe attraversamenti veri.
         if abs(price - pts[-1]) >= self.min_move_frac * max(abs(pts[-1]), 1e-12):
             pts.append(price)
 
