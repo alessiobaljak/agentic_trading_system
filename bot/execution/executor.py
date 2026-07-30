@@ -67,6 +67,11 @@ class Position:
     realized_gross: float = 0.0
     realized_net: float = 0.0    # PnL NETTO gia' realizzato dalle fette (fee/spread dedotti), gia' accreditato all'equity
     orig_stop: float = 0.0
+    # --- solo LIVE (DRY_RUN=False): ordini di protezione REALI sull'exchange ---
+    # id dello STOP appoggiato sul book e prezzo a cui e' appoggiato: servono per
+    # SOSTITUIRLO quando lo stop si muove (break-even dopo TP1, profit-lock).
+    sl_order_id: Optional[int] = None
+    exchange_stop: Optional[float] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -167,27 +172,96 @@ class ExecutionEngine:
         self._write_position_state(pos, mark_price=pos.entry_price)
         return pos
 
+    @staticmethod
+    def _opposite(pos: Position) -> str:
+        """Lato che CHIUDE la posizione (per gli ordini reduce-only SL/TP)."""
+        return "SELL" if pos.direction == Direction.LONG else "BUY"
+
     def _submit_live_entry(self, pos: Position) -> None:
-        """Ordini reali: limit entry + SL e TP separati (riduce slippage)."""
+        """Ordini reali: limit entry + ordini di protezione (SL + scala TP)."""
         side = "BUY" if pos.direction == Direction.LONG else "SELL"
-        opp = "SELL" if side == "BUY" else "BUY"
         try:
             self._client.futures_change_leverage(symbol=pos.symbol, leverage=int(pos.leverage))
             self._client.futures_create_order(
                 symbol=pos.symbol, side=side, type="LIMIT", timeInForce="GTC",
                 quantity=round(pos.quantity, 6), price=round(pos.entry_price, 6),
             )
-            # SL e TP come ordini reduce-only separati
-            self._client.futures_create_order(
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] errore ordine live {pos.symbol}: {exc}")
+            return
+        self._place_protective_orders(pos)
+
+    def _place_protective_orders(self, pos: Position) -> None:
+        """Appoggia sul book TUTTO il piano di uscita, non solo un TP unico.
+
+        Con lo SCALE-OUT attivo il piano e' una SCALA (30% a 1.5R, 30% a 3R, 40% a 5R):
+        se piazzassimo un solo TP, gli ordini reali sull'exchange direbbero una cosa e la
+        logica del bot un'altra. Ogni livello diventa quindi un TAKE_PROFIT_MARKET
+        reduce-only con la SUA frazione di quantita'; l'ultima fetta prende il RESTO
+        (evita che gli arrotondamenti lascino polvere non protetta).
+
+        Lo STOP copre la quantita' piena: essendo reduce-only, Binance lo limita da solo
+        alla size effettivamente aperta man mano che le fette si chiudono."""
+        opp = self._opposite(pos)
+        long = pos.direction == Direction.LONG
+        ladder = scale_ladder(pos.entry_price, pos.orig_stop, long) if settings.SCALE_OUT_ENABLED else []
+        try:
+            resp = self._client.futures_create_order(
                 symbol=pos.symbol, side=opp, type="STOP_MARKET", reduceOnly=True,
                 stopPrice=round(pos.stop_price, 6), quantity=round(pos.quantity, 6),
             )
-            self._client.futures_create_order(
-                symbol=pos.symbol, side=opp, type="TAKE_PROFIT_MARKET", reduceOnly=True,
-                stopPrice=round(pos.take_profit_price, 6), quantity=round(pos.quantity, 6),
-            )
+            pos.sl_order_id = (resp or {}).get("orderId") if isinstance(resp, dict) else None
+            pos.exchange_stop = pos.stop_price
         except Exception as exc:  # noqa: BLE001
-            print(f"[execution] errore ordine live {pos.symbol}: {exc}")
+            print(f"[execution] errore STOP live {pos.symbol}: {exc}")
+
+        targets = ladder or [(pos.take_profit_price, 1.0)]
+        qty_left = pos.quantity
+        for i, (price, frac) in enumerate(targets):
+            last = i == len(targets) - 1
+            qty = qty_left if last else round(pos.quantity * frac, 6)
+            qty = min(qty, qty_left)
+            if qty <= 0:
+                continue
+            try:
+                self._client.futures_create_order(
+                    symbol=pos.symbol, side=opp, type="TAKE_PROFIT_MARKET", reduceOnly=True,
+                    stopPrice=round(price, 6), quantity=round(qty, 6),
+                )
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] errore TP live {pos.symbol} @ {price}: {exc}")
+            qty_left -= qty
+
+    def _sync_exchange_stop(self, pos: Position, new_stop: float) -> None:
+        """Allinea lo STOP appoggiato sul book al nuovo stop deciso dalla logica
+        (break-even dopo il primo TP, o profit-lock che lo alza). Senza questo
+        l'exchange terrebbe lo stop ORIGINALE: la protezione esisterebbe solo nella
+        memoria del bot, e un suo crash lascerebbe la posizione scoperta.
+        Cancella-e-ripiazza (Binance non modifica in place gli stop)."""
+        if self.dry_run or self._client is None:
+            return
+        if pos.exchange_stop is not None and abs(new_stop - pos.exchange_stop) < 1e-12:
+            return
+        if pos.sl_order_id is not None:
+            try:
+                self._client.futures_cancel_order(symbol=pos.symbol, orderId=pos.sl_order_id)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] cancel STOP {pos.symbol} fallito: {exc}")
+        try:
+            resp = self._client.futures_create_order(
+                symbol=pos.symbol, side=self._opposite(pos), type="STOP_MARKET",
+                reduceOnly=True, stopPrice=round(new_stop, 6),
+                quantity=round(pos.remaining_qty, 6),
+            )
+            pos.sl_order_id = (resp or {}).get("orderId") if isinstance(resp, dict) else None
+            pos.exchange_stop = new_stop
+        except Exception as exc:  # noqa: BLE001
+            # lo stop vecchio e' stato cancellato ma il nuovo non e' passato: la
+            # posizione e' SCOPERTA sull'exchange -> segnalalo forte, il bot continua
+            # a proteggerla via update_position (stop "software") fino al prossimo giro.
+            pos.sl_order_id = None
+            pos.exchange_stop = None
+            print(f"[execution] ATTENZIONE: STOP non ripiazzato su {pos.symbol}: {exc}")
 
     # ------------------------------------------------------------------ #
     # Gestione posizione — ALLINEATA AL BACKTEST (GATE 1)                 #
@@ -281,6 +355,9 @@ class ExecutionEngine:
             # ombre nel high_water solo ORA (dopo i trigger): valgono per i tick
             # FUTURI, come il gate che aggiorna best_fav a fine barra
             pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
+            # LIVE: lo stop sul book deve seguire quello deciso qui (break-even/profit-lock)
+            intended = max(eff_stop, pos.stop_price) if long else min(eff_stop, pos.stop_price)
+            self._sync_exchange_stop(pos, intended)
             self._write_position_state(pos, mark_price)
             return None
 
@@ -308,6 +385,7 @@ class ExecutionEngine:
             return self._close(pos, mark_price, ExitReason.TIME_EXIT)
 
         pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
+        self._sync_exchange_stop(pos, eff_stop)   # LIVE: stop sul book = stop deciso qui
         self._write_position_state(pos, mark_price)
         return None
 
@@ -470,6 +548,7 @@ class ExecutionEngine:
             # --- campi extra per ricostruire la posizione dopo un restart ---
             "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
             # stato scale-out (per non perdere fette/BE dopo un riavvio)
+            "sl_order_id": pos.sl_order_id, "exchange_stop": pos.exchange_stop,
             "scale_stage": pos.scale_stage, "realized_gross": pos.realized_gross,
             "realized_net": pos.realized_net,
             "orig_stop": pos.orig_stop,
@@ -534,6 +613,12 @@ class ExecutionEngine:
         pos.scale_stage = int(p.get("scale_stage", 0) or 0)
         pos.realized_gross = float(p.get("realized_gross", 0.0) or 0.0)
         pos.realized_net = float(p.get("realized_net", 0.0) or 0.0)
+        # ordini di protezione LIVE: senza questi, dopo un restart il bot non saprebbe
+        # QUALE stop cancellare e ne accumulerebbe uno nuovo a ogni spostamento
+        _sid = p.get("sl_order_id")
+        pos.sl_order_id = int(_sid) if _sid is not None else None
+        _xs = p.get("exchange_stop")
+        pos.exchange_stop = float(_xs) if _xs is not None else None
         pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
         return pos
 
