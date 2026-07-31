@@ -148,6 +148,21 @@ export default function Positions({ onSelect }: { onSelect?: (p: Position) => vo
                       {upnl >= 0 ? '+' : ''}
                       {fmt(upnl)}
                       {p.trailing_active ? ' ↑' : ''}
+                      {/* dopo un TP parziale l'uPnL e' SOLO il residuo: senza il
+                          totale (residuo + gia' incassato) una posizione in utile
+                          sembra in perdita */}
+                      {p.realized_partial != null && p.realized_partial !== 0 && (() => {
+                        const tot = upnl + (p.realized_partial ?? 0);
+                        return (
+                          <div
+                            className={tot >= 0 ? 'pos' : 'neg'}
+                            style={{ fontSize: 11, opacity: 0.85 }}
+                            title={`Gia' incassato dai TP parziali: ${(p.realized_partial ?? 0) >= 0 ? '+' : ''}${fmt(p.realized_partial)} · totale posizione = residuo + incassato`}
+                          >
+                            tot {tot >= 0 ? '+' : ''}{fmt(tot)}
+                          </div>
+                        );
+                      })()}
                     </td>
                     <td style={{ textAlign: 'right' }}>
                       <button

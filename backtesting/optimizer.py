@@ -21,7 +21,7 @@ import random
 from dataclasses import dataclass, field
 from typing import Optional
 
-from backtesting.engine import Backtester, StrategyStats, passes_gate
+from backtesting.engine import Backtester, StrategyStats, passes_gate, pf_by_regime
 from bot.core.indicators import compute_indicator_frame
 from bot.core.models import Candle
 from bot.strategies.base import STRATEGY_REGISTRY
@@ -46,6 +46,14 @@ class OptResult:
     passed: bool
     trailing: dict = field(default_factory=dict)   # conteggi verdetto trailing OOS
     params_history: list = field(default_factory=list)
+    # verifica finale sull'HOLDOUT (dati MAI visti dalla selezione), coi parametri
+    # che verrebbero spediti: {"pf", "pnl_pct", "trades", "ok"}. Vuoto se holdout off.
+    holdout: dict = field(default_factory=dict)
+    # PF/trades per regime dai trade OOS: esportato nel registro per il filtro di
+    # regime live e come prior per il learning.
+    regime_pf: dict = field(default_factory=dict)
+    # timestamp dell'ultima candela usata: serve alla regola "pass solo con dati nuovi"
+    data_end: float = 0.0
 
 
 class WalkForwardOptimizer:
@@ -76,6 +84,11 @@ class WalkForwardOptimizer:
         # (per tenere i tempi gestibili quando si ottimizzano molti coin)
         self.max_combos = max_combos
         self._rng = random.Random(seed)
+        # HOLDOUT anti data-snooping: ultimi N giorni esclusi da train e finestre.
+        # La selezione non li vede mai; ci si valuta UNA volta, a valle, coi
+        # parametri che verrebbero spediti. In barre del timeframe corrente.
+        from bot.config import settings as _st
+        self.holdout_bars = int(_st.GATE_HOLDOUT_DAYS * 24.0 / timeframe_hours(interval))
 
     # ------------------------------------------------------------------ #
     def _windows(self, n: int) -> list[tuple[int, int, int, int]]:
@@ -98,11 +111,40 @@ class WalkForwardOptimizer:
         # obiettivo: ritorno netto OOS, con piccolo bonus per profit factor
         return stats.total_pnl_pct() + 0.1 * (stats.profit_factor() - 1.0)
 
+    def split_holdout(self, candles: list) -> tuple[list, int]:
+        """(corpo per la selezione, indice di inizio holdout). La selezione (train,
+        finestre OOS, pass) lavora SOLO sul corpo; l'holdout resta invisibile fino
+        alla verifica finale. holdout_bars<=0 -> nessun holdout (corpo = tutto)."""
+        if self.holdout_bars <= 0 or len(candles) <= self.holdout_bars:
+            return candles, len(candles)
+        cut = len(candles) - self.holdout_bars
+        return candles[:cut], cut
+
+    def _holdout_check(self, strategy, symbol: str, candles: list, frame,
+                       cut: int, context_by_ts=None) -> dict:
+        """Valuta i parametri SPEDIBILI sull'holdout. Include il warmup degli
+        indicatori PRIMA del taglio, ma i trade contati partono dall'holdout."""
+        from bot.config import settings as _st
+        if cut >= len(candles):
+            return {}
+        start = max(0, cut - self.bt.window)
+        seg = candles[start:]
+        seg_f = frame.iloc[start:].reset_index(drop=True)
+        st = self.bt.run_strategy(strategy, symbol, seg, frame=seg_f,
+                                  context_by_ts=context_by_ts)
+        pf = st.profit_factor()
+        pnl = st.total_pnl_pct()
+        n = len(st.trades)
+        ok = (n >= _st.GATE_HOLDOUT_MIN_TRADES and pf >= _st.GATE_HOLDOUT_PF and pnl > 0)
+        return {"pf": round(pf, 3), "pnl_pct": round(pnl, 4), "trades": n, "ok": ok}
+
     def optimize_symbol(self, symbol: str, candles: list[Candle],
                         context_by_ts: dict | None = None) -> list[OptResult]:
         results: list[OptResult] = []
         frame = compute_indicator_frame(candles)
-        windows = self._windows(len(candles))
+        # la SELEZIONE vede solo il corpo: l'holdout resta fuori da train e finestre
+        body, cut = self.split_holdout(candles)
+        windows = self._windows(len(body))
         if not windows:
             print(f"[optimizer] {symbol}: dati insufficienti per il walk-forward")
             return results
@@ -121,7 +163,7 @@ class WalkForwardOptimizer:
             history: list[dict] = []
             window_pnls: list[float] = []   # ritorno OOS per finestra (consistenza)
             for (ta, tb, sa, sb) in windows:
-                train_c = candles[ta:tb]
+                train_c = body[ta:tb]
                 train_f = frame.iloc[ta:tb].reset_index(drop=True)
                 # grid search sul train
                 best_combo, best_score = combos[0], -1e18
@@ -136,7 +178,7 @@ class WalkForwardOptimizer:
                 if best_score < -1e8:
                     continue
                 # applica i migliori sul TEST (out-of-sample)
-                test_c = candles[sa:sb]
+                test_c = body[sa:sb]
                 test_f = frame.iloc[sa:sb].reset_index(drop=True)
                 st_oos = self.bt.run_strategy(cls(best_combo), symbol, test_c, frame=test_f,
                                               context_by_ts=context_by_ts)
@@ -150,11 +192,20 @@ class WalkForwardOptimizer:
             pf = oos.profit_factor()
             pnl = oos.total_pnl_pct()
             passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl)
+            # VERIFICA FINALE sull'holdout, solo se le finestre sono superate e coi
+            # parametri che verrebbero spediti (l'ultimo best del walk-forward).
+            hold: dict = {}
+            if passed and history and self.holdout_bars > 0:
+                hold = self._holdout_check(cls(history[-1]), symbol, candles, frame,
+                                           cut, context_by_ts=context_by_ts)
+                passed = bool(hold.get("ok"))
             results.append(OptResult(
                 symbol=symbol, strategy=name,
                 best_params=history[-1] if history else {},
                 oos_pf=round(pf, 3), oos_pnl_pct=round(pnl, 4),
                 oos_trades=len(oos.trades), oos_win_rate=round(oos.win_rate(), 3),
                 passed=passed, trailing=oos.trailing_counts(), params_history=history,
+                holdout=hold, regime_pf=pf_by_regime(oos.trades),
+                data_end=(candles[-1].open_time.timestamp() if candles else 0.0),
             ))
         return results

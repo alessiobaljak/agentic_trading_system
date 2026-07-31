@@ -80,6 +80,9 @@ def _opt_one(sym: str) -> tuple[str, dict, list]:
             "oos_pf": r.oos_pf, "oos_pnl_pct": r.oos_pnl_pct,
             "oos_trades": r.oos_trades, "oos_win_rate": r.oos_win_rate,
             "passed": r.passed, "trailing": r.trailing,
+            # holdout (dati mai visti dalla selezione), PF per-regime e fine dati:
+            # alimentano il registro (verifica, filtro regime, pass onesto).
+            "holdout": r.holdout, "regime_pf": r.regime_pf, "data_end": r.data_end,
         }
         if r.passed:
             passed.append(key)
@@ -286,6 +289,9 @@ MIN_COVERED = int(os.getenv("OPTIMIZER_MIN_COVERED", "5"))
 # una coppia resta "validata" solo se rivista entro questi giorni (auto-pulizia:
 # i coin usciti dall'universo decadono e il bot smette di operarli).
 FRESH_DAYS = float(os.getenv("OPTIMIZER_FRESH_DAYS", "3"))
+# un pass conta SOLO se dall'ultimo pass sono entrate almeno queste ore di dati
+# nuovi: rivalutare gli stessi dati non e' una conferma indipendente.
+NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "24")) * 3600
 # auto-purge: una coppia viene RIMOSSA dal registro dopo N run consecutivi in cui,
 # pur essendo processata, non passa piu' il gate (costi/edge non piu' battuti).
 PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))
@@ -304,9 +310,20 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     for key, e in out.items():
         rec = pairs.get(key, {"pass_count": 0})
         if key in passed_set:
-            rec["pass_count"] = rec.get("pass_count", 0) + 1
+            # PASS ONESTO: incrementa solo se ci sono dati NUOVI dall'ultimo pass.
+            # Senza questa regola MIN_PASSES contava rivalutazioni degli stessi
+            # dati, non conferme indipendenti (il difetto che gonfiava il registro).
+            data_end = float(e.get("data_end", 0) or 0)
+            prev_end = float(rec.get("last_pass_data_end", 0) or 0)
+            if data_end <= 0 or data_end - prev_end >= NEW_DATA_MIN_S:
+                rec["pass_count"] = rec.get("pass_count", 0) + 1
+                rec["last_pass_data_end"] = data_end
             rec["fail_count"] = 0                      # ripassata -> azzera i fallimenti
             rec["last_params"] = e["params"]
+            if e.get("holdout"):
+                rec["holdout"] = e["holdout"]
+            if e.get("regime_pf"):
+                rec["regime_pf"] = e["regime_pf"]
             rec["last_pf"] = e["oos_pf"]
             rec["last_pnl_pct"] = e["oos_pnl_pct"]
             rec["last_trades"] = e["oos_trades"]

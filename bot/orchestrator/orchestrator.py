@@ -97,6 +97,10 @@ class Orchestrator:
                     continue
                 if not self.adaptation.is_enabled(sym, strat.name):
                     continue
+                # filtro di regime informato dal gate: non si opera una coppia nel
+                # regime in cui il gate l'ha vista perdere (fail-open senza dati)
+                if not self.adaptation.regime_ok(sym, strat.name, coin_regime):
+                    continue
                 sig = strat.generate_signal(asset, ctx)
                 if sig is None:
                     continue

@@ -32,6 +32,9 @@ class AdaptationEngine:
         self._weights: dict[str, float] = {}   # chiave "strategy|regime" -> peso
         self._params: dict[str, dict] = {}     # chiave "SYMBOL|strategy" -> params ottimizzati
         self._passed: set[str] = set()         # coppie "SYMBOL|strategy" che hanno passato OOS
+        # PF per-regime dal gate: "SYMBOL|strategy" -> {regime: {"pf", "trades"}}.
+        # Alimenta il filtro di regime (non operare dove il gate ha visto perdere).
+        self._regime_pf: dict[str, dict] = {}
         self._has_opt_data: bool = False
         self._generated_specs: dict[str, dict] = {}  # gen_id -> spec (strategie scoperte)
         self.load_weights()
@@ -163,6 +166,7 @@ class AdaptationEngine:
         if validated:
             self._passed = self._robust_only(validated)
             self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in self._passed}
+            self._regime_pf = {k: (pairs.get(k, {}).get("regime_pf", {}) or {}) for k in self._passed}
             self._has_opt_data = True
             return
         # Nessuna coppia a MIN_PASSES passaggi. DEFAULT: il bot resta FLAT — NON si
@@ -236,6 +240,28 @@ class AdaptationEngine:
         if not self._has_opt_data:
             return not settings.REQUIRE_VALIDATED_PAIRS
         return f"{symbol}|{strategy}" in self._passed
+
+    def regime_ok(self, symbol: str, strategy: str, regime) -> bool:
+        """False se il GATE ha visto questa coppia PERDERE nel regime corrente
+        (PF < 1 con un campione minimo). FAIL-OPEN: senza dati per-regime (coppia
+        non ancora ri-validata, regime mai visto in OOS) non blocca nulla.
+
+        E' il prior che mancava: il gate conosceva il PF per-regime dai suoi trade
+        OOS ma non lo esportava, cosi' il bot tradava in sideways coppie che il
+        gate stesso sapeva perdere in sideways — e il learning doveva riscoprirlo
+        da zero, a spese del paper."""
+        if not settings.REGIME_FILTER_ENABLED or regime is None:
+            return True
+        info = self._regime_pf.get(f"{symbol}|{strategy}", {})
+        rk = regime.value if hasattr(regime, "value") else str(regime)
+        rec = info.get(rk)
+        if not isinstance(rec, dict):
+            return True
+        try:
+            pf, n = float(rec.get("pf", 99)), int(rec.get("trades", 0))
+        except (TypeError, ValueError):
+            return True
+        return not (n >= settings.GATE_REGIME_MIN_TRADES and pf < 1.0)
 
     def is_baseline_cycle(self, rng: Optional[random.Random] = None) -> bool:
         """

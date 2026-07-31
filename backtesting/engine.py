@@ -33,6 +33,23 @@ from bot.strategies.base import StrategyContext
 LEVERAGE_LEVELS = (2, 3, 5, 10, 20)
 
 
+def pf_by_regime(trades) -> dict:
+    """PF e numero di trade PER REGIME dai trade simulati. E' il dato che permette
+    al bot di NON operare una coppia nel regime in cui il gate stesso l'ha vista
+    perdere — e al learning di partire con un prior invece che da zero."""
+    from collections import defaultdict
+    acc: dict[str, list[float]] = defaultdict(list)
+    for t in trades:
+        acc[str(getattr(t, "regime_at_entry", "") or t.regime)].append(t.pnl_pct)
+    out: dict[str, dict] = {}
+    for regime, pnls in acc.items():
+        gains = sum(x for x in pnls if x > 0)
+        losses = -sum(x for x in pnls if x < 0)
+        pf = (gains / losses) if losses > 0 else (99.0 if gains > 0 else 0.0)
+        out[regime] = {"pf": round(pf, 3), "trades": len(pnls)}
+    return out
+
+
 def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
                 win_rate: float, total_return: float) -> bool:
     """

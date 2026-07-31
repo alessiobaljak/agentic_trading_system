@@ -22,7 +22,7 @@ import time
 from datetime import date
 
 from backtesting.data_loader import load_candles
-from backtesting.engine import StrategyStats, passes_gate
+from backtesting.engine import StrategyStats, passes_gate, pf_by_regime
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
 from bot.config import settings
@@ -30,7 +30,8 @@ from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
 from bot.strategies.generator import generate_specs, mutate
-from scripts.optimize import FRESH_DAYS, MIN_PASSES, _min_history, top_symbols_by_volume
+from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_history,
+                              top_symbols_by_volume)
 
 # stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
 # processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
@@ -74,11 +75,17 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list]:
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict):
     """Aggrega le performance del spec sulle SOLE finestre out-of-sample e applica
-    il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra)."""
+    il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra).
+
+    Le finestre sono calcolate sul CORPO (holdout escluso): le spec generate non
+    hanno train, quindi qui l'OOS era l'unica difesa — e veniva riusato identico a
+    ogni run da migliaia di candidate (la lotteria). L'holdout finale, mai visto
+    dalla selezione, e' la verifica che mancava."""
     oos = StrategyStats(strategy=spec["id"])
     window_pnls: list[float] = []   # ritorno OOS per finestra (consistenza)
-    for (_ta, _tb, sa, sb) in opt._windows(len(candles)):
-        test_c = candles[sa:sb]
+    body, cut = opt.split_holdout(candles)
+    for (_ta, _tb, sa, sb) in opt._windows(len(body)):
+        test_c = body[sa:sb]
         test_f = frame.iloc[sa:sb].reset_index(drop=True)
         st = opt.bt.run_strategy(GeneratedStrategy(spec), symbol, test_c, frame=test_f)
         oos.trades.extend(st.trades)
@@ -89,9 +96,15 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()
     passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl)
+    hold: dict = {}
+    if passed and opt.holdout_bars > 0:
+        hold = opt._holdout_check(GeneratedStrategy(spec), symbol, candles, frame, cut)
+        passed = bool(hold.get("ok"))
     return {
         "pf": round(pf, 3), "pnl": round(pnl, 4),
         "trades": len(oos.trades), "win": round(oos.win_rate(), 3), "passed": passed,
+        "holdout": hold, "regime_pf": pf_by_regime(oos.trades),
+        "data_end": (candles[-1].open_time.timestamp() if candles else 0.0),
     }
 
 
@@ -107,7 +120,16 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
     for key in passed_now:
         e = out[key]
         rec = pairs.get(key, {"pass_count": 0})
-        rec["pass_count"] = rec.get("pass_count", 0) + 1
+        # PASS ONESTO (stessa regola di optimize): conta solo con dati nuovi
+        data_end = float(e.get("data_end", 0) or 0)
+        prev_end = float(rec.get("last_pass_data_end", 0) or 0)
+        if data_end <= 0 or data_end - prev_end >= NEW_DATA_MIN_S:
+            rec["pass_count"] = rec.get("pass_count", 0) + 1
+            rec["last_pass_data_end"] = data_end
+        if e.get("holdout"):
+            rec["holdout"] = e["holdout"]
+        if e.get("regime_pf"):
+            rec["regime_pf"] = e["regime_pf"]
         rec["last_params"] = e["params"]
         rec["last_pf"] = e["oos_pf"]
         rec["last_pnl_pct"] = e["oos_pnl_pct"]

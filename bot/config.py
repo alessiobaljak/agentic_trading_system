@@ -241,7 +241,40 @@ class Settings:
     #   - è profittevole in OGNI finestra OOS (no "in perdita un anno, recupero il
     #     dopo"): almeno GATE_CONSISTENCY_FRACTION delle finestre dev'essere > 0
     GATE_PF_THRESHOLD: float = float(os.getenv("GATE_PF_THRESHOLD", "1.25"))
-    GATE_MIN_TRADES: int = int(os.getenv("GATE_MIN_TRADES", "20"))
+    # 30 (era 20): con 20 trade la varianza del PF e' enorme e, moltiplicata per
+    # migliaia di candidate testate, produce troppi falsi positivi (lotteria).
+    GATE_MIN_TRADES: int = int(os.getenv("GATE_MIN_TRADES", "30"))
+
+    # ---- HOLDOUT finale (anti data-snooping) ----
+    # Gli ultimi N giorni di storia sono ESCLUSI da train e finestre OOS: la
+    # selezione (grid search, scelta spec, pass_count) non li vede MAI. Una coppia
+    # passa solo se, DOPO aver passato le finestre, regge anche sull'holdout coi
+    # parametri che verrebbero spediti in produzione. Senza questo, migliaia di
+    # candidate valutate sempre sulle stesse finestre trasformano l'OOS in un
+    # training set (selection bias): e' il difetto che gonfiava il registro.
+    # L'holdout e' ROLLING (scorre col tempo), quindi non diventa un bersaglio fisso.
+    GATE_HOLDOUT_DAYS: float = float(os.getenv("GATE_HOLDOUT_DAYS", "45"))
+    # requisiti sull'holdout: piu' morbidi del gate pieno (45 giorni producono pochi
+    # trade), ma DEVE essere profittevole. PF>=1.05 e ritorno>0 con almeno 5 trade.
+    GATE_HOLDOUT_PF: float = float(os.getenv("GATE_HOLDOUT_PF", "1.05"))
+    GATE_HOLDOUT_MIN_TRADES: int = int(os.getenv("GATE_HOLDOUT_MIN_TRADES", "5"))
+
+    # ---- pass_count ONESTO ----
+    # Un pass incrementa il conteggio SOLO se dall'ultimo pass sono entrati almeno
+    # queste ore di dati NUOVI. Rivalutare due volte nello stesso giorno gli stessi
+    # dati non e' una conferma indipendente: senza questa regola MIN_PASSES=3
+    # significava solo "valutata 3 volte", non "confermata 3 volte".
+    OPTIMIZER_NEW_DATA_MIN_HOURS: float = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "24"))
+
+    # ---- filtro di regime informato dal gate ----
+    # Il gate CONOSCE il PF per-regime di ogni coppia (dai suoi trade OOS) ma prima
+    # non lo esportava: il bot tradava in sideways coppie che il gate stesso sapeva
+    # perdere in sideways, e il learning doveva riscoprirlo da zero sul paper.
+    # Con questo flag una coppia NON opera nel regime corrente se il suo PF in quel
+    # regime e' < 1.0 (con almeno GATE_REGIME_MIN_TRADES trade). Fail-open: senza
+    # dati per-regime (coppie non ancora ri-validate) non blocca nulla.
+    REGIME_FILTER_ENABLED: bool = os.getenv("REGIME_FILTER_ENABLED", "true").lower() == "true"
+    GATE_REGIME_MIN_TRADES: int = int(os.getenv("GATE_REGIME_MIN_TRADES", "10"))
     GATE_WIN_RATE_FLOOR: float = float(os.getenv("GATE_WIN_RATE_FLOOR", "0.45"))
     GATE_MIN_TOTAL_RETURN: float = float(os.getenv("GATE_MIN_TOTAL_RETURN", "0.15"))
     GATE_CONSISTENCY_FRACTION: float = float(os.getenv("GATE_CONSISTENCY_FRACTION", "1.0"))
