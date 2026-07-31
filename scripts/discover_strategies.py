@@ -22,7 +22,7 @@ import time
 from datetime import date
 
 from backtesting.data_loader import load_candles
-from backtesting.engine import StrategyStats, passes_gate, pf_by_regime
+from backtesting.engine import StrategyStats, max_drawdown, passes_gate, pf_by_regime
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
 from bot.config import settings
@@ -95,15 +95,43 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
             window_pnls.append(sum(t.pnl_pct for t in st.trades))
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()
-    passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl)
+    passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
+                         max_dd=max_drawdown(oos.trades))
+
+    # SCALA DI TP PER-COPPIA anche per le GENERATE. Le classiche la scelgono nella
+    # grid search; le generate non hanno grid -> senza questo passo restavano per
+    # sempre sulla scala globale (e sono la maggioranza del registro). Solo per chi
+    # PASSA le finestre (poche): si rivalutano le candidate sulle stesse finestre e
+    # vince quella col miglior (ritorno - drawdown). Costo marginale ~4x su pochi.
+    best_ladder = None
+    if passed and settings.SCALE_OUT_ENABLED:
+        from bot.execution.exit_logic import SCALE_LADDER_CANDIDATES
+        body2, _cut2 = opt.split_holdout(candles)
+        best_metric = None
+        for cand in SCALE_LADDER_CANDIDATES:
+            st_c = StrategyStats(strategy=spec["id"])
+            for (_ta, _tb, sa, sb) in opt._windows(len(body2)):
+                g = GeneratedStrategy(spec)
+                g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(cand)}
+                r = opt.bt.run_strategy(g, symbol, body2[sa:sb],
+                                        frame=frame.iloc[sa:sb].reset_index(drop=True))
+                st_c.trades.extend(r.trades)
+            metric = st_c.total_pnl_pct() - max_drawdown(st_c.trades)
+            if best_metric is None or metric > best_metric:
+                best_metric, best_ladder = metric, list(cand)
+
     hold: dict = {}
     if passed and opt.holdout_bars > 0:
-        hold = opt._holdout_check(GeneratedStrategy(spec), symbol, candles, frame, cut)
+        g = GeneratedStrategy(spec)
+        if best_ladder:
+            g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": best_ladder}
+        hold = opt._holdout_check(g, symbol, candles, frame, cut)
         passed = bool(hold.get("ok"))
     return {
         "pf": round(pf, 3), "pnl": round(pnl, 4),
         "trades": len(oos.trades), "win": round(oos.win_rate(), 3), "passed": passed,
         "holdout": hold, "regime_pf": pf_by_regime(oos.trades),
+        "scale_r_mults": best_ladder,
         "data_end": (candles[-1].open_time.timestamp() if candles else 0.0),
     }
 
@@ -130,6 +158,12 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
             rec["holdout"] = e["holdout"]
         if e.get("regime_pf"):
             rec["regime_pf"] = e["regime_pf"]
+        # scala validata per questa coppia generata: viaggia in last_params, cosi'
+        # params_for -> open_position la consegna al live come per le classiche
+        if e.get("scale_r_mults"):
+            lp = rec.get("last_params") or {}
+            lp["scale_r_mults"] = e["scale_r_mults"]
+            rec["last_params"] = lp
         rec["last_params"] = e["params"]
         rec["last_pf"] = e["oos_pf"]
         rec["last_pnl_pct"] = e["oos_pnl_pct"]

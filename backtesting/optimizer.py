@@ -21,7 +21,8 @@ import random
 from dataclasses import dataclass, field
 from typing import Optional
 
-from backtesting.engine import Backtester, StrategyStats, passes_gate, pf_by_regime
+from backtesting.engine import (Backtester, StrategyStats, max_drawdown, passes_gate,
+                                pf_by_regime)
 from bot.core.indicators import compute_indicator_frame
 from bot.core.models import Candle
 from bot.strategies.base import STRATEGY_REGISTRY
@@ -108,8 +109,12 @@ class WalkForwardOptimizer:
     def _score(stats: StrategyStats, min_trades: int) -> float:
         if len(stats.trades) < min_trades:
             return -1e9
-        # obiettivo: ritorno netto OOS, con piccolo bonus per profit factor
-        return stats.total_pnl_pct() + 0.1 * (stats.profit_factor() - 1.0)
+        # obiettivo: PROFITTO CONTINUO, non profitto e basta. Il drawdown della
+        # curva entra nel punteggio con lo stesso peso del ritorno: tra due
+        # parametri con lo stesso guadagno vince quello che scava la buca minore.
+        # Piccolo bonus PF come tie-break di qualita'.
+        return (stats.total_pnl_pct() - max_drawdown(stats.trades)
+                + 0.1 * (stats.profit_factor() - 1.0))
 
     def split_holdout(self, candles: list) -> tuple[list, int]:
         """(corpo per la selezione, indice di inizio holdout). La selezione (train,
@@ -191,7 +196,8 @@ class WalkForwardOptimizer:
 
             pf = oos.profit_factor()
             pnl = oos.total_pnl_pct()
-            passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl)
+            passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
+                                 max_dd=max_drawdown(oos.trades))
             # VERIFICA FINALE sull'holdout, solo se le finestre sono superate e coi
             # parametri che verrebbero spediti (l'ultimo best del walk-forward).
             hold: dict = {}

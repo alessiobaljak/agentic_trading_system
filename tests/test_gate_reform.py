@@ -159,3 +159,52 @@ def test_registry_stores_holdout_and_regime_pf():
     rec = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])[key]
     assert rec["holdout"]["ok"] is True
     assert rec["regime_pf"]["sideways"]["trades"] == 20
+
+
+# ---- CONTINUITA': recovery factor e drawdown ------------------------------ #
+def test_max_drawdown_measures_the_hole():
+    from backtesting.engine import max_drawdown
+    # curva: +10, -4, -4, +8  -> picco a 10, fondo a 2 -> buca 8
+    assert max_drawdown([_T("x", v) for v in (0.10, -0.04, -0.04, 0.08)]) == pytest.approx(0.08)
+    assert max_drawdown([]) == 0.0
+    # monotona crescente: nessuna buca
+    assert max_drawdown([_T("x", v) for v in (0.05, 0.05)]) == 0.0
+
+
+def test_gate_rejects_deep_holes_even_if_profitable(monkeypatch):
+    """Il cuore dell'obiettivo 'profitto continuo': stesso ritorno, stessa
+    consistenza per finestra, ma una curva che scava una buca profonda meta'
+    del guadagno NON passa (recovery < 2)."""
+    from backtesting.engine import passes_gate
+    monkeypatch.setattr(settings, "GATE_MIN_RECOVERY", 2.0)
+    good = dict(window_pnls=[0.10, 0.08, 0.12], n_trades=40, pf=1.4,
+                win_rate=0.55, total_return=0.30)
+    assert passes_gate(**good, max_dd=0.10) is True     # 0.30/0.10 = 3 >= 2
+    assert passes_gate(**good, max_dd=0.20) is False    # 0.30/0.20 = 1.5 < 2
+    assert passes_gate(**good, max_dd=0.0) is True      # nessuna buca
+    assert passes_gate(**good) is True                  # senza dd: invariato (compat)
+
+
+def test_gate_accepts_low_win_rate_if_curve_is_smooth(monkeypatch):
+    """Il committente accetta WR 'apparentemente basso' se il profitto e'
+    continuo: con recovery alto e PF alto, il WR al floor passa — e' il PF/DD
+    a decidere, non la frequenza di vincita."""
+    from backtesting.engine import passes_gate
+    monkeypatch.setattr(settings, "GATE_MIN_RECOVERY", 2.0)
+    runner = dict(window_pnls=[0.15, 0.12, 0.18], n_trades=60, pf=1.6,
+                  win_rate=settings.GATE_WIN_RATE_FLOOR,   # esattamente al floor
+                  total_return=0.45)
+    assert passes_gate(**runner, max_dd=0.12) is True
+
+
+def test_score_prefers_smooth_curve_over_volatile_same_return():
+    """A parita' di ritorno, la grid search deve scegliere i parametri con la
+    curva piu' regolare (prima vinceva il ritorno grezzo)."""
+    from backtesting.engine import StrategyStats
+    from backtesting.optimizer import WalkForwardOptimizer
+    smooth = StrategyStats(strategy="s")
+    smooth.trades = [_T("x", v) for v in (0.05, 0.05, 0.05, 0.05)]       # 0.20, dd 0
+    volatile = StrategyStats(strategy="v")
+    volatile.trades = [_T("x", v) for v in (0.30, -0.25, 0.30, -0.15)]   # 0.20, dd 0.25+
+    sc = WalkForwardOptimizer._score
+    assert sc(smooth, 1) > sc(volatile, 1)

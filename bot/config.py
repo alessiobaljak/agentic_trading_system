@@ -278,6 +278,12 @@ class Settings:
     GATE_WIN_RATE_FLOOR: float = float(os.getenv("GATE_WIN_RATE_FLOOR", "0.45"))
     GATE_MIN_TOTAL_RETURN: float = float(os.getenv("GATE_MIN_TOTAL_RETURN", "0.15"))
     GATE_CONSISTENCY_FRACTION: float = float(os.getenv("GATE_CONSISTENCY_FRACTION", "1.0"))
+    # CONTINUITA' del profitto: ritorno OOS / max drawdown della curva dei trade
+    # (recovery factor) >= questa soglia. Rende operativo l'obiettivo "profitto
+    # continuo": il PF dice QUANTO si vince, il recovery dice quanto in PROFONDITA'
+    # si scava per vincerlo. Il win-rate resta una proprieta' di STILE, non un
+    # criterio di validita': un 35% di WR con curva regolare e' benvenuto.
+    GATE_MIN_RECOVERY: float = float(os.getenv("GATE_MIN_RECOVERY", "2.0"))
 
     # ---- Selezione per il PAPER/LIVE: robustezza minima ----
     # Una coppia (coin, strategia) e' tradabile SOLO se la sua STRATEGIA e' validata

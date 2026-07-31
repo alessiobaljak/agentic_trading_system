@@ -50,8 +50,22 @@ def pf_by_regime(trades) -> dict:
     return out
 
 
+def max_drawdown(trades) -> float:
+    """Max drawdown della curva di equity dei trade IN SEQUENZA (cumulata dei
+    pnl_pct). E' la misura della continuita': due strategie con lo stesso ritorno
+    possono scavare buche molto diverse per arrivarci, e la buca e' cio' che in
+    live diventa drawdown reale."""
+    peak = equity = dd = 0.0
+    for t in trades:
+        equity += t.pnl_pct
+        peak = max(peak, equity)
+        dd = max(dd, peak - equity)
+    return dd
+
+
 def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
-                win_rate: float, total_return: float) -> bool:
+                win_rate: float, total_return: float,
+                max_dd: float | None = None) -> bool:
     """
     Verdetto GATE 1 per una coppia (coin, strategia), fuori campione (OOS).
     Tutte le condizioni (soglie in config) devono valere:
@@ -74,6 +88,11 @@ def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
     if window_pnls:
         positive = sum(1 for w in window_pnls if w > 0)
         if positive < len(window_pnls) * settings.GATE_CONSISTENCY_FRACTION - 1e-9:
+            return False
+    # CONTINUITA' trade-per-trade: le finestre la misurano ad anni, questo a ogni
+    # trade — niente curve che scavano buche profonde per poi risalire.
+    if max_dd is not None and max_dd > 0:
+        if total_return / max_dd < settings.GATE_MIN_RECOVERY:
             return False
     return True
 # soglia di liquidazione approssimata: ~ (1/leva) meno un buffer di mantenimento
