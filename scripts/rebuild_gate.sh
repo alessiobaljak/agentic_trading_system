@@ -56,6 +56,23 @@ export BACKTEST_ALLOW_SYNTHETIC=false     # MAI validare su dati finti
 systemctl stop trading-optimizer.timer trading-optimizer.service 2>/dev/null || true
 trap 'systemctl start trading-optimizer.timer 2>/dev/null || true; echo "[rebuild] timer riattivato"' EXIT
 
+# AZZERA il registro SUBITO e riavvia il bot PRIMA delle passate.
+# Senza questo il bot tiene il registro VECCHIO in memoria fino a 1 ora
+# (ADAPT_RELOAD_SECONDS) e continua ad APRIRE posizioni mentre il gate e' in
+# ricostruzione (bug osservato: notifica Telegram di apertura durante il rebuild).
+# Dopo il restart il bot rilegge un registro vuoto -> ready=false -> FLAT subito.
+echo "[rebuild] azzero il registro e riavvio il bot (flat immediato)..."
+"$PY" - <<'PYEOF'
+from bot.core.firebase_client import get_firebase
+fb = get_firebase()
+fb.set_doc("strategy_registry", "validated", {})
+fb.set_doc("discovered_strategies", "specs", {"specs": {}})
+fb.set_doc("strategy_params", "current", {})
+print("[rebuild] registro azzerato")
+PYEOF
+systemctl restart trading-bot.service 2>/dev/null \
+  || echo "[rebuild] ATTENZIONE: riavvia il bot A MANO ORA: sudo systemctl restart trading-bot.service"
+
 OPT_ARGS="--top 200 --windows 3 --max-combos 12 --start 2022-01-01"
 DISC_ARGS="--top 200 --generate 100 --reeval-cap 500 --windows 3 --start 2022-01-01"
 echo "[rebuild] GATE 1 riformato · $N passate back-to-back · inizio $(date -u)"
