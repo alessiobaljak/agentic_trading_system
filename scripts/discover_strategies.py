@@ -65,6 +65,12 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list]:
                 "symbol": sym, "strategy": spec["id"], "params": {}, "spec": spec,
                 "oos_pf": r["pf"], "oos_pnl_pct": r["pnl"],
                 "oos_trades": r["trades"], "oos_win_rate": r["win"], "passed": True,
+                # SENZA questi campi il registro perde: il pass onesto (data_end
+                # assente faceva incrementare a OGNI run - il bug delle coppie a
+                # 3 pass in un giorno), il veto di regime e la scala per-coppia.
+                "holdout": r.get("holdout"), "regime_pf": r.get("regime_pf"),
+                "scale_r_mults": r.get("scale_r_mults"),
+                "data_end": r.get("data_end", 0),
             }
             passed_keys.append(key)
             specs_passed[spec["id"]] = spec
@@ -151,20 +157,22 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
         # PASS ONESTO (stessa regola di optimize): conta solo con dati nuovi
         data_end = float(e.get("data_end", 0) or 0)
         prev_end = float(rec.get("last_pass_data_end", 0) or 0)
-        if data_end <= 0 or data_end - prev_end >= NEW_DATA_MIN_S:
+        # FAIL-CLOSED: senza data_end il pass NON conta. Il fallback aperto era il
+        # buco da cui i run sharded (entries senza data_end) gonfiavano il conteggio.
+        if data_end > 0 and (prev_end <= 0 or data_end - prev_end >= NEW_DATA_MIN_S):
             rec["pass_count"] = rec.get("pass_count", 0) + 1
             rec["last_pass_data_end"] = data_end
         if e.get("holdout"):
             rec["holdout"] = e["holdout"]
         if e.get("regime_pf"):
             rec["regime_pf"] = e["regime_pf"]
+        # NB: last_params si assegna PRIMA, poi si innesta la scala. Invertendo,
+        # l'assegnazione cancellerebbe la scala appena salvata.
+        rec["last_params"] = dict(e["params"] or {})
         # scala validata per questa coppia generata: viaggia in last_params, cosi'
         # params_for -> open_position la consegna al live come per le classiche
         if e.get("scale_r_mults"):
-            lp = rec.get("last_params") or {}
-            lp["scale_r_mults"] = e["scale_r_mults"]
-            rec["last_params"] = lp
-        rec["last_params"] = e["params"]
+            rec["last_params"]["scale_r_mults"] = e["scale_r_mults"]
         rec["last_pf"] = e["oos_pf"]
         rec["last_pnl_pct"] = e["oos_pnl_pct"]
         rec["last_trades"] = e["oos_trades"]

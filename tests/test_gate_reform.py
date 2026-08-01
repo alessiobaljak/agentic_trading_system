@@ -208,3 +208,34 @@ def test_score_prefers_smooth_curve_over_volatile_same_return():
     volatile.trades = [_T("x", v) for v in (0.30, -0.25, 0.30, -0.15)]   # 0.20, dd 0.25+
     sc = WalkForwardOptimizer._score
     assert sc(smooth, 1) > sc(volatile, 1)
+
+
+def test_pass_count_fail_closed_without_data_end():
+    """Un percorso che DIMENTICA data_end non deve poter incrementare: era il buco
+    da cui i run sharded gonfiavano pass_count (coppie 'validate' in un giorno)."""
+    from scripts.optimize import update_registry
+    from bot.core.firebase_client import decode_pairs
+    fb = _fake_fb_with_registry()
+    key = "XUSDT|s1"
+    e = _entry(0)                      # data_end mancante/azzerato
+    update_registry(fb, {key: e}, [key])
+    update_registry(fb, {key: e}, [key])
+    rec = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])[key]
+    assert rec["pass_count"] == 0      # mai incrementato senza dati datati
+
+
+def test_generated_ladder_survives_last_params_assignment():
+    """REGRESSIONE: last_params veniva assegnato DOPO aver innestato la scala e la
+    cancellava -> le generate sarebbero tornate mute sulla scala globale."""
+    from scripts.discover_strategies import merge_into_registry
+    from bot.core.firebase_client import FirebaseClient, decode_pairs
+    fb = FirebaseClient()
+    key = "BTCUSDT|gen_zzz"
+    out = {key: {"symbol": "BTCUSDT", "strategy": "gen_zzz", "params": {"a": 1},
+                 "oos_pf": 1.4, "oos_pnl_pct": 0.3, "oos_trades": 40,
+                 "oos_win_rate": 0.5, "passed": True,
+                 "scale_r_mults": [1.0, 2.0, 3.0], "data_end": 1_700_000_000.0}}
+    merge_into_registry(fb, out, passed_now=[key])
+    lp = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])[key]["last_params"]
+    assert lp["scale_r_mults"] == [1.0, 2.0, 3.0]
+    assert lp["a"] == 1        # i params originali non si perdono

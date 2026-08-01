@@ -95,8 +95,11 @@ def test_merge_into_registry_only_passed_and_accumulates():
     from scripts.discover_strategies import merge_into_registry
     fb = FirebaseClient()
     out = {
+        # data_end come nel produttore reale: senza, il pass onesto (fail-closed)
+        # non conta e la potatura scarta la coppia a pass_count 0
         "BTCUSDT|gen_aaa": {"symbol": "BTCUSDT", "strategy": "gen_aaa", "params": {},
-                            "oos_pf": 1.3, "oos_pnl_pct": 0.2, "oos_trades": 40, "passed": True},
+                            "oos_pf": 1.3, "oos_pnl_pct": 0.2, "oos_trades": 40,
+                            "passed": True, "data_end": 1_700_000_000.0},
         "BTCUSDT|gen_bbb": {"symbol": "BTCUSDT", "strategy": "gen_bbb", "params": {},
                             "oos_pf": 0.9, "oos_pnl_pct": -0.1, "oos_trades": 30, "passed": False},
     }
@@ -108,7 +111,10 @@ def test_merge_into_registry_only_passed_and_accumulates():
     assert "BTCUSDT|gen_bbb" not in pairs
     assert "BTCUSDT|gen_aaa" not in reg["validated"]  # serve >=3 pass
     # dopo 3 pass diventa validata/operabile
+    # ogni pass richiede >=24h di dati NUOVI: si avanza data_end di un giorno
+    out["BTCUSDT|gen_aaa"]["data_end"] = 1_700_000_000.0 + 86_400.0
     merge_into_registry(fb, out, passed_now=["BTCUSDT|gen_aaa"])
+    out["BTCUSDT|gen_aaa"]["data_end"] = 1_700_000_000.0 + 2 * 86_400.0
     merge_into_registry(fb, out, passed_now=["BTCUSDT|gen_aaa"])
     reg = fb.get_doc("strategy_registry", "validated")
     assert decode_pairs(reg["pairs"])["BTCUSDT|gen_aaa"]["pass_count"] == 3

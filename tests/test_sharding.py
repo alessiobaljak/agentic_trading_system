@@ -5,8 +5,10 @@ from bot.core.firebase_client import FirebaseClient, decode_pairs
 
 
 def _entry(sym, strat, pf=1.3, pnl=0.2):
+    # data_end presente come nel produttore REALE (senza, il pass onesto non conta)
     return {"symbol": sym, "strategy": strat, "params": {}, "oos_pf": pf,
-            "oos_pnl_pct": pnl, "oos_trades": 40, "oos_win_rate": 0.5, "passed": True}
+            "oos_pnl_pct": pnl, "oos_trades": 40, "oos_win_rate": 0.5, "passed": True,
+            "data_end": 1_700_000_000.0}
 
 
 def test_optimize_merge_combines_shards():
@@ -43,11 +45,11 @@ def test_discover_merge_combines_shards():
     spec_b["id"] = spec_id(spec_b)
     ka, kb = f"BTCUSDT|{spec_a['id']}", f"ETHUSDT|{spec_b['id']}"
     fb.set_doc("discover_shards", "0", {"run_id": "", "n_eval": 100,
-        "passed_entries": {ka: {"symbol": "BTCUSDT", "strategy": spec_a["id"], "params": {},
+        "passed_entries": {ka: {"symbol": "BTCUSDT", "strategy": spec_a["id"], "params": {}, "data_end": 1_700_000_000.0,
                                 "spec": spec_a, "oos_pf": 1.2, "oos_pnl_pct": 0.3, "oos_trades": 40}},
         "passed_keys": [ka], "specs": {spec_a["id"]: spec_a}})
     fb.set_doc("discover_shards", "1", {"run_id": "", "n_eval": 100,
-        "passed_entries": {kb: {"symbol": "ETHUSDT", "strategy": spec_b["id"], "params": {},
+        "passed_entries": {kb: {"symbol": "ETHUSDT", "strategy": spec_b["id"], "params": {}, "data_end": 1_700_000_000.0,
                                 "spec": spec_b, "oos_pf": 1.3, "oos_pnl_pct": 0.4, "oos_trades": 50}},
         "passed_keys": [kb], "specs": {spec_b["id"]: spec_b}})
     _merge_discover_shards(fb, Namespace(num_shards=2))

@@ -78,7 +78,12 @@ def test_registry_accumulates_and_gates(monkeypatch):
                              "params": {"rr": 3.0}, "oos_pf": 0.9, "oos_pnl_pct": -0.1, "oos_trades": 50},
     }
     reg = {}
-    for _ in range(MIN_PASSES):
+    # PASS ONESTO: ogni pass conta solo con >=24h di dati NUOVI -> si avanza
+    # data_end di un giorno a ogni giro (3 chiamate sugli stessi dati = 1 pass)
+    base_end = 1_700_000_000.0
+    for i in range(MIN_PASSES):
+        for e in out.values():
+            e["data_end"] = base_end + i * 86_400.0
         reg = update_registry(fb, out, passed_now=["SOLUSDT|breakout"])
     assert "SOLUSDT|breakout" in reg["validated"]
     assert "BTCUSDT|breakout" not in reg["validated"]

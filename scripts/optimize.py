@@ -315,7 +315,9 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
             # dati, non conferme indipendenti (il difetto che gonfiava il registro).
             data_end = float(e.get("data_end", 0) or 0)
             prev_end = float(rec.get("last_pass_data_end", 0) or 0)
-            if data_end <= 0 or data_end - prev_end >= NEW_DATA_MIN_S:
+            # FAIL-CLOSED: senza data_end il pass NON conta (nessun percorso deve
+            # poter incrementare "gratis" dimenticando il campo).
+            if data_end > 0 and (prev_end <= 0 or data_end - prev_end >= NEW_DATA_MIN_S):
                 rec["pass_count"] = rec.get("pass_count", 0) + 1
                 rec["last_pass_data_end"] = data_end
             rec["fail_count"] = 0                      # ripassata -> azzera i fallimenti
