@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-03 18:05 UTC_
+_Generato: 2026-08-03 19:58 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-03 18:05 UTC
+- ultimo heartbeat: 2026-08-03 19:57 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-03 18:03 UTC)
+- esito: **⚪ FLAT** (2026-08-03 19:48 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -19,7 +19,7 @@ _Generato: 2026-08-03 18:05 UTC_
 - copertura universo: **51/181 crypto (28%)** · obiettivo ≥ 60%
 - coppie validate (>= 3 pass OOS): **74**
 - universo scansionato: 0GUSDT, 1000BONKUSDT, 1000LUNCUSDT, 1000PEPEUSDT, 1000RATSUSDT, 1000SATSUSDT, 1000SHIBUSDT, 1000XECUSDT, AAVEUSDT, ACEUSDT, ACXUSDT, ADAUSDT, AEROUSDT, AEVOUSDT, AIOUSDT, AKEUSDT, ALGOUSDT, ALLOUSDT, APTUSDT, ARBUSDT, ARCUSDT, ASTERUSDT, ATOMUSDT, AVAXUSDT, BABYUSDT, BANKUSDT, BCHUSDT, BEATUSDT, BERAUSDT, BICOUSDT, BLESSUSDT, BNBUSDT, BOMEUSDT, BROCCOLI714USDT, BTCUSDT, BULLAUSDT, CAKEUSDT, CFXUSDT, CHZUSDT, CLOUSDT, COTIUSDT, CRVUSDT, DASHUSDT, DEXEUSDT, DIAUSDT, DOGEUSDT, DOTUSDT, EDENUSDT, EIGENUSDT, ELSAUSDT, ENAUSDT, ENJUSDT, ENSOUSDT, EPICUSDT, ERAUSDT, ESPORTSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, EULUSDT, EVAAUSDT, FARTCOINUSDT, FETUSDT, FFUSDT, FHEUSDT, FILUSDT, GALAUSDT, GIGGLEUSDT, GPSUSDT, GTCUSDT, GUSDT, GWEIUSDT, HBARUSDT, HEIUSDT, HEMIUSDT, HFTUSDT, HMSTRUSDT, HOLOUSDT, HOMEUSDT, HUSDT, HYPERUSDT, HYPEUSDT, ICNTUSDT, ICPUSDT, IDOLUSDT, INJUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KGENUSDT, KITEUSDT, KOMAUSDT, LABUSDT, LAUSDT, LDOUSDT, LINKUSDT, LITUSDT, LPTUSDT, LTCUSDT, MEGAUSDT, MIRAUSDT, MMTUSDT, MORPHOUSDT, MUBARAKUSDT, MYXUSDT, NEARUSDT, NILUSDT, ONDOUSDT, ONUSDT, OPENUSDT, OPUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PIEVERSEUSDT, PIPPINUSDT, POLUSDT, PORTALUSDT, PROMUSDT, PTBUSDT, PUMPUSDT, PYTHUSDT, RAVEUSDT, RENDERUSDT, RIFUSDT, RIVERUSDT, SAGAUSDT, SAHARAUSDT, SANDUSDT, SEIUSDT, SENTUSDT, SKYAIUSDT, SNXUSDT, SOLUSDT, SOONUSDT, SPXUSDT, STORJUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUSDT, SYNUSDT, TAGUSDT, TAKEUSDT, TAOUSDT, TIAUSDT, TLMUSDT, TRUMPUSDT, TRXUSDT, TUSDT, TUTUSDT, UAIUSDT, UBUSDT, UNIUSDT, USELESSUSDT, USUSDT, VANAUSDT, VANRYUSDT, VELVETUSDT, VICUSDT, VIRTUALUSDT, VVVUSDT, WAXPUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, XANUSDT, XLMUSDT, XMRUSDT, XPINUSDT, XPLUSDT, XRPUSDT, ZAMAUSDT, ZECUSDT, ZENUSDT, ZEREBROUSDT, ZKUSDT, ZROUSDT, 币安人生USDT
-- aggiornato: 2026-08-03 17:29 UTC
+- aggiornato: 2026-08-03 19:36 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
@@ -52,7 +52,7 @@ _Generato: 2026-08-03 18:05 UTC_
 | ELSAUSDT | gen_d230db12 | 3 | 1.493 | 68% | scale_r_mults=[1.5, 3.0, 5.0] |
 | JUPUSDT | gen_a06a52e1 | 6 | 1.258 | 68% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ETCUSDT | gen_0a39495c | 6 | 1.287 | 67% | scale_r_mults=[2.0, 4.0, 6.0] |
-| HYPERUSDT | gen_0a39495c | 4 | 1.576 | 67% | scale_r_mults=[1.5, 3.0, 5.0] |
+| HYPERUSDT | gen_0a39495c | 4 | 1.575 | 67% | scale_r_mults=[1.5, 3.0, 5.0] |
 | MIRAUSDT | gen_aac99e5d | 3 | 2.42 | 64% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ZAMAUSDT | gen_11cfc2ad | 3 | 1.649 | 63% | scale_r_mults=[1.5, 3.0, 5.0] |
 | 4USDT | gen_0a39495c | 5 | 1.503 | 61% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -66,8 +66,8 @@ _Generato: 2026-08-03 18:05 UTC_
 | GALAUSDT | gen_cb98159b | 3 | 1.257 | 59% | scale_r_mults=[2.0, 4.0, 6.0] |
 | BIRBUSDT | gen_6c4f5e63 | 6 | 2.305 | 59% | scale_r_mults=[2.0, 4.0, 6.0] |
 | HEMIUSDT | gen_6003e6d7 | 5 | 1.385 | 57% | scale_r_mults=[1.5, 3.0, 5.0] |
-| TRUSTUSDT | gen_6c4f5e63 | 3 | 1.668 | 56% |  |
 | ERAUSDT | gen_e9ed313b | 5 | 1.277 | 56% | scale_r_mults=[2.0, 4.0, 6.0] |
+| TRUSTUSDT | gen_6c4f5e63 | 3 | 1.668 | 56% |  |
 | SAHARAUSDT | gen_a06a52e1 | 4 | 1.491 | 52% | scale_r_mults=[1.5, 3.0, 5.0] |
 | 1000BONKUSDT | gen_de8c8c1b | 4 | 1.867 | 51% | scale_r_mults=[1.5, 3.0, 5.0] |
 | AEROUSDT | gen_843b59a9 | 4 | 1.679 | 50% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -94,9 +94,9 @@ _Generato: 2026-08-03 18:05 UTC_
 | RIFUSDT | momentum_cross_asset | 4 | 1.38 | 28% | btc_move_threshold=0.4, atr_mult_stop=2.0, scale_r_mults=[2.0, 4.0, 6.0] |
 | LINKUSDT | gen_de8c8c1b | 4 | 1.322 | 25% | scale_r_mults=[1.0, 1.5, 2.5] |
 | HYPEUSDT | gen_5b5f8703 | 6 | 1.476 | 25% | scale_r_mults=[2.0, 4.0, 6.0] |
-| SYNUSDT | gen_626a5968 | 4 | 1.739 | 23% | scale_r_mults=[1.5, 3.0, 5.0] |
+| SYNUSDT | gen_626a5968 | 4 | 1.738 | 23% | scale_r_mults=[1.5, 3.0, 5.0] |
+| MEGAUSDT | gen_4982af25 | 4 | 1.828 | 20% | scale_r_mults=[1.0, 2.0, 3.0] |
 | TLMUSDT | gen_142b91b2 | 6 | 1.654 | 20% | scale_r_mults=[2.0, 4.0, 6.0] |
-| MEGAUSDT | gen_4982af25 | 3 | 1.81 | 19% | scale_r_mults=[1.0, 2.0, 3.0] |
 | MIRAUSDT | gen_4982af25 | 7 | 1.547 | 19% | scale_r_mults=[2.0, 4.0, 6.0] |
 
 ## Ultimo run di ottimizzazione
