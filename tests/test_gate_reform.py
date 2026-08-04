@@ -239,3 +239,63 @@ def test_generated_ladder_survives_last_params_assignment():
     lp = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])[key]["last_params"]
     assert lp["scale_r_mults"] == [1.0, 2.0, 3.0]
     assert lp["a"] == 1        # i params originali non si perdono
+
+
+# ---- RECENCY: i parametri si ritarano sul presente ------------------------ #
+class _TT:
+    """Trade con timestamp, per i pesi di recency."""
+    def __init__(self, pnl, days_ago, now=1_700_000_000.0):
+        self.pnl_pct = pnl
+        self.entry_ts = now - days_ago * 86400.0
+        self.regime_at_entry = "x"
+        self.regime = "x"
+
+
+def test_recency_halves_the_weight_each_half_life(monkeypatch):
+    from backtesting.engine import recency_weights
+    monkeypatch.setattr(settings, "GATE_RECENCY_HALFLIFE_DAYS", 180.0)
+    w = recency_weights([_TT(0.01, 0), _TT(0.01, 180), _TT(0.01, 360)])
+    assert w[0] == pytest.approx(1.0)
+    assert w[1] == pytest.approx(0.5)
+    assert w[2] == pytest.approx(0.25)
+
+
+def test_recency_disabled_is_uniform(monkeypatch):
+    """0 = comportamento storico esatto: nessuna sorpresa se lo si spegne."""
+    from backtesting.engine import recency_weights
+    monkeypatch.setattr(settings, "GATE_RECENCY_HALFLIFE_DAYS", 0.0)
+    assert recency_weights([_TT(0.01, 0), _TT(0.01, 900)]) == [1.0, 1.0]
+
+
+def test_recency_ignored_without_timestamps(monkeypatch):
+    """Trade senza entry_ts (storici) -> pesi uniformi, nessun crash."""
+    from backtesting.engine import recency_weights
+    monkeypatch.setattr(settings, "GATE_RECENCY_HALFLIFE_DAYS", 180.0)
+    assert recency_weights([_T("x", 0.01), _T("x", 0.02)]) == [1.0, 1.0]
+
+
+def test_score_prefers_params_working_NOW(monkeypatch):
+    """IL PUNTO. Due parametri con lo STESSO ritorno totale: uno guadagnava nel
+    2022 e ora perde, l'altro perdeva allora e ora guadagna. Senza recency erano
+    indistinguibili; con recency vince quello che funziona ADESSO."""
+    from backtesting.optimizer import WalkForwardOptimizer
+    from backtesting.engine import StrategyStats
+    monkeypatch.setattr(settings, "GATE_RECENCY_HALFLIFE_DAYS", 180.0)
+    old_glory = StrategyStats(strategy="a")
+    old_glory.trades = [_TT(+0.20, 700), _TT(-0.10, 10)]      # bello ieri, brutto oggi
+    fresh = StrategyStats(strategy="b")
+    fresh.trades = [_TT(-0.10, 700), _TT(+0.20, 10)]          # stesso totale, invertito
+    assert sum(t.pnl_pct for t in old_glory.trades) == pytest.approx(
+        sum(t.pnl_pct for t in fresh.trades))
+    sc = WalkForwardOptimizer._score
+    assert sc(fresh, 1) > sc(old_glory, 1)
+
+
+def test_weighted_return_stays_on_the_same_scale(monkeypatch):
+    """La rinormalizzazione evita che pesare premi solo chi ha piu' trade: con
+    performance uniforme nel tempo, il ritorno pesato ~ quello grezzo."""
+    from backtesting.engine import weighted_score_parts
+    monkeypatch.setattr(settings, "GATE_RECENCY_HALFLIFE_DAYS", 180.0)
+    trades = [_TT(0.02, d) for d in (0, 30, 60, 90, 120)]
+    pnl_w, _ = weighted_score_parts(trades)
+    assert pnl_w == pytest.approx(sum(t.pnl_pct for t in trades), rel=1e-9)

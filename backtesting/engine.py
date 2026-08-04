@@ -63,6 +63,36 @@ def max_drawdown(trades) -> float:
     return dd
 
 
+def recency_weights(trades, half_life_days: float | None = None) -> list[float]:
+    """Peso di ogni trade nella SCELTA DEI PARAMETRI: 1.0 per il piu' recente,
+    dimezzato ogni `half_life_days`. Emivita <= 0 (o timestamp assenti) -> pesi
+    uniformi, cioe' esattamente il comportamento storico."""
+    hl = settings.GATE_RECENCY_HALFLIFE_DAYS if half_life_days is None else half_life_days
+    ts = [float(getattr(t, "entry_ts", 0) or 0) for t in trades]
+    if hl <= 0 or not ts or max(ts) <= 0:
+        return [1.0] * len(ts)
+    newest = max(ts)
+    return [0.5 ** (max(0.0, newest - t) / 86400.0 / hl) if t > 0 else 0.0 for t in ts]
+
+
+def weighted_score_parts(trades) -> tuple[float, float]:
+    """(ritorno pesato, profit factor pesato) coi pesi di recency.
+
+    Il ritorno e' RINORMALIZZATO sul numero di trade: senza, pesare abbasserebbe
+    ogni somma e il punteggio finirebbe per premiare semplicemente chi ha piu'
+    trade invece di chi va meglio ADESSO."""
+    w = recency_weights(trades)
+    tot_w = sum(w)
+    if tot_w <= 0:
+        return 0.0, 0.0
+    n = len(trades)
+    pnl = sum(wi * t.pnl_pct for wi, t in zip(w, trades)) * n / tot_w
+    gains = sum(wi * t.pnl_pct for wi, t in zip(w, trades) if t.pnl_pct > 0)
+    losses = -sum(wi * t.pnl_pct for wi, t in zip(w, trades) if t.pnl_pct < 0)
+    pf = (gains / losses) if losses > 0 else (99.0 if gains > 0 else 0.0)
+    return pnl, pf
+
+
 def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
                 win_rate: float, total_return: float,
                 max_dd: float | None = None) -> bool:
@@ -119,6 +149,9 @@ class SimTrade:
     # prima di tornare. E' la misura che rende decidibile la scala dei TP (da questo
     # numero si sa quali gradini avrebbe colpito qualunque scala).
     mfe_r: float = 0.0
+    # istante d'ingresso (epoch): permette di pesare i trade RECENTI piu' dei vecchi
+    # nella scelta dei parametri. 0 = sconosciuto -> peso uniforme.
+    entry_ts: float = 0.0
     # verdetto controfattuale sull'uscita TRAILING (None se non trailing):
     # 'premature' = avremmo raggiunto il TP tenendo; 'protected' = avremmo preso lo
     # stop base; 'neutral' = nessuno dei due entro l'orizzonte.
@@ -489,6 +522,7 @@ class Backtester:
                 confidence_at_entry=sig.confidence, regime_at_entry=regime.value,
                 trailing_verdict=trailing_verdict,
                 mfe_r=round(mfe_in_r(entry, mfe, stop), 3),
+                entry_ts=candles[i].open_time.timestamp(),
             ))
             i = j + 1   # niente posizioni sovrapposte
         return stats

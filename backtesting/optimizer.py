@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from backtesting.engine import (Backtester, StrategyStats, max_drawdown, passes_gate,
-                                pf_by_regime)
+                                pf_by_regime, weighted_score_parts)
 from bot.core.indicators import compute_indicator_frame
 from bot.core.models import Candle
 from bot.strategies.base import STRATEGY_REGISTRY
@@ -113,8 +113,12 @@ class WalkForwardOptimizer:
         # curva entra nel punteggio con lo stesso peso del ritorno: tra due
         # parametri con lo stesso guadagno vince quello che scava la buca minore.
         # Piccolo bonus PF come tie-break di qualita'.
-        return (stats.total_pnl_pct() - max_drawdown(stats.trades)
-                + 0.1 * (stats.profit_factor() - 1.0))
+        # RECENCY: ritorno e PF sono PESATI (i trade recenti contano di piu'), cosi'
+        # i parametri si ritarano sul carattere ATTUALE del mercato invece che sulla
+        # media di anni. Il drawdown NON si pesa: e' una proprieta' del PERCORSO,
+        # riponderarla non avrebbe significato.
+        pnl_w, pf_w = weighted_score_parts(stats.trades)
+        return pnl_w - max_drawdown(stats.trades) + 0.1 * (pf_w - 1.0)
 
     def split_holdout(self, candles: list) -> tuple[list, int]:
         """(corpo per la selezione, indice di inizio holdout). La selezione (train,

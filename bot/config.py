@@ -306,6 +306,15 @@ class Settings:
     # si scava per vincerlo. Il win-rate resta una proprieta' di STILE, non un
     # criterio di validita': un 35% di WR con curva regolare e' benvenuto.
     GATE_MIN_RECOVERY: float = float(os.getenv("GATE_MIN_RECOVERY", "2.0"))
+    # RECENCY: emivita (giorni) del peso dei trade nella SCELTA DEI PARAMETRI.
+    # Le finestre pesavano tutte uguale: un trade di gennaio 2022 contava quanto uno
+    # di oggi, quindi 7 giorni nuovi su 4.6 anni valevano lo 0.42% dell'evidenza e
+    # l'ottimo non si spostava MAI — ecco perche' la strategia non "migliorava".
+    # Col decadimento i parametri si ritarano sul carattere ATTUALE del mercato.
+    # 0 = disattivato (peso uniforme, comportamento storico).
+    # NB: pesa SOLO la selezione dei parametri; i criteri di validazione restano
+    # non pesati, cosi' il rigore del gate non si ammorbidisce di un grammo.
+    GATE_RECENCY_HALFLIFE_DAYS: float = float(os.getenv("GATE_RECENCY_HALFLIFE_DAYS", "180"))
 
     # ---- Selezione per il PAPER/LIVE: robustezza minima ----
     # Una coppia (coin, strategia) e' tradabile SOLO se la sua STRATEGIA e' validata
