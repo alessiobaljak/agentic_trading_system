@@ -176,8 +176,10 @@ class ExecutionEngine:
             print(f"[DRY_RUN] OPEN {direction.value} {pos.symbol} qty={pos.quantity:.4f} "
                   f"@ {pos.entry_price} lev={pos.leverage}x SL={pos.stop_price:.4f} "
                   f"TP={pos.take_profit_price:.4f}")
-        else:
-            self._submit_live_entry(pos)
+        elif not self._submit_live_entry(pos):
+            # nessun fill (o troppo piccolo): la posizione NON deve nascere, altrimenti
+            # il bot gestirebbe qualcosa che sull'exchange non esiste
+            return None
 
         self.open_positions[pos.symbol] = pos
         self._write_position_state(pos, mark_price=pos.entry_price)
@@ -188,19 +190,104 @@ class ExecutionEngine:
         """Lato che CHIUDE la posizione (per gli ordini reduce-only SL/TP)."""
         return "SELL" if pos.direction == Direction.LONG else "BUY"
 
-    def _submit_live_entry(self, pos: Position) -> None:
-        """Ordini reali: limit entry + ordini di protezione (SL + scala TP)."""
+    def _submit_live_entry(self, pos: Position) -> bool:
+        """Ordine reale di ingresso CON CONFERMA DEL FILL.
+
+        Prima si piazzava un LIMIT e si dava per scontato che fosse riempito: se il
+        prezzo scappava, il bot gestiva una posizione INESISTENTE — stop e TP su
+        quantita' mai comprata, PnL immaginario, e in chiusura un reduce-only che
+        non riduce nulla. Ora:
+          1. si piazza il LIMIT e si ATTENDE l'esito (EXEC_FILL_TIMEOUT_S);
+          2. si RICONCILIA la posizione con quantita' e prezzo medio REALI (un fill
+             parziale sopra la soglia e' una posizione valida, ma piu' piccola);
+          3. sotto EXEC_MIN_FILL_FRACTION si cancella e si rinuncia: una posizione
+             simbolica paga le fee quanto una vera senza il potenziale;
+          4. gli ordini di protezione si piazzano SOLO DOPO, sulla quantita' vera.
+        Ritorna True se la posizione esiste davvero."""
         side = "BUY" if pos.direction == Direction.LONG else "SELL"
         try:
             self._client.futures_change_leverage(symbol=pos.symbol, leverage=int(pos.leverage))
-            self._client.futures_create_order(
+            resp = self._client.futures_create_order(
                 symbol=pos.symbol, side=side, type="LIMIT", timeInForce="GTC",
                 quantity=round(pos.quantity, 6), price=round(pos.entry_price, 6),
-            )
+            ) or {}
         except Exception as exc:  # noqa: BLE001
             print(f"[execution] errore ordine live {pos.symbol}: {exc}")
-            return
+            return False
+
+        order_id = resp.get("orderId") if isinstance(resp, dict) else None
+        filled_qty, avg_price = self._await_fill(pos, order_id)
+
+        if filled_qty <= 0:
+            print(f"[execution] {pos.symbol}: nessun fill entro "
+                  f"{settings.EXEC_FILL_TIMEOUT_S:.0f}s -> ordine cancellato, niente posizione")
+            self._cancel_order(pos.symbol, order_id)
+            return False
+
+        frac = filled_qty / pos.quantity if pos.quantity > 0 else 0.0
+        if frac < settings.EXEC_MIN_FILL_FRACTION:
+            print(f"[execution] {pos.symbol}: fill solo {frac*100:.0f}% "
+                  f"(< {settings.EXEC_MIN_FILL_FRACTION*100:.0f}%) -> chiudo e rinuncio")
+            self._cancel_order(pos.symbol, order_id)
+            self._flatten_residual(pos, filled_qty)
+            return False
+
+        # RICONCILIAZIONE: da qui in poi la posizione e' quella VERA, non quella
+        # richiesta. Anche i TP scaglionati si ricalcolano su questa quantita'.
+        if frac < 1.0:
+            print(f"[execution] {pos.symbol}: fill PARZIALE {frac*100:.0f}% "
+                  f"({filled_qty:.6f}/{pos.quantity:.6f}) -> posizione riconciliata")
+            self._cancel_order(pos.symbol, order_id)
+        pos.quantity = filled_qty
+        pos.remaining_qty = filled_qty
+        if avg_price > 0:
+            # lo stop e' un LIVELLO deciso dalla strategia: non si sposta col prezzo
+            # medio reale, ma R e la scala TP si ricalcolano da entry+stop, quindi
+            # l'entry vero DEVE essere quello eseguito.
+            pos.entry_price = avg_price
+            pos.high_water = avg_price
         self._place_protective_orders(pos)
+        return True
+
+    def _await_fill(self, pos: Position, order_id) -> tuple[float, float]:
+        """(quantita' riempita, prezzo medio) interrogando l'ordine finche' e' vivo."""
+        if order_id is None:
+            return 0.0, 0.0
+        deadline = time.time() + settings.EXEC_FILL_TIMEOUT_S
+        filled, avg = 0.0, 0.0
+        while time.time() < deadline:
+            try:
+                o = self._client.futures_get_order(symbol=pos.symbol, orderId=order_id) or {}
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] stato ordine {pos.symbol} non leggibile: {exc}")
+                break
+            filled = float(o.get("executedQty", 0) or 0)
+            avg = float(o.get("avgPrice", 0) or 0)
+            status = str(o.get("status", ""))
+            if status in ("FILLED", "CANCELED", "REJECTED", "EXPIRED"):
+                break
+            time.sleep(settings.EXEC_FILL_POLL_S)
+        return filled, avg
+
+    def _cancel_order(self, symbol: str, order_id) -> None:
+        if order_id is None:
+            return
+        try:
+            self._client.futures_cancel_order(symbol=symbol, orderId=order_id)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] cancel ordine {symbol} fallito: {exc}")
+
+    def _flatten_residual(self, pos: Position, qty: float) -> None:
+        """Chiude a mercato un fill troppo piccolo per essere tenuto: lasciarlo
+        aperto senza stop sarebbe la cosa peggiore."""
+        if qty <= 0:
+            return
+        try:
+            self._client.futures_create_order(
+                symbol=pos.symbol, side=self._opposite(pos), type="MARKET",
+                reduceOnly=True, quantity=round(qty, 6))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] ATTENZIONE: residuo {pos.symbol} non chiuso: {exc}")
 
     def _place_protective_orders(self, pos: Position) -> None:
         """Appoggia sul book TUTTO il piano di uscita, non solo un TP unico.

@@ -155,6 +155,17 @@ class Settings:
     # nello stesso verso, coerente col breaker giornaliero al 5%.
     MAX_DIRECTIONAL_RISK_PCT: float = float(os.getenv("MAX_DIRECTIONAL_RISK_PCT", "0.03"))
 
+    # ---- INGRESSO LIVE: conferma del fill (solo DRY_RUN=False) ----
+    # Il bot piazzava un LIMIT e ASSUMEVA il fill: se il prezzo scappava, gestiva
+    # una posizione che non esisteva (stop e TP su quantita' mai comprata). Ora si
+    # attende la conferma e si riconcilia con quantita' e prezzo REALI.
+    # Secondi di attesa del riempimento prima di rinunciare.
+    EXEC_FILL_TIMEOUT_S: float = float(os.getenv("EXEC_FILL_TIMEOUT_S", "20"))
+    EXEC_FILL_POLL_S: float = float(os.getenv("EXEC_FILL_POLL_S", "1.0"))
+    # frazione minima riempita perche' la posizione valga: sotto, si cancella il
+    # resto e si rinuncia (una posizione simbolica costa in fee quanto rende)
+    EXEC_MIN_FILL_FRACTION: float = float(os.getenv("EXEC_MIN_FILL_FRACTION", "0.5"))
+
     # ---- Anti-overfitting ----
     # Frazione di capitale SEMPRE su configurazione baseline non adattata.
     BASELINE_CAPITAL_FRACTION: float = 0.20

@@ -21,14 +21,31 @@ from bot.execution.executor import ExecutionEngine
 
 
 class FakeBinance:
-    """Registra gli ordini creati/cancellati e assegna orderId progressivi."""
+    """Registra gli ordini creati/cancellati e assegna orderId progressivi.
 
-    def __init__(self, fail_create: bool = False):
+    `fill_ratio` simula l'esito dell'INGRESSO: 1.0 riempito, 0.0 mai riempito,
+    valori intermedi = fill parziale. Serve perche' l'ingresso live ora ATTENDE
+    la conferma invece di darla per scontata."""
+
+    def __init__(self, fail_create: bool = False, fill_ratio: float = 1.0,
+                 fill_price: float | None = None):
         self.orders: list[dict] = []
         self.cancelled: list[int] = []
         self.leverage: list[dict] = []
         self._next_id = 1000
         self.fail_create = fail_create
+        self.fill_ratio = fill_ratio
+        self.fill_price = fill_price
+
+    def futures_get_order(self, **kw):
+        oid = kw.get("orderId")
+        o = next((x for x in self.orders if x.get("orderId") == oid), {})
+        qty = float(o.get("quantity", 0) or 0)
+        filled = qty * self.fill_ratio
+        return {"orderId": oid, "executedQty": filled,
+                "avgPrice": self.fill_price if self.fill_price is not None
+                else float(o.get("price", 0) or 0),
+                "status": "FILLED" if self.fill_ratio >= 1.0 else "NEW"}
 
     def futures_change_leverage(self, **kw):
         self.leverage.append(kw)
@@ -74,6 +91,13 @@ def _live_engine(client) -> ExecutionEngine:
     eng.dry_run = False
     eng._client = client
     return eng
+
+
+@pytest.fixture(autouse=True)
+def fast_fill(monkeypatch):
+    """Attesa del fill ridotta: i test non devono dormire 20 secondi veri."""
+    monkeypatch.setattr(settings, "EXEC_FILL_TIMEOUT_S", 0.05)
+    monkeypatch.setattr(settings, "EXEC_FILL_POLL_S", 0.01)
 
 
 @pytest.fixture
@@ -208,3 +232,71 @@ def test_live_close_cancels_leftover_protective_orders(scale_on):
     closed = eng.update_position("BTCUSDT", 98.0)     # stop pieno
     assert closed is not None
     assert calls == ["BTCUSDT"]
+
+
+# ---- CONFERMA DEL FILL: la posizione nasce solo se esiste davvero --------- #
+def test_no_fill_means_no_position(scale_on):
+    """Il difetto storico: si piazzava un LIMIT e si ASSUMEVA il fill. Se il prezzo
+    scappa, il bot gestiva una posizione INESISTENTE — stop e TP su quantita' mai
+    comprata, PnL immaginario, e in chiusura un reduce-only che non riduce nulla."""
+    fake = FakeBinance(fill_ratio=0.0)
+    eng = _live_engine(fake)
+    pos = eng.open_position(_asset(100), "trend_following", Direction.LONG,
+                            _params(qty=1.0, stop=98))
+    assert pos is None                          # nessuna posizione
+    assert "BTCUSDT" not in eng.open_positions
+    assert fake.cancelled                       # l'ordine appeso e' stato cancellato
+    assert fake.of_type("STOP_MARKET") == []    # niente protezioni su qty inesistente
+
+
+def test_partial_fill_reconciles_to_the_real_quantity(scale_on):
+    """Fill al 70%: la posizione e' VALIDA ma piu' piccola, e stop/TP devono essere
+    piazzati sulla quantita' VERA, non su quella richiesta."""
+    fake = FakeBinance(fill_ratio=0.7)
+    eng = _live_engine(fake)
+    pos = eng.open_position(_asset(100), "breakout", Direction.LONG,
+                            _params(qty=1.0, stop=98))
+    assert pos is not None
+    assert abs(pos.quantity - 0.7) < 1e-9 and abs(pos.remaining_qty - 0.7) < 1e-9
+    stops = fake.of_type("STOP_MARKET")
+    assert abs(stops[-1]["quantity"] - 0.7) < 1e-9
+    tps = fake.of_type("TAKE_PROFIT_MARKET")
+    assert abs(sum(o["quantity"] for o in tps) - 0.7) < 1e-9   # scala sulla qty vera
+
+
+def test_tiny_fill_is_flattened_not_kept(scale_on):
+    """Sotto la soglia si rinuncia e si CHIUDE il residuo: lasciarlo aperto senza
+    protezioni sarebbe la cosa peggiore, e una posizione simbolica paga le fee
+    quanto una vera senza averne il potenziale."""
+    fake = FakeBinance(fill_ratio=0.1)
+    eng = _live_engine(fake)
+    pos = eng.open_position(_asset(100), "breakout", Direction.LONG,
+                            _params(qty=1.0, stop=98))
+    assert pos is None
+    market = [o for o in fake.orders if o.get("type") == "MARKET"]
+    assert market and market[-1]["reduceOnly"] is True     # residuo chiuso
+
+
+def test_entry_price_becomes_the_real_average(scale_on):
+    """Il prezzo d'ingresso vero cambia R e quindi TUTTA la scala di TP: usare
+    quello richiesto invece di quello eseguito falserebbe i livelli."""
+    fake = FakeBinance(fill_ratio=1.0, fill_price=100.5)
+    eng = _live_engine(fake)
+    pos = eng.open_position(_asset(100), "trend_following", Direction.LONG,
+                            _params(qty=1.0, stop=98))
+    assert pos is not None
+    assert pos.entry_price == 100.5
+    assert pos.high_water == 100.5
+    # R = 100.5 - 98 = 2.5 -> TP1 a 1.5R = 104.25 (non 103, che userebbe entry 100)
+    tps = fake.of_type("TAKE_PROFIT_MARKET")
+    assert abs(tps[0]["stopPrice"] - 104.25) < 1e-6
+
+
+def test_dry_run_never_waits_for_a_fill(scale_on):
+    """In paper la simulazione E' il fill: nessuna attesa, nessuna chiamata."""
+    fake = FakeBinance(fill_ratio=0.0)
+    eng = ExecutionEngine(firebase=FirebaseClient(), dry_run=True)
+    eng._client = fake
+    pos = eng.open_position(_asset(100), "trend_following", Direction.LONG,
+                            _params(qty=1.0, stop=98))
+    assert pos is not None and fake.orders == []
