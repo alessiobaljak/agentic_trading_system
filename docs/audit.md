@@ -1,5 +1,8 @@
 # AUDIT COMPLETO DEL SISTEMA
-_Ultimo aggiornamento: 2026-08-04 · 226 test verdi · 102 file sorgente_
+_Ultimo aggiornamento: 2026-08-04 (post blocchi A-D) · 249 test verdi_
+
+> **Blocchi A, B, C, D implementati.** Le voci risolte sono marcate ✅ RISOLTO
+> con il riferimento al commit. Restano aperte solo le voci elencate in §7.
 
 Stato di **ogni** logica, fase e attività. Legenda:
 **✅ verificato** · **⚠️ funziona con riserve** · **🔴 difetto/mancante** · **⛔ codice morto**
@@ -22,11 +25,11 @@ Stato di **ogni** logica, fase e attività. Legenda:
 | PF per-regime esportato | ✅ | alimenta il veto live |
 | Auto-purge dopo 2 fallimenti consecutivi | ✅ | |
 | Parità gate ↔ paper (costi, uscite, orizzonte) | ✅ | moduli condivisi, verificata riga per riga |
-| **Break-even dopo TP1 mai isolato in A/B** | ⚠️ | l'A/B confrontò TP-unico vs scale-out-con-BE: il BE non è mai stato testato da solo. Candidato per lo spazio di ricerca per coppia |
+| Break-even dopo TP1 | ✅ RISOLTO | `sl_to_breakeven` nella griglia [True, False], validato per coppia (C1) |
 | **Holdout consultato a ogni run** | ⚠️ | rolling mitiga, non azzera il riuso. Il vero OOS finale resta il paper |
-| Nessun requisito di profittabilità **per regime** | ⚠️ | il veto live copre, ma una coppia può validarsi vivendo di un solo regime |
-| Generatore: solo tecnico single-coin, stesso timeframe | ⚠️ | niente funding/stagionalità/multi-timeframe come feature |
-| Diversificazione di portafoglio | 🔴 | vedi §4 — non è compito del gate, ma **nessuno** la fa |
+| Profittabilità per regime | ✅ RISOLTO | `GATE_REGIME_MIN_PF`: nessun regime può essere un buco conclamato (C2) |
+| Generatore: feature di condizione | ✅ RISOLTO | volatilità, ADX, volume, sessione oraria (C3). Restano fuori: funding e multi-timeframe |
+| Diversificazione di portafoglio | ✅ RISOLTO | correlation guard collegato + tetto direzionale (blocco A) |
 
 **Traiettoria attuale**: 3%→28% copertura in 3 giorni, ~3 coppie promosse per run su 1432 valutate. Profili plausibili (PF 1.37–1.55, 94–305 trade), non più i PF 4+ della lotteria.
 
@@ -81,9 +84,9 @@ Stato di **ogni** logica, fase e attività. Legenda:
 | Kill switch a prezzi freschi | ✅ | |
 | Cap posizioni aperte (5) | ✅ | |
 | Cap margine per posizione | ✅ | |
-| **Correlation guard** | ⛔ **CODICE MORTO** | `bot/risk/correlation_guard.py` esiste, è documentato (max 3 posizioni correlate, soglia 0.85) ma **non è importato da nessun file**. Il bot può aprire 5 posizioni perfettamente correlate senza accorgersene |
-| **Macro agent** (flat ±2h su FOMC/CPI/NFP) | ⛔ **CODICE MORTO** | `bot/agents/macro_agent.py`, 0 import. Il bot trada dentro gli eventi macro |
-| Esposizione direzionale netta | 🔴 | nessun limite: 5 long su micro-cap correlate = una scommessa sola con size 5x |
+| **Correlation guard** | ✅ RISOLTO | collegato al percorso di apertura, cache prezzi 30 min, fail-open senza storico (A1) |
+| **Macro agent** | ✅ RIMOSSO | `upcoming_high_impact_events()` era un placeholder che ritornava `[]`: collegarlo non avrebbe fatto nulla. Il bot **non** si mette flat sugli eventi macro — serve una fonte di calendario (A3) |
+| Esposizione direzionale netta | ✅ RISOLTO | `MAX_DIRECTIONAL_RISK_PCT` 3%: somma il rischio vero nello stesso verso, usa lo stop ORIGINALE (A2) |
 
 > **Correzione a una mia affermazione precedente**: avevo detto che la diversificazione di portafoglio "la fa il cap di correlazione live". **Non è vero**: quel modulo non è collegato. È il difetto più serio emerso da questo audit.
 
@@ -96,9 +99,9 @@ Stato di **ogni** logica, fase e attività. Legenda:
 | Scala TP completa sul book | ✅ | un ordine per gradino, quote corrette, no dust |
 | Stop risincronizzato (BE / profit-lock) | ✅ | cancella-e-ripiazza, fallimento segnalato |
 | Cancellazione ordini orfani alla chiusura | ✅ | |
-| **Conferma dei fill** | 🔴 **BLOCCANTE** | il bot piazza un LIMIT e *assume* il fill: la posizione nasce senza verifica. Se il prezzo scappa, gestisce una posizione inesistente |
-| Riconciliazione quantità/prezzi reali | 🔴 | conseguenza del precedente |
-| Gestione fill parziali dell'ingresso | 🔴 | non prevista |
+| **Conferma dei fill (ingresso)** | ✅ RISOLTO | attesa + riconciliazione qty/prezzo reali; sotto soglia si chiude il residuo (B1) |
+| Riconciliazione quantità/prezzi (ingresso) | ✅ RISOLTO | entry = prezzo medio eseguito → R e scala TP corretti |
+| Fill parziali dell'ingresso | ✅ RISOLTO | sopra soglia riconcilia, sotto chiude il residuo |
 
 ---
 
@@ -113,12 +116,23 @@ Stato di **ogni** logica, fase e attività. Legenda:
 | Dashboard: operatività, equity, learning, trailing, sentiment | ✅ |
 | 9 workflow GitHub (test, optimize, discover, learning, snapshot, monitoring…) | ✅ |
 | 226 test | ✅ |
-| Falso "🔴 offline" durante gli scan lunghi | ⚠️ cosmetico (heartbeat >180s) |
+| Falso "🔴 offline" | ✅ RISOLTO | soglia 180s → 900s (D1) |
 | `backtesting/report.py` usato solo da `run.py` | ⚠️ marginale |
 
 ---
 
-## 7. PRIORITÀ SUGGERITE
+## 7. COSA RESTA APERTO (dopo A-D)
+
+| Voce | Stato | Nota |
+|---|---|---|
+| **Fill delle USCITE in live** | 🔴 **bloccante** | TP/SL scattati sull'exchange sono ancora *dedotti* dal prezzo, non letti. Va chiuso prima del reale |
+| Calibrazione costi dal vissuto | 🔴 | impossibile in DRY_RUN (il paper simula coi costi del modello). Disponibile dopo i fill reali |
+| Flat sugli eventi macro | 🔴 | serve una fonte di calendario economico |
+| Slippage d'ingresso | ⚠️ | non modellato, mitigato dal costo fisso |
+| Holdout consultato ogni run | ⚠️ | rolling mitiga, non azzera. Il vero OOS resta il paper |
+| Generatore: funding e multi-timeframe | ⚠️ | le feature di condizione ci sono, queste no |
+
+## 8. PRIORITÀ STORICHE (blocchi A-D — completati)
 
 **Blocco A — rischio (il più urgente, indipendente dal resto)**
 1. Collegare il **correlation guard** al percorso di apertura
