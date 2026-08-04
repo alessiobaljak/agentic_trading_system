@@ -140,6 +140,20 @@ class Settings:
     WEIGHT_RECOVERY_DAYS: float = float(os.getenv("WEIGHT_RECOVERY_DAYS", "30"))
     MAX_CORRELATED_POSITIONS: int = 3     # correlazione >0.85
     CORRELATION_THRESHOLD: float = 0.85
+    # Il correlation guard ESISTEVA ma non era collegato a nulla (audit 04/08): il
+    # bot poteva aprire 5 posizioni perfettamente correlate credendo di essere
+    # diversificato — una sola scommessa con size 5x. Ora e' nel percorso di
+    # apertura. FAIL-OPEN: se lo storico prezzi non e' disponibile non blocca.
+    CORRELATION_GUARD_ENABLED: bool = os.getenv("CORRELATION_GUARD_ENABLED", "true").lower() == "true"
+    # candele 1h usate per la correlazione (24 = un giorno)
+    CORRELATION_LOOKBACK_BARS: int = int(os.getenv("CORRELATION_LOOKBACK_BARS", "24"))
+    # ESPOSIZIONE DIREZIONALE: rischio massimo (frazione di equity) impegnato in
+    # posizioni della STESSA direzione. Il cap sul numero di posizioni non basta:
+    # 5 long correlati rischiano quanto un solo trade con size 5x. Qui si somma il
+    # rischio VERO di ciascuna (distanza dallo stop x quantita' residua).
+    # 0 = disattivato. Default 3% con rischio/trade all'1%: ~3 posizioni piene
+    # nello stesso verso, coerente col breaker giornaliero al 5%.
+    MAX_DIRECTIONAL_RISK_PCT: float = float(os.getenv("MAX_DIRECTIONAL_RISK_PCT", "0.03"))
 
     # ---- Anti-overfitting ----
     # Frazione di capitale SEMPRE su configurazione baseline non adattata.

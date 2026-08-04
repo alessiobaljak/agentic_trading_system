@@ -33,6 +33,7 @@ from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
 from bot.orchestrator import Orchestrator
 from bot.risk.circuit_breakers import CircuitBreakers
+from bot.risk.correlation_guard import CorrelationGuard
 from bot.risk.risk_manager import RiskManager
 
 
@@ -53,6 +54,9 @@ class TradingBot:
         self.orchestrator = Orchestrator(self.adaptation)
         self.circuit_breakers = CircuitBreakers.from_dict(self.fb.get_rtdb("/risk_state"))
         self.risk = RiskManager(self.circuit_breakers)
+        # guard di correlazione: era codice MORTO (0 import) fino all'audit del 04/08
+        self.corr_guard = CorrelationGuard()
+        self._price_cache: dict[str, tuple[float, list]] = {}   # symbol -> (ts, closes)
         self.executor = ExecutionEngine(self.fb)
         self.logger = TradeLogger(self.fb)
         self.notifier = TelegramNotifier()
@@ -99,6 +103,61 @@ class TradingBot:
         chiude il suo margine si LIBERA subito e torna disponibile per nuovi trade."""
         return sum(p.remaining_qty * p.entry_price / max(p.leverage, 1.0)
                    for p in self.executor.open_positions.values())
+
+    def _price_series(self, symbol: str, max_age_s: float = 1800.0) -> list:
+        """Chiusure orarie recenti per la correlazione, con cache breve.
+
+        Senza cache servirebbero N+1 chiamate a ogni decisione; con le posizioni
+        aperte che cambiano di rado, mezz'ora di validita' e' abbondante."""
+        now = time.time()
+        hit = self._price_cache.get(symbol)
+        if hit and now - hit[0] < max_age_s:
+            return hit[1]
+        try:
+            candles = self.price.get_candles(symbol, "1h",
+                                             limit=settings.CORRELATION_LOOKBACK_BARS)
+        except Exception:  # noqa: BLE001
+            return []
+        closes = [c.close for c in candles]
+        self._price_cache[symbol] = (now, closes)
+        return closes
+
+    def _correlation_blocks(self, symbol: str) -> str | None:
+        """Motivo del blocco se aprire `symbol` creerebbe un grappolo di posizioni
+        correlate, altrimenti None. FAIL-OPEN: senza storico non blocca nulla."""
+        if not settings.CORRELATION_GUARD_ENABLED or not self.executor.open_positions:
+            return None
+        cand = self._price_series(symbol)
+        if len(cand) < 3:
+            return None
+        opens = {sym: self._price_series(sym)
+                 for sym in self.executor.open_positions if sym != symbol}
+        opens = {k: v for k, v in opens.items() if len(v) >= 3}
+        if not opens:
+            return None
+        ok, reason = self.corr_guard.can_open(symbol, cand, opens)
+        return None if ok else reason
+
+    def _directional_risk_blocks(self, direction, add_risk: float) -> str | None:
+        """Motivo del blocco se il rischio nello STESSO verso supererebbe il tetto.
+
+        Il cap sul NUMERO di posizioni non protegge: 5 long correlati rischiano
+        quanto un unico trade con size 5x. Qui si somma il rischio vero di ognuna
+        (distanza dallo stop ORIGINALE x quantita' residua)."""
+        cap = settings.MAX_DIRECTIONAL_RISK_PCT
+        if cap <= 0:
+            return None
+        eq = self.account_equity()
+        if eq <= 0:
+            return None
+        same = sum(abs(p.entry_price - (p.orig_stop or p.stop_price)) * p.remaining_qty
+                   for p in self.executor.open_positions.values()
+                   if p.direction == direction)
+        total = (same + max(0.0, add_risk)) / eq
+        if total > cap:
+            return (f"rischio direzionale {total*100:.1f}% > tetto {cap*100:.1f}% "
+                    f"({direction.value}: gia' {same/eq*100:.1f}% impegnato)")
+        return None
 
     def _sync_stream_symbols(self) -> None:
         """Tiene lo stream iscritto ESATTAMENTE ai simboli con posizioni aperte."""
@@ -481,6 +540,14 @@ class TradingBot:
             self._publish_decision_status({"outcome": "flat", "reason": "snapshot asset mancante"})
             return
 
+        # DIVERSIFICAZIONE: aprire la 5a posizione correlata alle altre 4 non e'
+        # diversificare, e' quintuplicare la stessa scommessa. Guard collegato
+        # all'audit del 04/08 (prima era codice morto).
+        corr_reason = self._correlation_blocks(decision.asset)
+        if corr_reason:
+            self._publish_decision_status({"outcome": "flat", "reason": corr_reason})
+            return
+
         # sentiment/social SOLO per la coin che sta per essere tradata.
         try:
             sent = self.sentiment.get_sentiment(decision.asset)
@@ -512,6 +579,17 @@ class TradingBot:
             print(f"[main] trade bloccato dal gate: {params.reject_reason}")
             self._publish_decision_status(
                 {"outcome": "flat", "reason": f"bloccato dal risk gate: {params.reject_reason}"})
+            return
+
+        # ESPOSIZIONE DIREZIONALE: qui il rischio del trade e' noto (distanza dallo
+        # stop x quantita'), quindi si puo' sommare a quello gia' impegnato nello
+        # stesso verso. Il cap sul NUMERO di posizioni non protegge da 5 scommesse
+        # identiche; questo si'.
+        trade_risk = abs(asset.price - params.stop_price) * params.quantity
+        dir_reason = self._directional_risk_blocks(decision.direction, trade_risk)
+        if dir_reason:
+            print(f"[main] trade bloccato: {dir_reason}")
+            self._publish_decision_status({"outcome": "flat", "reason": dir_reason})
             return
 
         # REALISMO PRODUZIONE: Binance rifiuta l'ordine se il margine libero non copre

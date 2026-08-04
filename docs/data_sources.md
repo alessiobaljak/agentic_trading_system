@@ -34,3 +34,15 @@ indicata per la validazione 2022–2026.
 ## Rate limit
 Il `MarketScanner` limita gli asset scansionati per ciclo (`max_symbols`, default
 60) per non saturare i rate limit pur coprendo l'universo dei più liquidi.
+
+
+## Macro/news — NON implementato (rimosso 04/08/2026)
+`bot/agents/macro_agent.py` esisteva ma non era importato da nessun file, e il
+suo `upcoming_high_impact_events()` era un **placeholder che ritornava `[]`**:
+collegarlo non avrebbe prodotto alcun effetto. E' stato rimosso perche' codice
+morto documentato come protezione e' peggio di una protezione assente — fa
+credere che il rischio sia coperto.
+
+**Conseguenza da conoscere**: il bot **non** si mette flat attorno a FOMC/CPI/NFP.
+Per implementarlo servirebbe una fonte di calendario economico (Investing.com,
+ForexFactory) e poi l'aggancio ai circuit breaker.
