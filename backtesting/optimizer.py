@@ -200,8 +200,9 @@ class WalkForwardOptimizer:
 
             pf = oos.profit_factor()
             pnl = oos.total_pnl_pct()
+            reg_pf = pf_by_regime(oos.trades)
             passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
-                                 max_dd=max_drawdown(oos.trades))
+                                 max_dd=max_drawdown(oos.trades), regime_pf=reg_pf)
             # VERIFICA FINALE sull'holdout, solo se le finestre sono superate e coi
             # parametri che verrebbero spediti (l'ultimo best del walk-forward).
             hold: dict = {}
@@ -215,7 +216,7 @@ class WalkForwardOptimizer:
                 oos_pf=round(pf, 3), oos_pnl_pct=round(pnl, 4),
                 oos_trades=len(oos.trades), oos_win_rate=round(oos.win_rate(), 3),
                 passed=passed, trailing=oos.trailing_counts(), params_history=history,
-                holdout=hold, regime_pf=pf_by_regime(oos.trades),
+                holdout=hold, regime_pf=reg_pf,
                 data_end=(candles[-1].open_time.timestamp() if candles else 0.0),
             ))
         return results

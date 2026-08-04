@@ -300,6 +300,12 @@ class Settings:
     # dati per-regime (coppie non ancora ri-validate) non blocca nulla.
     REGIME_FILTER_ENABLED: bool = os.getenv("REGIME_FILTER_ENABLED", "true").lower() == "true"
     GATE_REGIME_MIN_TRADES: int = int(os.getenv("GATE_REGIME_MIN_TRADES", "10"))
+    # Una coppia poteva validarsi vivendo di UN SOLO regime: profitto enorme in
+    # trend, perdite in laterale, totale positivo -> passava. Poi il paper la
+    # trovava in laterale e perdeva. Qui si esige che NESSUN regime con campione
+    # sufficiente sia in perdita marcata (il veto live resta la seconda rete).
+    # 0 = disattivato.
+    GATE_REGIME_MIN_PF: float = float(os.getenv("GATE_REGIME_MIN_PF", "0.8"))
 
     # ---- RILEVATORE DI DERIVA (anello paper -> gate) ----
     # Il gate promette (PF validato, TP raggiungibili); il paper misura il vissuto.

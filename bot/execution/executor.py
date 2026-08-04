@@ -32,7 +32,7 @@ from bot.core.models import (
     AssetSnapshot, ClosedTrade, Direction, EffectiveRiskParams, ExitReason, Regime,
 )
 from bot.execution.exit_logic import (
-    locked_stop, scale_ladder, scale_fills, mfe_in_r,
+    locked_stop, scale_ladder, scale_fills, mfe_in_r, breakeven_after_tp1,
 )
 
 
@@ -81,6 +81,9 @@ class Position:
     # altri numeri e in live gli ordini sul book non corrisponderebbero piu'.
     # None -> default globale (SCALE_OUT_R_MULTIPLES).
     scale_r_mults: Optional[tuple] = None
+    # BE dopo TP1 VALIDATO per questa coppia, congelato all'ingresso come la scala:
+    # non e' una scelta ovvia (protegge, ma taglia i runner) e ora la decide il gate
+    sl_to_breakeven: Optional[bool] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -151,6 +154,7 @@ class ExecutionEngine:
         params: EffectiveRiskParams,
         confidence: Optional[float] = None,
         scale_r_mults: Optional[tuple] = None,
+        sl_to_breakeven: Optional[bool] = None,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved)."""
         if not params.approved or params.quantity <= 0:
@@ -170,6 +174,7 @@ class ExecutionEngine:
             atr=(ind15.atr if ind15 and ind15.atr else 0.0),
             spread_cost=liquidity_spread(asset.volume_24h),   # == costo backtest
             scale_r_mults=tuple(scale_r_mults) if scale_r_mults else None,
+            sl_to_breakeven=sl_to_breakeven,
         )
 
         if self.dry_run:
@@ -444,7 +449,9 @@ class ExecutionEngine:
                 for price, frac in partials:
                     self._partial_close(pos, price, pos.quantity * frac)
                 pos.scale_stage = new_stage
-                if settings.SCALE_OUT_SL_TO_BREAKEVEN:
+                _be = (pos.sl_to_breakeven if pos.sl_to_breakeven is not None
+                       else settings.SCALE_OUT_SL_TO_BREAKEVEN)
+                if _be:
                     pos.stop_price = pos.entry_price   # break-even sul residuo
                 if reached_final:
                     last_price = fills[-1][0]
@@ -676,6 +683,7 @@ class ExecutionEngine:
             # stato scale-out (per non perdere fette/BE dopo un riavvio)
             "sl_order_id": pos.sl_order_id, "exchange_stop": pos.exchange_stop,
             "scale_r_mults": list(pos.scale_r_mults) if pos.scale_r_mults else None,
+            "sl_to_breakeven": pos.sl_to_breakeven,
             "scale_stage": pos.scale_stage, "realized_gross": pos.realized_gross,
             "realized_net": pos.realized_net,
             "orig_stop": pos.orig_stop,
@@ -750,6 +758,8 @@ class ExecutionEngine:
         # ripartirebbe con TP diversi da quelli con cui e' stata aperta
         _sm = p.get("scale_r_mults")
         pos.scale_r_mults = tuple(float(x) for x in _sm) if _sm else None
+        _be = p.get("sl_to_breakeven")
+        pos.sl_to_breakeven = bool(_be) if _be is not None else None
         pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
         return pos
 

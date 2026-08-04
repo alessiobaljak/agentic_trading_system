@@ -27,7 +27,8 @@ from bot.agents.price_stream import PriceStream
 from bot.agents.regime_detector import RegimeDetector
 from bot.agents.sentiment_agent import SentimentAgent
 from bot.execution.executor import ExecutionEngine
-from bot.execution.exit_logic import ladder_multiples, trailing_reason
+from bot.execution.exit_logic import (breakeven_after_tp1, ladder_multiples,
+                                      trailing_reason)
 from bot.execution.notifier import TelegramNotifier
 from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
@@ -611,7 +612,8 @@ class TradingBot:
         _sparams = self.adaptation.params_for(asset.symbol).get(decision.strategy, {})
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,
                                           params, confidence=decision.confidence,
-                                          scale_r_mults=ladder_multiples(_sparams))
+                                          scale_r_mults=ladder_multiples(_sparams),
+                                          sl_to_breakeven=breakeven_after_tp1(_sparams))
         if pos is not None:
             self._sync_stream_symbols()
             # i prezzi accumulati PRIMA dell'ingresso non possono riempire i suoi TP

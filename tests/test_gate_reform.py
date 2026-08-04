@@ -299,3 +299,92 @@ def test_weighted_return_stays_on_the_same_scale(monkeypatch):
     trades = [_TT(0.02, d) for d in (0, 30, 60, 90, 120)]
     pnl_w, _ = weighted_score_parts(trades)
     assert pnl_w == pytest.approx(sum(t.pnl_pct for t in trades), rel=1e-9)
+
+
+# ---- BLOCCO C: BE per coppia, regime, feature di condizione --------------- #
+def test_breakeven_is_validated_per_pair(monkeypatch):
+    """Il BE dopo TP1 non era mai stato isolato in A/B (si confronto' TP-unico vs
+    scale-out-CON-BE). Protegge ma taglia i runner: ora lo decide il gate."""
+    from bot.execution.exit_logic import breakeven_after_tp1, effective_param_grid
+    monkeypatch.setattr(settings, "SCALE_OUT_ENABLED", True)
+    monkeypatch.setattr(settings, "SCALE_OUT_SL_TO_BREAKEVEN", True)
+    assert breakeven_after_tp1({"sl_to_breakeven": False}) is False
+    assert breakeven_after_tp1({"sl_to_breakeven": True}) is True
+    assert breakeven_after_tp1(None) is True          # assente -> default globale
+    assert effective_param_grid({"rr": [1.5, 2.0]})["sl_to_breakeven"] == [True, False]
+
+
+def test_position_freezes_its_breakeven_choice(monkeypatch):
+    """Come la scala: congelato all'ingresso, altrimenti una passata cambierebbe
+    il comportamento di un trade gia' aperto."""
+    from bot.core.firebase_client import FirebaseClient
+    from bot.core.models import (AssetSnapshot, Direction, EffectiveRiskParams,
+                                 IndicatorSnapshot, Regime)
+    from bot.execution.executor import ExecutionEngine
+    monkeypatch.setattr(settings, "SCALE_OUT_ENABLED", True)
+    monkeypatch.setattr(settings, "SCALE_OUT_SL_TO_BREAKEVEN", True)
+    eng = ExecutionEngine(firebase=FirebaseClient(), dry_run=True)
+    asset = AssetSnapshot(symbol="BTCUSDT", price=100.0, regime=Regime.BULL_TRENDING,
+                          volume_24h=5e8,
+                          indicators={"15m": IndicatorSnapshot(timeframe="15m", atr=2.0, close=100.0)})
+    prm = EffectiveRiskParams(leverage=3.0, risk_per_trade=0.01, notional=100.0,
+                              quantity=1.0, stop_price=98.0, take_profit_price=104.0,
+                              user_leverage=3, user_risk_per_trade=0.01,
+                              safety_leverage_cap=5, safety_risk_cap=0.03, approved=True)
+    eng.open_position(asset, "trend_following", Direction.LONG, prm, sl_to_breakeven=False)
+    pos = eng.open_positions["BTCUSDT"]
+    eng.update_position("BTCUSDT", 103.0)             # TP1
+    assert pos.scale_stage == 1
+    assert pos.stop_price == 98.0                     # NON spostato a break-even
+    state = eng.fb.get_rtdb("/positions/BTCUSDT")
+    assert state["sl_to_breakeven"] is False
+    assert eng._position_from_state(state).sl_to_breakeven is False
+
+
+def test_gate_rejects_a_pair_that_bleeds_in_one_regime(monkeypatch):
+    """Una coppia poteva validarsi vivendo di UN solo regime: profitto enorme in
+    trend, perdite in laterale, totale positivo -> promossa. Poi il paper la
+    incontrava in laterale. Non si pretende profitto ovunque: si esige che nessun
+    regime con campione sufficiente sia un buco conclamato."""
+    from backtesting.engine import passes_gate, regime_ok
+    monkeypatch.setattr(settings, "GATE_REGIME_MIN_PF", 0.8)
+    monkeypatch.setattr(settings, "GATE_REGIME_MIN_TRADES", 10)
+    good = dict(window_pnls=[0.10, 0.08, 0.12], n_trades=40, pf=1.4,
+                win_rate=0.55, total_return=0.30, max_dd=0.10)
+    bleeding = {"bull_trending": {"pf": 3.0, "trades": 30},
+                "sideways": {"pf": 0.4, "trades": 25}}
+    assert regime_ok(bleeding) is False
+    assert passes_gate(**good, regime_pf=bleeding) is False
+    healthy = {"bull_trending": {"pf": 1.6, "trades": 30},
+               "sideways": {"pf": 1.1, "trades": 25}}
+    assert passes_gate(**good, regime_pf=healthy) is True
+    # campione piccolo -> non blocca; assente -> non blocca
+    small = {"sideways": {"pf": 0.1, "trades": 3}}
+    assert passes_gate(**good, regime_pf=small) is True
+    assert passes_gate(**good) is True
+
+
+def test_generator_creates_market_condition_features():
+    """Il generatore era solo oscillatori sullo stesso timeframe: sapeva DOVE sta
+    il prezzo, mai in che CONDIZIONE e' il mercato."""
+    from bot.strategies.generator import generate_specs
+    from bot.strategies.generated import FEATURE_LIBRARY
+    cond = {"volatility_regime", "trend_strength", "volume_surge", "session"}
+    assert cond <= set(FEATURE_LIBRARY)
+    specs = generate_specs(200, seed=11)
+    with_cond = [s for s in specs if any(f["kind"] in cond for f in s["features"])]
+    assert 0.2 * len(specs) < len(with_cond) < 0.8 * len(specs)   # mix, non monocultura
+    assert all(1 <= len(s["features"]) <= 3 for s in specs)       # tetto rispettato
+
+
+def test_condition_features_return_a_valid_verdict():
+    """Ogni feature deve dare (long, short) o None se i dati mancano."""
+    from bot.core.models import IndicatorSnapshot
+    from bot.strategies.generated import FEATURE_LIBRARY
+    full = IndicatorSnapshot(timeframe="15m", close=100.0, atr=2.0, adx=25.0,
+                             volume=1000.0, volume_sma=500.0)
+    empty = IndicatorSnapshot(timeframe="15m", close=100.0)
+    for name in ("volatility_regime", "trend_strength", "volume_surge", "session"):
+        out = FEATURE_LIBRARY[name](full, 100.0, {})
+        assert out is not None and len(out) == 2
+        assert FEATURE_LIBRARY[name](empty, 100.0, {}) is not None or name != "session"

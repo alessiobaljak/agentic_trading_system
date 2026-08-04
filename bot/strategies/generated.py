@@ -119,6 +119,48 @@ def _feat_stoch_momentum(i: IndicatorSnapshot, price: float, f: dict):
     return (i.stoch_k > i.stoch_d, i.stoch_k < i.stoch_d)
 
 
+def _feat_volatility_regime(i: IndicatorSnapshot, price: float, f: dict):
+    """VOLATILITA' RELATIVA (ATR/prezzo) sopra/sotto una soglia.
+
+    Aggiunta perche' il generatore era interamente fatto di oscillatori sullo
+    stesso timeframe: sapeva DOVE sta il prezzo, mai in che CONDIZIONE e' il
+    mercato. Le stesse soglie RSI significano cose diverse a volatilita' 0.5% o 5%."""
+    if i.atr is None or price <= 0:
+        return None
+    vol = i.atr / price
+    hi = f.get("vol_pct", 0.02)
+    return (vol < hi, vol >= hi)      # (calmo, agitato): filtro di CONDIZIONE
+
+
+def _feat_trend_strength(i: IndicatorSnapshot, price: float, f: dict):
+    """ADX sopra/sotto soglia: distingue mercato che TENDE da mercato che oscilla.
+    Con lo scale-out conta molto: i gradini alti si raggiungono solo se tende."""
+    if i.adx is None:
+        return None
+    lo = f.get("adx_lo", 20.0)
+    return (i.adx >= lo, i.adx < lo)
+
+
+def _feat_volume_surge(i: IndicatorSnapshot, price: float, f: dict):
+    """Volume sopra la sua media per un fattore: partecipazione reale al movimento
+    (un breakout senza volume e' spesso rumore)."""
+    if i.volume is None or not i.volume_sma:
+        return None
+    mult = f.get("vol_mult_feat", 1.5)
+    return (i.volume >= i.volume_sma * mult, i.volume < i.volume_sma * mult)
+
+
+def _feat_session(i: IndicatorSnapshot, price: float, f: dict):
+    """SESSIONE oraria (UTC): la crypto non e' uniforme nelle 24h — la sessione
+    asiatica e quella US hanno liquidita' e comportamenti diversi. Primo elemento
+    NON tecnico del generatore."""
+    from datetime import datetime, timezone
+    h = datetime.now(timezone.utc).hour
+    lo, hi = f.get("hour_from", 12), f.get("hour_to", 21)
+    inside = (lo <= h < hi) if lo <= hi else (h >= lo or h < hi)
+    return (inside, not inside)
+
+
 # nome feature -> (funzione, è_direzionale). Le non direzionali sono filtri.
 FEATURE_LIBRARY = {
     "rsi_extreme": _feat_rsi_extreme,
@@ -135,6 +177,11 @@ FEATURE_LIBRARY = {
     "price_bb_mid": _feat_price_bb_mid,
     "stoch_extreme": _feat_stoch_extreme,
     "stoch_momentum": _feat_stoch_momentum,
+    # --- CONDIZIONE di mercato (non direzionali): dicono QUANDO operare, non dove
+    "volatility_regime": _feat_volatility_regime,
+    "trend_strength": _feat_trend_strength,
+    "volume_surge": _feat_volume_surge,
+    "session": _feat_session,
 }
 
 

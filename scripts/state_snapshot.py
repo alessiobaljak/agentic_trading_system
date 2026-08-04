@@ -34,7 +34,11 @@ def build() -> str:
     # --- stato bot (RTDB) ---
     status = fb.get_rtdb("/bot_status") or {}
     hb = status.get("heartbeat")
-    online = hb and (time.time() - float(hb) < 180)
+    # 900s (era 180): il market scan tocca 200 coin con pacing e puo' durare
+    # minuti, durante i quali l'heartbeat non si aggiorna. A 180s il bot risultava
+    # "offline" mentre stava lavorando — falso allarme ricorrente. Il tick e' 30s,
+    # quindi 15 minuti di silenzio restano un segnale vero di blocco.
+    online = hb and (time.time() - float(hb) < 900)
     equity = fb.get_rtdb("/account/equity")
     eq_str = f"${float(equity):,.2f}" if equity is not None else "—"
     lines += [

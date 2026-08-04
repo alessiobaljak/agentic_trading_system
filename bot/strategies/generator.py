@@ -32,6 +32,15 @@ _INCOMPATIBLE = {
     frozenset({"stoch_extreme", "stoch_momentum"}),
 }
 
+# feature di CONDIZIONE (non danno la direzione: dicono quando operare). Erano
+# assenti: il generatore combinava solo oscillatori sullo stesso timeframe, quindi
+# sapeva dove sta il prezzo ma mai in che condizione e' il mercato.
+_CONDITIONAL = ["volatility_regime", "trend_strength", "volume_surge", "session"]
+_VOL_PCT = [0.01, 0.02, 0.03]
+_ADX_LO = [18.0, 22.0, 28.0]
+_VOL_MULT_FEAT = [1.2, 1.5, 2.0]
+_SESSIONS = [(0, 8), (8, 16), (12, 21), (16, 24)]
+
 _RSI_LOW = [20.0, 25.0, 30.0, 35.0]
 _RSI_HIGH = [65.0, 70.0, 75.0, 80.0]
 _RSI_MID = [45.0, 50.0, 55.0]
@@ -53,6 +62,14 @@ def _feature_with_params(kind: str, rng: random.Random) -> dict:
     elif kind == "stoch_extreme":
         f["low"] = rng.choice(_STOCH_LOW)
         f["high"] = rng.choice(_STOCH_HIGH)
+    elif kind == "volatility_regime":
+        f["vol_pct"] = rng.choice(_VOL_PCT)
+    elif kind == "trend_strength":
+        f["adx_lo"] = rng.choice(_ADX_LO)
+    elif kind == "volume_surge":
+        f["vol_mult_feat"] = rng.choice(_VOL_MULT_FEAT)
+    elif kind == "session":
+        f["hour_from"], f["hour_to"] = rng.choice(_SESSIONS)
     return f
 
 
@@ -83,8 +100,16 @@ def generate_specs(n: int, seed: int = 0, max_features: int = 3) -> list[dict]:
     attempts = 0
     while len(out) < n and attempts < n * 40:
         attempts += 1
-        k = rng.randint(1, max_features)
+        # con probabilita' 1/2 la spec include una feature di CONDIZIONE (volatilita',
+        # forza del trend, volume, sessione). Non da' la direzione: dice QUANDO la
+        # direzione vale. Meta' delle spec resta puramente direzionale, cosi' il
+        # confronto tra i due stili lo fa il gate, non una scelta a priori.
+        # La condizione occupa uno degli slot: il tetto max_features resta invariato.
+        add_cond = rng.random() < 0.5
+        k = rng.randint(1, max(1, max_features - (1 if add_cond else 0)))
         kinds = rng.sample(_DIRECTIONAL, k)
+        if add_cond:
+            kinds.append(rng.choice(_CONDITIONAL))
         if not _coherent(kinds):
             continue
         spec = _build_spec(kinds, rng)

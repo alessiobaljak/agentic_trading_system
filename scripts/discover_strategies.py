@@ -101,8 +101,9 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
             window_pnls.append(sum(t.pnl_pct for t in st.trades))
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()
+    reg_pf = pf_by_regime(oos.trades)
     passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
-                         max_dd=max_drawdown(oos.trades))
+                         max_dd=max_drawdown(oos.trades), regime_pf=reg_pf)
 
     # SCALA DI TP PER-COPPIA anche per le GENERATE. Le classiche la scelgono nella
     # grid search; le generate non hanno grid -> senza questo passo restavano per
@@ -136,7 +137,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     return {
         "pf": round(pf, 3), "pnl": round(pnl, 4),
         "trades": len(oos.trades), "win": round(oos.win_rate(), 3), "passed": passed,
-        "holdout": hold, "regime_pf": pf_by_regime(oos.trades),
+        "holdout": hold, "regime_pf": reg_pf,
         "scale_r_mults": best_ladder,
         "data_end": (candles[-1].open_time.timestamp() if candles else 0.0),
     }

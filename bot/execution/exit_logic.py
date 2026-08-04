@@ -85,6 +85,20 @@ def scale_ladder(entry: float, base_stop: float, long: bool,
     return out
 
 
+def breakeven_after_tp1(params: dict | None) -> bool:
+    """Se spostare lo stop a BREAK-EVEN dopo il primo TP, per QUESTA coppia.
+
+    Non e' una scelta ovvia e non era mai stata isolata: l'A/B confronto' TP-unico
+    vs scale-out-CON-BE, quindi il BE non e' mai stato testato da solo. I dati lo
+    rendono ambiguo: protegge (un ritorno a entry dopo il TP1 diventa +0.3R invece
+    di -0.55R) ma taglia i runner (con mfe mediana ~1.1R il prezzo ritocca l'entry
+    di continuo). Quale prevalga dipende dalla coppia -> lo decide il gate.
+    Assente nei params -> default globale (comportamento storico)."""
+    if params is not None and "sl_to_breakeven" in params:
+        return bool(params["sl_to_breakeven"])
+    return settings.SCALE_OUT_SL_TO_BREAKEVEN
+
+
 def effective_param_grid(grid: dict) -> dict:
     """Griglia di ricerca EFFETTIVA per una strategia, in base al modello di uscita.
 
@@ -99,6 +113,8 @@ def effective_param_grid(grid: dict) -> dict:
         return grid
     out = {k: v for k, v in grid.items() if k != "rr"}
     out["scale_r_mults"] = list(SCALE_LADDER_CANDIDATES)
+    # il BE dopo TP1 e' un'ipotesi, non una certezza: si valida per coppia
+    out["sl_to_breakeven"] = [True, False]
     return out
 
 

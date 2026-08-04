@@ -26,6 +26,7 @@ from bot.core.models import AssetSnapshot, Candle, Direction, Regime
 from bot.config import settings
 from bot.execution.exit_logic import (
     locked_stop, scale_ladder, scale_fills, ladder_multiples, mfe_in_r,
+    breakeven_after_tp1,
 )
 from bot.strategies import get_all_strategies
 from bot.strategies.base import StrategyContext
@@ -93,9 +94,31 @@ def weighted_score_parts(trades) -> tuple[float, float]:
     return pnl, pf
 
 
+def regime_ok(regime_pf: dict | None) -> bool:
+    """False se ESISTE un regime, con campione sufficiente, in perdita marcata.
+
+    Senza questo una coppia poteva validarsi vivendo di un solo regime: profitto
+    enorme in trend, perdite in laterale, totale positivo -> promossa. Poi il paper
+    la incontrava in laterale e perdeva. Non si pretende profitto ovunque (sarebbe
+    troppo), si esige che nessun regime sia un buco conclamato."""
+    if not regime_pf or settings.GATE_REGIME_MIN_PF <= 0:
+        return True
+    for rec in regime_pf.values():
+        if not isinstance(rec, dict):
+            continue
+        try:
+            n, pf = int(rec.get("trades", 0)), float(rec.get("pf", 99))
+        except (TypeError, ValueError):
+            continue
+        if n >= settings.GATE_REGIME_MIN_TRADES and pf < settings.GATE_REGIME_MIN_PF:
+            return False
+    return True
+
+
 def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
                 win_rate: float, total_return: float,
-                max_dd: float | None = None) -> bool:
+                max_dd: float | None = None,
+                regime_pf: dict | None = None) -> bool:
     """
     Verdetto GATE 1 per una coppia (coin, strategia), fuori campione (OOS).
     Tutte le condizioni (soglie in config) devono valere:
@@ -124,6 +147,8 @@ def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
     if max_dd is not None and max_dd > 0:
         if total_return / max_dd < settings.GATE_MIN_RECOVERY:
             return False
+    if not regime_ok(regime_pf):
+        return False
     return True
 # soglia di liquidazione approssimata: ~ (1/leva) meno un buffer di mantenimento
 MAINTENANCE_BUFFER = 0.005
@@ -463,7 +488,7 @@ class Backtester:
                         realized_pct += frac * ret
                         taken += frac
                         exit_price = price
-                    if fills and settings.SCALE_OUT_SL_TO_BREAKEVEN:
+                    if fills and breakeven_after_tp1(getattr(strategy, "params", None)):
                         stop_base = entry   # break-even sul residuo dopo il primo TP
                     if stage >= len(ladder):
                         done = True
