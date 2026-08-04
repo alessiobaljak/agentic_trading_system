@@ -136,7 +136,46 @@ def build() -> str:
         lines.append("_Nessun risultato di ottimizzazione ancora presente su Firebase._")
     lines.append("")
     lines += _closed_trades_section(fb)
+    lines += _drift_section(fb)
     return "\n".join(lines)
+
+
+def _drift_section(fb) -> list[str]:
+    """Deriva: dove il VISSUTO contraddice la PROMESSA del gate. E' l'anello di
+    ritorno paper -> gate, quindi va visto senza SSH."""
+    try:
+        doc = fb.get_doc("drift", "current") or {}
+    except Exception as exc:  # noqa: BLE001
+        return ["## Deriva paper vs gate", f"_non leggibile: {exc}_", ""]
+    if not doc or not (doc.get("pairs") or doc.get("strategies")):
+        return ["## Deriva paper vs gate",
+                "_nessun verdetto ancora: servono trade chiusi su coppie validate._", ""]
+    out = ["## Deriva paper vs gate",
+           "_il gate promette sulla storia, il paper misura il presente. `drift` = "
+           "promessa contraddetta -> size/leva frenate subito e fallimento al gate "
+           "alla prossima passata._", ""]
+    g = doc.get("global") or {}
+    if g:
+        out += [f"- **globale**: {g.get('verdict', '—')} · {g.get('trades', 0)} trade · "
+                f"PF vissuto {g.get('live_pf')} vs {g.get('expected_pf')} atteso"
+                + (f" · mfe mediana {g['mfe_median']}R" if g.get("mfe_median") else ""), ""]
+    rows = [(k, v) for k, v in (doc.get("pairs") or {}).items()
+            if v.get("verdict") in ("drift", "watch")]
+    rows.sort(key=lambda kv: (kv[1]["verdict"] != "drift", -kv[1].get("trades", 0)))
+    if rows:
+        out += ["| Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |",
+                "|---|---|---|---|---|"]
+        for k, v in rows[:20]:
+            out.append(f"| {k} | {v['verdict']} | {v['trades']} | "
+                       f"{v['live_pf']} / {v['expected_pf']} | {v['reason']} |")
+        out.append("")
+    strat = [(k, v) for k, v in (doc.get("strategies") or {}).items()
+             if v.get("verdict") == "drift"]
+    if strat:
+        out += ["- strategie in deriva: "
+                + ", ".join(f"**{k}** ({v['trades']} trade, PF {v['live_pf']})"
+                            for k, v in strat), ""]
+    return out
 
 
 _EXIT_LABEL = {

@@ -504,7 +504,7 @@ class TradingBot:
         user = self.read_user_risk()
         rmult, lmult, alloc_note = self.adaptation.allocation(
             decision.strategy, asset.regime or self.regime or Regime.SIDEWAYS,
-            decision.confidence)
+            decision.confidence, drift_key=(asset.symbol, decision.strategy))
         params = self.risk.evaluate(decision, user, asset, self.account_equity(),
                                     volatility_sigma=self._volatility_sigma(asset),
                                     risk_mult=rmult, lev_mult=lmult, alloc_note=alloc_note)
@@ -671,6 +671,31 @@ class TradingBot:
             print(f"[main] verdetto trailing assegnato a {done} trade paper")
 
     # ------------------------------------------------------------------ #
+    def _publish_drift(self, trades: list[dict]) -> None:
+        """Confronta il vissuto del paper con la promessa del gate e pubblica i
+        verdetti su `drift/current`. Da li' due strade:
+          * SUBITO: adaptation frena size/leva delle coppie in deriva (allocation);
+          * alla passata successiva: optimize/discover leggono le derive CONFERMATE
+            e le contano come fallimento -> auto-purge se anche la storia le boccia.
+        E' l'anello che mancava: il paper non tara i parametri (li consumerebbe come
+        training set) ma FALSIFICA cio' che il gate aveva promesso."""
+        if not settings.DRIFT_ENABLED:
+            return
+        try:
+            from bot.core.firebase_client import decode_pairs
+            from bot.learning.drift import compute_drift, drifted_keys
+            reg = self.fb.get_doc("strategy_registry", "validated") or {}
+            doc = compute_drift(trades, decode_pairs(reg.get("pairs")))
+            doc["updated_at"] = time.time()
+            self.fb.set_doc("drift", "current", doc)
+            self.adaptation._drift = doc          # effetto immediato, senza reload
+            n = len(drifted_keys(doc))
+            if n:
+                print(f"[drift] {n} coppie in deriva confermata -> size/leva frenate, "
+                      f"evidenza al gate alla prossima passata")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[drift] calcolo saltato: {exc}")
+
     def refresh_weights(self, now: float) -> None:
         """Ricalcola i pesi strategia×regime dai TRADE su Firestore (nessun Binance)
         e li salva. Stessa identica logica del job notturno (finestra 30g,
@@ -685,6 +710,12 @@ class TradingBot:
                 self.adaptation.save_weights(weights)   # save_weights ricarica anche in RAM
                 print(f"[main] pesi ricalcolati: {len(weights)} coppie strat×regime "
                       f"da {len(trades)} trade (30g)")
+            # DERIVA dopo i pesi e in un try SUO: e' diagnostica, un suo errore non
+            # deve mai impedire il ricalcolo dei pesi (che e' il learning primario).
+            try:
+                self._publish_drift(trades)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[drift] pubblicazione saltata: {exc}")
             # B2 — il TRAILING impara: keep del profit-lock per-strategia dai verdetti
             # (premature/protected + rumore vs inversione). Campione insufficiente ->
             # mappa senza quella strategia -> default globale validato dal gate.

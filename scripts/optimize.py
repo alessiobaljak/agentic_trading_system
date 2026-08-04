@@ -297,6 +297,23 @@ NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "24")) * 3600
 PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))
 
 
+def drifted_from_paper(fb) -> set:
+    """Coppie che il PAPER ha visto contraddire la promessa del gate.
+
+    E' l'anello di ritorno: il gate valida sulla storia, il paper vive il presente
+    e, quando il vissuto smentisce, quell'evidenza pesa qui — non come "riottimizza
+    sui trade paper" (li consumerebbe come training set) ma come FALLIMENTO, alla
+    pari di una bocciatura sulle finestre. Due fallimenti consecutivi -> auto-purge.
+    Se invece la coppia ripassa il gate su storia AGGIORNATA (che ora include il
+    periodo vissuto dal paper), il fail_count si azzera e la coppia si redime."""
+    try:
+        from bot.learning.drift import drifted_keys
+        return set(drifted_keys(fb.get_doc("drift", "current") or {}))
+    except Exception as exc:  # noqa: BLE001
+        print(f"[registry] deriva non leggibile ({exc}): la ignoro")
+        return set()
+
+
 def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     """
     Accumula nel tempo: ogni run incrementa il pass_count delle coppie che passano.
@@ -306,9 +323,22 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     doc = fb.get_doc("strategy_registry", "validated") or {}
     pairs: dict = decode_pairs(doc.get("pairs"))
     passed_set = set(passed_now)
+    drifted = drifted_from_paper(fb)
+    if drifted:
+        print(f"[registry] {len(drifted)} coppie in deriva dal paper: contano come "
+              f"fallimento anche se hanno ripassato le finestre")
 
     for key, e in out.items():
         rec = pairs.get(key, {"pass_count": 0})
+        # una coppia SMENTITA DAL VIVO non puo' accumulare un pass, nemmeno se la
+        # storia la promuove ancora: e' il paper ad avere l'ultima parola sul presente
+        if key in drifted:
+            rec["fail_count"] = rec.get("fail_count", 0) + 1
+            rec["drift_seen_at"] = time.time()
+            rec["symbol"], rec["strategy"] = e["symbol"], e["strategy"]
+            rec["last_seen_at"] = time.time()
+            pairs[key] = rec
+            continue
         if key in passed_set:
             # PASS ONESTO: incrementa solo se ci sono dati NUOVI dall'ultimo pass.
             # Senza questa regola MIN_PASSES contava rivalutazioni degli stessi

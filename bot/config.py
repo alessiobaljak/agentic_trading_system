@@ -275,6 +275,28 @@ class Settings:
     # dati per-regime (coppie non ancora ri-validate) non blocca nulla.
     REGIME_FILTER_ENABLED: bool = os.getenv("REGIME_FILTER_ENABLED", "true").lower() == "true"
     GATE_REGIME_MIN_TRADES: int = int(os.getenv("GATE_REGIME_MIN_TRADES", "10"))
+
+    # ---- RILEVATORE DI DERIVA (anello paper -> gate) ----
+    # Il gate promette (PF validato, TP raggiungibili); il paper misura il vissuto.
+    # Quando il vissuto contraddice la promessa: si frena SUBITO in produzione e
+    # l'evidenza va al gate, che rivalidera' su storia ORA comprensiva del periodo
+    # appena vissuto. Il paper FALSIFICA, non ottimizza: tararci i parametri lo
+    # consumerebbe come training set (lo stesso difetto rimosso dal gate).
+    DRIFT_ENABLED: bool = os.getenv("DRIFT_ENABLED", "true").lower() == "true"
+    # campioni minimi per DICHIARARE deriva (sotto -> "watch": si vede, non si agisce).
+    # Per-coppia i trade arrivano lentissimi, per strategia e globale molto prima.
+    DRIFT_MIN_TRADES_PAIR: int = int(os.getenv("DRIFT_MIN_TRADES_PAIR", "8"))
+    DRIFT_MIN_TRADES_STRATEGY: int = int(os.getenv("DRIFT_MIN_TRADES_STRATEGY", "20"))
+    DRIFT_MIN_TRADES_GLOBAL: int = int(os.getenv("DRIFT_MIN_TRADES_GLOBAL", "40"))
+    # il PF vissuto deve restare almeno a questa frazione di quello validato
+    DRIFT_PF_RATIO: float = float(os.getenv("DRIFT_PF_RATIO", "0.6"))
+    # la mfe mediana deve arrivare almeno a questa frazione del PRIMO gradino:
+    # sotto, la scala di TP e' irraggiungibile per come si muove davvero il prezzo
+    DRIFT_MFE_RATIO: float = float(os.getenv("DRIFT_MFE_RATIO", "0.7"))
+    # freno applicato a size/leva su una coppia (o strategia) in deriva. Frena, non
+    # spegne: rimuovere spetta al gate, che decide sulla storia, non su 8 trade.
+    DRIFT_WEIGHT_FACTOR: float = float(os.getenv("DRIFT_WEIGHT_FACTOR", "0.5"))
+    DRIFT_WEIGHT_FLOOR: float = float(os.getenv("DRIFT_WEIGHT_FLOOR", "0.25"))
     GATE_WIN_RATE_FLOOR: float = float(os.getenv("GATE_WIN_RATE_FLOOR", "0.45"))
     GATE_MIN_TOTAL_RETURN: float = float(os.getenv("GATE_MIN_TOTAL_RETURN", "0.15"))
     GATE_CONSISTENCY_FRACTION: float = float(os.getenv("GATE_CONSISTENCY_FRACTION", "1.0"))

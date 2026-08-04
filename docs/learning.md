@@ -57,3 +57,38 @@ pesi appresi.
 Il backtester (GATE 1) dà i propri trade simulati a `compute_weights` e mostra i
 pesi risultanti nel report HTML: così il learning loop è validato **prima** del
 paper trading. Vedi `backtesting/engine.py::validate_learning`.
+
+
+## Rilevatore di deriva — l'anello paper → gate
+
+Il gate valida sulla **storia** e produce una promessa per ogni coppia (PF atteso,
+TP raggiungibili). Il paper esegue e misura il **presente**. Prima le due cose non si
+parlavano: il paper aggiustava solo *quanto* tradare, mai segnalava che una coppia
+stava tradendo la promessa.
+
+**Il paper falsifica, non ottimizza.** È l'unico dato mai visto dalla selezione:
+tararci sopra i parametri lo consumerebbe come training set — lo stesso difetto
+rimosso dal gate con l'holdout. Qui fa il giudice.
+
+### Due segnali indipendenti
+| Segnale | Cosa dice | Perché conta |
+|---|---|---|
+| **PF vissuto vs validato** | l'edge non si presenta | richiede esiti completi |
+| **`mfe_r` vs primo gradino** | il prezzo non arriva mai al TP1 | basta **un numero per trade**, nessuna attesa |
+
+### Tre granularità
+`coppia` (precisa ma lentissima, ~0,03 trade/giorno) · `strategia` (giorni) ·
+`globale` (la più rapida: se tutto il registro delude è un problema di sistema).
+Sotto il campione minimo il verdetto è **`watch`**: si vede, non si agisce.
+
+### Cosa succede quando scatta `drift`
+1. **Subito** — `allocation()` frena size e leva (`DRIFT_WEIGHT_FACTOR`, con
+   pavimento): frena, **non spegne**. Rimuovere spetta al gate, che decide sulla
+   storia, non su 8 trade.
+2. **Alla passata successiva** — `optimize`/`discover` leggono `drift/current`: la
+   coppia smentita dal vivo **non accumula un pass** nemmeno se la storia la
+   promuove ancora, e incassa un `fail_count`. Due fallimenti → auto-purge.
+3. **Redenzione** — se ripassa il gate su storia aggiornata (che ora **include il
+   periodo appena vissuto dal paper**), il `fail_count` si azzera e torna piena.
+
+Visibile in `docs/state.md` (sezione "Deriva paper vs gate") senza SSH.

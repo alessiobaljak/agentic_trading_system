@@ -31,7 +31,7 @@ from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
 from bot.strategies.generator import generate_specs, mutate
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_history,
-                              top_symbols_by_volume)
+                              drifted_from_paper, top_symbols_by_volume)
 
 # stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
 # processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
@@ -150,10 +150,19 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
     doc = fb.get_doc("strategy_registry", "validated") or {}
     pairs = decode_pairs(doc.get("pairs"))
     now = time.time()
+    drifted = drifted_from_paper(fb)   # evidenza dal paper: vale come fallimento
     # 1) upsert SOLO delle coppie passate (non sporco il registro con i fallimenti)
     for key in passed_now:
         e = out[key]
         rec = pairs.get(key, {"pass_count": 0})
+        if key in drifted:      # smentita dal vivo -> nessun pass, conta come fallimento
+            rec["fail_count"] = rec.get("fail_count", 0) + 1
+            rec["drift_seen_at"] = now
+            rec["symbol"], rec["strategy"] = e["symbol"], e["strategy"]
+            rec["generated"] = True
+            rec["last_seen_at"] = now
+            pairs[key] = rec
+            continue
         # PASS ONESTO (stessa regola di optimize): conta solo con dati nuovi
         data_end = float(e.get("data_end", 0) or 0)
         prev_end = float(rec.get("last_pass_data_end", 0) or 0)

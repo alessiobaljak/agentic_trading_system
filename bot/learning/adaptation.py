@@ -35,6 +35,9 @@ class AdaptationEngine:
         # PF per-regime dal gate: "SYMBOL|strategy" -> {regime: {"pf", "trades"}}.
         # Alimenta il filtro di regime (non operare dove il gate ha visto perdere).
         self._regime_pf: dict[str, dict] = {}
+        # verdetti di deriva (paper vs promessa del gate): frenano size/leva SUBITO,
+        # senza aspettare che il gate rivaluti. Ricaricato col registro.
+        self._drift: dict = {}
         self._has_opt_data: bool = False
         self._generated_specs: dict[str, dict] = {}  # gen_id -> spec (strategie scoperte)
         self.load_weights()
@@ -90,7 +93,8 @@ class AdaptationEngine:
         self.load_weights()
 
     # ------------------------------------------------------------------ #
-    def allocation(self, strategy: str, regime: Regime, confidence: float) -> tuple[float, float, str]:
+    def allocation(self, strategy: str, regime: Regime, confidence: float,
+                   drift_key: tuple[str, str] | None = None) -> tuple[float, float, str]:
         """(risk_mult, lev_mult, nota): quanto CAPITALE e quanta LEVA merita questo
         trade, guidato SOLO dai dati — mai oltre i cap di sicurezza (applicati poi
         dal risk manager, che puo' solo ridurre).
@@ -114,6 +118,16 @@ class AdaptationEngine:
         lev_mult = max(0.7, min(1.3, raw ** 0.5))
         note = (f"alloc: convinzione x{conf_mult:.2f} · learning "
                 f"{'x%.2f' % learn_mult if w is not None else 'neutro (nessun dato)'}")
+        # DERIVA: se il vissuto contraddice la promessa del gate si frena SUBITO,
+        # senza attendere la rivalidazione. Applicato DOPO i cap: e' una riduzione,
+        # non puo' mai aumentare l'esposizione.
+        if drift_key is not None:
+            from bot.learning.drift import weight_factor
+            f = weight_factor(self._drift, drift_key[0], drift_key[1])
+            if f < 1.0:
+                risk_mult *= f
+                lev_mult = max(0.5, lev_mult * (f ** 0.5))
+                note += f" · DERIVA x{f:.2f}"
         return risk_mult, lev_mult, note
 
     # ------------------------------------------------------------------ #
@@ -151,6 +165,11 @@ class AdaptationEngine:
         return generated | {k for k in keys if k.split("|", 1)[1] in robust}
 
     def load_params(self) -> None:
+        # deriva: si carica sempre, anche quando il registro non e' pronto
+        try:
+            self._drift = self.fb.get_doc("drift", "current") or {}
+        except Exception:  # noqa: BLE001
+            self._drift = {}
         reg = self.fb.get_doc("strategy_registry", "validated") or {}
         validated = reg.get("validated") or []
         pairs = decode_pairs(reg.get("pairs"))
