@@ -1,25 +1,25 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-06 10:49 UTC_
+_Generato: 2026-08-06 14:34 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-06 10:49 UTC
+- ultimo heartbeat: 2026-08-06 14:34 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-06 10:48 UTC)
+- esito: **⚪ FLAT** (2026-08-06 14:33 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
-- copertura universo: **71/183 crypto (39%)** · obiettivo ≥ 60%
-- coppie validate (>= 3 pass OOS): **165**
+- copertura universo: **70/183 crypto (38%)** · obiettivo ≥ 60%
+- coppie validate (>= 3 pass OOS): **163**
 - universo scansionato: 1000BONKUSDT, 1000LUNCUSDT, 1000PEPEUSDT, 1000RATSUSDT, 1000SATSUSDT, 1000SHIBUSDT, 1000XECUSDT, 4USDT, AAVEUSDT, ACEUSDT, ACTUSDT, ACXUSDT, ADAUSDT, AEROUSDT, AIOUSDT, AKEUSDT, ALGOUSDT, ALLOUSDT, APTUSDT, ARBUSDT, ASTERUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, BABYUSDT, BANKUSDT, BANUSDT, BCHUSDT, BEATUSDT, BERAUSDT, BICOUSDT, BIOUSDT, BIRBUSDT, BLESSUSDT, BNBUSDT, BOMEUSDT, BTCUSDT, BULLAUSDT, CAKEUSDT, CCUSDT, CFXUSDT, CHZUSDT, COOKIEUSDT, COTIUSDT, CRVUSDT, CTSIUSDT, CYSUSDT, DASHUSDT, DEXEUSDT, DODOXUSDT, DOGEUSDT, DOTUSDT, EIGENUSDT, ELSAUSDT, ENAUSDT, EPICUSDT, ERAUSDT, ESPORTSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, EULUSDT, EVAAUSDT, FARTCOINUSDT, FETUSDT, FFUSDT, FIDAUSDT, FILUSDT, GALAUSDT, GIGGLEUSDT, GRASSUSDT, GRTUSDT, GUAUSDT, GWEIUSDT, HBARUSDT, HEIUSDT, HEMIUSDT, HFTUSDT, HMSTRUSDT, HOMEUSDT, HUSDT, HYPERUSDT, HYPEUSDT, ICNTUSDT, ICPUSDT, IDOLUSDT, INJUSDT, INXUSDT, JCTUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KITEUSDT, KOMAUSDT, LABUSDT, LAUSDT, LDOUSDT, LIGHTUSDT, LINKUSDT, LITUSDT, LTCUSDT, MIRAUSDT, MMTUSDT, MONUSDT, MORPHOUSDT, MYXUSDT, NEARUSDT, NEIROUSDT, NILUSDT, NOMUSDT, ONDOUSDT, ONUSDT, OPENUSDT, OPUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PIEVERSEUSDT, PIPPINUSDT, PLUMEUSDT, POLUSDT, PORTALUSDT, POWRUSDT, PROMUSDT, PTBUSDT, PUMPUSDT, RAVEUSDT, RENDERUSDT, RESOLVUSDT, RIFUSDT, RIVERUSDT, SAHARAUSDT, SANDUSDT, SEIUSDT, SIRENUSDT, SKRUSDT, SKYAIUSDT, SOLUSDT, SOONUSDT, SSVUSDT, STOUSDT, STRKUSDT, SUIUSDT, SUSHIUSDT, SYNUSDT, TAKEUSDT, TAOUSDT, THETAUSDT, TIAUSDT, TLMUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, TSTUSDT, TUTUSDT, UAIUSDT, UBUSDT, UNIUSDT, USELESSUSDT, USUSDT, VANRYUSDT, VELVETUSDT, VICUSDT, VIRTUALUSDT, VVVUSDT, WAXPUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, ZAMAUSDT, ZBTUSDT, ZECUSDT, ZENUSDT, ZEREBROUSDT, ZILUSDT, ZORAUSDT, ZROUSDT, 币安人生USDT
-- aggiornato: 2026-08-06 09:33 UTC
+- aggiornato: 2026-08-06 12:20 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
@@ -45,7 +45,6 @@ _Generato: 2026-08-06 10:49 UTC_
 | 4USDT | gen_b6e9e2b3 | 8 | 1.8 | 135% | scale_r_mults=[1.5, 3.0, 5.0] |
 | HEIUSDT | gen_b09d3dec | 4 | 1.308 | 134% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SENTUSDT | gen_51b688cd | 5 | 1.315 | 134% | scale_r_mults=[2.0, 4.0, 6.0] |
-| ROSEUSDT | gen_f5e2455b | 3 | 1.314 | 133% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ACTUSDT | gen_0a39495c | 3 | 2.024 | 132% | scale_r_mults=[2.0, 4.0, 6.0] |
 | XRPUSDT | gen_1a96fcc0 | 3 | 1.581 | 119% | scale_r_mults=[2.0, 4.0, 6.0] |
 | HEIUSDT | gen_30bedcb6 | 4 | 1.548 | 118% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -56,7 +55,6 @@ _Generato: 2026-08-06 10:49 UTC_
 | HEIUSDT | gen_b01e6fb7 | 4 | 1.272 | 112% | scale_r_mults=[1.5, 3.0, 5.0] |
 | MYXUSDT | gen_9b98d7e9 | 3 | 2.668 | 108% | scale_r_mults=[2.0, 4.0, 6.0] |
 | DOTUSDT | gen_0a39495c | 9 | 1.493 | 108% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ROSEUSDT | gen_cb98159b | 3 | 1.461 | 105% | scale_r_mults=[2.0, 4.0, 6.0] |
 | 4USDT | gen_e01108f9 | 3 | 1.439 | 105% | scale_r_mults=[2.0, 4.0, 6.0] |
 | XPLUSDT | gen_e59ad90b | 5 | 1.438 | 104% | scale_r_mults=[1.5, 3.0, 5.0] |
 | DASHUSDT | gen_7c75b098 | 3 | 1.34 | 102% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -68,7 +66,7 @@ _Generato: 2026-08-06 10:49 UTC_
 | BEATUSDT | gen_9069e17a | 9 | 1.523 | 96% | scale_r_mults=[1.5, 3.0, 5.0] |
 | BIRBUSDT | gen_472f85b8 | 3 | 1.514 | 94% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SAHARAUSDT | gen_e9ed313b | 5 | 1.403 | 93% | scale_r_mults=[1.0, 1.5, 2.5] |
-| RENDERUSDT | gen_5ff8d861 | 5 | 1.378 | 93% | scale_r_mults=[1.5, 3.0, 5.0] |
+| RENDERUSDT | gen_5ff8d861 | 5 | 1.377 | 93% | scale_r_mults=[1.5, 3.0, 5.0] |
 | MUBARAKUSDT | gen_4982af25 | 9 | 2.131 | 92% | scale_r_mults=[2.0, 4.0, 6.0] |
 | MIRAUSDT | gen_2a819829 | 3 | 1.345 | 92% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ERAUSDT | gen_b09d3dec | 4 | 1.401 | 89% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -76,8 +74,8 @@ _Generato: 2026-08-06 10:49 UTC_
 | EVAAUSDT | gen_217f70ef | 4 | 2.399 | 86% | scale_r_mults=[1.5, 3.0, 5.0] |
 | CLOUSDT | gen_d5d29422 | 4 | 1.553 | 86% | scale_r_mults=[2.0, 4.0, 6.0] |
 | JUPUSDT | gen_70667b7f | 3 | 1.276 | 82% | scale_r_mults=[2.0, 4.0, 6.0] |
-| BIRBUSDT | gen_5c8dfeb6 | 7 | 1.832 | 80% | scale_r_mults=[2.0, 4.0, 6.0] |
-| BIRBUSDT | gen_93573f5f | 8 | 1.832 | 80% | scale_r_mults=[2.0, 4.0, 6.0] |
+| BIRBUSDT | gen_5c8dfeb6 | 7 | 1.831 | 80% | scale_r_mults=[2.0, 4.0, 6.0] |
+| BIRBUSDT | gen_93573f5f | 8 | 1.831 | 80% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SOONUSDT | gen_a06a52e1 | 7 | 1.596 | 77% | scale_r_mults=[1.5, 3.0, 5.0] |
 | TAGUSDT | gen_5fbbfb8d | 4 | 1.64 | 76% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ELSAUSDT | gen_026c5e5c | 3 | 1.635 | 75% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -93,7 +91,7 @@ _Generato: 2026-08-06 10:49 UTC_
 | JUPUSDT | gen_a06a52e1 | 7 | 1.254 | 67% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ETCUSDT | gen_0a39495c | 7 | 1.284 | 67% | scale_r_mults=[2.0, 4.0, 6.0] |
 | HYPERUSDT | gen_0a39495c | 5 | 1.575 | 67% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ZAMAUSDT | gen_9069e17a | 9 | 2.67 | 66% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ZAMAUSDT | gen_9069e17a | 9 | 2.669 | 66% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ELSAUSDT | gen_d230db12 | 5 | 1.454 | 66% | scale_r_mults=[1.5, 3.0, 5.0] |
 | FFUSDT | gen_aac99e5d | 3 | 1.717 | 66% | scale_r_mults=[2.0, 4.0, 6.0] |
 | MIRAUSDT | gen_b2ea9dd6 | 10 | 2.37 | 64% | scale_r_mults=[1.5, 3.0, 5.0] |
