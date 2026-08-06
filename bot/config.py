@@ -328,6 +328,19 @@ class Settings:
     # spegne: rimuovere spetta al gate, che decide sulla storia, non su 8 trade.
     DRIFT_WEIGHT_FACTOR: float = float(os.getenv("DRIFT_WEIGHT_FACTOR", "0.5"))
     DRIFT_WEIGHT_FLOOR: float = float(os.getenv("DRIFT_WEIGHT_FLOOR", "0.25"))
+
+    # ---- CALIBRAZIONE DELLA CONFIDENZA ----
+    # allocation() modula size e leva sulla confidenza del segnale, ma nessuno
+    # aveva mai verificato che quel numero predicesse l'esito: se fosse rumore,
+    # staremmo dimensionando le posizioni su una cifra senza significato — e con
+    # convinzione, che e' la parte peggiore. Misurata la relazione, l'influenza
+    # della confidenza viene RIDOTTA verso il neutro quando non predice. Non
+    # invertita: scommettere contro un segnale che anti-predice su pochi trade
+    # e' adattarsi al rumore con un altro nome.
+    CALIBRATION_ENABLED: bool = os.getenv("CALIBRATION_ENABLED", "true").lower() == "true"
+    CALIBRATION_MIN_TRADES: int = int(os.getenv("CALIBRATION_MIN_TRADES", "30"))
+    CALIBRATION_FLAT_ABS: float = float(os.getenv("CALIBRATION_FLAT_ABS", "0.05"))
+    CALIBRATION_FLAT_TRUST: float = float(os.getenv("CALIBRATION_FLAT_TRUST", "0.5"))
     GATE_WIN_RATE_FLOOR: float = float(os.getenv("GATE_WIN_RATE_FLOOR", "0.45"))
     GATE_MIN_TOTAL_RETURN: float = float(os.getenv("GATE_MIN_TOTAL_RETURN", "0.15"))
     GATE_CONSISTENCY_FRACTION: float = float(os.getenv("GATE_CONSISTENCY_FRACTION", "1.0"))

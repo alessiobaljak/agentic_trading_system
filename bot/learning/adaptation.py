@@ -38,6 +38,8 @@ class AdaptationEngine:
         # verdetti di deriva (paper vs promessa del gate): frenano size/leva SUBITO,
         # senza aspettare che il gate rivaluti. Ricaricato col registro.
         self._drift: dict = {}
+        # calibrazione: quanto la confidenza dei segnali predica davvero l'esito
+        self._calibration: dict = {}
         self._has_opt_data: bool = False
         self._generated_specs: dict[str, dict] = {}  # gen_id -> spec (strategie scoperte)
         self.load_weights()
@@ -112,11 +114,19 @@ class AdaptationEngine:
         w = self._weights.get(key)
         conf = max(0.0, min(1.0, (float(confidence or 0) - 30.0) / 55.0))
         conf_mult = 0.75 + 0.5 * conf
+        # CALIBRAZIONE: se la confidenza non predice l'esito, la sua influenza si
+        # restringe verso il neutro (1.0). Con trust=0 la size smette di dipendere
+        # da un numero che non significa nulla.
+        from bot.learning.calibration import confidence_trust
+        _trust = confidence_trust(self._calibration)
+        if _trust < 1.0:
+            conf_mult = 1.0 + (conf_mult - 1.0) * _trust
         learn_mult = 1.0 if w is None else 0.5 + 0.75 * float(w)
         raw = conf_mult * learn_mult
         risk_mult = max(0.5, min(1.5, raw))
         lev_mult = max(0.7, min(1.3, raw ** 0.5))
-        note = (f"alloc: convinzione x{conf_mult:.2f} · learning "
+        note = (f"alloc: convinzione x{conf_mult:.2f}"
+                f"{' (calibr. x%.2f)' % _trust if _trust < 1.0 else ''} · learning "
                 f"{'x%.2f' % learn_mult if w is not None else 'neutro (nessun dato)'}")
         # DERIVA: se il vissuto contraddice la promessa del gate si frena SUBITO,
         # senza attendere la rivalidazione. Applicato DOPO i cap: e' una riduzione,
@@ -170,6 +180,10 @@ class AdaptationEngine:
             self._drift = self.fb.get_doc("drift", "current") or {}
         except Exception:  # noqa: BLE001
             self._drift = {}
+        try:
+            self._calibration = self.fb.get_doc("calibration", "current") or {}
+        except Exception:  # noqa: BLE001
+            self._calibration = {}
         reg = self.fb.get_doc("strategy_registry", "validated") or {}
         validated = reg.get("validated") or []
         pairs = decode_pairs(reg.get("pairs"))

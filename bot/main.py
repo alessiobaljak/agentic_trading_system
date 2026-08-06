@@ -776,6 +776,24 @@ class TradingBot:
         except Exception as exc:  # noqa: BLE001
             print(f"[drift] calcolo saltato: {exc}")
 
+    def _publish_calibration(self, trades: list[dict]) -> None:
+        """Verifica che la confidenza dei segnali predica l'esito e pubblica il
+        verdetto su `calibration/current`.
+
+        La usiamo per modulare size e leva: se non predicesse nulla staremmo
+        dimensionando le posizioni su un numero senza significato. Il verdetto
+        RESTRINGE la sua influenza verso il neutro — mai la inverte."""
+        if not settings.CALIBRATION_ENABLED:
+            return
+        from bot.learning.calibration import calibrate
+        doc = calibrate(trades)
+        doc["updated_at"] = time.time()
+        self.fb.set_doc("calibration", "current", doc)
+        self.adaptation._calibration = doc          # effetto immediato
+        if doc.get("trust", 1.0) < 1.0:
+            print(f"[calibrazione] {doc['verdict']}: {doc.get('note', '')} "
+                  f"-> influenza confidenza x{doc['trust']:.2f}")
+
     def refresh_weights(self, now: float) -> None:
         """Ricalcola i pesi strategia×regime dai TRADE su Firestore (nessun Binance)
         e li salva. Stessa identica logica del job notturno (finestra 30g,
@@ -796,6 +814,11 @@ class TradingBot:
                 self._publish_drift(trades)
             except Exception as exc:  # noqa: BLE001
                 print(f"[drift] pubblicazione saltata: {exc}")
+            # anche questa e' diagnostica: in un try suo, non deve fermare i pesi
+            try:
+                self._publish_calibration(trades)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[calibrazione] pubblicazione saltata: {exc}")
             # B2 — il TRAILING impara: keep del profit-lock per-strategia dai verdetti
             # (premature/protected + rumore vs inversione). Campione insufficiente ->
             # mappa senza quella strategia -> default globale validato dal gate.

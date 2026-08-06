@@ -141,7 +141,57 @@ def build() -> str:
     lines.append("")
     lines += _closed_trades_section(fb)
     lines += _drift_section(fb)
+    lines += _calibration_section(fb)
     return "\n".join(lines)
+
+
+def _benchmark_return(start_ts: float) -> float | None:
+    """Rendimento di BTC dall'inizio del periodo: il metro di paragone.
+
+    Senza, "equity positiva" non dice se il sistema crea valore: guadagnare il 5%
+    mentre il mercato fa +20% significa che comprare e tenere sarebbe stato
+    meglio, con meno rischio operativo e zero costi di esecuzione."""
+    try:
+        import requests
+        r = requests.get("https://fapi.binance.com/fapi/v1/klines",
+                         params={"symbol": "BTCUSDT", "interval": "1h",
+                                 "startTime": int(start_ts * 1000), "limit": 1000},
+                         timeout=15)
+        kl = r.json()
+        if not isinstance(kl, list) or len(kl) < 2:
+            return None
+        first, last = float(kl[0][1]), float(kl[-1][4])
+        return (last - first) / first if first > 0 else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _calibration_section(fb) -> list[str]:
+    """Calibrazione della confidenza: quel numero predice davvero l'esito?"""
+    try:
+        doc = fb.get_doc("calibration", "current") or {}
+    except Exception as exc:  # noqa: BLE001
+        return ["## Calibrazione della confidenza", f"_non leggibile: {exc}_", ""]
+    if not doc:
+        return ["## Calibrazione della confidenza",
+                "_nessun verdetto ancora: servono trade chiusi._", ""]
+    out = ["## Calibrazione della confidenza",
+           "_la confidenza del segnale modula size e leva: qui si verifica che "
+           "predica davvero l'esito, invece di darlo per scontato._", "",
+           f"- verdetto: **{doc.get('verdict', '—')}** · {doc.get('trades', 0)} trade · "
+           f"correlazione {doc.get('correlation')} · influenza applicata "
+           f"**x{doc.get('trust', 1.0)}**",
+           f"- {doc.get('note', '')}", ""]
+    b = doc.get("buckets") or []
+    if b:
+        out += ["| Fascia di confidenza | Trade | Win rate | Esito medio |",
+                "|---|---|---|---|"]
+        for x in b:
+            out.append(f"| {x['conf_min']}–{x['conf_max']} | {x['trades']} | "
+                       f"{x['win_rate']*100:.0f}% | {x['expectancy']*100:+.2f}% |")
+        out += ["", "_se l'esito medio CRESCE dalla fascia bassa all'alta, la "
+                "confidenza ordina correttamente i trade._", ""]
+    return out
 
 
 def _drift_section(fb) -> list[str]:
@@ -215,7 +265,18 @@ def _closed_trades_section(fb) -> list[str]:
     wins = sum(1 for t in trades if float(t.get("pnl", 0) or 0) > 0)
     out = ["## Trade chiusi — perché usciamo",
            f"- totale: **{n}** · vinti: {wins} ({wins / n * 100:.0f}%) · "
-           f"PnL realizzato: **{pnl:+.2f}**", ""]
+           f"PnL realizzato: **{pnl:+.2f}**"]
+    # BENCHMARK: "equity positiva" non basta a dire che il sistema crea valore
+    ts = [float(t.get("exit_ts", 0) or 0) for t in trades if t.get("exit_ts")]
+    if ts:
+        bench = _benchmark_return(min(ts))
+        eq0 = 1000.0
+        if bench is not None:
+            ours = pnl / eq0
+            verdetto = "**batte** il mercato" if ours > bench else "**sotto** il mercato"
+            out.append(f"- confronto col mercato: noi {ours*100:+.2f}% vs "
+                       f"BTC buy&hold {bench*100:+.2f}% nello stesso periodo → {verdetto}")
+    out.append("")
 
     reasons = Counter(str(t.get("exit_reason", "?")) for t in trades)
     out += ["| Uscita | Trade | % | PnL |", "|---|---|---|---|"]
