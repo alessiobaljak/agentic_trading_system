@@ -129,6 +129,7 @@ Stato di **ogni** logica, fase e attività. Legenda:
 | Calibrazione costi dal vissuto | 🔴 | impossibile in DRY_RUN (il paper simula coi costi del modello). Disponibile dopo i fill reali |
 | Flat sugli eventi macro | 🔴 | serve una fonte di calendario economico |
 | Slippage d'ingresso | ⚠️ | non modellato, mitigato dal costo fisso |
+| **Bias di sopravvivenza** | ✅ MISURATO — marginale | 28 delistati su 829 perpetual attivi nella finestra = **3,4%**. Misurato con `scripts/survivorship_report.py` su data.binance.vision (che conserva gli archivi anche dei simboli rimossi). Sotto la soglia che giustificherebbe una seconda pipeline dati. **Da tenere presente**: i delistati sono coin *vecchie* (MATIC→POL, RNDR→RENDER, EOS: molti sono rebrand/migrazioni, non fallimenti), quindi il bias reale è ancora più piccolo del 3,4% |
 | Holdout consultato ogni run | ⚠️ | rolling mitiga, non azzera. Il vero OOS resta il paper |
 | Generatore: funding e multi-timeframe | ⚠️ | le feature di condizione ci sono, queste no |
 
