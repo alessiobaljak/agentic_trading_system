@@ -1,25 +1,27 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-07 07:41 UTC_
+_Generato: 2026-08-07 09:15 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$998.58**
-- ultimo heartbeat: 2026-08-07 07:40 UTC
+- equity: **$978.42**
+- ultimo heartbeat: 2026-08-07 09:15 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-07 07:32 UTC)
-- motivo: nessun segnale valido sopra soglia
-- asset valutati: 71 · segnali: 0
+- esito: **⚪ FLAT** (2026-08-07 09:02 UTC)
+- motivo: parita' backtest: 2 segnali validi aperti
+- asset valutati: 82 · segnali: 4 · miglior segnale BLESSUSDT gen_936abf10 (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- 4USDT: long qty=20018.058292707545 @ 0.010002 uPnL=-3.454126193040149
-- GIGGLEUSDT: short qty=6.147393891423422 @ 32.57 uPnL=-1.4490873409259937
-- INJUSDT: long qty=31.60270880361174 @ 4.43 uPnL=2.368799605167694
-- RENDERUSDT: long qty=150.15015015015015 @ 1.332 uPnL=-0.6023563241406179
-- VICUSDT: long qty=4444.700468028538 @ 0.02911 uPnL=0.598727247445741
+- 4USDT: long qty=20147.79043597244 @ 0.009815 uPnL=7.750790331861778
+- BIRBUSDT: short qty=4216.42991746417 @ 0.0469 uPnL=-1.7362221957391977
+- BLESSUSDT: long qty=7984.417495594377 @ 0.013632 uPnL=-1.4100655041377201
+- DASHUSDT: short qty=6.418388936354091 @ 30.81 uPnL=-0.4693172863393591
+- INJUSDT: long qty=31.60270880361174 @ 4.43 uPnL=2.637373831492596
+- RENDERUSDT: long qty=150.15015015015015 @ 1.332 uPnL=-0.8489914154976845
+- SOONUSDT: short qty=904.6228871412148 @ 0.2186 uPnL=-1.2126979972317735
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
@@ -240,28 +242,39 @@ _aggiornato: 2026-08-07 02:32 UTC · 1472 coppie valutate, 2 passate in questo r
 | USUSDT | trend_following | 1.371 | 65% | 197 | 47% |
 
 ## Trade chiusi — perché usciamo
-- totale: **1** · vinti: 0 (0%) · PnL realizzato: **-2.52**
+- totale: **4** · vinti: 0 (0%) · PnL realizzato: **-22.69**
 
 | Uscita | Trade | % | PnL |
 |---|---|---|---|
-| Stop loss (prima di qualsiasi TP) | 1 | 100% | -2.52 |
+| Stop loss (prima di qualsiasi TP) | 4 | 100% | -22.69 |
 
-- gradini raggiunti (su 1 trade): 0 TP: 1 (100%)
+- gradini raggiunti (su 4 trade): 0 TP: 4 (100%)
 
-- escursione favorevole (mfe_r, 1 trade): mediana **0.12R** · ≥1R: 0% · ≥1.5R: 0% · ≥3R: 0% · ≥5R: 0%
+- escursione favorevole (mfe_r, 4 trade): mediana **0.31R** · ≥1R: 0% · ≥1.5R: 0% · ≥3R: 0% · ≥5R: 0%
   _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
 
 ## Deriva paper vs gate
 _il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
 
-- **globale**: watch · 1 trade · PF vissuto 0.0 vs 1.643 atteso · mfe mediana 0.12R
+- **globale**: watch · 4 trade · PF vissuto 0.0 vs 1.643 atteso · mfe mediana 0.31R
 
 | Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
 |---|---|---|---|---|
 | JUPUSDT|gen_70667b7f | watch | 1 | 0.0 / 1.273 | PF 0.00 vs 1.27 atteso · mfe mediana 0.12R < primo TP 2.00R |
+| 4USDT|gen_9069e17a | watch | 1 | 0.0 / 1.635 | PF 0.00 vs 1.64 atteso · mfe mediana 0.29R < primo TP 1.50R |
+| GIGGLEUSDT|gen_f5e2455b | watch | 1 | 0.0 / 1.565 | PF 0.00 vs 1.56 atteso · mfe mediana 0.45R < primo TP 1.00R |
+| VICUSDT|gen_efc32d00 | watch | 1 | 0.0 / 1.438 | PF 0.00 vs 1.44 atteso · mfe mediana 0.31R < primo TP 2.00R |
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **insufficient** · 1 trade · correlazione None · influenza applicata **x1.0**
-- servono 30 trade, ce ne sono 1
+- verdetto: **insufficient** · 4 trade · correlazione None · influenza applicata **x1.0**
+- servono 30 trade, ce ne sono 4
+
+| Fascia di confidenza | Trade | Win rate | Esito medio |
+|---|---|---|---|
+| 60.0–60.0 | 1 | 0% | -15.98% |
+| 60.0–60.0 | 1 | 0% | -5.82% |
+| 60.0–60.0 | 2 | 0% | -3.26% |
+
+_se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
