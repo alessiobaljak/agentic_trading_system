@@ -1,32 +1,30 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-08 13:12 UTC_
+_Generato: 2026-08-08 14:49 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$936.82**
-- ultimo heartbeat: 2026-08-08 13:12 UTC
+- equity: **$948.49**
+- ultimo heartbeat: 2026-08-08 14:49 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-08 13:02 UTC)
+- esito: **⚪ FLAT** (2026-08-08 14:48 UTC)
 - motivo: parita' backtest: 2 segnali validi aperti
-- asset valutati: 78 · segnali: 2 · miglior segnale NOMUSDT gen_534c426c (conf. 60.0/soglia 30)
+- asset valutati: 78 · segnali: 3 · miglior segnale NOMUSDT gen_534c426c (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- AEROUSDT: short qty=293.83138086507745 @ 0.4415 uPnL=1.0183756340235872
-- ARBUSDT: long qty=949.3379715036498 @ 0.07835 uPnL=1.3259556458938315
-- CYSUSDT: long qty=70.02749952702553 @ 0.819 uPnL=-0.7745520169578912
-- ELSAUSDT: long qty=3373.4860260111536 @ 0.05554 uPnL=-0.23249606639364967
-- ERAUSDT: long qty=2707.935524354075 @ 0.06933 uPnL=1.2897742140062547
-- JUPUSDT: short qty=1027.2889635511033 @ 0.1826 uPnL=-0.5018088211595759
-- NOMUSDT: long qty=110938.40393097975 @ 0.001665 uPnL=-0.5094924324881207
-- ONUSDT: short qty=227.19023420201748 @ 0.38214 uPnL=13.045061100408926
-- SAHARAUSDT: short qty=21216.683039866908 @ 0.008706 uPnL=2.68018431457855
-- SENTUSDT: short qty=14161.426401346873 @ 0.01327 uPnL=0.7456722136681705
-- TAGUSDT: long qty=62293.60442680778 @ 0.001203 uPnL=4.6077790946350285
-- TRUMPUSDT: short qty=124.98166343823229 @ 1.479 uPnL=-1.1072875849102881
+- AEROUSDT: short qty=293.83138086507745 @ 0.4415 uPnL=0.8905847540471892
+- ARBUSDT: long qty=949.3379715036498 @ 0.07835 uPnL=1.1820707792729257
+- CYSUSDT: long qty=70.02749952702553 @ 0.819 uPnL=-0.17990207757693716
+- ELSAUSDT: long qty=3373.4860260111536 @ 0.05554 uPnL=0.20853542528402652
+- ERAUSDT: long qty=2707.935524354075 @ 0.06933 uPnL=0.6870382002466273
+- NOMUSDT: long qty=110938.40393097975 @ 0.001665 uPnL=1.0284637139377195
+- SAHARAUSDT: short qty=21216.683039866908 @ 0.008706 uPnL=3.7641040511788373
+- SENTUSDT: short qty=14161.426401346873 @ 0.01327 uPnL=0.5528655184120932
+- SKYAIUSDT: short qty=1032.3657619531577 @ 0.10882 uPnL=-4.988904628585991
+- ZAMAUSDT: long qty=4062.9582566087197 @ 0.04677 uPnL=-0.0602672031113424
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
@@ -245,58 +243,58 @@ _aggiornato: 2026-08-08 09:22 UTC · 1472 coppie valutate, 0 passate in questo r
 _Nessuna coppia ha passato in questo run._
 
 ## Trade chiusi — perché usciamo
-- totale: **41** · vinti: 10 (24%) · PnL realizzato: **-70.84**
+- totale: **45** · vinti: 12 (27%) · PnL realizzato: **-53.34**
 
 | Uscita | Trade | % | PnL |
 |---|---|---|---|
-| Stop loss (prima di qualsiasi TP) | 31 | 76% | -135.21 |
-| Scale-out (>=1 TP incassato, residuo a BE) | 7 | 17% | +21.86 |
-| Time exit (orizzonte scaduto) | 2 | 5% | +20.94 |
+| Stop loss (prima di qualsiasi TP) | 33 | 73% | -138.50 |
+| Scale-out (>=1 TP incassato, residuo a BE) | 8 | 18% | +30.92 |
+| Time exit (orizzonte scaduto) | 3 | 7% | +32.67 |
 | Take profit (fino all'ultimo gradino) | 1 | 2% | +21.57 |
 
-- gradini raggiunti (su 41 trade): 0 TP: 31 (76%) · 1 TP: 7 (17%) · 2 TP: 2 (5%) · 3 TP: 1 (2%)
+- gradini raggiunti (su 45 trade): 0 TP: 34 (76%) · 1 TP: 7 (16%) · 2 TP: 3 (7%) · 3 TP: 1 (2%)
 
-- escursione favorevole (mfe_r, 41 trade): mediana **0.45R** · ≥1R: 32% · ≥1.5R: 22% · ≥3R: 2% · ≥5R: 2%
+- escursione favorevole (mfe_r, 45 trade): mediana **0.50R** · ≥1R: 38% · ≥1.5R: 24% · ≥3R: 4% · ≥5R: 2%
   _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
 
 ## Deriva paper vs gate
 _il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
 
-- **globale**: drift · 41 trade · PF vissuto 0.476 vs 1.645 atteso · mfe mediana 0.45R
+- **globale**: drift · 45 trade · PF vissuto 0.615 vs 1.645 atteso · mfe mediana 0.5R
 
 | Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
 |---|---|---|---|---|
 | BIRBUSDT|gen_472f85b8 | watch | 3 | 0.137 / 1.514 | PF 0.14 vs 1.51 atteso · mfe mediana 0.18R < primo TP 1.50R |
 | ELSAUSDT|gen_d230db12 | watch | 3 | 0.16 / 1.508 | PF 0.16 vs 1.51 atteso · mfe mediana 0.92R < primo TP 1.50R |
+| JUPUSDT|gen_70667b7f | watch | 3 | 0.0 / 1.269 | PF 0.00 vs 1.27 atteso · mfe mediana 0.43R < primo TP 2.00R |
 | NOMUSDT|gen_534c426c | watch | 2 | 0.0 / 1.473 | PF 0.00 vs 1.47 atteso |
 | SOONUSDT|gen_be9e1684 | watch | 2 | 0.0 / 1.311 | PF 0.00 vs 1.31 atteso |
-| JUPUSDT|gen_70667b7f | watch | 2 | 0.0 / 1.269 | PF 0.00 vs 1.27 atteso · mfe mediana 0.43R < primo TP 2.00R |
-| TAGUSDT|gen_30bedcb6 | watch | 1 | 0.0 / 1.573 | PF 0.00 vs 1.57 atteso · mfe mediana 0.01R < primo TP 1.50R |
-| SENTUSDT|gen_a7798aa0 | watch | 1 | 0.0 / 1.558 | PF 0.00 vs 1.56 atteso · mfe mediana 0.50R < primo TP 1.50R |
-| SYNUSDT|gen_d146d9fc | watch | 1 | 0.0 / 1.366 | PF 0.00 vs 1.37 atteso · mfe mediana 0.13R < primo TP 2.00R |
-| XMRUSDT|gen_f99df625 | watch | 1 | 0.0 / 1.323 | PF 0.00 vs 1.32 atteso · mfe mediana 0.96R < primo TP 2.00R |
-| BLESSUSDT|gen_936abf10 | watch | 1 | 0.0 / 1.563 | PF 0.00 vs 1.56 atteso · mfe mediana 0.55R < primo TP 2.00R |
-| ELSAUSDT|gen_3c900892 | watch | 1 | 0.0 / 1.329 | PF 0.00 vs 1.33 atteso · mfe mediana 0.27R < primo TP 2.00R |
-| 4USDT|gen_9069e17a | watch | 1 | 0.0 / 1.652 | PF 0.00 vs 1.65 atteso · mfe mediana 0.29R < primo TP 1.50R |
-| SKYAIUSDT|gen_ca980edf | watch | 1 | 0.0 / 1.302 | PF 0.00 vs 1.30 atteso · mfe mediana 0.02R < primo TP 1.50R |
-| NOMUSDT|gen_7ca6c708 | watch | 1 | 0.0 / 1.431 | PF 0.00 vs 1.43 atteso |
-| DASHUSDT|gen_7c75b098 | watch | 1 | 0.0 / 1.34 | PF 0.00 vs 1.34 atteso · mfe mediana 0.29R < primo TP 1.50R |
-| ELSAUSDT|gen_9d27232a | watch | 1 | 0.0 / 1.355 | PF 0.00 vs 1.35 atteso · mfe mediana 0.51R < primo TP 1.50R |
-| NOMUSDT|gen_82496c33 | watch | 1 | 0.0 / 1.434 | PF 0.00 vs 1.43 atteso · mfe mediana 0.14R < primo TP 2.00R |
-| GIGGLEUSDT|gen_f5e2455b | watch | 1 | 0.0 / 1.72 | PF 0.00 vs 1.72 atteso · mfe mediana 0.45R < primo TP 1.00R |
+| NOMUSDT|gen_2adc4d4f | watch | 1 | 0.0 / 1.307 | PF 0.00 vs 1.31 atteso · mfe mediana 0.14R < primo TP 2.00R |
+| VICUSDT|gen_efc32d00 | watch | 1 | 0.0 / 1.438 | PF 0.00 vs 1.44 atteso · mfe mediana 0.31R < primo TP 2.00R |
+| ZAMAUSDT|gen_95183c6b | watch | 1 | 0.0 / 1.426 | PF 0.00 vs 1.43 atteso · mfe mediana 1.21R < primo TP 2.00R |
 | ERAUSDT|gen_b2c947fc | watch | 1 | 0.0 / 1.774 | PF 0.00 vs 1.77 atteso · mfe mediana 0.19R < primo TP 1.50R |
 | SOONUSDT|gen_a06a52e1 | watch | 1 | 0.0 / 1.596 | PF 0.00 vs 1.60 atteso · mfe mediana 0.20R < primo TP 1.50R |
+| SKYAIUSDT|gen_ca980edf | watch | 1 | 0.0 / 1.302 | PF 0.00 vs 1.30 atteso · mfe mediana 0.02R < primo TP 1.50R |
+| BLESSUSDT|gen_936abf10 | watch | 1 | 0.0 / 1.563 | PF 0.00 vs 1.56 atteso · mfe mediana 0.55R < primo TP 2.00R |
+| TRUMPUSDT|gen_a7798aa0 | watch | 1 | 0.0 / 1.294 | PF 0.00 vs 1.29 atteso · mfe mediana 1.12R < primo TP 2.00R |
+| NOMUSDT|gen_7ca6c708 | watch | 1 | 0.0 / 1.431 | PF 0.00 vs 1.43 atteso |
+| DASHUSDT|gen_7c75b098 | watch | 1 | 0.0 / 1.34 | PF 0.00 vs 1.34 atteso · mfe mediana 0.29R < primo TP 1.50R |
+| 4USDT|gen_9069e17a | watch | 1 | 0.0 / 1.652 | PF 0.00 vs 1.65 atteso · mfe mediana 0.29R < primo TP 1.50R |
+| RENDERUSDT|gen_5ff8d861 | watch | 1 | 0.0 / 1.382 | PF 0.00 vs 1.38 atteso · mfe mediana 0.50R < primo TP 1.50R |
+| XMRUSDT|gen_f99df625 | watch | 1 | 0.0 / 1.323 | PF 0.00 vs 1.32 atteso · mfe mediana 0.96R < primo TP 2.00R |
+| ELSAUSDT|gen_3c900892 | watch | 1 | 0.0 / 1.329 | PF 0.00 vs 1.33 atteso · mfe mediana 0.27R < primo TP 2.00R |
+| BIRBUSDT|gen_93573f5f | watch | 1 | 0.0 / 1.831 | PF 0.00 vs 1.83 atteso · mfe mediana 0.21R < primo TP 2.00R |
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **flat** · 41 trade · correlazione 0.0 · influenza applicata **x0.5**
+- verdetto: **flat** · 45 trade · correlazione 0.0 · influenza applicata **x0.5**
 - nessuna relazione tra confidenza ed esito: influenza ridotta
 
 | Fascia di confidenza | Trade | Win rate | Esito medio |
 |---|---|---|---|
-| 60.0–60.0 | 13 | 38% | +0.62% |
-| 60.0–60.0 | 13 | 38% | -1.26% |
+| 60.0–60.0 | 15 | 40% | +1.60% |
+| 60.0–60.0 | 15 | 40% | +0.05% |
 | 60.0–60.0 | 15 | 0% | -5.81% |
 
 _se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
