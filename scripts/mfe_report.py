@@ -86,11 +86,17 @@ def main() -> int:
             continue
 
     rows = [(k, v) for k, v in groups.items() if len(v) >= args.min_trades]
-    if not rows:
-        print(f"[mfe] nessun gruppo con almeno {args.min_trades} trade. "
-              f"Prova --min-trades 1 o --by strategy.")
-        return 1
     rows.sort(key=lambda kv: -len(kv[1]))
+    shown = sum(len(v) for _, v in rows)
+    if shown < len(usable):
+        print(f"[mfe] {len(usable) - shown} trade su {len(usable)} sono in gruppi sotto "
+              f"--min-trades {args.min_trades} e NON compaiono nelle righe per gruppo "
+              f"(compaiono solo nel TOTALE).")
+    # TOTALE sempre in testa: con i trade sparsi su molti gruppi le righe per gruppo
+    # sono tutte sotto soglia e l'aggregato e' l'unico numero con una statistica.
+    # Va letto per primo: dice se l'edge c'e', prima di chiedersi DOVE sia.
+    all_vals = [v for vals in groups.values() for v in vals]
+    rows = [("TOTALE (tutti i trade)", all_vals)] + rows
 
     # --- 1) quanto lontano arriva il prezzo -------------------------------- #
     head = "gruppo".ljust(34) + "n".rjust(4) + "  mediana" + \
