@@ -44,12 +44,23 @@ ufw --force enable
 Il repo è privato, quindi serve autenticarsi. Crea un **Personal Access Token**
 GitHub (Settings → Developer settings → Tokens, scope `repo`) e usalo come password:
 ```bash
-cd /opt
+cd /root        # o /opt, o dove preferisci: la scelta e' libera (vedi nota sotto)
 git clone https://github.com/alessiobaljak/agentic_trading_system.git
 # username: alessiobaljak   password: <il-tuo-token>
 cd agentic_trading_system
 git checkout claude/brave-albattani-1b12fv
+export APP_DIR="$(pwd)"   # usato dai comandi piu' avanti
 ```
+
+> **La directory non e' fissa.** Gli script del repo ricavano il proprio path da soli
+> (`APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"`), quindi funzionano ovunque tu abbia
+> clonato. Solo la unit systemd qui sotto scrive path assoluti, ed e' l'unica cosa da
+> tenere allineata. **L'installazione in produzione sta in `/root/agentic_trading_system`.**
+>
+> Se apri una shell nuova e non ricordi dove sia, chiedilo al servizio che sta girando:
+> ```bash
+> systemctl show trading-bot.service -p WorkingDirectory
+> ```
 
 ## 6. Ambiente Python + dipendenze
 ```bash
@@ -90,16 +101,18 @@ Guarda i log; fermalo con `Ctrl+C`. Se gira senza errori, passa al 24/7.
 ## 10. Fallo girare 24/7 con systemd
 Crea il servizio:
 ```bash
-cat > /etc/systemd/system/trading-bot.service <<'EOF'
+# NB: heredoc SENZA apici -> $APP_DIR viene espanso nei path assoluti della unit
+# (systemd non espande variabili di shell, quindi devono essere gia' risolti qui).
+cat > /etc/systemd/system/trading-bot.service <<EOF
 [Unit]
 Description=Agentic Trading Bot
 After=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=/opt/agentic_trading_system
-EnvironmentFile=/opt/agentic_trading_system/.env
-ExecStart=/opt/agentic_trading_system/.venv/bin/python -m bot.main
+WorkingDirectory=$APP_DIR
+EnvironmentFile=$APP_DIR/.env
+ExecStart=$APP_DIR/.venv/bin/python -m bot.main
 Restart=always
 RestartSec=10
 
@@ -118,7 +131,8 @@ journalctl -u trading-bot -f
 ## Sicurezza (importante)
 - La API key Binance **senza permesso di Withdraw**.
 - Tieni `DRY_RUN=true` per **settimane** (GATE 2) prima di pensare al live.
-- Aggiornamenti del codice: `cd /opt/agentic_trading_system && git pull && systemctl restart trading-bot`.
+- Aggiornamenti del codice: `cd "$APP_DIR" && git pull && systemctl restart trading-bot`
+  (in produzione: `cd /root/agentic_trading_system && git pull && systemctl restart trading-bot`).
 
 ## Passaggio a live (solo dopo paper positivo + GATE 1 superato)
 Nel `.env`: `DRY_RUN=false` (e `BINANCE_TESTNET=false` quando pronto), poi
