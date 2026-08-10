@@ -1,25 +1,23 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-10 21:02 UTC_
+_Generato: 2026-08-10 22:56 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: bear_trending
 - DRY_RUN: True
-- equity: **$787.78**
-- ultimo heartbeat: 2026-08-10 21:00 UTC
+- equity: **$785.51**
+- ultimo heartbeat: 2026-08-10 22:56 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-10 20:48 UTC)
+- esito: **⚪ FLAT** (2026-08-10 22:48 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
 ## Posizioni aperte
 - BTCUSDT: long qty=1.0 @ 100.0 uPnL=0.9079999666715278
-- ERAUSDT: long qty=1201.5742783138744 @ 0.06739 uPnL=0.3027985361297177
-- HUSDT: long qty=718.7008135049573 @ 0.07931 uPnL=1.6530320751359717
-- LABUSDT: short qty=684.8511536594757 @ 0.1189 uPnL=0.35572919389623375
-- MIRAUSDT: long qty=1933.6097101520843 @ 0.04224 uPnL=-0.46230740781083
+- ERAUSDT: long qty=1201.5742783138744 @ 0.06739 uPnL=0.4837799729603645
+- HUSDT: long qty=718.7008135049573 @ 0.07931 uPnL=1.9283303200624926
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
@@ -39,11 +37,11 @@ _aggiornato: 2026-08-10 17:27 UTC · 1480 coppie valutate, 0 passate in questo r
 _Nessuna coppia ha passato in questo run._
 
 ## Trade chiusi — perché usciamo
-- totale: **140** · vinti: 46 (33%) · PnL realizzato: **-227.03**
+- totale: **142** · vinti: 46 (32%) · PnL realizzato: **-229.31**
 
 | Uscita | Trade | % | PnL |
 |---|---|---|---|
-| Stop loss (prima di qualsiasi TP) | 86 | 61% | -385.32 |
+| Stop loss (prima di qualsiasi TP) | 88 | 62% | -387.60 |
 | Scale-out (>=1 TP incassato, residuo a BE) | 23 | 16% | +82.12 |
 | Time exit (orizzonte scaduto) | 9 | 6% | +63.56 |
 | Take profit (fino all'ultimo gradino) | 8 | 6% | +35.57 |
@@ -51,26 +49,26 @@ _Nessuna coppia ha passato in questo run._
 | ? | 5 | 4% | -25.00 |
 | Manuale | 1 | 1% | +0.53 |
 
-- gradini raggiunti (su 135 trade): 0 TP: 104 (77%) · 1 TP: 21 (16%) · 2 TP: 9 (7%) · 3 TP: 1 (1%)
+- gradini raggiunti (su 137 trade): 0 TP: 106 (77%) · 1 TP: 21 (15%) · 2 TP: 9 (7%) · 3 TP: 1 (1%)
 
-- escursione favorevole (mfe_r, 135 trade): mediana **0.55R** · ≥1R: 36% · ≥1.5R: 26% · ≥3R: 7% · ≥5R: 1%
+- escursione favorevole (mfe_r, 137 trade): mediana **0.58R** · ≥1R: 36% · ≥1.5R: 26% · ≥3R: 7% · ≥5R: 1%
   _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
 
 ## Deriva paper vs gate
 _il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
 
-- **globale**: drift · 131 trade · PF vissuto 0.442 vs 1.544 atteso · mfe mediana 0.55R
+- **globale**: drift · 133 trade · PF vissuto 0.439 vs 1.544 atteso · mfe mediana 0.58R
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **ok** · 131 trade · correlazione 0.126 · influenza applicata **x1.0**
+- verdetto: **ok** · 133 trade · correlazione 0.125 · influenza applicata **x1.0**
 - la confidenza ordina correttamente gli esiti
 
 | Fascia di confidenza | Trade | Win rate | Esito medio |
 |---|---|---|---|
-| 60.0–60.0 | 43 | 28% | -4.28% |
-| 60.0–60.0 | 43 | 35% | -0.45% |
+| 60.0–60.0 | 44 | 27% | -4.20% |
+| 60.0–60.0 | 44 | 34% | -0.49% |
 | 60.0–75.0 | 45 | 29% | -1.78% |
 
 _se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
