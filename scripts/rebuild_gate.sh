@@ -2,7 +2,9 @@
 # ============================================================================
 # RICOSTRUISCE il registro GATE 1 da zero sotto il gate RIFORMATO:
 #   * HOLDOUT mai riusato (ultimi GATE_HOLDOUT_DAYS esclusi dalla selezione)
-#   * pass_count ONESTO (incrementa solo con dati nuovi -> >=1 giorno tra i pass)
+#   * pass_count ONESTO (incrementa solo con dati nuovi -> >=7 giorni tra i pass)
+#   * ROBUSTEZZA: PF >= 1 anche togliendo il 5% di trade migliori
+#   * storia minima 365 giorni (era 180: finestre da 34gg dentro una sola fase)
 #   * PF per-regime esportato (filtro di regime live + prior per il learning)
 #   * scala di TP dinamica per coppia (al posto del parametro morto `rr`)
 #   * GATE_MIN_TRADES 30 (era 20)
@@ -14,10 +16,12 @@
 # NON tocca: paper (trade chiusi/equity), learning (pesi/memory), user_risk.
 # A differenza di promote_scale_out.sh qui si azzera SOLO il registro.
 #
-# CONSEGUENZA da conoscere: col pass onesto servono >= MIN_PASSES giorni di
-# passate perche' una coppia torni validata -> il bot resta FLAT (ready<60%)
-# per ALMENO 3 giorni. E' il costo di una validazione vera. Il timer riprende
-# ad accumulare pass da solo, una passata al giorno che conta.
+# CONSEGUENZA da conoscere: col pass onesto a 168h servono MIN_PASSES x 7 giorni
+# perche' una coppia torni validata -> con MIN_PASSES=3 il bot resta FLAT per
+# ~3 SETTIMANE. E' il costo di una validazione vera, e va confrontato col costo
+# dell'alternativa: il registro precedente ha prodotto PF 0.525 su 96 trade.
+# Per accorciare, si abbassa OPTIMIZER_NEW_DATA_MIN_HOURS nel .env (72 = ~9
+# giorni) sapendo che si torna a contare come conferme dei dati piu' sovrapposti.
 #
 # Uso (sul VPS, dentro tmux):
 #   tmux new -s rebuild
@@ -43,8 +47,8 @@ PY="$APP_DIR/.venv/bin/python"
 if [ "$YES" -ne 1 ]; then
   echo "ATTENZIONE: azzera il REGISTRO GATE 1 e lo ricostruisce col gate riformato."
   echo "  - paper e learning NON vengono toccati"
-  echo "  - il bot restera' FLAT finche' la copertura non torna >= 60%"
-  echo "  - col pass onesto servono >= 3 GIORNI di passate (1 pass utile/giorno)"
+  echo "  - il bot restera' FLAT finche' la copertura non torna >= OPTIMIZER_READY_FRACTION"
+  echo "  - col pass onesto (168h) servono ~3 SETTIMANE: 1 pass utile ogni 7 giorni"
   echo
   echo "Per eseguire:  bash scripts/rebuild_gate.sh --yes ${N}"
   exit 1
@@ -76,8 +80,9 @@ systemctl restart trading-bot.service 2>/dev/null \
 OPT_ARGS="--top 200 --windows 3 --max-combos 12 --start 2022-01-01"
 DISC_ARGS="--top 200 --generate 100 --reeval-cap 500 --windows 3 --start 2022-01-01"
 echo "[rebuild] GATE 1 riformato · $N passate back-to-back · inizio $(date -u)"
-echo "[rebuild] NB: le passate nello stesso giorno accumulano AL MASSIMO 1 pass"
-echo "[rebuild]     (pass onesto): le successive arrivano dal timer nei giorni dopo."
+echo "[rebuild] NB: piu' passate ravvicinate accumulano AL MASSIMO 1 pass (pass"
+echo "[rebuild]     onesto, 168h di dati nuovi): le altre arrivano dal timer."
+echo "[rebuild]     Le passate extra servono comunque: popolano il registro e le spec."
 for i in $(seq 1 "$N"); do
   RESET=""
   [ "$i" -eq 1 ] && RESET="--reset-registry"     # SOLO la prima passata azzera
