@@ -103,6 +103,30 @@ def test_pair_and_strategy_drift_compound_down_to_the_floor(monkeypatch):
     assert weight_factor(d, "AUSDT", "s1") == pytest.approx(settings.DRIFT_WEIGHT_FLOOR)
 
 
+def test_global_drift_alone_brakes_every_pair(monkeypatch):
+    """Il livello GLOBALE deve frenare da solo.
+
+    E' la granularita' che matura per prima: i trade si spargono su decine di
+    coppie, quindi nessuna raggiunge DRIFT_MIN_TRADES_PAIR mentre l'aggregato ha
+    gia' campione abbondante. Finche' weight_factor leggeva solo pairs/strategies,
+    il rilevatore pubblicava 'drift' globale e il bot continuava a size piena.
+    Qui: coppie e strategie restano sotto soglia (una coppia diversa per trade),
+    solo il globale supera -> il freno deve comunque scattare.
+    """
+    monkeypatch.setattr(settings, "DRIFT_ENABLED", True)
+    monkeypatch.setattr(settings, "DRIFT_MIN_TRADES_GLOBAL", 10)
+    trades, pairs = [], {}
+    for i in range(30):        # 30 coppie/strategie diverse, 1 solo trade ciascuna
+        sym, strat = f"C{i}USDT", f"gen_{i}"
+        trades.append(_t(sym=sym, strat=strat))
+        pairs[f"{sym}|{strat}"] = {"last_pf": 1.6}
+    d = compute_drift(trades, pairs)
+    assert all(v["verdict"] != DRIFT for v in d["pairs"].values()), "nessuna coppia in DRIFT"
+    assert all(v["verdict"] != DRIFT for v in d["strategies"].values())
+    assert d["global"]["verdict"] == DRIFT
+    assert weight_factor(d, "C0USDT", "gen_0") == pytest.approx(settings.DRIFT_WEIGHT_FACTOR)
+
+
 def test_drift_disabled_means_no_brake(monkeypatch):
     monkeypatch.setattr(settings, "DRIFT_ENABLED", False)
     d = compute_drift([_t() for _ in range(10)], _pairs())

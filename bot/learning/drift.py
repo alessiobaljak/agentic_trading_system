@@ -147,13 +147,22 @@ def weight_factor(drift_doc: dict | None, symbol: str, strategy: str) -> float:
 
     Frena la coppia (o l'intera strategia) che sta contraddicendo la promessa,
     senza spegnerla: la decisione di rimuoverla spetta al gate, che rivalidera' su
-    dati storici. 1.0 = nessuna deriva o funzione disattivata."""
+    dati storici. 1.0 = nessuna deriva o funzione disattivata.
+
+    Le tre granularita' si moltiplicano perche' dicono cose diverse e cumulabili:
+    la coppia sbaglia, la strategia sbaglia ovunque, il registro INTERO sbaglia.
+    Il livello GLOBALE e' quello che matura per primo (le soglie per coppia
+    richiedono 8 trade e i trade si spargono su decine di coppie), ed e' anche il
+    piu' solido perche' e' l'unico con abbastanza campione: ignorarlo lasciava il
+    bot a size piena mentre il suo stesso rilevatore aveva gia' emesso 'drift'."""
     if not settings.DRIFT_ENABLED or not drift_doc:
         return 1.0
     f = 1.0
     if (drift_doc.get("pairs") or {}).get(f"{symbol}|{strategy}", {}).get("verdict") == DRIFT:
         f *= settings.DRIFT_WEIGHT_FACTOR
     if (drift_doc.get("strategies") or {}).get(strategy, {}).get("verdict") == DRIFT:
+        f *= settings.DRIFT_WEIGHT_FACTOR
+    if (drift_doc.get("global") or {}).get("verdict") == DRIFT:
         f *= settings.DRIFT_WEIGHT_FACTOR
     return max(settings.DRIFT_WEIGHT_FLOOR, f)
 
