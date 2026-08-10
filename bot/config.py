@@ -17,7 +17,16 @@ from functools import lru_cache
 
 from dotenv import load_dotenv
 
-load_dotenv()
+# I TEST NON DEVONO VEDERE LA CONFIGURAZIONE DI PRODUZIONE.
+# load_dotenv() legge il .env della directory corrente: lanciando pytest dalla
+# cartella dell'app sulla VPS, l'intera configurazione live (SCALE_OUT_ENABLED,
+# leva, cap di size, BACKTEST_PARITY...) finiva dentro i test, che assumono i
+# default -> 14 fallimenti fantasma su una macchina e zero sull'altra. Peggio:
+# entrava anche FIREBASE_SERVICE_ACCOUNT, quindi la suite si collegava al
+# Firebase VERO e poteva scrivergli sopra (un test ha trovato una posizione di
+# produzione aperta). conftest.py imposta questa variabile prima di ogni import.
+if not os.getenv("TRADING_BOT_TEST_MODE"):
+    load_dotenv()
 
 
 def timeframe_hours(tf: str) -> float:
