@@ -22,7 +22,8 @@ import time
 from datetime import date
 
 from backtesting.data_loader import load_candles
-from backtesting.engine import StrategyStats, max_drawdown, passes_gate, pf_by_regime
+from backtesting.engine import (StrategyStats, max_drawdown, passes_gate, pf_by_regime,
+                                pf_without_top)
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
 from bot.config import settings
@@ -87,45 +88,63 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     hanno train, quindi qui l'OOS era l'unica difesa — e veniva riusato identico a
     ogni run da migliaia di candidate (la lotteria). L'holdout finale, mai visto
     dalla selezione, e' la verifica che mancava."""
-    oos = StrategyStats(strategy=spec["id"])
-    window_pnls: list[float] = []   # ritorno OOS per finestra (consistenza)
     body, cut = opt.split_holdout(candles)
-    for (_ta, _tb, sa, sb) in opt._windows(len(body)):
-        test_c = body[sa:sb]
-        test_f = frame.iloc[sa:sb].reset_index(drop=True)
-        st = opt.bt.run_strategy(GeneratedStrategy(spec), symbol, test_c, frame=test_f)
-        oos.trades.extend(st.trades)
-        # consistenza: solo le finestre con trade (una finestra senza segnali non e'
-        # una perdita -> non deve far fallire il gate).
-        if st.trades:
-            window_pnls.append(sum(t.pnl_pct for t in st.trades))
-    pf = oos.profit_factor()
-    pnl = oos.total_pnl_pct()
-    reg_pf = pf_by_regime(oos.trades)
-    passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
-                         max_dd=max_drawdown(oos.trades), regime_pf=reg_pf)
 
-    # SCALA DI TP PER-COPPIA anche per le GENERATE. Le classiche la scelgono nella
-    # grid search; le generate non hanno grid -> senza questo passo restavano per
-    # sempre sulla scala globale (e sono la maggioranza del registro). Solo per chi
-    # PASSA le finestre (poche): si rivalutano le candidate sulle stesse finestre e
-    # vince quella col miglior (ritorno - drawdown). Costo marginale ~4x su pochi.
+    def _run_oos(ladder=None) -> tuple:
+        """(stats OOS, ritorni per finestra) con una scala di TP data."""
+        st_all = StrategyStats(strategy=spec["id"])
+        per_window: list[float] = []
+        for (_ta, _tb, sa, sb) in opt._windows(len(body)):
+            g = GeneratedStrategy(spec)
+            if ladder:
+                g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(ladder)}
+            st = opt.bt.run_strategy(g, symbol, body[sa:sb],
+                                     frame=frame.iloc[sa:sb].reset_index(drop=True))
+            st_all.trades.extend(st.trades)
+            # consistenza: solo le finestre con trade (una finestra senza segnali non
+            # e' una perdita -> non deve far fallire il gate).
+            if st.trades:
+                per_window.append(sum(t.pnl_pct for t in st.trades))
+        return st_all, per_window
+
+    # 1) PRESELEZIONE con la scala globale: serve solo a scartare in fretta le spec
+    #    senza speranza, prima di spendere 4 backtest per la scelta della scala.
+    oos, window_pnls = _run_oos()
+    passed = passes_gate(window_pnls, len(oos.trades), oos.profit_factor(),
+                         oos.win_rate(), oos.total_pnl_pct(),
+                         max_dd=max_drawdown(oos.trades),
+                         regime_pf=pf_by_regime(oos.trades),
+                         pf_ex_top=pf_without_top(oos.trades))
+
+    # 2) SCALA DI TP PER-COPPIA anche per le GENERATE. Le classiche la scelgono nella
+    #    grid search; le generate non hanno grid -> senza questo passo restavano per
+    #    sempre sulla scala globale (e sono la maggioranza del registro).
     best_ladder = None
     if passed and settings.SCALE_OUT_ENABLED:
         from bot.execution.exit_logic import SCALE_LADDER_CANDIDATES
-        body2, _cut2 = opt.split_holdout(candles)
         best_metric = None
         for cand in SCALE_LADDER_CANDIDATES:
-            st_c = StrategyStats(strategy=spec["id"])
-            for (_ta, _tb, sa, sb) in opt._windows(len(body2)):
-                g = GeneratedStrategy(spec)
-                g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(cand)}
-                r = opt.bt.run_strategy(g, symbol, body2[sa:sb],
-                                        frame=frame.iloc[sa:sb].reset_index(drop=True))
-                st_c.trades.extend(r.trades)
+            st_c, _ = _run_oos(cand)
             metric = st_c.total_pnl_pct() - max_drawdown(st_c.trades)
             if best_metric is None or metric > best_metric:
                 best_metric, best_ladder = metric, list(cand)
+
+    # 3) METRICHE FINALI CON LA SCALA CHE VERRA' ESEGUITA. Prima i numeri spediti nel
+    #    registro (last_pf, win, regime_pf) uscivano dal passo 1, cioe' dalla scala
+    #    GLOBALE, mentre il bot operava la scala scelta al passo 2: per 95 coppie su
+    #    184 erano due configurazioni diverse. Il registro pubblicizzava un PF che
+    #    nessuno eseguiva, e il rilevatore di deriva confrontava il vissuto contro
+    #    quel numero sbagliato.
+    if best_ladder and list(best_ladder) != list(settings.SCALE_OUT_R_MULTIPLES):
+        oos, window_pnls = _run_oos(best_ladder)
+    pf = oos.profit_factor()
+    pnl = oos.total_pnl_pct()
+    reg_pf = pf_by_regime(oos.trades)
+    # il verdetto si rifa' sulla configurazione vera: una scala scelta per il
+    # (ritorno - drawdown) puo' comunque non superare gli altri criteri.
+    passed = passed and passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
+                                    max_dd=max_drawdown(oos.trades), regime_pf=reg_pf,
+                                    pf_ex_top=pf_without_top(oos.trades))
 
     hold: dict = {}
     if passed and opt.holdout_bars > 0:

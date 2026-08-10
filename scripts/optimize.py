@@ -32,13 +32,21 @@ from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 
 def _min_history(interval: str) -> int:
     """Minimo di CANDELE perche' una coin sia validabile, definito in GIORNI di
-    storia (default 180) e convertito nel timeframe corrente. Cosi' il requisito
+    storia (default 365) e convertito nel timeframe corrente. Cosi' il requisito
     NON si indebolisce cambiando timeframe (2500 candele fisse = 104 giorni a 1h
-    ma solo 26 a 15m). OPTIMIZER_MIN_HISTORY (in candele) vince se impostato."""
+    ma solo 26 a 15m). OPTIMIZER_MIN_HISTORY (in candele) vince se impostato.
+
+    Perche' 365 e non 180: con 180 giorni, tolti i 45 di holdout, restano 135 da
+    dividere in 4 blocchi -> finestre da 34 giorni. Le "3 validazioni OOS
+    indipendenti" diventano tre fette contigue dello stesso trimestre, per giunta
+    spesso i primi mesi di una listing nuova (una fase di mercato sola, molto
+    direzionale). E' il caso misurato su BIRBUSDT: 191 giorni di storia, passava il
+    minimo per 11, PF 1.51 nel gate e 0.16 nel paper. Un anno porta le finestre a
+    ~80 giorni e fa entrare almeno un cambio di regime."""
     env = os.getenv("OPTIMIZER_MIN_HISTORY")
     if env:
         return int(env)
-    days = float(os.getenv("OPTIMIZER_MIN_HISTORY_DAYS", "180"))
+    days = float(os.getenv("OPTIMIZER_MIN_HISTORY_DAYS", "365"))
     return int(days * 24.0 / timeframe_hours(interval))
 
 FAPI = "https://fapi.binance.com"
@@ -291,7 +299,12 @@ MIN_COVERED = int(os.getenv("OPTIMIZER_MIN_COVERED", "5"))
 FRESH_DAYS = float(os.getenv("OPTIMIZER_FRESH_DAYS", "3"))
 # un pass conta SOLO se dall'ultimo pass sono entrate almeno queste ore di dati
 # nuovi: rivalutare gli stessi dati non e' una conferma indipendente.
-NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "24")) * 3600
+# 24 ore erano troppo poche: con l'ottimizzatore che gira ogni 8h, tre pass
+# potevano maturare in tre giorni su dati identici al 99%, e MIN_PASSES=3 non
+# significava piu' nulla (BIRBUSDT aveva pass_count 3 su 191 giorni di storia).
+# 168 ore = una settimana: su una finestra OOS da ~80 giorni e' circa il 9% di
+# dati davvero nuovi per ogni conferma.
+NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "168")) * 3600
 # auto-purge: una coppia viene RIMOSSA dal registro dopo N run consecutivi in cui,
 # pur essendo processata, non passa piu' il gate (costi/edge non piu' battuti).
 PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))

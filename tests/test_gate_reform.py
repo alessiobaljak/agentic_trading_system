@@ -145,8 +145,12 @@ def test_pass_count_needs_new_data():
     # stesso data_end (stessi dati) -> NESSUN incremento
     update_registry(fb, {key: _entry(t0)}, [key])
     assert pc() == 1
-    # 2 giorni di dati nuovi -> incrementa
-    update_registry(fb, {key: _entry(t0 + 2 * 86400)}, [key])
+    # meno dati nuovi della soglia -> ancora NESSUN incremento
+    from scripts.optimize import NEW_DATA_MIN_S
+    update_registry(fb, {key: _entry(t0 + NEW_DATA_MIN_S * 0.5)}, [key])
+    assert pc() == 1
+    # oltre la soglia di dati NUOVI -> incrementa
+    update_registry(fb, {key: _entry(t0 + NEW_DATA_MIN_S + 60)}, [key])
     assert pc() == 2
 
 

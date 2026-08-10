@@ -110,11 +110,13 @@ def test_merge_into_registry_only_passed_and_accumulates():
     assert "BTCUSDT|gen_aaa" in pairs
     assert "BTCUSDT|gen_bbb" not in pairs
     assert "BTCUSDT|gen_aaa" not in reg["validated"]  # serve >=3 pass
-    # dopo 3 pass diventa validata/operabile
-    # ogni pass richiede >=24h di dati NUOVI: si avanza data_end di un giorno
-    out["BTCUSDT|gen_aaa"]["data_end"] = 1_700_000_000.0 + 86_400.0
+    # dopo 3 pass diventa validata/operabile. Ogni pass richiede NEW_DATA_MIN_S di
+    # dati NUOVI: si avanza data_end oltre la soglia (derivata, non un giorno fisso,
+    # cosi' il test non si rompe se la soglia cambia).
+    from scripts.optimize import NEW_DATA_MIN_S
+    out["BTCUSDT|gen_aaa"]["data_end"] = 1_700_000_000.0 + (NEW_DATA_MIN_S + 60)
     merge_into_registry(fb, out, passed_now=["BTCUSDT|gen_aaa"])
-    out["BTCUSDT|gen_aaa"]["data_end"] = 1_700_000_000.0 + 2 * 86_400.0
+    out["BTCUSDT|gen_aaa"]["data_end"] = 1_700_000_000.0 + 2 * (NEW_DATA_MIN_S + 60)
     merge_into_registry(fb, out, passed_now=["BTCUSDT|gen_aaa"])
     reg = fb.get_doc("strategy_registry", "validated")
     assert decode_pairs(reg["pairs"])["BTCUSDT|gen_aaa"]["pass_count"] == 3

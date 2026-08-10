@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from backtesting.engine import (Backtester, StrategyStats, max_drawdown, passes_gate,
-                                pf_by_regime, weighted_score_parts)
+                                pf_by_regime, pf_without_top, weighted_score_parts)
 from bot.core.indicators import compute_indicator_frame
 from bot.core.models import Candle
 from bot.strategies.base import STRATEGY_REGISTRY
@@ -144,8 +144,15 @@ class WalkForwardOptimizer:
         pf = st.profit_factor()
         pnl = st.total_pnl_pct()
         n = len(st.trades)
-        ok = (n >= _st.GATE_HOLDOUT_MIN_TRADES and pf >= _st.GATE_HOLDOUT_PF and pnl > 0)
-        return {"pf": round(pf, 3), "pnl_pct": round(pnl, 4), "trades": n, "ok": ok}
+        # ROBUSTEZZA sull'unico campione mai usato per selezionare: se l'holdout e'
+        # positivo SOLO grazie ai suoi colpi migliori, non ha verificato un edge.
+        # Misurato su BIRBUSDT|gen_472f85b8: 94 trade, +29.5%, ma togliendo i 7
+        # migliori diventava -22.6%. Passava lo stesso.
+        pf_ex = pf_without_top(st.trades)
+        ok = (n >= _st.GATE_HOLDOUT_MIN_TRADES and pf >= _st.GATE_HOLDOUT_PF and pnl > 0
+              and pf_ex >= _st.GATE_MIN_PF_EX_TOP)
+        return {"pf": round(pf, 3), "pnl_pct": round(pnl, 4), "trades": n, "ok": ok,
+                "pf_ex_top": round(pf_ex, 3)}
 
     def optimize_symbol(self, symbol: str, candles: list[Candle],
                         context_by_ts: dict | None = None) -> list[OptResult]:
@@ -202,7 +209,8 @@ class WalkForwardOptimizer:
             pnl = oos.total_pnl_pct()
             reg_pf = pf_by_regime(oos.trades)
             passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
-                                 max_dd=max_drawdown(oos.trades), regime_pf=reg_pf)
+                                 max_dd=max_drawdown(oos.trades), regime_pf=reg_pf,
+                                 pf_ex_top=pf_without_top(oos.trades))
             # VERIFICA FINALE sull'holdout, solo se le finestre sono superate e coi
             # parametri che verrebbero spediti (l'ultimo best del walk-forward).
             hold: dict = {}

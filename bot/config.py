@@ -350,6 +350,16 @@ class Settings:
     # si scava per vincerlo. Il win-rate resta una proprieta' di STILE, non un
     # criterio di validita': un 35% di WR con curva regolare e' benvenuto.
     GATE_MIN_RECOVERY: float = float(os.getenv("GATE_MIN_RECOVERY", "2.0"))
+    # ROBUSTEZZA: frazione dei trade MIGLIORI da togliere prima di ricalcolare il PF,
+    # e soglia che quel PF ridotto deve comunque superare. Sotto scale-out il
+    # risultato lo fanno poche corse lunghe: su BIRBUSDT|gen_472f85b8 l'holdout di 94
+    # trade era positivo solo grazie ai 7 migliori, e senza quelli gli altri 87
+    # perdevano. Il tasso di coda e' anche la statistica piu' instabile, quindi
+    # scegliere il meglio fra 1464 candidate su una metrica che ne dipende seleziona
+    # la coda piu' fortunata invece dell'edge. Chiedere PF >= 1 SENZA i colpi migliori
+    # distingue "valida" da "e' andata bene". 0 disattiva il test.
+    GATE_DROP_TOP_FRAC: float = float(os.getenv("GATE_DROP_TOP_FRAC", "0.05"))
+    GATE_MIN_PF_EX_TOP: float = float(os.getenv("GATE_MIN_PF_EX_TOP", "1.0"))
     # RECENCY: emivita (giorni) del peso dei trade nella SCELTA DEI PARAMETRI.
     # Le finestre pesavano tutte uguale: un trade di gennaio 2022 contava quanto uno
     # di oggi, quindi 7 giorni nuovi su 4.6 anni valevano lo 0.42% dell'evidenza e

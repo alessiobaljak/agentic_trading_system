@@ -115,10 +115,39 @@ def regime_ok(regime_pf: dict | None) -> bool:
     return True
 
 
+def pf_without_top(trades, frac: float | None = None) -> float:
+    """Profit factor RICALCOLATO togliendo la frazione di trade piu' profittevoli.
+
+    Sotto scale-out il risultato non e' distribuito: una manciata di corse lunghe
+    paga tutte le perdite. Misurato su BIRBUSDT|gen_472f85b8, l'holdout di 94 trade
+    era positivo solo grazie ai 7 migliori — togliendoli, gli altri 87 perdevano.
+    Quel numero e' anche la statistica piu' instabile che ci sia, e selezionare il
+    meglio fra 1464 candidate su una metrica che dipende da 7 osservazioni
+    seleziona la coda piu' fortunata, non l'edge.
+
+    Questo test chiede: la strategia regge ANCHE senza i suoi colpi migliori? Se no
+    non e' validata, e' fortunata. Frazione <= 0 -> nessuna rimozione (PF normale).
+    """
+    frac = settings.GATE_DROP_TOP_FRAC if frac is None else frac
+    pnls = sorted((t.pnl_pct for t in trades), reverse=True)
+    if not pnls:
+        return 0.0
+    if frac > 0:
+        # almeno 1 trade rimosso quando la frazione e' attiva: con campioni piccoli
+        # arrotondare a zero renderebbe il test silenziosamente inefficace.
+        pnls = pnls[max(1, int(len(pnls) * frac)):]
+    gains = sum(p for p in pnls if p > 0)
+    losses = -sum(p for p in pnls if p < 0)
+    if losses <= 0:
+        return 0.0 if gains <= 0 else 999.0
+    return gains / losses
+
+
 def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
                 win_rate: float, total_return: float,
                 max_dd: float | None = None,
-                regime_pf: dict | None = None) -> bool:
+                regime_pf: dict | None = None,
+                pf_ex_top: float | None = None) -> bool:
     """
     Verdetto GATE 1 per una coppia (coin, strategia), fuori campione (OOS).
     Tutte le condizioni (soglie in config) devono valere:
@@ -128,7 +157,10 @@ def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
       * ritorno OOS totale >= GATE_MIN_TOTAL_RETURN ("profittevole, e di tanto");
       * profittevole in OGNI (o quasi) finestra OOS — almeno
         GATE_CONSISTENCY_FRACTION delle finestre > 0: niente "in perdita un anno e
-        recupero il dopo".
+        recupero il dopo";
+      * ROBUSTEZZA: PF >= GATE_MIN_PF_EX_TOP anche togliendo il GATE_DROP_TOP_FRAC
+        di trade migliori (vedi pf_without_top) — il risultato non deve poggiare
+        su pochi colpi fortunati.
     """
     if n_trades < settings.GATE_MIN_TRADES:
         return False
@@ -147,6 +179,8 @@ def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
     if max_dd is not None and max_dd > 0:
         if total_return / max_dd < settings.GATE_MIN_RECOVERY:
             return False
+    if pf_ex_top is not None and pf_ex_top < settings.GATE_MIN_PF_EX_TOP:
+        return False
     if not regime_ok(regime_pf):
         return False
     return True
