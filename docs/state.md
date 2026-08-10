@@ -1,38 +1,31 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-10 11:21 UTC_
+_Generato: 2026-08-10 13:44 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$855.07**
-- ultimo heartbeat: 2026-08-10 11:20 UTC
+- equity: **$824.53**
+- ultimo heartbeat: 2026-08-10 13:43 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-10 11:18 UTC)
+- esito: **⚪ FLAT** (2026-08-10 13:33 UTC)
 - motivo: parita' backtest: 4 segnali validi aperti
-- asset valutati: 91 · segnali: 7 · miglior segnale NOMUSDT gen_83893297 (conf. 60.0/soglia 30)
+- asset valutati: 93 · segnali: 8 · miglior segnale GUAUSDT gen_0a39495c (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- BEATUSDT: long qty=27.74570470119412 @ 2.595 uPnL=-2.1876706324387576
-- DEEPUSDT: short qty=11201.873503530547 @ 0.01554 uPnL=1.3303726119227945
-- ELSAUSDT: short qty=3082.5939452063594 @ 0.05817 uPnL=-3.7547758384122414
-- FFUSDT: long qty=2758.7521050255127 @ 0.0626 uPnL=-0.1703688892332579
-- GUAUSDT: short qty=2911.300561185891 @ 0.04626 uPnL=-6.848081040617471
-- LABUSDT: short qty=1003.7395384794505 @ 0.1214 uPnL=0.5601382129181123
-- MYXUSDT: short qty=2377.1117312836213 @ 0.07403 uPnL=-0.29819172888053513
-- NOMUSDT: short qty=103535.90034448268 @ 0.001668 uPnL=-1.8276923318482203
-- SEIUSDT: long qty=4138.458705358185 @ 0.04173 uPnL=-0.2756974413302706
-- UAIUSDT: long qty=755.9904664057672 @ 0.2388 uPnL=4.367430055982257
-- UBUSDT: long qty=979.6110404178619 @ 0.12621 uPnL=7.658460212157335
+- ALLOUSDT: short qty=270.68386251758596 @ 0.30461 uPnL=-0.3682480132782835
+- GUAUSDT: short qty=661.7919266779887 @ 0.0579 uPnL=-2.116619879408805
+- MYXUSDT: long qty=1090.7925831655225 @ 0.07559 uPnL=-0.274043517116887
+- NOMUSDT: long qty=48616.1623593643 @ 0.001696 uPnL=-0.424007776707207
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
-- copertura universo: **91/186 crypto (49%)** · obiettivo ≥ 35%
-- coppie validate (>= 3 pass OOS): **247**
+- copertura universo: **93/186 crypto (50%)** · obiettivo ≥ 35%
+- coppie validate (>= 3 pass OOS): **249**
 - universo scansionato: 1000BONKUSDT, 1000CATUSDT, 1000PEPEUSDT, 1000RATSUSDT, 1000SHIBUSDT, 4USDT, AAVEUSDT, ACEUSDT, ACTUSDT, ACUUSDT, ADAUSDT, AEROUSDT, AIOUSDT, AIXBTUSDT, AKEUSDT, ALGOUSDT, ALLOUSDT, ALTUSDT, APTUSDT, ARBUSDT, ARCUSDT, ASTERUSDT, ATOMUSDT, AVAXUSDT, AVNTUSDT, BABYUSDT, BANANAS31USDT, BANKUSDT, BBUSDT, BCHUSDT, BEATUSDT, BICOUSDT, BIOUSDT, BLESSUSDT, BLUAIUSDT, BMTUSDT, BNBUSDT, BOMEUSDT, BROCCOLI714USDT, BROCCOLIF3BUSDT, BTCUSDT, BTRUSDT, BULLAUSDT, C98USDT, CATIUSDT, CCUSDT, CGPTUSDT, CHILLGUYUSDT, CHZUSDT, CLOUSDT, COAIUSDT, COOKIEUSDT, COTIUSDT, CRVUSDT, CTSIUSDT, CYSUSDT, DASHUSDT, DEEPUSDT, DEXEUSDT, DODOXUSDT, DOGEUSDT, DOTUSDT, DYMUSDT, EDENUSDT, EIGENUSDT, ELSAUSDT, ENAUSDT, EPICUSDT, ERAUSDT, ESPORTSUSDT, ESPUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, EULUSDT, FARTCOINUSDT, FETUSDT, FHEUSDT, FILUSDT, FORMUSDT, GALAUSDT, GIGGLEUSDT, GUAUSDT, GWEIUSDT, HBARUSDT, HEIUSDT, HEMIUSDT, HMSTRUSDT, HOMEUSDT, HUMAUSDT, HYPEUSDT, ICPUSDT, INJUSDT, INXUSDT, IOTXUSDT, JOEUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KERNELUSDT, KGENUSDT, KOMAUSDT, LABUSDT, LAUSDT, LDOUSDT, LINKUSDT, LISTAUSDT, LITUSDT, LTCUSDT, MAGMAUSDT, MAVUSDT, MEMEUSDT, MMTUSDT, MOODENGUSDT, MUBARAKUSDT, MUSDT, NEARUSDT, NEIROUSDT, NILUSDT, ONDOUSDT, ONUSDT, OPUSDT, ORDIUSDT, PARTIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PNUTUSDT, POWERUSDT, PROMUSDT, PTBUSDT, PUMPUSDT, QUSDT, RAVEUSDT, RENDERUSDT, RIFUSDT, RIVERUSDT, SAGAUSDT, SCRUSDT, SEIUSDT, SHELLUSDT, SIRENUSDT, SKYAIUSDT, SOLUSDT, SOLVUSDT, SOONUSDT, STOUSDT, STRKUSDT, SUIUSDT, SUSHIUSDT, SYNUSDT, TAKEUSDT, TAOUSDT, TAUSDT, THEUSDT, TIAUSDT, TRADOORUSDT, TRUMPUSDT, TRXUSDT, TSTUSDT, TURBOUSDT, TUTUSDT, UAIUSDT, UBUSDT, UNIUSDT, USELESSUSDT, USUSDT, VIRTUALUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, XANUSDT, XLMUSDT, XMRUSDT, XNYUSDT, XPINUSDT, XPLUSDT, XRPUSDT, ZAMAUSDT, ZBTUSDT, ZECUSDT, ZENUSDT, ZROUSDT, 币安人生USDT
-- aggiornato: 2026-08-10 09:31 UTC
+- aggiornato: 2026-08-10 13:03 UTC
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
@@ -44,7 +37,7 @@ _Generato: 2026-08-10 11:21 UTC_
 | LABUSDT | gen_0316a306 | 3 | 1.686 | 345% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SKYAIUSDT | gen_4ca25e6b | 7 | 1.298 | 341% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SKYAIUSDT | gen_c2ad3837 | 8 | 1.298 | 341% | scale_r_mults=[1.5, 3.0, 5.0] |
-| LABUSDT | gen_0cebab50 | 4 | 1.538 | 334% | scale_r_mults=[2.0, 4.0, 6.0] |
+| LABUSDT | gen_0cebab50 | 4 | 1.537 | 334% | scale_r_mults=[2.0, 4.0, 6.0] |
 | GUAUSDT | gen_75dc48b6 | 3 | 1.554 | 270% | scale_r_mults=[1.5, 3.0, 5.0] |
 | LABUSDT | gen_3ef37952 | 3 | 5.262 | 268% | scale_r_mults=[2.0, 4.0, 6.0] |
 | LABUSDT | gen_455d8307 | 3 | 1.53 | 267% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -58,6 +51,7 @@ _Generato: 2026-08-10 11:21 UTC_
 | NOMUSDT | gen_534c426c | 5 | 1.539 | 217% | scale_r_mults=[1.5, 3.0, 5.0] |
 | BEATUSDT | gen_e333c757 | 3 | 1.368 | 211% | scale_r_mults=[1.0, 2.0, 3.0] |
 | GUAUSDT | gen_f00878de | 3 | 1.301 | 206% | scale_r_mults=[1.5, 3.0, 5.0] |
+| ARCUSDT | gen_1c8c43ea | 3 | 2.66 | 204% | scale_r_mults=[1.5, 3.0, 5.0] |
 | GUAUSDT | gen_2a737fc0 | 4 | 2.421 | 204% | scale_r_mults=[1.0, 2.0, 3.0] |
 | NOMUSDT | gen_7ca6c708 | 5 | 1.423 | 201% | scale_r_mults=[1.5, 3.0, 5.0] |
 | GUAUSDT | gen_fe331ae5 | 4 | 1.352 | 201% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -68,6 +62,7 @@ _Generato: 2026-08-10 11:21 UTC_
 | HEIUSDT | gen_10430017 | 3 | 1.976 | 187% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ACTUSDT | gen_a359180e | 6 | 2.017 | 183% | scale_r_mults=[2.0, 4.0, 6.0] |
 | BEATUSDT | gen_00a2189f | 5 | 1.411 | 183% | scale_r_mults=[1.5, 3.0, 5.0] |
+| CLOUSDT | gen_f048d715 | 3 | 1.641 | 183% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ACTUSDT | gen_f99df625 | 7 | 1.828 | 177% | scale_r_mults=[2.0, 4.0, 6.0] |
 | BLESSUSDT | gen_6003e6d7 | 3 | 2.082 | 175% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ONUSDT | gen_a36d1557 | 7 | 1.425 | 172% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -75,6 +70,7 @@ _Generato: 2026-08-10 11:21 UTC_
 | ONUSDT | gen_ca980edf | 13 | 1.403 | 168% | scale_r_mults=[2.0, 4.0, 6.0] |
 | TRADOORUSDT | gen_807e3c00 | 3 | 1.313 | 162% | scale_r_mults=[1.5, 3.0, 5.0] |
 | RAVEUSDT | gen_508e22b9 | 4 | 1.498 | 151% | scale_r_mults=[2.0, 4.0, 6.0] |
+| CLOUSDT | gen_a06a52e1 | 4 | 1.953 | 150% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ETCUSDT | gen_91b83995 | 4 | 1.4 | 147% | scale_r_mults=[2.0, 4.0, 6.0] |
 | HEIUSDT | gen_b09d3dec | 8 | 1.315 | 146% | scale_r_mults=[1.5, 3.0, 5.0] |
 | 4USDT | gen_b6e9e2b3 | 12 | 1.864 | 146% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -108,7 +104,8 @@ _Generato: 2026-08-10 11:21 UTC_
 | 4USDT | gen_c5bb7320 | 3 | 1.536 | 105% | scale_r_mults=[2.0, 4.0, 6.0] |
 | DASHUSDT | gen_7c75b098 | 7 | 1.347 | 104% | scale_r_mults=[1.5, 3.0, 5.0] |
 | BEATUSDT | gen_9069e17a | 10 | 1.568 | 104% | scale_r_mults=[1.5, 3.0, 5.0] |
-| HUSDT | gen_e6c14a8c | 3 | 1.342 | 102% | scale_r_mults=[1.5, 3.0, 5.0] |
+| CLOUSDT | gen_6003e6d7 | 3 | 1.51 | 103% | scale_r_mults=[2.0, 4.0, 6.0] |
+| HUSDT | gen_e6c14a8c | 4 | 1.342 | 102% | scale_r_mults=[1.5, 3.0, 5.0] |
 | XPLUSDT | gen_e59ad90b | 6 | 1.418 | 102% | scale_r_mults=[1.5, 3.0, 5.0] |
 | JUPUSDT | gen_03181574 | 3 | 1.34 | 101% | scale_r_mults=[1.5, 3.0, 5.0] |
 | NEIROUSDT | gen_03181574 | 3 | 1.474 | 101% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -125,11 +122,13 @@ _Generato: 2026-08-10 11:21 UTC_
 | BLESSUSDT | gen_217f70ef | 7 | 2.008 | 92% | scale_r_mults=[2.0, 4.0, 6.0] |
 | BLESSUSDT | gen_4d573491 | 5 | 2.008 | 92% | scale_r_mults=[2.0, 4.0, 6.0] |
 | HEIUSDT | gen_e596aacc | 4 | 1.639 | 92% | scale_r_mults=[1.5, 3.0, 5.0] |
+| CLOUSDT | gen_d5d29422 | 5 | 1.558 | 92% | scale_r_mults=[2.0, 4.0, 6.0] |
 | GUAUSDT | gen_0ca47430 | 6 | 1.88 | 92% | scale_r_mults=[1.5, 3.0, 5.0] |
 | UBUSDT | gen_2a737fc0 | 3 | 1.44 | 91% | scale_r_mults=[2.0, 4.0, 6.0] |
 | JUPUSDT | gen_e83a8b9f | 4 | 1.384 | 91% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ALLOUSDT | gen_03181574 | 3 | 1.481 | 90% | scale_r_mults=[1.0, 2.0, 3.0] |
 | CYSUSDT | gen_472ebce0 | 3 | 1.556 | 87% | scale_r_mults=[2.0, 4.0, 6.0] |
-| ERAUSDT | gen_b09d3dec | 7 | 1.386 | 87% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ERAUSDT | gen_b09d3dec | 8 | 1.37 | 84% | scale_r_mults=[2.0, 4.0, 6.0] |
 | GIGGLEUSDT | gen_5a15b630 | 4 | 1.487 | 83% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SOONUSDT | gen_695a0f5b | 6 | 1.91 | 81% | scale_r_mults=[1.0, 2.0, 3.0] |
 | JUPUSDT | gen_70667b7f | 7 | 1.267 | 80% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -149,12 +148,11 @@ _Generato: 2026-08-10 11:21 UTC_
 | TAGUSDT | gen_5fbbfb8d | 6 | 1.625 | 76% | scale_r_mults=[1.5, 3.0, 5.0] |
 | RENDERUSDT | gen_a06a52e1 | 13 | 1.348 | 75% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SOONUSDT | gen_be9e1684 | 3 | 1.311 | 75% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ELSAUSDT | gen_026c5e5c | 6 | 1.561 | 74% | scale_r_mults=[1.5, 3.0, 5.0] |
 | HMSTRUSDT | gen_b4b15a8c | 7 | 2.078 | 73% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ONUSDT | gen_b9a141af | 3 | 2.828 | 73% | scale_r_mults=[1.5, 3.0, 5.0] |
 | GUAUSDT | gen_d5d29422 | 3 | 1.766 | 72% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ELSAUSDT | gen_d230db12 | 7 | 1.508 | 71% | scale_r_mults=[1.5, 3.0, 5.0] |
-| EVAAUSDT | gen_036ff8d4 | 6 | 2.51 | 71% | scale_r_mults=[2.0, 4.0, 6.0] |
-| ELSAUSDT | gen_026c5e5c | 5 | 1.569 | 71% | scale_r_mults=[1.5, 3.0, 5.0] |
+| ELSAUSDT | gen_d230db12 | 8 | 1.479 | 70% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ETCUSDT | gen_0a39495c | 10 | 1.3 | 70% | scale_r_mults=[2.0, 4.0, 6.0] |
 | TAGUSDT | gen_4895f636 | 4 | 1.717 | 70% | scale_r_mults=[1.5, 3.0, 5.0] |
 | TRUMPUSDT | gen_a7798aa0 | 5 | 1.294 | 70% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -166,16 +164,14 @@ _Generato: 2026-08-10 11:21 UTC_
 | JUPUSDT | gen_cb98159b | 10 | 1.677 | 69% | scale_r_mults=[2.0, 4.0, 6.0] |
 | BULLAUSDT | gen_58fc95fd | 6 | 5.218 | 69% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SKYAIUSDT | gen_879f4c20 | 5 | 1.771 | 69% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ZBTUSDT | gen_3769be8d | 4 | 1.903 | 68% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ZBTUSDT | gen_3769be8d | 4 | 1.904 | 68% | scale_r_mults=[2.0, 4.0, 6.0] |
 | EVAAUSDT | gen_217f70ef | 6 | 1.971 | 68% | scale_r_mults=[1.5, 3.0, 5.0] |
 | EVAAUSDT | gen_4d573491 | 3 | 1.971 | 68% | scale_r_mults=[1.5, 3.0, 5.0] |
 | 4USDT | gen_0a39495c | 10 | 1.55 | 67% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ZAMAUSDT | gen_e0d02090 | 7 | 1.872 | 67% | scale_r_mults=[1.5, 3.0, 5.0] |
 | 4USDT | gen_10430017 | 4 | 1.375 | 66% | scale_r_mults=[2.0, 4.0, 6.0] |
 | MIRAUSDT | gen_b2ea9dd6 | 13 | 2.364 | 66% | scale_r_mults=[1.5, 3.0, 5.0] |
-| OGNUSDT | gen_ef28e4e5 | 3 | 1.398 | 66% | scale_r_mults=[2.0, 4.0, 6.0] |
-| AKEUSDT | gen_232b25e5 | 4 | 1.431 | 65% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ELSAUSDT | gen_3c900892 | 4 | 1.329 | 64% | scale_r_mults=[2.0, 4.0, 6.0] |
+| AKEUSDT | gen_232b25e5 | 4 | 1.43 | 65% | scale_r_mults=[1.5, 3.0, 5.0] |
 | HEMIUSDT | gen_6003e6d7 | 11 | 1.443 | 64% | scale_r_mults=[2.0, 4.0, 6.0] |
 | TUTUSDT | gen_90fb2872 | 4 | 1.534 | 64% | scale_r_mults=[1.0, 1.5, 2.5] |
 | CYSUSDT | gen_b6e98197 | 3 | 2.04 | 63% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -190,6 +186,7 @@ _Generato: 2026-08-10 11:21 UTC_
 | BULLAUSDT | gen_db0bca86 | 6 | 2.326 | 60% | scale_r_mults=[1.0, 1.5, 2.5] |
 | ZBTUSDT | gen_be9e1684 | 4 | 1.427 | 59% | scale_r_mults=[1.0, 2.0, 3.0] |
 | PENGUUSDT | gen_4e5cbb1d | 7 | 1.347 | 58% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ELSAUSDT | gen_3c900892 | 5 | 1.274 | 57% | scale_r_mults=[2.0, 4.0, 6.0] |
 | CYSUSDT | gen_1a96fcc0 | 3 | 2.554 | 56% | scale_r_mults=[1.0, 2.0, 3.0] |
 | UBUSDT | gen_91b83995 | 4 | 1.484 | 55% | scale_r_mults=[1.5, 3.0, 5.0] |
 | FFUSDT | gen_b2ea9dd6 | 8 | 1.653 | 55% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -197,6 +194,7 @@ _Generato: 2026-08-10 11:21 UTC_
 | GUAUSDT | gen_4982af25 | 6 | 1.814 | 53% | scale_r_mults=[1.5, 3.0, 5.0] |
 | FFUSDT | gen_a359180e | 6 | 1.544 | 53% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ZAMAUSDT | gen_e01108f9 | 9 | 1.967 | 52% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ELSAUSDT | gen_9d27232a | 6 | 1.389 | 52% | scale_r_mults=[1.5, 3.0, 5.0] |
 | BOMEUSDT | gen_1e8cd48b | 4 | 1.252 | 52% | scale_r_mults=[2.0, 4.0, 6.0] |
 | BLUAIUSDT | gen_936abf10 | 3 | 2.166 | 51% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SOONUSDT | gen_03a825ad | 4 | 1.99 | 51% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -212,29 +210,28 @@ _Generato: 2026-08-10 11:21 UTC_
 | XMRUSDT | gen_5e23f61e | 7 | 1.601 | 48% | scale_r_mults=[1.5, 3.0, 5.0] |
 | XMRUSDT | gen_ef28e4e5 | 8 | 1.601 | 48% | scale_r_mults=[1.5, 3.0, 5.0] |
 | GIGGLEUSDT | gen_f5e2455b | 8 | 1.772 | 48% | scale_r_mults=[1.0, 2.0, 3.0] |
+| AEROUSDT | gen_843b59a9 | 10 | 1.637 | 47% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ZAMAUSDT | gen_00a2189f | 5 | 1.329 | 47% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SKRUSDT | gen_b11818f1 | 4 | 1.83 | 47% | scale_r_mults=[2.0, 4.0, 6.0] |
 | CYSUSDT | gen_0a39495c | 3 | 1.863 | 47% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ZAMAUSDT | gen_472ebce0 | 5 | 1.71 | 46% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ELSAUSDT | gen_9d27232a | 5 | 1.355 | 46% | scale_r_mults=[1.5, 3.0, 5.0] |
-| KAITOUSDT | gen_0a39495c | 13 | 1.353 | 46% | scale_r_mults=[2.0, 4.0, 6.0] |
+| KAITOUSDT | gen_0a39495c | 13 | 1.352 | 46% | scale_r_mults=[2.0, 4.0, 6.0] |
 | INXUSDT | gen_07cc1f19 | 3 | 3.032 | 46% | scale_r_mults=[2.0, 4.0, 6.0] |
 | RENDERUSDT | gen_c92be270 | 3 | 1.386 | 45% | scale_r_mults=[2.0, 4.0, 6.0] |
 | RENDERUSDT | gen_dbabacaf | 3 | 1.386 | 45% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SYNUSDT | gen_d146d9fc | 3 | 1.366 | 45% | scale_r_mults=[2.0, 4.0, 6.0] |
 | GIGGLEUSDT | gen_a06a52e1 | 3 | 1.617 | 45% | scale_r_mults=[1.0, 1.5, 2.5] |
 | GIGGLEUSDT | gen_07cc1f19 | 7 | 2.143 | 45% | scale_r_mults=[1.0, 2.0, 3.0] |
-| AEROUSDT | gen_843b59a9 | 9 | 1.601 | 45% | scale_r_mults=[1.5, 3.0, 5.0] |
 | LABUSDT | gen_0ca20b3d | 5 | 1.56 | 44% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SOONUSDT | gen_b344bf9e | 7 | 1.781 | 44% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ZAMAUSDT | gen_6c4f5e63 | 12 | 1.924 | 43% | scale_r_mults=[1.5, 3.0, 5.0] |
 | GWEIUSDT | gen_834b7525 | 8 | 1.799 | 43% | scale_r_mults=[1.5, 3.0, 5.0] |
+| ELSAUSDT | gen_0a688ff9 | 6 | 1.43 | 42% | scale_r_mults=[2.0, 4.0, 6.0] |
 | USUSDT | gen_52bad056 | 7 | 1.382 | 42% | scale_r_mults=[2.0, 4.0, 6.0] |
-| ELSAUSDT | gen_0a688ff9 | 5 | 1.44 | 42% | scale_r_mults=[2.0, 4.0, 6.0] |
 | APRUSDT | gen_42464eb3 | 4 | 1.805 | 42% | scale_r_mults=[2.0, 4.0, 6.0] |
-| EVAAUSDT | gen_936abf10 | 4 | 1.779 | 41% | scale_r_mults=[2.0, 4.0, 6.0] |
+| EDENUSDT | gen_91b83995 | 3 | 1.643 | 41% | scale_r_mults=[1.0, 1.5, 2.5] |
 | ZAMAUSDT | gen_95183c6b | 8 | 1.406 | 40% | scale_r_mults=[2.0, 4.0, 6.0] |
-| KAITOUSDT | gen_eb39de0f | 4 | 1.605 | 40% | scale_r_mults=[1.0, 2.0, 3.0] |
+| KAITOUSDT | gen_eb39de0f | 4 | 1.606 | 40% | scale_r_mults=[1.0, 2.0, 3.0] |
 | XPLUSDT | gen_eb39de0f | 4 | 1.666 | 39% | scale_r_mults=[1.0, 2.0, 3.0] |
 | LITUSDT | gen_629e8772 | 5 | 1.821 | 39% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ZAMAUSDT | gen_5ca05111 | 3 | 1.307 | 39% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -248,10 +245,9 @@ _Generato: 2026-08-10 11:21 UTC_
 | GIGGLEUSDT | gen_cb98159b | 10 | 2.066 | 36% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ZAMAUSDT | gen_91b83995 | 5 | 2.116 | 36% | scale_r_mults=[1.5, 3.0, 5.0] |
 | BULLAUSDT | gen_26cc121e | 6 | 3.213 | 36% | scale_r_mults=[2.0, 4.0, 6.0] |
-| INXUSDT | gen_4e5cbb1d | 3 | 1.806 | 35% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SAHARAUSDT | gen_695a0f5b | 5 | 1.473 | 34% | scale_r_mults=[1.5, 3.0, 5.0] |
 | UAIUSDT | gen_217f70ef | 5 | 1.53 | 34% | scale_r_mults=[1.5, 3.0, 5.0] |
-| DEXEUSDT | gen_45f53866 | 5 | 1.362 | 34% | scale_r_mults=[1.5, 3.0, 5.0] |
+| DEXEUSDT | gen_45f53866 | 5 | 1.363 | 34% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ACTUSDT | gen_b344bf9e | 7 | 1.476 | 34% | scale_r_mults=[2.0, 4.0, 6.0] |
 | GWEIUSDT | gen_dc5ad549 | 5 | 1.67 | 34% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ZAMAUSDT | gen_e6c14a8c | 5 | 1.426 | 33% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -274,11 +270,10 @@ _Generato: 2026-08-10 11:21 UTC_
 | SUSDT | gen_11d154ef | 3 | 1.38 | 24% | scale_r_mults=[1.5, 3.0, 5.0] |
 | GIGGLEUSDT | gen_c5437dd2 | 6 | 1.797 | 24% | scale_r_mults=[1.0, 2.0, 3.0] |
 | MIRAUSDT | gen_6d889664 | 5 | 1.658 | 24% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ERAUSDT | gen_b2c947fc | 9 | 1.844 | 23% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ARBUSDT | gen_66e69502 | 6 | 1.309 | 23% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ARBUSDT | gen_6ccf6b0c | 5 | 1.309 | 23% | scale_r_mults=[2.0, 4.0, 6.0] |
 | EULUSDT | gen_6d889664 | 3 | 1.644 | 22% | scale_r_mults=[2.0, 4.0, 6.0] |
-| ERAUSDT | gen_b2c947fc | 8 | 1.774 | 21% | scale_r_mults=[1.5, 3.0, 5.0] |
-| EVAAUSDT | gen_0abcb675 | 4 | 1.672 | 21% | scale_r_mults=[1.5, 3.0, 5.0] |
 | HYPEUSDT | gen_4309cd9c | 8 | 1.57 | 19% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ZBTUSDT | gen_05ea31a2 | 4 | 2.015 | 18% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ERAUSDT | gen_2f746759 | 8 | 1.544 | 18% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -293,58 +288,60 @@ _aggiornato: 2026-08-10 09:31 UTC · 1488 coppie valutate, 1 passate in questo r
 | HEIUSDT | momentum_cross_asset | 1.819 | 23% | 42 | 52% |
 
 ## Trade chiusi — perché usciamo
-- totale: **96** · vinti: 31 (32%) · PnL realizzato: **-148.87**
+- totale: **111** · vinti: 38 (34%) · PnL realizzato: **-175.47**
 
 | Uscita | Trade | % | PnL |
 |---|---|---|---|
-| Stop loss (prima di qualsiasi TP) | 65 | 68% | -313.58 |
-| Scale-out (>=1 TP incassato, residuo a BE) | 21 | 22% | +79.58 |
-| Time exit (orizzonte scaduto) | 9 | 9% | +63.56 |
+| Stop loss (prima di qualsiasi TP) | 70 | 63% | -343.19 |
+| Scale-out (>=1 TP incassato, residuo a BE) | 22 | 20% | +80.54 |
+| Time exit (orizzonte scaduto) | 9 | 8% | +63.56 |
+| Kill switch | 8 | 7% | +1.52 |
+| Manuale | 1 | 1% | +0.53 |
 | Take profit (fino all'ultimo gradino) | 1 | 1% | +21.57 |
 
-- gradini raggiunti (su 96 trade): 0 TP: 68 (71%) · 1 TP: 18 (19%) · 2 TP: 9 (9%) · 3 TP: 1 (1%)
+- gradini raggiunti (su 111 trade): 0 TP: 81 (73%) · 1 TP: 20 (18%) · 2 TP: 9 (8%) · 3 TP: 1 (1%)
 
-- escursione favorevole (mfe_r, 96 trade): mediana **0.81R** · ≥1R: 43% · ≥1.5R: 32% · ≥3R: 9% · ≥5R: 2%
+- escursione favorevole (mfe_r, 111 trade): mediana **0.68R** · ≥1R: 41% · ≥1.5R: 31% · ≥3R: 8% · ≥5R: 2%
   _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
 
 ## Deriva paper vs gate
 _il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
 
-- **globale**: drift · 96 trade · PF vissuto 0.525 vs 1.648 atteso · mfe mediana 0.81R
+- **globale**: drift · 102 trade · PF vissuto 0.483 vs 1.648 atteso · mfe mediana 0.81R
 
 | Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
 |---|---|---|---|---|
 | BIRBUSDT|gen_472f85b8 | watch | 6 | 0.157 / 1.514 | PF 0.16 vs 1.51 atteso · mfe mediana 0.51R < primo TP 1.50R |
-| LABUSDT|gen_50eaf1c5 | watch | 3 | 0.994 / 1.468 | mfe mediana 0.32R < primo TP 2.00R |
+| ELSAUSDT|gen_d230db12 | watch | 4 | 0.104 / 1.479 | PF 0.10 vs 1.48 atteso · mfe mediana 0.92R < primo TP 1.50R |
 | JUPUSDT|gen_70667b7f | watch | 3 | 0.0 / 1.267 | PF 0.00 vs 1.27 atteso · mfe mediana 0.43R < primo TP 2.00R |
-| ELSAUSDT|gen_d230db12 | watch | 3 | 0.16 / 1.508 | PF 0.16 vs 1.51 atteso · mfe mediana 0.92R < primo TP 1.50R |
 | PIEVERSEUSDT|gen_11d154ef | watch | 3 | 0.0 / 1.644 | PF 0.00 vs 1.64 atteso · mfe mediana 1.13R < primo TP 2.00R |
-| ERAUSDT|gen_b2c947fc | watch | 2 | 1.059 / 1.774 | PF 1.06 vs 1.77 atteso |
-| ZAMAUSDT|gen_00a2189f | watch | 2 | 0.0 / 1.329 | PF 0.00 vs 1.33 atteso |
-| COOKIEUSDT|gen_6c4f5e63 | watch | 2 | 0.0 / 1.548 | PF 0.00 vs 1.55 atteso · mfe mediana 0.66R < primo TP 2.00R |
-| NOMUSDT|gen_534c426c | watch | 2 | 0.0 / 1.539 | PF 0.00 vs 1.54 atteso |
-| SENTUSDT|gen_a7798aa0 | watch | 2 | 0.0 / 1.558 | PF 0.00 vs 1.56 atteso |
+| ERAUSDT|gen_b2c947fc | watch | 2 | 1.059 / 1.844 | PF 1.06 vs 1.84 atteso |
 | ZBTUSDT|gen_be9e1684 | watch | 2 | 0.38 / 1.427 | PF 0.38 vs 1.43 atteso |
-| ERAUSDT|gen_b09d3dec | watch | 2 | 0.0 / 1.386 | PF 0.00 vs 1.39 atteso · mfe mediana 0.93R < primo TP 2.00R |
+| COOKIEUSDT|gen_6c4f5e63 | watch | 2 | 0.0 / 1.548 | PF 0.00 vs 1.55 atteso · mfe mediana 0.66R < primo TP 2.00R |
+| GUAUSDT|gen_2a737fc0 | watch | 2 | 0.0 / 2.421 | PF 0.00 vs 2.42 atteso |
 | SOONUSDT|gen_be9e1684 | watch | 2 | 0.0 / 1.311 | PF 0.00 vs 1.31 atteso |
-| 4USDT|gen_9069e17a | watch | 1 | 0.0 / 1.652 | PF 0.00 vs 1.65 atteso · mfe mediana 0.29R < primo TP 1.50R |
-| XMRUSDT|gen_f99df625 | watch | 1 | 0.0 / 1.323 | PF 0.00 vs 1.32 atteso · mfe mediana 0.96R < primo TP 2.00R |
-| VIRTUALUSDT|gen_de8c8c1b | watch | 1 | 0.0 / 2.641 | PF 0.00 vs 2.64 atteso · mfe mediana 0.24R < primo TP 2.00R |
-| SKYAIUSDT|gen_ca980edf | watch | 1 | 0.0 / 1.302 | PF 0.00 vs 1.30 atteso · mfe mediana 0.02R < primo TP 1.50R |
-| 4USDT|gen_68593ebf | watch | 1 | 0.0 / 1.335 | PF 0.00 vs 1.33 atteso |
-| ELSAUSDT|gen_9d27232a | watch | 1 | 0.0 / 1.355 | PF 0.00 vs 1.35 atteso · mfe mediana 0.51R < primo TP 1.50R |
+| NOMUSDT|gen_83893297 | watch | 2 | 0.0 / 1.43 | PF 0.00 vs 1.43 atteso · mfe mediana 0.55R < primo TP 1.00R |
+| NOMUSDT|gen_534c426c | watch | 2 | 0.0 / 1.539 | PF 0.00 vs 1.54 atteso |
+| ZAMAUSDT|gen_00a2189f | watch | 2 | 0.0 / 1.329 | PF 0.00 vs 1.33 atteso |
+| ERAUSDT|gen_b09d3dec | watch | 2 | 0.0 / 1.37 | PF 0.00 vs 1.37 atteso · mfe mediana 0.93R < primo TP 2.00R |
+| SENTUSDT|gen_a7798aa0 | watch | 2 | 0.0 / 1.558 | PF 0.00 vs 1.56 atteso |
+| TRUMPUSDT|gen_a7798aa0 | watch | 1 | 0.0 / 1.294 | PF 0.00 vs 1.29 atteso · mfe mediana 1.12R < primo TP 2.00R |
 | GWEIUSDT|gen_8c6dedd4 | watch | 1 | 0.0 / 1.284 | PF 0.00 vs 1.28 atteso |
+| MIRAUSDT|gen_2a819829 | watch | 1 | 0.0 / 1.353 | PF 0.00 vs 1.35 atteso · mfe mediana 0.25R < primo TP 1.50R |
+| VIRTUALUSDT|gen_de8c8c1b | watch | 1 | 0.0 / 2.641 | PF 0.00 vs 2.64 atteso · mfe mediana 0.24R < primo TP 2.00R |
+| DASHUSDT|gen_7c75b098 | watch | 1 | 0.0 / 1.347 | PF 0.00 vs 1.35 atteso · mfe mediana 0.29R < primo TP 1.50R |
+| 4USDT|gen_68593ebf | watch | 1 | 0.0 / 1.335 | PF 0.00 vs 1.33 atteso |
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **flat** · 96 trade · correlazione 0.0 · influenza applicata **x0.5**
+- verdetto: **flat** · 102 trade · correlazione 0.0 · influenza applicata **x0.5**
 - nessuna relazione tra confidenza ed esito: influenza ridotta
 
 | Fascia di confidenza | Trade | Win rate | Esito medio |
 |---|---|---|---|
-| 60.0–60.0 | 32 | 44% | -1.69% |
-| 60.0–60.0 | 32 | 31% | -1.11% |
-| 60.0–60.0 | 32 | 22% | -2.67% |
+| 60.0–60.0 | 34 | 44% | -2.16% |
+| 60.0–60.0 | 34 | 26% | -1.02% |
+| 60.0–60.0 | 34 | 24% | -3.04% |
 
 _se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
