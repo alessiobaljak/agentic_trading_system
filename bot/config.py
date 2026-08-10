@@ -62,6 +62,21 @@ class Settings:
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
     ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL") or "claude-opus-4-8"
 
+    # ---- Livello AI (bot/ai) ----
+    # Interruttore unico. A OFF (o senza chiave) il sistema si comporta ESATTAMENTE
+    # come prima: il modello non e' mai sul percorso di esecuzione, quindi
+    # spegnerlo non toglie nessuna funzione operativa, toglie solo ipotesi.
+    AI_ENABLED: bool = os.getenv("AI_ENABLED", "true").lower() == "true"
+    AI_TIMEOUT_SECONDS: float = float(os.getenv("AI_TIMEOUT_SECONDS", "120"))
+    # quante spec il modello propone per passata di discovery. Poche e motivate
+    # battono molte e casuali: ogni candidata in piu' e' un'ipotesi in piu' nel
+    # conto del confronto multiplo, cioe' una probabilita' in piu' di promuovere
+    # un fortunato. Il resto delle spec resta casuale (esplorazione).
+    AI_HYPOTHESES_PER_RUN: int = int(os.getenv("AI_HYPOTHESES_PER_RUN", "20"))
+    # filtro di contesto sull'universo: scarta le coin su cui non vale la pena
+    # spendere validazione. FAIL-OPEN: senza AI non scarta nulla.
+    AI_UNIVERSE_FILTER: bool = os.getenv("AI_UNIVERSE_FILTER", "true").lower() == "true"
+
     # ---- Data agents ----
     LUNARCRUSH_API_KEY: str = os.getenv("LUNARCRUSH_API_KEY", "")
     COINGLASS_API_KEY: str = os.getenv("COINGLASS_API_KEY", "")

@@ -30,6 +30,8 @@ from bot.config import settings
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
+from bot.ai.hypotheses import propose as ai_propose
+from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import generate_specs, mutate
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_history,
                               drifted_from_paper, top_symbols_by_volume)
@@ -357,7 +359,18 @@ def main() -> int:
 
     # 1) candidate NUOVE  2) RI-VALUTA le scoperte precedenti (così accumulano i
     # pass e diventano operabili)  3) mutazioni per evolvere attorno alle vincenti.
-    specs = generate_specs(args.generate, seed=args.seed)
+    # 1a) IPOTESI AI: poche spec con un meccanismo dichiarato, al posto di altrettante
+    #     estrazioni casuali. Non e' un'aggiunta all'imbuto: SOSTITUISCE una quota di
+    #     candidate casuali, perche' ogni candidata in piu' e' un'estrazione in piu'
+    #     della lotteria del confronto multiplo. Senza AI la quota resta casuale e il
+    #     comportamento e' identico a prima.
+    ai_specs = ai_propose(min(settings.AI_HYPOTHESES_PER_RUN, args.generate),
+                          market_context=f"Timeframe operativo: {args.interval}. "
+                                         f"Universo: crypto futures USDT-M su Binance.")
+    if ai_specs:
+        print(f"[discover] {len(ai_specs)} ipotesi AI (motivate) + "
+              f"{args.generate - len(ai_specs)} casuali")
+    specs = ai_specs + generate_specs(max(0, args.generate - len(ai_specs)), seed=args.seed)
     existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
     # PRIORITÀ: ri-valida SEMPRE le generate GIÀ VALIDATE (in ogni shard), così non
     # scadono per freshness e non vengono "cancellate" dal registro. Poi riempi col
@@ -376,6 +389,13 @@ def main() -> int:
           f"{len(existing_list) - len(priority)} altre) seed={args.seed} {args.start}->{end}")
 
     full_symbols = top_symbols_by_volume(args.top)
+    # FILTRO DI CONTESTO: toglie dall'imbuto le coin su cui una validazione non
+    # sarebbe informativa (storia dentro la sola fase di listing, illiquide,
+    # prezzo guidato da eventi discreti). Fail-open: senza AI non toglie nulla.
+    full_symbols, _excluded = ai_filter_universe(
+        [{"symbol": s} for s in full_symbols])
+    for _sym, _why in list(_excluded.items())[:10]:
+        print(f"[discover]   escluso {_sym}: {_why}")
     # SHARDING: ogni shard valida le candidate su una fetta dell'universo; il merge
     # riunisce. Così copriamo l'INTERO universo restando nel timeout.
     symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
