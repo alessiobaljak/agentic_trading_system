@@ -15,6 +15,9 @@ firebase-service-account.json
 *service-account*.json
 
 # Backtesting / runtime output
+# export dei trade prima di un reset del paper: sono dati operativi, si tengono
+# sulla VPS (o fuori dal repo), non nella storia di git
+trades_backup_*.json
 backtesting/output/
 *.log
 data_cache/
