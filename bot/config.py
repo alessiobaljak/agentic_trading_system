@@ -407,6 +407,16 @@ class Settings:
     # riproduce le stesse condizioni del GATE 1 e il confronto e' valido. Per il
     # trading con soldi VERI va rimesso a False (controlli di sicurezza riattivi).
     BACKTEST_PARITY: bool = os.getenv("BACKTEST_PARITY", "false").lower() == "true"
+    # TIMING D'INGRESSO nel backtest. False (storico) = si entra alla CHIUSURA della
+    # barra che genera il segnale. True = si entra all'APERTURA della barra dopo,
+    # cioe' al primo prezzo davvero eseguibile: il bot conosce la chiusura solo a
+    # barra chiusa, decide dopo il confine dell'orologio ed esegue al mark di quel
+    # momento. E' l'unica delle sei cause di disparita' ipotizzate che sopravvive
+    # alla verifica (le altre — indicatori, costi, funding, uscite — sono moduli
+    # CONDIVISI, non due implementazioni). Default False finche' l'effetto non e'
+    # misurato: `scripts.gate_vs_paper --entry-timing` lo quantifica per coppia.
+    BACKTEST_ENTRY_NEXT_OPEN: bool = os.getenv(
+        "BACKTEST_ENTRY_NEXT_OPEN", "false").lower() == "true"
 
     # ---- Trend come contesto di decisione (SOLO live/paper, non nel backtest) ----
     # Il trend (coin + mercato) e' un fattore IN PIU' che modula la SIZE, NON un veto:

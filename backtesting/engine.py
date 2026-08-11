@@ -471,6 +471,20 @@ class Backtester:
             entry = snap.price
             stop = sig.suggested_stop or (entry * (0.98 if sig.direction == Direction.LONG else 1.02))
             target = sig.suggested_target or (entry * (1.04 if sig.direction == Direction.LONG else 0.96))
+            # TIMING D'INGRESSO. Il segnale nasce alla CHIUSURA della barra i, e qui
+            # per default si entra a quel prezzo. Il bot vero non puo': conosce la
+            # chiusura solo quando la barra e' chiusa, decide subito dopo il confine
+            # dell'orologio ed esegue al mark di quel momento — cioe' dentro la barra
+            # i+1. Con ENTRY_NEXT_OPEN si entra all'APERTURA della barra i+1, che e'
+            # il primo prezzo davvero eseguibile.
+            # Stop e target TRASLANO col nuovo ingresso invece di restare assoluti:
+            # in live la strategia li calcola sullo snapshot usato anche per entrare,
+            # quindi la distanza R (= atr_mult x ATR) resta ancorata al prezzo
+            # d'esecuzione. Tenerli fissi cambierebbe R e falserebbe il confronto.
+            if settings.BACKTEST_ENTRY_NEXT_OPEN:
+                nxt = float(candles[i + 1].open)
+                shift = nxt - entry
+                entry, stop, target = nxt, stop + shift, target + shift
             long = sig.direction == Direction.LONG
 
             # SCALE-OUT su multipli di R (se attivo): scala di TP + break-even dopo

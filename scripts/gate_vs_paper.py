@@ -97,6 +97,58 @@ def _contribution(name: str, rows: list[tuple[float, float]], mults: tuple) -> N
     print(f"  {'TOTALE':<26}{tot_n:>7}{100:>8.0f}%{tot_pnl:>12.3f}{100:>10.0f}%")
 
 
+def _entry_timing_report(base: StrategyStats, rerun, strategy: str) -> None:
+    """Quanto costa entrare al primo prezzo ESEGUIBILE invece che alla chiusura.
+
+    Il segnale nasce alla chiusura della barra, ma il bot puo' eseguire solo dopo:
+    conosce quella chiusura a barra chiusa, decide al confine dell'orologio e manda
+    l'ordine al mark di quel momento. Il gate invece entra al prezzo di chiusura,
+    che nessuno avrebbe potuto ottenere. Qui si rigirano le STESSE finestre con
+    l'ingresso all'apertura della barra successiva e si misura la differenza.
+
+    E' l'unica delle sei cause di disparita' ipotizzate dal prompt che sopravvive
+    alla verifica: indicatori, costi, funding e uscite sono moduli condivisi.
+    """
+    from statistics import mean, median
+
+    prev = settings.BACKTEST_ENTRY_NEXT_OPEN
+    settings.BACKTEST_ENTRY_NEXT_OPEN = True
+    try:
+        shifted = rerun()
+    finally:
+        settings.BACKTEST_ENTRY_NEXT_OPEN = prev
+
+    print("\n=== TIMING D'INGRESSO: chiusura barra vs apertura successiva ===")
+    hdr = f"{'':22}{'n':>6}{'PF':>9}{'ritorno':>11}{'win':>7}{'per trade':>12}"
+    print(hdr)
+    print("-" * len(hdr))
+    for name, st in (("entra al close(T)", base), ("entra a open(T+1)", shifted)):
+        n = len(st.trades)
+        per = (st.total_pnl_pct() / n * 100) if n else 0.0
+        print(f"{name:22}{n:>6}{st.profit_factor():>9.3f}"
+              f"{st.total_pnl_pct() * 100:>10.1f}%{st.win_rate() * 100:>6.0f}%{per:>11.3f}%")
+
+    nb, ns = len(base.trades), len(shifted.trades)
+    if not nb or not ns:
+        print("  (campione vuoto: niente da confrontare)")
+        return
+    d_per = (shifted.total_pnl_pct() / ns - base.total_pnl_pct() / nb) * 100
+    print(f"\n  DELTA per trade: {d_per:+.3f}%  ·  PF {base.profit_factor():.3f} -> "
+          f"{shifted.profit_factor():.3f}")
+
+    # scarto sui singoli ingressi: dice quanto si muove il prezzo fra la chiusura
+    # e l'apertura dopo. Su crypto (mercato continuo) e' piccolo, ma non zero.
+    pairs_ = [(b.entry_price, s.entry_price)
+              for b, s in zip(base.trades, shifted.trades)]
+    gaps = [abs(s - b) / b * 100 for b, s in pairs_ if b]
+    if gaps:
+        print(f"  scarto |open(T+1) - close(T)|: mediana {median(gaps):.4f}% · "
+              f"media {mean(gaps):.4f}% · max {max(gaps):.3f}%")
+    print("  [se il DELTA e' trascurabile, il timing NON spiega la disparita' e la"
+          "\n   causa resta la selezione statistica; se e' grande, va corretto"
+          "\n   attivando BACKTEST_ENTRY_NEXT_OPEN e RIVALIDANDO il registro.]")
+
+
 def _build_strategy(fb, strategy: str, ladder):
     """La strategia ESATTA che il gate ha validato, con la scala della coppia."""
     if strategy.startswith("gen_"):
@@ -134,6 +186,10 @@ def main() -> int:
     ap.add_argument("--source", default="binance")
     ap.add_argument("--ladder", default=None,
                     help="scala di TP in R, es. 1.5,3,5. Default: quella del registro")
+    ap.add_argument("--entry-timing", action="store_true",
+                    help="misura l'effetto del timing d'ingresso: rigira le stesse "
+                         "finestre entrando all'apertura della barra DOPO il segnale "
+                         "(cioe' al primo prezzo eseguibile) e confronta")
     args = ap.parse_args()
 
     fb = get_firebase()
@@ -169,12 +225,21 @@ def main() -> int:
     opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
     body, cut = opt.split_holdout(candles)
 
-    # --- GATE: le stesse finestre OOS su cui la coppia e' stata promossa --------
-    oos = StrategyStats(strategy=args.strategy)
-    for (_ta, _tb, sa, sb) in opt._windows(len(body)):
-        st = opt.bt.run_strategy(make(), args.symbol, body[sa:sb],
-                                 frame=frame.iloc[sa:sb].reset_index(drop=True))
-        oos.trades.extend(st.trades)
+    def _oos_run() -> StrategyStats:
+        """Le stesse finestre OOS su cui la coppia e' stata promossa."""
+        st_all = StrategyStats(strategy=args.strategy)
+        for (_ta, _tb, sa, sb) in opt._windows(len(body)):
+            st = opt.bt.run_strategy(make(), args.symbol, body[sa:sb],
+                                     frame=frame.iloc[sa:sb].reset_index(drop=True))
+            st_all.trades.extend(st.trades)
+        return st_all
+
+    # --- GATE ------------------------------------------------------------------
+    oos = _oos_run()
+
+    # --- TIMING D'INGRESSO: quanto costa entrare al primo prezzo ESEGUIBILE? ----
+    if args.entry_timing:
+        _entry_timing_report(oos, _oos_run, args.strategy)
 
     # --- HOLDOUT: mai visto dalla selezione ------------------------------------
     hold = StrategyStats(strategy=args.strategy)
