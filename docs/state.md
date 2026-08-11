@@ -1,23 +1,21 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-11 05:29 UTC_
+_Generato: 2026-08-11 07:37 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$785.51**
-- ultimo heartbeat: 2026-08-11 05:27 UTC
+- equity: **$788.41**
+- ultimo heartbeat: 2026-08-11 07:37 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-11 05:18 UTC)
+- esito: **⚪ FLAT** (2026-08-11 07:33 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
 ## Posizioni aperte
 - BTCUSDT: long qty=1.0 @ 100.0 uPnL=0.9079999666715278
-- ERAUSDT: long qty=1201.5742783138744 @ 0.06739 uPnL=1.2280369462863943
-- HUSDT: long qty=718.7008135049573 @ 0.07931 uPnL=1.8001274605616266
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
@@ -32,21 +30,21 @@ _aggiornato: 2026-08-11 02:17 UTC · 1480 coppie valutate, 0 passate in questo r
 _Nessuna coppia ha passato in questo run._
 
 ## Trade chiusi — perché usciamo
-- totale: **142** · vinti: 46 (32%) · PnL realizzato: **-229.31**
+- totale: **144** · vinti: 48 (33%) · PnL realizzato: **-225.59**
 
 | Uscita | Trade | % | PnL |
 |---|---|---|---|
-| Stop loss (prima di qualsiasi TP) | 88 | 62% | -387.60 |
+| Stop loss (prima di qualsiasi TP) | 88 | 61% | -387.60 |
 | Scale-out (>=1 TP incassato, residuo a BE) | 23 | 16% | +82.12 |
+| Kill switch | 10 | 7% | +5.24 |
 | Time exit (orizzonte scaduto) | 9 | 6% | +63.56 |
 | Take profit (fino all'ultimo gradino) | 8 | 6% | +35.57 |
-| Kill switch | 8 | 6% | +1.52 |
-| ? | 5 | 4% | -25.00 |
+| ? | 5 | 3% | -25.00 |
 | Manuale | 1 | 1% | +0.53 |
 
-- gradini raggiunti (su 137 trade): 0 TP: 106 (77%) · 1 TP: 21 (15%) · 2 TP: 9 (7%) · 3 TP: 1 (1%)
+- gradini raggiunti (su 139 trade): 0 TP: 107 (77%) · 1 TP: 22 (16%) · 2 TP: 9 (6%) · 3 TP: 1 (1%)
 
-- escursione favorevole (mfe_r, 137 trade): mediana **0.58R** · ≥1R: 36% · ≥1.5R: 26% · ≥3R: 7% · ≥5R: 1%
+- escursione favorevole (mfe_r, 139 trade): mediana **0.58R** · ≥1R: 37% · ≥1.5R: 27% · ≥3R: 6% · ≥5R: 1%
   _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
 
 ## Deriva paper vs gate
