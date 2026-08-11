@@ -113,12 +113,29 @@ def build_digest(trades: list[dict], pairs: dict, drift: dict,
         per_pair[f"{t.get('symbol')}|{t.get('strategy')}"].append(p)
     rows = sorted(per_pair.items(), key=lambda kv: -len(kv[1]))[:12]
     L.append("PROMESSA DEL GATE vs VISSUTO (coppie piu' operate):")
+    orphans = 0
     for key, ps in rows:
         exp = float((pairs.get(key) or {}).get("last_pf", 0) or 0)
         g, l = sum(x for x in ps if x > 0), -sum(x for x in ps if x < 0)
         live = g / l if l else (999.0 if g else 0.0)
-        L.append(f"  {key}: {len(ps)} trade · PF vissuto {live:.2f} vs atteso {exp:.2f}"
+        # "atteso 0.00" sarebbe una bugia: il gate non promette mai zero. Zero vuol
+        # dire che la coppia NON e' (piu') nel registro — purgata, scaduta per
+        # freshness, o il registro e' stato ricostruito dopo quei trade. Dirlo
+        # esplicitamente evita che l'analisi legga un artefatto come un dato.
+        if exp <= 0:
+            orphans += 1
+            promise = "NESSUNA PROMESSA (coppia non presente nel registro attuale)"
+        else:
+            promise = f"atteso {exp:.2f}"
+        L.append(f"  {key}: {len(ps)} trade · PF vissuto {live:.2f} vs {promise}"
                  f" · PnL {sum(ps):+.2f}")
+    in_reg = sum(1 for k in per_pair if float((pairs.get(k) or {}).get("last_pf", 0) or 0) > 0)
+    L.append(f"  [coppie operate presenti nel registro attuale: {in_reg}/{len(per_pair)}"
+             f" · registro: {len(pairs)} coppie]")
+    if orphans and in_reg == 0:
+        L.append("  [ATTENZIONE: nessuna coppia operata risulta nel registro. I trade"
+                 " sono precedenti a una ricostruzione/purga: il confronto"
+                 " promessa-vs-vissuto NON e' possibile su questi dati.]")
 
     if drift:
         gl = drift.get("global") or {}

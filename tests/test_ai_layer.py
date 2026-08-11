@@ -166,3 +166,24 @@ def test_analyst_returns_none_without_ai(monkeypatch):
 def test_analyst_returns_none_on_empty_history():
     from bot.ai import analyst
     assert analyst.analyze([], {}) is None
+
+
+def test_digest_does_not_report_a_missing_promise_as_zero():
+    """"atteso 0.00" sarebbe un artefatto: il gate non promette mai zero. Zero vuol
+    dire coppia assente dal registro, e l'analisi non deve leggerlo come un dato."""
+    from bot.ai.analyst import build_digest
+    trades = [{"symbol": "AUSDT", "strategy": "s1", "pnl": -5.0, "mfe_r": 0.3,
+               "exit_reason": "stop_loss"}]
+    d = build_digest(trades, {}, {}, {})          # registro vuoto
+    assert "atteso 0.00" not in d
+    assert "NESSUNA PROMESSA" in d
+    assert "0/1" in d and "ATTENZIONE" in d
+
+
+def test_digest_reports_the_promise_when_the_pair_is_in_the_registry():
+    from bot.ai.analyst import build_digest
+    trades = [{"symbol": "AUSDT", "strategy": "s1", "pnl": -5.0, "mfe_r": 0.3,
+               "exit_reason": "stop_loss"}]
+    d = build_digest(trades, {"AUSDT|s1": {"last_pf": 1.51}}, {}, {})
+    assert "atteso 1.51" in d and "NESSUNA PROMESSA" not in d
+    assert "1/1" in d
