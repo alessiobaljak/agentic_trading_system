@@ -1,21 +1,18 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-11 07:37 UTC_
+_Generato: 2026-08-11 09:13 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$788.41**
-- ultimo heartbeat: 2026-08-11 07:37 UTC
-- stream prezzi: 🟢 attivo
+- equity: **$1,000.00**
+- ultimo heartbeat: 2026-08-11 09:13 UTC
+- stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-11 07:33 UTC)
+- esito: **⚪ FLAT** (2026-08-11 09:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
-
-## Posizioni aperte
-- BTCUSDT: long qty=1.0 @ 100.0 uPnL=0.9079999666715278
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
@@ -29,23 +26,8 @@ _aggiornato: 2026-08-11 02:17 UTC · 1480 coppie valutate, 0 passate in questo r
 
 _Nessuna coppia ha passato in questo run._
 
-## Trade chiusi — perché usciamo
-- totale: **144** · vinti: 48 (33%) · PnL realizzato: **-225.59**
-
-| Uscita | Trade | % | PnL |
-|---|---|---|---|
-| Stop loss (prima di qualsiasi TP) | 88 | 61% | -387.60 |
-| Scale-out (>=1 TP incassato, residuo a BE) | 23 | 16% | +82.12 |
-| Kill switch | 10 | 7% | +5.24 |
-| Time exit (orizzonte scaduto) | 9 | 6% | +63.56 |
-| Take profit (fino all'ultimo gradino) | 8 | 6% | +35.57 |
-| ? | 5 | 3% | -25.00 |
-| Manuale | 1 | 1% | +0.53 |
-
-- gradini raggiunti (su 139 trade): 0 TP: 107 (77%) · 1 TP: 22 (16%) · 2 TP: 9 (6%) · 3 TP: 1 (1%)
-
-- escursione favorevole (mfe_r, 139 trade): mediana **0.58R** · ≥1R: 37% · ≥1.5R: 27% · ≥3R: 6% · ≥5R: 1%
-  _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
+## Trade chiusi
+_nessun trade chiuso._
 
 ## Deriva paper vs gate
 _nessun verdetto ancora: servono trade chiusi su coppie validate._
@@ -53,13 +35,5 @@ _nessun verdetto ancora: servono trade chiusi su coppie validate._
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **ok** · 133 trade · correlazione 0.125 · influenza applicata **x1.0**
-- la confidenza ordina correttamente gli esiti
-
-| Fascia di confidenza | Trade | Win rate | Esito medio |
-|---|---|---|---|
-| 60.0–60.0 | 44 | 27% | -4.20% |
-| 60.0–60.0 | 44 | 34% | -0.49% |
-| 60.0–75.0 | 45 | 29% | -1.78% |
-
-_se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
+- verdetto: **insufficient** · 0 trade · correlazione None · influenza applicata **x1.0**
+- servono 30 trade, ce ne sono 0
