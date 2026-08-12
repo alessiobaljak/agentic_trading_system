@@ -189,7 +189,12 @@ def _replay_pair(key: str, ptrades: list[dict], args, specs: dict, pairs: dict) 
         return None
 
     if make() is None:
-        return {"key": key, "n_paper": len(ptrades), "skip": "spec/strategia non trovata"}
+        # Le spec generate vengono POTATE dal registro quando la coppia non passa
+        # piu': se la coppia e' stata purgata, la sua definizione non esiste piu' e
+        # il replay e' impossibile. Non e' un errore dello script — e' un dato che
+        # non c'e', e va detto invece di essere aggirato indovinando i parametri.
+        return {"key": key, "n_paper": len(ptrades),
+                "skip": "definizione della strategia non piu' nel registro"}
 
     # MAI dati sintetici qui: se Binance non risponde, un backtest su serie
     # inventate produrrebbe un confronto dall'aria plausibile e privo di senso —
@@ -200,6 +205,13 @@ def _replay_pair(key: str, ptrades: list[dict], args, specs: dict, pairs: dict) 
         return {"key": key, "n_paper": len(ptrades), "skip": f"solo {len(candles)} candele"}
     frame = compute_indicator_frame(candles)
     opt = WalkForwardOptimizer(n_windows=1, interval=args.interval)
+    # barre in cui il gate puo' DAVVERO emettere segnali: il motore ne consuma
+    # `window` per il warmup degli indicatori. Con una finestra troppo corta uno
+    # zero non significa "il gate non vedeva niente", significa "non ho guardato".
+    usable = len(candles) - opt.bt.window
+    if usable < 50:
+        return {"key": key, "n_paper": len(ptrades),
+                "skip": f"finestra troppo corta ({usable} barre dopo il warmup)"}
     st = opt.bt.run_strategy(make(), symbol, candles, frame=frame)
     lo, hi = min(t_in), max(t_out or t_in)
     sim = [s for s in st.trades if lo - tf_h * 3600 <= float(getattr(s, "entry_ts", 0)) <= hi]
@@ -208,7 +220,8 @@ def _replay_pair(key: str, ptrades: list[dict], args, specs: dict, pairs: dict) 
     both = [(p, s) for p, s in matched if s is not None]
     return {
         "key": key, "n_paper": len(ptrades), "n_gate": len(sim),
-        "n_matched": len(both), "skip": None,
+        "n_matched": len(both), "skip": None, "usable_bars": usable,
+        "n_mfe_paper": sum(1 for p in ptrades if p.get("mfe_r") is not None),
         "d_entry": [abs(float(s.entry_price) - float(p["entry_price"]))
                     / float(p["entry_price"]) * 100
                     for p, s in both if float(p.get("entry_price") or 0) > 0],
@@ -240,9 +253,27 @@ def _replay_report(rows: list[dict]) -> None:
         print(f"{r['key'][:33]:<34}{r['n_paper']:>7}{r['n_gate']:>6}{r['n_matched']:>7}"
               f"{de:>10}{dtm:>10}{mp:>9}{mg:>10}")
 
+    skipped = [r for r in rows if r.get("skip")]
+    if skipped:
+        from collections import Counter
+        print(f"\nNON confrontabili: {len(skipped)}/{len(rows)} coppie "
+              f"({sum(r['n_paper'] for r in skipped)} trade paper su "
+              f"{sum(r['n_paper'] for r in rows)})")
+        for motivo, n in Counter(r["skip"] for r in skipped).most_common():
+            print(f"  · {n} coppie: {motivo}")
     if not ok:
-        print("\nNessuna coppia confrontabile.")
+        print("\nNessuna coppia confrontabile: il confronto Fase 1.1 non e'"
+              "\neseguibile su questi dati. Non e' un risultato negativo, e' un"
+              "\ndato mancante — vedi i motivi qui sopra.")
         return
+    zero = [r for r in ok if r["n_gate"] == 0]
+    if zero:
+        print(f"\nATTENZIONE: su {len(zero)} coppie il gate non ha prodotto alcun"
+              " segnale nella finestra.\n  Con finestre corte "
+              f"({min(r['usable_bars'] for r in zero)}-"
+              f"{max(r['usable_bars'] for r in zero)} barre utili) e parametri "
+              "non piu' nel registro,\n  uno zero NON dimostra una divergenza di "
+              "generazione: dimostra che il\n  campione non basta a dirlo.")
     tot_p = sum(r["n_paper"] for r in ok)
     tot_g = sum(r["n_gate"] for r in ok)
     tot_m = sum(r["n_matched"] for r in ok)
@@ -255,17 +286,19 @@ def _replay_report(rows: list[dict]) -> None:
 
     print("\n--- TABELLA METRICA (aggregato) ---")
     print(f"{'METRICA':<34}{'PAPER':>14}{'GATE':>14}{'DELTA':>14}")
-    def row(name, a, b, fmt="{:.3f}", suffix=""):
-        d = (b - a) if (a is not None and b is not None) else None
-        sa = fmt.format(a) + suffix if a is not None else "—"
-        sb = fmt.format(b) + suffix if b is not None else "—"
-        sd = ("{:+}".format(fmt.format(d)) + suffix) if d is not None else "—"
+    def row(name, a, b, decimals=3, suffix=""):
+        """Riga PAPER | GATE | DELTA. Il segno va messo nella format spec del
+        NUMERO: applicarlo a una stringa gia' formattata solleva ValueError."""
+        sa = f"{a:.{decimals}f}{suffix}" if a is not None else "—"
+        sb = f"{b:.{decimals}f}{suffix}" if b is not None else "—"
+        sd = (f"{b - a:+.{decimals}f}{suffix}"
+              if (a is not None and b is not None) else "—")
         print(f"{name:<34}{sa:>14}{sb:>14}{sd:>14}")
-    row("trade / segnali nella finestra", tot_p, tot_g, "{:.0f}")
+    row("trade / segnali nella finestra", tot_p, tot_g, 0)
     row("mfe_r mediana", median(mp) if mp else None, median(mg) if mg else None,
-        "{:.2f}", "R")
+        2, "R")
     row("variazione prezzo media", (sum(vp) / len(vp) * 100) if vp else None,
-        (sum(vg) / len(vg) * 100) if vg else None, "{:.3f}", "%")
+        (sum(vg) / len(vg) * 100) if vg else None, 3, "%")
     print(f"{'accoppiati (±2 barre)':<34}{tot_m:>14}{'':>14}"
           f"{f'{tot_m / tot_p * 100:.0f}% del paper' if tot_p else '—':>14}")
     if d_entry:
@@ -311,6 +344,12 @@ def _replay_mode(args) -> int:
     fb = get_firebase()
     specs = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
     pairs = decode_pairs((fb.get_doc("strategy_registry", "validated") or {}).get("pairs"))
+    # distingue "le spec non ci sono piu'" da "le sto cercando male": senza questa
+    # riga un replay a vuoto sembra un bug dello script invece che un dato perso.
+    wanted = {k.split("|", 1)[1] for k in todo if k.split("|", 1)[1].startswith("gen_")}
+    print(f"[gvp] registro: {len(pairs)} coppie · spec generate disponibili: "
+          f"{len(specs)} · servono per questo replay: {len(wanted)} "
+          f"(presenti {len(wanted & set(specs))})")
 
     rows = []
     for i, (key, ts) in enumerate(sorted(todo.items(), key=lambda kv: -len(kv[1])), 1):

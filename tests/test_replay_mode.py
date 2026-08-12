@@ -99,3 +99,33 @@ def test_match_handles_empty_sides():
     assert _match([], [_Sim(base)], tol_s=60) == []
     out = _match([_p(base)], [], tol_s=60)
     assert len(out) == 1 and out[0][1] is None
+
+
+# ---- il report non deve mai crashare sui dati veri ------------------------- #
+def test_report_survives_the_real_shapes(capsys):
+    """Riprodotto dal run vero: il DELTA veniva formattato con "{:+}" applicato a
+    una STRINGA gia' formattata -> ValueError, e la tabella moriva a meta'.
+    Qui si coprono le forme incontrate: coppie saltate, gate a zero segnali,
+    liste vuote."""
+    from scripts.gate_vs_paper import _replay_report
+    rows = [
+        {"key": "ETHUSDT|vwap_reversion", "n_paper": 10, "n_gate": 0, "n_matched": 0,
+         "skip": None, "usable_bars": 185, "n_mfe_paper": 10,
+         "d_entry": [], "d_time": [], "mfe_paper": [0.0] * 10, "mfe_gate": [],
+         "move_paper": [0.01] * 10, "move_gate": []},
+        {"key": "BIRBUSDT|gen_x", "n_paper": 6,
+         "skip": "definizione della strategia non piu' nel registro"},
+    ]
+    _replay_report(rows)                      # non deve sollevare
+    out = capsys.readouterr().out
+    assert "TABELLA METRICA" in out
+    assert "NON confrontabili: 1/2" in out
+    assert "ATTENZIONE" in out                # gate a zero -> avviso, non "scoperta"
+
+
+def test_report_says_it_plainly_when_nothing_is_comparable(capsys):
+    from scripts.gate_vs_paper import _replay_report
+    _replay_report([{"key": "A|b", "n_paper": 3, "skip": "definizione mancante"}])
+    out = capsys.readouterr().out
+    assert "non e'" in out and "eseguibile" in out
+    assert "dato mancante" in out
