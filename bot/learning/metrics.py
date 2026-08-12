@@ -101,6 +101,59 @@ def filter_anomalous_trades(trades: list[dict]) -> tuple[list[dict], dict]:
     return kept, dict(reasons)
 
 
+def cost_report(trades: list[dict], equity: float | None = None) -> dict:
+    """Quanto e' costato operare, voce per voce, e quanto serve solo per pareggiare.
+
+    Il PnL netto e' un numero solo e nasconde il conto: due sistemi con lo stesso
+    risultato possono avere costi molto diversi, e quello con i costi alti e'
+    molto piu' fragile — basta un edge leggermente peggiore e va sotto.
+
+    `break_even_pct` e' la domanda operativa: "quanto deve rendere il sistema, in
+    percentuale sull'equity, solo per coprire cio' che spende". Se e' alto, il
+    problema non e' la strategia, e' il numero di trade o le coin scelte.
+    """
+    rows = [t for t in trades if t.get("total_cost_usdt") is not None]
+    if not rows:
+        return {}
+    comm = sum(float(t.get("commission_usdt") or 0) for t in rows)
+    spread = sum(float(t.get("spread_usdt") or 0) for t in rows)
+    fund = sum(float(t.get("funding_paid_usdt") or 0) for t in rows)
+    total = sum(float(t.get("total_cost_usdt") or 0) for t in rows)
+    gross = sum(float(t.get("gross_pnl_usdt") or 0) for t in rows)
+    net = sum(float(t.get("pnl") or 0) for t in rows)
+    per_symbol: dict[str, float] = defaultdict(float)
+    for t in rows:
+        per_symbol[t.get("symbol", "?")] += float(t.get("total_cost_usdt") or 0)
+    return {
+        "trades": len(rows),
+        "commission_usdt": round(comm, 2), "spread_usdt": round(spread, 2),
+        "funding_usdt": round(fund, 2), "total_cost_usdt": round(total, 2),
+        "gross_pnl_usdt": round(gross, 2), "net_pnl_usdt": round(net, 2),
+        "cost_per_trade_usdt": round(total / len(rows), 3),
+        "break_even_pct": round(total / equity * 100, 2) if equity else None,
+        # dove si spende di piu': serve a capire QUALI coin costano, non solo quanto
+        "cost_by_symbol": dict(sorted(per_symbol.items(), key=lambda kv: -kv[1])[:10]),
+        # in DRY_RUN sono stime dal modello del gate, non misure dai fill di Binance
+        "estimated": all(t.get("costs_are_estimated", True) for t in rows),
+    }
+
+
+def cost_alerts(report: dict, equity: float | None = None) -> list[str]:
+    """Avvisi quando i costi diventano il problema, non un dettaglio."""
+    out: list[str] = []
+    if not report:
+        return out
+    be = report.get("break_even_pct")
+    if be is not None and be > settings.COST_ALERT_BREAKEVEN_PCT:
+        out.append(f"Costi operativi elevati: servono {be:.2f}% solo per pareggiare "
+                   f"(soglia {settings.COST_ALERT_BREAKEVEN_PCT:g}%)")
+    gross, net = report.get("gross_pnl_usdt", 0.0), report.get("net_pnl_usdt", 0.0)
+    if gross > 0 and net <= 0:
+        out.append(f"Il lordo e' positivo ({gross:+.2f}) ma il netto no ({net:+.2f}): "
+                   f"il risultato lo mangiano i costi, non il mercato")
+    return out
+
+
 def win_rate(trades: Iterable[dict]) -> float:
     trades = list(trades)
     if not trades:

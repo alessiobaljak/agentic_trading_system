@@ -422,6 +422,17 @@ class Settings:
     # filtro (trada tutte le validate).
     MIN_COINS_PER_STRATEGY: int = int(os.getenv("MIN_COINS_PER_STRATEGY", "3"))
 
+    # ---- Monitoraggio costi (Fase 2.5) ----
+    # oltre questa percentuale di equity spesa in costi, il sistema deve rendere
+    # tanto SOLO per pareggiare: e' un allarme sul numero di trade o sulle coin
+    # scelte, non sulla strategia.
+    COST_ALERT_BREAKEVEN_PCT: float = float(os.getenv("COST_ALERT_BREAKEVEN_PCT", "1.5"))
+
+    # ---- Kill switch a livelli (bot/risk/kill_switch) ----
+    # STOP AND PROTECT: quanto stretto portare lo stop, in ATR. 0.3 = le posizioni
+    # escono al primo movimento avverso serio, ma quelle che corrono continuano.
+    KILL_PROTECT_ATR_MULT: float = float(os.getenv("KILL_PROTECT_ATR_MULT", "0.3"))
+
     # ---- Asset scoring (bot/agents/market_scanner) ----
     # Volatilita' "utile" (ATR/prezzo) per il punteggio: sotto, il movimento non
     # paga i costi; sopra, gli stop saltano per rumore.

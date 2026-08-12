@@ -291,6 +291,29 @@ def _closed_trades_section(fb, pairs=None) -> list[str]:
                        f"BTC buy&hold {bench*100:+.2f}% nello stesso periodo → {verdetto}")
     out.append("")
 
+    # COSTI SCOMPOSTI: il PnL netto da solo non dice se un risultato e' mancato
+    # edge o troppa spesa. Il break-even e' la domanda operativa: quanto deve
+    # rendere il sistema SOLO per coprire cio' che spende.
+    from bot.learning.metrics import cost_alerts, cost_report
+    _eq = fb.get_rtdb("/account/equity")
+    rep = cost_report(trades, float(_eq) if _eq else None)
+    if rep:
+        stima = " _(stimati dal modello del gate, non misurati dai fill)_" if rep.get("estimated") else ""
+        out += [f"- costi: **{rep['total_cost_usdt']:.2f} USDT** su {rep['trades']} trade "
+                f"({rep['cost_per_trade_usdt']:.2f}/trade){stima}",
+                f"  - commissioni {rep['commission_usdt']:.2f} · spread "
+                f"{rep['spread_usdt']:.2f} · funding {rep['funding_usdt']:+.2f}",
+                f"  - lordo {rep['gross_pnl_usdt']:+.2f} → netto {rep['net_pnl_usdt']:+.2f}"
+                + (f" · **break-even {rep['break_even_pct']:.2f}%** dell'equity"
+                   if rep.get("break_even_pct") is not None else "")]
+        if rep.get("cost_by_symbol"):
+            top = " · ".join(f"{k} {v:.2f}" for k, v in
+                             list(rep["cost_by_symbol"].items())[:5])
+            out.append(f"  - piu' costose: {top}")
+        for a in cost_alerts(rep):
+            out.append(f"  - ⚠️ {a}")
+        out.append("")
+
     reasons = Counter(str(t.get("exit_reason", "?")) for t in trades)
     out += ["| Uscita | Trade | % | PnL |", "|---|---|---|---|"]
     for r, c in reasons.most_common():

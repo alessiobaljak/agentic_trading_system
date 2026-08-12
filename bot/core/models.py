@@ -240,6 +240,25 @@ class ClosedTrade(BaseModel):
     # legarlo a size o leva. Vedi RegimeDetector.detect_detailed.
     regime_confidence_at_entry: Optional[float] = None
 
+    # --- SCOMPOSIZIONE DEI COSTI (Fase 2.5) --------------------------------- #
+    # Il PnL netto e' un numero solo e nasconde quanto e' costato ottenerlo. Qui
+    # ogni voce e' separata, cosi' si puo' rispondere a "quanto serve fare al mese
+    # solo per coprire i costi" e "quali coin costano di piu' da tradare".
+    # In DRY_RUN sono STIME dallo stesso modello del gate (fee+spread per fascia di
+    # liquidita', funding col tasso reale della coin); in live andranno sostituite
+    # coi valori del fill di Binance. Il campo `costs_are_estimated` dice quale dei
+    # due casi e', cosi' nessuno confonde una stima con una misura.
+    expected_entry_price: Optional[float] = None
+    expected_exit_price: Optional[float] = None
+    entry_slippage_pct: Optional[float] = None
+    exit_slippage_pct: Optional[float] = None
+    commission_usdt: Optional[float] = None        # fee+slippage round-trip
+    spread_usdt: Optional[float] = None            # spread bid/ask stimato
+    funding_paid_usdt: Optional[float] = None      # con segno: >0 pagato, <0 incassato
+    total_cost_usdt: Optional[float] = None
+    gross_pnl_usdt: Optional[float] = None         # PRIMA di qualunque costo
+    costs_are_estimated: bool = True
+
     @property
     def duration_seconds(self) -> float:
         return (self.exit_time - self.entry_time).total_seconds()

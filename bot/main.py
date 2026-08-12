@@ -34,6 +34,8 @@ from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
 from bot.orchestrator import Orchestrator
 from bot.risk.circuit_breakers import CircuitBreakers
+from bot.risk import kill_switch
+from bot.risk.kill_switch import BotState
 from bot.risk.correlation_guard import CorrelationGuard
 from bot.risk.risk_manager import RiskManager
 
@@ -305,8 +307,19 @@ class TradingBot:
         self.fb.set_rtdb("/account/equity", new_eq)
         return new_eq
 
+    def bot_state(self) -> BotState:
+        """Stato operativo richiesto dalla dashboard, letto a ogni tick.
+
+        La dashboard SCRIVE su Firebase e il bot LEGGE: non c'e' nessun canale
+        diretto da tenere aperto, quindi il comando arriva anche se la VPS e' lenta
+        o mezza bloccata. Il vecchio flag booleano continua a valere EMERGENCY.
+        """
+        return kill_switch.resolve(self.fb.get_rtdb("/commands/bot_state"),
+                                   self.fb.get_rtdb("/commands/kill_switch"))
+
     def kill_switch_active(self) -> bool:
-        return bool(self.fb.get_rtdb("/commands/kill_switch"))
+        """Compatibilita': True quando lo stato blocca le nuove posizioni."""
+        return kill_switch.blocks_new_positions(self.bot_state())
 
     # ------------------------------------------------------------------ #
     def maybe_scan(self, now: float) -> None:
@@ -395,6 +408,68 @@ class TradingBot:
             "price_stream": (self.stream.is_healthy() if self.stream is not None else False),
         })
         return self.regime
+
+    def _mark_for(self, symbol: str) -> float | None:
+        """Prezzo corrente per una posizione, con ripiego sullo snapshot."""
+        p = self.price.get_mark_price(symbol)
+        if p is None:
+            snap = self.selected.get(symbol)
+            p = snap.price if snap else None
+        return p
+
+    def _emergency_close(self) -> None:
+        """Livello 3: chiusura immediata a mercato di tutto, e il bot resta fermo.
+
+        E' l'unico caso in cui il costo dell'uscita immediata e' preferibile al
+        rischio di restare. Dopo, `bot_state` NON torna a normal da solo: ripartire
+        richiede un gesto esplicito dalla dashboard, altrimenti un'emergenza
+        rientrata in silenzio rimetterebbe il bot a operare senza che nessuno abbia
+        deciso che si puo'.
+        """
+        prices = {s: p for s in list(self.executor.open_positions.keys())
+                  if (p := self._mark_for(s)) is not None}
+        closed = self.executor.force_close_all(prices, ExitReason.KILL_SWITCH)
+        self._settle_realized()
+        for t in closed:
+            self._log_closed(t)
+        realized = sum(t.pnl for t in closed)
+        self.notifier.send(
+            f"🚨 <b>EMERGENCY CLOSE</b>\n{len(closed)} posizioni chiuse a mercato\n"
+            + ("\n".join(f"• {t.symbol} {t.pnl:+.2f}" for t in closed) or "• nessuna")
+            + f"\n<b>PnL realizzato: {realized:+.2f} USDT</b>"
+            f"\n{datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC}"
+            "\nIl bot resta FERMO: riattivazione manuale dalla dashboard.")
+        # il flag booleano storico si consuma (era "one shot"), lo stato resta
+        self.fb.set_rtdb("/commands/kill_switch", False)
+        self.fb.set_rtdb("/commands/bot_state", BotState.EMERGENCY.value)
+        self.fb.set_rtdb("/bot_active", False)
+
+    def _tighten_stops_for_exit(self) -> None:
+        """Livello 2: stop stretti a 0.3 ATR, uscita graduale.
+
+        Non chiude a mercato: le posizioni escono da sole al primo movimento
+        avverso, mentre quelle che stanno correndo continuano a correre. Lo stop si
+        muove SOLO se si avvicina al prezzo — allontanarlo allargherebbe la perdita
+        possibile proprio mentre si sta cercando di uscire.
+        """
+        moved = []
+        for sym, pos in list(self.executor.open_positions.items()):
+            mark = self._mark_for(sym)
+            if mark is None:
+                continue
+            new_stop = kill_switch.protect_stop(
+                mark, pos.stop_price, pos.atr or 0.0,
+                pos.direction == Direction.LONG, settings.KILL_PROTECT_ATR_MULT)
+            if abs(new_stop - pos.stop_price) > 1e-12:
+                pos.stop_price = new_stop
+                moved.append(f"{sym} → {new_stop:g}")
+        if moved:
+            print(f"[kill] STOP AND PROTECT: stop stretti su {len(moved)} posizioni")
+            self.notifier.send("🟠 <b>STOP AND PROTECT</b>\nstop stretti a "
+                               f"{settings.KILL_PROTECT_ATR_MULT:g} ATR:\n"
+                               + "\n".join(f"• {m}" for m in moved))
+        self._publish_decision_status(
+            {"outcome": "flat", "reason": "uscita graduale in corso (STOP AND PROTECT)"})
 
     def _recent_stops(self, lookback_days: float | None = None) -> dict[str, int]:
         """Stop loss per coin nella finestra recente. Serve alla quarantena: una
@@ -547,21 +622,21 @@ class TradingBot:
         # 2) kill switch — prezzi FRESCHI per ogni posizione aperta: gli snapshot
         # possono essere vecchi di 15m/4h e il fallback all'entry price registrerebbe
         # un PnL finto proprio nel percorso di emergenza.
-        if self.kill_switch_active():
-            prices: dict[str, float] = {}
-            for s in list(self.executor.open_positions.keys()):
-                p = self.price.get_mark_price(s)
-                if p is None:
-                    snap = self.selected.get(s)
-                    p = snap.price if snap else None
-                if p is not None:
-                    prices[s] = p
-            closed = self.executor.force_close_all(prices, ExitReason.KILL_SWITCH)
-            self._settle_realized()
-            for t in closed:
-                self._log_closed(t)
-            self.notifier.kill_switch()
-            self.fb.set_rtdb("/commands/kill_switch", False)
+        state = self.bot_state()
+        if state is BotState.EMERGENCY:
+            self._emergency_close()
+            return
+        if state is BotState.STOPPING:
+            # uscita GRADUALE: gli stop si stringono e le posizioni escono da sole
+            # al primo movimento avverso, senza regalare lo spread di una chiusura
+            # a mercato. Quelle che stanno correndo continuano a correre.
+            self._tighten_stops_for_exit()
+            return
+        if state is BotState.PAUSED:
+            # niente di nuovo, ma le posizioni aperte restano gestite dal punto (1)
+            # qui sopra: SL/TP, scale-out e orizzonte continuano a funzionare.
+            self._publish_decision_status(
+                {"outcome": "flat", "reason": "bot in PAUSA: nessuna nuova posizione"})
             return
 
         # 3) nuova decisione a OGNI CANDELA CHIUSA del timeframe, ALLINEATA al

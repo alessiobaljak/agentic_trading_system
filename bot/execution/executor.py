@@ -91,6 +91,10 @@ class Position:
     risk_effective_pct: float = 0.0
     # confidenza della classificazione di regime all'ingresso (0..1), congelata
     regime_confidence: Optional[float] = None
+    # prezzo ATTESO all'ingresso (quello su cui l'orchestratore ha deciso): il
+    # confronto con quello eseguito e' lo slippage d'ingresso. In DRY_RUN i due
+    # coincidono, in live no — ed e' li' che il numero inizia a dire qualcosa.
+    expected_entry_price: Optional[float] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -620,7 +624,12 @@ class ExecutionEngine:
         # short incassa quando il tasso e' positivo (viceversa se negativo).
         funding = funding_fraction(pos.funding_at_entry, held_hours, long,
                                    default_rate=self.funding_per_8h)
-        cost = (self.cost_per_trade + pos.spread_cost + funding) * notional
+        # scomposizione: le tre voci separate, non solo il totale. Il PnL netto da
+        # solo non dice se un trade e' andato male o se e' costato troppo tenerlo.
+        commission = self.cost_per_trade * notional
+        spread = pos.spread_cost * notional
+        funding_usdt = funding * notional
+        cost = commission + spread + funding_usdt
         pnl = gross_pnl - cost                       # PnL NETTO in USDT
         # PnL% sul margine impegnato (notional/leverage)
         margin = notional / max(pos.leverage, 1)
@@ -645,6 +654,19 @@ class ExecutionEngine:
             scale_stage_reached=pos.scale_stage,
             realized_partial=round(pos.realized_net, 6),
             mfe_r=round(mfe_in_r(pos.entry_price, pos.high_water, pos.orig_stop), 3),
+            # --- costi scomposti (Fase 2.5) ---
+            expected_entry_price=pos.expected_entry_price or pos.entry_price,
+            expected_exit_price=pos.stop_price if reason is ExitReason.STOP_LOSS else None,
+            entry_slippage_pct=(
+                (pos.entry_price - pos.expected_entry_price) / pos.expected_entry_price
+                if pos.expected_entry_price else 0.0),
+            commission_usdt=round(commission, 6),
+            spread_usdt=round(spread, 6),
+            funding_paid_usdt=round(funding_usdt, 6),
+            total_cost_usdt=round(cost, 6),
+            gross_pnl_usdt=round(gross_pnl, 6),
+            # in DRY_RUN sono stime dal modello del gate, non misure dai fill
+            costs_are_estimated=self.dry_run,
         )
 
     def _write_position_state(self, pos: Position, mark_price: float) -> None:
