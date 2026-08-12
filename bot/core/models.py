@@ -234,7 +234,11 @@ class ClosedTrade(BaseModel):
     sentiment_at_entry: Optional[float] = None
     fear_greed_at_entry: Optional[int] = None
     funding_at_entry: Optional[float] = None
-    confidence_at_entry: Optional[float] = None  # confidenza orchestratore
+    confidence_at_entry: Optional[float] = None
+    # quanto era NETTA la classificazione di regime all'ingresso (0..1). Registrato
+    # per poter misurare se predice l'esito: solo dopo quella verifica ha senso
+    # legarlo a size o leva. Vedi RegimeDetector.detect_detailed.
+    regime_confidence_at_entry: Optional[float] = None
 
     @property
     def duration_seconds(self) -> float:

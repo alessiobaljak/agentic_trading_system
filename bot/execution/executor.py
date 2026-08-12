@@ -89,6 +89,8 @@ class Position:
     # cap per-posizione limita il nozionale — che e' il caso normale, non
     # l'eccezione. Serve a rendere visibile un numero che finora nessuno vedeva.
     risk_effective_pct: float = 0.0
+    # confidenza della classificazione di regime all'ingresso (0..1), congelata
+    regime_confidence: Optional[float] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -158,6 +160,7 @@ class ExecutionEngine:
         direction: Direction,
         params: EffectiveRiskParams,
         confidence: Optional[float] = None,
+        regime_confidence: Optional[float] = None,
         scale_r_mults: Optional[tuple] = None,
         sl_to_breakeven: Optional[bool] = None,
     ) -> Optional[Position]:
@@ -181,6 +184,7 @@ class ExecutionEngine:
             scale_r_mults=tuple(scale_r_mults) if scale_r_mults else None,
             sl_to_breakeven=sl_to_breakeven,
             risk_effective_pct=params.risk_effective_pct,
+            regime_confidence=regime_confidence,
         )
 
         if self.dry_run:
@@ -637,6 +641,7 @@ class ExecutionEngine:
             fear_greed_at_entry=pos.fear_greed_at_entry,
             funding_at_entry=pos.funding_at_entry,
             confidence_at_entry=pos.confidence_at_entry,
+            regime_confidence_at_entry=pos.regime_confidence,
             scale_stage_reached=pos.scale_stage,
             realized_partial=round(pos.realized_net, 6),
             mfe_r=round(mfe_in_r(pos.entry_price, pos.high_water, pos.orig_stop), 3),
@@ -688,6 +693,7 @@ class ExecutionEngine:
             "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
             # stato scale-out (per non perdere fette/BE dopo un riavvio)
             "risk_effective_pct": pos.risk_effective_pct,
+            "regime_confidence": pos.regime_confidence,
             "sl_order_id": pos.sl_order_id, "exchange_stop": pos.exchange_stop,
             "scale_r_mults": list(pos.scale_r_mults) if pos.scale_r_mults else None,
             "sl_to_breakeven": pos.sl_to_breakeven,
@@ -744,6 +750,7 @@ class ExecutionEngine:
             fear_greed_at_entry=p.get("fear_greed_at_entry"),
             funding_at_entry=p.get("funding_at_entry"),
             confidence_at_entry=p.get("confidence_at_entry"),
+            regime_confidence=p.get("regime_confidence"),
             atr=float(p.get("atr", 0.0) or 0.0),
             spread_cost=float(p.get("spread_cost", 0.0) or 0.0),
         )

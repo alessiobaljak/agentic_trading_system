@@ -64,6 +64,10 @@ class TradingBot:
 
         self.selected: dict = {}        # symbol -> AssetSnapshot
         self.regime = None
+        # confidenza dell'ULTIMA classificazione di regime: viaggia su ogni trade
+        # per poter misurare, piu' avanti, se predice davvero l'esito. Finche' non
+        # e' dimostrato, non tocca size ne' leva.
+        self.regime_confidence: float | None = None
         self.last_scan = 0.0
         self.last_regime = 0.0
         self.last_decision = 0.0
@@ -328,14 +332,58 @@ class TradingBot:
         print(f"[main] valutate {len(self.selected)} coin validate "
               f"({len(coins)} nel registro): {list(self.selected.keys())}")
 
+    def _regime_history(self, assessment, now: float) -> dict:
+        """Durata del regime e probabilita' di cambio, dalla storia recente.
+
+        Il detector e' senza stato (e deve restarlo: lo usa anche il backtest, dove
+        una memoria di processo non avrebbe senso). Durata e stabilita' sono quindi
+        una proprieta' del BOT, che le ricava da una finestra scorrevole su RTDB.
+
+        `change_probability` e' una stima grezza e dichiarata tale: la frazione di
+        letture recenti che NON concordano con l'etichetta corrente, corretta al
+        ribasso quando il regime dura da molto. Non e' una probabilita' calibrata —
+        e' un indicatore di instabilita', e come tale va letto.
+        """
+        keep = 48                                  # ~2 giorni di letture orarie
+        hist = self.fb.get_rtdb("/regime_history") or []
+        if not isinstance(hist, list):
+            hist = []
+        hist = [h for h in hist if isinstance(h, dict)][-keep:]
+        hist.append({"ts": now, "regime": assessment.primary.value,
+                     "confidence": round(assessment.confidence, 3)})
+        self.fb.set_rtdb("/regime_history", hist[-keep:])
+
+        cur = assessment.primary.value
+        streak = 0
+        for h in reversed(hist):
+            if h.get("regime") != cur:
+                break
+            streak += 1
+        window = hist[-12:]
+        disagree = sum(1 for h in window if h.get("regime") != cur) / max(1, len(window))
+        # piu' il regime dura, meno pesa il disaccordo residuo della finestra
+        change_p = disagree * (1.0 / (1.0 + streak / 12.0))
+        return {"regime_duration_readings": streak,
+                "regime_change_probability": round(min(1.0, change_p), 3)}
+
     def refresh_regime(self, now: float):
         btc = self.price.build_snapshot("BTCUSDT")
         fng = self.onchain.fear_greed()
+        detail: dict = {}
         if btc:
-            self.regime = self.regime_detector.detect(btc, fng)
+            assessment = self.regime_detector.detect_detailed(btc, fng)
+            # l'etichetta resta quella di detect(): detect_detailed la riusa, non la
+            # ricalcola, cosi' non puo' divergere da quella che opera nel gate.
+            self.regime = assessment.primary
+            self.regime_confidence = assessment.confidence
+            detail = {**assessment.as_dict(), **self._regime_history(assessment, now)}
         self.last_regime = now
         self.fb.set_rtdb("/bot_status", {
             "state": "running", "regime": self.regime.value if self.regime else None,
+            # lettura RICCA: confidenza, secondario, segnali a favore e contro,
+            # durata e instabilita'. Solo osservabilita': non tocca size ne' leva
+            # finche' non e' dimostrato che predice l'esito (vedi detect_detailed).
+            "regime_detail": detail,
             "dry_run": settings.DRY_RUN, "updated_at": now,
             # SOLO osservabilita' (dashboard Sentiment): il Fear & Greed corrente.
             # Gia' calcolato sopra per il regime; qui e' un semplice output, non
@@ -612,6 +660,7 @@ class TradingBot:
         _sparams = self.adaptation.params_for(asset.symbol).get(decision.strategy, {})
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,
                                           params, confidence=decision.confidence,
+                                          regime_confidence=self.regime_confidence,
                                           scale_r_mults=ladder_multiples(_sparams),
                                           sl_to_breakeven=breakeven_after_tp1(_sparams))
         if pos is not None:
