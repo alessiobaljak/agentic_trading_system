@@ -356,3 +356,116 @@ def test_path_extremes_always_match_the_range():
     assert not trunc
     assert max(path) == hi == 108.0
     assert min(path) == lo == 97.0
+
+
+# ---- resilienza: scaletta di riconnessione e durata del buco --------------- #
+def test_backoff_ladder_is_stepped_not_doubling():
+    """Un blip di rete si recupera in 5 secondi; se la connessione non torna,
+    insistere ogni pochi secondi non aiuta e sovraccarica un endpoint gia' in
+    difficolta'. La scaletta e' esplicita e non cresce all'infinito."""
+    from bot.agents.price_stream import PriceStream
+    lad = PriceStream.BACKOFF_LADDER
+    assert lad[0] == 5.0 and lad[-1] == 300.0
+    assert list(lad) == sorted(lad), "l'attesa deve solo crescere"
+    # dopo l'ultimo gradino si continua a quel ritmo: il bot resta operativo sulle
+    # candele REST invece di fermarsi
+    assert len(lad) == 6
+
+
+def test_downtime_is_zero_while_connected():
+    from bot.agents.price_stream import PriceStream
+    s = PriceStream()
+    s._connected = True
+    assert s.downtime_seconds() == 0.0
+    assert s.missed_candles(0.25) == 0
+
+
+def test_downtime_grows_and_translates_into_missed_candles():
+    """Quante candele sono state perse decide quante recuperare via REST: senza
+    questo numero il backfill sarebbe una stima a occhio."""
+    import time as _t
+    from bot.agents.price_stream import PriceStream
+    s = PriceStream()
+    s._connected = False
+    s._down_since = _t.time() - 3600      # un'ora di buco
+    assert abs(s.downtime_seconds() - 3600) < 5
+    assert s.missed_candles(0.25) == 4    # candele da 15m
+    assert s.missed_candles(1.0) == 1
+
+
+def test_missed_candles_is_safe_with_a_bad_interval():
+    from bot.agents.price_stream import PriceStream
+    s = PriceStream()
+    s._connected = False
+    s._down_since = 1.0
+    assert s.missed_candles(0) == 0
+
+
+def test_stats_report_the_gap():
+    from bot.agents.price_stream import PriceStream
+    s = PriceStream()
+    s._connected = False
+    s._down_since = 1000.0
+    st = s.stats()
+    assert st["down_since"] == 1000.0 and st["down_for_s"] > 0
+
+
+# ---- ripresa dopo un buco: due candele di attesa --------------------------- #
+def _bot_with_stream(stream, interval_s=900):
+    from bot.main import TradingBot
+
+    class Stub:
+        pass
+    b = Stub()
+    b.stream = stream
+    b._decision_interval_s = interval_s
+    b._stream_recovered_at = None
+    return b, TradingBot._stream_recovery_guard
+
+
+def test_no_wait_while_the_stream_is_still_down():
+    """Durante il buco il bot lavora sulle candele REST: degradato, non fermo.
+    Fermarsi del tutto per un problema di rete sarebbe peggio del problema."""
+    from bot.agents.price_stream import PriceStream
+    s = PriceStream()
+    s._connected, s._down_since = False, 1000.0
+    bot, guard = _bot_with_stream(s)
+    assert guard(bot, 2000.0) is False
+
+
+def test_after_recovery_the_bot_waits_two_candles():
+    """Alla riconnessione gli indicatori poggiano ancora su una serie con un pezzo
+    mancante: decidere subito significherebbe operare su valori che non
+    corrispondono al mercato."""
+    from bot.agents.price_stream import PriceStream
+    s = PriceStream()
+    s._connected, s._down_since, s._last_gap_s = True, None, 600.0
+    bot, guard = _bot_with_stream(s, interval_s=900)
+    assert guard(bot, 1000.0) is True          # primo tick dopo il recupero
+    assert guard(bot, 1000.0 + 1799) is True   # ancora dentro le due candele
+    assert guard(bot, 1000.0 + 1801) is False  # riprende
+
+
+def test_a_clean_stream_never_waits():
+    from bot.agents.price_stream import PriceStream
+    s = PriceStream()
+    s._connected, s._down_since, s._last_gap_s = True, None, 0.0
+    bot, guard = _bot_with_stream(s)
+    assert guard(bot, 1000.0) is False
+
+
+def test_the_gap_is_absorbed_only_once():
+    """Assorbito il buco, un nuovo tick non deve far ripartire l'attesa: sarebbe
+    un blocco perpetuo dopo una sola disconnessione."""
+    from bot.agents.price_stream import PriceStream
+    s = PriceStream()
+    s._connected, s._down_since, s._last_gap_s = True, None, 600.0
+    bot, guard = _bot_with_stream(s, interval_s=900)
+    guard(bot, 1000.0)
+    assert guard(bot, 1000.0 + 1801) is False
+    assert guard(bot, 1000.0 + 3600) is False
+
+
+def test_no_stream_configured_means_no_wait():
+    bot, guard = _bot_with_stream(None)
+    assert guard(bot, 1000.0) is False

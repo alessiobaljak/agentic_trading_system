@@ -59,6 +59,10 @@ class PriceStream:
         # una connessione APERTA che non consegna nulla e' inutile quanto una caduta:
         # dopo questo silenzio si chiude e si riprova (prima restava appesa per sempre)
         self.silent_after_s = silent_after_s
+        # istante in cui e' iniziato il buco corrente (None = stream vivo) e durata
+        # dell'ultimo buco chiuso: servono al backfill e alla diagnostica
+        self._down_since: Optional[float] = None
+        self._last_gap_s: float = 0.0
         # soglia sotto la quale un'inversione e' rumore (rimbalzo bid/ask) e non
         # apre un punto nuovo nel percorso; e tetto di punti per non crescere senza fine
         self.min_move_frac = (settings.EXEC_PATH_MIN_MOVE_FRAC
@@ -280,6 +284,11 @@ class PriceStream:
                 "last_error": self._last_error,
                 "last_url": self._last_url,
                 "last_msg_age_s": (time.time() - self._last_msg_ts) if self._last_msg_ts else None,
+                # durata del buco IN CORSO e di quello appena chiuso: dicono se il
+                # bot sta lavorando su candele REST e da quanto
+                "down_since": self._down_since,
+                "down_for_s": (time.time() - self._down_since) if self._down_since else 0.0,
+                "last_gap_s": self._last_gap_s,
             }
 
     # ------------------------------------------------------------------ #
@@ -312,9 +321,30 @@ class PriceStream:
         except Exception as exc:  # noqa: BLE001
             print(f"[price_stream] loop terminato: {exc}")
 
+    # SCALETTA DI RICONNESSIONE, non un raddoppio continuo. Un blip di rete si
+    # recupera in 5 secondi; se la connessione non torna, insistere ogni pochi
+    # secondi non aiuta e sovraccarica un endpoint gia' in difficolta'. Dopo
+    # l'ultimo gradino si continua a riprovare a quel ritmo: il bot intanto lavora
+    # con le candele REST, quindi resta operativo — degradato, non fermo.
+    BACKOFF_LADDER = (5.0, 10.0, 30.0, 60.0, 120.0, 300.0)
+
+    def downtime_seconds(self) -> float:
+        """Da quanto lo stream e' giu' (0 se e' vivo). Serve a decidere quante
+        candele recuperare alla riconnessione."""
+        with self._lock:
+            if self._connected or not self._down_since:
+                return 0.0
+            return max(0.0, time.time() - self._down_since)
+
+    def missed_candles(self, interval_hours: float) -> int:
+        """Quante candele il bot ha probabilmente perso durante il buco."""
+        if interval_hours <= 0:
+            return 0
+        return int(self.downtime_seconds() / (interval_hours * 3600.0))
+
     async def _serve(self) -> None:
         self._loop = asyncio.get_running_loop()
-        backoff = 1.0
+        attempt = 0
         while not self._stop_evt.is_set():
             with self._lock:
                 symbols, generation = set(self._symbols), self._generation
@@ -330,9 +360,17 @@ class PriceStream:
                 async with websockets.connect(url, ping_interval=20, close_timeout=5) as ws:
                     print(f"[price_stream] connesso · {len(symbols)} simboli · {url}")
                     with self._lock:
+                        was_down = self._down_since
                         self._connected = True
                         self._last_error = None
-                    backoff = 1.0
+                        self._down_since = None
+                    if was_down:
+                        gap = time.time() - was_down
+                        print(f"[price_stream] riconnesso dopo {gap:.0f}s di buco "
+                              f"({attempt} tentativi)")
+                        with self._lock:
+                            self._last_gap_s = gap
+                    attempt = 0
                     loop = asyncio.get_running_loop()
                     last_seen = loop.time()
                     while not self._stop_evt.is_set():
@@ -361,6 +399,15 @@ class PriceStream:
                 with self._lock:
                     self._connected = False
                     self._last_error = f"{type(exc).__name__}: {exc}"
-                print(f"[price_stream] disconnesso ({exc}) · riprovo in {backoff:.0f}s")
-                await asyncio.sleep(backoff)
-                backoff = min(backoff * 2, 30.0)
+                    self._down_since = self._down_since or time.time()
+                delay = self.BACKOFF_LADDER[min(attempt, len(self.BACKOFF_LADDER) - 1)]
+                attempt += 1
+                if attempt == len(self.BACKOFF_LADDER):
+                    # dopo l'ultimo gradino: lo stream e' irraggiungibile, non un
+                    # blip. Il bot NON si ferma — passa alle candele REST, che
+                    # vedono gli estremi ma non l'ordine dei prezzi nel minuto.
+                    print(f"[price_stream] IRRAGGIUNGIBILE dopo {attempt} tentativi: "
+                          f"il bot prosegue sulle candele REST (ordine dei prezzi "
+                          f"non ricostruibile)")
+                print(f"[price_stream] disconnesso ({exc}) · riprovo in {delay:.0f}s")
+                await asyncio.sleep(delay)

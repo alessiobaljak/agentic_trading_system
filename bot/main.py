@@ -17,7 +17,7 @@ from __future__ import annotations
 import time
 from datetime import datetime, timezone
 
-from bot.config import settings
+from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import get_firebase
 from bot.core.models import Direction, ExitReason, Regime, RiskSettings
 from bot.agents.market_scanner import MarketScanner
@@ -92,6 +92,8 @@ class TradingBot:
         # Cosi' l'orchestratore agisce a OGNI candela chiusa del timeframe validato.
         _tf_secs = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 14400}
         self._decision_interval_s = _tf_secs.get(settings.ORCHESTRATOR_TIMEFRAME, 3600)
+        # istante in cui lo stream si e' ripreso da un buco (None = niente attesa)
+        self._stream_recovered_at: float | None = None
         self._coin_cooldown: dict[str, float] = {}    # symbol -> epoch in cooldown
         self._strat_streak: dict[str, int] = {}       # strategia -> stop consecutivi
         self._strat_cooldown: dict[str, float] = {}   # strategia -> epoch in panchina
@@ -418,6 +420,45 @@ class TradingBot:
         })
         return self.regime
 
+    def _stream_recovery_guard(self, now: float) -> bool:
+        """True se il bot deve ASTENERSI dal decidere perche' lo stream si e' appena
+        ripreso da un buco.
+
+        Alla riconnessione gli indicatori del bot poggiano su una serie con un
+        pezzo mancante: le candele del buco arrivano dal REST, ma i valori
+        calcolati durante l'interruzione sono stati costruiti su dati parziali.
+        Decidere subito significherebbe operare su indicatori che non
+        corrispondono al mercato. Si aspettano due candele COMPLETE — il tempo che
+        la finestra si riempia di nuovo con dati veri.
+
+        Non e' un blocco: le posizioni aperte continuano a essere gestite
+        normalmente, si sospende solo l'APERTURA di nuove.
+        """
+        if self.stream is None:
+            return False
+        gap = self.stream.downtime_seconds()
+        if gap > 0:
+            # buco IN CORSO: il bot lavora sulle candele REST, che vedono gli
+            # estremi ma non l'ordine dei prezzi. Si continua a operare (degradati),
+            # perche' fermarsi del tutto per un problema di rete e' peggio.
+            self._stream_recovered_at = None
+            return False
+        last = getattr(self.stream, "_last_gap_s", 0.0) or 0.0
+        if last <= 0:
+            return False
+        # primo tick dopo il recupero: si annota l'istante e si aspetta
+        if getattr(self, "_stream_recovered_at", None) is None:
+            self._stream_recovered_at = now
+            missed = self.stream.missed_candles(timeframe_hours(settings.ORCHESTRATOR_TIMEFRAME))
+            print(f"[main] stream ripreso dopo {last:.0f}s ({missed} candele perse): "
+                  f"nessuna nuova posizione per 2 candele")
+        wait_s = 2 * self._decision_interval_s
+        if now - self._stream_recovered_at < wait_s:
+            return True
+        self._stream_recovered_at = None
+        self.stream._last_gap_s = 0.0        # buco assorbito
+        return False
+
     def _internal_state(self) -> tuple[dict, float | None]:
         """Cosa il bot CREDE di avere: quantita' residue e saldo di riferimento."""
         return ({s: p.remaining_qty for s, p in self.executor.open_positions.items()},
@@ -692,6 +733,15 @@ class TradingBot:
         # 2) kill switch — prezzi FRESCHI per ogni posizione aperta: gli snapshot
         # possono essere vecchi di 15m/4h e il fallback all'entry price registrerebbe
         # un PnL finto proprio nel percorso di emergenza.
+        # STREAM appena ripreso: gli indicatori poggiano ancora su una serie con
+        # un pezzo mancante. Si aspettano due candele complete prima di decidere.
+        if self._stream_recovery_guard(now):
+            self._publish_decision_status(
+                {"outcome": "flat",
+                 "reason": "stream appena ripreso: attesa di 2 candele complete "
+                           "prima di riprendere le aperture"})
+            return
+
         # RICONCILIAZIONE: applica le azioni rilevate dal thread e, se lo stato e'
         # incerto, non si aggiunge rischio finche' non c'e' un reset esplicito.
         if self._apply_reconciliation():
