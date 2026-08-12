@@ -88,10 +88,74 @@ class AdaptationEngine:
                     win_rate=None, avg_rr=None, sample_size=0))   # 0 = "in prova"
             except ValueError:
                 continue   # regime non piu' valido
+        # SOGLIA DI CAMPIONE: e' una decisione di PUBBLICAZIONE, non di calcolo —
+        # compute_weights resta una funzione pura dei trade e qui si decide se
+        # quei numeri meritano di guidare size e leva. sample_size somma i trade
+        # effettivamente usati, quindi non serve ripassare la lista.
+        used = sum(w.sample_size or 0 for w in weights)
+        if weights and used < settings.LEARNING_MIN_TRADES_TOTAL:
+            print(f"[learning] solo {used} trade validi (servono "
+                  f"{settings.LEARNING_MIN_TRADES_TOTAL}): pesi INVARIATI")
+            return
+        if not weights and not carried:
+            return          # niente da pubblicare
+
+        prev = {(e.get("strategy"), e.get("regime")): float(e.get("weight", 1.0) or 0.0)
+                for e in (doc.get("weights") or []) if e.get("strategy")}
+
+        # SMOOTHING ESPONENZIALE verso il peso precedente. Lo shrinkage bayesiano
+        # gia' presente stabilizza rispetto alla NUMEROSITA' del campione; questo
+        # stabilizza rispetto al TEMPO, cioe' evita che due ricalcoli consecutivi
+        # (ogni ora) facciano saltare un peso da 0.9 a 0.2 per una manciata di
+        # esiti nuovi. Sono due cose diverse e si sommano bene. Alla prima
+        # comparsa di un gruppo non c'e' nulla da smorzare: si prende il valore
+        # nuovo, altrimenti ogni strategia nascerebbe a meta' strada dal default.
+        a = max(0.0, min(1.0, settings.LEARNING_SMOOTHING_ALPHA))
+        smoothed: list[StrategyRegimeWeight] = []
+        for w in weights:
+            old = prev.get((w.strategy, w.regime.value))
+            if old is not None and a < 1.0:
+                w = w.model_copy(update={"weight": round(a * w.weight + (1 - a) * old, 4)})
+            smoothed.append(w)
+
+        # SAFETY CHECK: un salto aggregato oltre soglia e' quasi sempre un difetto
+        # (dati sporchi, finestra vuota, campo mancante) e non un apprendimento.
+        # Pubblicarlo cambierebbe size e leva di ogni trade successivo, quindi in
+        # caso di dubbio si tengono i pesi vecchi e si chiede di guardare.
+        if prev and smoothed:
+            common = [(w, prev[(w.strategy, w.regime.value)]) for w in smoothed
+                      if (w.strategy, w.regime.value) in prev]
+            base = sum(o for _w, o in common)
+            if common and base > 0:
+                delta = sum(abs(w.weight - o) for w, o in common) / base
+                if delta > settings.LEARNING_MAX_TOTAL_CHANGE:
+                    print(f"[learning] ANOMALIA: i pesi cambierebbero del "
+                          f"{delta * 100:.0f}% (limite "
+                          f"{settings.LEARNING_MAX_TOTAL_CHANGE * 100:.0f}%). "
+                          f"NON pubblicati, restano i precedenti.")
+                    try:
+                        from bot.execution.notifier import TelegramNotifier
+                        TelegramNotifier().send(
+                            f"⚠️ Learning loop: variazione pesi {delta * 100:.0f}% "
+                            f"oltre soglia → aggiornamento SOSPESO")
+                    except Exception:  # noqa: BLE001
+                        pass
+                    return
+
+        payload = [w.model_dump(mode="json") for w in smoothed + carried]
+        version = int(doc.get("version", 0) or 0) + 1
         self.fb.set_doc("strategy_weights", "current", {
-            "weights": [w.model_dump(mode="json") for w in list(weights) + carried],
-            "updated_at": now,
+            "weights": payload, "updated_at": now, "version": version,
+            "trade_count_used": sum(w.sample_size or 0 for w in weights),
         })
+        # STORICO ad anello: l'id del documento e' la versione modulo N, cosi' si
+        # tengono le ultime N senza dover elencare la collection per potarla.
+        try:
+            keep = max(1, settings.LEARNING_HISTORY_VERSIONS)
+            self.fb.set_doc("strategy_weights", f"v{version % keep:03d}", {
+                "version": version, "updated_at": now, "weights": payload})
+        except Exception as exc:  # noqa: BLE001
+            print(f"[learning] storico pesi non salvato: {exc}")
         self.load_weights()
 
     # ------------------------------------------------------------------ #

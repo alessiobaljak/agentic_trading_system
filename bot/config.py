@@ -198,6 +198,27 @@ class Settings:
     LEARNING_LOOKBACK_DAYS: tuple[int, ...] = (30, 60, 90)
     MIN_TRADES_FOR_KELLY: int = 100       # Kelly suggerito dopo 100+ trade
     MIN_TRADES_PER_WEIGHT: int = 5        # minimo campione per fidarsi di un peso
+    # ---- Learning robusto (anti-overfitting) ----
+    # Sotto questo numero di trade VALIDI (dopo il filtro anomalie) non si aggiorna
+    # nessun peso: ricalcolare su una manciata di esiti insegue il rumore, e i pesi
+    # guidano size e leva di ogni trade successivo.
+    LEARNING_MIN_TRADES_TOTAL: int = int(os.getenv("LEARNING_MIN_TRADES_TOTAL", "50"))
+    # smoothing esponenziale verso il peso precedente: stabilizza nel TEMPO (lo
+    # shrinkage bayesiano stabilizza rispetto alla numerosita' del campione, che e'
+    # un'altra cosa). 1.0 = nessuno smoothing.
+    LEARNING_SMOOTHING_ALPHA: float = float(os.getenv("LEARNING_SMOOTHING_ALPHA", "0.3"))
+    # variazione aggregata oltre la quale l'aggiornamento viene SOSPESO: un salto
+    # cosi' grande e' quasi sempre un difetto (dati sporchi, campo mancante) e non
+    # apprendimento. 0 disattiva il controllo.
+    LEARNING_MAX_TOTAL_CHANGE: float = float(os.getenv("LEARNING_MAX_TOTAL_CHANGE", "0.40"))
+    # trade piu' brevi di cosi' sono artefatti (fill anomalo, dato sporco)
+    LEARNING_MIN_TRADE_SECONDS: float = float(os.getenv("LEARNING_MIN_TRADE_SECONDS", "60"))
+    # slippage oltre N volte la mediana: misura la liquidita' di quel momento, non
+    # la bonta' del segnale
+    LEARNING_SLIPPAGE_OUTLIER_MULT: float = float(
+        os.getenv("LEARNING_SLIPPAGE_OUTLIER_MULT", "3.0"))
+    # quante versioni dei pesi tenere nello storico ad anello (per il rollback)
+    LEARNING_HISTORY_VERSIONS: int = int(os.getenv("LEARNING_HISTORY_VERSIONS", "90"))
 
     # ---- Timeframes raccolti dal price agent ----
     TIMEFRAMES: tuple[str, ...] = ("1m", "5m", "15m", "1h")

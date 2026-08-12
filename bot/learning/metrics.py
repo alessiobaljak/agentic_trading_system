@@ -40,6 +40,67 @@ def _strategy_determined(t: dict) -> bool:
     return t.get("exit_reason") not in _EXTERNAL_EXITS
 
 
+def filter_anomalous_trades(trades: list[dict]) -> tuple[list[dict], dict]:
+    """Toglie dal learning i trade che NON descrivono l'edge della strategia.
+
+    Ritorna (trade_tenuti, {motivo: quanti}). Il conteggio va sempre loggato: un
+    filtro troppo aggressivo si riconosce solo vedendo quanto scarta.
+
+    Cosa si esclude e perche':
+      * `external_exit` — chiusura decisa da fuori (manuale, kill switch, circuit
+        breaker): l'esito misura l'intervento, non la strategia;
+      * `wrong_timeframe` — l'esperienza fatta a 1h non descrive le stesse
+        strategie a 15m (SL/TP e durate diversi). Senza campo timeframe il trade
+        e' anteriore alla tracciatura: escluso, cosi' al cambio di timeframe il
+        learning riparte dal prior invece che avvelenato;
+      * `short_duration` — trade chiusi in pochi secondi sono quasi sempre
+        artefatti (fill anomalo, dato sporco), non decisioni;
+      * `slippage_outlier` — esecuzioni molto peggiori della norma misurano la
+        liquidita' di quel momento, non la bonta' del segnale.
+
+    NON implementati per mancanza di sorgente, e vanno detti invece che simulati:
+      * finestra ±2h attorno agli eventi macro — manca un calendario economico;
+      * giorni con volatilita' BTC oltre il 95esimo percentile — il job gira dove
+        Binance non e' raggiungibile;
+      * trade con WebSocket disconnesso — la salute dello stream e' pubblicata
+        come stato istantaneo, non come storico consultabile a posteriori.
+    """
+    from statistics import median as _median
+
+    reasons: dict[str, int] = defaultdict(int)
+    tf = settings.ORCHESTRATOR_TIMEFRAME
+    step1: list[dict] = []
+    for t in trades:
+        if not _strategy_determined(t):
+            reasons["external_exit"] += 1
+            continue
+        if t.get("timeframe") != tf:
+            reasons["wrong_timeframe"] += 1
+            continue
+        dur = t.get("duration_seconds")
+        if dur is not None and float(dur) < settings.LEARNING_MIN_TRADE_SECONDS:
+            reasons["short_duration"] += 1
+            continue
+        step1.append(t)
+
+    # slippage: la soglia si calcola sui trade GIA' filtrati e solo se il dato
+    # esiste davvero. In DRY_RUN lo slippage e' spesso 0 -> mediana 0 -> qualunque
+    # valore positivo sarebbe "anomalo": in quel caso il filtro si disattiva da se'.
+    slips = [abs(float(t.get("slippage") or 0)) for t in step1]
+    positive = [s for s in slips if s > 0]
+    kept = step1
+    if len(positive) >= 10:
+        limit = _median(positive) * settings.LEARNING_SLIPPAGE_OUTLIER_MULT
+        if limit > 0:
+            kept = []
+            for t, s in zip(step1, slips):
+                if s > limit:
+                    reasons["slippage_outlier"] += 1
+                else:
+                    kept.append(t)
+    return kept, dict(reasons)
+
+
 def win_rate(trades: Iterable[dict]) -> float:
     trades = list(trades)
     if not trades:
@@ -204,12 +265,14 @@ def compute_weights(trades: list[dict]) -> list[StrategyRegimeWeight]:
     prior_wr = PRIOR_WINRATE
     k = max(1, settings.MIN_TRADES_PER_WEIGHT)   # forza dello shrinkage
 
-    # SOLO i trade del timeframe corrente: l'esperienza fatta a 1h non descrive il
-    # comportamento delle stesse strategie a 15m (SL/TP/durate diversi). I trade
-    # storici senza campo timeframe ("" o assente) sono esclusi: al cambio di
-    # timeframe il learning riparte dal prior invece che avvelenato dal passato.
-    tf = settings.ORCHESTRATOR_TIMEFRAME
-    trades = [t for t in trades if t.get("timeframe") == tf and _strategy_determined(t)]
+    # ANOMALIE: timeframe sbagliato, uscite esterne, durate impossibili, slippage
+    # fuori scala. Il conteggio si stampa sempre — un filtro troppo aggressivo si
+    # riconosce solo vedendo quanto scarta.
+    n_in = len(trades)
+    trades, reasons = filter_anomalous_trades(trades)
+    if reasons:
+        detail = " · ".join(f"{k}: {v}" for k, v in sorted(reasons.items()))
+        print(f"[learning] filtrati {n_in - len(trades)}/{n_in} trade ({detail})")
 
     groups: dict[tuple[str, str], list[dict]] = defaultdict(list)
     for t in trades:

@@ -282,7 +282,12 @@ def test_is_enabled_only_validated_pairs_when_registry_present():
     assert eng.is_enabled("BTCUSDT", "mean_reversion") is False    # non validata
 
 
-def test_refresh_weights_reacts_within_the_hour():
+def test_refresh_weights_reacts_within_the_hour(monkeypatch):
+    # qui si verifica la REATTIVITA' (il refresh orario sposta i pesi in RAM), non
+    # la soglia di pubblicazione: con 6 trade quella bloccherebbe tutto.
+    from bot.config import settings as _s
+    monkeypatch.setattr(_s, "LEARNING_MIN_TRADES_TOTAL", 1)
+    monkeypatch.setattr(_s, "LEARNING_SMOOTHING_ALPHA", 1.0)
     # Opzione A: il bot ricalcola i pesi dai trade su Firestore (niente Binance).
     # 5 perdite in sideways per 'breakout' -> dopo il refresh il peso e' 0 in sideways.
     from bot.main import TradingBot
@@ -306,7 +311,11 @@ def test_refresh_weights_reacts_within_the_hour():
     assert adaptation.weight_for("breakout", Regime.SIDEWAYS) == 0.0
 
 
-def test_probation_reentry_instead_of_amnesia():
+def test_probation_reentry_instead_of_amnesia(monkeypatch):
+    # qui si verifica la PROBATION, non la soglia di campione ne' lo smoothing
+    from bot.config import settings as _s
+    monkeypatch.setattr(_s, "LEARNING_MIN_TRADES_TOTAL", 1)
+    monkeypatch.setattr(_s, "LEARNING_SMOOTHING_ALPHA", 1.0)
     # Un gruppo ucciso (peso 0) che ESCE dalla finestra 30g non deve risorgere
     # di colpo a 1.0: il peso viene trascinato e recupera gradualmente
     # (WEIGHT_RECOVERY_DAYS). A recupero completo viene potato (default 1.0).
