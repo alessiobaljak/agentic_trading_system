@@ -16,8 +16,9 @@ import sys
 
 from backtesting.data_loader import load_candles
 from backtesting.engine import Backtester, StrategyStats
-from backtesting.quality import (find_indicator_lookahead, max_drawdown_dated,
-                                 sharpe, sortino, validation_light)
+from backtesting.quality import (benchmarks, find_indicator_lookahead,
+                                 looks_delisted, max_drawdown_dated, sharpe,
+                                 sortino, validation_light)
 from backtesting.report import write_excel, write_html
 from bot.config import settings, timeframe_hours
 
@@ -41,6 +42,9 @@ def main() -> int:
     # stats aggregate per strategia (trade uniti su tutti gli asset)
     aggregated: dict[str, StrategyStats] = {}
     per_symbol_loaded = 0
+    # candele per simbolo: servono al benchmark PANIERE, che si calcola sulle coin
+    # davvero tradate senza una singola chiamata di rete in piu'
+    loaded: dict[str, list] = {}
 
     for sym in symbols:
         print(f"[backtest] === {sym} {args.interval} {args.start}->{args.end} (source={args.source}) ===")
@@ -57,7 +61,17 @@ def main() -> int:
         if leak:
             print(f"[backtest] BLOCCATO su {sym}: {leak}")
             return 1
+        # DELISTING: se la serie finisce molto prima della data richiesta, la coin
+        # non e' piu' quotata. Le posizioni ancora aperte alla fine dei dati non si
+        # sono chiuse a un prezzo normale: il mercato si stava svuotando. Va
+        # dichiarato, perche' un backtest che chiude tutto al prezzo di listino
+        # sopravvaluta proprio le coin peggiori.
+        if looks_delisted(candles, args.end, timeframe_hours(args.interval)):
+            print(f"[backtest] {sym}: dati fermi al "
+                  f"{candles[-1].open_time:%Y-%m-%d}, probabile DELISTING — "
+                  f"i risultati su questa coin vanno letti con prudenza")
         per_symbol_loaded += 1
+        loaded[sym] = candles
         stats = bt.run(sym, candles)
         for name, s in stats.items():
             agg = aggregated.setdefault(name, StrategyStats(strategy=name))
@@ -99,15 +113,30 @@ def main() -> int:
     # SEMAFORO sull'aggregato: procedi / attenzione / non procedere, coi motivi.
     all_trades = [t for st in aggregated.values() for t in st.trades]
     _dd, _ = max_drawdown_dated(all_trades)
+    _ret = sum(t.pnl_pct for t in all_trades)
+    bench = benchmarks(loaded)
+    if bench.get("btc_hold") is not None:
+        print(f"\n[backtest] BTC compra&tieni: {bench['btc_hold'] * 100:+.1f}%")
+    if bench.get("basket_hold") is not None:
+        print(f"[backtest] paniere delle coin tradate (equipesato): "
+              f"{bench['basket_hold'] * 100:+.1f}%")
+    # Si giudica contro il PANIERE quando c'e': e' il controllo vero. Chiede "la
+    # selezione delle strategie aggiunge qualcosa, o sto solo cavalcando le stesse
+    # coin che avrei potuto comprare e tenere?". BTC resta il costo-opportunita'
+    # e viene stampato comunque, ma da solo si presta all'obiezione "io trado le
+    # alt, non bitcoin" — che e' fondata.
+    ref, label = ((bench.get("basket_hold"), "il paniere delle coin tradate")
+                  if bench.get("basket_hold") is not None
+                  else (bench.get("btc_hold"), "BTC compra&tieni"))
     light = validation_light(
         sharpe_ratio=sharpe(all_trades), max_dd=_dd, n_trades=len(all_trades),
-        total_return=sum(t.pnl_pct for t in all_trades))
+        total_return=_ret, benchmark_return=ref, benchmark_label=label)
     print(f"\n[backtest] SEMAFORO: {light['message']}")
 
     weights = bt.validate_learning(aggregated)
     verdict = bt.verdict(aggregated)
 
-    html = write_html(aggregated, verdict, weights)
+    html = write_html(aggregated, verdict, weights, light=light, bench=bench)
     xlsx = write_excel(aggregated)
     print(f"[backtest] report HTML: {html}")
     if xlsx:

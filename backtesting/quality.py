@@ -109,7 +109,8 @@ GREEN, YELLOW, RED = "verde", "giallo", "rosso"
 
 def validation_light(*, sharpe_ratio: Optional[float], max_dd: float,
                      n_trades: int, total_return: float,
-                     benchmark_return: Optional[float] = None) -> dict:
+                     benchmark_return: Optional[float] = None,
+                     benchmark_label: str = "benchmark") -> dict:
     """Semaforo: procedi / attenzione / non procedere, coi motivi.
 
     Ogni criterio vota separatamente e vince il PIU' SEVERO: un Sharpe eccellente
@@ -149,11 +150,11 @@ def validation_light(*, sharpe_ratio: Optional[float], max_dd: float,
 
     if benchmark_return is not None:
         if total_return <= benchmark_return:
-            vote(RED, f"sotto il benchmark ({total_return * 100:+.1f}% contro "
+            vote(RED, f"sotto {benchmark_label} ({total_return * 100:+.1f}% contro "
                       f"{benchmark_return * 100:+.1f}%): comprare e tenere avrebbe "
                       f"reso di piu', con meno rischio operativo")
         else:
-            vote(GREEN, f"batte il benchmark ({total_return * 100:+.1f}% contro "
+            vote(GREEN, f"batte {benchmark_label} ({total_return * 100:+.1f}% contro "
                         f"{benchmark_return * 100:+.1f}%)")
 
     level = RED if RED in votes else (YELLOW if YELLOW in votes else GREEN)
@@ -268,3 +269,72 @@ def find_lookahead(backtester, strategy_factory, symbol: str, candles: list,
                     f"{a[k][0]} contro {b[k][0]})")
     return ("LOOK-AHEAD: il passato cambia quando si toglie il futuro — "
             + " · ".join(bits))
+
+
+# --------------------------------------------------------------------------- #
+# Benchmark: contro cosa si misura davvero il sistema                          #
+# --------------------------------------------------------------------------- #
+def buy_and_hold(candles: list) -> Optional[float]:
+    """Rendimento di "compra e tieni" sulla serie: (ultimo - primo) / primo."""
+    if len(candles) < 2:
+        return None
+    first, last = float(candles[0].close), float(candles[-1].close)
+    return (last - first) / first if first > 0 else None
+
+
+def benchmarks(candles_by_symbol: dict) -> dict:
+    """Due metri di paragone, che rispondono a due domande diverse.
+
+    BTC — il costo-opportunita'. E' quello che una persona normale avrebbe fatto
+    invece di far girare un bot: comprare bitcoin e non pensarci piu'. Se il
+    sistema non lo batte, tutto il lavoro e il rischio operativo non hanno
+    prodotto nulla che non si potesse avere gratis.
+
+    PANIERE — il controllo VERO, e risponde alla domanda piu' scomoda: "la mia
+    strategia aggiunge qualcosa, o sto solo cavalcando le stesse coin che avrei
+    potuto comprare e tenere?". E' un paniere equipesato delle coin DAVVERO
+    tradate nel backtest, sullo stesso periodo. Batte BTC come confronto proprio
+    perche' toglie di mezzo la scusa del "ma io trado le alt, non bitcoin": se il
+    sistema non batte il paniere delle sue stesse coin, la selezione delle
+    strategie non sta aggiungendo niente al semplice esserci stato.
+
+    I due possono divergere parecchio — in una fase di alt season il paniere vola
+    e BTC no, e viceversa in una fuga verso la qualita'. Servono entrambi: uno
+    dice se valeva la pena fare trading, l'altro se valeva la pena farlo COSI'.
+    """
+    per_symbol = {s: buy_and_hold(c) for s, c in candles_by_symbol.items()}
+    per_symbol = {s: r for s, r in per_symbol.items() if r is not None}
+    out: dict = {"per_symbol": per_symbol}
+    if per_symbol:
+        out["basket_hold"] = sum(per_symbol.values()) / len(per_symbol)
+    btc = per_symbol.get("BTCUSDT")
+    if btc is not None:
+        out["btc_hold"] = btc
+    return out
+
+
+def looks_delisted(candles: list, requested_end: Optional[str],
+                   interval_hours: float, tolerance_bars: float = 200) -> bool:
+    """La serie finisce molto prima di quanto richiesto: la coin non e' piu' quotata.
+
+    Serve a distinguere due situazioni che nel backtest sembrano identiche — una
+    posizione ancora aperta quando i dati finiscono. Se i dati finiscono perche'
+    finisce la FINESTRA, non e' successo niente e la posizione si chiude al
+    prezzo corrente. Se finiscono perche' la coin e' stata DELISTATA, l'uscita
+    reale sarebbe avvenuta in un mercato che si stava svuotando, a un prezzo
+    molto peggiore.
+
+    Senza questa distinzione si applicherebbe la penalita' a ogni confine di
+    finestra walk-forward, cioe' quasi sempre e a torto.
+    """
+    if not candles or not requested_end:
+        return False
+    try:
+        end = dt.datetime.fromisoformat(requested_end).replace(tzinfo=dt.timezone.utc)
+    except ValueError:
+        return False
+    last = candles[-1].open_time
+    if last.tzinfo is None:
+        last = last.replace(tzinfo=dt.timezone.utc)
+    gap_bars = (end - last).total_seconds() / max(1e-9, interval_hours * 3600)
+    return gap_bars > tolerance_bars

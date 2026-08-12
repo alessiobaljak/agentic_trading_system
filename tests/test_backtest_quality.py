@@ -195,3 +195,80 @@ def test_a_series_too_short_gives_no_verdict():
     from backtesting.engine import Backtester
     bt = Backtester(window=200, capital=10_000.0, interval_hours=0.25)
     assert find_lookahead(bt, _Honest, "TESTUSDT", _series(n=260)) is None
+
+
+# ---- benchmark: contro cosa ci si misura ----------------------------------- #
+def _flat(n=100, start=100.0, end=120.0):
+    import datetime as _dt
+    from bot.core.models import Candle
+    t0 = _dt.datetime(2026, 1, 1, tzinfo=_dt.timezone.utc)
+    step = (end - start) / (n - 1)
+    return [Candle(open_time=t0 + _dt.timedelta(days=k), open=start + k * step,
+                   high=start + k * step, low=start + k * step,
+                   close=start + k * step, volume=1.0) for k in range(n)]
+
+
+def test_buy_and_hold_is_first_to_last():
+    from backtesting.quality import buy_and_hold
+    assert buy_and_hold(_flat(start=100.0, end=120.0)) == pytest.approx(0.20)
+    assert buy_and_hold([]) is None
+
+
+def test_the_basket_covers_the_coins_actually_traded():
+    """E' il controllo VERO: risponde a "la selezione delle strategie aggiunge
+    qualcosa, o sto solo cavalcando le stesse coin che avrei potuto tenere?".
+    BTC da solo si presta all'obiezione fondata "io trado le alt, non bitcoin"."""
+    from backtesting.quality import benchmarks
+    b = benchmarks({"BTCUSDT": _flat(end=110.0),      # +10%
+                    "ALTUSDT": _flat(end=200.0),      # +100%
+                    "MEHUSDT": _flat(end=90.0)})      # -10%
+    assert b["btc_hold"] == pytest.approx(0.10)
+    # equipesato sulle tre: (0.10 + 1.00 - 0.10) / 3
+    assert b["basket_hold"] == pytest.approx(1.00 / 3, rel=1e-6)
+    assert set(b["per_symbol"]) == {"BTCUSDT", "ALTUSDT", "MEHUSDT"}
+
+
+def test_the_basket_exists_even_without_btc():
+    """Il sistema trada microcap: pretendere BTC nel paniere lo renderebbe
+    inutilizzabile proprio nei casi in cui serve."""
+    from backtesting.quality import benchmarks
+    b = benchmarks({"ALTUSDT": _flat(end=200.0)})
+    assert b["basket_hold"] == pytest.approx(1.0)
+    assert "btc_hold" not in b
+
+
+def test_benchmarks_on_empty_input():
+    from backtesting.quality import benchmarks
+    assert benchmarks({}) == {"per_symbol": {}}
+
+
+def test_the_light_names_the_benchmark_it_used():
+    """Sapere CONTRO COSA si e' perso e' meta' dell'informazione."""
+    v = validation_light(sharpe_ratio=1.2, max_dd=0.1, n_trades=300,
+                         total_return=0.10, benchmark_return=0.40,
+                         benchmark_label="il paniere delle coin tradate")
+    assert v["level"] == RED
+    assert any("paniere delle coin tradate" in r for r in v["reasons"])
+
+
+# ---- delisting -------------------------------------------------------------- #
+def test_a_window_boundary_is_not_a_delisting():
+    """Senza questa distinzione la penalita' scatterebbe a ogni confine di
+    finestra walk-forward, cioe' quasi sempre e a torto."""
+    from backtesting.quality import looks_delisted
+    c = _flat(n=100)   # ultima candela al giorno 99 dal 2026-01-01
+    fine = (c[-1].open_time).date().isoformat()
+    assert looks_delisted(c, fine, interval_hours=24.0) is False
+
+
+def test_a_series_ending_long_before_the_request_is_a_delisting():
+    from backtesting.quality import looks_delisted
+    c = _flat(n=100)
+    assert looks_delisted(c, "2027-01-01", interval_hours=24.0) is True
+
+
+def test_delisting_check_is_safe_without_data_or_a_bad_date():
+    from backtesting.quality import looks_delisted
+    assert looks_delisted([], "2027-01-01", 24.0) is False
+    assert looks_delisted(_flat(), None, 24.0) is False
+    assert looks_delisted(_flat(), "non-una-data", 24.0) is False
