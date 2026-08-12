@@ -85,6 +85,12 @@ class Settings:
     # filtro di contesto sull'universo: scarta le coin su cui non vale la pena
     # spendere validazione. FAIL-OPEN: senza AI non scarta nulla.
     AI_UNIVERSE_FILTER: bool = os.getenv("AI_UNIVERSE_FILTER", "true").lower() == "true"
+    # MODALITA' OMBRA: a ogni decisione il modello dice cosa farebbe, e la sua
+    # scelta viene REGISTRATA accanto a quella vera. Non tocca nulla: serve a
+    # rispondere con dei numeri alla domanda "aggiungerebbe valore?", prima di
+    # dargli un ruolo. Una decisione LLM non e' riproducibile, quindi non e'
+    # backtestabile: l'ombra e' l'unico modo di misurarla senza rischiare.
+    AI_SHADOW_ENABLED: bool = os.getenv("AI_SHADOW_ENABLED", "true").lower() == "true"
 
     # ---- Data agents ----
     LUNARCRUSH_API_KEY: str = os.getenv("LUNARCRUSH_API_KEY", "")

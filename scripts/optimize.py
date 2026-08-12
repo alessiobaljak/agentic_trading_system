@@ -291,6 +291,13 @@ MIN_PASSES = int(os.getenv("OPTIMIZER_MIN_PASSES", "3"))
 # hanno almeno una strategia validata supera questa soglia. Si adatta se cambiano
 # le crypto nell'universo (non un numero fisso). Regolabile via env.
 READY_FRACTION = float(os.getenv("OPTIMIZER_READY_FRACTION", "0.60"))
+# VIA ALTERNATIVA alla copertura: numero ASSOLUTO di coppie validate sufficiente a
+# partire. Serve perche' con un gate severo la copertura percentuale non si
+# raggiunge mai (misurato: 9 coppie passate su 1200 valutate -> 6.7% di copertura
+# contro una soglia del 35%). Quello che serve per iniziare non e' coprire una
+# fetta del mercato, e' avere abbastanza strategie validate da diversificare.
+# 0 = disattivata (vale solo la copertura).
+READY_MIN_PAIRS = int(os.getenv("OPTIMIZER_READY_MIN_PAIRS", "0"))
 # minimi di sicurezza: non dichiarare "ready" se l'universo è troppo piccolo o se
 # le crypto validate in assoluto sono troppo poche.
 MIN_UNIVERSE = int(os.getenv("OPTIMIZER_MIN_UNIVERSE", "10"))
@@ -414,9 +421,18 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     covered = sorted(validated_coins)
     universe = max(len(current_coins), len(covered)) or 1
     coverage = len(covered) / universe
-    ready = (coverage >= READY_FRACTION
-             and universe >= MIN_UNIVERSE
-             and len(covered) >= MIN_COVERED)
+    # PRONTI PER IL PAPER. La COPERTURA come criterio nasce da un'idea ragionevole
+    # ("voglio poter operare su una fetta ampia del mercato") che pero' diventa
+    # irraggiungibile quando il gate e' severo: se passa lo 0.75% delle coppie
+    # valutate, chiedere il 35% dell'universo significa non partire mai.
+    # READY_MIN_PAIRS e' la via alternativa: quello che serve davvero per iniziare
+    # non e' coprire una percentuale del mercato, e' avere abbastanza strategie
+    # validate da diversificare. Le due strade sono in OR, e i minimi assoluti
+    # restano condizione necessaria in entrambi i casi.
+    base_ok = universe >= MIN_UNIVERSE and len(covered) >= MIN_COVERED
+    by_coverage = coverage >= READY_FRACTION
+    by_count = READY_MIN_PAIRS > 0 and len(validated) >= READY_MIN_PAIRS
+    ready = base_ok and (by_coverage or by_count)
 
     registry = {
         "updated_at": time.time(),
@@ -430,6 +446,8 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         "ready": ready,
         "min_passes": MIN_PASSES,
         "ready_fraction": READY_FRACTION,
+        "ready_min_pairs": READY_MIN_PAIRS,
+        "ready_by": ("copertura" if by_coverage else "numero coppie") if ready else None,
         "min_universe": MIN_UNIVERSE,
         "min_covered": MIN_COVERED,
     }

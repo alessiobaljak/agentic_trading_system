@@ -459,6 +459,42 @@ class TradingBot:
         self.stream._last_gap_s = 0.0        # buco assorbito
         return False
 
+    def _record_shadow(self, opened: list, now: float) -> None:
+        """Registra cosa avrebbe fatto il modello, accanto a cosa ha fatto il bot.
+
+        NON influenza nulla: nessun percorso legge questo documento per operare.
+        Serve a rispondere con dei numeri, fra qualche settimana, alla domanda
+        "l'LLM aggiungerebbe valore?" — che oggi non ha risposta, perche' una
+        decisione di un modello non e' riproducibile e quindi non e' backtestabile.
+        """
+        if not settings.AI_SHADOW_ENABLED:
+            return
+        try:
+            from bot.ai.shadow import compare, propose_shadow
+            signals = self.orchestrator.collect_signals(self.selected, self.regime)
+            if not signals:
+                return
+            risks = [p.risk_effective_pct for p in self.executor.open_positions.values()]
+            shadow = propose_shadow(
+                signals, self.regime,
+                risk={"open_risk_pct": sum(risks), "equity": self.account_equity(),
+                      "open_positions": len(self.executor.open_positions),
+                      "day_pnl": self.circuit_breakers.day_pnl_pct * 100
+                      if hasattr(self.circuit_breakers, "day_pnl_pct") else 0.0},
+                alerts=[f.event for f in getattr(self.reconciler, "findings", [])],
+                recent=self.logger.recent(10))
+            if not shadow:
+                return
+            actual = f"{opened[0].asset}|{opened[0].strategy}" if opened else None
+            self.fb.set_doc("ai_shadow", str(int(now)), {
+                **shadow, "actual": actual, "verdict": compare(shadow, actual),
+                "signals_available": len(signals),
+                "regime": self.regime.value if self.regime else None,
+            })
+        except Exception as exc:  # noqa: BLE001
+            # diagnostica: un suo errore non deve MAI fermare il trading
+            print(f"[ai-shadow] non registrata: {exc}")
+
     def _internal_state(self) -> tuple[dict, float | None]:
         """Cosa il bot CREDE di avere: quantita' residue e saldo di riferimento."""
         return ({s: p.remaining_qty for s, p in self.executor.open_positions.items()},
@@ -791,8 +827,13 @@ class TradingBot:
         # "il migliore del ciclo"). In parita' apriamo TUTTI i segnali validi del
         # ciclo (uno per coin); altrimenti la singola decisione migliore (LLM/fallback).
         if settings.BACKTEST_PARITY:
-            for d in self.orchestrator.decide_all(self.selected, self.regime, disabled=disabled):
+            opened = [d for d in self.orchestrator.decide_all(
+                self.selected, self.regime, disabled=disabled)]
+            for d in opened:
                 self._try_open(d, now)
+            # OMBRA: il modello dice cosa AVREBBE fatto, e resta li'. Dopo il giro
+            # delle aperture, cosi' non aggiunge latenza alla decisione vera.
+            self._record_shadow(opened, now)
             self._publish_decision_status()
             return
         decision = self.orchestrator.decide(self.selected, self.regime, memory, recent,
