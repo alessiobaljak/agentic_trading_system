@@ -92,6 +92,9 @@ class TradingBot:
         # Cosi' l'orchestratore agisce a OGNI candela chiusa del timeframe validato.
         _tf_secs = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 14400}
         self._decision_interval_s = _tf_secs.get(settings.ORCHESTRATOR_TIMEFRAME, 3600)
+        # ultima lettura dell'ombra: serve al veto (passo 2). Resta None finche'
+        # l'ombra non ha risposto, e in quel caso il veto non puo' scattare.
+        self._last_shadow: dict | None = None
         # istante in cui lo stream si e' ripreso da un buco (None = niente attesa)
         self._stream_recovered_at: float | None = None
         self._coin_cooldown: dict[str, float] = {}    # symbol -> epoch in cooldown
@@ -483,6 +486,7 @@ class TradingBot:
                       if hasattr(self.circuit_breakers, "day_pnl_pct") else 0.0},
                 alerts=[f.event for f in getattr(self.reconciler, "findings", [])],
                 recent=self.logger.recent(10))
+            self._last_shadow = shadow
             if not shadow:
                 return
             actual = f"{opened[0].asset}|{opened[0].strategy}" if opened else None
@@ -872,6 +876,18 @@ class TradingBot:
         if not asset:
             self._publish_decision_status({"outcome": "flat", "reason": "snapshot asset mancante"})
             return
+
+        # VETO dell'ombra (passo 2). Il modello puo' solo dire "questo no", mai
+        # "prendi quest'altro": e' l'unico ruolo operativo falsificabile a
+        # posteriori, e un veto sbagliato costa un'occasione, non una perdita.
+        # DISARMATO finche' AI_VETO_ENABLED resta false.
+        if settings.AI_VETO_ENABLED and self._last_shadow:
+            from bot.ai.shadow import veto_reason
+            _v = veto_reason(self._last_shadow, f"{decision.asset}|{decision.strategy}")
+            if _v:
+                self._publish_decision_status(
+                    {"outcome": "flat", "reason": f"veto AI su {decision.asset}: {_v}"})
+                return
 
         # ESCLUSIONI STRUTTURALI dell'asset (funding insostenibile, spread, coin in
         # quarantena dopo troppi stop). Inerti sotto BACKTEST_PARITY come cooldown e

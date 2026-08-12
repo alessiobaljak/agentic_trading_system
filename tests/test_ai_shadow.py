@@ -107,3 +107,44 @@ def test_the_context_carries_risk_and_alerts(monkeypatch):
     assert "4.50%" in u and "9 posizioni" in u
     assert "ghost_position" in u, "il modello deve sapere se il sistema e' degradato"
     assert "ULTIMI 1 TRADE" in u
+
+
+# ---- passo 2: il VETO, disarmato di default -------------------------------- #
+def test_veto_is_disarmed_by_default():
+    """Il meccanismo c'e', ma non agisce finche' `scripts.shadow_report` non
+    mostra che i veti dell'ombra erano giusti. E' la stessa disciplina usata per
+    la confidenza di regime e per il punteggio degli asset."""
+    assert settings.AI_VETO_ENABLED is False
+    s = {"choice": None, "reason": "nessun setup", "rejected": ["BTCUSDT|breakout: no"]}
+    assert shadow.veto_reason(s, "BTCUSDT|breakout") is None
+
+
+def test_veto_on_an_explicitly_rejected_signal(monkeypatch):
+    monkeypatch.setattr(settings, "AI_VETO_ENABLED", True)
+    s = {"choice": "ETHUSDT|momentum",
+         "rejected": ["BTCUSDT|breakout: volume in calo, breakout fragile"]}
+    r = shadow.veto_reason(s, "BTCUSDT|breakout")
+    assert r and "volume in calo" in r
+
+
+def test_preferring_another_signal_is_not_a_veto(monkeypatch):
+    """"Ne preferivo un altro" non e' un veto: sarebbe una SELEZIONE mascherata,
+    cioe' il passo 3 fatto di nascosto. Solo lo scarto esplicito conta."""
+    monkeypatch.setattr(settings, "AI_VETO_ENABLED", True)
+    s = {"choice": "ETHUSDT|momentum", "rejected": []}
+    assert shadow.veto_reason(s, "BTCUSDT|breakout") is None
+
+
+def test_choosing_nothing_vetoes_everything(monkeypatch):
+    monkeypatch.setattr(settings, "AI_VETO_ENABLED", True)
+    s = {"choice": None, "reason": "regime incerto e rischio aperto gia' alto"}
+    r = shadow.veto_reason(s, "BTCUSDT|breakout")
+    assert r and "regime incerto" in r
+
+
+def test_no_shadow_means_no_veto(monkeypatch):
+    """Se il modello non ha risposto non si blocca nulla: un'API muta non deve
+    diventare un freno silenzioso al trading."""
+    monkeypatch.setattr(settings, "AI_VETO_ENABLED", True)
+    assert shadow.veto_reason(None, "BTCUSDT|breakout") is None
+    assert shadow.veto_reason({}, "BTCUSDT|breakout") is None

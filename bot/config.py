@@ -91,6 +91,13 @@ class Settings:
     # dargli un ruolo. Una decisione LLM non e' riproducibile, quindi non e'
     # backtestabile: l'ombra e' l'unico modo di misurarla senza rischiare.
     AI_SHADOW_ENABLED: bool = os.getenv("AI_SHADOW_ENABLED", "true").lower() == "true"
+    # PASSO 2 — VETO. Il modello puo' solo dire "questo no", mai "prendi
+    # quest'altro". E' l'unico ruolo operativo accettabile prima di una prova,
+    # perche' e' falsificabile (si guarda a posteriori se i vietati avrebbero
+    # perso) e perche' un veto sbagliato costa un'occasione, non una perdita.
+    # DEFAULT False: si arma solo dopo che `scripts.shadow_report` mostra che i
+    # veti dell'ombra erano giusti. Il meccanismo c'e', la decisione e' dell'utente.
+    AI_VETO_ENABLED: bool = os.getenv("AI_VETO_ENABLED", "false").lower() == "true"
 
     # ---- Data agents ----
     LUNARCRUSH_API_KEY: str = os.getenv("LUNARCRUSH_API_KEY", "")

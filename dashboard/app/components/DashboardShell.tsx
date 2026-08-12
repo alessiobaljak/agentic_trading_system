@@ -24,6 +24,7 @@ import LearningEvolution from './LearningEvolution';
 import PortfolioRisk from './PortfolioRisk';
 import ReconcilerStatus from './ReconcilerStatus';
 import OperatingCosts from './OperatingCosts';
+import OrchestratorShadow from './OrchestratorShadow';
 
 type TabId =
   | 'panoramica'
@@ -297,6 +298,7 @@ export default function DashboardShell() {
                 <Heatmap />
               </div>
               <LearningEvolution />
+              <OrchestratorShadow />
               <TrailingLearning />
               <Insights />
             </>

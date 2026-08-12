@@ -119,6 +119,37 @@ def propose_shadow(signals: list[dict], regime, risk: Optional[dict] = None,
     }
 
 
+def veto_reason(shadow: Optional[dict], candidate: str) -> Optional[str]:
+    """Motivo per cui il modello eviterebbe questo trade, o None.
+
+    E' il PASSO 2, e resta disarmato (`AI_VETO_ENABLED`, default False) finche'
+    l'ombra non ha prodotto abbastanza casi per dire se i veti erano giusti.
+
+    Perche' il veto e' l'unico ruolo operativo accettabile prima di quella prova:
+      * e' FALSIFICABILE — si registra il trade vietato e si guarda a posteriori
+        se avrebbe perso. Una selezione ("prendi quest'altro") non lo e': del
+        trade non preso non si sapra' mai l'esito;
+      * un veto sbagliato costa un'occasione, non una perdita;
+      * non rompe la parita' col gate nel modo grave. Il paper resta un
+        SOTTOINSIEME dei trade validati, e il sottoinsieme e' tracciato — quindi
+        il confronto PF resta interpretabile, cosa che con una selezione libera
+        non sarebbe piu' vera.
+
+    Il veto vale solo se il modello ha scartato ESPLICITAMENTE questo candidato o
+    ha scelto di non operare affatto. Un semplice "ne preferiva un altro" NON e'
+    un veto: sarebbe una selezione mascherata.
+    """
+    if not settings.AI_VETO_ENABLED or not shadow:
+        return None
+    for r in (shadow.get("rejected") or []):
+        text = str(r)
+        if text.split(":", 1)[0].strip() == candidate:
+            return text[:200]
+    if shadow.get("choice") is None and shadow.get("reason"):
+        return f"nessun setup convincente: {shadow['reason'][:160]}"
+    return None
+
+
 def compare(shadow: Optional[dict], actual: Optional[str]) -> str:
     """Come si e' posizionata l'ombra rispetto al bot. Quattro esiti, tutti utili.
 
