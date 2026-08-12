@@ -55,6 +55,10 @@ class OptResult:
     regime_pf: dict = field(default_factory=dict)
     # timestamp dell'ultima candela usata: serve alla regola "pass solo con dati nuovi"
     data_end: float = 0.0
+    # max drawdown OOS della coppia da SOLA. Va salvato, non solo usato per il
+    # verdetto: senza, non si puo' confrontare la buca PROMESSA dal gate con quella
+    # che il portafoglio scava davvero tenendo aperte 9-12 coppie insieme.
+    oos_max_dd: float = 0.0
 
 
 class WalkForwardOptimizer:
@@ -225,6 +229,7 @@ class WalkForwardOptimizer:
                 oos_trades=len(oos.trades), oos_win_rate=round(oos.win_rate(), 3),
                 passed=passed, trailing=oos.trailing_counts(), params_history=history,
                 holdout=hold, regime_pf=reg_pf,
+                oos_max_dd=round(max_drawdown(oos.trades), 4),
                 data_end=(candles[-1].open_time.timestamp() if candles else 0.0),
             ))
         return results

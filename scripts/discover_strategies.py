@@ -72,7 +72,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list]:
                 # assente faceva incrementare a OGNI run - il bug delle coppie a
                 # 3 pass in un giorno), il veto di regime e la scala per-coppia.
                 "holdout": r.get("holdout"), "regime_pf": r.get("regime_pf"),
-                "scale_r_mults": r.get("scale_r_mults"),
+                "oos_max_dd": r.get("max_dd"), "scale_r_mults": r.get("scale_r_mults"),
                 "data_end": r.get("data_end", 0),
             }
             passed_keys.append(key)
@@ -159,6 +159,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         "pf": round(pf, 3), "pnl": round(pnl, 4),
         "trades": len(oos.trades), "win": round(oos.win_rate(), 3), "passed": passed,
         "holdout": hold, "regime_pf": reg_pf,
+        "max_dd": round(max_drawdown(oos.trades), 4),
         "scale_r_mults": best_ladder,
         "data_end": (candles[-1].open_time.timestamp() if candles else 0.0),
     }

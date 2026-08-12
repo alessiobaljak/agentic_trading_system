@@ -14,6 +14,8 @@ from __future__ import annotations
 import time
 from datetime import datetime, timezone
 
+from backtesting.engine import max_concurrent, portfolio_drawdown
+from bot.config import settings
 from bot.core.firebase_client import decode_pairs, get_firebase
 
 OUT = "docs/state.md"
@@ -150,7 +152,7 @@ def build() -> str:
     else:
         lines.append("_Nessun risultato di ottimizzazione ancora presente su Firebase._")
     lines.append("")
-    lines += _closed_trades_section(fb)
+    lines += _closed_trades_section(fb, pairs)
     lines += _drift_section(fb)
     lines += _calibration_section(fb)
     return "\n".join(lines)
@@ -253,7 +255,7 @@ _EXIT_LABEL = {
 }
 
 
-def _closed_trades_section(fb) -> list[str]:
+def _closed_trades_section(fb, pairs=None) -> list[str]:
     """PERCHE' usciamo dai trade: e' la diagnosi piu' diretta di come sta andando.
 
     - la distribuzione di `exit_reason` dice se veniamo stoppati PRIMA di incassare
@@ -307,6 +309,45 @@ def _closed_trades_section(fb) -> list[str]:
         out += [f"- gradini raggiunti (su {tot} trade): {desc}", ""]
 
     mfes = sorted(float(t["mfe_r"]) for t in trades if t.get("mfe_r") is not None)
+    # DRAWDOWN DI PORTAFOGLIO: le uscite ordinate nel TEMPO, non per coppia. Il
+    # gate misura la buca che una coppia scava DA SOLA e promuove solo curve
+    # regolari (recovery >= 2); ma dieci curve regolari che scendono negli stessi
+    # giorni — e su crypto si muovono quasi tutte con BTC — scavano insieme una
+    # buca che nessuno dei numeri per coppia mostrava.
+    def _t(v):
+        if isinstance(v, (int, float)):
+            return float(v)
+        try:
+            return datetime.fromisoformat(str(v)).timestamp()
+        except (TypeError, ValueError):
+            return None
+    events = [(_t(t.get("exit_ts") or t.get("exit_time")), float(t.get("pnl", 0) or 0))
+              for t in trades]
+    events = [e for e in events if e[0] is not None]
+    if events:
+        dd, tot = portfolio_drawdown(events)
+        conc = max_concurrent((_t(t.get("entry_time")), _t(t.get("exit_time")))
+                              for t in trades)
+        rec = (tot / dd) if dd > 0 else None
+        out += [f"- **drawdown di portafoglio: {dd:.2f} USDT** "
+                f"(ritorno {tot:+.2f} · recovery "
+                f"{f'{rec:.2f}' if rec is not None else '—'}) "
+                f"· max {conc} posizioni aperte insieme"]
+        # confronto con la PROMESSA: il gate accetta una coppia solo se il suo
+        # recovery e' >= GATE_MIN_RECOVERY. Se il portafoglio sta sotto mentre ogni
+        # coppia stava sopra, la soglia per coppia non protegge il portafoglio.
+        recs = [float(r.get("last_pnl_pct") or 0) / float(r.get("last_max_dd") or 0)
+                for r in (pairs or {}).values()
+                if float((r or {}).get("last_max_dd") or 0) > 0]
+        if recs and rec is not None:
+            worst = min(recs)
+            out.append(f"  - il gate prometteva recovery ≥ "
+                       f"{settings.GATE_MIN_RECOVERY:.1f} per ogni coppia "
+                       f"(peggiore in registro: {worst:.2f}); il PORTAFOGLIO "
+                       f"realizza {rec:.2f}")
+        out += ["  _uscite in ordine di TEMPO: e' la buca vera, quella che il gate"
+                " non vede perche' valida una coppia alla volta._", ""]
+
     if mfes:
         med = mfes[len(mfes) // 2]
         reach = " · ".join(f"≥{r:g}R: {sum(1 for v in mfes if v >= r) / len(mfes) * 100:.0f}%"

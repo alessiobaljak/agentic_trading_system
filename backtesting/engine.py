@@ -55,13 +55,73 @@ def max_drawdown(trades) -> float:
     """Max drawdown della curva di equity dei trade IN SEQUENZA (cumulata dei
     pnl_pct). E' la misura della continuita': due strategie con lo stesso ritorno
     possono scavare buche molto diverse per arrivarci, e la buca e' cio' che in
-    live diventa drawdown reale."""
+    live diventa drawdown reale.
+
+    ATTENZIONE AL PERIMETRO: e' il drawdown di UNA coppia che opera DA SOLA. Il
+    motore non sovrappone posizioni sulla stessa coppia, quindi per quella coppia
+    la sequenza e' corretta — ma il bot ne tiene aperte 9-12 insieme, spesso su
+    coin correlate, e le loro buche si sommano nello stesso momento. Il drawdown di
+    PORTAFOGLIO e' un altro numero, tipicamente molto peggiore: si calcola con
+    `portfolio_drawdown`, che i trade li ordina nel TEMPO invece che per coppia.
+    """
     peak = equity = dd = 0.0
     for t in trades:
         equity += t.pnl_pct
         peak = max(peak, equity)
         dd = max(dd, peak - equity)
     return dd
+
+
+def portfolio_drawdown(events) -> tuple[float, float]:
+    """(max drawdown, ritorno totale) della curva di equity del PORTAFOGLIO.
+
+    `events`: iterabile di (timestamp_uscita, pnl). Le uscite si ordinano nel
+    TEMPO e non per coppia: e' l'unico modo di far coincidere le perdite che nella
+    realta' sono avvenute insieme.
+
+    Perche' serve un secondo numero. Il gate valida una coppia alla volta e misura
+    la buca che quella coppia scava da sola; con la soglia recovery >= 2 promuove
+    solo curve regolari. Ma dieci curve regolari messe insieme possono scavare una
+    buca profonda se scendono negli stessi giorni — ed e' cio' che succede su coin
+    crypto, che si muovono quasi tutte con BTC. Il drawdown per coppia non e'
+    sbagliato: e' semplicemente un altro perimetro, e da solo genera l'illusione
+    che il portafoglio erediti la regolarita' delle sue parti.
+
+    Le unita' sono quelle dei `pnl` passati (frazioni nel gate, USDT nel paper): la
+    funzione non le interpreta, si limita a sommarle in ordine cronologico.
+    """
+    rows = sorted((float(ts), float(p)) for ts, p in events if ts is not None)
+    peak = equity = dd = 0.0
+    for _ts, pnl in rows:
+        equity += pnl
+        peak = max(peak, equity)
+        dd = max(dd, peak - equity)
+    return dd, equity
+
+
+def max_concurrent(intervals) -> int:
+    """Massimo numero di posizioni aperte NELLO STESSO ISTANTE.
+
+    `intervals`: iterabile di (apertura, chiusura). E' il moltiplicatore implicito
+    del rischio: con N posizioni aperte insieme, una giornata storta le colpisce
+    tutte. Il gate non lo modella affatto (una coppia per volta), quindi senza
+    questo numero non si sa quanto il portafoglio sia concentrato.
+    """
+    marks: list[tuple[float, int]] = []
+    for a, b in intervals:
+        if a is None:
+            continue
+        # chiusura mancante -> posizione ancora aperta: la si tratta come tale
+        marks.append((float(a), 1))
+        marks.append((float(b) if b is not None else float("inf"), -1))
+    # a parita' di istante si chiude PRIMA di aprire: due trade consecutivi che si
+    # toccano non contano come sovrapposti (sarebbe un falso positivo).
+    marks.sort(key=lambda m: (m[0], m[1]))
+    cur = best = 0
+    for _t, delta in marks:
+        cur += delta
+        best = max(best, cur)
+    return best
 
 
 def recency_weights(trades, half_life_days: float | None = None) -> list[float]:

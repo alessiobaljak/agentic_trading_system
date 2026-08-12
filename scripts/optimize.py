@@ -91,6 +91,7 @@ def _opt_one(sym: str) -> tuple[str, dict, list]:
             # holdout (dati mai visti dalla selezione), PF per-regime e fine dati:
             # alimentano il registro (verifica, filtro regime, pass onesto).
             "holdout": r.holdout, "regime_pf": r.regime_pf, "data_end": r.data_end,
+            "oos_max_dd": r.oos_max_dd,
         }
         if r.passed:
             passed.append(key)
@@ -371,6 +372,8 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
                 rec["regime_pf"] = e["regime_pf"]
             rec["last_pf"] = e["oos_pf"]
             rec["last_pnl_pct"] = e["oos_pnl_pct"]
+            if e.get("oos_max_dd") is not None:
+                rec["last_max_dd"] = e["oos_max_dd"]
             rec["last_trades"] = e["oos_trades"]
             rec["last_win_rate"] = e.get("oos_win_rate")
             tr = e.get("trailing") or {}
