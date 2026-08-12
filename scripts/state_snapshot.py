@@ -79,8 +79,19 @@ def build() -> str:
         for sym, p in positions.items():
             if not isinstance(p, dict):
                 continue
+            # rischio EFFETTIVO: quanto costa davvero lo stop, in % dell'equity.
+            # E' il numero che dice se la manopola del rischio sta funzionando: sotto
+            # il cap per-posizione diverge dall'impostazione e varia con lo stop.
+            r = p.get("risk_effective_pct")
+            risk = f" · rischio {float(r) * 100:.2f}%" if r else ""
             lines.append(f"- {sym}: {p.get('direction')} qty={p.get('quantity')} "
-                         f"@ {p.get('entry_price')} uPnL={p.get('unrealized_pnl')}")
+                         f"@ {p.get('entry_price')} uPnL={p.get('unrealized_pnl')}"
+                         f"{risk} · leva {p.get('leverage')}x")
+        risks = [float(p.get("risk_effective_pct") or 0) for p in positions.values()
+                 if isinstance(p, dict) and p.get("risk_effective_pct")]
+        if risks:
+            lines.append(f"- **rischio aperto totale: {sum(risks) * 100:.2f}%** "
+                         f"dell'equity su {len(risks)} posizioni")
         lines.append("")
 
     # --- GATE 1: registro di validazione cumulativo ---

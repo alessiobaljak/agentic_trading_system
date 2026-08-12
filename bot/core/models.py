@@ -160,7 +160,12 @@ class RiskSettings(BaseModel):
 class EffectiveRiskParams(BaseModel):
     """Risultato della logica di precedenza: i valori realmente applicati."""
     leverage: float
-    risk_per_trade: float
+    risk_per_trade: float           # rischio RICHIESTO (impostazione utente x alloc)
+    # rischio EFFETTIVO: quanto si perde davvero allo stop, in frazione dell'equity.
+    # Diverge da `risk_per_trade` quando il cap per-posizione limita il nozionale, ed
+    # e' il caso normale: e' l'unico numero che dice quanto si sta rischiando davvero.
+    risk_effective_pct: float = 0.0
+    capped_by_position_limit: bool = False
     notional: float                 # valore nozionale della posizione
     quantity: float                 # quantità nell'asset
     stop_price: float

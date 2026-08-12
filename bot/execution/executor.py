@@ -84,6 +84,11 @@ class Position:
     # BE dopo TP1 VALIDATO per questa coppia, congelato all'ingresso come la scala:
     # non e' una scelta ovvia (protegge, ma taglia i runner) e ora la decide il gate
     sl_to_breakeven: Optional[bool] = None
+    # RISCHIO EFFETTIVO all'ingresso, in frazione dell'equity: quanto si perde
+    # davvero se lo stop viene toccato. Diverge dall'impostazione utente quando il
+    # cap per-posizione limita il nozionale — che e' il caso normale, non
+    # l'eccezione. Serve a rendere visibile un numero che finora nessuno vedeva.
+    risk_effective_pct: float = 0.0
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -175,6 +180,7 @@ class ExecutionEngine:
             spread_cost=liquidity_spread(asset.volume_24h),   # == costo backtest
             scale_r_mults=tuple(scale_r_mults) if scale_r_mults else None,
             sl_to_breakeven=sl_to_breakeven,
+            risk_effective_pct=params.risk_effective_pct,
         )
 
         if self.dry_run:
@@ -681,6 +687,7 @@ class ExecutionEngine:
             # --- campi extra per ricostruire la posizione dopo un restart ---
             "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
             # stato scale-out (per non perdere fette/BE dopo un riavvio)
+            "risk_effective_pct": pos.risk_effective_pct,
             "sl_order_id": pos.sl_order_id, "exchange_stop": pos.exchange_stop,
             "scale_r_mults": list(pos.scale_r_mults) if pos.scale_r_mults else None,
             "sl_to_breakeven": pos.sl_to_breakeven,

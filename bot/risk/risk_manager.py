@@ -81,10 +81,16 @@ class RiskManager:
 
         # === precedenza: il valore più conservativo (minimo) ===
         eff_lev = min(alloc_lev, sys_lev_cap, hard_limits.MAX_LEVERAGE)
-        # la leva sui futures e' un INTERO: Binance non accetta 2.02x. Arrotondo
-        # (>=1) -> la leva dinamica si muove a gradini puliti (1x/2x/3x per
-        # convinzione+learning), niente code decimali, e resta valida per l'ordine reale.
-        eff_lev = float(max(1, min(round(eff_lev), int(hard_limits.MAX_LEVERAGE))))
+        # la leva sui futures e' un INTERO: Binance non accetta 2.02x. Si arrotonda
+        # (>=1) -> gradini puliti 1x/2x/3x per convinzione+learning, e il valore
+        # resta valido per l'ordine reale.
+        # floor(x+0.5) e NON round(): round() in Python arrotonda alla pari, quindi
+        # round(2.5) == 2. Con leva base 2 il massimo assoluto dell'allocazione e'
+        # esattamente 2.5 (conv 1.25 x learning 1.25 -> radice 1.25), quindi il
+        # gradino 3x era IRRAGGIUNGIBILE: il moltiplicatore poteva solo frenare, mai
+        # premiare. Verificato spazzando tutte le combinazioni: con base 2 le leve
+        # ottenibili erano {1, 2}.
+        eff_lev = float(max(1, min(int(eff_lev + 0.5), int(hard_limits.MAX_LEVERAGE))))
         eff_risk = min(alloc_risk, sys_risk_cap, hard_limits.MAX_RISK_PER_TRADE)
 
         # il size_multiplier dell'orchestratore scala ulteriormente (<=1)
@@ -126,14 +132,31 @@ class RiskManager:
             frac = 0.10
         if frac < 1.0:
             max_notional = min(max_notional, account_equity * eff_lev * frac)
-        if notional > max_notional:
-            notes.append(f"Nozionale limitato (cap posizione {frac:.0%} equity)")
+        capped = notional > max_notional
+        if capped:
             notional = max_notional
             quantity = notional / price
+
+        # RISCHIO EFFETTIVO: quanto si perde davvero se lo stop viene toccato, in
+        # frazione dell'equity. NON coincide con `risk_per_trade` quando il cap
+        # morde — ed e' il caso NORMALE, non l'eccezione: con equity 1000, leva 2 e
+        # cap al 10% il nozionale e' 200, mentre un rischio dell'1% su uno stop del
+        # 2% ne chiederebbe 500. Il risultato e' che l'utente imposta 1% e il
+        # sistema rischia ~0.35%, per giunta variabile con la volatilita' (piu' lo
+        # stop e' largo, meno si rischia). Finche' questo numero non era esposto la
+        # manopola del rischio sembrava funzionare e non funzionava.
+        risk_effective = (quantity * per_unit_risk / account_equity) if account_equity else 0.0
+        if capped:
+            notes.append(
+                f"Nozionale limitato dal cap posizione ({frac:.0%} equity): "
+                f"rischio effettivo {risk_effective * 100:.2f}% invece di "
+                f"{eff_risk * 100:.2f}%")
 
         return EffectiveRiskParams(
             leverage=eff_lev,
             risk_per_trade=eff_risk,
+            risk_effective_pct=risk_effective,
+            capped_by_position_limit=capped,
             notional=notional,
             quantity=quantity,
             stop_price=stop_price,
