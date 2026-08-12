@@ -18,16 +18,24 @@ registro.
 Uso (sul VPS):
     .venv/bin/python -m scripts.gate_vs_paper --symbol BIRBUSDT --strategy gen_472f85b8
     .venv/bin/python -m scripts.gate_vs_paper --symbol BIRBUSDT --strategy gen_472f85b8 --ladder 1,2,3
+    .venv/bin/python -m scripts.gate_vs_paper --symbol X --strategy Y --entry-timing
+
+MODALITA' REPLAY (confronto trade-per-trade sul periodo davvero operato):
+    .venv/bin/python -m scripts.gate_vs_paper --trades-file trades_backup_20260811.json
 """
 from __future__ import annotations
 
 import argparse
+import datetime as dt
+import json
+from collections import defaultdict
 from datetime import date
+from statistics import median
 
 from backtesting.data_loader import load_candles
 from backtesting.engine import StrategyStats, max_drawdown
 from backtesting.optimizer import WalkForwardOptimizer
-from bot.config import settings
+from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import decode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.execution.exit_logic import ladder_multiples
@@ -95,6 +103,226 @@ def _contribution(name: str, rows: list[tuple[float, float]], mults: tuple) -> N
         quota = (pnl[i] / tot_pnl * 100) if abs(tot_pnl) > 1e-12 else float("nan")
         print(f"  {lab:<26}{cnt[i]:>7}{cnt[i] / tot_n * 100:>8.0f}%{pnl[i]:>12.3f}{quota:>10.0f}%")
     print(f"  {'TOTALE':<26}{tot_n:>7}{100:>8.0f}%{tot_pnl:>12.3f}{100:>10.0f}%")
+
+
+# ---------------------------------------------------------------------------- #
+# MODALITA' REPLAY — il confronto trade-per-trade richiesto dalla Fase 1.1      #
+# ---------------------------------------------------------------------------- #
+def _ts(value) -> float:
+    """Epoch da un campo temporale del trade (ISO string o numero)."""
+    if isinstance(value, (int, float)):
+        return float(value)
+    try:
+        return dt.datetime.fromisoformat(str(value)).timestamp()
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _match(paper: list[dict], sim: list, tol_s: float) -> list[tuple]:
+    """Accoppia ogni trade PAPER col segnale del GATE piu' vicino nel tempo.
+
+    Ogni segnale del gate puo' essere usato una volta sola: senza questo vincolo
+    piu' trade paper vicini fra loro si accopperebbero tutti allo stesso segnale e
+    il conteggio dei "non accoppiati" perderebbe significato. Ritorna coppie
+    (trade_paper, trade_gate|None) — il None e' un risultato, non un errore: dice
+    che in quel momento il gate NON aveva un segnale.
+    """
+    used: set = set()
+    out = []
+    for p in sorted(paper, key=lambda t: _ts(t.get("entry_time"))):
+        pt = _ts(p.get("entry_time"))
+        best, best_d = None, None
+        for idx, s in enumerate(sim):
+            if idx in used:
+                continue
+            d = abs(float(getattr(s, "entry_ts", 0.0)) - pt)
+            if d <= tol_s and (best_d is None or d < best_d):
+                best, best_d = idx, d
+        if best is None:
+            out.append((p, None))
+        else:
+            used.add(best)
+            out.append((p, sim[best]))
+    return out
+
+
+def _price_move(t: dict) -> float:
+    """Variazione di PREZZO del trade paper, con segno per la direzione.
+
+    E' la grandezza confrontabile col `pnl_pct` del gate, che e' anch'esso una
+    variazione di prezzo senza leva. Il `pnl_pct` del ClosedTrade invece e' il
+    ritorno sul MARGINE (leva inclusa): stesso nome, semantica diversa.
+    """
+    e, x = float(t.get("entry_price") or 0), float(t.get("exit_price") or 0)
+    if e <= 0:
+        return 0.0
+    sign = -1.0 if str(t.get("direction", "")).lower() == "short" else 1.0
+    return (x - e) / e * sign
+
+
+def _replay_pair(key: str, ptrades: list[dict], args, specs: dict, pairs: dict) -> dict | None:
+    """Rigira il GATE sulla finestra di calendario in cui il paper ha operato."""
+    symbol, strategy = key.split("|", 1)
+    t_in = [_ts(t.get("entry_time")) for t in ptrades if _ts(t.get("entry_time")) > 0]
+    t_out = [_ts(t.get("exit_time")) for t in ptrades if _ts(t.get("exit_time")) > 0]
+    if not t_in:
+        return None
+    tf_h = timeframe_hours(args.interval)
+    # warmup: il motore ha bisogno di ~200 barre prima di poter emettere segnali,
+    # altrimenti la finestra del paper resterebbe scoperta all'inizio.
+    warm_s = 260 * tf_h * 3600
+    start = dt.datetime.fromtimestamp(min(t_in) - warm_s, dt.timezone.utc).date().isoformat()
+    end = dt.datetime.fromtimestamp(max(t_out or t_in) + 86400, dt.timezone.utc).date().isoformat()
+
+    spec = specs.get(strategy)
+    ladder = ladder_multiples((pairs.get(key) or {}).get("last_params") or {})
+
+    def make():
+        if spec is not None:
+            g = GeneratedStrategy(spec)
+            if ladder:
+                g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(ladder)}
+            return g
+        for s in get_all_strategies():
+            if s.name == strategy:
+                return s
+        return None
+
+    if make() is None:
+        return {"key": key, "n_paper": len(ptrades), "skip": "spec/strategia non trovata"}
+
+    # MAI dati sintetici qui: se Binance non risponde, un backtest su serie
+    # inventate produrrebbe un confronto dall'aria plausibile e privo di senso —
+    # il modo peggiore di sbagliare, perche' non si vede.
+    candles = load_candles(symbol, args.interval, start, end, prefer=args.source,
+                           allow_synthetic=False)
+    if len(candles) < 260:
+        return {"key": key, "n_paper": len(ptrades), "skip": f"solo {len(candles)} candele"}
+    frame = compute_indicator_frame(candles)
+    opt = WalkForwardOptimizer(n_windows=1, interval=args.interval)
+    st = opt.bt.run_strategy(make(), symbol, candles, frame=frame)
+    lo, hi = min(t_in), max(t_out or t_in)
+    sim = [s for s in st.trades if lo - tf_h * 3600 <= float(getattr(s, "entry_ts", 0)) <= hi]
+
+    matched = _match(ptrades, sim, tol_s=2 * tf_h * 3600)
+    both = [(p, s) for p, s in matched if s is not None]
+    return {
+        "key": key, "n_paper": len(ptrades), "n_gate": len(sim),
+        "n_matched": len(both), "skip": None,
+        "d_entry": [abs(float(s.entry_price) - float(p["entry_price"]))
+                    / float(p["entry_price"]) * 100
+                    for p, s in both if float(p.get("entry_price") or 0) > 0],
+        "d_time": [abs(float(s.entry_ts) - _ts(p.get("entry_time"))) for p, s in both],
+        "mfe_paper": [float(p["mfe_r"]) for p in ptrades if p.get("mfe_r") is not None],
+        "mfe_gate": [float(s.mfe_r) for s in sim],
+        "move_paper": [_price_move(p) for p in ptrades],
+        "move_gate": [float(s.pnl_pct) for s in sim],
+    }
+
+
+def _replay_report(rows: list[dict]) -> None:
+    ok = [r for r in rows if not r.get("skip")]
+    print("\n" + "=" * 96)
+    print("CONFRONTO PAPER vs GATE sulla STESSA finestra di calendario")
+    print("=" * 96)
+    hdr = (f"{'coppia':<34}{'paper':>7}{'gate':>6}{'match':>7}"
+           f"{'Δprezzo':>10}{'Δtempo':>10}{'mfe pap':>9}{'mfe gate':>10}")
+    print(hdr)
+    print("-" * len(hdr))
+    for r in sorted(rows, key=lambda x: -x["n_paper"]):
+        if r.get("skip"):
+            print(f"{r['key'][:33]:<34}{r['n_paper']:>7}   —      —   [{r['skip']}]")
+            continue
+        de = f"{median(r['d_entry']):.3f}%" if r["d_entry"] else "—"
+        dtm = f"{median(r['d_time']) / 60:.0f}m" if r["d_time"] else "—"
+        mp = f"{median(r['mfe_paper']):.2f}R" if r["mfe_paper"] else "—"
+        mg = f"{median(r['mfe_gate']):.2f}R" if r["mfe_gate"] else "—"
+        print(f"{r['key'][:33]:<34}{r['n_paper']:>7}{r['n_gate']:>6}{r['n_matched']:>7}"
+              f"{de:>10}{dtm:>10}{mp:>9}{mg:>10}")
+
+    if not ok:
+        print("\nNessuna coppia confrontabile.")
+        return
+    tot_p = sum(r["n_paper"] for r in ok)
+    tot_g = sum(r["n_gate"] for r in ok)
+    tot_m = sum(r["n_matched"] for r in ok)
+    d_entry = [x for r in ok for x in r["d_entry"]]
+    d_time = [x for r in ok for x in r["d_time"]]
+    mp = [x for r in ok for x in r["mfe_paper"]]
+    mg = [x for r in ok for x in r["mfe_gate"]]
+    vp = [x for r in ok for x in r["move_paper"]]
+    vg = [x for r in ok for x in r["move_gate"]]
+
+    print("\n--- TABELLA METRICA (aggregato) ---")
+    print(f"{'METRICA':<34}{'PAPER':>14}{'GATE':>14}{'DELTA':>14}")
+    def row(name, a, b, fmt="{:.3f}", suffix=""):
+        d = (b - a) if (a is not None and b is not None) else None
+        sa = fmt.format(a) + suffix if a is not None else "—"
+        sb = fmt.format(b) + suffix if b is not None else "—"
+        sd = ("{:+}".format(fmt.format(d)) + suffix) if d is not None else "—"
+        print(f"{name:<34}{sa:>14}{sb:>14}{sd:>14}")
+    row("trade / segnali nella finestra", tot_p, tot_g, "{:.0f}")
+    row("mfe_r mediana", median(mp) if mp else None, median(mg) if mg else None,
+        "{:.2f}", "R")
+    row("variazione prezzo media", (sum(vp) / len(vp) * 100) if vp else None,
+        (sum(vg) / len(vg) * 100) if vg else None, "{:.3f}", "%")
+    print(f"{'accoppiati (±2 barre)':<34}{tot_m:>14}{'':>14}"
+          f"{f'{tot_m / tot_p * 100:.0f}% del paper' if tot_p else '—':>14}")
+    if d_entry:
+        print(f"{'scarto prezzo di ingresso':<34}{'':>14}{'':>14}"
+              f"{f'mediana {median(d_entry):.3f}%':>14}")
+    if d_time:
+        print(f"{'scarto istante di ingresso':<34}{'':>14}{'':>14}"
+              f"{f'mediana {median(d_time) / 60:.0f} min':>14}")
+
+    print("\nCome si legge:")
+    print("  · 'gate' molto > 'paper': il bot ha eseguito solo una parte dei segnali")
+    print("    (margine esaurito, guardie di portafoglio, coppia non ancora validata).")
+    print("  · pochi 'accoppiati': il paper ha operato quando il gate NON aveva un")
+    print("    segnale — divergenza di GENERAZIONE, la piu' grave.")
+    print("  · Δprezzo e Δtempo grandi: divergenza di ESECUZIONE (timing/fill).")
+    print("  · mfe simili ma esiti diversi: divergenza nelle USCITE.")
+    print("  · mfe del paper molto sotto quella del gate: nessuna delle tre — e' il")
+    print("    mercato che non ha ripetuto la coda su cui il gate era stato validato.")
+
+
+def _replay_mode(args) -> int:
+    try:
+        with open(args.trades_file, encoding="utf-8") as fh:
+            trades = json.load(fh)
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"[gvp] non riesco a leggere {args.trades_file}: {exc}")
+        return 1
+    if not isinstance(trades, list) or not trades:
+        print(f"[gvp] {args.trades_file} non contiene una lista di trade")
+        return 1
+
+    by_pair: dict[str, list] = defaultdict(list)
+    for t in trades:
+        if isinstance(t, dict) and t.get("symbol") and t.get("strategy"):
+            by_pair[f"{t['symbol']}|{t['strategy']}"].append(t)
+    todo = {k: v for k, v in by_pair.items() if len(v) >= args.min_trades}
+    print(f"[gvp] {len(trades)} trade · {len(by_pair)} coppie · "
+          f"{len(todo)} con almeno {args.min_trades} trade")
+    if not todo:
+        print(f"[gvp] nessuna coppia sopra soglia: prova --min-trades 1")
+        return 1
+
+    fb = get_firebase()
+    specs = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+    pairs = decode_pairs((fb.get_doc("strategy_registry", "validated") or {}).get("pairs"))
+
+    rows = []
+    for i, (key, ts) in enumerate(sorted(todo.items(), key=lambda kv: -len(kv[1])), 1):
+        print(f"[gvp] ({i}/{len(todo)}) {key} · {len(ts)} trade paper...")
+        try:
+            r = _replay_pair(key, ts, args, specs, pairs)
+        except Exception as exc:  # noqa: BLE001
+            r = {"key": key, "n_paper": len(ts), "skip": f"{type(exc).__name__}: {exc}"}
+        if r:
+            rows.append(r)
+    _replay_report(rows)
+    return 0
 
 
 def _entry_timing_report(base: StrategyStats, rerun, strategy: str) -> None:
@@ -177,8 +405,8 @@ def _build_strategy(fb, strategy: str, ladder):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--symbol", required=True)
-    ap.add_argument("--strategy", required=True, help="es. gen_472f85b8 oppure breakout")
+    ap.add_argument("--symbol", help="es. BIRBUSDT (non serve in modalita' replay)")
+    ap.add_argument("--strategy", help="es. gen_472f85b8 oppure breakout")
     ap.add_argument("--interval", default=settings.ORCHESTRATOR_TIMEFRAME)
     ap.add_argument("--start", default="2022-01-01")
     ap.add_argument("--end", default=None)
@@ -190,7 +418,18 @@ def main() -> int:
                     help="misura l'effetto del timing d'ingresso: rigira le stesse "
                          "finestre entrando all'apertura della barra DOPO il segnale "
                          "(cioe' al primo prezzo eseguibile) e confronta")
+    ap.add_argument("--trades-file",
+                    help="MODALITA' REPLAY: file JSON di trade paper (export di "
+                         "reset_paper). Rigira il gate sulla stessa finestra di "
+                         "calendario e confronta trade per trade. Ignora --symbol")
+    ap.add_argument("--min-trades", type=int, default=2,
+                    help="modalita' replay: coppie con meno trade non vengono girate")
     args = ap.parse_args()
+
+    if args.trades_file:
+        return _replay_mode(args)
+    if not args.symbol or not args.strategy:
+        ap.error("servono --symbol e --strategy (oppure --trades-file)")
 
     fb = get_firebase()
     key = f"{args.symbol}|{args.strategy}"
