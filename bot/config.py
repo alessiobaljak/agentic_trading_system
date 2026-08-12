@@ -518,6 +518,23 @@ class Settings:
     SENTIMENT_TILT_STRENGTH: float = float(os.getenv("SENTIMENT_TILT_STRENGTH", "0.5"))
     SENTIMENT_TILT_FLOOR: float = float(os.getenv("SENTIMENT_TILT_FLOOR", "0.5"))
 
+    # ---- Degradazione sotto stress (Fase 5) ----
+    # TETTO DI TEMPO sullo scan. Con Binance lenta ogni simbolo puo' costare fino a
+    # ~20s (timeout 10s + un retry): su ~135 coin lo scan diventerebbe di ore, e per
+    # tutto quel tempo il loop non torna a GESTIRE LE POSIZIONI APERTE — cioe' il
+    # problema di rete si trasformerebbe in stop e take-profit non sorvegliati. Oltre
+    # questo budget lo scan si ferma e tiene cio' che ha raccolto (dichiarando quante
+    # coin ha saltato: una troncatura silenziosa si leggerebbe come "universo intero").
+    SCAN_MAX_SECONDS: float = float(os.getenv("SCAN_MAX_SECONDS", "300"))
+    # Firebase irraggiungibile: per quanto si continua ad APRIRE prima di astenersi.
+    # Le posizioni aperte continuano a essere gestite SEMPRE (vivono in memoria e si
+    # chiudono coi prezzi di Binance: Firebase non serve). Ma con il database muto non
+    # si legge piu' il kill switch — cioe' il freno dell'utente — quindi passato questo
+    # tempo non si aggiunge rischio nuovo. Stessa regola del reconciler: nell'incertezza
+    # si gestisce cio' che c'e', non si apre altro.
+    FIREBASE_DEGRADED_BLOCK_SECONDS: float = float(
+        os.getenv("FIREBASE_DEGRADED_BLOCK_SECONDS", "300"))
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

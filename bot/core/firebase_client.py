@@ -112,13 +112,43 @@ class _InMemoryStore:
 
 
 class FirebaseClient:
-    """Interfaccia unica usata da tutto il bot."""
+    """Interfaccia unica usata da tutto il bot.
+
+    DUE MODI DI NON AVERE FIREBASE, e vanno trattati diversamente.
+
+      * NON CONFIGURATO (test, primo avvio locale): si parte direttamente sullo
+        store in-memory. Tutto funziona, niente e' persistente, e si sa in
+        partenza.
+      * CONFIGURATO MA IRRAGGIUNGIBILE a meta' corsa (rete giu', quota finita,
+        credenziali revocate): qui il client e' vivo e ogni chiamata SOLLEVA. Il
+        Realtime DB e' sul percorso caldo del loop — stato, equity, comandi,
+        heartbeat — quindi un'eccezione li' fermava il ciclo; e l'heartbeat sta
+        in un `finally`, dove un'eccezione non e' intercettata da nessuno e
+        TERMINA il processo. Cioe': un buco di rete su Firebase spegneva il bot
+        lasciando aperte le posizioni.
+
+    Da qui la regola: **il Realtime DB non solleva mai**. Le scritture vanno
+    comunque nello specchio in memoria, le letture ricadono sull'ultimo valore
+    noto, e il guasto viene CONTATO (`degraded_for`) invece che propagato. Il
+    loop resta vivo e continua a gestire le posizioni aperte — che vivono in
+    memoria e si chiudono coi prezzi di Binance, senza bisogno di Firebase.
+
+    Firestore invece continua a sollevare, ed e' voluto: li' ci sono i trade
+    CHIUSI. Se una scrittura fallita passasse per riuscita, il WAL verrebbe
+    cancellato subito dopo e quel trade sparirebbe per sempre (equity mai piu'
+    riconciliabile). Meglio un ciclo interrotto che un trade perso.
+    """
 
     def __init__(self) -> None:
         self._memory = _InMemoryStore()
         self._fs = None   # firestore client
         self._db = None   # realtime db module
         self._live = False
+        # salute del RTDB: istante del PRIMO fallimento della serie in corso
+        # (None = sano), quanti ne sono seguiti, e l'ultimo errore visto.
+        self._rtdb_down_since: Optional[float] = None
+        self._rtdb_failures = 0
+        self._last_rtdb_error: Optional[str] = None
         self._init_firebase()
 
     def _init_firebase(self) -> None:
@@ -199,8 +229,59 @@ class FirebaseClient:
             self._memory._docs.pop(f"{collection}/{doc_id}", None)
 
     # ---- Realtime DB (stato live) ----
-    def set_rtdb(self, path: str, data: Any) -> None:
-        if self._live and self._db is not None:
+    def _note_rtdb(self, ok: bool, exc: Optional[BaseException] = None) -> None:
+        """Tiene il conto dei guasti del RTDB. Un buco si giudica dalla DURATA, non
+        dal singolo errore: una richiesta persa capita, dieci minuti di silenzio no."""
+        if ok:
+            if self._rtdb_down_since is not None:
+                import time as _t
+                print(f"[firebase] RTDB di nuovo raggiungibile dopo "
+                      f"{_t.time() - self._rtdb_down_since:.0f}s "
+                      f"({self._rtdb_failures} chiamate fallite)")
+            self._rtdb_down_since = None
+            self._rtdb_failures = 0
+            return
+        import time as _t
+        self._rtdb_failures += 1
+        self._last_rtdb_error = str(exc)[:200] if exc else "?"
+        if self._rtdb_down_since is None:
+            self._rtdb_down_since = _t.time()
+            print(f"[firebase] RTDB irraggiungibile ({self._last_rtdb_error}): "
+                  f"si continua sullo specchio in memoria")
+
+    def degraded_for(self, now: Optional[float] = None) -> float:
+        """Da quanti secondi il RTDB e' muto. 0 = sano (o non configurato).
+
+        Chi decide se APRIRE legge questo: col database muto non si legge piu' il
+        kill switch, cioe' il freno dell'utente, e aggiungere rischio mentre il
+        freno e' scollegato non e' una scelta difendibile.
+        """
+        if self._rtdb_down_since is None:
+            return 0.0
+        import time as _t
+        return max(0.0, (now if now is not None else _t.time()) - self._rtdb_down_since)
+
+    def health(self) -> dict:
+        """Diagnostica leggibile: serve al report e ai log, non alle decisioni."""
+        return {"live": self._live, "rtdb_down_since": self._rtdb_down_since,
+                "rtdb_failures": self._rtdb_failures,
+                "rtdb_degraded_for_s": round(self.degraded_for(), 1),
+                "last_rtdb_error": self._last_rtdb_error}
+
+    def set_rtdb(self, path: str, data: Any) -> bool:
+        """Scrive lo stato live. NON solleva mai. True se e' finita DAVVERO su
+        Firebase, False se e' rimasta solo nello specchio in memoria.
+
+        Il valore di ritorno esiste perche' un chiamante puo' avere bisogno di
+        sapere se la scrittura e' durevole (il WAL dei trade chiusi lo usa): senza,
+        "scritto" e "perso al prossimo riavvio" sarebbero indistinguibili.
+        """
+        # lo specchio si aggiorna SEMPRE: e' quello che regge le letture quando il
+        # database e' muto, e resta allineato quando non lo e'.
+        self._memory.set_rtdb(path, data)
+        if not (self._live and self._db is not None):
+            return False
+        try:
             # ATTENZIONE: il RTDB lancia "Value must not be None" se passi None
             # a .set(). Per cancellare un nodo (es. posizione chiusa) si usa
             # .delete(). Senza questo, la chiusura di una posizione crashava e il
@@ -210,13 +291,34 @@ class FirebaseClient:
                 ref.delete()
             else:
                 ref.set(data)
-        else:
-            self._memory.set_rtdb(path, data)
+            self._note_rtdb(True)
+            return True
+        except Exception as exc:  # noqa: BLE001
+            self._note_rtdb(False, exc)
+            return False
 
     def get_rtdb(self, path: str) -> Any:
-        if self._live and self._db is not None:
-            return self._db.reference(path).get()
-        return self._memory.get_rtdb(path)
+        """Legge lo stato live. NON solleva mai: se il database e' muto ritorna
+        l'ULTIMO VALORE NOTO (specchio in memoria), che e' sempre meglio di far
+        cadere il ciclo di trading.
+
+        ATTENZIONE a come si legge un valore in degrado: per i nodi che scrive il
+        BOT lo specchio e' esatto, per quelli che scrive la DASHBOARD (i comandi)
+        e' vecchio quanto il buco. Per questo il degrado ha anche una durata, e
+        oltre quella si smette di aprire invece di fidarsi di un comando stantio.
+        """
+        if not (self._live and self._db is not None):
+            return self._memory.get_rtdb(path)
+        try:
+            val = self._db.reference(path).get()
+            self._note_rtdb(True)
+            # lettura riuscita -> aggiorna lo specchio: cosi' il valore piu' fresco
+            # e' gia' li' quando il database smettera' di rispondere
+            self._memory.set_rtdb(path, val)
+            return val
+        except Exception as exc:  # noqa: BLE001
+            self._note_rtdb(False, exc)
+            return self._memory.get_rtdb(path)
 
 
 _client: Optional[FirebaseClient] = None

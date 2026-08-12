@@ -11,6 +11,7 @@ attualmente favorevoli (regime corrente).
 from __future__ import annotations
 
 import os
+import time
 from dataclasses import dataclass
 from typing import Optional
 
@@ -164,6 +165,15 @@ class MarketScanner:
             # le N crypto più liquide per VOLUME (non i primi N in ordine d'API)
             symbols = self.price.list_perpetual_symbols_by_volume()[: self.max_symbols]
         results: list[ScanResult] = []
+        # BUDGET DI TEMPO. Con Binance lenta ogni simbolo puo' costare fino a ~20s
+        # (timeout 10s piu' un retry): su un universo di oltre cento coin lo scan
+        # diventa di ore, e per tutto quel tempo il loop non torna a gestire le
+        # posizioni aperte. Cioe' la lentezza della rete si trasformerebbe in stop e
+        # take-profit non sorvegliati — un problema molto peggiore di uno scan
+        # incompleto. Scaduto il budget si tiene cio' che si e' raccolto.
+        budget = float(getattr(settings, "SCAN_MAX_SECONDS", 0) or 0)
+        deadline = (time.monotonic() + budget) if budget > 0 else None
+        skipped_budget = 0
         # La liquidita' e' ora gestita dal MODELLO DI COSTO (bot/core/costs.py): il gate
         # valida ogni coppia coi suoi costi reali (spread piu' largo sulle sottili), quindi
         # si puo' tradare l'INTERO universo validato. Questo filtro resta solo come "sanity
@@ -171,7 +181,10 @@ class MarketScanner:
         # reale -> parita'. Default basso (config); alzabile via env per i soldi veri.
         min_vol = settings.SCAN_MIN_VOLUME_24H
         skipped_illiquid = 0
-        for sym in symbols:
+        for idx, sym in enumerate(symbols):
+            if deadline is not None and time.monotonic() >= deadline:
+                skipped_budget = len(symbols) - idx
+                break
             snap = self.price.build_snapshot(sym)
             if snap is None:
                 continue
@@ -189,6 +202,12 @@ class MarketScanner:
         if skipped_illiquid:
             print(f"[scanner] {skipped_illiquid} coin scartate per liquidità "
                   f"(< {min_vol:,.0f} vol 24h), {len(results)} valutate")
+        if skipped_budget:
+            # DICHIARATO, mai silenzioso: uno scan troncato che non lo dice si
+            # leggerebbe come "ho guardato tutto il mercato" quando non e' vero.
+            print(f"[scanner] budget di {budget:.0f}s esaurito: {skipped_budget} coin "
+                  f"NON valutate in questo giro (Binance lenta?), "
+                  f"{len(results)} valutate")
         results.sort(key=lambda r: r.score, reverse=True)
         return results
 

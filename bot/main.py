@@ -282,7 +282,12 @@ class TradingBot:
         wal_path = f"/unlogged_trades/{closed.trade_id}"
         data = closed.model_dump(mode="json")
         try:
-            self.fb.set_rtdb(wal_path, data)
+            if self.fb.set_rtdb(wal_path, data) is False and self.fb.is_live:
+                # il WAL e' finito solo nello specchio in memoria: non sopravvive a
+                # un riavvio. Va DETTO, perche' e' esattamente la finestra in cui un
+                # trade chiuso puo' sparire, e un silenzio qui la renderebbe invisibile.
+                print(f"[main] WAL non durevole per {closed.trade_id} "
+                      f"(Firebase muto): il trade e' a rischio fino al log su Firestore")
         except Exception:  # noqa: BLE001
             pass          # WAL best-effort: senza, si procede come prima
         self.logger.log(closed)
@@ -461,6 +466,31 @@ class TradingBot:
         self._stream_recovered_at = None
         self.stream._last_gap_s = 0.0        # buco assorbito
         return False
+
+    def _firebase_guard(self, now: float) -> float:
+        """Secondi di silenzio di Firebase oltre i quali NON si apre piu'. 0 = si opera.
+
+        Perche' non ci si ferma del tutto: le posizioni aperte vivono nella memoria
+        dell'executor e si chiudono coi prezzi di Binance. Firebase non serve per
+        gestirle — serve per RACCONTARLE (dashboard, stato, storico). Smettere di
+        gestirle perche' il database e' muto sarebbe la reazione peggiore possibile:
+        lascerebbe stop e take-profit senza sorveglianza per un problema che non li
+        riguarda.
+
+        Perche' pero' non si APRE: col RTDB muto non si legge piu' /commands, e li'
+        dentro c'e' il kill switch. Aprire una posizione mentre il freno dell'utente
+        e' scollegato aggiunge rischio che nessuno puo' piu' fermare. E' la stessa
+        regola del reconciler: nell'incertezza si gestisce cio' che c'e', non si
+        aggiunge altro.
+
+        La soglia (default 5 minuti) esiste perche' una singola richiesta persa non
+        e' un guasto: e' rete. Si giudica la durata.
+        """
+        soglia = settings.FIREBASE_DEGRADED_BLOCK_SECONDS
+        if soglia <= 0:
+            return 0.0
+        down = self.fb.degraded_for(now) if hasattr(self.fb, "degraded_for") else 0.0
+        return down if down >= soglia else 0.0
 
     def _record_shadow(self, opened: list, now: float) -> None:
         """Registra cosa avrebbe fatto il modello, accanto a cosa ha fatto il bot.
@@ -780,6 +810,16 @@ class TradingBot:
                 {"outcome": "flat",
                  "reason": "stream appena ripreso: attesa di 2 candele complete "
                            "prima di riprendere le aperture"})
+            return
+
+        # FIREBASE MUTO: si continua a gestire cio' che e' aperto (punto 1, che non
+        # ha bisogno del database), ma passata la soglia non si apre altro.
+        degraded = self._firebase_guard(now)
+        if degraded:
+            self._publish_decision_status(
+                {"outcome": "flat",
+                 "reason": f"Firebase irraggiungibile da {degraded:.0f}s: kill switch "
+                           f"non leggibile, nessuna nuova posizione"})
             return
 
         # RICONCILIAZIONE: applica le azioni rilevate dal thread e, se lo stato e'
