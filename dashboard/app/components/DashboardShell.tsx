@@ -22,6 +22,8 @@ import RegimeIntelligence from './RegimeIntelligence';
 import AssetScoring from './AssetScoring';
 import LearningEvolution from './LearningEvolution';
 import PortfolioRisk from './PortfolioRisk';
+import ReconcilerStatus from './ReconcilerStatus';
+import OperatingCosts from './OperatingCosts';
 
 type TabId =
   | 'panoramica'
@@ -280,7 +282,12 @@ export default function DashboardShell() {
             </>
           )}
 
-          {tab === 'operativita' && <OperativitaTab />}
+          {tab === 'operativita' && (
+            <>
+              <OperativitaTab />
+              <OperatingCosts />
+            </>
+          )}
 
           {tab === 'apprendimento' && (
             <>
@@ -308,6 +315,7 @@ export default function DashboardShell() {
             <>
               <RiskControl />
               <KillSwitch />
+              <ReconcilerStatus />
             </>
           )}
         </div>

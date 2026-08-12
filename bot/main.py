@@ -30,6 +30,8 @@ from bot.execution.executor import ExecutionEngine
 from bot.execution.exit_logic import (breakeven_after_tp1, ladder_multiples,
                                       trailing_reason)
 from bot.execution.notifier import TelegramNotifier
+from bot.execution.reconciler import (CLOSE_NOW, DROP_LOCAL, ExchangeState,
+                                      Reconciler, blocks_trading)
 from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
 from bot.orchestrator import Orchestrator
@@ -63,6 +65,13 @@ class TradingBot:
         self.executor = ExecutionEngine(self.fb)
         self.logger = TradeLogger(self.fb)
         self.notifier = TelegramNotifier()
+        # RICONCILIAZIONE: il thread RILEVA (deve funzionare anche se questo loop e'
+        # bloccato, che e' proprio quando serve di piu'); le AZIONI le applica il
+        # loop, perche' mutare le posizioni da un thread mentre il loop le itera
+        # introdurrebbe una race — un secondo modo di divergere dalla realta'
+        # proprio nel componente che deve impedirlo. Inerte in DRY_RUN.
+        self.reconciler = Reconciler(self._exchange_state, self._internal_state,
+                                     notifier=self.notifier, firebase=self.fb)
 
         self.selected: dict = {}        # symbol -> AssetSnapshot
         self.regime = None
@@ -409,6 +418,67 @@ class TradingBot:
         })
         return self.regime
 
+    def _internal_state(self) -> tuple[dict, float | None]:
+        """Cosa il bot CREDE di avere: quantita' residue e saldo di riferimento."""
+        return ({s: p.remaining_qty for s, p in self.executor.open_positions.items()},
+                self.account_equity())
+
+    def _exchange_state(self) -> ExchangeState:
+        """Fotografia dell'exchange. Solo in live: in DRY_RUN non c'e' nulla da
+        leggere e il reconciler e' comunque spento."""
+        client = getattr(self.executor, "_client", None)
+        if client is None:
+            return ExchangeState(reachable=False)
+        positions: dict[str, float] = {}
+        protective: dict[str, int] = {}
+        duplicates: dict[str, list] = {}
+        balance = None
+        for p in (client.futures_position_information() or []):
+            qty = float(p.get("positionAmt", 0) or 0)
+            if abs(qty) > 0:
+                positions[p.get("symbol")] = qty
+        for o in (client.futures_get_open_orders() or []):
+            sym = o.get("symbol")
+            # ordini che PROTEGGONO: stop e take profit, non le entry pendenti
+            if str(o.get("type", "")).upper() in {"STOP_MARKET", "TAKE_PROFIT_MARKET",
+                                                  "STOP", "TAKE_PROFIT"}:
+                protective[sym] = protective.get(sym, 0) + 1
+                duplicates.setdefault(sym, []).append(o.get("orderId"))
+        for b in (client.futures_account_balance() or []):
+            if b.get("asset") == settings.QUOTE_ASSET:
+                balance = float(b.get("balance", 0) or 0)
+        return ExchangeState(True, positions, protective,
+                             {k: v for k, v in duplicates.items() if len(v) > 1}, balance)
+
+    def _apply_reconciliation(self) -> bool:
+        """Applica le azioni rilevate dal thread. Ritorna True se si deve stare fermi.
+
+        Qui, nel loop, perche' toccare le posizioni da un thread mentre il loop le
+        itera sarebbe una race condition: il reconciler diventerebbe la causa del
+        tipo di problema che deve prevenire.
+        """
+        findings = list(self.reconciler.findings)
+        if not findings:
+            return False
+        for f in findings:
+            pos = self.executor.open_positions.get(f.symbol) if f.symbol else None
+            if f.action == CLOSE_NOW and pos is not None:
+                mark = self._mark_for(f.symbol) or pos.entry_price
+                closed = self.executor.force_close_all({f.symbol: mark},
+                                                       ExitReason.KILL_SWITCH)
+                self._settle_realized()
+                for t in closed:
+                    self._log_closed(t)
+                print(f"[reconciler] {f.symbol} chiusa: posizione senza protezione")
+            elif f.action == DROP_LOCAL and pos is not None:
+                # esiste solo nella nostra testa: si allinea lo stato, NON si chiude
+                # (non c'e' niente da chiudere) e la coin va in quarantena
+                self.executor.open_positions.pop(f.symbol, None)
+                self.fb.set_rtdb(f"/positions/{f.symbol}", None)
+                self._coin_cooldown[f.symbol] = time.time() + 1800
+                print(f"[reconciler] {f.symbol}: stato locale allineato (fantasma)")
+        return blocks_trading(findings)
+
     def _mark_for(self, symbol: str) -> float | None:
         """Prezzo corrente per una posizione, con ripiego sullo snapshot."""
         p = self.price.get_mark_price(symbol)
@@ -622,6 +692,15 @@ class TradingBot:
         # 2) kill switch — prezzi FRESCHI per ogni posizione aperta: gli snapshot
         # possono essere vecchi di 15m/4h e il fallback all'entry price registrerebbe
         # un PnL finto proprio nel percorso di emergenza.
+        # RICONCILIAZIONE: applica le azioni rilevate dal thread e, se lo stato e'
+        # incerto, non si aggiunge rischio finche' non c'e' un reset esplicito.
+        if self._apply_reconciliation():
+            self._publish_decision_status(
+                {"outcome": "flat",
+                 "reason": "riconciliazione: divergenza con l'exchange, nuove "
+                           "posizioni bloccate fino al reset"})
+            return
+
         state = self.bot_state()
         if state is BotState.EMERGENCY:
             self._emergency_close()
@@ -1011,6 +1090,9 @@ class TradingBot:
 
     # ------------------------------------------------------------------ #
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
+        if self.reconciler.start():
+            print(f"[main] reconciler attivo (ogni "
+                  f"{settings.RECONCILE_INTERVAL_SECONDS:g}s)")
         print(f"[main] avvio bot @ {datetime.now(timezone.utc).isoformat()} "
               f"DRY_RUN={settings.DRY_RUN}")
         self._replay_unlogged()   # recupera log a meta' PRIMA di riconciliare

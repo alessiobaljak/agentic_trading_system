@@ -422,6 +422,22 @@ class Settings:
     # filtro (trada tutte le validate).
     MIN_COINS_PER_STRATEGY: int = int(os.getenv("MIN_COINS_PER_STRATEGY", "3"))
 
+    # ---- Reconciler (bot/execution/reconciler) ----
+    # Confronto fra stato interno ed exchange. INERTE in DRY_RUN: senza exchange
+    # non c'e' nulla da riconciliare e girerebbe solo per produrre falsi allarmi.
+    RECONCILE_ENABLED: bool = os.getenv("RECONCILE_ENABLED", "true").lower() == "true"
+    RECONCILE_INTERVAL_SECONDS: float = float(os.getenv("RECONCILE_INTERVAL_SECONDS", "60"))
+    # differenze di quantita' sotto questa soglia sono arrotondamenti, non divergenze
+    RECONCILE_QTY_TOLERANCE: float = float(os.getenv("RECONCILE_QTY_TOLERANCE", "1e-8"))
+    # scarto relativo di saldo oltre il quale si ferma tutto: sotto ci stanno fee
+    # non ancora contabilizzate e funding in corso, sopra e' successo altro
+    RECONCILE_BALANCE_TOLERANCE: float = float(
+        os.getenv("RECONCILE_BALANCE_TOLERANCE", "0.02"))
+    # un problema che dura ore non deve produrre un alert al minuto: si smetterebbe
+    # di leggerli, che e' il modo piu' comune di rendere inutile un allarme
+    RECONCILE_ALERT_COOLDOWN_S: float = float(
+        os.getenv("RECONCILE_ALERT_COOLDOWN_S", "300"))
+
     # ---- Monitoraggio costi (Fase 2.5) ----
     # oltre questa percentuale di equity spesa in costi, il sistema deve rendere
     # tanto SOLO per pareggiare: e' un allarme sul numero di trade o sulle coin
