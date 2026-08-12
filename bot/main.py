@@ -328,6 +328,7 @@ class TradingBot:
             regime = self.regime or self.refresh_regime(now)
             selected = self.scanner.select_assets(results, regime)
         self.selected = {r.symbol: r.snapshot for r in selected}
+        self._publish_asset_scores(selected)
         self.last_scan = now
         print(f"[main] valutate {len(self.selected)} coin validate "
               f"({len(coins)} nel registro): {list(self.selected.keys())}")
@@ -394,6 +395,44 @@ class TradingBot:
             "price_stream": (self.stream.is_healthy() if self.stream is not None else False),
         })
         return self.regime
+
+    def _recent_stops(self, lookback_days: float | None = None) -> dict[str, int]:
+        """Stop loss per coin nella finestra recente. Serve alla quarantena: una
+        coin che ci stoppa piu' volte di fila e' choppy per le NOSTRE strategie,
+        indipendentemente da quanto sia bella nel punteggio."""
+        days = settings.ASSET_BLACKLIST_LOOKBACK_DAYS if lookback_days is None else lookback_days
+        out: dict[str, int] = {}
+        try:
+            for t in self.logger.all_since(time.time() - days * 86400):
+                if str(t.get("exit_reason")) == ExitReason.STOP_LOSS.value:
+                    out[t.get("symbol", "?")] = out.get(t.get("symbol", "?"), 0) + 1
+        except Exception as exc:  # noqa: BLE001
+            print(f"[scanner] storico stop non leggibile: {exc}")
+        return out
+
+    def _publish_asset_scores(self, results: list) -> None:
+        """Pubblica il punteggio di OGNI asset valutato, col dettaglio dei sei
+        fattori e gli eventuali motivi di esclusione.
+
+        E' osservabilita', non una decisione: il punteggio non filtra nulla finche'
+        non e' dimostrato che predice l'esito. Averlo scritto a ogni scan permette
+        di verificarlo nel tempo — e intanto rende leggibile PERCHE' una coin e'
+        nell'universo e un'altra no.
+        """
+        try:
+            stops = self._recent_stops()
+            rows = []
+            for r in results[:80]:
+                excl = self.scanner.exclusions(r.snapshot, stops.get(r.symbol, 0))
+                rows.append({"symbol": r.symbol, "score": round(r.score, 4),
+                             "components": {k: round(v, 3) for k, v in r.components.items()},
+                             "excluded": excl, "recent_stops": stops.get(r.symbol, 0)})
+            rows.sort(key=lambda x: -x["score"])
+            self.fb.set_doc("asset_scores", "current",
+                            {"updated_at": time.time(), "assets": rows,
+                             "exclusions_enforced": not settings.BACKTEST_PARITY})
+        except Exception as exc:  # noqa: BLE001
+            print(f"[scanner] punteggi non pubblicati: {exc}")
 
     def refresh_selected_snapshots(self) -> None:
         fng = self.onchain.fear_greed()
@@ -588,6 +627,22 @@ class TradingBot:
         if not asset:
             self._publish_decision_status({"outcome": "flat", "reason": "snapshot asset mancante"})
             return
+
+        # ESCLUSIONI STRUTTURALI dell'asset (funding insostenibile, spread, coin in
+        # quarantena dopo troppi stop). Inerti sotto BACKTEST_PARITY come cooldown e
+        # panchina: il gate non le modella, e filtrare in live cio' che il gate ha
+        # validato creerebbe la stessa divergenza promesso/eseguito che stiamo
+        # combattendo. Fuori parita' (soldi veri) sono un presidio di rischio.
+        if not settings.BACKTEST_PARITY:
+            _snap = self.selected.get(decision.asset)
+            if _snap is not None:
+                _excl = self.scanner.exclusions(
+                    _snap, self._recent_stops().get(decision.asset, 0))
+                if _excl:
+                    self._publish_decision_status(
+                        {"outcome": "flat",
+                         "reason": f"{decision.asset} escluso: {'; '.join(_excl)}"})
+                    return
 
         # DIVERSIFICAZIONE: aprire la 5a posizione correlata alle altre 4 non e'
         # diversificare, e' quintuplicare la stessa scommessa. Guard collegato

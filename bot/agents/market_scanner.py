@@ -28,13 +28,15 @@ class ScanResult:
     snapshot: AssetSnapshot
 
 
-# pesi del punteggio composito (somma ~1)
+# pesi del punteggio composito (somma 1). Ogni componente e' 0..1, quindi il
+# punteggio finale e' leggibile come "quanto questo asset e' adatto, da 0 a 1".
 WEIGHTS = {
-    "momentum": 0.30,
-    "social": 0.20,
-    "volume": 0.20,
-    "funding": 0.15,
-    "volatility": 0.15,
+    "momentum": 0.25,     # trend EMA + spinta RSI
+    "social": 0.20,       # sentiment (LunarCrush), neutro quando manca
+    "volume": 0.20,       # volume ATTUALE contro la sua media, non il volume assoluto
+    "funding": 0.15,      # vicino a zero = neutro; estremo = costo di mantenimento
+    "volatility": 0.10,   # ATR nella fascia utile: troppo poca non paga i costi
+    "liquidity": 0.10,    # spread stimato dalla fascia di volume
 }
 
 
@@ -42,6 +44,15 @@ def _norm(value: float, lo: float, hi: float) -> float:
     if hi <= lo:
         return 0.0
     return max(0.0, min(1.0, (value - lo) / (hi - lo)))
+
+
+def _bell(value: float, best: float, width: float) -> float:
+    """1.0 al valore ideale, decrescente allontanandosi. Serve per le grandezze in
+    cui NON vale "piu' e' meglio": la volatilita' utile sta in una fascia, e il
+    funding migliore e' quello vicino a zero."""
+    if width <= 0:
+        return 0.0
+    return max(0.0, 1.0 - abs(value - best) / width)
 
 
 class MarketScanner:
@@ -58,35 +69,89 @@ class MarketScanner:
         self.max_symbols = max_symbols or int(os.getenv("SCAN_MAX_SYMBOLS", "100"))
 
     def _score(self, snap: AssetSnapshot) -> tuple[float, dict[str, float]]:
+        """Punteggio composito 0..1 con i sei fattori, tutti spiegabili.
+
+        Ogni componente e' normalizzata in 0..1 cosi' il totale si legge come
+        "quanto questo asset e' adatto", e il dettaglio dice PERCHE'. I componenti
+        finiscono su Firebase a ogni scan: nel tempo si puo' verificare se il
+        punteggio predice davvero l'esito, invece di darlo per scontato.
+        """
+        from bot.core.costs import liquidity_spread
+
         i = snap.ind(settings.ORCHESTRATOR_TIMEFRAME)
         comp: dict[str, float] = {}
 
-        # momentum tecnico: distanza EMA + RSI deviation dal neutro
-        momentum = 0.0
+        # 1) MOMENTUM: separazione delle EMA + spinta dell'RSI oltre il neutro.
+        #    Due segnali dello stesso fenomeno, mediati: l'RSI da solo satura, le
+        #    EMA da sole non distinguono un trend appena nato da uno maturo.
+        ema_part = 0.0
         if i and i.ema_fast and i.ema_slow and snap.price:
-            sep = (i.ema_fast - i.ema_slow) / snap.price
-            momentum = _norm(abs(sep), 0.0, 0.02)
-        comp["momentum"] = momentum
+            ema_part = _norm(abs(i.ema_fast - i.ema_slow) / snap.price, 0.0, 0.02)
+        rsi_part = _norm(abs((i.rsi if i and i.rsi is not None else 50.0) - 50.0), 0.0, 25.0)
+        comp["momentum"] = 0.6 * ema_part + 0.4 * rsi_part
 
-        # social momentum
-        comp["social"] = float(snap.sentiment_score) if snap.sentiment_score is not None else 0.3
+        # 2) SOCIAL: neutro (0.5) quando il dato manca — senza chiave LunarCrush
+        #    valeva 0.3, cioe' una PENALITA' silenziosa uguale per tutti.
+        comp["social"] = (float(snap.sentiment_score)
+                          if snap.sentiment_score is not None else 0.5)
 
-        # volume 24h (log-normalizzato grossolanamente)
-        vol = snap.volume_24h or 0.0
-        comp["volume"] = _norm(vol, 1e6, 5e8)
+        # 3) VOLUME DI QUALITA': volume corrente / sua media, non il volume assoluto.
+        #    Il volume assoluto premia sempre le stesse major; il RAPPORTO dice se
+        #    ORA sta succedendo qualcosa. >= 1.5x = attivita' inusuale.
+        if i and i.volume and i.volume_sma:
+            comp["volume"] = _norm(i.volume / i.volume_sma, 0.5, 2.0)
+        else:
+            comp["volume"] = _norm(snap.volume_24h or 0.0, 1e6, 5e8)
 
-        # funding estremo = opportunità
-        fr = abs(snap.funding_rate or 0.0)
-        comp["funding"] = _norm(fr, 0.0, 0.001)
+        # 4) FUNDING: qui "vicino a zero e' meglio". Un funding estremo e' un COSTO
+        #    di mantenimento che erode ogni trade tenuto ore. E' l'opposto della
+        #    versione precedente, che premiava gli estremi come opportunita': vale
+        #    solo per funding_arbitrage, mentre questo punteggio serve a tutte.
+        comp["funding"] = _bell(abs(snap.funding_rate or 0.0), 0.0, 0.0015)
 
-        # volatilità (ATR/prezzo)
-        atr_pct = 0.0
-        if i and i.atr and snap.price:
-            atr_pct = i.atr / snap.price
-        comp["volatility"] = _norm(atr_pct, 0.0, 0.03)
+        # 5) VOLATILITA' UTILE: una fascia, non "piu' e' meglio". Sotto, il
+        #    movimento non paga i costi; sopra, gli stop saltano per rumore.
+        atr_pct = (i.atr / snap.price) if (i and i.atr and snap.price) else 0.0
+        comp["volatility"] = _bell(atr_pct, settings.ASSET_IDEAL_ATR_PCT,
+                                   settings.ASSET_IDEAL_ATR_PCT * 2)
+
+        # 6) LIQUIDITA': lo spread stimato dalla fascia di volume (stesso modello di
+        #    costo del gate). Meno spread = piu' punteggio.
+        comp["liquidity"] = 1.0 - _norm(liquidity_spread(snap.volume_24h), 0.0, 0.001)
 
         score = sum(WEIGHTS[k] * comp[k] for k in WEIGHTS)
         return score, comp
+
+    @staticmethod
+    def exclusions(snap: AssetSnapshot, recent_stops: int = 0) -> list[str]:
+        """Motivi per NON valutare affatto questo asset, o lista vuota.
+
+        Sono esclusioni STRUTTURALI: nessun punteggio, per quanto alto, le supera.
+        Il chiamante decide se applicarle — sotto BACKTEST_PARITY restano inerti,
+        perche' il gate non le modella e filtrare qui creerebbe una divergenza fra
+        i trade validati e quelli eseguiti (la stessa classe di problema che ci ha
+        gia' fatto perdere una settimana).
+
+        Nota sul volume minimo: il default e' 0, cioe' DISATTIVATO. Questo sistema
+        ha deliberatamente sostituito il filtro netto sul volume con il modello di
+        costo (bot/core/costs.py), che allarga lo spread sulle coin sottili e lascia
+        che sia il gate a bocciare chi non lo batte. Un pavimento a 100M
+        escluderebbe quasi tutto l'universo validato.
+        """
+        from bot.core.costs import liquidity_spread
+
+        out: list[str] = []
+        vol = snap.volume_24h or 0.0
+        if settings.ASSET_MIN_VOLUME_24H > 0 and vol < settings.ASSET_MIN_VOLUME_24H:
+            out.append(f"volume 24h ${vol / 1e6:.1f}M sotto la soglia")
+        if liquidity_spread(vol) > settings.ASSET_MAX_SPREAD:
+            out.append("spread stimato oltre la soglia")
+        fr = snap.funding_rate
+        if fr is not None and not (settings.ASSET_FUNDING_MIN <= fr <= settings.ASSET_FUNDING_MAX):
+            out.append(f"funding {fr * 100:+.3f}% fuori dalla fascia sostenibile")
+        if recent_stops >= settings.ASSET_BLACKLIST_STOPS:
+            out.append(f"{recent_stops} stop recenti: in quarantena")
+        return out
 
     def scan(self, symbols: Optional[list[str]] = None,
              fetch_sentiment: bool = False) -> list[ScanResult]:

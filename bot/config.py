@@ -422,6 +422,27 @@ class Settings:
     # filtro (trada tutte le validate).
     MIN_COINS_PER_STRATEGY: int = int(os.getenv("MIN_COINS_PER_STRATEGY", "3"))
 
+    # ---- Asset scoring (bot/agents/market_scanner) ----
+    # Volatilita' "utile" (ATR/prezzo) per il punteggio: sotto, il movimento non
+    # paga i costi; sopra, gli stop saltano per rumore.
+    ASSET_IDEAL_ATR_PCT: float = float(os.getenv("ASSET_IDEAL_ATR_PCT", "0.015"))
+    # ESCLUSIONI STRUTTURALI. Attive solo fuori da BACKTEST_PARITY: il gate non le
+    # modella, e filtrare in live cio' che il gate ha validato crea proprio la
+    # divergenza fra promesso ed eseguito che stiamo combattendo.
+    # Volume minimo DISATTIVATO di default: questo sistema ha sostituito il filtro
+    # netto sul volume col modello di costo (spread piu' largo sulle sottili, e il
+    # gate boccia chi non lo batte). Un pavimento a 100M taglierebbe quasi tutto
+    # l'universo validato.
+    ASSET_MIN_VOLUME_24H: float = float(os.getenv("ASSET_MIN_VOLUME_24H", "0"))
+    ASSET_MAX_SPREAD: float = float(os.getenv("ASSET_MAX_SPREAD", "0.001"))
+    # funding fuori da questa fascia = costo di mantenimento insostenibile
+    ASSET_FUNDING_MIN: float = float(os.getenv("ASSET_FUNDING_MIN", "-0.0010"))
+    ASSET_FUNDING_MAX: float = float(os.getenv("ASSET_FUNDING_MAX", "0.0015"))
+    # stop consecutivi su una coin oltre i quali va in quarantena
+    ASSET_BLACKLIST_STOPS: int = int(os.getenv("ASSET_BLACKLIST_STOPS", "3"))
+    ASSET_BLACKLIST_LOOKBACK_DAYS: float = float(
+        os.getenv("ASSET_BLACKLIST_LOOKBACK_DAYS", "7"))
+
     # ---- Parità col backtest (fase di validazione paper) ----
     # Quando True, il bot DISATTIVA i controlli che il backtest non modella (cooldown
     # post-stop, panchina strategia, circuit breaker giornaliero) così il paper
