@@ -122,9 +122,11 @@ def main() -> int:
               f"{bench['basket_hold'] * 100:+.1f}%")
     # Si giudica contro il PANIERE quando c'e': e' il controllo vero. Chiede "la
     # selezione delle strategie aggiunge qualcosa, o sto solo cavalcando le stesse
-    # coin che avrei potuto comprare e tenere?". BTC resta il costo-opportunita'
-    # e viene stampato comunque, ma da solo si presta all'obiezione "io trado le
-    # alt, non bitcoin" — che e' fondata.
+    # coin che avrei potuto comprare e tenere?". BTC resta il costo-opportunita' e
+    # viene stampato comunque, ma da solo non basta: bitcoin E' nell'universo e
+    # viene tradato come le altre, solo che e' UNA coin su ~135 e porta circa l'1%
+    # dell'esposizione. Batterlo puo' dipendere solo da come sono andate le alt
+    # quel trimestre, non dalle nostre scelte.
     ref, label = ((bench.get("basket_hold"), "il paniere delle coin tradate")
                   if bench.get("basket_hold") is not None
                   else (bench.get("btc_hold"), "BTC compra&tieni"))

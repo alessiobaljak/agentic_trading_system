@@ -293,10 +293,15 @@ def benchmarks(candles_by_symbol: dict) -> dict:
     PANIERE — il controllo VERO, e risponde alla domanda piu' scomoda: "la mia
     strategia aggiunge qualcosa, o sto solo cavalcando le stesse coin che avrei
     potuto comprare e tenere?". E' un paniere equipesato delle coin DAVVERO
-    tradate nel backtest, sullo stesso periodo. Batte BTC come confronto proprio
-    perche' toglie di mezzo la scusa del "ma io trado le alt, non bitcoin": se il
-    sistema non batte il paniere delle sue stesse coin, la selezione delle
-    strategie non sta aggiungendo niente al semplice esserci stato.
+    tradate nel backtest, sullo stesso periodo.
+
+    Perche' il paniere e' il confronto piu' stringente. BTC E' nell'universo e
+    viene tradato come qualunque altra coin — ma e' UNA su ~135, quindi porta
+    circa l'1% dell'esposizione. Il rendimento di bitcoin non descrive cio' a cui
+    il portafoglio e' esposto: se il sistema batte BTC solo perche' quel trimestre
+    le alt sono andate meglio, non ha dimostrato niente sulle proprie scelte. Il
+    paniere toglie di mezzo esattamente questo effetto, perche' usa le stesse coin
+    su cui il bot ha operato.
 
     I due possono divergere parecchio — in una fase di alt season il paniere vola
     e BTC no, e viceversa in una fuga verso la qualita'. Servono entrambi: uno
