@@ -16,6 +16,8 @@ import sys
 
 from backtesting.data_loader import load_candles
 from backtesting.engine import Backtester, StrategyStats
+from backtesting.quality import (find_indicator_lookahead, max_drawdown_dated,
+                                 sharpe, sortino, validation_light)
 from backtesting.report import write_excel, write_html
 from bot.config import settings, timeframe_hours
 
@@ -46,6 +48,15 @@ def main() -> int:
         if len(candles) < bt.window + 10:
             print(f"[backtest] {sym}: dati insufficienti ({len(candles)}), salto")
             continue
+        # GUARDIA ANTI LOOK-AHEAD, prima di credere a qualunque numero: un
+        # indicatore causale calcolato su un prefisso deve dare gli stessi valori
+        # che da' sulla serie intera. Se cambia, il backtest sta leggendo il
+        # futuro e i risultati che seguono non valgono nulla — meglio fermarsi
+        # che pubblicare un report che sembra buono.
+        leak = find_indicator_lookahead(candles)
+        if leak:
+            print(f"[backtest] BLOCCATO su {sym}: {leak}")
+            return 1
         per_symbol_loaded += 1
         stats = bt.run(sym, candles)
         for name, s in stats.items():
@@ -66,6 +77,32 @@ def main() -> int:
         print(f"  {name:24s} trades={len(s.trades):4d} "
               f"win={s.win_rate()*100:5.1f}% pf={s.profit_factor():4.2f} "
               f"pnl={s.total_pnl_pct()*100:+7.1f}%")
+
+    # METRICHE DI RISCHIO per strategia: il report deve SEMPRE riportarle. Due
+    # strategie con lo stesso guadagno possono avere profili opposti, e senza
+    # queste il confronto si riduce a "chi ha guadagnato di piu'".
+    print()
+    for name, st in sorted(aggregated.items()):
+        if not st.trades:
+            continue
+        sh, so = sharpe(st.trades), sortino(st.trades)
+        dd, day = max_drawdown_dated(st.trades)
+        wins = [t.pnl_pct for t in st.trades if t.pnl_pct > 0]
+        losses = [t.pnl_pct for t in st.trades if t.pnl_pct < 0]
+        print(f"  {name:24s} sharpe={('%.2f' % sh) if sh is not None else '  n/d':>6} "
+              f"sortino={('%.2f' % so) if so is not None else '  n/d':>6} "
+              f"maxDD={dd * 100:5.1f}% ({day or 'n/d'}) "
+              f"win={st.win_rate() * 100:4.0f}% "
+              f"avgW={(sum(wins) / len(wins) * 100) if wins else 0:+5.2f}% "
+              f"avgL={(sum(losses) / len(losses) * 100) if losses else 0:+5.2f}%")
+
+    # SEMAFORO sull'aggregato: procedi / attenzione / non procedere, coi motivi.
+    all_trades = [t for st in aggregated.values() for t in st.trades]
+    _dd, _ = max_drawdown_dated(all_trades)
+    light = validation_light(
+        sharpe_ratio=sharpe(all_trades), max_dd=_dd, n_trades=len(all_trades),
+        total_return=sum(t.pnl_pct for t in all_trades))
+    print(f"\n[backtest] SEMAFORO: {light['message']}")
 
     weights = bt.validate_learning(aggregated)
     verdict = bt.verdict(aggregated)
