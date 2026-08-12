@@ -18,6 +18,10 @@ import KillSwitch from './KillSwitch';
 import TopVitals from './TopVitals';
 import LearningSummary from './LearningSummary';
 import SentimentAnalysis from './SentimentAnalysis';
+import RegimeIntelligence from './RegimeIntelligence';
+import AssetScoring from './AssetScoring';
+import LearningEvolution from './LearningEvolution';
+import PortfolioRisk from './PortfolioRisk';
 
 type TabId =
   | 'panoramica'
@@ -269,6 +273,10 @@ export default function DashboardShell() {
                 <EquityCurve />
                 <DailySnapshot />
               </div>
+              <div className="grid grid-2">
+                <RegimeIntelligence />
+                <PortfolioRisk />
+              </div>
             </>
           )}
 
@@ -281,6 +289,7 @@ export default function DashboardShell() {
                 <StrategyWeights />
                 <Heatmap />
               </div>
+              <LearningEvolution />
               <TrailingLearning />
               <Insights />
             </>
@@ -288,7 +297,12 @@ export default function DashboardShell() {
 
           {tab === 'sentiment' && <SentimentAnalysis />}
 
-          {tab === 'strategie' && <OptimizedStrategies />}
+          {tab === 'strategie' && (
+            <>
+              <OptimizedStrategies />
+              <AssetScoring />
+            </>
+          )}
 
           {tab === 'impostazioni' && (
             <>
