@@ -22,7 +22,7 @@ import time
 from datetime import date
 
 from backtesting.data_loader import load_candles
-from backtesting.engine import (StrategyStats, max_drawdown, passes_gate, pf_by_regime,
+from backtesting.engine import (StrategyStats, gate_verdict, max_drawdown, pf_by_regime,
                                 pf_without_top)
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
@@ -41,27 +41,109 @@ from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_histo
 _W: dict = {}
 
 
+def mutation_seeds(fb, existing: dict, limit: int = 10) -> list[dict]:
+    """Le spec da cui vale la pena evolvere: i QUASI-PASSAGGI del run precedente.
+
+    Una candidata fermata da UN SOLO criterio e per poco e' l'informazione piu'
+    preziosa che un run produce: dice che in quella zona dello spazio delle
+    strategie c'e' qualcosa, e che manca poco. Mutare li' e' una ricerca guidata;
+    generare candidate a caso e' ricominciare da zero a ogni giro, che e' esattamente
+    cio' che il sistema faceva.
+
+    Fail-open in ogni punto: nessuna autopsia, autopsia illeggibile o quasi-passaggi
+    su strategie BASE (che non sono spec mutabili) -> lista vuota, e il chiamante
+    torna al comportamento precedente.
+    """
+    near: list = []
+    try:
+        # PRIMA l'autopsia della discovery: e' l'unica che contiene spec generate,
+        # cioe' le uniche mutabili. Quella dell'optimizer parla di strategie BASE,
+        # che non sono spec — leggerla da sola darebbe sempre lista vuota.
+        for doc_id in ("discover", "current"):
+            near.extend(((fb.get_doc("gate_autopsy", doc_id) or {})
+                         .get("near_misses") or []))
+    except Exception:  # noqa: BLE001
+        return []
+    out: list[dict] = []
+    for n in near:
+        key = str(n.get("key", ""))
+        if "|" not in key:
+            continue
+        gid = key.split("|", 1)[1]
+        spec = existing.get(gid)
+        if spec is not None and spec not in out:
+            out.append(spec)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _publish_discover_autopsy(fb, evaluated: int, passed: int, binding: dict,
+                              involved: dict, near: list, top_near: int = 40) -> dict:
+    """Scrive l'autopsia della discovery, che e' dove sta il grosso del volume:
+    l'optimizer valuta ~1500 coppie per run, la discovery oltre ventimila.
+
+    Documento SEPARATO da quello dell'optimizer: sono due imbuti diversi (strategie
+    classiche con grid search contro spec generate senza train) e mediarli
+    nasconderebbe proprio la differenza che interessa. Best-effort: una diagnosi
+    non salvata non deve far fallire un run di validazione.
+    """
+    near = sorted(near, key=lambda n: -(n.get("shortfall") or -9))[:top_near]
+    rep = {"updated_at": time.time(), "evaluated": evaluated, "passed": passed,
+           "diagnosed": int(sum(binding.values())),
+           "binding": dict(sorted(binding.items(), key=lambda kv: -kv[1])),
+           "involved": dict(sorted(involved.items(), key=lambda kv: -kv[1])),
+           "near_misses": near, "near_miss_count": len(near)}
+    try:
+        fb.set_doc("gate_autopsy", "discover", rep)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[autopsy] non salvata ({exc})")
+    if rep["diagnosed"]:
+        top = " · ".join(f"{k} {v}" for k, v in list(rep["binding"].items())[:5])
+        print(f"[autopsy] {passed}/{evaluated} passate · muoiono su: {top}")
+        print(f"[autopsy] quasi-passaggi (semi per le mutazioni del prossimo run): "
+              f"{len(near)}")
+    return rep
+
+
 def _disc_init(args, end: str, specs: list) -> None:
     _W.update(opt=WalkForwardOptimizer(n_windows=args.windows, interval=args.interval),
               args=args, end=end, specs=specs, min_history=_min_history(args.interval))
 
 
-def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list]:
+def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
     """Valuta TUTTE le spec su un simbolo (nei worker).
-    Ritorna (sym, passed_entries, passed_keys, specs_passed, n_eval, summary)."""
+    Ritorna (sym, passed_entries, passed_keys, specs_passed, n_eval, summary, diag).
+
+    `diag` e' l'autopsia LOCALE: conteggi dei criteri che hanno fermato le spec e
+    i pochi quasi-passaggi. Si aggregano numeri, non le migliaia di valutazioni
+    bocciate — la diagnosi deve costare quanto un contatore, altrimenti non
+    verrebbe fatta."""
     args, end, specs = _W["args"], _W["end"], _W["specs"]
     candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
     if len(candles) < _W["min_history"]:
-        return (sym, {}, [], {}, 0, [])
+        return (sym, {}, [], {}, 0, [], {})
     frame = compute_indicator_frame(candles)
     entries: dict = {}
     passed_keys: list = []
     specs_passed: dict = {}
     summary: list = []
+    binding: dict = {}
+    involved: dict = {}
+    near: list = []
     n_eval = 0
     for spec in specs:
         r = evaluate_spec(_W["opt"], sym, candles, frame, spec)
         n_eval += 1
+        if not r["passed"] and r.get("fail_criteria"):
+            b = r.get("fail_binding") or "?"
+            binding[b] = binding.get(b, 0) + 1
+            for c in r["fail_criteria"]:
+                involved[c] = involved.get(c, 0) + 1
+            if r.get("near_miss"):
+                near.append({"key": f"{sym}|{spec['id']}", "binding": b,
+                             "shortfall": r.get("fail_shortfall"),
+                             "pf": r["pf"], "trades": r["trades"]})
         if r["passed"]:
             key = f"{sym}|{spec['id']}"
             entries[key] = {
@@ -79,7 +161,9 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list]:
             specs_passed[spec["id"]] = spec
             summary.append({"symbol": sym, "id": spec["id"], "pf": r["pf"],
                             "pnl": r["pnl"], "desc": GeneratedStrategy(spec).description})
-    return (sym, entries, passed_keys, specs_passed, n_eval, summary)
+    near.sort(key=lambda n: -(n.get("shortfall") or -9))
+    return (sym, entries, passed_keys, specs_passed, n_eval, summary,
+            {"binding": binding, "involved": involved, "near": near[:10]})
 
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict):
@@ -112,11 +196,12 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     # 1) PRESELEZIONE con la scala globale: serve solo a scartare in fretta le spec
     #    senza speranza, prima di spendere 4 backtest per la scelta della scala.
     oos, window_pnls = _run_oos()
-    passed = passes_gate(window_pnls, len(oos.trades), oos.profit_factor(),
-                         oos.win_rate(), oos.total_pnl_pct(),
-                         max_dd=max_drawdown(oos.trades),
-                         regime_pf=pf_by_regime(oos.trades),
-                         pf_ex_top=pf_without_top(oos.trades))
+    verdict = gate_verdict(window_pnls, len(oos.trades), oos.profit_factor(),
+                           oos.win_rate(), oos.total_pnl_pct(),
+                           max_dd=max_drawdown(oos.trades),
+                           regime_pf=pf_by_regime(oos.trades),
+                           pf_ex_top=pf_without_top(oos.trades))
+    passed = verdict.ok
 
     # 2) SCALA DI TP PER-COPPIA anche per le GENERATE. Le classiche la scelgono nella
     #    grid search; le generate non hanno grid -> senza questo passo restavano per
@@ -144,9 +229,13 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     reg_pf = pf_by_regime(oos.trades)
     # il verdetto si rifa' sulla configurazione vera: una scala scelta per il
     # (ritorno - drawdown) puo' comunque non superare gli altri criteri.
-    passed = passed and passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
-                                    max_dd=max_drawdown(oos.trades), regime_pf=reg_pf,
-                                    pf_ex_top=pf_without_top(oos.trades))
+    if passed:
+        verdict = gate_verdict(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
+                               max_dd=max_drawdown(oos.trades), regime_pf=reg_pf,
+                               pf_ex_top=pf_without_top(oos.trades))
+        passed = verdict.ok
+    failed, binding = list(verdict.failed), verdict.binding
+    shortfall, near = verdict.shortfall, verdict.near_miss()
 
     hold: dict = {}
     if passed and opt.holdout_bars > 0:
@@ -155,6 +244,9 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
             g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": best_ladder}
         hold = opt._holdout_check(g, symbol, candles, frame, cut)
         passed = bool(hold.get("ok"))
+        if not passed:
+            # supera tutto e cade sui dati mai visti: l'esito piu' informativo
+            failed, binding, shortfall, near = ["holdout"], "holdout", 0.0, True
     return {
         "pf": round(pf, 3), "pnl": round(pnl, 4),
         "trades": len(oos.trades), "win": round(oos.win_rate(), 3), "passed": passed,
@@ -162,6 +254,8 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         "max_dd": round(max_drawdown(oos.trades), 4),
         "scale_r_mults": best_ladder,
         "data_end": (candles[-1].open_time.timestamp() if candles else 0.0),
+        "fail_criteria": failed, "fail_binding": binding,
+        "fail_shortfall": shortfall, "near_miss": bool(near and not passed),
     }
 
 
@@ -385,7 +479,16 @@ def main() -> int:
     rest = [s for gid, s in existing.items() if gid not in validated_gen]
     existing_list = priority + rest[: max(0, args.reeval_cap - len(priority))]
     specs.extend(existing_list)
-    for i, base in enumerate(existing_list[:10]):
+    # MUTAZIONE INFORMATA: si evolve attorno ai QUASI-PASSAGGI del run precedente
+    # (una sola condizione mancata, e per poco), non attorno alle prime dieci spec
+    # che capitano. E' la differenza fra cercare dove l'ultimo tentativo si e'
+    # avvicinato e ricominciare da capo ogni volta. Fail-open: senza autopsia si
+    # mutano le prime, come prima.
+    seeds = mutation_seeds(fb, existing)
+    if seeds:
+        print(f"[discover] {len(seeds)} semi dai quasi-passaggi del run precedente")
+    bases = seeds or existing_list[:10]
+    for i, base in enumerate(bases[:10]):
         specs.append(mutate(base, seed=args.seed + i + 1))
     # de-dup per id
     specs = list({s["id"]: s for s in specs}.values())
@@ -421,7 +524,10 @@ def main() -> int:
     # distribuito su tutti i core del runner. Fallback sequenziale se BACKTEST_WORKERS=1.
     workers = n_workers()
     print(f"[discover] {len(symbols)} coin x {len(specs)} spec su {workers} worker (core)")
-    for sym, entries, p_keys, p_specs, n_ev, summary in parallel_map(
+    diag_binding: dict = {}
+    diag_involved: dict = {}
+    diag_near: list = []
+    for sym, entries, p_keys, p_specs, n_ev, summary, diag in parallel_map(
         _disc_one, symbols, workers=workers, initializer=_disc_init, initargs=(args, end, specs)
     ):
         n_eval += n_ev
@@ -429,8 +535,20 @@ def main() -> int:
         passed_keys.extend(p_keys)
         specs_to_save.update(p_specs)
         passed_summary.extend(summary)
+        for k, v in (diag.get("binding") or {}).items():
+            diag_binding[k] = diag_binding.get(k, 0) + v
+        for k, v in (diag.get("involved") or {}).items():
+            diag_involved[k] = diag_involved.get(k, 0) + v
+        diag_near.extend(diag.get("near") or [])
         if p_keys:
             print(f"[discover] {sym}: {len(p_keys)} coppie passate ✅")
+
+    # Con gli shard ognuno vede una fetta dell'universo e sovrascriverebbe la
+    # diagnosi degli altri: meglio nessuna autopsia che una parziale spacciata per
+    # intera. Sulla VPS (non shardata) si pubblica sempre.
+    if args.num_shards <= 1:
+        _publish_discover_autopsy(fb, n_eval, len(passed_keys),
+                                  diag_binding, diag_involved, diag_near)
 
     # SHARD: scrive il proprio risultato; il merge riunisce e aggiorna il registro.
     if args.num_shards > 1:

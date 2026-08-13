@@ -21,7 +21,7 @@ import random
 from dataclasses import dataclass, field
 from typing import Optional
 
-from backtesting.engine import (Backtester, StrategyStats, max_drawdown, passes_gate,
+from backtesting.engine import (Backtester, StrategyStats, gate_verdict, max_drawdown,
                                 pf_by_regime, pf_without_top, weighted_score_parts)
 from bot.core.indicators import compute_indicator_frame
 from bot.core.models import Candle
@@ -59,6 +59,13 @@ class OptResult:
     # verdetto: senza, non si puo' confrontare la buca PROMESSA dal gate con quella
     # che il portafoglio scava davvero tenendo aperte 9-12 coppie insieme.
     oos_max_dd: float = 0.0
+    # AUTOPSIA: perche' NON e' passata. Senza questi campi ogni run ripete
+    # ventimila esperimenti e non ne conserva l'esito, e l'unica reazione possibile
+    # a "non passa niente" resta abbassare le soglie a caso.
+    fail_criteria: tuple = ()     # tutti i criteri non soddisfatti
+    fail_binding: str = ""        # quello messo peggio
+    fail_shortfall: float = 0.0   # quanto manca al binding, in relativo
+    near_miss: bool = False       # un solo criterio, mancato di poco
 
 
 class WalkForwardOptimizer:
@@ -212,9 +219,13 @@ class WalkForwardOptimizer:
             pf = oos.profit_factor()
             pnl = oos.total_pnl_pct()
             reg_pf = pf_by_regime(oos.trades)
-            passed = passes_gate(window_pnls, len(oos.trades), pf, oos.win_rate(), pnl,
-                                 max_dd=max_drawdown(oos.trades), regime_pf=reg_pf,
-                                 pf_ex_top=pf_without_top(oos.trades))
+            verdict = gate_verdict(window_pnls, len(oos.trades), pf, oos.win_rate(),
+                                   pnl, max_dd=max_drawdown(oos.trades),
+                                   regime_pf=reg_pf,
+                                   pf_ex_top=pf_without_top(oos.trades))
+            passed = verdict.ok
+            failed, binding = list(verdict.failed), verdict.binding
+            shortfall, near = verdict.shortfall, verdict.near_miss()
             # VERIFICA FINALE sull'holdout, solo se le finestre sono superate e coi
             # parametri che verrebbero spediti (l'ultimo best del walk-forward).
             hold: dict = {}
@@ -222,6 +233,11 @@ class WalkForwardOptimizer:
                 hold = self._holdout_check(cls(history[-1]), symbol, candles, frame,
                                            cut, context_by_ts=context_by_ts)
                 passed = bool(hold.get("ok"))
+                if not passed:
+                    # muore QUI, dopo aver superato tutto il resto: e' l'esito piu'
+                    # informativo di tutti — la strategia regge sulle finestre di
+                    # selezione e cade sui dati mai visti.
+                    failed, binding, shortfall, near = ["holdout"], "holdout", 0.0, True
             results.append(OptResult(
                 symbol=symbol, strategy=name,
                 best_params=history[-1] if history else {},
@@ -231,5 +247,7 @@ class WalkForwardOptimizer:
                 holdout=hold, regime_pf=reg_pf,
                 oos_max_dd=round(max_drawdown(oos.trades), 4),
                 data_end=(candles[-1].open_time.timestamp() if candles else 0.0),
+                fail_criteria=tuple(failed), fail_binding=binding,
+                fail_shortfall=shortfall, near_miss=bool(near and not passed),
             ))
         return results

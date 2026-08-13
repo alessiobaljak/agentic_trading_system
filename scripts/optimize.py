@@ -92,6 +92,10 @@ def _opt_one(sym: str) -> tuple[str, dict, list]:
             # alimentano il registro (verifica, filtro regime, pass onesto).
             "holdout": r.holdout, "regime_pf": r.regime_pf, "data_end": r.data_end,
             "oos_max_dd": r.oos_max_dd,
+            # AUTOPSIA: dove muore. Senza, ogni run ripete ventimila esperimenti
+            # e non ne conserva l'esito.
+            "fail_criteria": list(r.fail_criteria), "fail_binding": r.fail_binding,
+            "fail_shortfall": r.fail_shortfall, "near_miss": r.near_miss,
         }
         if r.passed:
             passed.append(key)
@@ -225,6 +229,8 @@ def main() -> int:
         "passed": encode_pairs(summary_passed),
     })
 
+    publish_autopsy(fb, out)
+
     # --- registro di validazione cumulativo (robustezza nel tempo) ---
     reg = update_registry(fb, out, summary_passed)
 
@@ -316,6 +322,73 @@ NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "168")) * 3600
 # auto-purge: una coppia viene RIMOSSA dal registro dopo N run consecutivi in cui,
 # pur essendo processata, non passa piu' il gate (costi/edge non piu' battuti).
 PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))
+
+
+def autopsy(out: dict, top_near: int = 40) -> dict:
+    """DOVE MUOIONO LE CANDIDATE. Il conto dei criteri che le fermano.
+
+    Il gate rispondeva si'/no. Con oltre ventimila valutazioni per run questo
+    significa ripetere ventimila esperimenti senza conservarne l'esito: se non
+    passa niente non si sa se muoiono per pochi trade, per PF sotto i costi, per
+    l'holdout o per la robustezza. E senza saperlo l'unica reazione possibile e'
+    abbassare le soglie a caso — cioe' validare rumore.
+
+    Due letture, diverse e complementari:
+      * `binding` — il criterio messo PEGGIO per ciascuna candidata. Dice dove sta
+        il collo di bottiglia dell'intera ricerca.
+      * `involved` — quante volte ogni criterio compare, anche non da solo. Un
+        criterio che appare quasi sempre e' una condizione strutturale del mercato
+        su cui stiamo lavorando, non un filtro che seleziona.
+
+    `near_misses` sono le candidate fermate da UN SOLO criterio e per poco: sono i
+    semi da mutare al giro dopo. Cercare attorno a un quasi-passaggio e' una
+    ricerca informata; estrarre nuove candidate a caso non lo e'.
+    """
+    from collections import Counter
+    binding: Counter = Counter()
+    involved: Counter = Counter()
+    near: list[dict] = []
+    passed = 0
+    for key, e in out.items():
+        if e.get("passed"):
+            passed += 1
+            continue
+        crits = e.get("fail_criteria") or []
+        if not crits:
+            continue                       # non passata ma senza diagnosi: non inventarla
+        binding[e.get("fail_binding") or "?"] += 1
+        for c in crits:
+            involved[c] += 1
+        if e.get("near_miss"):
+            near.append({"key": key, "binding": e.get("fail_binding"),
+                         "shortfall": e.get("fail_shortfall"),
+                         "pf": e.get("oos_pf"), "trades": e.get("oos_trades")})
+    near.sort(key=lambda n: -(n.get("shortfall") or -9))
+    return {
+        "updated_at": time.time(),
+        "evaluated": len(out), "passed": passed,
+        "diagnosed": int(sum(binding.values())),
+        "binding": dict(binding.most_common()),
+        "involved": dict(involved.most_common()),
+        "near_misses": near[:top_near],
+        "near_miss_count": len(near),
+    }
+
+
+def publish_autopsy(fb, out: dict) -> dict:
+    """Scrive l'autopsia e la riassume a schermo. Best-effort: una diagnosi non
+    salvata non deve far fallire un run di validazione."""
+    rep = autopsy(out)
+    try:
+        fb.set_doc("gate_autopsy", "current", rep)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[autopsy] non salvata ({exc})")
+    if rep["diagnosed"]:
+        top = " · ".join(f"{k} {v}" for k, v in list(rep["binding"].items())[:5])
+        print(f"[autopsy] {rep['passed']}/{rep['evaluated']} passate · muoiono su: {top}")
+        print(f"[autopsy] quasi-passaggi (un solo criterio, di poco): "
+              f"{rep['near_miss_count']}")
+    return rep
 
 
 def drifted_from_paper(fb) -> set:

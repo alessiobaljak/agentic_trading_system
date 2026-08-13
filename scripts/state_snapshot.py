@@ -152,10 +152,44 @@ def build() -> str:
     else:
         lines.append("_Nessun risultato di ottimizzazione ancora presente su Firebase._")
     lines.append("")
+    lines += _autopsy_section(fb)
     lines += _closed_trades_section(fb, pairs)
     lines += _drift_section(fb)
     lines += _calibration_section(fb)
     return "\n".join(lines)
+
+
+def _autopsy_section(fb) -> list[str]:
+    """DOVE MUOIONO LE CANDIDATE, dentro lo snapshot committato.
+
+    Sta qui e non solo in uno script a parte per una ragione precisa: questo file
+    finisce su git a ogni aggiornamento, quindi la diagnosi diventa leggibile senza
+    entrare sulla VPS. Un numero che richiede un comando manuale per essere visto,
+    in pratica non viene visto — e questa e' l'informazione che dice su cosa
+    lavorare quando il gate non promuove nulla.
+    """
+    out = ["## Dove muoiono le candidate (autopsia del GATE 1)", ""]
+    docs = [("strategie base", fb.get_doc("gate_autopsy", "current") or {}),
+            ("strategie generate", fb.get_doc("gate_autopsy", "discover") or {})]
+    if not any(d for _, d in docs):
+        out += ["_nessuna diagnosi ancora registrata: serve un run dell'optimizer._", ""]
+        return out
+    for label, rep in docs:
+        if not rep:
+            continue
+        ev, ps = rep.get("evaluated", 0), rep.get("passed", 0)
+        out.append(f"**{label}** — {ev} valutazioni, {ps} passate "
+                   f"({(ps / ev * 100) if ev else 0:.2f}%) · {_ts(rep.get('updated_at'))}")
+        binding = rep.get("binding") or {}
+        if binding:
+            tot = sum(binding.values()) or 1
+            out += ["", "| Criterio che ferma | Casi | Quota |", "|---|---|---|"]
+            for k, v in list(binding.items())[:8]:
+                out.append(f"| {k} | {v} | {v / tot * 100:.1f}% |")
+        out += ["", f"- quasi-passaggi (un solo criterio, di poco): "
+                    f"**{rep.get('near_miss_count', 0)}** "
+                    f"— sono i semi delle mutazioni del run successivo", ""]
+    return out
 
 
 def _benchmark_return(start_ts: float) -> float | None:

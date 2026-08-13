@@ -203,11 +203,47 @@ def pf_without_top(trades, frac: float | None = None) -> float:
     return gains / losses
 
 
-def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
-                win_rate: float, total_return: float,
-                max_dd: float | None = None,
-                regime_pf: dict | None = None,
-                pf_ex_top: float | None = None) -> bool:
+@dataclass
+class GateVerdict:
+    """Perche' una coppia NON e' passata, non solo che non e' passata.
+
+    Il gate rispondeva si'/no e buttava via il motivo. Con oltre ventimila
+    valutazioni per run, questo significa ripetere ventimila esperimenti e non
+    conservarne l'esito: se nessuna candidata passa non si sa se muoiono per
+    mancanza di trade, per costi non battuti, per l'holdout o per la robustezza —
+    e senza saperlo l'unica reazione possibile e' abbassare le soglie a caso, che
+    e' il modo piu' rapido di validare del rumore.
+
+    `failed` sono TUTTI i criteri non soddisfatti; `binding` e' quello messo peggio
+    (il piu' lontano dalla soglia in termini relativi). Una candidata con un solo
+    criterio fallito di poco e' un quasi-passaggio: e' li' che vale la pena cercare
+    ancora, mutando attorno, invece che estraendo candidate a caso.
+    """
+    ok: bool
+    failed: tuple = ()
+    binding: str = ""
+    shortfall: float = 0.0        # scarto RELATIVO dalla soglia del criterio binding
+                                  # (negativo = quanto manca; 0 = passato)
+
+    def near_miss(self, tol: float = 0.10) -> bool:
+        """Un solo criterio mancato, e per meno di `tol` in relativo."""
+        return (not self.ok and len(self.failed) == 1
+                and self.shortfall is not None and self.shortfall >= -abs(tol))
+
+
+def _short(value: float, threshold: float) -> float:
+    """Scarto relativo dalla soglia. Serve a CONFRONTARE criteri con unita' diverse
+    (un PF, un conteggio di trade, una frazione di finestre) su una scala sola."""
+    if threshold == 0:
+        return 0.0 if value >= 0 else -1.0
+    return (value - threshold) / abs(threshold)
+
+
+def gate_verdict(window_pnls: list[float], n_trades: int, pf: float,
+                 win_rate: float, total_return: float,
+                 max_dd: float | None = None,
+                 regime_pf: dict | None = None,
+                 pf_ex_top: float | None = None) -> GateVerdict:
     """
     Verdetto GATE 1 per una coppia (coin, strategia), fuori campione (OOS).
     Tutte le condizioni (soglie in config) devono valere:
@@ -221,29 +257,59 @@ def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
       * ROBUSTEZZA: PF >= GATE_MIN_PF_EX_TOP anche togliendo il GATE_DROP_TOP_FRAC
         di trade migliori (vedi pf_without_top) — il risultato non deve poggiare
         su pochi colpi fortunati.
+
+    I criteri sono valutati TUTTI, non a corto circuito: fermarsi al primo che
+    fallisce direbbe che una candidata "muore per pochi trade" anche quando avrebbe
+    fallito altri quattro controlli, e la diagnosi ne uscirebbe falsata.
     """
+    failed: list[tuple] = []          # (nome, scarto relativo)
+
     if n_trades < settings.GATE_MIN_TRADES:
-        return False
+        failed.append(("trades", _short(n_trades, settings.GATE_MIN_TRADES)))
     if pf < settings.GATE_PF_THRESHOLD:
-        return False
+        failed.append(("pf", _short(pf, settings.GATE_PF_THRESHOLD)))
     if win_rate < settings.GATE_WIN_RATE_FLOOR:
-        return False
+        failed.append(("win_rate", _short(win_rate, settings.GATE_WIN_RATE_FLOOR)))
     if total_return < settings.GATE_MIN_TOTAL_RETURN:
-        return False
+        failed.append(("total_return",
+                       _short(total_return, settings.GATE_MIN_TOTAL_RETURN)))
     if window_pnls:
         positive = sum(1 for w in window_pnls if w > 0)
-        if positive < len(window_pnls) * settings.GATE_CONSISTENCY_FRACTION - 1e-9:
-            return False
+        need = len(window_pnls) * settings.GATE_CONSISTENCY_FRACTION
+        if positive < need - 1e-9:
+            failed.append(("consistency", _short(positive, need)))
     # CONTINUITA' trade-per-trade: le finestre la misurano ad anni, questo a ogni
     # trade — niente curve che scavano buche profonde per poi risalire.
     if max_dd is not None and max_dd > 0:
-        if total_return / max_dd < settings.GATE_MIN_RECOVERY:
-            return False
+        rec = total_return / max_dd
+        if rec < settings.GATE_MIN_RECOVERY:
+            failed.append(("recovery", _short(rec, settings.GATE_MIN_RECOVERY)))
     if pf_ex_top is not None and pf_ex_top < settings.GATE_MIN_PF_EX_TOP:
-        return False
+        failed.append(("pf_ex_top", _short(pf_ex_top, settings.GATE_MIN_PF_EX_TOP)))
     if not regime_ok(regime_pf):
-        return False
-    return True
+        # criterio BOOLEANO: non ha una distanza dalla soglia, e darne una inventata
+        # lo farebbe competere con gli altri su una scala che non ha. -1 lo tiene
+        # fuori dai quasi-passaggi, che e' il comportamento corretto: un regime in
+        # emorragia non e' "quasi a posto".
+        failed.append(("regime", -1.0))
+
+    if not failed:
+        return GateVerdict(ok=True)
+    binding = min(failed, key=lambda x: x[1])
+    return GateVerdict(ok=False, failed=tuple(n for n, _ in failed),
+                       binding=binding[0], shortfall=round(binding[1], 4))
+
+
+def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
+                win_rate: float, total_return: float,
+                max_dd: float | None = None,
+                regime_pf: dict | None = None,
+                pf_ex_top: float | None = None) -> bool:
+    """Verdetto secco. Stessa identica logica di `gate_verdict`, di cui e' una
+    scorciatoia: esiste per non riscrivere i chiamanti che vogliono solo il bool."""
+    return gate_verdict(window_pnls, n_trades, pf, win_rate, total_return,
+                        max_dd=max_dd, regime_pf=regime_pf,
+                        pf_ex_top=pf_ex_top).ok
 # soglia di liquidazione approssimata: ~ (1/leva) meno un buffer di mantenimento
 MAINTENANCE_BUFFER = 0.005
 
