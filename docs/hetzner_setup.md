@@ -135,6 +135,18 @@ journalctl -u trading-bot -f
 - Aggiornamenti del codice: `cd "$APP_DIR" && git pull && systemctl restart trading-bot`
   (in produzione: `cd /root/agentic_trading_system && git pull && systemctl restart trading-bot`).
 
+> **Una volta sola, per non vedere più `git pull` abortire.** `docs/state.md` è
+> generato: lo scrive la GitHub Action, e lo riscrive chiunque lanci
+> `scripts.state_snapshot` sulla VPS. Basta un file generato non committato e il
+> pull si ferma con *"Your local changes would be overwritten"* — e i comandi
+> lanciati subito dopo girano sulla versione vecchia del codice, che è il modo
+> peggiore di accorgersene. Rimedio permanente:
+> ```bash
+> git config pull.rebase true
+> git config rebase.autoStash true
+> ```
+> Da lì in poi il pull mette da parte le modifiche locali, aggiorna e le rimette.
+
 ## Passaggio a live (solo dopo paper positivo + GATE 1 superato)
 Nel `.env`: `DRY_RUN=false` (e `BINANCE_TESTNET=false` quando pronto), poi
 `systemctl restart trading-bot`. Capitale ridotto, leva 1–2x, monitoraggio attivo.

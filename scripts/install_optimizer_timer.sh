@@ -86,14 +86,23 @@ WantedBy=timers.target
 EOF
 
 systemctl daemon-reload
-systemctl enable trading-optimizer.timer
-systemctl enable trading-supervisor.timer
+systemctl enable --now trading-optimizer.timer
+systemctl enable --now trading-supervisor.timer
+
+# VERIFICA, non fiducia: `enable` senza `--now` lascia il timer spento fino al
+# riavvio, e un timer che credi attivo e non lo e' e' peggio di uno assente.
+echo
+systemctl list-timers --no-pager 'trading-*' || true
 
 cat <<MSG
 
-[install] FATTO. Unit installate e timer notturno abilitato (03:00).
-[install] Per lanciare la validazione ADESSO (in background, sopravvive all'SSH):
-            sudo systemctl start trading-optimizer.service
+[install] FATTO.
+[install]   validazione   -> ogni 3 ore   (trading-optimizer.timer)
+[install]   supervisore   -> ogni ora     (trading-supervisor.timer)
+[install] Da qui in poi non serve lanciare niente a mano.
+[install] Per vedere cosa deciderebbe il supervisore adesso, senza applicare nulla:
+            .venv/bin/python -m scripts.supervisor --dry-run
 [install] Per seguire i log live:
             journalctl -u trading-optimizer.service -f
+            journalctl -u trading-supervisor.service -f
 MSG
