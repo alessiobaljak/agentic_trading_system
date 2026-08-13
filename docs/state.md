@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-13 04:40 UTC_
+_Generato: 2026-08-13 05:07 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-13 04:40 UTC
+- ultimo heartbeat: 2026-08-13 05:06 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-13 04:35 UTC)
+- esito: **⚪ FLAT** (2026-08-13 05:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -29,6 +29,10 @@ _Nessun risultato di ottimizzazione ancora presente su Firebase._
 ## Dove muoiono le candidate (autopsia del GATE 1)
 
 _nessuna diagnosi ancora registrata: serve un run dell'optimizer._
+
+## Supervisore (taratura automatica)
+
+_non ha ancora deciso nulla._
 
 ## Trade chiusi
 _nessun trade chiuso._
