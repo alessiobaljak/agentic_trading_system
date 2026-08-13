@@ -335,6 +335,9 @@ def _merge_discover_shards(fb, args) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser(description="Scoperta autonoma di nuove strategie.")
     ap.add_argument("--top", type=int, default=25, help="numero di crypto su cui validare")
+    ap.add_argument("--symbols", default="",
+                    help="lista esplicita di coin (CSV). Ha precedenza su --top: "
+                         "serve alle conferme mirate su coppie gia' candidate")
     ap.add_argument("--generate", type=int, default=40, help="strategie candidate da generare")
     ap.add_argument("--windows", type=int, default=3)
     ap.add_argument("--seed", type=int, default=int(time.time()) % 100000,
@@ -389,7 +392,14 @@ def main() -> int:
     print(f"[discover] {len(specs)} candidate ({len(priority)} validate ri-validate + "
           f"{len(existing_list) - len(priority)} altre) seed={args.seed} {args.start}->{end}")
 
-    full_symbols = top_symbols_by_volume(args.top)
+    # UNIVERSO RISTRETTO (--symbols): serve alle conferme mirate. Quando si sa gia'
+    # quali coppie possono ancora arrivare a MIN_PASSES, ri-testare l'intero mercato
+    # e' tempo speso su coppie che non potrebbero comunque validarsi.
+    if getattr(args, "symbols", ""):
+        full_symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
+        print(f"[discover] universo RISTRETTO a {len(full_symbols)} coin (--symbols)")
+    else:
+        full_symbols = top_symbols_by_volume(args.top)
     # FILTRO DI CONTESTO: toglie dall'imbuto le coin su cui una validazione non
     # sarebbe informativa (storia dentro la sola fase di listing, illiquide,
     # prezzo guidato da eventi discreti). Fail-open: senza AI non toglie nulla.

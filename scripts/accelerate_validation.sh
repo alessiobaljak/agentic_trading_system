@@ -1,14 +1,24 @@
 #!/usr/bin/env bash
 # ============================================================================
-# Accelera la validazione del GATE 1 eseguendo N passate optimize+discover
-# BACK-TO-BACK, invece di aspettare il timer da 8h. Ogni passata incrementa il
-# pass_count delle coppie che ripassano: dopo N passate quelle a >= MIN_PASSES
-# passaggi diventano "validate" e il bot inizia a tradarle.
+# ⚠️  SUPERATO — NON USARE PER ACCUMULARE I PASS. Usa scripts/fast_gate.sh.
+#
+# Questo script eseguiva N passate optimize+discover back-to-back nella
+# convinzione che ognuna incrementasse il pass_count. Da quando esiste il PASS
+# ONESTO (OPTIMIZER_NEW_DATA_MIN_HOURS, 168h) non e' piu' vero: passate
+# ravvicinate hanno lo stesso `data_end`, quindi valgono UN SOLO pass. Lanciarne
+# tre significa spendere nove ore di CPU per l'effetto di una.
+#
+# Cosa usare al suo posto:
+#   * scripts/fast_gate.sh       — tre finestre a date di fine diverse, con
+#                                  imbuto sui sopravvissuti (poche ore)
+#   * scripts/backfill_passes.sh — stesso principio, senza imbuto (piu' lento)
+#
+# Resta utile per una cosa sola: POPOLARE il registro e le spec (piu' candidate
+# valutate), non per validarle.
 #
 # NON abbassa la qualita' e NON riduce nulla: usa gli STESSI identici parametri
 # del timer (install_optimizer_timer.sh) — stesso universo (--top 200), stesse
 # strategie, stesso gate/costi/walk-forward. Niente --reset-registry: ACCUMULA.
-# L'unica differenza col timer e' che le passate sono di fila, non ogni 8h.
 #
 # Uso sul VPS (dentro tmux, cosi' sopravvive alla disconnessione SSH):
 #   tmux new -s val

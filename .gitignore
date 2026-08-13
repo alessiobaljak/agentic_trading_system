@@ -18,6 +18,10 @@ firebase-service-account.json
 # export dei trade prima di un reset del paper: sono dati operativi, si tengono
 # sulla VPS (o fuori dal repo), non nella storia di git
 trades_backup_*.json
+# backup del registro/spec prese PRIMA di un azzeramento: senza, le strategie
+# generate spariscono con le coppie purgate e i loro trade non sono piu' rigiocabili
+# (successo: 30 coppie su 31 non replayabili dopo un reset)
+gate_backup_*.json
 backtesting/output/
 *.log
 data_cache/

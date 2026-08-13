@@ -65,10 +65,21 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--top", type=int, default=15,
                     help="quante coppie mostrare nel dettaglio")
+    ap.add_argument("--coins-min-pass", type=int, default=None, metavar="K",
+                    help="stampa SOLO la lista CSV delle coin con almeno K pass, "
+                         "e nient'altro: e' l'input delle conferme mirate")
     args = ap.parse_args()
 
     doc = get_firebase().get_doc("strategy_registry", "validated") or {}
     pairs = decode_pairs(doc.get("pairs"))
+
+    if args.coins_min_pass is not None:
+        coins = sorted({r.get("symbol") for r in pairs.values()
+                        if int(r.get("pass_count", 0) or 0) >= args.coins_min_pass
+                        and r.get("symbol")})
+        print(",".join(coins))
+        return 0 if coins else 1
+
     if not pairs:
         print("[gate] registro VUOTO: nessuna coppia tracciata. Il bot non puo' "
               "operare finche' l'optimizer non ne accumula.")
