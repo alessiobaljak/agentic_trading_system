@@ -27,6 +27,12 @@ from dotenv import load_dotenv
 # produzione aperta). conftest.py imposta questa variabile prima di ogni import.
 if not os.getenv("TRADING_BOT_TEST_MODE"):
     load_dotenv()
+    # TARATURA AUTOMATICA. Il supervisore (bot/learning/supervisor.py) scrive qui, e
+    # SOLO qui: il .env con le chiavi resta di proprieta' dell'utente e nessun
+    # processo automatico lo tocca mai. Caricato DOPO con override, cosi' una
+    # decisione del supervisore vince sul default — ma resta un file di testo
+    # leggibile, versionabile a mano e cancellabile per tornare ai default.
+    load_dotenv("tuning.env", override=True)
 
 
 def timeframe_hours(tf: str) -> float:

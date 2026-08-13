@@ -1,0 +1,263 @@
+"""IL SUPERVISORE — puo' allentare i criteri da solo, ma solo dentro un vincolo.
+
+La domanda che questi test devono chiudere non e' "funziona", e' "puo' fare danni?".
+Un sistema che taratura i propri criteri di validazione, se sbagliato, non da'
+errore: promuove strategie che sembrano valide e non lo sono, e il conto arriva in
+paper o coi soldi veri.
+
+Quindi si verifica soprattutto cio' che NON deve succedere: mai sotto i pavimenti,
+mai un allentamento quando il budget di falsi positivi e' esaurito, mai un
+allentamento quando le candidate muoiono sull'holdout (li' allentare promuoverebbe
+proprio le sovradattate), mai due parametri insieme, mai nulla durante il paper.
+"""
+import pytest
+
+from bot.learning.supervisor import (NEVER, TUNABLES, Context, decide,
+                                     effective_confirmations, expected_lucky,
+                                     headroom, max_pass_rate)
+
+
+def _ctx(**kw) -> Context:
+    base = dict(ready=False, validated=0, days_stagnant=10.0,
+                evaluated=20000, passed=8, binding={"pf": 900, "trades": 100},
+                current={t.name: v for t, v in [
+                    (TUNABLES["trades"], 30.0), (TUNABLES["pf"], 1.25),
+                    (TUNABLES["win_rate"], 0.45), (TUNABLES["total_return"], 0.15),
+                    (TUNABLES["consistency"], 1.0), (TUNABLES["recovery"], 2.0),
+                    (TUNABLES["regime"], 0.8), (TUNABLES["pf_ex_top"], 1.0)]},
+                min_passes=3, runs_per_day=8.0, budget=1.0, independence=0.5)
+    base.update(kw)
+    return Context(**base)
+
+
+# ---- il vincolo: quanta fortuna ci si aspetta ----------------------------- #
+def test_confirmations_are_not_independent_tests():
+    """Finestre a pochi giorni di distanza vedono quasi gli stessi dati: contarle
+    come test indipendenti gonfierebbe la fiducia proprio dove serve prudenza."""
+    assert effective_confirmations(3, 0.5) == 2.0      # non 3
+    assert effective_confirmations(1, 0.5) == 1.0
+    assert effective_confirmations(3, 1.0) == 3.0      # indipendenza piena, se scelta
+
+
+def test_more_draws_mean_more_luck():
+    a = expected_lucky(1_000, 0.01, 3)
+    b = expected_lucky(100_000, 0.01, 3)
+    assert b > a
+
+
+def test_more_confirmations_mean_less_luck():
+    assert expected_lucky(20_000, 0.01, 5) < expected_lucky(20_000, 0.01, 3)
+
+
+def test_a_gate_that_passes_nothing_expects_no_luck():
+    assert expected_lucky(20_000, 0.0, 3) == 0.0
+
+
+def test_the_ceiling_on_the_pass_rate_is_computable():
+    """E' la licenza quantitativa: dice di quanto si puo' allentare, invece di
+    lasciarlo al sentimento."""
+    top = max_pass_rate(20_000, 3, budget=1.0, runs_per_day=1.0)
+    assert 0 < top < 1
+    # al tetto, le attese coincidono col budget
+    assert expected_lucky(20_000, top, 3, runs_per_day=1.0) == pytest.approx(1.0, rel=0.02)
+
+
+def test_todays_numbers_leave_room():
+    """22k valutazioni con 8 passate: il gate e' molto piu' severo di quanto il
+    budget richieda. E' questo che autorizza ad allentare — non l'impazienza."""
+    assert headroom(22_264, 8 / 22_264, 3, budget=1.0, runs_per_day=3.0) > 1.0
+
+
+# ---- quando NON si tocca niente ------------------------------------------ #
+def test_nothing_is_tuned_while_the_paper_is_running():
+    """Cambiare le regole a partita in corso renderebbe non interpretabile il
+    confronto fra cio' che il gate ha promesso e cio' che il paper vive."""
+    d = decide(_ctx(ready=True))
+    assert [x.kind for x in d] == ["none"]
+
+
+def test_it_waits_before_reacting_to_a_quiet_day():
+    d = decide(_ctx(days_stagnant=0.5, stagnant_after_days=2.0))
+    assert d[0].kind == "none" and "aspetta" in d[0].reason
+
+
+def test_without_a_diagnosis_nothing_is_touched():
+    """Tarare senza sapere dove si muore e' esattamente il comportamento che questo
+    modulo esiste per sostituire."""
+    d = decide(_ctx(binding={}))
+    assert d[0].kind == "none" and "buio" in d[0].reason
+
+
+def test_an_exhausted_budget_forbids_any_relaxation():
+    """Con il budget sforato allentare comprerebbe candidate fortunate. Si riducono
+    le estrazioni, che e' l'altro modo di rientrare."""
+    d = decide(_ctx(evaluated=200_000, passed=40_000))     # tasso enorme
+    assert d[0].kind == "tighten" and "SFORATO" in d[0].reason
+    assert not any(x.kind == "set_param" for x in d)
+
+
+def test_dying_on_the_holdout_never_relaxes_anything():
+    """E' il caso piu' pericoloso: le candidate superano tutto e cadono sui dati mai
+    visti. Allentare promuoverebbe proprio le sovradattate."""
+    d = decide(_ctx(binding={"holdout": 500, "pf": 10}))
+    assert d[0].kind == "tighten" and "sovradattamento" in d[0].reason
+    assert not any(x.kind == "set_param" for x in d)
+
+
+def test_a_parameter_at_its_floor_is_not_pushed_further():
+    """pf_ex_top parte gia' al pavimento: sotto il pareggio senza i colpi migliori si
+    validerebbe la fortuna, e non c'e' budget che lo giustifichi."""
+    d = decide(_ctx(binding={"pf_ex_top": 900}))
+    assert d[0].kind == "none" and "pavimento" in d[0].reason
+
+
+def test_the_floor_is_never_crossed_even_after_many_moves():
+    """Il controllo che conta davvero: iterando le decisioni, nessun parametro puo'
+    finire sotto il proprio pavimento."""
+    cur = {TUNABLES["pf"].name: 1.25}
+    for _ in range(50):
+        d = decide(_ctx(binding={"pf": 900}, current={**_ctx().current, **cur}))
+        sets = [x for x in d if x.kind == "set_param"]
+        if not sets:
+            break
+        cur[TUNABLES["pf"].name] = sets[0].new
+    assert cur[TUNABLES["pf"].name] >= TUNABLES["pf"].floor
+
+
+# ---- quando si tocca, si tocca poco e si dice perche' -------------------- #
+def test_it_relaxes_the_criterion_that_stops_the_most():
+    d = decide(_ctx(binding={"trades": 5000, "pf": 100}))
+    s = [x for x in d if x.kind == "set_param"]
+    assert s and s[0].param == "GATE_MIN_TRADES"
+    assert s[0].new < s[0].old
+
+
+def test_only_one_parameter_moves_at_a_time():
+    """Due modifiche insieme rendono impossibile sapere quale ha prodotto l'effetto
+    misurato al run successivo: si perde proprio il segnale di ritorno."""
+    d = decide(_ctx(binding={"trades": 5000, "pf": 4000, "win_rate": 3000}))
+    assert len([x for x in d if x.kind == "set_param"]) == 1
+
+
+def test_an_integer_parameter_always_moves_by_at_least_one():
+    """Con l'arrotondamento un passo del 15% su un intero piccolo poteva non
+    muovere nulla, e il supervisore avrebbe 'deciso' a vuoto per sempre."""
+    d = decide(_ctx(binding={"trades": 900},
+                    current={**_ctx().current, TUNABLES["trades"].name: 21.0}))
+    s = [x for x in d if x.kind == "set_param"]
+    assert s and s[0].new < 21.0
+
+
+def test_every_decision_carries_the_numbers_that_justify_it():
+    """Fra due mesi la domanda sara' 'perche' questa soglia sta qui?'. La risposta
+    deve stare nella decisione, non nella memoria di qualcuno."""
+    d = decide(_ctx(binding={"pf": 900}))
+    s = [x for x in d if x.kind == "set_param"][0]
+    assert "pass_rate" in s.detail and "expected_lucky_per_day" in s.detail
+    assert "budget" in s.reason or "spazio" in s.reason
+
+
+# ---- misurare subito: fast_gate ------------------------------------------ #
+def test_a_change_is_measured_in_hours_not_in_weeks():
+    """Un parametro cambiato che aspetta tre settimane per essere giudicato non e'
+    un anello chiuso, e' una scommessa."""
+    d = decide(_ctx(days_stagnant=10.0, days_since_fast_gate=999.0))
+    assert any(x.kind == "fast_gate" for x in d)
+
+
+def test_fast_gate_respects_its_cooldown():
+    """E' distruttivo (azzera il registro): ripeterlo ogni giorno cancellerebbe di
+    continuo i pass veri accumulati nel frattempo."""
+    d = decide(_ctx(days_stagnant=10.0, days_since_fast_gate=1.0,
+                    fast_gate_cooldown_days=7.0))
+    assert not any(x.kind == "fast_gate" for x in d)
+
+
+def test_fast_gate_is_not_run_when_something_has_been_validated():
+    d = decide(_ctx(validated=3, days_stagnant=10.0))
+    assert not any(x.kind == "fast_gate" for x in d)
+
+
+# ---- la lista dei divieti ------------------------------------------------- #
+def test_the_untouchables_are_never_proposed():
+    """L'holdout, i dati sintetici, la parita' col backtest, DRY_RUN e il numero di
+    conferme non sono parametri di ricerca."""
+    proposed = {t.name for t in TUNABLES.values()}
+    assert proposed.isdisjoint(NEVER)
+    for k in ("GATE_HOLDOUT_DAYS", "BACKTEST_ALLOW_SYNTHETIC", "DRY_RUN",
+              "OPTIMIZER_MIN_PASSES", "OPTIMIZER_NEW_DATA_MIN_HOURS"):
+        assert k in NEVER
+
+
+def test_every_floor_states_why_it_exists():
+    """Un pavimento senza motivo scritto e' un numero che qualcuno abbassera'."""
+    for t in TUNABLES.values():
+        assert t.why_floor, f"{t.name} non dice perche' il pavimento sta li'"
+
+
+# ---- lo stato fra un giro e l'altro --------------------------------------- #
+class _Fb:
+    def __init__(self, docs):
+        self.docs = docs
+
+    def get_doc(self, coll, doc_id):
+        return self.docs.get(f"{coll}/{doc_id}")
+
+    def set_doc(self, coll, doc_id, data):
+        self.docs[f"{coll}/{doc_id}"] = data
+
+
+def test_an_unknown_previous_count_does_not_reset_the_clock():
+    """Regressione. Il conteggio si azzera solo se le validate sono DAVVERO
+    cresciute: un valore precedente assente significa 'non lo so ancora', e
+    trattarlo come un aumento azzerava la stagnazione a ogni giro — il supervisore
+    non sarebbe mai arrivato a decidere niente."""
+    import time
+    from bot.core.firebase_client import encode_pairs
+    from scripts.supervisor import build_context
+    fb = _Fb({"strategy_registry/validated": {"pairs": encode_pairs({}), "ready": False}})
+    ctx = build_context(fb, {"validated_since": time.time() - 9 * 86400})
+    assert ctx.days_stagnant > 8
+
+
+def test_the_clock_restarts_when_something_gets_validated():
+    import time
+    from bot.core.firebase_client import encode_pairs
+    from scripts.supervisor import build_context
+    pairs = {"BTCUSDT|x": {"pass_count": 3, "symbol": "BTCUSDT"}}
+    fb = _Fb({"strategy_registry/validated": {"pairs": encode_pairs(pairs)}})
+    ctx = build_context(fb, {"validated_since": time.time() - 9 * 86400,
+                             "last_validated": 0})
+    assert ctx.validated == 1 and ctx.days_stagnant < 0.1
+
+
+def test_both_autopsies_are_summed():
+    """La discovery porta il grosso del volume, l'optimizer le strategie base: per
+    sapere dove si muore contano insieme."""
+    from bot.core.firebase_client import encode_pairs
+    from scripts.supervisor import build_context
+    fb = _Fb({"strategy_registry/validated": {"pairs": encode_pairs({})},
+              "gate_autopsy/current": {"evaluated": 1000, "passed": 1,
+                                       "binding": {"pf": 10}},
+              "gate_autopsy/discover": {"evaluated": 20000, "passed": 7,
+                                        "binding": {"pf": 5, "trades": 90}}})
+    ctx = build_context(fb, {"validated_since": 1.0, "last_validated": 0})
+    assert ctx.evaluated == 21000 and ctx.passed == 8
+    assert ctx.binding == {"pf": 15, "trades": 90}
+
+
+def test_the_tuning_file_round_trips(tmp_path, monkeypatch):
+    import scripts.supervisor as sup
+    monkeypatch.setattr(sup, "TUNING_FILE", str(tmp_path / "tuning.env"))
+    sup.write_tuning({"GATE_MIN_TRADES": "25", "GATE_PF_THRESHOLD": "1.19"})
+    assert sup.read_tuning() == {"GATE_MIN_TRADES": "25", "GATE_PF_THRESHOLD": "1.19"}
+
+
+def test_the_tuning_file_says_it_is_machine_written(tmp_path, monkeypatch):
+    """Chi lo apre a mano deve capire subito che le sue modifiche verranno
+    sovrascritte, e come tornare ai default."""
+    import scripts.supervisor as sup
+    monkeypatch.setattr(sup, "TUNING_FILE", str(tmp_path / "tuning.env"))
+    sup.write_tuning({"GATE_MIN_TRADES": "25"})
+    text = (tmp_path / "tuning.env").read_text()
+    assert "NON modificare a mano" in text and "cancella" in text

@@ -249,3 +249,61 @@ sarebbe mai backtestabile.
 4. Quando ci sono trade: strada B (disparità gate ↔ paper) e
    `scripts/shadow_report.py`.
 5. Solo dopo, e solo se i numeri reggono, parlare di soldi veri.
+
+---
+
+## Appendice — Il supervisore (automazione della taratura)
+
+Aggiunto dopo la Fase 5, su richiesta esplicita: il sistema deve tarare i propri
+parametri **da solo**, senza attendere un comando.
+
+### Il vincolo che rende la cosa difendibile
+
+Automatizzare "abbassa le soglie finché qualcosa passa" sarebbe il modo più rapido
+di validare rumore. Il supervisore lo evita con un vincolo misurabile invece che
+con la prudenza:
+
+```
+coppie fortunate attese al giorno  ≈  valutazioni × tasso_passaggio ^ conferme_efficaci
+```
+
+Il tasso di passaggio non è una stima: lo **misura l'autopsia** a ogni run. Le
+conferme non contano come test indipendenti (finestre vicine vedono quasi gli
+stessi dati): ognuna oltre la prima vale mezza
+(`SUPERVISOR_CONFIRM_INDEPENDENCE`, dichiarato e modificabile).
+
+Finché quel numero resta sotto il budget (default: **1 coppia fortunata al
+giorno**), allentare è legittimo e si sa *di quanto*. Coi numeri attuali —
+22.264 valutazioni, 8 passate, 3 conferme — le coppie fortunate attese sono ~0,02:
+il gate è molto più severo di quanto il budget richieda, e c'è circa 7× di margine.
+Quando il margine finisce, non si allenta più nulla nemmeno se non passa niente per
+mesi: a quel punto il problema non è la soglia, ed è onesto dirlo.
+
+### Cosa non può fare, mai
+
+- scendere sotto i **pavimenti** (ognuno con scritto il motivo per cui esiste);
+- toccare l'**holdout**, la robustezza `pf_ex_top`, i dati sintetici, la parità col
+  backtest, `DRY_RUN`, i limiti di rischio hard;
+- **abbassare** il numero di conferme: può solo alzarlo;
+- allentare quando le candidate muoiono sull'**holdout** — lì il dato dice
+  "funzionano dove le abbiamo scelte e non fuori", e allentare promuoverebbe
+  proprio le sovradattate. La reazione è opposta: ridurre le estrazioni;
+- toccare qualcosa mentre il **paper opera**: cambiare le regole a partita in corso
+  renderebbe non interpretabile il confronto gate ↔ paper.
+
+Muove **un parametro alla volta**, altrimenti al run successivo non si saprebbe
+quale dei due ha prodotto l'effetto.
+
+### L'anello si chiude in ore, non in settimane
+
+Dopo un cambiamento il supervisore lancia `fast_gate` (rigioca la storia su tre
+finestre) se sono passati abbastanza giorni senza validazioni e il cooldown è
+scaduto. Così il parametro modificato viene **giudicato dai dati in poche ore**
+invece che dopo tre settimane. Senza questo, ogni modifica sarebbe una scommessa.
+
+### Dove si legge cosa ha deciso
+
+`tuning.env` (scritto solo dal supervisore, mai il `.env` con le chiavi),
+`supervisor/state` su Firebase, e la sezione "Supervisore" in `docs/state.md`, che
+è committata: il *perché* di ogni soglia resta leggibile a mesi di distanza senza
+entrare sulla VPS. Per tornare ai default: cancellare `tuning.env` e riavviare.

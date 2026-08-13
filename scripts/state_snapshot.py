@@ -153,6 +153,7 @@ def build() -> str:
         lines.append("_Nessun risultato di ottimizzazione ancora presente su Firebase._")
     lines.append("")
     lines += _autopsy_section(fb)
+    lines += _supervisor_section(fb)
     lines += _closed_trades_section(fb, pairs)
     lines += _drift_section(fb)
     lines += _calibration_section(fb)
@@ -189,6 +190,41 @@ def _autopsy_section(fb) -> list[str]:
         out += ["", f"- quasi-passaggi (un solo criterio, di poco): "
                     f"**{rep.get('near_miss_count', 0)}** "
                     f"— sono i semi delle mutazioni del run successivo", ""]
+    return out
+
+
+def _supervisor_section(fb) -> list[str]:
+    """COSA HA DECISO IL SUPERVISORE, e con quali numeri.
+
+    Un sistema che si tara da solo deve lasciare per iscritto perche' ogni soglia
+    sta dove sta: senza, fra due mesi nessuno sapra' piu' se un valore e' frutto di
+    una misura o di una svista, e l'unica reazione possibile sara' rimettere tutto
+    ai default buttando via cio' che si e' imparato.
+    """
+    st = fb.get_doc("supervisor", "state") or {}
+    out = ["## Supervisore (taratura automatica)", ""]
+    if not st:
+        out += ["_non ha ancora deciso nulla._", ""]
+        return out
+    tuning = st.get("tuning") or {}
+    out.append(f"- ultimo giro: {_ts(st.get('updated_at'))} · coppie validate: "
+               f"**{st.get('validated', 0)}** · GATE 1 pronto: {st.get('ready')}")
+    out.append(f"- tasso di passaggio misurato: **{float(st.get('pass_rate', 0)) * 100:.3f}%**")
+    if tuning:
+        out += ["", "**Parametri modificati rispetto ai default:**", "",
+                "| Parametro | Valore |", "|---|---|"]
+        out += [f"| {k} | {v} |" for k, v in sorted(tuning.items())]
+    else:
+        out.append("- nessun parametro modificato: il gate gira coi valori di partenza")
+    hist = (st.get("history") or [])[-5:]
+    if hist:
+        out += ["", "**Ultime decisioni:**", ""]
+        for h in reversed(hist):
+            what = h.get("kind", "?")
+            if h.get("param"):
+                what += f" {h['param']} {h.get('old')} → {h.get('new')}"
+            out.append(f"- `{what}` — {h.get('reason', '')}")
+    out.append("")
     return out
 
 

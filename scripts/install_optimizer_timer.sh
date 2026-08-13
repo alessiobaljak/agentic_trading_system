@@ -39,10 +39,17 @@ EOF
 
 cat > /etc/systemd/system/trading-optimizer.timer <<EOF
 [Unit]
-Description=GATE 1 validazione ogni 8h (dati reali Binance) - accumula validazioni
+Description=GATE 1 validazione ogni 3h (dati reali Binance) - accumula validazioni
 
 [Timer]
-OnCalendar=*-*-* 00,08,16:00:00
+# OGNI 3 ORE (era 8). Il passo da 8h nasceva quando una passata durava quasi tutto
+# l'intervallo su 2 core condivisi e con la cache che riscaricava l'intera storia a
+# ogni finestra. Con piu' core e la cache incrementale una passata costa una frazione
+# di quel tempo, e passate piu' frequenti significano piu' candidate provate al
+# giorno. NB: NON accelerano la validazione — un pass conta solo con una settimana di
+# dati nuovi — accelerano la SCOPERTA. E ogni estrazione in piu' entra nel budget di
+# falsi positivi del supervisore, che se ne accorge e reagisce.
+OnCalendar=*-*-* 00/3:00:00
 Persistent=true
 RandomizedDelaySec=600
 
@@ -50,8 +57,37 @@ RandomizedDelaySec=600
 WantedBy=timers.target
 EOF
 
+# ---- SUPERVISORE: decide da solo, ogni ora ----------------------------------
+cat > /etc/systemd/system/trading-supervisor.service <<EOF
+[Unit]
+Description=Agentic Trading - supervisore (taratura automatica dentro il budget)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=$APP_DIR
+EnvironmentFile=$APP_DIR/.env
+EnvironmentFile=-$APP_DIR/tuning.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=$APP_DIR/.venv/bin/python -m scripts.supervisor
+EOF
+
+cat > /etc/systemd/system/trading-supervisor.timer <<EOF
+[Unit]
+Description=Supervisore ogni ora (guarda l'autopsia, tara, decide se rivalidare)
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
+EOF
+
 systemctl daemon-reload
 systemctl enable trading-optimizer.timer
+systemctl enable trading-supervisor.timer
 
 cat <<MSG
 
