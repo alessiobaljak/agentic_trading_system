@@ -175,3 +175,69 @@ def test_an_unreadable_autopsy_does_not_stop_discovery():
             raise ConnectionError("firebase giu'")
 
     assert mutation_seeds(_Broken(), {"gen_aaa": {"id": "gen_aaa"}}) == []
+
+
+# =========================================================================== #
+# t-stat: "e' fortuna?" misurato senza assumere una frazione                  #
+# =========================================================================== #
+# `pf_without_top` boccia chi non pareggia togliendo il 5% di trade migliori. Ma
+# confonde due cose: profitto concentrato per FORTUNA (poche vincite casuali) e
+# profitto concentrato perche' il MECCANISMO e' quello — lo scale-out con l'ultimo
+# gradino a 5R fa arrivare il guadagno dalla coda per costruzione. Il t-stat separa
+# i due casi attraverso la dispersione, ed e' deterministico e O(n): calcolabile su
+# tutte le ventimila valutazioni di ogni run, cosa che un bootstrap non sarebbe.
+
+class _T:
+    def __init__(self, pnl):
+        self.pnl_pct = pnl
+
+
+def test_a_steady_edge_scores_high():
+    from backtesting.engine import t_stat
+    trades = [_T(0.01)] * 50 + [_T(-0.005)] * 50      # piccolo ma regolare
+    assert t_stat(trades) > 3
+
+
+def test_one_lucky_trade_carrying_everything_scores_low():
+    """Il caso che il gate vuole escludere: un colpo enorme e cento perdite. Il PF
+    puo' essere ottimo, ma il rendimento medio non si distingue dallo zero."""
+    from backtesting.engine import t_stat
+    trades = [_T(5.0)] + [_T(-0.04)] * 100
+    assert abs(t_stat(trades)) < 2
+
+
+def test_a_designed_tail_is_not_punished_like_luck():
+    """Coda REGOLARE (un vincitore grosso ogni cinque, come da scale-out) contro
+    coda casuale con lo stesso profitto totale: la prima deve segnare piu' alto."""
+    from backtesting.engine import t_stat
+    disegnata = ([_T(0.30)] + [_T(-0.05)] * 4) * 20
+    fortunata = [_T(6.0)] + [_T(-0.05)] * 99
+    assert t_stat(disegnata) > t_stat(fortunata)
+
+
+def test_a_losing_strategy_scores_negative():
+    from backtesting.engine import t_stat
+    assert t_stat([_T(-0.02)] * 30 + [_T(0.01)] * 10) < 0
+
+
+def test_it_is_deterministic():
+    """Un criterio che cambia verdetto fra due run identici renderebbe il gate non
+    riproducibile — ed e' il motivo per cui qui NON si usa un bootstrap."""
+    from backtesting.engine import t_stat
+    trades = [_T(0.03), _T(-0.01), _T(0.05), _T(-0.02)]
+    assert t_stat(trades) == t_stat(trades)
+
+
+def test_too_few_trades_give_no_verdict():
+    from backtesting.engine import t_stat
+    assert t_stat([]) == 0.0
+    assert t_stat([_T(0.5)]) == 0.0
+
+
+def test_it_does_not_touch_the_gate_verdict():
+    """E' MISURATO, non collegato: il gate deve dare lo stesso verdetto di prima.
+    E' la stessa disciplina usata per la calibrazione e per l'ombra dell'LLM —
+    prima si misura, poi semmai si collega."""
+    import inspect
+    from backtesting.engine import gate_verdict
+    assert "t_stat" not in inspect.getsource(gate_verdict)

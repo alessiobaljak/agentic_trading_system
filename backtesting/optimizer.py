@@ -22,7 +22,8 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from backtesting.engine import (Backtester, StrategyStats, gate_verdict, max_drawdown,
-                                pf_by_regime, pf_without_top, weighted_score_parts)
+                                pf_by_regime, pf_without_top, t_stat,
+                                weighted_score_parts)
 from bot.core.indicators import compute_indicator_frame
 from bot.core.models import Candle
 from bot.strategies.base import STRATEGY_REGISTRY
@@ -66,6 +67,10 @@ class OptResult:
     fail_binding: str = ""        # quello messo peggio
     fail_shortfall: float = 0.0   # quanto manca al binding, in relativo
     near_miss: bool = False       # un solo criterio, mancato di poco
+    # MISURATO, non usato per decidere: separa "profitto concentrato per fortuna" da
+    # "profitto concentrato perche' il meccanismo e' quello". Serve a capire se
+    # pf_ex_top stia bocciando edge veri (vedi t_stat in backtesting/engine.py).
+    t_stat: float = 0.0
 
 
 class WalkForwardOptimizer:
@@ -249,5 +254,6 @@ class WalkForwardOptimizer:
                 data_end=(candles[-1].open_time.timestamp() if candles else 0.0),
                 fail_criteria=tuple(failed), fail_binding=binding,
                 fail_shortfall=shortfall, near_miss=bool(near and not passed),
+                t_stat=round(t_stat(oos.trades), 3),
             ))
         return results

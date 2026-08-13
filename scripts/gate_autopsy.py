@@ -84,10 +84,26 @@ def _show(rep: dict, title: str, near_n: int) -> None:
           f"{rep.get('near_miss_count', len(near))}")
     for n in near[:near_n]:
         sf = n.get("shortfall")
+        t = n.get("t_stat")
         print(f"    {str(n.get('key')):<34} manca {abs(sf) * 100 if sf else 0:>5.1f}% "
-              f"su {n.get('binding')} · PF {n.get('pf')} · {n.get('trades')} trade")
+              f"su {n.get('binding')} · PF {n.get('pf')} · {n.get('trades')} trade"
+              + (f" · t={t}" if t is not None else ""))
     if near:
         print("    (sono i semi da cui il prossimo run fa mutare le candidate)")
+
+    # IL CONFRONTO CHE DECIDE SE pf_ex_top STIA BOCCIANDO EDGE VERI.
+    # `pf_ex_top` boccia chi non pareggia togliendo il 5% di trade migliori, ma non
+    # distingue "concentrato per fortuna" da "concentrato perche' il meccanismo e'
+    # quello" — e lo scale-out con l'ultimo gradino a 5R fa arrivare il guadagno
+    # dalla coda PER COSTRUZIONE. Il t-stat separa i due casi via dispersione.
+    stuck = [n for n in near if n.get("binding") == "pf_ex_top"
+             and n.get("t_stat") is not None]
+    if stuck:
+        solid = [n for n in stuck if float(n["t_stat"]) >= 2.0]
+        print(f"\n  FERMATE SOLO DA pf_ex_top: {len(stuck)}, di cui {len(solid)} con "
+              f"t >= 2\n  (t alto = il rendimento medio si distingue dallo zero "
+              f"nonostante la concentrazione:\n   sono i casi in cui pf_ex_top "
+              f"potrebbe star bocciando un edge vero invece della fortuna)")
 
 
 def main() -> int:

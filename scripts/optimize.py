@@ -96,6 +96,7 @@ def _opt_one(sym: str) -> tuple[str, dict, list]:
             # e non ne conserva l'esito.
             "fail_criteria": list(r.fail_criteria), "fail_binding": r.fail_binding,
             "fail_shortfall": r.fail_shortfall, "near_miss": r.near_miss,
+            "t_stat": r.t_stat,
         }
         if r.passed:
             passed.append(key)
@@ -362,7 +363,8 @@ def autopsy(out: dict, top_near: int = 40) -> dict:
         if e.get("near_miss"):
             near.append({"key": key, "binding": e.get("fail_binding"),
                          "shortfall": e.get("fail_shortfall"),
-                         "pf": e.get("oos_pf"), "trades": e.get("oos_trades")})
+                         "pf": e.get("oos_pf"), "trades": e.get("oos_trades"),
+                         "t_stat": e.get("t_stat")})
     near.sort(key=lambda n: -(n.get("shortfall") or -9))
     return {
         "updated_at": time.time(),

@@ -23,7 +23,7 @@ from datetime import date
 
 from backtesting.data_loader import load_candles
 from backtesting.engine import (StrategyStats, gate_verdict, max_drawdown, pf_by_regime,
-                                pf_without_top)
+                                pf_without_top, t_stat)
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
 from bot.config import settings
@@ -143,7 +143,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
             if r.get("near_miss"):
                 near.append({"key": f"{sym}|{spec['id']}", "binding": b,
                              "shortfall": r.get("fail_shortfall"),
-                             "pf": r["pf"], "trades": r["trades"]})
+                             "pf": r["pf"], "trades": r["trades"],
+                             "t_stat": r.get("t_stat")})
         if r["passed"]:
             key = f"{sym}|{spec['id']}"
             entries[key] = {
@@ -256,6 +257,8 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         "data_end": (candles[-1].open_time.timestamp() if candles else 0.0),
         "fail_criteria": failed, "fail_binding": binding,
         "fail_shortfall": shortfall, "near_miss": bool(near and not passed),
+        # MISURATO, non usato per decidere: vedi t_stat in backtesting/engine.py
+        "t_stat": round(t_stat(oos.trades), 3),
     }
 
 

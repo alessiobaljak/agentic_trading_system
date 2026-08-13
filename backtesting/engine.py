@@ -175,6 +175,42 @@ def regime_ok(regime_pf: dict | None) -> bool:
     return True
 
 
+def t_stat(trades) -> float:
+    """Quanto il rendimento medio per trade si distingue dallo ZERO, data la sua
+    dispersione. E' la misura classica di "e' fortuna?", e qui serve a rispondere a
+    una domanda che `pf_without_top` non sa distinguere.
+
+    IL PROBLEMA. `pf_without_top` boccia chi non pareggia togliendo il 5% di trade
+    migliori. Ma quel test confonde due cose diverse:
+      * il profitto e' concentrato perche' la strategia e' FORTUNATA (poche vincite
+        casuali che reggono tutto) — va bocciata;
+      * il profitto e' concentrato perche' il MECCANISMO e' quello (scale-out con
+        l'ultimo gradino a 5R: il guadagno viene dalla coda per costruzione, l'abbiamo
+        progettato cosi') — bocciarla significa rifiutare il proprio disegno.
+
+    Il t-stat separa i due casi senza assumere una frazione: penalizza la
+    concentrazione attraverso la DISPERSIONE (poche vincite enormi -> deviazione
+    standard alta -> t basso), ma non punisce una coda regolare e ripetuta su molti
+    trade. Ed e' deterministico e O(n): calcolabile su tutte le ventimila valutazioni
+    di ogni run, cosa che un bootstrap non sarebbe.
+
+    RIFERIMENTI D'USO: |t| >= 2 e' la soglia convenzionale, ma con migliaia di
+    candidate valutate per run serve di piu' (vedi il budget di falsi positivi in
+    bot/learning/supervisor.py). Qui si MISURA soltanto: non e' un criterio del gate
+    finche' non avremo confrontato i suoi verdetti con quelli di pf_without_top sui
+    dati veri.
+    """
+    pnls = [float(t.pnl_pct) for t in trades]
+    n = len(pnls)
+    if n < 2:
+        return 0.0
+    mean = sum(pnls) / n
+    var = sum((p - mean) ** 2 for p in pnls) / (n - 1)
+    if var <= 0:
+        return 0.0 if mean == 0 else (99.0 if mean > 0 else -99.0)
+    return mean / ((var ** 0.5) / (n ** 0.5))
+
+
 def pf_without_top(trades, frac: float | None = None) -> float:
     """Profit factor RICALCOLATO togliendo la frazione di trade piu' profittevoli.
 
