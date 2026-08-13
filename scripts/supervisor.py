@@ -72,13 +72,19 @@ def current_values() -> dict:
 def _autopsy(fb) -> dict:
     """Le due autopsie sommate. La discovery porta il grosso del volume, l'optimizer
     le strategie base: per decidere dove si muore contano insieme."""
-    tot = {"evaluated": 0, "passed": 0, "binding": {}}
+    tot = {"evaluated": 0, "passed": 0, "binding": {}, "near": {}}
     for doc_id in ("current", "discover"):
         rep = fb.get_doc("gate_autopsy", doc_id) or {}
         tot["evaluated"] += int(rep.get("evaluated", 0) or 0)
         tot["passed"] += int(rep.get("passed", 0) or 0)
         for k, v in (rep.get("binding") or {}).items():
             tot["binding"][k] = tot["binding"].get(k, 0) + int(v or 0)
+        # i QUASI-PASSAGGI raggruppati per criterio: e' il segnale su cui si sceglie
+        # la leva, perche' sono le uniche candidate che un allentamento converte
+        for n in (rep.get("near_misses") or []):
+            crit = n.get("binding")
+            if crit:
+                tot["near"].setdefault(crit, []).append(float(n.get("shortfall") or 0))
     return tot
 
 
@@ -107,6 +113,7 @@ def build_context(fb, state: dict) -> Context:
         ready=bool(reg.get("ready")), validated=validated,
         days_stagnant=max(0.0, (now - since) / 86400.0),
         evaluated=a["evaluated"], passed=a["passed"], binding=a["binding"],
+        near=a["near"],
         current=current_values(), min_passes=min_passes, runs_per_day=runs,
         budget=float(os.getenv("SUPERVISOR_FALSE_POSITIVE_BUDGET", "1.0")),
         independence=float(os.getenv("SUPERVISOR_CONFIRM_INDEPENDENCE", "0.5")),

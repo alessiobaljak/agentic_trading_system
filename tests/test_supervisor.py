@@ -20,6 +20,7 @@ from bot.learning.supervisor import (NEVER, TUNABLES, Context, decide,
 def _ctx(**kw) -> Context:
     base = dict(ready=False, validated=0, days_stagnant=10.0,
                 evaluated=20000, passed=8, binding={"pf": 900, "trades": 100},
+                near={"pf": [-0.02, -0.03]},
                 current={t.name: v for t, v in [
                     (TUNABLES["trades"], 30.0), (TUNABLES["pf"], 1.25),
                     (TUNABLES["win_rate"], 0.45), (TUNABLES["total_return"], 0.15),
@@ -99,7 +100,7 @@ def test_an_exhausted_budget_forbids_any_relaxation():
 def test_dying_on_the_holdout_never_relaxes_anything():
     """E' il caso piu' pericoloso: le candidate superano tutto e cadono sui dati mai
     visti. Allentare promuoverebbe proprio le sovradattate."""
-    d = decide(_ctx(binding={"holdout": 500, "pf": 10}))
+    d = decide(_ctx(binding={"holdout": 500, "pf": 10}, near={"holdout": [0.0, 0.0]}))
     assert d[0].kind == "tighten" and "sovradattamento" in d[0].reason
     assert not any(x.kind == "set_param" for x in d)
 
@@ -107,7 +108,7 @@ def test_dying_on_the_holdout_never_relaxes_anything():
 def test_a_parameter_at_its_floor_is_not_pushed_further():
     """pf_ex_top parte gia' al pavimento: sotto il pareggio senza i colpi migliori si
     validerebbe la fortuna, e non c'e' budget che lo giustifichi."""
-    d = decide(_ctx(binding={"pf_ex_top": 900}))
+    d = decide(_ctx(binding={"pf_ex_top": 900}, near={"pf_ex_top": [-0.01]}))
     assert d[0].kind == "none" and "pavimento" in d[0].reason
 
 
@@ -116,7 +117,8 @@ def test_the_floor_is_never_crossed_even_after_many_moves():
     finire sotto il proprio pavimento."""
     cur = {TUNABLES["pf"].name: 1.25}
     for _ in range(50):
-        d = decide(_ctx(binding={"pf": 900}, current={**_ctx().current, **cur}))
+        d = decide(_ctx(binding={"pf": 900}, near={"pf": [-0.9]},
+                        current={**_ctx().current, **cur}))
         sets = [x for x in d if x.kind == "set_param"]
         if not sets:
             break
@@ -126,7 +128,8 @@ def test_the_floor_is_never_crossed_even_after_many_moves():
 
 # ---- quando si tocca, si tocca poco e si dice perche' -------------------- #
 def test_it_relaxes_the_criterion_that_stops_the_most():
-    d = decide(_ctx(binding={"trades": 5000, "pf": 100}))
+    d = decide(_ctx(binding={"trades": 5000, "pf": 100},
+                    near={"trades": [-0.05, -0.06]}))
     s = [x for x in d if x.kind == "set_param"]
     assert s and s[0].param == "GATE_MIN_TRADES"
     assert s[0].new < s[0].old
@@ -135,14 +138,16 @@ def test_it_relaxes_the_criterion_that_stops_the_most():
 def test_only_one_parameter_moves_at_a_time():
     """Due modifiche insieme rendono impossibile sapere quale ha prodotto l'effetto
     misurato al run successivo: si perde proprio il segnale di ritorno."""
-    d = decide(_ctx(binding={"trades": 5000, "pf": 4000, "win_rate": 3000}))
+    d = decide(_ctx(binding={"trades": 5000, "pf": 4000, "win_rate": 3000},
+                    near={"trades": [-0.05, -0.06], "pf": [-0.02],
+                          "win_rate": [-0.03]}))
     assert len([x for x in d if x.kind == "set_param"]) == 1
 
 
 def test_an_integer_parameter_always_moves_by_at_least_one():
     """Con l'arrotondamento un passo del 15% su un intero piccolo poteva non
     muovere nulla, e il supervisore avrebbe 'deciso' a vuoto per sempre."""
-    d = decide(_ctx(binding={"trades": 900},
+    d = decide(_ctx(binding={"trades": 900}, near={"trades": [-0.02]},
                     current={**_ctx().current, TUNABLES["trades"].name: 21.0}))
     s = [x for x in d if x.kind == "set_param"]
     assert s and s[0].new < 21.0
@@ -151,7 +156,7 @@ def test_an_integer_parameter_always_moves_by_at_least_one():
 def test_every_decision_carries_the_numbers_that_justify_it():
     """Fra due mesi la domanda sara' 'perche' questa soglia sta qui?'. La risposta
     deve stare nella decisione, non nella memoria di qualcuno."""
-    d = decide(_ctx(binding={"pf": 900}))
+    d = decide(_ctx(binding={"pf": 900}, near={"pf": [-0.02]}))
     s = [x for x in d if x.kind == "set_param"][0]
     assert "pass_rate" in s.detail and "expected_lucky_per_day" in s.detail
     assert "budget" in s.reason or "spazio" in s.reason
@@ -261,3 +266,78 @@ def test_the_tuning_file_says_it_is_machine_written(tmp_path, monkeypatch):
     sup.write_tuning({"GATE_MIN_TRADES": "25"})
     text = (tmp_path / "tuning.env").read_text()
     assert "NON modificare a mano" in text and "cancella" in text
+
+
+# =========================================================================== #
+# LA LEZIONE DEI PRIMI DATI VERI                                              #
+# =========================================================================== #
+# Prima autopsia reale: 21.948 valutazioni, 8 passate. Il 78% moriva su
+# `total_return` — ma quelle stesse candidate fallivano anche pf (96%), pf_ex_top
+# (98%), win_rate (94%), recovery (88%), consistency (88%). Sei criteri insieme.
+# Allentare `total_return`, il criterio "dominante", non ne avrebbe convertita
+# NESSUNA: quando quasi tutto fallisce quasi tutto, il conteggio delle bocciature
+# descrive la qualita' media delle candidate, non un collo di bottiglia.
+
+def test_the_lever_is_not_the_most_frequent_failure():
+    """Il caso reale: `total_return` ferma la maggioranza, ma nessuna di quelle
+    candidate e' vicina a passare. La leva deve andare dove ci sono i
+    quasi-passaggi, altrimenti si spende una mossa di budget per zero conversioni."""
+    d = decide(_ctx(binding={"total_return": 15747, "recovery": 1338, "trades": 2019},
+                    near={"trades": [-0.03, -0.03, -0.06]}))
+    s = [x for x in d if x.kind == "set_param"]
+    assert s and s[0].param == TUNABLES["trades"].name
+
+
+def test_no_near_misses_means_no_move_at_all():
+    """Se nessuna candidata e' fermata da un solo criterio, non esiste una soglia
+    che ne sbloccherebbe qualcuna: allentare sarebbe una mossa al buio."""
+    d = decide(_ctx(binding={"total_return": 15747}, near={}))
+    assert d[0].kind == "none" and "sono le candidate" in d[0].reason
+
+
+def test_the_criterion_with_most_near_misses_wins():
+    d = decide(_ctx(binding={"total_return": 999},
+                    near={"trades": [-0.05], "recovery": [-0.02, -0.03, -0.04]}))
+    s = [x for x in d if x.kind == "set_param"]
+    assert s and s[0].param == TUNABLES["recovery"].name
+
+
+def test_the_step_is_sized_on_the_gap_not_on_the_maximum():
+    """Allentare piu' del necessario regala passaggi a candidate che non erano
+    vicine: e' il modo in cui una taratura ragionevole diventa una svendita."""
+    d = decide(_ctx(binding={"recovery": 9},
+                    near={"recovery": [-0.02, -0.02, -0.03]}))
+    s = [x for x in d if x.kind == "set_param"][0]
+    mossa = (s.old - s.new) / s.old
+    assert 0.02 <= mossa <= 0.05          # copre la mediana, non il passo massimo
+
+
+def test_the_move_predicts_how_many_it_should_unblock():
+    """Una decisione che non dice cosa dovrebbe succedere non e' verificabile al
+    giro dopo, ed e' allora che una taratura sbagliata resta in piedi per mesi."""
+    d = decide(_ctx(binding={"recovery": 9},
+                    near={"recovery": [-0.02, -0.02, -0.03]}))
+    s = [x for x in d if x.kind == "set_param"][0]
+    assert s.detail["expected_conversions"] >= 2
+    assert "sbloccare" in s.reason
+
+
+def test_near_misses_stuck_on_the_anti_luck_test_stop_everything():
+    """Il caso vero e piu' importante: le candidate piu' vicine al passaggio sono
+    ferme su pf_ex_top, che sta gia' al pavimento (pareggio senza i colpi migliori).
+    Scendere sotto significherebbe validare strategie che PERDONO senza le loro
+    poche corse fortunate. Il supervisore deve fermarsi e dirlo."""
+    d = decide(_ctx(binding={"total_return": 15747},
+                    near={"pf_ex_top": [-0.006, -0.007, -0.024, -0.043]}))
+    assert d[0].kind == "none"
+    assert "pavimento" in d[0].reason
+    assert not any(x.kind == "set_param" for x in d)
+
+
+def test_near_misses_on_the_holdout_trigger_tightening():
+    """Quattro coppie base con PF fra 1.4 e 4.7 sulle finestre, tutte morte
+    sull'holdout: e' la firma del sovradattamento, e la reazione e' opposta
+    all'allentamento."""
+    d = decide(_ctx(binding={"total_return": 1248},
+                    near={"holdout": [0.0, 0.0, 0.0, 0.0]}))
+    assert d[0].kind == "tighten" and "sovradattamento" in d[0].reason

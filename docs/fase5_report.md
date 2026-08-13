@@ -307,3 +307,39 @@ invece che dopo tre settimane. Senza questo, ogni modifica sarebbe una scommessa
 `supervisor/state` su Firebase, e la sezione "Supervisore" in `docs/state.md`, che
 è committata: il *perché* di ogni soglia resta leggibile a mesi di distanza senza
 entrare sulla VPS. Per tornare ai default: cancellare `tuning.env` e riavviare.
+
+### Correzione dopo la prima autopsia reale (13 ago 2026)
+
+I primi dati veri hanno smentito una scelta di progetto del supervisore, ed è bene
+che resti scritto.
+
+**Cosa dicevano i numeri.** 21.948 valutazioni, 8 passate (0,036%). Il criterio che
+fermava più candidate era `total_return` (78%). Ma la seconda tabella — quante
+volte ogni criterio è *coinvolto*, anche non da solo — mostrava tutt'altro:
+`pf_ex_top` 98%, `pf` 96%, `win_rate` 94%, `recovery` 88%, `consistency` 88%. Cioè
+**quasi tutte le candidate fallivano quasi tutti i criteri insieme**.
+
+**Perché era una smentita.** Il supervisore sceglieva la leva dal criterio più
+frequente. Avrebbe quindi allentato `total_return`, e non avrebbe convertito
+**nessuna** candidata: quelle 15.747 restavano bocciate da altri cinque criteri.
+Una mossa di budget spesa per zero.
+
+Quando quasi tutto fallisce quasi tutto, il conteggio delle bocciature descrive la
+**qualità media delle candidate**, non un collo di bottiglia da rimuovere.
+
+**La correzione.** La leva si sceglie ora dai **quasi-passaggi** — le candidate
+fermate da *un solo* criterio — che sono le uniche che un allentamento converte
+davvero. Il passo si dimensiona sulla mediana dei loro scarti (allentare più del
+necessario regala passaggi a chi non era vicino), e la decisione dichiara in
+anticipo **quante candidate dovrebbe sbloccare**, così al giro dopo si può
+verificare.
+
+**Cosa dice, sui dati veri, dopo la correzione:**
+
+> le candidate più vicine al passaggio (5) sono fermate da `GATE_MIN_PF_EX_TOP`,
+> che è già al pavimento (1): sotto il pareggio senza i colpi migliori si valida la
+> fortuna. Non si scende oltre: quello che manca non è una soglia più bassa.
+
+È il risultato giusto, e non è un risultato comodo: dice che le strategie più
+promettenti che abbiamo sono quelle che pareggiano appena *senza* le loro poche
+corse fortunate.

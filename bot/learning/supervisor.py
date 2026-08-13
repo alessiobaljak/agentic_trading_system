@@ -175,6 +175,10 @@ class Context:
     evaluated: int = 0
     passed: int = 0
     binding: dict = field(default_factory=dict)     # criterio -> casi
+    # QUASI-PASSAGGI: criterio -> scarti (negativi) delle candidate fermate da QUEL
+    # SOLO criterio. E' il segnale che guida la taratura; `binding` serve a capire
+    # il terreno, non a scegliere la mossa. Vedi `_lever`.
+    near: dict = field(default_factory=dict)
     current: dict = field(default_factory=dict)     # nome parametro -> valore attuale
     min_passes: int = 3
     runs_per_day: float = 3.0
@@ -190,18 +194,52 @@ class Context:
         return (self.passed / self.evaluated) if self.evaluated else 0.0
 
 
-def _relaxed(t: Tunable, value: float) -> Optional[float]:
+def _relaxed(t: Tunable, value: float, need: float = 0.0) -> Optional[float]:
     """Il valore dopo UNA mossa di allentamento, o None se e' gia' al pavimento.
-    Un passo alla volta: cambiarne due insieme renderebbe impossibile sapere quale
-    dei due ha prodotto l'effetto misurato al run successivo."""
+
+    `need` = scarto relativo da coprire per sbloccare le candidate che quel criterio
+    sta fermando da solo. Si allenta di quanto SERVE (piu' un margine minimo), mai
+    piu' del passo massimo: un allentamento piu' grande del necessario regala
+    passaggi a candidate che non erano vicine.
+
+    Un parametro alla volta: cambiarne due insieme renderebbe impossibile sapere
+    quale dei due ha prodotto l'effetto misurato al run successivo.
+    """
     if t.step <= 0 or value <= t.floor:
         return None
-    nxt = value * (1.0 - t.step)
+    frac = min(t.step, max(0.01, abs(need) * 1.1))   # +10% di margine sullo scarto
+    nxt = value * (1.0 - frac)
     if t.kind == "int":
         nxt = float(int(nxt))
         if nxt >= value:
             nxt = value - 1
     return max(t.floor, nxt)
+
+
+def _lever(ctx: "Context") -> tuple[str, list]:
+    """QUALE criterio conviene allentare, e per quali candidate.
+
+    Qui sta la lezione dei primi dati veri. La scelta ovvia sarebbe il criterio che
+    ferma piu' candidate (`binding`), e sarebbe SBAGLIATA: nella prima autopsia
+    reale il 78% moriva su `total_return`, ma quelle stesse candidate fallivano
+    anche pf, win_rate, recovery, consistency e pf_ex_top — sei criteri insieme,
+    ognuno presente in oltre il 90% delle bocciature. Allentare `total_return` non
+    ne avrebbe convertita NESSUNA: avrebbe speso una mossa di budget per spostare
+    una soglia davanti a candidate che restavano bocciate da altre cinque.
+
+    Quando quasi tutto fallisce quasi tutto, il conteggio delle bocciature descrive
+    la qualita' media delle candidate, non un collo di bottiglia da rimuovere.
+
+    Le uniche candidate che un allentamento converte davvero sono quelle fermate da
+    UN SOLO criterio. Quindi la leva si sceglie li': il criterio con piu'
+    quasi-passaggi, e il passo si dimensiona sui loro scarti. Cosi' la decisione
+    diventa anche falsificabile — si puo' dire in anticipo quante candidate
+    dovrebbe sbloccare, e verificarlo al giro dopo.
+    """
+    if not ctx.near:
+        return "", []
+    best = max(ctx.near.items(), key=lambda kv: (len(kv[1]), -min(kv[1], default=0)))
+    return best[0], list(best[1])
 
 
 def decide(ctx: Context) -> list[Decision]:
@@ -246,19 +284,30 @@ def decide(ctx: Context) -> list[Decision]:
     if not ctx.binding:
         return [Decision("none", "nessuna autopsia disponibile: non si tara al buio",
                          detail=budget_detail)]
-    worst = max(ctx.binding.items(), key=lambda kv: kv[1])[0]
 
-    # 3) IL CASO HOLDOUT. Le candidate superano tutto e cadono sui dati mai visti:
-    # e' sovradattamento conclamato. Allentare promuoverebbe le sovradattate.
+    # 3) LA LEVA si sceglie sui QUASI-PASSAGGI, non sul conteggio delle bocciature.
+    # (Il perche' sta in `_lever`: quando quasi tutte le candidate falliscono quasi
+    # tutti i criteri, allentare il criterio piu' frequente non converte nessuno.)
+    worst, shortfalls = _lever(ctx)
+    if not worst:
+        return [Decision(
+            "none",
+            "nessun quasi-passaggio: nessuna candidata e' fermata da UN SOLO "
+            "criterio, quindi non esiste una soglia che ne sbloccherebbe qualcuna. "
+            "Allentare qui sarebbe una mossa al buio: il problema non e' il gate, "
+            "sono le candidate", detail=budget_detail)]
+
+    # 4) IL CASO HOLDOUT. La candidata supera tutto e cade sui dati mai visti: e'
+    # sovradattamento conclamato. Allentare promuoverebbe proprio le sovradattate.
     if worst == "holdout":
         out.append(Decision(
             "tighten",
-            "la maggioranza muore sull'HOLDOUT: funzionano dove le abbiamo scelte e "
-            "non fuori. E' sovradattamento — si riducono le candidate, non si "
-            "allentano i criteri", detail=budget_detail))
+            f"i {len(shortfalls)} quasi-passaggi muoiono sull'HOLDOUT: superano ogni "
+            f"criterio sulle finestre di selezione e falliscono sui dati mai visti. "
+            f"E' sovradattamento — si riducono le candidate, non si allentano i "
+            f"criteri", detail=budget_detail))
         return out
 
-    # 4) L'ALLENTAMENTO, di un passo, sul criterio che ferma di piu'.
     t = TUNABLES.get(worst)
     if t is None:
         return [Decision("none", f"criterio '{worst}' non e' tarabile automaticamente",
@@ -267,20 +316,33 @@ def decide(ctx: Context) -> list[Decision]:
     if cur is None:
         return [Decision("none", f"valore attuale di {t.name} sconosciuto",
                          detail=budget_detail)]
-    nxt = _relaxed(t, float(cur))
+
+    # scarto da coprire: la MEDIANA dei quasi-passaggi. Coprirli tutti significherebbe
+    # dimensionare la mossa sul caso peggiore, cioe' allentare piu' del necessario per
+    # la maggioranza.
+    ordered = sorted(abs(s) for s in shortfalls if s is not None)
+    need = ordered[len(ordered) // 2] if ordered else 0.0
+    nxt = _relaxed(t, float(cur), need)
     if nxt is None:
         return [Decision(
             "none",
-            f"{t.name} e' gia' al pavimento ({t.floor:g}): {t.why_floor}. "
-            f"Il problema non e' questa soglia, e non si scende oltre",
-            param=t.name, old=float(cur), detail=budget_detail)]
+            f"le candidate piu' vicine al passaggio ({len(shortfalls)}) sono fermate "
+            f"da {t.name}, che e' gia' al pavimento ({t.floor:g}): {t.why_floor}. "
+            f"Non si scende oltre: quello che manca non e' una soglia piu' bassa",
+            param=t.name, old=float(cur), detail={**budget_detail,
+                                                  "near_misses": len(shortfalls)})]
 
+    moved = abs(nxt - float(cur)) / float(cur) if cur else 0.0
+    converts = sum(1 for s in ordered if s <= moved + 1e-9)
     out.append(Decision(
         "set_param",
-        f"{ctx.binding[worst]} candidate su {sum(ctx.binding.values())} muoiono su "
-        f"'{worst}' e il budget lo consente (spazio {room:.0f}x, attese "
-        f"{lucky:.3f}/giorno contro un tetto di {ctx.budget:g})",
-        param=t.name, old=float(cur), new=nxt, detail=budget_detail))
+        f"{len(shortfalls)} candidate sono fermate SOLO da '{worst}' (mediana: manca "
+        f"{need * 100:.1f}%). La mossa ne dovrebbe sbloccare ~{converts}, e il budget "
+        f"la consente (spazio {room:.0f}x, attese {lucky:.3f}/giorno contro un tetto "
+        f"di {ctx.budget:g})",
+        param=t.name, old=float(cur), new=nxt,
+        detail={**budget_detail, "near_misses": len(shortfalls),
+                "expected_conversions": converts}))
 
     # 5) MISURARE SUBITO. Un parametro cambiato che aspetta tre settimane per essere
     # giudicato non e' un anello chiuso: e' una scommessa. fast_gate rigioca la
