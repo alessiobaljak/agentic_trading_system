@@ -11,7 +11,8 @@ VPS Hetzner. Tempo stimato: ~30 minuti.
 1. Entra nella **Hetzner Cloud Console** → **New Project** (es. "trading") → **Add Server**.
 2. **Location**: una EU (Nuremberg / Falkenstein / Helsinki). Vanno bene per Binance.
 3. **Image**: **Ubuntu 24.04**.
-4. **Type**: **CX22** (2 vCPU, 4 GB RAM, ~€4/mese) — più che sufficiente.
+4. **Type**: **CX22** (2 vCPU, 4 GB RAM, ~€4/mese) — sufficiente per il **bot**.
+   Per la **validazione** (GATE 1) serve di più: vedi "Dimensionare la macchina".
 5. **SSH Key**: aggiungi la tua chiave pubblica (consigliato). Se non ne hai una:
    ```bash
    # sul TUO computer
@@ -137,3 +138,88 @@ journalctl -u trading-bot -f
 ## Passaggio a live (solo dopo paper positivo + GATE 1 superato)
 Nel `.env`: `DRY_RUN=false` (e `BINANCE_TESTNET=false` quando pronto), poi
 `systemctl restart trading-bot`. Capitale ridotto, leva 1–2x, monitoraggio attivo.
+
+---
+
+## Dimensionare la macchina
+
+Sulla stessa VPS girano due carichi con esigenze opposte, e confonderli porta a
+comprare la macchina sbagliata.
+
+**Il bot** (`trading-bot.service`) non consuma quasi nulla: un tick ogni 30
+secondi, qualche richiesta REST, un WebSocket. Ci gira su due core condivisi senza
+accorgersene, e continuerà a girarci qualunque cosa si decida per il resto.
+
+**La validazione** (`trading-optimizer.service`) è tutt'altro: walk-forward su
+centinaia di coin per decine di strategie, oltre ventimila valutazioni per
+passata. È il carico che decide la macchina.
+
+### Cosa NON si accorcia con l'hardware
+
+La validazione richiede **tre conferme distanziate da una settimana di dati
+nuovi** (`OPTIMIZER_NEW_DATA_MIN_HOURS`). Sono tre settimane di calendario, e
+nessuna CPU al mondo fa arrivare prima i dati di mercato. Un processore più veloce
+non accorcia di un minuto l'attesa: accorcia solo il tempo di *calcolo* dentro
+ogni passata.
+
+L'unico modo onesto di comprimere quelle tre settimane è `scripts/fast_gate.sh`,
+che rigioca la storia con tre date di fine diverse — e *quello* sì è
+CPU-dipendente.
+
+### Cos'era rete e non CPU
+
+Fino ad agosto 2026 la cache delle candele era indicizzata anche sulla **data di
+fine**. Ogni finestra di validazione cambia esattamente quella, quindi ogni
+finestra era un buco nella cache: ~140.000 candele per coin (4 anni a 15m)
+riscaricate da capo, per duecento coin, decine di migliaia di richieste HTTP a
+passata. Su quella parte l'hardware non incideva per niente.
+
+Ora una serie in cache più lunga viene **tagliata** e una più corta viene
+**estesa** scaricando la sola coda mancante. Prima di valutare un upgrade, misura
+di nuovo: una buona parte del tempo che sembrava calcolo era attesa di rete.
+
+### Se dopo la misura serve davvero più CPU
+
+Il calcolo è parallelo per simbolo (processi separati, `BACKTEST_WORKERS`), quindi
+scala quasi linearmente coi core. Regole pratiche:
+
+- **RAM**: circa **1,2 GB per worker**. Con 4 GB si sta a 2 worker, che è il vero
+  motivo per cui su CX22 non si va oltre. Vuoi 8 worker? Servono ~12 GB, quindi
+  16 GB di taglio.
+- **vCPU dedicate, non condivise**: la validazione tiene i core al 100% per ore.
+  È il profilo per cui esiste la linea **CCX** (dedicata); sulle linee condivise
+  (CX/CPX) un carico così prolungato è esattamente ciò che le condizioni d'uso
+  scoraggiano, oltre a subire il "rumore" degli altri tenant.
+- **Ordini di grandezza**: passando da 2 core condivisi a 8 dedicati la passata si
+  accorcia di circa 4 volte. Verifica i tagli e i prezzi correnti sul sito: qui si
+  documenta il criterio, non il listino.
+
+### L'alternativa più economica
+
+Hetzner fattura **a ore**. Il bot può restare sulla CX22 e la macchina grossa si
+crea **solo quando serve** una rivalidazione completa, si esegue `fast_gate.sh`, e
+si distrugge. Costa qualche centesimo invece di un canone mensile.
+
+Un avvertimento pratico: una macchina nuova ha la cache delle candele **vuota**, e
+riempirla è proprio la parte lenta. Se scegli questa strada, copia prima la cache:
+
+```bash
+rsync -az /root/agentic_trading_system/.cache/ nuovo-server:/root/agentic_trading_system/.cache/
+```
+
+### Come spendere i core in più
+
+Questa è la parte che conta più della macchina. Con più CPU la tentazione è
+alzare `--generate`, cioè provare più strategie casuali. **È la scelta peggiore**:
+il sistema valuta già ~1.500 coppie per run, e a quella scala ci si aspettano
+alcune strategie di puro rumore che superano la soglia per fortuna. Raddoppiare le
+candidate raddoppia i falsi positivi, e il paper li scopre pagandoli.
+
+I core in più vanno spesi in **rigore**, non in volume:
+
+- `--windows 5` invece di 3 — più finestre walk-forward, validazione più severa;
+- più **conferme** su date di fine diverse (`fast_gate`, `backfill_passes`);
+- ricerca **guidata** attorno ai quasi-passaggi (già automatica: vedi
+  `scripts/gate_autopsy.py`), che esplora a fondo poche zone promettenti invece di
+  estrarre a caso;
+- iterazione più rapida sui **criteri**, che è ciò che davvero sblocca il gate.

@@ -234,23 +234,110 @@ def _cache_file(symbol: str, interval: str, start: str, end: str) -> str:
 def _cache_read(path: str) -> list[Candle] | None:
     try:
         with open(path) as f:
-            rows = json.load(f)
+            doc = json.load(f)
+        # due formati: lista nuda (storico) e dict con la FONTE (nuovo). La fonte
+        # serve all'estensione incrementale: allungare una serie Binance con candele
+        # Bybit produrrebbe una storia che non e' mai esistita su nessun exchange.
+        rows = doc if isinstance(doc, list) else (doc.get("rows") or [])
         return [_candle(r[0], r[1], r[2], r[3], r[4], r[5]) for r in rows] or None
     except Exception:  # noqa: BLE001
         return None
 
 
-def _cache_write(path: str, candles: list[Candle]) -> None:
+def _cache_source(path: str) -> str:
+    """Da quale exchange viene la serie in cache. '' = sconosciuta (formato vecchio),
+    e in quel caso non si estende: si riscarica, che e' l'opzione sicura."""
+    try:
+        with open(path) as f:
+            doc = json.load(f)
+        return str(doc.get("source", "")) if isinstance(doc, dict) else ""
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def _cache_write(path: str, candles: list[Candle], source: str = "") -> None:
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         rows = [[int(c.open_time.timestamp() * 1000), c.open, c.high, c.low, c.close, c.volume]
                 for c in candles]
         tmp = f"{path}.tmp"
         with open(tmp, "w") as f:
-            json.dump(rows, f)
+            json.dump({"source": source, "rows": rows}, f)
         os.replace(tmp, path)   # scrittura atomica: niente file a metà se interrotti
     except Exception:  # noqa: BLE001
         pass
+
+
+def cut_to(candles: list[Candle], end_dt: datetime) -> list[Candle]:
+    """Taglia la serie a `end_dt` ESCLUSA. E' il taglio che rende riusabile una
+    cache piu' lunga di quanto serve, ed e' anche il punto in cui un errore
+    diventerebbe look-ahead: una sola candela oltre il confine farebbe vedere alla
+    validazione un pezzo di futuro. Per questo il confronto e' stretto (<)."""
+    return [c for c in candles if c.open_time < end_dt]
+
+
+def _reusable_cache(symbol: str, interval: str, start: str) -> list[tuple[str, str]]:
+    """File di cache della STESSA serie (symbol, interval, start), dal piu' recente
+    al piu' vecchio per data di fine.
+
+    Serve perche' la chiave include `end`: senza questo, chiedere la stessa storia
+    con una data di fine diversa e' sempre un buco nella cache, e ogni finestra di
+    validazione riscarica quattro anni di candele per duecento coin.
+    """
+    prefix = f"{symbol}_{interval}_{start}_"
+    try:
+        names = [n for n in os.listdir(_CACHE_DIR)
+                 if n.startswith(prefix) and n.endswith(".json")]
+    except Exception:  # noqa: BLE001
+        return []
+    out = [(n[len(prefix):-len(".json")], os.path.join(_CACHE_DIR, n)) for n in names]
+    return sorted(out, key=lambda x: x[0], reverse=True)
+
+
+def _drop_older(symbol: str, interval: str, start: str, keep: str) -> None:
+    """Tiene UN SOLO file per serie. Ogni data di fine crea un file con l'intera
+    storia dentro: senza questa pulizia il riuso della cache si pagherebbe in
+    gigabyte di copie quasi identiche."""
+    for _end, path in _reusable_cache(symbol, interval, start):
+        if os.path.abspath(path) == os.path.abspath(keep):
+            continue
+        try:
+            os.remove(path)
+        except Exception:  # noqa: BLE001
+            pass
+
+
+def _merge_candles(base: list[Candle], tail: list[Candle]) -> list[Candle] | None:
+    """Unisce la coda nuova alla serie in cache. None se il risultato non e'
+    attendibile — e allora il chiamante riscarica tutto.
+
+    La sovrapposizione viene RIMPIAZZATA dalla coda: l'ultima candela di una serie
+    scaricata "fino a oggi" era ancora in formazione, e tenerla congelerebbe per
+    sempre un massimo/minimo parziale dentro i dati di validazione.
+
+    I controlli non sono formalita': una cache corrotta non da' errore, da' risultati
+    di validazione sbagliati per settimane senza che nessuno se ne accorga.
+    """
+    if not base:
+        return tail or None
+    if not tail:
+        return base
+    cut = tail[0].open_time
+    merged = [c for c in base if c.open_time < cut] + list(tail)
+    if len(merged) < 2:
+        return merged
+    step = None
+    for a, b in zip(merged, merged[1:]):
+        d = (b.open_time - a.open_time).total_seconds()
+        if d <= 0:
+            return None                     # non monotona: cache inaffidabile
+        if step is None:
+            step = d
+        elif abs(d - step) > 1.0 and d % step != 0:
+            # un buco e' possibile (exchange in manutenzione), un passo INCOERENTE
+            # col resto no: vorrebbe dire due serie con timeframe diversi unite
+            return None
+    return merged
 
 
 def _covers_end(candles: list[Candle], end_dt: datetime) -> bool:
@@ -323,12 +410,51 @@ def load_candles(
 
     # cache su disco: se abbiamo gia' questi dati REALI e COMPLETI, niente rete.
     cache_path = _cache_file(symbol, interval, start, end)
+    base: list[Candle] = []
+    base_source = ""
     if _CACHE_ENABLED:
         _prune_cache()
         cached = _cache_read(cache_path)
         if cached and _covers_end(cached, end_dt):
             print(f"[backtest] dati da cache: {len(cached)} candele ({symbol} {interval})")
             return cached
+        # RIUSO DI UNA SERIE PIU' LUNGA O PIU' CORTA. La chiave include `end`, quindi
+        # senza questo blocco ogni finestra di validazione (che cambia proprio la
+        # data di fine) e' un buco nella cache: quattro anni di candele riscaricati
+        # per duecento coin, ogni volta. E' la voce di costo piu' grossa dell'intero
+        # GATE 1, ed e' rete — non si risolve con piu' CPU.
+        for _end, path in _reusable_cache(symbol, interval, start):
+            if path == cache_path:
+                continue
+            other = _cache_read(path)
+            if not other:
+                continue
+            if other[-1].open_time >= end_dt - timedelta(hours=24):
+                # la cache copre GIA' il periodo chiesto: basta tagliarla
+                cut = cut_to(other, end_dt)
+                if cut and _covers_end(cut, end_dt):
+                    print(f"[backtest] cache riusata (tagliata da {_end}): "
+                          f"{len(cut)} candele ({symbol} {interval})")
+                    _cache_write(cache_path, cut, _cache_source(path))
+                    _drop_older(symbol, interval, start, cache_path)
+                    return cut
+            # piu' corta: la si tiene come BASE da allungare con la sola coda mancante
+            base, base_source = other, _cache_source(path)
+            break
+
+    # ESTENSIONE INCREMENTALE: si scarica solo il pezzo che manca. Il run delle 8h
+    # chiedeva ogni volta l'intera storia per avere in piu' qualche candela nuova.
+    if base and base_source == "binance" and prefer in ("binance", "auto"):
+        from_ms = int(base[-1].open_time.timestamp() * 1000)
+        tail = _binance(symbol, interval, from_ms, ems)
+        merged = _merge_candles(base, tail) if tail else None
+        if merged and _covers_end(merged, end_dt):
+            print(f"[backtest] cache ESTESA di {len(tail)} candele "
+                  f"(invece di riscaricarne {len(merged)}) ({symbol} {interval})")
+            if _CACHE_ENABLED:
+                _cache_write(cache_path, merged, "binance")
+                _drop_older(symbol, interval, start, cache_path)
+            return merged
 
     # ordine di fallback tra exchange OHLCV gratuiti
     chain: list[tuple[str, Callable[[], list[Candle]]]] = [
@@ -346,7 +472,10 @@ def load_candles(
         if candles and _covers_end(candles, end_dt):
             print(f"[backtest] dati da {name}: {len(candles)} candele")
             if _CACHE_ENABLED:
-                _cache_write(cache_path, candles)   # salva per i giri/shard successivi
+                # la FONTE viaggia con la serie: senza, un'estensione incrementale
+                # potrebbe allungare candele Binance con candele Bybit
+                _cache_write(cache_path, candles, name)
+                _drop_older(symbol, interval, start, cache_path)
             return candles
         if len(candles) > len(partial):
             partial = candles   # troncata (es. 429 a meta' paginazione): prova il prossimo
