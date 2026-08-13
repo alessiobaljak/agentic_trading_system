@@ -456,13 +456,28 @@ def _closed_trades_section(fb, pairs=None) -> list[str]:
 
 
 def main() -> int:
+    import argparse
+    import os
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=OUT,
+                    help="dove scrivere. Sulla VPS conviene un percorso FUORI dal "
+                         "repo: docs/state.md e' tracciato e lo scrive anche la "
+                         "GitHub Action, quindi riscriverlo qui sporca il working "
+                         "tree e fa abortire il git pull successivo — col risultato "
+                         "che i comandi dopo girano sulla versione vecchia del codice")
+    ap.add_argument("--no-write", action="store_true",
+                    help="stampa e basta, non tocca nessun file")
+    args = ap.parse_args()
+
     content = build()
     print(content)
-    import os
-    os.makedirs("docs", exist_ok=True)
-    with open(OUT, "w", encoding="utf-8") as f:
+    if args.no_write:
+        return 0
+    d = os.path.dirname(os.path.abspath(args.out))
+    os.makedirs(d, exist_ok=True)
+    with open(args.out, "w", encoding="utf-8") as f:
         f.write(content)
-    print(f"\n[snapshot] scritto {OUT}")
+    print(f"\n[snapshot] scritto {args.out}")
     return 0
 
 
