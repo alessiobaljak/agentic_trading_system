@@ -168,3 +168,24 @@ def test_the_shipped_example_contains_no_destructive_entry_active():
     for pericolosa in ("fast-gate", "reset-paper"):
         assert pericolosa not in entries
     assert "autopsy" in entries and "gate" in entries
+
+
+# ---- l'HEAD staccato: il guasto che perde le risposte in silenzio -------- #
+def test_a_detached_head_stops_everything():
+    """Non perche' il pull fallisce — quello e' solo il sintomo. Il danno vero
+    verrebbe dopo: le risposte committate su nessun ramo spariscono al primo
+    checkout, e nel log si sarebbe visto solo un errore di pull."""
+    from scripts.ops_agent import branch_problem
+    problema = branch_problem(0, "HEAD")
+    assert "STACCATO" in problema and "git checkout" in problema
+
+
+def test_an_unreadable_head_is_treated_as_a_problem():
+    from scripts.ops_agent import branch_problem
+    assert branch_problem(128, "") != ""
+
+
+def test_a_normal_branch_is_no_problem():
+    from scripts.ops_agent import branch_problem
+    assert branch_problem(0, "claude/brave-albattani-1b12fv\n") == ""
+    assert branch_problem(0, "main") == ""

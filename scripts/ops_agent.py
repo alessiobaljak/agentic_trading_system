@@ -189,6 +189,24 @@ def _git(*args: str) -> tuple[int, str]:
     return p.returncode, (p.stdout or "") + (p.stderr or "")
 
 
+def branch_problem(code: int, head: str) -> str:
+    """Perche' NON si puo' lavorare con questo HEAD, o stringa vuota se si puo'.
+
+    L'HEAD staccato e' il caso pericoloso, e non perche' il pull fallisce: perche'
+    i commit fatti li' non appartengono a nessun ramo. L'agente eseguirebbe, si
+    scriverebbe le risposte, le committerebbe — e sparirebbero al primo checkout,
+    senza che nessuno veda un errore. Meglio non fare niente e dirlo.
+    """
+    b = (head or "").strip()
+    if code != 0:
+        return "impossibile leggere il ramo corrente"
+    if not b or b == "HEAD":
+        return ("HEAD STACCATO: i commit fatti qui non appartengono a nessun ramo e "
+                "andrebbero persi. Nessuna richiesta e' stata eseguita. Correggi con: "
+                "git checkout claude/brave-albattani-1b12fv")
+    return ""
+
+
 def _git_hint() -> str:
     """Perche' git puo' fallire QUI e non a mano. Senza questa riga il sintomo e'
     'l'agente non risponde', che manda a cercare nel posto sbagliato."""
@@ -203,6 +221,15 @@ def _git_hint() -> str:
 def main() -> int:
     # 1) prendi le richieste nuove. Senza questo l'agente lavorerebbe su una copia
     # vecchia del repo e non vedrebbe mai nulla.
+    # PRIMA di tutto: si e' su un ramo? Un HEAD staccato fa fallire il pull, ma il
+    # danno vero verrebbe dopo — le risposte committate su nessun ramo spariscono
+    # al primo checkout, e nel log si sarebbe visto solo un errore di pull.
+    code, head = _git("rev-parse", "--abbrev-ref", "HEAD")
+    problema = branch_problem(code, head)
+    if problema:
+        print(f"[ops] {problema}")
+        return 1
+
     code, out = _git("pull", "--rebase", "--autostash")
     if code != 0:
         print(f"[ops] pull fallito: {out.strip()[:200]}{_git_hint()}")
