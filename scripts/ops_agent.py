@@ -56,7 +56,12 @@ SECRET_RE = re.compile(
     r"[A-Za-z0-9_-]*\s*[:=]\s*\S+"
     r"|-----BEGIN [A-Z ]*PRIVATE KEY-----"
     r"|sk-[A-Za-z0-9-]{16,}"
-    r"|ghp_[A-Za-z0-9]{20,}"
+    # i token GitHub hanno prefissi diversi per tipo: ghp_ (classici), github_pat_
+    # (fine-grained), piu' quelli di installazione e di refresh. Coprirne solo uno
+    # lascia passare gli altri, ed e' il tipo di svista che si scopre quando il
+    # token e' gia' uscito.
+    r"|gh[pousr]_[A-Za-z0-9]{20,}"
+    r"|github_pat_[A-Za-z0-9_]{20,}"
     r"|AIza[A-Za-z0-9_-]{20,}"
     r")")
 

@@ -110,6 +110,17 @@ def test_keys_are_redacted():
         assert "[OSCURATO]" in redact(veleno)
 
 
+def test_every_flavour_of_github_token_is_redacted():
+    """I token GitHub hanno prefissi diversi per tipo: classici, fine-grained, di
+    installazione. Coprirne solo uno lascia passare gli altri — ed e' il tipo di
+    svista che si scopre quando il token e' gia' uscito."""
+    for t in ("ghp_AbCdEf0123456789AbCdEf0123456789",
+              "gho_AbCdEf0123456789AbCdEf0123456789",
+              "ghs_AbCdEf0123456789AbCdEf0123456789",
+              "github_pat_11ABCDEFG0123456789_abcdefghijklmnopqrstuvwxyz0123456789"):
+        assert "[OSCURATO]" in redact(f"remote: usando {t} per il push")
+
+
 def test_ordinary_output_survives_redaction():
     """Un oscuramento troppo largo renderebbe le risposte illeggibili, e nessuno
     userebbe piu' il canale."""
