@@ -391,7 +391,10 @@ def persist_params(fb, out: dict, passed: list) -> bool:
 # passaggi accumulati, cioe' settimane di attesa. Tutto il resto e' descrittivo.
 REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         "symbol", "strategy", "last_seen_at", "last_params",
-                        "scale_r_mults", "drift_seen_at"}
+                        "scale_r_mults", "drift_seen_at",
+                        # senza questi due la finestra di giudizio si riaprirebbe da
+                        # capo a ogni alleggerimento, e i verdetti non arriverebbero mai
+                        "window_start", "passed_in_window"}
 
 
 def slim_registry(pairs: dict, validated: list,
@@ -509,6 +512,65 @@ def drifted_from_paper(fb) -> set:
         return set()
 
 
+def judge_window(rec: dict, data_end: float, passed_now: bool,
+                 min_new_data_s: float = NEW_DATA_MIN_S) -> dict:
+    """UN VERDETTO PER FINESTRA, non per run. Modifica `rec` sul posto.
+
+    IL DIFETTO CHE CORREGGE. Due regole giuste prese singolarmente, su orologi
+    incompatibili: un pass conta solo dopo una settimana di dati nuovi, ma il purge
+    scattava dopo due bocciature CONSECUTIVE, contate a ogni run. Col timer ogni tre
+    ore, fra una conferma e la successiva passano 56 run: per sopravvivere una coppia
+    avrebbe dovuto passare il gate ~28 volte in sette giorni, con un tasso misurato
+    dello 0.027%. Nessuna ce la faceva. Il registro non poteva accumulare tre
+    conferme PER COSTRUZIONE — ed e' il motivo per cui in tre settimane le validate
+    sono sempre state zero, e per cui la popolazione a 1 pass si rinnovava
+    completamente ogni pochi giorni invece di crescere.
+
+    LA REGOLA ORA. La finestra e' l'unita' di evidenza:
+      * passa almeno una volta nella finestra -> UNA conferma;
+      * non passa mai in tutta la finestra    -> UN fallimento;
+      * dentro la finestra non succede niente: rivalutare gli stessi dati non e'
+        una prova nuova, ne' a favore ne' contro.
+
+    Il pass onesto non serve piu' come controllo separato: e' la finestra stessa a
+    garantire che due conferme distino una settimana di dati.
+
+    NB il primo avvistamento e' un'eccezione voluta: una coppia che passa appena
+    scoperta prende subito la sua prima conferma, come prima. Farle aspettare una
+    settimana per il PRIMO pass ritarderebbe tutto senza aggiungere evidenza — non
+    c'e' nessuna conferma precedente da cui distanziarsi.
+    """
+    # FAIL-CLOSED: senza data_end non si giudica. Nessun percorso deve poter
+    # incrementare un contatore "gratis" dimenticando un campo.
+    if data_end <= 0:
+        return rec
+    if passed_now:
+        rec["passed_in_window"] = True
+
+    start = float(rec.get("window_start", 0) or 0)
+    if start <= 0:                      # primo avvistamento: si apre la finestra
+        rec["window_start"] = data_end
+        if passed_now:                  # ...e la prima conferma si prende subito
+            rec["pass_count"] = int(rec.get("pass_count", 0) or 0) + 1
+            rec["last_pass_data_end"] = data_end
+            rec["fail_count"] = 0
+            rec["passed_in_window"] = False
+        return rec
+
+    if data_end - start < min_new_data_s:
+        return rec                      # finestra ancora aperta: nessun verdetto
+
+    if rec.get("passed_in_window"):
+        rec["pass_count"] = int(rec.get("pass_count", 0) or 0) + 1
+        rec["last_pass_data_end"] = data_end
+        rec["fail_count"] = 0
+    else:
+        rec["fail_count"] = int(rec.get("fail_count", 0) or 0) + 1
+    rec["window_start"] = data_end      # la finestra successiva parte da qui
+    rec["passed_in_window"] = False
+    return rec
+
+
 def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     """
     Accumula nel tempo: ogni run incrementa il pass_count delle coppie che passano.
@@ -534,18 +596,8 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
             rec["last_seen_at"] = time.time()
             pairs[key] = rec
             continue
+        judge_window(rec, float(e.get("data_end", 0) or 0), key in passed_set)
         if key in passed_set:
-            # PASS ONESTO: incrementa solo se ci sono dati NUOVI dall'ultimo pass.
-            # Senza questa regola MIN_PASSES contava rivalutazioni degli stessi
-            # dati, non conferme indipendenti (il difetto che gonfiava il registro).
-            data_end = float(e.get("data_end", 0) or 0)
-            prev_end = float(rec.get("last_pass_data_end", 0) or 0)
-            # FAIL-CLOSED: senza data_end il pass NON conta (nessun percorso deve
-            # poter incrementare "gratis" dimenticando il campo).
-            if data_end > 0 and (prev_end <= 0 or data_end - prev_end >= NEW_DATA_MIN_S):
-                rec["pass_count"] = rec.get("pass_count", 0) + 1
-                rec["last_pass_data_end"] = data_end
-            rec["fail_count"] = 0                      # ripassata -> azzera i fallimenti
             rec["last_params"] = e["params"]
             if e.get("holdout"):
                 rec["holdout"] = e["holdout"]
@@ -562,9 +614,6 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
             rec["trailing_protected"] = tr.get("protected", 0)
             rec["trailing_neutral"] = tr.get("neutral", 0)
             rec["last_passed_at"] = time.time()
-        else:
-            # PROCESSATA ma NON passata: conta i fallimenti consecutivi (auto-purge)
-            rec["fail_count"] = rec.get("fail_count", 0) + 1
         rec["symbol"] = e["symbol"]
         rec["strategy"] = e["strategy"]
         rec["last_seen_at"] = time.time()

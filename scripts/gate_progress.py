@@ -12,10 +12,12 @@ Questo script la trasforma in un calendario, usando le stesse regole del gate:
     validata) OPPURE per NUMERO ASSOLUTO di coppie validate
     (OPTIMIZER_READY_MIN_PAIRS), con i minimi di sicurezza sempre necessari.
 
-La stima e' un LIMITE INFERIORE, e va letta come tale: assume che ogni coppia
-continui a passare a ogni run. Non succedera' — chi fallisce due run di fila viene
-rimosso e perde tutti i pass accumulati. La data vera sara' piu' in la' di questa,
-mai prima.
+La stima assume che ogni coppia passi ALMENO UNA VOLTA per finestra settimanale.
+E' un'ipotesi realistica da quando il registro giudica per finestra e non per run:
+prima la stessa stima era una finzione, perche' il purge contava i fallimenti a
+ogni run e nessuna coppia sopravviveva abbastanza da arrivare alla conferma
+successiva (vedi judge_window in scripts/optimize.py). Resta un limite inferiore:
+chi non passa per due settimane intere esce comunque dal registro.
 
 Uso (sul VPS):
     .venv/bin/python -m scripts.gate_progress
@@ -132,9 +134,9 @@ def main() -> int:
     giorni = (target - now) / 86400
     print(f"  Al piu' presto il {_when(target)} (fra {giorni:.1f} giorni), quando la "
           f"{READY_MIN_PAIRS}a coppia\n  raggiungerebbe {MIN_PASSES} pass.")
-    print(f"  E' un LIMITE INFERIORE: assume che tutte continuino a passare a ogni run."
-          f"\n  Chi fallisce {PURGE_FAILS} run di fila viene rimosso e perde i pass "
-          f"accumulati, quindi\n  la data vera sara' piu' in la'. Serve anche coprire "
+    print(f"  E' un LIMITE INFERIORE: assume che ognuna passi almeno una volta per"
+          f"\n  finestra settimanale. Chi non passa per {PURGE_FAILS} finestre intere "
+          f"esce dal registro,\n  quindi la data vera puo' essere piu' in la'. Serve anche coprire "
           f">= {MIN_COVERED} coin distinte ({need} coppie\n  su coin diverse bastano).")
     return 0
 
