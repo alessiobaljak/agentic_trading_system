@@ -189,12 +189,23 @@ def _git(*args: str) -> tuple[int, str]:
     return p.returncode, (p.stdout or "") + (p.stderr or "")
 
 
+def _git_hint() -> str:
+    """Perche' git puo' fallire QUI e non a mano. Senza questa riga il sintomo e'
+    'l'agente non risponde', che manda a cercare nel posto sbagliato."""
+    home = os.environ.get("HOME")
+    if not home or home == "/":
+        return (" — HOME non e' impostato in questo servizio, quindi git non trova "
+                "ne' ~/.gitconfig ne' le credenziali. Aggiungi 'Environment=HOME=/root' "
+                "alla unit (o rilancia scripts/install_ops_agent.sh)")
+    return f" (HOME={home})"
+
+
 def main() -> int:
     # 1) prendi le richieste nuove. Senza questo l'agente lavorerebbe su una copia
     # vecchia del repo e non vedrebbe mai nulla.
     code, out = _git("pull", "--rebase", "--autostash")
     if code != 0:
-        print(f"[ops] pull fallito: {out.strip()[:200]}")
+        print(f"[ops] pull fallito: {out.strip()[:200]}{_git_hint()}")
 
     todo = pending()
     if not todo:
@@ -231,7 +242,8 @@ def main() -> int:
     if code != 0:
         # non si perde niente: il commit resta locale e il push si ritenta al giro
         # dopo. Va detto, pero': senza push la risposta non arriva a destinazione.
-        print(f"[ops] push fallito, riprovo al prossimo giro: {out.strip()[:200]}")
+        print(f"[ops] push fallito, riprovo al prossimo giro: "
+              f"{out.strip()[:200]}{_git_hint()}")
     return 0
 
 

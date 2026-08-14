@@ -29,6 +29,11 @@ WorkingDirectory=$APP_DIR
 EnvironmentFile=$APP_DIR/.env
 EnvironmentFile=-$APP_DIR/tuning.env
 Environment=PYTHONUNBUFFERED=1
+# HOME NON e' impostato di default nei servizi systemd, e senza di esso git non
+# trova ne' ~/.gitconfig ne' le credenziali: pull e push falliscono in silenzio, e
+# l'agente sembra semplicemente non rispondere. E' il primo posto dove guardare se
+# le risposte non arrivano.
+Environment=HOME=$HOME
 # priorita' bassa: non deve mai rubare CPU al bot, che sorveglia le posizioni
 Nice=10
 ExecStart=$APP_DIR/.venv/bin/python -m scripts.ops_agent
