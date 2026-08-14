@@ -189,6 +189,22 @@ def _git(*args: str) -> tuple[int, str]:
     return p.returncode, (p.stdout or "") + (p.stderr or "")
 
 
+def rebase_in_progress(git_dir: str) -> bool:
+    """True se c'e' un rebase interrotto a meta'.
+
+    E' successo davvero: `pull --rebase --autostash` ha trovato un conflitto
+    riapplicando lo stash, si e' fermato lasciando l'HEAD staccato e la cartella
+    `rebase-merge` sul disco. Da quel momento OGNI giro successivo falliva con "there
+    is already a rebase-merge directory" — un blocco permanente che l'agente si era
+    procurato da solo e da cui non poteva uscire senza una mano umana.
+
+    Un processo automatico non deve poter arrivare in uno stato da cui non sa
+    uscire: se lo trova, lo abbandona e riparte.
+    """
+    return any(os.path.isdir(os.path.join(git_dir, d))
+               for d in ("rebase-merge", "rebase-apply"))
+
+
 def branch_problem(code: int, head: str) -> str:
     """Perche' NON si puo' lavorare con questo HEAD, o stringa vuota se si puo'.
 
@@ -224,15 +240,30 @@ def main() -> int:
     # PRIMA di tutto: si e' su un ramo? Un HEAD staccato fa fallire il pull, ma il
     # danno vero verrebbe dopo — le risposte committate su nessun ramo spariscono
     # al primo checkout, e nel log si sarebbe visto solo un errore di pull.
+    # Un rebase lasciato a meta' blocca ogni operazione successiva, per sempre.
+    # Si abbandona: `--quit` scarta lo stato del rebase e LASCIA l'HEAD dov'e',
+    # che e' esattamente cio' che serve qui (le risposte gia' committate restano).
+    if rebase_in_progress(os.path.join(APP_DIR, ".git")):
+        print("[ops] trovato un rebase interrotto: lo abbandono per non restare "
+              "bloccato a ogni giro")
+        _git("rebase", "--quit")
+
     code, head = _git("rev-parse", "--abbrev-ref", "HEAD")
     problema = branch_problem(code, head)
     if problema:
         print(f"[ops] {problema}")
         return 1
+    branch = head.strip()
 
-    code, out = _git("pull", "--rebase", "--autostash")
+    # NIENTE rebase automatico. Era la fonte del blocco: un conflitto durante il
+    # riapplico dello stash lascia il repo a meta' e nessuno la' fuori puo'
+    # risolverlo. Un avanzamento veloce o niente — se non e' possibile si prosegue
+    # comunque, perche' i commit locali (le risposte) vanno spinti lo stesso.
+    _git("fetch", "origin", branch)
+    code, out = _git("merge", "--ff-only", f"origin/{branch}")
     if code != 0:
-        print(f"[ops] pull fallito: {out.strip()[:200]}{_git_hint()}")
+        print(f"[ops] niente avanzamento veloce ({out.strip()[:120]}): "
+              f"proseguo con lo stato locale{_git_hint()}")
 
     todo = pending()
     if not todo:

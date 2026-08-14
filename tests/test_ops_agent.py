@@ -189,3 +189,31 @@ def test_a_normal_branch_is_no_problem():
     from scripts.ops_agent import branch_problem
     assert branch_problem(0, "claude/brave-albattani-1b12fv\n") == ""
     assert branch_problem(0, "main") == ""
+
+
+def test_an_interrupted_rebase_is_detected(tmp_path):
+    """E' successo davvero: `pull --rebase --autostash` ha trovato un conflitto, si
+    e' fermato, e da quel momento OGNI giro falliva con 'there is already a
+    rebase-merge directory'. Un blocco permanente che l'agente si era procurato da
+    solo e da cui non poteva uscire. Un processo automatico non deve poter arrivare
+    in uno stato da cui non sa uscire."""
+    from scripts.ops_agent import rebase_in_progress
+    git = tmp_path / ".git"
+    git.mkdir()
+    assert rebase_in_progress(str(git)) is False
+    (git / "rebase-merge").mkdir()
+    assert rebase_in_progress(str(git)) is True
+
+
+def test_the_other_rebase_flavour_is_detected_too(tmp_path):
+    """`git rebase --apply` usa un'altra cartella: cercarne una sola lascerebbe
+    scoperta meta' dei casi."""
+    from scripts.ops_agent import rebase_in_progress
+    git = tmp_path / ".git"
+    (git / "rebase-apply").mkdir(parents=True)
+    assert rebase_in_progress(str(git)) is True
+
+
+def test_a_missing_git_dir_is_not_a_rebase(tmp_path):
+    from scripts.ops_agent import rebase_in_progress
+    assert rebase_in_progress(str(tmp_path / "inesistente")) is False
