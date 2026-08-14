@@ -241,3 +241,45 @@ def test_it_does_not_touch_the_gate_verdict():
     import inspect
     from backtesting.engine import gate_verdict
     assert "t_stat" not in inspect.getsource(gate_verdict)
+
+
+# =========================================================================== #
+# LA SOGLIA DEL t-STAT DIPENDE DA QUANTI TEST SI FANNO                        #
+# =========================================================================== #
+# Il 2 canonico vale per UN esperimento. Qui se ne fanno oltre ventimila per run:
+# a t=2 ci si aspettano CENTINAIA di candidate che passano per puro caso. Leggere
+# "8 su 14 superano t=2" come prova che il gate boccia edge veri sarebbe scambiare
+# la lotteria per un edge — l'errore che tutto il sistema esiste per non fare.
+
+def test_more_tests_demand_a_higher_bar():
+    from scripts.gate_autopsy import required_t
+    assert required_t(22_500) > required_t(1_000) > required_t(20)
+
+
+def test_the_bar_at_our_scale_is_about_four_not_two():
+    """Con ~22mila valutazioni per run la soglia onesta e' vicina a 4."""
+    from scripts.gate_autopsy import required_t
+    assert 3.8 < required_t(22_500) < 4.2
+
+
+def test_a_stricter_budget_raises_the_bar():
+    from scripts.gate_autopsy import required_t
+    assert required_t(22_500, budget=0.1) > required_t(22_500, budget=1.0)
+
+
+def test_the_bar_lets_through_about_one_lucky_candidate():
+    """E' la definizione stessa della soglia: si sceglie il valore che, per puro
+    caso, ne lascerebbe passare al massimo una."""
+    from scripts.gate_autopsy import expected_by_chance, required_t
+    n = 22_500
+    assert expected_by_chance(required_t(n), n) == pytest.approx(1.0, rel=0.05)
+
+
+def test_the_canonical_two_would_let_through_hundreds():
+    from scripts.gate_autopsy import expected_by_chance
+    assert expected_by_chance(2.0, 22_500) > 300
+
+
+def test_a_single_test_falls_back_to_something_sane():
+    from scripts.gate_autopsy import required_t
+    assert required_t(0) == 2.0 and required_t(1) == 2.0

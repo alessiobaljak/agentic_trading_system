@@ -46,6 +46,31 @@ MEANING = {
 }
 
 
+def required_t(evaluated: int, budget: float = 1.0) -> float:
+    """Il t-stat che serve DAVVERO, corretto per quanti test si fanno.
+
+    Il 2 canonico vale per UN esperimento. Qui se ne fanno oltre ventimila per run,
+    e a t=2 ci si aspettano centinaia di candidate che passano per puro caso: usarlo
+    come prova significherebbe scambiare la lotteria per un edge — esattamente
+    l'errore che tutto il resto del sistema esiste per non fare.
+
+    Si chiede quindi il valore che lascia passare al massimo `budget` candidate
+    fortunate per run. Stesso ragionamento del budget di falsi positivi del
+    supervisore, applicato a una singola statistica invece che al tasso di passaggio.
+    """
+    if evaluated <= 1 or budget <= 0:
+        return 2.0
+    from statistics import NormalDist
+    p = min(0.5, budget / evaluated)
+    return NormalDist().inv_cdf(1.0 - p)
+
+
+def expected_by_chance(t: float, evaluated: int) -> float:
+    """Quante candidate raggiungerebbero quel t per puro caso, con questi test."""
+    from statistics import NormalDist
+    return max(0.0, (1.0 - NormalDist().cdf(t)) * max(0, evaluated))
+
+
 def _show(rep: dict, title: str, near_n: int) -> None:
     if not rep:
         print(f"\n=== {title}: nessuna autopsia registrata ===")
@@ -99,11 +124,16 @@ def _show(rep: dict, title: str, near_n: int) -> None:
     stuck = [n for n in near if n.get("binding") == "pf_ex_top"
              and n.get("t_stat") is not None]
     if stuck:
-        solid = [n for n in stuck if float(n["t_stat"]) >= 2.0]
-        print(f"\n  FERMATE SOLO DA pf_ex_top: {len(stuck)}, di cui {len(solid)} con "
-              f"t >= 2\n  (t alto = il rendimento medio si distingue dallo zero "
-              f"nonostante la concentrazione:\n   sono i casi in cui pf_ex_top "
-              f"potrebbe star bocciando un edge vero invece della fortuna)")
+        req = required_t(ev)
+        solid = [n for n in stuck if float(n["t_stat"]) >= req]
+        best = max(float(n["t_stat"]) for n in stuck)
+        print(f"\n  FERMATE SOLO DA pf_ex_top: {len(stuck)} · miglior t = {best:.2f} "
+              f"· ne servirebbe {req:.2f} · le superano in {len(solid)}")
+        print(f"  La soglia NON e' il canonico 2: con {ev} test per run, a t=2 ci si "
+              f"aspettano\n  ~{expected_by_chance(2.0, ev):.0f} candidate per puro caso. "
+              f"{req:.2f} e' il valore che ne lascia\n  passare al massimo una. Sotto quel "
+              f"livello 'pf_ex_top boccia un edge vero' non e'\n  una conclusione che i "
+              f"dati sostengono — e' la stessa lotteria vista da un'altra\n  angolazione.")
 
 
 def main() -> int:
