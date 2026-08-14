@@ -36,3 +36,8 @@ node_modules/
 # OS
 .DS_Store
 .cache/
+
+# La lista bianca dell'agente ops vive SULLA MACCHINA, non nel repo: se fosse
+# versionata, chiunque possa committare potrebbe ampliarla e il controllo su cosa
+# viene eseguito sarebbe finto. Vedi ops/README.md.
+ops/allowlist

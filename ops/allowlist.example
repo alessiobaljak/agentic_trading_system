@@ -1,0 +1,42 @@
+# LISTA BIANCA DELL'AGENTE OPS — copiala in `ops/allowlist` (senza .example).
+#
+# Questo file NON e' versionato, ed e' il punto in cui sta tutto il controllo:
+# l'agente esegue SOLO cio' che compare qui. Una richiesta puo' nominare una voce,
+# mai comporre un comando. Se fosse nel repo, chiunque possa committare potrebbe
+# ampliarla — e la lista bianca non sarebbe piu' una garanzia.
+#
+# Formato:   chiave: comando            (una riga, niente shell, niente pipe)
+#            chiave: comando +args      se la richiesta puo' aggiungere argomenti
+#
+# Regola pratica: aggiungi una voce solo se sei disposto a vederla eseguita
+# automaticamente, di notte, senza che tu la stia guardando.
+
+# ---- diagnosi (sola lettura) ----------------------------------------------
+autopsy:      .venv/bin/python -m scripts.gate_autopsy
+gate:         .venv/bin/python -m scripts.gate_progress
+supervisor:   .venv/bin/python -m scripts.supervisor --dry-run
+stato:        .venv/bin/python -m scripts.state_snapshot --no-write
+shadow:       .venv/bin/python -m scripts.shadow_report
+trades:       .venv/bin/python -m scripts.trade_stats
+connettivita: .venv/bin/python -m scripts.connectivity_check
+test:         .venv/bin/python -m pytest -q
+
+# ---- stato del sistema -----------------------------------------------------
+servizi:      systemctl list-timers --no-pager trading-*
+log-bot:      journalctl -u trading-bot.service -n 80 --no-pager
+log-gate:     journalctl -u trading-optimizer.service -n 80 --no-pager
+log-super:    journalctl -u trading-supervisor.service -n 40 --no-pager
+memoria:      free -g
+disco:        df -h /
+
+# ---- azioni operative (cambiano qualcosa, ma nulla di distruttivo) ---------
+aggiorna:     git pull
+riavvia-bot:  systemctl restart trading-bot.service
+lancia-gate:  systemctl start --no-block trading-optimizer.service
+lancia-super: .venv/bin/python -m scripts.supervisor
+
+# ---- DISTRUTTIVE: lasciate commentate di proposito -------------------------
+# fast_gate AZZERA il registro validato: i passaggi accumulati (settimane di
+# attesa) spariscono. Abilitala solo quando vuoi davvero una rivalidazione da capo.
+# fast-gate:  bash scripts/fast_gate.sh --yes
+# reset-paper: .venv/bin/python -m scripts.reset_paper --yes
