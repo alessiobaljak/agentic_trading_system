@@ -221,16 +221,13 @@ def main() -> int:
               f"{len(summary_passed)} passate. Il merge aggiornera' il registro.")
         return 0
 
-    # entries/passed CODIFICATI come stringa JSON: Firestore indicizza UN campo
-    # invece di ogni sottocampo di ogni coppia (200 coin x 9 strat sfondano il
-    # limite di 40k voci d'indice -> "INDEX_ENTRIES_COUNT_LIMIT_EXCEEDED").
-    fb.set_doc("strategy_params", "current", {
-        "updated_at": time.time(),
-        "entries": encode_pairs(out),
-        "passed": encode_pairs(summary_passed),
-    })
-
+    # L'AUTOPSIA PRIMA DEI PARAMETRI, e non e' un dettaglio d'ordine: la scrittura
+    # dei parametri e' quella che puo' fallire per dimensione (vedi persist_params),
+    # e quando e' fallita si e' portata via la diagnosi e l'aggiornamento del
+    # registro — quattro ore di calcolo buttate perche' l'ULTIMO passo non e' andato.
+    # Prima si mette al sicuro cio' che costa di piu' ricreare.
     publish_autopsy(fb, out)
+    persist_params(fb, out, summary_passed)
 
     # --- registro di validazione cumulativo (robustezza nel tempo) ---
     reg = update_registry(fb, out, summary_passed)
@@ -323,6 +320,108 @@ NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "168")) * 3600
 # auto-purge: una coppia viene RIMOSSA dal registro dopo N run consecutivi in cui,
 # pur essendo processata, non passa piu' il gate (costi/edge non piu' battuti).
 PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))
+
+
+# Campi che qualcuno LEGGE davvero da strategy_params/current: i parametri (il bot),
+# e le metriche mostrate per le coppie passate (snapshot e dashboard). Tutto il resto
+# vive nel registro o serve solo dentro il processo che lo calcola.
+PARAM_DOC_FIELDS = {
+    "symbol", "strategy", "params", "passed",
+    "oos_pf", "oos_pnl_pct", "oos_trades", "oos_win_rate",
+    "oos_max_dd", "holdout", "regime_pf", "data_end", "trailing", "scale_r_mults",
+}
+# Firestore rifiuta un documento oltre 1 MiB. Si sta sotto con margine, perche' il
+# limite vero e' su TUTTO il documento, non sul solo campo.
+PARAM_DOC_MAX_BYTES = int(os.getenv("PARAM_DOC_MAX_BYTES", "900000"))
+
+
+def slim_entries(out: dict, passed: list, max_bytes: int = PARAM_DOC_MAX_BYTES) -> dict:
+    """Le entries da PERSISTERE, ridotte a cio' che qualcuno legge davvero.
+
+    Il documento `strategy_params/current` contiene una voce per ogni coppia
+    valutata: con duecento coin e otto strategie sono ~1500 voci, ed era gia' a
+    ridosso del limite di 1 MiB di Firestore. Aggiungere cinque campi diagnostici
+    per voce (l'autopsia) lo ha sfondato — e il crash e' arrivato DOPO quattro ore
+    di calcolo, portandosi via diagnosi e aggiornamento del registro.
+
+    Da qui due difese. La prima: si persiste solo cio' che ha un lettore. I campi
+    dell'autopsia servono a costruire l'aggregato, che viene calcolato nello stesso
+    processo e salvato altrove; tenerli anche qui era spreco puro.
+
+    La seconda: se anche cosi' si sfora, si tengono le coppie PASSATE (le uniche di
+    cui il bot legge i parametri) e si dichiara quante se ne sono lasciate indietro.
+    Un documento troncato in silenzio si leggerebbe come "il registro e' questo".
+    """
+    slim = {k: {f: v for f, v in e.items() if f in PARAM_DOC_FIELDS}
+            for k, e in out.items()}
+    if len(encode_pairs(slim).encode("utf-8")) <= max_bytes:
+        return slim
+    keep = {k: slim[k] for k in passed if k in slim}
+    print(f"[optimize] documento parametri oltre {max_bytes} byte: persistite le "
+          f"{len(keep)} coppie PASSATE su {len(slim)} valutate (le altre non hanno "
+          f"lettori: la diagnosi sta in gate_autopsy, la storia nel registro)")
+    return keep
+
+
+def persist_params(fb, out: dict, passed: list) -> bool:
+    """Salva i parametri per il bot. NON deve poter far fallire il run.
+
+    entries/passed sono CODIFICATI come stringa JSON: Firestore indicizza UN campo
+    invece di ogni sottocampo di ogni coppia (200 coin x 9 strategie sfondano il
+    limite di 40k voci d'indice -> "INDEX_ENTRIES_COUNT_LIMIT_EXCEEDED").
+
+    Se la scrittura fallisce comunque, si logga e si prosegue: il bot continuera' coi
+    parametri precedenti — degradato, non fermo — mentre far cadere il processo qui
+    significherebbe buttare ore di validazione gia' fatta.
+    """
+    try:
+        fb.set_doc("strategy_params", "current", {
+            "updated_at": time.time(),
+            "entries": encode_pairs(slim_entries(out, passed)),
+            "passed": encode_pairs(passed),
+        })
+        return True
+    except Exception as exc:  # noqa: BLE001
+        print(f"[optimize] parametri NON salvati ({str(exc)[:160]}). Il registro e "
+              f"l'autopsia sono al sicuro; il bot resta sui parametri precedenti.")
+        return False
+
+
+# Cio' che serve alla CONTABILITA' del registro: senza questi campi si perdono i
+# passaggi accumulati, cioe' settimane di attesa. Tutto il resto e' descrittivo.
+REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
+                        "symbol", "strategy", "last_seen_at", "last_params",
+                        "scale_r_mults", "drift_seen_at"}
+
+
+def slim_registry(pairs: dict, validated: list,
+                  max_bytes: int = PARAM_DOC_MAX_BYTES) -> str:
+    """Il registro codificato, alleggerito SOLO se necessario.
+
+    Il registro cresce con le coppie tracciate (1200 e oltre) e ognuna porta con se'
+    holdout, PF per regime e metriche descrittive. E' lo stesso limite di 1 MiB che
+    ha fatto cadere il documento dei parametri, e qui costerebbe molto di piu': in
+    quel documento ci sono i PASSAGGI ACCUMULATI, cioe' settimane di attesa.
+
+    Quando si sfora si tolgono i campi descrittivi alle coppie NON validate — non a
+    quelle validate, che il bot e la dashboard leggono — e la contabilita' resta
+    intatta per tutte. Se non basta ancora, meglio provarci comunque e lasciare che
+    sia Firestore a rifiutare: troncare il registro significherebbe cancellare
+    passaggi veri, e quello non e' un compromesso accettabile.
+    """
+    enc = encode_pairs(pairs)
+    if len(enc.encode("utf-8")) <= max_bytes:
+        return enc
+    keep = set(validated)
+    slim = {k: (r if k in keep else
+                {f: v for f, v in r.items() if f in REGISTRY_CORE_FIELDS})
+            for k, r in pairs.items()}
+    enc2 = encode_pairs(slim)
+    print(f"[registry] oltre {max_bytes} byte: tolti i campi descrittivi alle "
+          f"{len(pairs) - len(keep)} coppie non validate "
+          f"({len(enc.encode('utf-8'))} -> {len(enc2.encode('utf-8'))} byte). "
+          f"I passaggi accumulati restano intatti.")
+    return enc2
 
 
 def autopsy(out: dict, top_near: int = 40) -> dict:
@@ -511,7 +610,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
 
     registry = {
         "updated_at": time.time(),
-        "pairs": encode_pairs(pairs),
+        "pairs": slim_registry(pairs, validated),
         "validated": validated,
         "coins_covered": len(covered),
         "coins": covered,
