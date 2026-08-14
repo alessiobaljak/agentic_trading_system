@@ -231,6 +231,10 @@ def _git_hint() -> str:
         return (" — HOME non e' impostato in questo servizio, quindi git non trova "
                 "ne' ~/.gitconfig ne' le credenziali. Aggiungi 'Environment=HOME=/root' "
                 "alla unit (o rilancia scripts/install_ops_agent.sh)")
+    if not os.path.exists(os.path.join(home, ".git-credentials")):
+        return (f" — non ci sono credenziali salvate in {home}/.git-credentials, e un "
+                f"servizio non puo' rispondere a una richiesta di password. Salvale "
+                f"una volta con: git config credential.helper store && git push")
     return f" (HOME={home})"
 
 

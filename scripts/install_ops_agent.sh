@@ -45,6 +45,10 @@ Environment=PYTHONUNBUFFERED=1
 # l'agente sembra semplicemente non rispondere. E' il primo posto dove guardare se
 # le risposte non arrivano.
 Environment=HOME=$HOME
+# Senza credenziali salvate, git si mette ad ASPETTARE username e password. Un
+# servizio non ha nessuno che possa rispondere: resterebbe appeso per sempre,
+# bloccando anche tutti i giri successivi. Meglio fallire subito e dirlo.
+Environment=GIT_TERMINAL_PROMPT=0
 # priorita' bassa: non deve mai rubare CPU al bot, che sorveglia le posizioni
 Nice=10
 ExecStart=$APP_DIR/.venv/bin/python -m scripts.ops_agent
