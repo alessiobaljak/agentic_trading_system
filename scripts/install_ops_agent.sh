@@ -15,6 +15,17 @@ if [ ! -f ops/allowlist ]; then
   exit 1
 fi
 
+# IDENTITA' GIT. Senza, qualunque operazione che CREA un commit fallisce con
+# "Committer identity unknown" — e con pull.rebase attivo un pull fallito a meta'
+# lascia l'HEAD staccato, che e' come e' nato tutto il pasticcio. L'agente passa
+# gia' un'identita' esplicita per i propri commit, ma i pull manuali no.
+# Locale al repo, non --global: non si tocca la configurazione della macchina.
+if ! git config user.email >/dev/null 2>&1; then
+  git config user.email "trading-agent@localhost"
+  git config user.name "Trading Agent"
+  echo "[install] identita' git impostata (locale al repo): $(git config user.name)"
+fi
+
 echo "[install] lista bianca attiva ($(grep -cE '^[^#]*:' ops/allowlist) voci):"
 grep -E '^[^#]*:' ops/allowlist | sed 's/^/           /'
 
