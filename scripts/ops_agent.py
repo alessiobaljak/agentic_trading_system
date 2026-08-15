@@ -228,6 +228,33 @@ def branch_problem(code: int, head: str) -> str:
     return ""
 
 
+def ahead_count(out: str) -> int:
+    """Quanti commit locali non sono ancora su GitHub. Serve a decidere se ritentare
+    una spedizione fallita: senza questo conteggio, l'unico modo di accorgersi che
+    una risposta e' rimasta ferma sarebbe non vederla arrivare."""
+    try:
+        return int((out or "0").strip().split()[0])
+    except (ValueError, IndexError):
+        return 0
+
+
+def push_pending(branch: str) -> bool:
+    """Spinge cio' che e' rimasto indietro. Chiamata SEMPRE, anche quando non c'e'
+    niente da eseguire: un push fallito ieri non ha nessun altro momento per
+    riuscire."""
+    code, out = _git("rev-list", "--count", f"origin/{branch}..HEAD")
+    n = ahead_count(out) if code == 0 else 0
+    if n <= 0:
+        return True
+    code, out = _git("push")
+    if code != 0:
+        print(f"[ops] {n} risposte ancora da spedire, push fallito: "
+              f"{out.strip()[:160]}{_git_hint()}")
+        return False
+    print(f"[ops] spedite {n} risposte rimaste indietro")
+    return True
+
+
 def _git_hint() -> str:
     """Perche' git puo' fallire QUI e non a mano. Senza questa riga il sintomo e'
     'l'agente non risponde', che manda a cercare nel posto sbagliato."""
@@ -276,6 +303,12 @@ def main() -> int:
 
     todo = pending()
     if not todo:
+        # NIENTE DA FARE non vuol dire niente da SPEDIRE. Se un push era fallito, la
+        # risposta e' gia' scritta e committata: al giro dopo `pending()` la vede
+        # come evasa e prima si usciva subito, senza mai ritentare. La risposta
+        # restava per sempre sulla macchina — e chi l'aspettava non vedeva ne' un
+        # risultato ne' un errore. Il tentativo di spedizione va fatto SEMPRE.
+        push_pending(branch)
         return 0
     allow = {}
     if os.path.exists(ALLOWLIST):
@@ -305,12 +338,9 @@ def main() -> int:
     _git("add", "ops/results")
     _git("-c", "user.email=ops@localhost", "-c", "user.name=ops-agent",
          "commit", "-m", f"ops: {len(todo)} risposte [skip ci]")
-    code, out = _git("push")
-    if code != 0:
-        # non si perde niente: il commit resta locale e il push si ritenta al giro
-        # dopo. Va detto, pero': senza push la risposta non arriva a destinazione.
-        print(f"[ops] push fallito, riprovo al prossimo giro: "
-              f"{out.strip()[:200]}{_git_hint()}")
+    # il ritentativo vive in push_pending, che gira anche nei giri senza lavoro:
+    # cosi' una spedizione fallita non resta ferma per sempre.
+    push_pending(branch)
     return 0
 
 

@@ -228,3 +228,18 @@ def test_the_other_rebase_flavour_is_detected_too(tmp_path):
 def test_a_missing_git_dir_is_not_a_rebase(tmp_path):
     from scripts.ops_agent import rebase_in_progress
     assert rebase_in_progress(str(tmp_path / "inesistente")) is False
+
+
+# ---- una risposta scritta ma non spedita non deve restare ferma ---------- #
+def test_the_ahead_count_is_read_from_git():
+    from scripts.ops_agent import ahead_count
+    assert ahead_count("3\n") == 3
+    assert ahead_count("0") == 0
+
+
+def test_an_unreadable_count_means_nothing_to_send():
+    """Meglio non spedire per prudenza che spedire su un conteggio inventato."""
+    from scripts.ops_agent import ahead_count
+    assert ahead_count("") == 0
+    assert ahead_count("boh") == 0
+    assert ahead_count(None) == 0
