@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-15 01:49 UTC_
+_Generato: 2026-08-15 03:05 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-15 01:49 UTC
+- ultimo heartbeat: 2026-08-15 03:04 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-15 01:48 UTC)
+- esito: **⚪ FLAT** (2026-08-15 03:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -32,13 +32,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| trades | 31 | 2.1% |
-| regime | 47 | 3.2% |
-| pf_ex_top | 11 | 0.7% |
-| recovery | 123 | 8.3% |
-| consistency | 23 | 1.5% |
 | total_return | 1250 | 84.0% |
 | holdout | 3 | 0.2% |
+| pf_ex_top | 11 | 0.7% |
+| regime | 47 | 3.2% |
+| recovery | 123 | 8.3% |
+| trades | 31 | 2.1% |
+| consistency | 23 | 1.5% |
 
 - quasi-passaggi (un solo criterio, di poco): **4** — sono i semi delle mutazioni del run successivo
 
@@ -46,30 +46,30 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 1733 | 7.0% |
-| trades | 1168 | 4.7% |
-| win_rate | 13 | 0.1% |
-| pf_ex_top | 217 | 0.9% |
-| recovery | 1327 | 5.4% |
-| consistency | 304 | 1.2% |
 | total_return | 19837 | 80.4% |
 | holdout | 60 | 0.2% |
+| pf_ex_top | 217 | 0.9% |
+| recovery | 1327 | 5.4% |
+| regime | 1733 | 7.0% |
+| win_rate | 13 | 0.1% |
+| trades | 1168 | 4.7% |
+| consistency | 304 | 1.2% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-08-15 01:03 UTC · coppie validate: **0** · GATE 1 pronto: False
-- tasso di passaggio misurato: **0.092%**
+- ultimo giro: 2026-08-15 03:02 UTC · coppie validate: **0** · GATE 1 pronto: False
+- tasso di passaggio misurato: **0.096%**
 - nessun parametro modificato: il gate gira coi valori di partenza
 
 **Ultime decisioni:**
 
+- `none` — solo 1.6 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
+- `none` — solo 1.5 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
 - `none` — solo 1.5 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
 - `none` — solo 1.5 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
 - `none` — solo 1.4 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
-- `none` — solo 1.4 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
-- `none` — solo 1.3 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
 
 ## Trade chiusi
 _nessun trade chiuso._
