@@ -10,6 +10,13 @@
 #
 # Regola pratica: aggiungi una voce solo se sei disposto a vederla eseguita
 # automaticamente, di notte, senza che tu la stia guardando.
+#
+# DUE COSE DA NON METTERE, imparate a caro prezzo:
+#  * niente `+args` se puoi evitarlo. Gli argomenti vengono appesi in coda al
+#    comando, e `/root/.env` o `--file=/root/.git-credentials` superano tutti i
+#    filtri: e' il chiamante a scegliere COSA il comando andra' a leggere.
+#  * niente `git remote -v` ne' `git config --list`: se il token e' nell'URL del
+#    remoto, uscirebbe in chiaro dentro una risposta committata.
 
 # ---- diagnosi (sola lettura) ----------------------------------------------
 autopsy:      .venv/bin/python -m scripts.gate_autopsy
@@ -21,9 +28,16 @@ trades:       .venv/bin/python -m scripts.trade_stats
 connettivita: .venv/bin/python -m scripts.connectivity_check
 test:         .venv/bin/python -m pytest -q
 
+# ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
+log-ops:      journalctl -u trading-ops.service -n 200 --no-pager
+ops-unit:     systemctl show trading-ops.service -p ActiveState -p SubState -p Result -p ExecMainStatus -p ExecMainStartTimestamp
+git-stato:    git status --short --branch
+git-storia:   git log --oneline -20 --decorate
+attivi:       systemctl is-active trading-bot.service trading-ops.timer trading-optimizer.timer trading-supervisor.timer
+
 # ---- stato del sistema -----------------------------------------------------
 servizi:      systemctl list-timers --no-pager trading-*
-log-bot:      journalctl -u trading-bot.service -n 80 --no-pager
+log-bot:      journalctl -u trading-bot.service -n 120 --no-pager
 log-gate:     journalctl -u trading-optimizer.service -n 80 --no-pager
 log-super:    journalctl -u trading-supervisor.service -n 40 --no-pager
 memoria:      free -g

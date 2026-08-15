@@ -118,7 +118,11 @@ def build_context(fb, state: dict) -> Context:
         budget=float(os.getenv("SUPERVISOR_FALSE_POSITIVE_BUDGET", "1.0")),
         independence=float(os.getenv("SUPERVISOR_CONFIRM_INDEPENDENCE", "0.5")),
         stagnant_after_days=float(os.getenv("SUPERVISOR_STAGNANT_DAYS", "2")),
-        fast_gate_after_days=float(os.getenv("SUPERVISOR_FAST_GATE_DAYS", "5")),
+        # DISARMATO per default: e' l'unica azione irreversibile che il supervisore
+        # puo' decidere da solo, azzera le conferme accumulate e non e' annullabile
+        # da remoto. Si arma con SUPERVISOR_FAST_GATE_DAYS>0 quando c'e' qualcuno
+        # che guarda. Vedi il commento in bot/learning/supervisor.py.
+        fast_gate_after_days=float(os.getenv("SUPERVISOR_FAST_GATE_DAYS", "0")),
         days_since_fast_gate=max(0.0, (now - float(state.get("last_fast_gate", 0) or 0))
                                  / 86400.0) if state.get("last_fast_gate") else 999.0,
         fast_gate_cooldown_days=float(os.getenv("SUPERVISOR_FAST_GATE_COOLDOWN", "7")),

@@ -63,6 +63,10 @@ SECRET_RE = re.compile(
     r"|gh[pousr]_[A-Za-z0-9]{20,}"
     r"|github_pat_[A-Za-z0-9_]{20,}"
     r"|AIza[A-Za-z0-9_-]{20,}"
+    # credenziali dentro un URL (https://utente:token@host): e' la forma in cui un
+    # token compare in `git remote -v` e nei messaggi di errore di git, cioe'
+    # proprio nell'output che questo agente rimanda indietro.
+    r"|://[^\s/:@]+:[^\s/@]+@"
     r")")
 
 
@@ -189,9 +193,28 @@ def pending() -> list:
     return [f for f in reqs if f"{os.path.splitext(f)[0]}.md" not in done]
 
 
+GIT_TIMEOUT_S = float(os.getenv("OPS_GIT_TIMEOUT_S", "120"))
+
+
 def _git(*args: str) -> tuple[int, str]:
-    p = subprocess.run(["git", *args], cwd=APP_DIR, capture_output=True, text=True)
-    return p.returncode, (p.stdout or "") + (p.stderr or "")
+    """Un comando git, SEMPRE con un tetto di tempo.
+
+    Senza `timeout` un `fetch` o un `push` su una connessione che non risponde
+    blocca il processo per sempre. E il servizio e' `Type=oneshot`, per cui systemd
+    NON applica un timeout di avvio di default: la unit resta in `activating`, e il
+    timer `OnUnitActiveSec` non fa ripartire una unit che non si e' mai disattivata.
+    Un solo git appeso spegneva il canale in modo permanente e silenzioso — il
+    guasto peggiore possibile per un agente che deve funzionare senza nessuno.
+    """
+    try:
+        p = subprocess.run(["git", *args], cwd=APP_DIR, capture_output=True,
+                           text=True, timeout=GIT_TIMEOUT_S)
+        return p.returncode, (p.stdout or "") + (p.stderr or "")
+    except subprocess.TimeoutExpired:
+        return 124, (f"git {' '.join(args[:2])} non ha risposto entro "
+                     f"{GIT_TIMEOUT_S:g}s (rete?)")
+    except Exception as exc:  # noqa: BLE001
+        return 127, f"git non eseguibile: {exc}"
 
 
 def rebase_in_progress(git_dir: str) -> bool:
@@ -226,6 +249,59 @@ def branch_problem(code: int, head: str) -> str:
                 "andrebbero persi. Nessuna richiesta e' stata eseguita. Correggi con: "
                 "git checkout claude/brave-albattani-1b12fv")
     return ""
+
+
+def foreign_changes(porcelain: str) -> list:
+    """File modificati che NON appartengono all'agente.
+
+    L'agente possiede solo `ops/`. Qualunque altra modifica locale e' roba che non
+    ha scritto lui — nella pratica `docs/state.md`, che e' tracciato e viene
+    riscritto sia dalla GitHub Action sia da chi lancia state_snapshot a mano. Basta
+    quel file sporco per bloccare l'avanzamento veloce, e da li' in poi il canale
+    non riceve piu' nulla.
+    """
+    out = []
+    for riga in (porcelain or "").splitlines():
+        percorso = riga[3:].strip().split(" -> ")[-1].strip('"')
+        if percorso and not percorso.startswith("ops/"):
+            out.append(percorso)
+    return out
+
+
+def riconcilia(branch: str) -> bool:
+    """USCITA AUTONOMA DALLA DIVERGENZA. Il guasto che ha zittito il canale non era
+    un errore: era l'assenza di una via d'uscita.
+
+    L'avanzamento veloce fallisce per due motivi, e vanno trattati diversamente:
+      * FILE LOCALI SPORCHI che l'agente non ha scritto (tipicamente docs/state.md,
+        generato altrove): si buttano. Non sono suoi e non c'e' niente da salvare.
+      * COMMIT LOCALI suoi (le risposte non ancora spedite): NON si buttano. Si
+        rimettono in fila sopra il remoto con un rebase.
+
+    Il rebase e' proprio cio' che una volta ha incastrato tutto, quindi qui e'
+    diverso: niente autostash (l'abbiamo appena tolto di mezzo pulendo) e, se
+    fallisce, si ABORTA subito. Restare a meta' e' l'unico esito inaccettabile —
+    da li' non si esce senza una persona, e la persona puo' non esserci per giorni.
+    """
+    code, out = _git("status", "--porcelain")
+    estranei = foreign_changes(out) if code == 0 else []
+    if estranei:
+        print(f"[ops] scarto modifiche locali non mie: {', '.join(estranei[:5])}")
+        _git("checkout", "--", *estranei)
+
+    code, out = _git("merge", "--ff-only", f"origin/{branch}")
+    if code == 0:
+        print("[ops] riallineato dopo la pulizia")
+        return True
+
+    code, out = _git("rebase", "--no-autostash", f"origin/{branch}")
+    if code == 0:
+        print("[ops] commit locali rimessi in fila sopra il remoto")
+        return True
+    print(f"[ops] rebase fallito ({out.strip()[:120]}): abortisco per non restare "
+          f"a meta'")
+    _git("rebase", "--abort")
+    return False
 
 
 HEARTBEAT = os.path.join(APP_DIR, "ops", "heartbeat.md")
@@ -344,8 +420,8 @@ def main() -> int:
     _git("fetch", "origin", branch)
     code, out = _git("merge", "--ff-only", f"origin/{branch}")
     if code != 0:
-        print(f"[ops] niente avanzamento veloce ({out.strip()[:120]}): "
-              f"proseguo con lo stato locale{_git_hint()}")
+        print(f"[ops] niente avanzamento veloce ({out.strip()[:120]}){_git_hint()}")
+        riconcilia(branch)
 
     todo = pending()
     # il battito PRIMA di qualunque uscita anticipata: e' proprio nei giri senza

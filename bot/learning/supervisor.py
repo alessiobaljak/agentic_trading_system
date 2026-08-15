@@ -185,7 +185,7 @@ class Context:
     budget: float = 1.0
     independence: float = 0.5
     stagnant_after_days: float = 2.0
-    fast_gate_after_days: float = 5.0
+    fast_gate_after_days: float = 0.0     # 0 = disarmato (vedi decide())
     days_since_fast_gate: float = 999.0
     fast_gate_cooldown_days: float = 7.0
 
@@ -347,7 +347,22 @@ def decide(ctx: Context) -> list[Decision]:
     # 5) MISURARE SUBITO. Un parametro cambiato che aspetta tre settimane per essere
     # giudicato non e' un anello chiuso: e' una scommessa. fast_gate rigioca la
     # storia su tre finestre e restituisce il verdetto in ore.
-    if (ctx.days_stagnant >= ctx.fast_gate_after_days and ctx.validated == 0
+    #
+    # MA E' DISARMATO PER DEFAULT (soglia <= 0), ed e' l'unica azione irreversibile
+    # che questo modulo puo' decidere da solo. Tre ragioni, tutte emerse guardando
+    # cosa succederebbe davvero:
+    #   * AZZERA il registro validato — cioe' proprio le conferme che si stanno
+    #     accumulando, che costano una settimana l'una. Farlo scattare mentre
+    #     maturano distruggerebbe l'unica cosa che stiamo aspettando;
+    #   * il backup che scrive resta SUL DISCO della macchina, fuori da git, e non
+    #     esiste nessuno script che lo ripristini: da remoto non si torna indietro;
+    #   * non si vede. Gira in tmux, ferma il timer dell'optimizer mentre lavora, e
+    #     se si interrompe lascia il registro a meta' senza che nessuno lo sappia.
+    # Un'azione che non si puo' osservare ne' annullare da lontano non deve partire
+    # da sola. Si arma esplicitamente (SUPERVISOR_FAST_GATE_DAYS > 0) quando c'e'
+    # qualcuno che guarda.
+    if (ctx.fast_gate_after_days > 0
+            and ctx.days_stagnant >= ctx.fast_gate_after_days and ctx.validated == 0
             and ctx.days_since_fast_gate >= ctx.fast_gate_cooldown_days):
         out.append(Decision(
             "fast_gate",

@@ -166,7 +166,8 @@ def test_every_decision_carries_the_numbers_that_justify_it():
 def test_a_change_is_measured_in_hours_not_in_weeks():
     """Un parametro cambiato che aspetta tre settimane per essere giudicato non e'
     un anello chiuso, e' una scommessa."""
-    d = decide(_ctx(days_stagnant=10.0, days_since_fast_gate=999.0))
+    d = decide(_ctx(days_stagnant=10.0, days_since_fast_gate=999.0,
+                    fast_gate_after_days=5.0))     # armato esplicitamente
     assert any(x.kind == "fast_gate" for x in d)
 
 
@@ -174,12 +175,12 @@ def test_fast_gate_respects_its_cooldown():
     """E' distruttivo (azzera il registro): ripeterlo ogni giorno cancellerebbe di
     continuo i pass veri accumulati nel frattempo."""
     d = decide(_ctx(days_stagnant=10.0, days_since_fast_gate=1.0,
-                    fast_gate_cooldown_days=7.0))
+                    fast_gate_after_days=5.0, fast_gate_cooldown_days=7.0))
     assert not any(x.kind == "fast_gate" for x in d)
 
 
 def test_fast_gate_is_not_run_when_something_has_been_validated():
-    d = decide(_ctx(validated=3, days_stagnant=10.0))
+    d = decide(_ctx(validated=3, days_stagnant=10.0, fast_gate_after_days=5.0))
     assert not any(x.kind == "fast_gate" for x in d)
 
 
@@ -341,3 +342,29 @@ def test_near_misses_on_the_holdout_trigger_tightening():
     d = decide(_ctx(binding={"total_return": 1248},
                     near={"holdout": [0.0, 0.0, 0.0, 0.0]}))
     assert d[0].kind == "tighten" and "sovradattamento" in d[0].reason
+
+
+# ---- fast_gate: disarmato per default ------------------------------------ #
+def test_fast_gate_is_disarmed_by_default():
+    """E' l'unica azione IRREVERSIBILE che il supervisore puo' decidere da solo:
+    azzera il registro, cioe' le conferme che costano una settimana l'una, il
+    backup resta sul disco della macchina fuori da git e non esiste nessuno script
+    che lo ripristini. Un'azione che non si puo' ne' osservare ne' annullare da
+    lontano non deve partire da sola."""
+    d = decide(_ctx(days_stagnant=30.0, validated=0, days_since_fast_gate=999.0,
+                    fast_gate_after_days=0.0))
+    assert not any(x.kind == "fast_gate" for x in d)
+
+
+def test_fast_gate_still_fires_when_explicitly_armed():
+    """Disarmato non vuol dire rimosso: chi guarda puo' armarlo."""
+    d = decide(_ctx(days_stagnant=30.0, validated=0, days_since_fast_gate=999.0,
+                    fast_gate_after_days=5.0))
+    assert any(x.kind == "fast_gate" for x in d)
+
+
+def test_the_dataclass_default_is_disarmed_too():
+    """Il default del codice e quello dell'env devono dire la stessa cosa: se
+    divergessero, il comportamento dipenderebbe da quale percorso costruisce il
+    contesto."""
+    assert Context().fast_gate_after_days == 0.0
