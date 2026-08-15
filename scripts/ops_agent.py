@@ -228,6 +228,39 @@ def branch_problem(code: int, head: str) -> str:
     return ""
 
 
+HEARTBEAT = os.path.join(APP_DIR, "ops", "heartbeat.md")
+HEARTBEAT_EVERY_S = float(os.getenv("OPS_HEARTBEAT_MINUTES", "60")) * 60
+
+
+def heartbeat_due(last_ts: float, now: float,
+                  every_s: float = HEARTBEAT_EVERY_S) -> bool:
+    """Se e' ora di lasciare un segno di vita.
+
+    Senza battito il silenzio e' AMBIGUO: "l'agente e' morto" e "non c'era niente da
+    fare" si leggono allo stesso modo da fuori, e per distinguerli servirebbe
+    proprio la macchina a cui non si ha accesso. Un file aggiornato a intervalli
+    regolari trasforma l'assenza di notizie in un'informazione: se il battito si
+    ferma, il canale e' caduto — e si sa QUANDO.
+
+    Non a ogni giro: sarebbero millequattrocento commit al giorno. Un'ora basta a
+    distinguere "morto" da "in attesa" senza sommergere la storia del repo.
+    """
+    return (now - max(0.0, last_ts)) >= every_s
+
+
+def write_heartbeat(branch: str, pendenti: int, now: float) -> None:
+    """Un file piccolo con l'ora e lo stato. Non serve a chi guarda la macchina —
+    serve a chi puo' vedere SOLO git."""
+    from datetime import datetime, timezone
+    quando = datetime.fromtimestamp(now, timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    with open(HEARTBEAT, "w", encoding="utf-8") as f:
+        f.write(f"# agente ops: vivo\n\n_ultimo giro: {quando}_\n\n"
+                f"- ramo: `{branch}`\n"
+                f"- richieste in attesa: {pendenti}\n\n"
+                f"Se questa data smette di avanzare, il canale e' caduto: da fuori\n"
+                f"il silenzio non si distinguerebbe da 'niente da fare'.\n")
+
+
 def ahead_count(out: str) -> int:
     """Quanti commit locali non sono ancora su GitHub. Serve a decidere se ritentare
     una spedizione fallita: senza questo conteggio, l'unico modo di accorgersi che
@@ -239,9 +272,22 @@ def ahead_count(out: str) -> int:
 
 
 def push_pending(branch: str) -> bool:
-    """Spinge cio' che e' rimasto indietro. Chiamata SEMPRE, anche quando non c'e'
-    niente da eseguire: un push fallito ieri non ha nessun altro momento per
-    riuscire."""
+    """Spedisce TUTTO cio' che e' rimasto indietro. Chiamata SEMPRE, anche nei giri
+    senza lavoro: un push fallito ieri non ha nessun altro momento per riuscire.
+
+    Copre entrambi i modi in cui una risposta puo' restare ferma sulla macchina:
+    scritta ma non committata (il processo e' stato ucciso a meta' — succede se
+    systemd chiude il servizio prima della fine) e committata ma non spedita (il
+    push e' fallito). Prima ne copriva zero: `pending()` vedeva la richiesta come
+    evasa e si usciva subito, e quella risposta non sarebbe mai piu' partita.
+    """
+    # risposte scritte ma mai committate (e il battito, se aggiornato)
+    code, out = _git("status", "--porcelain", "--", "ops/results", "ops/heartbeat.md")
+    if code == 0 and out.strip():
+        _git("add", "ops/results", "ops/heartbeat.md")
+        _git("-c", "user.email=ops@localhost", "-c", "user.name=ops-agent",
+             "commit", "-m", "ops: risposte e battito [skip ci]")
+
     code, out = _git("rev-list", "--count", f"origin/{branch}..HEAD")
     n = ahead_count(out) if code == 0 else 0
     if n <= 0:
@@ -302,6 +348,15 @@ def main() -> int:
               f"proseguo con lo stato locale{_git_hint()}")
 
     todo = pending()
+    # il battito PRIMA di qualunque uscita anticipata: e' proprio nei giri senza
+    # lavoro che serve dire "sono vivo".
+    try:
+        ultimo = os.path.getmtime(HEARTBEAT) if os.path.exists(HEARTBEAT) else 0.0
+        if heartbeat_due(ultimo, time.time()):
+            write_heartbeat(branch, len(todo), time.time())
+    except Exception as exc:  # noqa: BLE001
+        print(f"[ops] battito non scritto ({exc}): non e' un motivo per fermarsi")
+
     if not todo:
         # NIENTE DA FARE non vuol dire niente da SPEDIRE. Se un push era fallito, la
         # risposta e' gia' scritta e committata: al giro dopo `pending()` la vede
@@ -335,11 +390,8 @@ def main() -> int:
             f.write(body)
 
     # 2) rimanda indietro le risposte. `[skip ci]` per non innescare workflow.
-    _git("add", "ops/results")
-    _git("-c", "user.email=ops@localhost", "-c", "user.name=ops-agent",
-         "commit", "-m", f"ops: {len(todo)} risposte [skip ci]")
-    # il ritentativo vive in push_pending, che gira anche nei giri senza lavoro:
-    # cosi' una spedizione fallita non resta ferma per sempre.
+    # UN SOLO PUNTO che committa e spedisce, usato sia qui sia nei giri senza
+    # lavoro: due percorsi diversi vorrebbero dire due modi di dimenticarsi qualcosa.
     push_pending(branch)
     return 0
 

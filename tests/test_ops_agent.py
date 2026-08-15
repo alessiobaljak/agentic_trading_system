@@ -243,3 +243,27 @@ def test_an_unreadable_count_means_nothing_to_send():
     assert ahead_count("") == 0
     assert ahead_count("boh") == 0
     assert ahead_count(None) == 0
+
+
+# ---- il battito: distinguere "morto" da "niente da fare" ----------------- #
+def test_the_heartbeat_is_due_after_the_interval():
+    from scripts.ops_agent import heartbeat_due
+    assert heartbeat_due(1000.0, 1000.0 + 3601, every_s=3600) is True
+    assert heartbeat_due(1000.0, 1000.0 + 60, every_s=3600) is False
+
+
+def test_a_missing_heartbeat_is_written_immediately():
+    """Al primo giro non c'e' nessun file: il battito deve partire subito,
+    altrimenti la prima ora sarebbe indistinguibile da un agente morto."""
+    from scripts.ops_agent import heartbeat_due
+    assert heartbeat_due(0.0, 1_700_000_000.0, every_s=3600) is True
+
+
+def test_the_heartbeat_says_when_and_what(tmp_path, monkeypatch):
+    import scripts.ops_agent as ops
+    monkeypatch.setattr(ops, "HEARTBEAT", str(tmp_path / "heartbeat.md"))
+    ops.write_heartbeat("mio-ramo", 3, 1_700_000_000.0)
+    testo = (tmp_path / "heartbeat.md").read_text()
+    assert "mio-ramo" in testo and "3" in testo and "2023" in testo
+    # deve spiegare a cosa serve: un file di stato che non si spiega viene ignorato
+    assert "silenzio" in testo

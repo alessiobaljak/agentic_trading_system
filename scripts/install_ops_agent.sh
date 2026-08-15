@@ -49,6 +49,12 @@ Environment=HOME=$HOME
 # servizio non ha nessuno che possa rispondere: resterebbe appeso per sempre,
 # bloccando anche tutti i giri successivi. Meglio fallire subito e dirlo.
 Environment=GIT_TERMINAL_PROMPT=0
+# IL TIMEOUT DI SYSTEMD DEVE ESSERE PIU' LARGO DI QUELLO DELL'AGENTE. Il default e'
+# 90 secondi: un comando piu' lento (OPS_TIMEOUT_S vale 900) veniva ucciso da
+# systemd PRIMA che l'agente potesse scrivere la risposta — e il risultato era
+# silenzio, non un messaggio di timeout. Cosi' invece scade prima quello interno,
+# che una risposta la produce sempre: "TIMEOUT dopo Ns" e' un esito, il silenzio no.
+TimeoutStartSec=1200
 # priorita' bassa: non deve mai rubare CPU al bot, che sorveglia le posizioni
 Nice=10
 ExecStart=$APP_DIR/.venv/bin/python -m scripts.ops_agent
