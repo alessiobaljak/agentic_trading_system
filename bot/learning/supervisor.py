@@ -180,6 +180,10 @@ class Context:
     # il terreno, non a scegliere la mossa. Vedi `_lever`.
     near: dict = field(default_factory=dict)
     current: dict = field(default_factory=dict)     # nome parametro -> valore attuale
+    # cio' che il supervisore ha gia' cambiato (contenuto di tuning.env). Serve a
+    # sapere che cosa c'e' da DISFARE quando il budget salta: senza, l'unica
+    # reazione possibile sarebbe accusare il mondo per una propria mossa.
+    tuned: dict = field(default_factory=dict)
     min_passes: int = 3
     runs_per_day: float = 3.0
     budget: float = 1.0
@@ -270,13 +274,34 @@ def decide(ctx: Context) -> list[Decision]:
                      "evaluated": ctx.evaluated, "runs_per_day": ctx.runs_per_day}
 
     if room < 1.0:
-        # Budget sforato: allentare comprerebbe fortuna. Si riduce il numero di
-        # ESTRAZIONI, che e' l'altro modo di rientrare — e l'unico onesto qui.
+        # BUDGET SFORATO. La prima cosa da disfare e' la PROPRIA mossa: se sono
+        # state allentate delle soglie e adesso il conto non torna, l'ipotesi piu'
+        # semplice e' che quell'allentamento sia stato eccessivo. Si torna al punto
+        # noto — nessuna taratura — e si rimisura.
+        #
+        # Senza questo il sistema restava in una posizione insostenibile: soglie
+        # allentate, budget superato, e un messaggio ripetuto all'infinito che
+        # diceva "non allento piu'" senza mai disfare cio' che aveva gia' fatto. La
+        # promessa di tornare indietro c'era scritta qui sopra e non esisteva nel
+        # codice: la differenza fra un anello chiuso e uno che si limita a
+        # dichiararsi tale.
+        if ctx.tuned:
+            out.append(Decision(
+                "revert",
+                f"budget SFORATO ({lucky:.2f} coppie fortunate attese al giorno "
+                f"contro un tetto di {ctx.budget:g}): disfo le mie modifiche "
+                f"({', '.join(sorted(ctx.tuned))}) e rimisuro. Prima si annulla la "
+                f"propria mossa, poi semmai si accusa il mondo",
+                detail={**budget_detail, "reverted": sorted(ctx.tuned)}))
+            return out
+        # Nessuna taratura da disfare: il tasso alto viene dalla ricerca, non da una
+        # soglia mia. L'altro modo di rientrare e' ridurre le ESTRAZIONI.
         out.append(Decision(
             "tighten",
             f"budget di falsi positivi SFORATO ({lucky:.2f} coppie fortunate attese "
-            f"al giorno, tetto {ctx.budget:g}): non si allenta nulla, si riducono le "
-            f"estrazioni", detail=budget_detail))
+            f"al giorno, tetto {ctx.budget:g}) e nessuna mia modifica da disfare: "
+            f"il tasso viene dalla ricerca, si riducono le estrazioni",
+            detail=budget_detail))
         return out
 
     # 2) DOVE MUOIONO. Senza diagnosi non si tocca niente: sarebbe tarare al buio,

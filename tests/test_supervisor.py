@@ -368,3 +368,41 @@ def test_the_dataclass_default_is_disarmed_too():
     divergessero, il comportamento dipenderebbe da quale percorso costruisce il
     contesto."""
     assert Context().fast_gate_after_days == 0.0
+
+
+# ---- disfare la propria mossa prima di accusare il mondo ----------------- #
+def test_an_exceeded_budget_undoes_its_own_tuning_first():
+    """Il caso reale del 17 agosto: win_rate allentato, budget a 1.64 contro un
+    tetto di 1. Il sistema restava li' a ripetere 'non allento piu'' senza mai
+    disfare cio' che aveva gia' fatto — una posizione insostenibile mantenuta
+    all'infinito. L'ipotesi piu' semplice, quando il conto non torna dopo una
+    propria modifica, e' che quella modifica fosse eccessiva."""
+    d = decide(_ctx(evaluated=200_000, passed=40_000,
+                    tuned={"GATE_WIN_RATE_FLOOR": "0.398537"}))
+    assert d[0].kind == "revert"
+    assert d[0].detail["reverted"] == ["GATE_WIN_RATE_FLOOR"]
+    assert not any(x.kind == "set_param" for x in d)
+
+
+def test_without_its_own_changes_it_blames_the_search():
+    """Se non c'e' niente da disfare, il tasso alto viene dalla ricerca e non da una
+    soglia: l'altro modo di rientrare e' ridurre le estrazioni."""
+    d = decide(_ctx(evaluated=200_000, passed=40_000, tuned={}))
+    assert d[0].kind == "tighten" and "ricerca" in d[0].reason
+
+
+def test_the_revert_names_everything_it_undoes():
+    """Fra due mesi deve restare scritto cosa e' stato disfatto e perche'."""
+    d = decide(_ctx(evaluated=200_000, passed=40_000,
+                    tuned={"GATE_PF_THRESHOLD": "1.2", "GATE_MIN_TRADES": "25"}))
+    assert set(d[0].detail["reverted"]) == {"GATE_PF_THRESHOLD", "GATE_MIN_TRADES"}
+    assert "GATE_MIN_TRADES" in d[0].reason
+
+
+def test_tuning_does_not_block_a_healthy_budget():
+    """Avere modifiche in corso non deve impedire di continuare a tarare quando il
+    budget e' ampio: il revert e' una reazione allo sforamento, non alla presenza
+    di una taratura."""
+    d = decide(_ctx(tuned={"GATE_WIN_RATE_FLOOR": "0.4"}, binding={"pf": 900},
+                    near={"pf": [-0.02]}))
+    assert any(x.kind == "set_param" for x in d)

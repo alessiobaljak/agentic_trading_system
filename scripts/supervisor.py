@@ -88,7 +88,7 @@ def _autopsy(fb) -> dict:
     return tot
 
 
-def build_context(fb, state: dict) -> Context:
+def build_context(fb, state: dict, tuned: dict | None = None) -> Context:
     reg = fb.get_doc("strategy_registry", "validated") or {}
     pairs = decode_pairs(reg.get("pairs"))
     min_passes = int(os.getenv("OPTIMIZER_MIN_PASSES", "3"))
@@ -114,7 +114,8 @@ def build_context(fb, state: dict) -> Context:
         days_stagnant=max(0.0, (now - since) / 86400.0),
         evaluated=a["evaluated"], passed=a["passed"], binding=a["binding"],
         near=a["near"],
-        current=current_values(), min_passes=min_passes, runs_per_day=runs,
+        current=current_values(), tuned=dict(tuned or {}),
+        min_passes=min_passes, runs_per_day=runs,
         budget=float(os.getenv("SUPERVISOR_FALSE_POSITIVE_BUDGET", "1.0")),
         independence=float(os.getenv("SUPERVISOR_CONFIRM_INDEPENDENCE", "0.5")),
         stagnant_after_days=float(os.getenv("SUPERVISOR_STAGNANT_DAYS", "2")),
@@ -149,14 +150,14 @@ def main() -> int:
 
     fb = get_firebase()
     state = fb.get_doc("supervisor", "state") or {}
-    ctx = build_context(fb, state)
+    tuning = read_tuning()
+    ctx = build_context(fb, state, tuning)
     decisions = decide(ctx)
 
     print(f"[supervisor] validate={ctx.validated} ready={ctx.ready} "
           f"stagnazione={ctx.days_stagnant:.1f}g · valutazioni={ctx.evaluated} "
           f"passate={ctx.passed} (tasso {ctx.pass_rate * 100:.3f}%)")
 
-    tuning = read_tuning()
     applied: list[dict] = []
     for d in decisions:
         print(f"[supervisor] {d.kind.upper()}: {d.reason}")
@@ -167,6 +168,14 @@ def main() -> int:
             print(f"[supervisor]   {d.param}: {d.old:g} -> {d.new:g}")
             if not args.dry_run:
                 tuning[d.param] = f"{d.new:g}"
+                write_tuning(tuning)
+        elif d.kind == "revert":
+            # si torna al punto noto togliendo le voci: il valore di partenza e'
+            # quello del codice o del .env, che non e' stato toccato da nessuno.
+            for nome in (d.detail.get("reverted") or []):
+                tuning.pop(nome, None)
+                print(f"[supervisor]   disfatto {nome}")
+            if not args.dry_run:
                 write_tuning(tuning)
         elif d.kind == "fast_gate":
             if not args.dry_run:
