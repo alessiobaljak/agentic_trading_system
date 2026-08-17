@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-17 01:55 UTC_
+_Generato: 2026-08-17 03:13 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-17 01:55 UTC
+- ultimo heartbeat: 2026-08-17 03:13 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-17 01:48 UTC)
+- esito: **⚪ FLAT** (2026-08-17 03:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -32,13 +32,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 14 | 1.0% |
-| total_return | 1238 | 86.0% |
-| trades | 32 | 2.2% |
-| consistency | 17 | 1.2% |
-| regime | 45 | 3.1% |
 | holdout | 1 | 0.1% |
+| total_return | 1238 | 86.0% |
+| consistency | 17 | 1.2% |
+| pf_ex_top | 14 | 1.0% |
+| regime | 45 | 3.1% |
 | recovery | 93 | 6.5% |
+| trades | 32 | 2.2% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -46,21 +46,21 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| recovery | 2457 | 7.5% |
-| trades | 1345 | 4.1% |
-| consistency | 665 | 2.0% |
 | holdout | 153 | 0.5% |
-| win_rate | 3 | 0.0% |
-| pf_ex_top | 432 | 1.3% |
 | total_return | 24490 | 74.5% |
+| pf_ex_top | 432 | 1.3% |
 | regime | 3311 | 10.1% |
+| recovery | 2457 | 7.5% |
+| consistency | 665 | 2.0% |
+| win_rate | 3 | 0.0% |
+| trades | 1345 | 4.1% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-08-17 01:02 UTC · coppie validate: **0** · GATE 1 pronto: False
-- tasso di passaggio misurato: **0.231%**
+- ultimo giro: 2026-08-17 03:01 UTC · coppie validate: **0** · GATE 1 pronto: False
+- tasso di passaggio misurato: **0.244%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -70,11 +70,11 @@ _Nessuna coppia ha passato in questo run._
 
 **Ultime decisioni:**
 
+- `tighten` — budget di falsi positivi SFORATO (1.64 coppie fortunate attese al giorno, tetto 1): non si allenta nulla, si riducono le estrazioni
+- `tighten` — budget di falsi positivi SFORATO (1.64 coppie fortunate attese al giorno, tetto 1): non si allenta nulla, si riducono le estrazioni
 - `tighten` — budget di falsi positivi SFORATO (1.46 coppie fortunate attese al giorno, tetto 1): non si allenta nulla, si riducono le estrazioni
 - `tighten` — budget di falsi positivi SFORATO (1.46 coppie fortunate attese al giorno, tetto 1): non si allenta nulla, si riducono le estrazioni
 - `tighten` — budget di falsi positivi SFORATO (1.46 coppie fortunate attese al giorno, tetto 1): non si allenta nulla, si riducono le estrazioni
-- `tighten` — budget di falsi positivi SFORATO (1.55 coppie fortunate attese al giorno, tetto 1): non si allenta nulla, si riducono le estrazioni
-- `tighten` — budget di falsi positivi SFORATO (1.55 coppie fortunate attese al giorno, tetto 1): non si allenta nulla, si riducono le estrazioni
 
 ## Trade chiusi
 _nessun trade chiuso._
