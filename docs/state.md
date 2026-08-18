@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-18 13:07 UTC_
+_Generato: 2026-08-18 14:52 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-18 13:07 UTC
+- ultimo heartbeat: 2026-08-18 14:52 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-18 13:03 UTC)
+- esito: **⚪ FLAT** (2026-08-18 14:48 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -19,7 +19,7 @@ _Generato: 2026-08-18 13:07 UTC_
 - copertura universo: **0/180 crypto (0%)** · obiettivo ≥ 35%
 - coppie validate (>= 3 pass OOS): **0**
 - universo scansionato: 0GUSDT, 1000BONKUSDT, 1000LUNCUSDT, 1000PEPEUSDT, 1000SHIBUSDT, 4USDT, AAVEUSDT, ACEUSDT, ACUUSDT, ADAUSDT, AEROUSDT, AIOUSDT, AKEUSDT, ALGOUSDT, ALICEUSDT, ALLOUSDT, APRUSDT, APTUSDT, ARBUSDT, ASTERUSDT, ATOMUSDT, AVAAIUSDT, AVAXUSDT, AVNTUSDT, BABYUSDT, BANKUSDT, BCHUSDT, BEATUSDT, BERAUSDT, BICOUSDT, BLESSUSDT, BMTUSDT, BNBUSDT, BOMEUSDT, BRUSDT, BTCUSDT, BULLAUSDT, CAKEUSDT, CCUSDT, CHZUSDT, CLOUSDT, COMPUSDT, COTIUSDT, COWUSDT, CRVUSDT, CYSUSDT, DASHUSDT, DEXEUSDT, DIAUSDT, DODOXUSDT, DOGEUSDT, DOLOUSDT, DOTUSDT, EDENUSDT, EGLDUSDT, EIGENUSDT, ENAUSDT, ENSOUSDT, ENSUSDT, EPICUSDT, ERAUSDT, ESPORTSUSDT, ESPUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, EULUSDT, EVAAUSDT, FARTCOINUSDT, FETUSDT, FHEUSDT, FILUSDT, GALAUSDT, GIGGLEUSDT, GPSUSDT, GUNUSDT, GWEIUSDT, HAEDALUSDT, HANAUSDT, HBARUSDT, HEIUSDT, HEMIUSDT, HOLOUSDT, HOMEUSDT, HUSDT, HYPEUSDT, ICPUSDT, INJUSDT, JCTUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KOMAUSDT, LABUSDT, LAUSDT, LDOUSDT, LINKUSDT, LITUSDT, LTCUSDT, LUMIAUSDT, MEGAUSDT, MMTUSDT, MONUSDT, MORPHOUSDT, MOVRUSDT, MUBARAKUSDT, MUSDT, NEARUSDT, NILUSDT, ONDOUSDT, ONEUSDT, ONGUSDT, ONTUSDT, ONUSDT, OPUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PIEVERSEUSDT, PIPPINUSDT, PIXELUSDT, PLUMEUSDT, PNUTUSDT, POLUSDT, PORTALUSDT, POWERUSDT, PROMUSDT, PUMPUSDT, QUSDT, RAREUSDT, REDUSDT, RENDERUSDT, RIFUSDT, RIVERUSDT, SANDUSDT, SEIUSDT, SKYAIUSDT, SKYUSDT, SOLUSDT, SOLVUSDT, SOPHUSDT, STABLEUSDT, STBLUSDT, STRKUSDT, SUIUSDT, SYRUPUSDT, TAOUSDT, TIAUSDT, TLMUSDT, TRUMPUSDT, TRXUSDT, TSTUSDT, TUTUSDT, UAIUSDT, UBUSDT, UNIUSDT, USELESSUSDT, USUSDT, VELVETUSDT, VIRTUALUSDT, VVVUSDT, WALUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, XAIUSDT, XLMUSDT, XMRUSDT, XPINUSDT, XPLUSDT, XRPUSDT, ZAMAUSDT, ZBTUSDT, ZECUSDT, ZENUSDT, ZKUSDT, ZROUSDT, 币安人生USDT
-- aggiornato: 2026-08-18 12:36 UTC
+- aggiornato: 2026-08-18 13:23 UTC
 
 ## Ultimo run di ottimizzazione
 _aggiornato: 2026-08-18 12:36 UTC · 1440 coppie valutate, 0 passate in questo run_
@@ -32,45 +32,45 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 47 | 3.3% |
 | total_return | 1226 | 85.1% |
-| holdout | 1 | 0.1% |
-| pf_ex_top | 15 | 1.0% |
 | consistency | 21 | 1.5% |
+| regime | 47 | 3.3% |
+| pf_ex_top | 15 | 1.0% |
+| trades | 32 | 2.2% |
 | recovery | 95 | 6.6% |
 | win_rate | 3 | 0.2% |
-| trades | 32 | 2.2% |
+| holdout | 1 | 0.1% |
 
 - quasi-passaggi (un solo criterio, di poco): **3** — sono i semi delle mutazioni del run successivo
 
-**strategie generate** — 36695 valutazioni, 106 passate (0.29%) · 2026-08-18 10:19 UTC
+**strategie generate** — 37440 valutazioni, 108 passate (0.29%) · 2026-08-18 13:23 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 4046 | 11.1% |
-| total_return | 26874 | 73.4% |
-| holdout | 151 | 0.4% |
-| pf_ex_top | 438 | 1.2% |
-| consistency | 821 | 2.2% |
-| recovery | 2838 | 7.8% |
+| regime | 4328 | 11.6% |
+| consistency | 822 | 2.2% |
+| total_return | 27045 | 72.4% |
+| pf_ex_top | 411 | 1.1% |
+| trades | 1782 | 4.8% |
+| recovery | 2726 | 7.3% |
 | win_rate | 65 | 0.2% |
-| trades | 1356 | 3.7% |
+| holdout | 153 | 0.4% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-08-18 13:04 UTC · coppie validate: **0** · GATE 1 pronto: False
+- ultimo giro: 2026-08-18 14:02 UTC · coppie validate: **0** · GATE 1 pronto: False
 - tasso di passaggio misurato: **0.278%**
 - nessun parametro modificato: il gate gira coi valori di partenza
 
 **Ultime decisioni:**
 
-- `tighten` — budget di falsi positivi SFORATO (2.36 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
-- `tighten` — budget di falsi positivi SFORATO (2.36 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
-- `tighten` — budget di falsi positivi SFORATO (2.36 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
-- `tighten` — budget di falsi positivi SFORATO (2.36 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
 - `tighten` — budget di falsi positivi SFORATO (2.40 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
+- `tighten` — budget di falsi positivi SFORATO (2.36 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
+- `tighten` — budget di falsi positivi SFORATO (2.36 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
+- `tighten` — budget di falsi positivi SFORATO (2.36 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
+- `tighten` — budget di falsi positivi SFORATO (2.36 coppie fortunate attese al giorno, tetto 1) e nessuna mia modifica da disfare: il tasso viene dalla ricerca, si riducono le estrazioni
 
 ## Trade chiusi
 _nessun trade chiuso._
