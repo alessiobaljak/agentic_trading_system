@@ -130,35 +130,44 @@ def effective_confirmations(min_passes: int, independence: float) -> float:
 
 
 def expected_lucky(evaluated: int, pass_rate: float, min_passes: int,
-                   independence: float = 0.5, runs_per_day: float = 1.0) -> float:
+                   independence: float = 0.5, window_days: float = 7.0) -> float:
     """Coppie attese che raggiungono la validazione PER CASO, al giorno.
 
-    E' il numero che il supervisore non puo' far crescere oltre il budget. Con
-    ventiduemila valutazioni e un tasso dello 0.036% vale circa 0.003: il gate e'
-    oggi molto piu' severo di quanto il budget richieda, ed e' esattamente questa
-    misura a dire quanto margine c'e' — invece di allentare a sentimento.
+    E' il numero che il supervisore non puo' far crescere oltre il budget.
+
+    L'UNITA' DI OCCASIONE E' LA FINESTRA, non il run. Prima qui si moltiplicava per
+    il numero di passate al giorno, perche' ogni passata era davvero un'occasione
+    indipendente di incrementare un contatore. Da quando il registro giudica per
+    finestra non lo e' piu': una coppia guadagna al massimo UNA conferma a
+    settimana, per quante volte la si rivaluti nel frattempo.
+
+    Tenere il vecchio moltiplicatore sovrastimava il rischio di 56 volte (otto
+    passate al giorno per sette giorni), e il supervisore e' rimasto per giorni a
+    ripetere "budget sforato" per un allarme che era il suo stesso modello a
+    fabbricare. Un modello che non segue le regole che misura non e' prudente:
+    e' rotto, e la prudenza che sembra offrire e' solo rumore.
     """
-    if evaluated <= 0 or pass_rate <= 0:
+    if evaluated <= 0 or pass_rate <= 0 or window_days <= 0:
         return 0.0
     exp = effective_confirmations(min_passes, independence)
-    return evaluated * (pass_rate ** exp) * max(0.0, runs_per_day)
+    return evaluated * (pass_rate ** exp) / window_days
 
 
 def max_pass_rate(evaluated: int, min_passes: int, budget: float = 1.0,
-                  independence: float = 0.5, runs_per_day: float = 1.0) -> float:
+                  independence: float = 0.5, window_days: float = 7.0) -> float:
     """Il tasso di passaggio piu' alto che il budget consente. Oltre questo, ogni
     allentamento comprerebbe candidate fortunate invece che strategie."""
-    if evaluated <= 0 or budget <= 0:
+    if evaluated <= 0 or budget <= 0 or window_days <= 0:
         return 0.0
     exp = effective_confirmations(min_passes, independence)
-    return min(1.0, (budget / (evaluated * max(1e-9, runs_per_day))) ** (1.0 / exp))
+    return min(1.0, (budget * window_days / evaluated) ** (1.0 / exp))
 
 
 def headroom(evaluated: int, pass_rate: float, min_passes: int, budget: float = 1.0,
-             independence: float = 0.5, runs_per_day: float = 1.0) -> float:
+             independence: float = 0.5, window_days: float = 7.0) -> float:
     """Quante volte il tasso attuale puo' ancora crescere restando nel budget.
     < 1 = budget gia' sforato; 1 = al limite; 10 = c'e' spazio per dieci volte tanto."""
-    top = max_pass_rate(evaluated, min_passes, budget, independence, runs_per_day)
+    top = max_pass_rate(evaluated, min_passes, budget, independence, window_days)
     if pass_rate <= 0:
         return float("inf") if top > 0 else 0.0
     return top / pass_rate
@@ -185,7 +194,9 @@ class Context:
     # reazione possibile sarebbe accusare il mondo per una propria mossa.
     tuned: dict = field(default_factory=dict)
     min_passes: int = 3
-    runs_per_day: float = 3.0
+    # durata della finestra di conferma: e' l'unita' di occasione, perche' una
+    # coppia guadagna al massimo un verdetto per finestra (vedi judge_window).
+    window_days: float = 7.0
     budget: float = 1.0
     independence: float = 0.5
     stagnant_after_days: float = 2.0
@@ -265,13 +276,13 @@ def decide(ctx: Context) -> list[Decision]:
 
     # 1) IL BUDGET. E' il vincolo, quindi si guarda per primo.
     room = headroom(ctx.evaluated, ctx.pass_rate, ctx.min_passes, ctx.budget,
-                    ctx.independence, ctx.runs_per_day)
+                    ctx.independence, ctx.window_days)
     lucky = expected_lucky(ctx.evaluated, ctx.pass_rate, ctx.min_passes,
-                           ctx.independence, ctx.runs_per_day)
+                           ctx.independence, ctx.window_days)
     budget_detail = {"pass_rate": round(ctx.pass_rate, 6),
                      "expected_lucky_per_day": round(lucky, 4),
                      "headroom": (None if room == float("inf") else round(room, 2)),
-                     "evaluated": ctx.evaluated, "runs_per_day": ctx.runs_per_day}
+                     "evaluated": ctx.evaluated, "window_days": ctx.window_days}
 
     if room < 1.0:
         # BUDGET SFORATO. La prima cosa da disfare e' la PROPRIA mossa: se sono

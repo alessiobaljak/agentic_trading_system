@@ -107,15 +107,18 @@ def build_context(fb, state: dict, tuned: dict | None = None) -> Context:
     if since <= 0 or (prev is not None and validated > int(prev)):
         since = now
     a = _autopsy(fb)
-    # quante passate al giorno: dal timer systemd, con un default prudente
-    runs = float(os.getenv("SUPERVISOR_RUNS_PER_DAY", "8"))
+    # LA FINESTRA e' l'unita' di occasione: una coppia guadagna al massimo una
+    # conferma per finestra, per quante volte la si rivaluti nel frattempo. Deve
+    # coincidere con OPTIMIZER_NEW_DATA_MIN_HOURS, altrimenti il budget misura una
+    # cadenza diversa da quella con cui il registro assegna i verdetti.
+    window_days = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "168")) / 24.0
     return Context(
         ready=bool(reg.get("ready")), validated=validated,
         days_stagnant=max(0.0, (now - since) / 86400.0),
         evaluated=a["evaluated"], passed=a["passed"], binding=a["binding"],
         near=a["near"],
         current=current_values(), tuned=dict(tuned or {}),
-        min_passes=min_passes, runs_per_day=runs,
+        min_passes=min_passes, window_days=window_days,
         budget=float(os.getenv("SUPERVISOR_FALSE_POSITIVE_BUDGET", "1.0")),
         independence=float(os.getenv("SUPERVISOR_CONFIRM_INDEPENDENCE", "0.5")),
         stagnant_after_days=float(os.getenv("SUPERVISOR_STAGNANT_DAYS", "2")),

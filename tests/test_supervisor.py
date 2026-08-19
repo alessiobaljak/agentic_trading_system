@@ -26,7 +26,7 @@ def _ctx(**kw) -> Context:
                     (TUNABLES["win_rate"], 0.45), (TUNABLES["total_return"], 0.15),
                     (TUNABLES["consistency"], 1.0), (TUNABLES["recovery"], 2.0),
                     (TUNABLES["regime"], 0.8), (TUNABLES["pf_ex_top"], 1.0)]},
-                min_passes=3, runs_per_day=8.0, budget=1.0, independence=0.5)
+                min_passes=3, window_days=7.0, budget=1.0, independence=0.5)
     base.update(kw)
     return Context(**base)
 
@@ -57,16 +57,16 @@ def test_a_gate_that_passes_nothing_expects_no_luck():
 def test_the_ceiling_on_the_pass_rate_is_computable():
     """E' la licenza quantitativa: dice di quanto si puo' allentare, invece di
     lasciarlo al sentimento."""
-    top = max_pass_rate(20_000, 3, budget=1.0, runs_per_day=1.0)
+    top = max_pass_rate(20_000, 3, budget=1.0, window_days=7.0)
     assert 0 < top < 1
     # al tetto, le attese coincidono col budget
-    assert expected_lucky(20_000, top, 3, runs_per_day=1.0) == pytest.approx(1.0, rel=0.02)
+    assert expected_lucky(20_000, top, 3, window_days=7.0) == pytest.approx(1.0, rel=0.02)
 
 
 def test_todays_numbers_leave_room():
     """22k valutazioni con 8 passate: il gate e' molto piu' severo di quanto il
     budget richieda. E' questo che autorizza ad allentare — non l'impazienza."""
-    assert headroom(22_264, 8 / 22_264, 3, budget=1.0, runs_per_day=3.0) > 1.0
+    assert headroom(22_264, 8 / 22_264, 3, budget=1.0, window_days=7.0) > 1.0
 
 
 # ---- quando NON si tocca niente ------------------------------------------ #
@@ -406,3 +406,29 @@ def test_tuning_does_not_block_a_healthy_budget():
     d = decide(_ctx(tuned={"GATE_WIN_RATE_FLOOR": "0.4"}, binding={"pf": 900},
                     near={"pf": [-0.02]}))
     assert any(x.kind == "set_param" for x in d)
+
+
+# ---- l'unita' di occasione e' la FINESTRA, non il run -------------------- #
+def test_more_runs_per_day_no_longer_inflate_the_risk():
+    """Il difetto misurato il 19 agosto: il budget moltiplicava per le passate
+    giornaliere, ma da quando il registro giudica per finestra una coppia guadagna
+    al massimo UNA conferma a settimana. Il vecchio modello sovrastimava di 56
+    volte, e il supervisore ripeteva 'budget sforato' per un allarme che era il suo
+    stesso modello a fabbricare."""
+    lucky = expected_lucky(26_000, 0.00227, 3, window_days=7.0)
+    assert lucky < 0.05, f"atteso ben sotto il tetto, ottenuto {lucky}"
+
+
+def test_a_shorter_window_means_more_opportunities():
+    """Se le conferme arrivassero ogni giorno invece che ogni settimana, il rischio
+    di validare fortuna crescerebbe davvero — ed e' l'unico modo in cui deve
+    crescere."""
+    assert (expected_lucky(26_000, 0.002, 3, window_days=1.0)
+            > expected_lucky(26_000, 0.002, 3, window_days=7.0))
+
+
+def test_a_zero_window_is_not_an_infinite_risk():
+    """Una configurazione assurda non deve produrre una divisione per zero ne' un
+    allarme infinito: si risponde zero e non si decide niente su quel numero."""
+    assert expected_lucky(26_000, 0.002, 3, window_days=0.0) == 0.0
+    assert max_pass_rate(26_000, 3, window_days=0.0) == 0.0
