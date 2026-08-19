@@ -7,7 +7,8 @@ letto al posto di un altro) da una porta diversa. Questa volta il controllo e' s
 fatto per intero, modulo per modulo, e sono elencati anche i punti risultati **puliti**:
 un elenco di soli difetti non dice quanto e' stato guardato.
 
-Suite: **679 test verdi**.
+Suite: **681 test verdi**, sia con ambiente pulito sia con quello di
+produzione (vedi il punto 9 in fondo: non era cosi').
 
 ---
 
