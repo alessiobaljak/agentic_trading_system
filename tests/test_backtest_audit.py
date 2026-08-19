@@ -196,7 +196,40 @@ def test_two_series_with_different_timeframes_are_still_rejected():
 
 
 # --------------------------------------------------------------------------- #
-# 6. IL CONFINE DELL'HOLDOUT                                                   #
+# 6. LA SUITE CHE ERA ROSSA SOLO SULLA MACCHINA                                #
+# --------------------------------------------------------------------------- #
+def test_the_suite_does_not_read_the_production_configuration():
+    """Undici test fallivano sulla VPS e nessuno qui.
+
+    Non era una regressione: le unit systemd hanno `EnvironmentFile=.env`, quindi la
+    configurazione di produzione arriva dall'AMBIENTE del processo. Il conftest
+    disattivava la lettura del `.env` — difesa giusta ma insufficiente, perche' le
+    variabili erano gia' dentro e passavano indisturbate.
+
+    Una suite rossa per default sulla macchina non e' una rete di sicurezza: e'
+    rumore, e chi la lancia non distingue piu' una regressione vera da uno scarto di
+    configurazione. Peggio: il canale ops, che serve proprio a verificare da lontano,
+    ereditava lo stesso ambiente e restituiva lo stesso rosso.
+    """
+    import os
+    from bot.config import settings
+    # i valori del CODICE, non quelli della macchina
+    assert settings.SCALE_OUT_ENABLED is False
+    assert os.getenv("SCALE_OUT_ENABLED") is None, \
+        "il conftest deve TOGLIERE la variabile, non solo ignorare il .env"
+
+
+def test_the_isolation_list_is_derived_from_the_sources():
+    """Scritta a mano, la lista invecchierebbe: si aggiunge un'impostazione e nessuno
+    si ricorda di neutralizzarla. Ricavarla dai sorgenti la tiene viva da sola."""
+    import inspect
+    import tests.conftest as c
+    src = inspect.getsource(c)
+    assert "os.environ.pop" in src and "_NOME" in src
+
+
+# --------------------------------------------------------------------------- #
+# 7. IL CONFINE DELL'HOLDOUT                                                   #
 # --------------------------------------------------------------------------- #
 def test_the_holdout_never_counts_trades_from_before_the_cut():
     """L'holdout include il warmup degli indicatori PRIMA del taglio, e va bene: gli

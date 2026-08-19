@@ -178,3 +178,50 @@ delistate) e uno storico minimo piu' lungo. Non e' un peggioramento — e' il nu
 che avremmo dovuto vedere fin dall'inizio. In compenso il difetto n.1 significa che
 **tutte le valutazioni fatte finora a 15m vanno considerate sospette**: il regime era
 quello di bitcoin. Le 224 coppie a 1 pass nel registro sono state prodotte cosi'.
+
+---
+
+## Aggiunta del 19 agosto sera — trovati usando il canale ops
+
+Le due correzioni qui sotto non vengono dalla lettura del codice ma dall'aver
+**lanciato** le verifiche sulla macchina. Sono il tipo di difetto che una revisione
+statica non trova, perche' esistono solo nell'ambiente reale.
+
+### 8. Una terza contabilita' del registro, in `discover_strategies`
+
+`merge_into_registry` teneva una **copia a mano** della vecchia regola del "pass
+onesto" (differenza fra due `data_end`) e non chiamava mai `judge_window`. Quindi le
+coppie **generate** — che sono la maggioranza del registro — accumulavano conferme con
+un criterio, e le base con un altro. Il suo ramo deriva incrementava `fail_count` a
+ogni run, come quello di `optimize.py` prima della correzione n.3.
+
+E' ancora una volta lo stesso schema: finche' esistono due copie della stessa regola,
+prima o poi divergono. Ora `judge_window` e' l'unica contabilita' del registro.
+
+Effetto collaterale visibile: `gate_progress` stampava «finestra chiusa il 08 Jan» per
+le coppie generate. Era il 1970 — la settimana sommata a un `window_start` mai
+impostato. Una data falsa in mezzo a date vere, che sembra un dato e non lo e'. Ora
+dice «finestra non ancora aperta», e le finestre si aprono davvero alla prima passata
+della discovery dopo l'unificazione.
+
+### 9. La suite era rossa **solo sulla macchina**: 11 test
+
+Lanciata via canale ops, `pytest` restituiva 11 fallimenti su 679 — e qui era verde.
+Non una regressione: le unit systemd hanno `EnvironmentFile=.env`, quindi la
+configurazione di produzione (scale-out attivo, cap di rischio diversi) arriva
+dall'**ambiente del processo**. Il `conftest` disattivava la lettura del `.env` —
+difesa giusta ma insufficiente, perche' le variabili erano gia' dentro.
+
+Perche' conta piu' di quanto sembri: una suite rossa per default sulla macchina non e'
+una rete di sicurezza, e' rumore. Chi la lancia smette di distinguere una regressione
+vera da uno scarto di configurazione — ed e' esattamente cio' che serve saper
+distinguere quando si e' lontani e si puo' solo leggere un output. Il canale ops, che
+esiste per questo, ereditava lo stesso ambiente e restituiva lo stesso rosso.
+
+Correzione: il `conftest` ora **toglie** dall'ambiente tutte le variabili di
+configurazione, e la lista si ricava dai sorgenti invece di essere scritta a mano —
+un'impostazione aggiunta domani viene neutralizzata senza che nessuno se ne debba
+ricordare. Verificato: la suite passa identica con l'ambiente pulito e con quello di
+produzione.
+
+**681 test verdi**, in entrambi gli ambienti.
