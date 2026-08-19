@@ -150,7 +150,15 @@ def test_allocation_applies_the_brake_to_risk_and_leverage(monkeypatch):
 # ---- anello di ritorno: l'evidenza pesa nel gate -------------------------- #
 def test_drifted_pair_counts_as_a_gate_failure():
     """IL CUORE DELL'ANELLO: una coppia smentita dal vivo non accumula un pass
-    nemmeno se la storia la promuove ancora — e va verso l'auto-purge."""
+    nemmeno se la storia la promuove ancora — e va verso l'auto-purge.
+
+    IL CONTO PERO' E' QUELLO DELLA FINESTRA. Questo test chiedeva `fail_count == 1`
+    subito, al primo run: era la fotografia del difetto, non del comportamento
+    voluto. Contando a ogni run, col timer ogni tre ore una coppia in deriva spariva
+    dal registro in sei ore e non poteva piu' redimersi, perche' il contatore si
+    azzera solo alla chiusura di una finestra e la coppia non ne vedeva mai una.
+    Ora la deriva fa la cosa giusta: impedisce alla finestra di chiudersi con una
+    conferma, e il fallimento arriva quando la finestra finisce."""
     from scripts.optimize import update_registry
     from bot.core.firebase_client import decode_pairs
 
@@ -171,8 +179,15 @@ def test_drifted_pair_counts_as_a_gate_failure():
     update_registry(fb, {key: entry}, [key])          # la STORIA la promuove...
     rec = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])[key]
     assert rec["pass_count"] == 0                     # ...ma il vivo la smentisce
-    assert rec["fail_count"] == 1
+    assert rec.get("fail_count", 0) == 0, "dentro la finestra non si viene purgati"
     assert "drift_seen_at" in rec
+    assert rec["window_start"] > 0                    # la finestra e' aperta e conta
+
+    # una settimana di dati nuovi dopo, sempre in deriva: ORA arriva il fallimento
+    entry_dopo = {**entry, "data_end": entry["data_end"] + 169 * 3600.0}
+    update_registry(fb, {key: entry_dopo}, [key])
+    rec = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])[key]
+    assert rec["fail_count"] == 1 and rec["pass_count"] == 0
 
 
 def test_without_drift_the_pass_is_normal():

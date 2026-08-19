@@ -408,6 +408,16 @@ class Settings:
     GATE_WIN_RATE_FLOOR: float = float(os.getenv("GATE_WIN_RATE_FLOOR", "0.45"))
     GATE_MIN_TOTAL_RETURN: float = float(os.getenv("GATE_MIN_TOTAL_RETURN", "0.15"))
     GATE_CONSISTENCY_FRACTION: float = float(os.getenv("GATE_CONSISTENCY_FRACTION", "1.0"))
+    # QUANTE finestre OOS devono aver prodotto trade. La consistenza si misura solo
+    # sulle finestre con trade (una senza segnali non e' una perdita), ed e' giusto —
+    # ma da sola apriva un buco: una candidata che concentra TUTTI i suoi trade in una
+    # sola delle tre finestre superava la consistenza con un solo dato, e il gate
+    # dichiarava "profittevole in ogni finestra OOS" avendone osservata una.
+    # Il walk-forward promette validazioni OOS ripetute nel tempo: se il tempo non c'e'
+    # stato, la promessa non e' stata mantenuta. Non e' una soglia di severita' da
+    # tarare, e' la definizione stessa di walk-forward — per questo non e' fra i
+    # TUNABLES del supervisore.
+    GATE_MIN_OOS_WINDOWS: int = int(os.getenv("GATE_MIN_OOS_WINDOWS", "2"))
     # CONTINUITA' del profitto: ritorno OOS / max drawdown della curva dei trade
     # (recovery factor) >= questa soglia. Rende operativo l'obiettivo "profitto
     # continuo": il PF dice QUANTO si vince, il recovery dice quanto in PROFONDITA'

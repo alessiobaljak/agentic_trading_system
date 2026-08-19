@@ -157,6 +157,15 @@ class WalkForwardOptimizer:
         seg_f = frame.iloc[start:].reset_index(drop=True)
         st = self.bt.run_strategy(strategy, symbol, seg, frame=seg_f,
                                   context_by_ts=context_by_ts)
+        # RETE DI SICUREZZA sul confine. Normalmente il warmup cade tutto prima del
+        # taglio e il primo trade nasce esattamente all'inizio dell'holdout. Ma se la
+        # storia e' piu' corta del warmup, `start` viene bloccato a 0 e i primi trade
+        # cadono PRIMA del taglio: l'holdout verificherebbe in parte su dati che la
+        # selezione ha gia' visto, che e' l'unica cosa che l'holdout non deve fare.
+        # Filtrare per timestamp e' corretto in entrambi i casi e non costa nulla.
+        h0 = candles[cut].open_time.timestamp()
+        trades = [t for t in st.trades if float(getattr(t, "entry_ts", 0) or 0) >= h0]
+        st = StrategyStats(strategy=st.strategy, trades=trades)
         pf = st.profit_factor()
         pnl = st.total_pnl_pct()
         n = len(st.trades)

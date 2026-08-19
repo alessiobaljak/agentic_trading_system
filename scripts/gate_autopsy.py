@@ -39,6 +39,8 @@ MEANING = {
     "win_rate": "vince troppo di rado perche' i guadagni ripaghino le perdite",
     "total_return": "profittevole, ma di troppo poco per valere il rischio",
     "consistency": "guadagna in un periodo e perde negli altri: non e' un edge stabile",
+    "oos_windows": "tutti i trade concentrati in una sola finestra: un'osservazione, "
+                   "non un walk-forward",
     "recovery": "la curva scava buche troppo profonde rispetto a quanto rende",
     "pf_ex_top": "regge solo grazie ai suoi pochi colpi migliori: fortuna, non edge",
     "regime": "in almeno un regime di mercato perde in modo conclamato",

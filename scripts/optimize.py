@@ -78,6 +78,17 @@ def _opt_one(sym: str) -> tuple[str, dict, list]:
     candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
     if len(candles) < _W["min_history"]:
         return (sym, {}, [])
+    # COIN DELISTATA: la serie finisce mesi fa. Ha storia a sufficienza, quindi il
+    # controllo qui sopra la lascia passare, e il gate la valida allegramente su un
+    # mercato che non esiste piu' — con l'ultima posizione chiusa a un prezzo che nella
+    # realta' si sarebbe eseguito in un book in liquidazione. Il controllo esisteva
+    # (quality.looks_delisted) ma era cablato solo in backtesting/run.py, cioe' nel
+    # report a mano: il job che alimenta il registro non lo chiamava.
+    from backtesting.quality import looks_delisted
+    if looks_delisted(candles, end, timeframe_hours(args.interval)):
+        print(f"[optimize] {sym}: serie ferma al "
+              f"{candles[-1].open_time:%Y-%m-%d} -> coin delistata, saltata")
+        return (sym, {}, [])
     results = _W["opt"].optimize_symbol(sym, candles, context_by_ts=_W["btc_ctx"])
     entries: dict = {}
     passed: list = []
@@ -594,10 +605,21 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     for key, e in out.items():
         rec = pairs.get(key, {"pass_count": 0})
         # una coppia SMENTITA DAL VIVO non puo' accumulare un pass, nemmeno se la
-        # storia la promuove ancora: e' il paper ad avere l'ultima parola sul presente
+        # storia la promuove ancora: e' il paper ad avere l'ultima parola sul presente.
+        #
+        # MA IL CONTO RESTA QUELLO DELLA FINESTRA. Prima questo ramo saltava
+        # `judge_window` e incrementava `fail_count` A OGNI RUN: col timer ogni tre ore
+        # una coppia in deriva veniva purgata in SEI ORE, e la redenzione promessa dalla
+        # docstring qui sopra ("se ripassa il gate su storia aggiornata il fail_count si
+        # azzera") era irraggiungibile, perche' l'azzeramento avviene solo alla chiusura
+        # di una finestra e la coppia non arrivava mai a vederne una. E' esattamente il
+        # difetto dei due orologi che `judge_window` esiste per chiudere, rimasto vivo
+        # su questo ramo. Ora la deriva fa cio' che deve: impedisce che LA FINESTRA
+        # possa chiudersi con una conferma, e il verdetto arriva quando arriva per tutti.
         if key in drifted:
-            rec["fail_count"] = rec.get("fail_count", 0) + 1
+            rec["passed_in_window"] = False
             rec["drift_seen_at"] = time.time()
+            judge_window(rec, float(e.get("data_end", 0) or 0), False)
             rec["symbol"], rec["strategy"] = e["symbol"], e["strategy"]
             rec["last_seen_at"] = time.time()
             pairs[key] = rec

@@ -33,7 +33,7 @@ def test_h_idx_uses_only_closed_hour_bars():
     # niente look-ahead: la barra 15m usa solo l'ultima 1h GIA' CHIUSA.
     candles = _candles_15m(16)
     bt = Backtester(interval_hours=0.25)
-    _, h_idx = bt._htf_for(candles)
+    _, h_idx = bt._htf_for("TESTUSDT", candles)
     # le prime 3 barre 15m: l'ora 00 non e' ancora chiusa -> -1
     assert h_idx[0] == -1 and h_idx[2] == -1
     # la barra 00:45 chiude alle 01:00 -> l'ora 00 e' chiusa -> indice 0
@@ -45,7 +45,7 @@ def test_snapshot_1h_key_is_real_not_alias():
     candles = _candles_15m(48 * 8)
     bt = Backtester(interval_hours=0.25)
     frame = compute_indicator_frame(candles)
-    htf = bt._htf_for(candles)
+    htf = bt._htf_for("TESTUSDT", candles)
     snap = bt._snapshot_from_frame("X", frame, 300, htf=htf)
     i15, i1h = snap.indicators["15m"], snap.indicators["1h"]
     assert i1h.timeframe == "1h"
@@ -56,4 +56,4 @@ def test_at_1h_no_resample_keys_alias():
     # timeframe base gia' 1h: nessun resample, la "1h" e' la riga stessa.
     candles = _candles_15m(300)   # i timestamp non contano qui
     bt = Backtester(interval_hours=1.0)
-    assert bt._htf_for(candles) is None
+    assert bt._htf_for("TESTUSDT", candles) is None

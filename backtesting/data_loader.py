@@ -326,14 +326,18 @@ def _merge_candles(base: list[Candle], tail: list[Candle]) -> list[Candle] | Non
     merged = [c for c in base if c.open_time < cut] + list(tail)
     if len(merged) < 2:
         return merged
-    step = None
-    for a, b in zip(merged, merged[1:]):
-        d = (b.open_time - a.open_time).total_seconds()
-        if d <= 0:
-            return None                     # non monotona: cache inaffidabile
-        if step is None:
-            step = d
-        elif abs(d - step) > 1.0 and d % step != 0:
+    diffs = [(b.open_time - a.open_time).total_seconds()
+             for a, b in zip(merged, merged[1:])]
+    if any(d <= 0 for d in diffs):
+        return None                         # non monotona: cache inaffidabile
+    # IL PASSO E' IL MINIMO, non il primo. Prendendo il primo, una serie che inizia
+    # con un buco (manutenzione dell'exchange proprio li') faceva sembrare
+    # incoerenti tutte le coppie successive e mandava a riscaricare quattro anni di
+    # candele. Non produceva dati sbagliati — solo ore di rete buttate a caso, che
+    # e' il difetto piu' difficile da notare perche' somiglia a lentezza normale.
+    step = min(diffs)
+    for d in diffs:
+        if abs(d - step) > 1.0 and d % step != 0:
             # un buco e' possibile (exchange in manutenzione), un passo INCOERENTE
             # col resto no: vorrebbe dire due serie con timeframe diversi unite
             return None

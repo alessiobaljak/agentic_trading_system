@@ -123,6 +123,14 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
     candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
     if len(candles) < _W["min_history"]:
         return (sym, {}, [], {}, 0, [], {})
+    # coin DELISTATA: storia a sufficienza ma serie ferma a mesi fa. Vedi la nota
+    # gemella in scripts/optimize.py: validare su un mercato che non esiste piu'.
+    from backtesting.quality import looks_delisted
+    from bot.config import timeframe_hours as _tfh
+    if looks_delisted(candles, end, _tfh(args.interval)):
+        print(f"[discover] {sym}: serie ferma al "
+              f"{candles[-1].open_time:%Y-%m-%d} -> coin delistata, saltata")
+        return (sym, {}, [], {}, 0, [], {})
     frame = compute_indicator_frame(candles)
     entries: dict = {}
     passed_keys: list = []

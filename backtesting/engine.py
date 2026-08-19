@@ -290,6 +290,8 @@ def gate_verdict(window_pnls: list[float], n_trades: int, pf: float,
       * profittevole in OGNI (o quasi) finestra OOS — almeno
         GATE_CONSISTENCY_FRACTION delle finestre > 0: niente "in perdita un anno e
         recupero il dopo";
+      * e su almeno GATE_MIN_OOS_WINDOWS finestre DIVERSE: "profittevole in ogni
+        finestra" non vuol dire niente se la finestra osservata e' una sola;
       * ROBUSTEZZA: PF >= GATE_MIN_PF_EX_TOP anche togliendo il GATE_DROP_TOP_FRAC
         di trade migliori (vedi pf_without_top) — il risultato non deve poggiare
         su pochi colpi fortunati.
@@ -314,6 +316,11 @@ def gate_verdict(window_pnls: list[float], n_trades: int, pf: float,
         need = len(window_pnls) * settings.GATE_CONSISTENCY_FRACTION
         if positive < need - 1e-9:
             failed.append(("consistency", _short(positive, need)))
+        # ...e la consistenza va misurata su piu' di una finestra, altrimenti dice
+        # soltanto "l'unica finestra osservata era positiva". Vedi GATE_MIN_OOS_WINDOWS.
+        if len(window_pnls) < settings.GATE_MIN_OOS_WINDOWS:
+            failed.append(("oos_windows",
+                           _short(len(window_pnls), settings.GATE_MIN_OOS_WINDOWS)))
     # CONTINUITA' trade-per-trade: le finestre la misurano ad anni, questo a ogni
     # trade — niente curve che scavano buche profonde per poi risalire.
     if max_dd is not None and max_dd > 0:
@@ -523,15 +530,26 @@ class Backtester:
                        low=buckets[ts][2], close=buckets[ts][3], volume=buckets[ts][4])
                 for ts in order]
 
-    def _htf_for(self, candles: list[Candle]):
+    def _htf_for(self, symbol: str, candles: list[Candle]):
         """(frame_1h, h_idx) per la serie data: h_idx[i] = indice dell'ULTIMA candela
         1h CHIUSA alla chiusura della barra i (-1 se nessuna: niente look-ahead sulla
         1h in formazione — il live, dopo il fix della candela parziale, fa lo stesso).
         None se il timeframe base e' gia' >= 1h (la riga e' gia' la 1h). Memoizzata
-        per slice: l'optimizer richiama run_strategy molte volte sugli stessi dati."""
+        per slice: l'optimizer richiama run_strategy molte volte sugli stessi dati.
+
+        LA CHIAVE INCLUDE IL SIMBOLO, e non e' un dettaglio. Tutte le coin condividono
+        la stessa griglia temporale: chiesta la stessa storia con lo stesso timeframe,
+        (prima_candela, ultima_candela, quante) e' IDENTICO per BTCUSDT e per
+        qualunque altra coin quotata da prima di `--start`. Senza il simbolo nella
+        chiave, la seconda coin di ogni worker riceveva la 1h della PRIMA — e la prima
+        era sempre BTC, perche' il contesto cross-asset viene costruito all'avvio del
+        worker. Risultato: regime e conferma dual-timeframe calcolati sul grafico di
+        BITCOIN per quasi tutto l'universo, in ogni finestra e in ogni holdout.
+        E' l'errore piu' silenzioso possibile — nessuna eccezione, nessun log, solo
+        numeri sbagliati — e spiega buona parte della divergenza gate<->paper."""
         if self.interval_hours >= 1.0 or not candles:
             return None
-        key = (candles[0].open_time, candles[-1].open_time, len(candles))
+        key = (symbol, candles[0].open_time, candles[-1].open_time, len(candles))
         hit = self._htf_cache.get(key)
         if hit is not None:
             return hit
@@ -576,7 +594,7 @@ class Backtester:
         strategie cross-asset (momentum_cross_asset) sono validabili nel backtest."""
         if frame is None:
             frame = compute_indicator_frame(candles)
-        htf = self._htf_for(candles)
+        htf = self._htf_for(symbol, candles)
         out: dict = {}
         for idx in range(len(frame)):
             snap = self._snapshot_from_frame(symbol, frame, idx, htf=htf)
@@ -592,7 +610,7 @@ class Backtester:
         hit = self._prep_cache.get(key)
         if hit is not None:
             return hit
-        htf = self._htf_for(candles)           # 1h REALE per regime/dual-timeframe
+        htf = self._htf_for(symbol, candles)   # 1h REALE per regime/dual-timeframe
         snaps, regimes = [], []
         for idx in range(len(frame)):
             snap = self._snapshot_from_frame(symbol, frame, idx, htf=htf)

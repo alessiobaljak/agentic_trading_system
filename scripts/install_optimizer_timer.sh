@@ -29,7 +29,14 @@ Environment=BACKTEST_ALLOW_SYNTHETIC=false
 Environment=OPTIMIZER_MIN_PASSES=3
 # storia minima in GIORNI (convertita in candele nel timeframe corrente dal codice):
 # NON usare OPTIMIZER_MIN_HISTORY (in candele), non scala col timeframe.
-Environment=OPTIMIZER_MIN_HISTORY_DAYS=180
+# 365, non 180. Con 180 giorni, tolti i 45 di holdout, restano 135 da dividere in 4
+# blocchi: finestre da 34 giorni, cioe' tre fette contigue dello stesso trimestre —
+# spesso i primi mesi di una listing nuova, una sola fase di mercato. E' il caso
+# misurato su BIRBUSDT: 191 giorni di storia, PF 1.51 nel gate e 0.16 nel paper.
+# Il codice lo dice da tempo nella docstring di _min_history; questa unit diceva 180
+# e vinceva lei, perche' l'ambiente batte il default. La lezione era scritta e non
+# applicata.
+Environment=OPTIMIZER_MIN_HISTORY_DAYS=365
 # priorita' bassa: non deve mai rubare CPU/IO al bot live
 Nice=15
 IOSchedulingClass=idle
