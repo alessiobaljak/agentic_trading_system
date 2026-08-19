@@ -27,6 +27,7 @@ import OperatingCosts from './OperatingCosts';
 import OrchestratorShadow from './OrchestratorShadow';
 import SupervisorDecisions from './SupervisorDecisions';
 import GateAutopsy from './GateAutopsy';
+import GateFunnel from './GateFunnel';
 import GateEvolution from './GateEvolution';
 import ClaudeChat from './ClaudeChat';
 
@@ -336,8 +337,9 @@ export default function DashboardShell() {
 
           {tab === 'ricerca' && (
             <>
-              <SupervisorDecisions />
+              <GateFunnel />
               <GateEvolution />
+              <SupervisorDecisions />
               <GateAutopsy />
             </>
           )}

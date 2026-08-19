@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { getDb } from '../lib/firebase';
+import { CHROME, STATO, formatta } from '../lib/viz';
 
 /**
  * DOVE MUOIONO LE CANDIDATE.
@@ -13,19 +14,22 @@ import { getDb } from '../lib/firebase';
  * profitto non batte i costi, o perché crollano sui dati mai visti. E senza saperlo
  * l'unica reazione possibile è abbassare le soglie a caso, cioè validare rumore.
  *
- * Due letture, e servono entrambe:
+ * DUE LETTURE, E SERVONO ENTRAMBE — per questo sono un interruttore e non due liste
+ * affiancate: messe una accanto all'altra sembrano la stessa cosa misurata due volte,
+ * mentre dicono cose opposte.
  *
- *   * CHI FERMA — il criterio messo peggio per ciascuna candidata. Dice dov'è il
- *     collo di bottiglia della ricerca.
- *   * CHI È COINVOLTO — quante volte ogni criterio compare, anche non da solo. Un
+ *   * CHI FERMA — il criterio messo peggio per ciascuna candidata: dov'è il collo di
+ *     bottiglia.
+ *   * CHI È COINVOLTO — quante volte un criterio compare, anche non da solo. Un
  *     criterio presente in quasi tutte le bocciature non sta selezionando: sta
  *     descrivendo la qualità media delle candidate. Allentarlo non convertirebbe
  *     nessuno, perché quelle candidate fallirebbero comunque altri cinque controlli.
  *     È la lezione che ha fatto riscrivere la scelta della leva del supervisore.
  *
- * I QUASI-PASSAGGI sono le candidate fermate da UN SOLO criterio e per poco: le
- * uniche che un allentamento convertirebbe davvero, e i semi da cui la discovery
- * muta al giro dopo.
+ * INTERATTIVO PERCHÉ SERVE, non per decorazione: cliccando un criterio la tabella
+ * sotto mostra solo le candidate fermate da QUELLO. È la domanda che ci si fa
+ * davvero guardando l'istogramma ("chi sono quelle 40 lì?"), e prima richiedeva di
+ * andarsele a cercare a mano nel documento su Firebase.
  */
 type Near = {
   key?: string;
@@ -46,7 +50,7 @@ type Rep = {
   near_miss_count?: number;
 };
 
-/** Cosa vuol dire ogni criterio, in italiano. Un'etichetta tecnica senza glossa è
+/** Cosa vuol dire ogni criterio, in italiano: un'etichetta tecnica senza glossa è
  *  un'informazione che chi guarda deve andarsi a cercare altrove. */
 const SIGNIFICATO: Record<string, string> = {
   trades: 'pochi segnali: la strategia spara troppo poco',
@@ -61,66 +65,23 @@ const SIGNIFICATO: Record<string, string> = {
   holdout: 'funziona dove l’abbiamo scelta e non sui dati mai visti: sovradattamento',
 };
 
-function Barre({ dati, tot }: { dati: [string, number][]; tot: number }) {
-  if (!dati.length) return <p className="muted" style={{ fontSize: 13 }}>—</p>;
-  const max = Math.max(...dati.map(([, v]) => v)) || 1;
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      {dati.map(([k, v]) => (
-        <div key={k}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-            <span>{k}</span>
-            <span className="muted">
-              {v.toLocaleString('it-IT')} · {tot ? ((v / tot) * 100).toFixed(0) : '0'}%
-            </span>
-          </div>
-          <div
-            style={{
-              height: 6,
-              background: 'var(--border-soft)',
-              borderRadius: 3,
-              overflow: 'hidden',
-              margin: '3px 0 2px',
-            }}
-          >
-            <div
-              style={{
-                width: `${(v / max) * 100}%`,
-                height: '100%',
-                background: 'var(--accent)',
-                borderRadius: 3,
-              }}
-            />
-          </div>
-          {SIGNIFICATO[k] && (
-            <div className="muted" style={{ fontSize: 11 }}>
-              {SIGNIFICATO[k]}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
+type Vista = 'binding' | 'involved';
 
 export default function GateAutopsy() {
   const [cur, setCur] = useState<Rep | null>(null);
   const [dis, setDis] = useState<Rep | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [vista, setVista] = useState<Vista>('binding');
+  const [scelto, setScelto] = useState<string | null>(null);
 
   useEffect(() => {
     try {
       const db = getDb();
-      const a = onSnapshot(
-        doc(db, 'gate_autopsy', 'current'),
+      const a = onSnapshot(doc(db, 'gate_autopsy', 'current'),
         (s) => { setCur(s.exists() ? (s.data() as Rep) : null); setLoaded(true); },
-        () => setLoaded(true),
-      );
-      const b = onSnapshot(
-        doc(db, 'gate_autopsy', 'discover'),
-        (s) => setDis(s.exists() ? (s.data() as Rep) : null),
-        () => {},
-      );
+        () => setLoaded(true));
+      const b = onSnapshot(doc(db, 'gate_autopsy', 'discover'),
+        (s) => setDis(s.exists() ? (s.data() as Rep) : null), () => {});
       return () => { a(); b(); };
     } catch {
       setLoaded(true);
@@ -128,8 +89,9 @@ export default function GateAutopsy() {
     }
   }, []);
 
-  /** Le due autopsie sommate: la discovery porta il volume, l'optimizer le
-   *  strategie base. Per capire dove si muore contano insieme. */
+  /** Le due autopsie sommate: la discovery porta il volume (oltre ventimila
+   *  valutazioni), l'optimizer le strategie base (~1500). Per capire dove si muore
+   *  contano insieme. */
   const tot = useMemo(() => {
     const somma = (f: (r: Rep) => Record<string, number> | undefined) => {
       const out: Record<string, number> = {};
@@ -139,28 +101,33 @@ export default function GateAutopsy() {
       }
       return Object.entries(out).sort((x, y) => y[1] - x[1]);
     };
-    const evaluated = Number(cur?.evaluated ?? 0) + Number(dis?.evaluated ?? 0);
-    const passed = Number(cur?.passed ?? 0) + Number(dis?.passed ?? 0);
-    const diagnosed = Number(cur?.diagnosed ?? 0) + Number(dis?.diagnosed ?? 0);
     const near = [...(cur?.near_misses ?? []), ...(dis?.near_misses ?? [])]
-      .sort((a, b) => (b.shortfall ?? -9) - (a.shortfall ?? -9))
-      .slice(0, 12);
-    return { binding: somma((r) => r.binding), involved: somma((r) => r.involved),
-             evaluated, passed, diagnosed, near };
+      .sort((a, b) => (b.shortfall ?? -9) - (a.shortfall ?? -9));
+    return {
+      binding: somma((r) => r.binding),
+      involved: somma((r) => r.involved),
+      diagnosed: Number(cur?.diagnosed ?? 0) + Number(dis?.diagnosed ?? 0),
+      near,
+    };
   }, [cur, dis]);
+
+  const dati = vista === 'binding' ? tot.binding : tot.involved;
+  const max = Math.max(1, ...dati.map(([, v]) => v));
 
   /** Un criterio presente in ≥90% delle bocciature descrive il mercato, non seleziona. */
   const universali = tot.involved
     .filter(([, v]) => tot.diagnosed && v >= 0.9 * tot.diagnosed)
     .map(([k]) => k);
 
+  const nearMostrati = scelto ? tot.near.filter((n) => n.binding === scelto) : tot.near;
+
   return (
     <div className="panel">
       <h2>Perché le candidate non passano</h2>
       <p className="subtitle">
-        L&apos;autopsia dell&apos;ultima passata: su cosa si fermano le strategie
-        provate, e quali erano a un passo. È il dato su cui il supervisore sceglie dove
-        intervenire — senza, si tarerebbe al buio.
+        L&apos;autopsia dell&apos;ultima passata. Clicca un criterio per vedere quali
+        candidate ha fermato — è il dato su cui il supervisore sceglie dove
+        intervenire.
       </p>
 
       {!loaded ? (
@@ -172,39 +139,104 @@ export default function GateAutopsy() {
         </p>
       ) : (
         <>
-          <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', fontSize: 13, marginBottom: 12 }}>
-            <span>
-              valutate <b>{tot.evaluated.toLocaleString('it-IT')}</b>
-            </span>
-            <span style={{ color: tot.passed > 0 ? 'var(--green)' : undefined }}>
-              passate <b>{tot.passed.toLocaleString('it-IT')}</b>
-            </span>
-            <span>
-              quasi-passaggi{' '}
-              <b>
-                {(Number(cur?.near_miss_count ?? 0) + Number(dis?.near_miss_count ?? 0)).toLocaleString('it-IT')}
-              </b>
-            </span>
+          <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setVista('binding')}
+              className={`btn ${vista === 'binding' ? 'btn-primary' : 'btn-ghost'}`}
+              style={{ padding: '4px 12px', fontSize: 12 }}
+              aria-pressed={vista === 'binding'}
+            >
+              Chi le ferma
+            </button>
+            <button
+              onClick={() => setVista('involved')}
+              className={`btn ${vista === 'involved' ? 'btn-primary' : 'btn-ghost'}`}
+              style={{ padding: '4px 12px', fontSize: 12 }}
+              aria-pressed={vista === 'involved'}
+            >
+              Chi è coinvolto
+            </button>
+            {scelto && (
+              <button
+                onClick={() => setScelto(null)}
+                className="btn btn-ghost"
+                style={{ padding: '4px 12px', fontSize: 12 }}
+              >
+                ✕ togli il filtro «{scelto}»
+              </button>
+            )}
           </div>
 
-          <div className="grid grid-2" style={{ gap: 18 }}>
-            <div>
-              <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
-                CHI LE FERMA (il criterio messo peggio)
-              </div>
-              <Barre dati={tot.binding.slice(0, 8)} tot={tot.diagnosed} />
-            </div>
-            <div>
-              <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
-                CHI È COINVOLTO (anche non da solo)
-              </div>
-              <Barre dati={tot.involved.slice(0, 8)} tot={tot.diagnosed} />
-            </div>
+          <p className="muted" style={{ fontSize: 12, marginTop: -4, marginBottom: 10 }}>
+            {vista === 'binding'
+              ? 'Il criterio messo peggio per ciascuna candidata: dov’è il collo di bottiglia.'
+              : 'Quante volte ogni criterio compare, anche insieme ad altri: descrive il terreno, non il filtro.'}
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {dati.slice(0, 10).map(([k, v]) => {
+              const attivo = scelto === k;
+              const perc = tot.diagnosed ? (v / tot.diagnosed) * 100 : 0;
+              return (
+                <button
+                  key={k}
+                  onClick={() => setScelto(attivo ? null : k)}
+                  title={SIGNIFICATO[k] ?? k}
+                  aria-pressed={attivo}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'left',
+                    background: attivo ? 'rgba(79,156,249,.10)' : 'transparent',
+                    border: '1px solid transparent',
+                    borderColor: attivo ? 'var(--border)' : 'transparent',
+                    borderRadius: 8,
+                    // area cliccabile generosa: la barra è alta 6px, il bersaglio no
+                    padding: '7px 9px',
+                    cursor: 'pointer',
+                    color: 'inherit',
+                    font: 'inherit',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                    <span>{k}</span>
+                    <span className="muted" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                      {formatta(v)} · {perc.toFixed(0)}%
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      height: 6,
+                      background: CHROME.griglia,
+                      borderRadius: 3,
+                      overflow: 'hidden',
+                      margin: '4px 0 3px',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${(v / max) * 100}%`,
+                        height: '100%',
+                        background: universali.includes(k) && vista === 'involved'
+                          ? STATO.attenzione
+                          : 'var(--accent)',
+                        borderRadius: 3,
+                      }}
+                    />
+                  </div>
+                  {SIGNIFICATO[k] && (
+                    <div className="muted" style={{ fontSize: 11 }}>
+                      {SIGNIFICATO[k]}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {universali.length > 0 && (
-            <p style={{ fontSize: 12, marginTop: 12, color: 'var(--amber)' }}>
-              {universali.join(', ')} compare in quasi tutte le bocciature: sta
+          {universali.length > 0 && vista === 'involved' && (
+            <p style={{ fontSize: 12, marginTop: 10, color: STATO.attenzione }}>
+              ⚠ {universali.join(', ')} compare in quasi tutte le bocciature: sta
               descrivendo la qualità media delle candidate, non facendo da filtro.
               Allentarlo non ne convertirebbe nessuna — fallirebbero comunque gli altri
               criteri.
@@ -212,15 +244,18 @@ export default function GateAutopsy() {
           )}
 
           <div className="muted" style={{ fontSize: 12, margin: '16px 0 6px' }}>
-            A UN PASSO (fermate da un solo criterio)
+            A UN PASSO — fermate da un solo criterio
+            {scelto && <> · filtrate su <b>{scelto}</b></>}
+            {' '}({nearMostrati.length})
           </div>
-          {tot.near.length === 0 ? (
+          {nearMostrati.length === 0 ? (
             <p className="muted" style={{ fontSize: 13 }}>
-              Nessuna. Vuol dire che non esiste una soglia che ne sbloccherebbe qualcuna:
-              il problema non è il gate, sono le candidate.
+              {scelto
+                ? 'Nessun quasi-passaggio su questo criterio: le candidate che ferma fallivano anche altro.'
+                : 'Nessuna. Vuol dire che non esiste una soglia che ne sbloccherebbe qualcuna: il problema non è il gate, sono le candidate.'}
             </p>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ overflowX: 'auto', maxHeight: 300, overflowY: 'auto' }}>
               <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
                 <thead>
                   <tr className="muted" style={{ textAlign: 'left' }}>
@@ -231,8 +266,8 @@ export default function GateAutopsy() {
                     <th style={{ padding: '4px 8px' }}>trade</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {tot.near.map((n, i) => (
+                <tbody style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {nearMostrati.slice(0, 40).map((n, i) => (
                     <tr key={`${n.key}-${i}`} style={{ borderTop: '1px solid var(--border-soft)' }}>
                       <td style={{ padding: '4px 8px 4px 0', whiteSpace: 'nowrap' }}>{n.key}</td>
                       <td style={{ padding: '4px 8px' }}>{n.binding}</td>

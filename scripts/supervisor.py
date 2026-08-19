@@ -23,6 +23,7 @@ from datetime import datetime, timezone
 from bot.config import settings
 from bot.core.firebase_client import decode_pairs, get_firebase
 from bot.learning.supervisor import NEVER, TUNABLES, Context, decide
+from scripts.optimize import publish_timeline
 
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TUNING_FILE = os.path.join(APP_DIR, "tuning.env")
@@ -191,6 +192,17 @@ def main() -> int:
                         "at": time.time()})
 
     if not args.dry_run:
+        # CAMPIONA LA STORIA DEL GATE. La scrivono anche optimize e discover, ma quelli
+        # girano ogni tre ore: il supervisore gira ogni ora e il registro l'ha gia'
+        # letto, quindi da qui la serie ha risoluzione tripla senza costare una lettura
+        # in piu'. E' un'osservazione, non una decisione — ma resta fuori dal --dry-run,
+        # perche' "prova senza toccare niente" deve voler dire esattamente quello.
+        try:
+            reg = fb.get_doc("strategy_registry", "validated") or {}
+            publish_timeline(fb, decode_pairs(reg.get("pairs")), "supervisor",
+                             ctx.evaluated, ctx.passed)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[supervisor] storia del gate non campionata ({exc})")
         state.update({
             "updated_at": time.time(), "validated": ctx.validated,
             "last_validated": ctx.validated, "ready": ctx.ready,
