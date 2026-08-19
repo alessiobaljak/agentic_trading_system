@@ -1,0 +1,45 @@
+name: claude
+
+# CHIEDERE A CLAUDE DA DENTRO IL REPO.
+#
+# Un commento su una issue che contiene "@claude" fa partire una sessione di Claude
+# Code con accesso a questo repo: legge il codice, risponde nel thread, e se serve
+# committa. E' il motore dietro la tab "Claude" della dashboard, che scrive proprio
+# qui (vedi dashboard/app/api/claude/route.ts e docs/claude_da_vercel.md).
+#
+# ATTENZIONE: QUESTO REPO E' PUBBLICO. Senza il filtro qui sotto, chiunque su
+# internet potrebbe scrivere un commento e far partire una sessione con i nostri
+# crediti e con accesso in scrittura al repo. Il filtro non e' una precauzione
+# ridondante: e' l'unica cosa che separa "il proprietario chiede" da "chiunque
+# comanda". L'azione ha una sua difesa (risponde solo a chi ha permessi di
+# scrittura), ma quella difesa scatta DOPO l'avvio del job — e il job usa gia' il
+# segreto. Qui si ferma prima.
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  rispondi:
+    # tre condizioni insieme: e' il proprietario, e' una issue (non una PR), e la
+    # frase di attivazione c'e' davvero.
+    if: >
+      github.event.comment.user.login == github.repository_owner &&
+      !github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          trigger_phrase: "@claude"

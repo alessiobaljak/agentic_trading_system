@@ -33,8 +33,9 @@ from bot.strategies.generated import GeneratedStrategy
 from bot.ai.hypotheses import propose as ai_propose
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import generate_specs, mutate
-from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_history,
-                              drifted_from_paper, top_symbols_by_volume)
+from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
+                              drifted_from_paper, judge_window, publish_timeline,
+                              top_symbols_by_volume)
 
 # stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
 # processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
@@ -283,22 +284,31 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
     for key in passed_now:
         e = out[key]
         rec = pairs.get(key, {"pass_count": 0})
-        if key in drifted:      # smentita dal vivo -> nessun pass, conta come fallimento
-            rec["fail_count"] = rec.get("fail_count", 0) + 1
+        # UNA SOLA CONTABILITA' PER TUTTO IL REGISTRO. Qui c'era una copia a mano
+        # della vecchia regola del "pass onesto" (differenza fra due data_end), che
+        # optimize.py ha smesso di usare quando e' passato al verdetto per finestra.
+        # Due regole diverse sullo stesso documento: le coppie generate — che sono la
+        # maggioranza del registro — accumulavano conferme con un criterio, le base
+        # con un altro, e nessuno dei due sapeva dell'altro. E' lo stesso schema che
+        # ha gia' prodotto due difetti (due orologi, un campo letto al posto di un
+        # altro): finche' esistono due copie della stessa regola, prima o poi
+        # divergono. Ora c'e' `judge_window` e basta, per tutti.
+        data_end = float(e.get("data_end", 0) or 0)
+        if key in drifted:
+            # smentita dal vivo: la finestra non puo' chiudersi con una conferma.
+            # Un fallimento per FINESTRA, non per run (vedi la nota gemella in
+            # scripts/optimize.py: contando a ogni run si purgava in sei ore).
+            rec["passed_in_window"] = False
             rec["drift_seen_at"] = now
+            judge_window(rec, data_end, False)
             rec["symbol"], rec["strategy"] = e["symbol"], e["strategy"]
             rec["generated"] = True
             rec["last_seen_at"] = now
             pairs[key] = rec
             continue
-        # PASS ONESTO (stessa regola di optimize): conta solo con dati nuovi
-        data_end = float(e.get("data_end", 0) or 0)
-        prev_end = float(rec.get("last_pass_data_end", 0) or 0)
-        # FAIL-CLOSED: senza data_end il pass NON conta. Il fallback aperto era il
-        # buco da cui i run sharded (entries senza data_end) gonfiavano il conteggio.
-        if data_end > 0 and (prev_end <= 0 or data_end - prev_end >= NEW_DATA_MIN_S):
-            rec["pass_count"] = rec.get("pass_count", 0) + 1
-            rec["last_pass_data_end"] = data_end
+        # FAIL-CLOSED sul data_end: `judge_window` non giudica senza. Era il buco da
+        # cui i run sharded (entries senza data_end) gonfiavano il conteggio.
+        judge_window(rec, data_end, True)
         if e.get("holdout"):
             rec["holdout"] = e["holdout"]
         if e.get("regime_pf"):
@@ -365,6 +375,7 @@ def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
     doc["coverage"] = round(len(validated_coins) / universe, 3)
     doc["updated_at"] = now
     fb.set_doc("strategy_registry", "validated", doc)
+    publish_timeline(fb, pairs, "discover", len(out), len(passed_now))
     return validated
 
 

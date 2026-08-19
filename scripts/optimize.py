@@ -588,6 +588,55 @@ def judge_window(rec: dict, data_end: float, passed_now: bool,
     return rec
 
 
+# quanti punti di storia tenere: 240 punti a due passate ogni tre ore sono circa
+# quindici giorni. Il documento resta sotto i 50 KB, molto lontano dal limite di
+# 1 MiB che ci ha gia' fatto cadere un run da quattro ore.
+TIMELINE_POINTS = int(os.getenv("GATE_TIMELINE_POINTS", "240"))
+
+
+def publish_timeline(fb, pairs: dict, source: str,
+                     evaluated: int = 0, passed: int = 0) -> None:
+    """L'EVOLVERSI DELLE STRATEGIE, come serie storica.
+
+    Il registro dice com'e' il mondo ADESSO: 2615 coppie, 224 a un passaggio, zero
+    validate. Non dice se ieri erano 180 o 400, e quella e' l'unica differenza che
+    conta — un fronte che cresce significa che la ricerca sta accumulando, uno che si
+    rinnova ogni pochi giorni significa che le coppie entrano ed escono senza mai
+    arrivare in fondo. E' esattamente il sintomo con cui si e' scoperto il difetto
+    dei due orologi, e all'epoca lo si e' potuto vedere solo confrontando a mano
+    schermate di giorni diversi.
+
+    Un punto per passata, campi piccoli, coda tagliata: e' un grafico, non un
+    archivio. Best-effort in ogni punto — la storia e' un di piu', non deve poter
+    far fallire una validazione.
+    """
+    try:
+        dist: dict[str, int] = {}
+        for r in pairs.values():
+            p = int(r.get("pass_count", 0) or 0)
+            k = str(min(p, MIN_PASSES))          # tutto cio' che e' >= soglia e' "validata"
+            dist[k] = dist.get(k, 0) + 1
+        punto = {
+            "at": round(time.time()),
+            "src": source,
+            "tracked": len(pairs),
+            "dist": dist,
+            "validated": dist.get(str(MIN_PASSES), 0),
+            "evaluated": int(evaluated),
+            "passed": int(passed),
+        }
+        doc = fb.get_doc("gate_history", "timeline") or {}
+        punti = list(doc.get("points") or [])
+        punti.append(punto)
+        fb.set_doc("gate_history", "timeline", {
+            "updated_at": time.time(),
+            "min_passes": MIN_PASSES,
+            "points": punti[-TIMELINE_POINTS:],
+        })
+    except Exception as exc:  # noqa: BLE001
+        print(f"[timeline] non salvata ({exc})")
+
+
 def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     """
     Accumula nel tempo: ogni run incrementa il pass_count delle coppie che passano.
@@ -703,6 +752,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         "min_covered": MIN_COVERED,
     }
     fb.set_doc("strategy_registry", "validated", registry)
+    publish_timeline(fb, pairs, "optimize", len(out), len(passed_set))
     return registry
 
 
