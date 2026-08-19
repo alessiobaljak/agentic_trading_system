@@ -122,11 +122,17 @@ def main() -> int:
     for t, k in finite[:args.top]:
         r = pairs[k]
         stato = "GIA' VALIDATA" if t <= 0 else f"validata il {_when(t)}"
+        # SE LA FINESTRA NON C'E', NON SI STAMPA UNA DATA. Sommando la settimana a un
+        # `window_start` assente usciva l'8 gennaio 1970, che in mezzo a date vere
+        # sembra un dato e non lo e'. Le coppie senza finestra sono quelle generate
+        # dalla discovery, che fino a poco fa non passava da judge_window: la finestra
+        # si apre alla prima passata dopo l'unificazione della contabilita'.
+        ws = float(r.get("window_start", 0) or 0)
+        fin = (f"finestra chiusa il {_when(ws + NEW_DATA_MIN_S)}" if ws > 0
+               else "finestra non ancora aperta")
         print(f"  {k:<34} {int(r.get('pass_count', 0) or 0)}/{MIN_PASSES} pass · "
               f"{stato} · ultimo pass "
-              f"{_when(float(r.get('last_pass_data_end', 0) or 0))}"
-              f" · finestra chiusa il "
-              f"{_when(float(r.get('window_start', 0) or 0) + NEW_DATA_MIN_S)}"
+              f"{_when(float(r.get('last_pass_data_end', 0) or 0))} · {fin}"
               + (f" · {r.get('fail_count')} fallimenti di fila" if r.get("fail_count") else ""))
 
     # --- la data che interessa: quando riparte il bot ----------------------- #
