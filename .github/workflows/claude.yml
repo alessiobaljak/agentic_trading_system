@@ -19,6 +19,13 @@ on:
   issue_comment:
     types: [created]
 
+# Il segreto non si puo' leggere in un `if` di job, ma si puo' proiettare qui: cosi'
+# finche' ANTHROPIC_API_KEY non e' configurata il workflow non fallisce in rosso a
+# ogni messaggio — risponde nel thread che manca la chiave e si ferma. Una raffica di
+# mail di fallimento e' il modo piu' rapido per far ignorare le notifiche vere.
+env:
+  HA_CHIAVE: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+
 jobs:
   rispondi:
     # tre condizioni insieme: e' il proprietario, e' una issue (non una PR), e la
@@ -35,10 +42,23 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
+      - name: Dire che manca la chiave (invece di fallire in silenzio)
+        if: env.HA_CHIAVE != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -sS -X POST \
+            -H "authorization: Bearer $GH_TOKEN" \
+            -H "accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments" \
+            -d '{"body":"Non posso rispondere: manca il segreto **ANTHROPIC_API_KEY** nelle impostazioni del repo (Settings -> Secrets and variables -> Actions). I passi sono in `docs/claude_da_vercel.md`."}'
+
       - uses: actions/checkout@v4
+        if: env.HA_CHIAVE == 'true'
         with:
           fetch-depth: 0
       - uses: anthropics/claude-code-action@v1
+        if: env.HA_CHIAVE == 'true'
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
