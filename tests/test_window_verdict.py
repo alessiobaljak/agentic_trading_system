@@ -147,3 +147,33 @@ def test_the_window_fields_survive_the_registry_slimming():
     capo a ogni run e i verdetti non arriverebbero mai."""
     from scripts.optimize import REGISTRY_CORE_FIELDS
     assert {"window_start", "passed_in_window"} <= REGISTRY_CORE_FIELDS
+
+
+# ---- la migrazione: la conferma regalata che stava rientrando ------------ #
+def test_a_pre_existing_pair_does_not_get_a_free_confirmation():
+    """Il caso della migrazione, trovato il 19 agosto. Una coppia che aveva gia' un
+    passaggio ma non la finestra (perche' esisteva PRIMA che la regola entrasse in
+    vigore) veniva trattata come un primo avvistamento: passando in quel momento si
+    prendeva la seconda conferma senza un solo dato nuovo. E' esattamente il difetto
+    che la finestra esiste per impedire, rientrato dalla porta della migrazione."""
+    rec = {"pass_count": 1, "last_pass_data_end": T0}
+    _run(rec, 0, True)
+    assert rec["pass_count"] == 1, "nessuna conferma regalata"
+    assert rec["window_start"] > 0, "ma la finestra si apre e il conto parte"
+
+
+def test_a_pre_existing_pair_confirms_after_a_full_window():
+    """Aspetta come tutte le altre, e poi la conferma arriva."""
+    rec = {"pass_count": 1, "last_pass_data_end": T0}
+    _run(rec, 0, False)
+    _run(rec, 3, True)
+    _run(rec, 7.1, False)
+    assert rec["pass_count"] == 2
+
+
+def test_a_genuinely_new_pair_still_confirms_immediately():
+    """La distinzione e' fra 'mai vista' e 'gia' vista prima della regola': senza
+    zero passaggi non e' un primo avvistamento."""
+    rec = {}
+    _run(rec, 0, True)
+    assert rec["pass_count"] == 1

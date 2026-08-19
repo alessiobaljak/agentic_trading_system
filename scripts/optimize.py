@@ -548,10 +548,16 @@ def judge_window(rec: dict, data_end: float, passed_now: bool,
         rec["passed_in_window"] = True
 
     start = float(rec.get("window_start", 0) or 0)
-    if start <= 0:                      # primo avvistamento: si apre la finestra
+    if start <= 0:                      # nessuna finestra aperta: se ne apre una
         rec["window_start"] = data_end
-        if passed_now:                  # ...e la prima conferma si prende subito
-            rec["pass_count"] = int(rec.get("pass_count", 0) or 0) + 1
+        # La conferma immediata vale SOLO per una coppia mai vista prima. Una che ha
+        # gia' dei passaggi ma non ha la finestra e' una coppia PRE-ESISTENTE alla
+        # regola, incontrata per la prima volta dopo il cambio: darle un pass qui
+        # sarebbe una conferma regalata, senza un solo dato nuovo — esattamente il
+        # difetto che la finestra esiste per impedire, rientrato dalla porta della
+        # migrazione. Le si apre la finestra e si aspetta come tutte le altre.
+        if passed_now and int(rec.get("pass_count", 0) or 0) == 0:
+            rec["pass_count"] = 1
             rec["last_pass_data_end"] = data_end
             rec["fail_count"] = 0
             rec["passed_in_window"] = False

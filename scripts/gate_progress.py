@@ -51,16 +51,26 @@ def eta_ready(rec: dict, now: float) -> float:
     """Quando QUESTA coppia diventerebbe validata, se continuasse a passare.
 
     Il conto e' meccanico: mancano `MIN_PASSES - pass_count` conferme, e ognuna
-    dista una settimana di dati nuovi dalla precedente. Una coppia che non ha mai
-    passato non ha una data — non ha ancora nemmeno la prima conferma.
+    arriva alla chiusura di una finestra. Una coppia che non ha mai passato non ha
+    una data — non ha ancora nemmeno la prima conferma.
+
+    SI PARTE DA `window_start`, NON dall'ultimo pass. Sono due cose diverse e per
+    alcune coppie divergono: quelle che esistevano gia' quando la regola della
+    finestra e' entrata in vigore hanno la finestra aperta al momento del cambio,
+    non al loro ultimo passaggio. Leggere `last_pass_data_end` dava date piu'
+    ottimistiche di quelle vere — e' l'errore che mi ha fatto annunciare le seconde
+    conferme per il 19 agosto quando sarebbero arrivate il 22.
     """
     passes = int(rec.get("pass_count", 0) or 0)
     if passes >= MIN_PASSES:
         return 0.0
-    last = float(rec.get("last_pass_data_end", 0) or 0)
-    if passes <= 0 or last <= 0:
+    if passes <= 0:
         return float("inf")
-    return last + (MIN_PASSES - passes) * NEW_DATA_MIN_S
+    da = float(rec.get("window_start", 0) or 0) or float(
+        rec.get("last_pass_data_end", 0) or 0)
+    if da <= 0:
+        return float("inf")
+    return da + (MIN_PASSES - passes) * NEW_DATA_MIN_S
 
 
 def main() -> int:
@@ -115,6 +125,8 @@ def main() -> int:
         print(f"  {k:<34} {int(r.get('pass_count', 0) or 0)}/{MIN_PASSES} pass · "
               f"{stato} · ultimo pass "
               f"{_when(float(r.get('last_pass_data_end', 0) or 0))}"
+              f" · finestra chiusa il "
+              f"{_when(float(r.get('window_start', 0) or 0) + NEW_DATA_MIN_S)}"
               + (f" · {r.get('fail_count')} fallimenti di fila" if r.get("fail_count") else ""))
 
     # --- la data che interessa: quando riparte il bot ----------------------- #
