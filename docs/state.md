@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-20 01:51 UTC_
+_Generato: 2026-08-20 03:10 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: bull_trending
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-20 01:51 UTC
+- ultimo heartbeat: 2026-08-20 03:10 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-20 01:48 UTC)
+- esito: **⚪ FLAT** (2026-08-20 03:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -32,14 +32,14 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| trades | 10 | 0.9% |
-| total_return | 969 | 87.1% |
 | holdout | 3 | 0.3% |
 | pf_ex_top | 10 | 0.9% |
-| consistency | 17 | 1.5% |
-| regime | 35 | 3.1% |
-| win_rate | 1 | 0.1% |
 | recovery | 67 | 6.0% |
+| total_return | 969 | 87.1% |
+| regime | 35 | 3.1% |
+| consistency | 17 | 1.5% |
+| trades | 10 | 0.9% |
+| win_rate | 1 | 0.1% |
 
 - quasi-passaggi (un solo criterio, di poco): **3** — sono i semi delle mutazioni del run successivo
 
@@ -47,21 +47,21 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| recovery | 2248 | 6.9% |
-| win_rate | 2 | 0.0% |
 | holdout | 82 | 0.3% |
-| pf_ex_top | 395 | 1.2% |
-| consistency | 639 | 2.0% |
-| regime | 3788 | 11.7% |
 | trades | 1346 | 4.2% |
+| win_rate | 2 | 0.0% |
 | total_return | 23869 | 73.7% |
+| regime | 3788 | 11.7% |
+| consistency | 639 | 2.0% |
+| pf_ex_top | 395 | 1.2% |
+| recovery | 2248 | 6.9% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-08-20 01:04 UTC · coppie validate: **0** · GATE 1 pronto: False
-- tasso di passaggio misurato: **0.048%**
+- ultimo giro: 2026-08-20 03:00 UTC · coppie validate: **0** · GATE 1 pronto: False
+- tasso di passaggio misurato: **0.054%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -71,11 +71,11 @@ _Nessuna coppia ha passato in questo run._
 
 **Ultime decisioni:**
 
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (31) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (31) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (30) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (30) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (30) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `set_param GATE_WIN_RATE_FLOOR 0.402099 → 0.39661436963999996` — 20 candidate sono fermate SOLO da 'win_rate' (mediana: manca 1.2%). La mossa ne dovrebbe sbloccare ~12, e il budget la consente (spazio 5x, attese 0.035/giorno contro un tetto di 1)
-- `set_param GATE_WIN_RATE_FLOOR 0.407659 → 0.40209853124` — 20 candidate sono fermate SOLO da 'win_rate' (mediana: manca 1.2%). La mossa ne dovrebbe sbloccare ~12, e il budget la consente (spazio 5x, attese 0.035/giorno contro un tetto di 1)
 
 ## Trade chiusi
 _nessun trade chiuso._
