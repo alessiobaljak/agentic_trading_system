@@ -33,6 +33,14 @@ from bot.strategies.base import StrategyContext
 
 LEVERAGE_LEVELS = (2, 3, 5, 10, 20)
 
+# Dopo quante barre una posizione ancora aperta viene chiusa d'ufficio al prezzo
+# corrente. Non e' una regola di trading: e' il confine della simulazione. A 15m sono
+# 24 ore, a 1h quattro giorni. Un movimento che continua oltre questo limite viene
+# TRONCATO, quindi per quei trade il backtest produce un limite INFERIORE del
+# risultato, non il risultato. Chi analizza deve poterlo sapere: vedi `bars_held` in
+# SimTrade e scripts/spike_response.py.
+HORIZON_BARS = 96
+
 
 def pf_by_regime(trades) -> dict:
     """PF e numero di trade PER REGIME dai trade simulati. E' il dato che permette
@@ -380,6 +388,13 @@ class SimTrade:
     # istante d'ingresso (epoch): permette di pesare i trade RECENTI piu' dei vecchi
     # nella scelta dei parametri. 0 = sconosciuto -> peso uniforme.
     entry_ts: float = 0.0
+    # QUANTE BARRE e' rimasto aperto. Serve a distinguere un'uscita VOLUTA (stop o
+    # target) da una chiusura d'ufficio: il motore chiude tutto dopo HORIZON_BARS, e
+    # un trade che arriva sempre a quel limite non e' stato misurato fino in fondo —
+    # e' stato TRONCATO. Senza questo campo la differenza era invisibile, e i
+    # movimenti lunghi (uno spike che continua per giorni) sembravano rendere quanto
+    # dice il backtest invece che almeno quanto dice.
+    bars_held: int = 0
     # verdetto controfattuale sull'uscita TRAILING (None se non trailing):
     # 'premature' = avremmo raggiunto il TP tenendo; 'protected' = avremmo preso lo
     # stop base; 'neutral' = nessuno dei due entro l'orizzonte.
@@ -680,7 +695,7 @@ class Backtester:
             max_adverse = 0.0
             exit_price = entry
             j = i + 1
-            horizon = min(n - 1, i + 96)
+            horizon = min(n - 1, i + HORIZON_BARS)
             best_fav = entry
             trailing_verdict = None
 
@@ -776,6 +791,7 @@ class Backtester:
                 trailing_verdict=trailing_verdict,
                 mfe_r=round(mfe_in_r(entry, mfe, stop), 3),
                 entry_ts=candles[i].open_time.timestamp(),
+                bars_held=max(0, min(j, horizon) - i),
             ))
             i = j + 1   # niente posizioni sovrapposte
         return stats
