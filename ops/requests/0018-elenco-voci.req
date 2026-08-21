@@ -1,0 +1,4 @@
+# SONDA, non un errore: questa chiave non esiste di proposito. Il rifiuto elenca
+# tutte le voci attive sulla macchina, ed e' l'unico modo che ho di leggere la
+# lista bianca senza che lei esca dal suo posto (non e' nel repo, ed e' giusto).
+elenco-voci-attive
