@@ -27,6 +27,19 @@ shadow:       .venv/bin/python -m scripts.shadow_report
 trades:       .venv/bin/python -m scripts.trade_stats
 connettivita: .venv/bin/python -m scripts.connectivity_check
 test:         .venv/bin/python -m pytest -q
+gate-top:     .venv/bin/python -m scripts.gate_progress --top 40
+
+# ---- analisi che rispondono a una domanda aperta (tutte in sola lettura) ---
+# Nessuna di queste scrive niente: girano, stampano, e la risposta torna in
+# ops/results. Sono la differenza fra "credo che" e "ho misurato".
+spike:        .venv/bin/python -m scripts.spike_response
+gate-vs-paper: .venv/bin/python -m scripts.gate_vs_paper
+edge:         .venv/bin/python -m scripts.edge_stability
+frequenza:    .venv/bin/python -m scripts.signal_frequency
+sopravvivenza: .venv/bin/python -m scripts.survivorship_report
+confidenza:   .venv/bin/python -m scripts.confidence_analysis
+# revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
+costi:        .venv/bin/python -m scripts.revalidate_costs
 
 # ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
 log-ops:      journalctl -u trading-ops.service -n 200 --no-pager
@@ -42,15 +55,43 @@ log-gate:     journalctl -u trading-optimizer.service -n 80 --no-pager
 log-super:    journalctl -u trading-supervisor.service -n 40 --no-pager
 memoria:      free -g
 disco:        df -h /
+carico:       uptime
+# chi sta mangiando la CPU: serve a distinguere "l'optimizer sta lavorando" da
+# "l'optimizer e' piantato", che dai log sembrano uguali.
+processi:     ps -eo pid,pcpu,pmem,etime,args --sort=-pcpu
+# sessioni in background (fast_gate, backfill): senza questo non si sa se ce n'e'
+# una che sta girando da ore.
+tmux:         tmux ls
+# la cache delle candele e' la voce di disco che cresce: quattro anni a 15m per
+# centinaia di coin. Quando `disco` si riempie, la causa e' quasi sempre qui.
+cache:        du -sh .cache
 
 # ---- azioni operative (cambiano qualcosa, ma nulla di distruttivo) ---------
 aggiorna:     git pull
 riavvia-bot:  systemctl restart trading-bot.service
 lancia-gate:  systemctl start --no-block trading-optimizer.service
 lancia-super: .venv/bin/python -m scripts.supervisor
+# un timer puo' incepparsi (unit fallita, stato inconsistente): riavviarlo non
+# tocca il registro ne' le posizioni, rimette solo in moto la pianificazione.
+riavvia-gate: systemctl restart trading-optimizer.timer
+riavvia-super-timer: systemctl restart trading-supervisor.timer
 
 # ---- DISTRUTTIVE: lasciate commentate di proposito -------------------------
+# Queste due restano fuori ANCHE quando si e' tentati di "abilitare tutto adesso
+# che ci sono". Il criterio non e' quanto sono utili: e' che non si possono
+# annullare da lontano. Il backup che fast_gate scrive resta sul disco della
+# macchina, fuori da git, e non esiste uno script che lo ripristini — quindi da
+# remoto un errore qui e' definitivo.
+#
 # fast_gate AZZERA il registro validato: i passaggi accumulati (settimane di
-# attesa) spariscono. Abilitala solo quando vuoi davvero una rivalidazione da capo.
+# attesa) spariscono. Abilitala solo quando vuoi davvero una rivalidazione da capo
+# E puoi guardare la macchina mentre lo fa.
 # fast-gate:  bash scripts/fast_gate.sh --yes
 # reset-paper: .venv/bin/python -m scripts.reset_paper --yes
+#
+# E per lo stesso motivo NON vanno messe, mai:
+#  * `revalidate_costs --apply` (la versione senza --apply e' sopra ed e' innocua);
+#  * qualunque cosa con `+args`;
+#  * `env`, `printenv`, `cat .env`, `git remote -v`, `git config --list`:
+#    stamperebbero un segreto dentro una risposta che finisce committata in un
+#    repo PUBBLICO. Un segreto finito li' e' compromesso per sempre.
