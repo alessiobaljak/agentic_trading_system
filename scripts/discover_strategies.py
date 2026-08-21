@@ -271,14 +271,32 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     }
 
 
-def merge_into_registry(fb, out: dict, passed_now: list[str]) -> list[str]:
+def merge_into_registry(fb, out: dict, passed_now: list[str],
+                        evaluated_symbols: set | None = None) -> list[str]:
     """Aggiunge SOLO le coppie generate che PASSANO (accumula pass_count) e pota
     quelle generate inutili/stantie, evitando crescita illimitata del documento.
     Ricalcola la lista validated PRESERVANDO i campi di copertura del GATE 1
-    (universe/coverage/ready) che spettano a optimize.py."""
+    (universe/coverage/ready) che spettano a optimize.py.
+
+    `evaluated_symbols`: le coin che QUESTA passata ha davvero guardato. Serve a dare
+    a `last_seen_at` un significato solo. Qui dentro si scrivono solo le coppie che
+    passano, quindi finora il campo per le generate voleva dire "ultima volta che ha
+    PASSATO", mentre per le coppie base (scritte da optimize.py su tutto cio' che
+    valuta) vuol dire "ultima volta che e' stata GUARDATA". Un campo, due significati:
+    e chi ci costruisce sopra un filtro — per esempio per escludere le coppie di coin
+    uscite dall'universo — finisce per scambiare "non passa piu'" con "non esiste
+    piu'". Sono due diagnosi opposte: la prima e' una strategia che ha smesso di
+    funzionare, la seconda e' un pezzo di mercato che non guardiamo piu'.
+    """
     doc = fb.get_doc("strategy_registry", "validated") or {}
     pairs = decode_pairs(doc.get("pairs"))
     now = time.time()
+    # le coppie GENERATE sulle coin appena guardate sono state valutate, anche se non
+    # hanno passato: il campo lo deve dire.
+    if evaluated_symbols:
+        for r in pairs.values():
+            if r.get("generated") and r.get("symbol") in evaluated_symbols:
+                r["last_seen_at"] = now
     drifted = drifted_from_paper(fb)   # evidenza dal paper: vale come fallimento
     # 1) upsert SOLO delle coppie passate (non sporco il registro con i fallimenti)
     for key in passed_now:
@@ -588,7 +606,8 @@ def main() -> int:
     # persisti: spec scoperte + merge nel registro validato
     if specs_to_save:
         persist_specs(fb, specs_to_save)
-    validated = merge_into_registry(fb, out, passed_keys)
+    validated = merge_into_registry(fb, out, passed_keys,
+                                    evaluated_symbols=set(symbols))
     # riepilogo COMPATTO (niente spec/entry per ogni coppia: sforerebbe il limite
     # di 1 MiB di Firestore). Le spec complete stanno in discovered_strategies/specs.
     fb.set_doc("strategy_params", "discovered_last_run", {

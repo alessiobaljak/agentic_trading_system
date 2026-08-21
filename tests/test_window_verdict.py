@@ -227,3 +227,42 @@ def test_gate_progress_does_not_build_a_date_on_frozen_pairs():
     src = inspect.getsource(gate_progress.main)
     assert "fresche" in src and "congelate" in src
     assert "eta_ready(r, now), k) for k, r in fresche.items()" in src
+
+
+def test_last_seen_at_means_one_thing_for_generated_pairs_too():
+    """Un campo, due significati — trovato il 21 agosto inseguendo un numero strano.
+
+    `optimize.py` scrive `last_seen_at` su TUTTO cio' che valuta; la discovery lo
+    scriveva solo sulle coppie che PASSANO. Quindi per le generate il campo voleva
+    dire "ultima volta che ha passato", per le base "ultima volta che e' stata
+    guardata". Chi ci costruisce sopra un filtro — per escludere le coppie di coin
+    uscite dall'universo — scambia "non passa piu'" con "non esiste piu'". Sono due
+    diagnosi opposte: una strategia che ha smesso di funzionare, contro un pezzo di
+    mercato che non guardiamo piu'.
+    """
+    import time as _t
+    from scripts.discover_strategies import merge_into_registry
+    from bot.core.firebase_client import decode_pairs, encode_pairs
+
+    vecchio = _t.time() - 5 * 86400
+    class FB:
+        def __init__(self):
+            self.docs = {("strategy_registry", "validated"): {
+                "pairs": encode_pairs({
+                    # valutata questo giro ma non ha passato: e' VIVA
+                    "AUSDT|gen_x": {"pass_count": 1, "generated": True,
+                                    "symbol": "AUSDT", "last_seen_at": vecchio},
+                    # la sua coin non e' piu' nell'universo: resta ferma
+                    "ZUSDT|gen_y": {"pass_count": 1, "generated": True,
+                                    "symbol": "ZUSDT", "last_seen_at": vecchio},
+                })}}
+        def get_doc(self, c, d):
+            return self.docs.get((c, d), {})
+        def set_doc(self, c, d, data):
+            self.docs[(c, d)] = data
+
+    fb = FB()
+    merge_into_registry(fb, {}, [], evaluated_symbols={"AUSDT"})
+    pairs = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])
+    assert pairs["AUSDT|gen_x"]["last_seen_at"] > vecchio, "valutata = vista"
+    assert pairs["ZUSDT|gen_y"]["last_seen_at"] == vecchio, "non valutata = non vista"
