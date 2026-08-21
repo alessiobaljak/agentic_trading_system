@@ -53,6 +53,18 @@ bash scripts/install_ops_agent.sh
 
 ## Aggiungere un comando
 
+PRIMA DI AGGIUNGERE UNA VOCE, un vincolo che non e' ovvio: una richiesta **nomina**
+una voce, non compone un comando. Quindi il comando scritto qui e' esattamente e per
+sempre quello che verra' eseguito, e **un comando che pretende argomenti non potra'
+mai riceverli** — la voce nasce morta. E' successo con `gate-vs-paper`, aggiunta dopo
+un controllo statico troppo debole: usciva con l'usage di argparse e nessuno lo
+sapeva finche' non e' stata lanciata.
+
+Ora c'e' un test che le lancia davvero: `tests/test_allowlist_runnable.py` prende
+ogni voce Python di `ops/allowlist.example` e pretende che non muoia sugli
+argomenti. Se aggiungi una voce all'esempio e lo script non ha un comportamento di
+default sensato, la suite te lo dice prima che la voce finisca sulla macchina.
+
 Modifica `ops/allowlist` sulla VPS. La regola pratica: aggiungi una voce solo se
 sei disposto a vederla eseguita automaticamente, di notte, senza che tu la stia
 guardando. Le voci distruttive (`fast_gate`, `reset_paper`) sono lasciate
