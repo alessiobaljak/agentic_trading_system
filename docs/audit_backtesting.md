@@ -226,3 +226,73 @@ ricordare. Verificato: la suite passa identica con l'ambiente pulito e con quell
 produzione.
 
 **681 test verdi**, in entrambi gli ambienti.
+
+---
+
+## 21 agosto — la risposta agli spike, MISURATA
+
+`scripts/spike_response.py` su BTC, ETH e SOL, 2022 → oggi, soglia 10% in 24h
+(`ops/results/0017-spike.md`, 7 minuti di calcolo su dati reali).
+
+### Quello che avevo dedotto era sbagliato
+
+Avevo scritto che le tre strategie di continuazione (`momentum`, `trend_following`,
+`momentum_cross_asset`) sono **spente proprio quando lo spike c'e'**, perche' l'ATR
+supera il 2.5% e scatta HIGH_UNCERTAINTY. Il vincolo esiste. La sua frequenza no:
+
+| | eventi | in HIGH_UNCERTAINTY | quindi con le trend ACCESE |
+|---|---|---|---|
+| BTC | 49 | 10 (20%) | **39/49** |
+| ETH | 110 | 23 (21%) | **86/110** |
+| SOL | 276 | 90 (33%) | **180/276** |
+
+L'ATR e' una media a quattordici periodi: una sola giornata violenta non lo sposta.
+Nell'80% degli spike quelle strategie **operano**. Un vincolo vero, letto senza
+misurarne la frequenza, produce una conclusione sbagliata con la stessa sicurezza di
+una giusta.
+
+### E rispondono bene
+
+Somma dei ritorni dei trade aperti durante gli eventi:
+
+| strategia | BTC | ETH | SOL |
+|---|---|---|---|
+| momentum | **+74%** | **+190%** | **+228%** |
+| trend_following | **+59%** | **+156%** | **+277%** |
+| breakout | −12% | +73% | +64% |
+| mean_reversion | −10% | −85% | −210% |
+| **vwap_reversion** | **−192%** | **−439%** | **−821%** |
+
+### Il problema vero e' un altro: `vwap_reversion`
+
+Perde su tutte e tre, in modo crescente col numero di eventi, con win rate 25-30%.
+Sta **sfumando** il movimento mentre corre — ed e' attiva in BULL_TRENDING e
+BEAR_TRENDING, cioe' esattamente dove lo spike la trova.
+
+Il numero va letto per quello che e': sono i parametri di DEFAULT su tutta la storia,
+non le coppie validate coi parametri tarati che il bot opera davvero. Ma il segno e'
+cosi' netto e cosi' ripetuto che merita una decisione, non un'alzata di spalle.
+
+### Due cose che invece vanno bene
+
+* **L'orizzonte non tronca niente.** Temevo che i trade sugli spike finissero quasi
+  tutti alle 96 barre. Sono da 0 a 17 su centinaia: il limite non morde.
+* **`pf_ex_top` non sta penalizzando gli spike.** I trade dentro gli eventi portano
+  il 3% (BTC), 4% (ETH) e 18% (SOL) del profitto totale, coprendo il 5%, 12% e 27%
+  delle barre. Sono **sotto**-proporzionali, non concentrati: il profitto non arriva
+  da li'. Anche questa preoccupazione era mia e non regge alla misura.
+
+### La divergenza di regime, quantificata
+
+Il gate calcola il regime sulla coin, il bot dal vivo su bitcoin per tutte. Quanto
+spesso le due letture discordano al momento di uno spike:
+
+| BTC | ETH | SOL |
+|---|---|---|
+| 0% | **23%** | **46%** |
+
+Zero su BTC e' atteso (e' lui il riferimento). Su SOL quasi la meta' delle volte gate
+e bot non sono d'accordo su che regime sia — e siccome il regime decide quali
+strategie si accendono, e' una divergenza che si traduce in comportamento diverso.
+Cresce con la distanza da bitcoin, quindi sulle alt minori e' presumibilmente
+peggiore. Resta una decisione aperta, non una svista da correggere di nascosto.

@@ -54,19 +54,22 @@ def test_a_slow_climb_is_not_a_spike():
 
 
 # ---- CHI E' ACCESO: la meta' che non serve la rete ------------------------- #
-def test_the_trend_strategies_are_off_exactly_when_the_spike_happens():
-    """IL PUNTO DELLA DOMANDA.
+def test_the_trend_strategies_are_off_in_high_uncertainty():
+    """In HIGH_UNCERTAINTY `momentum`, `trend_following` e `momentum_cross_asset`
+    sono spente. Il test fissa la mappa regime -> strategie accese, perche' e' quella
+    che decide se il sistema puo' rispondere a un movimento.
 
-    Uno spike alza l'ATR; sopra il 2.5% del prezzo il rilevatore dichiara
-    HIGH_UNCERTAINTY. E in quel regime `momentum`, `trend_following` e
-    `momentum_cross_asset` — cioe' proprio le tre che esistono per cavalcare un
-    movimento in corso — sono spente per costruzione.
+    ATTENZIONE A NON DEDURNE TROPPO — e' l'errore che ho fatto io. Avevo scritto che
+    "le tre strategie che esistono per cavalcare un movimento sono spente proprio
+    quando il movimento c'e'". La misura sui dati veri (ops/results/0017-spike.md)
+    dice il contrario: uno spike del 10% in 24h porta in HIGH_UNCERTAINTY solo il
+    20% dei casi su BTC, il 21% su ETH, il 33% su SOL. L'ATR e' una media a 14
+    periodi, quindi una giornata violenta da sola non lo sposta sopra il 2.5%.
 
-    Non e' necessariamente un difetto: entrare sulla barra piu' violenta e' anche
-    il modo piu' rapido di farsi prendere lo stop. Ma e' una SCELTA, e finora non
-    era scritta da nessuna parte ne' misurata. Questo test la rende esplicita:
-    se un giorno qualcuno accende momentum in HIGH_UNCERTAINTY, deve sapere che sta
-    cambiando la risposta del sistema agli spike, non una riga di configurazione.
+    Nell'80% dei casi quelle tre strategie sono ACCESE, e sono anche le uniche in
+    guadagno durante gli spike. La mappa qui sotto e' corretta; la conclusione che
+    ne avevo tratto no. Un vincolo vero letto senza misurarne la frequenza porta a
+    una conclusione sbagliata con la stessa sicurezza di una giusta.
     """
     strategie = {s.name: s for s in Backtester(window=200).strategies}
     spente = {n for n, s in strategie.items()
