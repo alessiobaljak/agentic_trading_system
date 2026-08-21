@@ -146,6 +146,22 @@ def main() -> int:
     print(f"  ready dichiarato dal registro: {doc.get('ready')} "
           f"(via {doc.get('ready_by') or '—'})")
 
+    # --- LA FINESTRA E' APERTA? ---------------------------------------------- #
+    # Il conto che mancava. Una coppia con un passaggio ma SENZA finestra non e' in
+    # attesa: e' ferma. La finestra si apre solo quando `judge_window` viene chiamato
+    # per quella coppia, e nella discovery questo succede soltanto se la coppia
+    # ripassa il gate. Se la maggioranza delle coppie a un passaggio non ha una
+    # finestra, il fronte che sembra "in maturazione" non sta maturando affatto — e
+    # la distribuzione da sola non lo dice.
+    con_pass = [r for r in fresche.values() if int(r.get("pass_count", 0) or 0) > 0]
+    aperte = [r for r in con_pass if float(r.get("window_start", 0) or 0) > 0]
+    if con_pass:
+        print(f"  FINESTRE: {len(aperte)}/{len(con_pass)} coppie con almeno un "
+              f"passaggio hanno la finestra aperta.\n"
+              f"  Le altre {len(con_pass) - len(aperte)} non stanno maturando: "
+              f"la finestra si apre solo quando la coppia\n  ripassa il gate, e "
+              f"finche' non si apre non arriva ne' una conferma ne' un fallimento.")
+
     # --- il calendario ------------------------------------------------------ #
     etas = sorted((eta_ready(r, now), k) for k, r in fresche.items())
     finite = [(t, k) for t, k in etas if t != float("inf")]
@@ -165,9 +181,14 @@ def main() -> int:
         ws = float(r.get("window_start", 0) or 0)
         fin = (f"finestra chiusa il {_when(ws + NEW_DATA_MIN_S)}" if ws > 0
                else "finestra non ancora aperta")
+        # `visto` = l'ultima volta che l'optimizer l'ha VALUTATA, che e' diverso da
+        # `ultimo pass`. Le due date insieme distinguono i tre casi che finora
+        # sembravano uguali: valutata e continua a passare, valutata e non passa
+        # piu', non piu' valutata affatto.
         print(f"  {k:<34} {int(r.get('pass_count', 0) or 0)}/{MIN_PASSES} pass · "
               f"{stato} · ultimo pass "
               f"{_when(float(r.get('last_pass_data_end', 0) or 0))} · {fin}"
+              f" · vista {_when(float(r.get('last_seen_at', 0) or 0))}"
               + (f" · {r.get('fail_count')} fallimenti di fila" if r.get("fail_count") else ""))
 
     # --- la data che interessa: quando riparte il bot ----------------------- #
