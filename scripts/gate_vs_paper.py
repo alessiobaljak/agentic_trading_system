@@ -442,6 +442,30 @@ def _build_strategy(fb, strategy: str, ladder):
     return make
 
 
+def _coppia_piu_vissuta(fb) -> tuple | None:
+    """(symbol, strategy, quanti) della coppia su cui il paper ha chiuso piu' trade.
+
+    None se non c'e' nessun trade chiuso — e in quel caso il chiamante deve DIRLO,
+    non scegliere una coppia a caso: un confronto gate<->paper su una coppia che il
+    paper non ha mai operato non e' un confronto, e' il backtest da solo con un
+    titolo diverso.
+    """
+    try:
+        trades = fb.query_collection("trades", order_by="exit_ts") or []
+    except Exception as exc:  # noqa: BLE001
+        print(f"[gvp] trade non leggibili ({exc})")
+        return None
+    conta: dict = {}
+    for t in trades:
+        sym, strat = t.get("symbol"), t.get("strategy")
+        if sym and strat:
+            conta[(sym, strat)] = conta.get((sym, strat), 0) + 1
+    if not conta:
+        return None
+    (sym, strat), n = max(conta.items(), key=lambda kv: kv[1])
+    return sym, strat, n
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbol", help="es. BIRBUSDT (non serve in modalita' replay)")
@@ -468,7 +492,30 @@ def main() -> int:
     if args.trades_file:
         return _replay_mode(args)
     if not args.symbol or not args.strategy:
-        ap.error("servono --symbol e --strategy (oppure --trades-file)")
+        # MODALITA' AUTOMATICA: nessuna coppia indicata -> la si sceglie.
+        #
+        # Serve perche' questo script gira anche dal canale ops, dove una richiesta
+        # puo' nominare una voce ma non comporre un comando: senza argomenti, senza
+        # questo ramo, l'unica risposta possibile era l'usage di argparse. Un
+        # comando che non puo' ricevere argomenti deve saper scegliere da solo, o
+        # non ha senso metterlo in lista bianca.
+        #
+        # Il criterio e' quello giusto per la domanda: la coppia su cui il PAPER ha
+        # chiuso piu' trade, perche' e' l'unica su cui il confronto gate<->vissuto
+        # ha abbastanza materiale. Se il paper non ha ancora chiuso niente non si
+        # ripiega su una coppia a caso: si dice che non c'e' niente da confrontare,
+        # che e' la risposta vera.
+        scelta = _coppia_piu_vissuta(get_firebase())
+        if not scelta:
+            print("[gvp] nessun trade chiuso dal paper: non c'e' ancora niente da "
+                  "confrontare.\n      Questo confronto ha senso solo dopo che il "
+                  "bot ha operato una coppia validata.\n      Per forzarne una a "
+                  "mano: --symbol X --strategy Y")
+            return 1
+        args.symbol, args.strategy, n_tr = scelta
+        print(f"[gvp] nessuna coppia indicata -> scelta automatica: "
+              f"{args.symbol}|{args.strategy} ({n_tr} trade chiusi dal paper, "
+              f"e' quella con piu' materiale)")
 
     fb = get_firebase()
     key = f"{args.symbol}|{args.strategy}"

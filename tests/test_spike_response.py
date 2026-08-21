@@ -117,3 +117,41 @@ def test_the_horizon_is_a_named_constant():
     import inspect
     from backtesting import engine
     assert "i + HORIZON_BARS" in inspect.getsource(engine.Backtester.run_strategy)
+
+
+# ---- un comando in lista bianca non puo' chiedere argomenti ---------------- #
+def test_gate_vs_paper_works_without_arguments():
+    """Avevo messo `gate-vs-paper` in lista bianca dicendo che girava senza
+    argomenti. Non era vero: usciva con l'usage di argparse. Il controllo che avevo
+    fatto cercava `required=True` nel sorgente, e quello script valida a mano.
+
+    Il punto non e' la svista: e' che una voce della lista bianca NON PUO' ricevere
+    argomenti (una richiesta nomina una voce, non compone un comando), quindi un
+    comando che ne pretende e' morto in partenza. Ora sceglie da solo la coppia su
+    cui il paper ha chiuso piu' trade, e se non ce n'e' nessuna lo dice invece di
+    ripiegare su una coppia a caso.
+    """
+    import inspect
+    from scripts import gate_vs_paper as g
+    src = inspect.getsource(g.main)
+    assert "_coppia_piu_vissuta" in src
+    assert "ap.error(" not in src, "nessun percorso deve morire sull'usage"
+
+
+def test_it_refuses_to_pick_a_pair_the_paper_never_traded():
+    """Senza trade chiusi la risposta giusta e' "non c'e' niente da confrontare".
+    Scegliere comunque una coppia produrrebbe il backtest da solo con un titolo
+    diverso — cioe' un numero che sembra un confronto e non lo e'."""
+    from scripts.gate_vs_paper import _coppia_piu_vissuta
+
+    class FB:
+        def query_collection(self, *a, **k):
+            return []
+    assert _coppia_piu_vissuta(FB()) is None
+
+    class FB2:
+        def query_collection(self, *a, **k):
+            return [{"symbol": "AUSDT", "strategy": "s1"},
+                    {"symbol": "AUSDT", "strategy": "s1"},
+                    {"symbol": "BUSDT", "strategy": "s2"}]
+    assert _coppia_piu_vissuta(FB2()) == ("AUSDT", "s1", 2)
