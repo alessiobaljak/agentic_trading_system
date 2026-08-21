@@ -153,8 +153,16 @@ def analizza(symbol: str, candles: list[Candle], btc: list[Candle],
             if int(getattr(t, "bars_held", 0) or 0) >= orizzonte:
                 r["scaduti"] += 1
 
+    # COPERTURA: che frazione della serie sta dentro una finestra di evento. Senza
+    # questo numero la percentuale qui sotto puo' saturare senza che si veda: se gli
+    # eventi coprono quasi tutto, "il 100% del profitto arriva dagli spike" e' una
+    # tautologia — tutti i trade sono dentro un evento — e non dice piu' niente sulla
+    # concentrazione. E' il tipo di conclusione che sembra un risultato ed e' un
+    # artefatto della soglia scelta.
+    coperte = len({i for a, b in finestre for i in range(a, b + 1)})
     return {
         "symbol": symbol, "eventi": len(eventi),
+        "copertura": coperte / max(1, len(candles)),
         "primo": eventi[0]["quando"], "ultimo": eventi[-1]["quando"],
         "regime_evento": dict(regime_evento.most_common()),
         "acceso": dict(acceso.most_common()),
@@ -230,14 +238,22 @@ def main() -> int:
             wr = v["vinti"] / v["trade"] * 100
             print(f"    {k:<22} {v['trade']:>4} trade · {v['pnl'] * 100:>+7.1f}% · "
                   f"win {wr:>4.0f}% · {v['scaduti']} chiusi per scadenza")
+        cop = float(r.get("copertura") or 0) * 100
         if r["tot_pnl"]:
             q = r["tot_pnl_spike"] / r["tot_pnl"] * 100
             print(f"  QUANTO PESANO: {q:.0f}% del profitto totale del periodo arriva "
-                  f"da questi trade.")
-            if q > 30:
-                print("    -> sopra il 30%: il gate, che con pf_ex_top toglie il 5% di "
-                      "trade migliori\n       e pretende che il resto regga, sta "
-                      "selezionando CONTRO queste strategie.")
+                  f"da questi trade,\n  che coprono il {cop:.0f}% delle barre.")
+            if cop > 50:
+                print(f"    -> ATTENZIONE: con gli eventi che coprono il {cop:.0f}% "
+                      f"della serie, la percentuale\n       qui sopra non misura la "
+                      f"concentrazione — misura la soglia scelta. Rilanciare\n"
+                      f"       con --soglia piu' alta o --hours piu' corto prima di "
+                      f"concluderne qualcosa.")
+            elif q > 30:
+                print("    -> sopra il 30% con una copertura bassa: il profitto e' "
+                      "davvero concentrato\n       negli eventi, e il gate — che con "
+                      "pf_ex_top toglie il 5% di trade migliori\n       e pretende che "
+                      "il resto regga — sta selezionando CONTRO queste strategie.")
         print()
     return 0
 
