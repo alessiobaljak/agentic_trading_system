@@ -39,6 +39,10 @@ READY_FRACTION = float(os.getenv("OPTIMIZER_READY_FRACTION", "0.60"))
 READY_MIN_PAIRS = int(os.getenv("OPTIMIZER_READY_MIN_PAIRS", "0"))
 MIN_COVERED = int(os.getenv("OPTIMIZER_MIN_COVERED", "5"))
 PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))
+# Da quanti giorni senza essere valutata una coppia e' da considerare CONGELATA.
+# Stessa variabile che usa il registro per decidere chi conta come validata:
+# duplicarla come costante locale vorrebbe dire poterle far divergere.
+FRESH_DAYS = float(os.getenv("OPTIMIZER_FRESH_DAYS", "3"))
 
 
 def _when(ts: float) -> str:
@@ -86,9 +90,14 @@ def main() -> int:
     pairs = decode_pairs(doc.get("pairs"))
 
     if args.coins_min_pass is not None:
+        # solo le coppie ancora valutate: una lista di conferme mirate su coin
+        # uscite dall'universo manderebbe l'optimizer a lavorare a vuoto
+        _ora = time.time()
         coins = sorted({r.get("symbol") for r in pairs.values()
                         if int(r.get("pass_count", 0) or 0) >= args.coins_min_pass
-                        and r.get("symbol")})
+                        and r.get("symbol")
+                        and _ora - float(r.get("last_seen_at", 0) or 0)
+                        < FRESH_DAYS * 86400})
         print(",".join(coins))
         return 0 if coins else 1
 
@@ -98,21 +107,47 @@ def main() -> int:
         return 1
     now = time.time()
 
-    dist = Counter(int(r.get("pass_count", 0) or 0) for r in pairs.values())
-    validated = [k for k, r in pairs.items()
-                 if int(r.get("pass_count", 0) or 0) >= MIN_PASSES]
-    coins = {r.get("symbol") for k, r in pairs.items() if k in validated}
+    # --- CHI E' ANCORA IN GIOCO --------------------------------------------- #
+    # Una coppia che l'optimizer non valuta piu' e' CONGELATA: non prende conferme,
+    # non prende fallimenti, non viene purgata. Resta nel registro esattamente com'era
+    # l'ultimo giorno in cui e' stata vista.
+    #
+    # Non e' un caso di scuola: alzando la storia minima a 365 giorni, 57 coin sono
+    # uscite dall'universo in un colpo solo, e con loro tutte le coppie che avevano
+    # gia' accumulato un passaggio. Contarle qui dentro faceva due danni. Gonfiava la
+    # distribuzione — "249 a un passaggio" quando molte non possono piu' avanzare — e
+    # soprattutto la DATA: il calendario qui sotto si costruisce sulle coppie piu'
+    # vicine al traguardo, che erano proprio quelle ferme dal 13 agosto. Il risultato
+    # era un "il bot riparte il 27 agosto" calcolato su coppie che nessuno stava piu'
+    # valutando. Una data che non sarebbe mai arrivata.
+    fresche = {k: r for k, r in pairs.items()
+               if now - float(r.get("last_seen_at", 0) or 0) < FRESH_DAYS * 86400}
+    congelate = {k: r for k, r in pairs.items() if k not in fresche}
 
-    print(f"[gate] {len(pairs)} coppie tracciate · soglia {MIN_PASSES} pass · "
-          f"un pass ogni {NEW_DATA_MIN_S / 3600:.0f}h di dati nuovi")
-    print("  distribuzione pass: " +
+    dist = Counter(int(r.get("pass_count", 0) or 0) for r in fresche.values())
+    validated = [k for k, r in fresche.items()
+                 if int(r.get("pass_count", 0) or 0) >= MIN_PASSES]
+    coins = {r.get("symbol") for k, r in fresche.items() if k in validated}
+
+    print(f"[gate] {len(pairs)} coppie nel registro · {len(fresche)} ancora valutate "
+          f"· soglia {MIN_PASSES} pass · un pass ogni {NEW_DATA_MIN_S / 3600:.0f}h "
+          f"di dati nuovi")
+    print("  distribuzione pass (solo coppie vive): " +
           " · ".join(f"{p} pass: {n}" for p, n in sorted(dist.items())))
+    if congelate:
+        con_pass = sum(1 for r in congelate.values()
+                       if int(r.get("pass_count", 0) or 0) > 0)
+        print(f"  CONGELATE: {len(congelate)} coppie non piu' valutate da oltre "
+              f"{FRESH_DAYS:g} giorni ({con_pass} avevano gia' un passaggio).\n"
+              f"  La coin e' uscita dall'universo — di solito per storia insufficiente "
+              f"o delisting.\n  Non avanzano e non falliscono: sono escluse da tutti i "
+              f"conti qui sotto.")
     print(f"  VALIDATE ora: {len(validated)} su {len(coins)} coin distinte")
     print(f"  ready dichiarato dal registro: {doc.get('ready')} "
           f"(via {doc.get('ready_by') or '—'})")
 
     # --- il calendario ------------------------------------------------------ #
-    etas = sorted((eta_ready(r, now), k) for k, r in pairs.items())
+    etas = sorted((eta_ready(r, now), k) for k, r in fresche.items())
     finite = [(t, k) for t, k in etas if t != float("inf")]
 
     print(f"\n--- QUANDO ARRIVANO LE PROSSIME CONFERME (limite inferiore) ---")

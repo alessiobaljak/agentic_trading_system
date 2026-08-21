@@ -611,15 +611,27 @@ def publish_timeline(fb, pairs: dict, source: str,
     far fallire una validazione.
     """
     try:
+        # SOLO LE COPPIE ANCORA VALUTATE. Una coppia la cui coin e' uscita
+        # dall'universo resta nel registro congelata: non prende conferme, non prende
+        # fallimenti, non viene purgata. Contarla nel grafico e' peggio che inutile —
+        # e' una riga piatta che si somma al fronte e lo fa sembrare piu' largo di
+        # quanto sia. Alzando la storia minima a 365 giorni sono uscite 57 coin in un
+        # colpo solo, quindi non e' un caso di scuola.
+        adesso = time.time()
+        vive = [r for r in pairs.values()
+                if adesso - float(r.get("last_seen_at", 0) or 0) < FRESH_DAYS * 86400]
         dist: dict[str, int] = {}
-        for r in pairs.values():
+        for r in vive:
             p = int(r.get("pass_count", 0) or 0)
             k = str(min(p, MIN_PASSES))          # tutto cio' che e' >= soglia e' "validata"
             dist[k] = dist.get(k, 0) + 1
         punto = {
-            "at": round(time.time()),
+            "at": round(adesso),
             "src": source,
-            "tracked": len(pairs),
+            "tracked": len(vive),
+            # quante sono ferme nel registro ma fuori dai conti: se cresce, e' l'universo
+            # che si e' ristretto, non la ricerca che ha smesso di produrre
+            "frozen": len(pairs) - len(vive),
             "dist": dist,
             "validated": dist.get(str(MIN_PASSES), 0),
             "evaluated": int(evaluated),

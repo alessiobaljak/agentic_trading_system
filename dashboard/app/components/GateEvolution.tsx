@@ -45,10 +45,14 @@ type Punto = {
   at: number;
   tracked?: number;
   validated?: number;
+  /** coppie ferme nel registro ma non piu' valutate: la coin e' uscita
+   *  dall'universo. Non avanzano e non falliscono — fuori dai conti. */
+  frozen?: number;
   dist?: Record<string, number>;
 };
 type Doc = { points?: Punto[]; min_passes?: number };
-type Riga = { t: number; label: string; uno: number; due: number; ok: number; tracked: number };
+type Riga = { t: number; label: string; uno: number; due: number; ok: number;
+              tracked: number; frozen: number };
 type SerieKey = 'uno' | 'due' | 'ok';
 
 const PERIODI = [
@@ -175,6 +179,7 @@ export default function GateEvolution() {
           uno: n('1'), due: n('2'),
           ok: Number(p.validated ?? n('3')),
           tracked: Number(p.tracked ?? 0),
+          frozen: Number(p.frozen ?? 0),
         };
       });
   }, [d]);
@@ -218,6 +223,16 @@ export default function GateEvolution() {
         {ultimo && (
           <span className="muted" style={{ fontSize: 12 }}>
             coppie tracciate <b style={{ color: 'var(--text)' }}>{formatta(ultimo.tracked)}</b>
+            {ultimo.frozen > 0 && (
+              <span
+                title={'Coppie ferme nel registro: la loro coin e\u2019 uscita '
+                  + 'dall\u2019universo (storia insufficiente o delisting), quindi '
+                  + 'l\u2019optimizer non le valuta piu\u2019. Non avanzano e non '
+                  + 'falliscono: sono escluse da tutti i conti.'}
+              >
+                {' '}· {formatta(ultimo.frozen)} congelate
+              </span>
+            )}
           </span>
         )}
         <button

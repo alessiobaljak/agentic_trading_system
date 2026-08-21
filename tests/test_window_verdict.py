@@ -177,3 +177,53 @@ def test_a_genuinely_new_pair_still_confirms_immediately():
     rec = {}
     _run(rec, 0, True)
     assert rec["pass_count"] == 1
+
+
+# ---- le coppie CONGELATE: uscite dall'universo, ferme nel registro --------- #
+def test_a_pair_whose_coin_left_the_universe_is_excluded_from_the_counts():
+    """Trovato il 21 agosto leggendo il registro vero.
+
+    Alzando la storia minima a 365 giorni sono uscite 57 coin in un colpo solo. Le
+    loro coppie restano nel registro CONGELATE: l'optimizer non le valuta piu',
+    quindi non prendono conferme, non prendono fallimenti e non vengono purgate.
+
+    Il danno non era teorico. `gate_progress` costruiva il calendario sulle coppie
+    piu' vicine al traguardo, che erano proprio quelle ferme dal 13 agosto: ne
+    usciva "il bot riparte il 27 agosto", una data calcolata su coppie che nessuno
+    stava piu' valutando e che quindi non sarebbe mai arrivata. Tredici delle
+    quindici in cima alla lista erano di coin uscite dall'universo.
+    """
+    import time as _t
+    from scripts.optimize import publish_timeline
+
+    ora = _t.time()
+    pairs = {
+        "VIVAUSDT|s": {"pass_count": 1, "last_seen_at": ora - 3600},
+        "MORTAUSDT|s": {"pass_count": 1, "last_seen_at": ora - 10 * 86400},
+        "MORTA2USDT|s": {"pass_count": 2, "last_seen_at": ora - 10 * 86400},
+    }
+
+    class FB:
+        def __init__(self):
+            self.doc = {}
+        def get_doc(self, c, d):
+            return self.doc
+        def set_doc(self, c, d, data):
+            self.doc = data
+
+    fb = FB()
+    publish_timeline(fb, pairs, "test")
+    p = fb.doc["points"][-1]
+    assert p["tracked"] == 1, "solo la coppia ancora valutata entra nei conti"
+    assert p["frozen"] == 2, "le altre si contano a parte, non si nascondono"
+    assert p["dist"] == {"1": 1}
+
+
+def test_gate_progress_does_not_build_a_date_on_frozen_pairs():
+    """La difesa deve stare anche nello strumento che stampa la data: e' quello che
+    il proprietario legge."""
+    import inspect
+    from scripts import gate_progress
+    src = inspect.getsource(gate_progress.main)
+    assert "fresche" in src and "congelate" in src
+    assert "eta_ready(r, now), k) for k, r in fresche.items()" in src
