@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-22 01:50 UTC_
+_Generato: 2026-08-22 03:07 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: high_uncertainty
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-22 01:49 UTC
+- ultimo heartbeat: 2026-08-22 03:07 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-22 01:48 UTC)
+- esito: **⚪ FLAT** (2026-08-22 03:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -32,13 +32,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 18 | 1.5% |
 | trades | 8 | 0.7% |
 | holdout | 1 | 0.1% |
-| recovery | 71 | 6.0% |
-| total_return | 1027 | 87.3% |
-| consistency | 16 | 1.4% |
 | regime | 35 | 3.0% |
+| pf_ex_top | 18 | 1.5% |
+| recovery | 71 | 6.0% |
+| consistency | 16 | 1.4% |
+| total_return | 1027 | 87.3% |
 
 - quasi-passaggi (un solo criterio, di poco): **2** — sono i semi delle mutazioni del run successivo
 
@@ -46,21 +46,21 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 553 | 1.5% |
-| regime | 4466 | 12.1% |
-| recovery | 2772 | 7.5% |
-| trades | 1402 | 3.8% |
 | consistency | 759 | 2.1% |
-| win_rate | 2 | 0.0% |
 | holdout | 132 | 0.4% |
+| regime | 4466 | 12.1% |
 | total_return | 26933 | 72.8% |
+| trades | 1402 | 3.8% |
+| win_rate | 2 | 0.0% |
+| recovery | 2772 | 7.5% |
+| pf_ex_top | 553 | 1.5% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-08-22 01:03 UTC · coppie validate: **0** · GATE 1 pronto: False
-- tasso di passaggio misurato: **0.063%**
+- ultimo giro: 2026-08-22 03:04 UTC · coppie validate: **0** · GATE 1 pronto: False
+- tasso di passaggio misurato: **0.065%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -70,10 +70,10 @@ _Nessuna coppia ha passato in questo run._
 
 **Ultime decisioni:**
 
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (31) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (31) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (30) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (29) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (29) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (28) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (29) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 
 ## Trade chiusi
