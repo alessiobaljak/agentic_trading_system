@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-25 01:52 UTC_
+_Generato: 2026-08-25 03:13 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: bull_trending
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-25 01:52 UTC
+- ultimo heartbeat: 2026-08-25 03:12 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-25 01:48 UTC)
+- esito: **⚪ FLAT** (2026-08-25 03:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -32,13 +32,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 33 | 2.8% |
-| consistency | 17 | 1.4% |
-| trades | 10 | 0.8% |
-| pf_ex_top | 11 | 0.9% |
-| recovery | 84 | 7.0% |
 | total_return | 1035 | 86.8% |
+| regime | 33 | 2.8% |
+| pf_ex_top | 11 | 0.9% |
+| trades | 10 | 0.8% |
 | holdout | 2 | 0.2% |
+| recovery | 84 | 7.0% |
+| consistency | 17 | 1.4% |
 
 - quasi-passaggi (un solo criterio, di poco): **2** — sono i semi delle mutazioni del run successivo
 
@@ -46,21 +46,21 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 5147 | 12.8% |
-| recovery | 3069 | 7.6% |
-| trades | 1572 | 3.9% |
-| consistency | 908 | 2.3% |
 | total_return | 28829 | 71.6% |
-| holdout | 178 | 0.4% |
+| consistency | 908 | 2.3% |
 | pf_ex_top | 533 | 1.3% |
+| trades | 1572 | 3.9% |
+| recovery | 3069 | 7.6% |
+| regime | 5147 | 12.8% |
+| holdout | 178 | 0.4% |
 | win_rate | 3 | 0.0% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-08-25 01:00 UTC · coppie validate: **0** · GATE 1 pronto: False
-- tasso di passaggio misurato: **0.110%**
+- ultimo giro: 2026-08-25 03:03 UTC · coppie validate: **0** · GATE 1 pronto: False
+- tasso di passaggio misurato: **0.094%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -70,11 +70,11 @@ _Nessuna coppia ha passato in questo run._
 
 **Ultime decisioni:**
 
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (34) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (34) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (32) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (33) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (33) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (33) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (32) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 
 ## Trade chiusi
 _nessun trade chiuso._
