@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-26 01:58 UTC_
+_Generato: 2026-08-26 03:18 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-26 01:58 UTC
+- ultimo heartbeat: 2026-08-26 03:14 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-26 01:48 UTC)
+- esito: **⚪ FLAT** (2026-08-26 03:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
@@ -34,13 +34,13 @@ _aggiornato: 2026-08-26 00:42 UTC · 1160 coppie valutate, 1 passate in questo r
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| trades | 6 | 0.5% |
-| pf_ex_top | 14 | 1.2% |
-| consistency | 20 | 1.7% |
-| total_return | 1018 | 87.8% |
 | recovery | 69 | 6.0% |
 | regime | 29 | 2.5% |
+| trades | 6 | 0.5% |
+| consistency | 20 | 1.7% |
 | holdout | 3 | 0.3% |
+| pf_ex_top | 14 | 1.2% |
+| total_return | 1018 | 87.8% |
 
 - quasi-passaggi (un solo criterio, di poco): **4** — sono i semi delle mutazioni del run successivo
 
@@ -48,21 +48,21 @@ _aggiornato: 2026-08-26 00:42 UTC · 1160 coppie valutate, 1 passate in questo r
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 487 | 1.2% |
-| win_rate | 2 | 0.0% |
-| recovery | 2930 | 7.2% |
-| holdout | 171 | 0.4% |
-| trades | 622 | 1.5% |
-| consistency | 892 | 2.2% |
 | total_return | 30434 | 74.8% |
 | regime | 5161 | 12.7% |
+| recovery | 2930 | 7.2% |
+| consistency | 892 | 2.2% |
+| trades | 622 | 1.5% |
+| holdout | 171 | 0.4% |
+| win_rate | 2 | 0.0% |
+| pf_ex_top | 487 | 1.2% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-08-26 01:02 UTC · coppie validate: **0** · GATE 1 pronto: False
-- tasso di passaggio misurato: **0.114%**
+- ultimo giro: 2026-08-26 03:03 UTC · coppie validate: **0** · GATE 1 pronto: False
+- tasso di passaggio misurato: **0.112%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -72,11 +72,11 @@ _aggiornato: 2026-08-26 00:42 UTC · 1160 coppie valutate, 1 passate in questo r
 
 **Ultime decisioni:**
 
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (38) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (38) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (33) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (32) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (32) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (33) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (34) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 
 ## Trade chiusi
 _nessun trade chiuso._
