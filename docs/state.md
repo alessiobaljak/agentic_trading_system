@@ -1,68 +1,66 @@
 # Stato sistema (snapshot)
-_Generato: 2026-08-26 10:51 UTC_
+_Generato: 2026-08-26 13:16 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$1,000.00**
-- ultimo heartbeat: 2026-08-26 10:51 UTC
+- ultimo heartbeat: 2026-08-26 13:14 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-08-26 10:48 UTC)
+- esito: **⚪ FLAT** (2026-08-26 13:03 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 100 · segnali: 0
 
 ## GATE 1 — Validazione strategie
 - stato: **🔄 in corso**
-- copertura universo: **0/143 crypto (0%)** · obiettivo ≥ 35%
+- copertura universo: **0/141 crypto (0%)** · obiettivo ≥ 35%
 - coppie validate (>= 3 pass OOS): **0**
-- universo scansionato: 1000BONKUSDT, 1000FLOKIUSDT, 1000LUNCUSDT, 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ACEUSDT, ADAUSDT, AEROUSDT, ALGOUSDT, ALICEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, B2USDT, BANKUSDT, BCHUSDT, BICOUSDT, BIOUSDT, BMTUSDT, BNBUSDT, BOMEUSDT, BRUSDT, BTCUSDT, CAKEUSDT, CFXUSDT, CHZUSDT, COTIUSDT, COWUSDT, CRVUSDT, DASHUSDT, DEXEUSDT, DOGEUSDT, DOTUSDT, DUSKUSDT, EIGENUSDT, ENAUSDT, ENSUSDT, ESPORTSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FILUSDT, GALAUSDT, GMTUSDT, GOATUSDT, GPSUSDT, GRASSUSDT, GRTUSDT, HBARUSDT, HEIUSDT, HOMEUSDT, HUSDT, HYPEUSDT, ICPUSDT, INJUSDT, JASMYUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KASUSDT, KMNOUSDT, KOMAUSDT, LDOUSDT, LINKUSDT, LSKUSDT, LTCUSDT, MELANIAUSDT, MOODENGUSDT, MORPHOUSDT, MOVEUSDT, MOVRUSDT, MUBARAKUSDT, NEARUSDT, NEIROUSDT, NILUSDT, ONDOUSDT, ONGUSDT, ONTUSDT, OPUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PLAYUSDT, PNUTUSDT, POLUSDT, POPCATUSDT, PORTALUSDT, PROMUSDT, PUMPUSDT, PUNDIXUSDT, PYTHUSDT, RAYSOLUSDT, REDUSDT, RENDERUSDT, SANDUSDT, SEIUSDT, SKYAIUSDT, SOLUSDT, SOLVUSDT, SPKUSDT, SPXUSDT, SQDUSDT, STGUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUPERUSDT, SUSDT, TACUSDT, TAOUSDT, TIAUSDT, TLMUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, TSTUSDT, TUTUSDT, TWTUSDT, UNIUSDT, USELESSUSDT, VELVETUSDT, VETUSDT, VIRTUALUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, ZECUSDT, ZENUSDT, ZORAUSDT, ZROUSDT
-- aggiornato: 2026-08-26 10:43 UTC
+- universo scansionato: 1000BONKUSDT, 1000FLOKIUSDT, 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ACEUSDT, ADAUSDT, AEROUSDT, ALGOUSDT, ALICEUSDT, APTUSDT, ARBUSDT, ARUSDT, ATOMUSDT, AVAXUSDT, AXSUSDT, B2USDT, BANKUSDT, BCHUSDT, BICOUSDT, BIOUSDT, BMTUSDT, BNBUSDT, BOMEUSDT, BRUSDT, BTCUSDT, CAKEUSDT, CFXUSDT, CHZUSDT, COTIUSDT, COWUSDT, CRVUSDT, CVXUSDT, DASHUSDT, DEXEUSDT, DOGEUSDT, DOTUSDT, DUSKUSDT, EIGENUSDT, ENAUSDT, ENSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FILUSDT, GALAUSDT, GMTUSDT, GOATUSDT, GPSUSDT, GRASSUSDT, GRTUSDT, HBARUSDT, HEIUSDT, HOMEUSDT, HUMAUSDT, HUSDT, HYPEUSDT, ICPUSDT, INJUSDT, JASMYUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KASUSDT, KMNOUSDT, KOMAUSDT, LDOUSDT, LINKUSDT, LSKUSDT, LTCUSDT, MELANIAUSDT, MOODENGUSDT, MORPHOUSDT, MOVEUSDT, MOVRUSDT, MUBARAKUSDT, NEARUSDT, NEIROUSDT, NILUSDT, ONDOUSDT, ONGUSDT, ONTUSDT, OPUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PLAYUSDT, PNUTUSDT, POLUSDT, POPCATUSDT, PORTALUSDT, PROMUSDT, PUMPBTCUSDT, PUMPUSDT, PYTHUSDT, REDUSDT, RENDERUSDT, SANDUSDT, SEIUSDT, SKYAIUSDT, SOLUSDT, SOLVUSDT, SPKUSDT, SPXUSDT, SQDUSDT, STGUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUPERUSDT, SXTUSDT, TACUSDT, TAOUSDT, TIAUSDT, TLMUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, TSTUSDT, TUTUSDT, TWTUSDT, UNIUSDT, USELESSUSDT, VELVETUSDT, VETUSDT, VIRTUALUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, ZECUSDT, ZENUSDT, ZROUSDT
+- aggiornato: 2026-08-26 12:38 UTC
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-08-26 09:39 UTC · 1144 coppie valutate, 1 passate in questo run_
+_aggiornato: 2026-08-26 12:38 UTC · 1128 coppie valutate, 0 passate in questo run_
 
-| Coin | Strategia | PF | PnL OOS | Trade | Win |
-|---|---|---|---|---|---|
-| GRTUSDT | mean_reversion | 1.785 | 97% | 174 | 48% |
+_Nessuna coppia ha passato in questo run._
 
 ## Dove muoiono le candidate (autopsia del GATE 1)
 
-**strategie base** — 1144 valutazioni, 1 passate (0.09%) · 2026-08-26 09:39 UTC
+**strategie base** — 1128 valutazioni, 0 passate (0.00%) · 2026-08-26 12:38 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| recovery | 72 | 6.3% |
-| trades | 7 | 0.6% |
-| total_return | 1005 | 87.9% |
-| regime | 37 | 3.2% |
-| holdout | 2 | 0.2% |
+| regime | 38 | 3.4% |
 | pf_ex_top | 11 | 1.0% |
-| consistency | 9 | 0.8% |
+| trades | 7 | 0.6% |
+| consistency | 10 | 0.9% |
+| holdout | 2 | 0.2% |
+| recovery | 73 | 6.5% |
+| total_return | 987 | 87.5% |
 
-- quasi-passaggi (un solo criterio, di poco): **2** — sono i semi delle mutazioni del run successivo
+- quasi-passaggi (un solo criterio, di poco): **4** — sono i semi delle mutazioni del run successivo
 
 **strategie generate** — 40470 valutazioni, 50 passate (0.12%) · 2026-08-26 10:43 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| trades | 1717 | 4.2% |
 | regime | 5085 | 12.6% |
-| win_rate | 4 | 0.0% |
-| recovery | 3095 | 7.7% |
-| total_return | 28991 | 71.7% |
-| holdout | 178 | 0.4% |
 | pf_ex_top | 459 | 1.1% |
+| trades | 1717 | 4.2% |
+| holdout | 178 | 0.4% |
+| recovery | 3095 | 7.7% |
+| win_rate | 4 | 0.0% |
 | consistency | 891 | 2.2% |
+| total_return | 28991 | 71.7% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-08-26 10:02 UTC · coppie validate: **0** · GATE 1 pronto: False
-- tasso di passaggio misurato: **0.118%**
+- ultimo giro: 2026-08-26 13:01 UTC · coppie validate: **0** · GATE 1 pronto: False
+- tasso di passaggio misurato: **0.120%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -72,11 +70,11 @@ _aggiornato: 2026-08-26 09:39 UTC · 1144 coppie valutate, 1 passate in questo r
 
 **Ultime decisioni:**
 
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (37) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (37) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (37) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 - `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (35) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
-- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (36) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (33) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (33) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (37) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
+- `none GATE_MIN_PF_EX_TOP 1.0 → None` — le candidate piu' vicine al passaggio (37) sono fermate da GATE_MIN_PF_EX_TOP, che e' gia' al pavimento (1): sotto il pareggio senza i colpi migliori si valida la fortuna. Non si scende oltre: quello che manca non e' una soglia piu' bassa
 
 ## Trade chiusi
 _nessun trade chiuso._
