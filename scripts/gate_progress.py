@@ -64,14 +64,27 @@ def eta_ready(rec: dict, now: float) -> float:
     non al loro ultimo passaggio. Leggere `last_pass_data_end` dava date piu'
     ottimistiche di quelle vere — e' l'errore che mi ha fatto annunciare le seconde
     conferme per il 19 agosto quando sarebbero arrivate il 22.
+
+    E SENZA FINESTRA NON C'E' NESSUNA DATA. E' la terza volta che questa funzione
+    produce un calendario su coppie che non ci arriveranno, e ogni volta da una porta
+    diversa: prima leggendo il campo sbagliato, poi contando coppie di coin uscite
+    dall'universo, ora queste — valutate a ogni giro, ma che il gate non passa piu'.
+    La finestra si apre solo quando una coppia RIPASSA, quindi per loro la prossima
+    conferma non e' fra N giorni: dipende da un evento che potrebbe non succedere
+    mai. Ripiegare su `last_pass_data_end` significa scambiare "l'ultima volta che ha
+    funzionato" per "quando tornera' a funzionare", che e' esattamente la promessa
+    che non si puo' fare.
+
+    Il costo di quella finzione non era solo una data sbagliata: quelle coppie hanno
+    la data piu' VECCHIA, quindi finivano in cima all'elenco e nascondevano le uniche
+    che stavano davvero maturando.
     """
     passes = int(rec.get("pass_count", 0) or 0)
     if passes >= MIN_PASSES:
         return 0.0
     if passes <= 0:
         return float("inf")
-    da = float(rec.get("window_start", 0) or 0) or float(
-        rec.get("last_pass_data_end", 0) or 0)
+    da = float(rec.get("window_start", 0) or 0)
     if da <= 0:
         return float("inf")
     return da + (MIN_PASSES - passes) * NEW_DATA_MIN_S
@@ -156,11 +169,15 @@ def main() -> int:
     con_pass = [r for r in fresche.values() if int(r.get("pass_count", 0) or 0) > 0]
     aperte = [r for r in con_pass if float(r.get("window_start", 0) or 0) > 0]
     if con_pass:
-        print(f"  FINESTRE: {len(aperte)}/{len(con_pass)} coppie con almeno un "
-              f"passaggio hanno la finestra aperta.\n"
-              f"  Le altre {len(con_pass) - len(aperte)} non stanno maturando: "
-              f"la finestra si apre solo quando la coppia\n  ripassa il gate, e "
-              f"finche' non si apre non arriva ne' una conferma ne' un fallimento.")
+        print(f"  FINESTRE APERTE: {len(aperte)}/{len(con_pass)} coppie con almeno "
+              f"un passaggio.\n"
+              f"  E' QUESTO il numero da guardare: solo queste stanno contando i "
+              f"giorni verso la\n  conferma successiva, e solo queste compaiono nel "
+              f"calendario qui sotto.\n"
+              f"  Le altre {len(con_pass) - len(aperte)} sono ferme: la finestra si "
+              f"apre solo quando la coppia RIPASSA\n  il gate, quindi per loro la "
+              f"prossima conferma non ha una data — dipende da un\n  evento che "
+              f"potrebbe non succedere.")
 
     # --- il calendario ------------------------------------------------------ #
     etas = sorted((eta_ready(r, now), k) for k, r in fresche.items())

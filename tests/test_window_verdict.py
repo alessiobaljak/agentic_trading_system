@@ -266,3 +266,25 @@ def test_last_seen_at_means_one_thing_for_generated_pairs_too():
     pairs = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])
     assert pairs["AUSDT|gen_x"]["last_seen_at"] > vecchio, "valutata = vista"
     assert pairs["ZUSDT|gen_y"]["last_seen_at"] == vecchio, "non valutata = non vista"
+
+
+def test_a_pair_without_an_open_window_has_no_date():
+    """La terza volta che il calendario mentiva, e ogni volta da una porta diversa.
+
+    Una coppia con un passaggio ma senza finestra aperta e' ferma: la finestra si
+    apre solo quando RIPASSA il gate, quindi la prossima conferma non e' fra N
+    giorni — dipende da un evento che potrebbe non succedere. Ripiegare su
+    `last_pass_data_end` scambia "l'ultima volta che ha funzionato" per "quando
+    tornera' a funzionare".
+
+    E il costo non era solo una data sbagliata: quelle coppie hanno la data piu'
+    VECCHIA, quindi finivano in cima all'elenco e nascondevano le uniche che
+    stavano davvero maturando.
+    """
+    from scripts.gate_progress import eta_ready
+
+    ferma = {"pass_count": 1, "last_pass_data_end": T0, "window_start": 0}
+    assert eta_ready(ferma, T0) == float("inf"), "senza finestra non c'e' una data"
+
+    matura = {"pass_count": 1, "last_pass_data_end": T0, "window_start": T0}
+    assert eta_ready(matura, T0) == T0 + 2 * SETTIMANA
