@@ -11,6 +11,7 @@ Uso: python -m scripts.state_snapshot
 """
 from __future__ import annotations
 
+import os
 import time
 from datetime import datetime, timezone
 
@@ -26,6 +27,53 @@ def _ts(v) -> str:
         return datetime.fromtimestamp(float(v), tz=timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     except Exception:  # noqa: BLE001
         return "—"
+
+
+def _salute_registro(pairs: dict) -> list[str]:
+    """IL REGISTRO STA ACCUMULANDO, O STA BUTTANDO VIA CIO' CHE TROVA?
+
+    Nasce dal difetto del 31 agosto, e serve a non farlo ripetere. Le coppie base
+    erano cresciute oltre il tetto da sole, e il tetto cancellava tutte le GENERATE
+    a ogni passata — cioe' le uniche che passano il gate. La ricerca trovava ottanta
+    candidate a giro e il registro le buttava un istante dopo.
+
+    E' rimasto invisibile per giorni per un motivo preciso: ogni numero che
+    guardavamo era VERO. "80 candidate passate" vero. "3041 coppie nel registro"
+    vero. Nessuno confrontava le due cose, e nessuno guardava di che cosa fosse
+    fatto quel 3041. Un totale non dice mai se dentro c'e' quello che serve.
+
+    Queste tre righe fanno esattamente quel confronto, e finiscono in docs/state.md
+    — che e' committato, quindi si legge da qualunque posto senza entrare sulla
+    macchina. Se il registro torna a soffocare, la prossima volta si vede subito.
+    """
+    if not pairs:
+        return []
+    tetto = int(os.getenv("OPTIMIZER_MAX_PAIRS", "3000"))
+    base = sum(1 for r in pairs.values() if not r.get("generated"))
+    gen = len(pairs) - base
+    gen_con_pass = sum(1 for r in pairs.values()
+                       if r.get("generated") and int(r.get("pass_count", 0) or 0) > 0)
+    out = [
+        "### Salute del registro",
+        "",
+        f"- composizione: **{base} base** · **{gen} generate** "
+        f"(di cui {gen_con_pass} con almeno una conferma)",
+        f"- occupazione: {len(pairs)}/{tetto} — "
+        f"{'⚠️ SOPRA IL TETTO' if len(pairs) > tetto else 'ok'}",
+    ]
+    # L'ALLARME. Le generate sono le uniche che passano il gate: se sono zero, o se
+    # le base da sole riempiono il tetto, il sistema non puo' accumulare NIENTE per
+    # quante candidate trovi.
+    if gen == 0:
+        out.append("- 🔴 **ZERO coppie generate**: sono le uniche che passano il "
+                   "gate. Il registro non puo' accumulare niente, per quante "
+                   "candidate la ricerca trovi.")
+    elif base >= tetto * 0.9:
+        out.append(f"- 🟠 **le base occupano il {base / tetto * 100:.0f}% del "
+                   f"tetto**: alle generate restano {max(0, tetto - base)} posti. "
+                   f"Sotto zero il registro smette di accumulare.")
+    out.append("")
+    return out
 
 
 def build() -> str:
@@ -113,6 +161,7 @@ def build() -> str:
         f"- aggiornato: {_ts(reg.get('updated_at'))}",
         "",
     ]
+    lines += _salute_registro(pairs)
     if validated:
         lines.append("### Strategie VALIDATE (operate dal bot)")
         lines.append("| Coin | Strategia | Passes | PF | PnL OOS | Parametri |")

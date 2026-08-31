@@ -139,3 +139,31 @@ def test_generated_pairs_without_a_confirmation_are_pruned_before_the_cap():
         assert [k for k in fb.pairs() if k.startswith("G")] == []
     finally:
         os.environ.pop("OPTIMIZER_MAX_PAIRS", None)
+
+
+# --------------------------------------------------------------------------- #
+# 3. L'allarme: perche' ci sono voluti giorni per accorgersene                  #
+# --------------------------------------------------------------------------- #
+def test_the_snapshot_raises_an_alarm_when_the_registry_cannot_accumulate():
+    """LA DOMANDA DEL PROPRIETARIO: com'e' possibile accorgersene solo ora?
+
+    Perche' ogni numero che guardavamo era VERO. «80 candidate passate» vero.
+    «3041 coppie nel registro» vero. Nessuno confrontava le due cose, e nessuno
+    guardava di che cosa fosse fatto quel 3041. Un totale non dice mai se dentro
+    c'e' quello che serve.
+
+    Ora il confronto lo fa il rapporto committato ogni ora, quindi si legge da
+    qualunque posto senza entrare sulla macchina.
+    """
+    from scripts.state_snapshot import _salute_registro
+
+    malato = {f"C{i}USDT|breakout": {"pass_count": 0} for i in range(3041)}
+    righe = "\n".join(_salute_registro(malato))
+    assert "ZERO coppie generate" in righe
+    assert "SOPRA IL TETTO" in righe
+
+    sano = {f"C{i}USDT|breakout": {"pass_count": 0} for i in range(1200)}
+    sano.update({f"G{i}USDT|gen_x{i}": {"generated": True, "pass_count": 1}
+                 for i in range(140)})
+    righe = "\n".join(_salute_registro(sano))
+    assert "ZERO coppie generate" not in righe and "140 generate" in righe
