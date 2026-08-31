@@ -359,22 +359,47 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         ))
     }
     # cap: limita il numero di coppie per non superare 1 MiB di documento.
-    # SOLO sulle GENERATE: le coppie base sono il prodotto di optimize.py e la
-    # discovery non deve MAI potarle (con --top alto le base da sole superano il
-    # cap e perderebbero pass/fail_count silenziosamente).
+    #
+    # QUI IL 31 AGOSTO IL REGISTRO SI E' FERMATO DEL TUTTO, in silenzio. Le coppie
+    # base non venivano mai potate e crescevano a ogni rotazione dell'universo (ogni
+    # coin mai scansionata lascia 8 coppie per sempre). Quando hanno superato il
+    # tetto da sole — 3041 su 3000 — `gen_budget` e' diventato ZERO, e la riga qui
+    # sotto cancellava TUTTE le generate a ogni passata. La discovery trovava ottanta
+    # candidate a giro, le scriveva, e la stessa funzione le buttava via subito dopo.
+    # Nessun errore, nessun log: solo un registro che non poteva piu' accumulare
+    # niente. Le 137 coppie a un passaggio del 27 agosto erano diventate 2.
+    #
+    # Due difese, perche' una sola non basta:
+    #   1. le coppie con almeno una CONFERMA non si toccano mai. Ognuna costa una
+    #      settimana di attesa: buttarle per far spazio significa buttare l'unica
+    #      cosa che il sistema sta producendo. Se per tenerle si sfora il tetto, si
+    #      sfora — a quel punto e' `slim_registry` a togliere i campi descrittivi, che
+    #      e' un prezzo che si puo' pagare. Cancellare passaggi veri no.
+    #
+    # UNA SOLA REGOLA, non due. La prima versione di questa correzione riservava
+    # anche una quota alle generate SENZA conferme, ed era codice morto: la potatura
+    # qui sopra le toglie tutte (`pass_count == 0`), quindi quell'insieme e' sempre
+    # vuoto. Un test lo ha mostrato subito. Meglio una difesa sola che si capisce
+    # che due di cui una non fa niente.
     max_pairs = int(os.getenv("OPTIMIZER_MAX_PAIRS", "3000"))
     if len(pairs) > max_pairs:
         base = {k: r for k, r in pairs.items() if not r.get("generated")}
         gen = {k: r for k, r in pairs.items() if r.get("generated")}
-        gen_budget = max(0, max_pairs - len(base))
-        if len(gen) > gen_budget:
-            ranked = sorted(
-                gen.items(),
-                key=lambda kv: (kv[1].get("pass_count", 0) >= MIN_PASSES,
-                                kv[1].get("pass_count", 0), kv[1].get("last_seen_at", 0)),
-                reverse=True)
-            gen = dict(ranked[:gen_budget])
-        pairs = {**base, **gen}
+        # INTOCCABILI: hanno gia' pagato il prezzo del tempo. Ognuna e' una
+        # settimana di attesa, e sono l'unica cosa che il sistema sta producendo.
+        con_pass = {k: r for k, r in gen.items()
+                    if int(r.get("pass_count", 0) or 0) > 0}
+        resto = {k: r for k, r in gen.items() if k not in con_pass}
+        budget = max(0, max_pairs - len(base) - len(con_pass))
+        if len(resto) > budget:
+            ranked = sorted(resto.items(),
+                            key=lambda kv: kv[1].get("last_seen_at", 0), reverse=True)
+            resto = dict(ranked[:budget])
+        if len(base) + len(con_pass) > max_pairs:
+            print(f"[registry] tetto {max_pairs} sforato per tenere "
+                  f"{len(con_pass)} coppie con conferme: e' voluto. Le "
+                  f"{len(base)} base vanno potate da optimize.py, non da qui.")
+        pairs = {**base, **con_pass, **resto}
     validated = sorted(
         k for k, r in pairs.items()
         if r.get("pass_count", 0) >= MIN_PASSES

@@ -717,7 +717,33 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         del pairs[k]
     if purged:
         print(f"[registry] AUTO-PURGE: rimosse {len(purged)} coppie "
-              f"(fallite {PURGE_FAILS}+ run di fila)")
+              f"(fallite {PURGE_FAILS}+ finestre di fila)")
+
+    # BASE STANTIE: la causa vera del blocco del 31 agosto.
+    #
+    # L'universo ruota — e' il top-N per volume, e cambia ogni giorno. Ogni coin mai
+    # scansionata lasciava dietro di se' 8 coppie base PER SEMPRE: nessuno le
+    # valutava piu', quindi non prendevano ne' conferme ne' fallimenti, e la potatura
+    # della discovery le risparmia di proposito. Sono cresciute fino a 3041, cioe'
+    # oltre il tetto di 3000 da sole — e a quel punto lo spazio rimasto alle coppie
+    # GENERATE, le uniche che passano il gate, e' diventato zero. La ricerca trovava
+    # ottanta candidate a giro e il registro le cancellava tutte, in silenzio.
+    #
+    # Il criterio e' lo stesso che la discovery applica alle generate, e non c'e'
+    # ragione perche' le base ne fossero esenti: non valutata da due periodi di
+    # freschezza e senza conferme = peso morto. Chi ha conferme non si tocca, e chi
+    # torna nell'universo viene semplicemente ricreata al primo run.
+    stantie = time.time() - FRESH_DAYS * 86400 * 2
+    morte = [k for k, r in pairs.items()
+             if not r.get("generated")
+             and int(r.get("pass_count", 0) or 0) < MIN_PASSES
+             and float(r.get("last_seen_at", 0) or 0) < stantie]
+    for k in morte:
+        del pairs[k]
+    if morte:
+        print(f"[registry] BASE STANTIE: rimosse {len(morte)} coppie di coin uscite "
+              f"dall'universo da oltre {FRESH_DAYS * 2:g} giorni. Senza questo il "
+              f"registro cresce senza limite e soffoca le generate.")
 
     validated = sorted(
         k for k, r in pairs.items()
