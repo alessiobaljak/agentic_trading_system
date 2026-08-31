@@ -155,6 +155,32 @@ def main() -> int:
               f"  La coin e' uscita dall'universo — di solito per storia insufficiente "
               f"o delisting.\n  Non avanzano e non falliscono: sono escluse da tutti i "
               f"conti qui sotto.")
+    # --- DI CHE COSA E' FATTO IL REGISTRO ------------------------------------ #
+    # Il 31 agosto le coppie a un passaggio sono passate da 137 a 2 in quattro
+    # giorni. Con la contabilita' per finestra non e' possibile: per purgarne una
+    # servono DUE finestre fallite, cioe' due settimane. Quindi qualcos'altro le ha
+    # tolte — la potatura per anzianita' della discovery, o il tetto sul numero di
+    # coppie — e senza questi conteggi la differenza non si vede.
+    #
+    # Le due popolazioni vanno separate perche' hanno regole diverse: le BASE non
+    # vengono mai potate dalla discovery, le GENERATE si. Se il registro si riempie
+    # di base morte, il tetto le tiene e butta fuori le generate — cioe' le uniche
+    # che passano il gate. Un numero solo, "3041 coppie", nasconde esattamente questo.
+    base = {k: r for k, r in fresche.items() if not r.get("generated")}
+    gen = {k: r for k, r in fresche.items() if r.get("generated")}
+    base_tot = sum(1 for r in pairs.values() if not r.get("generated"))
+    tetto = int(os.getenv("OPTIMIZER_MAX_PAIRS", "3000"))
+    print(f"  COMPOSIZIONE (vive): {len(base)} base · {len(gen)} generate.  "
+          f"Nel registro intero: {base_tot} base su {len(pairs)}, tetto {tetto}.")
+    if base_tot >= tetto * 0.8:
+        print(f"  ATTENZIONE: le coppie base occupano quasi tutto il tetto. Non "
+              f"vengono mai potate,\n  quindi lo spazio che resta alle generate — le "
+              f"uniche che passano il gate — si\n  riduce a {max(0, tetto - base_tot)}.")
+    falliti = Counter(int(r.get("fail_count", 0) or 0) for r in fresche.values()
+                      if int(r.get("fail_count", 0) or 0) > 0)
+    if falliti:
+        print("  fallimenti accumulati: " +
+              " · ".join(f"{n} fallimenti: {q}" for n, q in sorted(falliti.items())))
     print(f"  VALIDATE ora: {len(validated)} su {len(coins)} coin distinte")
     print(f"  ready dichiarato dal registro: {doc.get('ready')} "
           f"(via {doc.get('ready_by') or '—'})")
