@@ -1,0 +1,4 @@
+# la verifica VERA: la 0026 e' stata eseguita nello stesso minuto del push, quindi
+# ha letto il registro prima che il codice nuovo girasse. Da allora l'optimizer ha
+# fatto due passate. Le base morte devono essere sparite.
+gate
