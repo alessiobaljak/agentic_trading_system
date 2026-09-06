@@ -88,3 +88,59 @@ L'ordine non è negoziabile, ed è più lungo di quanto sembri:
 giorno dica sì non lo cambia: la promessa del backtest e il vissuto sono già stati
 diversi una volta (BIRBUSDT, PF 1,51 nel gate e 0,16 nel paper), ed è esattamente il
 motivo per cui il passo 2 esiste.
+
+---
+
+## Quando avrà senso «cercare cose diverse» (aggiunto il 6 settembre)
+
+Domanda del proprietario. La risposta è: **non adesso**, e ci sono tre segnali
+precisi che lo direbbero. Due non sono ancora arrivati, uno l'ho misurato oggi.
+
+### Segnale 1 — il 13 settembre, se nessuna arriva a tre conferme
+
+Otto coppie sono a 2/3. Le loro finestre chiudono il 13. Se **nessuna** ripassa,
+vuol dire che quello che il gate trova si ripete **una volta e non due** — cioè non
+è un vantaggio, è rumore con un po' di inerzia. A quel punto insistere con la stessa
+ricerca è tempo speso a pescare nello stesso stagno vuoto.
+
+### Segnale 2 — se validano ma il paper perde
+
+È il fallimento **più informativo di tutti**, ed è già successo una volta: BIRBUSDT
+prometteva PF 1,51 nel gate e ha fatto 0,16 nel paper. Se si ripete, il problema non
+è *cosa* cerchiamo ma *come misuriamo*: il gate starebbe promuovendo cose che il
+mercato vero non conferma, e nessuna quantità di ricerca aggiuntiva lo risolve.
+
+### Segnale 3 — se la ricerca converge su poche idee
+
+Il ciclo delle mutazioni cerca **vicino** a ciò che quasi funziona. È efficiente, ma
+per costruzione si avvicina a un massimo locale: prima o poi produce solo varianti
+della stessa idea, e continuare non aggiunge informazione.
+
+**Misurato oggi: non sta succedendo.** Fra le coppie viste nei risultati ops ci sono
+**78 spec distinte su 95 coppie**, sparse su 48 coin. La ricerca è ancora larga.
+
+Un'osservazione che però va tenuta d'occhio: **quasi tutte le spec funzionano su UNA
+sola coin.** Solo una (`gen_9a383fff`) compare su cinque. Un vantaggio vero di solito
+generalizza — se resta vero che ogni strategia vive su una coin sola, è un indizio
+che stiamo adattandoci alla storia di quella coin invece di trovare una regolarità
+di mercato. Non è ancora una conclusione: il campione è piccolo.
+
+### Cosa vorrebbe dire, in concreto
+
+Non «altri parametri». Cambiare **la domanda**:
+
+* **materia prima diversa** — oggi si guardano solo prezzo e volume. Funding rate,
+  liquidazioni, book, dati on-chain sono segnali che nessuna delle nostre strategie
+  vede;
+* **orizzonte diverso** — siamo a 15 minuti con un limite di 24 ore per posizione. A
+  4 ore o a un giorno il rapporto fra segnale e costi è un'altra cosa;
+* **domanda diversa** — invece di «quale schema si ripete?», chiedere «**chi c'è
+  dall'altra parte, e perché mi lascia quel soldo?**». Le strategie che sopravvivono
+  a lungo hanno quasi sempre una risposta a questa domanda: qualcuno è costretto a
+  vendere, o paga per un servizio. È la differenza fra avere un'ipotesi e cercare.
+
+### La raccomandazione
+
+**Aspettare il 13 settembre.** Mancano sei giorni ed è un test decisivo che costa
+zero: sta già girando. Cambiare la ricerca adesso butterebbe via l'esperimento a metà
+e ci lascerebbe senza la risposta alla domanda che aspettiamo da tre settimane.
