@@ -145,8 +145,21 @@ def main() -> int:
     print(f"[gate] {len(pairs)} coppie nel registro · {len(fresche)} ancora valutate "
           f"· soglia {MIN_PASSES} pass · un pass ogni {NEW_DATA_MIN_S / 3600:.0f}h "
           f"di dati nuovi")
+    # SU QUANTE COIN DISTINTE. E' la domanda che il proprietario ha fatto l'11
+    # settembre — «quante crypto potremmo operare?» — e il conteggio delle coppie non
+    # la risponde: otto strategie diverse sulla STESSA moneta sono otto coppie e una
+    # sola crypto. Peggio, sembrano una diversificazione e non lo sono: se il bot le
+    # operasse tutte, avrebbe otto posizioni che salgono e scendono insieme.
+    #
+    # E' anche la soglia che decide se il paper puo' partire: OPTIMIZER_MIN_COVERED
+    # coin distinte, non coppie.
+    coin_per_livello: dict[int, set] = {}
+    for r in fresche.values():
+        p = int(r.get("pass_count", 0) or 0)
+        coin_per_livello.setdefault(p, set()).add(r.get("symbol"))
     print("  distribuzione pass (solo coppie vive): " +
-          " · ".join(f"{p} pass: {n}" for p, n in sorted(dist.items())))
+          " · ".join(f"{p} pass: {n} su {len(coin_per_livello.get(p, ())) } coin"
+                     for p, n in sorted(dist.items())))
     if congelate:
         con_pass = sum(1 for r in congelate.values()
                        if int(r.get("pass_count", 0) or 0) > 0)
