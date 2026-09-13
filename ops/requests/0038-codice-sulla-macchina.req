@@ -1,0 +1,4 @@
+# Conferma che il giro appena lanciato gira col codice corretto: se l'agente ops
+# avesse eseguito `lancia-gate` prima del pull, il run userebbe la versione vecchia
+# e la lettura fra un'ora non direbbe quello che sembra dire.
+git-storia
