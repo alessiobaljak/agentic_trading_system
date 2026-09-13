@@ -42,6 +42,65 @@ from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
 _W: dict = {}
 
 
+def specs_da_rivalutare(existing: dict, reg: dict, cap: int) -> tuple[list[dict], dict]:
+    """Quali spec gia' note si ri-valutano in questo run, e con che priorita'.
+
+    IL DIFETTO CHE CORREGGE, in una riga: il taglio buttava fuori proprio le coppie
+    piu' vicine alla validazione.
+
+    Una coppia generata prende una conferma SOLO ripassando il gate (`judge_window`
+    e' chiamato, nella discovery, unicamente sulle coppie che passano). Quindi una
+    spec che non viene ri-valutata non e' "in attesa": e' ferma per sempre, e il
+    calendario delle conferme continua a stampare per lei una data che nessuno
+    onorera'.
+
+    La versione precedente proteggeva dal taglio le sole spec GIA' VALIDATE, e le
+    validate sono zero da quando il registro esiste. Tutto il resto entrava
+    nell'ordine in cui era stato scoperto e veniva tagliato a `cap`: le spec piu'
+    vecchie dentro, le piu' recenti fuori — un criterio che con le conferme non
+    c'entra niente. Una coppia a 2 passaggi su 3 poteva restare fuori dal taglio e
+    non arrivare mai al terzo, senza che nessun contatore lo dicesse.
+
+    E' la terza volta che un tetto pensato per limitare i TEMPI finisce per
+    sacrificare l'unica cosa che il sistema sta producendo (le altre due: il tetto
+    sulle coppie del registro il 31 agosto, e la quota morta per le generate senza
+    conferme). Il criterio ora e' esplicito: **prima le conferme, poi l'anzianita'**.
+
+    Le spec con almeno una conferma passano SEMPRE, anche a costo di sforare il cap:
+    sono poche (una manciata di centinaia contro migliaia di candidate nuove) e sono
+    l'unica cosa che il gate ha prodotto in tre settimane. Sacrificarle per stare nei
+    tempi vuol dire non arrivare mai in fondo, che non e' un risparmio.
+
+    Ritorna la lista di spec e un dizionario di diagnostica, che finisce su Firestore
+    e da li' nel rapporto: senza, la differenza fra "il taglio morde" e "il taglio
+    non morde" resta invisibile esattamente come lo era prima.
+    """
+    pairs = decode_pairs(reg.get("pairs"))
+    # quante conferme ha gia' ogni spec. Una spec puo' vivere su piu' coin: conta la
+    # coppia piu' avanti, perche' e' quella che il taglio rischia di buttare via.
+    conferme: dict[str, int] = {}
+    for k, r in pairs.items():
+        if not r.get("generated") or "|" not in k:
+            continue
+        gid = k.split("|", 1)[1]
+        conferme[gid] = max(conferme.get(gid, 0), int(r.get("pass_count", 0) or 0))
+
+    # `sorted` e' stabile: a parita' di conferme resta l'ordine di scoperta, cioe'
+    # esattamente il comportamento precedente per tutta la coda senza conferme.
+    ordinate = sorted(existing.items(), key=lambda kv: -conferme.get(kv[0], 0))
+    con_conferme = [s for gid, s in ordinate if conferme.get(gid, 0) > 0]
+    senza = [s for gid, s in ordinate if conferme.get(gid, 0) == 0]
+    scelte = con_conferme + senza[: max(0, cap - len(con_conferme))]
+    diag = {
+        "reeval_cap": cap,
+        "n_specs_note": len(existing),
+        "n_specs_rivalutate": len(scelte),
+        "n_specs_con_conferme": len(con_conferme),
+        "n_specs_tagliate": max(0, len(existing) - len(scelte)),
+    }
+    return scelte, diag
+
+
 def mutation_seeds(fb, existing: dict, limit: int = 10) -> list[dict]:
     """Le spec da cui vale la pena evolvere: i QUASI-PASSAGGI del run precedente.
 
@@ -535,14 +594,8 @@ def main() -> int:
               f"{args.generate - len(ai_specs)} casuali")
     specs = ai_specs + generate_specs(max(0, args.generate - len(ai_specs)), seed=args.seed)
     existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
-    # PRIORITÀ: ri-valida SEMPRE le generate GIÀ VALIDATE (in ogni shard), così non
-    # scadono per freshness e non vengono "cancellate" dal registro. Poi riempi col
-    # resto fino al cap.
     reg = fb.get_doc("strategy_registry", "validated") or {}
-    validated_gen = {k.split("|", 1)[1] for k in (reg.get("validated") or []) if "|gen_" in k}
-    priority = [existing[g] for g in validated_gen if g in existing]
-    rest = [s for gid, s in existing.items() if gid not in validated_gen]
-    existing_list = priority + rest[: max(0, args.reeval_cap - len(priority))]
+    existing_list, diag_reeval = specs_da_rivalutare(existing, reg, args.reeval_cap)
     specs.extend(existing_list)
     # MUTAZIONE INFORMATA: si evolve attorno ai QUASI-PASSAGGI del run precedente
     # (una sola condizione mancata, e per poco), non attorno alle prime dieci spec
@@ -557,8 +610,11 @@ def main() -> int:
         specs.append(mutate(base, seed=args.seed + i + 1))
     # de-dup per id
     specs = list({s["id"]: s for s in specs}.values())
-    print(f"[discover] {len(specs)} candidate ({len(priority)} validate ri-validate + "
-          f"{len(existing_list) - len(priority)} altre) seed={args.seed} {args.start}->{end}")
+    print(f"[discover] {len(specs)} candidate "
+          f"({diag_reeval['n_specs_con_conferme']} con conferme ri-validate + "
+          f"{len(existing_list) - diag_reeval['n_specs_con_conferme']} altre, "
+          f"{diag_reeval['n_specs_tagliate']} tagliate su "
+          f"{diag_reeval['n_specs_note']} note) seed={args.seed} {args.start}->{end}")
 
     # UNIVERSO RISTRETTO (--symbols): serve alle conferme mirate. Quando si sa gia'
     # quali coppie possono ancora arrivare a MIN_PASSES, ri-testare l'intero mercato
@@ -639,6 +695,9 @@ def main() -> int:
         "updated_at": time.time(),
         "n_eval": n_eval,
         "n_passed": len(passed_keys),
+        # QUANTO MORDE IL TAGLIO. Senza questi numeri, "il registro non accumula" e
+        # "meta' del registro non viene piu' guardata" sono indistinguibili da fuori.
+        **diag_reeval,
         "passed": [{"symbol": out[k]["symbol"], "id": out[k]["strategy"],
                     "pf": out[k]["oos_pf"], "pnl": out[k]["oos_pnl_pct"]}
                    for k in passed_keys],

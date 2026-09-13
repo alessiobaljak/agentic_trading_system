@@ -99,7 +99,8 @@ def main() -> int:
                          "e nient'altro: e' l'input delle conferme mirate")
     args = ap.parse_args()
 
-    doc = get_firebase().get_doc("strategy_registry", "validated") or {}
+    fb = get_firebase()
+    doc = fb.get_doc("strategy_registry", "validated") or {}
     pairs = decode_pairs(doc.get("pairs"))
 
     if args.coins_min_pass is not None:
@@ -217,6 +218,24 @@ def main() -> int:
               f"apre solo quando la coppia RIPASSA\n  il gate, quindi per loro la "
               f"prossima conferma non ha una data — dipende da un\n  evento che "
               f"potrebbe non succedere.")
+
+    # --- CHI VIENE ANCORA RI-VALUTATO ---------------------------------------- #
+    # Il calendario qui sotto vale SOLO per le spec che la discovery ri-guarda: una
+    # coppia generata prende la conferma successiva unicamente ripassando il gate, e
+    # se la sua spec resta fuori dal taglio per i tempi non ripassera' mai. Sarebbe
+    # una data stampata su una coppia ferma — la quarta volta, dopo il campo
+    # sbagliato, le coin congelate e le coppie senza finestra.
+    diag = fb.get_doc("strategy_params", "discovered_last_run") or {}
+    if diag.get("n_specs_note"):
+        tagliate = int(diag.get("n_specs_tagliate", 0) or 0)
+        print(f"\n  RI-VALUTAZIONE (ultimo run discovery): "
+              f"{diag.get('n_specs_rivalutate')} spec su {diag.get('n_specs_note')} "
+              f"note · cap {diag.get('reeval_cap')} · "
+              f"{diag.get('n_specs_con_conferme')} con almeno una conferma")
+        if tagliate:
+            print(f"  {tagliate} spec restano fuori dal taglio: sono ferme, non in "
+                  f"attesa.\n  Quelle con conferme passano comunque, quindi il taglio "
+                  f"tocca solo candidate a zero passaggi.")
 
     # --- il calendario ------------------------------------------------------ #
     etas = sorted((eta_ready(r, now), k) for k, r in fresche.items())

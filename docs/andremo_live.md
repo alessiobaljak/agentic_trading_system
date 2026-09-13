@@ -144,3 +144,66 @@ Non «altri parametri». Cambiare **la domanda**:
 **Aspettare il 13 settembre.** Mancano sei giorni ed è un test decisivo che costa
 zero: sta già girando. Cambiare la ricerca adesso butterebbe via l'esperimento a metà
 e ci lascerebbe senza la risposta alla domanda che aspettiamo da tre settimane.
+
+---
+
+## Il 13 settembre: cos'è successo davvero
+
+**Zero coppie validate.** Il numero è quello di `ops/results/0035-verdetto-13set.md`,
+letto alle 05:24 UTC. Ma il segnale 1, scritto il 6 settembre, non si può ancora
+dichiarare né passato né fallito — e la ragione è un difetto trovato oggi, non una
+scusa costruita dopo.
+
+### Cosa dicono i numeri di oggi
+
+| | 6 set | 8 set | 11 set | 12 set | **13 set** |
+|---|---|---|---|---|---|
+| coppie a 1 conferma | — | 167 | 204 (70 coin) | 220 (73 coin) | **243 (80 coin)** |
+| coppie a 2 conferme | 8 | 58 | 81 (32 coin) | 84 (35 coin) | **90 (37 coin)** |
+| validate | 0 | 0 | 0 | 0 | **0** |
+
+Il fronte cresce ancora, su più monete. Le seconde conferme arrivano: quello che il
+gate trova si ripete almeno una volta. Il terzo passaggio no, e finora nemmeno una
+coppia lo ha raggiunto.
+
+### Perché la data non ha ancora deciso niente
+
+Le otto coppie ORCAUSDT a 2/3 avevano la finestra in scadenza oggi alle 00:00: da
+quel momento un loro passaggio varrebbe la terza conferma. Nel run delle 05:11
+ORCAUSDT ha avuto **14 coppie passate** — ma nessuna delle otto. Restano a 2/3, con
+la finestra ancora aperta.
+
+Questo, da solo, sarebbe una risposta legittima (non hanno ripassato). Il punto è che
+non si poteva sapere se fossero state nemmeno *guardate*:
+
+> la discovery ri-valuta al massimo `--reeval-cap` spec già note per run (500 in
+> produzione). Restavano dentro **le più vecchie**, e l'unica protezione dal taglio
+> era per le spec **già validate** — che sono zero. Quindi una coppia a 2/3 stava
+> dentro o fuori a seconda di quando era stata scoperta.
+
+E restare fuori non vuol dire aspettare il giro dopo. Nella discovery `judge_window`
+è chiamato **solo sulle coppie che passano**: una spec non ri-valutata non passa,
+quindi non prende né la conferma né il fallimento. Non matura — si ferma, mentre il
+calendario continua a stamparle accanto una data di validazione.
+
+È la terza volta che un tetto messo per limitare i **tempi** finisce per sacrificare
+l'unica cosa che il sistema produce (le altre due: il tetto sulle coppie del registro
+il 31 agosto, e la quota morta per le generate senza conferme).
+
+### Cosa è cambiato oggi
+
+* `specs_da_rivalutare` ordina **prima le conferme, poi l'anzianità**, e le spec con
+  almeno un passaggio non vengono tagliate mai — a costo di sforare il cap.
+* Il run scrive quanto il taglio morde (`n_specs_note`, `n_specs_rivalutate`,
+  `n_specs_tagliate`), e `gate_progress` lo stampa. Senza quei numeri, «il registro
+  non accumula» e «metà del registro non viene più guardata» sono indistinguibili da
+  fuori — ed è esattamente com'è andata finora.
+* Sei test in `tests/test_reeval_priority.py` tengono chiuso il criterio.
+
+### La nuova data, e cosa la renderebbe onesta
+
+Il segnale 1 si giudica **quando le otto coppie a 2/3 sono state ri-valutate almeno
+una volta con la finestra scaduta**, cioè dal primo run dopo che questa correzione
+è in produzione. Se dopo due o tre giri nessuna delle 90 coppie a due conferme
+arriva a tre, allora il segnale è arrivato per davvero, e la conclusione del 6
+settembre vale: quello che il gate trova si ripete una volta e non due.
