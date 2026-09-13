@@ -149,12 +149,12 @@ e ci lascerebbe senza la risposta alla domanda che aspettiamo da tre settimane.
 
 ## Il 13 settembre: cos'è successo davvero
 
-**Zero coppie validate.** Il numero è quello di `ops/results/0035-verdetto-13set.md`,
-letto alle 05:24 UTC. Ma il segnale 1, scritto il 6 settembre, non si può ancora
-dichiarare né passato né fallito — e la ragione è un difetto trovato oggi, non una
-scusa costruita dopo.
+**Zero coppie validate**, e stavolta il numero *conta come verdetto*: le otto coppie
+a due conferme sono state ri-testate con la finestra scaduta e non hanno ripassato.
+Fonti: `ops/results/0035-verdetto-13set.md` (registro, 05:24 UTC) e
+`ops/results/0040-log-dopo-correzione.md` (log della discovery, giro delle 06:12).
 
-### Cosa dicono i numeri di oggi
+### I numeri
 
 | | 6 set | 8 set | 11 set | 12 set | **13 set** |
 |---|---|---|---|---|---|
@@ -162,48 +162,69 @@ scusa costruita dopo.
 | coppie a 2 conferme | 8 | 58 | 81 (32 coin) | 84 (35 coin) | **90 (37 coin)** |
 | validate | 0 | 0 | 0 | 0 | **0** |
 
-Il fronte cresce ancora, su più monete. Le seconde conferme arrivano: quello che il
-gate trova si ripete almeno una volta. Il terzo passaggio no, e finora nemmeno una
-coppia lo ha raggiunto.
+Il fronte cresce ancora, su più monete: le seconde conferme arrivano, quindi quello
+che il gate trova si ripete **almeno una volta**. La terza no, mai, da nessuna coppia.
 
-### Perché la data non ha ancora deciso niente
+### Il verdetto, e perché adesso è leggibile
 
-Le otto coppie ORCAUSDT a 2/3 avevano la finestra in scadenza oggi alle 00:00: da
-quel momento un loro passaggio varrebbe la terza conferma. Nel run delle 05:11
-ORCAUSDT ha avuto **14 coppie passate** — ma nessuna delle otto. Restano a 2/3, con
-la finestra ancora aperta.
+Le otto coppie ORCAUSDT a 2/3 avevano la finestra in scadenza il 13 alle 00:00: da
+quel momento un loro passaggio vale la terza conferma. Nel giro delle 05:11 ORCAUSDT
+ha avuto **14 coppie passate** — nessuna delle otto. Restano a 2/3.
 
-Questo, da solo, sarebbe una risposta legittima (non hanno ripassato). Il punto è che
-non si poteva sapere se fossero state nemmeno *guardate*:
+Prima di chiamarlo verdetto serviva escludere che non fossero state nemmeno
+*guardate*, e il conto per saperlo non esisteva. Ora esiste, e dice:
 
-> la discovery ri-valuta al massimo `--reeval-cap` spec già note per run (500 in
-> produzione). Restavano dentro **le più vecchie**, e l'unica protezione dal taglio
-> era per le spec **già validate** — che sono zero. Quindi una coppia a 2/3 stava
-> dentro o fuori a seconda di quando era stata scoperta.
+> `[discover] 439 candidate (219 con conferme ri-validate + 110 altre, **0 tagliate
+> su 329 note**)`
 
-E restare fuori non vuol dire aspettare il giro dopo. Nella discovery `judge_window`
-è chiamato **solo sulle coppie che passano**: una spec non ri-valutata non passa,
-quindi non prende né la conferma né il fallimento. Non matura — si ferma, mentre il
-calendario continua a stamparle accanto una data di validazione.
+Le spec note sono **329**, il tetto della ri-valutazione è **500**: il taglio non
+mordeva. Tutte e otto sono state ri-testate con la finestra scaduta, e non hanno
+ripassato. **Il segnale 1 è arrivato per questa coorte, ed è quello negativo.**
 
-È la terza volta che un tetto messo per limitare i **tempi** finisce per sacrificare
+### Il difetto trovato oggi, e quanto è costato: niente (per ora)
+
+Il criterio del taglio era sbagliato — restavano dentro le spec **più vecchie**, e
+l'unica protezione era per quelle **già validate**, che sono zero. Una coppia a 2/3
+stava dentro o fuori a seconda di quando era stata scoperta, e restare fuori non è
+aspettare il giro dopo: nella discovery `judge_window` è chiamato **solo sulle coppie
+che passano**, quindi una spec non ri-valutata non prende né conferma né fallimento.
+Si ferma, mentre il calendario continua a stamparle accanto una data.
+
+Ma con 329 spec contro un tetto di 500 **non ha ancora tolto niente a nessuno**. Era
+una trappola armata per quando le spec avrebbero superato le 500 — cioè fra poche
+settimane al ritmo attuale — non un danno già fatto. Vale la pena scriverlo con
+questa precisione: la tentazione di far coincidere «ho trovato un difetto» con «ecco
+perché non funziona» è esattamente l'errore che ha già prodotto una correzione
+pubblica in questo documento.
+
+Resta però la terza volta che un tetto messo per limitare i **tempi** può sacrificare
 l'unica cosa che il sistema produce (le altre due: il tetto sulle coppie del registro
 il 31 agosto, e la quota morta per le generate senza conferme).
 
-### Cosa è cambiato oggi
+Cosa è cambiato:
 
 * `specs_da_rivalutare` ordina **prima le conferme, poi l'anzianità**, e le spec con
-  almeno un passaggio non vengono tagliate mai — a costo di sforare il cap.
-* Il run scrive quanto il taglio morde (`n_specs_note`, `n_specs_rivalutate`,
-  `n_specs_tagliate`), e `gate_progress` lo stampa. Senza quei numeri, «il registro
-  non accumula» e «metà del registro non viene più guardata» sono indistinguibili da
-  fuori — ed è esattamente com'è andata finora.
+  almeno un passaggio non si tagliano mai — a costo di sforare il cap.
+* Ogni giro scrive quanto il taglio morde (`n_specs_note`, `n_specs_rivalutate`,
+  `n_specs_tagliate`) e `gate_progress` lo stampa. È il conto che ha permesso di
+  scrivere «non ha morso» invece di «forse ha morso».
 * Sei test in `tests/test_reeval_priority.py` tengono chiuso il criterio.
 
-### La nuova data, e cosa la renderebbe onesta
+### Cosa vuol dire, e cosa NON vuol dire
 
-Il segnale 1 si giudica **quando le otto coppie a 2/3 sono state ri-valutate almeno
-una volta con la finestra scaduta**, cioè dal primo run dopo che questa correzione
-è in produzione. Se dopo due o tre giri nessuna delle 90 coppie a due conferme
-arriva a tre, allora il segnale è arrivato per davvero, e la conclusione del 6
-settembre vale: quello che il gate trova si ripete una volta e non due.
+**Non** vuol dire che il 13 settembre era una scadenza secca. Per una coppia generata
+non viene mai registrato un fallimento, quindi le otto restano a 2/3 con la finestra
+scaduta e **ogni giorno, con un giorno di dati nuovi, hanno un'altra occasione**. La
+prova si accumula: più giorni passano senza che ripassino, più pesa.
+
+**Non** vuol dire nemmeno che il campione sia sufficiente. Otto coppie **su una sola
+moneta** (ORCAUSDT) sono la prima coorte, non la popolazione: le altre 90 coppie a
+due conferme, sparse su 37 monete, chiudono la finestra nei giorni seguenti — AXSUSDT
+il 14, e via così. Concludere adesso su una moneta sola ripeterebbe l'errore
+dell'11 settembre, quando avevo dedotto una concentrazione da un elenco troncato.
+
+Vuol dire questo: **la prima prova disponibile è negativa**, e il verdetto pieno
+arriva mano a mano che le altre finestre scadono. Se entro fine settimana nessuna
+delle 90 arriva a tre pur essendo stata ri-testata, la conclusione del 6 settembre
+vale — quello che il gate trova si ripete una volta e non due — e la mossa non è
+allentare le soglie, è cambiare cosa si cerca.
