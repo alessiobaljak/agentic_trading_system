@@ -1,0 +1,6 @@
+# Le finestre delle 8 coppie ORCA a 2/3 sono scadute oggi alle 00:00: da adesso un
+# loro passaggio varrebbe la TERZA conferma. Ma la discovery ri-valuta solo le prime
+# `--reeval-cap 500` spec gia' note, sempre nello stesso ordine: se le loro spec sono
+# fuori da quel taglio, il 13 settembre non e' un verdetto, e' un non-evento.
+# Il log stampa "[discover] N candidate (P validate ri-validate + M altre)".
+log-gate
