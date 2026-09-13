@@ -1,0 +1,5 @@
+# Fa partire un giro di GATE 1 subito, col codice appena corretto (l'agente ops fa
+# git pull prima di eseguire). Serve a sapere OGGI se le otto coppie a 2/3 rientrano
+# nella ri-valutazione: prima della correzione non era possibile distinguere
+# "non hanno ripassato" da "non sono state guardate".
+lancia-gate
