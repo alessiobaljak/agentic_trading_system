@@ -1,0 +1,3 @@
+# Conferma finale: le otto ORCAUSDT devono avere last_seen_at di oggi, non piu'
+# 13 Sep 08:36. Se e' ancora quello, la riaggiunta non arriva fino al registro.
+gate
