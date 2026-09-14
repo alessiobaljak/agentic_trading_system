@@ -101,18 +101,34 @@ def specs_da_rivalutare(existing: dict, reg: dict, cap: int) -> tuple[list[dict]
     return scelte, diag
 
 
-def mutation_seeds(fb, existing: dict, limit: int = 10) -> list[dict]:
-    """Le spec da cui vale la pena evolvere: i QUASI-PASSAGGI del run precedente.
+def mutation_seeds(fb, existing: dict, limit: int = 10,
+                   pairs: dict | None = None) -> list[dict]:
+    """Le spec da cui vale la pena evolvere: i QUASI-PASSAGGI del run precedente,
+    con precedenza a quelli sulle coin che NON copriamo ancora.
 
     Una candidata fermata da UN SOLO criterio e per poco e' l'informazione piu'
     preziosa che un run produce: dice che in quella zona dello spazio delle
     strategie c'e' qualcosa, e che manca poco. Mutare li' e' una ricerca guidata;
-    generare candidate a caso e' ricominciare da zero a ogni giro, che e' esattamente
-    cio' che il sistema faceva.
+    generare candidate a caso e' ricominciare da zero a ogni giro.
 
-    Fail-open in ogni punto: nessuna autopsia, autopsia illeggibile o quasi-passaggi
-    su strategie BASE (che non sono spec mutabili) -> lista vuota, e il chiamante
-    torna al comportamento precedente.
+    LA PRECEDENZA ALLA COPERTURA, e perche' esiste. L'obiettivo dichiarato dal
+    proprietario e' «un sistema che non si ferma mai»: se una moneta non e' coperta,
+    la ricerca deve andare a cercare una strategia per QUELLA. Senza questa regola i
+    semi si prendevano nell'ordine in cui capitavano, quindi l'evoluzione tendeva a
+    rinforzare le coin dove qualcosa gia' funziona — e la copertura, che e' il numero
+    che decide quante monete il bot potra' operare, non si muoveva.
+
+    Non e' teoria: al 14 settembre le coppie validate erano 7, tutte sulla STESSA
+    moneta. Un'ottava strategia su quella moneta non aggiunge una moneta operabile;
+    la prima su una moneta nuova si'.
+
+    Le due meta' restano entrambe: prima i semi che estenderebbero la copertura, poi
+    gli altri a riempire. Abbandonare del tutto le coin gia' coperte sarebbe l'errore
+    opposto — una coin con una sola coppia validata e' fragile, e la seconda serve.
+
+    Fail-open in ogni punto: nessuna autopsia, autopsia illeggibile, registro non
+    passato o quasi-passaggi su strategie BASE (che non sono spec mutabili) -> si
+    torna esattamente al comportamento precedente.
     """
     near: list = []
     try:
@@ -124,18 +140,34 @@ def mutation_seeds(fb, existing: dict, limit: int = 10) -> list[dict]:
                          .get("near_misses") or []))
     except Exception:  # noqa: BLE001
         return []
-    out: list[dict] = []
+
+    # coin gia' coperte = hanno almeno una coppia VALIDATA. E' la definizione che
+    # conta per «quante monete potremmo operare»: una coin con due conferme non e'
+    # ancora operabile, quindi cercare li' estende comunque la copertura.
+    coperte: set = set()
+    for r in (pairs or {}).values():
+        if int(r.get("pass_count", 0) or 0) >= MIN_PASSES and r.get("symbol"):
+            coperte.add(r["symbol"])
+
+    estendono: list[dict] = []
+    resto: list[dict] = []
+    visti: set = set()
     for n in near:
         key = str(n.get("key", ""))
         if "|" not in key:
             continue
-        gid = key.split("|", 1)[1]
+        sym, gid = key.split("|", 1)
         spec = existing.get(gid)
-        if spec is not None and spec not in out:
-            out.append(spec)
-        if len(out) >= limit:
-            break
-    return out
+        if spec is None or gid in visti:
+            continue
+        visti.add(gid)
+        (resto if sym in coperte else estendono).append(spec)
+
+    out = estendono[:limit] + resto[: max(0, limit - len(estendono))]
+    if coperte and estendono:
+        print(f"[discover] semi: {min(len(estendono), limit)} da coin NON coperte "
+              f"(su {len(coperte)} gia' coperte)")
+    return out[:limit]
 
 
 def _publish_discover_autopsy(fb, evaluated: int, passed: int, binding: dict,
@@ -620,7 +652,10 @@ def main() -> int:
     # che capitano. E' la differenza fra cercare dove l'ultimo tentativo si e'
     # avvicinato e ricominciare da capo ogni volta. Fail-open: senza autopsia si
     # mutano le prime, come prima.
-    seeds = mutation_seeds(fb, existing)
+    # il registro serve a sapere quali coin sono GIA' coperte: i semi vanno
+    # preferibilmente sulle altre, altrimenti l'evoluzione rinforza dove qualcosa
+    # gia' funziona e il numero di monete operabili non si muove.
+    seeds = mutation_seeds(fb, existing, pairs=decode_pairs(reg.get("pairs")))
     if seeds:
         print(f"[discover] {len(seeds)} semi dai quasi-passaggi del run precedente")
     bases = seeds or existing_list[:10]
