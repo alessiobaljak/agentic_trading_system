@@ -114,6 +114,70 @@ def _opt_one(sym: str) -> tuple[str, dict, list]:
     return (sym, entries, passed)
 
 
+def conferme_da_proteggere(rec: dict, ora: float) -> bool:
+    """La coppia ha conferme accumulate e non e' abbandonata da troppo tempo.
+
+    UN SOLO CRITERIO PER LE POTATURE. Prima ce n'erano tre, scritti in tre punti
+    diversi, e divergevano:
+
+      * il tetto del registro diceva «le coppie con almeno una conferma non si
+        toccano MAI» (discover_strategies);
+      * la potatura per anzianita', dieci righe sopra nello stesso file, cancellava
+        le generate con `pass_count < MIN_PASSES` non viste da 6 giorni — cioe'
+        proprio quelle con una o due conferme;
+      * la potatura delle base in optimize.py diceva in commento «chi ha conferme
+        non si tocca» e in codice `pass_count < MIN_PASSES`, cioe' il contrario.
+
+    Non e' teoria: le otto coppie ORCAUSDT a 2 conferme su 3 sarebbero state
+    CANCELLATE il 19 settembre, sei giorni dopo l'uscita della coin dall'universo,
+    da una riga che sta sotto un commento che promette di non farlo.
+
+    LA SOGLIA E' MIN_PASSES FINESTRE, non due periodi di freschezza: una coppia ha
+    bisogno di MIN_PASSES finestre per validarsi, quindi cancellarla prima di
+    tanto vuol dire non darle il tempo che la regola stessa le chiede.
+
+    UN SOLO OROLOGIO, quello di parete. `last_pass_data_end` e' un tempo dei DATI
+    (la fine della serie di candele) e confrontarlo con `time.time()` sarebbe lo
+    stesso errore dei due orologi incompatibili che `judge_window` esiste per
+    chiudere — ci sono cascato scrivendo la prima versione di questa funzione, e
+    tre test l'hanno mostrato subito.
+
+    FAIL-OPEN sulla data: se la coppia ha conferme ma non si riesce a datarla, la
+    risposta e' SI'. Buttare passaggi veri perche' manca un campo e' proprio la
+    forma di difetto che questa funzione esiste per chiudere. La crescita del
+    registro la tengono a bada la potatura di chi ha ZERO conferme e il tetto.
+    """
+    if int(rec.get("pass_count", 0) or 0) <= 0:
+        return False
+    visto = float(rec.get("last_seen_at", 0) or 0)
+    if visto <= 0:
+        return True
+    return visto >= ora - MIN_PASSES * NEW_DATA_MIN_S
+
+
+def sta_ancora_progredendo(rec: dict, ora: float) -> bool:
+    """La coppia sta ancora avanzando, non solo sopravvivendo.
+
+    Domanda DIVERSA da `conferme_da_proteggere`, e serve a una cosa diversa: tenere
+    la sua coin nell'universo guardato costa tempo di calcolo a ogni giro, quindi si
+    paga solo per chi puo' ancora arrivare in fondo.
+
+    Senza questa distinzione ci sarebbe un giro vizioso: riaggiungo la coin ->
+    la coppia viene vista -> `last_seen_at` si aggiorna -> risulta viva -> riaggiungo
+    la coin, per sempre, anche se non passa piu' da mesi.
+
+    Si guarda quindi l'ultimo PASSAGGIO, non l'ultima occhiata. Stesso orologio di
+    parete (`last_passed_at`, scritto dalla discovery), stessa soglia, stesso
+    fail-open.
+    """
+    if not conferme_da_proteggere(rec, ora):
+        return False
+    passato = float(rec.get("last_passed_at", 0) or 0)
+    if passato <= 0:
+        return True
+    return passato >= ora - MIN_PASSES * NEW_DATA_MIN_S
+
+
 def coin_in_maturazione(pairs: dict, ora: float, max_extra: int = 40) -> list[str]:
     """Le coin che NON si possono perdere: hanno una coppia a meta' strada.
 
@@ -147,18 +211,12 @@ def coin_in_maturazione(pairs: dict, ora: float, max_extra: int = 40) -> list[st
     finestre: se in tre settimane non hanno ripassato, non stanno maturando, e
     tenerle attaccate all'universo per sempre lo farebbe crescere senza limite.
     """
-    scaduta = ora - MIN_PASSES * NEW_DATA_MIN_S
     vive: dict[str, int] = {}
     for r in pairs.values():
-        if not r.get("generated"):
-            continue                       # le base non maturano: 0 passaggi su 1150
-        passi = int(r.get("pass_count", 0) or 0)
         sym = r.get("symbol")
-        if passi <= 0 or not sym:
+        if not sym or not sta_ancora_progredendo(r, ora):
             continue
-        if float(r.get("last_pass_data_end", 0) or 0) < scaduta:
-            continue
-        vive[sym] = max(vive.get(sym, 0), passi)
+        vive[sym] = max(vive.get(sym, 0), int(r.get("pass_count", 0) or 0))
     # prima le coin con la coppia piu' avanti: se il tetto morde, si perde la meno
     # vicina al traguardo.
     return [s for s, _ in sorted(vive.items(), key=lambda kv: -kv[1])][:max_extra]
@@ -455,7 +513,18 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         "scale_r_mults", "drift_seen_at",
                         # senza questi due la finestra di giudizio si riaprirebbe da
                         # capo a ogni alleggerimento, e i verdetti non arriverebbero mai
-                        "window_start", "passed_in_window"}
+                        "window_start", "passed_in_window",
+                        # e SENZA QUESTO una coppia generata, alleggerita, diventa
+                        # indistinguibile da una base: la potatura delle base la
+                        # cancella, il tetto smette di considerarla intoccabile e la
+                        # sua spec perde la priorita' nella ri-valutazione. Un flag
+                        # perso in un alleggerimento silenzioso, tre conseguenze
+                        # silenziose.
+                        "generated",
+                        # e questo dice se la coppia sta ancora AVANZANDO (non solo
+                        # sopravvivendo): senza, `sta_ancora_progredendo` va in
+                        # fail-open e tiene la coin nell'universo per sempre.
+                        "last_passed_at"}
 
 
 def slim_registry(pairs: dict, validated: list,
@@ -783,10 +852,19 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     # ragione perche' le base ne fossero esenti: non valutata da due periodi di
     # freschezza e senza conferme = peso morto. Chi ha conferme non si tocca, e chi
     # torna nell'universo viene semplicemente ricreata al primo run.
-    stantie = time.time() - FRESH_DAYS * 86400 * 2
+    #
+    # «Chi ha conferme non si tocca» lo diceva il commento, non il codice: la
+    # condizione era `pass_count < MIN_PASSES`, che cancella anche chi ne ha una o
+    # due. Ora il criterio e' `conferme_da_proteggere`, lo stesso che usa la potatura della
+    # discovery e la riaggiunta delle coin all'universo. Una regola sola, in un
+    # posto solo: e' il modo in cui questo sistema smette di avere due contabilita'
+    # che divergono.
+    ora = time.time()
+    stantie = ora - FRESH_DAYS * 86400 * 2
     morte = [k for k, r in pairs.items()
              if not r.get("generated")
              and int(r.get("pass_count", 0) or 0) < MIN_PASSES
+             and not conferme_da_proteggere(r, ora)
              and float(r.get("last_seen_at", 0) or 0) < stantie]
     for k in morte:
         del pairs[k]

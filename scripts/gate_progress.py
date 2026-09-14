@@ -43,6 +43,9 @@ PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))
 # Stessa variabile che usa il registro per decidere chi conta come validata:
 # duplicarla come costante locale vorrebbe dire poterle far divergere.
 FRESH_DAYS = float(os.getenv("OPTIMIZER_FRESH_DAYS", "3"))
+#: il limite vero e' 1 MiB di Firestore; qui si guarda contro il tetto che il codice
+#: si e' dato (`PARAM_DOC_MAX_BYTES`), che e' quello che scatta per primo.
+LIMITE_DOC = float(os.getenv("PARAM_DOC_MAX_BYTES", "900000"))
 
 
 def _when(ts: float) -> str:
@@ -218,6 +221,38 @@ def main() -> int:
               f"apre solo quando la coppia RIPASSA\n  il gate, quindi per loro la "
               f"prossima conferma non ha una data — dipende da un\n  evento che "
               f"potrebbe non succedere.")
+
+    # --- QUANTO SPAZIO RESTA NEI DOCUMENTI ----------------------------------- #
+    # Firestore rifiuta un documento oltre 1 MiB. Due documenti ci arrivano vicino, e
+    # il modo in cui cedono e' diverso ma il risultato e' lo stesso: si smette di
+    # accumulare senza che nessuno lo dica.
+    #
+    #  * `strategy_registry/validated` tiene i PASSAGGI, cioe' settimane di attesa.
+    #    `slim_registry` toglie i campi descrittivi quando cresce, ma se non basta
+    #    lascia che sia Firestore a rifiutare: quel run perde le conferme appena
+    #    guadagnate.
+    #  * `discovered_strategies/specs` tiene le spec. Se la scrittura fallisce, una
+    #    coppia puo' entrare nel registro senza che la sua spec venga salvata: non
+    #    sara' mai piu' ri-valutata, quindi restera' a una conferma per sempre.
+    #
+    # Un limite che nessuno guarda e' esattamente la forma di difetto che questo
+    # sistema ha gia' pagato tre volte. Qui si guarda.
+    for coll, campo, cosa in (("strategy_registry", "pairs", "registro"),
+                              ("discovered_strategies", "specs", "spec scoperte")):
+        try:
+            d = fb.get_doc(coll, "validated" if campo == "pairs" else "specs") or {}
+            n = len((d.get(campo) or "").encode("utf-8"))
+        except Exception:                     # noqa: BLE001 - diagnostica, mai fatale
+            continue
+        if n:
+            quota = 100 * n / LIMITE_DOC
+            segno = "  ATTENZIONE:" if quota >= 80 else ""
+            print(f"  spazio {cosa}: {n / 1024:.0f} KiB su {LIMITE_DOC / 1024:.0f} "
+                  f"({quota:.0f}%){segno}")
+            if quota >= 80:
+                print(f"  oltre il limite Firestore rifiuta la scrittura e il run "
+                      f"perde\n  le conferme appena guadagnate. Va alzato il tetto "
+                      f"o alleggerito il documento.")
 
     # --- CHI VIENE ANCORA RI-VALUTATO ---------------------------------------- #
     # Il calendario qui sotto vale SOLO per le spec che la discovery ri-guarda: una

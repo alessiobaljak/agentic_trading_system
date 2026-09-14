@@ -21,8 +21,12 @@ from scripts.optimize import coin_in_maturazione
 
 
 def _gen(sym: str, passi: int, ultimo_pass: float) -> dict:
+    """`last_passed_at` e `last_seen_at` sono OROLOGI DI PARETE, come li scrive la
+    discovery. La prima versione di questo criterio confrontava `last_pass_data_end`
+    — che e' un tempo dei DATI — con `time.time()`: due orologi diversi, lo stesso
+    errore che `judge_window` esiste per chiudere. Tre test lo hanno mostrato."""
     return {"symbol": sym, "generated": True, "pass_count": passi,
-            "last_pass_data_end": ultimo_pass}
+            "last_passed_at": ultimo_pass, "last_seen_at": ultimo_pass}
 
 
 def test_a_coin_with_a_pair_halfway_is_kept():
@@ -50,13 +54,27 @@ def test_a_pair_that_stopped_passing_long_ago_is_let_go():
     assert coin_in_maturazione(pairs, ora) == []
 
 
-def test_base_pairs_do_not_pin_a_coin():
-    """Le strategie scritte a mano fanno 0 passaggi su ~1150 a ogni giro: non
-    maturano, e non devono trattenere nell'universo una coin uscita per volume."""
+def test_it_does_not_depend_on_the_generated_flag():
+    """Il criterio guarda le CONFERME, non il flag `generated`.
+
+    Di proposito: `slim_registry` puo' togliere i campi non essenziali quando il
+    documento cresce, e finche' `generated` non era fra quelli protetti una coppia
+    alleggerita diventava indistinguibile da una base. Far dipendere da quel flag la
+    sopravvivenza di una coppia significa legare settimane di attesa a un campo che
+    qualcun altro puo' cancellare per far spazio.
+    """
     ora = time.time()
-    pairs = {"AUSDT|breakout": {"symbol": "AUSDT", "pass_count": 2,
-                                "last_pass_data_end": ora}}
-    assert coin_in_maturazione(pairs, ora) == []
+    pairs = {"AUSDT|qualcosa": {"symbol": "AUSDT", "pass_count": 2,
+                                "last_passed_at": ora, "last_seen_at": ora}}
+    assert coin_in_maturazione(pairs, ora) == ["AUSDT"]
+
+
+def test_the_generated_flag_survives_slimming():
+    """Perche' se si perde, la potatura delle base cancella la coppia, il tetto
+    smette di considerarla intoccabile e la sua spec perde la priorita' nella
+    ri-valutazione. Un campo, tre conseguenze, tutte silenziose."""
+    from scripts.optimize import REGISTRY_CORE_FIELDS
+    assert "generated" in REGISTRY_CORE_FIELDS
 
 
 def test_the_closest_to_the_finish_line_come_first():

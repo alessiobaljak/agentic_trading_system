@@ -35,7 +35,7 @@ from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import generate_specs, mutate
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
                               coin_in_maturazione, drifted_from_paper, judge_window,
-                              publish_timeline, top_symbols_by_volume)
+                              publish_timeline, conferme_da_proteggere, top_symbols_by_volume)
 
 # stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
 # processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
@@ -407,16 +407,34 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         rec["last_seen_at"] = now
         rec["last_passed_at"] = now
         pairs[key] = rec
-    # 2) potatura: scarta le coppie GENERATE senza valore (pass_count 0) o stantie
-    #    e non validate. Le coppie BASE (optimize.py, senza flag generated) restano.
-    stale_before = now - FRESH_DAYS * 86400 * 2
-    pairs = {
-        k: r for k, r in pairs.items()
-        if not (r.get("generated") and (
-            r.get("pass_count", 0) == 0
-            or (r.get("pass_count", 0) < MIN_PASSES and r.get("last_seen_at", 0) < stale_before)
-        ))
-    }
+    # 2) potatura: scarta le coppie GENERATE che non hanno niente da perdere.
+    #
+    # QUI SI CANCELLAVANO LE COPPIE A META' STRADA. La condizione era
+    # `pass_count < MIN_PASSES and last_seen_at < 6 giorni fa`: cioe' una coppia a
+    # 2 conferme su 3 veniva CANCELLATA sei giorni dopo che la sua coin era uscita
+    # dall'universo — non per un verdetto, ma perche' nessuno la guardava piu'.
+    # Le otto coppie ORCAUSDT a 2/3 sarebbero sparite il 19 settembre.
+    #
+    # E lo faceva dieci righe sopra al commento del tetto, che promette «le coppie
+    # con almeno una conferma non si toccano MAI». Due regole sullo stesso
+    # documento, in disaccordo, nello stesso file: e' la terza volta.
+    #
+    # Ora il criterio e' uno solo, `conferme_da_proteggere`, condiviso con la potatura delle
+    # base e con la riaggiunta delle coin all'universo: chi ha una conferma presa da
+    # meno di MIN_PASSES finestre non si cancella. Chi non ne prende una da tre
+    # settimane esce, altrimenti il registro cresce senza limite — che e' il difetto
+    # del 31 agosto visto dall'altro lato.
+    #
+    # Le VALIDATE non si potano mai da qui: sono quelle che il bot opera, e toglierle
+    # in silenzio cambierebbe cosa fa il sistema senza che nessuno l'abbia deciso.
+    def _da_tenere(r: dict) -> bool:
+        if not r.get("generated"):
+            return True                                   # le base le pota optimize
+        if int(r.get("pass_count", 0) or 0) >= MIN_PASSES:
+            return True                                   # validate: mai da qui
+        return conferme_da_proteggere(r, now)
+
+    pairs = {k: r for k, r in pairs.items() if _da_tenere(r)}
     # cap: limita il numero di coppie per non superare 1 MiB di documento.
     #
     # QUI IL 31 AGOSTO IL REGISTRO SI E' FERMATO DEL TUTTO, in silenzio. Le coppie
