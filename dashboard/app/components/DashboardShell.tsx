@@ -12,6 +12,7 @@ import StrategyWeights from './StrategyWeights';
 import TrailingLearning from './TrailingLearning';
 import Heatmap from './Heatmap';
 import OptimizedStrategies from './OptimizedStrategies';
+import GateMaturazione from './GateMaturazione';
 import Insights from './Insights';
 import RiskControl from './RiskControl';
 import KillSwitch from './KillSwitch';
@@ -145,7 +146,9 @@ const META: Record<TabId, { label: string; title: string; intro: string }> = {
   strategie: {
     label: 'Strategie',
     title: 'Strategie · GATE 1',
-    intro: 'Catalogo delle strategie validate dal backtest walk-forward.',
+    intro:
+      'A che punto e\' ogni coppia verso le tre conferme — chi e\' idoneo adesso, chi '
+      + 'aspetta e chi e\' fermo — e il catalogo di quelle gia\' validate.',
   },
   impostazioni: {
     label: 'Impostazioni',
@@ -350,6 +353,9 @@ export default function DashboardShell() {
 
           {tab === 'strategie' && (
             <>
+              {/* PRIMA la maturazione, poi il catalogo: la domanda che si fa aprendo
+                  questa tab e' «a che punto siamo», non «cosa c'e' in magazzino». */}
+              <GateMaturazione />
               <OptimizedStrategies />
               <AssetScoring />
             </>
