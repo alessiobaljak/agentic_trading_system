@@ -228,3 +228,71 @@ arriva mano a mano che le altre finestre scadono. Se entro fine settimana nessun
 delle 90 arriva a tre pur essendo stata ri-testata, la conclusione del 6 settembre
 vale — quello che il gate trova si ripete una volta e non due — e la mossa non è
 allentare le soglie, è cambiare cosa si cerca.
+
+---
+
+## 14 settembre: la coorte ORCA si è fermata, e si è capito perché
+
+**Ancora 0 validate.** Fonte: `ops/results/0041-gate-14set.md` e
+`ops/results/0042-gate-top-14set.md`, letti alle 05:12 UTC.
+
+| | 12 set | 13 set | **14 set** |
+|---|---|---|---|
+| coppie a 1 conferma | 220 (73 coin) | 243 (80 coin) | **277 (89 coin)** |
+| coppie a 2 conferme | 84 (35 coin) | 90 (37 coin) | **104 (40 coin)** |
+| validate | 0 | 0 | **0** |
+
+### Le coppie testate con la finestra scaduta
+
+Cinque coppie su tre monete diverse hanno avuto oggi il loro primo tentativo utile
+(`vista 14 Sep 02:24`, finestra chiusa il 14 alle 00:00): `AXSUSDT|gen_b922252e`,
+`EGLDUSDT|gen_36b0e335`, e tre su `STXUSDT`. **Nessuna ha ripassato.**
+
+Sommate alle otto di ORCAUSDT del 13, fanno **13 coppie su 4 monete, un tentativo
+utile ciascuna, zero terze conferme**. È poca evidenza, non un verdetto: ogni coppia
+ha avuto UN solo test su dati nuovi, non cinque.
+
+### Il difetto che il caso ORCA ha reso visibile
+
+Le otto coppie ORCAUSDT hanno `vista 13 Sep 08:36`, mentre tutte le altre hanno
+`vista 14 Sep 02:24`. **ORCAUSDT è uscita dall'universo.**
+
+L'universo è il top-N per volume e ruota. Misurato sugli snapshot committati in
+`docs/state.md`:
+
+| universo di | coin | ancora dentro il 14 set |
+|---|---|---|
+| 8 set | 148 | 74% |
+| 11 set | 145 | 80% |
+| 12 set | 154 | 82% |
+| 13 set (sera) | 162 | 96% |
+
+Circa un quarto dell'universo cambia in sei giorni. Ma una coppia ha bisogno di
+**almeno due settimane** con la sua coin dentro per arrivare a tre conferme.
+
+E uscire **non è fallire**: nella discovery `judge_window` è chiamato solo sulle
+coppie che passano, quindi una coppia che nessuno valuta non prende né conferma né
+fallimento. Si ferma a metà strada, e il calendario continua a stamparle accanto una
+data di validazione. Le otto di ORCAUSDT hanno avuto **un tentativo, uno solo**, il
+giorno in cui la finestra scadeva — e poi il sistema ha smesso di guardarle.
+
+Nel calendario esteso sono già ferme anche `HEIUSDT` (vista l'11), `PLUMEUSDT`
+(vista il 12), `SPXUSDT` (vista il 13).
+
+### La correzione
+
+L'universo della discovery non è più solo il top-N: le coin che hanno **una coppia
+già avviata** (almeno una conferma, e l'ultima non più vecchia di tre finestre)
+vengono riaggiunte, fino a un tetto di 40, **ordinate per vicinanza al traguardo**.
+La riaggiunta sta dopo il filtro di contesto: una coin che ha già prodotto conferme
+ha già dimostrato di essere informativa.
+
+Sette test in `tests/test_universe_rotation.py`. Suite intera: 730 verdi.
+
+### Cosa NON è ancora dimostrato
+
+Che sia questa la ragione per cui non valida nessuno. ORCAUSDT è **un** caso, per
+quanto grosso (otto coppie in un colpo). Le altre 96 coppie a due conferme stanno su
+39 monete che l'universo contiene ancora, e le loro finestre scadono nei prossimi
+giorni: sono loro a dare la risposta vera, e adesso non potranno più sparire mentre
+la aspettiamo.

@@ -34,8 +34,8 @@ from bot.ai.hypotheses import propose as ai_propose
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import generate_specs, mutate
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
-                              drifted_from_paper, judge_window, publish_timeline,
-                              top_symbols_by_volume)
+                              coin_in_maturazione, drifted_from_paper, judge_window,
+                              publish_timeline, top_symbols_by_volume)
 
 # stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
 # processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
@@ -631,6 +631,28 @@ def main() -> int:
         [{"symbol": s} for s in full_symbols])
     for _sym, _why in list(_excluded.items())[:10]:
         print(f"[discover]   escluso {_sym}: {_why}")
+    # L'UNIVERSO RUOTA, LA VALIDAZIONE NO. Il top-N per volume cambia ogni giorno —
+    # fra l'8 e il 14 settembre ne e' uscito il 26% — ma una coppia ha bisogno di due
+    # settimane con la SUA coin dentro. Quando la coin esce, la coppia non fallisce:
+    # si ferma a meta' strada, perche' nella discovery una coppia prende la conferma
+    # successiva solo ripassando, e chi non viene valutato non passa.
+    #
+    # E' successo a ORCAUSDT il 13 settembre, con OTTO coppie a 2 conferme su 3, il
+    # giorno stesso in cui la loro finestra scadeva: un tentativo, uno solo, e poi il
+    # sistema ha smesso di guardarle.
+    #
+    # La riaggiunta sta DOPO il filtro di proposito: una coin che ha gia' prodotto
+    # conferme ha gia' dimostrato di essere informativa, e lasciarla escludere
+    # rimetterebbe in piedi lo stesso buco da un'altra porta.
+    if not getattr(args, "symbols", ""):
+        maturazione = coin_in_maturazione(decode_pairs(reg.get("pairs")), time.time())
+        riaggiunte = [s for s in maturazione if s not in set(full_symbols)]
+        if riaggiunte:
+            print(f"[discover] {len(riaggiunte)} coin riaggiunte: hanno una coppia in "
+                  f"maturazione ma sono uscite dal top-{args.top} per volume "
+                  f"({', '.join(riaggiunte[:12])}"
+                  f"{' ...' if len(riaggiunte) > 12 else ''})")
+            full_symbols = list(full_symbols) + riaggiunte
     # SHARDING: ogni shard valida le candidate su una fetta dell'universo; il merge
     # riunisce. Così copriamo l'INTERO universo restando nel timeout.
     symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols

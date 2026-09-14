@@ -114,6 +114,56 @@ def _opt_one(sym: str) -> tuple[str, dict, list]:
     return (sym, entries, passed)
 
 
+def coin_in_maturazione(pairs: dict, ora: float, max_extra: int = 40) -> list[str]:
+    """Le coin che NON si possono perdere: hanno una coppia a meta' strada.
+
+    IL PROBLEMA, misurato il 14 settembre. L'universo e' il top-N per volume e
+    ruota: fra l'8 e il 14 settembre il 26% delle coin e' uscito (misura sugli
+    snapshot committati in `docs/state.md`). Ma una coppia generata ha bisogno di
+    MIN_PASSES finestre da una settimana per validarsi, cioe' almeno due settimane
+    in cui la SUA coin deve restare nell'universo.
+
+    Quando la coin esce, la coppia non fallisce: si ferma. Nella discovery
+    `judge_window` e' chiamato solo sulle coppie che passano, e una coppia che
+    nessuno valuta non passa. Resta a 2/3 per sempre, con accanto una data di
+    validazione che nessuno onorera'.
+
+    E' successo davvero: ORCAUSDT e' uscita dall'universo il 13 settembre con OTTO
+    coppie a 2 conferme su 3, il giorno stesso in cui la loro finestra scadeva.
+    Hanno avuto un tentativo, uno solo, e poi il sistema ha smesso di guardarle.
+
+    Quindi l'universo non e' piu' solo il top-N: si riaggiungono le coin che hanno
+    una coppia gia' avviata. Il costo e' proporzionale (qualche coin in piu' per
+    giro), il beneficio e' che il percorso di validazione puo' arrivare in fondo.
+
+    IL TETTO `max_extra` E' ORDINATO PER VICINANZA AL TRAGUARDO, non per anzianita'
+    ne' per caso: se un giorno non ci stessero tutte, si perdono le piu' lontane. E'
+    la lezione del taglio della ri-valutazione, dove il criterio era l'ordine di
+    scoperta e buttava fuori proprio le coppie a 2/3. Il chiamante stampa quante ne
+    restano fuori, perche' un tetto che morde in silenzio e' il difetto che questo
+    sistema ha gia' pagato tre volte.
+
+    Si escludono le coppie la cui ultima conferma e' piu' vecchia di MIN_PASSES
+    finestre: se in tre settimane non hanno ripassato, non stanno maturando, e
+    tenerle attaccate all'universo per sempre lo farebbe crescere senza limite.
+    """
+    scaduta = ora - MIN_PASSES * NEW_DATA_MIN_S
+    vive: dict[str, int] = {}
+    for r in pairs.values():
+        if not r.get("generated"):
+            continue                       # le base non maturano: 0 passaggi su 1150
+        passi = int(r.get("pass_count", 0) or 0)
+        sym = r.get("symbol")
+        if passi <= 0 or not sym:
+            continue
+        if float(r.get("last_pass_data_end", 0) or 0) < scaduta:
+            continue
+        vive[sym] = max(vive.get(sym, 0), passi)
+    # prima le coin con la coppia piu' avanti: se il tetto morde, si perde la meno
+    # vicina al traguardo.
+    return [s for s, _ in sorted(vive.items(), key=lambda kv: -kv[1])][:max_extra]
+
+
 def top_symbols_by_volume(n: int) -> list[str]:
     """
     Universo = perpetual USDT di BINANCE (dove il bot opera davvero).
