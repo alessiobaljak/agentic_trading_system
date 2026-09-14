@@ -296,3 +296,63 @@ quanto grosso (otto coppie in un colpo). Le altre 96 coppie a due conferme stann
 39 monete che l'universo contiene ancora, e le loro finestre scadono nei prossimi
 giorni: sono loro a dare la risposta vera, e adesso non potranno più sparire mentre
 la aspettiamo.
+
+---
+
+## 14 settembre, ore 08:45: le prime coppie validate
+
+**Sette.** Tutte su ORCAUSDT. Fonte: `ops/results/0054-fine-giro-0626.md`.
+
+```
+distribuzione pass: 0 pass: 1744 su 218 coin · 1 pass: 286 su 90 coin
+                  · 2 pass: 105 su 41 coin · 3 pass: 7 su 1 coin
+VALIDATE ora: 7 su 1 coin distinte
+ready dichiarato dal registro: False
+```
+
+È la prima volta da quando il registro esiste nella forma attuale. Il segnale 1,
+pre-registrato il 6 settembre, è risolto: **quello che il gate trova si ripete anche
+la terza volta.** Non era rumore con inerzia.
+
+### E sono proprio quelle che la correzione di stamattina ha salvato
+
+ORCAUSDT era uscita dal top-200 per volume il 13 settembre. Senza la riaggiunta delle
+coin in maturazione — scritta questa mattina — nessuno l'avrebbe più guardata, quelle
+otto coppie sarebbero rimaste a 2/3 per sempre, e il **19 settembre** la potatura per
+anzianità le avrebbe cancellate.
+
+La sequenza, per data:
+
+| | |
+|---|---|
+| 13 set, 08:36 | ultima valutazione: ORCAUSDT esce dall'universo |
+| 14 set, ~05:30 | correzione: le coin con coppie in maturazione rientrano |
+| 14 set, 06:26 | il giro riaggiunge 13 coin, fra cui ORCAUSDT |
+| 14 set, 08:08 | 7 coppie su 8 ripassano il gate → terza conferma |
+| 19 set | *(data in cui sarebbero state cancellate)* |
+
+### Quanto vale, onestamente
+
+**Sette coppie non sono sette prove.** Sono sette strategie sulla **stessa moneta**,
+che hanno preso la terza conferma **lo stesso giorno, sugli stessi dati**. È un
+evento solo. Se ORCAUSDT ha avuto una settimana favorevole, sette strategie diverse
+la vedono tutte.
+
+**E la moneta è uscita dal top-200 per volume.** Una strategia validata su una coin
+in calo di liquidità è esattamente lo schema BIRBUSDT: PF 1,51 nel gate e 0,16 nel
+paper. Il passo 2 — mesi di paper prima di parlare di denaro — esiste per questo.
+
+**Il bot non parte.** Servono **10 coppie validate su almeno 5 monete diverse**:
+`ready: False`. Sette coppie su una moneta sola non fanno partire niente, ed è
+giusto così: cinque strategie sulla stessa moneta salgono e scendono insieme.
+
+### Cosa guardare adesso
+
+105 coppie sono a 2/3, su **41 monete**. Sei sono già idonee, 51 lo diventano domani.
+La domanda non è più «il meccanismo funziona» — quella ha avuto risposta. È: **su
+quante monete DIVERSE arriva la terza conferma?** Cinque monete valgono più di
+cinquanta coppie su una.
+
+La regola di stop del 21 settembre resta, ma cambia di significato: non è più «se non
+valida niente si cambia approccio», è «se non valida su almeno cinque monete diverse,
+quello che troviamo non generalizza».
