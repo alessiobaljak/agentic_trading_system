@@ -37,6 +37,10 @@ gate-vs-paper: .venv/bin/python -m scripts.gate_vs_paper
 edge:         .venv/bin/python -m scripts.edge_stability
 frequenza:    .venv/bin/python -m scripts.signal_frequency
 sopravvivenza: .venv/bin/python -m scripts.survivorship_report
+# «le monete che a 15 min non copriamo, a un'altra scala si coprono?». SOLA LETTURA:
+# non scrive registro ne' spec ne' configurazione — una coppia validata a 1 ora e
+# scritta nel registro verrebbe operata dal bot a 15 minuti.
+timeframe:    .venv/bin/python -m scripts.timeframe_probe
 confidenza:   .venv/bin/python -m scripts.confidence_analysis
 # revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
 costi:        .venv/bin/python -m scripts.revalidate_costs
