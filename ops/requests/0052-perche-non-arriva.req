@@ -1,0 +1,3 @@
+# Il giro ha stampato "13 coin riaggiunte" alle 06:26 ma il registro non ha
+# aggiornato last_seen_at di ORCAUSDT. O il giro non e' finito, o e' morto.
+log-gate
