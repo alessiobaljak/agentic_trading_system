@@ -222,6 +222,38 @@ def main() -> int:
               f"prossima conferma non ha una data — dipende da un\n  evento che "
               f"potrebbe non succedere.")
 
+    # --- CHI PUO' VALIDARSI OGGI --------------------------------------------- #
+    # LA DOMANDA DEL PROPRIETARIO, il 14 settembre: «perche' devo aspettare il 21?
+    # Non ci sono crypto che arrivano a 3 oggi, domani, dopodomani?».
+    #
+    # Se la risposta si legge contando a mano le righe del calendario qui sotto, si
+    # legge male: quell'elenco e' troncato a `--top`, e dedurre una proporzione da un
+    # elenco troncato e' gia' costato un falso allarme (11 settembre, ORCAUSDT).
+    #
+    # E soprattutto: una finestra SCADUTA non e' una scadenza mancata. `judge_window`
+    # nella discovery si attiva solo sui passaggi, quindi chi non ripassa non prende
+    # un fallimento: resta idoneo, e ha un tentativo nuovo ogni giorno, su un giorno
+    # di dati in piu'. Il gruppo degli idonei si ACCUMULA, non si consuma.
+    a_un_passo = [r for r in aperte
+                  if int(r.get("pass_count", 0) or 0) == MIN_PASSES - 1]
+    if a_un_passo:
+        scaduta = [r for r in a_un_passo
+                   if float(r.get("window_start", 0)) + NEW_DATA_MIN_S <= now]
+        coin_pronte = {r.get("symbol") for r in scaduta}
+        print(f"\n  A UN PASSO DALLA VALIDAZIONE: {len(a_un_passo)} coppie a "
+              f"{MIN_PASSES - 1}/{MIN_PASSES}.")
+        print(f"  Di queste, {len(scaduta)} su {len(coin_pronte)} coin hanno GIA' la "
+              f"finestra scaduta: si\n  validano al primo run in cui ripassano il "
+              f"gate, cioe' potenzialmente oggi.")
+        prossime: Counter = Counter()
+        for r in a_un_passo:
+            fine = float(r.get("window_start", 0)) + NEW_DATA_MIN_S
+            if fine > now:
+                prossime[_when(fine)] += 1
+        if prossime:
+            print("  Le altre diventano idonee: " +
+                  " · ".join(f"{q} il {g}" for g, q in sorted(prossime.items())))
+
     # --- QUANTO SPAZIO RESTA NEI DOCUMENTI ----------------------------------- #
     # Firestore rifiuta un documento oltre 1 MiB. Due documenti ci arrivano vicino, e
     # il modo in cui cedono e' diverso ma il risultato e' lo stesso: si smette di
