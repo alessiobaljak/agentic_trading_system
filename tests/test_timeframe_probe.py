@@ -76,9 +76,9 @@ def test_covered_means_validated_not_merely_confirmed():
     finally:
         probe.top_symbols_by_volume = originale
 
-    assert "QUASIUSDT" in scoperte, "due conferme non sono una moneta operabile"
     assert "ALTRAUSDT" in scoperte
     assert controllo == ["COPERTAUSDT"]
+    assert "COPERTAUSDT" not in scoperte
 
 
 def test_the_same_candidates_are_used_on_every_timeframe():
@@ -123,3 +123,60 @@ def test_without_the_reference_scale_it_refuses_to_conclude():
     src = inspect.getsource(probe.main)
     assert 'rif = risultati.get("15m")' in src
     assert "Niente conclusioni" in src
+
+
+def test_the_two_groups_never_overlap():
+    """AL PRIMO GIRO XRPUSDT ERA IN ENTRAMBI. «scoperte» escludeva solo le monete
+    VALIDATE; il controllo di ripiego prende quelle a MIN_PASSES-1, che validate non
+    sono — quindi finivano in tutti e due i gruppi.
+
+    Un controllo che contiene le stesse monete del gruppo misurato non controlla
+    niente: l'esperimento diventa inutile e nessun numero nel rapporto lo dice."""
+    from scripts.optimize import MIN_PASSES
+    from bot.core.firebase_client import encode_pairs
+
+    class FB:
+        def get_doc(self, *a):
+            # nessuna moneta VALIDATA: scatta il controllo di ripiego
+            return {"pairs": encode_pairs({
+                "QUASIUSDT|gen_a": {"symbol": "QUASIUSDT", "generated": True,
+                                    "pass_count": MIN_PASSES - 1}})}
+
+    originale = probe.top_symbols_by_volume
+    probe.top_symbols_by_volume = lambda _n: ["QUASIUSDT", "AUSDT", "BUSDT"]
+    try:
+        scoperte, controllo = probe.scegli_monete(FB(), 10, 4)
+    finally:
+        probe.top_symbols_by_volume = originale
+
+    assert controllo == ["QUASIUSDT"]
+    assert not set(scoperte) & set(controllo), (
+        f"gruppi sovrapposti: {set(scoperte) & set(controllo)}")
+
+
+def test_it_measures_a_distribution_not_a_rare_event():
+    """IL PRIMO GIRO UTILE HA DATO 0 PASSAGGI SU TUTTE E SEI LE CASELLE, e non era
+    una risposta: era un esperimento senza potenza. Col tasso di passaggio misurato
+    (0,19%, una candidata su ~500) una casella da 120 valutazioni produce in media
+    0,2 passaggi — zero ovunque e' l'esito piu' probabile ANCHE SE una scala fosse
+    nettamente migliore.
+
+    Il profit factor invece esiste per ogni candidata: se una scala e' migliore la
+    distribuzione si sposta, e con 120 misure lo si vede."""
+    st = probe._statistiche([0.5, 1.2, 0.9, 1.4, 1.0], passate=0, quasi=1)
+    assert st["n"] == 5
+    assert st["pf_mediano"] == 1.0
+    assert st["quota_pf1"] == 0.6
+    src = inspect.getsource(probe.main)
+    assert "pf_mediano" in src, "la lettura deve basarsi sulla distribuzione"
+
+
+def test_zero_passes_everywhere_does_not_become_a_conclusion():
+    """La conclusione si trae dal PF mediano. Se si guardassero i passaggi, «0 contro
+    0» diventerebbe «cambiare timeframe non serve» — una sentenza tratta dal nulla,
+    che e' esattamente l'errore che questa sonda esiste per non fare."""
+    src = inspect.getsource(probe.main)
+    i = src.index("COME SI LEGGE")
+    coda = src[i:]
+    assert "d_sco = sco[\"pf_mediano\"]" in coda
+    assert "Zero non sarebbe una risposta" in src

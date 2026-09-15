@@ -99,36 +99,67 @@ def di(msg: str = "") -> None:
     print(msg, flush=True)
 
 
+def _statistiche(pf: list[float], passate: int, quasi: int) -> dict:
+    """Riassume una casella (scala x gruppo) con numeri che ESISTONO sempre.
+
+    `pf_mediano` e `quota_pf1` (quante candidate battono il pareggio) si muovono
+    anche quando i passaggi sono zero — ed e' il caso normale, non l'eccezione.
+    """
+    ordinati = sorted(pf)
+    n = len(ordinati)
+    mediana = ordinati[n // 2] if n else 0.0
+    return {"n": n, "pf_mediano": mediana,
+            "quota_pf1": (sum(1 for v in ordinati if v >= 1.0) / n) if n else 0.0,
+            "passate": passate, "quasi": quasi}
+
+
 def _init(interval: str, specs: list, end: str) -> None:
     _W.update(opt=WalkForwardOptimizer(n_windows=3, interval=interval),
               interval=interval, specs=specs, end=end,
               min_history=_min_history(interval))
 
 
-def _una(sym: str) -> tuple[str, int, int, int]:
-    """(simbolo, valutate, passate, quasi-passaggi) per una moneta a un timeframe."""
+def _una(sym: str) -> tuple[str, list, int, int]:
+    """(simbolo, profit factor di ogni candidata, passate, quasi-passaggi).
+
+    SI RIPORTA LA DISTRIBUZIONE, non solo il conteggio dei passaggi, ed e' la
+    correzione che rende questa sonda capace di rispondere.
+
+    Il primo giro utile ha dato 0 passaggi su TUTTE e tre le scale e su TUTTI e due i
+    gruppi. Non era una risposta: era un esperimento senza potenza. Il gate ha un
+    tasso di passaggio misurato dello 0,19%, cioe' circa una candidata su 500; con
+    180 valutazioni per casella ci si aspettano 0,3 passaggi. Zero ovunque e'
+    l'esito piu' probabile anche se una scala fosse nettamente migliore — e leggerlo
+    come «cambiare timeframe non serve» sarebbe una conclusione tratta dal nulla.
+
+    Il profit factor invece c'e' per OGNI candidata, sempre. Se a un'ora le
+    strategie su quelle monete vanno davvero meglio, la distribuzione si sposta, e
+    con 120 misure lo si vede. E' la differenza fra contare i terni al lotto e
+    guardare la media delle estrazioni.
+    """
     try:
         candles = load_candles(sym, _W["interval"], START, _W["end"], prefer="binance")
     except Exception as exc:  # noqa: BLE001 - una moneta che non scarica non ferma la sonda
         print(f"  [{_W['interval']}] {sym}: dati non disponibili ({exc})")
-        return (sym, 0, 0, 0)
+        return (sym, [], 0, 0)
     if len(candles) < _W["min_history"]:
         # NON e' un fallimento della scala: e' storia insufficiente. Contarlo come
         # "zero passaggi" direbbe che a quella scala la moneta non funziona, che e'
         # un'altra affermazione.
         di(f"  [{_W['interval']}] {sym}: storia insufficiente "
            f"({len(candles)} candele su {_W['min_history']}), esclusa")
-        return (sym, 0, 0, 0)
+        return (sym, [], 0, 0)
     frame = compute_indicator_frame(candles)
-    valutate = passate = quasi = 0
+    pf: list[float] = []
+    passate = quasi = 0
     for spec in _W["specs"]:
         r = evaluate_spec(_W["opt"], sym, candles, frame, spec)
-        valutate += 1
+        pf.append(float(r.get("pf") or 0.0))
         if r["passed"]:
             passate += 1
         elif r.get("near_miss"):
             quasi += 1
-    return (sym, valutate, passate, quasi)
+    return (sym, pf, passate, quasi)
 
 
 def scegli_monete(fb, n_scoperte: int, n_controllo: int) -> tuple[list[str], list[str]]:
@@ -142,14 +173,21 @@ def scegli_monete(fb, n_scoperte: int, n_controllo: int) -> tuple[list[str], lis
     coperte = {r.get("symbol") for r in pairs.values()
                if int(r.get("pass_count", 0) or 0) >= MIN_PASSES and r.get("symbol")}
     universo = top_symbols_by_volume(120)
-    scoperte = [s for s in universo if s not in coperte][:n_scoperte]
     controllo = [s for s in universo if s in coperte][:n_controllo]
     if not controllo:
-        # Senza monete coperte il controllo non esiste. Si prendono le piu' avanti
-        # (almeno una conferma): non e' lo stesso gruppo, e il rapporto lo dice.
+        # Senza monete coperte nell'universo il controllo non esiste. Si ripiega
+        # sulle piu' avanti (almeno MIN_PASSES-1 conferme): non e' lo stesso gruppo,
+        # e il rapporto lo dice.
         quasi = {r.get("symbol") for r in pairs.values()
                  if int(r.get("pass_count", 0) or 0) >= MIN_PASSES - 1 and r.get("symbol")}
         controllo = [s for s in universo if s in quasi][:n_controllo]
+    # I DUE GRUPPI NON SI DEVONO SOVRAPPORRE. Al primo giro XRPUSDT e' finita in
+    # ENTRAMBI: «scoperte» escludeva solo le coin VALIDATE, e il controllo di
+    # ripiego prende quelle a MIN_PASSES-1, che validate non sono. Un controllo che
+    # contiene le stesse monete del gruppo misurato non controlla niente — e' il
+    # difetto che rende un esperimento inutile senza che nessun numero lo dica.
+    esclusi = coperte | set(controllo)
+    scoperte = [s for s in universo if s not in esclusi][:n_scoperte]
     return scoperte, controllo
 
 
@@ -198,27 +236,30 @@ def main() -> int:
         for nome, monete in (("scoperte", scoperte), ("controllo", controllo)):
             if not monete:
                 continue
-            v = p = q = 0
-            for _sym, nv, np_, nq in parallel_map(
+            pf: list[float] = []
+            p = q = 0
+            for _sym, npf, np_, nq in parallel_map(
                 _una, monete, workers=n_workers(),
                 initializer=_init, initargs=(tf, specs, end),
             ):
-                v, p, q = v + nv, p + np_, q + nq
-            gruppi[nome] = (v, p, q)
-            tasso = f"{100 * p / v:.2f}%" if v else "—"
+                pf.extend(npf)
+                p, q = p + np_, q + nq
+            gruppi[nome] = _statistiche(pf, p, q)
+            st = gruppi[nome]
             # SUBITO, non alla fine: se il tempo scade, questa riga c'e' gia'.
-            di(f"[probe] {tf:>4} {nome:<10} {v:>5} valutate · {p:>3} passate "
-               f"({tasso}) · {q} quasi")
+            di(f"[probe] {tf:>4} {nome:<10} {st['n']:>4} valutate · PF mediano "
+               f"{st['pf_mediano']:.3f} · sopra il pareggio {st['quota_pf1'] * 100:.0f}% "
+               f"· {p} passate, {q} quasi")
         risultati[tf] = gruppi
         di(f"[probe] {tf} finito in {time.time() - t0:.0f}s")
 
-    di("\n--- QUANTO PASSA, PER SCALA E PER GRUPPO ---")
-    di(f"{'scala':<7} {'gruppo':<11} {'valutate':>9} {'passate':>8} "
-       f"{'tasso':>8} {'quasi':>7}")
+    di("\n--- COM'E' ANDATA, PER SCALA E PER GRUPPO ---")
+    di(f"{'scala':<7} {'gruppo':<11} {'valutate':>9} {'PF mediano':>11} "
+       f"{'sopra 1':>8} {'passate':>8} {'quasi':>6}")
     for tf in tfs:
-        for nome, (v, p, q) in risultati.get(tf, {}).items():
-            tasso = f"{100 * p / v:.2f}%" if v else "—"
-            di(f"{tf:<7} {nome:<11} {v:>9} {p:>8} {tasso:>8} {q:>7}")
+        for nome, st in risultati.get(tf, {}).items():
+            di(f"{tf:<7} {nome:<11} {st['n']:>9} {st['pf_mediano']:>11.3f} "
+               f"{st['quota_pf1'] * 100:>7.0f}% {st['passate']:>8} {st['quasi']:>6}")
     if saltate:
         di(f"\nNON MISURATE per mancanza di tempo: {', '.join(saltate)}. "
            f"Rilanciare la voce\nripartendo da queste (le altre sono gia' risposte).")
@@ -230,29 +271,34 @@ def main() -> int:
            "dice se sia alto o basso. Niente conclusioni da questo giro.")
         return 0
     di("\n--- COME SI LEGGE ---")
+    di("Si guarda il PF MEDIANO, non i passaggi: col tasso di passaggio misurato\n"
+       "(0,19%) una casella da ~120 valutazioni produce zero passaggi anche se una\n"
+       "scala fosse nettamente migliore. Zero non sarebbe una risposta.")
     for tf in tfs:
         if tf == "15m" or tf not in risultati:
             continue
-        sco = risultati[tf].get("scoperte", (0, 0, 0))
-        ctl = risultati[tf].get("controllo", (0, 0, 0))
-        sco0 = rif.get("scoperte", (0, 0, 0))
-        ctl0 = rif.get("controllo", (0, 0, 0))
-        d_sco = (sco[1] / sco[0] if sco[0] else 0) - (sco0[1] / sco0[0] if sco0[0] else 0)
-        d_ctl = (ctl[1] / ctl[0] if ctl[0] else 0) - (ctl0[1] / ctl0[0] if ctl0[0] else 0)
-        di(f"\n{tf} contro 15m:")
-        di(f"  monete scoperte : {d_sco * 100:+.2f} punti di tasso")
-        di(f"  controllo       : {d_ctl * 100:+.2f} punti di tasso")
-        if d_sco <= 0:
-            di("  -> a questa scala NON passa di piu' dove non copriamo: cambiare\n"
-               "     timeframe non e' la risposta per queste monete.")
+        sco = risultati[tf].get("scoperte", {})
+        ctl = risultati[tf].get("controllo", {})
+        sco0 = rif.get("scoperte", {})
+        ctl0 = rif.get("controllo", {})
+        if not (sco and sco0):
+            continue
+        d_sco = sco["pf_mediano"] - sco0["pf_mediano"]
+        d_ctl = (ctl.get("pf_mediano", 0) - ctl0.get("pf_mediano", 0)) if (ctl and ctl0) else 0.0
+        di(f"\n{tf} contro 15m (PF mediano):")
+        di(f"  monete scoperte : {d_sco:+.3f}")
+        di(f"  controllo       : {d_ctl:+.3f}")
+        if d_sco <= 0.01:
+            di("  -> a questa scala le strategie NON vanno meglio dove non copriamo:\n"
+               "     cambiare timeframe non e' la risposta per queste monete.")
         elif d_ctl >= d_sco * 0.7:
-            di("  -> passa di piu' OVUNQUE, non solo dove non copriamo. E' un fatto\n"
-               "     sul timeframe (costi, rumore), non sulle monete: trattarlo come\n"
-               "     una scoperta vorrebbe dire allentare il gate senza dirlo.")
+            di("  -> vanno meglio OVUNQUE, non solo dove non copriamo. E' un fatto\n"
+               "     sulla scala (costi, rumore), non sulle monete: trattarlo come una\n"
+               "     scoperta vorrebbe dire allentare il gate senza dirlo.")
         else:
-            di("  -> passa di piu' SOLO dove non copriamo, e non nel controllo.\n"
-               "     E' il segnale che queste monete hanno una scala loro. Vale la\n"
-               "     pena pagare il costo di portare il timeframe dentro la coppia.")
+            di("  -> vanno meglio SOLO dove non copriamo, e non nel controllo. E' il\n"
+               "     segnale che queste monete hanno una scala loro, e vale la pena\n"
+               "     pagare il costo di portare il timeframe dentro la coppia.")
 
     di("\nNOTA SUL PREZZO. Tre scale triplicano le estrazioni: a parita' di tutto,\n"
        "anche le coppie che passano per CASO triplicano. Il margine sul budget di\n"
