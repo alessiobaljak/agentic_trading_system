@@ -1,0 +1,4 @@
+# Secondo tentativo: ora stampa mentre lavora (flush) e si ferma da sola a 780s,
+# dalla scala piu' economica alla piu' cara. Anche in timeout deve lasciare dei
+# numeri.
+timeframe
