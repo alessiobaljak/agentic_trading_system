@@ -1,0 +1,6 @@
+# LA SONDA SUI TIMEFRAME. Domanda: le monete che a 15 minuti non copriamo, a 5
+# minuti o a 1 ora si coprono? Misura le stesse candidate su tre scale, con un
+# gruppo di controllo di monete gia' coperte per distinguere "quelle monete hanno
+# una scala loro" da "a quella scala il gate e' piu' facile per tutti".
+# SOLA LETTURA: non scrive registro, spec ne' configurazione.
+timeframe
