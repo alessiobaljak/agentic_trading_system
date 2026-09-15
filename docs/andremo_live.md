@@ -406,3 +406,77 @@ Ed è lì che comincia la prova che conta davvero: `scripts/gate_vs_paper.py` co
 quello che il backtest ha promesso con quello che il paper realizza. Il precedente da
 tenere a mente è BIRBUSDT — PF 1,51 promesso, 0,16 realizzato. Il gate è una
 selezione su storia; il paper è l'unica cosa che assomiglia al vero.
+
+---
+
+## La sonda sui timeframe (15 settembre)
+
+Domanda del proprietario: se certe monete non sono copribili a 15 minuti, forse
+servono 1 ora o 5 minuti. Misura in `ops/results/0060-sonda-timeframe-3.md`: le
+stesse 20 candidate su tre scale, su 6 monete scoperte e 3 di controllo già coperte.
+
+| scala | gruppo | PF mediano | sopra il pareggio |
+|---|---|---|---|
+| **1h** | scoperte | **0,910** | **29%** |
+| 1h | controllo | 0,949 | 37% |
+| 15m | scoperte | 0,826 | 8% |
+| 15m | controllo | 0,876 | 8% |
+| 5m | scoperte | 0,694 | 2% |
+| 5m | controllo | 0,779 | 3% |
+
+### La risposta alla domanda posta: no
+
+Il timeframe **per moneta** non è supportato da questi numeri. A 1 ora le strategie
+vanno meglio (+0,084 di PF mediano sulle scoperte), ma vanno meglio **quasi
+altrettanto sul controllo** (+0,073). Il guadagno non è specifico delle monete
+scoperte: è un fatto sulla **scala**, non sulle monete.
+
+Pagare il costo di portare il timeframe dentro ogni coppia — 28 punti del codice, e
+il rischio che gate e vissuto divergano — per un vantaggio che non è specifico
+sarebbe spendere molto per niente.
+
+### La risposta alla domanda NON posta, che è più interessante
+
+L'ordine è monotono e non è debole: **più lunga la scala, meglio vanno le
+strategie**, su entrambi i gruppi.
+
+* a 5 minuti solo il **2-3%** delle candidate batte il pareggio;
+* a 15 minuti l'**8%**;
+* a 1 ora il **29-37%**.
+
+La spiegazione economica più semplice è i **costi**: a parità di movimento di
+prezzo, più si accorcia l'orizzonte più trade servono, e ogni trade paga fee e
+funding. A 15 minuti potremmo star girando a una scala dove i costi si mangiano il
+vantaggio — per tutte le monete, non per alcune.
+
+Se è così, la mossa non è un timeframe **per coppia**: è un timeframe **globale
+diverso**. Che costa infinitamente meno (un parametro, nessuna divergenza possibile
+fra gate e live) ed è esattamente il contrario di quello che la domanda iniziale
+suggeriva.
+
+### Perché NON si tocca niente adesso
+
+1. **Cambiare il timeframe globale invalida tutto il registro.** Le 11 coppie
+   validate e le 400+ con conferme sono state validate a 15 minuti. A un'altra scala
+   non valgono più: si ricomincerebbe da zero, proprio mentre manca **una moneta**
+   perché il paper parta.
+2. **La sonda misura il PF, non il gate.** Il 73% delle candidate muore su
+   `total_return`, non sul PF. A 1 ora ci sono meno trade, quindi il ritorno totale
+   sul periodo potrebbe essere più basso anche con un PF migliore. «PF mediano più
+   alto» non è «il gate validerebbe di più».
+3. **La quota sopra il pareggio va letta con prudenza.** A 1 ora ci sono meno trade
+   per candidata, quindi il PF è più rumoroso: una distribuzione più larga sposta più
+   massa oltre 1 anche senza un vero vantaggio. Il PF *mediano* è il numero più
+   solido dei due.
+4. **È una sonda: 9 monete, 20 candidate.** Serve a decidere se vale la pena
+   misurare sul serio, non a decidere.
+
+### Cosa farne
+
+Aspettare il paper. Sta per partire e darà l'unica cosa che non abbiamo mai avuto:
+il confronto fra quello che il backtest promette e quello che il mercato restituisce.
+Se il paper a 15 minuti perde per i costi, questa misura ne è la spiegazione già
+pronta — e allora il test su 1 ora si fa in grande e con un motivo.
+
+Buttare il registro adesso per inseguire +0,08 di PF mediano su nove monete
+significherebbe scambiare una misura vera per un'ipotesi.
