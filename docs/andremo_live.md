@@ -356,3 +356,53 @@ cinquanta coppie su una.
 La regola di stop del 21 settembre resta, ma cambia di significato: non è più «se non
 valida niente si cambia approccio», è «se non valida su almeno cinque monete diverse,
 quello che troviamo non generalizza».
+
+---
+
+## 15 settembre: undici coppie validate su QUATTRO monete
+
+Fonte: `ops/results/0055-gate-15set.md`.
+
+```
+3 pass: 11 su 4 coin  ·  VALIDATE ora: 11 su 4 coin distinte
+ready dichiarato dal registro: False
+```
+
+| moneta | coppie validate |
+|---|---|
+| ORCAUSDT | 8 |
+| STXUSDT | 1 |
+| HEIUSDT | 1 |
+| EGLDUSDT | 1 |
+
+### La domanda di ieri ha risposta
+
+Ieri le validate erano 7, tutte su ORCAUSDT, e la domanda era: **è un fatto su quella
+moneta o il sistema sa farlo anche altrove?** Tre monete nuove in ventiquattr'ore
+dicono che sa farlo altrove. Non stiamo guardando una fortuna locale.
+
+Vale la pena notare che ORCAUSDT e HEIUSDT sono due delle tredici monete che la
+correzione del 14 ha rimesso nell'universo: erano uscite dal top-200 per volume e
+nessuno le guardava più. Due delle quattro monete coperte oggi sarebbero state
+cancellate il 19.
+
+### Quanto manca perché il paper parta
+
+Servono **10 coppie validate su almeno 5 monete distinte**. Le coppie ci sono (11);
+le monete no (4). **Manca una moneta sola.**
+
+E il fronte è pieno: **53 coppie a 2/3 su 24 monete diverse hanno già la finestra
+scaduta**, cioè si validano al primo giro in cui ripassano il gate. Ieri erano 6 su 4
+monete. Non è una questione di settimane.
+
+### Cosa succede quando la quinta arriva
+
+`REQUIRE_GATE1_READY` è `true`, quindi il bot è rimasto piatto finora. Quando il
+registro dichiara `ready`, **il paper inizia a operare da solo**, senza che nessuno
+prema niente. `DRY_RUN` resta `true`: nessun denaro vero, mai, e non cambia per il
+fatto che il gate dica sì.
+
+Ed è lì che comincia la prova che conta davvero: `scripts/gate_vs_paper.py` confronta
+quello che il backtest ha promesso con quello che il paper realizza. Il precedente da
+tenere a mente è BIRBUSDT — PF 1,51 promesso, 0,16 realizzato. Il gate è una
+selezione su storia; il paper è l'unica cosa che assomiglia al vero.
