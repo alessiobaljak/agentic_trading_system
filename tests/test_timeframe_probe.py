@@ -87,3 +87,39 @@ def test_the_same_candidates_are_used_on_every_timeframe():
     sulle scale."""
     src = inspect.getsource(probe.main)
     assert src.index("generate_specs(") < src.index("for tf in tfs:")
+
+
+def test_it_prints_as_it_goes_and_stops_before_the_guillotine():
+    """IL PRIMO TENTATIVO NON HA LASCIATO NIENTE. Il canale ops uccide a 900s e
+    restituisce l'output parziale — ma l'output parziale di un processo Python
+    ucciso e' VUOTO: stdout su pipe e' bufferizzato a blocchi. Risultato: codice
+    124, zero righe, e nessuna idea di quanto fosse arrivata lontano.
+
+    Due difese, e servono entrambe: ogni riga esce SUBITO (`di`, che fa flush), e la
+    sonda ha una deadline PROPRIA piu' corta di quella del canale, cosi' si ferma da
+    sola e stampa cio' che ha invece di essere ammazzata a meta'.
+    """
+    src = inspect.getsource(probe)
+    assert "flush=True" in inspect.getsource(probe.di)
+    assert "args.budget" in inspect.getsource(probe.main), "manca la deadline propria"
+    assert probe.BUDGET_S < 900, "la deadline deve stare DENTRO quella del canale ops"
+    # nessun print non flushato nel percorso lungo
+    assert "print(" not in inspect.getsource(probe.main), (
+        "usa `di()`: un print bufferizzato sparisce se il processo viene ucciso")
+
+
+def test_the_cheapest_scale_goes_first():
+    """A 5 minuti la serie ha dodici volte le candele di un'ora e non e' in cache.
+    Misurandola per prima si consuma tutto il budget e non si risponde a NIENTE —
+    e' quello che e' successo. Dalla piu' economica alla piu' cara: se il tempo
+    finisce si perde solo l'ultima."""
+    assert probe.TIMEFRAMES.index("1h") < probe.TIMEFRAMES.index("15m") \
+        < probe.TIMEFRAMES.index("5m")
+
+
+def test_without_the_reference_scale_it_refuses_to_conclude():
+    """Se 15m non e' stata misurata, un tasso a 1 ora non si sa se sia alto o basso.
+    Meglio dire «niente conclusioni» che produrre un confronto contro il vuoto."""
+    src = inspect.getsource(probe.main)
+    assert 'rif = risultati.get("15m")' in src
+    assert "Niente conclusioni" in src

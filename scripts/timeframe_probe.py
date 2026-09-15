@@ -42,6 +42,7 @@ mai comporre un comando.
 from __future__ import annotations
 
 import argparse
+import os
 import time
 from datetime import date
 
@@ -54,19 +55,33 @@ from bot.strategies.generator import generate_specs
 from scripts.discover_strategies import evaluate_spec
 from scripts.optimize import MIN_PASSES, _min_history, top_symbols_by_volume
 
-#: Le scale da confrontare. 15m e' quella attuale e fa da riferimento: senza, un
-#: conteggio a 1 ora non si sa se sia alto o basso.
-TIMEFRAMES = ("5m", "15m", "1h")
+#: Le scale da confrontare, DALLA PIU' ECONOMICA ALLA PIU' CARA. Non e' pignoleria:
+#: il canale ops taglia a 900 secondi, e a 5 minuti la serie ha dodici volte le
+#: candele di un'ora — per giunta non e' in cache, perche' il sistema gira a 15m.
+#: Con l'ordine sbagliato il primo tentativo ha consumato tutto il tempo sui dati a
+#: 5 minuti e non ha risposto a NIENTE. Cosi' invece, se il tempo finisce, si perde
+#: solo l'ultima scala e le altre sono gia' state stampate.
+#: 15m e' quella attuale e fa da riferimento: senza, un conteggio a 1 ora non si sa
+#: se sia alto o basso.
+TIMEFRAMES = ("1h", "15m", "5m")
+
+#: Quanto tempo la sonda si concede prima di fermarsi DA SOLA e stampare cio' che ha.
+#: Il canale ops uccide a 900s e restituisce l'output parziale: ma l'output parziale
+#: di un processo Python ucciso e' VUOTO, perche' stdout su pipe e' bufferizzato a
+#: blocchi. Il primo tentativo e' finito cosi': codice 124, zero righe, e nessuna
+#: informazione su quanto fosse arrivata lontano. Un comando che gira dietro una
+#: ghigliottina deve avere una deadline propria, piu' corta di quella.
+BUDGET_S = float(os.getenv("PROBE_BUDGET_S", "780"))
 
 #: Quante monete per gruppo. Piccolo di proposito: questa e' una SONDA, deve stare
 #: nei 15 minuti di timeout del canale ops. Se dice che c'e' qualcosa, la misura
 #: seria si fa dopo e in grande.
-N_SCOPERTE = 10
-N_CONTROLLO = 4
+N_SCOPERTE = 6
+N_CONTROLLO = 3
 
 #: Candidate generate per timeframe. Le STESSE su tutti e tre (stesso seme), perche'
 #: confrontare insiemi di strategie diversi non direbbe niente sul timeframe.
-N_SPEC = 24
+N_SPEC = 20
 SEED = 4242
 
 #: Finestra dati comune a tutte le scale. Non si parte dal 2022: a 5 minuti sarebbero
@@ -75,6 +90,13 @@ SEED = 4242
 START = "2024-01-01"
 
 _W: dict = {}
+
+
+def di(msg: str = "") -> None:
+    """Stampa SUBITO. Senza flush, stdout su pipe accumula a blocchi e un processo
+    ucciso dal timeout non lascia una riga: e' esattamente com'e' andata la prima
+    volta."""
+    print(msg, flush=True)
 
 
 def _init(interval: str, specs: list, end: str) -> None:
@@ -94,8 +116,8 @@ def _una(sym: str) -> tuple[str, int, int, int]:
         # NON e' un fallimento della scala: e' storia insufficiente. Contarlo come
         # "zero passaggi" direbbe che a quella scala la moneta non funziona, che e'
         # un'altra affermazione.
-        print(f"  [{_W['interval']}] {sym}: storia insufficiente "
-              f"({len(candles)} candele su {_W['min_history']}), esclusa")
+        di(f"  [{_W['interval']}] {sym}: storia insufficiente "
+           f"({len(candles)} candele su {_W['min_history']}), esclusa")
         return (sym, 0, 0, 0)
     frame = compute_indicator_frame(candles)
     valutate = passate = quasi = 0
@@ -137,12 +159,14 @@ def main() -> int:
     ap.add_argument("--controllo", type=int, default=N_CONTROLLO)
     ap.add_argument("--spec", type=int, default=N_SPEC)
     ap.add_argument("--timeframes", default=",".join(TIMEFRAMES))
+    ap.add_argument("--budget", type=float, default=BUDGET_S,
+                    help="secondi che la sonda si concede prima di fermarsi da sola")
     args = ap.parse_args()
 
     fb = get_firebase()
     scoperte, controllo = scegli_monete(fb, args.scoperte, args.controllo)
     if not scoperte:
-        print("[probe] nessuna moneta scoperta nell'universo: niente da sondare.")
+        di("[probe] nessuna moneta scoperta nell'universo: niente da sondare.")
         return 1
     # LE STESSE candidate su tutte le scale: e' il timeframe la variabile, non le
     # strategie. Con insiemi diversi il confronto non direbbe niente.
@@ -150,15 +174,25 @@ def main() -> int:
     end = date.today().isoformat()
     tfs = [t.strip() for t in args.timeframes.split(",") if t.strip()]
 
-    print(f"[probe] {len(specs)} candidate (seme {SEED}) x "
-          f"{len(scoperte)} monete scoperte + {len(controllo)} di controllo "
-          f"x {len(tfs)} scale · dati da {START}")
-    print(f"[probe] scoperte:  {', '.join(scoperte)}")
-    print(f"[probe] controllo: {', '.join(controllo) or '— (nessuna coperta)'}")
-    print()
+    di(f"[probe] {len(specs)} candidate (seme {SEED}) x "
+       f"{len(scoperte)} monete scoperte + {len(controllo)} di controllo "
+       f"x {len(tfs)} scale · dati da {START} · budget {args.budget:.0f}s")
+    di(f"[probe] scoperte:  {', '.join(scoperte)}")
+    di(f"[probe] controllo: {', '.join(controllo) or '— (nessuna coperta)'}")
+    di()
 
+    t_inizio = time.time()
     risultati: dict[str, dict[str, tuple[int, int, int]]] = {}
+    saltate: list[str] = []
     for tf in tfs:
+        # DEADLINE PROPRIA. Il canale ops uccide a 900s e l'output di un processo
+        # ucciso e' vuoto: meglio fermarsi prima e stampare cio' che si e' misurato.
+        restante = args.budget - (time.time() - t_inizio)
+        if restante < 90:
+            saltate.append(tf)
+            di(f"[probe] {tf} SALTATA: restano {restante:.0f}s, non bastano. "
+               f"Meglio un risultato parziale che nessuno.")
+            continue
         t0 = time.time()
         gruppi: dict[str, tuple[int, int, int]] = {}
         for nome, monete in (("scoperte", scoperte), ("controllo", controllo)):
@@ -171,22 +205,33 @@ def main() -> int:
             ):
                 v, p, q = v + nv, p + np_, q + nq
             gruppi[nome] = (v, p, q)
-        risultati[tf] = gruppi
-        print(f"[probe] {tf} finito in {time.time() - t0:.0f}s")
-
-    print("\n--- QUANTO PASSA, PER SCALA E PER GRUPPO ---")
-    print(f"{'scala':<7} {'gruppo':<11} {'valutate':>9} {'passate':>8} "
-          f"{'tasso':>8} {'quasi':>7}")
-    for tf in tfs:
-        for nome, (v, p, q) in risultati[tf].items():
             tasso = f"{100 * p / v:.2f}%" if v else "—"
-            print(f"{tf:<7} {nome:<11} {v:>9} {p:>8} {tasso:>8} {q:>7}")
+            # SUBITO, non alla fine: se il tempo scade, questa riga c'e' gia'.
+            di(f"[probe] {tf:>4} {nome:<10} {v:>5} valutate · {p:>3} passate "
+               f"({tasso}) · {q} quasi")
+        risultati[tf] = gruppi
+        di(f"[probe] {tf} finito in {time.time() - t0:.0f}s")
+
+    di("\n--- QUANTO PASSA, PER SCALA E PER GRUPPO ---")
+    di(f"{'scala':<7} {'gruppo':<11} {'valutate':>9} {'passate':>8} "
+       f"{'tasso':>8} {'quasi':>7}")
+    for tf in tfs:
+        for nome, (v, p, q) in risultati.get(tf, {}).items():
+            tasso = f"{100 * p / v:.2f}%" if v else "—"
+            di(f"{tf:<7} {nome:<11} {v:>9} {p:>8} {tasso:>8} {q:>7}")
+    if saltate:
+        di(f"\nNON MISURATE per mancanza di tempo: {', '.join(saltate)}. "
+           f"Rilanciare la voce\nripartendo da queste (le altre sono gia' risposte).")
 
     # --- LA LETTURA, che e' la parte che serve ------------------------------- #
-    print("\n--- COME SI LEGGE ---")
-    rif = risultati.get("15m", {})
+    rif = risultati.get("15m")
+    if not rif:
+        di("\nSenza la misura a 15m non c'e' un riferimento: un tasso da solo non\n"
+           "dice se sia alto o basso. Niente conclusioni da questo giro.")
+        return 0
+    di("\n--- COME SI LEGGE ---")
     for tf in tfs:
-        if tf == "15m":
+        if tf == "15m" or tf not in risultati:
             continue
         sco = risultati[tf].get("scoperte", (0, 0, 0))
         ctl = risultati[tf].get("controllo", (0, 0, 0))
@@ -194,26 +239,26 @@ def main() -> int:
         ctl0 = rif.get("controllo", (0, 0, 0))
         d_sco = (sco[1] / sco[0] if sco[0] else 0) - (sco0[1] / sco0[0] if sco0[0] else 0)
         d_ctl = (ctl[1] / ctl[0] if ctl[0] else 0) - (ctl0[1] / ctl0[0] if ctl0[0] else 0)
-        print(f"\n{tf} contro 15m:")
-        print(f"  monete scoperte : {d_sco * 100:+.2f} punti di tasso")
-        print(f"  controllo       : {d_ctl * 100:+.2f} punti di tasso")
+        di(f"\n{tf} contro 15m:")
+        di(f"  monete scoperte : {d_sco * 100:+.2f} punti di tasso")
+        di(f"  controllo       : {d_ctl * 100:+.2f} punti di tasso")
         if d_sco <= 0:
-            print("  -> a questa scala NON passa di piu' dove non copriamo: "
-                  "cambiare timeframe\n     non e' la risposta per queste monete.")
+            di("  -> a questa scala NON passa di piu' dove non copriamo: cambiare\n"
+               "     timeframe non e' la risposta per queste monete.")
         elif d_ctl >= d_sco * 0.7:
-            print("  -> passa di piu' OVUNQUE, non solo dove non copriamo. E' un fatto\n"
-                  "     sul timeframe (costi, rumore), non sulle monete: trattarlo come\n"
-                  "     una scoperta vorrebbe dire allentare il gate senza dirlo.")
+            di("  -> passa di piu' OVUNQUE, non solo dove non copriamo. E' un fatto\n"
+               "     sul timeframe (costi, rumore), non sulle monete: trattarlo come\n"
+               "     una scoperta vorrebbe dire allentare il gate senza dirlo.")
         else:
-            print("  -> passa di piu' SOLO dove non copriamo, e non nel controllo.\n"
-                  "     E' il segnale che queste monete hanno una scala loro. Vale la\n"
-                  "     pena pagare il costo di portare il timeframe dentro la coppia.")
+            di("  -> passa di piu' SOLO dove non copriamo, e non nel controllo.\n"
+               "     E' il segnale che queste monete hanno una scala loro. Vale la\n"
+               "     pena pagare il costo di portare il timeframe dentro la coppia.")
 
-    print("\nNOTA SUL PREZZO. Tre scale triplicano le estrazioni: a parita' di tutto,\n"
-          "anche le coppie che passano per CASO triplicano. Il margine sul budget di\n"
-          "falsi positivi scende da ~10x a ~3x. Resta accettabile, ma va contato.")
-    print("\nQuesta sonda non ha scritto niente: ne' registro, ne' spec, ne' "
-          "configurazione.")
+    di("\nNOTA SUL PREZZO. Tre scale triplicano le estrazioni: a parita' di tutto,\n"
+       "anche le coppie che passano per CASO triplicano. Il margine sul budget di\n"
+       "falsi positivi scende da ~10x a ~3x. Resta accettabile, ma va contato.")
+    di("\nQuesta sonda non ha scritto niente: ne' registro, ne' spec, ne' "
+       "configurazione.")
     return 0
 
 
