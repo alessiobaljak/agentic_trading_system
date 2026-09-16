@@ -1,0 +1,3 @@
+# Due verifiche: che il bot stia davvero operando sulle coppie validate, e che
+# DRY_RUN sia ancora True.
+log-bot
