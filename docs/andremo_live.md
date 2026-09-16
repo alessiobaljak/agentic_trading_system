@@ -542,3 +542,53 @@ Il costo dell'attesa va detto: la cosa piu' importante che non sappiamo — se i
 vissuto confermi la promessa del backtest — resta ignota per un'altra settimana.
 Se fra qualche giorno il ritmo delle validazioni si fermasse, allora accendere la via
 a conteggio sarebbe una decisione presa sui dati e non contro di essi.
+
+---
+
+## 16 settembre, 16:00: il paper opera
+
+```
+GATE 1: ✅ SUPERATO — pronti per il paper trading
+ready: True (via numero coppie)
+deciso il 16 Sep 15:44 su 35 validate / 19 coin coperte / universo 156
+  · minimi ok: True · copertura ok: False · conteggio ok: True
+DRY_RUN: True
+```
+
+Il bot valuta **16 asset** invece di 100: opera solo le coppie validate, come deve.
+Prima posizione aperta: **SPXUSDT long**, rischio 0,39% dell'equity, leva 2x.
+Nessun trade chiuso ancora, quindi nessun verdetto: i numeri arrivano quando le
+posizioni si chiudono.
+
+### La contraddizione di stamattina, e cosa l'ha sciolta
+
+Per due ore il registro ha mostrato 31 coppie validate su 16 monete, la via a
+conteggio impostata a 10, e `ready: False`. Con quei numeri il conto dava sì.
+
+Non era un difetto: era un **disallineamento di tempi** invisibile. `ready` lo
+calcola la fase OPTIMIZE; la fase DISCOVERY, che gira dopo, riscrive `validated` e
+`coins_covered` **senza ricalcolarlo**. Quindi i numeri che si leggevano nel
+registro non erano quelli su cui la decisione era stata presa — e nessuno
+conservava i secondi.
+
+Ora `_ready_state` registra cosa ha usato, con l'ora. La riga sopra dice «deciso il
+16 Sep 15:44 su 35 validate / 19 coin coperte», e la contraddizione si legge invece
+di doverla indovinare. È la stessa lezione di ogni difetto trovato in questo
+progetto: **un totale non dice mai su cosa è stato calcolato.**
+
+### Da qui in avanti la domanda cambia di nuovo
+
+Finora era «il gate produce qualcosa?». Adesso è: **quello che il gate promette, il
+mercato lo conferma?**
+
+La regola di lettura è fissata PRIMA di vedere i numeri, e vale:
+
+> **Non si conclude niente sul gate finché non ci sono almeno 40 trade chiusi** — la
+> stessa soglia che il sistema usa per dichiarare una deriva globale. Con meno,
+> qualunque risultato è rumore, in bene come in male.
+
+Il precedente da tenere in mente è BIRBUSDT: PF 1,51 promesso dal backtest, 0,16
+realizzato dal paper. È per questo che il paper esiste.
+
+`DRY_RUN` resta `true`. Non cambia perché il gate ha detto sì, e non cambierà senza
+una richiesta esplicita, ripetuta e consapevole del proprietario.
