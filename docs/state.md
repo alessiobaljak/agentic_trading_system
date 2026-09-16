@@ -1,35 +1,35 @@
 # Stato sistema (snapshot)
-_Generato: 2026-09-16 13:30 UTC_
+_Generato: 2026-09-16 18:12 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$1,000.00**
-- ultimo heartbeat: 2026-09-16 13:29 UTC
+- equity: **$995.81**
+- ultimo heartbeat: 2026-09-16 18:11 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-09-16 13:16 UTC)
+- esito: **⚪ FLAT** (2026-09-16 18:00 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 16 · segnali: 0
+- asset valutati: 19 · segnali: 0
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
 - copertura universo: **19/156 crypto (12%)** · obiettivo ≥ 35%
-- coppie validate (>= 3 pass OOS): **34**
-- universo scansionato: 1000BONKUSDT, 1000FLOKIUSDT, 1000LUNCUSDT, 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ACEUSDT, ADAUSDT, AEROUSDT, AINUSDT, ALGOUSDT, APTUSDT, ARBUSDT, ARCUSDT, ARKUSDT, ARUSDT, ASTRUSDT, ATOMUSDT, AVAAIUSDT, AVAXUSDT, AXLUSDT, AXSUSDT, BANKUSDT, BCHUSDT, BICOUSDT, BNBUSDT, BOMEUSDT, BRUSDT, BTCUSDT, BTRUSDT, BULLAUSDT, CAKEUSDT, CHZUSDT, COTIUSDT, CROSSUSDT, CRVUSDT, CVCUSDT, DASHUSDT, DEXEUSDT, DOGEUSDT, DOTUSDT, DYDXUSDT, DYMUSDT, EGLDUSDT, EIGENUSDT, ENAUSDT, ENSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FILUSDT, FLOCKUSDT, FORMUSDT, GALAUSDT, GPSUSDT, GUSDT, HBARUSDT, HEIUSDT, HEMIUSDT, HIVEUSDT, HOMEUSDT, HUMAUSDT, HUSDT, HYPEUSDT, ICPUSDT, IDOLUSDT, INJUSDT, IOSTUSDT, IOTAUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KASUSDT, KAVAUSDT, KOMAUSDT, LAUSDT, LDOUSDT, LINKUSDT, LSKUSDT, LTCUSDT, MINAUSDT, MORPHOUSDT, MTLUSDT, MUBARAKUSDT, NEARUSDT, NEIROUSDT, NOTUSDT, ONDOUSDT, ONGUSDT, OPUSDT, ORCAUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PLAYUSDT, PNUTUSDT, POLUSDT, POLYXUSDT, POWRUSDT, PROMUSDT, PUMPUSDT, PUNDIXUSDT, PYTHUSDT, RAYSOLUSDT, REDUSDT, RENDERUSDT, REZUSDT, RONINUSDT, SAGAUSDT, SANDUSDT, SEIUSDT, SKYAIUSDT, SKYUSDT, SOLUSDT, SOPHUSDT, SPXUSDT, STEEMUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUSHIUSDT, SYNUSDT, TAOUSDT, THETAUSDT, TIAUSDT, TLMUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, TUSDT, TUTUSDT, UNIUSDT, USDCUSDT, USELESSUSDT, VELVETUSDT, VETUSDT, VIRTUALUSDT, VTHOUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, ZECUSDT, ZENUSDT, ZILUSDT, ZKUSDT, ZORAUSDT, ZROUSDT
-- aggiornato: 2026-09-16 12:48 UTC
+- coppie validate (>= 3 pass OOS): **35**
+- universo scansionato: 1000BONKUSDT, 1000FLOKIUSDT, 1000LUNCUSDT, 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ACEUSDT, ADAUSDT, AEROUSDT, AINUSDT, ALGOUSDT, APTUSDT, ARBUSDT, ARCUSDT, ARKUSDT, ARUSDT, ASTRUSDT, ATOMUSDT, AVAAIUSDT, AVAXUSDT, AXLUSDT, AXSUSDT, BANKUSDT, BCHUSDT, BICOUSDT, BNBUSDT, BOMEUSDT, BRUSDT, BTCUSDT, BTRUSDT, BULLAUSDT, CAKEUSDT, CHZUSDT, COTIUSDT, CROSSUSDT, CRVUSDT, CVCUSDT, DASHUSDT, DEXEUSDT, DODOXUSDT, DOGEUSDT, DOTUSDT, DYMUSDT, EGLDUSDT, EIGENUSDT, ENAUSDT, ENSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FILUSDT, FLOCKUSDT, FORMUSDT, GALAUSDT, GPSUSDT, GUSDT, HBARUSDT, HEIUSDT, HEMIUSDT, HIVEUSDT, HOLOUSDT, HOMEUSDT, HUSDT, HYPEUSDT, ICPUSDT, IDOLUSDT, INJUSDT, IOSTUSDT, IOTAUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KASUSDT, KAVAUSDT, KOMAUSDT, LAUSDT, LDOUSDT, LINKUSDT, LSKUSDT, LTCUSDT, MINAUSDT, MORPHOUSDT, MTLUSDT, MUBARAKUSDT, NEARUSDT, NEIROUSDT, NOTUSDT, ONDOUSDT, ONGUSDT, OPUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PLAYUSDT, PNUTUSDT, POLUSDT, POLYXUSDT, PORTALUSDT, POWRUSDT, PROMUSDT, PUMPUSDT, PUNDIXUSDT, PYTHUSDT, RAYSOLUSDT, RENDERUSDT, REZUSDT, RIFUSDT, RONINUSDT, SAGAUSDT, SANDUSDT, SEIUSDT, SKYAIUSDT, SKYUSDT, SOLUSDT, SOPHUSDT, SPXUSDT, STEEMUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUSHIUSDT, SYNUSDT, TAOUSDT, TIAUSDT, TLMUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, TUSDT, TUTUSDT, UNIUSDT, USDCUSDT, USELESSUSDT, VELVETUSDT, VETUSDT, VIRTUALUSDT, VTHOUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, WUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, ZECUSDT, ZENUSDT, ZILUSDT, ZKUSDT, ZORAUSDT, ZROUSDT
+- aggiornato: 2026-09-16 17:18 UTC
 
 ### Salute del registro
 
-- composizione: **1944 base** · **465 generate** (di cui 465 con almeno una conferma)
-- occupazione: 2409/3000 — ok
+- composizione: **1960 base** · **473 generate** (di cui 473 con almeno una conferma)
+- occupazione: 2433/3000 — ok
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
 |---|---|---|---|---|---|
-| HEIUSDT | gen_e6ddc613 | 3 | 2.444 | 211% | scale_r_mults=[2.0, 4.0, 6.0] |
+| HEIUSDT | gen_e6ddc613 | 3 | 2.446 | 211% | scale_r_mults=[2.0, 4.0, 6.0] |
 | JASMYUSDT | gen_b2f350ff | 3 | 1.608 | 137% | scale_r_mults=[2.0, 4.0, 6.0] |
 | VETUSDT | gen_6d06dca0 | 3 | 1.636 | 128% | scale_r_mults=[2.0, 4.0, 6.0] |
 | DOTUSDT | gen_d85b1f05 | 3 | 1.559 | 125% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -48,6 +48,7 @@ _Generato: 2026-09-16 13:30 UTC_
 | ORCAUSDT | gen_5b847426 | 3 | 1.812 | 93% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ORCAUSDT | gen_bbe21d3f | 3 | 1.897 | 84% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SKYAIUSDT | gen_98837ec2 | 3 | 2.4 | 83% | scale_r_mults=[2.0, 4.0, 6.0] |
+| PROMUSDT | gen_452d4511 | 3 | 2.347 | 82% | scale_r_mults=[2.0, 4.0, 6.0] |
 | MUBARAKUSDT | gen_ff3e4154 | 3 | 1.684 | 81% | scale_r_mults=[2.0, 4.0, 6.0] |
 | USELESSUSDT | gen_194e2514 | 3 | 1.541 | 77% | scale_r_mults=[2.0, 4.0, 6.0] |
 | USELESSUSDT | gen_1bb04e1a | 3 | 1.541 | 77% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -65,45 +66,45 @@ _Generato: 2026-09-16 13:30 UTC_
 | ZKUSDT | gen_98837ec2 | 3 | 1.476 | 22% | scale_r_mults=[2.0, 4.0, 6.0] |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-09-16 12:48 UTC · 1248 coppie valutate, 0 passate in questo run_
+_aggiornato: 2026-09-16 15:44 UTC · 1248 coppie valutate, 0 passate in questo run_
 
 _Nessuna coppia ha passato in questo run._
 
 ## Dove muoiono le candidate (autopsia del GATE 1)
 
-**strategie base** — 1248 valutazioni, 0 passate (0.00%) · 2026-09-16 12:48 UTC
+**strategie base** — 1248 valutazioni, 0 passate (0.00%) · 2026-09-16 15:44 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 37 | 3.0% |
-| consistency | 10 | 0.8% |
-| total_return | 1102 | 88.3% |
-| holdout | 3 | 0.2% |
-| pf_ex_top | 19 | 1.5% |
-| recovery | 68 | 5.4% |
+| regime | 32 | 2.6% |
+| recovery | 71 | 5.7% |
+| consistency | 17 | 1.4% |
+| total_return | 1107 | 88.7% |
 | trades | 9 | 0.7% |
+| holdout | 2 | 0.2% |
+| pf_ex_top | 10 | 0.8% |
 
-- quasi-passaggi (un solo criterio, di poco): **3** — sono i semi delle mutazioni del run successivo
+- quasi-passaggi (un solo criterio, di poco): **4** — sono i semi delle mutazioni del run successivo
 
-**strategie generate** — 76140 valutazioni, 165 passate (0.22%) · 2026-09-16 12:06 UTC
+**strategie generate** — 76302 valutazioni, 145 passate (0.19%) · 2026-09-16 17:18 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 11426 | 15.0% |
-| win_rate | 9 | 0.0% |
-| trades | 1810 | 2.4% |
-| recovery | 6265 | 8.2% |
-| consistency | 2129 | 2.8% |
-| total_return | 52702 | 69.4% |
-| holdout | 551 | 0.7% |
-| pf_ex_top | 1083 | 1.4% |
+| regime | 11706 | 15.4% |
+| win_rate | 7 | 0.0% |
+| holdout | 546 | 0.7% |
+| recovery | 6320 | 8.3% |
+| consistency | 2186 | 2.9% |
+| total_return | 53252 | 69.9% |
+| trades | 1106 | 1.5% |
+| pf_ex_top | 1034 | 1.4% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-09-16 13:02 UTC · coppie validate: **34** · GATE 1 pronto: True
-- tasso di passaggio misurato: **0.213%**
+- ultimo giro: 2026-09-16 18:05 UTC · coppie validate: **35** · GATE 1 pronto: True
+- tasso di passaggio misurato: **0.187%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -116,17 +117,40 @@ _Nessuna coppia ha passato in questo run._
 - `none` — GATE 1 superato: il paper opera, la taratura si ferma
 - `none` — GATE 1 superato: il paper opera, la taratura si ferma
 - `none` — GATE 1 superato: il paper opera, la taratura si ferma
-- `none` — solo 0.3 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
-- `none` — solo 0.2 giorni senza validate: si aspetta (2 giorni) prima di toccare qualcosa
+- `none` — GATE 1 superato: il paper opera, la taratura si ferma
+- `none` — GATE 1 superato: il paper opera, la taratura si ferma
 
-## Trade chiusi
-_nessun trade chiuso._
+## Trade chiusi — perché usciamo
+- totale: **1** · vinti: 0 (0%) · PnL realizzato: **-4.19**
+
+- costi: **0.32 USDT** su 1 trade (0.32/trade) _(stimati dal modello del gate, non misurati dai fill)_
+  - commissioni 0.16 · spread 0.16 · funding +0.00
+  - lordo -3.87 → netto -4.19 · **break-even 0.03%** dell'equity
+  - piu' costose: SPXUSDT 0.32
+
+| Uscita | Trade | % | PnL |
+|---|---|---|---|
+| Stop loss (prima di qualsiasi TP) | 1 | 100% | -4.19 |
+
+- gradini raggiunti (su 1 trade): 0 TP: 1 (100%)
+
+- **drawdown di portafoglio: 4.19 USDT** (ritorno -4.19 · recovery -1.00) · max 1 posizioni aperte insieme
+  _uscite in ordine di TEMPO: e' la buca vera, quella che il gate non vede perche' valida una coppia alla volta._
+
+- escursione favorevole (mfe_r, 1 trade): mediana **0.30R** · ≥1R: 0% · ≥1.5R: 0% · ≥3R: 0% · ≥5R: 0%
+  _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
 
 ## Deriva paper vs gate
-_nessun verdetto ancora: servono trade chiusi su coppie validate._
+_il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
+
+- **globale**: watch · 1 trade · PF vissuto 0.0 vs 1.903 atteso · mfe mediana 0.3R
+
+| Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
+|---|---|---|---|---|
+| SPXUSDT|gen_ba3a671f | watch | 1 | 0.0 / 1.505 | PF 0.00 vs 1.50 atteso · mfe mediana 0.30R < primo TP 1.50R |
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **insufficient** · 0 trade · correlazione None · influenza applicata **x1.0**
-- servono 30 trade, ce ne sono 0
+- verdetto: **insufficient** · 1 trade · correlazione None · influenza applicata **x1.0**
+- servono 30 trade, ce ne sono 1
