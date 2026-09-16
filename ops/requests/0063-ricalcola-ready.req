@@ -1,0 +1,3 @@
+# Il proprietario ha aggiunto OPTIMIZER_READY_MIN_PAIRS=10 al .env. `ready` viene
+# ricalcolato solo da un giro dell'ottimizzatore: lo lancio invece di aspettare.
+lancia-gate
