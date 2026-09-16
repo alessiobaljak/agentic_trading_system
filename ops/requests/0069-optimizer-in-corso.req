@@ -1,0 +1,5 @@
+# Il giro lanciato alle 08:21 potrebbe essere stato un no-op: se il servizio era
+# gia' attivo dalle 07:03, `systemctl start` non fa niente. Serve sapere se sta
+# ancora girando, perche' la diagnostica la scrive la fase optimize del PROSSIMO
+# giro.
+processi
