@@ -39,11 +39,13 @@ import { CHROME, GATE_RAMP, STATO } from '../lib/viz';
  *     discovery il verdetto scatta solo sui passaggi. Resta idoneo e riprova ogni
  *     giorno con un giorno di dati in più. Il gruppo degli idonei si ACCUMULA.
  *
- *  3. FERMA ≠ IN ATTESA. Se la coin esce dal top-N per volume, nessuno valuta più le
- *     sue coppie: non prendono conferme né fallimenti. Restano lì con una data
- *     accanto che nessuno onorerà. È successo a ORCAUSDT il 13 settembre con otto
- *     coppie a 2/3. Qui quelle righe sono marcate FERMA, in arancione, e non
- *     mostrano nessuna data.
+ *  3. FERMA ≠ IN ATTESA, e FERMA non è una cosa sola. Se la coin esce dal top-N per
+ *     volume nessuno valuta più le sue coppie: non prendono conferme né fallimenti,
+ *     e restano lì con una data accanto che nessuno onorerà (è successo a ORCAUSDT
+ *     il 13 settembre, con otto coppie a 2/3). Ma fra quelle ferme ci sono due
+ *     destini opposti — chi riprende, perché il sistema rimette la sua moneta sotto
+ *     osservazione, e chi è abbandonata perché non prende una conferma da oltre tre
+ *     settimane. Mostrarle uguali fa aspettare qualcosa che per metà non arriverà.
  *
  * I colori sono la rampa ordinale validata di lib/viz.ts (più conferme = più chiaro),
  * perché 1 → 2 → 3 sono gradini della stessa scala, non categorie diverse. Il verde
@@ -57,6 +59,7 @@ type PairRec = {
   pass_count?: number;
   window_start?: number;
   last_pass_data_end?: number;
+  last_passed_at?: number;
   last_seen_at?: number;
   last_pf?: number;
 };
@@ -69,7 +72,7 @@ const FINESTRA_S = 168 * 3600;
 const FRESCA_G = 3;
 const MIN_PASSES_DEFAULT = 3;
 
-type Stato = 'validata' | 'idonea' | 'attesa' | 'ferma';
+type Stato = 'validata' | 'idonea' | 'attesa' | 'ripresa' | 'abbandonata';
 
 type Riga = {
   key: string;
@@ -93,14 +96,37 @@ const COLORE: Record<Stato, string> = {
   validata: STATO.buono,
   idonea: GATE_RAMP.due,
   attesa: GATE_RAMP.uno,
-  ferma: STATO.serio,
+  ripresa: STATO.attenzione,
+  abbandonata: STATO.serio,
 };
 const ETICHETTA: Record<Stato, string> = {
   validata: 'validata',
   idonea: 'idonea ora',
   attesa: 'in attesa',
-  ferma: 'ferma',
+  ripresa: 'ferma, in ripresa',
+  abbandonata: 'ferma, abbandonata',
 };
+
+/**
+ * «FERMA» NON BASTA, ed è la domanda che il proprietario ha fatto guardando il
+ * pannello: «12 ferme — cosa vuol dire per queste 12?».
+ *
+ * La risposta è che ce ne sono due tipi, con destini opposti, e il pannello li
+ * mostrava uguali:
+ *
+ *  * FERMA, IN RIPRESA — la sua moneta è uscita dal top-N per volume, ma la coppia
+ *    sta ancora avanzando. Dal 14 settembre il sistema rimette quelle monete
+ *    nell'universo scansionato apposta: entro il giro successivo torna a essere
+ *    valutata e riprende da dove era.
+ *
+ *  * FERMA, ABBANDONATA — non prende una conferma da più di MIN_PASSES finestre.
+ *    Non viene più protetta, quindi la sua moneta non viene riaggiunta e la coppia
+ *    verrà rimossa dal registro. Per questa non succederà più niente.
+ *
+ * Mostrarle con la stessa etichetta vuol dire far aspettare qualcosa che per metà
+ * di loro non arriverà: è la stessa finzione delle date sulle coppie senza finestra,
+ * corretta tre volte in gate_progress.py.
+ */
 
 export default function GateMaturazione() {
   const [reg, setReg] = useState<Reg | null>(null);
@@ -158,9 +184,14 @@ export default function GateMaturazione() {
       const ws = Number(r.window_start ?? 0);
       const chiude = ws > 0 ? (ws + FINESTRA_S) * 1000 : 0;
       const ferma = visto > 0 && ora - visto > FRESCA_G * GIORNO;
+      // stesso criterio del backend (`sta_ancora_progredendo`): l'ultima conferma,
+      // non l'ultima occhiata. Orologio di parete quando c'è, altrimenti il tempo
+      // dei dati — che in produzione coincidono.
+      const ultimoPasso = Number(r.last_passed_at ?? r.last_pass_data_end ?? 0) * 1000;
+      const progredisce = ultimoPasso <= 0 || ora - ultimoPasso < minPasses * FINESTRA_S * 1000;
       let stato: Stato;
       if (passi >= minPasses) stato = 'validata';
-      else if (ferma) stato = 'ferma';
+      else if (ferma) stato = progredisce ? 'ripresa' : 'abbandonata';
       else if (chiude > 0 && chiude <= ora) stato = 'idonea';
       else stato = 'attesa';
       out.push({
@@ -199,14 +230,17 @@ export default function GateMaturazione() {
         return { livello: l, coppie: v?.coppie ?? 0, coin: v?.coin.size ?? 0 };
       }),
       idoneeOra: aUnPasso.filter((r) => r.stato === 'idonea'),
-      ferme: righe.filter((r) => r.stato === 'ferma'),
+      riprese: righe.filter((r) => r.stato === 'ripresa'),
+      abbandonate: righe.filter((r) => r.stato === 'abbandonata'),
     };
   }, [righe, minPasses]);
 
   /** Quante coppie a un passo diventano idonee, per giorno. La prima barra è
    *  «già idonee»: sono un accumulo, non un evento di quel giorno. */
   const calendario = useMemo(() => {
-    const aUnPasso = righe.filter((r) => r.passi === minPasses - 1 && r.stato !== 'ferma');
+    const aUnPasso = righe.filter(
+      (r) => r.passi === minPasses - 1 && r.stato !== 'abbandonata',
+    );
     const ora = Date.now();
     // la chiave è il timestamp, non l'etichetta: ordinare per stringa metterebbe
     // "01 ott" prima di "15 set"
@@ -219,18 +253,28 @@ export default function GateMaturazione() {
     const futuri = [...perGiorno.entries()]
       .sort(([a], [b]) => a - b)
       .map(([ts, n]) => ({ giorno: data(ts), n, adesso: false }));
-    return [{ giorno: 'già idonee', n: gia, adesso: true }, ...futuri];
+    // LA PRIMA BARRA PORTA LA DATA DI OGGI, non l'etichetta «già idonee».
+    // Il proprietario l'ha cercata nel grafico e non l'ha trovata: leggendo «35
+    // possono validarsi oggi» sopra, si aspetta di vedere OGGI nel grafico. Che sia
+    // un accumulo e non un evento del giorno lo dice la riga sotto il grafico.
+    return [{ giorno: `${data(ora / 1000)} (oggi)`, n: gia, adesso: true }, ...futuri];
   }, [righe, minPasses]);
 
   const perCoinRighe = useMemo(() => {
-    const m = new Map<string, { coin: string; livelli: number[]; prima: number; ferme: number }>();
+    const m = new Map<string, {
+      coin: string; livelli: number[]; prima: number; riprese: number; abbandonate: number;
+    }>();
     for (const r of righe) {
       if (!m.has(r.coin)) {
-        m.set(r.coin, { coin: r.coin, livelli: Array(minPasses).fill(0), prima: Infinity, ferme: 0 });
+        m.set(r.coin, {
+          coin: r.coin, livelli: Array(minPasses).fill(0), prima: Infinity,
+          riprese: 0, abbandonate: 0,
+        });
       }
       const v = m.get(r.coin)!;
       v.livelli[Math.min(r.passi, minPasses) - 1] += 1;
-      if (r.stato === 'ferma') v.ferme += 1;
+      if (r.stato === 'ripresa') v.riprese += 1;
+      else if (r.stato === 'abbandonata') v.abbandonate += 1;
       else if (r.passi === minPasses - 1) v.prima = Math.min(v.prima, r.finestraChiude);
     }
     return [...m.values()].sort(
@@ -331,13 +375,28 @@ export default function GateMaturazione() {
               su {new Set(riepilogo.idoneeOra.map((r) => r.coin)).size} coin — hanno {minPasses - 1}{' '}
               conferme e la finestra già scaduta.
             </span>
-            {riepilogo.ferme.length > 0 && (
+            {riepilogo.riprese.length > 0 && (
               <div style={{ marginTop: 6 }}>
-                <b style={{ color: COLORE.ferma }}>{riepilogo.ferme.length} ferme</b>
+                <b style={{ color: COLORE.ripresa }}>
+                  {riepilogo.riprese.length} ferme ma in ripresa
+                </b>
                 <span className="muted">
                   {' '}
-                  — la coin non è più nell&apos;universo scansionato, quindi non avanzano né
-                  falliscono.
+                  — la loro moneta è uscita dalla classifica per volume, ma stanno ancora
+                  avanzando: il sistema la rimette sotto osservazione e riprendono da dove
+                  erano.
+                </span>
+              </div>
+            )}
+            {riepilogo.abbandonate.length > 0 && (
+              <div style={{ marginTop: 6 }}>
+                <b style={{ color: COLORE.abbandonata }}>
+                  {riepilogo.abbandonate.length} ferme e abbandonate
+                </b>
+                <span className="muted">
+                  {' '}
+                  — non prendono una conferma da più di tre settimane, quindi non vengono
+                  più protette: per queste non succederà più niente e verranno rimosse.
                 </span>
               </div>
             )}
@@ -376,8 +435,10 @@ export default function GateMaturazione() {
             </ResponsiveContainer>
           </div>
           <p className="muted" style={{ fontSize: 12, margin: '4px 0 16px' }}>
-            La prima barra è un <b>accumulo</b>, non un evento di oggi: chi diventa idoneo
-            resta idoneo. Le altre sono il giorno in cui scade la settimana di attesa.
+            La barra di <b>oggi</b> è un <b>accumulo</b>: raccoglie tutte le coppie
+            diventate idonee nei giorni scorsi e non ancora validate, perché chi diventa
+            idoneo <b>resta</b> idoneo e riprova ogni giorno. Le altre barre sono il
+            giorno in cui scade la settimana di attesa.
           </p>
 
           <div
@@ -427,7 +488,12 @@ export default function GateMaturazione() {
                       </th>
                     ))}
                     <th style={cellaTesto}>Prima validazione possibile</th>
-                    <th style={cell}>Ferme</th>
+                    <th style={cell} title="la moneta è fuori dalla classifica per volume, ma la coppia sta ancora avanzando: il sistema la rimette sotto osservazione">
+                      in ripresa
+                    </th>
+                    <th style={cell} title="nessuna conferma da oltre tre settimane: non viene più protetta e verrà rimossa">
+                      abbandonate
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -450,8 +516,11 @@ export default function GateMaturazione() {
                           data(c.prima)
                         )}
                       </td>
-                      <td style={{ ...cell, color: c.ferme ? COLORE.ferma : '#5f6d84' }}>
-                        {c.ferme || '·'}
+                      <td style={{ ...cell, color: c.riprese ? COLORE.ripresa : '#5f6d84' }}>
+                        {c.riprese || '·'}
+                      </td>
+                      <td style={{ ...cell, color: c.abbandonate ? COLORE.abbandonata : '#5f6d84' }}>
+                        {c.abbandonate || '·'}
                       </td>
                     </tr>
                   ))}
@@ -505,8 +574,12 @@ export default function GateMaturazione() {
                       <td style={cellaTesto}>
                         {r.stato === 'validata' ? (
                           <span className="muted">—</span>
-                        ) : r.stato === 'ferma' ? (
-                          <span className="muted">nessuna data: non viene più valutata</span>
+                        ) : r.stato === 'ripresa' ? (
+                          <span className="muted">
+                            riprende appena la sua moneta torna sotto osservazione
+                          </span>
+                        ) : r.stato === 'abbandonata' ? (
+                          <span className="muted">nessuna data: verrà rimossa</span>
                         ) : r.stato === 'idonea' ? (
                           <span>
                             idonea da {Math.abs(r.giorni)} giorn{Math.abs(r.giorni) === 1 ? 'o' : 'i'}
