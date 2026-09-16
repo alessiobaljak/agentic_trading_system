@@ -480,3 +480,65 @@ pronta — e allora il test su 1 ora si fa in grande e con un motivo.
 
 Buttare il registro adesso per inseguire +0,08 di PF mediano su nove monete
 significherebbe scambiare una misura vera per un'ipotesi.
+
+---
+
+## 16 settembre: 31 validate su 16 monete — e una mia correzione sulla soglia
+
+```
+3 pass: 31 su 16 coin  ·  VALIDATE ora: 31 su 16 coin distinte
+ready dichiarato dal registro: False (via —)
+```
+
+In due giorni: 0 → 11 su 4 monete → **31 su 16 monete**. Il meccanismo non solo
+funziona, sta accelerando.
+
+### La correzione
+
+Il 15 settembre ho scritto qui e detto al proprietario che «servono 10 coppie
+validate su almeno 5 monete distinte» e che «manca una moneta». **Era sbagliato.**
+
+Quella e' la via `READY_MIN_PAIRS`, che in `bot/config` vale **0 di default** — cioe'
+e' DISATTIVATA — e sulla macchina non e' impostata. Si vede dal registro stesso:
+`ready_by` e' `—`, mentre se la via a conteggio fosse attiva con 31 validate sarebbe
+gia' scattata.
+
+La regola davvero in vigore e' l'altra:
+
+```python
+base_ok  = universe >= 10 and len(covered) >= 5      # minimi assoluti: soddisfatti
+by_coverage = coverage >= READY_FRACTION            # 0.35 sulla macchina
+by_count    = READY_MIN_PAIRS > 0 and ...           # spenta
+ready = base_ok and (by_coverage or by_count)
+```
+
+Serve **il 35% dell'universo scansionato** con almeno una strategia validata: circa
+**76 monete su 217**. Ne abbiamo 16, cioe' il 7,4%.
+
+I minimi assoluti (≥10 monete nell'universo, ≥5 coperte) li abbiamo passati: sono
+condizione necessaria, non sufficiente. Li avevo scambiati per la soglia.
+
+### Cosa cambia, e cosa no
+
+Non cambia niente di quello che il sistema sta facendo: continua a validare, e in
+fretta. Cambia **quando** parte il paper: non «manca una moneta», ma «mancano ~60
+monete», e al ritmo di ieri (+12 coperte in un giorno) sono all'incirca una
+settimana.
+
+### La scelta, che e' del proprietario
+
+C'e' un interruttore, ed e' stato scritto in anticipo proprio per questo caso — il
+commento nel codice dice: *«la copertura diventa irraggiungibile quando il gate e'
+severo; READY_MIN_PAIRS e' la via alternativa»*. Impostare
+`OPTIMIZER_READY_MIN_PAIRS=10` sulla macchina farebbe partire il paper subito.
+
+**Raccomandazione: aspettare.** Non perche' 35% sia sacro, ma perche' la ragione per
+cui quella via alternativa esiste — «con un gate cosi' severo non partiremmo mai» —
+ha smesso di essere vera **ieri**. Abbassare l'asticella nel momento esatto in cui
+diventa raggiungibile e' la definizione di spostare il traguardo dopo aver visto il
+risultato, ed e' l'errore che questo documento esiste per non fare.
+
+Il costo dell'attesa va detto: la cosa piu' importante che non sappiamo — se il
+vissuto confermi la promessa del backtest — resta ignota per un'altra settimana.
+Se fra qualche giorno il ritmo delle validazioni si fermasse, allora accendere la via
+a conteggio sarebbe una decisione presa sui dati e non contro di essi.
