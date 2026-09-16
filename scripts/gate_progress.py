@@ -201,6 +201,17 @@ def main() -> int:
     print(f"  VALIDATE ora: {len(validated)} su {len(coins)} coin distinte")
     print(f"  ready dichiarato dal registro: {doc.get('ready')} "
           f"(via {doc.get('ready_by') or '—'})")
+    # LA REGOLA COM'E' STATA APPLICATA, non com'e' scritta nei default. Il 16
+    # settembre `ready` e' rimasto False con 31 coppie validate su 16 coin, e senza
+    # questi due numeri non c'era modo di sapere se il problema fosse la soglia o il
+    # fatto che l'optimizer non avesse letto la configurazione. Sono valori che
+    # l'ultimo run ha SCRITTO nel registro: dicono cosa ha usato davvero.
+    _cop = doc.get("coverage")
+    print(f"     copertura {(_cop * 100 if isinstance(_cop, (int, float)) else 0):.1f}% "
+          f"su obiettivo {float(doc.get('ready_fraction') or 0) * 100:.0f}% · "
+          f"via a conteggio: {doc.get('ready_min_pairs') or 'spenta'} coppie "
+          f"(0 = spenta) · minimi {doc.get('min_universe')} coin nell'universo, "
+          f"{doc.get('min_covered')} coperte")
 
     # --- LA FINESTRA E' APERTA? ---------------------------------------------- #
     # Il conto che mancava. Una coppia con un passaggio ma SENZA finestra non e' in
