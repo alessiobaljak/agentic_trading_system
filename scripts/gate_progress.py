@@ -212,6 +212,17 @@ def main() -> int:
           f"via a conteggio: {doc.get('ready_min_pairs') or 'spenta'} coppie "
           f"(0 = spenta) · minimi {doc.get('min_universe')} coin nell'universo, "
           f"{doc.get('min_covered')} coperte")
+    # E I NUMERI SU CUI IL CALCOLO E' STATO FATTO. Non sono gli stessi che si leggono
+    # qui sopra: `ready` lo decide la fase OPTIMIZE, e la discovery riscrive
+    # `validated` e `coins_covered` DOPO senza ricalcolarlo. Senza questa riga, un
+    # registro che mostra 31 validate e `ready: False` sembra una contraddizione.
+    _in = doc.get("ready_inputs") or {}
+    if _in:
+        print(f"     deciso il {_when(float(_in.get('at', 0) or 0))} su "
+              f"{_in.get('validated')} validate / {_in.get('covered')} coin coperte "
+              f"/ universo {_in.get('universe')} · minimi ok: {_in.get('base_ok')} · "
+              f"copertura ok: {_in.get('by_coverage')} · conteggio ok: "
+              f"{_in.get('by_count')}")
 
     # --- LA FINESTRA E' APERTA? ---------------------------------------------- #
     # Il conto che mancava. Una coppia con un passaggio ma SENZA finestra non e' in

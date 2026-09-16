@@ -914,6 +914,17 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         "ready_fraction": READY_FRACTION,
         "ready_min_pairs": READY_MIN_PAIRS,
         "ready_by": ("copertura" if by_coverage else "numero coppie") if ready else None,
+        # I NUMERI CHE IL CALCOLO HA USATO, non quelli che il registro mostrera' dopo.
+        # Il 16 settembre il registro diceva 31 coppie validate su 16 coin con la via
+        # a conteggio a 10, e `ready` era comunque False: leggendo solo il risultato
+        # non c'era modo di sapere se il conto fosse stato fatto su altri numeri.
+        # Puo' succedere: `update_registry` gira nella fase OPTIMIZE, e la discovery
+        # riscrive `validated`/`coins_covered` DOPO, senza ricalcolare `ready`. Quindi
+        # cio' che si legge nel registro non e' cio' su cui `ready` e' stato deciso.
+        "ready_inputs": {"validated": len(validated), "covered": len(covered),
+                         "universe": universe, "base_ok": base_ok,
+                         "by_coverage": by_coverage, "by_count": by_count,
+                         "at": time.time()},
         "min_universe": MIN_UNIVERSE,
         "min_covered": MIN_COVERED,
     }
