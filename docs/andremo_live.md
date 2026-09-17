@@ -592,3 +592,56 @@ realizzato dal paper. È per questo che il paper esiste.
 
 `DRY_RUN` resta `true`. Non cambia perché il gate ha detto sì, e non cambierà senza
 una richiesta esplicita, ripetuta e consapevole del proprietario.
+
+---
+
+## 17 settembre: i primi tre trade
+
+Fonti: `ops/results/0073-paper-primo-giorno.md` e `0074-trade-chiusi.md`.
+
+```
+DRY_RUN: True · equity $997,66 (−0,23%) · GATE 1 pronto: True
+3 trade chiusi · 1 vinto (33%) · PnL realizzato −2,34
+2 su 3 usciti in stop loss
+noi −0,23% vs BTC buy&hold +1,17% nello stesso periodo → sotto il mercato
+```
+
+### NON si conclude niente, ed è il punto
+
+La regola fissata prima di vedere i numeri è **40 trade chiusi**. Ne abbiamo **3**.
+Tre trade non distinguono una strategia che perde da una che vince avendo avuto una
+brutta giornata, in nessuna delle due direzioni. Il momento in cui una regola del
+genere conta è esattamente questo: quando il risultato è negativo e sarebbe comodo
+leggerlo come un verdetto.
+
+Al ritmo misurato — **1,5 trade al giorno** — servono circa **quattro settimane**.
+
+### Una cosa da tenere d'occhio (non una conclusione)
+
+I costi sono **0,97 USDT su 3 trade**, e il conto è questo:
+
+```
+lordo −1,38  →  costi 0,97  →  netto −2,34
+break-even 0,10% dell'equity per trade
+```
+
+Le strategie hanno perso 1,38 sul mercato; i costi hanno **aggiunto il 70% di
+quella perdita**. Con tre trade è un dato senza peso statistico, ma va nella stessa
+direzione della sonda sui timeframe del 15 settembre: a 1 ora il PF mediano era
+0,910 contro 0,826 a 15 minuti, e la spiegazione economica più semplice era proprio
+che orizzonti più corti pagano più costi per lo stesso movimento.
+
+Se fra qualche settimana i costi restassero questa frazione del risultato, le due
+misure si sosterrebbero a vicenda e il caso per un timeframe globale più lungo
+diventerebbe serio. Oggi sono due indizi, non una prova.
+
+Attenzione a una cosa: i costi sono **stimati dal modello del gate, non misurati dai
+fill**. Quindi non sono nemmeno una misura indipendente — è lo stesso modello che
+ha prodotto la promessa a dire quanto costa mantenerla.
+
+### Il resto è sano
+
+Il bot valuta 19 asset (solo le coppie validate), tiene al massimo 2 posizioni
+contemporanee contro un tetto di 10, e il rischio aperto resta sotto l'1%. Il numero
+di trade è limitato dai **segnali**, non dalla liquidità né dal margine: il sistema
+non sta forzando operazioni per riempire il portafoglio.
