@@ -124,7 +124,8 @@ class MarketScanner:
         return score, comp
 
     @staticmethod
-    def exclusions(snap: AssetSnapshot, recent_stops: int = 0) -> list[str]:
+    def exclusions(snap: AssetSnapshot, recent_stops: int = 0,
+                   validata: bool = False) -> list[str]:
         """Motivi per NON valutare affatto questo asset, o lista vuota.
 
         Sono esclusioni STRUTTURALI: nessun punteggio, per quanto alto, le supera.
@@ -145,7 +146,11 @@ class MarketScanner:
         vol = snap.volume_24h or 0.0
         if settings.ASSET_MIN_VOLUME_24H > 0 and vol < settings.ASSET_MIN_VOLUME_24H:
             out.append(f"volume 24h ${vol / 1e6:.1f}M sotto la soglia")
-        if liquidity_spread(vol) > settings.ASSET_MAX_SPREAD:
+        if liquidity_spread(vol) > settings.ASSET_MAX_SPREAD and not validata:
+            # Per una coppia VALIDATA questa esclusione non si applica: lo spread
+            # stimato da questo stesso modello era gia' dentro i costi che il gate le
+            # ha fatto battere tre volte. Applicarlo di nuovo qui e' contare due volte
+            # lo stesso argomento, e fa divergere il validato dall'operato.
             out.append("spread stimato oltre la soglia")
         fr = snap.funding_rate
         if fr is not None and not (settings.ASSET_FUNDING_MIN <= fr <= settings.ASSET_FUNDING_MAX):
@@ -155,7 +160,8 @@ class MarketScanner:
         return out
 
     def scan(self, symbols: Optional[list[str]] = None,
-             fetch_sentiment: bool = False) -> list[ScanResult]:
+             fetch_sentiment: bool = False,
+             sempre_ammesse: Optional[set] = None) -> list[ScanResult]:
         """
         Scansiona l'universo. Di default NON interroga la fonte sentiment per ogni
         simbolo (sarebbero decine di chiamate -> rate limit CoinGecko): il sentiment
@@ -180,7 +186,24 @@ class MarketScanner:
         # floor" per escludere coin morte/delistate (fill impossibile). Uguale in paper e
         # reale -> parita'. Default basso (config); alzabile via env per i soldi veri.
         min_vol = settings.SCAN_MIN_VOLUME_24H
+        # LE COIN VALIDATE NON SI SCARTANO PER VOLUME. Richiesta esplicita del
+        # proprietario, 17 settembre: «se superano il 3 passaggio, anche se il volume
+        # non e' nei nostri standard, il paper li deve operare».
+        #
+        # Non e' un capriccio, ed e' coerente col disegno dichiarato dieci righe piu'
+        # su: la liquidita' la gestisce il MODELLO DI COSTO, che allarga lo spread
+        # sulle coin sottili e lascia che sia il gate a bocciare chi non lo batte.
+        # Una coppia validata ha gia' battuto quei costi, tre volte, su dati che
+        # includevano il suo spread. Scartarla qui vorrebbe dire dire di no due volte
+        # con lo stesso argomento — e far divergere cio' che il gate valida da cio'
+        # che il bot opera, che e' la classe di problema piu' costosa di questo
+        # progetto.
+        #
+        # Resta il pavimento vero: senza snapshot (coin morta o delistata) si salta
+        # comunque, perche' li' non c'e' un prezzo a cui eseguire.
+        ammesse = {s.upper() for s in (sempre_ammesse or set())}
         skipped_illiquid = 0
+        passate_sottili = 0
         for idx, sym in enumerate(symbols):
             if deadline is not None and time.monotonic() >= deadline:
                 skipped_budget = len(symbols) - idx
@@ -191,8 +214,10 @@ class MarketScanner:
             # filtro liquidità: scarta i listing illiquidi (volume 24h sotto soglia).
             # Tiene fuori la spazzatura appena quotata e accorcia lo scan.
             if min_vol > 0 and (snap.volume_24h or 0.0) < min_vol:
-                skipped_illiquid += 1
-                continue
+                if sym.upper() not in ammesse:
+                    skipped_illiquid += 1
+                    continue
+                passate_sottili += 1
             if fetch_sentiment:
                 sent = self.sentiment.get_sentiment(sym)
                 snap.sentiment_score = sent.get("sentiment_score")
@@ -202,6 +227,11 @@ class MarketScanner:
         if skipped_illiquid:
             print(f"[scanner] {skipped_illiquid} coin scartate per liquidità "
                   f"(< {min_vol:,.0f} vol 24h), {len(results)} valutate")
+        if passate_sottili:
+            # DETTO, non taciuto: sono coin sotto la soglia che operiamo lo stesso
+            # perche' VALIDATE. Su queste il fill del paper e' modellato, non reale.
+            print(f"[scanner] {passate_sottili} coin validate sotto la soglia di "
+                  f"volume ammesse comunque: hanno passato il gate coi loro costi")
         if skipped_budget:
             # DICHIARATO, mai silenzioso: uno scan troncato che non lo dice si
             # leggerebbe come "ho guardato tutto il mercato" quando non e' vero.

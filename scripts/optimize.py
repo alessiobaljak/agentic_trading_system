@@ -179,7 +179,7 @@ def sta_ancora_progredendo(rec: dict, ora: float) -> bool:
 
 
 def coin_in_maturazione(pairs: dict, ora: float,
-                        max_coda: int = 60) -> tuple[list[str], dict]:
+                        max_coda: int = 0) -> tuple[list[str], dict]:
     """Le coin che NON si possono perdere: hanno una coppia a meta' strada.
 
     IL PROBLEMA, misurato il 14 settembre. L'universo e' il top-N per volume e
@@ -211,9 +211,14 @@ def coin_in_maturazione(pairs: dict, ora: float,
         passo dalla validazione, o gia' validate). Rientrano SEMPRE, senza tetto.
         Sono poche per costruzione: oggi 40 su ~2000 coppie tracciate, e ognuna ha
         gia' pagato due settimane di attesa.
-      * **CODA** — coin con una sola conferma. Qui il tetto ha senso: sono decine,
-        il grosso non arrivera' in fondo, e ogni coin in piu' e' tempo di calcolo a
-        ogni giro. Si tagliano le ultime, e si DICE quante.
+      * **CODA** — coin con una sola conferma. `max_coda=0` (il default) vuol dire
+        NESSUN TETTO nemmeno qui, ed e' una scelta del proprietario, ripetuta il 17
+        settembre: «e' importante che le coppie che iniziano il processo di
+        validazione lo portino al termine, non importa se il volume scende». Una
+        coppia a una conferma HA iniziato. Il tetto resta disponibile come parametro
+        per chi un giorno dovesse limitare i tempi di un giro, ma non e' piu' acceso
+        di default — e il run stampa quante coin la riaggiunta comporta, cosi' se un
+        giorno il costo diventasse serio si vede prima di subirlo.
 
     Si escludono comunque le coppie la cui ultima conferma e' piu' vecchia di
     MIN_PASSES finestre (`sta_ancora_progredendo`): se in tre settimane non hanno
@@ -235,10 +240,10 @@ def coin_in_maturazione(pairs: dict, ora: float,
     intoccabili = [s for s, n in vive.items() if n >= MIN_PASSES - 1]
     coda = [s for s, n in sorted(vive.items(), key=lambda kv: -kv[1])
             if n < MIN_PASSES - 1]
-    scelte = intoccabili + coda[:max_coda]
+    scelte = intoccabili + (coda if max_coda <= 0 else coda[:max_coda])
+    tenute = len(coda) if max_coda <= 0 else min(len(coda), max_coda)
     diag = {"intoccabili": len(intoccabili), "coda": len(coda),
-            "coda_tenuta": min(len(coda), max_coda),
-            "tagliate": max(0, len(coda) - max_coda)}
+            "coda_tenuta": tenute, "tagliate": len(coda) - tenute}
     return scelte, diag
 
 

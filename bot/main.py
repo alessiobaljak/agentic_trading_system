@@ -352,7 +352,8 @@ class TradingBot:
         # In bootstrap (registro non ancora caricato) si ricade sullo scan per volume.
         coins = sorted(self.adaptation.validated_coins())
         if coins:
-            results = self.scanner.scan(symbols=coins)
+            # le validate non si scartano per volume: hanno gia' battuto i loro costi
+            results = self.scanner.scan(symbols=coins, sempre_ammesse=set(coins))
             regime = self.regime or self.refresh_regime(now)
             selected = self.scanner.select_assets(results, regime, top_n=len(results))
         else:
@@ -677,9 +678,12 @@ class TradingBot:
         """
         try:
             stops = self._recent_stops()
+            _validate = self.adaptation.validated_coins()
             rows = []
             for r in results[:80]:
-                excl = self.scanner.exclusions(r.snapshot, stops.get(r.symbol, 0))
+                excl = self.scanner.exclusions(
+                    r.snapshot, stops.get(r.symbol, 0),
+                    validata=r.symbol in _validate)
                 rows.append({"symbol": r.symbol, "score": round(r.score, 4),
                              "components": {k: round(v, 3) for k, v in r.components.items()},
                              "excluded": excl, "recent_stops": stops.get(r.symbol, 0)})
@@ -937,8 +941,11 @@ class TradingBot:
         if not settings.BACKTEST_PARITY:
             _snap = self.selected.get(decision.asset)
             if _snap is not None:
+                # una coin VALIDATA non si esclude per spread: quel costo il gate
+                # gliel'ha gia' fatto battere tre volte (vedi market_scanner.exclusions)
                 _excl = self.scanner.exclusions(
-                    _snap, self._recent_stops().get(decision.asset, 0))
+                    _snap, self._recent_stops().get(decision.asset, 0),
+                    validata=decision.asset in self.adaptation.validated_coins())
                 if _excl:
                     self._publish_decision_status(
                         {"outcome": "flat",
