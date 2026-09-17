@@ -178,7 +178,8 @@ def sta_ancora_progredendo(rec: dict, ora: float) -> bool:
     return passato >= ora - MIN_PASSES * NEW_DATA_MIN_S
 
 
-def coin_in_maturazione(pairs: dict, ora: float, max_extra: int = 40) -> list[str]:
+def coin_in_maturazione(pairs: dict, ora: float,
+                        max_coda: int = 60) -> tuple[list[str], dict]:
     """Le coin che NON si possono perdere: hanno una coppia a meta' strada.
 
     IL PROBLEMA, misurato il 14 settembre. L'universo e' il top-N per volume e
@@ -194,22 +195,35 @@ def coin_in_maturazione(pairs: dict, ora: float, max_extra: int = 40) -> list[st
 
     E' successo davvero: ORCAUSDT e' uscita dall'universo il 13 settembre con OTTO
     coppie a 2 conferme su 3, il giorno stesso in cui la loro finestra scadeva.
-    Hanno avuto un tentativo, uno solo, e poi il sistema ha smesso di guardarle.
 
-    Quindi l'universo non e' piu' solo il top-N: si riaggiungono le coin che hanno
-    una coppia gia' avviata. Il costo e' proporzionale (qualche coin in piu' per
-    giro), il beneficio e' che il percorso di validazione puo' arrivare in fondo.
+    IL TETTO NON PUO' TOCCARE CHI E' VICINO AL TRAGUARDO. La prima versione di
+    questa funzione aveva un tetto UNICO di 40 coin, ordinate per vicinanza. Il
+    proprietario l'ha contestato il 17 settembre, e aveva ragione: la promessa era
+    che una moneta con una validazione in corso non si perde perche' le e' calato il
+    volume, e un tetto che vale anche per lei quella promessa non la mantiene. Un
+    tetto ordinato bene fa perdere le ULTIME della fila, ma resta un tetto — e in
+    questo progetto un tetto che tocca cio' che stiamo aspettando e' gia' costato
+    quattro difetti.
 
-    IL TETTO `max_extra` E' ORDINATO PER VICINANZA AL TRAGUARDO, non per anzianita'
-    ne' per caso: se un giorno non ci stessero tutte, si perdono le piu' lontane. E'
-    la lezione del taglio della ri-valutazione, dove il criterio era l'ordine di
-    scoperta e buttava fuori proprio le coppie a 2/3. Il chiamante stampa quante ne
-    restano fuori, perche' un tetto che morde in silenzio e' il difetto che questo
-    sistema ha gia' pagato tre volte.
+    Quindi ora sono due insiemi con regole diverse:
 
-    Si escludono le coppie la cui ultima conferma e' piu' vecchia di MIN_PASSES
-    finestre: se in tre settimane non hanno ripassato, non stanno maturando, e
-    tenerle attaccate all'universo per sempre lo farebbe crescere senza limite.
+      * **INTOCCABILI** — coin con una coppia ad almeno MIN_PASSES-1 conferme (a un
+        passo dalla validazione, o gia' validate). Rientrano SEMPRE, senza tetto.
+        Sono poche per costruzione: oggi 40 su ~2000 coppie tracciate, e ognuna ha
+        gia' pagato due settimane di attesa.
+      * **CODA** — coin con una sola conferma. Qui il tetto ha senso: sono decine,
+        il grosso non arrivera' in fondo, e ogni coin in piu' e' tempo di calcolo a
+        ogni giro. Si tagliano le ultime, e si DICE quante.
+
+    Si escludono comunque le coppie la cui ultima conferma e' piu' vecchia di
+    MIN_PASSES finestre (`sta_ancora_progredendo`): se in tre settimane non hanno
+    ripassato non stanno maturando, e tenerle attaccate all'universo per sempre lo
+    farebbe crescere senza limite.
+
+    Ritorna anche la diagnostica, perche' la versione precedente prometteva in
+    docstring che «il chiamante stampa quante ne restano fuori» e il chiamante non
+    lo stampava: un tetto che morde in silenzio e' esattamente il difetto che questa
+    funzione esiste per chiudere, rientrato dalla porta del commento.
     """
     vive: dict[str, int] = {}
     for r in pairs.values():
@@ -217,9 +231,15 @@ def coin_in_maturazione(pairs: dict, ora: float, max_extra: int = 40) -> list[st
         if not sym or not sta_ancora_progredendo(r, ora):
             continue
         vive[sym] = max(vive.get(sym, 0), int(r.get("pass_count", 0) or 0))
-    # prima le coin con la coppia piu' avanti: se il tetto morde, si perde la meno
-    # vicina al traguardo.
-    return [s for s, _ in sorted(vive.items(), key=lambda kv: -kv[1])][:max_extra]
+
+    intoccabili = [s for s, n in vive.items() if n >= MIN_PASSES - 1]
+    coda = [s for s, n in sorted(vive.items(), key=lambda kv: -kv[1])
+            if n < MIN_PASSES - 1]
+    scelte = intoccabili + coda[:max_coda]
+    diag = {"intoccabili": len(intoccabili), "coda": len(coda),
+            "coda_tenuta": min(len(coda), max_coda),
+            "tagliate": max(0, len(coda) - max_coda)}
+    return scelte, diag
 
 
 def top_symbols_by_volume(n: int) -> list[str]:

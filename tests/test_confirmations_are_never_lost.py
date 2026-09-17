@@ -171,8 +171,8 @@ def test_the_reevaluation_cut_still_keeps_them():
 # --------------------------------------------------------------------------- #
 def test_the_coin_stays_in_the_scanned_universe():
     ora = time.time()
-    assert coin_in_maturazione({"A|g": _mezza_strada("ORCAUSDT", "g", 3)}, ora) == \
-        ["ORCAUSDT"]
+    scelte, _ = coin_in_maturazione({"A|g": _mezza_strada("ORCAUSDT", "g", 3)}, ora)
+    assert scelte == ["ORCAUSDT"]
 
 
 # --------------------------------------------------------------------------- #

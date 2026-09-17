@@ -33,7 +33,7 @@ def test_a_coin_with_a_pair_halfway_is_kept():
     """Il caso ORCAUSDT: otto coppie a 2/3 e la coin fuori dalla classifica."""
     ora = time.time()
     pairs = {f"ORCAUSDT|gen_{i}": _gen("ORCAUSDT", 2, ora - 86400) for i in range(8)}
-    assert coin_in_maturazione(pairs, ora) == ["ORCAUSDT"]
+    assert coin_in_maturazione(pairs, ora)[0] == ["ORCAUSDT"]
 
 
 def test_a_coin_with_no_confirmations_is_not_kept():
@@ -42,7 +42,7 @@ def test_a_coin_with_no_confirmations_is_not_kept():
     costerebbe di piu' senza avvicinare una sola validazione."""
     ora = time.time()
     pairs = {"TALEUSDT|gen_a": _gen("TALEUSDT", 0, 0)}
-    assert coin_in_maturazione(pairs, ora) == []
+    assert coin_in_maturazione(pairs, ora)[0] == []
 
 
 def test_a_pair_that_stopped_passing_long_ago_is_let_go():
@@ -51,7 +51,7 @@ def test_a_pair_that_stopped_passing_long_ago_is_let_go():
     eccezioni diventa piu' grande della regola."""
     ora = time.time()
     pairs = {"VECCHIAUSDT|gen_a": _gen("VECCHIAUSDT", 1, ora - 40 * 86400)}
-    assert coin_in_maturazione(pairs, ora) == []
+    assert coin_in_maturazione(pairs, ora)[0] == []
 
 
 def test_it_does_not_depend_on_the_generated_flag():
@@ -66,7 +66,7 @@ def test_it_does_not_depend_on_the_generated_flag():
     ora = time.time()
     pairs = {"AUSDT|qualcosa": {"symbol": "AUSDT", "pass_count": 2,
                                 "last_passed_at": ora, "last_seen_at": ora}}
-    assert coin_in_maturazione(pairs, ora) == ["AUSDT"]
+    assert coin_in_maturazione(pairs, ora)[0] == ["AUSDT"]
 
 
 def test_the_generated_flag_survives_slimming():
@@ -77,23 +77,49 @@ def test_the_generated_flag_survives_slimming():
     assert "generated" in REGISTRY_CORE_FIELDS
 
 
-def test_the_closest_to_the_finish_line_come_first():
-    """Se il tetto dovesse mordere, si perde la coin PIU' LONTANA dal traguardo.
-    E' la lezione del taglio della ri-valutazione, dove il criterio era l'ordine di
-    scoperta e buttava fuori proprio le coppie a 2/3."""
+def test_a_coin_one_step_from_validation_is_never_capped():
+    """LA CONTESTAZIONE DEL PROPRIETARIO, 17 settembre: «non avevamo detto che le
+    monete, anche se scendeva il volume durante i tre passaggi, le avremmo comunque
+    tenute?».
+
+    Aveva ragione. La prima versione aveva un tetto UNICO di 40 coin ordinate per
+    vicinanza al traguardo: ordinare bene fa perdere le ultime della fila, ma resta
+    un tetto, e una moneta a un passo dalla validazione non deve poterci finire
+    sotto. Ora quelle non hanno tetto; il tetto vale solo per la coda a una conferma.
+    """
     ora = time.time()
-    pairs = {"UNOUSDT|gen_a": _gen("UNOUSDT", 1, ora),
-             "DUEUSDT|gen_b": _gen("DUEUSDT", 2, ora),
-             "TREUSDT|gen_c": _gen("TREUSDT", 1, ora)}
-    assert coin_in_maturazione(pairs, ora, max_extra=1) == ["DUEUSDT"]
+    pairs = {f"VICINA{i}USDT|gen_{i}": _gen(f"VICINA{i}USDT", 2, ora)
+             for i in range(50)}
+    scelte, diag = coin_in_maturazione(pairs, ora, max_coda=5)
+    assert len(scelte) == 50, "una coin a 2/3 non puo' essere tagliata da un tetto"
+    assert diag["intoccabili"] == 50
+    assert diag["tagliate"] == 0
 
 
-def test_the_extra_coins_are_bounded():
-    """Il tetto esiste: ogni coin in piu' e' tempo di calcolo a ogni giro, e un
-    universo che cresce senza limite finirebbe per non chiudere un giro."""
+def test_only_the_one_confirmation_tail_is_capped():
+    """Il tetto serve ancora: le coin con UNA sola conferma sono decine, il grosso
+    non arrivera' in fondo, e ogni coin in piu' e' tempo di calcolo a ogni giro.
+    Si tagliano le ultime della coda — e il conteggio di quante lo dice, invece di
+    lasciarlo a una promessa in docstring."""
     ora = time.time()
     pairs = {f"C{i}USDT|gen_{i}": _gen(f"C{i}USDT", 1, ora) for i in range(100)}
-    assert len(coin_in_maturazione(pairs, ora, max_extra=40)) == 40
+    scelte, diag = coin_in_maturazione(pairs, ora, max_coda=60)
+    assert len(scelte) == 60
+    assert diag["intoccabili"] == 0
+    assert diag["coda"] == 100
+    assert diag["tagliate"] == 40
+
+
+def test_the_untouchable_ones_do_not_eat_the_tail_budget():
+    """Se le intoccabili consumassero slot della coda, un giorno con molte coppie a
+    2/3 affamerebbe proprio l'esplorazione che le rifornisce."""
+    ora = time.time()
+    pairs = {f"V{i}USDT|gen_v{i}": _gen(f"V{i}USDT", 2, ora) for i in range(30)}
+    pairs.update({f"U{i}USDT|gen_u{i}": _gen(f"U{i}USDT", 1, ora) for i in range(70)})
+    scelte, diag = coin_in_maturazione(pairs, ora, max_coda=60)
+    assert diag["intoccabili"] == 30
+    assert diag["coda_tenuta"] == 60
+    assert len(scelte) == 90
 
 
 def test_the_discovery_adds_them_after_the_context_filter():

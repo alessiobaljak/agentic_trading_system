@@ -698,7 +698,8 @@ def main() -> int:
     # conferme ha gia' dimostrato di essere informativa, e lasciarla escludere
     # rimetterebbe in piedi lo stesso buco da un'altra porta.
     if not getattr(args, "symbols", ""):
-        maturazione = coin_in_maturazione(decode_pairs(reg.get("pairs")), time.time())
+        maturazione, diag_mat = coin_in_maturazione(
+            decode_pairs(reg.get("pairs")), time.time())
         riaggiunte = [s for s in maturazione if s not in set(full_symbols)]
         if riaggiunte:
             print(f"[discover] {len(riaggiunte)} coin riaggiunte: hanno una coppia in "
@@ -706,6 +707,12 @@ def main() -> int:
                   f"({', '.join(riaggiunte[:12])}"
                   f"{' ...' if len(riaggiunte) > 12 else ''})")
             full_symbols = list(full_symbols) + riaggiunte
+        # QUANTE NE RESTANO FUORI. La versione precedente lo prometteva in docstring
+        # e non lo stampava: un tetto che morde in silenzio e' il difetto che la
+        # riaggiunta esiste per chiudere, rientrato dalla porta del commento.
+        print(f"[discover] maturazione: {diag_mat['intoccabili']} coin a un passo "
+              f"dalla validazione (mai tagliate) + {diag_mat['coda_tenuta']} con una "
+              f"conferma · {diag_mat['tagliate']} tagliate dalla coda")
     # SHARDING: ogni shard valida le candidate su una fetta dell'universo; il merge
     # riunisce. Così copriamo l'INTERO universo restando nel timeout.
     symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
