@@ -1,35 +1,35 @@
 # Stato sistema (snapshot)
-_Generato: 2026-09-17 00:33 UTC_
+_Generato: 2026-09-17 07:40 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$995.81**
-- ultimo heartbeat: 2026-09-17 00:32 UTC
+- ultimo heartbeat: 2026-09-17 07:39 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-09-17 00:30 UTC)
+- esito: **⚪ FLAT** (2026-09-17 07:30 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 19 · segnali: 0
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
-- copertura universo: **19/155 crypto (12%)** · obiettivo ≥ 35%
+- copertura universo: **19/157 crypto (12%)** · obiettivo ≥ 35%
 - coppie validate (>= 3 pass OOS): **35**
-- universo scansionato: 1000BONKUSDT, 1000FLOKIUSDT, 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ACEUSDT, ADAUSDT, AEROUSDT, AINUSDT, ALGOUSDT, APTUSDT, ARBUSDT, ARCUSDT, ARKUSDT, ARUSDT, ASTRUSDT, ATOMUSDT, AVAAIUSDT, AVAXUSDT, AXLUSDT, AXSUSDT, BANKUSDT, BCHUSDT, BICOUSDT, BNBUSDT, BOMEUSDT, BRUSDT, BTCUSDT, BTRUSDT, BULLAUSDT, CAKEUSDT, CHZUSDT, COTIUSDT, CROSSUSDT, CRVUSDT, CVCUSDT, DASHUSDT, DEXEUSDT, DODOXUSDT, DOGEUSDT, DOTUSDT, DYMUSDT, EGLDUSDT, EIGENUSDT, ENAUSDT, ENSUSDT, ESPORTSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FILUSDT, FLOCKUSDT, FORMUSDT, GALAUSDT, GPSUSDT, GRIFFAINUSDT, GUSDT, HBARUSDT, HEIUSDT, HEMIUSDT, HIVEUSDT, HOLOUSDT, HOMEUSDT, HUSDT, HYPEUSDT, ICPUSDT, IDOLUSDT, INJUSDT, IOSTUSDT, IOTAUSDT, JSTUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KASUSDT, KAVAUSDT, KOMAUSDT, LAUSDT, LDOUSDT, LINKUSDT, LSKUSDT, LTCUSDT, MINAUSDT, MORPHOUSDT, MTLUSDT, MUBARAKUSDT, NEARUSDT, NEIROUSDT, NOTUSDT, ONDOUSDT, ONGUSDT, OPUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PLAYUSDT, PLUMEUSDT, PNUTUSDT, POLUSDT, POLYXUSDT, POWRUSDT, PROMUSDT, PUMPUSDT, PUNDIXUSDT, PYTHUSDT, RAYSOLUSDT, RENDERUSDT, REZUSDT, RIFUSDT, SAGAUSDT, SANDUSDT, SEIUSDT, SKYAIUSDT, SKYUSDT, SOLUSDT, SOPHUSDT, SPXUSDT, STEEMUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUSHIUSDT, SYNUSDT, TAOUSDT, TIAUSDT, TLMUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, TUSDT, TUTUSDT, UNIUSDT, USELESSUSDT, VETUSDT, VIRTUALUSDT, VTHOUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, WUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, ZECUSDT, ZENUSDT, ZILUSDT, ZKUSDT, ZORAUSDT, ZROUSDT
-- aggiornato: 2026-09-16 23:16 UTC
+- universo scansionato: 1000BONKUSDT, 1000FLOKIUSDT, 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ACEUSDT, ADAUSDT, AEROUSDT, AINUSDT, ALGOUSDT, APTUSDT, ARBUSDT, ARCUSDT, ARKUSDT, ARUSDT, ASTRUSDT, ATOMUSDT, AVAUSDT, AVAXUSDT, AXSUSDT, BANKUSDT, BCHUSDT, BICOUSDT, BNBUSDT, BOMEUSDT, BRETTUSDT, BRUSDT, BTCUSDT, BTRUSDT, BULLAUSDT, CAKEUSDT, CFXUSDT, CHZUSDT, COTIUSDT, CROSSUSDT, CRVUSDT, CVCUSDT, DASHUSDT, DEXEUSDT, DODOXUSDT, DOGEUSDT, DOTUSDT, EGLDUSDT, EIGENUSDT, ENAUSDT, ENSUSDT, ESPORTSUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FILUSDT, FLOCKUSDT, FORMUSDT, GALAUSDT, GPSUSDT, GRIFFAINUSDT, GUSDT, HBARUSDT, HEIUSDT, HEMIUSDT, HIVEUSDT, HOMEUSDT, HUMAUSDT, HUSDT, HYPEUSDT, ICPUSDT, INJUSDT, IOSTUSDT, IOTAUSDT, IOUSDT, JSTUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, KASUSDT, KAVAUSDT, KOMAUSDT, LAUSDT, LDOUSDT, LINKUSDT, LSKUSDT, LTCUSDT, MERLUSDT, MINAUSDT, MOODENGUSDT, MORPHOUSDT, MTLUSDT, MUBARAKUSDT, NEARUSDT, NEIROUSDT, ONDOUSDT, ONEUSDT, ONGUSDT, OPUSDT, ORDIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PLAYUSDT, PNUTUSDT, POLUSDT, POWRUSDT, PROMUSDT, PUMPUSDT, PUNDIXUSDT, PYTHUSDT, RAYSOLUSDT, RENDERUSDT, REZUSDT, SAGAUSDT, SANDUSDT, SEIUSDT, SKYAIUSDT, SKYUSDT, SOLUSDT, SOLVUSDT, SOMIUSDT, SOPHUSDT, SPXUSDT, STEEMUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUSHIUSDT, SYNUSDT, TAOUSDT, TIAUSDT, TLMUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, TUSDT, TUTUSDT, UNIUSDT, USELESSUSDT, VETUSDT, VIRTUALUSDT, VTHOUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, WUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, XVGUSDT, ZECUSDT, ZENUSDT, ZILUSDT, ZKCUSDT, ZKUSDT, ZROUSDT
+- aggiornato: 2026-09-17 06:47 UTC
 
 ### Salute del registro
 
-- composizione: **1952 base** · **476 generate** (di cui 476 con almeno una conferma)
-- occupazione: 2428/3000 — ok
+- composizione: **1984 base** · **494 generate** (di cui 494 con almeno una conferma)
+- occupazione: 2478/3000 — ok
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
 |---|---|---|---|---|---|
-| HEIUSDT | gen_e6ddc613 | 3 | 2.447 | 211% | scale_r_mults=[2.0, 4.0, 6.0] |
+| HEIUSDT | gen_e6ddc613 | 3 | 2.447 | 212% | scale_r_mults=[2.0, 4.0, 6.0] |
 | JASMYUSDT | gen_b2f350ff | 3 | 1.608 | 137% | scale_r_mults=[2.0, 4.0, 6.0] |
 | VETUSDT | gen_6d06dca0 | 3 | 1.636 | 128% | scale_r_mults=[2.0, 4.0, 6.0] |
 | DOTUSDT | gen_d85b1f05 | 3 | 1.559 | 125% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -45,7 +45,7 @@ _Generato: 2026-09-17 00:33 UTC_
 | ORCAUSDT | gen_7b4a474b | 3 | 2.221 | 100% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SKYAIUSDT | gen_c61d9322 | 3 | 2.443 | 96% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SPXUSDT | gen_ba3a671f | 3 | 1.505 | 94% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ORCAUSDT | gen_5b847426 | 3 | 1.812 | 93% | scale_r_mults=[2.0, 4.0, 6.0] |
+| ORCAUSDT | gen_5b847426 | 3 | 1.811 | 93% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ORCAUSDT | gen_bbe21d3f | 3 | 1.897 | 84% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SKYAIUSDT | gen_98837ec2 | 3 | 2.4 | 83% | scale_r_mults=[2.0, 4.0, 6.0] |
 | PROMUSDT | gen_452d4511 | 3 | 2.347 | 82% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -59,52 +59,52 @@ _Generato: 2026-09-17 00:33 UTC_
 | ORCAUSDT | gen_6d06dca0 | 3 | 1.907 | 68% | scale_r_mults=[1.5, 3.0, 5.0] |
 | EGLDUSDT | gen_36b0e335 | 3 | 1.49 | 60% | scale_r_mults=[1.5, 3.0, 5.0] |
 | SPXUSDT | gen_d53c153b | 3 | 1.817 | 58% | scale_r_mults=[1.5, 3.0, 5.0] |
-| NEIROUSDT | gen_f3124a14 | 3 | 1.575 | 56% | scale_r_mults=[1.5, 3.0, 5.0] |
+| NEIROUSDT | gen_f3124a14 | 3 | 1.576 | 56% | scale_r_mults=[1.5, 3.0, 5.0] |
 | NEIROUSDT | gen_d53c153b | 3 | 1.773 | 47% | scale_r_mults=[1.0, 2.0, 3.0] |
 | SYRUPUSDT | gen_af734c68 | 3 | 1.856 | 43% | scale_r_mults=[2.0, 4.0, 6.0] |
 | MUBARAKUSDT | gen_2053cba6 | 3 | 1.463 | 29% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ZKUSDT | gen_98837ec2 | 3 | 1.476 | 22% | scale_r_mults=[2.0, 4.0, 6.0] |
 
 ## Ultimo run di ottimizzazione
-_aggiornato: 2026-09-16 21:40 UTC · 1240 coppie valutate, 0 passate in questo run_
+_aggiornato: 2026-09-17 06:47 UTC · 1256 coppie valutate, 0 passate in questo run_
 
 _Nessuna coppia ha passato in questo run._
 
 ## Dove muoiono le candidate (autopsia del GATE 1)
 
-**strategie base** — 1240 valutazioni, 0 passate (0.00%) · 2026-09-16 21:40 UTC
+**strategie base** — 1256 valutazioni, 0 passate (0.00%) · 2026-09-17 06:47 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 40 | 3.2% |
-| consistency | 19 | 1.5% |
-| holdout | 1 | 0.1% |
-| pf_ex_top | 11 | 0.9% |
-| total_return | 1097 | 88.5% |
-| recovery | 65 | 5.2% |
+| consistency | 11 | 0.9% |
 | trades | 7 | 0.6% |
+| pf_ex_top | 17 | 1.4% |
+| recovery | 68 | 5.4% |
+| regime | 37 | 2.9% |
+| total_return | 1113 | 88.6% |
+| holdout | 3 | 0.2% |
 
-- quasi-passaggi (un solo criterio, di poco): **2** — sono i semi delle mutazioni del run successivo
+- quasi-passaggi (un solo criterio, di poco): **3** — sono i semi delle mutazioni del run successivo
 
-**strategie generate** — 76636 valutazioni, 159 passate (0.21%) · 2026-09-16 23:16 UTC
+**strategie generate** — 78077 valutazioni, 188 passate (0.24%) · 2026-09-17 05:27 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
+| consistency | 2200 | 2.8% |
+| holdout | 615 | 0.8% |
+| pf_ex_top | 1111 | 1.4% |
+| recovery | 6818 | 8.8% |
+| trades | 1807 | 2.3% |
+| total_return | 53312 | 68.4% |
 | win_rate | 7 | 0.0% |
-| holdout | 581 | 0.8% |
-| recovery | 6550 | 8.6% |
-| regime | 11522 | 15.1% |
-| consistency | 2111 | 2.8% |
-| total_return | 52489 | 68.6% |
-| pf_ex_top | 1084 | 1.4% |
-| trades | 2133 | 2.8% |
+| regime | 12019 | 15.4% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-09-17 00:00 UTC · coppie validate: **35** · GATE 1 pronto: True
-- tasso di passaggio misurato: **0.204%**
+- ultimo giro: 2026-09-17 07:01 UTC · coppie validate: **35** · GATE 1 pronto: True
+- tasso di passaggio misurato: **0.237%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -143,7 +143,7 @@ _Nessuna coppia ha passato in questo run._
 ## Deriva paper vs gate
 _il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
 
-- **globale**: watch · 1 trade · PF vissuto 0.0 vs 1.902 atteso · mfe mediana 0.3R
+- **globale**: watch · 1 trade · PF vissuto 0.0 vs 1.895 atteso · mfe mediana 0.3R
 
 | Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
 |---|---|---|---|---|
