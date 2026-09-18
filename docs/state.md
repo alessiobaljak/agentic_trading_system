@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-09-18 17:41 UTC_
+_Generato: 2026-09-18 20:54 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: bull_trending
 - DRY_RUN: True
 - equity: **$993.46**
-- ultimo heartbeat: 2026-09-18 17:40 UTC
+- ultimo heartbeat: 2026-09-18 20:54 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-09-18 17:31 UTC)
+- esito: **⚪ FLAT** (2026-09-18 20:46 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 23 · segnali: 0
 
@@ -84,13 +84,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| consistency | 17 | 1.4% |
-| pf_ex_top | 9 | 0.7% |
 | regime | 36 | 2.9% |
-| total_return | 1115 | 89.3% |
+| trades | 5 | 0.4% |
+| consistency | 17 | 1.4% |
 | recovery | 64 | 5.1% |
 | holdout | 2 | 0.2% |
-| trades | 5 | 0.4% |
+| total_return | 1115 | 89.3% |
+| pf_ex_top | 9 | 0.7% |
 
 - quasi-passaggi (un solo criterio, di poco): **4** — sono i semi delle mutazioni del run successivo
 
@@ -98,20 +98,20 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| regime | 15233 | 15.8% |
 | recovery | 8379 | 8.7% |
-| holdout | 834 | 0.9% |
-| consistency | 2841 | 2.9% |
-| trades | 1868 | 1.9% |
-| pf_ex_top | 1350 | 1.4% |
-| total_return | 65969 | 68.4% |
 | win_rate | 12 | 0.0% |
+| regime | 15233 | 15.8% |
+| consistency | 2841 | 2.9% |
+| holdout | 834 | 0.9% |
+| total_return | 65969 | 68.4% |
+| pf_ex_top | 1350 | 1.4% |
+| trades | 1868 | 1.9% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-09-18 17:04 UTC · coppie validate: **43** · GATE 1 pronto: True
+- ultimo giro: 2026-09-18 20:02 UTC · coppie validate: **43** · GATE 1 pronto: True
 - tasso di passaggio misurato: **0.246%**
 
 **Parametri modificati rispetto ai default:**
@@ -158,11 +158,11 @@ _il gate promette sulla storia, il paper misura il presente. `drift` = promessa 
 | Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
 |---|---|---|---|---|
 | SYRUPUSDT|gen_af734c68 | watch | 2 | 0.0 / 1.79 | PF 0.00 vs 1.79 atteso · mfe mediana 0.94R < primo TP 2.00R |
-| VETUSDT|gen_6d06dca0 | watch | 1 | 0.0 / 1.631 | PF 0.00 vs 1.63 atteso |
-| ORCAUSDT|gen_6d06dca0 | watch | 1 | 0.0 / 1.967 | PF 0.00 vs 1.97 atteso · mfe mediana 0.49R < primo TP 1.50R |
-| TUTUSDT|gen_4465723e | watch | 1 | 0.0 / 1.538 | PF 0.00 vs 1.54 atteso · mfe mediana 0.69R < primo TP 1.50R |
-| SPXUSDT|gen_ba3a671f | watch | 1 | 0.0 / 1.504 | PF 0.00 vs 1.50 atteso · mfe mediana 0.30R < primo TP 1.50R |
 | DEXEUSDT|gen_fa304106 | watch | 1 | 0.0 / 1.954 | PF 0.00 vs 1.95 atteso · mfe mediana 0.52R < primo TP 1.50R |
+| ORCAUSDT|gen_6d06dca0 | watch | 1 | 0.0 / 1.967 | PF 0.00 vs 1.97 atteso · mfe mediana 0.49R < primo TP 1.50R |
+| SPXUSDT|gen_ba3a671f | watch | 1 | 0.0 / 1.504 | PF 0.00 vs 1.50 atteso · mfe mediana 0.30R < primo TP 1.50R |
+| TUTUSDT|gen_4465723e | watch | 1 | 0.0 / 1.538 | PF 0.00 vs 1.54 atteso · mfe mediana 0.69R < primo TP 1.50R |
+| VETUSDT|gen_6d06dca0 | watch | 1 | 0.0 / 1.631 | PF 0.00 vs 1.63 atteso |
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
