@@ -645,3 +645,96 @@ Il bot valuta 19 asset (solo le coppie validate), tiene al massimo 2 posizioni
 contemporanee contro un tetto di 10, e il rischio aperto resta sotto l'1%. Il numero
 di trade è limitato dai **segnali**, non dalla liquidità né dal margine: il sistema
 non sta forzando operazioni per riempire il portafoglio.
+
+## 18 settembre: due domande del proprietario, e cosa hanno trovato
+
+> «l'ho visto in positivo per quasi 10 ore e alla fine siamo andati in stop loss,
+> com'è possibile?» — e — «in una giornata di rialzo abbiamo aperto 4 posizioni su
+> 5 short, mi ricordo che vedere il trend era una prerogativa».
+
+Il trade è VETUSDT / `gen_6d06dca0`, short, 06:00 → 16:12, uscito a **−3,24**.
+Nessuna delle due cose è un bug. Entrambe sono comportamenti **voluti**, e nessuno
+dei due era scritto da qualche parte che si rompesse se qualcuno lo cambiava.
+
+### Perché un trade in profitto esce allo stop pieno
+
+La protezione del profitto si arma quando il prezzo ha percorso metà della distanza
+`entry → TP`. Sotto scale-out quel «TP» è **l'ultimo gradino della scala**, non il
+primo. VETUSDT ha la scala 2/4/6, quindi:
+
+```
+primo incasso parziale ....... 2,0 R
+protezione del profitto ...... 3,0 R   (metà di 6 R)
+```
+
+Sotto 3R lo stop resta quello di partenza e **tutto** il guadagno non realizzato
+può tornare indietro. Non è un margine di sicurezza sottile: è una soglia alta.
+
+Il dato che lo rende grave non è il singolo trade, è la distribuzione sui primi
+sette chiusi (`docs/state.md`, 18 set 12:58 UTC):
+
+```
+mfe mediana 0,52 R  ·  ≥1R: 14%  ·  ≥3R: 0%
+uscite: 6 stop loss pieni su 7 (86%, −17,47)
+```
+
+Zero trade oltre 3R significa che **la protezione del profitto non si è mai armata,
+e con questi numeri non poteva**. Non è sfortuna su un trade: è una funzione che
+finora non è mai entrata in gioco.
+
+La deriva già lo segnala su ogni coppia, con la stessa forma: «mfe mediana 0,52R <
+primo TP 1,50R». PF vissuto globale **0,221** contro **1,884** atteso.
+
+**Ma il gate fa esattamente la stessa cosa** (`backtesting/engine.py:712` e
+`bot/execution/executor.py:435` passano entrambi `final_target = ladder[-1][0]`).
+Quindi il PF 1,63 di VETUSDT è stato misurato CON questa regola dentro: non c'è
+divergenza gate↔paper, non è un altro BIRBUSDT. È una regola severa e onesta, che
+sta semplicemente incontrando un mercato in cui il prezzo non arriva dove serve.
+
+### Perché tante short in un rialzo
+
+Tre meccanismi, tutti deliberati:
+
+1. **Il regime è per-coin, non macro.** In `BACKTEST_PARITY` il regime si calcola
+   sui dati di *quella* moneta (`orchestrator.py:82`). BTC che sale non rende VET
+   rialzista; e sotto lo 0,4% di separazione fra le EMA il verdetto è «laterale».
+2. **Le strategie generate sono attive in TUTTI i regimi** (`generated.py:216`),
+   per costruzione: le valida il gate coppia per coppia, non il filtro di regime.
+3. **Il trend modula la size, non mette il veto** (`decide_all`): controtrend apre
+   al massimo dimezzato (`size_mult ≥ 0,5`), ma apre.
+
+E soprattutto: metà delle feature generate sono di **ritorno alla media**
+(`rsi_extreme`, `bb_touch`, `vwap_reversion`). Un mercato che sale è precisamente
+quando l'RSI è alto e il prezzo è sulla banda superiore — cioè quando quelle
+feature dicono *short*. Vendere la forza è ciò che quelle strategie **sono**.
+
+Quindi «4 short su 5 in un rialzo» è il comportamento atteso di questo portafoglio,
+non una contraddizione. La domanda utile non è *quante* short, è **se stiano
+pagando** — e a quella nessun report sapeva rispondere.
+
+### Cosa è cambiato nel codice
+
+Solo strumentazione, niente logica di trading: cambiare le uscite adesso
+renderebbe i primi 40 trade non confrontabili con quelli dopo.
+
+* `scripts/trade_stats.py` (già in lista bianca come `trades`): nuovo blocco
+  **DIREZIONE** — long vs short con PnL e mfe mediana, la matrice regime×direzione,
+  e la riga CONTROTREND col suo PnL. Il criterio di controtrend è importato da
+  `Orchestrator._trend_align` invece di essere riscritto: due definizioni che
+  divergono sarebbero peggio di nessuna.
+* `tests/test_direzione_e_protezione_profitto.py`: fissa che il lock è ancorato
+  all'**ultimo** gradino (con la scala 2/4/6 a 1,9R lo stop è ancora quello base;
+  con la 1/2/3 lo stesso movimento protegge), e che gate e paper usano lo stesso
+  ancoraggio.
+
+774 test passati (9 nuovi).
+
+### Cosa NON ho cambiato, e perché
+
+La soglia del profit-lock ancorata al gradino finale è la candidata ovvia: ancorarla
+al **primo** TP la porterebbe da 3R a 1R su VETUSDT, dentro la portata di un mfe
+mediano di 0,52R. Ma sarebbe una modifica alle uscite a metà esperimento, e andrebbe
+fatta **nel gate prima che nel paper**, altrimenti si rompe la parità — cioè si
+ricrea di mano propria il problema più caro di questo progetto.
+
+Se ne riparla col verdetto dei 40 trade. Chiusi: 7 (8 col VET).
