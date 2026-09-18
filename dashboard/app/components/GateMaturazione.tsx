@@ -89,6 +89,39 @@ type Riga = {
 };
 
 const GIORNO = 86_400_000;
+
+/**
+ * DA QUANTI GIORNI UNA COPPIA E' IDONEA, e perché è un voto e non una data.
+ *
+ * Domanda del proprietario, 18 settembre, guardando la tabella: «cosa vuol dire
+ * idonea ora, idonea da 4 giorni?». La risposta è che il secondo numero conta più
+ * del primo, e finora era scritto in grigio come tutto il resto.
+ *
+ * Il backtest gira ogni giorno su un giorno di dati IN PIU', quindi ogni giorno è un
+ * tentativo nuovo e distinto. (Dentro la stessa giornata i giri usano gli stessi
+ * dati e danno lo stesso esito: contano una volta sola.) Quindi «idonea da 4 giorni»
+ * vuol dire, in pratica, «ha provato quattro volte e non ce l'ha fatta».
+ *
+ * Le soglie qui sotto NON sono un criterio statistico e non vanno lette come un
+ * verdetto: sono un aiuto alla lettura, per distinguere a colpo d'occhio una coda
+ * che scorre da una impantanata. Il numero di tentativi resta scritto accanto,
+ * perché sia chi legge a giudicare e non il colore.
+ */
+const ATTESA_LUNGA = 3;      // da qui in poi: insiste senza riuscirci
+const ATTESA_MOLTO_LUNGA = 7;
+
+function insistenza(giorni: number): 'fresca' | 'insiste' | 'impantanata' {
+  const g = Math.abs(giorni);
+  if (g >= ATTESA_MOLTO_LUNGA) return 'impantanata';
+  if (g >= ATTESA_LUNGA) return 'insiste';
+  return 'fresca';
+}
+
+const COLORE_ATTESA = {
+  fresca: GATE_RAMP.due,
+  insiste: STATO.attenzione,
+  impantanata: STATO.serio,
+} as const;
 const data = (ts: number) =>
   ts > 0 ? new Date(ts * 1000).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' }) : '—';
 
@@ -230,6 +263,8 @@ export default function GateMaturazione() {
         return { livello: l, coppie: v?.coppie ?? 0, coin: v?.coin.size ?? 0 };
       }),
       idoneeOra: aUnPasso.filter((r) => r.stato === 'idonea'),
+      insistono: aUnPasso.filter(
+        (r) => r.stato === 'idonea' && insistenza(r.giorni) !== 'fresca').length,
       riprese: righe.filter((r) => r.stato === 'ripresa'),
       abbandonate: righe.filter((r) => r.stato === 'abbandonata'),
     };
@@ -375,6 +410,20 @@ export default function GateMaturazione() {
               su {new Set(riepilogo.idoneeOra.map((r) => r.coin)).size} coin — hanno {minPasses - 1}{' '}
               conferme e la finestra già scaduta.
             </span>
+            {riepilogo.insistono > 0 && (
+              <div style={{ marginTop: 6 }}>
+                <b style={{ color: COLORE_ATTESA.insiste }}>
+                  {riepilogo.insistono} idonee da {ATTESA_LUNGA} giorni o più
+                </b>
+                <span className="muted">
+                  {' '}
+                  — ogni giorno è un tentativo su dati nuovi, quindi queste ci hanno
+                  già provato {ATTESA_LUNGA}+ volte senza passare. Non è una bocciatura
+                  (riprovano domani), ma più il numero cresce meno è probabile che ce
+                  la facciano.
+                </span>
+              </div>
+            )}
             {riepilogo.riprese.length > 0 && (
               <div style={{ marginTop: 6 }}>
                 <b style={{ color: COLORE.ripresa }}>
@@ -581,8 +630,16 @@ export default function GateMaturazione() {
                         ) : r.stato === 'abbandonata' ? (
                           <span className="muted">nessuna data: verrà rimossa</span>
                         ) : r.stato === 'idonea' ? (
-                          <span>
-                            idonea da {Math.abs(r.giorni)} giorn{Math.abs(r.giorni) === 1 ? 'o' : 'i'}
+                          <span style={{ color: COLORE_ATTESA[insistenza(r.giorni)] }}>
+                            idonea da {Math.abs(r.giorni)} giorn
+                            {Math.abs(r.giorni) === 1 ? 'o' : 'i'}
+                            <span className="muted" style={{ fontSize: 11 }}>
+                              {' '}
+                              {/* un giorno = un tentativo, perché il backtest avanza
+                                  di un giorno di dati per volta */}
+                              ≈ {Math.max(1, Math.abs(r.giorni))} tentativ
+                              {Math.abs(r.giorni) === 1 ? 'o' : 'i'}
+                            </span>
                           </span>
                         ) : (
                           <span>
