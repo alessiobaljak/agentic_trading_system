@@ -894,3 +894,40 @@ coppie sarà stato stabile per tutta la finestra. Se allora il divario resta, è
 difetto e va cacciato.
 
 797 test passati (10 nuovi).
+
+### 19 settembre, sera: la risposta vera — nessun divario
+
+Il confronto settimanale (7,0 attesi al giorno contro ~3 aperti) era **sbilanciato per
+costruzione**, e dire «va verificato fra una settimana» era una resa evitabile: il dato
+per rispondere subito c'era già, bastava smettere di guardare la media.
+
+Ora entrambi gli strumenti stampano la ripartizione giorno per giorno. Affiancate:
+
+```
+            attesi   aperti
+16 set        4        1      (il paper è partito alle 16:00 → 8 ore su 24)
+17 set        6        2
+18 set        3        6      ← il paper ha aperto il DOPPIO degli attesi
+19 set        —        3      (la sonda arriva al 18)
+
+correggendo il 16 per le ore davvero girate:
+  attesi 10,3  ·  aperti 9  →  87%
+```
+
+**Nessun divario sistematico.** Il "metà dei trade" era un artefatto della media: la
+finestra di sette giorni includeva quattro giorni in cui il paper non girava ancora, e
+applicava le 47 coppie validate di oggi a un registro che il 17 ne aveva 35.
+
+E il 18 settembre chiude la questione in modo che nessuna media può: il paper ha aperto
+**sei** trade contro tre attesi. Un sistema che sopprime i segnali non fa così, mai.
+
+Quindi la risposta alla domanda del proprietario resta quella semplice, e ora è
+sostenuta da una misura invece che da un'assenza di prove: **il paper esegue le
+strategie che ha validato, con la frequenza giusta.** Va male perché ha fatto 12 trade,
+e una strategia che perde il 54% delle volte ha bisogno di numeri per mostrare il suo
+vantaggio.
+
+Il campione è piccolo — tre giorni, conteggi a una cifra — e la verifica del 26
+settembre resta in calendario come conferma. Ma non è più una domanda aperta.
+
+801 test passati (4 nuovi).
