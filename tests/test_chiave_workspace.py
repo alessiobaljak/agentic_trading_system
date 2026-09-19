@@ -120,3 +120,21 @@ def test_NESSUN_punto_costruisce_il_client_senza_le_intestazioni():
                 colpevoli.append(f"{f}: {m.group(0)[:70]}")
     assert not colpevoli, (
         "client costruiti senza le intestazioni condivise:\n" + "\n".join(colpevoli))
+
+
+def test_il_controllo_nomina_cio_che_e_rotto():
+    """Il 19 settembre `connectivity_check` ha stampato «RISULTATO: GitHub <->
+    Firebase OK ✅» mentre la chiave Anthropic era morta da sei giorni, e il
+    workflow mostrava il pallino verde. Chi guarda l'ultima riga — o la lista dei
+    workflow — vedeva un sistema sano.
+
+    Il codice d'uscita resta legato a Firebase, che e' il contratto di questo
+    controllo e non va cambiato di nascosto. Ma cio' che e' rotto dev'essere
+    NOMINATO nel riepilogo, non lasciato a chi scorre venti righe all'indietro."""
+    import inspect
+
+    from scripts import connectivity_check as cc
+
+    src = inspect.getsource(cc.main)
+    assert "_FALLITI" in src and "controlli FALLITI" in src
+    assert "_FALLITI.append" in inspect.getsource(cc._line)

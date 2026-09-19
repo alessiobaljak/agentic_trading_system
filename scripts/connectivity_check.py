@@ -20,8 +20,14 @@ FAIL = "❌ FAIL"
 SKIP = "➖ assente"
 
 
+#: i controlli falliti di questo giro, per il riepilogo finale
+_FALLITI: list[str] = []
+
+
 def _line(name: str, status: str, detail: str = "") -> None:
     print(f"{status:<12} {name}" + (f"  — {detail}" if detail else ""))
+    if status == FAIL:
+        _FALLITI.append(name)
 
 
 def check_firebase() -> bool:
@@ -177,6 +183,16 @@ def main() -> int:
     firebase_ok = check_firebase()
     info_others()
     print("=" * 60)
+    # IL RIEPILOGO DEI FALLITI, e non e' cosmetica. Il 19 settembre questo script
+    # ha stampato «RISULTATO: GitHub <-> Firebase OK ✅» mentre la chiave Anthropic
+    # era morta da sei giorni: chi guardava solo l'ultima riga — o il pallino verde
+    # del workflow — vedeva un sistema sano. Il codice d'uscita resta legato a
+    # Firebase (e' il contratto di questo controllo), ma cio' che e' rotto va
+    # NOMINATO, non lasciato a chi scorre venti righe all'indietro.
+    if _FALLITI:
+        print(f"⚠️  {len(_FALLITI)} controlli FALLITI: {' · '.join(_FALLITI)}")
+        print("   (il codice d'uscita riguarda solo Firebase: un fallimento qui non")
+        print("    ferma il workflow, ma qualcosa NON funziona e va guardato)")
     if firebase_ok:
         print("RISULTATO: GitHub ↔ Firebase OK ✅")
         return 0
