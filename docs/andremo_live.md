@@ -931,3 +931,56 @@ Il campione è piccolo — tre giorni, conteggi a una cifra — e la verifica de
 settembre resta in calendario come conferma. Ma non è più una domanda aperta.
 
 801 test passati (4 nuovi).
+
+## 19 settembre: il livello AI è progettato ma NON sta girando
+
+Domanda del proprietario: «dove entra realmente in gioco l'AI? mi sembra che stiamo
+lavorando nel trading alla vecchia maniera».
+
+Aveva ragione, e la causa è banale: **la chiave API è rifiutata**.
+
+```
+Sep 13 06:12  [ai-hypotheses] non disponibile (AuthenticationError: 401
+              'invalid x-api-key') -> proseguo senza AI
+Sep 14 06:26  stessa riga
+```
+
+E la conferma indipendente, oggi: `scripts/shadow_report` dice **«nessuna decisione in
+ombra registrata»**. La modalità ombra è accesa per default (`AI_SHADOW_ENABLED=true`)
+e il bot decide dal 16 settembre: se la chiave funzionasse, ci sarebbero centinaia di
+documenti in `ai_shadow`. Ce ne sono zero.
+
+### Cosa è progettato e cosa gira
+
+| pezzo | nel codice | gira |
+|---|---|---|
+| AI che propone strategie (20 su 40 candidate/giro) | sì | **no** |
+| AI che filtra l'universo | sì | **no** |
+| AI in ombra (decide accanto al bot, per misurarla) | sì | **no** |
+| AI con potere di veto | sì, spento di proposito | no |
+| sentiment (CoinGecko) come riduttore di size | sì | sì |
+| Fear&Greed, funding, open interest, long/short | sì | sì |
+| notizie, indici macro | **no** | no |
+| apprendimento dai trade chiusi | sì | sì, ma «insufficient» |
+
+### Da dove vengono allora le strategie `gen_*`
+
+Da `generate_specs` (combinazioni casuali di mattoncini tecnici) e da `mutate`
+(evoluzione attorno ai quasi-passaggi del giro precedente). È ricerca automatica —
+casuale, selezione, mutazione — e funziona: le 47 coppie validate vengono da lì. Ma
+**non è un modello che ragiona**, è un algoritmo genetico.
+
+Il commento nel codice lo diceva già, e nessuno l'aveva letto come una diagnosi:
+«Senza AI la quota resta casuale e il comportamento è identico a prima».
+
+### Cosa cambierebbe rimettendo una chiave valida
+
+Tornerebbero: le ipotesi motivate al posto di altrettante estrazioni casuali, il
+filtro dell'universo, e soprattutto **la modalità ombra** — che è l'unica strada per
+arrivare a dare all'LLM un ruolo operativo, perché è l'unica che produce numeri.
+
+Cosa NON cambierebbe, ed è voluto: **l'LLM non decide i trade**. Una sua decisione non
+è riproducibile, quindi non è backtestabile, quindi non potrebbe mai passare il GATE 1.
+La scala progettata è ombra → veto → selezione, e ogni gradino si sblocca solo coi
+numeri del precedente. Oggi siamo fermi prima del primo gradino perché il primo
+gradino non ha mai potuto girare.
