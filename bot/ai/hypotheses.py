@@ -23,6 +23,7 @@ motore non sa eseguire.
 """
 from __future__ import annotations
 
+from collections import Counter
 from typing import Optional
 
 from bot.ai.client import ask_json, available
@@ -67,63 +68,111 @@ Rispondi ESCLUSIVAMENTE con JSON:
 ]}"""
 
 
-def _clean_feature(raw: dict) -> Optional[dict]:
+def _esamina_feature(raw: dict) -> tuple[Optional[dict], str]:
+    """(feature ripulita, motivo dello scarto). Uno dei due e' sempre vuoto."""
     if not isinstance(raw, dict):
-        return None
+        return None, "feature non e' un oggetto"
     kind = raw.get("kind")
     if kind not in FEATURE_LIBRARY:
-        return None
+        return None, f"feature inesistente: {str(kind)[:30]}"
     out = {"kind": kind}
     for name, (lo, hi) in _FEATURE_PARAMS.get(kind, {}).items():
         if name not in raw:
-            return None          # parametro obbligatorio mancante -> scarta
+            return None, f"{kind}: manca il parametro {name}"
         try:
             v = float(raw[name])
         except (TypeError, ValueError):
-            return None
+            return None, f"{kind}: {name} non e' un numero"
         if not (lo <= v <= hi):
-            return None
+            return None, f"{kind}: {name}={v:g} fuori dalla fascia {lo:g}-{hi:g}"
         out[name] = v
     if kind == "session":        # le ore restano interi, e devono essere ordinate
         out["hour_from"], out["hour_to"] = int(out["hour_from"]), int(out["hour_to"])
         if out["hour_from"] >= out["hour_to"]:
-            return None
-    return out
+            return None, "session: ora di inizio non precedente a quella di fine"
+    return out, ""
 
 
-def _clean_spec(raw: dict) -> Optional[dict]:
-    """Ricostruisce una spec valida dai campi proposti, o None."""
+def _esamina_spec(raw: dict) -> tuple[Optional[dict], str]:
+    """(spec valida, motivo dello scarto) — la LOGICA sta qui, una volta sola.
+
+    PERCHE' UN MOTIVO E NON UN SI'/NO. Il 19 settembre, primo giro col livello AI
+    riacceso, il log ha detto: «19/20 proposte scartate (fuori vocabolario)». Il
+    95% buttato, e nessun modo di sapere QUALE regola le fermasse — feature
+    inventate? troppe? parametri fuori scala? combinazioni vietate? Senza quella
+    risposta l'unica mossa possibile era correggere il prompt a tentoni, cioe'
+    cambiare qualcosa e sperare. E' lo stesso buco che il gate aveva prima
+    dell'autopsia: si contavano i morti senza sapere di cosa.
+
+    `_clean_spec` resta la porta di prima (solo la spec) per chi non vuole il
+    motivo; entrambe passano di qui, quindi non possono divergere.
+    """
     if not isinstance(raw, dict):
-        return None
-    feats = [f for f in (_clean_feature(x) for x in (raw.get("features") or [])) if f]
+        return None, "proposta non e' un oggetto"
+
+    grezze = raw.get("features") or []
+    feats, motivi_feat = [], []
+    for x in grezze:
+        f, perche = _esamina_feature(x)
+        if f:
+            feats.append(f)
+        else:
+            motivi_feat.append(perche)
+    # QUANDO TUTTE le feature cadono, la spec cade con loro — ed e' il caso in cui
+    # il motivo serve davvero: «nessuna feature valida» non direbbe niente, mentre
+    # «rsi_extreme: manca il parametro low» dice cosa correggere nel prompt. Si
+    # riporta il PRIMO motivo: con tre feature al massimo, l'elenco completo
+    # sarebbe rumore e il primo basta a riconoscere lo schema.
+    #
+    # Se invece ne cade solo QUALCUNA, la spec prosegue con le rimaste: e' il
+    # comportamento di sempre e non lo cambio mentre sto diagnosticando — una
+    # modifica alla severita' in mezzo a una misura renderebbe illeggibile il
+    # confronto col giro precedente.
+    if not feats:
+        return None, motivi_feat[0] if motivi_feat else "nessuna feature proposta"
     kinds = [f["kind"] for f in feats]
-    if not 1 <= len(feats) <= 3 or len(set(kinds)) != len(kinds):
-        return None
+    if len(feats) > 3:
+        return None, f"troppe feature ({len(feats)}, il massimo e' 3)"
+    if len(set(kinds)) != len(kinds):
+        return None, "stessa feature ripetuta"
     if not any(k in _DIRECTIONAL for k in kinds):
-        return None              # senza direzionale la spec non sa dove andare
-    if any(pair <= set(kinds) for pair in _INCOMPATIBLE):
-        return None
-    def _num(key, lo, hi, default):
+        # senza direzionale la spec non sa dove andare
+        return None, "nessuna feature direzionale"
+    for pair in _INCOMPATIBLE:
+        if pair <= set(kinds):
+            return None, f"coppia incompatibile: {' + '.join(sorted(pair))}"
+
+    for key, lo, hi, default in (("atr_mult_stop", min(_ATR_STOP), max(_ATR_STOP), 1.5),
+                                 ("rr", min(_RR), max(_RR), 2.0),
+                                 ("min_adx", 0.0, 40.0, 0.0),
+                                 ("volume_mult", 0.0, 5.0, 0.0)):
         try:
             v = float(raw.get(key, default))
         except (TypeError, ValueError):
-            return None
-        return v if lo <= v <= hi else None
-    atr = _num("atr_mult_stop", min(_ATR_STOP), max(_ATR_STOP), 1.5)
-    rr = _num("rr", min(_RR), max(_RR), 2.0)
-    adx = _num("min_adx", 0.0, 40.0, 0.0)
-    vol = _num("volume_mult", 0.0, 5.0, 0.0)
-    if None in (atr, rr, adx, vol):
-        return None
-    spec = {"features": feats, "volume_mult": vol, "min_adx": adx,
-            "atr_mult_stop": atr, "rr": rr}
+            return None, f"{key} non e' un numero"
+        if not (lo <= v <= hi):
+            return None, f"{key}={v:g} fuori dalla fascia {lo:g}-{hi:g}"
+        raw = {**raw, key: v}
+
+    spec = {"features": feats, "volume_mult": raw["volume_mult"],
+            "min_adx": raw["min_adx"], "atr_mult_stop": raw["atr_mult_stop"],
+            "rr": raw["rr"]}
     spec["id"] = spec_id(spec)   # STESSA identita' delle spec casuali: niente corsie
     mech = str(raw.get("mechanism") or "").strip()
     if mech:
         # tracciabile: dopo la validazione si potra' chiedere se il meccanismo
         # dichiarato regge, non solo se i numeri tornano.
         spec["mechanism"] = mech[:400]
-    return spec
+    return spec, ""
+
+
+def _clean_feature(raw: dict) -> Optional[dict]:
+    return _esamina_feature(raw)[0]
+
+
+def _clean_spec(raw: dict) -> Optional[dict]:
+    """Ricostruisce una spec valida dai campi proposti, o None."""
+    return _esamina_spec(raw)[0]
 
 
 def propose(n: int, market_context: str = "") -> list[dict]:
@@ -141,12 +190,24 @@ def propose(n: int, market_context: str = "") -> list[dict]:
         return []
     seen: set = set()
     specs: list[dict] = []
+    motivi: Counter = Counter()
     for item in raw:
-        spec = _clean_spec(item)
-        if spec and spec["id"] not in seen:
-            seen.add(spec["id"])
-            specs.append(spec)
+        spec, perche = _esamina_spec(item)
+        if not spec:
+            motivi[perche] += 1
+            continue
+        if spec["id"] in seen:
+            motivi["duplicata di un'altra proposta dello stesso giro"] += 1
+            continue
+        seen.add(spec["id"])
+        specs.append(spec)
     kept, tot = len(specs), len(raw)
     if kept < tot:
-        print(f"[ai-hypotheses] {tot - kept}/{tot} proposte scartate (fuori vocabolario)")
+        # I MOTIVI, non solo il conteggio. La prima versione stampava «N/M proposte
+        # scartate (fuori vocabolario)» e basta: il 19 settembre ha detto 19 su 20
+        # senza dire quale regola, e per correggere il prompt restava solo provare
+        # a caso. Con l'elenco davanti si vede subito se il modello inventa nomi,
+        # sfora le fasce o dimentica un parametro — tre correzioni diverse.
+        dettaglio = " · ".join(f"{m} ×{k}" for m, k in motivi.most_common(6))
+        print(f"[ai-hypotheses] {tot - kept}/{tot} proposte scartate: {dettaglio}")
     return specs[:n]
