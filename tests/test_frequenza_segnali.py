@@ -86,3 +86,39 @@ def _argomenti():
         argparse.ArgumentParser.add_argument = vero
         del argparse.ArgumentParser.parse_args
     return catturati
+
+
+# --------------------------------------------------------------------------- #
+# Il vincolo di una posizione per moneta                                       #
+# --------------------------------------------------------------------------- #
+def test_segnali_sovrapposti_sulla_stessa_coin_contano_uno():
+    """ORCAUSDT ha sei strategie validate. Il conto grezzo somma i loro trade come
+    se potessero stare aperti tutti insieme; il bot ne tiene UNA per moneta. Senza
+    questa distinzione il numero grezzo finiva accanto ai trade veri del paper e la
+    differenza sembrava un difetto — mentre e' il comportamento voluto."""
+    # tre segnali che si accavallano nella stessa ora
+    assert sf.apribili_una_per_coin([(0, 3600), (600, 4200), (1200, 4800)]) == 1
+
+
+def test_segnali_in_fila_contano_tutti():
+    """Se la moneta si libera prima del segnale successivo, il bot li apre tutti:
+    il vincolo non deve nascondere una soppressione vera."""
+    assert sf.apribili_una_per_coin([(0, 100), (200, 300), (400, 500)]) == 3
+
+
+def test_l_ordine_di_arrivo_non_dipende_da_come_sono_elencati():
+    """I trade arrivano raggruppati per strategia, non in ordine di tempo: se la
+    funzione non riordinasse, il conto dipenderebbe dall'ordine delle strategie."""
+    disordinati = [(400, 500), (0, 100), (200, 300)]
+    assert sf.apribili_una_per_coin(disordinati) == 3
+
+
+def test_un_segnale_che_arriva_esattamente_alla_chiusura_entra():
+    """Il confine: la posizione si chiude e la moneta e' libera nello stesso
+    istante. Escluderlo sottostimerebbe gli apribili, cioe' renderebbe il divario
+    col paper piu' piccolo del vero — l'errore nella direzione comoda."""
+    assert sf.apribili_una_per_coin([(0, 100), (100, 200)]) == 2
+
+
+def test_nessun_segnale_nessun_apribile():
+    assert sf.apribili_una_per_coin([]) == 0

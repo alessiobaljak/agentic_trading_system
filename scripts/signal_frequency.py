@@ -39,6 +39,31 @@ from bot.strategies import get_all_strategies
 ORE_PER_CANDELA = {"5m": 1 / 12, "15m": 0.25, "30m": 0.5, "1h": 1.0, "4h": 4.0}
 
 
+def apribili_una_per_coin(intervalli: list[tuple[float, float]]) -> int:
+    """Quanti di questi trade il BOT avrebbe potuto davvero aprire.
+
+    Il conto grezzo somma i trade di ogni strategia per conto suo: su ORCAUSDT, che
+    ha sei strategie validate, sei segnali sovrapposti contano sei. Il bot invece
+    tiene UNA posizione per moneta (`decide_all`: «vincolo conto reale, 1
+    posizione/coin»), quindi mentre una e' aperta le altre cinque non entrano.
+
+    Senza questa riga il numero grezzo veniva messo accanto ai trade veri del paper
+    e la differenza sembrava un difetto da cacciare. Puo' esserlo — ma prima va
+    tolto cio' che e' il comportamento voluto, altrimenti si insegue un fantasma.
+
+    `intervalli`: (apertura, chiusura) in epoch. Si scorre in ordine di apertura e
+    si prende il trade solo se la moneta e' libera in quel momento — esattamente
+    cio' che fa il bot.
+    """
+    libera_da = float("-inf")
+    presi = 0
+    for apre, chiude in sorted(intervalli):
+        if apre >= libera_da:
+            presi += 1
+            libera_da = chiude
+    return presi
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Frequenza di segnali attesa (recente).")
     ap.add_argument("--days", type=int, default=7, help="giorni recenti da valutare")
@@ -73,6 +98,9 @@ def main() -> int:
 
     per_coin: dict[str, int] = defaultdict(int)
     per_strat: dict[str, int] = defaultdict(int)
+    # (apertura, chiusura) per moneta: serve al conto col vincolo di una posizione
+    finestre: dict[str, list[tuple[float, float]]] = defaultdict(list)
+    senza_orario = 0
     total = 0
     for n, sym in enumerate(coins, 1):
         try:
@@ -94,10 +122,26 @@ def main() -> int:
                 per_coin[sym] += k
                 per_strat[strat.name] += k
                 total += k
+                for t in stats.trades:
+                    apre = float(getattr(t, "entry_ts", 0) or 0)
+                    if apre <= 0:
+                        senza_orario += 1
+                        continue
+                    barre = int(getattr(t, "bars_held", 0) or 0)
+                    finestre[sym].append((apre, apre + barre * ore * 3600))
 
+    apribili = sum(apribili_una_per_coin(v) for v in finestre.values())
     print(f"{'='*56}")
-    print(f"TRADE ATTESI negli ultimi ~{args.days} giorni: {total}  "
+    print(f"SEGNALI GREZZI negli ultimi ~{args.days} giorni: {total}  "
           f"(~{total/max(args.days,1):.1f}/giorno)")
+    print(f"DI CUI APRIBILI dal bot:            {apribili}  "
+          f"(~{apribili/max(args.days,1):.1f}/giorno)")
+    print("  Il grezzo somma ogni strategia per conto suo; il bot tiene UNA")
+    print("  posizione per moneta, quindi i segnali sovrapposti sulla stessa coin")
+    print("  non entrano. E' il secondo numero che va confrontato col paper.")
+    if senza_orario:
+        print(f"  ({senza_orario} trade senza orario d'ingresso: esclusi dal secondo "
+              f"conto, quindi e' un limite INFERIORE)")
     print(f"\nPer coin (attive):")
     for sym, k in sorted(per_coin.items(), key=lambda x: -x[1]):
         print(f"  {sym:<14} {k}")
