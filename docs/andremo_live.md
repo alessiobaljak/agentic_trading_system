@@ -812,3 +812,72 @@ quattro script, due componenti della dashboard — e farla di fretta su un docum
 che contiene settimane di attesa, mentre il paper sta girando, è il modo di
 trasformare un problema di spazio in una perdita di dati. Con il vincolo spostato a
 mesi c'è tempo per farla bene.
+
+## 19 settembre: il paper apre i trade che deve? (e una sonda che misurava un'altra cosa)
+
+Domanda del proprietario, nata guardando una scheda della dashboard: `gen_4465723e`,
++$12.821 su $10.000 nel backtest, e −$4 nel paper. «Come è possibile?»
+
+### Perché quel numero è più piccolo di come appare
+
+Tre cose, tutte verificate nel codice:
+
+1. **Non sono tre settimane.** Il gate parte dal 2022 (minimo un anno di storia per
+   moneta), divide in quattro blocchi e testa fuori campione su **tre quarti**. I
+   215 trade sono sparsi su ~dieci mesi.
+2. **Assume di puntare tutto il capitale su ogni trade.** `pnl = pnl_pct × capital`
+   con `capital = 10.000` e `pnl_pct` = la variazione di prezzo
+   (`backtesting/engine.py:788`). Il paper mette 200$ su 1.000$: cinque volte meno.
+   Gli stessi 215 trade nel paper darebbero **~+25%**, non +128%. Che è comunque
+   buono — quindi la size spiega perché il numero è gonfio, **non** la perdita.
+3. **215 trade contro 1.** Win rate 46% vuol dire che quella strategia **perde il
+   54% delle volte**. Guadagna perché le vincite sono più grandi, e serve tempo.
+
+Con 12 trade e 2 vinti: se il sistema funzionasse come promette, la probabilità di
+un risultato così brutto è **3,6%** (una volta su 28). Poco probabile — non abbastanza
+per dire «è solo sfortuna, aspetta».
+
+### La sonda misurava una scala diversa da quella su cui il bot opera
+
+`frequenza` ha risposto **22 trade attesi in 7 giorni (~3,1/giorno)** contro i ~3 al
+giorno del paper. Messi vicini: «tutto torna». Ed era falso: **contava su candele da
+un'ora, il bot gira a quindici minuti.** Candele quattro volte più larghe danno molti
+meno segnali, quindi gli "attesi" erano strutturalmente bassi e la coincidenza non
+significava nulla.
+
+Non un numero sbagliato: **un numero giusto per un'altra domanda**, messo accanto a
+uno che risponde a questa. La stessa forma di difetto di BIRBUSDT.
+
+Il dettaglio che lo rendeva invisibile: la voce in lista bianca non può passare
+argomenti (regola voluta, `ops/README.md`), quindi il valore predefinito non era una
+comodità — era **l'unica cosa che sarebbe mai stata eseguita**.
+
+### I numeri veri
+
+```
+segnali grezzi (15m, 7 giorni) ..... 71   (~10,1/giorno)
+di cui APRIBILI dal bot ............ 49   (~7,0/giorno)
+paper, davvero aperti .............. ~3-4,5/giorno
+```
+
+Il secondo numero è quello confrontabile: il conto grezzo somma ogni strategia per
+conto suo, ma il bot tiene **una posizione per moneta** (ORCA ha sei strategie
+validate: i segnali sovrapposti non entrano).
+
+### Conclusione, e cosa NON è stato dimostrato
+
+Restano ~7/giorno attesi contro ~3-4,5 aperti. **Non è la prova di un difetto**, per
+una ragione precisa: la sonda applica le **47 coppie validate di oggi** a tutti e
+sette i giorni, mentre il bot ne aveva 35 il 17 e 43 il 18 — e il paper gira solo da
+2,7 giorni dei 7 misurati. Il divario residuo sta dentro ciò che quel disallineamento
+spiega.
+
+Quindi: **nessuna prova che qualcosa sopprima i segnali.** Il paper va male per il
+motivo semplice, non per un bug — pochi trade, e una strategia che perde più della
+metà delle volte ha bisogno di numeri per mostrare il suo vantaggio.
+
+La verifica pulita è ripetere la misura fra sette giorni, quando l'insieme delle
+coppie sarà stato stabile per tutta la finestra. Se allora il divario resta, è un
+difetto e va cacciato.
+
+797 test passati (10 nuovi).
