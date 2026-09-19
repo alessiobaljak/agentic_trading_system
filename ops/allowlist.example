@@ -42,6 +42,11 @@ sopravvivenza: .venv/bin/python -m scripts.survivorship_report
 # scritta nel registro verrebbe operata dal bot a 15 minuti.
 timeframe:    .venv/bin/python -m scripts.timeframe_probe
 confidenza:   .venv/bin/python -m scripts.confidence_analysis
+# «l'AI sta lavorando?» in un comando solo. Prima servivano connettivita +
+# log-gate + shadow e la lettura incrociata dei loro log: una diagnosi cosi'
+# cara non viene rifatta, e infatti e' rimasta non fatta per sei giorni
+# mentre la chiave era rifiutata. Costa una chiamata da 5 token.
+ai-stato:     .venv/bin/python -m scripts.ai_status
 # revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
 costi:        .venv/bin/python -m scripts.revalidate_costs
 

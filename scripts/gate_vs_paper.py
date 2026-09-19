@@ -540,7 +540,8 @@ def main() -> int:
     make = _build_strategy(fb, args.strategy, ladder)
 
     end = args.end or date.today().isoformat()
-    candles = load_candles(args.symbol, args.interval, args.start, end, prefer=args.source)
+    candles = load_candles(args.symbol, args.interval, args.start, end,
+                           prefer=args.source, allow_synthetic=False)
     if not candles:
         raise SystemExit("[gvp] nessuna candela caricata (Binance raggiungibile?)")
     print(f"[gvp] candele: {len(candles)} da {candles[0].open_time:%Y-%m-%d} "
