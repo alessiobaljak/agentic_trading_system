@@ -14,6 +14,7 @@ import {
   YAxis,
 } from 'recharts';
 import { getDb } from '../lib/firebase';
+import { decodePairs } from '../lib/registry';
 import { CHROME, GATE_RAMP, STATO } from '../lib/viz';
 
 /**
@@ -202,12 +203,7 @@ export default function GateMaturazione() {
 
   const righe = useMemo<Riga[]>(() => {
     if (!reg) return [];
-    let pairs: Record<string, PairRec> = {};
-    try {
-      pairs = typeof reg.pairs === 'string' ? JSON.parse(reg.pairs) : (reg.pairs ?? {});
-    } catch {
-      return [];
-    }
+    const pairs = decodePairs<PairRec>(reg.pairs);
     const ora = Date.now();
     const out: Riga[] = [];
     for (const [key, r] of Object.entries(pairs)) {

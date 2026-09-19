@@ -35,7 +35,8 @@ from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import generate_specs, mutate
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
                               coin_in_maturazione, drifted_from_paper, judge_window,
-                              publish_timeline, conferme_da_proteggere, top_symbols_by_volume)
+                              publish_timeline, conferme_da_proteggere, scrivi_registro,
+                              slim_registry, top_symbols_by_volume)
 
 # stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
 # processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
@@ -519,14 +520,18 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
     # (universe_size) resta quello di optimize.
     validated_coins = sorted({pairs[k].get("symbol") or k.split("|", 1)[0] for k in validated})
     universe = max(doc.get("universe_size", 0) or 0, len(validated_coins)) or 1
-    doc["pairs"] = encode_pairs(pairs)
+    # ALLEGGERITO ANCHE QUI, e non e' un dettaglio: la discovery scrive il registro
+    # DOPO optimize. Finche' questa riga usava `encode_pairs` grezzo, rigonfiava di
+    # colpo tutto cio' che optimize aveva appena alleggerito — cioe' la rete c'era
+    # ma l'ultimo a scrivere la toglieva.
+    doc["pairs"] = slim_registry(pairs, validated)
     doc["validated"] = validated
     doc["coins_covered"] = len(validated_coins)
     doc["coins"] = validated_coins
     doc["universe_size"] = universe
     doc["coverage"] = round(len(validated_coins) / universe, 3)
     doc["updated_at"] = now
-    fb.set_doc("strategy_registry", "validated", doc)
+    scrivi_registro(fb, doc, pairs)
     publish_timeline(fb, pairs, "discover", len(out), len(passed_now))
     return validated
 

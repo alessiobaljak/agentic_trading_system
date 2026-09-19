@@ -35,13 +35,96 @@ def encode_pairs(pairs: dict) -> str:
     return json.dumps(pairs or {})
 
 
+# --------------------------------------------------------------------------- #
+# FORMATO COMPATTO DEL REGISTRO                                                #
+# --------------------------------------------------------------------------- #
+# Il registro e' UN SOLO documento Firestore e il limite e' 1 MiB. Il 19 settembre
+# era a 759 KiB su 900.000 byte (86%) e cresceva di ~37 KiB al giorno: tre giorni
+# al muro. Superato il limite Firestore RIFIUTA la scrittura, e quel run perde le
+# conferme appena guadagnate — cioe' settimane di attesa, in silenzio.
+#
+# La compressione vive TUTTA qui dentro. `decode_pairs` restituisce sempre i nomi
+# lunghi, quindi nessun lettore (bot, learning, script, autopsia) cambia di una
+# riga: se la compressione fosse sparsa nei chiamanti, il primo che se ne
+# dimenticasse leggerebbe un registro vuoto invece di dare errore.
+#
+# Tre risparmi, tutti senza perdita di informazione:
+#   1. NOMI BREVI — `last_pass_data_end` diventa `d`. Le chiavi JSON si ripetono
+#      identiche 2.600 volte: da sole erano meta' del documento.
+#   2. SYMBOL E STRATEGY TOLTI — sono gia' dentro la chiave `COINUSDT|strategia`.
+#      Si tolgono SOLO se combaciano con la chiave: un record incoerente si tiene
+#      com'e', perche' qui un dubbio va risolto conservando, non indovinando.
+#   3. TEMPI INTERI — `1758258123.456789` diventa `1758258123`. Al secondo: le
+#      finestre del gate durano una settimana, i microsecondi non decidono nulla.
+REGISTRY_FORMAT = 2
+
+_BREVI = {
+    "pass_count": "p", "last_pass_data_end": "d", "fail_count": "f",
+    "last_seen_at": "v", "last_params": "m", "scale_r_mults": "r",
+    "drift_seen_at": "x", "window_start": "w", "passed_in_window": "q",
+    "generated": "g", "last_passed_at": "l",
+}
+_LUNGHI = {v: k for k, v in _BREVI.items()}
+_TEMPI = {"last_seen_at", "last_passed_at", "window_start", "last_pass_data_end",
+          "drift_seen_at"}
+
+
+def encode_registry(pairs: dict) -> str:
+    """La mappa del registro nel formato compatto, come stringa JSON."""
+    compatte = {}
+    for chiave, rec in (pairs or {}).items():
+        if not isinstance(rec, dict):
+            compatte[chiave] = rec
+            continue
+        sym, _, strat = str(chiave).partition("|")
+        fuori = {}
+        for campo, valore in rec.items():
+            # ridondanti con la chiave: si tolgono solo se combaciano davvero
+            if campo == "symbol" and valore == sym:
+                continue
+            if campo == "strategy" and valore == strat:
+                continue
+            if campo in _TEMPI and isinstance(valore, (int, float)):
+                valore = int(valore)
+            fuori[_BREVI.get(campo, campo)] = valore
+        compatte[chiave] = fuori
+    return json.dumps({"v": REGISTRY_FORMAT, "k": compatte})
+
+
+def _espandi_registro(compatte: dict) -> dict:
+    """Formato compatto -> nomi lunghi, con symbol/strategy ricostruiti dalla chiave."""
+    fuori = {}
+    for chiave, rec in (compatte or {}).items():
+        if not isinstance(rec, dict):
+            fuori[chiave] = rec
+            continue
+        lungo = {_LUNGHI.get(campo, campo): valore for campo, valore in rec.items()}
+        sym, sep, strat = str(chiave).partition("|")
+        if sep:
+            lungo.setdefault("symbol", sym)
+            lungo.setdefault("strategy", strat)
+        fuori[chiave] = lungo
+    return fuori
+
+
 def decode_pairs(value) -> dict:
-    """Legge `pairs` sia come stringa JSON (nuovo formato) sia come mappa (vecchio)."""
+    """Legge `pairs` in TUTTI i formati mai scritti: mappa nuda (il piu' vecchio),
+    stringa JSON coi nomi lunghi, e stringa JSON compatta.
+
+    Ritorna SEMPRE i nomi lunghi. La retro-compatibilita' non e' cortesia: il
+    registro vivo e' scritto nel formato vecchio finche' il primo run col codice
+    nuovo non lo riscrive, e nel mezzo il bot deve continuare a operare."""
     if isinstance(value, str):
         try:
-            return json.loads(value) or {}
+            value = json.loads(value)
         except Exception:  # noqa: BLE001
             return {}
+    if not isinstance(value, dict):
+        return value or {}
+    # una chiave di coppia e' sempre "SYMBOL|strategia", quindi "v"/"k" al primo
+    # livello non possono essere coppie: il marcatore non e' ambiguo.
+    if value.get("v") == REGISTRY_FORMAT and isinstance(value.get("k"), dict):
+        return _espandi_registro(value["k"])
     return value or {}
 
 

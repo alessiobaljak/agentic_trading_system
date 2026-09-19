@@ -155,14 +155,36 @@ def test_pass_count_needs_new_data():
 
 
 def test_registry_stores_holdout_and_regime_pf():
+    """Il PF per-regime deve arrivare al bot: e' il prior con cui `regime_ok` evita
+    di operare una coppia nel regime in cui il gate l'ha vista perdere.
+
+    DAL 19 SETTEMBRE vale solo per le coppie VALIDATE, ed e' voluto: il registro
+    era all'86% del limite di 1 MiB e questi campi sono i piu' pesanti che porta.
+    Verificato che nessuno li legga altrove — `adaptation` costruisce `_regime_pf`
+    da `self._passed`, che nel percorso normale E' la lista delle validate; drift,
+    analyst e la dashboard partono tutti dai trade o da `reg.validated`, cioe' da
+    coppie validate. Su una non validata quei campi erano peso morto pagato ogni
+    giro da tutte e 2.500.
+    """
     from scripts.optimize import update_registry
-    from bot.core.firebase_client import decode_pairs
-    fb = _fake_fb_with_registry()
+    from bot.core.firebase_client import decode_pairs, encode_registry
     key = "XUSDT|s1"
+
+    # 1) VALIDATA (tre passaggi gia' in cascina): tiene tutto
+    gia_validata = {"pass_count": 3, "symbol": "XUSDT", "strategy": "s1",
+                    "last_seen_at": time.time(), "window_start": 0}
+    fb = _fake_fb_with_registry({"pairs": encode_registry({key: gia_validata})})
     update_registry(fb, {key: _entry(time.time())}, [key])
     rec = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])[key]
     assert rec["holdout"]["ok"] is True
     assert rec["regime_pf"]["sideways"]["trades"] == 20
+
+    # 2) NON validata: la contabilita' resta, il descrittivo no
+    fb2 = _fake_fb_with_registry()
+    update_registry(fb2, {key: _entry(time.time())}, [key])
+    rec2 = decode_pairs(fb2.get_doc("strategy_registry", "validated")["pairs"])[key]
+    assert rec2["pass_count"] == 1 and "last_params" in rec2
+    assert "regime_pf" not in rec2 and "holdout" not in rec2
 
 
 # ---- CONTINUITA': recovery factor e drawdown ------------------------------ #

@@ -303,6 +303,15 @@ def main() -> int:
             segno = "  ATTENZIONE:" if quota >= 80 else ""
             print(f"  spazio {cosa}: {n / 1024:.0f} KiB su {LIMITE_DOC / 1024:.0f} "
                   f"({quota:.0f}%){segno}")
+            # QUANTO MANCA, in coppie e non in percentuale. Una percentuale dice
+            # dove siamo, non quanto tempo resta: l'86% del 19 settembre erano tre
+            # giorni, e nessuno lo aveva calcolato. Il costo per coppia e' anche
+            # l'unica misura che dice se un alleggerimento ha davvero funzionato.
+            if campo == "pairs" and len(pairs):
+                per_coppia = n / len(pairs)
+                capienza = int((LIMITE_DOC - n) / per_coppia) if per_coppia else 0
+                print(f"    {per_coppia:.0f} byte a coppia · ci stanno ancora "
+                      f"~{capienza} coppie oltre le {len(pairs)} di adesso")
             if quota >= 80:
                 print(f"  oltre il limite Firestore rifiuta la scrittura e il run "
                       f"perde\n  le conferme appena guadagnate. Va alzato il tetto "

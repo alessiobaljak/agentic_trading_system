@@ -65,20 +65,33 @@ def test_the_result_actually_fits():
 
 
 # ---- il registro: la contabilita' non si tocca ---------------------------- #
-def test_the_registry_is_untouched_when_it_fits():
+def test_the_registry_is_slimmed_even_when_it_fits():
+    """CAMBIATO IL 19 SETTEMBRE, e il vecchio nome di questo test diceva la cosa
+    sbagliata: «il registro e' intatto quando ci sta».
+
+    Alleggerire solo oltre la soglia sembra prudente ed e' il contrario: il
+    documento arriva al muro alla velocita' piena e la rete si apre nell'istante in
+    cui si sta gia' cadendo. Misurato: 759 KiB su 879 (86%) il 19 settembre, +37
+    KiB al giorno, e nessun alleggerimento mai eseguito perche' la soglia non era
+    stata toccata. Alleggerire sempre non e' solo piu' piccolo — e' piu' LENTO a
+    crescere, perche' ogni coppia nuova entra gia' leggera."""
+    from bot.core.firebase_client import decode_pairs
     pairs = {"A|s": {"pass_count": 2, "symbol": "A", "holdout": {"pf": 1.5}}}
-    assert json.loads(slim_registry(pairs, [])) == pairs
+    fuori = decode_pairs(slim_registry(pairs, [], max_bytes=10**9))
+    assert fuori["A|s"]["pass_count"] == 2
+    assert "holdout" not in fuori["A|s"]
 
 
 def test_an_oversize_registry_keeps_every_pass_count():
     """E' il dato che costa settimane di attesa: si possono perdere le metriche
     descrittive, mai i passaggi accumulati."""
+    from bot.core.firebase_client import decode_pairs
     pairs = {f"C{i}|s": {"pass_count": i % 4, "symbol": f"C{i}", "strategy": "s",
                          "last_pass_data_end": 1.0, "fail_count": 0,
                          "regime_pf": {"bull": {"pf": 1.2, "trades": 40}},
                          "holdout": {"pf": 1.4, "pnl_pct": 0.2, "trades": 60}}
              for i in range(300)}
-    decoded = json.loads(slim_registry(pairs, validated=["C1|s"], max_bytes=5_000))
+    decoded = decode_pairs(slim_registry(pairs, validated=["C1|s"], max_bytes=5_000))
     assert len(decoded) == 300
     for k, r in pairs.items():
         assert decoded[k]["pass_count"] == r["pass_count"]
@@ -87,11 +100,14 @@ def test_an_oversize_registry_keeps_every_pass_count():
 
 def test_validated_pairs_keep_their_full_record():
     """Sono quelle che il bot opera e la dashboard mostra: alleggerirle
-    romperebbe cio' che serve davvero."""
+    romperebbe cio' che serve davvero. (In EMERGENZA si alleggeriscono anche loro,
+    ma solo quando l'alternativa e' perdere i passaggi: vedi
+    `tests/test_registro_spazio.py`.)"""
+    from bot.core.firebase_client import decode_pairs
     pairs = {f"C{i}|s": {"pass_count": 3, "symbol": f"C{i}", "strategy": "s",
                          "holdout": {"pf": 1.4}, "last_pf": 1.5}
              for i in range(300)}
-    decoded = json.loads(slim_registry(pairs, validated=["C7|s"], max_bytes=5_000))
+    decoded = decode_pairs(slim_registry(pairs, validated=["C7|s"], max_bytes=10**9))
     assert decoded["C7|s"]["holdout"] == {"pf": 1.4}
     assert "holdout" not in decoded["C1|s"]
 

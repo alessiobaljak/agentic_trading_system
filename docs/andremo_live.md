@@ -738,3 +738,77 @@ fatta **nel gate prima che nel paper**, altrimenti si rompe la parità — cioè
 ricrea di mano propria il problema più caro di questo progetto.
 
 Se ne riparla col verdetto dei 40 trade. Chiusi: 7 (8 col VET).
+
+## 19 settembre: il registro era a tre giorni dal muro
+
+Il report del gate lo diceva da giorni, in fondo a una riga: `spazio registro: 759
+KiB su 879 (86%)`. Tradotto: il registro è **un solo documento Firestore**, il
+limite è 1 MiB, e dentro ci sono i **passaggi accumulati** — settimane di attesa.
+
+```
+17 set 20:11 ....... 708 KiB  (81%)
+19 set 05:28 ....... 759 KiB  (86%)     → ~37 KiB al giorno
+margine rimasto .... 120 KiB            → circa TRE giorni
+```
+
+Oltre il limite Firestore rifiuta la scrittura. E fino a oggi quella scrittura era
+una riga sola, `fb.set_doc(...)`, **senza rete**: il run sarebbe morto lì portandosi
+via le conferme appena guadagnate, e da fuori il sintomo sarebbe stato solo un
+numero che smette di salire. Esattamente il guasto che non si distingue dalla calma.
+
+### Il difetto nella difesa che c'era già
+
+`slim_registry` esisteva e faceva la cosa giusta — tolglie i campi descrittivi alle
+coppie non validate — ma **solo oltre la soglia**. Sembra prudente ed è il
+contrario: il documento arriva al muro alla velocità piena, e la rete si apre
+nell'istante in cui si sta già cadendo. In tre settimane di vita **non era mai stata
+eseguita una volta**.
+
+E c'era un secondo buco: la discovery riscriveva il registro *dopo* optimize con
+`encode_pairs` grezzo. Cioè l'ultimo a scrivere disfaceva il lavoro del primo.
+
+### Cosa è cambiato
+
+Quattro cose, nessuna delle quali tocca la logica di trading:
+
+1. **Formato compatto** (`bot/core/firebase_client.py`): nomi di campo di una
+   lettera (le chiavi JSON si ripetono 2.600 volte identiche), `symbol` e
+   `strategy` tolti perché già dentro la chiave `COIN|strategia`, tempi arrotondati
+   al secondo. La compressione vive in **un solo posto**: `decode_pairs` restituisce
+   sempre i nomi lunghi, quindi nessun lettore cambia di una riga.
+2. **Alleggerimento preventivo**: sempre, non solo quando sfora. Non è solo più
+   piccolo — è più *lento a crescere*, perché ogni coppia nuova entra già leggera.
+3. **Rete sulla scrittura**: se Firestore rifiuta, si riprova con la sola
+   contabilità. Si perdono le metriche descrittive (le riscrive il giro dopo); **non
+   si perde un solo passaggio**.
+4. **Il report dice quanto manca in coppie**, non in percentuale. L'86% erano tre
+   giorni e nessuno lo aveva calcolato.
+
+### Misura
+
+Col codice vero, su un registro sintetico che replica la composizione reale
+(2.598 coppie, 47 validate):
+
+```
+prima ..... 368 byte/coppia
+dopo ...... 138 byte/coppia        −63%
+proiezione sul reale: 759 KiB → ~284 KiB = 32% del tetto
+```
+
+Il limite dei byte **smette di essere il vincolo**: a 138 byte a coppia ci starebbero
+~7.000 coppie, e il tetto dichiarato sul numero di coppie è 3.000. Arriva prima
+quello, che è un tetto voluto e visibile.
+
+**Attenzione: 284 KiB è una proiezione, non una misura.** Il numero vero arriva dal
+primo giro dell'ottimizzatore col codice nuovo. Va verificato, non dato per buono.
+
+787 test passati (13 nuovi), `tsc` e `next build` puliti.
+
+### Cosa NON ho fatto
+
+La correzione strutturale sarebbe **spezzare il registro su più documenti**: è
+l'unica che scala davvero. Non l'ho fatta perché tocca ogni lettore — bot, learning,
+quattro script, due componenti della dashboard — e farla di fretta su un documento
+che contiene settimane di attesa, mentre il paper sta girando, è il modo di
+trasformare un problema di spazio in una perdita di dati. Con il vincolo spostato a
+mesi c'è tempo per farla bene.

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { collection, doc, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getDb } from '../lib/firebase';
+import { decodePairs } from '../lib/registry';
 
 /**
  * Catalogo strategie. Con 100+ coppie validate serve gestione: riepilogo in cima,
@@ -177,12 +178,7 @@ export default function OptimizedStrategies() {
 
   const cards = useMemo<Card[]>(() => {
     if (!reg) return [];
-    let pairs: Record<string, PairRec> = {};
-    try {
-      pairs = typeof reg.pairs === 'string' ? JSON.parse(reg.pairs) : (reg.pairs ?? {});
-    } catch {
-      pairs = {};
-    }
+    const pairs = decodePairs<PairRec>(reg.pairs);
     const specs = specsDoc?.specs ?? {};
     const byStrat = new Map<string, PairRec[]>();
     for (const key of reg.validated ?? []) {

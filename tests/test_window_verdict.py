@@ -264,8 +264,12 @@ def test_last_seen_at_means_one_thing_for_generated_pairs_too():
     fb = FB()
     merge_into_registry(fb, {}, [], evaluated_symbols={"AUSDT"})
     pairs = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])
+    # i tempi nel registro sono arrotondati al secondo dal 19 settembre (spazio:
+    # il documento era all'86% del limite di 1 MiB). Le finestre del gate durano
+    # una settimana, quindi il secondo e' abbondante — ma il confronto qui va
+    # fatto sull'intero, altrimenti misura l'arrotondamento e non il significato.
     assert pairs["AUSDT|gen_x"]["last_seen_at"] > vecchio, "valutata = vista"
-    assert pairs["ZUSDT|gen_y"]["last_seen_at"] == vecchio, "non valutata = non vista"
+    assert pairs["ZUSDT|gen_y"]["last_seen_at"] == int(vecchio), "non valutata = non vista"
 
 
 def test_a_pair_without_an_open_window_has_no_date():

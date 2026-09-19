@@ -27,7 +27,8 @@ from backtesting.data_loader import load_candles
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
 from bot.config import settings, timeframe_hours
-from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
+from bot.core.firebase_client import (decode_pairs, encode_pairs,
+                                      encode_registry, get_firebase)
 
 
 def _min_history(interval: str) -> int:
@@ -554,31 +555,49 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
 
 def slim_registry(pairs: dict, validated: list,
                   max_bytes: int = PARAM_DOC_MAX_BYTES) -> str:
-    """Il registro codificato, alleggerito SOLO se necessario.
+    """Il registro codificato e alleggerito, SEMPRE — non solo quando sfora.
 
-    Il registro cresce con le coppie tracciate (1200 e oltre) e ognuna porta con se'
-    holdout, PF per regime e metriche descrittive. E' lo stesso limite di 1 MiB che
-    ha fatto cadere il documento dei parametri, e qui costerebbe molto di piu': in
-    quel documento ci sono i PASSAGGI ACCUMULATI, cioe' settimane di attesa.
+    Il registro e' un solo documento Firestore col limite di 1 MiB, e dentro ci
+    sono i PASSAGGI ACCUMULATI: settimane di attesa. Se la scrittura viene
+    rifiutata, quel run le perde tutte, in silenzio.
 
-    Quando si sfora si tolgono i campi descrittivi alle coppie NON validate — non a
-    quelle validate, che il bot e la dashboard leggono — e la contabilita' resta
-    intatta per tutte. Se non basta ancora, meglio provarci comunque e lasciare che
-    sia Firestore a rifiutare: troncare il registro significherebbe cancellare
-    passaggi veri, e quello non e' un compromesso accettabile.
+    PERCHE' «SEMPRE» E NON «QUANDO SERVE». La versione precedente alleggeriva solo
+    oltre la soglia. Sembra prudente ed e' il contrario: il documento arriva al
+    muro alla velocita' piena, e l'alleggerimento — che e' la rete — si apre
+    nell'istante in cui si sta gia' cadendo. Il 19 settembre il registro era a
+    759 KiB su 879 (86%) crescendo di ~37 KiB al giorno: tre giorni di margine, e
+    nessun alleggerimento mai eseguito, perche' la soglia non era ancora stata
+    toccata. Alleggerire sempre non e' solo piu' piccolo: e' piu' LENTO a crescere,
+    perche' ogni coppia nuova entra gia' leggera.
+
+    Cosa si toglie: i campi descrittivi (holdout, PF per regime, metriche
+    dell'ultimo passaggio) alle coppie NON validate. La contabilita' —
+    `REGISTRY_CORE_FIELDS` — resta intatta per TUTTE. Verificato chi li legge:
+    `adaptation.regime_ok`, `drift`, `analyst` e la dashboard li consultano solo
+    per coppie validate (la dashboard cicla su `reg.validated`), e quelle non
+    vengono toccate.
+
+    Se dopo tutto questo si sfora ancora, si alleggeriscono ANCHE le validate: la
+    dashboard perde il PF sulle schede, il bot no (i parametri sono nel nucleo).
+    E' una perdita cosmetica contro una perdita di settimane; non e' un pareggio.
     """
-    enc = encode_pairs(pairs)
-    if len(enc.encode("utf-8")) <= max_bytes:
-        return enc
     keep = set(validated)
     slim = {k: (r if k in keep else
                 {f: v for f, v in r.items() if f in REGISTRY_CORE_FIELDS})
             for k, r in pairs.items()}
-    enc2 = encode_pairs(slim)
-    print(f"[registry] oltre {max_bytes} byte: tolti i campi descrittivi alle "
-          f"{len(pairs) - len(keep)} coppie non validate "
-          f"({len(enc.encode('utf-8'))} -> {len(enc2.encode('utf-8'))} byte). "
-          f"I passaggi accumulati restano intatti.")
+    enc = encode_registry(slim)
+    n = len(enc.encode("utf-8"))
+    if n <= max_bytes:
+        return enc
+
+    emergenza = {k: {f: v for f, v in r.items() if f in REGISTRY_CORE_FIELDS}
+                 for k, r in pairs.items()}
+    enc2 = encode_registry(emergenza)
+    print(f"[registry] ATTENZIONE: {n} byte oltre il tetto di {max_bytes} anche "
+          f"dopo l'alleggerimento normale. Tolti i campi descrittivi ANCHE alle "
+          f"{len(keep)} coppie validate ({n} -> {len(enc2.encode('utf-8'))} byte). "
+          f"I passaggi accumulati restano intatti; la dashboard perde il PF sulle "
+          f"schede finche' il registro non torna sotto.")
     return enc2
 
 
@@ -953,9 +972,46 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         "min_universe": MIN_UNIVERSE,
         "min_covered": MIN_COVERED,
     }
-    fb.set_doc("strategy_registry", "validated", registry)
+    scrivi_registro(fb, registry, pairs)
     publish_timeline(fb, pairs, "optimize", len(out), len(passed_set))
     return registry
+
+
+def scrivi_registro(fb, registry: dict, pairs: dict) -> bool:
+    """Scrive il registro, e se la scrittura viene RIFIUTATA ci riprova nudo.
+
+    Fino al 19 settembre questa era una `set_doc` sola e senza rete. E' il punto
+    piu' costoso dell'intero sistema: dentro ci sono i passaggi accumulati, e un
+    documento oltre il limite di 1 MiB fa rifiutare la scrittura a Firestore. Il
+    run moriva li', portandosi via le conferme appena guadagnate — settimane di
+    attesa — e dal fuori il sintomo era solo un numero che smetteva di salire.
+
+    Due tentativi, in ordine di preferenza:
+      1. il registro completo, gia' alleggerito da `slim_registry`;
+      2. SOLO la contabilita': `pairs` ridotto al nucleo e i campi di riepilogo.
+         Si perdono le metriche descrittive (le riscrive il run successivo); NON
+         si perde un solo passaggio.
+
+    Se fallisce anche il secondo, l'eccezione sale: a quel punto il problema non e'
+    lo spazio, e fingere che vada tutto bene sarebbe peggio che fermarsi.
+    """
+    try:
+        fb.set_doc("strategy_registry", "validated", registry)
+        return True
+    except Exception as exc:  # noqa: BLE001
+        print(f"[registry] SCRITTURA RIFIUTATA ({str(exc)[:200]}). Riprovo con la "
+              f"sola contabilita': i passaggi accumulati vengono prima di tutto "
+              f"il resto.")
+
+    minimo = dict(registry)
+    minimo["pairs"] = encode_registry(
+        {k: {f: v for f, v in r.items() if f in REGISTRY_CORE_FIELDS}
+         for k, r in pairs.items()})
+    fb.set_doc("strategy_registry", "validated", minimo)
+    print(f"[registry] salvato in forma minima: {len(pairs)} coppie, "
+          f"{len(minimo['pairs'].encode('utf-8'))} byte. Le metriche descrittive "
+          f"le riscrive il run successivo.")
+    return True
 
 
 def _notify_telegram(out: dict, passed: list[str], reg: dict) -> None:
