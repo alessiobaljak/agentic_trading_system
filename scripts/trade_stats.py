@@ -190,6 +190,13 @@ def main() -> int:
     print(f"\nTrade totali analizzati: {len(trades)}  ({len(spans)} con apertura nota)")
     print(f"Giorni coperti:          {len(per_day)}")
     print(f"Trade/giorno:            min {min(counts)} · media {mean(counts):.1f} · max {max(counts)}")
+    # LA RIPARTIZIONE, non solo min/media/max. La media sulla settimana non si puo'
+    # confrontare con gli "attesi" di `signal_frequency`: quella sonda fa girare le
+    # coppie validate di OGGI su giorni in cui il registro ne aveva meno, e su giorni
+    # in cui il paper non girava ancora. Il confronto onesto e' giorno contro giorno,
+    # sugli ultimi — e senza questa riga non c'era modo di farlo.
+    print("  per giorno (UTC): " + " · ".join(
+        f"{g} {per_day[g]}" for g in sorted(per_day)))
     if durations_h:
         print(f"Durata media holding:    {mean(durations_h):.1f}h  (min {min(durations_h):.1f}h · max {max(durations_h):.1f}h)")
     print(f"Posizioni contemporanee: MAX {max_conc} · media nel tempo {avg_conc:.1f}")

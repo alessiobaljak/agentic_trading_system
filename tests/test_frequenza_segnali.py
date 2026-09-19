@@ -122,3 +122,42 @@ def test_un_segnale_che_arriva_esattamente_alla_chiusura_entra():
 
 def test_nessun_segnale_nessun_apribile():
     assert sf.apribili_una_per_coin([]) == 0
+
+
+def test_i_selezionati_sono_gli_stessi_che_vengono_contati():
+    """Il conto e il dettaglio devono venire dalla STESSA regola. Se divergessero,
+    il totale della settimana e la ripartizione giorno per giorno racconterebbero
+    due storie diverse dello stesso fatto — e non ci sarebbe modo di sapere quale
+    delle due e' quella su cui si sta decidendo."""
+    casi = [
+        [(0, 3600), (600, 4200), (1200, 4800)],
+        [(0, 100), (200, 300), (400, 500)],
+        [(400, 500), (0, 100), (200, 300)],
+        [],
+    ]
+    for c in casi:
+        assert len(sf.selezionati_una_per_coin(c)) == sf.apribili_una_per_coin(c)
+
+
+def test_il_dettaglio_restituisce_le_finestre_davvero_prese():
+    """Non un conteggio: servono gli orari, perche' il confronto col paper si fa
+    giorno per giorno e il totale della settimana non e' confrontabile."""
+    presi = sf.selezionati_una_per_coin([(0, 3600), (600, 4200), (7200, 9000)])
+    assert presi == [(0, 3600), (7200, 9000)]
+
+
+def test_il_report_riparte_gli_apribili_per_giorno():
+    """Il totale settimanale sovrastima per costruzione: la sonda usa le coppie
+    validate di OGGI su giorni in cui il registro ne aveva meno. Senza la
+    ripartizione, l'unica risposta possibile era «rifacciamo la misura fra una
+    settimana»."""
+    src = inspect.getsource(sf.main)
+    assert "APRIBILI giorno per giorno" in src
+    assert "selezionati_una_per_coin" in src
+
+
+def test_anche_i_trade_veri_sono_ripartiti_per_giorno():
+    """Il confronto ha bisogno di due serie, non di una serie e una media."""
+    from scripts import trade_stats
+
+    assert "per giorno (UTC)" in inspect.getsource(trade_stats.main)

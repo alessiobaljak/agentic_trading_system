@@ -27,7 +27,7 @@ from __future__ import annotations
 
 import argparse
 from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 from backtesting.data_loader import load_candles
 from backtesting.engine import Backtester
@@ -37,6 +37,27 @@ from bot.learning.adaptation import AdaptationEngine
 from bot.strategies import get_all_strategies
 
 ORE_PER_CANDELA = {"5m": 1 / 12, "15m": 0.25, "30m": 0.5, "1h": 1.0, "4h": 4.0}
+
+
+def selezionati_una_per_coin(
+        intervalli: list[tuple[float, float]]) -> list[tuple[float, float]]:
+    """QUALI di questi trade il bot avrebbe aperto (non solo quanti).
+
+    Serve il dettaglio, non il totale, perche' il confronto col paper va fatto
+    GIORNO PER GIORNO: il 19 settembre la sonda applicava le 47 coppie validate di
+    oggi a tutti e sette i giorni, mentre il bot ne aveva 35 il 17 e 43 il 18 — e il
+    paper girava solo da 2,7 giorni dei 7. Sul totale della settimana quel
+    disallineamento gonfia gli attesi e fa sembrare che il bot ne apra la meta'.
+    Sull'ULTIMO giorno, in cui l'insieme era quasi quello di oggi, il confronto e'
+    onesto e la risposta arriva subito invece che fra una settimana.
+    """
+    libera_da = float("-inf")
+    presi: list[tuple[float, float]] = []
+    for apre, chiude in sorted(intervalli):
+        if apre >= libera_da:
+            presi.append((apre, chiude))
+            libera_da = chiude
+    return presi
 
 
 def apribili_una_per_coin(intervalli: list[tuple[float, float]]) -> int:
@@ -55,13 +76,7 @@ def apribili_una_per_coin(intervalli: list[tuple[float, float]]) -> int:
     si prende il trade solo se la moneta e' libera in quel momento — esattamente
     cio' che fa il bot.
     """
-    libera_da = float("-inf")
-    presi = 0
-    for apre, chiude in sorted(intervalli):
-        if apre >= libera_da:
-            presi += 1
-            libera_da = chiude
-    return presi
+    return len(selezionati_una_per_coin(intervalli))
 
 
 def main() -> int:
@@ -130,7 +145,8 @@ def main() -> int:
                     barre = int(getattr(t, "bars_held", 0) or 0)
                     finestre[sym].append((apre, apre + barre * ore * 3600))
 
-    apribili = sum(apribili_una_per_coin(v) for v in finestre.values())
+    scelti = [t for v in finestre.values() for t in selezionati_una_per_coin(v)]
+    apribili = len(scelti)
     print(f"{'='*56}")
     print(f"SEGNALI GREZZI negli ultimi ~{args.days} giorni: {total}  "
           f"(~{total/max(args.days,1):.1f}/giorno)")
@@ -142,6 +158,22 @@ def main() -> int:
     if senza_orario:
         print(f"  ({senza_orario} trade senza orario d'ingresso: esclusi dal secondo "
               f"conto, quindi e' un limite INFERIORE)")
+
+    # GIORNO PER GIORNO: il totale della settimana NON e' confrontabile col paper,
+    # perche' qui girano le coppie validate di OGGI su giorni in cui il registro ne
+    # aveva meno (35 il 17 settembre, 43 il 18) e in cui il paper magari non girava
+    # ancora. Il confronto onesto e' sugli ULTIMI giorni, e per farlo serve la
+    # ripartizione — non la media.
+    per_giorno: dict[str, int] = defaultdict(int)
+    for apre, _ in scelti:
+        per_giorno[datetime.fromtimestamp(apre, timezone.utc).strftime("%Y-%m-%d")] += 1
+    if per_giorno:
+        print("\nAPRIBILI giorno per giorno (UTC):")
+        for giorno in sorted(per_giorno):
+            print(f"  {giorno}   {per_giorno[giorno]}")
+        print("  Confronta gli ULTIMI giorni coi trade veri del paper: i primi della")
+        print("  finestra usano le coppie validate di oggi su un registro che allora")
+        print("  ne aveva meno, quindi sovrastimano.")
     print(f"\nPer coin (attive):")
     for sym, k in sorted(per_coin.items(), key=lambda x: -x[1]):
         print(f"  {sym:<14} {k}")
