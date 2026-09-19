@@ -33,6 +33,29 @@ def available() -> bool:
     return bool(settings.AI_ENABLED and settings.ANTHROPIC_API_KEY)
 
 
+def _headers() -> dict:
+    """Intestazioni extra per il client Anthropic.
+
+    UNA CHIAVE PUO' ESSERE DI DUE TIPI, e il sistema deve accettarli entrambi:
+
+      * legata a un WORKSPACE — funziona cosi' com'e', non serve niente;
+      * a livello di ORGANIZZAZIONE — l'API risponde 400 «This API key is not
+        scoped to a workspace, so this request must include the
+        anthropic-workspace-id header».
+
+    Il 19 settembre il proprietario ha caricato una chiave del secondo tipo e il
+    livello AI e' rimasto spento con un errore che sembrava identico al problema
+    precedente (chiave rifiutata) ma non lo era affatto: la chiave era buona. Un
+    messaggio chiaro dell'API vale poco se il sistema non lo distingue da un
+    guasto diverso — quindi qui si supporta anche quel caso, e basta valorizzare
+    `ANTHROPIC_WORKSPACE_ID` nel `.env`.
+
+    Vuoto -> nessuna intestazione extra, comportamento identico a prima.
+    """
+    ws = (settings.ANTHROPIC_WORKSPACE_ID or "").strip()
+    return {"anthropic-workspace-id": ws} if ws else {}
+
+
 def ask_json(system: str, user: str, max_tokens: int = 2000,
              label: str = "ai") -> Optional[Any]:
     """Interroga il modello e ritorna il JSON della risposta, o None.
@@ -47,7 +70,8 @@ def ask_json(system: str, user: str, max_tokens: int = 2000,
         import anthropic
 
         client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
-                                     timeout=_TIMEOUT_S)
+                                     timeout=_TIMEOUT_S,
+                                     default_headers=_headers())
         resp = client.messages.create(
             model=settings.ANTHROPIC_MODEL,
             max_tokens=max_tokens,

@@ -76,6 +76,10 @@ class Settings:
     # should have at least 1 character").
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
     ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL") or "claude-opus-4-8"
+    # Serve SOLO alle chiavi a livello di organizzazione: senza, l'API risponde
+    # 400 «This API key is not scoped to a workspace». Una chiave gia' legata a un
+    # workspace non ne ha bisogno e questo campo resta vuoto.
+    ANTHROPIC_WORKSPACE_ID: str = os.getenv("ANTHROPIC_WORKSPACE_ID", "")
 
     # ---- Livello AI (bot/ai) ----
     # Interruttore unico. A OFF (o senza chiave) il sistema si comporta ESATTAMENTE

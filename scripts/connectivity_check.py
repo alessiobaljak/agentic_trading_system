@@ -71,10 +71,18 @@ def info_others() -> None:
     if settings.ANTHROPIC_API_KEY:
         try:
             import anthropic
-            anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY).messages.create(
+            # STESSE intestazioni del client vero (`bot.ai.client`), non un client
+            # costruito a mano: una prova che chiama l'API in modo diverso da come
+            # la chiama il sistema risponde a un'altra domanda. E' lo stesso errore
+            # gia' pagato con la sonda sui segnali, che contava su candele da un'ora
+            # mentre il bot gira a quindici minuti.
+            from bot.ai.client import _headers
+            anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
+                                default_headers=_headers()).messages.create(
                 model=settings.ANTHROPIC_MODEL, max_tokens=5,
                 messages=[{"role": "user", "content": "ping"}])
-            _line("Anthropic", OK, f"model={settings.ANTHROPIC_MODEL}")
+            ws = " (workspace impostato)" if settings.ANTHROPIC_WORKSPACE_ID else ""
+            _line("Anthropic", OK, f"model={settings.ANTHROPIC_MODEL}{ws}")
         except Exception as exc:  # noqa: BLE001
             # messaggio completo per diagnosi (nessun segreto qui)
             _line("Anthropic", FAIL, f"model={settings.ANTHROPIC_MODEL} :: {str(exc)[:300]}")
