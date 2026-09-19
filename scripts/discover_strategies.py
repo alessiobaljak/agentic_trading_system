@@ -31,6 +31,7 @@ from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
 from bot.ai.hypotheses import propose as ai_propose
+from bot.execution.exit_logic import SCALE_LADDER_CANDIDATES, ladder_from_mfe
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import generate_specs, mutate
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
@@ -199,9 +200,122 @@ def _publish_discover_autopsy(fb, evaluated: int, passed: int, binding: dict,
     return rep
 
 
-def _disc_init(args, end: str, specs: list) -> None:
+def prove_dal_paper(fb) -> str:
+    """Cosa il PAPER ha misurato, in forma leggibile da chi propone strategie.
+
+    Fino al 19 settembre l'AI riceveva questo, e solo questo:
+
+        «Timeframe operativo: 15m. Universo: crypto futures USDT-M su Binance.»
+
+    Proponeva alla cieca. Non sapeva che il prezzo si ferma a meta' strada dal primo
+    obiettivo, che le short perdevano e le long no, ne' su quale criterio muoiono le
+    candidate. Avevamo costruito un sistema che misura tutto e poi non lo dice a chi
+    deve inventare le soluzioni.
+
+    Qui si mettono insieme SOLO FATTI MISURATI, con il loro campione accanto. Niente
+    interpretazioni e niente istruzioni: un'ipotesi la deve formulare chi legge, e
+    il gate resta l'unico che decide se vale. Un numero senza il suo campione
+    sarebbe peggio di nessun numero — chi legge non saprebbe quanto pesarlo.
+
+    Fail-open in ogni punto: qualunque pezzo manchi, si salta quella riga.
+    """
+    righe: list[str] = []
+
+    try:
+        drift = fb.get_doc("drift", "current") or {}
+    except Exception:  # noqa: BLE001
+        drift = {}
+    glob = drift.get("global") or {}
+    if glob.get("trades"):
+        righe.append(
+            f"PAPER (vissuto, {glob['trades']} trade chiusi): profit factor "
+            f"{glob.get('live_pf')} contro {glob.get('expected_pf')} promesso dal gate.")
+        if glob.get("mfe_median") is not None and glob.get("first_rung_r"):
+            righe.append(
+                f"Escursione favorevole mediana {glob['mfe_median']}R contro un primo "
+                f"take-profit a {glob['first_rung_r']}R: il prezzo si ferma prima di "
+                f"arrivare al primo incasso.")
+
+    try:
+        trades = fb.query_collection("trades", order_by="exit_ts") or []
+    except Exception:  # noqa: BLE001
+        trades = []
+    if trades:
+        for direzione in ("long", "short"):
+            sel = [t for t in trades
+                   if str(t.get("direction", "")).lower() == direzione]
+            if sel:
+                vinti = sum(1 for t in sel if float(t.get("pnl", 0) or 0) > 0)
+                pnl = sum(float(t.get("pnl", 0) or 0) for t in sel)
+                righe.append(f"Direzione {direzione}: {len(sel)} trade, {vinti} vinti, "
+                             f"PnL {pnl:+.2f}.")
+
+    try:
+        aut = fb.get_doc("gate_autopsy", "current") or {}
+    except Exception:  # noqa: BLE001
+        aut = {}
+    binding = aut.get("binding") or {}
+    if binding and aut.get("evaluated"):
+        top = " · ".join(f"{k} {v}" for k, v in list(binding.items())[:4])
+        righe.append(f"GATE: su {aut['evaluated']} valutazioni ne passano "
+                     f"{aut.get('passed', 0)}; muoiono soprattutto su {top}.")
+
+    if not righe:
+        return ""
+    return ("Prove misurate finora (campioni piccoli: sono indizi, non leggi).\n"
+            + "\n".join(f"- {r}" for r in righe))
+
+
+def scala_dal_paper(fb, min_trades: int = 10):
+    """La scala di TP suggerita da dove il prezzo e' DAVVERO arrivato nel paper.
+
+    E' l'anello che mancava. Il paper misurava `mfe_r` su ogni trade chiuso, il
+    rilevatore di deriva lo confrontava col primo gradino e scriveva «mfe mediana
+    0,74R < primo TP 1,50R» su una coppia dopo l'altra — e il gate continuava a
+    scegliere fra quattro scale scritte a mano, senza mai vedere quel numero.
+
+    Si calcola sui trade di TUTTE le coppie insieme, di proposito: per coppia ce ne
+    sono uno o due e un quantile su due numeri non significa niente, mentre «quanto
+    lontano arriva il prezzo in unita' di rischio» e' soprattutto una proprieta'
+    della scala temporale e del mercato, non della singola moneta.
+
+    Fail-open: senza Firebase, senza trade o senza abbastanza campione ritorna None
+    e il gate resta esattamente com'era.
+    """
+    try:
+        trades = fb.query_collection("trades", order_by="exit_ts") or []
+    except Exception as exc:  # noqa: BLE001
+        print(f"[paper] misura mfe non disponibile ({str(exc)[:80]}) -> scale fisse")
+        return None
+    mfes = [t.get("mfe_r") for t in trades if t.get("mfe_r") is not None]
+    scala = ladder_from_mfe(mfes, min_trades=min_trades)
+    if scala:
+        print(f"[paper] {len(mfes)} trade chiusi -> scala candidata dal vissuto: "
+              f"{list(scala)} (si aggiunge alle {len(SCALE_LADDER_CANDIDATES)} fisse, "
+              f"non le sostituisce: sceglie il gate)")
+    elif mfes:
+        print(f"[paper] solo {len(mfes)} trade con mfe (ne servono {min_trades}): "
+              f"scale fisse")
+    return scala
+
+
+def candidate_ladders(scala_paper=None) -> tuple:
+    """Le scale che il gate mettera' a confronto per una coppia.
+
+    Le quattro fisse sempre; quella misurata dal paper in piu', se c'e' ed e'
+    diversa. Mai al posto delle altre — una misura su pochi trade puo' PROPORRE,
+    non decidere."""
+    if not scala_paper:
+        return SCALE_LADDER_CANDIDATES
+    if tuple(scala_paper) in {tuple(c) for c in SCALE_LADDER_CANDIDATES}:
+        return SCALE_LADDER_CANDIDATES
+    return SCALE_LADDER_CANDIDATES + (tuple(scala_paper),)
+
+
+def _disc_init(args, end: str, specs: list, scala_paper=None) -> None:
     _W.update(opt=WalkForwardOptimizer(n_windows=args.windows, interval=args.interval),
-              args=args, end=end, specs=specs, min_history=_min_history(args.interval))
+              args=args, end=end, specs=specs, min_history=_min_history(args.interval),
+              scala_paper=scala_paper)
 
 
 def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
@@ -234,7 +348,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
     near: list = []
     n_eval = 0
     for spec in specs:
-        r = evaluate_spec(_W["opt"], sym, candles, frame, spec)
+        r = evaluate_spec(_W["opt"], sym, candles, frame, spec,
+                          scale_candidates=candidate_ladders(_W.get("scala_paper")))
         n_eval += 1
         if not r["passed"] and r.get("fail_criteria"):
             b = r.get("fail_binding") or "?"
@@ -268,7 +383,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
             {"binding": binding, "involved": involved, "near": near[:10]})
 
 
-def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict):
+def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict,
+                  scale_candidates=None):
     """Aggrega le performance del spec sulle SOLE finestre out-of-sample e applica
     il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra).
 
@@ -310,9 +426,11 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     #    sempre sulla scala globale (e sono la maggioranza del registro).
     best_ladder = None
     if passed and settings.SCALE_OUT_ENABLED:
-        from bot.execution.exit_logic import SCALE_LADDER_CANDIDATES
         best_metric = None
-        for cand in SCALE_LADDER_CANDIDATES:
+        # le candidate arrivano dal CHIAMANTE, non da uno stato globale: cosi'
+        # `evaluate_spec` resta una funzione di cio' che riceve, e un test puo'
+        # verificarla senza ricostruire lo stato dei worker
+        for cand in (scale_candidates or SCALE_LADDER_CANDIDATES):
             st_c, _ = _run_oos(cand)
             metric = st_c.total_pnl_pct() - max_drawdown(st_c.trades)
             if best_metric is None or metric > best_metric:
@@ -641,9 +759,13 @@ def main() -> int:
     #     candidate casuali, perche' ogni candidata in piu' e' un'estrazione in piu'
     #     della lotteria del confronto multiplo. Senza AI la quota resta casuale e il
     #     comportamento e' identico a prima.
+    prove = prove_dal_paper(fb)
+    if prove:
+        print(f"[discover] prove del paper passate all'AI:\n{prove}")
     ai_specs = ai_propose(min(settings.AI_HYPOTHESES_PER_RUN, args.generate),
                           market_context=f"Timeframe operativo: {args.interval}. "
-                                         f"Universo: crypto futures USDT-M su Binance.")
+                                         f"Universo: crypto futures USDT-M su Binance."
+                                         + (f"\n\n{prove}" if prove else ""))
     if ai_specs:
         print(f"[discover] {len(ai_specs)} ipotesi AI (motivate) + "
               f"{args.generate - len(ai_specs)} casuali")
@@ -736,7 +858,8 @@ def main() -> int:
     diag_involved: dict = {}
     diag_near: list = []
     for sym, entries, p_keys, p_specs, n_ev, summary, diag in parallel_map(
-        _disc_one, symbols, workers=workers, initializer=_disc_init, initargs=(args, end, specs)
+        _disc_one, symbols, workers=workers, initializer=_disc_init,
+        initargs=(args, end, specs, scala_dal_paper(fb))
     ):
         n_eval += n_ev
         out.update(entries)

@@ -65,6 +65,58 @@ SCALE_LADDER_CANDIDATES: tuple[tuple[float, ...], ...] = (
 )
 
 
+def ladder_from_mfe(mfes, min_trades: int = 10) -> tuple[float, ...] | None:
+    """Una scala di TP ricavata da DOVE IL PREZZO E' DAVVERO ARRIVATO nel paper.
+
+    IL PROBLEMA CHE CHIUDE. Le quattro scale candidate sopra sono un elenco scritto
+    a mano, e il gate sceglie fra quelle guardando solo la storia simulata. Il paper
+    intanto misurava un fatto che nessuno usava: `mfe_r`, quanto lontano arriva il
+    prezzo prima di tornare. Al 19 settembre la mediana era **0,74 R** contro un
+    primo gradino a 1,5-2,0 R — cioe' puntavamo sistematicamente oltre la portata
+    del mercato, e il rilevatore di deriva lo scriveva su ogni coppia senza che
+    nessuno potesse farci niente.
+
+    PERCHE' `mfe` FUNZIONA CON POCHI TRADE, e vincere/perdere no. Un esito e' testa
+    o croce: dodici lanci non distinguono la sfortuna dal difetto (su 12 trade con 2
+    vinti, un sistema sano produce quel risultato il 3,6% delle volte). `mfe_r` e'
+    un NUMERO per ogni trade, non una monetina: dodici numeri dicono dove va il
+    mercato molto prima che dodici monetine dicano se si vince.
+
+    E RESTA UN CANDIDATO, non una decisione. Questa scala viene semplicemente
+    aggiunta alle quattro fisse e il gate sceglie la migliore sui PROPRI dati, con
+    le proprie tre conferme. Il paper propone, il gate dispone: cosi' una misura su
+    dodici trade non puo' scavalcare la validazione, e la parita' gate<->paper
+    regge. Se la scala derivata non e' buona, il gate non la sceglie e basta.
+
+    Quantili 50/75/90: il primo gradino alla mediana significa che circa meta' dei
+    trade incassa la prima fetta, invece di quasi nessuno.
+
+    None se i trade non bastano o se non ne esce una scala sensata — e in quel caso
+    i candidati restano i quattro di sempre.
+    """
+    validi = sorted(float(m) for m in (mfes or [])
+                    if m is not None and float(m) > 0)
+    if len(validi) < min_trades:
+        return None
+
+    def quantile(p: float) -> float:
+        i = int(round(p * (len(validi) - 1)))
+        return validi[min(len(validi) - 1, max(0, i))]
+
+    fuori: list[float] = []
+    prec = 0.0
+    for p in (0.5, 0.75, 0.9):
+        # arrotondato a 0.25 R: una scala non ha bisogno di tre decimali, e numeri
+        # tondi rendono leggibile il confronto con le quattro candidate fisse
+        x = round(quantile(p) * 4) / 4
+        x = max(x, prec + 0.25, 0.5)     # gradini strettamente crescenti
+        if x > 8.0:
+            return None                 # oltre, non e' piu' una scala: e' un sogno
+        fuori.append(x)
+        prec = x
+    return tuple(fuori)
+
+
 def scale_ladder(entry: float, base_stop: float, long: bool,
                  r_mults=None, fracs=None) -> list[tuple[float, float]]:
     """Scala di take-profit a MULTIPLI di R (R = |entry - base_stop|).
