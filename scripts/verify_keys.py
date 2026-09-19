@@ -47,7 +47,9 @@ def check_anthropic() -> None:
         return _line("Anthropic (Claude)", SKIP)
     try:
         import anthropic
-        c = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+        from bot.ai.client import _headers
+        c = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
+                                default_headers=_headers())
         r = c.messages.create(model=settings.ANTHROPIC_MODEL, max_tokens=5,
                               messages=[{"role": "user", "content": "ping"}])
         _line("Anthropic (Claude)", OK, f"model={settings.ANTHROPIC_MODEL}")

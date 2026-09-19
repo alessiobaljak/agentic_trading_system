@@ -91,3 +91,32 @@ def test_il_parametro_e_documentato_dove_si_compila():
         testo = f.read()
     assert "ANTHROPIC_WORKSPACE_ID" in testo
     assert "not scoped to a workspace" in testo
+
+
+def test_NESSUN_punto_costruisce_il_client_senza_le_intestazioni():
+    """LA REGOLA GENERALE, dopo averla vista fallire due volte in un giorno.
+
+    `bot/ai/client.py` e' «l'unico punto da cui il sistema parla con un modello» —
+    lo dice la sua docstring — ma non era vero: orchestratore, ciclo di
+    apprendimento notturno e i due script di verifica costruivano il client da
+    soli. Finche' non serviva niente di speciale la differenza non si vedeva; il
+    giorno in cui e' servita un'intestazione, quei quattro punti avrebbero preso
+    400 mentre il resto funzionava — e il sintomo sarebbe stato «l'AI a volte si',
+    a volte no».
+
+    Questo test non chiede di passare per `ask_json` (la narrativa settimanale
+    vuole testo libero, non JSON): chiede che CHIUNQUE costruisca un client usi le
+    stesse intestazioni.
+    """
+    import pathlib
+    import re
+
+    radice = pathlib.Path(".")
+    colpevoli = []
+    for f in list(radice.glob("bot/**/*.py")) + list(radice.glob("scripts/*.py")):
+        testo = f.read_text(encoding="utf-8")
+        for m in re.finditer(r"anthropic\.Anthropic\((.*?)\)", testo, re.S):
+            if "default_headers" not in m.group(1):
+                colpevoli.append(f"{f}: {m.group(0)[:70]}")
+    assert not colpevoli, (
+        "client costruiti senza le intestazioni condivise:\n" + "\n".join(colpevoli))

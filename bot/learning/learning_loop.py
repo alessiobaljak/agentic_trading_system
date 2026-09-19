@@ -94,7 +94,9 @@ class LearningLoop:
         try:
             import anthropic
 
-            client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+            from bot.ai.client import _headers
+            client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
+                                         default_headers=_headers())
             resp = client.messages.create(
                 model=settings.ANTHROPIC_MODEL,
                 max_tokens=400,

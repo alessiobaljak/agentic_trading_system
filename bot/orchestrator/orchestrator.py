@@ -222,7 +222,9 @@ class Orchestrator:
         try:
             import anthropic
 
-            client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+            from bot.ai.client import _headers
+            client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
+                                         default_headers=_headers())
             user_msg = build_user_message(
                 assets, signals, regime, memory_report, recent_trades, macro_events
             )
