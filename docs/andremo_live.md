@@ -795,12 +795,25 @@ dopo ...... 138 byte/coppia        −63%
 proiezione sul reale: 759 KiB → ~284 KiB = 32% del tetto
 ```
 
-Il limite dei byte **smette di essere il vincolo**: a 138 byte a coppia ci starebbero
-~7.000 coppie, e il tetto dichiarato sul numero di coppie è 3.000. Arriva prima
-quello, che è un tetto voluto e visibile.
+**MISURATO** dopo il primo giro dell'ottimizzatore col codice nuovo (registro
+riscritto alle 06:34 UTC, report ops `gate` delle 11:38):
 
-**Attenzione: 284 KiB è una proiezione, non una misura.** Il numero vero arriva dal
-primo giro dell'ottimizzatore col codice nuovo. Va verificato, non dato per buono.
+```
+spazio registro ..... 272 KiB su 879   (31%)     [proiezione: ~284 KiB, 32%]
+costo per coppia .... 108 byte                   [proiezione: 138]
+coppie validate ..... 47 su 24 coin              [invariate: nessun passaggio perso]
+distribuzione ....... 0 pass 1704 · 1 pass 397 · 2 pass 133 · 3 pass 47
+ci stanno ancora .... ~5.773 coppie oltre le 2.593 di adesso
+```
+
+La proiezione era corretta e semmai pessimista. Il controllo che contava davvero non
+era la dimensione ma la riga delle **validate**: 47 prima, 47 dopo, con la
+distribuzione dei passaggi intatta. La migrazione di formato non ha perso niente —
+era il rischio peggiore del cambio, e non si è avverato.
+
+Il limite dei byte **ha smesso di essere il vincolo**: a 108 byte a coppia ce ne
+starebbero oltre 8.000, e il tetto dichiarato sul numero di coppie è 3.000. Arriva
+prima quello, che è un tetto voluto e visibile.
 
 787 test passati (13 nuovi), `tsc` e `next build` puliti.
 
