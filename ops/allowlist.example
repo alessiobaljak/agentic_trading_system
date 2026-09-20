@@ -47,6 +47,11 @@ confidenza:   .venv/bin/python -m scripts.confidence_analysis
 # cara non viene rifatta, e infatti e' rimasta non fatta per sei giorni
 # mentre la chiave era rifiutata. Costa una chiamata da 5 token.
 ai-stato:     .venv/bin/python -m scripts.ai_status
+# quanto storico di open interest / long-short esiste per le coppie validate, e
+# quanto peserebbe sul disco. Legge il registro da Firebase (qui c'e', altrove
+# no) e il listing pubblico di data.binance.vision: non scarica lo storico e non
+# scrive niente. Backlog B6.
+storico-oi:   .venv/bin/python -m scripts.binance_metrics_probe
 # revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
 costi:        .venv/bin/python -m scripts.revalidate_costs
 

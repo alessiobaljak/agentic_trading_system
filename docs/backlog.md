@@ -209,9 +209,38 @@ Trappole verificate, da scrivere nel codice:
 * è un dataset **non documentato** nel README di Binance: può cambiare senza
   preavviso.
 
-**Primo passo, piccolo:** scaricarli per le 25 coppie validate dal 2022-01-01,
-misurare quanto pesano sul disco e quante coppie hanno davvero dati dal 2022.
-Solo dopo decidere se costruirci una feature.
+**Primo passo FATTO il 20 set** — `scripts/binance_metrics_probe.py` (lettore in
+`backtesting/metrics_loader.py`, allowlist `storico-oi`). Misurato sulle 25
+coppie validate, finestra 2022-01-01 → 2026-09-19:
+
+```
+coppie con dati dal 2022-01-01:   3 su 25   (DOT, EGLD, VET)
+coppie con dati (anche recenti): 25 su 25
+peso compresso, tutta la finestra: 221 MiB · 20.926 file da ~11 KiB
+scompattato, proiezione dal campione: ~676 MiB (×3,1)
+giorni mancanti nello storico: 1 solo (STXUSDT 2023-12-08) su 20.926
+```
+
+Le tre trappole del contenuto sono nel lettore e nei test
+(`tests/test_storico_metrics.py`): righe non ordinate, righe doppie nel 2020/21,
+checksum SHA256 verificato a ogni download.
+
+**Cosa dice il numero, e perché la feature resta ferma.** Solo 3 coppie su 25
+hanno storico dal 2022: le altre 22 sono coin quotate fra il 2023 e il 2025. Una
+feature costruita su questi dati **non potrebbe essere validata sulla stessa
+finestra del gate** — 22 coppie avrebbero l'indicatore vuoto per la maggior
+parte dei 4,6 anni, e il walk-forward a 4 blocchi non avrebbe dati nei primi
+blocchi. Non è un difetto della fonte: è che la fonte esiste da prima delle coin,
+non delle coin da prima della fonte.
+
+Restano due strade, nessuna delle due da aprire adesso:
+* usare la finestra **corta** (dal listing di ogni coin) e accettare meno blocchi
+  OOS — cioè meno severità, proprio dove il GATE 1 è tutta la difesa;
+* tenerli come **tilt di size dal vivo**, come già fanno trend e sentiment, senza
+  passare dal gate. Costa poco e non tocca la validazione.
+
+221 MiB compressi sono un peso accettabile per la VPS; il problema non è lo
+spazio, è la copertura. **Decisione rimandata a dopo i 40 trade del paper.**
 
 ### B7. Registrare noi lo storico da oggi — non è "una riga di codice"
 **Stato:** aperto · emerso 20 set
