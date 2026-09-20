@@ -138,15 +138,92 @@ diventa il dato più ricco che abbiamo — e l'AI è l'unica cosa capace di legg
 referti e trovare il filo comune.
 
 ### B5. Notizie e dati macro
-**Stato:** aperto, **bassa priorità nonostante sia la richiesta originale**
+**Stato:** aperto · ricerca fatta il 20 set (30 agenti, 23 candidati, 8 confermati)
 
-Non esistono nel sistema: le strategie vedono solo prezzo e volume. Fear&Greed e
-funding ci sono ma li usa solo il riconoscimento del regime.
+Non esistono nel sistema: le strategie vedono solo prezzo e volume. **Il problema
+non è leggerle, è validarle** — serve l'archivio STORICO allineato al minuto,
+altrimenti il gate non può testarle.
 
-**Il problema non è leggerle, è validarle:** serve l'archivio STORICO delle notizie
-allineato al minuto, altrimenti il gate non può testarle e si finirebbe a operare
-qualcosa di mai verificato. Costosa e incerta: le altre tre voci di questa sezione
-usano dati che abbiamo già.
+**Cosa è stato verificato (e cosa no).** La ricerca ha girato da una rete che
+blocca quasi tutti i domini dei fornitori: LunarCrush, CoinGecko, FRED, Dune,
+ForexFactory, DefiLlama, Alpha Vantage. Letti DIRETTAMENTE solo: il README del
+server MCP LunarCrush su GitHub, la pagina prezzi di BigQuery, i file S3 di
+Binance Vision. Il resto è marcato come non verificato ed è da ricontrollare da
+una rete non filtrata prima di costruirci sopra.
+
+**Piani gratuiti che NON esistono più** (tutti verificati, tutti chiusi nel 2026):
+
+| fonte | stato |
+|---|---|
+| CryptoPanic | piano Developer gratuito dismesso a inizio 2026 |
+| CryptoCompare / CoinDesk Data | gratuito chiuso il 21 maggio 2026 |
+| Dune Analytics | dal **10 settembre 2026** il free è in sola lettura: non esegue query |
+| CoinGecko | storico gratuito fermo a 365 giorni; per il 2022 serve il piano da **129 $/mese** |
+| Santiment free | 1 anno di storico **con gli ultimi 30 giorni tagliati**: backtestabile ma non operabile |
+
+**LunarCrush: no.** Il server MCP ufficiale esiste ma usa la **stessa chiave**
+della REST (`Authorization: Bearer <LUNARCRUSH_API_KEY>`, README letto) e la nostra
+risponde **402** da tre misure indipendenti. Il prezzo attuale non è verificabile
+da qui: si sa che la chiave che abbiamo non funziona e che l'MCP ne richiede una.
+
+**GDELT** resta l'unica vera fonte di notizie con storico gratuito (tono e volume
+ogni 15 minuti dal 2015, file bulk ri-scaricabili, nessuna chiave). Riserve:
+domini bloccati quindi non provato di persona; è rumore macro mondiale, non
+notizie crypto; e **BigQuery non basta gratis** — il tetto è 1 TiB/mese
+(verificato) ma una passata 2022→oggi ne consuma ~1,68 TiB.
+
+**Il passo a costo zero che viene PRIMA di tutto.** Esiste su Hugging Face un
+dataset gratuito con ~5 anni di notizie crypto con orario (ott 2019 → feb 2025,
+verificato leggendo il CSV). Non alimenta la produzione, ma permette di misurare
+**se le notizie hanno un qualche edge sulle nostre coppie**. Se la risposta è no,
+ogni abbonamento è risparmiato. Licenza CC-BY-NC, qualità bassa (contiene
+comunicati sponsorizzati).
+
+### B6. Lo storico di open interest e long/short: già gratis, mai usato
+**Stato:** aperto · **la raccomandazione numero uno** · verificato con le mani 20 set
+
+Binance pubblica in file scaricabili le STESSE grandezze che oggi leggiamo solo
+dal vivo: open interest, long/short ratio dei top trader, taker buy/sell ratio.
+
+Misurato davvero, non stimato:
+
+```
+download anonimo, senza chiave: 25 file in parallelo → 25× HTTP 200 in 1,1s
+granularità 5 minuti · 288 righe al giorno · checksum SHA256 corretti
+BTCUSDT dal 2020-09-01 · ETH/BNB/XRP/DOGE dal 2021-12-01 · fino a ieri
+s3-ap-northeast-1.amazonaws.com/data.binance.vision  prefix=data/futures/um/daily/metrics/
+```
+
+**Perché è il candidato migliore:** è la *stessa fonte* che il bot usa già in
+produzione, quindi ricerca e live non possono disallinearsi. L'endpoint REST tiene
+solo 30 giorni ed è per questo che quei dati non sono mai entrati nel gate: questo
+dataset toglie esattamente quel muro.
+
+Trappole verificate, da scrivere nel codice:
+* esistono solo file **giornalieri** (i mensili non ci sono): su tutte le coppie
+  sarebbero ~850.000 file → farlo solo sulle 25 coppie validate;
+* i file recenti **non sono ordinati** per orario: riordinare dopo il parsing;
+* i file del 2020/inizio 2021 hanno ogni riga **duplicata**;
+* usare l'origine S3, non l'hostname `data.binance.vision` (già fatto così in
+  `scripts/survivorship_report.py:40`);
+* è un dataset **non documentato** nel README di Binance: può cambiare senza
+  preavviso.
+
+**Primo passo, piccolo:** scaricarli per le 25 coppie validate dal 2022-01-01,
+misurare quanto pesano sul disco e quante coppie hanno davvero dati dal 2022.
+Solo dopo decidere se costruirci una feature.
+
+### B7. Registrare noi lo storico da oggi — non è "una riga di codice"
+**Stato:** aperto · emerso 20 set
+
+Sembra la soluzione ovvia e non lo è. Oggi non registriamo nulla
+(`bot/execution/executor.py:184` salva il sentiment solo dentro il singolo trade),
+il gratuito di CoinGecko non regge un polling continuo (lo dice il repo stesso in
+`bot/agents/market_scanner.py:166`), **23 delle 25 coppie validate non hanno
+nemmeno un id CoinGecko**, e soprattutto il backtest consuma **solo candele**
+(`bot/core/indicators.py:119`): non esiste un canale per una serie esterna.
+
+**Serve:** prima costruire il canale nel backtest, poi cominciare a registrare.
 
 ---
 
@@ -175,6 +252,32 @@ Allargarlo aumenterebbe le monete coperte (15% contro l'obiettivo del 35%), ma u
 giro dura già ~2h contro un timer di 3h.
 
 **Serve:** prima misurare quanto dura davvero un giro, poi decidere.
+
+### C4. Il bot non si mette flat su FOMC/CPI/NFP
+**Stato:** aperto · rischio documentato dal 4 agosto, mai chiuso
+
+`macro_agent.py` esisteva, non era importato da nessuno e il suo
+`upcoming_high_impact_events()` ritornava `[]`. È stato rimosso perché «codice
+morto documentato come protezione è peggio di una protezione assente». La
+conseguenza scritta nei documenti: **il bot tiene le posizioni aperte durante i
+dati macro**, e nessuno lo sta guardando.
+
+Ricerca del 20 settembre: **nessuna fonte gratuita e verificata copre il caso.**
+
+* **FRED** sembrava la risposta ed è stato scartato dalla verifica: i termini
+  d'uso vietano *«storing, caching, or archiving»* e l'uso per addestrare
+  software — cioè precisamente ciò che il gate fa — e le date sono **al giorno,
+  senza orario**. Da rileggere da una rete non filtrata prima di escluderlo del
+  tutto.
+* **ForexFactory / CryptoCraft**: gratis e col campo "impatto", ma ~2 mesi
+  indietro → solo live, mai gate. Il pacchetto `market-calendar-tool` che
+  prometteva lo storico non è installabile (vuole Python 3.12, siamo su 3.11),
+  è fermo da 23 mesi, e se ForexFactory cambia una scritta **cancella le righe in
+  silenzio**: il backtest riceverebbe un calendario vuoto senza errore.
+* **La lista scritta a mano.** Dal 2022 a oggi sono ~8 FOMC l'anno + 12 CPI + 12
+  NFP: **circa 140 righe**. Un CSV nel repo, nessuna API, nessuna licenza, nessuno
+  scraper che si rompe durante un giro. Gli orari sono costanti (CPI e NFP 14:30
+  ora italiana, FOMC 20:00). *È un ragionamento, non una fonte letta.*
 
 ### C3. La copertura non raggiungerà mai il 35%
 **Stato:** da decidere
