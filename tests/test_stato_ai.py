@@ -56,14 +56,33 @@ def test_le_proposte_si_riconoscono_dal_meccanismo():
         "gen_b": {"features": []},
     }}})
     righe = _cattura(lambda: ai_status.stato_proposte(fb))
-    assert "1 spec con un meccanismo dichiarato su 2" in righe
+    assert "di origine AI fra quelle che hanno passato il gate: 1 su 2" in righe
 
 
-def test_senza_proposte_lo_dice_invece_di_tacere():
+def test_zero_spec_AI_nel_gate_non_e_un_allarme():
+    """IL FALSO ALLARME DEL 20 SETTEMBRE. Il validatore aveva appena accettato 20
+    proposte su 20 e il registro diceva «0 su 416»: il messaggio concludeva «l'AI
+    non ha girato, oppure le proposte non vengono salvate». Sbagliato due volte —
+    la verita' era la terza, non contemplata: le proposte erano appena state
+    accettate e non avevano ancora avuto un giro per passare il gate, dove passa
+    lo 0,25% delle valutazioni."""
     fb = _Fb(docs={("discovered_strategies", "specs"): {"specs": {
         "gen_b": {"features": []}}}})
     righe = _cattura(lambda: ai_status.stato_proposte(fb))
-    assert "nessuna spec motivata" in righe
+    assert "normale finche' le proposte AI sono poche o recenti" in righe
+    assert "non ha girato" not in righe
+
+
+def test_proporre_e_passare_il_gate_sono_DUE_righe_diverse():
+    """Confonderle e' cio' che ha prodotto il falso allarme: la prima dice se l'AI
+    lavora (subito), la seconda se il suo lavoro regge (settimane)."""
+    fb = _Fb(docs={
+        ("ai_hypotheses", "last"): {"proposte": 20, "accettate": 20,
+                                    "motivi": {}, "at": 1.0},
+        ("discovered_strategies", "specs"): {"specs": {"gen_b": {"features": []}}}})
+    righe = _cattura(lambda: ai_status.stato_proposte(fb))
+    assert "20/20 accettate dal validatore" in righe
+    assert "di origine AI fra quelle che hanno passato il gate: 0 su 1" in righe
 
 
 def test_l_ombra_vuota_spiega_perche_puo_essere_normale():
@@ -95,7 +114,7 @@ def test_un_guasto_di_firebase_non_fa_cadere_la_diagnosi():
             raise RuntimeError("giu'")
 
     assert "non leggibile" in _cattura(lambda: ai_status.stato_ombra(_Rotto()))
-    assert "non leggibile" in _cattura(lambda: ai_status.stato_proposte(_Rotto()))
+    assert "non leggibili" in _cattura(lambda: ai_status.stato_proposte(_Rotto()))
 
 
 def test_e_sola_lettura():

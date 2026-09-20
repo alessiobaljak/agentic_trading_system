@@ -10,7 +10,8 @@ Questo script risponde in una schermata a quattro domande, nell'ordine in cui
 servono:
 
   1. la chiave funziona? (una chiamata vera, minima)
-  2. l'AI sta PROPONENDO strategie? (dal registro delle spec scoperte)
+  2. l'AI sta PROPONENDO strategie, e quante sue proposte hanno superato il
+     gate? (due domande diverse: la prima si vede subito, la seconda no)
   3. l'AI sta DECIDENDO in ombra? (dal documento `ai_shadow`)
   4. quali PROVE del paper le stiamo passando? (lo stesso digest che riceve)
 
@@ -74,43 +75,56 @@ def prova_chiave() -> bool:
 
 
 def stato_proposte(fb) -> None:
-    """Quante spec portano la firma dell'AI, e quando e' stata l'ultima."""
-    try:
-        doc = fb.get_doc("discovered_strategies", "specs") or {}
-    except Exception as exc:  # noqa: BLE001
-        print(f"{FAIL} proposte: registro spec non leggibile ({str(exc)[:70]})")
-        return
-    specs = decode_pairs(doc.get("specs"))
-    if not specs:
-        print(f"{SKIP} proposte: nessuna spec nel registro")
-        return
-    # Le spec dell'AI portano `mechanism` — il meccanismo dichiarato — e quelle
-    # casuali no. E' l'UNICO modo di distinguerle: l'id e' calcolato allo stesso
-    # modo di proposito («niente corsie preferenziali», dice il codice che le
-    # costruisce), quindi al gate arrivano indistinguibili. Giusto per la
-    # validazione, scomodo per sapere se l'AI sta lavorando: questo campo e'
-    # l'unica traccia.
-    motivate = [s for s in specs.values()
-                if isinstance(s, dict) and s.get("mechanism")]
-    print(f"{OK if motivate else FAIL} proposte: {len(motivate)} spec con un "
-          f"meccanismo dichiarato su {len(specs)} totali")
-    if not motivate:
-        print("   nessuna spec motivata: o l'AI non ha ancora girato col codice "
-              "nuovo,\n   oppure sta proponendo e le proposte non vengono salvate")
+    """L'AI sta proponendo? E quante delle sue proposte hanno superato il gate?
 
-    # PERCHE' ne sopravvivono cosi' poche. Il 19 settembre il log diceva «19/20
-    # scartate» e il motivo, aggiunto la sera stessa, era gia' illeggibile il
-    # mattino dopo: il canale ops mostra le ultime righe del journal e in mezzo
-    # l'ottimizzo ne scrive migliaia. Ora l'esito vive su Firebase e si legge qui.
+    SONO DUE DOMANDE DIVERSE, e confonderle da' un falso allarme. La prima si
+    legge dall'esito dell'ultimo giro; la seconda dal registro delle spec, che
+    contiene SOLO quelle che hanno passato il gate almeno una volta (0,25% delle
+    valutazioni). Il 20 settembre la prima diceva «20/20 accettate» e la seconda
+    «0 su 416», e il messaggio concludeva «l'AI non ha girato, oppure le proposte
+    non vengono salvate»: sbagliato due volte. La verita' era la terza, non
+    contemplata — le sue proposte erano appena state accettate e non avevano
+    ancora avuto un giro per passare il gate.
+    """
+    # 1) STA PROPONENDO? — l'esito dell'ultimo giro, salvato su Firebase perche'
+    #    nel journal scorre via in poche ore.
     try:
         esito = fb.get_doc("ai_hypotheses", "last") or {}
     except Exception:  # noqa: BLE001
         esito = {}
-    if esito.get("proposte"):
+    if not esito.get("proposte"):
+        print(f"{FAIL} proposte: nessun giro registrato. L'AI non ha ancora "
+              f"proposto\n   col codice che salva l'esito, o non sta proponendo.")
+    else:
         acc, tot = esito.get("accettate", 0), esito["proposte"]
-        print(f"   ultimo giro: {acc}/{tot} proposte accettate · {_quando(esito.get('at'))}")
+        segno = OK if acc else FAIL
+        print(f"{segno} proposte: {acc}/{tot} accettate dal validatore · "
+              f"{_quando(esito.get('at'))}")
         for motivo, quante in list((esito.get("motivi") or {}).items())[:6]:
             print(f"     scartate ×{quante}: {motivo}")
+
+    # 2) QUANTE HANNO SUPERATO IL GATE — lento per costruzione: passa lo 0,25%
+    #    delle valutazioni, e una spec entra qui solo dopo essere passata.
+    try:
+        doc = fb.get_doc("discovered_strategies", "specs") or {}
+    except Exception as exc:  # noqa: BLE001
+        print(f"{FAIL} spec che hanno passato il gate: non leggibili "
+              f"({str(exc)[:60]})")
+        return
+    specs = decode_pairs(doc.get("specs"))
+    if not specs:
+        print(f"{SKIP} spec che hanno passato il gate: nessuna nel registro")
+        return
+    # `mechanism` e' l'UNICA traccia dell'origine AI: l'id e' calcolato come quello
+    # delle casuali di proposito («niente corsie preferenziali»), quindi al gate
+    # arrivano indistinguibili.
+    motivate = [s for s in specs.values()
+                if isinstance(s, dict) and s.get("mechanism")]
+    print(f"{OK if motivate else SKIP} di origine AI fra quelle che hanno passato "
+          f"il gate: {len(motivate)} su {len(specs)}")
+    if not motivate:
+        print("   normale finche' le proposte AI sono poche o recenti: passa lo "
+              "0,25%\n   delle valutazioni, e serve almeno un giro dopo la proposta")
 
 
 def stato_ombra(fb) -> None:
