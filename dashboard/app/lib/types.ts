@@ -95,6 +95,10 @@ export interface Position {
   leverage?: number;
   unrealized_pnl?: number;
   stop_price?: number;
+  /** Lo stop che verrebbe eseguito ADESSO: include la protezione del
+   *  profitto, che alza lo stop a ogni tick senza persisterlo in
+   *  `stop_price`. Assente sulle posizioni aperte prima del 20 set. */
+  effective_stop?: number | null;
   take_profit_price?: number;
   trailing_active?: boolean;
   scaled_out?: boolean;

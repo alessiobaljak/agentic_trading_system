@@ -297,7 +297,12 @@ def test_path_replay_keeps_position_open_and_publishes_once(scale_on):
     eng = _open()
     writes = []
     orig = eng._write_position_state
-    eng._write_position_state = lambda pos, mark: writes.append(mark) or orig(pos, mark)
+    # `**kw` accoglie `eff_stop`, aggiunto il 20 settembre per pubblicare lo stop
+    # che include la protezione del profitto. Un finto con la firma rigida rompe
+    # al primo argomento nuovo e sembra un difetto del codice invece che del finto:
+    # qui interessa QUANTE volte si pubblica, non con quali parametri.
+    eng._write_position_state = (
+        lambda pos, mark, **kw: writes.append(mark) or orig(pos, mark, **kw))
     closed = eng.update_position_path("BTCUSDT", [100.2, 101.0, 100.5], mark_price=100.5)
     assert closed is None
     assert "BTCUSDT" in eng.open_positions

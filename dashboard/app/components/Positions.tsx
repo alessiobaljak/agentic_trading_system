@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { onValue, ref, serverTimestamp, set } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
 import type { Position } from '../lib/types';
+import { STATO } from '../lib/viz';
 import PositionDetail from './PositionDetail';
 
 function fmt(n: number | undefined, digits = 2): string {
@@ -118,7 +119,24 @@ export default function Positions({ onSelect }: { onSelect?: (p: Position) => vo
                     <td className="mono">{fmt(p.mark_price, 4)}</td>
                     <td className="mono">{fmt(p.quantity, 4)}</td>
                     <td className="mono">{p.leverage != null ? `${p.leverage}x` : '—'}</td>
-                    <td className="mono">{fmt(p.stop_price, 4)}</td>
+                    <td className="mono">
+                      {/* lo stop EFFETTIVO: `stop_price` e' la base (pareggio dopo
+                          il primo TP) e non include la protezione del profitto, che
+                          si ricalcola a ogni tick. Mostrare la base faceva credere
+                          di essere protetti al pareggio quando lo si era molto piu'
+                          in alto — e spinge a chiudere a mano una posizione gia' al
+                          sicuro. */}
+                      {fmt(p.effective_stop ?? p.stop_price, 4)}
+                      {p.effective_stop != null && p.stop_price != null
+                        && p.effective_stop !== p.stop_price && (
+                        <span
+                          title={`protezione del profitto attiva (base ${fmt(p.stop_price, 4)})`}
+                          style={{ marginLeft: 4, color: STATO.buono }}
+                        >
+                          🔒
+                        </span>
+                      )}
+                    </td>
                     <td className="mono">
                       {p.tp_ladder && p.tp_ladder.length > 0 ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-end' }}>

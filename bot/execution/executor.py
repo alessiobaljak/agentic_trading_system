@@ -483,7 +483,7 @@ class ExecutionEngine:
             if publish:
                 intended = max(eff_stop, pos.stop_price) if long else min(eff_stop, pos.stop_price)
                 self._sync_exchange_stop(pos, intended)
-                self._write_position_state(pos, mark_price)
+                self._write_position_state(pos, mark_price, eff_stop=intended)
             return None
 
         # --- percorso classico: TP unico pieno (identico al backtest) ---
@@ -512,7 +512,7 @@ class ExecutionEngine:
         pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
         if publish:
             self._sync_exchange_stop(pos, eff_stop)   # LIVE: stop sul book = stop deciso qui
-            self._write_position_state(pos, mark_price)
+            self._write_position_state(pos, mark_price, eff_stop=eff_stop)
         return None
 
     def update_position_path(self, symbol: str, path: list[float],
@@ -669,7 +669,8 @@ class ExecutionEngine:
             costs_are_estimated=self.dry_run,
         )
 
-    def _write_position_state(self, pos: Position, mark_price: float) -> None:
+    def _write_position_state(self, pos: Position, mark_price: float,
+                              eff_stop: float | None = None) -> None:
         long = pos.direction == Direction.LONG
         gross = (mark_price - pos.entry_price) if long else (pos.entry_price - mark_price)
         # UPNL NETTO = quanto incasseresti chiudendo ORA. Sottrae fee round-trip +
@@ -687,7 +688,14 @@ class ExecutionEngine:
         # dashboard). Solo osservabilita'. Vuoto se scale-out disattivo (TP unico).
         tp_ladder = []
         if settings.SCALE_OUT_ENABLED:
-            _mults = settings.SCALE_OUT_R_MULTIPLES
+            # I MULTIPLI DELLA COPPIA, non il default globale. I PREZZI qui sotto
+            # sono sempre stati calcolati da `pos.scale_r_mults` (la scala validata
+            # per questa coppia); l'ETICHETTA veniva dal default globale 1.5/3/5.
+            # Su PROMUSDT, validata con 2/4/6, la dashboard mostrava «✓ 3R» accanto
+            # a un prezzo che era 4R: il proprietario ha letto 3R e ragionato su 3R.
+            # Un'etichetta sbagliata accanto a un prezzo giusto e' peggio di nessuna
+            # etichetta — sembra un'informazione e invece e' una bugia.
+            _mults = pos.scale_r_mults or settings.SCALE_OUT_R_MULTIPLES
             tp_ladder = [
                 {"price": round(pr, 6), "fraction": fr,
                  "r": (_mults[i] if i < len(_mults) else None),
@@ -700,6 +708,15 @@ class ExecutionEngine:
             "entry_price": pos.entry_price, "mark_price": mark_price,
             "quantity": pos.remaining_qty, "leverage": pos.leverage,
             "stop_price": pos.stop_price, "take_profit_price": pos.take_profit_price,
+            # LO STOP CHE VERREBBE DAVVERO ESEGUITO ADESSO. `stop_price` e' la
+            # base (spostata a pareggio dopo il primo TP) e serve a ricostruire
+            # la posizione dopo un riavvio: NON va cambiata. Ma la protezione
+            # del profitto alza lo stop a ogni tick senza persisterlo, quindi la
+            # dashboard mostrava «pareggio» mentre il bot proteggeva molto piu'
+            # in alto. Sottostimare la protezione porta a chiudere a mano una
+            # posizione che era gia' al sicuro — il modo piu' silenzioso di
+            # perdere una vincita.
+            "effective_stop": round(eff_stop, 6) if eff_stop is not None else None,
             "tp_ladder": tp_ladder,
             # PnL gia' incassato dalle fette (TP parziali), gia' accreditato in equity
             "realized_partial": round(pos.realized_net, 4),
