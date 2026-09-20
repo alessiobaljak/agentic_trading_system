@@ -769,6 +769,16 @@ def main() -> int:
     if ai_specs:
         print(f"[discover] {len(ai_specs)} ipotesi AI (motivate) + "
               f"{args.generate - len(ai_specs)} casuali")
+    # L'ESITO SU FIREBASE, non solo nel log: il journal tiene le ultime righe e la
+    # discovery gira ogni tre ore, quindi il motivo degli scarti e' illeggibile gia'
+    # poche ore dopo. Best-effort: una diagnosi non salvata non deve far fallire un
+    # giro di validazione.
+    from bot.ai.hypotheses import ULTIMO_ESITO
+    if ULTIMO_ESITO:
+        try:
+            fb.set_doc("ai_hypotheses", "last", dict(ULTIMO_ESITO))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[ai-hypotheses] esito non salvato ({str(exc)[:80]})")
     specs = ai_specs + generate_specs(max(0, args.generate - len(ai_specs)), seed=args.seed)
     existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
     reg = fb.get_doc("strategy_registry", "validated") or {}

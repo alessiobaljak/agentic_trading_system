@@ -98,6 +98,20 @@ def stato_proposte(fb) -> None:
         print("   nessuna spec motivata: o l'AI non ha ancora girato col codice "
               "nuovo,\n   oppure sta proponendo e le proposte non vengono salvate")
 
+    # PERCHE' ne sopravvivono cosi' poche. Il 19 settembre il log diceva «19/20
+    # scartate» e il motivo, aggiunto la sera stessa, era gia' illeggibile il
+    # mattino dopo: il canale ops mostra le ultime righe del journal e in mezzo
+    # l'ottimizzo ne scrive migliaia. Ora l'esito vive su Firebase e si legge qui.
+    try:
+        esito = fb.get_doc("ai_hypotheses", "last") or {}
+    except Exception:  # noqa: BLE001
+        esito = {}
+    if esito.get("proposte"):
+        acc, tot = esito.get("accettate", 0), esito["proposte"]
+        print(f"   ultimo giro: {acc}/{tot} proposte accettate · {_quando(esito.get('at'))}")
+        for motivo, quante in list((esito.get("motivi") or {}).items())[:6]:
+            print(f"     scartate ×{quante}: {motivo}")
+
 
 def stato_ombra(fb) -> None:
     """Se l'ombra registra, fra qualche settimana «l'AI avrebbe fatto meglio?»

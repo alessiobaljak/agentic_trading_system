@@ -137,3 +137,63 @@ def test_una_proposta_che_non_e_un_oggetto_non_fa_esplodere_niente():
     scarto contato, non un'eccezione che porta giu' il giro di discovery."""
     assert h._esamina_spec("stringa") == (None, "proposta non e' un oggetto")
     assert h._esamina_spec(None)[0] is None
+
+
+# --------------------------------------------------------------------------- #
+# L'esito sopravvive al log                                                   #
+# --------------------------------------------------------------------------- #
+def test_l_esito_dell_ultimo_giro_resta_disponibile():
+    """IL DIFETTO DEL 20 SETTEMBRE. La diagnosi dei motivi c'era gia' e non e'
+    stata leggibile lo stesso: il canale ops mostra le ultime 80 righe del
+    journal, la discovery gira ogni tre ore e in mezzo l'ottimizzo ne scrive
+    migliaia. Sei ore dopo, il motivo per cui il 95% delle proposte veniva buttato
+    era scorso via — terza volta in due giorni che un'informazione esiste e non si
+    riesce a raggiungerla."""
+    from bot.config import settings
+
+    prima = settings.ANTHROPIC_API_KEY
+    settings.ANTHROPIC_API_KEY = ""          # `propose` esce subito, senza chiamate
+    try:
+        h.ULTIMO_ESITO.clear()
+        assert h.propose(5) == []
+        # senza chiave non si propone niente: l'esito resta vuoto, non finto
+        assert not h.ULTIMO_ESITO
+    finally:
+        settings.ANTHROPIC_API_KEY = prima
+
+
+def test_l_esito_registra_proposte_accettate_e_motivi(monkeypatch):
+    """Il conteggio DEVE venire dalla stessa passata che accetta o scarta: due
+    conteggi separati divergerebbero al primo caso di confine."""
+    from bot.config import settings
+
+    monkeypatch.setattr(settings, "ANTHROPIC_API_KEY", "finta")
+    monkeypatch.setattr(settings, "AI_ENABLED", True)
+    monkeypatch.setattr(h, "ask_json", lambda *a, **k: {"specs": [
+        _spec(),                                   # buona
+        _spec(rr=99.0),                            # numero fuori fascia
+        _spec(features=[{"kind": "inventata"}]),   # feature inesistente
+        _spec(features=[{"kind": "inventata"}]),   # stesso motivo, conta 2
+    ]})
+    h.ULTIMO_ESITO.clear()
+    specs = h.propose(10)
+
+    assert len(specs) == 1
+    assert h.ULTIMO_ESITO["proposte"] == 4 and h.ULTIMO_ESITO["accettate"] == 1
+    motivi = h.ULTIMO_ESITO["motivi"]
+    assert sum(motivi.values()) == 3
+    assert any("inesistente" in m and q == 2 for m, q in motivi.items())
+    assert any("fuori dalla fascia" in m for m in motivi)
+
+
+def test_la_discovery_salva_l_esito_e_ai_stato_lo_mostra():
+    """Registrarlo in memoria e non salvarlo lascerebbe il problema identico: il
+    processo della discovery muore a fine giro."""
+    import inspect
+
+    from scripts import ai_status
+    from scripts import discover_strategies as d
+
+    src = inspect.getsource(d.main)
+    assert "ULTIMO_ESITO" in src and 'set_doc("ai_hypotheses", "last"' in src
+    assert 'get_doc("ai_hypotheses", "last")' in inspect.getsource(ai_status.stato_proposte)

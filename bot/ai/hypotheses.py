@@ -23,6 +23,7 @@ motore non sa eseguire.
 """
 from __future__ import annotations
 
+import time
 from collections import Counter
 from typing import Optional
 
@@ -32,6 +33,11 @@ from bot.strategies.generator import _ATR_STOP, _DIRECTIONAL, _INCOMPATIBLE, _RR
 
 # parametri numerici ammessi per feature, con intervallo. Fuori intervallo ->
 # spec scartata: non si "corregge" l'output del modello, lo si rifiuta.
+#: esito dell'ULTIMA chiamata a `propose` in questo processo: quante proposte, quante
+#: accettate, e il conteggio dei motivi di scarto. Lo legge la discovery per salvarlo
+#: su Firebase — vedi il commento dentro `propose`.
+ULTIMO_ESITO: dict = {}
+
 _FEATURE_PARAMS = {
     "rsi_extreme": {"low": (5.0, 45.0), "high": (55.0, 95.0)},
     "rsi_momentum": {"mid": (35.0, 65.0)},
@@ -202,6 +208,16 @@ def propose(n: int, market_context: str = "") -> list[dict]:
         seen.add(spec["id"])
         specs.append(spec)
     kept, tot = len(specs), len(raw)
+    # L'ESITO SOPRAVVIVE AL LOG. Il 20 settembre la diagnosi dei motivi c'era gia'
+    # e non e' stata leggibile lo stesso: il canale ops mostra le ultime 80 righe
+    # del journal, la discovery gira una volta ogni tre ore e in mezzo l'ottimizzo
+    # ne scrive migliaia. Sei ore dopo, il motivo per cui il 95% delle proposte
+    # viene buttato era gia' scorso via. Una diagnosi che vive solo in una
+    # finestra che scorre non e' una diagnosi — e' la terza volta in due giorni
+    # che un'informazione esiste e non si riesce a raggiungerla.
+    ULTIMO_ESITO.clear()
+    ULTIMO_ESITO.update({"proposte": tot, "accettate": kept,
+                         "motivi": dict(motivi.most_common()), "at": time.time()})
     if kept < tot:
         # I MOTIVI, non solo il conteggio. La prima versione stampava «N/M proposte
         # scartate (fuori vocabolario)» e basta: il 19 settembre ha detto 19 su 20
