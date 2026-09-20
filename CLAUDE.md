@@ -16,6 +16,13 @@ Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
 `docs/audit_backtesting.md` per l'ultima revisione del motore di backtest.
 
+**`docs/backlog.md`** tiene le cose TROVATE E NON FATTE, col motivo del rinvio e il
+numero misurato che le ha fatte emergere. Va letto prima di proporre una modifica —
+molto probabilmente e' gia' li', con scritto perche' non e' stata fatta. E va
+AGGIORNATO ogni volta che si scopre qualcosa che vale la pena valutare ma non si fa
+subito: senza, quelle scoperte vivono solo dentro una conversazione e spariscono con
+lei. E' gia' successo per settimane.
+
 ## Regole che non si negoziano
 
 * **`DRY_RUN` resta `true`.** Il sistema non ha mai toccato denaro vero e non deve
