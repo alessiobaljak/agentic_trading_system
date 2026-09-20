@@ -103,6 +103,23 @@ registro esiste, e occupano il 78% del registro.
 **Serve:** decidere se continuare a valutarle. Toglierle libererebbe tempo di
 calcolo e spazio; tenerle costa poco ma il conto è zero da settimane.
 
+### B2bis. `rr` non serve a niente, ma scarta il 74% delle proposte AI
+**Stato:** aperto · emerso 20 set
+
+Sotto scale-out il take-profit non è più `rr × R`: è la **scala di gradini**. Il
+ramo scale-out ignora `target`, quindi **`rr` non ha nessun effetto sulle uscite** —
+lo dice la docstring di `effective_param_grid`, che per le strategie classiche lo
+sostituisce apposta nella griglia.
+
+Per le generate invece `rr` resta un campo obbligatorio e validato. Risultato
+misurato il 20 settembre: **14 proposte AI su 19 scartate** perché `rr` era sotto
+1,5, cioè per un parametro che non cambia un solo trade.
+
+**Serve:** decidere se per le generate `rr` vada ignorato del tutto (accettando
+qualsiasi valore, o togliendolo dalla spec) quando lo scale-out è attivo. Non
+toccato ora: cambiare cosa si valida a metà misurazione invalida il confronto fra
+le coppie validate prima e dopo.
+
 ### B3. Nessuno chiede PERCHÉ le candidate muoiono
 **Stato:** aperto · emerso 19 set
 
