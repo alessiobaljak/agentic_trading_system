@@ -197,3 +197,52 @@ def test_la_discovery_salva_l_esito_e_ai_stato_lo_mostra():
     src = inspect.getsource(d.main)
     assert "ULTIMO_ESITO" in src and 'set_doc("ai_hypotheses", "last"' in src
     assert 'get_doc("ai_hypotheses", "last")' in inspect.getsource(ai_status.stato_proposte)
+
+
+# --------------------------------------------------------------------------- #
+# Le fasce che il prompt dichiara sono quelle che il validatore applica        #
+# --------------------------------------------------------------------------- #
+def test_il_prompt_dichiara_le_fasce_numeriche():
+    """LA CAUSA VERA del 20 settembre, misurata: su 19 scarti, QUATTORDICI erano
+    `rr` fuori fascia (0.9, 1, 1.2, 1.3 contro un minimo di 1.5). Il prompt non
+    nominava nessuna fascia, quindi il modello non poteva saperlo — e i valori che
+    proponeva erano per giunta sensati, coerenti con le prove del paper che gli
+    passiamo (mfe mediana 0.85R). Una regola che il validatore conosce e il
+    richiedente no non e' una regola, e' una trappola."""
+    assert "FASCE AMMESSE" in h.SYSTEM
+    assert "rr: da 1.5 a 3" in h.SYSTEM
+
+
+def test_le_fasce_del_prompt_vengono_DALLE_STESSE_costanti_del_validatore():
+    """Un elenco copiato a mano nel prompt si stacca al primo cambio di soglia, e
+    il sintomo sarebbe identico a quello di oggi: proposte legali secondo le
+    istruzioni e illegali per il validatore."""
+    for chiave, (lo, hi) in h._NUMERI.items():
+        assert f"{chiave}: da {lo:g} a {hi:g}" in h.SYSTEM, chiave
+    # e il validatore le legge da li', non da una copia
+    import inspect
+    assert "_NUMERI[key]" in inspect.getsource(h._esamina_spec)
+
+
+def test_il_prompt_elenca_i_parametri_obbligatori_di_ogni_feature():
+    """Il secondo motivo di scarto: una feature senza i suoi parametri. L'esempio
+    nel prompt ne mostra una che non ne ha, e chi lo legge lo imita — ci sono
+    caduto anch'io scrivendo questi test."""
+    for kind, params in h._FEATURE_PARAMS.items():
+        assert f"feature {kind}: richiede" in h.SYSTEM, kind
+        for nome in params:
+            assert nome in h.SYSTEM, f"{kind}.{nome}"
+
+
+def test_il_prompt_dice_che_fuori_fascia_si_scarta_TUTTA_la_spec():
+    """Senza questo, un modello ragionevole assume che il valore venga avvicinato
+    al limite — e perde la spec intera per un decimale."""
+    assert "scartata INTERA" in h.SYSTEM
+
+
+def test_le_fasce_sono_calcolate_una_volta_sola():
+    """Generarle a ogni chiamata nasconderebbe un errore di formato fino alla
+    prima proposta vera, cioe' fino a tre ore dopo."""
+    import inspect
+    src = inspect.getsource(h)
+    assert 'SYSTEM = _SYSTEM_TEMPLATE.replace("{FASCE}", _fasce_testo())' in src

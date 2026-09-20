@@ -31,13 +31,13 @@ from bot.ai.client import ask_json, available
 from bot.strategies.generated import FEATURE_LIBRARY, spec_id
 from bot.strategies.generator import _ATR_STOP, _DIRECTIONAL, _INCOMPATIBLE, _RR
 
-# parametri numerici ammessi per feature, con intervallo. Fuori intervallo ->
-# spec scartata: non si "corregge" l'output del modello, lo si rifiuta.
 #: esito dell'ULTIMA chiamata a `propose` in questo processo: quante proposte, quante
 #: accettate, e il conteggio dei motivi di scarto. Lo legge la discovery per salvarlo
 #: su Firebase — vedi il commento dentro `propose`.
 ULTIMO_ESITO: dict = {}
 
+# parametri numerici ammessi per feature, con intervallo. Fuori intervallo ->
+# spec scartata: non si "corregge" l'output del modello, lo si rifiuta.
 _FEATURE_PARAMS = {
     "rsi_extreme": {"low": (5.0, 45.0), "high": (55.0, 95.0)},
     "rsi_momentum": {"mid": (35.0, 65.0)},
@@ -48,7 +48,32 @@ _FEATURE_PARAMS = {
     "session": {"hour_from": (0, 23), "hour_to": (1, 24)},
 }
 
-SYSTEM = """\
+#: fasce dei numeri di una spec. UNA SOLA definizione, usata sia da `_esamina_spec`
+#: per validare sia dal prompt per dichiararle. Prima le fasce esistevano solo nel
+#: validatore e il prompt non le nominava: il 20 settembre il modello ha proposto
+#: rr fra 0.9 e 1.3 — sensato per una strategia di ritorno alla media, e coerente
+#: con le prove del paper che gli passiamo (mfe mediana 0.85R) — e QUATTORDICI
+#: proposte su diciannove sono state scartate per quello. Una regola che il
+#: validatore conosce e il richiedente no non e' una regola: e' una trappola.
+_NUMERI = {
+    "atr_mult_stop": (min(_ATR_STOP), max(_ATR_STOP)),
+    "rr": (min(_RR), max(_RR)),
+    "min_adx": (0.0, 40.0),
+    "volume_mult": (0.0, 5.0),
+}
+
+
+def _fasce_testo() -> str:
+    """Le fasce ammesse, scritte per chi propone. Generate dalle stesse costanti
+    che validano: un elenco copiato a mano si stacca al primo cambio di soglia."""
+    righe = [f"  - {k}: da {lo:g} a {hi:g}" for k, (lo, hi) in _NUMERI.items()]
+    for kind, params in sorted(_FEATURE_PARAMS.items()):
+        dettaglio = ", ".join(f"{n} da {lo:g} a {hi:g}" for n, (lo, hi) in params.items())
+        righe.append(f"  - feature {kind}: richiede {dettaglio}")
+    return "\n".join(righe)
+
+
+_SYSTEM_TEMPLATE = """\
 Proponi strategie di trading per crypto futures come specifiche dichiarative.
 
 Ogni proposta deve avere un MECCANISMO: perche' quella combinazione dovrebbe
@@ -63,7 +88,13 @@ motivate che 50 combinazioni.
 Vincoli (una spec che li viola viene scartata):
 - almeno una feature DIREZIONALE;
 - da 1 a 3 feature in tutto, senza ripetizioni;
-- niente coppie contraddittorie (mean-reversion + breakout sullo stesso segnale).
+- niente coppie contraddittorie (mean-reversion + breakout sullo stesso segnale);
+- OGNI feature che richiede parametri deve averli TUTTI, dentro la sua fascia;
+- i numeri devono stare nelle fasce qui sotto. Fuori fascia la spec viene
+  scartata INTERA: non viene corretta ne' avvicinata al limite.
+
+FASCE AMMESSE:
+{FASCE}
 
 Rispondi ESCLUSIVAMENTE con JSON:
 {"specs": [
@@ -72,6 +103,10 @@ Rispondi ESCLUSIVAMENTE con JSON:
                 {"kind": "stoch_momentum"}],
    "atr_mult_stop": 2.0, "rr": 2.5, "min_adx": 20.0, "volume_mult": 1.5}
 ]}"""
+
+# riempito UNA volta all'import: le fasce non cambiano a runtime, e generarle
+# a ogni chiamata nasconderebbe un errore di formato fino alla prima proposta
+SYSTEM = _SYSTEM_TEMPLATE.replace("{FASCE}", _fasce_testo())
 
 
 def _esamina_feature(raw: dict) -> tuple[Optional[dict], str]:
@@ -148,10 +183,13 @@ def _esamina_spec(raw: dict) -> tuple[Optional[dict], str]:
         if pair <= set(kinds):
             return None, f"coppia incompatibile: {' + '.join(sorted(pair))}"
 
-    for key, lo, hi, default in (("atr_mult_stop", min(_ATR_STOP), max(_ATR_STOP), 1.5),
-                                 ("rr", min(_RR), max(_RR), 2.0),
-                                 ("min_adx", 0.0, 40.0, 0.0),
-                                 ("volume_mult", 0.0, 5.0, 0.0)):
+    # le fasce vengono da `_NUMERI`, le STESSE che il prompt dichiara: una copia
+    # scritta qui si staccherebbe dal prompt al primo cambio di soglia, e il
+    # modello proporrebbe valori legali secondo le istruzioni e illegali per il
+    # validatore — il difetto che il 20 settembre ha scartato 14 proposte su 19.
+    for key, default in (("atr_mult_stop", 1.5), ("rr", 2.0),
+                         ("min_adx", 0.0), ("volume_mult", 0.0)):
+        lo, hi = _NUMERI[key]
         try:
             v = float(raw.get(key, default))
         except (TypeError, ValueError):

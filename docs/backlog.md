@@ -226,12 +226,22 @@ Se regge ai 40 trade, il trend smette di essere un suggerimento sulla size
 (`size_mult ≥ 0,5`) e diventa un **veto**. Oggi sarebbe una reazione al rumore.
 
 ### E2. L'AI si vede scartare quasi tutte le proposte
-**Stato:** in corso · la diagnosi è arrivata il 19 sera
+**Stato:** corretto 20 set · in attesa di conferma al prossimo giro
 
-`1 ipotesi AI accettata su 20`. I motivi ora vengono registrati e salvati; il
-sospetto principale è «manca un parametro obbligatorio» — scrivendo i test ci sono
-caduto anch'io. La correzione è nel prompt: elencare per ogni feature i parametri
-obbligatori e le fasce.
+Diagnosi misurata (`ai_hypotheses/last`, giro delle 08:41 ora italiana):
+
+```
+1 proposta accettata su 20
+rr=1.3 ×4 · rr=1.2 ×4 · rr=1 ×3 · rr=0.9 ×3   →  14 su 19
+rsi_momentum: manca il parametro mid ×1
+nessuna feature direzionale ×1
+```
+
+**Non** era il parametro mancante, come mi aspettavo: era `rr` sotto il minimo di
+1.5. E il prompt non nominava **nessuna** fascia numerica, quindi il modello non
+poteva saperlo. Corretto generando le fasce dalle stesse costanti che validano.
+
+Resta da vedere al prossimo giro se il tasso di accettazione sale.
 
 ### E3. Binance risponde 451 dai runner GitHub
 **Stato:** noto e gestito · nessuna azione
