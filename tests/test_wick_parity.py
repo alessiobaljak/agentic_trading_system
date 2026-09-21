@@ -85,13 +85,32 @@ def test_wick_stop_wins_when_range_touches_both(scale_on):
 
 def test_wick_fills_are_idempotent_across_ticks(scale_on):
     """Rileggere la STESSA ombra al tick dopo non riempie due volte lo stesso livello
-    (per questo la sovrapposizione delle candele 1m e' innocua)."""
+    (per questo la sovrapposizione delle candele 1m e' innocua).
+
+    Dal 21 set 2026 il lock e' ancorato al PRIMO gradino (103): dopo l'ombra a
+    103,5 e' armato a 101,75, quindi al secondo tick l'ombra bassa deve restare
+    sopra il lock — altrimenti il residuo esce (giusto, ma e' un altro test, sotto).
+    Prima l'ancora era l'ultimo gradino (110) e il lock si armava solo a +5."""
     eng = _open()
     eng.update_position("BTCUSDT", 101.0, high=103.5, low=100.5)
-    eng.update_position("BTCUSDT", 101.0, high=103.5, low=100.5)
+    eng.update_position("BTCUSDT", 102.0, high=103.5, low=101.9)
     pos = eng.open_positions["BTCUSDT"]
     assert pos.scale_stage == 1
     assert abs(pos.remaining_qty - 0.7) < 1e-9
+
+
+def test_dopo_il_primo_gradino_il_lock_protegge_il_residuo(scale_on):
+    """A1, 21 set 2026. Toccato il primo gradino (103) e tornati a 100,5, il residuo
+    esce a 101,75 — il lock ancorato al primo gradino — invece di restare esposto
+    fino al pareggio. Misurato: 13 stop su 21 erano trade andati a favore senza
+    toccare il primo gradino e usciti a -1R pieno; questo e' il caso gemello, un
+    gradino piu' in la'."""
+    eng = _open()
+    assert eng.update_position("BTCUSDT", 101.0, high=103.5, low=100.5) is None
+    closed = eng.update_position("BTCUSDT", 101.0, high=103.5, low=100.5)
+    assert closed is not None
+    assert abs(closed.exit_price - 101.75) < 1e-9
+    assert closed.pnl > 0
 
 
 def test_wick_short_direction_fills_on_low(scale_on):
