@@ -526,6 +526,9 @@ class Settings:
     # (size_multiplier e' clampato <=1, quindi il tilt puo' solo ridurre.)
     TREND_TILT_ENABLED: bool = os.getenv("TREND_TILT_ENABLED", "true").lower() == "true"
     TREND_TILT_STRENGTH: float = float(os.getenv("TREND_TILT_STRENGTH", "0.5"))
+    # size minima per un trade contro coin E mercato: 0.5 = mai sotto meta'. Era
+    # scritto nel codice; ora si puo' stringere senza rilasciare.
+    TREND_TILT_FLOOR: float = float(os.getenv("TREND_TILT_FLOOR", "0.5"))
 
     # ---- Sentiment come contesto di decisione (SOLO live/paper, non nel backtest) ----
     # Overlay di SIZE al final gate, identico nello spirito al trend tilt: il sentiment

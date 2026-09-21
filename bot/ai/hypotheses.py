@@ -51,6 +51,11 @@ _FEATURE_PARAMS = {
     # mercato dalla sua: 0 = basta essere piu' forte, 0.02 = almeno due punti
     # percentuali di forza in piu'.
     "relative_strength": {"rs_gap": (0.0, 0.05)},
+    # distanza massima dalla media lenta, in ATR: oltre, il prezzo non sta
+    # oscillando, sta correndo. 21 set 2026: MUBARAK +37% con RSI 88, venduto.
+    "not_stretched": {"stretch_max": (1.0, 6.0)},
+    # opera solo con ADX sotto soglia: l'opposto di min_adx
+    "adx_below": {"adx_hi": (12.0, 50.0)},
 }
 
 #: fasce dei numeri di una spec. UNA SOLA definizione, usata sia da `_esamina_spec`

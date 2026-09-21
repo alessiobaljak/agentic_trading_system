@@ -984,3 +984,53 @@ Cosa NON cambierebbe, ed è voluto: **l'LLM non decide i trade**. Una sua decisi
 La scala progettata è ombra → veto → selezione, e ogni gradino si sblocca solo coi
 numeri del precedente. Oggi siamo fermi prima del primo gradino perché il primo
 gradino non ha mai potuto girare.
+
+## 21 settembre: il giorno in cui abbiamo letto cosa fanno le strategie
+
+Fino a oggi il gate misurava i **risultati** delle strategie generate; nessuno aveva
+letto cosa **fanno**. Il proprietario ha mandato due grafici — MUBARAKUSDT a +37% in
+trenta ore con RSI a 88, USELESSUSDT in salita verticale — e la domanda giusta:
+*«siamo entrati short lì? siamo stupidi?»*. Stupidi no. Ciechi sì, in quattro punti,
+tutti nel codice da luglio.
+
+```
+oggi: short 13 trade · 2 vinti · -30,11    long 11 trade · 3 vinti · -15,59
+USELESSUSDT|gen_2031005e: mfe mediana 0,20R contro un primo gradino a 2,00R
+rischio della posizione aperta: 0,91%  (il freno sul controtrend avrebbe dato ~0,5%)
+```
+
+**1. Il freno non frenava.** Il rilevatore di regime chiamava «incertezza» qualunque
+cosa con ATR/prezzo sopra il 2,5%, prima ancora di guardare la direzione. Quindi più
+una coin correva, meno era «in trend» — e per il freno «incertezza» vale zero. Ora la
+direzione si legge prima. Le strategie generate operano in tutti i regimi, quindi i
+loro backtest non cambiano: cambia l'etichetta, cioè ciò che il freno legge.
+
+**2. Il tritacarne.** L'anti-whipsaw (un'ora di quarantena sulla coin dopo uno stop)
+esisteva nel bot e veniva ignorato in parità, perché il gate non ce l'aveva: il gate
+rientrava alla candela dopo, il bot al minuto dopo. Ora ce l'hanno entrambi, con la
+stessa `COOLDOWN_HOURS` e una sola conversione ore→barre. Nel bot è per coin, quindi
+blocca anche le strategie gemelle che si mettevano in fila.
+
+**3. Le gemelle.** USELESSUSDT aveva tre coppie validate con PF 1,541 / 1,541 / 1,54;
+ORCAUSDT otto. `spec_id` è un hash: due spec che differiscono solo per `rr` — inerte
+sotto scale-out — erano «strategie diverse». Ora la discovery scarta le candidate con
+la stessa **firma** (feature + soglie arrotondate, `rr` escluso). Quelle già validate
+restano: si stampano a ogni giro, la decisione è del proprietario.
+
+**4. Le parole che mancavano.** `rsi_extreme` e `bb_touch` dicono «vendi la forza» e
+`min_adx` lascia passare il segnale solo con un trend forte: insieme fanno «vendi i
+trend forti», per costruzione. Il vocabolario non aveva modo di dire «questa non è
+un'oscillazione». Ora ha `not_stretched` (prezzo entro N ATR dalla media) e
+`adx_below` (l'opposto di `min_adx`), più i tre mattoncini di mercato del mattino
+(`market_trend`, `market_fade`, `relative_strength`). Sceglie il gate.
+
+**Cosa NON è stato fatto, apposta:** azzerare il registro. Le 56 coppie tengono i
+passaggi e vengono rigiudicate con le regole nuove alla prossima finestra di sette
+giorni — la stessa migrazione a registro misto usata per la scala dei TP. Le gemelle
+già dentro non sono state rimosse. `min_adx` sulle spec esistenti non è stato
+toccato.
+
+**La misura dei 40 trade** da qui in poi non è più confrontabile con i primi 24:
+scelta del proprietario, motivata — *«non buttiamo via nulla, andiamo avanti, sono
+tutte info che ci servono»*. I 24 restano nel registro dei trade con le regole con
+cui sono nati.

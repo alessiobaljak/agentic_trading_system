@@ -278,6 +278,35 @@ def feature_esiste(kind: str) -> bool:
     regola — l'abbiamo gia' pagata il 20 settembre con `rr`."""
     return kind in FEATURE_LIBRARY or kind in MARKET_FEATURES
 
+def _feat_not_stretched(i: IndicatorSnapshot, price: float, f: dict):
+    """NON SOVRAESTESO: il prezzo sta entro `stretch_max` ATR dalla media lenta.
+
+    E' la parola che mancava al vocabolario il 21 settembre 2026. MUBARAKUSDT a
+    +37% in trenta ore, RSI 88: per `rsi_extreme` e `bb_touch` era il segnale di
+    vendita piu' forte possibile, e nessun mattoncino poteva dire «questa non e'
+    un'oscillazione, e' una salita verticale». Ora una strategia di ritorno alla
+    media puo' dichiarare fino a dove accetta di vendere la forza — e il gate
+    misura se serve. Non direzionale: blocca entrambi i lati."""
+    if None in (i.atr, i.ema_slow) or not i.atr:
+        return None
+    ok = abs(price - i.ema_slow) / i.atr <= float(f.get("stretch_max", 3.0))
+    return (ok, ok)
+
+
+def _feat_adx_below(i: IndicatorSnapshot, price: float, f: dict):
+    """ADX SOTTO soglia: opera solo quando il trend e' debole.
+
+    E' l'opposto di `min_adx`, che lascia passare il segnale SOLO con ADX alto —
+    cioe' solo quando un trend c'e'. Combinato con feature di ritorno alla media,
+    `min_adx` significa «opera solo quando c'e' un trend forte, e vendilo»: la
+    selezione attiva dei momenti peggiori, misurata il 21 settembre 2026. Qui il
+    generatore ha finalmente anche l'ipotesi contraria; sceglie il gate."""
+    if i.adx is None:
+        return None
+    ok = i.adx < float(f.get("adx_hi", 30.0))
+    return (ok, ok)
+
+
 # nome feature -> (funzione, è_direzionale). Le non direzionali sono filtri.
 FEATURE_LIBRARY = {
     "rsi_extreme": _feat_rsi_extreme,
@@ -299,6 +328,8 @@ FEATURE_LIBRARY = {
     "trend_strength": _feat_trend_strength,
     "volume_surge": _feat_volume_surge,
     "session": _feat_session,
+    "not_stretched": _feat_not_stretched,
+    "adx_below": _feat_adx_below,
 }
 
 

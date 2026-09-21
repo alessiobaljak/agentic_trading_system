@@ -901,7 +901,14 @@ class TradingBot:
                 {"outcome": "flat", "reason": f"{decision.asset} già aperto"})
             return
         cd_until = self._coin_cooldown.get(decision.asset, 0.0)
-        if not settings.BACKTEST_PARITY and now < cd_until:
+        # ANCHE IN PARITA'. Era escluso perche' il gate non aveva il cooldown; dal 21
+        # settembre 2026 ce l'ha (backtesting/engine.py, stessa COOLDOWN_HOURS), e
+        # quel giorno il paper senza freno ha fatto tre short consecutivi sulla
+        # stessa coin in salita. Qui la quarantena e' PER COIN, nel motore per
+        # strategia: dal vivo e' piu' stretta, perche' blocca anche le strategie
+        # gemelle che si mettono in fila dopo lo stop di una sorella. Divergenza
+        # nella direzione sicura (meno trade), voluta.
+        if now < cd_until:
             self._publish_decision_status(
                 {"outcome": "flat",
                  "reason": f"cooldown su {decision.asset} dopo stop ({int((cd_until - now) / 60)}m)"})

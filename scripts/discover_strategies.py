@@ -45,6 +45,78 @@ from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
 _W: dict = {}
 
 
+def _tondo(v: float) -> float:
+    """Due soglie a cinque punti di distanza sono la stessa soglia (RSI 70 e 72
+    sparano negli stessi momenti nove volte su dieci); i numeri piccoli si
+    confrontano al millesimo."""
+    return round(v / 5.0) * 5.0 if abs(v) >= 5.0 else round(v, 3)
+
+
+def firma_spec(spec: dict) -> str:
+    """LA LOGICA CHE OPERA, non l'id.
+
+    `spec_id` e' un hash di tutto: due spec che differiscono per una soglia di
+    due punti, o SOLO per `rr` — che sotto scale-out non ha alcun effetto sulle
+    uscite (backlog B2bis) — hanno id diversi e per il sistema sono «strategie
+    diverse». Il 21 settembre 2026 USELESSUSDT aveva tre coppie validate con PF
+    1,541 / 1,541 / 1,54: la stessa scommessa contata tre volte, che il bot ha
+    messo in fila — stop, riapre, stop, riapre. Qui `rr` e' escluso e le soglie
+    sono arrotondate, cosi' le gemelle hanno la stessa firma."""
+    feats = []
+    for f in spec.get("features") or []:
+        parti = [str(f.get("kind"))]
+        for k, v in sorted(f.items()):
+            if k == "kind":
+                continue
+            parti.append(f"{k}={_tondo(v) if isinstance(v, (int, float)) else v}")
+        feats.append("|".join(parti))
+    feats.sort()
+    adx = _tondo(float(spec.get("min_adx", 0) or 0))
+    vol = round(float(spec.get("volume_mult", 0) or 0) * 2) / 2
+    atr = float(spec.get("atr_mult_stop", 0) or 0)
+    return ";".join(feats) + f";adx={adx:g};vol={vol:g};atr={atr:g}"
+
+
+def scarta_gemelle(specs: list[dict], existing: dict) -> tuple[list[dict], int]:
+    """Toglie dalle CANDIDATE NUOVE quelle con la stessa firma di una gia' nota o
+    di un'altra candidata. Le spec gia' nel registro passano intatte: non si
+    butta via niente di gia' validato, si impedisce che entrino altre copie."""
+    note = {firma_spec(sp) for sp in existing.values() if isinstance(sp, dict)}
+    viste: set[str] = set()
+    tenute: list[dict] = []
+    scartate = 0
+    for sp in specs:
+        if sp.get("id") in existing:
+            tenute.append(sp)
+            continue
+        fm = firma_spec(sp)
+        if fm in note or fm in viste:
+            scartate += 1
+            continue
+        viste.add(fm)
+        tenute.append(sp)
+    return tenute, scartate
+
+
+def gemelle_validate(pairs: dict, existing: dict) -> list[tuple[str, list[str]]]:
+    """Le gemelle GIA' validate sulla stessa coin: diagnostica, non rimozione.
+    Sapere che ORCAUSDT ha otto coppie di cui cinque con la stessa firma e' il
+    dato che serve per decidere; toglierle di nascosto no."""
+    per_coin: dict[tuple[str, str], list[str]] = {}
+    for key, rec in pairs.items():
+        if not isinstance(rec, dict) or int(rec.get("pass_count", 0) or 0) < MIN_PASSES:
+            continue
+        if "|" not in key:
+            continue
+        sym, sid = key.split("|", 1)
+        sp = existing.get(sid)
+        if not isinstance(sp, dict):
+            continue
+        per_coin.setdefault((sym, firma_spec(sp)), []).append(sid)
+    return sorted(((sym, ids) for (sym, _), ids in per_coin.items() if len(ids) > 1),
+                  key=lambda t: -len(t[1]))
+
+
 def specs_da_rivalutare(existing: dict, reg: dict, cap: int) -> tuple[list[dict], dict]:
     """Quali spec gia' note si ri-valutano in questo run, e con che priorita'.
 
@@ -821,6 +893,14 @@ def main() -> int:
         specs.append(mutate(base, seed=args.seed + i + 1))
     # de-dup per id
     specs = list({s["id"]: s for s in specs}.values())
+    # e per LOGICA: due spec con la stessa firma sono la stessa scommessa
+    specs, n_gemelle = scarta_gemelle(specs, existing)
+    if n_gemelle:
+        print(f"[discover] {n_gemelle} candidate scartate perche' gemelle di una "
+              f"spec gia' nota (stessa logica, id diverso)")
+    for sym, ids in gemelle_validate(decode_pairs(reg.get("pairs")), existing)[:8]:
+        print(f"[discover] GEMELLE gia' validate su {sym}: {len(ids)} coppie con la "
+              f"stessa logica ({', '.join(ids[:4])}{'…' if len(ids) > 4 else ''})")
     print(f"[discover] {len(specs)} candidate "
           f"({diag_reeval['n_specs_con_conferme']} con conferme ri-validate + "
           f"{len(existing_list) - diag_reeval['n_specs_con_conferme']} altre, "

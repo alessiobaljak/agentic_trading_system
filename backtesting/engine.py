@@ -59,6 +59,17 @@ def pf_by_regime(trades) -> dict:
     return out
 
 
+def cooldown_bars(hours: float, interval_hours: float) -> int:
+    """Quante barre vale il cooldown dopo uno stop, in QUESTO timeframe.
+
+    Una sola definizione per motore e bot: il bot ragiona in ore (COOLDOWN_HOURS),
+    il motore in barre, e due conversioni scritte a mano divergerebbero al primo
+    cambio di timeframe. Mai meno di una barra quando il cooldown e' attivo."""
+    if hours <= 0 or interval_hours <= 0:
+        return 0
+    return max(1, int(round(hours / interval_hours)))
+
+
 def max_drawdown(trades) -> float:
     """Max drawdown della curva di equity dei trade IN SEQUENZA (cumulata dei
     pnl_pct). E' la misura della continuita': due strategie con lo stesso ritorno
@@ -694,6 +705,7 @@ class Backtester:
             mfe = entry          # miglior prezzo a favore, per la MISURA (non decide nulla)
             max_adverse = 0.0
             exit_price = entry
+            was_stop = False     # uscita per stop (base o alzato): decide il cooldown
             j = i + 1
             horizon = min(n - 1, i + HORIZON_BARS)
             best_fav = entry
@@ -717,6 +729,7 @@ class Backtester:
                     # 1) stop del RESIDUO (stop_base = entry dopo il primo TP)
                     stop_hit = (c.low <= eff_stop) if long else (c.high >= eff_stop)
                     if stop_hit:
+                        was_stop = True
                         ret = (eff_stop - entry) / entry if long else (entry - eff_stop) / entry
                         realized_pct += (1.0 - taken) * ret
                         exit_price = eff_stop
@@ -757,6 +770,7 @@ class Backtester:
                     mfe = max(mfe, c.high) if long else min(mfe, c.low)
                     if long and c.low <= eff_stop:
                         exit_price = eff_stop
+                        was_stop = True
                         if trailing:
                             trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
                         break
@@ -764,6 +778,7 @@ class Backtester:
                         exit_price = target; break
                     if (not long) and c.high >= eff_stop:
                         exit_price = eff_stop
+                        was_stop = True
                         if trailing:
                             trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
                         break
@@ -793,7 +808,18 @@ class Backtester:
                 entry_ts=candles[i].open_time.timestamp(),
                 bars_held=max(0, min(j, horizon) - i),
             ))
+            # ANTI-WHIPSAW, LA STESSA REGOLA DEL BOT. Dopo uno stop IN PERDITA la coin
+            # si lascia stare per COOLDOWN_HOURS: il segnale che ha fatto entrare e'
+            # quasi sempre ancora li', e rientrare alla candela dopo e' rientrare
+            # nella stessa trappola. Il bot aveva questa regola da sempre e la
+            # ignorava in parita' perche' il gate NON ce l'aveva — 21 settembre 2026,
+            # USELESSUSDT: stop alle 11:00, rientro alle 11:01, stop alle 11:25, tre
+            # volte di fila. Ora ce l'hanno tutti e due, quindi la parita' regge.
+            # Uno stop alzato dal profit-lock che chiude in guadagno NON e' una
+            # trappola: nessuna attesa.
             i = j + 1   # niente posizioni sovrapposte
+            if was_stop and pnl_pct <= 0 and settings.COOLDOWN_HOURS > 0:
+                i += cooldown_bars(settings.COOLDOWN_HOURS, self.interval_hours)
         return stats
 
     def run(self, symbol: str, candles: list[Candle]) -> dict[str, StrategyStats]:

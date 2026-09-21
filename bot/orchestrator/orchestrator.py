@@ -199,7 +199,8 @@ class Orchestrator:
             if settings.TREND_TILT_ENABLED:
                 align = (0.6 * self._trend_align(s.get("coin_regime"), s["direction"])
                          + 0.4 * self._trend_align(regime, s["direction"]))
-                size_mult = max(0.5, 1.0 + settings.TREND_TILT_STRENGTH * min(0.0, align))
+                size_mult = max(settings.TREND_TILT_FLOOR,
+                                1.0 + settings.TREND_TILT_STRENGTH * min(0.0, align))
             d = OrchestratorDecision(
                 asset=s["symbol"], strategy=s["strategy"],
                 direction=Direction(s["direction"]), size_multiplier=size_mult,

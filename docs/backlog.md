@@ -576,12 +576,32 @@ sono stati **tre trade short consecutivi** sulla stessa coin mentre saliva.
 **Il numero:** short 13 trade, 2 vinti, **−30,11**; long 11 trade, 3 vinti, −15,59.
 `USELESSUSDT|gen_2031005e` ha mfe mediana **0,20R** contro un primo gradino a 2,00R.
 
-**Serve** (nessuna fatta, tutte da decidere):
-* un tetto alla distanza dalla media, o un `max_adx`, perché una strategia di
-  ritorno alla media possa dichiarare *«questa non è una oscillazione»*;
-* un controllo di somiglianza fra spec prima che entrino nel registro — o un tetto
-  di coppie validate per coin, che è più grezzo ma immediato;
-* rivedere `min_adx`: per le mean-reversion andrebbe letto al contrario.
+**FATTO il 21 set sera**, su richiesta esplicita del proprietario («fai 1, 2 e
+anche 3, ma non buttiamo via nulla»), senza azzerare il registro:
+* **il freno non frenava**: il rilevatore di regime chiamava «incertezza» ogni
+  coin con ATR/prezzo > 2,5% — quindi più correva, meno era «in trend», e il freno
+  leggeva zero. Ora la direzione si legge prima; la volatilità decide solo quando
+  una direzione non c'è. Le generate operano in tutti i regimi, quindi i loro
+  backtest non cambiano: cambia l'etichetta, cioè ciò che freno e learning leggono.
+  Il pavimento del freno è una manopola (`TREND_TILT_FLOOR`, default 0,5).
+* **tritacarne**: l'attesa dopo uno stop in perdita (`COOLDOWN_HOURS`, 1h a 15m)
+  ora sta nel motore di backtest E nel bot, con una sola conversione ore→barre.
+  Nel bot è per coin (blocca anche le gemelle in fila), nel motore per strategia:
+  dal vivo è più stretta, divergenza nella direzione sicura. Le coppie validate
+  tengono i passaggi e vengono rigiudicate con la regola nuova alla prossima
+  finestra: è la migrazione a registro misto già usata per la scala dei TP.
+* **gemelle**: `firma_spec` (feature + soglie arrotondate, `rr` escluso perché
+  inerte) e `scarta_gemelle` nella discovery: nessuna copia nuova entra. Quelle
+  già validate **non vengono rimosse** — vengono stampate a ogni giro
+  (`gemelle_validate`) perché la decisione sia del proprietario, non del codice.
+* **le parole che mancavano**: `not_stretched` (prezzo entro N ATR dalla media)
+  e `adx_below` (l'opposto di `min_adx`) nel vocabolario, nel generatore, nel
+  prompt AI e nel validatore. Additivo: le spec esistenti non le usano, il gate
+  misura se servono.
+
+**Resta aperto:** `min_adx` sulle spec esistenti non è stato toccato — cambiarlo
+cambierebbe strategie già validate. Le nuove hanno `adx_below` come alternativa.
+E le gemelle già validate sono ancora lì: vanno decise, non nascoste.
 
 ### E3. Binance risponde 451 dai runner GitHub
 **Stato:** noto e gestito · nessuna azione

@@ -60,17 +60,28 @@ class RegimeDetector:
         up = i.ema_fast > i.ema_slow
         momentum = i.macd_hist or 0.0
 
-        # volatilità estrema -> incertezza, indipendentemente dalla direzione
-        if atr_pct > self.HIGH_VOL_ATR_PCT:
-            return Regime.HIGH_UNCERTAINTY
-
-        # trend chiaro: EMA ben separate e momentum coerente
+        # UN TREND VIOLENTO E' UN TREND. Fino al 21 settembre 2026 la volatilita'
+        # aveva la precedenza: ATR/prezzo sopra il 2,5% -> «incertezza», qualunque
+        # fosse la direzione. Quindi PIU' una coin correva, MENO veniva vista come
+        # in trend: MUBARAKUSDT a +37% in trenta ore con RSI a 88 era «incerta», e
+        # per il freno sul controtrend «incerta» vale zero. Risultato misurato: due
+        # short consecutivi a size piena (rischio 0,91%, non lo 0,5% del freno)
+        # dentro la salita piu' verticale della giornata. Ora la direzione si
+        # legge PRIMA; la volatilita' decide solo quando una direzione non c'e'.
+        # I trend con volatilita' alta restano riconoscibili in `detect_detailed`
+        # come regime secondario. NB: le strategie generate operano in tutti i
+        # regimi, quindi questo cambio non sposta i loro backtest — cambia solo
+        # l'etichetta, cioe' cio' che il freno e il learning leggono.
         if separation > self.TREND_SEPARATION:
             if up and momentum >= 0:
                 return Regime.BULL_TRENDING
             if (not up) and momentum <= 0:
                 return Regime.BEAR_TRENDING
             # EMA dicono una cosa, momentum un'altra -> incertezza
+            return Regime.HIGH_UNCERTAINTY
+
+        # nessuna direzione netta E volatilita' estrema -> incertezza
+        if atr_pct > self.HIGH_VOL_ATR_PCT:
             return Regime.HIGH_UNCERTAINTY
 
         # EMA vicine, bassa volatilità -> mercato laterale

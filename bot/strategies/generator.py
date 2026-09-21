@@ -43,10 +43,16 @@ _INCOMPATIBLE = {
 # feature di CONDIZIONE (non danno la direzione: dicono quando operare). Erano
 # assenti: il generatore combinava solo oscillatori sullo stesso timeframe, quindi
 # sapeva dove sta il prezzo ma mai in che condizione e' il mercato.
-_CONDITIONAL = ["volatility_regime", "trend_strength", "volume_surge", "session"]
+_CONDITIONAL = ["volatility_regime", "trend_strength", "volume_surge", "session",
+                # dal 21 set 2026: «non sovraesteso» e «trend debole», le due
+                # condizioni con cui una mean-reversion puo' rifiutarsi di
+                # vendere una salita verticale
+                "not_stretched", "adx_below"]
 _VOL_PCT = [0.01, 0.02, 0.03]
 _ADX_LO = [18.0, 22.0, 28.0]
 _RS_GAP = [0.0, 0.005, 0.02]
+_STRETCH_MAX = [2.0, 3.0, 4.5]   # in ATR dalla media lenta
+_ADX_HI = [20.0, 28.0, 35.0]
 _VOL_MULT_FEAT = [1.2, 1.5, 2.0]
 _SESSIONS = [(0, 8), (8, 16), (12, 21), (16, 24)]
 
@@ -79,6 +85,10 @@ def _feature_with_params(kind: str, rng: random.Random) -> dict:
         f["vol_mult_feat"] = rng.choice(_VOL_MULT_FEAT)
     elif kind == "session":
         f["hour_from"], f["hour_to"] = rng.choice(_SESSIONS)
+    elif kind == "not_stretched":
+        f["stretch_max"] = rng.choice(_STRETCH_MAX)
+    elif kind == "adx_below":
+        f["adx_hi"] = rng.choice(_ADX_HI)
     elif kind == "relative_strength":
         # 0 = basta essere piu' forte del mercato; 0.02 = almeno due punti
         # percentuali in piu'. Senza questa riga il generatore proporrebbe la
