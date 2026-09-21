@@ -63,10 +63,14 @@ _BREVI = {
     "last_seen_at": "v", "last_params": "m", "scale_r_mults": "r",
     "drift_seen_at": "x", "window_start": "w", "passed_in_window": "q",
     "generated": "g", "last_passed_at": "l",
+    # QUANDO la coppia e' entrata fra le validate. Senza, la domanda «quanto vive
+    # una strategia validata?» non ha risposta: il registro contiene solo i
+    # sopravvissuti, e chi esce sparisce senza lasciare la sua eta'.
+    "validated_at": "a",
 }
 _LUNGHI = {v: k for k, v in _BREVI.items()}
 _TEMPI = {"last_seen_at", "last_passed_at", "window_start", "last_pass_data_end",
-          "drift_seen_at"}
+          "drift_seen_at", "validated_at"}
 
 
 def encode_registry(pairs: dict) -> str:

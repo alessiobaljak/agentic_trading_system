@@ -70,8 +70,8 @@ del 10% per posizione morde quasi sempre, e più lo stop è largo meno si rischi
 **Serve:** decidere se il cap per posizione deve restare al 10%. Non è un difetto
 da riparare di nascosto — è una scelta. Toccarlo cambia la size a metà esperimento.
 
-### A4. Non sappiamo quanto vive una strategia validata — e distruggiamo la prova
-**Stato:** aperto · **la più importante di questa sezione** · emerso 21 set
+### A4. Quanto vive una strategia validata — la prova non si distrugge più
+**Stato:** **misura avviata il 21 set** · risposta fra qualche settimana
 
 Domanda del proprietario: *«la strategia è costruita per passare quei 4 anni circa
 più quelle settimane che aggiungiamo, ma ora il mercato è diverso e lo sarà sempre.
@@ -100,12 +100,21 @@ rientrato dalla porta di servizio sulle strategie.
 Quindi oggi a *«quanto vive una strategia validata?»* si può solo rispondere «non
 lo so», che è esattamente la risposta che la sua domanda non può accettare.
 
-**Serve (piccolo, e non tocca l'esperimento):** scrivere una riga durevole a ogni
-purge e a ogni promozione — chiave, `pass_count` raggiunto, quando è entrata,
-quando è uscita, con che PF. Fra qualche settimana quella collezione risponde da
-sola: vita mediana di una coppia validata, quante muoiono entro la prima finestra,
-se le generate durano più o meno delle base. Senza, fra un mese saremo allo stesso
-punto di oggi.
+**FATTO il 21 set** (`registra_vite` in `scripts/optimize.py`, documento
+`gate_history/lifecycle`). A ogni promozione e a ogni rimozione si scrive una riga
+durevole: chiave, `pass_count`, `fail_count`, PF, giorni vissuti, e se la coppia
+era in deriva dal paper. La riga si scrive **prima** della cancellazione — dopo, il
+record non esiste più.
+
+Non tocca l'esperimento: non promuove, non rimuove, non cambia una size. È un
+diario, `best-effort`, tagliato a 500 righe come la timeline.
+
+**Una cosa che NON fa, di proposito:** dare una data di nascita alle coppie già
+validate. Al momento del rilascio ce n'erano 56: scrivergli `validated_at = adesso`
+avrebbe fabbricato 56 età false, tutte corte, e la vita mediana sarebbe risultata
+più breve del vero proprio nel primo mese di misura. Escono con
+`vissuta_giorni = None`, che è «non lo so». **Quindi la risposta arriva dalle
+coppie promosse da qui in avanti, non da domani.**
 
 **Poi, solo dopo:** chiedersi se il gate premi strategie legate a un regime. Oggi
 valida su 4,6 anni **come un blocco unico** (con walk-forward a 3 blocchi OOS, che

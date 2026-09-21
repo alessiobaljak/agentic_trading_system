@@ -812,6 +812,87 @@ def publish_timeline(fb, pairs: dict, source: str,
         print(f"[timeline] non salvata ({exc})")
 
 
+# quante righe di vita tenere. Una coppia entra ed esce poche volte al giorno:
+# 500 righe sono mesi di storia e restano una manciata di KB, molto lontano dal
+# limite di 1 MiB che ci ha gia' fatto cadere un run da quattro ore.
+VITE_MAX = int(os.getenv("GATE_LIFECYCLE_MAX", "500"))
+
+
+def registra_vite(fb, nuove: list[dict], uscite: list[dict]) -> None:
+    """LE NASCITE E LE MORTI DELLE COPPIE VALIDATE, in un posto che dura.
+
+    IL BUCO CHE CHIUDE. Il purge stampava una riga nel journal e poi cancellava il
+    record. Il journal scorre via in poche ore — ci e' gia' costato tre diagnosi —
+    e nel registro restano solo i SOPRAVVISSUTI: lo stesso bias di sopravvivenza
+    che misuriamo sulle coin delistate, rientrato dalla porta di servizio sulle
+    strategie. Cosi' alla domanda «quanto vive una strategia validata?» si poteva
+    solo rispondere «non lo so».
+
+    Con questa collezione, fra qualche settimana, la risposta e' un conto: vita
+    mediana, quante muoiono alla prima finestra, se le generate durano piu' delle
+    base.
+
+    NON DECIDE NIENTE. Non promuove, non rimuove, non cambia una size: scrive un
+    diario. E' `best-effort` in ogni punto, come la timeline — la memoria di cosa
+    e' successo non deve poter far fallire una validazione.
+    """
+    if not nuove and not uscite:
+        return
+    try:
+        doc = fb.get_doc("gate_history", "lifecycle") or {}
+        righe = list(doc.get("events") or [])
+        righe.extend(nuove)
+        righe.extend(uscite)
+        fb.set_doc("gate_history", "lifecycle", {
+            "updated_at": time.time(),
+            "min_passes": MIN_PASSES,
+            "events": righe[-VITE_MAX:],
+        })
+        if uscite:
+            eta = [r["vissuta_giorni"] for r in uscite
+                   if r.get("vissuta_giorni") is not None]
+            mediana = sorted(eta)[len(eta) // 2] if eta else None
+            print(f"[vite] {len(nuove)} promosse · {len(uscite)} rimosse"
+                  + (f" · vissute mediana {mediana:.1f} giorni" if mediana else ""))
+    except Exception as exc:  # noqa: BLE001
+        print(f"[vite] non salvate ({exc})")
+
+
+def _riga_vita(key: str, rec: dict, tipo: str, adesso: float) -> dict:
+    """Una riga di diario. `vissuta_giorni` e' None quando la coppia e' stata
+    validata PRIMA che esistesse questo registro: un'eta' inventata dal campo
+    mancante sarebbe peggio di un'eta' assente."""
+    nato = float(rec.get("validated_at", 0) or 0)
+    riga = {
+        "key": key, "tipo": tipo, "at": round(adesso),
+        "pass_count": int(rec.get("pass_count", 0) or 0),
+        "fail_count": int(rec.get("fail_count", 0) or 0),
+    }
+    if rec.get("last_pf") is not None:
+        riga["pf"] = round(float(rec["last_pf"]), 3)
+    if tipo == "rimossa":
+        riga["vissuta_giorni"] = round((adesso - nato) / 86400, 2) if nato > 0 else None
+        riga["in_deriva"] = bool(rec.get("drift_seen_at"))
+    return riga
+
+
+def _segna_promozione(key: str, rec: dict, prima: int, adesso: float,
+                      nuove: list[dict]) -> None:
+    """Se la coppia ha appena ATTRAVERSATO la soglia, le si scrive la data di
+    nascita e si annota l'evento.
+
+    Solo l'attraversamento, mai le gia' validate: dare `validated_at = adesso` a
+    chi e' validata da settimane fabbricherebbe eta' false, tutte corte, e la vita
+    mediana risulterebbe piu' breve del vero proprio nel primo mese di misura.
+    Chi era gia' dentro resta senza data e uscira' con `vissuta_giorni = None`,
+    che e' «non lo so» — l'unica risposta onesta per lei."""
+    dopo = int(rec.get("pass_count", 0) or 0)
+    if prima >= MIN_PASSES or dopo < MIN_PASSES:
+        return
+    rec["validated_at"] = adesso
+    nuove.append(_riga_vita(key, rec, "promossa", adesso))
+
+
 def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     """
     Accumula nel tempo: ogni run incrementa il pass_count delle coppie che passano.
@@ -821,6 +902,8 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     doc = fb.get_doc("strategy_registry", "validated") or {}
     pairs: dict = decode_pairs(doc.get("pairs"))
     passed_set = set(passed_now)
+    adesso = time.time()
+    nuove: list[dict] = []          # promozioni di questa passata
     drifted = drifted_from_paper(fb)
     if drifted:
         print(f"[registry] {len(drifted)} coppie in deriva dal paper: contano come "
@@ -828,6 +911,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
 
     for key, e in out.items():
         rec = pairs.get(key, {"pass_count": 0})
+        prima_pass = int(rec.get("pass_count", 0) or 0)
         # una coppia SMENTITA DAL VIVO non puo' accumulare un pass, nemmeno se la
         # storia la promuove ancora: e' il paper ad avere l'ultima parola sul presente.
         #
@@ -846,6 +930,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
             judge_window(rec, float(e.get("data_end", 0) or 0), False)
             rec["symbol"], rec["strategy"] = e["symbol"], e["strategy"]
             rec["last_seen_at"] = time.time()
+            _segna_promozione(key, rec, prima_pass, adesso, nuove)
             pairs[key] = rec
             continue
         judge_window(rec, float(e.get("data_end", 0) or 0), key in passed_set)
@@ -869,6 +954,7 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
         rec["symbol"] = e["symbol"]
         rec["strategy"] = e["strategy"]
         rec["last_seen_at"] = time.time()
+        _segna_promozione(key, rec, prima_pass, adesso, nuove)
         pairs[key] = rec
 
     # AUTO-PURGE: rimuove le coppie che falliscono il gate per PURGE_FAILS run
@@ -876,11 +962,17 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     # auto-pulisce: chi smette di battere i costi/edge esce da solo, senza script
     # manuali. 1 fallimento non basta (rumore/dati): serve la conferma.
     purged = [k for k, r in pairs.items() if r.get("fail_count", 0) >= PURGE_FAILS]
+    # la riga di diario si scrive PRIMA di cancellare: dopo, il record non esiste
+    # piu' e con lui sparisce l'unica prova di quanto era vissuta. E' il buco che
+    # rendeva impossibile rispondere a «quanto dura una strategia validata?».
+    uscite = [_riga_vita(k, pairs[k], "rimossa", adesso) for k in purged
+              if int((pairs[k] or {}).get("pass_count", 0) or 0) >= MIN_PASSES]
     for k in purged:
         del pairs[k]
     if purged:
         print(f"[registry] AUTO-PURGE: rimosse {len(purged)} coppie "
               f"(fallite {PURGE_FAILS}+ finestre di fila)")
+    registra_vite(fb, nuove, uscite)
 
     # BASE STANTIE: la causa vera del blocco del 31 agosto.
     #
