@@ -537,6 +537,52 @@ poteva saperlo. Corretto generando le fasce dalle stesse costanti che validano.
 
 Resta da vedere al prossimo giro se il tasso di accettazione sale.
 
+### E4. Vendiamo le salite verticali, e con più strategie quasi gemelle
+**Stato:** aperto · **il difetto più costoso in corso** · misurato 21 set
+
+MUBARAKUSDT, 21 settembre: da 0,0320 a 0,04407 in ~30 ore (**+37%**), con un tratto
+quasi verticale da 0,034 a 0,044 fra le 11:00 e le 12:42 e RSI a **88**. Ci siamo
+entrati **short**.
+
+Non è un guasto: è quello che le nostre strategie sono. `rsi_extreme` restituisce
+*«RSI sopra soglia → vendi»*, `bb_touch` *«prezzo sopra la banda → vendi»*. Su un
+RSI di 88 qualunque soglia ammessa (55–95) spara short.
+
+**Due cose rendono il difetto strutturale, non sfortuna:**
+
+1. **`min_adx` seleziona proprio i casi peggiori.** È un filtro che lascia passare
+   il segnale SOLO quando l'ADX è alto, cioè **solo quando un trend c'è**. Combinato
+   con feature di ritorno alla media significa: *opera solo quando c'è un trend, e
+   vendilo*. Il vocabolario non ha nessun modo di dire *«non vendere una salita
+   verticale»* — non esiste un tetto sulla distanza dalla media, né un `max_adx`.
+
+2. **Più strategie quasi gemelle sulla stessa coin.** Al 21 settembre:
+
+```
+ORCAUSDT     8 coppie validate
+SKYAIUSDT    4        MUBARAKUSDT  4
+USELESSUSDT  3   → PF 1,541 · 1,541 · 1,54   (PnL OOS 77% · 77% · 72%)
+```
+
+Tre PF identici alla terza cifra non sono tre ipotesi diverse: è la stessa
+scommessa contata tre volte. Non esiste **nessun controllo di somiglianza** fra
+spec, né nel generatore né nella discovery: `spec_id` è un hash, quindi due spec
+che differiscono per una soglia (RSI 70 vs 72) sono "diverse" per il sistema.
+
+Il bot tiene una posizione per coin, quindi le gemelle non si sommano: **si mettono
+in fila**. Chiuso uno stop, la successiva riapre. Su USELESSUSDT il 21 settembre
+sono stati **tre trade short consecutivi** sulla stessa coin mentre saliva.
+
+**Il numero:** short 13 trade, 2 vinti, **−30,11**; long 11 trade, 3 vinti, −15,59.
+`USELESSUSDT|gen_2031005e` ha mfe mediana **0,20R** contro un primo gradino a 2,00R.
+
+**Serve** (nessuna fatta, tutte da decidere):
+* un tetto alla distanza dalla media, o un `max_adx`, perché una strategia di
+  ritorno alla media possa dichiarare *«questa non è una oscillazione»*;
+* un controllo di somiglianza fra spec prima che entrino nel registro — o un tetto
+  di coppie validate per coin, che è più grezzo ma immediato;
+* rivedere `min_adx`: per le mean-reversion andrebbe letto al contrario.
+
 ### E3. Binance risponde 451 dai runner GitHub
 **Stato:** noto e gestito · nessuna azione
 
