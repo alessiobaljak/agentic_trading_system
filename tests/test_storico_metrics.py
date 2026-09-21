@@ -204,15 +204,31 @@ def test_la_sonda_dice_quante_coppie_hanno_dati_dal_2022():
     assert "PESO SUL DISCO" in src
 
 
-def test_la_finestra_finisce_IERI_non_oggi():
-    """PRIMO GIRO, 20 settembre: la sonda ha detto «25 coppie su 25 con giorni
-    mancanti». Nessuna ne aveva: il file di un giorno esce il giorno dopo, e
-    l'unico buco era la data di fine scelta male. Un allarme inventato dal
-    proprio metro e' peggio di nessun allarme."""
+def test_la_fine_della_finestra_si_MISURA_non_si_indovina():
+    """DUE GIRI, DUE FALSI ALLARMI, LO STESSO ERRORE. Il 20 settembre la sonda ha
+    detto «25 coppie su 25 con giorni mancanti» perche' chiudevo la finestra a
+    oggi; ho spostato a ieri, e il 21 ha detto «263 su 263» perche' il ritardo di
+    pubblicazione di Binance non e' un giorno fisso. La correzione non e' un altro
+    numero indovinato: la fine e' l'ultimo giorno che ESISTE nei dati."""
     import inspect
 
     from scripts import binance_metrics_probe as p
 
     src = inspect.getsource(p.main)
-    assert "timedelta(days=1)" in src
-    assert 'default=ieri.isoformat()' in src
+    assert "ultimo_vero = max(" in src
+    assert "al = ultimo_vero" in src
+
+
+def test_si_misurano_solo_le_coppie_VALIDATE():
+    """Il documento `strategy_registry/validated` si chiama cosi' ma contiene
+    TUTTE le coppie seguite, quasi tutte a zero passaggi. Senza filtro il primo
+    giro ha misurato 263 coin invece di 25 — cioe' ha risposto a una domanda
+    diversa da quella fatta. E la soglia viene dalla costante che promuove, non
+    da un 3 scritto a mano."""
+    import inspect
+
+    from scripts import binance_metrics_probe as p
+
+    src = inspect.getsource(p.coppie_validate)
+    assert "MIN_PASSES" in src and "< MIN_PASSES" in src
+    assert "from scripts.optimize import MIN_PASSES" in src

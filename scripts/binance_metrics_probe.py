@@ -42,16 +42,29 @@ MIB = 1024 * 1024
 
 
 def coppie_validate() -> list[str]:
-    """Le coin del registro validato. Su questa macchina Firebase non c'e': in
-    quel caso lo si dice e si usa `--symbols`, invece di inventare un elenco."""
+    """Le coin delle coppie VALIDATE, cioe' quelle che il bot opera davvero.
+
+    IL FILTRO NON E' UN DETTAGLIO. Il documento `strategy_registry/validated` si
+    chiama cosi' ma contiene TUTTE le coppie seguite — migliaia, quasi tutte a
+    zero passaggi. Senza il filtro il primo giro sulla VPS ha misurato 263 coin
+    invece di 25, e ha risposto alla domanda sbagliata: 2835 MiB di storico per
+    un universo che in gran parte non tradiamo, al posto dei 221 MiB delle coppie
+    che operano.
+
+    La soglia viene dalla STESSA costante che promuove le coppie, non da un 3
+    scritto a mano: se domani diventasse 4, qui cambierebbe da sola."""
     from bot.core.firebase_client import decode_pairs, get_firebase
+    from scripts.optimize import MIN_PASSES
 
     fb = get_firebase()
     pairs = decode_pairs((fb.get_doc("strategy_registry", "validated") or {}).get("pairs"))
     simboli = set()
     for chiave, rec in pairs.items():
-        sym = (rec or {}).get("symbol") if isinstance(rec, dict) else None
-        simboli.add(sym or chiave.split("|", 1)[0])
+        if not isinstance(rec, dict):
+            continue
+        if int(rec.get("pass_count", 0) or 0) < MIN_PASSES:
+            continue
+        simboli.add(rec.get("symbol") or chiave.split("|", 1)[0])
     return sorted(s for s in simboli if s)
 
 
@@ -112,17 +125,30 @@ def main() -> int:
           "gia' li')…\n")
 
     sess = requests.Session()
-    righe: list[dict] = []
+    mappe: dict[str, dict] = {}
     errori: list[tuple[str, str]] = []
     with cf.ThreadPoolExecutor(max_workers=args.workers) as ex:
         futs = {ex.submit(elenco_giorni, s, 30, sess): s for s in simboli}
         for f in cf.as_completed(futs):
             sym = futs[f]
             try:
-                righe.append(_riga(sym, f.result(), dal, al))
+                mappe[sym] = f.result()
             except Exception as exc:  # noqa: BLE001
                 errori.append((sym, f"{type(exc).__name__}: {str(exc)[:60]}"))
 
+    # LA FINE DELLA FINESTRA SI MISURA, NON SI INDOVINA.
+    # Binance pubblica il file di un giorno con qualche giorno di ritardo, e il
+    # ritardo non e' fisso. Assumendo «ieri» il primo giro ha dichiarato 263
+    # coppie su 263 «con giorni mancanti»: l'unico giorno mancante era quello che
+    # avevo scelto io come fine, e l'allarme veniva dal metro, non dai dati. Qui
+    # la fine e' l'ultimo giorno che ESISTE davvero, quando e' prima di `--al`.
+    ultimo_vero = max((max(m) for m in mappe.values() if m), default=None)
+    if ultimo_vero and ultimo_vero < al:
+        print(f"[metrics] ultimo giorno pubblicato: {ultimo_vero} "
+              f"({(al - ultimo_vero).days} gg di ritardo) → finestra chiusa li'\n")
+        al = ultimo_vero
+
+    righe = [_riga(sym, m, dal, al) for sym, m in mappe.items()]
     righe.sort(key=lambda r: (r["primo"] or date.max))
     attesi = (al - dal).days + 1
 
