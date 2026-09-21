@@ -52,12 +52,13 @@ ai-stato:     .venv/bin/python -m scripts.ai_status
 # no) e il listing pubblico di data.binance.vision: non scarica lo storico e non
 # scrive niente. Backlog B6.
 storico-oi:   .venv/bin/python -m scripts.binance_metrics_probe
-# «il gate ha mai perso cosi' tante volte di fila?» e «il paper entra dove entra
-# il gate?». Rigira il motore sulle coppie che hanno operato e misura la serie di
-# perdite piu' lunga che il gate ha gia' attraversato — il metro che mancava per
-# capire se una striscia in corso e' un guasto o il carattere della strategia.
+# GATE contro PAPER su tutto cio' che si puo' confrontare, non solo il win rate:
+# gradini raggiunti (0/1/2/3 TP), perdite e vincite consecutive, mfe, PF, resa per
+# trade, e quanti trade del paper hanno un ingresso del gate entro due barre.
+# Include il METRO che mancava: quante volte il gate ha gia' attraversato una
+# striscia di perdite lunga come quella in corso.
 # Dura qualche minuto (una passata di backtest per coppia). Sola lettura.
-serie:        .venv/bin/python -m scripts.serie_perdite
+confronto:    .venv/bin/python -m scripts.confronto_gate_paper
 # revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
 costi:        .venv/bin/python -m scripts.revalidate_costs
 

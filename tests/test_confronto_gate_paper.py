@@ -16,7 +16,7 @@ fra due finestre di backtest.
 """
 import inspect
 
-from scripts import serie_perdite as sp
+from scripts import confronto_gate_paper as sp
 
 
 def test_una_serie_finale_non_viene_persa():
@@ -109,3 +109,84 @@ def test_e_sola_lettura():
     src = inspect.getsource(sp)
     for vietato in ("set_doc(", "set_rtdb(", "update_registry"):
         assert vietato not in src, f"lo script scrive: {vietato}"
+
+
+# --------------------------------------------------------------------------- #
+# IL CONFRONTO COMPLETO: non solo il win rate                                 #
+# --------------------------------------------------------------------------- #
+def test_i_gradini_si_contano_uguale_dalle_due_parti():
+    """LA RICHIESTA DEL 21 SETTEMBRE: «voglio confrontare tutti i dati, non solo
+    il win rate». Sotto scale-out «vinto» non dice quasi niente — chi tocca il
+    primo gradino e torna a pareggio incassa 0,45R lordi, chi arriva in fondo
+    3,35R, ed entrambi sono «vittorie». Il numero di gradini invece si confronta,
+    perche' si ricava da `mfe_r`, che esiste sia nel backtest sia nel paper."""
+    mults = (1.5, 3.0, 5.0)
+    # 0 gradini, 1, 2, 3
+    assert sp.gradini_raggiunti([0.4, 2.0, 3.5, 7.0], mults) == [1, 1, 1, 1]
+    assert sp.gradini_raggiunti([], mults) == [0, 0, 0, 0]
+
+
+def test_i_gradini_usano_LA_STESSA_funzione_di_gate_vs_paper():
+    """Se questo script ricalcolasse le fasce per conto suo, i due strumenti
+    direbbero numeri diversi sulla stessa coppia — e non ci sarebbe modo di
+    sapere quale ha ragione. Tre copie di `judge_window` sono gia' costate care."""
+    import inspect
+
+    from scripts import gate_vs_paper as gvp
+
+    assert "from scripts.gate_vs_paper import _bucket_of" in inspect.getsource(sp)
+    mults = (1.5, 3.0, 5.0)
+    for m in (0.0, 1.49, 1.5, 3.0, 4.9, 5.0, 12.0):
+        atteso = [0] * (len(mults) + 1)
+        atteso[gvp._bucket_of(m, mults)] += 1
+        assert sp.gradini_raggiunti([m], mults) == atteso, m
+
+
+def test_il_gradino_di_confine_conta_come_raggiunto():
+    """Un mfe ESATTAMENTE sul gradino lo ha toccato. Metterlo nella fascia sotto
+    sposterebbe in silenzio ogni trade di confine dalla parte sbagliata."""
+    assert sp.gradini_raggiunti([1.5], (1.5, 3.0, 5.0)) == [0, 1, 0, 0]
+
+
+def test_si_confrontano_rapporti_e_medie_mai_due_somme():
+    """Il backtest somma variazioni di prezzo, il paper USDT: affiancare le due
+    somme come se fossero la stessa grandezza e' il modo piu' facile di produrre
+    un confronto dall'aria seria e senza senso."""
+    d = sp.profilo("X", [1.0], [2.0], [True], (1.5, 3.0, 5.0))
+    assert "per_trade" in d and "pf" in d
+    assert "pnl_totale" not in d
+
+
+def test_un_paper_senza_vincite_non_stampa_un_PF_finto(capsys):
+    """Con zero guadagni il profit factor non e' zero: non e' calcolabile. Uno
+    «0.00» si legge come una misura e non lo e'."""
+    mults = (1.5, 3.0, 5.0)
+    g = sp.profilo("GATE", [2.0], [1.0], [True], mults)
+    p = sp.profilo("PAPER", [0.3, 0.4], [-1.0, -2.0], [False, False], mults)
+    sp.stampa_confronto(g, p, mults)
+    riga = [r for r in capsys.readouterr().out.splitlines() if "PAPER" in r][0]
+    assert "—" in riga and "0.00" not in riga
+
+
+def test_le_vincite_consecutive_si_contano_come_le_perdite():
+    """La stessa funzione, con gli esiti rovesciati: due implementazioni
+    separate divergerebbero sul caso di confine (la serie che arriva in fondo),
+    che e' proprio quello che interessa."""
+    d = sp.profilo("X", [1.0] * 5, [1, 1, 1, -1, -1],
+                   [True, True, True, False, False], (1.5, 3.0, 5.0))
+    assert d["vincite_max"] == 3 and d["perdite_max"] == 2
+
+
+def test_le_finestre_dicono_su_quante_possibili(capsys):
+    """«7 volte» senza il denominatore non e' una frequenza. Serve sapere su
+    quante occasioni, altrimenti non si puo' dire se sia raro o normale."""
+    sp._finestre("GATE", [False, False, True, False, False, False], 3)
+    out = capsys.readouterr().out
+    assert "su 4" in out and "%" in out
+
+
+def test_una_storia_piu_corta_della_finestra_lo_dice(capsys):
+    """Stampare «0 volte» quando la storia e' troppo corta significherebbe dire
+    «non succede mai» al posto di «non lo so»."""
+    sp._finestre("GATE", [False, False], 5)
+    assert "non confrontabile" in capsys.readouterr().out
