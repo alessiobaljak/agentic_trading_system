@@ -61,11 +61,38 @@ parametro.
 `sl_to_breakeven`. Non è ovvio che convenga: protegge, ma con mfe mediana 0,85R il
 prezzo ritocca l'entrata di continuo e ogni volta chiude il 70% a zero.
 
-### A3. La manopola del rischio non fa quello che dice
-**Stato:** aperto · emerso 18 set
+### A3. La manopola del rischio non fa quello che dice — e non come credevamo
+**Stato:** aperto · emerso 18 set · **corretto il 21 set: la regola era scritta al contrario**
 
-L'utente imposta 1% e il sistema rischia ~0,35-0,39%, variabile col trade: il cap
-del 10% per posizione morde quasi sempre, e più lo stop è largo meno si rischia.
+Con il cap per-posizione attivo, il rischio effettivo **non è fisso e non cala con
+stop larghi**. Dalla formula in `bot/risk/risk_manager.py:147`:
+
+```
+rischio effettivo = min( leva × cap_posizione × ampiezza_stop ,  rischio_impostato )
+                  = min( 2 × 0,10 × ampiezza_stop , 1% )
+```
+
+cioè **cresce con l'ampiezza dello stop** finché non tocca l'1% impostato:
+
+```
+stop 1,0%  →  0,20%       stop 4,4%  →  0,88%
+stop 2,0%  →  0,40%       stop 5,0%  →  1,00%  (il cap smette di mordere)
+stop 3,0%  →  0,60%       stop 8,0%  →  1,00%
+```
+
+La voce diceva *«più lo stop è largo meno si rischia»*: **è l'opposto**. Il ~0,35%
+osservato il 18 settembre non è il comportamento del sistema, è il comportamento
+del sistema **su coppie con stop stretti**.
+
+**Il numero misurato che lo ha fatto emergere** (21 set, USELESSUSDT, due short
+consecutivi di `gen_2031005e`): −8,25 e −8,65 su un'equity di ~970$, cioè **0,85% e
+0,89%** — praticamente l'intero 1% impostato, non un terzo. Lo stop era largo ~4,3%,
+normale per l'ATR di una micro-cap sul timeframe da 15 minuti.
+
+**Conseguenza pratica, che cambia la lettura di tutto il paper:** sulle coin
+volatili il sistema rischia il massimo consentito, su quelle tranquille un quinto.
+Il rischio per trade non è una costante ma una funzione della volatilità della
+coin — e nessuno lo stava leggendo così.
 
 **Serve:** decidere se il cap per posizione deve restare al 10%. Non è un difetto
 da riparare di nascosto — è una scelta. Toccarlo cambia la size a metà esperimento.
