@@ -1034,3 +1034,21 @@ toccato.
 scelta del proprietario, motivata — *«non buttiamo via nulla, andiamo avanti, sono
 tutte info che ci servono»*. I 24 restano nel registro dei trade con le regole con
 cui sono nati.
+
+### 21 settembre, sera: gli stop divisi per come sono morti, e A1
+
+`mfe_report` (ora in lista bianca come `mfe`) sui 27 trade chiusi, 21 in stop:
+
+```
+sbagliati dall'inizio (mfe < 0,25R) ..........   7   33%   → ingresso
+andati a favore, sotto il 1° gradino .........  13   62%   → uscita
+oltre il 1° gradino, poi stop ................   1    5%
+fra i «quasi»: mfe mediana 0,69R, massima 1,23R
+R medi per trade con la scala piu' corta (1/1.5/2.5): -0,30 — nessuna scala da sola gira in positivo
+```
+
+Abbassare il take profit sposta la perdita, non la toglie. La leva per i 13 «quasi»
+è la protezione del profitto: era ancorata all'**ultimo** gradino (si armava a 3R su
+2/4/6), ora al **primo** (`lock_anchor`, 1R su 2/4/6, 0,75R su 1,5/3/5), nel motore e
+nell'executor dalla stessa funzione. Quei trade escono vicino al pareggio invece che
+a −1R. Deciso dal proprietario coi numeri sopra. Registro non azzerato.

@@ -170,6 +170,22 @@ def effective_param_grid(grid: dict) -> dict:
     return out
 
 
+def lock_anchor(ladder) -> float:
+    """A quale prezzo e' ancorata la protezione del profitto sotto scale-out.
+
+    IL PRIMO GRADINO, dal 21 settembre 2026. Prima era l'ultimo: con la scala 2/4/6
+    il lock si armava a meta' strada da 6R, cioe' a 3R, e un trade a +1,9R per
+    tre ore non era protetto da niente — usciva allo stop pieno. Misurato su 27
+    trade chiusi: 21 stop, e 13 di quei 21 erano andati a favore (mfe mediana
+    0,69R) senza toccare il primo gradino. Ancorando al primo gradino il lock si
+    arma a meta' strada da esso (1R su 2/4/6, 0,75R su 1,5/3/5) e quei trade
+    escono vicino al pareggio invece che a -1R.
+
+    Una sola definizione per motore e executor: e' il punto in cui gate e paper
+    devono coincidere, e due copie divergerebbero al primo ritocco."""
+    return ladder[0][0]
+
+
 def ladder_multiples(params: dict | None) -> tuple | None:
     """Multipli di R da usare per QUESTA coppia, letti dai params validati dal gate.
 

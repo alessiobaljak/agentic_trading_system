@@ -32,7 +32,7 @@ from bot.core.models import (
     AssetSnapshot, ClosedTrade, Direction, EffectiveRiskParams, ExitReason, Regime,
 )
 from bot.execution.exit_logic import (
-    locked_stop, scale_ladder, scale_fills, mfe_in_r, breakeven_after_tp1,
+    locked_stop, lock_anchor, scale_ladder, scale_fills, mfe_in_r, breakeven_after_tp1,
 )
 
 
@@ -431,8 +431,8 @@ class ExecutionEngine:
         # ORIGINALE (orig_stop), non quello spostato a break-even.
         ladder = scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults) if settings.SCALE_OUT_ENABLED else []
         if ladder:
-            final_target = ladder[-1][0]
-            eff_stop = locked_stop(pos.entry_price, final_target, long, pos.high_water,
+            # ancorato al PRIMO gradino (lock_anchor): stessa scelta del motore
+            eff_stop = locked_stop(pos.entry_price, lock_anchor(ladder), long, pos.high_water,
                                    pos.stop_price, keep=keep)
             pos.trailing_active = eff_stop != pos.orig_stop
 

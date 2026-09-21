@@ -25,7 +25,7 @@ from bot.core.indicators import compute_indicator_frame, snapshot_from_row
 from bot.core.models import AssetSnapshot, Candle, Direction, Regime
 from bot.config import settings
 from bot.execution.exit_logic import (
-    locked_stop, scale_ladder, scale_fills, ladder_multiples, mfe_in_r,
+    locked_stop, lock_anchor, scale_ladder, scale_fills, ladder_multiples, mfe_in_r,
     breakeven_after_tp1,
 )
 from bot.strategies import get_all_strategies
@@ -713,7 +713,8 @@ class Backtester:
 
             if ladder:
                 # --- percorso SCALE-OUT (parità con l'executor live) ---
-                final_target = ladder[-1][0]
+                final_target = ladder[-1][0]          # per il verdetto controfattuale
+                anchor = lock_anchor(ladder)          # per la protezione: PRIMO gradino
                 stage = 0
                 taken = 0.0
                 realized_pct = 0.0
@@ -721,7 +722,7 @@ class Backtester:
                 done = False
                 while j <= horizon:
                     c = candles[j]
-                    eff_stop = locked_stop(entry, final_target, long, best_fav, stop_base)
+                    eff_stop = locked_stop(entry, anchor, long, best_fav, stop_base)
                     trailing = eff_stop != stop_base
                     adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
                     max_adverse = max(max_adverse, adverse)

@@ -27,7 +27,7 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 ## A. Uscite — dopo il verdetto dei 40 trade
 
 ### A1. La protezione del profitto si accende troppo tardi
-**Stato:** aperto · emerso 19 set, confermato dal proprietario il 20 set
+**Stato:** **FATTO il 21 set sera** (`lock_anchor` in `exit_logic`, usata da motore ed executor: ancora al PRIMO gradino). Il numero che l'ha deciso: 13 stop su 21 erano trade andati a favore (mfe mediana 0,69R) senza toccare il primo gradino, e uscivano a −1R pieno. Le coppie validate tengono i passaggi e vengono rigiudicate con la regola nuova (registro misto).
 
 Il profit-lock si arma a metà della distanza dall'**ultimo** gradino. Con la scala
 2/4/6 significa **3R**, mentre il primo incasso è a 2R: fra 2R e 3R il 70% della
