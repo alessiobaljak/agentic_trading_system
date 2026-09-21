@@ -190,3 +190,43 @@ def test_una_storia_piu_corta_della_finestra_lo_dice(capsys):
     «non succede mai» al posto di «non lo so»."""
     sp._finestre("GATE", [False, False], 5)
     assert "non confrontabile" in capsys.readouterr().out
+
+
+def test_un_orario_in_formato_ISO_non_diventa_ZERO():
+    """IL DIFETTO DEL 21 SETTEMBRE, e il piu' pericoloso di tutta la giornata.
+
+    Questo file aveva un `_ts` suo, `float(v)` e basta. Ma `entry_time` nel paper
+    e' una stringa ISO: ogni trade diventava 0, veniva saltato dal confronto, e il
+    report stampava «0/21 ingressi combaciano» — che si legge come «il paper non
+    sta operando le strategie del gate». Un allarme gravissimo, falso, prodotto
+    proprio dallo strumento costruito per scoprirlo.
+
+    La correzione non e' aggiustare la copia: e' non averne una. La funzione si
+    importa da `gate_vs_paper`, che gestisce entrambi i formati da sempre."""
+    iso = "2026-09-20T16:12:00+00:00"
+    assert sp._ts(iso) > 1_700_000_000, "una data ISO non deve valere zero"
+    assert sp._ts(1_758_384_720.0) == 1_758_384_720.0
+    assert sp._ts(None) == 0.0
+
+
+def test_il_tempo_NON_viene_riscritto_in_questo_file():
+    """Una seconda copia tornerebbe a divergere: e' gia' successo qui, ed era
+    invisibile perche' il risultato sbagliato aveva l'aria di una scoperta."""
+    import inspect
+
+    src = inspect.getsource(sp)
+    assert "def _ts(" not in src, "c'e' di nuovo una copia locale di _ts"
+    assert "from scripts.gate_vs_paper import" in src and "_ts" in src
+
+
+def test_gli_ingressi_combaciano_con_orari_ISO():
+    """La prova end-to-end del difetto: con date ISO il confronto deve trovare la
+    corrispondenza, non zero."""
+    class _T:
+        def __init__(self, ts):
+            self.entry_ts = ts
+
+    quando = sp._ts("2026-09-20T16:12:00+00:00")
+    par = sp.parita_ingressi([{"entry_time": "2026-09-20T16:12:00+00:00"}],
+                             [_T(quando + 300)], tf_h=0.25)
+    assert par["trovati"] == 1

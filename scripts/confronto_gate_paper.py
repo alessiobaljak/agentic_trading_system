@@ -69,11 +69,14 @@ from bot.execution.exit_logic import ladder_multiples
 from bot.learning.trade_logger import TradeLogger
 from bot.strategies.base import get_all_strategies
 from bot.strategies.generated import GeneratedStrategy
-# I MATTONI CONDIVISI con `gate_vs_paper`: le fasce di mfe devono essere
-# calcolate dalla STESSA funzione da entrambe le parti. Due copie della stessa
-# regola che si separano nel tempo sono il difetto piu' caro di questo
-# progetto — ci e' gia' costato tre copie di `judge_window`.
-from scripts.gate_vs_paper import _bucket_of
+# I MATTONI CONDIVISI con `gate_vs_paper`, e il motivo per cui si importano
+# invece di riscriverli. La prima versione di questo file aveva un `_ts` suo,
+# `float(v)` e basta: `entry_time` nel paper e' una stringa ISO, quindi ogni
+# trade diventava 0 e veniva saltato. Il report ha stampato «0/21 ingressi
+# combaciano», che si legge come «il paper non sta operando le strategie del
+# gate» — un allarme grave, e falso, generato dallo strumento che doveva
+# scoprirlo. Stessa famiglia delle tre copie di `judge_window`.
+from scripts.gate_vs_paper import _bucket_of, _ts
 
 
 # --------------------------------------------------------------------------- #
@@ -259,13 +262,6 @@ def trade_del_gate(symbol: str, strategy: str, spec, ladder, args):
 # --------------------------------------------------------------------------- #
 # PARITA': il paper entra dove entra il gate?                                  #
 # --------------------------------------------------------------------------- #
-def _ts(v) -> float:
-    try:
-        return float(v)
-    except (TypeError, ValueError):
-        return 0.0
-
-
 def parita_ingressi(ptrades: list[dict], gtrades, tf_h: float) -> dict:
     """Quanti ingressi del paper trovano un ingresso del gate vicino nel tempo.
 
