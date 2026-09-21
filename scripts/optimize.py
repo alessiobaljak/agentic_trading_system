@@ -339,6 +339,17 @@ def main() -> int:
     out: dict[str, dict] = {}
     summary_passed: list[str] = []
 
+    if SKIP_BASE and not args.reset_registry:
+        # niente valutazione: solo la manutenzione del registro (stantie, purge,
+        # timeline, copertura), che vive in update_registry e serve comunque.
+        print("[optimize] strategie BASE saltate (OPTIMIZER_SKIP_BASE): 0 validate "
+              "su 1312 valutazioni nella storia del registro — il calcolo va alla "
+              "discovery. Faccio solo la manutenzione del registro.")
+        reg = update_registry(fb, out, summary_passed)
+        print(f"[optimize] registro: {len(reg.get('validated') or [])} validate · "
+              f"copertura {reg['coverage'] * 100:.1f}%")
+        return 0
+
     # PARALLELO: i simboli sono indipendenti -> li distribuiamo su tutti i core del
     # runner (process pool). Ogni worker costruisce il proprio optimizer + contesto
     # BTC una volta sola. Fallback sequenziale automatico se BACKTEST_WORKERS=1.
@@ -465,6 +476,14 @@ NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "168")) * 3600
 # auto-purge: una coppia viene RIMOSSA dal registro dopo N run consecutivi in cui,
 # pur essendo processata, non passa piu' il gate (costi/edge non piu' battuti).
 PURGE_FAILS = int(os.getenv("OPTIMIZER_PURGE_FAILS", "2"))
+# LE STRATEGIE SCRITTE A MANO NON VALIDANO NIENTE. Al 21 set 2026: 1312 valutazioni
+# nella storia del registro, ZERO passate (backlog B2), e occupavano il 61% delle
+# coppie vive e una fetta del giro da 2h22 su 3h. Saltarne la valutazione libera
+# calcolo per la discovery — che e' l'unica cosa che produce validate — e quindi
+# per la COPERTURA (26 coin su 165). Il registro resta in ordine: le coppie base
+# non piu' viste escono con la regola delle stantie, quelle con conferme sono
+# protette. Rimettere le base: OPTIMIZER_SKIP_BASE=false.
+SKIP_BASE = os.getenv("OPTIMIZER_SKIP_BASE", "true").lower() == "true"
 
 
 # Campi che qualcuno LEGGE davvero da strategy_params/current: i parametri (il bot),

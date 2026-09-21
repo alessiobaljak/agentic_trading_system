@@ -171,7 +171,7 @@ della singola moneta.
 dichiarativa, validata dal gate come tutto il resto.
 
 ### B2. Le strategie scritte a mano non hanno mai validato niente
-**Stato:** aperto · misurato ogni giorno
+**Stato:** **FATTO il 21 set sera** — `OPTIMIZER_SKIP_BASE=true` (default nel codice): la valutazione delle base è saltata, resta la manutenzione del registro; le coppie base senza conferme escono con la regola delle stantie. Il calcolo liberato va ai semi della discovery (`DISCOVERY_SEEDS` 10→30, precedenza alle coin non coperte). Obiettivo: copertura, 26 coin su 165.
 
 ```
 strategie base: 1312 valutazioni, 0 passate (0,00%)
@@ -420,7 +420,7 @@ paper, dove i costi sono 4,61 su un lordo di −13,39.
 **Serve:** il verdetto dei 40 trade. Cambiare timeframe azzera il confronto.
 
 ### C2. L'universo è fermo a `--top 200`
-**Stato:** aperto · rimandato per scelta
+**Stato:** aperto · **da rivalutare dopo il 28 set**, quando le 74 coin a 2/3 avranno avuto la finestra: se la copertura resta sotto 40 coin, allargare a 250-300 col calcolo liberato da B2
 
 Allargarlo aumenterebbe le monete coperte (15% contro l'obiettivo del 35%), ma un
 giro dura già ~2h contro un timer di 3h.

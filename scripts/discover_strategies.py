@@ -176,7 +176,15 @@ def specs_da_rivalutare(existing: dict, reg: dict, cap: int) -> tuple[list[dict]
     return scelte, diag
 
 
-def mutation_seeds(fb, existing: dict, limit: int = 10,
+# quanti semi per giro. Erano 10 su ~100 candidate: la ricerca guidata (mutare i
+# quasi-passaggi, con precedenza alle coin NON coperte) pesava un decimo, e la
+# copertura restava ferma a 26 coin su 165 mentre le validate si impilavano sulle
+# stesse. Il calcolo per i semi in piu' viene dalle strategie base saltate
+# (OPTIMIZER_SKIP_BASE). 21 set 2026.
+SEEDS = int(os.getenv("DISCOVERY_SEEDS", "30"))
+
+
+def mutation_seeds(fb, existing: dict, limit: int = SEEDS,
                    pairs: dict | None = None) -> list[dict]:
     """Le spec da cui vale la pena evolvere: i QUASI-PASSAGGI del run precedente,
     con precedenza a quelli sulle coin che NON copriamo ancora.
@@ -888,8 +896,8 @@ def main() -> int:
     seeds = mutation_seeds(fb, existing, pairs=decode_pairs(reg.get("pairs")))
     if seeds:
         print(f"[discover] {len(seeds)} semi dai quasi-passaggi del run precedente")
-    bases = seeds or existing_list[:10]
-    for i, base in enumerate(bases[:10]):
+    bases = seeds or existing_list[:SEEDS]
+    for i, base in enumerate(bases[:SEEDS]):
         specs.append(mutate(base, seed=args.seed + i + 1))
     # de-dup per id
     specs = list({s["id"]: s for s in specs}.values())

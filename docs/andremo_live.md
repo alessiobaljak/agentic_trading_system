@@ -1073,3 +1073,12 @@ chiusi al click.
   disegna entry/exit come linee e come marker sul tempo (IN/OUT), più SL e TP.
 * **Tab Claude e rotta `/api/claude` rimosse.** Il canale con Claude resta quello
   delle issue di GitHub (`CLAUDE.md` aggiornato).
+
+
+### 21 settembre, sera: copertura — via le base dal giro, più semi
+
+Copertura ferma a 26 coin su 165 (`gate`, 18:55). Due leve sulla ricerca, nessuna sul
+trading: le 8 strategie scritte a mano (0 validate su 1312 valutazioni) non vengono
+più valutate (`OPTIMIZER_SKIP_BASE`, default acceso: il timer sulla VPS resta
+uguale), e i semi di mutazione — che già danno precedenza alle coin non coperte —
+passano da 10 a 30 (`DISCOVERY_SEEDS`). Metro: le 74 coin a 2/3 entro il 28 set.

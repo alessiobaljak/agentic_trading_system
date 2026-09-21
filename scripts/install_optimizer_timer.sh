@@ -37,6 +37,11 @@ Environment=OPTIMIZER_MIN_PASSES=3
 # e vinceva lei, perche' l'ambiente batte il default. La lezione era scritta e non
 # applicata.
 Environment=OPTIMIZER_MIN_HISTORY_DAYS=365
+# le 8 strategie scritte a mano: 0 validate su 1312 valutazioni (21 set 2026).
+# Saltarle libera il giro per la discovery, che e' l'unica che produce validate.
+Environment=OPTIMIZER_SKIP_BASE=true
+# semi di mutazione per giro (precedenza alle coin NON coperte): erano 10.
+Environment=DISCOVERY_SEEDS=30
 # priorita' bassa: non deve mai rubare CPU/IO al bot live
 Nice=15
 IOSchedulingClass=idle
