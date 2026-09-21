@@ -68,3 +68,10 @@ os.environ.setdefault("BINANCE_TESTNET", "true")
 # a 15m durante i test. Va impostato PRIMA che bot.config venga importato (il valore
 # e' letto a def-time della classe Settings).
 os.environ.setdefault("ORCHESTRATOR_TIMEFRAME", "15m")
+
+# I DATI SINTETICI SOLO QUI. Dal 21 set 2026 il default di BACKTEST_ALLOW_SYNTHETIC
+# e' spento (backlog D2): un percorso nuovo che carica candele non puo' piu'
+# ricadere su una serie inventata in silenzio. I test invece girano senza rete
+# e li vogliono: e' l'unico posto in cui si accendono, DOPO la pulizia
+# dell'ambiente qui sopra (che altrimenti li spegnerebbe di nuovo).
+os.environ["BACKTEST_ALLOW_SYNTHETIC"] = "true"

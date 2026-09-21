@@ -161,6 +161,18 @@ def stato_prove(fb) -> None:
         for riga in prove.splitlines():
             print(f"   {riga}")
 
+    # B3: l'ultima analisi dei quasi-passaggi, se c'e'
+    try:
+        aut = fb.get_doc("ai_hypotheses", "autopsia") or {}
+    except Exception:  # noqa: BLE001
+        aut = {}
+    if aut.get("schema"):
+        print(f"{OK} quasi-passaggi letti dall'AI: {aut.get('n_quasi')} · {_quando(aut.get('at'))}")
+        print(f"   schema: {str(aut['schema'])[:220]}")
+        print(f"   consigli: {str(aut.get('consigli', ''))[:220]}")
+    else:
+        print(f"{SKIP} quasi-passaggi: nessuna analisi AI ancora (arriva col prossimo giro)")
+
     scala = scala_dal_paper(fb)
     if scala:
         print(f"{OK} scala candidata dal vissuto: {list(scala)} "

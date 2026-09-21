@@ -884,10 +884,24 @@ def main() -> int:
     prove = prove_dal_paper(fb)
     if prove:
         print(f"[discover] prove del paper passate all'AI:\n{prove}")
+    # B3: i quasi-passaggi del giro precedente al modello, che risponde con uno
+    # schema e con consigli; i consigli entrano nel contesto delle proposte di
+    # QUESTO giro. Fail-open: senza AI o senza autopsia si propone come prima.
+    from bot.ai.autopsia import analizza as ai_autopsia, contesto_per_le_proposte
+    try:
+        autopsia = ai_autopsia(fb)
+    except Exception as exc:  # noqa: BLE001
+        autopsia = None
+        print(f"[ai-autopsia] saltata ({str(exc)[:80]})")
+    if autopsia:
+        print(f"[ai-autopsia] schema: {autopsia.get('schema', '')[:300]}")
+        print(f"[ai-autopsia] consigli: {autopsia.get('consigli', '')[:300]}")
     ai_specs = ai_propose(min(settings.AI_HYPOTHESES_PER_RUN, args.generate),
                           market_context=f"Timeframe operativo: {args.interval}. "
                                          f"Universo: crypto futures USDT-M su Binance."
-                                         + (f"\n\n{prove}" if prove else ""))
+                                         + (f"\n\n{prove}" if prove else "")
+                                         + (f"\n\n{contesto_per_le_proposte(autopsia)}"
+                                            if autopsia else ""))
     if ai_specs:
         print(f"[discover] {len(ai_specs)} ipotesi AI (motivate) + "
               f"{args.generate - len(ai_specs)} casuali")

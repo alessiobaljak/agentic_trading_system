@@ -54,7 +54,6 @@ Imposta i Secrets (README §7.1). I workflow in `.github/workflows/`:
 - `learning.yml` — nightly 02:00 UTC
 - `monitoring.yml` — ogni 15 min (heartbeat + alert)
 - `tests.yml` — su push/PR
-- `backtest.yml` — manuale (GATE 1)
 
 ## 5. Procedura di go-live (gates)
 1. **GATE 1**: esegui il backtest finché il verdetto è "passed".

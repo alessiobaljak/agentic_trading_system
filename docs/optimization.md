@@ -13,7 +13,7 @@ tempo** — senza validazione manuale.
   migliori sulla finestra *test* successiva (mai vista) e aggrega le metriche
   **out-of-sample** (pf, pnl, n. trade, win rate). Una coppia (asset, strategia)
   "passa" se OOS pf ≥ 1.10, pnl > 0 e abbastanza trade.
-- **Job autonomo** (`scripts/optimize.py` + `.github/workflows/optimize.yml`):
+- **Job autonomo** (`scripts/optimize.py`, timer systemd sulla VPS — i workflow GitHub sono stati rimossi il 21 set 2026: dai runner Binance risponde 451):
   gira **ogni giorno alle 03:00 UTC**, ri-ottimizza su dati freschi e scrive su
   Firebase `strategy_params/current`. Nessun gate manuale.
 - **Lettura lato bot** (`AdaptationEngine`): carica i parametri per-asset; il bot
@@ -30,7 +30,7 @@ tempo** — senza validazione manuale.
 
 ## Flusso giornaliero
 ```
-03:00 UTC  optimize.yml ──► walk-forward per asset ──► strategy_params/current (Firebase)
+ogni 3h    timer VPS    ──► walk-forward per asset ──► strategy_params/current (Firebase)
    │
    └► il bot (entro 6h) ricarica i parametri e opera solo le coppie validate OOS
 02:00 UTC  learning loop ──► pesi strategia×regime + memory_report

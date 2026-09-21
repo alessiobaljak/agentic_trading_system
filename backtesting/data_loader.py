@@ -393,12 +393,16 @@ def load_candles(
 
     `allow_synthetic`: se False, quando NESSUNA fonte reale è raggiungibile ritorna
     [] invece dei dati sintetici. CRITICO per il GATE 1: validare su una serie finta
-    (random walk) produce coppie "validate" fasulle. Default: env
-    BACKTEST_ALLOW_SYNTHETIC (true), così i test restano invariati ma i job di
-    validazione lo mettono a false.
+    (random walk) produce coppie "validate" fasulle.
+
+    DEFAULT SPENTO dal 21 set 2026 (backlog D2). Prima il default era acceso e
+    ogni percorso NUOVO che caricava candele ricadeva su dati inventati in
+    silenzio se Binance non rispondeva: i job di validazione lo spegnevano uno a
+    uno, ma bastava dimenticarlo una volta. Ora chi vuole i sintetici lo chiede:
+    i test lo fanno in `tests/conftest.py`.
     """
     if allow_synthetic is None:
-        allow_synthetic = os.getenv("BACKTEST_ALLOW_SYNTHETIC", "true").lower() == "true"
+        allow_synthetic = os.getenv("BACKTEST_ALLOW_SYNTHETIC", "false").lower() == "true"
     if end is None:
         end = datetime.now(timezone.utc).strftime("%Y-%m-%d")   # fino a OGGI
     start_dt = datetime.fromisoformat(start).replace(tzinfo=timezone.utc)
