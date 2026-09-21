@@ -310,6 +310,70 @@ nemmeno un id CoinGecko**, e soprattutto il backtest consuma **solo candele**
 
 ---
 
+### B8. Una strategia generata non può essere RITARATA: può solo morire
+**Stato:** aperto · **la più importante di tutto il backlog** · emerso 21 set
+
+Osservazione del proprietario: *«magari la strategia è corretta ma le regole di
+ingresso no, e vanno riadattate per quella strategia»*. È esatta, e oggi il sistema
+non ha nessun modo di farlo.
+
+Quando la discovery promuove una spec, nel registro scrive:
+
+```python
+entries[key] = {"symbol": sym, "strategy": spec["id"], "params": {}, ...}
+```
+
+`params` **vuoto** (`scripts/discover_strategies.py:367`). E la docstring di
+`evaluate_spec` lo dice: *«le spec generate non hanno train»*. Le soglie d'ingresso
+— quale RSI, quale ADX minimo, quale moltiplicatore di volume — sono **congelate
+alla nascita**. L'unico parametro tarato per coppia è la scala dei TP, aggiunta
+dopo, e infatti il commento di `ladder_multiples` racconta proprio quella
+migrazione.
+
+Quindi il gate sa rispondere solo **sì / no** sulla spec così com'è scritta. Non sa
+dire *«l'idea è buona, la soglia è sbagliata: spostala da RSI<30 a RSI<25»*. Una
+spec che sbaglia di poco viene bocciata, purgata, e sostituita da un'altra estratta
+a caso: si butta via l'ipotesi insieme alla taratura.
+
+**Quello che oggi si adatta, e quello che no:**
+
+| cosa | si adatta? | da cosa |
+|---|---|---|
+| scala dei TP per coppia | sì | gate: 4 candidate fisse + 1 dal vissuto del paper |
+| peso strategia × regime | sì | learning → modula la **size** |
+| calibrazione confidenza | sì | → modula **size** e leva |
+| freno da deriva | sì | → modula **size** |
+| soglie globali (`DECISION_THRESHOLD`…) | sì | supervisore, dentro un budget di falsi positivi |
+| **soglie d'ingresso di una spec** | **no** | **mai** |
+| feature di una spec | no | congelate alla nascita |
+
+Tutto ciò che impara modula **size o uscite**. L'ingresso, no.
+
+**Attenzione a non "risolverlo" nel modo sbagliato.** Tarare i parametri sui
+risultati del paper è vietato per un motivo scritto in `bot/config.py:383`: *«Il
+paper FALSIFICA, non ottimizza: tararci i parametri lo consumerebbe come training
+set»*. È la stessa trappola che ha prodotto BIRBUSDT (PF 1,51 promesso, 0,16
+vissuto). Il paper è l'unica prova fuori campione che esiste: se la si usa per
+tarare, smette di essere una prova.
+
+**La strada giusta è nel GATE, su dati storici**, esattamente come già avviene per
+le strategie scritte a mano (`effective_param_grid`): una **ricerca nell'intorno**
+di una spec validata — stesse feature, soglie numeriche spostate di poco — valutata
+con lo stesso walk-forward e lo stesso holdout. Non consuma il paper, perché non lo
+guarda.
+
+**Il costo, misurato:** una passata del gate dura già **2h22 dentro una finestra di
+3 ore**, con 8 processi al 99% su 8 core (`ops/results/0118`). Provare 5 varianti
+per spec moltiplicherebbe il lavoro. Mitigazione ovvia: fare l'intorno **solo sulle
+coppie in `watch` o `drift`**, cioè spendere calcolo solo dove l'evidenza dice già
+che la taratura attuale è sbagliata.
+
+**Perché non è stato fatto adesso:** cambierebbe quali coppie entrano nel registro,
+quindi cosa il paper opera, quindi la misura in corso. È la modifica più invasiva
+di tutto il backlog. Va decisa, non fatta di slancio.
+
+---
+
 ## C. Timeframe e universo
 
 ### C1. A 1 ora le strategie vanno molto meglio
