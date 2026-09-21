@@ -434,6 +434,12 @@ export default function OptimizedStrategies() {
                         </button>
                         {openCard === c.strategy && (
                           <div style={{ marginTop: 6, maxHeight: 168, overflowY: 'auto' }}>
+                            {/* I riquadri in cima (PnL/Win/Trade) sono il PAPER; qui sotto
+                                e' tutto BACKTEST. Senza questa riga i due si leggevano come
+                                lo stesso numero: «win 57%» accanto a 4 trade tutti persi. */}
+                            <div style={{ fontSize: 9, color: '#7b8696', padding: '0 4px 4px' }}>
+                              tutti i numeri qui sotto sono del <strong>backtest</strong>, non del paper
+                            </div>
                             {c.coins.map((coin) => {
                               const prof = profit10k(coin);
                               return (
@@ -446,11 +452,11 @@ export default function OptimizedStrategies() {
                                   <span style={{ color: prof >= 0 ? '#3fb950' : '#f85149', fontWeight: 700, textAlign: 'right', minWidth: 56 }}>
                                     {fmtMoney(prof)}
                                   </span>
-                                  <span style={{ color: '#7b8696', textAlign: 'right' }} title="profit factor">
-                                    pf {coin.last_pf != null ? coin.last_pf.toFixed(2) : '—'}
+                                  <span style={{ color: '#7b8696', textAlign: 'right' }} title="profit factor del BACKTEST (gate), non del paper">
+                                    pf bt {coin.last_pf != null ? coin.last_pf.toFixed(2) : '—'}
                                   </span>
-                                  <span style={{ color: '#7b8696', textAlign: 'right' }} title="win-rate · trade">
-                                    {coin.last_win_rate != null ? `${Math.round(coin.last_win_rate * 100)}%` : '—'}
+                                  <span style={{ color: '#7b8696', textAlign: 'right' }} title="win-rate e numero trade del BACKTEST (gate), non del paper">
+                                    bt {coin.last_win_rate != null ? `${Math.round(coin.last_win_rate * 100)}%` : '—'}
                                     {coin.last_trades != null ? `·${coin.last_trades}` : ''}
                                   </span>
                                 </div>
