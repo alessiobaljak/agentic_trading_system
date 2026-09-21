@@ -30,7 +30,6 @@ import SupervisorDecisions from './SupervisorDecisions';
 import GateAutopsy from './GateAutopsy';
 import GateFunnel from './GateFunnel';
 import GateEvolution from './GateEvolution';
-import ClaudeChat from './ClaudeChat';
 
 type TabId =
   | 'panoramica'
@@ -39,7 +38,6 @@ type TabId =
   | 'ricerca'
   | 'sentiment'
   | 'strategie'
-  | 'claude'
   | 'impostazioni';
 type NavId = Exclude<TabId, 'impostazioni'>;
 
@@ -62,8 +60,6 @@ function Icon({ id }: { id: TabId }) {
         <path d="M20 20l-4.2-4.2" />
       </>
     ),
-    // claude: un fumetto, perche' e' l'unico posto della dashboard dove si SCRIVE
-    claude: <path d="M21 12a8 8 0 0 1-8 8H4l2.2-2.6A8 8 0 1 1 21 12z" />,
     apprendimento: (
       <>
         <path d="M12 3l9 5-9 5-9-5 9-5z" />
@@ -136,13 +132,6 @@ const META: Record<TabId, { label: string; title: string; intro: string }> = {
       'Le decisioni che il sistema prende da solo, dove muoiono le candidate e come '
       + 'si muove il fronte di validazione nel tempo.',
   },
-  claude: {
-    label: 'Claude',
-    title: 'Claude',
-    intro:
-      'Scrivi al sistema da qui: la domanda arriva a una sessione di Claude con '
-      + 'accesso al repo, che risponde nel thread.',
-  },
   strategie: {
     label: 'Strategie',
     title: 'Strategie · GATE 1',
@@ -158,7 +147,7 @@ const META: Record<TabId, { label: string; title: string; intro: string }> = {
 };
 
 const NAV: NavId[] = ['panoramica', 'operativita', 'apprendimento', 'ricerca',
-                      'sentiment', 'strategie', 'claude'];
+                      'sentiment', 'strategie'];
 
 function isTab(v: string): v is TabId {
   return v in META;
@@ -346,8 +335,6 @@ export default function DashboardShell() {
               <GateAutopsy />
             </>
           )}
-
-          {tab === 'claude' && <ClaudeChat />}
 
           {tab === 'sentiment' && <SentimentAnalysis />}
 

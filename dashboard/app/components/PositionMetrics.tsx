@@ -102,7 +102,7 @@ export default function PositionMetrics({ position }: { position: Position }) {
                 className="mini-chip"
                 style={
                   t.hit
-                    ? { background: 'rgba(63,185,80,0.16)', borderColor: 'rgba(63,185,80,0.4)', color: 'var(--green)' }
+                    ? { background: 'var(--green-soft)', borderColor: 'rgba(22,163,74,0.4)', color: 'var(--green)' }
                     : undefined
                 }
                 title={`${Math.round(t.fraction * 100)}% della size a ${t.r != null ? `${t.r}R` : ''} ${t.hit ? '· raggiunto' : '· in attesa'}`}

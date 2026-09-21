@@ -1,7 +1,8 @@
 # Istruzioni per Claude su questo repo
 
-Chi legge questo file sta rispondendo a una domanda arrivata dalla tab **Claude**
-della dashboard (o direttamente da una issue). Chi scrive e' il proprietario, spesso
+Chi legge questo file sta rispondendo a una domanda arrivata da una issue di GitHub
+(la tab **Claude** della dashboard è stata tolta il 21 set 2026: il proprietario non la
+usava più). Chi scrive e' il proprietario, spesso
 da un telefono e spesso senza poter lanciare comandi: la risposta dev'essere
 autosufficiente.
 

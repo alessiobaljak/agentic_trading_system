@@ -23,7 +23,7 @@ import { getDb } from '../lib/firebase';
 type W = { strategy: string; regime: string; weight: number; sample_size?: number };
 type Snap = { version?: number; updated_at?: number; weights?: W[]; trade_count_used?: number };
 
-const COLORS = ['#3fb950', '#58a6ff', '#d29922', '#f85149', '#bc8cff', '#39c5cf'];
+const COLORS = ['var(--green)', 'var(--accent)', 'var(--amber)', 'var(--red)', 'var(--purple)', 'var(--teal)'];
 
 export default function LearningEvolution() {
   const [versions, setVersions] = useState<Snap[]>([]);
@@ -116,7 +116,7 @@ export default function LearningEvolution() {
               <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ maxWidth: W }}>
                 {[0, 0.5, 1].map((g) => (
                   <line key={g} x1={PAD} x2={W - PAD} y1={y(g)} y2={y(g)}
-                        stroke="#28303d" strokeWidth="1" />
+                        stroke="var(--border)" strokeWidth="1" />
                 ))}
                 {series.map((s, si) => {
                   const pts = s.v

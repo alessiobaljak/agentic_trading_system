@@ -340,9 +340,9 @@ export default function GateMaturazione() {
       fontSize: 12,
       borderRadius: 999,
       cursor: 'pointer',
-      border: `1px solid ${attivo ? '#3f7fd0' : '#223049'}`,
-      background: attivo ? 'rgba(63,127,208,.18)' : '#0f1726',
-      color: attivo ? '#cfe0f7' : '#8b96a5',
+      border: `1px solid ${attivo ? 'var(--accent)' : 'var(--border)'}`,
+      background: attivo ? 'var(--accent-soft)' : 'var(--bg-elev)',
+      color: attivo ? 'var(--text)' : 'var(--text-dim)',
       whiteSpace: 'nowrap',
     }) as const;
 
@@ -391,8 +391,8 @@ export default function GateMaturazione() {
 
           <div
             style={{
-              background: '#131c2e',
-              border: '1px solid #223049',
+              background: 'var(--bg-elev)',
+              border: '1px solid var(--border)',
               borderRadius: 10,
               padding: '10px 12px',
               marginBottom: 16,
@@ -471,7 +471,7 @@ export default function GateMaturazione() {
                   formatter={(v: number) => [`${v} coppie`, 'diventano idonee']}
                 />
                 <Bar dataKey="n" radius={[4, 4, 0, 0]} maxBarSize={38}>
-                  <LabelList dataKey="n" position="top" fill="#9fb0c9" fontSize={11} />
+                  <LabelList dataKey="n" position="top" fill="var(--text-dim)" fontSize={11} />
                   {calendario.map((c) => (
                     <Cell key={c.giorno} fill={c.adesso ? COLORE.idonea : COLORE.attesa} />
                   ))}
@@ -504,8 +504,8 @@ export default function GateMaturazione() {
               onChange={(e) => setCerca(e.target.value)}
               placeholder="cerca coin o strategia…"
               style={{
-                background: '#0f1726',
-                border: '1px solid #223049',
+                background: 'var(--bg-elev)',
+                border: '1px solid var(--border)',
                 borderRadius: 8,
                 color: 'inherit',
                 padding: '5px 10px',
@@ -525,7 +525,7 @@ export default function GateMaturazione() {
             {perCoin ? (
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ textAlign: 'left', color: '#8b96a5' }}>
+                  <tr style={{ textAlign: 'left', color: 'var(--text-dim)' }}>
                     <th style={cellaTesto}>Coin</th>
                     {riepilogo.livelli.map((l) => (
                       <th key={l.livello} style={cell}>
@@ -543,12 +543,12 @@ export default function GateMaturazione() {
                 </thead>
                 <tbody>
                   {perCoinRighe.slice(0, quante).map((c) => (
-                    <tr key={c.coin} style={{ borderTop: '1px solid #1c2740' }}>
+                    <tr key={c.coin} style={{ borderTop: '1px solid var(--border-soft)' }}>
                       <td style={cellaTesto}>
                         <b>{c.coin}</b>
                       </td>
                       {c.livelli.map((n, i) => (
-                        <td key={i} style={{ ...cell, color: n ? undefined : '#5f6d84' }}>
+                        <td key={i} style={{ ...cell, color: n ? undefined : 'var(--text-faint)' }}>
                           {n || '·'}
                         </td>
                       ))}
@@ -561,10 +561,10 @@ export default function GateMaturazione() {
                           data(c.prima)
                         )}
                       </td>
-                      <td style={{ ...cell, color: c.riprese ? COLORE.ripresa : '#5f6d84' }}>
+                      <td style={{ ...cell, color: c.riprese ? COLORE.ripresa : 'var(--text-faint)' }}>
                         {c.riprese || '·'}
                       </td>
-                      <td style={{ ...cell, color: c.abbandonate ? COLORE.abbandonata : '#5f6d84' }}>
+                      <td style={{ ...cell, color: c.abbandonate ? COLORE.abbandonata : 'var(--text-faint)' }}>
                         {c.abbandonate || '·'}
                       </td>
                     </tr>
@@ -574,7 +574,7 @@ export default function GateMaturazione() {
             ) : (
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ textAlign: 'left', color: '#8b96a5' }}>
+                  <tr style={{ textAlign: 'left', color: 'var(--text-dim)' }}>
                     <th style={cellaTesto}>Coin</th>
                     <th style={cellaTesto}>Strategia</th>
                     <th style={cell}>Conferme</th>
@@ -585,7 +585,7 @@ export default function GateMaturazione() {
                 </thead>
                 <tbody>
                   {filtrate.slice(0, quante).map((r) => (
-                    <tr key={r.key} style={{ borderTop: '1px solid #1c2740' }}>
+                    <tr key={r.key} style={{ borderTop: '1px solid var(--border-soft)' }}>
                       <td style={cellaTesto}>
                         <b>{r.coin}</b>
                       </td>
@@ -604,7 +604,7 @@ export default function GateMaturazione() {
                         <span style={{ color: COLORE[r.stato], letterSpacing: 1 }}>
                           {'●'.repeat(Math.min(r.passi, minPasses))}
                         </span>
-                        <span style={{ color: '#3a4560', letterSpacing: 1 }}>
+                        <span style={{ color: 'var(--text-faint)', letterSpacing: 1 }}>
                           {'○'.repeat(Math.max(0, minPasses - r.passi))}
                         </span>
                         <span className="muted" style={{ fontSize: 11 }}>

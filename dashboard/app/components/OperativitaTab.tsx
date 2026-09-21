@@ -8,18 +8,25 @@ import type { Position } from '../lib/types';
 import CandleChart from './CandleChart';
 import PositionMetrics from './PositionMetrics';
 import Positions from './Positions';
-import ClosedTrades from './ClosedTrades';
+import ClosedTrades, { type Trade } from './ClosedTrades';
 
 /**
- * Scheda Operatività: grafico prezzo SEMPRE visibile in cima (con selettore coin),
- * metriche quando la coin selezionata è una posizione aperta, poi le tabelle
- * posizioni aperte e trade chiusi. Cliccando una riga (aperta o chiusa) il grafico
- * si punta su quella coin. SOLO lettura + il comando di chiusura già esistente.
+ * Scheda Operatività: grafico in cima, metriche se la coin scelta è una posizione
+ * aperta, poi le tabelle. Cliccando una posizione aperta il grafico mostra
+ * entry/SL/gradini; cliccando un trade CHIUSO mostra entry ed exit sul tempo.
+ *
+ * IL DIFETTO DEL «SEMPRE BTC» (21 set 2026): il default veniva scelto al primo
+ * render, quando posizioni e trade non erano ancora arrivati da Firebase, quindi
+ * cadeva su BTCUSDT e da li' non si muoveva piu'. Ora la scelta automatica segue
+ * la prima posizione aperta (o l'ultimo trade chiuso) finche' l'utente non ne fa
+ * una sua.
  */
 export default function OperativitaTab() {
   const [positions, setPositions] = useState<Position[]>([]);
-  const [tradeSyms, setTradeSyms] = useState<string[]>([]);
+  const [lastTrades, setLastTrades] = useState<Trade[]>([]);
   const [selected, setSelected] = useState<string>('');
+  const [userChose, setUserChose] = useState(false);
+  const [trade, setTrade] = useState<Trade | null>(null);
 
   useEffect(() => {
     const u1 = onValue(ref(getRtdb(), 'positions'), (snap) => {
@@ -30,40 +37,38 @@ export default function OperativitaTab() {
       list.sort((a, b) => (a.symbol > b.symbol ? 1 : -1));
       setPositions(list);
     });
-    // simboli distinti dai trade chiusi recenti, per il selettore del grafico
     const q = query(collection(getDb(), 'trades'), orderBy('exit_ts', 'desc'), limit(200));
-    const u2 = onSnapshot(
-      q,
-      (snap) => {
-        const seen: string[] = [];
-        snap.forEach((d) => {
-          const s = (d.data() as { symbol?: string }).symbol;
-          if (s && !seen.includes(s)) seen.push(s);
-        });
-        setTradeSyms(seen);
-      },
-      () => undefined,
-    );
-    return () => {
-      u1();
-      u2();
-    };
+    const u2 = onSnapshot(q, (snap) => {
+      setLastTrades(snap.docs.map((d) => d.data() as Trade));
+    }, () => undefined);
+    return () => { u1(); u2(); };
   }, []);
 
   const openSyms = useMemo(() => positions.map((p) => p.symbol), [positions]);
-  const otherSyms = useMemo(
-    () => tradeSyms.filter((s) => !openSyms.includes(s)),
-    [tradeSyms, openSyms],
-  );
+  const tradeSyms = useMemo(() => {
+    const seen: string[] = [];
+    for (const t of lastTrades) if (t.symbol && !seen.includes(t.symbol)) seen.push(t.symbol);
+    return seen;
+  }, [lastTrades]);
+  const otherSyms = useMemo(() => tradeSyms.filter((s) => !openSyms.includes(s)), [tradeSyms, openSyms]);
 
-  // default: prima posizione aperta -> primo trade chiuso -> BTCUSDT
+  // scelta automatica: segue i dati finche' l'utente non sceglie lui
   useEffect(() => {
-    if (selected) return;
-    const def = openSyms[0] || tradeSyms[0] || 'BTCUSDT';
-    if (def) setSelected(def);
-  }, [openSyms, tradeSyms, selected]);
+    if (userChose) return;
+    if (openSyms.length > 0) { setSelected(openSyms[0]); setTrade(null); return; }
+    if (lastTrades.length > 0) { setSelected(lastTrades[0].symbol); setTrade(lastTrades[0]); return; }
+  }, [openSyms, lastTrades, userChose]);
+
+  const choose = (sym: string, t: Trade | null) => {
+    setUserChose(true);
+    setSelected(sym);
+    setTrade(t);
+  };
 
   const selectedPos = positions.find((p) => p.symbol === selected) || null;
+  // se la coin scelta ha una posizione aperta, il grafico mostra quella (piu' utile
+  // del trade chiuso); altrimenti il trade chiuso cliccato
+  const shownTrade = selectedPos ? null : trade && trade.symbol === selected ? trade : null;
 
   return (
     <>
@@ -72,47 +77,47 @@ export default function OperativitaTab() {
           <div>
             <h2 style={{ margin: 0 }}>Grafico</h2>
             <p className="subtitle" style={{ margin: '4px 0 0' }}>
-              Prezzo live (TradingView) · scegli la coin o clicca una riga sotto
+              {shownTrade
+                ? `${shownTrade.symbol} · ${shownTrade.strategy} · ${shownTrade.direction} · trade chiuso, entry e uscita sul grafico`
+                : 'Prezzo live · scegli la coin o clicca una riga sotto (aperta o chiusa)'}
             </p>
           </div>
-          <select
-            value={selected}
-            onChange={(e) => setSelected(e.target.value)}
-            aria-label="coin del grafico"
-          >
+          <select value={selected || 'BTCUSDT'} onChange={(e) => choose(e.target.value, null)} aria-label="coin del grafico">
             {openSyms.length > 0 && (
               <optgroup label="Posizioni aperte">
-                {openSyms.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
+                {openSyms.map((s) => <option key={s} value={s}>{s}</option>)}
               </optgroup>
             )}
             {otherSyms.length > 0 && (
               <optgroup label="Trade chiusi">
-                {otherSyms.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
+                {otherSyms.map((s) => <option key={s} value={s}>{s}</option>)}
               </optgroup>
             )}
-            {openSyms.length === 0 && otherSyms.length === 0 && (
-              <option value="BTCUSDT">BTCUSDT</option>
-            )}
+            {openSyms.length === 0 && otherSyms.length === 0 && <option value="BTCUSDT">BTCUSDT</option>}
           </select>
         </div>
 
         {selectedPos ? (
           <PositionMetrics position={selectedPos} />
+        ) : shownTrade ? (
+          <p className="muted" style={{ fontSize: 12, marginTop: 0, marginBottom: 10 }}>
+            Entry {shownTrade.entry_price ?? '—'} · Exit {shownTrade.exit_price ?? '—'} ·{' '}
+            <span className={(shownTrade.pnl ?? 0) >= 0 ? 'pos' : 'neg'} style={{ fontWeight: 700 }}>
+              {(shownTrade.pnl ?? 0) >= 0 ? '+' : ''}{(shownTrade.pnl ?? 0).toFixed(2)}
+            </span>
+            {' '}· {shownTrade.exit_reason}
+          </p>
         ) : (
           <p className="muted" style={{ fontSize: 12, marginTop: 0, marginBottom: 10 }}>
-            {selected} · nessuna posizione aperta su questa coin (metriche operative solo per le posizioni aperte).
+            {selected || 'BTCUSDT'} · nessuna posizione aperta su questa coin.
           </p>
         )}
 
-        {selected && <CandleChart symbol={selected} position={selectedPos} height={460} />}
+        <CandleChart symbol={selected || 'BTCUSDT'} position={selectedPos} trade={shownTrade} height={460} />
       </div>
 
-      <Positions onSelect={(p) => setSelected(p.symbol)} />
-      <ClosedTrades onSelect={(s) => setSelected(s)} />
+      <Positions onSelect={(p) => choose(p.symbol, null)} />
+      <ClosedTrades onSelect={(t) => choose(t.symbol, t)} />
     </>
   );
 }

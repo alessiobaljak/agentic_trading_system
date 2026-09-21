@@ -46,7 +46,7 @@ function Gauge({ value, color }: { value: number; color: string }) {
   const len = Math.PI * R; // lunghezza della semicirconferenza
   return (
     <svg width="140" height="82" viewBox="0 0 140 82" aria-hidden>
-      <path d="M 18 70 A 52 52 0 0 1 122 70" fill="none" stroke="#28303d" strokeWidth="12"
+      <path d="M 18 70 A 52 52 0 0 1 122 70" fill="none" stroke="var(--border)" strokeWidth="12"
             strokeLinecap="round" />
       <path
         d="M 18 70 A 52 52 0 0 1 122 70"

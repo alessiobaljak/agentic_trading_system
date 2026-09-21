@@ -28,10 +28,10 @@ type Trade = {
 const MAX = 500;
 const NOISE_ATR = 1.0; // sotto 1 ATR il ritracciamento è "rumore" (fixabile con trail ATR)
 
-const GREEN = '#3fb950';
-const RED = '#f85149';
-const AMBER = '#d29922';
-const MUTED = '#8b96a5';
+const GREEN = 'var(--green)';
+const RED = 'var(--red)';
+const AMBER = 'var(--amber)';
+const MUTED = 'var(--text-dim)';
 
 type Row = {
   strategy: string;
@@ -151,7 +151,7 @@ export default function TrailingLearning() {
               </thead>
               <tbody>
                 {perStrat.map((r) => (
-                  <tr key={r.strategy} style={{ borderTop: '1px solid #28303d' }}>
+                  <tr key={r.strategy} style={{ borderTop: '1px solid var(--border)' }}>
                     <td style={{ ...cell, fontWeight: 600 }}>{r.strategy}</td>
                     <td style={{ ...cell, textAlign: 'right' }}>{r.n}</td>
                     <td style={{ ...cell, textAlign: 'right', color: RED }}>
@@ -180,7 +180,7 @@ export default function TrailingLearning() {
 function Stat({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
     <div>
-      <div style={{ fontSize: 20, fontWeight: 700, color: color ?? '#e6edf3' }}>{value}</div>
+      <div style={{ fontSize: 20, fontWeight: 700, color: color ?? 'var(--text)' }}>{value}</div>
       <div style={{ fontSize: 11, color: MUTED }}>{label}</div>
     </div>
   );

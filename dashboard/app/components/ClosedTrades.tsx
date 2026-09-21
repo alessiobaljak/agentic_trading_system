@@ -11,8 +11,9 @@ import { getDb } from '../lib/firebase';
  * lato browser; i verdetti si calcolano SOLO per i giorni espansi (niente raffica
  * di fetch su tutti i trade). Se Binance non è raggiungibile -> "n/d".
  */
-type Trade = {
+export type Trade = {
   trade_id?: string;
+  entry_price?: number;
   symbol: string;
   strategy: string;
   direction: string;
@@ -88,18 +89,18 @@ function tradeKey(t: Trade): string {
  *  DOPO aver bancato >=1 TP (esito netto positivo) -> verde, distinto dal trailing
  *  protettivo (ambra) e dallo stop-loss pieno (rosso). */
 const EXIT_LABEL: Record<string, { text: string; color: string }> = {
-  take_profit: { text: 'Take profit', color: '#3fb950' },
-  scale_out: { text: 'Scale-out', color: '#3fb950' },
-  trailing_stop: { text: 'Trailing stop', color: '#d29922' },
-  stop_loss: { text: 'Stop loss', color: '#f85149' },
-  time_exit: { text: 'Time exit', color: '#8b96a5' },
-  manual: { text: 'Manuale', color: '#8b96a5' },
-  kill_switch: { text: 'Kill switch', color: '#8b96a5' },
-  circuit_breaker: { text: 'Circuit breaker', color: '#8b96a5' },
+  take_profit: { text: 'Take profit', color: 'var(--green)' },
+  scale_out: { text: 'Scale-out', color: 'var(--green)' },
+  trailing_stop: { text: 'Trailing stop', color: 'var(--amber)' },
+  stop_loss: { text: 'Stop loss', color: 'var(--red)' },
+  time_exit: { text: 'Time exit', color: 'var(--text-dim)' },
+  manual: { text: 'Manuale', color: 'var(--text-dim)' },
+  kill_switch: { text: 'Kill switch', color: 'var(--text-dim)' },
+  circuit_breaker: { text: 'Circuit breaker', color: 'var(--text-dim)' },
 };
 
 function exitLabel(reason: string | undefined): { text: string; color: string } {
-  return EXIT_LABEL[reason ?? ''] ?? { text: reason ?? '—', color: '#8b96a5' };
+  return EXIT_LABEL[reason ?? ''] ?? { text: reason ?? '—', color: 'var(--text-dim)' };
 }
 
 /**
@@ -150,37 +151,37 @@ async function evalTrailing(t: Trade): Promise<Verdict> {
 function VerdictBadge({ v }: { v: Verdict | undefined }) {
   if (v === 'premature') {
     return (
-      <span style={{ color: '#f85149' }} title={`Restando in posizione il prezzo avrebbe toccato il TP entro ${EVAL_HOURS}h: il trailing ha tagliato un vincitore.`}>
+      <span style={{ color: 'var(--red)' }} title={`Restando in posizione il prezzo avrebbe toccato il TP entro ${EVAL_HOURS}h: il trailing ha tagliato un vincitore.`}>
         ❌ prematuro
       </span>
     );
   }
   if (v === 'protected') {
     return (
-      <span style={{ color: '#3fb950' }} title={`Restando in posizione il prezzo avrebbe toccato lo STOP LOSS entro ${EVAL_HOURS}h: il trailing ha protetto da una perdita.`}>
+      <span style={{ color: 'var(--green)' }} title={`Restando in posizione il prezzo avrebbe toccato lo STOP LOSS entro ${EVAL_HOURS}h: il trailing ha protetto da una perdita.`}>
         ✅ corretto
       </span>
     );
   }
   if (v === 'neutral') {
     return (
-      <span style={{ color: '#8b96a5' }} title={`Entro ${EVAL_HOURS}h il prezzo non ha toccato né TP né SL (o li ha toccati nella stessa candela): esito indifferente.`}>
+      <span style={{ color: 'var(--text-dim)' }} title={`Entro ${EVAL_HOURS}h il prezzo non ha toccato né TP né SL (o li ha toccati nella stessa candela): esito indifferente.`}>
         ⚪ neutro
       </span>
     );
   }
   if (v === 'pending') {
-    return <span style={{ color: '#8b96a5' }} title={`Finestra di ${EVAL_HOURS}h non ancora completa.`}>in valutazione</span>;
+    return <span style={{ color: 'var(--text-dim)' }} title={`Finestra di ${EVAL_HOURS}h non ancora completa.`}>in valutazione</span>;
   }
   if (v === 'unavailable') {
-    return <span style={{ color: '#8b96a5' }} title="TP/SL non registrati (trade vecchio) o Binance non raggiungibile dal browser.">n/d</span>;
+    return <span style={{ color: 'var(--text-dim)' }} title="TP/SL non registrati (trade vecchio) o Binance non raggiungibile dal browser.">n/d</span>;
   }
-  return <span style={{ color: '#8b96a5' }}>…</span>;
+  return <span style={{ color: 'var(--text-dim)' }}>…</span>;
 }
 
 type DayGroup = { key: string; label: string; trades: Trade[]; net: number };
 
-export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string) => void } = {}) {
+export default function ClosedTrades({ onSelect }: { onSelect?: (trade: Trade) => void } = {}) {
   const [rows, setRows] = useState<Trade[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [verdicts, setVerdicts] = useState<Record<string, Verdict>>({});
@@ -277,7 +278,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
-              <tr style={{ textAlign: 'left', color: '#8b96a5' }}>
+              <tr style={{ textAlign: 'left', color: 'var(--text-dim)' }}>
                 <th style={cell}>Aperta</th>
                 <th style={cell}>Chiusa</th>
                 <th style={cell}>Coin</th>
@@ -296,10 +297,10 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                   <Fragment key={g.key}>
                     <tr
                       onClick={() => toggle(g.key)}
-                      style={{ cursor: 'pointer', borderTop: '2px solid #28303d', background: '#161d2a' }}
+                      style={{ cursor: 'pointer', borderTop: '2px solid var(--border)', background: 'var(--bg-elev)' }}
                     >
                       <td colSpan={8} style={{ ...cell, fontWeight: 600 }}>
-                        <span style={{ display: 'inline-block', width: 16, color: '#8b96a5' }}>
+                        <span style={{ display: 'inline-block', width: 16, color: 'var(--text-dim)' }}>
                           {open ? '▾' : '▸'}
                         </span>
                         {g.label}
@@ -307,7 +308,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                           {g.trades.length} trade
                         </span>
                       </td>
-                      <td style={{ ...cell, textAlign: 'right', fontWeight: 700, color: g.net >= 0 ? '#3fb950' : '#f85149' }}>
+                      <td style={{ ...cell, textAlign: 'right', fontWeight: 700, color: g.net >= 0 ? 'var(--green)' : 'var(--red)' }}>
                         {g.net >= 0 ? '+' : ''}
                         {g.net.toFixed(2)}
                       </td>
@@ -316,12 +317,12 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                       g.trades.map((t, i) => (
                         <tr
                           key={`${g.key}-${i}`}
-                          style={{ borderTop: '1px solid #28303d', cursor: onSelect ? 'pointer' : 'default' }}
-                          onClick={onSelect ? () => onSelect(t.symbol) : undefined}
+                          style={{ borderTop: '1px solid var(--border)', cursor: onSelect ? 'pointer' : 'default' }}
+                          onClick={onSelect ? () => onSelect(t) : undefined}
                           title={onSelect ? 'Mostra sul grafico' : undefined}
                         >
-                          <td style={{ ...cell, color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtEntry(t.entry_time, t.exit_ts)}</td>
-                          <td style={{ ...cell, color: '#8b96a5', whiteSpace: 'nowrap' }}>{fmtTime(t.exit_ts)}</td>
+                          <td style={{ ...cell, color: 'var(--text-dim)', whiteSpace: 'nowrap' }}>{fmtEntry(t.entry_time, t.exit_ts)}</td>
+                          <td style={{ ...cell, color: 'var(--text-dim)', whiteSpace: 'nowrap' }}>{fmtTime(t.exit_ts)}</td>
                           <td style={{ ...cell, fontWeight: 600 }}>{t.symbol}</td>
                           <td style={cell}>{t.strategy}</td>
                           <td style={cell}>{t.direction}</td>
@@ -334,7 +335,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                             {t.scale_stage_reached != null ? (
                               t.scale_stage_reached > 0 ? (
                                 <span
-                                  style={{ color: '#3fb950' }}
+                                  style={{ color: 'var(--green)' }}
                                   title={
                                     t.realized_partial != null
                                       ? `incassato dalle fette: ${t.realized_partial >= 0 ? '+' : ''}${t.realized_partial.toFixed(2)}`
@@ -344,10 +345,10 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                                   ✓ {t.scale_stage_reached}
                                 </span>
                               ) : (
-                                <span style={{ color: '#8b96a5' }} title="nessun TP raggiunto (uscito prima)">—</span>
+                                <span style={{ color: 'var(--text-dim)' }} title="nessun TP raggiunto (uscito prima)">—</span>
                               )
                             ) : (
-                              <span style={{ color: '#8b96a5' }}>·</span>
+                              <span style={{ color: 'var(--text-dim)' }}>·</span>
                             )}
                           </td>
                           <td style={{ ...cell, whiteSpace: 'nowrap' }}>
@@ -355,7 +356,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                               <VerdictBadge v={(t.trailing_verdict as Verdict | undefined) ?? verdicts[tradeKey(t)]} />
                             ) : null}
                           </td>
-                          <td style={{ ...cell, textAlign: 'right', color: (t.pnl ?? 0) >= 0 ? '#3fb950' : '#f85149' }}>
+                          <td style={{ ...cell, textAlign: 'right', color: (t.pnl ?? 0) >= 0 ? 'var(--green)' : 'var(--red)' }}>
                             {(t.pnl ?? 0).toFixed(2)}
                           </td>
                         </tr>
@@ -363,11 +364,11 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (symbol: string)
                   </Fragment>
                 );
               })}
-              <tr style={{ borderTop: '2px solid #28303d', fontWeight: 700 }}>
+              <tr style={{ borderTop: '2px solid var(--border)', fontWeight: 700 }}>
                 <td style={cell} colSpan={8}>
                   Totale realizzato ({rows.length} trade)
                 </td>
-                <td style={{ ...cell, textAlign: 'right', color: total >= 0 ? '#3fb950' : '#f85149' }}>
+                <td style={{ ...cell, textAlign: 'right', color: total >= 0 ? 'var(--green)' : 'var(--red)' }}>
                   {total.toFixed(2)}
                 </td>
               </tr>

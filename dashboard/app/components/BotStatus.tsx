@@ -207,7 +207,7 @@ export default function BotStatus() {
                   width: `${fillPct}%`,
                   background: aboveThr
                     ? 'linear-gradient(90deg, var(--accent), var(--teal))'
-                    : 'linear-gradient(90deg, var(--amber), #f2c65a)',
+                    : 'linear-gradient(90deg, var(--amber), var(--amber))',
                 }}
               />
               <div className="meter-thresh" style={{ left: `${thrPct}%` }} title={`soglia ${thr}`} />

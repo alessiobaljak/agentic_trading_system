@@ -119,7 +119,7 @@ export default function OrchestratorShadow() {
           </p>
 
           {last && (
-            <div style={{ border: '1px solid #28303d', borderRadius: 8,
+            <div style={{ border: '1px solid var(--border)', borderRadius: 8,
                           padding: '10px 12px', margin: '10px 0' }}>
               <div style={{ fontSize: 12, color: 'var(--muted)' }}>ULTIMA DECISIONE</div>
               <div style={{ marginTop: 4 }}>
@@ -164,7 +164,7 @@ export default function OrchestratorShadow() {
                   const v = VERDICT[r.verdict ?? ''] ?? { label: r.verdict ?? '—',
                                                           color: 'var(--muted)', help: '' };
                   return (
-                    <tr key={i} style={{ borderTop: '1px solid #28303d' }}>
+                    <tr key={i} style={{ borderTop: '1px solid var(--border)' }}>
                       <td style={{ ...cellStyle, color: 'var(--muted)' }}>
                         {r.at ? new Date(r.at * 1000).toLocaleString('it-IT') : '—'}
                       </td>

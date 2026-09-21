@@ -91,9 +91,9 @@ function describe(name: string, generated: boolean, spec?: Spec): string {
 }
 
 function robustness(nCoins: number): { label: string; color: string; bg: string } {
-  if (nCoins >= 8) return { label: `🛡️ robusta · ${nCoins}`, color: '#8fd18f', bg: '#1c2e1c' };
-  if (nCoins >= 3) return { label: `solida · ${nCoins}`, color: '#cdd6e2', bg: '#1d2533' };
-  return { label: `${nCoins} crypto`, color: '#c9a24b', bg: '#2e2613' };
+  if (nCoins >= 8) return { label: `🛡️ robusta · ${nCoins}`, color: 'var(--green)', bg: 'var(--green-soft)' };
+  if (nCoins >= 3) return { label: `solida · ${nCoins}`, color: 'var(--text)', bg: 'var(--bg-panel-2)' };
+  return { label: `${nCoins} crypto`, color: 'var(--amber)', bg: 'var(--amber-soft)' };
 }
 function hashStr(s: string): number {
   let h = 2166136261;
@@ -351,10 +351,10 @@ export default function OptimizedStrategies() {
               const rob = robustness(c.coins.length);
               const p = prod[c.strategy];
               const curve = p && p.points.length ? realSpark(p.points) : null;
-              const stroke = curve ? (curve.positive ? '#3fb950' : '#f85149') : '#2a3340';
+              const stroke = curve ? (curve.positive ? 'var(--green)' : 'var(--red)') : 'var(--border)';
               return (
                 <div key={c.strategy} style={{ border: '1px solid var(--border-soft)', borderRadius: 10, overflow: 'hidden', background: 'var(--bg-elev)' }}>
-                  <svg viewBox="0 0 100 44" preserveAspectRatio="none" style={{ width: '100%', height: 70, display: 'block', background: '#0a0f18' }}>
+                  <svg viewBox="0 0 100 44" preserveAspectRatio="none" style={{ width: '100%', height: 70, display: 'block', background: 'var(--bg-elev)' }}>
                     {curve ? (
                       <>
                         <defs>
@@ -368,8 +368,8 @@ export default function OptimizedStrategies() {
                       </>
                     ) : (
                       <>
-                        <line x1="0" y1="36" x2="100" y2="36" stroke="#2a3340" strokeWidth="1" strokeDasharray="2 2" />
-                        <text x="50" y="24" fill="#5a6473" fontSize="6" textAnchor="middle">nessun trade ancora</text>
+                        <line x1="0" y1="36" x2="100" y2="36" stroke="var(--border)" strokeWidth="1" strokeDasharray="2 2" />
+                        <text x="50" y="24" fill="var(--text-faint)" fontSize="6" textAnchor="middle">nessun trade ancora</text>
                       </>
                     )}
                   </svg>
@@ -377,26 +377,26 @@ export default function OptimizedStrategies() {
                   <div style={{ padding: 10 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                       <strong style={{ fontSize: 13 }}>{c.strategy}</strong>
-                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: c.generated ? '#1f2a44' : '#23331f', color: c.generated ? '#8ab4ff' : '#8fd18f' }}>
+                      <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: c.generated ? 'var(--accent-soft)' : 'var(--green-soft)', color: c.generated ? 'var(--accent)' : 'var(--green)' }}>
                         {c.generated ? '🧠 AI' : 'base'}
                       </span>
                       <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 4, background: rob.bg, color: rob.color }}>{rob.label}</span>
                     </div>
 
-                    <p style={{ fontSize: 11.5, color: '#aeb7c4', margin: '6px 0 8px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: 48 }}>
+                    <p style={{ fontSize: 11.5, color: 'var(--text-dim)', margin: '6px 0 8px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: 48 }}>
                       {c.desc}
                     </p>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4, textAlign: 'center' }}>
                       {[
-                        { l: 'PnL', v: p ? `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(0)}$` : '—', col: p ? (p.pnl >= 0 ? '#3fb950' : '#f85149') : '#7b8696' },
-                        { l: 'Win', v: p && p.n ? `${Math.round((p.wins / p.n) * 100)}%` : '—', col: '#cdd6e2' },
-                        { l: 'Trade', v: p ? `${p.n}` : '0', col: '#cdd6e2' },
-                        { l: 'PF bt', v: c.avgPf ? c.avgPf.toFixed(2) : '—', col: '#8b96a5' },
+                        { l: 'PnL', v: p ? `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(0)}$` : '—', col: p ? (p.pnl >= 0 ? 'var(--green)' : 'var(--red)') : 'var(--text-dim)' },
+                        { l: 'Win', v: p && p.n ? `${Math.round((p.wins / p.n) * 100)}%` : '—', col: 'var(--text)' },
+                        { l: 'Trade', v: p ? `${p.n}` : '0', col: 'var(--text)' },
+                        { l: 'PF bt', v: c.avgPf ? c.avgPf.toFixed(2) : '—', col: 'var(--text-dim)' },
                       ].map((k) => (
-                        <div key={k.l} style={{ background: '#121a28', borderRadius: 6, padding: '4px 2px' }}>
+                        <div key={k.l} style={{ background: 'var(--bg-elev)', borderRadius: 6, padding: '4px 2px' }}>
                           <div style={{ fontSize: 13, fontWeight: 700, color: k.col }}>{k.v}</div>
-                          <div style={{ fontSize: 9, color: '#7b8696' }}>{k.l}</div>
+                          <div style={{ fontSize: 9, color: 'var(--text-dim)' }}>{k.l}</div>
                         </div>
                       ))}
                     </div>
@@ -404,19 +404,19 @@ export default function OptimizedStrategies() {
                     {c.coins.length > 0 && (
                       <div title="Rendimento di BACKTEST su $10k fissi per trade, SENZA leva e non composto: serve a confrontare/classificare le strategie, NON e' una previsione del PnL live." style={{
                         marginTop: 8, padding: '6px 8px', borderRadius: 6,
-                        background: c.simProfit10k >= 0 ? '#11210f' : '#27120f',
-                        border: `1px solid ${c.simProfit10k >= 0 ? '#214d1d' : '#5a2620'}`,
+                        background: c.simProfit10k >= 0 ? 'var(--green-soft)' : 'var(--red-soft)',
+                        border: `1px solid ${c.simProfit10k >= 0 ? 'rgba(22,163,74,.35)' : 'rgba(220,38,38,.35)'}`,
                         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       }}>
                         <div>
-                          <div style={{ fontSize: 14, fontWeight: 700, color: c.simProfit10k >= 0 ? '#3fb950' : '#f85149' }}>
+                          <div style={{ fontSize: 14, fontWeight: 700, color: c.simProfit10k >= 0 ? 'var(--green)' : 'var(--red)' }}>
                             {fmtMoney(c.simProfit10k)}
                           </div>
-                          <div style={{ fontSize: 9, color: '#7b8696' }}>backtest su $10k · media/coin · no leva</div>
+                          <div style={{ fontSize: 9, color: 'var(--text-dim)' }}>backtest su $10k · media/coin · no leva</div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: 11, fontWeight: 600, color: '#8fd18f' }}>{fmtMoney(c.bestProfit10k)}</div>
-                          <div style={{ fontSize: 9, color: '#7b8696' }}>miglior coin</div>
+                          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--green)' }}>{fmtMoney(c.bestProfit10k)}</div>
+                          <div style={{ fontSize: 9, color: 'var(--text-dim)' }}>miglior coin</div>
                         </div>
                       </div>
                     )}
@@ -427,7 +427,7 @@ export default function OptimizedStrategies() {
                           onClick={() => setOpenCard(openCard === c.strategy ? null : c.strategy)}
                           style={{
                             marginTop: 8, width: '100%', textAlign: 'left', cursor: 'pointer',
-                            background: 'transparent', border: 'none', color: '#8b96a5', fontSize: 10, padding: 0,
+                            background: 'transparent', border: 'none', color: 'var(--text-dim)', fontSize: 10, padding: 0,
                           }}
                         >
                           {openCard === c.strategy ? '▾' : '▸'} dettaglio per coppia ({c.coins.length})
@@ -437,7 +437,7 @@ export default function OptimizedStrategies() {
                             {/* I riquadri in cima (PnL/Win/Trade) sono il PAPER; qui sotto
                                 e' tutto BACKTEST. Senza questa riga i due si leggevano come
                                 lo stesso numero: «win 57%» accanto a 4 trade tutti persi. */}
-                            <div style={{ fontSize: 9, color: '#7b8696', padding: '0 4px 4px' }}>
+                            <div style={{ fontSize: 9, color: 'var(--text-dim)', padding: '0 4px 4px' }}>
                               tutti i numeri qui sotto sono del <strong>backtest</strong>, non del paper
                             </div>
                             {c.coins.map((coin) => {
@@ -446,16 +446,16 @@ export default function OptimizedStrategies() {
                                 <div key={coin.symbol} style={{
                                   display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: 6,
                                   alignItems: 'center', padding: '3px 4px', fontSize: 10,
-                                  borderBottom: '1px solid #1a2230',
+                                  borderBottom: '1px solid var(--border-soft)',
                                 }}>
-                                  <span style={{ color: '#cdd6e2', fontWeight: 600 }}>{coin.symbol.replace('USDT', '')}</span>
-                                  <span style={{ color: prof >= 0 ? '#3fb950' : '#f85149', fontWeight: 700, textAlign: 'right', minWidth: 56 }}>
+                                  <span style={{ color: 'var(--text)', fontWeight: 600 }}>{coin.symbol.replace('USDT', '')}</span>
+                                  <span style={{ color: prof >= 0 ? 'var(--green)' : 'var(--red)', fontWeight: 700, textAlign: 'right', minWidth: 56 }}>
                                     {fmtMoney(prof)}
                                   </span>
-                                  <span style={{ color: '#7b8696', textAlign: 'right' }} title="profit factor del BACKTEST (gate), non del paper">
+                                  <span style={{ color: 'var(--text-dim)', textAlign: 'right' }} title="profit factor del BACKTEST (gate), non del paper">
                                     pf bt {coin.last_pf != null ? coin.last_pf.toFixed(2) : '—'}
                                   </span>
-                                  <span style={{ color: '#7b8696', textAlign: 'right' }} title="win-rate e numero trade del BACKTEST (gate), non del paper">
+                                  <span style={{ color: 'var(--text-dim)', textAlign: 'right' }} title="win-rate e numero trade del BACKTEST (gate), non del paper">
                                     bt {coin.last_win_rate != null ? `${Math.round(coin.last_win_rate * 100)}%` : '—'}
                                     {coin.last_trades != null ? `·${coin.last_trades}` : ''}
                                   </span>

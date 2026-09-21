@@ -255,7 +255,7 @@ export default function SupervisorDecisions() {
                         display: 'block',
                         width: '100%',
                         textAlign: 'left',
-                        background: apri ? 'rgba(79,156,249,.07)' : 'transparent',
+                        background: apri ? 'var(--accent-soft)' : 'transparent',
                         border: '1px solid var(--border-soft)',
                         borderRadius: 8,
                         padding: '8px 11px',

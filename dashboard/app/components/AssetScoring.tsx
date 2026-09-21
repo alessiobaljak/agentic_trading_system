@@ -102,7 +102,7 @@ export default function AssetScoring() {
                 {shown.map((r) => {
                   const out = (r.excluded ?? []).length > 0;
                   return (
-                    <tr key={r.symbol} style={{ borderTop: '1px solid #28303d',
+                    <tr key={r.symbol} style={{ borderTop: '1px solid var(--border)',
                                                 opacity: out ? 0.55 : 1 }}>
                       <td style={{ ...cellStyle, fontWeight: 600,
                                    textDecoration: out ? 'line-through' : undefined }}>

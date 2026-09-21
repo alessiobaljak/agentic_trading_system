@@ -57,7 +57,7 @@ export default function StrategyWeights() {
                 <span className="wlab" title={`${w.strategy} · ${w.regime}`}>
                   {w.strategy} <span className="wreg">· {w.regime}</span>
                   {inProva && (
-                    <span className="wtag" style={{ background: 'rgba(227,169,43,0.15)', color: 'var(--amber)' }}>
+                    <span className="wtag" style={{ background: 'var(--amber-soft)', color: 'var(--amber)' }}>
                       in prova
                     </span>
                   )}

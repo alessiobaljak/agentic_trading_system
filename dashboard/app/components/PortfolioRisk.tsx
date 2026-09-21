@@ -122,7 +122,7 @@ export default function PortfolioRisk() {
                   .sort((a, b) => Number(b[1].risk_effective_pct ?? 0)
                                 - Number(a[1].risk_effective_pct ?? 0))
                   .map(([sym, p]) => (
-                  <tr key={sym} style={{ borderTop: '1px solid #28303d' }}>
+                  <tr key={sym} style={{ borderTop: '1px solid var(--border)' }}>
                     <td style={{ ...cellStyle, fontWeight: 600 }}>{sym}</td>
                     <td style={{ ...cellStyle,
                                  color: p.direction === 'short' ? 'var(--red)' : 'var(--green)' }}>

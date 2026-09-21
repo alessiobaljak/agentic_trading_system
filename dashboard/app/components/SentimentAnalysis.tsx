@@ -18,11 +18,11 @@ import type { BotStatus, ClosedTrade, Position } from '../lib/types';
  */
 
 function fgClass(v: number): { label: string; color: string } {
-  if (v < 25) return { label: 'Extreme Fear', color: '#f85149' };
-  if (v < 45) return { label: 'Fear', color: '#e3a92b' };
-  if (v <= 55) return { label: 'Neutral', color: '#c9c94b' };
-  if (v < 75) return { label: 'Greed', color: '#7ad17a' };
-  return { label: 'Extreme Greed', color: '#3fb950' };
+  if (v < 25) return { label: 'Extreme Fear', color: 'var(--red)' };
+  if (v < 45) return { label: 'Fear', color: 'var(--amber)' };
+  if (v <= 55) return { label: 'Neutral', color: '#d4b83a' };
+  if (v < 75) return { label: 'Greed', color: 'var(--green)' };
+  return { label: 'Extreme Greed', color: 'var(--green)' };
 }
 
 type Bucket = { label: string; test: (v: number) => boolean };

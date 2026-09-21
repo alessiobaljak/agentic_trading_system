@@ -95,7 +95,7 @@ export default function ReconcilerStatus() {
         <>
           {d.error && (
             <div style={{
-              background: 'rgba(248,81,73,.12)', border: '1px solid var(--red)',
+              background: 'var(--red-soft)', border: '1px solid var(--red)',
               borderRadius: 8, padding: '10px 12px', marginBottom: 12,
             }}>
               <b style={{ color: 'var(--red)' }}>

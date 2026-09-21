@@ -1052,3 +1052,24 @@ Abbassare il take profit sposta la perdita, non la toglie. La leva per i 13 «qu
 2/4/6), ora al **primo** (`lock_anchor`, 1R su 2/4/6, 0,75R su 1,5/3/5), nel motore e
 nell'executor dalla stessa funzione. Quei trade escono vicino al pareggio invece che
 a −1R. Deciso dal proprietario coi numeri sopra. Registro non azzerato.
+
+
+### 21 settembre, sera: dashboard chiara, e il grafico che mostrava sempre BTC
+
+Richiesta del proprietario: tema chiaro, via la tab Claude (non la usa più), il
+grafico dell'Operatività che «mostra sempre BTC», e il grafico anche dei trade
+chiusi al click.
+
+* **Tema chiaro.** Token in `globals.css` riscritti (superfici bianche, ombre
+  leggere, niente glow), e i colori scritti a mano in 19 componenti sostituiti coi
+  token — il grafico a candele, che è un canvas e non legge il CSS, li prende dai
+  token a runtime. `color-scheme: light`.
+* **«Sempre BTC»** era un difetto vero: il default veniva scelto al primo render,
+  quando posizioni e trade non erano ancora arrivati da Firebase, quindi cadeva su
+  BTCUSDT e da lì non si muoveva più. Ora la scelta automatica segue la prima
+  posizione aperta (o l'ultimo trade chiuso) finché l'utente non ne fa una sua.
+* **Trade chiusi sul grafico.** Il click passa il trade intero, non il simbolo: il
+  grafico sceglie il timeframe che lo mostra intero, centra la finestra sul trade e
+  disegna entry/exit come linee e come marker sul tempo (IN/OUT), più SL e TP.
+* **Tab Claude e rotta `/api/claude` rimosse.** Il canale con Claude resta quello
+  delle issue di GitHub (`CLAUDE.md` aggiornato).

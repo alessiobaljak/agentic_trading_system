@@ -178,21 +178,21 @@ export default function EquityCurve() {
               <AreaChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#4f9cf9" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="#4f9cf9" stopOpacity={0} />
+                    <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid stroke="#28303d" strokeDasharray="3 3" />
-                <XAxis dataKey="label" stroke="#8b96a5" fontSize={11} tickLine={false} minTickGap={40} />
-                <YAxis stroke="#8b96a5" fontSize={11} tickLine={false} width={56} />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
+                <XAxis dataKey="label" stroke="var(--text-dim)" fontSize={11} tickLine={false} minTickGap={40} />
+                <YAxis stroke="var(--text-dim)" fontSize={11} tickLine={false} width={56} />
                 <Tooltip
                   contentStyle={{
-                    background: '#141a24',
-                    border: '1px solid #28303d',
+                    background: 'var(--bg-panel)',
+                    border: '1px solid var(--border)',
                     borderRadius: 8,
-                    color: '#e6edf3',
+                    color: 'var(--text)',
                   }}
-                  labelStyle={{ color: '#8b96a5' }}
+                  labelStyle={{ color: 'var(--text-dim)' }}
                   labelFormatter={(_label: unknown, payload?: ReadonlyArray<{ payload?: Point }>) => {
                     const t = payload?.[0]?.payload?.t;
                     return t
@@ -207,7 +207,7 @@ export default function EquityCurve() {
                     ] as [string, string];
                   }}
                 />
-                <Area type="monotone" dataKey="equity" stroke="#4f9cf9" strokeWidth={2} fill="url(#equityFill)" />
+                <Area type="monotone" dataKey="equity" stroke="var(--accent)" strokeWidth={2} fill="url(#equityFill)" />
               </AreaChart>
             </ResponsiveContainer>
           )}

@@ -14,7 +14,7 @@ function pillColors(v: number): { bg: string; fg: string; bd: string } {
   const hue = x * 130; // 0 rosso -> 130 verde
   return {
     bg: `hsla(${hue}, 60%, 45%, ${0.18 + x * 0.32})`,
-    fg: '#e9eef5',
+    fg: '#ffffff',
     bd: `hsla(${hue}, 60%, 55%, 0.5)`,
   };
 }

@@ -187,7 +187,7 @@ export default function GateAutopsy() {
                     display: 'block',
                     width: '100%',
                     textAlign: 'left',
-                    background: attivo ? 'rgba(79,156,249,.10)' : 'transparent',
+                    background: attivo ? 'var(--accent-soft)' : 'transparent',
                     border: '1px solid transparent',
                     borderColor: attivo ? 'var(--border)' : 'transparent',
                     borderRadius: 8,

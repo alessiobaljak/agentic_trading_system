@@ -45,7 +45,7 @@ export default function DecisionStatus() {
   }, []);
 
   const opened = st?.outcome === 'opened';
-  const color = opened ? '#3fb950' : '#8b96a5';
+  const color = opened ? 'var(--green)' : 'var(--text-dim)';
 
   return (
     <div className="panel">
