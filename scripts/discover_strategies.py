@@ -22,6 +22,7 @@ import time
 from datetime import date
 
 from backtesting.data_loader import load_candles
+from bot.strategies.generated import MARKET_SYMBOL
 from backtesting.engine import (StrategyStats, gate_verdict, max_drawdown, pf_by_regime,
                                 pf_without_top, t_stat)
 from backtesting.optimizer import WalkForwardOptimizer
@@ -313,9 +314,24 @@ def candidate_ladders(scala_paper=None) -> tuple:
 
 
 def _disc_init(args, end: str, specs: list, scala_paper=None) -> None:
-    _W.update(opt=WalkForwardOptimizer(n_windows=args.windows, interval=args.interval),
-              args=args, end=end, specs=specs, min_history=_min_history(args.interval),
-              scala_paper=scala_paper)
+    opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
+    # IL MERCATO NEL GATE. `scripts/optimize.py` carica BTC come contesto
+    # cross-asset da sempre; la discovery — che valida TUTTE le spec che il bot
+    # opera davvero — non lo faceva, quindi per le strategie generate il mercato
+    # non era «poco pesato»: non era proprio nella stanza. Senza questa riga una
+    # spec che usa una feature di mercato non produce segnali e viene bocciata
+    # per assenza di dati invece che per demerito.
+    btc_ctx = None
+    try:
+        btc = load_candles(MARKET_SYMBOL, args.interval, args.start, end,
+                           prefer=args.source)
+        if len(btc) >= 200:
+            btc_ctx = opt.bt.build_context(MARKET_SYMBOL, btc)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[discover] contesto di mercato non disponibile nel worker: {exc}")
+    _W.update(opt=opt, args=args, end=end, specs=specs,
+              min_history=_min_history(args.interval), scala_paper=scala_paper,
+              btc_ctx=btc_ctx)
 
 
 def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
@@ -349,7 +365,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
     n_eval = 0
     for spec in specs:
         r = evaluate_spec(_W["opt"], sym, candles, frame, spec,
-                          scale_candidates=candidate_ladders(_W.get("scala_paper")))
+                          scale_candidates=candidate_ladders(_W.get("scala_paper")),
+                          context_by_ts=_W.get("btc_ctx"))
         n_eval += 1
         if not r["passed"] and r.get("fail_criteria"):
             b = r.get("fail_binding") or "?"
@@ -384,7 +401,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
 
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict,
-                  scale_candidates=None):
+                  scale_candidates=None, context_by_ts=None):
     """Aggrega le performance del spec sulle SOLE finestre out-of-sample e applica
     il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra).
 
@@ -403,7 +420,8 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
             if ladder:
                 g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(ladder)}
             st = opt.bt.run_strategy(g, symbol, body[sa:sb],
-                                     frame=frame.iloc[sa:sb].reset_index(drop=True))
+                                     frame=frame.iloc[sa:sb].reset_index(drop=True),
+                                     context_by_ts=context_by_ts)
             st_all.trades.extend(st.trades)
             # consistenza: solo le finestre con trade (una finestra senza segnali non
             # e' una perdita -> non deve far fallire il gate).
@@ -462,7 +480,10 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         g = GeneratedStrategy(spec)
         if best_ladder:
             g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": best_ladder}
-        hold = opt._holdout_check(g, symbol, candles, frame, cut)
+        # STESSO contesto dell'OOS: un holdout senza mercato boccerebbe le spec
+        # di mercato per dati mancanti, cioe' proprio quelle da misurare.
+        hold = opt._holdout_check(g, symbol, candles, frame, cut,
+                                  context_by_ts=context_by_ts)
         passed = bool(hold.get("ok"))
         if not passed:
             # supera tutto e cade sui dati mai visti: l'esito piu' informativo

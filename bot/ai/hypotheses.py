@@ -28,7 +28,8 @@ from collections import Counter
 from typing import Optional
 
 from bot.ai.client import ask_json, available
-from bot.strategies.generated import FEATURE_LIBRARY, spec_id
+from bot.strategies.generated import (FEATURE_LIBRARY, MARKET_FEATURES,
+                                      feature_esiste, spec_id)
 from bot.strategies.generator import _ATR_STOP, _DIRECTIONAL, _INCOMPATIBLE, _RR
 
 #: esito dell'ULTIMA chiamata a `propose` in questo processo: quante proposte, quante
@@ -46,6 +47,10 @@ _FEATURE_PARAMS = {
     "trend_strength": {"adx_lo": (10.0, 40.0)},
     "volume_surge": {"vol_mult_feat": (1.05, 5.0)},
     "session": {"hour_from": (0, 23), "hour_to": (1, 24)},
+    # scarto minimo fra la distanza della coin dalla sua media e quella del
+    # mercato dalla sua: 0 = basta essere piu' forte, 0.02 = almeno due punti
+    # percentuali di forza in piu'.
+    "relative_strength": {"rs_gap": (0.0, 0.05)},
 }
 
 #: fasce dei numeri di una spec. UNA SOLA definizione, usata sia da `_esamina_spec`
@@ -114,7 +119,7 @@ def _esamina_feature(raw: dict) -> tuple[Optional[dict], str]:
     if not isinstance(raw, dict):
         return None, "feature non e' un oggetto"
     kind = raw.get("kind")
-    if kind not in FEATURE_LIBRARY:
+    if not feature_esiste(kind):
         return None, f"feature inesistente: {str(kind)[:30]}"
     out = {"kind": kind}
     for name, (lo, hi) in _FEATURE_PARAMS.get(kind, {}).items():
@@ -223,7 +228,7 @@ def propose(n: int, market_context: str = "") -> list[dict]:
     """Fino a `n` spec valide e motivate. Lista vuota se l'AI non e' disponibile."""
     if not available() or n <= 0:
         return []
-    kinds = ", ".join(sorted(FEATURE_LIBRARY))
+    kinds = ", ".join(sorted(set(FEATURE_LIBRARY) | set(MARKET_FEATURES)))
     user = (f"Feature disponibili (usa SOLO questi nomi): {kinds}\n"
             f"Direzionali: {', '.join(_DIRECTIONAL)}\n\n"
             f"{market_context}\n\n"

@@ -23,6 +23,12 @@ _DIRECTIONAL = [
     "vwap_momentum", "vwap_reversion", "ema_cross", "macd_cross",
     "macd_hist", "price_ema", "macd_zero", "price_bb_mid",
     "stoch_extreme", "stoch_momentum",
+    # --- il MERCATO. Aggiunti il 21 set dopo due short consecutivi su una coin
+    # che saliva dentro una giornata di rialzo: le altre feature guardano solo
+    # quella coin, quindi la strategia non poteva distinguere «sto vendendo un
+    # ritracciamento» da «sto davanti a un treno». Sono mattoncini, NON un veto:
+    # il gate misura se servono, come per tutto il resto.
+    "market_trend", "market_fade", "relative_strength",
 ]
 # combinazioni incoerenti da evitare (mean-reversion + breakout sullo stesso segnale)
 _INCOMPATIBLE = {
@@ -30,6 +36,8 @@ _INCOMPATIBLE = {
     frozenset({"vwap_momentum", "vwap_reversion"}),
     frozenset({"rsi_extreme", "rsi_momentum"}),
     frozenset({"stoch_extreme", "stoch_momentum"}),
+    # andare col mercato e contro il mercato insieme non lascia passare niente
+    frozenset({"market_trend", "market_fade"}),
 }
 
 # feature di CONDIZIONE (non danno la direzione: dicono quando operare). Erano
@@ -38,6 +46,7 @@ _INCOMPATIBLE = {
 _CONDITIONAL = ["volatility_regime", "trend_strength", "volume_surge", "session"]
 _VOL_PCT = [0.01, 0.02, 0.03]
 _ADX_LO = [18.0, 22.0, 28.0]
+_RS_GAP = [0.0, 0.005, 0.02]
 _VOL_MULT_FEAT = [1.2, 1.5, 2.0]
 _SESSIONS = [(0, 8), (8, 16), (12, 21), (16, 24)]
 
@@ -70,6 +79,13 @@ def _feature_with_params(kind: str, rng: random.Random) -> dict:
         f["vol_mult_feat"] = rng.choice(_VOL_MULT_FEAT)
     elif kind == "session":
         f["hour_from"], f["hour_to"] = rng.choice(_SESSIONS)
+    elif kind == "relative_strength":
+        # 0 = basta essere piu' forte del mercato; 0.02 = almeno due punti
+        # percentuali in piu'. Senza questa riga il generatore proporrebbe la
+        # feature senza il suo parametro e il validatore la scarterebbe: e'
+        # esattamente lo scarto che il 20 settembre ha bruciato il 74% delle
+        # proposte AI.
+        f["rs_gap"] = rng.choice(_RS_GAP)
     return f
 
 

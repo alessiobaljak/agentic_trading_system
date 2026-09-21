@@ -161,6 +161,123 @@ def _feat_session(i: IndicatorSnapshot, price: float, f: dict):
     return (inside, not inside)
 
 
+# --------------------------------------------------------------------------- #
+# IL MERCATO COME INGREDIENTE DELLA DECISIONE, NON COME VETO                   #
+#                                                                              #
+# 21 settembre 2026. Due short consecutivi su USELESSUSDT dentro una giornata   #
+# di rialzo, -16,90 in quaranta minuti. Le feature che li hanno prodotti dicono #
+# «RSI sopra 70 -> vendi» e «prezzo sopra la banda -> vendi»: guardano SOLO     #
+# quella coin. Il mercato, per una strategia generata, non esisteva — non era   #
+# «poco pesato», non era proprio nella stanza (`discover_strategies` non        #
+# caricava nemmeno BTC).                                                       #
+#                                                                              #
+# La correzione NON e' vietare gli short quando il mercato sale. Dentro una     #
+# giornata di rialzo ci sono ritracciamenti del 2-3%, e prenderli e' esattamente#
+# il mestiere di una strategia di ritorno alla media. Il problema e' che la     #
+# strategia non aveva modo di distinguere «sto vendendo un ritracciamento» da   #
+# «sto stando davanti a un treno», perche' non vedeva il treno.                 #
+#                                                                              #
+# Quindi il mercato entra come MATTONCINO: il generatore puo' usarlo, il GATE   #
+# misura se serve davvero, e nessuno gli impone una regola decisa a tavolino.   #
+# Una feature di mercato che non aiuta viene bocciata come tutto il resto.      #
+#                                                                              #
+# Firma diversa dalle altre (`m` = snapshot del mercato) di proposito: cosi' le #
+# diciotto feature esistenti non vengono toccate, e una spec che chiede il      #
+# mercato dove il mercato non c'e' non produce segnale invece di inventarselo.  #
+# --------------------------------------------------------------------------- #
+#: L'asset che rappresenta «il mercato». BTC e' gia' il contesto che il gate
+#: carica per le strategie cross-asset (`scripts/optimize.py:67`), quindi usando
+#: lo stesso non serve una seconda pipeline dati.
+MARKET_SYMBOL = "BTCUSDT"
+
+
+class MercatoSnap:
+    """Il minimo che serve alle feature di mercato: prezzo e due medie.
+
+    Esiste per non far sapere alle feature come si naviga uno `AssetSnapshot`
+    (quale timeframe, quale dizionario): cosi' si testano con tre numeri e non
+    con mezzo modello."""
+
+    __slots__ = ("price", "ema_fast", "ema_slow")
+
+    def __init__(self, price, ema_fast, ema_slow):
+        self.price, self.ema_fast, self.ema_slow = price, ema_fast, ema_slow
+
+
+def mercato_da_contesto(ctx, timeframe: str):
+    """Lo snapshot del mercato dal contesto cross-asset, o None.
+
+    None NON viene mai sostituito con un valore di comodo: una spec che chiede
+    il mercato dove il mercato non c'e' deve smettere di produrre segnali, non
+    produrne di finti. E' la stessa regola dei dati sintetici nel backtest."""
+    if ctx is None:
+        return None
+    asset = (getattr(ctx, "all_assets", None) or {}).get(MARKET_SYMBOL)
+    if asset is None:
+        return None
+    ind = asset.ind(timeframe)
+    if ind is None:
+        return None
+    return MercatoSnap(getattr(asset, "price", None), ind.ema_fast, ind.ema_slow)
+
+
+def _mkt_market_trend(i, price: float, f: dict, m):
+    """Va CON il mercato: long se il mercato sale, short se scende."""
+    if m is None or m.ema_fast is None or m.ema_slow is None:
+        return None
+    return (m.ema_fast > m.ema_slow, m.ema_fast < m.ema_slow)
+
+
+def _mkt_market_fade(i, price: float, f: dict, m):
+    """Va CONTRO il mercato. Non e' il gemello inutile del precedente: e'
+    l'ipotesi opposta, e serve che il gate possa misurarle entrambe invece di
+    ricevere gia' decisa quella che credo io."""
+    if m is None or m.ema_fast is None or m.ema_slow is None:
+        return None
+    return (m.ema_fast < m.ema_slow, m.ema_fast > m.ema_slow)
+
+
+def _mkt_relative_strength(i, price: float, f: dict, m):
+    """FORZA RELATIVA: la coin e' piu' forte o piu' debole del mercato?
+
+    E' il mattoncino che mancava di piu', ed e' fra le basi del mestiere:
+    comprare cio' che sale piu' del mercato e vendere cio' che sale meno. Con
+    questo una strategia puo' shortare una coin debole ANCHE in un mercato
+    rialzista — che e' la cosa sensata — invece di shortare quella che corre
+    piu' di tutte solo perche' ha l'RSI alto.
+
+    Si confrontano due distanze dalla media, non due prezzi: una percentuale e'
+    paragonabile fra coin, un prezzo no."""
+    if m is None or None in (i.ema_slow, m.ema_slow) or not i.ema_slow or not m.ema_slow:
+        return None
+    if m.price is None or not m.price:
+        return None
+    coin = (price - i.ema_slow) / i.ema_slow
+    mercato = (m.price - m.ema_slow) / m.ema_slow
+    soglia = float(f.get("rs_gap", 0.0))
+    return (coin - mercato >= soglia, mercato - coin >= soglia)
+
+
+#: feature che guardano il MERCATO. Firma `(i, price, f, m)`; `m` e' lo snapshot
+#: dell'asset di riferimento (BTC) allo stesso istante, o None se non disponibile.
+MARKET_FEATURES = {
+    "market_trend": _mkt_market_trend,
+    "market_fade": _mkt_market_fade,
+    "relative_strength": _mkt_relative_strength,
+}
+
+
+def feature_esiste(kind: str) -> bool:
+    """L'UNICA definizione di «questa feature esiste».
+
+    Le feature di mercato hanno una firma diversa e quindi vivono in un
+    dizionario separato. Chi valida le proposte deve guardare entrambi: la prima
+    versione guardava solo `FEATURE_LIBRARY`, e il validatore avrebbe scartato
+    come «inesistenti» proprio le feature appena aggiunte al vocabolario. Un
+    controllo che non conosce meta' del vocabolario e' una trappola, non una
+    regola — l'abbiamo gia' pagata il 20 settembre con `rr`."""
+    return kind in FEATURE_LIBRARY or kind in MARKET_FEATURES
+
 # nome feature -> (funzione, è_direzionale). Le non direzionali sono filtri.
 FEATURE_LIBRARY = {
     "rsi_extreme": _feat_rsi_extreme,
@@ -235,12 +352,20 @@ class GeneratedStrategy(Strategy):
         if i is None or not self._features:
             return None
         price = asset.price
+        # Il mercato si risolve UNA volta, non per feature: se manca e la spec lo
+        # chiede, il segnale non nasce. Meglio nessun trade che un trade deciso
+        # su un mercato immaginario.
+        mercato = mercato_da_contesto(ctx, self._tf)
         long_ok, short_ok = True, True
         for f in self._features:
-            fn = FEATURE_LIBRARY.get(f.get("kind"))
-            if fn is None:
-                return None
-            res = fn(i, price, f)
+            kind = f.get("kind")
+            if kind in MARKET_FEATURES:
+                res = MARKET_FEATURES[kind](i, price, f, mercato)
+            else:
+                fn = FEATURE_LIBRARY.get(kind)
+                if fn is None:
+                    return None
+                res = fn(i, price, f)
             if res is None:
                 return None  # dati indicatore mancanti -> niente segnale
             long_ok = long_ok and res[0]
