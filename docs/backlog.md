@@ -70,6 +70,51 @@ del 10% per posizione morde quasi sempre, e più lo stop è largo meno si rischi
 **Serve:** decidere se il cap per posizione deve restare al 10%. Non è un difetto
 da riparare di nascosto — è una scelta. Toccarlo cambia la size a metà esperimento.
 
+### A4. Non sappiamo quanto vive una strategia validata — e distruggiamo la prova
+**Stato:** aperto · **la più importante di questa sezione** · emerso 21 set
+
+Domanda del proprietario: *«la strategia è costruita per passare quei 4 anni circa
+più quelle settimane che aggiungiamo, ma ora il mercato è diverso e lo sarà sempre.
+Non credo che questa strategia possa valere per i prossimi 3 anni.»*
+
+Ha ragione, e il sistema in parte lo sa già: una coppia validata **non è
+permanente**. Ogni 7 giorni di dati nuovi prende una conferma o un fallimento
+(`judge_window`), e dopo **due finestre fallite di fila** viene rimossa
+(`OPTIMIZER_PURGE_FAILS=2`, `scripts/optimize.py:878`). L'holdout di 45 giorni
+scorre in avanti col tempo, quindi una strategia deve continuare a funzionare su
+dati recenti che non ha mai visto. Non cerchiamo una strategia che duri tre anni:
+teniamo viva una **popolazione**, e i singoli muoiono.
+
+**Il buco:** non abbiamo MAI misurato quanto dura un individuo, e non possiamo,
+perché la prova viene cancellata nel momento in cui nasce. Il purge stampa
+
+```
+[registry] AUTO-PURGE: rimosse N coppie (fallite 2+ finestre di fila)
+```
+
+nel journal e poi elimina il record. Il journal scorre via in poche ore (ci è già
+costato tre diagnosi), e il registro contiene solo i **sopravvissuti** — lo stesso
+bias di sopravvivenza che `scripts/survivorship_report.py` misura sulle coin,
+rientrato dalla porta di servizio sulle strategie.
+
+Quindi oggi a *«quanto vive una strategia validata?»* si può solo rispondere «non
+lo so», che è esattamente la risposta che la sua domanda non può accettare.
+
+**Serve (piccolo, e non tocca l'esperimento):** scrivere una riga durevole a ogni
+purge e a ogni promozione — chiave, `pass_count` raggiunto, quando è entrata,
+quando è uscita, con che PF. Fra qualche settimana quella collezione risponde da
+sola: vita mediana di una coppia validata, quante muoiono entro la prima finestra,
+se le generate durano più o meno delle base. Senza, fra un mese saremo allo stesso
+punto di oggi.
+
+**Poi, solo dopo:** chiedersi se il gate premi strategie legate a un regime. Oggi
+valida su 4,6 anni **come un blocco unico** (con walk-forward a 3 blocchi OOS, che
+mitiga ma non elimina): una strategia che funziona solo in mercato toro può passare
+se i periodi toro pesano abbastanza. Nessuno ha mai chiesto *«sarebbe passata nel
+2022? nel 2023? nel 2024?»* separatamente. `scripts/edge_stability.py` (allowlist
+`edge`) confronta vecchio vs recente ed è il mattone più vicino, ma non è la stessa
+domanda.
+
 ---
 
 ## B. Ricerca — dove il sistema smette di cercare
