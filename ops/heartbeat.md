@@ -1,9 +1,9 @@
 # agente ops: vivo
 
-_ultimo giro: 2026-09-21 05:07 UTC_
+_ultimo giro: 2026-09-21 06:08 UTC_
 
 - ramo: `claude/brave-albattani-1b12fv`
-- richieste in attesa: 0
+- richieste in attesa: 1
 
 Se questa data smette di avanzare, il canale e' caduto: da fuori
 il silenzio non si distinguerebbe da 'niente da fare'.
