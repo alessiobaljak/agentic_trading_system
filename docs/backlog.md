@@ -46,7 +46,7 @@ invece che all'ultimo** (su 2/4/6 si armerebbe a 1R).
 **Serve:** farlo nel gate, rivalidare, poi il paper. **Non** prima dei 40 trade.
 
 ### A2. Il break-even non è validato per le strategie generate
-**Stato:** aperto · emerso 20 set
+**Stato:** **FATTO il 21 set sera** — `evaluate_spec` prova, sulla scala scelta, anche l'alternativa al default di `sl_to_breakeven` (una passata in più, non il doppio) e scrive la scelta in `last_params`; il bot la legge già (`breakeven_after_tp1`). Le coppie esistenti restano sul default finché non vengono rigiudicate.
 
 `breakeven_after_tp1` dice che «lo decide il gate per ogni coppia». Per le generate
 — cioè **tutte e 52 le validate** — non lo decide mai: non hanno griglia di ricerca,
@@ -185,7 +185,7 @@ registro esiste, e occupano il 78% del registro.
 calcolo e spazio; tenerle costa poco ma il conto è zero da settimane.
 
 ### B2bis. `rr` non serve a niente, ma scarta il 74% delle proposte AI
-**Stato:** aperto · emerso 20 set
+**Stato:** **FATTO il 21 set sera** — `rr` non è più richiesto né controllato dal validatore, e non compare più nel prompt; resta nella spec col default 2.0 perché fa parte dell'id.
 
 Sotto scale-out il take-profit non è più `rr × R`: è la **scala di gradini**. Il
 ramo scale-out ignora `target`, quindi **`rr` non ha nessun effetto sulle uscite** —
@@ -454,7 +454,7 @@ Ricerca del 20 settembre: **nessuna fonte gratuita e verificata copre il caso.**
   ora italiana, FOMC 20:00). *È un ragionamento, non una fonte letta.*
 
 ### C3. La copertura non raggiungerà mai il 35%
-**Stato:** da decidere
+**Stato:** **SUPERATA il 21 set** dalle azioni sulla copertura (B2 chiusa, semi 10→30). Si riapre solo se al 28 set la copertura è sotto 40 coin: allora si decide se il 35% ha ancora senso.
 
 Il gate è "pronto" per numero di coppie, non per copertura: 25 monete su 164 = 15%,
 contro un obiettivo del 35% che con questo tasso di passaggio non arriverà.
@@ -488,7 +488,7 @@ silenzio** se Binance non risponde.
 ogni chiamante.
 
 ### D3. Il modello dell'AI è la versione precedente
-**Stato:** aperto · banale
+**Stato:** **FATTO il 21 set sera** — `ANTHROPIC_MODEL` default `claude-opus-5` (era `claude-opus-4-8`). L'env sulla VPS, se impostato, vince: `ai-stato` dice quale gira.
 
 `ANTHROPIC_MODEL=claude-opus-4-8`. Rimandato il 19 set per non cambiare due cose
 insieme mentre si verificava la chiave.
@@ -520,7 +520,7 @@ Se regge ai 40 trade, il trend smette di essere un suggerimento sulla size
 (`size_mult ≥ 0,5`) e diventa un **veto**. Oggi sarebbe una reazione al rumore.
 
 ### E2. L'AI si vede scartare quasi tutte le proposte
-**Stato:** corretto 20 set · in attesa di conferma al prossimo giro
+**Stato:** **CHIUSA il 21 set** — dal 20 set 20/20 proposte accettate a ogni giro e 2 spec di origine AI hanno passato il gate (`ai-stato`, 21 set 05:45 UTC). La correzione ha funzionato.
 
 Diagnosi misurata (`ai_hypotheses/last`, giro delle 08:41 ora italiana):
 
@@ -538,7 +538,7 @@ poteva saperlo. Corretto generando le fasce dalle stesse costanti che validano.
 Resta da vedere al prossimo giro se il tasso di accettazione sale.
 
 ### E4. Vendiamo le salite verticali, e con più strategie quasi gemelle
-**Stato:** aperto · **il difetto più costoso in corso** · misurato 21 set
+**Stato:** **FATTO il 21 set sera** (vedi il blocco «FATTO» in fondo alla voce) · **resta aperto** `min_adx` sulle spec esistenti e le gemelle già validate, che si stampano a ogni giro e vanno decise.
 
 MUBARAKUSDT, 21 settembre: da 0,0320 a 0,04407 in ~30 ore (**+37%**), con un tratto
 quasi verticale da 0,034 a 0,044 fra le 11:00 e le 12:42 e RSI a **88**. Ci siamo

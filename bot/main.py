@@ -913,6 +913,19 @@ class TradingBot:
                 {"outcome": "flat",
                  "reason": f"cooldown su {decision.asset} dopo stop ({int((cd_until - now) / 60)}m)"})
             return
+        # TETTO DI PERDITA PER COIN AL GIORNO (bot/risk/daily_cap.py): regola di
+        # portafoglio, attiva anche in parita' — diverge nella direzione sicura.
+        if settings.RISK_PER_COIN_DAY > 0:
+            from bot.risk.daily_cap import coin_bloccata
+            try:
+                _recenti = self.logger.recent(100)
+            except Exception:  # noqa: BLE001
+                _recenti = []
+            _blocco = coin_bloccata(_recenti, decision.asset, now,
+                                    self.account_equity(), settings.RISK_PER_COIN_DAY)
+            if _blocco:
+                self._publish_decision_status({"outcome": "flat", "reason": _blocco})
+                return
         # cap sul NUMERO di posizioni: in parita' disattivato (il bt non lo ha).
         if not settings.BACKTEST_PARITY and len(self.executor.open_positions) >= settings.MAX_OPEN_POSITIONS:
             self._publish_decision_status(

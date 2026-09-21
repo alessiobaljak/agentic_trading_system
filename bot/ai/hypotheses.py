@@ -30,7 +30,7 @@ from typing import Optional
 from bot.ai.client import ask_json, available
 from bot.strategies.generated import (FEATURE_LIBRARY, MARKET_FEATURES,
                                       feature_esiste, spec_id)
-from bot.strategies.generator import _ATR_STOP, _DIRECTIONAL, _INCOMPATIBLE, _RR
+from bot.strategies.generator import _ATR_STOP, _DIRECTIONAL, _INCOMPATIBLE
 
 #: esito dell'ULTIMA chiamata a `propose` in questo processo: quante proposte, quante
 #: accettate, e il conteggio dei motivi di scarto. Lo legge la discovery per salvarlo
@@ -67,7 +67,6 @@ _FEATURE_PARAMS = {
 #: validatore conosce e il richiedente no non e' una regola: e' una trappola.
 _NUMERI = {
     "atr_mult_stop": (min(_ATR_STOP), max(_ATR_STOP)),
-    "rr": (min(_RR), max(_RR)),
     "min_adx": (0.0, 40.0),
     "volume_mult": (0.0, 5.0),
 }
@@ -111,7 +110,7 @@ Rispondi ESCLUSIVAMENTE con JSON:
   {"mechanism": "perche' dovrebbe funzionare, 1-2 frasi",
    "features": [{"kind": "volume_surge", "vol_mult_feat": 2.0},
                 {"kind": "stoch_momentum"}],
-   "atr_mult_stop": 2.0, "rr": 2.5, "min_adx": 20.0, "volume_mult": 1.5}
+   "atr_mult_stop": 2.0, "min_adx": 20.0, "volume_mult": 1.5}
 ]}"""
 
 # riempito UNA volta all'import: le fasce non cambiano a runtime, e generarle
@@ -197,7 +196,10 @@ def _esamina_spec(raw: dict) -> tuple[Optional[dict], str]:
     # scritta qui si staccherebbe dal prompt al primo cambio di soglia, e il
     # modello proporrebbe valori legali secondo le istruzioni e illegali per il
     # validatore — il difetto che il 20 settembre ha scartato 14 proposte su 19.
-    for key, default in (("atr_mult_stop", 1.5), ("rr", 2.0),
+    # `rr` NON e' piu' fra i requisiti (backlog B2bis): sotto scale-out non tocca
+    # le uscite, e il 20 set 2026 era il motivo del 74% degli scarti. Resta nella
+    # spec col suo default perche' l'id e' calcolato anche su di lui.
+    for key, default in (("atr_mult_stop", 1.5),
                          ("min_adx", 0.0), ("volume_mult", 0.0)):
         lo, hi = _NUMERI[key]
         try:
@@ -208,9 +210,13 @@ def _esamina_spec(raw: dict) -> tuple[Optional[dict], str]:
             return None, f"{key}={v:g} fuori dalla fascia {lo:g}-{hi:g}"
         raw = {**raw, key: v}
 
+    try:
+        rr = float(raw.get("rr", 2.0))
+    except (TypeError, ValueError):
+        rr = 2.0
     spec = {"features": feats, "volume_mult": raw["volume_mult"],
             "min_adx": raw["min_adx"], "atr_mult_stop": raw["atr_mult_stop"],
-            "rr": raw["rr"]}
+            "rr": rr}
     spec["id"] = spec_id(spec)   # STESSA identita' delle spec casuali: niente corsie
     mech = str(raw.get("mechanism") or "").strip()
     if mech:

@@ -75,7 +75,7 @@ class Settings:
     # come assente — e una stringa vuota farebbe fallire l'API ("model: String
     # should have at least 1 character").
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
-    ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL") or "claude-opus-4-8"
+    ANTHROPIC_MODEL: str = os.getenv("ANTHROPIC_MODEL") or "claude-opus-5"
     # Serve SOLO alle chiavi a livello di organizzazione: senza, l'API risponde
     # 400 «This API key is not scoped to a workspace». Una chiave gia' legata a un
     # workspace non ne ha bisogno e questo campo resta vuoto.
@@ -529,6 +529,14 @@ class Settings:
     # size minima per un trade contro coin E mercato: 0.5 = mai sotto meta'. Era
     # scritto nel codice; ora si puo' stringere senza rilasciare.
     TREND_TILT_FLOOR: float = float(os.getenv("TREND_TILT_FLOOR", "0.5"))
+    # TETTO DI PERDITA PER COIN AL GIORNO, in frazione dell'equity. 21 set 2026:
+    # tre short consecutivi su USELESSUSDT, -1,74% del conto in 40 minuti da una
+    # coin sola, e il rischio per trade che dipende dalla volatilita' (stop largo
+    # -> 0,9%, stretto -> 0,2%). Una regola sola chiude entrambe le falle: superata
+    # la perdita giornaliera su una coin, quella coin non si riapre fino a
+    # mezzanotte UTC. Regola di portafoglio, NON del gate (che valida una coppia
+    # alla volta): diverge nella direzione sicura, meno trade. 0 = spento.
+    RISK_PER_COIN_DAY: float = float(os.getenv("RISK_PER_COIN_DAY", "0.015"))
 
     # ---- Sentiment come contesto di decisione (SOLO live/paper, non nel backtest) ----
     # Overlay di SIZE al final gate, identico nello spirito al trend tilt: il sentiment

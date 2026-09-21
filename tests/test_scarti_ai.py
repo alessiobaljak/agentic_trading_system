@@ -63,8 +63,20 @@ def test_un_parametro_mancante_dice_quale():
 def test_un_numero_fuori_fascia_dice_valore_e_fascia():
     """Correzione ancora diversa: dichiarare le fasce ammesse. Serve sapere sia
     quanto ha proposto sia quanto era permesso, altrimenti si tira a indovinare."""
-    m = _motivo(_spec(rr=99.0))
-    assert "rr=99" in m and "fuori dalla fascia" in m
+    m = _motivo(_spec(atr_mult_stop=99.0))
+    assert "atr_mult_stop=99" in m and "fuori dalla fascia" in m
+
+
+def test_rr_non_e_piu_un_motivo_di_scarto():
+    """B2bis, chiuso il 21 set 2026: sotto scale-out `rr` non tocca le uscite, e
+    il 20 set era il motivo del 74% degli scarti. Una proposta con rr=0.9 (o senza
+    rr) ora passa; il campo resta nella spec col default perche' fa parte dell'id."""
+    spec, motivo = h._esamina_spec(_spec(rr=0.9))
+    assert spec is not None, motivo
+    senza = {k: v for k, v in _spec().items() if k != "rr"}
+    spec2, motivo2 = h._esamina_spec(senza)
+    assert spec2 is not None and spec2["rr"] == 2.0, motivo2
+    assert "rr: da" not in h.SYSTEM
 
 
 def test_troppe_feature_dicono_quante():
@@ -106,7 +118,7 @@ def test_la_porta_vecchia_e_quella_nuova_non_possono_divergere():
     """`_clean_spec` resta per chi non vuole il motivo, ma deve passare di qui:
     due copie della stessa regola che si separano nel tempo sono il difetto piu'
     caro di questo progetto — ci e' gia' costato tre copie di `judge_window`."""
-    for caso in (_spec(), _spec(rr=99.0), _spec(features=[{"kind": "boh"}]), 42):
+    for caso in (_spec(), _spec(atr_mult_stop=99.0), _spec(features=[{"kind": "boh"}]), 42):
         assert h._clean_spec(caso) == h._esamina_spec(caso)[0]
     for caso in (_feat("rsi_momentum"), {"kind": "boh"}, "non un dict"):
         assert h._clean_feature(caso) == h._esamina_feature(caso)[0]
@@ -171,7 +183,7 @@ def test_l_esito_registra_proposte_accettate_e_motivi(monkeypatch):
     monkeypatch.setattr(settings, "AI_ENABLED", True)
     monkeypatch.setattr(h, "ask_json", lambda *a, **k: {"specs": [
         _spec(),                                   # buona
-        _spec(rr=99.0),                            # numero fuori fascia
+        _spec(atr_mult_stop=99.0),                 # numero fuori fascia
         _spec(features=[{"kind": "inventata"}]),   # feature inesistente
         _spec(features=[{"kind": "inventata"}]),   # stesso motivo, conta 2
     ]})
@@ -210,7 +222,7 @@ def test_il_prompt_dichiara_le_fasce_numeriche():
     passiamo (mfe mediana 0.85R). Una regola che il validatore conosce e il
     richiedente no non e' una regola, e' una trappola."""
     assert "FASCE AMMESSE" in h.SYSTEM
-    assert "rr: da 1.5 a 3" in h.SYSTEM
+    assert "atr_mult_stop: da" in h.SYSTEM
 
 
 def test_le_fasce_del_prompt_vengono_DALLE_STESSE_costanti_del_validatore():

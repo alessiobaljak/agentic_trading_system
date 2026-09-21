@@ -469,6 +469,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
                 # 3 pass in un giorno), il veto di regime e la scala per-coppia.
                 "holdout": r.get("holdout"), "regime_pf": r.get("regime_pf"),
                 "oos_max_dd": r.get("max_dd"), "scale_r_mults": r.get("scale_r_mults"),
+                "sl_to_breakeven": r.get("sl_to_breakeven"),
                 "data_end": r.get("data_end", 0),
             }
             passed_keys.append(key)
@@ -491,14 +492,17 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     dalla selezione, e' la verifica che mancava."""
     body, cut = opt.split_holdout(candles)
 
-    def _run_oos(ladder=None) -> tuple:
-        """(stats OOS, ritorni per finestra) con una scala di TP data."""
+    def _run_oos(ladder=None, be=None) -> tuple:
+        """(stats OOS, ritorni per finestra) con una scala di TP data e, se
+        indicato, la scelta sul break-even dopo il primo gradino."""
         st_all = StrategyStats(strategy=spec["id"])
         per_window: list[float] = []
         for (_ta, _tb, sa, sb) in opt._windows(len(body)):
             g = GeneratedStrategy(spec)
             if ladder:
                 g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(ladder)}
+            if be is not None:
+                g.params = {**(getattr(g, "params", {}) or {}), "sl_to_breakeven": bool(be)}
             st = opt.bt.run_strategy(g, symbol, body[sa:sb],
                                      frame=frame.iloc[sa:sb].reset_index(drop=True),
                                      context_by_ts=context_by_ts)
@@ -523,6 +527,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     #    grid search; le generate non hanno grid -> senza questo passo restavano per
     #    sempre sulla scala globale (e sono la maggioranza del registro).
     best_ladder = None
+    best_be = None
     if passed and settings.SCALE_OUT_ENABLED:
         best_metric = None
         # le candidate arrivano dal CHIAMANTE, non da uno stato globale: cosi'
@@ -533,6 +538,17 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
             metric = st_c.total_pnl_pct() - max_drawdown(st_c.trades)
             if best_metric is None or metric > best_metric:
                 best_metric, best_ladder = metric, list(cand)
+        # 2b) BREAK-EVEN DOPO IL PRIMO GRADINO: lo decide il gate, per coppia
+        #     (backlog A2). Le generate giravano TUTTE sul default globale senza
+        #     che nessuno l'avesse mai provato; e con il lock ancorato al primo
+        #     gradino (A1) il BE cambia significato. Una sola passata in piu' —
+        #     l'alternativa al default sulla scala scelta — invece di raddoppiare
+        #     la ricerca: costa 1/4 e decide la stessa cosa.
+        if best_ladder:
+            be_default = bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)
+            st_alt, _ = _run_oos(best_ladder, not be_default)
+            alt_metric = st_alt.total_pnl_pct() - max_drawdown(st_alt.trades)
+            best_be = (not be_default) if alt_metric > best_metric else be_default
 
     # 3) METRICHE FINALI CON LA SCALA CHE VERRA' ESEGUITA. Prima i numeri spediti nel
     #    registro (last_pf, win, regime_pf) uscivano dal passo 1, cioe' dalla scala
@@ -540,8 +556,9 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     #    184 erano due configurazioni diverse. Il registro pubblicizzava un PF che
     #    nessuno eseguiva, e il rilevatore di deriva confrontava il vissuto contro
     #    quel numero sbagliato.
-    if best_ladder and list(best_ladder) != list(settings.SCALE_OUT_R_MULTIPLES):
-        oos, window_pnls = _run_oos(best_ladder)
+    if best_ladder and (list(best_ladder) != list(settings.SCALE_OUT_R_MULTIPLES)
+                        or best_be != bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)):
+        oos, window_pnls = _run_oos(best_ladder, best_be)
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()
     reg_pf = pf_by_regime(oos.trades)
@@ -559,7 +576,8 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     if passed and opt.holdout_bars > 0:
         g = GeneratedStrategy(spec)
         if best_ladder:
-            g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": best_ladder}
+            g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": best_ladder,
+                        "sl_to_breakeven": best_be}
         # STESSO contesto dell'OOS: un holdout senza mercato boccerebbe le spec
         # di mercato per dati mancanti, cioe' proprio quelle da misurare.
         hold = opt._holdout_check(g, symbol, candles, frame, cut,
@@ -574,6 +592,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         "holdout": hold, "regime_pf": reg_pf,
         "max_dd": round(max_drawdown(oos.trades), 4),
         "scale_r_mults": best_ladder,
+        "sl_to_breakeven": best_be,
         "data_end": (candles[-1].open_time.timestamp() if candles else 0.0),
         "fail_criteria": failed, "fail_binding": binding,
         "fail_shortfall": shortfall, "near_miss": bool(near and not passed),
@@ -649,6 +668,8 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         # params_for -> open_position la consegna al live come per le classiche
         if e.get("scale_r_mults"):
             rec["last_params"]["scale_r_mults"] = e["scale_r_mults"]
+        if e.get("sl_to_breakeven") is not None:
+            rec["last_params"]["sl_to_breakeven"] = bool(e["sl_to_breakeven"])
         rec["last_pf"] = e["oos_pf"]
         rec["last_pnl_pct"] = e["oos_pnl_pct"]
         rec["last_trades"] = e["oos_trades"]

@@ -1082,3 +1082,21 @@ trading: le 8 strategie scritte a mano (0 validate su 1312 valutazioni) non veng
 più valutate (`OPTIMIZER_SKIP_BASE`, default acceso: il timer sulla VPS resta
 uguale), e i semi di mutazione — che già danno precedenza alle coin non coperte —
 passano da 10 a 30 (`DISCOVERY_SEEDS`). Metro: le 74 coin a 2/3 entro il 28 set.
+
+
+### 21 settembre, notte: A2, B2bis, D3, tetto per coin, referto settimanale
+
+* **A2** — il break-even dopo il primo gradino lo sceglie il gate per coppia: una
+  passata in più sulla scala scelta (l'alternativa al default), non il doppio della
+  ricerca. La scelta viaggia in `last_params` e il bot la legge già.
+* **B2bis** — `rr` non è più richiesto né controllato: sotto scale-out non fa
+  niente, e scartava proposte AI sensate.
+* **D3** — modello AI `claude-opus-5` di default.
+* **Tetto di perdita per coin al giorno** (`RISK_PER_COIN_DAY`, 1,5% dell'equity,
+  `bot/risk/daily_cap.py`): persa quella frazione su una coin, la coin non si riapre
+  fino a mezzanotte UTC. Regola di portafoglio, diverge dal gate nella direzione
+  sicura. Le vincite non compensano: il tetto è sulle perdite, non sul netto.
+* **Referto settimanale**: una routine ogni domenica alle 09:00 (ora italiana)
+  raccoglie `trades`, `mfe`, `confronto`, `gate`, `ai-stato` e risponde alle
+  domande fisse — il lock taglia vincitori? le gemelle rientrano? la copertura si
+  muove? quanto dura il giro?
