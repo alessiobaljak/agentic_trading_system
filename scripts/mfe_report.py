@@ -113,6 +113,35 @@ def main() -> int:
 
     # --- 2) quale scala avrebbe incassato di piu' -------------------------- #
     fracs = tuple(settings.SCALE_OUT_FRACTIONS)
+    # ---- GLI STOP, DIVISI PER COME SONO MORTI ---------------------------------
+    # Domanda del proprietario (21 set 2026): «alcune posizioni erano in positivo
+    # per due o tre ore, non hanno toccato il primo take profit, e poi stop loss.
+    # Siamo entrati proprio sbagliati, o ci siamo avvicinati e il TP andava tarato
+    # piu' basso?». Sono due morti diverse e si curano in modo diverso: la prima
+    # e' un problema di INGRESSO (la strategia sbaglia direzione), la seconda di
+    # USCITA (il primo gradino e' troppo lontano, o la protezione scatta tardi).
+    # `mfe_r` le distingue senza altri dati: sotto 0,25R non e' mai andata a
+    # favore; fra 0,25R e il primo gradino ci e' andata e non e' bastato.
+    stop = [t for t in usable if str(t.get("exit_reason", "")) in ("stop_loss", "ExitReason.STOP_LOSS")]
+    if stop:
+        primo = float(settings.SCALE_OUT_R_MULTIPLES[0])
+        sbagliati = [t for t in stop if float(t["mfe_r"]) < 0.25]
+        quasi = [t for t in stop if 0.25 <= float(t["mfe_r"]) < primo]
+        oltre = [t for t in stop if float(t["mfe_r"]) >= primo]
+        print(f"\nSTOP LOSS divisi per come sono morti ({len(stop)} su {len(usable)} trade):")
+        print(f"  sbagliati dall'inizio (mfe < 0.25R) .......... {len(sbagliati):>3} "
+              f"{_pct(len(sbagliati), len(stop))}   -> problema di INGRESSO")
+        print(f"  andati a favore ma sotto il 1° gradino ....... {len(quasi):>3} "
+              f"{_pct(len(quasi), len(stop))}   -> problema di USCITA")
+        print(f"  oltre il 1° gradino e poi stop ............... {len(oltre):>3} "
+              f"{_pct(len(oltre), len(stop))}   -> protezione del profitto")
+        if quasi:
+            q = sorted(float(t["mfe_r"]) for t in quasi)
+            med = q[len(q) // 2]
+            print(f"  fra i «quasi»: mfe mediana {med:.2f}R, massima {q[-1]:.2f}R; "
+                  f"con un primo gradino a {med:.2f}R meta' di loro avrebbe incassato")
+        print("  (il primo gradino qui e' quello GLOBALE; per coppia vale la sua scala)")
+
     print(f"\nR medi incassati per scala (modello semplificato, quote {fracs}):")
     head2 = "gruppo".ljust(34) + "n".rjust(4) + \
         "".join(f"  {'/'.join(f'{m:g}' for m in c)}".rjust(14) for c in SCALE_LADDER_CANDIDATES)
