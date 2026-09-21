@@ -1100,3 +1100,12 @@ passano da 10 a 30 (`DISCOVERY_SEEDS`). Metro: le 74 coin a 2/3 entro il 28 set.
   raccoglie `trades`, `mfe`, `confronto`, `gate`, `ai-stato` e risponde alle
   domande fisse — il lock taglia vincitori? le gemelle rientrano? la copertura si
   muove? quanto dura il giro?
+
+
+### 21 settembre, notte: B3, D2, E3
+
+* **B3** — i quasi-passaggi vanno all'AI: schema, ipotesi, consigli; i consigli
+  entrano nelle proposte dello stesso giro. Prima si contavano i morti, ora si
+  chiede perché. L'AI suggerisce, il gate decide.
+* **D2** — dati sintetici spenti per default; solo i test li accendono.
+* **E3** — via i quattro workflow GitHub che non potevano avere dati veri (451).

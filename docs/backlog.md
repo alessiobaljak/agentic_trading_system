@@ -202,7 +202,7 @@ toccato ora: cambiare cosa si valida a metà misurazione invalida il confronto f
 le coppie validate prima e dopo.
 
 ### B3. Nessuno chiede PERCHÉ le candidate muoiono
-**Stato:** aperto · emerso 19 set
+**Stato:** **FATTO il 21 set notte** — `bot/ai/autopsia.py`: a ogni giro i 40 quasi-passaggi (feature, coin, criterio, scarto) vanno al modello, che risponde con schema, ipotesi e consigli; i consigli entrano nel contesto delle proposte dello stesso giro. Esito in `ai_hypotheses/autopsia`, visibile in `ai-stato`. L'AI legge e suggerisce, il gate decide.
 
 Il 68% muore su `total_return`, giro dopo giro. Contiamo i morti, non facciamo
 l'autopsia. Ci sono ~40 quasi-passaggi a ogni giro che nessuno legge.
@@ -477,7 +477,7 @@ Il formato compatto ha spostato il vincolo da 3 giorni a mesi (272 KiB su 879, 1
 byte a coppia): c'è tempo per farla bene.
 
 ### D2. I dati sintetici sono attivi per default
-**Stato:** parzialmente chiuso · 19 set
+**Stato:** **FATTO il 21 set notte** — default spento; i test lo accendono in `tests/conftest.py`, unico posto.
 
 `BACKTEST_ALLOW_SYNTHETIC` vale `true` di default. È spento esplicitamente ovunque
 si validi (unit systemd, script, workflow) e nelle analisi in lista bianca, ma
@@ -604,7 +604,7 @@ cambierebbe strategie già validate. Le nuove hanno `adx_below` come alternativa
 E le gemelle già validate sono ancora lì: vanno decise, non nascoste.
 
 ### E3. Binance risponde 451 dai runner GitHub
-**Stato:** noto e gestito · nessuna azione
+**Stato:** **CHIUSA il 21 set notte** — rimossi i quattro workflow che non potevano avere dati veri dai runner (optimize, discover, reset-optimizer, backtest). Tutto gira sulla VPS; niente più falsi guasti.
 
 Blocco geografico. La ricerca e la validazione girano sulla VPS dove Binance
 risponde, e i due workflow che avrebbero bisogno di dati veri hanno lo schedule
