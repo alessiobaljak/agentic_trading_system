@@ -90,6 +90,7 @@ export default function CandleChart({
   const candleRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
   const volRef = useRef<ISeriesApi<'Histogram'> | null>(null);
   const linesRef = useRef<IPriceLine[]>([]);
+  const dataRef = useRef<C[]>([]);            // candele caricate: i marker vanno solo su tempi esistenti
   const legendRef = useRef<HTMLDivElement>(null);
   const [interval, setInterval] = useState('1h');
   const [err, setErr] = useState<string | null>(null);
@@ -161,26 +162,50 @@ export default function CandleChart({
     setErr(null); setLoading(true);
     const tf = TFS.find((x) => x.id === interval)?.sec ?? 3600;
     const endMs = trade?.exit_ts ? (trade.exit_ts + tf * 40) * 1000 : undefined;
-    fetchKlines(symbol, interval, colors.current.up, colors.current.down, endMs)
-      .then(({ c, v }) => {
+    // DIFENSIVO (22 set 2026: grafico bianco al click su un trade chiuso, senza
+    // errore ne' caricamento). Se con la finestra sul trade arrivano poche candele
+    // si riprova senza; zero candele si DICE a schermo; la messa a fuoco sul trade
+    // e' in try/catch e ricade sulla vista intera; ogni errore va nell'overlay.
+    (async () => {
+      try {
+        let { c, v } = await fetchKlines(symbol, interval, colors.current.up, colors.current.down, endMs);
+        if (endMs && c.length < 50) {
+          ({ c, v } = await fetchKlines(symbol, interval, colors.current.up, colors.current.down));
+        }
         if (cancelled || !candleRef.current || !volRef.current) return;
+        if (c.length === 0) {
+          setErr(`Nessuna candela da Binance per ${symbol} a ${interval}.`);
+          setLoading(false);
+          return;
+        }
         candleRef.current.setData(c);
         volRef.current.setData(v);
+        dataRef.current = c;
         const ts = chartRef.current?.timeScale();
         const entry = trade?.entry_time ? new Date(trade.entry_time).getTime() / 1000 : undefined;
-        if (ts && trade?.exit_ts && entry) {
+        let messo = false;
+        if (ts && trade?.exit_ts && entry && entry < trade.exit_ts) {
           const pad = Math.max((trade.exit_ts - entry) * 0.6, tf * 8);
-          ts.setVisibleRange({ from: (entry - pad) as UTCTimestamp, to: (trade.exit_ts + pad) as UTCTimestamp });
-        } else {
-          ts?.fitContent();
+          const from = Math.max(entry - pad, Number(c[0].time));
+          const to = Math.min(trade.exit_ts + pad, Number(c[c.length - 1].time));
+          if (from < to) {
+            try {
+              ts.setVisibleRange({ from: from as UTCTimestamp, to: to as UTCTimestamp });
+              messo = true;
+            } catch (e) {
+              console.warn('[chart] finestra sul trade non applicabile', e);
+            }
+          }
         }
+        if (!messo) ts?.fitContent();
         setLoading(false);
-      })
-      .catch(() => {
+      } catch (e) {
         if (cancelled) return;
-        setErr('Grafico non disponibile (Binance non raggiungibile dal browser).');
+        console.warn('[chart]', e);
+        setErr(`Grafico non disponibile: ${e instanceof Error ? e.message : String(e)}`);
         setLoading(false);
-      });
+      }
+    })();
     return () => { cancelled = true; };
   }, [symbol, interval, tradeKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -216,19 +241,32 @@ export default function CandleChart({
       add(trade.stop_price, k.down, 'SL', true);
       add(trade.take_profit_price, k.up, 'TP', true);
       const entryTs = trade.entry_time ? Math.floor(new Date(trade.entry_time).getTime() / 1000) : undefined;
-      const tf = TFS.find((x) => x.id === interval)?.sec ?? 3600;
-      const snap = (t: number) => (Math.floor(t / tf) * tf) as UTCTimestamp;
+      // il marker va sulla candela ESISTENTE piu' vicina (non su un tempo calcolato):
+      // un tempo assente dalla serie e' il modo classico di far tacere il grafico
+      const data = dataRef.current;
+      const nearest = (t: number): UTCTimestamp | null => {
+        if (!data.length) return null;
+        let best = data[0].time;
+        for (const d of data) if (Math.abs(Number(d.time) - t) < Math.abs(Number(best) - t)) best = d.time;
+        return Math.abs(Number(best) - t) <= 86400 ? best : null;
+      };
       const markers: SeriesMarker<Time>[] = [];
-      if (entryTs) markers.push({
-        time: snap(entryTs), position: long ? 'belowBar' : 'aboveBar',
+      const tIn = entryTs ? nearest(entryTs) : null;
+      const tOut = trade.exit_ts ? nearest(trade.exit_ts) : null;
+      if (tIn) markers.push({
+        time: tIn, position: long ? 'belowBar' : 'aboveBar',
         color: k.accent, shape: long ? 'arrowUp' : 'arrowDown', text: 'IN',
       });
-      if (trade.exit_ts) markers.push({
-        time: snap(trade.exit_ts), position: long ? 'aboveBar' : 'belowBar',
+      if (tOut) markers.push({
+        time: tOut, position: long ? 'aboveBar' : 'belowBar',
         color: win ? k.up : k.down, shape: 'circle', text: 'OUT',
       });
       markers.sort((a, b) => Number(a.time) - Number(b.time));
-      candle.setMarkers(markers);
+      try {
+        candle.setMarkers(markers);
+      } catch (e) {
+        console.warn('[chart] marker non applicabili', e);
+      }
     }
   }, [position, trade, tradeKey, symbol, interval, loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
