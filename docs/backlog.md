@@ -156,7 +156,7 @@ domanda.
 ## B. Ricerca — dove il sistema smette di cercare
 
 ### B1. Il vocabolario è chiuso: 18 mattoncini
-**Stato:** aperto · **la più importante di questa sezione** · emerso 19 set
+**Stato:** aperto · la più importante di questa sezione · emerso 19 set · **primo passo il 21-22 set**: sei parole nuove (market_trend, market_fade, relative_strength, not_stretched, adx_below, htf_confirm), tutte additive. Il salto vero — l'AI che propone una feature come formula — resta da fare.
 
 L'AI può solo **combinare** 18 feature (RSI, Bollinger, MACD, VWAP, volume,
 sessione, volatilità). Non può inventarne una nuova. Tutto lo spazio di ricerca è
@@ -404,7 +404,7 @@ di tutto il backlog. Va decisa, non fatta di slancio.
 ## C. Timeframe e universo
 
 ### C1. A 1 ora le strategie vanno molto meglio
-**Stato:** aperto · misurato 15 set (sonda `timeframe_probe`)
+**Stato:** aperto · misurato 15 set · **22 set: fatta la prima metà** — la conferma a 1 ora è un mattoncino (`htf_confirm`), il gate misura coin per coin. Resta la seconda metà: strategie native a 1 ora nel gate e nel bot (orologio per strategia), da fare quando il giro sta sotto le 3h.
 
 ```
 candidate che battono il pareggio:

@@ -1109,3 +1109,14 @@ passano da 10 a 30 (`DISCOVERY_SEEDS`). Metro: le 74 coin a 2/3 entro il 28 set.
   chiede perché. L'AI suggerisce, il gate decide.
 * **D2** — dati sintetici spenti per default; solo i test li accendono.
 * **E3** — via i quattro workflow GitHub che non potevano avere dati veri (451).
+
+
+### 22 settembre, sera: la conferma a 1 ora (`htf_confirm`)
+
+Idea del proprietario: guardare la moneta con due occhi, 15 minuti per operare e
+1 ora per confermare. Fatta come mattoncino direzionale, non come regola: il gate
+misura coin per coin. Le strategie senza conferma continuano a operare; quelle con
+conferma entrano solo se reggono il gate anche con meno segnali. Sul caso MUBARAK
+(RSI 88 a 15 minuti, medie orarie in salita) lo short non nascerebbe. Misura di
+riferimento: sui 35 trade del 22 set la conferma avrebbe tolto 11 trade (-31%), il
+cui netto era +5,87 — ma con le etichette di regime vecchie; il gate decide.
