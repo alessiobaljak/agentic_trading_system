@@ -119,11 +119,14 @@ def main() -> int:
     total = 0
     for n, sym in enumerate(coins, 1):
         try:
-            # `end` a DOMANI: il taglio della cache e' escluso a mezzanotte, quindi
-            # senza questo la sonda si fermava a ieri e non poteva rispondere a
-            # «e' normale che OGGI non abbia aperto niente?» (22 set 2026).
+            # `end` a DOPODOMANI, non a domani. Il taglio della cache e' escluso a
+            # mezzanotte E la cache si considera «completa» se la sua ultima
+            # candela e' entro 24h dalla fine richiesta (`_covers_end`): con
+            # end=domani riusava la serie tagliata a ieri e la sonda restava cieca
+            # su OGGI — misurato il 22 set 2026, «0 apribili oggi» mentre il bot ne
+            # aveva aperti due. Con due giorni la cache viene estesa davvero.
             candles = load_candles(sym, interval=args.interval, start=start,
-                                   end=(date.today() + timedelta(days=1)).isoformat(),
+                                   end=(date.today() + timedelta(days=2)).isoformat(),
                                    allow_synthetic=False)
         except Exception as exc:  # noqa: BLE001
             print(f"  {sym}: candele non caricate ({exc})")

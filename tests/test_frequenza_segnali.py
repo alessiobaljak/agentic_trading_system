@@ -174,5 +174,6 @@ def test_la_sonda_conta_anche_OGGI():
     from scripts import signal_frequency as sf
 
     src = inspect.getsource(sf.main)
-    assert "end=(date.today() + timedelta(days=1)).isoformat()" in src
+    assert "end=(date.today() + timedelta(days=2)).isoformat()" in src, (
+        "con un giorno solo la cache (tolleranza 24h) riusa la serie tagliata a ieri")
     assert "per_giorno.setdefault(oggi, 0)" in src
