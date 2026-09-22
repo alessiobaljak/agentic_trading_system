@@ -95,6 +95,11 @@ export default function CandleChart({
   const [interval, setInterval] = useState('1h');
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  // DIAGNOSI A SCHERMO (22 set 2026: riquadro bianco senza errore). Da questa
+  // rete Binance non e' raggiungibile e il grafico non si puo' riprodurre: la
+  // riga sotto ai pulsanti dice quante candele sono arrivate e da dove, cosi'
+  // uno screenshot distingue «niente dati» da «dati che non si vedono».
+  const [diag, setDiag] = useState<string>('in attesa…');
   const colors = useRef({
     up: token('--green', '#16a34a'), down: token('--red', '#dc2626'),
     text: token('--text-dim', '#475569'), border: token('--border', '#c7d1de'),
@@ -174,6 +179,7 @@ export default function CandleChart({
         }
         if (cancelled || !candleRef.current || !volRef.current) return;
         if (c.length === 0) {
+          setDiag('0 candele');
           setErr(`Nessuna candela da Binance per ${symbol} a ${interval}.`);
           setLoading(false);
           return;
@@ -181,6 +187,8 @@ export default function CandleChart({
         candleRef.current.setData(c);
         volRef.current.setData(v);
         dataRef.current = c;
+        const f = (t: number) => new Date(t * 1000).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+        setDiag(`${c.length} candele · ${f(Number(c[0].time))} → ${f(Number(c[c.length - 1].time))} · ultima chiusura ${c[c.length - 1].close}`);
         const ts = chartRef.current?.timeScale();
         const entry = trade?.entry_time ? new Date(trade.entry_time).getTime() / 1000 : undefined;
         let messo = false;
@@ -202,6 +210,7 @@ export default function CandleChart({
       } catch (e) {
         if (cancelled) return;
         console.warn('[chart]', e);
+        setDiag(`errore: ${e instanceof Error ? e.message : String(e)}`);
         setErr(`Grafico non disponibile: ${e instanceof Error ? e.message : String(e)}`);
         setLoading(false);
       }
@@ -281,6 +290,9 @@ export default function CandleChart({
           ))}
         </div>
         <div ref={legendRef} className="chart-legend mono" />
+      </div>
+      <div className="muted mono" style={{ fontSize: 11, margin: '0 0 6px' }}>
+        {symbol} · {interval} · {diag}
       </div>
       <div className="chart-canvas" style={{ height }}>
         <div ref={wrapRef} style={{ position: 'absolute', inset: 0 }} />
