@@ -29,6 +29,9 @@ _DIRECTIONAL = [
     # ritracciamento» da «sto davanti a un treno». Sono mattoncini, NON un veto:
     # il gate misura se servono, come per tutto il resto.
     "market_trend", "market_fade", "relative_strength",
+    # --- la CONFERMA A 1 ORA della stessa coin (22 set): long solo con le medie
+    # orarie in salita, short solo in discesa. Il gate misura se serve.
+    "htf_confirm",
 ]
 # combinazioni incoerenti da evitare (mean-reversion + breakout sullo stesso segnale)
 _INCOMPATIBLE = {

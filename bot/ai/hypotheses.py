@@ -28,7 +28,7 @@ from collections import Counter
 from typing import Optional
 
 from bot.ai.client import ask_json, available
-from bot.strategies.generated import (FEATURE_LIBRARY, MARKET_FEATURES,
+from bot.strategies.generated import (FEATURE_LIBRARY, HTF_FEATURES, MARKET_FEATURES,
                                       feature_esiste, spec_id)
 from bot.strategies.generator import _ATR_STOP, _DIRECTIONAL, _INCOMPATIBLE
 
@@ -239,7 +239,7 @@ def propose(n: int, market_context: str = "") -> list[dict]:
     """Fino a `n` spec valide e motivate. Lista vuota se l'AI non e' disponibile."""
     if not available() or n <= 0:
         return []
-    kinds = ", ".join(sorted(set(FEATURE_LIBRARY) | set(MARKET_FEATURES)))
+    kinds = ", ".join(sorted(set(FEATURE_LIBRARY) | set(MARKET_FEATURES) | set(HTF_FEATURES)))
     user = (f"Feature disponibili (usa SOLO questi nomi): {kinds}\n"
             f"Direzionali: {', '.join(_DIRECTIONAL)}\n\n"
             f"{market_context}\n\n"

@@ -267,6 +267,36 @@ MARKET_FEATURES = {
 }
 
 
+# --------------------------------------------------------------------------- #
+# LA CONFERMA A 1 ORA — «guardare la moneta con due occhi»                     #
+#                                                                              #
+# Idea del proprietario, 22 set 2026: il trader opera a 5 o 15 minuti ma prima #
+# di aprire guarda l'ora e chiede «la direzione che prendo e' coerente con     #
+# quello che vedo a 1 ora?». Qui e' un MATTONCINO direzionale, non una regola  #
+# per tutti: il gate misura coin per coin se la conferma aiuta, e nel registro #
+# convivono strategie con e senza. Il costo — meno segnali, e qualche          #
+# ritracciamento vero perso perche' le medie orarie girano tardi — lo paga     #
+# solo chi la usa, e solo se il gate lo giudica un buon affare.                #
+#                                                                              #
+# L'occhio a 1 ora esiste gia' da tutte e due le parti: il motore di backtest   #
+# porta la 1h REALE nello snapshot (senza look-ahead, `_htf_for`) e il bot la  #
+# calcola fra i suoi TIMEFRAMES. Nessuna nuova pipeline: parita' gratis.       #
+# --------------------------------------------------------------------------- #
+def _htf_confirm(h, price: float, f: dict):
+    """Long solo se a 1 ora la media veloce sta sopra la lenta; short solo se
+    sotto. `h` e' lo snapshot degli indicatori a 1h della STESSA coin."""
+    if h is None or h.ema_fast is None or h.ema_slow is None:
+        return None
+    return (h.ema_fast > h.ema_slow, h.ema_fast < h.ema_slow)
+
+
+#: feature che guardano il TIMEFRAME SUPERIORE della stessa coin. Firma
+#: `(h, price, f)`: `h` e' `asset.ind("1h")`, o None se non disponibile.
+HTF_FEATURES = {
+    "htf_confirm": _htf_confirm,
+}
+
+
 def feature_esiste(kind: str) -> bool:
     """L'UNICA definizione di «questa feature esiste».
 
@@ -276,7 +306,7 @@ def feature_esiste(kind: str) -> bool:
     come «inesistenti» proprio le feature appena aggiunte al vocabolario. Un
     controllo che non conosce meta' del vocabolario e' una trappola, non una
     regola — l'abbiamo gia' pagata il 20 settembre con `rr`."""
-    return kind in FEATURE_LIBRARY or kind in MARKET_FEATURES
+    return kind in FEATURE_LIBRARY or kind in MARKET_FEATURES or kind in HTF_FEATURES
 
 def _feat_not_stretched(i: IndicatorSnapshot, price: float, f: dict):
     """NON SOVRAESTESO: il prezzo sta entro `stretch_max` ATR dalla media lenta.
@@ -377,6 +407,8 @@ class GeneratedStrategy(Strategy):
         # serve: si decide una volta qui, non a ogni barra.
         self.usa_mercato = any((f.get("kind") in MARKET_FEATURES)
                                for f in self._features if isinstance(f, dict))
+        self.usa_htf = any((f.get("kind") in HTF_FEATURES)
+                           for f in self._features if isinstance(f, dict))
 
     def _describe(self) -> str:
         parts = []
@@ -396,11 +428,15 @@ class GeneratedStrategy(Strategy):
         # chiede, il segnale non nasce. Meglio nessun trade che un trade deciso
         # su un mercato immaginario.
         mercato = mercato_da_contesto(ctx, self._tf) if self.usa_mercato else None
+        # l'occhio a 1 ora: solo se la spec lo chiede (stesso principio del mercato)
+        htf = asset.ind("1h") if self.usa_htf else None
         long_ok, short_ok = True, True
         for f in self._features:
             kind = f.get("kind")
             if kind in MARKET_FEATURES:
                 res = MARKET_FEATURES[kind](i, price, f, mercato)
+            elif kind in HTF_FEATURES:
+                res = HTF_FEATURES[kind](htf, price, f)
             else:
                 fn = FEATURE_LIBRARY.get(kind)
                 if fn is None:
