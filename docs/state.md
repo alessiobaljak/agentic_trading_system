@@ -1,16 +1,16 @@
 # Stato sistema (snapshot)
-_Generato: 2026-09-21 23:16 UTC_
+_Generato: 2026-09-22 04:57 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: bull_trending
+- regime: high_uncertainty
 - DRY_RUN: True
 - equity: **$971.35**
-- ultimo heartbeat: 2026-09-21 23:16 UTC
+- ultimo heartbeat: 2026-09-22 04:57 UTC
 - stream prezzi: 🟡 candele REST
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-09-21 23:16 UTC)
+- esito: **⚪ FLAT** (2026-09-22 04:46 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 26 · segnali: 0
 
@@ -19,12 +19,12 @@ _Generato: 2026-09-21 23:16 UTC_
 - copertura universo: **26/26 crypto (100%)** · obiettivo ≥ 35%
 - coppie validate (>= 3 pass OOS): **56**
 - universo scansionato: —
-- aggiornato: 2026-09-21 22:32 UTC
+- aggiornato: 2026-09-22 02:52 UTC
 
 ### Salute del registro
 
-- composizione: **1960 base** · **888 generate** (di cui 888 con almeno una conferma)
-- occupazione: 2848/3000 — ok
+- composizione: **1944 base** · **908 generate** (di cui 908 con almeno una conferma)
+- occupazione: 2852/3000 — ok
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
@@ -48,12 +48,12 @@ _Generato: 2026-09-21 23:16 UTC_
 | GPSUSDT | gen_871647b8 | 3 | 1.491 | 94% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SPXUSDT | gen_725cb5f4 | 3 | 1.708 | 92% | scale_r_mults=[0.75, 1.5, 3.0] |
 | ORCAUSDT | gen_7b4a474b | 3 | 2.148 | 89% | scale_r_mults=[1.5, 3.0, 5.0] |
-| DEXEUSDT | gen_b31d8b93 | 3 | 1.892 | 88% | scale_r_mults=[2.0, 4.0, 6.0] |
+| DEXEUSDT | gen_b31d8b93 | 3 | 1.892 | 88% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
 | ORCAUSDT | gen_bbe21d3f | 3 | 1.952 | 87% | scale_r_mults=[1.5, 3.0, 5.0] |
 | STXUSDT | gen_14e1775b | 3 | 1.74 | 87% | scale_r_mults=[2.0, 4.0, 6.0] |
 | STXUSDT | gen_68ebd3b9 | 3 | 1.748 | 86% | scale_r_mults=[2.0, 4.0, 6.0] |
-| ORCAUSDT | gen_e6ddc613 | 3 | 2.002 | 84% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ORCAUSDT | gen_9a383fff | 3 | 2.023 | 84% | scale_r_mults=[1.5, 3.0, 5.0] |
+| ORCAUSDT | gen_e6ddc613 | 3 | 2.002 | 84% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True |
+| ORCAUSDT | gen_9a383fff | 3 | 2.023 | 84% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True |
 | SPXUSDT | gen_ba3a671f | 3 | 1.644 | 84% | scale_r_mults=[0.75, 1.5, 3.0] |
 | DOTUSDT | gen_919c110c | 3 | 1.462 | 82% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SEIUSDT | gen_4f890271 | 3 | 1.851 | 82% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -61,7 +61,7 @@ _Generato: 2026-09-21 23:16 UTC_
 | PROMUSDT | gen_452d4511 | 3 | 2.145 | 75% | scale_r_mults=[2.0, 4.0, 6.0] |
 | USELESSUSDT | gen_2031005e | 3 | 1.54 | 72% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ORCAUSDT | gen_6d06dca0 | 3 | 1.967 | 70% | scale_r_mults=[1.5, 3.0, 5.0] |
-| SKYAIUSDT | gen_c61d9322 | 3 | 2.613 | 68% | scale_r_mults=[2.0, 4.0, 6.0] |
+| SKYAIUSDT | gen_c61d9322 | 3 | 2.613 | 68% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
 | TRUMPUSDT | gen_0e000630 | 3 | 2.223 | 66% | scale_r_mults=[2.0, 4.0, 6.0] |
 | BICOUSDT | gen_f238d283 | 3 | 1.531 | 61% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SPXUSDT | gen_d53c153b | 3 | 1.824 | 58% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -69,13 +69,13 @@ _Generato: 2026-09-21 23:16 UTC_
 | NEIROUSDT | gen_f3124a14 | 3 | 1.572 | 56% | scale_r_mults=[1.5, 3.0, 5.0] |
 | EGLDUSDT | gen_36b0e335 | 3 | 1.455 | 56% | scale_r_mults=[1.5, 3.0, 5.0] |
 | NEIROUSDT | gen_d53c153b | 3 | 1.808 | 49% | scale_r_mults=[1.0, 2.0, 3.0] |
-| QUSDT | gen_bf2be656 | 3 | 3.073 | 47% | scale_r_mults=[1.5, 3.0, 5.0] |
-| SAHARAUSDT | gen_6b94025f | 3 | 2.207 | 46% | scale_r_mults=[2.0, 4.0, 6.0] |
-| SKYAIUSDT | gen_eb2ece0c | 3 | 2.943 | 46% | scale_r_mults=[2.0, 4.0, 6.0] |
-| SKYAIUSDT | gen_98837ec2 | 3 | 2.214 | 44% | scale_r_mults=[2.0, 4.0, 6.0] |
+| QUSDT | gen_bf2be656 | 3 | 3.073 | 47% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True |
+| SAHARAUSDT | gen_6b94025f | 3 | 2.207 | 46% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
+| SKYAIUSDT | gen_eb2ece0c | 3 | 2.943 | 46% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
+| SKYAIUSDT | gen_98837ec2 | 3 | 2.214 | 44% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
 | SCRUSDT | gen_63712f8e | 3 | 2.302 | 43% | scale_r_mults=[1.0, 2.0, 3.0] |
-| QUSDT | gen_18c839a0 | 3 | 2.406 | 43% | scale_r_mults=[2.0, 4.0, 6.0] |
-| SKYAIUSDT | gen_6cf80ae6 | 3 | 1.892 | 40% | scale_r_mults=[2.0, 4.0, 6.0] |
+| QUSDT | gen_18c839a0 | 3 | 2.406 | 43% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
+| SKYAIUSDT | gen_6cf80ae6 | 3 | 1.892 | 40% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
 | HEMIUSDT | gen_108c996b | 3 | 1.986 | 40% | scale_r_mults=[2.0, 4.0, 6.0] |
 | HEMIUSDT | gen_93131ef1 | 3 | 1.986 | 40% | scale_r_mults=[2.0, 4.0, 6.0] |
 | SYRUPUSDT | gen_af734c68 | 3 | 1.726 | 38% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -97,34 +97,34 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| consistency | 17 | 1.3% |
-| total_return | 1207 | 91.4% |
-| trades | 6 | 0.5% |
 | holdout | 1 | 0.1% |
-| recovery | 64 | 4.8% |
-| pf_ex_top | 3 | 0.2% |
 | regime | 22 | 1.7% |
+| trades | 6 | 0.5% |
+| consistency | 17 | 1.3% |
+| recovery | 64 | 4.8% |
+| total_return | 1207 | 91.4% |
+| pf_ex_top | 3 | 0.2% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
-**strategie generate** — 120960 valutazioni, 249 passate (0.21%) · 2026-09-21 22:32 UTC
+**strategie generate** — 123078 valutazioni, 248 passate (0.20%) · 2026-09-22 02:52 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 1110 | 0.9% |
-| total_return | 89904 | 74.5% |
-| trades | 1931 | 1.6% |
-| holdout | 709 | 0.6% |
-| recovery | 10073 | 8.3% |
-| consistency | 3047 | 2.5% |
-| regime | 13937 | 11.5% |
+| holdout | 726 | 0.6% |
+| regime | 14311 | 11.7% |
+| trades | 1397 | 1.1% |
+| consistency | 3015 | 2.5% |
+| recovery | 10204 | 8.3% |
+| total_return | 92198 | 75.1% |
+| pf_ex_top | 979 | 0.8% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-09-21 23:02 UTC · coppie validate: **56** · GATE 1 pronto: True
-- tasso di passaggio misurato: **0.204%**
+- ultimo giro: 2026-09-22 04:02 UTC · coppie validate: **56** · GATE 1 pronto: True
+- tasso di passaggio misurato: **0.199%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -171,17 +171,17 @@ _il gate promette sulla storia, il paper misura il presente. `drift` = promessa 
 
 | Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
 |---|---|---|---|---|
-| DEXEUSDT|gen_fa304106 | watch | 4 | 0.0 / 2.06 | PF 0.00 vs 2.06 atteso · mfe mediana 0.52R < primo TP 1.50R |
 | USELESSUSDT|gen_2031005e | watch | 4 | 0.198 / 1.54 | PF 0.20 vs 1.54 atteso · mfe mediana 0.20R < primo TP 2.00R |
+| DEXEUSDT|gen_fa304106 | watch | 4 | 0.0 / 2.06 | PF 0.00 vs 2.06 atteso · mfe mediana 0.52R < primo TP 1.50R |
 | SPXUSDT|gen_ba3a671f | watch | 3 | 0.0 / 1.644 | PF 0.00 vs 1.64 atteso · mfe mediana 0.30R < primo TP 0.75R |
-| SYRUPUSDT|gen_af734c68 | watch | 3 | 0.407 / 1.726 | PF 0.41 vs 1.73 atteso · mfe mediana 0.94R < primo TP 2.00R |
 | STXUSDT|gen_b9bf5d01 | watch | 3 | 0.208 / 1.54 | PF 0.21 vs 1.54 atteso · mfe mediana 0.74R < primo TP 2.00R |
-| ORCAUSDT|gen_6d06dca0 | watch | 2 | 0.0 / 1.967 | PF 0.00 vs 1.97 atteso · mfe mediana 1.05R < primo TP 1.50R |
+| SYRUPUSDT|gen_af734c68 | watch | 3 | 0.407 / 1.726 | PF 0.41 vs 1.73 atteso · mfe mediana 0.94R < primo TP 2.00R |
 | VETUSDT|gen_6d06dca0 | watch | 2 | 0.0 / 1.631 | PF 0.00 vs 1.63 atteso |
+| ORCAUSDT|gen_6d06dca0 | watch | 2 | 0.0 / 1.967 | PF 0.00 vs 1.97 atteso · mfe mediana 1.05R < primo TP 1.50R |
 | DEXEUSDT|gen_b31d8b93 | watch | 2 | 0.37 / 1.892 | PF 0.37 vs 1.89 atteso |
+| MUBARAKUSDT|gen_1f7ead60 | watch | 1 | 0.0 / 2.776 | PF 0.00 vs 2.78 atteso |
 | QUSDT|gen_18c839a0 | watch | 1 | 99.0 / 2.406 | mfe mediana 0.90R < primo TP 2.00R |
 | MUBARAKUSDT|gen_2053cba6 | watch | 1 | 99.0 / 1.446 | mfe mediana 1.05R < primo TP 2.00R |
-| MUBARAKUSDT|gen_1f7ead60 | watch | 1 | 0.0 / 2.776 | PF 0.00 vs 2.78 atteso |
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
