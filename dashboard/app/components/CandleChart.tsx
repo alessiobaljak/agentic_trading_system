@@ -9,8 +9,6 @@ import {
   type IChartApi,
   type ISeriesApi,
   type IPriceLine,
-  type SeriesMarker,
-  type Time,
   type UTCTimestamp,
 } from 'lightweight-charts';
 import type { Position } from '../lib/types';
@@ -224,7 +222,6 @@ export default function CandleChart({
     if (!candle) return;
     for (const l of linesRef.current) candle.removePriceLine(l);
     linesRef.current = [];
-    candle.setMarkers([]);
     const k = colors.current;
     const add = (price: number | undefined, color: string, title: string, dashed: boolean) => {
       if (price == null || !Number.isFinite(price) || price <= 0) return;
@@ -249,33 +246,11 @@ export default function CandleChart({
       add(trade.exit_price, win ? k.up : k.down, `Exit ${win ? '+' : ''}${(trade.pnl ?? 0).toFixed(2)}`, false);
       add(trade.stop_price, k.down, 'SL', true);
       add(trade.take_profit_price, k.up, 'TP', true);
-      const entryTs = trade.entry_time ? Math.floor(new Date(trade.entry_time).getTime() / 1000) : undefined;
-      // il marker va sulla candela ESISTENTE piu' vicina (non su un tempo calcolato):
-      // un tempo assente dalla serie e' il modo classico di far tacere il grafico
-      const data = dataRef.current;
-      const nearest = (t: number): UTCTimestamp | null => {
-        if (!data.length) return null;
-        let best = data[0].time;
-        for (const d of data) if (Math.abs(Number(d.time) - t) < Math.abs(Number(best) - t)) best = d.time;
-        return Math.abs(Number(best) - t) <= 86400 ? best : null;
-      };
-      const markers: SeriesMarker<Time>[] = [];
-      const tIn = entryTs ? nearest(entryTs) : null;
-      const tOut = trade.exit_ts ? nearest(trade.exit_ts) : null;
-      if (tIn) markers.push({
-        time: tIn, position: long ? 'belowBar' : 'aboveBar',
-        color: k.accent, shape: long ? 'arrowUp' : 'arrowDown', text: 'IN',
-      });
-      if (tOut) markers.push({
-        time: tOut, position: long ? 'aboveBar' : 'belowBar',
-        color: win ? k.up : k.down, shape: 'circle', text: 'OUT',
-      });
-      markers.sort((a, b) => Number(a.time) - Number(b.time));
-      try {
-        candle.setMarkers(markers);
-      } catch (e) {
-        console.warn('[chart] marker non applicabili', e);
-      }
+      // NIENTE MARKER SUL TEMPO (22 set 2026). Con i marker IN/OUT il riquadro
+      // restava bianco su qualunque trade chiuso, senza errore in pagina: la
+      // libreria disegna in modo asincrono e un marker che non le piace uccide il
+      // disegno, non React. Entry ed exit restano come LINEE DI PREZZO, lo stesso
+      // meccanismo delle posizioni aperte, che funziona.
     }
   }, [position, trade, tradeKey, symbol, interval, loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
