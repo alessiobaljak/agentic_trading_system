@@ -368,6 +368,15 @@ class GeneratedStrategy(Strategy):
         self._min_adx = float(spec.get("min_adx", 0.0) or 0.0)
         self._atr_mult_stop = float(spec.get("atr_mult_stop", 1.5))
         self._rr = float(spec.get("rr", 2.0))
+        # IL MERCATO SI GUARDA SOLO SE LA SPEC LO USA. Il 22 set 2026 il giro della
+        # discovery e' passato da ~2h a oltre 2h53 (finestra di 3h sforata, giro
+        # delle 06:00 saltato): il contesto di mercato veniva risolto a OGNI
+        # candela per OGNI spec, anche per le ~550 che non hanno feature di
+        # mercato. Sul percorso caldo del backtest (milioni di candele) anche pochi
+        # microsecondi diventano decine di minuti. La spec sa dalla nascita se le
+        # serve: si decide una volta qui, non a ogni barra.
+        self.usa_mercato = any((f.get("kind") in MARKET_FEATURES)
+                               for f in self._features if isinstance(f, dict))
 
     def _describe(self) -> str:
         parts = []
@@ -386,7 +395,7 @@ class GeneratedStrategy(Strategy):
         # Il mercato si risolve UNA volta, non per feature: se manca e la spec lo
         # chiede, il segnale non nasce. Meglio nessun trade che un trade deciso
         # su un mercato immaginario.
-        mercato = mercato_da_contesto(ctx, self._tf)
+        mercato = mercato_da_contesto(ctx, self._tf) if self.usa_mercato else None
         long_ok, short_ok = True, True
         for f in self._features:
             kind = f.get("kind")

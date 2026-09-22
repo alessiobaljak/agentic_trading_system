@@ -22,7 +22,7 @@ import time
 from datetime import date
 
 from backtesting.data_loader import load_candles
-from bot.strategies.generated import MARKET_SYMBOL
+from bot.strategies.generated import MARKET_FEATURES, MARKET_SYMBOL
 from backtesting.engine import (StrategyStats, gate_verdict, max_drawdown, pf_by_regime,
                                 pf_without_top, t_stat)
 from backtesting.optimizer import WalkForwardOptimizer
@@ -444,9 +444,14 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
     near: list = []
     n_eval = 0
     for spec in specs:
+        # il contesto di mercato SOLO alle spec che lo usano: per le altre il
+        # motore salterebbe una ricerca per candela che non serve a nessuno (e'
+        # cio' che il 22 set ha fatto sforare la finestra di 3h)
+        usa_mercato = any((f.get("kind") in MARKET_FEATURES)
+                          for f in (spec.get("features") or []) if isinstance(f, dict))
         r = evaluate_spec(_W["opt"], sym, candles, frame, spec,
                           scale_candidates=candidate_ladders(_W.get("scala_paper")),
-                          context_by_ts=_W.get("btc_ctx"))
+                          context_by_ts=_W.get("btc_ctx") if usa_mercato else None)
         n_eval += 1
         if not r["passed"] and r.get("fail_criteria"):
             b = r.get("fail_binding") or "?"

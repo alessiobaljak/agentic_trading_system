@@ -180,3 +180,46 @@ def test_il_mercato_e_lo_STESSO_asset_che_usa_gia_il_gate():
     from bot.strategies.momentum_cross_asset import BTC_SYMBOL
 
     assert MARKET_SYMBOL == BTC_SYMBOL
+
+
+def test_il_mercato_si_risolve_SOLO_se_la_spec_lo_usa(monkeypatch):
+    """22 set 2026: il giro e' passato da ~2h a oltre 2h53 (finestra sforata)
+    perche' il contesto di mercato veniva risolto a ogni candela per ogni spec,
+    anche per le ~550 senza feature di mercato. Una spec senza quelle feature
+    non deve nemmeno toccarlo."""
+    from bot.strategies import generated as g
+
+    def esplode(*a, **k):
+        raise AssertionError("mercato risolto per una spec che non lo usa")
+    monkeypatch.setattr(g, "mercato_da_contesto", esplode)
+
+    class _Ind:
+        rsi = 80.0
+        ema_fast = ema_slow = 1.0
+        bb_upper = bb_lower = bb_mid = 1.0
+        atr = 1.0
+        adx = None
+        volume = volume_sma = None
+
+    class _Asset:
+        price = 1.0
+        symbol = "X"
+        regime = None          # `_signal` lo legge per etichettare il segnale
+
+        def ind(self, tf):
+            return _Ind()
+
+    senza = g.GeneratedStrategy({"id": "gen_s", "features": [{"kind": "rsi_extreme", "low": 30, "high": 70}],
+                                 "atr_mult_stop": 1.5, "rr": 2.0})
+    assert senza.usa_mercato is False
+    senza.generate_signal(_Asset(), None)      # non deve esplodere
+    con = g.GeneratedStrategy({"id": "gen_c", "features": [{"kind": "market_trend"}],
+                               "atr_mult_stop": 1.5, "rr": 2.0})
+    assert con.usa_mercato is True
+
+
+def test_la_discovery_passa_il_contesto_solo_a_chi_lo_usa():
+    from scripts import discover_strategies as d
+
+    src = inspect.getsource(d._disc_one)
+    assert 'context_by_ts=_W.get("btc_ctx") if usa_mercato else None' in src
