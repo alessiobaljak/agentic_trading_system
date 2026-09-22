@@ -85,3 +85,32 @@ def test_l_ora_si_risolve_solo_se_la_spec_la_usa():
     niente lavoro per candela per chi non lo chiede."""
     src = inspect.getsource(GeneratedStrategy.generate_signal)
     assert 'asset.ind("1h") if self.usa_htf else None' in src
+
+
+def test_l_ipotesi_opposta_esiste_lo_short_sul_calo_momentaneo():
+    """Il proprietario: «se la short vuole sfruttare un calo momentaneo anche se
+    il trend e' in salita, questo trade DEVE aprirsi». `htf_fade` vende
+    l'eccesso rispetto alla media oraria, senza guardare la direzione del
+    trend. Con la conferma sono incompatibili: il gate sceglie."""
+    import random
+
+    from bot.ai import hypotheses as h
+    from bot.strategies.generator import _DIRECTIONAL, _INCOMPATIBLE, _feature_with_params
+
+    fn = HTF_FEATURES["htf_fade"]
+
+    class _S:
+        ema_fast, ema_slow = 11.0, 10.0      # trend orario in salita
+
+    assert fn(_S(), 10.5, {"htf_gap": 0.02}) == (False, True), "sopra la media: short si', anche col trend su"
+    assert fn(_S(), 9.5, {"htf_gap": 0.02}) == (True, False)
+    assert fn(_S(), 10.1, {"htf_gap": 0.02}) == (False, False), "troppo vicino alla media: nessuna delle due"
+    assert fn(None, 10.0, {}) is None
+    assert "htf_fade" in _DIRECTIONAL and frozenset({"htf_confirm", "htf_fade"}) in _INCOMPATIBLE
+    assert "htf_gap" in _feature_with_params("htf_fade", random.Random(0))
+    spec, motivo = h._esamina_spec({"mechanism": "vendi l'eccesso orario",
+                                    "features": [{"kind": "htf_fade", "htf_gap": 0.01}],
+                                    "atr_mult_stop": 1.5, "min_adx": 0.0, "volume_mult": 0.0})
+    assert spec is not None, motivo
+    assert h._esamina_spec({"mechanism": "x", "features": [{"kind": "htf_fade", "htf_gap": 0.01}, {"kind": "htf_confirm"}],
+                            "atr_mult_stop": 1.5, "min_adx": 0.0, "volume_mult": 0.0})[0] is None

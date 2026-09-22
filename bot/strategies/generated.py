@@ -290,10 +290,27 @@ def _htf_confirm(h, price: float, f: dict):
     return (h.ema_fast > h.ema_slow, h.ema_fast < h.ema_slow)
 
 
+def _htf_fade(h, price: float, f: dict):
+    """L'IPOTESI OPPOSTA alla conferma, e il proprietario ha insistito perche'
+    e' «vitale»: dentro un trend orario in salita ci sono cali momentanei, e uno
+    short che li sfrutta DEVE potersi aprire. Qui si vende l'eccesso rispetto
+    alla media oraria: short se il prezzo sta sopra la media lenta a 1h di
+    almeno `htf_gap` (frazione del prezzo), long se sta sotto di altrettanto.
+    Non guarda la direzione del trend: guarda quanto il prezzo se n'e'
+    allontanato. Con `htf_confirm` nella stessa spec sarebbero in contraddizione:
+    sono incompatibili, e il gate misura quale delle due paga, coin per coin."""
+    if h is None or h.ema_slow is None or not h.ema_slow:
+        return None
+    gap = (price - h.ema_slow) / h.ema_slow
+    soglia = float(f.get("htf_gap", 0.0))
+    return (gap <= -soglia, gap >= soglia)
+
+
 #: feature che guardano il TIMEFRAME SUPERIORE della stessa coin. Firma
 #: `(h, price, f)`: `h` e' `asset.ind("1h")`, o None se non disponibile.
 HTF_FEATURES = {
     "htf_confirm": _htf_confirm,
+    "htf_fade": _htf_fade,
 }
 
 

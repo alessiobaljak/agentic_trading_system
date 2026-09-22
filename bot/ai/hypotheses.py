@@ -56,6 +56,9 @@ _FEATURE_PARAMS = {
     "not_stretched": {"stretch_max": (1.0, 6.0)},
     # opera solo con ADX sotto soglia: l'opposto di min_adx
     "adx_below": {"adx_hi": (12.0, 50.0)},
+    # quanto il prezzo deve essersi allontanato dalla media oraria (frazione del
+    # prezzo) per vendere l'eccesso: 0 = basta stare sopra
+    "htf_fade": {"htf_gap": (0.0, 0.05)},
 }
 
 #: fasce dei numeri di una spec. UNA SOLA definizione, usata sia da `_esamina_spec`

@@ -32,6 +32,9 @@ _DIRECTIONAL = [
     # --- la CONFERMA A 1 ORA della stessa coin (22 set): long solo con le medie
     # orarie in salita, short solo in discesa. Il gate misura se serve.
     "htf_confirm",
+    # e l'ipotesi opposta: vendere l'eccesso rispetto alla media oraria (lo
+    # short sul calo momentaneo dentro un trend in salita). Sceglie il gate.
+    "htf_fade",
 ]
 # combinazioni incoerenti da evitare (mean-reversion + breakout sullo stesso segnale)
 _INCOMPATIBLE = {
@@ -41,6 +44,7 @@ _INCOMPATIBLE = {
     frozenset({"stoch_extreme", "stoch_momentum"}),
     # andare col mercato e contro il mercato insieme non lascia passare niente
     frozenset({"market_trend", "market_fade"}),
+    frozenset({"htf_confirm", "htf_fade"}),
 }
 
 # feature di CONDIZIONE (non danno la direzione: dicono quando operare). Erano
@@ -55,6 +59,7 @@ _VOL_PCT = [0.01, 0.02, 0.03]
 _ADX_LO = [18.0, 22.0, 28.0]
 _RS_GAP = [0.0, 0.005, 0.02]
 _STRETCH_MAX = [2.0, 3.0, 4.5]   # in ATR dalla media lenta
+_HTF_GAP = [0.0, 0.01, 0.02]     # distanza minima dalla media oraria, frazione del prezzo
 _ADX_HI = [20.0, 28.0, 35.0]
 _VOL_MULT_FEAT = [1.2, 1.5, 2.0]
 _SESSIONS = [(0, 8), (8, 16), (12, 21), (16, 24)]
@@ -92,6 +97,8 @@ def _feature_with_params(kind: str, rng: random.Random) -> dict:
         f["stretch_max"] = rng.choice(_STRETCH_MAX)
     elif kind == "adx_below":
         f["adx_hi"] = rng.choice(_ADX_HI)
+    elif kind == "htf_fade":
+        f["htf_gap"] = rng.choice(_HTF_GAP)
     elif kind == "relative_strength":
         # 0 = basta essere piu' forte del mercato; 0.02 = almeno due punti
         # percentuali in piu'. Senza questa riga il generatore proporrebbe la
