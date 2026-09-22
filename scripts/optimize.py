@@ -345,7 +345,7 @@ def main() -> int:
         print("[optimize] strategie BASE saltate (OPTIMIZER_SKIP_BASE): 0 validate "
               "su 1312 valutazioni nella storia del registro — il calcolo va alla "
               "discovery. Faccio solo la manutenzione del registro.")
-        reg = update_registry(fb, out, summary_passed)
+        reg = update_registry(fb, out, summary_passed, universe=full_symbols)
         print(f"[optimize] registro: {len(reg.get('validated') or [])} validate · "
               f"copertura {reg['coverage'] * 100:.1f}%")
         return 0
@@ -912,7 +912,8 @@ def _segna_promozione(key: str, rec: dict, prima: int, adesso: float,
     nuove.append(_riga_vita(key, rec, "promossa", adesso))
 
 
-def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
+def update_registry(fb, out: dict, passed_now: list[str],
+                    universe: list[str] | None = None) -> dict:
     """
     Accumula nel tempo: ogni run incrementa il pass_count delle coppie che passano.
     Una coppia è VALIDATA con pass_count >= MIN_PASSES. Il modello è "ready" quando
@@ -1038,7 +1039,11 @@ def update_registry(fb, out: dict, passed_now: list[str]) -> dict:
     # COPERTURA = tutte le coin che hanno almeno una strategia validata (coerente
     # col dashboard), NON solo quelle che capitano nel top-80 di oggi. Denominatore:
     # l'universo scansionato in questo run (o le coin validate, se piu' grande).
-    current_coins = sorted({e["symbol"] for e in out.values()})
+    # `universe` esplicito quando la valutazione e' saltata (OPTIMIZER_SKIP_BASE):
+    # con `out` vuoto il denominatore collassava sulle sole coin validate e la
+    # copertura diventava «26/26 (100%)» — misurato il 22 set 2026, primo giro
+    # senza le base. Un numero giusto scritto in un posto sbagliato e' una bugia.
+    current_coins = sorted(universe) if universe else sorted({e["symbol"] for e in out.values()})
     covered = sorted(validated_coins)
     universe = max(len(current_coins), len(covered)) or 1
     coverage = len(covered) / universe

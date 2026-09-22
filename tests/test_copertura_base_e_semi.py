@@ -25,7 +25,7 @@ def test_saltare_le_base_non_salta_la_manutenzione_del_registro():
     src = inspect.getsource(o.main)
     i = src.index("if SKIP_BASE and not args.reset_registry:")
     blocco = src[i:i + 900]
-    assert "update_registry(fb, out, summary_passed)" in blocco
+    assert "update_registry(fb, out, summary_passed, universe=full_symbols)" in blocco
     assert "return 0" in blocco
     # e viene PRIMA della valutazione parallela
     assert i < src.index("parallel_map(")
@@ -48,3 +48,13 @@ def test_i_semi_danno_ancora_precedenza_alle_coin_non_coperte():
     la copertura crescerebbe dove c'e' gia'."""
     src = inspect.getsource(d.mutation_seeds)
     assert "estendono[:limit] + resto[" in src
+
+
+def test_saltando_le_base_la_copertura_usa_l_universo_vero():
+    """22 set 2026, primo giro senza le base: «copertura 26/26 (100%)». Con `out`
+    vuoto il denominatore collassava sulle coin validate. L'universo va passato
+    esplicitamente, ed e' quello del top-N calcolato per il giro."""
+    src = inspect.getsource(o.main)
+    assert "update_registry(fb, out, summary_passed, universe=full_symbols)" in src
+    body = inspect.getsource(o.update_registry)
+    assert "current_coins = sorted(universe) if universe else" in body
