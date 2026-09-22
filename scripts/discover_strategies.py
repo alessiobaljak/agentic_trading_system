@@ -851,6 +851,11 @@ def _merge_discover_shards(fb, args) -> int:
 
 
 def main() -> int:
+    # IL TEMPO DEL GIRO SI MISURA QUI, e si salva su Firebase. Il 22 set 2026 per
+    # sapere quanto durava un giro servivano `servizi` + `processi` + il journal,
+    # e il journal tiene 80 righe di cache che spingono via la fine del giro. Da
+    # ora `gate_progress` (allowlist `gate`) lo stampa: inizio, fine, durata.
+    t0 = time.time()
     ap = argparse.ArgumentParser(description="Scoperta autonoma di nuove strategie.")
     ap.add_argument("--top", type=int, default=25, help="numero di crypto su cui validare")
     ap.add_argument("--symbols", default="",
@@ -1060,8 +1065,13 @@ def main() -> int:
                                     evaluated_symbols=set(symbols))
     # riepilogo COMPATTO (niente spec/entry per ogni coppia: sforerebbe il limite
     # di 1 MiB di Firestore). Le spec complete stanno in discovered_strategies/specs.
+    durata = time.time() - t0
+    print(f"[discover] GIRO FINITO in {durata / 3600:.0f}h {(durata % 3600) / 60:.0f}m "
+          f"({n_eval} valutazioni, {len(passed_keys)} passate)")
     fb.set_doc("strategy_params", "discovered_last_run", {
         "updated_at": time.time(),
+        "started_at": t0,
+        "duration_s": round(durata),
         "n_eval": n_eval,
         "n_passed": len(passed_keys),
         # QUANTO MORDE IL TAGLIO. Senza questi numeri, "il registro non accumula" e

@@ -324,6 +324,20 @@ def main() -> int:
     # una data stampata su una coppia ferma — la quarta volta, dopo il campo
     # sbagliato, le coin congelate e le coppie senza finestra.
     diag = fb.get_doc("strategy_params", "discovered_last_run") or {}
+    # QUANTO DURA IL GIRO (discovery): scritto dalla discovery stessa alla fine.
+    # E' il vincolo numero uno del sistema (finestra del timer: 3h) e prima si
+    # ricavava a mano da tre comandi. Se `started_at` manca, il giro in corso o
+    # l'ultimo finito girava col codice vecchio.
+    if diag.get("started_at") and diag.get("duration_s") is not None:
+        ini = datetime.fromtimestamp(float(diag["started_at"]), timezone.utc)
+        d = int(diag["duration_s"])
+        fine = datetime.fromtimestamp(float(diag["started_at"]) + d, timezone.utc)
+        avviso = "  ← SFORA la finestra di 3h" if d > 3 * 3600 else ""
+        print(f"\n  TEMPO DELL'ULTIMO GIRO (discovery): {d // 3600}h {(d % 3600) // 60:02d}m · "
+              f"iniziato {ini:%d %b %H:%M} UTC · finito {fine:%H:%M} UTC{avviso}")
+    else:
+        print("\n  TEMPO DELL'ULTIMO GIRO: non ancora registrato (codice del 22 set: "
+              "arriva col primo giro finito)")
     if diag.get("n_specs_note"):
         tagliate = int(diag.get("n_specs_tagliate", 0) or 0)
         print(f"\n  RI-VALUTAZIONE (ultimo run discovery): "
