@@ -338,6 +338,12 @@ def main() -> int:
     else:
         print("\n  TEMPO DELL'ULTIMO GIRO: non ancora registrato (codice del 22 set: "
               "arriva col primo giro finito)")
+    # la passata extra (strategie native a 1 ora, per ora solo BTC)
+    d1h = fb.get_doc("strategy_params", "discovered_last_run_1h") or {}
+    if d1h.get("started_at") and d1h.get("duration_s") is not None:
+        d = int(d1h["duration_s"])
+        print(f"  PASSATA A 1 ORA ({d1h.get('symbols', '?')} coin): {d // 60}m · "
+              f"{d1h.get('n_eval', '?')} valutazioni · {d1h.get('n_passed', '?')} passate")
     if diag.get("n_specs_note"):
         tagliate = int(diag.get("n_specs_tagliate", 0) or 0)
         print(f"\n  RI-VALUTAZIONE (ultimo run discovery): "

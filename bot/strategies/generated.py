@@ -377,7 +377,10 @@ def spec_id(spec: dict) -> str:
         "min_adx": spec.get("min_adx", 0.0),
         "atr_mult_stop": spec.get("atr_mult_stop"),
         "rr": spec.get("rr"),
-        "timeframe": settings.ORCHESTRATOR_TIMEFRAME,
+        # dal 22 set 2026 la spec puo' portare il SUO timeframe (strategie native
+        # a 1 ora): se manca, e' quella del bot, come e' sempre stato — cosi' gli
+        # id delle spec esistenti non cambiano di una virgola.
+        "timeframe": spec.get("timeframe") or settings.ORCHESTRATOR_TIMEFRAME,
     }
     h = hashlib.sha1(json.dumps(payload, sort_keys=True, default=str).encode()).hexdigest()[:8]
     return f"gen_{h}"
@@ -394,6 +397,12 @@ class GeneratedStrategy(Strategy):
         self.active_regimes = ALL_REGIMES
         self.description = self._describe()
         self._features = spec.get("features", [])
+        # IL TIMEFRAME E' DELLA SPEC (22 set 2026, strategie native a 1 ora). Se
+        # manca e' quello del bot, com'e' sempre stato. Da qui dipendono gli
+        # indicatori letti (`asset.ind(self._tf)`), lo stop in ATR e — nel bot —
+        # l'orologio su cui la strategia decide.
+        from bot.config import settings as _st   # locale, come in spec_id (import circolare)
+        self.timeframe = spec.get("timeframe") or _st.ORCHESTRATOR_TIMEFRAME
         self._volume_mult = float(spec.get("volume_mult", 0.0) or 0.0)
         self._min_adx = float(spec.get("min_adx", 0.0) or 0.0)
         self._atr_mult_stop = float(spec.get("atr_mult_stop", 1.5))
@@ -416,6 +425,10 @@ class GeneratedStrategy(Strategy):
             extra = " ".join(f"{k}={v}" for k, v in f.items() if k != "kind")
             parts.append(f"{f.get('kind')}{(' ' + extra) if extra else ''}")
         return " AND ".join(parts) or "vuota"
+
+    @property
+    def _tf(self) -> str:
+        return self.timeframe
 
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None

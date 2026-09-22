@@ -876,7 +876,7 @@ class TradingBot:
         # ciclo (uno per coin); altrimenti la singola decisione migliore (LLM/fallback).
         if settings.BACKTEST_PARITY:
             opened = [d for d in self.orchestrator.decide_all(
-                self.selected, self.regime, disabled=disabled)]
+                self.selected, self.regime, disabled=disabled, boundary=boundary)]
             for d in opened:
                 self._try_open(d, now)
             # OMBRA: il modello dice cosa AVREBBE fatto, e resta li'. Dopo il giro
@@ -1045,7 +1045,8 @@ class TradingBot:
                                           params, confidence=decision.confidence,
                                           regime_confidence=self.regime_confidence,
                                           scale_r_mults=ladder_multiples(_sparams),
-                                          sl_to_breakeven=breakeven_after_tp1(_sparams))
+                                          sl_to_breakeven=breakeven_after_tp1(_sparams),
+                                          timeframe=self.adaptation.timeframe_for(decision.strategy))
         if pos is not None:
             self._sync_stream_symbols()
             # i prezzi accumulati PRIMA dell'ingresso non possono riempire i suoi TP

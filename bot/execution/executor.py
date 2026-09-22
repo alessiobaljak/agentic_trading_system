@@ -91,6 +91,9 @@ class Position:
     risk_effective_pct: float = 0.0
     # confidenza della classificazione di regime all'ingresso (0..1), congelata
     regime_confidence: Optional[float] = None
+    # timeframe della STRATEGIA che ha aperto (None = quello del bot): dal 22 set
+    # 2026 esistono strategie native a 1 ora, e il learning filtra per questo campo
+    timeframe: Optional[str] = None
     # prezzo ATTESO all'ingresso (quello su cui l'orchestratore ha deciso): il
     # confronto con quello eseguito e' lo slippage d'ingresso. In DRY_RUN i due
     # coincidono, in live no — ed e' li' che il numero inizia a dire qualcosa.
@@ -167,13 +170,15 @@ class ExecutionEngine:
         regime_confidence: Optional[float] = None,
         scale_r_mults: Optional[tuple] = None,
         sl_to_breakeven: Optional[bool] = None,
+        timeframe: Optional[str] = None,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved)."""
         if not params.approved or params.quantity <= 0:
             print(f"[execution] ordine rifiutato dal gate: {params.reject_reason}")
             return None
 
-        ind15 = asset.ind(settings.ORCHESTRATOR_TIMEFRAME)
+        tf = timeframe or settings.ORCHESTRATOR_TIMEFRAME
+        ind15 = asset.ind(tf) or asset.ind(settings.ORCHESTRATOR_TIMEFRAME)
         pos = Position(
             position_id=str(uuid.uuid4()),
             symbol=asset.symbol, strategy=strategy, direction=direction,
@@ -189,6 +194,7 @@ class ExecutionEngine:
             sl_to_breakeven=sl_to_breakeven,
             risk_effective_pct=params.risk_effective_pct,
             regime_confidence=regime_confidence,
+            timeframe=tf,
         )
 
         if self.dry_run:
@@ -638,7 +644,7 @@ class ExecutionEngine:
         ind = {k: IndicatorSnapshot(**v) for k, v in pos.indicators_at_entry.items()}
         return ClosedTrade(
             trade_id=pos.position_id, symbol=pos.symbol, strategy=pos.strategy,
-            direction=pos.direction, timeframe=settings.ORCHESTRATOR_TIMEFRAME,
+            direction=pos.direction, timeframe=pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME,
             entry_time=pos.entry_time,
             exit_time=datetime.now(timezone.utc), entry_price=pos.entry_price,
             exit_price=exit_price, size=pos.quantity,
@@ -736,6 +742,7 @@ class ExecutionEngine:
             "sl_order_id": pos.sl_order_id, "exchange_stop": pos.exchange_stop,
             "scale_r_mults": list(pos.scale_r_mults) if pos.scale_r_mults else None,
             "sl_to_breakeven": pos.sl_to_breakeven,
+            "timeframe": pos.timeframe,
             "scale_stage": pos.scale_stage, "realized_gross": pos.realized_gross,
             "realized_net": pos.realized_net,
             "orig_stop": pos.orig_stop,
@@ -814,6 +821,7 @@ class ExecutionEngine:
         _be = p.get("sl_to_breakeven")
         pos.sl_to_breakeven = bool(_be) if _be is not None else None
         pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
+        pos.timeframe = p.get("timeframe") or None
         return pos
 
     @staticmethod

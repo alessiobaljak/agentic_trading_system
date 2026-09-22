@@ -59,6 +59,10 @@ def pf_by_regime(trades) -> dict:
     return out
 
 
+#: ore -> nome del timeframe, per etichettare la riga base dello snapshot
+_TF_NAMES = {round(1 / 12, 4): "5m", 0.25: "15m", 0.5: "30m", 1.0: "1h", 4.0: "4h", 24.0: "1d"}
+
+
 def cooldown_bars(hours: float, interval_hours: float) -> int:
     """Quante barre vale il cooldown dopo uno stop, in QUESTO timeframe.
 
@@ -599,9 +603,13 @@ class Backtester:
                              htf=None) -> AssetSnapshot:
         row = frame.iloc[idx]
         snap = AssetSnapshot(symbol=symbol, price=float(row["close"]))
-        tf = settings.ORCHESTRATOR_TIMEFRAME
+        # la riga base prende il nome del timeframe SU CUI GIRA il motore (a 1h
+        # e' "1h"), non quello del bot: una strategia nativa a 1 ora chiede
+        # `ind("1h")` e deve trovare la riga base, non un alias per caso
+        tf = _TF_NAMES.get(round(self.interval_hours, 4), settings.ORCHESTRATOR_TIMEFRAME)
         ind = snapshot_from_row(row, tf)
         snap.indicators[tf] = ind
+        snap.indicators.setdefault(settings.ORCHESTRATOR_TIMEFRAME, ind)
         # 1h REALE quando disponibile (timeframe base < 1h e storia sufficiente);
         # fallback: alias della riga base (comportamento storico, es. tf gia' 1h).
         ind1h = None

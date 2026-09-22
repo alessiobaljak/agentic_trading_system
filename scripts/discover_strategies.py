@@ -22,7 +22,7 @@ import time
 from datetime import date
 
 from backtesting.data_loader import load_candles
-from bot.strategies.generated import MARKET_FEATURES, MARKET_SYMBOL
+from bot.strategies.generated import MARKET_FEATURES, MARKET_SYMBOL, spec_id
 from backtesting.engine import (StrategyStats, gate_verdict, max_drawdown, pf_by_regime,
                                 pf_without_top, t_stat)
 from backtesting.optimizer import WalkForwardOptimizer
@@ -944,6 +944,23 @@ def main() -> int:
     bases = seeds or existing_list[:SEEDS]
     for i, base in enumerate(bases[:SEEDS]):
         specs.append(mutate(base, seed=args.seed + i + 1))
+    # IL TIMEFRAME DELLA PASSATA sulle candidate nuove: una spec nata in una
+    # passata a 1 ora e' una strategia a 1 ora, con il suo id (che include il
+    # timeframe). Le spec gia' note NON si ristampano: si rivalutano solo quelle
+    # dello stesso intervallo, altrimenti una spec a 15m giudicata a 1h finirebbe
+    # nel registro con lo stesso nome e un'altra natura.
+    tf_bot = settings.ORCHESTRATOR_TIMEFRAME
+    nuove = []
+    for sp in specs:
+        if sp.get("id") in existing:
+            if (existing[sp["id"]].get("timeframe") or tf_bot) == args.interval:
+                nuove.append(sp)
+            continue
+        if args.interval != tf_bot:
+            sp = {**sp, "timeframe": args.interval}
+            sp["id"] = spec_id(sp)
+        nuove.append(sp)
+    specs = nuove
     # de-dup per id
     specs = list({s["id"]: s for s in specs}.values())
     # e per LOGICA: due spec con la stessa firma sono la stessa scommessa
@@ -1068,7 +1085,11 @@ def main() -> int:
     durata = time.time() - t0
     print(f"[discover] GIRO FINITO in {durata / 3600:.0f}h {(durata % 3600) / 60:.0f}m "
           f"({n_eval} valutazioni, {len(passed_keys)} passate)")
-    fb.set_doc("strategy_params", "discovered_last_run", {
+    _doc_run = ("discovered_last_run" if args.interval == settings.ORCHESTRATOR_TIMEFRAME
+                else f"discovered_last_run_{args.interval}")
+    fb.set_doc("strategy_params", _doc_run, {
+        "interval": args.interval,
+        "symbols": len(symbols),
         "updated_at": time.time(),
         "started_at": t0,
         "duration_s": round(durata),

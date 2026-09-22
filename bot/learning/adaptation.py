@@ -324,6 +324,11 @@ class AdaptationEngine:
                 out.append(GeneratedStrategy(spec))
         return out
 
+    def timeframe_for(self, strategy: str) -> Optional[str]:
+        """Il timeframe di una strategia generata (None = quello del bot)."""
+        spec = self._generated_specs.get(strategy)
+        return (spec or {}).get("timeframe") or None
+
     def is_enabled(self, symbol: str, strategy: str) -> bool:
         """
         True se la coppia (asset, strategia) è abilitata a operare.

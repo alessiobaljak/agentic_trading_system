@@ -1120,3 +1120,15 @@ conferma entrano solo se reggono il gate anche con meno segnali. Sul caso MUBARA
 (RSI 88 a 15 minuti, medie orarie in salita) lo short non nascerebbe. Misura di
 riferimento: sui 35 trade del 22 set la conferma avrebbe tolto 11 trade (-31%), il
 cui netto era +5,87 — ma con le etichette di regime vecchie; il gate decide.
+
+
+### 22 settembre, notte: strategie native a 1 ora, per ora solo BTC (C1, seconda metà)
+
+Chiesto dal proprietario: «facciamola solo su BTC, poi se funziona si allarga».
+La spec porta il suo timeframe (e l'id lo include: una logica a 15m e a 1h sono due
+strategie), il motore chiama la riga base col suo intervallo, `optimize` lancia a
+ogni giro una discovery a 1h su BTCUSDT come sottoprocesso con un tempo massimo
+(nessuna modifica alla unit sulla VPS), il bot fa decidere ogni strategia sul suo
+orologio (una a 1h decide una volta l'ora), e i trade portano il timeframe della
+strategia così il learning non li mescola. Le prime coppie BTC@1h servono le
+solite 3 conferme. Allargare = cambiare `DISCOVERY_EXTRA`.

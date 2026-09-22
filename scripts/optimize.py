@@ -348,6 +348,7 @@ def main() -> int:
         reg = update_registry(fb, out, summary_passed, universe=full_symbols)
         print(f"[optimize] registro: {len(reg.get('validated') or [])} validate · "
               f"copertura {reg['coverage'] * 100:.1f}%")
+        passata_extra(args)
         return 0
 
     # PARALLELO: i simboli sono indipendenti -> li distribuiamo su tutti i core del
@@ -910,6 +911,44 @@ def _segna_promozione(key: str, rec: dict, prima: int, adesso: float,
         return
     rec["validated_at"] = adesso
     nuove.append(_riga_vita(key, rec, "promossa", adesso))
+
+
+# LA PASSATA A 1 ORA (22 set 2026, idea del proprietario: «strategie a 1 ora, per
+# ora solo su BTC, poi se funziona si allarga»). Vive qui, nel primo passo del
+# timer, perche' cosi' NON serve toccare la unit sulla VPS: stesso comando, il
+# codice lancia la discovery a 1h su BTC come sottoprocesso, con un tempo
+# massimo che non puo' sforare la finestra. "1h:BTCUSDT" = un intervallo e le
+# coin, separati da virgola; vuoto = spenta.
+DISCOVERY_EXTRA = os.getenv("DISCOVERY_EXTRA", "1h:BTCUSDT")
+DISCOVERY_EXTRA_MAX_S = int(os.getenv("DISCOVERY_EXTRA_MAX_S", "2400"))
+
+
+def passata_extra(args) -> None:
+    if not DISCOVERY_EXTRA or ":" not in DISCOVERY_EXTRA:
+        return
+    interval, coins = DISCOVERY_EXTRA.split(":", 1)
+    interval, coins = interval.strip(), coins.strip()
+    if not interval or not coins:
+        return
+    import subprocess
+    import sys
+    cmd = [sys.executable, "-m", "scripts.discover_strategies",
+           "--interval", interval, "--symbols", coins,
+           "--generate", os.getenv("DISCOVERY_EXTRA_GENERATE", "60"),
+           "--reeval-cap", os.getenv("DISCOVERY_EXTRA_REEVAL", "200"),
+           "--windows", str(args.windows), "--start", args.start]
+    print(f"[optimize] passata extra: discovery a {interval} su {coins} "
+          f"(max {DISCOVERY_EXTRA_MAX_S // 60} min)")
+    t0 = time.time()
+    try:
+        r = subprocess.run(cmd, timeout=DISCOVERY_EXTRA_MAX_S)
+        print(f"[optimize] passata extra finita in {(time.time() - t0) / 60:.0f} min "
+              f"(codice {r.returncode})")
+    except subprocess.TimeoutExpired:
+        print(f"[optimize] passata extra INTERROTTA dopo {DISCOVERY_EXTRA_MAX_S // 60} min: "
+              f"non deve sforare la finestra del timer")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[optimize] passata extra non riuscita: {exc}")
 
 
 def update_registry(fb, out: dict, passed_now: list[str],

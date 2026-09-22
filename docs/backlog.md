@@ -404,7 +404,7 @@ di tutto il backlog. Va decisa, non fatta di slancio.
 ## C. Timeframe e universo
 
 ### C1. A 1 ora le strategie vanno molto meglio
-**Stato:** aperto · misurato 15 set · **22 set: fatta la prima metà** — la conferma a 1 ora è un mattoncino (`htf_confirm`), il gate misura coin per coin. Resta la seconda metà: strategie native a 1 ora nel gate e nel bot (orologio per strategia), da fare quando il giro sta sotto le 3h.
+**Stato:** **FATTA il 22 set sera, solo su BTC** — la spec porta il suo timeframe (id incluso), il motore etichetta la riga base col suo intervallo, `optimize` lancia a ogni giro una passata di discovery a 1h su BTCUSDT (`DISCOVERY_EXTRA=1h:BTCUSDT`, max 40 min, senza toccare il timer), il bot fa decidere ogni strategia sul suo orologio e i trade portano il timeframe della strategia. Le prime coppie BTC@1h servono 3 conferme (3 settimane). Allargare ad altre coin = cambiare `DISCOVERY_EXTRA`.
 
 ```
 candidate che battono il pareggio:

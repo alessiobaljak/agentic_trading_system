@@ -29,6 +29,10 @@ from bot.strategies import get_all_strategies
 from bot.strategies.base import StrategyContext
 
 
+#: secondi per timeframe, per l'orologio delle strategie native a 1 ora
+_TF_SECS = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 14400, "1d": 86400}
+
+
 class Orchestrator:
     DECISION_THRESHOLD = 30  # confidenza aggiustata minima per agire (fallback)
 
@@ -63,7 +67,7 @@ class Orchestrator:
     # ------------------------------------------------------------------ #
     def collect_signals(
         self, assets: dict[str, AssetSnapshot], regime: Regime,
-        disabled: Optional[set] = None,
+        disabled: Optional[set] = None, boundary: Optional[float] = None,
     ) -> list[dict]:
         """
         Raccoglie i segnali delle strategie attive nel regime corrente.
@@ -93,6 +97,17 @@ class Orchestrator:
             for strat in strategies:
                 if strat.name in disabled:
                     continue
+                # OGNI STRATEGIA SUL SUO OROLOGIO (22 set 2026, strategie native a
+                # 1 ora): una spec a 1h decide UNA volta per candela oraria, non
+                # quattro volte come se fosse a 15m — nel backtest e' valutata a
+                # ogni sua candela, e la parita' vuole lo stesso dal vivo.
+                # `boundary` e' l'apertura della candela del bot appena chiusa:
+                # se non cade su una chiusura della candela della strategia, si
+                # salta. Senza `boundary` (chiamate legacy) non si filtra.
+                if boundary is not None:
+                    _tf_s = _TF_SECS.get(getattr(strat, "timeframe", None) or "", 0)
+                    if _tf_s and int(boundary) % _tf_s != 0:
+                        continue
                 if not strat.is_active_in(coin_regime):
                     continue
                 if not self.adaptation.is_enabled(sym, strat.name):
@@ -177,13 +192,13 @@ class Orchestrator:
     # ------------------------------------------------------------------ #
     def decide_all(
         self, assets: dict[str, AssetSnapshot], regime: Regime,
-        disabled: Optional[set] = None,
+        disabled: Optional[set] = None, boundary: Optional[float] = None,
     ) -> list[OrchestratorDecision]:
         """PARITA' COL BACKTEST: ritorna UNA decisione per OGNI coin con un segnale
         valido (sopra soglia, peso>0), prendendo la strategia migliore per quella
         coin. Niente LLM, niente 'scegli il migliore globale': come il backtest che
         apre ogni segnale indipendentemente. Vincolo conto reale: 1 posizione/coin."""
-        signals = self.collect_signals(assets, regime, disabled=disabled)
+        signals = self.collect_signals(assets, regime, disabled=disabled, boundary=boundary)
         decisions: list[OrchestratorDecision] = []
         seen: set = set()
         for s in signals:  # ordinati per adjusted_confidence desc
