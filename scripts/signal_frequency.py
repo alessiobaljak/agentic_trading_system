@@ -119,7 +119,12 @@ def main() -> int:
     total = 0
     for n, sym in enumerate(coins, 1):
         try:
-            candles = load_candles(sym, interval=args.interval, start=start, allow_synthetic=False)
+            # `end` a DOMANI: il taglio della cache e' escluso a mezzanotte, quindi
+            # senza questo la sonda si fermava a ieri e non poteva rispondere a
+            # «e' normale che OGGI non abbia aperto niente?» (22 set 2026).
+            candles = load_candles(sym, interval=args.interval, start=start,
+                                   end=(date.today() + timedelta(days=1)).isoformat(),
+                                   allow_synthetic=False)
         except Exception as exc:  # noqa: BLE001
             print(f"  {sym}: candele non caricate ({exc})")
             continue
@@ -169,8 +174,11 @@ def main() -> int:
         per_giorno[datetime.fromtimestamp(apre, timezone.utc).strftime("%Y-%m-%d")] += 1
     if per_giorno:
         print("\nAPRIBILI giorno per giorno (UTC):")
+        oggi = date.today().isoformat()
+        per_giorno.setdefault(oggi, 0)      # oggi si stampa anche a zero: e' la domanda
         for giorno in sorted(per_giorno):
-            print(f"  {giorno}   {per_giorno[giorno]}")
+            nota = "   (oggi, parziale: fino all'ultima candela)" if giorno == oggi else ""
+            print(f"  {giorno}   {per_giorno[giorno]}{nota}")
         print("  Confronta gli ULTIMI giorni coi trade veri del paper: i primi della")
         print("  finestra usano le coppie validate di oggi su un registro che allora")
         print("  ne aveva meno, quindi sovrastimano.")

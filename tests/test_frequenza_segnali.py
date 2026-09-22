@@ -161,3 +161,18 @@ def test_anche_i_trade_veri_sono_ripartiti_per_giorno():
     from scripts import trade_stats
 
     assert "per giorno (UTC)" in inspect.getsource(trade_stats.main)
+
+
+
+def test_la_sonda_conta_anche_OGGI():
+    """22 set 2026: la tabella giorno per giorno si fermava a ieri, perche' il
+    taglio delle candele e' escluso a mezzanotte. Alla domanda «e' normale che
+    oggi non abbia aperto niente?» non poteva rispondere. Oggi si stampa sempre,
+    anche a zero: e' esattamente la riga che serve."""
+    import inspect
+
+    from scripts import signal_frequency as sf
+
+    src = inspect.getsource(sf.main)
+    assert "end=(date.today() + timedelta(days=1)).isoformat()" in src
+    assert "per_giorno.setdefault(oggi, 0)" in src
