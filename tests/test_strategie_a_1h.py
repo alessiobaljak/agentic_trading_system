@@ -69,7 +69,7 @@ def test_i_trade_portano_il_timeframe_della_strategia():
 def test_la_passata_a_1h_e_su_btc_e_non_puo_sforare():
     from scripts import optimize as o
 
-    assert o.DISCOVERY_EXTRA == "1h:BTCUSDT"
+    assert o.DISCOVERY_EXTRA == "1h:BTCUSDT,ETHUSDT,SOLUSDT,ADAUSDT,BCHUSDT"
     assert o.DISCOVERY_EXTRA_MAX_S <= 3600
     src = inspect.getsource(o.passata_extra)
     assert "timeout=DISCOVERY_EXTRA_MAX_S" in src and '"--interval", interval, "--symbols", coins' in src

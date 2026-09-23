@@ -919,7 +919,9 @@ def _segna_promozione(key: str, rec: dict, prima: int, adesso: float,
 # codice lancia la discovery a 1h su BTC come sottoprocesso, con un tempo
 # massimo che non puo' sforare la finestra. "1h:BTCUSDT" = un intervallo e le
 # coin, separati da virgola; vuoto = spenta.
-DISCOVERY_EXTRA = os.getenv("DISCOVERY_EXTRA", "1h:BTCUSDT")
+# 23 set: BTC a 1h costa 2 minuti a giro -> allargata a ETH, SOL, ADA, BCH
+# (richiesta del proprietario). Cinque coin: ~10 minuti dentro i 40 massimi.
+DISCOVERY_EXTRA = os.getenv("DISCOVERY_EXTRA", "1h:BTCUSDT,ETHUSDT,SOLUSDT,ADAUSDT,BCHUSDT")
 DISCOVERY_EXTRA_MAX_S = int(os.getenv("DISCOVERY_EXTRA_MAX_S", "2400"))
 
 
