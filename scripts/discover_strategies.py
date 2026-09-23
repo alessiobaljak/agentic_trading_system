@@ -34,7 +34,7 @@ from bot.strategies.generated import GeneratedStrategy
 from bot.ai.hypotheses import propose as ai_propose
 from bot.execution.exit_logic import SCALE_LADDER_CANDIDATES, ladder_from_mfe
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
-from bot.strategies.generator import generate_specs, mutate
+from bot.strategies.generator import generate_specs, mutate, varianti_da_referto
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
                               coin_in_maturazione, drifted_from_paper, judge_window,
                               publish_timeline, conferme_da_proteggere, scrivi_registro,
@@ -74,7 +74,14 @@ def firma_spec(spec: dict) -> str:
     adx = _tondo(float(spec.get("min_adx", 0) or 0))
     vol = round(float(spec.get("volume_mult", 0) or 0) * 2) / 2
     atr = float(spec.get("atr_mult_stop", 0) or 0)
-    return ";".join(feats) + f";adx={adx:g};vol={vol:g};atr={atr:g}"
+    firma = ";".join(feats) + f";adx={adx:g};vol={vol:g};atr={atr:g}"
+    # il LATO operato e' logica (23 set 2026, varianti dai referti): «solo long»
+    # e' una scommessa diversa dal genitore che opera entrambi i lati, altrimenti
+    # `scarta_gemelle` butterebbe via la variante prima ancora di provarla.
+    solo = str(spec.get("solo") or "").lower()
+    if solo in ("long", "short"):
+        firma += f";solo={solo}"
+    return firma
 
 
 def scarta_gemelle(specs: list[dict], existing: dict) -> tuple[list[dict], int]:
@@ -441,6 +448,90 @@ def candidate_ladders(scala_paper=None) -> tuple:
     if tuple(scala_paper) in {tuple(c) for c in SCALE_LADDER_CANDIDATES}:
         return SCALE_LADDER_CANDIDATES
     return SCALE_LADDER_CANDIDATES + (tuple(scala_paper),)
+
+
+#: quante varianti dai referti entrano in un giro. Sostituiscono altrettante
+#: casuali (come le ipotesi AI): il giro non si allunga, e dieci e' gia' piu'
+#: delle ipotesi che il referto puo' formulare con i ~40 trade di oggi.
+REFERTI_VARIANTI_MAX = int(os.getenv("DISCOVERY_REFERTI_MAX", "10"))
+
+
+def varianti_dai_referti(fb, existing: dict, interval: str,
+                         limit: int = REFERTI_VARIANTI_MAX) -> list[dict]:
+    """Le VARIANTI che il paper propone, pronte per il gate (backlog B8).
+
+    Il bot scrive in `learning/referti` le ipotesi ricavate dai post-mortem dei
+    trade chiusi, con regole dichiarate prima (short 4/4 persi -> «solo long»;
+    stop largo in due referti -> «stop piu' stretto»; ...). Qui ogni ipotesi su
+    una spec NOTA e dello stesso timeframe diventa una spec figlia, con un solo
+    cambiamento e un id suo, e si mette in coda alle candidate del giro: il gate
+    la giudica sulla storia, tre conferme piu' holdout, come tutte le altre. Il
+    paper propone, non decide — e' la stessa regola della scala dei TP.
+
+    Si scartano prima le figlie gia' note per id o per firma (`scarta_gemelle`
+    le toglierebbe comunque, ma qui sprecherebbero il tetto), e si tiene una
+    figlia per id.
+
+    Fail-open: senza documento, senza Firebase o con un documento malformato si
+    torna a lista vuota e il giro e' identico a prima, con una riga di log.
+    """
+    try:
+        doc = fb.get_doc("learning", "referti") or {}
+        ipotesi = doc.get("ipotesi") or []
+    except Exception as exc:  # noqa: BLE001
+        print(f"[discover] referti del paper non disponibili ({str(exc)[:80]}) "
+              f"-> nessuna variante")
+        return []
+    if not ipotesi:
+        return []
+    tf_bot = settings.ORCHESTRATOR_TIMEFRAME
+    firme_note = {firma_spec(sp) for sp in existing.values() if isinstance(sp, dict)}
+    out: list[dict] = []
+    visti: set[str] = set()
+    tagliate = 0
+    for ip in ipotesi:
+        if not isinstance(ip, dict):
+            continue
+        # L'id del genitore dev'essere una stringa: con una lista o un dict al
+        # suo posto `existing.get` esplodeva (TypeError, non hashabile) e UN
+        # documento storto fermava l'intero giro della discovery — il contrario
+        # del fail-open promesso sopra (rilievo dei revisori, 23 set 2026).
+        gid = ip.get("strategia")
+        if not isinstance(gid, str):
+            continue
+        genitore = existing.get(gid)
+        if not isinstance(genitore, dict):
+            continue
+        if (genitore.get("timeframe") or tf_bot) != interval:
+            continue
+        try:
+            figlia = varianti_da_referto(genitore, str(ip.get("tipo") or ""))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[discover] variante {ip.get('strategia')} ({ip.get('tipo')}) "
+                  f"non costruibile: {str(exc)[:80]}")
+            continue
+        if figlia is None:
+            continue
+        fid = figlia["id"]
+        if fid in existing or fid in visti:
+            continue
+        fm = firma_spec(figlia)
+        if fm in firme_note:
+            continue
+        if len(out) >= limit:
+            tagliate += 1
+            continue
+        visti.add(fid)
+        firme_note.add(fm)
+        out.append(figlia)
+    if out:
+        riga = " · ".join(f"{v['genitore']} -> {v['id']} ({v['ipotesi']})" for v in out[:6])
+        print(f"[discover] {len(out)} varianti dai referti del paper (B8): {riga}"
+              f"{' ...' if len(out) > 6 else ''}")
+    if tagliate:
+        print(f"[discover] {tagliate} varianti dai referti oltre il tetto di {limit} "
+              f"(DISCOVERY_REFERTI_MAX): restano per il prossimo giro")
+    return out
 
 
 def _disc_init(args, end: str, specs: list, scala_paper=None) -> None:
@@ -975,8 +1066,14 @@ def main() -> int:
             fb.set_doc("ai_hypotheses", "last", dict(ULTIMO_ESITO))
         except Exception as exc:  # noqa: BLE001
             print(f"[ai-hypotheses] esito non salvato ({str(exc)[:80]})")
-    specs = ai_specs + generate_specs(max(0, args.generate - len(ai_specs)), seed=args.seed)
+    # 1b) VARIANTI DAI REFERTI (B8): le spec note servono PRIMA, perche' una
+    #     variante nasce da una spec che il bot ha gia' operato. Come le ipotesi
+    #     AI, sostituiscono una quota di casuali: il giro non si allunga.
     existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+    varianti = varianti_dai_referti(fb, existing, args.interval)
+    specs = (ai_specs + varianti
+             + generate_specs(max(0, args.generate - len(ai_specs) - len(varianti)),
+                              seed=args.seed))
     reg = fb.get_doc("strategy_registry", "validated") or {}
     _ora = time.time()
     _completa = (not REEVAL_DAILY) or giro_giornaliero(_ora) or bool(args.symbols)

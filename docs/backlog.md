@@ -14,7 +14,8 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 
 **Due vincoli che valgono per quasi tutto qui sotto:**
 
-1. **Niente cambia le uscite prima dei 40 trade chiusi.** Siamo a 15. Cambiare
+1. **Niente cambia le uscite prima dei 40 trade chiusi.** Al 23 set sono 40, ma la
+   misura pulita è ripartita la sera del 21 (freno, cooldown, tetto per coin). Cambiare
    stop, obiettivi o size a metà misurazione rende i primi trade non confrontabili
    coi successivi, e il verdetto che aspettiamo da tre settimane sparisce.
 2. **Tutto passa dal GATE, mai solo dal paper.** Una modifica applicata al paper e
@@ -211,7 +212,7 @@ l'autopsia. Ci sono ~40 quasi-passaggi a ogni giro che nessuno legge.
 RICERCA, non su una strategia.
 
 ### B4. Un referto su ogni trade chiuso
-**Stato:** **parte meccanica FATTA il 23 set** — `bot/risk/setup_check.py`: alla chiusura ogni trade riceve un referto (`post_mortem`: classe della morte, stop largo, lock mai armato, controtrend, verdetto) scritto nel documento del trade e stampato da `trades`; la stessa aritmetica blocca PRIMA i setup con stop oltre `MAX_STOP_PCT` (6%) nel gate e nel bot. Resta la lettura aggregata dall'AI, a 100+ trade.
+**Stato:** **parte meccanica FATTA il 23 set** — `bot/risk/setup_check.py`: alla chiusura ogni trade riceve un referto (`post_mortem`: classe della morte, stop largo, lock mai armato, controtrend, verdetto) scritto nel documento del trade e stampato da `trades`; la stessa aritmetica blocca PRIMA i setup con stop oltre `MAX_STOP_PCT` (6%) nel gate e nel bot. **Aggregazione FATTA il 23 set pomeriggio** — `bot/learning/referti.py`: il bot somma i referti per strategia, coin e direzione e scrive `learning/referti` a ogni refresh dei pesi, con le IPOTESI che scattano da regole dichiarate prima (vedi F1). Resta la lettura narrativa dall'AI, a 100+ trade.
 
 Ogni trade registra indicatori all'entrata, regime, confidenza, dove è arrivato il
 prezzo, perché è uscito. **Nessuno li legge.** Con 15 trade è aneddoto; con 200
@@ -338,7 +339,9 @@ nemmeno un id CoinGecko**, e soprattutto il backtest consuma **solo candele**
 ---
 
 ### B8. Una strategia generata non può essere RITARATA: può solo morire
-**Stato:** aperto · **la più importante di tutto il backlog** · emerso 21 set
+**Stato:** **prima metà FATTA il 23 set pomeriggio** — le VARIANTI DAI REFERTI: quando i referti del paper scattano su una regola dichiarata (short tutte perse → «solo long»; perdite controtrend o mai andate a favore → «con conferma a 1 ora»; stop larghi → «stop più stretto»), la discovery genera la variante della STESSA spec (`bot/strategies/generator.py::varianti_da_referto`, `scripts/discover_strategies.py::varianti_dai_referti`) e la mette nel gate al posto di altrettante candidate casuali: stesse 3 conferme, stesso holdout, il giro non si allunga. Il paper propone, la storia decide. La variante porta `genitore` e `origine=referto`, così si vede da dove viene. **Seconda metà aperta:** l'intorno numerico delle soglie (RSI 30→25, ADX 22→18) sulle coppie in `watch`/`drift`, quando il cronometro del giro sta sotto 1h30.
+
+_Emerso il 21 set; testo originale qui sotto._
 
 Osservazione del proprietario: *«magari la strategia è corretta ma le regole di
 ingresso no, e vanno riadattate per quella strategia»*. È esatta, e oggi il sistema
@@ -468,7 +471,7 @@ contro un obiettivo del 35% che con questo tasso di passaggio non arriverà.
 ## F. Apprendimento — l'obiettivo finale
 
 ### F1. Il bot non sceglie quale trade aprire: apre tutti i segnali validi
-**Stato:** aperto · **è l'obiettivo finale del proprietario** · scritto il 23 set
+**Stato:** aperto · **è l'obiettivo finale del proprietario** · scritto il 23 set · **primo pezzo FATTO il 23 set pomeriggio** (vedi «Cosa è stato fatto» in fondo alla voce)
 
 Obiettivo dichiarato: *«che la scelta delle strategie e delle monete sia talmente
 avanzata da scegliere praticamente sempre quella corretta che ci porti in
@@ -504,6 +507,46 @@ paper da prova in training set — è BIRBUSDT. Le tre strade oneste, in ordine:
 **A 37 trade, col paper in perdita e le short che non reggono, il profitto oggi
 viene da segnali migliori (gate), non dallo scegliere fra segnali.** Il selettore ha
 senso quando c'è qualcosa di buono fra cui scegliere.
+
+**Cosa è stato fatto il 23 set pomeriggio** (richiesta: «il sistema deve imparare
+da tutto quello che fa … e adattarsi tutti i giorni»; 40 trade, 6 giornate su 8 in
+perdita, −50,88 realizzato):
+
+| pezzo | dove | cosa fa | cosa NON fa |
+|---|---|---|---|
+| referti aggregati | `bot/learning/referti.py` → `learning/referti` | somma i referti per strategia, coin, direzione; fa scattare IPOTESI da regole scritte prima (3 short tutte perse → solo long; 3 perdite controtrend → conferma a 1 ora; 2 stop larghi → stop stretto) | non cambia nessun parametro |
+| varianti nel gate (B8) | `generator.py::varianti_da_referto`, `discover_strategies.py::varianti_dai_referti` | ogni ipotesi diventa una variante della stessa spec messa nel gate (3 conferme + holdout) al posto di candidate casuali | non entra in paper senza passare il gate; non allunga il giro |
+| freno di serie | `drift.py::serie_perdite`, `STREAK_BRAKE_*` | 4 perdite di fila su una strategia → size e leva a metà fino al primo guadagno | non spegne, non tara: frena e basta |
+
+Il ciclo è: referto → ipotesi (regola dichiarata) → variante nel gate → se passa,
+opera. Il paper non tara nulla da solo. **Il selettore validato (punto 2) e la
+lettura AI dei referti (B4) restano aperti**: servono 100+ trade.
+
+### F2. Il gate a due livelli: «candidata» in paper a size ridotta, «validata» a size piena
+**Stato:** proposta del 23 set pomeriggio · **aspetta il sì del proprietario** · non si tocca il gate senza
+
+Domanda del proprietario: *«se una strategia in backtest funziona, poi sarà il paper
+a validarla nelle settimane successive: possiamo rivedere le tre settimane del gate?»*
+
+Quello che le 3 conferme fanno davvero: **non servono al paper, servono contro i
+falsi positivi**. Passa lo 0,3% delle candidate; con una sola finestra passerebbero
+molte strategie fortunate. E non sono tre settimane fisse: 3 pass con almeno 7 giorni
+di dati nuovi fra uno e l'altro (`NEW_DATA_MIN_HOURS=168`) = minimo 14 giorni.
+
+Perché «conferma il paper» da solo non basta: a 4-5 trade al giorno su 59 coppie,
+una coppia arriva a 8 trade in settimane — più lento del gate, non più veloce. E se
+il criterio si decide dopo aver visto i risultati, è BIRBUSDT al contrario.
+
+**Proposta:** due livelli, senza accorciare nulla.
+* **candidata** (1 pass + holdout): entra in paper subito, a un quarto della size, e
+  continua a raccogliere conferme nel gate;
+* **validata** (3 pass): size piena, come oggi;
+* regole d'uscita scritte PRIMA: deriva confermata o bocciatura nel gate = fuori;
+  statistiche del paper separate per livello.
+
+Si guadagna: più coin in paper e prima (oggi 27 su 165), più dati per il cervello,
+falsi positivi limitati dalla size. Costa: più coppie da rivalutare nel giro (il
+cronometro decide), paper più rumoroso se i due livelli non restano separati.
 
 ## D. Infrastruttura
 

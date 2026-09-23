@@ -169,4 +169,83 @@ def mutate(spec: dict, seed: int = 0) -> dict:
     elif choice < 0.7 and len(kinds) > 1:
         kinds.pop(rng.randrange(len(kinds)))
     child = _build_spec(kinds, rng)
+    # il lato operato (variante dai referti, 23 set 2026) e' parte dell'idea:
+    # mutare «attorno a» una spec solo-long deve restare solo-long, altrimenti
+    # la figlia riapre il lato che il paper aveva visto perdere sempre
+    if spec.get("solo") in ("long", "short"):
+        child["solo"] = spec["solo"]
+        child["id"] = spec_id(child)
     return child
+
+
+# --------------------------------------------------------------------------- #
+# LE VARIANTI DAI REFERTI DEL PAPER (23 set 2026, backlog B8)                  #
+#                                                                              #
+# «Una strategia generata non puo' essere ritarata: puo' solo morire.» Il      #
+# proprietario ha chiesto che il sistema impari da ogni trade; la strada       #
+# onesta NON e' spostare una soglia guardando i risultati del paper (il paper  #
+# e' la prova, non il training set: BIRBUSDT, PF 1,51 promesso e 0,16 vissuto).#
+# La strada e': il paper PROPONE una variante della stessa idea, e il GATE la  #
+# prova sulla storia come qualunque candidata, tre conferme piu' holdout.      #
+#                                                                              #
+# Il documento `learning/referti` raccoglie i post-mortem dei trade chiusi e   #
+# formula ipotesi con regole dichiarate PRIMA (solo_long, solo_short,          #
+# conferma_trend, stop_stretto). Qui ogni ipotesi diventa una spec figlia:     #
+# stessa logica, un solo cambiamento, nuovo id. Il gate decide se vale.        #
+# --------------------------------------------------------------------------- #
+#: i tipi di ipotesi che il referto puo' formulare e che qui sanno diventare spec
+TIPI_VARIANTE = ("solo_long", "solo_short", "conferma_trend", "stop_stretto")
+
+
+def varianti_da_referto(spec: dict, tipo: str) -> Optional[dict]:
+    """La spec FIGLIA di `spec` per l'ipotesi `tipo`, o None se non ha senso.
+
+    Funzione pura: non legge Firebase, non tira a caso. Cambia UNA cosa sola,
+    cosi' se la figlia passa il gate e il genitore no, si sa esattamente cosa
+    ha fatto la differenza.
+
+      * solo_long / solo_short: la stessa spec che opera un lato solo. None se
+        gia' lo fa.
+      * conferma_trend: aggiunge la conferma a 1 ora (`htf_confirm`). None se
+        la spec guarda gia' l'ora (conferma o fade: sarebbe incoerente). Puo'
+        arrivare a 4 feature: la conferma e' un filtro, non un segnale nuovo.
+      * stop_stretto: lo stop al gradino sotto nella lista `_ATR_STOP`. None se
+        e' gia' al minimo; un valore fuori lista scende al gradino piu' grande
+        sotto di lui.
+
+    La figlia perde l'id del genitore e ne riceve uno suo (`spec_id`, che
+    include `solo`), conserva il timeframe, e porta scritto da dove viene:
+    origine/genitore/ipotesi. Sono etichette, non logica: non entrano nell'id.
+    """
+    if not isinstance(spec, dict) or tipo not in TIPI_VARIANTE:
+        return None
+    figlia = {k: v for k, v in spec.items() if k != "id"}
+    figlia["features"] = [dict(f) for f in spec.get("features", []) if isinstance(f, dict)]
+
+    if tipo in ("solo_long", "solo_short"):
+        lato = tipo.split("_", 1)[1]
+        if str(spec.get("solo") or "").lower() == lato:
+            return None
+        figlia["solo"] = lato
+    elif tipo == "conferma_trend":
+        kinds = [f.get("kind") for f in figlia["features"]]
+        if "htf_confirm" in kinds or "htf_fade" in kinds:
+            return None
+        if not _coherent(kinds + ["htf_confirm"]):
+            return None
+        figlia["features"].append({"kind": "htf_confirm"})
+    elif tipo == "stop_stretto":
+        try:
+            attuale = float(spec.get("atr_mult_stop"))
+        except (TypeError, ValueError):
+            return None
+        sotto = [g for g in _ATR_STOP if g < attuale]
+        if not sotto:
+            return None
+        figlia["atr_mult_stop"] = max(sotto)
+
+    figlia["origine"] = "referto"
+    figlia["genitore"] = spec.get("id")
+    figlia["ipotesi"] = tipo
+    figlia["id"] = spec_id(figlia)
+    return figlia

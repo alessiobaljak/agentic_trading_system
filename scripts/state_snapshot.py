@@ -333,9 +333,20 @@ def _drift_section(fb) -> list[str]:
         doc = fb.get_doc("drift", "current") or {}
     except Exception as exc:  # noqa: BLE001
         return ["## Deriva paper vs gate", f"_non leggibile: {exc}_", ""]
+    # il FRENO DI SERIE (23 set 2026): chi sta perdendo di fila adesso. Va
+    # mostrato anche quando non c'e' ancora nessun verdetto di deriva, perche'
+    # matura in giorni e non ha bisogno di una promessa del gate.
+    from bot.config import settings as _cfg
+    serie = [(k, int(v)) for k, v in (doc.get("serie") or {}).items()
+             if isinstance(v, (int, float)) and v >= _cfg.STREAK_BRAKE_LOSSES]
+    serie.sort(key=lambda kv: (-kv[1], kv[0]))
+    riga_serie = (["- **freno di serie** (size x%g): " % _cfg.STREAK_BRAKE_FACTOR
+                   + ", ".join(f"**{k}** ({v} perdite di fila)" for k, v in serie), ""]
+                  if serie else [])
     if not doc or not (doc.get("pairs") or doc.get("strategies")):
         return ["## Deriva paper vs gate",
-                "_nessun verdetto ancora: servono trade chiusi su coppie validate._", ""]
+                "_nessun verdetto ancora: servono trade chiusi su coppie validate._", ""
+                ] + riga_serie
     out = ["## Deriva paper vs gate",
            "_il gate promette sulla storia, il paper misura il presente. `drift` = "
            "promessa contraddetta -> size/leva frenate subito e fallimento al gate "
@@ -361,6 +372,7 @@ def _drift_section(fb) -> list[str]:
         out += ["- strategie in deriva: "
                 + ", ".join(f"**{k}** ({v['trades']} trade, PF {v['live_pf']})"
                             for k, v in strat), ""]
+    out += riga_serie
     return out
 
 

@@ -1209,6 +1209,27 @@ class TradingBot:
         except Exception as exc:  # noqa: BLE001
             print(f"[drift] calcolo saltato: {exc}")
 
+    def _publish_referti(self, trades: list[dict]) -> None:
+        """Aggrega i referti (post_mortem) dei trade chiusi per strategia, coin e
+        direzione e pubblica su `learning/referti` le IPOTESI con regole
+        dichiarate (bot/learning/referti.py). Il paper qui PROPONE soltanto: la
+        discovery legge il documento e prova le ipotesi come varianti sulla
+        storia, nel gate. Nessun parametro cambia da questo metodo (backlog F1/B8:
+        il paper non e' un training set). Chiesto dal proprietario il 23 set 2026
+        dopo 8 giorni di paper con 6 chiusi in perdita: «deve imparare e
+        adattarsi tutti i giorni», ma con criterio."""
+        try:
+            from bot.learning.referti import aggrega_referti, riassunto_ipotesi
+            doc = aggrega_referti(trades)
+            doc["updated_at"] = time.time()
+            self.fb.set_doc("learning", "referti", doc)
+            righe = riassunto_ipotesi(doc)
+            if righe:
+                print(f"[referti] {len(righe)} ipotesi dai referti del paper -> varianti "
+                      f"al prossimo giro del gate: " + " | ".join(righe))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[referti] calcolo saltato: {exc}")
+
     def _publish_calibration(self, trades: list[dict]) -> None:
         """Verifica che la confidenza dei segnali predica l'esito e pubblica il
         verdetto su `calibration/current`.
@@ -1252,6 +1273,12 @@ class TradingBot:
                 self._publish_calibration(trades)
             except Exception as exc:  # noqa: BLE001
                 print(f"[calibrazione] pubblicazione saltata: {exc}")
+            # REFERTI aggregati -> ipotesi per il gate: diagnostica, in un try suo,
+            # non deve fermare i pesi. Il paper propone, il gate decide.
+            try:
+                self._publish_referti(trades)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[referti] pubblicazione saltata: {exc}")
             # B2 — il TRAILING impara: keep del profit-lock per-strategia dai verdetti
             # (premature/protected + rumore vs inversione). Campione insufficiente ->
             # mappa senza quella strategia -> default globale validato dal gate.

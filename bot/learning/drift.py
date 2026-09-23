@@ -28,6 +28,18 @@ DUE SEGNALI INDIPENDENTI
   2. RAGGIUNGIBILITA' DEI TP (mfe_r): se il prezzo non arriva mai nemmeno al primo
      gradino, la scala e' un desiderio — e lo si sa da UN numero per trade, senza
      aspettare esiti completi. E' il segnale piu' efficiente che abbiamo.
+
+IL FRENO DI SERIE (size, non veto)
+Le soglie sopra chiedono campione: 20 trade per strategia, 40 per il globale. Il
+23 set 2026 il paper aveva 40 trade in 8 giorni, 6 giornate su 8 in perdita e una
+strategia con 4 trade e 4 perdite — e nessun freno l'aveva ancora toccata. Per
+"adattarsi ogni giorno" serve un segnale che maturi in giorni: la SERIE di
+perdite consecutive alla fine della sequenza di ogni strategia (su tutte le
+coin). A STREAK_BRAKE_LOSSES perdite di fila la size si moltiplica per
+STREAK_BRAKE_FACTOR finche' non arriva un trade in guadagno, che azzera la serie.
+Non e' un verdetto e non tara nulla: la soglia e' dichiarata prima (4, ragionato:
+con win rate 45% capita ~9% delle volte per sequenza), il freno e' solo sulla
+size, e rimuovere resta compito del gate sulla storia.
 """
 from __future__ import annotations
 
@@ -98,13 +110,51 @@ def _bucket(trades: list[dict], expected_pf: float, params: dict | None,
     }
 
 
+def _ts_sicuro(v) -> float:
+    try:
+        return float(v or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def serie_perdite(trades: Iterable[dict]) -> dict[str, int]:
+    """Per strategia: quante perdite CONSECUTIVE chiudono la sua sequenza di trade.
+
+    La sequenza e' ordinata per exit_ts (assente o illeggibile -> 0: l'ordine
+    e' stabile, quindi i trade senza data restano nell'ordine in cui arrivano, e
+    una data storta non fa saltare l'intero documento di deriva). Un pnl >= 0
+    interrompe la serie: un trade in pari basta a rimetterla a zero, perche' la
+    domanda e' "sta perdendo ADESSO", non "quanto ha perso". Gli esiti esterni
+    (manual, kill switch, circuit breaker) non contano: non li ha decisi la
+    strategia. Strategie senza trade utili non compaiono.
+
+    La serie si calcola sui trade che riceve: nel bot sono quelli degli ultimi
+    30 giorni (refresh_weights), quindi una strategia ferma da un mese esce dal
+    freno anche senza un guadagno — senza trade non c'e' size da frenare."""
+    by_strat: dict[str, list[dict]] = defaultdict(list)
+    for t in trades:
+        if str(t.get("exit_reason", "")) in _EXTERNAL:
+            continue
+        by_strat[str(t.get("strategy", "?"))].append(t)
+    out: dict[str, int] = {}
+    for strat, ts in by_strat.items():
+        ordered = sorted(ts, key=lambda t: _ts_sicuro(t.get("exit_ts")))
+        n = 0
+        for t in ordered:
+            n = n + 1 if float(t.get("pnl", 0) or 0) < 0 else 0
+        out[strat] = n
+    return out
+
+
 def compute_drift(trades: Iterable[dict], pairs: dict | None = None) -> dict:
     """Confronta il vissuto (trade paper) con la promessa del gate (registro).
 
     `pairs`: mappa "SYMBOL|strategy" -> record del registro (last_pf, last_params).
-    Ritorna {"pairs": {...}, "strategies": {...}, "global": {...}} con un verdetto
-    per ciascuna granularita'. Coppie senza promessa nel registro vengono saltate:
-    senza un atteso non c'e' niente da falsificare."""
+    Ritorna {"pairs": {...}, "strategies": {...}, "global": {...}, "serie": {...}}
+    con un verdetto per ciascuna granularita'. Coppie senza promessa nel registro
+    vengono saltate: senza un atteso non c'e' niente da falsificare. "serie"
+    invece copre TUTTE le strategie con trade, anche senza promessa: il freno di
+    serie non confronta con un atteso, guarda solo se sta perdendo di fila."""
     pairs = pairs or {}
     rows = [t for t in trades if str(t.get("exit_reason", "")) not in _EXTERNAL]
 
@@ -139,7 +189,8 @@ def compute_drift(trades: Iterable[dict], pairs: dict | None = None) -> dict:
     all_exp = [pf for v in exp_by_strat.values() for pf in v]
     glob = _bucket(rows, (sum(all_exp) / len(all_exp)) if all_exp else 0.0,
                    None, settings.DRIFT_MIN_TRADES_GLOBAL) if rows else {}
-    return {"pairs": out_pairs, "strategies": out_strats, "global": glob}
+    return {"pairs": out_pairs, "strategies": out_strats, "global": glob,
+            "serie": serie_perdite(rows)}
 
 
 def weight_factor(drift_doc: dict | None, symbol: str, strategy: str) -> float:
@@ -154,7 +205,10 @@ def weight_factor(drift_doc: dict | None, symbol: str, strategy: str) -> float:
     Il livello GLOBALE e' quello che matura per primo (le soglie per coppia
     richiedono 8 trade e i trade si spargono su decine di coppie), ed e' anche il
     piu' solido perche' e' l'unico con abbastanza campione: ignorarlo lasciava il
-    bot a size piena mentre il suo stesso rilevatore aveva gia' emesso 'drift'."""
+    bot a size piena mentre il suo stesso rilevatore aveva gia' emesso 'drift'.
+
+    Il FRENO DI SERIE si somma agli altri: matura in giorni invece che in
+    settimane, e DRIFT_WEIGHT_FLOOR resta il pavimento di tutto."""
     if not settings.DRIFT_ENABLED or not drift_doc:
         return 1.0
     f = 1.0
@@ -164,7 +218,40 @@ def weight_factor(drift_doc: dict | None, symbol: str, strategy: str) -> float:
         f *= settings.DRIFT_WEIGHT_FACTOR
     if (drift_doc.get("global") or {}).get("verdict") == DRIFT:
         f *= settings.DRIFT_WEIGHT_FACTOR
+    if _serie_attiva(drift_doc, strategy):
+        f *= settings.STREAK_BRAKE_FACTOR
     return max(settings.DRIFT_WEIGHT_FLOOR, f)
+
+
+def _serie_attiva(drift_doc: dict, strategy: str) -> bool:
+    """True se la strategia ha chiuso almeno STREAK_BRAKE_LOSSES perdite di fila."""
+    if not settings.STREAK_BRAKE_ENABLED:
+        return False
+    try:
+        n = int((drift_doc.get("serie") or {}).get(strategy, 0) or 0)
+    except (TypeError, ValueError):
+        return False
+    return n >= settings.STREAK_BRAKE_LOSSES
+
+
+def motivi_freno(drift_doc: dict | None, symbol: str, strategy: str) -> list[str]:
+    """I motivi per cui weight_factor sta frenando questa coppia, in parole: vanno
+    nella nota del trade, cosi' dal registro si legge PERCHE' la size era ridotta
+    invece di dover ricostruire il documento di deriva di quel momento. Lista
+    vuota = nessun freno (o funzione disattivata), coerente con weight_factor."""
+    if not settings.DRIFT_ENABLED or not drift_doc:
+        return []
+    motivi: list[str] = []
+    if (drift_doc.get("pairs") or {}).get(f"{symbol}|{strategy}", {}).get("verdict") == DRIFT:
+        motivi.append("deriva coppia")
+    if (drift_doc.get("strategies") or {}).get(strategy, {}).get("verdict") == DRIFT:
+        motivi.append("deriva strategia")
+    if (drift_doc.get("global") or {}).get("verdict") == DRIFT:
+        motivi.append("deriva globale")
+    if _serie_attiva(drift_doc, strategy):
+        n = int((drift_doc.get("serie") or {}).get(strategy, 0) or 0)
+        motivi.append(f"serie {n} perdite")
+    return motivi
 
 
 def drifted_keys(drift_doc: dict | None) -> list[str]:

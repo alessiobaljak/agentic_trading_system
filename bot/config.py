@@ -396,6 +396,21 @@ class Settings:
     # spegne: rimuovere spetta al gate, che decide sulla storia, non su 8 trade.
     DRIFT_WEIGHT_FACTOR: float = float(os.getenv("DRIFT_WEIGHT_FACTOR", "0.5"))
     DRIFT_WEIGHT_FLOOR: float = float(os.getenv("DRIFT_WEIGHT_FLOOR", "0.25"))
+    # FRENO DI SERIE: la deriva per strategia scatta a 20 trade e i pesi a 50, ma
+    # il 23 set 2026 il paper aveva 40 trade in 8 giorni (6 giornate su 8 in
+    # perdita) e una strategia con 4 trade, 4 perdite: nessun freno l'aveva ancora
+    # toccata. Qui il freno arriva PRIMA: quando una strategia (su tutte le coin)
+    # chiude STREAK_BRAKE_LOSSES trade in perdita di fila, size e leva si
+    # dimezzano finche' non arriva un trade in guadagno. Frena, non spegne:
+    # rimuovere spetta al gate, sulla storia. Il 4 e' RAGIONATO, non misurato sul
+    # paper: con un win rate del 45% quattro perdite di fila capitano ~9% delle
+    # volte per sequenza (0.55^4), abbastanza raro da non frenare il rumore ma
+    # abbastanza presto da contare in giorni. Regola dichiarata prima dei dati.
+    # Richiede DRIFT_ENABLED=true: la serie la calcola e pubblica il rilevatore
+    # di deriva (doc `drift/current`, chiave "serie").
+    STREAK_BRAKE_ENABLED: bool = os.getenv("STREAK_BRAKE_ENABLED", "true").lower() == "true"
+    STREAK_BRAKE_LOSSES: int = int(os.getenv("STREAK_BRAKE_LOSSES", "4"))
+    STREAK_BRAKE_FACTOR: float = float(os.getenv("STREAK_BRAKE_FACTOR", "0.5"))
 
     # ---- CALIBRAZIONE DELLA CONFIDENZA ----
     # allocation() modula size e leva sulla confidenza del segnale, ma nessuno

@@ -192,16 +192,19 @@ class AdaptationEngine:
         note = (f"alloc: convinzione x{conf_mult:.2f}"
                 f"{' (calibr. x%.2f)' % _trust if _trust < 1.0 else ''} · learning "
                 f"{'x%.2f' % learn_mult if w is not None else 'neutro (nessun dato)'}")
-        # DERIVA: se il vissuto contraddice la promessa del gate si frena SUBITO,
-        # senza attendere la rivalidazione. Applicato DOPO i cap: e' una riduzione,
-        # non puo' mai aumentare l'esposizione.
+        # FRENO: se il vissuto contraddice la promessa del gate (deriva) o la
+        # strategia sta perdendo di fila (serie) si frena SUBITO, senza attendere
+        # la rivalidazione. Applicato DOPO i cap: e' una riduzione, non puo' mai
+        # aumentare l'esposizione. La nota elenca i motivi, cosi' dal trade si
+        # legge PERCHE' la size era ridotta.
         if drift_key is not None:
-            from bot.learning.drift import weight_factor
+            from bot.learning.drift import motivi_freno, weight_factor
             f = weight_factor(self._drift, drift_key[0], drift_key[1])
             if f < 1.0:
                 risk_mult *= f
                 lev_mult = max(0.5, lev_mult * (f ** 0.5))
-                note += f" · DERIVA x{f:.2f}"
+                motivi = motivi_freno(self._drift, drift_key[0], drift_key[1])
+                note += f" · FRENO x{f:.2f} ({', '.join(motivi)})"
         return risk_mult, lev_mult, note
 
     # ------------------------------------------------------------------ #

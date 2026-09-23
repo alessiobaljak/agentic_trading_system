@@ -207,15 +207,23 @@ def main() -> int:
 
     print_direction_report(direction_report(trades))
 
-    # ---- I REFERTI (post_mortem) degli ultimi trade in perdita ------------------
-    # Scritti dal bot alla chiusura (bot/risk/setup_check.py). Qui si stampano e
-    # si contano per rilievo: e' il conteggio che dice cosa correggere, non il
-    # singolo caso — «stop largo» x N vale una regola, x 1 vale un'occhiata.
-    con_referto = [t for t in trades if isinstance(t.get("post_mortem"), dict)]
+    # ---- I REFERTI (post_mortem) aggregati -------------------------------------
+    # Scritti dal bot alla chiusura (bot/risk/setup_check.py), aggregati da
+    # bot/learning/referti.py (stesso documento che il bot pubblica su Firestore
+    # `learning/referti` e che la discovery legge). E' il conteggio che dice cosa
+    # correggere, non il singolo caso — «stop largo» x N vale una regola, x 1
+    # vale un'occhiata. Le IPOTESI qui sotto sono proposte del paper: le prova il
+    # gate sulla storia. Nessun parametro cambia da questo script.
+    from bot.learning.referti import (ESITI_ESTERNI, MIN_CAMPIONE, MIN_STOP_LARGO,
+                                      aggrega_referti, riassunto_ipotesi)
+    doc = aggrega_referti(trades)
+    con_referto = [t for t in trades if isinstance(t.get("post_mortem"), dict)
+                   and str(t.get("exit_reason", "")) not in ESITI_ESTERNI]
     persi = [t for t in con_referto if float(t.get("pnl", 0) or 0) < 0]
     if con_referto:
-        print(f"\nREFERTI (post_mortem) sui trade chiusi: {len(con_referto)} "
-              f"({len(persi)} in perdita)")
+        print(f"\nREFERTI (post_mortem) sui trade chiusi: {doc['n_con_referto']} "
+              f"({doc['n_persi_con_referto']} in perdita; esclusi gli esiti "
+              f"manual/kill_switch/circuit_breaker)")
         conta = defaultdict(int)
         for t in persi:
             pm = t["post_mortem"]
@@ -229,13 +237,59 @@ def main() -> int:
                 conta["controtrend"] += 1
         for k, v in sorted(conta.items(), key=lambda kv: -kv[1]):
             print(f"  {k:<24} x{v}")
+        # le prime 8 strategie per numero di perdite: i rilievi sono contati SOLO
+        # sui trade in perdita con referto, n/vinti/persi/PnL su tutti i trade
+        righe = sorted(doc["per_strategia"].items(),
+                       key=lambda kv: (-kv[1]["persi"], kv[0]))[:8]
+        if righe:
+            print("\n  PER STRATEGIA (trade in perdita con referto):")
+            print(f"  {'strategia':<14} {'n':>3} {'vinti':>5} {'persi':>5} {'PnL':>8}  "
+                  f"{'ingr/usc/prot':>13} {'stop largo':>10} {'lock mai':>8} {'controtrend':>11}")
+            for gid, b in righe:
+                print(f"  {gid:<14} {b['n']:>3} {b['vinti']:>5} {b['persi']:>5} {b['pnl']:>8.2f}  "
+                      f"{b['ingresso']:>4}/{b['uscita']:>3}/{b['protezione']:>4} "
+                      f"{b['stop_largo']:>10} {b['lock_mai']:>8} {b['controtrend']:>11}")
         print("  ultimi referti in perdita:")
         for t in sorted(persi, key=lambda t: float(t.get("exit_ts") or 0))[-6:]:
             print(f"   - {t.get('symbol')} {t.get('strategy')} {t.get('direction')} "
                   f"{float(t.get('pnl', 0) or 0):+.2f}: {t['post_mortem'].get('verdetto')}")
     else:
-        print("\nREFERTI: nessun trade porta ancora `post_mortem` (si scrive sui trade "
-              "chiusi DOPO il rilascio del 23 set)")
+        esterni = sum(1 for t in trades if isinstance(t.get("post_mortem"), dict)
+                      and str(t.get("exit_reason", "")) in ESITI_ESTERNI)
+        if esterni:
+            print(f"\nREFERTI: {esterni} referti presenti ma tutti su esiti esterni "
+                  f"(manual/kill_switch/circuit_breaker): esclusi dai conteggi")
+        else:
+            print("\nREFERTI: nessun trade porta ancora `post_mortem` (si scrive sui "
+                  "trade chiusi DOPO il rilascio del 23 set)")
+
+    # ---- LE SERIE DI PERDITE per strategia (freno di serie) --------------------
+    # Stessa funzione del bot (bot/learning/drift.py): a STREAK_BRAKE_LOSSES
+    # perdite di fila size e leva si dimezzano fino al primo guadagno. Qui si
+    # vede CHI e' frenato adesso, senza entrare sulla macchina. Il bot la calcola
+    # sui trade degli ultimi 30 giorni: se qui compare una serie piu' lunga e'
+    # perche' questo script legge tutti i trade.
+    from bot.learning.drift import serie_perdite
+    from bot.config import settings as _cfg
+    serie = {k: v for k, v in serie_perdite(trades).items() if v >= 2}
+    if serie:
+        print(f"\nSERIE DI PERDITE in corso per strategia (freno x"
+              f"{_cfg.STREAK_BRAKE_FACTOR:g} da {_cfg.STREAK_BRAKE_LOSSES} di fila):")
+        for k, v in sorted(serie.items(), key=lambda kv: (-kv[1], kv[0]))[:10]:
+            freno = "  <- FRENO attivo" if v >= _cfg.STREAK_BRAKE_LOSSES else ""
+            print(f"  {k:<14} {v} perdite di fila{freno}")
+
+    # Le ipotesi per direzione (solo_long/solo_short) non hanno bisogno del
+    # referto: bastano pnl e direzione, quindi si stampano comunque.
+    print("\nIPOTESI DAI REFERTI (regole dichiarate; le prova il gate sulla storia, "
+          "non il paper):")
+    righe_ipotesi = riassunto_ipotesi(doc)
+    if righe_ipotesi:
+        for r in righe_ipotesi:
+            print(f"  - {r}")
+    else:
+        print(f"  nessuna: servono almeno {MIN_CAMPIONE} perdite per direzione o "
+              f"controtrend, {MIN_STOP_LARGO} stop larghi")
 
     return 0
 

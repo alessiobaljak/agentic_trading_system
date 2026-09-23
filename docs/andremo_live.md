@@ -1147,3 +1147,38 @@ DOPO, ogni trade chiuso riceve un referto scritto nel suo documento (classe dell
 morte, stop largo, lock mai armato, controtrend, verdetto), stampato e contato da
 `trades`. Richiesta del proprietario: «queste analisi il sistema le deve fare prima,
 e per ogni trade perso devono essere scritte e usate».
+
+
+### 23 settembre, pomeriggio: il cervello, primo pezzo
+
+Il proprietario, davanti a 40 trade chiusi con 6 giornate su 8 in perdita e −50,88
+realizzato (dashboard, 23 set): «il sistema deve imparare da tutto quello che fa e
+adattarsi tutti i giorni; questa schermata dimostra che non si sta adattando».
+
+Ha ragione sul fatto: fino a oggi ciò che impara modulava solo size e uscite (pesi,
+deriva, scala dei TP, keep del trailing), e con soglie alte (50 trade per i pesi, 20
+per strategia per la deriva). Sugli ingressi, niente. Da oggi il ciclo è chiuso in
+tre pezzi, tutti sotto la regola «il paper propone, il gate decide»:
+
+1. **Referti aggregati** (`bot/learning/referti.py`, documento `learning/referti`,
+   stampati da `trades`): i referti dei trade chiusi sommati per strategia, coin e
+   direzione. Da regole scritte PRIMA scattano le ipotesi: tre short tutte perse →
+   «solo long»; tre perdite controtrend o mai andate a favore → «con conferma a 1
+   ora»; due stop larghi → «stop più stretto».
+2. **Varianti nel gate** (B8, prima metà): ogni ipotesi diventa una variante della
+   stessa strategia che entra nel gate al posto di una candidata casuale. Stesse 3
+   conferme, stesso holdout, il giro non si allunga. Se passa, opera; se no, muore
+   lì, e il paper non ha tarato niente.
+3. **Freno di serie** (`STREAK_BRAKE_LOSSES=4`, `STREAK_BRAKE_FACTOR=0,5`): quattro
+   perdite di fila su una strategia, su qualunque coin, dimezzano size e leva fino al
+   primo guadagno. Frena, non spegne: il 4 è ragionato (con un win rate del 45%
+   capita circa il 9% delle volte per sequenza), non misurato — e lo dice il commento.
+
+Cosa NON è cambiato: nessuna soglia d'ingresso tarata sul paper, nessuna regola del
+gate (le 3 conferme restano), `DRY_RUN` true. La proposta del gate a due livelli
+(candidata a size ridotta / validata a size piena) è in backlog come F2 e aspetta il
+sì del proprietario.
+
+Il metro per giudicare: nei prossimi giri di `log-gate` le righe «varianti dai
+referti del paper (B8)» e, tra due settimane, quante varianti hanno passato il gate
+rispetto ai genitori; in `log-bot` le righe «FRENO x0.50 (serie N perdite)».

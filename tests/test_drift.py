@@ -11,12 +11,15 @@ import pytest
 
 from bot.config import settings
 from bot.learning.drift import (DRIFT, OK, WATCH, compute_drift, drifted_keys,
-                                weight_factor)
+                                motivi_freno, serie_perdite, weight_factor)
 
 
-def _t(sym="AUSDT", strat="s1", pnl=-5.0, mfe=0.4, reason="stop_loss"):
-    return {"symbol": sym, "strategy": strat, "pnl": pnl, "mfe_r": mfe,
-            "exit_reason": reason}
+def _t(sym="AUSDT", strat="s1", pnl=-5.0, mfe=0.4, reason="stop_loss", ts=None):
+    t = {"symbol": sym, "strategy": strat, "pnl": pnl, "mfe_r": mfe,
+         "exit_reason": reason}
+    if ts is not None:
+        t["exit_ts"] = ts
+    return t
 
 
 def _pairs(pf=1.5, mults=(1.5, 3.0, 5.0)):
@@ -144,7 +147,126 @@ def test_allocation_applies_the_brake_to_risk_and_leverage(monkeypatch):
     a._drift = compute_drift([_t() for _ in range(10)], _pairs())
     r, l, note = a.allocation("s1", Regime.SIDEWAYS, 60.0, drift_key=("AUSDT", "s1"))
     assert r < base_r and l < base_l
-    assert "DERIVA" in note
+    assert "FRENO" in note and "deriva coppia" in note
+
+
+# ---- freno di serie: matura in giorni, non in settimane ------------------- #
+def _no_drift(monkeypatch):
+    """Disattiva i tre verdetti di deriva alzando le soglie: cosi' si isola il
+    solo freno di serie (i trade di _t sono tutti in perdita e farebbero scattare
+    anche la deriva)."""
+    monkeypatch.setattr(settings, "DRIFT_ENABLED", True)
+    monkeypatch.setattr(settings, "STREAK_BRAKE_ENABLED", True)
+    monkeypatch.setattr(settings, "STREAK_BRAKE_LOSSES", 4)
+    monkeypatch.setattr(settings, "STREAK_BRAKE_FACTOR", 0.5)
+    monkeypatch.setattr(settings, "DRIFT_MIN_TRADES_PAIR", 10_000)
+    monkeypatch.setattr(settings, "DRIFT_MIN_TRADES_STRATEGY", 10_000)
+    monkeypatch.setattr(settings, "DRIFT_MIN_TRADES_GLOBAL", 10_000)
+
+
+def test_streak_is_counted_on_exit_ts_not_list_order():
+    """La serie e' quella che chiude la sequenza NEL TEMPO: Firestore non
+    garantisce l'ordine della lista. Qui la lista mette il guadagno per ultimo,
+    ma per exit_ts e' il primo: le 4 perdite successive sono la serie corrente."""
+    trades = [_t(pnl=-1, ts=200), _t(pnl=-1, ts=300), _t(pnl=-1, ts=400),
+              _t(pnl=-1, ts=500), _t(pnl=+3, ts=100)]
+    assert serie_perdite(trades) == {"s1": 4}
+
+
+def test_streak_resets_on_a_gain_and_a_flat_trade():
+    """Un trade in guadagno (o in pari: pnl >= 0) azzera la serie: la domanda e'
+    'sta perdendo ADESSO', non 'quanto ha perso in totale'."""
+    trades = [_t(pnl=-1, ts=1), _t(pnl=-1, ts=2), _t(pnl=-1, ts=3), _t(pnl=-1, ts=4),
+              _t(pnl=+2, ts=5), _t(pnl=-1, ts=6)]
+    assert serie_perdite(trades) == {"s1": 1}
+    flat = trades[:4] + [_t(pnl=0.0, ts=5)]
+    assert serie_perdite(flat) == {"s1": 0}
+
+
+def test_streak_ignores_external_exits_and_is_per_strategy():
+    """Kill switch e chiusure manuali non sono decisioni della strategia: non
+    allungano la serie e non la interrompono. Ogni strategia ha la sua serie,
+    sommata su tutte le coin."""
+    trades = [_t(sym="AUSDT", pnl=-1, ts=1), _t(sym="BUSDT", pnl=-1, ts=2),
+              _t(sym="AUSDT", pnl=+5, ts=3, reason="kill_switch"),   # ignorato
+              _t(sym="CUSDT", pnl=-1, ts=4), _t(sym="AUSDT", pnl=-1, ts=5),
+              _t(strat="s2", pnl=-1, ts=1), _t(strat="s2", pnl=+1, ts=2)]
+    assert serie_perdite(trades) == {"s1": 4, "s2": 0}
+    d = compute_drift(trades, {})            # anche SENZA promessa del gate
+    assert d["pairs"] == {} and d["serie"] == {"s1": 4, "s2": 0}
+
+
+def test_streak_without_exit_ts_keeps_stable_order():
+    """Trade senza exit_ts -> 0 per tutti: l'ordinamento e' stabile, quindi
+    resta l'ordine di arrivo (i test esistenti contano su questo)."""
+    trades = [_t(pnl=+1), _t(pnl=-1), _t(pnl=-1)]
+    assert serie_perdite(trades) == {"s1": 2}
+
+
+def test_streak_brake_applies_only_at_the_threshold(monkeypatch):
+    """3 perdite di fila: size piena. 4: dimezzata. Il 4 e' dichiarato prima
+    (STREAK_BRAKE_LOSSES), non tarato sul paper."""
+    _no_drift(monkeypatch)
+    tre = compute_drift([_t(pnl=-1, ts=i) for i in range(3)], _pairs())
+    assert tre["serie"] == {"s1": 3}
+    assert weight_factor(tre, "AUSDT", "s1") == 1.0
+    assert motivi_freno(tre, "AUSDT", "s1") == []
+    quattro = compute_drift([_t(pnl=-1, ts=i) for i in range(4)], _pairs())
+    assert weight_factor(quattro, "AUSDT", "s1") == pytest.approx(0.5)
+    assert motivi_freno(quattro, "AUSDT", "s1") == ["serie 4 perdite"]
+    # una coin MAI vista frena lo stesso: la serie e' della strategia
+    assert weight_factor(quattro, "ZUSDT", "s1") == pytest.approx(0.5)
+    # un'altra strategia no
+    assert weight_factor(quattro, "AUSDT", "s2") == 1.0
+
+
+def test_streak_brake_can_be_switched_off(monkeypatch):
+    """STREAK_BRAKE_ENABLED=false -> comportamento identico a prima."""
+    _no_drift(monkeypatch)
+    d = compute_drift([_t(pnl=-1, ts=i) for i in range(6)], _pairs())
+    assert weight_factor(d, "AUSDT", "s1") == pytest.approx(0.5)
+    monkeypatch.setattr(settings, "STREAK_BRAKE_ENABLED", False)
+    assert weight_factor(d, "AUSDT", "s1") == 1.0
+    assert motivi_freno(d, "AUSDT", "s1") == []
+
+
+def test_motivi_freno_lists_every_active_brake(monkeypatch):
+    """La nota del trade deve dire PERCHE' la size era ridotta: tutti i motivi
+    attivi, nell'ordine coppia / strategia / globale / serie."""
+    monkeypatch.setattr(settings, "DRIFT_ENABLED", True)
+    monkeypatch.setattr(settings, "STREAK_BRAKE_ENABLED", True)
+    monkeypatch.setattr(settings, "STREAK_BRAKE_LOSSES", 4)
+    d = compute_drift([_t(pnl=-1, ts=i) for i in range(45)], _pairs())
+    assert motivi_freno(d, "AUSDT", "s1") == [
+        "deriva coppia", "deriva strategia", "deriva globale", "serie 45 perdite"]
+    assert motivi_freno(None, "AUSDT", "s1") == []
+    monkeypatch.setattr(settings, "DRIFT_ENABLED", False)
+    assert motivi_freno(d, "AUSDT", "s1") == []
+
+
+def test_floor_holds_with_drift_and_streak_together(monkeypatch):
+    """Deriva su tre livelli + serie: quattro dimezzamenti farebbero 0.0625, ma
+    DRIFT_WEIGHT_FLOOR resta il pavimento di tutto. Frena, non spegne."""
+    monkeypatch.setattr(settings, "DRIFT_ENABLED", True)
+    monkeypatch.setattr(settings, "STREAK_BRAKE_ENABLED", True)
+    monkeypatch.setattr(settings, "STREAK_BRAKE_LOSSES", 4)
+    d = compute_drift([_t(pnl=-1, ts=i) for i in range(45)], _pairs())
+    assert d["global"]["verdict"] == DRIFT and d["serie"]["s1"] == 45
+    assert weight_factor(d, "AUSDT", "s1") == pytest.approx(settings.DRIFT_WEIGHT_FLOOR)
+
+
+def test_allocation_note_names_the_streak(monkeypatch):
+    """Dalla nota del trade si legge il freno di serie, col fattore applicato."""
+    from bot.core.firebase_client import FirebaseClient
+    from bot.core.models import Regime
+    from bot.learning.adaptation import AdaptationEngine
+    _no_drift(monkeypatch)
+    a = AdaptationEngine(FirebaseClient())
+    base_r, _, _ = a.allocation("s1", Regime.SIDEWAYS, 60.0)
+    a._drift = compute_drift([_t(pnl=-1, ts=i) for i in range(4)], _pairs())
+    r, _, note = a.allocation("s1", Regime.SIDEWAYS, 60.0, drift_key=("AUSDT", "s1"))
+    assert r == pytest.approx(base_r * 0.5)
+    assert "FRENO x0.50 (serie 4 perdite)" in note
 
 
 # ---- anello di ritorno: l'evidenza pesa nel gate -------------------------- #
@@ -211,3 +333,14 @@ def test_without_drift_the_pass_is_normal():
     update_registry(fb, {key: entry}, [key])
     rec = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])[key]
     assert rec["pass_count"] == 1 and rec.get("fail_count", 0) == 0
+
+
+def test_serie_con_exit_ts_illeggibile_non_fa_saltare_la_deriva():
+    """Un exit_ts scritto male (stringa ISO) non deve spegnere l'intero
+    documento di deriva: quel trade va in coda-zero e il resto si calcola."""
+    from bot.learning.drift import serie_perdite
+    trades = [_t(pnl=-1.0), {**_t(pnl=-1.0), "exit_ts": "2026-09-23T10:00:00"},
+              {**_t(pnl=-1.0), "exit_ts": 5.0}]
+    assert serie_perdite(trades) == {"s1": 3}
+    d = compute_drift(trades, _pairs())
+    assert d["serie"] == {"s1": 3}

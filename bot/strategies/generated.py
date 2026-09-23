@@ -399,6 +399,17 @@ def spec_id(spec: dict) -> str:
         # id delle spec esistenti non cambiano di una virgola.
         "timeframe": spec.get("timeframe") or settings.ORCHESTRATOR_TIMEFRAME,
     }
+    # dal 23 set 2026 una spec puo' operare UN SOLO lato (`solo`: "long" o
+    # "short"): e' la variante che il paper propone quando un lato perde sempre
+    # (backlog B8). Entra nell'hash SOLO se c'e' ed e' valido, per la stessa
+    # ragione del timeframe: gli id delle spec note non devono cambiare di una
+    # virgola. Normalizzato come lo legge GeneratedStrategy: "Long" e "long"
+    # sono la stessa strategia, "boh" e' come non averlo.
+    # Da dove viene la variante (origine/genitore/ipotesi) NON e' logica: due
+    # spec identiche nate in modi diversi sono la stessa strategia.
+    solo = str(spec.get("solo") or "").lower()
+    if solo in ("long", "short"):
+        payload["solo"] = solo
     h = hashlib.sha1(json.dumps(payload, sort_keys=True, default=str).encode()).hexdigest()[:8]
     return f"gen_{h}"
 
@@ -424,6 +435,13 @@ class GeneratedStrategy(Strategy):
         self._min_adx = float(spec.get("min_adx", 0.0) or 0.0)
         self._atr_mult_stop = float(spec.get("atr_mult_stop", 1.5))
         self._rr = float(spec.get("rr", 2.0))
+        # UN SOLO LATO (23 set 2026, backlog B8). Il paper ha misurato piu' volte
+        # una strategia che vince sui long e perde tutti gli short (o viceversa):
+        # invece di buttare via l'idea, il paper PROPONE la variante «solo long»
+        # e il gate la prova sulla storia come qualunque altra candidata. Qui la
+        # spec dichiara il lato; il segnale dell'altro lato non nasce.
+        solo = str(spec.get("solo") or "").lower()
+        self.solo = solo if solo in ("long", "short") else None
         # IL MERCATO SI GUARDA SOLO SE LA SPEC LO USA. Il 22 set 2026 il giro della
         # discovery e' passato da ~2h a oltre 2h53 (finestra di 3h sforata, giro
         # delle 06:00 saltato): il contesto di mercato veniva risolto a OGNI
@@ -441,7 +459,11 @@ class GeneratedStrategy(Strategy):
         for f in self.spec.get("features", []):
             extra = " ".join(f"{k}={v}" for k, v in f.items() if k != "kind")
             parts.append(f"{f.get('kind')}{(' ' + extra) if extra else ''}")
-        return " AND ".join(parts) or "vuota"
+        testo = " AND ".join(parts) or "vuota"
+        solo = str(self.spec.get("solo") or "").lower()
+        if solo in ("long", "short"):
+            testo += f" [solo {solo}]"
+        return testo
 
     @property
     def _tf(self) -> str:
@@ -488,6 +510,15 @@ class GeneratedStrategy(Strategy):
 
         if long_ok == short_ok:
             return None  # nessuna direzione netta (o entrambe -> contraddittorio)
+        # il lato escluso dalla spec non nasce mai. DOPO il controllo qui sopra,
+        # di proposito: la figlia «solo long» deve prendere esattamente i long
+        # del genitore e nessun altro — se il filtro stesse prima, un caso
+        # contraddittorio (entrambi i lati veri) diventerebbe un long che il
+        # genitore non avrebbe mai aperto.
+        if self.solo == "long" and short_ok:
+            return None
+        if self.solo == "short" and long_ok:
+            return None
         direction = Direction.LONG if long_ok else Direction.SHORT
         stop, target = self._atr_stop_target(asset, direction, self._tf, self._atr_mult_stop, self._rr)
         return self._signal(asset, direction, confidence=60.0,
