@@ -219,7 +219,7 @@ diventa il dato più ricco che abbiamo — e l'AI è l'unica cosa capace di legg
 referti e trovare il filo comune.
 
 ### B5. Notizie e dati macro
-**Stato:** aperto · ricerca fatta il 20 set (30 agenti, 23 candidati, 8 confermati)
+**Stato:** rimandata alla **sessione dedicata ai dati esterni** (decisione del 23 set) · aperto · ricerca fatta il 20 set (30 agenti, 23 candidati, 8 confermati)
 
 Non esistono nel sistema: le strategie vedono solo prezzo e volume. **Il problema
 non è leggerle, è validarle** — serve l'archivio STORICO allineato al minuto,
@@ -261,7 +261,7 @@ ogni abbonamento è risparmiato. Licenza CC-BY-NC, qualità bassa (contiene
 comunicati sponsorizzati).
 
 ### B6. Lo storico di open interest e long/short: già gratis, mai usato
-**Stato:** aperto · **la raccomandazione numero uno** · verificato con le mani 20 set
+**Stato:** rimandata alla **sessione dedicata ai dati esterni** (decisione del 23 set) · aperto · **la raccomandazione numero uno** · verificato con le mani 20 set
 
 Binance pubblica in file scaricabili le STESSE grandezze che oggi leggiamo solo
 dal vivo: open interest, long/short ratio dei top trader, taker buy/sell ratio.
@@ -324,7 +324,7 @@ Restano due strade, nessuna delle due da aprire adesso:
 spazio, è la copertura. **Decisione rimandata a dopo i 40 trade del paper.**
 
 ### B7. Registrare noi lo storico da oggi — non è "una riga di codice"
-**Stato:** aperto · emerso 20 set
+**Stato:** rimandata alla **sessione dedicata ai dati esterni** (decisione del 23 set) · aperto · emerso 20 set
 
 Sembra la soluzione ovvia e non lo è. Oggi non registriamo nulla
 (`bot/execution/executor.py:184` salva il sentiment solo dentro il singolo trade),
@@ -493,19 +493,11 @@ ogni chiamante.
 `ANTHROPIC_MODEL=claude-opus-4-8`. Rimandato il 19 set per non cambiare due cose
 insieme mentre si verificava la chiave.
 
-### D4. LunarCrush: abbonamento scaduto
-**Stato:** da decidere · emerso 19 set
-
-HTTP 402. È una fonte di sentiment **opzionale** e il sistema ricade su CoinGecko
-(funzionante), quindi non è rotto niente. Da rinnovare o da togliere: una chiave
-scaduta in configurazione è rumore che a ogni controllo sembra un guasto.
-
----
-
-## E. Da tenere d'occhio (non ancora azioni)
+### D4. LunarCrush — RIMOSSA dal backlog il 23 set
+**Stato:** **tolta su decisione del proprietario**: i dati esterni (sentiment, notizie, macro, open interest) si affrontano tutti insieme in una **sessione dedicata**, più avanti. Fino ad allora il sentiment resta un tilt di size come oggi.
 
 ### E1. Le short perdono sistematicamente
-**Stato:** in osservazione · aggiornato 20 set
+**Stato:** **NON risolta · in osservazione** — 23 set: short 23 trade, 8 vinti, **−35,84**; long 14 trade, 6 vinti, +4,75. Dal 21 sera il freno sul controtrend agisce davvero (VET short a 0,47% di rischio il 23) e la conferma a 1 ora è nel vocabolario: se le short perdono anche frenate, il passo successivo è validarle con un criterio a parte (PF per direzione nel gate).
 
 ```
 long    7 trade · 3 vinti · +0,53 · mfe 1,23R
