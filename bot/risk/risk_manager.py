@@ -106,6 +106,21 @@ class RiskManager:
             stop_price, take_profit = self._stop_target(asset, decision.direction)
             notes.append("SL/TP dai default risk manager (strategia senza suggested_stop/target)")
         price = asset.price
+        # SETUP NON TRADABILE (stessa funzione del motore di backtest): uno stop
+        # piu' largo di MAX_STOP_PCT non si apre, e il motivo finisce nello stato
+        # delle decisioni cosi' si vede PRIMA, non nell'autopsia dopo.
+        from bot.risk.setup_check import analizza_setup
+        from bot.execution.exit_logic import ladder_multiples
+        _geo = analizza_setup(price, stop_price, ladder_multiples(getattr(decision, "params", None)))
+        if not _geo["tradabile"]:
+            return EffectiveRiskParams(
+                leverage=eff_lev, risk_per_trade=eff_risk, notional=0, quantity=0,
+                stop_price=stop_price or 0, take_profit_price=take_profit or 0,
+                user_leverage=user_lev, user_risk_per_trade=user_risk,
+                safety_leverage_cap=sys_lev_cap, safety_risk_cap=sys_risk_cap,
+                notes=notes + [_geo["motivo"]], approved=False,
+                reject_reason=_geo["motivo"],
+            )
         risk_amount = account_equity * eff_risk         # $ a rischio
         per_unit_risk = abs(price - stop_price) if stop_price else None
 

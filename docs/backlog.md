@@ -211,7 +211,7 @@ l'autopsia. Ci sono ~40 quasi-passaggi a ogni giro che nessuno legge.
 RICERCA, non su una strategia.
 
 ### B4. Un referto su ogni trade chiuso
-**Stato:** aperto · emerso 19 set
+**Stato:** **parte meccanica FATTA il 23 set** — `bot/risk/setup_check.py`: alla chiusura ogni trade riceve un referto (`post_mortem`: classe della morte, stop largo, lock mai armato, controtrend, verdetto) scritto nel documento del trade e stampato da `trades`; la stessa aritmetica blocca PRIMA i setup con stop oltre `MAX_STOP_PCT` (6%) nel gate e nel bot. Resta la lettura aggregata dall'AI, a 100+ trade.
 
 Ogni trade registra indicatori all'entrata, regime, confidenza, dove è arrivato il
 prezzo, perché è uscito. **Nessuno li legge.** Con 15 trade è aneddoto; con 200

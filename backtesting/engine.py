@@ -24,6 +24,7 @@ from bot.core.costs import funding_fraction
 from bot.core.indicators import compute_indicator_frame, snapshot_from_row
 from bot.core.models import AssetSnapshot, Candle, Direction, Regime
 from bot.config import settings
+from bot.risk.setup_check import analizza_setup
 from bot.execution.exit_logic import (
     locked_stop, lock_anchor, scale_ladder, scale_fills, ladder_multiples, mfe_in_r,
     breakeven_after_tp1,
@@ -700,6 +701,13 @@ class Backtester:
                 shift = nxt - entry
                 entry, stop, target = nxt, stop + shift, target + shift
             long = sig.direction == Direction.LONG
+
+            # SETUP NON TRADABILE: stop piu' largo di MAX_STOP_PCT del prezzo (ATR
+            # gonfiato dopo un pump). Stessa funzione del risk manager del bot:
+            # ne' il gate ne' il paper aprono questi trade. 23 set 2026, MUBARAK.
+            if not analizza_setup(entry, stop, ladder_multiples(getattr(strategy, "params", None)))["tradabile"]:
+                i += 1
+                continue
 
             # SCALE-OUT su multipli di R (se attivo): scala di TP + break-even dopo
             # il primo TP. Vuota -> percorso classico a TP unico (sotto).

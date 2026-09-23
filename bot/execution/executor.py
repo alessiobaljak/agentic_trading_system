@@ -594,6 +594,21 @@ class ExecutionEngine:
                       f"(POSSIBILI ORDINI ORFANI: verificare su Binance)")
 
         trade = self._build_closed_trade(pos, price, reason)
+        # IL REFERTO, subito e per ogni trade: la stessa analisi che il proprietario
+        # ha chiesto «a posteriori» il 23 set, fatta dal sistema alla chiusura e
+        # scritta nel documento del trade. Best-effort: non deve fermare la chiusura.
+        try:
+            from bot.risk.setup_check import post_mortem
+            trade.post_mortem = post_mortem({
+                "entry_price": pos.entry_price, "orig_stop": pos.orig_stop,
+                "stop_price": pos.stop_price, "scale_r_mults": pos.scale_r_mults,
+                "mfe_r": trade.mfe_r, "pnl": trade.pnl, "direction": pos.direction.value,
+                "regime_at_entry": pos.regime_at_entry.value if pos.regime_at_entry else None,
+            })
+            if trade.pnl < 0:
+                print(f"[referto] {pos.symbol} {pos.strategy}: {trade.post_mortem.get('verdetto')}")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[referto] non scritto ({exc})")
         # Accredita all'equity SOLO la parte non ancora realizzata dalle fette:
         # trade.pnl e' il TOTALE (fette + residuo, netto costi pieni); realized_net
         # e' gia' stato accreditato ai TP parziali. Cosi' la somma degli eventi ==

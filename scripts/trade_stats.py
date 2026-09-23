@@ -206,6 +206,37 @@ def main() -> int:
     print("trade e' limitato dai SEGNALI, non dalla liquidita'. Trade/giorno ~= segnali/giorno.")
 
     print_direction_report(direction_report(trades))
+
+    # ---- I REFERTI (post_mortem) degli ultimi trade in perdita ------------------
+    # Scritti dal bot alla chiusura (bot/risk/setup_check.py). Qui si stampano e
+    # si contano per rilievo: e' il conteggio che dice cosa correggere, non il
+    # singolo caso — «stop largo» x N vale una regola, x 1 vale un'occhiata.
+    con_referto = [t for t in trades if isinstance(t.get("post_mortem"), dict)]
+    persi = [t for t in con_referto if float(t.get("pnl", 0) or 0) < 0]
+    if con_referto:
+        print(f"\nREFERTI (post_mortem) sui trade chiusi: {len(con_referto)} "
+              f"({len(persi)} in perdita)")
+        conta = defaultdict(int)
+        for t in persi:
+            pm = t["post_mortem"]
+            if pm.get("classe"):
+                conta[f"classe {pm['classe']}"] += 1
+            if pm.get("stop_largo"):
+                conta["stop troppo largo"] += 1
+            if pm.get("lock_mai_armato"):
+                conta["lock mai armato"] += 1
+            if pm.get("controtrend"):
+                conta["controtrend"] += 1
+        for k, v in sorted(conta.items(), key=lambda kv: -kv[1]):
+            print(f"  {k:<24} x{v}")
+        print("  ultimi referti in perdita:")
+        for t in sorted(persi, key=lambda t: float(t.get("exit_ts") or 0))[-6:]:
+            print(f"   - {t.get('symbol')} {t.get('strategy')} {t.get('direction')} "
+                  f"{float(t.get('pnl', 0) or 0):+.2f}: {t['post_mortem'].get('verdetto')}")
+    else:
+        print("\nREFERTI: nessun trade porta ancora `post_mortem` (si scrive sui trade "
+              "chiusi DOPO il rilascio del 23 set)")
+
     return 0
 
 

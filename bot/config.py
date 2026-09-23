@@ -537,6 +537,13 @@ class Settings:
     # mezzanotte UTC. Regola di portafoglio, NON del gate (che valida una coppia
     # alla volta): diverge nella direzione sicura, meno trade. 0 = spento.
     RISK_PER_COIN_DAY: float = float(os.getenv("RISK_PER_COIN_DAY", "0.015"))
+    # STOP MASSIMO come frazione del prezzo. 23 set 2026, MUBARAK long dopo un
+    # pump del +37%: ATR gonfiato, stop a -15,3%, primo incasso a +31%, lock del
+    # profitto che si armava a +15%: un trade che poteva solo perdere lentamente
+    # o vincere di rado. Sopra questo tetto il setup NON e' tradabile e non si
+    # apre — nel gate e nel bot, dalla stessa funzione (bot/risk/setup_check.py).
+    # 0 = spento.
+    MAX_STOP_PCT: float = float(os.getenv("MAX_STOP_PCT", "0.06"))
 
     # ---- Sentiment come contesto di decisione (SOLO live/paper, non nel backtest) ----
     # Overlay di SIZE al final gate, identico nello spirito al trend tilt: il sentiment

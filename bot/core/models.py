@@ -221,6 +221,9 @@ class ClosedTrade(BaseModel):
     # (0 = nessuno, es. uscito allo SL prima del TP1) e il PnL netto gia' incassato
     # dalle fette. Servono a capire se/quanto lo scale-out ha lavorato sul trade.
     scale_stage_reached: int = 0
+    # il referto del trade (bot/risk/setup_check.post_mortem): classe della morte,
+    # stop largo, lock mai armato, controtrend, verdetto in una riga
+    post_mortem: Optional[dict] = None
     realized_partial: float = 0.0
     # massima escursione FAVOREVOLE raggiunta, in unita' di R: dice quanto lontano e'
     # arrivato il prezzo prima di tornare. Da questo unico numero si sa quali gradini

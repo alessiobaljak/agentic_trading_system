@@ -1132,3 +1132,18 @@ ogni giro una discovery a 1h su BTCUSDT come sottoprocesso con un tempo massimo
 orologio (una a 1h decide una volta l'ora), e i trade portano il timeframe della
 strategia così il learning non li mescola. Le prime coppie BTC@1h servono le
 solite 3 conferme. Allargare = cambiare `DISCOVERY_EXTRA`.
+
+
+### 23 settembre: il controllo del setup prima, il referto dopo
+
+MUBARAK long dopo un pump del +37%: stop a −15,3%, primo incasso a +31%, lock che si
+armava a +15%. Ore in positivo al 3-6% (0,3R), poi stop pieno, −9,8. Il trailing non
+poteva scattare: il metro (R = ATR gonfiato) era sbagliato, non il lock.
+
+Da oggi, dalla stessa aritmetica (`bot/risk/setup_check.py`): PRIMA, uno stop più
+largo di `MAX_STOP_PCT` (6% del prezzo) rende il setup non tradabile — il motore lo
+salta, il risk manager lo rifiuta col motivo visibile nello stato delle decisioni;
+DOPO, ogni trade chiuso riceve un referto scritto nel suo documento (classe della
+morte, stop largo, lock mai armato, controtrend, verdetto), stampato e contato da
+`trades`. Richiesta del proprietario: «queste analisi il sistema le deve fare prima,
+e per ogni trade perso devono essere scritte e usate».
