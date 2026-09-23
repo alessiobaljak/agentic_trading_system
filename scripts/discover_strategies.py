@@ -117,7 +117,50 @@ def gemelle_validate(pairs: dict, existing: dict) -> list[tuple[str, list[str]]]
                   key=lambda t: -len(t[1]))
 
 
-def specs_da_rivalutare(existing: dict, reg: dict, cap: int) -> tuple[list[dict], dict]:
+# LA RIVALUTAZIONE COMPLETA UNA VOLTA AL GIORNO (23 set 2026). Un giro rivaluta
+# ~430 spec note su 200 coin: il 77% del lavoro. Ma una conferma o un fallimento
+# contano SOLO quando si chiude la finestra dei 7 giorni, e la finestra si
+# misura sui giorni di dati: rivalutare la stessa coppia otto volte al giorno da'
+# otto volte lo stesso verdetto su 96 candele in piu' su 165.000. Quindi: la
+# rivalutazione completa gira nel primo giro dopo mezzanotte UTC (quando le
+# finestre si chiudono davvero); negli altri giri si rivalutano SOLO le coppie
+# che possono cambiare stato adesso — quelle con almeno una conferma e la
+# finestra in chiusura o gia' scaduta — cosi' una terza conferma non aspetta
+# mai piu' di tre ore. Le candidate nuove restano ogni giro: la scoperta non
+# rallenta. Misurato prima: 2h29 a giro; atteso dopo: ~1h nei giri normali.
+REEVAL_DAILY = os.getenv("DISCOVERY_REEVAL_DAILY", "true").lower() == "true"
+REEVAL_HOUR_MAX = int(os.getenv("DISCOVERY_REEVAL_HOUR_MAX", "3"))   # UTC: 00:xx-02:59
+
+
+def giro_giornaliero(now: float) -> bool:
+    """True nel primo giro dopo mezzanotte UTC (il timer parte alle 00:00 con un
+    ritardo casuale fino a 10 minuti e il giro dura ~2h)."""
+    from datetime import datetime, timezone
+    return datetime.fromtimestamp(now, timezone.utc).hour < REEVAL_HOUR_MAX
+
+
+def spec_urgenti(pairs: dict, now: float, margine_s: float = 3 * 3600) -> set:
+    """Le spec con almeno una coppia che PUO' cambiare stato in questo giro: ha
+    gia' una conferma e la sua finestra si chiude entro `margine_s` o e' gia'
+    scaduta. Rivalutarle ogni giro costa poco (sono decine, non centinaia) e
+    tiene la terza conferma a tre ore di distanza, non a un giorno."""
+    from scripts.optimize import NEW_DATA_MIN_S
+    out: set = set()
+    for k, r in pairs.items():
+        if not r.get("generated") or "|" not in k:
+            continue
+        if int(r.get("pass_count", 0) or 0) < 1:
+            continue
+        start = float(r.get("window_start", 0) or 0)
+        if start <= 0:
+            continue
+        if now - start >= NEW_DATA_MIN_S - margine_s:
+            out.add(k.split("|", 1)[1])
+    return out
+
+
+def specs_da_rivalutare(existing: dict, reg: dict, cap: int,
+                        completa: bool = True, now: float | None = None) -> tuple[list[dict], dict]:
     """Quali spec gia' note si ri-valutano in questo run, e con che priorita'.
 
     IL DIFETTO CHE CORREGGE, in una riga: il taglio buttava fuori proprio le coppie
@@ -165,9 +208,16 @@ def specs_da_rivalutare(existing: dict, reg: dict, cap: int) -> tuple[list[dict]
     ordinate = sorted(existing.items(), key=lambda kv: -conferme.get(kv[0], 0))
     con_conferme = [s for gid, s in ordinate if conferme.get(gid, 0) > 0]
     senza = [s for gid, s in ordinate if conferme.get(gid, 0) == 0]
-    scelte = con_conferme + senza[: max(0, cap - len(con_conferme))]
+    if completa:
+        scelte = con_conferme + senza[: max(0, cap - len(con_conferme))]
+        modalita = "completa"
+    else:
+        urgenti = spec_urgenti(pairs, now if now is not None else time.time())
+        scelte = [sp for gid, sp in ordinate if gid in urgenti]
+        modalita = "solo urgenti"
     diag = {
         "reeval_cap": cap,
+        "reeval_modalita": modalita,
         "n_specs_note": len(existing),
         "n_specs_rivalutate": len(scelte),
         "n_specs_con_conferme": len(con_conferme),
@@ -928,7 +978,12 @@ def main() -> int:
     specs = ai_specs + generate_specs(max(0, args.generate - len(ai_specs)), seed=args.seed)
     existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
     reg = fb.get_doc("strategy_registry", "validated") or {}
-    existing_list, diag_reeval = specs_da_rivalutare(existing, reg, args.reeval_cap)
+    _ora = time.time()
+    _completa = (not REEVAL_DAILY) or giro_giornaliero(_ora) or bool(args.symbols)
+    existing_list, diag_reeval = specs_da_rivalutare(existing, reg, args.reeval_cap,
+                                                     completa=_completa, now=_ora)
+    print(f"[discover] rivalutazione {diag_reeval['reeval_modalita']}: "
+          f"{diag_reeval['n_specs_rivalutate']} spec note su {diag_reeval['n_specs_note']}")
     specs.extend(existing_list)
     # MUTAZIONE INFORMATA: si evolve attorno ai QUASI-PASSAGGI del run precedente
     # (una sola condizione mancata, e per poco), non attorno alle prime dieci spec

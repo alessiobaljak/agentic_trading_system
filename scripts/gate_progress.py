@@ -346,7 +346,7 @@ def main() -> int:
               f"{d1h.get('n_eval', '?')} valutazioni · {d1h.get('n_passed', '?')} passate")
     if diag.get("n_specs_note"):
         tagliate = int(diag.get("n_specs_tagliate", 0) or 0)
-        print(f"\n  RI-VALUTAZIONE (ultimo run discovery): "
+        print(f"\n  RI-VALUTAZIONE (ultimo run discovery, {diag.get('reeval_modalita', 'completa')}): "
               f"{diag.get('n_specs_rivalutate')} spec su {diag.get('n_specs_note')} "
               f"note · cap {diag.get('reeval_cap')} · "
               f"{diag.get('n_specs_con_conferme')} con almeno una conferma")
