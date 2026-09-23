@@ -463,6 +463,48 @@ contro un obiettivo del 35% che con questo tasso di passaggio non arriverà.
 
 ---
 
+---
+
+## F. Apprendimento — l'obiettivo finale
+
+### F1. Il bot non sceglie quale trade aprire: apre tutti i segnali validi
+**Stato:** aperto · **è l'obiettivo finale del proprietario** · scritto il 23 set
+
+Obiettivo dichiarato: *«che la scelta delle strategie e delle monete sia talmente
+avanzata da scegliere praticamente sempre quella corretta che ci porti in
+profitto»*. Cosa impara oggi il sistema, misurato sul codice:
+
+| dove impara | da cosa | su cosa agisce |
+|---|---|---|
+| pesi strategia × regime (`compute_weights`) | win rate dei trade chiusi | **size**, panchina a peso 0 |
+| freno da deriva | PF vissuto vs promesso (8 trade) | **size**, fallimento al gate |
+| scala dei TP dal vissuto (`ladder_from_mfe`) | quantili di mfe | **uscite**, passando dal gate |
+| keep del trailing (`compute_trailing_keep`) | verdetti prematuro/corretto | **uscite**, fra 0,35 e 0,65 · sotto 8 verdetti non agisce |
+| calibrazione della confidenza | esito vs confidenza | **size** — inerte: le generate escono tutte a 60 |
+| autopsia dei quasi-passaggi (B3) | 40 quasi-passaggi a giro | **proposte** dell'AI |
+
+**Il buco:** in parità col gate il bot apre *tutti* i segnali validi del ciclo, uno
+per coin. Nessun meccanismo dice «questo sì, quest'altro no»: la scelta è solo a
+monte (il gate) e, lentamente, la panchina a peso zero. Tutto ciò che impara modula
+size o uscite; **né gli ingressi (B8) né la selezione fra segnali**.
+
+**Perché non si fa «a mano»:** una scelta tarata sul vissuto del paper trasforma il
+paper da prova in training set — è BIRBUSDT. Le tre strade oneste, in ordine:
+
+1. **B8** — spostare l'apprendimento nel gate: ritarare le soglie di ingresso delle
+   spec in `watch`/`drift`. Alza la qualità del «sì» alla fonte.
+2. **Un selettore validato**: il criterio di scelta fra segnali (peso, PF per
+   regime, confidenza calibrata, mfe attesa) si simula nel backtest come una
+   strategia — «apri solo i segnali che il selettore avrebbe scelto» contro «apri
+   tutti» — e si misura se rende di più. Solo così la scelta è una prova, non
+   un'opinione.
+3. **Far parlare i referti** (B4) e l'**ombra** dell'AI (31 decisioni, 0 d'accordo
+   col bot): le due fonti ricche oggi mute. Servono 100+ trade.
+
+**A 37 trade, col paper in perdita e le short che non reggono, il profitto oggi
+viene da segnali migliori (gate), non dallo scegliere fra segnali.** Il selettore ha
+senso quando c'è qualcosa di buono fra cui scegliere.
+
 ## D. Infrastruttura
 
 ### D1. Il registro su più documenti

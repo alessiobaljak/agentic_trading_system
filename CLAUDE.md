@@ -24,6 +24,16 @@ AGGIORNATO ogni volta che si scopre qualcosa che vale la pena valutare ma non si
 subito: senza, quelle scoperte vivono solo dentro una conversazione e spariscono con
 lei. E' gia' successo per settimane.
 
+## L'obiettivo finale, detto dal proprietario il 23 set 2026
+
+Fare in modo che questo sistema **massimizzi vincite e profitti giorno dopo giorno**,
+come farebbe un esperto di trading crypto — ma **tutto con criterio, logica e
+precisione**: un numero va con la sua fonte, una modifica passa dal gate, il paper
+non si usa mai come training set. Ogni mattina il controllo giornaliero, oltre ai
+soliti numeri, **propone la voce del backlog più importante da attivare**, con il
+perché e cosa si aspetta prima di farla (`docs/backlog.md`, voce F1 per il
+learning).
+
 ## Regole che non si negoziano
 
 * **`DRY_RUN` resta `true`.** Il sistema non ha mai toccato denaro vero e non deve
