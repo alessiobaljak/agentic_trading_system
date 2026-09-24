@@ -557,7 +557,7 @@ cronometro decide), paper più rumoroso se i due livelli non restano separati.
 **Stato:** **FATTO il 24 set** — `MAX_RISK_PER_DIRECTION=0.03`: se il rischio aperto in una direzione è già al 3% dell'equity (tre posizioni a size piena), il trade successivo in quella direzione non si apre (`bot/risk/daily_cap.py::direzione_bloccata`). Il 3% è ragionato; **si tara col backtest di portafoglio (G2)**. Il 21 set: 7 posizioni contemporanee, short 23 su 40 trade.
 
 ### G2. Il gate valida coppie una alla volta, mai il portafoglio
-**Stato:** **script in scrittura il 24 set** (`portafoglio`, da aggiungere alla lista bianca quando è committato) — tutte le validate insieme sugli ultimi 60 giorni con i limiti veri del conto: trade al giorno, posizioni contemporanee, quante nella stessa direzione, giornate in utile/perdita, drawdown, e il confronto con/senza tetto per direzione. Aperto: leggerlo ogni settimana nel referto e usarlo per tarare G1 e il numero massimo di posizioni.
+**Stato:** **script FATTO il 24 set** (`portafoglio`, da aggiungere alla lista bianca: `portafoglio: .venv/bin/python -m scripts.portafoglio_backtest`) — tutte le validate insieme sugli ultimi 60 giorni con i limiti veri del conto: trade al giorno, posizioni contemporanee, quante nella stessa direzione, giornate in utile/perdita, drawdown, e il confronto con/senza tetto per direzione. Aperto: leggerlo ogni settimana nel referto e usarlo per tarare G1 e il numero massimo di posizioni.
 
 ### G3. La statistica t è misurata ma non decide
 **Stato:** **misura FATTA il 24 set** — `last_t` nel registro per ogni validata, `gate` stampa quante reggerebbero t ≥ 2 e la mediana. Aperto: decidere se farne un criterio, dopo aver visto quante validate cadrebbero.
