@@ -154,6 +154,29 @@ domanda.
 
 ---
 
+### A5. I take profit non guardano il grafico: sono multipli dello stop
+**Stato:** aperto · emerso il 24 set (domanda del proprietario su DOT: TP3 a 1,26 da un ingresso a 1,10, toccato una volta l'8 set)
+
+Oggi ogni gradino è `multiplo × R`, con R = distanza dello stop (ATR): la scala si
+adatta alla volatilità del trade, ma **non alla struttura** (massimi recenti,
+bande, VWAP, livelli dove il prezzo si è già fermato). I multipli sono scelti dal
+gate per coppia fra 4-5 scale fisse; TP3 a 5R è la coda, presa di rado per
+costruzione. I numeri di oggi dicono che il problema è il primo gradino: 19 stop su
+28 andati a favore ma sotto TP1, escursione mediana 0,84R contro un primo gradino a
+1,5R.
+
+**Cosa fare, in ordine, senza toccare nulla a mano:**
+1. **Misurare** (in `mfe`): all'ingresso di ogni trade la distanza in R dalla
+   resistenza/supporto più vicino (massimo/minimo delle ultime 96 barre, banda di
+   Bollinger) e quante volte l'escursione l'ha raggiunta. Se il livello
+   strutturale viene toccato più spesso di TP1, vale la pena.
+2. **Candidata strutturale nel gate**: gradino = min(multiplo × R, livello
+   strutturale), valutata per coppia accanto alle scale fisse e a quella dal
+   vissuto; vince chi rende di più su OOS e holdout, come oggi.
+3. **Nel bot** via `exit_logic` (parità: stessa funzione del motore).
+
+Non si abbassa TP1 a mano sul paper: sarebbe tarare sul vissuto.
+
 ## B. Ricerca — dove il sistema smette di cercare
 
 ### B1. Il vocabolario è chiuso: 18 mattoncini

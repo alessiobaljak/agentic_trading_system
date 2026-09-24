@@ -1268,3 +1268,23 @@ Fonti: ops 0175-0183 (06:02-06:13 UTC), stato delle 08:13.
 Proposta del giorno: correggere il modello AI, aggiungere le chiavi `selettore` e
 `portafoglio`, e lanciare `portafoglio` per tarare il tetto per direzione e il
 massimo di posizioni sui numeri, non a occhio.
+
+
+### Portafoglio del 24 settembre (08:36, ops 0184)
+
+59 coppie validate insieme sugli ultimi 60 giorni, con i limiti del bot (5
+posizioni, una per coin, tetto per coin, cooldown, 1% per trade): 526 trade aperti
+su 771 candidati, 8,6 al giorno, 2,5 posizioni contemporanee in media (max 5), il
+51% delle altre aperte nella stessa direzione, 39 giorni in utile e 22 in perdita,
+drawdown 16%. **Il PnL (+104% in 60 giorni) NON è una previsione**: le coppie sono
+state scelte perché hanno passato il gate proprio su questo periodo (l'holdout è
+negli ultimi 45 giorni), quindi il livello è gonfiato dalla selezione. Valgono la
+forma e il confronto: il paper apre 4,9 trade al giorno contro 8,6 simulati, un
+divario da capire (frequenza: attesi 9, aperti 5 il 23). Tetto per direzione al 3%:
+ferma 23 trade su 526 (11 short, 12 long), PnL e drawdown invariati, posizioni
+nella stessa direzione da 5 a 4: quasi neutro, non stringe né protegge molto.
+
+`selettore` (0185): 165 righe da una sola coppia (ADA a 1 ora), campione
+insufficiente come atteso; le righe delle 59 coppie a 15m arrivano col giro delle
+08:00. `ai-stato` (0186): chiave ok, modello `claude-opus-4-8`; le proposte AI
+risultano ferme al 22 set 20:14, da verificare in `log-gate` («[ai-hypotheses]»).
