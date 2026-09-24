@@ -54,7 +54,9 @@ def n_workers() -> int:
     in fondo. Quando il tetto scatta, lo dice."""
     env = os.getenv("BACKTEST_WORKERS")
     requested = max(1, int(env)) if env else max(1, os.cpu_count() or 1)
-    per_worker = float(os.getenv("BACKTEST_MEM_PER_WORKER_GB", "1.5"))
+    # 2,0 GB dal 24 set sera: con 1,5 la macchina da 15 GB partiva con 8 worker
+    # e arrivava a 13 GB usati in cinque minuti (quattro giri uccisi per OOM)
+    per_worker = float(os.getenv("BACKTEST_MEM_PER_WORKER_GB", "2.0"))
     avail = available_gb()
     allowed = workers_for(requested, avail, per_worker)
     if allowed < requested:

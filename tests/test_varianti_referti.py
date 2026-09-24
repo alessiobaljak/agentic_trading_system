@@ -366,7 +366,8 @@ def test_le_varianti_troncate_si_valutano_per_ultime_con_la_cache_svuotata(monke
     Ora vanno per ultime e la cache si svuota prima e dopo."""
     import inspect
     src = inspect.getsource(d._disc_one)
-    assert "troncate = [s for s in tutte if" in src and "+ troncate" in src
+    assert "troncate = ([s for s in tutte if" in src and "+ troncate" in src
+    assert d.VARIANTI_TRONCATE is False       # spente dal 24 set sera (OOM sulla VPS)
     assert src.count("svuota_cache_motore(_W[\"opt\"])") == 2
     assert "svuota_cache_motore(opt)" in inspect.getsource(d.conferme_retroattive)
 

@@ -583,6 +583,14 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
 # prova che il paper non ha mai visto. Costo: due valutazioni in piu' per
 # variante passata, su al massimo REFERTI_VARIANTI_MAX spec.
 RETRO_CONFERME = os.getenv("DISCOVERY_RETRO_CONFERME", "true").lower() == "true"
+# LE VARIANTI TRONCATE (dai referti, valutate su dati che finiscono prima
+# dell'ipotesi) sono SPENTE dal 24 set sera: quattro giri di fila uccisi dal
+# sistema per memoria (09, 12, 15 e 18 UTC) con 13 GB su 15 usati dopo cinque
+# minuti; in locale la correzione della cache bastava, sulla VPS no. Finche'
+# non si misura il picco vero per worker sulla macchina (riga «[discover] SYM ...
+# rss» qui sotto), le varianti dai referti si valutano sui dati interi come le
+# altre candidate. Riaccendere: DISCOVERY_VARIANTI_TRONCATE=true.
+VARIANTI_TRONCATE = os.getenv("DISCOVERY_VARIANTI_TRONCATE", "false").lower() == "true"
 RETRO_STEP_DAYS = float(os.getenv("DISCOVERY_RETRO_STEP_DAYS", "8"))
 
 
@@ -900,8 +908,10 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
     # 1,5 GB, per 8 worker 12 GB su 15) — e' l'OOM dei giri delle 09, 12 e 15 UTC
     # del 24 set.
     tutte = list(specs) + list((_W.get("specs_per_symbol") or {}).get(sym, []))
-    troncate = [s for s in tutte if s.get("origine") == "referto" and s.get("ipotesi_da")]
-    ordinate = [s for s in tutte if not (s.get("origine") == "referto" and s.get("ipotesi_da"))] + troncate
+    troncate = ([s for s in tutte if s.get("origine") == "referto" and s.get("ipotesi_da")]
+                if VARIANTI_TRONCATE else [])
+    ordinate = ([s for s in tutte if not (s.get("origine") == "referto" and s.get("ipotesi_da"))] + troncate
+                if VARIANTI_TRONCATE else list(tutte))
     prima_troncata = True
     for spec in ordinate:
         # il contesto di mercato SOLO alle spec che lo usano: per le altre il
@@ -915,7 +925,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
         # conteneva proprio le perdite osservate, e la figlia «solo long» passava
         # in parte per costruzione.
         cand, fr = candles, frame
-        if spec.get("origine") == "referto" and spec.get("ipotesi_da"):
+        if VARIANTI_TRONCATE and spec.get("origine") == "referto" and spec.get("ipotesi_da"):
             cut = _taglio_a(candles, float(spec["ipotesi_da"]))
             if cut < _W["min_history"]:
                 continue
@@ -1000,8 +1010,14 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
         stats_righe["n"] += st["n"]
         for k, v in st["per_famiglia"].items():
             stats_righe["per_famiglia"][k] = stats_righe["per_famiglia"].get(k, 0) + v
+    try:
+        import resource
+        rss_mb = int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
+    except Exception:  # noqa: BLE001
+        rss_mb = 0
     return (sym, entries, passed_keys, specs_passed, n_eval, summary,
-            {"binding": binding, "involved": involved, "near": near[:10]}, stats_righe)
+            {"binding": binding, "involved": involved, "near": near[:10], "rss_mb": rss_mb},
+            stats_righe)
 
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict,
@@ -1776,6 +1792,10 @@ def main() -> int:
         diag_near.extend(diag.get("near") or [])
         if p_keys:
             print(f"[discover] {sym}: {len(p_keys)} coppie passate ✅")
+        if isinstance(diag, dict) and diag.get("rss_mb"):
+            # memoria di picco del worker che ha valutato questa coin: serve a
+            # capire da fuori QUANTO usa un worker sulla macchina vera
+            print(f"[discover] {sym}: worker rss {diag['rss_mb']} MB")
 
     # DATASET DEL SELETTORE (passo 0): i trade OOS delle coppie passate, con le
     # condizioni all'ingresso, accodati al file del giorno. Solo sulla VPS: gli
