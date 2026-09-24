@@ -1317,3 +1317,15 @@ dai referti si valida solo su dati precedenti all'ipotesi e sostituisce la madre
 interazione direzione × mercato. Da decidere (backlog H): t ≥ 3 nel gate, holdout
 non condiviso, stop giornaliero di portafoglio, e la misura che separa mercato da
 esecuzione (4,9 trade al giorno nel paper contro 8,6 simulati).
+
+
+### Portafoglio dopo l'audit, 24 settembre (09:20, ops 0188)
+
+Quattro colonne cumulative sulle 59 validate, ultimi 60 giorni (PnL gonfiato dalla
+selezione: vale la forma): senza limiti 526 trade, +10.386, drawdown 16,3%, 39/22
+giorni; tetto direzione 3% (regola del bot) −64 trade, +9.664, dd 17,0%; + stop
+giornaliero 3% −44 trade, 9 giorni fermati, +7.638, dd 14,9%, giorno peggiore da
+−832 a −187; + netto 2R −80 trade, PnL uguale, dd 16,2%. Win rate dopo 4 perdite di
+fila: 33% su **6 casi** (incondizionato 63,7%, t −1,55): campione inesistente, il
+freno di serie resta spento. Diversification ratio 0,17: le coppie si compensano
+molto, non sono una scommessa sola. `portfolio/backtest` ora si pubblica.
