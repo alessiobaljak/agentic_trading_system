@@ -340,7 +340,10 @@ def _drift_section(fb) -> list[str]:
     serie = [(k, int(v)) for k, v in (doc.get("serie") or {}).items()
              if isinstance(v, (int, float)) and v >= _cfg.STREAK_BRAKE_LOSSES]
     serie.sort(key=lambda kv: (-kv[1], kv[0]))
-    riga_serie = (["- **freno di serie** (size x%g): " % _cfg.STREAK_BRAKE_FACTOR
+    _eti = ("- **freno di serie** (size x%g): " % _cfg.STREAK_BRAKE_FACTOR
+            if _cfg.STREAK_BRAKE_ENABLED else
+            "- serie di perdite (freno SPENTO dal 24 set, solo misura): ")
+    riga_serie = ([_eti
                    + ", ".join(f"**{k}** ({v} perdite di fila)" for k, v in serie), ""]
                   if serie else [])
     if not doc or not (doc.get("pairs") or doc.get("strategies")):
