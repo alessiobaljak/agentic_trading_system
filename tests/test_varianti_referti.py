@@ -358,3 +358,23 @@ def test_merge_promuove_subito_la_variante_con_le_conferme_retroattive():
     assert v["pass_count"] == MIN_PASSES and v.get("validated_at")
     assert v["passed_in_window"] is False and v["window_start"] == int(1_700_000_000)
     assert w["pass_count"] == 1 and not w.get("validated_at")
+
+
+def test_le_varianti_troncate_si_valutano_per_ultime_con_la_cache_svuotata(monkeypatch):
+    """OOM del 24 set: valutare una variante su dati troncati in mezzo alle altre
+    faceva ricostruire la cache degli snapshot e raddoppiava il picco di memoria.
+    Ora vanno per ultime e la cache si svuota prima e dopo."""
+    import inspect
+    src = inspect.getsource(d._disc_one)
+    assert "troncate = [s for s in tutte if" in src and "+ troncate" in src
+    assert src.count("svuota_cache_motore(_W[\"opt\"])") == 2
+    assert "svuota_cache_motore(opt)" in inspect.getsource(d.conferme_retroattive)
+
+    class _Bt:
+        def __init__(self): self._prep_cache = {1: 1}; self._htf_cache = {2: 2}
+    class _Opt:
+        bt = _Bt()
+    o = _Opt()
+    d.svuota_cache_motore(o)
+    assert o.bt._prep_cache == {} and o.bt._htf_cache == {}
+    d.svuota_cache_motore(object())          # senza cache: non esplode

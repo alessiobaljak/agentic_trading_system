@@ -1342,3 +1342,11 @@ solo i conteggi; le righe dei quasi-passaggi entrano solo nel giro completo dell
 02:00 e al massimo per 2 spec per coin; i file più vecchi di 14 giorni si
 cancellano. Il registro non è stato toccato (le validate restano 59); il prossimo
 giro parte col timer delle 17:04. Da verificare: che finisca, e in quanto tempo.
+
+**15:50, la causa vera dell'OOM:** anche il giro delle 17:04 è morto (15:12 UTC).
+Misurato in locale su una serie da 165k candele a 15 minuti: valutare una
+variante dai referti su dati troncati in mezzo alle altre spec fa ricostruire la
+cache degli snapshot del motore e porta il picco di memoria del worker da 0,9 a
+1,5 GB; per 8 worker sono 12 GB su 15. Correzione: le varianti troncate si
+valutano per ultime per ogni coin, con la cache svuotata prima e dopo (picco
+misurato 0,97 GB). Il prossimo giro parte col timer delle 20:04.

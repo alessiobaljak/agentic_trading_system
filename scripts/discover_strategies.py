@@ -586,6 +586,18 @@ RETRO_CONFERME = os.getenv("DISCOVERY_RETRO_CONFERME", "true").lower() == "true"
 RETRO_STEP_DAYS = float(os.getenv("DISCOVERY_RETRO_STEP_DAYS", "8"))
 
 
+def svuota_cache_motore(opt) -> None:
+    """Svuota le cache per-slice del motore (snapshot e 1h). Si chiama attorno alle
+    valutazioni su dati TRONCATI: le loro finestre hanno chiavi diverse da quelle
+    dei dati interi, e tenere in piedi entrambe le serie di snapshot raddoppia il
+    picco di memoria del worker (OOM del 24 set)."""
+    try:
+        opt.bt._prep_cache.clear()
+        opt.bt._htf_cache.clear()
+    except Exception:  # noqa: BLE001
+        pass
+
+
 def _taglio_a(candles, ts: float) -> int:
     """Quante candele hanno open_time <= ts (le candele sono ordinate)."""
     cut = 0
@@ -619,6 +631,7 @@ def conferme_retroattive(opt, sym: str, candles, frame, spec: dict,
             cut = i + 1
         if cut < max(min_history, 1):
             break
+        svuota_cache_motore(opt)            # ogni fine-dati e' una serie a se'
         r = evaluate_spec(opt, sym, candles[:cut], frame.iloc[:cut].reset_index(drop=True),
                           spec, scale_candidates=scale_candidates,
                           context_by_ts=context_by_ts)
@@ -880,8 +893,17 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
     stats_righe = {"n": 0, "per_famiglia": {}}
     bocciate_scritte = 0
     n_eval = 0
-    # le figlie dell'intorno si valutano SOLO sulla coin della madre
-    for spec in list(specs) + list((_W.get("specs_per_symbol") or {}).get(sym, [])):
+    # le figlie dell'intorno si valutano SOLO sulla coin della madre; le
+    # varianti TRONCATE (dai referti, con `ipotesi_da`) per ULTIME e con la cache
+    # del motore svuotata prima e dopo: valutarle in mezzo alle altre faceva
+    # ricostruire la cache degli snapshot (misurato: picco per worker da 0,9 a
+    # 1,5 GB, per 8 worker 12 GB su 15) — e' l'OOM dei giri delle 09, 12 e 15 UTC
+    # del 24 set.
+    tutte = list(specs) + list((_W.get("specs_per_symbol") or {}).get(sym, []))
+    troncate = [s for s in tutte if s.get("origine") == "referto" and s.get("ipotesi_da")]
+    ordinate = [s for s in tutte if not (s.get("origine") == "referto" and s.get("ipotesi_da"))] + troncate
+    prima_troncata = True
+    for spec in ordinate:
         # il contesto di mercato SOLO alle spec che lo usano: per le altre il
         # motore salterebbe una ricerca per candela che non serve a nessuno (e'
         # cio' che il 22 set ha fatto sforare la finestra di 3h)
@@ -898,6 +920,9 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
             if cut < _W["min_history"]:
                 continue
             cand, fr = candles[:cut], frame.iloc[:cut].reset_index(drop=True)
+            if prima_troncata:
+                svuota_cache_motore(_W["opt"])
+                prima_troncata = False
         r = evaluate_spec(_W["opt"], sym, cand, fr, spec,
                           scale_candidates=candidate_ladders(_W.get("scala_paper")),
                           context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
@@ -968,6 +993,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
             summary.append({"symbol": sym, "id": spec["id"], "pf": r["pf"],
                             "pnl": r["pnl"], "desc": GeneratedStrategy(spec).description})
     near.sort(key=lambda n: -(n.get("shortfall") or -9))
+    if troncate:
+        svuota_cache_motore(_W["opt"])      # la coin dopo riparte pulita
     if rows:
         st = scrivi_righe_worker(rows, end, args.interval)
         stats_righe["n"] += st["n"]
