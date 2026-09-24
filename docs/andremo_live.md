@@ -1361,3 +1361,11 @@ misurato 0,97 GB). Il prossimo giro parte col timer delle 20:04.
   non aperti 9 (PF 1,23, 6 short). Indizio, non prova: campione di 9.
 * **Gate lanciato a mano alle 21:11:** 6 worker, 9 GB usati su 15 dopo 11 minuti,
   vivo. Fine attesa verso le 23:00.
+
+**23:26, il giro lanciato a mano è finito bene:** 2h07 (21:13 → 23:20) con 6 worker,
+70.560 valutazioni, 135 coppie passate, 380 coppie a 2 conferme su 3 (erano 213) e
+nessuna con finestra scaduta (le bocciature la chiudono davvero); statistica t
+misurata su 5 validate (1 regge t ≥ 2, mediana 1,47). Dataset del selettore: 9.740
+righe da 135 coppie. Memoria di picco per worker: 2,28 GB (per questo 8 worker
+morivano: 8 × 2,3 > 15). Il timer delle 23:04 è saltato perché il giro era in
+corso; il prossimo è il giro completo delle 02:04, con l'intorno per la prima volta.
