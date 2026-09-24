@@ -75,6 +75,72 @@ def cooldown_bars(hours: float, interval_hours: float) -> int:
     return max(1, int(round(hours / interval_hours)))
 
 
+def _r4(v):
+    """float a 4 decimali o None: e' il formato di TUTTE le variabili del selettore.
+    None quando il valore manca o non e' un numero finito (NaN in un file JSONL
+    diventa un errore di lettura mesi dopo, non oggi)."""
+    if v is None:
+        return None
+    try:
+        x = float(v)
+    except (TypeError, ValueError):
+        return None
+    if x != x or x in (float("inf"), float("-inf")):
+        return None
+    return round(x, 4)
+
+
+def feats_ingresso(snap: AssetSnapshot, tf: str, entry: float, stop: float,
+                   strategy=None, ctx_snap: AssetSnapshot | None = None,
+                   hour: int | None = None) -> dict:
+    """Le variabili che c'erano SUL GRAFICO nell'istante in cui il trade e' nato.
+
+    Passo 0 del selettore (docs/disegno_cervello.md, Punto 2, 24 set 2026). Fino
+    a oggi `SimTrade` diceva l'ESITO di un trade ma non le CONDIZIONI in cui era
+    stato aperto: senza, nessun modello puo' imparare quando un segnale valido
+    paga e quando no. Le variabili sono poche e fisse, scelte nel disegno per non
+    imparare il rumore, e NESSUNA identifica la coin: il selettore deve imparare
+    condizioni, non nomi.
+
+    `tf` e' il timeframe della riga base del motore (come in `_snapshot_from_frame`);
+    `ctx_snap` e' lo snapshot del mercato (BTC) allo stesso istante, o None se il
+    gate non l'ha caricato: in quel caso `market_up` resta None, non si inventa.
+    Ogni valore e' un float a 4 decimali o None (mancante): un dataset che mescola
+    None e numeri e' onesto, uno che riempie i buchi con zeri mente."""
+    ind = snap.ind(tf) if snap is not None else None
+    price = float(getattr(snap, "price", entry) or entry)
+    out: dict = {"rsi": None, "adx": None, "stoch_k": None, "atr_pct": None,
+                 "dist_ema": None, "bb_pos": None, "vol_ratio": None}
+    if ind is not None:
+        out["rsi"] = _r4(ind.rsi)
+        out["adx"] = _r4(ind.adx)
+        out["stoch_k"] = _r4(ind.stoch_k)
+        if ind.atr is not None and price:
+            out["atr_pct"] = _r4(ind.atr / price)
+        if ind.ema_slow:
+            out["dist_ema"] = _r4(price / ind.ema_slow - 1.0)
+        if ind.bb_upper is not None and ind.bb_lower is not None:
+            banda = ind.bb_upper - ind.bb_lower
+            # banda nulla (serie piatta): la posizione non e' definita, non e' 0
+            out["bb_pos"] = _r4((price - ind.bb_lower) / banda) if banda else None
+        if ind.volume is not None and ind.volume_sma:
+            out["vol_ratio"] = _r4(ind.volume / ind.volume_sma)
+    # geometria del trade: larghezza dello stop e primo gradino della scala in R
+    out["stop_pct"] = _r4(abs(entry - stop) / entry) if entry else None
+    mults = (ladder_multiples(getattr(strategy, "params", None))
+             or tuple(settings.SCALE_OUT_R_MULTIPLES))
+    out["r1"] = _r4(min(mults)) if mults else None
+    out["hour"] = int(hour) if hour is not None else None
+    # mercato: BTC sopra (1) o sotto (0) la sua media lenta a 1h; None se non c'e'
+    market_up = None
+    if ctx_snap is not None:
+        m = ctx_snap.ind("1h")
+        if m is not None and m.ema_fast is not None and m.ema_slow is not None:
+            market_up = 1.0 if m.ema_fast > m.ema_slow else 0.0
+    out["market_up"] = market_up
+    return out
+
+
 def max_drawdown(trades) -> float:
     """Max drawdown della curva di equity dei trade IN SEQUENZA (cumulata dei
     pnl_pct). E' la misura della continuita': due strategie con lo stesso ritorno
@@ -415,6 +481,12 @@ class SimTrade:
     # 'premature' = avremmo raggiunto il TP tenendo; 'protected' = avremmo preso lo
     # stop base; 'neutral' = nessuno dei due entro l'orizzonte.
     trailing_verdict: Optional[str] = None
+    # COSA C'ERA SUL GRAFICO all'ingresso (rsi, adx, atr_pct, bb_pos, ...): vedi
+    # `feats_ingresso`. E' il dataset del selettore (passo 0, 24 set 2026): senza
+    # queste variabili i trade simulati dicono com'e' andata ma non in quali
+    # condizioni, e nessun modello puo' imparare a distinguere i segnali buoni.
+    # Vuoto = trade costruito senza snapshot (test, replay vecchi).
+    feats: dict = field(default_factory=dict)
 
     def as_trade_dict(self) -> dict:
         """Formato compatibile con bot.learning.metrics."""
@@ -424,6 +496,7 @@ class SimTrade:
             "pnl": self.pnl, "pnl_pct": self.pnl_pct, "is_win": self.is_win,
             "hour_bucket": self.hour_bucket,
             "confidence_at_entry": self.confidence_at_entry,
+            "feats": dict(self.feats),
         }
 
 
@@ -665,6 +738,9 @@ class Backtester:
             frame = compute_indicator_frame(candles)
         cost = self._liquidity_cost(candles)   # costo reale di QUESTA coin (liquidita')
         snaps, regimes = self._prepared(symbol, frame, candles)
+        # nome della riga base dello snapshot: lo stesso di `_snapshot_from_frame`,
+        # serve a `feats_ingresso` per leggere gli indicatori del timeframe giusto
+        tf = _TF_NAMES.get(round(self.interval_hours, 4), settings.ORCHESTRATOR_TIMEFRAME)
         i = self.window
         n = len(candles)
         while i < n - 1:
@@ -674,6 +750,7 @@ class Backtester:
                 i += 1
                 continue
             ctx_assets = {symbol: snap}
+            ctx_snap = None
             if context_by_ts:
                 ctx_snap = context_by_ts.get(candles[i].open_time)
                 if ctx_snap is not None:
@@ -824,6 +901,10 @@ class Backtester:
                 mfe_r=round(mfe_in_r(entry, mfe, stop), 3),
                 entry_ts=candles[i].open_time.timestamp(),
                 bars_held=max(0, min(j, horizon) - i),
+                # le condizioni all'ingresso, per il selettore (passo 0): costano
+                # una decina di letture per trade, nulla rispetto alla simulazione
+                feats=feats_ingresso(snap, tf, entry, stop, strategy, ctx_snap,
+                                     hour=candles[i].open_time.hour),
             ))
             # ANTI-WHIPSAW, LA STESSA REGOLA DEL BOT. Dopo uno stop IN PERDITA la coin
             # si lascia stare per COOLDOWN_HOURS: il segnale che ha fatto entrare e'

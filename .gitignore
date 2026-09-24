@@ -25,6 +25,10 @@ gate_backup_*.json
 backtesting/output/
 *.log
 data_cache/
+# il dataset del selettore (un file JSONL per giro del gate, con le condizioni
+# all'ingresso di ogni trade simulato): sono dati di ogni giro, vivono sulla VPS.
+# Il riepilogo sta su Firestore (selector/dataset).
+data/selettore/
 
 # Node / Next.js
 dashboard/node_modules/

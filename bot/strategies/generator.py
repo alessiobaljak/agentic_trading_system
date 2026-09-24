@@ -249,3 +249,105 @@ def varianti_da_referto(spec: dict, tipo: str) -> Optional[dict]:
     figlia["ipotesi"] = tipo
     figlia["id"] = spec_id(figlia)
     return figlia
+
+
+# --------------------------------------------------------------------------- #
+# L'INTORNO DI UNA STRATEGIA VALIDATA (24 set 2026, backlog B8 seconda meta')   #
+#                                                                              #
+# Le soglie di una spec generata sono congelate alla nascita. I sistemi         #
+# quantitativi seri le riprovano a intervalli fissi sulla storia recente: qui   #
+# ogni parametro numerico si sposta di UN gradino in su e uno in giu' sulle     #
+# liste del generatore, una figlia per gradino. Le feature non cambiano (lo fa  #
+# gia' `mutate`). Il gate giudica le figlie con la stessa pipeline delle        #
+# varianti dai referti (walk-forward, holdout, conferme retroattive); la scelta #
+# fra le figlie e' di nuovo una piccola lotteria, e per questo la figlia        #
+# sostituisce la madre solo con un margine, e non piu' di una volta ogni due    #
+# settimane (regole in scripts/discover_strategies.py).                         #
+# --------------------------------------------------------------------------- #
+#: parametro -> lista dei gradini, a livello di feature e a livello di spec
+_GRADINI_FEATURE = {
+    "low": None, "high": None,          # dipendono dal kind: rsi o stocastico
+    "mid": _RSI_MID, "vol_pct": _VOL_PCT, "adx_lo": _ADX_LO, "adx_hi": _ADX_HI,
+    "vol_mult_feat": _VOL_MULT_FEAT, "stretch_max": _STRETCH_MAX,
+    "htf_gap": _HTF_GAP, "rs_gap": _RS_GAP,
+}
+_GRADINI_SPEC = {
+    "atr_mult_stop": _ATR_STOP,
+    "volume_mult": sorted({v for v in _VOL if v > 0}),
+    "min_adx": sorted({v for v in _ADX if v > 0}),
+}
+
+
+def _lista_per(kind: str, param: str):
+    if param in ("low", "high"):
+        if kind == "rsi_extreme":
+            return _RSI_LOW if param == "low" else _RSI_HIGH
+        if kind == "stoch_extreme":
+            return _STOCH_LOW if param == "low" else _STOCH_HIGH
+        return None
+    return _GRADINI_FEATURE.get(param)
+
+
+def _vicini(valore: float, lista) -> list[float]:
+    """Il gradino sotto e quello sopra `valore` nella lista (se esistono).
+    Un valore fuori lista prende i due gradini piu' vicini attorno a lui."""
+    if not lista:
+        return []
+    try:
+        v = float(valore)
+    except (TypeError, ValueError):
+        return []
+    sotto = [g for g in lista if g < v]
+    sopra = [g for g in lista if g > v]
+    out = []
+    if sotto:
+        out.append(max(sotto))
+    if sopra:
+        out.append(min(sopra))
+    return out
+
+
+def figlie_intorno(spec: dict) -> list[dict]:
+    """Le spec figlie con UN parametro numerico spostato di un gradino.
+
+    Ogni figlia cambia una cosa sola, cosi' se passa e la madre no si sa cosa ha
+    fatto la differenza. Porta origine="intorno", genitore e ipotesi
+    "intorno:<parametro>"; conserva timeframe e `solo`; nuovo id. Nessuna figlia
+    per i parametri che non hanno gradini (sessione, feature senza numeri)."""
+    if not isinstance(spec, dict):
+        return []
+    out: list[dict] = []
+    visti: set[str] = set()
+
+    def _emetti(figlia: dict, etichetta: str) -> None:
+        figlia.pop("id", None)
+        figlia["origine"] = "intorno"
+        figlia["genitore"] = spec.get("id")
+        figlia["ipotesi"] = f"intorno:{etichetta}"
+        figlia["id"] = spec_id(figlia)
+        if figlia["id"] != spec.get("id") and figlia["id"] not in visti:
+            visti.add(figlia["id"])
+            out.append(figlia)
+
+    feats = [f for f in spec.get("features", []) if isinstance(f, dict)]
+    for i, f in enumerate(feats):
+        for param, val in f.items():
+            if param == "kind" or not isinstance(val, (int, float)):
+                continue
+            for g in _vicini(val, _lista_per(str(f.get("kind")), param)):
+                figlia = {k: v for k, v in spec.items()}
+                figlia["features"] = [dict(x) for x in feats]
+                figlia["features"][i][param] = g
+                _emetti(figlia, f"{f.get('kind')}.{param}={g:g}")
+    for param, lista in _GRADINI_SPEC.items():
+        val = spec.get(param)
+        # un filtro SPENTO (0) resta spento: accenderlo non e' «spostare di un
+        # gradino», e' un'altra strategia — quello lo fa gia' la mutazione
+        if not isinstance(val, (int, float)) or val <= 0:
+            continue
+        for g in _vicini(val, lista):
+            figlia = {k: v for k, v in spec.items()}
+            figlia["features"] = [dict(x) for x in feats]
+            figlia[param] = g
+            _emetti(figlia, f"{param}={g:g}")
+    return out

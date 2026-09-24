@@ -1199,3 +1199,28 @@ scartata subito. Le due date arretrate stanno prima del periodo in cui il paper 
 formulato l'ipotesi: sono la parte della prova che il paper non ha mai visto.
 Costo: due valutazioni in più per variante passata, su al massimo 10 spec. Il
 metro: in `log-gate` le righe «conferme retroattive n/2».
+
+
+### 24 settembre, sera: il cervello prende forma (selettore passi 0-1, intorno)
+
+Richiesta: «procedi con tutto come da tuo suggerimento». Tre pezzi, nessuno tocca
+il bot.
+
+* **Dataset del selettore (passo 0).** Ogni trade simulato dal gate porta ora le
+  variabili all'ingresso (RSI, ADX, stocastico, volatilità, distanza dalla media,
+  posizione nelle bande, volume, larghezza dello stop, primo gradino, ora, BTC
+  sopra/sotto la media oraria). A ogni giro la discovery scrive i trade OOS delle
+  coppie passate in `data/selettore/` sulla VPS e un riepilogo in
+  `selector/dataset`. Primo numero da leggere: quante righe e quante famiglie con
+  almeno 500.
+* **Addestramento e confronto (passo 1).** `bot/learning/selettore.py`:
+  regressione logistica (numpy/scipy, nessuna dipendenza nuova), walk-forward nel
+  tempo con soglia scelta sul train, confronto «apri tutto» contro «selettore» per
+  finestra. Il comando ops `selettore` stampa il verdetto per famiglia (va
+  aggiunto alla lista bianca sulla VPS). Il bot NON lo usa: l'ombra è il passo 2.
+* **L'intorno (punto 1).** Nel giro completo, fino a 10 coppie validate a notte
+  vengono riprovate con ogni soglia spostata di un gradino, solo sulla loro coin.
+  La figlia sostituisce la madre solo con le conferme retroattive e un margine del
+  10% sul ritorno OOS; la madre resta nel registro ma non si opera più. Il metro:
+  in `log-gate` le righe «intorno: N coppie … figlie» e «[intorno] … sostituisce».
+  Il cronometro del giro completo dice se il tetto può salire a 40.

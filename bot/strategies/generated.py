@@ -380,6 +380,39 @@ FEATURE_LIBRARY = {
 }
 
 
+#: FAMIGLIE di strategia per il selettore (docs/disegno_cervello.md, Punto 2):
+#: un modello per famiglia, non per strategia — per strategia i trade sono
+#: troppo pochi. Contano solo le feature DIREZIONALI: i filtri (volatilita',
+#: sessione, volume...) dicono quando operare, non in che verso.
+FAMIGLIE_FEATURE = {
+    "reversion": {"rsi_extreme", "bb_touch", "vwap_reversion", "stoch_extreme",
+                  "market_fade", "htf_fade"},
+    "momentum": {"rsi_momentum", "ema_cross", "macd_cross", "macd_hist", "macd_zero",
+                 "price_ema", "price_bb_mid", "vwap_momentum", "stoch_momentum",
+                 "market_trend", "htf_confirm", "relative_strength"},
+    "breakout": {"bb_break"},
+}
+
+
+def famiglia_spec(spec: dict) -> str:
+    """"reversion" | "momentum" | "breakout" | "altro": la famiglia di una spec.
+
+    Vince la famiglia con piu' feature direzionali; a parita' l'ordine e'
+    reversion > momentum > breakout (una spec che compra l'RSI basso E la media
+    che gira e' prima di tutto un rientro alla media). Nessuna feature
+    direzionale -> "altro". E' l'etichetta con cui il dataset del selettore
+    raggruppa i trade (passo 0, 24 set 2026): deve restare STABILE, perche' un
+    modello addestrato su una famiglia si applica ai trade della stessa."""
+    kinds = [f.get("kind") for f in (spec.get("features") or []) if isinstance(f, dict)]
+    conteggi = {fam: sum(1 for k in kinds if k in feats)
+                for fam, feats in FAMIGLIE_FEATURE.items()}
+    vincente, massimo = "altro", 0
+    for fam in ("reversion", "momentum", "breakout"):   # ordine = tie-break
+        if conteggi[fam] > massimo:
+            vincente, massimo = fam, conteggi[fam]
+    return vincente
+
+
 def spec_id(spec: dict) -> str:
     """Hash stabile della LOGICA (feature+soglie), così la stessa strategia ha
     sempre lo stesso id tra run (la validazione cumulativa funziona per nome).

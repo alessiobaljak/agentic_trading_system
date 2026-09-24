@@ -570,7 +570,31 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         # e questo dice se la coppia sta ancora AVANZANDO (non solo
                         # sopravvivendo): senza, `sta_ancora_progredendo` va in
                         # fail-open e tiene la coin nell'universo per sempre.
-                        "last_passed_at"}
+                        "last_passed_at",
+                        # L'INTORNO (24 set 2026): la madre sostituita da una figlia
+                        # resta nel registro ma NON si opera; senza questi campi un
+                        # alleggerimento la rimetterebbe in gioco accanto alla figlia
+                        # (la stessa scommessa due volte, il caso USELESSUSDT).
+                        "sostituita_da", "intorno_at", "nata_intorno_at", "validated_at"}
+
+
+def coppie_validate(pairs: dict, now: float | None = None) -> list[str]:
+    """LE COPPIE CHE IL BOT OPERA, in un posto solo.
+
+    Fino al 24 set 2026 la regola (pass_count >= MIN_PASSES e vista da meno di
+    FRESH_DAYS) era copiata in due file, optimize e discover: due copie della
+    stessa regola prima o poi divergono (e' gia' successo tre volte su questo
+    documento). Ora e' qui, e aggiunge la terza condizione: una madre SOSTITUITA
+    da una figlia dell'intorno (`sostituita_da`) non si opera piu' — resta nel
+    registro con la sua storia, ma la scommessa la porta avanti la figlia."""
+    ora = time.time() if now is None else now
+    return sorted(
+        k for k, r in pairs.items()
+        if isinstance(r, dict)
+        and int(r.get("pass_count", 0) or 0) >= MIN_PASSES
+        and (ora - float(r.get("last_seen_at", 0) or 0)) < FRESH_DAYS * 86400
+        and not r.get("sostituita_da")
+    )
 
 
 def slim_registry(pairs: dict, validated: list,
@@ -1070,11 +1094,7 @@ def update_registry(fb, out: dict, passed_now: list[str],
               f"dall'universo da oltre {FRESH_DAYS * 2:g} giorni. Senza questo il "
               f"registro cresce senza limite e soffoca le generate.")
 
-    validated = sorted(
-        k for k, r in pairs.items()
-        if r.get("pass_count", 0) >= MIN_PASSES
-        and (time.time() - r.get("last_seen_at", 0)) < FRESH_DAYS * 86400
-    )
+    validated = coppie_validate(pairs)
     validated_coins = {pairs[k]["symbol"] for k in validated}
 
     # COPERTURA = tutte le coin che hanno almeno una strategia validata (coerente
