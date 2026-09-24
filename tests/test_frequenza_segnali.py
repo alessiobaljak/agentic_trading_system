@@ -64,6 +64,7 @@ def _argomenti():
 
     catturati = []
     vero = argparse.ArgumentParser.add_argument
+    vero_parse = argparse.ArgumentParser.parse_args
 
     def spia(self, *a, **k):
         azione = vero(self, *a, **k)
@@ -84,7 +85,9 @@ def _argomenti():
         pass
     finally:
         argparse.ArgumentParser.add_argument = vero
-        del argparse.ArgumentParser.parse_args
+        # RIPRISTINARE, non cancellare: con `del` la classe restava senza
+        # parse_args per tutti i test successivi dello stesso processo (24 set)
+        argparse.ArgumentParser.parse_args = vero_parse
     return catturati
 
 

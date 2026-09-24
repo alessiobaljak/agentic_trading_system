@@ -63,6 +63,8 @@ confronto:    .venv/bin/python -m scripts.confronto_gate_paper
 # sbagliati dall'inizio (ingresso) o andati a favore senza toccare il primo
 # gradino (uscita). Sola lettura.
 mfe:          .venv/bin/python -m scripts.mfe_report
+# selettore (disegno_cervello, punto 2 passo 1): «apri tutto» vs «selettore», offline, sola lettura
+selettore:    .venv/bin/python -m scripts.selettore_report
 # revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
 costi:        .venv/bin/python -m scripts.revalidate_costs
 
