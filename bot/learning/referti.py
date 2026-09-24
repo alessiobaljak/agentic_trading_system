@@ -88,6 +88,22 @@ def _aggiungi(b: dict, pnl: float, direzione: str, pm: dict | None) -> None:
             b["controtrend"] += 1
 
 
+def _ts_trade(t: dict):
+    """Epoch dell'apertura (entry_ts, o entry_time ISO; in mancanza exit_ts)."""
+    import datetime as _dt
+    for k in ("entry_ts", "exit_ts"):
+        v = t.get(k)
+        if isinstance(v, (int, float)):
+            return float(v)
+    v = t.get("entry_time")
+    if v:
+        try:
+            return _dt.datetime.fromisoformat(str(v)).timestamp()
+        except (TypeError, ValueError):
+            pass
+    return None
+
+
 def _arrotonda(b: dict) -> dict:
     b["pnl"] = round(b["pnl"], 2)
     return b
@@ -137,9 +153,14 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
     per_coin: dict[str, dict] = defaultdict(_bucket_vuoto)
     per_dir: dict[str, dict] = {"long": _bucket_vuoto(), "short": _bucket_vuoto()}
     n_con_referto = n_persi_con_referto = 0
+    # il PRIMO trade del paper per strategia: la variante che nasce da un'ipotesi
+    # si valida su dati che finiscono prima di quella data (pre-registrazione,
+    # audit del 24 set)
+    primo_ts: dict[str, float] = {}
 
     for t in rows:
         pnl = float(t.get("pnl", 0) or 0)
+        ts = _ts_trade(t)
         direzione = str(t.get("direction", "") or "").lower()
         pm = t.get("post_mortem")
         pm = pm if isinstance(pm, dict) else None
@@ -149,6 +170,8 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
                 n_persi_con_referto += 1
         gid = str(t.get("strategy", "?") or "?")
         sym = str(t.get("symbol", "?") or "?")
+        if ts is not None and (gid not in primo_ts or ts < primo_ts[gid]):
+            primo_ts[gid] = ts
         _aggiungi(per_strat[gid], pnl, direzione, pm)
         _aggiungi(per_coin[sym], pnl, direzione, pm)
         if direzione in per_dir:
@@ -158,7 +181,10 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
     for gid in sorted(per_strat):
         if gid == "?":
             continue    # trade senza strategia: contano nei bucket, non propongono
-        ipotesi.extend(_ipotesi_per(gid, per_strat[gid]))
+        for h in _ipotesi_per(gid, per_strat[gid]):
+            if gid in primo_ts:
+                h["da_ts"] = round(primo_ts[gid], 0)
+            ipotesi.append(h)
     ipotesi.sort(key=lambda h: (h["strategia"], h["tipo"]))
 
     return {

@@ -90,6 +90,15 @@ def _r4(v):
     return round(x, 4)
 
 
+def _feats_sicure(snap, tf, entry, stop, strategy, ctx_snap, hour) -> dict:
+    """feats_ingresso in fail-open: un dato storto non deve fermare il backtest
+    di una coppia (audit del 24 set). Vuoto = «non misurato»."""
+    try:
+        return feats_ingresso(snap, tf, entry, stop, strategy, ctx_snap, hour=hour)
+    except Exception:  # noqa: BLE001
+        return {}
+
+
 def feats_ingresso(snap: AssetSnapshot, tf: str, entry: float, stop: float,
                    strategy=None, ctx_snap: AssetSnapshot | None = None,
                    hour: int | None = None) -> dict:
@@ -903,8 +912,8 @@ class Backtester:
                 bars_held=max(0, min(j, horizon) - i),
                 # le condizioni all'ingresso, per il selettore (passo 0): costano
                 # una decina di letture per trade, nulla rispetto alla simulazione
-                feats=feats_ingresso(snap, tf, entry, stop, strategy, ctx_snap,
-                                     hour=candles[i].open_time.hour),
+                feats=_feats_sicure(snap, tf, entry, stop, strategy, ctx_snap,
+                                    candles[i].open_time.hour),
             ))
             # ANTI-WHIPSAW, LA STESSA REGOLA DEL BOT. Dopo uno stop IN PERDITA la coin
             # si lascia stare per COOLDOWN_HOURS: il segnale che ha fatto entrare e'

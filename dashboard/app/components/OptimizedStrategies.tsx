@@ -30,7 +30,7 @@ type Reg = {
   ready?: boolean;
 };
 type Feature = { kind: string } & Record<string, unknown>;
-type Spec = { features?: Feature[]; volume_mult?: number; min_adx?: number; atr_mult_stop?: number; rr?: number };
+type Spec = { features?: Feature[]; volume_mult?: number; min_adx?: number; atr_mult_stop?: number; rr?: number; solo?: string };
 type SpecsDoc = { specs?: Record<string, Spec> };
 type Prod = { n: number; wins: number; pnl: number; points: Array<[number, number]> }; // [exit_ts, pnl]
 type TradeDoc = { strategy?: string; pnl?: number; is_win?: boolean; exit_ts?: number };
@@ -87,6 +87,7 @@ function describe(name: string, generated: boolean, spec?: Spec): string {
   const tail: string[] = [];
   if (spec?.atr_mult_stop) tail.push(`stop ${spec.atr_mult_stop} ATR`);
   if (spec?.rr) tail.push(`R/R ${spec.rr}`);
+  if (spec?.solo) tail.push(`solo ${spec.solo}`); // variante a un lato (24 set)
   return tail.length ? `${base} ${tail.join(', ')}.` : base;
 }
 

@@ -20,7 +20,7 @@ import argparse
 import json
 import os
 import time
-from datetime import date
+from datetime import date, datetime, timezone
 
 from backtesting.data_loader import load_candles
 from bot.strategies.generated import MARKET_FEATURES, MARKET_SYMBOL, famiglia_spec, spec_id
@@ -466,7 +466,8 @@ RANDOM_MAX = int(os.getenv("DISCOVERY_RANDOM_MAX", "40"))
 
 
 def varianti_dai_referti(fb, existing: dict, interval: str,
-                         limit: int = REFERTI_VARIANTI_MAX) -> list[dict]:
+                         limit: int = REFERTI_VARIANTI_MAX,
+                         pairs: dict | None = None) -> list[dict]:
     """Le VARIANTI che il paper propone, pronte per il gate (backlog B8).
 
     Il bot scrive in `learning/referti` le ipotesi ricavate dai post-mortem dei
@@ -513,8 +514,30 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
             continue
         if (genitore.get("timeframe") or tf_bot) != interval:
             continue
+        # IL GATE HA GIA' LA RISPOSTA? (audit del 24 set) L'ipotesi «gli short
+        # perdono» nasce da 3-4 trade del paper (falso positivo ~22%); il gate ha
+        # decine di trade OOS per direzione. Se per questa coppia il lato da
+        # spegnere ha PF >= 1 su almeno 20 trade nel gate, la variante non nasce.
+        tipo = str(ip.get("tipo") or "")
+        if pairs and tipo in ("solo_long", "solo_short"):
+            lato_spento = "short" if tipo == "solo_long" else "long"
+            for k, rec in pairs.items():
+                if (rec.get("strategy") or k.split("|", 1)[-1]) != gid:
+                    continue
+                dpf = ((rec.get("direzione_pf") or {}).get(lato_spento) or {})
+                if int(dpf.get("n", 0) or 0) >= 20 and float(dpf.get("pf", 0) or 0) >= 1.0:
+                    print(f"[discover] variante {gid} {tipo} non creata: nel gate il lato "
+                          f"{lato_spento} ha PF {dpf['pf']} su {dpf['n']} trade ({k})")
+                    tipo = ""
+                    break
+            if not tipo:
+                continue
         try:
-            figlia = varianti_da_referto(genitore, str(ip.get("tipo") or ""))
+            figlia = varianti_da_referto(genitore, tipo)
+            if figlia is not None and ip.get("da_ts"):
+                # la data del primo trade del paper che ha fatto nascere
+                # l'ipotesi: la validazione finisce PRIMA (pre-registrazione)
+                figlia["ipotesi_da"] = float(ip["da_ts"])
         except Exception as exc:  # noqa: BLE001
             print(f"[discover] variante {ip.get('strategia')} ({ip.get('tipo')}) "
                   f"non costruibile: {str(exc)[:80]}")
@@ -563,6 +586,16 @@ RETRO_CONFERME = os.getenv("DISCOVERY_RETRO_CONFERME", "true").lower() == "true"
 RETRO_STEP_DAYS = float(os.getenv("DISCOVERY_RETRO_STEP_DAYS", "8"))
 
 
+def _taglio_a(candles, ts: float) -> int:
+    """Quante candele hanno open_time <= ts (le candele sono ordinate)."""
+    cut = 0
+    for i, c in enumerate(candles):
+        if c.open_time.timestamp() > ts:
+            break
+        cut = i + 1
+    return cut
+
+
 def conferme_retroattive(opt, sym: str, candles, frame, spec: dict,
                          scale_candidates=None, context_by_ts=None,
                          n: int = MIN_PASSES - 1, step_days: float = RETRO_STEP_DAYS,
@@ -602,7 +635,8 @@ SELETTORE_DIR = os.getenv("SELETTORE_DIR", "data/selettore")
 
 
 def righe_selettore(trades, symbol: str, spec: dict, run_end: str = "",
-                    interval: str = "") -> list[dict]:
+                    interval: str = "",
+                    passed: bool = True) -> list[dict]:
     """Le righe del dataset del selettore per i trade OOS di UNA coppia.
 
     FORMATO CONDIVISO con chi addestra (bot/learning/selettore.py): cambiare una
@@ -620,7 +654,7 @@ def righe_selettore(trades, symbol: str, spec: dict, run_end: str = "",
             "entry_ts": float(t.entry_ts), "pnl_pct": float(t.pnl_pct),
             "pnl": float(t.pnl), "is_win": bool(t.is_win),
             "mfe_r": float(t.mfe_r), "bars_held": int(t.bars_held),
-            "hour": int(t.hour_bucket), "famiglia": fam,
+            "hour": int(t.hour_bucket), "famiglia": fam, "passed": bool(passed),
             "feats": dict(getattr(t, "feats", None) or {}),
             "run_end": str(run_end), "interval": str(interval),
         })
@@ -643,9 +677,15 @@ def scrivi_dataset_selettore(fb, rows: list[dict], end: str, interval: str,
     try:
         os.makedirs(SELETTORE_DIR, exist_ok=True)
         path = os.path.join(SELETTORE_DIR, f"{end}_{interval}.jsonl")
+        scartate_nan = 0
         with open(path, "a", encoding="utf-8") as fh:
             for r in rows:
-                fh.write(json.dumps(r, ensure_ascii=False, allow_nan=False) + "\n")
+                try:
+                    fh.write(json.dumps(r, ensure_ascii=False, allow_nan=False) + "\n")
+                except ValueError:      # NaN in un campo: si salta LA RIGA, non il giro
+                    scartate_nan += 1
+        if scartate_nan:
+            print(f"[selettore] {scartate_nan} righe con NaN saltate")
         per_famiglia: dict[str, int] = {}
         for r in rows:
             fam = r.get("famiglia") or "altro"
@@ -677,7 +717,7 @@ def scrivi_dataset_selettore(fb, rows: list[dict], end: str, interval: str,
 # Il tetto e' 10 finche' il giro completo non sta sotto 1h30 (poi 40).
 INTORNO_CAP = int(os.getenv("DISCOVERY_INTORNO_CAP", "10"))
 INTORNO_OGNI_GIORNI = float(os.getenv("DISCOVERY_INTORNO_OGNI_GIORNI", "7"))
-INTORNO_RIPOSO_GIORNI = float(os.getenv("DISCOVERY_INTORNO_RIPOSO_GIORNI", "14"))
+INTORNO_RIPOSO_GIORNI = float(os.getenv("DISCOVERY_INTORNO_RIPOSO_GIORNI", "30"))
 INTORNO_MARGINE = float(os.getenv("DISCOVERY_INTORNO_MARGINE", "0.10"))
 
 
@@ -711,7 +751,8 @@ def coppie_per_intorno(pairs: dict, existing: dict, drift_doc: dict | None,
     return [(k, sp) for _, _, k, sp in cand[:max(0, cap)]]
 
 
-def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=None) -> None:
+def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=None,
+               gia_validate=None) -> None:
     opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
     # IL MERCATO NEL GATE. `scripts/optimize.py` carica BTC come contesto
     # cross-asset da sempre; la discovery — che valida TUTTE le spec che il bot
@@ -729,7 +770,8 @@ def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=N
         print(f"[discover] contesto di mercato non disponibile nel worker: {exc}")
     _W.update(opt=opt, args=args, end=end, specs=specs,
               min_history=_min_history(args.interval), scala_paper=scala_paper,
-              btc_ctx=btc_ctx, specs_per_symbol=specs_per_symbol or {})
+              btc_ctx=btc_ctx, specs_per_symbol=specs_per_symbol or {},
+              gia_validate=set(gia_validate or ()))
 
 
 def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
@@ -771,7 +813,18 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
         # cio' che il 22 set ha fatto sforare la finestra di 3h)
         usa_mercato = any((f.get("kind") in MARKET_FEATURES)
                           for f in (spec.get("features") or []) if isinstance(f, dict))
-        r = evaluate_spec(_W["opt"], sym, candles, frame, spec,
+        # PRE-REGISTRAZIONE (audit del 24 set): una variante dai referti si giudica
+        # SOLO su dati precedenti al primo trade del paper che ha fatto nascere
+        # l'ipotesi (`ipotesi_da`). Senza questo taglio l'holdout di 45 giorni
+        # conteneva proprio le perdite osservate, e la figlia «solo long» passava
+        # in parte per costruzione.
+        cand, fr = candles, frame
+        if spec.get("origine") == "referto" and spec.get("ipotesi_da"):
+            cut = _taglio_a(candles, float(spec["ipotesi_da"]))
+            if cut < _W["min_history"]:
+                continue
+            cand, fr = candles[:cut], frame.iloc[:cut].reset_index(drop=True)
+        r = evaluate_spec(_W["opt"], sym, cand, fr, spec,
                           scale_candidates=candidate_ladders(_W.get("scala_paper")),
                           context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                           run_end=end, interval=args.interval)
@@ -790,9 +843,12 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
         if r["passed"]:
             key = f"{sym}|{spec['id']}"
             retro = 0
-            if RETRO_CONFERME and spec.get("origine") in ("referto", "intorno"):
+            # le conferme retroattive servono alla PRIMA promozione: una variante
+            # gia' validata e' una validata come le altre (audit del 24 set)
+            if (RETRO_CONFERME and spec.get("origine") in ("referto", "intorno")
+                    and key not in (_W.get("gia_validate") or set())):
                 retro = conferme_retroattive(
-                    _W["opt"], sym, candles, frame, spec,
+                    _W["opt"], sym, cand, fr, spec,
                     scale_candidates=candidate_ladders(_W.get("scala_paper")),
                     context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                     min_history=_W["min_history"])
@@ -818,6 +874,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                 # registro (`last_t`) cosi' `gate` puo' dire quante validate
                 # reggerebbero un criterio t >= 2 prima di renderlo una regola
                 "t_stat": r.get("t_stat"),
+                "window_pnls": r.get("window_pnls") or [],
+                "direzione_pf": r.get("direzione_pf") or {},
             }
             passed_keys.append(key)
             specs_passed[spec["id"]] = spec
@@ -952,14 +1010,62 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         "t_stat": round(t_stat(oos.trades), 3),
         # dataset del selettore: i trade OOS della CONFIGURAZIONE FINALE (scala e
         # break-even scelti al passo 2), cioe' quella che il bot opera davvero
-        "oos_rows": (righe_selettore(oos.trades, symbol, spec, run_end, interval)
-                     if passed else []),
+        # Dal 24 set (audit) anche i QUASI-PASSAGGI, con `passed` False: un
+        # selettore allenato solo sui vincitori non puo' imparare a dire «no».
+        "oos_rows": (righe_selettore(oos.trades, symbol, spec, run_end, interval,
+                                     passed=passed)
+                     if (passed or (near and not passed)) else []),
+        # ritorni per finestra OOS: servono al confronto APPAIATO figlia/madre
+        "window_pnls": [round(float(w), 4) for w in window_pnls],
+        # PF e campione PER DIREZIONE (E1, audit del 24 set): l'ipotesi «gli short
+        # di questa spec perdono» si verifica qui, su decine di trade OOS, prima
+        # che il paper la proponga con quattro.
+        "direzione_pf": _pf_per_direzione(oos.trades),
     }
+
+
+def _pf_per_direzione(trades) -> dict:
+    out = {}
+    for lato in ("long", "short"):
+        sel = [t for t in trades if str(t.direction).lower() == lato]
+        if not sel:
+            continue
+        g = sum(t.pnl_pct for t in sel if t.pnl_pct > 0)
+        l = -sum(t.pnl_pct for t in sel if t.pnl_pct < 0)
+        pf = (g / l) if l > 0 else (99.0 if g > 0 else 0.0)
+        out[lato] = {"pf": round(pf, 3), "n": len(sel)}
+    return out
+
+
+def _metro(pnl, dd) -> float:
+    return float(pnl or 0) - float(dd or 0)
+
+
+def _batte_per_finestra(figlia: dict, madre: dict, margine: float) -> tuple[bool, str]:
+    """La figlia batte la madre se (ritorno OOS - drawdown) e' maggiore del
+    margine E vince in almeno 2 finestre OOS su 3 (test APPAIATO: stesse finestre,
+    stesso giro). Entrambi i numeri devono venire dallo stesso giro."""
+    mf = _metro(figlia.get("oos_pnl_pct"), figlia.get("oos_max_dd"))
+    mm = _metro(madre.get("oos_pnl_pct"), madre.get("oos_max_dd"))
+    if mm <= 0:
+        ok_tot = mf > 0
+    else:
+        ok_tot = mf >= mm * (1.0 + margine)
+    wf, wm = list(figlia.get("window_pnls") or []), list(madre.get("window_pnls") or [])
+    if wf and wm and len(wf) == len(wm):
+        vinte = sum(1 for a, b in zip(wf, wm) if a > b)
+        ok_fin = vinte * 2 > len(wf)
+    else:
+        ok_fin = False
+    return (ok_tot and ok_fin), f"metro {mf:.3f} vs {mm:.3f}, finestre {wf} vs {wm}"
 
 
 def merge_into_registry(fb, out: dict, passed_now: list[str],
                         evaluated_symbols: set | None = None,
-                        intorno_madri: dict | None = None) -> list[str]:
+                        intorno_madri: dict | None = None,
+                        evaluated_spec_ids: set | None = None,
+                        data_end_run: float = 0.0,
+                        esito: dict | None = None) -> list[str]:
     """Aggiunge SOLO le coppie generate che PASSANO (accumula pass_count) e pota
     quelle generate inutili/stantie, evitando crescita illimitata del documento.
     Ricalcola la lista validated PRESERVANDO i campi di copertura del GATE 1
@@ -985,31 +1091,76 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
             if r.get("generated") and r.get("symbol") in evaluated_symbols:
                 r["last_seen_at"] = now
     drifted = drifted_from_paper(fb)   # evidenza dal paper: vale come fallimento
+    # 0) UNA BOCCIATURA CHIUDE LA FINESTRA (audit del 24 set: il giro «solo
+    #    urgenti» non si svuotava mai, 223 spec su 516, perche' una coppia a 1-2
+    #    conferme con la finestra scaduta che NON ripassava restava urgente per
+    #    sempre e veniva rivalutata ogni tre ore sugli stessi dati). Come fa
+    #    optimize per le base: valutata in questo giro e non passata -> UN
+    #    fallimento per finestra, e la coppia torna urgente dopo 168 ore.
+    scartate_giro = set(esito.get("scartate", ())) if esito else set()
+    if evaluated_spec_ids and evaluated_symbols and data_end_run > 0:
+        passate = set(passed_now)
+        for k, r in pairs.items():
+            if (r.get("generated") and int(r.get("pass_count", 0) or 0) >= 1
+                    and k not in passate and r.get("symbol") in evaluated_symbols
+                    and (r.get("strategy") or k.split("|", 1)[-1]) in evaluated_spec_ids):
+                judge_window(r, data_end_run, False)
     # 1) upsert SOLO delle coppie passate (non sporco il registro con i fallimenti)
-    n_intorno_ok = n_intorno_no = 0
+    n_intorno_ok = n_intorno_no = n_var_scartate = 0
+    # UNA SOLA FIGLIA PER MADRE E PER GIRO (audit del 24 set): con 6-12 figlie
+    # per madre, due che passano entrerebbero entrambe sulla stessa coin — la
+    # stessa scommessa due volte. Resta la migliore per (ritorno - drawdown).
+    migliore_per_madre: dict = {}
+    for key in passed_now:
+        e = out[key]
+        spec_e = e.get("spec") or {}
+        if isinstance(spec_e, dict) and spec_e.get("origine") in ("intorno", "referto"):
+            mk = f"{e['symbol']}|{spec_e.get('genitore')}"
+            m = _metro(e.get("oos_pnl_pct"), e.get("oos_max_dd"))
+            if mk not in migliore_per_madre or m > migliore_per_madre[mk][0]:
+                migliore_per_madre[mk] = (m, key)
     for key in passed_now:
         e = out[key]
         rec = pairs.get(key, {"pass_count": 0})
-        # UNA FIGLIA DELL'INTORNO entra solo se ha le conferme retroattive E batte
-        # la madre con margine sul ritorno OOS (l'ultimo numero della madre nel
-        # registro). Altrimenti non entra affatto: scegliere la migliore fra otto
-        # figlie e' una piccola lotteria, e senza margine si validerebbe il rumore.
         spec_e = e.get("spec") or {}
-        if isinstance(spec_e, dict) and spec_e.get("origine") == "intorno":
-            madre = pairs.get(f"{e['symbol']}|{spec_e.get('genitore')}") or {}
-            base = float(madre.get("last_pnl_pct", 0) or 0)
+        variante = isinstance(spec_e, dict) and spec_e.get("origine") in ("intorno", "referto")
+        # UNA VARIANTE (dai referti o dall'intorno) entra SOLO alla sua prima
+        # promozione con le conferme retroattive; se e' passata solo con i dati
+        # di oggi non entra affatto (muore subito, come dicono i documenti).
+        # Una variante gia' validata e' una validata come le altre.
+        if variante and int(rec.get("pass_count", 0) or 0) < MIN_PASSES:
+            mk = f"{e['symbol']}|{spec_e.get('genitore')}"
+            madre = pairs.get(mk) or {}
             retro_ok = int(e.get("conferme_retro") or 0) >= MIN_PASSES - 1
-            batte = float(e.get("oos_pnl_pct", 0) or 0) >= base * (1.0 + INTORNO_MARGINE) and base > 0
-            if not (retro_ok and batte and madre):
-                n_intorno_no += 1
+            if not retro_ok or migliore_per_madre.get(mk, (0, key))[1] != key:
+                n_var_scartate += 1
+                scartate_giro.add(key)
                 continue
-            n_intorno_ok += 1
-            rec["nata_intorno_at"] = now
-            madre["sostituita_da"] = spec_e.get("id")
-            madre["sostituita_at"] = now
-            print(f"[intorno] {key} ({spec_e.get('ipotesi')}) sostituisce "
-                  f"{spec_e.get('genitore')}: ritorno OOS {e.get('oos_pnl_pct')} contro "
-                  f"{base} della madre")
+            if spec_e.get("origine") == "intorno":
+                # confronto APPAIATO con la madre rivalutata nello STESSO giro:
+                # se la madre oggi non e' stata valutata, non si decide
+                madre_oggi = out.get(mk)
+                if not madre_oggi or not madre:
+                    n_intorno_no += 1
+                    scartate_giro.add(key)
+                    print(f"[intorno] {key}: madre {mk} non valutata in questo giro, "
+                          f"nessun confronto")
+                    continue
+                ok, dettaglio = _batte_per_finestra(e, madre_oggi, INTORNO_MARGINE)
+                if not ok:
+                    n_intorno_no += 1
+                    scartate_giro.add(key)
+                    continue
+                n_intorno_ok += 1
+                rec["nata_intorno_at"] = now
+                print(f"[intorno] {key} ({spec_e.get('ipotesi')}) sostituisce "
+                      f"{spec_e.get('genitore')}: {dettaglio}")
+            else:
+                print(f"[discover] variante {key} ({spec_e.get('ipotesi')}) validata "
+                      f"con le conferme retroattive: sostituisce {spec_e.get('genitore')}")
+            if madre:
+                madre["sostituita_da"] = spec_e.get("id")
+                madre["sostituita_at"] = now
         # UNA SOLA CONTABILITA' PER TUTTO IL REGISTRO. Qui c'era una copia a mano
         # della vecchia regola del "pass onesto" (differenza fra due data_end), che
         # optimize.py ha smesso di usare quando e' passato al verdetto per finestra.
@@ -1065,6 +1216,10 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         rec["last_pf"] = e["oos_pf"]
         if e.get("t_stat") is not None:
             rec["last_t"] = e["t_stat"]
+        if e.get("oos_max_dd") is not None:
+            rec["last_max_dd"] = e["oos_max_dd"]
+        if e.get("direzione_pf"):
+            rec["direzione_pf"] = e["direzione_pf"]
         rec["last_pnl_pct"] = e["oos_pnl_pct"]
         rec["last_trades"] = e["oos_trades"]
         rec["last_win_rate"] = e.get("oos_win_rate")
@@ -1079,7 +1234,12 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
             if isinstance(pairs.get(k), dict):
                 pairs[k]["intorno_at"] = now
         print(f"[intorno] {len(intorno_madri)} madri riprovate: {n_intorno_ok} figlie "
-              f"promosse, {n_intorno_no} figlie passate ma senza margine o conferme")
+              f"promosse, {n_intorno_no} figlie passate ma senza margine o confronto")
+    if n_var_scartate:
+        print(f"[discover] {n_var_scartate} varianti passate solo con i dati di oggi "
+              f"(o seconde figlie): scartate, non entrano nel registro")
+    if esito is not None:
+        esito["scartate"] = sorted(scartate_giro)
     # 2) potatura: scarta le coppie GENERATE che non hanno niente da perdere.
     #
     # QUI SI CANCELLAVANO LE COPPIE A META' STRADA. La condizione era
@@ -1320,13 +1480,14 @@ def main() -> int:
     #     variante nasce da una spec che il bot ha gia' operato. Come le ipotesi
     #     AI, sostituiscono una quota di casuali: il giro non si allunga.
     existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
-    varianti = varianti_dai_referti(fb, existing, args.interval)
+    reg = fb.get_doc("strategy_registry", "validated") or {}
+    varianti = varianti_dai_referti(fb, existing, args.interval,
+                                    pairs=decode_pairs(reg.get("pairs")))
     n_casuali = max(0, min(args.generate - len(ai_specs) - len(varianti), RANDOM_MAX))
     if n_casuali < args.generate - len(ai_specs) - len(varianti):
         print(f"[discover] candidate casuali limitate a {n_casuali} "
               f"(DISCOVERY_RANDOM_MAX={RANDOM_MAX}): le altre fonti sono ragionate")
     specs = ai_specs + varianti + generate_specs(n_casuali, seed=args.seed)
-    reg = fb.get_doc("strategy_registry", "validated") or {}
     _ora = time.time()
     _completa = (not REEVAL_DAILY) or giro_giornaliero(_ora) or bool(args.symbols)
     existing_list, diag_reeval = specs_da_rivalutare(existing, reg, args.reeval_cap,
@@ -1469,11 +1630,15 @@ def main() -> int:
     diag_near: list = []
     righe_selettore_run: list = []
     coppie_selettore_run = 0
+    valutate: set = set()   # coin davvero valutate (non saltate per storia/delisting)
+    gia_validate = set(coppie_validate(decode_pairs(reg.get("pairs")), _ora))
     for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows in parallel_map(
         _disc_one, symbols, workers=workers, initializer=_disc_init,
-        initargs=(args, end, specs, scala_dal_paper(fb), specs_per_symbol)
+        initargs=(args, end, specs, scala_dal_paper(fb), specs_per_symbol, gia_validate)
     ):
         n_eval += n_ev
+        if n_ev > 0:
+            valutate.add(sym)
         righe_selettore_run.extend(rows or [])
         coppie_selettore_run += len(p_keys)
         out.update(entries)
@@ -1522,12 +1687,31 @@ def main() -> int:
               f"Il merge aggiornera' il registro.")
         return 0
 
-    # persisti: spec scoperte + merge nel registro validato
+    # merge nel registro, POI le spec: le varianti scartate dal merge (passate
+    # solo con i dati di oggi, seconde figlie, senza margine) non devono finire
+    # in discovered_strategies/specs, altrimenti al giro dopo verrebbero
+    # rivalutate su tutte le coin (audit del 24 set)
+    esito_merge: dict = {}
+    _data_end_run = 0.0
+    try:
+        _data_end_run = datetime.fromisoformat(end).replace(tzinfo=timezone.utc).timestamp()
+    except Exception:  # noqa: BLE001
+        pass
+    validated = merge_into_registry(fb, out, passed_keys,
+                                    evaluated_symbols=valutate,
+                                    intorno_madri=madri_intorno,
+                                    evaluated_spec_ids={sp["id"] for sp in specs}
+                                    | {f["id"] for fs in specs_per_symbol.values() for f in fs},
+                                    data_end_run=_data_end_run,
+                                    esito=esito_merge)
+    scartate = set(esito_merge.get("scartate", ()))
+    if scartate:
+        passed_keys = [k for k in passed_keys if k not in scartate]
+        ids_scartati = {out[k]["strategy"] for k in scartate} - {out[k]["strategy"] for k in passed_keys}
+        specs_to_save = {i: sp for i, sp in specs_to_save.items() if i not in ids_scartati}
+        passed_summary = [s for s in passed_summary if f"{s['symbol']}|{s['id']}" not in scartate]
     if specs_to_save:
         persist_specs(fb, specs_to_save)
-    validated = merge_into_registry(fb, out, passed_keys,
-                                    evaluated_symbols=set(symbols),
-                                    intorno_madri=madri_intorno)
     # riepilogo COMPATTO (niente spec/entry per ogni coppia: sforerebbe il limite
     # di 1 MiB di Firestore). Le spec complete stanno in discovered_strategies/specs.
     durata = time.time() - t0

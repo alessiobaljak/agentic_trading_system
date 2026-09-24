@@ -35,12 +35,17 @@ def test_tetto_per_direzione_blocca_la_quarta_short_non_il_long():
     assert direzione_bloccata(tre_short, Direction.SHORT, 0) is None          # spento
 
 
-def test_il_bot_applica_il_tetto_prima_di_aprire():
+def test_nel_bot_la_regola_per_direzione_e_una_sola():
+    """Audit del 24 set: il tetto per direzione esisteva gia' dall'8 set
+    (`_directional_risk_blocks`, MAX_DIRECTIONAL_RISK_PCT). La copia aggiunta il
+    24 set e' stata tolta: nel bot deve restare UNA regola, e un solo parametro."""
     from bot import main as bot_main
     from bot.config import settings
     src = inspect.getsource(bot_main.TradingBot)
-    assert "direzione_bloccata(self.executor.open_positions.values()" in src
-    assert settings.MAX_RISK_PER_DIRECTION == 0.03
+    assert "direzione_bloccata(" not in src
+    assert src.count("_directional_risk_blocks(decision.direction") == 1
+    assert not hasattr(settings, "MAX_RISK_PER_DIRECTION")
+    assert settings.MAX_DIRECTIONAL_RISK_PCT == 0.03
 
 
 def test_la_statistica_t_finisce_nel_registro():

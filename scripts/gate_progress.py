@@ -143,7 +143,8 @@ def main() -> int:
 
     dist = Counter(int(r.get("pass_count", 0) or 0) for r in fresche.values())
     validated = [k for k, r in fresche.items()
-                 if int(r.get("pass_count", 0) or 0) >= MIN_PASSES]
+                 if int(r.get("pass_count", 0) or 0) >= MIN_PASSES
+                 and not r.get("sostituita_da")]   # madre sostituita: non si opera
     coins = {r.get("symbol") for k, r in fresche.items() if k in validated}
 
     print(f"[gate] {len(pairs)} coppie nel registro · {len(fresche)} ancora valutate "

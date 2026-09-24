@@ -60,7 +60,10 @@ def coin_bloccata(trades: list[dict], symbol: str, now: float, equity: float,
 
 
 # --------------------------------------------------------------------------- #
-# TETTO DI RISCHIO PER DIREZIONE (24 set 2026)                                  #
+# RISCHIO PER DIREZIONE (24 set 2026) — funzioni PURE per il backtest di         #
+# portafoglio e per i test. NEL BOT la regola e' `_directional_risk_blocks` in   #
+# bot/main.py (dall'8 set, MAX_DIRECTIONAL_RISK_PCT=3%): l'audit del 24 set ha   #
+# trovato che qui ne era stata scritta una seconda copia, tolta lo stesso giorno. #
 # --------------------------------------------------------------------------- #
 def _lato(v) -> str:
     return str(getattr(v, "value", v) or "").lower()

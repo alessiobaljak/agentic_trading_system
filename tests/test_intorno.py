@@ -102,42 +102,135 @@ def test_coppie_per_intorno_sceglie_validate_fresche_con_precedenza_al_watch():
     assert coppie_per_intorno(pairs, existing, None, now, "15m", cap=0) == []
 
 
-def test_merge_promuove_la_figlia_solo_con_conferme_e_margine():
-    """La figlia entra (validata subito) e la madre passa a `sostituita_da` SOLO
-    se ha le conferme retroattive e batte la madre del 10%; altrimenti non
-    entra affatto. Le madri riprovate ricevono `intorno_at`."""
-    from bot.core.firebase_client import decode_pairs, encode_pairs
-    from scripts.discover_strategies import merge_into_registry
-    from scripts.optimize import MIN_PASSES, coppie_validate
+def _fb_con(pairs):
+    from bot.core.firebase_client import encode_pairs
 
     class FB:
-        def __init__(self, pairs):
+        def __init__(self):
             self.docs = {("strategy_registry", "validated"): {"pairs": encode_pairs(pairs)}}
         def get_doc(self, c, dname): return self.docs.get((c, dname), {})
         def set_doc(self, c, dname, data): self.docs[(c, dname)] = data
+    return FB()
+
+
+def _entry(sym, spec, retro, pnl, dd, finestre):
+    return {"symbol": sym, "strategy": spec["id"], "params": {}, "spec": spec,
+            "oos_pf": 1.6, "oos_pnl_pct": pnl, "oos_max_dd": dd, "oos_trades": 40,
+            "oos_win_rate": 0.5, "passed": True, "holdout": {"ok": True},
+            "data_end": 1e9, "conferme_retro": retro, "window_pnls": finestre}
+
+
+def test_merge_promuove_la_figlia_solo_con_conferme_confronto_appaiato_e_margine():
+    """Audit del 24 set: la figlia entra (validata subito) e la madre passa a
+    `sostituita_da` SOLO se ha le conferme retroattive, la madre e' stata
+    rivalutata nello STESSO giro, la batte su (ritorno - drawdown) col margine e
+    vince in almeno 2 finestre su 3. Altrimenti non entra affatto."""
+    from bot.core.firebase_client import decode_pairs
+    from scripts.discover_strategies import merge_into_registry
+    from scripts.optimize import MIN_PASSES, coppie_validate
 
     madre = _spec()
     figlia = figlie_intorno(madre)[0]
-    fb = FB({f"A|{madre['id']}": _rec(strategy=madre["id"], symbol="A", last_pnl_pct=0.50),
-             f"B|{madre['id']}": _rec(strategy=madre["id"], symbol="B", last_pnl_pct=0.50)})
-
-    def entry(sym, retro, pnl):
-        return {"symbol": sym, "strategy": figlia["id"], "params": {}, "spec": figlia,
-                "oos_pf": 1.6, "oos_pnl_pct": pnl, "oos_trades": 40, "oos_win_rate": 0.5,
-                "passed": True, "holdout": {"ok": True}, "data_end": 1e9,
-                "conferme_retro": retro}
-    out = {f"A|{figlia['id']}": entry("A", MIN_PASSES - 1, 0.60),   # +20%: promossa
-           f"B|{figlia['id']}": entry("B", MIN_PASSES - 1, 0.52)}   # +4%: senza margine
-    merge_into_registry(fb, out, list(out), evaluated_symbols={"A", "B"},
-                        intorno_madri={f"A|{madre['id']}": 6, f"B|{madre['id']}": 6})
+    fb = _fb_con({f"A|{madre['id']}": _rec(strategy=madre["id"], symbol="A"),
+                  f"B|{madre['id']}": _rec(strategy=madre["id"], symbol="B"),
+                  f"C|{madre['id']}": _rec(strategy=madre["id"], symbol="C")})
+    out = {
+        # A: madre rivalutata oggi; figlia +30% sul metro e vince 3 finestre su 3
+        f"A|{madre['id']}": _entry("A", madre, 0, 0.50, 0.10, [0.1, 0.2, 0.2]),
+        f"A|{figlia['id']}": _entry("A", figlia, MIN_PASSES - 1, 0.62, 0.10, [0.2, 0.3, 0.12]),
+        # B: madre rivalutata, figlia +30% ma vince UNA finestra sola: fuori
+        f"B|{madre['id']}": _entry("B", madre, 0, 0.50, 0.10, [0.1, 0.2, 0.2]),
+        f"B|{figlia['id']}": _entry("B", figlia, MIN_PASSES - 1, 0.62, 0.10, [0.5, 0.05, 0.07]),
+        # C: madre NON valutata oggi: nessun confronto, figlia fuori
+        f"C|{figlia['id']}": _entry("C", figlia, MIN_PASSES - 1, 0.90, 0.05, [0.3, 0.3, 0.3]),
+    }
+    esito = {}
+    merge_into_registry(fb, out, list(out), evaluated_symbols={"A", "B", "C"},
+                        intorno_madri={f"{c}|{madre['id']}": 6 for c in "ABC"},
+                        esito=esito)
     pairs = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])
     fa, ma = pairs[f"A|{figlia['id']}"], pairs[f"A|{madre['id']}"]
     assert fa["pass_count"] == MIN_PASSES and fa.get("nata_intorno_at")
     assert ma["sostituita_da"] == figlia["id"] and ma.get("intorno_at")
-    assert f"B|{figlia['id']}" not in pairs                       # niente margine: fuori
+    assert f"B|{figlia['id']}" not in pairs and f"C|{figlia['id']}" not in pairs
     assert not pairs[f"B|{madre['id']}"].get("sostituita_da")
-    assert pairs[f"B|{madre['id']}"].get("intorno_at")            # riprovata comunque
-    # il bot opera la figlia e la madre B, NON la madre A
+    assert sorted(esito["scartate"]) == sorted([f"B|{figlia['id']}", f"C|{figlia['id']}"])
     op = coppie_validate(pairs, 1e9)
-    assert f"A|{figlia['id']}" in op and f"B|{madre['id']}" in op
-    assert f"A|{madre['id']}" not in op
+    assert f"A|{figlia['id']}" in op and f"A|{madre['id']}" not in op
+    assert f"B|{madre['id']}" in op and f"C|{madre['id']}" in op
+
+
+def test_due_figlie_della_stessa_madre_entra_solo_la_migliore():
+    from bot.core.firebase_client import decode_pairs
+    from scripts.discover_strategies import merge_into_registry
+    from scripts.optimize import MIN_PASSES
+
+    madre = _spec()
+    f1, f2 = figlie_intorno(madre)[:2]
+    fb = _fb_con({f"A|{madre['id']}": _rec(strategy=madre["id"], symbol="A")})
+    out = {f"A|{madre['id']}": _entry("A", madre, 0, 0.50, 0.10, [0.1, 0.2, 0.2]),
+           f"A|{f1['id']}": _entry("A", f1, MIN_PASSES - 1, 0.70, 0.10, [0.2, 0.3, 0.2]),
+           f"A|{f2['id']}": _entry("A", f2, MIN_PASSES - 1, 0.90, 0.10, [0.3, 0.4, 0.2])}
+    merge_into_registry(fb, out, list(out), evaluated_symbols={"A"},
+                        intorno_madri={f"A|{madre['id']}": 2})
+    pairs = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])
+    assert f"A|{f2['id']}" in pairs and f"A|{f1['id']}" not in pairs
+    assert pairs[f"A|{madre['id']}"]["sostituita_da"] == f2["id"]
+
+
+def test_variante_passata_solo_oggi_non_entra():
+    """Una variante (referti o intorno) senza conferme retroattive muore subito:
+    non entra nel registro, e la sua chiave torna in `esito["scartate"]` cosi'
+    la discovery non la persiste ne' la annuncia."""
+    from bot.core.firebase_client import decode_pairs
+    from scripts.discover_strategies import merge_into_registry
+    from bot.strategies.generator import varianti_da_referto
+
+    madre = _spec()
+    var = varianti_da_referto(madre, "solo_long")
+    fb = _fb_con({f"A|{madre['id']}": _rec(strategy=madre["id"], symbol="A")})
+    out = {f"A|{var['id']}": _entry("A", var, 0, 0.9, 0.05, [0.3, 0.3, 0.3])}
+    esito = {}
+    merge_into_registry(fb, out, list(out), evaluated_symbols={"A"}, esito=esito)
+    pairs = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])
+    assert f"A|{var['id']}" not in pairs and esito["scartate"] == [f"A|{var['id']}"]
+    # con le conferme retroattive entra, e la madre viene sostituita
+    out[f"A|{var['id']}"]["conferme_retro"] = 2
+    merge_into_registry(fb, out, list(out), evaluated_symbols={"A"})
+    pairs = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])
+    assert pairs[f"A|{var['id']}"]["pass_count"] >= 3
+    assert pairs[f"A|{madre['id']}"]["sostituita_da"] == var["id"]
+
+
+def test_una_bocciatura_chiude_la_finestra_della_generata():
+    """Audit del 24 set: una coppia generata a 1-2 conferme, valutata e NON
+    passata con la finestra scaduta, prende UN fallimento e la finestra riparte:
+    cosi' il giro «solo urgenti» si svuota invece di rivalutarla ogni tre ore."""
+    from bot.core.firebase_client import decode_pairs
+    from scripts.discover_strategies import merge_into_registry
+    from scripts.optimize import NEW_DATA_MIN_S
+
+    ora = 1e9
+    fb = _fb_con({"A|gen_a": _rec(pass_count=1, strategy="gen_a", symbol="A",
+                                  window_start=ora - NEW_DATA_MIN_S - 10, passed_in_window=False),
+                  "A|gen_b": _rec(pass_count=1, strategy="gen_b", symbol="A",
+                                  window_start=ora - 100, passed_in_window=False),
+                  "Z|gen_a": _rec(pass_count=1, strategy="gen_a", symbol="Z",
+                                  window_start=ora - NEW_DATA_MIN_S - 10, passed_in_window=False,
+                                  last_seen_at=__import__("time").time())})
+    merge_into_registry(fb, {}, [], evaluated_symbols={"A"},
+                        evaluated_spec_ids={"gen_a", "gen_b"}, data_end_run=ora)
+    pairs = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])
+    assert pairs["A|gen_a"]["fail_count"] == 1 and pairs["A|gen_a"]["window_start"] == int(ora)
+    assert pairs["A|gen_a"]["pass_count"] == 1                    # nessuna conferma persa
+    assert not pairs["A|gen_b"].get("fail_count")                 # finestra ancora aperta
+    assert not pairs["Z|gen_a"].get("fail_count")                 # coin non valutata
+
+
+def test_pf_per_direzione():
+    from types import SimpleNamespace
+    from scripts.discover_strategies import _pf_per_direzione
+    tr = [SimpleNamespace(direction="long", pnl_pct=0.02), SimpleNamespace(direction="long", pnl_pct=-0.01),
+          SimpleNamespace(direction="short", pnl_pct=-0.01), SimpleNamespace(direction="short", pnl_pct=-0.02)]
+    d = _pf_per_direzione(tr)
+    assert d["long"] == {"pf": 2.0, "n": 2} and d["short"] == {"pf": 0.0, "n": 2}

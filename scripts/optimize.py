@@ -575,7 +575,8 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         # resta nel registro ma NON si opera; senza questi campi un
                         # alleggerimento la rimetterebbe in gioco accanto alla figlia
                         # (la stessa scommessa due volte, il caso USELESSUSDT).
-                        "sostituita_da", "intorno_at", "nata_intorno_at", "validated_at"}
+                        "sostituita_da", "sostituita_at", "intorno_at", "nata_intorno_at", "validated_at",
+                        "last_max_dd"}
 
 
 def coppie_validate(pairs: dict, now: float | None = None) -> list[str]:

@@ -406,9 +406,17 @@ class Settings:
     # paper: con un win rate del 45% quattro perdite di fila capitano ~9% delle
     # volte per sequenza (0.55^4), abbastanza raro da non frenare il rumore ma
     # abbastanza presto da contare in giorni. Regola dichiarata prima dei dati.
+    # (Il 9% e' per UNA sequenza di 4: su un mese di trade la probabilita' di
+    # vedere almeno una serie e' molto piu' alta — vedi la nota sotto.)
     # Richiede DRIFT_ENABLED=true: la serie la calcola e pubblica il rilevatore
     # di deriva (doc `drift/current`, chiave "serie").
-    STREAK_BRAKE_ENABLED: bool = os.getenv("STREAK_BRAKE_ENABLED", "true").lower() == "true"
+    # SPENTO PER DEFAULT dal 24 set sera (audit): con 17 strategie e ~9 trade al
+    # mese l'una, quattro perdite di fila capitano per puro caso al 30-44% delle
+    # strategie ogni mese (win rate 37-45%), e sommato alla deriva globale gia'
+    # in `drift` portava la size a un quarto (DEXEUSDT a 0,15% di rischio). Si
+    # riaccende solo se `portafoglio` misura, sui trade OOS del gate, un win rate
+    # dopo 4 perdite davvero piu' basso di quello incondizionato (t >= 2).
+    STREAK_BRAKE_ENABLED: bool = os.getenv("STREAK_BRAKE_ENABLED", "false").lower() == "true"
     STREAK_BRAKE_LOSSES: int = int(os.getenv("STREAK_BRAKE_LOSSES", "4"))
     STREAK_BRAKE_FACTOR: float = float(os.getenv("STREAK_BRAKE_FACTOR", "0.5"))
 
@@ -552,15 +560,6 @@ class Settings:
     # mezzanotte UTC. Regola di portafoglio, NON del gate (che valida una coppia
     # alla volta): diverge nella direzione sicura, meno trade. 0 = spento.
     RISK_PER_COIN_DAY: float = float(os.getenv("RISK_PER_COIN_DAY", "0.015"))
-    # TETTO DI RISCHIO PER DIREZIONE (24 set 2026, «rischio di portafoglio, non
-    # per trade»). Il 21 set il paper aveva 7 posizioni contemporanee e le short
-    # erano 23 trade su 40: sette short aperti insieme sono UNA scommessa sul
-    # mercato, non sette. Se il rischio aperto (somma di risk_effective_pct) in
-    # una direzione raggiunge questa frazione dell'equity, il trade successivo
-    # in quella direzione non si apre. 3% = tre posizioni a size piena (1%).
-    # Numero RAGIONATO, da tarare col backtest di portafoglio (`portafoglio`);
-    # 0 = spento. Regola di portafoglio: diverge dal gate nella direzione sicura.
-    MAX_RISK_PER_DIRECTION: float = float(os.getenv("MAX_RISK_PER_DIRECTION", "0.03"))
     # STOP MASSIMO come frazione del prezzo. 23 set 2026, MUBARAK long dopo un
     # pump del +37%: ATR gonfiato, stop a -15,3%, primo incasso a +31%, lock del
     # profitto che si armava a +15%: un trade che poteva solo perdere lentamente

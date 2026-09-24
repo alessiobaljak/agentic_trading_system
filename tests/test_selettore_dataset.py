@@ -172,7 +172,10 @@ def _chiama(monkeypatch, passa: bool):
 
 def test_evaluate_spec_da_le_righe_solo_se_passa(monkeypatch):
     r = _chiama(monkeypatch, passa=False)
-    assert r["passed"] is False and r["oos_rows"] == []
+    # dal 24 set (audit) anche un QUASI-passaggio produce righe, marcate
+    # passed=False: il selettore deve vedere anche chi non ce l'ha fatta
+    assert r["passed"] is False
+    assert all(row["passed"] is False for row in r["oos_rows"])
 
     r = _chiama(monkeypatch, passa=True)
     assert r["passed"] is True
@@ -181,7 +184,7 @@ def test_evaluate_spec_da_le_righe_solo_se_passa(monkeypatch):
     # IL CONTRATTO con chi addestra: queste chiavi, questi tipi
     assert set(riga) == {"symbol", "strategy", "direction", "regime", "entry_ts",
                          "pnl_pct", "pnl", "is_win", "mfe_r", "bars_held", "hour",
-                         "famiglia", "feats", "run_end", "interval"}
+                         "famiglia", "feats", "run_end", "interval", "passed"}
     assert riga["symbol"] == "XUSDT" and riga["strategy"] == "gen_x"
     assert riga["direction"] == "long" and riga["regime"] == "sideways"
     assert riga["pnl_pct"] == 0.02 and riga["is_win"] is True and riga["hour"] == 7

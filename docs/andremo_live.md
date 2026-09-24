@@ -1288,3 +1288,32 @@ nella stessa direzione da 5 a 4: quasi neutro, non stringe né protegge molto.
 insufficiente come atteso; le righe delle 59 coppie a 15m arrivano col giro delle
 08:00. `ai-stato` (0186): chiave ok, modello `claude-opus-4-8`; le proposte AI
 risultano ferme al 22 set 20:14, da verificare in `log-gate` («[ai-hypotheses]»).
+
+
+### 24 settembre, sera: l'audit del cervello
+
+Domanda del proprietario: «hai fatto un check di tutto il codice appena creato,
+coerenza con quello che esisteva, quasi un audit completo rispetto ai sistemi
+seri e all'obiettivo del profitto?». No, non completo: fatto adesso, con quattro
+revisori indipendenti (integrazione, correttezza, regole, disegno) sulle 4.400
+righe dei due giorni. Nessun bloccante, ma parecchio da correggere, e due errori
+miei da dire chiaramente:
+
+* **il tetto per direzione esisteva già dall'8 settembre** (`MAX_DIRECTIONAL_RISK_PCT`,
+  stesso 3%): ne avevo scritta una seconda copia. Tolta.
+* **il freno di serie scatta per caso**: con 17 strategie e ~9 trade al mese
+  l'una, quattro perdite di fila capitano al 30-44% delle strategie ogni mese; e
+  sommato alla deriva globale portava la size a un quarto. Spento, finché
+  `portafoglio` non misura sui trade del gate se dopo 4 perdite si vince davvero
+  meno.
+
+Corretto lo stesso giorno: le bocciature chiudono la finestra (causa del giro
+«solo urgenti» da 1h54: 223 spec restavano urgenti per sempre), le varianti senza
+conferme retroattive muoiono davvero, una sola figlia per madre, confronto
+figlia/madre nello stesso giro su ritorno − drawdown e per finestra, la variante
+dai referti si valida solo su dati precedenti all'ipotesi e sostituisce la madre,
+`portfolio/backtest` si pubblica, il selettore vede anche i quasi-passaggi e dà
+«batte» solo oltre il 95° percentile di 200 permutazioni, dedup delle gemelle,
+interazione direzione × mercato. Da decidere (backlog H): t ≥ 3 nel gate, holdout
+non condiviso, stop giornaliero di portafoglio, e la misura che separa mercato da
+esecuzione (4,9 trade al giorno nel paper contro 8,6 simulati).

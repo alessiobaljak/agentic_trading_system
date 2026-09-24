@@ -70,7 +70,7 @@ _BREVI = {
 }
 _LUNGHI = {v: k for k, v in _BREVI.items()}
 _TEMPI = {"last_seen_at", "last_passed_at", "window_start", "last_pass_data_end",
-          "drift_seen_at", "validated_at"}
+          "drift_seen_at", "validated_at", "sostituita_at", "intorno_at", "nata_intorno_at"}
 
 
 def encode_registry(pairs: dict) -> str:

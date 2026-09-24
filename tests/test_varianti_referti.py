@@ -238,7 +238,7 @@ def test_la_discovery_mette_davvero_le_varianti_in_coda():
     sarebbero verdi e il gate non vedrebbe mai una variante. E le spec note
     devono essere lette PRIMA: una variante nasce da una spec gia' operata."""
     src = inspect.getsource(d.main)
-    assert "varianti_dai_referti(fb, existing, args.interval)" in src
+    assert "varianti_dai_referti(fb, existing, args.interval," in src
     assert src.index("existing = decode_pairs") < src.index("varianti_dai_referti(")
     assert "args.generate - len(ai_specs) - len(varianti)" in src, \
         "le varianti sostituiscono casuali, non allungano il giro"

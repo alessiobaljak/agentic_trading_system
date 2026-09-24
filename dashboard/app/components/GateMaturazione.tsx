@@ -63,6 +63,7 @@ type PairRec = {
   last_passed_at?: number;
   last_seen_at?: number;
   last_pf?: number;
+  sostituita_da?: string; // madre sostituita da una figlia dell'intorno (24 set)
 };
 type Reg = { pairs?: string | Record<string, PairRec>; validated?: string[] };
 type Timeline = { min_passes?: number };
@@ -73,7 +74,7 @@ const FINESTRA_S = 168 * 3600;
 const FRESCA_G = 3;
 const MIN_PASSES_DEFAULT = 3;
 
-type Stato = 'validata' | 'idonea' | 'attesa' | 'ripresa' | 'abbandonata';
+type Stato = 'validata' | 'sostituita' | 'idonea' | 'attesa' | 'ripresa' | 'abbandonata';
 
 type Riga = {
   key: string;
@@ -128,6 +129,7 @@ const data = (ts: number) =>
 
 const COLORE: Record<Stato, string> = {
   validata: STATO.buono,
+  sostituita: GATE_RAMP.uno,
   idonea: GATE_RAMP.due,
   attesa: GATE_RAMP.uno,
   ripresa: STATO.attenzione,
@@ -135,6 +137,7 @@ const COLORE: Record<Stato, string> = {
 };
 const ETICHETTA: Record<Stato, string> = {
   validata: 'validata',
+  sostituita: 'sostituita da una figlia',
   idonea: 'idonea ora',
   attesa: 'in attesa',
   ripresa: 'ferma, in ripresa',
@@ -219,7 +222,10 @@ export default function GateMaturazione() {
       const ultimoPasso = Number(r.last_passed_at ?? r.last_pass_data_end ?? 0) * 1000;
       const progredisce = ultimoPasso <= 0 || ora - ultimoPasso < minPasses * FINESTRA_S * 1000;
       let stato: Stato;
-      if (passi >= minPasses) stato = 'validata';
+      // madre sostituita da una figlia dell'intorno (24 set): resta nel
+      // registro con la sua storia, ma il bot non la opera piu'
+      if (r.sostituita_da) stato = 'sostituita';
+      else if (passi >= minPasses) stato = 'validata';
       else if (ferma) stato = progredisce ? 'ripresa' : 'abbandonata';
       else if (chiude > 0 && chiude <= ora) stato = 'idonea';
       else stato = 'attesa';

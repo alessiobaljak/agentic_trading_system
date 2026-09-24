@@ -65,8 +65,7 @@ con 59 coppie sono migliaia. **Stima, da misurare al passo 0.**
 Un modello semplice e leggibile: **regressione logistica con regolarizzazione**
 (coefficienti che si possono stampare e spiegare). Se non basta, un gradient
 boosting piccolo — ma solo se batte la logistica fuori campione. Pesi di recenza
-sui trade (`entry_ts` c'è già). Libreria: scikit-learn, da aggiungere a
-`requirements.txt` (numpy, pandas e scipy ci sono).
+sui trade (`entry_ts` c'è già). Libreria: numpy/scipy, nessuna dipendenza nuova (implementato così il 24 set).
 
 Un modello per famiglia di strategie (mean-reversion, momentum, breakout), non uno
 per strategia: per strategia i trade sono troppo pochi.
@@ -74,8 +73,9 @@ per strategia: per strategia i trade sono troppo pochi.
 ### Come si valida senza barare
 
 Come il gate: **walk-forward nel tempo**. Si addestra sui trade fino a una data
-T, si applica ai trade dopo T; mai lo stesso periodo da tutte e due le parti. Le
-tre finestre OOS e l'holdout di 45 giorni sono le stesse del gate.
+T, si applica ai trade dopo T; mai lo stesso periodo da tutte e due le parti.
+(Implementazione del 24 set: 40% iniziale di train, poi tre fette di test
+consecutive sul conteggio dei trade; verdetto per permutazione dal 24 sera.)
 
 Il metro è uno solo: **rendimento e drawdown di «apri solo se p ≥ soglia, size
 secondo p» contro «apri tutto»**, sulle stesse finestre. La soglia si sceglie sul
