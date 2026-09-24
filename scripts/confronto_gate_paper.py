@@ -45,6 +45,17 @@ chiuso 11 trade, 11 e' un numero da cui non si conclude quasi niente; il senso
 qui e' avere il METRO, cioe' sapere quale serie di perdite il gate considera
 normale, prima di decidere se quella in corso lo e'.
 
+LA DOMANDA H5 (24 settembre 2026, backlog): il paper apre ~4,9 trade al giorno
+contro 8,6 simulati e perde (PF 0,63) dove il gate prometteva 1,88. Due
+spiegazioni opposte danno lo stesso sintomo: «il mercato e' cambiato» e «il
+paper esegue male». La misura che le separa e' nei segnali del gate che cadono
+NEL PERIODO DEL PAPER: quelli che il paper ha aperto e quelli che NON ha aperto
+(posizioni piene, cooldown, tetto per coin, veto dell'AI, bot fermo...). Se i
+segnali non aperti rendono e quelli aperti no, il difetto e' nel percorso live;
+se perdono tutti e due, il gate ha promesso su un regime che non c'e' piu'. I
+trade del gate qui sono simulati sulla storia INTERA, senza holdout: sono una
+promessa, non una prova. `PAPER_START` (env, default 2026-09-16) dice da quando.
+
 SOLA LETTURA. Rigira il motore di backtest e legge i trade del paper: non
 scrive su Firebase, non tocca il registro, non cambia niente di cio' che il bot
 sta facendo adesso.
@@ -57,6 +68,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import os
 from collections import defaultdict
 from datetime import date
 
@@ -271,10 +283,23 @@ def parita_ingressi(ptrades: list[dict], gtrades, tf_h: float) -> dict:
     soglie non stanno vedendo la stessa cosa — ed e' il difetto che il
     proprietario sta cercando."""
     tol = 2 * tf_h * 3600
-    t_gate = sorted(float(getattr(t, "entry_ts", 0) or 0) for t in gtrades)
+    coppie = _accoppia(ptrades, gtrades, tol)
+    return {"paper": len(ptrades), "trovati": len(coppie),
+            "scarti_t": [d for _, d in coppie]}
+
+
+def _accoppia(ptrades: list[dict], gtrades, tol: float) -> list[tuple[int, float]]:
+    """Il cuore condiviso di `parita_ingressi` e `abbina` (24 set 2026): per
+    ogni trade del paper il trade del gate NON ancora usato piu' vicino nel
+    tempo, entro `tol` secondi. Ritorna (indice in `gtrades`, scarto in s).
+
+    Un trade del gate si usa una volta sola: senza, tre trade del paper vicini
+    fra loro si appoggerebbero tutti allo stesso segnale e la parita' sembrerebbe
+    perfetta mentre non lo e'. L'indice e' quello della lista COME ARRIVA, non
+    di una copia ordinata: chi chiama deve poter risalire al trade."""
+    t_gate = [float(getattr(t, "entry_ts", 0) or 0) for t in gtrades]
     usati: set[int] = set()
-    scarti_t: list[float] = []
-    trovati = 0
+    fuori: list[tuple[int, float]] = []
     for p in ptrades:
         tp = _ts(p.get("entry_time"))
         if tp <= 0:
@@ -288,9 +313,120 @@ def parita_ingressi(ptrades: list[dict], gtrades, tf_h: float) -> dict:
                 migliore, delta = i, d
         if migliore is not None:
             usati.add(migliore)
-            scarti_t.append(delta)
-            trovati += 1
-    return {"paper": len(ptrades), "trovati": trovati, "scarti_t": scarti_t}
+            fuori.append((migliore, delta))
+    return fuori
+
+
+# --------------------------------------------------------------------------- #
+# H5: i segnali del gate nel periodo del paper, aperti e non aperti            #
+# --------------------------------------------------------------------------- #
+#: da quando esiste il paper. Env per poterlo spostare senza toccare il codice;
+#: il default e' il giorno in cui il bot ha iniziato a operare (16 set 2026).
+PAPER_START = os.environ.get("PAPER_START", "2026-09-16")
+
+#: sotto questo PF un gruppo «perde»; sopra questo «rende». Le due soglie sono
+#: distanti apposta: fra 0,8 e 1,2 il PF di un campione piccolo e' rumore.
+PF_PERDE = 0.8
+PF_RENDE = 1.2
+
+
+def inizio_paper(ptrades: list[dict], paper_start: str = PAPER_START) -> float:
+    """Epoch da cui contare i segnali del gate: la mezzanotte UTC di
+    `paper_start`, oppure il trade del paper piu' vecchio se e' PRIMA. Cosi' un
+    paper partito in anticipo rispetto alla data scritta non perde i suoi primi
+    trade, e una data scritta male non li nasconde. Con una data illeggibile si
+    ricade sui trade (fail-open)."""
+    try:
+        base = dt.datetime.combine(date.fromisoformat(paper_start), dt.time(),
+                                   dt.timezone.utc).timestamp()
+    except (TypeError, ValueError):
+        base = 0.0
+    primi = [ts for ts in (_ts(t.get("entry_time")) for t in ptrades) if ts > 0]
+    if primi and (base <= 0 or min(primi) < base):
+        return min(primi)
+    return base
+
+
+def abbina(ptrades: list[dict], gtrades, tf_h: float) -> tuple[set[int], set[int]]:
+    """Divide i trade del gate in APERTI dal paper e NON APERTI.
+
+    Un trade del gate e' «aperto» se un trade del paper della stessa coppia
+    entra entro due barre da lui (la stessa tolleranza di `parita_ingressi`,
+    perche' il segnale nasce a barra chiusa e il bot esegue dopo), e ogni trade
+    del gate si abbina a un solo trade del paper. Tutti gli altri sono «non
+    aperti»: e' il gruppo che dice cosa avrebbe reso il gate SENZA il percorso
+    live in mezzo. Ritorna due insiemi di indici in `gtrades`, disgiunti e
+    complementari. Funzione pura: nessuna lettura, nessuna stampa."""
+    tol = 2 * tf_h * 3600
+    aperti = {i for i, _ in _accoppia(ptrades, gtrades, tol)}
+    non_aperti = set(range(len(gtrades))) - aperti
+    return aperti, non_aperti
+
+
+def _campo(t, nome: str, default=None):
+    """Legge un campo da un SimTrade o da un dict: i test costruiscono trade
+    sintetici come dict, il motore produce oggetti."""
+    if isinstance(t, dict):
+        return t.get(nome, default)
+    return getattr(t, nome, default)
+
+
+def metriche_gruppo(trades) -> dict:
+    """n, PF, win rate, pnl_pct medio e direzioni di un gruppo di trade del gate.
+
+    Il PF e' somma dei guadagni / somma delle perdite su `pnl_pct`: e' un
+    rapporto, quindi confrontabile fra i due gruppi anche se hanno numeri di
+    trade diversi. Con guadagni e nessuna perdita vale infinito (e non 0, che
+    farebbe sembrare «perdente» un gruppo di soli vinti); senza trade vale 0.
+    «Vinto» qui e' pnl_pct > 0: `is_win` del motore puo' mancare sui dict."""
+    pnls = [float(_campo(t, "pnl_pct", 0.0) or 0.0) for t in trades]
+    n = len(pnls)
+    guadagni = sum(p for p in pnls if p > 0)
+    perdite = -sum(p for p in pnls if p < 0)
+    if perdite > 0:
+        pf = guadagni / perdite
+    else:
+        pf = float("inf") if guadagni > 0 else 0.0
+    direzioni = [str(_campo(t, "direction", "long") or "long").lower() for t in trades]
+    return {
+        "n": n,
+        "pf": pf,
+        "wr": (sum(1 for p in pnls if p > 0) / n) if n else 0.0,
+        "pnl_medio": (sum(pnls) / n) if n else 0.0,
+        "long": sum(1 for d in direzioni if d == "long"),
+        "short": sum(1 for d in direzioni if d == "short"),
+    }
+
+
+def lettura_h5(aperti: dict, non_aperti: dict) -> str:
+    """La frase che separa mercato da esecuzione, dalle metriche dei due gruppi.
+
+    Tre esiti e basta, con le soglie PF_RENDE / PF_PERDE:
+      * non aperti rendono (>= 1,2) e aperti perdono (< 0,8): il gate aveva
+        ragione, e' il PERCORSO LIVE (cosa apre, quando, come) a sbagliare;
+      * perdono tutti e due (< 0,8): il gate ha promesso su un regime che non
+        c'e' piu', e il paper non poteva fare meglio;
+      * tutto il resto, e anche un gruppo vuoto: non distinguibile.
+    Non dice mai «e' sicuro»: e' un campione di giorni, non di mesi."""
+    if not aperti.get("n") or not non_aperti.get("n"):
+        return "non distinguibile con questo campione (uno dei due gruppi e' vuoto)"
+    pa, pn = aperti["pf"], non_aperti["pf"]
+    if pn >= PF_RENDE and pa < PF_PERDE:
+        return "il difetto e' nel percorso live, non nel mercato"
+    if pa < PF_PERDE and pn < PF_PERDE:
+        return "il gate ha promesso su un regime che non c'e' piu'"
+    return "non distinguibile con questo campione"
+
+
+def _pf_txt(pf: float) -> str:
+    if pf == float("inf"):
+        return "inf"
+    return f"{pf:.2f}"
+
+
+def _riga_gruppo(m: dict) -> str:
+    return (f"n {m['n']}, PF {_pf_txt(m['pf'])}, WR {m['wr'] * 100:.0f}%, "
+            f"pnl medio {m['pnl_medio']:+.3f}, L/S {m['long']}/{m['short']}")
 
 
 def main() -> int:
@@ -334,6 +470,10 @@ def main() -> int:
     scelte = sorted(per_coppia.items(), key=lambda kv: -len(kv[1]))[: args.coppie]
     tutti_gate: list = []
     saltate: list[tuple[str, str]] = []
+    # H5: i trade del gate nel periodo del paper, divisi in aperti e non aperti
+    t0_paper = inizio_paper(tutti)
+    h5_aperti: list = []
+    h5_non_aperti: list = []
 
     for key, ptr in scelte:
         symbol, strategy = key.split("|", 1)
@@ -384,6 +524,20 @@ def main() -> int:
         if len(p_mfe) < len(ptr_ord):
             print(f"     NB {len(ptr_ord) - len(p_mfe)} trade del paper senza "
                   f"`mfe_r`: esclusi dalle fasce, contati nel resto")
+
+        # H5: solo i trade del gate entrati DA QUANDO il paper esiste. Gli
+        # «aperti» hanno un trade del paper entro due barre, gli altri no.
+        g_periodo = [t for t in gtrades
+                     if float(getattr(t, "entry_ts", 0) or 0) >= t0_paper]
+        idx_ap, idx_no = abbina(ptr_ord, g_periodo, tf_h)
+        ap = [g_periodo[i] for i in sorted(idx_ap)]
+        no = [g_periodo[i] for i in sorted(idx_no)]
+        h5_aperti.extend(ap)
+        h5_non_aperti.extend(no)
+        print(f"  H5 dal {dt.datetime.fromtimestamp(t0_paper, dt.timezone.utc):%Y-%m-%d}: "
+              f"gate {len(g_periodo)} segnali · aperti dal paper: "
+              f"{_riga_gruppo(metriche_gruppo(ap))} · non aperti: "
+              f"{_riga_gruppo(metriche_gruppo(no))}")
         tutti_gate.extend(gtrades)
         print()
 
@@ -411,6 +565,22 @@ def main() -> int:
         _finestre("GATE", esiti, peggiore_paper)
         print(f"  PAPER: {n_paper} trade · persi {persi_paper} · serie di "
               f"perdite piu' lunga: {peggiore_paper}")
+
+    # ---- H5: mercato o esecuzione? I segnali del gate da quando c'e' il paper -
+    if tutti_gate:
+        m_ap = metriche_gruppo(h5_aperti)
+        m_no = metriche_gruppo(h5_non_aperti)
+        print("\n" + "=" * 74)
+        print("H5 — I SEGNALI DEL GATE NEL PERIODO DEL PAPER")
+        print(f"  dal {dt.datetime.fromtimestamp(t0_paper, dt.timezone.utc):%Y-%m-%d} "
+              f"(PAPER_START={PAPER_START}), sulle {len(scelte) - len(saltate)} coppie rigirate")
+        print("=" * 74)
+        print(f"  aperti dal paper: {_riga_gruppo(m_ap)}")
+        print(f"  non aperti:       {_riga_gruppo(m_no)}")
+        print(f"  Lettura: {lettura_h5(m_ap, m_no)}.")
+        print("  NB: i trade del gate sono simulati sulla storia INTERA, senza holdout:")
+        print("      sono una promessa, non una prova. E «aperto» e' un abbinamento nel")
+        print("      tempo, non la certezza che il paper abbia seguito quel segnale.")
 
     if saltate:
         print(f"\n[serie] non rigirate: {len(saltate)}")

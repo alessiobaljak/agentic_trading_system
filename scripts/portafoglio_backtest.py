@@ -37,6 +37,17 @@ stanno nel registro delle spec), le spec con un timeframe diverso da quello
 richiesto (caricare le loro candele raddoppierebbe il tempo, e il bot opera
 comunque a ORCHESTRATOR_TIMEFRAME), le coin con poche candele.
 
+IL PERIODO DEL PAPER (H5 del backlog, 24 set 2026). Il paper perde dove il gate
+prometteva, e due spiegazioni opposte danno lo stesso sintomo: il mercato e'
+cambiato, o il paper esegue male. Nel run di default si stampa quindi anche il
+PnL simulato giorno per giorno DA QUANDO IL PAPER ESISTE (`PAPER_START`, env,
+default 2026-09-16), affiancato al PnL del paper letto da Firestore per giorno
+UTC di uscita. Se anche il simulato perde, e' il mercato; se il simulato vince
+e il paper no, il divario e' esecuzione/parita'. Con un avvertimento che pesa:
+il simulato dal 16 set e' GONFIATO dalla selezione (l'holdout del gate sono
+gli ultimi 45 giorni, e quei giorni li contengono), quindi un simulato in
+utile e' meno informativo di un simulato in perdita.
+
 SOLA LETTURA sul registro. Pubblica un riepilogo compatto in
 `portfolio/backtest` (senza curva) in fail-open: se Firebase non c'e', il
 report resta a schermo e il codice d'uscita non cambia. Il riepilogo non deve
@@ -53,6 +64,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import math
+import os
 from collections import defaultdict
 
 from backtesting.data_loader import load_candles
@@ -60,9 +72,14 @@ from backtesting.optimizer import WalkForwardOptimizer
 from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import decode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
+from bot.learning.trade_logger import TradeLogger
 from bot.risk.portafoglio import MOTIVI, limiti_default, simula
 from bot.strategies.generated import GeneratedStrategy
 from scripts.optimize import coppie_validate
+
+#: da quando esiste il paper (H5, 24 set 2026). Env per spostarlo senza toccare
+#: il codice; il default e' il giorno in cui il bot ha iniziato a operare.
+PAPER_START = os.environ.get("PAPER_START", "2026-09-16")
 
 #: barre che il motore consuma prima di poter emettere segnali (window=200), con
 #: un margine: lo stesso numero di gate_vs_paper, per non inventarne un altro.
@@ -291,6 +308,132 @@ def pubblica(fb, doc: dict) -> None:
         print(f"\n[firebase] pubblicazione saltata ({exc}).")
 
 
+# --------------------------------------------------------------------------- #
+# H5: IL PERIODO DEL PAPER — il simulato perde anche lui, dal 16 set?          #
+# --------------------------------------------------------------------------- #
+def _giorno_utc_uscita(t: dict) -> str | None:
+    """Il giorno UTC (YYYY-MM-DD) in cui il trade del paper e' uscito.
+
+    `exit_ts` (epoch, scritto dal TradeLogger) ha la precedenza; se manca si
+    prova `exit_time` (ISO). Un trade senza nessuno dei due non ha un giorno e
+    viene saltato: meglio un trade in meno che uno messo nel giorno sbagliato."""
+    ts = t.get("exit_ts")
+    if isinstance(ts, (int, float)) and ts > 0:
+        return dt.datetime.fromtimestamp(float(ts), dt.timezone.utc).date().isoformat()
+    raw = t.get("exit_time")
+    if not raw:
+        return None
+    try:
+        d = dt.datetime.fromisoformat(str(raw))
+    except (TypeError, ValueError):
+        return None
+    if d.tzinfo is None:
+        d = d.replace(tzinfo=dt.timezone.utc)
+    return d.astimezone(dt.timezone.utc).date().isoformat()
+
+
+def pnl_paper_per_giorno(trades: list[dict]) -> dict[str, float]:
+    """PnL del paper (USDT, campo `pnl`) sommato per giorno UTC di uscita.
+
+    Il giorno e' quello dell'USCITA, come in `simula` (che accredita il PnL alla
+    chiusura): cosi' le due colonne della tabella contano allo stesso modo.
+    Funzione pura sui dict di Firestore: i test la nutrono con trade sintetici."""
+    per_giorno: dict[str, float] = defaultdict(float)
+    for t in trades:
+        g = _giorno_utc_uscita(t)
+        if g is None:
+            continue
+        try:
+            per_giorno[g] += float(t.get("pnl", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+    return {g: round(v, 2) for g, v in sorted(per_giorno.items())}
+
+
+def _trade_paper(fb, dal_ts: float) -> list[dict] | None:
+    """I trade del paper usciti dal `dal_ts` in poi. None se Firebase non c'e'
+    o la lettura fallisce (fail-open: la sezione si stampa lo stesso, senza la
+    colonna del paper, e lo dice)."""
+    try:
+        if not fb.is_live:
+            return None
+        return [t for t in TradeLogger(fb).all_since(dal_ts) if isinstance(t, dict)]
+    except Exception:  # noqa: BLE001 — una lettura fallita non deve fermare il report
+        return None
+
+
+def lettura_periodo_paper(sim_tot: float, paper_tot: float | None, dal: str) -> str:
+    """La riga «Lettura:» del periodo del paper.
+
+    Le unita' non coincidono (il simulato parte dai 10.000$ del gate con l'1%
+    di rischio, il paper dal suo conto e dalle sue size): si confrontano i
+    SEGNI e i giorni, mai le due somme come se fossero la stessa cosa. E il
+    simulato dal 16 set e' gonfiato dalla selezione: l'holdout del gate sono gli
+    ultimi 45 giorni, cioe' proprio questi. Un simulato in utile dice meno di
+    un simulato in perdita."""
+    avviso = ("attenzione: il simulato di questi giorni e' gonfiato dalla selezione "
+              "(l'holdout del gate sono gli ultimi 45 giorni)")
+    if paper_tot is None:
+        return (f"dal {dal} il portafoglio simulato fa {sim_tot:+.2f}; il paper non e' "
+                f"leggibile da qui (Firebase assente o nessun trade chiuso), quindi il "
+                f"confronto non si fa; {avviso}.")
+    if sim_tot <= 0:
+        return (f"dal {dal} anche il portafoglio simulato perde ({sim_tot:+.2f}, paper "
+                f"{paper_tot:+.2f}): e' il mercato, non l'esecuzione — e visto che il "
+                f"simulato e' gonfiato dalla selezione, dal vivo era lecito aspettarsi "
+                f"anche peggio.")
+    if paper_tot < 0:
+        return (f"dal {dal} il portafoglio simulato fa {sim_tot:+.2f} e il paper "
+                f"{paper_tot:+.2f}: il divario e' esecuzione/parita' (cosa il paper apre, "
+                f"quando, come esce), non il mercato; {avviso}, quindi una parte del "
+                f"divario puo' essere promessa, non prova.")
+    return (f"dal {dal} simulato {sim_tot:+.2f} e paper {paper_tot:+.2f}, tutti e due in "
+            f"utile o pari: nessun divario da spiegare in questo periodo; {avviso}.")
+
+
+def sezione_periodo_paper(sim: dict, trades_paper: list[dict] | None, dal: dt.date,
+                          oggi: dt.date, inizio_run: dt.date) -> dict:
+    """Stampa «PERIODO DEL PAPER» e ritorna il riepilogo (senza liste annidate)
+    per Firebase. `sim` e' lo scenario SENZA limiti extra: e' il portafoglio
+    come il gate lo immagina, senza i what-if. Se il run parte DOPO `dal`
+    (es. `--giorni 3`) la tabella copre solo i giorni simulati e lo dice."""
+    da = max(dal, inizio_run)
+    if da > oggi:
+        print(f"\n  PERIODO DEL PAPER: {dal} e' nel futuro, niente da confrontare.")
+        return {"dal": dal.isoformat(), "giorni": 0}
+    giorni = [(da + dt.timedelta(days=i)).isoformat() for i in range((oggi - da).days + 1)]
+    sim_g = {g: float(sim["pnl_per_giorno"].get(g, 0.0)) for g in giorni}
+    paper_g = pnl_paper_per_giorno(trades_paper) if trades_paper is not None else None
+
+    print("\n" + "=" * 74)
+    print(f"PERIODO DEL PAPER (dal {da}, PAPER_START={PAPER_START}): "
+          f"simulato senza limiti extra · paper")
+    print("=" * 74)
+    if inizio_run > dal:
+        print(f"  NB il run parte dal {inizio_run}, dopo PAPER_START: i giorni prima mancano.")
+    print(f"  {'giorno':<12}{'simulato':>12}{'paper':>12}")
+    for g in giorni:
+        p = "n.d." if paper_g is None else f"{paper_g.get(g, 0.0):+.2f}"
+        print(f"  {g:<12}{sim_g[g]:>+12.2f}{p:>12}")
+    sim_tot = sum(sim_g.values())
+    utile = sum(1 for v in sim_g.values() if v > 0)
+    perdita = sum(1 for v in sim_g.values() if v < 0)
+    riga = (f"  totale{'':<6}{sim_tot:>+12.2f}")
+    paper_tot = None
+    if paper_g is not None:
+        paper_tot = round(sum(v for g, v in paper_g.items() if g in sim_g), 2)
+        riga += f"{paper_tot:>+12.2f}"
+        n_paper = len([t for t in trades_paper if _giorno_utc_uscita(t) in sim_g])
+        riga += f"   ({n_paper} trade del paper usciti nel periodo)"
+    print(riga)
+    print(f"  giorni simulati in utile / in perdita: {utile} / {perdita} su {len(giorni)}")
+    testo = lettura_periodo_paper(sim_tot, paper_tot, da.isoformat())
+    print(f"  Lettura: {testo}")
+    return {"dal": da.isoformat(), "giorni": len(giorni),
+            "simulato_totale": round(sim_tot, 2), "paper_totale": paper_tot,
+            "giorni_utile": utile, "giorni_perdita": perdita, "lettura": testo}
+
+
 def _data(s: str) -> dt.date:
     try:
         return dt.date.fromisoformat(s)
@@ -415,6 +558,21 @@ def main(argv: list[str] | None = None) -> int:
         for g in giorni:
             print(f"    {g}  " + "  ".join(f"{s['pnl_per_giorno'].get(g, 0.0):>+9.2f}" for s in sims))
 
+    # H5: nel run di default, il periodo del paper giorno per giorno, accanto
+    # al paper vero. Con --dal la tabella sopra fa gia' lo stesso lavoro.
+    periodo_paper: dict = {}
+    if args.dal is None:
+        try:
+            dal_paper = dt.date.fromisoformat(PAPER_START)
+        except ValueError:
+            dal_paper = None
+            print(f"\n  PERIODO DEL PAPER: PAPER_START={PAPER_START!r} non e' una data, salto.")
+        if dal_paper is not None:
+            dal_ts = dt.datetime.combine(dal_paper, dt.time(), dt.timezone.utc).timestamp()
+            periodo_paper = sezione_periodo_paper(
+                sims[0], _trade_paper(fb, dal_ts), dal_paper, ora.date(),
+                dt.datetime.fromtimestamp(inizio_ts, dt.timezone.utc).date())
+
     stampa_wr_condizionato(sims[0])
     print(f"\n  {lettura_diversification(sims[0])}")
 
@@ -433,6 +591,7 @@ def main(argv: list[str] | None = None) -> int:
         "scenari": {nome: riepilogo_compatto(s) for nome, s in zip(COLONNE, sims)},
         "lettura": testo,
         "lettura_diversification": lettura_diversification(sims[0]),
+        "periodo_paper": periodo_paper,
         "nota": "backtest, non paper: rischio 1%/trade fisso, trade del motore",
     })
     return 0
