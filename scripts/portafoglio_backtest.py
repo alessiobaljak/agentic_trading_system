@@ -12,16 +12,22 @@ per costruzione:
     fila hanno fatto -1,74% in quaranta minuti: backlog E4);
   * che giornate fa sommando tutto: quante in utile, quante in perdita, il
     drawdown della curva;
-  * e cosa cambierebbe un TETTO DI RISCHIO PER DIREZIONE: la somma del rischio
-    aperto sui long (o sugli short) non oltre una frazione dell'equity.
+  * e cosa cambierebbero TRE limiti di portafoglio, accesi uno sull'altro: il
+    tetto di rischio per direzione (quello che il bot ha gia',
+    MAX_DIRECTIONAL_RISK_PCT), uno stop giornaliero di portafoglio e un tetto
+    al netto direzionale in R (questi due il bot NON li ha: sono what-if).
 
 COME FA. Per ogni coin validata carica le candele una volta sola, rigira ogni
 strategia validata su quella coin con i parametri del registro (`last_params`:
 scala dei TP, breakeven), come farebbe il gate, e tiene i trade entrati negli
 ultimi N giorni. Poi tutti i trade di tutte le coppie passano, in ordine di
-tempo, da un conto solo (`bot/risk/portafoglio.simula`) — DUE volte: senza
-tetto per direzione (com'era) e col tetto. La differenza fra le due e' il
-what-if.
+tempo, da un conto solo (`bot/risk/portafoglio.simula`) — QUATTRO volte, con i
+limiti cumulativi: senza limiti extra · tetto direzione · + stop giornaliero ·
++ netto in R. La differenza fra le colonne e' il what-if di ogni limite.
+
+Stampa anche due misure che servono a decidere, non a limitare: il win rate
+dopo k perdite di fila per strategia (il freno di serie ha senso?) e il
+diversification ratio delle giornate (il portafoglio e' una scommessa sola?).
 
 COSA NON E'. Non e' il paper: i trade sono quelli del backtest (uscita a barra
 chiusa, costi modellati), e il rischio per trade e' l'1% dell'equity senza le
@@ -33,11 +39,14 @@ comunque a ORCHESTRATOR_TIMEFRAME), le coin con poche candele.
 
 SOLA LETTURA sul registro. Pubblica un riepilogo compatto in
 `portfolio/backtest` (senza curva) in fail-open: se Firebase non c'e', il
-report resta a schermo e il codice d'uscita non cambia.
+report resta a schermo e il codice d'uscita non cambia. Il riepilogo non deve
+contenere liste dentro liste: Firestore le rifiuta («invalid nested entity»,
+ops/results/0184 del 24 set, quando i giorni peggiori erano tuple).
 
 Uso:
     .venv/bin/python -m scripts.portafoglio_backtest
     .venv/bin/python -m scripts.portafoglio_backtest --giorni 30 --tetto-direzione 0.02
+    .venv/bin/python -m scripts.portafoglio_backtest --dal 2026-09-16   # dall'inizio del paper
 """
 from __future__ import annotations
 
@@ -61,6 +70,10 @@ WARMUP_BARRE = 260
 
 #: sotto queste candele la coin non si rigira: sarebbe quasi tutto warmup
 MIN_CANDELE = WARMUP_BARRE + 50
+
+#: le quattro colonne del what-if, nell'ordine in cui i limiti si accendono
+#: (cumulativi: ogni colonna ha anche i limiti delle precedenti)
+COLONNE = ("senza_extra", "tetto_direzione", "piu_stop_giorno", "piu_netto_r")
 
 
 def _giorni_di_warmup(interval: str) -> int:
@@ -129,40 +142,38 @@ def trades_della_coin(symbol: str, strategie: list[tuple[str, dict]], specs: dic
 # --------------------------------------------------------------------------- #
 # STAMPA                                                                       #
 # --------------------------------------------------------------------------- #
-def _riga(nome: str, a, b, fmt: str = "{}") -> None:
-    print(f"  {nome:<34}{fmt.format(a):>16}{fmt.format(b):>16}")
+LARGO = 15  # larghezza di ogni colonna numerica
 
 
-def stampa_tabella(senza: dict, con: dict, tetto: float) -> None:
-    print(f"  {'':<34}{'senza tetto':>16}{f'tetto {tetto * 100:.0f}%/dir':>16}")
-    print("  " + "-" * 66)
-    _riga("trade aperti", senza["n_aperti"], con["n_aperti"])
+def _riga(nome: str, valori: list, fmt: str = "{}") -> None:
+    print(f"  {nome:<36}" + "".join(f"{fmt.format(v):>{LARGO}}" for v in valori))
+
+
+def stampa_tabella(sims: list[dict], intestazioni: list[str]) -> None:
+    """Una riga per misura, una colonna per scenario (quattro, cumulativi)."""
+    print(f"  {'':<36}" + "".join(f"{h:>{LARGO}}" for h in intestazioni))
+    print("  " + "-" * (36 + LARGO * len(sims)))
+    _riga("trade aperti", [s["n_aperti"] for s in sims])
     for m in MOTIVI:
-        if senza["saltati"].get(m) or con["saltati"].get(m):
-            _riga(f"  saltati: {m}", senza["saltati"].get(m, 0), con["saltati"].get(m, 0))
-    _riga("  di cui short fermati dal tetto", senza["saltati_direzione"]["short"],
-          con["saltati_direzione"]["short"])
-    _riga("  di cui long fermati dal tetto", senza["saltati_direzione"]["long"],
-          con["saltati_direzione"]["long"])
-    _riga("trade al giorno (min/media/max)",
-          _tag(senza["trade_al_giorno"]), _tag(con["trade_al_giorno"]))
+        if any(s["saltati"].get(m) for s in sims):
+            _riga(f"  saltati: {m}", [s["saltati"].get(m, 0) for s in sims])
+    _riga("  di cui short fermati dal tetto dir.", [s["saltati_direzione"]["short"] for s in sims])
+    _riga("  di cui long fermati dal tetto dir.", [s["saltati_direzione"]["long"] for s in sims])
+    _riga("  giorni fermati dallo stop giorno", [s["giorni_fermati"] for s in sims])
+    _riga("trade al giorno (min/media/max)", [_tag(s["trade_al_giorno"]) for s in sims])
     _riga("posizioni contemporanee (max/media)",
-          _pc(senza["posizioni_contemporanee"]), _pc(con["posizioni_contemporanee"]))
-    _riga("stessa direzione, max contemporanee",
-          senza["stessa_direzione_max"], con["stessa_direzione_max"])
+          [_pc(s["posizioni_contemporanee"]) for s in sims])
+    _riga("stessa direzione, max contemporanee", [s["stessa_direzione_max"] for s in sims])
     _riga("quota altre aperte, stessa direzione",
-          senza["quota_contemporanee_stessa_direzione"],
-          con["quota_contemporanee_stessa_direzione"], "{:.0%}")
-    _riga("long: n / PnL", _dirz(senza["per_direzione"]["long"]),
-          _dirz(con["per_direzione"]["long"]))
-    _riga("short: n / PnL", _dirz(senza["per_direzione"]["short"]),
-          _dirz(con["per_direzione"]["short"]))
+          [s["quota_contemporanee_stessa_direzione"] for s in sims], "{:.0%}")
+    _riga("long: n / PnL", [_dirz(s["per_direzione"]["long"]) for s in sims])
+    _riga("short: n / PnL", [_dirz(s["per_direzione"]["short"]) for s in sims])
     _riga("giorni in utile / in perdita",
-          f"{senza['giorni_utile']} / {senza['giorni_perdita']}",
-          f"{con['giorni_utile']} / {con['giorni_perdita']}")
-    _riga("PnL totale", senza["pnl_totale"], con["pnl_totale"], "{:+.2f}")
-    _riga("equity finale", senza["equity_finale"], con["equity_finale"], "{:.2f}")
-    _riga("max drawdown", senza["max_drawdown_pct"], con["max_drawdown_pct"], "{:.2f}%")
+          [f"{s['giorni_utile']} / {s['giorni_perdita']}" for s in sims])
+    _riga("diversification ratio", [_dr(s["diversification_ratio"]) for s in sims])
+    _riga("PnL totale", [s["pnl_totale"] for s in sims], "{:+.2f}")
+    _riga("equity finale", [s["equity_finale"] for s in sims], "{:.2f}")
+    _riga("max drawdown", [s["max_drawdown_pct"] for s in sims], "{:.2f}%")
 
 
 def _tag(d: dict) -> str:
@@ -177,42 +188,100 @@ def _dirz(d: dict) -> str:
     return f"{d['n']} / {d['pnl']:+.0f}"
 
 
-def giorni_peggiori(senza: dict, con: dict, n: int = 5) -> list[tuple[str, float, float]]:
-    """I giorni peggiori del portafoglio SENZA tetto, con accanto lo stesso
-    giorno col tetto: e' il confronto che dice se il tetto avrebbe tolto le
-    giornate brutte o solo limato le altre."""
-    peggiori = sorted(senza["pnl_per_giorno"].items(), key=lambda kv: kv[1])[:n]
-    return [(g, v, con["pnl_per_giorno"].get(g, 0.0)) for g, v in peggiori]
+def _dr(v) -> str:
+    return "n.d." if v is None else f"{v:.2f}"
 
 
-def lettura(senza: dict, con: dict, tetto: float) -> str:
-    """Una riga in parole semplici: cosa fa il tetto e cosa costa."""
-    if tetto <= 0:
-        return "tetto per direzione spento: le due simulazioni coincidono."
-    fermati = con["saltati"]["tetto_direzione"]
-    s, l = con["saltati_direzione"]["short"], con["saltati_direzione"]["long"]
-    if not fermati:
-        return (f"con il tetto del {tetto * 100:.0f}% per direzione non si salta "
-                f"nessun trade: negli ultimi giorni il portafoglio non e' mai "
-                f"arrivato a {senza['stessa_direzione_max']} posizioni nella stessa "
-                f"direzione col rischio pieno, quindi il tetto non cambia niente.")
-    return (f"con il tetto del {tetto * 100:.0f}% per direzione si saltano {fermati} "
-            f"trade ({s} short, {l} long); il PnL passa da {senza['pnl_totale']:+.0f} "
-            f"a {con['pnl_totale']:+.0f}, il drawdown da {senza['max_drawdown_pct']:.2f}% "
-            f"a {con['max_drawdown_pct']:.2f}%, le posizioni contemporanee nella stessa "
-            f"direzione da {senza['stessa_direzione_max']} a {con['stessa_direzione_max']}.")
+def giorni_peggiori(sims: list[dict], n: int = 5) -> list[dict]:
+    """I giorni peggiori del portafoglio SENZA limiti extra (la prima
+    simulazione), con accanto lo stesso giorno in ogni altra colonna: e' il
+    confronto che dice se un limite avrebbe tolto le giornate brutte o solo
+    limato le altre. Dict per riga, non tuple: Firestore rifiuta le liste
+    annidate (24 set)."""
+    base = sims[0]
+    peggiori = sorted(base["pnl_per_giorno"].items(), key=lambda kv: kv[1])[:n]
+    return [{"giorno": g, "pnl": v,
+             "altri": [s["pnl_per_giorno"].get(g, 0.0) for s in sims[1:]]}
+            for g, v in peggiori]
+
+
+def stampa_wr_condizionato(sim: dict) -> None:
+    """La domanda: dopo k perdite di fila la strategia vince meno? Se no, il
+    freno di serie (4 perdite -> size a meta') non ha un fondamento nei dati."""
+    wc = sim["wr_condizionato"]
+    inc = wc["incondizionato"]
+    print(f"\n  win rate dopo k perdite di fila (per strategia, sui {inc['n']} trade "
+          f"candidati; incondizionato {inc['wr']:.1%})")
+    print(f"  {'k':>3}{'n':>8}{'WR':>9}{'diff':>10}{'t':>8}")
+    for k, d in wc["dopo_k"].items():
+        print(f"  {k:>3}{d['n']:>8}{d['wr']:>9.1%}{d['diff_punti']:>+9.1f}p{d['t']:>8.2f}")
+    d4 = wc["dopo_k"].get("4", {"n": 0, "wr": 0.0, "t": 0.0})
+    print(f"  dopo 4 perdite: WR {d4['wr']:.1%} su {d4['n']} "
+          f"(incondizionato {inc['wr']:.1%}, t {d4['t']:.2f})")
+
+
+def lettura_diversification(sim: dict) -> str:
+    dr = sim["diversification_ratio"]
+    if dr is None:
+        return "diversification ratio non definito (meno di due giorni o coppie piatte)."
+    n = sim["n_coppie_aperte"]
+    if dr >= 0.8:
+        giudizio = "le coppie si muovono quasi insieme: e' quasi una scommessa sola"
+    elif dr >= 0.5:
+        giudizio = "le coppie si compensano in parte"
+    else:
+        giudizio = "le coppie si compensano molto fra loro"
+    return (f"diversification ratio {dr:.2f} su {n} coppie che hanno chiuso trade "
+            f"(1 = una scommessa sola, 0 = si annullano): {giudizio}.")
+
+
+def lettura(sims: list[dict], nomi: list[str]) -> str:
+    """Una riga in parole semplici per ogni limite acceso: cosa fa e cosa costa,
+    rispetto alla colonna prima (i limiti sono cumulativi)."""
+    frasi = []
+    for prima, dopo, nome in zip(sims, sims[1:], nomi[1:]):
+        fermati = prima["n_aperti"] - dopo["n_aperti"]
+        if fermati <= 0:
+            frasi.append(f"{nome}: non salta nessun trade in piu', non cambia niente")
+            continue
+        frasi.append(
+            f"{nome}: salta {fermati} trade in piu'; il PnL passa da "
+            f"{prima['pnl_totale']:+.0f} a {dopo['pnl_totale']:+.0f}, il drawdown da "
+            f"{prima['max_drawdown_pct']:.2f}% a {dopo['max_drawdown_pct']:.2f}%")
+    return "; ".join(frasi) + "." if frasi else "un solo scenario: niente da confrontare."
+
+
+def contiene_liste_annidate(v, dentro_lista: bool = False) -> bool:
+    """True se da qualche parte c'e' una lista (o tupla) dentro una lista, anche
+    passando da un dict: e' quello che Firestore rifiuta come «nested entity»
+    (ops/results/0184). Ricorsiva, cosi' il controllo vale per tutto il doc."""
+    if isinstance(v, (list, tuple)):
+        if dentro_lista:
+            return True
+        return any(contiene_liste_annidate(x, True) for x in v)
+    if isinstance(v, dict):
+        return any(contiene_liste_annidate(x, dentro_lista) for x in v.values())
+    return False
 
 
 def riepilogo_compatto(sim: dict) -> dict:
     """Per Firebase: tutto tranne la curva e il PnL giorno per giorno (che sono
-    la parte pesante e si rigenerano lanciando il comando)."""
+    la parte pesante e si rigenerano lanciando il comando). I giorni peggiori
+    sono dict {giorno, pnl}, non tuple: una lista di tuple e' una lista di
+    liste per Firestore, che la rifiutava e il doc non si pubblicava mai (24
+    set)."""
     fuori = {k: v for k, v in sim.items() if k not in ("curva", "pnl_per_giorno", "limiti")}
-    fuori["giorni_peggiori"] = sorted(sim["pnl_per_giorno"].items(), key=lambda kv: kv[1])[:5]
+    fuori["giorni_peggiori"] = [
+        {"giorno": g, "pnl": v}
+        for g, v in sorted(sim["pnl_per_giorno"].items(), key=lambda kv: kv[1])[:5]]
     return fuori
 
 
 def pubblica(fb, doc: dict) -> None:
     try:
+        if contiene_liste_annidate(doc):
+            print("\n[firebase] riepilogo con liste annidate: non lo pubblico (Firestore lo rifiuta).")
+            return
         if not fb.is_live:
             print("\n[firebase] non connesso: report solo a schermo.")
             return
@@ -222,18 +291,49 @@ def pubblica(fb, doc: dict) -> None:
         print(f"\n[firebase] pubblicazione saltata ({exc}).")
 
 
+def _data(s: str) -> dt.date:
+    try:
+        return dt.date.fromisoformat(s)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"data non valida {s!r}: serve YYYY-MM-DD") from exc
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
-        description="le coppie validate insieme sugli ultimi N giorni, con e senza tetto per direzione")
-    ap.add_argument("--giorni", type=int, default=60)
+        description="le coppie validate insieme sugli ultimi N giorni, con i limiti di "
+                    "portafoglio accesi uno sull'altro (direzione, stop giorno, netto in R)")
+    quando = ap.add_mutually_exclusive_group()
+    quando.add_argument("--giorni", type=int, default=None,
+                        help="ultimi N giorni (default 60)")
+    quando.add_argument("--dal", type=_data, default=None,
+                        help="dal giorno YYYY-MM-DD (es. 2026-09-16, inizio del paper) a oggi; "
+                             "stampa anche il PnL giorno per giorno")
     ap.add_argument("--interval", default=settings.ORCHESTRATOR_TIMEFRAME)
     ap.add_argument("--tetto-direzione", type=float,
                     default=limiti_default()["tetto_direzione"],
-                    help="frazione dell'equity di rischio aperto per direzione (0 = spento)")
+                    help="frazione dell'equity di rischio aperto per direzione, nuovo trade "
+                         "compreso (0 = spento)")
+    ap.add_argument("--tetto-giorno", type=float, default=0.03,
+                    help="perdita di portafoglio nel giorno UTC, frazione dell'equity di "
+                         "inizio giornata, oltre cui non si apre piu' (0 = spento)")
+    ap.add_argument("--netto-r", type=float, default=2.0,
+                    help="massimo |rischio long - rischio short| aperto, in multipli del "
+                         "rischio per trade (0 = spento)")
     ap.add_argument("--source", default="auto")
     ap.add_argument("--equity", type=float, default=10_000.0,
                     help="equity di partenza (default: i 10.000$ del gate)")
     args = ap.parse_args(argv)
+
+    ora = dt.datetime.now(dt.timezone.utc)
+    if args.dal is not None:
+        # --dal: dal giorno dato a oggi, cosi' si confronta col paper giorno per giorno
+        args.giorni = max((ora.date() - args.dal).days, 1)
+        inizio_ts = dt.datetime.combine(args.dal, dt.time(), dt.timezone.utc).timestamp()
+    else:
+        if args.giorni is None:
+            args.giorni = 60
+        inizio_ts = (ora - dt.timedelta(days=args.giorni)).replace(
+            hour=0, minute=0, second=0, microsecond=0).timestamp()
 
     fb = get_firebase()
     pairs = decode_pairs((fb.get_doc("strategy_registry", "validated") or {}).get("pairs"))
@@ -248,13 +348,11 @@ def main(argv: list[str] | None = None) -> int:
         sym, _, strat = key.partition("|")
         per_coin[sym].append((strat, pairs.get(key) or {}))
 
-    ora = dt.datetime.now(dt.timezone.utc)
-    inizio_ts = (ora - dt.timedelta(days=args.giorni)).replace(
-        hour=0, minute=0, second=0, microsecond=0).timestamp()
     limiti = limiti_default()
     print("=" * 74)
     print(f"PORTAFOGLIO: {len(validate)} coppie validate su {len(per_coin)} coin, "
-          f"ultimi {args.giorni} giorni a {args.interval}")
+          f"dal {dt.datetime.fromtimestamp(inizio_ts, dt.timezone.utc).date()} "
+          f"({args.giorni} giorni) a {args.interval}")
     print(f"  limiti del bot: max {limiti['max_posizioni']} posizioni · una per coin · "
           f"tetto coin/giorno {limiti['tetto_coin_giorno'] * 100:.1f}% · "
           f"cooldown {limiti['cooldown_ore']:.2f} h · rischio {limiti['rischio_per_trade'] * 100:.0f}%/trade")
@@ -286,31 +384,55 @@ def main(argv: list[str] | None = None) -> int:
 
     secondi_barra = timeframe_hours(args.interval) * 3600.0
     periodo = (inizio_ts, ora.timestamp())
-    senza = simula(trades, args.equity, {**limiti, "tetto_direzione": 0.0},
-                   secondi_barra=secondi_barra, periodo=periodo)
-    con = simula(trades, args.equity, {**limiti, "tetto_direzione": args.tetto_direzione},
-                 secondi_barra=secondi_barra, periodo=periodo)
+    # i quattro scenari, cumulativi: ogni colonna aggiunge un limite alla precedente
+    scenari = [
+        {**limiti, "tetto_direzione": 0.0, "tetto_giorno": 0.0, "netto_r_max": 0.0},
+        {**limiti, "tetto_direzione": args.tetto_direzione, "tetto_giorno": 0.0, "netto_r_max": 0.0},
+        {**limiti, "tetto_direzione": args.tetto_direzione, "tetto_giorno": args.tetto_giorno,
+         "netto_r_max": 0.0},
+        {**limiti, "tetto_direzione": args.tetto_direzione, "tetto_giorno": args.tetto_giorno,
+         "netto_r_max": args.netto_r},
+    ]
+    intestazioni = ["senza limiti", f"tetto dir {args.tetto_direzione * 100:.0f}%",
+                    f"+ stop gg {args.tetto_giorno * 100:.0f}%", f"+ netto {args.netto_r:.0f}R"]
+    sims = [simula(trades, args.equity, lim, secondi_barra=secondi_barra, periodo=periodo)
+            for lim in scenari]
 
     print("\n" + "=" * 74)
-    print("LE COPPIE INSIEME, IN ORDINE DI TEMPO: senza e con tetto per direzione")
+    print("LE COPPIE INSIEME, IN ORDINE DI TEMPO: i limiti di portafoglio, uno sull'altro")
     print("=" * 74)
-    stampa_tabella(senza, con, args.tetto_direzione)
+    stampa_tabella(sims, intestazioni)
 
-    print("\n  i 5 giorni peggiori (senza tetto → con tetto)")
-    for g, v, v2 in giorni_peggiori(senza, con):
-        print(f"    {g}  {v:>+9.2f}  →  {v2:>+9.2f}")
+    print("\n  i 5 giorni peggiori (senza limiti → le altre colonne)")
+    for r in giorni_peggiori(sims):
+        print(f"    {r['giorno']}  {r['pnl']:>+9.2f}  →  "
+              + "  ".join(f"{v:>+9.2f}" for v in r["altri"]))
 
-    print(f"\nLettura: {lettura(senza, con, args.tetto_direzione)}")
+    if args.dal is not None:
+        # giorno per giorno dal --dal: e' la riga da mettere accanto al paper
+        print(f"\n  PnL giorno per giorno dal {args.dal} (stesse colonne)")
+        giorni = [(args.dal + dt.timedelta(days=i)).isoformat() for i in range(args.giorni + 1)]
+        for g in giorni:
+            print(f"    {g}  " + "  ".join(f"{s['pnl_per_giorno'].get(g, 0.0):>+9.2f}" for s in sims))
+
+    stampa_wr_condizionato(sims[0])
+    print(f"\n  {lettura_diversification(sims[0])}")
+
+    testo = lettura(sims, intestazioni)
+    print(f"\nLettura: {testo}")
 
     pubblica(fb, {
         "updated_at": ora.isoformat(),
-        "giorni": args.giorni, "interval": args.interval, "equity0": args.equity,
+        "giorni": args.giorni, "dal": dt.datetime.fromtimestamp(inizio_ts, dt.timezone.utc).date().isoformat(),
+        "interval": args.interval, "equity0": args.equity,
         "coppie_simulate": n_simulate, "coppie_saltate": len(saltate),
-        "n_trade": len(trades), "tetto_direzione": args.tetto_direzione,
+        "n_trade": len(trades),
+        "tetto_direzione": args.tetto_direzione, "tetto_giorno": args.tetto_giorno,
+        "netto_r": args.netto_r,
         "limiti": limiti,
-        "senza_tetto": riepilogo_compatto(senza),
-        "con_tetto": riepilogo_compatto(con),
-        "lettura": lettura(senza, con, args.tetto_direzione),
+        "scenari": {nome: riepilogo_compatto(s) for nome, s in zip(COLONNE, sims)},
+        "lettura": testo,
+        "lettura_diversification": lettura_diversification(sims[0]),
         "nota": "backtest, non paper: rischio 1%/trade fisso, trade del motore",
     })
     return 0
