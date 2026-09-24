@@ -1182,3 +1182,20 @@ sì del proprietario.
 Il metro per giudicare: nei prossimi giri di `log-gate` le righe «varianti dai
 referti del paper (B8)» e, tra due settimane, quante varianti hanno passato il gate
 rispetto ai genitori; in `log-bot` le righe «FRENO x0.50 (serie N perdite)».
+
+
+### 24 settembre: le tre conferme nello stesso giro, per le varianti
+
+Domanda del proprietario: «se impari e vuoi rivalidare, perché non rivalidi
+dall'inizio fino a oggi e, se passa, la riprovi? Sei sicuro che i sistemi
+intelligenti aspettino davvero?». Risposta: no, non aspettano. Le tre conferme
+distanziate di una settimana sono nate contro la lotteria delle migliaia di
+candidate casuali; l'ingrediente non è il calendario ma i dati che finiscono in
+momenti diversi (`scripts/backfill_passes.sh` lo diceva già a settembre). Una
+variante dai referti è una modifica mirata a una spec nota: da oggi la discovery
+la valuta con i dati fino a oggi, a 8 e a 16 giorni fa nello stesso giro. Tutte e
+tre più l'holdout → validata subito e operata dal giro dopo; solo quella di oggi →
+scartata subito. Le due date arretrate stanno prima del periodo in cui il paper ha
+formulato l'ipotesi: sono la parte della prova che il paper non ha mai visto.
+Costo: due valutazioni in più per variante passata, su al massimo 10 spec. Il
+metro: in `log-gate` le righe «conferme retroattive n/2».

@@ -35,7 +35,7 @@ from bot.ai.hypotheses import propose as ai_propose
 from bot.execution.exit_logic import SCALE_LADDER_CANDIDATES, ladder_from_mfe
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import generate_specs, mutate, varianti_da_referto
-from scripts.optimize import (FRESH_DAYS, MIN_PASSES, _min_history,
+from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_history,
                               coin_in_maturazione, drifted_from_paper, judge_window,
                               publish_timeline, conferme_da_proteggere, scrivi_registro,
                               slim_registry, top_symbols_by_volume)
@@ -534,6 +534,58 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
     return out
 
 
+# LE TRE CONFERME NELLO STESSO GIRO, per le varianti dai referti (24 set 2026).
+#
+# Domanda del proprietario: «se impari e vuoi rivalidare, perche' non rivalidi
+# dall'inizio fino a oggi e, se passa, la riprovi subito? Sei sicuro che i sistemi
+# intelligenti aspettino davvero tre settimane?». No, non aspettano: la regola
+# delle tre conferme distanziate di una settimana e' nata contro la lotteria delle
+# migliaia di candidate casuali, e il tempo di calendario non e' l'ingrediente —
+# lo sono i dati che finiscono in momenti diversi (e' la stessa idea di
+# scripts/backfill_passes.sh, gia' usata a settembre). Una variante e' UNA
+# modifica mirata a una spec gia' nota, non un'estrazione: qui si valuta con i
+# dati fino a oggi, fino a 8 giorni fa e fino a 16 giorni fa nello stesso giro.
+# Passa tutte e tre piu' l'holdout -> validata oggi; passa solo con i dati di oggi
+# -> muore subito invece che fra tre settimane. Le due date arretrate stanno
+# PRIMA del periodo in cui il paper ha formulato l'ipotesi: sono la parte della
+# prova che il paper non ha mai visto. Costo: due valutazioni in piu' per
+# variante passata, su al massimo REFERTI_VARIANTI_MAX spec.
+RETRO_CONFERME = os.getenv("DISCOVERY_RETRO_CONFERME", "true").lower() == "true"
+RETRO_STEP_DAYS = float(os.getenv("DISCOVERY_RETRO_STEP_DAYS", "8"))
+
+
+def conferme_retroattive(opt, sym: str, candles, frame, spec: dict,
+                         scale_candidates=None, context_by_ts=None,
+                         n: int = MIN_PASSES - 1, step_days: float = RETRO_STEP_DAYS,
+                         min_history: int = 0) -> int:
+    """Quante delle `n` valutazioni con fine dati arretrata (step_days, 2*step_days,
+    ...) la spec passa. Si ferma alla prima bocciatura: contano solo conferme
+    consecutive, come nel registro. Il passo deve superare la finestra del pass
+    onesto (168 ore), altrimenti due valutazioni contano come una."""
+    if not candles or n <= 0:
+        return 0
+    if step_days * 86400 < NEW_DATA_MIN_S:
+        return 0
+    fine = candles[-1].open_time.timestamp()
+    ok = 0
+    for k in range(1, n + 1):
+        taglio_ts = fine - k * step_days * 86400
+        cut = 0
+        for i, c in enumerate(candles):
+            if c.open_time.timestamp() > taglio_ts:
+                break
+            cut = i + 1
+        if cut < max(min_history, 1):
+            break
+        r = evaluate_spec(opt, sym, candles[:cut], frame.iloc[:cut].reset_index(drop=True),
+                          spec, scale_candidates=scale_candidates,
+                          context_by_ts=context_by_ts)
+        if not r.get("passed"):
+            break
+        ok += 1
+    return ok
+
+
 def _disc_init(args, end: str, specs: list, scala_paper=None) -> None:
     opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
     # IL MERCATO NEL GATE. `scripts/optimize.py` carica BTC come contesto
@@ -606,6 +658,17 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
                              "t_stat": r.get("t_stat")})
         if r["passed"]:
             key = f"{sym}|{spec['id']}"
+            retro = 0
+            if RETRO_CONFERME and spec.get("origine") == "referto":
+                retro = conferme_retroattive(
+                    _W["opt"], sym, candles, frame, spec,
+                    scale_candidates=candidate_ladders(_W.get("scala_paper")),
+                    context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
+                    min_history=_W["min_history"])
+                print(f"[discover] {sym}|{spec['id']} (variante di "
+                      f"{spec.get('genitore')}, {spec.get('ipotesi')}): conferme "
+                      f"retroattive {retro}/{MIN_PASSES - 1}"
+                      f"{' -> VALIDATA oggi' if retro >= MIN_PASSES - 1 else ''}")
             entries[key] = {
                 "symbol": sym, "strategy": spec["id"], "params": {}, "spec": spec,
                 "oos_pf": r["pf"], "oos_pnl_pct": r["pnl"],
@@ -617,6 +680,9 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict]:
                 "oos_max_dd": r.get("max_dd"), "scale_r_mults": r.get("scale_r_mults"),
                 "sl_to_breakeven": r.get("sl_to_breakeven"),
                 "data_end": r.get("data_end", 0),
+                # conferme raccolte NELLO STESSO GIRO con fine dati arretrata
+                # (solo varianti dai referti): 2 = validata subito
+                "conferme_retro": retro,
             }
             passed_keys.append(key)
             specs_passed[spec["id"]] = spec
@@ -803,6 +869,20 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         # FAIL-CLOSED sul data_end: `judge_window` non giudica senza. Era il buco da
         # cui i run sharded (entries senza data_end) gonfiavano il conteggio.
         judge_window(rec, data_end, True)
+        # VARIANTE CON LE CONFERME RETROATTIVE (vedi conferme_retroattive): le
+        # altre MIN_PASSES-1 conferme sono gia' state raccolte in questo giro, su
+        # dati che finiscono in momenti diversi. Si scrive il conteggio pieno, la
+        # data di nascita e si chiude la finestra: da qui in poi e' una validata
+        # come le altre, con le stesse regole di deriva e di purga.
+        retro = int(e.get("conferme_retro") or 0)
+        if retro >= MIN_PASSES - 1 and int(rec.get("pass_count", 0) or 0) < MIN_PASSES:
+            rec["pass_count"] = MIN_PASSES
+            rec["last_pass_data_end"] = data_end
+            rec["window_start"] = data_end
+            rec["passed_in_window"] = False
+            rec["fail_count"] = 0
+            rec["validated_at"] = now
+            rec["conferme_retro"] = retro
         if e.get("holdout"):
             rec["holdout"] = e["holdout"]
         if e.get("regime_pf"):

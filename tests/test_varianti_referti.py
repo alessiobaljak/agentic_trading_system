@@ -283,3 +283,78 @@ def test_mutate_conserva_il_lato():
     for seed in range(5):
         m = mutate(figlia, seed=seed)
         assert m["solo"] == "long" and m["id"] == spec_id(m)
+
+
+# --------------------------------------------------------------------------- #
+# 24 set: le tre conferme nello stesso giro (fine dati arretrata)              #
+# --------------------------------------------------------------------------- #
+def _candele(n, start=1_700_000_000.0, step=900.0):
+    from datetime import datetime, timezone
+    from types import SimpleNamespace
+    return [SimpleNamespace(open_time=datetime.fromtimestamp(start + i * step, tz=timezone.utc))
+            for i in range(n)]
+
+
+class _Frame:
+    """finto DataFrame: basta iloc[:cut].reset_index(drop=True)."""
+    def __init__(self, n): self.n = n
+    @property
+    def iloc(self): return self
+    def __getitem__(self, sl): return _Frame(len(range(*sl.indices(self.n))))
+    def reset_index(self, drop=True): return self
+
+
+def test_conferme_retroattive_tagliano_i_dati_e_si_fermano_alla_prima_bocciatura(monkeypatch):
+    """Ogni valutazione arretrata vede SOLO le candele fino a k*step giorni prima
+    della fine; il conteggio si ferma alla prima bocciatura (conferme
+    consecutive, come nel registro)."""
+    n = 30 * 96                                  # 30 giorni a 15 minuti
+    candles = _candele(n)
+    visti = []
+    def finto(opt, sym, cs, frame, spec, scale_candidates=None, context_by_ts=None):
+        visti.append(len(cs))
+        return {"passed": len(cs) > 20 * 96}     # passa solo con piu' di 20 giorni
+    monkeypatch.setattr(d, "evaluate_spec", finto)
+    ok = d.conferme_retroattive(None, "AUSDT", candles, _Frame(n), {"id": "x"},
+                                n=2, step_days=8, min_history=1)
+    assert visti == [n - 8 * 96, n - 16 * 96]    # 8 e 16 giorni in meno
+    assert ok == 1                               # la seconda (14 giorni) non passa
+    visti.clear()
+    ok = d.conferme_retroattive(None, "AUSDT", candles, _Frame(n), {"id": "x"},
+                                n=2, step_days=4, min_history=1)
+    assert ok == 0 and visti == []               # passo sotto le 168 ore: non conta
+
+
+def test_conferme_retroattive_senza_storia_sufficiente(monkeypatch):
+    monkeypatch.setattr(d, "evaluate_spec", lambda *a, **k: {"passed": True})
+    candles = _candele(10 * 96)
+    assert d.conferme_retroattive(None, "AUSDT", candles, _Frame(len(candles)),
+                                  {"id": "x"}, n=2, step_days=8, min_history=5 * 96) == 0
+
+
+def test_merge_promuove_subito_la_variante_con_le_conferme_retroattive():
+    """2 conferme arretrate + quella di oggi = MIN_PASSES: pass_count pieno,
+    finestra chiusa, data di nascita. Senza conferme retroattive resta a 1."""
+    from bot.core.firebase_client import decode_pairs
+    from scripts.discover_strategies import merge_into_registry
+    from scripts.optimize import MIN_PASSES
+
+    class FB:
+        def __init__(self): self.docs = {}
+        def get_doc(self, c, dname): return self.docs.get((c, dname), {})
+        def set_doc(self, c, dname, data): self.docs[(c, dname)] = data
+
+    def entry(sym, gid, retro):
+        return {"symbol": sym, "strategy": gid, "params": {}, "oos_pf": 1.5,
+                "oos_pnl_pct": 0.3, "oos_trades": 40, "oos_win_rate": 0.5,
+                "passed": True, "holdout": {"ok": True}, "data_end": 1_700_000_000.0,
+                "conferme_retro": retro}
+    fb = FB()
+    out = {"AUSDT|gen_v": entry("AUSDT", "gen_v", MIN_PASSES - 1),
+           "AUSDT|gen_w": entry("AUSDT", "gen_w", 0)}
+    merge_into_registry(fb, out, list(out), evaluated_symbols={"AUSDT"})
+    pairs = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])
+    v, w = pairs["AUSDT|gen_v"], pairs["AUSDT|gen_w"]
+    assert v["pass_count"] == MIN_PASSES and v.get("validated_at")
+    assert v["passed_in_window"] is False and v["window_start"] == int(1_700_000_000)
+    assert w["pass_count"] == 1 and not w.get("validated_at")
