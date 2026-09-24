@@ -155,7 +155,7 @@ domanda.
 ---
 
 ### A5. I take profit non guardano il grafico: sono multipli dello stop
-**Stato:** aperto · emerso il 24 set (domanda del proprietario su DOT: TP3 a 1,26 da un ingresso a 1,10, toccato una volta l'8 set)
+**Stato:** **misurato il 24 set sera (ops 0210), ipotesi nella forma «massimo/minimo delle 24 ore» SMENTITA** — su 45 trade il livello strutturale sta in mediana a 3,96R, molto più lontano del primo gradino (1,5R): raggiunto nel 2% dei trade contro l'11% di TP1. Il problema non è dove stanno i bersagli, è che il prezzo non va lontano (escursione mediana 0,84R). La strada che resta è un primo gradino più basso, e la scala dal vissuto (0,75 / 1,5 / 2,25) è già fra le candidate che il gate confronta per coppia. Emersa il 24 set (domanda del proprietario su DOT: TP3 a 1,26 da un ingresso a 1,10).
 
 Oggi ogni gradino è `multiplo × R`, con R = distanza dello stop (ATR): la scala si
 adatta alla volatilità del trade, ma **non alla struttura** (massimi recenti,
@@ -629,6 +629,8 @@ Spento. Si riaccende solo se `portafoglio` misura un win rate dopo 4 perdite pi�
 basso di quello incondizionato con t ≥ 2 su ≥ 200 osservazioni.
 
 ### H5. La misura che separa mercato da esecuzione
+**Misurato il 24 set sera (ops 0211, 8 coppie rigirate):** dal 16 set i segnali del gate aperti dal paper sono 15 (PF 0,50, win rate 53%) e quelli non aperti 9 (PF 1,23, win rate 56%; 6 short su 9). Indizio che il percorso live scarta segnali migliori di quelli che apre, ma 9 trade non decidono niente. Prossimo passo: contare i motivi dei rifiuti nel log del bot (cooldown, tetto per coin, stop troppo largo, soglia) nel periodo del paper.
+
 Il paper apre 4,9 trade al giorno contro 8,6 simulati. PF dei segnali «apribili ma
 non aperti» (da `frequenza` + `confronto`) e `portafoglio --dal 2026-09-16`: se
 anche il portafoglio simulato perde dal 16 set, è il mercato più la selezione; se

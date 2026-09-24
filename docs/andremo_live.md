@@ -1350,3 +1350,14 @@ cache degli snapshot del motore e porta il picco di memoria del worker da 0,9 a
 1,5 GB; per 8 worker sono 12 GB su 15. Correzione: le varianti troncate si
 valutano per ultime per ogni coin, con la cache svuotata prima e dopo (picco
 misurato 0,97 GB). Il prossimo giro parte col timer delle 20:04.
+
+
+### 24 settembre, 21:30: le due misure
+
+* **A5 (ops 0210):** il livello strutturale delle 24 ore sta in mediana a 3,96R,
+  raggiunto nel 2% dei trade contro l'11% del primo gradino. Ipotesi smentita in
+  questa forma: i bersagli non sono messi male, è il prezzo che non va lontano.
+* **H5 (ops 0211):** dal 16 set, segnali del gate aperti dal paper 15 (PF 0,50),
+  non aperti 9 (PF 1,23, 6 short). Indizio, non prova: campione di 9.
+* **Gate lanciato a mano alle 21:11:** 6 worker, 9 GB usati su 15 dopo 11 minuti,
+  vivo. Fine attesa verso le 23:00.
