@@ -457,6 +457,12 @@ def candidate_ladders(scala_paper=None) -> tuple:
 #: casuali (come le ipotesi AI): il giro non si allunga, e dieci e' gia' piu'
 #: delle ipotesi che il referto puo' formulare con i ~40 trade di oggi.
 REFERTI_VARIANTI_MAX = int(os.getenv("DISCOVERY_REFERTI_MAX", "10"))
+# MENO CANDIDATE A CASO (24 set 2026, punto 4 del disegno). Con 100 estrazioni
+# casuali a giro serve un filtro durissimo per non validare la fortuna (passa lo
+# 0,3%). Le fonti RAGIONATE sono ormai quattro: ipotesi AI, varianti dai referti,
+# intorno delle validate, mutazioni dei quasi-passaggi. Le casuali restano, ma
+# con un tetto: il metro e' il tasso di passaggio in `gate_autopsy`, prima e dopo.
+RANDOM_MAX = int(os.getenv("DISCOVERY_RANDOM_MAX", "40"))
 
 
 def varianti_dai_referti(fb, existing: dict, interval: str,
@@ -808,6 +814,10 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                 # conferme raccolte NELLO STESSO GIRO con fine dati arretrata
                 # (solo varianti dai referti): 2 = validata subito
                 "conferme_retro": retro,
+                # MISURATA, non ancora usata per decidere: dal 24 set finisce nel
+                # registro (`last_t`) cosi' `gate` puo' dire quante validate
+                # reggerebbero un criterio t >= 2 prima di renderlo una regola
+                "t_stat": r.get("t_stat"),
             }
             passed_keys.append(key)
             specs_passed[spec["id"]] = spec
@@ -1053,6 +1063,8 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         if e.get("sl_to_breakeven") is not None:
             rec["last_params"]["sl_to_breakeven"] = bool(e["sl_to_breakeven"])
         rec["last_pf"] = e["oos_pf"]
+        if e.get("t_stat") is not None:
+            rec["last_t"] = e["t_stat"]
         rec["last_pnl_pct"] = e["oos_pnl_pct"]
         rec["last_trades"] = e["oos_trades"]
         rec["last_win_rate"] = e.get("oos_win_rate")
@@ -1309,9 +1321,11 @@ def main() -> int:
     #     AI, sostituiscono una quota di casuali: il giro non si allunga.
     existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
     varianti = varianti_dai_referti(fb, existing, args.interval)
-    specs = (ai_specs + varianti
-             + generate_specs(max(0, args.generate - len(ai_specs) - len(varianti)),
-                              seed=args.seed))
+    n_casuali = max(0, min(args.generate - len(ai_specs) - len(varianti), RANDOM_MAX))
+    if n_casuali < args.generate - len(ai_specs) - len(varianti):
+        print(f"[discover] candidate casuali limitate a {n_casuali} "
+              f"(DISCOVERY_RANDOM_MAX={RANDOM_MAX}): le altre fonti sono ragionate")
+    specs = ai_specs + varianti + generate_specs(n_casuali, seed=args.seed)
     reg = fb.get_doc("strategy_registry", "validated") or {}
     _ora = time.time()
     _completa = (not REEVAL_DAILY) or giro_giornaliero(_ora) or bool(args.symbols)

@@ -56,3 +56,39 @@ def coin_bloccata(trades: list[dict], symbol: str, now: float, equity: float,
         return (f"{symbol}: persi {persa:.2f} oggi = {persa / equity * 100:.2f}% "
                 f"dell'equity, tetto {cap * 100:.2f}% per coin al giorno")
     return None
+
+
+
+# --------------------------------------------------------------------------- #
+# TETTO DI RISCHIO PER DIREZIONE (24 set 2026)                                  #
+# --------------------------------------------------------------------------- #
+def _lato(v) -> str:
+    return str(getattr(v, "value", v) or "").lower()
+
+
+def rischio_direzione(posizioni, direction) -> float:
+    """Rischio aperto (somma di `risk_effective_pct`, in FRAZIONE dell'equity)
+    delle posizioni nella stessa direzione. Accetta oggetti Position o dict."""
+    lato = _lato(direction)
+    tot = 0.0
+    for p in posizioni or []:
+        d = _lato(getattr(p, "direction", None) if not isinstance(p, dict) else p.get("direction"))
+        if d != lato:
+            continue
+        r = getattr(p, "risk_effective_pct", None) if not isinstance(p, dict) else p.get("risk_effective_pct")
+        tot += float(r or 0)
+    return tot
+
+
+def direzione_bloccata(posizioni, direction, cap: float) -> str | None:
+    """Motivo del blocco se aprire un altro trade in `direction` porterebbe il
+    rischio aperto di quel lato oltre il tetto; None se si puo' aprire. Il
+    confronto e' sul rischio GIA' aperto (>= cap): con tre posizioni da 1% e
+    tetto 3% la quarta non entra, la terza si'."""
+    if cap <= 0:
+        return None
+    aperto = rischio_direzione(posizioni, direction)
+    if aperto >= cap:
+        return (f"tetto per direzione: {_lato(direction)} gia' al {aperto * 100:.2f}% "
+                f"dell'equity di rischio aperto, tetto {cap * 100:.2f}%")
+    return None

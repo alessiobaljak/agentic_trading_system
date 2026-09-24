@@ -926,6 +926,17 @@ class TradingBot:
             if _blocco:
                 self._publish_decision_status({"outcome": "flat", "reason": _blocco})
                 return
+        # TETTO DI RISCHIO PER DIREZIONE (bot/risk/daily_cap.py): sette short
+        # aperti insieme sono una scommessa sola. Regola di portafoglio, attiva
+        # anche in parita' — diverge nella direzione sicura (meno trade).
+        if settings.MAX_RISK_PER_DIRECTION > 0:
+            from bot.risk.daily_cap import direzione_bloccata
+            _blocco_dir = direzione_bloccata(self.executor.open_positions.values(),
+                                             decision.direction,
+                                             settings.MAX_RISK_PER_DIRECTION)
+            if _blocco_dir:
+                self._publish_decision_status({"outcome": "flat", "reason": _blocco_dir})
+                return
         # cap sul NUMERO di posizioni: in parita' disattivato (il bt non lo ha).
         if not settings.BACKTEST_PARITY and len(self.executor.open_positions) >= settings.MAX_OPEN_POSITIONS:
             self._publish_decision_status(

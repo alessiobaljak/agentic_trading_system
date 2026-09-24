@@ -256,6 +256,19 @@ def main() -> int:
     # nella discovery si attiva solo sui passaggi, quindi chi non ripassa non prende
     # un fallimento: resta idoneo, e ha un tentativo nuovo ogni giorno, su un giorno
     # di dati in piu'. Il gruppo degli idonei si ACCUMULA, non si consuma.
+    # STATISTICA t DELLE VALIDATE (24 set 2026): misurata dal gate per ogni
+    # coppia, non ancora un criterio. Qui si vede quante reggerebbero t >= 2
+    # (il metro classico contro la fortuna) PRIMA di decidere se farne una regola.
+    con_t = sorted((float(r["last_t"]), k) for k, r in pairs.items()
+                   if int(r.get("pass_count", 0) or 0) >= MIN_PASSES
+                   and r.get("last_t") is not None)
+    if con_t:
+        sopra = sum(1 for t, _ in con_t if t >= 2.0)
+        mediana = con_t[len(con_t) // 2][0]
+        print(f"\n  STATISTICA t DELLE VALIDATE: {len(con_t)} con misura · "
+              f"{sopra} reggerebbero t >= 2 · mediana {mediana:.2f} · "
+              f"le piu' basse: " + ", ".join(f"{k} ({t:.2f})" for t, k in con_t[:3]))
+        print("  (misurata, non usata per decidere: si decide dopo averla vista)")
     a_un_passo = [r for r in aperte
                   if int(r.get("pass_count", 0) or 0) == MIN_PASSES - 1]
     if a_un_passo:

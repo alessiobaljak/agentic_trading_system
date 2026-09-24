@@ -552,6 +552,15 @@ class Settings:
     # mezzanotte UTC. Regola di portafoglio, NON del gate (che valida una coppia
     # alla volta): diverge nella direzione sicura, meno trade. 0 = spento.
     RISK_PER_COIN_DAY: float = float(os.getenv("RISK_PER_COIN_DAY", "0.015"))
+    # TETTO DI RISCHIO PER DIREZIONE (24 set 2026, «rischio di portafoglio, non
+    # per trade»). Il 21 set il paper aveva 7 posizioni contemporanee e le short
+    # erano 23 trade su 40: sette short aperti insieme sono UNA scommessa sul
+    # mercato, non sette. Se il rischio aperto (somma di risk_effective_pct) in
+    # una direzione raggiunge questa frazione dell'equity, il trade successivo
+    # in quella direzione non si apre. 3% = tre posizioni a size piena (1%).
+    # Numero RAGIONATO, da tarare col backtest di portafoglio (`portafoglio`);
+    # 0 = spento. Regola di portafoglio: diverge dal gate nella direzione sicura.
+    MAX_RISK_PER_DIRECTION: float = float(os.getenv("MAX_RISK_PER_DIRECTION", "0.03"))
     # STOP MASSIMO come frazione del prezzo. 23 set 2026, MUBARAK long dopo un
     # pump del +37%: ATR gonfiato, stop a -15,3%, primo incasso a +31%, lock del
     # profitto che si armava a +15%: un trade che poteva solo perdere lentamente
