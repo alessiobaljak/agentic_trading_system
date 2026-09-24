@@ -15,7 +15,15 @@ che il controllo del mattino leggera'.
 
 IL BOT NON USA ANCORA IL SELETTORE. Questo script misura e basta: il passo 2 (ombra
 nel bot, con calibrazione sul paper) viene dopo, e solo se qui il verdetto e'
-«batte» su almeno 2 finestre su 3.
+«batte» su almeno 2 finestre su 3 — dove «batte» su una finestra vuol dire
+sopra la baseline E sopra il 95° percentile di 200 selezioni con le p
+rimescolate (`p_perm` stampato accanto: la frazione di rimescolamenti che fanno
+almeno altrettanto; audit 24 set 2026).
+
+Dal 24 set 2026 il dataset ha anche i trade delle spec BOCCIATE dal gate (campo
+`passed`): si addestra su tutte, e per ogni finestra si stampano anche le due
+righe «solo passate» e «solo bocciate», perche' quello che il bot aprirebbe sono
+le prime.
 
 Uso (sul VPS):
     .venv/bin/python -m scripts.selettore_report
@@ -29,8 +37,8 @@ from datetime import datetime, timezone
 
 from bot.learning import selettore as sel
 
-#: quanti coefficienti stampare del modello «tutte» (sono 13 in tutto: si
-#: stampano tutti, ma il tetto resta scritto per quando le variabili cresceranno).
+#: quanti coefficienti stampare del modello «tutte» (sono 18 in tutto dal 24 set
+#: 2026: si stampano tutti, ma il tetto resta scritto per quando cresceranno).
 MAX_COEF = 20
 
 
@@ -43,24 +51,43 @@ def _riga_finestra(f: dict) -> str:
         return (f"  finestra {f['finestra']}: train {f['train_n']} trade < minimo -> "
                 f"campione insufficiente")
     b, z, s = f["baseline"], f.get("selezione") or f["selettore"], f["selettore"]
-    return (f"  finestra {f['finestra']} [{f['test_da']} -> {f['test_a']}] "
-            f"train {f['train_n']:5d} | soglia {f['soglia']:.2f}\n"
-            f"     apri tutto: n {b['n']:4d}  pnl {_num(b['pnl'])}  dd {b['dd']:.4f}  "
-            f"wr {b['win_rate']:.1%}  metro {_num(b['metro'])}\n"
-            f"     selezione : n {z['n']:4d}  pnl {_num(z['pnl'])}  dd {z['dd']:.4f}  "
-            f"wr {z['win_rate']:.1%}  metro {_num(z['metro'])}  "
-            f"-> {'BATTE' if f['batte'] else 'non batte'} (margine {_num(f['margine'])})\n"
-            f"     con size  : n {s['n']:4d}  pnl {_num(s['pnl'])}  dd {s['dd']:.4f}  "
-            f"metro {_num(s['metro'])}  (informativo: il verdetto e' sulla selezione)")
+    p_perm, soglia_perm = f.get("p_perm"), f.get("soglia_perm")
+    perm = ("" if p_perm is None else
+            f", p_perm {p_perm:.3f}, 95° perc. {_num(soglia_perm)}")
+    righe = [
+        f"  finestra {f['finestra']} [{f['test_da']} -> {f['test_a']}] "
+        f"train {f['train_n']:5d} | soglia {f['soglia']:.2f}",
+        f"     apri tutto: n {b['n']:4d}  pnl {_num(b['pnl'])}  dd {b['dd']:.4f}  "
+        f"wr {b['win_rate']:.1%}  metro {_num(b['metro'])}",
+        f"     selezione : n {z['n']:4d}  pnl {_num(z['pnl'])}  dd {z['dd']:.4f}  "
+        f"wr {z['win_rate']:.1%}  metro {_num(z['metro'])}  "
+        f"-> {'BATTE' if f['batte'] else 'non batte'} (margine {_num(f['margine'])}{perm})",
+        f"     con size  : n {s['n']:4d}  pnl {_num(s['pnl'])}  dd {s['dd']:.4f}  "
+        f"metro {_num(s['metro'])}  (informativo: il verdetto e' sulla selezione)",
+    ]
+    # le due righe per `passed`: informative, il verdetto e' sull'insieme intero
+    for etichetta, chiave in (("solo passate", "solo_passate"), ("solo bocciate", "solo_bocciate")):
+        sub = f.get(chiave)
+        if not sub:
+            continue
+        sb, sz = sub["baseline"], sub["selezione"]
+        righe.append(f"     {etichetta:13s}: n {sub['n']:4d} | apri tutto pnl {_num(sb['pnl'])} "
+                     f"metro {_num(sb['metro'])} | selezione n {sz['n']:4d} "
+                     f"pnl {_num(sz['pnl'])} metro {_num(sz['metro'])}")
+    return "\n".join(righe)
 
 
 def stampa_famiglia(nome: str, wf: dict) -> None:
     print(f"\n[{nome}] {wf['n_righe']} trade usabili"
           + (f" ({wf['n_scartate']} scartati: variabili mancanti)" if wf["n_scartate"] else "")
+          + (f", {wf['n_passate']} di spec passate e {wf['n_bocciate']} di bocciate"
+             if wf.get("n_bocciate") else "")
           + (f", dal {wf['da']} al {wf['a']}" if wf["da"] else ""))
     for f in wf["finestre"]:
         print(_riga_finestra(f))
-    print(f"  VERDETTO: {wf['verdetto'].upper()} ({wf['vittorie']}/{wf['n_finestre']} finestre)")
+    print(f"  VERDETTO: {wf['verdetto'].upper()} ({wf['vittorie']}/{wf['n_finestre']} finestre; "
+          f"«batte» = sopra la baseline e sopra il 95° percentile di "
+          f"{wf.get('n_permutazioni', sel.N_PERMUTAZIONI)} permutazioni)")
 
 
 def stampa_coefficienti(modello: dict | None) -> None:
@@ -126,7 +153,8 @@ def main(argv: list[str] | None = None) -> int:
     for r in righe:
         famiglie[str(r.get("famiglia") or "altro")] = famiglie.get(str(r.get("famiglia") or "altro"), 0) + 1
     print(f"[selettore] {len(righe)} trade da {letto['file']} file "
-          f"({letto['duplicate']} duplicati fusi, {letto['scartate']} righe rotte saltate)"
+          f"({letto['duplicate']} duplicati fusi, {letto.get('gemelle_fuse', 0)} gemelle fuse, "
+          f"{letto['scartate']} righe rotte saltate)"
           + (f", ultimi {args.giorni} giorni" if args.giorni else ""))
     print(f"[selettore] {len(coppie)} coppie coin+strategia; famiglie: "
           + ", ".join(f"{k} {v}" for k, v in sorted(famiglie.items(), key=lambda kv: -kv[1])))
