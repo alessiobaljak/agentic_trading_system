@@ -1224,3 +1224,15 @@ il bot.
   10% sul ritorno OOS; la madre resta nel registro ma non si opera più. Il metro:
   in `log-gate` le righe «intorno: N coppie … figlie» e «[intorno] … sostituisce».
   Il cronometro del giro completo dice se il tetto può salire a 40.
+
+
+### 24 settembre, notte: rischio per direzione, statistica t, meno casuali, portafoglio
+
+* **Tetto per direzione** (`MAX_RISK_PER_DIRECTION=3%`): con tre posizioni a
+  size piena nella stessa direzione la quarta non si apre. Il motivo compare nello
+  stato delle decisioni («tetto per direzione»). Riavvio del bot in coda (0174).
+* **Statistica t** nel registro e in `gate`: misurata, non ancora regola.
+* **Candidate casuali** a 40 per giro (erano 100): le fonti ragionate sono quattro.
+* **Backtest di portafoglio** (`portafoglio`, chiave da aggiungere): le validate
+  insieme con i limiti veri, con e senza tetto per direzione. È il numero che
+  manca per tarare G1 e il massimo di posizioni.
