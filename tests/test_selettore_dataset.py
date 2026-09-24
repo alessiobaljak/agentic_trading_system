@@ -159,7 +159,7 @@ class _Opt:
         return [(0, 0, 0, n)]
 
 
-def _chiama(monkeypatch, passa: bool):
+def _chiama(monkeypatch, passa: bool, righe_bocciate: bool = True):
     monkeypatch.setattr(d, "gate_verdict",
                         lambda *a, **k: GateVerdict(ok=passa, failed=() if passa else ("pf",),
                                                     binding="" if passa else "pf"))
@@ -167,7 +167,8 @@ def _chiama(monkeypatch, passa: bool):
     candles = [_Candle(datetime(2026, 9, 24, tzinfo=timezone.utc))] * 4
     frame = pd.DataFrame({"close": [1.0] * 4})
     return d.evaluate_spec(_Opt(), "XUSDT", candles, frame, _spec("rsi_extreme"),
-                           run_end="2026-09-24", interval="15m")
+                           run_end="2026-09-24", interval="15m",
+                           righe_bocciate=righe_bocciate)
 
 
 def test_evaluate_spec_da_le_righe_solo_se_passa(monkeypatch):
@@ -200,11 +201,12 @@ def test_il_worker_passa_le_righe_al_main():
     import inspect
 
     uno = inspect.getsource(d._disc_one)
-    assert 'rows.extend(r.get("oos_rows") or [])' in uno
-    assert "near[:10]}, rows)" in uno
+    # dal 24 set sera (OOM) il worker SCRIVE le righe e ritorna solo i conteggi
+    assert "scrivi_righe_worker(rows, end, args.interval)" in uno
+    assert "near[:10]}, stats_righe)" in uno
     main = inspect.getsource(d.main)
     assert "summary, diag, rows in parallel_map(" in main
-    assert "scrivi_dataset_selettore(" in main
+    assert "pubblica_dataset_selettore(" in main
 
 
 # --------------------------------------------------------------------------- #
@@ -270,3 +272,44 @@ def test_la_scrittura_e_fail_open(tmp_path, monkeypatch):
 def test_il_dataset_non_finisce_in_git():
     with open(os.path.join(os.path.dirname(__file__), "..", ".gitignore")) as fh:
         assert "data/selettore/" in fh.read()
+
+
+# --------------------------------------------------------------------------- #
+# 24 set sera: OOM -> i worker scrivono, il main pubblica, i vecchi file vanno #
+# --------------------------------------------------------------------------- #
+def test_il_worker_scrive_un_file_suo_e_ritorna_i_conteggi(tmp_path, monkeypatch):
+    import os
+    monkeypatch.setattr(d, "SELETTORE_DIR", str(tmp_path))
+    st = d.scrivi_righe_worker(_righe(3) + _righe(2, "momentum"), "2026-09-24", "15m")
+    assert st["n"] == 5 and st["per_famiglia"] == {"reversion": 3, "momentum": 2}
+    files = os.listdir(tmp_path)
+    assert files == [f"2026-09-24_15m.w{os.getpid()}.jsonl"]
+    assert sum(1 for _ in open(tmp_path / files[0], encoding="utf-8")) == 5
+    assert d.scrivi_righe_worker([], "2026-09-24", "15m") == {"n": 0, "per_famiglia": {}}
+
+
+def test_le_righe_bocciate_solo_se_richieste(monkeypatch):
+    r = _chiama(monkeypatch, passa=False)
+    assert r["oos_rows"] and all(x["passed"] is False for x in r["oos_rows"])
+    r2 = _chiama(monkeypatch, passa=False, righe_bocciate=False)
+    assert r2["oos_rows"] == []
+
+
+def test_pulizia_dei_file_vecchi(tmp_path, monkeypatch):
+    import os, time
+    monkeypatch.setattr(d, "SELETTORE_DIR", str(tmp_path))
+    vecchio = tmp_path / "2026-09-01_15m.w1.jsonl"
+    nuovo = tmp_path / "2026-09-24_15m.w1.jsonl"
+    vecchio.write_text("{}\n"); nuovo.write_text("{}\n")
+    os.utime(vecchio, (time.time() - 20 * 86400, time.time() - 20 * 86400))
+    assert d.pulisci_dataset_selettore(14) == 1
+    assert sorted(os.listdir(tmp_path)) == ["2026-09-24_15m.w1.jsonl"]
+
+
+def test_pubblica_il_riepilogo_dai_conteggi(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(d, "SELETTORE_DIR", str(tmp_path))
+    fb = _Fb()
+    d.pubblica_dataset_selettore(fb, {"n": 7, "per_famiglia": {"reversion": 7}}, "2026-09-24", "15m", 2)
+    doc = fb.docs["selector/dataset"]
+    assert doc["n_rows_run"] == 7 and doc["n_pairs_run"] == 2 and doc["per_famiglia"] == {"reversion": 7}
+    assert "[selettore] 7 righe (2 coppie)" in capsys.readouterr().out

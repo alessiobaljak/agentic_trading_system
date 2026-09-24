@@ -1329,3 +1329,16 @@ giornaliero 3% −44 trade, 9 giorni fermati, +7.638, dd 14,9%, giorno peggiore 
 fila: 33% su **6 casi** (incondizionato 63,7%, t −1,55): campione inesistente, il
 freno di serie resta spento. Diversification ratio 0,17: le coppie si compensano
 molto, non sono una scommessa sola. `portfolio/backtest` ora si pubblica.
+
+
+### 24 settembre, 14:50: due giri del gate uccisi dalla memoria, colpa mia
+
+I giri delle 11:00 e delle 14:06 sono stati uccisi dal sistema per memoria
+esaurita (OOM, `log-gate` 0195, 14:11). Causa: dall'audit il dataset del
+selettore raccoglieva anche le righe dei quasi-passaggi, e con 264 coin per 314
+spec quelle righe venivano portate tutte in memoria nel processo principale.
+Correzione: i worker scrivono le righe su un file per processo e restituiscono
+solo i conteggi; le righe dei quasi-passaggi entrano solo nel giro completo delle
+02:00 e al massimo per 2 spec per coin; i file più vecchi di 14 giorni si
+cancellano. Il registro non è stato toccato (le validate restano 59); il prossimo
+giro parte col timer delle 17:04. Da verificare: che finisca, e in quanto tempo.

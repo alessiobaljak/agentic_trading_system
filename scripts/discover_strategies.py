@@ -661,6 +661,78 @@ def righe_selettore(trades, symbol: str, spec: dict, run_end: str = "",
     return out
 
 
+#: quanti quasi-passaggi per coin possono contribuire righe «bocciate» al dataset,
+#: e SOLO nel giro completo: il 24 set alle 14:11 UTC il giro e' stato ucciso dal
+#: sistema (OOM) perche' le righe di TUTTI i quasi-passaggi di 264 coin x 314 spec
+#: si accumulavano in memoria nel processo principale. Ora i worker scrivono su
+#: file per conto loro e restituiscono solo i conteggi.
+BOCCIATE_PER_COIN = int(os.getenv("SELETTORE_BOCCIATE_PER_COIN", "2"))
+SELETTORE_RITENZIONE_GIORNI = float(os.getenv("SELETTORE_RITENZIONE_GIORNI", "14"))
+
+
+def scrivi_righe_worker(rows: list[dict], end: str, interval: str) -> dict:
+    """Accoda le righe di UNA coin al file di questo worker (un file per processo:
+    niente scritture concorrenti sullo stesso file) e ritorna i conteggi. Vive
+    nel worker perche' portare le righe al processo principale le accumulava
+    tutte in memoria (OOM del 24 set). Fail-open: un errore -> conteggi a zero."""
+    stats = {"n": 0, "per_famiglia": {}}
+    if not rows:
+        return stats
+    try:
+        os.makedirs(SELETTORE_DIR, exist_ok=True)
+        path = os.path.join(SELETTORE_DIR, f"{end}_{interval}.w{os.getpid()}.jsonl")
+        with open(path, "a", encoding="utf-8") as fh:
+            for r in rows:
+                try:
+                    fh.write(json.dumps(r, ensure_ascii=False, allow_nan=False) + "\n")
+                except ValueError:
+                    continue
+                stats["n"] += 1
+                fam = r.get("famiglia") or "altro"
+                stats["per_famiglia"][fam] = stats["per_famiglia"].get(fam, 0) + 1
+    except Exception as exc:  # noqa: BLE001
+        print(f"[selettore] scrittura dal worker fallita (si prosegue): {exc}")
+    return stats
+
+
+def pulisci_dataset_selettore(giorni: float = SELETTORE_RITENZIONE_GIORNI) -> int:
+    """Cancella i file del dataset piu' vecchi di `giorni`: ogni giro riscrive gli
+    stessi trade (il lettore li fonde), quindi tenere piu' di due settimane e'
+    solo disco sprecato."""
+    tolti = 0
+    try:
+        soglia = time.time() - giorni * 86400
+        for nome in os.listdir(SELETTORE_DIR):
+            p = os.path.join(SELETTORE_DIR, nome)
+            if nome.endswith(".jsonl") and os.path.getmtime(p) < soglia:
+                os.remove(p)
+                tolti += 1
+    except Exception:  # noqa: BLE001
+        pass
+    return tolti
+
+
+def pubblica_dataset_selettore(fb, stats: dict, end: str, interval: str,
+                               n_pairs: int) -> None:
+    """Il riepilogo del giro su Firestore (`selector/dataset`), dai conteggi dei
+    worker. Fail-open."""
+    n = int(stats.get("n", 0) or 0)
+    print(f"[selettore] {n} righe ({n_pairs} coppie) -> {SELETTORE_DIR}/{end}_{interval}.w*.jsonl")
+    tolti = pulisci_dataset_selettore()
+    if tolti:
+        print(f"[selettore] {tolti} file del dataset piu' vecchi di "
+              f"{SELETTORE_RITENZIONE_GIORNI:g} giorni cancellati")
+    try:
+        fb.set_doc("selector", "dataset", {
+            "updated_at": time.time(), "run_end": end, "interval": interval,
+            "n_rows_run": n, "n_pairs_run": n_pairs,
+            "per_famiglia": dict(stats.get("per_famiglia") or {}),
+            "file": f"{SELETTORE_DIR}/{end}_{interval}.w*.jsonl",
+        })
+    except Exception as exc:  # noqa: BLE001
+        print(f"[selettore] riepilogo su Firestore fallito (il file c'e'): {exc}")
+
+
 def scrivi_dataset_selettore(fb, rows: list[dict], end: str, interval: str,
                              n_pairs: int) -> str | None:
     """Accoda le righe del giro al file JSONL e pubblica il riepilogo su Firestore
@@ -752,7 +824,7 @@ def coppie_per_intorno(pairs: dict, existing: dict, drift_doc: dict | None,
 
 
 def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=None,
-               gia_validate=None) -> None:
+               gia_validate=None, bocciate_ok: bool = False) -> None:
     opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
     # IL MERCATO NEL GATE. `scripts/optimize.py` carica BTC come contesto
     # cross-asset da sempre; la discovery — che valida TUTTE le spec che il bot
@@ -771,7 +843,7 @@ def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=N
     _W.update(opt=opt, args=args, end=end, specs=specs,
               min_history=_min_history(args.interval), scala_paper=scala_paper,
               btc_ctx=btc_ctx, specs_per_symbol=specs_per_symbol or {},
-              gia_validate=set(gia_validate or ()))
+              gia_validate=set(gia_validate or ()), bocciate_ok=bool(bocciate_ok))
 
 
 def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
@@ -805,6 +877,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
     involved: dict = {}
     near: list = []
     rows: list = []
+    stats_righe = {"n": 0, "per_famiglia": {}}
+    bocciate_scritte = 0
     n_eval = 0
     # le figlie dell'intorno si valutano SOLO sulla coin della madre
     for spec in list(specs) + list((_W.get("specs_per_symbol") or {}).get(sym, [])):
@@ -827,9 +901,21 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
         r = evaluate_spec(_W["opt"], sym, cand, fr, spec,
                           scale_candidates=candidate_ladders(_W.get("scala_paper")),
                           context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
-                          run_end=end, interval=args.interval)
+                          run_end=end, interval=args.interval,
+                          righe_bocciate=bool(_W.get("bocciate_ok"))
+                          and bocciate_scritte < BOCCIATE_PER_COIN)
         n_eval += 1
-        rows.extend(r.get("oos_rows") or [])
+        if r.get("oos_rows"):
+            if not r["passed"]:
+                bocciate_scritte += 1
+            rows.extend(r["oos_rows"])
+            # su file SUBITO, dal worker, e via dalla memoria (OOM del 24 set)
+            if len(rows) >= 2000:
+                st = scrivi_righe_worker(rows, end, args.interval)
+                stats_righe["n"] += st["n"]
+                for k, v in st["per_famiglia"].items():
+                    stats_righe["per_famiglia"][k] = stats_righe["per_famiglia"].get(k, 0) + v
+                rows = []
         if not r["passed"] and r.get("fail_criteria"):
             b = r.get("fail_binding") or "?"
             binding[b] = binding.get(b, 0) + 1
@@ -882,12 +968,17 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
             summary.append({"symbol": sym, "id": spec["id"], "pf": r["pf"],
                             "pnl": r["pnl"], "desc": GeneratedStrategy(spec).description})
     near.sort(key=lambda n: -(n.get("shortfall") or -9))
+    if rows:
+        st = scrivi_righe_worker(rows, end, args.interval)
+        stats_righe["n"] += st["n"]
+        for k, v in st["per_famiglia"].items():
+            stats_righe["per_famiglia"][k] = stats_righe["per_famiglia"].get(k, 0) + v
     return (sym, entries, passed_keys, specs_passed, n_eval, summary,
-            {"binding": binding, "involved": involved, "near": near[:10]}, rows)
+            {"binding": binding, "involved": involved, "near": near[:10]}, stats_righe)
 
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict,
-                  scale_candidates=None, context_by_ts=None,
+                  scale_candidates=None, context_by_ts=None, righe_bocciate: bool = False,
                   run_end: str = "", interval: str = ""):
     """Aggrega le performance del spec sulle SOLE finestre out-of-sample e applica
     il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra).
@@ -1014,7 +1105,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         # selettore allenato solo sui vincitori non puo' imparare a dire «no».
         "oos_rows": (righe_selettore(oos.trades, symbol, spec, run_end, interval,
                                      passed=passed)
-                     if (passed or (near and not passed)) else []),
+                     if (passed or (righe_bocciate and near and not passed)) else []),
         # ritorni per finestra OOS: servono al confronto APPAIATO figlia/madre
         "window_pnls": [round(float(w), 4) for w in window_pnls],
         # PF e campione PER DIREZIONE (E1, audit del 24 set): l'ipotesi «gli short
@@ -1628,18 +1719,24 @@ def main() -> int:
     diag_binding: dict = {}
     diag_involved: dict = {}
     diag_near: list = []
-    righe_selettore_run: list = []
+    stats_selettore_run: dict = {"n": 0, "per_famiglia": {}}
     coppie_selettore_run = 0
+    # le righe dei quasi-passaggi entrano SOLO nel giro completo e non shardato
+    bocciate_ok = bool(_completa and args.num_shards <= 1 and not getattr(args, "symbols", ""))
     valutate: set = set()   # coin davvero valutate (non saltate per storia/delisting)
     gia_validate = set(coppie_validate(decode_pairs(reg.get("pairs")), _ora))
     for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows in parallel_map(
         _disc_one, symbols, workers=workers, initializer=_disc_init,
-        initargs=(args, end, specs, scala_dal_paper(fb), specs_per_symbol, gia_validate)
+        initargs=(args, end, specs, scala_dal_paper(fb), specs_per_symbol, gia_validate,
+                  bocciate_ok)
     ):
         n_eval += n_ev
         if n_ev > 0:
             valutate.add(sym)
-        righe_selettore_run.extend(rows or [])
+        if isinstance(rows, dict):
+            stats_selettore_run["n"] += int(rows.get("n", 0) or 0)
+            for k, v in (rows.get("per_famiglia") or {}).items():
+                stats_selettore_run["per_famiglia"][k] = stats_selettore_run["per_famiglia"].get(k, 0) + v
         coppie_selettore_run += len(p_keys)
         out.update(entries)
         passed_keys.extend(p_keys)
@@ -1659,11 +1756,11 @@ def main() -> int:
     # nessuno. Fail-open: un errore qui non tocca il registro.
     try:
         if args.num_shards > 1:
-            print(f"[selettore] run shardato: {len(righe_selettore_run)} righe non "
-                  f"scritte (gli shard non condividono il disco)")
+            print(f"[selettore] run shardato: {stats_selettore_run['n']} righe scritte "
+                  f"dai worker dello shard, riepilogo non pubblicato")
         else:
-            scrivi_dataset_selettore(fb, righe_selettore_run, end, args.interval,
-                                     coppie_selettore_run)
+            pubblica_dataset_selettore(fb, stats_selettore_run, end, args.interval,
+                                       coppie_selettore_run)
     except Exception as exc:  # noqa: BLE001
         print(f"[selettore] dataset saltato (si prosegue): {exc}")
 
