@@ -1236,3 +1236,35 @@ il bot.
 * **Backtest di portafoglio** (`portafoglio`, chiave da aggiungere): le validate
   insieme con i limiti veri, con e senza tetto per direzione. È il numero che
   manca per tarare G1 e il massimo di posizioni.
+
+
+### Controllo del 24 settembre (08:20)
+
+Fonti: ops 0175-0183 (06:02-06:13 UTC), stato delle 08:13.
+
+* **Guasto**: il modello AI sulla VPS è `claude-opus-4.8`, id inesistente
+  (`ai-stato`: «model: claude-opus-4.8 was not found. Did you mean
+  claude-opus-4-8?»). Dalle 23:12 di ieri proposte, autopsia e filtro universo
+  saltano (fail-open: il giro prosegue senza AI). Da correggere nel `.env`.
+* Trade 44 in 9 giorni · netto −49,15 (lordo −37,85, costi 11,30 = 1,19% dell'equity)
+  · equity 950,85 · DRY_RUN True · long 18 (6 vinti, −16,28) · short 26 (10 vinti,
+  −32,87) · deriva globale PF 0,60 contro 1,89.
+* Validate 59 su 27 coin (universo 200) · 213 coppie a 2/3, 75 con finestra
+  scaduta su 40 coin (ieri 72).
+* Giro «solo urgenti» delle 05:11: **1h54**, sopra la soglia di 1h30 (atteso ~1h):
+  da rimisurare al giro delle 09:00. Passata a 1 ora: 1 minuto, 445 valutazioni,
+  **prima coppia a 1h passata: ADAUSDT**.
+* Cervello: referti 5 (3 in perdita); freno di serie attivo su gen_ba3a671f e
+  gen_fa304106 (5 perdite di fila): lo short DEXEUSDT delle 02:16 è partito a leva
+  1x invece di 2x e ha perso 1,50. Due ipotesi → due varianti nel giro delle 08:03
+  (gen_54d1beed «solo short» da gen_ba3a671f, gen_9998083f «solo long» da
+  gen_fa304106): esito delle conferme retroattive al prossimo giro. Dataset del
+  selettore: 165 righe (ADA a 1h). Chiave `selettore` non ancora in lista (0183
+  rifiutata). L'intorno gira per la prima volta stanotte.
+* Stop per classe (`mfe`, 28 su 44): 8 ingresso / 19 uscita / 1 protezione (ieri
+  7/13/1 su 21). Frequenza: 23 set attesi 9, aperti 5.
+* Tetto per direzione attivo dal riavvio delle 08:12 (0174).
+
+Proposta del giorno: correggere il modello AI, aggiungere le chiavi `selettore` e
+`portafoglio`, e lanciare `portafoglio` per tarare il tetto per direzione e il
+massimo di posizioni sui numeri, non a occhio.
