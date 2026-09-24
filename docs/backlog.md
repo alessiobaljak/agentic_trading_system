@@ -519,7 +519,10 @@ perdita, −50,88 realizzato):
 | freno di serie | `drift.py::serie_perdite`, `STREAK_BRAKE_*` | 4 perdite di fila su una strategia → size e leva a metà fino al primo guadagno | non spegne, non tara: frena e basta |
 
 Il ciclo è: referto → ipotesi (regola dichiarata) → variante nel gate → se passa,
-opera. Il paper non tara nulla da solo. **Il selettore validato (punto 2) e la
+opera.
+
+**24 set:** il disegno del selettore (punto 2) e della ritaratura periodica (punto 1)
+è in `docs/disegno_cervello.md`, con dati, validazione, costo, rischi e go/no-go. Il paper non tara nulla da solo. **Il selettore validato (punto 2) e la
 lettura AI dei referti (B4) restano aperti**: servono 100+ trade.
 
 ### F2. Il gate a due livelli: «candidata» in paper a size ridotta, «validata» a size piena
