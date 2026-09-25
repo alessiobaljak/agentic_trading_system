@@ -1426,3 +1426,44 @@ l'esecuzione: il paper ha perso un terzo di quello che avrebbe perso il simulato
 grazie alla size dimezzata dal freno e ai tetti. Dopo 4 perdite di fila il win
 rate è 56% su 16 casi (t −0,58): il freno di serie resta spento. Bot riavviato
 alle 07:57 con le righe «[rifiuto]» nel log; chiave ops `rifiuti` da aggiungere.
+
+### Controllo del 25 settembre (08:10 ora italiana, ops 0234-0239 più 0227-0232 delle 07:10-07:53)
+
+**Numeri.** 55 trade chiusi in 10 giorni (2 oggi alle 08:10), 4 aperte (HEI e
+PROM long, TUT e XPL short, rischio aperto 1,48%), realizzato −46,65, equity
+953,35, DRY_RUN True, costi stimati 12,64 su 54 trade (lordo −34,01), massimo 7
+posizioni insieme, giornate in perdita 6 su 8 dal 18 set (ops 0234, 0227). Uscite:
+31 stop (−128,57), 14 trailing (+29,97), 6 scale-out (+17,69), 2 TP pieni, 1 time
+exit (ops 0227). Direzione: long 24 trade, 9 vinti, −17,93; short 31, 14 vinti,
+−32,19 (ops 0234): E1 resta aperta. Il freno globale è attivo (PF vissuto 0,64
+contro 1,89). Gate: 160 validate su 52 coin, copertura 26%, 403 coppie a 2/3
+(5 con finestra già scaduta), statistica t misurata su 9 validate: 3 reggerebbero
+t ≥ 2, mediana 1,47 (ops 0235): troppo poche misure per decidere H1. **Giro
+completo notturno 1h09** (03:30-04:40 UTC), «solo urgenti» 8 spec su 529, passata
+a 1 ora 440 valutazioni e 0 passate (ops 0235). Nessun Traceback né OOM nei log
+(ops 0236, 0239). Bot riavviato alle 07:58: da allora nessun rifiuto d'ingresso
+nel log e ultimo esito «flat» (ops 0239, 0234); la chiave `rifiuti` NON è ancora
+nella lista bianca della VPS (ops 0238: rifiutata). Frequenza: 24 apribili al
+giorno negli ultimi 7 giorni su 52 coin, contro 5,5 aperti al giorno di media
+(ops 0229, 0234): il collo resta il bot, non i segnali (una posizione per coin,
+tetti, freno). AI: chiave ok, 20/20 proposte accettate alle 05:31 italiane, ombra
+0/60 d'accordo (ops 0230, letto prima dell'aggiornamento del contatore: si
+ricontrolla domani). Selettore: NON BATTE, 1 finestra su 3 batte con p 0,035, le
+altre due no (ops 0231). Portafoglio: dal 16 set il simulato perde −1.516 contro
+−46,65 del paper (è il mercato), dopo 4 perdite WR 56% su 16, diversification
+ratio 0,11 (ops 0232). Stop: 20 su 32 andati a favore ma sotto il primo gradino
+(mfe mediana 0,67R), livello strutturale a 4,04R raggiunto nel 2% dei trade (ops
+0237): A5 resta confutata.
+
+**Proposta del giorno: alzare il tetto dell'intorno da 10 a 40 coppie a notte
+(B8 seconda metà, `DISCOVERY_INTORNO_CAP`).** Perché: era la condizione scritta
+nel disegno («si attiva solo con il giro completo sotto 1h30»), e il giro
+completo di stanotte ha fatto 1h09 con il tetto a 10 e 6 worker (ops 0235); con
+160 validate a 10 coppie a notte ogni coppia rivede le sue soglie ogni 16 notti,
+a 40 ogni 4, cioè entro il riposo di 7 giorni previsto. Cosa cambia: ~30 coppie
+in più a notte, ~8 figlie l'una, quindi ~240 valutazioni in più su ~90.000 e le
+conferme retroattive per le figlie che passano; una figlia entra solo se passa il
+gate, batte la madre del 10% su 2 finestre su 3 e passa l'holdout. Cosa NON
+cambia: il paper, le soglie del gate, il vocabolario. Metro: il tempo del giro
+completo (deve restare sotto 1h30; se sfora le 2h si torna a 10) e la riga
+«intorno: madri/figlie/promosse» in `gate` per due settimane. **Serve il sì.**
