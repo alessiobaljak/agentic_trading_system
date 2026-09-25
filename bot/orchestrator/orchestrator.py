@@ -37,9 +37,12 @@ _TF_SECS = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 1440
 #: per ciclo e nelle ultime 24 ore, e i conteggi vanno in /decision_status. Sono
 #: le prime parole della riga, ridotte a nove classi: cosi' il controllo orario
 #: puo' dire «12 cooldown, 3 margine» senza leggere il journal.
+#: «esplorative al tetto» (25 set 2026, F1bis) e' il rifiuto di un segnale
+#: esplorativo quando ESPLORATIVE_MAX_APERTE posizioni esplorative sono gia'
+#: aperte: contato a parte, cosi' si vede quante volte il tetto ha morso.
 MOTIVI_RIFIUTO = ("cooldown", "tetto per coin", "peso sotto soglia", "strategia spenta",
                   "veto di regime", "margine", "rischio direzionale", "stop troppo largo",
-                  "altro")
+                  "esplorative al tetto", "altro")
 
 
 def motivo_rifiuto(testo: str) -> str:
@@ -61,6 +64,8 @@ def motivo_rifiuto(testo: str) -> str:
         return "rischio direzionale"
     if "stop troppo largo" in t:
         return "stop troppo largo"
+    if "esplorative al tetto" in t:
+        return "esplorative al tetto"
     return "altro"
 
 
@@ -193,9 +198,13 @@ class Orchestrator:
             # strategie base (6) + strategie GENERATE validate per questo asset
             strategies = get_all_strategies(params_by_strat)
             strategies += self.adaptation.generated_strategies_for(sym)
+            # + le ESPLORATIVE (25 set 2026, F1bis): i quasi-passaggi scelti dal
+            # gate, marcati `esplorativa` sull'oggetto. Vuoto fuori dal paper.
+            strategies += self.adaptation.esplorative_for(sym)
             for strat in strategies:
                 if strat.name in disabled:
                     continue
+                esplorativa = bool(getattr(strat, "esplorativa", False))
                 # OGNI STRATEGIA SUL SUO OROLOGIO (22 set 2026, strategie native a
                 # 1 ora): una spec a 1h decide UNA volta per candela oraria, non
                 # quattro volte come se fosse a 15m — nel backtest e' valutata a
@@ -209,7 +218,12 @@ class Orchestrator:
                         continue
                 if not strat.is_active_in(coin_regime):
                     continue
-                if not self.adaptation.is_enabled(sym, strat.name):
+                # una validata passa da `is_enabled` (registro); un'esplorativa
+                # non e' nel registro validato per definizione: passa dal suo
+                if esplorativa:
+                    if not self.adaptation.is_esplorativa(sym, strat.name):
+                        continue
+                elif not self.adaptation.is_enabled(sym, strat.name):
                     continue
                 # filtro di regime informato dal gate: non si opera una coppia nel
                 # regime in cui il gate l'ha vista perdere (fail-open senza dati)
@@ -236,6 +250,9 @@ class Orchestrator:
                     # li usa invece dei default fissi (parità GATE 1 <-> paper).
                     "suggested_stop": sig.suggested_stop,
                     "suggested_target": sig.suggested_target,
+                    # il paper esplorativo (25 set 2026): decide_all da' la
+                    # precedenza alle validate e applica il tetto di aperte
+                    "esplorativa": esplorativa,
                 })
         signals.sort(key=lambda s: s["adjusted_confidence"], reverse=True)
         return signals
@@ -252,6 +269,10 @@ class Orchestrator:
     ) -> Optional[OrchestratorDecision]:
         self.nuovo_ciclo()
         signals = self.collect_signals(assets, regime, disabled=disabled)
+        # il paper esplorativo vive SOLO in parita' (`decide_all`, un segnale per
+        # coin): qui si sceglie il migliore globale e un quasi-passaggio non deve
+        # mai vincere sulle validate (25 set 2026, F1bis)
+        signals = [s for s in signals if not s.get("esplorativa")]
         self._stampa_rifiuti()          # i veti di regime del giro
         if not signals:
             self._record_status(regime, len(assets), signals, "flat",
@@ -301,16 +322,30 @@ class Orchestrator:
     def decide_all(
         self, assets: dict[str, AssetSnapshot], regime: Regime,
         disabled: Optional[set] = None, boundary: Optional[float] = None,
+        esplorative_aperte: int = 0,
     ) -> list[OrchestratorDecision]:
         """PARITA' COL BACKTEST: ritorna UNA decisione per OGNI coin con un segnale
         valido (sopra soglia, peso>0), prendendo la strategia migliore per quella
         coin. Niente LLM, niente 'scegli il migliore globale': come il backtest che
-        apre ogni segnale indipendentemente. Vincolo conto reale: 1 posizione/coin."""
+        apre ogni segnale indipendentemente. Vincolo conto reale: 1 posizione/coin.
+
+        IL PAPER ESPLORATIVO (25 set 2026, F1bis), due regole sole:
+          (a) una VALIDATA vince sempre: se sulla coin una strategia validata ha
+              prodotto un segnale, i segnali esplorativi di quella coin cadono
+              (anche se il segnale validato viene poi rifiutato per peso);
+          (b) al massimo ESPLORATIVE_MAX_APERTE posizioni esplorative aperte
+              insieme: `esplorative_aperte` sono quelle gia' aperte (le passa
+              main), le decisioni di questo ciclo si sommano; oltre, rifiuto
+              «esplorative al tetto», contato come gli altri."""
         self.nuovo_ciclo()
         signals = self.collect_signals(assets, regime, disabled=disabled, boundary=boundary)
         decisions: list[OrchestratorDecision] = []
         seen: set = set()
+        coin_con_validata = {s["symbol"] for s in signals if not s.get("esplorativa")}
+        n_esplorative = int(esplorative_aperte or 0)
         for s in signals:  # ordinati per adjusted_confidence desc
+            if s.get("esplorativa") and s["symbol"] in coin_con_validata:
+                continue        # regola (a): la validata ha la precedenza, senza rifiuto
             if s["weight"] <= 0.0:
                 self._rifiuto(s["symbol"], s["strategy"],
                               f"peso {s['weight']:.2f} (strategia spenta dal learning)")
@@ -323,6 +358,12 @@ class Orchestrator:
                 continue
             if s["symbol"] in seen:
                 continue
+            if s.get("esplorativa"):
+                if n_esplorative >= settings.ESPLORATIVE_MAX_APERTE:
+                    self._rifiuto(s["symbol"], s["strategy"],
+                                  f"esplorative al tetto ({settings.ESPLORATIVE_MAX_APERTE} aperte)")
+                    continue    # regola (b)
+                n_esplorative += 1
             seen.add(s["symbol"])
             # TREND come contesto: modula la SIZE (non un veto). Il controtrend
             # (rispetto a trend della coin 60% + mercato 40%) apre piu' piccolo;
@@ -338,7 +379,8 @@ class Orchestrator:
                 direction=Direction(s["direction"]), size_multiplier=size_mult,
                 confidence=s["confidence"], reasoning=s.get("reasoning", ""),
                 suggested_stop=s.get("suggested_stop"),
-                suggested_target=s.get("suggested_target"))
+                suggested_target=s.get("suggested_target"),
+                esplorativa=bool(s.get("esplorativa")))
             d.adjusted_confidence = s["adjusted_confidence"]
             decisions.append(d)
         self._stampa_rifiuti()

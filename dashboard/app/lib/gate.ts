@@ -81,6 +81,13 @@ export interface Giro extends Testata {
     strategie?: number | null;
     con_scala?: number | null;
   } | null;
+  /** il paper esplorativo (25 set 2026, F1bis): coppie esplorative attive dopo
+   *  il giro e il metro dell'esperimento (poi validate / scartate) */
+  esplorative?: {
+    attive?: number | null;
+    validate_poi?: number | null;
+    scartate?: number | null;
+  } | null;
 }
 
 export interface DistribuzionePass {

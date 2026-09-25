@@ -44,6 +44,9 @@ export default function ControlloPaper() {
   const costi = p.costi ?? null;
   const stop = p.stop ?? null;
   const tr = p.trailing ?? null;
+  // il paper esplorativo (25 set 2026, F1bis): una riga sola, coi suoi numeri
+  // tenuti a parte da quelli delle validate qui sopra
+  const esp = p.esplorative ?? null;
 
   const riassunto = (
     <>
@@ -208,6 +211,18 @@ export default function ControlloPaper() {
           {tr.verdetti_per_proposta != null && tr.soglia != null && (
             <span className="muted"> ({tr.verdetti_per_proposta} verdetti utili su soglia {tr.soglia})</span>
           )}
+        </Riga>
+      )}
+
+      {esp && (
+        <Riga>
+          <span title="quasi-passaggi del gate operati a un quarto della size, marcati «espl.» fra i trade chiusi; fuori dai numeri delle validate e dai pesi">
+            <b>Paper esplorativo</b>: {esp.trades ?? '—'} trade
+            {esp.vinti != null && ` (${esp.vinti} vinti)`}
+            {', '}
+            <span className={classePnl(esp.pnl)}>{segno(esp.pnl, 2)}</span>
+            {' '}· {esp.aperte ?? '—'} aperte · {esp.coppie_attive ?? '—'} coppie
+          </span>
         </Riga>
       )}
 

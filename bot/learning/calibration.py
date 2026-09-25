@@ -112,9 +112,13 @@ def calibrate(trades: Iterable[dict]) -> dict:
     """Verdetto sulla calibrazione + `trust` da applicare in allocation.
 
     trust 1.0 = la confidenza conta come oggi; 0.0 = non influenza piu' la size."""
+    # i trade del paper esplorativo (25 set 2026, F1bis) restano fuori: la
+    # calibrazione tara la fiducia nella confidenza delle VALIDATE, e un
+    # quasi-passaggio a size ridotta e' un'altra popolazione
     pairs = [(float(t["confidence_at_entry"]), float(t["pnl_pct"]))
              for t in trades
              if str(t.get("exit_reason", "")) not in _EXTERNAL
+             and not t.get("esplorativa")
              and t.get("confidence_at_entry") is not None
              and t.get("pnl_pct") is not None]
     n = len(pairs)

@@ -988,8 +988,11 @@ class TradingBot:
         # "il migliore del ciclo"). In parita' apriamo TUTTI i segnali validi del
         # ciclo (uno per coin); altrimenti la singola decisione migliore (LLM/fallback).
         if settings.BACKTEST_PARITY:
+            # quante posizioni ESPLORATIVE sono gia' aperte (25 set 2026, F1bis):
+            # l'orchestratore applica il tetto ESPLORATIVE_MAX_APERTE su questo numero
             opened = [d for d in self.orchestrator.decide_all(
-                self.selected, self.regime, disabled=disabled, boundary=boundary)]
+                self.selected, self.regime, disabled=disabled, boundary=boundary,
+                esplorative_aperte=self._esplorative_aperte())]
             for d in opened:
                 self._try_open(d, now)
             # OMBRA: il modello dice cosa AVREBBE fatto, e resta li'. Dopo il giro
@@ -1005,10 +1008,33 @@ class TradingBot:
         self._try_open(decision, now)
 
     # ------------------------------------------------------------------ #
+    def _esplorative_aperte(self) -> int:
+        """Quante posizioni aperte sono ESPLORATIVE (25 set 2026, F1bis): il
+        numero su cui l'orchestratore applica il tetto ESPLORATIVE_MAX_APERTE."""
+        try:
+            return sum(1 for p in self.executor.open_positions.values()
+                       if getattr(p, "esplorativa", False))
+        except Exception:  # noqa: BLE001
+            return 0
+
+    @staticmethod
+    def fattore_size_esplorativa(decision) -> float:
+        """Il moltiplicatore di size di una decisione (25 set 2026, F1bis): un
+        quarto (ESPLORATIVA_SIZE_MULT) per un'esplorativa, 1 per una validata.
+        Puro: e' la sola aritmetica del paper esplorativo dentro `_try_open`."""
+        if getattr(decision, "esplorativa", False):
+            return max(0.0, min(1.0, float(settings.ESPLORATIVA_SIZE_MULT)))
+        return 1.0
+
     def _try_open(self, decision, now: float) -> None:
         """Apre UNA posizione dalla decisione (controlli + risk gate + executor).
         Se un controllo fallisce fa 'return' (salta questa decisione; in parita' il
-        loop continua con le altre)."""
+        loop continua con le altre).
+
+        Una decisione ESPLORATIVA (25 set 2026, F1bis) passa da TUTTI gli stessi
+        controlli di una validata (cooldown, tetto per coin, correlazione, risk
+        gate, rischio direzionale, margine): cambia solo la size, moltiplicata
+        per ESPLORATIVA_SIZE_MULT prima del risk gate, e la marca sulla posizione."""
         # I RIFIUTI NEL LOG (25 set 2026, backlog H5). Ogni scarto prima
         # dell'apertura lascia UNA riga uniforme «[rifiuto] coin strategia
         # direzione: motivo». Prima finiva solo in RTDB /decision_status, che
@@ -1145,6 +1171,13 @@ class TradingBot:
         rmult, lmult, alloc_note = self.adaptation.allocation(
             decision.strategy, asset.regime or self.regime or Regime.SIDEWAYS,
             decision.confidence, drift_key=(asset.symbol, decision.strategy))
+        # PAPER ESPLORATIVO (25 set 2026, F1bis): un quarto della size, PRIMA dei
+        # cap del risk manager (che possono solo ridurre ancora). La leva resta
+        # quella dell'allocazione: e' la size che limita il danno, non la leva.
+        _f_esp = self.fattore_size_esplorativa(decision)
+        if _f_esp < 1.0:
+            rmult *= _f_esp
+            alloc_note += f" · esplorativa x{_f_esp:g}"
         params = self.risk.evaluate(decision, user, asset, self.account_equity(),
                                     volatility_sigma=self._volatility_sigma(asset),
                                     risk_mult=rmult, lev_mult=lmult, alloc_note=alloc_note)
@@ -1204,8 +1237,14 @@ class TradingBot:
                                           sl_to_breakeven=breakeven_after_tp1(_sparams),
                                           profit_lock_keep=lock_keep(_sparams),
                                           timeframe=self.adaptation.timeframe_for(decision.strategy),
-                                          selector_p=_sel_p, selector_soglia=_sel_soglia)
+                                          selector_p=_sel_p, selector_soglia=_sel_soglia,
+                                          esplorativa=bool(getattr(decision, "esplorativa", False)))
         if pos is not None:
+            if getattr(decision, "esplorativa", False):
+                # la riga che distingue nel log un trade esplorativo da uno delle
+                # validate (25 set 2026, F1bis): stessa forma di «[rifiuto]»
+                print(f"[esplorativa] {pos.symbol} {pos.strategy} {pos.direction.value} "
+                      f"size x{_f_esp:g}")
             self._sync_stream_symbols()
             # i prezzi accumulati PRIMA dell'ingresso non possono riempire i suoi TP
             if self.stream is not None:

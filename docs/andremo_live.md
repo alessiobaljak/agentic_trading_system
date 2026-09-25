@@ -1577,3 +1577,20 @@ H3 parcheggiata (va contro «non limitare»). Proposto il «paper esplorativo»
 (F1bis), aspetta il sì. Suite: 1451 test verdi (1409 prima), TypeScript ok.
 Non verificato dal vivo: il primo `[selettore]` nel log arriva dopo il prossimo
 report `selettore` e il riavvio del bot.
+
+### 25 settembre, 14:50: il paper esplorativo è acceso (F1bis, sì del proprietario)
+
+Le coppie che passano il gate per un pelo (quasi-passaggi, mancato più piccolo,
+una per coin, al massimo 20, mai le validate né le strategie base) finiscono in
+`strategy_registry/esplorative` a ogni giro della discovery, con una storia
+(validata poi / scartata). Il bot le opera in paper a **un quarto della size**,
+al massimo 3 aperte insieme, marcate `esplorativa`; una validata sulla stessa
+coin vince sempre. Pesi, freno da deriva e calibrazione le ignorano; referti,
+scala e keep dal vissuto le includono (più chiusure da cui imparare: è lo
+scopo). I numeri del paper nel controllo restano quelli delle validate; la riga
+«Paper esplorativo» sta a parte. Fuori dal paper (DRY_RUN false) è spento
+comunque. Metro: dopo 100 trade esplorativi, quante coppie sono poi passate
+contro quante scartate (`gate`, riga ESPLORATIVE; `trades`, sezione PAPER
+ESPLORATIVO). Suite 1483 test verdi, TypeScript ok. Non verificato dal vivo: il
+primo giro del gate scrive il documento; fino ad allora il bot non ha
+esplorative e lo dice.

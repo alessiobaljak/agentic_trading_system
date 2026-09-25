@@ -141,6 +141,20 @@ def riga_cervello(diag: dict) -> str:
             f"{_n(v, 'scartate')} scartate / sostituzioni {testo_sost}")
 
 
+def riga_esplorative(esp_doc: dict | None) -> str:
+    """La riga «ESPLORATIVE: ...» (25 set 2026, F1bis) dal documento
+    `strategy_registry/esplorative`: quante coppie esplorative sono attive e il
+    metro dell'esperimento (quante sono poi passate il gate, quante scartate).
+    Pura; senza documento lo dice."""
+    if not isinstance(esp_doc, dict):
+        return "  ESPLORATIVE: registro non ancora scritto dal gate (paper esplorativo, F1bis)"
+    attive = len(decode_pairs(esp_doc.get("pairs")))
+    storia = decode_pairs(esp_doc.get("storia"))
+    validate_poi = sum(1 for v in storia.values() if (v or {}).get("esito") == "validata")
+    scartate = sum(1 for v in storia.values() if (v or {}).get("esito") == "scartata")
+    return f"  ESPLORATIVE: {attive} attive · validate poi {validate_poi} · scartate {scartate}"
+
+
 def riga_keep_validate(pairs: dict, validated) -> str:
     """«KEEP DEL LOCK»: quale keep del profit-lock il gate ha scelto per le coppie
     validate (25 set 2026), letto da `last_params["profit_lock_keep"]`.
@@ -415,6 +429,11 @@ def main() -> int:
     print(riga_cervello(diag))
     # e il KEEP DEL PROFIT-LOCK scelto per coppia (25 set 2026): vedi riga_keep_validate
     print(riga_keep_validate(pairs, validated))
+    # e il PAPER ESPLORATIVO (25 set 2026, F1bis): vedi riga_esplorative
+    try:
+        print(riga_esplorative(fb.get_doc("strategy_registry", "esplorative")))
+    except Exception as exc:  # noqa: BLE001 - diagnostica, mai fatale
+        print(f"  ESPLORATIVE: registro non leggibile ({str(exc)[:60]})")
     # la passata extra (strategie native a 1 ora, per ora solo BTC)
     d1h = fb.get_doc("strategy_params", "discovered_last_run_1h") or {}
     if d1h.get("started_at") and d1h.get("duration_s") is not None:

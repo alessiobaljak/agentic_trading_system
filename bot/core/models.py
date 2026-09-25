@@ -134,6 +134,11 @@ class OrchestratorDecision(BaseModel):
     # così il paper replica esattamente lo stop/target validato out-of-sample.
     suggested_stop: Optional[float] = None
     suggested_target: Optional[float] = None
+    # PAPER ESPLORATIVO (25 set 2026, backlog F1bis): True se la strategia e' un
+    # quasi-passaggio del gate operato a size ridotta, non una validata. Lo
+    # legge `_try_open` (size x ESPLORATIVA_SIZE_MULT) e segue il trade fino al
+    # ClosedTrade, cosi' il learning delle validate lo puo' ignorare.
+    esplorativa: bool = False
     timestamp: datetime = Field(default_factory=_utcnow)
 
     @field_validator("size_multiplier")
@@ -257,6 +262,12 @@ class ClosedTrade(BaseModel):
     # o trade precedente all'ombra.
     selector_p: Optional[float] = None
     selector_soglia: Optional[float] = None
+    # PAPER ESPLORATIVO (25 set 2026, backlog F1bis): il trade e' stato aperto da
+    # una coppia esplorativa (quasi-passaggio del gate, size a un quarto), non
+    # da una validata. E' la chiave con cui pesi, deriva e calibrazione lo
+    # ESCLUDONO (non e' una promessa del gate) e con cui referti, scala e keep
+    # lo INCLUDONO (piu' dati e' il punto). False sui trade storici.
+    esplorativa: bool = False
 
     # --- SCOMPOSIZIONE DEI COSTI (Fase 2.5) --------------------------------- #
     # Il PnL netto e' un numero solo e nasconde quanto e' costato ottenerlo. Qui

@@ -24,6 +24,15 @@ WEIGHT_WINRATE_HIGH = 0.60
 PRIOR_WINRATE = 0.65
 
 
+def esplorativo(t: dict) -> bool:
+    """True se il trade e' del PAPER ESPLORATIVO (25 set 2026, backlog F1bis): aperto
+    da un quasi-passaggio del gate a size ridotta, non da una validata. Pesi,
+    keep del trailing, deriva e calibrazione lo IGNORANO: non e' una promessa
+    del gate, e i suoi esiti non devono muovere size e leva delle validate.
+    Referti, scala e keep del gate lo INCLUDONO (piu' dati e' il punto)."""
+    return bool(isinstance(t, dict) and t.get("esplorativa"))
+
+
 def _is_win(t: dict) -> bool:
     return bool(t.get("is_win", t.get("pnl", 0) > 0))
 
@@ -299,6 +308,8 @@ def compute_trailing_keep(trades: list[dict]) -> dict[str, float]:
     for t in trades:
         if t.get("timeframe") != tf or t.get("exit_reason") != "trailing_stop":
             continue
+        if esplorativo(t):
+            continue    # F1bis: il keep del bot si impara solo dalle validate
         s = t.get("strategy", "?")
         v = t.get("trailing_verdict")
         if v == "premature":
@@ -349,7 +360,14 @@ def compute_weights(trades: list[dict]) -> list[StrategyRegimeWeight]:
     # fuori scala. Il conteggio si stampa sempre — un filtro troppo aggressivo si
     # riconosce solo vedendo quanto scarta.
     n_in = len(trades)
+    # PAPER ESPLORATIVO (25 set 2026, F1bis): fuori dai pesi. Contati a parte
+    # nella riga di log, cosi' si vede quanti erano.
+    n_esp = sum(1 for t in trades if esplorativo(t))
+    trades = [t for t in trades if not esplorativo(t)]
     trades, reasons = filter_anomalous_trades(trades)
+    if n_esp:
+        reasons = dict(reasons)
+        reasons["esplorativi"] = n_esp
     if reasons:
         detail = " · ".join(f"{k}: {v}" for k, v in sorted(reasons.items()))
         print(f"[learning] filtrati {n_in - len(trades)}/{n_in} trade ({detail})")

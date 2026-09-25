@@ -42,6 +42,12 @@ class AdaptationEngine:
         self._calibration: dict = {}
         self._has_opt_data: bool = False
         self._generated_specs: dict[str, dict] = {}  # gen_id -> spec (strategie scoperte)
+        # IL PAPER ESPLORATIVO (25 set 2026, backlog F1bis): le coppie che il gate
+        # ha selezionato fra i quasi-passaggi (`strategy_registry/esplorative`),
+        # "SYMBOL|gen_id" -> record, e le loro spec. Si operano a size ridotta e
+        # marcate; ricaricate ogni ora con le spec generate (`load_generated`).
+        self._esplorative: dict[str, dict] = {}
+        self._esplorative_specs: dict[str, dict] = {}
         self.load_weights()
         self.load_params()
         self.load_generated()
@@ -316,6 +322,55 @@ class AdaptationEngine:
         doc = self.fb.get_doc("discovered_strategies", "specs") or {}
         # specs codificate come stringa JSON (limite indici Firestore) -> decode.
         self._generated_specs = decode_pairs(doc.get("specs"))
+        # e le ESPLORATIVE (25 set 2026, F1bis), nello stesso giro orario. Fail-open:
+        # un documento assente o illeggibile lascia il paper esplorativo vuoto e
+        # non tocca le validate, che sono in `load_params`.
+        try:
+            esp = self.fb.get_doc("strategy_registry", "esplorative") or {}
+            self._esplorative = decode_pairs(esp.get("pairs"))
+            self._esplorative_specs = decode_pairs(esp.get("specs"))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[esplorativa] registro esplorative non letto ({str(exc)[:80]}): vuoto")
+            self._esplorative, self._esplorative_specs = {}, {}
+
+    def esplorative_for(self, symbol: str) -> list:
+        """Le strategie ESPLORATIVE di questo asset (25 set 2026, F1bis): i
+        quasi-passaggi scelti dal gate, istanziati come le generate e marcati
+        `esplorativa = True` sull'oggetto, cosi' l'orchestratore li riconosce.
+
+        Vuoto quando: il paper esplorativo e' spento (`ESPLORATIVE_ENABLED`),
+        NON si e' in DRY_RUN (fuori dal paper non si opera mai una coppia che il
+        gate non ha validato: e' la regola, qualunque sia il flag), il registro
+        non e' pronto (il bot resta flat anche per le validate), o la coppia e'
+        nel frattempo diventata validata (la opera gia' `generated_strategies_for`
+        a size piena: non si apre due volte)."""
+        if not settings.DRY_RUN or not settings.ESPLORATIVE_ENABLED:
+            return []
+        if not self._has_opt_data or (settings.REQUIRE_GATE1_READY and not self._passed):
+            return []
+        from bot.strategies.generated import GeneratedStrategy
+        out = []
+        prefix = f"{symbol}|"
+        for key in self._esplorative:
+            if not key.startswith(prefix) or key in self._passed:
+                continue
+            gen_id = key[len(prefix):]
+            spec = self._esplorative_specs.get(gen_id) or self._generated_specs.get(gen_id)
+            if not isinstance(spec, dict):
+                continue
+            try:
+                strat = GeneratedStrategy(spec)
+            except Exception:  # noqa: BLE001
+                continue
+            strat.esplorativa = True
+            out.append(strat)
+        return out
+
+    def is_esplorativa(self, symbol: str, strategy: str) -> bool:
+        """True se la coppia e' nel registro esplorativo E non e' validata: una
+        coppia validata nel frattempo e' una validata, non piu' esplorativa."""
+        key = f"{symbol}|{strategy}"
+        return key in self._esplorative and key not in self._passed
 
     def generated_strategies_for(self, symbol: str) -> list:
         """Istanzia le strategie GENERATE che sono validate e abilitate per questo
@@ -329,7 +384,7 @@ class AdaptationEngine:
 
     def timeframe_for(self, strategy: str) -> Optional[str]:
         """Il timeframe di una strategia generata (None = quello del bot)."""
-        spec = self._generated_specs.get(strategy)
+        spec = self._generated_specs.get(strategy) or self._esplorative_specs.get(strategy)
         return (spec or {}).get("timeframe") or None
 
     def is_enabled(self, symbol: str, strategy: str) -> bool:

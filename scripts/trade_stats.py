@@ -254,11 +254,69 @@ def print_selettore_ombra(rep: dict) -> None:
     print(f"  regola: {rep['regola']}")
 
 
+def esplorativo_report(trades: list[dict], esp_doc: dict | None) -> dict:
+    """I numeri del PAPER ESPLORATIVO (25 set 2026, backlog F1bis), a parte da
+    quelli delle validate: trade, vinti, PnL, le 5 coppie con piu' trade, e il
+    metro dell'esperimento letto dalla storia di `strategy_registry/esplorative`
+    (quante coppie esplorative sono POI passate il gate, quante scartate). Pura."""
+    from bot.learning.referti import ESITI_ESTERNI
+    rows = [t for t in trades if t.get("esplorativa")
+            and str(t.get("exit_reason", "")) not in ESITI_ESTERNI]
+    per_coppia: dict[str, dict] = {}
+    for t in rows:
+        k = f"{t.get('symbol', '?')}|{t.get('strategy', '?')}"
+        b = per_coppia.setdefault(k, {"coppia": k, "trades": 0, "vinti": 0, "pnl": 0.0})
+        pnl = float(t.get("pnl", 0) or 0)
+        b["trades"] += 1
+        b["vinti"] += 1 if pnl > 0 else 0
+        b["pnl"] = round(b["pnl"] + pnl, 2)
+    top = sorted(per_coppia.values(), key=lambda b: (-b["trades"], b["coppia"]))[:5]
+    attive = validate_poi = scartate = None
+    if isinstance(esp_doc, dict):
+        from bot.core.firebase_client import decode_pairs
+        attive = len(decode_pairs(esp_doc.get("pairs")))
+        storia = decode_pairs(esp_doc.get("storia"))
+        validate_poi = sum(1 for v in storia.values() if (v or {}).get("esito") == "validata")
+        scartate = sum(1 for v in storia.values() if (v or {}).get("esito") == "scartata")
+    return {"trades": len(rows), "vinti": sum(1 for t in rows if float(t.get("pnl", 0) or 0) > 0),
+            "pnl": round(sum(float(t.get("pnl", 0) or 0) for t in rows), 2),
+            "per_coppia": top, "coppie_attive": attive,
+            "validate_poi": validate_poi, "scartate": scartate}
+
+
+def print_esplorativo(rep: dict) -> None:
+    print("\nPAPER ESPLORATIVO (quasi-passaggi a un quarto della size, F1bis; fuori dai "
+          "numeri qui sopra e dai pesi)")
+    if rep["coppie_attive"] is None:
+        print("  registro esplorativo non ancora scritto dal gate")
+    else:
+        print(f"  coppie attive adesso: {rep['coppie_attive']}")
+    print(f"  trade chiusi: {rep['trades']} · vinti {rep['vinti']} · PnL {rep['pnl']:+.2f}")
+    for b in rep["per_coppia"]:
+        print(f"    {b['coppia']:<34} {b['trades']:>3} trade · {b['vinti']} vinti · {b['pnl']:+.2f}")
+    if rep["validate_poi"] is None:
+        print("  coppie esplorative poi validate / scartate: n/d (senza registro)")
+    else:
+        print(f"  coppie esplorative poi validate {rep['validate_poi']} / scartate "
+              f"{rep['scartate']}  (il metro: si legge a 100 trade esplorativi)")
+
+
 def main() -> int:
     fb = get_firebase()
-    trades = fb.query_collection("trades", order_by="exit_ts")
-    if not trades:
+    trades_letti = fb.query_collection("trades", order_by="exit_ts")
+    if not trades_letti:
         print("Nessun trade chiuso trovato.")
+        return 0
+    # IL PAPER ESPLORATIVO A PARTE (25 set 2026, F1bis): le statistiche qui sotto
+    # sono delle VALIDATE; gli esplorativi hanno la loro sezione in fondo.
+    trades = [t for t in trades_letti if not t.get("esplorativa")]
+    if not trades:
+        print("Nessun trade chiuso delle validate (solo esplorativi).")
+        try:
+            esp_doc = fb.get_doc("strategy_registry", "esplorative")
+        except Exception:  # noqa: BLE001
+            esp_doc = None
+        print_esplorativo(esplorativo_report(trades_letti, esp_doc))
         return 0
 
     spans = []  # (entry_ts, exit_ts) validi
@@ -444,6 +502,14 @@ def main() -> int:
     # apertura, letta contro l'esito. Il paper qui e' il giudice del modello
     # addestrato sul gate, non un dato di training.
     print_selettore_ombra(selettore_ombra_report(trades))
+
+    # IL PAPER ESPLORATIVO (25 set 2026, F1bis): in fondo, coi suoi numeri e il
+    # metro dell'esperimento dalla storia del registro esplorativo.
+    try:
+        esp_doc = fb.get_doc("strategy_registry", "esplorative")
+    except Exception:  # noqa: BLE001
+        esp_doc = None
+    print_esplorativo(esplorativo_report(trades_letti, esp_doc))
 
     return 0
 

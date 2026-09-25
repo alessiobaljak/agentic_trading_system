@@ -183,8 +183,14 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
     discovery e con `scripts/trade_stats.py`). Gli esiti esterni (manual,
     kill_switch, circuit_breaker) sono esclusi: non li ha decisi la strategia.
     Le ipotesi per direzione NON richiedono il referto: bastano pnl e direction,
-    quindi scattano anche sui trade chiusi prima del 23 set."""
+    quindi scattano anche sui trade chiusi prima del 23 set.
+
+    I trade del PAPER ESPLORATIVO (25 set 2026, F1bis) sono INCLUSI, di proposito:
+    le ipotesi per il gate sono il punto stesso dell'esplorazione, e un referto
+    vale come referto a qualunque size. Il documento li conta in `esplorative`,
+    cosi' chi legge sa quanta parte dell'evidenza viene da li'."""
     rows = [t for t in trades if str(t.get("exit_reason", "")) not in ESITI_ESTERNI]
+    n_esplorative = sum(1 for t in rows if t.get("esplorativa"))
     per_strat: dict[str, dict] = defaultdict(_bucket_vuoto)
     per_coin: dict[str, dict] = defaultdict(_bucket_vuoto)
     per_dir: dict[str, dict] = {"long": _bucket_vuoto(), "short": _bucket_vuoto()}
@@ -225,6 +231,7 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
 
     return {
         "n_trades": len(rows),
+        "esplorative": n_esplorative,
         "n_con_referto": n_con_referto,
         "n_persi_con_referto": n_persi_con_referto,
         "per_strategia": {k: _arrotonda(v) for k, v in sorted(per_strat.items())},

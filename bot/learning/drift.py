@@ -156,7 +156,12 @@ def compute_drift(trades: Iterable[dict], pairs: dict | None = None) -> dict:
     invece copre TUTTE le strategie con trade, anche senza promessa: il freno di
     serie non confronta con un atteso, guarda solo se sta perdendo di fila."""
     pairs = pairs or {}
-    rows = [t for t in trades if str(t.get("exit_reason", "")) not in _EXTERNAL]
+    # PAPER ESPLORATIVO (25 set 2026, F1bis): fuori da TUTTE le granularita',
+    # globale compresa. La deriva confronta il vissuto con la PROMESSA del gate,
+    # e un quasi-passaggio non ha una promessa: i suoi trade (a un quarto della
+    # size) non devono ne' frenare le validate ne' bocciarle per coppia.
+    rows = [t for t in trades if str(t.get("exit_reason", "")) not in _EXTERNAL
+            and not t.get("esplorativa")]
 
     by_pair: dict[str, list[dict]] = defaultdict(list)
     by_strat: dict[str, list[dict]] = defaultdict(list)

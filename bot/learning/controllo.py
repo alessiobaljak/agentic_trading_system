@@ -265,6 +265,9 @@ def carica_dati(fb, now: float, trades=None, registro=None) -> dict:
     d["ai_hypotheses"] = fs("ai_hypotheses", "last")
     d["memory"] = fs("memory", "30") or {}
     d["portfolio_backtest"] = fs("portfolio", "backtest")
+    # il registro del paper esplorativo (25 set 2026, F1bis): `pairs` sono le
+    # coppie attive; None se il documento non c'e' (gate mai girato col codice)
+    d["esplorative"] = fs("strategy_registry", "esplorative")
     d["discovered_last_run"] = fs("strategy_params", "discovered_last_run") or {}
     try:
         d["ai_shadow"] = fb.query_collection("ai_shadow", order_by="at", limit=200) or []
@@ -660,10 +663,37 @@ def _trailing(trades_tutti) -> dict:
             "soglia": KEEP_PAPER_MIN_VERDETTI}
 
 
+def _esplorative(trades_esplorativi, positions, esp_doc) -> dict:
+    """`paper.esplorative` (25 set 2026, F1bis): i numeri del paper esplorativo,
+    tenuti a parte da quelli delle validate. `coppie_attive` viene dal registro
+    `strategy_registry/esplorative` (null se il documento non c'e'); `aperte`
+    dalle posizioni RTDB marcate `esplorativa`."""
+    rows = _rows(trades_esplorativi)
+    pnls = [_pnl(t) for t in rows]
+    aperte = 0
+    if isinstance(positions, dict):
+        aperte = sum(1 for p in positions.values() if isinstance(p, dict) and p.get("esplorativa"))
+    coppie = None
+    if isinstance(esp_doc, dict):
+        try:
+            from bot.core.firebase_client import decode_pairs
+            coppie = len(decode_pairs(esp_doc.get("pairs")))
+        except Exception:  # noqa: BLE001
+            coppie = None
+    return {"trades": len(rows), "vinti": sum(1 for p in pnls if p > 0),
+            "pnl": round(sum(pnls), 2), "aperte": aperte, "coppie_attive": coppie}
+
+
 def _paper(d: dict, now: float) -> dict:
-    trades_tutti = [t for t in (d.get("trades") or []) if isinstance(t, dict)]
     if d.get("trades") is None:
         raise RuntimeError("trade non leggibili da Firestore")
+    # IL PAPER ESPLORATIVO A PARTE (25 set 2026, F1bis): tutti i numeri qui sotto
+    # sono delle VALIDATE (trade senza la marca `esplorativa`); gli esplorativi
+    # hanno il loro campo. L'equity invece e' quella del conto e li comprende:
+    # lo dice il `dettaglio`, e l'anomalia EQUITY_NON_TORNA li somma.
+    trades_letti = [t for t in (d.get("trades") or []) if isinstance(t, dict)]
+    trades_esplorativi = [t for t in trades_letti if t.get("esplorativa")]
+    trades_tutti = [t for t in trades_letti if not t.get("esplorativa")]
     rows = _rows(trades_tutti)
     equity = _f(d.get("equity"))
     iniziale = _f(d.get("starting_equity"))
@@ -739,11 +769,14 @@ def _paper(d: dict, now: float) -> dict:
     return {
         "computed_at": now,
         "fonti": ["fs:trades", "rtdb:/account", "fs:drift/current", "rtdb:/btc_history",
-                  "fs:strategy_registry/validated", "fs:portfolio/backtest"],
+                  "fs:strategy_registry/validated", "fs:strategy_registry/esplorative",
+                  "fs:portfolio/backtest"],
         "lettura": "",
         "dettaglio": ("trades/vinti/perdite/win_rate/pf/expectancy sui trade decisi dalla "
                       "strategia (fuori manual/kill_switch/circuit_breaker); pnl_realizzato "
-                      "su TUTTI i trade chiusi, com'e' nell'equity"),
+                      "su tutti i trade chiusi delle VALIDATE; i trade del paper esplorativo "
+                      "(size a un quarto, F1bis) stanno SOLO in `esplorative`; `equity` e' "
+                      "quella del conto e comprende anche loro"),
         "errore": None,
         "equity": equity,
         "equity_iniziale": iniziale, "equity_iniziale_fonte": iniziale_fonte,
@@ -769,6 +802,7 @@ def _paper(d: dict, now: float) -> dict:
         "max_posizioni_insieme": conc,
         "trailing": trailing,
         "benchmark": benchmark,
+        "esplorative": _esplorative(trades_esplorativi, d.get("positions"), d.get("esplorative")),
     }
 
 
@@ -1015,7 +1049,11 @@ def anomalie(salute: dict, paper: dict, attivo: dict, dati: dict, now: float,
             positions = dati.get("positions") or {}
             parziali = sum(_f(x.get("realized_partial")) or 0.0 for x in positions.values()
                            if isinstance(x, dict)) if isinstance(positions, dict) else 0.0
-            atteso = (p.get("equity_iniziale") or 0.0) + (p.get("pnl_realizzato") or 0.0) + parziali
+            # + il PnL del paper esplorativo (F1bis): sta fuori da pnl_realizzato
+            # ma dentro l'equity del conto
+            pnl_esp = _f((p.get("esplorative") or {}).get("pnl")) or 0.0
+            atteso = ((p.get("equity_iniziale") or 0.0) + (p.get("pnl_realizzato") or 0.0)
+                      + parziali + pnl_esp)
             if abs(eq - atteso) > 1.0:
                 add("EQUITY_NON_TORNA", SISTEMA, GIALLO,
                     f"equity {_num(eq, 2)} contro {_num(atteso, 2)} = iniziale + pnl + fette aperte",

@@ -108,6 +108,11 @@ class Position:
     # riavvio e arrivano sul ClosedTrade (`selector_p`, `selector_soglia`).
     selector_p: Optional[float] = None
     selector_soglia: Optional[float] = None
+    # PAPER ESPLORATIVO (25 set 2026, backlog F1bis): la posizione e' di una
+    # coppia esplorativa (quasi-passaggio, size a un quarto). Persistita e
+    # ripristinata come `selector_p`: dopo un riavvio il trade chiuso deve
+    # uscire ancora marcato, altrimenti finirebbe nei pesi delle validate.
+    esplorativa: bool = False
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -184,10 +189,14 @@ class ExecutionEngine:
         profit_lock_keep: Optional[float] = None,
         selector_p: Optional[float] = None,
         selector_soglia: Optional[float] = None,
+        esplorativa: bool = False,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved).
         `selector_p`/`selector_soglia`: l'ombra del selettore (25 set 2026), solo
-        annotate sulla posizione — non cambiano niente di cio' che si apre."""
+        annotate sulla posizione — non cambiano niente di cio' che si apre.
+        `esplorativa`: la coppia e' un quasi-passaggio del gate operato a size
+        ridotta (25 set 2026, F1bis); la size e' gia' dentro `params`, qui si
+        annota soltanto, e l'annotazione segue il trade fino a Firestore."""
         if not params.approved or params.quantity <= 0:
             print(f"[execution] ordine rifiutato dal gate: {params.reject_reason}")
             return None
@@ -213,6 +222,7 @@ class ExecutionEngine:
             timeframe=tf,
             selector_p=(float(selector_p) if selector_p is not None else None),
             selector_soglia=(float(selector_soglia) if selector_soglia is not None else None),
+            esplorativa=bool(esplorativa),
         )
 
         if self.dry_run:
@@ -708,6 +718,9 @@ class ExecutionEngine:
             # trade_stats e la calibrazione la leggono (25 set 2026)
             selector_p=pos.selector_p,
             selector_soglia=pos.selector_soglia,
+            # e la marca del paper esplorativo (25 set 2026, F1bis): e' qui che
+            # pesi/deriva/calibrazione la leggono per escludere il trade
+            esplorativa=bool(pos.esplorativa),
             scale_stage_reached=pos.scale_stage,
             realized_partial=round(pos.realized_net, 6),
             mfe_r=round(mfe_in_r(pos.entry_price, pos.high_water, pos.orig_stop), 3),
@@ -814,6 +827,10 @@ class ExecutionEngine:
             # riavvio la cancellerebbe e il trade chiuso uscirebbe senza p
             "selector_p": pos.selector_p,
             "selector_soglia": pos.selector_soglia,
+            # il paper esplorativo (25 set 2026, F1bis): senza questa chiave un
+            # riavvio smarcherebbe la posizione e il trade chiuso entrerebbe
+            # nei pesi delle validate
+            "esplorativa": bool(pos.esplorativa),
         })
 
     # ------------------------------------------------------------------ #
@@ -900,6 +917,9 @@ class ExecutionEngine:
         pos.selector_p = float(_sp) if _sp is not None else None
         _ss = p.get("selector_soglia")
         pos.selector_soglia = float(_ss) if _ss is not None else None
+        # il paper esplorativo (25 set 2026, F1bis): documenti piu' vecchi non
+        # hanno la chiave -> False, cioe' «posizione di una validata»
+        pos.esplorativa = bool(p.get("esplorativa", False))
         return pos
 
     @staticmethod

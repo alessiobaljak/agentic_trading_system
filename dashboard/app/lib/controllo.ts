@@ -279,6 +279,16 @@ export interface Benchmark {
   portafoglio?: { lettura?: string | null; updated_at?: number | null } | null;
 }
 
+/** Il paper esplorativo (25 set 2026, F1bis): i quasi-passaggi del gate operati
+ *  a un quarto della size, tenuti FUORI dai numeri delle validate qui sotto. */
+export interface Esplorative {
+  trades?: number | null;
+  vinti?: number | null;
+  pnl?: number | null;
+  aperte?: number | null;
+  coppie_attive?: number | null;
+}
+
 /** §1.3 */
 export interface Paper extends Testata {
   equity?: number | null;
@@ -309,6 +319,7 @@ export interface Paper extends Testata {
   max_posizioni_insieme?: number | null;
   trailing?: Trailing | null;
   benchmark?: Benchmark | null;
+  esplorative?: Esplorative | null;
 }
 
 export interface FrenoGlobale {

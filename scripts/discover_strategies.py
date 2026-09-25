@@ -370,6 +370,162 @@ def _publish_discover_autopsy(fb, evaluated: int, passed: int, binding: dict,
     return rep
 
 
+# --------------------------------------------------------------------------- #
+# IL PAPER ESPLORATIVO (25 set 2026, backlog F1bis)                             #
+# --------------------------------------------------------------------------- #
+# Il proprietario ha detto si' il 25 set: le coppie che passano il gate per un
+# pelo (quasi-passaggi: un solo criterio mancato per meno del 10%) si operano in
+# paper a un quarto della size, marcate `esplorativa`, fuori dal learning delle
+# validate. Qui il gate SCEGLIE quali: a ogni giro, le ESPLORATIVE_MAX coppie
+# col mancato piu' piccolo, una per coin, non gia' validate, con una spec
+# generata nota in questo giro e la coin nell'universo di adesso. Il documento
+# `strategy_registry/esplorative` tiene le attive (`pairs`), le loro spec
+# (`specs`, solo quelle delle attive) e la STORIA (`storia`): e' la storia il
+# metro dell'esperimento — dopo 100 trade esplorativi, quante coppie sono poi
+# passate il gate («validata») contro quante sono cadute («scartata»).
+#
+# Ciclo di vita, semplice di proposito: una coppia resta finche' e' ancora un
+# quasi-passaggio O e' stata vista negli ultimi due giri (`last_seen` entro
+# ESPLORATIVE_ASSENZA_S); diventa validata -> storia «validata»; non vista da
+# piu' di due giri -> storia «scartata». La storia e' tagliata alle ultime
+# ESPLORATIVE_STORIA_MAX voci. Fail-open ovunque: un errore qui stampa e non
+# ferma mai il giro (il registro validato e' gia' scritto).
+ESPLORATIVE_STORIA_MAX = 200
+#: due giri da 3 ore, con margine: «vista negli ultimi 2 giri»
+ESPLORATIVE_ASSENZA_S = 8 * 3600
+
+
+def _shortfall(n: dict) -> float:
+    try:
+        v = n.get("shortfall")
+        return float(v) if v is not None else -9.0
+    except (TypeError, ValueError):
+        return -9.0
+
+
+def seleziona_esplorative(near: list, validate, specs: dict, universo,
+                          max_n: int | None = None) -> list[dict]:
+    """Le coppie esplorative di QUESTO giro, dai quasi-passaggi `near` (le voci
+    `{key, binding, shortfall, pf, trades}` di `_disc_one`). Pura.
+
+    Ordine: dal mancato piu' piccolo (shortfall piu' vicino a zero; e' negativo,
+    «quanto manca»). Una sola per coin; fuori le gia' validate, le strategie
+    BASE (non hanno una spec da istanziare), le spec che questo giro non
+    conosce e le coin fuori dall'universo di adesso. Al massimo `max_n`
+    (ESPLORATIVE_MAX)."""
+    max_n = settings.ESPLORATIVE_MAX if max_n is None else int(max_n)
+    validate = set(validate or ())
+    universo = set(universo or ())
+    specs = specs or {}
+    ordinati = sorted((n for n in (near or []) if isinstance(n, dict) and "|" in str(n.get("key", ""))),
+                      key=lambda n: -_shortfall(n))
+    out: list[dict] = []
+    coin_viste: set = set()
+    for n in ordinati:
+        if len(out) >= max_n:
+            break
+        key = str(n["key"])
+        sym, gid = key.split("|", 1)
+        if key in validate or sym in coin_viste or sym not in universo:
+            continue
+        if not gid.startswith("gen_") or not isinstance(specs.get(gid), dict):
+            continue
+        coin_viste.add(sym)
+        out.append({"key": key, "symbol": sym, "strategy": gid,
+                    "shortfall": n.get("shortfall"), "binding": n.get("binding"),
+                    "pf": n.get("pf"), "trades": n.get("trades")})
+    return out
+
+
+def aggiorna_esplorative(doc_prec: dict | None, selezione: list[dict], specs: dict,
+                         validate, now: float,
+                         assenza_s: float = ESPLORATIVE_ASSENZA_S) -> tuple[dict, dict]:
+    """Il documento `strategy_registry/esplorative` nuovo (con `pairs`/`specs`/
+    `storia` come dict, non codificati) e i conteggi del giro. Pura.
+
+    `doc_prec`: il documento del giro prima (campi codificati o gia' dict);
+    `selezione`: `seleziona_esplorative` di questo giro; `specs`: le spec note
+    (per tenere solo quelle delle attive); `validate`: le coppie validate DOPO
+    il merge di questo giro."""
+    prec = doc_prec or {}
+    pairs = dict(decode_pairs(prec.get("pairs")))
+    storia = dict(decode_pairs(prec.get("storia")))
+    specs_prec = decode_pairs(prec.get("specs"))
+    validate = set(validate or ())
+    sel = {str(x["key"]): x for x in (selezione or []) if isinstance(x, dict) and x.get("key")}
+    nuove = 0
+    for key, x in sel.items():
+        rec = pairs.get(key)
+        if not isinstance(rec, dict):
+            nuove += 1
+            rec = {"symbol": x.get("symbol"), "strategy": x.get("strategy"), "since": now}
+            pairs[key] = rec
+        rec.update({"last_seen": now, "shortfall": x.get("shortfall"), "binding": x.get("binding"),
+                    "pf": x.get("pf"), "trades": x.get("trades"), "esito": "in_corso"})
+    validate_giro = scartate_giro = 0
+    for key in list(pairs):
+        rec = pairs[key] if isinstance(pairs[key], dict) else {}
+        if key in validate:
+            storia[key] = {"since": rec.get("since"), "fine": now, "esito": "validata"}
+            del pairs[key]
+            validate_giro += 1
+        elif key not in sel and now - float(rec.get("last_seen") or 0) > assenza_s:
+            storia[key] = {"since": rec.get("since"), "fine": now, "esito": "scartata"}
+            del pairs[key]
+            scartate_giro += 1
+    if len(storia) > ESPLORATIVE_STORIA_MAX:
+        recenti = sorted(storia.items(), key=lambda kv: -float((kv[1] or {}).get("fine") or 0))
+        storia = dict(recenti[:ESPLORATIVE_STORIA_MAX])
+    specs_out: dict = {}
+    for rec in pairs.values():
+        gid = str((rec or {}).get("strategy") or "")
+        sp = (specs or {}).get(gid) or specs_prec.get(gid)
+        if isinstance(sp, dict):
+            specs_out[gid] = sp
+    doc = {"updated_at": now, "pairs": pairs, "specs": specs_out, "storia": storia}
+    stats = {"attive": len(pairs), "nuove": nuove,
+             "validate_poi": sum(1 for v in storia.values() if (v or {}).get("esito") == "validata"),
+             "scartate": sum(1 for v in storia.values() if (v or {}).get("esito") == "scartata"),
+             "validate_giro": validate_giro, "scartate_giro": scartate_giro}
+    return doc, stats
+
+
+def riga_esplorative(stats: dict | None) -> str:
+    """La riga «[cervello] esplorative: ...» in coda al giro."""
+    st = stats or {}
+    return (f"[cervello] esplorative: {int(st.get('attive') or 0)} attive "
+            f"({int(st.get('nuove') or 0)} nuove), validate poi "
+            f"{int(st.get('validate_poi') or 0)}, scartate {int(st.get('scartate') or 0)}")
+
+
+def pubblica_esplorative(fb, near: list, validate, specs: dict, universo,
+                         now: float | None = None) -> dict | None:
+    """Sceglie le esplorative del giro, aggiorna il ciclo di vita e scrive
+    `strategy_registry/esplorative` (mappe codificate come il registro). Stampa
+    la riga «[cervello] esplorative». Non solleva MAI: ritorna i conteggi, o
+    None se qualcosa e' andato storto (il giro prosegue)."""
+    now = time.time() if now is None else now
+    try:
+        if not settings.ESPLORATIVE_ENABLED:
+            print("[cervello] esplorative: spente (ESPLORATIVE_ENABLED=false)")
+            return None
+        try:
+            prec = fb.get_doc("strategy_registry", "esplorative") or {}
+        except Exception as exc:  # noqa: BLE001
+            print(f"[cervello] esplorative: documento precedente non letto ({str(exc)[:80]})")
+            prec = {}
+        selezione = seleziona_esplorative(near, validate, specs, universo)
+        doc, stats = aggiorna_esplorative(prec, selezione, specs, validate, now)
+        fb.set_doc("strategy_registry", "esplorative", {
+            "updated_at": now, "pairs": encode_pairs(doc["pairs"]),
+            "specs": encode_pairs(doc["specs"]), "storia": encode_pairs(doc["storia"])})
+        print(riga_esplorative(stats))
+        return stats
+    except Exception as exc:  # noqa: BLE001
+        print(f"[cervello] esplorative: non aggiornate ({type(exc).__name__}: {str(exc)[:120]})")
+        return None
+
+
 def prove_dal_paper(fb) -> str:
     """Cosa il PAPER ha misurato, in forma leggibile da chi propone strategie.
 
@@ -467,6 +623,10 @@ def scala_dal_paper(fb, min_trades: int = 10, trades: list | None = None):
     Fail-open: senza Firebase, senza trade o senza abbastanza campione ritorna None
     e il gate resta esattamente com'era. `trades`: la lista gia' letta dal main
     (`trades_del_paper`); se manca, la si legge qui come prima.
+
+    I trade del PAPER ESPLORATIVO (25 set 2026, F1bis) sono DENTRO, di proposito:
+    dove arriva il prezzo in unita' di R non dipende dalla size, e piu' dati e'
+    il punto dell'esplorazione. Il gate decide comunque sulla storia.
     """
     if trades is None:
         try:
@@ -493,7 +653,9 @@ SCALA_STRATEGIA_MIN_TRADES = 5
 
 def scale_per_strategia(trades, min_trades: int = SCALA_STRATEGIA_MIN_TRADES) -> dict[str, tuple]:
     """La scala dei TP ricavata dagli mfe di OGNI strategia, per id (25 set 2026,
-    backlog I4).
+    backlog I4). I trade del paper ESPLORATIVO (F1bis) sono dentro: per una
+    strategia esplorativa sono gli unici mfe che esistono, ed e' proprio la
+    scala per QUELLA che il gate deve poter giudicare.
 
     `scala_dal_paper` misura una scala sola per tutte le coppie insieme: giusto
     come punto di partenza, ma 20 stop su 32 erano trade andati a favore e morti
@@ -589,6 +751,8 @@ def keep_dal_paper(fb, min_verdetti: int = KEEP_PAPER_MIN_VERDETTI,
     candidati restano i tre fissi. Stampa SEMPRE una riga coi conteggi, cosi' dal
     log si vede quanti verdetti ci sono e perche' (non) e' nata una proposta.
     `trades`: la lista gia' letta dal main; se manca, la si legge qui come prima.
+    I verdetti dei trade ESPLORATIVI (25 set 2026, F1bis) contano come gli altri:
+    un lock che taglia un vincitore lo fa a qualunque size.
     """
     if trades is None:
         try:
@@ -2063,6 +2227,7 @@ def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
                f"durata {_durata_testo(run.get('duration_s'))}.")
     cand = dict(candidate or {})
     ipu = run.get("ipotesi_uscita") if isinstance(run.get("ipotesi_uscita"), dict) else {}
+    esp = run.get("esplorative") if isinstance(run.get("esplorative"), dict) else None
     return {
         "coin_valutate": coin, "valutazioni": n_eval, "passate": int(run.get("n_passed") or 0),
         "passate_lista": [{"coin": p.get("symbol"), "id": p.get("id"),
@@ -2082,6 +2247,13 @@ def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
         # nel merge degli shard e nei giri senza ipotesi
         "ipotesi_uscita": {"strategie": int(_num(ipu.get("strategie")) or 0),
                            "con_scala": int(_num(ipu.get("con_scala")) or 0)},
+        # il paper esplorativo (25 set 2026, F1bis): quante coppie esplorative
+        # sono attive dopo questo giro e il metro dell'esperimento (poi
+        # validate / scartate, dalla storia); null se il giro non le ha aggiornate
+        "esplorative": ({"attive": int(_num(esp.get("attive")) or 0),
+                         "validate_poi": int(_num(esp.get("validate_poi")) or 0),
+                         "scartate": int(_num(esp.get("scartate")) or 0)}
+                        if isinstance(esp, dict) else None),
         "lettura": lettura,
         "dettaglio": ("candidate: `totale` e' la lista comune valutata su ogni coin "
                       "(nuove + rivalutate, dopo de-dup e gemelle); `intorno` sono le "
@@ -2868,6 +3040,16 @@ def main() -> int:
             passed_summary = [s for s in passed_summary if f"{s['symbol']}|{s['id']}" not in scartate]
         if specs_to_save:
             persist_specs(fb, specs_to_save)
+        # IL PAPER ESPLORATIVO (25 set 2026, F1bis): dopo il merge, cosi' la
+        # lista delle validate e' quella nuova (una coppia esplorativa che oggi
+        # e' passata finisce in storia «validata»). Le spec note in questo giro
+        # sono quelle rivalutate + le nuove salvate; l'universo e' quello di
+        # adesso. Solo dal giro sul timeframe del bot (la passata a 1 ora non
+        # opera coppie sue) e mai negli shard. Fail-open dentro.
+        stats_esplorative = None
+        if fase_gate == "discover":
+            stats_esplorative = pubblica_esplorative(
+                fb, diag_near, validated, {**existing, **specs_to_save}, set(full_symbols))
         # riepilogo COMPATTO (niente spec/entry per ogni coppia: sforerebbe il limite
         # di 1 MiB di Firestore). Le spec complete stanno in discovered_strategies/specs.
         durata = time.time() - t0
@@ -2911,6 +3093,9 @@ def main() -> int:
             # e le strategie rigiudicate per un'ipotesi scala_stretta (25 set
             # 2026, I4): da qui lo legge `giro.ipotesi_uscita` del documento del gate
             "ipotesi_uscita": ipotesi_uscita,
+            # e il paper esplorativo (25 set 2026, F1bis): da qui lo legge
+            # `giro.esplorative` del documento del gate; None se non aggiornato
+            "esplorative": stats_esplorative,
         }
         fb.set_doc("strategy_params", _doc_run, riepilogo_run)
         # IL DOCUMENTO DEL GATE, intero (25 set 2026): solo dal giro sul timeframe del

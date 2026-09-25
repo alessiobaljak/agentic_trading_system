@@ -420,6 +420,27 @@ class Settings:
     STREAK_BRAKE_LOSSES: int = int(os.getenv("STREAK_BRAKE_LOSSES", "4"))
     STREAK_BRAKE_FACTOR: float = float(os.getenv("STREAK_BRAKE_FACTOR", "0.5"))
 
+    # ---- IL PAPER ESPLORATIVO (25 set 2026, backlog F1bis) ----
+    # Scelta ESPLICITA del proprietario del 25 set 2026, per il SOLO paper: le
+    # coppie che passano il gate per un pelo (quasi-passaggi: un solo criterio
+    # mancato per meno del 10%) si operano in paper a un quarto della size,
+    # marcate `esplorativa`, ESCLUSE dal learning che governa le validate (pesi,
+    # freno di deriva, calibrazione) e INCLUSE nei referti e nelle misure che il
+    # gate rilegge (scala, keep). Scopo: piu' trade chiusi da cui imparare e un
+    # vissuto per coppie che il gate giudichera' anche con quello. Metro: dopo
+    # 100 trade esplorativi, quante coppie esplorative sono poi passate il gate
+    # contro quante sono state scartate (`strategy_registry/esplorative.storia`).
+    # Fuori dal paper (DRY_RUN=false) il paper esplorativo e' SPENTO comunque:
+    # `adaptation.esplorative_for` ritorna vuoto, qualunque sia questo flag.
+    ESPLORATIVE_ENABLED: bool = _get_bool("ESPLORATIVE_ENABLED", True)
+    # quante coppie esplorative il gate seleziona a ogni giro (una per coin)
+    ESPLORATIVE_MAX: int = int(os.getenv("ESPLORATIVE_MAX", "20"))
+    # la size di un trade esplorativo, in frazione di quella che avrebbe una
+    # validata: un quarto, cosi' i trade piu' deboli sporcano poco l'equity
+    ESPLORATIVA_SIZE_MULT: float = _get_float("ESPLORATIVA_SIZE_MULT", 0.25)
+    # quante posizioni esplorative possono stare aperte insieme
+    ESPLORATIVE_MAX_APERTE: int = int(os.getenv("ESPLORATIVE_MAX_APERTE", "3"))
+
     # ---- CALIBRAZIONE DELLA CONFIDENZA ----
     # allocation() modula size e leva sulla confidenza del segnale, ma nessuno
     # aveva mai verificato che quel numero predicesse l'esito: se fosse rumore,

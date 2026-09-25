@@ -40,6 +40,9 @@ export type Trade = {
   } | null;
   /** keep del profit-lock usato dalla posizione (per coppia dal gate, 25 set) */
   profit_lock_keep?: number | null;
+  /** il paper esplorativo (25 set, F1bis): trade di un quasi-passaggio del gate
+   *  a un quarto della size, fuori dai pesi delle validate. Assente = validata. */
+  esplorativa?: boolean | null;
 };
 
 /** Etichetta corta della classe del referto: dove e' morto il trade. */
@@ -346,7 +349,17 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (trade: Trade) =
                         >
                           <td style={{ ...cell, color: 'var(--text-dim)', whiteSpace: 'nowrap' }}>{fmtEntry(t.entry_time, t.exit_ts)}</td>
                           <td style={{ ...cell, color: 'var(--text-dim)', whiteSpace: 'nowrap' }}>{fmtTime(t.exit_ts)}</td>
-                          <td style={{ ...cell, fontWeight: 600 }}>{t.symbol}</td>
+                          <td style={{ ...cell, fontWeight: 600 }}>
+                            {t.symbol}
+                            {t.esplorativa ? (
+                              <span
+                                title="paper esplorativo: quasi-passaggio del gate, size a un quarto, fuori dai pesi delle validate"
+                                style={{ marginLeft: 6, fontSize: 10, fontWeight: 600, padding: '1px 5px', borderRadius: 4, border: '1px solid var(--border)', color: 'var(--text-dim)' }}
+                              >
+                                espl.
+                              </span>
+                            ) : null}
+                          </td>
                           <td style={cell}>{t.strategy}</td>
                           <td style={cell}>{t.direction}</td>
                           <td style={cell}>

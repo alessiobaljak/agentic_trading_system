@@ -96,7 +96,10 @@ def _run(**extra):
            "reeval_modalita": "solo urgenti", "n_specs_note": 40, "n_specs_rivalutate": 12,
            "n_specs_con_conferme": 5, "n_specs_tagliate": 28,
            "passed": [{"symbol": "AUSDT", "id": "gen_a", "pf": 1.6, "pnl": 0.5}],
-           "intorno": {}, "varianti": {}}
+           "intorno": {}, "varianti": {},
+           # il paper esplorativo (25 set 2026, F1bis): i conteggi del giro
+           "esplorative": {"attive": 12, "nuove": 3, "validate_poi": 1, "scartate": 2,
+                           "validate_giro": 0, "scartate_giro": 1}}
     run.update(extra)
     return run
 
