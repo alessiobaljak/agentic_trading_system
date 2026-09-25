@@ -181,7 +181,7 @@ benchmark su Binance, «cosa aspetta il sì» (vive in `docs/backlog.md`).
 | `CIRCUIT_BREAKER` | paper | halted/paused/macro flat | giallo |
 | `NESSUN_TRADE_48H` | paper | nessuna chiusura né apertura da 48 h e `segnali_trovati > 0` (approssimata) | giallo |
 | `SENZA_PROMESSA` | paper | `n_senza_promessa / n_operate > 0.3` (dal doc gate) | giallo |
-| `CONTROLLO_LENTO` | sistema | `durata_ms > 2000` | giallo |
+| `CONTROLLO_LENTO` | sistema | `durata_ms > 5000` (2000 era troppo stretta: 2002 ms da ops a freddo il 25 set) | giallo |
 
 Il semaforo di famiglia = rosso se una rossa, giallo se una gialla, verde altrimenti;
 le `info` non colorano. `BOT_FERMO` scatta anche col battito MAI visto (valore

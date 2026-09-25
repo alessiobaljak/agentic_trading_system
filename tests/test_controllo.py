@@ -581,8 +581,8 @@ def test_circuit_breaker_nessun_trade_48h_senza_promessa_controllo_lento():
     g = _gate()
     g["strategie"] = {"n_operate": 100, "n_senza_promessa": 40}
     assert _codici(_con(d, gate=g))["SENZA_PROMESSA"]["valore"] == 0.4
-    assert _codici(_con(d, durata_ms=2500))["CONTROLLO_LENTO"]["valore"] == 2500
-    assert "CONTROLLO_LENTO" not in _codici(_con(d, durata_ms=1500))
+    assert _codici(_con(d, durata_ms=6000))["CONTROLLO_LENTO"]["valore"] == 6000
+    assert "CONTROLLO_LENTO" not in _codici(_con(d, durata_ms=4000))
 
 
 def test_le_anomalie_sono_ordinate_per_gravita():

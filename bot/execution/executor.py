@@ -867,6 +867,14 @@ class ExecutionEngine:
         pos.profit_lock_keep = float(_pk) if _pk is not None else None
         pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
         pos.timeframe = p.get("timeframe") or None
+        # il rischio EFFETTIVO (quanto costa lo stop, in frazione dell'equity) non
+        # veniva ripristinato: dopo ogni riavvio tornava 0.0 e alla prima scrittura
+        # dello stato sovrascriveva su RTDB il valore vero. Il primo controllo
+        # orario (25 set 2026, ops 0245) lo ha mostrato: «4 posizioni, 0,0% a
+        # rischio». Ora si rilegge (un documento senza la chiave resta a 0.0: le
+        # posizioni aperte prima della correzione lo perdono fino alla chiusura).
+        _re = p.get("risk_effective_pct")
+        pos.risk_effective_pct = float(_re) if _re is not None else 0.0
         return pos
 
     @staticmethod

@@ -1050,8 +1050,12 @@ def anomalie(salute: dict, paper: dict, attivo: dict, dati: dict, now: float,
     if n_op and n_sp is not None and n_sp / n_op > 0.3:
         add("SENZA_PROMESSA", PAPER, GIALLO, f"{n_sp} validate su {n_op} senza promessa (last_pf)",
             round(n_sp / n_op, 3), 0.3)
-    if durata_ms is not None and durata_ms > 2000:
-        add("CONTROLLO_LENTO", SISTEMA, GIALLO, f"il controllo ha impiegato {int(durata_ms)} ms", int(durata_ms), 2000)
+    # 5 s, non 2: la prima prova dalla VPS fuori dal bot (ops 0245, 25 set) ha
+    # impiegato 2002 ms per le sole letture Firestore a freddo; dentro il bot
+    # 1441 ms. L'anomalia deve segnalare un controllo che si e' impantanato, non
+    # la latenza normale di una ventina di letture.
+    if durata_ms is not None and durata_ms > 5000:
+        add("CONTROLLO_LENTO", SISTEMA, GIALLO, f"il controllo ha impiegato {int(durata_ms)} ms", int(durata_ms), 5000)
 
     peso = {ROSSO: 0, GIALLO: 1, INFO: 2}
     out.sort(key=lambda x: (peso.get(x["gravita"], 3), x["codice"]))

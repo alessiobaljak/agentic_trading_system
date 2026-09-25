@@ -349,3 +349,20 @@ def test_main_passa_il_keep_del_registro_all_apertura():
     assert "profit_lock_keep=lock_keep(_sparams)" in src
     assert "lock_keep" in inspect.getsource(bot_main).split("class TradingBot")[0], \
         "lock_keep va importato da exit_logic"
+
+
+def test_bot_il_rischio_effettivo_sopravvive_al_riavvio(tp_unico):
+    """25 set 2026 (ops 0245): dopo un riavvio le posizioni ricaricate tornavano a
+    rischio 0.0 e la prima scrittura dello stato lo cancellava anche su RTDB; il
+    primo controllo orario mostrava «4 posizioni, 0,0% a rischio»."""
+    fb = FirebaseClient()
+    eng1 = ExecutionEngine(firebase=fb, dry_run=True)
+    eng1.open_position(_asset(100), "trend_following", Direction.LONG, _params())
+    eng1.open_positions["BTCUSDT"].risk_effective_pct = 0.0042
+    eng1._write_position_state(eng1.open_positions["BTCUSDT"])
+    eng2 = ExecutionEngine(firebase=fb, dry_run=True)      # ricarica da Firebase nel costruttore
+    assert eng2.open_positions["BTCUSDT"].risk_effective_pct == pytest.approx(0.0042)
+    # documento vecchio senza la chiave -> 0.0, non un'eccezione
+    p = dict(fb.get_rtdb("/positions/BTCUSDT") or {})
+    p.pop("risk_effective_pct", None)
+    assert eng2._position_from_state(p).risk_effective_pct == 0.0
