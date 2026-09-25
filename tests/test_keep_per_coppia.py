@@ -359,7 +359,7 @@ def test_bot_il_rischio_effettivo_sopravvive_al_riavvio(tp_unico):
     eng1 = ExecutionEngine(firebase=fb, dry_run=True)
     eng1.open_position(_asset(100), "trend_following", Direction.LONG, _params())
     eng1.open_positions["BTCUSDT"].risk_effective_pct = 0.0042
-    eng1._write_position_state(eng1.open_positions["BTCUSDT"])
+    eng1._write_position_state(eng1.open_positions["BTCUSDT"], 100.0)
     eng2 = ExecutionEngine(firebase=fb, dry_run=True)      # ricarica da Firebase nel costruttore
     assert eng2.open_positions["BTCUSDT"].risk_effective_pct == pytest.approx(0.0042)
     # documento vecchio senza la chiave -> 0.0, non un'eccezione
