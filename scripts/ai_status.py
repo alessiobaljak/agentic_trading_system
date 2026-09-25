@@ -27,10 +27,25 @@ from __future__ import annotations
 import time
 from datetime import datetime, timezone
 
+from bot.ai.shadow import compare
 from bot.config import settings
 from bot.core.firebase_client import decode_pairs, get_firebase
 
 OK, FAIL, SKIP = "✅", "❌", "➖"
+
+# LA CHIAVE DELL'ACCORDO SI CHIEDE A CHI LA SCRIVE, non si ricopia a mano. Fino
+# al 25 set 2026 qui si contava «accordo» mentre `compare` scrive «agree»: il
+# risultato era «d'accordo col bot 0/60» da giorni, e nessuno poteva distinguerlo
+# da un vero zero. Chiamare `compare` su una coppia uguale rende impossibile che
+# le due parti divergano di nuovo senza che questo script se ne accorga.
+_ACCORDO = compare({"choice": "x"}, "x")
+_ESITI = {
+    _ACCORDO: "stessa scelta del bot",
+    compare({"choice": "x"}, "y"): "altra scelta",
+    compare({"choice": "x"}, None): "avrebbe operato, il bot no",
+    compare({"choice": None}, "x"): "avrebbe evitato il trade aperto",
+    compare({"choice": None}, None): "entrambi fermi",
+}
 
 
 def _quando(ts) -> str:
@@ -143,9 +158,28 @@ def stato_ombra(fb) -> None:
         return
     ultima = max((float(r.get("at", 0) or 0) for r in righe), default=0)
     print(f"{OK} ombra: {len(righe)} decisioni registrate · ultima {_quando(ultima)}")
-    accordi = sum(1 for r in righe if r.get("verdict") == "accordo")
-    print(f"   d'accordo col bot {accordi}/{len(righe)} volte "
-          f"(serve piu' campione per dire se conviene ascoltarla)")
+    # L'accordo ha senso solo dove il bot ha DAVVERO aperto qualcosa nello stesso
+    # ciclo (`actual` non nullo): se il bot e' restato fermo, l'ombra puo' al
+    # massimo «avrebbe operato» o «entrambi fermi», mai «d'accordo». Un «0/60»
+    # con 57 cicli senza trade e' un «0/3», ed e' un'altra notizia. (25 set 2026)
+    con_trade = [r for r in righe if r.get("actual")]
+    senza_trade = len(righe) - len(con_trade)
+    accordi = sum(1 for r in con_trade if r.get("verdict") == _ACCORDO)
+    print(f"   il bot aveva un trade aperto nello stesso ciclo in "
+          f"{len(con_trade)} decisioni, in {senza_trade} no")
+    if con_trade:
+        print(f"   d'accordo col bot {accordi}/{len(con_trade)} volte quando "
+              f"aveva aperto (serve piu' campione per dire se conviene ascoltarla)")
+    else:
+        print("   d'accordo col bot: non misurabile, il bot non ha mai aperto "
+              "nei cicli\n   in cui l'ombra ha deciso (senza trade non c'e' accordo "
+              "possibile)")
+    esiti: dict[str, int] = {}
+    for r in righe:
+        v = str(r.get("verdict") or "?")
+        esiti[v] = esiti.get(v, 0) + 1
+    for v, quante in sorted(esiti.items(), key=lambda kv: -kv[1]):
+        print(f"     {v} ×{quante}: {_ESITI.get(v, 'esito non previsto da compare()')}")
 
 
 def stato_prove(fb) -> None:

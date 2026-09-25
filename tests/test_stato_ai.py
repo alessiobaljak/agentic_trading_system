@@ -139,3 +139,67 @@ def _cattura(fn) -> str:
     with contextlib.redirect_stdout(buf):
         fn()
     return buf.getvalue()
+
+
+# ---- l'ombra: contare con la chiave che si scrive (25 set 2026) ------------ #
+def _decisione(choice, actual, at=1.0):
+    """Un documento `ai_shadow` come lo scrive bot/main.py: verdetto calcolato
+    dalla STESSA `compare` di produzione, non ricopiato a mano nel test."""
+    from bot.ai.shadow import compare
+    return {"choice": choice, "actual": actual,
+            "verdict": compare({"choice": choice}, actual), "at": at}
+
+
+def test_l_accordo_si_conta_con_la_chiave_che_scrive_compare():
+    """IL FALSO ZERO DEL 25 SETTEMBRE. Qui si contava «accordo», `compare`
+    scrive «agree»: «d'accordo col bot 0/60» da giorni, indistinguibile da un
+    vero zero. Due accordi su tre cicli con trade aperto devono uscire 2/3."""
+    righe = [_decisione("BTCUSDT|breakout", "BTCUSDT|breakout"),
+             _decisione("ETHUSDT|momentum", "ETHUSDT|momentum"),
+             _decisione("BTCUSDT|breakout", "ETHUSDT|momentum"),
+             _decisione("BTCUSDT|breakout", None),
+             _decisione(None, None)]
+    out = _cattura(lambda: ai_status.stato_ombra(_Fb(righe=righe)))
+    assert "d'accordo col bot 2/3 volte" in out
+    assert "0/5" not in out
+
+
+def test_la_chiave_dell_accordo_non_e_ricopiata_a_mano():
+    """Se `compare` cambiasse parola, il contatore deve seguirla da solo:
+    la chiave si chiede a `compare`, non si scrive come stringa."""
+    from bot.ai.shadow import compare
+    assert ai_status._ACCORDO == compare({"choice": "x"}, "x")
+    src = inspect.getsource(ai_status.stato_ombra)
+    assert '"accordo"' not in src and '"agree"' not in src
+
+
+def test_l_ombra_dice_in_quanti_cicli_il_bot_aveva_un_trade():
+    """Senza un trade aperto dal bot nello stesso ciclo l'ombra non puo' essere
+    «d'accordo»: un 0/60 con 57 cicli fermi e' uno 0/3, ed e' un'altra notizia."""
+    righe = [_decisione("BTCUSDT|breakout", None) for _ in range(4)] + \
+            [_decisione(None, "ETHUSDT|momentum")]
+    out = _cattura(lambda: ai_status.stato_ombra(_Fb(righe=righe)))
+    assert "trade aperto nello stesso ciclo in 1 decisioni, in 4 no" in out
+    assert "d'accordo col bot 0/1 volte" in out
+
+
+def test_senza_trade_aperti_l_accordo_e_non_misurabile_non_zero():
+    """Se il bot non ha mai aperto nei cicli dell'ombra, «0/N» sarebbe una
+    bugia: il numero giusto e' «non misurabile»."""
+    righe = [_decisione("BTCUSDT|breakout", None), _decisione(None, None)]
+    out = _cattura(lambda: ai_status.stato_ombra(_Fb(righe=righe)))
+    assert "non misurabile" in out
+    assert "d'accordo col bot 0/" not in out
+
+
+def test_ogni_esito_di_compare_ha_una_spiegazione():
+    """La riga degli esiti stampa la chiave grezza di Firebase con una glossa:
+    tutti e cinque i casi di `compare` devono averla, cosi' nessuno deve
+    riaprire shadow.py per leggere la schermata."""
+    from bot.ai.shadow import compare
+    casi = [("x", "x"), ("x", "y"), ("x", None), (None, "x"), (None, None)]
+    for choice, actual in casi:
+        assert compare({"choice": choice}, actual) in ai_status._ESITI
+    righe = [_decisione("BTCUSDT|breakout", None) for _ in range(3)]
+    out = _cattura(lambda: ai_status.stato_ombra(_Fb(righe=righe)))
+    assert "shadow_only ×3: avrebbe operato, il bot no" in out

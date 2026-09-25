@@ -11,8 +11,8 @@ trade e' adattarsi al rumore con un altro nome.
 import pytest
 
 from bot.config import settings
-from bot.learning.calibration import (FLAT, INSUFFICIENT, INVERTED, OK,
-                                      calibrate, confidence_buckets,
+from bot.learning.calibration import (CONSTANT, FLAT, INSUFFICIENT, INVERTED,
+                                      OK, calibrate, confidence_buckets,
                                       confidence_trust)
 
 
@@ -131,3 +131,95 @@ def test_trust_survives_garbage():
     assert confidence_trust({}) == 1.0
     assert confidence_trust({"trust": "boh"}) == 1.0
     assert confidence_trust({"trust": 5.0}) == 1.0        # clampato
+
+
+# ---- confidenza che non varia: niente da calibrare (25 set 2026) ---------- #
+def test_constant_confidence_cannot_be_calibrated(monkeypatch):
+    """Tutte le strategie generate escono a confidenza fissa 60. Con un solo
+    valore i terzili non sono fasce di confidenza e il verdetto e' un artefatto:
+    qui deve dire «costante», non fingere una misura."""
+    monkeypatch.setattr(settings, "CALIBRATION_MIN_TRADES", 10)
+    trades = _many([(60, 0.02), (60, -0.01), (60, 0.03), (60, -0.02)], repeat=5)
+    out = calibrate(trades)
+    assert out["verdict"] == CONSTANT
+    assert out["trust"] == 1.0                      # nessuna influenza sulla size
+    assert out["correlation"] is None               # non c'e' correlazione con un solo x
+    assert "confidenza 60" in out["note"] and "non varia" in out["note"]
+    assert confidence_trust(out) == 1.0
+
+
+def test_constant_verdict_does_not_depend_on_trade_order(monkeypatch):
+    """L'ARTEFATTO DEL 23-25 SETTEMBRE. Con confidenza costante `sorted` e'
+    stabile: la «fascia alta» sono gli ULTIMI trade. Stessi trade in ordine
+    inverso davano «ok» invece di «flat» senza che nulla fosse cambiato.
+    Ora l'ordine non conta."""
+    monkeypatch.setattr(settings, "CALIBRATION_MIN_TRADES", 10)
+    perdite_prima = [_t(60, -0.02) for _ in range(6)] + [_t(60, 0.03) for _ in range(6)]
+    vincite_prima = list(reversed(perdite_prima))
+    assert calibrate(perdite_prima)["verdict"] == CONSTANT
+    assert calibrate(vincite_prima)["verdict"] == CONSTANT
+
+
+def test_range_below_one_point_counts_as_constant(monkeypatch):
+    """60 e 60,5 non sono due fasce: nessuna differenza di size ne esce."""
+    monkeypatch.setattr(settings, "CALIBRATION_MIN_TRADES", 10)
+    trades = _many([(60, 0.02), (60.5, -0.02), (60.2, 0.01)], repeat=4)
+    assert calibrate(trades)["verdict"] == CONSTANT
+
+
+def test_constant_wins_over_small_sample(monkeypatch):
+    """«Servono 30 trade» promette che con piu' trade si misurera' qualcosa:
+    con la confidenza fissa non e' vero. La costanza va detta subito."""
+    monkeypatch.setattr(settings, "CALIBRATION_MIN_TRADES", 30)
+    out = calibrate(_many([(60, 0.01), (60, -0.01)], repeat=3))
+    assert out["verdict"] == CONSTANT
+    assert out["trust"] == 1.0
+
+
+def test_fewer_than_two_trades_is_still_insufficient(monkeypatch):
+    """Con un trade il range non e' definito: vale il verdetto di sempre."""
+    monkeypatch.setattr(settings, "CALIBRATION_MIN_TRADES", 30)
+    assert calibrate([_t(60, 0.01)])["verdict"] == INSUFFICIENT
+    assert calibrate([])["verdict"] == INSUFFICIENT
+
+
+def test_constant_note_does_not_blame_generated_for_other_values(monkeypatch):
+    """La frase sulle strategie generate e' vera solo per il 60: con un altro
+    valore costante si dice solo la costanza."""
+    monkeypatch.setattr(settings, "CALIBRATION_MIN_TRADES", 5)
+    note = calibrate(_many([(75, 0.01), (75, -0.01)], repeat=4))["note"]
+    assert "costante (75)" in note and "generate" not in note
+
+
+def test_variable_confidence_keeps_the_old_verdicts(monkeypatch):
+    """Appena la confidenza varia, la calibrazione torna a misurare come prima:
+    il verdetto «costante» non deve mai coprire un caso misurabile."""
+    monkeypatch.setattr(settings, "CALIBRATION_MIN_TRADES", 10)
+    ok = _many([(30, -0.02), (40, -0.01), (60, 0.01), (80, 0.03)], repeat=4)
+    flat = _many([(30, 0.02), (30, -0.02), (60, 0.02), (60, -0.02),
+                  (85, 0.02), (85, -0.02)], repeat=3)
+    inv = _many([(30, 0.03), (45, 0.01), (65, -0.01), (85, -0.03)], repeat=4)
+    assert calibrate(ok)["verdict"] == OK
+    assert calibrate(flat)["verdict"] == FLAT
+    assert calibrate(inv)["verdict"] == INVERTED
+    for trades in (ok, flat, inv):
+        assert calibrate(trades)["verdict"] != CONSTANT
+
+
+def test_constant_verdict_leaves_allocation_untouched(monkeypatch):
+    """Il punto pratico: col verdetto «costante» il bot dimensiona ESATTAMENTE
+    come senza calibrazione. Non c'e' evidenza, quindi non si devia."""
+    from bot.core.firebase_client import FirebaseClient
+    from bot.core.models import Regime
+    from bot.learning.adaptation import AdaptationEngine
+    monkeypatch.setattr(settings, "CALIBRATION_ENABLED", True)
+    monkeypatch.setattr(settings, "CALIBRATION_MIN_TRADES", 10)
+    a = AdaptationEngine(FirebaseClient())
+
+    a._calibration = {}
+    senza = a.allocation("s1", Regime.SIDEWAYS, 60.0)
+    a._calibration = calibrate(_many([(60, 0.02), (60, -0.01)], repeat=8))
+    assert a._calibration["verdict"] == CONSTANT
+    con = a.allocation("s1", Regime.SIDEWAYS, 60.0)
+    assert con == senza
+    assert "calibr." not in con[2]

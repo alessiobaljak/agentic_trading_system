@@ -23,6 +23,16 @@ Se la confidenza anti-predice, la risposta onesta e' smettere di usarla — non
 scommetterci contro, che sarebbe adattarsi al rumore con un altro nome.
 Sotto il campione minimo non tocca niente: agire su 10 trade sarebbe l'errore
 che stiamo cercando di evitare.
+
+QUANDO NON PUO' MISURARE NULLA (25 set 2026)
+Tutte le strategie generate escono a confidenza fissa 60
+(`bot/strategies/generated.py`). Con un solo valore le «fasce» non sono fasce
+di confidenza: `sorted` e' stabile, quindi i terzili sono l'ORDINE CRONOLOGICO
+dei trade, e «la fascia alta rende piu' della bassa» significa solo «gli ultimi
+trade sono andati meglio dei primi». Il verdetto oscillava fra «flat» (23 set)
+e «ok» (25 set) senza che nulla fosse cambiato: era un artefatto. In quel caso
+il verdetto e' «costante», con trust 1.0 (niente da correggere, niente da
+ridurre) e una nota che dice perche' non si misura.
 """
 from __future__ import annotations
 
@@ -35,6 +45,25 @@ from bot.config import settings
 _EXTERNAL = {"manual", "kill_switch", "circuit_breaker"}
 
 OK, FLAT, INVERTED, INSUFFICIENT = "ok", "flat", "inverted", "insufficient"
+# la confidenza non varia: non c'e' niente da calibrare (vedi in cima, 25 set 2026)
+CONSTANT = "costante"
+
+# sotto questo range (in punti di confidenza) le fasce non separano nulla: un
+# punto e' meno di qualunque differenza che allocation() possa tradurre in size
+CONSTANT_RANGE = 1.0
+
+
+def _constant_note(lo: float, hi: float, n: int) -> str:
+    """Perche' non si misura, detto a chi legge il verdetto al mattino.
+
+    Il caso reale (25 set 2026) e' «tutte a 60»: e' il valore fisso delle
+    strategie generate, e va detto. Se un giorno il valore costante fosse un
+    altro, la frase sulle generate sarebbe falsa: si scrive solo la costanza."""
+    coda = ("la calibrazione non puo' misurare nulla finche' la confidenza non "
+            f"varia ({n} trade, confidenza {lo:.0f}-{hi:.0f})")
+    if abs(lo - 60.0) < CONSTANT_RANGE:
+        return f"tutte le strategie generate escono a confidenza 60: {coda}"
+    return f"la confidenza e' costante ({lo:.0f}) su tutti i trade: {coda}"
 
 
 def _pearson(pairs: list[tuple[float, float]]) -> float | None:
@@ -91,6 +120,21 @@ def calibrate(trades: Iterable[dict]) -> dict:
     n = len(pairs)
     buckets = confidence_buckets(pairs)
     corr = _pearson(pairs)
+
+    # CONFIDENZA CHE NON VARIA: viene PRIMA del campione minimo, di proposito.
+    # «insufficient: servono 30 trade» promette che con piu' trade si misurera'
+    # qualcosa; con la confidenza fissa a 60 non e' vero, e la promessa falsa e'
+    # peggio del numero mancante. Sotto i 2 trade il range non e' definito e vale
+    # il verdetto di sempre. (25 set 2026)
+    if n >= 2:
+        lo = min(p[0] for p in pairs)
+        hi = max(p[0] for p in pairs)
+        # «tutte le fasce hanno lo stesso valore» e «varianza nulla» sono casi
+        # particolari di «range sotto un punto»: basta questo controllo.
+        if hi - lo < CONSTANT_RANGE:
+            return {"verdict": CONSTANT, "trades": n, "correlation": None,
+                    "buckets": buckets, "monotonic": None, "trust": 1.0,
+                    "note": _constant_note(lo, hi, n)}
 
     if n < settings.CALIBRATION_MIN_TRADES:
         return {"verdict": INSUFFICIENT, "trades": n, "correlation": corr,
