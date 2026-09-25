@@ -5,15 +5,19 @@ import { onValue, ref, serverTimestamp, set } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
 
 /**
- * Kill switch. Sets /commands/kill_switch = true (the bot resets it to false
- * after flattening all positions). Confirmation-guarded so it can't be tripped
- * by an accidental click.
+ * Kill switch. Scrive /commands/kill_switch = true (il bot lo rimette a false
+ * dopo aver chiuso tutte le posizioni). C'e' una conferma in mezzo: un click
+ * per sbaglio non deve chiudere tutto.
+ *
+ * Due varianti (25 set 2026): `button` e' il pulsante STOP sempre visibile in
+ * alto, con la finestra di conferma; `panel` (Impostazioni) e' UNA riga di
+ * stato — prima era un secondo pannello con lo stesso dialogo, e due posti da
+ * cui chiudere tutto sono uno di troppo.
  */
 export default function KillSwitch({ variant = 'panel' }: { variant?: 'panel' | 'button' }) {
   const [armed, setArmed] = useState(false); // dialog open
   const [sending, setSending] = useState(false);
   const [current, setCurrent] = useState<boolean | null>(null);
-  const [lastSent, setLastSent] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,10 +39,9 @@ export default function KillSwitch({ variant = 'panel' }: { variant?: 'panel' | 
         requested_by: 'dashboard',
         requested_at: serverTimestamp(),
       }).catch(() => undefined);
-      setLastSent(Date.now());
       setArmed(false);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to trigger kill switch.');
+      setError(e instanceof Error ? e.message : 'Invio del kill switch fallito.');
     } finally {
       setSending(false);
     }
@@ -49,19 +52,19 @@ export default function KillSwitch({ variant = 'panel' }: { variant?: 'panel' | 
   const confirmDialog = armed && (
     <div className="dialog-overlay" role="dialog" aria-modal="true">
       <div className="dialog">
-        <h3>Confirm kill switch</h3>
+        <h3>Confermi il kill switch?</h3>
         <p>
-          This sets <code>/commands/kill_switch = true</code>. The bot will close{' '}
-          <strong>all open positions</strong> and stop opening new ones. This action cannot be
-          undone from the dashboard.
+          Scrive <code>/commands/kill_switch = true</code>. Il bot chiude{' '}
+          <strong>tutte le posizioni aperte</strong> e smette di aprirne. Dalla dashboard non si
+          torna indietro.
         </p>
         {error && <div className="warn">{error}</div>}
         <div className="dialog-actions">
           <button className="btn" onClick={() => setArmed(false)} disabled={sending}>
-            Cancel
+            Annulla
           </button>
           <button className="btn btn-danger" onClick={trigger} disabled={sending}>
-            {sending ? 'Sending…' : 'Yes, kill everything'}
+            {sending ? 'Invio…' : 'Sì, chiudi tutto'}
           </button>
         </div>
       </div>
@@ -89,54 +92,25 @@ export default function KillSwitch({ variant = 'panel' }: { variant?: 'panel' | 
     );
   }
 
+  // Impostazioni: una riga di stato. Il pulsante e la conferma stanno in alto.
   return (
-    <div className="panel" style={{ borderColor: 'var(--red)' }}>
-      <h2 style={{ color: 'var(--red)' }}>Kill Switch</h2>
-      <p className="subtitle">
-        Immediately flatten all positions and halt new entries. Use only in an emergency.
+    <div className="panel">
+      <h2>Kill switch</h2>
+      <p style={{ margin: 0, fontSize: 13 }}>
+        {pending ? (
+          <span style={{ color: 'var(--red)', fontWeight: 700 }}>
+            ATTIVO — il bot sta chiudendo le posizioni e non ne apre di nuove.
+          </span>
+        ) : (
+          <>
+            <span style={{ color: 'var(--green)', fontWeight: 600 }}>spento</span>
+            <span className="muted">
+              {' '}· il pulsante STOP in alto chiude tutte le posizioni e ferma le entrate
+            </span>
+          </>
+        )}
       </p>
-
-      {pending ? (
-        <div className="badge red" style={{ marginBottom: 12 }}>
-          KILL SWITCH ACTIVE — bot is flattening positions
-        </div>
-      ) : (
-        <div className="muted" style={{ fontSize: 12, marginBottom: 12 }}>
-          Status: idle
-          {lastSent != null && ` · last sent ${new Date(lastSent).toLocaleTimeString()}`}
-        </div>
-      )}
-
-      <button
-        className="btn btn-danger"
-        onClick={() => setArmed(true)}
-        disabled={sending || pending}
-      >
-        {pending ? 'Kill switch sent' : 'KILL SWITCH'}
-      </button>
-
       {error && <div className="warn">{error}</div>}
-
-      {armed && (
-        <div className="dialog-overlay" role="dialog" aria-modal="true">
-          <div className="dialog">
-            <h3>Confirm kill switch</h3>
-            <p>
-              This sets <code>/commands/kill_switch = true</code>. The bot will close{' '}
-              <strong>all open positions</strong> and stop opening new ones. This action cannot be
-              undone from the dashboard.
-            </p>
-            <div className="dialog-actions">
-              <button className="btn" onClick={() => setArmed(false)} disabled={sending}>
-                Cancel
-              </button>
-              <button className="btn btn-danger" onClick={trigger} disabled={sending}>
-                {sending ? 'Sending…' : 'Yes, kill everything'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

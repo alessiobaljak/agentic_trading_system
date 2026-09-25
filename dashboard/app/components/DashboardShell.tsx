@@ -3,82 +3,83 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import { getAuthInstance } from '../lib/firebase';
+import { lista, useControllo, type Manca } from '../lib/controllo';
+import { useGateDoc } from '../lib/gate';
+import { durata } from '../lib/viz';
 
 import BotStatus from './BotStatus';
-import DailySnapshot from './DailySnapshot';
-import EquityCurve from './EquityCurve';
+import ControlloAnomalie from './ControlloAnomalie';
+import ControlloHero from './ControlloHero';
+import ControlloLettura from './ControlloLettura';
+import ControlloPaper from './ControlloPaper';
+import ControlloSezione from './ControlloSezione';
 import OperativitaTab from './OperativitaTab';
 import StrategyWeights from './StrategyWeights';
-import TrailingLearning from './TrailingLearning';
-import Heatmap from './Heatmap';
-import OptimizedStrategies from './OptimizedStrategies';
 import GateMaturazione from './GateMaturazione';
-import Insights from './Insights';
 import RiskControl from './RiskControl';
 import KillSwitch from './KillSwitch';
 import TopVitals from './TopVitals';
-import LearningSummary from './LearningSummary';
-import SentimentAnalysis from './SentimentAnalysis';
-import RegimeIntelligence from './RegimeIntelligence';
-import AssetScoring from './AssetScoring';
-import LearningEvolution from './LearningEvolution';
-import PortfolioRisk from './PortfolioRisk';
 import ReconcilerStatus from './ReconcilerStatus';
-import OperatingCosts from './OperatingCosts';
-import OrchestratorShadow from './OrchestratorShadow';
 import SupervisorDecisions from './SupervisorDecisions';
 import GateAutopsy from './GateAutopsy';
 import GateFunnel from './GateFunnel';
 import GateEvolution from './GateEvolution';
+import GateCervello from './GateCervello';
+import StrategieOperate from './StrategieOperate';
+import LearningAttivoMisurato from './LearningAttivoMisurato';
+import LearningMisurato from './LearningMisurato';
 
-type TabId =
-  | 'panoramica'
-  | 'operativita'
-  | 'apprendimento'
-  | 'ricerca'
-  | 'sentiment'
-  | 'strategie'
-  | 'impostazioni';
+/**
+ * Il guscio della dashboard (25 set 2026): cinque schede, e la prima e' il
+ * CONTROLLO — quello che il proprietario apre dal telefono la mattina.
+ *
+ *   controllo    — «e' rotto? perde?»: semafori, anomalie, paper, learning e
+ *                  gate in breve, tutto dal documento orario del bot;
+ *   operativita  — grafico, posizioni aperte, trade chiusi (tempo reale);
+ *   gate         — dentro il gate: imbuto, maturazione, cervello, supervisore,
+ *                  evoluzione, autopsia, le strategie operate;
+ *   learning     — cosa cambia le decisioni ORA e cosa e' solo misurato;
+ *   impostazioni — rischio, kill switch, riconciliazione (solo live).
+ *
+ * Sono sparite panoramica, ricerca, strategie, sentiment e apprendimento: i
+ * loro pannelli o vivono nel controllo (calcolati dal bot una volta, non da
+ * dieci componenti ognuno a modo suo) o stanno nelle schede gate/learning. I
+ * vecchi hash nei segnalibri vengono girati sulla scheda nuova.
+ */
+type TabId = 'controllo' | 'operativita' | 'gate' | 'learning' | 'impostazioni';
 type NavId = Exclude<TabId, 'impostazioni'>;
+
+/** I vecchi hash (segnalibri, link nelle issue) → scheda nuova. */
+const VECCHI_HASH: Record<string, TabId> = {
+  panoramica: 'controllo',
+  sentiment: 'controllo',
+  ricerca: 'gate',
+  strategie: 'gate',
+  apprendimento: 'learning',
+};
 
 /* --- icone (inline SVG, stroke = currentColor) ---------------------------- */
 function Icon({ id }: { id: TabId }) {
   const p: Record<TabId, ReactNode> = {
-    panoramica: (
+    // controllo: uno scudo con la spunta — «e' tutto a posto?»
+    controllo: (
       <>
-        <rect x="3" y="3" width="7" height="7" rx="1.5" />
-        <rect x="14" y="3" width="7" height="7" rx="1.5" />
-        <rect x="14" y="14" width="7" height="7" rx="1.5" />
-        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
+        <path d="M9 12l2 2 4-4" />
       </>
     ),
     operativita: <path d="M3 12h4l3 7 4-14 3 7h4" />,
-    // ricerca: una lente — questa tab guarda DENTRO il gate, non i risultati
-    ricerca: (
+    // gate: un imbuto — le candidate entrano larghe ed escono strette
+    gate: (
       <>
-        <circle cx="11" cy="11" r="7" />
-        <path d="M20 20l-4.2-4.2" />
+        <path d="M4 5h16l-6 7v6l-4 2v-8L4 5z" />
       </>
     ),
-    apprendimento: (
+    learning: (
       <>
         <path d="M12 3l9 5-9 5-9-5 9-5z" />
         <path d="M21 8v5" />
         <path d="M7 10.5V15c0 1.5 2.5 3 5 3s5-1.5 5-3v-4.5" />
-      </>
-    ),
-    sentiment: (
-      <>
-        <path d="M4 16a8 8 0 0 1 16 0" />
-        <path d="M12 16l4-3.5" />
-        <circle cx="12" cy="16" r="1.4" />
-      </>
-    ),
-    strategie: (
-      <>
-        <circle cx="12" cy="12" r="8" />
-        <circle cx="12" cy="12" r="3.5" />
-        <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
       </>
     ),
     impostazioni: (
@@ -105,64 +106,170 @@ function Icon({ id }: { id: TabId }) {
 }
 
 const META: Record<TabId, { label: string; title: string; intro: string }> = {
-  panoramica: {
-    label: 'Panoramica',
-    title: 'Panoramica',
-    intro: 'Stato del bot, equity mark-to-market, ultima decisione e curva di equity.',
+  controllo: {
+    label: 'Controllo',
+    title: 'Controllo',
+    intro: 'Il controllo orario scritto dal bot: e\' rotto? perde? cosa e\' cambiato.',
   },
   operativita: {
     label: 'Operatività',
     title: 'Operatività',
-    intro: 'Posizioni aperte e trade chiusi (con verdetto sul trailing).',
+    intro: 'Posizioni aperte e trade chiusi (con verdetto sul trailing), in tempo reale.',
   },
-  apprendimento: {
-    label: 'Apprendimento',
-    title: 'Apprendimento',
-    intro: 'Cosa sta imparando il bot: pesi strategia × regime, trailing adattivo e diario.',
-  },
-  sentiment: {
-    label: 'Sentiment',
-    title: 'Sentiment analysis',
-    intro: 'Fear & Greed di mercato e sentiment delle coin: la fonte che orienta le decisioni.',
-  },
-  ricerca: {
-    label: 'Ricerca',
-    title: 'Ricerca · dentro il GATE 1',
+  gate: {
+    label: 'Gate',
+    title: 'Gate',
     intro:
-      'Le decisioni che il sistema prende da solo, dove muoiono le candidate e come '
-      + 'si muove il fronte di validazione nel tempo.',
+      'Dentro il gate: dove muoiono le candidate, come matura il registro e quali '
+      + 'strategie stanno operando davvero.',
   },
-  strategie: {
-    label: 'Strategie',
-    title: 'Strategie · GATE 1',
-    intro:
-      'A che punto e\' ogni coppia verso le tre conferme — chi e\' idoneo adesso, chi '
-      + 'aspetta e chi e\' fermo — e il catalogo di quelle gia\' validate.',
+  learning: {
+    label: 'Learning',
+    title: 'Learning',
+    intro: 'Cosa cambia le decisioni adesso (attivo) e cosa e\' solo misurato.',
   },
   impostazioni: {
     label: 'Impostazioni',
     title: 'Impostazioni · Rischio',
-    intro: 'Parametri di leva e rischio, entro i cap di sicurezza applicati dal bot.',
+    intro: 'Leva e rischio entro i tetti di sicurezza applicati dal bot; kill switch.',
   },
 };
 
-const NAV: NavId[] = ['panoramica', 'operativita', 'apprendimento', 'ricerca',
-                      'sentiment', 'strategie'];
+const NAV: NavId[] = ['controllo', 'operativita', 'gate', 'learning'];
 
 function isTab(v: string): v is TabId {
   return v in META;
 }
 
+/* ------------------------------------------------ la scheda Controllo ---- */
+function ControlloTab() {
+  const { doc, stato } = useControllo();
+  const gate = useGateDoc();
+  const learning = doc?.learning ?? null;
+  const attivo = learning?.attivo ?? null;
+  const cambiamenti = lista<string>(attivo?.cambiamenti_24h);
+  const manca = lista<Manca>(doc?.manca);
+  const salute = doc?.salute ?? null;
+
+  return (
+    <>
+      <ControlloHero />
+      <BotStatus />
+      <ControlloAnomalie />
+      {stato !== 'assente' && doc && (
+        <>
+          <ControlloPaper />
+
+          <ControlloSezione
+            titolo="Learning in breve"
+            computedAt={learning?.computed_at}
+            errore={learning?.errore}
+            riassunto={
+              cambiamenti.length
+                ? `${cambiamenti.length} cambiamenti in 24 h`
+                : 'nessun cambiamento in 24 h'
+            }
+          >
+            <ControlloLettura sezione={learning} style={{ marginTop: 0 }} />
+            <div className="sotto-titolo" style={{ marginTop: 12 }}>
+              Cosa ha cambiato decisione nelle ultime 24 h
+            </div>
+            {cambiamenti.length === 0 ? (
+              <p className="muted" style={{ margin: 0, fontSize: 12.5 }}>
+                Nessun pezzo del learning ha cambiato decisione: freno, panchina, cooldown, keep e
+                validate sono come nel controllo precedente.
+              </p>
+            ) : (
+              <ul className="lista-grigia">
+                {cambiamenti.map((c, i) => (
+                  <li key={i}>{c}</li>
+                ))}
+              </ul>
+            )}
+            <p className="muted" style={{ margin: '10px 0 0', fontSize: 12 }}>
+              Il dettaglio (freno, panchina, deriva, calibrazione, referti) sta nella scheda
+              Learning.
+            </p>
+          </ControlloSezione>
+
+          <ControlloSezione
+            titolo="Gate in breve"
+            aggiornatoS={salute?.gate_ultimo_giro_eta_s ?? gate.etaS}
+            riassunto={salute?.gate_stato ?? gate.doc?.meta?.stato ?? 'n/d'}
+          >
+            <p className="riga-paper" style={{ marginTop: 0 }}>
+              ultimo giro{' '}
+              {salute?.gate_ultimo_giro_eta_s != null
+                ? `${durata(salute.gate_ultimo_giro_eta_s)} fa`
+                : gate.etaS != null
+                  ? `${durata(gate.etaS)} fa`
+                  : 'mai visto'}
+              {' '}· modalità <b>{salute?.gate_modalita ?? gate.doc?.meta?.modalita ?? 'n/d'}</b>
+              {' '}· stato <b>{salute?.gate_stato ?? gate.doc?.meta?.stato ?? 'n/d'}</b>
+              {gate.doc?.meta?.fase && gate.doc.meta.stato === 'in_corso' && ` (fase ${gate.doc.meta.fase})`}
+              {' '}· validate{' '}
+              <b>{attivo?.impronta?.validate ?? gate.doc?.registro?.validate ?? '—'}</b>
+              {gate.doc?.registro?.validate_delta_giro != null
+                && gate.doc.registro.validate_delta_giro !== 0
+                && ` (${gate.doc.registro.validate_delta_giro > 0 ? '+' : ''}${gate.doc.registro.validate_delta_giro} nel giro)`}
+              {salute?.gate_pronto === false && (
+                <span style={{ color: 'var(--red)' }}> · NON PRONTO: il bot resta flat</span>
+              )}
+              {gate.doc?.meta?.stato === 'errore' && gate.doc.meta.errore && (
+                <span style={{ color: 'var(--red)' }}> · errore: {gate.doc.meta.errore}</span>
+              )}
+            </p>
+            <p className="muted" style={{ margin: '8px 0 0', fontSize: 12 }}>
+              Imbuto, maturazione, cervello e strategie operate stanno nella scheda Gate.
+            </p>
+          </ControlloSezione>
+
+          <ControlloSezione
+            titolo="Cosa manca"
+            computedAt={doc.meta?.generato_at}
+            riassunto={manca.length ? `${manca.length} evidenze non disponibili qui` : undefined}
+          >
+            {manca.length === 0 ? (
+              <p className="muted" style={{ margin: 0, fontSize: 12.5 }}>
+                Il controllo non dichiara evidenze mancanti.
+              </p>
+            ) : (
+              <ul className="lista-grigia">
+                {manca.map((m, i) => (
+                  <li key={i}>
+                    <b>{m.evidenza}</b>
+                    {m.perche && <> — {m.perche}</>}
+                    {m.come_avere && <span className="muted"> · come averla: {m.come_avere}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </ControlloSezione>
+        </>
+      )}
+    </>
+  );
+}
+
 export default function DashboardShell() {
-  const [tab, setTab] = useState<TabId>('panoramica');
+  const [tab, setTab] = useState<TabId>('controllo');
   const [user, setUser] = useState<User | null>(null);
   const [collapsed, setCollapsed] = useState(false);
 
-  // deep-link + persistenza al refresh via hash (#operativita)
+  // deep-link + persistenza al refresh via hash (#gate); i vecchi hash vengono
+  // girati sulla scheda nuova e riscritti nella barra degli indirizzi
   useEffect(() => {
     const sync = () => {
       const h = window.location.hash.replace('#', '');
-      if (isTab(h)) setTab(h);
+      if (isTab(h)) {
+        setTab(h);
+      } else if (h in VECCHI_HASH) {
+        const nuovo = VECCHI_HASH[h];
+        setTab(nuovo);
+        window.history.replaceState(null, '', `#${nuovo}`);
+      } else if (!h) {
+        setTab('controllo');
+      }
     };
     sync();
     window.addEventListener('hashchange', sync);
@@ -216,8 +323,8 @@ export default function DashboardShell() {
             </svg>
           </span>
           <span className="brand-text">
-            Agentic Trading
-            <span className="brand-sub">crypto futures · autonomo</span>
+            Trading bot
+            <span className="brand-sub">crypto futures · paper</span>
           </span>
         </div>
 
@@ -257,7 +364,7 @@ export default function DashboardShell() {
             <span className="nav-label">Impostazioni</span>
           </button>
 
-          <span className="dry-pill" title="Paper trading (DRY_RUN)">
+          <span className="dry-pill" title="Paper trading (DRY_RUN): nessun denaro vero">
             <span className="dot" style={{ background: 'var(--amber)' }} />
             <span className="dry-text">DRY_RUN · paper</span>
           </span>
@@ -292,59 +399,27 @@ export default function DashboardShell() {
         </header>
 
         <div className="grid" key={tab} style={{ marginTop: 16 }}>
-          {tab === 'panoramica' && (
-            <>
-              <BotStatus />
-              <div className="grid grid-2">
-                <EquityCurve />
-                <DailySnapshot />
-              </div>
-              <div className="grid grid-2">
-                <RegimeIntelligence />
-                <PortfolioRisk />
-              </div>
-            </>
-          )}
+          {tab === 'controllo' && <ControlloTab />}
 
-          {tab === 'operativita' && (
-            <>
-              <OperativitaTab />
-              <OperatingCosts />
-            </>
-          )}
+          {tab === 'operativita' && <OperativitaTab />}
 
-          {tab === 'apprendimento' && (
-            <>
-              <LearningSummary />
-              <div className="grid grid-2">
-                <StrategyWeights />
-                <Heatmap />
-              </div>
-              <LearningEvolution />
-              <OrchestratorShadow />
-              <TrailingLearning />
-              <Insights />
-            </>
-          )}
-
-          {tab === 'ricerca' && (
+          {tab === 'gate' && (
             <>
               <GateFunnel />
-              <GateEvolution />
+              <GateMaturazione />
+              <GateCervello />
               <SupervisorDecisions />
+              <GateEvolution />
               <GateAutopsy />
+              <StrategieOperate />
             </>
           )}
 
-          {tab === 'sentiment' && <SentimentAnalysis />}
-
-          {tab === 'strategie' && (
+          {tab === 'learning' && (
             <>
-              {/* PRIMA la maturazione, poi il catalogo: la domanda che si fa aprendo
-                  questa tab e' «a che punto siamo», non «cosa c'e' in magazzino». */}
-              <GateMaturazione />
-              <OptimizedStrategies />
-              <AssetScoring />
+              <LearningAttivoMisurato />
+              <StrategyWeights />
+              <LearningMisurato />
             </>
           )}
 

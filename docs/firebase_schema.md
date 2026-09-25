@@ -36,11 +36,22 @@ qui: vengono applicati dal `RiskManager` lato bot.
 Memoria a lungo termine (RAG): `{ week_id, narrative, overall_win_rate,
 total_trades, created_at }`.
 
+### `dashboard/controllo` e `dashboard/gate`  (dal 25 set 2026)
+Il **controllo orario** (scritto dal bot ogni ora; ripiego GitHub snapshot e ops
+`controllo`) e il **documento del gate** (scritto dalla discovery a ogni giro:
+`stato` in_corso/finito/errore, giro, registro, cervello, strategie operate per
+coppia). Specchi RTDB `/controllo` e `/gate` per la dashboard. Schema completo, campo
+per campo, in `docs/controllo_schema.md`.
+
 ## Realtime Database
 
 ### `/bot_status`
-`{ state, regime, dry_run, updated_at, heartbeat }`. La dashboard mostra lo stato
-e il monitoring usa `heartbeat` per l'alert "bot offline".
+`{ state, regime, dry_run, updated_at, heartbeat, avviato_at, errori_ciclo_1h,
+btc_close, price_stream, fear_greed }`. La dashboard mostra lo stato e il monitoring
+usa `heartbeat` per l'alert "bot offline" (dal 25 set il battito è anche nel dict
+riscritto ogni ora da `refresh_regime`, così non sparisce più per un attimo).
+Anelli: `/btc_history` (200 punti `{ts, close}`), `/avvii` (ultimi 20 avvii).
+`/decision_status` porta anche `rifiuti_ciclo` e `rifiuti_24h` (`[{motivo, n}]`).
 
 ### `/positions/{symbol}`
 Stato live di una posizione aperta (scritto dall'execution ad ogni update):

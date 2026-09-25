@@ -42,6 +42,28 @@ from bot.risk.correlation_guard import CorrelationGuard
 from bot.risk.risk_manager import RiskManager
 
 
+def _primo_ingresso(trades: list[dict]) -> float | None:
+    """Epoch del PRIMO ingresso fra i trade chiusi (entry_time ISO, altrimenti
+    exit_ts meno la durata, altrimenti exit_ts); None senza trade leggibili."""
+    out = []
+    for t in trades or []:
+        ts = None
+        v = t.get("entry_time")
+        if v:
+            try:
+                ts = datetime.fromisoformat(str(v).replace("Z", "+00:00")).timestamp()
+            except (TypeError, ValueError):
+                ts = None
+        if ts is None and t.get("exit_ts") is not None:
+            try:
+                ts = float(t["exit_ts"]) - float(t.get("duration_seconds") or 0)
+            except (TypeError, ValueError):
+                ts = None
+        if ts is not None:
+            out.append(ts)
+    return min(out) if out else None
+
+
 class TradingBot:
     def __init__(self) -> None:
         self.fb = get_firebase()
@@ -100,6 +122,16 @@ class TradingBot:
         self._coin_cooldown: dict[str, float] = {}    # symbol -> epoch in cooldown
         self._strat_streak: dict[str, int] = {}       # strategia -> stop consecutivi
         self._strat_cooldown: dict[str, float] = {}   # strategia -> epoch in panchina
+        # IL CONTROLLO ORARIO (25 set 2026, docs/controllo_schema.md): quando e'
+        # stato pubblicato l'ultimo `dashboard/controllo` (guard >= 3300 s: una
+        # volta l'ora, mai a ogni trade), l'istante di avvio del processo (figlio
+        # /bot_status/avviato_at + anello /avvii) e gli istanti dei cicli finiti
+        # in errore (contatore /bot_status/errori_ciclo_1h). Il registro letto
+        # da `_publish_drift` si tiene da parte per non rileggerlo un'ora dopo.
+        self._last_controllo_at = 0.0
+        self._avviato_at = time.time()
+        self._errori_ciclo: list[float] = []
+        self._registro_cache: dict | None = None
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
@@ -260,14 +292,27 @@ class TradingBot:
         sempre coerente coi trade chiusi (anche quelli chiusi prima di questa
         logica) e si auto-corregge dopo ogni riavvio."""
         base = self.fb.get_rtdb("/account/starting_equity")
-        base = float(base) if base else 1000.0
-        realized = sum(float(t.get("pnl", 0.0)) for t in self.logger.all_since(0.0))
+        if base:
+            base = float(base)
+        else:
+            # (25 set 2026) il capitale iniziale finiva su RTDB solo con
+            # `scripts/reset_paper.py`: senza, il controllo orario non sapeva da
+            # dove partisse il rendimento e doveva dire «default 1000». Si scrive
+            # UNA volta e mai piu': e' la base con cui l'equity torna.
+            base = 1000.0
+            self.fb.set_rtdb("/account/starting_equity", base)
+        trades = self.logger.all_since(0.0)
+        realized = sum(float(t.get("pnl", 0.0)) for t in trades)
         # + PnL delle FETTE gia' realizzate su posizioni ANCORA aperte (scale-out):
         # il loro trade non e' ancora loggato, ma il netto e' gia' in equity. Cosi'
         # dopo un restart a meta' trade l'equity resta coerente (nessun salto).
         open_realized = sum(p.realized_net for p in self.executor.open_positions.values())
         eq = base + realized + open_realized
         self.fb.set_rtdb("/account/equity", eq)
+        # (25 set 2026) l'inizio del paper, scritto UNA volta: il primo ingresso
+        # fra i trade chiusi, o adesso se il paper non ha ancora un trade.
+        if not self.fb.get_rtdb("/account/paper_started_at"):
+            self.fb.set_rtdb("/account/paper_started_at", _primo_ingresso(trades) or time.time())
         print(f"[main] equity riconciliata: {eq:.2f} (base {base:.2f} + realizzato "
               f"{realized:+.2f} + fette aperte {open_realized:+.2f})")
         return eq
@@ -412,6 +457,7 @@ class TradingBot:
             self.regime_confidence = assessment.confidence
             detail = {**assessment.as_dict(), **self._regime_history(assessment, now)}
         self.last_regime = now
+        btc_close = float(btc.price) if (btc and getattr(btc, "price", None)) else None
         self.fb.set_rtdb("/bot_status", {
             "state": "running", "regime": self.regime.value if self.regime else None,
             # lettura RICCA: confidenza, secondario, segnali a favore e contro,
@@ -426,8 +472,57 @@ class TradingBot:
             # osservabilita': lo stream prezzi e' vivo? Se False il bot sta usando le
             # candele REST (funziona, ma non risolve l'ORDINE dei prezzi nel minuto).
             "price_stream": (self.stream.is_healthy() if self.stream is not None else False),
+            # (25 set 2026, controllo orario) i FIGLI che il loop scrive a parte
+            # vanno anche qui: `set` sul nodo lo riscrive intero, e per un attimo
+            # il battito spariva (la dashboard vedeva il bot offline). Con
+            # `heartbeat: now` nel dict il buco non c'e' piu'; `avviato_at` ed
+            # `errori_ciclo_1h` sopravvivono alla riscrittura per lo stesso motivo.
+            "heartbeat": now,
+            "avviato_at": self._avviato_at,
+            "errori_ciclo_1h": self._errori_ciclo_1h(now),
+            # la chiusura di BTC: alimenta l'anello /btc_history (200 punti orari)
+            # da cui il controllo ricava BTC a 24 h e a 7 giorni senza Binance.
+            "btc_close": btc_close,
         })
+        if btc_close is not None:
+            self._btc_history(btc_close, now)
         return self.regime
+
+    def _btc_history(self, close: float, now: float) -> None:
+        """Anello RTDB `/btc_history` di 200 punti `{ts, close}` (uno l'ora, come
+        `_regime_history`): e' il benchmark che il controllo orario puo' dare
+        senza candele — GitHub non raggiunge Binance, la VPS si'."""
+        keep = 200
+        try:
+            hist = self.fb.get_rtdb("/btc_history") or []
+            if not isinstance(hist, list):
+                hist = []
+            hist = [h for h in hist if isinstance(h, dict)][-(keep - 1):]
+            hist.append({"ts": now, "close": float(close)})
+            self.fb.set_rtdb("/btc_history", hist[-keep:])
+        except Exception as exc:  # noqa: BLE001
+            print(f"[main] anello BTC non aggiornato: {exc}")
+
+    def _errori_ciclo_1h(self, now: float | None = None) -> int:
+        """Quanti cicli sono finiti in errore nell'ultima ora (finestra in RAM)."""
+        now = time.time() if now is None else now
+        self._errori_ciclo = [t for t in self._errori_ciclo if now - t <= 3600]
+        return len(self._errori_ciclo)
+
+    def _publish_avvio(self) -> None:
+        """(25 set 2026) `/bot_status/avviato_at` come FIGLIO e l'anello `/avvii`
+        degli ultimi 20 avvii: e' cio' che permette al controllo orario di contare
+        i riavvii delle 24 ore senza leggere il journal."""
+        try:
+            self.fb.set_rtdb("/bot_status/avviato_at", self._avviato_at)
+            ring = self.fb.get_rtdb("/avvii") or []
+            if not isinstance(ring, list):
+                ring = []
+            ring = [float(x) for x in ring if isinstance(x, (int, float))][-19:]
+            ring.append(self._avviato_at)
+            self.fb.set_rtdb("/avvii", ring)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[main] avvio non registrato su RTDB: {exc}")
 
     def _stream_recovery_guard(self, now: float) -> bool:
         """True se il bot deve ASTENERSI dal decidere perche' lo stream si e' appena
@@ -906,6 +1001,12 @@ class TradingBot:
         def _rifiuto(motivo: str) -> None:
             print(f"[rifiuto] {decision.asset} {decision.strategy} "
                   f"{decision.direction.value}: {motivo}")
+            # e lo stesso contatore dell'orchestratore (25 set 2026): i conteggi
+            # per motivo finiscono in /decision_status e nel controllo orario
+            try:
+                self.orchestrator.conta_scarto(motivo, now)
+            except Exception:  # noqa: BLE001
+                pass
 
         if decision.asset in self.executor.open_positions:
             _rifiuto("posizione gia' aperta su questa coin")
@@ -1157,6 +1258,16 @@ class TradingBot:
         if extra:
             status.update(extra)
         if status:
+            # I CONTEGGI dei rifiuti per motivo (25 set 2026, contratto §3.5):
+            # del ciclo e delle ultime 24 ore, come liste [{motivo, n}] (niente
+            # motivi come chiavi: il RTDB rifiuta `.#$[]/`). `rifiuti_24h_dal`
+            # dice da quando conta la finestra (si azzera al riavvio).
+            try:
+                status["rifiuti_ciclo"] = self.orchestrator.rifiuti_ciclo()
+                status["rifiuti_24h"] = self.orchestrator.rifiuti_24h()
+                status["rifiuti_24h_dal"] = self.orchestrator.rifiuti_24h_dal
+            except Exception:  # noqa: BLE001
+                pass
             self.fb.set_rtdb("/decision_status", status)
 
     # ------------------------------------------------------------------ #
@@ -1227,8 +1338,18 @@ class TradingBot:
             from bot.core.firebase_client import decode_pairs
             from bot.learning.drift import compute_drift, drifted_keys
             reg = self.fb.get_doc("strategy_registry", "validated") or {}
+            self._registro_cache = reg          # lo riusa il controllo orario
             doc = compute_drift(trades, decode_pairs(reg.get("pairs")))
             doc["updated_at"] = time.time()
+            # DA QUANDO il freno globale e' acceso (25 set 2026, contratto §3.4):
+            # `global.dal` e' l'istante del PRIMO verdetto `drift` consecutivo,
+            # ereditato dal documento precedente finche' il verdetto non cambia.
+            # Senza, ogni ora il documento diceva solo «drift», mai da quanto.
+            glob = doc.get("global") or {}
+            if glob.get("verdict") == "drift":
+                prima = (self.fb.get_doc("drift", "current") or {}).get("global") or {}
+                dal = prima.get("dal") if prima.get("verdict") == "drift" else None
+                glob["dal"] = float(dal) if dal else doc["updated_at"]
             self.fb.set_doc("drift", "current", doc)
             self.adaptation._drift = doc          # effetto immediato, senza reload
             n = len(drifted_keys(doc))
@@ -1277,12 +1398,16 @@ class TradingBot:
             print(f"[calibrazione] {doc['verdict']}: {doc.get('note', '')} "
                   f"-> influenza confidenza x{doc['trust']:.2f}")
 
-    def refresh_weights(self, now: float) -> None:
+    def refresh_weights(self, now: float, orario: bool = False) -> None:
         """Ricalcola i pesi strategia×regime dai TRADE su Firestore (nessun Binance)
         e li salva. Stessa identica logica del job notturno (finestra 30g,
         metrics.compute_weights), ma ogni ora: cosi' le perdite recenti frenano una
         strategia in poche ore invece di aspettare la notte. E' aritmetica sul nostro
-        registro (win/loss gia' scritti), quindi giralo pure sul VPS nel loop."""
+        registro (win/loss gia' scritti), quindi giralo pure sul VPS nel loop.
+
+        `orario=True` SOLO dal ramo orario del loop (ogni 3600 s): e' il gancio
+        del controllo (`_publish_controllo`) e del contatore errori_ciclo_1h, che
+        non devono girare dopo ogni chiusura (25 set 2026)."""
         from bot.learning import metrics
         try:
             trades = self.logger.all_since(now - 30 * 86400)
@@ -1316,8 +1441,59 @@ class TradingBot:
             if keep:
                 self.fb.set_rtdb("/trailing_keep", keep)   # visibilita' dashboard/debug
                 print(f"[main] trailing keep adattato per {len(keep)} strategie: {keep}")
+            # IL CONTROLLO ORARIO (25 set 2026): solo dal gancio orario, mai dal
+            # ricalcolo dopo ogni chiusura; in un try suo, e' osservabilita'.
+            if orario:
+                try:
+                    self.fb.set_rtdb("/bot_status/errori_ciclo_1h", self._errori_ciclo_1h(now))
+                    self._publish_controllo(trades, now)
+                except Exception as exc:  # noqa: BLE001
+                    print(f"[controllo] pubblicazione saltata: {exc}")
         except Exception as exc:  # noqa: BLE001
             print(f"[main] refresh_weights fallito: {exc}")
+
+    def _publish_controllo(self, trades: list[dict], now: float | None = None) -> None:
+        """Il documento orario `dashboard/controllo` (+ specchio RTDB `/controllo`),
+        dal contratto docs/controllo_schema.md: salute, paper, learning e le
+        anomalie con i due semafori. E' cio' che la dashboard mostra ogni ora al
+        posto di quattro comandi ops letti a mano (25 set 2026).
+
+        Guard `_last_controllo_at` (>= 3300 s): una volta l'ora anche se il ramo
+        orario venisse chiamato piu' spesso. I trade in mano sono quelli degli
+        ultimi 30 giorni di `refresh_weights`: bastano finche' il paper e' piu'
+        giovane di 30 giorni; oltre, il documento vuole l'all-time e lo rilegge.
+        Il registro e' quello letto da `_publish_drift` un attimo prima (cache),
+        altrimenti si legge come fa lui. Tutto in un try suo: un errore qui non
+        tocca pesi, deriva o trading."""
+        now = time.time() if now is None else now
+        if now - self._last_controllo_at < 3300:
+            return
+        try:
+            from bot.learning.controllo import (carica_dati, costruisci_controllo,
+                                                pubblica_controllo)
+            t0 = time.time()
+            reg = self._registro_cache
+            if reg is None:
+                reg = self.fb.get_doc("strategy_registry", "validated") or {}
+            dal = self.fb.get_rtdb("/account/paper_started_at")
+            try:
+                dal = float(dal) if dal else None
+            except (TypeError, ValueError):
+                dal = None
+            if dal is None or dal < now - 30 * 86400:
+                trades = self.logger.all_since(0.0)
+            dati = carica_dati(self.fb, now, trades=trades, registro=reg)
+            doc = costruisci_controllo(dati, now, "bot", settings_da_bot=True,
+                                       durata_ms=int((time.time() - t0) * 1000))
+            pubblica_controllo(self.fb, doc)
+            self._last_controllo_at = now
+            m = doc["meta"]
+            print(f"[controllo] pubblicato: sistema {m['semaforo_sistema']}, paper "
+                  f"{m['semaforo_paper']}, {len(doc['salute'].get('anomalie') or [])} "
+                  f"anomalie, {m['durata_ms']} ms"
+                  + (f", sezioni fallite: {m['errori']}" if m.get("errori") else ""))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[controllo] pubblicazione saltata: {exc}")
 
     # ------------------------------------------------------------------ #
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
@@ -1328,6 +1504,7 @@ class TradingBot:
               f"DRY_RUN={settings.DRY_RUN}")
         self._replay_unlogged()   # recupera log a meta' PRIMA di riconciliare
         self.reconcile_equity()
+        self._publish_avvio()     # avviato_at + anello /avvii (controllo orario)
         self._load_adapt_state()
         # esce dalla manutenzione: il bot e' di nuovo su -> il monitoraggio "offline"
         # torna attivo da solo (vedi scripts/monitor.py).
@@ -1352,7 +1529,9 @@ class TradingBot:
                 # Il ricalcolo PRINCIPALE e' event-driven: subito dopo ogni trade
                 # chiuso (vedi dopo trading_cycle).
                 if now - self.last_weight_refresh >= 3600:
-                    self.refresh_weights(now)
+                    # `orario=True`: SOLO qui parte il controllo orario (mai dal
+                    # ricalcolo dopo ogni chiusura, qui sotto)
+                    self.refresh_weights(now, orario=True)
                     self.last_weight_refresh = now
                 # ricarica il REGISTRO validato (coppie GATE 1 + specs generate +
                 # params) OGNI ORA: cosi' il bot aggancia in fretta le nuove coppie
@@ -1381,6 +1560,9 @@ class TradingBot:
                     self._closed_this_cycle = False
             except Exception as exc:  # noqa: BLE001
                 print(f"[main] errore nel ciclo: {exc}")
+                # contato: il controllo orario pubblica quanti nell'ultima ora
+                # (/bot_status/errori_ciclo_1h) e avvisa oltre 3 (25 set 2026)
+                self._errori_ciclo.append(time.time())
             finally:
                 # heartbeat SEMPRE aggiornato a ogni iterazione, anche se il ciclo
                 # ha lanciato un'eccezione o lo scan ha bloccato a lungo: indica

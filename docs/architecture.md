@@ -57,7 +57,7 @@ RegimeDetector ──> regime ────────────────�
 | `bot/learning` | trade logger, metriche, pesi, learning loop, adaptation |
 | `bot/execution` | ordini, trailing/scale-out, stato RTDB, notifier |
 | `backtesting` | GATE 1: simulazione storica + liquidazioni + validazione learning |
-| `dashboard` | UI Vercel: stato, equity, heatmap, pesi, insight, risk control, kill switch |
+| `dashboard` | UI Vercel: **Controllo** orario (semafori, anomalie, letture: `docs/controllo_schema.md`), operatività, gate (documento `/gate` della discovery, strategie operate per coppia), learning (attivo vs misurato), impostazioni |
 | `scripts` + `.github/workflows` | learning notturno + monitoring + test + backtest |
 
 ## Perché queste tecnologie

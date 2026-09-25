@@ -60,3 +60,59 @@ export function quando(ts?: number | null): string {
     minute: '2-digit',
   });
 }
+
+/* ------------------------------------------------------------------------- */
+/* Formattazione dei numeri del controllo (25 set 2026).                      */
+/* La virgola decimale e' quella italiana, come gia' fa `formatta`; qui si    */
+/* aggiungono i decimali fissi, il segno esplicito e le durate, perche' i     */
+/* pannelli del controllo mostrano decine di numeri e devono essere uguali    */
+/* fra loro (e uguali alle letture scritte dal bot, che usa la stessa regola).*/
+/* ------------------------------------------------------------------------- */
+
+/** «1.234,50» con decimali fissi; «—» se il dato manca (null = non misurato). */
+export function numero(n: number | null | undefined, dec = 2): string {
+  if (n == null || !Number.isFinite(Number(n))) return '—';
+  return Number(n).toLocaleString('it-IT', {
+    minimumFractionDigits: dec,
+    maximumFractionDigits: dec,
+  });
+}
+
+/** Come `numero`, ma col «+» davanti ai positivi: per PnL e rendimenti. */
+export function segno(n: number | null | undefined, dec = 2): string {
+  if (n == null || !Number.isFinite(Number(n))) return '—';
+  const s = numero(n, dec);
+  return Number(n) > 0 ? `+${s}` : s;
+}
+
+/** Percentuale gia' in percento (campi `_pct`): «4,7%». */
+export function pct(n: number | null | undefined, dec = 1): string {
+  if (n == null || !Number.isFinite(Number(n))) return '—';
+  return `${numero(n, dec)}%`;
+}
+
+/** Frazione 0-1 mostrata in percento: 0,42 → «42%». */
+export function quota(n: number | null | undefined, dec = 0): string {
+  if (n == null || !Number.isFinite(Number(n))) return '—';
+  return `${numero(Number(n) * 100, dec)}%`;
+}
+
+/**
+ * Durata leggibile da secondi: «22 s», «5 min», «1 h 30», «2 g 3 h».
+ * Stessa regola di `_eta` in `bot/learning/controllo.py`, cosi' la dashboard e
+ * le letture scritte dal bot dicono la stessa cosa.
+ */
+export function durata(s: number | null | undefined): string {
+  if (s == null || !Number.isFinite(Number(s))) return '—';
+  const sec = Math.max(0, Math.floor(Number(s)));
+  if (sec < 60) return `${sec} s`;
+  if (sec < 3600) return `${Math.floor(sec / 60)} min`;
+  if (sec < 86400) {
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    return m > 0 ? `${h} h ${String(m).padStart(2, '0')}` : `${h} h`;
+  }
+  const g = Math.floor(sec / 86400);
+  const h = Math.floor((sec % 86400) / 3600);
+  return `${g} g ${h} h`;
+}

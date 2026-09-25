@@ -28,6 +28,25 @@ export type Trade = {
   trailing_verdict?: string; // scritto dal bot (B1); se presente si usa questo, niente fetch Binance
   scale_stage_reached?: number; // quanti TP scaglionati raggiunti (0 = uscito allo SL prima del TP1)
   realized_partial?: number;    // PnL netto incassato dalle fette
+  /** il referto del trade (bot/risk/setup_check.post_mortem, dal 23 set): classe
+   *  della morte e verdetto in una riga. Assente sui trade chiusi prima. */
+  post_mortem?: {
+    classe?: string | null;
+    stop_largo?: boolean;
+    lock_mai_armato?: boolean;
+    controtrend?: boolean;
+    mfe_r?: number | null;
+    verdetto?: string | null;
+  } | null;
+  /** keep del profit-lock usato dalla posizione (per coppia dal gate, 25 set) */
+  profit_lock_keep?: number | null;
+};
+
+/** Etichetta corta della classe del referto: dove e' morto il trade. */
+const CLASSE_REFERTO: Record<string, string> = {
+  ingresso: 'ingresso',
+  uscita: 'uscita',
+  protezione: 'protezione',
 };
 
 type Verdict = 'premature' | 'protected' | 'neutral' | 'pending' | 'unavailable';
@@ -263,15 +282,17 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (trade: Trade) =
 
   const total = rows.reduce((s, t) => s + (t.pnl ?? 0), 0);
   const cell = { padding: '6px 8px' } as const;
+  // colonne della tabella meno quella del PnL (per i colSpan delle righe di gruppo)
+  const COLONNE_SENZA_PNL = 10;
 
   return (
     <div className="panel">
-      <h2>Closed Trades</h2>
+      <h2>Trade chiusi</h2>
       <p className="subtitle">
         {rows.length} trade chiusi (paper) · clicca un giorno per espanderlo, un trade per vederlo sul grafico
       </p>
       {!loaded ? (
-        <p className="muted">Loading…</p>
+        <p className="muted">Caricamento…</p>
       ) : rows.length === 0 ? (
         <p className="muted">Nessun trade chiuso ancora (le posizioni aperte non hanno ancora toccato TP/SL).</p>
       ) : (
@@ -283,10 +304,12 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (trade: Trade) =
                 <th style={cell}>Chiusa</th>
                 <th style={cell}>Coin</th>
                 <th style={cell}>Strategia</th>
-                <th style={cell}>Side</th>
+                <th style={cell}>Lato</th>
                 <th style={cell}>Uscita</th>
                 <th style={cell} title="Quanti TP scaglionati raggiunti prima della chiusura">TP</th>
+                <th style={cell} title="keep del profit-lock usato: quanto del massimo raggiunto si teneva">Keep</th>
                 <th style={cell}>Trailing?</th>
+                <th style={cell} title="il referto scritto alla chiusura: dove e' morto il trade e perche'">Referto</th>
                 <th style={{ ...cell, textAlign: 'right' }}>PnL</th>
               </tr>
             </thead>
@@ -299,7 +322,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (trade: Trade) =
                       onClick={() => toggle(g.key)}
                       style={{ cursor: 'pointer', borderTop: '2px solid var(--border)', background: 'var(--bg-elev)' }}
                     >
-                      <td colSpan={8} style={{ ...cell, fontWeight: 600 }}>
+                      <td colSpan={COLONNE_SENZA_PNL} style={{ ...cell, fontWeight: 600 }}>
                         <span style={{ display: 'inline-block', width: 16, color: 'var(--text-dim)' }}>
                           {open ? '▾' : '▸'}
                         </span>
@@ -352,9 +375,24 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (trade: Trade) =
                             )}
                           </td>
                           <td style={{ ...cell, whiteSpace: 'nowrap' }}>
+                            {t.profit_lock_keep != null ? t.profit_lock_keep.toFixed(2) : <span style={{ color: 'var(--text-dim)' }}>·</span>}
+                          </td>
+                          <td style={{ ...cell, whiteSpace: 'nowrap' }}>
                             {t.exit_reason === 'trailing_stop' || t.exit_reason === 'scale_out' ? (
                               <VerdictBadge v={(t.trailing_verdict as Verdict | undefined) ?? verdicts[tradeKey(t)]} />
                             ) : null}
+                          </td>
+                          <td style={{ ...cell, maxWidth: 260 }}>
+                            {t.post_mortem?.verdetto ? (
+                              <span title={t.post_mortem.verdetto} style={{ display: 'inline-block', maxWidth: 260, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', verticalAlign: 'bottom' }}>
+                                {t.post_mortem.classe ? (
+                                  <span style={{ color: 'var(--text-dim)' }}>[{CLASSE_REFERTO[t.post_mortem.classe] ?? t.post_mortem.classe}] </span>
+                                ) : null}
+                                {t.post_mortem.verdetto}
+                              </span>
+                            ) : (
+                              <span style={{ color: 'var(--text-dim)' }} title="trade chiuso prima dei referti (23 set)">·</span>
+                            )}
                           </td>
                           <td style={{ ...cell, textAlign: 'right', color: (t.pnl ?? 0) >= 0 ? 'var(--green)' : 'var(--red)' }}>
                             {(t.pnl ?? 0).toFixed(2)}
@@ -365,7 +403,7 @@ export default function ClosedTrades({ onSelect }: { onSelect?: (trade: Trade) =
                 );
               })}
               <tr style={{ borderTop: '2px solid var(--border)', fontWeight: 700 }}>
-                <td style={cell} colSpan={8}>
+                <td style={cell} colSpan={COLONNE_SENZA_PNL}>
                   Totale realizzato ({rows.length} trade)
                 </td>
                 <td style={{ ...cell, textAlign: 'right', color: total >= 0 ? 'var(--green)' : 'var(--red)' }}>

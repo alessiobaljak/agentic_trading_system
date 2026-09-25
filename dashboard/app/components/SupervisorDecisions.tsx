@@ -27,6 +27,11 @@ import { STATO, quando } from '../lib/viz';
  * SIAMO VICINI AL LIMITE. Con ventimila candidate per passata, allentare una soglia
  * compra sempre qualche passaggio — la domanda non è «passa qualcuno?» ma «quanti di
  * quelli che passano sarebbero passati per caso?».
+ *
+ * UNA RIGA IN CHIARO, LA LINEA DEL TEMPO CHIUSA (25 set 2026). Da settimane la
+ * decisione è quasi sempre «nessuna azione»: venti righe uguali una sotto l'altra
+ * occupavano mezza scheda per dire una cosa sola. La riga di testa dice l'ultima
+ * decisione, quante «nessuna azione» di fila e quando; la storia si apre a richiesta.
  */
 type Detail = {
   pass_rate?: number;
@@ -135,14 +140,21 @@ export default function SupervisorDecisions() {
   const storia = [...(s?.history ?? [])].reverse().slice(0, 20);
   const tuning = Object.entries(s?.tuning ?? {}).filter(([k]) => !k.startsWith('#'));
   const spazio = storia.find((d) => d.detail?.headroom != null)?.detail?.headroom;
+  const ultima = storia[0];
+  // quante «nessuna azione» di fila prima di una decisione vera: lo stesso conto
+  // che la discovery scrive in `cervello.supervisore.decisioni_none_di_fila`
+  let noneDiFila = 0;
+  for (const d of storia) {
+    if ((d.kind ?? 'none') !== 'none') break;
+    noneDiFila += 1;
+  }
 
   return (
     <div className="panel">
       <h2>Decisioni del supervisore</h2>
       <p className="subtitle">
         Lo strato che si tara da solo: ogni ora guarda la validazione, l&apos;autopsia
-        delle candidate e il budget di falsi positivi, e decide. Clicca una decisione
-        per il dettaglio.
+        delle candidate e il budget di falsi positivi, e decide.
       </p>
 
       {!loaded ? (
@@ -155,6 +167,22 @@ export default function SupervisorDecisions() {
         </p>
       ) : (
         <>
+          <div style={{ fontSize: 13, lineHeight: 1.6, marginBottom: 12 }}>
+            {ultima ? (
+              <>
+                Ultima decisione{' '}
+                <b style={{ color: (KIND[ultima.kind ?? 'none'] ?? KIND.none).color }}>
+                  {(KIND[ultima.kind ?? 'none'] ?? KIND.none).label}
+                </b>
+                {ultima.param ? <> su {ultima.param}{ultima.old != null && ultima.new != null ? ` (${ultima.old} → ${ultima.new})` : ''}</> : null}
+                {' '}<span className="muted">{quando(ultima.at)}</span>
+                {ultima.reason ? <> — {ultima.reason}</> : null}
+                {noneDiFila > 1 ? <span className="muted"> · {noneDiFila} «nessuna azione» di fila</span> : null}
+              </>
+            ) : (
+              <span className="muted">Nessuna decisione registrata ancora.</span>
+            )}
+          </div>
           <div
             style={{
               display: 'flex',
@@ -209,9 +237,10 @@ export default function SupervisorDecisions() {
             )}
           </div>
 
-          <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
-            LINEA DEL TEMPO
-          </div>
+          <details>
+          <summary className="muted" style={{ fontSize: 12, marginBottom: 8, cursor: 'pointer' }}>
+            LINEA DEL TEMPO · ultime {storia.length} decisioni, clicca una decisione per il dettaglio
+          </summary>
           {storia.length === 0 ? (
             <p className="muted" style={{ fontSize: 13 }}>Nessuna decisione registrata.</p>
           ) : (
@@ -333,6 +362,7 @@ export default function SupervisorDecisions() {
               })}
             </div>
           )}
+          </details>
         </>
       )}
     </div>

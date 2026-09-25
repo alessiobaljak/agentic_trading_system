@@ -32,6 +32,37 @@ from bot.strategies.base import StrategyContext
 #: secondi per timeframe, per l'orologio delle strategie native a 1 ora
 _TF_SECS = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 14400, "1d": 86400}
 
+#: I MOTIVI dei rifiuti, normalizzati (25 set 2026, docs/controllo_schema.md §3.5).
+#: Le righe «[rifiuto]» restano com'erano nel log; qui si CONTANO per motivo,
+#: per ciclo e nelle ultime 24 ore, e i conteggi vanno in /decision_status. Sono
+#: le prime parole della riga, ridotte a nove classi: cosi' il controllo orario
+#: puo' dire «12 cooldown, 3 margine» senza leggere il journal.
+MOTIVI_RIFIUTO = ("cooldown", "tetto per coin", "peso sotto soglia", "strategia spenta",
+                  "veto di regime", "margine", "rischio direzionale", "stop troppo largo",
+                  "altro")
+
+
+def motivo_rifiuto(testo: str) -> str:
+    """La classe di un motivo di rifiuto, dalle sue prime parole. Pura."""
+    t = str(testo or "").lower()
+    if "cooldown" in t:
+        return "cooldown"
+    if "tetto per coin" in t:
+        return "tetto per coin"
+    if "spenta" in t:
+        return "strategia spenta"
+    if "peso" in t:
+        return "peso sotto soglia"
+    if "veto di regime" in t:
+        return "veto di regime"
+    if "margine" in t:
+        return "margine"
+    if "rischio direzionale" in t:
+        return "rischio direzionale"
+    if "stop troppo largo" in t:
+        return "stop troppo largo"
+    return "altro"
+
 
 class Orchestrator:
     DECISION_THRESHOLD = 30  # confidenza aggiustata minima per agire (fallback)
@@ -50,11 +81,45 @@ class Orchestrator:
         # righe), una riga per (coin, strategia).
         self._rifiuti_ciclo: list[str] = []
         self._rifiuti_visti: set = set()
+        # I CONTEGGI dei rifiuti per motivo (25 set 2026, contratto §3.5): del
+        # ciclo in corso e della finestra scorrevole di 24 ore. Vivono in RAM e
+        # si azzerano al riavvio: `rifiuti_24h_dal` dice da quando conta, cosi'
+        # il lettore non scambia «2 rifiuti» dopo un riavvio per una giornata
+        # calma. Ci passano anche gli scarti di `TradingBot._try_open`
+        # (`conta_scarto`), cosi' il contatore e' uno solo.
+        self._rifiuti_conteggio: dict[str, int] = {}
+        self._rifiuti_24h_lista: list[tuple[float, str]] = []
+        self.rifiuti_24h_dal: float = time.time()
 
     #: righe «[rifiuto]» stampate per ciclo; oltre, una riga «... e altri N».
     #: Con 160 coppie un regime sfavorevole puo' scartarne decine a ogni candela:
     #: senza tetto il log del bot diventerebbe illeggibile.
     _MAX_RIFIUTI_LOG = 20
+
+    def conta_scarto(self, motivo: str, now: float | None = None) -> None:
+        """Conta un rifiuto (per motivo normalizzato) nel ciclo e nelle 24 ore.
+        Non stampa: la riga «[rifiuto]» la scrive chi rifiuta."""
+        classe = motivo_rifiuto(motivo)
+        self._rifiuti_conteggio[classe] = self._rifiuti_conteggio.get(classe, 0) + 1
+        self._rifiuti_24h_lista.append((time.time() if now is None else now, classe))
+
+    def nuovo_ciclo(self) -> None:
+        """Azzera i conteggi del ciclo: da chiamare all'inizio di ogni decisione."""
+        self._rifiuti_conteggio = {}
+
+    def rifiuti_ciclo(self) -> list[dict]:
+        """[{motivo, n}] del ciclo in corso, dal piu' frequente."""
+        return [{"motivo": m, "n": n} for m, n in
+                sorted(self._rifiuti_conteggio.items(), key=lambda kv: (-kv[1], kv[0]))]
+
+    def rifiuti_24h(self, now: float | None = None) -> list[dict]:
+        """[{motivo, n}] delle ultime 24 ore (finestra scorrevole in RAM)."""
+        now = time.time() if now is None else now
+        self._rifiuti_24h_lista = [(t, m) for t, m in self._rifiuti_24h_lista if now - t <= 86400]
+        conta: dict[str, int] = {}
+        for _t, m in self._rifiuti_24h_lista:
+            conta[m] = conta.get(m, 0) + 1
+        return [{"motivo": m, "n": n} for m, n in sorted(conta.items(), key=lambda kv: (-kv[1], kv[0]))]
 
     def _rifiuto(self, symbol: str, strategy: str, motivo: str) -> None:
         """Registra un rifiuto del ciclo (una riga per coppia, stampa a fine ciclo)."""
@@ -63,6 +128,7 @@ class Orchestrator:
             return
         self._rifiuti_visti.add(key)
         self._rifiuti_ciclo.append(f"[rifiuto] {symbol} {strategy}: {motivo}")
+        self.conta_scarto(motivo)
 
     def _stampa_rifiuti(self) -> None:
         """Stampa i rifiuti accumulati (prime _MAX_RIFIUTI_LOG righe, poi il conto)
@@ -184,6 +250,7 @@ class Orchestrator:
         macro_events: Optional[list[dict]] = None,
         disabled: Optional[set] = None,
     ) -> Optional[OrchestratorDecision]:
+        self.nuovo_ciclo()
         signals = self.collect_signals(assets, regime, disabled=disabled)
         self._stampa_rifiuti()          # i veti di regime del giro
         if not signals:
@@ -239,6 +306,7 @@ class Orchestrator:
         valido (sopra soglia, peso>0), prendendo la strategia migliore per quella
         coin. Niente LLM, niente 'scegli il migliore globale': come il backtest che
         apre ogni segnale indipendentemente. Vincolo conto reale: 1 posizione/coin."""
+        self.nuovo_ciclo()
         signals = self.collect_signals(assets, regime, disabled=disabled, boundary=boundary)
         decisions: list[OrchestratorDecision] = []
         seen: set = set()

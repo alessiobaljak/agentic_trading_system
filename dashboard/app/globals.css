@@ -1368,3 +1368,213 @@ input[type='range'] {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ======================================================= Controllo (25 set 2026)
+   Chip, sezioni a fisarmonica, anomalie, righe e barre minuscole della scheda
+   Controllo. Riusano .panel / .stat-grid / .stat-tile / .mini-chip: qui solo
+   cio' che mancava. `--muted` era usato da anni ma mai definito (color: var(--muted)
+   cadeva sul colore ereditato): ora e' il testo attenuato.
+   ========================================================================== */
+:root {
+  --muted: var(--text-dim);
+}
+
+/* chip con pallino (semaforo, eta', freno, DRY_RUN) */
+.chip-semaforo {
+  font-size: 12px;
+  background: var(--bg-panel);
+  border-color: var(--border-soft);
+  box-shadow: var(--shadow-sm);
+}
+
+/* la lettura di una sezione: una frase sola, un po' piu' grande */
+.lettura {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+/* banner rosso: controllo fermo */
+.avviso-rosso {
+  background: var(--red-soft);
+  border: 1px solid rgba(220, 38, 38, 0.45);
+  color: #7f1d1d;
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.avviso-rosso code {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* sezioni a fisarmonica (<details>) */
+.sezione {
+  padding: 0;
+}
+.sezione > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  user-select: none;
+}
+.sezione > summary::-webkit-details-marker { display: none; }
+.sezione > summary::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--text-faint);
+  border-bottom: 2px solid var(--text-faint);
+  transform: rotate(-45deg);
+  transition: transform 0.15s var(--ease);
+  flex-shrink: 0;
+}
+.sezione[open] > summary::before { transform: rotate(45deg); }
+.sezione[open] > summary { border-bottom: 1px solid var(--border-soft); }
+.sezione-titolo {
+  font-size: 15px;
+  font-weight: 650;
+}
+.sezione-riassunto {
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+.sezione-eta {
+  margin-left: auto;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+.sezione-corpo {
+  padding: 14px 18px 18px;
+}
+
+/* anomalie: pallino + testo; valore/soglia solo da tablet in su */
+.anomalie {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.anomalia {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.anomalia .dot { position: relative; top: 1px; }
+.anomalia-testo { flex: 1; min-width: 0; }
+.anomalia-dettaglio {
+  font-size: 11.5px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* righe di testo compatte (costi, stop, trailing, direzione, gate in breve) */
+.riga-paper {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+.riga-paper b { color: var(--text); font-weight: 650; }
+.sotto-titolo {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  font-weight: 650;
+  margin-bottom: 6px;
+}
+
+/* elenco compatto nome ⟷ numeri (uscite per motivo) */
+.lista-compatta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.lista-compatta li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 12.5px;
+}
+.lista-compatta li:last-child { border-bottom: none; }
+.lista-compatta .lc-nome { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.lista-compatta .lc-numeri { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* barre minuscole delle ultime giornate */
+.barre-mini {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.barre-mini li {
+  display: grid;
+  grid-template-columns: 44px 1fr 72px;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.barre-mini .bm-data { color: var(--text-dim); font-size: 11px; }
+.barre-mini .bm-track {
+  height: 7px;
+  border-radius: 999px;
+  background: var(--bg-panel-2);
+  overflow: hidden;
+}
+.barre-mini .bm-fill { display: block; height: 100%; border-radius: 999px; }
+.barre-mini .bm-val { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* elenco grigio (cambiamenti 24 h, cosa manca) */
+.lista-grigia {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+.lista-grigia li { margin: 3px 0; }
+.lista-grigia b { color: var(--text); font-weight: 650; }
+
+/* la curva compatta dentro la sezione Paper */
+.equity-compatta .toolbar { margin-top: 0; }
+
+/* ---------------------------------------------------- Telefono: una colonna */
+@media (max-width: 600px) {
+  .app-shell {
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .main { padding: 16px; }
+  .sidebar { padding: 10px 16px; }
+  .stat-grid { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .panel { padding: 14px; }
+  .sezione > summary { padding: 12px 14px; }
+  .sezione-corpo { padding: 12px 14px 14px; }
+  .sezione-eta { margin-left: 0; width: 100%; }
+  .solo-largo { display: none; }
+  .page-title { font-size: 18px; }
+  .stat-tile .stat-value { font-size: 21px; }
+  .top-vitals { gap: 6px; }
+  .vital-chip { padding: 6px 9px; }
+  /* niente scorrimento orizzontale della pagina: cio' che e' largo scorre da solo */
+  html, body { overflow-x: hidden; }
+}

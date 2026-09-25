@@ -45,14 +45,14 @@ Regole comuni:
 | `precedente_at` | float\|null | `generato_at` del documento precedente (letto da RTDB `/controllo/meta/generato_at`, pochi byte) |
 | `semaforo_sistema` | `"verde" \| "giallo" \| "rosso"` | «è rotto?»: massima gravità delle anomalie con `famiglia: "sistema"` |
 | `semaforo_paper` | idem | «perde?»: massima gravità delle anomalie con `famiglia: "paper"` |
-| `errori` | list[str] | sezioni fallite |
+| `errori` | list[str] | sezioni fallite (`salute`, `paper`, `learning.attivo`, `learning.misurato`, `anomalie`) + una voce `lettura: <fonte>: <errore>` per ogni lettura Firebase fallita in `carica_dati` |
 | `fonte_impostazioni` | `"processo bot" \| "default repo"` | i `settings.*` letti valgono per la VPS solo se scritti dal bot |
 
 ### 1.2 `salute`
 | campo | tipo | fonte |
 |---|---|---|
 | `bot_stato` | str\|null | `rtdb:/bot_status.state` |
-| `heartbeat_at` | float\|null | `rtdb:/bot_status/heartbeat` (letto come FIGLIO, chiamata a parte) |
+| `heartbeat_at` | float\|null | `rtdb:/bot_status/heartbeat` (letto come FIGLIO, chiamata a parte; se il figlio non risponde si ripiega sul campo `heartbeat` del dict `/bot_status`, che `refresh_regime` scrive dal 25 set) |
 | `heartbeat_eta_s` | int\|null | `now - heartbeat_at` |
 | `soglia_online_s` | int | `900` — la dashboard calcola «online» da sola con questa soglia; il bot non scrive `online` (scriverebbe sempre true) |
 | `avviato_at` | float\|null | `rtdb:/bot_status/avviato_at` (nuovo: figlio scritto all'avvio, non riscritto da `refresh_regime`) |
@@ -98,23 +98,27 @@ Regole comuni:
 | `equity_iniziale` / `equity_iniziale_fonte` | float / `"rtdb" \| "default 1000"` | `rtdb:/account/starting_equity` (nuovo: `reconcile_equity` la scrive se assente) |
 | `paper_dal` / `paper_dal_fonte` / `giorni_paper` | float\|null / `"rtdb" \| "primo trade"` / int\|null | `rtdb:/account/paper_started_at` (nuovo), ripiego `entry_time` minimo |
 | `rendimento_pct` | float\|null | `(equity/equity_iniziale - 1) × 100` |
-| `trades` / `vinti` / `perdite` / `win_rate` | int / int / int / float\|null | trade all-time escludendo gli esiti esterni (`ESITI_ESTERNI` di `bot/learning/referti.py`) |
-| `pnl_realizzato` / `pf_vissuto` / `expectancy` | float / float\|null / float\|null | inline; `pf_vissuto = null` se `perdite == 0` |
+| `trades` / `vinti` / `perdite` / `win_rate` | int / int / int / float\|null | trade all-time escludendo gli esiti esterni (`ESITI_ESTERNI` di `bot/learning/referti.py`). Dal bot arrivano i trade di `refresh_weights` (30 g) finché il paper è più giovane di 30 giorni; oltre, `_publish_controllo` rilegge l'all-time |
+| `pnl_realizzato` / `pf_vissuto` / `expectancy` | float / float\|null / float\|null | inline; `pnl_realizzato` su TUTTI i trade chiusi (com'è nell'equity, esiti esterni compresi), `pf_vissuto`/`expectancy` sui soli decisi dalla strategia; `pf_vissuto = null` se `perdite == 0` |
 | `ultimi_30g` | {trades, pnl, pf, win_rate} | `fs:drift/current.global.{trades, live_pf, pnl}` (pf 99 → null) |
 | `oggi` | {trades, vinti, pnl, migliore:{coin,pnl}\|null, peggiore:{...}\|null} | giorno **UTC** |
 | `giornate` | {con_trade, positive, negative, migliore:{data,pnl}, peggiore:{data,pnl}, ultime_7: list[{data, trades, pnl}]} | pura `giornate(trades, now)` |
 | `uscite` | list[{motivo, etichetta, trades, quota, pnl}] | `Counter(exit_reason)` + etichette di `state_snapshot._EXIT_LABEL` |
 | `gradini` | list[{gradino, n}] | `scale_stage_reached` |
-| `mfe` | {mediana_r, quota_1r, quota_1_5r, quota_3r} | `mfe_r` |
+| `mfe` | {n, mediana_r, quota_1r, quota_1_5r, quota_3r} | `mfe_r` (`n` = trade che lo portano; il resto `null` se 0) |
 | `stop` | {totale, sbagliati, quasi, oltre_primo_tp, quasi_durata_mediana_h, primo_gradino_r, nota} | `metrics.classi_stop(trades, first_rung)` (pura, NUOVA in `bot/learning/metrics.py`; `mfe_report` la usa); `first_rung` per coppia da `last_params.scale_r_mults[0]` se il registro è in mano, altrimenti globale e `nota` lo dice |
 | `direzione` | {long:{trade, vinti, pnl, mfe_mediana}, short:{...}} | `trade_stats.direction_report(trades)["per_direzione"]` (le chiavi vere: `trade`, non `trades`) |
 | `allineamento` | {in_trend:{trade,pnl}, contro:{...}, neutro:{...}, ignoto:{...}} | `direction_report(...)["allineamento"]` |
 | `costi` | {totale, per_trade, commissioni, spread, funding, lordo, netto, break_even_pct, stimati: true, avvisi: list[str]} | `metrics.cost_report`, `metrics.cost_alerts` |
 | `drawdown_portafoglio` / `max_posizioni_insieme` | float\|null / int\|null | `backtesting.engine.portfolio_drawdown`, `max_concurrent` |
 | `trailing` | {verdetti_totali, prematuri, protetti, neutri, verdetti_per_proposta, prematuri_tf, protetti_tf, proposta_paper, soglia} | tutti i verdetti (anche scale_out) nei primi 4; SOLO `exit_reason == trailing_stop` e timeframe del bot negli `_tf`; `proposta_paper = metrics.proposta_keep(n, prem, prot)` (stessa regola di `keep_dal_paper`) |
-| `benchmark` | {btc_24h_pct, btc_7g_pct, nota} | dall'anello BTC (§3); `portfolio/backtest.{lettura, updated_at}` se esiste (manuale, con la sua età) |
+| `benchmark` | {btc_24h_pct, btc_7g_pct, nota, portafoglio: {lettura, updated_at}\|null} | dall'anello BTC (§3); `portafoglio` = `fs:portfolio/backtest.{lettura, updated_at}` se esiste (manuale, con la sua età) |
 
 ### 1.4 `learning` — `attivo` (cambia decisioni ORA) e `misurato` (solo osservato)
+`learning` porta la sua testata (`computed_at`, `fonti` = unione, `lettura`, `errore`)
+e dentro `attivo` e `misurato`, ciascuno con la propria testata e il proprio try
+(uno può fallire senza l'altro).
+
 `attivo`:
 | campo | tipo | fonte |
 |---|---|---|
@@ -122,7 +126,7 @@ Regole comuni:
 | `gate_pronto` | bool\|null | come in salute (interruttore attivo) |
 | `pesi` | {at, aggiornato_da_nota: "bot orario o notturno GitHub", versione, campioni_sommati, combinazioni, soglia_panchina: 0.5, in_panchina_n, spente_n, in_panchina: list[≤10 {strategia, regime, peso, campione, win_rate}]} | `fs:strategy_weights/current` (panchina = peso < 0.5; spenta = peso ≤ 0) |
 | `tilt` | {trend_enabled, trend_strength, trend_floor, sentiment_enabled, sentiment_strength} | `settings.*` |
-| `keep_per_coppia` | list[{valore, n}] + `non_rivalutate` | dal registro in RAM (`last_params.profit_lock_keep`) |
+| `keep_per_coppia` | {distribuzione: list[{valore, n}], non_rivalutate: int} | dal registro in RAM (`last_params.profit_lock_keep`), stessa forma di `gate.cervello.keep_validate` |
 | `freno_serie` | {enabled, perdite_soglia, fattore, serie: list[≤5 {strategia, perdite}]} | `settings.STREAK_BRAKE_*`; `fs:drift/current.serie` |
 | `tetti` | {coin_giorno_pct, direzione_pct, max_posizioni, max_posizioni_attivo, correlate_max} | `settings.*` |
 | `cooldown_attivi` | int | come salute |
@@ -180,7 +184,10 @@ benchmark su Binance, «cosa aspetta il sì» (vive in `docs/backlog.md`).
 | `CONTROLLO_LENTO` | sistema | `durata_ms > 2000` | giallo |
 
 Il semaforo di famiglia = rosso se una rossa, giallo se una gialla, verde altrimenti;
-le `info` non colorano.
+le `info` non colorano. `BOT_FERMO` scatta anche col battito MAI visto (valore
+`null`): un bot senza battito non è «non misurato», è fermo. Se il calcolo delle
+anomalie stesso fallisce, la lista porta la sola `ANOMALIE_NON_CALCOLATE`
+(sistema, giallo) e `meta.errori` contiene `anomalie`.
 
 ### 1.7 Letture (una frase ≤ 140 caratteri per sezione, da regole)
 * salute: «Bot vivo (battito 22 s fa), gate 1 h 30 fa (solo urgenti), 4 posizioni, 1,5% a rischio. 1 avviso: freno globale.»
@@ -216,7 +223,7 @@ Scrivere `in_corso` senza cancellare le sezioni del giro precedente (merge del s
 | `coin_valutate` / `valutazioni` / `passate` | int | `discovered_last_run` |
 | `passate_lista` | list[≤10 {coin, id, pf, pnl}] | |
 | `spec_note` / `spec_rivalutate` / `spec_con_conferme` / `spec_tagliate` / `tetto_rivalutazione` | int | modalità urgenti |
-| `candidate` | {totale, ai, varianti_referti, intorno, casuali, semi, gemelle_scartate} | composizione (oggi solo nel log) |
+| `candidate` | {totale, ai, varianti_referti, intorno, casuali, semi, gemelle_scartate, rivalutate}\|null | composizione: ai/varianti/casuali/semi contate all'assemblaggio (prima della de-dup), `totale` = lista comune davvero valutata su ogni coin (nuove + rivalutate, dopo de-dup e gemelle), `intorno` = figlie valutate solo sulla coin della madre; `null` nel merge degli shard (non contabile) |
 | `passata_1h` | {at, durata_s, coin, valutazioni, passate}\|null | `discovered_last_run_1h` |
 | `worker` / `rss_max_mb` | int / float\|null | se noti |
 | `paper_propone` | {scala: str\|null, keep: float\|null, verdetti_trailing: int} | `scala_dal_paper`, `keep_dal_paper` |
@@ -226,21 +233,21 @@ Scrivere `in_corso` senza cancellare le sezioni del giro precedente (merge del s
 |---|---|---|
 | `validate` / `coin_coperte` / `universo` / `copertura` / `obiettivo_copertura` | int/int/int/float/float | doc `validated` |
 | `pronto` / `pronto_per` | bool / `"copertura" \| "numero coppie" \| null` | `ready`, `ready_by` |
-| `distribuzione_pass` | list[{pass, coppie, coin}] | `gate_progress.distribuzione_pass(pairs, now)` (estratta) |
+| `distribuzione_pass` | list[{pass, coppie, coin}] | `registry.distribuzione_pass(pairs, now)` (estratta in `bot/core/registry.py`, `gate_progress` la usa per stampare) |
 | `congelate` / `a_un_passo` / `finestre_scadute` | int | idem |
-| `coppie` / `base` / `generate` / `occupazione` / `limite` / `alleggerito` | int/int/int/int/int/bool | `registry.salute_registro(pairs)` (estratta in `bot/core/registry.py`); `limite` = `OPTIMIZER_MAX_PAIRS` letto nel processo del gate |
+| `coppie` / `base` / `generate` / `generate_con_conferme` / `occupazione` / `limite` / `alleggerito` | int/int/int/int/int/int/bool | `registry.salute_registro(pairs)` (estratta in `bot/core/registry.py`, gemella di `state_snapshot._salute_registro`); `occupazione` = base + generate con conferme, cioe' la parte del tetto che nessuno pota (il difetto del 31 agosto: al tetto le candidate nuove non hanno posto); `limite` = `OPTIMIZER_MAX_PAIRS` letto nel processo del gate (e scritto anche nel doc `validated` come `max_pairs`); `alleggerito` = almeno una validata senza i campi descrittivi (`last_pnl_pct`) |
 | `senza_promessa` | int | validate senza `last_pf` |
-| `statistica_t` | {misurate, sopra_2, sopra_3, mediana, piu_basse: list[3 {coppia, t}]} | `gate_progress.statistica_t(pairs)` (estratta; misurata, non decide) |
+| `statistica_t` | {misurate, sopra_2, sopra_3, mediana, piu_basse: list[3 {coppia, t}]} | `registry.statistica_t(pairs)` (estratta; misurata, non decide; `mediana` non arrotondata, come la stampa) |
 | `validate_delta_giro` | int\|null | vs documento precedente |
 
 ### 2.4 `cervello`
 | campo | tipo | fonte |
 |---|---|---|
 | `riga` | str | `riga_cervello(diag)` |
-| `intorno` | {madri, figlie_passate, promosse: list[≤10 str], senza_margine, scartate, ultimo_completo_at}\|null | dell'ULTIMO GIRO COMPLETO (l'intorno gira solo lì): se questo giro non è completo, ricopiare dal documento precedente e tenere `ultimo_completo_at` |
+| `intorno` | {madri, figlie_passate, promosse: list[≤10 str], senza_margine, madre_non_valutata, scartate, ultimo_completo_at}\|null | dell'ULTIMO GIRO COMPLETO (l'intorno gira solo lì): se questo giro non è completo, ricopiato dal documento precedente con il suo `ultimo_completo_at`; `null` se non c'è un documento precedente |
 | `varianti` | {create, passate, retro_ok, promosse: list[≤10 str], scartate, sostituzioni: list[≤10 {figlia, madre}]} | `esito["varianti"]` |
-| `keep_giro` | {scelti: list[{valore, n}], non_scelto, dal_paper: float\|null, dal_paper_n: int} | i numeri di `riga_cervello_keep` |
-| `keep_validate` | {distribuzione: list[{valore, n}], non_rivalutate: int} | `gate_progress.conta_keep(pairs, validated)` (estratta) |
+| `keep_giro` | {scelti: list[{valore, n}], non_scelto, dal_paper: float\|null, dal_paper_n: int} | `discover_strategies.conta_keep_giro(out, passed_keys, keep_paper)`: gli stessi numeri che `riga_cervello_keep` stampa |
+| `keep_validate` | {distribuzione: list[{valore, n}], non_rivalutate: int} | `registry.conta_keep(pairs, validated)` (estratta in `bot/core/registry.py`) |
 | `scala_validate` | list[{scala, n}] | `last_params.scale_r_mults` |
 | `breakeven_validate` | int | `last_params.sl_to_breakeven` |
 | `autopsia` | {at, valutazioni, passate, quota, criterio_principale, quota_criterio, quasi_passaggi} | `gate_autopsy/discover` |
@@ -250,12 +257,15 @@ Scrivere `in_corso` senza cancellare le sezioni del giro precedente (merge del s
 ### 2.5 `strategie`
 | campo | tipo | fonte |
 |---|---|---|
-| `n_operate` / `n_con_paper` / `n_senza_promessa` / `n_sostituite` / `n_nate_intorno` / `n_da_referto` / `n_scadute_dal_giro` | int | `registry.coppie_validate(pairs, now)` (spostata in `bot/core/registry.py`; `optimize` e `discovery` la importano da lì) + `adaptation`-style robustezza; `n_scadute_dal_giro` = validate nel doc − operate |
-| `operate` | list[≤300 {chiave, coin, strategia, famiglia, origine, genitore, ipotesi, pass, validata_at, ultimo_pass_at, pf_promesso, pnl_promesso_pct, t, holdout_ok, scala, breakeven, keep, direzione_pf: {long, short}, paper: {trades, vinti, pnl, pf_vissuto, perdite, verdetto, motivo}, sostituita_da}] | registro + spec (`famiglia_spec`) + trade raggruppati per `symbol\|strategy` (fetch UNICO dei trade nel main della discovery, riusato da `scala_dal_paper`/`keep_dal_paper`); `verdetto`/`motivo` da `drift/current.pairs` se presenti; `t`, `holdout_ok`, `direzione_pf` `null` se assenti |
+| `n_operate` / `n_con_paper` / `n_senza_promessa` / `n_sostituite` / `n_nate_intorno` / `n_da_referto` / `n_scadute_dal_giro` | int (`n_con_paper` null senza trade) | `registry.coppie_operate(pairs, now)` = `registry.coppie_validate` (spostata in `bot/core/registry.py`; `optimize` e `discovery` la importano da lì) + `registry.coppie_robuste` (la regola di `adaptation._robust_only`, copiata); `n_sostituite` = coppie a soglia con `sostituita_da` (le madri: NON stanno fra le validate); `n_scadute_dal_giro` = validate nel doc − operate |
+| `operate` | list[≤300 {chiave, coin, strategia, famiglia, origine, genitore, ipotesi, pass, validata_at, ultimo_pass_at, pf_promesso, pnl_promesso_pct, t, holdout_ok, scala, breakeven, keep, direzione_pf: {long, short}, paper: {trades, vinti, pnl, pf_vissuto, perdite, verdetto, motivo}}] | registro + spec (`famiglia_spec`; `famiglia`/`origine` = `"base"` per le strategie scritte a mano, null se la spec non è nota) + trade raggruppati per `symbol\|strategy` (fetch UNICO dei trade nel main della discovery, `trades_del_paper`, riusato da `scala_dal_paper`/`keep_dal_paper`); `verdetto`/`motivo` (≤60 car.) da `drift/current.pairs` se presenti; `t`, `holdout_ok`, `direzione_pf` `null` se assenti; `paper` null senza trade per la coppia. NIENTE `sostituita_da`: una coppia operata non è mai sostituita (sarebbe sempre null; 300 voci devono stare in 200 KB). Ordine: prima chi ha trade nel paper, poi PF promesso decrescente; oltre 300 si tronca e `operate_troncate` lo dice |
+| `operate_troncate` | int | quante coppie operate sono rimaste fuori da `operate` (oltre le 300, o dopo il dimezzamento se il documento supera i 200 KB); `0` = lista completa |
 | `per_famiglia` | list[{famiglia, coppie, coin, pf_promesso_mediano, paper_trades, paper_pnl, paper_pf}] | aggregato |
 | `per_coin` | list[≤10 {coin, coppie, paper_trades, paper_pnl}] | aggregato |
 | `promessa_vs_vissuto` | {pf_promesso_mediano_operate, pf_atteso_media_registro, pf_vissuto_30g} | registro; `drift.global` |
-| `vite` | {promosse_7g, rimosse_7g, parziale: bool} | `gate_history/lifecycle` (`registra_vite` chiamata anche dalla discovery) |
+| `vite` | {promosse_7g, rimosse_7g, parziale: bool} | `gate_history/lifecycle` (`registra_vite` chiamata anche da `merge_into_registry` della discovery, via `_segna_promozione`: solo l'attraversamento della soglia); `parziale: true` (e conteggi null) solo se il documento manca |
+
+Chi scrive il documento: `discover_strategies.costruisci_doc_gate(...)` (pura) tramite `pubblica_doc_gate(fb, ...)`; la scrittura (`scrivi_doc_gate`: Firestore poi RTDB, mai un'eccezione), la fusione del solo `meta` (`aggiorna_meta_gate`) e la guardia di serializzazione (`pulisci_per_firestore`) stanno in `bot/core/registry.py`, così anche `optimize.py` le usa senza importare la discovery. La passata a 1 ora (`--interval` diverso dal timeframe del bot) scrive solo `meta: {stato: in_corso, fase: passata_1h}`; il documento intero lo scrive il giro sul timeframe del bot, che è l'ultimo passo della unit. Nel merge degli shard (GitHub) il documento esce con `candidate: null` e l'intorno ricopiato.
 
 ---
 
@@ -264,7 +274,7 @@ Scrivere `in_corso` senza cancellare le sezioni del giro precedente (merge del s
 2. `bot/main.py` all'avvio: `rtdb:/bot_status/avviato_at` (figlio) + anello `rtdb:/avvii` (ultimi 20); contatore `errori_ciclo_1h` pubblicato come figlio `/bot_status/errori_ciclo_1h` dal gancio orario.
 3. `bot/main.py::reconcile_equity`: scrive `/account/starting_equity` e `/account/paper_started_at` se assenti (oggi solo `reset_paper.py`).
 4. `bot/main.py::_publish_drift`: `global.dal` = data del primo verdetto `drift` consecutivo (letto dal doc precedente).
-5. `bot/orchestrator/orchestrator.py::_rifiuto` + `bot/main.py::_try_open`: contatori `rifiuti_ciclo` {motivo: n} e scorrevole `rifiuti_24h` pubblicati in `/decision_status` (come liste `[{motivo, n}]`). I motivi sono le prime parole della riga `[rifiuto]` normalizzate: `cooldown`, `tetto per coin`, `peso sotto soglia`, `strategia spenta`, `veto di regime`, `margine`, `rischio direzionale`, `stop troppo largo`, `altro`.
+5. `bot/orchestrator/orchestrator.py::_rifiuto` + `bot/main.py::_try_open`: contatori `rifiuti_ciclo` {motivo: n} e scorrevole `rifiuti_24h` pubblicati in `/decision_status` (come liste `[{motivo, n}]`). I motivi sono le prime parole della riga `[rifiuto]` normalizzate (`orchestrator.motivo_rifiuto`): `cooldown`, `tetto per coin`, `peso sotto soglia`, `strategia spenta`, `veto di regime`, `margine`, `rischio direzionale`, `stop troppo largo`, `altro`. Il contatore è uno solo, nell'orchestratore: `conta_scarto(motivo)` lo incrementa (lo chiama anche `_try_open`), `nuovo_ciclo()` azzera quello del ciclo all'inizio di `decide`/`decide_all`, `rifiuti_ciclo()`/`rifiuti_24h()` lo leggono come liste; `rifiuti_24h_dal` è l'avvio del processo.
 6. `scripts/optimize.py`: `dashboard/gate.meta = {stato: in_corso, fase: optimize, iniziato_at}` all'avvio (merge del solo meta); `max_pairs` nel doc `validated`; `registra_vite` richiamata anche da `merge_into_registry` della discovery.
 7. `scripts/discover_strategies.py`: `stato: in_corso, fase: discover` all'avvio; a fine giro il documento intero (§2); `except` di alto livello → `stato: errore`.
 8. `scripts/state_snapshot.py`: dopo lo snapshot, `--publish-controllo --se-vecchio 5400` (ripiego GitHub: pubblica con `generato_da: "github"` solo se il controllo del bot è più vecchio di 90 minuti).

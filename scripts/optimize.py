@@ -29,6 +29,8 @@ from backtesting.parallel import n_workers, parallel_map
 from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import (decode_pairs, encode_pairs,
                                       encode_registry, get_firebase)
+from bot.core.registry import aggiorna_meta_gate, tetto_coppie
+from bot.core.registry import coppie_validate as _coppie_validate
 
 
 def _min_history(interval: str) -> int:
@@ -319,6 +321,13 @@ def main() -> int:
     if args.merge:
         return _merge_shards(fb, args)
 
+    # IL GIRO E' INIZIATO, e lo si dice subito (25 set 2026, docs/controllo_schema.md
+    # §2.1): optimize e' il primo passo della unit, quindi e' qui che `dashboard/gate`
+    # passa a `in_corso`. Si fonde il SOLO `meta`: le sezioni del giro precedente
+    # restano leggibili finche' la discovery non scrive quelle nuove.
+    aggiorna_meta_gate(fb, {"stato": "in_corso", "fase": "optimize",
+                            "iniziato_at": time.time(), "errore": None})
+
     full_symbols = []
     if args.top > 0:
         full_symbols = top_symbols_by_volume(args.top)
@@ -592,23 +601,11 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         "last_pf"}
 
 
-def coppie_validate(pairs: dict, now: float | None = None) -> list[str]:
-    """LE COPPIE CHE IL BOT OPERA, in un posto solo.
-
-    Fino al 24 set 2026 la regola (pass_count >= MIN_PASSES e vista da meno di
-    FRESH_DAYS) era copiata in due file, optimize e discover: due copie della
-    stessa regola prima o poi divergono (e' gia' successo tre volte su questo
-    documento). Ora e' qui, e aggiunge la terza condizione: una madre SOSTITUITA
-    da una figlia dell'intorno (`sostituita_da`) non si opera piu' — resta nel
-    registro con la sua storia, ma la scommessa la porta avanti la figlia."""
-    ora = time.time() if now is None else now
-    return sorted(
-        k for k, r in pairs.items()
-        if isinstance(r, dict)
-        and int(r.get("pass_count", 0) or 0) >= MIN_PASSES
-        and (ora - float(r.get("last_seen_at", 0) or 0)) < FRESH_DAYS * 86400
-        and not r.get("sostituita_da")
-    )
+# LE COPPIE CHE IL BOT OPERA, in un posto solo: dal 25 set 2026 la regola vive in
+# `bot/core/registry.py` (la legge anche il documento del gate e il controllo
+# orario, che non devono importare il motore). Qui resta il nome, cosi' chi fa
+# `from scripts.optimize import coppie_validate` continua a funzionare.
+coppie_validate = _coppie_validate
 
 
 def slim_registry(pairs: dict, validated: list,
@@ -1162,6 +1159,10 @@ def update_registry(fb, out: dict, passed_now: list[str],
                          "at": time.time()},
         "min_universe": MIN_UNIVERSE,
         "min_covered": MIN_COVERED,
+        # IL TETTO CON CUI E' STATO SCRITTO (25 set 2026): il documento del gate e
+        # il controllo orario leggono `occupazione/limite` da qui, non dall'ambiente
+        # del processo che legge — che sulla dashboard non esiste.
+        "max_pairs": tetto_coppie(),
     }
     scrivi_registro(fb, registry, pairs)
     publish_timeline(fb, pairs, "optimize", len(out), len(passed_set))

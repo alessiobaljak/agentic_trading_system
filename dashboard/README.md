@@ -9,21 +9,29 @@ The Python bot writes state to Firebase; this dashboard is read-mostly, with two
 - **Risk settings** → `user_risk_settings/current` (Firestore)
 - **Kill switch** → `/commands/kill_switch` (Realtime Database)
 
-## What it shows
+## What it shows (dal 25 set 2026)
 
-- **Bot status header** — running/stopped, current regime, `DRY_RUN` badge, online/offline by
-  heartbeat freshness (offline if older than ~2 min), live equity, and the *effective*
-  leverage/risk the bot actually applied (shown when the bot publishes it to `/bot_status` or
-  `/risk_state`).
-- **Open positions** — real-time table with unrealized PnL (subscribes to `/positions`).
-- **Equity curve** — cumulative realized PnL from closed `trades`, ordered by `exit_ts`.
-- **Heatmap** — win rate per strategy × regime from `memory/30.win_rate_by_strategy_regime`.
-- **Strategy weights** — current adaptive weights from `strategy_weights/current`.
-- **Weekly insights** — narratives from the `insights` collection, newest first.
-- **Risk control panel** — leverage (1–5x) and risk per trade (0.5%–3%) with hard caps shown,
-  client-side clamping, and a Save button that writes `user_risk_settings/current` with
-  `updated_by: "dashboard"` and a server timestamp.
-- **Kill switch** — confirmation-guarded button that sets `/commands/kill_switch = true`.
+Cinque tab, mobile first. La prima è **Controllo**: il documento che il bot scrive ogni ora
+(`/controllo` su RTDB, `dashboard/controllo` su Firestore, schema in
+`docs/controllo_schema.md`) con due semafori — «è rotto?» (sistema) e «perde?» (paper) —,
+«aggiornato N minuti fa» (rosso oltre 2 ore), le quattro tessere che contano, una frase di
+lettura, le anomalie con codice e soglia, e sotto, chiusi, paper / learning / gate / «cosa
+manca». Poi:
+
+- **Operatività** — posizioni aperte (con rischio %), trade chiusi (con referto e keep usato),
+  grafico esterno chiuso di default.
+- **Gate** — imbuto, maturazione, il cervello dell'ultimo giro (intorno, varianti, keep, scala,
+  candidate) dal documento `/gate` che la discovery scrive a ogni giro, supervisore, e la
+  tabella delle **strategie operate per coppia** (PF promesso contro vissuto).
+- **Learning** — «cambia le decisioni ORA» contro «solo misurato», più «cosa è cambiato nelle
+  ultime 24 ore»; pesi strategia × regime (peso < 0,5 = panchina).
+- **Impostazioni** — rischio (con il rischio effettivo di oggi), kill switch, riconciliatore
+  (solo fuori dal paper).
+
+Tolto quel che faceva solo rumore o leggeva dati che nessuno scrive più: sentiment, punteggio
+asset, insight settimanali, heatmap (assorbita dai pesi), trailing adattivo (superato dal keep
+per coppia), costi per coin, snapshot giornaliero, dettaglio posizione in modale, evoluzione del
+learning, strategie aggregate per strategia (ora per coppia).
 
 ## Hard limits
 

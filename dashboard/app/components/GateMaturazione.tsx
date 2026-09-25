@@ -51,6 +51,12 @@ import { CHROME, GATE_RAMP, STATO } from '../lib/viz';
  * I colori sono la rampa ordinale validata di lib/viz.ts (più conferme = più chiaro),
  * perché 1 → 2 → 3 sono gradini della stessa scala, non categorie diverse. Il verde
  * di «validata» è un colore di stato e viaggia sempre con l'etichetta accanto.
+ *
+ * RIQUADRI E RIEPILOGO IN CHIARO, IL RESTO CHIUSO (25 set 2026). Con 160 validate
+ * e centinaia di coppie in coda, calendario e tabelle sono lunghi quanto una
+ * scheda intera; la domanda che si fa aprendo la scheda («quante sono a che
+ * punto, quante possono validarsi oggi») sta nei riquadri e nel riepilogo. Il
+ * calendario e le tabelle si aprono a richiesta, chiusi di default.
  */
 
 type PairRec = {
@@ -356,7 +362,7 @@ export default function GateMaturazione() {
     return (
       <div className="panel">
         <h2>Maturazione delle strategie</h2>
-        <p className="muted">Loading…</p>
+        <p className="muted">Caricamento…</p>
       </div>
     );
   }
@@ -453,7 +459,10 @@ export default function GateMaturazione() {
             )}
           </div>
 
-          <h3 style={{ fontSize: 14, margin: '0 0 8px' }}>Quando diventano idonee</h3>
+          <details style={{ marginBottom: 12 }}>
+          <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, margin: '0 0 8px' }}>
+            Quando diventano idonee (calendario)
+          </summary>
           <div style={{ width: '100%', height: 180 }}>
             <ResponsiveContainer>
               <BarChart data={calendario} margin={{ top: 18, right: 8, left: -18, bottom: 0 }}>
@@ -491,6 +500,12 @@ export default function GateMaturazione() {
             idoneo <b>resta</b> idoneo e riprova ogni giorno. Le altre barre sono il
             giorno in cui scade la settimana di attesa.
           </p>
+          </details>
+
+          <details>
+          <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
+            Tutte le coppie ({righe.length}) · cerca, filtra, per coin
+          </summary>
 
           <div
             className="chip-row"
@@ -665,6 +680,7 @@ export default function GateMaturazione() {
               mostra altre ({(perCoin ? perCoinRighe.length : filtrate.length) - quante})
             </button>
           )}
+          </details>
         </>
       )}
     </div>

@@ -5,28 +5,28 @@ import DashboardShell from './components/DashboardShell';
 function ConfigureNotice() {
   return (
     <div className="notice">
-      <h2 style={{ marginTop: 0 }}>Configure Firebase to load the dashboard</h2>
+      <h2 style={{ marginTop: 0 }}>Configura Firebase per vedere la dashboard</h2>
       <p>
-        The dashboard reads live state from Firebase. Set the following environment variables
-        (copy <code>.env.local.example</code> to <code>.env.local</code> locally, or add them in
-        your Vercel project settings):
+        La dashboard legge lo stato vivo da Firebase. Imposta queste variabili d&apos;ambiente
+        (copia <code>.env.local.example</code> in <code>.env.local</code> in locale, o aggiungile
+        nelle impostazioni del progetto Vercel):
       </p>
       <ul>
         {missingFirebaseVars.length > 0 ? (
           missingFirebaseVars.map((v) => (
             <li key={v}>
-              <code>{v}</code> — missing
+              <code>{v}</code> — manca
             </li>
           ))
         ) : (
           <li>
-            <code>NEXT_PUBLIC_FIREBASE_*</code> values
+            <code>NEXT_PUBLIC_FIREBASE_*</code>
           </li>
         )}
       </ul>
       <p className="muted" style={{ marginBottom: 0 }}>
-        Required: API key, project id, app id and the Realtime Database URL. Also recommended: auth
-        domain, storage bucket, messaging sender id.
+        Obbligatorie: API key, project id, app id e l&apos;URL del Realtime Database. Consigliate:
+        auth domain, storage bucket, messaging sender id.
       </p>
     </div>
   );
@@ -51,7 +51,8 @@ export default function Page() {
         className="muted"
         style={{ fontSize: 11, margin: '4px auto 24px', textAlign: 'center', maxWidth: 1600 }}
       >
-        Hard caps enforced client-side (leverage ≤ 5x, risk ≤ 3%) and re-enforced by the bot.
+        Paper trading (DRY_RUN). Tetti di sicurezza applicati lato client (leva ≤ 5x, rischio ≤ 3%)
+        e di nuovo dal bot.
       </footer>
     </>
   );

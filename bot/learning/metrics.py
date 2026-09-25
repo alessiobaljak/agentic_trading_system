@@ -379,3 +379,119 @@ def compute_weights(trades: list[dict]) -> list[StrategyRegimeWeight]:
             win_rate=round(wr, 4), avg_rr=rr_map.get(strat), sample_size=n,
         ))
     return weights
+
+
+# --------------------------------------------------------------------------- #
+# GLI STOP DIVISI PER COME SONO MORTI (25 set 2026, dal rapporto mfe)          #
+# --------------------------------------------------------------------------- #
+# Domanda del proprietario (21 set 2026): «posizioni in positivo per ore, mai
+# al primo take profit, poi stop: siamo entrati sbagliati o il TP andava tarato
+# piu' basso?». Sono due morti diverse e si curano in modo diverso: la prima e'
+# un problema di INGRESSO (la strategia sbaglia direzione), la seconda di USCITA
+# (il primo gradino e' troppo lontano). `mfe_r` le distingue senza altri dati:
+# sotto SOGLIA_INGRESSO_SBAGLIATO il prezzo non e' mai andato davvero a favore;
+# fra quella soglia e il primo gradino ci e' andato e non e' bastato; oltre il
+# primo gradino e poi stop e' un problema di protezione del profitto.
+#
+# Viveva dentro `scripts/mfe_report.py`; qui e' pura (liste di dict) perche' la
+# usano sia il rapporto sia il controllo orario (`bot/learning/controllo.py`), e
+# due copie della stessa soglia divergerebbero prima o poi.
+SOGLIA_INGRESSO_SBAGLIATO = 0.25
+
+_ESITI_STOP = ("stop_loss", "ExitReason.STOP_LOSS")
+
+
+def _gradino_globale() -> float:
+    return float(min(settings.SCALE_OUT_R_MULTIPLES))
+
+
+def _gradino_per(t: dict, first_rung) -> tuple[float, bool]:
+    """(primo gradino in R per QUESTO trade, era per coppia?).
+
+    `first_rung` puo' essere: None (globale), un numero (uguale per tutti), un
+    dict «SYMBOL|strategia» -> gradino (dal registro), o una funzione(trade) ->
+    gradino|None. Un valore mancante o non leggibile ricade sul globale."""
+    v = None
+    if callable(first_rung):
+        try:
+            v = first_rung(t)
+        except Exception:  # noqa: BLE001
+            v = None
+    elif isinstance(first_rung, dict):
+        v = first_rung.get(f"{t.get('symbol')}|{t.get('strategy')}")
+    elif first_rung is not None:
+        v = first_rung
+    try:
+        if v is not None and float(v) > 0:
+            return float(v), isinstance(first_rung, dict) or callable(first_rung)
+    except (TypeError, ValueError):
+        pass
+    return _gradino_globale(), False
+
+
+def classi_stop_liste(trades: list[dict], first_rung=None) -> tuple[list, list, list, list]:
+    """(sbagliati, quasi, oltre, gradini_usati): gli stop con `mfe_r` divisi
+    nelle tre classi, piu' il primo gradino usato per ciascuno (stesso ordine
+    degli stop). Le liste servono al rapporto, che stampa anche le mediane."""
+    stop = [t for t in trades
+            if str(t.get("exit_reason", "")) in _ESITI_STOP and t.get("mfe_r") is not None]
+    sbagliati: list[dict] = []
+    quasi: list[dict] = []
+    oltre: list[dict] = []
+    gradini: list[float] = []
+    for t in stop:
+        try:
+            mfe = float(t["mfe_r"])
+        except (TypeError, ValueError):
+            continue
+        r1, _ = _gradino_per(t, first_rung)
+        gradini.append(r1)
+        if mfe < SOGLIA_INGRESSO_SBAGLIATO:
+            sbagliati.append(t)
+        elif mfe < r1:
+            quasi.append(t)
+        else:
+            oltre.append(t)
+    return sbagliati, quasi, oltre, gradini
+
+
+def classi_stop(trades: list[dict], first_rung=None) -> dict:
+    """Gli stop loss divisi per come sono morti, in numeri.
+
+    Ritorna {totale, sbagliati, quasi, oltre_primo_tp, quasi_durata_mediana_h,
+    primo_gradino_r, nota}. `primo_gradino_r` e' il gradino usato (mediana se per
+    coppia); `nota` dice da dove viene, perche' la classe «quasi» dipende da
+    dove sta il gradino e un lettore deve poterlo sapere. Pura: niente
+    Firebase, niente candele."""
+    from statistics import median as _median
+
+    sbagliati, quasi, oltre, gradini = classi_stop_liste(trades, first_rung)
+    per_coppia = isinstance(first_rung, dict) or callable(first_rung)
+    durate = []
+    for t in quasi:
+        d = t.get("duration_seconds")
+        try:
+            if d is not None:
+                durate.append(float(d) / 3600.0)
+        except (TypeError, ValueError):
+            continue
+    if gradini:
+        r1 = float(_median(gradini))
+    else:
+        r1 = _gradino_globale()
+    if per_coppia:
+        nota = ("primo gradino per coppia dal registro (mediana "
+                f"{r1:.2f}R); coppie senza scala nel registro: gradino globale "
+                f"{_gradino_globale():g}R")
+    else:
+        nota = (f"primo gradino GLOBALE {_gradino_globale():g}R: per coppia vale "
+                "la sua scala (registro non in mano)")
+    return {
+        "totale": len(sbagliati) + len(quasi) + len(oltre),
+        "sbagliati": len(sbagliati),
+        "quasi": len(quasi),
+        "oltre_primo_tp": len(oltre),
+        "quasi_durata_mediana_h": round(float(_median(durate)), 2) if durate else None,
+        "primo_gradino_r": round(r1, 3),
+        "nota": nota,
+    }

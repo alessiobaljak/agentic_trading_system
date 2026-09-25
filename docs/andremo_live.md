@@ -1507,3 +1507,39 @@ sotto 1h30; se sfora le 2h si torna a 10. Vale dal prossimo giro completo
 bianca va messa in ordine: `ops/allowlist.example` ha le stesse 45 chiavi della
 macchina (confronto con la risposta ops 0238), raggruppate per sezione, e
 aggiunge `lista` (sola lettura della lista stessa) per poter confrontare le due.
+
+### 25 settembre, 10:40: il controllo orario e la dashboard nuova
+
+Il proprietario: «hai tutte le capacità per fare check di status, learning,
+paper, gate, strategie in automatico? fai in modo che le evidenze mi arrivino in
+dashboard ogni ora; la dashboard deve evolvere in un sistema serio: togli il
+rumore, aggiungi quello che dà una situazione chiara». Sì, con una scelta: il
+controllo orario lo calcola **il bot** sulla VPS (GitHub Actions ha buchi
+misurati di 3-7 ore: lo snapshot resta solo come ripiego), da ciò che è già su
+Firebase, e lo scrive in `dashboard/controllo` (schema in
+`docs/controllo_schema.md`): due semafori («è rotto?» e «perde?»), 27 anomalie
+con codice e soglia, una frase di lettura per sezione da regole (niente AI), e
+per il learning la foto di ciò che decide ORA più «cosa è cambiato nelle ultime
+24 ore». La discovery scrive `dashboard/gate` a ogni giro: stato in corso /
+finito / errore, composizione delle candidate, il cervello (intorno dell'ultimo
+giro completo, varianti, keep scelto nel giro e nelle validate), e le strategie
+operate per coppia con PF promesso contro vissuto. Per averli sono stati aggiunti
+i dati che mancavano: battito nel dict di `/bot_status` (spariva per un attimo a
+ogni ora), avvio e riavvii, errori del ciclo, chiusura BTC oraria (benchmark a
+costo zero), equity iniziale e data d'inizio del paper, data d'ingresso del freno
+globale, contatori dei rifiuti d'ingresso per motivo in `/decision_status`.
+
+La dashboard passa da 6+1 tab a 4+1: Controllo (prima pagina: semafori,
+«aggiornato N minuti fa» rosso oltre 2 ore, quattro tessere, lettura, anomalie,
+poi paper / learning / gate chiusi), Operatività, Gate (con la tabella per
+coppia), Learning (attivo contro misurato), Impostazioni. Tolti 16 pannelli che
+facevano rumore o leggevano dati che nessuno scrive più (sentiment, punteggio
+asset, insight, heatmap, trailing adattivo, costi per coin, snapshot giornaliero,
+modale posizione, evoluzione learning, strategie per strategia, ombra AI e
+rischio di portafoglio come pannelli a sé). Verificato: 1407 test Python verdi
+(erano 1249), TypeScript pulito, build Next ok, e un test di parità che confronta
+campo per campo lo schema, ciò che scrive Python e ciò che legge TypeScript. Non
+verificato dal vivo: né Firebase né un browser da qui (backlog J4). Il primo
+controllo arriva al riavvio del bot; il primo documento del gate al prossimo
+giro. Cosa resta su richiesta via ops: portafoglio simulato, selettore, righe
+`[rifiuto]` per coppia.

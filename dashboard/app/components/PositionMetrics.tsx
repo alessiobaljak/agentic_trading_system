@@ -15,9 +15,10 @@ function fmt(n: number | undefined | null, d = 2): string {
 
 /**
  * Metriche operative di una posizione APERTA (striscia + contesto). SOLO lettura.
- * Riusata dal grafico persistente (Operatività) e dal dettaglio.
+ * Riusata dalla riga espansa della tabella delle posizioni e dal grafico
+ * (Operatività). Etichette in italiano e rischio effettivo dal 25 set 2026.
  */
-export default function PositionMetrics({ position }: { position: Position }) {
+export default function PositionMetrics({ position }: { position: Position & { risk_effective_pct?: number | null; profit_lock_keep?: number | null } }) {
   const p = position;
   const long = (p.direction ?? '').toLowerCase() === 'long';
   const entry = p.entry_price ?? 0;
@@ -45,16 +46,19 @@ export default function PositionMetrics({ position }: { position: Position }) {
   return (
     <>
       <div className="metric-strip" style={{ marginBottom: 10 }}>
-        <M label="Entry">{fmt(entry, 4)}</M>
-        <M label="Mark">{fmt(mark, 4)}</M>
+        <M label="Ingresso">{fmt(entry, 4)}</M>
+        <M label="Prezzo">{fmt(mark, 4)}</M>
         <M label="R attuale">
           <span className={curR != null && curR >= 0 ? 'pos' : 'neg'}>
             {curR != null ? `${curR >= 0 ? '+' : ''}${fmt(curR)}R` : '—'}
           </span>
         </M>
-        <M label="Dist. Stop">{distSL != null ? `${fmt(distSL, 1)}%` : '—'}</M>
+        <M label="Dist. stop">{distSL != null ? `${fmt(distSL, 1)}%` : '—'}</M>
         <M label="Dist. TP">{distTP != null ? `${fmt(distTP, 1)}%` : '—'}</M>
         <M label="Leva">{lev}x</M>
+        {/* la frazione di equity persa se scatta lo stop ORIGINALE: e' il numero
+            che il tetto per direzione somma */}
+        <M label="Rischio">{p.risk_effective_pct != null ? `${fmt(p.risk_effective_pct * 100, 2)}%` : '—'}</M>
         <M label="uPnL">
           <span className={upnl >= 0 ? 'pos' : 'neg'}>{upnl >= 0 ? '+' : ''}{fmt(upnl)}</span>
         </M>
@@ -73,9 +77,12 @@ export default function PositionMetrics({ position }: { position: Position }) {
             </M>
           </>
         )}
-        <M label="Notional">${fmt(notional, 0)}</M>
+        <M label="Nozionale">${fmt(notional, 0)}</M>
         <M label="Margine">${fmt(margin, 0)}</M>
-        <M label="Held">{p.held_hours != null ? `${fmt(p.held_hours, 1)}h` : '—'}</M>
+        <M label="Aperta da">{p.held_hours != null ? `${fmt(p.held_hours, 1)}h` : '—'}</M>
+        {p.profit_lock_keep != null && (
+          <M label="Keep lock">{fmt(p.profit_lock_keep, 2)}</M>
+        )}
       </div>
 
       <div className="detail-ctx muted">

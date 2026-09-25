@@ -663,6 +663,25 @@ Dimezza tutto finché il PF a 30 giorni non supera 0,6 × 1,89 ≈ 1,13. È il f
 ### I6. Il cap di 5 posizioni è spento in parità
 `MAX_OPEN_POSITIONS` vale solo fuori dalla parità col gate; in parità il limite è il margine (10% dell'equity per posizione ≈ 10 posizioni); il paper ha già toccato 7 contemporanee. Con 160 coppie e il freno che dimezza la size, il tetto per direzione (3%) ammette ~8 posizioni nello stesso verso. Da decidere con `portafoglio` sulle 160 (in coda): cap in parità, o tetto direzionale più stretto finché il globale è in deriva, o stop giornaliero (H3).
 
+## J. Controllo orario e dashboard (25 set)
+
+Fatto il 25 set su richiesta del proprietario («check di tutto in automatico, le evidenze in dashboard ogni ora, la dashboard come un sistema serio»): il bot scrive ogni ora `dashboard/controllo` (`bot/learning/controllo.py`, schema in `docs/controllo_schema.md`), la discovery scrive `dashboard/gate` a ogni giro, la dashboard passa da 6+1 tab a 4+1 con il Controllo in prima pagina e 16 pannelli tolti. Rimandato, con il motivo:
+
+### J1. Totali «da sempre» del paper ricalcolati a ogni ora
+Il controllo rilegge tutti i trade chiusi ogni ora (oggi 55: costa niente). Oltre ~5.000 trade servono somme incrementali aggiornate a ogni chiusura. Metro: `meta.durata_ms` nel controllo (anomalia `CONTROLLO_LENTO` oltre 2 s).
+
+### J2. «Cosa aspetta il sì» non è persistito
+Le voci in attesa del sì vivono qui nel backlog: il controllo le lascia `null` e lo dice. Persisterle (un doc scritto dal controllo del mattino) è possibile ma è un altro posto da tenere allineato a mano; si fa solo se il proprietario vuole vederle in dashboard.
+
+### J3. Il ripiego GitHub del controllo è lento quanto GitHub
+Se il bot è fermo, il controllo lo scrive lo snapshot di GitHub (ogni 2 ore sulla carta, 3-7 ore misurate). La dashboard lo segnala con «scritto dal ripiego» e il rosso oltre 2 ore: è voluto, un controllo vecchio È l'evidenza che qualcosa è fermo. Un timer sulla VPS (`ops controllo --publish`) sarebbe più regolare ma non aggiunge informazione: se il bot è giù lo dice il battito.
+
+### J4. Non verificato dal vivo
+La dashboard nuova è verificata con tipi, build e un test di parità campo per campo fra chi scrive (Python) e chi legge (TypeScript), non in un browser né con dati veri (nessun accesso a Firebase da qui): il ripiego RTDB→Firestore, la resa su telefono e le liste RTDB rese come oggetti vanno guardate dal proprietario al primo giro. Da segnalare qui ciò che non torna.
+
+### J5. Contatori che vivono in RAM
+`rifiuti_24h`, `errori_ciclo_1h` e `riavvii_24h` si azzerano al riavvio del bot (lo dicono `rifiuti_24h_dal` e l'anello `/avvii`). Persisterli su RTDB costa una scrittura per rifiuto: non ora.
+
 ## D. Infrastruttura
 
 ### D1. Il registro su più documenti

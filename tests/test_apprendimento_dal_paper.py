@@ -180,7 +180,9 @@ def test_la_scala_del_paper_arriva_ai_worker():
     from scripts import discover_strategies as d
 
     assert "scala_paper" in inspect.getsource(d._disc_init)
-    assert "scala_dal_paper(fb)" in inspect.getsource(d.main)
+    # dal 25 set 2026 i trade del paper si leggono UNA volta nel main
+    # (`trades_del_paper`) e si passano alla proposta della scala
+    assert "scala_paper = scala_dal_paper(fb, trades=trades_paper)" in inspect.getsource(d.main)
     # il worker la passa a `evaluate_spec`, che la riceve come ARGOMENTO invece di
     # leggerla da uno stato globale: la prima versione la infilava in `_disc_one` e
     # la scelta della scala non e' li' — questo test l'ha trovato

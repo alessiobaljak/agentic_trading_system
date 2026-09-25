@@ -50,6 +50,11 @@ export default function ReconcilerStatus() {
   const [d, setD] = useState<Doc | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
+  // dry_run letto dal RTDB (figlio, pochi byte): in paper il pannello non
+  // compare (25 set 2026). Finche' non arriva (null) si tratta come paper:
+  // il sistema non ha mai toccato denaro vero, e un pannello vuoto che parla
+  // di exchange confonde chi legge dal telefono.
+  const [dryRun, setDryRun] = useState<boolean | null>(null);
 
   useEffect(() => {
     const unsub = onValue(
@@ -57,8 +62,15 @@ export default function ReconcilerStatus() {
       (s) => { setD((s.val() as Doc) ?? null); setLoaded(true); },
       () => setLoaded(true),
     );
-    return () => unsub();
+    const unsubDry = onValue(
+      ref(getRtdb(), '/bot_status/dry_run'),
+      (s) => setDryRun(s.exists() ? Boolean(s.val()) : null),
+      () => setDryRun(null),
+    );
+    return () => { unsub(); unsubDry(); };
   }, []);
+
+  if (dryRun !== false) return null;
 
   const reset = async () => {
     if (!confirm('Azzerare l\'allarme di riconciliazione? Fallo solo dopo aver '
@@ -85,7 +97,7 @@ export default function ReconcilerStatus() {
       </p>
 
       {!loaded ? (
-        <p className="muted">Loading…</p>
+        <p className="muted">Caricamento…</p>
       ) : !d ? (
         <p className="muted">
           Nessun controllo eseguito. Il reconciler è attivo solo in live

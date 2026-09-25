@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { getDb } from '../lib/firebase';
-import { CHROME, STATO, formatta } from '../lib/viz';
+import { CHROME, STATO, durata, formatta } from '../lib/viz';
+import { useOrologio } from './GateCervello';
 
 /**
  * DOVE MUOIONO LE CANDIDATE.
@@ -30,6 +31,13 @@ import { CHROME, STATO, formatta } from '../lib/viz';
  * sotto mostra solo le candidate fermate da QUELLO. È la domanda che ci si fa
  * davvero guardando l'istogramma ("chi sono quelle 40 lì?"), e prima richiedeva di
  * andarsele a cercare a mano nel documento su Firebase.
+ *
+ * UNA RIGA IN CHIARO, IL RESTO CHIUSO (25 set 2026). Il pannello era il più lungo
+ * della scheda e la sua risposta sta in una frase per autopsia: quante valutate,
+ * quante passate, chi ferma di più, quante a un passo, e di QUANDO è. Il dettaglio
+ * si apre. E le due autopsie non si sommano più: `discover` è di stamattina,
+ * `current` (optimizer sulle strategie base) può essere di giorni fa — si sceglie
+ * quale guardare, con la sua età accanto.
  */
 type Near = {
   key?: string;
@@ -66,6 +74,7 @@ const SIGNIFICATO: Record<string, string> = {
 };
 
 type Vista = 'binding' | 'involved';
+type Fonte = 'dis' | 'cur';
 
 export default function GateAutopsy() {
   const [cur, setCur] = useState<Rep | null>(null);
@@ -73,6 +82,8 @@ export default function GateAutopsy() {
   const [loaded, setLoaded] = useState(false);
   const [vista, setVista] = useState<Vista>('binding');
   const [scelto, setScelto] = useState<string | null>(null);
+  const [fonte, setFonte] = useState<Fonte>('dis');
+  const now = useOrologio();
 
   useEffect(() => {
     try {
@@ -89,27 +100,43 @@ export default function GateAutopsy() {
     }
   }, []);
 
-  /** Le due autopsie sommate: la discovery porta il volume (oltre ventimila
-   *  valutazioni), l'optimizer le strategie base (~1500). Per capire dove si muore
-   *  contano insieme. */
+  /** UNA autopsia per volta, scelta dall'interruttore: la discovery porta il
+   *  volume (oltre ventimila valutazioni ogni 3 ore), l'optimizer le strategie
+   *  base (~1500, di rado). Sommarle mischiava due date. */
+  const rep = fonte === 'dis' ? dis : cur;
   const tot = useMemo(() => {
-    const somma = (f: (r: Rep) => Record<string, number> | undefined) => {
-      const out: Record<string, number> = {};
-      for (const r of [cur, dis]) {
-        if (!r) continue;
-        for (const [k, v] of Object.entries(f(r) ?? {})) out[k] = (out[k] ?? 0) + Number(v || 0);
-      }
-      return Object.entries(out).sort((x, y) => y[1] - x[1]);
-    };
-    const near = [...(cur?.near_misses ?? []), ...(dis?.near_misses ?? [])]
-      .sort((a, b) => (b.shortfall ?? -9) - (a.shortfall ?? -9));
+    const ordina = (m: Record<string, number> | undefined) =>
+      Object.entries(m ?? {}).map(([k, v]) => [k, Number(v || 0)] as [string, number]).sort((x, y) => y[1] - x[1]);
+    const near = [...(rep?.near_misses ?? [])].sort((a, b) => (b.shortfall ?? -9) - (a.shortfall ?? -9));
     return {
-      binding: somma((r) => r.binding),
-      involved: somma((r) => r.involved),
-      diagnosed: Number(cur?.diagnosed ?? 0) + Number(dis?.diagnosed ?? 0),
+      binding: ordina(rep?.binding),
+      involved: ordina(rep?.involved),
+      diagnosed: Number(rep?.diagnosed ?? 0),
       near,
     };
-  }, [cur, dis]);
+  }, [rep]);
+
+  /** La frase che riassume un'autopsia, con la sua età. */
+  const riassunto = (r: Rep | null, nome: string) => {
+    if (!r) return <span className="muted">{nome}: nessuna autopsia.</span>;
+    const ev = Number(r.evaluated ?? 0);
+    const pa = Number(r.passed ?? 0);
+    const primo = Object.entries(r.binding ?? {}).sort((x, y) => Number(y[1]) - Number(x[1]))[0];
+    const dg = Number(r.diagnosed ?? 0);
+    return (
+      <>
+        <b>{nome}</b>
+        {r.updated_at ? <span className="muted"> ({durata(now - r.updated_at)} fa)</span> : null}: {formatta(ev)} valutate,{' '}
+        {formatta(pa)} passate{ev > 0 ? ` (${((pa / ev) * 100).toFixed(2)}%)` : ''}
+        {primo ? (
+          <>
+            {' '}· ferma di più <b>{primo[0]}</b>{dg > 0 ? ` (${Math.round((Number(primo[1]) / dg) * 100)}% delle bocciate)` : ''}
+          </>
+        ) : null}
+        {r.near_miss_count != null ? <> · {formatta(r.near_miss_count)} a un passo</> : null}
+      </>
+    );
+  };
 
   const dati = vista === 'binding' ? tot.binding : tot.involved;
   const max = Math.max(1, ...dati.map(([, v]) => v));
@@ -125,9 +152,8 @@ export default function GateAutopsy() {
     <div className="panel">
       <h2>Perché le candidate non passano</h2>
       <p className="subtitle">
-        L&apos;autopsia dell&apos;ultima passata. Clicca un criterio per vedere quali
-        candidate ha fermato — è il dato su cui il supervisore sceglie dove
-        intervenire.
+        L&apos;autopsia dell&apos;ultima passata: dove muoiono le candidate. È il dato su
+        cui il supervisore sceglie dove intervenire.
       </p>
 
       {!loaded ? (
@@ -139,7 +165,34 @@ export default function GateAutopsy() {
         </p>
       ) : (
         <>
+          <div style={{ fontSize: 13, lineHeight: 1.6, marginBottom: 6 }}>
+            <div>{riassunto(dis, 'Discovery')}</div>
+            <div>{riassunto(cur, 'Optimizer (strategie base)')}</div>
+          </div>
+          <details>
+            <summary style={{ cursor: 'pointer', fontSize: 12, color: 'var(--text-dim)', marginBottom: 10 }}>
+              dettaglio: criteri, a un passo, filtro per criterio
+            </summary>
           <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setFonte('dis')}
+              className={`btn ${fonte === 'dis' ? 'btn-primary' : 'btn-ghost'}`}
+              style={{ padding: '4px 12px', fontSize: 12 }}
+              aria-pressed={fonte === 'dis'}
+              disabled={!dis}
+            >
+              Discovery
+            </button>
+            <button
+              onClick={() => setFonte('cur')}
+              className={`btn ${fonte === 'cur' ? 'btn-primary' : 'btn-ghost'}`}
+              style={{ padding: '4px 12px', fontSize: 12 }}
+              aria-pressed={fonte === 'cur'}
+              disabled={!cur}
+            >
+              Optimizer
+            </button>
+            <span style={{ width: 8 }} />
             <button
               onClick={() => setVista('binding')}
               className={`btn ${vista === 'binding' ? 'btn-primary' : 'btn-ghost'}`}
@@ -282,6 +335,7 @@ export default function GateAutopsy() {
               </table>
             </div>
           )}
+          </details>
         </>
       )}
     </div>

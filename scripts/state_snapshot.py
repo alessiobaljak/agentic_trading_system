@@ -546,18 +546,59 @@ def main() -> int:
                          "che i comandi dopo girano sulla versione vecchia del codice")
     ap.add_argument("--no-write", action="store_true",
                     help="stampa e basta, non tocca nessun file")
+    ap.add_argument("--publish-controllo", action="store_true",
+                    help="dopo lo snapshot, pubblica dashboard/controllo con "
+                         "generato_da=github se quello del bot e' piu' vecchio di "
+                         "--se-vecchio secondi (ripiego: il bot e' la fonte)")
+    ap.add_argument("--se-vecchio", type=float, default=5400.0, metavar="SECONDI",
+                    help="eta' del controllo del bot oltre la quale il ripiego scrive "
+                         "(default 5400 = 90 minuti: il bot pubblica ogni ora)")
     args = ap.parse_args()
 
     content = build()
     print(content)
-    if args.no_write:
-        return 0
-    d = os.path.dirname(os.path.abspath(args.out))
-    os.makedirs(d, exist_ok=True)
-    with open(args.out, "w", encoding="utf-8") as f:
-        f.write(content)
-    print(f"\n[snapshot] scritto {args.out}")
+    if not args.no_write:
+        d = os.path.dirname(os.path.abspath(args.out))
+        os.makedirs(d, exist_ok=True)
+        with open(args.out, "w", encoding="utf-8") as f:
+            f.write(content)
+        print(f"\n[snapshot] scritto {args.out}")
+    if args.publish_controllo:
+        pubblica_controllo_se_vecchio(args.se_vecchio)
     return 0
+
+
+def pubblica_controllo_se_vecchio(soglia_s: float = 5400.0) -> bool:
+    """RIPIEGO GitHub del controllo orario (25 set 2026, docs/controllo_schema.md §3.8).
+
+    Il bot e' la fonte di `dashboard/controllo` (ogni ora). GitHub Actions non
+    regge l'ora (buchi misurati di 3-7 h), quindi qui si pubblica SOLO se il
+    documento del bot manca o e' piu' vecchio di `soglia_s`: un bot vivo non va
+    coperto da un documento che non conosce i suoi settings ne' il suo RTDB
+    degradato. Ritorna True se ha pubblicato. Un errore non ferma lo snapshot:
+    docs/state.md va comunque committato."""
+    try:
+        from bot.learning.controllo import _figlio, esegui
+        fb = get_firebase()
+        now = time.time()
+        prec = _figlio(fb, "/controllo", "meta", "generato_at")
+        try:
+            prec = float(prec) if prec else None
+        except (TypeError, ValueError):
+            prec = None
+        if prec is not None and now - prec < soglia_s:
+            print(f"[controllo] il bot ha pubblicato {int(now - prec)} s fa "
+                  f"(< {soglia_s:g} s): niente ripiego")
+            return False
+        doc = esegui(fb, "github", settings_da_bot=False, now=now, pubblica=True)
+        m = doc["meta"]
+        print(f"[controllo] ripiego GitHub pubblicato: sistema {m['semaforo_sistema']}, "
+              f"paper {m['semaforo_paper']}, {len(doc['salute'].get('anomalie') or [])} "
+              f"anomalie (bot: {'mai visto' if prec is None else f'{int(now - prec)} s fa'})")
+        return True
+    except Exception as exc:  # noqa: BLE001
+        print(f"[controllo] ripiego saltato: {exc}")
+        return False
 
 
 if __name__ == "__main__":

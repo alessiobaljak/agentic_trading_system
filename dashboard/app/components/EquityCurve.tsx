@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { collection, limit as fsLimit, onSnapshot, orderBy, query } from 'firebase/firestore';
 import {
   Area,
   AreaChart,
@@ -31,19 +31,44 @@ const RANGES: { id: RangeId; label: string; ms: number }[] = [
 ];
 
 /**
- * Equity curve derived from closed trades' cumulative PnL, ordered by exit_ts.
- * The y-axis is cumulative realized PnL (starts at 0). This avoids needing a
- * separate equity-history feed; it tracks realized performance over time.
+ * Curva di equity: PnL realizzato cumulato dai trade chiusi, in ordine di
+ * `exit_ts`. L'asse y parte da 0 (e' il PnL, non il saldo): cosi' non serve
+ * una serie storica dell'equity a parte.
+ *
+ * Dal 25 set 2026 il grafico vive dentro la sezione Paper del Controllo, con
+ * tre manopole:
+ *   * `altezza` — 200 px nella sezione (sul telefono 320 erano mezza schermata);
+ *   * `limite` — quanti trade leggere: gli ULTIMI `limite` per `exit_ts`. Senza
+ *     limite si scarica tutta la collezione a ogni apertura della pagina; con
+ *     55-200 trade e' niente, ma cresce ogni giorno. Se i trade superano il
+ *     limite la curva parte dal trade piu' vecchio letto, non dal primo del
+ *     paper: il PnL cumulato «vero» resta nel tile della sezione;
+ *   * `compatta` — niente titolo e niente striscia di metriche: quei numeri
+ *     (trade, win rate, PF, PnL) stanno gia' nei tile calcolati dal bot, e due
+ *     copie leggermente diverse (qui in tempo reale, li' all'ultimo giro orario)
+ *     farebbero solo domande.
  */
-export default function EquityCurve() {
+export default function EquityCurve({
+  altezza = 320,
+  limite,
+  compatta = false,
+}: {
+  altezza?: number;
+  limite?: number;
+  compatta?: boolean;
+} = {}) {
   const [trades, setTrades] = useState<ClosedTrade[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [range, setRange] = useState<RangeId>('all');
 
   useEffect(() => {
     const db = getDb();
-    // exit_ts may not exist on every doc; we still order by it and sort client-side as a fallback.
-    const q = query(collection(db, 'trades'), orderBy('exit_ts', 'asc'));
+    // exit_ts puo' mancare su qualche documento: si ordina lo stesso e si
+    // riordina lato client. Col limite si prendono gli ULTIMI trade (ordine
+    // decrescente) e si rimettono in ordine crescente sotto.
+    const q = limite && limite > 0
+      ? query(collection(db, 'trades'), orderBy('exit_ts', 'desc'), fsLimit(limite))
+      : query(collection(db, 'trades'), orderBy('exit_ts', 'asc'));
     const unsub = onSnapshot(
       q,
       (snap) => {
@@ -53,7 +78,7 @@ export default function EquityCurve() {
       () => setLoaded(true),
     );
     return () => unsub();
-  }, []);
+  }, [limite]);
 
   const data = useMemo<Point[]>(() => {
     const sorted = [...trades].sort(
@@ -65,7 +90,7 @@ export default function EquityCurve() {
       const ms = toMillis(t.exit_ts);
       return {
         t: ms ?? 0,
-        label: ms ? new Date(ms).toLocaleDateString() : '',
+        label: ms ? new Date(ms).toLocaleDateString('it-IT') : '',
         equity: Number(cum.toFixed(2)),
         pnl: t.pnl ?? 0,
       };
@@ -74,9 +99,9 @@ export default function EquityCurve() {
 
   const last = data.length ? data[data.length - 1].equity : 0;
 
-  // Metriche di performance ALL-TIME derivate dagli stessi trade chiusi.
-  // Nessuna sovrapposizione con lo Snapshot (solo oggi): qui win rate
-  // complessivo, profit factor, max drawdown ed expectancy/trade.
+  // Metriche di performance sui trade letti (tutti, o gli ultimi `limite`):
+  // win rate, profit factor, max drawdown ed expectancy per trade. Nella
+  // versione compatta non si mostrano (vedi sopra), ma il calcolo e' banale.
   const stats = useMemo(() => {
     const pnls = data.map((d) => d.pnl);
     const n = pnls.length;
@@ -106,19 +131,25 @@ export default function EquityCurve() {
     return data.filter((d) => d.t >= cutoff);
   }, [data, range]);
 
-  const num = (v: number, d = 2) => v.toLocaleString(undefined, { maximumFractionDigits: d });
+  const num = (v: number, d = 2) => v.toLocaleString('it-IT', { maximumFractionDigits: d });
 
   return (
-    <div className="panel">
-      <h2>Equity Curve</h2>
-      <p className="subtitle">PnL realizzato cumulato dai trade chiusi</p>
+    <div className={compatta ? 'equity-compatta' : 'panel'}>
+      {!compatta && (
+        <>
+          <h2>Curva di equity</h2>
+          <p className="subtitle">PnL realizzato cumulato dai trade chiusi</p>
+        </>
+      )}
       {!loaded ? (
-        <p className="muted">Loading…</p>
+        <p className="muted">Caricamento…</p>
       ) : data.length === 0 ? (
         <p className="muted">Ancora nessun trade chiuso.</p>
       ) : (
         <>
-          {/* tutti i numeri sopra, su una sola riga */}
+          {/* tutti i numeri sopra, su una sola riga (non nella versione compatta:
+              li' i numeri li porta il controllo orario) */}
+          {!compatta && (
           <div className="metric-strip">
             <div className="metric">
               <span className="m-label">PnL cumulato</span>
@@ -155,9 +186,10 @@ export default function EquityCurve() {
               </span>
             </div>
           </div>
+          )}
 
           {/* filtro periodo del grafico */}
-          <div className="toolbar" style={{ justifyContent: 'flex-end', margin: '16px 0 8px' }}>
+          <div className="toolbar" style={{ justifyContent: 'flex-end', margin: compatta ? '0 0 6px' : '16px 0 8px' }}>
             <span className="muted" style={{ fontSize: 12, marginRight: 'auto' }}>Periodo grafico</span>
             <div className="seg" role="tablist" aria-label="periodo">
               {RANGES.map((r) => (
@@ -174,7 +206,7 @@ export default function EquityCurve() {
               Nessun trade chiuso in questa finestra.
             </p>
           ) : (
-            <ResponsiveContainer width="100%" height={320}>
+            <ResponsiveContainer width="100%" height={altezza}>
               <AreaChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">
@@ -196,13 +228,13 @@ export default function EquityCurve() {
                   labelFormatter={(_label: unknown, payload?: ReadonlyArray<{ payload?: Point }>) => {
                     const t = payload?.[0]?.payload?.t;
                     return t
-                      ? new Date(t).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })
+                      ? new Date(t).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' })
                       : '';
                   }}
                   formatter={(v: number, _name: unknown, item?: { payload?: Point }) => {
                     const pnl = item?.payload?.pnl ?? 0;
                     return [
-                      `${Number(v).toFixed(2)}  (trade ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)})`,
+                      `${num(Number(v))}  (trade ${pnl >= 0 ? '+' : ''}${num(pnl)})`,
                       'PnL cumulato',
                     ] as [string, string];
                   }}

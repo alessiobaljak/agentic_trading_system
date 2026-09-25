@@ -70,6 +70,14 @@ portafoglio:  .venv/bin/python -m scripts.portafoglio_backtest
 mfe:          .venv/bin/python -m scripts.mfe_report
 # selettore (disegno_cervello, punto 2 passo 1): «apri tutto» vs «selettore», offline, sola lettura
 selettore:    .venv/bin/python -m scripts.selettore_report
+# IL CONTROLLO AUTOMATICO (25 set 2026, docs/controllo_schema.md): i due
+# semafori, le anomalie e le tre letture (salute, paper, learning) calcolate
+# adesso dagli stessi dati che il bot pubblica ogni ora in dashboard/controllo.
+# Sola lettura: e' il «check di tutto» in un comando.
+controllo:    .venv/bin/python -m scripts.controllo
+# ripiego che SCRIVE il documento con generato_da=ops: solo se il bot tace e la
+# dashboard resta vuota. Il bot e' la fonte, per questo resta commentata.
+# controllo-publish: .venv/bin/python -m scripts.controllo --publish
 # revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
 costi:        .venv/bin/python -m scripts.revalidate_costs
 

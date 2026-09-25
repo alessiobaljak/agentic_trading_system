@@ -39,8 +39,16 @@ from bot.learning.metrics import KEEP_PAPER_MIN_VERDETTI, KEEP_PAPER_QUOTA, prop
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import (figlie_intorno, generate_specs, mutate,
                                       varianti_da_referto)
+from bot.core.registry import (aggiorna_meta_gate, breakeven_n, conta_keep,
+                               coppie_operate, coppie_validate, distribuzione_pass,
+                               leggi_doc_gate, pulisci_per_firestore, salute_registro,
+                               scala_distribuzione,
+                               scala_str, scrivi_doc_gate, senza_promessa,
+                               statistica_t, tetto_coppie)
+from bot.learning.referti import ESITI_ESTERNI
+from scripts.gate_progress import riga_cervello
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_history,
-                              coppie_validate,
+                              _segna_promozione, registra_vite,
                               coin_in_maturazione, drifted_from_paper, judge_window,
                               publish_timeline, conferme_da_proteggere, scrivi_registro,
                               slim_registry, top_symbols_by_volume)
@@ -409,7 +417,22 @@ def prove_dal_paper(fb) -> str:
             + "\n".join(f"- {r}" for r in righe))
 
 
-def scala_dal_paper(fb, min_trades: int = 10):
+def trades_del_paper(fb):
+    """I trade chiusi del paper, letti UNA volta per giro (25 set 2026).
+
+    Fino a oggi `scala_dal_paper` e `keep_dal_paper` scaricavano ognuna l'intera
+    collection `trades`; ora la lista si legge qui e si passa a entrambe e al
+    documento del gate (`costruisci_doc_gate`). Ritorna None se Firebase non
+    risponde: chi la riceve fa da solo la propria lettura di ripiego, con la
+    propria riga di log — il comportamento fail-open di prima resta intatto."""
+    try:
+        return list(fb.query_collection("trades", order_by="exit_ts") or [])
+    except Exception as exc:  # noqa: BLE001
+        print(f"[paper] trade non disponibili ({str(exc)[:80]}): ogni lettore fa da se'")
+        return None
+
+
+def scala_dal_paper(fb, min_trades: int = 10, trades: list | None = None):
     """La scala di TP suggerita da dove il prezzo e' DAVVERO arrivato nel paper.
 
     E' l'anello che mancava. Il paper misurava `mfe_r` su ogni trade chiuso, il
@@ -423,14 +446,17 @@ def scala_dal_paper(fb, min_trades: int = 10):
     della scala temporale e del mercato, non della singola moneta.
 
     Fail-open: senza Firebase, senza trade o senza abbastanza campione ritorna None
-    e il gate resta esattamente com'era.
+    e il gate resta esattamente com'era. `trades`: la lista gia' letta dal main
+    (`trades_del_paper`); se manca, la si legge qui come prima.
     """
-    try:
-        trades = fb.query_collection("trades", order_by="exit_ts") or []
-    except Exception as exc:  # noqa: BLE001
-        print(f"[paper] misura mfe non disponibile ({str(exc)[:80]}) -> scale fisse")
-        return None
-    mfes = [t.get("mfe_r") for t in trades if t.get("mfe_r") is not None]
+    if trades is None:
+        try:
+            trades = fb.query_collection("trades", order_by="exit_ts") or []
+        except Exception as exc:  # noqa: BLE001
+            print(f"[paper] misura mfe non disponibile ({str(exc)[:80]}) -> scale fisse")
+            return None
+    mfes = [t.get("mfe_r") for t in trades
+            if isinstance(t, dict) and t.get("mfe_r") is not None]
     scala = ladder_from_mfe(mfes, min_trades=min_trades)
     if scala:
         print(f"[paper] {len(mfes)} trade chiusi -> scala candidata dal vissuto: "
@@ -459,7 +485,25 @@ def candidate_ladders(scala_paper=None) -> tuple:
 #: (`proposta_keep`): la usa anche il controllo orario, e i due non divergono.
 
 
-def keep_dal_paper(fb, min_verdetti: int = KEEP_PAPER_MIN_VERDETTI):
+def conta_verdetti_trailing(trades, tf: str) -> tuple[int, int]:
+    """(prematuri, protetti) fra le uscite `trailing_stop` del timeframe `tf`.
+    Pura: la usano `keep_dal_paper` e il documento del gate, con gli stessi numeri."""
+    prem = prot = 0
+    for t in trades or []:
+        if not isinstance(t, dict):
+            continue
+        if t.get("exit_reason") != "trailing_stop" or t.get("timeframe") != tf:
+            continue
+        v = t.get("trailing_verdict")
+        if v == "premature":
+            prem += 1
+        elif v == "protected":
+            prot += 1
+    return prem, prot
+
+
+def keep_dal_paper(fb, min_verdetti: int = KEEP_PAPER_MIN_VERDETTI,
+                   trades: list | None = None):
     """Il keep del profit-lock che il paper PROPONE dai verdetti trailing (25 set 2026).
 
     Su ogni trade chiuso dal trailing il paper scrive un verdetto controfattuale:
@@ -481,24 +525,15 @@ def keep_dal_paper(fb, min_verdetti: int = KEEP_PAPER_MIN_VERDETTI):
     Fail-open: senza Firebase, senza trade o sotto il campione ritorna None e i
     candidati restano i tre fissi. Stampa SEMPRE una riga coi conteggi, cosi' dal
     log si vede quanti verdetti ci sono e perche' (non) e' nata una proposta.
+    `trades`: la lista gia' letta dal main; se manca, la si legge qui come prima.
     """
-    try:
-        trades = fb.query_collection("trades", order_by="exit_ts") or []
-    except Exception as exc:  # noqa: BLE001
-        print(f"[paper] verdetti trailing non disponibili ({str(exc)[:80]}) -> keep fissi")
-        return None
-    tf = settings.ORCHESTRATOR_TIMEFRAME
-    prem = prot = 0
-    for t in trades:
-        if not isinstance(t, dict):
-            continue
-        if t.get("exit_reason") != "trailing_stop" or t.get("timeframe") != tf:
-            continue
-        v = t.get("trailing_verdict")
-        if v == "premature":
-            prem += 1
-        elif v == "protected":
-            prot += 1
+    if trades is None:
+        try:
+            trades = fb.query_collection("trades", order_by="exit_ts") or []
+        except Exception as exc:  # noqa: BLE001
+            print(f"[paper] verdetti trailing non disponibili ({str(exc)[:80]}) -> keep fissi")
+            return None
+    prem, prot = conta_verdetti_trailing(trades, settings.ORCHESTRATOR_TIMEFRAME)
     n = prem + prot
     testa = f"[paper] {n} verdetti trailing ({prem} prematuri, {prot} protetti)"
     if n < min_verdetti:
@@ -1371,12 +1406,13 @@ def riga_cervello_varianti(e: dict | None) -> str:
             f"{int(e.get('scartate', 0) or 0)} scartate / sostituzioni: {testo_sost}")
 
 
-def riga_cervello_keep(out: dict, passed_keys, keep_paper=None) -> str:
-    """La riga «[cervello] keep del lock ...» per la coda del log (25 set 2026):
-    quante coppie passate in QUESTO giro hanno scelto quale keep del profit-lock.
-    Si stampa sempre: un giro in cui il gate ha confermato 0,5 ovunque deve
-    dirlo, e se il paper aveva proposto un candidato si vede quante volte l'ha
-    spuntata (la proposta e' un candidato, non una decisione)."""
+def conta_keep_giro(out: dict, passed_keys, keep_paper=None) -> dict:
+    """I NUMERI del keep scelto in QUESTO giro (25 set 2026), puri: quante coppie
+    passate hanno scelto quale keep (`scelti`), quante non l'hanno scelto affatto
+    (`non_scelto`: spec bocciata prima di provare i keep, o codice vecchio), e
+    quante volte ha vinto il candidato proposto dal paper (`dal_paper_n`).
+    `riga_cervello_keep` li stampa e il documento del gate li scrive: una sola
+    fonte per i due lettori."""
     conta: dict = {}
     senza = 0
     for k in (passed_keys or []):
@@ -1387,13 +1423,27 @@ def riga_cervello_keep(out: dict, passed_keys, keep_paper=None) -> str:
             continue
         v = float(v)
         conta[v] = conta.get(v, 0) + 1
-    parti = [f"{v:g} x{n}" for v, n in sorted(conta.items())]
-    if senza:
-        parti.append(f"non scelto x{senza}")
+    kp = None if keep_paper is None else float(keep_paper)
+    return {"scelti": [{"valore": v, "n": n} for v, n in sorted(conta.items())],
+            "non_scelto": senza,
+            "dal_paper": kp,
+            "dal_paper_n": conta.get(kp, 0) if kp is not None else 0}
+
+
+def riga_cervello_keep(out: dict, passed_keys, keep_paper=None) -> str:
+    """La riga «[cervello] keep del lock ...» per la coda del log (25 set 2026):
+    quante coppie passate in QUESTO giro hanno scelto quale keep del profit-lock.
+    Si stampa sempre: un giro in cui il gate ha confermato 0,5 ovunque deve
+    dirlo, e se il paper aveva proposto un candidato si vede quante volte l'ha
+    spuntata (la proposta e' un candidato, non una decisione). I numeri sono
+    quelli di `conta_keep_giro`."""
+    k = conta_keep_giro(out, passed_keys, keep_paper)
+    parti = [f"{d['valore']:g} x{d['n']}" for d in k["scelti"]]
+    if k["non_scelto"]:
+        parti.append(f"non scelto x{k['non_scelto']}")
     testo = " · ".join(parti) if parti else "nessuna coppia passata"
-    if keep_paper is not None:
-        kp = float(keep_paper)
-        testo += f" (dal paper {kp:g} x{conta.get(kp, 0)})"
+    if k["dal_paper"] is not None:
+        testo += f" (dal paper {k['dal_paper']:g} x{k['dal_paper_n']})"
     return f"[cervello] keep del lock scelto dal gate: {testo}"
 
 
@@ -1436,13 +1486,22 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
     #    optimize per le base: valutata in questo giro e non passata -> UN
     #    fallimento per finestra, e la coppia torna urgente dopo 168 ore.
     scartate_giro = set(esito.get("scartate", ())) if esito else set()
+    # IL DIARIO DELLE VITE ANCHE DA QUI (25 set 2026): le promozioni delle coppie
+    # generate avvengono in questa funzione (chiusura della finestra o conferme
+    # retroattive), non in optimize, e `gate_history/lifecycle` le vedeva solo
+    # per le base. Stessa regola di optimize: si annota SOLO l'attraversamento
+    # della soglia (`_segna_promozione`), mai le gia' validate. Le rimozioni qui
+    # non riguardano mai validate (la potatura le risparmia): `uscite` resta vuota.
+    nuove_vite: list[dict] = []
     if evaluated_spec_ids and evaluated_symbols and data_end_run > 0:
         passate = set(passed_now)
         for k, r in pairs.items():
             if (r.get("generated") and int(r.get("pass_count", 0) or 0) >= 1
                     and k not in passate and r.get("symbol") in evaluated_symbols
                     and (r.get("strategy") or k.split("|", 1)[-1]) in evaluated_spec_ids):
+                prima = int(r.get("pass_count", 0) or 0)
                 judge_window(r, data_end_run, False)
+                _segna_promozione(k, r, prima, now, nuove_vite)
     # 1) upsert SOLO delle coppie passate (non sporco il registro con i fallimenti)
     n_intorno_ok = n_intorno_no = n_var_scartate = 0
     # L'ESITO DEL CERVELLO, CONTATO QUI E LETTO DA FUORI (25 set 2026). Finora
@@ -1475,6 +1534,7 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
     for key in passed_now:
         e = out[key]
         rec = pairs.get(key, {"pass_count": 0})
+        prima_pass = int(rec.get("pass_count", 0) or 0)
         spec_e = e.get("spec") or {}
         variante = isinstance(spec_e, dict) and spec_e.get("origine") in ("intorno", "referto")
         # UNA VARIANTE (dai referti o dall'intorno) entra SOLO alla sua prima
@@ -1550,6 +1610,7 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
             rec["symbol"], rec["strategy"] = e["symbol"], e["strategy"]
             rec["generated"] = True
             rec["last_seen_at"] = now
+            _segna_promozione(key, rec, prima_pass, now, nuove_vite)
             pairs[key] = rec
             continue
         # FAIL-CLOSED sul data_end: `judge_window` non giudica senza. Era il buco da
@@ -1603,7 +1664,9 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         rec["generated"] = True
         rec["last_seen_at"] = now
         rec["last_passed_at"] = now
+        _segna_promozione(key, rec, prima_pass, now, nuove_vite)
         pairs[key] = rec
+    registra_vite(fb, nuove_vite, [])
     if intorno_madri:
         for k in intorno_madri:
             if isinstance(pairs.get(k), dict):
@@ -1668,7 +1731,7 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
     # qui sopra le toglie tutte (`pass_count == 0`), quindi quell'insieme e' sempre
     # vuoto. Un test lo ha mostrato subito. Meglio una difesa sola che si capisce
     # che due di cui una non fa niente.
-    max_pairs = int(os.getenv("OPTIMIZER_MAX_PAIRS", "3000"))
+    max_pairs = tetto_coppie()
     if len(pairs) > max_pairs:
         base = {k: r for k, r in pairs.items() if not r.get("generated")}
         gen = {k: r for k, r in pairs.items() if r.get("generated")}
@@ -1704,6 +1767,7 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
     doc["universe_size"] = universe
     doc["coverage"] = round(len(validated_coins) / universe, 3)
     doc["updated_at"] = now
+    doc["max_pairs"] = max_pairs      # il tetto con cui e' stato scritto (25 set 2026)
     scrivi_registro(fb, doc, pairs)
     publish_timeline(fb, pairs, "discover", len(out), len(passed_now))
     return validated
@@ -1740,8 +1804,493 @@ def _notify(passed: list[dict], n_eval: int, n_specs: int, n_coins: int) -> None
         print(f"[discover] telegram fallito: {exc}")
 
 
+# --------------------------------------------------------------------------- #
+# IL DOCUMENTO DEL GATE: `dashboard/gate` (25 set 2026, docs/controllo_schema.md §2) #
+# --------------------------------------------------------------------------- #
+# Richiesta del proprietario: «check di status, learning, paper, gate, strategie,
+# tutto in automatico, e le evidenze in dashboard ogni ora». Il bot scrive il
+# documento orario (`dashboard/controllo`); la discovery scrive QUESTO a ogni giro,
+# con tutto cio' che del gate finora si leggeva solo nel log o con `gate_progress`
+# dalla VPS. Le funzioni qui sotto sono PURE: prendono dizionari gia' letti e
+# ritornano il documento; la sola I/O sta in `pubblica_doc_gate`. Ogni sezione e'
+# fail-open per conto suo (`errore` nella sezione, il resto del documento esce).
+DOC_GATE_OPERATE_MAX = 300
+DOC_GATE_MAX_BYTES = 200_000
+
+
+def _tronca(testo: str, n: int = 140) -> str:
+    testo = " ".join(str(testo or "").split())
+    return testo if len(testo) <= n else testo[: n - 1].rstrip() + "…"
+
+
+def _num(v):
+    """float o None: mai NaN/inf, mai una stringa spacciata per numero."""
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    if f != f or f in (float("inf"), float("-inf")):
+        return None
+    return f
+
+
+def _sezione(nome: str, fonti: list, corpo, now: float) -> dict:
+    """Testata comune + corpo; se il corpo esplode, la sezione esce con `errore`
+    e una `lettura` che lo dice, invece di portarsi via il documento."""
+    sez = {"computed_at": now, "fonti": list(fonti), "lettura": "", "dettaglio": None,
+           "errore": None}
+    try:
+        sez.update(corpo())
+    except Exception as exc:  # noqa: BLE001
+        sez["errore"] = f"{type(exc).__name__}: {str(exc)[:200]}"
+        sez["lettura"] = _tronca(f"sezione {nome} non calcolata: {str(exc)[:100]}")
+    sez["lettura"] = _tronca(sez.get("lettura") or "")
+    return sez
+
+
+def _durata_testo(s) -> str:
+    s = int(_num(s) or 0)
+    return f"{s // 3600}h {(s % 3600) // 60:02d}m"
+
+
+def paper_per_coppia(trades, chiavi=None) -> dict:
+    """I trade del paper raggruppati per `symbol|strategy`, esclusi gli esiti
+    esterni (manual, kill_switch, circuit_breaker: non li ha decisi la strategia,
+    stessa lista di `bot/learning/referti.py`). `pf_vissuto` e' None senza
+    perdite (non 99, non inf), col gemello `perdite`."""
+    per: dict[str, dict] = {}
+    chiavi = set(chiavi) if chiavi is not None else None
+    for t in trades or []:
+        if not isinstance(t, dict):
+            continue
+        if str(t.get("exit_reason", "")) in ESITI_ESTERNI:
+            continue
+        key = f"{t.get('symbol', '?')}|{t.get('strategy', '?')}"
+        if chiavi is not None and key not in chiavi:
+            continue
+        b = per.setdefault(key, {"trades": 0, "vinti": 0, "perdite": 0, "pnl": 0.0,
+                                 "_g": 0.0, "_l": 0.0})
+        pnl = _num(t.get("pnl")) or 0.0
+        b["trades"] += 1
+        b["pnl"] += pnl
+        if pnl > 0:
+            b["vinti"] += 1
+            b["_g"] += pnl
+        elif pnl < 0:
+            b["perdite"] += 1
+            b["_l"] -= pnl
+    out = {}
+    for key, b in per.items():
+        out[key] = {"trades": b["trades"], "vinti": b["vinti"], "perdite": b["perdite"],
+                    "pnl": round(b["pnl"], 4),
+                    "pf_vissuto": round(b["_g"] / b["_l"], 3) if b["_l"] > 0 else None}
+    return out
+
+
+def _pf_lista(pnls: list) -> float | None:
+    g = sum(p for p in pnls if p > 0)
+    l = -sum(p for p in pnls if p < 0)
+    return round(g / l, 3) if l > 0 else None
+
+
+def _mediana(xs: list):
+    xs = sorted(x for x in xs if x is not None)
+    if not xs:
+        return None
+    n = len(xs)
+    return round(xs[n // 2] if n % 2 else (xs[n // 2 - 1] + xs[n // 2]) / 2, 3)
+
+
+def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
+              worker, rss_max_mb, modalita: str, now: float) -> dict:
+    run = run or {}
+    passate = [p for p in (run.get("passed") or []) if isinstance(p, dict)]
+    prem, prot = conta_verdetti_trailing(trades or [], settings.ORCHESTRATOR_TIMEFRAME)
+    p1h = None
+    if isinstance(run_1h, dict) and run_1h.get("started_at"):
+        p1h = {"at": _num(run_1h.get("started_at")),
+               "durata_s": int(_num(run_1h.get("duration_s")) or 0),
+               "coin": run_1h.get("symbols"), "valutazioni": run_1h.get("n_eval"),
+               "passate": run_1h.get("n_passed")}
+    n_eval = int(run.get("n_eval") or 0)
+    coin = run.get("coin_valutate")
+    lettura = (f"{n_eval} valutazioni su {coin if coin is not None else '?'} coin, "
+               f"{int(run.get('n_passed') or 0)} passate ({modalita}), "
+               f"durata {_durata_testo(run.get('duration_s'))}.")
+    cand = dict(candidate or {})
+    return {
+        "coin_valutate": coin, "valutazioni": n_eval, "passate": int(run.get("n_passed") or 0),
+        "passate_lista": [{"coin": p.get("symbol"), "id": p.get("id"),
+                           "pf": _num(p.get("pf")), "pnl": _num(p.get("pnl"))}
+                          for p in passate[:10]],
+        "spec_note": run.get("n_specs_note"), "spec_rivalutate": run.get("n_specs_rivalutate"),
+        "spec_con_conferme": run.get("n_specs_con_conferme"),
+        "spec_tagliate": run.get("n_specs_tagliate"),
+        "tetto_rivalutazione": run.get("reeval_cap"),
+        "candidate": cand or None,
+        "passata_1h": p1h,
+        "worker": worker, "rss_max_mb": _num(rss_max_mb),
+        "paper_propone": {"scala": scala_str(scala_paper), "keep": _num(keep_paper),
+                          "verdetti_trailing": prem + prot},
+        "lettura": lettura,
+        "dettaglio": ("candidate: `totale` e' la lista comune valutata su ogni coin "
+                      "(nuove + rivalutate, dopo de-dup e gemelle); `intorno` sono le "
+                      "figlie valutate solo sulla coin della madre; ai/varianti/casuali/"
+                      "semi sono contate all'assemblaggio, prima della de-dup."),
+    }
+
+
+def _sez_registro(reg_doc: dict, pairs: dict, doc_prec: dict, now: float) -> dict:
+    validated = [k for k in (reg_doc.get("validated") or []) if isinstance(k, str)]
+    dp = distribuzione_pass(pairs, now)
+    sal = salute_registro(pairs)
+    prec = ((doc_prec or {}).get("registro") or {}).get("validate")
+    delta = (len(validated) - int(prec)) if isinstance(prec, int) and not isinstance(prec, bool) else None
+    cop = _num(reg_doc.get("coverage"))
+    pronto = reg_doc.get("ready")
+    lettura = (f"{len(validated)} validate su {reg_doc.get('coins_covered', '?')} coin "
+               f"({cop * 100:.0f}%), pronto {'si' if pronto else 'no'}; "
+               f"{sal['occupazione']}/{sal['limite']} intoccabili nel tetto; "
+               f"{dp['a_un_passo']} a un passo, {dp['finestre_scadute']} con finestra scaduta."
+               if cop is not None else
+               f"{len(validated)} validate; copertura non nel registro.")
+    return {
+        "validate": len(validated), "coin_coperte": reg_doc.get("coins_covered"),
+        "universo": reg_doc.get("universe_size"), "copertura": cop,
+        "obiettivo_copertura": _num(reg_doc.get("ready_fraction")),
+        "pronto": None if pronto is None else bool(pronto), "pronto_per": reg_doc.get("ready_by"),
+        "distribuzione_pass": dp["distribuzione"], "congelate": dp["congelate"],
+        "a_un_passo": dp["a_un_passo"], "finestre_scadute": dp["finestre_scadute"],
+        "coppie": sal["coppie"], "base": sal["base"], "generate": sal["generate"],
+        "generate_con_conferme": sal["generate_con_conferme"],
+        "occupazione": sal["occupazione"], "limite": sal["limite"],
+        "alleggerito": sal["alleggerito"],
+        "senza_promessa": senza_promessa(pairs, validated),
+        "statistica_t": statistica_t(pairs),
+        "validate_delta_giro": delta,
+        "lettura": lettura,
+        "dettaglio": ("`occupazione` = base + generate con conferme: la parte del tetto che "
+                      "nessuno pota (il difetto del 31 agosto). `alleggerito` = almeno "
+                      "una validata senza i campi descrittivi."),
+    }
+
+
+def _sez_cervello(esito: dict, keep_giro: dict, pairs: dict, validated: list,
+                  intorno_girato: bool, doc_prec: dict, letture: dict, now: float) -> dict:
+    esito = esito or {}
+    ei = dict(esito.get("intorno") or {})
+    ev = dict(esito.get("varianti") or {})
+    if intorno_girato:
+        intorno = {"madri": int(ei.get("madri", 0) or 0),
+                   "figlie_passate": int(ei.get("figlie_passate", 0) or 0),
+                   "promosse": [str(k) for k in (ei.get("promosse") or [])][:10],
+                   "senza_margine": int(ei.get("senza_margine", 0) or 0),
+                   "madre_non_valutata": int(ei.get("madre_non_valutata", 0) or 0),
+                   "scartate": int(ei.get("scartate", 0) or 0),
+                   "ultimo_completo_at": now}
+    else:
+        # l'intorno gira solo nel giro completo: si RICOPIA l'ultimo, con la sua data
+        prec = ((doc_prec or {}).get("cervello") or {}).get("intorno")
+        intorno = dict(prec) if isinstance(prec, dict) else None
+    varianti = {"create": int(ev.get("create", 0) or 0), "passate": int(ev.get("passate", 0) or 0),
+                "retro_ok": int(ev.get("retro_ok", 0) or 0),
+                "promosse": [str(k) for k in (ev.get("promosse") or [])][:10],
+                "scartate": int(ev.get("scartate", 0) or 0),
+                "sostituzioni": [{"figlia": str(s.get("figlia")), "madre": str(s.get("madre"))}
+                                 for s in (ev.get("sostituzioni") or []) if isinstance(s, dict)][:10]}
+    aut = letture.get("autopsia_discover") or {}
+    autopsia = None
+    if isinstance(aut, dict) and aut.get("evaluated"):
+        binding = aut.get("binding") or {}
+        primo = next(iter(binding), None) if isinstance(binding, dict) else None
+        diagn = int(aut.get("diagnosed") or 0)
+        autopsia = {"at": _num(aut.get("updated_at")), "valutazioni": int(aut.get("evaluated") or 0),
+                    "passate": int(aut.get("passed") or 0),
+                    "quota": round(int(aut.get("passed") or 0) / int(aut.get("evaluated")), 5),
+                    "criterio_principale": primo,
+                    "quota_criterio": (round(float(binding[primo]) / diagn, 3)
+                                       if primo is not None and diagn else None),
+                    "quasi_passaggi": aut.get("near_miss_count")}
+    base_at = _num((letture.get("autopsia_current") or {}).get("updated_at"))
+    sup = letture.get("supervisore") or {}
+    supervisore = None
+    if isinstance(sup, dict) and sup:
+        storia = [d for d in (sup.get("history") or []) if isinstance(d, dict)]
+        ultima = storia[-1] if storia else None
+        none_di_fila = 0
+        for d in reversed(storia):
+            if d.get("kind") != "none":
+                break
+            none_di_fila += 1
+        supervisore = {"at": _num(sup.get("updated_at")),
+                       "ultima_decisione": ({"kind": ultima.get("kind"),
+                                             "reason": _tronca(ultima.get("reason"), 160)}
+                                            if ultima else None),
+                       "decisioni_none_di_fila": none_di_fila}
+    scelti = " ".join(f"{d['valore']:g}x{d['n']}" for d in (keep_giro or {}).get("scelti") or [])
+    lettura = (f"intorno {intorno['madri'] if intorno else '?'} madri / "
+               f"{len(intorno['promosse']) if intorno else '?'} promosse"
+               f"{'' if intorno_girato else ' (ultimo giro completo)'}; "
+               f"varianti {varianti['create']} create / {len(varianti['promosse'])} promosse; "
+               f"keep scelto: {scelti or 'nessuno'}.")
+    return {
+        "riga": riga_cervello({"intorno": ei, "varianti": ev}).strip(),
+        "intorno": intorno, "varianti": varianti,
+        "keep_giro": keep_giro or conta_keep_giro({}, [], None),
+        "keep_validate": conta_keep(pairs, validated),
+        "scala_validate": scala_distribuzione(pairs, validated),
+        "breakeven_validate": breakeven_n(pairs, validated),
+        "autopsia": autopsia,
+        "autopsia_base_congelata_da_s": int(now - base_at) if base_at else None,
+        "supervisore": supervisore,
+        "lettura": lettura,
+    }
+
+
+def _voce_operata(key: str, rec: dict, spec, paper: dict | None, verdetto: dict | None) -> dict:
+    sym, strat = key.split("|", 1)
+    lp = rec.get("last_params") if isinstance(rec.get("last_params"), dict) else {}
+    hold = rec.get("holdout") if isinstance(rec.get("holdout"), dict) else None
+    dpf = rec.get("direzione_pf") if isinstance(rec.get("direzione_pf"), dict) else None
+    if isinstance(spec, dict):
+        famiglia = famiglia_spec(spec)
+        origine = spec.get("origine") or None
+    else:
+        famiglia = None if rec.get("generated") else "base"
+        origine = None if rec.get("generated") else "base"
+    pnl_pct = _num(rec.get("last_pnl_pct"))
+    t = _num(rec.get("last_t"))
+    v = verdetto if isinstance(verdetto, dict) else {}
+    # 300 voci devono stare in 200 KB (test): i tempi in secondi interi, `t` a due
+    # decimali, il motivo della deriva a 60 caratteri. Niente `sostituita_da`: una
+    # coppia operata non e' MAI sostituita (lo esclude `coppie_validate`), quindi
+    # sarebbe sempre null; le madri sostituite si contano in `n_sostituite`.
+    return {
+        "chiave": key, "coin": sym, "strategia": strat, "famiglia": famiglia,
+        "origine": origine,
+        "genitore": spec.get("genitore") if isinstance(spec, dict) else None,
+        "ipotesi": _tronca(spec.get("ipotesi"), 60) if isinstance(spec, dict) and spec.get("ipotesi") else None,
+        "pass": int(rec.get("pass_count", 0) or 0),
+        "validata_at": int(_num(rec.get("validated_at")) or 0) or None,
+        "ultimo_pass_at": int(_num(rec.get("last_passed_at")) or 0) or None,
+        "pf_promesso": _num(rec.get("last_pf")),
+        "pnl_promesso_pct": round(pnl_pct * 100, 1) if pnl_pct is not None else None,
+        "t": round(t, 2) if t is not None else None,
+        "holdout_ok": (bool(hold.get("ok")) if hold and "ok" in hold else None),
+        "scala": scala_str(lp.get("scale_r_mults")),
+        "breakeven": (bool(lp["sl_to_breakeven"]) if "sl_to_breakeven" in lp else None),
+        "keep": _num(lp.get("profit_lock_keep")),
+        "direzione_pf": ({"long": _num((dpf.get("long") or {}).get("pf")),
+                          "short": _num((dpf.get("short") or {}).get("pf"))} if dpf else None),
+        "paper": ({**paper, "verdetto": v.get("verdict"), "motivo": _tronca(v.get("reason"), 60) or None}
+                  if paper else None),
+    }
+
+
+def _sez_strategie(reg_doc: dict, pairs: dict, specs: dict, drift_doc: dict, trades,
+                   letture: dict, now: float) -> dict:
+    validated = [k for k in (reg_doc.get("validated") or []) if isinstance(k, str)]
+    operate = coppie_operate(pairs, now)
+    verdetti = (drift_doc or {}).get("pairs") or {}
+    paper = paper_per_coppia(trades, operate) if trades is not None else None
+    voci = []
+    for key in operate:
+        rec = pairs.get(key) or {}
+        strat = rec.get("strategy") or key.split("|", 1)[-1]
+        voci.append(_voce_operata(key, rec, (specs or {}).get(strat),
+                                  (paper or {}).get(key), verdetti.get(key)))
+    # prima chi ha trade nel paper, poi la promessa piu' alta: se si tronca a 300
+    # restano fuori le coppie di cui si sa meno
+    voci.sort(key=lambda v: (-(v["paper"] or {}).get("trades", 0),
+                             -(v["pf_promesso"] or 0), v["chiave"]))
+    n_con_paper = sum(1 for v in voci if v["paper"]) if paper is not None else None
+    n_senza_promessa = sum(1 for v in voci if not v["pf_promesso"])
+    fam: dict[str, dict] = {}
+    coin: dict[str, dict] = {}
+    for v in voci:
+        f = fam.setdefault(v["famiglia"] or "ignota", {"coppie": 0, "coin": set(), "pf": [],
+                                                       "pt": 0, "pnl": 0.0, "pnls": []})
+        f["coppie"] += 1
+        f["coin"].add(v["coin"])
+        if v["pf_promesso"]:
+            f["pf"].append(v["pf_promesso"])
+        c = coin.setdefault(v["coin"], {"coppie": 0, "pt": 0, "pnl": 0.0})
+        c["coppie"] += 1
+        if v["paper"]:
+            f["pt"] += v["paper"]["trades"]
+            f["pnl"] += v["paper"]["pnl"]
+            c["pt"] += v["paper"]["trades"]
+            c["pnl"] += v["paper"]["pnl"]
+    # il PF per famiglia si calcola sui trade, non sulla somma dei PF per coppia
+    pnl_fam: dict[str, list] = {}
+    if trades is not None:
+        fam_di = {v["chiave"]: v["famiglia"] or "ignota" for v in voci}
+        for t in trades or []:
+            if not isinstance(t, dict) or str(t.get("exit_reason", "")) in ESITI_ESTERNI:
+                continue
+            k = f"{t.get('symbol', '?')}|{t.get('strategy', '?')}"
+            if k in fam_di:
+                pnl_fam.setdefault(fam_di[k], []).append(_num(t.get("pnl")) or 0.0)
+    per_famiglia = [{"famiglia": name, "coppie": f["coppie"], "coin": len(f["coin"]),
+                     "pf_promesso_mediano": _mediana(f["pf"]),
+                     "paper_trades": f["pt"] if trades is not None else None,
+                     "paper_pnl": round(f["pnl"], 4) if trades is not None else None,
+                     "paper_pf": _pf_lista(pnl_fam.get(name, [])) if trades is not None else None}
+                    for name, f in sorted(fam.items(), key=lambda kv: (-kv[1]["coppie"], kv[0]))]
+    per_coin = [{"coin": name, "coppie": c["coppie"],
+                 "paper_trades": c["pt"] if trades is not None else None,
+                 "paper_pnl": round(c["pnl"], 4) if trades is not None else None}
+                for name, c in sorted(coin.items(), key=lambda kv: (-kv[1]["coppie"], kv[0]))][:10]
+    pf_reg = [_num((pairs.get(k) or {}).get("last_pf")) for k in validated]
+    pf_reg = [p for p in pf_reg if p]
+    glob = (drift_doc or {}).get("global") or {}
+    vissuto = _num(glob.get("live_pf")) if glob.get("trades") else None
+    if vissuto is not None and vissuto >= 99:
+        vissuto = None
+    promessa = {"pf_promesso_mediano_operate": _mediana([v["pf_promesso"] for v in voci if v["pf_promesso"]]),
+                "pf_atteso_media_registro": round(sum(pf_reg) / len(pf_reg), 3) if pf_reg else None,
+                "pf_vissuto_30g": vissuto}
+    vite_doc = letture.get("vite")
+    if isinstance(vite_doc, dict) and vite_doc:
+        eventi = [e for e in (vite_doc.get("events") or []) if isinstance(e, dict)
+                  and _num(e.get("at")) is not None and _num(e.get("at")) >= now - 7 * 86400]
+        vite = {"promosse_7g": sum(1 for e in eventi if e.get("tipo") == "promossa"),
+                "rimosse_7g": sum(1 for e in eventi if e.get("tipo") == "rimossa"),
+                "parziale": False}
+    else:
+        vite = {"promosse_7g": None, "rimosse_7g": None, "parziale": True}
+    n_operate = len(operate)
+    lettura = (f"{n_operate} operate ({n_con_paper if n_con_paper is not None else '?'} con trade "
+               f"nel paper, {n_senza_promessa} senza promessa); PF promesso mediano "
+               f"{promessa['pf_promesso_mediano_operate']} vs vissuto 30g {vissuto}.")
+    return {
+        "n_operate": n_operate, "n_con_paper": n_con_paper,
+        "n_senza_promessa": n_senza_promessa,
+        # le madri sostituite NON stanno in `validated` (le esclude coppie_validate):
+        # si contano fra le coppie a soglia con `sostituita_da`
+        "n_sostituite": sum(1 for r_ in pairs.values() if isinstance(r_, dict)
+                            and int(r_.get("pass_count", 0) or 0) >= MIN_PASSES
+                            and r_.get("sostituita_da")),
+        "n_nate_intorno": sum(1 for k in operate if (pairs.get(k) or {}).get("nata_intorno_at")),
+        "n_da_referto": sum(1 for v in voci if v["origine"] == "referto"),
+        "n_scadute_dal_giro": max(0, len(validated) - n_operate),
+        "operate": voci[:DOC_GATE_OPERATE_MAX],
+        "operate_troncate": max(0, len(voci) - DOC_GATE_OPERATE_MAX),
+        "per_famiglia": per_famiglia, "per_coin": per_coin,
+        "promessa_vs_vissuto": promessa, "vite": vite,
+        "lettura": lettura,
+        "dettaglio": ("operate = validate del registro, fresche, non sostituite e robuste "
+                      "(stessa regola di adaptation._robust_only); paper = trade per "
+                      "symbol|strategy senza esiti esterni; verdetto/motivo da drift/current."
+                      + (" Trade del paper NON disponibili in questo giro." if trades is None else "")),
+    }
+
+
+def costruisci_doc_gate(*, reg_doc: dict, specs: dict, drift_doc: dict, trades,
+                        esito: dict, run: dict, keep_paper, scala_paper, doc_prec: dict,
+                        now: float, iniziato_at: float, modalita: str,
+                        intorno_girato: bool, candidate: dict | None = None,
+                        keep_giro: dict | None = None, letture: dict | None = None,
+                        worker=None, rss_max_mb=None, fase: str = "discover") -> dict:
+    """Il documento `dashboard/gate` intero (docs/controllo_schema.md §2), PURO:
+    prende cio' che il main ha gia' letto e calcolato e non tocca Firebase.
+
+    `reg_doc`: il registro DOPO il merge (con `pairs` codificato o gia' dict);
+    `specs`: le spec note (id -> spec) per famiglia/origine; `drift_doc`:
+    `drift/current`; `trades`: i trade del paper letti una volta (None = fonte
+    assente: i campi del paper escono null, non zero); `esito`: `esito["intorno"]`
+    e `esito["varianti"]` del merge; `run`: il riepilogo scritto in
+    `discovered_last_run`; `doc_prec`: il documento del giro precedente (per
+    `validate_delta_giro` e per ricopiare l'intorno quando questo giro non e'
+    completo); `letture`: i documenti accessori gia' letti (autopsia, supervisore,
+    vite, passata 1h), ognuno facoltativo."""
+    letture = letture or {}
+    reg_doc = reg_doc or {}
+    pairs = decode_pairs(reg_doc.get("pairs")) if not isinstance(reg_doc.get("pairs"), dict) \
+        else reg_doc["pairs"]
+    validated = [k for k in (reg_doc.get("validated") or []) if isinstance(k, str)]
+    doc = {
+        "meta": {"versione_schema": 1, "stato": "finito", "fase": fase, "errore": None,
+                 "iniziato_at": iniziato_at, "generato_at": now,
+                 "durata_s": int(max(0.0, now - iniziato_at)), "modalita": modalita,
+                 "generato_da": "discovery"},
+        "giro": _sezione("giro", ["fs:strategy_params/discovered_last_run",
+                                  "fs:strategy_params/discovered_last_run_1h", "fs:trades"],
+                         lambda: _sez_giro(run, candidate, keep_paper, scala_paper, trades,
+                                           letture.get("run_1h"), worker, rss_max_mb, modalita, now),
+                         now),
+        "registro": _sezione("registro", ["fs:strategy_registry/validated"],
+                             lambda: _sez_registro(reg_doc, pairs, doc_prec, now), now),
+        "cervello": _sezione("cervello", ["giro", "fs:strategy_registry/validated",
+                                          "fs:gate_autopsy/discover", "fs:gate_autopsy/current",
+                                          "fs:supervisor/state"],
+                             lambda: _sez_cervello(esito, keep_giro, pairs, validated,
+                                                   intorno_girato, doc_prec, letture, now), now),
+        "strategie": _sezione("strategie", ["fs:strategy_registry/validated",
+                                            "fs:discovered_strategies/specs", "fs:drift/current",
+                                            "fs:trades", "fs:gate_history/lifecycle"],
+                              lambda: _sez_strategie(reg_doc, pairs, specs, drift_doc, trades,
+                                                     letture, now), now),
+    }
+    return doc
+
+
+def letture_doc_gate(fb) -> dict:
+    """I documenti accessori del documento del gate, ognuno fail-open: un documento
+    che manca lascia la sua parte a null, non ferma il giro."""
+    out: dict = {}
+    for nome, coll, did in (("drift", "drift", "current"),
+                            ("autopsia_discover", "gate_autopsy", "discover"),
+                            ("autopsia_current", "gate_autopsy", "current"),
+                            ("supervisore", "supervisor", "state"),
+                            ("vite", "gate_history", "lifecycle"),
+                            ("run_1h", "strategy_params", "discovered_last_run_1h")):
+        try:
+            d = fb.get_doc(coll, did)
+            out[nome] = d if isinstance(d, dict) else None
+        except Exception as exc:  # noqa: BLE001
+            print(f"[gate-doc] {coll}/{did} non letto ({str(exc)[:80]})")
+            out[nome] = None
+    return out
+
+
+def pubblica_doc_gate(fb, **kw) -> dict | None:
+    """Legge il registro (DOPO il merge), le spec e i documenti accessori, costruisce
+    il documento e lo scrive. Non solleva mai: e' l'ultimo passo del giro e un
+    racconto non salvato non deve costare le conferme appena scritte nel registro.
+    `kw` sono gli argomenti di `costruisci_doc_gate` che solo il main conosce."""
+    try:
+        reg_doc = fb.get_doc("strategy_registry", "validated") or {}
+        specs = kw.pop("specs", None)
+        if specs is None:
+            specs = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+        letture = letture_doc_gate(fb)
+        doc = costruisci_doc_gate(reg_doc=reg_doc, specs=specs, drift_doc=letture.get("drift") or {},
+                                  letture=letture, **kw)
+        n = len(json.dumps(pulisci_per_firestore(doc), ensure_ascii=False, default=str).encode("utf-8"))
+        if n > DOC_GATE_MAX_BYTES:
+            # oltre il tetto si taglia la lista piu' lunga, dichiarandolo: un documento
+            # rifiutato da Firestore lascerebbe la dashboard sul giro precedente
+            voci = doc["strategie"].get("operate") or []
+            doc["strategie"]["operate"] = voci[: max(50, len(voci) // 2)]
+            doc["strategie"]["operate_troncate"] = (doc["strategie"].get("operate_troncate") or 0) \
+                + len(voci) - len(doc["strategie"]["operate"])
+            print(f"[gate-doc] {n} byte oltre {DOC_GATE_MAX_BYTES}: lista `operate` dimezzata")
+        ok = scrivi_doc_gate(fb, doc)
+        m = doc["meta"]
+        errori = [s for s in ("giro", "registro", "cervello", "strategie") if doc[s].get("errore")]
+        print(f"[gate-doc] dashboard/gate {'scritto' if ok else 'NON scritto'}: {m['stato']} "
+              f"({m['modalita']}, {n // 1024} KiB)"
+              + (f" · sezioni in errore: {', '.join(errori)}" if errori else ""))
+        return doc
+    except Exception as exc:  # noqa: BLE001
+        print(f"[gate-doc] documento del gate non costruito ({type(exc).__name__}: {str(exc)[:160]})")
+        return None
+
+
 def _merge_discover_shards(fb, args) -> int:
     """Riunisce gli shard di discovery e aggiorna il registro UNA volta sola."""
+    t0 = time.time()
     run_id = os.getenv("GITHUB_RUN_ID", "")
     combined_out: dict = {}
     passed_keys: list[str] = []
@@ -1764,15 +2313,24 @@ def _merge_discover_shards(fb, args) -> int:
     print(f"[merge] {used}/{args.num_shards} shard uniti: {len(passed_keys)} coppie passate")
     if combined_specs:
         persist_specs(fb, combined_specs)
-    validated = merge_into_registry(fb, combined_out, passed_keys)
+    esito_merge: dict = {}
+    validated = merge_into_registry(fb, combined_out, passed_keys, esito=esito_merge)
     summary = [{"symbol": e["symbol"], "id": e["strategy"], "pf": e["oos_pf"],
                 "pnl": e["oos_pnl_pct"], "desc": GeneratedStrategy(e["spec"]).description}
                for e in combined_out.values()]
-    fb.set_doc("strategy_params", "discovered_last_run", {
+    riepilogo_run = {
         "updated_at": time.time(), "n_eval": n_eval, "n_passed": len(passed_keys),
         "passed": [{"symbol": s["symbol"], "id": s["id"], "pf": s["pf"], "pnl": s["pnl"]}
                    for s in summary],
-    })
+    }
+    fb.set_doc("strategy_params", "discovered_last_run", riepilogo_run)
+    # il documento del gate anche da qui (25 set 2026): con gli shard l'intorno
+    # non gira e le candidate non si contano, e il documento lo dice (null)
+    pubblica_doc_gate(fb, trades=trades_del_paper(fb), esito=esito_merge,
+                      run=riepilogo_run, keep_paper=None, scala_paper=None,
+                      doc_prec=leggi_doc_gate(fb), now=time.time(), iniziato_at=t0,
+                      modalita="completa", intorno_girato=False, candidate=None,
+                      keep_giro=conta_keep_giro(combined_out, passed_keys, None))
     print(f"[merge] coppie validate totali nel registro (base+generate): {len(validated)}")
     _notify(summary, n_eval, len(combined_specs), args.num_shards)
     return 0
@@ -1812,344 +2370,401 @@ def main() -> int:
     if args.merge:
         return _merge_discover_shards(fb, args)
 
-    # 1) candidate NUOVE  2) RI-VALUTA le scoperte precedenti (così accumulano i
-    # pass e diventano operabili)  3) mutazioni per evolvere attorno alle vincenti.
-    # 1a) IPOTESI AI: poche spec con un meccanismo dichiarato, al posto di altrettante
-    #     estrazioni casuali. Non e' un'aggiunta all'imbuto: SOSTITUISCE una quota di
-    #     candidate casuali, perche' ogni candidata in piu' e' un'estrazione in piu'
-    #     della lotteria del confronto multiplo. Senza AI la quota resta casuale e il
-    #     comportamento e' identico a prima.
-    prove = prove_dal_paper(fb)
-    if prove:
-        print(f"[discover] prove del paper passate all'AI:\n{prove}")
-    # B3: i quasi-passaggi del giro precedente al modello, che risponde con uno
-    # schema e con consigli; i consigli entrano nel contesto delle proposte di
-    # QUESTO giro. Fail-open: senza AI o senza autopsia si propone come prima.
-    from bot.ai.autopsia import analizza as ai_autopsia, contesto_per_le_proposte
-    try:
-        autopsia = ai_autopsia(fb)
-    except Exception as exc:  # noqa: BLE001
-        autopsia = None
-        print(f"[ai-autopsia] saltata ({str(exc)[:80]})")
-    if autopsia:
-        print(f"[ai-autopsia] schema: {autopsia.get('schema', '')[:300]}")
-        print(f"[ai-autopsia] consigli: {autopsia.get('consigli', '')[:300]}")
-    ai_specs = ai_propose(min(settings.AI_HYPOTHESES_PER_RUN, args.generate),
-                          market_context=f"Timeframe operativo: {args.interval}. "
-                                         f"Universo: crypto futures USDT-M su Binance."
-                                         + (f"\n\n{prove}" if prove else "")
-                                         + (f"\n\n{contesto_per_le_proposte(autopsia)}"
-                                            if autopsia else ""))
-    if ai_specs:
-        print(f"[discover] {len(ai_specs)} ipotesi AI (motivate) + "
-              f"{args.generate - len(ai_specs)} casuali")
-    # L'ESITO SU FIREBASE, non solo nel log: il journal tiene le ultime righe e la
-    # discovery gira ogni tre ore, quindi il motivo degli scarti e' illeggibile gia'
-    # poche ore dopo. Best-effort: una diagnosi non salvata non deve far fallire un
-    # giro di validazione.
-    from bot.ai.hypotheses import ULTIMO_ESITO
-    if ULTIMO_ESITO:
-        try:
-            fb.set_doc("ai_hypotheses", "last", dict(ULTIMO_ESITO))
-        except Exception as exc:  # noqa: BLE001
-            print(f"[ai-hypotheses] esito non salvato ({str(exc)[:80]})")
-    # 1b) VARIANTI DAI REFERTI (B8): le spec note servono PRIMA, perche' una
-    #     variante nasce da una spec che il bot ha gia' operato. Come le ipotesi
-    #     AI, sostituiscono una quota di casuali: il giro non si allunga.
-    existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
-    reg = fb.get_doc("strategy_registry", "validated") or {}
-    varianti = varianti_dai_referti(fb, existing, args.interval,
-                                    pairs=decode_pairs(reg.get("pairs")))
-    n_casuali = max(0, min(args.generate - len(ai_specs) - len(varianti), RANDOM_MAX))
-    if n_casuali < args.generate - len(ai_specs) - len(varianti):
-        print(f"[discover] candidate casuali limitate a {n_casuali} "
-              f"(DISCOVERY_RANDOM_MAX={RANDOM_MAX}): le altre fonti sono ragionate")
-    specs = ai_specs + varianti + generate_specs(n_casuali, seed=args.seed)
+    # LA MODALITA' SI DECIDE SUBITO (25 set 2026): la stessa regola di prima
+    # (completa nel primo giro dopo mezzanotte UTC, o con --symbols), solo
+    # anticipata, perche' il documento del gate la dichiara gia' in apertura.
     _ora = time.time()
     _completa = (not REEVAL_DAILY) or giro_giornaliero(_ora) or bool(args.symbols)
-    existing_list, diag_reeval = specs_da_rivalutare(existing, reg, args.reeval_cap,
-                                                     completa=_completa, now=_ora)
-    print(f"[discover] rivalutazione {diag_reeval['reeval_modalita']}: "
-          f"{diag_reeval['n_specs_rivalutate']} spec note su {diag_reeval['n_specs_note']}")
-    specs.extend(existing_list)
-    # MUTAZIONE INFORMATA: si evolve attorno ai QUASI-PASSAGGI del run precedente
-    # (una sola condizione mancata, e per poco), non attorno alle prime dieci spec
-    # che capitano. E' la differenza fra cercare dove l'ultimo tentativo si e'
-    # avvicinato e ricominciare da capo ogni volta. Fail-open: senza autopsia si
-    # mutano le prime, come prima.
-    # il registro serve a sapere quali coin sono GIA' coperte: i semi vanno
-    # preferibilmente sulle altre, altrimenti l'evoluzione rinforza dove qualcosa
-    # gia' funziona e il numero di monete operabili non si muove.
-    seeds = mutation_seeds(fb, existing, pairs=decode_pairs(reg.get("pairs")))
-    if seeds:
-        print(f"[discover] {len(seeds)} semi dai quasi-passaggi del run precedente")
-    bases = seeds or existing_list[:SEEDS]
-    for i, base in enumerate(bases[:SEEDS]):
-        specs.append(mutate(base, seed=args.seed + i + 1))
-    # IL TIMEFRAME DELLA PASSATA sulle candidate nuove: una spec nata in una
-    # passata a 1 ora e' una strategia a 1 ora, con il suo id (che include il
-    # timeframe). Le spec gia' note NON si ristampano: si rivalutano solo quelle
-    # dello stesso intervallo, altrimenti una spec a 15m giudicata a 1h finirebbe
-    # nel registro con lo stesso nome e un'altra natura.
+    modalita = "completa" if _completa else "solo urgenti"
     tf_bot = settings.ORCHESTRATOR_TIMEFRAME
-    nuove = []
-    for sp in specs:
-        if sp.get("id") in existing:
-            if (existing[sp["id"]].get("timeframe") or tf_bot) == args.interval:
-                nuove.append(sp)
-            continue
-        if args.interval != tf_bot:
-            sp = {**sp, "timeframe": args.interval}
-            sp["id"] = spec_id(sp)
-        nuove.append(sp)
-    specs = nuove
-    # de-dup per id
-    specs = list({s["id"]: s for s in specs}.values())
-    # e per LOGICA: due spec con la stessa firma sono la stessa scommessa
-    specs, n_gemelle = scarta_gemelle(specs, existing)
-    if n_gemelle:
-        print(f"[discover] {n_gemelle} candidate scartate perche' gemelle di una "
-              f"spec gia' nota (stessa logica, id diverso)")
-    for sym, ids in gemelle_validate(decode_pairs(reg.get("pairs")), existing)[:8]:
-        print(f"[discover] GEMELLE gia' validate su {sym}: {len(ids)} coppie con la "
-              f"stessa logica ({', '.join(ids[:4])}{'…' if len(ids) > 4 else ''})")
-    print(f"[discover] {len(specs)} candidate "
-          f"({diag_reeval['n_specs_con_conferme']} con conferme ri-validate + "
-          f"{len(existing_list) - diag_reeval['n_specs_con_conferme']} altre, "
-          f"{diag_reeval['n_specs_tagliate']} tagliate su "
-          f"{diag_reeval['n_specs_note']} note) seed={args.seed} {args.start}->{end}")
+    # IL DOCUMENTO DEL GATE, `dashboard/gate` (25 set 2026, docs/controllo_schema.md
+    # §2): all'apertura si fonde il SOLO `meta` con `stato: in_corso`, cosi' il
+    # controllo orario e la dashboard sanno che il giro sta girando ma continuano
+    # a mostrare le sezioni del giro precedente; a fine giro si scrive tutto; se
+    # il giro cade, l'`except` in fondo scrive `stato: errore` e rilancia. La
+    # passata a 1 ora (lanciata da optimize) e' la fase `passata_1h`: segna solo
+    # l'apertura, il documento intero lo scrive il giro sul timeframe del bot.
+    fase_gate = "discover" if args.interval == tf_bot else "passata_1h"
+    doc_gate_prec = leggi_doc_gate(fb)
+    aggiorna_meta_gate(fb, {"stato": "in_corso", "fase": fase_gate, "iniziato_at": t0,
+                            "modalita": modalita, "errore": None})
+    # Da qui in poi il corpo del giro sta dentro un `try`: e' il solo modo di
+    # scrivere `stato: errore` per QUALUNQUE caduta senza spezzare `main` in due
+    # (la fine del giro e' l'ultima cosa che il log mostra, e resta qui).
+    try:
 
-    # UNIVERSO RISTRETTO (--symbols): serve alle conferme mirate. Quando si sa gia'
-    # quali coppie possono ancora arrivare a MIN_PASSES, ri-testare l'intero mercato
-    # e' tempo speso su coppie che non potrebbero comunque validarsi.
-    if getattr(args, "symbols", ""):
-        full_symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
-        print(f"[discover] universo RISTRETTO a {len(full_symbols)} coin (--symbols)")
-    else:
-        full_symbols = top_symbols_by_volume(args.top)
-    # FILTRO DI CONTESTO: toglie dall'imbuto le coin su cui una validazione non
-    # sarebbe informativa (storia dentro la sola fase di listing, illiquide,
-    # prezzo guidato da eventi discreti). Fail-open: senza AI non toglie nulla.
-    full_symbols, _excluded = ai_filter_universe(
-        [{"symbol": s} for s in full_symbols])
-    for _sym, _why in list(_excluded.items())[:10]:
-        print(f"[discover]   escluso {_sym}: {_why}")
-    # L'UNIVERSO RUOTA, LA VALIDAZIONE NO. Il top-N per volume cambia ogni giorno —
-    # fra l'8 e il 14 settembre ne e' uscito il 26% — ma una coppia ha bisogno di due
-    # settimane con la SUA coin dentro. Quando la coin esce, la coppia non fallisce:
-    # si ferma a meta' strada, perche' nella discovery una coppia prende la conferma
-    # successiva solo ripassando, e chi non viene valutato non passa.
-    #
-    # E' successo a ORCAUSDT il 13 settembre, con OTTO coppie a 2 conferme su 3, il
-    # giorno stesso in cui la loro finestra scadeva: un tentativo, uno solo, e poi il
-    # sistema ha smesso di guardarle.
-    #
-    # La riaggiunta sta DOPO il filtro di proposito: una coin che ha gia' prodotto
-    # conferme ha gia' dimostrato di essere informativa, e lasciarla escludere
-    # rimetterebbe in piedi lo stesso buco da un'altra porta.
-    if not getattr(args, "symbols", ""):
-        maturazione, diag_mat = coin_in_maturazione(
-            decode_pairs(reg.get("pairs")), time.time())
-        riaggiunte = [s for s in maturazione if s not in set(full_symbols)]
-        if riaggiunte:
-            print(f"[discover] {len(riaggiunte)} coin riaggiunte: hanno una coppia in "
-                  f"maturazione ma sono uscite dal top-{args.top} per volume "
-                  f"({', '.join(riaggiunte[:12])}"
-                  f"{' ...' if len(riaggiunte) > 12 else ''})")
-            full_symbols = list(full_symbols) + riaggiunte
-        # QUANTE NE RESTANO FUORI. La versione precedente lo prometteva in docstring
-        # e non lo stampava: un tetto che morde in silenzio e' il difetto che la
-        # riaggiunta esiste per chiudere, rientrato dalla porta del commento.
-        print(f"[discover] maturazione: {diag_mat['intoccabili']} coin a un passo "
-              f"dalla validazione (mai tagliate) + {diag_mat['coda_tenuta']} con una "
-              f"conferma · {diag_mat['tagliate']} tagliate dalla coda")
-    # L'INTORNO: solo nel giro completo, non shardato, senza --symbols (le
-    # conferme mirate non sono il posto per ritarare). Le figlie vanno nei worker
-    # per coin, non nella lista comune: valutarle su 200 coin sarebbe 200 volte
-    # il costo per una domanda che riguarda una coppia sola.
-    specs_per_symbol: dict[str, list] = {}
-    madri_intorno: dict[str, int] = {}
-    if _completa and not getattr(args, "symbols", "") and args.num_shards <= 1 and INTORNO_CAP > 0:
+        # 1) candidate NUOVE  2) RI-VALUTA le scoperte precedenti (così accumulano i
+        # pass e diventano operabili)  3) mutazioni per evolvere attorno alle vincenti.
+        # 1a) IPOTESI AI: poche spec con un meccanismo dichiarato, al posto di altrettante
+        #     estrazioni casuali. Non e' un'aggiunta all'imbuto: SOSTITUISCE una quota di
+        #     candidate casuali, perche' ogni candidata in piu' e' un'estrazione in piu'
+        #     della lotteria del confronto multiplo. Senza AI la quota resta casuale e il
+        #     comportamento e' identico a prima.
+        prove = prove_dal_paper(fb)
+        if prove:
+            print(f"[discover] prove del paper passate all'AI:\n{prove}")
+        # B3: i quasi-passaggi del giro precedente al modello, che risponde con uno
+        # schema e con consigli; i consigli entrano nel contesto delle proposte di
+        # QUESTO giro. Fail-open: senza AI o senza autopsia si propone come prima.
+        from bot.ai.autopsia import analizza as ai_autopsia, contesto_per_le_proposte
         try:
-            _drift_doc = fb.get_doc("drift", "current") or {}
-        except Exception:  # noqa: BLE001
-            _drift_doc = {}
-        for _key, _madre in coppie_per_intorno(decode_pairs(reg.get("pairs")), existing,
-                                               _drift_doc, _ora, args.interval):
-            _sym = _key.split("|", 1)[0]
-            _figlie = figlie_intorno(_madre)
-            if not _figlie:
+            autopsia = ai_autopsia(fb)
+        except Exception as exc:  # noqa: BLE001
+            autopsia = None
+            print(f"[ai-autopsia] saltata ({str(exc)[:80]})")
+        if autopsia:
+            print(f"[ai-autopsia] schema: {autopsia.get('schema', '')[:300]}")
+            print(f"[ai-autopsia] consigli: {autopsia.get('consigli', '')[:300]}")
+        ai_specs = ai_propose(min(settings.AI_HYPOTHESES_PER_RUN, args.generate),
+                              market_context=f"Timeframe operativo: {args.interval}. "
+                                             f"Universo: crypto futures USDT-M su Binance."
+                                             + (f"\n\n{prove}" if prove else "")
+                                             + (f"\n\n{contesto_per_le_proposte(autopsia)}"
+                                                if autopsia else ""))
+        if ai_specs:
+            print(f"[discover] {len(ai_specs)} ipotesi AI (motivate) + "
+                  f"{args.generate - len(ai_specs)} casuali")
+        # L'ESITO SU FIREBASE, non solo nel log: il journal tiene le ultime righe e la
+        # discovery gira ogni tre ore, quindi il motivo degli scarti e' illeggibile gia'
+        # poche ore dopo. Best-effort: una diagnosi non salvata non deve far fallire un
+        # giro di validazione.
+        from bot.ai.hypotheses import ULTIMO_ESITO
+        if ULTIMO_ESITO:
+            try:
+                fb.set_doc("ai_hypotheses", "last", dict(ULTIMO_ESITO))
+            except Exception as exc:  # noqa: BLE001
+                print(f"[ai-hypotheses] esito non salvato ({str(exc)[:80]})")
+        # 1b) VARIANTI DAI REFERTI (B8): le spec note servono PRIMA, perche' una
+        #     variante nasce da una spec che il bot ha gia' operato. Come le ipotesi
+        #     AI, sostituiscono una quota di casuali: il giro non si allunga.
+        existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+        reg = fb.get_doc("strategy_registry", "validated") or {}
+        varianti = varianti_dai_referti(fb, existing, args.interval,
+                                        pairs=decode_pairs(reg.get("pairs")))
+        n_casuali = max(0, min(args.generate - len(ai_specs) - len(varianti), RANDOM_MAX))
+        if n_casuali < args.generate - len(ai_specs) - len(varianti):
+            print(f"[discover] candidate casuali limitate a {n_casuali} "
+                  f"(DISCOVERY_RANDOM_MAX={RANDOM_MAX}): le altre fonti sono ragionate")
+        specs = ai_specs + varianti + generate_specs(n_casuali, seed=args.seed)
+        existing_list, diag_reeval = specs_da_rivalutare(existing, reg, args.reeval_cap,
+                                                         completa=_completa, now=_ora)
+        print(f"[discover] rivalutazione {diag_reeval['reeval_modalita']}: "
+              f"{diag_reeval['n_specs_rivalutate']} spec note su {diag_reeval['n_specs_note']}")
+        specs.extend(existing_list)
+        # MUTAZIONE INFORMATA: si evolve attorno ai QUASI-PASSAGGI del run precedente
+        # (una sola condizione mancata, e per poco), non attorno alle prime dieci spec
+        # che capitano. E' la differenza fra cercare dove l'ultimo tentativo si e'
+        # avvicinato e ricominciare da capo ogni volta. Fail-open: senza autopsia si
+        # mutano le prime, come prima.
+        # il registro serve a sapere quali coin sono GIA' coperte: i semi vanno
+        # preferibilmente sulle altre, altrimenti l'evoluzione rinforza dove qualcosa
+        # gia' funziona e il numero di monete operabili non si muove.
+        seeds = mutation_seeds(fb, existing, pairs=decode_pairs(reg.get("pairs")))
+        if seeds:
+            print(f"[discover] {len(seeds)} semi dai quasi-passaggi del run precedente")
+        bases = seeds or existing_list[:SEEDS]
+        n_semi = len(bases[:SEEDS])
+        for i, base in enumerate(bases[:SEEDS]):
+            specs.append(mutate(base, seed=args.seed + i + 1))
+        # IL TIMEFRAME DELLA PASSATA sulle candidate nuove: una spec nata in una
+        # passata a 1 ora e' una strategia a 1 ora, con il suo id (che include il
+        # timeframe). Le spec gia' note NON si ristampano: si rivalutano solo quelle
+        # dello stesso intervallo, altrimenti una spec a 15m giudicata a 1h finirebbe
+        # nel registro con lo stesso nome e un'altra natura.
+        nuove = []
+        for sp in specs:
+            if sp.get("id") in existing:
+                if (existing[sp["id"]].get("timeframe") or tf_bot) == args.interval:
+                    nuove.append(sp)
                 continue
-            specs_per_symbol.setdefault(_sym, []).extend(_figlie)
-            madri_intorno[_key] = len(_figlie)
-            if _sym not in full_symbols:
-                full_symbols = list(full_symbols) + [_sym]
-        if madri_intorno:
-            print(f"[discover] intorno: {len(madri_intorno)} coppie validate riprovate "
-                  f"con {sum(madri_intorno.values())} figlie (tetto {INTORNO_CAP}): "
-                  + ", ".join(list(madri_intorno)[:6]))
-    # SHARDING: ogni shard valida le candidate su una fetta dell'universo; il merge
-    # riunisce. Così copriamo l'INTERO universo restando nel timeout.
-    symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
-    print(f"[discover] shard {args.shard}/{args.num_shards}: {len(symbols)}/{len(full_symbols)} coin")
-    out: dict[str, dict] = {}
-    passed_summary: list[dict] = []
-    passed_keys: list[str] = []
-    specs_to_save: dict = {}
-    n_eval = 0
+            if args.interval != tf_bot:
+                sp = {**sp, "timeframe": args.interval}
+                sp["id"] = spec_id(sp)
+            nuove.append(sp)
+        specs = nuove
+        # de-dup per id
+        specs = list({s["id"]: s for s in specs}.values())
+        # e per LOGICA: due spec con la stessa firma sono la stessa scommessa
+        specs, n_gemelle = scarta_gemelle(specs, existing)
+        if n_gemelle:
+            print(f"[discover] {n_gemelle} candidate scartate perche' gemelle di una "
+                  f"spec gia' nota (stessa logica, id diverso)")
+        for sym, ids in gemelle_validate(decode_pairs(reg.get("pairs")), existing)[:8]:
+            print(f"[discover] GEMELLE gia' validate su {sym}: {len(ids)} coppie con la "
+                  f"stessa logica ({', '.join(ids[:4])}{'…' if len(ids) > 4 else ''})")
+        print(f"[discover] {len(specs)} candidate "
+              f"({diag_reeval['n_specs_con_conferme']} con conferme ri-validate + "
+              f"{len(existing_list) - diag_reeval['n_specs_con_conferme']} altre, "
+              f"{diag_reeval['n_specs_tagliate']} tagliate su "
+              f"{diag_reeval['n_specs_note']} note) seed={args.seed} {args.start}->{end}")
 
-    # PARALLELO: ogni simbolo valuta tutte le spec, indipendente dagli altri ->
-    # distribuito su tutti i core del runner. Fallback sequenziale se BACKTEST_WORKERS=1.
-    workers = n_workers()
-    print(f"[discover] {len(symbols)} coin x {len(specs)} spec su {workers} worker (core)")
-    diag_binding: dict = {}
-    diag_involved: dict = {}
-    diag_near: list = []
-    stats_selettore_run: dict = {"n": 0, "per_famiglia": {}}
-    coppie_selettore_run = 0
-    # le righe dei quasi-passaggi entrano SOLO nel giro completo e non shardato
-    bocciate_ok = bool(_completa and args.num_shards <= 1 and not getattr(args, "symbols", ""))
-    valutate: set = set()   # coin davvero valutate (non saltate per storia/delisting)
-    gia_validate = set(coppie_validate(decode_pairs(reg.get("pairs")), _ora))
-    # IL PAPER PROPONE (25 set 2026): oltre alla scala dei TP, il keep del
-    # profit-lock ricavato dai verdetti trailing. Calcolato UNA volta qui e
-    # passato ai worker in coda a `initargs`: un candidato in piu', mai al posto
-    # dei fissi. Serve anche alla riga «[cervello] keep» in fondo al giro.
-    keep_paper = keep_dal_paper(fb)
-    for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows in parallel_map(
-        _disc_one, symbols, workers=workers, initializer=_disc_init,
-        initargs=(args, end, specs, scala_dal_paper(fb), specs_per_symbol, gia_validate,
-                  bocciate_ok, keep_paper)
-    ):
-        n_eval += n_ev
-        if n_ev > 0:
-            valutate.add(sym)
-        if isinstance(rows, dict):
-            stats_selettore_run["n"] += int(rows.get("n", 0) or 0)
-            for k, v in (rows.get("per_famiglia") or {}).items():
-                stats_selettore_run["per_famiglia"][k] = stats_selettore_run["per_famiglia"].get(k, 0) + v
-        coppie_selettore_run += len(p_keys)
-        out.update(entries)
-        passed_keys.extend(p_keys)
-        specs_to_save.update(p_specs)
-        passed_summary.extend(summary)
-        for k, v in (diag.get("binding") or {}).items():
-            diag_binding[k] = diag_binding.get(k, 0) + v
-        for k, v in (diag.get("involved") or {}).items():
-            diag_involved[k] = diag_involved.get(k, 0) + v
-        diag_near.extend(diag.get("near") or [])
-        if p_keys:
-            print(f"[discover] {sym}: {len(p_keys)} coppie passate ✅")
-        if isinstance(diag, dict) and diag.get("rss_mb"):
-            # memoria di picco del worker che ha valutato questa coin: serve a
-            # capire da fuori QUANTO usa un worker sulla macchina vera
-            print(f"[discover] {sym}: worker rss {diag['rss_mb']} MB")
-
-    # DATASET DEL SELETTORE (passo 0): i trade OOS delle coppie passate, con le
-    # condizioni all'ingresso, accodati al file del giorno. Solo sulla VPS: gli
-    # shard non condividono il disco, e un file per shard non lo leggerebbe
-    # nessuno. Fail-open: un errore qui non tocca il registro.
-    try:
-        if args.num_shards > 1:
-            print(f"[selettore] run shardato: {stats_selettore_run['n']} righe scritte "
-                  f"dai worker dello shard, riepilogo non pubblicato")
+        # UNIVERSO RISTRETTO (--symbols): serve alle conferme mirate. Quando si sa gia'
+        # quali coppie possono ancora arrivare a MIN_PASSES, ri-testare l'intero mercato
+        # e' tempo speso su coppie che non potrebbero comunque validarsi.
+        if getattr(args, "symbols", ""):
+            full_symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
+            print(f"[discover] universo RISTRETTO a {len(full_symbols)} coin (--symbols)")
         else:
-            pubblica_dataset_selettore(fb, stats_selettore_run, end, args.interval,
-                                       coppie_selettore_run)
-    except Exception as exc:  # noqa: BLE001
-        print(f"[selettore] dataset saltato (si prosegue): {exc}")
+            full_symbols = top_symbols_by_volume(args.top)
+        # FILTRO DI CONTESTO: toglie dall'imbuto le coin su cui una validazione non
+        # sarebbe informativa (storia dentro la sola fase di listing, illiquide,
+        # prezzo guidato da eventi discreti). Fail-open: senza AI non toglie nulla.
+        full_symbols, _excluded = ai_filter_universe(
+            [{"symbol": s} for s in full_symbols])
+        for _sym, _why in list(_excluded.items())[:10]:
+            print(f"[discover]   escluso {_sym}: {_why}")
+        # L'UNIVERSO RUOTA, LA VALIDAZIONE NO. Il top-N per volume cambia ogni giorno —
+        # fra l'8 e il 14 settembre ne e' uscito il 26% — ma una coppia ha bisogno di due
+        # settimane con la SUA coin dentro. Quando la coin esce, la coppia non fallisce:
+        # si ferma a meta' strada, perche' nella discovery una coppia prende la conferma
+        # successiva solo ripassando, e chi non viene valutato non passa.
+        #
+        # E' successo a ORCAUSDT il 13 settembre, con OTTO coppie a 2 conferme su 3, il
+        # giorno stesso in cui la loro finestra scadeva: un tentativo, uno solo, e poi il
+        # sistema ha smesso di guardarle.
+        #
+        # La riaggiunta sta DOPO il filtro di proposito: una coin che ha gia' prodotto
+        # conferme ha gia' dimostrato di essere informativa, e lasciarla escludere
+        # rimetterebbe in piedi lo stesso buco da un'altra porta.
+        if not getattr(args, "symbols", ""):
+            maturazione, diag_mat = coin_in_maturazione(
+                decode_pairs(reg.get("pairs")), time.time())
+            riaggiunte = [s for s in maturazione if s not in set(full_symbols)]
+            if riaggiunte:
+                print(f"[discover] {len(riaggiunte)} coin riaggiunte: hanno una coppia in "
+                      f"maturazione ma sono uscite dal top-{args.top} per volume "
+                      f"({', '.join(riaggiunte[:12])}"
+                      f"{' ...' if len(riaggiunte) > 12 else ''})")
+                full_symbols = list(full_symbols) + riaggiunte
+            # QUANTE NE RESTANO FUORI. La versione precedente lo prometteva in docstring
+            # e non lo stampava: un tetto che morde in silenzio e' il difetto che la
+            # riaggiunta esiste per chiudere, rientrato dalla porta del commento.
+            print(f"[discover] maturazione: {diag_mat['intoccabili']} coin a un passo "
+                  f"dalla validazione (mai tagliate) + {diag_mat['coda_tenuta']} con una "
+                  f"conferma · {diag_mat['tagliate']} tagliate dalla coda")
+        # L'INTORNO: solo nel giro completo, non shardato, senza --symbols (le
+        # conferme mirate non sono il posto per ritarare). Le figlie vanno nei worker
+        # per coin, non nella lista comune: valutarle su 200 coin sarebbe 200 volte
+        # il costo per una domanda che riguarda una coppia sola.
+        specs_per_symbol: dict[str, list] = {}
+        madri_intorno: dict[str, int] = {}
+        intorno_attivo = bool(_completa and not getattr(args, "symbols", "")
+                              and args.num_shards <= 1 and INTORNO_CAP > 0)
+        if intorno_attivo:
+            try:
+                _drift_doc = fb.get_doc("drift", "current") or {}
+            except Exception:  # noqa: BLE001
+                _drift_doc = {}
+            for _key, _madre in coppie_per_intorno(decode_pairs(reg.get("pairs")), existing,
+                                                   _drift_doc, _ora, args.interval):
+                _sym = _key.split("|", 1)[0]
+                _figlie = figlie_intorno(_madre)
+                if not _figlie:
+                    continue
+                specs_per_symbol.setdefault(_sym, []).extend(_figlie)
+                madri_intorno[_key] = len(_figlie)
+                if _sym not in full_symbols:
+                    full_symbols = list(full_symbols) + [_sym]
+            if madri_intorno:
+                print(f"[discover] intorno: {len(madri_intorno)} coppie validate riprovate "
+                      f"con {sum(madri_intorno.values())} figlie (tetto {INTORNO_CAP}): "
+                      + ", ".join(list(madri_intorno)[:6]))
+        # SHARDING: ogni shard valida le candidate su una fetta dell'universo; il merge
+        # riunisce. Così copriamo l'INTERO universo restando nel timeout.
+        symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
+        print(f"[discover] shard {args.shard}/{args.num_shards}: {len(symbols)}/{len(full_symbols)} coin")
+        out: dict[str, dict] = {}
+        passed_summary: list[dict] = []
+        passed_keys: list[str] = []
+        specs_to_save: dict = {}
+        n_eval = 0
 
-    # Con gli shard ognuno vede una fetta dell'universo e sovrascriverebbe la
-    # diagnosi degli altri: meglio nessuna autopsia che una parziale spacciata per
-    # intera. Sulla VPS (non shardata) si pubblica sempre.
-    if args.num_shards <= 1:
-        _publish_discover_autopsy(fb, n_eval, len(passed_keys),
-                                  diag_binding, diag_involved, diag_near)
+        # PARALLELO: ogni simbolo valuta tutte le spec, indipendente dagli altri ->
+        # distribuito su tutti i core del runner. Fallback sequenziale se BACKTEST_WORKERS=1.
+        workers = n_workers()
+        print(f"[discover] {len(symbols)} coin x {len(specs)} spec su {workers} worker (core)")
+        diag_binding: dict = {}
+        diag_involved: dict = {}
+        diag_near: list = []
+        stats_selettore_run: dict = {"n": 0, "per_famiglia": {}}
+        coppie_selettore_run = 0
+        # le righe dei quasi-passaggi entrano SOLO nel giro completo e non shardato
+        bocciate_ok = bool(_completa and args.num_shards <= 1 and not getattr(args, "symbols", ""))
+        valutate: set = set()   # coin davvero valutate (non saltate per storia/delisting)
+        rss_max = 0.0            # picco di memoria fra i worker (per il documento del gate)
+        # LA COMPOSIZIONE DELLE CANDIDATE (25 set 2026) per `giro.candidate` del
+        # documento del gate: contata all'assemblaggio (ai/varianti/casuali/semi,
+        # prima della de-dup), `totale` e' la lista comune davvero valutata,
+        # `intorno` le figlie per coin.
+        candidate = {"totale": len(specs), "ai": len(ai_specs),
+                     "varianti_referti": len(varianti), "intorno": sum(madri_intorno.values()),
+                     "casuali": n_casuali, "semi": n_semi, "gemelle_scartate": n_gemelle,
+                     "rivalutate": len(existing_list)}
+        gia_validate = set(coppie_validate(decode_pairs(reg.get("pairs")), _ora))
+        # IL PAPER PROPONE (25 set 2026): oltre alla scala dei TP, il keep del
+        # profit-lock ricavato dai verdetti trailing. Calcolato UNA volta qui e
+        # passato ai worker in coda a `initargs`: un candidato in piu', mai al posto
+        # dei fissi. Serve anche alla riga «[cervello] keep» in fondo al giro.
+        trades_paper = trades_del_paper(fb)
+        keep_paper = keep_dal_paper(fb, trades=trades_paper)
+        scala_paper = scala_dal_paper(fb, trades=trades_paper)
+        for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows in parallel_map(
+            _disc_one, symbols, workers=workers, initializer=_disc_init,
+            initargs=(args, end, specs, scala_paper, specs_per_symbol, gia_validate,
+                      bocciate_ok, keep_paper)
+        ):
+            n_eval += n_ev
+            if n_ev > 0:
+                valutate.add(sym)
+            if isinstance(rows, dict):
+                stats_selettore_run["n"] += int(rows.get("n", 0) or 0)
+                for k, v in (rows.get("per_famiglia") or {}).items():
+                    stats_selettore_run["per_famiglia"][k] = stats_selettore_run["per_famiglia"].get(k, 0) + v
+            coppie_selettore_run += len(p_keys)
+            out.update(entries)
+            passed_keys.extend(p_keys)
+            specs_to_save.update(p_specs)
+            passed_summary.extend(summary)
+            for k, v in (diag.get("binding") or {}).items():
+                diag_binding[k] = diag_binding.get(k, 0) + v
+            for k, v in (diag.get("involved") or {}).items():
+                diag_involved[k] = diag_involved.get(k, 0) + v
+            diag_near.extend(diag.get("near") or [])
+            if p_keys:
+                print(f"[discover] {sym}: {len(p_keys)} coppie passate ✅")
+            if isinstance(diag, dict) and diag.get("rss_mb"):
+                rss_max = max(rss_max, float(diag["rss_mb"] or 0))
+                # memoria di picco del worker che ha valutato questa coin: serve a
+                # capire da fuori QUANTO usa un worker sulla macchina vera
+                print(f"[discover] {sym}: worker rss {diag['rss_mb']} MB")
 
-    # SHARD: scrive il proprio risultato; il merge riunisce e aggiorna il registro.
-    if args.num_shards > 1:
-        fb.set_doc("discover_shards", str(args.shard), {
-            "run_id": os.getenv("GITHUB_RUN_ID", ""),
-            "passed_entries": encode_pairs({k: out[k] for k in passed_keys}),
-            "passed_keys": encode_pairs(passed_keys),
-            "specs": encode_pairs(specs_to_save),
-            "n_eval": n_eval, "updated_at": time.time(),
-        })
-        print(f"[discover] shard {args.shard} scritto: {len(passed_keys)} coppie passate. "
-              f"Il merge aggiornera' il registro.")
+        # DATASET DEL SELETTORE (passo 0): i trade OOS delle coppie passate, con le
+        # condizioni all'ingresso, accodati al file del giorno. Solo sulla VPS: gli
+        # shard non condividono il disco, e un file per shard non lo leggerebbe
+        # nessuno. Fail-open: un errore qui non tocca il registro.
+        try:
+            if args.num_shards > 1:
+                print(f"[selettore] run shardato: {stats_selettore_run['n']} righe scritte "
+                      f"dai worker dello shard, riepilogo non pubblicato")
+            else:
+                pubblica_dataset_selettore(fb, stats_selettore_run, end, args.interval,
+                                           coppie_selettore_run)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[selettore] dataset saltato (si prosegue): {exc}")
+
+        # Con gli shard ognuno vede una fetta dell'universo e sovrascriverebbe la
+        # diagnosi degli altri: meglio nessuna autopsia che una parziale spacciata per
+        # intera. Sulla VPS (non shardata) si pubblica sempre.
+        if args.num_shards <= 1:
+            _publish_discover_autopsy(fb, n_eval, len(passed_keys),
+                                      diag_binding, diag_involved, diag_near)
+
+        # SHARD: scrive il proprio risultato; il merge riunisce e aggiorna il registro.
+        if args.num_shards > 1:
+            fb.set_doc("discover_shards", str(args.shard), {
+                "run_id": os.getenv("GITHUB_RUN_ID", ""),
+                "passed_entries": encode_pairs({k: out[k] for k in passed_keys}),
+                "passed_keys": encode_pairs(passed_keys),
+                "specs": encode_pairs(specs_to_save),
+                "n_eval": n_eval, "updated_at": time.time(),
+            })
+            print(f"[discover] shard {args.shard} scritto: {len(passed_keys)} coppie passate. "
+                  f"Il merge aggiornera' il registro.")
+            return 0
+
+        # merge nel registro, POI le spec: le varianti scartate dal merge (passate
+        # solo con i dati di oggi, seconde figlie, senza margine) non devono finire
+        # in discovered_strategies/specs, altrimenti al giro dopo verrebbero
+        # rivalutate su tutte le coin (audit del 24 set)
+        esito_merge: dict = {}
+        _data_end_run = 0.0
+        try:
+            _data_end_run = datetime.fromisoformat(end).replace(tzinfo=timezone.utc).timestamp()
+        except Exception:  # noqa: BLE001
+            pass
+        validated = merge_into_registry(fb, out, passed_keys,
+                                        evaluated_symbols=valutate,
+                                        intorno_madri=madri_intorno,
+                                        evaluated_spec_ids={sp["id"] for sp in specs}
+                                        | {f["id"] for fs in specs_per_symbol.values() for f in fs},
+                                        data_end_run=_data_end_run,
+                                        esito=esito_merge,
+                                        varianti_create=len(varianti))
+        scartate = set(esito_merge.get("scartate", ()))
+        if scartate:
+            passed_keys = [k for k in passed_keys if k not in scartate]
+            ids_scartati = {out[k]["strategy"] for k in scartate} - {out[k]["strategy"] for k in passed_keys}
+            specs_to_save = {i: sp for i, sp in specs_to_save.items() if i not in ids_scartati}
+            passed_summary = [s for s in passed_summary if f"{s['symbol']}|{s['id']}" not in scartate]
+        if specs_to_save:
+            persist_specs(fb, specs_to_save)
+        # riepilogo COMPATTO (niente spec/entry per ogni coppia: sforerebbe il limite
+        # di 1 MiB di Firestore). Le spec complete stanno in discovered_strategies/specs.
+        durata = time.time() - t0
+        # L'ESITO DEL CERVELLO NELLA CODA DEL LOG (25 set 2026): SEMPRE, anche a
+        # zero, e come ultime righe prima di «GIRO FINITO», perche' da fuori il log si
+        # legge con 80 righe di coda e un giro in cui l'intorno non ha promosso
+        # nessuno deve DIRLO, non tacere. Gli stessi numeri vanno nel documento
+        # `discovered_last_run` qui sotto, da cui `gate_progress` li rilegge.
+        esito_intorno = esito_merge.get("intorno") or {}
+        esito_varianti = esito_merge.get("varianti") or {}
+        print(riga_cervello_intorno(esito_intorno))
+        print(riga_cervello_varianti(esito_varianti))
+        # e la DECISIONE sul keep del profit-lock (25 set 2026): quante passate hanno
+        # scelto quale keep, e quante volte ha vinto il candidato del paper
+        print(riga_cervello_keep(out, passed_keys, keep_paper))
+        print(f"[discover] GIRO FINITO in {durata / 3600:.0f}h {(durata % 3600) / 60:.0f}m "
+              f"({n_eval} valutazioni, {len(passed_keys)} passate)")
+        _doc_run = ("discovered_last_run" if args.interval == settings.ORCHESTRATOR_TIMEFRAME
+                    else f"discovered_last_run_{args.interval}")
+        riepilogo_run = {
+            "interval": args.interval,
+            "symbols": len(symbols),
+            "coin_valutate": len(valutate),
+            "updated_at": time.time(),
+            "started_at": t0,
+            "duration_s": round(durata),
+            "n_eval": n_eval,
+            "n_passed": len(passed_keys),
+            # QUANTO MORDE IL TAGLIO. Senza questi numeri, "il registro non accumula" e
+            # "meta' del registro non viene piu' guardata" sono indistinguibili da fuori.
+            **diag_reeval,
+            "passed": [{"symbol": out[k]["symbol"], "id": out[k]["strategy"],
+                        "pf": out[k]["oos_pf"], "pnl": out[k]["oos_pnl_pct"]}
+                       for k in passed_keys],
+            # COSA HA FATTO IL CERVELLO (25 set 2026): l'esito dell'intorno e delle
+            # varianti dai referti, che prima viveva solo nel log del gate
+            "intorno": esito_intorno,
+            "varianti": esito_varianti,
+        }
+        fb.set_doc("strategy_params", _doc_run, riepilogo_run)
+        # IL DOCUMENTO DEL GATE, intero (25 set 2026): solo dal giro sul timeframe del
+        # bot, che e' l'ultimo passo della unit (dopo optimize e la passata a 1 ora).
+        # Il registro si rilegge DOPO il merge: e' quello che il bot operera'.
+        if fase_gate == "discover":
+            pubblica_doc_gate(
+                fb, specs={**existing, **specs_to_save}, trades=trades_paper,
+                esito=esito_merge, run=riepilogo_run, keep_paper=keep_paper,
+                scala_paper=scala_paper, doc_prec=doc_gate_prec, now=time.time(),
+                iniziato_at=t0, modalita=modalita, intorno_girato=intorno_attivo,
+                candidate=candidate,
+                keep_giro=conta_keep_giro(out, passed_keys, keep_paper),
+                worker=workers, rss_max_mb=rss_max or None, fase=fase_gate)
+
+        print("\n" + "=" * 60)
+        print(f"[discover] {n_eval} valutazioni, {len(passed_keys)} coppie nuove passate in QUESTO run.")
+        print(f"[discover] coppie validate totali nel registro (base+generate): {len(validated)}")
+        print("=" * 60)
+        _notify(passed_summary, n_eval, len(specs), len(symbols))
         return 0
-
-    # merge nel registro, POI le spec: le varianti scartate dal merge (passate
-    # solo con i dati di oggi, seconde figlie, senza margine) non devono finire
-    # in discovered_strategies/specs, altrimenti al giro dopo verrebbero
-    # rivalutate su tutte le coin (audit del 24 set)
-    esito_merge: dict = {}
-    _data_end_run = 0.0
-    try:
-        _data_end_run = datetime.fromisoformat(end).replace(tzinfo=timezone.utc).timestamp()
-    except Exception:  # noqa: BLE001
-        pass
-    validated = merge_into_registry(fb, out, passed_keys,
-                                    evaluated_symbols=valutate,
-                                    intorno_madri=madri_intorno,
-                                    evaluated_spec_ids={sp["id"] for sp in specs}
-                                    | {f["id"] for fs in specs_per_symbol.values() for f in fs},
-                                    data_end_run=_data_end_run,
-                                    esito=esito_merge,
-                                    varianti_create=len(varianti))
-    scartate = set(esito_merge.get("scartate", ()))
-    if scartate:
-        passed_keys = [k for k in passed_keys if k not in scartate]
-        ids_scartati = {out[k]["strategy"] for k in scartate} - {out[k]["strategy"] for k in passed_keys}
-        specs_to_save = {i: sp for i, sp in specs_to_save.items() if i not in ids_scartati}
-        passed_summary = [s for s in passed_summary if f"{s['symbol']}|{s['id']}" not in scartate]
-    if specs_to_save:
-        persist_specs(fb, specs_to_save)
-    # riepilogo COMPATTO (niente spec/entry per ogni coppia: sforerebbe il limite
-    # di 1 MiB di Firestore). Le spec complete stanno in discovered_strategies/specs.
-    durata = time.time() - t0
-    # L'ESITO DEL CERVELLO NELLA CODA DEL LOG (25 set 2026): SEMPRE, anche a
-    # zero, e come ultime righe prima di «GIRO FINITO», perche' da fuori il log si
-    # legge con 80 righe di coda e un giro in cui l'intorno non ha promosso
-    # nessuno deve DIRLO, non tacere. Gli stessi numeri vanno nel documento
-    # `discovered_last_run` qui sotto, da cui `gate_progress` li rilegge.
-    esito_intorno = esito_merge.get("intorno") or {}
-    esito_varianti = esito_merge.get("varianti") or {}
-    print(riga_cervello_intorno(esito_intorno))
-    print(riga_cervello_varianti(esito_varianti))
-    # e la DECISIONE sul keep del profit-lock (25 set 2026): quante passate hanno
-    # scelto quale keep, e quante volte ha vinto il candidato del paper
-    print(riga_cervello_keep(out, passed_keys, keep_paper))
-    print(f"[discover] GIRO FINITO in {durata / 3600:.0f}h {(durata % 3600) / 60:.0f}m "
-          f"({n_eval} valutazioni, {len(passed_keys)} passate)")
-    _doc_run = ("discovered_last_run" if args.interval == settings.ORCHESTRATOR_TIMEFRAME
-                else f"discovered_last_run_{args.interval}")
-    fb.set_doc("strategy_params", _doc_run, {
-        "interval": args.interval,
-        "symbols": len(symbols),
-        "updated_at": time.time(),
-        "started_at": t0,
-        "duration_s": round(durata),
-        "n_eval": n_eval,
-        "n_passed": len(passed_keys),
-        # QUANTO MORDE IL TAGLIO. Senza questi numeri, "il registro non accumula" e
-        # "meta' del registro non viene piu' guardata" sono indistinguibili da fuori.
-        **diag_reeval,
-        "passed": [{"symbol": out[k]["symbol"], "id": out[k]["strategy"],
-                    "pf": out[k]["oos_pf"], "pnl": out[k]["oos_pnl_pct"]}
-                   for k in passed_keys],
-        # COSA HA FATTO IL CERVELLO (25 set 2026): l'esito dell'intorno e delle
-        # varianti dai referti, che prima viveva solo nel log del gate
-        "intorno": esito_intorno,
-        "varianti": esito_varianti,
-    })
-
-    print("\n" + "=" * 60)
-    print(f"[discover] {n_eval} valutazioni, {len(passed_keys)} coppie nuove passate in QUESTO run.")
-    print(f"[discover] coppie validate totali nel registro (base+generate): {len(validated)}")
-    print("=" * 60)
-    _notify(passed_summary, n_eval, len(specs), len(symbols))
-    return 0
+    except Exception as exc:
+        # UN GIRO CADUTO LO DICE (25 set 2026): prima il documento restava al giro
+        # precedente e da fuori «gate fermo» e «gate caduto» erano la stessa cosa.
+        aggiorna_meta_gate(fb, {"stato": "errore", "fase": fase_gate,
+                                "errore": f"{type(exc).__name__}: {str(exc)[:300]}",
+                                "generato_at": time.time(),
+                                "durata_s": int(time.time() - t0)})
+        raise
 
 
 if __name__ == "__main__":

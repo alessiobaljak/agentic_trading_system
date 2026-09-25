@@ -31,7 +31,10 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
-        run: python -m scripts.state_snapshot
+        # --publish-controllo: ripiego del controllo orario (docs/controllo_schema.md
+        # §3.8). Scrive dashboard/controllo con generato_da=github SOLO se quello
+        # del bot manca o ha piu' di 90 minuti: il bot resta la fonte.
+        run: python -m scripts.state_snapshot --publish-controllo
       - name: Commit snapshot if changed
         run: |
           git config user.name "github-actions"

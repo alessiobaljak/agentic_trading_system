@@ -293,25 +293,29 @@ def main() -> int:
     # USCITA (il primo gradino e' troppo lontano, o la protezione scatta tardi).
     # `mfe_r` le distingue senza altri dati: sotto 0,25R non e' mai andata a
     # favore; fra 0,25R e il primo gradino ci e' andata e non e' bastato.
-    stop = [t for t in usable if str(t.get("exit_reason", "")) in ("stop_loss", "ExitReason.STOP_LOSS")]
+    # Dal 25 set 2026 le classi le calcola `metrics.classi_stop` (pura), la
+    # stessa che il controllo orario pubblica in `paper.stop`: qui si stampano.
+    # La soglia d'ingresso sbagliato e' metrics.SOGLIA_INGRESSO_SBAGLIATO (0,25R).
+    from bot.learning.metrics import (SOGLIA_INGRESSO_SBAGLIATO, classi_stop,
+                                      classi_stop_liste)
+    sbagliati, quasi, oltre, _gradini = classi_stop_liste(usable)
+    stop = sbagliati + quasi + oltre
     if stop:
-        primo = float(settings.SCALE_OUT_R_MULTIPLES[0])
-        sbagliati = [t for t in stop if float(t["mfe_r"]) < 0.25]
-        quasi = [t for t in stop if 0.25 <= float(t["mfe_r"]) < primo]
-        oltre = [t for t in stop if float(t["mfe_r"]) >= primo]
-        print(f"\nSTOP LOSS divisi per come sono morti ({len(stop)} su {len(usable)} trade):")
-        print(f"  sbagliati dall'inizio (mfe < 0.25R) .......... {len(sbagliati):>3} "
-              f"{_pct(len(sbagliati), len(stop))}   -> problema di INGRESSO")
-        print(f"  andati a favore ma sotto il 1° gradino ....... {len(quasi):>3} "
-              f"{_pct(len(quasi), len(stop))}   -> problema di USCITA")
-        print(f"  oltre il 1° gradino e poi stop ............... {len(oltre):>3} "
-              f"{_pct(len(oltre), len(stop))}   -> protezione del profitto")
+        cs = classi_stop(usable)
+        print(f"\nSTOP LOSS divisi per come sono morti ({cs['totale']} su {len(usable)} trade):")
+        print(f"  sbagliati dall'inizio (mfe < {SOGLIA_INGRESSO_SBAGLIATO:g}R) .......... "
+              f"{cs['sbagliati']:>3} "
+              f"{_pct(cs['sbagliati'], cs['totale'])}   -> problema di INGRESSO")
+        print(f"  andati a favore ma sotto il 1° gradino ....... {cs['quasi']:>3} "
+              f"{_pct(cs['quasi'], cs['totale'])}   -> problema di USCITA")
+        print(f"  oltre il 1° gradino e poi stop ............... {cs['oltre_primo_tp']:>3} "
+              f"{_pct(cs['oltre_primo_tp'], cs['totale'])}   -> protezione del profitto")
         if quasi:
             q = sorted(float(t["mfe_r"]) for t in quasi)
             med = q[len(q) // 2]
             print(f"  fra i «quasi»: mfe mediana {med:.2f}R, massima {q[-1]:.2f}R; "
                   f"con un primo gradino a {med:.2f}R meta' di loro avrebbe incassato")
-        print("  (il primo gradino qui e' quello GLOBALE; per coppia vale la sua scala)")
+        print(f"  ({cs['nota']})")
 
     print(f"\nR medi incassati per scala (modello semplificato, quote {fracs}):")
     head2 = "gruppo".ljust(34) + "n".rjust(4) + \

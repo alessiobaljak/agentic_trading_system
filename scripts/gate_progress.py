@@ -32,6 +32,12 @@ from collections import Counter
 from datetime import datetime, timezone
 
 from bot.core.firebase_client import decode_pairs, get_firebase
+# I CONTEGGI VIVONO IN bot/core/registry.py (25 set 2026): gli stessi numeri che
+# questo script stampa finiscono nel documento `dashboard/gate` scritto dalla
+# discovery, e due copie dello stesso conto prima o poi divergono. Qui si stampa,
+# li' si conta.
+from bot.core.registry import (conta_keep, coppie_fresche, coppie_validate,
+                               distribuzione_pass, salute_registro, statistica_t)
 
 MIN_PASSES = int(os.getenv("OPTIMIZER_MIN_PASSES", "3"))
 NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "168")) * 3600
@@ -143,21 +149,11 @@ def riga_keep_validate(pairs: dict, validated) -> str:
     finora nessuno vedeva. Una validata SENZA la chiave non e' un errore: e' stata
     validata prima del nuovo parametro e opera ancora col keep con cui e' passata
     (`lock_keep` -> None -> default); si conta a parte, cosi' si vede quante
-    coppie il gate deve ancora rivalutare col nuovo parametro."""
-    conta: dict = {}
-    senza = 0
-    for k in validated or []:
-        rec = pairs.get(k) if isinstance(pairs, dict) else None
-        lp = rec.get("last_params") if isinstance(rec, dict) else None
-        v = lp.get("profit_lock_keep") if isinstance(lp, dict) else None
-        try:
-            v = None if (v is None or isinstance(v, bool)) else float(v)
-        except (TypeError, ValueError):
-            v = None
-        if v is None:
-            senza += 1
-        else:
-            conta[v] = conta.get(v, 0) + 1
+    coppie il gate deve ancora rivalutare col nuovo parametro. I conteggi sono
+    quelli di `registry.conta_keep` (gli stessi del documento del gate)."""
+    k = conta_keep(pairs if isinstance(pairs, dict) else {}, validated)
+    conta = {d["valore"]: d["n"] for d in k["distribuzione"]}
+    senza = k["non_rivalutate"]
     testa = "  KEEP DEL LOCK (scelto dal gate per coppia): "
     if not conta and not senza:
         return testa + "nessuna coppia validata"
@@ -211,14 +207,13 @@ def main() -> int:
     # vicine al traguardo, che erano proprio quelle ferme dal 13 agosto. Il risultato
     # era un "il bot riparte il 27 agosto" calcolato su coppie che nessuno stava piu'
     # valutando. Una data che non sarebbe mai arrivata.
-    fresche = {k: r for k, r in pairs.items()
-               if now - float(r.get("last_seen_at", 0) or 0) < FRESH_DAYS * 86400}
+    fresche = coppie_fresche(pairs, now)
     congelate = {k: r for k, r in pairs.items() if k not in fresche}
 
-    dist = Counter(int(r.get("pass_count", 0) or 0) for r in fresche.values())
-    validated = [k for k, r in fresche.items()
-                 if int(r.get("pass_count", 0) or 0) >= MIN_PASSES
-                 and not r.get("sostituita_da")]   # madre sostituita: non si opera
+    # i conteggi sono quelli di bot/core/registry.py: qui si stampano soltanto
+    dp = distribuzione_pass(pairs, now)
+    salute = salute_registro(pairs)
+    validated = coppie_validate(pairs, now)   # madre sostituita: non si opera
     coins = {r.get("symbol") for k, r in fresche.items() if k in validated}
 
     print(f"[gate] {len(pairs)} coppie nel registro · {len(fresche)} ancora valutate "
@@ -232,18 +227,12 @@ def main() -> int:
     #
     # E' anche la soglia che decide se il paper puo' partire: OPTIMIZER_MIN_COVERED
     # coin distinte, non coppie.
-    coin_per_livello: dict[int, set] = {}
-    for r in fresche.values():
-        p = int(r.get("pass_count", 0) or 0)
-        coin_per_livello.setdefault(p, set()).add(r.get("symbol"))
     print("  distribuzione pass (solo coppie vive): " +
-          " · ".join(f"{p} pass: {n} su {len(coin_per_livello.get(p, ())) } coin"
-                     for p, n in sorted(dist.items())))
+          " · ".join(f"{d['pass']} pass: {d['coppie']} su {d['coin']} coin"
+                     for d in dp["distribuzione"]))
     if congelate:
-        con_pass = sum(1 for r in congelate.values()
-                       if int(r.get("pass_count", 0) or 0) > 0)
-        print(f"  CONGELATE: {len(congelate)} coppie non piu' valutate da oltre "
-              f"{FRESH_DAYS:g} giorni ({con_pass} avevano gia' un passaggio).\n"
+        print(f"  CONGELATE: {dp['congelate']} coppie non piu' valutate da oltre "
+              f"{FRESH_DAYS:g} giorni ({dp['congelate_con_conferme']} avevano gia' un passaggio).\n"
               f"  La coin e' uscita dall'universo — di solito per storia insufficiente "
               f"o delisting.\n  Non avanzano e non falliscono: sono escluse da tutti i "
               f"conti qui sotto.")
@@ -260,8 +249,7 @@ def main() -> int:
     # che passano il gate. Un numero solo, "3041 coppie", nasconde esattamente questo.
     base = {k: r for k, r in fresche.items() if not r.get("generated")}
     gen = {k: r for k, r in fresche.items() if r.get("generated")}
-    base_tot = sum(1 for r in pairs.values() if not r.get("generated"))
-    tetto = int(os.getenv("OPTIMIZER_MAX_PAIRS", "3000"))
+    base_tot, tetto = salute["base"], salute["limite"]
     print(f"  COMPOSIZIONE (vive): {len(base)} base · {len(gen)} generate.  "
           f"Nel registro intero: {base_tot} base su {len(pairs)}, tetto {tetto}.")
     if base_tot >= tetto * 0.8:
@@ -334,15 +322,12 @@ def main() -> int:
     # STATISTICA t DELLE VALIDATE (24 set 2026): misurata dal gate per ogni
     # coppia, non ancora un criterio. Qui si vede quante reggerebbero t >= 2
     # (il metro classico contro la fortuna) PRIMA di decidere se farne una regola.
-    con_t = sorted((float(r["last_t"]), k) for k, r in pairs.items()
-                   if int(r.get("pass_count", 0) or 0) >= MIN_PASSES
-                   and r.get("last_t") is not None)
-    if con_t:
-        sopra = sum(1 for t, _ in con_t if t >= 2.0)
-        mediana = con_t[len(con_t) // 2][0]
-        print(f"\n  STATISTICA t DELLE VALIDATE: {len(con_t)} con misura · "
-              f"{sopra} reggerebbero t >= 2 · mediana {mediana:.2f} · "
-              f"le piu' basse: " + ", ".join(f"{k} ({t:.2f})" for t, k in con_t[:3]))
+    st = statistica_t(pairs)
+    if st["misurate"]:
+        print(f"\n  STATISTICA t DELLE VALIDATE: {st['misurate']} con misura · "
+              f"{st['sopra_2']} reggerebbero t >= 2 · mediana {st['mediana']:.2f} · "
+              f"le piu' basse: " + ", ".join(f"{d['coppia']} ({d['t']:.2f})"
+                                             for d in st["piu_basse"]))
         print("  (misurata, non usata per decidere: si decide dopo averla vista)")
     a_un_passo = [r for r in aperte
                   if int(r.get("pass_count", 0) or 0) == MIN_PASSES - 1]

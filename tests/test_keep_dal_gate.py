@@ -292,7 +292,9 @@ def test_la_proposta_arriva_ai_worker_e_la_scelta_torna_al_main():
     assert '"profit_lock_keep": r.get("profit_lock_keep")' in uno
     assert "keep_candidates=keep_candidates" in inspect.getsource(d.conferme_retroattive)
     main = inspect.getsource(d.main)
-    assert "keep_paper = keep_dal_paper(fb)" in main
+    # dal 25 set 2026 i trade del paper si leggono UNA volta nel main
+    # (`trades_del_paper`) e si passano alla proposta del keep
+    assert "keep_paper = keep_dal_paper(fb, trades=trades_paper)" in main
     assert "bocciate_ok, keep_paper)" in main
 
 

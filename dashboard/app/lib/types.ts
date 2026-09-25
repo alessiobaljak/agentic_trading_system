@@ -74,8 +74,10 @@ export interface BotStatus {
   // Optional: the bot may publish the effective (post-safety) risk values.
   effective_leverage?: number;
   effective_risk_per_trade?: number;
-  // Fear & Greed corrente (0-100), pubblicato per la vista Sentiment.
+  // Fear & Greed corrente (0-100): solo un numero, non decide nulla.
   fear_greed?: number;
+  // Stream prezzi acceso/spento (25 set 2026: letto per il badge di BotStatus).
+  price_stream?: boolean;
 }
 
 export interface RiskState {

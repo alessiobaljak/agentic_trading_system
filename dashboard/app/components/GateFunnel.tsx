@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { getDb } from '../lib/firebase';
-import { GATE_RAMP, STATO, formatta } from '../lib/viz';
+import { GATE_RAMP, STATO, durata, formatta } from '../lib/viz';
+import { RigaUltimoGiro, useOrologio } from './GateCervello';
 
 /**
  * L'IMBUTO DEL GATE — da ventimila tentativi a zero strategie operative.
@@ -26,8 +27,15 @@ import { GATE_RAMP, STATO, formatta } from '../lib/viz';
  * Perché riquadri e non barre: le fasi vanno da ~21.000 a 0, quindi su una scala
  * comune si vedrebbe la prima barra e cinque righe piatte. E il dato che interessa non
  * è il valore assoluto, è quanto ne sopravvive fra una fase e la successiva.
+ *
+ * DUE AUTOPSIE, NON UNA SOMMA (25 set 2026). Il flusso veniva sommato da
+ * `gate_autopsy/discover` (la discovery, ogni 3 ore) e `gate_autopsy/current`
+ * (l'optimizer sulle strategie base, che da settimane gira di rado): sommare un
+ * numero di stamattina con uno di dieci giorni fa dava un «questa passata» che non
+ * era mai esistito. Ora ogni autopsia ha il suo blocco con la sua età, e la riga
+ * «ultimo giro» viene dal documento del gate, che dice davvero quando è finito.
  */
-type Rep = { evaluated?: number; passed?: number; diagnosed?: number; near_miss_count?: number };
+type Rep = { updated_at?: number; evaluated?: number; passed?: number; diagnosed?: number; near_miss_count?: number };
 type Reg = { pairs?: unknown; validated?: string[]; ready?: boolean };
 type Punto = { at: number; tracked?: number; validated?: number; dist?: Record<string, number> };
 type Storia = { points?: Punto[] };
@@ -99,11 +107,12 @@ function Riquadro({ f, prec, primo }: { f: Fase; prec: number; primo: boolean })
   );
 }
 
-function Blocco({ titolo, fasi }: { titolo: string; fasi: Fase[] }) {
+function Blocco({ titolo, sotto, fasi }: { titolo: string; sotto?: string; fasi: Fase[] }) {
   return (
     <div style={{ minWidth: 0 }}>
       <div className="muted" style={{ fontSize: 11, marginBottom: 6, letterSpacing: '.04em' }}>
         {titolo}
+        {sotto ? <span style={{ letterSpacing: 0, marginLeft: 6 }}>· {sotto}</span> : null}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 4, overflowX: 'auto', paddingBottom: 4 }}>
         {fasi.map((f, i) => (
@@ -145,19 +154,25 @@ export default function GateFunnel() {
     }
   }, []);
 
-  const { passata, registro, vuoto } = useMemo(() => {
-    const n = (f: (r: Rep) => number | undefined) =>
-      Number(cur ? f(cur) ?? 0 : 0) + Number(dis ? f(dis) ?? 0 : 0);
-    const punti = [...(storia?.points ?? [])].sort((a, b) => a.at - b.at);
-    const u = punti[punti.length - 1];
-    const passata: Fase[] = [
-      { id: 'valutate', label: 'valutate', valore: n((r) => r.evaluated),
+  const now = useOrologio();
+
+  const { flussi, registro, vuoto } = useMemo(() => {
+    const flusso = (r: Rep | null): Fase[] => [
+      { id: 'valutate', label: 'valutate', valore: Number(r?.evaluated ?? 0),
         spiega: 'combinazioni coppia × strategia provate in questa passata' },
-      { id: 'quasi', label: 'a un passo', valore: n((r) => r.near_miss_count),
+      { id: 'quasi', label: 'a un passo', valore: Number(r?.near_miss_count ?? 0),
         spiega: 'fermate da UN SOLO criterio, e per poco: i semi da cui si muta al giro dopo' },
-      { id: 'passate', label: 'passate', valore: n((r) => r.passed),
+      { id: 'passate', label: 'passate', valore: Number(r?.passed ?? 0),
         spiega: 'hanno superato tutti i criteri in questa passata' },
     ];
+    // ogni autopsia col suo orologio: l'età è quella del SUO documento
+    const eta = (r: Rep | null) => (r?.updated_at ? `${durata(now - r.updated_at)} fa` : 'età ignota');
+    const flussi = [
+      { id: 'dis', titolo: 'DISCOVERY · ultima passata', sotto: dis ? eta(dis) : 'nessuna', fasi: flusso(dis), c_e: Boolean(dis) },
+      { id: 'cur', titolo: 'OPTIMIZER · strategie base', sotto: cur ? eta(cur) : 'nessuna', fasi: flusso(cur), c_e: Boolean(cur) },
+    ];
+    const punti = [...(storia?.points ?? [])].sort((a, b) => a.at - b.at);
+    const u = punti[punti.length - 1];
     const registro: Fase[] = [
       { id: 'uno', label: '1 conferma', valore: Number(u?.dist?.['1'] ?? 0), colore: GATE_RAMP.uno,
         spiega: 'nel registro con un passaggio: aspettano una settimana di dati nuovi' },
@@ -167,10 +182,10 @@ export default function GateFunnel() {
         spiega: 'tre conferme distanziate: il bot può operarle' },
     ];
     return {
-      passata, registro,
-      vuoto: [...passata, ...registro].every((f) => f.valore === 0),
+      flussi, registro,
+      vuoto: [...flussi.flatMap((f) => f.fasi), ...registro].every((f) => f.valore === 0),
     };
-  }, [cur, dis, reg, storia]);
+  }, [cur, dis, reg, storia, now]);
 
   return (
     <div className="panel">
@@ -179,6 +194,9 @@ export default function GateFunnel() {
         Da quante strategie si provano a quante il bot può davvero operare. Fra un
         riquadro e l&apos;altro c&apos;è quanto ne sopravvive.
       </p>
+      <div style={{ marginBottom: 12 }}>
+        <RigaUltimoGiro />
+      </div>
 
       {!loaded ? (
         <p className="muted">Caricamento…</p>
@@ -189,7 +207,18 @@ export default function GateFunnel() {
         </p>
       ) : (
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-          <Blocco titolo="QUESTA PASSATA · si azzera ogni 3 ore" fasi={passata} />
+          {/* un blocco per autopsia, ognuno con la sua età: NON si sommano */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
+            {flussi.map((f) => (
+              f.c_e ? (
+                <Blocco key={f.id} titolo={f.titolo} sotto={f.sotto} fasi={f.fasi} />
+              ) : (
+                <div key={f.id} className="muted" style={{ fontSize: 11 }}>
+                  {f.titolo} · nessuna autopsia scritta
+                </div>
+              )
+            ))}
+          </div>
 
           {/* il confine, dichiarato. Nessuna percentuale lo attraversa */}
           <div
