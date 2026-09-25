@@ -619,16 +619,21 @@ Migliaia di candidate per giro puntano lo STESSO holdout di 45 giorni (PF ≥ 1,
 10 e finestra di holdout per candidata (hash dell'id → mese fra gli ultimi 12).
 
 ### H3. Stop giornaliero di portafoglio e netto in R
+**Sulle 160 coppie (ops 0232, 60 giorni):** senza limiti 974 trade, 16 al giorno, drawdown 14,8%, 34/27 giorni; + tetto direzione 3%: 854 trade, dd 16,0%; + stop giornaliero 3%: 765 trade, 13 giorni fermati, PnL −21%, dd 16,8% (peggiore, non migliore: dopo il blocco il rimbalzo si perde); + netto 2R: 713 trade, dd 13,6%, 35/25 giorni. Il giorno peggiore (30 ago, −1.609) passa a −563 solo con lo stop giornaliero. Non c'è una regola che vinca su tutto: si decide sul rischio che si vuole, non sui numeri.
 I 5 giorni peggiori del portafoglio simulato perdono il 6-8% in un giorno con 1% per
 trade e 5 posizioni: non stop simultanei, trade riaperti in una giornata che scende.
 Nessuna regola oggi. `portafoglio` simula i due what-if (3% al giorno; |long − short|
 ≤ 2R): si decide sui suoi numeri.
 
 ### H4. Il freno di serie
+Spento. **Misurato sulle 160 (ops 0232):** dopo 4 perdite di fila win rate 56% su 16 casi contro 63% incondizionato, t −0,58: nessuna evidenza, resta spento.
+
 Spento. Si riaccende solo se `portafoglio` misura un win rate dopo 4 perdite più
 basso di quello incondizionato con t ≥ 2 su ≥ 200 osservazioni.
 
 ### H5. La misura che separa mercato da esecuzione
+**Risposta del 25 set (ops 0232, portafoglio sulle 160 coppie dal 16 set):** anche il portafoglio simulato perde nel periodo del paper, −1.516 su 10.000 (−15%) con 8 giorni su 10 in perdita, contro −46,65 del paper (−5%): **è il mercato, non l'esecuzione**; il paper ha perso meno perché ha size dimezzata e freni. Chiuso il dubbio sull'esecuzione; resta il fatto che il gate ha promesso su un mercato diverso da quello di queste due settimane (deriva globale).
+
 **Misurato il 24 set sera (ops 0211, 8 coppie rigirate):** dal 16 set i segnali del gate aperti dal paper sono 15 (PF 0,50, win rate 53%) e quelli non aperti 9 (PF 1,23, win rate 56%; 6 short su 9). Indizio che il percorso live scarta segnali migliori di quelli che apre, ma 9 trade non decidono niente. Prossimo passo: contare i motivi dei rifiuti nel log del bot (cooldown, tetto per coin, stop troppo largo, soglia) nel periodo del paper.
 
 Il paper apre 4,9 trade al giorno contro 8,6 simulati. PF dei segnali «apribili ma

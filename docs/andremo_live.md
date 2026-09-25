@@ -1413,3 +1413,16 @@ errore? il learning impara dai trailing? c'è qualcosa che ci perdiamo?». Rispo
   finalmente contabili, H5), freno globale scritto in `stato`, esito di intorno e
   varianti salvato a ogni giro e letto da `gate`, `last_pf` conservato
   dall'alleggerimento. Sezione I del backlog con le sei cose da decidere.
+
+
+### 25 settembre, 08:10: il portafoglio sulle 160 coppie, e la risposta a H5
+
+Ops 0232, 60 giorni, 160 coppie: 974 trade (16 al giorno, contro 8,6 con 59
+coppie), massimo 5 posizioni contemporanee (limite della simulazione), drawdown
+14,8%, 34 giorni in utile e 27 in perdita, PnL gonfiato dalla selezione. **Dal 16
+settembre anche il portafoglio simulato perde: −1.516 su 10.000, 8 giorni su 10 in
+perdita, contro −46,65 del paper.** È il mercato di queste due settimane, non
+l'esecuzione: il paper ha perso un terzo di quello che avrebbe perso il simulato,
+grazie alla size dimezzata dal freno e ai tetti. Dopo 4 perdite di fila il win
+rate è 56% su 16 casi (t −0,58): il freno di serie resta spento. Bot riavviato
+alle 07:57 con le righe «[rifiuto]» nel log; chiave ops `rifiuti` da aggiungere.
