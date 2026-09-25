@@ -255,6 +255,33 @@ TRAILING_KEEP_MAX = 0.65
 TRAILING_MIN_SAMPLE = 8      # sotto questo campione: NESSUN adattamento (niente dati, niente decisioni)
 
 
+#: la REGOLA con cui il paper propone un keep del profit-lock al gate (25 set
+#: 2026, backlog I3): condivisa da `keep_dal_paper` nella discovery e dal
+#: controllo orario, cosi' i due non possono divergere. Servono almeno
+#: KEEP_PAPER_MIN_VERDETTI verdetti (tutte le coppie insieme); se almeno il 60%
+#: sono «prematuri» il lock e' troppo stretto -> 0.25; se almeno il 60% sono
+#: «protetti» sta lavorando -> 0.75. Fuori dai tre candidati fissi di proposito:
+#: un candidato che il gate ha gia' sarebbe una proposta vuota.
+KEEP_PAPER_MIN_VERDETTI = 8
+KEEP_PAPER_QUOTA = 0.6
+KEEP_PAPER_LARGO, KEEP_PAPER_STRETTO = 0.25, 0.75
+
+
+def proposta_keep(n_verdetti: int, prematuri: int, protetti: int,
+                  min_verdetti: int = KEEP_PAPER_MIN_VERDETTI,
+                  quota: float = KEEP_PAPER_QUOTA):
+    """Il keep che il paper PROPONE (0.25, 0.75) o None. Pura: solo conteggi.
+    `n_verdetti` e' prematuri + protetti (i «neutral» non contano)."""
+    n = int(n_verdetti or 0)
+    if n < min_verdetti or n <= 0:
+        return None
+    if prematuri / n >= quota:
+        return KEEP_PAPER_LARGO
+    if protetti / n >= quota:
+        return KEEP_PAPER_STRETTO
+    return None
+
+
 def compute_trailing_keep(trades: list[dict]) -> dict[str, float]:
     """PROFIT_LOCK_KEEP per-strategia imparato dai VERDETTI trailing del paper (B1).
 

@@ -35,6 +35,7 @@ from bot.strategies.generated import GeneratedStrategy
 from bot.ai.hypotheses import propose as ai_propose
 from bot.execution.exit_logic import (LOCK_KEEP_CANDIDATES, SCALE_LADDER_CANDIDATES,
                                       ladder_from_mfe)
+from bot.learning.metrics import KEEP_PAPER_MIN_VERDETTI, KEEP_PAPER_QUOTA, proposta_keep
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import (figlie_intorno, generate_specs, mutate,
                                       varianti_da_referto)
@@ -454,18 +455,8 @@ def candidate_ladders(scala_paper=None) -> tuple:
     return SCALE_LADDER_CANDIDATES + (tuple(scala_paper),)
 
 
-#: verdetti trailing (prematuri + protetti) sotto i quali il paper NON propone un
-#: keep. E' la stessa soglia dell'adattamento per strategia del bot
-#: (bot/learning/metrics.py, TRAILING_MIN_SAMPLE), ma qui su TUTTE le coppie
-#: insieme: si raggiunge in giorni, non in mesi (14 verdetti in 10 giorni al 25 set).
-KEEP_PAPER_MIN_VERDETTI = 8
-#: quota di verdetti da un lato oltre la quale il paper propone un keep
-KEEP_PAPER_QUOTA = 0.6
-#: cosa propone: lock piu' LARGO se dominano i prematuri (il rumore ci butta fuori
-#: prima del TP), piu' STRETTO se dominano i protetti (il lock sta lavorando).
-#: Fuori dai tre fissi (0,35 / 0,5 / 0,65) di proposito: proporre un candidato
-#: che il gate ha gia' sarebbe una proposta vuota.
-KEEP_PAPER_LARGO, KEEP_PAPER_STRETTO = 0.25, 0.75
+#: la regola (soglie e valori proposti) vive in bot/learning/metrics.py
+#: (`proposta_keep`): la usa anche il controllo orario, e i due non divergono.
 
 
 def keep_dal_paper(fb, min_verdetti: int = KEEP_PAPER_MIN_VERDETTI):
@@ -513,11 +504,7 @@ def keep_dal_paper(fb, min_verdetti: int = KEEP_PAPER_MIN_VERDETTI):
     if n < min_verdetti:
         print(f"{testa} (ne servono {min_verdetti}): keep fissi")
         return None
-    keep = None
-    if prem / n >= KEEP_PAPER_QUOTA:
-        keep = KEEP_PAPER_LARGO
-    elif prot / n >= KEEP_PAPER_QUOTA:
-        keep = KEEP_PAPER_STRETTO
+    keep = proposta_keep(n, prem, prot, min_verdetti=min_verdetti, quota=KEEP_PAPER_QUOTA)
     if keep is None:
         print(f"{testa} -> nessun candidato in piu' (sotto il {KEEP_PAPER_QUOTA:.0%})")
         return None
