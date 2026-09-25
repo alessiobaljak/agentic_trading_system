@@ -311,7 +311,10 @@ def test_conferme_retroattive_tagliano_i_dati_e_si_fermano_alla_prima_bocciatura
     n = 30 * 96                                  # 30 giorni a 15 minuti
     candles = _candele(n)
     visti = []
-    def finto(opt, sym, cs, frame, spec, scale_candidates=None, context_by_ts=None):
+    # `keep_candidates`: dal 25 set 2026 le conferme retroattive inoltrano anche i
+    # candidati del keep del profit-lock (tests/test_keep_dal_gate.py)
+    def finto(opt, sym, cs, frame, spec, scale_candidates=None, context_by_ts=None,
+              keep_candidates=None):
         visti.append(len(cs))
         return {"passed": len(cs) > 20 * 96}     # passa solo con piu' di 20 giorni
     monkeypatch.setattr(d, "evaluate_spec", finto)

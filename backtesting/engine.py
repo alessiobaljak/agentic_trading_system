@@ -27,7 +27,7 @@ from bot.config import settings
 from bot.risk.setup_check import analizza_setup
 from bot.execution.exit_logic import (
     locked_stop, lock_anchor, scale_ladder, scale_fills, ladder_multiples, mfe_in_r,
-    breakeven_after_tp1,
+    breakeven_after_tp1, lock_keep,
 )
 from bot.strategies import get_all_strategies
 from bot.strategies.base import StrategyContext
@@ -750,6 +750,12 @@ class Backtester:
         # nome della riga base dello snapshot: lo stesso di `_snapshot_from_frame`,
         # serve a `feats_ingresso` per leggere gli indicatori del timeframe giusto
         tf = _TF_NAMES.get(round(self.interval_hours, 4), settings.ORCHESTRATOR_TIMEFRAME)
+        # keep del profit-lock SCELTO DAL GATE per questa coppia (25 set 2026): letto
+        # una volta per strategia, come la scala dei TP. None -> default globale, cioe'
+        # esattamente il keep con cui la coppia e' stata validata finora. Passarlo a
+        # `locked_stop` e' cio' che permette al gate di SIMULARE un keep diverso per
+        # coppia invece di dare per scontato 0,5 mentre il bot ne usa un altro.
+        keep = lock_keep(getattr(strategy, "params", None))
         i = self.window
         n = len(candles)
         while i < n - 1:
@@ -824,7 +830,7 @@ class Backtester:
                 done = False
                 while j <= horizon:
                     c = candles[j]
-                    eff_stop = locked_stop(entry, anchor, long, best_fav, stop_base)
+                    eff_stop = locked_stop(entry, anchor, long, best_fav, stop_base, keep=keep)
                     trailing = eff_stop != stop_base
                     adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
                     max_adverse = max(max_adverse, adverse)
@@ -866,7 +872,7 @@ class Backtester:
                 while j <= horizon:
                     c = candles[j]
                     # stop effettivo: base o alzato dal profit-lock (sui massimi passati)
-                    eff_stop = locked_stop(entry, target, long, best_fav, stop)
+                    eff_stop = locked_stop(entry, target, long, best_fav, stop, keep=keep)
                     trailing = eff_stop != stop   # il profit-lock ha alzato lo stop?
                     adverse = (entry - c.low) / entry if long else (c.high - entry) / entry
                     max_adverse = max(max_adverse, adverse)

@@ -30,8 +30,10 @@ def locked_stop(entry: float, target: float, long: bool,
     look-ahead nel backtest.
 
     `keep`: frazione del miglior guadagno da bloccare. None -> default globale
-    (PROFIT_LOCK_KEEP, il valore VALIDATO dal gate). Il bot live puo' passare il
-    valore IMPARATO per-strategia dai verdetti trailing (metrics.compute_trailing_keep).
+    (PROFIT_LOCK_KEEP). Dal 25 set 2026 motore e bot passano il keep SCELTO DAL
+    GATE per la coppia (`lock_keep(params)`); il bot, se il gate non l'ha ancora
+    scelto, quello IMPARATO per-strategia dai verdetti trailing
+    (metrics.compute_trailing_keep).
     """
     if not settings.PROFIT_LOCK_ENABLED:
         return base_stop
@@ -203,6 +205,46 @@ def ladder_multiples(params: dict | None) -> tuple | None:
     except (TypeError, ValueError):
         return None
     return out or None
+
+
+# ---- KEEP DEL PROFIT-LOCK PER COPPIA (scelto dal GATE) --------------------- #
+# Fino al 25 set 2026 il `keep` (quanta parte del miglior guadagno si blocca) era
+# UNO per tutte le coppie (PROFIT_LOCK_KEEP=0,5), con un adattamento dal paper per
+# strategia che non e' mai scattato: servono 8 verdetti per strategia e in 10
+# giorni ne sono usciti 14 su 21 strategie (backlog I3). E se fosse scattato, il
+# gate avrebbe continuato a simulare 0,5: paper e gate sarebbero divergenti.
+# Ora il keep e' un PARAMETRO PER COPPIA come la scala dei TP e il break-even: il
+# gate lo prova su questi tre candidati, scrive il vincitore in `last_params`
+# ("profit_lock_keep"), e motore e bot leggono lo stesso numero. I bordi sono
+# quelli che l'adattamento dal paper gia' rispettava (0,35-0,65 attorno allo 0,5
+# validato); il range accettato e' un po' piu' largo per non rifiutare un valore
+# che domani il gate potrebbe voler provare.
+LOCK_KEEP_CANDIDATES: tuple[float, ...] = (0.35, 0.5, 0.65)
+LOCK_KEEP_MIN, LOCK_KEEP_MAX = 0.2, 0.8
+
+
+def lock_keep(params: dict | None) -> float | None:
+    """Frazione del miglior guadagno da bloccare per QUESTA coppia, dai params del gate.
+
+    None -> `locked_stop` usa il comportamento di oggi: il default globale
+    (PROFIT_LOCK_KEEP) nel motore, e nel bot il valore imparato per strategia se
+    c'e', altrimenti il globale. E' il caso delle coppie che il gate non ha ancora
+    rivalutato col nuovo parametro: continuano con il keep CON CUI SONO STATE
+    VALIDATE, quindi la parita' gate<->paper regge anche a registro misto.
+    Un valore non numerico o fuori da [LOCK_KEEP_MIN, LOCK_KEEP_MAX] vale come
+    assente: meglio il default validato che un numero sbagliato scritto a mano."""
+    if not params:
+        return None
+    v = params.get("profit_lock_keep")
+    if v is None or isinstance(v, bool):
+        return None
+    try:
+        k = float(v)
+    except (TypeError, ValueError):
+        return None
+    if not (LOCK_KEEP_MIN <= k <= LOCK_KEEP_MAX):   # NaN cade qui: il confronto e' falso
+        return None
+    return k
 
 
 def mfe_in_r(entry: float, best_favorable: float, base_stop: float) -> float:

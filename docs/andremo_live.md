@@ -1427,6 +1427,34 @@ grazie alla size dimezzata dal freno e ai tetti. Dopo 4 perdite di fila il win
 rate è 56% su 16 casi (t −0,58): il freno di serie resta spento. Bot riavviato
 alle 07:57 con le righe «[rifiuto]» nel log; chiave ops `rifiuti` da aggiungere.
 
+### 25 settembre, 08:30: i verdetti del trailing arrivano al cervello — il keep lo sceglie il gate
+
+Il proprietario: «il learning impara dal trailing ok, ma fai in modo che venga
+usato e consumato e venga presa una decisione; ogni dato raccolto deve arrivare
+al cervello, altrimenti raccogliamo dati a fare». Aveva ragione: il keep del
+lock (quanta parte del miglior guadagno si blocca) si adattava per strategia
+solo dopo 8 verdetti, e in 10 giorni ne sono usciti 14 su 21 strategie — non
+sarebbe mai scattato. E se fosse scattato, il gate avrebbe continuato a simulare
+0,5: paper e gate divergenti, il caso BIRBUSDT in un altro vestito.
+
+Da oggi il keep è un **parametro per coppia scelto dal gate**, come la scala dei
+TP e il break-even: `evaluate_spec` prova 0,35 / 0,5 / 0,65 sulla scala già
+scelta (3 backtest in più per ogni spec che passa, nessuno per le bocciate), il
+vincitore va in `last_params.profit_lock_keep`, e motore e bot lo leggono con la
+stessa funzione (`lock_keep`). Il paper entra come per la scala dei TP:
+`keep_dal_paper` somma i verdetti di tutte le coppie e con almeno 8 propone un
+quarto candidato (0,25 se ≥ 60% prematuri, 0,75 se ≥ 60% protetti): **il paper
+propone, la storia decide.** La scelta fra scale, break-even e keep pesa i trade
+recenti (emivita 180 giorni, G6): prima sette giorni nuovi su 4,6 anni valevano
+lo 0,42% dell'evidenza e la scelta non si spostava mai. I criteri per PASSARE
+restano non pesati: il tasso di passaggio non cambia per costruzione.
+
+Le coppie non ancora rigiudicate continuano col keep con cui sono state validate
+(chiave assente = comportamento di prima); ognuna riceve il suo alla chiusura
+della sua finestra. Si vede in `gate` (riga «keep del lock») e nel log del giro
+(`[paper] N verdetti trailing…`, `[cervello] keep…`). Bot riavviato per leggere
+la chiave. Suite completa: 1249 test verdi (1214 prima, 35 nuovi). Il trade chiuso registra ora anche quale keep lo ha governato, così un verdetto «prematuro» si legge col suo numero. Non verificato: un giro reale della discovery col nuovo parametro (il primo giro utile lo dirà nel log: riga `[paper] N verdetti trailing…` e `[cervello] keep…`).
+
 ### Controllo del 25 settembre (08:10 ora italiana, ops 0234-0239 più 0227-0232 delle 07:10-07:53)
 
 **Numeri.** 55 trade chiusi in 10 giorni (2 oggi alle 08:10), 4 aperte (HEI e

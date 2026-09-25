@@ -32,7 +32,9 @@ def test_le_metriche_finali_usano_la_scelta_vera():
     passata col default, il PF promesso descriverebbe un altro sistema."""
     src = inspect.getsource(d.evaluate_spec)
     assert "or best_be != bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)" in src
-    assert "_run_oos(best_ladder, best_be)" in src
+    # dal 25 set 2026 la passata finale porta anche il keep del profit-lock
+    # scelto dal gate (tests/test_keep_dal_gate.py): stessa regola, un parametro in piu'
+    assert "_run_oos(best_ladder, best_be, keep=best_keep)" in src
 
 
 def test_il_bot_legge_gia_la_scelta():

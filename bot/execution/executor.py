@@ -84,6 +84,11 @@ class Position:
     # BE dopo TP1 VALIDATO per questa coppia, congelato all'ingresso come la scala:
     # non e' una scelta ovvia (protegge, ma taglia i runner) e ora la decide il gate
     sl_to_breakeven: Optional[bool] = None
+    # keep del profit-lock SCELTO DAL GATE per questa coppia (25 set 2026), congelato
+    # all'ingresso come la scala e il BE: il trade si chiude col piano con cui e'
+    # stato aperto. None -> il gate non l'ha ancora scelto: si usa quello imparato
+    # per strategia se c'e', altrimenti il default globale (comportamento di prima).
+    profit_lock_keep: Optional[float] = None
     # RISCHIO EFFETTIVO all'ingresso, in frazione dell'equity: quanto si perde
     # davvero se lo stop viene toccato. Diverge dall'impostazione utente quando il
     # cap per-posizione limita il nozionale — che e' il caso normale, non
@@ -171,6 +176,7 @@ class ExecutionEngine:
         scale_r_mults: Optional[tuple] = None,
         sl_to_breakeven: Optional[bool] = None,
         timeframe: Optional[str] = None,
+        profit_lock_keep: Optional[float] = None,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved)."""
         if not params.approved or params.quantity <= 0:
@@ -192,6 +198,7 @@ class ExecutionEngine:
             spread_cost=liquidity_spread(asset.volume_24h),   # == costo backtest
             scale_r_mults=tuple(scale_r_mults) if scale_r_mults else None,
             sl_to_breakeven=sl_to_breakeven,
+            profit_lock_keep=float(profit_lock_keep) if profit_lock_keep is not None else None,
             risk_effective_pct=params.risk_effective_pct,
             regime_confidence=regime_confidence,
             timeframe=tf,
@@ -389,6 +396,13 @@ class ExecutionEngine:
     # ------------------------------------------------------------------ #
     # Gestione posizione — ALLINEATA AL BACKTEST (GATE 1)                 #
     # ------------------------------------------------------------------ #
+    def _keep_per(self, pos: Position) -> Optional[float]:
+        """Il keep del profit-lock che governa QUESTA posizione (vedi la nota di
+        precedenza in update_position). None = default globale."""
+        if pos.profit_lock_keep is not None:
+            return pos.profit_lock_keep
+        return self.trailing_keep.get(pos.strategy)
+
     def update_position(self, symbol: str, mark_price: float,
                         high: float | None = None,
                         low: float | None = None,
@@ -421,9 +435,16 @@ class ExecutionEngine:
         hi = mark_price if high is None else max(high, mark_price)
         lo = mark_price if low is None else min(low, mark_price)
 
-        # `keep` per-strategia: IMPARATO dai verdetti trailing del paper (B1/B2);
-        # assente dalla mappa (pochi dati) -> default globale validato dal gate.
-        keep = self.trailing_keep.get(pos.strategy)
+        # `keep` del profit-lock, in ordine di precedenza (25 set 2026):
+        #   1. quello SCELTO DAL GATE per la coppia, congelato nella posizione;
+        #   2. altrimenti quello IMPARATO per strategia dai verdetti trailing del paper;
+        #   3. altrimenti None -> default globale (PROFIT_LOCK_KEEP).
+        # Il gate decide, il paper propone: i verdetti del paper entrano nel gate come
+        # candidata, e il gate li mette alla prova sui propri dati con le proprie
+        # conferme. L'adattamento diretto per strategia (2) resta solo per le coppie
+        # che il gate non ha ancora rivalutato col nuovo parametro; per tutte le
+        # altre motore e bot usano lo stesso numero, e la parita' regge.
+        keep = self._keep_per(pos)
         # ORDINE (identico al motore del gate): lo stop effettivo si calcola sul
         # high_water dei tick PRECEDENTI; i trigger si valutano su questo range; il
         # high_water si aggiorna SOLO a fine tick (come best_fav a fine barra).
@@ -675,6 +696,10 @@ class ExecutionEngine:
             scale_stage_reached=pos.scale_stage,
             realized_partial=round(pos.realized_net, 6),
             mfe_r=round(mfe_in_r(pos.entry_price, pos.high_water, pos.orig_stop), 3),
+            # il keep EFFETTIVO (gate, imparato o globale): il verdetto trailing
+            # di questo trade si legge solo insieme a questo numero
+            profit_lock_keep=(self._keep_per(pos) if self._keep_per(pos) is not None
+                              else float(settings.PROFIT_LOCK_KEEP)),
             # --- costi scomposti (Fase 2.5) ---
             expected_entry_price=pos.expected_entry_price or pos.entry_price,
             expected_exit_price=pos.stop_price if reason is ExitReason.STOP_LOSS else None,
@@ -757,6 +782,7 @@ class ExecutionEngine:
             "sl_order_id": pos.sl_order_id, "exchange_stop": pos.exchange_stop,
             "scale_r_mults": list(pos.scale_r_mults) if pos.scale_r_mults else None,
             "sl_to_breakeven": pos.sl_to_breakeven,
+            "profit_lock_keep": pos.profit_lock_keep,
             "timeframe": pos.timeframe,
             "scale_stage": pos.scale_stage, "realized_gross": pos.realized_gross,
             "realized_net": pos.realized_net,
@@ -835,6 +861,10 @@ class ExecutionEngine:
         pos.scale_r_mults = tuple(float(x) for x in _sm) if _sm else None
         _be = p.get("sl_to_breakeven")
         pos.sl_to_breakeven = bool(_be) if _be is not None else None
+        # il keep scelto dal gate segue la posizione oltre il riavvio; i documenti
+        # scritti prima del 25 set 2026 non hanno la chiave -> None (come prima)
+        _pk = p.get("profit_lock_keep")
+        pos.profit_lock_keep = float(_pk) if _pk is not None else None
         pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
         pos.timeframe = p.get("timeframe") or None
         return pos

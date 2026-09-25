@@ -28,7 +28,7 @@ from bot.agents.regime_detector import RegimeDetector
 from bot.agents.sentiment_agent import SentimentAgent
 from bot.execution.executor import ExecutionEngine
 from bot.execution.exit_logic import (breakeven_after_tp1, ladder_multiples,
-                                      trailing_reason)
+                                      lock_keep, trailing_reason)
 from bot.execution.notifier import TelegramNotifier
 from bot.execution.reconciler import (CLOSE_NOW, DROP_LOCAL, ExchangeState,
                                       Reconciler, blocks_trading)
@@ -1063,15 +1063,18 @@ class TradingBot:
                             f"nuovo {new_margin:.0f} > equity {eq:.0f}")})
             return
 
-        # scala di TP tarata per QUESTA coppia dal GATE (se l'ha gia' ri-validata).
-        # Assente -> None -> l'executor usa il default globale, cioe' esattamente la
-        # scala con cui quella coppia e' stata validata: registro misto ma coerente.
+        # scala di TP, break-even e keep del profit-lock tarati per QUESTA coppia dal
+        # GATE (se l'ha gia' ri-validata). Assente -> None -> l'executor usa il
+        # default globale (o, per il keep, quello imparato per strategia), cioe'
+        # esattamente il piano con cui quella coppia e' stata validata: registro
+        # misto ma coerente. Il keep per coppia e' del 25 set 2026.
         _sparams = self.adaptation.params_for(asset.symbol).get(decision.strategy, {})
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,
                                           params, confidence=decision.confidence,
                                           regime_confidence=self.regime_confidence,
                                           scale_r_mults=ladder_multiples(_sparams),
                                           sl_to_breakeven=breakeven_after_tp1(_sparams),
+                                          profit_lock_keep=lock_keep(_sparams),
                                           timeframe=self.adaptation.timeframe_for(decision.strategy))
         if pos is not None:
             self._sync_stream_symbols()

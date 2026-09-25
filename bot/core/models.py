@@ -230,6 +230,11 @@ class ClosedTrade(BaseModel):
     # avrebbe colpito QUALUNQUE scala di TP -> rende decidibile la taratura, senza
     # dover provare scale diverse ne' sacrificare trade per esplorare.
     mfe_r: float = 0.0
+    # quale keep del profit-lock ha governato QUESTO trade (dal 25 set 2026 lo
+    # sceglie il gate per coppia, backlog I3). Senza questo numero un verdetto
+    # «prematuro» non si legge: un lock al 65% che taglia un vincitore dice una
+    # cosa, uno al 35% ne dice un'altra. None = keep globale di allora.
+    profit_lock_keep: Optional[float] = None
 
     # contesto all'ENTRATA (fondamentale per il learning)
     regime_at_entry: Regime

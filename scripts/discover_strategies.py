@@ -25,7 +25,7 @@ from datetime import date, datetime, timezone
 from backtesting.data_loader import load_candles
 from bot.strategies.generated import MARKET_FEATURES, MARKET_SYMBOL, famiglia_spec, spec_id
 from backtesting.engine import (StrategyStats, gate_verdict, max_drawdown, pf_by_regime,
-                                pf_without_top, t_stat)
+                                pf_without_top, t_stat, weighted_score_parts)
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers, parallel_map
 from bot.config import settings
@@ -33,7 +33,8 @@ from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
 from bot.ai.hypotheses import propose as ai_propose
-from bot.execution.exit_logic import SCALE_LADDER_CANDIDATES, ladder_from_mfe
+from bot.execution.exit_logic import (LOCK_KEEP_CANDIDATES, SCALE_LADDER_CANDIDATES,
+                                      ladder_from_mfe)
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import (figlie_intorno, generate_specs, mutate,
                                       varianti_da_referto)
@@ -453,6 +454,95 @@ def candidate_ladders(scala_paper=None) -> tuple:
     return SCALE_LADDER_CANDIDATES + (tuple(scala_paper),)
 
 
+#: verdetti trailing (prematuri + protetti) sotto i quali il paper NON propone un
+#: keep. E' la stessa soglia dell'adattamento per strategia del bot
+#: (bot/learning/metrics.py, TRAILING_MIN_SAMPLE), ma qui su TUTTE le coppie
+#: insieme: si raggiunge in giorni, non in mesi (14 verdetti in 10 giorni al 25 set).
+KEEP_PAPER_MIN_VERDETTI = 8
+#: quota di verdetti da un lato oltre la quale il paper propone un keep
+KEEP_PAPER_QUOTA = 0.6
+#: cosa propone: lock piu' LARGO se dominano i prematuri (il rumore ci butta fuori
+#: prima del TP), piu' STRETTO se dominano i protetti (il lock sta lavorando).
+#: Fuori dai tre fissi (0,35 / 0,5 / 0,65) di proposito: proporre un candidato
+#: che il gate ha gia' sarebbe una proposta vuota.
+KEEP_PAPER_LARGO, KEEP_PAPER_STRETTO = 0.25, 0.75
+
+
+def keep_dal_paper(fb, min_verdetti: int = KEEP_PAPER_MIN_VERDETTI):
+    """Il keep del profit-lock che il paper PROPONE dai verdetti trailing (25 set 2026).
+
+    Su ogni trade chiuso dal trailing il paper scrive un verdetto controfattuale:
+    «premature» (tenendo si arrivava al TP: il lock ha tagliato un vincitore) o
+    «protected» (tenendo si prendeva lo stop base: il lock ha salvato). Fino a
+    oggi quei verdetti alimentavano SOLO un adattamento per strategia dentro il
+    bot (backlog I3) che non e' mai scattato — servono 8 verdetti PER STRATEGIA e
+    in 10 giorni ne sono usciti 14 su 21 strategie — e che il gate comunque non
+    avrebbe visto: avrebbe continuato a simulare 0,5 mentre il bot ne usava un
+    altro. Qui diventano un CANDIDATO in piu' per il gate, che lo giudica sulla
+    storia come gli altri tre: il paper propone, il gate dispone. E' la stessa
+    regola della scala dei TP (`scala_dal_paper`).
+
+    Tutte le coppie insieme, di proposito: per coppia ce ne sono uno o due, e «il
+    lock taglia i vincitori» e' una proprieta' del timeframe e del mercato prima
+    che della singola moneta. Solo i trade del timeframe su cui gira il bot: un
+    verdetto a 1 ora non dice niente sul lock a 15 minuti.
+
+    Fail-open: senza Firebase, senza trade o sotto il campione ritorna None e i
+    candidati restano i tre fissi. Stampa SEMPRE una riga coi conteggi, cosi' dal
+    log si vede quanti verdetti ci sono e perche' (non) e' nata una proposta.
+    """
+    try:
+        trades = fb.query_collection("trades", order_by="exit_ts") or []
+    except Exception as exc:  # noqa: BLE001
+        print(f"[paper] verdetti trailing non disponibili ({str(exc)[:80]}) -> keep fissi")
+        return None
+    tf = settings.ORCHESTRATOR_TIMEFRAME
+    prem = prot = 0
+    for t in trades:
+        if not isinstance(t, dict):
+            continue
+        if t.get("exit_reason") != "trailing_stop" or t.get("timeframe") != tf:
+            continue
+        v = t.get("trailing_verdict")
+        if v == "premature":
+            prem += 1
+        elif v == "protected":
+            prot += 1
+    n = prem + prot
+    testa = f"[paper] {n} verdetti trailing ({prem} prematuri, {prot} protetti)"
+    if n < min_verdetti:
+        print(f"{testa} (ne servono {min_verdetti}): keep fissi")
+        return None
+    keep = None
+    if prem / n >= KEEP_PAPER_QUOTA:
+        keep = KEEP_PAPER_LARGO
+    elif prot / n >= KEEP_PAPER_QUOTA:
+        keep = KEEP_PAPER_STRETTO
+    if keep is None:
+        print(f"{testa} -> nessun candidato in piu' (sotto il {KEEP_PAPER_QUOTA:.0%})")
+        return None
+    print(f"{testa} -> keep candidato dal vissuto: {keep} (si aggiunge ai "
+          f"{len(LOCK_KEEP_CANDIDATES)} fissi, non li sostituisce: sceglie il gate)")
+    return keep
+
+
+def candidate_keeps(keep_paper=None) -> tuple:
+    """I keep del profit-lock che il gate mettera' a confronto per una coppia.
+
+    I tre fissi sempre; quello proposto dal paper in piu', se c'e' ed e' nuovo.
+    Mai al posto degli altri — vale la stessa regola di `candidate_ladders`: una
+    misura su pochi trade puo' PROPORRE, non decidere."""
+    if keep_paper is None:
+        return LOCK_KEEP_CANDIDATES
+    try:
+        k = float(keep_paper)
+    except (TypeError, ValueError):
+        return LOCK_KEEP_CANDIDATES
+    if any(abs(k - c) < 1e-9 for c in LOCK_KEEP_CANDIDATES):
+        return LOCK_KEEP_CANDIDATES
+    return LOCK_KEEP_CANDIDATES + (k,)
+
+
 #: quante varianti dai referti entrano in un giro. Sostituiscono altrettante
 #: casuali (come le ipotesi AI): il giro non si allunga, e dieci e' gia' piu'
 #: delle ipotesi che il referto puo' formulare con i ~40 trade di oggi.
@@ -619,7 +709,7 @@ def _taglio_a(candles, ts: float) -> int:
 def conferme_retroattive(opt, sym: str, candles, frame, spec: dict,
                          scale_candidates=None, context_by_ts=None,
                          n: int = MIN_PASSES - 1, step_days: float = RETRO_STEP_DAYS,
-                         min_history: int = 0) -> int:
+                         min_history: int = 0, keep_candidates=None) -> int:
     """Quante delle `n` valutazioni con fine dati arretrata (step_days, 2*step_days,
     ...) la spec passa. Si ferma alla prima bocciatura: contano solo conferme
     consecutive, come nel registro. Il passo deve superare la finestra del pass
@@ -642,7 +732,7 @@ def conferme_retroattive(opt, sym: str, candles, frame, spec: dict,
         svuota_cache_motore(opt)            # ogni fine-dati e' una serie a se'
         r = evaluate_spec(opt, sym, candles[:cut], frame.iloc[:cut].reset_index(drop=True),
                           spec, scale_candidates=scale_candidates,
-                          context_by_ts=context_by_ts)
+                          context_by_ts=context_by_ts, keep_candidates=keep_candidates)
         if not r.get("passed"):
             break
         ok += 1
@@ -845,7 +935,7 @@ def coppie_per_intorno(pairs: dict, existing: dict, drift_doc: dict | None,
 
 
 def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=None,
-               gia_validate=None, bocciate_ok: bool = False) -> None:
+               gia_validate=None, bocciate_ok: bool = False, keep_paper=None) -> None:
     opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
     # IL MERCATO NEL GATE. `scripts/optimize.py` carica BTC come contesto
     # cross-asset da sempre; la discovery — che valida TUTTE le spec che il bot
@@ -864,7 +954,10 @@ def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=N
     _W.update(opt=opt, args=args, end=end, specs=specs,
               min_history=_min_history(args.interval), scala_paper=scala_paper,
               btc_ctx=btc_ctx, specs_per_symbol=specs_per_symbol or {},
-              gia_validate=set(gia_validate or ()), bocciate_ok=bool(bocciate_ok))
+              gia_validate=set(gia_validate or ()), bocciate_ok=bool(bocciate_ok),
+              # il keep proposto dal paper (25 set 2026): in coda a `initargs`, con
+              # default, cosi' gli altri argomenti posizionali non si spostano
+              keep_paper=keep_paper)
 
 
 def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
@@ -935,6 +1028,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                 prima_troncata = False
         r = evaluate_spec(_W["opt"], sym, cand, fr, spec,
                           scale_candidates=candidate_ladders(_W.get("scala_paper")),
+                          keep_candidates=candidate_keeps(_W.get("keep_paper")),
                           context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                           run_end=end, interval=args.interval,
                           righe_bocciate=bool(_W.get("bocciate_ok"))
@@ -971,6 +1065,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                 retro = conferme_retroattive(
                     _W["opt"], sym, cand, fr, spec,
                     scale_candidates=candidate_ladders(_W.get("scala_paper")),
+                    keep_candidates=candidate_keeps(_W.get("keep_paper")),
                     context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                     min_history=_W["min_history"])
                 print(f"[discover] {sym}|{spec['id']} (variante di "
@@ -987,6 +1082,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                 "holdout": r.get("holdout"), "regime_pf": r.get("regime_pf"),
                 "oos_max_dd": r.get("max_dd"), "scale_r_mults": r.get("scale_r_mults"),
                 "sl_to_breakeven": r.get("sl_to_breakeven"),
+                # e il keep del profit-lock (25 set 2026): stessa strada della scala
+                "profit_lock_keep": r.get("profit_lock_keep"),
                 "data_end": r.get("data_end", 0),
                 # conferme raccolte NELLO STESSO GIRO con fine dati arretrata
                 # (solo varianti dai referti): 2 = validata subito
@@ -1022,7 +1119,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict,
                   scale_candidates=None, context_by_ts=None, righe_bocciate: bool = False,
-                  run_end: str = "", interval: str = ""):
+                  run_end: str = "", interval: str = "", keep_candidates=None):
     """Aggrega le performance del spec sulle SOLE finestre out-of-sample e applica
     il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra).
 
@@ -1036,9 +1133,10 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     dalla selezione, e' la verifica che mancava."""
     body, cut = opt.split_holdout(candles)
 
-    def _run_oos(ladder=None, be=None) -> tuple:
+    def _run_oos(ladder=None, be=None, keep=None) -> tuple:
         """(stats OOS, ritorni per finestra) con una scala di TP data e, se
-        indicato, la scelta sul break-even dopo il primo gradino."""
+        indicati, la scelta sul break-even dopo il primo gradino e il keep del
+        profit-lock (None = default globale, cioe' il comportamento di prima)."""
         st_all = StrategyStats(strategy=spec["id"])
         per_window: list[float] = []
         for (_ta, _tb, sa, sb) in opt._windows(len(body)):
@@ -1047,6 +1145,9 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
                 g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(ladder)}
             if be is not None:
                 g.params = {**(getattr(g, "params", {}) or {}), "sl_to_breakeven": bool(be)}
+            if keep is not None:
+                # il motore legge `lock_keep(strategy.params)` (25 set 2026)
+                g.params = {**(getattr(g, "params", {}) or {}), "profit_lock_keep": float(keep)}
             st = opt.bt.run_strategy(g, symbol, body[sa:sb],
                                      frame=frame.iloc[sa:sb].reset_index(drop=True),
                                      context_by_ts=context_by_ts)
@@ -1072,14 +1173,19 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     #    sempre sulla scala globale (e sono la maggioranza del registro).
     best_ladder = None
     best_be = None
+    best_keep = None
     if passed and settings.SCALE_OUT_ENABLED:
         best_metric = None
         # le candidate arrivano dal CHIAMANTE, non da uno stato globale: cosi'
         # `evaluate_spec` resta una funzione di cio' che riceve, e un test puo'
         # verificarla senza ricostruire lo stato dei worker
+        # IL METRO DELLA SCELTA e' pesato per recency (`_metrica_scelta`, 25 set
+        # 2026); il verdetto pass/fail qui sopra e qui sotto NO. Vedi la nota
+        # sulla funzione: col metro non pesato sette giorni nuovi su 4,6 anni non
+        # potevano mai spostare la scelta.
         for cand in (scale_candidates or SCALE_LADDER_CANDIDATES):
             st_c, _ = _run_oos(cand)
-            metric = st_c.total_pnl_pct() - max_drawdown(st_c.trades)
+            metric = _metrica_scelta(st_c.trades)
             if best_metric is None or metric > best_metric:
                 best_metric, best_ladder = metric, list(cand)
         # 2b) BREAK-EVEN DOPO IL PRIMO GRADINO: lo decide il gate, per coppia
@@ -1091,8 +1197,29 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         if best_ladder:
             be_default = bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)
             st_alt, _ = _run_oos(best_ladder, not be_default)
-            alt_metric = st_alt.total_pnl_pct() - max_drawdown(st_alt.trades)
+            alt_metric = _metrica_scelta(st_alt.trades)
             best_be = (not be_default) if alt_metric > best_metric else be_default
+            # 2c) KEEP DEL PROFIT-LOCK, per coppia (25 set 2026). Era UNO per tutte
+            #     (PROFIT_LOCK_KEEP=0,5): i verdetti trailing del paper dicevano da
+            #     giorni che il lock tagliava vincitori, e nessuna decisione ne
+            #     usciva (backlog I3). Ora e' un parametro del gate come la scala e
+            #     il BE: si provano i candidati (i tre fissi piu', se c'e', quello
+            #     proposto dal paper) sulla scala e sul BE gia' scelti. Il
+            #     riferimento e' la configurazione col default, GIA' misurata
+            #     (best_metric, o alt_metric se ha vinto il BE alternativo): non si
+            #     rifa'. A parita' vince il default: cambiare costa una
+            #     ri-validazione di fatto, e un pareggio non la paga.
+            keep_default = float(settings.PROFIT_LOCK_KEEP)
+            rif_metric = alt_metric if best_be != be_default else best_metric
+            best_keep = keep_default
+            for k in (keep_candidates or LOCK_KEEP_CANDIDATES):
+                k = float(k)
+                if abs(k - keep_default) < 1e-9:
+                    continue
+                st_k, _ = _run_oos(best_ladder, best_be, keep=k)
+                metric_k = _metrica_scelta(st_k.trades)
+                if metric_k > rif_metric:
+                    rif_metric, best_keep = metric_k, k
 
     # 3) METRICHE FINALI CON LA SCALA CHE VERRA' ESEGUITA. Prima i numeri spediti nel
     #    registro (last_pf, win, regime_pf) uscivano dal passo 1, cioe' dalla scala
@@ -1101,8 +1228,9 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     #    nessuno eseguiva, e il rilevatore di deriva confrontava il vissuto contro
     #    quel numero sbagliato.
     if best_ladder and (list(best_ladder) != list(settings.SCALE_OUT_R_MULTIPLES)
-                        or best_be != bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)):
-        oos, window_pnls = _run_oos(best_ladder, best_be)
+                        or best_be != bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)
+                        or best_keep != float(settings.PROFIT_LOCK_KEEP)):
+        oos, window_pnls = _run_oos(best_ladder, best_be, keep=best_keep)
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()
     reg_pf = pf_by_regime(oos.trades)
@@ -1121,7 +1249,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         g = GeneratedStrategy(spec)
         if best_ladder:
             g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": best_ladder,
-                        "sl_to_breakeven": best_be}
+                        "sl_to_breakeven": best_be, "profit_lock_keep": best_keep}
         # STESSO contesto dell'OOS: un holdout senza mercato boccerebbe le spec
         # di mercato per dati mancanti, cioe' proprio quelle da misurare.
         hold = opt._holdout_check(g, symbol, candles, frame, cut,
@@ -1137,6 +1265,8 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         "max_dd": round(max_drawdown(oos.trades), 4),
         "scale_r_mults": best_ladder,
         "sl_to_breakeven": best_be,
+        # il keep del profit-lock scelto dal gate (None = non passata o senza scala)
+        "profit_lock_keep": best_keep,
         "data_end": (candles[-1].open_time.timestamp() if candles else 0.0),
         "fail_criteria": failed, "fail_binding": binding,
         "fail_shortfall": shortfall, "near_miss": bool(near and not passed),
@@ -1173,6 +1303,24 @@ def _pf_per_direzione(trades) -> dict:
 
 def _metro(pnl, dd) -> float:
     return float(pnl or 0) - float(dd or 0)
+
+
+def _metrica_scelta(trades) -> float:
+    """Il metro con cui il gate SCEGLIE fra scala, break-even e keep: ritorno
+    pesato per recency meno drawdown (25 set 2026).
+
+    Solo per la SCELTA, mai per il verdetto. Fino a oggi scala e BE si sceglievano
+    col `pnl - dd` NON pesato: su 4,6 anni di storia sette giorni nuovi valgono lo
+    0,4% dell'evidenza, quindi la scelta non poteva muoversi mai — e il paper, che
+    vive negli ultimi giorni, non aveva alcun modo di spostarla.
+    `GATE_RECENCY_HALFLIFE_DAYS` (180 giorni; 0 = pesi uniformi, cioe' esattamente
+    il metro di prima) dimezza il peso di un trade ogni sei mesi, e la nota in
+    config dice che pesa SOLO la selezione dei parametri. I `gate_verdict` di
+    `evaluate_spec` restano sui numeri non pesati (`oos.total_pnl_pct()` ecc.):
+    il rigore del pass/fail non si ammorbidisce di un grammo. Il drawdown resta
+    non pesato: e' la buca vera della sequenza, non una media."""
+    pnl_pesato, _pf = weighted_score_parts(trades)
+    return float(pnl_pesato) - float(max_drawdown(trades))
 
 
 def _batte_per_finestra(figlia: dict, madre: dict, margine: float) -> tuple[bool, str]:
@@ -1231,6 +1379,32 @@ def riga_cervello_varianti(e: dict | None) -> str:
             f"{int(e.get('retro_ok', 0) or 0)} con conferme retroattive / "
             f"{len(prom)} promosse{_elenco_chiavi(prom)} / "
             f"{int(e.get('scartate', 0) or 0)} scartate / sostituzioni: {testo_sost}")
+
+
+def riga_cervello_keep(out: dict, passed_keys, keep_paper=None) -> str:
+    """La riga «[cervello] keep del lock ...» per la coda del log (25 set 2026):
+    quante coppie passate in QUESTO giro hanno scelto quale keep del profit-lock.
+    Si stampa sempre: un giro in cui il gate ha confermato 0,5 ovunque deve
+    dirlo, e se il paper aveva proposto un candidato si vede quante volte l'ha
+    spuntata (la proposta e' un candidato, non una decisione)."""
+    conta: dict = {}
+    senza = 0
+    for k in (passed_keys or []):
+        e = (out or {}).get(k) if isinstance(out, dict) else None
+        v = e.get("profit_lock_keep") if isinstance(e, dict) else None
+        if v is None:
+            senza += 1
+            continue
+        v = float(v)
+        conta[v] = conta.get(v, 0) + 1
+    parti = [f"{v:g} x{n}" for v, n in sorted(conta.items())]
+    if senza:
+        parti.append(f"non scelto x{senza}")
+    testo = " · ".join(parti) if parti else "nessuna coppia passata"
+    if keep_paper is not None:
+        kp = float(keep_paper)
+        testo += f" (dal paper {kp:g} x{conta.get(kp, 0)})"
+    return f"[cervello] keep del lock scelto dal gate: {testo}"
 
 
 def merge_into_registry(fb, out: dict, passed_now: list[str],
@@ -1418,6 +1592,12 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
             rec["last_params"]["scale_r_mults"] = e["scale_r_mults"]
         if e.get("sl_to_breakeven") is not None:
             rec["last_params"]["sl_to_breakeven"] = bool(e["sl_to_breakeven"])
+        # e il keep del profit-lock scelto dal gate (25 set 2026): stessa strada,
+        # cosi' `lock_keep(last_params)` lo consegna a motore e bot senza un campo
+        # nuovo da ricordare nel codec o nell'alleggerimento (`last_params` viaggia
+        # intero: e' nel nucleo REGISTRY_CORE_FIELDS)
+        if e.get("profit_lock_keep") is not None:
+            rec["last_params"]["profit_lock_keep"] = float(e["profit_lock_keep"])
         rec["last_pf"] = e["oos_pf"]
         if e.get("t_stat") is not None:
             rec["last_t"] = e["t_stat"]
@@ -1841,10 +2021,15 @@ def main() -> int:
     bocciate_ok = bool(_completa and args.num_shards <= 1 and not getattr(args, "symbols", ""))
     valutate: set = set()   # coin davvero valutate (non saltate per storia/delisting)
     gia_validate = set(coppie_validate(decode_pairs(reg.get("pairs")), _ora))
+    # IL PAPER PROPONE (25 set 2026): oltre alla scala dei TP, il keep del
+    # profit-lock ricavato dai verdetti trailing. Calcolato UNA volta qui e
+    # passato ai worker in coda a `initargs`: un candidato in piu', mai al posto
+    # dei fissi. Serve anche alla riga «[cervello] keep» in fondo al giro.
+    keep_paper = keep_dal_paper(fb)
     for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows in parallel_map(
         _disc_one, symbols, workers=workers, initializer=_disc_init,
         initargs=(args, end, specs, scala_dal_paper(fb), specs_per_symbol, gia_validate,
-                  bocciate_ok)
+                  bocciate_ok, keep_paper)
     ):
         n_eval += n_ev
         if n_ev > 0:
@@ -1942,6 +2127,9 @@ def main() -> int:
     esito_varianti = esito_merge.get("varianti") or {}
     print(riga_cervello_intorno(esito_intorno))
     print(riga_cervello_varianti(esito_varianti))
+    # e la DECISIONE sul keep del profit-lock (25 set 2026): quante passate hanno
+    # scelto quale keep, e quante volte ha vinto il candidato del paper
+    print(riga_cervello_keep(out, passed_keys, keep_paper))
     print(f"[discover] GIRO FINITO in {durata / 3600:.0f}h {(durata % 3600) / 60:.0f}m "
           f"({n_eval} valutazioni, {len(passed_keys)} passate)")
     _doc_run = ("discovered_last_run" if args.interval == settings.ORCHESTRATOR_TIMEFRAME

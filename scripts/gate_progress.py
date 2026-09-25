@@ -135,6 +135,38 @@ def riga_cervello(diag: dict) -> str:
             f"{_n(v, 'scartate')} scartate / sostituzioni {testo_sost}")
 
 
+def riga_keep_validate(pairs: dict, validated) -> str:
+    """«KEEP DEL LOCK»: quale keep del profit-lock il gate ha scelto per le coppie
+    validate (25 set 2026), letto da `last_params["profit_lock_keep"]`.
+
+    E' la decisione che i verdetti trailing del paper dovevano produrre e che
+    finora nessuno vedeva. Una validata SENZA la chiave non e' un errore: e' stata
+    validata prima del nuovo parametro e opera ancora col keep con cui e' passata
+    (`lock_keep` -> None -> default); si conta a parte, cosi' si vede quante
+    coppie il gate deve ancora rivalutare col nuovo parametro."""
+    conta: dict = {}
+    senza = 0
+    for k in validated or []:
+        rec = pairs.get(k) if isinstance(pairs, dict) else None
+        lp = rec.get("last_params") if isinstance(rec, dict) else None
+        v = lp.get("profit_lock_keep") if isinstance(lp, dict) else None
+        try:
+            v = None if (v is None or isinstance(v, bool)) else float(v)
+        except (TypeError, ValueError):
+            v = None
+        if v is None:
+            senza += 1
+        else:
+            conta[v] = conta.get(v, 0) + 1
+    testa = "  KEEP DEL LOCK (scelto dal gate per coppia): "
+    if not conta and not senza:
+        return testa + "nessuna coppia validata"
+    parti = [f"{v:g} x{n}" for v, n in sorted(conta.items())]
+    if senza:
+        parti.append(f"non ancora rivalutate x{senza}")
+    return testa + " · ".join(parti)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--top", type=int, default=15,
@@ -396,6 +428,8 @@ def main() -> int:
               "arriva col primo giro finito)")
     # COSA HA FATTO IL CERVELLO nell'ultimo giro (25 set 2026): vedi riga_cervello
     print(riga_cervello(diag))
+    # e il KEEP DEL PROFIT-LOCK scelto per coppia (25 set 2026): vedi riga_keep_validate
+    print(riga_keep_validate(pairs, validated))
     # la passata extra (strategie native a 1 ora, per ora solo BTC)
     d1h = fb.get_doc("strategy_params", "discovered_last_run_1h") or {}
     if d1h.get("started_at") and d1h.get("duration_s") is not None:
