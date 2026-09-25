@@ -1369,3 +1369,24 @@ misurata su 5 validate (1 regge t ≥ 2, mediana 1,47). Dataset del selettore: 9
 righe da 135 coppie. Memoria di picco per worker: 2,28 GB (per questo 8 worker
 morivano: 8 × 2,3 > 15). Il timer delle 23:04 è saltato perché il giro era in
 corso; il prossimo è il giro completo delle 02:04, con l'intorno per la prima volta.
+
+
+### 25 settembre, 07:05: il giro completo notturno e il salto delle validate
+
+* **Giro completo delle 02:04** (primo con l'intorno: 10 madri, 53 figlie): finito;
+  il giro «solo urgenti» delle 05:30 è durato **1h09** con **8 spec urgenti su 529**
+  (erano 223): la correzione dell'audit ha svuotato la coda. Memoria di picco per
+  worker 2,29 GB, 6 worker, nessun OOM. Dataset del selettore: +1.558 righe.
+* **Validate 59 → 160 su 52 coin (copertura 26%)**, quasi tutto nella sera del 24.
+  Causa: la stessa correzione. Una coppia che passa dentro la sua finestra di 7
+  giorni guadagna la conferma alla chiusura della finestra; prima la chiusura
+  avveniva solo se la coppia ripassava DOPO la scadenza, quindi decine di conferme
+  già guadagnate restavano sospese (i 75 «a 2/3 con finestra scaduta» del 24
+  mattina). Ora si registrano, come optimize faceva da sempre per le base. Non è
+  un abbassamento del gate: 3 passaggi in 3 finestre diverse, come prima. Le scale
+  delle nuove validate sono le fisse (2/4/6 e 1,5/3/5), non quella dal vissuto.
+* Conseguenza da guardare: il bot opera 160 coppie invece di 59 → più segnali al
+  giorno, con gli stessi limiti (5 posizioni, una per coin, tetto per coin, tetto
+  per direzione). Il controllo delle 08:00 misura il salto.
+* Statistica t: 9 validate con misura, 3 reggono t ≥ 2, mediana 1,47.
+* 1 ora: un'unica candidata (ADAUSDT, prima conferma il 24), nessuna validata.
