@@ -68,7 +68,9 @@ portafoglio:  .venv/bin/python -m scripts.portafoglio_backtest
 # sbagliati dall'inizio (ingresso) o andati a favore senza toccare il primo
 # gradino (uscita). Sola lettura.
 mfe:          .venv/bin/python -m scripts.mfe_report
-# selettore (disegno_cervello, punto 2 passo 1): «apri tutto» vs «selettore», offline, sola lettura
+# selettore (disegno_cervello, punto 2): «apri tutto» vs «selettore», offline, sul dataset
+# del gate. Dal 25 set 2026 pubblica anche il modello in `selector/current` (passo 2,
+# l'OMBRA: il bot annota p su ogni apertura e non decide). Non tocca registro ne' posizioni.
 selettore:    .venv/bin/python -m scripts.selettore_report
 # IL CONTROLLO AUTOMATICO (25 set 2026, docs/controllo_schema.md): i due
 # semafori, le anomalie e le tre letture (salute, paper, learning) calcolate

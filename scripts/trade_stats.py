@@ -144,6 +144,116 @@ def print_direction_report(rep: dict) -> None:
     print("costruzione. Conta il PnL della riga CONTROTREND, non il suo conteggio.")
 
 
+# --------------------------------------------------------------------------- #
+# Il selettore in OMBRA (25 set 2026, docs/disegno_cervello.md punto 2 passo 2) #
+# --------------------------------------------------------------------------- #
+#: quanti trade con p servono prima di leggere la calibrazione sul paper (dal
+#: disegno: «non flat dopo 40 segnali») e prima di calcolare una correlazione
+#: che non sia rumore.
+MIN_TRADE_CON_P = 40
+MIN_CORRELAZIONE = 10
+
+#: la regola d'ingresso, scritta una volta sola e stampata sempre: il selettore
+#: entra solo se batte «apri tutto» su 2/3 finestre (scripts/selettore_report.py)
+#: E la calibrazione sul paper non e' piatta (p media dei vinti sopra quella dei
+#: persi, correlazione p/esito > 0) su almeno MIN_TRADE_CON_P trade con p.
+REGOLA_SELETTORE = ("il selettore entra solo se batte «apri tutto» su 2/3 finestre "
+                    "(report `selettore`) E la calibrazione sul paper non e' piatta "
+                    f"(>= {MIN_TRADE_CON_P} trade con p, p media dei vinti > dei persi, "
+                    "correlazione p/esito > 0)")
+
+
+def _pearson(x: list[float], y: list[float]) -> float | None:
+    """Correlazione di Pearson; None se una delle due serie e' costante."""
+    n = len(x)
+    if n < 2:
+        return None
+    mx, my = sum(x) / n, sum(y) / n
+    sxx = sum((a - mx) ** 2 for a in x)
+    syy = sum((b - my) ** 2 for b in y)
+    # «costante» con la tolleranza dei float: dodici 0.6 sommati non danno uno
+    # scarto quadratico esattamente zero, ma quasi (1e-32), e non e' un segnale
+    if sxx <= 1e-12 or syy <= 1e-12:
+        return None
+    sxy = sum((a - mx) * (b - my) for a, b in zip(x, y))
+    return sxy / (sxx * syy) ** 0.5
+
+
+def selettore_ombra_report(trades: list[dict]) -> dict:
+    """Cosa dice il paper della p annotata dall'ombra del selettore.
+
+    Legge SOLO i trade chiusi che portano `selector_p` (il bot la scrive dal
+    25 set 2026; prima non c'era). Per ognuno la soglia e' `selector_soglia`
+    del trade stesso (era quella del modello in vigore quando si e' aperto;
+    0.5 se manca). Numeri: quanti trade con p; p media dei vinti e dei persi
+    (se p predice, la prima e' piu' alta); quanti stavano sopra la soglia e il
+    loro PnL contro il PnL di tutti i trade con p (cioe' cosa avrebbe fatto il
+    selettore se avesse deciso, a size uguale); correlazione p/esito (esito
+    1 = vinto, 0 = perso) solo da MIN_CORRELAZIONE trade in su. Non decide
+    nulla: e' la misura che, con >= MIN_TRADE_CON_P trade, dira' se la
+    calibrazione e' piatta o no."""
+    con_p = []
+    for t in trades or []:
+        try:
+            p = float(t.get("selector_p"))
+            pnl = float(t.get("pnl", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        if p != p:   # NaN
+            continue
+        try:
+            soglia = float(t.get("selector_soglia"))
+        except (TypeError, ValueError):
+            soglia = 0.5
+        con_p.append((p, soglia, pnl))
+    n = len(con_p)
+    out = {"n": n, "n_vinti": 0, "n_persi": 0, "p_media_vinti": None,
+           "p_media_persi": None, "n_sopra": 0, "pnl_sopra": 0.0, "pnl_tutti": 0.0,
+           "correlazione": None, "minimo_calibrazione": MIN_TRADE_CON_P,
+           "regola": REGOLA_SELETTORE}
+    if not n:
+        return out
+    vinti = [p for p, _, pnl in con_p if pnl > 0]
+    persi = [p for p, _, pnl in con_p if pnl < 0]
+    sopra = [(p, pnl) for p, s, pnl in con_p if p >= s]
+    out.update({
+        "n_vinti": len(vinti), "n_persi": len(persi),
+        "p_media_vinti": round(mean(vinti), 4) if vinti else None,
+        "p_media_persi": round(mean(persi), 4) if persi else None,
+        "n_sopra": len(sopra),
+        "pnl_sopra": round(sum(pnl for _, pnl in sopra), 4),
+        "pnl_tutti": round(sum(pnl for _, _, pnl in con_p), 4),
+    })
+    if n >= MIN_CORRELAZIONE:
+        c = _pearson([p for p, _, _ in con_p], [1.0 if pnl > 0 else 0.0 for _, _, pnl in con_p])
+        out["correlazione"] = round(c, 4) if c is not None else None
+    return out
+
+
+def print_selettore_ombra(rep: dict) -> None:
+    print("\nSELETTORE IN OMBRA (p annotata dal bot a ogni apertura, mai usata per decidere)")
+    if not rep["n"]:
+        print("  nessun trade con p ancora (il bot la scrive dal 25 set 2026, se "
+              "`selector/current` e' pubblicato)")
+        print(f"  regola: {rep['regola']}")
+        return
+    print(f"  trade con p: {rep['n']}  (vinti {rep['n_vinti']}, persi {rep['n_persi']}; "
+          f"ne servono {rep['minimo_calibrazione']} per leggere la calibrazione)")
+    pv, pp = rep["p_media_vinti"], rep["p_media_persi"]
+    print(f"  p media dei vinti: {'—' if pv is None else f'{pv:.3f}'}   "
+          f"p media dei persi: {'—' if pp is None else f'{pp:.3f}'}"
+          + ("   (se p predice, la prima e' piu' alta)" if pv is not None and pp is not None else ""))
+    print(f"  sopra la soglia: {rep['n_sopra']}/{rep['n']} trade, PnL {rep['pnl_sopra']:+.2f} "
+          f"contro {rep['pnl_tutti']:+.2f} di tutti (a size uguale: e' cio' che il "
+          f"selettore avrebbe tenuto)")
+    c = rep["correlazione"]
+    if rep["n"] < MIN_CORRELAZIONE:
+        print(f"  correlazione p/esito: — (servono {MIN_CORRELAZIONE} trade, ce ne sono {rep['n']})")
+    else:
+        print(f"  correlazione p/esito: {'— (serie costante)' if c is None else f'{c:+.3f}'}")
+    print(f"  regola: {rep['regola']}")
+
+
 def main() -> int:
     fb = get_firebase()
     trades = fb.query_collection("trades", order_by="exit_ts")
@@ -329,6 +439,11 @@ def main() -> int:
     else:
         print(f"  nessuna: servono almeno {MIN_CAMPIONE} perdite per direzione o "
               f"controtrend, {MIN_STOP_LARGO} stop larghi")
+
+    # L'OMBRA DEL SELETTORE (25 set 2026): la p che il bot annota su ogni
+    # apertura, letta contro l'esito. Il paper qui e' il giudice del modello
+    # addestrato sul gate, non un dato di training.
+    print_selettore_ombra(selettore_ombra_report(trades))
 
     return 0
 

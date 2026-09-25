@@ -653,3 +653,92 @@ def report_per_famiglia(righe: list[dict], **kw) -> dict:
         if gruppi.get(fam):
             out[fam] = walk_forward(gruppi[fam], famiglia=fam, **kw)
     return out
+
+
+# --------------------------------------------------------------------------- #
+# Passo 2 — l'ombra nel bot (25 set 2026)                                      #
+# --------------------------------------------------------------------------- #
+# Il verdetto del passo 1 e' NON BATTE (1 finestra su 3, ops 0231). Il disegno
+# vorrebbe l'ombra solo dopo un «batte», ma il proprietario vuole imparare da
+# ogni trade del paper: se il bot annota su OGNI apertura la p del selettore,
+# fra qualche settimana si potra' misurare SUL PAPER se p predice l'esito
+# (calibrazione), senza che il selettore abbia mai deciso nulla. Il paper resta
+# giudice, non maestro: qui non si addestra, si legge un modello pubblicato.
+#
+# `scripts/selettore_report.py` pubblica `selector/current`; il bot lo rilegge
+# ogni ora (`TradingBot._load_selettore`) e, subito prima di aprire, calcola p
+# con la STESSA funzione delle variabili del gate (`feats_ingresso`) e la stessa
+# `prob` di qui. Nessuna decisione cambia: p e soglia viaggiano sulla posizione
+# e sul trade chiuso (`selector_p`, `selector_soglia`) e basta.
+
+#: la soglia da usare se il documento pubblicato non ne porta una leggibile.
+SOGLIA_DEFAULT = 0.5
+
+
+def valida_pubblicato(doc) -> dict | None:
+    """`selector/current` letto da Firestore -> {modello, soglia, ...} usabile,
+    o None se il documento manca o non e' un modello di QUESTA versione.
+
+    Il controllo sulle variabili e' il punto: un modello pubblicato con un altro
+    elenco di VARIABILI (una versione vecchia o futura del codice) darebbe una p
+    calcolata su colonne sbagliate, cioe' un numero che sembra vero e non lo e'.
+    Meglio nessuna ombra che un'ombra che mente."""
+    if not isinstance(doc, dict):
+        return None
+    m = doc.get("modello")
+    if not isinstance(m, dict):
+        return None
+    try:
+        if [str(v) for v in (m.get("variabili") or [])] != list(VARIABILI):
+            return None
+        d = len(VARIABILI)
+        coef = [float(x) for x in m["coef"]]
+        media = [float(x) for x in m["media"]]
+        scala = [float(x) for x in m["scala"]]
+        intercetta = float(m["intercetta"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    if len(coef) != d or len(media) != d or len(scala) != d:
+        return None
+    if not all(math.isfinite(x) for x in coef + media + scala + [intercetta]):
+        return None
+    soglia = _float(doc.get("soglia"))
+    if soglia is None or not 0.0 < soglia < 1.0:
+        soglia = SOGLIA_DEFAULT
+    return {"modello": {**m, "coef": coef, "media": media, "scala": scala,
+                        "intercetta": intercetta},
+            "soglia": float(soglia),
+            "verdetto": doc.get("verdetto"), "stato": doc.get("stato"),
+            "righe": doc.get("righe"), "generato_at": doc.get("generato_at")}
+
+
+def riga_dal_vivo(symbol: str, strategy: str, direction: str, regime,
+                  hour: int | None, feats: dict | None,
+                  entry_ts: float | None = None) -> dict:
+    """La riga del selettore per un trade che il bot sta per aprire, nello STESSO
+    formato delle righe del gate (`righe_selettore` in scripts/discover_strategies.py)
+    per la parte che `vettore` legge: symbol, strategy, direction, regime, hour,
+    entry_ts, feats. Mancano solo le chiavi dell'ESITO (pnl, is_win, mfe_r,
+    bars_held, passed...), che dal vivo non esistono ancora: l'ombra e' proprio
+    il modo di scoprirlo dopo. `regime` puo' essere l'enum o la stringa: si
+    salva `value` se c'e', come fa il gate con `str(t.regime)`."""
+    reg = getattr(regime, "value", regime)
+    return {"symbol": str(symbol), "strategy": str(strategy),
+            "direction": str(getattr(direction, "value", direction)).lower(),
+            "regime": (str(reg) if reg is not None else None),
+            "entry_ts": (float(entry_ts) if entry_ts is not None else None),
+            "hour": (int(hour) if hour is not None else None),
+            "feats": dict(feats or {})}
+
+
+def variabili_mancanti(row: dict) -> list[str]:
+    """Quali variabili OBBLIGATORIE mancano alla riga (perche' `vettore` dira'
+    None): serve al log dell'ombra per dire cosa non si e' potuto misurare dal
+    vivo, invece di un muto «p non calcolabile»."""
+    feats = row.get("feats") or {}
+    out = [n for n in _OBBLIGATORIE if _float(feats.get(n) if isinstance(feats, dict) else None) is None]
+    if str(row.get("direction", "")).lower() not in ("long", "short"):
+        out.append("direction")
+    if _ora(row) is None:
+        out.append("hour")
+    return out

@@ -20,7 +20,7 @@ ipotesi finiscono su Firestore `learning/referti`; la discovery le legge e le
 prova come VARIANTI sulla storia, nel gate. Se la storia le conferma entrano,
 altrimenti muoiono li'. Il paper non cambia un parametro da solo.
 
-LE QUATTRO IPOTESI (una per tipo, per strategia)
+LE CINQUE IPOTESI (una per tipo, per strategia)
   * solo_long  / solo_short: una direzione ha PERSO almeno MIN_CAMPIONE trade
     e non ne ha mai vinto uno (i pareggi non contano) -> variante che la spegne.
   * conferma_trend: le perdite sono controtrend o «mai andate a favore»
@@ -28,6 +28,14 @@ LE QUATTRO IPOTESI (una per tipo, per strategia)
     conferma del trend all'ingresso.
   * stop_stretto: MIN_STOP_LARGO perdite con stop oltre MAX_STOP_PCT -> variante
     con stop piu' stretto (il caso 0,07022/0,0595 del 23 set, -15,3%).
+  * scala_stretta (25 set 2026, backlog I4): MIN_SCALA_STRETTA perdite di classe
+    «uscita» — il prezzo e' andato a favore ma e' morto SOTTO il primo gradino
+    della scala dei TP. Il numero che l'ha fatta nascere: 20 stop su 32 erano
+    trade andati a favore (mfe mediana ~0,7 R) con il primo gradino a 1,5-2 R.
+    Non produce una variante della spec: dice alla discovery di RIGIUDICARE la
+    strategia nel gate con in piu' la scala ricavata dai SUOI mfe
+    (`scale_per_strategia` in scripts/discover_strategies.py). Sceglie sempre il
+    gate sulla storia; il paper indica solo dove guardare.
 """
 from __future__ import annotations
 
@@ -45,8 +53,12 @@ ESITI_ESTERNI = frozenset({"manual", "kill_switch", "circuit_breaker"})
 # lo stop largo e' una proprieta' della geometria, non della fortuna.
 MIN_CAMPIONE = 3
 MIN_STOP_LARGO = 2
+# 3 perdite «sotto il primo gradino» sulla stessa strategia (25 set 2026): come
+# MIN_CAMPIONE, e' il minimo perche' smetta di essere un caso. Dichiarata prima
+# di vedere per quali strategie scatta.
+MIN_SCALA_STRETTA = 3
 
-TIPI = ("solo_long", "solo_short", "conferma_trend", "stop_stretto")
+TIPI = ("solo_long", "solo_short", "conferma_trend", "stop_stretto", "scala_stretta")
 
 _RILIEVI = ("ingresso", "uscita", "protezione", "stop_largo", "lock_mai", "controtrend")
 
@@ -56,7 +68,11 @@ def _bucket_vuoto() -> dict:
             "ingresso": 0, "uscita": 0, "protezione": 0,
             "stop_largo": 0, "lock_mai": 0, "controtrend": 0,
             "long_n": 0, "long_vinti": 0, "long_persi": 0,
-            "short_n": 0, "short_vinti": 0, "short_persi": 0}
+            "short_n": 0, "short_vinti": 0, "short_persi": 0,
+            # gli mfe (in R) delle perdite di classe «uscita»: servono solo alla
+            # mediana nell'ipotesi scala_stretta; `_arrotonda` li toglie dal
+            # documento (una lista per strategia non serve a nessun lettore)
+            "_uscita_mfe": []}
 
 
 def _aggiungi(b: dict, pnl: float, direzione: str, pm: dict | None) -> None:
@@ -80,6 +96,8 @@ def _aggiungi(b: dict, pnl: float, direzione: str, pm: dict | None) -> None:
         classe = pm.get("classe")
         if classe in ("ingresso", "uscita", "protezione"):
             b[classe] += 1
+        if classe == "uscita" and isinstance(pm.get("mfe_r"), (int, float)):
+            b["_uscita_mfe"].append(float(pm["mfe_r"]))
         if pm.get("stop_largo"):
             b["stop_largo"] += 1
         if pm.get("lock_mai_armato"):
@@ -104,8 +122,17 @@ def _ts_trade(t: dict):
     return None
 
 
+def _mediana(xs: list[float]) -> float | None:
+    xs = sorted(xs)
+    if not xs:
+        return None
+    n = len(xs)
+    return round(xs[n // 2] if n % 2 else (xs[n // 2 - 1] + xs[n // 2]) / 2, 2)
+
+
 def _arrotonda(b: dict) -> dict:
     b["pnl"] = round(b["pnl"], 2)
+    b.pop("_uscita_mfe", None)
     return b
 
 
@@ -137,6 +164,15 @@ def _ipotesi_per(gid: str, b: dict) -> list[dict]:
         out.append({"strategia": gid, "tipo": "stop_stretto",
                     "motivo": f"{b['stop_largo']} perdite con stop troppo largo",
                     "campione": b["stop_largo"]})
+    # scala_stretta (25 set 2026): perdite andate a favore ma morte sotto il primo
+    # gradino. La mediana degli mfe e' il numero che dice QUANTO era fuori
+    # portata la scala; se un referto vecchio non porta `mfe_r`, si scrive n/d.
+    if b["uscita"] >= MIN_SCALA_STRETTA:
+        med = _mediana(b.get("_uscita_mfe") or [])
+        out.append({"strategia": gid, "tipo": "scala_stretta",
+                    "motivo": (f"{b['uscita']} perdite sotto il primo gradino "
+                               f"(mfe mediana {f'{med:.2f}' if med is not None else 'n/d'} R)"),
+                    "campione": b["uscita"], "mfe_mediana": med})
     return out
 
 

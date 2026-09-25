@@ -180,7 +180,8 @@ def spec_urgenti(pairs: dict, now: float, margine_s: float = 3 * 3600) -> set:
 
 
 def specs_da_rivalutare(existing: dict, reg: dict, cap: int,
-                        completa: bool = True, now: float | None = None) -> tuple[list[dict], dict]:
+                        completa: bool = True, now: float | None = None,
+                        urgenti_extra=None) -> tuple[list[dict], dict]:
     """Quali spec gia' note si ri-valutano in questo run, e con che priorita'.
 
     IL DIFETTO CHE CORREGGE, in una riga: il taglio buttava fuori proprio le coppie
@@ -212,6 +213,12 @@ def specs_da_rivalutare(existing: dict, reg: dict, cap: int,
     Ritorna la lista di spec e un dizionario di diagnostica, che finisce su Firestore
     e da li' nel rapporto: senza, la differenza fra "il taglio morde" e "il taglio
     non morde" resta invisibile esattamente come lo era prima.
+
+    `urgenti_extra` (25 set 2026): id di spec note da rigiudicare COMUNQUE in
+    questo giro, oltre alla regola sopra — oggi le strategie con un'ipotesi
+    `scala_stretta` fresca nei referti (`strategie_scala_stretta`), che il gate
+    rivede con la loro scala dal vissuto. Entrano in coda, senza contare nel cap:
+    sono al massimo SCALA_STRETTA_MAX.
     """
     pairs = decode_pairs(reg.get("pairs"))
     # quante conferme ha gia' ogni spec. Una spec puo' vivere su piu' coin: conta la
@@ -235,6 +242,17 @@ def specs_da_rivalutare(existing: dict, reg: dict, cap: int,
         urgenti = spec_urgenti(pairs, now if now is not None else time.time())
         scelte = [sp for gid, sp in ordinate if gid in urgenti]
         modalita = "solo urgenti"
+    # le strategie con ipotesi scala_stretta fresca: in coda, se note e non gia'
+    # dentro (nell'ordine in cui arrivano, che e' gia' «le piu' recenti prima»)
+    dentro = {id(sp) for sp in scelte}
+    n_extra = 0
+    for gid in (urgenti_extra or ()):
+        sp = existing.get(gid) if isinstance(gid, str) else None
+        if not isinstance(sp, dict) or id(sp) in dentro:
+            continue
+        scelte.append(sp)
+        dentro.add(id(sp))
+        n_extra += 1
     diag = {
         "reeval_cap": cap,
         "reeval_modalita": modalita,
@@ -242,6 +260,7 @@ def specs_da_rivalutare(existing: dict, reg: dict, cap: int,
         "n_specs_rivalutate": len(scelte),
         "n_specs_con_conferme": len(con_conferme),
         "n_specs_tagliate": max(0, len(existing) - len(scelte)),
+        "n_specs_ipotesi_uscita": n_extra,
     }
     return scelte, diag
 
@@ -468,17 +487,61 @@ def scala_dal_paper(fb, min_trades: int = 10, trades: list | None = None):
     return scala
 
 
-def candidate_ladders(scala_paper=None) -> tuple:
+# quanti trade chiusi con mfe servono a una strategia per avere una scala propria
+SCALA_STRATEGIA_MIN_TRADES = 5
+
+
+def scale_per_strategia(trades, min_trades: int = SCALA_STRATEGIA_MIN_TRADES) -> dict[str, tuple]:
+    """La scala dei TP ricavata dagli mfe di OGNI strategia, per id (25 set 2026,
+    backlog I4).
+
+    `scala_dal_paper` misura una scala sola per tutte le coppie insieme: giusto
+    come punto di partenza, ma 20 stop su 32 erano trade andati a favore e morti
+    sotto il primo gradino, e non tutte le strategie arrivano alla stessa
+    distanza. Qui, per ogni strategia con almeno `min_trades` trade chiusi con
+    `mfe_r`, la stessa regola dei quantili (`ladder_from_mfe`) sui SUOI trade.
+    Cinque trade sono pochi per un esito, non per un numero per trade (vedi la
+    docstring di `ladder_from_mfe`): e' un candidato in piu' per il gate, che
+    sceglie sulla storia, non una decisione del paper.
+
+    Fail-open: senza trade, con trade malformati o senza campione per nessuna
+    strategia ritorna {} e il gate resta com'era."""
+    per_strat: dict[str, list] = {}
+    for t in trades or []:
+        if not isinstance(t, dict) or t.get("mfe_r") is None:
+            continue
+        gid = t.get("strategy")
+        if not isinstance(gid, str) or not gid:
+            continue
+        per_strat.setdefault(gid, []).append(t.get("mfe_r"))
+    out: dict[str, tuple] = {}
+    for gid in sorted(per_strat):
+        if len(per_strat[gid]) < min_trades:
+            continue
+        try:
+            scala = ladder_from_mfe(per_strat[gid], min_trades=min_trades)
+        except (TypeError, ValueError):
+            continue
+        if scala:
+            out[gid] = tuple(scala)
+    return out
+
+
+def candidate_ladders(scala_paper=None, scala_strategia=None) -> tuple:
     """Le scale che il gate mettera' a confronto per una coppia.
 
     Le quattro fisse sempre; quella misurata dal paper in piu', se c'e' ed e'
-    diversa. Mai al posto delle altre — una misura su pochi trade puo' PROPORRE,
-    non decidere."""
-    if not scala_paper:
-        return SCALE_LADDER_CANDIDATES
-    if tuple(scala_paper) in {tuple(c) for c in SCALE_LADDER_CANDIDATES}:
-        return SCALE_LADDER_CANDIDATES
-    return SCALE_LADDER_CANDIDATES + (tuple(scala_paper),)
+    diversa; e dal 25 set 2026 anche quella misurata sui trade della SOLA
+    strategia in esame (`scale_per_strategia`), se nuova. Mai al posto delle
+    altre — una misura su pochi trade puo' PROPORRE, non decidere."""
+    out = SCALE_LADDER_CANDIDATES
+    for scala in (scala_paper, scala_strategia):
+        if not scala:
+            continue
+        if tuple(scala) in {tuple(c) for c in out}:
+            continue
+        out = out + (tuple(scala),)
+    return out
 
 
 #: la regola (soglie e valori proposti) vive in bot/learning/metrics.py
@@ -577,9 +640,60 @@ REFERTI_VARIANTI_MAX = int(os.getenv("DISCOVERY_REFERTI_MAX", "10"))
 RANDOM_MAX = int(os.getenv("DISCOVERY_RANDOM_MAX", "40"))
 
 
+def leggi_referti(fb) -> dict:
+    """Il documento `learning/referti` scritto dal bot, letto UNA volta per giro
+    (25 set 2026): lo usano `varianti_dai_referti` e `strategie_scala_stretta`.
+    Fail-open: senza Firebase o senza documento ritorna {}, con una riga di log."""
+    try:
+        doc = fb.get_doc("learning", "referti") or {}
+        return doc if isinstance(doc, dict) else {}
+    except Exception as exc:  # noqa: BLE001
+        print(f"[discover] referti del paper non disponibili ({str(exc)[:80]}) "
+              f"-> nessuna variante")
+        return {}
+
+
+# quante strategie con ipotesi scala_stretta fresca si rigiudicano per giro:
+# ognuna costa una valutazione su ogni coin, come una spec urgente.
+SCALA_STRETTA_MAX = 10
+SCALA_STRETTA_FRESCA_S = 7 * 86400
+
+
+def strategie_scala_stretta(doc: dict | None, now: float, cap: int = SCALA_STRETTA_MAX,
+                            fresca_s: float = SCALA_STRETTA_FRESCA_S) -> list[str]:
+    """Le strategie con un'ipotesi `scala_stretta` FRESCA nei referti del paper
+    (25 set 2026, backlog I4): `da_ts` (il primo trade del paper di quella
+    strategia) negli ultimi `fresca_s` secondi. Il gate le rigiudica nel giro
+    con in piu' la scala dai LORO mfe (`scale_per_strategia`): un candidato,
+    non una decisione. Al massimo `cap`, le piu' recenti prima, poi per id: un
+    giro «solo urgenti» deve restare breve. Fail-open: documento assente o
+    malformato -> lista vuota."""
+    if not isinstance(doc, dict):
+        return []
+    trovate: list[tuple[float, str]] = []
+    for ip in doc.get("ipotesi") or []:
+        if not isinstance(ip, dict) or ip.get("tipo") != "scala_stretta":
+            continue
+        gid = ip.get("strategia")
+        if not isinstance(gid, str) or not gid:
+            continue
+        try:
+            da_ts = float(ip.get("da_ts") or 0)
+        except (TypeError, ValueError):
+            continue
+        if da_ts <= 0 or now - da_ts > fresca_s:
+            continue
+        trovate.append((-da_ts, gid))
+    ordinate: list[str] = []
+    for _, gid in sorted(set(trovate)):
+        if gid not in ordinate:
+            ordinate.append(gid)
+    return ordinate[: max(0, cap)]
+
+
 def varianti_dai_referti(fb, existing: dict, interval: str,
                          limit: int = REFERTI_VARIANTI_MAX,
-                         pairs: dict | None = None) -> list[dict]:
+                         pairs: dict | None = None, doc: dict | None = None) -> list[dict]:
     """Le VARIANTI che il paper propone, pronte per il gate (backlog B8).
 
     Il bot scrive in `learning/referti` le ipotesi ricavate dai post-mortem dei
@@ -596,15 +710,16 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
 
     Fail-open: senza documento, senza Firebase o con un documento malformato si
     torna a lista vuota e il giro e' identico a prima, con una riga di log.
+    `doc`: il documento gia' letto dal main (`leggi_referti`); se manca, lo si
+    legge qui come prima.
     """
+    if doc is None:
+        doc = leggi_referti(fb)
     try:
-        doc = fb.get_doc("learning", "referti") or {}
         ipotesi = doc.get("ipotesi") or []
-    except Exception as exc:  # noqa: BLE001
-        print(f"[discover] referti del paper non disponibili ({str(exc)[:80]}) "
-              f"-> nessuna variante")
+    except AttributeError:
         return []
-    if not ipotesi:
+    if not ipotesi or not isinstance(ipotesi, list):
         return []
     tf_bot = settings.ORCHESTRATOR_TIMEFRAME
     firme_note = {firma_spec(sp) for sp in existing.values() if isinstance(sp, dict)}
@@ -631,6 +746,11 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
         # decine di trade OOS per direzione. Se per questa coppia il lato da
         # spegnere ha PF >= 1 su almeno 20 trade nel gate, la variante non nasce.
         tipo = str(ip.get("tipo") or "")
+        # scala_stretta (25 set 2026) NON e' una variante della spec: e' la
+        # richiesta di rigiudicare la strategia con la sua scala dal vissuto
+        # (`strategie_scala_stretta` + `scale_per_strategia`), gestita a parte
+        if tipo == "scala_stretta":
+            continue
         if pairs and tipo in ("solo_long", "solo_short"):
             lato_spento = "short" if tipo == "solo_long" else "long"
             for k, rec in pairs.items():
@@ -960,7 +1080,8 @@ def coppie_per_intorno(pairs: dict, existing: dict, drift_doc: dict | None,
 
 
 def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=None,
-               gia_validate=None, bocciate_ok: bool = False, keep_paper=None) -> None:
+               gia_validate=None, bocciate_ok: bool = False, keep_paper=None,
+               scale_strategie=None) -> None:
     opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
     # IL MERCATO NEL GATE. `scripts/optimize.py` carica BTC come contesto
     # cross-asset da sempre; la discovery — che valida TUTTE le spec che il bot
@@ -982,7 +1103,10 @@ def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=N
               gia_validate=set(gia_validate or ()), bocciate_ok=bool(bocciate_ok),
               # il keep proposto dal paper (25 set 2026): in coda a `initargs`, con
               # default, cosi' gli altri argomenti posizionali non si spostano
-              keep_paper=keep_paper)
+              keep_paper=keep_paper,
+              # le scale per strategia dal vissuto (25 set 2026, backlog I4):
+              # id -> scala; ultima in coda, stessa regola
+              scale_strategie=dict(scale_strategie or {}))
 
 
 def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
@@ -1051,8 +1175,14 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
             if prima_troncata:
                 svuota_cache_motore(_W["opt"])
                 prima_troncata = False
+        # la scala dai trade del paper di QUESTA strategia (25 set 2026, I4): un
+        # candidato in piu' dopo quella globale, solo per le strategie che hanno
+        # abbastanza trade con mfe; per le altre `None` e i candidati sono quelli
+        # di prima
+        scala_strategia = (_W.get("scale_strategie") or {}).get(spec.get("id"))
         r = evaluate_spec(_W["opt"], sym, cand, fr, spec,
-                          scale_candidates=candidate_ladders(_W.get("scala_paper")),
+                          scale_candidates=candidate_ladders(_W.get("scala_paper"),
+                                                             scala_strategia=scala_strategia),
                           keep_candidates=candidate_keeps(_W.get("keep_paper")),
                           context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                           run_end=end, interval=args.interval,
@@ -1089,7 +1219,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                     and key not in (_W.get("gia_validate") or set())):
                 retro = conferme_retroattive(
                     _W["opt"], sym, cand, fr, spec,
-                    scale_candidates=candidate_ladders(_W.get("scala_paper")),
+                    scale_candidates=candidate_ladders(_W.get("scala_paper"),
+                                                       scala_strategia=scala_strategia),
                     keep_candidates=candidate_keeps(_W.get("keep_paper")),
                     context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                     min_history=_W["min_history"])
@@ -1428,6 +1559,19 @@ def conta_keep_giro(out: dict, passed_keys, keep_paper=None) -> dict:
             "non_scelto": senza,
             "dal_paper": kp,
             "dal_paper_n": conta.get(kp, 0) if kp is not None else 0}
+
+
+def riga_cervello_uscita(ipotesi_uscita: dict | None) -> str:
+    """La riga «[cervello] ipotesi scala_stretta: ...» per la coda del log (25 set
+    2026, I4): quante strategie con un'ipotesi fresca sulle uscite sono state
+    rigiudicate, e quante di loro con una scala propria dal vissuto. Sempre,
+    anche a zero: un giro senza deve dirlo."""
+    e = ipotesi_uscita if isinstance(ipotesi_uscita, dict) else {}
+    n = int(e.get("strategie", 0) or 0)
+    con = int(e.get("con_scala", 0) or 0)
+    return (f"[cervello] ipotesi scala_stretta: {n} strategie rigiudicate con la loro "
+            f"scala dal vissuto ({con} con almeno {SCALA_STRATEGIA_MIN_TRADES} trade con mfe "
+            f"e una scala propria)")
 
 
 def riga_cervello_keep(out: dict, passed_keys, keep_paper=None) -> str:
@@ -1918,6 +2062,7 @@ def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
                f"{int(run.get('n_passed') or 0)} passate ({modalita}), "
                f"durata {_durata_testo(run.get('duration_s'))}.")
     cand = dict(candidate or {})
+    ipu = run.get("ipotesi_uscita") if isinstance(run.get("ipotesi_uscita"), dict) else {}
     return {
         "coin_valutate": coin, "valutazioni": n_eval, "passate": int(run.get("n_passed") or 0),
         "passate_lista": [{"coin": p.get("symbol"), "id": p.get("id"),
@@ -1932,6 +2077,11 @@ def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
         "worker": worker, "rss_max_mb": _num(rss_max_mb),
         "paper_propone": {"scala": scala_str(scala_paper), "keep": _num(keep_paper),
                           "verdetti_trailing": prem + prot},
+        # le strategie rigiudicate per un'ipotesi scala_stretta fresca (25 set
+        # 2026, I4) e quante di loro avevano una scala propria dal vissuto; 0/0
+        # nel merge degli shard e nei giri senza ipotesi
+        "ipotesi_uscita": {"strategie": int(_num(ipu.get("strategie")) or 0),
+                           "con_scala": int(_num(ipu.get("con_scala")) or 0)},
         "lettura": lettura,
         "dettaglio": ("candidate: `totale` e' la lista comune valutata su ogni coin "
                       "(nuove + rivalutate, dopo de-dup e gemelle); `intorno` sono le "
@@ -2439,15 +2589,24 @@ def main() -> int:
         #     AI, sostituiscono una quota di casuali: il giro non si allunga.
         existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
         reg = fb.get_doc("strategy_registry", "validated") or {}
+        doc_referti = leggi_referti(fb)
         varianti = varianti_dai_referti(fb, existing, args.interval,
-                                        pairs=decode_pairs(reg.get("pairs")))
+                                        pairs=decode_pairs(reg.get("pairs")), doc=doc_referti)
+        # IPOTESI SULLE USCITE (25 set 2026, backlog I4): le strategie con
+        # un'ipotesi scala_stretta fresca si rigiudicano in QUESTO giro, anche se
+        # non urgenti, con in piu' la scala dai loro mfe (piu' sotto). Solo le
+        # spec note dello stesso timeframe: le altre non si valutano qui.
+        urgenti_uscita = [g for g in strategie_scala_stretta(doc_referti, _ora)
+                          if isinstance(existing.get(g), dict)
+                          and (existing[g].get("timeframe") or tf_bot) == args.interval]
         n_casuali = max(0, min(args.generate - len(ai_specs) - len(varianti), RANDOM_MAX))
         if n_casuali < args.generate - len(ai_specs) - len(varianti):
             print(f"[discover] candidate casuali limitate a {n_casuali} "
                   f"(DISCOVERY_RANDOM_MAX={RANDOM_MAX}): le altre fonti sono ragionate")
         specs = ai_specs + varianti + generate_specs(n_casuali, seed=args.seed)
         existing_list, diag_reeval = specs_da_rivalutare(existing, reg, args.reeval_cap,
-                                                         completa=_completa, now=_ora)
+                                                         completa=_completa, now=_ora,
+                                                         urgenti_extra=urgenti_uscita)
         print(f"[discover] rivalutazione {diag_reeval['reeval_modalita']}: "
               f"{diag_reeval['n_specs_rivalutate']} spec note su {diag_reeval['n_specs_note']}")
         specs.extend(existing_list)
@@ -2608,10 +2767,21 @@ def main() -> int:
         trades_paper = trades_del_paper(fb)
         keep_paper = keep_dal_paper(fb, trades=trades_paper)
         scala_paper = scala_dal_paper(fb, trades=trades_paper)
+        # e la scala per OGNI strategia con abbastanza trade (25 set 2026, I4):
+        # id -> scala, in coda a `initargs`; il worker la aggiunge ai candidati
+        # della sola spec a cui appartiene
+        scale_strategie = scale_per_strategia(trades_paper or [])
+        if scale_strategie:
+            _es = next(iter(scale_strategie))
+            print(f"[paper] scale per strategia dal vissuto: {len(scale_strategie)} strategie "
+                  f"con >= {SCALA_STRATEGIA_MIN_TRADES} trade (es. {_es} -> "
+                  f"{scala_str(scale_strategie[_es])})")
+        ipotesi_uscita = {"strategie": len(urgenti_uscita),
+                          "con_scala": sum(1 for g in urgenti_uscita if g in scale_strategie)}
         for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows in parallel_map(
             _disc_one, symbols, workers=workers, initializer=_disc_init,
             initargs=(args, end, specs, scala_paper, specs_per_symbol, gia_validate,
-                      bocciate_ok, keep_paper)
+                      bocciate_ok, keep_paper, scale_strategie)
         ):
             n_eval += n_ev
             if n_ev > 0:
@@ -2713,6 +2883,8 @@ def main() -> int:
         # e la DECISIONE sul keep del profit-lock (25 set 2026): quante passate hanno
         # scelto quale keep, e quante volte ha vinto il candidato del paper
         print(riga_cervello_keep(out, passed_keys, keep_paper))
+        # e le strategie rigiudicate per l'ipotesi sulle uscite (25 set 2026, I4)
+        print(riga_cervello_uscita(ipotesi_uscita))
         print(f"[discover] GIRO FINITO in {durata / 3600:.0f}h {(durata % 3600) / 60:.0f}m "
               f"({n_eval} valutazioni, {len(passed_keys)} passate)")
         _doc_run = ("discovered_last_run" if args.interval == settings.ORCHESTRATOR_TIMEFRAME
@@ -2736,6 +2908,9 @@ def main() -> int:
             # varianti dai referti, che prima viveva solo nel log del gate
             "intorno": esito_intorno,
             "varianti": esito_varianti,
+            # e le strategie rigiudicate per un'ipotesi scala_stretta (25 set
+            # 2026, I4): da qui lo legge `giro.ipotesi_uscita` del documento del gate
+            "ipotesi_uscita": ipotesi_uscita,
         }
         fb.set_doc("strategy_params", _doc_run, riepilogo_run)
         # IL DOCUMENTO DEL GATE, intero (25 set 2026): solo dal giro sul timeframe del

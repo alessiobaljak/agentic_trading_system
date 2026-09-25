@@ -103,6 +103,11 @@ class Position:
     # confronto con quello eseguito e' lo slippage d'ingresso. In DRY_RUN i due
     # coincidono, in live no — ed e' li' che il numero inizia a dire qualcosa.
     expected_entry_price: Optional[float] = None
+    # il selettore in OMBRA (25 set 2026): p e soglia annotate all'apertura, mai
+    # usate per decidere. Congelate qui e persistite, cosi' sopravvivono al
+    # riavvio e arrivano sul ClosedTrade (`selector_p`, `selector_soglia`).
+    selector_p: Optional[float] = None
+    selector_soglia: Optional[float] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -177,8 +182,12 @@ class ExecutionEngine:
         sl_to_breakeven: Optional[bool] = None,
         timeframe: Optional[str] = None,
         profit_lock_keep: Optional[float] = None,
+        selector_p: Optional[float] = None,
+        selector_soglia: Optional[float] = None,
     ) -> Optional[Position]:
-        """Apre una posizione. `params` DEVE provenire dal final gate (approved)."""
+        """Apre una posizione. `params` DEVE provenire dal final gate (approved).
+        `selector_p`/`selector_soglia`: l'ombra del selettore (25 set 2026), solo
+        annotate sulla posizione — non cambiano niente di cio' che si apre."""
         if not params.approved or params.quantity <= 0:
             print(f"[execution] ordine rifiutato dal gate: {params.reject_reason}")
             return None
@@ -202,6 +211,8 @@ class ExecutionEngine:
             risk_effective_pct=params.risk_effective_pct,
             regime_confidence=regime_confidence,
             timeframe=tf,
+            selector_p=(float(selector_p) if selector_p is not None else None),
+            selector_soglia=(float(selector_soglia) if selector_soglia is not None else None),
         )
 
         if self.dry_run:
@@ -693,6 +704,10 @@ class ExecutionEngine:
             funding_at_entry=pos.funding_at_entry,
             confidence_at_entry=pos.confidence_at_entry,
             regime_confidence_at_entry=pos.regime_confidence,
+            # l'ombra del selettore segue il trade fino a Firestore: e' li' che
+            # trade_stats e la calibrazione la leggono (25 set 2026)
+            selector_p=pos.selector_p,
+            selector_soglia=pos.selector_soglia,
             scale_stage_reached=pos.scale_stage,
             realized_partial=round(pos.realized_net, 6),
             mfe_r=round(mfe_in_r(pos.entry_price, pos.high_water, pos.orig_stop), 3),
@@ -795,6 +810,10 @@ class ExecutionEngine:
             "fear_greed_at_entry": pos.fear_greed_at_entry,
             "funding_at_entry": pos.funding_at_entry,
             "confidence_at_entry": pos.confidence_at_entry,
+            # l'ombra del selettore (25 set 2026): senza queste due chiavi un
+            # riavvio la cancellerebbe e il trade chiuso uscirebbe senza p
+            "selector_p": pos.selector_p,
+            "selector_soglia": pos.selector_soglia,
         })
 
     # ------------------------------------------------------------------ #
@@ -875,6 +894,12 @@ class ExecutionEngine:
         # posizioni aperte prima della correzione lo perdono fino alla chiusura).
         _re = p.get("risk_effective_pct")
         pos.risk_effective_pct = float(_re) if _re is not None else 0.0
+        # l'ombra del selettore (25 set 2026): documenti piu' vecchi non hanno le
+        # chiavi -> None, cioe' «trade senza p», non un errore
+        _sp = p.get("selector_p")
+        pos.selector_p = float(_sp) if _sp is not None else None
+        _ss = p.get("selector_soglia")
+        pos.selector_soglia = float(_ss) if _ss is not None else None
         return pos
 
     @staticmethod

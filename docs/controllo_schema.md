@@ -227,6 +227,7 @@ Scrivere `in_corso` senza cancellare le sezioni del giro precedente (merge del s
 | `passata_1h` | {at, durata_s, coin, valutazioni, passate}\|null | `discovered_last_run_1h` |
 | `worker` / `rss_max_mb` | int / float\|null | se noti |
 | `paper_propone` | {scala: str\|null, keep: float\|null, verdetti_trailing: int} | `scala_dal_paper`, `keep_dal_paper` |
+| `ipotesi_uscita` | {strategie: int, con_scala: int} | strategie rigiudicate nel giro per un'ipotesi `scala_stretta` fresca nei referti (`strategie_scala_stretta`, ≤ 10) e quante con una scala propria dal vissuto (`scale_per_strategia`); 0/0 nel merge degli shard |
 
 ### 2.3 `registro`
 | campo | tipo | fonte |

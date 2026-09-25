@@ -1554,3 +1554,26 @@ controllo. Ora il ramo orario ha un orologio suo (`last_orario`). Il learning
 non si era fermato: nel log i pesi e i referti si ricalcolano a ogni chiusura
 (11:07, 11:13, 11:38 UTC). Riavvio ops 0247, primo controllo alle 11:42 UTC.
 Trovato anche il rischio effettivo perso al riavvio (ops 0245, commit 04147c7).
+
+### 25 settembre, 14:15: imparare di più da ogni chiusura — scala per strategia, ipotesi «uscita», selettore in ombra
+
+Il proprietario: «non voglio limitare la quantità, voglio trade migliori;
+impara il più possibile da ogni chiusura; in paper puoi rischiare di più per
+validare ipotesi». Tre cose:
+1. **Scala di TP per strategia dal vissuto**: ogni strategia con ≥ 5 trade in
+   paper propone al gate la propria scala (quantili del suo mfe), e il gate la
+   prova sulle sue coppie accanto alle fisse e a quella globale del paper.
+2. **Quinta ipotesi «scala_stretta»** (I4): 3 perdite «andate a favore ma sotto
+   il primo gradino» sulla stessa strategia → ipotesi nel referto e le sue spec
+   rigiudicate al giro successivo (cap 10 strategie); nel doc del gate
+   `giro.ipotesi_uscita`. Limite noto: la freschezza usa la data del primo trade
+   (backlog I4bis).
+3. **Selettore in ombra** (passo 2 del disegno): `selettore_report` pubblica il
+   modello in `selector/current`; il bot lo carica ogni ora e a ogni apertura
+   scrive p e soglia sul trade e nel log, senza decidere. `trades` stampa
+   «SELETTORE IN OMBRA». Si accende solo con il verdetto «batte» e la
+   calibrazione sul paper non piatta.
+H3 parcheggiata (va contro «non limitare»). Proposto il «paper esplorativo»
+(F1bis), aspetta il sì. Suite: 1451 test verdi (1409 prima), TypeScript ok.
+Non verificato dal vivo: il primo `[selettore]` nel log arriva dopo il prossimo
+report `selettore` e il riavvio del bot.

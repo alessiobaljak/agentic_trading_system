@@ -15,6 +15,7 @@ Avvio:  python -m bot.main
 from __future__ import annotations
 
 import time
+import types
 from datetime import datetime, timezone
 
 from bot.config import settings, timeframe_hours
@@ -32,6 +33,7 @@ from bot.execution.exit_logic import (breakeven_after_tp1, ladder_multiples,
 from bot.execution.notifier import TelegramNotifier
 from bot.execution.reconciler import (CLOSE_NOW, DROP_LOCAL, ExchangeState,
                                       Reconciler, blocks_trading)
+from bot.learning import selettore as sel
 from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
 from bot.orchestrator import Orchestrator
@@ -118,6 +120,17 @@ class TradingBot:
         # ultima lettura dell'ombra: serve al veto (passo 2). Resta None finche'
         # l'ombra non ha risposto, e in quel caso il veto non puo' scattare.
         self._last_shadow: dict | None = None
+        # IL SELETTORE IN OMBRA (25 set 2026, docs/disegno_cervello.md punto 2,
+        # passo 2). `_selettore` e' `selector/current` letto da Firestore (modello
+        # + soglia), ricaricato ogni ora con il registro; `_btc_snap` e' lo
+        # snapshot di BTC dell'ultimo refresh_regime, riusato come contesto di
+        # mercato (`market_up`) con la STESSA funzione delle variabili del gate.
+        # Il selettore qui NON decide: annota p su ogni apertura e basta.
+        # `_selettore_avviso_at`: un errore dell'ombra si stampa al massimo una
+        # volta l'ora, per non riempire il log di una cosa che non cambia nulla.
+        self._selettore: dict | None = None
+        self._btc_snap = None
+        self._selettore_avviso_at = 0.0
         # istante in cui lo stream si e' ripreso da un buco (None = niente attesa)
         self._stream_recovered_at: float | None = None
         self._coin_cooldown: dict[str, float] = {}    # symbol -> epoch in cooldown
@@ -448,6 +461,10 @@ class TradingBot:
 
     def refresh_regime(self, now: float):
         btc = self.price.build_snapshot("BTCUSDT")
+        # il contesto di mercato per l'ombra del selettore (25 set 2026): e' lo
+        # stesso snapshot da cui nasce il regime, non una seconda lettura
+        if btc:
+            self._btc_snap = btc
         fng = self.onchain.fear_greed()
         detail: dict = {}
         if btc:
@@ -1171,13 +1188,23 @@ class TradingBot:
         # esattamente il piano con cui quella coppia e' stata validata: registro
         # misto ma coerente. Il keep per coppia e' del 25 set 2026.
         _sparams = self.adaptation.params_for(asset.symbol).get(decision.strategy, {})
+        # L'OMBRA DEL SELETTORE (25 set 2026): DOPO tutti i rifiuti e PRIMA
+        # dell'ordine, cosi' vede esattamente i trade che si aprono. Calcola p e
+        # la annota; non puo' fermare ne' ridurre niente (mai un'eccezione: dentro
+        # e' tutto fail-open, p None se qualcosa manca). Il timeframe e' quello
+        # della strategia, lo stesso che l'executor usa per gli indicatori.
+        _sel_p, _sel_soglia = self._ombra_selettore(
+            decision, asset, params, _sparams,
+            self.adaptation.timeframe_for(decision.strategy) or settings.ORCHESTRATOR_TIMEFRAME,
+            now)
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,
                                           params, confidence=decision.confidence,
                                           regime_confidence=self.regime_confidence,
                                           scale_r_mults=ladder_multiples(_sparams),
                                           sl_to_breakeven=breakeven_after_tp1(_sparams),
                                           profit_lock_keep=lock_keep(_sparams),
-                                          timeframe=self.adaptation.timeframe_for(decision.strategy))
+                                          timeframe=self.adaptation.timeframe_for(decision.strategy),
+                                          selector_p=_sel_p, selector_soglia=_sel_soglia)
         if pos is not None:
             self._sync_stream_symbols()
             # i prezzi accumulati PRIMA dell'ingresso non possono riempire i suoi TP
@@ -1190,6 +1217,78 @@ class TradingBot:
                 pos.symbol, pos.strategy, pos.direction.value,
                 pos.entry_price, pos.quantity, pos.leverage,
                 pos.stop_price, pos.take_profit_price, dry_run=settings.DRY_RUN)
+
+    # ------------------------------------------------------------------ #
+    # Il selettore in ombra (25 set 2026, passo 2 del disegno)              #
+    # ------------------------------------------------------------------ #
+    def _load_selettore(self) -> None:
+        """Rilegge `selector/current` (pubblicato da scripts/selettore_report.py)
+        e lo tiene in `self._selettore`. Chiamato all'avvio e ogni ora, insieme
+        al registro. Fail-open in tutti i sensi: documento assente o di un'altra
+        versione -> ombra spenta (p None) e una riga nel log; Firebase che non
+        risponde -> si tiene il modello letto l'ora prima, non si spegne."""
+        try:
+            doc = self.fb.get_doc("selector", "current")
+            nuovo = sel.valida_pubblicato(doc)
+            if nuovo is None:
+                if self._selettore is not None or doc:
+                    print("[selettore] selector/current assente o non leggibile: ombra spenta")
+                self._selettore = None
+                return
+            if (self._selettore or {}).get("generato_at") != nuovo.get("generato_at"):
+                print(f"[selettore] modello caricato: {nuovo.get('righe')} righe, "
+                      f"soglia {nuovo['soglia']:.2f}, verdetto {nuovo.get('verdetto')}, "
+                      f"stato {nuovo.get('stato')}, generato {nuovo.get('generato_at')} "
+                      f"-> solo ombra, non decide")
+            self._selettore = nuovo
+        except Exception as exc:  # noqa: BLE001 — l'ombra non ferma il bot
+            print(f"[selettore] lettura di selector/current fallita ({exc}): "
+                  f"tengo {'il modello precedente' if self._selettore else 'ombra spenta'}")
+
+    def _ombra_selettore(self, decision, asset, params, sparams: dict, tf: str,
+                         now: float) -> tuple[float | None, float | None]:
+        """(p, soglia) del selettore per il trade che sta per aprirsi, o (None, None).
+
+        Le variabili sono calcolate con `feats_ingresso` di backtesting/engine.py,
+        la STESSA funzione del gate, sullo snapshot vivo della coin (`asset`) e su
+        quello di BTC dell'ultimo refresh_regime (`market_up`): parita' come per
+        tutto il resto. Differenze dal vivo, dette qui perche' contano quando si
+        leggera' la calibrazione: lo stop e' quello del risk gate (`params`), non
+        quello grezzo della strategia; l'ora e' quella della decisione, non
+        dell'apertura della candela (sul 15m coincide quasi sempre); lo snapshot
+        BTC puo' avere fino a un'ora (REGIME_INTERVAL_MINUTES). Se manca una
+        variabile obbligatoria p e' None e il log dice quale. Mai un'eccezione:
+        un errore stampa al massimo una riga l'ora e ritorna (None, None)."""
+        if not self._selettore:
+            return None, None
+        sym, strat = decision.asset, decision.strategy
+        direzione = getattr(decision.direction, "value", decision.direction)
+        try:
+            from backtesting.engine import feats_ingresso   # pigro: pesante
+            ora = datetime.fromtimestamp(now, tz=timezone.utc).hour
+            feats = feats_ingresso(asset, tf, float(asset.price), float(params.stop_price),
+                                   types.SimpleNamespace(params=sparams or None),
+                                   self._btc_snap, hour=ora)
+            riga = sel.riga_dal_vivo(sym, strat, direzione,
+                                     asset.regime or self.regime or Regime.SIDEWAYS,
+                                     ora, feats, entry_ts=now)
+            p = sel.prob(self._selettore["modello"], riga)
+            soglia = float(self._selettore["soglia"])
+            if p is None:
+                mancanti = sel.variabili_mancanti(riga)
+                print(f"[selettore] {sym} {strat} {direzione}: p non calcolabile "
+                      f"(mancano dal vivo: {', '.join(mancanti) or '?'})")
+                return None, None
+            esito = "avrebbe aperto" if p >= soglia else "NON avrebbe aperto"
+            print(f"[selettore] {sym} {strat} {direzione} p={p:.2f} soglia={soglia:.2f} "
+                  f"-> {esito} (ombra: apre comunque)")
+            return round(float(p), 4), soglia
+        except Exception as exc:  # noqa: BLE001 — l'ombra non tocca l'apertura
+            if now - self._selettore_avviso_at >= 3600:
+                self._selettore_avviso_at = now
+                print(f"[selettore] ombra fallita su {sym} {strat} ({exc}): p None "
+                      f"(al massimo un avviso l'ora)")
+            return None, None
 
     # ------------------------------------------------------------------ #
     def _load_adapt_state(self) -> None:
@@ -1507,6 +1606,7 @@ class TradingBot:
         self.reconcile_equity()
         self._publish_avvio()     # avviato_at + anello /avvii (controllo orario)
         self._load_adapt_state()
+        self._load_selettore()    # l'ombra del selettore (solo annota, non decide)
         # esce dalla manutenzione: il bot e' di nuovo su -> il monitoraggio "offline"
         # torna attivo da solo (vedi scripts/monitor.py).
         self.fb.set_rtdb("/commands/maintenance", False)
@@ -1548,6 +1648,9 @@ class TradingBot:
                     self.adaptation.load_weights()
                     self.adaptation.load_params()
                     self.adaptation.load_generated()
+                    # e il modello del selettore in ombra (25 set 2026): stesso
+                    # ritmo del registro, stesso «fail-open» (dentro ha il suo try)
+                    self._load_selettore()
                     self.last_adapt_reload = now
                 if now - self.last_regime >= settings.REGIME_INTERVAL_MINUTES * 60 or not self.regime:
                     self.refresh_regime(now)

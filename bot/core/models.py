@@ -247,6 +247,16 @@ class ClosedTrade(BaseModel):
     # per poter misurare se predice l'esito: solo dopo quella verifica ha senso
     # legarlo a size o leva. Vedi RegimeDetector.detect_detailed.
     regime_confidence_at_entry: Optional[float] = None
+    # IL SELETTORE IN OMBRA (25 set 2026, docs/disegno_cervello.md punto 2 passo 2):
+    # la probabilita' di chiudere in utile che il selettore (bot/learning/
+    # selettore.py, modello pubblicato in `selector/current`) dava a QUESTO trade
+    # all'apertura, e la soglia sotto cui NON lo avrebbe aperto. Solo annotazione:
+    # il selettore non decide nulla. Servono a misurare sul paper, fra qualche
+    # settimana, se p predice l'esito (calibrazione) — il paper e' il giudice,
+    # non il maestro. None = modello non pubblicato, variabili mancanti dal vivo,
+    # o trade precedente all'ombra.
+    selector_p: Optional[float] = None
+    selector_soglia: Optional[float] = None
 
     # --- SCOMPOSIZIONE DEI COSTI (Fase 2.5) --------------------------------- #
     # Il PnL netto e' un numero solo e nasconde quanto e' costato ottenerlo. Qui

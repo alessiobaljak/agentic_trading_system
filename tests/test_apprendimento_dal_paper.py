@@ -186,7 +186,9 @@ def test_la_scala_del_paper_arriva_ai_worker():
     # il worker la passa a `evaluate_spec`, che la riceve come ARGOMENTO invece di
     # leggerla da uno stato globale: la prima versione la infilava in `_disc_one` e
     # la scelta della scala non e' li' — questo test l'ha trovato
-    assert 'candidate_ladders(_W.get("scala_paper"))' in inspect.getsource(d._disc_one)
+    # dal 25 set 2026 ai candidati si aggiunge anche la scala della SOLA
+    # strategia in esame (`scale_per_strategia`): la globale resta il primo argomento
+    assert 'candidate_ladders(_W.get("scala_paper"),' in inspect.getsource(d._disc_one)
     assert "scale_candidates" in inspect.getsource(d.evaluate_spec)
 
 

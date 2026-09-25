@@ -9,8 +9,8 @@ questo modulo non deve mai toccare un parametro (backlog F1/B8).
 """
 import inspect
 
-from bot.learning.referti import (ESITI_ESTERNI, MIN_CAMPIONE, MIN_STOP_LARGO,
-                                  aggrega_referti, riassunto_ipotesi)
+from bot.learning.referti import (ESITI_ESTERNI, MIN_CAMPIONE, MIN_SCALA_STRETTA,
+                                  MIN_STOP_LARGO, TIPI, aggrega_referti, riassunto_ipotesi)
 
 
 def _t(strat="gen_a", sym="AUSDT", direction="long", pnl=-5.0, reason="stop_loss",
@@ -23,10 +23,13 @@ def _t(strat="gen_a", sym="AUSDT", direction="long", pnl=-5.0, reason="stop_loss
     return t
 
 
-def _pm(classe="uscita", stop_largo=False, lock_mai=False, contro=None):
-    return {"classe": classe, "stop_largo": stop_largo,
-            "lock_mai_armato": lock_mai, "controtrend": contro,
-            "verdetto": "x"}
+def _pm(classe="uscita", stop_largo=False, lock_mai=False, contro=None, mfe=None):
+    pm = {"classe": classe, "stop_largo": stop_largo,
+          "lock_mai_armato": lock_mai, "controtrend": contro,
+          "verdetto": "x"}
+    if mfe is not None:
+        pm["mfe_r"] = mfe
+    return pm
 
 
 def _tipi(doc, strat="gen_a"):
@@ -35,7 +38,8 @@ def _tipi(doc, strat="gen_a"):
 
 # ---- le costanti sono quelle dichiarate ------------------------------------ #
 def test_le_soglie_sono_dichiarate_e_non_tarate():
-    assert MIN_CAMPIONE == 3 and MIN_STOP_LARGO == 2
+    assert MIN_CAMPIONE == 3 and MIN_STOP_LARGO == 2 and MIN_SCALA_STRETTA == 3
+    assert TIPI[-1] == "scala_stretta" and len(TIPI) == 5
     assert ESITI_ESTERNI == {"manual", "kill_switch", "circuit_breaker"}
 
 
@@ -93,7 +97,9 @@ def test_trade_senza_strategia_non_propone():
 
 # ---- conferma_trend --------------------------------------------------------- #
 def test_conferma_trend_da_perdite_controtrend():
-    persi = _misti(3, pm=_pm(contro=True))
+    # classe «protezione» di proposito: con tre «uscita» scatterebbe anche
+    # scala_stretta (dal 25 set), e qui si guarda solo il controtrend
+    persi = _misti(3, pm=_pm(classe="protezione", contro=True))
     vinti = [_t(pnl=+3.0, pm=_pm(contro=True))]      # il vinto non conta come rilievo
     doc = aggrega_referti(persi + vinti)
     assert doc["per_strategia"]["gen_a"]["controtrend"] == 3
@@ -136,6 +142,72 @@ def test_stop_largo_su_trade_vinto_non_conta():
     doc = aggrega_referti([_t(pnl=+1.0, pm=_pm(stop_largo=True)) for _ in range(3)])
     assert doc["per_strategia"]["gen_a"]["stop_largo"] == 0
     assert _tipi(doc) == []
+
+
+# ---- scala_stretta (25 set 2026, backlog I4) -------------------------------- #
+def test_scala_stretta_scatta_a_tre_perdite_sotto_il_primo_gradino():
+    """Tre perdite di classe «uscita» (a favore, ma morte sotto il primo gradino)
+    sulla stessa strategia -> scala_stretta, con la mediana degli mfe nel testo.
+    Con due e' ancora un caso."""
+    persi = [_t(direction=("long", "short")[i % 2], pm=_pm(classe="uscita", mfe=m))
+             for i, m in enumerate((0.7, 0.9, 0.5))]
+    assert _tipi(aggrega_referti(persi[:2])) == []
+    doc = aggrega_referti(persi)
+    assert _tipi(doc) == ["scala_stretta"]
+    h = doc["ipotesi"][0]
+    assert h["campione"] == 3 and h["mfe_mediana"] == 0.7
+    assert h["motivo"] == "3 perdite sotto il primo gradino (mfe mediana 0.70 R)"
+    assert riassunto_ipotesi(doc) == [
+        "gen_a: scala_stretta — 3 perdite sotto il primo gradino (mfe mediana 0.70 R) (campione 3)"]
+
+
+def test_scala_stretta_ha_da_ts_come_le_altre():
+    persi = [_t(direction=("long", "short")[i % 2], pm=_pm(mfe=0.6), entry_ts=100.0 + i)
+             for i in range(3)]
+    doc = aggrega_referti(persi)
+    assert doc["ipotesi"][0]["tipo"] == "scala_stretta"
+    assert doc["ipotesi"][0]["da_ts"] == 100.0
+
+
+def test_scala_stretta_conta_solo_la_classe_uscita_in_perdita():
+    """Le classi ingresso/protezione non c'entrano; un vinto con classe uscita
+    (chiuso in guadagno a mano o dal trailing) non porta rilievi."""
+    trades = (_misti(2, pm=_pm(classe="uscita", mfe=0.6))
+              + [_t(pm=_pm(classe="protezione", mfe=2.0)),
+                 _t(pm=_pm(classe="ingresso", mfe=0.1)),
+                 _t(pnl=+2.0, pm=_pm(classe="uscita", mfe=0.8))])
+    doc = aggrega_referti(trades)
+    assert doc["per_strategia"]["gen_a"]["uscita"] == 2
+    assert "scala_stretta" not in _tipi(doc)
+
+
+def test_scala_stretta_senza_mfe_nel_referto_scrive_nd():
+    """Un referto vecchio senza `mfe_r`: l'ipotesi scatta lo stesso (la classe
+    basta), il numero mancante si dichiara invece di inventarlo."""
+    doc = aggrega_referti(_misti(3, pm=_pm(classe="uscita")))
+    h = doc["ipotesi"][0]
+    assert h["tipo"] == "scala_stretta" and h["mfe_mediana"] is None
+    assert "mfe mediana n/d R" in h["motivo"]
+
+
+def test_la_lista_degli_mfe_non_finisce_nel_documento():
+    """Il bucket accumula gli mfe per la mediana ma il documento su Firestore
+    porta solo contatori: nessun lettore (controllo, trades) vuole una lista."""
+    doc = aggrega_referti(_misti(3, pm=_pm(mfe=0.6)))
+    for sez in ("per_strategia", "per_coin", "per_direzione"):
+        for b in doc[sez].values():
+            assert "_uscita_mfe" not in b
+            assert all(not isinstance(v, list) for v in b.values())
+
+
+def test_scala_stretta_convive_con_le_altre_ipotesi_e_resta_deterministica():
+    trades = ([_t(strat="gen_a", direction="short", pm=_pm(mfe=0.6)) for _ in range(3)]
+              + [_t(strat="gen_b", pm=_pm(stop_largo=True)) for _ in range(2)])
+    d1 = aggrega_referti(trades)
+    d2 = aggrega_referti(list(reversed(trades)))
+    assert d1 == d2
+    assert [(h["strategia"], h["tipo"]) for h in d1["ipotesi"]] == [
+        ("gen_a", "scala_stretta"), ("gen_a", "solo_long"), ("gen_b", "stop_stretto")]
 
 
 # ---- esclusioni e bucket ---------------------------------------------------- #

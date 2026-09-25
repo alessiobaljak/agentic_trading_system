@@ -254,6 +254,7 @@ GATE_ANNIDATE = {
                        "gemelle_scartate", "rivalutate"},
     "giro.passata_1h": {"at", "durata_s", "coin", "valutazioni", "passate"},
     "giro.paper_propone": {"scala", "keep", "verdetti_trailing"},
+    "giro.ipotesi_uscita": {"strategie", "con_scala"},
     "registro.distribuzione_pass[]": {"pass", "coppie", "coin"},
     "registro.statistica_t": {"misurate", "sopra_2", "sopra_3", "mediana", "piu_basse"},
     "registro.statistica_t.piu_basse[]": {"coppia", "t"},

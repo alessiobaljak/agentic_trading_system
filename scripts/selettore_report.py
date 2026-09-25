@@ -13,12 +13,18 @@ giro che deve ancora passare. Sola lettura sul disco; con Firebase raggiungibile
 pubblica un riepilogo in `selector/report` (verdetti per famiglia), che e' quello
 che il controllo del mattino leggera'.
 
-IL BOT NON USA ANCORA IL SELETTORE. Questo script misura e basta: il passo 2 (ombra
-nel bot, con calibrazione sul paper) viene dopo, e solo se qui il verdetto e'
-«batte» su almeno 2 finestre su 3 — dove «batte» su una finestra vuol dire
-sopra la baseline E sopra il 95° percentile di 200 selezioni con le p
-rimescolate (`p_perm` stampato accanto: la frazione di rimescolamenti che fanno
-almeno altrettanto; audit 24 set 2026).
+IL BOT NON USA ANCORA IL SELETTORE PER DECIDERE. Questo script misura; il
+verdetto e' «batte» solo su almeno 2 finestre su 3 — dove «batte» su una
+finestra vuol dire sopra la baseline E sopra il 95° percentile di 200 selezioni
+con le p rimescolate (`p_perm` stampato accanto: la frazione di rimescolamenti
+che fanno almeno altrettanto; audit 24 set 2026).
+
+DAL 25 SET 2026 PUBBLICA ANCHE IL MODELLO: `selector/current` su Firestore
+(coefficienti, medie e scale come liste, soglia, verdetto, stato «ombra»),
+addestrato su TUTTE le righe. Il bot lo rilegge ogni ora e, a ogni apertura,
+annota la p del selettore sulla posizione e sul trade chiuso SENZA agire (passo 2
+del disegno, l'ombra). Il verdetto oggi e' NON BATTE: l'ombra serve a misurare
+sul paper, fra qualche settimana, se p predice l'esito — non a decidere.
 
 Dal 24 set 2026 il dataset ha anche i trade delle spec BOCCIATE dal gate (campo
 `passed`): si addestra su tutte, e per ogni finestra si stampano anche le due
@@ -32,6 +38,7 @@ Uso (sul VPS):
 from __future__ import annotations
 
 import argparse
+import json
 import time
 from datetime import datetime, timezone
 
@@ -120,12 +127,85 @@ def pubblica(report: dict, n_righe: int) -> None:
                                "n_finestre": wf["n_finestre"], "n_righe": wf["n_righe"],
                                "soglia_consigliata": wf["soglia_consigliata"]}
                          for fam, wf in report.items()},
-            "nota": "il bot NON usa il selettore: passo 1 (misura offline)",
+            "nota": "il bot NON usa il selettore per decidere: in ombra dal 25 set 2026 (selector/current)",
         }
         fb.set_doc("selector", "report", doc)
         print("\n[firebase] pubblicato selector/report.")
     except Exception as exc:  # noqa: BLE001 — la pubblicazione non deve mai rompere il report
         print(f"\n[firebase] pubblicazione saltata ({exc}).")
+
+
+def _mediana(valori: list[float]) -> float | None:
+    v = sorted(float(x) for x in valori)
+    if not v:
+        return None
+    n = len(v)
+    return v[n // 2] if n % 2 else (v[n // 2 - 1] + v[n // 2]) / 2.0
+
+
+def documento_modello(righe: list[dict], report: dict) -> dict | None:
+    """Il documento `selector/current` (25 set 2026, passo 2: l'ombra nel bot).
+
+    Il modello e' addestrato su TUTTE le righe (`addestra`, famiglia «tutte»),
+    non su una finestra: e' il modello piu' informato che abbiamo, ed e' quello
+    che il bot deve leggere. La soglia e' la MEDIANA delle soglie scelte sul
+    train nelle finestre del walk-forward «tutte» (0.5 se non ce ne sono): non
+    decide nulla, serve solo al log «avrebbe aperto / NON avrebbe aperto».
+    Tutto JSON-safe (liste e float di Python, niente numpy), cosi' Firestore lo
+    accetta e `prob(modello, riga)` lo rilegge tale e quale (round trip).
+    None se le righe sono troppo poche per avere coefficienti sensati (stesso
+    minimo di `walk_forward`)."""
+    if len(righe) < max(len(sel.VARIABILI) + 1, 20):
+        return None
+    modello = sel.addestra(righe, famiglia="tutte")
+    wf = report.get("tutte") or {}
+    soglie = [f["soglia"] for f in wf.get("finestre", []) if f.get("soglia") is not None]
+    soglia = _mediana(soglie) if soglie else None
+    if soglia is None:
+        soglia = float(wf.get("soglia_consigliata") or sel.SOGLIA_DEFAULT)
+    doc = {
+        "modello": modello,
+        "soglia": float(soglia),
+        "famiglia": "tutte",
+        "righe": int(len(righe)),
+        "verdetto": str(wf.get("verdetto") or sel.INSUFFICIENTE).upper(),
+        "vittorie": int(wf.get("vittorie") or 0),
+        "n_finestre": int(wf.get("n_finestre") or 0),
+        "stato": "ombra",
+        "generato_at": datetime.now(timezone.utc).isoformat(),
+        "nota": ("il bot annota p su ogni apertura e NON agisce (passo 2, ombra); "
+                 "entra solo se batte su 2/3 finestre e la calibrazione sul paper "
+                 "non e' piatta (>= 40 trade con p)"),
+    }
+    # il round trip via json e' la garanzia: se qui passa, Firestore lo accetta e
+    # il bot lo rilegge identico (un NaN o un tipo numpy fallirebbero QUI, non
+    # sulla macchina alle tre di notte)
+    return json.loads(json.dumps(doc, allow_nan=False))
+
+
+def pubblica_modello(doc: dict | None, fb=None) -> bool:
+    """`selector/current` su Firestore. Fail-open come `pubblica`: senza Firebase
+    (in locale, nei test, o dal canale ops senza credenziali) si stampa e si va
+    avanti — il report a schermo e' gia' completo. Ritorna True solo se ha
+    scritto davvero."""
+    if not doc:
+        print("\n[firebase] selector/current NON pubblicato: troppe poche righe per un modello.")
+        return False
+    try:
+        if fb is None:
+            from bot.core.firebase_client import get_firebase
+            fb = get_firebase()
+        if not fb.is_live:
+            print("\n[firebase] non connesso: selector/current solo a schermo "
+                  f"(righe {doc['righe']}, soglia {doc['soglia']:.2f}, verdetto {doc['verdetto']}).")
+            return False
+        fb.set_doc("selector", "current", doc)
+        print(f"\n[firebase] pubblicato selector/current: modello su {doc['righe']} righe, "
+              f"soglia {doc['soglia']:.2f}, verdetto {doc['verdetto']}, stato {doc['stato']}.")
+        return True
+    except Exception as exc:  # noqa: BLE001 — mai rompere il report per la pubblicazione
+        print(f"\n[firebase] pubblicazione di selector/current saltata ({exc}).")
+        return False
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -145,7 +225,7 @@ def main(argv: list[str] | None = None) -> int:
     if not righe:
         print("nessun dataset: il gate lo scrive dal 24 set a ogni giro"
               f" (cartella: {cartella}, file trovati: {letto['file']})")
-        print("Il bot NON usa ancora il selettore: questo e' il passo 1, solo misura.")
+        print("Il bot NON usa ancora il selettore per decidere: senza dataset non c'e' nemmeno l'ombra.")
         return 0
 
     coppie = {(r.get("symbol"), r.get("strategy")) for r in righe}
@@ -166,9 +246,11 @@ def main(argv: list[str] | None = None) -> int:
         stampa_famiglia(nome, report[nome])
     stampa_coefficienti(report["tutte"].get("modello"))
 
-    print("\nIl bot NON usa ancora il selettore: questo e' il passo 1 (misura offline); "
-          "il passo 2 (ombra nel bot) viene dopo, e solo con verdetto «batte».")
+    print("\nIl bot NON usa ancora il selettore per decidere: dal 25 set 2026 e' in OMBRA "
+          "(passo 2): annota la sua p su ogni apertura e non agisce. Entra solo se batte "
+          "su 2/3 finestre e la calibrazione sul paper non e' piatta (>= 40 trade con p).")
     pubblica(report, len(righe))
+    pubblica_modello(documento_modello(righe, report))
     print(f"[selettore] fatto in {time.time() - t0:.1f}s")
     return 0
 

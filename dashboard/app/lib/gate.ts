@@ -77,6 +77,10 @@ export interface Giro extends Testata {
     keep?: number | null;
     verdetti_trailing?: number | null;
   } | null;
+  ipotesi_uscita?: {
+    strategie?: number | null;
+    con_scala?: number | null;
+  } | null;
 }
 
 export interface DistribuzionePass {

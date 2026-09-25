@@ -282,8 +282,10 @@ def test_i_candidati_del_paper_si_aggiungono_e_non_sostituiscono():
 # --------------------------------------------------------------------------- #
 def test_la_proposta_arriva_ai_worker_e_la_scelta_torna_al_main():
     sig = inspect.signature(d._disc_init)
-    ultimo = list(sig.parameters)[-1]
-    assert ultimo == "keep_paper" and sig.parameters[ultimo].default is None, \
+    # dal 25 set 2026 dopo `keep_paper` c'e' `scale_strategie` (test_scala_per_strategia):
+    # entrambi in coda, con default, cosi' le posizioni prima non si spostano
+    assert list(sig.parameters)[-2:] == ["keep_paper", "scale_strategie"]
+    assert sig.parameters["keep_paper"].default is None, \
         "initargs e' posizionale: il nuovo argomento va in coda, con default"
     assert "keep_paper=keep_paper" in inspect.getsource(d._disc_init)
     uno = inspect.getsource(d._disc_one)
@@ -295,7 +297,7 @@ def test_la_proposta_arriva_ai_worker_e_la_scelta_torna_al_main():
     # dal 25 set 2026 i trade del paper si leggono UNA volta nel main
     # (`trades_del_paper`) e si passano alla proposta del keep
     assert "keep_paper = keep_dal_paper(fb, trades=trades_paper)" in main
-    assert "bocciate_ok, keep_paper)" in main
+    assert "bocciate_ok, keep_paper, scale_strategie)" in main
 
 
 def test_disc_init_mette_il_keep_del_paper_nello_stato_del_worker(monkeypatch):
