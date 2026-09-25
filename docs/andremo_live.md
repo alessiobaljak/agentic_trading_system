@@ -1496,3 +1496,14 @@ gate, batte la madre del 10% su 2 finestre su 3 e passa l'holdout. Cosa NON
 cambia: il paper, le soglie del gate, il vocabolario. Metro: il tempo del giro
 completo (deve restare sotto 1h30; se sfora le 2h si torna a 10) e la riga
 «intorno: madri/figlie/promosse» in `gate` per due settimane. **Serve il sì.**
+
+### 25 settembre, 08:40: sì all'intorno a 40, chiave `rifiuti` aggiunta
+
+Il proprietario ha detto sì alla proposta del giorno: il tetto dell'intorno
+passa da 10 a 40 coppie a notte (`DISCOVERY_INTORNO_CAP`, default nel codice).
+Metro: il giro completo (1h09 il 25 set con tetto 10, ops 0235) deve restare
+sotto 1h30; se sfora le 2h si torna a 10. Vale dal prossimo giro completo
+(03:30 UTC). La chiave `rifiuti` è ora nella lista bianca della VPS; la lista
+bianca va messa in ordine: `ops/allowlist.example` ha le stesse 45 chiavi della
+macchina (confronto con la risposta ops 0238), raggruppate per sezione, e
+aggiunge `lista` (sola lettura della lista stessa) per poter confrontare le due.

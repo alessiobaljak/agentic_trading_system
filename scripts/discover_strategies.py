@@ -897,8 +897,11 @@ def scrivi_dataset_selettore(fb, rows: list[dict], end: str, interval: str,
 # piu'. Una coppia va nell'intorno al massimo ogni INTORNO_OGNI_GIORNI, prima
 # quelle in watch/drift; una figlia appena nata aspetta INTORNO_RIPOSO_GIORNI
 # prima del proprio intorno, cosi' le soglie non inseguono il rumore.
-# Il tetto e' 10 finche' il giro completo non sta sotto 1h30 (poi 40).
-INTORNO_CAP = int(os.getenv("DISCOVERY_INTORNO_CAP", "10"))
+# Il tetto era 10 finche' il giro completo non stava sotto 1h30: il 25 set 2026 il
+# giro completo ha fatto 1h09 (ops 0235) e il proprietario ha detto si' -> 40.
+# Con 160 validate ogni coppia rivede le sue soglie ogni 4 notti invece di 16.
+# Metro: il giro completo deve restare sotto 1h30; se sfora le 2h si torna a 10.
+INTORNO_CAP = int(os.getenv("DISCOVERY_INTORNO_CAP", "40"))
 INTORNO_OGNI_GIORNI = float(os.getenv("DISCOVERY_INTORNO_OGNI_GIORNI", "7"))
 INTORNO_RIPOSO_GIORNI = float(os.getenv("DISCOVERY_INTORNO_RIPOSO_GIORNI", "30"))
 INTORNO_MARGINE = float(os.getenv("DISCOVERY_INTORNO_MARGINE", "0.10"))

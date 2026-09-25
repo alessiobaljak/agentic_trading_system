@@ -170,7 +170,7 @@ Ogni figlia costa una valutazione di coppia (spec × coin), più due retroattive
 passa. Con 40 coppie a notte e ~8 figlie l'una sono ~320 valutazioni più le
 retroattive: **da misurare** contro il giro completo di 2h29 (cronometro in
 `gate`). Si attiva solo con il giro completo sotto 1h30, come già scritto in
-backlog per B8; fino ad allora il tetto scende a 10 coppie a notte.
+backlog per B8; fino ad allora il tetto scende a 10 coppie a notte. (Misurato il 25 set: giro completo 1h09 con tetto 10 → tetto alzato a 40 col sì del proprietario.)
 
 ### Rischi
 
