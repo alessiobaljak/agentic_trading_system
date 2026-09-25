@@ -107,6 +107,8 @@ class Position:
     # usate per decidere. Congelate qui e persistite, cosi' sopravvivono al
     # riavvio e arrivano sul ClosedTrade (`selector_p`, `selector_soglia`).
     selector_p: Optional[float] = None
+    feats_at_entry: Optional[dict] = None     # le 10 variabili d'ingresso (memoria del trade)
+    regola: Optional[str] = None              # la regola della strategia in chiaro
     selector_soglia: Optional[float] = None
     # PAPER ESPLORATIVO (25 set 2026, backlog F1bis): la posizione e' di una
     # coppia esplorativa (quasi-passaggio, size a un quarto). Persistita e
@@ -190,6 +192,8 @@ class ExecutionEngine:
         selector_p: Optional[float] = None,
         selector_soglia: Optional[float] = None,
         esplorativa: bool = False,
+        feats_at_entry: Optional[dict] = None,
+        regola: Optional[str] = None,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved).
         `selector_p`/`selector_soglia`: l'ombra del selettore (25 set 2026), solo
@@ -223,6 +227,8 @@ class ExecutionEngine:
             selector_p=(float(selector_p) if selector_p is not None else None),
             selector_soglia=(float(selector_soglia) if selector_soglia is not None else None),
             esplorativa=bool(esplorativa),
+            feats_at_entry=dict(feats_at_entry) if feats_at_entry else None,
+            regola=(str(regola)[:300] if regola else None),
         )
 
         if self.dry_run:
@@ -718,6 +724,14 @@ class ExecutionEngine:
             # trade_stats e la calibrazione la leggono (25 set 2026)
             selector_p=pos.selector_p,
             selector_soglia=pos.selector_soglia,
+            orig_stop=pos.orig_stop,
+            scale_r_mults=[float(x) for x in pos.scale_r_mults] if pos.scale_r_mults else None,
+            sl_to_breakeven=pos.sl_to_breakeven,
+            tp_prices=([round(float(pr), 8) for pr, _fr in
+                        scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults)]
+                       if (settings.SCALE_OUT_ENABLED and pos.orig_stop) else None),
+            feats_at_entry=pos.feats_at_entry,
+            regola=pos.regola,
             # e la marca del paper esplorativo (25 set 2026, F1bis): e' qui che
             # pesi/deriva/calibrazione la leggono per escludere il trade
             esplorativa=bool(pos.esplorativa),
@@ -827,6 +841,8 @@ class ExecutionEngine:
             # riavvio la cancellerebbe e il trade chiuso uscirebbe senza p
             "selector_p": pos.selector_p,
             "selector_soglia": pos.selector_soglia,
+            "feats_at_entry": pos.feats_at_entry,
+            "regola": pos.regola,
             # il paper esplorativo (25 set 2026, F1bis): senza questa chiave un
             # riavvio smarcherebbe la posizione e il trade chiuso entrerebbe
             # nei pesi delle validate
@@ -917,6 +933,8 @@ class ExecutionEngine:
         pos.selector_p = float(_sp) if _sp is not None else None
         _ss = p.get("selector_soglia")
         pos.selector_soglia = float(_ss) if _ss is not None else None
+        pos.feats_at_entry = dict(p["feats_at_entry"]) if isinstance(p.get("feats_at_entry"), dict) else None
+        pos.regola = p.get("regola") or None
         # il paper esplorativo (25 set 2026, F1bis): documenti piu' vecchi non
         # hanno la chiave -> False, cioe' «posizione di una validata»
         pos.esplorativa = bool(p.get("esplorativa", False))

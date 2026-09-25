@@ -66,6 +66,21 @@ def _primo_ingresso(trades: list[dict]) -> float | None:
     return min(out) if out else None
 
 
+def variabili_ingresso(btc_snap, asset, params, sparams: dict, tf: str, now: float):
+    """Le 10 variabili d'ingresso del selettore (`feats_ingresso` del gate) sullo
+    snapshot vivo della coin e su quello di BTC dell'ultimo refresh_regime:
+    servono all'ombra del selettore E alla memoria del trade (25 set 2026).
+    None se non calcolabili; mai un'eccezione."""
+    try:
+        from backtesting.engine import feats_ingresso   # pigro: pesante
+        ora = datetime.fromtimestamp(now, tz=timezone.utc).hour
+        return feats_ingresso(asset, tf, float(asset.price), float(params.stop_price),
+                              types.SimpleNamespace(params=sparams or None),
+                              btc_snap, hour=ora)
+    except Exception:  # noqa: BLE001
+        return None
+
+
 class TradingBot:
     def __init__(self) -> None:
         self.fb = get_firebase()
@@ -1226,10 +1241,11 @@ class TradingBot:
         # la annota; non puo' fermare ne' ridurre niente (mai un'eccezione: dentro
         # e' tutto fail-open, p None se qualcosa manca). Il timeframe e' quello
         # della strategia, lo stesso che l'executor usa per gli indicatori.
+        _tf_strat = self.adaptation.timeframe_for(decision.strategy) or settings.ORCHESTRATOR_TIMEFRAME
+        _feats = variabili_ingresso(getattr(self, "_btc_snap", None), asset, params, _sparams,
+                                    _tf_strat, now)
         _sel_p, _sel_soglia = self._ombra_selettore(
-            decision, asset, params, _sparams,
-            self.adaptation.timeframe_for(decision.strategy) or settings.ORCHESTRATOR_TIMEFRAME,
-            now)
+            decision, asset, params, _sparams, _tf_strat, now, feats=_feats)
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,
                                           params, confidence=decision.confidence,
                                           regime_confidence=self.regime_confidence,
@@ -1238,7 +1254,11 @@ class TradingBot:
                                           profit_lock_keep=lock_keep(_sparams),
                                           timeframe=self.adaptation.timeframe_for(decision.strategy),
                                           selector_p=_sel_p, selector_soglia=_sel_soglia,
-                                          esplorativa=bool(getattr(decision, "esplorativa", False)))
+                                          esplorativa=bool(getattr(decision, "esplorativa", False)),
+                                          # memoria del trade (25 set 2026): variabili
+                                          # d'ingresso e regola in chiaro
+                                          feats_at_entry=_feats,
+                                          regola=getattr(decision, "reasoning", None) or None)
         if pos is not None:
             if getattr(decision, "esplorativa", False):
                 # la riga che distingue nel log un trade esplorativo da uno delle
@@ -1284,8 +1304,12 @@ class TradingBot:
             print(f"[selettore] lettura di selector/current fallita ({exc}): "
                   f"tengo {'il modello precedente' if self._selettore else 'ombra spenta'}")
 
+    def _variabili_ingresso(self, asset, params, sparams: dict, tf: str, now: float):
+        """Vedi `variabili_ingresso` (funzione di modulo): qui solo lo snapshot BTC."""
+        return variabili_ingresso(getattr(self, "_btc_snap", None), asset, params, sparams, tf, now)
+
     def _ombra_selettore(self, decision, asset, params, sparams: dict, tf: str,
-                         now: float) -> tuple[float | None, float | None]:
+                         now: float, feats: dict | None = None) -> tuple[float | None, float | None]:
         """(p, soglia) del selettore per il trade che sta per aprirsi, o (None, None).
 
         Le variabili sono calcolate con `feats_ingresso` di backtesting/engine.py,
@@ -1303,11 +1327,12 @@ class TradingBot:
         sym, strat = decision.asset, decision.strategy
         direzione = getattr(decision.direction, "value", decision.direction)
         try:
-            from backtesting.engine import feats_ingresso   # pigro: pesante
             ora = datetime.fromtimestamp(now, tz=timezone.utc).hour
-            feats = feats_ingresso(asset, tf, float(asset.price), float(params.stop_price),
-                                   types.SimpleNamespace(params=sparams or None),
-                                   self._btc_snap, hour=ora)
+            if feats is None:
+                feats = variabili_ingresso(getattr(self, "_btc_snap", None), asset, params,
+                                           sparams, tf, now)
+            if feats is None:
+                raise ValueError("variabili d'ingresso non calcolabili")
             riga = sel.riga_dal_vivo(sym, strat, direzione,
                                      asset.regime or self.regime or Regime.SIDEWAYS,
                                      ora, feats, entry_ts=now)

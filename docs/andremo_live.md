@@ -1594,3 +1594,15 @@ contro quante scartate (`gate`, riga ESPLORATIVE; `trades`, sezione PAPER
 ESPLORATIVO). Suite 1483 test verdi, TypeScript ok. Non verificato dal vivo: il
 primo giro del gate scrive il documento; fino ad allora il bot non ha
 esplorative e lo dice.
+
+### 25 settembre, 22:10: la memoria completa di ogni trade chiuso
+
+Domanda del proprietario: «per ogni trade chiuso il sistema memorizza TP e SL
+configurati e le condizioni d'ingresso?». Quasi tutto sì (foto degli indicatori,
+regime, referto, costi, mfe, keep, p del selettore), con due buchi: lo stop
+salvato era quello FINALE spostato dal trailing, e la scala dei TP non c'era.
+Ora ogni trade chiuso porta anche `orig_stop`, `scale_r_mults`,
+`sl_to_breakeven`, `tp_prices` (i prezzi dei gradini), `feats_at_entry` (le 10
+variabili d'ingresso del selettore) e `regola` (la regola della strategia in
+chiaro). Sopravvivono al riavvio con la posizione. Nessun effetto sulle
+decisioni. Suite 1485 test verdi.

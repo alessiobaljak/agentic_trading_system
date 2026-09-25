@@ -268,6 +268,18 @@ class ClosedTrade(BaseModel):
     # ESCLUDONO (non e' una promessa del gate) e con cui referti, scala e keep
     # lo INCLUDONO (piu' dati e' il punto). False sui trade storici.
     esplorativa: bool = False
+    # LA MEMORIA COMPLETA DEL TRADE (25 set 2026, richiesta del proprietario):
+    # lo stop ORIGINALE (quello in `stop_price` e' l'ultimo, spostato dal
+    # trailing), la scala dei TP e il break-even con cui e' stato aperto, i prezzi
+    # dei gradini, le 10 variabili d'ingresso del selettore e la regola della
+    # strategia in chiaro. Senza, «con che TP e SL era aperto?» si ricostruiva a
+    # mano dal referto.
+    orig_stop: Optional[float] = None
+    scale_r_mults: Optional[list[float]] = None
+    sl_to_breakeven: Optional[bool] = None
+    tp_prices: Optional[list[float]] = None
+    feats_at_entry: Optional[dict] = None
+    regola: Optional[str] = None
 
     # --- SCOMPOSIZIONE DEI COSTI (Fase 2.5) --------------------------------- #
     # Il PnL netto e' un numero solo e nasconde quanto e' costato ottenerlo. Qui

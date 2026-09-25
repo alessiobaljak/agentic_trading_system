@@ -366,3 +366,38 @@ def test_bot_il_rischio_effettivo_sopravvive_al_riavvio(tp_unico):
     p = dict(fb.get_rtdb("/positions/BTCUSDT") or {})
     p.pop("risk_effective_pct", None)
     assert eng2._position_from_state(p).risk_effective_pct == 0.0
+
+
+def test_il_trade_chiuso_ricorda_stop_originale_scala_e_regola(tp_unico):
+    """25 set 2026, domanda del proprietario: «per ogni trade chiuso il sistema
+    memorizza TP e SL configurati e le condizioni d'ingresso?». Lo stop salvato
+    era quello finale (spostato dal trailing) e la scala non c'era."""
+    fb = FirebaseClient()
+    eng = ExecutionEngine(firebase=fb, dry_run=True)
+    eng.open_position(_asset(100), "trend_following", Direction.LONG, _params(),
+                      scale_r_mults=(1.5, 3.0, 5.0), sl_to_breakeven=False,
+                      feats_at_entry={"rsi": 27.0, "adx": 31.0}, regola="[gen] rsi<30 e adx>25")
+    pos = eng.open_positions["BTCUSDT"]
+    assert pos.feats_at_entry == {"rsi": 27.0, "adx": 31.0} and pos.regola.startswith("[gen]")
+    # sopravvive al riavvio
+    eng2 = ExecutionEngine(firebase=fb, dry_run=True)
+    assert eng2.open_positions["BTCUSDT"].feats_at_entry == {"rsi": 27.0, "adx": 31.0}
+    assert eng2.open_positions["BTCUSDT"].regola == "[gen] rsi<30 e adx>25"
+    _arma(eng2)
+    closed = eng2.update_position("BTCUSDT", 102.5)
+    assert closed is not None
+    assert closed.orig_stop == pytest.approx(98.0)          # l'originale, non quello spostato
+    assert closed.exit_price > closed.orig_stop              # uscita col lock, non allo stop
+    assert closed.scale_r_mults == [1.5, 3.0, 5.0] and closed.sl_to_breakeven is False
+    assert closed.feats_at_entry == {"rsi": 27.0, "adx": 31.0}
+    assert closed.regola == "[gen] rsi<30 e adx>25"
+    if closed.tp_prices is not None:                         # scale-out acceso
+        assert closed.tp_prices[0] == pytest.approx(103.0)   # 100 + 1.5 * 2
+
+
+def test_main_passa_variabili_e_regola_alla_posizione():
+    import inspect
+    from bot import main as bot_main
+    src = inspect.getsource(bot_main.TradingBot._try_open)
+    assert "feats_at_entry=_feats" in src and 'regola=getattr(decision, "reasoning"' in src
+    assert "variabili_ingresso(getattr(self, \"_btc_snap\", None), asset, params, _sparams" in src
