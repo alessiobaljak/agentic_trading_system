@@ -1543,3 +1543,14 @@ verificato dal vivo: né Firebase né un browser da qui (backlog J4). Il primo
 controllo arriva al riavvio del bot; il primo documento del gate al prossimo
 giro. Cosa resta su richiesta via ops: portafoglio simulato, selettore, righe
 `[rifiuto]` per coppia.
+
+### 25 settembre, 13:45: il controllo si era fermato dopo il primo giro
+
+Screenshot del proprietario: «sistema ok (vecchio)» e «controllo fermo: l'ultimo
+è di 2 h 43 fa» col bot vivo. Causa: il ramo orario del loop usava l'orologio
+dei pesi, che il ricalcolo dopo ogni chiusura azzera; con una chiusura all'ora
+(69 trade a 30 giorni, ops 0248) il ramo non partiva mai, e con lui il
+controllo. Ora il ramo orario ha un orologio suo (`last_orario`). Il learning
+non si era fermato: nel log i pesi e i referti si ricalcolano a ogni chiusura
+(11:07, 11:13, 11:38 UTC). Riavvio ops 0247, primo controllo alle 11:42 UTC.
+Trovato anche il rischio effettivo perso al riavvio (ops 0245, commit 04147c7).
