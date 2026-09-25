@@ -1432,7 +1432,8 @@ alle 07:57 con le righe «[rifiuto]» nel log; chiave ops `rifiuti` da aggiunger
 **Numeri.** 55 trade chiusi in 10 giorni (2 oggi alle 08:10), 4 aperte (HEI e
 PROM long, TUT e XPL short, rischio aperto 1,48%), realizzato −46,65, equity
 953,35, DRY_RUN True, costi stimati 12,64 su 54 trade (lordo −34,01), massimo 7
-posizioni insieme, giornate in perdita 6 su 8 dal 18 set (ops 0234, 0227). Uscite:
+posizioni insieme (ops 0234, 0227); giornate del paper: 4 in utile e 6 in perdita
+su 10 dal 16 set, e il 24 e il 25 in utile di poco (+1,17 e +0,92, ops 0232). Uscite:
 31 stop (−128,57), 14 trailing (+29,97), 6 scale-out (+17,69), 2 TP pieni, 1 time
 exit (ops 0227). Direzione: long 24 trade, 9 vinti, −17,93; short 31, 14 vinti,
 −32,19 (ops 0234): E1 resta aperta. Il freno globale è attivo (PF vissuto 0,64
