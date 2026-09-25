@@ -1029,3 +1029,16 @@ def test_il_workflow_e_la_lista_bianca_chiamano_il_ripiego():
     voci = parse_allowlist(txt)
     assert voci["controllo"]["cmd"].endswith("scripts.controllo") and not voci["controllo"]["args"]
     assert "controllo-publish" not in voci
+
+
+def test_il_ramo_orario_ha_un_orologio_suo():
+    """25 set 2026: il ricalcolo dopo ogni chiusura azzera `last_weight_refresh`;
+    con una chiusura all'ora il ramo orario (e il controllo) non partiva mai.
+    Il ramo orario deve usare `last_orario`, che le chiusure non toccano."""
+    import inspect
+    from bot import main as bot_main
+    src = inspect.getsource(bot_main.TradingBot.run)
+    assert "if now - self.last_orario >= 3600:" in src
+    assert "self.last_orario = now" in src
+    dopo_chiusura = src.split("if self._closed_this_cycle:", 1)[1]
+    assert "last_orario" not in dopo_chiusura

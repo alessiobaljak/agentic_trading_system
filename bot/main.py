@@ -107,6 +107,7 @@ class TradingBot:
         self.last_adapt_reload = 0.0
         self.last_trailing_eval = 0.0
         self.last_weight_refresh = 0.0
+        self.last_orario = 0.0          # orologio del ramo orario (controllo), mai azzerato dalle chiusure
         # True se in QUESTO ciclo si e' chiuso un trade DETERMINATO dalla strategia
         # (SL/TP/trailing/time): fa ricalcolare i pesi SUBITO (learning event-driven).
         self._closed_this_cycle = False
@@ -1528,11 +1529,17 @@ class TradingBot:
                 # in prova (probation, tempo-dipendente) avanza anche senza chiusure.
                 # Il ricalcolo PRINCIPALE e' event-driven: subito dopo ogni trade
                 # chiuso (vedi dopo trading_cycle).
-                if now - self.last_weight_refresh >= 3600:
+                # Il ramo orario ha un SUO orologio (`last_orario`): quello dei pesi
+                # viene azzerato dal ricalcolo dopo ogni chiusura, e con una
+                # chiusura all'ora il ramo non partiva mai -> il controllo orario
+                # e' rimasto fermo 2 h 43 la mattina del 25 set 2026 (screenshot
+                # del proprietario) mentre il bot era vivo e imparava a ogni trade.
+                if now - self.last_orario >= 3600:
                     # `orario=True`: SOLO qui parte il controllo orario (mai dal
                     # ricalcolo dopo ogni chiusura, qui sotto)
                     self.refresh_weights(now, orario=True)
                     self.last_weight_refresh = now
+                    self.last_orario = now
                 # ricarica il REGISTRO validato (coppie GATE 1 + specs generate +
                 # params) OGNI ORA: cosi' il bot aggancia in fretta le nuove coppie
                 # validate e il flag "ready" appena la copertura cresce, senza
