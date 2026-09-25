@@ -1194,12 +1194,52 @@ def _batte_per_finestra(figlia: dict, madre: dict, margine: float) -> tuple[bool
     return (ok_tot and ok_fin), f"metro {mf:.3f} vs {mm:.3f}, finestre {wf} vs {wm}"
 
 
+def _elenco_chiavi(chiavi, n: int = 6) -> str:
+    chiavi = [str(k) for k in (chiavi or [])]
+    if not chiavi:
+        return ""
+    return " (" + ", ".join(chiavi[:n]) + ("…" if len(chiavi) > n else "") + ")"
+
+
+def riga_cervello_intorno(e: dict | None) -> str:
+    """La riga «[cervello] intorno: ...» per la coda del log (25 set 2026).
+
+    Si stampa SEMPRE, anche a zero: un giro in cui nessuna figlia e' passata
+    deve dirlo, altrimenti da fuori «niente nel log» e «intorno mai partito»
+    sono indistinguibili. I numeri sono quelli contati in `merge_into_registry`
+    (`esito["intorno"]`), gli stessi che vanno in `discovered_last_run`."""
+    e = e or {}
+    prom = list(e.get("promosse") or [])
+    return (f"[cervello] intorno: {int(e.get('madri', 0) or 0)} madri riprovate / "
+            f"{int(e.get('figlie_passate', 0) or 0)} figlie passate / "
+            f"{len(prom)} promosse{_elenco_chiavi(prom)} / "
+            f"{int(e.get('senza_margine', 0) or 0)} senza margine / "
+            f"{int(e.get('madre_non_valutata', 0) or 0)} con madre non valutata / "
+            f"{int(e.get('scartate', 0) or 0)} senza conferme retroattive o seconde figlie")
+
+
+def riga_cervello_varianti(e: dict | None) -> str:
+    """La riga «[cervello] varianti: ...» per la coda del log (25 set 2026).
+    Vedi `riga_cervello_intorno`; qui i numeri sono `esito["varianti"]`."""
+    e = e or {}
+    prom = list(e.get("promosse") or [])
+    sost = [s for s in (e.get("sostituzioni") or []) if isinstance(s, dict)]
+    testo_sost = ((", ".join(f"{s.get('figlia')} -> {s.get('madre')}" for s in sost[:6])
+                   + ("…" if len(sost) > 6 else "")) if sost else "nessuna")
+    return (f"[cervello] varianti dai referti: {int(e.get('create', 0) or 0)} create / "
+            f"{int(e.get('passate', 0) or 0)} passate / "
+            f"{int(e.get('retro_ok', 0) or 0)} con conferme retroattive / "
+            f"{len(prom)} promosse{_elenco_chiavi(prom)} / "
+            f"{int(e.get('scartate', 0) or 0)} scartate / sostituzioni: {testo_sost}")
+
+
 def merge_into_registry(fb, out: dict, passed_now: list[str],
                         evaluated_symbols: set | None = None,
                         intorno_madri: dict | None = None,
                         evaluated_spec_ids: set | None = None,
                         data_end_run: float = 0.0,
-                        esito: dict | None = None) -> list[str]:
+                        esito: dict | None = None,
+                        varianti_create: int = 0) -> list[str]:
     """Aggiunge SOLO le coppie generate che PASSANO (accumula pass_count) e pota
     quelle generate inutili/stantie, evitando crescita illimitata del documento.
     Ricalcola la lista validated PRESERVANDO i campi di copertura del GATE 1
@@ -1241,6 +1281,21 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
                 judge_window(r, data_end_run, False)
     # 1) upsert SOLO delle coppie passate (non sporco il registro con i fallimenti)
     n_intorno_ok = n_intorno_no = n_var_scartate = 0
+    # L'ESITO DEL CERVELLO, CONTATO QUI E LETTO DA FUORI (25 set 2026). Finora
+    # quante figlie dell'intorno fossero passate, promosse o senza margine, e
+    # quante varianti dai referti fossero entrate o morte, stava SOLO nelle righe
+    # `[intorno]`/`[discover]` di questo log — che da fuori si legge con 80 righe
+    # di coda, cioe' quasi mai. I due dizionari finiscono in `esito`, il main li
+    # scrive in `strategy_params/discovered_last_run` e `gate_progress` li stampa.
+    # Si contano le figlie SOTTO GIUDIZIO (non ancora validate): una figlia gia'
+    # validata che ripassa e' una validata come le altre, non un esito nuovo.
+    esito_intorno = {"madri": len(intorno_madri or {}), "figlie_passate": 0,
+                     "promosse": [], "senza_margine": 0, "madre_non_valutata": 0,
+                     # senza conferme retroattive, o seconda figlia della stessa
+                     # madre: cosi' i conti tornano (passate = somma delle altre)
+                     "scartate": 0}
+    esito_varianti = {"create": int(varianti_create or 0), "passate": 0, "retro_ok": 0,
+                      "promosse": [], "scartate": 0, "sostituzioni": []}
     # UNA SOLA FIGLIA PER MADRE E PER GIRO (audit del 24 set): con 6-12 figlie
     # per madre, due che passano entrerebbero entrambe sulla stessa coin — la
     # stessa scommessa due volte. Resta la migliore per (ritorno - drawdown).
@@ -1266,16 +1321,24 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
             mk = f"{e['symbol']}|{spec_e.get('genitore')}"
             madre = pairs.get(mk) or {}
             retro_ok = int(e.get("conferme_retro") or 0) >= MIN_PASSES - 1
+            dall_intorno = spec_e.get("origine") == "intorno"
+            if dall_intorno:
+                esito_intorno["figlie_passate"] += 1
+            else:
+                esito_varianti["passate"] += 1
+                esito_varianti["retro_ok"] += int(retro_ok)
             if not retro_ok or migliore_per_madre.get(mk, (0, key))[1] != key:
                 n_var_scartate += 1
+                (esito_intorno if dall_intorno else esito_varianti)["scartate"] += 1
                 scartate_giro.add(key)
                 continue
-            if spec_e.get("origine") == "intorno":
+            if dall_intorno:
                 # confronto APPAIATO con la madre rivalutata nello STESSO giro:
                 # se la madre oggi non e' stata valutata, non si decide
                 madre_oggi = out.get(mk)
                 if not madre_oggi or not madre:
                     n_intorno_no += 1
+                    esito_intorno["madre_non_valutata"] += 1
                     scartate_giro.add(key)
                     print(f"[intorno] {key}: madre {mk} non valutata in questo giro, "
                           f"nessun confronto")
@@ -1283,18 +1346,26 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
                 ok, dettaglio = _batte_per_finestra(e, madre_oggi, INTORNO_MARGINE)
                 if not ok:
                     n_intorno_no += 1
+                    esito_intorno["senza_margine"] += 1
                     scartate_giro.add(key)
                     continue
                 n_intorno_ok += 1
+                esito_intorno["promosse"].append(key)
                 rec["nata_intorno_at"] = now
                 print(f"[intorno] {key} ({spec_e.get('ipotesi')}) sostituisce "
                       f"{spec_e.get('genitore')}: {dettaglio}")
             else:
+                esito_varianti["promosse"].append(key)
                 print(f"[discover] variante {key} ({spec_e.get('ipotesi')}) validata "
                       f"con le conferme retroattive: sostituisce {spec_e.get('genitore')}")
             if madre:
                 madre["sostituita_da"] = spec_e.get("id")
                 madre["sostituita_at"] = now
+                if not dall_intorno:
+                    # la madre di una figlia dell'intorno e' gia' in `promosse`
+                    # (stessa coin, `genitore` nella spec); qui si annota la
+                    # sostituzione che senza registro non si vede: quella dei referti
+                    esito_varianti["sostituzioni"].append({"figlia": key, "madre": mk})
         # UNA SOLA CONTABILITA' PER TUTTO IL REGISTRO. Qui c'era una copia a mano
         # della vecchia regola del "pass onesto" (differenza fra due data_end), che
         # optimize.py ha smesso di usare quando e' passato al verdetto per finestra.
@@ -1374,6 +1445,8 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
               f"(o seconde figlie): scartate, non entrano nel registro")
     if esito is not None:
         esito["scartate"] = sorted(scartate_giro)
+        esito["intorno"] = esito_intorno
+        esito["varianti"] = esito_varianti
     # 2) potatura: scarta le coppie GENERATE che non hanno niente da perdere.
     #
     # QUI SI CANCELLAVANO LE COPPIE A META' STRADA. La condizione era
@@ -1847,7 +1920,8 @@ def main() -> int:
                                     evaluated_spec_ids={sp["id"] for sp in specs}
                                     | {f["id"] for fs in specs_per_symbol.values() for f in fs},
                                     data_end_run=_data_end_run,
-                                    esito=esito_merge)
+                                    esito=esito_merge,
+                                    varianti_create=len(varianti))
     scartate = set(esito_merge.get("scartate", ()))
     if scartate:
         passed_keys = [k for k in passed_keys if k not in scartate]
@@ -1859,6 +1933,15 @@ def main() -> int:
     # riepilogo COMPATTO (niente spec/entry per ogni coppia: sforerebbe il limite
     # di 1 MiB di Firestore). Le spec complete stanno in discovered_strategies/specs.
     durata = time.time() - t0
+    # L'ESITO DEL CERVELLO NELLA CODA DEL LOG (25 set 2026): SEMPRE, anche a
+    # zero, e come ultime righe prima di «GIRO FINITO», perche' da fuori il log si
+    # legge con 80 righe di coda e un giro in cui l'intorno non ha promosso
+    # nessuno deve DIRLO, non tacere. Gli stessi numeri vanno nel documento
+    # `discovered_last_run` qui sotto, da cui `gate_progress` li rilegge.
+    esito_intorno = esito_merge.get("intorno") or {}
+    esito_varianti = esito_merge.get("varianti") or {}
+    print(riga_cervello_intorno(esito_intorno))
+    print(riga_cervello_varianti(esito_varianti))
     print(f"[discover] GIRO FINITO in {durata / 3600:.0f}h {(durata % 3600) / 60:.0f}m "
           f"({n_eval} valutazioni, {len(passed_keys)} passate)")
     _doc_run = ("discovered_last_run" if args.interval == settings.ORCHESTRATOR_TIMEFRAME
@@ -1877,6 +1960,10 @@ def main() -> int:
         "passed": [{"symbol": out[k]["symbol"], "id": out[k]["strategy"],
                     "pf": out[k]["oos_pf"], "pnl": out[k]["oos_pnl_pct"]}
                    for k in passed_keys],
+        # COSA HA FATTO IL CERVELLO (25 set 2026): l'esito dell'intorno e delle
+        # varianti dai referti, che prima viveva solo nel log del gate
+        "intorno": esito_intorno,
+        "varianti": esito_varianti,
     })
 
     print("\n" + "=" * 60)

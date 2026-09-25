@@ -93,6 +93,48 @@ def eta_ready(rec: dict, now: float) -> float:
     return da + (MIN_PASSES - passes) * NEW_DATA_MIN_S
 
 
+def riga_cervello(diag: dict) -> str:
+    """«IL CERVELLO NELL'ULTIMO GIRO»: cosa hanno fatto l'intorno e le varianti
+    dai referti, letto da `strategy_params/discovered_last_run` (chiavi `intorno`
+    e `varianti`, che la discovery scrive dal 25 set 2026).
+
+    Prima quell'esito viveva SOLO nel log del gate, che da fuori si legge con 80
+    righe di coda: quante madri fossero state riprovate, quante figlie fossero
+    passate e poi morte senza margine, quante varianti fossero entrate — da
+    fuori non si sapeva mai. Un giro col codice precedente non ha le chiavi, e
+    lo si dice invece di stampare zeri che sembrerebbero un esito."""
+    i, v = (diag or {}).get("intorno"), (diag or {}).get("varianti")
+    if not isinstance(i, dict) or not isinstance(v, dict):
+        return ("  IL CERVELLO NELL'ULTIMO GIRO: non registrato: giro precedente al "
+                "25 set (le chiavi `intorno`/`varianti` arrivano col primo giro finito)")
+
+    def _n(d, k):
+        return int(d.get(k, 0) or 0)
+
+    def _chiavi(lista, n=6):
+        lista = [str(k) for k in (lista or [])]
+        return (" (" + ", ".join(lista[:n]) + ("…" if len(lista) > n else "") + ")"
+                if lista else "")
+
+    prom_i, prom_v = list(i.get("promosse") or []), list(v.get("promosse") or [])
+    sost = [s for s in (v.get("sostituzioni") or []) if isinstance(s, dict)]
+    testo_sost = ((", ".join(f"{s.get('figlia')} -> {s.get('madre')}" for s in sost[:6])
+                   + ("…" if len(sost) > 6 else "")) if sost else "nessuna")
+    extra_i = ""
+    if _n(i, "madre_non_valutata"):
+        extra_i += f" / {_n(i, 'madre_non_valutata')} con madre non valutata"
+    if _n(i, "scartate"):
+        extra_i += f" / {_n(i, 'scartate')} senza conferme retroattive o seconde figlie"
+    return (f"  IL CERVELLO NELL'ULTIMO GIRO: intorno {_n(i, 'madri')} madri / "
+            f"{_n(i, 'figlie_passate')} figlie passate / "
+            f"{len(prom_i)} promosse{_chiavi(prom_i)} / "
+            f"{_n(i, 'senza_margine')} senza margine{extra_i} · "
+            f"varianti {_n(v, 'create')} create / {_n(v, 'passate')} passate / "
+            f"{_n(v, 'retro_ok')} con conferme retroattive / "
+            f"{len(prom_v)} promosse{_chiavi(prom_v)} / "
+            f"{_n(v, 'scartate')} scartate / sostituzioni {testo_sost}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--top", type=int, default=15,
@@ -352,6 +394,8 @@ def main() -> int:
     else:
         print("\n  TEMPO DELL'ULTIMO GIRO: non ancora registrato (codice del 22 set: "
               "arriva col primo giro finito)")
+    # COSA HA FATTO IL CERVELLO nell'ultimo giro (25 set 2026): vedi riga_cervello
+    print(riga_cervello(diag))
     # la passata extra (strategie native a 1 ora, per ora solo BTC)
     d1h = fb.get_doc("strategy_params", "discovered_last_run_1h") or {}
     if d1h.get("started_at") and d1h.get("duration_s") is not None:

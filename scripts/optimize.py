@@ -576,7 +576,20 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         # alleggerimento la rimetterebbe in gioco accanto alla figlia
                         # (la stessa scommessa due volte, il caso USELESSUSDT).
                         "sostituita_da", "sostituita_at", "intorno_at", "nata_intorno_at", "validated_at",
-                        "last_max_dd"}
+                        "last_max_dd",
+                        # LA PROMESSA DELLA COPPIA (25 set 2026): `last_pf` e' il
+                        # PF OOS dell'ultimo passaggio, quello che la deriva
+                        # (`bot/learning/drift.py`) e l'analista confrontano col
+                        # vivo. Una coppia viene alleggerita finche' NON e'
+                        # validata, poi puo' essere promossa dalla chiusura della
+                        # finestra senza ripassare da qui: arriva fra le validate
+                        # SENZA promessa, e la deriva va in fail-open. Misurato il
+                        # 25 set: 72 validate su 131 senza `last_pf`. E' un float
+                        # per coppia, spazio trascurabile. `regime_pf` (un
+                        # dizionario per regime, letto dal veto `regime_ok`) resta
+                        # fuori di proposito: costa troppo, e quel veto resta
+                        # fail-open per le coppie promosse cosi'.
+                        "last_pf"}
 
 
 def coppie_validate(pairs: dict, now: float | None = None) -> list[str]:
