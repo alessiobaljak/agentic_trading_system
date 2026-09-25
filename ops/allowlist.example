@@ -83,6 +83,10 @@ attivi:       systemctl is-active trading-bot.service trading-ops.timer trading-
 # ---- stato del sistema -----------------------------------------------------
 servizi:      systemctl list-timers --no-pager trading-*
 log-bot:      journalctl -u trading-bot.service -n 120 --no-pager
+# i RIFIUTI d'ingresso delle ultime 24 ore (dal 25 set il bot stampa una riga
+# «[rifiuto] coin strategia direzione: motivo» per ogni segnale non aperto):
+# e' il conteggio che manca a H5. -g e' il filtro di journalctl, niente pipe.
+rifiuti:      journalctl -u trading-bot.service --since -24h --no-pager -g "\[rifiuto\]"
 log-gate:     journalctl -u trading-optimizer.service -n 80 --no-pager
 log-super:    journalctl -u trading-supervisor.service -n 40 --no-pager
 memoria:      free -g
