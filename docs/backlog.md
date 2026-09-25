@@ -362,7 +362,7 @@ nemmeno un id CoinGecko**, e soprattutto il backtest consuma **solo candele**
 ---
 
 ### B8. Una strategia generata non può essere RITARATA: può solo morire
-**Stato:** **prima metà FATTA il 23 set pomeriggio** — le VARIANTI DAI REFERTI: quando i referti del paper scattano su una regola dichiarata (short tutte perse → «solo long»; perdite controtrend o mai andate a favore → «con conferma a 1 ora»; stop larghi → «stop più stretto»), la discovery genera la variante della STESSA spec (`bot/strategies/generator.py::varianti_da_referto`, `scripts/discover_strategies.py::varianti_dai_referti`) e la mette nel gate al posto di altrettante candidate casuali: stesse 3 conferme, stesso holdout, il giro non si allunga. Il paper propone, la storia decide. La variante porta `genitore` e `origine=referto`, così si vede da dove viene. **Dal 24 set sera (audit):** la variante si valida SOLO su dati precedenti al primo trade del paper che ha fatto nascere l'ipotesi (`ipotesi_da`: pre-registrazione), non nasce se il gate ha già misurato che il lato da spegnere rende (PF ≥ 1 su ≥ 20 trade OOS, `direzione_pf`), e quando è validata sostituisce la madre (`sostituita_da`), altrimenti validarla non cambiava un trade. **Dal 24 set le tre conferme si raccolgono nello stesso giro** (`conferme_retroattive`: dati fino a oggi, a 8 e a 16 giorni fa; passa tutte e tre più l'holdout → validata subito, altrimenti muore subito): il tempo di calendario non era l'ingrediente, lo sono i dati che finiscono in momenti diversi, come in `scripts/backfill_passes.sh`. **Seconda metà FATTA il 24 set (punto 1 del disegno):** l'intorno — ogni notte nel giro completo fino a 10 coppie validate (prima quelle in `watch`/`drift`) vengono riprovate con ogni soglia spostata di un gradino, solo sulla loro coin (`figlie_intorno`, `coppie_per_intorno`); una figlia sostituisce la madre solo con le conferme retroattive e un margine del 10% sul ritorno OOS; la madre resta nel registro (`sostituita_da`) ma non si opera (`coppie_validate`, regola unica per optimize e discovery). Una coppia ogni 7 giorni, una figlia riposa 14 giorni. Tetto 10 finché il giro completo non sta sotto 1h30 (`DISCOVERY_INTORNO_CAP`).
+**Stato:** **prima metà FATTA il 23 set pomeriggio** — le VARIANTI DAI REFERTI: quando i referti del paper scattano su una regola dichiarata (short tutte perse → «solo long»; perdite controtrend o mai andate a favore → «con conferma a 1 ora»; stop larghi → «stop più stretto»), la discovery genera la variante della STESSA spec (`bot/strategies/generator.py::varianti_da_referto`, `scripts/discover_strategies.py::varianti_dai_referti`) e la mette nel gate al posto di altrettante candidate casuali: stesse 3 conferme, stesso holdout, il giro non si allunga. Il paper propone, la storia decide. La variante porta `genitore` e `origine=referto`, così si vede da dove viene. **Dal 24 set sera (audit):** la variante DOVREBBE valutarsi solo su dati precedenti al primo trade del paper che ha fatto nascere l'ipotesi (`ipotesi_da`: pre-registrazione) — **ma dal 24 set alle 20:18 questa valutazione «troncata» è SPENTA** (`DISCOVERY_VARIANTI_TRONCATE=false`): raddoppiava la memoria dei worker e ha ucciso quattro giri; si riaccende quando si misura che il picco per worker (2,3 GB con 6 worker, ops 0225) lascia margine. Finché è spenta le figlie si giudicano sui dati interi, che contengono le perdite del paper che le hanno generate: limite noto. La variante non nasce se il gate ha già misurato che il lato da spegnere rende (PF ≥ 1 su ≥ 20 trade OOS, `direzione_pf`), e quando è validata sostituisce la madre (`sostituita_da`), altrimenti validarla non cambiava un trade. **Dal 24 set le tre conferme si raccolgono nello stesso giro** (`conferme_retroattive`: dati fino a oggi, a 8 e a 16 giorni fa; passa tutte e tre più l'holdout → validata subito, altrimenti muore subito): il tempo di calendario non era l'ingrediente, lo sono i dati che finiscono in momenti diversi, come in `scripts/backfill_passes.sh`. **Seconda metà FATTA il 24 set (punto 1 del disegno):** l'intorno — ogni notte nel giro completo fino a 10 coppie validate (prima quelle in `watch`/`drift`) vengono riprovate con ogni soglia spostata di un gradino, solo sulla loro coin (`figlie_intorno`, `coppie_per_intorno`); una figlia sostituisce la madre solo con le conferme retroattive e un margine del 10% sul ritorno OOS; la madre resta nel registro (`sostituita_da`) ma non si opera (`coppie_validate`, regola unica per optimize e discovery). Una coppia ogni 7 giorni, una figlia riposa **30** giorni (audit del 24 set; il disegno diceva 14). Tetto 10 finché il giro completo non sta sotto 1h30 (`DISCOVERY_INTORNO_CAP`).
 
 _Emerso il 21 set; testo originale qui sotto._
 
@@ -430,7 +430,7 @@ di tutto il backlog. Va decisa, non fatta di slancio.
 ## C. Timeframe e universo
 
 ### C1. A 1 ora le strategie vanno molto meglio
-**Stato:** **FATTA il 22 set sera, solo su BTC** — la spec porta il suo timeframe (id incluso), il motore etichetta la riga base col suo intervallo, `optimize` lancia a ogni giro una passata di discovery a 1h su BTCUSDT (`DISCOVERY_EXTRA=1h:BTCUSDT`, max 40 min, senza toccare il timer), il bot fa decidere ogni strategia sul suo orologio e i trade portano il timeframe della strategia. Le prime coppie BTC@1h servono 3 conferme (3 settimane). Allargare ad altre coin = cambiare `DISCOVERY_EXTRA`.
+**Stato:** **FATTA il 22 set sera su BTC, allargata il 23 a ETH, SOL, ADA, BCH** (`DISCOVERY_EXTRA`); prima candidata ADAUSDT@1h con 1 conferma il 24 set. Il resto della voce è la storia. — la spec porta il suo timeframe (id incluso), il motore etichetta la riga base col suo intervallo, `optimize` lancia a ogni giro una passata di discovery a 1h su BTCUSDT (`DISCOVERY_EXTRA=1h:BTCUSDT`, max 40 min, senza toccare il timer), il bot fa decidere ogni strategia sul suo orologio e i trade portano il timeframe della strategia. Le prime coppie BTC@1h servono 3 conferme (3 settimane). Allargare ad altre coin = cambiare `DISCOVERY_EXTRA`.
 
 ```
 candidate che battono il pareggio:
@@ -577,7 +577,7 @@ cronometro decide), paper più rumoroso se i due livelli non restano separati.
 ## G. Portafoglio e gate — quello che i sistemi seri fanno (24 set)
 
 ### G1. Rischio per direzione
-**Stato:** **esisteva già dall'8 set** (`MAX_DIRECTIONAL_RISK_PCT=0.03`, `bot/main.py::_directional_risk_blocks`): l'audit del 24 set ha trovato che il 24 mattina ne avevo scritta una seconda copia, tolta la sera stessa. Nel bot la regola è una. Il backtest di portafoglio (G2) dice che al 3% è quasi neutra (23 trade su 526 fermati, drawdown invariato): le regole di portafoglio che mancano davvero sono lo stop giornaliero e il netto in R (vedi H).
+**Stato:** **esisteva già dall'8 set** (`MAX_DIRECTIONAL_RISK_PCT=0.03`, `bot/main.py::_directional_risk_blocks`): l'audit del 24 set ha trovato che il 24 mattina ne avevo scritta una seconda copia, tolta la sera stessa. Nel bot la regola è una. Il backtest di portafoglio (G2, ops 0188 con la semantica del bot) dice che al 3% è quasi neutra (64 trade su 526 fermati, PnL −7%, drawdown invariato); con la size dimezzata dal freno globale ammette ~8 posizioni nello stesso verso: le regole di portafoglio che mancano davvero sono lo stop giornaliero e il netto in R (vedi H).
 
 ### G2. Il gate valida coppie una alla volta, mai il portafoglio
 **Stato:** **script FATTO il 24 set** (`portafoglio`, da aggiungere alla lista bianca: `portafoglio: .venv/bin/python -m scripts.portafoglio_backtest`) — tutte le validate insieme sugli ultimi 60 giorni con i limiti veri del conto: trade al giorno, posizioni contemporanee, quante nella stessa direzione, giornate in utile/perdita, drawdown, e il confronto con/senza tetto per direzione. Dal 24 set sera simula anche lo stop giornaliero di portafoglio e il netto in R come what-if, misura il win rate dopo k perdite di fila (per decidere il freno di serie) e il diversification ratio. Aperto: leggerlo ogni settimana e decidere le regole di portafoglio sui suoi numeri (H).
@@ -636,6 +636,28 @@ non aperti» (da `frequenza` + `confronto`) e `portafoglio --dal 2026-09-16`: se
 anche il portafoglio simulato perde dal 16 set, è il mercato più la selezione; se
 vince, è esecuzione/parità. È la domanda che vale tutte le altre.
 
+## I. Check end-to-end del learning (25 set, otto revisori)
+
+Cosa è ATTIVO e cambia davvero le decisioni oggi: il freno globale da deriva (size ×0,5 e leva ×0,71 su ogni trade da quando i trade hanno superato 40: PF 0,64 contro 1,89, ops 0227); i pesi strategia×regime (attivi dal 24 set alle 14:32, 32 coppie da 54 trade, ops 0228) che con confidenza fissa 60 mettono in panchina una strategia a peso < 0,5; il trend tilt; i tetti per coin e per direzione; il controllo del setup (stop > 6%); le regole del gate (finestra, intorno, varianti, scala dal vissuto). Cosa è misurato ma NON cambia niente: verdetti del trailing (keep mai adattato: servono 8 verdetti per strategia, 14 uscite trailing su 21 strategie), deriva per coppia/strategia (soglie 8 e 20 mai raggiunte: max 5 trade per coppia), calibrazione (confidenza costante), referti «lock mai armato» e «sotto TP1» (contati, nessuna ipotesi), selettore (NON BATTE, ops 0231), ombra AI (contatore rotto, corretto il 25), filtro universo AI (mai escluso nulla).
+
+### I1. I pesi mettono in panchina dopo due perdite
+Con confidenza fissa 60 e soglia 30, «peso < 0,5» spegne la strategia in quel regime: bastano 2 perdite su 2 (`orchestrator.py`, `metrics.compute_weights`). Il commento parla di 4-5. Da decidere se è troppo aggressivo: misurare quante coppie sono a peso 0 nel doc `strategy_weights` (i pesi non sono leggibili da nessun comando ops: aggiunto al passo 1 di visibilità).
+
+### I2. Il freno globale non ha una data di uscita
+Dimezza tutto finché il PF a 30 giorni non supera 0,6 × 1,89 ≈ 1,13. È il freno più forte del sistema e non compariva in nessun log: ora `stato` lo scrive. Il paper a size dimezzata impara più lentamente (meno euro per trade, stessi trade).
+
+### I3. Il keep del trailing non scatterà mai con questi volumi
+8 verdetti per strategia contro 14 uscite trailing in 10 giorni su 21 strategie. E se scattasse, il gate simula sempre keep 0,5: paper e gate divergerebbero. Proposta: keep per FAMIGLIA (reversion/momentum) invece che per strategia, e la stessa scelta nel gate.
+
+### I4. I referti sulle uscite non producono ipotesi
+«Andato a favore ma sotto TP1» 19 su 31 stop, «lock mai armato» 6 su 6: contati, nessuna variante. Quinta ipotesi «uscita» (≥ 3 perdite sotto TP1 sulla stessa strategia → variante con la scala dal vissuto, nel gate con le conferme retroattive): **serve il sì** (cambia quali candidate entrano).
+
+### I5. Validate senza promessa nel registro
+72 su 131 visibili senza `last_pf` (alleggerite quando non erano validate, promosse poi dalla chiusura della finestra): deriva e veto di regime in fail-open per loro. Corretto il 25 set: `last_pf` fra i campi che l'alleggerimento conserva; si riempie al prossimo passaggio di ognuna.
+
+### I6. Il cap di 5 posizioni è spento in parità
+`MAX_OPEN_POSITIONS` vale solo fuori dalla parità col gate; in parità il limite è il margine (10% dell'equity per posizione ≈ 10 posizioni); il paper ha già toccato 7 contemporanee. Con 160 coppie e il freno che dimezza la size, il tetto per direzione (3%) ammette ~8 posizioni nello stesso verso. Da decidere con `portafoglio` sulle 160 (in coda): cap in parità, o tetto direzionale più stretto finché il globale è in deriva, o stop giornaliero (H3).
+
 ## D. Infrastruttura
 
 ### D1. Il registro su più documenti
@@ -661,7 +683,7 @@ silenzio** se Binance non risponde.
 ogni chiamante.
 
 ### D3. Il modello dell'AI è la versione precedente
-**Stato:** **FATTO il 21 set sera** — `ANTHROPIC_MODEL` default `claude-opus-5` (era `claude-opus-4-8`). L'env sulla VPS, se impostato, vince: `ai-stato` dice quale gira.
+**Stato:** **FATTO il 21 set sera** — `ANTHROPIC_MODEL` default `claude-opus-5`. Dal 24 set il proprietario ha scelto sulla VPS `claude-opus-4-8` (più economico): l'env vince sul default, `ai-stato` dice quale gira.
 
 `ANTHROPIC_MODEL=claude-opus-4-8`. Rimandato il 19 set per non cambiare due cose
 insieme mentre si verificava la chiave.

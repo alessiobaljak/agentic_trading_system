@@ -1390,3 +1390,26 @@ corso; il prossimo è il giro completo delle 02:04, con l'intorno per la prima v
   per direzione). Il controllo delle 08:00 misura il salto.
 * Statistica t: 9 validate con misura, 3 reggono t ≥ 2, mediana 1,47.
 * 1 ora: un'unica candidata (ADAUSDT, prima conferma il 24), nessuna validata.
+
+
+### 25 settembre, 07:30: check end-to-end del learning (otto revisori) e i trade con 160 coppie
+
+Domanda del proprietario: «con 160 coppie i limiti reggono? il salto a 52 coin è un
+errore? il learning impara dai trailing? c'è qualcosa che ci perdiamo?». Risposte:
+
+* **Limiti**: non si sfonda il conto (margine e 3% per direzione sono invalicabili),
+  ma il cap di 5 posizioni è spento in parità (il paper ha già toccato 7). Oggi
+  fino alle 07:13: 3 aperture, 4 posizioni aperte, rischio 1,48% (ops 0227-0228);
+  attesi ~19-24 segnali apribili al giorno con 160 coppie (ops 0229) contro 11 il
+  24. `portafoglio` sulle 160 in coda.
+* **Salto 59→160**: legittimo, otto revisori su otto; 116 coppie a 3 passaggi e 44
+  a 4 (ops 0224). Nessuna via nel codice alza le conferme senza un passaggio vero.
+* **Trailing**: i verdetti si scrivono, il keep per strategia non è mai scattato
+  (servono 8 verdetti, ci sono 14 uscite trailing su 21 strategie); i referti
+  «sotto TP1» e «lock mai armato» sono contati ma non generano ipotesi.
+* **Corretto subito**: etichetta «FRENO attivo» falsa in `trades`, contatore
+  dell'ombra AI («0/60» era una chiave sbagliata), calibrazione con confidenza
+  costante ora dice «costante», rifiuti d'ingresso nel log (righe «[rifiuto]»:
+  finalmente contabili, H5), freno globale scritto in `stato`, esito di intorno e
+  varianti salvato a ogni giro e letto da `gate`, `last_pf` conservato
+  dall'alleggerimento. Sezione I del backlog con le sei cose da decidere.
