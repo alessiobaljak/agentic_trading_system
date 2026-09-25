@@ -359,6 +359,21 @@ def _drift_section(fb) -> list[str]:
         out += [f"- **globale**: {g.get('verdict', '—')} · {g.get('trades', 0)} trade · "
                 f"PF vissuto {g.get('live_pf')} vs {g.get('expected_pf')} atteso"
                 + (f" · mfe mediana {g['mfe_median']}R" if g.get("mfe_median") else ""), ""]
+    if g.get("verdict") == "drift":
+        # IL FRENO GLOBALE (25 set 2026): col verdetto globale in `drift`,
+        # weight_factor (bot/learning/drift.py) moltiplica size e leva di OGNI
+        # trade, non solo delle coppie in deriva. Non compariva in nessun log ne'
+        # comando: lo si scopriva solo dalla nota del singolo trade. I numeri
+        # sono quelli di settings, cosi' la riga non mente se cambiano.
+        if _cfg.DRIFT_ENABLED:
+            out += [f"- **freno globale attivo**: size x{_cfg.DRIFT_WEIGHT_FACTOR:g} e "
+                    f"leva x{_cfg.DRIFT_WEIGHT_FACTOR ** 0.5:.2f} (radice) su OGNI "
+                    f"trade finche' il PF a 30 giorni resta sotto "
+                    f"{_cfg.DRIFT_PF_RATIO:g} x atteso"
+                    + (f" (motivo: {g['reason']})" if g.get("reason") else ""), ""]
+        else:
+            out += ["- freno globale SPENTO (`DRIFT_ENABLED=false`): il verdetto e' "
+                    "solo misura, size e leva restano piene", ""]
     rows = [(k, v) for k, v in (doc.get("pairs") or {}).items()
             if v.get("verdict") in ("drift", "watch")]
     rows.sort(key=lambda kv: (kv[1]["verdict"] != "drift", -kv[1].get("trades", 0)))

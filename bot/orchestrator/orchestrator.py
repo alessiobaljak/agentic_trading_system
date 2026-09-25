@@ -43,6 +43,37 @@ class Orchestrator:
         self.regime_detector = RegimeDetector()
         # esito dell'ULTIMA decisione (osservabilità): pubblicato su Firebase da main
         self.last_status: dict = {}
+        # I RIFIUTI del ciclo (25 set 2026, backlog H5): i segnali scartati QUI
+        # (peso sotto soglia, veto di regime) non arrivavano mai a main, quindi
+        # ne' al log ne' a /decision_status: da fuori non si potevano contare.
+        # Si accumulano per ciclo e si stampano in blocco (max _MAX_RIFIUTI_LOG
+        # righe), una riga per (coin, strategia).
+        self._rifiuti_ciclo: list[str] = []
+        self._rifiuti_visti: set = set()
+
+    #: righe «[rifiuto]» stampate per ciclo; oltre, una riga «... e altri N».
+    #: Con 160 coppie un regime sfavorevole puo' scartarne decine a ogni candela:
+    #: senza tetto il log del bot diventerebbe illeggibile.
+    _MAX_RIFIUTI_LOG = 20
+
+    def _rifiuto(self, symbol: str, strategy: str, motivo: str) -> None:
+        """Registra un rifiuto del ciclo (una riga per coppia, stampa a fine ciclo)."""
+        key = (symbol, strategy)
+        if key in self._rifiuti_visti:
+            return
+        self._rifiuti_visti.add(key)
+        self._rifiuti_ciclo.append(f"[rifiuto] {symbol} {strategy}: {motivo}")
+
+    def _stampa_rifiuti(self) -> None:
+        """Stampa i rifiuti accumulati (prime _MAX_RIFIUTI_LOG righe, poi il conto)
+        e svuota l'accumulo, cosi' il ciclo dopo riparte da zero."""
+        righe = self._rifiuti_ciclo
+        for r in righe[:self._MAX_RIFIUTI_LOG]:
+            print(r)
+        if len(righe) > self._MAX_RIFIUTI_LOG:
+            print(f"[rifiuto] ... e altri {len(righe) - self._MAX_RIFIUTI_LOG}")
+        self._rifiuti_ciclo = []
+        self._rifiuti_visti = set()
 
     def _record_status(self, regime: Regime, n_assets: int, signals: list[dict],
                        outcome: str, reason: str,
@@ -79,6 +110,8 @@ class Orchestrator:
         disabled = disabled or set()
         ctx_global = StrategyContext(all_assets=assets, regime=regime)
         signals = []
+        # ciclo nuovo: i rifiuti del giro precedente sono gia' stati stampati
+        self._rifiuti_ciclo, self._rifiuti_visti = [], set()
         for sym, asset in assets.items():
             # PARITA' COL BACKTEST: il regime e' rilevato PER-COIN dai dati di quella
             # coin (come engine.run_strategy), non l'unico macro-BTC. Cosi' su ogni
@@ -115,6 +148,13 @@ class Orchestrator:
                 # filtro di regime informato dal gate: non si opera una coppia nel
                 # regime in cui il gate l'ha vista perdere (fail-open senza dati)
                 if not self.adaptation.regime_ok(sym, strat.name, coin_regime):
+                    # nel log SOLO se c'era davvero un segnale da scartare: una
+                    # coppia vetata che non avrebbe sparato non e' un rifiuto, e
+                    # contarla gonfierebbe proprio il numero che H5 vuole. Le
+                    # strategie sono senza stato: generarlo qui non cambia nulla.
+                    if strat.generate_signal(asset, ctx) is not None:
+                        self._rifiuto(sym, strat.name,
+                                      f"veto di regime ({coin_regime.value})")
                     continue
                 sig = strat.generate_signal(asset, ctx)
                 if sig is None:
@@ -145,6 +185,7 @@ class Orchestrator:
         disabled: Optional[set] = None,
     ) -> Optional[OrchestratorDecision]:
         signals = self.collect_signals(assets, regime, disabled=disabled)
+        self._stampa_rifiuti()          # i veti di regime del giro
         if not signals:
             self._record_status(regime, len(assets), signals, "flat",
                                 "nessun segnale dalle strategie attive in questo regime")
@@ -202,7 +243,15 @@ class Orchestrator:
         decisions: list[OrchestratorDecision] = []
         seen: set = set()
         for s in signals:  # ordinati per adjusted_confidence desc
-            if s["adjusted_confidence"] < self.DECISION_THRESHOLD or s["weight"] <= 0.0:
+            if s["weight"] <= 0.0:
+                self._rifiuto(s["symbol"], s["strategy"],
+                              f"peso {s['weight']:.2f} (strategia spenta dal learning)")
+                continue
+            if s["adjusted_confidence"] < self.DECISION_THRESHOLD:
+                self._rifiuto(s["symbol"], s["strategy"],
+                              f"peso {s['weight']:.2f}: confidenza "
+                              f"{s['adjusted_confidence']:.0f} < soglia "
+                              f"{self.DECISION_THRESHOLD}")
                 continue
             if s["symbol"] in seen:
                 continue
@@ -224,6 +273,7 @@ class Orchestrator:
                 suggested_target=s.get("suggested_target"))
             d.adjusted_confidence = s["adjusted_confidence"]
             decisions.append(d)
+        self._stampa_rifiuti()
         self._record_status(
             regime, len(assets), signals, "decided" if decisions else "flat",
             f"parita' backtest: {len(decisions)} segnali validi aperti" if decisions

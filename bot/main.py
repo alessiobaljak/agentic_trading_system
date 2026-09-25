@@ -896,7 +896,19 @@ class TradingBot:
         """Apre UNA posizione dalla decisione (controlli + risk gate + executor).
         Se un controllo fallisce fa 'return' (salta questa decisione; in parita' il
         loop continua con le altre)."""
+        # I RIFIUTI NEL LOG (25 set 2026, backlog H5). Ogni scarto prima
+        # dell'apertura lascia UNA riga uniforme «[rifiuto] coin strategia
+        # direzione: motivo». Prima finiva solo in RTDB /decision_status, che
+        # ogni ciclo sovrascrive: da fuori non si poteva contare quante volte il
+        # cooldown, il tetto per coin o il risk gate avessero fermato un segnale
+        # — e H5 (i segnali non aperti rendono piu' di quelli aperti?) ha
+        # bisogno proprio di quel conteggio. Solo log: nessun controllo cambia.
+        def _rifiuto(motivo: str) -> None:
+            print(f"[rifiuto] {decision.asset} {decision.strategy} "
+                  f"{decision.direction.value}: {motivo}")
+
         if decision.asset in self.executor.open_positions:
+            _rifiuto("posizione gia' aperta su questa coin")
             self._publish_decision_status(
                 {"outcome": "flat", "reason": f"{decision.asset} già aperto"})
             return
@@ -909,6 +921,7 @@ class TradingBot:
         # gemelle che si mettono in fila dopo lo stop di una sorella. Divergenza
         # nella direzione sicura (meno trade), voluta.
         if now < cd_until:
+            _rifiuto(f"cooldown dopo stop ({int((cd_until - now) / 60)}m)")
             self._publish_decision_status(
                 {"outcome": "flat",
                  "reason": f"cooldown su {decision.asset} dopo stop ({int((cd_until - now) / 60)}m)"})
@@ -924,20 +937,26 @@ class TradingBot:
             _blocco = coin_bloccata(_recenti, decision.asset, now,
                                     self.account_equity(), settings.RISK_PER_COIN_DAY)
             if _blocco:
+                _rifiuto(f"tetto per coin al giorno: {_blocco}")
                 self._publish_decision_status({"outcome": "flat", "reason": _blocco})
                 return
         # cap sul NUMERO di posizioni: in parita' disattivato (il bt non lo ha).
         if not settings.BACKTEST_PARITY and len(self.executor.open_positions) >= settings.MAX_OPEN_POSITIONS:
+            _rifiuto(f"max posizioni ({settings.MAX_OPEN_POSITIONS})")
             self._publish_decision_status(
                 {"outcome": "flat",
                  "reason": f"raggiunto il max di posizioni ({settings.MAX_OPEN_POSITIONS})"})
             return
         # short-circuit: conto gia' pienamente investito -> inutile valutare oltre.
+        # Non pubblica lo stato (lo fa il giro, a fine ciclo) ma nel log resta
+        # un rifiuto come gli altri: e' il «margine esaurito» che H5 vuole contare.
         if settings.BACKTEST_PARITY and self._used_margin() >= self.account_equity():
+            _rifiuto("margine esaurito (conto pienamente investito)")
             return
 
         asset = self.selected.get(decision.asset)
         if not asset:
+            _rifiuto("snapshot asset mancante")
             self._publish_decision_status({"outcome": "flat", "reason": "snapshot asset mancante"})
             return
 
@@ -949,6 +968,7 @@ class TradingBot:
             from bot.ai.shadow import veto_reason
             _v = veto_reason(self._last_shadow, f"{decision.asset}|{decision.strategy}")
             if _v:
+                _rifiuto(f"veto AI: {str(_v)[:80]}")
                 self._publish_decision_status(
                     {"outcome": "flat", "reason": f"veto AI su {decision.asset}: {_v}"})
                 return
@@ -967,6 +987,7 @@ class TradingBot:
                     _snap, self._recent_stops().get(decision.asset, 0),
                     validata=decision.asset in self.adaptation.validated_coins())
                 if _excl:
+                    _rifiuto(f"esclusione strutturale: {'; '.join(_excl)}")
                     self._publish_decision_status(
                         {"outcome": "flat",
                          "reason": f"{decision.asset} escluso: {'; '.join(_excl)}"})
@@ -977,6 +998,7 @@ class TradingBot:
         # all'audit del 04/08 (prima era codice morto).
         corr_reason = self._correlation_blocks(decision.asset)
         if corr_reason:
+            _rifiuto(f"correlazione: {corr_reason}")
             self._publish_decision_status({"outcome": "flat", "reason": corr_reason})
             return
 
@@ -1009,6 +1031,7 @@ class TradingBot:
                                     risk_mult=rmult, lev_mult=lmult, alloc_note=alloc_note)
         if not params.approved:
             print(f"[main] trade bloccato dal gate: {params.reject_reason}")
+            _rifiuto(f"risk gate: {params.reject_reason}")
             self._publish_decision_status(
                 {"outcome": "flat", "reason": f"bloccato dal risk gate: {params.reject_reason}"})
             return
@@ -1021,6 +1044,7 @@ class TradingBot:
         dir_reason = self._directional_risk_blocks(decision.direction, trade_risk)
         if dir_reason:
             print(f"[main] trade bloccato: {dir_reason}")
+            _rifiuto(dir_reason)
             self._publish_decision_status({"outcome": "flat", "reason": dir_reason})
             return
 
@@ -1031,6 +1055,8 @@ class TradingBot:
         used = self._used_margin()
         eq = self.account_equity()
         if used + new_margin > eq:
+            _rifiuto(f"margine insufficiente (usato {used:.0f} + nuovo {new_margin:.0f} "
+                     f"> equity {eq:.0f})")
             self._publish_decision_status(
                 {"outcome": "flat",
                  "reason": (f"margine insufficiente (Binance rifiuterebbe): usato {used:.0f} + "

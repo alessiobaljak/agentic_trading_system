@@ -273,11 +273,50 @@ def main() -> int:
     from bot.config import settings as _cfg
     serie = {k: v for k, v in serie_perdite(trades).items() if v >= 2}
     if serie:
-        print(f"\nSERIE DI PERDITE in corso per strategia (freno x"
-              f"{_cfg.STREAK_BRAKE_FACTOR:g} da {_cfg.STREAK_BRAKE_LOSSES} di fila):")
+        # L'ETICHETTA DICE IL VERO (25 set 2026): il freno di serie e' SPENTO per
+        # default dal 24 set (settings.STREAK_BRAKE_ENABLED, backlog H4), ma questa
+        # riga continuava a scrivere «FRENO attivo» come se dimezzasse la size.
+        # Ora si legge lo stato dell'interruttore, non la soglia.
+        if _cfg.STREAK_BRAKE_ENABLED:
+            print(f"\nSERIE DI PERDITE in corso per strategia (freno x"
+                  f"{_cfg.STREAK_BRAKE_FACTOR:g} da {_cfg.STREAK_BRAKE_LOSSES} di fila):")
+        else:
+            print(f"\nSERIE DI PERDITE in corso per strategia (freno spento: "
+                  f"STREAK_BRAKE_ENABLED=false, solo misura; soglia "
+                  f"{_cfg.STREAK_BRAKE_LOSSES} di fila):")
         for k, v in sorted(serie.items(), key=lambda kv: (-kv[1], kv[0]))[:10]:
-            freno = "  <- FRENO attivo" if v >= _cfg.STREAK_BRAKE_LOSSES else ""
+            if v >= _cfg.STREAK_BRAKE_LOSSES:
+                freno = ("  <- FRENO attivo" if _cfg.STREAK_BRAKE_ENABLED
+                         else "  (freno spento)")
+            else:
+                freno = ""
             print(f"  {k:<14} {v} perdite di fila{freno}")
+
+    # ---- I RIFIUTI D'INGRESSO ------------------------------------------------
+    # (25 set 2026, backlog H5) Il bot scarta segnali PRIMA di aprire: cooldown
+    # per coin, tetto per coin al giorno, margine, risk gate (stop troppo largo),
+    # rischio direzionale, peso sotto soglia, veto di regime. Non esiste un
+    # contatore persistente: RTDB /decision_status tiene solo l'ULTIMO esito
+    # (sovrascritto a ogni ciclo) e qui si mostra per quello che e'. Il conteggio
+    # vero sta nel log del bot, dove ogni scarto lascia una riga «[rifiuto]».
+    print("\nRIFIUTI D'INGRESSO")
+    stato = None
+    try:
+        stato = fb.get_rtdb("/decision_status")
+    except Exception as exc:  # noqa: BLE001
+        print(f"  /decision_status non leggibile: {exc}")
+    if isinstance(stato, dict) and stato:
+        quando = stato.get("ts")
+        try:
+            quando = datetime.fromtimestamp(float(quando), timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        except (TypeError, ValueError):
+            quando = "?"
+        print(f"  ultimo esito (RTDB /decision_status, solo l'ultimo, {quando}): "
+              f"{stato.get('outcome', '?')} — {stato.get('reason', '?')}")
+    else:
+        print("  nessun /decision_status leggibile da qui")
+    print("  nessun contatore persistente: i motivi dei rifiuti sono nel log del bot, "
+          "righe [rifiuto] (ops: `log-bot`)")
 
     # Le ipotesi per direzione (solo_long/solo_short) non hanno bisogno del
     # referto: bastano pnl e direzione, quindi si stampano comunque.
