@@ -1710,3 +1710,27 @@ slittano. Correzione: la regola delle 20 ore fa partire il completo solo nella
 finestra notturna (prima delle 08:00 UTC), con una rete a 30 ore; di giorno si
 resta sugli urgenti. Il tempo del completo con intorno a 40 si legge a fine
 giro.
+
+### 26 settembre, 15:15: il primo giro completo è finito — e dice una cosa scomoda
+
+Ops 0282-0284. Giro completo 09:06-12:55 UTC, **3h48**, modalità completa:
+134.994 valutazioni su 239 coin, 358 coppie passate. Intorno a 40: 40 madri
+riprovate, 5 figlie passate, 0 promosse (1 senza margine sulla madre, 4 senza
+le conferme retroattive). Varianti dai referti: 2 create, 2 bocciate. Passata a
+1 ora: 460 valutazioni, 1 passata (ADAUSDT, sempre lei). Esplorative: 34
+attive, 31 scartate. Nessun errore, memoria a 8 GB su 15. Il tempo non è
+l'intorno (320 valutazioni su 135.000): è la rivalutazione di tutte le spec, e
+da stanotte gira solo nella finestra notturna.
+
+**La cosa scomoda.** Il keep per coppia resta scritto su 15 validate e «non
+ancora rivalutate» restano 167: il merge scrive i parametri d'uscita a ogni
+coppia che PASSA, quindi 167 validate su 182 **non hanno passato il gate oggi**
+sui dati aggiornati. Il fallimento si registra solo alla chiusura della finestra
+(7 giorni) e la purga scatta dopo due finestre: fino ad allora il bot le opera
+come validate. È il gate che dice, sui suoi numeri, quello che il paper dice col
+PF 0,61: queste strategie in questo mercato non reggono. Proposta al
+proprietario (cambia il gate, serve il sì): una validata che fallisce il giro
+completo passa in «sospesa» (nessuna nuova apertura, posizioni aperte gestite
+fino alla fine) finché non ripassa; il paper aprirebbe solo sulle 15 che
+passano più le esplorative. Metro: PF vissuto delle sospese contro delle
+attive nei 7 giorni successivi.
