@@ -1,0 +1,90 @@
+# 0277-giro-completo-log-gate-2.req
+
+_eseguito: 2026-09-26 11:34 UTC_
+
+**richiesta:** `log-gate`
+**eseguito:** `journalctl -u trading-optimizer.service -n 80 --no-pager`
+**esito:** codice 0 in 0.1s
+
+```
+Sep 26 10:38:44 Trading-Agent python[1713748]: [backtest] dati da cache: 97209 candele (ACEUSDT 15m)
+Sep 26 10:38:49 Trading-Agent python[1713706]: [backtest] dati da cache: 96335 candele (MOVRUSDT 15m)
+Sep 26 10:40:42 Trading-Agent python[1713769]: [backtest] dati da cache: 165985 candele (ATOMUSDT 15m)
+Sep 26 10:41:55 Trading-Agent python[1713685]: [backtest] dati da cache: 165985 candele (ZENUSDT 15m)
+Sep 26 10:42:16 Trading-Agent python[1713727]: [backtest] dati da cache: 84329 candele (REZUSDT 15m)
+Sep 26 10:43:39 Trading-Agent python[1713664]: [backtest] dati da cache: 63975 candele (MORPHOUSDT 15m)
+Sep 26 10:44:33 Trading-Agent python[1713706]: [backtest] dati da cache: 24925 candele (ZAMAUSDT 15m)
+Sep 26 10:44:34 Trading-Agent python[1713706]: [backtest] dati da cache: 33551 candele (METUSDT 15m)
+Sep 26 10:44:35 Trading-Agent python[1713706]: [backtest] dati da cache: 95081 candele (XAIUSDT 15m)
+Sep 26 10:44:42 Trading-Agent python[1713748]: [backtest] dati da cache: 61845 candele (KMNOUSDT 15m)
+Sep 26 10:47:32 Trading-Agent python[1713727]: [backtest] dati da cache: 165985 candele (ALGOUSDT 15m)
+Sep 26 10:47:57 Trading-Agent python[1713664]: [backtest] dati da cache: 165985 candele (GALAUSDT 15m)
+Sep 26 10:48:34 Trading-Agent python[1713748]: [backtest] dati da cache: 53133 candele (PLUMEUSDT 15m)
+Sep 26 10:50:13 Trading-Agent python[1713706]: [backtest] dati da cache: 38271 candele (WLFIUSDT 15m)
+Sep 26 10:50:41 Trading-Agent python[1713769]: [backtest] dati da cache: 165889 candele (ARUSDT 15m)
+Sep 26 10:51:33 Trading-Agent python[1713685]: [backtest] dati da cache: 36550 candele (FLOCKUSDT 15m)
+Sep 26 10:51:38 Trading-Agent python[1713748]: [backtest] dati da cache: 102950 candele (WAXPUSDT 15m)
+Sep 26 10:52:36 Trading-Agent python[1713706]: [backtest] dati da cache: 58715 candele (VTHOUSDT 15m)
+Sep 26 10:52:50 Trading-Agent python[1713685]: [discover] FLOCKUSDT|gen_f68b811d (variante di gen_c61d9322, intorno:stoch_extreme.low=10): conferme retroattive 0/2
+Sep 26 10:54:24 Trading-Agent python[1713685]: [backtest] dati da cache: 73967 candele (SYNUSDT 15m)
+Sep 26 10:55:50 Trading-Agent python[1713706]: [backtest] dati da cache: 125895 candele (STXUSDT 15m)
+Sep 26 10:56:30 Trading-Agent python[1713727]: [backtest] dati da cache: 91045 candele (PIXELUSDT 15m)
+Sep 26 10:56:55 Trading-Agent python[1713748]: [backtest] dati da cache: 91037 candele (STRKUSDT 15m)
+Sep 26 10:57:00 Trading-Agent python[1713664]: [backtest] dati da cache: 43931 candele (HUSDT 15m)
+Sep 26 10:58:20 Trading-Agent python[1713685]: [backtest] dati da cache: 46797 candele (HUMAUSDT 15m)
+Sep 26 11:00:02 Trading-Agent python[1713769]: [backtest] dati da cache: 37219 candele (QUSDT 15m)
+Sep 26 11:00:14 Trading-Agent python[1713664]: [backtest] dati da cache: 62528 candele (VELODROMEUSDT 15m)
+Sep 26 11:01:22 Trading-Agent python[1713727]: [backtest] dati da cache: 33668 candele (MONUSDT 15m)
+Sep 26 11:01:26 Trading-Agent python[1713727]: [backtest] dati da cache: 165985 candele (COTIUSDT 15m)
+Sep 26 11:02:01 Trading-Agent python[1713685]: [discover] HUMAUSDT|gen_9be3dd94 (variante di gen_771790b1, intorno:rsi_extreme.high=70): conferme retroattive 0/2
+Sep 26 11:02:42 Trading-Agent python[1713748]: [backtest] dati da cache: 8225 candele (GRAMUSDT 15m)
+Sep 26 11:02:43 Trading-Agent python[1713748]: [backtest] dati da cache: 60528 candele (BIOUSDT 15m)
+Sep 26 11:02:49 Trading-Agent python[1713685]: [backtest] dati da cache: 37108 candele (TAKEUSDT 15m)
+Sep 26 11:03:00 Trading-Agent python[1713769]: [discover] QUSDT|gen_f7a2d160 (variante di gen_bf2be656, intorno:stoch_extreme.high=75): conferme retroattive 2/2 -> VALIDATA oggi
+Sep 26 11:03:29 Trading-Agent python[1713664]: [backtest] dati da cache: 27606 candele (USUSDT 15m)
+Sep 26 11:03:29 Trading-Agent python[1713664]: [backtest] dati da cache: 34433 candele (NOMUSDT 15m)
+Sep 26 11:03:31 Trading-Agent python[1713664]: [backtest] dati da cache: 36613 candele (AVNTUSDT 15m)
+Sep 26 11:03:48 Trading-Agent python[1713706]: [backtest] dati da cache: 55917 candele (KAITOUSDT 15m)
+Sep 26 11:03:55 Trading-Agent python[1713769]: [discover] QUSDT|gen_3b036cad (variante di gen_bf2be656, intorno:stoch_extreme.high=85): conferme retroattive 2/2 -> VALIDATA oggi
+Sep 26 11:04:53 Trading-Agent python[1713769]: [discover] QUSDT|gen_f368e09e (variante di gen_bf2be656, intorno:volatility_regime.vol_pct=0.02): conferme retroattive 2/2 -> VALIDATA oggi
+Sep 26 11:04:58 Trading-Agent python[1713685]: [backtest] dati da cache: 122449 candele (JOEUSDT 15m)
+Sep 26 11:05:17 Trading-Agent python[1713769]: [backtest] dati da cache: 165985 candele (VETUSDT 15m)
+Sep 26 11:05:41 Trading-Agent python[1713664]: [backtest] dati da cache: 165985 candele (SANDUSDT 15m)
+Sep 26 11:06:15 Trading-Agent python[1713748]: [backtest] dati da cache: 88655 candele (BOMEUSDT 15m)
+Sep 26 11:07:01 Trading-Agent python[1713706]: [backtest] dati da cache: 101135 candele (ORDIUSDT 15m)
+Sep 26 11:11:14 Trading-Agent python[1713727]: [backtest] dati da cache: 36549 candele (SKYUSDT 15m)
+Sep 26 11:11:42 Trading-Agent python[1713748]: [backtest] dati da cache: 100935 candele (STEEMUSDT 15m)
+Sep 26 11:12:01 Trading-Agent python[1713685]: [backtest] dati da cache: 165985 candele (ENSUSDT 15m)
+Sep 26 11:12:55 Trading-Agent python[1713706]: [backtest] dati da cache: 32966 candele (RIVERUSDT 15m)
+Sep 26 11:12:57 Trading-Agent python[1713706]: [backtest] dati da cache: 165985 candele (IOSTUSDT 15m)
+Sep 26 11:13:27 Trading-Agent python[1713727]: [backtest] dati da cache: 32967 candele (LABUSDT 15m)
+Sep 26 11:13:28 Trading-Agent python[1713727]: [backtest] dati da cache: 30963 candele (UAIUSDT 15m)
+Sep 26 11:13:29 Trading-Agent python[1713727]: [backtest] dati da cache: 53245 candele (TUTUSDT 15m)
+Sep 26 11:15:02 Trading-Agent python[1713664]: [backtest] dati da cache: 62830 candele (SPXUSDT 15m)
+Sep 26 11:15:07 Trading-Agent python[1713769]: [backtest] dati da cache: 165985 candele (GRTUSDT 15m)
+Sep 26 11:16:51 Trading-Agent python[1713727]: [backtest] dati da binance: 86429 candele
+Sep 26 11:17:26 Trading-Agent python[1713748]: [backtest] dati da cache: 49983 candele (DEEPUSDT 15m)
+Sep 26 11:19:11 Trading-Agent python[1713664]: [backtest] dati da cache: 165985 candele (CHZUSDT 15m)
+Sep 26 11:20:32 Trading-Agent python[1713748]: [backtest] dati da cache: 165889 candele (RUNEUSDT 15m)
+Sep 26 11:21:25 Trading-Agent python[1713685]: [backtest] dati da cache: 73967 candele (GUSDT 15m)
+Sep 26 11:21:55 Trading-Agent python[1713727]: [backtest] dati da cache: 30473 candele (ALLOUSDT 15m)
+Sep 26 11:21:57 Trading-Agent python[1713727]: [backtest] dati da cache: 33754 candele (GIGGLEUSDT 15m)
+Sep 26 11:21:57 Trading-Agent python[1713727]: [backtest] dati da cache: 30480 candele (BEATUSDT 15m)
+Sep 26 11:21:59 Trading-Agent python[1713727]: [backtest] dati da cache: 92703 candele (ZETAUSDT 15m)
+Sep 26 11:22:54 Trading-Agent python[1713706]: [backtest] dati da cache: 79733 candele (ZKUSDT 15m)
+Sep 26 11:25:10 Trading-Agent python[1713769]: [backtest] dati da binance: 142129 candele
+Sep 26 11:25:57 Trading-Agent python[1713685]: [backtest] dati da cache: 126087 candele (CFXUSDT 15m)
+Sep 26 11:27:34 Trading-Agent python[1713727]: [backtest] dati da cache: 99117 candele (ONGUSDT 15m)
+Sep 26 11:28:05 Trading-Agent python[1713706]: [backtest] dati da cache: 47679 candele (CVCUSDT 15m)
+Sep 26 11:29:01 Trading-Agent python[1713664]: [backtest] dati da cache: 50918 candele (STOUSDT 15m)
+Sep 26 11:30:15 Trading-Agent python[1713748]: [backtest] dati da cache: 67161 candele (MOODENGUSDT 15m)
+Sep 26 11:30:42 Trading-Agent python[1713706]: [backtest] dati da cache: 165889 candele (SUSHIUSDT 15m)
+Sep 26 11:31:49 Trading-Agent python[1713664]: [backtest] dati da cache: 9545 candele (REUSDT 15m)
+Sep 26 11:31:49 Trading-Agent python[1713664]: [backtest] dati da cache: 45757 candele (LAUSDT 15m)
+Sep 26 11:32:44 Trading-Agent python[1713727]: [backtest] dati da cache: 127253 candele (MINAUSDT 15m)
+Sep 26 11:33:04 Trading-Agent python[1713685]: [backtest] dati da cache: 30286 candele (SENTUSDT 15m)
+Sep 26 11:33:06 Trading-Agent python[1713685]: [backtest] dati da cache: 155507 candele (JASMYUSDT 15m)
+Sep 26 11:33:19 Trading-Agent python[1713769]: [backtest] dati da cache: 50423 candele (BANKUSDT 15m)
+Sep 26 11:33:57 Trading-Agent python[1713748]: [backtest] dati da cache: 165889 candele (ALICEUSDT 15m)
+Sep 26 11:34:23 Trading-Agent python[1713664]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 127917) (TUSDT 15m)
+```
