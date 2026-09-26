@@ -152,11 +152,39 @@ REEVAL_DAILY = os.getenv("DISCOVERY_REEVAL_DAILY", "true").lower() == "true"
 REEVAL_HOUR_MAX = int(os.getenv("DISCOVERY_REEVAL_HOUR_MAX", "3"))   # UTC: 00:xx-02:59
 
 
-def giro_giornaliero(now: float) -> bool:
+#: dopo quante ore dall'ultimo giro COMPLETO il prossimo giro e' completo
+#: comunque, a qualunque ora parta. Il 26 set 2026 il controllo del mattino ha
+#: scoperto che il giro «completo» non girava da giorni: il timer e' a catena
+#: (3 ore dall'attivazione precedente) e la discovery partiva alle 03:30-03:48
+#: UTC, fuori dalla finestra 00-02:59 della regola sull'ora; intorno, varianti
+#: e rivalutazione di tutte le spec restavano fermi, e `gate` mostrava
+#: «intorno 0 madri» senza che nessuno capisse perche'. La regola sull'ora
+#: resta (e' gratis quando funziona); questa la copre quando il timer deriva.
+COMPLETA_OGNI_S = float(os.getenv("DISCOVERY_COMPLETA_OGNI_H", "20")) * 3600
+
+
+def giro_giornaliero(now: float, ultimo_completo_at: float | None = None) -> bool:
     """True nel primo giro dopo mezzanotte UTC (il timer parte alle 00:00 con un
-    ritardo casuale fino a 10 minuti e il giro dura ~2h)."""
+    ritardo casuale fino a 10 minuti e il giro dura ~2h), OPPURE se l'ultimo
+    giro completo e' di piu' di COMPLETA_OGNI_S fa (o non c'e' mai stato)."""
     from datetime import datetime, timezone
-    return datetime.fromtimestamp(now, timezone.utc).hour < REEVAL_HOUR_MAX
+    if datetime.fromtimestamp(now, timezone.utc).hour < REEVAL_HOUR_MAX:
+        return True
+    if ultimo_completo_at is None:
+        return True
+    return (now - float(ultimo_completo_at)) >= COMPLETA_OGNI_S
+
+
+def ultimo_giro_completo_at(fb) -> float | None:
+    """L'istante dell'ultimo giro completo finito, da `discovered_last_run`
+    (`completa_at`, scritto solo a fine di un giro completo). None se il
+    documento manca o non lo porta ancora: allora il giro e' completo."""
+    try:
+        doc = fb.get_doc("strategy_params", "discovered_last_run") or {}
+        v = doc.get("completa_at")
+        return float(v) if v else None
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def spec_urgenti(pairs: dict, now: float, margine_s: float = 3 * 3600) -> set:
@@ -2696,8 +2724,13 @@ def main() -> int:
     # (completa nel primo giro dopo mezzanotte UTC, o con --symbols), solo
     # anticipata, perche' il documento del gate la dichiara gia' in apertura.
     _ora = time.time()
-    _completa = (not REEVAL_DAILY) or giro_giornaliero(_ora) or bool(args.symbols)
+    _ultimo_completo = ultimo_giro_completo_at(fb)
+    _completa = ((not REEVAL_DAILY) or giro_giornaliero(_ora, _ultimo_completo)
+                 or bool(args.symbols))
     modalita = "completa" if _completa else "solo urgenti"
+    if _completa and _ultimo_completo is not None and not bool(args.symbols):
+        print(f"[discover] giro COMPLETO: l'ultimo era di "
+              f"{(_ora - _ultimo_completo) / 3600:.1f} h fa")
     tf_bot = settings.ORCHESTRATOR_TIMEFRAME
     # IL DOCUMENTO DEL GATE, `dashboard/gate` (25 set 2026, docs/controllo_schema.md
     # §2): all'apertura si fonde il SOLO `meta` con `stato: in_corso`, cosi' il
@@ -3077,6 +3110,10 @@ def main() -> int:
             "coin_valutate": len(valutate),
             "updated_at": time.time(),
             "started_at": t0,
+            # l'istante dell'ultimo giro COMPLETO: se questo non lo e', si
+            # conserva quello del documento precedente (regola COMPLETA_OGNI_S)
+            "completa_at": (time.time() if (_completa and not args.symbols)
+                            else _ultimo_completo),
             "duration_s": round(durata),
             "n_eval": n_eval,
             "n_passed": len(passed_keys),

@@ -1606,3 +1606,44 @@ Ora ogni trade chiuso porta anche `orig_stop`, `scale_r_mults`,
 variabili d'ingresso del selettore) e `regola` (la regola della strategia in
 chiaro). Sopravvivono al riavvio con la posizione. Nessun effetto sulle
 decisioni. Suite 1485 test verdi.
+
+### Controllo del 26 settembre (08:20 ora italiana, ops 0258-0270)
+
+**Il guasto trovato, prima di tutto.** Il giro «completo» del gate (tutte le
+spec, intorno, varianti) **non girava da giorni**: la regola lo faceva partire
+solo se la discovery iniziava prima delle 03:00 UTC, ma il timer è a catena (3
+ore dall'attivazione precedente) e la discovery partiva alle 03:30-03:48. Per
+questo `gate` mostrava «intorno 0 madri» e le validate «non ancora rivalutate»
+erano 167 su 182 (ops 0261). Il «giro completo di 1h09» del 25 era un giro
+urgenti. Correzione: il giro è completo anche se l'ultimo completo è di più di 20
+ore fa (`completa_at` in `discovered_last_run`); vale dal prossimo giro, verso le
+11:00. Suite 1491 test verdi. Il tempo del primo completo con intorno a 40 lo si
+misura domani.
+
+**Numeri.** 84 trade in 11 giorni, 46% vinti, −63,73 USDT (−6,4%), equity
+936,27, DRY_RUN True, 2 posizioni (0,30% a rischio), max 8 insieme, costi
+stimati; giornate del paper: il 25 −13,90, il 26 −2,25 (ops 0258, 0259, 0267).
+Uscite: 45 stop (−165,54), 29 trailing (+48,10), 7 scale-out, 2 TP, 1 time exit.
+Direzione: long 30 trade −18,78; short 54 −44,95 (E1 aperta). Stop: 18 sbagliati
+dall'inizio, 26 andati a favore sotto il primo gradino (mfe mediana 0,65R), 1
+oltre (ops 0264). Controllo orario puntuale ogni ora nella notte (ops 0262);
+semafori sistema giallo (registro 2859/3000, 6 riavvii miei) e paper giallo
+(freno globale PF 0,61 vs 2,09; 115 validate su 182 senza promessa). Gate:
+182 validate su 62 coin, copertura 31%, 421 a 2/3, statistica t su 18 (8
+reggerebbero t ≥ 2, mediana 1,97); keep scelto su 15 coppie: 0,35 ×6, 0,5 ×1,
+0,65 ×2, **0,75 ×6** (il candidato del paper: 24 verdetti, 15 protetti, ha
+vinto 6 volte); scala dal vissuto 0,75/1,25/2 e scale per 4 strategie proposte
+(ops 0261, 0263). Esplorative: 43 attive, 9 scartate, 0 trade chiusi.
+Selettore in ombra: 12 trade, p vinti 0,70 vs persi 0,68 (ops 0258); verdetto
+NON BATTE, modello ripubblicato su 54.912 righe (ops 0266). Rifiuti nel log:
+18 «posizione già aperta», 17 cooldown, 3 confidenza sotto soglia, 0 per peso
+(ops 0268): i pesi non stanno spegnendo niente (I1 non è un problema oggi).
+AI: 20/20 proposte, ombra d'accordo 7/100 (ops 0260). Portafoglio: dopo 4
+perdite WR 61% su 18; diversification ratio 0,11 (ops 0267). Frequenza: 30
+trade il 25 (ops 0258).
+
+**Proposta del giorno: nessuna voce nuova.** L'azione del giorno è la
+correzione del giro completo, che rimette in moto intorno a 40, varianti e la
+rivalutazione di tutte le 548 spec: prima di proporre altro serve vederlo girare
+(tempo, madri/figlie, keep sulle 167 non rivalutate). H1 aspetta ancora numeri
+(18 misure); il selettore non batte; C2 il 28.
