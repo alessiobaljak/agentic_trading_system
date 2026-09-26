@@ -34,12 +34,13 @@ from bot.core.indicators import compute_indicator_frame
 from bot.strategies.generated import GeneratedStrategy
 from bot.ai.hypotheses import propose as ai_propose
 from bot.execution.exit_logic import (LOCK_KEEP_CANDIDATES, SCALE_LADDER_CANDIDATES,
-                                      ladder_from_mfe)
+                                      breakeven_after_tp1, ladder_from_mfe,
+                                      ladder_multiples, lock_keep)
 from bot.learning.metrics import KEEP_PAPER_MIN_VERDETTI, KEEP_PAPER_QUOTA, proposta_keep
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import (figlie_intorno, generate_specs, mutate,
                                       varianti_da_referto)
-from bot.core.registry import (aggiorna_meta_gate, breakeven_n, conta_keep,
+from bot.core.registry import (aggiorna_meta_gate, breakeven_n, conta_declassate, conta_keep,
                                coppie_operate, coppie_validate, distribuzione_pass,
                                leggi_doc_gate, pulisci_per_firestore, salute_registro,
                                scala_distribuzione,
@@ -305,6 +306,115 @@ def specs_da_rivalutare(existing: dict, reg: dict, cap: int,
         "n_specs_ipotesi_uscita": n_extra,
     }
     return scelte, diag
+
+
+# IL GIRO COMPLETO RIDOTTO (26 set 2026, backlog J10). Il primo giro completo
+# con tutte le spec (26 set, 09:06-12:55 UTC, ops 0282-0284) ha fatto 134.994
+# valutazioni in 3h48, 0,61 s l'una con 6 worker: ~120.000 erano le ~502 spec
+# NOTE rivalutate su TUTTE le ~240 coin, e quasi nessuna di quelle coppie
+# (spec, coin) ha mai passato il gate ne' lo passera' stanotte. Una spec nota
+# ha bisogno di essere rivista DOVE HA UNA COPPIA VIVA (pass_count >= 1: e' li'
+# che maturano le conferme e che si giudicano le validate e le declassate) e,
+# ogni tanto, sulle altre coin, per trovare una coppia nuova. Quindi nel giro
+# completo le spec note si valutano (a) sulle coin dove hanno una coppia viva e
+# (b) su una FETTA ROTANTE di 1/7 dell'universo (giorno UTC modulo 7 su un
+# ordine stabile delle coin), cosi' ogni coin viene rivista da ogni spec nota
+# entro una settimana. Le candidate NUOVE (ipotesi AI, varianti dai referti,
+# figlie dell'intorno, casuali, semi) restano su tutte le coin: la scoperta non
+# rallenta. I giri «solo urgenti», le passate mirate (--symbols) e gli shard
+# non cambiano. Atteso: 35-50 mila valutazioni, cioe' il completo sotto 1h30.
+# Il metro (docs/backlog.md, J10): durata del completo e coppie nuove a 1 pass a
+# settimana, prima e dopo. `DISCOVERY_RIDUZIONE=false` rimette tutto su tutto.
+RIDUZIONE_ENABLED = os.getenv("DISCOVERY_RIDUZIONE", "true").lower() == "true"
+#: in quante fette ruota l'universo: 7 = ogni coin rivista da ogni spec nota
+#: una volta a settimana (un giro completo a notte)
+RIDUZIONE_FETTE = int(os.getenv("DISCOVERY_RIDUZIONE_FETTE", "7"))
+
+
+def fetta_del_giorno(now: float, fette: int = RIDUZIONE_FETTE) -> int:
+    """La fetta di oggi, 0..fette-1: il giorno UTC contato dall'epoca, modulo
+    `fette`. Si usa il giorno dall'epoca e non quello dell'anno perche' a
+    capodanno il giorno dell'anno salta (365 -> 1) e una fetta verrebbe
+    ripetuta e un'altra saltata; contando i giorni di fila non succede. Il giro
+    completo parte di notte (prima delle 08:00 UTC), quindi la data e' quella
+    della notte stessa."""
+    return int(now // 86400) % max(1, int(fette))
+
+
+def coin_della_fetta(symbols, now: float, fette: int = RIDUZIONE_FETTE) -> set:
+    """Le coin della fetta rotante di oggi: ordine STABILE (alfabetico, non
+    quello del volume, che cambia ogni giorno) e indice modulo `fette`. Su
+    `fette` giorni di fila ogni coin dell'universo entra esattamente una volta."""
+    g = fetta_del_giorno(now, fette)
+    ordinate = sorted({str(s) for s in (symbols or ())})
+    return {s for i, s in enumerate(ordinate) if i % max(1, int(fette)) == g}
+
+
+def coin_proprie_delle_spec(pairs: dict) -> dict[str, set]:
+    """spec_id -> le coin dove la spec ha una coppia VIVA nel registro (generata,
+    pass_count >= 1). Le coppie congelate (coin fuori dall'universo da
+    FRESH_DAYS) restano dentro di proposito: se la loro coin e' di nuovo in
+    universo, il merge le segna «viste» e le giudica (finestra chiusa senza
+    passare = un fallimento) — giudicarle senza averle valutate sarebbe un
+    verdetto inventato. Se la coin non e' in universo non si valutano comunque."""
+    out: dict[str, set] = {}
+    for k, r in (pairs or {}).items():
+        if not isinstance(r, dict) or not r.get("generated") or "|" not in k:
+            continue
+        if int(r.get("pass_count", 0) or 0) < 1:
+            continue
+        sym, sid = k.split("|", 1)
+        out.setdefault(sid, set()).add(r.get("symbol") or sym)
+    return out
+
+
+def riduci_spec_note(specs: list[dict], existing: dict, pairs: dict, symbols,
+                     specs_per_symbol: dict | None, now: float,
+                     fette: int = RIDUZIONE_FETTE) -> tuple[list[dict], dict, dict]:
+    """Divide la lista comune delle candidate in NUOVE (restano comuni: ogni coin
+    le valuta) e NOTE (id in `existing`), e mette le note dentro `specs_per_symbol`
+    solo per le coin dove vanno valutate: quelle con una coppia viva della spec
+    e quelle della fetta di oggi. E' lo stesso canale delle figlie dell'intorno
+    (`_disc_one` legge `specs + specs_per_symbol[sym]`), quindi i worker non
+    cambiano. Ritorna (comuni, specs_per_symbol nuovo, riduzione) dove
+    `riduzione` sono i numeri per il log e per `giro.riduzione` del documento
+    del gate: quante spec note, su quante coin proprie, quale fetta, e quante
+    valutazioni ci si aspetta (nuove x coin + le liste per coin, intorno
+    compreso; le coin saltate per storia corta o delisting le abbassano)."""
+    existing = existing or {}
+    note = [sp for sp in specs if sp.get("id") in existing]
+    nuove = [sp for sp in specs if sp.get("id") not in existing]
+    symbols = list(symbols or [])
+    proprie = coin_proprie_delle_spec(pairs)
+    fetta = coin_della_fetta(symbols, now, fette)
+    per_coin: dict[str, list] = {s: list(f) for s, f in (specs_per_symbol or {}).items()}
+    coin_proprie: set = set()
+    coin_note: set = set()
+    for sym in symbols:
+        in_fetta = sym in fetta
+        scelte = [sp for sp in note if in_fetta or sym in proprie.get(sp["id"], ())]
+        if not scelte:
+            continue
+        coin_note.add(sym)
+        if any(sym in proprie.get(sp["id"], ()) for sp in scelte):
+            coin_proprie.add(sym)
+        # le note PRIMA delle figlie dell'intorno gia' in lista per la coin
+        per_coin[sym] = scelte + per_coin.get(sym, [])
+    stimate = len(nuove) * len(symbols) + sum(len(per_coin.get(s, [])) for s in symbols)
+    riduzione = {"spec_note": len(note), "coin_proprie": len(coin_proprie),
+                 "fetta": f"{fetta_del_giorno(now, fette) + 1}/{max(1, int(fette))}",
+                 "valutazioni_stimate": int(stimate),
+                 # per la riga di log: su quante coin le note vengono valutate
+                 "_coin_note": len(coin_note), "_nuove": len(nuove)}
+    return nuove, per_coin, riduzione
+
+
+def riga_riduzione(r: dict) -> str:
+    """La riga «[discover] completa: ...» di apertura del giro ridotto."""
+    return (f"[discover] completa: {int(r.get('spec_note') or 0)} spec note su "
+            f"{int(r.get('_coin_note') or 0)} coin (proprie + rotazione {r.get('fetta')}) + "
+            f"{int(r.get('_nuove') or 0)} candidate nuove su tutte · "
+            f"~{int(r.get('valutazioni_stimate') or 0)} valutazioni stimate")
 
 
 # quanti semi per giro. Erano 10 su ~100 candidate: la ricerca guidata (mutare i
@@ -1287,6 +1397,74 @@ INTORNO_CAP = int(os.getenv("DISCOVERY_INTORNO_CAP", "40"))
 INTORNO_OGNI_GIORNI = float(os.getenv("DISCOVERY_INTORNO_OGNI_GIORNI", "7"))
 INTORNO_RIPOSO_GIORNI = float(os.getenv("DISCOVERY_INTORNO_RIPOSO_GIORNI", "30"))
 INTORNO_MARGINE = float(os.getenv("DISCOVERY_INTORNO_MARGINE", "0.10"))
+# ISTERESI DELLA CONFIGURAZIONE D'USCITA (26 set 2026). Una validata si giudica
+# sulla scala/BE/keep che il bot OPERA (config_iniziale in `evaluate_spec`), e la
+# ricerca del passo 2 la sostituisce SOLO se un candidato la batte sul metro della
+# scelta (`_metrica_scelta`) di almeno questo margine — stessa regola e stesso
+# numero dell'intorno (`_batte_con_margine`). Senza margine ogni giro poteva
+# cambiare la configurazione operata per un pelo, cioe' il paper girava su una
+# configurazione e il gate ne prometteva un'altra. Dichiarato PRIMA di misurare,
+# mai tarato sui trade del paper.
+CONFIG_MARGINE = float(os.getenv("DISCOVERY_CONFIG_MARGINE", "0.10"))
+
+
+def _batte_con_margine(nuovo: float, vecchio: float, margine: float) -> bool:
+    """`nuovo` batte `vecchio` di almeno `margine` (relativo): se il vecchio non
+    e' positivo basta che il nuovo lo sia. E' la regola dell'intorno figlia/madre
+    (`_batte_per_finestra`) e, dal 26 set 2026, dell'isteresi della
+    configurazione d'uscita (`CONFIG_MARGINE`): una sola, in un posto solo."""
+    nuovo, vecchio = float(nuovo or 0), float(vecchio or 0)
+    if vecchio <= 0:
+        return nuovo > 0
+    return nuovo >= vecchio * (1.0 + float(margine))
+
+
+def config_globale_uscita() -> dict:
+    """La scala/BE/keep con cui il passo 1 del gate giudica le spec NON validate."""
+    return {"scale_r_mults": [float(x) for x in settings.SCALE_OUT_R_MULTIPLES],
+            "sl_to_breakeven": bool(settings.SCALE_OUT_SL_TO_BREAKEVEN),
+            "profit_lock_keep": float(settings.PROFIT_LOCK_KEEP)}
+
+
+def config_operata(last_params) -> dict:
+    """La scala/BE/keep che il bot OPERA per una coppia, letta da `last_params`
+    con le STESSE funzioni del bot e del motore (`bot/execution/exit_logic.py`:
+    `ladder_multiples`, `breakeven_after_tp1`, `lock_keep`): un campo assente o
+    storto vale il default globale, esattamente come in `open_position` e in
+    `run_strategy`. Cosi' il gate giudica cio' che gira davvero, non una lettura
+    parallela del registro (26 set 2026)."""
+    lp = last_params if isinstance(last_params, dict) else {}
+    scala = ladder_multiples(lp)
+    keep = lock_keep(lp)
+    return {"scale_r_mults": [float(x) for x in (scala or settings.SCALE_OUT_R_MULTIPLES)],
+            "sl_to_breakeven": bool(breakeven_after_tp1(lp)),
+            "profit_lock_keep": float(settings.PROFIT_LOCK_KEEP if keep is None else keep)}
+
+
+def stessa_config(a: dict | None, b: dict | None) -> bool:
+    """Due configurazioni d'uscita sono la stessa (scala, BE e keep uguali)."""
+    a, b = a or {}, b or {}
+    try:
+        return ([float(x) for x in (a.get("scale_r_mults") or [])]
+                == [float(x) for x in (b.get("scale_r_mults") or [])]
+                and bool(a.get("sl_to_breakeven")) == bool(b.get("sl_to_breakeven"))
+                and abs(float(a.get("profit_lock_keep") or 0)
+                        - float(b.get("profit_lock_keep") or 0)) < 1e-9)
+    except (TypeError, ValueError):
+        return False
+
+
+def config_validate_dal_registro(pairs: dict, validated) -> dict[str, dict]:
+    """chiave -> configurazione operata, per ogni coppia validata: e' cio' che il
+    main passa ai worker (`config_validate`) perche' `_disc_one` giudichi ogni
+    validata sulla SUA scala/BE/keep. Una validata senza `last_params` (validata
+    prima dello scale-out) opera la globale, e la globale e' quello che riceve."""
+    out: dict[str, dict] = {}
+    for k in validated or []:
+        rec = (pairs or {}).get(k)
+        if isinstance(rec, dict):
+            out[k] = config_operata(rec.get("last_params"))
+    return out
 
 
 def coppie_per_intorno(pairs: dict, existing: dict, drift_doc: dict | None,
@@ -1321,7 +1499,7 @@ def coppie_per_intorno(pairs: dict, existing: dict, drift_doc: dict | None,
 
 def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=None,
                gia_validate=None, bocciate_ok: bool = False, keep_paper=None,
-               scale_strategie=None) -> None:
+               scale_strategie=None, config_validate=None) -> None:
     opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
     # IL MERCATO NEL GATE. `scripts/optimize.py` carica BTC come contesto
     # cross-asset da sempre; la discovery — che valida TUTTE le spec che il bot
@@ -1345,15 +1523,48 @@ def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=N
               # default, cosi' gli altri argomenti posizionali non si spostano
               keep_paper=keep_paper,
               # le scale per strategia dal vissuto (25 set 2026, backlog I4):
-              # id -> scala; ultima in coda, stessa regola
-              scale_strategie=dict(scale_strategie or {}))
+              # id -> scala; in coda, stessa regola
+              scale_strategie=dict(scale_strategie or {}),
+              # LA CONFIGURAZIONE OPERATA DELLE VALIDATE (26 set 2026): chiave ->
+              # {scale_r_mults, sl_to_breakeven, profit_lock_keep} letta dal
+              # registro con le funzioni del bot (`config_validate_dal_registro`).
+              # Ultima in coda, con default: chi chiama `_disc_init` col vecchio
+              # numero di argomenti (l'autopsia) giudica come prima.
+              config_validate=dict(config_validate or {}))
 
 
-def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
+def _bocciata_leggera(sym: str, spec: dict, r: dict) -> dict:
+    """La voce LEGGERA di una validata che oggi NON ha passato il gate (26 set
+    2026): il perche' (criterio binding e criteri falliti), i numeri del verdetto
+    e cio' che serve al confronto appaiato figlia/madre (`_batte_per_finestra`
+    legge `oos_pnl_pct`, `oos_max_dd`, `window_pnls`). Niente spec ne' righe del
+    selettore: deve pesare quanto un contatore, sono centinaia a giro."""
+    hold = r.get("holdout") if isinstance(r.get("holdout"), dict) else {}
+    return {"symbol": sym, "strategy": spec["id"],
+            "fail_binding": r.get("fail_binding"),
+            "fail_criteria": list(r.get("fail_criteria") or []),
+            "pf": r.get("pf"), "trades": r.get("trades"),
+            "holdout_ok": (bool(hold.get("ok")) if hold else None),
+            "data_end": r.get("data_end", 0),
+            "oos_pnl_pct": r.get("pnl"), "oos_max_dd": r.get("max_dd"),
+            "window_pnls": list(r.get("window_pnls") or [])}
+
+
+def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, dict]:
     """Valuta TUTTE le spec su un simbolo (nei worker).
     Ritorna (sym, passed_entries, passed_keys, specs_passed, n_eval, summary, diag,
-    rows). `rows` sono le righe del dataset del selettore: i trade OOS delle sole
-    coppie passate, con le condizioni all'ingresso (passo 0, 24 set 2026).
+    rows, bocciate_validate). `rows` sono le righe del dataset del selettore: i
+    trade OOS delle sole coppie passate, con le condizioni all'ingresso (passo 0,
+    24 set 2026). `bocciate_validate` (26 set 2026) sono le VALIDATE che oggi non
+    hanno passato, come voci leggere (`_bocciata_leggera`): prima una validata
+    bocciata non lasciava traccia in `out`, quindi il merge non poteva ne'
+    contarla ne' confrontarla con una figlia dell'intorno.
+
+    Dal 26 set 2026 una coppia GIA' VALIDATA (`_W["gia_validate"]`) si giudica
+    sulla configurazione d'uscita che il bot OPERA (`_W["config_validate"]`,
+    passata come `config_iniziale` a `evaluate_spec`): il giro completo del 26 set
+    ne bocciava 167 su 182 giudicandole al passo 1 sulla scala/BE/keep GLOBALI,
+    cioe' su una configurazione che nessuna di loro eseguiva.
 
     `diag` e' l'autopsia LOCALE: conteggi dei criteri che hanno fermato le spec e
     i pochi quasi-passaggi. Si aggregano numeri, non le migliaia di valutazioni
@@ -1362,7 +1573,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
     args, end, specs = _W["args"], _W["end"], _W["specs"]
     candles = load_candles(sym, args.interval, args.start, end, prefer=args.source)
     if len(candles) < _W["min_history"]:
-        return (sym, {}, [], {}, 0, [], {}, [])
+        return (sym, {}, [], {}, 0, [], {}, [], {})
     # coin DELISTATA: storia a sufficienza ma serie ferma a mesi fa. Vedi la nota
     # gemella in scripts/optimize.py: validare su un mercato che non esiste piu'.
     from backtesting.quality import looks_delisted
@@ -1370,7 +1581,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
     if looks_delisted(candles, end, _tfh(args.interval)):
         print(f"[discover] {sym}: serie ferma al "
               f"{candles[-1].open_time:%Y-%m-%d} -> coin delistata, saltata")
-        return (sym, {}, [], {}, 0, [], {}, [])
+        return (sym, {}, [], {}, 0, [], {}, [], {})
     frame = compute_indicator_frame(candles)
     entries: dict = {}
     passed_keys: list = []
@@ -1380,9 +1591,12 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
     involved: dict = {}
     near: list = []
     rows: list = []
+    bocciate: dict = {}
     stats_righe = {"n": 0, "per_famiglia": {}}
     bocciate_scritte = 0
     n_eval = 0
+    gia_validate = _W.get("gia_validate") or set()
+    config_validate = _W.get("config_validate") or {}
     # le figlie dell'intorno si valutano SOLO sulla coin della madre; le
     # varianti TRONCATE (dai referti, con `ipotesi_da`) per ULTIME e con la cache
     # del motore svuotata prima e dopo: valutarle in mezzo alle altre faceva
@@ -1420,6 +1634,10 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
         # abbastanza trade con mfe; per le altre `None` e i candidati sono quelli
         # di prima
         scala_strategia = (_W.get("scale_strategie") or {}).get(spec.get("id"))
+        key = f"{sym}|{spec['id']}"
+        # SOLO le gia' validate ricevono la loro configurazione (26 set 2026): le
+        # candidate nuove non ne hanno una, e si giudicano come prima
+        cfg_operata = config_validate.get(key) if key in gia_validate else None
         r = evaluate_spec(_W["opt"], sym, cand, fr, spec,
                           scale_candidates=candidate_ladders(_W.get("scala_paper"),
                                                              scala_strategia=scala_strategia),
@@ -1427,8 +1645,11 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                           context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                           run_end=end, interval=args.interval,
                           righe_bocciate=bool(_W.get("bocciate_ok"))
-                          and bocciate_scritte < BOCCIATE_PER_COIN)
+                          and bocciate_scritte < BOCCIATE_PER_COIN,
+                          config_iniziale=cfg_operata)
         n_eval += 1
+        if not r["passed"] and key in gia_validate:
+            bocciate[key] = _bocciata_leggera(sym, spec, r)
         if r.get("oos_rows"):
             if not r["passed"]:
                 bocciate_scritte += 1
@@ -1451,12 +1672,11 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                              "pf": r["pf"], "trades": r["trades"],
                              "t_stat": r.get("t_stat")})
         if r["passed"]:
-            key = f"{sym}|{spec['id']}"
             retro = 0
             # le conferme retroattive servono alla PRIMA promozione: una variante
             # gia' validata e' una validata come le altre (audit del 24 set)
             if (RETRO_CONFERME and spec.get("origine") in ("referto", "intorno")
-                    and key not in (_W.get("gia_validate") or set())):
+                    and key not in gia_validate):
                 retro = conferme_retroattive(
                     _W["opt"], sym, cand, fr, spec,
                     scale_candidates=candidate_ladders(_W.get("scala_paper"),
@@ -1490,6 +1710,10 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
                 "t_stat": r.get("t_stat"),
                 "window_pnls": r.get("window_pnls") or [],
                 "direzione_pf": r.get("direzione_pf") or {},
+                # una validata passata SOLO grazie alla sua configurazione (26 set
+                # 2026): col passo 1 sulla globale sarebbe stata bocciata. Si
+                # conta nel giro (`passate_solo_con_propria_config`), non decide
+                "solo_propria_config": bool(r.get("solo_propria_config")),
             }
             passed_keys.append(key)
             specs_passed[spec["id"]] = spec
@@ -1510,7 +1734,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
         rss_mb = 0
     return (sym, entries, passed_keys, specs_passed, n_eval, summary,
             {"binding": binding, "involved": involved, "near": near[:10], "rss_mb": rss_mb},
-            stats_righe)
+            stats_righe, bocciate)
 
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict,
@@ -1520,13 +1744,23 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     """Aggrega le performance del spec sulle SOLE finestre out-of-sample e applica
     il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra).
 
-    `config_iniziale` (26 set 2026, SOLO per l'analisi `scripts/autopsia_validate.py`):
-    scala/BE/keep con cui fare la PRESELEZIONE del passo 1 al posto della
-    configurazione globale. La discovery non lo passa mai (None = comportamento
-    identico a prima). Serve a MISURARE quante validate il gate boccia perche' al
-    passo 1 le giudica su una configurazione che il bot non opera, prima di
-    decidere se cambiare il gate. Il passo 2 (ricerca per coppia) e il verdetto
-    finale restano quelli di sempre.
+    `config_iniziale` (26 set 2026): la scala/BE/keep che il bot OPERA per questa
+    coppia. Nato per l'analisi `scripts/autopsia_validate.py`, dal 26 set sera lo
+    passa anche la discovery per le coppie GIA' VALIDATE (`_disc_one`): il giro
+    completo del 26 set ne bocciava 167 su 182 giudicandole al passo 1 sulla
+    configurazione globale, che nessuna di loro eseguiva. Con il parametro:
+      * il passo 1 (preselezione) gira sulla configurazione operata;
+      * il passo 2 cerca come sempre fra i candidati globali, ma la
+        configurazione operata resta quella scelta a meno che un candidato non
+        la batta sul metro della scelta di almeno CONFIG_MARGINE (isteresi:
+        senza, un pelo di differenza cambiava ogni giro cio' che il bot opera);
+      * `solo_propria_config` dice se la coppia e' passata SOLO grazie alla sua
+        configurazione (col passo 1 sulla globale sarebbe stata bocciata): una
+        passata in piu', solo per chi passa e opera una configurazione diversa
+        dalla globale. E' una misura per il giro, non decide nulla.
+    None (le candidate nuove, la passata (A) dell'autopsia) = comportamento
+    identico a prima. Il verdetto pass/fail resta `gate_verdict` sui numeri non
+    pesati, sempre.
 
     `run_end` e `interval` etichettano le righe del dataset del selettore
     (`oos_rows`, solo se la spec PASSA: i trade delle bocciate non sono segnali
@@ -1565,10 +1799,19 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
 
     # 1) PRESELEZIONE con la scala globale: serve solo a scartare in fretta le spec
     #    senza speranza, prima di spendere 4 backtest per la scelta della scala.
-    #    Con `config_iniziale` (autopsia delle validate, 26 set 2026) la
-    #    preselezione gira sulla configurazione indicata: e' l'unico punto in cui
-    #    il parametro conta.
+    #    Con `config_iniziale` (le validate, 26 set 2026) la preselezione gira
+    #    sulla configurazione che il bot opera: e' il giudizio su cio' che gira.
+    be_default = bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)
+    keep_default = float(settings.PROFIT_LOCK_KEEP)
+    operata = None
     if config_iniziale:
+        # normalizzata come la legge il motore: un campo assente vale il default
+        operata = {"scale_r_mults": [float(x) for x in (config_iniziale.get("scale_r_mults")
+                                                        or settings.SCALE_OUT_R_MULTIPLES)],
+                   "sl_to_breakeven": (be_default if config_iniziale.get("sl_to_breakeven") is None
+                                       else bool(config_iniziale["sl_to_breakeven"])),
+                   "profit_lock_keep": (keep_default if config_iniziale.get("profit_lock_keep") is None
+                                        else float(config_iniziale["profit_lock_keep"]))}
         oos, window_pnls = _run_oos(config_iniziale.get("scale_r_mults"),
                                     config_iniziale.get("sl_to_breakeven"),
                                     keep=config_iniziale.get("profit_lock_keep"))
@@ -1580,6 +1823,9 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
                            regime_pf=pf_by_regime(oos.trades),
                            pf_ex_top=pf_without_top(oos.trades))
     passed = verdict.ok
+    # il metro della configurazione OPERATA, per l'isteresi del passo 2: si
+    # misura sulla passata appena fatta, non si rifa'
+    metrica_operata = _metrica_scelta(oos.trades) if operata else None
 
     # 2) SCALA DI TP PER-COPPIA anche per le GENERATE. Le classiche la scelgono nella
     #    grid search; le generate non hanno grid -> senza questo passo restavano per
@@ -1587,6 +1833,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     best_ladder = None
     best_be = None
     best_keep = None
+    tiene_operata = False      # True se l'isteresi ha tenuto la configurazione operata
     if passed and settings.SCALE_OUT_ENABLED:
         best_metric = None
         # le candidate arrivano dal CHIAMANTE, non da uno stato globale: cosi'
@@ -1608,7 +1855,6 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         #     l'alternativa al default sulla scala scelta — invece di raddoppiare
         #     la ricerca: costa 1/4 e decide la stessa cosa.
         if best_ladder:
-            be_default = bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)
             st_alt, _ = _run_oos(best_ladder, not be_default)
             alt_metric = _metrica_scelta(st_alt.trades)
             best_be = (not be_default) if alt_metric > best_metric else be_default
@@ -1622,7 +1868,6 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
             #     (best_metric, o alt_metric se ha vinto il BE alternativo): non si
             #     rifa'. A parita' vince il default: cambiare costa una
             #     ri-validazione di fatto, e un pareggio non la paga.
-            keep_default = float(settings.PROFIT_LOCK_KEEP)
             rif_metric = alt_metric if best_be != be_default else best_metric
             best_keep = keep_default
             for k in (keep_candidates or LOCK_KEEP_CANDIDATES):
@@ -1633,6 +1878,18 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
                 metric_k = _metrica_scelta(st_k.trades)
                 if metric_k > rif_metric:
                     rif_metric, best_keep = metric_k, k
+            # 2d) ISTERESI (26 set 2026): per una coppia che il bot OPERA gia',
+            #     la ricerca vince solo se batte la configurazione operata sul
+            #     metro della scelta di almeno CONFIG_MARGINE (la regola
+            #     dell'intorno). Altrimenti la scelta E' la configurazione
+            #     operata: cambiare costa una ri-validazione di fatto nel paper,
+            #     e un pelo di differenza non la paga.
+            if operata is not None and not _batte_con_margine(rif_metric, metrica_operata,
+                                                              CONFIG_MARGINE):
+                best_ladder = list(operata["scale_r_mults"])
+                best_be = bool(operata["sl_to_breakeven"])
+                best_keep = float(operata["profit_lock_keep"])
+                tiene_operata = True
 
     # 3) METRICHE FINALI CON LA SCALA CHE VERRA' ESEGUITA. Prima i numeri spediti nel
     #    registro (last_pf, win, regime_pf) uscivano dal passo 1, cioe' dalla scala
@@ -1640,14 +1897,17 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     #    184 erano due configurazioni diverse. Il registro pubblicizzava un PF che
     #    nessuno eseguiva, e il rilevatore di deriva confrontava il vissuto contro
     #    quel numero sbagliato.
-    if best_ladder and (list(best_ladder) != list(settings.SCALE_OUT_R_MULTIPLES)
-                        or best_be != bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)
-                        or best_keep != float(settings.PROFIT_LOCK_KEEP)
-                        # col passo 1 forzato (autopsia) la passata iniziale NON e'
-                        # quella globale: le metriche finali si rifanno comunque
-                        # sulla configurazione scelta, altrimenti descriverebbero
-                        # la configurazione forzata col verdetto di un'altra
-                        or bool(config_iniziale)):
+    #    Se l'isteresi ha tenuto la configurazione operata, i numeri del passo 1
+    #    sono GIA' i suoi: non si rifa' la passata.
+    if best_ladder and not tiene_operata and (
+            list(best_ladder) != list(settings.SCALE_OUT_R_MULTIPLES)
+            or best_be != bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)
+            or best_keep != float(settings.PROFIT_LOCK_KEEP)
+            # col passo 1 sulla configurazione operata la passata iniziale NON
+            # e' quella globale: se la ricerca ha vinto, le metriche finali si
+            # rifanno sulla configurazione scelta, altrimenti descriverebbero
+            # la configurazione operata col verdetto di un'altra
+            or bool(config_iniziale)):
         oos, window_pnls = _run_oos(best_ladder, best_be, keep=best_keep)
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()
@@ -1676,9 +1936,26 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         if not passed:
             # supera tutto e cade sui dati mai visti: l'esito piu' informativo
             failed, binding, shortfall, near = ["holdout"], "holdout", 0.0, True
+
+    # 4) MISURA, NON DECISIONE (26 set 2026): una validata passata sulla SUA
+    #    configurazione sarebbe passata anche col passo 1 di prima (la globale)?
+    #    Una passata in piu' solo per chi passa e opera una configurazione
+    #    diversa dalla globale (per le altre e' la stessa passata): il giro conta
+    #    `passate_solo_con_propria_config`, cosi' si vede quanto valeva
+    #    l'artefatto misurato dall'autopsia. Il verdetto non cambia.
+    solo_propria = False
+    if passed and operata is not None and not stessa_config(operata, config_globale_uscita()):
+        oos_g, finestre_g = _run_oos()
+        solo_propria = not gate_verdict(finestre_g, len(oos_g.trades), oos_g.profit_factor(),
+                                        oos_g.win_rate(), oos_g.total_pnl_pct(),
+                                        max_dd=max_drawdown(oos_g.trades),
+                                        regime_pf=pf_by_regime(oos_g.trades),
+                                        pf_ex_top=pf_without_top(oos_g.trades)).ok
     return {
         "pf": round(pf, 3), "pnl": round(pnl, 4),
         "trades": len(oos.trades), "win": round(oos.win_rate(), 3), "passed": passed,
+        # passata SOLO grazie alla propria configurazione (vedi passo 4)
+        "solo_propria_config": solo_propria,
         "holdout": hold, "regime_pf": reg_pf,
         "max_dd": round(max_drawdown(oos.trades), 4),
         "scale_r_mults": best_ladder,
@@ -1747,10 +2024,7 @@ def _batte_per_finestra(figlia: dict, madre: dict, margine: float) -> tuple[bool
     stesso giro). Entrambi i numeri devono venire dallo stesso giro."""
     mf = _metro(figlia.get("oos_pnl_pct"), figlia.get("oos_max_dd"))
     mm = _metro(madre.get("oos_pnl_pct"), madre.get("oos_max_dd"))
-    if mm <= 0:
-        ok_tot = mf > 0
-    else:
-        ok_tot = mf >= mm * (1.0 + margine)
+    ok_tot = _batte_con_margine(mf, mm, margine)
     wf, wm = list(figlia.get("window_pnls") or []), list(madre.get("window_pnls") or [])
     if wf and wm and len(wf) == len(wm):
         vinte = sum(1 for a, b in zip(wf, wm) if a > b)
@@ -1935,17 +2209,91 @@ def esiti_varianti_dal_merge(out: dict, passed_keys, esito_merge: dict | None,
     return eventi
 
 
+def aggiorna_declassate(pairs: dict, validate: set, passate: set, bocciate: set,
+                        now: float, completa: bool) -> dict:
+    """I contatori delle DECLASSATE (26 set 2026), sul posto in `pairs`. Regola
+    dichiarata prima di misurare (bot/config.py, DECLASSATA_NOTTI):
+      * solo nel giro COMPLETO (`completa`): un giro «solo urgenti» rigiudica
+        sugli stessi dati e non conta come una notte;
+      * validata passata oggi -> `bocciata_notti = 0`, `declassata = False`
+        (se lo era: «tornata piena»);
+      * validata bocciata oggi -> `bocciata_notti += 1`; alla soglia
+        `declassata = True`, `declassata_at = now` (se non lo era: «nuova»);
+      * non giudicata oggi -> non si tocca.
+    Ritorna l'esito per il log e per `discovered_last_run`: totale, nuove,
+    tornate piene, quante validate sono state bocciate nel giro. Non tocca
+    pass_count, finestre o purga."""
+    esito = {"totale": 0, "nuove": [], "tornate_piene": [], "bocciate_giro": len(bocciate),
+             "aggiornate": bool(completa)}
+    soglia = max(1, int(settings.DECLASSATA_NOTTI))
+    if completa:
+        for key in sorted(validate):
+            rec = pairs.get(key)
+            if not isinstance(rec, dict):
+                continue
+            if key in passate:
+                if rec.get("declassata"):
+                    esito["tornate_piene"].append(key)
+                rec["bocciata_notti"] = 0
+                rec["declassata"] = False
+            elif key in bocciate:
+                notti = int(rec.get("bocciata_notti", 0) or 0) + 1
+                rec["bocciata_notti"] = notti
+                if notti >= soglia and not rec.get("declassata"):
+                    rec["declassata"] = True
+                    rec["declassata_at"] = now
+                    esito["nuove"].append(key)
+    esito["totale"] = sum(1 for k in validate
+                          if isinstance(pairs.get(k), dict) and pairs[k].get("declassata")
+                          and not pairs[k].get("sostituita_da"))
+    return esito
+
+
+def riga_cervello_declassate(e: dict | None, solo_config: int | None = None,
+                             bocciate: int | None = None) -> str:
+    """«[cervello] declassate: N (nuove M, tornate piene K)», in coda al log del
+    giro (26 set 2026), piu' quante validate sono state bocciate oggi e quante
+    sono passate SOLO grazie alla propria configurazione. Un giro «solo urgenti»
+    lo dice: i contatori li' non si muovono."""
+    e = e or {}
+    testo = (f"[cervello] declassate: {int(e.get('totale', 0) or 0)} "
+             f"(nuove {len(e.get('nuove') or [])}, tornate piene {len(e.get('tornate_piene') or [])})")
+    if not e.get("aggiornate", True):
+        testo += " · contatori fermi: giro solo urgenti"
+    if bocciate is not None:
+        testo += f" · validate bocciate nel giro {int(bocciate)}"
+    if solo_config is not None:
+        testo += f" · passate solo con la propria configurazione {int(solo_config)}"
+    return testo
+
+
 def merge_into_registry(fb, out: dict, passed_now: list[str],
                         evaluated_symbols: set | None = None,
                         intorno_madri: dict | None = None,
                         evaluated_spec_ids: set | None = None,
                         data_end_run: float = 0.0,
                         esito: dict | None = None,
-                        varianti_create: int = 0) -> list[str]:
+                        varianti_create: int = 0,
+                        bocciate_validate: dict | None = None,
+                        completa: bool = False) -> list[str]:
     """Aggiunge SOLO le coppie generate che PASSANO (accumula pass_count) e pota
     quelle generate inutili/stantie, evitando crescita illimitata del documento.
     Ricalcola la lista validated PRESERVANDO i campi di copertura del GATE 1
     (universe/coverage/ready) che spettano a optimize.py.
+
+    `bocciate_validate` (26 set 2026): le VALIDATE che questo giro ha giudicato e
+    bocciato, come voci leggere (`_bocciata_leggera`). Servono a due cose:
+      * al confronto appaiato figlia/madre dell'intorno quando la madre oggi NON
+        e' in `out` perche' e' stata bocciata: prima quella figlia moriva come
+        «madre non valutata», e proprio una madre che oggi fallisce e' quella
+        che una figlia dovrebbe poter sostituire;
+      * ai contatori delle DECLASSATE, SOLO nel giro completo (`completa`): per
+        ogni validata, passata oggi -> `bocciata_notti` a 0 e `declassata` False;
+        bocciata oggi -> `bocciata_notti` + 1, e alla DECLASSATA_NOTTI-esima di
+        fila `declassata` True con `declassata_at`. I giri «solo urgenti» non li
+        toccano (rigiudicano sugli stessi dati). Non cambia MAI pass_count,
+        finestre (`judge_window`) o purga: e' un'informazione in piu' sul
+        record, che il bot legge per operare la coppia a un quarto della size.
 
     `evaluated_symbols`: le coin che QUESTA passata ha davvero guardato. Serve a dare
     a `last_seen_at` un significato solo. Qui dentro si scrivono solo le coppie che
@@ -1960,12 +2308,16 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
     doc = fb.get_doc("strategy_registry", "validated") or {}
     pairs = decode_pairs(doc.get("pairs"))
     now = time.time()
+    bocciate_validate = dict(bocciate_validate or {})
     # le coppie GENERATE sulle coin appena guardate sono state valutate, anche se non
     # hanno passato: il campo lo deve dire.
     if evaluated_symbols:
         for r in pairs.values():
             if r.get("generated") and r.get("symbol") in evaluated_symbols:
                 r["last_seen_at"] = now
+    # le validate PRIMA di questo merge: sono quelle di cui si aggiornano i
+    # contatori delle declassate (una promossa oggi non ha notti da contare)
+    validate_prima = set(coppie_validate(pairs, now))
     drifted = drifted_from_paper(fb)   # evidenza dal paper: vale come fallimento
     # 0) UNA BOCCIATURA CHIUDE LA FINESTRA (audit del 24 set: il giro «solo
     #    urgenti» non si svuotava mai, 223 spec su 516, perche' una coppia a 1-2
@@ -2046,8 +2398,11 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
                 continue
             if dall_intorno:
                 # confronto APPAIATO con la madre rivalutata nello STESSO giro:
-                # se la madre oggi non e' stata valutata, non si decide
-                madre_oggi = out.get(mk)
+                # se la madre oggi non e' stata valutata, non si decide. Una
+                # madre valutata e BOCCIATA oggi e' in `bocciate_validate` (26
+                # set 2026) con ritorno, drawdown e finestre: il confronto si fa,
+                # e la figlia PUO' sostituire una madre che non regge piu'
+                madre_oggi = out.get(mk) or bocciate_validate.get(mk)
                 if not madre_oggi or not madre:
                     n_intorno_no += 1
                     esito_intorno["madre_non_valutata"] += 1
@@ -2159,6 +2514,13 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
             rec["genitore"] = spec_e.get("genitore")
         _segna_promozione(key, rec, prima_pass, now, nuove_vite)
         pairs[key] = rec
+    # LE DECLASSATE (26 set 2026): contatori aggiornati SOLO nel giro completo,
+    # su chi era validata prima del merge. Passata oggi -> torna piena;
+    # bocciata oggi -> una notte in piu', e alla soglia diventa declassata. Chi
+    # oggi non e' stata giudicata (coin saltata, altro timeframe) non si tocca:
+    # nessuna evidenza, ne' a favore ne' contro.
+    esito_declassate = aggiorna_declassate(pairs, validate_prima, set(passed_now),
+                                           set(bocciate_validate), now, completa)
     registra_vite(fb, nuove_vite, [])
     if intorno_madri:
         for k in intorno_madri:
@@ -2173,6 +2535,7 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         esito["scartate"] = sorted(scartate_giro)
         esito["intorno"] = esito_intorno
         esito["varianti"] = esito_varianti
+        esito["declassate"] = esito_declassate
     # 2) potatura: scarta le coppie GENERATE che non hanno niente da perdere.
     #
     # QUI SI CANCELLAVANO LE COPPIE A META' STRADA. La condizione era
@@ -2413,6 +2776,7 @@ def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
     cand = dict(candidate or {})
     ipu = run.get("ipotesi_uscita") if isinstance(run.get("ipotesi_uscita"), dict) else {}
     esp = run.get("esplorative") if isinstance(run.get("esplorative"), dict) else None
+    rid = run.get("riduzione") if isinstance(run.get("riduzione"), dict) else None
     return {
         "coin_valutate": coin, "valutazioni": n_eval, "passate": int(run.get("n_passed") or 0),
         "passate_lista": [{"coin": p.get("symbol"), "id": p.get("id"),
@@ -2432,6 +2796,13 @@ def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
         # nel merge degli shard e nei giri senza ipotesi
         "ipotesi_uscita": {"strategie": int(_num(ipu.get("strategie")) or 0),
                            "con_scala": int(_num(ipu.get("con_scala")) or 0)},
+        # quante validate sono passate SOLO grazie alla propria configurazione
+        # d'uscita (26 set 2026): col passo 1 sulla globale sarebbero state
+        # bocciate. Misura dell'artefatto, non una decisione; null se il giro
+        # non l'ha contata (codice precedente, merge degli shard)
+        "passate_solo_con_propria_config": (
+            int(_num(run.get("passate_solo_con_propria_config")))
+            if _num(run.get("passate_solo_con_propria_config")) is not None else None),
         # il paper esplorativo (25 set 2026, F1bis): quante coppie esplorative
         # sono attive dopo questo giro e il metro dell'esperimento (poi
         # validate / scartate, dalla storia); null se il giro non le ha aggiornate
@@ -2439,11 +2810,21 @@ def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
                          "validate_poi": int(_num(esp.get("validate_poi")) or 0),
                          "scartate": int(_num(esp.get("scartate")) or 0)}
                         if isinstance(esp, dict) else None),
+        # il giro completo RIDOTTO (26 set 2026, J10): le spec note valutate solo
+        # sulle coin proprie + la fetta rotante del giorno; `valutazioni_stimate`
+        # si confronta con `valutazioni`. null se il giro non era ridotto
+        "riduzione": ({"spec_note": int(_num(rid.get("spec_note")) or 0),
+                       "coin_proprie": int(_num(rid.get("coin_proprie")) or 0),
+                       "fetta": (str(rid.get("fetta")) if rid.get("fetta") is not None else None),
+                       "valutazioni_stimate": int(_num(rid.get("valutazioni_stimate")) or 0)}
+                      if isinstance(rid, dict) else None),
         "lettura": lettura,
         "dettaglio": ("candidate: `totale` e' la lista comune valutata su ogni coin "
                       "(nuove + rivalutate, dopo de-dup e gemelle); `intorno` sono le "
                       "figlie valutate solo sulla coin della madre; ai/varianti/casuali/"
-                      "semi sono contate all'assemblaggio, prima della de-dup."),
+                      "semi sono contate all'assemblaggio, prima della de-dup. Nel giro "
+                      "completo ridotto (26 set) le spec note NON stanno nella lista "
+                      "comune: `riduzione` dice su quante coin sono state valutate."),
     }
 
 
@@ -2475,6 +2856,9 @@ def _sez_registro(reg_doc: dict, pairs: dict, doc_prec: dict, now: float) -> dic
         "senza_promessa": senza_promessa(pairs, validated),
         "statistica_t": statistica_t(pairs),
         "validate_delta_giro": delta,
+        # le validate DECLASSATE (26 set 2026): bocciate DECLASSATA_NOTTI giri
+        # completi di fila, operate dal bot a un quarto della size
+        "declassate": conta_declassate(pairs, validated),
         "lettura": lettura,
         "dettaglio": ("`occupazione` = base + generate con conferme: la parte del tetto che "
                       "nessuno pota (il difetto del 31 agosto). `alleggerito` = almeno "
@@ -3097,6 +3481,21 @@ def main() -> int:
                 print(f"[discover] intorno: {len(madri_intorno)} coppie validate riprovate "
                       f"con {sum(madri_intorno.values())} figlie (tetto {INTORNO_CAP}): "
                       + ", ".join(list(madri_intorno)[:6]))
+        # IL GIRO COMPLETO RIDOTTO (26 set 2026, J10): le spec NOTE escono dalla
+        # lista comune e vanno per coin (`specs_per_symbol`, il canale delle
+        # figlie dell'intorno) solo dove hanno una coppia viva o dove tocca alla
+        # fetta di oggi; le candidate nuove restano comuni. Solo nel giro
+        # completo, non shardato, senza --symbols: gli urgenti e la passata a
+        # 1 ora non cambiano. Vedi `riduci_spec_note` e RIDUZIONE_ENABLED.
+        riduzione: dict | None = None
+        riduzione_attiva = bool(RIDUZIONE_ENABLED and _completa and not getattr(args, "symbols", "")
+                                and args.num_shards <= 1)
+        if riduzione_attiva:
+            specs, specs_per_symbol, riduzione = riduci_spec_note(
+                specs, existing, decode_pairs(reg.get("pairs")), full_symbols,
+                specs_per_symbol, now=_ora)
+            print(riga_riduzione(riduzione))
+            riduzione = {k: v for k, v in riduzione.items() if not k.startswith("_")}
         # SHARDING: ogni shard valida le candidate su una fetta dell'universo; il merge
         # riunisce. Così copriamo l'INTERO universo restando nel timeout.
         symbols = full_symbols[args.shard::args.num_shards] if args.num_shards > 1 else full_symbols
@@ -3129,6 +3528,11 @@ def main() -> int:
                      "casuali": n_casuali, "semi": n_semi, "gemelle_scartate": n_gemelle,
                      "rivalutate": len(existing_list)}
         gia_validate = set(coppie_validate(decode_pairs(reg.get("pairs")), _ora))
+        # LA CONFIGURAZIONE OPERATA DI OGNI VALIDATA (26 set 2026): il worker la
+        # passa a `evaluate_spec` come `config_iniziale`, cosi' una validata si
+        # giudica sulla scala/BE/keep che il bot esegue, non sulla globale
+        config_validate = config_validate_dal_registro(decode_pairs(reg.get("pairs")),
+                                                       gia_validate)
         # IL PAPER PROPONE (25 set 2026): oltre alla scala dei TP, il keep del
         # profit-lock ricavato dai verdetti trailing. Calcolato UNA volta qui e
         # passato ai worker in coda a `initargs`: un candidato in piu', mai al posto
@@ -3147,14 +3551,18 @@ def main() -> int:
                   f"{scala_str(scale_strategie[_es])})")
         ipotesi_uscita = {"strategie": len(urgenti_uscita),
                           "con_scala": sum(1 for g in urgenti_uscita if g in scale_strategie)}
-        for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows in parallel_map(
+        # le VALIDATE bocciate oggi, come voci leggere (26 set 2026): il merge le
+        # usa per il confronto figlia/madre e per i contatori delle declassate
+        bocciate_validate: dict[str, dict] = {}
+        for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows, bocciate in parallel_map(
             _disc_one, symbols, workers=workers, initializer=_disc_init,
             initargs=(args, end, specs, scala_paper, specs_per_symbol, gia_validate,
-                      bocciate_ok, keep_paper, scale_strategie)
+                      bocciate_ok, keep_paper, scale_strategie, config_validate)
         ):
             n_eval += n_ev
             if n_ev > 0:
                 valutate.add(sym)
+            bocciate_validate.update(bocciate or {})
             if isinstance(rows, dict):
                 stats_selettore_run["n"] += int(rows.get("n", 0) or 0)
                 for k, v in (rows.get("per_famiglia") or {}).items():
@@ -3228,7 +3636,14 @@ def main() -> int:
                                         | {f["id"] for fs in specs_per_symbol.values() for f in fs},
                                         data_end_run=_data_end_run,
                                         esito=esito_merge,
-                                        varianti_create=len(varianti))
+                                        varianti_create=len(varianti),
+                                        bocciate_validate=bocciate_validate,
+                                        completa=(modalita == "completa"))
+        # quante validate sono passate SOLO grazie alla propria configurazione
+        # (26 set 2026): contate PRIMA del filtro sulle scartate (che riguarda
+        # solo le varianti), sulle chiavi gia' validate all'inizio del giro
+        passate_solo_config = sum(1 for k in passed_keys
+                                  if k in gia_validate and (out.get(k) or {}).get("solo_propria_config"))
         # gli esiti delle varianti dai referti nella storia (26 set 2026, J9):
         # PRIMA del filtro sulle scartate, che qui sotto le toglie da passed_keys
         aggiorna_ipotesi_storia(
@@ -3268,6 +3683,11 @@ def main() -> int:
         print(riga_cervello_keep(out, passed_keys, keep_paper))
         # e le strategie rigiudicate per l'ipotesi sulle uscite (25 set 2026, I4)
         print(riga_cervello_uscita(ipotesi_uscita))
+        # e le DECLASSATE (26 set 2026): quante validate operano a un quarto della
+        # size, quante lo sono diventate oggi, quante sono tornate piene
+        esito_declassate = esito_merge.get("declassate") or {}
+        print(riga_cervello_declassate(esito_declassate, solo_config=passate_solo_config,
+                                       bocciate=len(bocciate_validate)))
         print(f"[discover] GIRO FINITO in {durata / 3600:.0f}h {(durata % 3600) / 60:.0f}m "
               f"({n_eval} valutazioni, {len(passed_keys)} passate)")
         _doc_run = ("discovered_last_run" if args.interval == settings.ORCHESTRATOR_TIMEFRAME
@@ -3301,6 +3721,18 @@ def main() -> int:
             # e il paper esplorativo (25 set 2026, F1bis): da qui lo legge
             # `giro.esplorative` del documento del gate; None se non aggiornato
             "esplorative": stats_esplorative,
+            # LE VALIDATE GIUDICATE SULLA PROPRIA CONFIGURAZIONE (26 set 2026):
+            # quante sono passate solo grazie a essa (`giro` del documento del
+            # gate), quante sono state bocciate oggi, e l'esito delle declassate
+            # (`gate_progress` legge da qui «tornate piene nel giro»)
+            "passate_solo_con_propria_config": passate_solo_config,
+            "validate_bocciate": len(bocciate_validate),
+            "declassate": esito_declassate,
+            # IL GIRO RIDOTTO (26 set 2026, J10): quante spec note su quante coin
+            # proprie, la fetta del giorno e le valutazioni attese, da confrontare
+            # con `n_eval`; None se il giro non era ridotto (urgenti, --symbols,
+            # shard, interruttore spento). Da qui lo legge `giro.riduzione`.
+            "riduzione": riduzione,
         }
         fb.set_doc("strategy_params", _doc_run, riepilogo_run)
         # IL DOCUMENTO DEL GATE, intero (25 set 2026): solo dal giro sul timeframe del

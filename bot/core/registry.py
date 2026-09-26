@@ -264,6 +264,23 @@ def senza_promessa(pairs: dict, validated) -> int:
                and (pairs[k].get("last_pf") is None or _f(pairs[k], "last_pf") <= 0))
 
 
+def declassate(pairs: dict, validated) -> set:
+    """LE VALIDATE DECLASSATE (26 set 2026): fra le coppie validate, quelle con
+    `declassata: true` sul record — bocciate dal giro completo del gate per
+    DECLASSATA_NOTTI notti di fila (`bocciata_notti`, scritto da
+    `discover_strategies.aggiorna_declassate`). Il bot le opera ancora, a
+    DECLASSATA_SIZE_MULT della size: e' l'insieme che `adaptation` legge per
+    ridurla, e che il documento del gate e `gate_progress` contano. Una coppia
+    non validata col flag non conta: il flag ha senso solo per chi si opera."""
+    return {k for k in (validated or [])
+            if isinstance((pairs or {}).get(k), dict) and bool(pairs[k].get("declassata"))}
+
+
+def conta_declassate(pairs: dict, validated) -> int:
+    """Quante validate sono declassate (`registro.declassate` nel doc del gate)."""
+    return len(declassate(pairs, validated))
+
+
 # --------------------------------------------------------------------------- #
 # Il documento del gate: pulizia e scrittura                                   #
 # --------------------------------------------------------------------------- #

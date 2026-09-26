@@ -363,6 +363,47 @@ def esplorativo_report(trades: list[dict], esp_doc: dict | None) -> dict:
             "validate_poi": validate_poi, "scartate": scartate}
 
 
+def declassate_report(trades: list[dict]) -> dict:
+    """LE DECLASSATE (26 set 2026, passo 2) contro le ATTIVE: fra i trade delle
+    validate (esplorative ed esiti esterni fuori), quelli con `declassata: true`
+    e gli altri: trade, vinti, PnL e R medio (`drift.r_multiplo`: pnl /
+    (|entry − orig_stop| × size), ripiego `post_mortem.stop_pct`; `r_n` dice su
+    quanti trade l'R e' calcolabile). Pura: nessun verdetto, solo il confronto
+    che il metro del passo 2 chiede (PF vissuto delle declassate contro le
+    attive nei 7 giorni dopo il declassamento si legge da qui, giorno per
+    giorno)."""
+    from bot.learning.drift import r_multiplo
+    from bot.learning.referti import ESITI_ESTERNI
+
+    def _blocco(rows):
+        rs = [r for r in (r_multiplo(t) for t in rows) if r is not None]
+        pnls = [float(t.get("pnl", 0) or 0) for t in rows]
+        return {"trades": len(rows), "vinti": sum(1 for p in pnls if p > 0),
+                "pnl": round(sum(pnls), 2),
+                "r_medio": round(sum(rs) / len(rs), 3) if rs else None, "r_n": len(rs)}
+
+    rows = [t for t in trades if not t.get("esplorativa")
+            and str(t.get("exit_reason", "")) not in ESITI_ESTERNI]
+    decl = [t for t in rows if t.get("declassata")]
+    attive = [t for t in rows if not t.get("declassata")]
+    return {"declassate": _blocco(decl), "attive": _blocco(attive)}
+
+
+def print_declassate(rep: dict) -> None:
+    def _riga(nome, b):
+        r = "n/d" if b["r_medio"] is None else f"{b['r_medio']:+.3f}R su {b['r_n']}"
+        print(f"  {nome:<12} {b['trades']:>4} trade · {b['vinti']} vinti · PnL {b['pnl']:+.2f} · R medio {r}")
+
+    print("\nDECLASSATE (validate bocciate dal gate per DECLASSATA_NOTTI giri completi, operate a "
+          "DECLASSATA_SIZE_MULT della size; passo 2 del 26 set) contro le ATTIVE")
+    if rep["declassate"]["trades"] == 0:
+        print("  nessun trade chiuso da una declassata (il gate non ne ha ancora scritte, "
+              "o il bot non le ha ancora operate)")
+    _riga("declassate", rep["declassate"])
+    _riga("attive", rep["attive"])
+    print("  R = pnl / (|entry - stop originale| x size); i trade senza stop originale non entrano nell'R medio")
+
+
 def print_esplorativo(rep: dict) -> None:
     print("\nPAPER ESPLORATIVO (quasi-passaggi a un quarto della size, F1bis; fuori dai "
           "numeri qui sopra e dai pesi)")
@@ -623,6 +664,10 @@ def main() -> int:
     except Exception as exc:  # noqa: BLE001
         cal_doc = {"_errore": str(exc)[:80]}
     print_calibrazione_contesto(cal_doc)
+
+    # LE DECLASSATE (26 set 2026, passo 2): il vissuto delle validate declassate
+    # dal gate contro quello delle attive, sugli stessi trade di qui sopra.
+    print_declassate(declassate_report(trades))
 
     # IL PAPER ESPLORATIVO (25 set 2026, F1bis): in fondo, coi suoi numeri e il
     # metro dell'esperimento dalla storia del registro esplorativo.

@@ -99,7 +99,14 @@ def _run(**extra):
            "intorno": {}, "varianti": {},
            # il paper esplorativo (25 set 2026, F1bis): i conteggi del giro
            "esplorative": {"attive": 12, "nuove": 3, "validate_poi": 1, "scartate": 2,
-                           "validate_giro": 0, "scartate_giro": 1}}
+                           "validate_giro": 0, "scartate_giro": 1},
+           # le validate giudicate sulla propria configurazione (26 set 2026)
+           "passate_solo_con_propria_config": 2, "validate_bocciate": 5,
+           "declassate": {"totale": 1, "nuove": [], "tornate_piene": [], "bocciate_giro": 5,
+                          "aggiornate": True},
+           # il giro completo ridotto (26 set 2026, J10): spec note su coin proprie + fetta
+           "riduzione": {"spec_note": 500, "coin_proprie": 60, "fetta": "3/7",
+                         "valutazioni_stimate": 42000}}
     run.update(extra)
     return run
 
@@ -114,7 +121,9 @@ def _esito():
 
 def _fixture_piccola():
     pairs = {"AUSDT|gen_a": _rec("AUSDT", "gen_a"),
-             "BUSDT|gen_b": _rec("BUSDT", "gen_b", last_pf=None, last_params={}),
+             # declassata (26 set 2026): bocciata due notti di fila, operata a un quarto
+             "BUSDT|gen_b": _rec("BUSDT", "gen_b", last_pf=None, last_params={},
+                                 bocciata_notti=2, declassata=True, declassata_at=NOW - 3600),
              "CUSDT|gen_c": _rec("CUSDT", "gen_c", passi=2),
              "AUSDT|gen_m": _rec("AUSDT", "gen_m", sostituita_da="gen_v"),
              "AUSDT|gen_v": _rec("AUSDT", "gen_v", nata_intorno_at=NOW - 10)}
@@ -205,6 +214,9 @@ def test_lo_schema_ha_le_chiavi_del_contratto():
     assert doc["cervello"]["scala_validate"] == [{"scala": "1.5/3/5", "n": 2},
                                                  {"scala": "nessuna", "n": 1}]
     assert doc["cervello"]["breakeven_validate"] == 2
+    # le validate giudicate sulla propria configurazione e le declassate (26 set 2026)
+    assert doc["giro"]["passate_solo_con_propria_config"] == 2
+    assert doc["registro"]["declassate"] == 1
     assert doc["cervello"]["autopsia"]["criterio_principale"] == "total_return"
     assert doc["cervello"]["autopsia_base_congelata_da_s"] == 86400 * 4
     assert doc["cervello"]["supervisore"]["decisioni_none_di_fila"] == 2

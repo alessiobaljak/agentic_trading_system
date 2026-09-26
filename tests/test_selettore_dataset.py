@@ -203,9 +203,10 @@ def test_il_worker_passa_le_righe_al_main():
     uno = inspect.getsource(d._disc_one)
     # dal 24 set sera (OOM) il worker SCRIVE le righe e ritorna solo i conteggi
     assert "scrivi_righe_worker(rows, end, args.interval)" in uno
-    assert '"rss_mb": rss_mb},' in uno and "stats_righe)" in uno
+    # dal 26 set 2026 il nono elemento sono le validate bocciate (test_declassate_gate)
+    assert '"rss_mb": rss_mb},' in uno and "stats_righe, bocciate)" in uno
     main = inspect.getsource(d.main)
-    assert "summary, diag, rows in parallel_map(" in main
+    assert "summary, diag, rows, bocciate in parallel_map(" in main
     assert "pubblica_dataset_selettore(" in main
 
 

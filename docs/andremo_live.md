@@ -1734,3 +1734,38 @@ completo passa in «sospesa» (nessuna nuova apertura, posizioni aperte gestite
 fino alla fine) finché non ripassa; il paper aprirebbe solo sulle 15 che
 passano più le esplorative. Metro: PF vissuto delle sospese contro delle
 attive nei 7 giorni successivi.
+
+### 26 settembre, 19:30: il piano 1-5 è in produzione
+
+Sì del proprietario a tutti e cinque i punti. Cosa è entrato (suite 1701 test
+verdi, TypeScript e build puliti, nessun parametro tarato sul paper):
+1. **Autopsia delle validate** (`scripts/autopsia_validate.py`, ops
+   `autopsia-validate`): ogni validata rigiudicata come oggi, con la sua
+   configurazione, e sugli ultimi 45/120/180 giorni. Da lanciare quando la
+   chiave è in lista.
+2. **Il gate giudica le validate sulla configurazione che operano** (scala,
+   break-even, keep dal registro, con isteresi del 10% prima di cambiarla) e
+   restituisce anche le bocciate: una figlia dell'intorno può ora sostituire
+   una madre bocciata. **Declassate**: una validata bocciata in due giri
+   completi di fila opera a un quarto della size finché non ripassa
+   (`declassata`, `bocciata_notti` nel registro; riga DECLASSATE in `gate`,
+   `[declassata]` nel log, sezione in `trades`). Non tocca passaggi né purga.
+3. **Giro completo ridotto**: le spec note si rivalutano solo sulle coin dove
+   hanno una coppia viva più un settimo dell'universo a rotazione (tutte in 7
+   giorni); le candidate nuove restano su tutte le coin. Atteso 35-50.000
+   valutazioni contro 134.994 (riga «GIRO RIDOTTO» in `gate`). Il bot ricarica
+   il registro entro un minuto dalla scrittura del gate, non più ogni ora.
+4. **Freno per gruppo con uscita** (`bot/learning/drift.py`): CUSUM sugli
+   R-multipli e SPRT sul «tocca il primo gradino» per famiglia × regime e
+   direzione × contesto BTC, soglie dichiarate nel codice, allarme → size ×0,5
+   sul gruppo, ripresa automatica; si combina col freno globale prendendo il
+   minimo. La panchina «peso sotto soglia» non rifiuta più: size con pavimento
+   0,25 (`[panchina]` nel log). Ops `replay`: in che giorno avrebbe suonato sui
+   trade del paper contro il freno globale, e i falsi allarmi sulla storia.
+5. **1 ora su 30 coin** (`DISCOVERY_EXTRA=1h:auto30`: le 5 fisse, le coin con
+   coppie a 1 ora, quelle con validate a 15 minuti, poi per volume; la vecchia
+   lista di 5 nell'ambiente vale come auto30). Tetto 40 minuti invariato.
+Metri e date: `docs/backlog.md` A4, I1, I2, J10, C1. Prima lettura utile: il
+giro completo di stanotte (durata, valutazioni, declassate nuove, passate solo
+con la propria configurazione) e il `replay`. Non verificato dal vivo: nessun
+giro reale né Firebase da qui.

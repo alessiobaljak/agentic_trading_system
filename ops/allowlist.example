@@ -75,6 +75,9 @@ selettore:    .venv/bin/python -m scripts.selettore_report
 # i segnali RIFIUTATI avrebbero vinto? (26 set 2026, J6): per motivo, R medio dei
 # rifiutati simulati sulle candele vere contro gli aperti. Sola lettura.
 rifiutati:    .venv/bin/python -m scripts.rifiutati_report
+# IL REPLAY DEL FRENO PER GRUPPO (26 set 2026, passo 4): per ogni pool (famiglia x regime, direzione x
+# contesto BTC) il giorno in cui CUSUM/SPRT AVREBBERO suonato contro il freno globale, il PnL nei 7 giorni dopo, e i falsi allarmi su storia sana del gate (ARL0). Le soglie sono costanti: puo' solo bocciarle. Sola lettura.
+replay:       .venv/bin/python -m scripts.replay_freno
 # IL CONTROLLO AUTOMATICO (25 set 2026, docs/controllo_schema.md): i due
 # semafori, le anomalie e le tre letture (salute, paper, learning) calcolate
 # adesso dagli stessi dati che il bot pubblica ogni ora in dashboard/controllo.

@@ -81,12 +81,25 @@ export interface Giro extends Testata {
     strategie?: number | null;
     con_scala?: number | null;
   } | null;
+  /** (26 set 2026) quante validate sono passate SOLO grazie alla propria
+   *  configurazione d'uscita (col passo 1 sulla globale sarebbero state
+   *  bocciate): misura dell'artefatto, non una decisione; null se non contata */
+  passate_solo_con_propria_config?: number | null;
   /** il paper esplorativo (25 set 2026, F1bis): coppie esplorative attive dopo
    *  il giro e il metro dell'esperimento (poi validate / scartate) */
   esplorative?: {
     attive?: number | null;
     validate_poi?: number | null;
     scartate?: number | null;
+  } | null;
+  /** il giro completo RIDOTTO (26 set 2026, backlog J10): le spec note valutate
+   *  solo sulle coin proprie + la fetta rotante del giorno (`fetta` = «g/7»);
+   *  `valutazioni_stimate` si confronta con `valutazioni`; null se non ridotto */
+  riduzione?: {
+    spec_note?: number | null;
+    coin_proprie?: number | null;
+    fetta?: string | null;
+    valutazioni_stimate?: number | null;
   } | null;
 }
 
@@ -127,6 +140,10 @@ export interface Registro extends Testata {
   senza_promessa?: number | null;
   statistica_t?: StatisticaT | null;
   validate_delta_giro?: number | null;
+  /** (26 set 2026) validate DECLASSATE: bocciate dal giro completo del gate per
+   *  due notti di fila, operate dal bot a un quarto della size finche' non
+   *  ripassano */
+  declassate?: number | null;
 }
 
 export interface Intorno {

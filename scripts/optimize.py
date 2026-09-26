@@ -357,7 +357,7 @@ def main() -> int:
         reg = update_registry(fb, out, summary_passed, universe=full_symbols)
         print(f"[optimize] registro: {len(reg.get('validated') or [])} validate · "
               f"copertura {reg['coverage'] * 100:.1f}%")
-        passata_extra(args)
+        passata_extra(args, fb)
         return 0
 
     # PARALLELO: i simboli sono indipendenti -> li distribuiamo su tutti i core del
@@ -598,7 +598,17 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         # dizionario per regime, letto dal veto `regime_ok`) resta
                         # fuori di proposito: costa troppo, e quel veto resta
                         # fail-open per le coppie promosse cosi'.
-                        "last_pf"}
+                        "last_pf",
+                        # LE DECLASSATE (26 set 2026, passo 2 del piano del 26 set
+                        # 15:xx): i contatori che il gate scrive nel merge
+                        # (`discover_strategies.aggiorna_declassate`) e che il bot
+                        # legge per operare la coppia a un quarto della size.
+                        # Sopravvivono all'alleggerimento NORMALE perche' le
+                        # validate viaggiano intere; senza questa riga quello
+                        # d'EMERGENZA (tetto sforato anche dopo) li perdeva, e la
+                        # coppia tornava a size piena in silenzio (fail-open che
+                        # cancella un verdetto del gate). Tre campi piccoli.
+                        "bocciata_notti", "declassata", "declassata_at"}
 
 
 # LE COPPIE CHE IL BOT OPERA, in un posto solo: dal 25 set 2026 la regola vive in
@@ -961,17 +971,122 @@ def _segna_promozione(key: str, rec: dict, prima: int, adesso: float,
 # coin, separati da virgola; vuoto = spenta.
 # 23 set: BTC a 1h costa 2 minuti a giro -> allargata a ETH, SOL, ADA, BCH
 # (richiesta del proprietario). Cinque coin: ~10 minuti dentro i 40 massimi.
-DISCOVERY_EXTRA = os.getenv("DISCOVERY_EXTRA", "1h:BTCUSDT,ETHUSDT,SOLUSDT,ADAUSDT,BCHUSDT")
+# 26 set (backlog C1): «1h:autoN» — le 5 coin fisse + le coin che hanno gia' una
+# coppia a 1 ora nel registro + le coin con coppie validate a 15 minuti (piu'
+# coppie prima) + il top per volume dell'universo, fino a N. Il tasso di
+# passaggio a 1 ora (0,22% su 5 coin: 1 passata su 460 valutazioni il 26 set)
+# si misura su 30 coin; 5 coin costavano 2 minuti, quindi 30 ne costano ~12,
+# dentro i 40 massimi (che restano il tetto duro). Se la variabile d'ambiente
+# porta ANCORA la vecchia lista di 5 coin (la unit sulla VPS puo' averla
+# scritta a mano), si legge come «auto30»: la lista vecchia non e' una scelta,
+# e' il default di ieri.
+COIN_1H_FISSE = ("BTCUSDT", "ETHUSDT", "SOLUSDT", "ADAUSDT", "BCHUSDT")
+DISCOVERY_EXTRA_VECCHIO_DEFAULT = "1h:" + ",".join(COIN_1H_FISSE)
+DISCOVERY_EXTRA = os.getenv("DISCOVERY_EXTRA", "1h:auto30")
 DISCOVERY_EXTRA_MAX_S = int(os.getenv("DISCOVERY_EXTRA_MAX_S", "2400"))
+#: minuti di passata per coin, MISURATI il 26 set 2026: 2 minuti per 5 coin
+#: (ops 0282-0284, 460 valutazioni). Serve solo alla stima stampata nel log.
+MINUTI_1H_PER_COIN = 2.0 / 5.0
+#: quante coin dell'universo (top per volume) si guardano per riempire «autoN»
+UNIVERSO_1H_TOP = 200
 
 
-def passata_extra(args) -> None:
+def coin_1h_auto(n: int, pairs: dict, universo, specs: dict | None = None,
+                 interval: str = "1h", now: float | None = None) -> tuple[list[str], dict]:
+    """Le coin della passata a 1 ora in modalita' «autoN» (26 set 2026), in ordine
+    di precedenza e senza doppioni, fino a `n`:
+      1. le COIN_1H_FISSE (la storia della passata: BTC dal 22 set, le altre dal 23);
+      2. le coin con una coppia a `interval` gia' nel registro (pass_count >= 1;
+         la spec, in `specs`, porta il timeframe): senza la passata quelle coppie
+         si fermerebbero a meta' strada — e' il buco ORCAUSDT, che per il giro a
+         15 minuti chiude `coin_in_maturazione` ma che con --symbols non gira;
+      3. le coin con coppie VALIDATE (in pratica a 15 minuti: e' dove il gate ha
+         gia' trovato qualcosa), piu' coppie prima, a parita' in ordine alfabetico;
+      4. il top per volume dell'universo, nell'ordine del volume.
+    Pura: stessi ingressi, stessa lista. Ritorna anche quante coin da ogni fonte."""
+    n = max(0, int(n))
+    pairs = pairs or {}
+    specs = specs or {}
+    tf_1h = {sid for sid, sp in specs.items()
+             if isinstance(sp, dict) and str(sp.get("timeframe") or "") == interval}
+    con_1h: set[str] = set()
+    for k, r in pairs.items():
+        if not isinstance(r, dict) or "|" not in k:
+            continue
+        sym, sid = k.split("|", 1)
+        if sid in tf_1h and int(r.get("pass_count", 0) or 0) >= 1:
+            con_1h.add(r.get("symbol") or sym)
+    validate = _coppie_validate(pairs, now)
+    per_coin: dict[str, int] = {}
+    for k in validate:
+        sym = (pairs.get(k) or {}).get("symbol") or k.split("|", 1)[0]
+        per_coin[sym] = per_coin.get(sym, 0) + 1
+    con_validate = [s for s, _ in sorted(per_coin.items(), key=lambda kv: (-kv[1], kv[0]))]
+    out: list[str] = []
+    fonti = {"fisse": 0, "con_1h": 0, "con_validate": 0, "top_volume": 0}
+    for nome, gruppo in (("fisse", list(COIN_1H_FISSE)), ("con_1h", sorted(con_1h)),
+                         ("con_validate", con_validate),
+                         ("top_volume", [str(s) for s in (universo or [])])):
+        for sym in gruppo:
+            if len(out) >= n:
+                break
+            if sym in out:
+                continue
+            out.append(sym)
+            fonti[nome] += 1
+    return out, fonti
+
+
+def risolvi_coin_extra(coins: str, fb=None, interval: str = "1h",
+                       now: float | None = None) -> tuple[list[str], str]:
+    """Da cio' che c'e' dopo i due punti in DISCOVERY_EXTRA alla lista di coin:
+    una lista esplicita si rispetta com'e'; «autoN» si costruisce dal registro e
+    dall'universo (`coin_1h_auto`); la VECCHIA lista di default (5 coin) vale
+    come «auto30». Ritorna (coin, modo) dove `modo` dice da dove viene la lista."""
+    coins = (coins or "").strip()
+    lista = [c.strip().upper() for c in coins.split(",") if c.strip()]
+    modo = "lista"
+    if lista and lista == list(COIN_1H_FISSE):
+        coins, modo = "auto30", "vecchio default -> auto30"
+    if not coins.lower().startswith("auto"):
+        return lista, modo
+    try:
+        n = int(coins[4:] or 30)
+    except ValueError:
+        n = 30
+    modo = f"auto{n}" if modo == "lista" else modo
+    pairs: dict = {}
+    specs: dict = {}
+    if fb is not None:
+        try:
+            reg = fb.get_doc("strategy_registry", "validated") or {}
+            pairs = decode_pairs(reg.get("pairs"))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[optimize] passata extra: registro non letto ({str(exc)[:80]}), "
+                  f"solo fisse + volume")
+        try:
+            specs = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[optimize] passata extra: spec non lette ({str(exc)[:80]})")
+    universo = top_symbols_by_volume(max(UNIVERSO_1H_TOP, n))
+    scelte, fonti = coin_1h_auto(n, pairs, universo, specs=specs, interval=interval, now=now)
+    return scelte, (f"{modo}: {fonti['fisse']} fisse + {fonti['con_1h']} con coppie a "
+                    f"{interval} + {fonti['con_validate']} con validate + "
+                    f"{fonti['top_volume']} top volume")
+
+
+def passata_extra(args, fb=None) -> None:
     if not DISCOVERY_EXTRA or ":" not in DISCOVERY_EXTRA:
         return
     interval, coins = DISCOVERY_EXTRA.split(":", 1)
     interval, coins = interval.strip(), coins.strip()
     if not interval or not coins:
         return
+    lista, modo = risolvi_coin_extra(coins, fb, interval=interval)
+    if not lista:
+        print(f"[optimize] passata extra: nessuna coin per {interval} ({modo}), saltata")
+        return
+    coins = ",".join(lista)
     import subprocess
     import sys
     cmd = [sys.executable, "-m", "scripts.discover_strategies",
@@ -979,8 +1094,11 @@ def passata_extra(args) -> None:
            "--generate", os.getenv("DISCOVERY_EXTRA_GENERATE", "60"),
            "--reeval-cap", os.getenv("DISCOVERY_EXTRA_REEVAL", "200"),
            "--windows", str(args.windows), "--start", args.start]
-    print(f"[optimize] passata extra: discovery a {interval} su {coins} "
-          f"(max {DISCOVERY_EXTRA_MAX_S // 60} min)")
+    stima = len(lista) * MINUTI_1H_PER_COIN
+    print(f"[optimize] passata extra: discovery a {interval} su {len(lista)} coin ({modo}) "
+          f"(max {DISCOVERY_EXTRA_MAX_S // 60} min) · ~{stima:.0f} min stimati: "
+          f"2 min per 5 coin misurati il 26 set")
+    print(f"[optimize] passata extra: coin {coins}")
     t0 = time.time()
     try:
         r = subprocess.run(cmd, timeout=DISCOVERY_EXTRA_MAX_S)

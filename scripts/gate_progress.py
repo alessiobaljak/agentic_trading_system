@@ -36,7 +36,7 @@ from bot.core.firebase_client import decode_pairs, get_firebase
 # questo script stampa finiscono nel documento `dashboard/gate` scritto dalla
 # discovery, e due copie dello stesso conto prima o poi divergono. Qui si stampa,
 # li' si conta.
-from bot.core.registry import (conta_keep, coppie_fresche, coppie_validate,
+from bot.core.registry import (conta_declassate, conta_keep, coppie_fresche, coppie_validate,
                                distribuzione_pass, salute_registro, statistica_t)
 
 MIN_PASSES = int(os.getenv("OPTIMIZER_MIN_PASSES", "3"))
@@ -217,6 +217,53 @@ def riga_keep_validate(pairs: dict, validated) -> str:
     if senza:
         parti.append(f"non ancora rivalutate x{senza}")
     return testa + " · ".join(parti)
+
+
+def riga_riduzione_giro(diag: dict | None) -> str:
+    """«GIRO RIDOTTO: N spec note su M coin proprie + fetta g/7 · ~S valutazioni
+    stimate contro V fatte» (26 set 2026, backlog J10). Legge
+    `strategy_params/discovered_last_run.riduzione` (scritto dal main della
+    discovery; `None` se il giro non era ridotto: urgenti, `--symbols`, shard,
+    interruttore spento) e lo mette accanto alle valutazioni FATTE (`n_eval`):
+    e' il confronto che il metro di J10 chiede («se il vero supera la stima di
+    molto, le coin saltate non sono il motivo»). Un giro col codice precedente
+    non ha la chiave, e lo si dice."""
+    if not isinstance(diag, dict) or "riduzione" not in diag:
+        return ("  GIRO RIDOTTO: non registrato (la chiave `riduzione` arriva col primo "
+                "giro finito dal 26 set)")
+    r = diag.get("riduzione")
+    if not isinstance(r, dict):
+        return ("  GIRO RIDOTTO: no, tutte le spec su tutte le coin "
+                f"({diag.get('reeval_modalita') or 'giro non completo, --symbols, shard o interruttore spento'})")
+    fatte = diag.get("n_eval")
+    coda = (f" contro {int(fatte)} fatte" if isinstance(fatte, (int, float)) else "")
+    return (f"  GIRO RIDOTTO: {int(r.get('spec_note') or 0)} spec note su "
+            f"{int(r.get('coin_proprie') or 0)} coin proprie + fetta {r.get('fetta') or '?'} · "
+            f"~{int(r.get('valutazioni_stimate') or 0)} valutazioni stimate{coda}")
+
+
+def riga_declassate(pairs: dict, validated, diag: dict | None = None) -> str:
+    """«DECLASSATE: N validate a un quarto di size (bocciate 2 notti di fila) ·
+    tornate piene nel giro X» (26 set 2026). N e' il conto sul registro
+    (`registry.conta_declassate`, lo stesso del documento del gate);
+    «tornate piene» e «nuove» vengono dall'esito dell'ultimo giro
+    (`strategy_params/discovered_last_run.declassate`, scritto dal merge). Un
+    giro col codice precedente non ha la chiave, e lo si dice. Le soglie sono
+    quelle dichiarate in bot/config.py, non numeri copiati qui."""
+    from bot.config import settings          # import pigro, come nel registro
+    n = conta_declassate(pairs if isinstance(pairs, dict) else {}, validated)
+    mult = float(settings.DECLASSATA_SIZE_MULT)
+    size = "un quarto di" if abs(mult - 0.25) < 1e-9 else f"{mult:g}x"
+    testa = (f"  DECLASSATE: {n} validate a {size} size "
+             f"(bocciate {int(settings.DECLASSATA_NOTTI)} notti di fila)")
+    e = (diag or {}).get("declassate") if isinstance(diag, dict) else None
+    if not isinstance(e, dict):
+        return testa + " · esito del giro non registrato (arriva col primo giro finito dal 26 set)"
+    coda = (f" · tornate piene nel giro {len(e.get('tornate_piene') or [])}"
+            f" · nuove nel giro {len(e.get('nuove') or [])}")
+    if not e.get("aggiornate", True):
+        coda += " (contatori fermi: giro solo urgenti)"
+    return testa + coda
 
 
 def main() -> int:
@@ -473,10 +520,14 @@ def main() -> int:
     else:
         print("\n  TEMPO DELL'ULTIMO GIRO: non ancora registrato (codice del 22 set: "
               "arriva col primo giro finito)")
+    # e se il giro completo era RIDOTTO (26 set 2026, J10): vedi riga_riduzione_giro
+    print(riga_riduzione_giro(diag))
     # COSA HA FATTO IL CERVELLO nell'ultimo giro (25 set 2026): vedi riga_cervello
     print(riga_cervello(diag))
     # e il KEEP DEL PROFIT-LOCK scelto per coppia (25 set 2026): vedi riga_keep_validate
     print(riga_keep_validate(pairs, validated))
+    # e le DECLASSATE (26 set 2026): vedi riga_declassate
+    print(riga_declassate(pairs, validated, diag))
     # e il PAPER ESPLORATIVO (25 set 2026, F1bis): vedi riga_esplorative
     try:
         print(riga_esplorative(fb.get_doc("strategy_registry", "esplorative")))

@@ -441,6 +441,61 @@ class Settings:
     # quante posizioni esplorative possono stare aperte insieme
     ESPLORATIVE_MAX_APERTE: int = int(os.getenv("ESPLORATIVE_MAX_APERTE", "3"))
 
+    # ---- LE DECLASSATE (26 set 2026, passo 2 del piano del 26 set 15:xx) ----
+    # Il primo giro completo del gate (26 set, ops 0282-0284) ha detto che 167
+    # validate su 182 NON ripassano il gate sui dati aggiornati, e fino alla
+    # chiusura della finestra (7 giorni) il bot le operava a size piena. Il gate
+    # ora scrive sul record della coppia `declassata: true` (con `declassata_at`
+    # e `bocciata_notti`) quando la validata fallisce DECLASSATA_NOTTI giri
+    # completi di fila; il bot la opera ancora (mai un rifiuto: il proprietario
+    # non vuole limitare la quantita') ma a DECLASSATA_SIZE_MULT della size, come
+    # un'esplorativa, e marca il trade `declassata` cosi' il vissuto delle due
+    # popolazioni si legge a parte (`trades`, sezione DECLASSATE; controllo
+    # `paper.declassate`). Chi decide il declassamento e' il gate sulla STORIA;
+    # il bot legge il flag, non lo calcola. Soglie dichiarate qui, prima dei
+    # numeri: non sono tarate sui trade del paper.
+    DECLASSATE_ENABLED: bool = _get_bool("DECLASSATE_ENABLED", True)
+    DECLASSATA_SIZE_MULT: float = _get_float("DECLASSATA_SIZE_MULT", 0.25)
+    DECLASSATA_NOTTI: int = int(os.getenv("DECLASSATA_NOTTI", "2"))
+
+    # ---- IL FRENO PER GRUPPO CON USCITA (26 set 2026, passo 4) ----
+    # Il freno globale (I2) dimezza TUTTO da quando i trade hanno superato 40 e
+    # non ha una data di uscita; la deriva per coppia (8 trade) e per strategia
+    # (20) non e' mai scattata (max 5 trade per coppia). In mezzo mancava un
+    # livello che maturi in giorni e sappia anche SPEGNERSI: il pool. Due
+    # famiglie di pool, in `bot/learning/drift.py::compute_drift` chiave `pool`:
+    # famiglia x regime all'ingresso e direzione x contesto BTC. Su ogni pool un
+    # CUSUM a un lato sui multipli di R sotto il riferimento promesso dal
+    # registro (allarme a POOL_CUSUM_H R di deficit cumulato, k=0) e un CUSUM di
+    # RIPRESA (POOL_CUSUM_RIPRESA R sopra il riferimento dopo l'allarme: il freno
+    # si toglie da solo); accanto, un test sequenziale di Wald (SPRT) su «ha
+    # toccato TP1» con p0=POOL_SPRT_P0 (sano) e p1=POOL_SPRT_P1 (degradato),
+    # alpha=beta=0.05, solo REGISTRATO (il freno ascolta il CUSUM; il replay
+    # confronta chi avrebbe suonato prima). Un pool in allarme senza ripresa
+    # moltiplica la size per POOL_BRAKE_FACTOR, combinato col freno globale col
+    # MINIMO (mai il prodotto: un trade non si frena due volte per lo stesso
+    # motivo). Le soglie sono COSTANTI dichiarate prima di ogni misura, mai
+    # tarate sui 97 trade del paper: `scripts/replay_freno.py` (ops `replay`)
+    # puo' solo BOCCIARLE (se suona dopo il freno globale e' inutile; se supera
+    # 5 allarmi per 100 trade sani del gate, h e' troppo basso), non sceglierle.
+    POOL_BRAKE_ENABLED: bool = _get_bool("POOL_BRAKE_ENABLED", True)
+    POOL_BRAKE_FACTOR: float = _get_float("POOL_BRAKE_FACTOR", 0.5)
+    POOL_CUSUM_H: float = _get_float("POOL_CUSUM_H", 4.0)
+    POOL_CUSUM_RIPRESA: float = _get_float("POOL_CUSUM_RIPRESA", 2.5)
+    POOL_SPRT_P0: float = _get_float("POOL_SPRT_P0", 0.45)
+    POOL_SPRT_P1: float = _get_float("POOL_SPRT_P1", 0.25)
+
+    # ---- IL PAVIMENTO DELLA PANCHINA (26 set 2026, passo 4) ----
+    # Con confidenza fissa 60 e soglia 30 (`Orchestrator.DECISION_THRESHOLD`) un
+    # peso strategia x regime sotto 0,5 RIFIUTAVA il segnale («peso sotto
+    # soglia», backlog I1: bastano 2 perdite su 2). Il proprietario non vuole
+    # limitare il numero di trade: ridurre la size, mai rifiutare, salvo i
+    # verdetti del gate. Dal 26 set un peso sotto soglia non rifiuta piu': la
+    # decisione passa con `peso_size = max(PANCHINA_PAVIMENTO, peso)` e main lo
+    # applica alla size. Il peso 0 («spenta») rifiuta ancora. A 0 questo
+    # pavimento e' SPENTO e torna il rifiuto di prima.
+    PANCHINA_PAVIMENTO: float = _get_float("PANCHINA_PAVIMENTO", 0.25)
+
     # ---- CALIBRAZIONE DELLA CONFIDENZA ----
     # allocation() modula size e leva sulla confidenza del segnale, ma nessuno
     # aveva mai verificato che quel numero predicesse l'esito: se fosse rumore,

@@ -316,6 +316,12 @@ def test_la_validata_vince_anche_se_il_suo_segnale_viene_rifiutato_per_peso(monk
     monkeypatch.setattr(settings, "DRY_RUN", True)
     o = _orch({"BTCUSDT": {"mean_reversion"}}, ["BTCUSDT|gen_x"])
     o.adaptation._weights = {f"mean_reversion|{r.value}": 0.3 for r in Regime}
+    # dal 26 set 2026 (pavimento della panchina) il peso 0,3 non rifiuta: la
+    # validata passa a size ridotta e l'esplorativa cade comunque
+    dec = o.decide_all({"BTCUSDT": _asset("BTCUSDT")}, Regime.SIDEWAYS)
+    assert [(d.strategy, d.peso_size) for d in dec] == [("mean_reversion", 0.3)]
+    # col pavimento spento torna il rifiuto di prima, e la precedenza resta
+    monkeypatch.setattr(settings, "PANCHINA_PAVIMENTO", 0.0)
     assert o.decide_all({"BTCUSDT": _asset("BTCUSDT")}, Regime.SIDEWAYS) == []
 
 
@@ -433,7 +439,8 @@ def test_gli_altri_controlli_restano_e_main_passa_le_aperte_all_orchestratore(mo
     assert "open" not in b.visto                 # «posizione gia' aperta»: come per una validata
     assert b._esplorative_aperte() == 1
     src = inspect.getsource(TradingBot._try_open)
-    assert "rmult *= _f_esp" in src and "esplorativa=bool(getattr(decision, \"esplorativa\", False))" in src
+    # dal 26 set 2026 il fattore applicato e' il MINIMO fra esplorativa e declassata
+    assert "rmult *= _f_rid" in src and "esplorativa=bool(getattr(decision, \"esplorativa\", False))" in src
     assert "esplorative_aperte=self._esplorative_aperte()" in inspect.getsource(TradingBot)
     assert TradingBot.fattore_size_esplorativa(types.SimpleNamespace()) == 1.0
 

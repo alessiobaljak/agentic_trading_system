@@ -101,6 +101,10 @@ class Orchestrator:
         # righe), una riga per (coin, strategia).
         self._rifiuti_ciclo: list[str] = []
         self._rifiuti_visti: set = set()
+        # LE RIGHE «[panchina]» (26 set 2026, passo 4): un peso sotto soglia non
+        # rifiuta piu', riduce la size; la riga va nel log come un rifiuto (stessa
+        # forma, stesso tetto per ciclo) ma NON nei contatori dei rifiuti: non lo e'.
+        self._panchina_ciclo: list[str] = []
         # I CONTEGGI dei rifiuti per motivo (25 set 2026, contratto §3.5): del
         # ciclo in corso e della finestra scorrevole di 24 ore. Vivono in RAM e
         # si azzerano al riavvio: `rifiuti_24h_dal` dice da quando conta, cosi'
@@ -179,9 +183,19 @@ class Orchestrator:
                 "timeframe": s.get("timeframe"), "scale_r_mults": s.get("scale_r_mults"),
                 "esplorativa": bool(s.get("esplorativa")), "feats": None, "selector_p": None}
 
+    def _panchina(self, symbol: str, strategy: str, peso: float, peso_size: float) -> None:
+        """Accumula la riga «[panchina] SYM strat: peso 0.26 -> size x0.26» del
+        pavimento della panchina (26 set 2026): stampata a fine ciclo come le
+        righe dei rifiuti, cosi' dal journal si conta quante decisioni passano a
+        size ridotta invece che essere scartate (era il motivo «peso sotto
+        soglia»: 0 casi il 26 set, ops 0268, ma la regola vale da oggi)."""
+        self._panchina_ciclo.append(f"[panchina] {symbol} {strategy}: peso {peso:.2f} "
+                                    f"-> size x{peso_size:.2f}")
+
     def _stampa_rifiuti(self) -> None:
         """Stampa i rifiuti accumulati (prime _MAX_RIFIUTI_LOG righe, poi il conto)
-        e svuota l'accumulo, cosi' il ciclo dopo riparte da zero."""
+        e svuota l'accumulo, cosi' il ciclo dopo riparte da zero. Le righe
+        «[panchina]» seguono, con lo stesso tetto."""
         righe = self._rifiuti_ciclo
         for r in righe[:self._MAX_RIFIUTI_LOG]:
             print(r)
@@ -189,6 +203,12 @@ class Orchestrator:
             print(f"[rifiuto] ... e altri {len(righe) - self._MAX_RIFIUTI_LOG}")
         self._rifiuti_ciclo = []
         self._rifiuti_visti = set()
+        righe_p = self._panchina_ciclo
+        for r in righe_p[:self._MAX_RIFIUTI_LOG]:
+            print(r)
+        if len(righe_p) > self._MAX_RIFIUTI_LOG:
+            print(f"[panchina] ... e altri {len(righe_p) - self._MAX_RIFIUTI_LOG}")
+        self._panchina_ciclo = []
 
     def _record_status(self, regime: Regime, n_assets: int, signals: list[dict],
                        outcome: str, reason: str,
@@ -387,9 +407,16 @@ class Orchestrator:
         esplorative_aperte: int = 0,
     ) -> list[OrchestratorDecision]:
         """PARITA' COL BACKTEST: ritorna UNA decisione per OGNI coin con un segnale
-        valido (sopra soglia, peso>0), prendendo la strategia migliore per quella
-        coin. Niente LLM, niente 'scegli il migliore globale': come il backtest che
+        valido (peso > 0), prendendo la strategia migliore per quella coin.
+        Niente LLM, niente 'scegli il migliore globale': come il backtest che
         apre ogni segnale indipendentemente. Vincolo conto reale: 1 posizione/coin.
+
+        IL PAVIMENTO DELLA PANCHINA (26 set 2026, passo 4): un peso che porta la
+        confidenza sotto DECISION_THRESHOLD NON rifiuta piu' (era «peso sotto
+        soglia», backlog I1); la decisione passa con `peso_size = max(
+        PANCHINA_PAVIMENTO, peso)` e main lo applica alla size, con una riga
+        «[panchina]» nel log. Il peso 0 («spenta dal learning») rifiuta ancora.
+        Con PANCHINA_PAVIMENTO <= 0 torna il rifiuto di prima.
 
         IL PAPER ESPLORATIVO (25 set 2026, F1bis), due regole sole:
           (a) una VALIDATA vince sempre: se sulla coin una strategia validata ha
@@ -413,13 +440,19 @@ class Orchestrator:
                               f"peso {s['weight']:.2f} (strategia spenta dal learning)",
                               dettaglio=self._dettaglio(s))
                 continue
+            peso_size = None
             if s["adjusted_confidence"] < self.DECISION_THRESHOLD:
-                self._rifiuto(s["symbol"], s["strategy"],
-                              f"peso {s['weight']:.2f}: confidenza "
-                              f"{s['adjusted_confidence']:.0f} < soglia "
-                              f"{self.DECISION_THRESHOLD}",
-                              dettaglio=self._dettaglio(s))
-                continue
+                pavimento = float(settings.PANCHINA_PAVIMENTO)
+                if pavimento <= 0.0:
+                    self._rifiuto(s["symbol"], s["strategy"],
+                                  f"peso {s['weight']:.2f}: confidenza "
+                                  f"{s['adjusted_confidence']:.0f} < soglia "
+                                  f"{self.DECISION_THRESHOLD}",
+                                  dettaglio=self._dettaglio(s))
+                    continue
+                # size ridotta, mai rifiuto (26 set 2026): il peso e' il fattore,
+                # il pavimento impedisce che diventi un rifiuto travestito
+                peso_size = max(pavimento, min(1.0, float(s["weight"])))
             if s["symbol"] in seen:
                 continue
             if s.get("esplorativa"):
@@ -430,6 +463,8 @@ class Orchestrator:
                     continue    # regola (b)
                 n_esplorative += 1
             seen.add(s["symbol"])
+            if peso_size is not None:
+                self._panchina(s["symbol"], s["strategy"], float(s["weight"]), peso_size)
             # TREND come contesto: modula la SIZE (non un veto). Il controtrend
             # (rispetto a trend della coin 60% + mercato 40%) apre piu' piccolo;
             # in-trend resta pieno. size_multiplier<=1 -> puo' solo ridurre.
@@ -445,7 +480,8 @@ class Orchestrator:
                 confidence=s["confidence"], reasoning=s.get("reasoning", ""),
                 suggested_stop=s.get("suggested_stop"),
                 suggested_target=s.get("suggested_target"),
-                esplorativa=bool(s.get("esplorativa")))
+                esplorativa=bool(s.get("esplorativa")),
+                peso_size=peso_size)
             d.adjusted_confidence = s["adjusted_confidence"]
             decisions.append(d)
         self._stampa_rifiuti()

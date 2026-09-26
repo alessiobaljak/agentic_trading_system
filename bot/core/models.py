@@ -139,6 +139,13 @@ class OrchestratorDecision(BaseModel):
     # legge `_try_open` (size x ESPLORATIVA_SIZE_MULT) e segue il trade fino al
     # ClosedTrade, cosi' il learning delle validate lo puo' ignorare.
     esplorativa: bool = False
+    # IL PAVIMENTO DELLA PANCHINA (26 set 2026, passo 4): se il peso strategia x
+    # regime porta la confidenza sotto la soglia, la decisione NON viene piu'
+    # rifiutata (il proprietario non vuole limitare il numero di trade): passa
+    # con `peso_size = max(PANCHINA_PAVIMENTO, peso)` e main lo applica alla
+    # size (mai a `size_multiplier`, gia' usato dal tilt di trend: cosi' i due
+    # fattori restano leggibili a parte in `size_factors`). None = sopra soglia.
+    peso_size: Optional[float] = None
     timestamp: datetime = Field(default_factory=_utcnow)
 
     @field_validator("size_multiplier")
@@ -268,6 +275,13 @@ class ClosedTrade(BaseModel):
     # ESCLUDONO (non e' una promessa del gate) e con cui referti, scala e keep
     # lo INCLUDONO (piu' dati e' il punto). False sui trade storici.
     esplorativa: bool = False
+    # LE DECLASSATE (26 set 2026, passo 2): il trade e' stato aperto da una
+    # validata che il gate ha declassato (bocciata DECLASSATA_NOTTI giri completi
+    # di fila), a DECLASSATA_SIZE_MULT della size. Resta un trade delle VALIDATE
+    # (entra in pesi, deriva, numeri del paper): la marca serve a leggere il
+    # vissuto delle declassate contro le attive (`trades`, DECLASSATE; controllo
+    # `paper.declassate`). Persistita con la posizione come `esplorativa`.
+    declassata: bool = False
     # LA MEMORIA COMPLETA DEL TRADE (25 set 2026, richiesta del proprietario):
     # lo stop ORIGINALE (quello in `stop_price` e' l'ultimo, spostato dal
     # trailing), la scala dei TP e il break-even con cui e' stato aperto, i prezzi

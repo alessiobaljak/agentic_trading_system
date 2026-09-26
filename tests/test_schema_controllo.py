@@ -218,6 +218,7 @@ CONTROLLO_ANNIDATE = {
     "paper.benchmark": {"btc_24h_pct", "btc_7g_pct", "nota", "portafoglio"},
     "paper.benchmark.portafoglio": {"lettura", "updated_at"},
     "paper.esplorative": {"trades", "vinti", "pnl", "aperte", "coppie_attive"},
+    "paper.declassate": {"trades", "pnl", "aperte"},
     "learning.attivo.freno_globale": {"attivo", "verdetto", "trades", "pf_vissuto", "pf_atteso",
                                       "pf_atteso_nota", "soglia_uscita_pf", "size_x", "leva_x_min",
                                       "motivo", "dal"},

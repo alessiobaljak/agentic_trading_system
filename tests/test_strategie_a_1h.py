@@ -69,7 +69,10 @@ def test_i_trade_portano_il_timeframe_della_strategia():
 def test_la_passata_a_1h_e_su_btc_e_non_puo_sforare():
     from scripts import optimize as o
 
-    assert o.DISCOVERY_EXTRA == "1h:BTCUSDT,ETHUSDT,SOLUSDT,ADAUSDT,BCHUSDT"
+    # dal 26 set 2026 il default e' «auto30» (tests/test_1h_auto.py); la vecchia
+    # lista di 5 coin resta il ripiego riconosciuto (DISCOVERY_EXTRA_VECCHIO_DEFAULT)
+    assert o.DISCOVERY_EXTRA == "1h:auto30"
+    assert o.DISCOVERY_EXTRA_VECCHIO_DEFAULT == "1h:BTCUSDT,ETHUSDT,SOLUSDT,ADAUSDT,BCHUSDT"
     assert o.DISCOVERY_EXTRA_MAX_S <= 3600
     src = inspect.getsource(o.passata_extra)
     assert "timeout=DISCOVERY_EXTRA_MAX_S" in src and '"--interval", interval, "--symbols", coins' in src

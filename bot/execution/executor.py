@@ -115,6 +115,11 @@ class Position:
     # ripristinata come `selector_p`: dopo un riavvio il trade chiuso deve
     # uscire ancora marcato, altrimenti finirebbe nei pesi delle validate.
     esplorativa: bool = False
+    # LE DECLASSATE (26 set 2026, passo 2): la posizione e' di una validata che
+    # il gate ha declassato (size a DECLASSATA_SIZE_MULT). Persistita e
+    # ripristinata come `esplorativa`: dopo un riavvio il trade chiuso deve
+    # uscire ancora marcato, altrimenti il confronto declassate/attive si sporca.
+    declassata: bool = False
     # --- LE MISURE MANCANTI (26 set 2026, audit della memoria del trade) ----- #
     # Solo misura, nessuna decisione. Tutte persistite in _write_position_state e
     # ripristinate in _position_from_state (documenti vecchi -> None/[]).
@@ -220,6 +225,7 @@ class ExecutionEngine:
         size_factors: Optional[dict] = None,
         portafoglio_at_entry: Optional[dict] = None,
         signal_candle_ts: Optional[float] = None,
+        declassata: bool = False,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved).
         `selector_p`/`selector_soglia`: l'ombra del selettore (25 set 2026), solo
@@ -228,7 +234,9 @@ class ExecutionEngine:
         ridotta (25 set 2026, F1bis); la size e' gia' dentro `params`, qui si
         annota soltanto, e l'annotazione segue il trade fino a Firestore.
         `size_factors`/`portafoglio_at_entry`/`signal_candle_ts` (26 set 2026):
-        misure d'ingresso decise dal chiamante, solo annotate e persistite."""
+        misure d'ingresso decise dal chiamante, solo annotate e persistite.
+        `declassata` (26 set 2026, passo 2): la validata e' stata declassata dal
+        gate; come `esplorativa`, la size e' gia' dentro `params`, qui si annota."""
         if not params.approved or params.quantity <= 0:
             print(f"[execution] ordine rifiutato dal gate: {params.reject_reason}")
             return None
@@ -255,6 +263,7 @@ class ExecutionEngine:
             selector_p=(float(selector_p) if selector_p is not None else None),
             selector_soglia=(float(selector_soglia) if selector_soglia is not None else None),
             esplorativa=bool(esplorativa),
+            declassata=bool(declassata),
             feats_at_entry=dict(feats_at_entry) if feats_at_entry else None,
             regola=(str(regola)[:300] if regola else None),
             size_factors=dict(size_factors) if size_factors else None,
@@ -808,6 +817,8 @@ class ExecutionEngine:
             # e la marca del paper esplorativo (25 set 2026, F1bis): e' qui che
             # pesi/deriva/calibrazione la leggono per escludere il trade
             esplorativa=bool(pos.esplorativa),
+            # e quella delle declassate (26 set 2026): stessa strada
+            declassata=bool(getattr(pos, "declassata", False)),
             scale_stage_reached=pos.scale_stage,
             realized_partial=round(pos.realized_net, 6),
             mfe_r=round(mfe_in_r(pos.entry_price, pos.high_water, pos.orig_stop), 3),
@@ -951,6 +962,8 @@ class ExecutionEngine:
             # riavvio smarcherebbe la posizione e il trade chiuso entrerebbe
             # nei pesi delle validate
             "esplorativa": bool(pos.esplorativa),
+            # le declassate (26 set 2026, passo 2): stessa ragione della riga sopra
+            "declassata": bool(getattr(pos, "declassata", False)),
             # le misure mancanti (26 set 2026): senza queste chiavi un riavvio
             # azzererebbe MAE, tempi e fette, e il trade chiuso uscirebbe monco
             "low_water": pos.low_water,
@@ -1051,6 +1064,8 @@ class ExecutionEngine:
         # il paper esplorativo (25 set 2026, F1bis): documenti piu' vecchi non
         # hanno la chiave -> False, cioe' «posizione di una validata»
         pos.esplorativa = bool(p.get("esplorativa", False))
+        # le declassate (26 set 2026): chiave assente -> False, «validata attiva»
+        pos.declassata = bool(p.get("declassata", False))
         # le misure mancanti (26 set 2026): documenti piu' vecchi non hanno le
         # chiavi -> low_water all'entry (MAE parte da zero), tempi None, fette []
         _lw = p.get("low_water")

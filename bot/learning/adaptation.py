@@ -48,6 +48,16 @@ class AdaptationEngine:
         # marcate; ricaricate ogni ora con le spec generate (`load_generated`).
         self._esplorative: dict[str, dict] = {}
         self._esplorative_specs: dict[str, dict] = {}
+        # LE DECLASSATE (26 set 2026, passo 2): le coppie validate su cui il gate
+        # ha scritto `declassata: true` (bocciate DECLASSATA_NOTTI giri completi
+        # di fila). Si operano ancora, a DECLASSATA_SIZE_MULT della size; il
+        # bot LEGGE il flag dal registro (ogni ora, con `load_params`), non lo
+        # calcola. Fail-open: registro illeggibile -> nessuna declassata.
+        self._declassate: set[str] = set()
+        # `updated_at` del registro all'ultimo `load_params` (26 set 2026): e' il
+        # confronto di `registro_cambiato`, che il loop del bot chiama ogni
+        # minuto per ricaricare APPENA il gate scrive, non un'ora dopo
+        self._registro_updated_at = None
         self.load_weights()
         self.load_params()
         self.load_generated()
@@ -166,10 +176,16 @@ class AdaptationEngine:
 
     # ------------------------------------------------------------------ #
     def allocation(self, strategy: str, regime: Regime, confidence: float,
-                   drift_key: tuple[str, str] | None = None) -> tuple[float, float, str]:
+                   drift_key: tuple[str, str] | None = None,
+                   contesto=None, direzione=None) -> tuple[float, float, str]:
         """(risk_mult, lev_mult, nota): quanto CAPITALE e quanta LEVA merita questo
         trade, guidato SOLO dai dati — mai oltre i cap di sicurezza (applicati poi
         dal risk manager, che puo' solo ridurre).
+
+        `contesto` (market_up del BTC adesso: 1/0/None) e `direzione` (long/
+        short) servono al FRENO PER GRUPPO (26 set 2026): con `regime` individuano
+        i pool della decisione in `drift/current.pool`. Senza, quel freno resta
+        muto (fail-open), gli altri no.
 
           * CONVINZIONE: la confidence del segnale (forza degli indicatori, scala
             0-100 validata dal gate). 30 (soglia minima) -> x0.75; 85+ -> x1.25.
@@ -205,11 +221,13 @@ class AdaptationEngine:
         # legge PERCHE' la size era ridotta.
         if drift_key is not None:
             from bot.learning.drift import motivi_freno, weight_factor
-            f = weight_factor(self._drift, drift_key[0], drift_key[1])
+            f = weight_factor(self._drift, drift_key[0], drift_key[1],
+                              regime=regime, contesto=contesto, direzione=direzione)
             if f < 1.0:
                 risk_mult *= f
                 lev_mult = max(0.5, lev_mult * (f ** 0.5))
-                motivi = motivi_freno(self._drift, drift_key[0], drift_key[1])
+                motivi = motivi_freno(self._drift, drift_key[0], drift_key[1],
+                                      regime=regime, contesto=contesto, direzione=direzione)
                 note += f" · FRENO x{f:.2f} ({', '.join(motivi)})"
         return risk_mult, lev_mult, note
 
@@ -258,8 +276,19 @@ class AdaptationEngine:
         except Exception:  # noqa: BLE001
             self._calibration = {}
         reg = self.fb.get_doc("strategy_registry", "validated") or {}
+        # l'istante di scrittura del registro appena letto: `registro_cambiato`
+        # lo confronta con quello vivo per ricaricare appena il gate scrive
+        self._registro_updated_at = reg.get("updated_at")
         validated = reg.get("validated") or []
         pairs = decode_pairs(reg.get("pairs"))
+        # le DECLASSATE (26 set 2026): il flag lo scrive il gate sul record della
+        # coppia; qui si legge e basta, a ogni ricarica oraria. Un record rotto
+        # non ferma il caricamento del registro (fail-open: nessuna declassata).
+        try:
+            self._declassate = {str(k) for k, r in pairs.items()
+                                if isinstance(r, dict) and bool(r.get("declassata"))}
+        except Exception:  # noqa: BLE001
+            self._declassate = set()
         # GATE 0) il bot NON va in paper finche' il GATE 1 non e' "ready" (copertura
         # dell'universo >= soglia). Resta FLAT anche se qualche coppia e' gia'
         # validata: e' cio' che promette il Telegram ("GATE 1 SUPERATO -> paper").
@@ -299,6 +328,44 @@ class AdaptationEngine:
         self._passed = self._robust_only(decode_pairs(doc.get("passed")) or [])
         self._params = {k: (entries.get(k, {}).get("params", {}) or {}) for k in self._passed}
         self._has_opt_data = bool(entries)
+
+    def registro_cambiato(self) -> bool:
+        """True se `strategy_registry/validated.updated_at` e' diverso da quello
+        letto dall'ultimo `load_params` (26 set 2026, piano del 26 set 15:xx).
+
+        PERCHE'. Il bot ricaricava il registro ogni ora (ADAPT_RELOAD_SECONDS):
+        una coppia validata, declassata o sostituita dal giro delle 03:30 poteva
+        essere operata «alla vecchia» fino a 59 minuti. Il gate scrive
+        `updated_at` a ogni scrittura del registro (`update_registry` in
+        optimize, `merge_into_registry` nella discovery, anche a 1 ora): basta
+        confrontarlo.
+
+        COSTO. Il registro e' un documento da ~1 MB: leggerlo intero ogni
+        minuto sono 1.400 letture e ~1,3 GB al giorno. Sul Firestore vero si
+        chiede al server SOLO il campo (`field_paths`, una proiezione: il
+        documento resta a casa, viaggia un numero); il client di `bot/core/
+        firebase_client.py` non ha un metodo per farlo e non si tocca oggi,
+        quindi si passa dal suo `_fs` — se domani cambia, si ricade sulla
+        lettura intera. In memoria (test, nessun Firebase) si legge il
+        documento intero, che li' non costa niente.
+
+        FAIL-OPEN: qualunque errore -> False (si resta sulla ricarica oraria);
+        registro senza `updated_at` (formato vecchio) -> False."""
+        try:
+            fs = getattr(self.fb, "_fs", None)
+            if fs is not None and getattr(self.fb, "is_live", False):
+                snap = fs.collection("strategy_registry").document("validated") \
+                         .get(field_paths=["updated_at"])
+                doc = (snap.to_dict() or {}) if getattr(snap, "exists", False) else {}
+            else:
+                doc = self.fb.get_doc("strategy_registry", "validated") or {}
+            nuovo = doc.get("updated_at")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[adapt] registro non controllato ({str(exc)[:80]}): ricarica oraria")
+            return False
+        if nuovo is None:
+            return False
+        return nuovo != self._registro_updated_at
 
     def params_for(self, symbol: str) -> dict[str, dict]:
         """{strategy: params} per l'asset (solo coppie ottimizzate)."""
@@ -365,6 +432,16 @@ class AdaptationEngine:
             strat.esplorativa = True
             out.append(strat)
         return out
+
+    def is_declassata(self, symbol: str, strategy: str) -> bool:
+        """True se il gate ha DECLASSATO questa coppia validata (26 set 2026,
+        passo 2: `declassata: true` sul record del registro, letto ogni ora).
+        Chi la legge (`main._try_open`) la opera a DECLASSATA_SIZE_MULT della
+        size, senza mai rifiutarla. Fail-open: interruttore spento, coppia non
+        nel registro o flag assente -> False, cioe' size piena come prima."""
+        if not settings.DECLASSATE_ENABLED:
+            return False
+        return f"{symbol}|{strategy}" in self._declassate
 
     def is_esplorativa(self, symbol: str, strategy: str) -> bool:
         """True se la coppia e' nel registro esplorativo E non e' validata: una

@@ -47,6 +47,9 @@ VERSIONE_SCHEMA = 1
 #: puo' durare minuti senza battito). Il bot non scrive `online`: sarebbe sempre true.
 SOGLIA_ONLINE_S = 900
 #: peso sotto il quale una strategia×regime e' «in panchina» (a confidenza 60 non
+#: passa la soglia 30). Dal 26 set 2026 (pavimento della panchina, passo 4)
+#: «in panchina» NON vuol piu' dire rifiutata: la decisione passa a size ridotta
+#: (`peso_size` = max(PANCHINA_PAVIMENTO, peso)); il conteggio resta lo stesso.
 #: passa piu' la soglia 30 dell'orchestratore); a 0 e' spenta.
 SOGLIA_PANCHINA = 0.5
 LETTURA_MAX = 140
@@ -684,6 +687,19 @@ def _esplorative(trades_esplorativi, positions, esp_doc) -> dict:
             "pnl": round(sum(pnls), 2), "aperte": aperte, "coppie_attive": coppie}
 
 
+def _declassate(trades_validate, positions) -> dict:
+    """`paper.declassate` (26 set 2026, passo 2): i trade delle validate che il
+    gate ha DECLASSATO (`declassata: true`, size a un quarto), fuori dagli esiti
+    esterni. Restano dentro tutti gli altri numeri di `paper` (sono validate):
+    qui si contano a parte per leggere il vissuto delle declassate contro le
+    attive. `aperte` = posizioni RTDB marcate `declassata`."""
+    rows = [t for t in _rows(trades_validate) if t.get("declassata")]
+    aperte = 0
+    if isinstance(positions, dict):
+        aperte = sum(1 for p in positions.values() if isinstance(p, dict) and p.get("declassata"))
+    return {"trades": len(rows), "pnl": round(sum(_pnl(t) for t in rows), 2), "aperte": aperte}
+
+
 def _paper(d: dict, now: float) -> dict:
     if d.get("trades") is None:
         raise RuntimeError("trade non leggibili da Firestore")
@@ -803,6 +819,7 @@ def _paper(d: dict, now: float) -> dict:
         "trailing": trailing,
         "benchmark": benchmark,
         "esplorative": _esplorative(trades_esplorativi, d.get("positions"), d.get("esplorative")),
+        "declassate": _declassate(trades_tutti, d.get("positions")),
     }
 
 

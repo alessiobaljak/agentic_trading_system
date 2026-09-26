@@ -90,14 +90,17 @@ def verdetto_post_stop(after, entry: float, orig_stop: float, primo_gradino: flo
 
 
 def fattori_size(decision, rmult, lmult, alloc_note, params,
-                 tilt_sentiment=None, f_esplorativa=1.0) -> dict | None:
+                 tilt_sentiment=None, f_esplorativa=1.0, f_declassata=1.0,
+                 peso_size=None) -> dict | None:
     """I fattori con cui la size di QUESTO trade e' stata decisa (26 set 2026),
     in un dizionario JSON-safe: moltiplicatore di rischio e di leva
     dell'allocazione (dentro la nota: convinzione, peso imparato,
-    calibrazione/trust, FRENO per deriva o serie), il tilt del sentiment, il
-    fattore esplorativa, il size_multiplier finale della decisione e le note del
-    risk manager (cosa ha limitato cosa). Senza, «perche' era cosi' piccolo?»
-    non aveva risposta. Puro e fail-open: None se qualcosa non e' leggibile."""
+    calibrazione/trust, FRENO per deriva, serie o pool), il tilt del sentiment,
+    il fattore esplorativa, il fattore declassata e il `peso_size` del
+    pavimento della panchina (26 set 2026, passo 2 e 4: None = sopra soglia),
+    il size_multiplier finale della decisione e le note del risk manager (cosa
+    ha limitato cosa). Senza, «perche' era cosi' piccolo?» non aveva risposta.
+    Puro e fail-open: None se qualcosa non e' leggibile."""
     try:
         return {
             "risk_mult": round(float(rmult), 4),
@@ -106,6 +109,8 @@ def fattori_size(decision, rmult, lmult, alloc_note, params,
             "tilt_sentiment": (round(float(tilt_sentiment), 4)
                                if tilt_sentiment is not None else None),
             "esplorativa": round(float(f_esplorativa), 4),
+            "declassata": round(float(f_declassata), 4),
+            "peso_size": (round(float(peso_size), 4) if peso_size is not None else None),
             "size_multiplier": round(float(getattr(decision, "size_multiplier", 1.0)), 4),
             "confidence": (float(decision.confidence)
                            if getattr(decision, "confidence", None) is not None else None),
@@ -176,6 +181,49 @@ def _primo_ingresso(trades: list[dict]) -> float | None:
         if ts is not None:
             out.append(ts)
     return min(out) if out else None
+
+
+#: ogni quanti secondi, AL MASSIMO, il loop chiede al registro se il gate lo ha
+#: riscritto (26 set 2026): dichiarato qui, non tarato. Il loop gira ogni 30 s;
+#: la domanda costa una lettura di un solo campo (`registro_cambiato`), quindi
+#: 60 s e' un compromesso fra «entro un minuto dalla scrittura» e non chiedere
+#: due volte la stessa cosa nello stesso minuto. La ricarica oraria resta la rete.
+REGISTRO_CHECK_S = 60.0
+
+
+def fattore_size_declassata(decision, adaptation) -> tuple[float, bool]:
+    """(moltiplicatore, e' declassata) per una decisione (26 set 2026, passo 2):
+    DECLASSATA_SIZE_MULT se il gate ha declassato la coppia validata
+    (`adaptation.is_declassata`), 1 altrimenti. Un'esplorativa non e' mai
+    declassata (non e' validata). Funzione di modulo, non metodo, per la stessa
+    ragione di `fattori_size`: i TradingBot finti dei test non devono
+    conoscerla. Fail-open in ogni direzione: interruttore spento, adattamento
+    senza il metodo, errore -> size piena."""
+    if not settings.DECLASSATE_ENABLED or getattr(decision, "esplorativa", False):
+        return 1.0, False
+    fn = getattr(adaptation, "is_declassata", None)
+    try:
+        dec = bool(fn(decision.asset, decision.strategy)) if callable(fn) else False
+    except Exception:  # noqa: BLE001
+        dec = False
+    if not dec:
+        return 1.0, False
+    return max(0.0, min(1.0, float(settings.DECLASSATA_SIZE_MULT))), True
+
+
+def contesto_btc(btc_snap) -> float | None:
+    """`market_up` dallo snapshot di BTC dell'ultimo refresh_regime, con la
+    STESSA regola di `feats_ingresso` del gate (EMA veloce sopra la lenta a 1
+    ora -> 1.0, sotto -> 0.0): serve al FRENO PER GRUPPO (26 set 2026) per
+    trovare il pool direzione x contesto della decisione. None se lo snapshot
+    o gli indicatori a 1h mancano: il pool resta muto, non si inventa."""
+    try:
+        m = btc_snap.ind("1h") if btc_snap is not None else None
+        if m is None or m.ema_fast is None or m.ema_slow is None:
+            return None
+        return 1.0 if float(m.ema_fast) > float(m.ema_slow) else 0.0
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def variabili_ingresso(btc_snap, asset, params, sparams: dict, tf: str, now: float):
@@ -274,6 +322,12 @@ class TradingBot:
         self._avviato_at = time.time()
         self._errori_ciclo: list[float] = []
         self._registro_cache: dict | None = None
+        # LA RICARICA ALLA SCRITTURA (26 set 2026): quando e' stata fatta l'ultima
+        # domanda «il registro e' cambiato?» (al massimo ogni REGISTRO_CHECK_S) e
+        # se, dopo una ricarica, va riletto una volta ancora il documento delle
+        # spec (vedi _ricarica_registro_se_cambiato)
+        self._registro_check_at = 0.0
+        self._registro_rileggi_spec = False
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
@@ -1330,16 +1384,36 @@ class TradingBot:
         # strategia nel regime (adaptation.allocation). I cap di sicurezza (volatilita',
         # hard cap, 10%/posizione) restano tetto invalicabile dentro il risk manager.
         user = self.read_user_risk()
+        # il FRENO PER GRUPPO (26 set 2026, passo 4) trova i pool della decisione
+        # dal regime della coin, dal contesto BTC di adesso (stessa regola del
+        # gate: `contesto_btc`) e dalla direzione: fail-open se mancano
         rmult, lmult, alloc_note = self.adaptation.allocation(
             decision.strategy, asset.regime or self.regime or Regime.SIDEWAYS,
-            decision.confidence, drift_key=(asset.symbol, decision.strategy))
+            decision.confidence, drift_key=(asset.symbol, decision.strategy),
+            contesto=contesto_btc(getattr(self, "_btc_snap", None)),
+            direzione=decision.direction.value)
         # PAPER ESPLORATIVO (25 set 2026, F1bis): un quarto della size, PRIMA dei
         # cap del risk manager (che possono solo ridurre ancora). La leva resta
         # quella dell'allocazione: e' la size che limita il danno, non la leva.
+        # LE DECLASSATE (26 set 2026, passo 2): stessa strada, stesso quarto
+        # (DECLASSATA_SIZE_MULT). Una validata non e' mai esplorativa; se lo
+        # fossero entrambe vale il MINIMO dei due, mai il prodotto.
         _f_esp = self.fattore_size_esplorativa(decision)
-        if _f_esp < 1.0:
-            rmult *= _f_esp
-            alloc_note += f" · esplorativa x{_f_esp:g}"
+        _f_dec, _declassata = fattore_size_declassata(decision, self.adaptation)
+        _f_rid = min(_f_esp, _f_dec)
+        if _f_rid < 1.0:
+            rmult *= _f_rid
+            if _f_esp < 1.0:
+                alloc_note += f" · esplorativa x{_f_esp:g}"
+            if _declassata:
+                alloc_note += f" · declassata x{_f_dec:g}"
+        # IL PAVIMENTO DELLA PANCHINA (26 set 2026, passo 4): il peso sotto
+        # soglia non ha rifiutato, ha dato `peso_size`; si applica qui, sulla
+        # size, come i due fattori sopra (la leva resta dell'allocazione)
+        _peso_size = getattr(decision, "peso_size", None)
+        if _peso_size is not None and float(_peso_size) < 1.0:
+            rmult *= max(0.0, min(1.0, float(_peso_size)))
+            alloc_note += f" · panchina x{float(_peso_size):.2f}"
         params = self.risk.evaluate(decision, user, asset, self.account_equity(),
                                     volatility_sigma=self._volatility_sigma(asset),
                                     risk_mult=rmult, lev_mult=lmult, alloc_note=alloc_note)
@@ -1397,7 +1471,8 @@ class TradingBot:
         # com'e' il portafoglio in quel momento. Solo memoria, mai una decisione;
         # fail-open: un errore qui non ferma l'apertura.
         _size_factors = fattori_size(decision, rmult, lmult, alloc_note, params,
-                                     tilt_sentiment=_tilt_sent, f_esplorativa=_f_esp)
+                                     tilt_sentiment=_tilt_sent, f_esplorativa=_f_esp,
+                                     f_declassata=_f_dec, peso_size=_peso_size)
         _portafoglio = portafoglio_ingresso(getattr(self, "executor", None),
                                             getattr(self, "circuit_breakers", None),
                                             decision.direction)
@@ -1410,6 +1485,8 @@ class TradingBot:
                                           timeframe=self.adaptation.timeframe_for(decision.strategy),
                                           selector_p=_sel_p, selector_soglia=_sel_soglia,
                                           esplorativa=bool(getattr(decision, "esplorativa", False)),
+                                          # la marca delle declassate (26 set 2026, passo 2)
+                                          declassata=bool(_declassata),
                                           # memoria del trade (25 set 2026): variabili
                                           # d'ingresso e regola in chiaro
                                           feats_at_entry=_feats,
@@ -1423,6 +1500,10 @@ class TradingBot:
                 # validate (25 set 2026, F1bis): stessa forma di «[rifiuto]»
                 print(f"[esplorativa] {pos.symbol} {pos.strategy} {pos.direction.value} "
                       f"size x{_f_esp:g}")
+            if _declassata:
+                # la riga delle declassate (26 set 2026, passo 2): stessa forma
+                print(f"[declassata] {pos.symbol} {pos.strategy} {pos.direction.value} "
+                      f"size x{_f_dec:g}")
             self._sync_stream_symbols()
             # i prezzi accumulati PRIMA dell'ingresso non possono riempire i suoi TP
             if self.stream is not None:
@@ -1514,6 +1595,48 @@ class TradingBot:
             return None, None
 
     # ------------------------------------------------------------------ #
+    def _ricarica_registro_se_cambiato(self, now: float) -> bool:
+        """IL REGISTRO SI RICARICA QUANDO IL GATE LO SCRIVE, non un'ora dopo
+        (26 set 2026, piano del 26 set 15:xx). Il loop chiama questo metodo a
+        ogni iterazione (30 s); al massimo ogni REGISTRO_CHECK_S chiede a
+        `adaptation.registro_cambiato()` se `strategy_registry/validated.updated_at`
+        e' diverso da quello dell'ultima lettura, e se si' ricarica cio' che la
+        ricarica oraria ricarica (pesi, registro, spec generate, selettore) e
+        riparte l'orologio dell'ora. Prima una coppia validata, declassata o
+        sostituita dal giro delle 03:30 restava «alla vecchia» fino a 59 minuti.
+
+        La discovery scrive il registro nel merge e le spec nuove SUBITO DOPO
+        (`persist_specs`): se la ricarica cade in quei secondi, una coppia
+        appena validata potrebbe non avere ancora la sua spec. Per questo al
+        controllo successivo (un minuto dopo) si rileggono le spec una volta
+        ancora, che costa un documento piccolo. Fail-open in tutto: un errore
+        nella domanda lascia la ricarica oraria com'e'. Ritorna True se ha
+        ricaricato."""
+        if now - getattr(self, "_registro_check_at", 0.0) < REGISTRO_CHECK_S:
+            return False
+        self._registro_check_at = now
+        if getattr(self, "_registro_rileggi_spec", False):
+            self._registro_rileggi_spec = False
+            try:
+                self.adaptation.load_generated()
+            except Exception as exc:  # noqa: BLE001
+                print(f"[main] spec non rilette dopo la ricarica: {exc}")
+        try:
+            cambiato = bool(self.adaptation.registro_cambiato())
+        except Exception as exc:  # noqa: BLE001
+            print(f"[main] controllo del registro saltato: {exc}")
+            return False
+        if not cambiato:
+            return False
+        print("[main] registro riscritto dal gate: ricarico pesi, registro, spec e selettore")
+        self.adaptation.load_weights()
+        self.adaptation.load_params()
+        self.adaptation.load_generated()
+        self._load_selettore()
+        self.last_adapt_reload = now
+        self._registro_rileggi_spec = True
+        return True
+
     def _load_adapt_state(self) -> None:
         """Ricarica cooldown coin/strategia da Firebase: così SOPRAVVIVONO ai
         riavvii del bot (prima erano solo in memoria e si azzeravano a ogni restart)."""
@@ -1702,7 +1825,11 @@ class TradingBot:
             from bot.learning.drift import compute_drift, drifted_keys
             reg = self.fb.get_doc("strategy_registry", "validated") or {}
             self._registro_cache = reg          # lo riusa il controllo orario
-            doc = compute_drift(trades, decode_pairs(reg.get("pairs")))
+            # i pool del freno per gruppo (26 set 2026) hanno bisogno delle spec
+            # generate (famiglia) e delle chiavi validate (riferimento promesso)
+            doc = compute_drift(trades, decode_pairs(reg.get("pairs")),
+                                specs=getattr(self.adaptation, "_generated_specs", None),
+                                validated=reg.get("validated") or None)
             doc["updated_at"] = time.time()
             # DA QUANDO il freno globale e' acceso (25 set 2026, contratto §3.4):
             # `global.dal` e' l'istante del PRIMO verdetto `drift` consecutivo,
@@ -1926,6 +2053,9 @@ class TradingBot:
                     # ritmo del registro, stesso «fail-open» (dentro ha il suo try)
                     self._load_selettore()
                     self.last_adapt_reload = now
+                # e fra un'ora e l'altra, APPENA il gate riscrive il registro
+                # (26 set 2026): una domanda al minuto, vedi il metodo
+                self._ricarica_registro_se_cambiato(now)
                 if now - self.last_regime >= settings.REGIME_INTERVAL_MINUTES * 60 or not self.regime:
                     self.refresh_regime(now)
                 self.maybe_scan(now)

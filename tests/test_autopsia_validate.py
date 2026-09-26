@@ -8,10 +8,15 @@ su 1,5/3/5 con keep 0,5. Prima di cambiare il gate, `scripts/autopsia_validate.p
 misura quante bocciature spariscono col passo 1 sulla configurazione operata.
 
 Qui si difendono le quattro cose che rendono quella misura credibile:
-  * il gate NON cambia: `config_iniziale` ha default None, la discovery non lo
-    passa, e senza di esso `evaluate_spec` fa esattamente le passate di prima;
-  * col parametro, la configurazione forzata entra SOLO al passo 1: la ricerca
-    del passo 2 parte ancora dai candidati globali, e le metriche finali si
+  * `config_iniziale` ha default None e le candidate NUOVE non lo ricevono:
+    senza di esso `evaluate_spec` fa esattamente le passate di prima. Dal 26
+    set sera la discovery lo passa alle sole coppie GIA' validate
+    (tests/test_declassate_gate.py): l'autopsia misurava l'artefatto, il gate
+    poi l'ha chiuso;
+  * col parametro, il passo 1 gira sulla configurazione operata; la ricerca del
+    passo 2 parte ancora dai candidati globali ma la configurazione operata
+    resta scelta a meno che un candidato non la batta del margine
+    (CONFIG_MARGINE, isteresi); se la ricerca vince, le metriche finali si
     rifanno sulla configurazione scelta;
   * le funzioni pure (`pf_recente`, `classifica`, `config_operata`, il riassunto)
     dicono quello che dicono;
@@ -111,17 +116,21 @@ OPERATA = {"scale_r_mults": [2.0, 4.0, 6.0], "sl_to_breakeven": False, "profit_l
 # --------------------------------------------------------------------------- #
 # 1. il gate non cambia                                                        #
 # --------------------------------------------------------------------------- #
-def test_config_iniziale_ha_default_none_e_la_discovery_non_lo_passa():
+def test_config_iniziale_ha_default_none_e_va_solo_alle_validate():
     sig = inspect.signature(d.evaluate_spec)
     assert "config_iniziale" in sig.parameters
     assert sig.parameters["config_iniziale"].default is None
-    for fn in (d._disc_one, d.conferme_retroattive):
-        assert "config_iniziale" not in inspect.getsource(fn), \
-            "la discovery deve giudicare come prima: il parametro e' SOLO dell'autopsia"
+    # le conferme retroattive (prima promozione di una variante) non lo ricevono
+    assert "config_iniziale" not in inspect.getsource(d.conferme_retroattive)
+    # la discovery lo passa SOLO alle coppie gia' validate (26 set 2026)
+    uno = inspect.getsource(d._disc_one)
+    assert "cfg_operata = config_validate.get(key) if key in gia_validate else None" in uno
+    assert "config_iniziale=cfg_operata)" in uno
     src = inspect.getsource(d.evaluate_spec)
-    # il passo 2 e' invariato: la scala si cerca una volta, sui candidati; il
-    # verdetto resta su due chiamate; la passata finale porta la scelta intera
-    assert src.count("_run_oos(cand") == 1 and src.count("gate_verdict(") == 2
+    # il passo 2: la scala si cerca una volta, sui candidati; il verdetto sta su
+    # tre chiamate (preselezione, finale, misura sulla globale); la passata
+    # finale porta la scelta intera
+    assert src.count("_run_oos(cand") == 1 and src.count("gate_verdict(") == 3
     assert "_run_oos(best_ladder, best_be, keep=best_keep)" in src
 
 
@@ -155,7 +164,7 @@ def test_la_configurazione_forzata_si_applica_alla_preselezione(monkeypatch):
     assert opt.holdout_params is None
 
 
-def test_il_passo_2_riparte_dai_candidati_globali_e_la_finale_si_rifa(monkeypatch):
+def test_il_passo_2_riparte_dai_candidati_globali_e_tiene_l_operata_senza_margine(monkeypatch):
     bt = _Bt()
     r, opt = _valuta(monkeypatch, bt, passa=True, config_iniziale=OPERATA)
     assert r["passed"] is True
@@ -165,32 +174,34 @@ def test_il_passo_2_riparte_dai_candidati_globali_e_la_finale_si_rifa(monkeypatc
     assert bt.chiamate[1] == {"scale_r_mults": [1.5, 3.0, 5.0]}
     assert bt.chiamate[2] == {"scale_r_mults": [2.0, 4.0, 6.0]}
     assert "profit_lock_keep" not in bt.chiamate[3]           # il BE alternativo
-    # l'ultima passata e' la configurazione SCELTA, e l'holdout la riceve
+    # ISTERESI (26 set 2026): il meglio trovato (2/4/6 col BE e il keep globali)
+    # rende quanto l'operata, non di piu' del 10%: la scelta E' l'operata, non
+    # si rifa' la passata finale (i numeri del passo 1 sono gia' i suoi) e
+    # l'holdout la riceve intera; l'ultima passata e' la MISURA sulla globale
+    # (`solo_propria_config`), senza params
+    assert (r["scale_r_mults"], r["sl_to_breakeven"], r["profit_lock_keep"]) == \
+        ([2.0, 4.0, 6.0], False, 0.75)
+    assert opt.holdout_params == OPERATA
+    assert bt.chiamate[-1] == {} and len(bt.chiamate) == 7
+    assert r["pnl"] == pytest.approx(0.02)
+    assert r["solo_propria_config"] is False           # il verdetto finto passa anche la globale
+
+
+def test_se_la_ricerca_batte_l_operata_del_margine_la_finale_si_rifa_sulla_scelta(monkeypatch):
+    """Operata 1,5/3/5 (metro 0,01); il candidato 2/4/6 rende 0,02: batte del
+    100%, ben oltre CONFIG_MARGINE, quindi vince e le metriche finali sono le
+    sue — mai un PF di una configurazione col verdetto di un'altra."""
+    bt = _Bt()
+    r, opt = _valuta(monkeypatch, bt, passa=True,
+                     config_iniziale={"scale_r_mults": [1.5, 3.0, 5.0]})
+    assert r["scale_r_mults"] == [2.0, 4.0, 6.0]
     assert bt.chiamate[-1] == {"scale_r_mults": [2.0, 4.0, 6.0], "sl_to_breakeven": True,
                                "profit_lock_keep": 0.5}
     assert opt.holdout_params == bt.chiamate[-1]
-
-
-def test_con_la_configurazione_forzata_la_finale_si_rifa_anche_se_vince_la_globale(monkeypatch):
-    """Senza questa regola, se il passo 2 sceglie la configurazione globale le
-    metriche resterebbero quelle della passata forzata: un PF di una
-    configurazione col verdetto di un'altra."""
-    bt = _Bt()
-    r, _ = _valuta(monkeypatch, bt, passa=True,
-                   config_iniziale={"scale_r_mults": [2.0, 4.0, 6.0]})
-    monkeypatch.setattr(d, "SCALE_LADDER_CANDIDATES", ((1.5, 3.0, 5.0),))
-    bt2 = _Bt()
-    monkeypatch.setattr(settings, "SCALE_OUT_ENABLED", True)
-    candles = [_Candle(datetime(2026, 9, 26, tzinfo=timezone.utc))] * 4
-    r2 = d.evaluate_spec(_Opt(bt2), "XUSDT", candles, pd.DataFrame({"close": [1.0] * 4}),
-                         {"id": "gen_a", "features": [{"kind": "rsi_extreme"}]},
-                         scale_candidates=[(1.5, 3.0, 5.0)], keep_candidates=(0.5,),
-                         config_iniziale={"scale_r_mults": [2.0, 4.0, 6.0]})
-    assert r2["scale_r_mults"] == [1.5, 3.0, 5.0]
-    assert bt2.chiamate[-1] == {"scale_r_mults": [1.5, 3.0, 5.0], "sl_to_breakeven": True,
-                                "profit_lock_keep": 0.5}
-    assert r2["pnl"] == pytest.approx(0.01)          # la globale, non la forzata (0,02)
-    assert r["scale_r_mults"] == [2.0, 4.0, 6.0]
+    assert r["pnl"] == pytest.approx(0.02)            # la scelta, non l'operata (0,01)
+    # l'operata (scala globale, BE e keep assenti = default) E' la globale:
+    # nessuna misura in piu' dopo la finale
+    assert len(bt.chiamate) == 7 and r["solo_propria_config"] is False
 
 
 # --------------------------------------------------------------------------- #

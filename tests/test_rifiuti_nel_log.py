@@ -51,9 +51,15 @@ def _righe_rifiuto(out: str) -> list[str]:
 
 
 # ---- orchestratore: peso sotto soglia ------------------------------------------
+# Dal 26 set 2026 (pavimento della panchina, passo 4) un peso sotto soglia NON
+# rifiuta piu': la decisione passa a size ridotta con una riga «[panchina]»
+# (tests/test_freno_pool.py). Il rifiuto di prima resta con PANCHINA_PAVIMENTO a
+# 0: e' quello che questi test verificano, perche' la riga e la classe restano.
 def test_peso_sotto_soglia_lascia_una_riga_rifiuto(monkeypatch, capsys):
-    """conf 65 x peso 0,3 = 19,5 < 30: niente decisione, ma UNA riga nel log."""
+    """conf 65 x peso 0,3 = 19,5 < 30: niente decisione, ma UNA riga nel log
+    (col pavimento della panchina spento)."""
     monkeypatch.setattr(settings, "BACKTEST_PARITY", False)
+    monkeypatch.setattr(settings, "PANCHINA_PAVIMENTO", 0.0)
     o = _orch(["BTCUSDT"], peso=0.3)
     decisioni = o.decide_all({"BTCUSDT": _asset()}, Regime.SIDEWAYS)
     assert decisioni == []
@@ -111,6 +117,7 @@ def test_veto_di_regime_senza_segnale_non_e_un_rifiuto(monkeypatch, capsys):
 # ---- orchestratore: il tetto al rumore -------------------------------------------
 def test_piu_di_venti_rifiuti_stampano_venti_righe_e_il_conto(monkeypatch, capsys):
     monkeypatch.setattr(settings, "BACKTEST_PARITY", False)
+    monkeypatch.setattr(settings, "PANCHINA_PAVIMENTO", 0.0)     # rifiuto di prima
     syms = [f"C{i:02d}USDT" for i in range(25)]
     o = _orch(syms, peso=0.3)
     assert o.decide_all({s: _asset(s) for s in syms}, Regime.SIDEWAYS) == []
@@ -125,6 +132,7 @@ def test_i_rifiuti_non_si_accumulano_fra_un_ciclo_e_l_altro(monkeypatch, capsys)
     """Due cicli di seguito: il secondo stampa i SUOI rifiuti, non anche quelli
     del primo (altrimenti il log crescerebbe a ogni candela)."""
     monkeypatch.setattr(settings, "BACKTEST_PARITY", False)
+    monkeypatch.setattr(settings, "PANCHINA_PAVIMENTO", 0.0)     # rifiuto di prima
     o = _orch(["BTCUSDT"], peso=0.3)
     o.decide_all({"BTCUSDT": _asset()}, Regime.SIDEWAYS)
     o.decide_all({"BTCUSDT": _asset()}, Regime.SIDEWAYS)

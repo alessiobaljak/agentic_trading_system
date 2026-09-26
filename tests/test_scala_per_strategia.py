@@ -99,12 +99,14 @@ def test_senza_scala_per_strategia_i_candidati_sono_quelli_di_prima():
 # --------------------------------------------------------------------------- #
 def test_disc_init_riceve_le_scale_per_strategia_in_coda_con_default():
     sig = inspect.signature(d._disc_init)
-    ultimo = list(sig.parameters)[-1]
-    assert ultimo == "scale_strategie" and sig.parameters[ultimo].default is None, \
+    # dal 26 set 2026 dopo `scale_strategie` c'e' `config_validate` (test_declassate_gate):
+    # anch'esso in coda, con default
+    assert list(sig.parameters)[-2:] == ["scale_strategie", "config_validate"]
+    assert sig.parameters["scale_strategie"].default is None, \
         "initargs e' posizionale: il nuovo argomento va in coda, con default"
     main = inspect.getsource(d.main)
     assert "scale_strategie = scale_per_strategia(trades_paper or [])" in main
-    assert "bocciate_ok, keep_paper, scale_strategie)" in main
+    assert "bocciate_ok, keep_paper, scale_strategie, config_validate)" in main
     assert "[paper] scale per strategia dal vissuto" in main
 
 

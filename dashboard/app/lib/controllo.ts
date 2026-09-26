@@ -289,6 +289,15 @@ export interface Esplorative {
   coppie_attive?: number | null;
 }
 
+/** Le declassate (26 set 2026, passo 2): validate che il gate ha declassato,
+ *  operate a un quarto della size; RESTANO nei numeri delle validate, qui si
+ *  contano a parte. Campo facoltativo: i documenti vecchi non lo portano. */
+export interface Declassate {
+  trades?: number | null;
+  pnl?: number | null;
+  aperte?: number | null;
+}
+
 /** §1.3 */
 export interface Paper extends Testata {
   equity?: number | null;
@@ -320,6 +329,7 @@ export interface Paper extends Testata {
   trailing?: Trailing | null;
   benchmark?: Benchmark | null;
   esplorative?: Esplorative | null;
+  declassate?: Declassate | null;
 }
 
 export interface FrenoGlobale {

@@ -373,8 +373,12 @@ def _orch(symbols, peso=None, fb=None) -> Orchestrator:
     return o
 
 
+# Dal 26 set 2026 (pavimento della panchina, passo 4) il peso 0,3 non rifiuta
+# piu': i tre test sotto verificano il percorso rifiuto -> ombra, quindi tengono
+# il rifiuto di prima spegnendo il pavimento (PANCHINA_PAVIMENTO = 0).
 def test_peso_sotto_soglia_chiama_il_callback_col_dettaglio(monkeypatch, capsys):
     monkeypatch.setattr(settings, "BACKTEST_PARITY", False)
+    monkeypatch.setattr(settings, "PANCHINA_PAVIMENTO", 0.0)
     o = _orch(["BTCUSDT"], peso=0.3)
     visti = []
     o.on_rifiuto = lambda sym, strat, motivo, det: visti.append((sym, strat, motivo, det))
@@ -411,6 +415,7 @@ def test_veto_di_regime_registra_in_firebase(monkeypatch):
 
 def test_senza_fb_ne_callback_resta_solo_il_contatore(monkeypatch):
     monkeypatch.setattr(settings, "BACKTEST_PARITY", False)
+    monkeypatch.setattr(settings, "PANCHINA_PAVIMENTO", 0.0)
     o = _orch(["BTCUSDT"], peso=0.3)
     assert o.fb is None and o.on_rifiuto is None
     assert o.decide_all({"BTCUSDT": _asset()}, Regime.SIDEWAYS) == []
@@ -419,6 +424,7 @@ def test_senza_fb_ne_callback_resta_solo_il_contatore(monkeypatch):
 
 def test_un_callback_che_esplode_non_ferma_il_ciclo(monkeypatch, capsys):
     monkeypatch.setattr(settings, "BACKTEST_PARITY", False)
+    monkeypatch.setattr(settings, "PANCHINA_PAVIMENTO", 0.0)
     o = _orch(["BTCUSDT"], peso=0.3)
 
     def boom(*a):

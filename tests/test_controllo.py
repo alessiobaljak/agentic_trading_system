@@ -812,6 +812,9 @@ def test_i_contatori_del_ciclo_e_delle_24_ore():
 def test_decide_all_azzera_il_ciclo_e_conta_i_veti(monkeypatch, capsys):
     from bot.core.models import AssetSnapshot, IndicatorSnapshot, Regime
     monkeypatch.setattr(settings, "BACKTEST_PARITY", False)
+    # col pavimento della panchina (26 set 2026) il peso 0,3 non rifiuta piu':
+    # qui si verifica il contatore, quindi si tiene il rifiuto di prima
+    monkeypatch.setattr(settings, "PANCHINA_PAVIMENTO", 0.0)
     o = Orchestrator()
     o.adaptation._passed = {"BTCUSDT|mean_reversion"}
     o.adaptation._has_opt_data = True
@@ -953,9 +956,10 @@ def test_publish_drift_eredita_dal_del_primo_verdetto_drift(monkeypatch):
     fb = FirebaseClient()
     fb.set_doc("strategy_registry", "validated", _registro(5))
     verdetto = {"v": "drift"}
+    # dal 26 set 2026 `compute_drift` riceve anche `specs` e `validated` (i pool)
     monkeypatch.setattr(drift_mod, "compute_drift",
-                        lambda trades, pairs: {"pairs": {}, "strategies": {}, "serie": {},
-                                               "global": {"verdict": verdetto["v"], "trades": 40}})
+                        lambda trades, pairs, **kw: {"pairs": {}, "strategies": {}, "serie": {},
+                                                     "global": {"verdict": verdetto["v"], "trades": 40}})
     bot = _finto_bot(fb)
     TradingBot._publish_drift(bot, [])
     d1 = fb.get_doc("drift", "current")
