@@ -464,6 +464,12 @@ def main() -> int:
         avviso = "  ← SFORA la finestra di 3h" if d > 3 * 3600 else ""
         print(f"\n  TEMPO DELL'ULTIMO GIRO (discovery): {d // 3600}h {(d % 3600) // 60:02d}m · "
               f"iniziato {ini:%d %b %H:%M} UTC · finito {fine:%H:%M} UTC{avviso}")
+        # e il suo bilancio (26 set 2026): senza, per sapere quante coppie erano
+        # passate nel giro completo bisognava cercare la riga «GIRO FINITO» in un
+        # log che mostra solo le ultime 80 righe
+        print(f"  ULTIMO GIRO: {int(diag.get('n_eval') or 0)} valutazioni · "
+              f"{int(diag.get('n_passed') or 0)} coppie passate · "
+              f"{diag.get('reeval_modalita') or '?'} · {int(diag.get('coin_valutate') or 0)} coin")
     else:
         print("\n  TEMPO DELL'ULTIMO GIRO: non ancora registrato (codice del 22 set: "
               "arriva col primo giro finito)")
