@@ -39,7 +39,8 @@ def _tipi(doc, strat="gen_a"):
 # ---- le costanti sono quelle dichiarate ------------------------------------ #
 def test_le_soglie_sono_dichiarate_e_non_tarate():
     assert MIN_CAMPIONE == 3 and MIN_STOP_LARGO == 2 and MIN_SCALA_STRETTA == 3
-    assert TIPI[-1] == "scala_stretta" and len(TIPI) == 5
+    assert TIPI[4] == "scala_stretta" and len(TIPI) == 9
+    assert TIPI[5:] == ("ingresso_adx", "ingresso_vol_ratio", "ingresso_atr_pct", "ingresso_rsi")
     assert ESITI_ESTERNI == {"manual", "kill_switch", "circuit_breaker"}
 
 

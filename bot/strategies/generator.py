@@ -192,12 +192,36 @@ def mutate(spec: dict, seed: int = 0) -> dict:
 # formula ipotesi con regole dichiarate PRIMA (solo_long, solo_short,          #
 # conferma_trend, stop_stretto). Qui ogni ipotesi diventa una spec figlia:     #
 # stessa logica, un solo cambiamento, nuovo id. Il gate decide se vale.        #
+#                                                                              #
+# Dal 26 set 2026 (backlog I4ter) anche le CONDIZIONI D'INGRESSO: il referto   #
+# dice «le perdite mai andate a favore sono nate con ADX basso / volume sotto  #
+# la media / volatilita' alta / RSI nel mezzo, i vinti no», e qui la figlia    #
+# stringe di UN gradino del generatore il filtro che esprime quella condizione #
+# (min_adx, volume_mult, volatility_regime, banda RSI). Sempre un gradino delle #
+# liste qui sopra, mai il numero misurato sul paper: il paper indica la         #
+# direzione, la soglia e' del generatore, il verdetto e' del gate.             #
 # --------------------------------------------------------------------------- #
 #: i tipi di ipotesi che il referto puo' formulare e che qui sanno diventare spec
-TIPI_VARIANTE = ("solo_long", "solo_short", "conferma_trend", "stop_stretto")
+TIPI_VARIANTE = ("solo_long", "solo_short", "conferma_trend", "stop_stretto",
+                 "ingresso_adx", "ingresso_vol_ratio", "ingresso_atr_pct", "ingresso_rsi")
+#: le soglie DICHIARATE del referto (bot/learning/referti.py) che la figlia deve
+#: superare: il gradino scelto sta oltre la soglia, non sulla soglia. Ricopiate
+#: qui e non importate: il generatore non dipende dal learning del bot.
+_SOGLIA_ADX_BASSO = 20.0
+_SOGLIA_ATR_ALTA = 0.03
 
 
-def varianti_da_referto(spec: dict, tipo: str) -> Optional[dict]:
+def _gradino_sopra(valore: float, lista) -> Optional[float]:
+    sopra = [g for g in lista if g > valore]
+    return min(sopra) if sopra else None
+
+
+def _gradino_sotto(valore: float, lista) -> Optional[float]:
+    sotto = [g for g in lista if g < valore]
+    return max(sotto) if sotto else None
+
+
+def varianti_da_referto(spec: dict, tipo: str, soglia: Optional[float] = None) -> Optional[dict]:
     """La spec FIGLIA di `spec` per l'ipotesi `tipo`, o None se non ha senso.
 
     Funzione pura: non legge Firebase, non tira a caso. Cambia UNA cosa sola,
@@ -212,6 +236,28 @@ def varianti_da_referto(spec: dict, tipo: str) -> Optional[dict]:
       * stop_stretto: lo stop al gradino sotto nella lista `_ATR_STOP`. None se
         e' gia' al minimo; un valore fuori lista scende al gradino piu' grande
         sotto di lui.
+      * ingresso_adx (26 set 2026): `min_adx` al primo gradino di `_ADX` sopra la
+        soglia del referto (ADX < 20) e sopra il valore attuale: 25 se la spec
+        non ha il filtro o l'ha a 20; None se e' gia' a 25 o oltre.
+      * ingresso_vol_ratio: `volume_mult` al gradino sopra in `_VOL` (1,5 se
+        assente, poi 2,0); None se e' gia' al massimo.
+      * ingresso_atr_pct: un tetto alla volatilita' (ATR/prezzo). L'unico
+        mattoncino che la esprime e' `volatility_regime`, che pero' NON e' un
+        filtro a due lati: dice «long solo se calmo, short solo se agitato»
+        (bot/strategies/generated.py). Un tetto per entrambi i lati non esiste
+        nel vocabolario: la figlia nasce SOLO se la spec e' gia' `solo: long`
+        (li' «calmo» e' esattamente il tetto), con `vol_pct` al gradino di
+        `_VOL_PCT` sotto la soglia del referto (`soglia`, il 75° percentile dei
+        vinti, o 3%) e sotto il tetto attuale se la feature c'e' gia'. Negli
+        altri casi None, dichiarato: meglio nessuna variante che una che dice
+        un'altra cosa (backlog I4ter, «un tetto ATR a due lati» resta aperto).
+      * ingresso_rsi: se la spec ha `rsi_extreme`, la banda si stringe di un
+        gradino (low al gradino sotto, high al gradino sopra; se uno dei due e'
+        al limite si muove l'altro). None senza `rsi_extreme` o con la banda
+        gia' ai limiti: `rsi_momentum` (mid) non ha una banda da stringere.
+
+    `soglia`: la soglia misurata dal referto per questa ipotesi (oggi la usa
+    solo ingresso_atr_pct); senza, vale quella dichiarata.
 
     La figlia perde l'id del genitore e ne riceve uno suo (`spec_id`, che
     include `solo`), conserva il timeframe, e porta scritto da dove viene:
@@ -243,6 +289,62 @@ def varianti_da_referto(spec: dict, tipo: str) -> Optional[dict]:
         if not sotto:
             return None
         figlia["atr_mult_stop"] = max(sotto)
+    elif tipo == "ingresso_adx":
+        try:
+            attuale = float(spec.get("min_adx") or 0.0)
+        except (TypeError, ValueError):
+            return None
+        nuovo = _gradino_sopra(max(attuale, _SOGLIA_ADX_BASSO), _GRADINI_SPEC["min_adx"])
+        if nuovo is None:
+            return None
+        figlia["min_adx"] = nuovo
+    elif tipo == "ingresso_vol_ratio":
+        try:
+            attuale = float(spec.get("volume_mult") or 0.0)
+        except (TypeError, ValueError):
+            return None
+        nuovo = _gradino_sopra(attuale, _GRADINI_SPEC["volume_mult"])
+        if nuovo is None:
+            return None
+        figlia["volume_mult"] = nuovo
+    elif tipo == "ingresso_atr_pct":
+        if str(spec.get("solo") or "").lower() != "long":
+            return None
+        try:
+            tetto = float(soglia) if soglia is not None else _SOGLIA_ATR_ALTA
+        except (TypeError, ValueError):
+            tetto = _SOGLIA_ATR_ALTA
+        nuovo = _gradino_sotto(tetto, _VOL_PCT)
+        if nuovo is None:
+            return None
+        gia = [f for f in figlia["features"] if f.get("kind") == "volatility_regime"]
+        if gia:
+            try:
+                attuale = float(gia[0].get("vol_pct", 0.02))
+            except (TypeError, ValueError):
+                return None
+            if nuovo >= attuale:
+                return None
+            gia[0]["vol_pct"] = nuovo
+        else:
+            figlia["features"].append({"kind": "volatility_regime", "vol_pct": nuovo})
+    elif tipo == "ingresso_rsi":
+        rsi = [f for f in figlia["features"] if f.get("kind") == "rsi_extreme"]
+        if not rsi:
+            return None
+        f = rsi[0]
+        try:
+            low, high = float(f.get("low", 30.0)), float(f.get("high", 70.0))
+        except (TypeError, ValueError):
+            return None
+        nuovo_low = _gradino_sotto(low, _RSI_LOW)
+        nuovo_high = _gradino_sopra(high, _RSI_HIGH)
+        if nuovo_low is None and nuovo_high is None:
+            return None
+        if nuovo_low is not None:
+            f["low"] = nuovo_low
+        if nuovo_high is not None:
+            f["high"] = nuovo_high
 
     figlia["origine"] = "referto"
     figlia["genitore"] = spec.get("id")

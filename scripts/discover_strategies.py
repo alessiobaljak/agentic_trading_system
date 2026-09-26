@@ -943,6 +943,14 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
         # (`strategie_scala_stretta` + `scale_per_strategia`), gestita a parte
         if tipo == "scala_stretta":
             continue
+        # le ipotesi sulle CONDIZIONI D'INGRESSO (26 set 2026, backlog I4ter:
+        # ingresso_adx / ingresso_vol_ratio / ingresso_atr_pct / ingresso_rsi)
+        # SONO varianti della spec come solo_long e stop_stretto: passano da
+        # `varianti_da_referto` senza porte a parte. Il controllo «il gate ha gia'
+        # la risposta» qui sotto vale solo per il lato da spegnere (direzione_pf):
+        # per un filtro d'ingresso la risposta ce l'ha il gate quando prova la
+        # figlia. La `soglia` misurata (75° percentile dei vinti per atr_pct)
+        # viaggia con l'ipotesi: il gradino della figlia sta sotto di lei.
         if pairs and tipo in ("solo_long", "solo_short"):
             lato_spento = "short" if tipo == "solo_long" else "long"
             for k, rec in pairs.items():
@@ -957,7 +965,9 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
             if not tipo:
                 continue
         try:
-            figlia = varianti_da_referto(genitore, tipo)
+            soglia = ip.get("soglia")
+            figlia = varianti_da_referto(genitore, tipo,
+                                         soglia if isinstance(soglia, (int, float)) else None)
             if figlia is not None and ip.get("da_ts"):
                 # la data del primo trade del paper che ha fatto nascere
                 # l'ipotesi: la validazione finisce PRIMA (pre-registrazione)

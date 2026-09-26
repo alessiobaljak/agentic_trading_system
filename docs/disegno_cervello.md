@@ -164,6 +164,19 @@ così la vita del registro dice quanto la ritaratura ha reso.
 Una strategia cambia soglie al massimo una volta ogni 14 giorni: senza questo
 freno l'intorno insegue il rumore settimana per settimana.
 
+**Le condizioni d'ingresso dal paper (26 set 2026, backlog I4ter).** Accanto
+all'intorno «cieco» (ogni parametro un gradino in su e uno in giù) c'è ora un
+intorno **mirato**: i referti dei trade chiusi confrontano le variabili
+all'apertura (ADX, volume/media, ATR%, RSI — le stesse del selettore) delle
+perdite mai andate a favore con quelle dei vinti della stessa strategia, e
+quando almeno 4 perdite stanno per 3/4 dallo stesso lato di una soglia
+dichiarata e i vinti dall'altro, il referto formula `ingresso_<variabile>` e la
+discovery prova UNA figlia che stringe di un gradino il filtro corrispondente
+(`min_adx`, `volume_mult`, banda RSI; il tetto di volatilità solo per spec
+`solo: long`, perché `volatility_regime` non è un filtro a due lati). Stessa
+regola del resto del documento: il paper indica dove guardare, il gradino è del
+generatore, il verdetto è del gate con le conferme retroattive e l'holdout.
+
 ### Costo
 
 Ogni figlia costa una valutazione di coppia (spec × coin), più due retroattive se

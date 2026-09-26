@@ -382,7 +382,8 @@ def main() -> int:
     # correggere, non il singolo caso — «stop largo» x N vale una regola, x 1
     # vale un'occhiata. Le IPOTESI qui sotto sono proposte del paper: le prova il
     # gate sulla storia. Nessun parametro cambia da questo script.
-    from bot.learning.referti import (ESITI_ESTERNI, MIN_CAMPIONE, MIN_STOP_LARGO,
+    from bot.learning.referti import (ESITI_ESTERNI, MIN_CAMPIONE, MIN_INGRESSO,
+                                      MIN_STOP_LARGO, VARIABILI_INGRESSO,
                                       aggrega_referti, riassunto_ipotesi)
     doc = aggrega_referti(trades)
     con_referto = [t for t in trades if isinstance(t.get("post_mortem"), dict)
@@ -497,6 +498,36 @@ def main() -> int:
     else:
         print(f"  nessuna: servono almeno {MIN_CAMPIONE} perdite per direzione o "
               f"controtrend, {MIN_STOP_LARGO} stop larghi")
+
+    # LE CONDIZIONI D'INGRESSO (26 set 2026, backlog I4ter): per ogni strategia
+    # con almeno MIN_INGRESSO perdite «mai andate a favore» (classe ingresso) con
+    # la variabile nota, la mediana di ADX / volume / ATR% / RSI all'apertura
+    # delle perdite contro quella dei vinti. Sono i numeri da cui nascono le
+    # ipotesi `ingresso_<variabile>` qui sopra; dove non scattano, si vede
+    # perche' (stesso lato, o troppo pochi vinti). Dal doc `ingresso` di
+    # aggrega_referti: solo conteggi e mediane, mai le liste.
+    print(f"\nCONDIZIONI D'INGRESSO (perdite d'ingresso vs vinti, per strategia con "
+          f">= {MIN_INGRESSO} perdite d'ingresso):")
+    righe_ing = [(gid, r) for gid, r in sorted((doc.get("ingresso") or {}).items())
+                 if any(int((r.get(v) or {}).get("persi", 0) or 0) >= MIN_INGRESSO
+                        for v in VARIABILI_INGRESSO)]
+    if righe_ing:
+        def _mv(r, var, chiave):
+            x = (r.get(var) or {}).get(chiave)
+            if x is None:
+                return "n/d"
+            return f"{x * 100:.2f}%" if var == "atr_pct" else f"{x:.2f}"
+        print(f"  {'strategia':<14} {'persi/vinti':>11}  "
+              + "  ".join(f"{v + ' persi|vinti':>22}" for v in VARIABILI_INGRESSO))
+        for gid, r in righe_ing:
+            n_p = max(int((r.get(v) or {}).get("persi", 0) or 0) for v in VARIABILI_INGRESSO)
+            n_v = max(int((r.get(v) or {}).get("vinti", 0) or 0) for v in VARIABILI_INGRESSO)
+            celle = "  ".join(f"{_mv(r, v, 'mediana_persi') + '|' + _mv(r, v, 'mediana_vinti'):>22}"
+                              for v in VARIABILI_INGRESSO)
+            print(f"  {gid:<14} {f'{n_p}/{n_v}':>11}  {celle}")
+    else:
+        print(f"  nessuna strategia con >= {MIN_INGRESSO} perdite d'ingresso con le "
+              f"variabili note (feats_at_entry dal 25 set, o indicators_at_entry)")
 
     # L'OMBRA DEL SELETTORE (25 set 2026): la p che il bot annota su ogni
     # apertura, letta contro l'esito. Il paper qui e' il giudice del modello

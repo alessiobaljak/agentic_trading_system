@@ -36,6 +36,20 @@ LE CINQUE IPOTESI (una per tipo, per strategia)
     strategia nel gate con in piu' la scala ricavata dai SUOI mfe
     (`scale_per_strategia` in scripts/discover_strategies.py). Sceglie sempre il
     gate sulla storia; il paper indica solo dove guardare.
+
+LA SESTA IPOTESI: LE CONDIZIONI D'INGRESSO (26 set 2026, backlog I4ter)
+  * ingresso_<variabile> (adx, vol_ratio, atr_pct, rsi): le perdite «mai andate a
+    favore» (classe ingresso) di una strategia sono nate in una condizione
+    riconoscibile — ADX basso, volume sotto la media, volatilita' alta, RSI nel
+    mezzo — e i suoi trade VINTI no. Il dato viene da `feats_at_entry` (dal 25
+    set su ogni trade) o, per i trade piu' vecchi, da `indicators_at_entry`
+    con le stesse formule del gate (`variabili_ingresso_del_trade`). Regola:
+    almeno MIN_INGRESSO perdite d'ingresso con la variabile nota, almeno il
+    QUOTA_INGRESSO di esse dallo stesso lato della soglia DICHIARATA qui sotto,
+    e la mediana dei vinti (almeno MIN_VINTI_INGRESSO) dall'altro lato. La
+    variante figlia stringe il filtro corrispondente (min_adx, volume_mult,
+    volatility_regime, banda RSI) di un gradino del generatore, e come sempre
+    la giudica il gate sulla storia. Il paper propone, non tara.
 """
 from __future__ import annotations
 
@@ -57,8 +71,27 @@ MIN_STOP_LARGO = 2
 # MIN_CAMPIONE, e' il minimo perche' smetta di essere un caso. Dichiarata prima
 # di vedere per quali strategie scatta.
 MIN_SCALA_STRETTA = 3
+# Condizioni d'ingresso (26 set 2026, backlog I4ter). Le soglie sono quelle del
+# manuale, non dei risultati: ADX < 20 e' «senza trend» per definizione dell'
+# indicatore; volume sotto la media e' vol_ratio < 1; RSI 40-60 e' la fascia in
+# cui l'oscillatore non dice niente; per la volatilita' il confine e' il 75°
+# percentile dei VINTI della stessa strategia (o 3% del prezzo se e' piu' basso:
+# oltre il 3% per candela lo stop in ATR e' quasi sempre fuori dal setup_check).
+# 4 perdite: una in piu' di MIN_CAMPIONE perche' qui si contano solo quelle con
+# la variabile nota, e 3 su 4 dallo stesso lato con 3 sole perdite sarebbe
+# sempre vero. La quota 3/4 e' dichiarata prima di vedere per chi scatta.
+MIN_INGRESSO = 4
+MIN_VINTI_INGRESSO = 2
+QUOTA_INGRESSO = 0.75
+VARIABILI_INGRESSO = ("adx", "vol_ratio", "atr_pct", "rsi")
+SOGLIA_ADX_BASSO = 20.0
+SOGLIA_VOLUME_SOTTO = 1.0
+SOGLIA_ATR_ALTA = 0.03
+BANDA_RSI_NEUTRO = (40.0, 60.0)
+TIPI_INGRESSO = tuple(f"ingresso_{v}" for v in VARIABILI_INGRESSO)
 
-TIPI = ("solo_long", "solo_short", "conferma_trend", "stop_stretto", "scala_stretta")
+TIPI = ("solo_long", "solo_short", "conferma_trend", "stop_stretto", "scala_stretta",
+        *TIPI_INGRESSO)
 
 _RILIEVI = ("ingresso", "uscita", "protezione", "stop_largo", "lock_mai", "controtrend")
 
@@ -122,12 +155,106 @@ def _ts_trade(t: dict):
     return None
 
 
-def _mediana(xs: list[float]) -> float | None:
+def _mediana(xs: list[float], nd: int = 2) -> float | None:
     xs = sorted(xs)
     if not xs:
         return None
     n = len(xs)
-    return round(xs[n // 2] if n % 2 else (xs[n // 2 - 1] + xs[n // 2]) / 2, 2)
+    return round(xs[n // 2] if n % 2 else (xs[n // 2 - 1] + xs[n // 2]) / 2, nd)
+
+
+def _percentile(xs: list[float], q: float) -> float | None:
+    """Percentile per interpolazione lineare (come numpy di default), senza
+    numpy: qui girano poche decine di numeri."""
+    xs = sorted(xs)
+    if not xs:
+        return None
+    if len(xs) == 1:
+        return xs[0]
+    pos = (len(xs) - 1) * q
+    lo = int(pos)
+    hi = min(lo + 1, len(xs) - 1)
+    return xs[lo] + (xs[hi] - xs[lo]) * (pos - lo)
+
+
+# --------------------------------------------------------------------------- #
+# LE VARIABILI D'INGRESSO DI UN TRADE (26 set 2026)                             #
+# --------------------------------------------------------------------------- #
+def _r4(v):
+    """Come `_r4` di backtesting/engine.py: float a 4 decimali o None. Copiata
+    (non importata) perche' questo modulo gira nel bot e deve restare leggero."""
+    if v is None:
+        return None
+    try:
+        x = float(v)
+    except (TypeError, ValueError):
+        return None
+    if x != x or x in (float("inf"), float("-inf")):
+        return None
+    return round(x, 4)
+
+
+def _campo(snap, nome):
+    return snap.get(nome) if isinstance(snap, dict) else getattr(snap, nome, None)
+
+
+def variabili_ingresso_del_trade(t: dict) -> dict:
+    """Le quattro variabili d'ingresso (adx, vol_ratio, atr_pct, rsi) di un trade
+    chiuso; None dove il dato manca. Funzione pura.
+
+    Dal 25 set 2026 ogni trade porta `feats_at_entry`, scritto da
+    `feats_ingresso` (backtesting/engine.py): si legge quello. I trade piu'
+    vecchi portano solo `indicators_at_entry` (timeframe -> snapshot degli
+    indicatori): le stesse variabili si ricavano qui con LE STESSE FORMULE del
+    gate (atr_pct = atr/close, vol_ratio = volume/volume_sma, 4 decimali), sul
+    timeframe del trade, altrimenti su quello del bot, altrimenti sul primo che
+    c'e'. `feats_ingresso` divide l'ATR per il prezzo dell'asset nell'istante
+    del segnale; qui c'e' la chiusura della candela, che e' lo stesso numero
+    salvo lo scarto fra chiusura e prezzo corrente."""
+    out = {v: None for v in VARIABILI_INGRESSO}
+    if not isinstance(t, dict):
+        return out
+    feats = t.get("feats_at_entry")
+    if isinstance(feats, dict) and any(feats.get(v) is not None for v in VARIABILI_INGRESSO):
+        for v in VARIABILI_INGRESSO:
+            out[v] = _r4(feats.get(v))
+        return out
+    ind = t.get("indicators_at_entry")
+    if not isinstance(ind, dict) or not ind:
+        return out
+    snap = None
+    tf = t.get("timeframe")
+    if tf and ind.get(tf) is not None:
+        snap = ind[tf]
+    else:
+        try:
+            from bot.config import settings
+            tf_bot = settings.ORCHESTRATOR_TIMEFRAME
+        except Exception:  # noqa: BLE001
+            tf_bot = None
+        if tf_bot and ind.get(tf_bot) is not None:
+            snap = ind[tf_bot]
+        else:
+            snap = next((v for v in ind.values() if v is not None), None)
+    if snap is None:
+        return out
+    out["rsi"] = _r4(_campo(snap, "rsi"))
+    out["adx"] = _r4(_campo(snap, "adx"))
+    atr, close = _campo(snap, "atr"), _campo(snap, "close")
+    if not close:
+        close = t.get("entry_price")
+    try:
+        if atr is not None and close:
+            out["atr_pct"] = _r4(float(atr) / float(close))
+    except (TypeError, ValueError, ZeroDivisionError):
+        pass
+    vol, sma = _campo(snap, "volume"), _campo(snap, "volume_sma")
+    try:
+        if vol is not None and sma:
+            out["vol_ratio"] = _r4(float(vol) / float(sma))
+    except (TypeError, ValueError, ZeroDivisionError):
+        pass
+    return out
 
 
 def _arrotonda(b: dict) -> dict:
@@ -136,9 +263,56 @@ def _arrotonda(b: dict) -> dict:
     return b
 
 
-def _ipotesi_per(gid: str, b: dict) -> list[dict]:
+def _lato_ingresso(var: str, persi: list[float], vinti: list[float]) -> dict | None:
+    """La regola della sesta ipotesi per UNA variabile: quante perdite d'ingresso
+    stanno dal lato «cattivo» della soglia dichiarata, e se i vinti stanno
+    dall'altro. Ritorna None se non scatta, altrimenti i numeri per il testo.
+    `soglia` e' quella che la figlia deve superare (per atr_pct e' misurata sui
+    vinti, e per questo viaggia nell'ipotesi)."""
+    if len(persi) < MIN_INGRESSO or len(vinti) < MIN_VINTI_INGRESSO:
+        return None
+    med_v = _mediana(vinti, 4)
+    if var == "adx":
+        soglia, etich, nd = SOGLIA_ADX_BASSO, "ADX < 20", 0
+        lato = [x for x in persi if x < soglia]
+        vinti_ok = med_v >= soglia
+    elif var == "vol_ratio":
+        soglia, etich, nd = SOGLIA_VOLUME_SOTTO, "volume sotto la media (vol_ratio < 1)", 2
+        lato = [x for x in persi if x < soglia]
+        vinti_ok = med_v >= soglia
+    elif var == "atr_pct":
+        p75 = _percentile(vinti, 0.75)
+        soglia = min(SOGLIA_ATR_ALTA, p75) if p75 is not None else SOGLIA_ATR_ALTA
+        soglia = round(soglia, 4)
+        etich, nd = f"volatilita' alta (ATR > {soglia * 100:.2f}% del prezzo)", 4
+        lato = [x for x in persi if x > soglia]
+        vinti_ok = med_v <= soglia
+    elif var == "rsi":
+        lo, hi = BANDA_RSI_NEUTRO
+        soglia, etich, nd = None, f"RSI neutro ({lo:g}-{hi:g})", 0
+        lato = [x for x in persi if lo <= x <= hi]
+        vinti_ok = not (lo <= med_v <= hi)
+    else:
+        return None
+    if len(lato) < QUOTA_INGRESSO * len(persi) or not vinti_ok:
+        return None
+    return {"soglia": soglia, "etichetta": etich, "sul_lato": len(lato), "nd": nd,
+            "mediana_persi": _mediana(lato, 4), "mediana_vinti": med_v}
+
+
+def _fmt_var(var: str, x: float | None, nd: int) -> str:
+    if x is None:
+        return "n/d"
+    if var == "atr_pct":
+        return f"{x * 100:.2f}%"
+    return f"{x:.{nd}f}"
+
+
+def _ipotesi_per(gid: str, b: dict, ingresso: dict | None = None) -> list[dict]:
     """Le regole, una per tipo, sul bucket di una strategia. Ogni regola e' una
-    riga: se la cambi, cambia il commento in testa al modulo e la data."""
+    riga: se la cambi, cambia il commento in testa al modulo e la data.
+    `ingresso`: {variabile: {"persi": [...], "vinti": [...]}} — le variabili
+    d'ingresso delle perdite di classe ingresso e dei vinti (26 set 2026)."""
     out = []
     # si contano le PERDITE vere, non «tutti tranne i vinti»: con un pareggio
     # (pnl 0, raro con le fee ma possibile) il motivo direbbe «3/3 persi» su 2
@@ -173,6 +347,24 @@ def _ipotesi_per(gid: str, b: dict) -> list[dict]:
                     "motivo": (f"{b['uscita']} perdite sotto il primo gradino "
                                f"(mfe mediana {f'{med:.2f}' if med is not None else 'n/d'} R)"),
                     "campione": b["uscita"], "mfe_mediana": med})
+    # le condizioni d'ingresso (26 set 2026, backlog I4ter): una voce per
+    # variabile, perche' ognuna diventa una variante diversa nel generatore
+    for var in VARIABILI_INGRESSO:
+        dati = (ingresso or {}).get(var) or {}
+        persi, vinti = list(dati.get("persi") or []), list(dati.get("vinti") or [])
+        r = _lato_ingresso(var, persi, vinti)
+        if r is None:
+            continue
+        nd = r["nd"]
+        h = {"strategia": gid, "tipo": f"ingresso_{var}",
+             "motivo": (f"{r['sul_lato']} perdite d'ingresso su {len(persi)} con "
+                        f"{r['etichetta']} (mediana {_fmt_var(var, r['mediana_persi'], nd)}), "
+                        f"vinti mediana {_fmt_var(var, r['mediana_vinti'], nd)}"),
+             "campione": len(persi), "variabile": var,
+             "mediana_persi": r["mediana_persi"], "mediana_vinti": r["mediana_vinti"]}
+        if r["soglia"] is not None:
+            h["soglia"] = r["soglia"]
+        out.append(h)
     return out
 
 
@@ -199,6 +391,11 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
     # si valida su dati che finiscono prima di quella data (pre-registrazione,
     # audit del 24 set)
     primo_ts: dict[str, float] = {}
+    # le variabili d'ingresso, per strategia: delle PERDITE di classe ingresso
+    # (mai andate a favore) e dei VINTI. Solo i valori noti: un None non e' un
+    # numero (26 set 2026)
+    ingresso: dict[str, dict[str, dict[str, list[float]]]] = defaultdict(
+        lambda: {v: {"persi": [], "vinti": []} for v in VARIABILI_INGRESSO})
 
     for t in rows:
         pnl = float(t.get("pnl", 0) or 0)
@@ -218,16 +415,36 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
         _aggiungi(per_coin[sym], pnl, direzione, pm)
         if direzione in per_dir:
             _aggiungi(per_dir[direzione], pnl, direzione, pm)
+        perso_ingresso = pnl < 0 and pm is not None and pm.get("classe") == "ingresso"
+        if (perso_ingresso or pnl > 0) and gid != "?":
+            vals = variabili_ingresso_del_trade(t)
+            for var in VARIABILI_INGRESSO:
+                if vals.get(var) is not None:
+                    ingresso[gid][var]["persi" if perso_ingresso else "vinti"].append(vals[var])
 
     ipotesi: list[dict] = []
     for gid in sorted(per_strat):
         if gid == "?":
             continue    # trade senza strategia: contano nei bucket, non propongono
-        for h in _ipotesi_per(gid, per_strat[gid]):
+        for h in _ipotesi_per(gid, per_strat[gid], ingresso.get(gid)):
             if gid in primo_ts:
                 h["da_ts"] = round(primo_ts[gid], 0)
             ipotesi.append(h)
     ipotesi.sort(key=lambda h: (h["strategia"], h["tipo"]))
+    # il riassunto delle condizioni d'ingresso per strategia: solo conteggi e
+    # mediane (mai le liste), solo le 4 variabili, solo chi ha almeno un dato
+    ingresso_doc: dict[str, dict] = {}
+    for gid in sorted(ingresso):
+        riga = {}
+        for var in VARIABILI_INGRESSO:
+            d = ingresso[gid][var]
+            if not d["persi"] and not d["vinti"]:
+                continue
+            riga[var] = {"persi": len(d["persi"]), "vinti": len(d["vinti"]),
+                         "mediana_persi": _mediana(d["persi"], 4),
+                         "mediana_vinti": _mediana(d["vinti"], 4)}
+        if riga:
+            ingresso_doc[gid] = riga
 
     return {
         "n_trades": len(rows),
@@ -238,6 +455,7 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
         "per_coin": {k: _arrotonda(v) for k, v in sorted(per_coin.items())},
         "per_direzione": {k: _arrotonda(v) for k, v in per_dir.items()},
         "ipotesi": ipotesi,
+        "ingresso": ingresso_doc,
     }
 
 
