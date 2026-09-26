@@ -925,6 +925,11 @@ def _riga_vita(key: str, rec: dict, tipo: str, adesso: float) -> dict:
     }
     if rec.get("last_pf") is not None:
         riga["pf"] = round(float(rec["last_pf"]), 3)
+    # da dove viene una variante (26 set 2026, J9): l'ipotesi dei referti (o
+    # dell'intorno) e la madre, se il record li porta; senza, niente
+    for campo in ("ipotesi", "genitore"):
+        if rec.get(campo):
+            riga[campo] = str(rec[campo])
     if tipo == "rimossa":
         riga["vissuta_giorni"] = round((adesso - nato) / 86400, 2) if nato > 0 else None
         riga["in_deriva"] = bool(rec.get("drift_seen_at"))

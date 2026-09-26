@@ -72,6 +72,9 @@ mfe:          .venv/bin/python -m scripts.mfe_report
 # del gate. Dal 25 set 2026 pubblica anche il modello in `selector/current` (passo 2,
 # l'OMBRA: il bot annota p su ogni apertura e non decide). Non tocca registro ne' posizioni.
 selettore:    .venv/bin/python -m scripts.selettore_report
+# i segnali RIFIUTATI avrebbero vinto? (26 set 2026, J6): per motivo, R medio dei
+# rifiutati simulati sulle candele vere contro gli aperti. Sola lettura.
+rifiutati:    .venv/bin/python -m scripts.rifiutati_report
 # IL CONTROLLO AUTOMATICO (25 set 2026, docs/controllo_schema.md): i due
 # semafori, le anomalie e le tre letture (salute, paper, learning) calcolate
 # adesso dagli stessi dati che il bot pubblica ogni ora in dashboard/controllo.

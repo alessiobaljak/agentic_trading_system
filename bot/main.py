@@ -33,6 +33,7 @@ from bot.execution.exit_logic import (breakeven_after_tp1, ladder_multiples,
 from bot.execution.notifier import TelegramNotifier
 from bot.execution.reconciler import (CLOSE_NOW, DROP_LOCAL, ExchangeState,
                                       Reconciler, blocks_trading)
+from bot.learning import rifiutati
 from bot.learning import selettore as sel
 from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
@@ -42,6 +43,117 @@ from bot.risk import kill_switch
 from bot.risk.kill_switch import BotState
 from bot.risk.correlation_guard import CorrelationGuard
 from bot.risk.risk_manager import RiskManager
+
+
+def fattore_timeframe(tf: str | None) -> float:
+    """Quante barre del timeframe del BOT vale una barra del timeframe dato
+    (26 set 2026): 1 per il timeframe del bot, 4 per una strategia a 1h in un
+    bot a 15m. E' il moltiplicatore con cui cooldown e finestre dei verdetti,
+    espressi in ORE derivate da ORCHESTRATOR_TIMEFRAME, si riportano in barre
+    del timeframe della STRATEGIA. None/sconosciuto -> 1 (come prima)."""
+    base = timeframe_hours(settings.ORCHESTRATOR_TIMEFRAME) or 1.0
+    return timeframe_hours(tf or settings.ORCHESTRATOR_TIMEFRAME) / base
+
+
+def verdetto_post_stop(after, entry: float, orig_stop: float, primo_gradino: float,
+                       long: bool) -> dict:
+    """Controfattuale DOPO uno stop (26 set 2026): il prezzo, una volta preso lo
+    stop, e' tornato a favore fino al primo gradino della scala, o ha continuato
+    contro? Scorre le candele DALL'uscita in avanti:
+      - tocca il primo gradino PRIMA di andare un altro R contro -> 'rumore'
+        (lo stop era dentro il rumore del mercato: la direzione era giusta);
+      - va un altro R oltre lo stop prima -> 'inversione' (lo stop ha protetto);
+      - entrambi nella stessa candela -> 'inversione' (ordine ignoto: il peggio,
+        come fa il motore del gate);
+      - nessuno dei due -> None: non ancora decidibile (il chiamante scrive
+        'inversione' solo a finestra piena).
+    `post_stop_mfe_r`: la migliore escursione a favore DALL'ENTRY in R dopo lo
+    stop (negativa se il prezzo non e' mai tornato sopra l'entry). Solo misura."""
+    R = abs(entry - orig_stop)
+    if R <= 0:
+        return {"verdict": None, "post_stop_mfe_r": None}
+    contro = (orig_stop - R) if long else (orig_stop + R)
+    best = None
+    verdict = None
+    for c in after:
+        fav = c.high if long else c.low
+        best = fav if best is None else (max(best, fav) if long else min(best, fav))
+        if verdict is None:
+            hit_up = (c.high >= primo_gradino) if long else (c.low <= primo_gradino)
+            hit_dn = (c.low <= contro) if long else (c.high >= contro)
+            if hit_dn:
+                verdict = "inversione"
+            elif hit_up:
+                verdict = "rumore"
+    mfe = None if best is None else round(((best - entry) if long else (entry - best)) / R, 3)
+    return {"verdict": verdict, "post_stop_mfe_r": mfe}
+
+
+def fattori_size(decision, rmult, lmult, alloc_note, params,
+                 tilt_sentiment=None, f_esplorativa=1.0) -> dict | None:
+    """I fattori con cui la size di QUESTO trade e' stata decisa (26 set 2026),
+    in un dizionario JSON-safe: moltiplicatore di rischio e di leva
+    dell'allocazione (dentro la nota: convinzione, peso imparato,
+    calibrazione/trust, FRENO per deriva o serie), il tilt del sentiment, il
+    fattore esplorativa, il size_multiplier finale della decisione e le note del
+    risk manager (cosa ha limitato cosa). Senza, «perche' era cosi' piccolo?»
+    non aveva risposta. Puro e fail-open: None se qualcosa non e' leggibile."""
+    try:
+        return {
+            "risk_mult": round(float(rmult), 4),
+            "lev_mult": round(float(lmult), 4),
+            "alloc_note": str(alloc_note or "")[:300],
+            "tilt_sentiment": (round(float(tilt_sentiment), 4)
+                               if tilt_sentiment is not None else None),
+            "esplorativa": round(float(f_esplorativa), 4),
+            "size_multiplier": round(float(getattr(decision, "size_multiplier", 1.0)), 4),
+            "confidence": (float(decision.confidence)
+                           if getattr(decision, "confidence", None) is not None else None),
+            "adjusted_confidence": getattr(decision, "adjusted_confidence", None),
+            "risk_per_trade": (round(float(params.risk_per_trade), 6)
+                               if getattr(params, "risk_per_trade", None) is not None else None),
+            "capped_by_position_limit": bool(getattr(params, "capped_by_position_limit", False)),
+            "risk_notes": [str(n)[:200] for n in (getattr(params, "notes", None) or [])][:10],
+        }
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def portafoglio_ingresso(executor, circuit_breakers, direction) -> dict | None:
+    """Com'e' il portafoglio nell'istante dell'apertura (26 set 2026): quante
+    posizioni aperte, quanto rischio effettivo gia' impegnato (somma dei
+    risk_effective_pct), quante nello stesso verso, e il PnL del giorno dai
+    circuit breaker. Ogni voce e' None se non leggibile (fail-open): un trade
+    aperto da solo e uno aperto come quinto nello stesso verso non sono lo
+    stesso trade, e finora non si distinguevano."""
+    out = {"posizioni_aperte": None, "rischio_aperto_pct": None,
+           "stessa_direzione": None, "pnl_giorno": None}
+    try:
+        posizioni = list(getattr(executor, "open_positions", {}).values())
+        out["posizioni_aperte"] = len(posizioni)
+        out["rischio_aperto_pct"] = round(sum(
+            float(getattr(p, "risk_effective_pct", 0.0) or 0.0) for p in posizioni), 6)
+        out["stessa_direzione"] = sum(
+            1 for p in posizioni if getattr(p, "direction", None) == direction)
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        _pnl = getattr(circuit_breakers, "day_pnl_pct", None) if circuit_breakers is not None else None
+        out["pnl_giorno"] = round(float(_pnl), 6) if _pnl is not None else None
+    except Exception:  # noqa: BLE001
+        pass
+    return out
+
+
+def chiavi_aperte(opened: list, aperte: list | None) -> tuple[list[str], list[str]]:
+    """(["SIM|strategia", ...], [id, ...]) di cio' che il ciclo ha davvero aperto
+    (26 set 2026). Con `aperte` (posizioni) e' la lista vera; senza (chiamate
+    legacy) si ricade sulle decisioni, come prima."""
+    if aperte is not None:
+        keys = [f"{p.symbol}|{p.strategy}" for p in aperte]
+        ids = [str(getattr(p, "position_id", "") or "") for p in aperte]
+        return keys, ids
+    return [f"{d.asset}|{d.strategy}" for d in (opened or [])], []
 
 
 def _primo_ingresso(trades: list[dict]) -> float | None:
@@ -96,6 +208,7 @@ class TradingBot:
         self.regime_detector = RegimeDetector()
         self.adaptation = AdaptationEngine(self.fb)
         self.orchestrator = Orchestrator(self.adaptation)
+        self.orchestrator.fb = self.fb   # ombra dei rifiuti (26 set 2026, J6): registra i segnali scartati
         self.circuit_breakers = CircuitBreakers.from_dict(self.fb.get_rtdb("/risk_state"))
         self.risk = RiskManager(self.circuit_breakers)
         # guard di correlazione: era codice MORTO (0 import) fino all'audit del 04/08
@@ -621,13 +734,21 @@ class TradingBot:
         down = self.fb.degraded_for(now) if hasattr(self.fb, "degraded_for") else 0.0
         return down if down >= soglia else 0.0
 
-    def _record_shadow(self, opened: list, now: float) -> None:
+    def _record_shadow(self, opened: list, now: float, aperte: list | None = None) -> None:
         """Registra cosa avrebbe fatto il modello, accanto a cosa ha fatto il bot.
 
         NON influenza nulla: nessun percorso legge questo documento per operare.
         Serve a rispondere con dei numeri, fra qualche settimana, alla domanda
         "l'LLM aggiungerebbe valore?" — che oggi non ha risposta, perche' una
         decisione di un modello non e' riproducibile e quindi non e' backtestabile.
+
+        `opened`: le DECISIONI del ciclo; `aperte`: le POSIZIONI davvero aperte
+        (26 set 2026). Prima si registrava solo la prima decisione, anche se
+        poi un controllo l'aveva rifiutata: in parita' si aprono piu' segnali per
+        ciclo e l'ombra ne vedeva uno solo. Ora `actual_all` elenca tutte le
+        coppie aperte e `trade_ids` i loro id (per accoppiare i trade chiusi
+        senza indovinarli dal tempo); `actual` resta la prima, come stringa,
+        perche' scripts/shadow_report.py e scripts/ai_status.py la leggono cosi'.
         """
         if not settings.AI_SHADOW_ENABLED:
             return
@@ -648,9 +769,15 @@ class TradingBot:
             self._last_shadow = shadow
             if not shadow:
                 return
-            actual = f"{opened[0].asset}|{opened[0].strategy}" if opened else None
+            actual_all, trade_ids = chiavi_aperte(opened, aperte)
+            actual = actual_all[0] if actual_all else None
+            # verdetto: se la scelta dell'ombra e' fra le aperte e' un accordo,
+            # anche quando non e' la prima della lista
+            _scelta = shadow.get("choice")
+            _confronto = _scelta if (_scelta and _scelta in actual_all) else actual
             self.fb.set_doc("ai_shadow", str(int(now)), {
-                **shadow, "actual": actual, "verdict": compare(shadow, actual),
+                **shadow, "actual": actual, "verdict": compare(shadow, _confronto),
+                "actual_all": actual_all, "trade_ids": trade_ids,
                 "signals_available": len(signals),
                 "regime": self.regime.value if self.regime else None,
             })
@@ -882,15 +1009,19 @@ class TradingBot:
                 was_sl = closed.exit_reason in (ExitReason.STOP_LOSS,)
                 # cooldown anti-whipsaw: dopo uno STOP, la coin è "calda"/choppy →
                 # non rientrare su quella coin per qualche ora (evita il tritacarne).
+                # In BARRE del timeframe della STRATEGIA (26 set 2026): COOLDOWN_HOURS
+                # e' derivato da ORCHESTRATOR_TIMEFRAME (4 barre), e per un trade a
+                # 1h le stesse 4 barre sono 4 ore, non 1. Moltiplicatore 1 a 15m.
+                _ftf = fattore_timeframe(getattr(closed, "timeframe", None))
                 if was_sl:
-                    self._coin_cooldown[closed.symbol] = now + settings.COOLDOWN_HOURS * 3600
+                    self._coin_cooldown[closed.symbol] = now + settings.COOLDOWN_HOURS * 3600 * _ftf
                 # adattamento real-time: una STRATEGIA che perde N volte di fila va
                 # in panchina (il bot NON si ferma, continua con le altre strategie).
                 st = closed.strategy
                 if was_sl:
                     self._strat_streak[st] = self._strat_streak.get(st, 0) + 1
                     if self._strat_streak[st] >= settings.STRATEGY_LOSS_STREAK:
-                        self._strat_cooldown[st] = now + settings.STRATEGY_COOLDOWN_HOURS * 3600
+                        self._strat_cooldown[st] = now + settings.STRATEGY_COOLDOWN_HOURS * 3600 * _ftf
                         self._strat_streak[st] = 0
                         print(f"[main] strategia {st} in panchina dopo "
                               f"{settings.STRATEGY_LOSS_STREAK} stop consecutivi")
@@ -1008,11 +1139,16 @@ class TradingBot:
             opened = [d for d in self.orchestrator.decide_all(
                 self.selected, self.regime, disabled=disabled, boundary=boundary,
                 esplorative_aperte=self._esplorative_aperte())]
+            # `boundary` e' il confine della candela CHIUSA che ha prodotto la
+            # decisione: viaggia sul trade come `signal_candle_ts` (26 set 2026)
+            aperte = []
             for d in opened:
-                self._try_open(d, now)
+                _p = self._try_open(d, now, signal_candle_ts=boundary)
+                if _p is not None:
+                    aperte.append(_p)
             # OMBRA: il modello dice cosa AVREBBE fatto, e resta li'. Dopo il giro
             # delle aperture, cosi' non aggiunge latenza alla decisione vera.
-            self._record_shadow(opened, now)
+            self._record_shadow(opened, now, aperte=aperte)
             self._publish_decision_status()
             return
         decision = self.orchestrator.decide(self.selected, self.regime, memory, recent,
@@ -1020,7 +1156,7 @@ class TradingBot:
         if decision is None:
             self._publish_decision_status()  # flat: motivo già in last_status
             return
-        self._try_open(decision, now)
+        self._try_open(decision, now, signal_candle_ts=boundary)
 
     # ------------------------------------------------------------------ #
     def _esplorative_aperte(self) -> int:
@@ -1041,10 +1177,13 @@ class TradingBot:
             return max(0.0, min(1.0, float(settings.ESPLORATIVA_SIZE_MULT)))
         return 1.0
 
-    def _try_open(self, decision, now: float) -> None:
+    def _try_open(self, decision, now: float, signal_candle_ts: float | None = None):
         """Apre UNA posizione dalla decisione (controlli + risk gate + executor).
         Se un controllo fallisce fa 'return' (salta questa decisione; in parita' il
-        loop continua con le altre).
+        loop continua con le altre). Ritorna la Position aperta, o None.
+
+        `signal_candle_ts` (26 set 2026): confine della candela chiusa che ha
+        prodotto la decisione; sul trade diventa `signal_candle_ts` e `latenza_s`.
 
         Una decisione ESPLORATIVA (25 set 2026, F1bis) passa da TUTTI gli stessi
         controlli di una validata (cooldown, tetto per coin, correlazione, risk
@@ -1064,6 +1203,12 @@ class TradingBot:
             # per motivo finiscono in /decision_status e nel controllo orario
             try:
                 self.orchestrator.conta_scarto(motivo, now)
+                # e l'OMBRA del rifiuto (26 set 2026, J6): prezzo, stop, scala e
+                # motivo, cosi' 24-96 ore dopo si sa com'e' andata
+                _a = self.selected.get(decision.asset)
+                rifiutati.registra_decisione(self.fb, decision, motivo,
+                                             entry=(_a.price if _a else None), now=now,
+                                             adaptation=self.adaptation)
             except Exception:  # noqa: BLE001
                 pass
 
@@ -1173,8 +1318,10 @@ class TradingBot:
         # SENTIMENT TILT (live-only, come il trend tilt): se il sentiment della coin
         # e' CONTRO la direzione del trade, apri piu' piccolo (solo riduzione, mai
         # aumento). Niente dato -> nessuna penalita'. Non nel backtest -> parita' GATE1.
+        _tilt_sent = None
         if settings.SENTIMENT_TILT_ENABLED and asset.sentiment_score is not None:
             f = self._sentiment_size_factor(asset.sentiment_score, decision.direction)
+            _tilt_sent = float(f)
             if f < 1.0:
                 decision.size_multiplier = max(0.0, min(1.0, decision.size_multiplier * f))
 
@@ -1246,6 +1393,14 @@ class TradingBot:
                                     _tf_strat, now)
         _sel_p, _sel_soglia = self._ombra_selettore(
             decision, asset, params, _sparams, _tf_strat, now, feats=_feats)
+        # LE MISURE D'INGRESSO (26 set 2026): i fattori di size con cui si apre e
+        # com'e' il portafoglio in quel momento. Solo memoria, mai una decisione;
+        # fail-open: un errore qui non ferma l'apertura.
+        _size_factors = fattori_size(decision, rmult, lmult, alloc_note, params,
+                                     tilt_sentiment=_tilt_sent, f_esplorativa=_f_esp)
+        _portafoglio = portafoglio_ingresso(getattr(self, "executor", None),
+                                            getattr(self, "circuit_breakers", None),
+                                            decision.direction)
         pos = self.executor.open_position(asset, decision.strategy, decision.direction,
                                           params, confidence=decision.confidence,
                                           regime_confidence=self.regime_confidence,
@@ -1258,7 +1413,10 @@ class TradingBot:
                                           # memoria del trade (25 set 2026): variabili
                                           # d'ingresso e regola in chiaro
                                           feats_at_entry=_feats,
-                                          regola=getattr(decision, "reasoning", None) or None)
+                                          regola=getattr(decision, "reasoning", None) or None,
+                                          size_factors=_size_factors,
+                                          portafoglio_at_entry=_portafoglio,
+                                          signal_candle_ts=signal_candle_ts)
         if pos is not None:
             if getattr(decision, "esplorativa", False):
                 # la riga che distingue nel log un trade esplorativo da uno delle
@@ -1276,6 +1434,7 @@ class TradingBot:
                 pos.symbol, pos.strategy, pos.direction.value,
                 pos.entry_price, pos.quantity, pos.leverage,
                 pos.stop_price, pos.take_profit_price, dry_run=settings.DRY_RUN)
+        return pos
 
     # ------------------------------------------------------------------ #
     # Il selettore in ombra (25 set 2026, passo 2 del disegno)              #
@@ -1440,8 +1599,15 @@ class TradingBot:
         """B1 (learning dal paper): assegna il verdetto trailing (prematuro/protetto)
         alle uscite TRAILING recenti che non ce l'hanno ancora, dal prezzo SUCCESSIVO
         reale (Binance). Il dato si accumula sui trade -> il learning potra' usarlo.
-        Gira sul VPS (ha Binance), non nel learning notturno su GitHub (geo-bloccato)."""
-        window_s = window_h * 3600
+        Gira sul VPS (ha Binance), non nel learning notturno su GitHub (geo-bloccato).
+
+        Dal 26 set 2026 anche il controfattuale DOPO UNO STOP (`post_stop_verdict`
+        'rumore'/'inversione' e `post_stop_mfe_r`, vedi `verdetto_post_stop`), e
+        le candele sono del timeframe del TRADE, con una finestra in BARRE:
+        `window_h` e' in ore del timeframe del bot (24h = 96 barre a 15m) e si
+        scala col fattore del timeframe (96h per un trade a 1h). Prima si
+        leggevano 300 candele di ORCHESTRATOR_TIMEFRAME e la finestra era di 24
+        ore fisse: per un trade a 1h erano 24 barre invece di 96."""
         try:
             trades = self.logger.recent(limit=100)
         except Exception:  # noqa: BLE001
@@ -1450,42 +1616,75 @@ class TradingBot:
         for t in trades:
             if done >= max_eval:
                 break
+            reason = t.get("exit_reason")
             # trailing_stop E scale_out: entrambi tagliano il "runner" prima del TP
             # finale -> il controfattuale (tenere fino a TP3?) allena il keep trailing.
-            if t.get("exit_reason") not in ("trailing_stop", "scale_out") \
-                    or t.get("trailing_verdict") is not None:
+            # stop_loss: il controfattuale post-stop (rumore/inversione).
+            if reason in ("trailing_stop", "scale_out"):
+                if t.get("trailing_verdict") is not None:
+                    continue
+            elif reason == "stop_loss":
+                if t.get("post_stop_verdict") is not None:
+                    continue
+            else:
                 continue
             tp, sl, ex = t.get("take_profit_price"), t.get("stop_price"), t.get("exit_ts")
             if tp is None or sl is None or ex is None:
                 continue   # dati mancanti
+            tf = t.get("timeframe") or settings.ORCHESTRATOR_TIMEFRAME
+            tf_s = timeframe_hours(tf) * 3600.0
+            window_s = window_h * 3600 * fattore_timeframe(tf)
+            entry_ts = ex - float(t.get("duration_seconds", 0) or 0)
+            # le candele arrivano fino a ORA: ne servono abbastanza da coprire
+            # dall'ingresso (per `during`) a oggi, e almeno l'orizzonte del gate
+            # (96 barre = HORIZON_BARS del motore) piu' un margine
+            needed = max(96 + 8, int((now - entry_ts) / tf_s) + 8)
+            if needed > 1000:
+                continue   # troppo vecchio per le candele disponibili: non decidibile
             try:
-                candles = self.price.get_candles(
-                    t.get("symbol", ""), settings.ORCHESTRATOR_TIMEFRAME, limit=300)
+                candles = self.price.get_candles(t.get("symbol", ""), tf, limit=needed)
             except Exception:  # noqa: BLE001
                 continue
-            entry_ts = ex - float(t.get("duration_seconds", 0) or 0)
             during = [c for c in candles if entry_ts <= c.open_time.timestamp() <= ex]
             after = [c for c in candles if ex <= c.open_time.timestamp() <= ex + window_s]
             if len(after) < 2:
                 continue   # servono un paio di candele DOPO l'uscita per il controfattuale
             long = str(t.get("direction", "")).lower() == "long"
-            res = trailing_reason(during, after, float(t.get("entry_price", 0.0)),
-                                  float(t.get("exit_price", 0.0)), float(sl), float(tp), long)
-            # 'premature'/'protected' sono DEFINITIVI (TP o SL scattato dopo l'uscita)
-            # -> si scrivono SUBITO, niente attesa di 24h. 'neutral' (ne' TP ne' SL)
-            # e' valido solo a finestra piena; altrimenti aspetta piu' candele.
-            if res["verdict"] == "neutral" and now - ex < window_s:
-                continue
-            t["trailing_verdict"] = res["verdict"]
-            t["trailing_miss_to_tp"] = res["miss_to_tp"]      # quanto tragitto lasciato sul tavolo
-            t["trailing_knockout_atr"] = res["knockout_atr"]  # rumore (<1) vs inversione reale
+            if reason == "stop_loss":
+                orig_stop = t.get("orig_stop") or sl
+                tps = t.get("tp_prices") or []
+                entry = float(t.get("entry_price", 0.0))
+                R = abs(entry - float(orig_stop))
+                primo = (float(tps[0]) if tps
+                         else (entry + 1.5 * R if long else entry - 1.5 * R))
+                res = verdetto_post_stop(after, entry, float(orig_stop), primo, long)
+                if res["post_stop_mfe_r"] is None:
+                    continue   # R non calcolabile
+                # 'rumore'/'inversione' toccati sono DEFINITIVI; ne' l'uno ne'
+                # l'altro vale solo a finestra piena (-> 'inversione': non e'
+                # tornato al primo gradino entro l'orizzonte)
+                if res["verdict"] is None and now - ex < window_s:
+                    continue
+                t["post_stop_verdict"] = res["verdict"] or "inversione"
+                t["post_stop_mfe_r"] = res["post_stop_mfe_r"]
+            else:
+                res = trailing_reason(during, after, float(t.get("entry_price", 0.0)),
+                                      float(t.get("exit_price", 0.0)), float(sl), float(tp), long)
+                # 'premature'/'protected' sono DEFINITIVI (TP o SL scattato dopo l'uscita)
+                # -> si scrivono SUBITO, niente attesa di 24h. 'neutral' (ne' TP ne' SL)
+                # e' valido solo a finestra piena; altrimenti aspetta piu' candele.
+                if res["verdict"] == "neutral" and now - ex < window_s:
+                    continue
+                t["trailing_verdict"] = res["verdict"]
+                t["trailing_miss_to_tp"] = res["miss_to_tp"]      # quanto tragitto lasciato sul tavolo
+                t["trailing_knockout_atr"] = res["knockout_atr"]  # rumore (<1) vs inversione reale
             try:
                 self.fb.set_doc("trades", t["trade_id"], t)   # riscrive il doc + i campi
                 done += 1
             except Exception:  # noqa: BLE001
                 pass
         if done:
-            print(f"[main] verdetto trailing assegnato a {done} trade paper")
+            print(f"[main] verdetti (trailing/post-stop) assegnati a {done} trade paper")
 
     # ------------------------------------------------------------------ #
     def _publish_drift(self, trades: list[dict]) -> None:
@@ -1533,10 +1732,15 @@ class TradingBot:
         dopo 8 giorni di paper con 6 chiusi in perdita: «deve imparare e
         adattarsi tutti i giorni», ma con criterio."""
         try:
-            from bot.learning.referti import aggrega_referti, riassunto_ipotesi
+            from bot.learning.referti import aggiorna_storia, aggrega_referti, riassunto_ipotesi
             doc = aggrega_referti(trades)
             doc["updated_at"] = time.time()
             self.fb.set_doc("learning", "referti", doc)
+            # la STORIA delle ipotesi (26 set 2026, J9): prima comparsa di ogni
+            # «strategia|tipo», cosi' le regole dei referti si possono giudicare
+            self.fb.set_doc("learning", "ipotesi_storia",
+                            aggiorna_storia(self.fb.get_doc("learning", "ipotesi_storia") or {},
+                                            doc, time.time()))
             righe = riassunto_ipotesi(doc)
             if righe:
                 print(f"[referti] {len(righe)} ipotesi dai referti del paper -> varianti "
@@ -1689,6 +1893,12 @@ class TradingBot:
                 if now - self.last_trailing_eval >= self._decision_interval_s:
                     self.evaluate_pending_trailing(now)
                     self.last_trailing_eval = now
+                    # e l'esito simulato dei segnali RIFIUTATI (26 set 2026, J6):
+                    # stessa fonte di candele, al massimo 20 chiamate per giro
+                    try:
+                        rifiutati.valuta_pendenti(self.fb, self.price.get_candles, now)
+                    except Exception as exc:  # noqa: BLE001
+                        print(f"[rifiutati] valutazione saltata: {exc}")
                 # RETE DI SICUREZZA tempo-based: ricalcolo orario cosi' il recupero
                 # in prova (probation, tempo-dipendente) avanza anche senza chiusure.
                 # Il ricalcolo PRINCIPALE e' event-driven: subito dopo ogni trade

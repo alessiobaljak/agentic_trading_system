@@ -25,7 +25,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
 
-from bot.config import settings
+from bot.config import settings, timeframe_hours
 from bot.core.costs import funding_fraction, liquidity_spread
 from bot.core.firebase_client import get_firebase
 from bot.core.models import (
@@ -115,10 +115,30 @@ class Position:
     # ripristinata come `selector_p`: dopo un riavvio il trade chiuso deve
     # uscire ancora marcato, altrimenti finirebbe nei pesi delle validate.
     esplorativa: bool = False
+    # --- LE MISURE MANCANTI (26 set 2026, audit della memoria del trade) ----- #
+    # Solo misura, nessuna decisione. Tutte persistite in _write_position_state e
+    # ripristinate in _position_from_state (documenti vecchi -> None/[]).
+    # peggior prezzo CONTRO visto (specchio di high_water): aggiornato a fine
+    # tick nello stesso punto, dall'ombra avversa del range. Da qui il MAE.
+    low_water: float = 0.0
+    # epoch del primo gradino riempito e dell'ultimo miglioramento di high_water
+    t_tp1: Optional[float] = None
+    t_mfe: Optional[float] = None
+    # le fette chiuse dallo scale-out: {stage, price, qty, ts, net}
+    partial_fills: list = field(default_factory=list)
+    # epoch in cui lo stop e' andato a pareggio (None = mai)
+    be_at: Optional[float] = None
+    # i fattori di size decisi in main._try_open (rmult/lmult/nota/tilt/...)
+    size_factors: Optional[dict] = None
+    # il portafoglio all'ingresso (posizioni aperte, rischio aperto, ...)
+    portafoglio_at_entry: Optional[dict] = None
+    # confine (epoch) della candela chiusa che ha prodotto la decisione
+    signal_candle_ts: Optional[float] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
         self.high_water = self.entry_price
+        self.low_water = self.entry_price
         self.orig_stop = self.stop_price
 
 
@@ -139,6 +159,9 @@ class ExecutionEngine:
         from bot.config import timeframe_hours
         _tf_h = timeframe_hours(settings.ORCHESTRATOR_TIMEFRAME)
         self.max_hold_hours = float(os.getenv("EXEC_MAX_HOLD_HOURS", str(96 * _tf_h)))
+        # se l'env fissa le ore, vale per TUTTE le posizioni; altrimenti le 96
+        # barre sono del timeframe della POSIZIONE (vedi _max_hold_for)
+        self._max_hold_from_env = os.getenv("EXEC_MAX_HOLD_HOURS") is not None
         if not self.dry_run:
             self._init_binance()
         # CRITICO: ricarica le posizioni aperte da Firebase. Senza questo, ogni
@@ -194,13 +217,18 @@ class ExecutionEngine:
         esplorativa: bool = False,
         feats_at_entry: Optional[dict] = None,
         regola: Optional[str] = None,
+        size_factors: Optional[dict] = None,
+        portafoglio_at_entry: Optional[dict] = None,
+        signal_candle_ts: Optional[float] = None,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved).
         `selector_p`/`selector_soglia`: l'ombra del selettore (25 set 2026), solo
         annotate sulla posizione — non cambiano niente di cio' che si apre.
         `esplorativa`: la coppia e' un quasi-passaggio del gate operato a size
         ridotta (25 set 2026, F1bis); la size e' gia' dentro `params`, qui si
-        annota soltanto, e l'annotazione segue il trade fino a Firestore."""
+        annota soltanto, e l'annotazione segue il trade fino a Firestore.
+        `size_factors`/`portafoglio_at_entry`/`signal_candle_ts` (26 set 2026):
+        misure d'ingresso decise dal chiamante, solo annotate e persistite."""
         if not params.approved or params.quantity <= 0:
             print(f"[execution] ordine rifiutato dal gate: {params.reject_reason}")
             return None
@@ -229,6 +257,9 @@ class ExecutionEngine:
             esplorativa=bool(esplorativa),
             feats_at_entry=dict(feats_at_entry) if feats_at_entry else None,
             regola=(str(regola)[:300] if regola else None),
+            size_factors=dict(size_factors) if size_factors else None,
+            portafoglio_at_entry=dict(portafoglio_at_entry) if portafoglio_at_entry else None,
+            signal_candle_ts=(float(signal_candle_ts) if signal_candle_ts is not None else None),
         )
 
         if self.dry_run:
@@ -305,6 +336,7 @@ class ExecutionEngine:
             # l'entry vero DEVE essere quello eseguito.
             pos.entry_price = avg_price
             pos.high_water = avg_price
+            pos.low_water = avg_price
         self._place_protective_orders(pos)
         return True
 
@@ -423,6 +455,19 @@ class ExecutionEngine:
     # ------------------------------------------------------------------ #
     # Gestione posizione — ALLINEATA AL BACKTEST (GATE 1)                 #
     # ------------------------------------------------------------------ #
+    def _max_hold_for(self, pos: Position) -> float:
+        """Orizzonte massimo in ORE per QUESTA posizione: 96 barre del SUO
+        timeframe (24h a 15m, 96h a 1h), non di quello del bot. Fino al 26 set
+        2026 `max_hold_hours` era unico e derivato da ORCHESTRATOR_TIMEFRAME: una
+        strategia a 1h dentro un bot a 15m sarebbe stata chiusa d'ufficio dopo 24
+        barre invece delle 96 con cui il gate l'ha validata. Per le posizioni del
+        timeframe del bot il numero e' identico a prima (moltiplicatore 1), e
+        EXEC_MAX_HOLD_HOURS, se impostato, vince ancora su tutte."""
+        if self._max_hold_from_env:
+            return self.max_hold_hours
+        base = timeframe_hours(settings.ORCHESTRATOR_TIMEFRAME) or 1.0
+        return self.max_hold_hours * timeframe_hours(pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME) / base
+
     def _keep_per(self, pos: Position) -> Optional[float]:
         """Il keep del profit-lock che governa QUESTA posizione (vedi la nota di
         precedenza in update_position). None = default globale."""
@@ -514,25 +559,28 @@ class ExecutionEngine:
             if fills:
                 reached_final = new_stage >= len(ladder)
                 partials = fills[:-1] if reached_final else fills
-                for price, frac in partials:
-                    self._partial_close(pos, price, pos.quantity * frac)
+                for k, (price, frac) in enumerate(partials):
+                    self._partial_close(pos, price, pos.quantity * frac,
+                                        stage=pos.scale_stage + k + 1)
                 pos.scale_stage = new_stage
                 _be = (pos.sl_to_breakeven if pos.sl_to_breakeven is not None
                        else settings.SCALE_OUT_SL_TO_BREAKEVEN)
                 if _be:
+                    if pos.be_at is None and pos.stop_price != pos.entry_price:
+                        pos.be_at = time.time()        # misura: quando e' andato a pareggio
                     pos.stop_price = pos.entry_price   # break-even sul residuo
                 if reached_final:
                     last_price = fills[-1][0]
                     return self._close(pos, last_price, ExitReason.TAKE_PROFIT)
 
-            # 3) uscita a fine orizzonte
+            # 3) uscita a fine orizzonte (96 barre del timeframe della POSIZIONE)
             held_h = (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0
-            if held_h >= self.max_hold_hours:
+            if held_h >= self._max_hold_for(pos):
                 return self._close(pos, mark_price, ExitReason.TIME_EXIT)
 
             # ombre nel high_water solo ORA (dopo i trigger): valgono per i tick
             # FUTURI, come il gate che aggiorna best_fav a fine barra
-            pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
+            self._update_water_marks(pos, hi, lo, long)
             # LIVE: lo stop sul book deve seguire quello deciso qui (break-even/profit-lock)
             if publish:
                 intended = max(eff_stop, pos.stop_price) if long else min(eff_stop, pos.stop_price)
@@ -558,12 +606,13 @@ class ExecutionEngine:
         if hit_tp:
             return self._close(pos, pos.take_profit_price, ExitReason.TAKE_PROFIT)
 
-        # uscita a fine orizzonte (come l'orizzonte del backtester)
+        # uscita a fine orizzonte (come l'orizzonte del backtester, in barre del
+        # timeframe della POSIZIONE)
         held_h = (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0
-        if held_h >= self.max_hold_hours:
+        if held_h >= self._max_hold_for(pos):
             return self._close(pos, mark_price, ExitReason.TIME_EXIT)
 
-        pos.high_water = max(pos.high_water, hi) if long else min(pos.high_water, lo)
+        self._update_water_marks(pos, hi, lo, long)
         if publish:
             self._sync_exchange_stop(pos, eff_stop)   # LIVE: stop sul book = stop deciso qui
             self._write_position_state(pos, mark_price, eff_stop=eff_stop)
@@ -589,10 +638,24 @@ class ExecutionEngine:
                 return closed
         return self.update_position(symbol, mark_price)
 
-    def _partial_close(self, pos: Position, price: float, qty: float) -> None:
+    @staticmethod
+    def _update_water_marks(pos: Position, hi: float, lo: float, long: bool) -> None:
+        """Aggiorna a FINE TICK il miglior prezzo a favore (high_water, che decide
+        il profit-lock) e, dal 26 set 2026, il peggior prezzo contro (low_water,
+        solo misura: da qui il MAE) e l'istante dell'ultimo miglioramento
+        (t_mfe). Un solo punto per entrambi i percorsi, cosi' non divergono."""
+        new_hw = max(pos.high_water, hi) if long else min(pos.high_water, lo)
+        if new_hw != pos.high_water:
+            pos.high_water = new_hw
+            pos.t_mfe = time.time()
+        pos.low_water = min(pos.low_water, lo) if long else max(pos.low_water, hi)
+
+    def _partial_close(self, pos: Position, price: float, qty: float,
+                       stage: Optional[int] = None) -> None:
         """Chiude una FETTA (qty assoluta) della posizione al prezzo dato e accumula
         il PnL lordo realizzato. Il residuo continua a correre. La contabilita' del
-        PnL finale (fette + residuo, netto costi) e' in _build_closed_trade."""
+        PnL finale (fette + residuo, netto costi) e' in _build_closed_trade.
+        `stage`: numero del gradino (1 = TP1), solo per la memoria della fetta."""
         qty = min(qty, pos.remaining_qty)
         if qty <= 0:
             return
@@ -608,6 +671,16 @@ class ExecutionEngine:
         self.realized_events.append(net)
         pos.remaining_qty -= qty
         pos.scaled_out = True
+        # la memoria della fetta (26 set 2026): quale gradino, a che prezzo, quanto,
+        # quando e con che netto. E l'istante del PRIMO gradino (t_tp1).
+        _ts = time.time()
+        pos.partial_fills.append({
+            "stage": int(stage) if stage is not None else len(pos.partial_fills) + 1,
+            "price": float(price), "qty": round(float(qty), 8),
+            "ts": _ts, "net": round(float(net), 6),
+        })
+        if pos.t_tp1 is None:
+            pos.t_tp1 = _ts
         if self.dry_run:
             print(f"[DRY_RUN] SCALE-OUT {qty:.4f} {pos.symbol} @ {price} "
                   f"(netto {net:+.4f}, residuo {pos.remaining_qty:.4f})")
@@ -755,7 +828,38 @@ class ExecutionEngine:
             gross_pnl_usdt=round(gross_pnl, 6),
             # in DRY_RUN sono stime dal modello del gate, non misure dai fill
             costs_are_estimated=self.dry_run,
+            # --- le misure mancanti (26 set 2026): solo memoria, nessuna decisione ---
+            mae_r=self._mae_r(pos),
+            t_tp1_s=self._secondi_da_ingresso(pos, pos.t_tp1),
+            t_mfe_s=self._secondi_da_ingresso(pos, pos.t_mfe),
+            bars_held=round(held_hours / (timeframe_hours(
+                pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME) or 1.0), 2),
+            partial_fills=[dict(f) for f in (pos.partial_fills or [])],
+            be_at_s=self._secondi_da_ingresso(pos, pos.be_at),
+            size_factors_at_entry=(dict(pos.size_factors) if pos.size_factors else None),
+            risk_effective_pct=float(pos.risk_effective_pct),
+            portafoglio_at_entry=(dict(pos.portafoglio_at_entry)
+                                  if pos.portafoglio_at_entry else None),
+            signal_candle_ts=pos.signal_candle_ts,
+            latenza_s=(round(pos.entry_time.timestamp() - float(pos.signal_candle_ts), 3)
+                       if pos.signal_candle_ts is not None else None),
         )
+
+    @staticmethod
+    def _mae_r(pos: Position) -> Optional[float]:
+        """Massima escursione AVVERSA in R: |entry - low_water| / |entry - orig_stop|.
+        None se lo stop originale manca (R non calcolabile). Specchio di mfe_r."""
+        R = abs(pos.entry_price - (pos.orig_stop or 0.0))
+        if not pos.orig_stop or R <= 0:
+            return None
+        return round(abs(pos.entry_price - pos.low_water) / R, 3)
+
+    @staticmethod
+    def _secondi_da_ingresso(pos: Position, ts: Optional[float]) -> Optional[float]:
+        """Secondi tra l'ingresso e l'epoch dato (None se l'evento non c'e' stato)."""
+        if ts is None:
+            return None
+        return round(max(0.0, float(ts) - pos.entry_time.timestamp()), 3)
 
     def _write_position_state(self, pos: Position, mark_price: float,
                               eff_stop: float | None = None) -> None:
@@ -847,6 +951,15 @@ class ExecutionEngine:
             # riavvio smarcherebbe la posizione e il trade chiuso entrerebbe
             # nei pesi delle validate
             "esplorativa": bool(pos.esplorativa),
+            # le misure mancanti (26 set 2026): senza queste chiavi un riavvio
+            # azzererebbe MAE, tempi e fette, e il trade chiuso uscirebbe monco
+            "low_water": pos.low_water,
+            "t_tp1": pos.t_tp1, "t_mfe": pos.t_mfe,
+            "partial_fills": [dict(f) for f in (pos.partial_fills or [])],
+            "be_at": pos.be_at,
+            "size_factors": pos.size_factors,
+            "portafoglio_at_entry": pos.portafoglio_at_entry,
+            "signal_candle_ts": pos.signal_candle_ts,
         })
 
     # ------------------------------------------------------------------ #
@@ -938,6 +1051,21 @@ class ExecutionEngine:
         # il paper esplorativo (25 set 2026, F1bis): documenti piu' vecchi non
         # hanno la chiave -> False, cioe' «posizione di una validata»
         pos.esplorativa = bool(p.get("esplorativa", False))
+        # le misure mancanti (26 set 2026): documenti piu' vecchi non hanno le
+        # chiavi -> low_water all'entry (MAE parte da zero), tempi None, fette []
+        _lw = p.get("low_water")
+        pos.low_water = float(_lw) if _lw is not None else pos.entry_price
+        _t1, _tm, _ba = p.get("t_tp1"), p.get("t_mfe"), p.get("be_at")
+        pos.t_tp1 = float(_t1) if _t1 is not None else None
+        pos.t_mfe = float(_tm) if _tm is not None else None
+        pos.be_at = float(_ba) if _ba is not None else None
+        _pf = p.get("partial_fills")
+        pos.partial_fills = [dict(f) for f in _pf if isinstance(f, dict)] if isinstance(_pf, list) else []
+        pos.size_factors = dict(p["size_factors"]) if isinstance(p.get("size_factors"), dict) else None
+        pos.portafoglio_at_entry = (dict(p["portafoglio_at_entry"])
+                                    if isinstance(p.get("portafoglio_at_entry"), dict) else None)
+        _sc = p.get("signal_candle_ts")
+        pos.signal_candle_ts = float(_sc) if _sc is not None else None
         return pos
 
     @staticmethod

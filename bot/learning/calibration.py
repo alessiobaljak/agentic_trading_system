@@ -33,6 +33,18 @@ trade sono andati meglio dei primi». Il verdetto oscillava fra «flat» (23 set
 e «ok» (25 set) senza che nulla fosse cambiato: era un artefatto. In quel caso
 il verdetto e' «costante», con trust 1.0 (niente da correggere, niente da
 ridurre) e una nota che dice perche' non si misura.
+
+DUE MISURE IN PIU', SOLO MISURE (26 set 2026, backlog J8)
+Ogni trade porta anche `regime_confidence_at_entry` (quanto era netta la
+classificazione di regime, 0..1) e `fear_greed_at_entry` (l'indice 0..100).
+Nessuno dei due entra in `allocation()`; il modello (bot/core/models.py) lo
+diceva gia': «registrato per poter misurare se predice l'esito: solo dopo
+quella verifica ha senso legarlo a size o leva». Qui si fa quella verifica:
+terzili di confidenza del regime (`regime_confidence`, con un verdetto «cresce»
+/ «piatta» / «campione insufficiente» sotto MIN_PER_FASCIA trade per fascia) e
+tre fasce fisse di F&G (<= 25 paura, 26-74, >= 75 avidita': i confini del
+sito che lo pubblica, non tarati). `trust` NON li guarda: il verdetto sulla
+confidenza del segnale resta l'unico che tocca la size.
 """
 from __future__ import annotations
 
@@ -51,6 +63,13 @@ CONSTANT = "costante"
 # sotto questo range (in punti di confidenza) le fasce non separano nulla: un
 # punto e' meno di qualunque differenza che allocation() possa tradurre in size
 CONSTANT_RANGE = 1.0
+
+# le fasce del regime e del F&G (26 set 2026): sotto 10 trade per fascia il
+# confronto fra fasce e' rumore (dichiarato prima di vedere i numeri). Le
+# fasce del F&G sono quelle del sito che lo pubblica (paura <= 25, avidita' >= 75).
+MIN_PER_FASCIA = 10
+FG_PAURA, FG_AVIDITA = 25, 75
+CRESCE, PIATTA, INSUFFICIENTE_FASCE = "cresce", "piatta", "campione insufficiente"
 
 
 def _constant_note(lo: float, hi: float, n: int) -> str:
@@ -108,10 +127,95 @@ def confidence_buckets(pairs: list[tuple[float, float]], n_buckets: int = 3) -> 
     return out
 
 
+def _fascia(etichetta: str, pnls: list[float]) -> dict:
+    return {"fascia": etichetta, "n": len(pnls),
+            "win_rate": round(sum(1 for x in pnls if x > 0) / len(pnls), 3) if pnls else None,
+            "pnl_medio": round(mean(pnls), 5) if pnls else None}
+
+
+def fasce_regime(pairs: list[tuple[float, float]], n_fasce: int = 3) -> list[dict]:
+    """Terzili della confidenza del REGIME con n, win rate e pnl medio (26 set
+    2026). Stessa forma di `confidence_buckets`, con le etichette del range."""
+    if len(pairs) < n_fasce:
+        return []
+    ordered = sorted(pairs, key=lambda p: p[0])
+    size = len(ordered) // n_fasce
+    out = []
+    for i in range(n_fasce):
+        lo = i * size
+        hi = len(ordered) if i == n_fasce - 1 else (i + 1) * size
+        chunk = ordered[lo:hi]
+        if not chunk:
+            continue
+        f = _fascia(f"{min(p[0] for p in chunk):.2f}-{max(p[0] for p in chunk):.2f}",
+                    [p[1] for p in chunk])
+        f["min"], f["max"] = round(min(p[0] for p in chunk), 3), round(max(p[0] for p in chunk), 3)
+        out.append(f)
+    return out
+
+
+def verdetto_fasce(fasce: list[dict], minimo: int = MIN_PER_FASCIA) -> str:
+    """«cresce» se il pnl medio della fascia ALTA supera quello della BASSA,
+    «piatta» altrimenti; «campione insufficiente» se una fascia ha meno di
+    `minimo` trade o le fasce sono meno di due. Nessuna regola sulla size ne
+    discende: e' una misura."""
+    if len(fasce) < 2 or any(int(f.get("n", 0) or 0) < minimo for f in fasce):
+        return INSUFFICIENTE_FASCE
+    lo, hi = fasce[0].get("pnl_medio"), fasce[-1].get("pnl_medio")
+    if lo is None or hi is None:
+        return INSUFFICIENTE_FASCE
+    return CRESCE if hi > lo else PIATTA
+
+
+def fasce_fear_greed(pairs: list[tuple[float, float]]) -> list[dict]:
+    """Tre fasce fisse del Fear & Greed all'apertura: paura (<= 25), mezzo
+    (26-74), avidita' (>= 75). Fasce vuote comprese, con n = 0: chi legge deve
+    vedere che manca il dato, non che manca la riga."""
+    gruppi = {f"<={FG_PAURA}": [], f"{FG_PAURA + 1}-{FG_AVIDITA - 1}": [], f">={FG_AVIDITA}": []}
+    for fg, pnl in pairs:
+        if fg <= FG_PAURA:
+            gruppi[f"<={FG_PAURA}"].append(pnl)
+        elif fg >= FG_AVIDITA:
+            gruppi[f">={FG_AVIDITA}"].append(pnl)
+        else:
+            gruppi[f"{FG_PAURA + 1}-{FG_AVIDITA - 1}"].append(pnl)
+    return [_fascia(k, v) for k, v in gruppi.items()]
+
+
+def _coppie(trades: list[dict], campo: str) -> list[tuple[float, float]]:
+    out = []
+    for t in trades:
+        if (str(t.get("exit_reason", "")) in _EXTERNAL or t.get("esplorativa")
+                or t.get(campo) is None or t.get("pnl_pct") is None):
+            continue
+        try:
+            out.append((float(t[campo]), float(t["pnl_pct"])))
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+def misure_contesto(trades: list[dict]) -> dict:
+    """Le due misure del 26 set 2026 (regime, F&G): sono la stessa popolazione
+    della calibrazione (fuori esiti esterni ed esplorativi), ma ognuna con i
+    SUOI trade noti, perche' un trade senza F&G puo' avere il regime. Non
+    toccano `trust`."""
+    reg = _coppie(trades, "regime_confidence_at_entry")
+    fr = fasce_regime(reg)
+    fg = _coppie(trades, "fear_greed_at_entry")
+    return {"regime_confidence": {"trades": len(reg), "fasce": fr,
+                                  "verdetto_regime": verdetto_fasce(fr)},
+            "fear_greed": {"trades": len(fg), "fasce": fasce_fear_greed(fg)}}
+
+
 def calibrate(trades: Iterable[dict]) -> dict:
     """Verdetto sulla calibrazione + `trust` da applicare in allocation.
 
-    trust 1.0 = la confidenza conta come oggi; 0.0 = non influenza piu' la size."""
+    trust 1.0 = la confidenza conta come oggi; 0.0 = non influenza piu' la size.
+    Dal 26 set 2026 porta anche `regime_confidence` e `fear_greed` (vedi
+    `misure_contesto`): misure, che `trust` non legge."""
+    trades = list(trades)
+    contesto = misure_contesto(trades)
     # i trade del paper esplorativo (25 set 2026, F1bis) restano fuori: la
     # calibrazione tara la fiducia nella confidenza delle VALIDATE, e un
     # quasi-passaggio a size ridotta e' un'altra popolazione
@@ -138,12 +242,13 @@ def calibrate(trades: Iterable[dict]) -> dict:
         if hi - lo < CONSTANT_RANGE:
             return {"verdict": CONSTANT, "trades": n, "correlation": None,
                     "buckets": buckets, "monotonic": None, "trust": 1.0,
-                    "note": _constant_note(lo, hi, n)}
+                    "note": _constant_note(lo, hi, n), **contesto}
 
     if n < settings.CALIBRATION_MIN_TRADES:
         return {"verdict": INSUFFICIENT, "trades": n, "correlation": corr,
                 "buckets": buckets, "trust": 1.0,
-                "note": f"servono {settings.CALIBRATION_MIN_TRADES} trade, ce ne sono {n}"}
+                "note": f"servono {settings.CALIBRATION_MIN_TRADES} trade, ce ne sono {n}",
+                **contesto}
 
     # monotonia: l'expectancy della fascia ALTA supera quella della fascia BASSA?
     rising = bool(buckets) and buckets[-1]["expectancy"] > buckets[0]["expectancy"]
@@ -159,7 +264,8 @@ def calibrate(trades: Iterable[dict]) -> dict:
         verdict, trust = OK, 1.0
         note = "la confidenza ordina correttamente gli esiti"
     return {"verdict": verdict, "trades": n, "correlation": round(c, 3),
-            "buckets": buckets, "monotonic": rising, "trust": trust, "note": note}
+            "buckets": buckets, "monotonic": rising, "trust": trust, "note": note,
+            **contesto}
 
 
 def confidence_trust(cal_doc: dict | None) -> float:

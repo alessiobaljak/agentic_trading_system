@@ -254,6 +254,85 @@ def print_selettore_ombra(rep: dict) -> None:
     print(f"  regola: {rep['regola']}")
 
 
+def print_contesto_btc(per_contesto: dict | None) -> None:
+    """DIREZIONE x CONTESTO BTC (26 set 2026, backlog J7): la tabella
+    `per_contesto` di `aggrega_referti`. Risponde a «le short perdono» o «le
+    short perdono con BTC su»? Globale, poi le strategie con almeno un trade a
+    contesto noto (le prime 8 per trade). Il contesto c'e' solo dal 25 set
+    (`feats_at_entry.market_up`): i trade prima sono «ignoto», e si contano."""
+    from bot.learning.referti import CASELLE_CONTESTO, MIN_CAMPIONE
+    print("\nDIREZIONE x CONTESTO BTC (market_up all'apertura, feats_at_entry dal 25 set; "
+          "«con» = nel verso di BTC, «contro» = opposto)")
+    if not isinstance(per_contesto, dict) or not isinstance(per_contesto.get("globale"), dict):
+        print("  non disponibile (documento dei referti senza `per_contesto`)")
+        return
+    glob = per_contesto["globale"]
+    noti = sum(int((glob.get(c) or {}).get("trade", 0) or 0)
+               for c in CASELLE_CONTESTO if c != "ignoto")
+    ignoti = int((glob.get("ignoto") or {}).get("trade", 0) or 0)
+    if not noti:
+        print(f"  nessun trade con il contesto BTC noto ({ignoti} ignoti: aperti prima del "
+              f"25 set o senza feats_at_entry)")
+        return
+
+    def _cella(b, c):
+        x = (b.get(c) or {})
+        n = int(x.get("trade", 0) or 0)
+        if not n:
+            return f"{'—':>14}"
+        return f"{int(x.get('vinti', 0) or 0)}/{n} {float(x.get('pnl', 0) or 0):+.2f}".rjust(14)
+
+    colonne = [c for c in CASELLE_CONTESTO if c != "ignoto"]
+    print(f"  {'':<14} " + " ".join(f"{c:>14}" for c in colonne) + f" {'ignoti':>7}")
+    print(f"  {'tutte':<14} " + " ".join(_cella(glob, c) for c in colonne) + f" {ignoti:>7}")
+    righe = []
+    for gid, b in (per_contesto.get("per_strategia") or {}).items():
+        if not isinstance(b, dict):
+            continue
+        n = sum(int((b.get(c) or {}).get("trade", 0) or 0) for c in colonne)
+        if n:
+            righe.append((-n, gid, b))
+    for _, gid, b in sorted(righe)[:8]:
+        print(f"  {gid:<14} " + " ".join(_cella(b, c) for c in colonne)
+              + f" {int((b.get('ignoto') or {}).get('trade', 0) or 0):>7}")
+    print(f"  (cella: vinti/trade PnL; ipotesi controtrend_btc a >= {MIN_CAMPIONE} perdite "
+          f"contro il contesto e 0 vinti contro, per strategia)")
+
+
+def print_calibrazione_contesto(cal_doc: dict | None) -> None:
+    """CALIBRAZIONE (regime, F&G) da `calibration/current` (26 set 2026, J8):
+    le fasce della confidenza del regime col verdetto, e le tre fasce del Fear &
+    Greed. Solo misura: il documento dice se `trust` le guarda (no)."""
+    from bot.learning.calibration import MIN_PER_FASCIA
+    print("\nCALIBRAZIONE (regime, F&G) — misure, non toccano la size")
+    if not isinstance(cal_doc, dict) or not cal_doc:
+        print("  calibration/current non disponibile (bot fermo o Firestore non leggibile)")
+        return
+    if cal_doc.get("_errore"):
+        print(f"  calibration/current non leggibile: {cal_doc['_errore']}")
+        return
+    reg, fg = cal_doc.get("regime_confidence"), cal_doc.get("fear_greed")
+    if not isinstance(reg, dict) or not isinstance(fg, dict):
+        print("  documento precedente al 26 set: le fasce del regime e del F&G arrivano "
+              "col prossimo ricalcolo orario del bot")
+        return
+
+    def _tab(titolo, fasce):
+        print(f"  {titolo}")
+        print(f"    {'fascia':<12} {'n':>4} {'win rate':>9} {'pnl medio':>10}")
+        for f in fasce or []:
+            wr = f.get("win_rate")
+            pm = f.get("pnl_medio")
+            print(f"    {str(f.get('fascia')):<12} {int(f.get('n', 0) or 0):>4} "
+                  f"{'—' if wr is None else f'{wr * 100:.0f}%':>9} "
+                  f"{'—' if pm is None else f'{pm * 100:+.2f}%':>10}")
+
+    _tab(f"confidenza del REGIME (terzili, {int(reg.get('trades', 0) or 0)} trade): "
+         f"verdetto {reg.get('verdetto_regime', '?')} (< {MIN_PER_FASCIA} per fascia = "
+         f"campione insufficiente)", reg.get("fasce"))
+    _tab(f"FEAR & GREED all'apertura ({int(fg.get('trades', 0) or 0)} trade)", fg.get("fasce"))
+
+
 def esplorativo_report(trades: list[dict], esp_doc: dict | None) -> dict:
     """I numeri del PAPER ESPLORATIVO (25 set 2026, backlog F1bis), a parte da
     quelli delle validate: trade, vinti, PnL, le 5 coppie con piu' trade, e il
@@ -431,6 +510,7 @@ def main() -> int:
         else:
             print("\nREFERTI: nessun trade porta ancora `post_mortem` (si scrive sui "
                   "trade chiusi DOPO il rilascio del 23 set)")
+    print_contesto_btc(doc.get("per_contesto"))
 
     # ---- LE SERIE DI PERDITE per strategia (freno di serie) --------------------
     # Stessa funzione del bot (bot/learning/drift.py): a STREAK_BRAKE_LOSSES
@@ -533,6 +613,16 @@ def main() -> int:
     # apertura, letta contro l'esito. Il paper qui e' il giudice del modello
     # addestrato sul gate, non un dato di training.
     print_selettore_ombra(selettore_ombra_report(trades))
+
+    # LA CALIBRAZIONE DEL REGIME E DEL F&G (26 set 2026, backlog J8): il bot la
+    # scrive in `calibration/current` insieme al verdetto sulla confidenza;
+    # `state_snapshot` stampa quello, qui si stampano le due misure nuove. Sola
+    # lettura, fail-open: senza documento (o senza Firestore) lo si dice.
+    try:
+        cal_doc = fb.get_doc("calibration", "current")
+    except Exception as exc:  # noqa: BLE001
+        cal_doc = {"_errore": str(exc)[:80]}
+    print_calibrazione_contesto(cal_doc)
 
     # IL PAPER ESPLORATIVO (25 set 2026, F1bis): in fondo, coi suoi numeri e il
     # metro dell'esperimento dalla storia del registro esplorativo.

@@ -155,6 +155,48 @@ def riga_esplorative(esp_doc: dict | None) -> str:
     return f"  ESPLORATIVE: {attive} attive · validate poi {validate_poi} · scartate {scartate}"
 
 
+def riga_ipotesi_storia(doc: dict | None, autopsia: dict | None = None) -> str:
+    """«IPOTESI PER TIPO» (26 set 2026, backlog J9) dal documento
+    `learning/ipotesi_storia`: per ogni regola dei referti quante ipotesi sono
+    nate, quante figlie ha prodotto, quante hanno passato il gate, quante sono
+    entrate nel registro, quante bocciate. In coda il tasso di passaggio delle
+    figlie (passate / varianti) accanto a quello delle candidate dell'ultimo giro
+    da `gate_autopsy/discover` (passed / evaluated): NON sono la stessa unita'
+    (una figlia e' UNA spec provata su molte coin; l'autopsia conta coppie
+    coin x spec), e la riga lo dice. Pura; senza documento lo dice."""
+    if not isinstance(doc, dict) or not isinstance(doc.get("per_tipo"), dict):
+        return ("  IPOTESI PER TIPO: storia non ancora scritta (learning/ipotesi_storia, "
+                "dal 26 set: arriva col primo giro della discovery)")
+    per_tipo = doc["per_tipo"]
+    if not per_tipo:
+        return "  IPOTESI PER TIPO: nessuna ipotesi ancora nata nei referti"
+
+    def _n(r, k):
+        return int((r or {}).get(k, 0) or 0)
+
+    parti = []
+    tot_var = tot_pass = 0
+    for tipo in sorted(per_tipo):
+        r = per_tipo[tipo] if isinstance(per_tipo[tipo], dict) else {}
+        tot_var += _n(r, "varianti")
+        tot_pass += _n(r, "passate")
+        parti.append(f"{tipo} {_n(r, 'nate')} nate / {_n(r, 'varianti')} varianti / "
+                     f"{_n(r, 'passate')} passate / {_n(r, 'validate')} validate / "
+                     f"{_n(r, 'bocciate')} bocciate")
+    coda = ""
+    if tot_var:
+        coda = f" · tasso figlie {tot_pass / tot_var * 100:.0f}% ({tot_pass}/{tot_var} spec)"
+        a = autopsia if isinstance(autopsia, dict) else {}
+        try:
+            ev, pa = int(a.get("evaluated", 0) or 0), int(a.get("passed", 0) or 0)
+        except (TypeError, ValueError):
+            ev = pa = 0
+        if ev > 0:
+            coda += (f" contro {pa / ev * 100:.1f}% delle candidate dell'ultimo giro "
+                     f"({pa}/{ev} coppie coin x spec, gate_autopsy/discover: unita' diverse)")
+    return "  IPOTESI PER TIPO: " + " · ".join(parti) + coda
+
+
 def riga_keep_validate(pairs: dict, validated) -> str:
     """«KEEP DEL LOCK»: quale keep del profit-lock il gate ha scelto per le coppie
     validate (25 set 2026), letto da `last_params["profit_lock_keep"]`.
@@ -434,6 +476,12 @@ def main() -> int:
         print(riga_esplorative(fb.get_doc("strategy_registry", "esplorative")))
     except Exception as exc:  # noqa: BLE001 - diagnostica, mai fatale
         print(f"  ESPLORATIVE: registro non leggibile ({str(exc)[:60]})")
+    # e la STORIA DELLE IPOTESI per tipo di regola (26 set 2026, J9): vedi riga_ipotesi_storia
+    try:
+        print(riga_ipotesi_storia(fb.get_doc("learning", "ipotesi_storia"),
+                                  fb.get_doc("gate_autopsy", "discover")))
+    except Exception as exc:  # noqa: BLE001 - diagnostica, mai fatale
+        print(f"  IPOTESI PER TIPO: storia non leggibile ({str(exc)[:60]})")
     # la passata extra (strategie native a 1 ora, per ora solo BTC)
     d1h = fb.get_doc("strategy_params", "discovered_last_run_1h") or {}
     if d1h.get("started_at") and d1h.get("duration_s") is not None:

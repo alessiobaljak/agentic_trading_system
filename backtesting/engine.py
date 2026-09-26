@@ -476,6 +476,11 @@ class SimTrade:
     # prima di tornare. E' la misura che rende decidibile la scala dei TP (da questo
     # numero si sa quali gradini avrebbe colpito qualunque scala).
     mfe_r: float = 0.0
+    # massima escursione AVVERSA in R (26 set 2026): lo specchio di mfe_r, dallo
+    # stesso `max_adverse_pct` (frazione dell'entry) riportato in unita' di R.
+    # Stessa definizione del ClosedTrade.mae_r del paper, cosi' gate e paper si
+    # confrontano anche su quanto un trade ha SOFFERTO prima dell'esito.
+    mae_r: float = 0.0
     # istante d'ingresso (epoch): permette di pesare i trade RECENTI piu' dei vecchi
     # nella scelta dei parametri. 0 = sconosciuto -> peso uniforme.
     entry_ts: float = 0.0
@@ -506,6 +511,7 @@ class SimTrade:
             "hour_bucket": self.hour_bucket,
             "confidence_at_entry": self.confidence_at_entry,
             "feats": dict(self.feats),
+            "mae_r": self.mae_r,
         }
 
 
@@ -914,6 +920,8 @@ class Backtester:
                 confidence_at_entry=sig.confidence, regime_at_entry=regime.value,
                 trailing_verdict=trailing_verdict,
                 mfe_r=round(mfe_in_r(entry, mfe, stop), 3),
+                mae_r=(round(max_adverse * entry / abs(entry - stop), 3)
+                       if abs(entry - stop) > 0 else 0.0),
                 entry_ts=candles[i].open_time.timestamp(),
                 bars_held=max(0, min(j, horizon) - i),
                 # le condizioni all'ingresso, per il selettore (passo 0): costano

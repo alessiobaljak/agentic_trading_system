@@ -782,7 +782,8 @@ def test_motivo_rifiuto_normalizza_alle_nove_classi():
             "margine insufficiente (usato 900 + nuovo 200 > equity 1000)": "margine",
             "rischio direzionale 3.5% > tetto 3.0%": "rischio direzionale",
             "risk gate: stop troppo largo: 7.0% del prezzo > 6%": "stop troppo largo",
-            "posizione gia' aperta su questa coin": "altro", "": "altro"}
+            # dal 26 set (J6) ha la sua classe: era il rifiuto piu' frequente
+            "posizione gia' aperta su questa coin": "posizione aperta", "": "altro"}
     for testo, atteso in casi.items():
         assert motivo_rifiuto(testo) == atteso, testo
 

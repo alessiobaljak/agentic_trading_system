@@ -300,6 +300,43 @@ class ClosedTrade(BaseModel):
     gross_pnl_usdt: Optional[float] = None         # PRIMA di qualunque costo
     costs_are_estimated: bool = True
 
+    # --- LE MISURE MANCANTI (26 set 2026, audit della memoria del trade) ----- #
+    # Tutti campi di SOLA MISURA: nessuno decide niente. Servono a rispondere,
+    # fra qualche settimana, a domande che oggi non hanno un numero: quanto e'
+    # andato CONTRO prima di girare (MAE), quanto ci ha messo a colpire il primo
+    # gradino, con che fattori di size e' stato aperto, com'era il portafoglio.
+    # None/[] sui trade storici precedenti all'introduzione.
+    #
+    # massima escursione AVVERSA in R (specchio di mfe_r): |entry - low_water| /
+    # |entry - orig_stop|. Un trade vincente con MAE 0.9R e' stato a un soffio
+    # dallo stop; uno con MAE 0.1R non ha mai sofferto. Senza questo numero uno
+    # stop «largo» o «stretto» si giudica a occhio.
+    mae_r: Optional[float] = None
+    # secondi dall'ingresso al primo gradino riempito (None = mai) e all'istante
+    # in cui il miglior prezzo a favore e' stato visto per l'ultima volta
+    t_tp1_s: Optional[float] = None
+    t_mfe_s: Optional[float] = None
+    # durata in BARRE del timeframe della strategia (durata / secondi di barra):
+    # a 15m e a 1h le ore non si confrontano, le barre si'
+    bars_held: Optional[float] = None
+    # le fette chiuse dallo scale-out, una per gradino: {stage, price, qty, ts, net}
+    partial_fills: list[dict] = Field(default_factory=list)
+    # secondi dall'ingresso a quando lo stop e' andato a pareggio (None = mai)
+    be_at_s: Optional[float] = None
+    # i fattori di size con cui e' stato aperto (moltiplicatore di rischio e di
+    # leva, nota dell'allocazione con peso/deriva/freno, tilt sentiment,
+    # esplorativa, note del risk manager) e il rischio effettivo allo stop
+    size_factors_at_entry: Optional[dict] = None
+    risk_effective_pct: Optional[float] = None
+    # com'era il portafoglio all'ingresso: {posizioni_aperte, rischio_aperto_pct,
+    # stessa_direzione, pnl_giorno}. Un trade aperto come quinta posizione nello
+    # stesso verso non e' lo stesso trade aperto da solo.
+    portafoglio_at_entry: Optional[dict] = None
+    # il confine (epoch) della candela CHIUSA che ha prodotto la decisione, e la
+    # latenza in secondi tra quel confine e l'ingresso eseguito
+    signal_candle_ts: Optional[float] = None
+    latenza_s: Optional[float] = None
+
     @property
     def duration_seconds(self) -> float:
         return (self.exit_time - self.entry_time).total_seconds()

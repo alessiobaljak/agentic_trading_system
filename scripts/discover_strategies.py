@@ -45,7 +45,8 @@ from bot.core.registry import (aggiorna_meta_gate, breakeven_n, conta_keep,
                                scala_distribuzione,
                                scala_str, scrivi_doc_gate, senza_promessa,
                                statistica_t, tetto_coppie)
-from bot.learning.referti import ESITI_ESTERNI
+from bot.learning.referti import (ESITI_ESTERNI, aggiorna_storia, chiave_storia,
+                                  registra_esiti_storia)
 from scripts.gate_progress import riga_cervello
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_history,
                               _segna_promozione, registra_vite,
@@ -885,7 +886,8 @@ def strategie_scala_stretta(doc: dict | None, now: float, cap: int = SCALA_STRET
 
 def varianti_dai_referti(fb, existing: dict, interval: str,
                          limit: int = REFERTI_VARIANTI_MAX,
-                         pairs: dict | None = None, doc: dict | None = None) -> list[dict]:
+                         pairs: dict | None = None, doc: dict | None = None,
+                         esiti: dict | None = None) -> list[dict]:
     """Le VARIANTI che il paper propone, pronte per il gate (backlog B8).
 
     Il bot scrive in `learning/referti` le ipotesi ricavate dai post-mortem dei
@@ -904,6 +906,12 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
     torna a lista vuota e il giro e' identico a prima, con una riga di log.
     `doc`: il documento gia' letto dal main (`leggi_referti`); se manca, lo si
     legge qui come prima.
+    `esiti` (26 set 2026, storia delle ipotesi J9): se e' un dict, vi si scrive
+    per ogni ipotesi «strategia|tipo» l'esito di QUESTO giro — («variante_creata»,
+    id della figlia) quando la figlia esiste (nuova, o gia' nota da un giro
+    precedente), («scartata», None) quando non puo' nascere (il gate ha gia' la
+    risposta, la spec ha gia' quella proprieta', figlia non costruibile). Le
+    ipotesi `scala_stretta` non passano di qui e non lasciano esito.
     """
     if doc is None:
         doc = leggi_referti(fb)
@@ -943,6 +951,13 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
         # (`strategie_scala_stretta` + `scale_per_strategia`), gestita a parte
         if tipo == "scala_stretta":
             continue
+        tipo_ipotesi = tipo          # il tipo del referto, per la storia (J9)
+        # controtrend_btc (26 set 2026, backlog J7): «perde contro il contesto
+        # BTC» si prova con lo stesso mattoncino di conferma_trend (la conferma
+        # a 1 ora), stessa figlia e stesse regole; l'etichetta `ipotesi` della
+        # figlia resta quella del referto, cosi' la storia sa da quale regola viene
+        if tipo == "controtrend_btc":
+            tipo = "conferma_trend"
         # le ipotesi sulle CONDIZIONI D'INGRESSO (26 set 2026, backlog I4ter:
         # ingresso_adx / ingresso_vol_ratio / ingresso_atr_pct / ingresso_rsi)
         # SONO varianti della spec come solo_long e stop_stretto: passano da
@@ -963,6 +978,8 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
                     tipo = ""
                     break
             if not tipo:
+                if esiti is not None:
+                    esiti[chiave_storia(gid, tipo_ipotesi)] = ("scartata", None)
                 continue
         try:
             soglia = ip.get("soglia")
@@ -972,13 +989,21 @@ def varianti_dai_referti(fb, existing: dict, interval: str,
                 # la data del primo trade del paper che ha fatto nascere
                 # l'ipotesi: la validazione finisce PRIMA (pre-registrazione)
                 figlia["ipotesi_da"] = float(ip["da_ts"])
+            if figlia is not None and tipo_ipotesi != tipo:
+                figlia["ipotesi"] = tipo_ipotesi
         except Exception as exc:  # noqa: BLE001
             print(f"[discover] variante {ip.get('strategia')} ({ip.get('tipo')}) "
                   f"non costruibile: {str(exc)[:80]}")
+            if esiti is not None:
+                esiti[chiave_storia(gid, tipo_ipotesi)] = ("scartata", None)
             continue
         if figlia is None:
+            if esiti is not None:
+                esiti[chiave_storia(gid, tipo_ipotesi)] = ("scartata", None)
             continue
         fid = figlia["id"]
+        if esiti is not None:
+            esiti[chiave_storia(gid, tipo_ipotesi)] = ("variante_creata", fid)
         if fid in existing or fid in visti:
             continue
         fm = firma_spec(figlia)
@@ -1793,6 +1818,88 @@ def riga_cervello_keep(out: dict, passed_keys, keep_paper=None) -> str:
     return f"[cervello] keep del lock scelto dal gate: {testo}"
 
 
+# --------------------------------------------------------------------------- #
+# LA STORIA DELLE IPOTESI (26 set 2026, backlog J9)                             #
+# --------------------------------------------------------------------------- #
+# `learning/ipotesi_storia`: una voce per «strategia|tipo» con nascita e ultimo
+# esito, e `per_tipo` i conteggi. E' il metro con cui, fra qualche settimana, si
+# potra' dire se una REGOLA dei referti (un tipo) produce varianti che passano
+# il gate. La scrive il bot dopo i referti (`aggiorna_storia`) e la discovery
+# qui: all'inizio del giro (cosi' la storia si riempie anche prima che il bot
+# sia collegato) e dopo il merge con gli esiti. Fail-open ovunque: la storia non
+# puo' fermare un giro.
+def aggiorna_ipotesi_storia(fb, doc_referti: dict | None = None,
+                            eventi: dict | None = None, now: float | None = None) -> dict | None:
+    """Legge la storia, aggiunge le ipotesi nuove dei referti (se `doc_referti`)
+    e applica gli `eventi` della discovery (se ci sono), riscrive. Ritorna il
+    documento scritto o None se qualcosa e' andato storto (con una riga di log)."""
+    now = time.time() if now is None else now
+    try:
+        doc = fb.get_doc("learning", "ipotesi_storia") or {}
+        if not isinstance(doc, dict):
+            doc = {}
+        if doc_referti is not None:
+            doc = aggiorna_storia(doc, doc_referti, now)
+        if eventi:
+            doc = registra_esiti_storia(doc, eventi, now)
+        elif doc_referti is None:
+            return doc
+        fb.set_doc("learning", "ipotesi_storia", doc)
+        return doc
+    except Exception as exc:  # noqa: BLE001
+        print(f"[storia] ipotesi_storia non aggiornata ({str(exc)[:80]})")
+        return None
+
+
+def esiti_varianti_dal_merge(out: dict, passed_keys, esito_merge: dict | None,
+                             varianti: list | None = None) -> dict:
+    """Gli esiti di QUESTO giro per le varianti dai referti, come li vuole
+    `registra_esiti_storia`: {"genitore|ipotesi": (esito, id figlia)}.
+
+    Le figlie si prendono da `varianti` (create in questo giro) e dalle spec di
+    origine «referto» fra le passate (`out`, che porta solo le passate: una
+    figlia rivalutata da un giro precedente). Per ognuna, nell'ordine:
+      * una sua coppia in `esito["varianti"]["promosse"]` -> validata;
+      * una sua coppia in `esito["scartate"]` (passata solo con i dati di
+        oggi, o seconda figlia) -> bocciata;
+      * una sua coppia fra le passate -> passata;
+      * creata in questo giro e MAI passata su nessuna coin -> bocciata
+        (il gate l'ha valutata su tutto l'universo e non e' entrata).
+    Pura."""
+    e = esito_merge if isinstance(esito_merge, dict) else {}
+    promosse = {str(k) for k in ((e.get("varianti") or {}).get("promosse") or [])}
+    scartate = {str(k) for k in (e.get("scartate") or [])}
+    passate = {str(k) for k in (passed_keys or [])}
+    figlie: dict[str, dict] = {}
+    for sp in (varianti or []):
+        if isinstance(sp, dict) and sp.get("id"):
+            figlie[sp["id"]] = sp
+    for k, en in (out or {}).items():
+        sp = (en or {}).get("spec") if isinstance(en, dict) else None
+        if isinstance(sp, dict) and sp.get("origine") == "referto" and sp.get("id"):
+            figlie.setdefault(sp["id"], sp)
+    create = {sp["id"] for sp in (varianti or []) if isinstance(sp, dict) and sp.get("id")}
+    eventi: dict = {}
+    for fid, sp in figlie.items():
+        gid, tipo = sp.get("genitore"), sp.get("ipotesi")
+        if not isinstance(gid, str) or not isinstance(tipo, str) or not gid or not tipo:
+            continue
+        chiavi = {k for k, en in (out or {}).items()
+                  if isinstance(en, dict) and en.get("strategy") == fid}
+        if chiavi & promosse:
+            esito = "validata"
+        elif chiavi & scartate:
+            esito = "bocciata"
+        elif chiavi & passate:
+            esito = "passata"
+        elif fid in create and not chiavi:
+            esito = "bocciata"
+        else:
+            continue
+        eventi[chiave_storia(gid, tipo)] = (esito, fid)
+    return eventi
+
+
 def merge_into_registry(fb, out: dict, passed_now: list[str],
                         evaluated_symbols: set | None = None,
                         intorno_madri: dict | None = None,
@@ -2010,6 +2117,11 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         rec["generated"] = True
         rec["last_seen_at"] = now
         rec["last_passed_at"] = now
+        if variante:
+            # da dove viene (26 set 2026, J9): cosi' la riga del diario delle
+            # vite (`_riga_vita`) dice quale ipotesi l'ha fatta nascere
+            rec["ipotesi"] = spec_e.get("ipotesi")
+            rec["genitore"] = spec_e.get("genitore")
         _segna_promozione(key, rec, prima_pass, now, nuove_vite)
         pairs[key] = rec
     registra_vite(fb, nuove_vite, [])
@@ -2805,8 +2917,15 @@ def main() -> int:
         existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
         reg = fb.get_doc("strategy_registry", "validated") or {}
         doc_referti = leggi_referti(fb)
+        esiti_referti: dict = {}
         varianti = varianti_dai_referti(fb, existing, args.interval,
-                                        pairs=decode_pairs(reg.get("pairs")), doc=doc_referti)
+                                        pairs=decode_pairs(reg.get("pairs")), doc=doc_referti,
+                                        esiti=esiti_referti)
+        # LA STORIA DELLE IPOTESI (26 set 2026, J9): le ipotesi nuove nascono
+        # qui (anche prima che il bot scriva la storia dopo i referti) e le
+        # figlie create o scartate in questo giro lasciano il loro esito
+        aggiorna_ipotesi_storia(fb, doc_referti=doc_referti or None,
+                                eventi=esiti_referti, now=_ora)
         # IPOTESI SULLE USCITE (25 set 2026, backlog I4): le strategie con
         # un'ipotesi scala_stretta fresca si rigiudicano in QUESTO giro, anche se
         # non urgenti, con in piu' la scala dai loro mfe (piu' sotto). Solo le
@@ -3075,6 +3194,10 @@ def main() -> int:
                                         data_end_run=_data_end_run,
                                         esito=esito_merge,
                                         varianti_create=len(varianti))
+        # gli esiti delle varianti dai referti nella storia (26 set 2026, J9):
+        # PRIMA del filtro sulle scartate, che qui sotto le toglie da passed_keys
+        aggiorna_ipotesi_storia(
+            fb, eventi=esiti_varianti_dal_merge(out, passed_keys, esito_merge, varianti))
         scartate = set(esito_merge.get("scartate", ()))
         if scartate:
             passed_keys = [k for k in passed_keys if k not in scartate]

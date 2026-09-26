@@ -50,6 +50,29 @@ LA SESTA IPOTESI: LE CONDIZIONI D'INGRESSO (26 set 2026, backlog I4ter)
     variante figlia stringe il filtro corrispondente (min_adx, volume_mult,
     volatility_regime, banda RSI) di un gradino del generatore, e come sempre
     la giudica il gate sulla storia. Il paper propone, non tara.
+
+LA SETTIMA IPOTESI: LA DIREZIONE CONTRO IL CONTESTO BTC (26 set 2026, backlog J7)
+  * controtrend_btc: l'audit del flusso di learning ha chiesto se «le short
+    perdono» (E1: short 54 trade, -44,95) voglia dire «short» o «short con BTC
+    su». Il dato c'e' dal 25 set: `feats_at_entry.market_up` (BTC sopra o sotto
+    la sua media lenta a 1h nell'istante dell'apertura, la STESSA variabile del
+    gate e del selettore). Qui ogni trade finisce in una casella direzione x
+    contesto (`per_contesto`: long_con / long_contro / short_con / short_contro,
+    ignoto se il trade e' precedente al 25 set: il contesto NON si ricava dagli
+    indicatori della coin). La regola, dichiarata prima: almeno MIN_CAMPIONE
+    perdite CONTRO il contesto (long con BTC giu', short con BTC su) e nessun
+    vinto contro -> ipotesi `controtrend_btc`, che la discovery prova come
+    figlia `conferma_trend` (la conferma a 1 ora e' il mattoncino che c'e').
+    Misura, non decisione: il bot non cambia nulla.
+
+LA STORIA DELLE IPOTESI (26 set 2026, backlog J9)
+  Le ipotesi vanno e vengono con i trade; senza una memoria non si puo' dire
+  se una REGOLA di questo modulo (un tipo) produce varianti che poi passano il
+  gate, o solo rumore. `aggiorna_storia` / `registra_esiti_storia` tengono il
+  documento Firestore `learning/ipotesi_storia`: una voce per «strategia|tipo»
+  con la data di nascita e l'ultimo esito (aperta -> variante_creata ->
+  passata -> validata, oppure bocciata / scartata), e `per_tipo` i conteggi.
+  Funzioni pure: le scrive il bot dopo i referti e la discovery a ogni giro.
 """
 from __future__ import annotations
 
@@ -91,7 +114,12 @@ BANDA_RSI_NEUTRO = (40.0, 60.0)
 TIPI_INGRESSO = tuple(f"ingresso_{v}" for v in VARIABILI_INGRESSO)
 
 TIPI = ("solo_long", "solo_short", "conferma_trend", "stop_stretto", "scala_stretta",
-        *TIPI_INGRESSO)
+        *TIPI_INGRESSO, "controtrend_btc")
+
+# le caselle direzione x contesto BTC (26 set 2026): «con» = nel verso di BTC
+# (long con BTC su, short con BTC giu'), «contro» il verso opposto, «ignoto»
+# quando il trade non porta `market_up` (precedente al 25 set)
+CASELLE_CONTESTO = ("long_con", "long_contro", "short_con", "short_contro", "ignoto")
 
 _RILIEVI = ("ingresso", "uscita", "protezione", "stop_largo", "lock_mai", "controtrend")
 
@@ -257,6 +285,52 @@ def variabili_ingresso_del_trade(t: dict) -> dict:
     return out
 
 
+def contesto_btc_del_trade(t: dict) -> bool | None:
+    """BTC era sopra (True) o sotto (False) la sua media lenta a 1h all'apertura
+    del trade; None se non si sa. Legge SOLO `feats_at_entry.market_up` (scritto
+    dal bot dal 25 set 2026 con la stessa funzione del gate). Per i trade piu'
+    vecchi NON si ricava da `indicators_at_entry`: quelli sono gli indicatori
+    della coin, non di BTC, e un contesto inventato sarebbe peggio di uno
+    mancante. Funzione pura."""
+    if not isinstance(t, dict):
+        return None
+    feats = t.get("feats_at_entry")
+    if not isinstance(feats, dict):
+        return None
+    v = feats.get("market_up")
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, (int, float)) and v == v:
+        return bool(v >= 0.5)
+    return None
+
+
+def casella_contesto(direzione: str, market_up: bool | None) -> str:
+    """La casella direzione x contesto di un trade (vedi CASELLE_CONTESTO)."""
+    if market_up is None or direzione not in ("long", "short"):
+        return "ignoto"
+    con = (direzione == "long") == bool(market_up)
+    return f"{direzione}_{'con' if con else 'contro'}"
+
+
+def _contesto_vuoto() -> dict:
+    return {c: {"trade": 0, "vinti": 0, "pnl": 0.0} for c in CASELLE_CONTESTO}
+
+
+def _aggiungi_contesto(b: dict, casella: str, pnl: float) -> None:
+    c = b[casella]
+    c["trade"] += 1
+    c["pnl"] += pnl
+    if pnl > 0:
+        c["vinti"] += 1
+
+
+def _arrotonda_contesto(b: dict) -> dict:
+    for c in b.values():
+        c["pnl"] = round(c["pnl"], 2)
+    return b
+
+
 def _arrotonda(b: dict) -> dict:
     b["pnl"] = round(b["pnl"], 2)
     b.pop("_uscita_mfe", None)
@@ -308,11 +382,14 @@ def _fmt_var(var: str, x: float | None, nd: int) -> str:
     return f"{x:.{nd}f}"
 
 
-def _ipotesi_per(gid: str, b: dict, ingresso: dict | None = None) -> list[dict]:
+def _ipotesi_per(gid: str, b: dict, ingresso: dict | None = None,
+                 contesto: dict | None = None) -> list[dict]:
     """Le regole, una per tipo, sul bucket di una strategia. Ogni regola e' una
     riga: se la cambi, cambia il commento in testa al modulo e la data.
     `ingresso`: {variabile: {"persi": [...], "vinti": [...]}} — le variabili
-    d'ingresso delle perdite di classe ingresso e dei vinti (26 set 2026)."""
+    d'ingresso delle perdite di classe ingresso e dei vinti (26 set 2026).
+    `contesto`: il bucket direzione x contesto BTC della strategia (26 set 2026,
+    settima ipotesi `controtrend_btc`)."""
     out = []
     # si contano le PERDITE vere, non «tutti tranne i vinti»: con un pareggio
     # (pnl 0, raro con le fee ma possibile) il motivo direbbe «3/3 persi» su 2
@@ -365,6 +442,19 @@ def _ipotesi_per(gid: str, b: dict, ingresso: dict | None = None) -> list[dict]:
         if r["soglia"] is not None:
             h["soglia"] = r["soglia"]
         out.append(h)
+    # controtrend_btc (26 set 2026, backlog J7): le perdite CONTRO il contesto
+    # BTC (long con BTC giu', short con BTC su), sommate sulle due direzioni,
+    # e nessun vinto contro. Stesso MIN_CAMPIONE delle ipotesi per direzione:
+    # con 3 perdite e 0 vinti smette di essere un caso, come per «short 3/3».
+    if contesto:
+        contro = [contesto.get("long_contro") or {}, contesto.get("short_contro") or {}]
+        n_contro = sum(int(c.get("trade", 0) or 0) for c in contro)
+        vinti_contro = sum(int(c.get("vinti", 0) or 0) for c in contro)
+        persi_contro = sum(int(c.get("_persi", 0) or 0) for c in contro)
+        if persi_contro >= MIN_CAMPIONE and vinti_contro == 0:
+            out.append({"strategia": gid, "tipo": "controtrend_btc",
+                        "motivo": f"{persi_contro}/{n_contro} persi contro il contesto BTC",
+                        "campione": n_contro})
     return out
 
 
@@ -396,6 +486,11 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
     # numero (26 set 2026)
     ingresso: dict[str, dict[str, dict[str, list[float]]]] = defaultdict(
         lambda: {v: {"persi": [], "vinti": []} for v in VARIABILI_INGRESSO})
+    # direzione x contesto BTC (26 set 2026): per strategia e globale. `_persi`
+    # serve solo alla settima ipotesi (i pareggi non sono perdite); il documento
+    # porta trade/vinti/pnl
+    contesto_strat: dict[str, dict] = defaultdict(_contesto_vuoto)
+    contesto_glob = _contesto_vuoto()
 
     for t in rows:
         pnl = float(t.get("pnl", 0) or 0)
@@ -415,6 +510,11 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
         _aggiungi(per_coin[sym], pnl, direzione, pm)
         if direzione in per_dir:
             _aggiungi(per_dir[direzione], pnl, direzione, pm)
+        casella = casella_contesto(direzione, contesto_btc_del_trade(t))
+        for cb in (contesto_strat[gid], contesto_glob):
+            _aggiungi_contesto(cb, casella, pnl)
+            if pnl < 0:
+                cb[casella]["_persi"] = int(cb[casella].get("_persi", 0)) + 1
         perso_ingresso = pnl < 0 and pm is not None and pm.get("classe") == "ingresso"
         if (perso_ingresso or pnl > 0) and gid != "?":
             vals = variabili_ingresso_del_trade(t)
@@ -426,7 +526,8 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
     for gid in sorted(per_strat):
         if gid == "?":
             continue    # trade senza strategia: contano nei bucket, non propongono
-        for h in _ipotesi_per(gid, per_strat[gid], ingresso.get(gid)):
+        for h in _ipotesi_per(gid, per_strat[gid], ingresso.get(gid),
+                              contesto_strat.get(gid)):
             if gid in primo_ts:
                 h["da_ts"] = round(primo_ts[gid], 0)
             ipotesi.append(h)
@@ -445,6 +546,12 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
                          "mediana_vinti": _mediana(d["vinti"], 4)}
         if riga:
             ingresso_doc[gid] = riga
+    # direzione x contesto BTC nel documento: solo trade/vinti/pnl (il contatore
+    # `_persi` e' di servizio, come `_uscita_mfe`)
+    for cb in list(contesto_strat.values()) + [contesto_glob]:
+        for c in cb.values():
+            c.pop("_persi", None)
+        _arrotonda_contesto(cb)
 
     return {
         "n_trades": len(rows),
@@ -456,6 +563,8 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
         "per_direzione": {k: _arrotonda(v) for k, v in per_dir.items()},
         "ipotesi": ipotesi,
         "ingresso": ingresso_doc,
+        "per_contesto": {"globale": contesto_glob,
+                         "per_strategia": {k: contesto_strat[k] for k in sorted(contesto_strat)}},
     }
 
 
@@ -467,3 +576,90 @@ def riassunto_ipotesi(doc: dict | None) -> list[str]:
     return [f"{h.get('strategia')}: {h.get('tipo')} — {h.get('motivo')} "
             f"(campione {h.get('campione')})"
             for h in (doc.get("ipotesi") or [])]
+
+
+# --------------------------------------------------------------------------- #
+# LA STORIA DELLE IPOTESI (26 set 2026, backlog J9)                             #
+# --------------------------------------------------------------------------- #
+# gli esiti di una voce, nell'ordine in cui una vita puo' attraversarli
+ESITI_STORIA = ("aperta", "variante_creata", "passata", "validata", "bocciata", "scartata")
+# il primo istante in cui la voce ha toccato quel traguardo: da qui `per_tipo`
+# conta «quante varianti / passate / validate / bocciate» anche se l'ultimo
+# esito e' poi cambiato (una variante bocciata e rinata al giro dopo resta
+# contata come bocciata una volta)
+_TRAGUARDI = {"variante_creata": "variante_at", "passata": "passata_at",
+              "validata": "validata_at", "bocciata": "bocciata_at",
+              "scartata": "scartata_at"}
+
+
+def chiave_storia(strategia, tipo) -> str:
+    return f"{strategia}|{tipo}"
+
+
+def per_tipo_storia(voci: dict) -> dict:
+    """I conteggi per tipo di regola: nate (voci), varianti (con una figlia),
+    passate (la figlia ha passato il gate almeno una volta), validate (e' entrata
+    nel registro), bocciate. Pura, deterministica (tipi in ordine)."""
+    out: dict[str, dict] = {}
+    for v in (voci or {}).values():
+        if not isinstance(v, dict):
+            continue
+        tipo = str(v.get("tipo") or "?")
+        r = out.setdefault(tipo, {"nate": 0, "varianti": 0, "passate": 0,
+                                  "validate": 0, "bocciate": 0})
+        r["nate"] += 1
+        r["varianti"] += int(bool(v.get("variante_id")) or bool(v.get("variante_at")))
+        r["passate"] += int(bool(v.get("passata_at")) or bool(v.get("validata_at")))
+        r["validate"] += int(bool(v.get("validata_at")))
+        r["bocciate"] += int(bool(v.get("bocciata_at")))
+    return {k: out[k] for k in sorted(out)}
+
+
+def aggiorna_storia(doc_prec: dict | None, referti_doc: dict | None, now: float) -> dict:
+    """Aggiunge alla storia le ipotesi che compaiono per la PRIMA volta nei
+    referti (`nata_at = now`, esito «aperta»); le voci gia' note non si toccano
+    (la data di nascita e' il punto). Ritorna il documento nuovo, mai muta gli
+    argomenti. Pura: la scrive chi la chiama (il bot dopo `learning/referti`, la
+    discovery all'inizio del giro)."""
+    voci = {k: dict(v) for k, v in ((doc_prec or {}).get("voci") or {}).items()
+            if isinstance(v, dict)}
+    for h in (referti_doc or {}).get("ipotesi") or []:
+        if not isinstance(h, dict):
+            continue
+        gid, tipo = h.get("strategia"), h.get("tipo")
+        if not isinstance(gid, str) or not gid or not isinstance(tipo, str) or not tipo:
+            continue
+        k = chiave_storia(gid, tipo)
+        if k in voci:
+            continue
+        voci[k] = {"nata_at": round(float(now), 0), "tipo": tipo, "strategia": gid,
+                   "variante_id": None, "esito": "aperta", "at": round(float(now), 0)}
+    return {"voci": voci, "per_tipo": per_tipo_storia(voci), "updated_at": round(float(now), 0)}
+
+
+def registra_esiti_storia(doc_prec: dict | None, eventi: dict, now: float) -> dict:
+    """Applica gli esiti della discovery: `eventi` = {"strategia|tipo": (esito,
+    variante_id)} con esito in ESITI_STORIA. Una voce che non esiste ancora
+    (ipotesi nata prima della storia) viene creata con `nata_at = now`, cosi'
+    l'esito non si perde. Aggiorna l'ultimo esito e segna il traguardo la prima
+    volta che lo tocca. Pura."""
+    voci = {k: dict(v) for k, v in ((doc_prec or {}).get("voci") or {}).items()
+            if isinstance(v, dict)}
+    ts = round(float(now), 0)
+    for k, ev in (eventi or {}).items():
+        if not isinstance(k, str) or "|" not in k:
+            continue
+        esito, vid = (ev if isinstance(ev, (tuple, list)) and len(ev) == 2 else (ev, None))
+        if esito not in ESITI_STORIA:
+            continue
+        gid, tipo = k.split("|", 1)
+        v = voci.setdefault(k, {"nata_at": ts, "tipo": tipo, "strategia": gid,
+                                "variante_id": None, "esito": "aperta", "at": ts})
+        v["esito"] = esito
+        v["at"] = ts
+        if vid:
+            v["variante_id"] = str(vid)
+        tr = _TRAGUARDI.get(esito)
+        if tr and not v.get(tr):
+            v[tr] = ts
+    return {"voci": voci, "per_tipo": per_tipo_storia(voci), "updated_at": ts}

@@ -1647,3 +1647,43 @@ correzione del giro completo, che rimette in moto intorno a 40, varianti e la
 rivalutazione di tutte le 548 spec: prima di proporre altro serve vederlo girare
 (tempo, madri/figlie, keep sulle 167 non rivalutate). H1 aspetta ancora numeri
 (18 misure); il selettore non batte; C2 il 28.
+
+### 26 settembre, 11:30: i dati che mancavano al learning, e le strategie a 1 ora
+
+Domanda del proprietario: «come vanno le strategie a 1 ora, e c'è qualche dato
+che non tracciamo?». Revisione di sola lettura (19 lacune trovate), poi cinque
+misure chiuse subito, nessuna decisione cambiata:
+1. **Ombra dei segnali rifiutati** (`bot/learning/rifiutati.py`, ops
+   `rifiutati`): ogni segnale non aperto (cooldown, posizione già aperta, peso,
+   tetti, veto) viene registrato con prezzo, stop, scala e motivo; 24-96 ore
+   dopo si simula com'è andata con le regole del motore (senza costi). Regola:
+   un freno si ritara solo se per un motivo i rifiutati hanno R medio maggiore
+   degli aperti su almeno 30 casi. «Posizione già aperta» ora è una classe sua
+   (era «altro», ed è il motivo più frequente: 18 su 39, ops 0268).
+2. **Controfattuale dopo uno stop e MAE**: `post_stop_verdict` («rumore» se il
+   prezzo tocca il primo gradino prima di andare un altro R contro,
+   «inversione» altrimenti), `post_stop_mfe_r`, `mae_r` (massima escursione
+   avversa in R). 45 uscite su 84 sono stop: senza questo il referto
+   `stop_stretto` era cieco sui vincitori.
+3. **Direzione × contesto BTC** nei referti (`per_contesto`) e settima ipotesi
+   `controtrend_btc` → variante con conferma a 1 ora. Il contesto c'è solo sui
+   trade dal 25 sera (`feats_at_entry.market_up`): i vecchi sono «ignoto».
+4. **Storia delle ipotesi per tipo** (`learning/ipotesi_storia`, riga «IPOTESI
+   PER TIPO» in `gate`): nate, varianti, passate, validate, bocciate per ogni
+   regola dei referti, contro il tasso delle candidate casuali. Così una regola
+   che non produce nulla si può spegnere con un numero.
+5. **Sul trade chiuso**: fattori di size applicati (peso, freno, tilt,
+   esplorativa), rischio effettivo, contesto di portafoglio all'ingresso,
+   candela del segnale e latenza, tempo al primo gradino e al massimo
+   favorevole, barre tenute, fette con prezzo e ora, momento del break-even;
+   `mae_r` anche nel dataset del selettore. Calibrazione di regime e Fear &
+   Greed a fasce (misurata, non usata).
+
+**1 ora.** Zero validate e zero operate: l'unica candidata è ADAUSDT@1h con 1
+conferma (24 set), la seconda non prima del 1° ottobre. La revisione ha trovato
+tre rotture di parità che avrebbero colpito la prima validata a 1 ora, corrette
+oggi: orizzonte del bot 24 h contro 96 del gate (ora per timeframe della
+posizione), cooldown in barre del bot (ora ×4 a 1 ora), finestra del verdetto
+trailing (ora in barre del trade). Aspetta il sì: allargare la discovery a 1 ora
+da 5 a ~30 coin (stima 12 minuti a giro, da misurare; metro: tasso di passaggio
+a 1 ora su 2 settimane contro lo 0,22% dei 15 minuti). Suite 1596 test verdi.

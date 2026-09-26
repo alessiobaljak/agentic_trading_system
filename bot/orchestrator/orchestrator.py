@@ -23,6 +23,8 @@ from bot.config import settings
 from bot.core.models import (
     AssetSnapshot, Direction, MemoryReport, OrchestratorDecision, Regime,
 )
+from bot.execution.exit_logic import ladder_multiples
+from bot.learning import rifiutati
 from bot.learning.adaptation import AdaptationEngine
 from bot.orchestrator.prompt import SYSTEM_PROMPT, build_user_message
 from bot.strategies import get_all_strategies
@@ -40,9 +42,12 @@ _TF_SECS = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "4h": 1440
 #: «esplorative al tetto» (25 set 2026, F1bis) e' il rifiuto di un segnale
 #: esplorativo quando ESPLORATIVE_MAX_APERTE posizioni esplorative sono gia'
 #: aperte: contato a parte, cosi' si vede quante volte il tetto ha morso.
+#: «posizione aperta» (26 set 2026, J6) e' «posizione gia' aperta su questa coin»
+#: di `_try_open`: era il rifiuto PIU' frequente (ops 0268) e finiva in «altro»,
+#: dove non si poteva ne' contare ne' confrontare con gli altri freni.
 MOTIVI_RIFIUTO = ("cooldown", "tetto per coin", "peso sotto soglia", "strategia spenta",
                   "veto di regime", "margine", "rischio direzionale", "stop troppo largo",
-                  "esplorative al tetto", "altro")
+                  "esplorative al tetto", "posizione aperta", "altro")
 
 
 def motivo_rifiuto(testo: str) -> str:
@@ -66,14 +71,24 @@ def motivo_rifiuto(testo: str) -> str:
         return "stop troppo largo"
     if "esplorative al tetto" in t:
         return "esplorative al tetto"
+    if "posizione gia" in t or "posizione già" in t:
+        return "posizione aperta"
     return "altro"
 
 
 class Orchestrator:
     DECISION_THRESHOLD = 30  # confidenza aggiustata minima per agire (fallback)
 
-    def __init__(self, adaptation: Optional[AdaptationEngine] = None) -> None:
+    def __init__(self, adaptation: Optional[AdaptationEngine] = None, fb=None) -> None:
         self.adaptation = adaptation or AdaptationEngine()
+        # L'OMBRA DEI RIFIUTI (26 set 2026, J6): un rifiuto con `dettaglio` (entry,
+        # stop, target, scala) viene registrato in `segnali_rifiutati` per essere
+        # valutato dopo sulle candele vere. L'orchestratore non ha un Firebase suo:
+        # main gli passa il suo (`fb`) oppure un callback `on_rifiuto(symbol,
+        # strategy, motivo, dettaglio)`. Senza ne' l'uno ne' l'altro (test, uso
+        # legacy) resta il solo contatore. Il callback vince sul Firebase.
+        self.fb = fb
+        self.on_rifiuto = None
         self.strategies = get_all_strategies()
         # per il regime PER-COIN in parita' col backtest (stesso detector del bt)
         self.regime_detector = RegimeDetector()
@@ -126,14 +141,43 @@ class Orchestrator:
             conta[m] = conta.get(m, 0) + 1
         return [{"motivo": m, "n": n} for m, n in sorted(conta.items(), key=lambda kv: (-kv[1], kv[0]))]
 
-    def _rifiuto(self, symbol: str, strategy: str, motivo: str) -> None:
-        """Registra un rifiuto del ciclo (una riga per coppia, stampa a fine ciclo)."""
+    def _rifiuto(self, symbol: str, strategy: str, motivo: str,
+                 dettaglio: Optional[dict] = None) -> None:
+        """Registra un rifiuto del ciclo (una riga per coppia, stampa a fine ciclo).
+
+        `dettaglio` (26 set 2026, J6): {direction, entry, stop, target, timeframe,
+        scale_r_mults, esplorativa, feats, selector_p} del segnale scartato. Se
+        c'e', il rifiuto va anche nell'ombra (`rifiutati.registra`, via callback
+        `on_rifiuto` o via `self.fb`): fail-open, la riga di log non cambia."""
         key = (symbol, strategy)
         if key in self._rifiuti_visti:
             return
         self._rifiuti_visti.add(key)
         self._rifiuti_ciclo.append(f"[rifiuto] {symbol} {strategy}: {motivo}")
         self.conta_scarto(motivo)
+        if not dettaglio:
+            return
+        try:
+            if self.on_rifiuto is not None:
+                self.on_rifiuto(symbol, strategy, motivo, dettaglio)
+            elif self.fb is not None:
+                rifiutati.registra(
+                    self.fb, symbol=symbol, strategy=strategy, motivo=motivo,
+                    direction=dettaglio.get("direction"), timeframe=dettaglio.get("timeframe"),
+                    entry=dettaglio.get("entry"), stop=dettaglio.get("stop"),
+                    target=dettaglio.get("target"), scale_r_mults=dettaglio.get("scale_r_mults"),
+                    feats=dettaglio.get("feats"), selector_p=dettaglio.get("selector_p"),
+                    now=time.time(), esplorativa=bool(dettaglio.get("esplorativa")))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[rifiutati] ombra saltata per {symbol} {strategy} ({exc})")
+
+    @staticmethod
+    def _dettaglio(s: dict) -> dict:
+        """Il `dettaglio` per l'ombra da un segnale di `collect_signals`."""
+        return {"direction": s.get("direction"), "entry": s.get("entry"),
+                "stop": s.get("suggested_stop"), "target": s.get("suggested_target"),
+                "timeframe": s.get("timeframe"), "scale_r_mults": s.get("scale_r_mults"),
+                "esplorativa": bool(s.get("esplorativa")), "feats": None, "selector_p": None}
 
     def _stampa_rifiuti(self) -> None:
         """Stampa i rifiuti accumulati (prime _MAX_RIFIUTI_LOG righe, poi il conto)
@@ -212,6 +256,9 @@ class Orchestrator:
                 # `boundary` e' l'apertura della candela del bot appena chiusa:
                 # se non cade su una chiusura della candela della strategia, si
                 # salta. Senza `boundary` (chiamate legacy) non si filtra.
+                # l'orologio della strategia (None = quello del bot): per l'ombra
+                # dei rifiuti serve esplicito, per il filtro sotto no
+                _tf_strat = getattr(strat, "timeframe", None) or settings.ORCHESTRATOR_TIMEFRAME
                 if boundary is not None:
                     _tf_s = _TF_SECS.get(getattr(strat, "timeframe", None) or "", 0)
                     if _tf_s and int(boundary) % _tf_s != 0:
@@ -232,9 +279,19 @@ class Orchestrator:
                     # coppia vetata che non avrebbe sparato non e' un rifiuto, e
                     # contarla gonfierebbe proprio il numero che H5 vuole. Le
                     # strategie sono senza stato: generarlo qui non cambia nulla.
-                    if strat.generate_signal(asset, ctx) is not None:
+                    _sig_veto = strat.generate_signal(asset, ctx)
+                    if _sig_veto is not None:
                         self._rifiuto(sym, strat.name,
-                                      f"veto di regime ({coin_regime.value})")
+                                      f"veto di regime ({coin_regime.value})",
+                                      dettaglio={
+                                          "direction": _sig_veto.direction.value,
+                                          "entry": asset.price,
+                                          "stop": _sig_veto.suggested_stop,
+                                          "target": _sig_veto.suggested_target,
+                                          "timeframe": _tf_strat,
+                                          "scale_r_mults": ladder_multiples(params_by_strat.get(strat.name)),
+                                          "esplorativa": esplorativa,
+                                          "feats": None, "selector_p": None})
                     continue
                 sig = strat.generate_signal(asset, ctx)
                 if sig is None:
@@ -253,6 +310,11 @@ class Orchestrator:
                     # il paper esplorativo (25 set 2026): decide_all da' la
                     # precedenza alle validate e applica il tetto di aperte
                     "esplorativa": esplorativa,
+                    # per l'ombra dei rifiuti (26 set 2026, J6): dove sarebbe
+                    # entrato, su quale orologio e con quale scala
+                    "entry": asset.price,
+                    "timeframe": _tf_strat,
+                    "scale_r_mults": ladder_multiples(params_by_strat.get(strat.name)),
                 })
         signals.sort(key=lambda s: s["adjusted_confidence"], reverse=True)
         return signals
@@ -348,20 +410,23 @@ class Orchestrator:
                 continue        # regola (a): la validata ha la precedenza, senza rifiuto
             if s["weight"] <= 0.0:
                 self._rifiuto(s["symbol"], s["strategy"],
-                              f"peso {s['weight']:.2f} (strategia spenta dal learning)")
+                              f"peso {s['weight']:.2f} (strategia spenta dal learning)",
+                              dettaglio=self._dettaglio(s))
                 continue
             if s["adjusted_confidence"] < self.DECISION_THRESHOLD:
                 self._rifiuto(s["symbol"], s["strategy"],
                               f"peso {s['weight']:.2f}: confidenza "
                               f"{s['adjusted_confidence']:.0f} < soglia "
-                              f"{self.DECISION_THRESHOLD}")
+                              f"{self.DECISION_THRESHOLD}",
+                              dettaglio=self._dettaglio(s))
                 continue
             if s["symbol"] in seen:
                 continue
             if s.get("esplorativa"):
                 if n_esplorative >= settings.ESPLORATIVE_MAX_APERTE:
                     self._rifiuto(s["symbol"], s["strategy"],
-                                  f"esplorative al tetto ({settings.ESPLORATIVE_MAX_APERTE} aperte)")
+                                  f"esplorative al tetto ({settings.ESPLORATIVE_MAX_APERTE} aperte)",
+                                  dettaglio=self._dettaglio(s))
                     continue    # regola (b)
                 n_esplorative += 1
             seen.add(s["symbol"])
