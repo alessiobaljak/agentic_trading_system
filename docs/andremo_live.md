@@ -1687,3 +1687,14 @@ posizione), cooldown in barre del bot (ora ×4 a 1 ora), finestra del verdetto
 trailing (ora in barre del trade). Aspetta il sì: allargare la discovery a 1 ora
 da 5 a ~30 coin (stima 12 minuti a giro, da misurare; metro: tasso di passaggio
 a 1 ora su 2 settimane contro lo 0,22% dei 15 minuti). Suite 1596 test verdi.
+
+### 26 settembre, 11:35: verifica pulita «attesi contro aperti» (routine)
+
+Sonda `frequenza` (ops 0265, coppie validate di OGGI: 182 su 62 coin) contro i
+trade aperti per giorno (ops 0258). Dal 17 al 25: attesi 199, aperti 82 (41%),
+ma la sonda usa il registro di oggi su tutta la finestra e a inizio settimana le
+validate erano 59 (160 dal 24 sera, 182 il 26): gli attesi dei primi giorni sono
+gonfiati di circa tre volte. Sui due giorni confrontabili col registro simile
+(24 e 25 set): attesi 46, aperti 41, **89%**. Nessun divario sistematico:
+confermato quanto misurato il 19 (87%). Da rifare fra una settimana con il
+registro stabile a 182.
