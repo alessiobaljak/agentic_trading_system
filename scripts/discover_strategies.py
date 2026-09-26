@@ -162,18 +162,31 @@ REEVAL_HOUR_MAX = int(os.getenv("DISCOVERY_REEVAL_HOUR_MAX", "3"))   # UTC: 00:x
 #: «intorno 0 madri» senza che nessuno capisse perche'. La regola sull'ora
 #: resta (e' gratis quando funziona); questa la copre quando il timer deriva.
 COMPLETA_OGNI_S = float(os.getenv("DISCOVERY_COMPLETA_OGNI_H", "20")) * 3600
+#: la finestra NOTTURNA (ore UTC) in cui il giro completo puo' partire per la
+#: regola delle 20 ore: il primo completo dopo la correzione (26 set, partito
+#: alle 09:04 UTC) ha superato le 3 ore in pieno giorno, coi giri urgenti
+#: rimandati. Di notte lo stesso costo non disturba nessuno. Oltre
+#: COMPLETA_MAX_ORE_S dall'ultimo completo si parte comunque, a qualunque ora.
+COMPLETA_FINESTRA_ORA_MAX = int(os.getenv("DISCOVERY_COMPLETA_ORA_MAX", "8"))
+COMPLETA_MAX_ORE_S = float(os.getenv("DISCOVERY_COMPLETA_MAX_H", "30")) * 3600
 
 
 def giro_giornaliero(now: float, ultimo_completo_at: float | None = None) -> bool:
     """True nel primo giro dopo mezzanotte UTC (il timer parte alle 00:00 con un
-    ritardo casuale fino a 10 minuti e il giro dura ~2h), OPPURE se l'ultimo
-    giro completo e' di piu' di COMPLETA_OGNI_S fa (o non c'e' mai stato)."""
+    ritardo casuale fino a 10 minuti e il giro dura ~2h); OPPURE, se l'ultimo
+    giro completo e' di piu' di COMPLETA_OGNI_S fa (o non c'e' mai stato), nel
+    primo giro che parte entro le COMPLETA_FINESTRA_ORA_MAX UTC; OPPURE a
+    qualunque ora oltre COMPLETA_MAX_ORE_S dall'ultimo completo."""
     from datetime import datetime, timezone
-    if datetime.fromtimestamp(now, timezone.utc).hour < REEVAL_HOUR_MAX:
+    ora = datetime.fromtimestamp(now, timezone.utc).hour
+    if ora < REEVAL_HOUR_MAX:
         return True
     if ultimo_completo_at is None:
         return True
-    return (now - float(ultimo_completo_at)) >= COMPLETA_OGNI_S
+    da_ultimo = now - float(ultimo_completo_at)
+    if da_ultimo >= COMPLETA_MAX_ORE_S:
+        return True
+    return da_ultimo >= COMPLETA_OGNI_S and ora < COMPLETA_FINESTRA_ORA_MAX
 
 
 def ultimo_giro_completo_at(fb) -> float | None:

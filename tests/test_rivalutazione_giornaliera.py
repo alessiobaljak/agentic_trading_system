@@ -58,7 +58,7 @@ def test_il_giro_giornaliero_e_il_primo_dopo_mezzanotte_utc():
     # l'ultimo giro completo e' di piu' di 20 ore fa (o non c'e' memoria)
     t305 = datetime(2026, 9, 23, 3, 5, tzinfo=timezone.utc).timestamp()
     assert not d.giro_giornaliero(t305, ultimo_completo_at=t305 - 3 * 3600)
-    assert d.giro_giornaliero(t305, ultimo_completo_at=t305 - 21 * 3600)
+    assert d.giro_giornaliero(t305, ultimo_completo_at=t305 - 21 * 3600)   # 03:05 e' nella finestra notturna
     assert d.giro_giornaliero(t305)   # senza memoria: completo
     t23 = datetime(2026, 9, 23, 23, 0, tzinfo=timezone.utc).timestamp()
     assert not d.giro_giornaliero(t23, ultimo_completo_at=t23 - 20 * 3600 + 60)

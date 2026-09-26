@@ -1698,3 +1698,15 @@ gonfiati di circa tre volte. Sui due giorni confrontabili col registro simile
 (24 e 25 set): attesi 46, aperti 41, **89%**. Nessun divario sistematico:
 confermato quanto misurato il 19 (87%). Da rifare fra una settimana con il
 registro stabile a 182.
+
+### 26 settembre, 14:20: il primo giro completo sfora le 3 ore (in corso)
+
+Partito alle 09:04 UTC, alle 12:18 UTC era ancora in valutazione (274 coin ×
+549 spec, ~150.000 valutazioni, contro le 15.900 di un giro urgenti; memoria a
+8 GB su 15, ops 0279-0281). Non è un guasto: è il costo vero della
+rivalutazione di tutte le spec, che non girava da giorni. Il timer a catena non
+sovrappone giri (il servizio è ancora attivo), ma i giri urgenti del giorno
+slittano. Correzione: la regola delle 20 ore fa partire il completo solo nella
+finestra notturna (prima delle 08:00 UTC), con una rete a 30 ore; di giorno si
+resta sugli urgenti. Il tempo del completo con intorno a 40 si legge a fine
+giro.

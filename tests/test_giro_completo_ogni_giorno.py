@@ -24,6 +24,14 @@ def test_alle_tre_e_quaranta_e_completo_se_l_ultimo_e_di_ieri():
     assert d.giro_giornaliero(_t(3.8), ultimo_completo_at=_t(3.8) - 21 * 3600)
 
 
+def test_di_giorno_non_e_completo_anche_se_l_ultimo_e_di_ieri():
+    # 26 set: il completo partito alle 09:04 UTC ha superato le 3 ore di giorno.
+    # Fra le 8 e le 24 UTC si aspetta la notte, salvo oltre 30 ore dall'ultimo.
+    assert not d.giro_giornaliero(_t(9), ultimo_completo_at=_t(9) - 21 * 3600)
+    assert d.giro_giornaliero(_t(9), ultimo_completo_at=_t(9) - 31 * 3600)
+    assert d.giro_giornaliero(_t(7.5), ultimo_completo_at=_t(7.5) - 21 * 3600)
+
+
 def test_senza_memoria_di_un_giro_completo_e_completo():
     assert d.giro_giornaliero(_t(15), ultimo_completo_at=None)
 
