@@ -1515,9 +1515,18 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list]:
 
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict,
                   scale_candidates=None, context_by_ts=None, righe_bocciate: bool = False,
-                  run_end: str = "", interval: str = "", keep_candidates=None):
+                  run_end: str = "", interval: str = "", keep_candidates=None,
+                  config_iniziale: dict | None = None):
     """Aggrega le performance del spec sulle SOLE finestre out-of-sample e applica
     il GATE 1 (PF, win-rate, ritorno minimo, consistenza per finestra).
+
+    `config_iniziale` (26 set 2026, SOLO per l'analisi `scripts/autopsia_validate.py`):
+    scala/BE/keep con cui fare la PRESELEZIONE del passo 1 al posto della
+    configurazione globale. La discovery non lo passa mai (None = comportamento
+    identico a prima). Serve a MISURARE quante validate il gate boccia perche' al
+    passo 1 le giudica su una configurazione che il bot non opera, prima di
+    decidere se cambiare il gate. Il passo 2 (ricerca per coppia) e il verdetto
+    finale restano quelli di sempre.
 
     `run_end` e `interval` etichettano le righe del dataset del selettore
     (`oos_rows`, solo se la spec PASSA: i trade delle bocciate non sono segnali
@@ -1556,7 +1565,15 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
 
     # 1) PRESELEZIONE con la scala globale: serve solo a scartare in fretta le spec
     #    senza speranza, prima di spendere 4 backtest per la scelta della scala.
-    oos, window_pnls = _run_oos()
+    #    Con `config_iniziale` (autopsia delle validate, 26 set 2026) la
+    #    preselezione gira sulla configurazione indicata: e' l'unico punto in cui
+    #    il parametro conta.
+    if config_iniziale:
+        oos, window_pnls = _run_oos(config_iniziale.get("scale_r_mults"),
+                                    config_iniziale.get("sl_to_breakeven"),
+                                    keep=config_iniziale.get("profit_lock_keep"))
+    else:
+        oos, window_pnls = _run_oos()
     verdict = gate_verdict(window_pnls, len(oos.trades), oos.profit_factor(),
                            oos.win_rate(), oos.total_pnl_pct(),
                            max_dd=max_drawdown(oos.trades),
@@ -1625,7 +1642,12 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     #    quel numero sbagliato.
     if best_ladder and (list(best_ladder) != list(settings.SCALE_OUT_R_MULTIPLES)
                         or best_be != bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)
-                        or best_keep != float(settings.PROFIT_LOCK_KEEP)):
+                        or best_keep != float(settings.PROFIT_LOCK_KEEP)
+                        # col passo 1 forzato (autopsia) la passata iniziale NON e'
+                        # quella globale: le metriche finali si rifanno comunque
+                        # sulla configurazione scelta, altrimenti descriverebbero
+                        # la configurazione forzata col verdetto di un'altra
+                        or bool(config_iniziale)):
         oos, window_pnls = _run_oos(best_ladder, best_be, keep=best_keep)
     pf = oos.profit_factor()
     pnl = oos.total_pnl_pct()

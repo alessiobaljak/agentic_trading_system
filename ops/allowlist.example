@@ -85,6 +85,10 @@ controllo:    .venv/bin/python -m scripts.controllo
 # controllo-publish: .venv/bin/python -m scripts.controllo --publish
 # revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
 costi:        .venv/bin/python -m scripts.revalidate_costs
+# AUTOPSIA DELLE VALIDATE (26 set 2026): per ogni coppia validata, il gate di oggi
+# (A) contro il passo 1 forzato sulla configurazione operata (B) e il PF recente (C).
+# Sola lettura; si ferma da sola a 720 s e stampa cio' che ha misurato.
+autopsia-validate: .venv/bin/python -m scripts.autopsia_validate
 
 # ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
 # la lista bianca stessa, per confrontarla con questo esempio quando si mette in
