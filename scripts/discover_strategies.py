@@ -36,7 +36,9 @@ from bot.ai.hypotheses import propose as ai_propose
 from bot.execution.exit_logic import (LOCK_KEEP_CANDIDATES, SCALE_LADDER_CANDIDATES,
                                       breakeven_after_tp1, ladder_from_mfe,
                                       ladder_multiples, lock_keep)
-from bot.learning.metrics import KEEP_PAPER_MIN_VERDETTI, KEEP_PAPER_QUOTA, proposta_keep
+from bot.learning.metrics import (KEEP_PAPER_MIN_VERDETTI, KEEP_PAPER_QUOTA,
+                                  KEEP_STRATEGIA_MIN_VERDETTI, conta_verdetti_strategia,
+                                  proposta_keep, proposta_keep_strategia, soldi_sul_tavolo)
 from bot.ai.universe_filter import filter_universe as ai_filter_universe
 from bot.strategies.generator import (figlie_intorno, generate_specs, mutate,
                                       varianti_da_referto)
@@ -936,21 +938,88 @@ def keep_dal_paper(fb, min_verdetti: int = KEEP_PAPER_MIN_VERDETTI,
     return keep
 
 
-def candidate_keeps(keep_paper=None) -> tuple:
+def keep_per_strategia(trades, min_verdetti: int = KEEP_STRATEGIA_MIN_VERDETTI) -> dict[str, float]:
+    """Il keep del profit-lock che il paper propone per OGNI strategia, per id
+    (27 set 2026, backlog I3): la stessa strada di `scale_per_strategia` per la
+    scala dei TP. `keep_dal_paper` somma i verdetti di TUTTE le strategie e ne
+    tira fuori una proposta sola; ma «il lock taglia i vincitori» puo' essere
+    vero per una strategia e falso per un'altra, e i verdetti gia' portano il
+    perche' (`trailing_knockout_atr`: rumore o inversione). Qui, per ogni
+    strategia con almeno `min_verdetti` verdetti trailing sul timeframe del bot,
+    la regola dichiarata in `metrics.proposta_keep_strategia`: un candidato in
+    piu' per il gate della SOLA spec a cui appartiene, mai al posto dei fissi ne'
+    della proposta globale.
+
+    Fail-open: senza trade, con trade malformati o senza campione per nessuna
+    strategia ritorna {} e i candidati restano quelli di prima."""
+    per_strat: dict[str, list] = {}
+    for t in trades or []:
+        if not isinstance(t, dict):
+            continue
+        gid = t.get("strategy")
+        if not isinstance(gid, str) or not gid:
+            continue
+        per_strat.setdefault(gid, []).append(t)
+    out: dict[str, float] = {}
+    for gid in sorted(per_strat):
+        try:
+            k = proposta_keep_strategia(per_strat[gid], min_verdetti=min_verdetti)
+        except (TypeError, ValueError):
+            continue
+        if k is not None:
+            out[gid] = float(k)
+    return out
+
+
+def riga_paper_keep_strategie(keep_strategie: dict, trades,
+                              min_verdetti: int = KEEP_STRATEGIA_MIN_VERDETTI) -> str:
+    """La riga «[paper] keep per strategia dal vissuto: ...» del log del giro (27
+    set 2026): quante strategie hanno una proposta propria, un esempio coi suoi
+    conteggi (prematuri da rumore / prematuri, o protetti / verdetti), e quanto
+    tragitto verso il TP le uscite trailing hanno lasciato sul tavolo in media
+    (`metrics.soldi_sul_tavolo`: frazione del tragitto entry->TP, solo misurata).
+    Sempre, anche a zero: un giro senza proposte deve dirlo."""
+    ks = dict(keep_strategie or {})
+    testo = (f"[paper] keep per strategia dal vissuto: {len(ks)} strategie con "
+             f">= {min_verdetti} verdetti trailing")
+    if ks:
+        gid = next(iter(ks))
+        c = conta_verdetti_strategia([t for t in (trades or [])
+                                      if isinstance(t, dict) and t.get("strategy") == gid])
+        if ks[gid] < settings.PROFIT_LOCK_KEEP:
+            dettaglio = f"prematuri da rumore {c['prematuri_rumore']}/{c['prematuri']}"
+        else:
+            dettaglio = f"protetti {c['protetti']}/{c['n']}"
+        testo += f" (es. {gid} -> {ks[gid]:g}, {dettaglio})"
+    m = soldi_sul_tavolo(trades or [])
+    if m["n"]:
+        testo += (f" · tragitto lasciato sul tavolo medio {m['miss_medio']:.2f} del "
+                  f"tragitto entry->TP su {m['n']} trade")
+    else:
+        testo += " · tragitto lasciato sul tavolo: nessun trade con la misura"
+    return testo
+
+
+def candidate_keeps(keep_paper=None, keep_strategia=None) -> tuple:
     """I keep del profit-lock che il gate mettera' a confronto per una coppia.
 
-    I tre fissi sempre; quello proposto dal paper in piu', se c'e' ed e' nuovo.
-    Mai al posto degli altri — vale la stessa regola di `candidate_ladders`: una
-    misura su pochi trade puo' PROPORRE, non decidere."""
-    if keep_paper is None:
-        return LOCK_KEEP_CANDIDATES
-    try:
-        k = float(keep_paper)
-    except (TypeError, ValueError):
-        return LOCK_KEEP_CANDIDATES
-    if any(abs(k - c) < 1e-9 for c in LOCK_KEEP_CANDIDATES):
-        return LOCK_KEEP_CANDIDATES
-    return LOCK_KEEP_CANDIDATES + (k,)
+    I tre fissi sempre; quello proposto dal paper in piu', se c'e' ed e' nuovo;
+    e dal 27 set 2026 anche quello proposto dai verdetti della SOLA strategia in
+    esame (`keep_per_strategia`), se nuovo. Ordine: i tre fissi, il globale, il
+    per-strategia. Mai al posto degli altri — vale la stessa regola di
+    `candidate_ladders`: una misura su pochi trade puo' PROPORRE, non decidere."""
+    out = LOCK_KEEP_CANDIDATES
+    for keep in (keep_paper, keep_strategia):
+        if keep is None:
+            continue
+        try:
+            k = float(keep)
+        except (TypeError, ValueError):
+            continue
+        if any(abs(k - c) < 1e-9 for c in out):
+            continue
+        out = out + (k,)
+    return out
 
 
 #: quante varianti dai referti entrano in un giro. Sostituiscono altrettante
@@ -1508,7 +1577,7 @@ def coppie_per_intorno(pairs: dict, existing: dict, drift_doc: dict | None,
 
 def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=None,
                gia_validate=None, bocciate_ok: bool = False, keep_paper=None,
-               scale_strategie=None, config_validate=None) -> None:
+               scale_strategie=None, config_validate=None, keep_strategie=None) -> None:
     opt = WalkForwardOptimizer(n_windows=args.windows, interval=args.interval)
     # IL MERCATO NEL GATE. `scripts/optimize.py` carica BTC come contesto
     # cross-asset da sempre; la discovery — che valida TUTTE le spec che il bot
@@ -1537,9 +1606,12 @@ def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=N
               # LA CONFIGURAZIONE OPERATA DELLE VALIDATE (26 set 2026): chiave ->
               # {scale_r_mults, sl_to_breakeven, profit_lock_keep} letta dal
               # registro con le funzioni del bot (`config_validate_dal_registro`).
-              # Ultima in coda, con default: chi chiama `_disc_init` col vecchio
+              # In coda, con default: chi chiama `_disc_init` col vecchio
               # numero di argomenti (l'autopsia) giudica come prima.
-              config_validate=dict(config_validate or {}))
+              config_validate=dict(config_validate or {}),
+              # i keep per strategia dal vissuto (27 set 2026, backlog I3):
+              # id -> keep; ultimo in coda, stessa regola
+              keep_strategie=dict(keep_strategie or {}))
 
 
 def _bocciata_leggera(sym: str, spec: dict, r: dict) -> dict:
@@ -1643,6 +1715,9 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
         # abbastanza trade con mfe; per le altre `None` e i candidati sono quelli
         # di prima
         scala_strategia = (_W.get("scale_strategie") or {}).get(spec.get("id"))
+        # e il keep dai verdetti trailing di QUESTA strategia (27 set 2026, I3):
+        # stessa regola, un candidato in piu' dopo il globale del paper
+        keep_strategia = (_W.get("keep_strategie") or {}).get(spec.get("id"))
         key = f"{sym}|{spec['id']}"
         # SOLO le gia' validate ricevono la loro configurazione (26 set 2026): le
         # candidate nuove non ne hanno una, e si giudicano come prima
@@ -1650,7 +1725,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
         r = evaluate_spec(_W["opt"], sym, cand, fr, spec,
                           scale_candidates=candidate_ladders(_W.get("scala_paper"),
                                                              scala_strategia=scala_strategia),
-                          keep_candidates=candidate_keeps(_W.get("keep_paper")),
+                          keep_candidates=candidate_keeps(_W.get("keep_paper"),
+                                                          keep_strategia=keep_strategia),
                           context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                           run_end=end, interval=args.interval,
                           righe_bocciate=bool(_W.get("bocciate_ok"))
@@ -1690,7 +1766,8 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
                     _W["opt"], sym, cand, fr, spec,
                     scale_candidates=candidate_ladders(_W.get("scala_paper"),
                                                        scala_strategia=scala_strategia),
-                    keep_candidates=candidate_keeps(_W.get("keep_paper")),
+                    keep_candidates=candidate_keeps(_W.get("keep_paper"),
+                                                    keep_strategia=keep_strategia),
                     context_by_ts=_W.get("btc_ctx") if usa_mercato else None,
                     min_history=_W["min_history"])
                 print(f"[discover] {sym}|{spec['id']} (variante di "
@@ -2082,15 +2159,20 @@ def riga_cervello_varianti(e: dict | None) -> str:
             f"{int(e.get('scartate', 0) or 0)} scartate / sostituzioni: {testo_sost}")
 
 
-def conta_keep_giro(out: dict, passed_keys, keep_paper=None) -> dict:
+def conta_keep_giro(out: dict, passed_keys, keep_paper=None, keep_strategie=None) -> dict:
     """I NUMERI del keep scelto in QUESTO giro (25 set 2026), puri: quante coppie
     passate hanno scelto quale keep (`scelti`), quante non l'hanno scelto affatto
-    (`non_scelto`: spec bocciata prima di provare i keep, o codice vecchio), e
-    quante volte ha vinto il candidato proposto dal paper (`dal_paper_n`).
-    `riga_cervello_keep` li stampa e il documento del gate li scrive: una sola
-    fonte per i due lettori."""
+    (`non_scelto`: spec bocciata prima di provare i keep, o codice vecchio),
+    quante volte ha vinto il candidato proposto dal paper (`dal_paper_n`) e, dal
+    27 set 2026, quante volte ha vinto il candidato proposto dai verdetti della
+    SOLA strategia della coppia (`dal_paper_strategia_n`: `keep_strategie` e'
+    id -> keep di `keep_per_strategia`; la strategia della coppia e' `strategy`
+    della voce o la parte dopo `|` della chiave). `riga_cervello_keep` li stampa
+    e il documento del gate li scrive: una sola fonte per i due lettori."""
     conta: dict = {}
     senza = 0
+    ks = keep_strategie if isinstance(keep_strategie, dict) else {}
+    da_strategia = 0
     for k in (passed_keys or []):
         e = (out or {}).get(k) if isinstance(out, dict) else None
         v = e.get("profit_lock_keep") if isinstance(e, dict) else None
@@ -2099,11 +2181,16 @@ def conta_keep_giro(out: dict, passed_keys, keep_paper=None) -> dict:
             continue
         v = float(v)
         conta[v] = conta.get(v, 0) + 1
+        gid = e.get("strategy") if isinstance(e, dict) and e.get("strategy") else \
+            (k.split("|", 1)[1] if isinstance(k, str) and "|" in k else None)
+        if gid in ks and abs(float(ks[gid]) - v) < 1e-9:
+            da_strategia += 1
     kp = None if keep_paper is None else float(keep_paper)
     return {"scelti": [{"valore": v, "n": n} for v, n in sorted(conta.items())],
             "non_scelto": senza,
             "dal_paper": kp,
-            "dal_paper_n": conta.get(kp, 0) if kp is not None else 0}
+            "dal_paper_n": conta.get(kp, 0) if kp is not None else 0,
+            "dal_paper_strategia_n": da_strategia}
 
 
 def riga_cervello_sessione(existing: dict | None) -> str:
@@ -2135,20 +2222,27 @@ def riga_cervello_uscita(ipotesi_uscita: dict | None) -> str:
             f"e una scala propria)")
 
 
-def riga_cervello_keep(out: dict, passed_keys, keep_paper=None) -> str:
+def riga_cervello_keep(out: dict, passed_keys, keep_paper=None, keep_strategie=None) -> str:
     """La riga «[cervello] keep del lock ...» per la coda del log (25 set 2026):
     quante coppie passate in QUESTO giro hanno scelto quale keep del profit-lock.
     Si stampa sempre: un giro in cui il gate ha confermato 0,5 ovunque deve
     dirlo, e se il paper aveva proposto un candidato si vede quante volte l'ha
     spuntata (la proposta e' un candidato, non una decisione). I numeri sono
-    quelli di `conta_keep_giro`."""
-    k = conta_keep_giro(out, passed_keys, keep_paper)
+    quelli di `conta_keep_giro`. Dal 27 set 2026, se il paper aveva proposte
+    per strategia (`keep_strategie`), anche quante coppie hanno scelto quella
+    della loro strategia («dal paper per strategia xN»)."""
+    k = conta_keep_giro(out, passed_keys, keep_paper, keep_strategie)
     parti = [f"{d['valore']:g} x{d['n']}" for d in k["scelti"]]
     if k["non_scelto"]:
         parti.append(f"non scelto x{k['non_scelto']}")
     testo = " · ".join(parti) if parti else "nessuna coppia passata"
+    fonti = []
     if k["dal_paper"] is not None:
-        testo += f" (dal paper {k['dal_paper']:g} x{k['dal_paper_n']})"
+        fonti.append(f"dal paper {k['dal_paper']:g} x{k['dal_paper_n']}")
+    if keep_strategie:
+        fonti.append(f"dal paper per strategia x{k['dal_paper_strategia_n']}")
+    if fonti:
+        testo += f" ({' · '.join(fonti)})"
     return f"[cervello] keep del lock scelto dal gate: {testo}"
 
 
@@ -2884,7 +2978,7 @@ def _mediana(xs: list):
 
 
 def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
-              worker, rss_max_mb, modalita: str, now: float) -> dict:
+              worker, rss_max_mb, modalita: str, now: float, keep_strategie=None) -> dict:
     run = run or {}
     passate = [p for p in (run.get("passed") or []) if isinstance(p, dict)]
     prem, prot = conta_verdetti_trailing(trades or [], settings.ORCHESTRATOR_TIMEFRAME)
@@ -2916,7 +3010,12 @@ def _sez_giro(run: dict, candidate, keep_paper, scala_paper, trades, run_1h,
         "passata_1h": p1h,
         "worker": worker, "rss_max_mb": _num(rss_max_mb),
         "paper_propone": {"scala": scala_str(scala_paper), "keep": _num(keep_paper),
-                          "verdetti_trailing": prem + prot},
+                          "verdetti_trailing": prem + prot,
+                          # quante strategie hanno un keep proposto dai LORO
+                          # verdetti (27 set 2026, I3: `keep_per_strategia`); 0
+                          # nel merge degli shard e nei giri senza campione
+                          "keep_strategie": len(keep_strategie)
+                          if isinstance(keep_strategie, dict) else 0},
         # le strategie rigiudicate per un'ipotesi scala_stretta fresca (25 set
         # 2026, I4) e quante di loro avevano una scala propria dal vissuto; 0/0
         # nel merge degli shard e nei giri senza ipotesi
@@ -3208,7 +3307,8 @@ def costruisci_doc_gate(*, reg_doc: dict, specs: dict, drift_doc: dict, trades,
                         now: float, iniziato_at: float, modalita: str,
                         intorno_girato: bool, candidate: dict | None = None,
                         keep_giro: dict | None = None, letture: dict | None = None,
-                        worker=None, rss_max_mb=None, fase: str = "discover") -> dict:
+                        worker=None, rss_max_mb=None, fase: str = "discover",
+                        keep_strategie: dict | None = None) -> dict:
     """Il documento `dashboard/gate` intero (docs/controllo_schema.md §2), PURO:
     prende cio' che il main ha gia' letto e calcolato e non tocca Firebase.
 
@@ -3220,7 +3320,8 @@ def costruisci_doc_gate(*, reg_doc: dict, specs: dict, drift_doc: dict, trades,
     `discovered_last_run`; `doc_prec`: il documento del giro precedente (per
     `validate_delta_giro` e per ricopiare l'intorno quando questo giro non e'
     completo); `letture`: i documenti accessori gia' letti (autopsia, supervisore,
-    vite, passata 1h), ognuno facoltativo."""
+    vite, passata 1h), ognuno facoltativo; `keep_strategie`: id -> keep proposto
+    per strategia (27 set 2026), solo per contarle in `giro.paper_propone`."""
     letture = letture or {}
     reg_doc = reg_doc or {}
     pairs = decode_pairs(reg_doc.get("pairs")) if not isinstance(reg_doc.get("pairs"), dict) \
@@ -3234,7 +3335,8 @@ def costruisci_doc_gate(*, reg_doc: dict, specs: dict, drift_doc: dict, trades,
         "giro": _sezione("giro", ["fs:strategy_params/discovered_last_run",
                                   "fs:strategy_params/discovered_last_run_1h", "fs:trades"],
                          lambda: _sez_giro(run, candidate, keep_paper, scala_paper, trades,
-                                           letture.get("run_1h"), worker, rss_max_mb, modalita, now),
+                                           letture.get("run_1h"), worker, rss_max_mb, modalita, now,
+                                           keep_strategie=keep_strategie),
                          now),
         "registro": _sezione("registro", ["fs:strategy_registry/validated"],
                              lambda: _sez_registro(reg_doc, pairs, doc_prec, now), now),
@@ -3685,13 +3787,19 @@ def main() -> int:
                   f"{scala_str(scale_strategie[_es])})")
         ipotesi_uscita = {"strategie": len(urgenti_uscita),
                           "con_scala": sum(1 for g in urgenti_uscita if g in scale_strategie)}
+        # e il keep per OGNI strategia con abbastanza verdetti trailing (27 set
+        # 2026, I3): id -> keep, ultimo in coda a `initargs`; il worker lo aggiunge
+        # ai candidati della sola spec a cui appartiene. La riga si stampa sempre.
+        keep_strategie = keep_per_strategia(trades_paper or [])
+        print(riga_paper_keep_strategie(keep_strategie, trades_paper or []))
         # le VALIDATE bocciate oggi, come voci leggere (26 set 2026): il merge le
         # usa per il confronto figlia/madre e per i contatori delle declassate
         bocciate_validate: dict[str, dict] = {}
         for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows, bocciate in parallel_map(
             _disc_one, symbols, workers=workers, initializer=_disc_init,
             initargs=(args, end, specs, scala_paper, specs_per_symbol, gia_validate,
-                      bocciate_ok, keep_paper, scale_strategie, config_validate)
+                      bocciate_ok, keep_paper, scale_strategie, config_validate,
+                      keep_strategie)
         ):
             n_eval += n_ev
             if n_ev > 0:
@@ -3814,7 +3922,7 @@ def main() -> int:
         print(riga_cervello_varianti(esito_varianti))
         # e la DECISIONE sul keep del profit-lock (25 set 2026): quante passate hanno
         # scelto quale keep, e quante volte ha vinto il candidato del paper
-        print(riga_cervello_keep(out, passed_keys, keep_paper))
+        print(riga_cervello_keep(out, passed_keys, keep_paper, keep_strategie))
         # e le strategie rigiudicate per l'ipotesi sulle uscite (25 set 2026, I4)
         print(riga_cervello_uscita(ipotesi_uscita))
         # e le DECLASSATE (26 set 2026): quante validate operano a un quarto della
@@ -3879,8 +3987,9 @@ def main() -> int:
                 scala_paper=scala_paper, doc_prec=doc_gate_prec, now=time.time(),
                 iniziato_at=t0, modalita=modalita, intorno_girato=intorno_attivo,
                 candidate=candidate,
-                keep_giro=conta_keep_giro(out, passed_keys, keep_paper),
-                worker=workers, rss_max_mb=rss_max or None, fase=fase_gate)
+                keep_giro=conta_keep_giro(out, passed_keys, keep_paper, keep_strategie),
+                worker=workers, rss_max_mb=rss_max or None, fase=fase_gate,
+                keep_strategie=keep_strategie)
 
         print("\n" + "=" * 60)
         print(f"[discover] {n_eval} valutazioni, {len(passed_keys)} coppie nuove passate in QUESTO run.")

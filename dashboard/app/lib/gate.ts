@@ -76,6 +76,8 @@ export interface Giro extends Testata {
     scala?: string | null;
     keep?: number | null;
     verdetti_trailing?: number | null;
+    /** (27 set 2026) quante strategie hanno un keep proposto dai LORO verdetti trailing */
+    keep_strategie?: number | null;
   } | null;
   ipotesi_uscita?: {
     strategie?: number | null;
@@ -170,6 +172,8 @@ export interface KeepGiro {
   non_scelto?: number | null;
   dal_paper?: number | null;
   dal_paper_n?: number | null;
+  /** (27 set 2026) quante coppie passate hanno scelto il keep proposto per la LORO strategia */
+  dal_paper_strategia_n?: number | null;
 }
 
 export interface Autopsia {

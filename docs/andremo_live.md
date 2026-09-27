@@ -1959,3 +1959,19 @@ ripassano entro 3 settimane col filtro a due lati (riga «FEATURE session» di
 `gate`); sotto un quarto, vincevano solo grazie al difetto.
 Trovato anche che `--sfondo` non sopravvive al servizio ops (systemd uccide il
 gruppo, ops 0315): la chiave `ingressi-completo` ora usa `systemd-run`.
+
+### 27 settembre, 21:00: il keep proposto per strategia dai verdetti trailing (I3)
+
+Domanda del proprietario: «impariamo anche dai trailing prematuri?». Sì, ma
+solo in aggregato: la proposta di keep era una per tutte le coppie (30
+verdetti: 11 prematuri, 19 protetti → 0,75, scelto su 13 coppie). Ora ogni
+strategia con almeno 5 verdetti trailing propone al gate il SUO keep: 0,25 se
+almeno il 60% sono prematuri e almeno metà di questi «da rumore» (ritracciamento
+sotto 1 ATR), 0,75 se almeno il 60% sono protetti. Il gate la prova sulle
+coppie di quella strategia accanto ai tre valori fissi e alla proposta globale.
+Nel log la riga «[paper] keep per strategia dal vissuto»; in `trades` il blocco
+«KEEP PER STRATEGIA» con anche il tragitto lasciato sul tavolo (frazione del
+percorso entry→TP, misurata e basta). Metro a due settimane: quota di
+«prematuri» sulle coppie il cui keep viene dalla proposta per strategia
+contro le altre. Suite 1789 test verdi; vale dal prossimo giro del gate,
+nessun riavvio del bot necessario.

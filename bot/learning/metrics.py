@@ -291,6 +291,102 @@ def proposta_keep(n_verdetti: int, prematuri: int, protetti: int,
     return None
 
 
+#: LA REGOLA PER STRATEGIA (27 set 2026, backlog I3): il paper propone un keep
+#: anche per la SINGOLA strategia, dai suoi verdetti trailing, e usa in piu' il
+#: segnale del rumore (`trailing_knockout_atr` < KEEP_STRATEGIA_RUMORE_ATR: il
+#: ritracciamento che ci ha buttato fuori era sotto un ATR). Servono almeno
+#: KEEP_STRATEGIA_MIN_VERDETTI verdetti (5: pochi per un esito, non per una
+#: proposta che il gate giudica sulla storia); «prematuri» al KEEP_PAPER_QUOTA e
+#: almeno KEEP_STRATEGIA_QUOTA_RUMORE di quei prematuri da rumore -> 0.25 (il
+#: lock e' troppo stretto e il rumore ci butta fuori: allargarlo aiuta); se i
+#: prematuri sono da inversioni vere, allargare aiuterebbe poco e NON si propone;
+#: «protetti» al KEEP_PAPER_QUOTA -> 0.75. Costanti dichiarate PRIMA di ogni
+#: misura, mai tarate sui trade del paper.
+KEEP_STRATEGIA_MIN_VERDETTI = 5
+KEEP_STRATEGIA_QUOTA_RUMORE = 0.5
+KEEP_STRATEGIA_RUMORE_ATR = 1.0
+
+
+def conta_verdetti_strategia(verdetti: list[dict], tf: str | None = None) -> dict:
+    """I conteggi dei verdetti trailing di UNA strategia (27 set 2026): fra i
+    trade con `exit_reason == "trailing_stop"` e il timeframe del bot (`tf`,
+    default `settings.ORCHESTRATOR_TIMEFRAME`), quanti «premature», quanti di
+    questi da RUMORE (`trailing_knockout_atr` < KEEP_STRATEGIA_RUMORE_ATR) e
+    quanti «protected»; `n` = prematuri + protetti (i «neutral» non contano).
+    Pura: la usano la proposta per strategia, la discovery e `trade_stats`, con
+    gli stessi numeri. I trade esplorativi (F1bis) contano come gli altri: un
+    lock che taglia un vincitore lo fa a qualunque size."""
+    tf = settings.ORCHESTRATOR_TIMEFRAME if tf is None else tf
+    prem = prem_rumore = prot = 0
+    for t in verdetti or []:
+        if not isinstance(t, dict):
+            continue
+        if t.get("exit_reason") != "trailing_stop" or t.get("timeframe") != tf:
+            continue
+        v = t.get("trailing_verdict")
+        if v == "premature":
+            prem += 1
+            ko = t.get("trailing_knockout_atr")
+            try:
+                if ko is not None and float(ko) < KEEP_STRATEGIA_RUMORE_ATR:
+                    prem_rumore += 1
+            except (TypeError, ValueError):
+                pass
+        elif v == "protected":
+            prot += 1
+    return {"n": prem + prot, "prematuri": prem, "prematuri_rumore": prem_rumore,
+            "protetti": prot}
+
+
+def proposta_keep_strategia(verdetti: list[dict],
+                            min_verdetti: int = KEEP_STRATEGIA_MIN_VERDETTI,
+                            quota: float = KEEP_PAPER_QUOTA):
+    """Il keep che il paper PROPONE per UNA strategia (0.25, 0.75) o None (27 set
+    2026, backlog I3). `verdetti`: i trade chiusi di quella strategia (il filtro
+    su uscita trailing e timeframe e' qui dentro, `conta_verdetti_strategia`).
+
+    Diversa dalla regola globale (`proposta_keep`) in una cosa: per allargare il
+    lock (0.25) non basta che i prematuri siano tanti, devono essere in
+    maggioranza DA RUMORE (KEEP_STRATEGIA_QUOTA_RUMORE): un lock piu' largo
+    salva dal rumore, non da un'inversione vera. E' un candidato in piu' per il
+    gate, che lo giudica sulla storia come gli altri: il paper propone, non decide."""
+    c = conta_verdetti_strategia(verdetti)
+    n = c["n"]
+    if n < max(1, int(min_verdetti)):
+        return None
+    prem, prot = c["prematuri"], c["protetti"]
+    if prem / n >= quota and prem > 0 and c["prematuri_rumore"] / prem >= KEEP_STRATEGIA_QUOTA_RUMORE:
+        return KEEP_PAPER_LARGO
+    if prot / n >= quota:
+        return KEEP_PAPER_STRETTO
+    return None
+
+
+def soldi_sul_tavolo(verdetti: list[dict], tf: str | None = None) -> dict:
+    """Quanto tragitto verso il TP le uscite trailing hanno lasciato sul tavolo
+    (27 set 2026): media di `trailing_miss_to_tp` sulle uscite `trailing_stop`
+    del timeframe del bot che lo portano. E' una FRAZIONE del tragitto
+    entry->TP (0 = usciti al TP, 1 = usciti all'entrata: `exit_logic.trailing_reason`),
+    NON un multiplo di R: per convertirla servirebbe la distanza del TP in R di
+    ogni trade, che il trade chiuso non porta. Solo misurato e stampato: non
+    entra in nessuna regola. {n, miss_medio}; `miss_medio` None senza campione."""
+    tf = settings.ORCHESTRATOR_TIMEFRAME if tf is None else tf
+    xs: list[float] = []
+    for t in verdetti or []:
+        if not isinstance(t, dict):
+            continue
+        if t.get("exit_reason") != "trailing_stop" or t.get("timeframe") != tf:
+            continue
+        m = t.get("trailing_miss_to_tp")
+        if m is None:
+            continue
+        try:
+            xs.append(float(m))
+        except (TypeError, ValueError):
+            continue
+    return {"n": len(xs), "miss_medio": round(mean(xs), 3) if xs else None}
+
+
 def compute_trailing_keep(trades: list[dict]) -> dict[str, float]:
     """PROFIT_LOCK_KEEP per-strategia imparato dai VERDETTI trailing del paper (B1).
 

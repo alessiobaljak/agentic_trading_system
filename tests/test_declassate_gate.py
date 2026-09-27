@@ -326,7 +326,8 @@ def test_disc_one_passa_la_configurazione_solo_alle_validate_e_ritorna_le_boccia
 
 def test_disc_init_riceve_la_configurazione_delle_validate_in_coda_con_default(monkeypatch):
     sig = inspect.signature(d._disc_init)
-    assert list(sig.parameters)[-1] == "config_validate" and sig.parameters["config_validate"].default is None
+    # dal 27 set 2026 dopo `config_validate` c'e' `keep_strategie` (test_keep_per_strategia)
+    assert list(sig.parameters)[-2] == "config_validate" and sig.parameters["config_validate"].default is None
     prima = dict(d._W)
     try:
         monkeypatch.setattr(d, "WalkForwardOptimizer", lambda **k: SimpleNamespace(bt=None))
@@ -342,7 +343,7 @@ def test_disc_init_riceve_la_configurazione_delle_validate_in_coda_con_default(m
         d._W.update(prima)
     main = inspect.getsource(d.main)
     assert "config_validate = config_validate_dal_registro(" in main
-    assert "bocciate_ok, keep_paper, scale_strategie, config_validate)" in main
+    assert "bocciate_ok, keep_paper, scale_strategie, config_validate," in main
     assert "summary, diag, rows, bocciate in parallel_map(" in main
     assert "bocciate_validate.update(bocciate or {})" in main
     assert "bocciate_validate=bocciate_validate," in main and 'completa=(modalita == "completa")' in main

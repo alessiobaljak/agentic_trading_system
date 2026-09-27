@@ -285,15 +285,17 @@ def test_i_candidati_del_paper_si_aggiungono_e_non_sostituiscono():
 # --------------------------------------------------------------------------- #
 def test_la_proposta_arriva_ai_worker_e_la_scelta_torna_al_main():
     sig = inspect.signature(d._disc_init)
-    # dal 25 set 2026 dopo `keep_paper` c'e' `scale_strategie` (test_scala_per_strategia)
-    # e dal 26 set `config_validate` (test_declassate_gate): tutti in coda, con
-    # default, cosi' le posizioni prima non si spostano
-    assert list(sig.parameters)[-3:] == ["keep_paper", "scale_strategie", "config_validate"]
+    # dal 25 set 2026 dopo `keep_paper` c'e' `scale_strategie` (test_scala_per_strategia),
+    # dal 26 set `config_validate` (test_declassate_gate) e dal 27 set
+    # `keep_strategie` (test_keep_per_strategia): tutti in coda, con default,
+    # cosi' le posizioni prima non si spostano
+    assert list(sig.parameters)[-4:] == ["keep_paper", "scale_strategie", "config_validate",
+                                         "keep_strategie"]
     assert sig.parameters["keep_paper"].default is None, \
         "initargs e' posizionale: il nuovo argomento va in coda, con default"
     assert "keep_paper=keep_paper" in inspect.getsource(d._disc_init)
     uno = inspect.getsource(d._disc_one)
-    assert uno.count('keep_candidates=candidate_keeps(_W.get("keep_paper"))') == 2, \
+    assert uno.count('keep_candidates=candidate_keeps(_W.get("keep_paper"),') == 2, \
         "sia la valutazione sia le conferme retroattive devono ricevere i candidati"
     assert '"profit_lock_keep": r.get("profit_lock_keep")' in uno
     assert "keep_candidates=keep_candidates" in inspect.getsource(d.conferme_retroattive)
@@ -301,7 +303,7 @@ def test_la_proposta_arriva_ai_worker_e_la_scelta_torna_al_main():
     # dal 25 set 2026 i trade del paper si leggono UNA volta nel main
     # (`trades_del_paper`) e si passano alla proposta del keep
     assert "keep_paper = keep_dal_paper(fb, trades=trades_paper)" in main
-    assert "bocciate_ok, keep_paper, scale_strategie, config_validate)" in main
+    assert "bocciate_ok, keep_paper, scale_strategie, config_validate," in main
 
 
 def test_disc_init_mette_il_keep_del_paper_nello_stato_del_worker(monkeypatch):
@@ -393,7 +395,7 @@ def test_la_riga_del_cervello_conta_i_keep_delle_passate():
     assert d.riga_cervello_keep({}, [], 0.75).endswith("nessuna coppia passata (dal paper 0.75 x0)")
     # in coda al log, prima di «GIRO FINITO», come le altre righe del cervello
     src = inspect.getsource(d.main)
-    assert src.rindex("print(riga_cervello_keep(out, passed_keys, keep_paper))") \
+    assert src.rindex("print(riga_cervello_keep(out, passed_keys, keep_paper, keep_strategie))") \
         < src.index("GIRO FINITO in")
 
 

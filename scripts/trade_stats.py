@@ -26,8 +26,11 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from statistics import mean, median
 
+from bot.config import settings
 from bot.core.firebase_client import get_firebase
 from bot.core.models import Regime
+from bot.learning.metrics import (KEEP_STRATEGIA_MIN_VERDETTI, conta_verdetti_strategia,
+                                  proposta_keep_strategia, soldi_sul_tavolo)
 from bot.orchestrator.orchestrator import Orchestrator
 
 
@@ -421,6 +424,49 @@ def print_esplorativo(rep: dict) -> None:
               f"{rep['scartate']}  (il metro: si legge a 100 trade esplorativi)")
 
 
+def keep_per_strategia_report(trades: list[dict]) -> list[dict]:
+    """Per ogni strategia con almeno un verdetto trailing (uscita `trailing_stop`,
+    timeframe del bot): i conteggi di `metrics.conta_verdetti_strategia`, la
+    proposta di `metrics.proposta_keep_strategia` (None sotto i 5 verdetti o
+    fuori dalle soglie) e il tragitto medio lasciato sul tavolo
+    (`metrics.soldi_sul_tavolo`). Puro; ordinato per verdetti decrescenti, poi id."""
+    per: dict[str, list] = defaultdict(list)
+    for t in trades or []:
+        if isinstance(t, dict) and isinstance(t.get("strategy"), str) and t.get("strategy"):
+            per[t["strategy"]].append(t)
+    righe = []
+    for gid, ts in per.items():
+        c = conta_verdetti_strategia(ts)
+        if c["n"] == 0:
+            continue
+        m = soldi_sul_tavolo(ts)
+        righe.append({"strategia": gid, **c, "proposta": proposta_keep_strategia(ts),
+                      "miss_n": m["n"], "miss_medio": m["miss_medio"]})
+    righe.sort(key=lambda r: (-r["n"], r["strategia"]))
+    return righe
+
+
+def print_keep_per_strategia(trades: list[dict]) -> None:
+    print(f"\nKEEP PER STRATEGIA (proposta dal vissuto: >= {KEEP_STRATEGIA_MIN_VERDETTI} "
+          f"verdetti trailing sul timeframe del bot; 0.25 se prematuri >= 60% e almeno "
+          f"meta' da rumore, 0.75 se protetti >= 60%; la giudica il gate, non decide)")
+    righe = keep_per_strategia_report(trades)
+    if not righe:
+        print("  nessuna strategia con verdetti trailing (uscita trailing_stop, "
+              f"timeframe {settings.ORCHESTRATOR_TIMEFRAME})")
+        return
+    print(f"  {'strategia':<14} {'verdetti':>8} {'prematuri':>16} {'protetti':>8} "
+          f"{'proposta':>8} {'miss medio':>11}")
+    for r in righe:
+        prem = f"{r['prematuri']} (rumore {r['prematuri_rumore']})"
+        prop = f"{r['proposta']:g}" if r["proposta"] is not None else "-"
+        miss = f"{r['miss_medio']:.2f}" if r["miss_medio"] is not None else "n/d"
+        print(f"  {r['strategia']:<14} {r['n']:>8} {prem:>16} {r['protetti']:>8} "
+              f"{prop:>8} {miss:>11}")
+    print("  miss medio = frazione del tragitto entry->TP lasciata sul tavolo all'uscita "
+          "(0 = al TP, 1 = all'entrata): misura, non regola")
+
+
 def main() -> int:
     fb = get_firebase()
     trades_letti = fb.query_collection("trades", order_by="exit_ts")
@@ -649,6 +695,15 @@ def main() -> int:
     else:
         print(f"  nessuna strategia con >= {MIN_INGRESSO} perdite d'ingresso con le "
               f"variabili note (feats_at_entry dal 25 set, o indicators_at_entry)")
+
+    # IL KEEP PER STRATEGIA (27 set 2026, backlog I3): per ogni strategia con
+    # almeno un verdetto trailing sul timeframe del bot, i conteggi da cui la
+    # discovery ricava la proposta (`metrics.proposta_keep_strategia`: 0.25 se
+    # i prematuri sono al 60% e almeno meta' da rumore, 0.75 se i protetti sono
+    # al 60%, con >= 5 verdetti) e quanto tragitto verso il TP e' rimasto sul
+    # tavolo (frazione entry->TP, solo misurata). Su TUTTI i trade letti,
+    # esplorativi compresi: e' cio' che vede `keep_per_strategia`.
+    print_keep_per_strategia(trades_letti)
 
     # L'OMBRA DEL SELETTORE (25 set 2026): la p che il bot annota su ogni
     # apertura, letta contro l'esito. Il paper qui e' il giudice del modello

@@ -187,7 +187,8 @@ def test_lo_schema_ha_le_chiavi_del_contratto():
     assert {"coin_valutate", "valutazioni", "passate", "passate_lista", "spec_note",
             "spec_rivalutate", "spec_con_conferme", "spec_tagliate", "tetto_rivalutazione",
             "candidate", "passata_1h", "worker", "rss_max_mb", "paper_propone"} <= set(doc["giro"])
-    assert doc["giro"]["paper_propone"] == {"scala": "1/2/3", "keep": 0.25, "verdetti_trailing": 1}
+    assert doc["giro"]["paper_propone"] == {"scala": "1/2/3", "keep": 0.25, "verdetti_trailing": 1,
+                                            "keep_strategie": 0}
     assert doc["giro"]["passata_1h"]["coin"] == 5 and doc["giro"]["candidate"]["ai"] == 5
     assert {"validate", "coin_coperte", "universo", "copertura", "obiettivo_copertura", "pronto",
             "pronto_per", "distribuzione_pass", "congelate", "a_un_passo", "finestre_scadute",
@@ -347,12 +348,14 @@ def test_keep_giro_sono_i_numeri_di_riga_cervello_keep():
     k = d.conta_keep_giro(out, chiavi, keep_paper=0.25)
     assert k == {"scelti": [{"valore": 0.25, "n": 1}, {"valore": 0.35, "n": 1},
                             {"valore": 0.5, "n": 2}],
-                 "non_scelto": 1, "dal_paper": 0.25, "dal_paper_n": 1}
+                 "non_scelto": 1, "dal_paper": 0.25, "dal_paper_n": 1,
+                 "dal_paper_strategia_n": 0}
     riga = d.riga_cervello_keep(out, chiavi, keep_paper=0.25)
     assert riga == ("[cervello] keep del lock scelto dal gate: 0.25 x1 · 0.35 x1 · 0.5 x2"
                     " · non scelto x1 (dal paper 0.25 x1)")
     assert d.conta_keep_giro({}, [], None) == {"scelti": [], "non_scelto": 0,
-                                               "dal_paper": None, "dal_paper_n": 0}
+                                               "dal_paper": None, "dal_paper_n": 0,
+                                               "dal_paper_strategia_n": 0}
     doc = _costruisci(*_fixture_piccola())
     assert doc["cervello"]["keep_giro"] == d.conta_keep_giro(
         {"AUSDT|gen_a": {"profit_lock_keep": 0.25}}, ["AUSDT|gen_a"], 0.25)

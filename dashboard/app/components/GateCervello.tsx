@@ -358,6 +358,12 @@ export default function GateCervello() {
                     (su {formatta(g.paper_propone?.verdetti_trailing ?? 0)} verdetti trailing; e&apos; un
                     candidato in piu&apos; per il gate, non una decisione)
                   </span>
+                  {(g.paper_propone?.keep_strategie ?? 0) > 0 ? (
+                    <span className="muted">
+                      {' '}· keep per strategia: {formatta(g.paper_propone?.keep_strategie ?? 0)} strategie
+                      con una proposta dai propri verdetti
+                    </span>
+                  ) : null}
                 </div>
 
                 {g.worker != null || g.rss_max_mb != null ? (
@@ -477,6 +483,12 @@ export default function GateCervello() {
                         ) : (
                           <> · il paper non aveva un candidato</>
                         )}
+                        {(c.keep_giro?.dal_paper_strategia_n ?? 0) > 0 ? (
+                          <>
+                            {' '}· quello proposto per la loro strategia ha vinto{' '}
+                            {formatta(c.keep_giro?.dal_paper_strategia_n ?? 0)} volte
+                          </>
+                        ) : null}
                       </div>
                     </Voce>
                   </div>
