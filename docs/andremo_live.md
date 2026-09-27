@@ -1930,3 +1930,18 @@ valutare la regola sulla chiusura della candela (parità col motore) invece che
 sul prezzo vivo; (3) far aggiornare la cache delle candele allo strumento, o
 lanciarlo dopo un giro del gate; (4) rilanciare con `--budget 0` per le altre 41
 coppie.
+
+### 27 settembre, 15:30: il bug della sessione oraria (J13)
+
+Il dettaglio sugli ingressi (ops 0310, 0311) ha spiegato i 5 «ignoto»: la
+feature `session` leggeva l'ora dall'orologio del computer, non dalla candela.
+Nel gate ogni candela storica era giudicata con l'ora del giro (di notte tutta
+la storia «fuori sessione» = solo short, di giorno = solo long); nel bot con
+l'ora della decisione: alle 03:30 UTC lo short era permesso e con RSI 76 il bot
+vendeva, mentre lo strumento alle 13:00 vedeva «dentro» e vietava lo short.
+Corretto (commit 803a99f, 1761 test verdi, bot riavviato alle 15:27): motore e
+bot leggono l'ora dall'apertura dell'ultima candela chiusa, stesso valore.
+**47 validate su 212 usano la sessione** (ops 0314): i loro passaggi sono stati
+guadagnati su una regola valutata male. Decisione aperta per il proprietario:
+lasciarle (il gate le rigiudica con la regola giusta e le finestre faranno il
+loro corso), declassarle subito a un quarto, o azzerare i loro passaggi.
