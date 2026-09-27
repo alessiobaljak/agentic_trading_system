@@ -1769,3 +1769,67 @@ Metri e date: `docs/backlog.md` A4, I1, I2, J10, C1. Prima lettura utile: il
 giro completo di stanotte (durata, valutazioni, declassate nuove, passate solo
 con la propria configurazione) e il `replay`. Non verificato dal vivo: nessun
 giro reale né Firebase da qui.
+
+### Controllo del 27 settembre (08:00-08:31 ora italiana, ops 0286-0302)
+
+Sola lettura su richiesta del proprietario: nessuna modifica al codice.
+
+**Autopsia delle validate (ops 0290), la notizia del giorno.** 194 validate
+esaminate su 212 (18 fuori tempo). Col gate di oggi ne passano 17; giudicate
+sulla configurazione che operano, 23: l'artefatto della scala globale spiega
+solo 6 bocciature su 177. Le 171 bocciate in entrambi i modi cadono sulla storia
+lunga: recupero 37, consistenza 33, rendimento totale 32, holdout 30, regime 28,
+pf senza i migliori 11. In simulazione, sugli ultimi 120 giorni, solo 24 su 190
+hanno PF sotto 1, ma sono giorni che il gate ha già usato per sceglierle; la
+prova indipendente è il paper (PF 0,62 contro 2,10 promesso). Lettura: la porta
+d'ingresso è larga. `judge_window` (scripts/optimize.py) conta una finestra come
+conferma se la coppia passa almeno UNA volta nei 7 giorni, anche su molte
+valutazioni: una coppia al limite prima o poi passa per caso. Valutata una volta
+sola, oggi ne passa una su otto.
+
+**Freno per gruppo, replay (ops 0288).** Suona dopo il freno globale in 6 gruppi
+su 7 (0-1,8 giorni dopo), l'unico «prima» è nello stesso giorno; falsi allarmi
+sulla storia sana 3,5 ogni 100 trade (reggono). Per la regola dichiarata prima di
+accenderlo, come allarme anticipato non serve. Il gruppo peggiore: ritorno alla
+media in trend rialzista, 32 trade, R medio −0,24, dopo l'allarme 24 trade −10,50.
+
+**Ombra dei rifiutati (ops 0289).** 34 registrati, 28 simulati: cooldown 11, R
+−1,00, 0% vincenti (tutti stop); posizione già aperta 16, R −0,68, 19%; campione
+sotto 30, nessun verdetto. Difetto del report: gli aperti a «R medio −6,80» sono
+un errore (legge `post_mortem.stop_pct`, che è una frazione, come percentuale);
+il valore giusto è −0,17R (ops 0291). Da correggere prima dei 30 casi, perché il
+confronto è la regola per ritarare i freni.
+
+**Numeri.** 110 trade delle validate più 1 esplorativo, 48% vinti, −73,79 USDT
+(−7,4%), equity 927,56, oggi +3,59; 4 posizioni aperte, tutte short, 0,92% a
+rischio (ops 0291, 0292, 0300). Uscite: 58 stop −191,35, 40 trailing +55,89, 10
+scale-out +27,41; 34 stop su 58 andati a favore sotto il primo gradino (mfe
+mediana 0,62R, ops 0297). Long 44 trade −22,40, short 66 −51,00. Costi 20,58 sul
+lordo −53,21. Giornate del paper dal 16 set: 4 in utile e 8 in perdita (ops
+0302). Gate: 212 validate su 68 coin, copertura 34% su 35%, 508 a 2/3, t su 29
+misure (15 ≥ 2, mediana 2,12); keep per coppia su 27 (0,75 ×13, il candidato del
+paper); esplorative 55 attive, 64 scartate, 1 poi validata, 1 trade (−0,39);
+declassate 0 (serve il secondo completo) (ops 0294). Ultimo giro 05:06-06:19,
+urgenti, 1h13, 22.560 valutazioni, 59 passate; giro notturno dedotto dal log del
+bot: finito alle 03:47, partito verso le 02:02, completo ridotto di circa 1h45
+(non letto direttamente). 1 ora su 19 coin: 1.577 valutazioni in 6 minuti, 5
+passate (0,32% contro 0,26% a 15 minuti). Il giro partito alle 08:10 ha avuto 2
+worker invece di 6 perché l'autopsia occupava la memoria. Selettore (ops 0301):
+68.151 righe, NON BATTE (tutte 0/3, reversion 1/3, momentum 0/3, breakout
+campione insufficiente), ripubblicato in ombra con soglia 0,50; in ombra sul
+paper 38 trade con p, 0,65 vinti contro 0,63 persi, soglia che tiene tutto.
+Portafoglio a 60 giorni (ops 0302): +25.444 su 10.000 senza limiti, drawdown
+19,6%; col tetto per direzione +28.339, drawdown 12,7%; long 463 trade +24.997,
+short 686 trade +447: gli short sono peso morto anche in simulazione (E1).
+Periodo del paper: simulato −4.784,58 con 3 giorni in utile su 12, paper −73,79.
+Dopo 4 perdite WR 63,6% su 22 (t −0,15): freno di serie resta spento.
+Diversification ratio 0,10. Rifiuti 24 h: 21 posizione già aperta, 12 cooldown,
+1 stop largo, 0 per peso. Frequenza: 25-26 set 51 attesi, 51 aperti. Ombra AI
+d'accordo 10 su 123.
+
+**Proposta del giorno (serve il sì):** una finestra vale come conferma solo se la
+coppia passa la maggioranza delle valutazioni della settimana, non una volta
+sola. Metro: quota di validate che passano una valutazione singola, oggi 12% (23
+su 194), obiettivo sopra il 50% in tre settimane. In attesa del sì anche:
+spegnere il freno per gruppo (bocciato dal replay) e correggere il report dei
+rifiutati.
