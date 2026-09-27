@@ -54,35 +54,44 @@ def _avviso_pulito():
 
 
 def test_la_sessione_giudica_l_ora_della_candela_e_ignora_l_orologio(monkeypatch):
+    # AGGIORNATO il 27 set 2026 (sera): la sessione e' un FILTRO per i due lati
+    # (dentro -> entrambi ammessi, fuori -> nessuno), non sceglie piu' il lato.
+    # Il punto del test resta lo stesso: conta l'ora della CANDELA, non l'orologio.
     st = GeneratedStrategy(SPEC)
-    # rsi 80 -> solo short; la sessione 8-16 decide se lo short e' ammesso
+    # rsi 80 -> solo short; la sessione 8-16 decide se si opera
     _orologio(monkeypatch, 13)                        # orologio DENTRO la sessione
     notte = st.spiega(_asset(3))                      # candela delle 03:30 UTC
     assert notte["ora_utc"] == 3
     assert notte["features"]["session"]["valori"]["ora_utc"] == 3
-    assert notte["features"]["session"]["long"] is False and notte["features"]["session"]["short"] is True
-    assert notte["direzione_finale"] == "short"       # fuori sessione: short ammesso
-    assert st.generate_signal(_asset(3)) is not None
+    assert notte["features"]["session"]["valori"]["dentro"] is False
+    assert notte["features"]["session"]["long"] is False and notte["features"]["session"]["short"] is False
+    assert notte["direzione_finale"] is None          # fuori sessione: nessun segnale
+    assert "fermano session" in notte["motivo"]
+    assert st.generate_signal(_asset(3)) is None
 
     _orologio(monkeypatch, 3)                         # orologio FUORI dalla sessione
     giorno = st.spiega(_asset(13))                    # candela delle 13:30 UTC
     assert giorno["ora_utc"] == 13
-    assert giorno["features"]["session"]["long"] is True and giorno["features"]["session"]["short"] is False
-    assert giorno["direzione_finale"] is None         # dentro: solo long, ma rsi dice short
-    assert st.generate_signal(_asset(13)) is None
+    assert giorno["features"]["session"]["valori"]["dentro"] is True
+    assert giorno["features"]["session"]["long"] is True and giorno["features"]["session"]["short"] is True
+    assert giorno["direzione_finale"] == "short"      # dentro: decide l'rsi, che dice short
+    assert st.generate_signal(_asset(13)) is not None
 
 
-def test_semantica_invariata_dentro_long_fuori_short():
-    # dentro -> (True, False); fuori -> (False, True); giro di mezzanotte compreso
+def test_semantica_dal_27_set_dentro_entrambi_fuori_nessuno():
+    # AGGIORNATO il 27 set 2026: prima dentro -> (True, False) e fuori -> (False, True)
+    # (la feature sceglieva il lato). Ora e' un filtro: dentro -> (True, True),
+    # fuori -> (False, False); giro di mezzanotte compreso. Il dettaglio dei due
+    # lati e' in tests/test_sessione_filtro.py.
     f = {"kind": "session", "hour_from": 8, "hour_to": 16}
-    assert g._feat_session(None, 1.0, f, ora=8) == (True, False)
-    assert g._feat_session(None, 1.0, f, ora=15) == (True, False)
-    assert g._feat_session(None, 1.0, f, ora=16) == (False, True)
-    assert g._feat_session(None, 1.0, f, ora=3) == (False, True)
+    assert g._feat_session(None, 1.0, f, ora=8) == (True, True)
+    assert g._feat_session(None, 1.0, f, ora=15) == (True, True)
+    assert g._feat_session(None, 1.0, f, ora=16) == (False, False)
+    assert g._feat_session(None, 1.0, f, ora=3) == (False, False)
     notturna = {"kind": "session", "hour_from": 22, "hour_to": 4}
-    assert g._feat_session(None, 1.0, notturna, ora=23) == (True, False)
-    assert g._feat_session(None, 1.0, notturna, ora=2) == (True, False)
-    assert g._feat_session(None, 1.0, notturna, ora=12) == (False, True)
+    assert g._feat_session(None, 1.0, notturna, ora=23) == (True, True)
+    assert g._feat_session(None, 1.0, notturna, ora=2) == (True, True)
+    assert g._feat_session(None, 1.0, notturna, ora=12) == (False, False)
 
 
 def test_lo_snapshot_del_motore_porta_l_apertura_della_barra():
@@ -142,15 +151,15 @@ def test_il_backtest_di_una_spec_con_sessione_non_dipende_dall_orologio(monkeypa
         esiti[ora] = [(t.entry_ts, t.direction, round(t.pnl_pct, 10)) for t in st.trades]
     assert esiti[3], "la serie deve produrre trade, altrimenti il confronto e' vuoto"
     assert esiti[3] == esiti[13]
-    # e i trade seguono la candela: long solo dentro 8-16, short solo fuori
+    # e i trade seguono la candela: dal 27 set 2026 (sera) la sessione e' un
+    # filtro, quindi TUTTI i segnali stanno dentro 8-16, in entrambi i versi
     # (`entry_ts` e' l'apertura della barra del SEGNALE, `candles[i].open_time`)
     lati = set()
     for entry_ts, direction, _ in esiti[3]:
         ora_segnale = datetime.fromtimestamp(entry_ts, timezone.utc).hour
-        dentro = 8 <= ora_segnale < 16
-        assert (direction == "long") == dentro, (ora_segnale, direction)
+        assert 8 <= ora_segnale < 16, (ora_segnale, direction)
         lati.add(direction)
-    assert lati == {"long", "short"}     # entrambi i lati: la sessione varia lungo la storia
+    assert lati == {"long", "short"}     # entrambi i lati: dentro la fascia decide l'rsi
 
 
 def test_spiega_stampa_l_ora_della_candela(monkeypatch):
@@ -195,7 +204,7 @@ def test_gate_progress_conta_le_validate_con_la_sessione():
     riga = riga_sessione(["ORCAUSDT|gen_a", "VETUSDT|gen_a", "XUSDT|gen_b", "YUSDT|gen_z"], specs)
     assert riga.startswith("  FEATURE session: 2 validate su 4 usano la sessione oraria")
     assert "fino al 27 set valutata con l'orologio del giro, non della candela: passaggi da rifare" in riga
-    assert riga.endswith(" · 1 senza spec nel documento")
+    assert riga.endswith(" · 1 senza spec nel documento")     # senza `pairs`: nessuna azzerata
     assert riga_sessione([], None).startswith("  FEATURE session: 0 validate su 0")
 
 
@@ -203,7 +212,9 @@ def test_la_discovery_conta_le_spec_note_con_la_sessione():
     from scripts.discover_strategies import riga_cervello_sessione
     existing = {"gen_a": {"features": [{"kind": "session", "hour_from": 8, "hour_to": 16}]},
                 "gen_b": {"features": [{"kind": "bb_touch"}]}, "rotto": "non una spec"}
-    assert riga_cervello_sessione(existing).startswith("[cervello] sessione oraria: 1 spec note su 3 usano `session`")
+    riga = riga_cervello_sessione(existing)
+    assert riga.startswith("[cervello] sessione oraria: 1 spec note su 3 usano `session`")
+    assert "passaggi azzerati" in riga
     assert riga_cervello_sessione(None).startswith("[cervello] sessione oraria: 0 spec note su 0")
 
 

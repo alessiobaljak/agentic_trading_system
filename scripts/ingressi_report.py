@@ -1048,6 +1048,31 @@ def sfondo(args) -> int:
 # --------------------------------------------------------------------------- #
 # main                                                                         #
 # --------------------------------------------------------------------------- #
+def su_file(args) -> int:
+    """Come `--sfondo`, ma SENZA staccarsi: chi lancia e' gia' fuori dal canale
+    ops (27 set 2026). Il doppio fork non basta sulla VPS: l'agente ops gira
+    come servizio systemd e alla fine del comando systemd uccide TUTTO il
+    gruppo di controllo, anche il nipote con la sua sessione (ops 0315: referto
+    fermo alla prima coppia, processo «finito» senza una riga di errore).
+    La strada giusta e' `systemd-run --no-block ...`: un'unita' transitoria
+    fuori dal gruppo dell'agente, una riga sola, niente shell (vedi la voce
+    `ingressi-completo` in ops/allowlist.example). Qui si scrive solo il referto
+    su file e il pid, e si lavora in primo piano."""
+    os.makedirs(os.path.dirname(FILE_ESITO), exist_ok=True)
+    fd_out = os.open(FILE_ESITO, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o644)
+    os.dup2(fd_out, 1)
+    os.dup2(fd_out, 2)
+    os.close(fd_out)
+    with open(FILE_PID, "w", encoding="utf-8") as f:
+        f.write(str(os.getpid()))
+    di(f"[ingressi] su file, pid {os.getpid()}, avvio {dt.datetime.now(dt.timezone.utc):%Y-%m-%d %H:%M:%S} UTC")
+    try:
+        return analisi(args)
+    except BaseException as exc:  # noqa: BLE001
+        di(f"[ingressi] interrotto: {exc!r}")
+        return 1
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -1068,12 +1093,19 @@ def main() -> int:
                     default=True, help="seconda passata del motore sulla finestra corta")
     ap.add_argument("--sfondo", action="store_true",
                     help="stacca l'analisi (doppio fork), referto in data/ingressi_ultimo.txt, esce subito")
+    ap.add_argument("--su-file", action="store_true",
+                    help="referto in data/ingressi_ultimo.txt, in primo piano (per systemd-run)")
     ap.add_argument("--esito", action="store_true", help="stampa il referto scritto da --sfondo")
     args = ap.parse_args()
     if args.end is None:
         args.end = domani_utc()
     if args.esito:
         return esito()
+    if getattr(args, "su_file", False):
+        if os.getenv("TRADING_BOT_TEST_MODE") or not get_firebase().is_live:
+            di("[ingressi] --su-file: senza Firebase vivo non c'e' niente da analizzare (esco 0)")
+            return 0
+        return su_file(args)
     if args.sfondo:
         return sfondo(args)
     return analisi(args)

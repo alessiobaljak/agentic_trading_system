@@ -1945,3 +1945,17 @@ bot leggono l'ora dall'apertura dell'ultima candela chiusa, stesso valore.
 guadagnati su una regola valutata male. Decisione aperta per il proprietario:
 lasciarle (il gate le rigiudica con la regola giusta e le finestre faranno il
 loro corso), declassarle subito a un quarto, o azzerare i loro passaggi.
+
+### 27 settembre, 19:40: la sessione diventa un filtro, le 47 ripartono da zero
+
+Sì del proprietario: la feature `session` non sceglie più il lato (dentro la
+fascia solo long, fuori solo short: nessuna ragione economica), diventa un
+filtro che vale per entrambi i lati (dentro si opera, fuori no). Le 47 validate
+che la usano ripartono da zero passaggi al primo giro della discovery: il bot
+smette di aprirle entro un minuto, le posizioni aperte si chiudono da sole; la
+loro coin resta fra le «proprie» del giro ridotto e vengono rigiudicate sopra
+il cap, protette dalla potatura per 3 settimane. Metro: quante delle 47
+ripassano entro 3 settimane col filtro a due lati (riga «FEATURE session» di
+`gate`); sotto un quarto, vincevano solo grazie al difetto.
+Trovato anche che `--sfondo` non sopravvive al servizio ops (systemd uccide il
+gruppo, ops 0315): la chiave `ingressi-completo` ora usa `systemd-run`.

@@ -50,6 +50,12 @@ _INCOMPATIBLE = {
 # feature di CONDIZIONE (non danno la direzione: dicono quando operare). Erano
 # assenti: il generatore combinava solo oscillatori sullo stesso timeframe, quindi
 # sapeva dove sta il prezzo ma mai in che condizione e' il mercato.
+# `session` resta qui anche dal 27 set 2026, quando ha smesso di scegliere il
+# lato ed e' diventata un filtro puro (dentro la fascia -> entrambi i lati
+# ammessi, fuori -> nessuno; vedi `generated._feat_session`): e' esattamente
+# cio' che una feature di condizione deve fare, e una spec con la sola
+# sessione non da' una direzione (il generatore mette sempre almeno una
+# feature direzionale davanti).
 _CONDITIONAL = ["volatility_regime", "trend_strength", "volume_surge", "session",
                 # dal 21 set 2026: «non sovraesteso» e «trend debole», le due
                 # condizioni con cui una mean-reversion puo' rifiutarsi di

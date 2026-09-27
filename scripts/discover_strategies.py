@@ -266,12 +266,18 @@ def specs_da_rivalutare(existing: dict, reg: dict, cap: int,
     pairs = decode_pairs(reg.get("pairs"))
     # quante conferme ha gia' ogni spec. Una spec puo' vivere su piu' coin: conta la
     # coppia piu' avanti, perche' e' quella che il taglio rischia di buttare via.
-    conferme: dict[str, int] = {}
+    conferme: dict[str, float] = {}
     for k, r in pairs.items():
         if not r.get("generated") or "|" not in k:
             continue
         gid = k.split("|", 1)[1]
-        conferme[gid] = max(conferme.get(gid, 0), int(r.get("pass_count", 0) or 0))
+        n = int(r.get("pass_count", 0) or 0)
+        # AZZERATA DALLA SESSIONE (27 set 2026, J13): zero passaggi per decisione,
+        # non per demerito; conta come «mezza conferma» cosi' entra sempre nel
+        # giro completo (sopra il cap, come chi ha conferme vere) ma dopo di loro
+        if n == 0 and r.get("sessione_azzerata_at"):
+            n = 0.5
+        conferme[gid] = max(conferme.get(gid, 0), n)
 
     # `sorted` e' stabile: a parita' di conferme resta l'ordine di scoperta, cioe'
     # esattamente il comportamento precedente per tutta la coda senza conferme.
@@ -352,7 +358,10 @@ def coin_della_fetta(symbols, now: float, fette: int = RIDUZIONE_FETTE) -> set:
 
 def coin_proprie_delle_spec(pairs: dict) -> dict[str, set]:
     """spec_id -> le coin dove la spec ha una coppia VIVA nel registro (generata,
-    pass_count >= 1). Le coppie congelate (coin fuori dall'universo da
+    pass_count >= 1, oppure azzerata dalla sessione il 27 set 2026:
+    `sessione_azzerata_at`, J13 — e' ripartita da zero per decisione, e deve
+    essere rigiudicata proprio sulla sua coin, altrimenti aspetterebbe la fetta
+    rotante). Le coppie congelate (coin fuori dall'universo da
     FRESH_DAYS) restano dentro di proposito: se la loro coin e' di nuovo in
     universo, il merge le segna «viste» e le giudica (finestra chiusa senza
     passare = un fallimento) — giudicarle senza averle valutate sarebbe un
@@ -361,7 +370,7 @@ def coin_proprie_delle_spec(pairs: dict) -> dict[str, set]:
     for k, r in (pairs or {}).items():
         if not isinstance(r, dict) or not r.get("generated") or "|" not in k:
             continue
-        if int(r.get("pass_count", 0) or 0) < 1:
+        if int(r.get("pass_count", 0) or 0) < 1 and not r.get("sessione_azzerata_at"):
             continue
         sym, sid = k.split("|", 1)
         out.setdefault(sid, set()).add(r.get("symbol") or sym)
@@ -2102,14 +2111,15 @@ def riga_cervello_sessione(existing: dict | None) -> str:
     giro (27 set 2026, backlog J13). Prima del 27 set `_feat_session` leggeva
     l'orologio del giro e non la candela: i passaggi di queste spec sono stati
     guadagnati su una feature valutata male, e da questo giro si rivalutano con
-    l'ora giusta. Nessun contatore viene toccato: il numero serve al
-    proprietario per decidere cosa farne."""
+    l'ora giusta. Dal 27 set sera la feature e' un filtro per i due lati e i
+    passaggi di queste coppie sono stati azzerati una volta (`azzera_sessione`,
+    stampata subito dopo questa riga)."""
     from bot.strategies.generated import usa_sessione
     existing = existing if isinstance(existing, dict) else {}
     n = sum(1 for sp in existing.values() if usa_sessione(sp))
     return (f"[cervello] sessione oraria: {n} spec note su {len(existing)} usano `session` "
-            f"(fino al 27 set valutata con l'orologio del giro, non della candela: "
-            f"i loro passaggi precedenti sono da rifare)")
+            f"(fino al 27 set valutata con l'orologio del giro, non della candela, e "
+            f"sceglieva il lato: dal 27 set filtro per i due lati, passaggi azzerati)")
 
 
 def riga_cervello_uscita(ipotesi_uscita: dict | None) -> str:
@@ -2609,7 +2619,8 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         # INTOCCABILI: hanno gia' pagato il prezzo del tempo. Ognuna e' una
         # settimana di attesa, e sono l'unica cosa che il sistema sta producendo.
         con_pass = {k: r for k, r in gen.items()
-                    if int(r.get("pass_count", 0) or 0) > 0}
+                    if int(r.get("pass_count", 0) or 0) > 0
+                    or r.get("sessione_azzerata_at")}     # azzerate dalla sessione (J13)
         resto = {k: r for k, r in gen.items() if k not in con_pass}
         budget = max(0, max_pairs - len(base) - len(con_pass))
         if len(resto) > budget:
@@ -2621,6 +2632,19 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
                   f"{len(con_pass)} coppie con conferme: e' voluto. Le "
                   f"{len(base)} base vanno potate da optimize.py, non da qui.")
         pairs = {**base, **con_pass, **resto}
+    validated = finalizza_registro(fb, doc, pairs, now, max_pairs)
+    publish_timeline(fb, pairs, "discover", len(out), len(passed_now))
+    return validated
+
+
+def finalizza_registro(fb, doc: dict, pairs: dict, now: float, max_pairs: int | None = None) -> list:
+    """L'UNICO modo in cui la discovery scrive `strategy_registry/validated`:
+    ricalcola le validate con la regola condivisa, tiene copertura/coins
+    coerenti col nuovo set, alleggerisce, scrive `updated_at` (e' quello che
+    fa ricaricare il bot entro un minuto: `adaptation.registro_cambiato`).
+    Era la coda di `merge_into_registry`; dal 27 set 2026 la usa anche
+    `azzera_sessione`, cosi' una scrittura fuori dal merge non puo' divergere
+    da quella del merge. Ritorna la lista delle validate."""
     validated = coppie_validate(pairs, now)   # una regola sola, con optimize
     # tiene COPERTURA/coins coerenti col nuovo set validato (incluse le generate),
     # cosi' Telegram e dashboard mostrano gli stessi numeri. Il denominatore
@@ -2638,10 +2662,97 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
     doc["universe_size"] = universe
     doc["coverage"] = round(len(validated_coins) / universe, 3)
     doc["updated_at"] = now
-    doc["max_pairs"] = max_pairs      # il tetto con cui e' stato scritto (25 set 2026)
+    if max_pairs is not None:
+        doc["max_pairs"] = max_pairs      # il tetto con cui e' stato scritto (25 set 2026)
     scrivi_registro(fb, doc, pairs)
-    publish_timeline(fb, pairs, "discover", len(out), len(passed_now))
     return validated
+
+
+#: Il documento che ricorda le migrazioni una tantum del registro (27 set 2026):
+#: `strategy_params/migrazioni`, un campo `<nome>_at` per migrazione fatta.
+DOC_MIGRAZIONI = ("strategy_params", "migrazioni")
+#: i campi della finestra e dei verdetti che l'azzeramento cancella
+_CAMPI_FINESTRA = ("window_start", "window_evals", "window_passes", "window_contata")
+
+
+def azzera_sessione(fb, existing: dict | None, reg: dict | None, now: float) -> dict:
+    """MIGRAZIONE UNA TANTUM (27 set 2026, decisione del proprietario, backlog
+    J13): le coppie la cui spec usa `session` ripartono da ZERO passaggi.
+
+    Perche': fino al 27 set la feature sceglieva il lato (dentro la fascia solo
+    long, fuori solo short) ed era valutata con l'orologio del giro invece che
+    con l'ora della candela. Ogni conferma guadagnata da quelle coppie — 47
+    validate su 212 al 27 set (ops 0314) — dice qualcosa su una regola che non
+    esiste piu', non sulla spec. Da oggi la sessione e' un filtro per i due
+    lati (`generated._feat_session`), e una «validata» deve tornare a voler
+    dire «ha passato tre finestre con la regola vera».
+
+    Cosa fa, per ogni coppia con `pass_count >= 1` la cui spec (in `existing`,
+    `discovered_strategies/specs`) ha una feature `session`:
+      * `pass_count = 0`, `fail_count = 0`, `passed_in_window = False`,
+        finestra cancellata (`_CAMPI_FINESTRA`), `declassata = False`,
+        `bocciata_notti = 0`, `sessione_azzerata_at = now`;
+      * il record e i suoi `last_params` RESTANO: la coppia e' nota, la sua coin
+        e' «propria» nel giro ridotto (`coin_proprie_delle_spec`) e la potatura
+        la protegge per MIN_PASSES finestre (`conferme_da_proteggere`).
+    Poi scrive il registro UNA volta con lo stesso scrittore del merge
+    (`finalizza_registro`): `pass_count = 0` toglie le coppie da `validated`,
+    quindi il bot smette di aprirle appena ricarica (entro un minuto:
+    `updated_at` cambia). Le posizioni gia' aperte le porta a termine
+    l'esecutore, come sempre: il registro decide solo i segnali nuovi.
+
+    UNA VOLTA SOLA: il marcatore `strategy_params/migrazioni.sessione_lato_at`
+    si scrive DOPO il registro; se il registro e' vuoto o le spec non si
+    leggono, non si fa niente e non si segna niente (al giro dopo si riprova:
+    segnare senza aver fatto sarebbe la migrazione persa per sempre).
+    Ritorna il documento del registro da usare nel resto del giro (quello
+    riscritto, o quello ricevuto se non c'era niente da fare)."""
+    from bot.strategies.generated import usa_sessione
+    reg = reg if isinstance(reg, dict) else {}
+    try:
+        marker = fb.get_doc(*DOC_MIGRAZIONI) or {}
+    except Exception as exc:  # noqa: BLE001
+        print(f"[cervello] sessione: marcatore non leggibile ({str(exc)[:80]}): "
+              f"azzeramento rimandato al prossimo giro")
+        return reg
+    if isinstance(marker, dict) and marker.get("sessione_lato_at"):
+        return reg
+    pairs = decode_pairs(reg.get("pairs"))
+    existing = existing if isinstance(existing, dict) else {}
+    if not pairs or not existing:
+        print("[cervello] sessione: registro o spec vuoti, azzeramento rimandato al prossimo giro")
+        return reg
+    validate_prima = set(coppie_validate(pairs, now))
+    azzerate: list[str] = []
+    for k, rec in pairs.items():
+        if not isinstance(rec, dict) or "|" not in k:
+            continue
+        if int(rec.get("pass_count", 0) or 0) < 1:
+            continue
+        if not usa_sessione(existing.get(k.split("|", 1)[1])):
+            continue
+        rec["pass_count"] = 0
+        rec["fail_count"] = 0
+        rec["passed_in_window"] = False
+        for campo in _CAMPI_FINESTRA:
+            rec.pop(campo, None)
+        rec["declassata"] = False
+        rec["bocciata_notti"] = 0
+        rec["sessione_azzerata_at"] = now
+        azzerate.append(k)
+    n_val = sum(1 for k in azzerate if k in validate_prima)
+    if azzerate:
+        doc = dict(reg)
+        finalizza_registro(fb, doc, pairs, now)
+        reg = doc
+    marker = dict(marker) if isinstance(marker, dict) else {}
+    marker["sessione_lato_at"] = now
+    marker["sessione_lato_n"] = len(azzerate)
+    marker["sessione_lato_validate"] = n_val
+    fb.set_doc(*DOC_MIGRAZIONI, marker)
+    print(f"[cervello] sessione: {len(azzerate)} coppie azzerate ({n_val} validate) "
+          f"perche' la feature ha cambiato significato: ripartono da zero passaggi")
+    return reg
 
 
 def persist_specs(fb, specs_by_id: dict) -> None:
@@ -3354,6 +3465,10 @@ def main() -> int:
         # quindi ogni loro valutazione precedente e' da rifare. Si conta e basta.
         print(riga_cervello_sessione(existing))
         reg = fb.get_doc("strategy_registry", "validated") or {}
+        # L'AZZERAMENTO UNA TANTUM delle coppie con `session` (27 set 2026,
+        # J13): vedi `azzera_sessione`. Il registro da qui in poi e' quello
+        # riscritto (o lo stesso, se la migrazione era gia' stata fatta).
+        reg = azzera_sessione(fb, existing, reg, _ora)
         doc_referti = leggi_referti(fb)
         esiti_referti: dict = {}
         varianti = varianti_dai_referti(fb, existing, args.interval,

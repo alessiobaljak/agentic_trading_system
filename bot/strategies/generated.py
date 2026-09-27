@@ -185,19 +185,28 @@ def _feat_session(i: IndicatorSnapshot, price: float, f: dict, ora: Optional[int
     asiatica e quella US hanno liquidita' e comportamenti diversi. Primo elemento
     NON tecnico del generatore.
 
-    SEMANTICA (non ovvia, invariata dal 27 set 2026): `hour_from <= ora < hour_to`
-    (con giro di mezzanotte se from > to) e' «dentro la sessione».
-      * dentro  -> (long_ok=True,  short_ok=False): si compra solo in sessione
-      * fuori   -> (long_ok=False, short_ok=True):  si vende solo fuori sessione
-    Cioe' la feature NON e' un filtro «opera solo in questa fascia»: sceglie il
-    LATO in base alla fascia. Una spec «8-16» e' long di giorno e short di notte.
+    SEMANTICA (cambiata il 27 set 2026, decisione del proprietario, backlog J13):
+    `hour_from <= ora < hour_to` (con giro di mezzanotte se from > to) e'
+    «dentro la sessione», e la sessione e' un FILTRO valido per i due lati:
+      * dentro  -> (long_ok=True,  short_ok=True):  la regola decide col resto
+      * fuori   -> (long_ok=False, short_ok=False): nessun segnale, in nessun verso
+    Fino al 27 set la feature sceglieva il LATO (dentro -> solo long, fuori ->
+    solo short). Non aveva senso economico: non c'e' nessun motivo per comprare
+    soltanto fra le 8 e le 16 UTC e vendere soltanto di notte — una fascia
+    oraria dice QUANDO il mercato e' liquido e leggibile, non in che direzione
+    va. In piu' quella regola era stata valutata per settimane con l'orologio
+    del giro invece che con l'ora della candela (`ora_candela`), quindi nessuna
+    delle sue validazioni diceva qualcosa sulla spec. Dentro `_verdetto` una
+    feature che risponde (False, False) porta `long_ok` e `short_ok` a False
+    insieme: e' il veto su entrambi i lati; (True, True) non tocca niente, e la
+    direzione la danno le feature direzionali della spec.
 
     `ora` e' l'ora della candela (`ora_candela`, passata da `_verdetto`); se
     manca — chiamata diretta, senza snapshot — si legge l'orologio, con avviso."""
     h = ora if ora is not None else ora_candela(None)
     lo, hi = f.get("hour_from", 12), f.get("hour_to", 21)
     inside = (lo <= h < hi) if lo <= hi else (h >= lo or h < hi)
-    return (inside, not inside)
+    return (inside, inside)
 
 
 # --------------------------------------------------------------------------- #
@@ -367,8 +376,10 @@ def feature_esiste(kind: str) -> bool:
 
 def usa_sessione(spec) -> bool:
     """True se la spec ha una feature `session` (27 set 2026, backlog J13): le
-    sue validazioni prima di quel giorno sono state fatte con l'ora del giro, e
-    `gate_progress` / la discovery le contano per farle vedere al proprietario."""
+    sue validazioni prima di quel giorno sono state fatte con l'ora del giro e
+    con la feature che sceglieva il lato; dal 27 set la discovery azzera una
+    volta i passaggi di queste coppie (`discover_strategies.azzera_sessione`)
+    e `gate_progress` le conta per farle vedere al proprietario."""
     if not isinstance(spec, dict):
         return False
     return any(isinstance(f, dict) and f.get("kind") == "session"
@@ -531,6 +542,11 @@ def _valori_feature(f: dict, i, price: float, mercato, htf, ora: Optional[int] =
         return out
     if kind == "session":
         out["ora_utc"] = ora if ora is not None else ora_candela(None)
+        # dal 27 set 2026 la sessione e' un filtro: `dentro` dice se la fascia
+        # lasciava passare (entrambi i lati) o fermava (nessuno)
+        lo, hi = f.get("hour_from", 12), f.get("hour_to", 21)
+        h = out["ora_utc"]
+        out["dentro"] = bool((lo <= h < hi) if lo <= hi else (h >= lo or h < hi))
     for c in _CAMPI_FEATURE.get(kind, ()):
         out[c] = price if c == "price" else (getattr(i, c, None) if i is not None else None)
     return out

@@ -242,16 +242,17 @@ def riga_riduzione_giro(diag: dict | None) -> str:
             f"~{int(r.get('valutazioni_stimate') or 0)} valutazioni stimate{coda}")
 
 
-def riga_sessione(validated, specs: dict | None) -> str:
-    """«FEATURE session: N validate su M usano la sessione oraria» (27 set 2026,
-    backlog J13). Fino a quel giorno `_feat_session` leggeva l'ORA DEL GIRO e non
-    quella della candela: nel backtest ogni barra della storia era «dentro» o
-    «fuori» sessione a seconda di quando girava il gate, quindi i passaggi di
-    queste coppie sono stati guadagnati su una feature valutata male. Qui si
-    contano soltanto, per farle vedere: cosa farne lo decide il proprietario
-    (nessun contatore del registro viene toccato). `specs` e' la mappa id ->
-    spec di `discovered_strategies/specs`; una coppia la cui spec non c'e' non
-    si puo' contare, e lo si dice."""
+def riga_sessione(validated, specs: dict | None, pairs: dict | None = None) -> str:
+    """«FEATURE session: N validate su M usano la sessione oraria · K azzerate il
+    27 set, ripassano da zero» (27 set 2026, backlog J13). Fino a quel giorno
+    `_feat_session` leggeva l'ORA DEL GIRO e non quella della candela, e
+    sceglieva il lato: i passaggi di queste coppie erano guadagnati su una
+    feature valutata male. Il proprietario ha scelto di AZZERARLI
+    (`discover_strategies.azzera_sessione`, una volta): le azzerate portano
+    `sessione_azzerata_at` e qui si contano su `pairs` — quelle che ripassano
+    tornano fra le validate e si vedono nel primo numero. `specs` e' la mappa
+    id -> spec di `discovered_strategies/specs`; una coppia la cui spec non c'e'
+    non si puo' contare, e lo si dice."""
     from bot.strategies.generated import usa_sessione   # import pigro, come le altre righe
     validated = list(validated or [])
     specs = specs if isinstance(specs, dict) else {}
@@ -265,6 +266,14 @@ def riga_sessione(validated, specs: dict | None) -> str:
         if usa_sessione(spec):
             con += 1
     coda = f" · {senza_spec} senza spec nel documento" if senza_spec else ""
+    azzerate = sum(1 for r in (pairs or {}).values()
+                   if isinstance(r, dict) and r.get("sessione_azzerata_at"))
+    if azzerate:
+        ripassate = sum(1 for k in validated
+                        if isinstance((pairs or {}).get(k), dict)
+                        and (pairs or {})[k].get("sessione_azzerata_at"))
+        coda += (f" · {azzerate} azzerate il 27 set, ripassano da zero"
+                 + (f" ({ripassate} gia' ripassate)" if ripassate else ""))
     return (f"  FEATURE session: {con} validate su {len(validated)} usano la sessione oraria "
             f"(fino al 27 set valutata con l'orologio del giro, non della candela: "
             f"passaggi da rifare){coda}")
@@ -559,7 +568,7 @@ def main() -> int:
     # e le validate che usano la SESSIONE ORARIA (27 set 2026, J13): vedi riga_sessione
     try:
         _specs = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
-        print(riga_sessione(validated, _specs))
+        print(riga_sessione(validated, _specs, pairs))
     except Exception as exc:  # noqa: BLE001 - diagnostica, mai fatale
         print(f"  FEATURE session: spec non leggibili ({str(exc)[:60]})")
     # e il PAPER ESPLORATIVO (25 set 2026, F1bis): vedi riga_esplorative

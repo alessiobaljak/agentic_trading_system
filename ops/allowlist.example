@@ -105,7 +105,12 @@ ingressi:     .venv/bin/python -m scripts.ingressi_report
 # nipote staccato sopravvive), scrive in data/ingressi_ultimo.txt e stampa il
 # pid. Il referto si legge con `ingressi-esito` (dice anche se gira ancora).
 # Sola lettura su Firebase; sul disco scrive solo quel referto e la cache candele.
-ingressi-completo: .venv/bin/python -m scripts.ingressi_report --sfondo --budget 0
+# ATTENZIONE (27 set, ops 0315): `--sfondo` NON sopravvive sulla VPS. L'agente
+# ops e' un servizio systemd e alla fine del comando systemd uccide tutto il
+# gruppo di controllo, anche un processo staccato con setsid. L'analisi completa
+# va in un'unita' transitoria fuori dal gruppo: `systemd-run --no-block` (una
+# riga, niente shell). Il .env viene letto dalla cartella di lavoro.
+ingressi-completo: systemd-run --no-block --collect --unit=ingressi-completo --property=WorkingDirectory=/root/agentic_trading_system /root/agentic_trading_system/.venv/bin/python -m scripts.ingressi_report --su-file --budget 0
 ingressi-esito: .venv/bin/python -m scripts.ingressi_report --esito
 # UNA COPPIA, FEATURE PER FEATURE (27 set 2026): la regola di `gen_6d06dca0`
 # valutata barra per barra sui 6 trade di ORCAUSDT/VETUSDT che il motore non

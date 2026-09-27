@@ -198,7 +198,13 @@ def test_la_discovery_non_rigonfia_cio_che_optimize_ha_alleggerito():
 
     from scripts import discover_strategies as d
 
-    src = inspect.getsource(d.merge_into_registry)
+    # dal 27 set 2026 la coda del merge vive in `finalizza_registro` (la usa
+    # anche l'azzeramento della sessione, J13): si guarda li', e che il merge
+    # passi davvero da li'
+    src = inspect.getsource(d.finalizza_registro)
     assert "slim_registry(pairs, validated)" in src
     assert "scrivi_registro(" in src
     assert 'doc["pairs"] = encode_pairs' not in src
+    merge = inspect.getsource(d.merge_into_registry)
+    assert "finalizza_registro(fb, doc, pairs, now" in merge
+    assert 'doc["pairs"] = encode_pairs' not in merge

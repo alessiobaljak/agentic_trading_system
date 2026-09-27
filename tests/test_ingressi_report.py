@@ -516,11 +516,23 @@ def test_esito_senza_referto_esce_zero_e_con_referto_lo_stampa(tmp_path, monkeyp
     assert "RIASSUNTO finto" in out and "processo 999999999 finito" in out and "scritto" in out
 
 
+def test_su_file_senza_firebase_esce_0(monkeypatch):
+    monkeypatch.setenv("TRADING_BOT_TEST_MODE", "1")
+    import subprocess, sys
+    r = subprocess.run([sys.executable, "-m", "scripts.ingressi_report", "--su-file", "--budget", "1"],
+                       cwd=ROOT, capture_output=True, text=True, timeout=120)
+    assert r.returncode == 0 and "su-file" in r.stdout
+
+
 def test_le_voci_ops_del_27_set_e_il_gitignore():
     from scripts.ops_agent import parse_allowlist
     with open(os.path.join(ROOT, "ops", "allowlist.example"), encoding="utf-8") as f:
         voci = parse_allowlist(f.read())
-    assert voci["ingressi-completo"]["cmd"] == ".venv/bin/python -m scripts.ingressi_report --sfondo --budget 0"
+    # 27 set (ops 0315): il doppio fork non sopravvive al servizio systemd
+    # dell'agente ops -> unita' transitoria con systemd-run, in primo piano su file
+    cmd = voci["ingressi-completo"]["cmd"]
+    assert cmd.startswith("systemd-run --no-block") and "--su-file --budget 0" in cmd
+    assert "|" not in cmd and ">" not in cmd and "&&" not in cmd
     assert voci["ingressi-esito"]["cmd"] == ".venv/bin/python -m scripts.ingressi_report --esito"
     assert voci["ingressi-orca"]["cmd"].endswith("--coppia ORCAUSDT/gen_6d06dca0 --dettaglio")
     for k in ("ingressi-completo", "ingressi-esito", "ingressi-orca", "ingressi-vet"):

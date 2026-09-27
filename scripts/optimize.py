@@ -151,7 +151,13 @@ def conferme_da_proteggere(rec: dict, ora: float) -> bool:
     registro la tengono a bada la potatura di chi ha ZERO conferme e il tetto.
     """
     if int(rec.get("pass_count", 0) or 0) <= 0:
-        return False
+        # AZZERATA DALLA SESSIONE (27 set 2026, J13): zero passaggi per decisione
+        # del proprietario, non per demerito. Le si da' il tempo che la regola
+        # chiede a chiunque per validarsi, MIN_PASSES finestre dall'azzeramento;
+        # se in quel tempo non riprende nemmeno una conferma, esce come ogni
+        # candidata mai passata (cosi' l'azzeramento non diventa una perdita).
+        azzerata = float(rec.get("sessione_azzerata_at", 0) or 0)
+        return azzerata > 0 and azzerata >= ora - MIN_PASSES * NEW_DATA_MIN_S
     visto = float(rec.get("last_seen_at", 0) or 0)
     if visto <= 0:
         return True
@@ -611,7 +617,15 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         # d'EMERGENZA (tetto sforato anche dopo) li perdeva, e la
                         # coppia tornava a size piena in silenzio (fail-open che
                         # cancella un verdetto del gate). Tre campi piccoli.
-                        "bocciata_notti", "declassata", "declassata_at"}
+                        "bocciata_notti", "declassata", "declassata_at",
+                        # L'AZZERAMENTO DELLA SESSIONE (27 set 2026, J13): la
+                        # coppia e' ripartita da zero passaggi perche' la feature
+                        # `session` ha cambiato significato; con questo campo
+                        # resta «nota» (coin propria nel giro ridotto, protetta
+                        # dalla potatura per MIN_PASSES finestre) e la riga di
+                        # `gate_progress` la conta. Perso, la coppia sarebbe una
+                        # candidata a zero pass qualunque: potata al primo merge.
+                        "sessione_azzerata_at"}
 
 
 # LE COPPIE CHE IL BOT OPERA, in un posto solo: dal 25 set 2026 la regola vive in
