@@ -1895,3 +1895,38 @@ nella settimana, ingressi del paper allineati al gate solo nel 54%, una serie di
 8 perdite mai vista nel gate. Proposta: aprire il problema degli ingressi, trade
 per trade (quale segnale, quale candela, perché il gate non entra), prima di
 qualsiasi altra modifica alle uscite.
+
+### 27 settembre, 11:20: il problema degli ingressi, aperto (ops 0308)
+
+Prima lettura dello strumento `ingressi` (17 coppie su 58 nei 12 minuti del
+canale; 41 coppie «tempo (budget)»). 70 trade del paper classificati: abbinati
+36 (51%; 53% rigirando il motore «come il bot», da 200 barre prima del paper).
+I 34 non abbinati:
+- **15 «senza motore»**: sono TUTTI i trade dal 26 set 15:45 in poi. La cache
+  delle candele sulla VPS finisce lì (lo script legge solo la cache, non
+  scarica): non è una classe vera, è un limite dello strumento. Tolti questi,
+  gli abbinati sono 36 su 55 (65%).
+- **5 «motore in posizione» + 3 «cooldown»**: il gate era ancora dentro un
+  trade precedente o nel cooldown dopo uno stop. Cascata di un'uscita diversa,
+  non della regola d'ingresso.
+- **5 «prezzo vivo»** (tutti su DEXEUSDT|gen_fa304106 e GPSUSDT): indicatori
+  identici, ma il bot decide col prezzo dell'ultimo tick (`price_agent.
+  build_snapshot`: `price = candles[-1].close` della candela ancora aperta)
+  mentre il motore decide con la chiusura della candela precedente. Differenze
+  di 1-4 decimillesimi bastano a far scattare la regola da una parte sola.
+- **5 «ignoto»**, tutti di `gen_6d06dca0` su ORCAUSDT e VETUSDT: la regola non
+  scatta nemmeno sui valori registrati dal paper stesso, e il motore non ha
+  aperto NESSUN trade su quelle coppie nel periodo del paper (0 contro 6 del
+  bot). È il caso da cercare per primo: stessa spec, stessi indicatori, due
+  decisioni diverse. Sono i trade che il proprietario aveva già notato il 21
+  set (VETUSDT short in profitto per 10 ore poi stop).
+- 1 «segnale senza trade» (SUIUSDT: due trade del paper in 15 minuti sullo
+  stesso segnale).
+Per coppia: JTOUSDT, QUSDT, SYRUPUSDT 100%; SPXUSDT 5/6; ORCAUSDT e VETUSDT
+con `gen_6d06dca0` 0/3; HUMAUSDT|gen_fca11c08 0/4 (3 senza cache).
+Da fare (proposte, nessuna modifica fatta): (1) capire `gen_6d06dca0`: stampare
+la regola e i valori barra per barra sui 6 trade; (2) decidere se il bot deve
+valutare la regola sulla chiusura della candela (parità col motore) invece che
+sul prezzo vivo; (3) far aggiornare la cache delle candele allo strumento, o
+lanciarlo dopo un giro del gate; (4) rilanciare con `--budget 0` per le altre 41
+coppie.
