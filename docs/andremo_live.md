@@ -1847,3 +1847,51 @@ Il proprietario ha detto sì alle tre voci del controllo:
 3. **Report dei rifiutati corretto** (J6): R medio degli aperti −0,17, non −6,80.
 Suite 1709 test verdi. Il gate usa la regola nuova dal prossimo giro; il bot
 riavviato per leggere il freno spento.
+
+### Referto settimanale del 27 settembre (09:10 ora italiana)
+
+Fonti: ops 0304-0307 (confronto, gate, servizi, log-gate delle 09:09) e il
+controllo delle 08:00 (ops 0286-0302) per trades, mfe, stato, ai-stato, rifiuti.
+1. **Quanto e come.** Settimana 21-27 set: 91 trade, −55,75 USDT (dalla tabella
+   del periodo del paper, ops 0302). Totale: 110 trade delle validate più 1
+   esplorativo, −73,79 USDT, equity 927,56, DRY_RUN True, costi 20,58 sul lordo
+   −53,21 (ops 0291, 0292).
+2. **Il lock taglia vincitori?** No: 30 verdetti trailing, 11 prematuri e 19
+   protetti (log-gate); uscite trailing 40 per +55,89 contro 58 stop per −191,35.
+   Nessuna proposta di allentare il keep; il gate sceglie anzi 0,75 su 13 coppie.
+3. **Come muoiono gli stop.** 58 stop: 23 ingresso, 34 uscita, 1 protezione
+   (ops 0297); il 21 set erano 7 / 13 / 1 su 21. Le proporzioni restano simili:
+   sei stop su dieci erano andati a favore sotto il primo gradino.
+4. **Il paper entra dove entra il gate?** 20 su 37 trade delle 8 coppie
+   rigirate hanno un ingresso del gate entro 2 barre (54%, scarto mediano 16
+   minuti); il 21 set 10 su 17 (59%). **Sotto il 60%: problema da aprire.**
+5. **Le serie di perdite.** Il paper ha fatto 8 perdite di fila; il gate, sulle
+   stesse 8 coppie e 2.256 trade dal 2023, non è mai andato oltre 7 (0 finestre
+   di 8 su 2.249). Sulle stesse coppie, nel periodo del paper, i segnali del
+   gate aperti dal paper hanno PF 0,45 e quelli non aperti 0,66: il gate ha
+   promesso su un regime che non c'è più (ops 0304).
+6. **Le gemelle.** 8 gruppi di due validate con la stessa logica sulla stessa
+   coin (USELESS, SKYAI, MUBARAK, HEMI due volte, TRUMP, Q due volte); le
+   candidate scartate come gemelle non compaiono nelle ultime 90 righe del log.
+7. **La copertura.** 212 validate su 68 coin, universo 200, copertura 34% su
+   35%; coin a 2/3: 124 (508 coppie), a 1/3: 132 (651 coppie). Il 21 set: 56
+   coppie su 26 coin, universo 165. Sopra le 40 coin: C2 non serve per quel
+   criterio (ma l'autopsia del 27 dice che una validata su otto passa una
+   valutazione singola).
+8. **Durata del giro.** Ultimo finito 05:06-06:19, urgenti, 1h13; il completo
+   di ieri 3h48, quello di stanotte circa 1h45 (dedotto); il 21 set 2h22. Il
+   giro partito alle 08:10 non compare fra i finiti: alle 08:51 ne è partito un
+   altro con 6 worker (il log non dice perché; possibile un arresto per memoria
+   mentre giravano le analisi del mattino). Prossimo avvio alle 11:01.
+9. **Le vite.** Nessuna riga «[vite]» nelle ultime 90 righe del log.
+10. **L'AI.** 20 ipotesi su 20 accettate alle 08:10; nel giro 20 ipotesi AI
+    motivate e 40 casuali; ombra d'accordo 10 volte su 123.
+11. **Il tetto per coin.** Zero blocchi nelle ultime 24 ore (rifiuti: 21
+    posizione già aperta, 12 cooldown, 1 stop largo).
+
+Migliorato: copertura (212 validate su 68 coin), controllo orario, misure sui
+rifiuti e sugli stop, il lock protegge più di quanto tagli. Peggiorato: −55,75
+nella settimana, ingressi del paper allineati al gate solo nel 54%, una serie di
+8 perdite mai vista nel gate. Proposta: aprire il problema degli ingressi, trade
+per trade (quale segnale, quale candela, perché il gate non entra), prima di
+qualsiasi altra modifica alle uscite.
