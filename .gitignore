@@ -29,6 +29,10 @@ data_cache/
 # all'ingresso di ogni trade simulato): sono dati di ogni giro, vivono sulla VPS.
 # Il riepilogo sta su Firestore (selector/dataset).
 data/selettore/
+# il referto dell'analisi degli ingressi lanciata in sfondo (`ingressi_report
+# --sfondo`, 27 set 2026) e il pid del processo: dati della macchina, si leggono
+# con `ingressi-esito`, non si committano.
+data/ingressi_*
 
 # Node / Next.js
 dashboard/node_modules/

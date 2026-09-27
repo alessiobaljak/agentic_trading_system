@@ -245,6 +245,15 @@ class Settings:
 
     # ---- Timeframes raccolti dal price agent ----
     TIMEFRAMES: tuple[str, ...] = ("1m", "5m", "15m", "1h")
+    # LA REGOLA DECIDE SULLA CHIUSURA DELLA CANDELA (27 set 2026, backlog J12).
+    # Il motore di backtest valuta ogni strategia generata sulla chiusura
+    # dell'ultima candela chiusa; il bot la valutava sul prezzo VIVO della candela
+    # in formazione, qualche secondo dopo il confine. Ops 0308: 5 trade del paper
+    # (DEXEUSDT, GPSUSDT) con indicatori identici e regola scattata da una parte
+    # sola per 1-4 decimillesimi. Con True il bot usa `AssetSnapshot.close_chiusa`
+    # per la REGOLA e basta: prezzo d'ingresso, stop, gate di rischio e feature
+    # restano sul prezzo vivo. False = com'era prima (interruttore, non ricerca).
+    DECISIONE_SU_CHIUSURA: bool = _get_bool("DECISIONE_SU_CHIUSURA", True)
 
     # ---- Protezione profitto (profit-lock) ----
     # Quando una posizione va in profitto ma non tocca il TP, blocca una parte del

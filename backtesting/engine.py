@@ -691,7 +691,11 @@ class Backtester:
     def _snapshot_from_frame(self, symbol: str, frame, idx: int,
                              htf=None) -> AssetSnapshot:
         row = frame.iloc[idx]
-        snap = AssetSnapshot(symbol=symbol, price=float(row["close"]))
+        # `close_chiusa` = `price` per costruzione: qui il prezzo E' gia' la
+        # chiusura della candela chiusa (27 set 2026, backlog J12: il bot ora
+        # decide sulla stessa chiusura, `DECISIONE_SU_CHIUSURA`). Parita' esatta,
+        # con l'interruttore acceso o spento: il motore non cambia di un trade.
+        snap = AssetSnapshot(symbol=symbol, price=float(row["close"]), close_chiusa=float(row["close"]))
         # la riga base prende il nome del timeframe SU CUI GIRA il motore (a 1h
         # e' "1h"), non quello del bot: una strategia nativa a 1 ora chiede
         # `ind("1h")` e deve trovare la riga base, non un alias per caso

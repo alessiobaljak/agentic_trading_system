@@ -83,7 +83,8 @@ def test_e_nel_vocabolario_ovunque():
 def test_l_ora_si_risolve_solo_se_la_spec_la_usa():
     """La lezione del 22 set (il contesto di mercato che sforava le 3 ore):
     niente lavoro per candela per chi non lo chiede."""
-    src = inspect.getsource(GeneratedStrategy.generate_signal)
+    # dal 27 set 2026 la valutazione sta in `_verdetto` (condivisa con `spiega`)
+    src = inspect.getsource(GeneratedStrategy._verdetto)
     assert 'asset.ind("1h") if self.usa_htf else None' in src
 
 

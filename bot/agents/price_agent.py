@@ -138,6 +138,7 @@ class PriceAgent:
     def build_snapshot(self, symbol: str) -> Optional[AssetSnapshot]:
         indicators: dict[str, IndicatorSnapshot] = {}
         price = None
+        close_chiusa = None
         now = datetime.now(timezone.utc)
         for tf in settings.TIMEFRAMES:
             candles = self.get_candles(symbol, tf, limit=200)
@@ -154,6 +155,13 @@ class PriceAgent:
             if not closed:
                 continue
             indicators[tf] = compute_snapshot(closed, tf)
+            # LA CHIUSURA SU CUI LA REGOLA DECIDE (27 set 2026, backlog J12): la
+            # chiusura dell'ultima candela chiusa del timeframe primario, come il
+            # motore (`engine._snapshot_from_frame`). Il bot decide al confine di
+            # candela, quindi per una strategia a 1h e' anche la chiusura della
+            # sua candela oraria appena chiusa. `price` resta vivo.
+            if tf == settings.ORCHESTRATOR_TIMEFRAME:
+                close_chiusa = closed[-1].close
         if price is None:
             return None
         # senza il timeframe PRIMARIO le strategie sarebbero mute in silenzio
@@ -166,6 +174,7 @@ class PriceAgent:
         return AssetSnapshot(
             symbol=symbol,
             price=price,
+            close_chiusa=close_chiusa,
             mark_price=float(premium["markPrice"]) if premium.get("markPrice") else None,
             funding_rate=float(premium["lastFundingRate"]) if premium.get("lastFundingRate") else None,
             open_interest=self.get_open_interest(symbol),

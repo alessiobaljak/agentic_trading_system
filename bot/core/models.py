@@ -83,6 +83,12 @@ class AssetSnapshot(BaseModel):
     """Stato completo di un asset usato da strategie e orchestratore."""
     symbol: str
     price: float
+    # la chiusura dell'ultima candela CHIUSA del timeframe primario (27 set 2026,
+    # backlog J12): e' il prezzo su cui la regola di una strategia generata
+    # decide (`DECISIONE_SU_CHIUSURA`), lo stesso del motore di backtest. `price`
+    # resta il prezzo VIVO per esecuzione, stop, rischio e feature. None negli
+    # snapshot che non lo portano (allora la regola usa `price`, com'era).
+    close_chiusa: Optional[float] = None
     mark_price: Optional[float] = None
     funding_rate: Optional[float] = None   # es. 0.0001 = 0.01%
     open_interest: Optional[float] = None

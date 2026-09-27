@@ -344,7 +344,8 @@ def test_e_in_sola_lettura_e_parte_senza_argomenti():
     src = inspect.getsource(ir).split('"""', 2)[-1]
     for vietato in ("set_doc", "set_rtdb", "merge_into_registry", "persist_specs", "update_registry"):
         assert vietato not in src, f"il report chiama `{vietato}`: deve solo misurare"
-    main = inspect.getsource(ir.main)
+    # dal 27 set il lavoro sta in `analisi` (main smista --sfondo/--esito)
+    main = inspect.getsource(ir.main) + inspect.getsource(ir.analisi)
     assert "ap.error(" not in main and '"--budget"' in main and '"--coppie"' in main
     assert ir.BUDGET_S < 900, "la deadline propria deve stare sotto il timeout del canale ops"
     # i mattoni di ops 0304 sono importati, non riscritti
@@ -369,3 +370,161 @@ def test_la_voce_ops_esiste_nella_lista_bianca_di_esempio():
         voci = parse_allowlist(f.read())
     assert voci["ingressi"]["cmd"] == ".venv/bin/python -m scripts.ingressi_report"
     assert voci["ingressi"]["args"] is False
+
+
+# --------------------------------------------------------------------------- #
+# 7. vede anche oggi, dettaglio di una coppia, sfondo ed esito (27 set 2026)   #
+# --------------------------------------------------------------------------- #
+def test_la_fine_delle_candele_e_domani_per_default():
+    """Con `--end` = oggi il caricatore taglia a oggi 00:00 e accetta una cache
+    ferma a ieri: i 15 «senza motore» di ops 0308 erano tutti dopo la fine della
+    cache. Il default deve essere DOMANI (UTC)."""
+    oggi = datetime.now(timezone.utc).date()
+    assert ir.domani_utc() == (oggi + timedelta(days=1)).isoformat()
+    main = inspect.getsource(ir.main)
+    assert "args.end = domani_utc()" in main
+
+
+def test_una_candela_dopo_l_ultima_disponibile_lo_dice_con_l_ora():
+    candles = _serie(400)
+    frame = compute_indicator_frame(candles)
+    bt = Backtester(window=200, interval_hours=0.25)
+    diag = ir.Diagnosta(bt, lambda: GeneratedStrategy(SPEC), "XUSDT", candles, frame, "15m")
+    ultima = candles[-1].open_time.timestamp()
+    dopo = {"symbol": "XUSDT", "strategy": "gen_test", "direction": "long", "entry_price": 1.0,
+            "signal_candle_ts": ultima + 20 * 900.0,
+            "entry_time": datetime.fromtimestamp(ultima + 20 * 900.0 + 5, tz=timezone.utc).isoformat()}
+    assert diag(dopo, ir.barra_del_paper(dopo, 900.0)) == {"oltre_ultima": ultima}
+    righe = ir.classifica_coppia([dopo], [], 900.0, 4, diagnosi=diag)
+    assert righe[0]["classe"] == "SENZA_MOTORE"
+    assert righe[0]["dettaglio"] == f"dopo l'ultima candela disponibile ({ir._quando(ultima)} UTC)"
+    # una candela PRIMA dell'inizio resta «non nei dati» (non e' la cache)
+    prima = {**dopo, "signal_candle_ts": candles[0].open_time.timestamp() - 900.0 * 5}
+    assert diag(prima, ir.barra_del_paper(prima, 900.0)) is None
+
+
+def test_regola_coincide_e_diagnosi_dettaglio():
+    assert ir.regola_coincide(None, "rsi_extreme low=30.0 high=70.0") is None
+    assert ir.regola_coincide("[gen] rsi_extreme low=30.0 high=70.0 (peso=0.5)", "rsi_extreme low=30.0 high=70.0")
+    assert ir.regola_coincide("[gen] bb_touch AND rsi_extreme", "rsi_extreme low=30.0 high=70.0") is False
+    L = {"direzione_finale": "long", "motivo": "ok", "features": {"a": {"long": True, "short": False}}}
+    N = {"direzione_finale": None, "motivo": "nessuna direzione netta",
+         "features": {"a": {"long": True, "short": False}, "b": {"long": False, "short": False}}}
+    # 1. la spec operata non e' quella del registro: vince su tutto
+    assert "non e' quella che il bot ha operato" in ir.diagnosi_dettaglio("long", L, L, L, False)
+    # 2. sui valori del paper non scatta nemmeno col prezzo d'ingresso: chi frena
+    d = ir.diagnosi_dettaglio("long", N, N, N, True)
+    assert d.startswith("sui valori scritti dal paper la regola NON scatta") and "frenano b" in d
+    # 3. scatta col prezzo d'ingresso e non con la chiusura
+    assert ir.diagnosi_dettaglio("long", L, N, L, None).startswith("PREZZO VIVO")
+    # 4. scatta sui valori del paper, frena sul frame del motore
+    assert "sul frame del motore frenano: b" in ir.diagnosi_dettaglio("long", L, L, N, True)
+    # 5. scatta da entrambe le parti
+    assert "per altro" in ir.diagnosi_dettaglio("long", L, L, L, True)
+    # senza indicatori sul trade si vede solo il motore
+    assert "non porta" in ir.diagnosi_dettaglio("long", None, None, N, None)
+    assert ir.feature_che_frenano(N, "long") == ["b"] and ir.feature_che_frenano(N, "short") == ["a", "b"]
+
+
+def test_fmt_verdetto_e_una_riga_leggibile():
+    st = GeneratedStrategy(SPEC)
+    ind = IndicatorSnapshot(timeframe="15m", rsi=20.0, atr=1.0, close=100.0)
+    v = st.spiega(ir.AssetSnapshot(symbol="X", price=100.0, indicators={"15m": ind}))
+    riga = ir.fmt_verdetto(v)
+    assert "rsi_extreme L=si S=no" in riga and "rsi=20" in riga and "=> LONG" in riga
+
+
+def test_il_dettaglio_di_una_coppia_barra_per_barra_e_sui_valori_del_paper():
+    """Su candele sintetiche: un trade del paper che il motore apre (la regola
+    scatta da tutte e due le parti) e uno i cui `indicators_at_entry` non fanno
+    scattare la regola (il caso IGNOTO): il dettaglio stampa le 4 barre del
+    motore, i valori del paper col prezzo d'ingresso e con la chiusura, la
+    `regola` sul trade contro la spec, il registro, e una DIAGNOSI per trade."""
+    candles = _serie()
+    frame = compute_indicator_frame(candles)
+    bt = Backtester(window=200, interval_hours=0.25)
+    make = lambda: GeneratedStrategy(SPEC)  # noqa: E731
+    st = bt.run_strategy(make(), "XUSDT", candles, frame=frame)
+    gtrades = sorted(st.trades, key=lambda t: t.entry_ts)
+    diag = ir.Diagnosta(bt, make, "XUSDT", candles, frame, "15m")
+    tf_s = 900.0
+    g0 = gtrades[0]
+    k0 = diag.indice(g0.entry_ts)
+    snap = diag.snapshot_motore(k0)
+    strat = make()
+    ok = {"symbol": "XUSDT", "strategy": "gen_test", "direction": g0.direction,
+          "entry_time": datetime.fromtimestamp(g0.entry_ts + tf_s + 5, tz=timezone.utc).isoformat(),
+          "signal_candle_ts": g0.entry_ts + tf_s, "entry_price": g0.entry_price, "pnl": 1.0,
+          "indicators_at_entry": {"15m": snap.ind("15m").model_dump()},
+          "regola": f"[gen] {strat.description}", "feats_at_entry": {"rsi": 30.0, "dist_ema": 0.0}}
+    ignoto = {**ok, "indicators_at_entry": {"15m": {**snap.ind("15m").model_dump(), "rsi": 50.0}},
+              "regola": "[gen] bb_touch AND macd_cross"}
+    righe = ir.classifica_coppia([ok, ignoto], gtrades, tf_s, 4, diagnosi=diag)
+    rec = {"pass_count": 3, "sostituita_da": "gen_figlia", "genitore": None}
+    out = ir.dettaglio_coppia("XUSDT|gen_test", [ok, ignoto], SPEC, rec, strat, diag, tf_s, righe)
+    testo = "\n".join(out)
+    assert "DETTAGLIO XUSDT|gen_test" in testo
+    assert "solo entrambi" in testo and "timeframe 15m" in testo and "mercato no" in testo
+    assert "sostituita_da gen_figlia" in testo and "pass 3" in testo
+    assert testo.count("motore k-2") == 2 and testo.count("motore k+1") == 2
+    assert "paper (prezzo d'ingresso" in testo and "paper (chiusura" in testo
+    assert "prezzo di decisione ≈" in testo
+    assert "feats_at_entry: rsi=30 dist_ema=0" in testo
+    diagnosi = [l for l in out if "DIAGNOSI:" in l]
+    assert len(diagnosi) == 2
+    assert "coincide con la spec" in testo and "DIVERSA dalla spec" in testo
+    assert "non e' quella che il bot ha operato" in diagnosi[1]
+    assert "scatta da entrambe le parti" in diagnosi[0] or "frenano" in diagnosi[0]
+    # senza motore (spec non rigirabile) e senza spec
+    assert "motore: non rigirabile" in "\n".join(
+        ir.dettaglio_coppia("XUSDT|gen_test", [ok], SPEC, None, strat, None, tf_s))
+    assert "niente regola" in "\n".join(ir.dettaglio_coppia("X|y", [ok], None, None, None, None, tf_s))
+
+
+def _lancia(*argomenti, env_extra=None, timeout=60):
+    env = {**os.environ, "FIREBASE_SERVICE_ACCOUNT": "", "TRADING_BOT_TEST_MODE": "1",
+           "BACKTEST_ALLOW_SYNTHETIC": "false", "DRY_RUN": "true", "PYTHONPATH": ROOT}
+    env.update(env_extra or {})
+    return subprocess.run([sys.executable, "-m", "scripts.ingressi_report", *argomenti], cwd=ROOT,
+                          env=env, capture_output=True, text=True, timeout=timeout)
+
+
+def test_sfondo_nei_test_non_stacca_niente_ed_esce_zero():
+    """Il test della lista bianca lancia ogni voce: `--sfondo --budget 0` NON deve
+    avviare un'analisi di 40 minuti. In TEST MODE (e senza Firebase vivo) esce 0
+    e dice perche'."""
+    p = _lancia("--sfondo", "--budget", "0")
+    assert p.returncode == 0, p.stderr[-800:]
+    assert "TEST MODE" in p.stdout and "non stacco" in p.stdout
+    src = inspect.getsource(ir.sfondo)
+    for pezzo in ("os.fork()", "os.setsid()", "os.dup2(", "FILE_PID", "is_live", "TRADING_BOT_TEST_MODE"):
+        assert pezzo in src
+
+
+def test_esito_senza_referto_esce_zero_e_con_referto_lo_stampa(tmp_path, monkeypatch, capsys):
+    p = _lancia("--esito")
+    assert p.returncode == 0, p.stderr[-800:]
+    assert "nessun referto" in p.stdout or "referto" in p.stdout
+    # con un referto: mtime, stato del processo, e il contenuto
+    f = tmp_path / "ingressi_ultimo.txt"
+    f.write_text("RIASSUNTO finto\n", encoding="utf-8")
+    (tmp_path / "ingressi_ultimo.pid").write_text("999999999", encoding="utf-8")
+    monkeypatch.setattr(ir, "FILE_ESITO", str(f))
+    monkeypatch.setattr(ir, "FILE_PID", str(tmp_path / "ingressi_ultimo.pid"))
+    assert ir.esito() == 0
+    out = capsys.readouterr().out
+    assert "RIASSUNTO finto" in out and "processo 999999999 finito" in out and "scritto" in out
+
+
+def test_le_voci_ops_del_27_set_e_il_gitignore():
+    from scripts.ops_agent import parse_allowlist
+    with open(os.path.join(ROOT, "ops", "allowlist.example"), encoding="utf-8") as f:
+        voci = parse_allowlist(f.read())
+    assert voci["ingressi-completo"]["cmd"] == ".venv/bin/python -m scripts.ingressi_report --sfondo --budget 0"
+    assert voci["ingressi-esito"]["cmd"] == ".venv/bin/python -m scripts.ingressi_report --esito"
+    assert voci["ingressi-orca"]["cmd"].endswith("--coppia ORCAUSDT/gen_6d06dca0 --dettaglio")
+    for k in ("ingressi-completo", "ingressi-esito", "ingressi-orca", "ingressi-vet"):
+        assert voci[k]["args"] is False
+    with open(os.path.join(ROOT, ".gitignore"), encoding="utf-8") as f:
+        assert "data/ingressi_*" in f.read()
+    assert ir.FILE_ESITO.endswith(os.path.join("data", "ingressi_ultimo.txt"))

@@ -56,15 +56,41 @@ SOLA LETTURA: legge i trade, il registro e le spec, rigira il motore, stampa.
 Si ferma da sola a `--budget` secondi (720, sotto i 900 del canale ops) e
 stampa cio' che ha misurato. Senza Firebase esce con 0 e lo dice.
 
+IL DETTAGLIO DI UNA COPPIA (`--coppia SYM|strat --dettaglio`, 27 set 2026, dopo
+ops 0308): per ogni trade del paper la regola valutata FEATURE PER FEATURE
+(`GeneratedStrategy.spiega`, la stessa funzione che produce il segnale) sulle
+candele del motore intorno all'ingresso (k-2..k+1) E sui valori che il bot ha
+scritto sul trade (`indicators_at_entry`), col prezzo d'ingresso e con la
+chiusura; la `regola` in chiaro salvata sul trade contro la descrizione della
+spec nel registro; e una riga di diagnosi per trade. E' lo strumento per la
+classe IGNOTO di `gen_6d06dca0` (6 trade su ORCAUSDT/VETUSDT che il motore non
+apre): dice QUALE feature frena, o che la spec operata non e' quella nel registro.
+
+VEDE ANCHE OGGI: `--end` vale per default DOMANI (UTC). Con «oggi» il caricatore
+tagliava la serie a oggi 00:00 e accettava una cache ferma a ieri: i 15 «senza
+motore» di ops 0308 erano tutti trade dal 26 set 15:45 in poi, cioe' dopo la
+fine della cache, non trade senza spiegazione. Un trade ancora oltre l'ultima
+candela disponibile lo dice con l'ora dell'ultima candela.
+
+IN SFONDO: `--sfondo` stacca il lavoro dal canale ops (che uccide a 900 s) con un
+doppio fork + setsid, scrive tutto in `data/ingressi_ultimo.txt` (e il pid in
+`data/ingressi_ultimo.pid`), stampa il pid ed esce subito con 0. `--esito`
+stampa quel file, quando e' stato scritto e se il processo gira ancora. Le voci
+ops sono `ingressi-completo` (--sfondo --budget 0) e `ingressi-esito`.
+
 Uso:
     .venv/bin/python -m scripts.ingressi_report
     .venv/bin/python -m scripts.ingressi_report --coppie 8 --budget 0
+    .venv/bin/python -m scripts.ingressi_report --coppia ORCAUSDT/gen_6d06dca0 --dettaglio
+    .venv/bin/python -m scripts.ingressi_report --sfondo --budget 0 ; poi --esito
 """
 from __future__ import annotations
 
 import argparse
 import bisect
 import datetime as dt
+import os
+import sys
 import time
 from collections import Counter, defaultdict
 from datetime import date
@@ -110,6 +136,20 @@ CAMPI_INDICATORI = ("rsi", "adx", "stoch_k", "atr", "ema_fast", "ema_slow",
 BUDGET_S = 720.0
 #: sopra questa quota di abbinati la parita' degli ingressi «regge» (obiettivo J12)
 OBIETTIVO_ABBINATI = 0.80
+#: la radice del repo: il referto in sfondo vive in `data/` (ignorato da git)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#: dove `--sfondo` scrive tutto cio' che avrebbe stampato, e il pid del processo
+FILE_ESITO = os.path.join(ROOT, "data", "ingressi_ultimo.txt")
+FILE_PID = os.path.join(ROOT, "data", "ingressi_ultimo.pid")
+#: le barre intorno alla candela del paper che `--dettaglio` stampa (k-2..k+1)
+BARRE_DETTAGLIO = (-2, -1, 0, 1)
+
+
+def domani_utc() -> str:
+    """La data di DOMANI (UTC), il default di `--end`. Con «oggi» `load_candles`
+    taglia a oggi 00:00 (`cut_to`) e accetta una cache ferma a ieri (`_covers_end`
+    tollera 24 h): il paper di oggi resterebbe senza motore."""
+    return (dt.datetime.now(dt.timezone.utc).date() + dt.timedelta(days=1)).isoformat()
 
 
 def di(msg: str = "") -> None:
@@ -366,6 +406,12 @@ def classifica_coppia(ptrades: list[dict], gtrades, tf_s: float, cd_barre: int,
         if diag is None:
             r.update(classe="SENZA_MOTORE", dettaglio="candela del paper non nei dati del motore")
             continue
+        if diag.get("oltre_ultima"):
+            # la candela del paper viene DOPO la fine della serie: non e' un trade
+            # senza spiegazione, e' la cache (ops 0308: 15 trade cosi')
+            r.update(classe="SENZA_MOTORE",
+                     dettaglio=f"dopo l'ultima candela disponibile ({_quando(diag['oltre_ultima'])} UTC)")
+            continue
         if diag.get("errore"):
             r.update(classe="SENZA_MOTORE", dettaglio=f"diagnosi fallita: {diag['errore']}")
             continue
@@ -473,11 +519,19 @@ class Diagnosta:
         if not ind:
             return None
         prezzo = _f(t.get("entry_price"), 0.0) or _f(_campo(ind.get(next(iter(ind))), "close"), 0.0)
-        snap = AssetSnapshot(symbol=symbol, price=prezzo, indicators=ind)
+        # la chiusura chiusa e' il `close` degli indicatori del timeframe del bot
+        # (`compute_snapshot` sulle candele chiuse): e' cio' su cui la regola
+        # decide dal 27 set 2026 (`DECISIONE_SU_CHIUSURA`)
+        tf0 = settings.ORCHESTRATOR_TIMEFRAME if settings.ORCHESTRATOR_TIMEFRAME in ind else next(iter(ind))
+        cc = _campo(ind.get(tf0), "close")
+        snap = AssetSnapshot(symbol=symbol, price=prezzo, indicators=ind,
+                             close_chiusa=(float(cc) if cc is not None else None))
         return snap
 
     def __call__(self, t: dict, barra_ts: float) -> dict | None:
         k = self.indice(barra_ts)
+        if k is None and self.ts and barra_ts > self.ts[-1]:
+            return {"oltre_ultima": self.ts[-1]}
         if k is None or k < 1 or k >= len(self.candles) - 1:
             return None
         strategy = self.make()
@@ -693,6 +747,299 @@ def _sn(v) -> str:
     return "?" if v is None else ("si" if v else "no")
 
 
+
+# --------------------------------------------------------------------------- #
+# IL DETTAGLIO DI UNA COPPIA: la regola feature per feature (27 set 2026)      #
+# --------------------------------------------------------------------------- #
+def _fmt_valore(v) -> str:
+    if isinstance(v, dict):
+        return "{" + " ".join(f"{k}={_fmt_valore(x)}" for k, x in v.items()) + "}"
+    return _num(v)
+
+
+def fmt_verdetto(v: dict) -> str:
+    """UNA riga per un verdetto di `GeneratedStrategy.spiega`: per feature il voto
+    long/short (si/no/?) e i numeri che ha guardato; in coda la direzione e il
+    motivo. Funzione pura."""
+    pezzi = []
+    for nome, f in (v.get("features") or {}).items():
+        val = " ".join(f"{k}={_fmt_valore(x)}" for k, x in (f.get("valori") or {}).items())
+        pezzi.append(f"{nome} L={_sn(f.get('long'))} S={_sn(f.get('short'))}" + (f" ({val})" if val else ""))
+    for nome, f in (v.get("filtri") or {}).items():
+        pezzi.append(f"filtro {nome} {'ok' if f.get('ok') else 'NO'}")
+    dir_ = v.get("direzione_finale")
+    coda = f"=> {dir_.upper() if dir_ else 'nessun segnale'} ({v.get('motivo', '')})"
+    return " | ".join(pezzi + [coda]) if pezzi else coda
+
+
+def feature_che_frenano(v: dict, direzione: str) -> list[str]:
+    """Le feature il cui voto per `direzione` non e' vero (falso o non valutabile):
+    sono quelle che hanno impedito quel lato. Funzione pura."""
+    lato = "long" if str(direzione).lower() == "long" else "short"
+    return [nome for nome, f in (v.get("features") or {}).items() if not f.get(lato)]
+
+
+def regola_coincide(regola_trade, descrizione: str) -> bool | None:
+    """La `regola` in chiaro salvata sul trade contro la descrizione della spec nel
+    registro: None se il trade non la porta (trade prima del 25 set 2026), True se
+    la descrizione compare nel testo (che puo' avere il prefisso «[gen] » e la
+    coda del fallback), False altrimenti — e allora la spec operata NON e' quella
+    nel registro (id riusato, spec riscritta, o gemella sostituita)."""
+    if not regola_trade:
+        return None
+    return str(descrizione).strip() in str(regola_trade)
+
+
+def diagnosi_dettaglio(direzione_paper: str, v_vivo: dict | None, v_chiusa: dict | None,
+                       v_motore_k: dict | None, coincide: bool | None) -> str:
+    """LA RIGA DI DIAGNOSI per un trade, da regole, in quest'ordine:
+      1. la spec operata non e' quella nel registro (regola sul trade diversa);
+      2. sui valori del paper la regola non scatta nemmeno col prezzo d'ingresso:
+         quali feature frenano (il caso IGNOTO di ops 0308);
+      3. scatta col prezzo d'ingresso ma non con la chiusura: prezzo vivo;
+      4. scatta sui valori del paper ma non sul frame del motore: quali feature
+         frenano dal lato del motore;
+      5. scatta da entrambe le parti: il motore non ha aperto per altro.
+    Funzione pura."""
+    d = str(direzione_paper or "").lower()
+    if coincide is False:
+        return "la spec nel registro non e' quella che il bot ha operato (la `regola` sul trade e' diversa)"
+    if v_vivo is None:
+        return "il trade non porta `indicators_at_entry`: si vede solo il frame del motore" + (
+            "" if v_motore_k is None else
+            (" — che scatta" if v_motore_k.get("direzione_finale") == d
+             else f" — che NON scatta: frenano {', '.join(feature_che_frenano(v_motore_k, d)) or '?'}"))
+    if v_vivo.get("direzione_finale") != d:
+        frena = feature_che_frenano(v_vivo, d)
+        return ("sui valori scritti dal paper la regola NON scatta col prezzo d'ingresso: frenano "
+                + (", ".join(frena) if frena else v_vivo.get("motivo", "?"))
+                + " — NB: il prezzo su cui il bot ha deciso (vivo) non e' sul trade, `entry_price` porta lo "
+                  "slippage: se la feature che frena guarda il prezzo, vale la riga «prezzo di decisione ≈»; "
+                  "se guarda un indicatore, i valori registrati non sono quelli su cui il bot ha deciso")
+    if v_chiusa is not None and v_chiusa.get("direzione_finale") != d:
+        return ("PREZZO VIVO: sui valori del paper la regola scatta col prezzo d'ingresso e non con la "
+                "chiusura della candela — con DECISIONE_SU_CHIUSURA il bot non aprirebbe")
+    if v_motore_k is not None and v_motore_k.get("direzione_finale") != d:
+        frena = feature_che_frenano(v_motore_k, d)
+        return ("sul frame del motore frenano: " + (", ".join(frena) if frena else v_motore_k.get("motivo", "?"))
+                + " — stessi indicatori? guarda le differenze sopra")
+    return ("la regola scatta da entrambe le parti: il motore non ha aperto per altro "
+            "(posizione aperta, cooldown, setup non tradabile)")
+
+
+def _prezzo_da_feats(feats: dict | None, ind: IndicatorSnapshot | None) -> float | None:
+    """Il prezzo VIVO su cui il bot ha deciso, RICOSTRUITO (approssimato a 4
+    decimali) da `feats_at_entry`: `dist_ema` = price/ema_slow - 1. Serve perche'
+    il trade registra `entry_price`, che porta lo slippage, non il prezzo di
+    decisione."""
+    if not isinstance(feats, dict) or ind is None:
+        return None
+    de = feats.get("dist_ema")
+    if de is None or not ind.ema_slow:
+        return None
+    try:
+        return float(ind.ema_slow) * (1.0 + float(de))
+    except (TypeError, ValueError):
+        return None
+
+
+def dettaglio_coppia(key: str, ptr_ord: list[dict], spec, rec: dict | None, strat, diag,
+                     tf_s: float, righe: list[dict] | None = None) -> list[str]:
+    """Le righe del dettaglio per una coppia. `diag` e' il `Diagnosta` della
+    coppia (o None se il motore non e' rigirabile: allora si vedono solo i
+    valori del paper). Ritorna le righe invece di stamparle: cosi' i test le
+    leggono senza catturare stdout."""
+    out: list[str] = []
+    spiega = getattr(strat, "spiega", None)
+    out.append(f"  DETTAGLIO {key}")
+    if spec is None or spiega is None:
+        out.append("    spec non nel registro (o strategia non generata): niente regola da spiegare")
+        return out
+    out.append(f"    spec: {strat.description} · timeframe {strat.timeframe} · solo {strat.solo or 'entrambi'} · "
+               f"mercato {'si' if strat.usa_mercato else 'no'} · 1h {'si' if strat.usa_htf else 'no'} · "
+               f"volume_mult {spec.get('volume_mult', 0) or 0} · min_adx {spec.get('min_adx', 0) or 0}")
+    out.append(f"    spec nel registro: genitore {spec.get('genitore') or '—'} · ipotesi {spec.get('ipotesi') or '—'}"
+               + (f" · record coppia: pass {rec.get('pass_count', '?')} · sostituita_da "
+                  f"{rec.get('sostituita_da') or '—'} · genitore {rec.get('genitore') or '—'}"
+                  if isinstance(rec, dict) else " · record coppia: ASSENTE dal registro validato"))
+    classe_per = {id(r["paper"]): r for r in (righe or [])}
+    tf = strat.timeframe
+    for i, t in enumerate(ptr_ord, 1):
+        b = barra_del_paper(t, tf_s)
+        d = str(t.get("direction") or "?").lower()
+        r = classe_per.get(id(t)) or {}
+        out.append(f"    #{i} {_quando(b)} UTC {d:<5} entry {_num(t.get('entry_price'))} pnl "
+                   f"{_f(t.get('pnl')):+.2f} · classe {r.get('classe') or '?'}"
+                   + (f" · {r.get('sotto')}" if r.get("sotto") else ""))
+        coincide = regola_coincide(t.get("regola"), strat.description)
+        out.append(f"       regola sul trade: {t.get('regola') or '—'} → "
+                   f"{'coincide con la spec' if coincide else ('DIVERSA dalla spec' if coincide is False else 'non registrata')}")
+        feats = t.get("feats_at_entry") if isinstance(t.get("feats_at_entry"), dict) else None
+        if feats:
+            out.append("       feats_at_entry: " + " ".join(f"{k}={_num(v)}" for k, v in feats.items()))
+        # il frame del motore, barra per barra
+        v_motore_k = None
+        k = diag.indice(b) if diag is not None else None
+        if diag is None:
+            out.append("       motore: non rigirabile")
+        elif k is None:
+            out.append("       motore: candela del paper non nei dati del motore"
+                       + (f" (ultima {_quando(diag.ts[-1])} UTC)" if diag.ts and b > diag.ts[-1] else ""))
+        else:
+            for off in BARRE_DETTAGLIO:
+                j = k + off
+                if j < 0 or j >= len(diag.candles):
+                    continue
+                snap = diag.snapshot_motore(j)
+                ctx, _ = diag._ctx(snap, j)
+                v = spiega(snap, ctx)
+                if off == 0:
+                    v_motore_k = v
+                out.append(f"       motore k{off:+d} {_quando(diag.ts[j])} close {_num(snap.price)}: {fmt_verdetto(v)}")
+        # i valori del paper, col prezzo d'ingresso e con la chiusura
+        ric = Diagnosta.snapshot_dal_trade(t.get("symbol") or key.split("|")[0], t)
+        v_vivo = v_chiusa = None
+        if ric is None:
+            out.append("       paper: il trade non porta `indicators_at_entry`")
+        else:
+            ind_p = ric.ind(tf)
+            if ind_p is None:
+                out.append(f"       paper: `indicators_at_entry` senza il timeframe {tf}")
+            else:
+                ctx_p = StrategyContext({ric.symbol: ric}, ric.regime)
+                v_vivo = spiega(ric, ctx_p, prezzo=ric.price)
+                out.append(f"       paper (prezzo d'ingresso {_num(ric.price)}): {fmt_verdetto(v_vivo)}")
+                if ric.close_chiusa is not None:
+                    v_chiusa = spiega(ric, ctx_p, prezzo=ric.close_chiusa)
+                    out.append(f"       paper (chiusura {_num(ric.close_chiusa)}): {fmt_verdetto(v_chiusa)}")
+                pv = _prezzo_da_feats(feats, ind_p)
+                if pv is not None:
+                    v_pv = spiega(ric, ctx_p, prezzo=pv)
+                    out.append(f"       paper (prezzo di decisione ≈{_num(pv)}, da feats.dist_ema): {fmt_verdetto(v_pv)}")
+                if diag is not None and k is not None:
+                    dd = diff_indicatori(diag.snapshot_motore(k).ind(tf), ind_p)
+                    out.append("       indicatori motore/paper: " + (", ".join(
+                        f"{x['campo']} {_num(x['motore'])}/{_num(x['paper'])}" for x in dd) if dd else "uguali (entro 5%)"))
+        out.append("       DIAGNOSI: " + diagnosi_dettaglio(d, v_vivo, v_chiusa, v_motore_k, coincide))
+    return out
+
+
+# --------------------------------------------------------------------------- #
+# In sfondo: il canale ops uccide a 900 s, il lavoro completo dura di piu'     #
+# --------------------------------------------------------------------------- #
+def _processo_vivo(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def esito() -> int:
+    """Stampa il referto scritto da `--sfondo`, quando e' stato scritto e se il
+    processo gira ancora. Senza referto esce 0 e lo dice: e' in lista bianca."""
+    if not os.path.exists(FILE_ESITO):
+        di(f"[ingressi] nessun referto in {FILE_ESITO}: lancia prima `ingressi-completo` (--sfondo).")
+        return 0
+    mtime = dt.datetime.fromtimestamp(os.path.getmtime(FILE_ESITO), dt.timezone.utc)
+    pid, vivo = None, False
+    try:
+        with open(FILE_PID, encoding="utf-8") as f:
+            pid = int(f.read().strip() or 0)
+        vivo = _processo_vivo(pid) if pid else False
+    except (OSError, ValueError):
+        pid = None
+    stato = "ANCORA IN CORSO (il referto e' parziale)" if vivo else "finito"
+    di(f"[ingressi] referto {FILE_ESITO} · scritto {mtime:%Y-%m-%d %H:%M:%S} UTC · "
+       + (f"processo {pid} {stato}" if pid else "pid non registrato"))
+    di("-" * 74)
+    with open(FILE_ESITO, encoding="utf-8", errors="replace") as f:
+        sys.stdout.write(f.read())
+    sys.stdout.flush()
+    return 0
+
+
+def sfondo(args) -> int:
+    """Stacca l'analisi dal chiamante: doppio fork + setsid, stdout/stderr sul
+    file del referto, pid su file; il padre stampa il pid ed esce 0 subito.
+
+    PERCHE' COSI': la lista bianca ops e' «una riga, niente shell, niente pipe»,
+    quindi `nohup ... &` non si puo' scrivere li'; e l'agente ops uccide il
+    processo figlio a 900 s (`subprocess.run(timeout)`). Il nipote e' in una
+    sessione sua (setsid) e non e' figlio dell'agente: sopravvive. I suoi fd
+    0/1/2 vanno su /dev/null e sul file PRIMA che il padre esca, altrimenti
+    terrebbe aperta la pipe dell'agente e `communicate()` non tornerebbe mai.
+
+    NEI TEST (`TRADING_BOT_TEST_MODE`) o SENZA FIREBASE VIVO non si stacca niente:
+    esce 0 dicendo perche'. `tests/test_allowlist_runnable.py` lancia ogni voce
+    della lista bianca, e un fork di 40 minuti dentro la suite sarebbe un guaio."""
+    if os.getenv("TRADING_BOT_TEST_MODE"):
+        di("[ingressi] --sfondo in TEST MODE: non stacco nessun processo (uscita 0).")
+        return 0
+    try:
+        fb = get_firebase()
+        vivo = bool(getattr(fb, "is_live", False))
+    except Exception as exc:  # noqa: BLE001
+        di(f"[ingressi] --sfondo: Firebase non inizializzabile ({exc}): non stacco niente (uscita 0).")
+        return 0
+    if not vivo:
+        di("[ingressi] --sfondo: Firebase non e' vivo (store in memoria): niente da analizzare, non stacco niente.")
+        return 0
+    os.makedirs(os.path.dirname(FILE_ESITO), exist_ok=True)
+    try:
+        with open(FILE_PID, encoding="utf-8") as f:
+            vecchio = int(f.read().strip() or 0)
+        if vecchio and _processo_vivo(vecchio):
+            di(f"[ingressi] --sfondo: un'analisi e' GIA' in corso (pid {vecchio}): usa --esito, non ne lancio un'altra.")
+            return 0
+    except (OSError, ValueError):
+        pass
+    sys.stdout.flush()
+    sys.stderr.flush()
+    pid = os.fork()
+    if pid > 0:
+        os.waitpid(pid, 0)                 # il figlio intermedio esce subito
+        try:
+            with open(FILE_PID, encoding="utf-8") as f:
+                nipote = f.read().strip()
+        except OSError:
+            nipote = "?"
+        di(f"[ingressi] analisi completa avviata in sfondo (pid {nipote}) · referto in {FILE_ESITO} · "
+           f"leggilo con `ingressi-esito` (--esito). Il canale ops non la puo' fermare: e' staccata.")
+        return 0
+    # ---- figlio intermedio: nuova sessione, poi il nipote che lavora ----
+    os.setsid()
+    pid2 = os.fork()
+    if pid2 > 0:
+        with open(FILE_PID, "w", encoding="utf-8") as f:
+            f.write(str(pid2))
+        os._exit(0)
+    # ---- nipote ----
+    try:
+        fd_null = os.open(os.devnull, os.O_RDONLY)
+        fd_out = os.open(FILE_ESITO, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o644)
+        os.dup2(fd_null, 0)
+        os.dup2(fd_out, 1)
+        os.dup2(fd_out, 2)
+        os.close(fd_null)
+        os.close(fd_out)
+        di(f"[ingressi] sfondo, pid {os.getpid()}, avvio {dt.datetime.now(dt.timezone.utc):%Y-%m-%d %H:%M:%S} UTC")
+        code = analisi(args)
+    except BaseException as exc:  # noqa: BLE001
+        try:
+            di(f"[ingressi] sfondo interrotto: {exc!r}")
+        except Exception:  # noqa: BLE001
+            pass
+        code = 1
+    finally:
+        try:
+            sys.stdout.flush()
+        except Exception:  # noqa: BLE001
+            pass
+    os._exit(code)
+
 # --------------------------------------------------------------------------- #
 # main                                                                         #
 # --------------------------------------------------------------------------- #
@@ -701,15 +1048,35 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--interval", default=settings.ORCHESTRATOR_TIMEFRAME)
     ap.add_argument("--start", default="2022-01-01")
-    ap.add_argument("--end", default=None)
+    ap.add_argument("--end", default=None,
+                    help="fine delle candele (default: DOMANI UTC, cosi' si vede anche oggi)")
     ap.add_argument("--source", default="binance")
     ap.add_argument("--coppie", type=int, default=0,
                     help="quante coppie, dalle piu' operate in giu' (0 = tutte)")
+    ap.add_argument("--coppia", default=None,
+                    help="una sola coppia, `SYM|strat` (con --dettaglio: la regola feature per feature)")
+    ap.add_argument("--dettaglio", action="store_true",
+                    help="per ogni trade: la regola feature per feature, barra per barra")
     ap.add_argument("--budget", type=float, default=BUDGET_S,
                     help="secondi prima di fermarsi da soli (0 = mai)")
     ap.add_argument("--finestra-bot", dest="finestra_bot", action=argparse.BooleanOptionalAction,
                     default=True, help="seconda passata del motore sulla finestra corta")
+    ap.add_argument("--sfondo", action="store_true",
+                    help="stacca l'analisi (doppio fork), referto in data/ingressi_ultimo.txt, esce subito")
+    ap.add_argument("--esito", action="store_true", help="stampa il referto scritto da --sfondo")
     args = ap.parse_args()
+    if args.end is None:
+        args.end = domani_utc()
+    if args.esito:
+        return esito()
+    if args.sfondo:
+        return sfondo(args)
+    return analisi(args)
+
+
+def analisi(args) -> int:
+    """Il lavoro vero: legge, rigira, classifica, stampa. `main` ci arriva
+    direttamente o dal nipote di `--sfondo`."""
     t0 = time.time()
     deadline = (t0 + float(args.budget)) if args.budget > 0 else 0.0
 
@@ -726,6 +1093,15 @@ def main() -> int:
     pairs = decode_pairs((fb.get_doc("strategy_registry", "validated") or {}).get("pairs"))
 
     scelte = sorted(per_coppia.items(), key=lambda kv: (-len(kv[1]), kv[0]))
+    if args.coppia:
+        # `SYM|strat` o `SYM/strat`: la barra in una riga della lista bianca ops
+        # farebbe pensare a una pipe (non lo e': niente shell), meglio evitarla
+        args.coppia = str(args.coppia).replace("/", "|")
+        scelte = [kv for kv in scelte if kv[0] == args.coppia]
+        if not scelte:
+            di(f"[ingressi] la coppia {args.coppia} non ha trade nel paper. Coppie con trade: "
+               + ", ".join(k for k, _v in sorted(per_coppia.items())[:40]))
+            return 0
     if args.coppie > 0:
         scelte = scelte[: args.coppie]
     di("=" * 74)
@@ -783,6 +1159,10 @@ def main() -> int:
                 for i, r in enumerate(righe_per_coppia[key], 1):
                     for line in _riga_trade(i, r):
                         di(line)
+                if args.dettaglio:
+                    for line in dettaglio_coppia(key, ptr_ord, spec, pairs.get(key), strat, None, tf_s,
+                                                 righe_per_coppia[key]):
+                        di(line)
                 continue
             candles = load_candles(symbol, iv, args.start, args.end or date.today().isoformat(),
                                    prefer=args.source, allow_synthetic=False)
@@ -798,6 +1178,9 @@ def main() -> int:
                f"cooldown {cd_barre} barre")
             for i, r in enumerate(righe, 1):
                 for line in _riga_trade(i, r):
+                    di(line)
+            if args.dettaglio:
+                for line in dettaglio_coppia(key, ptr_ord, spec, pairs.get(key), strat, diag, tf_s, righe):
                     di(line)
             ab = sum(1 for r in righe if r["classe"] == "ABBINATO")
             riga = f"  ABBINATI {ab}/{len(righe)}"

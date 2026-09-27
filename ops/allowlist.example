@@ -98,6 +98,21 @@ autopsia-validate: .venv/bin/python -m scripts.autopsia_validate
 # non scatta con il sotto-motivo / lontano / senza motore) e una seconda passata del
 # motore «come il bot» (200 candele). Sola lettura; si ferma da sola a 720 s.
 ingressi:     .venv/bin/python -m scripts.ingressi_report
+# LA STESSA ANALISI SU TUTTE LE COPPIE, IN SFONDO (27 set 2026): ops 0308 ne ha
+# coperte 17 su 58 nei 12 minuti del canale. Qui lo script si stacca da solo
+# (doppio fork + setsid: la lista bianca e' «una riga, niente shell», quindi
+# `nohup ... &` non si puo' scrivere, e l'agente uccide il figlio a 900 s — il
+# nipote staccato sopravvive), scrive in data/ingressi_ultimo.txt e stampa il
+# pid. Il referto si legge con `ingressi-esito` (dice anche se gira ancora).
+# Sola lettura su Firebase; sul disco scrive solo quel referto e la cache candele.
+ingressi-completo: .venv/bin/python -m scripts.ingressi_report --sfondo --budget 0
+ingressi-esito: .venv/bin/python -m scripts.ingressi_report --esito
+# UNA COPPIA, FEATURE PER FEATURE (27 set 2026): la regola di `gen_6d06dca0`
+# valutata barra per barra sui 6 trade di ORCAUSDT/VETUSDT che il motore non
+# apre (classe IGNOTO in ops 0308). La coppia e' scritta nella voce: niente +args.
+# `SYM/strat` vale come `SYM|strat`: cosi' nella riga non c'e' una barra verticale.
+ingressi-orca: .venv/bin/python -m scripts.ingressi_report --coppia ORCAUSDT/gen_6d06dca0 --dettaglio
+ingressi-vet:  .venv/bin/python -m scripts.ingressi_report --coppia VETUSDT/gen_6d06dca0 --dettaglio
 
 # ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
 # la lista bianca stessa, per confrontarla con questo esempio quando si mette in

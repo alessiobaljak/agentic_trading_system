@@ -447,6 +447,45 @@ def spec_id(spec: dict) -> str:
     return f"gen_{h}"
 
 
+#: gli indicatori che ogni feature LEGGE (per `GeneratedStrategy.spiega`): serve a
+#: stampare, accanto al voto, i numeri da cui e' nato. "price" = il prezzo di
+#: decisione. Non cambia la valutazione: e' documentazione leggibile da macchina.
+_CAMPI_FEATURE = {
+    "rsi_extreme": ("rsi",), "rsi_momentum": ("rsi",),
+    "bb_touch": ("price", "bb_lower", "bb_upper"), "bb_break": ("price", "bb_lower", "bb_upper"),
+    "vwap_momentum": ("price", "vwap"), "vwap_reversion": ("price", "vwap"),
+    "ema_cross": ("ema_fast", "ema_slow"), "macd_cross": ("macd", "macd_signal"),
+    "macd_hist": ("macd_hist",), "price_ema": ("price", "ema_slow"), "macd_zero": ("macd",),
+    "price_bb_mid": ("price", "bb_mid"), "stoch_extreme": ("stoch_k",),
+    "stoch_momentum": ("stoch_k", "stoch_d"), "volatility_regime": ("price", "atr"),
+    "trend_strength": ("adx",), "volume_surge": ("volume", "volume_sma"), "session": (),
+    "not_stretched": ("price", "ema_slow", "atr"), "adx_below": ("adx",),
+}
+
+
+def _valori_feature(f: dict, i, price: float, mercato, htf) -> dict:
+    """I numeri che una feature ha guardato, piu' i suoi parametri. Solo lettura."""
+    kind = f.get("kind")
+    out = {k: v for k, v in f.items() if k != "kind"}
+    if kind in MARKET_FEATURES:
+        out["price"] = price
+        if i is not None:
+            out["ema_slow"] = i.ema_slow
+        out["mercato"] = (None if mercato is None else
+                          {"price": mercato.price, "ema_fast": mercato.ema_fast, "ema_slow": mercato.ema_slow})
+        return out
+    if kind in HTF_FEATURES:
+        out["price"] = price
+        out["1h"] = (None if htf is None else {"ema_fast": htf.ema_fast, "ema_slow": htf.ema_slow})
+        return out
+    if kind == "session":
+        from datetime import datetime, timezone
+        out["ora_utc"] = datetime.now(timezone.utc).hour
+    for c in _CAMPI_FEATURE.get(kind, ()):
+        out[c] = price if c == "price" else (getattr(i, c, None) if i is not None else None)
+    return out
+
+
 class GeneratedStrategy(Strategy):
     """Interpreta una spec dichiarativa. Attiva in tutti i regimi: dove funziona
     lo decide il backtest, non una teoria a priori."""
@@ -502,57 +541,153 @@ class GeneratedStrategy(Strategy):
     def _tf(self) -> str:
         return self.timeframe
 
+    # ----------------------------------------------------------------------- #
+    # LA REGOLA, VALUTATA UNA VOLTA SOLA (27 set 2026, backlog J12)             #
+    #                                                                          #
+    # `generate_signal` e `spiega` passano dalla STESSA `_verdetto`: il primo   #
+    # ne fa un segnale, il secondo lo restituisce feature per feature. Prima   #
+    # la valutazione stava tutta dentro `generate_signal`, e per capire perche' #
+    # `gen_6d06dca0` aveva aperto 6 trade su ORCAUSDT/VETUSDT che il motore non #
+    # apre (ops 0308, classe IGNOTO) non c'era modo di chiedere alla strategia  #
+    # «quale feature ti ha fermato?» senza riscrivere la regola a mano — e una  #
+    # regola riscritta a mano e' proprio cio' che non si puo' confrontare.      #
+    # ----------------------------------------------------------------------- #
+    def _prezzo_decisione(self, asset: AssetSnapshot) -> float:
+        """Il prezzo su cui la REGOLA decide.
+
+        Dal 27 set 2026 (`DECISIONE_SU_CHIUSURA`, backlog J12) e' la chiusura
+        dell'ultima candela CHIUSA (`asset.close_chiusa`), la stessa su cui
+        decide il motore di backtest (`engine._snapshot_from_frame`: `price =
+        row["close"]`). Il bot decideva invece sul prezzo VIVO della candela in
+        formazione (`price_agent.build_snapshot`: `price = candles[-1].close`):
+        ops 0308 ha misurato 5 trade (DEXEUSDT, GPSUSDT) con indicatori identici
+        e regola scattata da una parte sola per 1-4 decimillesimi di differenza.
+        Il prezzo vivo resta `asset.price` per tutto il resto: esecuzione, stop,
+        gate di rischio, feature del selettore. Se `close_chiusa` manca (snapshot
+        vecchi, test) si torna al prezzo vivo, com'era."""
+        from bot.config import settings as _st
+        cc = getattr(asset, "close_chiusa", None)
+        if _st.DECISIONE_SU_CHIUSURA and cc is not None:
+            return float(cc)
+        return asset.price
+
+    def _valuta_feature(self, f: dict, i: IndicatorSnapshot, price: float, mercato, htf):
+        """(long_ok, short_ok) di UNA feature, o None se non si puo' valutare
+        (feature sconosciuta o dato mancante). E' l'unico posto che sa in quale
+        vocabolario vive una feature."""
+        kind = f.get("kind")
+        if kind in MARKET_FEATURES:
+            return MARKET_FEATURES[kind](i, price, f, mercato)
+        if kind in HTF_FEATURES:
+            return HTF_FEATURES[kind](htf, price, f)
+        fn = FEATURE_LIBRARY.get(kind)
+        if fn is None:
+            return None
+        return fn(i, price, f)
+
+    def _verdetto(self, asset: AssetSnapshot, ctx=None, prezzo: Optional[float] = None) -> dict:
+        """La regola valutata feature per feature. PURA: non tocca lo snapshot e
+        non decide niente da sola — `generate_signal` legge `direzione_finale`.
+
+        Ritorna:
+          features        {nome: {"kind", "long", "short", "valori"}} nell'ordine
+                          della spec (nome = kind, o kind#n se ripetuto); long/short
+                          None quando la feature non si e' potuta valutare
+          direzione_finale "long" | "short" | None
+          motivo          UNA frase: perche' quella direzione, o perche' nessuna
+          prezzo          il prezzo su cui la regola ha deciso
+          filtri          esito dei filtri globali (volume, min_adx)
+        `prezzo` sovrascrive il prezzo di decisione: serve allo strumento degli
+        ingressi per chiedere «e col prezzo vivo del paper?» senza copiare lo
+        snapshot."""
+        out: dict = {"features": {}, "direzione_finale": None, "motivo": "",
+                     "prezzo": None, "prezzo_vivo": asset.price,
+                     "close_chiusa": getattr(asset, "close_chiusa", None),
+                     "filtri": {}, "solo": self.solo, "timeframe": self._tf}
+        i = asset.ind(self._tf)
+        if i is None:
+            out["motivo"] = f"indicatori del timeframe {self._tf} assenti"
+            return out
+        if not self._features:
+            out["motivo"] = "spec senza feature"
+            return out
+        price = float(prezzo) if prezzo is not None else self._prezzo_decisione(asset)
+        out["prezzo"] = price
+        mercato = mercato_da_contesto(ctx, self._tf) if self.usa_mercato else None
+        htf = asset.ind("1h") if self.usa_htf else None
+        long_ok, short_ok = True, True
+        blocco: Optional[str] = None
+        for f in self._features:
+            kind = str(f.get("kind"))
+            nome = kind
+            n = 2
+            while nome in out["features"]:
+                nome, n = f"{kind}#{n}", n + 1
+            res = self._valuta_feature(f, i, price, mercato, htf)
+            voce = {"kind": kind, "long": None if res is None else bool(res[0]),
+                    "short": None if res is None else bool(res[1]),
+                    "valori": _valori_feature(f, i, price, mercato, htf)}
+            out["features"][nome] = voce
+            if res is None and blocco is None:
+                blocco = (f"feature {nome} sconosciuta" if not feature_esiste(kind)
+                          else f"feature {nome} senza dati")
+            if res is not None:
+                long_ok = long_ok and res[0]
+                short_ok = short_ok and res[1]
+        if blocco is not None:
+            out["motivo"] = blocco
+            return out
+        # filtri globali (stesse soglie di sempre, sugli indicatori, non sul prezzo)
+        if self._volume_mult > 0:
+            ok = not (i.volume is None or i.volume_sma is None
+                      or i.volume <= i.volume_sma * self._volume_mult)
+            out["filtri"]["volume"] = {"ok": ok, "volume": i.volume, "volume_sma": i.volume_sma,
+                                       "mult": self._volume_mult}
+            if not ok:
+                out["motivo"] = "filtro volume: volume non sopra la media per il fattore"
+                return out
+        if self._min_adx > 0:
+            ok = not (i.adx is None or i.adx < self._min_adx)
+            out["filtri"]["min_adx"] = {"ok": ok, "adx": i.adx, "min": self._min_adx}
+            if not ok:
+                out["motivo"] = f"filtro ADX: {i.adx} sotto {self._min_adx:g}"
+                return out
+        if long_ok == short_ok:
+            frena = [n for n, v in out["features"].items() if not v["long"] and not v["short"]]
+            if long_ok:
+                out["motivo"] = "contraddittorio: tutte le feature dicono si a entrambi i lati"
+            else:
+                out["motivo"] = ("nessuna direzione netta" + (": fermano " + ", ".join(frena)
+                                                              if frena else ""))
+            return out
+        if self.solo == "long" and short_ok:
+            out["motivo"] = "lato escluso dalla spec (solo long): il segnale sarebbe short"
+            return out
+        if self.solo == "short" and long_ok:
+            out["motivo"] = "lato escluso dalla spec (solo short): il segnale sarebbe long"
+            return out
+        out["direzione_finale"] = "long" if long_ok else "short"
+        out["motivo"] = f"{out['direzione_finale'].upper()}: tutte le feature concordano"
+        return out
+
+    def spiega(self, asset: AssetSnapshot, ctx=None, prezzo: Optional[float] = None) -> dict:
+        """SOLA LETTURA: la stessa valutazione di `generate_signal`, feature per
+        feature, senza produrre ne' alterare alcuna decisione. Vedi `_verdetto`
+        per il formato. Un test (`tests/test_spiega.py`) pretende che
+        `spiega(...)["direzione_finale"]` e `generate_signal(...)` concordino
+        sempre: se un giorno divergono, e' `_verdetto` che va guardata, non
+        questo metodo."""
+        return self._verdetto(asset, ctx, prezzo=prezzo)
+
     def generate_signal(
         self, asset: AssetSnapshot, ctx: Optional[StrategyContext] = None
     ) -> Optional[StrategySignal]:
-        i = asset.ind(self._tf)
-        if i is None or not self._features:
+        v = self._verdetto(asset, ctx)
+        if v["direzione_finale"] is None:
             return None
-        price = asset.price
-        # Il mercato si risolve UNA volta, non per feature: se manca e la spec lo
-        # chiede, il segnale non nasce. Meglio nessun trade che un trade deciso
-        # su un mercato immaginario.
-        mercato = mercato_da_contesto(ctx, self._tf) if self.usa_mercato else None
-        # l'occhio a 1 ora: solo se la spec lo chiede (stesso principio del mercato)
-        htf = asset.ind("1h") if self.usa_htf else None
-        long_ok, short_ok = True, True
-        for f in self._features:
-            kind = f.get("kind")
-            if kind in MARKET_FEATURES:
-                res = MARKET_FEATURES[kind](i, price, f, mercato)
-            elif kind in HTF_FEATURES:
-                res = HTF_FEATURES[kind](htf, price, f)
-            else:
-                fn = FEATURE_LIBRARY.get(kind)
-                if fn is None:
-                    return None
-                res = fn(i, price, f)
-            if res is None:
-                return None  # dati indicatore mancanti -> niente segnale
-            long_ok = long_ok and res[0]
-            short_ok = short_ok and res[1]
-
-        # filtro volume opzionale (gate su entrambe le direzioni)
-        if self._volume_mult > 0:
-            if i.volume is None or i.volume_sma is None or i.volume <= i.volume_sma * self._volume_mult:
-                return None
-        # filtro ADX opzionale: opera solo se il trend è abbastanza forte
-        if self._min_adx > 0:
-            if i.adx is None or i.adx < self._min_adx:
-                return None
-
-        if long_ok == short_ok:
-            return None  # nessuna direzione netta (o entrambe -> contraddittorio)
-        # il lato escluso dalla spec non nasce mai. DOPO il controllo qui sopra,
-        # di proposito: la figlia «solo long» deve prendere esattamente i long
-        # del genitore e nessun altro — se il filtro stesse prima, un caso
-        # contraddittorio (entrambi i lati veri) diventerebbe un long che il
-        # genitore non avrebbe mai aperto.
-        if self.solo == "long" and short_ok:
-            return None
-        if self.solo == "short" and long_ok:
-            return None
-        direction = Direction.LONG if long_ok else Direction.SHORT
+        direction = Direction.LONG if v["direzione_finale"] == "long" else Direction.SHORT
+        # stop e target restano sul prezzo VIVO (`asset.price`): e' il prezzo a cui
+        # il trade si apre davvero, e lo stop in ATR si misura da li'
         stop, target = self._atr_stop_target(asset, direction, self._tf, self._atr_mult_stop, self._rr)
         return self._signal(asset, direction, confidence=60.0,
                             reasoning=f"[gen] {self.description}", stop=stop, target=target)
