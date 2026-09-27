@@ -1975,3 +1975,22 @@ percorso entry→TP, misurata e basta). Metro a due settimane: quota di
 «prematuri» sulle coppie il cui keep viene dalla proposta per strategia
 contro le altre. Suite 1789 test verdi; vale dal prossimo giro del gate,
 nessun riavvio del bot necessario.
+
+### 27 settembre, 22:50: l'analisi completa degli ingressi (ops 0318-0320)
+
+Girata con `systemd-run` (50 minuti, 66 coppie, 135 trade del paper), col
+codice nuovo: sessione come filtro e ora della candela. Abbinati 62 su 135
+(46%); non abbinati 73, di cui 67 «ignoto» (la regola non scatta nemmeno sui
+valori del paper). **Non è un difetto nuovo: è l'effetto atteso delle
+correzioni di oggi.** Le coppie con la sessione hanno cambiato comportamento
+nel motore: SUIUSDT|gen_490a90e5 da 782 a 292 trade sulla storia,
+USELESSUSDT|gen_2031005e da 266 a 105, ORCAUSDT|gen_fca11c08 da 484 a 222
+(stesse coppie, ops 0308 contro 0320); i trade del paper su quelle coppie
+erano stati decisi con la regola vecchia (lato scelto dall'ora
+dell'orologio) e la regola nuova non li riproduce: 0 su 7, 0 su 7, 0 su 5. Le
+coppie senza sessione non cambiano: SPXUSDT 6 su 6 (214 → 215 trade del
+motore), DEXEUSDT|gen_fa304106 137 → 137. Quindi la parità vera si misura solo
+sui trade aperti DOPO le correzioni del 27 (chiusura della candela dalle
+14:22, ora della candela dalle 15:27, sessione come filtro dalle 21:40 ora
+italiana). Proposta: un filtro di data nello strumento (di default, i trade
+dopo l'ultima modifica delle regole) e rilanciarlo fra una settimana.
