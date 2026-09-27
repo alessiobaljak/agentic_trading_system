@@ -40,6 +40,19 @@ class ExitReason(str, Enum):
     CIRCUIT_BREAKER = "circuit_breaker"
 
 
+def epoch_utc(dt: datetime) -> float:
+    """Epoch in secondi di un istante, leggendo un datetime SENZA fuso come UTC.
+
+    `datetime.timestamp()` su un datetime naive usa il fuso della macchina: su
+    una VPS in UTC non si vede, in un test su un portatile europeo sposta l'ora
+    della candela di una o due ore. Le candele di Binance arrivano con il fuso
+    (`price_agent`), quelle sintetiche dei test spesso senza: qui contano uguale.
+    Accetta anche un `pandas.Timestamp` (ha `tzinfo` e `timestamp()`)."""
+    if getattr(dt, "tzinfo", None) is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return float(dt.timestamp())
+
+
 def _utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -89,6 +102,14 @@ class AssetSnapshot(BaseModel):
     # resta il prezzo VIVO per esecuzione, stop, rischio e feature. None negli
     # snapshot che non lo portano (allora la regola usa `price`, com'era).
     close_chiusa: Optional[float] = None
+    # L'ORA DELLA CANDELA SU CUI LA REGOLA DECIDE (27 set 2026, backlog J13):
+    # epoch in secondi dell'APERTURA dell'ultima candela CHIUSA del timeframe
+    # primario, la stessa candela di `close_chiusa`. Serve alla feature
+    # `session` delle strategie generate, che fino al 27 set leggeva l'orologio
+    # del giro (`datetime.now`) e non la candela: nel backtest ogni barra della
+    # storia prendeva l'ora in cui girava il gate. None negli snapshot che non lo
+    # portano (allora la feature torna all'orologio, e lo dice una volta).
+    ts: Optional[float] = None
     mark_price: Optional[float] = None
     funding_rate: Optional[float] = None   # es. 0.0001 = 0.01%
     open_interest: Optional[float] = None

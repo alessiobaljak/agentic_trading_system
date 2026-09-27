@@ -242,6 +242,34 @@ def riga_riduzione_giro(diag: dict | None) -> str:
             f"~{int(r.get('valutazioni_stimate') or 0)} valutazioni stimate{coda}")
 
 
+def riga_sessione(validated, specs: dict | None) -> str:
+    """«FEATURE session: N validate su M usano la sessione oraria» (27 set 2026,
+    backlog J13). Fino a quel giorno `_feat_session` leggeva l'ORA DEL GIRO e non
+    quella della candela: nel backtest ogni barra della storia era «dentro» o
+    «fuori» sessione a seconda di quando girava il gate, quindi i passaggi di
+    queste coppie sono stati guadagnati su una feature valutata male. Qui si
+    contano soltanto, per farle vedere: cosa farne lo decide il proprietario
+    (nessun contatore del registro viene toccato). `specs` e' la mappa id ->
+    spec di `discovered_strategies/specs`; una coppia la cui spec non c'e' non
+    si puo' contare, e lo si dice."""
+    from bot.strategies.generated import usa_sessione   # import pigro, come le altre righe
+    validated = list(validated or [])
+    specs = specs if isinstance(specs, dict) else {}
+    con, senza_spec = 0, 0
+    for k in validated:
+        sid = str(k).split("|", 1)[1] if "|" in str(k) else str(k)
+        spec = specs.get(sid)
+        if not isinstance(spec, dict):
+            senza_spec += 1
+            continue
+        if usa_sessione(spec):
+            con += 1
+    coda = f" · {senza_spec} senza spec nel documento" if senza_spec else ""
+    return (f"  FEATURE session: {con} validate su {len(validated)} usano la sessione oraria "
+            f"(fino al 27 set valutata con l'orologio del giro, non della candela: "
+            f"passaggi da rifare){coda}")
+
+
 def riga_declassate(pairs: dict, validated, diag: dict | None = None) -> str:
     """«DECLASSATE: N validate a un quarto di size (bocciate 2 notti di fila) ·
     tornate piene nel giro X» (26 set 2026). N e' il conto sul registro
@@ -528,6 +556,12 @@ def main() -> int:
     print(riga_keep_validate(pairs, validated))
     # e le DECLASSATE (26 set 2026): vedi riga_declassate
     print(riga_declassate(pairs, validated, diag))
+    # e le validate che usano la SESSIONE ORARIA (27 set 2026, J13): vedi riga_sessione
+    try:
+        _specs = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+        print(riga_sessione(validated, _specs))
+    except Exception as exc:  # noqa: BLE001 - diagnostica, mai fatale
+        print(f"  FEATURE session: spec non leggibili ({str(exc)[:60]})")
     # e il PAPER ESPLORATIVO (25 set 2026, F1bis): vedi riga_esplorative
     try:
         print(riga_esplorative(fb.get_doc("strategy_registry", "esplorative")))

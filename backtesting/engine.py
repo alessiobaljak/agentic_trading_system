@@ -22,7 +22,7 @@ from typing import Optional
 from bot.agents.regime_detector import RegimeDetector
 from bot.core.costs import funding_fraction
 from bot.core.indicators import compute_indicator_frame, snapshot_from_row
-from bot.core.models import AssetSnapshot, Candle, Direction, Regime
+from bot.core.models import AssetSnapshot, Candle, Direction, Regime, epoch_utc
 from bot.config import settings
 from bot.risk.setup_check import analizza_setup
 from bot.execution.exit_logic import (
@@ -695,7 +695,11 @@ class Backtester:
         # chiusura della candela chiusa (27 set 2026, backlog J12: il bot ora
         # decide sulla stessa chiusura, `DECISIONE_SU_CHIUSURA`). Parita' esatta,
         # con l'interruttore acceso o spento: il motore non cambia di un trade.
-        snap = AssetSnapshot(symbol=symbol, price=float(row["close"]), close_chiusa=float(row["close"]))
+        # `ts` = APERTURA della barra (27 set 2026, backlog J13): e' l'ora su cui
+        # la feature `session` giudica la candela. Prima leggeva l'orologio del
+        # giro: una spec «8-16» validata di notte era short-only su tutta la storia.
+        snap = AssetSnapshot(symbol=symbol, price=float(row["close"]), close_chiusa=float(row["close"]),
+                             ts=epoch_utc(row["open_time"]))
         # la riga base prende il nome del timeframe SU CUI GIRA il motore (a 1h
         # e' "1h"), non quello del bot: una strategia nativa a 1 ora chiede
         # `ind("1h")` e deve trovare la riga base, non un alias per caso

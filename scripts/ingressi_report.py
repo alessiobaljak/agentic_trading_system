@@ -103,7 +103,7 @@ from bot.agents.regime_detector import RegimeDetector
 from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import decode_pairs, get_firebase
 from bot.core.indicators import compute_indicator_frame, compute_snapshot
-from bot.core.models import AssetSnapshot, IndicatorSnapshot
+from bot.core.models import AssetSnapshot, IndicatorSnapshot, epoch_utc
 from bot.execution.exit_logic import breakeven_after_tp1, ladder_multiples, lock_keep
 from bot.learning.trade_logger import TradeLogger
 from bot.risk.setup_check import analizza_setup
@@ -498,14 +498,18 @@ class Diagnosta:
         if hc:
             ind["1h"] = compute_snapshot(hc, "1h")
         ind.setdefault(settings.ORCHESTRATOR_TIMEFRAME, ind[self.tf])
-        snap = AssetSnapshot(symbol=self.symbol, price=prezzo, indicators=ind)
+        # `ts` = apertura della candela k, come il bot (27 set 2026, J13)
+        snap = AssetSnapshot(symbol=self.symbol, price=prezzo, indicators=ind,
+                             ts=epoch_utc(self.candles[k].open_time))
         snap.regime = self.rilevatore.detect(snap)
         return snap
 
     @staticmethod
-    def snapshot_dal_trade(symbol: str, t: dict) -> AssetSnapshot | None:
+    def snapshot_dal_trade(symbol: str, t: dict, barra_ts: float | None = None) -> AssetSnapshot | None:
         """Lo snapshot ricostruito da `indicators_at_entry` del trade, col prezzo
-        d'ingresso del paper: e' cio' su cui il bot ha deciso."""
+        d'ingresso del paper: e' cio' su cui il bot ha deciso. `barra_ts` e' la
+        candela del segnale (`barra_del_paper`): dal 27 set 2026 (J13) e' l'ora
+        su cui la feature `session` giudica, quindi va sullo snapshot come `ts`."""
         ind_raw = t.get("indicators_at_entry")
         if not isinstance(ind_raw, dict) or not ind_raw:
             return None
@@ -525,7 +529,8 @@ class Diagnosta:
         tf0 = settings.ORCHESTRATOR_TIMEFRAME if settings.ORCHESTRATOR_TIMEFRAME in ind else next(iter(ind))
         cc = _campo(ind.get(tf0), "close")
         snap = AssetSnapshot(symbol=symbol, price=prezzo, indicators=ind,
-                             close_chiusa=(float(cc) if cc is not None else None))
+                             close_chiusa=(float(cc) if cc is not None else None),
+                             ts=(float(barra_ts) if barra_ts else None))
         return snap
 
     def __call__(self, t: dict, barra_ts: float) -> dict | None:
@@ -563,7 +568,7 @@ class Diagnosta:
             vivo = snap.model_copy(update={"price": out["prezzo_paper"]})
             out["scatta_prezzo_vivo"] = self.segnale(strategy, vivo, k) is not None
         # la regola sui valori scritti dal bot (senza contesto BTC: non e' sul trade)
-        ricostruito = self.snapshot_dal_trade(self.symbol, t)
+        ricostruito = self.snapshot_dal_trade(self.symbol, t, barra_ts)
         if ricostruito is not None:
             ricostruito.regime = snap.regime
             try:
@@ -897,7 +902,7 @@ def dettaglio_coppia(key: str, ptr_ord: list[dict], spec, rec: dict | None, stra
                     v_motore_k = v
                 out.append(f"       motore k{off:+d} {_quando(diag.ts[j])} close {_num(snap.price)}: {fmt_verdetto(v)}")
         # i valori del paper, col prezzo d'ingresso e con la chiusura
-        ric = Diagnosta.snapshot_dal_trade(t.get("symbol") or key.split("|")[0], t)
+        ric = Diagnosta.snapshot_dal_trade(t.get("symbol") or key.split("|")[0], t, b)
         v_vivo = v_chiusa = None
         if ric is None:
             out.append("       paper: il trade non porta `indicators_at_entry`")

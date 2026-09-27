@@ -150,12 +150,51 @@ def _feat_volume_surge(i: IndicatorSnapshot, price: float, f: dict):
     return (i.volume >= i.volume_sma * mult, i.volume < i.volume_sma * mult)
 
 
-def _feat_session(i: IndicatorSnapshot, price: float, f: dict):
+#: L'AVVISO «ora dal calendario» si stampa UNA volta per processo: dopo la
+#: correzione del 27 set 2026 il motore e il bot portano sempre `ts`, quindi se
+#: compare e' uno snapshot costruito altrove (uno strumento, un test vecchio).
+_AVVISO_ORA_CALENDARIO = {"stampato": False}
+
+
+def ora_candela(asset) -> int:
+    """L'ORA UTC (0-23) SU CUI LA FEATURE `session` GIUDICA: l'apertura della
+    candela su cui la regola decide (`AssetSnapshot.ts`, l'ultima candela CHIUSA
+    del timeframe primario), NON l'orologio del giro.
+
+    Perche' (27 set 2026, backlog J13, ops 0310-0311): fino a quel giorno
+    `_feat_session` leggeva `datetime.now()`. Nel backtest ogni barra della
+    storia prendeva l'ora in cui il gate GIRAVA: una spec «8-16» validata alle
+    03:30 UTC era «fuori sessione» su tutta la storia (solo short), rigirata alle
+    13:00 era «dentro» ovunque (solo long) — validazioni senza senso e diverse
+    da un giro all'altro. Nel bot invece l'ora era quella della decisione, per
+    cui alle 03:30 apriva SHORT su `gen_6d06dca0` e il motore rigirato alle 13
+    non trovava il segnale: i 5 trade «IGNOTO» dell'indagine sugli ingressi.
+    Se `ts` manca si torna all'orologio, e lo si dice una volta sola."""
+    from datetime import datetime, timezone
+    ts = getattr(asset, "ts", None) if asset is not None else None
+    if ts is not None:
+        return datetime.fromtimestamp(float(ts), timezone.utc).hour
+    if not _AVVISO_ORA_CALENDARIO["stampato"]:
+        _AVVISO_ORA_CALENDARIO["stampato"] = True
+        print("[session] ora dal calendario: snapshot senza ts")
+    return datetime.now(timezone.utc).hour
+
+
+def _feat_session(i: IndicatorSnapshot, price: float, f: dict, ora: Optional[int] = None):
     """SESSIONE oraria (UTC): la crypto non e' uniforme nelle 24h — la sessione
     asiatica e quella US hanno liquidita' e comportamenti diversi. Primo elemento
-    NON tecnico del generatore."""
-    from datetime import datetime, timezone
-    h = datetime.now(timezone.utc).hour
+    NON tecnico del generatore.
+
+    SEMANTICA (non ovvia, invariata dal 27 set 2026): `hour_from <= ora < hour_to`
+    (con giro di mezzanotte se from > to) e' «dentro la sessione».
+      * dentro  -> (long_ok=True,  short_ok=False): si compra solo in sessione
+      * fuori   -> (long_ok=False, short_ok=True):  si vende solo fuori sessione
+    Cioe' la feature NON e' un filtro «opera solo in questa fascia»: sceglie il
+    LATO in base alla fascia. Una spec «8-16» e' long di giorno e short di notte.
+
+    `ora` e' l'ora della candela (`ora_candela`, passata da `_verdetto`); se
+    manca — chiamata diretta, senza snapshot — si legge l'orologio, con avviso."""
+    h = ora if ora is not None else ora_candela(None)
     lo, hi = f.get("hour_from", 12), f.get("hour_to", 21)
     inside = (lo <= h < hi) if lo <= hi else (h >= lo or h < hi)
     return (inside, not inside)
@@ -325,6 +364,16 @@ def feature_esiste(kind: str) -> bool:
     regola — l'abbiamo gia' pagata il 20 settembre con `rr`."""
     return kind in FEATURE_LIBRARY or kind in MARKET_FEATURES or kind in HTF_FEATURES
 
+
+def usa_sessione(spec) -> bool:
+    """True se la spec ha una feature `session` (27 set 2026, backlog J13): le
+    sue validazioni prima di quel giorno sono state fatte con l'ora del giro, e
+    `gate_progress` / la discovery le contano per farle vedere al proprietario."""
+    if not isinstance(spec, dict):
+        return False
+    return any(isinstance(f, dict) and f.get("kind") == "session"
+               for f in (spec.get("features") or []))
+
 def _feat_not_stretched(i: IndicatorSnapshot, price: float, f: dict):
     """NON SOVRAESTESO: il prezzo sta entro `stretch_max` ATR dalla media lenta.
 
@@ -463,8 +512,10 @@ _CAMPI_FEATURE = {
 }
 
 
-def _valori_feature(f: dict, i, price: float, mercato, htf) -> dict:
-    """I numeri che una feature ha guardato, piu' i suoi parametri. Solo lettura."""
+def _valori_feature(f: dict, i, price: float, mercato, htf, ora: Optional[int] = None) -> dict:
+    """I numeri che una feature ha guardato, piu' i suoi parametri. Solo lettura.
+    `ora` e' l'ora UTC della candela (`ora_candela`): per `session` e' il numero
+    che ha deciso, e `spiega` lo stampa come `ora_utc`."""
     kind = f.get("kind")
     out = {k: v for k, v in f.items() if k != "kind"}
     if kind in MARKET_FEATURES:
@@ -479,8 +530,7 @@ def _valori_feature(f: dict, i, price: float, mercato, htf) -> dict:
         out["1h"] = (None if htf is None else {"ema_fast": htf.ema_fast, "ema_slow": htf.ema_slow})
         return out
     if kind == "session":
-        from datetime import datetime, timezone
-        out["ora_utc"] = datetime.now(timezone.utc).hour
+        out["ora_utc"] = ora if ora is not None else ora_candela(None)
     for c in _CAMPI_FEATURE.get(kind, ()):
         out[c] = price if c == "price" else (getattr(i, c, None) if i is not None else None)
     return out
@@ -525,6 +575,10 @@ class GeneratedStrategy(Strategy):
                                for f in self._features if isinstance(f, dict))
         self.usa_htf = any((f.get("kind") in HTF_FEATURES)
                            for f in self._features if isinstance(f, dict))
+        # e l'ORA DELLA CANDELA si legge solo se la spec ha `session` (27 set
+        # 2026, J13): cosi' uno snapshot senza `ts` non fa scattare l'avviso per
+        # una spec a cui l'ora non serve.
+        self.usa_sessione = usa_sessione(spec)
 
     def _describe(self) -> str:
         parts = []
@@ -571,15 +625,19 @@ class GeneratedStrategy(Strategy):
             return float(cc)
         return asset.price
 
-    def _valuta_feature(self, f: dict, i: IndicatorSnapshot, price: float, mercato, htf):
+    def _valuta_feature(self, f: dict, i: IndicatorSnapshot, price: float, mercato, htf,
+                        ora: Optional[int] = None):
         """(long_ok, short_ok) di UNA feature, o None se non si puo' valutare
         (feature sconosciuta o dato mancante). E' l'unico posto che sa in quale
-        vocabolario vive una feature."""
+        vocabolario vive una feature. `ora` e' l'ora UTC della candela su cui la
+        regola decide (`ora_candela`): la usa solo `session`."""
         kind = f.get("kind")
         if kind in MARKET_FEATURES:
             return MARKET_FEATURES[kind](i, price, f, mercato)
         if kind in HTF_FEATURES:
             return HTF_FEATURES[kind](htf, price, f)
+        if kind == "session":
+            return _feat_session(i, price, f, ora)
         fn = FEATURE_LIBRARY.get(kind)
         if fn is None:
             return None
@@ -597,6 +655,8 @@ class GeneratedStrategy(Strategy):
           motivo          UNA frase: perche' quella direzione, o perche' nessuna
           prezzo          il prezzo su cui la regola ha deciso
           filtri          esito dei filtri globali (volume, min_adx)
+          ora_utc         (solo se la spec usa `session`) l'ora UTC della candela
+                          su cui ha deciso, da `asset.ts` — non l'orologio
         `prezzo` sovrascrive il prezzo di decisione: serve allo strumento degli
         ingressi per chiedere «e col prezzo vivo del paper?» senza copiare lo
         snapshot."""
@@ -615,6 +675,10 @@ class GeneratedStrategy(Strategy):
         out["prezzo"] = price
         mercato = mercato_da_contesto(ctx, self._tf) if self.usa_mercato else None
         htf = asset.ind("1h") if self.usa_htf else None
+        # l'ora della CANDELA, non del giro (27 set 2026, J13): vedi `ora_candela`
+        ora = ora_candela(asset) if self.usa_sessione else None
+        if self.usa_sessione:
+            out["ora_utc"] = ora
         long_ok, short_ok = True, True
         blocco: Optional[str] = None
         for f in self._features:
@@ -623,10 +687,10 @@ class GeneratedStrategy(Strategy):
             n = 2
             while nome in out["features"]:
                 nome, n = f"{kind}#{n}", n + 1
-            res = self._valuta_feature(f, i, price, mercato, htf)
+            res = self._valuta_feature(f, i, price, mercato, htf, ora)
             voce = {"kind": kind, "long": None if res is None else bool(res[0]),
                     "short": None if res is None else bool(res[1]),
-                    "valori": _valori_feature(f, i, price, mercato, htf)}
+                    "valori": _valori_feature(f, i, price, mercato, htf, ora)}
             out["features"][nome] = voce
             if res is None and blocco is None:
                 blocco = (f"feature {nome} sconosciuta" if not feature_esiste(kind)

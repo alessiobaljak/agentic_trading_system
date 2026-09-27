@@ -2097,6 +2097,21 @@ def conta_keep_giro(out: dict, passed_keys, keep_paper=None) -> dict:
             "dal_paper_n": conta.get(kp, 0) if kp is not None else 0}
 
 
+def riga_cervello_sessione(existing: dict | None) -> str:
+    """«[cervello] sessione oraria: N spec note su M usano `session`» a inizio
+    giro (27 set 2026, backlog J13). Prima del 27 set `_feat_session` leggeva
+    l'orologio del giro e non la candela: i passaggi di queste spec sono stati
+    guadagnati su una feature valutata male, e da questo giro si rivalutano con
+    l'ora giusta. Nessun contatore viene toccato: il numero serve al
+    proprietario per decidere cosa farne."""
+    from bot.strategies.generated import usa_sessione
+    existing = existing if isinstance(existing, dict) else {}
+    n = sum(1 for sp in existing.values() if usa_sessione(sp))
+    return (f"[cervello] sessione oraria: {n} spec note su {len(existing)} usano `session` "
+            f"(fino al 27 set valutata con l'orologio del giro, non della candela: "
+            f"i loro passaggi precedenti sono da rifare)")
+
+
 def riga_cervello_uscita(ipotesi_uscita: dict | None) -> str:
     """La riga «[cervello] ipotesi scala_stretta: ...» per la coda del log (25 set
     2026, I4): quante strategie con un'ipotesi fresca sulle uscite sono state
@@ -3334,6 +3349,10 @@ def main() -> int:
         #     variante nasce da una spec che il bot ha gia' operato. Come le ipotesi
         #     AI, sostituiscono una quota di casuali: il giro non si allunga.
         existing = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+        # QUANTE SPEC NOTE USANO LA SESSIONE ORARIA (27 set 2026, backlog J13):
+        # fino a quel giorno la feature leggeva l'ora del giro, non della candela,
+        # quindi ogni loro valutazione precedente e' da rifare. Si conta e basta.
+        print(riga_cervello_sessione(existing))
         reg = fb.get_doc("strategy_registry", "validated") or {}
         doc_referti = leggi_referti(fb)
         esiti_referti: dict = {}

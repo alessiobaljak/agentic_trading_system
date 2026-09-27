@@ -24,7 +24,7 @@ import requests
 
 from bot.config import settings
 from bot.core.indicators import compute_snapshot
-from bot.core.models import AssetSnapshot, Candle, IndicatorSnapshot
+from bot.core.models import AssetSnapshot, Candle, IndicatorSnapshot, epoch_utc
 
 FAPI_BASE = "https://testnet.binancefuture.com" if settings.BINANCE_TESTNET else "https://fapi.binance.com"
 
@@ -139,6 +139,7 @@ class PriceAgent:
         indicators: dict[str, IndicatorSnapshot] = {}
         price = None
         close_chiusa = None
+        ts_chiusa = None
         now = datetime.now(timezone.utc)
         for tf in settings.TIMEFRAMES:
             candles = self.get_candles(symbol, tf, limit=200)
@@ -162,6 +163,13 @@ class PriceAgent:
             # sua candela oraria appena chiusa. `price` resta vivo.
             if tf == settings.ORCHESTRATOR_TIMEFRAME:
                 close_chiusa = closed[-1].close
+                # e l'APERTURA di quella stessa candela (27 set 2026, backlog
+                # J13): l'ora su cui la feature `session` giudica, come il motore
+                # (`engine._snapshot_from_frame`). Il bot decide al confine di
+                # candela, quindi l'ora del giro e quella della candela di solito
+                # coincidono — ma non sempre (riavvii, giri in ritardo), e nel
+                # backtest non coincidevano mai.
+                ts_chiusa = epoch_utc(closed[-1].open_time)
         if price is None:
             return None
         # senza il timeframe PRIMARIO le strategie sarebbero mute in silenzio
@@ -175,6 +183,7 @@ class PriceAgent:
             symbol=symbol,
             price=price,
             close_chiusa=close_chiusa,
+            ts=ts_chiusa,
             mark_price=float(premium["markPrice"]) if premium.get("markPrice") else None,
             funding_rate=float(premium["lastFundingRate"]) if premium.get("lastFundingRate") else None,
             open_interest=self.get_open_interest(symbol),
