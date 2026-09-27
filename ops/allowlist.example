@@ -92,6 +92,12 @@ costi:        .venv/bin/python -m scripts.revalidate_costs
 # (A) contro il passo 1 forzato sulla configurazione operata (B) e il PF recente (C).
 # Sola lettura; si ferma da sola a 720 s e stampa cio' che ha misurato.
 autopsia-validate: .venv/bin/python -m scripts.autopsia_validate
+# IL PAPER ENTRA DOVE ENTRA IL GATE? (27 set 2026, backlog J12): ops 0304 ha misurato
+# 20 ingressi del paper su 37 con un trade del motore entro 2 barre. Qui ogni trade
+# del paper ha una classe sola (abbinato / motore in posizione / cooldown / regola che
+# non scatta con il sotto-motivo / lontano / senza motore) e una seconda passata del
+# motore «come il bot» (200 candele). Sola lettura; si ferma da sola a 720 s.
+ingressi:     .venv/bin/python -m scripts.ingressi_report
 
 # ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
 # la lista bianca stessa, per confrontarla con questo esempio quando si mette in
