@@ -67,6 +67,9 @@ _BREVI = {
     # una strategia validata?» non ha risposta: il registro contiene solo i
     # sopravvissuti, e chi esce sparisce senza lasciare la sua eta'.
     "validated_at": "a",
+    # i contatori della maggioranza della finestra (27 set 2026): su ~2.800
+    # coppie i nomi lunghi costerebbero ~140 KB del documento
+    "window_evals": "e", "window_passes": "s", "window_contata": "c",
 }
 _LUNGHI = {v: k for k, v in _BREVI.items()}
 _TEMPI = {"last_seen_at", "last_passed_at", "window_start", "last_pass_data_end",

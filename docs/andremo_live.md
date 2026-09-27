@@ -1833,3 +1833,17 @@ sola. Metro: quota di validate che passano una valutazione singola, oggi 12% (23
 su 194), obiettivo sopra il 50% in tre settimane. In attesa del sì anche:
 spegnere il freno per gruppo (bocciato dal replay) e correggere il report dei
 rifiutati.
+
+### 27 settembre, 09:00: i tre sì del mattino
+
+Il proprietario ha detto sì alle tre voci del controllo:
+1. **Conferma a maggioranza** (backlog J11): una finestra di 7 giorni vale come
+   conferma solo se la coppia ha passato più della metà delle valutazioni di
+   quella settimana; prima bastava una volta. È la porta da cui entravano le
+   coppie al limite (autopsia, ops 0290: una su otto passa una valutazione
+   singola). Le finestre già aperte chiudono con la regola vecchia, una volta.
+2. **Freno per gruppo spento** (I2): bocciato dal replay con la regola scritta
+   prima. Oggi non aveva effetto (il freno globale dimezza già tutto).
+3. **Report dei rifiutati corretto** (J6): R medio degli aperti −0,17, non −6,80.
+Suite 1709 test verdi. Il gate usa la regola nuova dal prossimo giro; il bot
+riavviato per leggere il freno spento.

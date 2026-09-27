@@ -478,7 +478,12 @@ class Settings:
     # tarate sui 97 trade del paper: `scripts/replay_freno.py` (ops `replay`)
     # puo' solo BOCCIARLE (se suona dopo il freno globale e' inutile; se supera
     # 5 allarmi per 100 trade sani del gate, h e' troppo basso), non sceglierle.
-    POOL_BRAKE_ENABLED: bool = _get_bool("POOL_BRAKE_ENABLED", True)
+    # SPENTO il 27 set 2026 (si' del proprietario): il replay (ops 0288) lo ha
+    # bocciato con la regola dichiarata prima di accenderlo: in 6 gruppi su 7
+    # sarebbe scattato DOPO il freno globale, quindi come allarme anticipato non
+    # aggiunge niente. Il codice resta; il ruolo non misurato (frenare solo i
+    # gruppi che perdono quando il globale si spegne) e' in backlog, voce I2.
+    POOL_BRAKE_ENABLED: bool = _get_bool("POOL_BRAKE_ENABLED", False)
     POOL_BRAKE_FACTOR: float = _get_float("POOL_BRAKE_FACTOR", 0.5)
     POOL_CUSUM_H: float = _get_float("POOL_CUSUM_H", 4.0)
     POOL_CUSUM_RIPRESA: float = _get_float("POOL_CUSUM_RIPRESA", 2.5)

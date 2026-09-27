@@ -155,7 +155,7 @@ def test_le_soglie_sono_costanti_dichiarate_nel_modulo_e_nella_config():
     assert (dr.CUSUM_H, dr.CUSUM_K, dr.CUSUM_RIPRESA) == (4.0, 0.0, 2.5)
     assert (dr.SPRT_P0, dr.SPRT_P1, dr.SPRT_ALPHA, dr.SPRT_BETA) == (0.45, 0.25, 0.05, 0.05)
     assert dr.POOL_GIORNI == 30
-    assert settings.POOL_BRAKE_ENABLED is True and settings.POOL_BRAKE_FACTOR == 0.5
+    assert settings.POOL_BRAKE_ENABLED is False and settings.POOL_BRAKE_FACTOR == 0.5   # spento il 27 set (replay, ops 0288)
     assert settings.POOL_CUSUM_H == 4.0 and settings.POOL_CUSUM_RIPRESA == 2.5
     assert settings.POOL_SPRT_P0 == 0.45 and settings.POOL_SPRT_P1 == 0.25
     assert settings.PANCHINA_PAVIMENTO == 0.25

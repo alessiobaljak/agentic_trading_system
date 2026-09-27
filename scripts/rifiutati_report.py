@@ -61,8 +61,14 @@ def stop_originale(t: dict) -> Optional[float]:
     pm = t.get("post_mortem") or {}
     sp = _f(pm.get("stop_pct")) if isinstance(pm, dict) else None
     if sp and sp > 0:
+        # `post_mortem.stop_pct` e' una FRAZIONE del prezzo (0,021 = 2,1%:
+        # bot/risk/setup_check.analizza_setup). Fino al 27 set qui si divideva
+        # ancora per 100: stop 100 volte piu' vicino, R degli aperti 100 volte piu'
+        # grande (R medio −6,80 invece di −0,17, ops 0289). Un valore >= 1 non
+        # puo' essere una frazione (stop al 100%): lo si legge come percentuale.
+        frac = sp if sp < 1 else sp / 100.0
         long = str(t.get("direction", "")).lower().endswith("long")
-        return entry * (1 - sp / 100.0) if long else entry * (1 + sp / 100.0)
+        return entry * (1 - frac) if long else entry * (1 + frac)
     return _f(t.get("stop_price"))
 
 

@@ -144,7 +144,7 @@ def test_a_pair_that_stops_drifting_can_redeem_itself():
     judge_window(rec, t0 + settimana + 1, False, settimana)      # finestra in deriva
     assert rec["fail_count"] == 1
     judge_window(rec, t0 + settimana + 2, True, settimana)       # ripassa il gate
-    judge_window(rec, t0 + 2 * settimana + 2, False, settimana)  # chiusura
+    judge_window(rec, t0 + 2 * settimana + 2, True, settimana)   # chiusura: 2 su 2 (27 set: maggioranza)
     assert rec["fail_count"] == 0 and rec["pass_count"] == 2
 
 

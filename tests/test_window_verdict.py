@@ -66,14 +66,44 @@ def test_passing_again_inside_the_window_does_not_add_a_confirmation():
 
 
 # ---- il verdetto arriva a fine finestra ----------------------------------- #
-def test_passing_at_least_once_in_the_window_earns_a_confirmation():
+def test_passing_once_in_the_window_is_no_longer_enough():
+    """27 set 2026: «almeno un pass nella finestra» era la porta da cui entravano
+    le coppie al limite (autopsia delle validate, ops 0290: valutate una volta,
+    ne passava una su otto). Un pass su cinque valutazioni e' un fallimento."""
     rec = {}
     _run(rec, 0, True)
-    _run(rec, 3, True)                       # dentro la finestra: memorizzato
+    _run(rec, 3, True)                       # dentro la finestra
     for g in (4, 5, 6):
         _run(rec, g, False)
-    _run(rec, 7.1, False)                    # finestra chiusa: vale il pass visto
+    _run(rec, 7.1, False)                    # chiusura: 1 pass su 5
+    assert rec["pass_count"] == 1 and rec["fail_count"] == 1
+
+
+def test_passing_the_majority_of_the_window_earns_a_confirmation():
+    rec = {}
+    _run(rec, 0, True)
+    for g, ok in ((2, True), (3, True), (4, False), (5, True), (6, False)):
+        _run(rec, g, ok)
+    _run(rec, 7.1, True)                     # chiusura: 4 pass su 6
+    assert rec["pass_count"] == 2 and rec.get("fail_count", 0) == 0
+    assert rec["window_evals"] == 0 and rec["window_passes"] == 0   # nuova finestra
+
+
+def test_exactly_half_is_not_a_majority():
+    rec = {}
+    _run(rec, 0, True)
+    _run(rec, 3, True)
+    _run(rec, 7.1, False)                    # 1 su 2
+    assert rec["pass_count"] == 1 and rec["fail_count"] == 1
+
+
+def test_a_window_opened_before_the_rule_keeps_the_old_rule_once():
+    """Le finestre aperte prima del 27 set non hanno i contatori dall'inizio:
+    per l'ultima volta vale la regola con cui sono nate."""
+    rec = {"pass_count": 1, "window_start": T0, "passed_in_window": True}
+    _run(rec, 7.1, False)
     assert rec["pass_count"] == 2
+    assert rec["window_contata"] is True     # dalla prossima, la maggioranza
 
 
 def test_never_passing_in_the_window_is_one_failure():
@@ -115,20 +145,34 @@ def test_a_confirmation_resets_the_failures():
 
 
 # ---- IL TEST CHE CONTA ---------------------------------------------------- #
-def test_a_pair_survives_the_gap_between_confirmations():
-    """La riproduzione del caso reale: timer ogni 3 ore, una coppia che passa di
-    rado. Con la contabilita' per run veniva purgata dopo 6 ore; ora arriva a tre
-    conferme in tre settimane, che e' esattamente cio' che il criterio chiede."""
+def test_a_pair_that_passes_rarely_is_not_confirmed():
+    """Il caso reale che la regola vecchia lasciava passare: timer ogni 3 ore,
+    una coppia che passa UNA volta su 57 valutazioni a settimana. Con «almeno un
+    pass» arrivava a tre conferme; con la maggioranza no. Resta vero il resto:
+    un verdetto per finestra, quindi due finestre sono due fallimenti, non 112."""
     rec = {}
     _run(rec, 0, True)                       # scoperta e prima conferma
     ora = 0.0
     for settimana in range(1, 3):
-        # 56 run in sette giorni, con UN solo passaggio nel mezzo
         for i in range(56):
             ora += 0.125
-            passa = (i == 30)
-            _run(rec, ora, passa)
+            _run(rec, ora, i == 30)
         _run(rec, settimana * 7 + 0.2, False)   # chiusura finestra
+    assert rec["pass_count"] == 1
+    assert rec["fail_count"] == 2
+
+
+def test_a_pair_that_passes_consistently_survives_the_gap():
+    """E una coppia che passa quasi sempre arriva a tre conferme in tre
+    settimane, come il criterio chiede."""
+    rec = {}
+    _run(rec, 0, True)
+    ora = 0.0
+    for settimana in range(1, 3):
+        for i in range(56):
+            ora += 0.125
+            _run(rec, ora, i % 5 != 0)       # 4 su 5
+        _run(rec, settimana * 7 + 0.2, True)
     assert rec["pass_count"] == 3, f"pass={rec['pass_count']} fail={rec.get('fail_count')}"
     assert rec.get("fail_count", 0) == 0
 
@@ -140,6 +184,15 @@ def test_without_a_data_end_nothing_is_judged():
     rec = {"pass_count": 1, "window_start": T0}
     judge_window(rec, 0.0, True, SETTIMANA)
     assert rec["pass_count"] == 1 and rec.get("fail_count", 0) == 0
+
+
+def test_the_majority_counters_survive_the_registry_slimming_and_codec():
+    from bot.core.firebase_client import decode_pairs, encode_pairs
+    from scripts.optimize import REGISTRY_CORE_FIELDS
+    assert {"window_evals", "window_passes", "window_contata"} <= REGISTRY_CORE_FIELDS
+    p = {"A|gen_x": {"pass_count": 2, "window_start": T0, "window_evals": 3,
+                     "window_passes": 2, "window_contata": True, "generated": True}}
+    assert decode_pairs(encode_pairs(p)) == p
 
 
 def test_the_window_fields_survive_the_registry_slimming():
@@ -167,7 +220,7 @@ def test_a_pre_existing_pair_confirms_after_a_full_window():
     rec = {"pass_count": 1, "last_pass_data_end": T0}
     _run(rec, 0, False)
     _run(rec, 3, True)
-    _run(rec, 7.1, False)
+    _run(rec, 7.1, True)                     # 2 su 2 dopo l'apertura (27 set: maggioranza)
     assert rec["pass_count"] == 2
 
 

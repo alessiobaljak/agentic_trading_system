@@ -569,6 +569,9 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         # senza questi due la finestra di giudizio si riaprirebbe da
                         # capo a ogni alleggerimento, e i verdetti non arriverebbero mai
                         "window_start", "passed_in_window",
+                        # e i contatori della maggioranza (27 set 2026): persi in un
+                        # alleggerimento, la finestra ricadrebbe nella regola vecchia
+                        "window_evals", "window_passes", "window_contata",
                         # e SENZA QUESTO una coppia generata, alleggerita, diventa
                         # indistinguibile da una base: la potatura delle base la
                         # cancella, il tetto smette di considerarla intoccabile e la
@@ -751,6 +754,13 @@ def drifted_from_paper(fb) -> set:
         return set()
 
 
+#: quota di valutazioni PASSATE sopra la quale una finestra di 7 giorni e' una
+#: conferma (27 set 2026): strettamente piu' della meta'. Dichiarata qui, mai
+#: tarata sul paper; si giudica con la quota di validate che passano una
+#: valutazione singola (autopsia-validate), 12% il 27 set.
+CONFERMA_QUOTA_MIN = float(os.getenv("GATE_CONFERMA_QUOTA", "0.5"))
+
+
 def judge_window(rec: dict, data_end: float, passed_now: bool,
                  min_new_data_s: float = NEW_DATA_MIN_S) -> dict:
     """UN VERDETTO PER FINESTRA, non per run. Modifica `rec` sul posto.
@@ -785,10 +795,27 @@ def judge_window(rec: dict, data_end: float, passed_now: bool,
         return rec
     if passed_now:
         rec["passed_in_window"] = True
+    # LA MAGGIORANZA, NON UNA VOLTA SOLA (27 set 2026, si' del proprietario).
+    # L'autopsia delle validate (ops 0290) ha mostrato la falla della regola
+    # «almeno un pass nella finestra»: una coppia al limite, valutata piu' volte a
+    # settimana, prima o poi passa per caso, e tre finestre cosi' la fanno
+    # validata. Valutate UNA volta, il 27 set passavano 23 validate su 194 (una su
+    # otto), contro un PF vissuto di 0,62 su 2,10 promesso. Ora ogni valutazione
+    # della finestra si conta, e la finestra e' una conferma solo se la coppia ha
+    # passato PIU' DELLA META' delle sue valutazioni. Resta un verdetto per
+    # finestra (il difetto dei due orologi non rientra): cambia solo cosa vuol
+    # dire «la settimana e' andata bene».
+    rec["window_evals"] = int(rec.get("window_evals", 0) or 0) + 1
+    if passed_now:
+        rec["window_passes"] = int(rec.get("window_passes", 0) or 0) + 1
 
     start = float(rec.get("window_start", 0) or 0)
     if start <= 0:                      # nessuna finestra aperta: se ne apre una
         rec["window_start"] = data_end
+        # la finestra che si apre qui parte coi contatori a zero (questa
+        # valutazione ha aperto la finestra, non ne fa parte)
+        rec["window_evals"], rec["window_passes"] = 0, 0
+        rec["window_contata"] = True
         # La conferma immediata vale SOLO per una coppia mai vista prima. Una che ha
         # gia' dei passaggi ma non ha la finestra e' una coppia PRE-ESISTENTE alla
         # regola, incontrata per la prima volta dopo il cambio: darle un pass qui
@@ -805,7 +832,15 @@ def judge_window(rec: dict, data_end: float, passed_now: bool,
     if data_end - start < min_new_data_s:
         return rec                      # finestra ancora aperta: nessun verdetto
 
-    if rec.get("passed_in_window"):
+    if rec.get("window_contata"):
+        n_ev = int(rec.get("window_evals", 0) or 0)
+        n_ok = int(rec.get("window_passes", 0) or 0)
+        conferma = n_ev > 0 and n_ok / n_ev > CONFERMA_QUOTA_MIN
+    else:
+        # finestra aperta PRIMA del 27 set, senza contatori dall'inizio: vale la
+        # regola con cui e' nata (una volta sola), per quest'ultima volta
+        conferma = bool(rec.get("passed_in_window"))
+    if conferma:
         rec["pass_count"] = int(rec.get("pass_count", 0) or 0) + 1
         rec["last_pass_data_end"] = data_end
         rec["fail_count"] = 0
@@ -813,6 +848,8 @@ def judge_window(rec: dict, data_end: float, passed_now: bool,
         rec["fail_count"] = int(rec.get("fail_count", 0) or 0) + 1
     rec["window_start"] = data_end      # la finestra successiva parte da qui
     rec["passed_in_window"] = False
+    rec["window_evals"], rec["window_passes"] = 0, 0
+    rec["window_contata"] = True
     return rec
 
 
