@@ -2023,3 +2023,32 @@ circuit breaker); il +1,26 della dashboard (controllo orario) conta solo i
 trade delle validate chiusi dalla strategia. Entrambi per giorno UTC di
 uscita. La differenza (1,99) sta quindi in trade esplorativi o in uscite
 esterne del 27: da verificare trade per trade al prossimo controllo.
+
+### Controllo del 28 settembre (08:20 ora italiana, ops 0321-0333)
+
+**Guasto, prima di tutto: quota di letture Firestore esaurita.** Alle 06:18 UTC
+`mfe` e `frequenza` sono falliti con «429 Quota exceeded» (RESOURCE_EXHAUSTED,
+ops 0331, 0332); alle 05:34 tutto funzionava. Il piano gratuito di Firestore
+concede 50.000 letture al giorno (si azzera alle 09:00 italiane). Stima delle
+letture del bot (dal codice, non misurate): verdetti trailing a ogni candela
+(100 trade × 96 = ~9.600), pesi dopo ogni chiusura e ogni ora (~150 trade ×
+~55 = ~8.200), controllo orario (ombra AI 200 + tutti i trade, × 24 = ~8.900),
+ombra dei rifiutati a ogni candela su una finestra di 17 giorni che cresce di
+~30 documenti al giorno (~5.300 oggi, ~24.000 fra una settimana), registro
+ogni minuto (1.440), stop recenti, referti, report ops e dashboard. Totale
+stimato oltre 50.000, e cresce coi trade. Finché la quota è esaurita il bot
+non rilegge registro, pesi e trade (lavora con quello che ha in memoria);
+le scritture hanno una quota separata. Proposta (serve il sì): una cache dei
+trade in memoria nel bot aggiornata solo coi trade nuovi, finestra
+dell'ombra dei rifiutati ridotta all'orizzonte vero, controllo orario che
+riusa i trade già letti, e un contatore delle letture stampato ogni ora.
+Atteso: sotto 15.000 letture al giorno.
+
+**Numeri** (ops 0321-0330, 0333): 142 trade delle validate più 2 esplorativi,
+52% vinti, −69,10 USDT, equity 930,69; 27 set in utile (+3,25 sul conto, +1,26
+sulle sole validate), 28 set +4,82 alle 07:34. Uscite: 69 stop −211,29, 58
+trailing +72,11. Long 54 −25,83, short 88 −43,27. Validate 192 su 66 coin,
+121 declassate; 347 coppie azzerate per la sessione. Giro urgente 1h48. 1 ora:
+16 passate su 2.310 (0,69%) contro 0,21% a 15 minuti. Selettore NON BATTE su
+81.490 righe (ops 0333). AI: 20/20 proposte, ombra d'accordo 15 su 148.
+`mfe` e `frequenza` non disponibili (quota).
