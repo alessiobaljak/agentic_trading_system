@@ -2014,3 +2014,12 @@ la regola dice «ritarabile», ma la differenza (0,06R) è sotto il vantaggio
 dei rifiutati simulati senza costi (0,1-0,2R): nessuna azione. Giro urgente
 1h48, nessun errore; selettore in ombra 70 trade, p 0,65 vinti contro 0,63
 persi, non seleziona.
+
+**Nota del 28 set (il proprietario):** in dashboard il 27 settembre risulta
++1,26, non +3,25. Sono due conti diversi: il +3,25 viene dal report
+`portafoglio`, che somma TUTTI i trade chiusi quel giorno (anche gli
+esplorativi e le uscite non decise dalla strategia: manuali, kill switch,
+circuit breaker); il +1,26 della dashboard (controllo orario) conta solo i
+trade delle validate chiusi dalla strategia. Entrambi per giorno UTC di
+uscita. La differenza (1,99) sta quindi in trade esplorativi o in uscite
+esterne del 27: da verificare trade per trade al prossimo controllo.
