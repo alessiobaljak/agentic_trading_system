@@ -1994,3 +1994,23 @@ sui trade aperti DOPO le correzioni del 27 (chiusura della candela dalle
 14:22, ora della candela dalle 15:27, sessione come filtro dalle 21:40 ora
 italiana). Proposta: un filtro di data nello strumento (di default, i trade
 dopo l'ultima modifica delle regole) e rilanciarlo fra una settimana.
+
+### 28 settembre, 07:40: primo giorno in utile, e cosa è cambiato (ops 0321-0329)
+
+Il 27 settembre è il primo giorno chiuso in utile di poco (+3,25) e il 28
+parte bene (+4,82 alle 07:34, ops 0328). Totale: 142 trade delle validate più
+2 esplorativi, 52% vinti (era 46-48%), −69,10 USDT, equity 930,69; freno
+globale ancora acceso (PF 0,67 contro 2,10). Uscite: 69 stop −211,29, 58
+trailing +72,11, 14 scale-out +35,61 (ops 0322). Cosa è cambiato nel registro:
+la sessione ha azzerato 347 coppie (le 47 validate comprese), le validate
+sono 192 su 66 coin, e **121 validate su 192 sono declassate a un quarto della
+size** (bocciate in due giri completi di fila, ops 0324): la maggior parte del
+paper oggi rischia un quarto. Il portafoglio simulato ora dà +7.190 dal 16
+set (ieri −4.785): non è il mercato che è cambiato, è l'insieme di coppie
+simulate (quelle validate oggi, gonfiate dalla selezione). 1 ora: 16 passate
+su 2.310 (0,69%) contro 49 su 23.086 a 15 minuti (0,21%). Ombra dei
+rifiutati: «posizione aperta» −0,20R su 31 casi contro −0,26R degli aperti:
+la regola dice «ritarabile», ma la differenza (0,06R) è sotto il vantaggio
+dei rifiutati simulati senza costi (0,1-0,2R): nessuna azione. Giro urgente
+1h48, nessun errore; selettore in ombra 70 trade, p 0,65 vinti contro 0,63
+persi, non seleziona.
