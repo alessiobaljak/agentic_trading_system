@@ -90,6 +90,16 @@ export default function ControlloHero() {
   // --- tile 1: equity e rendimento ---
   const rend = paper.rendimento_pct ?? null;
   const classeRend = rend == null ? '' : rend >= 0 ? 'good' : 'bad';
+  // contro BTC tenuto dal primo giorno del paper (28 set 2026): senza, «perdiamo
+  // il 7%» non dice se il mercato ha fatto meglio o peggio di noi
+  const btcDal = paper.benchmark?.btc_dal_paper_pct ?? null;
+  const btcInizioTs = paper.benchmark?.btc_inizio?.ts ?? null;
+  const noi = paper.benchmark?.noi_pct ?? rend;
+  const differenza = paper.benchmark?.differenza_pct ?? null;
+
+  // --- il canale ops (28 set 2026): il battito dell'agente su Firebase ---
+  const opsEta = salute.ops_battito_eta_s ?? null;
+  const opsFermo = opsEta != null && opsEta > 3 * 3600;
 
   // --- tile 2: PF vissuto 30 g contro promesso ---
   const pf30 = paper.ultimi_30g?.pf ?? null;
@@ -190,6 +200,24 @@ export default function ControlloHero() {
               {paper.equity_iniziale != null && ` da ${numero(paper.equity_iniziale, 0)}`}
               {paper.giorni_paper != null && ` · ${paper.giorni_paper} g di paper`}
             </div>
+            {btcDal != null && (
+              <div
+                className="stat-sub"
+                title={`BTC comprato alla chiusura della prima candela 1h del paper${
+                  paper.benchmark?.btc_inizio?.close != null
+                    ? ` (${numero(paper.benchmark.btc_inizio.close, 0)} USDT)`
+                    : ''
+                } e tenuto fino all'ultima chiusura${
+                  differenza != null ? `; differenza ${segno(differenza, 1)} punti` : ''
+                }`}
+              >
+                contro BTC tenuto
+                {btcInizioTs != null &&
+                  ` dal ${new Date(Number(btcInizioTs) * 1000).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}`}
+                : <b className={btcDal >= 0 ? 'pos' : 'neg'}>{segno(btcDal, 1)}%</b>
+                {noi != null && ` (noi ${segno(noi, 1)}%)`}
+              </div>
+            )}
           </div>
 
           <div className={`stat-tile ${classePf}`} title={`PF promesso: ${pfPromessoNota}`}>
@@ -241,6 +269,19 @@ export default function ControlloHero() {
         </div>
 
         <ControlloLettura sezione={salute} style={{ marginTop: 14 }} />
+
+        {/* il canale ops (28 set 2026): prima il suo battito si leggeva solo in
+            ops/heartbeat.md nel repo */}
+        {opsEta != null && (
+          <p
+            className="muted"
+            style={{ margin: '8px 0 0', fontSize: 12 }}
+            title="battito dell'agente ops su Firebase (/ops/battito), scritto ogni ora: oltre 3 h le richieste in ops/requests non vengono eseguite"
+          >
+            Canale ops:{' '}
+            <b className={opsFermo ? 'neg' : ''}>{opsFermo ? 'FERMO' : 'vivo'}</b> ({durata(opsEta)} fa)
+          </p>
+        )}
 
         {/* le letture Firestore del bot nelle ultime 24 h (28 set 2026): la quota
             gratuita e' 50.000 al giorno e il 28 set si e' esaurita alle 08:18 ora italiana */}

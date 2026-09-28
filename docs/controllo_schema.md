@@ -91,6 +91,7 @@ Regole comuni:
 | `controllo_precedente_eta_s` | int\|null | `now - meta.precedente_at` |
 | `letture_firestore_24h` | int\|null | (28 set) le letture Firestore del processo bot nelle ultime 24 h, dal contatore di `FirebaseClient` (`fb.letture()`: ogni `get_doc` 1, ogni `query_collection` i documenti tornati, il RTDB non conta); solo nel bot (`null` da ops/GitHub: sarebbero le letture di un processo appena nato). Quota gratuita 50.000/giorno, azzerata alle 07:00 UTC |
 | `letture_per_chiamante` | list[{chi, n}]\|null | le prime 8 etichette per volume nelle 24 h (`registro`, `trade`, `controllo`, `rifiutati`, `pesi`, …); solo nel bot |
+| `ops_battito_at` / `ops_battito_eta_s` | float\|null / int\|null | (28 set) `rtdb:/ops/battito.at`: il battito dell'agente ops, scritto da `scripts/ops_agent.py::write_heartbeat` ogni ora insieme a `ops/heartbeat.md` (`{at, pendenti, ramo}`, fail-open: senza client Firebase l'agente va avanti e il campo resta `null`); `now - at` |
 | `cache_trade` | {firestore, cache, allineata, verificata_at}\|null | (28 set) l'ultima verifica giornaliera della cache dei trade in memoria (`TradeLogger.verifica`: conteggio della collection con l'aggregazione del server contro i trade in cache; se non tornano la cache si ricarica); `null` finché non è mai girata e fuori dal bot |
 | `anomalie` | list[{codice, famiglia, gravita, testo, valore, soglia}] | vedi §1.6 |
 
@@ -116,7 +117,7 @@ Regole comuni:
 | `costi` | {totale, per_trade, commissioni, spread, funding, lordo, netto, break_even_pct, stimati: true, avvisi: list[str]} | `metrics.cost_report`, `metrics.cost_alerts` |
 | `drawdown_portafoglio` / `max_posizioni_insieme` | float\|null / int\|null | `backtesting.engine.portfolio_drawdown`, `max_concurrent` |
 | `trailing` | {verdetti_totali, prematuri, protetti, neutri, verdetti_per_proposta, prematuri_tf, protetti_tf, proposta_paper, soglia} | tutti i verdetti (anche scale_out) nei primi 4; SOLO `exit_reason == trailing_stop` e timeframe del bot negli `_tf`; `proposta_paper = metrics.proposta_keep(n, prem, prot)` (stessa regola di `keep_dal_paper`) |
-| `benchmark` | {btc_24h_pct, btc_7g_pct, nota, portafoglio: {lettura, updated_at}\|null} | dall'anello BTC (§3); `portafoglio` = `fs:portfolio/backtest.{lettura, updated_at}` se esiste (manuale, con la sua età) |
+| `benchmark` | {btc_24h_pct, btc_7g_pct, btc_dal_paper_pct, btc_inizio: {ts, close}\|null, noi_pct, differenza_pct, nota, portafoglio: {lettura, updated_at}\|null} | `btc_24h_pct`/`btc_7g_pct` dall'anello BTC (§3); (28 set) IL BUY&HOLD DAL PRIMO GIORNO: `btc_inizio` = `rtdb:/account/btc_inizio` (la prima candela 1h di BTCUSDT che apre a/dopo `paper_started_at`: `ts` = apertura, `close` = chiusura; scritta UNA volta dal bot, `TradingBot._btc_inizio_paper`, §3; `null` se manca o non corrisponde all'inizio del paper letto da RTDB), `btc_dal_paper_pct` = `(close_ora / btc_inizio.close − 1) × 100` con `close_ora` = l'ultima chiusura fra l'ultimo punto di `/btc_history` e `/bot_status.btc_close` (col suo `updated_at`), `null` se più vecchia di 3 h; `noi_pct` = `rendimento_pct` (il conto); `differenza_pct` = `noi_pct − btc_dal_paper_pct`; `portafoglio` = `fs:portfolio/backtest.{lettura, updated_at}` se esiste (manuale, con la sua età) |
 | `esplorative` | {trades, vinti, pnl, aperte, coppie_attive} | il PAPER ESPLORATIVO (25 set, backlog F1bis): i trade con `esplorativa: true` (quasi-passaggi del gate operati a un quarto della size), fuori dagli esiti esterni; `aperte` = posizioni RTDB con `esplorativa`; `coppie_attive` = `fs:strategy_registry/esplorative.pairs` (null senza documento). TUTTI gli altri numeri di `paper` (trades, pnl_realizzato, pf_vissuto, uscite, stop, costi, …) ESCLUDONO i trade esplorativi: sono i numeri delle validate. `equity` invece è quella del conto e li comprende (lo dice il `dettaglio`; `EQUITY_NON_TORNA` somma `esplorative.pnl`) |
 | `declassate` | {trades, pnl, aperte} | LE DECLASSATE (26 set, passo 2 del piano del 26 set 15:xx): i trade con `declassata: true` (validate che il gate ha declassato dopo `DECLASSATA_NOTTI` giri completi bocciati: `declassata`/`declassata_at`/`bocciata_notti` sul record del registro; il bot le opera a `DECLASSATA_SIZE_MULT` della size, riga `[declassata]` nel log), fuori dagli esiti esterni; `aperte` = posizioni RTDB con `declassata`. A differenza delle esplorative RESTANO dentro tutti gli altri numeri di `paper` (sono validate): qui si contano a parte per leggere il loro vissuto contro le attive (`trades`, sezione DECLASSATE) |
 
@@ -154,8 +155,11 @@ e dentro `attivo` e `misurato`, ciascuno con la propria testata e il proprio try
 
 ### 1.5 `manca`
 Lista `[{evidenza, perche, come_avere}]` di ciò che il controllo NON può dare
-oggi, scritta dal codice (non inventare numeri): battito ops (in git),
-benchmark su Binance, «cosa aspetta il sì» (vive in `docs/backlog.md`).
+oggi, scritta dal codice (non inventare numeri): «cosa aspetta il sì» (vive in
+`docs/backlog.md`) sempre; dal 28 set il battito ops solo finché
+`salute.ops_battito_at` è `null` e il benchmark dal primo giorno solo finché
+`paper.benchmark.btc_dal_paper_pct` è `null` (col motivo: `btc_inizio` non
+ancora scritto, o nessuna chiusura BTC recente).
 
 ### 1.6 Anomalie
 `{codice, famiglia: "sistema"|"paper", gravita: "rosso"|"giallo"|"info", testo, valore, soglia}`.
@@ -190,6 +194,7 @@ benchmark su Binance, «cosa aspetta il sì» (vive in `docs/backlog.md`).
 | `CONTROLLO_LENTO` | sistema | `durata_ms > 5000` (2000 era troppo stretta: 2002 ms da ops a freddo il 25 set) | giallo |
 | `LETTURE_FIRESTORE` | sistema | (28 set) `letture_firestore_24h > 25.000` → giallo, `> 40.000` → rosso (quota gratuita 50.000/giorno, azzerata alle 07:00 UTC; esaurita il 28 set alle 06:18 UTC). Testo: «letture Firestore nelle ultime 24 h: N (quota gratuita 50.000): valutare il piano a consumo (Blaze) se resta sopra» | giallo/rosso |
 | `CACHE_TRADE_DISALLINEATA` | sistema | (28 set) `cache_trade.allineata == false`: la verifica giornaliera ha trovato un conteggio diverso e ha ricaricato la cache | info |
+| `OPS_FERMO` | sistema | (28 set) `ops_battito_eta_s > 10800` (3 h: il battito arriva ogni ora). Testo: «canale ops fermo da N h: le richieste non vengono eseguite». Battito mai visto → nessuna anomalia (lo dice `manca`) | giallo |
 
 Il semaforo di famiglia = rosso se una rossa, giallo se una gialla, verde altrimenti;
 le `info` non colorano. `BOT_FERMO` scatta anche col battito MAI visto (valore
@@ -199,7 +204,7 @@ anomalie stesso fallisce, la lista porta la sola `ANOMALIE_NON_CALCOLATE`
 
 ### 1.7 Letture (una frase ≤ 140 caratteri per sezione, da regole)
 * salute: «Bot vivo (battito 22 s fa), gate 1 h 30 fa (solo urgenti), 4 posizioni, 1,5% a rischio. 1 avviso: freno globale.»
-* paper: «55 trade in 10 giorni, 42% vinti, −46,65 USDT (−4,7%). Stop nel 57% delle uscite. Oggi +0,92.» + «Numeri piccoli» se `trades < 20`
+* paper: «55 trade in 10 giorni, 42% vinti, −46,65 USDT (−4,7%). BTC dal primo giorno +11,6% (noi −4,7%). Stop nel 57% delle uscite. Oggi +0,92.» + «Numeri piccoli» se `trades < 20`; la frase su BTC solo se `btc_dal_paper_pct` c'è; oltre i 140 caratteri cade per prima quella sugli stop
 * learning: «Attivo: freno globale, 6 strategie in panchina, keep per coppia 0,5 ×31. Solo misurato: deriva, calibrazione, 14 verdetti trailing.»
 Ogni numero della frase esiste anche come campo.
 
@@ -286,6 +291,7 @@ Chi scrive il documento: `discover_strategies.costruisci_doc_gate(...)` (pura) t
 1. `bot/main.py::refresh_regime`: `"heartbeat": now` nel dict di `/bot_status` (oggi il nodo viene riscritto senza il figlio e il battito sparisce per un attimo); `btc_close` nel dict e anello `rtdb:/btc_history` (200 punti `{ts, close}`).
 2. `bot/main.py` all'avvio: `rtdb:/bot_status/avviato_at` (figlio) + anello `rtdb:/avvii` (ultimi 20); contatore `errori_ciclo_1h` pubblicato come figlio `/bot_status/errori_ciclo_1h` dal gancio orario.
 3. `bot/main.py::reconcile_equity`: scrive `/account/starting_equity` e `/account/paper_started_at` se assenti (oggi solo `reset_paper.py`).
+3bis. (28 set) `bot/main.py::_btc_inizio_paper`, dal ramo orario prima del controllo: se `/account/btc_inizio` manca (o non corrisponde a `paper_started_at`), `PriceAgent.get_candles("BTCUSDT", "1h", limit=3, start_ms=paper_started_at)` (parametro `startTime` di Binance, nuovo e facoltativo) e scrive `{ts, close}` della prima candela CHIUSA che apre a/dopo l'inizio; un tentativo l'ora al massimo, non solleva mai. `scripts/ops_agent.py::write_heartbeat`: oltre a `ops/heartbeat.md`, `rtdb:/ops/battito = {at, pendenti, ramo}` col client del progetto (import pigro dentro la funzione, in un thread con tetto di tempo, ogni errore stampato e ignorato).
 4. `bot/main.py::_publish_drift`: `global.dal` = data del primo verdetto `drift` consecutivo (letto dal doc precedente).
 5. `bot/orchestrator/orchestrator.py::_rifiuto` + `bot/main.py::_try_open`: contatori `rifiuti_ciclo` {motivo: n} e scorrevole `rifiuti_24h` pubblicati in `/decision_status` (come liste `[{motivo, n}]`). I motivi sono le prime parole della riga `[rifiuto]` normalizzate (`orchestrator.motivo_rifiuto`): `cooldown`, `tetto per coin`, `peso sotto soglia`, `strategia spenta`, `veto di regime`, `margine`, `rischio direzionale`, `stop troppo largo`, `esplorative al tetto` (25 set, F1bis: segnale esplorativo con `ESPLORATIVE_MAX_APERTE` posizioni esplorative già aperte), `posizione aperta` (26 set, J6: «posizione gia' aperta su questa coin», prima in `altro`), `altro`. Il contatore è uno solo, nell'orchestratore: `conta_scarto(motivo)` lo incrementa (lo chiama anche `_try_open`), `nuovo_ciclo()` azzera quello del ciclo all'inizio di `decide`/`decide_all`, `rifiuti_ciclo()`/`rifiuti_24h()` lo leggono come liste; `rifiuti_24h_dal` è l'avvio del processo.
 6. `scripts/optimize.py`: `dashboard/gate.meta = {stato: in_corso, fase: optimize, iniziato_at}` all'avvio (merge del solo meta); `max_pairs` nel doc `validated`; `registra_vite` richiamata anche da `merge_into_registry` della discovery.
@@ -299,4 +305,4 @@ Chi scrive il documento: `discover_strategies.costruisci_doc_gate(...)` (pura) t
 * righe `[rifiuto]` per coppia: journal (ops `rifiuti`); qui solo i conteggi per motivo;
 * portafoglio simulato, selettore, confronto: comandi ops sulla VPS (servono le candele);
 * «cosa aspetta il sì»: `docs/backlog.md`;
-* battito dell'agente ops: `ops/heartbeat.md`.
+* battito dell'agente ops: `ops/heartbeat.md` (dal 28 set anche `rtdb:/ops/battito`, §1.2).

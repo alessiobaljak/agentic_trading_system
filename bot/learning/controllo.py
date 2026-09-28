@@ -77,10 +77,17 @@ _ETICHETTA = {
     "CIRCUIT_BREAKER": "circuit breaker", "NESSUN_TRADE_48H": "nessun trade da 48 h",
     "SENZA_PROMESSA": "validate senza promessa", "CONTROLLO_LENTO": "controllo lento",
     "LETTURE_FIRESTORE": "letture Firestore", "CACHE_TRADE_DISALLINEATA": "cache trade",
+    "OPS_FERMO": "canale ops fermo",
 }
 #: soglie dell'anomalia LETTURE_FIRESTORE (28 set 2026): quota gratuita 50.000 al
 #: giorno, azzerata alle 07:00 UTC; giallo a meta' strada, rosso vicino al muro
 LETTURE_GIALLO, LETTURE_ROSSO = 25_000, 40_000
+#: il battito dell'agente ops su Firebase (28 set 2026) arriva ogni ora: oltre
+#: 3 ore il canale ops e' fermo (le richieste in ops/requests/ non vengono eseguite)
+SOGLIA_OPS_S = 3 * 3600
+#: la chiusura BTC «di adesso» per il benchmark dal primo giorno: oltre 3 ore e'
+#: vecchia (stessa regola dell'anello in `_btc_pct`)
+BTC_FRESCO_S = 3 * 3600
 
 
 # --------------------------------------------------------------------------- #
@@ -270,6 +277,12 @@ def carica_dati(fb, now: float, trades=None, registro=None, cache_trade=None) ->
     d["paper_started_at"] = rt("/account/paper_started_at")
     d["avvii"] = rt("/avvii")
     d["btc_history"] = rt("/btc_history")
+    # il benchmark dal primo giorno (28 set 2026): {ts, close} scritto una volta
+    # dal bot (`TradingBot._btc_inizio_paper`); RTDB, nessuna lettura Firestore
+    d["btc_inizio"] = rt("/account/btc_inizio")
+    # il battito dell'agente ops (28 set 2026): {at, pendenti, ramo}, scritto da
+    # `scripts/ops_agent.write_heartbeat` ogni ora accanto a ops/heartbeat.md
+    d["ops_battito"] = rt("/ops/battito")
     d["precedente_at"] = _figlio(fb, "/controllo", "meta", "generato_at")
     d["impronta_precedente"] = _figlio(fb, "/controllo", "learning", "attivo", "impronta")
 
@@ -560,6 +573,36 @@ def _btc_pct(ring, now: float, orizzonte_s: float):
     return round((ultimo / prima[-1][1] - 1.0) * 100.0, 2)
 
 
+def _btc_ora(d: dict, now: float):
+    """(ts, close) dell'ultima chiusura BTC nota: l'ultimo punto dell'anello
+    `/btc_history`, o `/bot_status.btc_close` (con il suo `updated_at`) se e'
+    piu' recente. None se nessuna delle due ha meno di `BTC_FRESCO_S`."""
+    cand = []
+    for p in (d.get("btc_history") or []):
+        if isinstance(p, dict) and (t := _f(p.get("ts"))) is not None and (c := _f(p.get("close"))):
+            cand.append((t, c))
+    st = d.get("bot_status") if isinstance(d.get("bot_status"), dict) else {}
+    if (c := _f(st.get("btc_close"))) and (t := _f(st.get("updated_at"))) is not None:
+        cand.append((t, c))
+    cand = [(t, c) for t, c in cand if c > 0 and now - t <= BTC_FRESCO_S]
+    return max(cand) if cand else None
+
+
+def btc_inizio_valido(valore, paper_dal=None) -> dict | None:
+    """`/account/btc_inizio` come {ts, close}, o None se manca o e' malformato.
+    Con `paper_dal` (l'inizio del paper letto da RTDB) il valore deve essere la
+    candela 1h che apre a/dopo l'inizio: un valore rimasto da un paper
+    precedente non e' il benchmark di questo."""
+    if not isinstance(valore, dict):
+        return None
+    ts, close = _f(valore.get("ts")), _f(valore.get("close"))
+    if ts is None or not close or close <= 0:
+        return None
+    if paper_dal is not None and not (paper_dal <= ts < paper_dal + 3600):
+        return None
+    return {"ts": ts, "close": close}
+
+
 def _pairs_registro(registro) -> tuple[dict, list]:
     """(pairs decodificate, chiavi validate) dal documento del registro."""
     from bot.core.firebase_client import decode_pairs
@@ -624,6 +667,8 @@ def _salute(d: dict, now: float, generato_da: str) -> dict:
     wal = d.get("unlogged") or {}
     precedente_at = _f(d.get("precedente_at"))
     letture = d.get("letture") if (generato_da == "bot" and isinstance(d.get("letture"), dict)) else None
+    ops = d.get("ops_battito") if isinstance(d.get("ops_battito"), dict) else {}
+    ops_at = _f(ops.get("at"))
     cache = d.get("cache_trade") if (generato_da == "bot" and isinstance(d.get("cache_trade"), dict)) else None
 
     out = {
@@ -631,7 +676,8 @@ def _salute(d: dict, now: float, generato_da: str) -> dict:
         "fonti": ["rtdb:/bot_status", "rtdb:/bot_status/heartbeat", "rtdb:/commands",
                   "rtdb:/decision_status", "rtdb:/risk_state", "rtdb:/adapt_state",
                   "rtdb:/positions", "rtdb:/unlogged_trades", "rtdb:/avvii",
-                  "rtdb:/btc_history", "rtdb:/controllo/meta", "fs:dashboard/gate",
+                  "rtdb:/btc_history", "rtdb:/controllo/meta", "rtdb:/ops/battito",
+                  "fs:dashboard/gate",
                   "fs:strategy_registry/validated", "fs:drift/current",
                   "fs:strategy_weights/current", "fs:calibration/current",
                   "fs:learning/referti", "fs:supervisor/state",
@@ -698,6 +744,10 @@ def _salute(d: dict, now: float, generato_da: str) -> dict:
         "wal_non_vuoto": len(wal) if isinstance(wal, dict) else 0,
         "rtdb_degradato_s": _f(d.get("rtdb_degradato_s")) if generato_da == "bot" else None,
         "controllo_precedente_eta_s": int(now - precedente_at) if precedente_at is not None else None,
+        # il battito dell'agente ops (28 set 2026): prima viveva solo in git
+        # (ops/heartbeat.md) e la dashboard non poteva dire se il canale era vivo
+        "ops_battito_at": ops_at,
+        "ops_battito_eta_s": int(now - ops_at) if ops_at is not None else None,
         # le letture Firestore del bot nelle ultime 24 h (28 set 2026): solo dal
         # bot, che e' il processo che vive 24 ore; da ops o GitHub sarebbero le
         # letture di un processo appena nato
@@ -841,17 +891,34 @@ def _paper(d: dict, now: float) -> dict:
 
     trailing = _trailing(trades_tutti)
     pb = d.get("portfolio_backtest")
+    rendimento = round((equity / iniziale - 1.0) * 100, 2) if (equity is not None and iniziale > 0) else None
+    # IL BENCHMARK DAL PRIMO GIORNO (28 set 2026): BTC comprato alla chiusura
+    # della prima candela 1h del paper e tenuto fino all'ultima chiusura nota,
+    # contro il rendimento del conto. Il controllo di un inizio da RTDB: con
+    # l'inizio stimato dal primo trade il confronto si fa lo stesso
+    inizio_btc = btc_inizio_valido(d.get("btc_inizio"), dal if dal_fonte == "rtdb" else None)
+    ora_btc = _btc_ora(d, now)
+    btc_dal = (round((ora_btc[1] / inizio_btc["close"] - 1.0) * 100, 2)
+               if (inizio_btc and ora_btc) else None)
     benchmark = {"btc_24h_pct": _btc_pct(d.get("btc_history"), now, 24 * 3600),
                  "btc_7g_pct": _btc_pct(d.get("btc_history"), now, 7 * 86400),
-                 "nota": ("BTC dall'anello orario /btc_history (200 ore): non e' il "
-                          "buy&hold dal primo giorno del paper (serve Binance: ops `stato`)"),
+                 "btc_dal_paper_pct": btc_dal,
+                 "btc_inizio": inizio_btc,
+                 "noi_pct": rendimento,
+                 "differenza_pct": round(rendimento - btc_dal, 2) if (rendimento is not None
+                                                                      and btc_dal is not None) else None,
+                 "nota": ("BTC a 24 h e 7 g dall'anello orario /btc_history (200 ore); "
+                          "dal primo giorno: chiusura della prima candela 1h del paper "
+                          "(/account/btc_inizio, scritta una volta dal bot da Binance) contro "
+                          "l'ultima chiusura nota; noi = rendimento del conto"),
                  "portafoglio": ({"lettura": str(pb.get("lettura"))[:300] if pb.get("lettura") else None,
                                   "updated_at": _ts(pb.get("updated_at"))}
                                  if isinstance(pb, dict) and pb else None)}
 
     return {
         "computed_at": now,
-        "fonti": ["fs:trades", "rtdb:/account", "fs:drift/current", "rtdb:/btc_history",
+        "fonti": ["fs:trades", "rtdb:/account", "rtdb:/account/btc_inizio",
+                  "rtdb:/bot_status", "fs:drift/current", "rtdb:/btc_history",
                   "fs:strategy_registry/validated", "fs:strategy_registry/esplorative",
                   "fs:portfolio/backtest"],
         "lettura": "",
@@ -865,7 +932,7 @@ def _paper(d: dict, now: float) -> dict:
         "equity_iniziale": iniziale, "equity_iniziale_fonte": iniziale_fonte,
         "paper_dal": dal, "paper_dal_fonte": dal_fonte,
         "giorni_paper": int((now - dal) / 86400) if dal is not None else None,
-        "rendimento_pct": round((equity / iniziale - 1.0) * 100, 2) if (equity is not None and iniziale > 0) else None,
+        "rendimento_pct": rendimento,
         "trades": n, "vinti": vinti, "perdite": perdite,
         "win_rate": round(vinti / n, 3) if n else None,
         "pnl_realizzato": round(sum(_pnl(t) for t in trades_tutti), 2),
@@ -1117,6 +1184,13 @@ def anomalie(salute: dict, paper: dict, attivo: dict, dati: dict, now: float,
                 f"letture Firestore nelle ultime 24 h: {_migliaia(lett)} (quota gratuita "
                 f"{_migliaia(QUOTA_LETTURE_GIORNO)}): valutare il piano a consumo (Blaze) se resta sopra",
                 int(lett), LETTURE_ROSSO if lett > LETTURE_ROSSO else LETTURE_GIALLO)
+        # IL CANALE OPS (28 set 2026): il battito arriva ogni ora; senza battito
+        # mai visto non si dice nulla (lo dice `manca`), oltre 3 ore e' fermo
+        oeta = s.get("ops_battito_eta_s")
+        if oeta is not None and oeta > SOGLIA_OPS_S:
+            add("OPS_FERMO", SISTEMA, GIALLO,
+                f"canale ops fermo da {_eta(oeta)}: le richieste non vengono eseguite",
+                oeta, SOGLIA_OPS_S)
         ct = s.get("cache_trade") or {}
         if ct and ct.get("allineata") is False:
             add("CACHE_TRADE_DISALLINEATA", SISTEMA, INFO,
@@ -1265,23 +1339,37 @@ def lettura_paper(p: dict) -> str:
         r = p["rendimento_pct"]
         testo += f" ({'+' if r >= 0 else ''}{_num(r, 1)}%)"
     testo += "."
+    # il benchmark dal primo giorno (28 set 2026), subito dopo il conto
+    btc = ""
+    bm = p.get("benchmark") or {}
+    if bm.get("btc_dal_paper_pct") is not None:
+        b = bm["btc_dal_paper_pct"]
+        btc = f" BTC dal primo giorno {'+' if b >= 0 else ''}{_num(b, 1)}%"
+        if bm.get("noi_pct") is not None:
+            r = bm["noi_pct"]
+            btc += f" (noi {'+' if r >= 0 else ''}{_num(r, 1)}%)"
+        btc += "."
     stop = next((u for u in (p.get("uscite") or []) if u.get("motivo") == "stop_loss"), None)
-    if stop and stop.get("quota") is not None:
-        testo += f" Stop nel {_num(stop['quota'] * 100)}% delle uscite."
+    stop_frase = (f" Stop nel {_num(stop['quota'] * 100)}% delle uscite."
+                  if stop and stop.get("quota") is not None else "")
     og = p.get("oggi") or {}
     if og.get("trades") or og.get("trades_tutti"):
         vt = og.get("pnl_tutti")
         v = vt if vt is not None else (og.get("pnl") or 0.0)
-        testo += f" Oggi {'+' if v >= 0 else ''}{_num(v, 2)}"
+        oggi_frase = f" Oggi {'+' if v >= 0 else ''}{_num(v, 2)}"
         vv = og.get("pnl")
         if vt is not None and vv is not None and og.get("trades_tutti") != og.get("trades"):
-            testo += f" (validate {'+' if vv >= 0 else ''}{_num(vv, 2)})"
-        testo += "."
+            oggi_frase += f" (validate {'+' if vv >= 0 else ''}{_num(vv, 2)})"
+        oggi_frase += "."
     else:
-        testo += " Oggi nessun trade."
-    if n < 20:
-        testo += " Numeri piccoli."
-    return taglia(testo)
+        oggi_frase = " Oggi nessun trade."
+    coda = " Numeri piccoli." if n < 20 else ""
+    # oltre i 140 caratteri cade per prima la quota degli stop (sta anche fra le
+    # uscite del pannello), cosi' il confronto con BTC e la coda restano interi
+    frase = testo + btc + stop_frase + oggi_frase + coda
+    if len(" ".join(frase.split())) > LETTURA_MAX:
+        frase = testo + btc + oggi_frase + coda
+    return taglia(frase)
 
 
 def lettura_learning(att: dict, mis: dict) -> str:
@@ -1324,21 +1412,37 @@ def lettura_learning(att: dict, mis: dict) -> str:
     return taglia(_frase())
 
 
-def manca() -> list[dict]:
+def manca(salute: dict | None = None, paper: dict | None = None) -> list[dict]:
     """Cio' che il controllo NON puo' dare oggi, scritto dal codice (nessun numero
-    inventato) e con la strada per averlo."""
-    return [
-        {"evidenza": "battito dell'agente ops",
-         "perche": "vive in git (ops/heartbeat.md), non su Firebase",
-         "come_avere": "leggere ops/heartbeat.md nel repo"},
-        {"evidenza": "benchmark BTC buy&hold dal primo giorno del paper",
-         "perche": "servono le candele di Binance (GitHub non le raggiunge): qui solo "
-                   "l'anello orario /btc_history di 200 punti",
-         "come_avere": "comando ops `stato` sulla VPS (state_snapshot col confronto col mercato)"},
-        {"evidenza": "cosa aspetta il si' del proprietario",
-         "perche": "vive in docs/backlog.md, non e' un dato del sistema",
-         "come_avere": "leggere docs/backlog.md (voce F1 per il learning)"},
-    ]
+    inventato) e con la strada per averlo. Dal 28 set 2026 il battito ops e il
+    benchmark dal primo giorno escono dalla lista quando il documento li porta:
+    restano, col motivo, solo finche' mancano."""
+    salute = salute if isinstance(salute, dict) else {}
+    paper = paper if isinstance(paper, dict) else {}
+    out = []
+    if salute.get("ops_battito_at") is None:
+        out.append({"evidenza": "battito dell'agente ops",
+                    "perche": ("la sezione salute non e' stata calcolata in questo giro"
+                               if salute.get("errore") else
+                               "l'agente non ha ancora scritto /ops/battito su Firebase (lo fa "
+                               "ogni ora accanto a ops/heartbeat.md, se il suo client Firebase va)"),
+                    "come_avere": "leggere ops/heartbeat.md nel repo"})
+    bm = paper.get("benchmark") if isinstance(paper.get("benchmark"), dict) else {}
+    if bm.get("btc_dal_paper_pct") is None:
+        if paper.get("errore"):
+            perche = "la sezione paper non e' stata calcolata in questo giro"
+        elif bm.get("btc_inizio") is None:
+            perche = ("il bot non ha ancora scritto /account/btc_inizio (la chiusura BTC della "
+                      "prima candela 1h del paper: la prende da Binance una volta, al giro orario)")
+        else:
+            perche = "manca una chiusura BTC recente (/btc_history o /bot_status.btc_close, meno di 3 h)"
+        out.append({"evidenza": "benchmark BTC buy&hold dal primo giorno del paper",
+                    "perche": perche,
+                    "come_avere": "comando ops `stato` sulla VPS (state_snapshot col confronto col mercato)"})
+    out.append({"evidenza": "cosa aspetta il si' del proprietario",
+                "perche": "vive in docs/backlog.md, non e' un dato del sistema",
+                "come_avere": "leggere docs/backlog.md (voce F1 per il learning)"})
+    return out
 
 
 # --------------------------------------------------------------------------- #
@@ -1413,7 +1517,7 @@ def costruisci_controllo(dati: dict, now: float, generato_da: str, settings_da_b
         "misurato": misurato,
     }
     return pulisci({"meta": meta, "salute": salute, "paper": paper,
-                    "learning": learning, "manca": manca()})
+                    "learning": learning, "manca": manca(salute, paper)})
 
 
 def pubblica_controllo(fb, doc: dict) -> None:

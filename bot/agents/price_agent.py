@@ -93,9 +93,16 @@ class PriceAgent:
         return [s for s, _ in ranked] or sorted(perps)
 
     # ---- candele ----
-    def get_candles(self, symbol: str, interval: str, limit: int = 200) -> list[Candle]:
-        data = self._get("/fapi/v1/klines",
-                         {"symbol": symbol, "interval": interval, "limit": limit})
+    def get_candles(self, symbol: str, interval: str, limit: int = 200,
+                    start_ms: Optional[int] = None) -> list[Candle]:
+        """Le ultime `limit` candele; con `start_ms` (28 set 2026) le prime
+        `limit` che APRONO a/dopo quell'istante (`startTime` di Binance): serve
+        al benchmark BTC dal primo giorno del paper (`TradingBot._btc_inizio_paper`).
+        Senza `start_ms` il comportamento e' quello di sempre."""
+        params = {"symbol": symbol, "interval": interval, "limit": limit}
+        if start_ms is not None:
+            params["startTime"] = int(start_ms)
+        data = self._get("/fapi/v1/klines", params)
         if not data:
             return []
         candles = []

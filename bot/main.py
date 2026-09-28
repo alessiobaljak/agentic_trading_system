@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 
 from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import get_firebase, kw_chi, riga_letture
-from bot.core.models import Direction, ExitReason, Regime, RiskSettings
+from bot.core.models import Direction, ExitReason, Regime, RiskSettings, epoch_utc
 from bot.agents.market_scanner import MarketScanner
 from bot.agents.onchain_agent import OnChainAgent
 from bot.agents.price_agent import PriceAgent
@@ -330,6 +330,11 @@ class TradingBot:
         self._registro_rileggi_spec = False
         # quando e' girata l'ultima passata giornaliera degli scaduti (28 set 2026)
         self._scaduti_at = 0.0
+        # IL BENCHMARK BTC DAL PRIMO GIORNO DEL PAPER (28 set 2026): l'ultimo
+        # tentativo di scrivere /account/btc_inizio (al massimo uno l'ora) e se
+        # e' gia' scritto (da quel momento non si rilegge piu' nulla)
+        self._btc_inizio_tentato_at = 0.0
+        self._btc_inizio_fatto = False
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
@@ -704,6 +709,69 @@ class TradingBot:
             self.fb.set_rtdb("/btc_history", hist[-keep:])
         except Exception as exc:  # noqa: BLE001
             print(f"[main] anello BTC non aggiornato: {exc}")
+
+    def _btc_inizio_paper(self, now: float | None = None) -> None:
+        """IL BENCHMARK BTC DAL PRIMO GIORNO DEL PAPER (28 set 2026, chiesto dal
+        proprietario): scrive UNA volta in RTDB `/account/btc_inizio = {ts, close}`
+        la prima candela 1h di BTCUSDT che APRE a/dopo `/account/paper_started_at`
+        (`ts` = la sua apertura, `close` = la sua chiusura). Il controllo orario
+        la confronta con l'ultima chiusura di BTC e pubblica «BTC tenuto dal primo
+        giorno +X%, noi Y%»: senza, «il paper perde il 7%» non dice se il mercato
+        ha fatto meglio o peggio di noi.
+
+        Perche' qui e non nel controllo: il controllo e' puro e gira anche da
+        GitHub, che Binance non lo raggiunge; il bot si'. Un valore scritto che
+        non corrisponde piu' all'inizio del paper (`ts` fuori da [inizio, inizio
+        + 1 h), per esempio dopo un reset) si riscrive. Se fallisce (rete, candela
+        non ancora chiusa, inizio del paper non ancora scritto) riprova al massimo
+        una volta l'ora. Non solleva mai: e' osservabilita', non trading."""
+        now = time.time() if now is None else now
+        if getattr(self, "_btc_inizio_fatto", False):
+            return
+        if now - getattr(self, "_btc_inizio_tentato_at", 0.0) < 3600:
+            return
+        self._btc_inizio_tentato_at = now
+        try:
+            inizio = self.fb.get_rtdb("/account/paper_started_at")
+            inizio = float(inizio) if inizio else None
+            if inizio is None:
+                print("[benchmark] inizio del paper non ancora scritto: riprovo fra un'ora")
+                return
+            gia = self.fb.get_rtdb("/account/btc_inizio")
+            if isinstance(gia, dict):
+                try:
+                    ts, close = float(gia.get("ts")), float(gia.get("close"))
+                    if close > 0 and inizio <= ts < inizio + 3600:
+                        self._btc_inizio_fatto = True
+                        return
+                except (TypeError, ValueError):
+                    pass
+            candele = self.price.get_candles("BTCUSDT", "1h", limit=3,
+                                             start_ms=int(inizio * 1000))
+            scelta = None
+            for c in candele or []:
+                apre = epoch_utc(c.open_time)
+                if apre >= inizio:
+                    scelta = (apre, c)
+                    break
+            if scelta is None:
+                print("[benchmark] nessuna candela BTC 1h dopo l'inizio del paper: riprovo fra un'ora")
+                return
+            apre, c = scelta
+            # la candela deve essere CHIUSA: una chiusura ancora in formazione non
+            # e' il prezzo del primo giorno, e scritta una volta resterebbe li'
+            if c.close_time is not None and epoch_utc(c.close_time) > now:
+                print("[benchmark] la prima candela del paper non e' ancora chiusa: riprovo fra un'ora")
+                return
+            if not (c.close and float(c.close) > 0):
+                return
+            valore = {"ts": float(apre), "close": float(c.close)}
+            self.fb.set_rtdb("/account/btc_inizio", valore)
+            self._btc_inizio_fatto = True
+            print(f"[benchmark] BTC all'inizio del paper: {valore['close']:.2f} "
+                  f"(candela 1h delle {datetime.fromtimestamp(apre, timezone.utc):%Y-%m-%d %H:%M} UTC)")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[benchmark] BTC all'inizio del paper non scritto ({exc}): riprovo fra un'ora")
 
     def _errori_ciclo_1h(self, now: float | None = None) -> int:
         """Quanti cicli sono finiti in errore nell'ultima ora (finestra in RAM)."""
@@ -2077,6 +2145,9 @@ class TradingBot:
                     # 2026): la verifica giornaliera della cache dei trade deve
                     # essere gia' fatta quando il controllo la pubblica
                     self._manutenzione_oraria(now)
+                    # il prezzo di BTC all'inizio del paper (28 set 2026): una
+                    # volta sola, PRIMA del controllo che lo pubblica
+                    self._btc_inizio_paper(now)
                     # `orario=True`: SOLO qui parte il controllo orario (mai dal
                     # ricalcolo dopo ogni chiusura, qui sotto)
                     self.refresh_weights(now, orario=True)

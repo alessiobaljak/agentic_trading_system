@@ -846,6 +846,19 @@ insieme mentre si verificava la chiave.
 ### D4. LunarCrush — RIMOSSA dal backlog il 23 set
 **Stato:** **tolta su decisione del proprietario**: i dati esterni (sentiment, notizie, macro, open interest) si affrontano tutti insieme in una **sessione dedicata**, più avanti. Fino ad allora il sentiment resta un tilt di size come oggi.
 
+### D5. `reset_paper.py` non azzera l'inizio del paper (né il prezzo BTC di partenza)
+**Stato:** aperto · trovato il 28 set leggendo `scripts/reset_paper.py` mentre si aggiungeva il benchmark BTC dal primo giorno
+
+Il reset riscrive `/account/equity` e `/account/starting_equity` ma lascia
+`/account/paper_started_at`: dopo un reset `giorni_paper` e il benchmark «BTC
+tenuto dal primo giorno» partirebbero dal paper VECCHIO. Il benchmark ha già una
+difesa (`/account/btc_inizio` vale solo se la sua candela apre entro un'ora
+dall'inizio del paper, altrimenti il bot la riscrive e il controllo la ignora), ma
+l'inizio stesso resta sbagliato. **Serve:** nel reset, `paper_started_at` e
+`btc_inizio` a `None` (il bot li riscrive da soli al riavvio). Non fatto il 28 set:
+nessun reset in vista e il proprietario non l'ha chiesto; il numero che lo ha fatto
+emergere è la sola lettura del codice, non un reset andato male.
+
 ### E1. Le short perdono sistematicamente
 **Stato:** **NON risolta · in osservazione** — 23 set: short 23 trade, 8 vinti, **−35,84**; long 14 trade, 6 vinti, +4,75. Dal 21 sera il freno sul controtrend agisce davvero (VET short a 0,47% di rischio il 23) e la conferma a 1 ora è nel vocabolario: se le short perdono anche frenate, il passo successivo è validarle con un criterio a parte (PF per direzione nel gate).
 

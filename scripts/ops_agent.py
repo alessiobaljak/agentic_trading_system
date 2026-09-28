@@ -326,7 +326,9 @@ def heartbeat_due(last_ts: float, now: float,
 
 def write_heartbeat(branch: str, pendenti: int, now: float) -> None:
     """Un file piccolo con l'ora e lo stato. Non serve a chi guarda la macchina —
-    serve a chi puo' vedere SOLO git."""
+    serve a chi puo' vedere SOLO git. Dal 28 set 2026 lo stesso battito va anche
+    su Firebase (`battito_firebase`), perche' il controllo orario e la dashboard
+    lo vedano senza leggere il repo."""
     from datetime import datetime, timezone
     quando = datetime.fromtimestamp(now, timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     with open(HEARTBEAT, "w", encoding="utf-8") as f:
@@ -335,6 +337,57 @@ def write_heartbeat(branch: str, pendenti: int, now: float) -> None:
                 f"- richieste in attesa: {pendenti}\n\n"
                 f"Se questa data smette di avanzare, il canale e' caduto: da fuori\n"
                 f"il silenzio non si distinguerebbe da 'niente da fare'.\n")
+    battito_firebase(branch, pendenti, now)
+
+
+BATTITO_PATH = "/ops/battito"
+BATTITO_TIMEOUT_S = float(os.getenv("OPS_BATTITO_TIMEOUT_S", "20"))
+
+
+def _scrivi_battito(valore: dict) -> None:
+    """La scrittura vera, col client Firebase del progetto. Import PIGRO: e'
+    pesante (firebase_admin, la configurazione del bot) e l'agente gira ogni
+    minuto, mentre il battito serve una volta l'ora."""
+    from bot.core.firebase_client import get_firebase
+    fb = get_firebase()
+    if fb.set_rtdb(BATTITO_PATH, valore) is False:
+        print("[ops] battito su Firebase non scritto: client non collegato "
+              "(FIREBASE_SERVICE_ACCOUNT?) o RTDB muto")
+
+
+def battito_firebase(branch: str, pendenti: int, now: float,
+                     timeout_s: float = BATTITO_TIMEOUT_S) -> None:
+    """IL BATTITO SU FIREBASE (28 set 2026): `rtdb:/ops/battito = {at, pendenti,
+    ramo}`. Il controllo orario lo legge (`salute.ops_battito_at`, anomalia
+    OPS_FERMO oltre 3 ore) e la dashboard dice «canale ops: vivo (12 min fa)»:
+    prima il battito viveva solo in `ops/heartbeat.md`, e per sapere se il canale
+    era vivo bisognava leggere git.
+
+    FAIL-OPEN, e con un tetto di tempo: il canale non deve mai fermarsi per il
+    battito. La scrittura gira in un thread demone e si aspetta al massimo
+    `timeout_s`; qualunque errore (client assente, credenziali, rete) si stampa
+    e basta."""
+    import threading
+    valore = {"at": float(now), "pendenti": int(pendenti), "ramo": str(branch)}
+    errori: list = []
+
+    def _lavoro():
+        try:
+            _scrivi_battito(valore)
+        except Exception as exc:  # noqa: BLE001
+            errori.append(exc)
+
+    try:
+        t = threading.Thread(target=_lavoro, name="battito-firebase", daemon=True)
+        t.start()
+        t.join(timeout_s)
+        if t.is_alive():
+            print(f"[ops] battito su Firebase: nessuna risposta entro {timeout_s:g}s, "
+                  f"vado avanti")
+        elif errori:
+            print(f"[ops] battito su Firebase non scritto ({errori[0]}): vado avanti")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[ops] battito su Firebase non scritto ({exc}): vado avanti")
 
 
 def ahead_count(out: str) -> int:

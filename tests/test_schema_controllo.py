@@ -95,6 +95,10 @@ def doc_controllo() -> dict:
     fb = _fb(verdetto_drift="drift")
     fb.set_doc("portfolio", "backtest", {"lettura": "il portafoglio simulato batte il paper",
                                          "updated_at": NOW - 3600})
+    # il benchmark dal primo giorno e il battito ops (28 set 2026): scritti dal bot
+    # e dall'agente ops, qui finti, cosi' le loro forme annidate si controllano
+    fb.set_rtdb("/account/btc_inizio", {"ts": NOW - 10 * 86400 + 1800, "close": 55000.0})
+    fb.set_rtdb("/ops/battito", {"at": NOW - 720, "pendenti": 0, "ramo": "principale"})
     # la verifica della cache dei trade (28 set 2026) la passa il bot: qui una finta
     doc = _doc_controllo(fb=fb, durata_ms=120,
                          cache_trade={"firestore": 54, "cache": 54, "allineata": True,
@@ -223,7 +227,9 @@ CONTROLLO_ANNIDATE = {
                     "break_even_pct", "stimati", "avvisi"},
     "paper.trailing": {"verdetti_totali", "prematuri", "protetti", "neutri", "verdetti_per_proposta",
                        "prematuri_tf", "protetti_tf", "proposta_paper", "soglia"},
-    "paper.benchmark": {"btc_24h_pct", "btc_7g_pct", "nota", "portafoglio"},
+    "paper.benchmark": {"btc_24h_pct", "btc_7g_pct", "btc_dal_paper_pct", "btc_inizio", "noi_pct",
+                        "differenza_pct", "nota", "portafoglio"},
+    "paper.benchmark.btc_inizio": {"ts", "close"},
     "paper.benchmark.portafoglio": {"lettura", "updated_at"},
     "paper.esplorative": {"trades", "vinti", "pnl", "aperte", "coppie_attive"},
     "paper.declassate": {"trades", "pnl", "aperte"},

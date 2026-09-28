@@ -275,6 +275,23 @@ export default function ControlloPaper() {
         </Riga>
       )}
 
+      {p.benchmark?.btc_dal_paper_pct != null && (
+        <Riga>
+          <span title="BTC comprato alla chiusura della prima candela 1h del paper e tenuto fino all'ultima chiusura nota; noi = rendimento del conto">
+            <b>Contro BTC tenuto</b>
+            {p.benchmark.btc_inizio?.ts != null &&
+              ` dal ${new Date(Number(p.benchmark.btc_inizio.ts) * 1000).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}`}
+            : BTC <span className={classePnl(p.benchmark.btc_dal_paper_pct)}>{segno(p.benchmark.btc_dal_paper_pct, 1)}%</span>
+            {p.benchmark.noi_pct != null && (
+              <>
+                {' '}· noi <span className={classePnl(p.benchmark.noi_pct)}>{segno(p.benchmark.noi_pct, 1)}%</span>
+              </>
+            )}
+            {p.benchmark.differenza_pct != null && ` · differenza ${segno(p.benchmark.differenza_pct, 1)} punti`}
+          </span>
+        </Riga>
+      )}
+
       <div style={{ marginTop: 14 }}>
         <div className="sotto-titolo">Curva di equity (PnL cumulato, ultimi 1000 trade)</div>
         <EquityCurve altezza={200} limite={1000} compatta />

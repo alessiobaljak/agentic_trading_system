@@ -193,6 +193,10 @@ export interface Salute extends Testata {
   wal_non_vuoto?: number | null;
   rtdb_degradato_s?: number | null;
   controllo_precedente_eta_s?: number | null;
+  /** il battito dell'agente ops su Firebase (28 set 2026): `rtdb:/ops/battito.at`,
+   *  ogni ora; oltre 3 h l'anomalia OPS_FERMO */
+  ops_battito_at?: number | null;
+  ops_battito_eta_s?: number | null;
   letture_firestore_24h?: number | null;
   letture_per_chiamante?: LetturaChiamante[] | null;
   cache_trade?: CacheTrade | null;
@@ -314,6 +318,14 @@ export interface Trailing {
 export interface Benchmark {
   btc_24h_pct?: number | null;
   btc_7g_pct?: number | null;
+  /** BTC comprato alla prima candela 1h del paper e tenuto (28 set 2026) */
+  btc_dal_paper_pct?: number | null;
+  /** `rtdb:/account/btc_inizio`: apertura (`ts`) e chiusura di quella candela */
+  btc_inizio?: { ts?: number | null; close?: number | null } | null;
+  /** il rendimento del conto (= `paper.rendimento_pct`) */
+  noi_pct?: number | null;
+  /** noi − BTC, in punti percentuali */
+  differenza_pct?: number | null;
   nota?: string | null;
   portafoglio?: { lettura?: string | null; updated_at?: number | null } | null;
 }
