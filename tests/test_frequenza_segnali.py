@@ -163,7 +163,7 @@ def test_anche_i_trade_veri_sono_ripartiti_per_giorno():
     """Il confronto ha bisogno di due serie, non di una serie e una media."""
     from scripts import trade_stats
 
-    assert "per giorno (UTC)" in inspect.getsource(trade_stats.main)
+    assert "per giorno (ora italiana)" in inspect.getsource(trade_stats.main)   # 28 set 2026
 
 
 

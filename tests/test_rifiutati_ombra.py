@@ -526,6 +526,7 @@ def test_il_bot_cabla_ombra_dei_rifiuti_e_storia_delle_ipotesi():
     src_open = inspect.getsource(bot_main.TradingBot._try_open)
     assert "rifiutati.registra_decisione(self.fb, decision, motivo" in src_open
     src_run = inspect.getsource(bot_main.TradingBot.run)
-    assert "rifiutati.valuta_pendenti(self.fb, self.price.get_candles, now)" in src_run
+    assert "rifiutati.valuta_pendenti(self.fb, self.price.get_candles, now," in src_run
+    assert "timeframes=self._timeframes_in_uso())" in src_run       # 28 set 2026: finestra per timeframe
     src_ref = inspect.getsource(bot_main.TradingBot._publish_referti)
     assert 'self.fb.set_doc("learning", "ipotesi_storia"' in src_ref

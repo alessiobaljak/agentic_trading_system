@@ -38,7 +38,11 @@ export default function ControlloPaper() {
   const oggi = p.oggi ?? {};
   const uscite = lista<Uscita>(p.uscite);
   const ultime = lista<Giornata>(p.giornate?.ultime_7);
-  const maxPnlGiorno = Math.max(1e-9, ...ultime.map((g) => Math.abs(g.pnl ?? 0)));
+  // le barre sono proporzionali al giorno piu' grande fra i DUE conti (28 set 2026)
+  const maxPnlGiorno = Math.max(
+    1e-9,
+    ...ultime.map((g) => Math.max(Math.abs(g.pnl ?? 0), Math.abs(g.pnl_tutti ?? 0))),
+  );
   const lungo = p.direzione?.long ?? null;
   const corto = p.direzione?.short ?? null;
   const costi = p.costi ?? null;
@@ -92,12 +96,17 @@ export default function ControlloPaper() {
           </div>
         </div>
         <div className={`stat-tile ${oggi.pnl != null && oggi.trades ? (oggi.pnl >= 0 ? 'good' : 'bad') : ''}`}>
-          <div className="stat-label">Oggi (UTC)</div>
+          <div className="stat-label">Oggi (ora italiana)</div>
           <div className={`stat-value ${classePnl(oggi.pnl)}`}>
             {oggi.trades ? segno(oggi.pnl, 2) : 'nessun trade'}
           </div>
           <div className="stat-sub">
             {oggi.trades ? `${oggi.trades} trade · ${oggi.vinti ?? 0} vinti` : 'ancora niente chiuso oggi'}
+            {oggi.pnl_tutti != null && oggi.trades_tutti !== oggi.trades && (
+              <>
+                {' '}· conto {segno(oggi.pnl_tutti, 2)} su {oggi.trades_tutti ?? 0}
+              </>
+            )}
             {oggi.migliore?.coin && ` · meglio ${oggi.migliore.coin} ${segno(oggi.migliore.pnl, 2)}`}
             {oggi.peggiore?.coin && ` · peggio ${oggi.peggiore.coin} ${segno(oggi.peggiore.pnl, 2)}`}
           </div>
@@ -122,33 +131,56 @@ export default function ControlloPaper() {
         </div>
       )}
 
-      {/* --- ultime 7 giornate: barre minuscole, proporzionali al giorno peggiore/migliore --- */}
+      {/* --- ultime 7 giornate (ora italiana, 28 set 2026): due conti per giorno,
+             «conto» = tutti i trade chiusi (cio' che muove l'equity),
+             «validate» = i soli trade delle validate decisi dalla strategia --- */}
       {ultime.length > 0 && (
         <div style={{ marginTop: 14 }}>
           <div className="sotto-titolo">
             Ultime 7 giornate
-            {p.giornate && (
-              <span className="muted" style={{ fontWeight: 500 }}>
-                {' '}· {p.giornate.positive ?? 0} positive, {p.giornate.negative ?? 0} negative su{' '}
-                {p.giornate.con_trade ?? 0} con trade
-              </span>
-            )}
+            <span className="muted" style={{ fontWeight: 500 }}>
+              {' '}· giornate in ora italiana
+              {p.giornate?.tutti && (
+                <>
+                  {' '}· conto: {p.giornate.tutti.positive ?? 0} positive, {p.giornate.tutti.negative ?? 0}{' '}
+                  negative su {p.giornate.tutti.con_trade ?? 0}
+                </>
+              )}
+              {p.giornate && (
+                <>
+                  {' '}· validate: {p.giornate.positive ?? 0} positive, {p.giornate.negative ?? 0} negative su{' '}
+                  {p.giornate.con_trade ?? 0}
+                </>
+              )}
+            </span>
           </div>
           <ul className="barre-mini">
             {ultime.map((g, i) => {
               const v = g.pnl ?? 0;
-              const w = Math.round((Math.abs(v) / maxPnlGiorno) * 100);
+              const vt = g.pnl_tutti ?? v;
+              const nt = g.trades_tutti ?? g.trades ?? 0;
+              const w = Math.round((Math.abs(vt) / maxPnlGiorno) * 100);
               return (
-                <li key={g.data ?? i} title={`${g.data}: ${g.trades ?? 0} trade, ${segno(v, 2)}`}>
+                <li
+                  key={g.data ?? i}
+                  title={`${g.data}: conto ${segno(vt, 2)} su ${nt} trade · validate ${segno(v, 2)} su ${g.trades ?? 0}`}
+                >
                   <span className="bm-data mono">{(g.data ?? '').slice(5)}</span>
                   <span className="bm-track">
                     <span
                       className="bm-fill"
-                      style={{ width: `${w}%`, background: v >= 0 ? 'var(--green)' : 'var(--red)' }}
+                      style={{ width: `${w}%`, background: vt >= 0 ? 'var(--green)' : 'var(--red)' }}
                     />
                   </span>
-                  <span className={`bm-val ${classePnl(v)}`}>
-                    {g.trades ? segno(v, 2) : <span className="muted">—</span>}
+                  <span className={`bm-val ${classePnl(vt)}`}>
+                    {nt ? (
+                      <>
+                        conto {segno(vt, 2)}
+                        <span className="muted"> · validate {g.trades ? segno(v, 2) : '—'}</span>
+                      </>
+                    ) : (
+                      <span className="muted">—</span>
+                    )}
                   </span>
                 </li>
               );

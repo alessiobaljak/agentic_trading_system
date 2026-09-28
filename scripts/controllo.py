@@ -63,6 +63,22 @@ def stampa(doc: dict) -> None:
         if sez.get("errore"):
             print(f"  {'':10} errore: {sez['errore']}")
 
+    # le letture Firestore del bot (28 set 2026): solo il documento scritto dal
+    # bot le porta; da ops sarebbero quelle di questo processo, appena nato
+    sal = doc.get("salute") or {}
+    lett = sal.get("letture_firestore_24h")
+    print("\nLETTURE FIRESTORE DEL BOT (ultime 24 h, quota gratuita 50.000/giorno):")
+    if lett is None:
+        print("  non misurate in questo documento (le conta solo il bot: vedi il controllo orario)")
+    else:
+        per = " · ".join(f"{r.get('chi')} {r.get('n')}" for r in (sal.get("letture_per_chiamante") or []))
+        print(f"  {lett}" + (f" ({per})" if per else ""))
+    ct = sal.get("cache_trade")
+    if isinstance(ct, dict):
+        print(f"  cache trade: {ct.get('cache')} in memoria contro {ct.get('firestore')} su Firestore "
+              f"({'allineata' if ct.get('allineata') else 'DISALLINEATA, ricaricata'}, "
+              f"verificata {_quando(ct.get('verificata_at'))})")
+
     att = ((doc.get("learning") or {}).get("attivo") or {})
     cambi = att.get("cambiamenti_24h")
     print("\nCAMBIAMENTI DEL LEARNING dal controllo precedente:")

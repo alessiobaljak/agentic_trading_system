@@ -42,7 +42,8 @@ prometteva, e due spiegazioni opposte danno lo stesso sintomo: il mercato e'
 cambiato, o il paper esegue male. Nel run di default si stampa quindi anche il
 PnL simulato giorno per giorno DA QUANDO IL PAPER ESISTE (`PAPER_START`, env,
 default 2026-09-16), affiancato al PnL del paper letto da Firestore per giorno
-UTC di uscita. Se anche il simulato perde, e' il mercato; se il simulato vince
+di uscita in ORA ITALIANA (dal 28 set 2026, `bot/core/tempo.py`: lo stesso
+giorno del controllo orario). Se anche il simulato perde, e' il mercato; se il simulato vince
 e il paper no, il divario e' esecuzione/parita'. Con un avvertimento che pesa:
 il simulato dal 16 set e' GONFIATO dalla selezione (l'holdout del gate sono
 gli ultimi 45 giorni, e quei giorni li contengono), quindi un simulato in
@@ -71,6 +72,7 @@ from backtesting.data_loader import load_candles
 from backtesting.optimizer import WalkForwardOptimizer
 from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import decode_pairs, get_firebase
+from bot.core.tempo import fuso, giorno_da_iso, giorno_locale
 from bot.core.indicators import compute_indicator_frame
 from bot.learning.trade_logger import TradeLogger
 from bot.risk.portafoglio import MOTIVI, limiti_default, simula
@@ -311,36 +313,37 @@ def pubblica(fb, doc: dict) -> None:
 # --------------------------------------------------------------------------- #
 # H5: IL PERIODO DEL PAPER — il simulato perde anche lui, dal 16 set?          #
 # --------------------------------------------------------------------------- #
-def _giorno_utc_uscita(t: dict) -> str | None:
-    """Il giorno UTC (YYYY-MM-DD) in cui il trade del paper e' uscito.
+def _giorno_uscita(t: dict) -> str | None:
+    """Il giorno in ORA ITALIANA (YYYY-MM-DD, `bot/core/tempo.py`) in cui il
+    trade del paper e' uscito. Dal 28 set 2026: prima era UTC, e il giorno
+    del report non era il giorno del proprietario.
 
     `exit_ts` (epoch, scritto dal TradeLogger) ha la precedenza; se manca si
-    prova `exit_time` (ISO). Un trade senza nessuno dei due non ha un giorno e
-    viene saltato: meglio un trade in meno che uno messo nel giorno sbagliato."""
+    prova `exit_time` (ISO, naive = UTC). Un trade senza nessuno dei due non ha
+    un giorno e viene saltato: meglio un trade in meno che uno messo nel
+    giorno sbagliato."""
     ts = t.get("exit_ts")
     if isinstance(ts, (int, float)) and ts > 0:
-        return dt.datetime.fromtimestamp(float(ts), dt.timezone.utc).date().isoformat()
-    raw = t.get("exit_time")
-    if not raw:
-        return None
-    try:
-        d = dt.datetime.fromisoformat(str(raw))
-    except (TypeError, ValueError):
-        return None
-    if d.tzinfo is None:
-        d = d.replace(tzinfo=dt.timezone.utc)
-    return d.astimezone(dt.timezone.utc).date().isoformat()
+        return giorno_locale(float(ts))
+    return giorno_da_iso(t.get("exit_time"))
+
+
+#: nome vecchio, tenuto per chi lo importa
+_giorno_utc_uscita = _giorno_uscita
 
 
 def pnl_paper_per_giorno(trades: list[dict]) -> dict[str, float]:
-    """PnL del paper (USDT, campo `pnl`) sommato per giorno UTC di uscita.
+    """PnL del paper (USDT, campo `pnl`) sommato per giorno di uscita in ora
+    italiana (TUTTI i trade chiusi: esplorativi e uscite esterne compresi, e'
+    il conto).
 
     Il giorno e' quello dell'USCITA, come in `simula` (che accredita il PnL alla
-    chiusura): cosi' le due colonne della tabella contano allo stesso modo.
-    Funzione pura sui dict di Firestore: i test la nutrono con trade sintetici."""
+    chiusura, nello stesso fuso): cosi' le due colonne della tabella contano
+    allo stesso modo. Funzione pura sui dict di Firestore: i test la nutrono
+    con trade sintetici."""
     per_giorno: dict[str, float] = defaultdict(float)
     for t in trades:
-        g = _giorno_utc_uscita(t)
+        g = _giorno_uscita(t)
         if g is None:
             continue
         try:
@@ -406,8 +409,8 @@ def sezione_periodo_paper(sim: dict, trades_paper: list[dict] | None, dal: dt.da
     paper_g = pnl_paper_per_giorno(trades_paper) if trades_paper is not None else None
 
     print("\n" + "=" * 74)
-    print(f"PERIODO DEL PAPER (dal {da}, PAPER_START={PAPER_START}): "
-          f"simulato senza limiti extra · paper")
+    print(f"PERIODO DEL PAPER (dal {da}, PAPER_START={PAPER_START}, giornate in ora "
+          f"italiana): simulato senza limiti extra · paper")
     print("=" * 74)
     if inizio_run > dal:
         print(f"  NB il run parte dal {inizio_run}, dopo PAPER_START: i giorni prima mancano.")
@@ -423,7 +426,7 @@ def sezione_periodo_paper(sim: dict, trades_paper: list[dict] | None, dal: dt.da
     if paper_g is not None:
         paper_tot = round(sum(v for g, v in paper_g.items() if g in sim_g), 2)
         riga += f"{paper_tot:>+12.2f}"
-        n_paper = len([t for t in trades_paper if _giorno_utc_uscita(t) in sim_g])
+        n_paper = len([t for t in trades_paper if _giorno_uscita(t) in sim_g])
         riga += f"   ({n_paper} trade del paper usciti nel periodo)"
     print(riga)
     print(f"  giorni simulati in utile / in perdita: {utile} / {perdita} su {len(giorni)}")
@@ -457,7 +460,7 @@ def main(argv: list[str] | None = None) -> int:
                     help="frazione dell'equity di rischio aperto per direzione, nuovo trade "
                          "compreso (0 = spento)")
     ap.add_argument("--tetto-giorno", type=float, default=0.03,
-                    help="perdita di portafoglio nel giorno UTC, frazione dell'equity di "
+                    help="perdita di portafoglio nel giorno (ora italiana), frazione dell'equity di "
                          "inizio giornata, oltre cui non si apre piu' (0 = spento)")
     ap.add_argument("--netto-r", type=float, default=2.0,
                     help="massimo |rischio long - rischio short| aperto, in multipli del "
@@ -467,7 +470,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="equity di partenza (default: i 10.000$ del gate)")
     args = ap.parse_args(argv)
 
-    ora = dt.datetime.now(dt.timezone.utc)
+    # «oggi» e' il giorno del proprietario (ora italiana, 28 set 2026): la
+    # tabella del periodo del paper finisce nella giornata che lui sta leggendo
+    ora = dt.datetime.now(fuso())
     if args.dal is not None:
         # --dal: dal giorno dato a oggi, cosi' si confronta col paper giorno per giorno
         args.giorni = max((ora.date() - args.dal).days, 1)

@@ -95,7 +95,10 @@ def doc_controllo() -> dict:
     fb = _fb(verdetto_drift="drift")
     fb.set_doc("portfolio", "backtest", {"lettura": "il portafoglio simulato batte il paper",
                                          "updated_at": NOW - 3600})
-    doc = _doc_controllo(fb=fb, durata_ms=120)
+    # la verifica della cache dei trade (28 set 2026) la passa il bot: qui una finta
+    doc = _doc_controllo(fb=fb, durata_ms=120,
+                         cache_trade={"firestore": 54, "cache": 54, "allineata": True,
+                                      "verificata_at": NOW - 600})
     assert doc["meta"]["errori"] == [], doc["meta"]["errori"]
     return doc
 
@@ -193,14 +196,19 @@ CONTROLLO_ANNIDATE = {
     "salute.cooldown_strategie[]": {"nome", "fino_a"},
     "salute.posizioni[]": {"coin", "direzione", "rischio_pct", "upnl"},
     "salute.anomalie[]": {"codice", "famiglia", "gravita", "testo", "valore", "soglia"},
+    "salute.letture_per_chiamante[]": {"chi", "n"},
+    "salute.cache_trade": {"firestore", "cache", "allineata", "verificata_at"},
     "paper.ultimi_30g": {"trades", "pnl", "pf", "win_rate"},
-    "paper.oggi": {"trades", "vinti", "pnl", "migliore", "peggiore"},
+    "paper.oggi": {"data", "trades", "vinti", "pnl", "migliore", "peggiore", "pnl_tutti", "trades_tutti"},
     "paper.oggi.migliore": {"coin", "pnl"},
     "paper.oggi.peggiore": {"coin", "pnl"},
-    "paper.giornate": {"con_trade", "positive", "negative", "migliore", "peggiore", "ultime_7"},
+    "paper.giornate": {"con_trade", "positive", "negative", "migliore", "peggiore", "ultime_7",
+                       "tz", "validate", "tutti"},
     "paper.giornate.migliore": {"data", "pnl"},
     "paper.giornate.peggiore": {"data", "pnl"},
-    "paper.giornate.ultime_7[]": {"data", "trades", "pnl"},
+    "paper.giornate.validate": {"con_trade", "positive", "negative", "migliore", "peggiore"},
+    "paper.giornate.tutti": {"con_trade", "positive", "negative", "migliore", "peggiore"},
+    "paper.giornate.ultime_7[]": {"data", "trades", "pnl", "pnl_validate", "pnl_tutti", "trades_tutti"},
     "paper.uscite[]": {"motivo", "etichetta", "trades", "quota", "pnl"},
     "paper.gradini[]": {"gradino", "n"},
     "paper.mfe": {"n", "mediana_r", "quota_1r", "quota_1_5r", "quota_3r"},

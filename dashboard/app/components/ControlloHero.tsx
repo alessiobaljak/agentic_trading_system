@@ -241,6 +241,30 @@ export default function ControlloHero() {
         </div>
 
         <ControlloLettura sezione={salute} style={{ marginTop: 14 }} />
+
+        {/* le letture Firestore del bot nelle ultime 24 h (28 set 2026): la quota
+            gratuita e' 50.000 al giorno e il 28 set si e' esaurita alle 08:18 ora italiana */}
+        {salute.letture_firestore_24h != null && (
+          <p
+            className="muted"
+            style={{ margin: '8px 0 0', fontSize: 12 }}
+            title="contatore del bot: ogni documento letto da Firestore vale una lettura; il Realtime DB non conta"
+          >
+            Letture Firestore ultime 24 h:{' '}
+            <b className={salute.letture_firestore_24h > 25000 ? 'neg' : ''}>
+              {numero(salute.letture_firestore_24h, 0)}
+            </b>{' '}
+            su 50.000 di quota gratuita
+            {(salute.letture_per_chiamante ?? []).length > 0 &&
+              ` · ${(salute.letture_per_chiamante ?? []).map((r) => `${r.chi} ${numero(r.n, 0)}`).join(' · ')}`}
+            {salute.cache_trade && (
+              <>
+                {' '}· cache trade {salute.cache_trade.allineata === false ? 'DISALLINEATA' : 'allineata'} (
+                {salute.cache_trade.cache ?? '—'}/{salute.cache_trade.firestore ?? '—'})
+              </>
+            )}
+          </p>
+        )}
       </div>
     </>
   );

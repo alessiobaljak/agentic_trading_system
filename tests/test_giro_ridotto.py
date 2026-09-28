@@ -287,18 +287,20 @@ def test_sul_firestore_vero_si_chiede_un_solo_campo():
             visto["coll"] = c
             return Coll()
 
-    class FB:
-        _fs = FS()
-        is_live = True
+    # (28 set 2026) la proiezione vive nel client (`get_doc_field`, conta 1
+    # lettura sotto «registro»): `adaptation` non guarda piu' dentro `_fs`
+    fb = FirebaseClient()
+    fb._fs, fb._live = FS(), True
 
-        def get_doc(self, c, k):
-            raise AssertionError("sul Firestore vero non si legge il documento intero")
-
+    def get_doc_intero(*a, **k):
+        raise AssertionError("sul Firestore vero non si legge il documento intero")
+    fb.get_doc = get_doc_intero
     a = AdaptationEngine.__new__(AdaptationEngine)
-    a.fb = FB()
+    a.fb = fb
     a._registro_updated_at = 4.0
     assert a.registro_cambiato() is True
     assert visto == {"coll": "strategy_registry", "doc": "validated", "field_paths": ["updated_at"]}
+    assert fb.letture()["per_chiamante"] == [{"chi": "registro", "n": 1}]
 
 
 def _bot_finto(fb):
@@ -320,13 +322,13 @@ def test_il_loop_ricarica_alla_scrittura_e_chiede_al_massimo_una_volta_al_minuto
     fb.set_doc("strategy_registry", "validated", _registro(1.0))
     b = _bot_finto(fb)
     letture = {"n": 0}
-    _get = fb.get_doc
+    _get = fb.get_doc_field          # la domanda «e' cambiato?» legge un solo campo
 
-    def get_doc(c, k):
+    def get_doc_field(c, k, fields, **kw):
         if c == "strategy_registry":
             letture["n"] += 1
-        return _get(c, k)
-    fb.get_doc = get_doc
+        return _get(c, k, fields, **kw)
+    fb.get_doc_field = get_doc_field
 
     assert b._ricarica_registro_se_cambiato(100.0) is False        # niente di nuovo
     assert letture["n"] == 1

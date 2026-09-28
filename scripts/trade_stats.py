@@ -29,6 +29,7 @@ from statistics import mean, median
 from bot.config import settings
 from bot.core.firebase_client import get_firebase
 from bot.core.models import Regime
+from bot.core.tempo import giorno_locale
 from bot.learning.metrics import (KEEP_STRATEGIA_MIN_VERDETTI, conta_verdetti_strategia,
                                   proposta_keep_strategia, soldi_sul_tavolo)
 from bot.orchestrator.orchestrator import Orchestrator
@@ -495,7 +496,7 @@ def main() -> int:
         strategies.add(t.get("strategy", "?"))
         if ex is None:
             continue
-        day = datetime.fromtimestamp(float(ex), timezone.utc).strftime("%Y-%m-%d")
+        day = giorno_locale(float(ex))      # giornate in ora italiana (28 set 2026)
         per_day[day] += 1
         if en is not None and ex > en:
             spans.append((en, float(ex)))
@@ -529,7 +530,7 @@ def main() -> int:
     # coppie validate di OGGI su giorni in cui il registro ne aveva meno, e su giorni
     # in cui il paper non girava ancora. Il confronto onesto e' giorno contro giorno,
     # sugli ultimi — e senza questa riga non c'era modo di farlo.
-    print("  per giorno (UTC): " + " · ".join(
+    print("  per giorno (ora italiana): " + " · ".join(
         f"{g} {per_day[g]}" for g in sorted(per_day)))
     if durations_h:
         print(f"Durata media holding:    {mean(durations_h):.1f}h  (min {min(durations_h):.1f}h · max {max(durations_h):.1f}h)")

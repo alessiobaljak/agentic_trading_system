@@ -2052,3 +2052,22 @@ trailing +72,11. Long 54 −25,83, short 88 −43,27. Validate 192 su 66 coin,
 16 passate su 2.310 (0,69%) contro 0,21% a 15 minuti. Selettore NON BATTE su
 81.490 righe (ops 0333). AI: 20/20 proposte, ombra d'accordo 15 su 148.
 `mfe` e `frequenza` non disponibili (quota).
+
+### 28 settembre, 09:20: letture Firestore sotto controllo, giornate in ora italiana (J14)
+
+Sì del proprietario. Quattro pezzi: (1) contatore delle letture nel client
+Firebase, per chiamante, stampato ogni ora nel log del bot e pubblicato nel
+controllo orario (`salute.letture_firestore_24h`, anomalia LETTURE_FIRESTORE
+gialla sopra 25.000, rossa sopra 40.000); (2) cache dei trade nel bot,
+aggiornata solo coi trade nuovi, ricaricata una volta al giorno e verificata
+col conteggio di Firestore; (3) ombra dei rifiutati con finestra pari
+all'orizzonte vero (26 ore a 15 minuti) e passata giornaliera che chiude come
+«scaduto» ciò che è in attesa da più di 5 giorni; (4) controllo orario che
+riusa i trade della cache e legge 50 decisioni dell'ombra AI invece di 200.
+Stima dal codice: ~7.300 letture al giorno dal bot (erano oltre 50.000),
+più ~2.000 da snapshot, ops e dashboard. Metro: la console di Firebase sotto
+15.000 al giorno il 30 set e il 1 ott; altrimenti piano a consumo (Blaze).
+Giornate: un solo helper (`bot/core/tempo.py`, Europe/Rome) per controllo,
+portafoglio, trade_stats, frequenza e dashboard, con due totali per giorno
+(conto = tutti i trade; validate = solo quelle decise dalla strategia).
+Suite 1832 test verdi. Bot da riavviare.

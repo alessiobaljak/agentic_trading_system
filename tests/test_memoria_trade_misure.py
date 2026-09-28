@@ -323,7 +323,10 @@ def _bot_verdetti(trade: dict, candles: list):
     """TradingBot minimo per evaluate_pending_trailing: un trade e le sue candele."""
     b = types.SimpleNamespace()
     b.visto = {}
-    b.logger = types.SimpleNamespace(recent=lambda limit=100: [trade])
+    # dal 28 set 2026 il verdetto si scrive via `logger.aggiorna` (Firestore +
+    # cache dei trade): il finto la inoltra a `fb.set_doc` come prima
+    b.logger = types.SimpleNamespace(recent=lambda limit=100: [trade],
+                                     aggiorna=lambda doc: b.fb.set_doc("trades", doc["trade_id"], doc))
 
     def get_candles(symbol, interval, limit=200):
         b.visto["interval"], b.visto["limit"] = interval, limit

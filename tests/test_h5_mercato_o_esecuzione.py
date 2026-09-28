@@ -162,31 +162,32 @@ def test_inizio_paper_prende_il_piu_vecchio_fra_data_e_trade():
 
 
 # --------------------------------------------------------------------------- #
-# (b) il PnL del paper per giorno UTC di uscita                               #
+# (b) il PnL del paper per giorno di uscita IN ORA ITALIANA (28 set 2026)      #
 # --------------------------------------------------------------------------- #
 def _ts(y, m, d, h=0):
     return dt.datetime(y, m, d, h, tzinfo=dt.timezone.utc).timestamp()
 
 
-def test_pnl_paper_per_giorno_somma_per_giorno_utc_di_uscita():
+def test_pnl_paper_per_giorno_somma_per_giorno_italiano_di_uscita():
     trades = [
         {"exit_ts": _ts(2026, 9, 16, 10), "pnl": 1.5},
+        # 23:00 UTC del 16 = 01:00 del 17 in Italia (ora legale): conta il 17
         {"exit_ts": _ts(2026, 9, 16, 23), "pnl": -2.0},
         {"exit_ts": _ts(2026, 9, 17, 0), "pnl": 3.25},
         # l'ingresso e' il 16 ma l'uscita il 18: conta il 18, come in `simula`
         {"entry_time": "2026-09-16T08:00:00+00:00", "exit_ts": _ts(2026, 9, 18, 1), "pnl": -1.0},
     ]
     assert pb.pnl_paper_per_giorno(trades) == {
-        "2026-09-16": -0.5, "2026-09-17": 3.25, "2026-09-18": -1.0}
+        "2026-09-16": 1.5, "2026-09-17": 1.25, "2026-09-18": -1.0}
 
 
 def test_pnl_paper_per_giorno_ricade_su_exit_time_iso_e_salta_i_trade_senza_data():
     trades = [
-        {"exit_time": "2026-09-20T02:00:00+02:00", "pnl": 4.0},   # 00:00 UTC del 20
-        {"exit_time": "2026-09-19T23:30:00", "pnl": 1.0},          # naive = UTC
+        {"exit_time": "2026-09-20T02:00:00+02:00", "pnl": 4.0},   # 02:00 italiane del 20
+        {"exit_time": "2026-09-19T21:30:00", "pnl": 1.0},          # naive = UTC: 23:30 del 19
         {"pnl": 99.0},                                             # senza data: fuori
-        {"exit_ts": _ts(2026, 9, 19), "pnl": "non un numero"},     # pnl rotto: fuori
-        {"exit_ts": _ts(2026, 9, 19), "pnl": None},                # None = 0
+        {"exit_ts": _ts(2026, 9, 19, 12), "pnl": "non un numero"},  # pnl rotto: fuori
+        {"exit_ts": _ts(2026, 9, 19, 12), "pnl": None},             # None = 0
     ]
     assert pb.pnl_paper_per_giorno(trades) == {"2026-09-19": 1.0, "2026-09-20": 4.0}
     assert pb.pnl_paper_per_giorno([]) == {}

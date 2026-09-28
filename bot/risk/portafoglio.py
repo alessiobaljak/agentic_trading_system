@@ -57,6 +57,7 @@ import math
 from collections import defaultdict
 
 from bot.config import settings
+from bot.core.tempo import giorno_locale, inizio_giorno_locale
 
 #: rischio per trade come frazione dell'equity corrente: la stessa costante del
 #: bot (bot/config.py), letta da li' per non avere due copie.
@@ -111,12 +112,17 @@ def _ts(v) -> float:
 
 
 def _giorno(ts: float) -> str:
-    return dt.datetime.fromtimestamp(ts, dt.timezone.utc).date().isoformat()
+    """Il giorno della simulazione: in ORA ITALIANA (`bot/core/tempo.py`) dal
+    28 set 2026, lo stesso del PnL del paper per giorno e del controllo orario,
+    cosi' le colonne «simulato» e «paper» contano la stessa giornata. Vale per
+    tutto cio' che qui e' «al giorno» (PnL, tetto giornaliero, tetto per coin
+    al giorno): il tetto per coin del bot vero (`bot/risk/daily_cap.py`) usa la
+    mezzanotte UTC, due ore di scarto sul confine, dichiarato."""
+    return giorno_locale(ts)
 
 
 def _mezzanotte(ts: float) -> float:
-    return dt.datetime.fromtimestamp(ts, dt.timezone.utc).replace(
-        hour=0, minute=0, second=0, microsecond=0).timestamp()
+    return inizio_giorno_locale(ts)
 
 
 def _prepara(trades: list[dict], secondi_barra: float) -> tuple[list[dict], int]:

@@ -73,10 +73,38 @@ export interface DataPnl {
   pnl?: number | null;
 }
 
+/** Una riga di `giornate.ultime_7`: `pnl`/`trades` sono le validate (come
+ *  prima), `pnl_tutti`/`trades_tutti` il conto intero (28 set 2026). */
 export interface Giornata {
   data?: string | null;
   trades?: number | null;
   pnl?: number | null;
+  pnl_validate?: number | null;
+  pnl_tutti?: number | null;
+  trades_tutti?: number | null;
+}
+
+/** I totali delle giornate per uno dei due conti (`giornate.validate` / `giornate.tutti`). */
+export interface GiornateTotali {
+  con_trade?: number | null;
+  positive?: number | null;
+  negative?: number | null;
+  migliore?: DataPnl | null;
+  peggiore?: DataPnl | null;
+}
+
+/** Una voce di `salute.letture_per_chiamante` (28 set 2026). */
+export interface LetturaChiamante {
+  chi?: string | null;
+  n?: number | null;
+}
+
+/** `salute.cache_trade`: la verifica giornaliera della cache dei trade del bot. */
+export interface CacheTrade {
+  firestore?: number | null;
+  cache?: number | null;
+  allineata?: boolean | null;
+  verificata_at?: number | null;
 }
 
 /** §1.1 */
@@ -165,6 +193,9 @@ export interface Salute extends Testata {
   wal_non_vuoto?: number | null;
   rtdb_degradato_s?: number | null;
   controllo_precedente_eta_s?: number | null;
+  letture_firestore_24h?: number | null;
+  letture_per_chiamante?: LetturaChiamante[] | null;
+  cache_trade?: CacheTrade | null;
   anomalie?: Anomalia[] | null;
 }
 
@@ -176,13 +207,18 @@ export interface Ultimi30g {
 }
 
 export interface Oggi {
+  data?: string | null;
   trades?: number | null;
   vinti?: number | null;
   pnl?: number | null;
   migliore?: CoinPnl | null;
   peggiore?: CoinPnl | null;
+  pnl_tutti?: number | null;
+  trades_tutti?: number | null;
 }
 
+/** Giornate in ORA ITALIANA (`tz`, 28 set 2026): il primo livello sono le
+ *  validate, `validate`/`tutti` i due conti uno accanto all'altro. */
 export interface Giornate {
   con_trade?: number | null;
   positive?: number | null;
@@ -190,6 +226,9 @@ export interface Giornate {
   migliore?: DataPnl | null;
   peggiore?: DataPnl | null;
   ultime_7?: Giornata[] | null;
+  tz?: string | null;
+  validate?: GiornateTotali | null;
+  tutti?: GiornateTotali | null;
 }
 
 export interface Uscita {

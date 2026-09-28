@@ -22,7 +22,7 @@ import time
 from typing import Optional
 
 from bot.config import settings
-from bot.core.firebase_client import decode_pairs, get_firebase
+from bot.core.firebase_client import decode_pairs, get_firebase, kw_chi
 from bot.core.models import Regime, StrategyRegimeWeight
 
 
@@ -64,7 +64,7 @@ class AdaptationEngine:
 
     # ------------------------------------------------------------------ #
     def load_weights(self) -> None:
-        doc = self.fb.get_doc("strategy_weights", "current") or {}
+        doc = self.fb.get_doc("strategy_weights", "current", **kw_chi(self.fb, "pesi")) or {}
         self._weights = {}
         for w in doc.get("weights", []):
             key = f"{w['strategy']}|{w['regime']}"
@@ -85,7 +85,7 @@ class AdaptationEngine:
         potato (equivale al default). Il merge sta QUI cosi' copre entrambi gli
         scrittori (refresh orario del bot e job notturno)."""
         now = time.time()
-        doc = self.fb.get_doc("strategy_weights", "current") or {}
+        doc = self.fb.get_doc("strategy_weights", "current", **kw_chi(self.fb, "pesi")) or {}
         prev_ts = float(doc.get("updated_at", 0) or 0)
         elapsed_days = max(0.0, (now - prev_ts) / 86400.0) if prev_ts else 0.0
         recovery = max(1e-9, settings.WEIGHT_RECOVERY_DAYS)
@@ -268,14 +268,14 @@ class AdaptationEngine:
     def load_params(self) -> None:
         # deriva: si carica sempre, anche quando il registro non e' pronto
         try:
-            self._drift = self.fb.get_doc("drift", "current") or {}
+            self._drift = self.fb.get_doc("drift", "current", **kw_chi(self.fb, "registro")) or {}
         except Exception:  # noqa: BLE001
             self._drift = {}
         try:
-            self._calibration = self.fb.get_doc("calibration", "current") or {}
+            self._calibration = self.fb.get_doc("calibration", "current", **kw_chi(self.fb, "registro")) or {}
         except Exception:  # noqa: BLE001
             self._calibration = {}
-        reg = self.fb.get_doc("strategy_registry", "validated") or {}
+        reg = self.fb.get_doc("strategy_registry", "validated", **kw_chi(self.fb, "registro")) or {}
         # l'istante di scrittura del registro appena letto: `registro_cambiato`
         # lo confronta con quello vivo per ricaricare appena il gate scrive
         self._registro_updated_at = reg.get("updated_at")
@@ -323,7 +323,7 @@ class AdaptationEngine:
             return
         # 3) ultima spiaggia: l'ultimo run (strategy_params/current). entries/passed
         # sono CODIFICATI (stringa JSON) -> decode_pairs (retro-compatibile col dict).
-        doc = self.fb.get_doc("strategy_params", "current") or {}
+        doc = self.fb.get_doc("strategy_params", "current", **kw_chi(self.fb, "registro")) or {}
         entries = decode_pairs(doc.get("entries"))
         self._passed = self._robust_only(decode_pairs(doc.get("passed")) or [])
         self._params = {k: (entries.get(k, {}).get("params", {}) or {}) for k in self._passed}
@@ -342,21 +342,18 @@ class AdaptationEngine:
 
         COSTO. Il registro e' un documento da ~1 MB: leggerlo intero ogni
         minuto sono 1.400 letture e ~1,3 GB al giorno. Sul Firestore vero si
-        chiede al server SOLO il campo (`field_paths`, una proiezione: il
-        documento resta a casa, viaggia un numero); il client di `bot/core/
-        firebase_client.py` non ha un metodo per farlo e non si tocca oggi,
-        quindi si passa dal suo `_fs` — se domani cambia, si ricade sulla
-        lettura intera. In memoria (test, nessun Firebase) si legge il
-        documento intero, che li' non costa niente.
+        chiede al server SOLO il campo (`get_doc_field`, dal 28 set 2026 nel
+        client: una proiezione, il documento resta a casa, viaggia un numero;
+        prima si passava dal client interno `_fs`). Resta UNA lettura al
+        minuto (1.440 al giorno), contata sotto «registro». Un client senza
+        `get_doc_field` (i finti dei test) ricade sulla lettura intera.
 
         FAIL-OPEN: qualunque errore -> False (si resta sulla ricarica oraria);
         registro senza `updated_at` (formato vecchio) -> False."""
         try:
-            fs = getattr(self.fb, "_fs", None)
-            if fs is not None and getattr(self.fb, "is_live", False):
-                snap = fs.collection("strategy_registry").document("validated") \
-                         .get(field_paths=["updated_at"])
-                doc = (snap.to_dict() or {}) if getattr(snap, "exists", False) else {}
+            campo = getattr(self.fb, "get_doc_field", None)
+            if callable(campo):
+                doc = campo("strategy_registry", "validated", ["updated_at"], **kw_chi(self.fb, "registro")) or {}
             else:
                 doc = self.fb.get_doc("strategy_registry", "validated") or {}
             nuovo = doc.get("updated_at")
@@ -386,14 +383,14 @@ class AdaptationEngine:
     # Strategie GENERATE (scoperte dal motore di discovery)              #
     # ------------------------------------------------------------------ #
     def load_generated(self) -> None:
-        doc = self.fb.get_doc("discovered_strategies", "specs") or {}
+        doc = self.fb.get_doc("discovered_strategies", "specs", **kw_chi(self.fb, "registro")) or {}
         # specs codificate come stringa JSON (limite indici Firestore) -> decode.
         self._generated_specs = decode_pairs(doc.get("specs"))
         # e le ESPLORATIVE (25 set 2026, F1bis), nello stesso giro orario. Fail-open:
         # un documento assente o illeggibile lascia il paper esplorativo vuoto e
         # non tocca le validate, che sono in `load_params`.
         try:
-            esp = self.fb.get_doc("strategy_registry", "esplorative") or {}
+            esp = self.fb.get_doc("strategy_registry", "esplorative", **kw_chi(self.fb, "registro")) or {}
             self._esplorative = decode_pairs(esp.get("pairs"))
             self._esplorative_specs = decode_pairs(esp.get("specs"))
         except Exception as exc:  # noqa: BLE001

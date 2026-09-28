@@ -26,13 +26,15 @@ Uso sulla VPS:
 from __future__ import annotations
 
 import argparse
+import time
 from collections import defaultdict
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, timedelta
 
 from backtesting.data_loader import load_candles
 from backtesting.engine import Backtester
 from bot.config import settings
 from bot.core.indicators import compute_indicator_frame
+from bot.core.tempo import giorno_locale
 from bot.learning.adaptation import AdaptationEngine
 from bot.strategies import get_all_strategies
 
@@ -172,12 +174,14 @@ def main() -> int:
     # aveva meno (35 il 17 settembre, 43 il 18) e in cui il paper magari non girava
     # ancora. Il confronto onesto e' sugli ULTIMI giorni, e per farlo serve la
     # ripartizione — non la media.
+    # (28 set 2026) giornate in ORA ITALIANA, le stesse di `trade_stats` «per
+    # giorno»: il confronto giorno contro giorno vuole lo stesso confine
     per_giorno: dict[str, int] = defaultdict(int)
     for apre, _ in scelti:
-        per_giorno[datetime.fromtimestamp(apre, timezone.utc).strftime("%Y-%m-%d")] += 1
+        per_giorno[giorno_locale(apre)] += 1
     if per_giorno:
-        print("\nAPRIBILI giorno per giorno (UTC):")
-        oggi = date.today().isoformat()
+        print("\nAPRIBILI giorno per giorno (ora italiana):")
+        oggi = giorno_locale(time.time())
         per_giorno.setdefault(oggi, 0)      # oggi si stampa anche a zero: e' la domanda
         for giorno in sorted(per_giorno):
             nota = "   (oggi, parziale: fino all'ultima candela)" if giorno == oggi else ""

@@ -89,6 +89,9 @@ Regole comuni:
 | `wal_non_vuoto` | int | numero di figli in `rtdb:/unlogged_trades` |
 | `rtdb_degradato_s` | float\|null | `fb.degraded_for()` (solo nel bot) |
 | `controllo_precedente_eta_s` | int\|null | `now - meta.precedente_at` |
+| `letture_firestore_24h` | int\|null | (28 set) le letture Firestore del processo bot nelle ultime 24 h, dal contatore di `FirebaseClient` (`fb.letture()`: ogni `get_doc` 1, ogni `query_collection` i documenti tornati, il RTDB non conta); solo nel bot (`null` da ops/GitHub: sarebbero le letture di un processo appena nato). Quota gratuita 50.000/giorno, azzerata alle 07:00 UTC |
+| `letture_per_chiamante` | list[{chi, n}]\|null | le prime 8 etichette per volume nelle 24 h (`registro`, `trade`, `controllo`, `rifiutati`, `pesi`, …); solo nel bot |
+| `cache_trade` | {firestore, cache, allineata, verificata_at}\|null | (28 set) l'ultima verifica giornaliera della cache dei trade in memoria (`TradeLogger.verifica`: conteggio della collection con l'aggregazione del server contro i trade in cache; se non tornano la cache si ricarica); `null` finché non è mai girata e fuori dal bot |
 | `anomalie` | list[{codice, famiglia, gravita, testo, valore, soglia}] | vedi §1.6 |
 
 ### 1.3 `paper`
@@ -101,8 +104,8 @@ Regole comuni:
 | `trades` / `vinti` / `perdite` / `win_rate` | int / int / int / float\|null | trade all-time escludendo gli esiti esterni (`ESITI_ESTERNI` di `bot/learning/referti.py`). Dal bot arrivano i trade di `refresh_weights` (30 g) finché il paper è più giovane di 30 giorni; oltre, `_publish_controllo` rilegge l'all-time |
 | `pnl_realizzato` / `pf_vissuto` / `expectancy` | float / float\|null / float\|null | inline; `pnl_realizzato` su TUTTI i trade chiusi (com'è nell'equity, esiti esterni compresi), `pf_vissuto`/`expectancy` sui soli decisi dalla strategia; `pf_vissuto = null` se `perdite == 0` |
 | `ultimi_30g` | {trades, pnl, pf, win_rate} | `fs:drift/current.global.{trades, live_pf, pnl}` (pf 99 → null) |
-| `oggi` | {trades, vinti, pnl, migliore:{coin,pnl}\|null, peggiore:{...}\|null} | giorno **UTC** |
-| `giornate` | {con_trade, positive, negative, migliore:{data,pnl}, peggiore:{data,pnl}, ultime_7: list[{data, trades, pnl}]} | pura `giornate(trades, now)` |
+| `oggi` | {data, trades, vinti, pnl, migliore:{coin,pnl}\|null, peggiore:{...}\|null, pnl_tutti, trades_tutti} | il giorno corrente in **ora italiana** (`bot/core/tempo.py::giorno_locale`, `GIORNO_TZ = "Europe/Rome"`; dal 28 set, prima era UTC): `trades`/`vinti`/`pnl` delle validate decise dalla strategia, `pnl_tutti`/`trades_tutti` di TUTTI i trade chiusi del conto (esplorativi e uscite esterne comprese: il conto del report `portafoglio`) |
+| `giornate` | {con_trade, positive, negative, migliore:{data,pnl}, peggiore:{data,pnl}, ultime_7: list[{data, trades, pnl, pnl_validate, pnl_tutti, trades_tutti}], tz, validate:{con_trade, positive, negative, migliore, peggiore}, tutti:{...}} | pura `giornate(trades, now, tutti)`, giornate in ora italiana per data di uscita: i campi di primo livello e `pnl` delle righe sono le VALIDATE (compatibilità), `validate`/`tutti` i due conti (28 set: «+3,25 sul conto, +1,26 sulle validate» per lo stesso 27 set), `tz` il fuso |
 | `uscite` | list[{motivo, etichetta, trades, quota, pnl}] | `Counter(exit_reason)` + etichette di `state_snapshot._EXIT_LABEL` |
 | `gradini` | list[{gradino, n}] | `scale_stage_reached` |
 | `mfe` | {n, mediana_r, quota_1r, quota_1_5r, quota_3r} | `mfe_r` (`n` = trade che lo portano; il resto `null` se 0) |
@@ -184,6 +187,8 @@ benchmark su Binance, «cosa aspetta il sì» (vive in `docs/backlog.md`).
 | `NESSUN_TRADE_48H` | paper | nessuna chiusura né apertura da 48 h e `segnali_trovati > 0` (approssimata) | giallo |
 | `SENZA_PROMESSA` | paper | `n_senza_promessa / n_operate > 0.3` (dal doc gate) | giallo |
 | `CONTROLLO_LENTO` | sistema | `durata_ms > 5000` (2000 era troppo stretta: 2002 ms da ops a freddo il 25 set) | giallo |
+| `LETTURE_FIRESTORE` | sistema | (28 set) `letture_firestore_24h > 25.000` → giallo, `> 40.000` → rosso (quota gratuita 50.000/giorno, azzerata alle 07:00 UTC; esaurita il 28 set alle 06:18 UTC). Testo: «letture Firestore nelle ultime 24 h: N (quota gratuita 50.000): valutare il piano a consumo (Blaze) se resta sopra» | giallo/rosso |
+| `CACHE_TRADE_DISALLINEATA` | sistema | (28 set) `cache_trade.allineata == false`: la verifica giornaliera ha trovato un conteggio diverso e ha ricaricato la cache | info |
 
 Il semaforo di famiglia = rosso se una rossa, giallo se una gialla, verde altrimenti;
 le `info` non colorano. `BOT_FERMO` scatta anche col battito MAI visto (valore

@@ -22,7 +22,9 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import threading
+import time
 from typing import Any, Optional
 
 from bot.config import settings
@@ -157,6 +159,91 @@ def resolve_service_account(raw: str) -> Optional[dict]:
 
 
 
+# --------------------------------------------------------------------------- #
+# IL CONTATORE DELLE LETTURE (28 set 2026)                                     #
+# --------------------------------------------------------------------------- #
+# Il 28 settembre alle 06:18 UTC la quota gratuita di Firestore (50.000 letture
+# al giorno) si e' esaurita: `mfe` e `frequenza` hanno risposto «429 Quota
+# exceeded» (ops 0331, 0332). Dalla console: 8k letture il 20 set, 39k il 26,
+# quota finita il 28. Le cause erano nel codice (verdetti a ogni candela su 100
+# trade, pesi su tutti i trade dopo ogni chiusura, controllo orario che rilegge
+# tutto, ombra dei rifiutati su una finestra di 17 giorni), ma NESSUNO le aveva
+# misurate: la stima del 28 set era «dal codice, non misurata».
+#
+# Da qui il contatore: ogni `get_doc` vale 1, ogni `query_collection` vale i
+# documenti tornati (almeno 1: anche una query vuota costa una lettura), e ogni
+# lettura porta un'etichetta di chi l'ha chiesta (`chi=`; senza, il nome della
+# funzione chiamante). L'anello per ora tiene le ultime 24 ore; il bot stampa
+# il totale ogni ora e lo pubblica nel controllo (`salute.letture_firestore_24h`,
+# anomalia `LETTURE_FIRESTORE`). Il Realtime DB NON si conta: e' un altro
+# prodotto con un'altra quota.
+#: la quota gratuita di Firestore (letture al giorno, si azzera alle 07:00 UTC)
+QUOTA_LETTURE_GIORNO = 50_000
+#: ore di anello tenute (24 + quella in corso)
+_ORE_ANELLO = 25
+#: quante etichette al massimo nel riepilogo
+_TOP_CHIAMANTI = 8
+
+
+def _chiamante(profondita: int = 2) -> str:
+    """Il nome della funzione che ha chiesto la lettura (senza `inspect`: un
+    frame e' abbastanza e costa nulla a questi volumi)."""
+    try:
+        return sys._getframe(profondita).f_code.co_name   # noqa: SLF001
+    except Exception:  # noqa: BLE001
+        return "?"
+
+
+class ContatoreLetture:
+    """Letture Firestore per ora e per chiamante. Thread-safe (il reconciler
+    gira in un thread suo)."""
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self.totale = 0
+        self._ore: dict[int, dict[str, int]] = {}    # ora (epoch // 3600) -> {chi: n}
+
+    def conta(self, n: int, chi: str, now: Optional[float] = None) -> None:
+        n = max(1, int(n))
+        ora = int((time.time() if now is None else now) // 3600)
+        with self._lock:
+            self.totale += n
+            per = self._ore.setdefault(ora, {})
+            per[chi] = per.get(chi, 0) + n
+            if len(self._ore) > _ORE_ANELLO:
+                for vecchia in sorted(self._ore)[:len(self._ore) - _ORE_ANELLO]:
+                    self._ore.pop(vecchia, None)
+
+    def riepilogo(self, now: Optional[float] = None) -> dict:
+        """{totale, ultime_24h, per_chiamante: [{chi, n}] (top 8 delle 24 h)}."""
+        ora = int((time.time() if now is None else now) // 3600)
+        with self._lock:
+            recenti = {o: dict(v) for o, v in self._ore.items() if ora - 23 <= o <= ora}
+            totale = self.totale
+        per: dict[str, int] = {}
+        for v in recenti.values():
+            for chi, n in v.items():
+                per[chi] = per.get(chi, 0) + n
+        top = sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))[:_TOP_CHIAMANTI]
+        return {"totale": totale, "ultime_24h": sum(per.values()),
+                "per_chiamante": [{"chi": chi, "n": n} for chi, n in top]}
+
+
+def kw_chi(fb, chi: str) -> dict:
+    """`{"chi": chi}` se `fb` e' un client che conta le letture, `{}` altrimenti:
+    cosi' i chiamanti passano l'etichetta senza rompere i client finti dei test
+    (che hanno `get_doc(coll, id)` senza parola chiave)."""
+    return {"chi": chi} if hasattr(fb, "letture") else {}
+
+
+def riga_letture(riepilogo: dict) -> str:
+    """La riga di log oraria: `[firebase] letture ultime 24 h: N (registro X · ...)`."""
+    parti = " · ".join(f"{r['chi']} {r['n']}" for r in (riepilogo.get("per_chiamante") or []))
+    return (f"[firebase] letture ultime 24 h: {riepilogo.get('ultime_24h', 0)}"
+            + (f" ({parti})" if parti else "")
+            + f" — quota gratuita {QUOTA_LETTURE_GIORNO}/giorno")
+
+
 class _InMemoryStore:
     """Fallback thread-safe quando Firebase non è configurato."""
 
@@ -241,6 +328,8 @@ class FirebaseClient:
         self._rtdb_down_since: Optional[float] = None
         self._rtdb_failures = 0
         self._last_rtdb_error: Optional[str] = None
+        # le letture Firestore, contate (28 set 2026): vedi ContatoreLetture
+        self._letture = ContatoreLetture()
         self._init_firebase()
 
     def _init_firebase(self) -> None:
@@ -277,42 +366,91 @@ class FirebaseClient:
         else:
             self._memory.set_doc(collection, doc_id, data)
 
-    def get_doc(self, collection: str, doc_id: str) -> Optional[dict]:
+    def get_doc(self, collection: str, doc_id: str, chi: Optional[str] = None) -> Optional[dict]:
+        """Un documento (1 lettura). `chi` e' l'etichetta del chiamante nel
+        contatore delle letture; senza, il nome della funzione che chiama."""
+        self._letture.conta(1, chi or _chiamante())
         if self._live:
             snap = self._fs.collection(collection).document(doc_id).get()
             return snap.to_dict() if snap.exists else None
         return self._memory.get_doc(collection, doc_id)
 
+    def get_doc_field(self, collection: str, doc_id: str, fields: list[str],
+                      chi: Optional[str] = None) -> Optional[dict]:
+        """SOLO alcuni campi di un documento (1 lettura, proiezione lato server:
+        il documento resta a casa, viaggiano i campi). E' cio' che `registro_cambiato`
+        faceva passando dal client interno (backlog J10, «da fare»): il registro e'
+        ~1 MB e la domanda «e' cambiato?» vuole un solo campo. In memoria si legge
+        il documento intero e si filtra: li' non costa niente."""
+        self._letture.conta(1, chi or _chiamante())
+        if self._live:
+            snap = self._fs.collection(collection).document(doc_id).get(field_paths=list(fields))
+            return (snap.to_dict() or {}) if getattr(snap, "exists", False) else None
+        doc = self._memory.get_doc(collection, doc_id)
+        if doc is None:
+            return None
+        return {k: doc[k] for k in fields if k in doc}
+
     def query_collection(
         self, collection: str, order_by: Optional[str] = None, limit: Optional[int] = None,
-        min_value: Optional[float] = None,
+        min_value: Optional[float] = None, max_value: Optional[float] = None,
+        chi: Optional[str] = None,
     ) -> list[dict]:
-        """`min_value`: filtro SERVER-SIDE `order_by >= min_value` (es. exit_ts degli
-        ultimi 30g). Senza, ogni chiamata scarica l'INTERA collection — costo Firestore
-        e latenza che crescono per sempre con lo storico."""
+        """`min_value` / `max_value`: filtri SERVER-SIDE `order_by >= min_value` e
+        `order_by <= max_value` (es. exit_ts degli ultimi 30g). Senza, ogni chiamata
+        scarica l'INTERA collection — costo Firestore e latenza che crescono per
+        sempre con lo storico. Conta i documenti tornati (almeno 1)."""
+        etichetta = chi or _chiamante()
         if self._live:
             q = self._fs.collection(collection)
             if order_by and min_value is not None:
                 q = q.where(order_by, ">=", min_value)
+            if order_by and max_value is not None:
+                q = q.where(order_by, "<=", max_value)
             if order_by:
                 q = q.order_by(order_by, direction="DESCENDING")
             if limit:
                 q = q.limit(limit)
-            return [d.to_dict() for d in q.stream()]
+            docs = [d.to_dict() for d in q.stream()]
+            self._letture.conta(len(docs), etichetta)
+            return docs
         docs = self._memory.query_collection(collection)
         if order_by and min_value is not None:
             docs = [d for d in docs if d.get(order_by, 0) >= min_value]
+        if order_by and max_value is not None:
+            docs = [d for d in docs if d.get(order_by, 0) <= max_value]
         if order_by:
             docs = sorted(docs, key=lambda d: d.get(order_by, 0), reverse=True)
         if limit:
             docs = docs[:limit]
+        self._letture.conta(len(docs), etichetta)
         return docs
 
-    def list_doc_ids(self, collection: str) -> list[str]:
+    def count_collection(self, collection: str, chi: Optional[str] = None) -> int:
+        """Quanti documenti ha una collection, con l'aggregazione `count()` del
+        server: costa 1 lettura ogni 1.000 documenti, non una per documento. Serve
+        alla verifica giornaliera della cache dei trade (trade_logger)."""
+        self._letture.conta(1, chi or _chiamante())
         if self._live:
-            return [d.id for d in self._fs.collection(collection).stream()]
+            res = self._fs.collection(collection).count().get()
+            return int(res[0][0].value)
+        return len(self._memory.query_collection(collection))
+
+    def list_doc_ids(self, collection: str, chi: Optional[str] = None) -> list[str]:
+        etichetta = chi or _chiamante()
+        if self._live:
+            ids = [d.id for d in self._fs.collection(collection).stream()]
+            self._letture.conta(len(ids), etichetta)
+            return ids
         prefix = f"{collection}/"
-        return [k[len(prefix):] for k in self._memory._docs if k.startswith(prefix)]
+        ids = [k[len(prefix):] for k in self._memory._docs if k.startswith(prefix)]
+        self._letture.conta(len(ids), etichetta)
+        return ids
+
+    def letture(self, now: Optional[float] = None) -> dict:
+        """Le letture Firestore di QUESTO processo: {totale, ultime_24h,
+        per_chiamante: [{chi, n}]} (vedi ContatoreLetture)."""
+        return self._letture.riepilogo(now)
 
     def delete_doc(self, collection: str, doc_id: str) -> None:
         if self._live:

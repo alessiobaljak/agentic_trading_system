@@ -4,7 +4,7 @@ Il contratto e' docs/controllo_schema.md. Qui si verifica che il documento lo
 rispetti: le chiavi di ogni sezione, la serializzazione (niente NaN/inf, niente
 `. # $ [ ] /` nelle chiavi), la dimensione (< 30 KB con una fixture realistica),
 ogni anomalia con la sua condizione, il fail-open per sezione, l'impronta e i
-cambiamenti, le giornate in UTC, il PF nullo senza perdite, i contatori dei
+cambiamenti, le giornate in ora italiana, il PF nullo senza perdite, i contatori dei
 rifiuti, il guard orario del bot (sul sorgente, come tests/test_referti.py),
 `reconcile_equity` che scrive il capitale iniziale UNA volta.
 
@@ -204,9 +204,10 @@ def _fb(**kw) -> FirebaseClient:
     return fb
 
 
-def _doc(fb=None, now: float = NOW, generato_da: str = "bot", durata_ms=None, **kw) -> dict:
+def _doc(fb=None, now: float = NOW, generato_da: str = "bot", durata_ms=None,
+         cache_trade=None, **kw) -> dict:
     fb = fb or _fb(**kw)
-    dati = c.carica_dati(fb, now)
+    dati = c.carica_dati(fb, now, cache_trade=cache_trade)
     return c.costruisci_controllo(dati, now, generato_da, settings_da_bot=(generato_da == "bot"),
                                   durata_ms=durata_ms)
 
@@ -231,7 +232,8 @@ SALUTE = {"bot_stato", "heartbeat_at", "heartbeat_eta_s", "soglia_online_s", "av
           "freno_globale_dal", "circuit_breaker", "cooldown_coin", "cooldown_strategie",
           "posizioni_aperte", "posizioni", "upnl_totale", "tetto_posizioni", "tetto_posizioni_attivo",
           "rischio_aperto_pct", "rischio_long_pct", "rischio_short_pct", "tetto_direzione_pct",
-          "wal_non_vuoto", "rtdb_degradato_s", "controllo_precedente_eta_s", "anomalie"}
+          "wal_non_vuoto", "rtdb_degradato_s", "controllo_precedente_eta_s", "anomalie",
+          "letture_firestore_24h", "letture_per_chiamante", "cache_trade"}
 PAPER = {"equity", "equity_iniziale", "equity_iniziale_fonte", "paper_dal", "paper_dal_fonte",
          "giorni_paper", "rendimento_pct", "trades", "vinti", "perdite", "win_rate", "pnl_realizzato",
          "pf_vissuto", "expectancy", "ultimi_30g", "oggi", "giornate", "uscite", "gradini", "mfe",
@@ -309,7 +311,8 @@ def test_i_numeri_della_fixture_arrivano_dove_dice_il_contratto():
     m2 = _con(c.carica_dati(_fb(), NOW), drift=dr)["learning"]["misurato"]
     assert m2["deriva"]["top"][0]["pf_vissuto"] is None          # 99 (senza perdite) -> null
     assert m["referti"]["lock_mai"] == 12 and m["referti"]["ipotesi"][0].startswith("gen_1: solo_long")
-    assert m["ombra_ai"] == {"n": 200, "agree": 50, "ultimo_at": NOW}
+    # 50 documenti, non 200 (28 set 2026: letture Firestore): un accordo ogni 4
+    assert m["ombra_ai"] == {"n": 50, "agree": 13, "ultimo_at": NOW}
     assert m["ipotesi_ai"] == {"proposte": 20, "accettate": 14, "at": NOW - 5000}
     assert m["selettore"]["verdetti"] == {"tutte": "NON BATTE"}
     assert m["notturno_at"] == pytest.approx(NOW - 40000)
@@ -631,10 +634,10 @@ def test_una_lettura_firebase_fallita_finisce_in_meta_errori():
     fb = _fb()
     orig = fb.get_doc
 
-    def _rotto(coll, doc_id):
+    def _rotto(coll, doc_id, **kw):
         if coll == "calibration":
             raise RuntimeError("quota")
-        return orig(coll, doc_id)
+        return orig(coll, doc_id, **kw)
     fb.get_doc = _rotto
     doc = _doc(fb)
     assert doc["meta"]["errori"] == ["lettura: fs:calibration/current: quota"]
@@ -673,25 +676,56 @@ def test_l_impronta_di_un_controllo_e_il_precedente_del_successivo():
 
 
 # --------------------------------------------------------------------------- #
-# 6. funzioni pure: giornate/oggi in UTC, pf, uscite, gradini, mfe, cooldown     #
+# 6. funzioni pure: giornate/oggi in ora italiana, pf, uscite, gradini, mfe, cooldown #
 # --------------------------------------------------------------------------- #
-def test_giornate_e_oggi_sono_in_utc():
-    mezzanotte = datetime(2026, 9, 25, 0, 0, tzinfo=timezone.utc).timestamp()
-    now = mezzanotte + 600                    # 00:10 UTC del 25
-    trades = [_trade(1, +3.0, exit_ts=mezzanotte + 60),          # oggi
-              _trade(2, -1.0, exit_ts=mezzanotte - 60),          # ieri alle 23:59
-              _trade(3, +5.0, exit_ts=mezzanotte - 86400 * 3)]   # 22 set
+def test_giornate_e_oggi_sono_in_ora_italiana():
+    """Dal 28 set 2026 le giornate sono in ora italiana (bot/core/tempo.py): a
+    settembre (ora legale) la mezzanotte italiana e' le 22:00 UTC."""
+    mezzanotte_it = datetime(2026, 9, 24, 22, 0, tzinfo=timezone.utc).timestamp()   # 00:00 del 25 in Italia
+    now = mezzanotte_it + 600                    # 00:10 italiane del 25 (22:10 UTC del 24)
+    trades = [_trade(1, +3.0, exit_ts=mezzanotte_it + 60),          # oggi (25)
+              _trade(2, -1.0, exit_ts=mezzanotte_it - 60),          # ieri (24) alle 23:59 italiane
+              _trade(3, +5.0, exit_ts=mezzanotte_it - 86400 * 3)]   # 22 set
     og = c.oggi(trades, now)
-    assert og == {"trades": 1, "vinti": 1, "pnl": 3.0, "migliore": {"coin": "AUSDT", "pnl": 3.0},
-                  "peggiore": {"coin": "AUSDT", "pnl": 3.0}}
+    assert og == {"data": "2026-09-25", "trades": 1, "vinti": 1, "pnl": 3.0,
+                  "migliore": {"coin": "AUSDT", "pnl": 3.0}, "peggiore": {"coin": "AUSDT", "pnl": 3.0},
+                  "pnl_tutti": 3.0, "trades_tutti": 1}
     g = c.giornate(trades, now)
-    assert g["con_trade"] == 3 and g["positive"] == 2 and g["negative"] == 1
+    assert g["con_trade"] == 3 and g["positive"] == 2 and g["negative"] == 1 and g["tz"] == "Europe/Rome"
     assert g["migliore"] == {"data": "2026-09-22", "pnl": 5.0}
     assert g["peggiore"] == {"data": "2026-09-24", "pnl": -1.0}
     assert [r["data"] for r in g["ultime_7"]] == [f"2026-09-{d}" for d in range(19, 26)]
-    assert g["ultime_7"][-1] == {"data": "2026-09-25", "trades": 1, "pnl": 3.0}
-    assert g["ultime_7"][-2] == {"data": "2026-09-24", "trades": 1, "pnl": -1.0}
+    assert g["ultime_7"][-1] == {"data": "2026-09-25", "trades": 1, "pnl": 3.0, "pnl_validate": 3.0,
+                                 "pnl_tutti": 3.0, "trades_tutti": 1}
+    assert g["ultime_7"][-2]["pnl"] == -1.0 and g["ultime_7"][-2]["trades"] == 1
+    assert g["validate"] == g["tutti"]                      # senza `tutti` i due conti coincidono
     assert c.oggi([], now)["migliore"] is None and c.giornate([], now)["migliore"] is None
+
+
+def test_giornate_portano_il_conto_intero_accanto_alle_validate():
+    """Il 27 set 2026: +3,25 sul conto, +1,26 sulle validate, stesso giorno. Le
+    due somme stanno nello stesso documento, dichiarate."""
+    mezzanotte_it = datetime(2026, 9, 24, 22, 0, tzinfo=timezone.utc).timestamp()
+    now = mezzanotte_it + 3600
+    validate = [_trade(1, +1.26, exit_ts=mezzanotte_it + 60)]
+    tutti = validate + [_trade(2, +1.99, "manual", exit_ts=mezzanotte_it + 120),
+                        _trade(3, -4.0, exit_ts=mezzanotte_it - 3600)]     # ieri, solo nel conto
+    g = c.giornate(validate, now, tutti=tutti)
+    assert g["ultime_7"][-1]["pnl_validate"] == 1.26 and g["ultime_7"][-1]["pnl_tutti"] == 3.25
+    assert g["ultime_7"][-1]["trades"] == 1 and g["ultime_7"][-1]["trades_tutti"] == 2
+    assert g["ultime_7"][-2] == {"data": "2026-09-24", "trades": 0, "pnl": 0.0, "pnl_validate": 0.0,
+                                 "pnl_tutti": -4.0, "trades_tutti": 1}
+    assert g["validate"]["con_trade"] == 1 and g["tutti"]["con_trade"] == 2
+    assert g["tutti"]["peggiore"] == {"data": "2026-09-24", "pnl": -4.0}
+    assert g["con_trade"] == 1                              # il primo livello resta le validate
+    og = c.oggi(validate, now, tutti=tutti)
+    assert og["pnl"] == 1.26 and og["pnl_tutti"] == 3.25 and og["trades_tutti"] == 2
+    # nel documento: `oggi`/`giornate` delle validate, il conto accanto
+    doc = _doc(trades=[_trade(0, +2.0, exit_ts=NOW - 60), _trade(1, +1.0, "manual", exit_ts=NOW - 120),
+                       _trade(2, +0.5, exit_ts=NOW - 180, esplorativa=True)])
+    p = doc["paper"]
+    assert p["oggi"]["pnl"] == 2.0 and p["oggi"]["pnl_tutti"] == 3.5 and p["oggi"]["trades_tutti"] == 3
+    assert "conto +3,50" in p["lettura"]
 
 
 def test_pf_senza_perdite_e_null_con_perdite_zero():

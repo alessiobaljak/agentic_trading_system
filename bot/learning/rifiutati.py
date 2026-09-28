@@ -54,6 +54,7 @@ from statistics import mean, median
 from typing import Callable, Optional
 
 from bot.config import settings
+from bot.core.firebase_client import kw_chi
 from bot.execution.exit_logic import (breakeven_after_tp1, ladder_multiples, lock_anchor,
                                       locked_stop, scale_fills, scale_ladder)
 
@@ -73,6 +74,18 @@ ORIZZONTE_BARRE = 96
 
 _TF_SECS = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600,
             "4h": 14400, "1d": 86400}
+
+#: etichetta nel contatore delle letture Firestore
+CHI = "rifiutati"
+#: quanti documenti al massimo legge un giro di `valuta_pendenti` (tetto alle
+#: letture: la finestra a 15m tiene ~30 documenti al giorno)
+MAX_LETTURE_GIRO = 200
+#: un pendente piu' vecchio di cosi' diventa «scaduto» nella passata giornaliera
+#: (`chiudi_scaduti`): nessun documento resta «in_attesa» per sempre
+SCADENZA_S = 5 * 86400
+#: i timeframe VISTI fra i pendenti negli ultimi giri: la finestra di lettura
+#: si dimensiona sul piu' lungo fra questi e quello del bot
+_TF_VISTI: set[str] = set()
 
 
 def tf_secondi(timeframe: Optional[str]) -> int:
@@ -134,7 +147,7 @@ def registra(fb, *, symbol: str, strategy: str, direction, motivo: str,
             target_f = entry_f * (1.04 if long else 0.96)
         tf = str(timeframe or settings.ORCHESTRATOR_TIMEFRAME)
         doc_id = chiave(now, symbol, strategy, tf)
-        if fb.get_doc(COLLECTION, doc_id):
+        if fb.get_doc(COLLECTION, doc_id, **kw_chi(fb, CHI)):
             return doc_id
         try:
             scala = [float(x) for x in (scale_r_mults or [])] or None
@@ -283,16 +296,29 @@ def simula_segnale(candles, direction, entry: float, stop: float, target=None,
 # --------------------------------------------------------------------------- #
 # 3. valutare i pendenti                                                       #
 # --------------------------------------------------------------------------- #
-def _finestra_pendenti_s(orizzonte_barre: int, margine_barre: int) -> float:
-    """Quanto indietro leggere i documenti: oltre (orizzonte + margine) barre del
-    timeframe piu' lungo (4h) piu' un giorno, un pendente e' per forza gia'
-    scaduto o valutato. Cosi' la query non scarica la collection intera."""
-    return (orizzonte_barre + margine_barre) * _TF_SECS["4h"] + 86400
+def _finestra_pendenti_s(orizzonte_barre: int, margine_barre: int,
+                         timeframes=None) -> float:
+    """Quanto indietro leggere i documenti: (orizzonte + margine + 2) barre del
+    timeframe PIU' LUNGO fra quelli dei segnali (`timeframes`, piu' quello del
+    bot e quelli visti nei giri precedenti). A 15m sono 106 barre, ~26 ore; a
+    1h ~106 ore. Oltre, un pendente e' per forza gia' valutato o scaduto (o lo
+    chiude la passata giornaliera `chiudi_scaduti`).
+
+    Fino al 28 set 2026 la finestra era dimensionata sul 4h piu' un giorno
+    (~18 giorni) per QUALUNQUE segnale: a ogni candela il bot rileggeva tutti i
+    documenti di 17 giorni (~30 al giorno, ~5.300 letture al giorno il 28 set,
+    ~24.000 una settimana dopo), per valutarne una manciata. Le 2 barre in piu'
+    sono quelle in cui `valuta_pendenti` scarica ancora le candele di un
+    segnale al limite."""
+    tfs = {settings.ORCHESTRATOR_TIMEFRAME} | set(timeframes or ()) | set(_TF_VISTI)
+    secs = max(tf_secondi(tf) for tf in tfs)
+    return (orizzonte_barre + margine_barre + 2) * secs
 
 
 def valuta_pendenti(fb, candele_fn: Callable, now: float,
                     orizzonte_barre: int = ORIZZONTE_BARRE, margine_barre: int = 8,
-                    max_per_giro: int = 20) -> int:
+                    max_per_giro: int = 20, timeframes=None,
+                    max_letture: int = MAX_LETTURE_GIRO) -> int:
     """Valuta i segnali «in_attesa»: scarica le candele, simula, scrive l'esito.
 
     `candele_fn(symbol, timeframe, limit)` ritorna le ULTIME `limit` candele
@@ -301,16 +327,23 @@ def valuta_pendenti(fb, candele_fn: Callable, now: float,
     2 barre; si usano solo le candele CHIUSE da `ts_candela` in poi. Se le
     candele scaricate non partono dalla candela d'ingresso (segnale piu' vecchio
     del limite, o buco) il segnale aspetta, e oltre orizzonte + margine barre
-    diventa «scaduto». `max_per_giro` limita le chiamate a Binance per giro.
-    Ritorna quanti documenti ha aggiornato (valutati + scaduti). Fail-open."""
+    diventa «scaduto». `max_per_giro` limita le chiamate a Binance per giro;
+    `max_letture` i documenti letti da Firestore (i piu' recenti della
+    finestra); `timeframes` sono i timeframe in uso oltre a quello del bot (la
+    finestra si dimensiona sul piu' lungo). Ritorna quanti documenti ha
+    aggiornato (valutati + scaduti). Fail-open."""
     try:
-        docs = fb.query_collection(COLLECTION, order_by="ts",
-                                  min_value=now - _finestra_pendenti_s(orizzonte_barre, margine_barre))
+        finestra = _finestra_pendenti_s(orizzonte_barre, margine_barre, timeframes)
+        docs = fb.query_collection(COLLECTION, order_by="ts", min_value=now - finestra,
+                                  limit=max(1, int(max_letture)), **kw_chi(fb, CHI))
     except Exception as exc:  # noqa: BLE001
         print(f"[rifiutati] lettura pendenti saltata ({exc})")
         return 0
     pendenti = sorted((d for d in (docs or []) if isinstance(d, dict) and d.get("stato") == IN_ATTESA),
                       key=lambda d: float(d.get("ts") or 0))
+    for d in pendenti:
+        if d.get("timeframe"):
+            _TF_VISTI.add(str(d["timeframe"]))
     chiamate, aggiornati = 0, 0
     for d in pendenti:
         if chiamate >= max_per_giro:
@@ -369,6 +402,48 @@ def valuta_pendenti(fb, candele_fn: Callable, now: float,
     return aggiornati
 
 
+def chiudi_scaduti(fb, now: float, scadenza_s: float = SCADENZA_S,
+                   fetta_s: float = 3 * 86400, max_docs: int = 200) -> int:
+    """La passata GIORNALIERA (28 set 2026): segna «scaduto» ogni documento ancora
+    «in_attesa» piu' vecchio di `scadenza_s` (5 giorni). E' la rete sotto la
+    finestra di `valuta_pendenti`: un segnale a un timeframe che la finestra
+    non copriva (o registrato mentre il bot era giu') non resta in attesa per
+    sempre, e `riassunto` lo conta fra gli scaduti invece che fra i pendenti.
+
+    Legge SOLO la fetta fra `scadenza_s` e `scadenza_s + fetta_s` (dal 5° all'8°
+    giorno, i piu' recenti prima, al massimo `max_docs`): girando ogni giorno,
+    ogni documento passa di qui una volta sola, con tre giorni di margine per
+    i giorni saltati. Costo: ~30 documenti al giorno di rifiuti = ~90 letture
+    al giorno. Fail-open, ritorna quanti ha chiuso."""
+    try:
+        docs = fb.query_collection(COLLECTION, order_by="ts",
+                                  min_value=now - scadenza_s - fetta_s,
+                                  max_value=now - scadenza_s, limit=max(1, int(max_docs)),
+                                  **kw_chi(fb, CHI)) or []
+    except Exception as exc:  # noqa: BLE001
+        print(f"[rifiutati] passata degli scaduti saltata ({exc})")
+        return 0
+    chiusi = 0
+    for d in docs:
+        if not isinstance(d, dict) or d.get("stato") != IN_ATTESA:
+            continue
+        try:
+            tf = str(d.get("timeframe") or settings.ORCHESTRATOR_TIMEFRAME)
+            doc_id = d.get("id") or chiave(float(d.get("ts") or 0), d.get("symbol", ""),
+                                            d.get("strategy", ""), tf)
+            d.update({"stato": SCADUTO, "valutato_at": float(now), "barre": 0,
+                      "scaduto_da": "passata_giornaliera"})
+            d["id"] = doc_id
+            fb.set_doc(COLLECTION, doc_id, d)
+            chiusi += 1
+        except Exception as exc:  # noqa: BLE001
+            print(f"[rifiutati] scadenza saltata per {d.get('id')} ({exc})")
+    if chiusi:
+        print(f"[rifiutati] {chiusi} segnali in attesa da piu' di "
+              f"{int(scadenza_s / 86400)} giorni segnati scaduti")
+    return chiusi
+
+
 # --------------------------------------------------------------------------- #
 # 4. riassumere                                                                #
 # --------------------------------------------------------------------------- #
@@ -379,7 +454,8 @@ def riassunto(fb, giorni: int = 30, now: Optional[float] = None) -> dict:
     now = time.time() if now is None else now
     dal = now - giorni * 86400
     try:
-        docs = fb.query_collection(COLLECTION, order_by="ts", min_value=dal) or []
+        docs = fb.query_collection(COLLECTION, order_by="ts", min_value=dal,
+                                  **kw_chi(fb, CHI)) or []
     except Exception as exc:  # noqa: BLE001
         print(f"[rifiutati] riassunto saltato ({exc})")
         docs = []

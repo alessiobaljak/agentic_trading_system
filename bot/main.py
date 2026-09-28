@@ -19,7 +19,7 @@ import types
 from datetime import datetime, timezone
 
 from bot.config import settings, timeframe_hours
-from bot.core.firebase_client import get_firebase
+from bot.core.firebase_client import get_firebase, kw_chi, riga_letture
 from bot.core.models import Direction, ExitReason, Regime, RiskSettings
 from bot.agents.market_scanner import MarketScanner
 from bot.agents.onchain_agent import OnChainAgent
@@ -328,11 +328,13 @@ class TradingBot:
         # spec (vedi _ricarica_registro_se_cambiato)
         self._registro_check_at = 0.0
         self._registro_rileggi_spec = False
+        # quando e' girata l'ultima passata giornaliera degli scaduti (28 set 2026)
+        self._scaduti_at = 0.0
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
         """Rilegge i parametri regolabili da Firebase PRIMA di ogni nuovo trade."""
-        doc = self.fb.get_doc("user_risk_settings", "current")
+        doc = self.fb.get_doc("user_risk_settings", "current", **kw_chi(self.fb, "rischio"))
         if not doc:
             return RiskSettings(leverage=settings.DEFAULT_LEVERAGE,
                                 risk_per_trade=settings.DEFAULT_RISK_PER_TRADE)
@@ -1527,7 +1529,7 @@ class TradingBot:
         versione -> ombra spenta (p None) e una riga nel log; Firebase che non
         risponde -> si tiene il modello letto l'ora prima, non si spegne."""
         try:
-            doc = self.fb.get_doc("selector", "current")
+            doc = self.fb.get_doc("selector", "current", **kw_chi(self.fb, "selettore"))
             nuovo = sel.valida_pubblicato(doc)
             if nuovo is None:
                 if self._selettore is not None or doc:
@@ -1665,7 +1667,7 @@ class TradingBot:
 
     def _load_memory(self):
         from bot.core.models import MemoryReport
-        doc = self.fb.get_doc("memory", "30")
+        doc = self.fb.get_doc("memory", "30", **kw_chi(self.fb, "memoria"))
         if not doc:
             return None
         try:
@@ -1802,7 +1804,9 @@ class TradingBot:
                 t["trailing_miss_to_tp"] = res["miss_to_tp"]      # quanto tragitto lasciato sul tavolo
                 t["trailing_knockout_atr"] = res["knockout_atr"]  # rumore (<1) vs inversione reale
             try:
-                self.fb.set_doc("trades", t["trade_id"], t)   # riscrive il doc + i campi
+                # riscrive il doc coi campi nuovi E allinea la cache dei trade
+                # (28 set 2026): `recent` non rilegge piu' Firestore a ogni candela
+                self.logger.aggiorna(t)
                 done += 1
             except Exception:  # noqa: BLE001
                 pass
@@ -1823,7 +1827,7 @@ class TradingBot:
         try:
             from bot.core.firebase_client import decode_pairs
             from bot.learning.drift import compute_drift, drifted_keys
-            reg = self.fb.get_doc("strategy_registry", "validated") or {}
+            reg = self.fb.get_doc("strategy_registry", "validated", **kw_chi(self.fb, "registro")) or {}
             self._registro_cache = reg          # lo riusa il controllo orario
             # i pool del freno per gruppo (26 set 2026) hanno bisogno delle spec
             # generate (famiglia) e delle chiavi validate (riferimento promesso)
@@ -1837,7 +1841,7 @@ class TradingBot:
             # Senza, ogni ora il documento diceva solo «drift», mai da quanto.
             glob = doc.get("global") or {}
             if glob.get("verdict") == "drift":
-                prima = (self.fb.get_doc("drift", "current") or {}).get("global") or {}
+                prima = (self.fb.get_doc("drift", "current", **kw_chi(self.fb, "deriva")) or {}).get("global") or {}
                 dal = prima.get("dal") if prima.get("verdict") == "drift" else None
                 glob["dal"] = float(dal) if dal else doc["updated_at"]
             self.fb.set_doc("drift", "current", doc)
@@ -1866,7 +1870,7 @@ class TradingBot:
             # la STORIA delle ipotesi (26 set 2026, J9): prima comparsa di ogni
             # «strategia|tipo», cosi' le regole dei referti si possono giudicare
             self.fb.set_doc("learning", "ipotesi_storia",
-                            aggiorna_storia(self.fb.get_doc("learning", "ipotesi_storia") or {},
+                            aggiorna_storia(self.fb.get_doc("learning", "ipotesi_storia", **kw_chi(self.fb, "referti")) or {},
                                             doc, time.time()))
             righe = riassunto_ipotesi(doc)
             if righe:
@@ -1954,12 +1958,12 @@ class TradingBot:
         posto di quattro comandi ops letti a mano (25 set 2026).
 
         Guard `_last_controllo_at` (>= 3300 s): una volta l'ora anche se il ramo
-        orario venisse chiamato piu' spesso. I trade in mano sono quelli degli
-        ultimi 30 giorni di `refresh_weights`: bastano finche' il paper e' piu'
-        giovane di 30 giorni; oltre, il documento vuole l'all-time e lo rilegge.
-        Il registro e' quello letto da `_publish_drift` un attimo prima (cache),
-        altrimenti si legge come fa lui. Tutto in un try suo: un errore qui non
-        tocca pesi, deriva o trading."""
+        orario venisse chiamato piu' spesso. Il documento vuole TUTTI i trade
+        chiusi: dal 28 set 2026 arrivano dalla cache in memoria di `TradeLogger`
+        (`all_since(0.0)`: nessuna lettura Firestore), e `carica_dati` non li
+        rilegge quando li riceve. Il registro e' quello letto da `_publish_drift`
+        un attimo prima (cache), altrimenti si legge come fa lui. Tutto in un
+        try suo: un errore qui non tocca pesi, deriva o trading."""
         now = time.time() if now is None else now
         if now - self._last_controllo_at < 3300:
             return
@@ -1969,15 +1973,10 @@ class TradingBot:
             t0 = time.time()
             reg = self._registro_cache
             if reg is None:
-                reg = self.fb.get_doc("strategy_registry", "validated") or {}
-            dal = self.fb.get_rtdb("/account/paper_started_at")
-            try:
-                dal = float(dal) if dal else None
-            except (TypeError, ValueError):
-                dal = None
-            if dal is None or dal < now - 30 * 86400:
-                trades = self.logger.all_since(0.0)
-            dati = carica_dati(self.fb, now, trades=trades, registro=reg)
+                reg = self.fb.get_doc("strategy_registry", "validated", **kw_chi(self.fb, "registro")) or {}
+            trades = self.logger.all_since(0.0)
+            dati = carica_dati(self.fb, now, trades=trades, registro=reg,
+                               cache_trade=getattr(self.logger, "ultima_verifica", None))
             doc = costruisci_controllo(dati, now, "bot", settings_da_bot=True,
                                        durata_ms=int((time.time() - t0) * 1000))
             pubblica_controllo(self.fb, doc)
@@ -1989,6 +1988,43 @@ class TradingBot:
                   + (f", sezioni fallite: {m['errori']}" if m.get("errori") else ""))
         except Exception as exc:  # noqa: BLE001
             print(f"[controllo] pubblicazione saltata: {exc}")
+
+    def _timeframes_in_uso(self) -> set[str]:
+        """I timeframe delle spec generate e delle esplorative in RAM (di solito
+        {15m} o {15m, 1h}): dimensionano la finestra dell'ombra dei rifiutati
+        (28 set 2026). Fail-open: vuoto se l'adattamento non li sa."""
+        try:
+            specs = dict(getattr(self.adaptation, "_generated_specs", {}) or {})
+            specs.update(getattr(self.adaptation, "_esplorative_specs", {}) or {})
+            return {str(v.get("timeframe")) for v in specs.values()
+                    if isinstance(v, dict) and v.get("timeframe")}
+        except Exception:  # noqa: BLE001
+            return set()
+
+    # ------------------------------------------------------------------ #
+    def _manutenzione_oraria(self, now: float) -> None:
+        """Il ramo orario delle LETTURE FIRESTORE (28 set 2026, dopo la quota
+        esaurita alle 06:18 UTC): stampa il contatore delle ultime 24 ore per
+        chiamante (`[firebase] letture ultime 24 h: ...`), fa la verifica
+        giornaliera della cache dei trade (conteggio + ricarica intera, vedi
+        `TradeLogger.manutenzione`) e una volta al giorno chiude i segnali
+        rifiutati in attesa da piu' di 5 giorni (`rifiutati.chiudi_scaduti`).
+        Ogni pezzo in un try suo: e' manutenzione, non deve fermare il ciclo."""
+        try:
+            if hasattr(self.fb, "letture"):
+                print(riga_letture(self.fb.letture(now)))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[firebase] contatore letture non stampato: {exc}")
+        try:
+            self.logger.manutenzione(now)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[trades] manutenzione della cache saltata: {exc}")
+        try:
+            if now - getattr(self, "_scaduti_at", 0.0) >= 86400:
+                self._scaduti_at = now
+                rifiutati.chiudi_scaduti(self.fb, now)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[rifiutati] passata degli scaduti saltata: {exc}")
 
     # ------------------------------------------------------------------ #
     def run(self, max_iterations: int | None = None, sleep_s: float = 30.0) -> None:
@@ -2023,7 +2059,8 @@ class TradingBot:
                     # e l'esito simulato dei segnali RIFIUTATI (26 set 2026, J6):
                     # stessa fonte di candele, al massimo 20 chiamate per giro
                     try:
-                        rifiutati.valuta_pendenti(self.fb, self.price.get_candles, now)
+                        rifiutati.valuta_pendenti(self.fb, self.price.get_candles, now,
+                                                  timeframes=self._timeframes_in_uso())
                     except Exception as exc:  # noqa: BLE001
                         print(f"[rifiutati] valutazione saltata: {exc}")
                 # RETE DI SICUREZZA tempo-based: ricalcolo orario cosi' il recupero
@@ -2036,6 +2073,10 @@ class TradingBot:
                 # e' rimasto fermo 2 h 43 la mattina del 25 set 2026 (screenshot
                 # del proprietario) mentre il bot era vivo e imparava a ogni trade.
                 if now - self.last_orario >= 3600:
+                    # la manutenzione delle letture PRIMA del controllo (28 set
+                    # 2026): la verifica giornaliera della cache dei trade deve
+                    # essere gia' fatta quando il controllo la pubblica
+                    self._manutenzione_oraria(now)
                     # `orario=True`: SOLO qui parte il controllo orario (mai dal
                     # ricalcolo dopo ogni chiusura, qui sotto)
                     self.refresh_weights(now, orario=True)

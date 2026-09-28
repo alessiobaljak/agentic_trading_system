@@ -34,10 +34,12 @@ from __future__ import annotations
 import math
 import time
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
+from datetime import datetime
 from statistics import median
 
 from bot.config import settings
+from bot.core.firebase_client import QUOTA_LETTURE_GIORNO, kw_chi
+from bot.core.tempo import GIORNO_TZ, giorno_locale
 from bot.learning.referti import ESITI_ESTERNI, riassunto_ipotesi
 from bot.learning.metrics import (KEEP_PAPER_MIN_VERDETTI, classi_stop, cost_alerts,
                                   cost_report, proposta_keep)
@@ -74,7 +76,11 @@ _ETICHETTA = {
     "OLTRE_TETTO_POSIZIONI": "oltre il tetto posizioni",
     "CIRCUIT_BREAKER": "circuit breaker", "NESSUN_TRADE_48H": "nessun trade da 48 h",
     "SENZA_PROMESSA": "validate senza promessa", "CONTROLLO_LENTO": "controllo lento",
+    "LETTURE_FIRESTORE": "letture Firestore", "CACHE_TRADE_DISALLINEATA": "cache trade",
 }
+#: soglie dell'anomalia LETTURE_FIRESTORE (28 set 2026): quota gratuita 50.000 al
+#: giorno, azzerata alle 07:00 UTC; giallo a meta' strada, rosso vicino al muro
+LETTURE_GIALLO, LETTURE_ROSSO = 25_000, 40_000
 
 
 # --------------------------------------------------------------------------- #
@@ -111,7 +117,9 @@ def _ts(v):
 
 
 def _giorno(ts: float) -> str:
-    return datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d")
+    """Il giorno del proprietario (ora italiana, `bot/core/tempo.py`), dal 28 set
+    2026: prima era UTC, e «il 27» della dashboard non era «il 27» di chi legge."""
+    return giorno_locale(ts)
 
 
 def _pnl(t: dict) -> float:
@@ -141,6 +149,11 @@ def _r(v, n=2):
 def _num(v, dec=0) -> str:
     """Numero in italiano («1,5»), col segno se chiesto dal chiamante."""
     return f"{v:.{dec}f}".replace(".", ",")
+
+
+def _migliaia(n) -> str:
+    """25001 -> «25.001» (il punto delle migliaia all'italiana)."""
+    return f"{int(n):,}".replace(",", ".")
 
 
 def _eta(s) -> str:
@@ -214,13 +227,16 @@ def _figlio(fb, base: str, *chiavi):
     return nodo
 
 
-def carica_dati(fb, now: float, trades=None, registro=None) -> dict:
+def carica_dati(fb, now: float, trades=None, registro=None, cache_trade=None) -> dict:
     """SOLO letture: i nodi RTDB e i documenti Firestore elencati nel contratto.
 
     `trades` e `registro` si passano quando chi chiama li ha gia' in mano (il
-    bot): senza, si leggono qui. Un errore di lettura non ferma nulla: il dato
-    resta None e finisce in `errori_lettura`, cosi' la sezione lo dice."""
-    d: dict = {"now": now, "errori_lettura": []}
+    bot, dalla cache di `TradeLogger`): senza, si leggono qui — e MAI si
+    rileggono se dati (28 set 2026: erano ~3.600 letture al giorno). Un errore
+    di lettura non ferma nulla: il dato resta None e finisce in
+    `errori_lettura`, cosi' la sezione lo dice. `cache_trade` e' l'esito
+    dell'ultima verifica della cache (`TradeLogger.ultima_verifica`), solo dal bot."""
+    d: dict = {"now": now, "errori_lettura": [], "cache_trade": cache_trade}
 
     def rt(path):
         try:
@@ -231,7 +247,7 @@ def carica_dati(fb, now: float, trades=None, registro=None) -> dict:
 
     def fs(coll, doc_id):
         try:
-            return fb.get_doc(coll, doc_id)
+            return fb.get_doc(coll, doc_id, **kw_chi(fb, "controllo"))
         except Exception as exc:  # noqa: BLE001
             d["errori_lettura"].append(f"fs:{coll}/{doc_id}: {str(exc)[:80]}")
             return None
@@ -272,18 +288,29 @@ def carica_dati(fb, now: float, trades=None, registro=None) -> dict:
     # coppie attive; None se il documento non c'e' (gate mai girato col codice)
     d["esplorative"] = fs("strategy_registry", "esplorative")
     d["discovered_last_run"] = fs("strategy_params", "discovered_last_run") or {}
+    # 50 documenti, non 200 (28 set 2026): l'ombra AI del controllo guarda gli
+    # ultimi giri, e ogni documento e' una lettura, 24 volte al giorno
     try:
-        d["ai_shadow"] = fb.query_collection("ai_shadow", order_by="at", limit=200) or []
+        d["ai_shadow"] = fb.query_collection("ai_shadow", order_by="at", limit=50,
+                                             **kw_chi(fb, "controllo")) or []
     except Exception as exc:  # noqa: BLE001
         d["errori_lettura"].append(f"fs:ai_shadow: {str(exc)[:80]}")
         d["ai_shadow"] = None
     if trades is None:
         try:
-            trades = fb.query_collection("trades", order_by="exit_ts", min_value=0.0) or []
+            trades = fb.query_collection("trades", order_by="exit_ts", min_value=0.0,
+                                         **kw_chi(fb, "controllo")) or []
         except Exception as exc:  # noqa: BLE001
             d["errori_lettura"].append(f"fs:trades: {str(exc)[:80]}")
             trades = None
     d["trades"] = trades
+    # le letture Firestore di questo processo (contatore del client, 28 set 2026):
+    # hanno senso solo nel bot, che vive 24 ore; `_salute` le pubblica solo li'
+    # (orologio vero, non `now`: il contatore vive nel tempo del processo)
+    try:
+        d["letture"] = fb.letture() if hasattr(fb, "letture") else None
+    except Exception:  # noqa: BLE001
+        d["letture"] = None
     try:
         d["rtdb_degradato_s"] = float(fb.degraded_for(now)) if hasattr(fb, "degraded_for") else None
     except Exception:  # noqa: BLE001
@@ -302,10 +329,7 @@ def pf(trades) -> float | None:
     return round(gains / losses, 3) if losses > 0 else None
 
 
-def giornate(trades, now: float) -> dict:
-    """Le giornate (UTC, per data di uscita): quante con trade, positive,
-    negative, la migliore e la peggiore, e le ultime 7 una per una (anche vuote,
-    cosi' la serie ha sempre 7 punti)."""
+def _per_giorno(trades) -> dict[str, dict]:
     per: dict[str, dict] = defaultdict(lambda: {"trades": 0, "pnl": 0.0})
     for t in trades or []:
         ts = _exit_ts(t)
@@ -314,36 +338,66 @@ def giornate(trades, now: float) -> dict:
         g = per[_giorno(ts)]
         g["trades"] += 1
         g["pnl"] += _pnl(t)
+    return per
+
+
+def _totali_giornate(per: dict[str, dict]) -> dict:
     righe = sorted(per.items())
-    positive = sum(1 for _, g in righe if g["pnl"] > 0)
-    negative = sum(1 for _, g in righe if g["pnl"] < 0)
     migliore = peggiore = None
     if righe:
         d, g = max(righe, key=lambda kv: kv[1]["pnl"])
         migliore = {"data": d, "pnl": round(g["pnl"], 2)}
         d, g = min(righe, key=lambda kv: kv[1]["pnl"])
         peggiore = {"data": d, "pnl": round(g["pnl"], 2)}
+    return {"con_trade": len(righe),
+            "positive": sum(1 for _, g in righe if g["pnl"] > 0),
+            "negative": sum(1 for _, g in righe if g["pnl"] < 0),
+            "migliore": migliore, "peggiore": peggiore}
+
+
+def giornate(trades, now: float, tutti=None) -> dict:
+    """Le giornate in ORA ITALIANA (`GIORNO_TZ`), per data di uscita: quante con
+    trade, positive, negative, la migliore e la peggiore, e le ultime 7 una per
+    una (anche vuote, cosi' la serie ha sempre 7 punti).
+
+    DUE CONTI, dichiarati (28 set 2026): `trades` sono i trade delle VALIDATE
+    decisi dalla strategia (i numeri di `paper`), `tutti` sono TUTTI i trade
+    chiusi del conto (esplorativi e uscite esterne comprese: e' cio' che muove
+    l'equity, lo stesso conto del report `portafoglio`). I campi di primo
+    livello e `pnl` delle righe restano le validate (compatibilita'); `tutti`
+    e `validate` portano i due totali, e ogni riga `pnl_validate` /
+    `pnl_tutti` / `trades_tutti`. Senza `tutti`, i due conti coincidono."""
+    per_v = _per_giorno(trades)
+    per_t = _per_giorno(trades if tutti is None else tutti)
+    base = _totali_giornate(per_v)
     ultime = []
     for i in range(6, -1, -1):
         d = _giorno(now - i * 86400)
-        g = per.get(d, {"trades": 0, "pnl": 0.0})
-        ultime.append({"data": d, "trades": g["trades"], "pnl": round(g["pnl"], 2)})
-    return {"con_trade": len(righe), "positive": positive, "negative": negative,
-            "migliore": migliore, "peggiore": peggiore, "ultime_7": ultime}
+        v = per_v.get(d, {"trades": 0, "pnl": 0.0})
+        t = per_t.get(d, {"trades": 0, "pnl": 0.0})
+        ultime.append({"data": d, "trades": v["trades"], "pnl": round(v["pnl"], 2),
+                       "pnl_validate": round(v["pnl"], 2), "pnl_tutti": round(t["pnl"], 2),
+                       "trades_tutti": t["trades"]})
+    return {**base, "ultime_7": ultime, "tz": GIORNO_TZ,
+            "validate": _totali_giornate(per_v), "tutti": _totali_giornate(per_t)}
 
 
-def oggi(trades, now: float) -> dict:
-    """Il giorno UTC corrente: trade, vinti, pnl, migliore e peggiore per coin."""
+def oggi(trades, now: float, tutti=None) -> dict:
+    """Il giorno corrente in ora italiana: trade, vinti, pnl, migliore e peggiore
+    per coin (delle validate) piu' `pnl_tutti` / `trades_tutti` del conto intero."""
     d = _giorno(now)
     sel = [t for t in (trades or []) if (ts := _exit_ts(t)) is not None and _giorno(ts) == d]
+    sel_t = [t for t in ((trades if tutti is None else tutti) or [])
+             if (ts := _exit_ts(t)) is not None and _giorno(ts) == d]
     mig = peg = None
     if sel:
         t = max(sel, key=_pnl)
         mig = {"coin": str(t.get("symbol", "?")), "pnl": round(_pnl(t), 2)}
         t = min(sel, key=_pnl)
         peg = {"coin": str(t.get("symbol", "?")), "pnl": round(_pnl(t), 2)}
-    return {"trades": len(sel), "vinti": sum(1 for t in sel if _pnl(t) > 0),
-            "pnl": round(sum(_pnl(t) for t in sel), 2), "migliore": mig, "peggiore": peg}
+    return {"data": d, "trades": len(sel), "vinti": sum(1 for t in sel if _pnl(t) > 0),
+            "pnl": round(sum(_pnl(t) for t in sel), 2), "migliore": mig, "peggiore": peg,
+            "pnl_tutti": round(sum(_pnl(t) for t in sel_t), 2), "trades_tutti": len(sel_t)}
 
 
 def _etichette_uscita() -> dict:
@@ -569,6 +623,8 @@ def _salute(d: dict, now: float, generato_da: str) -> dict:
                           "upnl": _r(p.get("unrealized_pnl"), 2)})
     wal = d.get("unlogged") or {}
     precedente_at = _f(d.get("precedente_at"))
+    letture = d.get("letture") if (generato_da == "bot" and isinstance(d.get("letture"), dict)) else None
+    cache = d.get("cache_trade") if (generato_da == "bot" and isinstance(d.get("cache_trade"), dict)) else None
 
     out = {
         "computed_at": now,
@@ -578,7 +634,8 @@ def _salute(d: dict, now: float, generato_da: str) -> dict:
                   "rtdb:/btc_history", "rtdb:/controllo/meta", "fs:dashboard/gate",
                   "fs:strategy_registry/validated", "fs:drift/current",
                   "fs:strategy_weights/current", "fs:calibration/current",
-                  "fs:learning/referti", "fs:supervisor/state"],
+                  "fs:learning/referti", "fs:supervisor/state",
+                  "bot:contatore letture Firestore", "bot:cache trade"],
         "lettura": "", "dettaglio": (
             "rischio per direzione = somma di risk_effective_pct delle posizioni "
             "aperte (stima: il tetto del bot usa lo stop ORIGINALE e la quantita' "
@@ -641,6 +698,16 @@ def _salute(d: dict, now: float, generato_da: str) -> dict:
         "wal_non_vuoto": len(wal) if isinstance(wal, dict) else 0,
         "rtdb_degradato_s": _f(d.get("rtdb_degradato_s")) if generato_da == "bot" else None,
         "controllo_precedente_eta_s": int(now - precedente_at) if precedente_at is not None else None,
+        # le letture Firestore del bot nelle ultime 24 h (28 set 2026): solo dal
+        # bot, che e' il processo che vive 24 ore; da ops o GitHub sarebbero le
+        # letture di un processo appena nato
+        "letture_firestore_24h": _i(letture.get("ultime_24h")) if letture else None,
+        "letture_per_chiamante": ([{"chi": str(r.get("chi")), "n": _i(r.get("n"))}
+                                   for r in (letture.get("per_chiamante") or [])
+                                   if isinstance(r, dict)] if letture else None),
+        "cache_trade": ({"firestore": _i(cache.get("firestore")), "cache": _i(cache.get("cache")),
+                         "allineata": bool(cache.get("allineata")),
+                         "verificata_at": _f(cache.get("verificata_at"))} if cache else None),
         "anomalie": [],
     }
     return out
@@ -805,8 +872,8 @@ def _paper(d: dict, now: float) -> dict:
         "pf_vissuto": pf(rows),
         "expectancy": round(pnl_rows / n, 3) if n else None,
         "ultimi_30g": ultimi,
-        "oggi": oggi(rows, now),
-        "giornate": giornate(rows, now),
+        "oggi": oggi(rows, now, tutti=trades_letti),
+        "giornate": giornate(rows, now, tutti=trades_letti),
         "uscite": uscite_per_motivo(trades_tutti),
         "gradini": gradini(trades_tutti),
         "mfe": mfe_riassunto(trades_tutti),
@@ -1033,6 +1100,20 @@ def anomalie(salute: dict, paper: dict, attivo: dict, dati: dict, now: float,
         if (s.get("rtdb_degradato_s") or 0) > 60:
             add("RTDB_DEGRADATO", SISTEMA, GIALLO, f"RTDB muto da {_eta(s['rtdb_degradato_s'])}",
                 s["rtdb_degradato_s"], 60)
+        # LE LETTURE FIRESTORE (28 set 2026): la quota gratuita e' 50.000 al giorno
+        # e il 28 set si e' esaurita alle 06:18 UTC (ops 0331/0332)
+        lett = s.get("letture_firestore_24h")
+        if lett is not None and lett > LETTURE_GIALLO:
+            add("LETTURE_FIRESTORE", SISTEMA, ROSSO if lett > LETTURE_ROSSO else GIALLO,
+                f"letture Firestore nelle ultime 24 h: {_migliaia(lett)} (quota gratuita "
+                f"{_migliaia(QUOTA_LETTURE_GIORNO)}): valutare il piano a consumo (Blaze) se resta sopra",
+                int(lett), LETTURE_ROSSO if lett > LETTURE_ROSSO else LETTURE_GIALLO)
+        ct = s.get("cache_trade") or {}
+        if ct and ct.get("allineata") is False:
+            add("CACHE_TRADE_DISALLINEATA", SISTEMA, INFO,
+                f"cache dei trade disallineata alla verifica giornaliera: {ct.get('firestore')} su "
+                f"Firestore contro {ct.get('cache')} in cache (ricaricata)",
+                ct.get("cache"), ct.get("firestore"))
         if s.get("rischio_aperto_pct", 0) > 6:
             add("RISCHIO_ALTO", PAPER, ROSSO, f"rischio aperto {_num(s['rischio_aperto_pct'], 2)}% dell'equity",
                 s["rischio_aperto_pct"], 6)
@@ -1174,9 +1255,13 @@ def lettura_paper(p: dict) -> str:
     if stop and stop.get("quota") is not None:
         testo += f" Stop nel {_num(stop['quota'] * 100)}% delle uscite."
     og = p.get("oggi") or {}
-    if og.get("trades"):
+    if og.get("trades") or og.get("trades_tutti"):
         v = og.get("pnl") or 0.0
-        testo += f" Oggi {'+' if v >= 0 else ''}{_num(v, 2)}."
+        testo += f" Oggi {'+' if v >= 0 else ''}{_num(v, 2)}"
+        vt = og.get("pnl_tutti")
+        if vt is not None and og.get("trades_tutti") != og.get("trades"):
+            testo += f" (conto {'+' if vt >= 0 else ''}{_num(vt, 2)})"
+        testo += "."
     else:
         testo += " Oggi nessun trade."
     if n < 20:
@@ -1325,12 +1410,12 @@ def pubblica_controllo(fb, doc: dict) -> None:
 
 
 def esegui(fb, generato_da: str, settings_da_bot: bool, trades=None, registro=None,
-           now: float | None = None, pubblica: bool = False) -> dict:
+           now: float | None = None, pubblica: bool = False, cache_trade=None) -> dict:
     """Carica, costruisce (misurando `durata_ms`) e, se chiesto, pubblica.
     E' la sequenza che bot, snapshot e comando ops ripetono uguale."""
     now = time.time() if now is None else now
     t0 = time.time()
-    dati = carica_dati(fb, now, trades=trades, registro=registro)
+    dati = carica_dati(fb, now, trades=trades, registro=registro, cache_trade=cache_trade)
     doc = costruisci_controllo(dati, now, generato_da, settings_da_bot,
                                durata_ms=int((time.time() - t0) * 1000))
     if pubblica:
