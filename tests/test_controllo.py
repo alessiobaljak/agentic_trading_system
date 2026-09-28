@@ -725,7 +725,7 @@ def test_giornate_portano_il_conto_intero_accanto_alle_validate():
                        _trade(2, +0.5, exit_ts=NOW - 180, esplorativa=True)])
     p = doc["paper"]
     assert p["oggi"]["pnl"] == 2.0 and p["oggi"]["pnl_tutti"] == 3.5 and p["oggi"]["trades_tutti"] == 3
-    assert "conto +3,50" in p["lettura"]
+    assert "Oggi +3,50 (validate +2,00)" in p["lettura"]   # 28 set: il conto in testa
 
 
 def test_pf_senza_perdite_e_null_con_perdite_zero():
@@ -1081,3 +1081,17 @@ def test_il_ramo_orario_ha_un_orologio_suo():
     assert "self.last_orario = now" in src
     dopo_chiusura = src.split("if self._closed_this_cycle:", 1)[1]
     assert "last_orario" not in dopo_chiusura
+
+
+def test_conto_e_stream_senza_posizioni_28_set():
+    """28 set 2026: il conto (tutti i trade, esplorativi compresi) accanto alle
+    validate; l'avviso dello stream solo con posizioni aperte."""
+    from bot.learning import controllo as c
+    p = {"conto": {"trades": 3, "vinti": 2, "pnl": 8.04}, "pnl_realizzato": 6.93,
+         "trades": 2, "win_rate": 0.5, "giorni_paper": 12,
+         "oggi": {"trades": 2, "trades_tutti": 3, "pnl": 6.93, "pnl_tutti": 8.04}}
+    testo = c.lettura_paper(p)
+    assert "+8,04 USDT" in testo and "Oggi +8,04" in testo and "validate +6,93" in testo
+    import inspect
+    src = inspect.getsource(c.anomalie)
+    assert 's.get("price_stream") is False and (s.get("posizioni_aperte") or 0) > 0' in src

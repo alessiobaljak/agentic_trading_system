@@ -351,6 +351,8 @@ export interface Paper extends Testata {
   perdite?: number | null;
   win_rate?: number | null;
   pnl_realizzato?: number | null;
+  /** tutti i trade chiusi, esplorativi e uscite esterne compresi (28 set 2026) */
+  conto?: { trades?: number | null; vinti?: number | null; pnl?: number | null } | null;
   pf_vissuto?: number | null;
   expectancy?: number | null;
   ultimi_30g?: Ultimi30g | null;

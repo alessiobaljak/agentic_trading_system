@@ -869,6 +869,13 @@ def _paper(d: dict, now: float) -> dict:
         "trades": n, "vinti": vinti, "perdite": perdite,
         "win_rate": round(vinti / n, 3) if n else None,
         "pnl_realizzato": round(sum(_pnl(t) for t in trades_tutti), 2),
+        # IL CONTO (28 set 2026, chiesto dal proprietario): TUTTI i trade chiusi,
+        # esplorativi e uscite esterne comprese. E' il numero che si vede
+        # nell'Operativita' e nell'equity: la dashboard lo mette in grande, e le
+        # sole validate (sopra) restano come «di cui validate».
+        "conto": {"trades": len(trades_letti),
+                  "vinti": sum(1 for t in trades_letti if _pnl(t) > 0),
+                  "pnl": round(sum(_pnl(t) for t in trades_letti), 2)},
         "pf_vissuto": pf(rows),
         "expectancy": round(pnl_rows / n, 3) if n else None,
         "ultimi_30g": ultimi,
@@ -1095,7 +1102,9 @@ def anomalie(salute: dict, paper: dict, attivo: dict, dati: dict, now: float,
             add("PESI_SOSPESI", SISTEMA, GIALLO,
                 f"pesi fermi da {_eta(now - pesi_at)} mentre la deriva e' fresca: ricalcolo sospeso?",
                 int(now - pesi_at), 7200)
-        if s.get("price_stream") is False:
+        # lo stream segue SOLO le coin con una posizione aperta: senza posizioni
+        # si dichiara spento anche se va tutto bene (falso allarme visto il 28 set)
+        if s.get("price_stream") is False and (s.get("posizioni_aperte") or 0) > 0:
             add("STREAM_PREZZI_OFF", SISTEMA, GIALLO, "stream prezzi spento: il bot usa le candele REST", False, True)
         if (s.get("rtdb_degradato_s") or 0) > 60:
             add("RTDB_DEGRADATO", SISTEMA, GIALLO, f"RTDB muto da {_eta(s['rtdb_degradato_s'])}",
@@ -1239,14 +1248,19 @@ def lettura_salute(s: dict, anomalie_lista) -> str:
 
 
 def lettura_paper(p: dict) -> str:
-    n = int(p.get("trades") or 0)
+    # dal 28 set in testa il CONTO (tutti i trade), come l'Operativita'
+    conto = p.get("conto") or {}
+    n = int(conto.get("trades") if conto.get("trades") is not None else (p.get("trades") or 0))
     testo = f"{n} trade"
     if p.get("giorni_paper") is not None:
         testo += f" in {p['giorni_paper']} giorni"
-    if p.get("win_rate") is not None:
+    if conto.get("trades"):
+        testo += f", {_num(conto.get('vinti', 0) / conto['trades'] * 100)}% vinti"
+    elif p.get("win_rate") is not None:
         testo += f", {_num(p['win_rate'] * 100)}% vinti"
-    if p.get("pnl_realizzato") is not None:
-        testo += f", {_num(p['pnl_realizzato'], 2) if p['pnl_realizzato'] < 0 else '+' + _num(p['pnl_realizzato'], 2)} USDT"
+    pnl = conto.get("pnl") if conto.get("pnl") is not None else p.get("pnl_realizzato")
+    if pnl is not None:
+        testo += f", {_num(pnl, 2) if pnl < 0 else '+' + _num(pnl, 2)} USDT"
     if p.get("rendimento_pct") is not None:
         r = p["rendimento_pct"]
         testo += f" ({'+' if r >= 0 else ''}{_num(r, 1)}%)"
@@ -1256,11 +1270,12 @@ def lettura_paper(p: dict) -> str:
         testo += f" Stop nel {_num(stop['quota'] * 100)}% delle uscite."
     og = p.get("oggi") or {}
     if og.get("trades") or og.get("trades_tutti"):
-        v = og.get("pnl") or 0.0
-        testo += f" Oggi {'+' if v >= 0 else ''}{_num(v, 2)}"
         vt = og.get("pnl_tutti")
-        if vt is not None and og.get("trades_tutti") != og.get("trades"):
-            testo += f" (conto {'+' if vt >= 0 else ''}{_num(vt, 2)})"
+        v = vt if vt is not None else (og.get("pnl") or 0.0)
+        testo += f" Oggi {'+' if v >= 0 else ''}{_num(v, 2)}"
+        vv = og.get("pnl")
+        if vt is not None and vv is not None and og.get("trades_tutti") != og.get("trades"):
+            testo += f" (validate {'+' if vv >= 0 else ''}{_num(vv, 2)})"
         testo += "."
     else:
         testo += " Oggi nessun trade."

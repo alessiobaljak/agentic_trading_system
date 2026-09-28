@@ -36,6 +36,9 @@ export default function ControlloPaper() {
 
   const p = doc.paper ?? {};
   const oggi = p.oggi ?? {};
+  // il conto di oggi (tutti i trade) in grande; le validate in piccolo (28 set 2026)
+  const oggiPnl = oggi.pnl_tutti ?? oggi.pnl;
+  const oggiN = oggi.trades_tutti ?? oggi.trades;
   const uscite = lista<Uscita>(p.uscite);
   const ultime = lista<Giornata>(p.giornate?.ultime_7);
   // le barre sono proporzionali al giorno piu' grande fra i DUE conti (28 set 2026)
@@ -52,10 +55,15 @@ export default function ControlloPaper() {
   // tenuti a parte da quelli delle validate qui sopra
   const esp = p.esplorative ?? null;
 
+  // IL CONTO in grande (28 set 2026): tutti i trade chiusi, esplorative
+  // comprese, come nell'Operativita'. Le sole validate restano «di cui».
+  const conto = p.conto ?? null;
+  const pnlConto = conto?.pnl ?? p.pnl_realizzato;
+  const tradeConto = conto?.trades ?? p.trades;
   const riassunto = (
     <>
-      <span className={classePnl(p.pnl_realizzato)}>{segno(p.pnl_realizzato, 2)}</span>
-      {p.trades != null && <span className="muted"> · {p.trades} trade</span>}
+      <span className={classePnl(pnlConto)}>{segno(pnlConto, 2)}</span>
+      {tradeConto != null && <span className="muted"> · {tradeConto} trade</span>}
     </>
   );
 
@@ -72,41 +80,41 @@ export default function ControlloPaper() {
       <div className="stat-grid" style={{ marginTop: 12 }}>
         <div className="stat-tile">
           <div className="stat-label">Trade</div>
-          <div className="stat-value">{p.trades ?? '—'}</div>
+          <div className="stat-value">{tradeConto ?? '—'}</div>
           <div className="stat-sub">
-            {p.vinti ?? '—'} vinti · {p.perdite ?? '—'} persi
+            {conto?.vinti ?? p.vinti ?? '—'} vinti
+            {conto && ` · di cui validate ${p.trades ?? 0} (${p.vinti ?? 0} vinti)`}
             {p.giorni_paper != null && ` · ${p.giorni_paper} giorni`}
           </div>
         </div>
         <div className={`stat-tile ${p.win_rate != null ? (p.win_rate >= 0.5 ? 'good' : 'warnb') : ''}`}>
-          <div className="stat-label">Win rate</div>
+          <div className="stat-label">Win rate delle validate</div>
           <div className="stat-value">{quota(p.win_rate, 0)}</div>
           <div className="stat-sub">
             PF {p.pf_vissuto != null ? numero(p.pf_vissuto, 2) : p.perdite === 0 && p.trades ? 'senza perdite' : '—'}
             {p.expectancy != null && ` · attesa ${segno(p.expectancy, 2)}/trade`}
           </div>
         </div>
-        <div className={`stat-tile ${p.pnl_realizzato != null ? (p.pnl_realizzato >= 0 ? 'good' : 'bad') : ''}`}>
-          <div className="stat-label">PnL realizzato</div>
-          <div className={`stat-value ${classePnl(p.pnl_realizzato)}`}>{segno(p.pnl_realizzato, 2)}</div>
+        <div className={`stat-tile ${pnlConto != null ? (pnlConto >= 0 ? 'good' : 'bad') : ''}`}>
+          <div className="stat-label">PnL realizzato (conto)</div>
+          <div className={`stat-value ${classePnl(pnlConto)}`}>{segno(pnlConto, 2)}</div>
           <div className="stat-sub">
+            {conto && `di cui validate ${segno(p.pnl_realizzato, 2)} · `}
             {p.rendimento_pct != null ? `${segno(p.rendimento_pct, 2)}%` : 'rendimento n/d'}
             {p.drawdown_portafoglio != null && ` · drawdown ${numero(p.drawdown_portafoglio, 2)}`}
             {p.max_posizioni_insieme != null && ` · max ${p.max_posizioni_insieme} insieme`}
           </div>
         </div>
-        <div className={`stat-tile ${oggi.pnl != null && oggi.trades ? (oggi.pnl >= 0 ? 'good' : 'bad') : ''}`}>
-          <div className="stat-label">Oggi (ora italiana)</div>
-          <div className={`stat-value ${classePnl(oggi.pnl)}`}>
-            {oggi.trades ? segno(oggi.pnl, 2) : 'nessun trade'}
+        <div className={`stat-tile ${oggiPnl != null && oggiN ? (oggiPnl >= 0 ? 'good' : 'bad') : ''}`}>
+          <div className="stat-label">Oggi (ora italiana, conto)</div>
+          <div className={`stat-value ${classePnl(oggiPnl)}`}>
+            {oggiN ? segno(oggiPnl, 2) : 'nessun trade'}
           </div>
           <div className="stat-sub">
-            {oggi.trades ? `${oggi.trades} trade · ${oggi.vinti ?? 0} vinti` : 'ancora niente chiuso oggi'}
-            {oggi.pnl_tutti != null && oggi.trades_tutti !== oggi.trades && (
-              <>
-                {' '}· conto {segno(oggi.pnl_tutti, 2)} su {oggi.trades_tutti ?? 0}
-              </>
-            )}
+            {oggiN ? `${oggiN} trade` : 'ancora niente chiuso oggi'}
+            {oggi.trades_tutti != null && oggi.trades_tutti !== oggi.trades && oggi.trades
+              ? ` · di cui validate ${segno(oggi.pnl, 2)} su ${oggi.trades}`
+              : oggi.trades ? ` · ${oggi.vinti ?? 0} vinti` : ''}
             {oggi.migliore?.coin && ` · meglio ${oggi.migliore.coin} ${segno(oggi.migliore.pnl, 2)}`}
             {oggi.peggiore?.coin && ` · peggio ${oggi.peggiore.coin} ${segno(oggi.peggiore.pnl, 2)}`}
           </div>
