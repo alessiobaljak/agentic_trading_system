@@ -2071,3 +2071,49 @@ Giornate: un solo helper (`bot/core/tempo.py`, Europe/Rome) per controllo,
 portafoglio, trade_stats, frequenza e dashboard, con due totali per giorno
 (conto = tutti i trade; validate = solo quelle decise dalla strategia).
 Suite 1832 test verdi. Bot da riavviare.
+
+### Controllo del 29 settembre (08:20 ora italiana, ops 0338-0350)
+
+**Nessun guasto.** Letture Firestore del bot: 3.946 dal riavvio delle 22:00 del
+28 (circa 10 ore; ~9.400 al giorno a questo ritmo), per il 58% dall'ombra dei
+rifiutati (2.274), poi registro 645 e controllo 620 (log del bot, ops 0344).
+Sotto la soglia gialla di 25.000; la console va letta il 30 set e il 1 ott.
+Controllo orario pubblicato ogni ora (ultimo 08:06), sistema verde, paper
+giallo, due anomalie: FRENO_GLOBALE (PF 0,70 contro 2,04) e SENZA_PROMESSA
+(125 validate su 199 senza `last_pf`); nessun cambiamento del learning (ops 0338).
+Nessun Traceback né OOM nei log.
+
+**Numeri.** 174 trade chiusi (168 delle validate + 6 esplorativi), 96 vinti
+(55%), −67,34 USDT, equity 932,66, DRY_RUN True, costi 28,16 su un lordo di
+−39,18, 1 posizione aperta (XPL, 0,14% a rischio), massimo 9 contemporanee
+(ops 0340, 0341). Giornate del conto (ora italiana, ops 0339): 27 set +1,26,
+28 set +8,06, 29 set +1,27 alle 08:05 (validate +0,24); dal 16 al 28: 5 in
+utile e 8 in perdita. BTC dal primo giorno +9,8% contro −6,7% nostro (controllo;
+`stato` dà +10,63% su un periodo diverso). Uscite: 78 stop −228,42, 75 trailing
++83,23, 18 scale-out +43,59; 88% dei trade non tocca il primo TP; mfe mediana
+0,88R. Stop per classe (ops 0346): 34 ingresso, 43 uscita, 1 protezione.
+Validate 199 su 69 coin, copertura 34,5%, 492 coppie a 2/3; statistica t su 38:
+25 reggono t ≥ 2, mediana 2,23 (ops 0343). Declassate 142 (erano 121). Giri:
+03:05-05:08 solo urgenti (2h03), passata a 1 ora 29 su 2.520 (1,15%) contro 57
+su 25.984 a 15 minuti (0,22%). Nessuna validata usa ancora la sessione (le 347
+azzerate non hanno ripassato). Esplorative: 6 chiuse, 5 vinte, +1,78; 56 attive.
+Declassate sul paper 18 trade R +0,045 contro attive 111 R −0,102 (metro al
+3 ott). Selettore NON BATTE su 87.490 trade (0 finestre su 3). AI: 20/20
+proposte, 38 delle 637 passate vengono dall'AI, ombra d'accordo 22 su 166.
+Rifiutati (ops 0350): «posizione aperta» R −0,10 su 40 contro −0,21 degli
+aperti: differenza 0,11, sotto lo 0,2R che serve (i rifiutati sono senza
+costi), quindi nessuna ritaratura (il report dice «si può ritarare» perché non
+applica il margine). Direzione (ops 0340): long 66 −29,38, short 102 −39,74;
+dal 25 set, col contesto BTC noto, short +5,20 su 48 e long −10,60 su 36.
+
+**Proposta del giorno (serve il sì): H2, prima metà — l'holdout chiede almeno
+10 trade invece di 5.** Il paper rende PF 0,70 contro 2,04 promesso: il gate
+promuove troppi fortunati. Oggi l'ultimo esame (45 giorni mai visti) si passa
+con PF ≥ 1,05 su 5 trade, e con 5 trade il caso lo passa circa una volta su
+due. Cambia: `GATE_HOLDOUT_MIN_TRADES` da 5 a 10, per le nuove candidate e per
+le validate al prossimo giro completo. Non cambia: il bot, le size, le uscite,
+il paper (mai usato per scegliere). Prima, sola lettura: capire perché un
+gruppo numeroso di quasi-passaggi si ferma sull'holdout con scarto esattamente
+0,000 (autopsia AI del 25 e del 29 set). Metro: `autopsia-validate` prima e
+dopo (quante delle 199 reggono) e, fra due settimane, PF del paper delle
+coppie che reggono contro quelle che non reggono.
