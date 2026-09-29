@@ -859,6 +859,37 @@ l'inizio stesso resta sbagliato. **Serve:** nel reset, `paper_started_at` e
 nessun reset in vista e il proprietario non l'ha chiesto; il numero che lo ha fatto
 emergere è la sola lettura del codice, non un reset andato male.
 
+### D6. Spesa dell'AI: ~2,75 $ al giorno, più di metà sono le ipotesi del gate
+**Stato:** aperto · trovato il 29 set, quando il proprietario ha visto circa 10 $ spesi in 4 giorni
+
+**Il numero (stima dai log, non dalla fattura):** token per chiamata letti nelle righe
+`[ai-*] ok in … · IN+OUT token` dei risultati ops (0219, 0236, 0263, 0283, 0296, 0307 e i log
+del bot), prezzo di `claude-opus-4-8` 5 $ per milione in ingresso e 25 $ in uscita:
+
+| chiamata | token (ingresso+uscita) | costo | volte al giorno | al giorno |
+|---|---|---|---|---|
+| ipotesi (`ai-hypotheses`) | ~2.000 + ~3.400 | ~0,095 $ | 16 (8 giri × passata 15m + passata 1h) | ~1,52 $ |
+| ombra (`ai-shadow`) | ~830 + ~600 | ~0,019 $ | ~42 (184−100 decisioni in 2 giorni, ops 0260→0330) | ~0,80 $ |
+| autopsia (`ai-autopsia`) | ~1.000 + ~750 | ~0,024 $ | 16 | ~0,38 $ |
+| universo (`ai-universe`) | ~480 + 10-110 | ~0,003 $ | ≤16 | ~0,05 $ |
+
+Totale ~2,75 $/giorno, ~11 $ in 4 giorni: torna con quanto visto dal proprietario. Più
+dell'80% è testo SCRITTO dal modello (l'uscita costa 5 volte l'ingresso). La sola
+previsione scritta nel repo era quella dell'ombra («qualche euro al mese», `bot/ai/shadow.py`);
+la passata a 1 ora (`DISCOVERY_EXTRA`, dal 25-26 set) ha raddoppiato ipotesi e autopsia,
+perché è un secondo `discover_strategies` con la stessa chiamata. `claude.yml` (le issue
+con «@claude») non è mai partito: 0 esecuzioni. `learning.yml` chiama il modello solo la
+domenica, con 400 token al massimo.
+
+**Leve, in ordine di risparmio, nessuna fatta:** (1) ipotesi e autopsia una volta per
+giro invece di due (la passata 1h riusa quelle della 15m, o non le chiede): ~-0,95 $/giorno;
+(2) ipotesi solo al giro completo (1 al giorno) invece che ogni 3 ore: ~-1,3 $/giorno, ma
+meno idee nuove per il gate (29 delle 605 che hanno passato vengono dall'AI, ops 0330);
+(3) ombra con risposta corta (motivo in una riga, `max_tokens` più basso: già oggi il motivo
+viene tagliato a 600 caratteri): ~-0,4 $/giorno; (4) modello più economico: è una scelta del
+proprietario (D3). **Manca:** un contatore dei token spesi al giorno nel controllo (come le
+letture Firestore), così il numero ha una fonte misurata e non una stima.
+
 ### E1. Le short perdono sistematicamente
 **Stato:** **NON risolta · in osservazione** — 23 set: short 23 trade, 8 vinti, **−35,84**; long 14 trade, 6 vinti, +4,75. Dal 21 sera il freno sul controtrend agisce davvero (VET short a 0,47% di rischio il 23) e la conferma a 1 ora è nel vocabolario: se le short perdono anche frenate, il passo successivo è validarle con un criterio a parte (PF per direzione nel gate).
 
