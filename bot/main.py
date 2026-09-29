@@ -89,6 +89,85 @@ def verdetto_post_stop(after, entry: float, orig_stop: float, primo_gradino: flo
     return {"verdict": verdict, "post_stop_mfe_r": mfe}
 
 
+def _rtdb_muto(fb) -> bool:
+    """Il RTDB del client non risponde (adesso)? Un client senza `degraded_for`
+    (i finti dei test) vale «risponde»."""
+    try:
+        return float(fb.degraded_for()) > 0
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def foto_learning_giorno(fb, dati: dict, now: float, stato: dict | None) -> dict:
+    """LA FOTO DEL GIORNO DEL LEARNING (29 set 2026). Il proprietario vuole
+    leggere ogni mattina cosa il learning ha cambiato IERI (keep e scala per
+    coppia, panchina, declassate, freno...), ma registro, pesi e referti si
+    sovrascrivono: senza una foto datata «ieri» non esiste. Alla PRIMA
+    pubblicazione del controllo di ogni giorno italiano si scrive su RTDB
+    `/learning_giorni/{YYYY-MM-DD}` l'impronta di
+    `bot/learning/apprendimento.impronta_giorno`, fatta coi `dati` appena letti
+    per il controllo: NESSUNA lettura Firestore in piu'. Accanto, l'indice
+    `/learning_indice/{YYYY-MM-DD}` = ora della foto, che il report legge in una
+    chiamata. La legge `scripts/controllo.py` (voce ops `controllo`).
+
+    `stato` = {"giorno": ultimo giorno scritto, "verificato": bool}, tenuto in
+    RAM dal bot. Al riavvio (`verificato` falso) si guarda UNA volta la foglia
+    `/learning_giorni/{giorno}/at` (pochi byte, RTDB): se la foto di oggi c'e'
+    gia' non si riscrive. Dopo ogni scrittura si cancellano le foto piu'
+    vecchie di 35 giorni. NON solleva mai: al massimo una riga di log.
+
+    SI RIMANDA ALL'ORA DOPO, senza segnare il giorno (rilievi del 29 set):
+      * se una lettura del controllo da cui e' fatta la foto e' fallita
+        (`apprendimento.letture_mancanti`): una foto coi buchi farebbe inventare
+        al report due mattine di cambi (panchine «uscite», ipotesi «sparite»);
+      * se il RTDB non risponde: la foglia `at` letta dallo specchio (vuoto dopo
+        un riavvio) direbbe «foto assente» anche quando c'e', e la foto delle
+        00:05 verrebbe riscritta con lo stato di meta' giornata. Per questo,
+        quando la scrittura fallisce, `verificato` torna falso: al tentativo
+        dopo si rilegge la foglia prima di scrivere."""
+    stato = dict(stato) if isinstance(stato, dict) else {"giorno": None, "verificato": False}
+    try:
+        from bot.core.tempo import giorno_locale
+        from bot.learning.apprendimento import (FOTO_BASE, FOTO_INDICE, giorni_da_cancellare,
+                                                impronta_giorno, letture_mancanti)
+        from bot.learning.controllo import _figlio
+        giorno = giorno_locale(now)
+        if stato.get("giorno") == giorno:
+            return stato
+        mancano = letture_mancanti(dati)
+        if mancano:
+            print(f"[learning] foto del {giorno} rimandata: letture fallite ({', '.join(mancano)}): "
+                  f"si riprova fra un'ora")
+            return stato
+        live = bool(getattr(fb, "is_live", False))
+        if not stato.get("verificato"):
+            gia = _figlio(fb, f"{FOTO_BASE}/{giorno}", "at")
+            if gia is None and live and _rtdb_muto(fb):
+                print(f"[learning] foto del {giorno} rimandata: RTDB non risponde, non si sa se "
+                      f"c'e' gia': si riprova fra un'ora")
+                return stato
+            stato["verificato"] = True
+            if gia is not None:
+                stato["giorno"] = giorno          # scattata prima del riavvio
+                return stato
+        foto = impronta_giorno(dati, now)
+        ok = fb.set_rtdb(f"{FOTO_BASE}/{giorno}", foto)
+        if ok is False and live:
+            stato["verificato"] = False           # al prossimo giro si rilegge la foglia `at`
+            print(f"[learning] foto del {giorno} non scritta (RTDB non risponde): si riprova fra un'ora")
+            return stato
+        fb.set_rtdb(f"{FOTO_INDICE}/{giorno}", float(now))
+        for vecchio in giorni_da_cancellare(giorno, stato.get("giorno")):
+            fb.set_rtdb(f"{FOTO_BASE}/{vecchio}", None)
+            fb.set_rtdb(f"{FOTO_INDICE}/{vecchio}", None)
+        stato["giorno"] = giorno
+        print(f"[learning] foto del {giorno} scritta: {len(foto.get('validate') or {})} validate, "
+              f"{len(foto.get('pesi') or {})} pesi strategia×regime")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[learning] foto del giorno saltata: {exc}")
+    return stato
+
+
 def fattori_size(decision, rmult, lmult, alloc_note, params,
                  tilt_sentiment=None, f_esplorativa=1.0, f_declassata=1.0,
                  peso_size=None) -> dict | None:
@@ -322,6 +401,10 @@ class TradingBot:
         self._avviato_at = time.time()
         self._errori_ciclo: list[float] = []
         self._registro_cache: dict | None = None
+        # LA FOTO DEL GIORNO DEL LEARNING (29 set 2026, `foto_learning_giorno`):
+        # il giorno italiano gia' fotografato e se al riavvio si e' gia' guardato
+        # su RTDB (None = mai guardato: una lettura di una foglia, poi solo RAM)
+        self._foto_learning: dict | None = None
         # LA RICARICA ALLA SCRITTURA (26 set 2026): quando e' stata fatta l'ultima
         # domanda «il registro e' cambiato?» (al massimo ogni REGISTRO_CHECK_S) e
         # se, dopo una ricarica, va riletto una volta ancora il documento delle
@@ -1860,6 +1943,9 @@ class TradingBot:
                     continue
                 t["post_stop_verdict"] = res["verdict"] or "inversione"
                 t["post_stop_mfe_r"] = res["post_stop_mfe_r"]
+                # QUANDO e' stato dato (29 set 2026): senza, «verdetti nuovi
+                # ieri» nel controllo del mattino si stimava dal giorno di uscita
+                t["post_stop_verdict_at"] = float(now)
             else:
                 res = trailing_reason(during, after, float(t.get("entry_price", 0.0)),
                                       float(t.get("exit_price", 0.0)), float(sl), float(tp), long)
@@ -1871,6 +1957,7 @@ class TradingBot:
                 t["trailing_verdict"] = res["verdict"]
                 t["trailing_miss_to_tp"] = res["miss_to_tp"]      # quanto tragitto lasciato sul tavolo
                 t["trailing_knockout_atr"] = res["knockout_atr"]  # rumore (<1) vs inversione reale
+                t["trailing_verdict_at"] = float(now)             # quando (29 set 2026, come sopra)
             try:
                 # riscrive il doc coi campi nuovi E allinea la cache dei trade
                 # (28 set 2026): `recent` non rilegge piu' Firestore a ogni candela
@@ -2054,6 +2141,11 @@ class TradingBot:
                   f"{m['semaforo_paper']}, {len(doc['salute'].get('anomalie') or [])} "
                   f"anomalie, {m['durata_ms']} ms"
                   + (f", sezioni fallite: {m['errori']}" if m.get("errori") else ""))
+            # LA FOTO DEL GIORNO (29 set 2026): alla prima pubblicazione di ogni
+            # giorno italiano, gli stessi `dati` diventano la foto del learning
+            # su RTDB. Non solleva mai (fail-open dentro la funzione)
+            self._foto_learning = foto_learning_giorno(self.fb, dati, now,
+                                                       getattr(self, "_foto_learning", None))
         except Exception as exc:  # noqa: BLE001
             print(f"[controllo] pubblicazione saltata: {exc}")
 

@@ -94,7 +94,8 @@ class LearningLoop:
         try:
             import anthropic
 
-            from bot.ai.client import _headers
+            from bot.ai.client import _headers, testo_di
+            from bot.ai.spesa import registra
             client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
                                          default_headers=_headers())
             resp = client.messages.create(
@@ -110,7 +111,20 @@ class LearningLoop:
                     ),
                 }],
             )
-            return resp.content[0].text.strip()
+            # 29 set 2026. La spesa si conta subito (il runner ha Firebase; non
+            # solleva). E il testo si prende dai blocchi che ce l'hanno: col
+            # modello di default, che ragiona prima di rispondere, `content[0]`
+            # e' un blocco di ragionamento e ogni domenica finiva in «'ThinkingBlock'
+            # object has no attribute 'text'», token pagati e narrativa persa.
+            registra(resp, "ai-learning", fb=self.fb)
+            testo = testo_di(resp)
+            if not testo:
+                # tutto lo spazio (max_tokens) speso a ragionare: si dice, invece
+                # di salvare una narrativa vuota
+                print(f"[learning] narrativa vuota (stop_reason="
+                      f"{getattr(resp, 'stop_reason', None)}) -> niente insight")
+                return None
+            return testo
         except Exception as exc:  # noqa: BLE001
             print(f"[learning] narrativa fallita: {exc}")
             return None

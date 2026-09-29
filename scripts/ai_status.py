@@ -14,10 +14,12 @@ servono:
      gate? (due domande diverse: la prima si vede subito, la seconda no)
   3. l'AI sta DECIDENDO in ombra? (dal documento `ai_shadow`)
   4. quali PROVE del paper le stiamo passando? (lo stesso digest che riceve)
+  5. quanto COSTA, e per quali ragioni? (dal contatore `ai_spesa`, 29 set 2026)
 
 SOLA LETTURA. Non scrive niente e non decide niente: una diagnosi che modifica lo
 stato non e' una diagnosi. L'unico costo e' la chiamata del punto 1, che vale una
-frazione di centesimo (max_tokens=5).
+frazione di centesimo (max_tokens=5) — e per la stessa regola NON entra nel conto
+del punto 5: lo si dichiara nella sezione invece di scriverlo.
 
 Uso:
     .venv/bin/python -m scripts.ai_status
@@ -215,6 +217,37 @@ def stato_prove(fb) -> None:
         print(f"{SKIP} scala dal vissuto: non ancora (servono 10 trade con mfe)")
 
 
+def stato_spesa(fb) -> None:
+    """QUANTO COSTA L'AI, E PER COSA (29 set 2026: «aggiungi al report la spesa
+    giornaliera di AI e per quali ragioni»).
+
+    Legge i documenti `ai_spesa` degli ultimi 9 giorni italiani (9 letture: oggi,
+    i 7 giorni completi della media e UNO in piu', che serve solo a dire se il
+    piu' vecchio dei 7 e' misurato per intero: senza il giorno prima, il primo
+    giorno del contatore entrava nella media una settimana dopo) e stampa il
+    testo di `bot.ai.spesa.righe_spesa`.
+    Il numero da leggere e' IERI, giornata intera: questo controllo gira verso le
+    8 italiane, e «oggi» copre poche ore. Ogni lettura e' a parte e in try: un
+    giorno illeggibile vale «nessun dato», non fa cadere la sezione.
+    """
+    from datetime import timedelta
+
+    from bot.ai.spesa import COLLEZIONE, righe_spesa
+    from bot.core.tempo import fuso
+
+    adesso = datetime.now(fuso())
+    giorni = [(adesso.date() - timedelta(days=i)).isoformat() for i in range(9)]
+    docs: dict = {}
+    for g in giorni:
+        try:
+            docs[g] = fb.get_doc(COLLEZIONE, g) or {}
+        except Exception:  # noqa: BLE001
+            docs[g] = {}
+    for riga in righe_spesa(docs, oggi=giorni[0], ieri=giorni[1],
+                            ora_locale=adesso.strftime("%H:%M")):
+        print(riga)
+
+
 def main() -> int:
     print("=" * 62)
     print("STATO DEL LIVELLO AI")
@@ -227,6 +260,8 @@ def main() -> int:
     stato_ombra(fb)
     print()
     stato_prove(fb)
+    print()
+    stato_spesa(fb)
     print("=" * 62)
     if not viva:
         print("La chiave non risponde: tutto il resto qui sotto e' fermo di "

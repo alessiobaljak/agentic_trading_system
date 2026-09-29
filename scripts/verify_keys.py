@@ -48,10 +48,14 @@ def check_anthropic() -> None:
     try:
         import anthropic
         from bot.ai.client import _headers
+        from bot.ai.spesa import registra
         c = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
                                 default_headers=_headers())
         r = c.messages.create(model=settings.ANTHROPIC_MODEL, max_tokens=5,
                               messages=[{"role": "user", "content": "ping"}])
+        # anche la prova si paga (poco): nel conto della spesa AI (29 set 2026).
+        # Non solleva, quindi non puo' trasformare un OK in FAIL.
+        registra(r, "ai-verifica")
         _line("Anthropic (Claude)", OK, f"model={settings.ANTHROPIC_MODEL}")
     except Exception as exc:  # noqa: BLE001
         _line("Anthropic (Claude)", FAIL, str(exc)[:120])

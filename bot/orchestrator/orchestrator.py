@@ -499,7 +499,8 @@ class Orchestrator:
         try:
             import anthropic
 
-            from bot.ai.client import _headers
+            from bot.ai.client import _headers, testo_di
+            from bot.ai.spesa import registra
             client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
                                          default_headers=_headers())
             user_msg = build_user_message(
@@ -511,7 +512,11 @@ class Orchestrator:
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": user_msg}],
             )
-            text = resp.content[0].text.strip()
+            # 29 set 2026: la spesa si conta subito (non solleva), e il testo si
+            # prende dai blocchi che ce l'hanno — `content[0]` puo' essere un
+            # blocco di ragionamento senza testo (vedi `testo_di`)
+            registra(resp, "ai-orchestratore")
+            text = testo_di(resp)
             start, end = text.find("{"), text.rfind("}")
             data = json.loads(text[start:end + 1])
             if float(data.get("size_multiplier", 0)) <= 0:

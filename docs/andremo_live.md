@@ -2117,3 +2117,32 @@ gruppo numeroso di quasi-passaggi si ferma sull'holdout con scarto esattamente
 0,000 (autopsia AI del 25 e del 29 set). Metro: `autopsia-validate` prima e
 dopo (quante delle 199 reggono) e, fra due settimane, PF del paper delle
 coppie che reggono contro quelle che non reggono.
+
+### 29 settembre, 10:30: il gate e i 10 trade; il report del mattino impara a raccontare il learning e la spesa AI
+
+**La proposta H2 del mattino (holdout a 10 trade) è ritirata.** Il proprietario ha chiesto cosa
+volesse dire e che impatto avesse sulle tempistiche. Misurato e simulato (dettaglio in backlog H2):
+il gate è permissivo (paper PF 0,70 contro 2,04 promesso; l'holdout lo passa il 46% di chi supera le
+finestre a 15 minuti, ops 0322), ma chiedere 10 trade invece di 5 non toglie i fortunati: una
+strategia senza vantaggio passa il 31% delle volte con 5 trade e il 37% con 10 (simulazione, non
+codice del repo). Toglierebbe soprattutto le coppie che fanno pochi trade (70% delle validate sotto
+10 trade in 45 giorni, ops 0290). Il giro non si allungherebbe, ma le validate a size piena
+scenderebbero da 57 a ~15-32 (stima). Trovato strada facendo: lo «scarto 0,000» letto dall'AI è un
+segnaposto del codice, non una misura.
+
+**Il report del mattino ha tre sezioni nuove** (richiesta del proprietario), senza chiavi ops nuove:
+* `controllo` stampa STORIA DEL LEARNING, COME IMPARA IL TRAILING (cosa ha visto il paper, cosa
+  propone al gate e quanto manca, cosa ha scelto il gate per le validate e cosa è cambiato ieri e
+  stanotte coppia per coppia, esito per keep in uso) e COSA IMPARANO LE STRATEGIE (ieri e stanotte:
+  ipotesi, varianti, promosse, rimosse, declassate, esplorative, panchina; le 10 strategie più attive).
+  Il «cosa è cambiato» viene da una foto giornaliera che il bot scrive su RTDB alla prima ora di ogni
+  giorno (`/learning_giorni`): la prima foto la scatta il bot al riavvio di oggi, quindi domattina
+  il confronto «ieri» copre da quell'ora a mezzanotte; dal 1 ottobre la giornata intera. Gli eventi
+  datati (ipotesi, varianti, promosse, declassate, esplorative) valgono già da domattina.
+* `ai-stato` stampa SPESA AI: token restituiti dall'API × 5/25 $ per milione, per ragione, ieri e
+  oggi, media dei giorni interi, risposte troncate («pagate e buttate»). Il conto parte dal riavvio
+  del bot e dal prossimo giro del gate; la fattura vera resta la console Anthropic.
+* Corretto: la narrativa AI della domenica falliva sempre sul runner GitHub (blocco di ragionamento
+  in testa alla risposta). Da ora i verdetti del trailing portano l'ora in cui sono stati dati.
+Suite 1892 test verdi (senza `test_allowlist_runnable`, che lancia comandi di rete). Firestore: zero
+letture in più nel bot, ~1 scrittura per chiamata AI, 9 letture in `ai-stato`. Bot da riavviare.

@@ -83,10 +83,14 @@ def info_others() -> None:
             # gia' pagato con la sonda sui segnali, che contava su candele da un'ora
             # mentre il bot gira a quindici minuti.
             from bot.ai.client import _headers
-            anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
-                                default_headers=_headers()).messages.create(
+            from bot.ai.spesa import registra
+            resp = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY,
+                                       default_headers=_headers()).messages.create(
                 model=settings.ANTHROPIC_MODEL, max_tokens=5,
                 messages=[{"role": "user", "content": "ping"}])
+            # anche la prova si paga (poco): nel conto della spesa AI (29 set
+            # 2026). Non solleva, quindi non puo' trasformare un OK in FAIL.
+            registra(resp, "ai-connettivita")
             ws = " (workspace impostato)" if settings.ANTHROPIC_WORKSPACE_ID else ""
             _line("Anthropic", OK, f"model={settings.ANTHROPIC_MODEL}{ws}")
         except Exception as exc:  # noqa: BLE001

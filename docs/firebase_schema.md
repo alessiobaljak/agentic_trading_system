@@ -43,7 +43,25 @@ Il **controllo orario** (scritto dal bot ogni ora; ripiego GitHub snapshot e ops
 coppia). Specchi RTDB `/controllo` e `/gate` per la dashboard. Schema completo, campo
 per campo, in `docs/controllo_schema.md`.
 
+### `ai_spesa/{YYYY-MM-DD}`  (dal 29 set 2026, giorno in ora italiana)
+La spesa AI **misurata**: ogni chiamata al modello (bot, discovery, runner GitHub,
+comandi ops tranne il ping di `ai-stato`) somma qui, con `Increment` atomico e
+`merge` (una scrittura, zero letture), i token restituiti dall'API:
+`{ ragioni: {etichetta: {n, in, out, cache_w, cache_r, stop: {motivo: n},
+modelli: {modello: n}}}, modelli: {modello: n}, ore: {HH: n}, aggiornato_at }`.
+I dollari non si salvano: li calcola `scripts/ai_status.py` (voce ops `ai-stato`)
+coi prezzi `AI_PREZZO_*` di `bot/config.py`. Codice in `bot/ai/spesa.py`.
+
 ## Realtime Database
+
+### `/learning_giorni/{YYYY-MM-DD}` e `/learning_indice/{YYYY-MM-DD}`  (dal 29 set 2026)
+La **foto del giorno del learning**, scritta dal bot alla prima pubblicazione del
+controllo di ogni giorno italiano (`bot/main.py::foto_learning_giorno`, impronta di
+`bot/learning/apprendimento.py::impronta_giorno`): per ogni validata keep, scala,
+break-even e declassata; pesi strategia×regime; cooldown; freno globale; ipotesi
+attive; esplorative attive; verdetti trailing e proposta del paper. L'indice dice
+l'ora della foto. Si tengono 35 giorni. La legge `scripts/controllo.py` (voce ops
+`controllo`) per dire cosa è cambiato ieri e stanotte.
 
 ### `/bot_status`
 `{ state, regime, dry_run, updated_at, heartbeat, avviato_at, errori_ciclo_1h,

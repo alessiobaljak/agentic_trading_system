@@ -730,6 +730,28 @@ La sesta ipotesi dei referti: le perdite «mai andate a favore» (classe ingress
 ### I6. Il cap di 5 posizioni è spento in parità
 `MAX_OPEN_POSITIONS` vale solo fuori dalla parità col gate; in parità il limite è il margine (10% dell'equity per posizione ≈ 10 posizioni); il paper ha già toccato 7 contemporanee. Con 160 coppie e il freno che dimezza la size, il tetto per direzione (3%) ammette ~8 posizioni nello stesso verso. Da decidere con `portafoglio` sulle 160 (in coda): cap in parità, o tetto direzionale più stretto finché il globale è in deriva, o stop giornaliero (H3).
 
+### I7. I verdetti delle uscite con incasso parziale non entrano in nessuna proposta
+Trovato il 29 set costruendo la sezione COME IMPARA IL TRAILING. Il bot dà il verdetto (prematuro /
+protetto / neutro) anche alle uscite `scale_out` (preso almeno il primo target, resto chiuso dallo
+stop), ma `conta_verdetti_trailing`, `conta_verdetti_strategia`, `compute_trailing_keep` e
+`soldi_sul_tavolo` contano solo `exit_reason == "trailing_stop"`, contro il commento di
+`bot/main.py` che li voleva insieme. Oggi 18 uscite scale_out (ops 0341). Da decidere se contarli:
+cambierebbe la proposta globale (oggi un verdetto sotto la soglia). Il report ora li mostra a parte.
+
+### I8. I verdetti dopo gli stop (rumore / inversione) non li usa nessuno
+`post_stop_verdict` e `post_stop_mfe_r` sono scritti su ogni stop dal 25 set, ma nessuna regola li
+legge. Sono la misura diretta di «stop troppo stretto» (rumore = il prezzo è poi tornato al primo
+target). Il report del mattino ora li conta; una regola (es. ipotesi «stop_stretto» dai rumori) va
+proposta coi numeri.
+
+### I9. La proposta di keep del paper si accende e si spegne senza isteresi
+Il 28 set la proposta globale era 0,75 e il gate l'ha scelta per 28 coppie su 49 passate (ops 0325);
+il 29 set i protetti sono 37 su 62 = 59,7%, un verdetto sotto il 60%, e la proposta è sparita
+(ops 0345). Le coppie a 1-2 conferme che avevano preso 0,75 lo perdono al passaggio dopo (0,75 non è
+più fra i candidati; le validate lo tengono per l'isteresi del 10%). Una soglia che oscilla attorno
+al 60% cambia davvero cosa scelgono le coppie non ancora validate. Da valutare: isteresi (accende a
+60%, spegne sotto 55%) o candidato 0,75 sempre presente fra i fissi.
+
 ## J. Controllo orario e dashboard (25 set)
 
 Fatto il 25 set su richiesta del proprietario («check di tutto in automatico, le evidenze in dashboard ogni ora, la dashboard come un sistema serio»): il bot scrive ogni ora `dashboard/controllo` (`bot/learning/controllo.py`, schema in `docs/controllo_schema.md`), la discovery scrive `dashboard/gate` a ogni giro, la dashboard passa da 6+1 tab a 4+1 con il Controllo in prima pagina e 16 pannelli tolti. Rimandato, con il motivo:
@@ -849,6 +871,14 @@ Il numero che l'ha decisa: l'autopsia delle validate (ops 0290) ha trovato che, 
 
 **Metrica:** la console Firebase (Usage → Reads) **sotto 15.000 letture al giorno per due giorni di fila** (30 set e 1 ott), e la riga oraria `[firebase] letture ultime 24 h` nel log del bot che dica lo stesso numero ± le letture fuori dal bot. Se resta sopra: piano a consumo (Blaze, ~0,06 $ ogni 100.000 letture) invece di rincorrere il codice. **Non verificato dal vivo:** l'aggregazione `count()` e la proiezione `field_paths` sul Firestore vero (in memoria sono simulate; `google-cloud-firestore` 2.30 le ha); il numero sulla console, che si legge fra due giorni; la dashboard nel browser (tipi e parità campo per campo verificati, resa no).
 
+### J15. «Cambiamenti del learning» confronta con un'ora prima, non con ieri
+`controllo.cambiamenti_24h` legge l'impronta precedente da RTDB `/controllo/learning/attivo/impronta`,
+riscritta ogni ora: dice quasi sempre «nessuno» (ops 0338: 06:05 contro 05:06) anche quando in 24 ore
+il keep di decine di coppie è cambiato (ops 0324 contro 0343). **29 set:** il «cosa è cambiato ieri»
+ora c'è davvero, dalle foto giornaliere (`/learning_giorni`, sezioni STORIA DEL LEARNING / COME
+IMPARA IL TRAILING / COSA IMPARANO LE STRATEGIE di `controllo`). Resta da rinominare o togliere la
+riga oraria, che col nome «24h» inganna.
+
 ## D. Infrastruttura
 
 ### D1. Il registro su più documenti
@@ -896,7 +926,7 @@ nessun reset in vista e il proprietario non l'ha chiesto; il numero che lo ha fa
 emergere è la sola lettura del codice, non un reset andato male.
 
 ### D6. Spesa dell'AI: ~2,75 $ al giorno, più di metà sono le ipotesi del gate
-**Stato:** aperto · trovato il 29 set, quando il proprietario ha visto circa 10 $ spesi in 4 giorni
+**Stato:** aperto · trovato il 29 set, quando il proprietario ha visto circa 10 $ spesi in 4 giorni · **il contatore misurato c'è dal 29 set** (richiesta del proprietario: «aggiungi al report la spesa giornaliera di AI e per quali ragioni»): ogni chiamata somma i token dell'API in Firestore `ai_spesa/{giorno}` (`bot/ai/spesa.py`), e `ai-stato` stampa la sezione SPESA AI (ieri per ragione, oggi, media dei giorni interi, risposte troncate, avviso se risponde un modello diverso da quello del prezzo). Le leve qui sotto restano da decidere, ora con un numero misurato.
 
 **Il numero (stima dai log, non dalla fattura):** token per chiamata letti nelle righe
 `[ai-*] ok in … · IN+OUT token` dei risultati ops (0219, 0236, 0263, 0283, 0296, 0307 e i log
@@ -925,6 +955,21 @@ meno idee nuove per il gate (29 delle 605 che hanno passato vengono dall'AI, ops
 viene tagliato a 600 caratteri): ~-0,4 $/giorno; (4) modello più economico: è una scelta del
 proprietario (D3). **Manca:** un contatore dei token spesi al giorno nel controllo (come le
 letture Firestore), così il numero ha una fonte misurata e non una stima.
+
+### D7. Chiamate AI pagate e buttate — trovate il 29 set leggendo il codice per il contatore
+* **`ai-universe` del giro principale fallisce a ogni giro** con «risposta senza JSON valido» (11 volte
+  nei log: ops 0104, 0190, 0198, 0201, 0212, 0219, 0263, 0283, 0296, 0307, 0345); riesce solo nella
+  passata a 1 ora. Causa probabile, non verificata: 277 coin in ingresso e risposta tagliata a 2000
+  token. Da ora il log stampa i token e «troncata» anche in quel ramo, e `ai-stato` conta le troncate:
+  **metro** = la riga «risposte tagliate a metà» dei prossimi giorni. Se sono troncate: più spazio o
+  meno coin nella domanda; se no, leggere la risposta.
+* **La narrativa della domenica** (`learning_loop`, runner GitHub) falliva sempre con «'ThinkingBlock'
+  object has no attribute 'text'»: il secret GitHub `ANTHROPIC_MODEL` è vuoto, quindi gira il modello
+  di default, che ragiona prima di rispondere, e il codice leggeva solo il primo blocco. **Corretto il
+  29 set** (`bot/ai/client.py::testo_di`, anche in `orchestrator._decide_llm`). Resta: con 400 token
+  di spazio il ragionamento può mangiarsi la risposta (il log ora lo dice), e il secret vuoto fa
+  scattare ogni lunedì l'avviso «modello diverso» in `ai-stato`: la scelta (riempire il secret o
+  lasciarlo) è del proprietario.
 
 ### E1. Le short perdono sistematicamente
 **Stato:** **NON risolta · in osservazione** — 23 set: short 23 trade, 8 vinti, **−35,84**; long 14 trade, 6 vinti, +4,75. Dal 21 sera il freno sul controtrend agisce davvero (VET short a 0,47% di rischio il 23) e la conferma a 1 ora è nel vocabolario: se le short perdono anche frenate, il passo successivo è validarle con un criterio a parte (PF per direzione nel gate).

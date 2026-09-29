@@ -21,6 +21,7 @@ import json
 import time
 from typing import Any, Optional
 
+from bot.ai.spesa import registra as registra_spesa
 from bot.config import settings
 
 # budget di sicurezza: una risposta che non arriva non deve bloccare un ciclo
@@ -78,18 +79,39 @@ def ask_json(system: str, user: str, max_tokens: int = 2000,
             system=system,
             messages=[{"role": "user", "content": user}],
         )
-        text = "".join(getattr(b, "text", "") for b in resp.content).strip()
-        data = _extract_json(text)
-        if data is None:
-            print(f"[{label}] risposta senza JSON valido -> ignorata")
-            return None
+        # LA SPESA SI CONTA QUI, PRIMA DI GUARDARE IL TESTO (29 set 2026): una
+        # risposta senza JSON o troncata e' pagata come una buona. Non solleva.
+        registra_spesa(resp, label)
         usage = getattr(resp, "usage", None)
-        tok = f" · {usage.input_tokens}+{usage.output_tokens} token" if usage else ""
+        tok = (f" · {getattr(usage, 'input_tokens', '?')}+"
+               f"{getattr(usage, 'output_tokens', '?')} token") if usage else ""
+        data = _extract_json(testo_di(resp))
+        if data is None:
+            # i token anche qui: fino al 29 set questo ramo usciva senza, e
+            # `ai-universe` falliva a ogni giro senza lasciare traccia di quanto
+            # costava ne' del perche' (una risposta troncata ha stop_reason
+            # «max_tokens»: il JSON e' rimasto a meta')
+            stop = getattr(resp, "stop_reason", None)
+            tronca = " · troncata: finito lo spazio max_tokens" if stop == "max_tokens" else ""
+            print(f"[{label}] risposta senza JSON valido{tok}{tronca} -> ignorata")
+            return None
         print(f"[{label}] ok in {time.time() - t0:.1f}s{tok}")
         return data
     except Exception as exc:  # noqa: BLE001
         print(f"[{label}] non disponibile ({type(exc).__name__}: {exc}) -> proseguo senza AI")
         return None
+
+
+def testo_di(resp: Any) -> str:
+    """Il testo di una risposta: i blocchi che HANNO testo, uniti.
+
+    Non `resp.content[0].text`: un modello che ragiona prima di rispondere mette
+    in testa un blocco di ragionamento, che il testo non ce l'ha. MISURATO: la
+    narrativa della domenica (runner GitHub) falliva cosi', «'ThinkingBlock'
+    object has no attribute 'text'», con i token gia' pagati (29 set 2026)."""
+    blocchi = getattr(resp, "content", None) or []
+    return "".join(t for t in (getattr(b, "text", None) for b in blocchi)
+                   if isinstance(t, str)).strip()
 
 
 def _extract_json(text: str) -> Optional[Any]:

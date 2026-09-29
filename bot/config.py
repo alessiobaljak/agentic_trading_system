@@ -108,6 +108,20 @@ class Settings:
     # DEFAULT False: si arma solo dopo che `scripts.shadow_report` mostra che i
     # veti dell'ombra erano giusti. Il meccanismo c'e', la decisione e' dell'utente.
     AI_VETO_ENABLED: bool = os.getenv("AI_VETO_ENABLED", "false").lower() == "true"
+    # PREZZI PER CONTARE LA SPESA AI (29 set 2026). Servono SOLO al report del
+    # mattino (`bot/ai/spesa.py`, `scripts/ai_status.py`): i token li restituisce
+    # l'API, i dollari sono token × questi prezzi. Sono i prezzi del modello che il
+    # proprietario ha scelto sulla VPS il 24 set: 5 $ per milione di token letti e
+    # 25 $ per milione di token scritti. SE SI CAMBIA MODELLO VANNO CAMBIATI
+    # NELL'ENV, altrimenti il report moltiplica i token giusti per il prezzo
+    # sbagliato (il report avvisa se risponde un modello diverso da ANTHROPIC_MODEL).
+    # La cache dei prompt oggi non si usa: i due moltiplicatori (sul prezzo di
+    # lettura) ci sono perche' il giorno che si accende il conto resti giusto.
+    # `_get_float`: un refuso nell'env non deve impedire l'avvio del bot.
+    AI_PREZZO_INGRESSO_MTOK: float = _get_float("AI_PREZZO_INGRESSO_MTOK", 5.0)
+    AI_PREZZO_USCITA_MTOK: float = _get_float("AI_PREZZO_USCITA_MTOK", 25.0)
+    AI_CACHE_SCRITTURA_MULT: float = _get_float("AI_CACHE_SCRITTURA_MULT", 1.25)
+    AI_CACHE_LETTURA_MULT: float = _get_float("AI_CACHE_LETTURA_MULT", 0.1)
 
     # ---- Data agents ----
     LUNARCRUSH_API_KEY: str = os.getenv("LUNARCRUSH_API_KEY", "")

@@ -1529,12 +1529,19 @@ def pubblica_controllo(fb, doc: dict) -> None:
 
 
 def esegui(fb, generato_da: str, settings_da_bot: bool, trades=None, registro=None,
-           now: float | None = None, pubblica: bool = False, cache_trade=None) -> dict:
+           now: float | None = None, pubblica: bool = False, cache_trade=None,
+           dati_out: dict | None = None) -> dict:
     """Carica, costruisce (misurando `durata_ms`) e, se chiesto, pubblica.
-    E' la sequenza che bot, snapshot e comando ops ripetono uguale."""
+    E' la sequenza che bot, snapshot e comando ops ripetono uguale.
+
+    `dati_out` (29 set 2026): se passato, ci si copiano i dati grezzi di
+    `carica_dati`, cosi' il comando ops li riusa per le sezioni del learning
+    (`bot/learning/apprendimento.py`) invece di rileggerli. Il documento non cambia."""
     now = time.time() if now is None else now
     t0 = time.time()
     dati = carica_dati(fb, now, trades=trades, registro=registro, cache_trade=cache_trade)
+    if isinstance(dati_out, dict):
+        dati_out.update(dati)
     doc = costruisci_controllo(dati, now, generato_da, settings_da_bot,
                                durata_ms=int((time.time() - t0) * 1000))
     if pubblica:

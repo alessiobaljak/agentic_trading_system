@@ -13,6 +13,8 @@ Schema (vedi docs/firebase_schema.md):
     strategy_weights/current           -> {weights: [...]}
     user_risk_settings/current         -> RiskSettings
     insights/{week_id}                 -> insight settimanale (RAG long-term)
+    ai_spesa/{YYYY-MM-DD}              -> token AI del giorno italiano, per ragione
+                                          (bot/ai/spesa.py, scritto con `incrementa`)
   Realtime DB:
     /positions/{symbol}                -> stato posizione live
     /bot_status                        -> {state, regime, equity, updated_at}
@@ -20,6 +22,7 @@ Schema (vedi docs/firebase_schema.md):
 """
 from __future__ import annotations
 
+import copy
 import json
 import os
 import sys
@@ -244,6 +247,55 @@ def riga_letture(riepilogo: dict) -> str:
             + f" — quota gratuita {QUOTA_LETTURE_GIORNO}/giorno")
 
 
+def _solo_numeri(annidato: dict) -> dict:
+    """Copia di `annidato` controllata per `incrementa`: chiavi stringhe non vuote
+    (Firestore non accetta un nome di campo vuoto), foglie solo numeri (un
+    booleano non e' una quantita' da sommare), sotto-dizionari vuoti tolti — su
+    Firestore un `{}` scritto con merge AZZERA la mappa che c'era, cioe' cancellerebbe
+    i conti del giorno invece di non toccarli."""
+    fuori: dict = {}
+    for k, v in (annidato or {}).items():
+        if not isinstance(k, str) or not k:
+            raise TypeError(f"incrementa: chiave non valida {k!r}")
+        if isinstance(v, dict):
+            dentro = _solo_numeri(v)
+            if dentro:
+                fuori[k] = dentro
+        elif isinstance(v, (int, float)) and not isinstance(v, bool):
+            fuori[k] = v
+        else:
+            raise TypeError(f"incrementa: {k}={v!r} non e' un numero (i valori da "
+                            f"scrivere cosi' come sono vanno in `imposta`)")
+    return fuori
+
+
+def _somma_annidata(dest: dict, add: dict) -> None:
+    """`dest += add` foglia per foglia. Come l'Increment di Firestore: una foglia
+    che non c'era, o che non era un numero, riparte da zero."""
+    for k, v in add.items():
+        if isinstance(v, dict):
+            sotto = dest.get(k)
+            if not isinstance(sotto, dict):
+                sotto = {}
+                dest[k] = sotto
+            _somma_annidata(sotto, v)
+        else:
+            prima = dest.get(k)
+            if not isinstance(prima, (int, float)) or isinstance(prima, bool):
+                prima = 0
+            dest[k] = prima + v
+
+
+def _fondi(dest: dict, src: dict) -> None:
+    """Scrittura con merge, come `set(..., merge=True)`: le mappe si fondono, il
+    resto si sovrascrive."""
+    for k, v in src.items():
+        if isinstance(v, dict) and isinstance(dest.get(k), dict):
+            _fondi(dest[k], v)
+        else:
+            dest[k] = copy.deepcopy(v)
+
+
 class _InMemoryStore:
     """Fallback thread-safe quando Firebase non è configurato."""
 
@@ -260,6 +312,18 @@ class _InMemoryStore:
     def get_doc(self, collection: str, doc_id: str) -> Optional[dict]:
         with self._lock:
             return self._docs.get(f"{collection}/{doc_id}")
+
+    def incrementa(self, collection: str, doc_id: str, annidato: dict,
+                   imposta: Optional[dict] = None) -> None:
+        """Somma annidata sotto lock (vedi `FirebaseClient.incrementa`). Si lavora
+        su una copia e la si rimette al posto: chi ha letto il documento prima
+        tiene la sua versione, come con Firestore."""
+        with self._lock:
+            chiave = f"{collection}/{doc_id}"
+            doc = copy.deepcopy(self._docs.get(chiave) or {})
+            _somma_annidata(doc, annidato)
+            _fondi(doc, imposta or {})
+            self._docs[chiave] = doc
 
     def query_collection(self, collection: str) -> list[dict]:
         with self._lock:
@@ -365,6 +429,46 @@ class FirebaseClient:
             self._fs.collection(collection).document(doc_id).set(data)
         else:
             self._memory.set_doc(collection, doc_id, data)
+
+    def incrementa(self, collection: str, doc_id: str, annidato: dict,
+                   imposta: Optional[dict] = None, timeout: float = 10.0) -> None:
+        """SOMMA i numeri di `annidato` a quelli del documento, foglia per foglia
+        (29 set 2026, per la spesa AI: `bot/ai/spesa.py`).
+
+        PERCHE' NON set_doc. Lo stesso documento lo aggiornano processi diversi
+        (bot, optimize, discovery, il runner GitHub della domenica): leggere,
+        sommare e riscrivere perderebbe i conti di chi scrive nello stesso istante,
+        e costerebbe una lettura a ogni chiamata. Qui dal vivo e' UNA scrittura e
+        ZERO letture: `set(merge=True)` con ogni numero avvolto in
+        `firestore.Increment`: la somma la fa il server, in modo atomico.
+
+        `imposta`: campi da scrivere cosi' come sono, nella stessa scrittura (es.
+        `aggiornato_at`). Come `set_doc` PUO' SOLLEVARE: chi chiama decide se la
+        misura vale un'eccezione (per la spesa AI no: la avvolge). `timeout`: una
+        misura non deve tenere fermo il giro che la produce.
+
+        UN SOLO TENTATIVO (`retry=None`, 29 set 2026). Senza, `set()` usa la
+        politica di default di Firestore per il commit: ritenta i 503/429 fino a
+        60 s, e ogni tentativo riceve di nuovo tutto il `timeout` — nel ciclo di
+        trading (l'ombra AI) sarebbe fino a un minuto fermo. E un Increment NON e'
+        idempotente: se il primo commit e' passato ma la risposta si e' persa, il
+        secondo somma di nuovo e la spesa si conta due volte. Una misura persa
+        costa una riga di log; una doppia non si vede.
+        """
+        numeri = _solo_numeri(annidato)
+        if self._live:
+            from firebase_admin import firestore
+
+            def _avvolgi(d: dict) -> dict:
+                return {k: (_avvolgi(v) if isinstance(v, dict) else firestore.Increment(v))
+                        for k, v in d.items()}
+
+            dati = _avvolgi(numeri)
+            dati.update(imposta or {})
+            self._fs.collection(collection).document(doc_id).set(
+                dati, merge=True, retry=None, timeout=timeout)
+        else:
+            self._memory.incrementa(collection, doc_id, numeri, imposta)
 
     def get_doc(self, collection: str, doc_id: str, chi: Optional[str] = None) -> Optional[dict]:
         """Un documento (1 lettura). `chi` e' l'etichetta del chiamante nel
