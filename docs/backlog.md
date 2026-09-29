@@ -963,6 +963,9 @@ letture Firestore), così il numero ha una fonte misurata e non una stima.
   token. Da ora il log stampa i token e «troncata» anche in quel ramo, e `ai-stato` conta le troncate:
   **metro** = la riga «risposte tagliate a metà» dei prossimi giorni. Se sono troncate: più spazio o
   meno coin nella domanda; se no, leggere la risposta.
+  **Confermato il 29 set alle 09:10 UTC** (ops 0356): «2119+2000 token · troncata: finito lo spazio
+  max_tokens». Ogni volta ~0,06 $ pagati e buttati, fino a 8 al giorno (~0,48 $): la risposta non ci
+  sta nei 2000 token. Rimedio da decidere: più spazio, o meno coin nella domanda.
 * **La narrativa della domenica** (`learning_loop`, runner GitHub) falliva sempre con «'ThinkingBlock'
   object has no attribute 'text'»: il secret GitHub `ANTHROPIC_MODEL` è vuoto, quindi gira il modello
   di default, che ragiona prima di rispondere, e il codice leggeva solo il primo blocco. **Corretto il
