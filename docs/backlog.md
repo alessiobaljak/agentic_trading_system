@@ -628,6 +628,42 @@ Migliaia di candidate per giro puntano lo STESSO holdout di 45 giorni (PF ≥ 1,
 5 trade: sotto il caso lo passa circa metà). Proposta: `GATE_HOLDOUT_MIN_TRADES` a
 10 e finestra di holdout per candidata (hash dell'id → mese fra gli ultimi 12).
 
+**29 set: la prima metà (5 → 10 trade) NON è la leva giusta — proposta ritirata.**
+Proposta al controllo del 29 set, poi misurata su richiesta del proprietario («vuol dire che il
+gate è troppo permissivo? che impatto sulle tempistiche?»). I numeri:
+* **Il gate è permissivo, sì:** paper PF 0,70 contro 2,04 promesso (ops 0338); chi passa le
+  finestre passa poi l'holdout nel 46% dei casi a 15 minuti (50 su 108, ops 0322) e nel 58% a 1 ora
+  (29 su 50, ops 0341).
+* **Ma 10 trade non toglie i fortunati.** Simulazione (stimata, non codice del repo: vinti +1,5R,
+  persi −1R, la regola vera dell'holdout con PF ≥ 1,05, ritorno > 0 e PF senza il migliore ≥ 1):
+  una strategia SENZA vantaggio passa il 31% delle volte con 5 trade e il 37% con 10; una con PF 2
+  passa il 63% e il 78%. Il rapporto buone/fortunate sale appena (da 2,0 a 2,1): «PF ≥ 1,05 e
+  ritorno > 0» per una strategia senza vantaggio resta quasi testa o croce a qualunque numero di
+  trade. Il revisore del 29 set, con un modello diverso, trova lo stesso (26% → 30%).
+* **Cosa farebbe davvero:** toglie le coppie che fanno pochi trade. Trade negli ultimi 45 giorni
+  delle validate: mediana 8, il 70% sotto 10 (ops 0290, 79 righe visibili su 194; dal portafoglio
+  ops 0339, ~8 a coppia). Il giro non si allunga (è una soglia, non un backtest in più) e il
+  calendario resta ≥ 14 giorni per validare; ma delle 492 coppie a 2/3 (ops 0343) si stima che il
+  45-75% perda la conferma, le 57 validate a size piena scenderebbero a ~15-32 in 2 notti e poi
+  sarebbero rimosse in 1-3 settimane (stime); le strategie a 1 ora, con meno trade al giorno,
+  pagano di più. E per ora le declassate sul paper fanno MEGLIO delle attive (18 trade +0,045R
+  contro 111 −0,102R, ops 0340): nessuna prova che bocciare di più migliori il paper.
+* **Le leve che riducono la fortuna** (da misurare prima di proporle): una statistica t
+  sull'holdout (H1 applicata all'holdout: con t ≥ 1,5 passerebbe per caso ~8-10%, ma passano meno
+  anche le buone), oppure la seconda metà di H2 (holdout diverso per candidata). Le tre conferme
+  poi sono poco indipendenti: fra una settimana e la successiva l'holdout condivide 38 giorni su 45.
+* **Prima di tutto un artefatto da togliere:** lo «scarto esattamente 0,000» delle quasi-passate
+  sull'holdout non è una misura: `optimizer.py:254` e `discover_strategies.py:2024` scrivono 0.0
+  d'ufficio a ogni bocciata sull'holdout, e la riga del quasi-passaggio porta PF e trade delle
+  FINESTRE, non dell'holdout (`discover_strategies.py:1754-1758`). L'AI lo legge come «esattamente
+  al limite» (ops 0230) e lo stesso 0,0 ordina queste coppie in fondo all'autopsia
+  (`-(shortfall or -9)`, `discover:518`, `:1808`, `:1822`) ma in cima alla scelta delle esplorative
+  (`_shortfall`, `discover:561-584`). Il 29 set, 21 dei 32 quasi-passaggi letti dall'AI erano
+  questo segnaposto (ops 0341), e il prompt dell'autopsia dice «15m» anche quando legge la passata
+  a 1 ora (`bot/ai/autopsia.py:77`). **Serve:** salvare PF/trade/PF senza il migliore
+  dell'HOLDOUT nel quasi-passaggio, uno scarto vero, lo stesso ordinamento nei due punti, il
+  timeframe giusto nel prompt. Non fatto il 29 set: non chiesto.
+
 ### H3. Stop giornaliero di portafoglio e netto in R
 **Stato: PARCHEGGIATA il 25 set** — il proprietario: «non voglio limitare la quantità, voglio trade migliori». Uno stop giornaliero riduce le perdite, non migliora gli ingressi: resta qui solo come memoria.
 **Sulle 160 coppie (ops 0232, 60 giorni):** senza limiti 974 trade, 16 al giorno, drawdown 14,8%, 34/27 giorni; + tetto direzione 3%: 854 trade, dd 16,0%; + stop giornaliero 3%: 765 trade, 13 giorni fermati, PnL −21%, dd 16,8% (peggiore, non migliore: dopo il blocco il rimbalzo si perde); + netto 2R: 713 trade, dd 13,6%, 35/25 giorni. Il giorno peggiore (30 ago, −1.609) passa a −563 solo con lo stop giornaliero. Non c'è una regola che vinca su tutto: si decide sul rischio che si vuole, non sui numeri.
