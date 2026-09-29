@@ -137,6 +137,24 @@ def test_universe_filter_ignores_a_mass_exclusion(monkeypatch):
     assert len(keep) == 10 and dropped == {}
 
 
+def test_universe_filter_ha_spazio_per_rispondere(monkeypatch):
+    """29 set 2026: con 2000 token la risposta sulle 277 coin del giro veniva
+    tagliata a meta' a ogni giro (ops 0356). Lo spazio concesso deve bastare e
+    restare sotto il tempo massimo della chiamata (~75 token/s)."""
+    visto = {}
+
+    def finto(*a, **k):
+        visto.update(k)
+        return {"escludi": []}
+
+    monkeypatch.setattr(universe_filter, "available", lambda: True)
+    monkeypatch.setattr(universe_filter, "ask_json", finto)
+    universe_filter.filter_universe(_metrics(3))
+    assert visto["max_tokens"] == universe_filter.MAX_TOKENS >= 4000
+    assert universe_filter.MAX_TOKENS / 75 < settings.AI_TIMEOUT_SECONDS
+    assert "poche parole" in universe_filter.SYSTEM
+
+
 def test_universe_filter_survives_a_malformed_answer(monkeypatch):
     monkeypatch.setattr(universe_filter, "available", lambda: True)
     monkeypatch.setattr(universe_filter, "ask_json", lambda *a, **k: "non un dict")

@@ -40,7 +40,18 @@ mentre una coin scartata qui non viene mai piu' guardata.
 
 Rispondi ESCLUSIVAMENTE con JSON:
 {"escludi": [{"symbol": "XUSDT", "motivo": "..."}]}
-Elenca SOLO le coin da escludere. Le altre si intendono tenute."""
+Elenca SOLO le coin da escludere. Le altre si intendono tenute.
+Ogni motivo in poche parole (al massimo 10): la risposta deve stare tutta nello
+spazio concesso, e una risposta tagliata a meta' non vale nulla."""
+
+# LO SPAZIO DELLA RISPOSTA (29 set 2026, sì del proprietario). Con 2000 token la
+# risposta sul giro principale (277 coin) veniva tagliata a meta' a OGNI giro:
+# MISURATO dal contatore della spesa, «2119+2000 token · troncata: finito lo
+# spazio max_tokens» (ops 0356), ~0,06 $ pagati e buttati ogni volta, e il filtro
+# di fatto spento. 5000 token bastano per ~190 esclusioni coi motivi brevi, piu'
+# del tetto del 50% che la guardia qui sotto accetta; non di piu', perche' a
+# ~75 token al secondo 5000 token sono ~70 s, sotto il timeout di AI_TIMEOUT_SECONDS.
+MAX_TOKENS = 5000
 
 
 def _fmt(m: dict) -> str:
@@ -68,7 +79,7 @@ def filter_universe(metrics: Iterable[dict],
 
     user = ((f"Regime di mercato corrente: {regime}\n\n" if regime else "")
             + "Coin candidate:\n" + "\n".join(_fmt(m) for m in rows))
-    out = ask_json(SYSTEM, user, max_tokens=2000, label="ai-universe")
+    out = ask_json(SYSTEM, user, max_tokens=MAX_TOKENS, label="ai-universe")
     if not isinstance(out, dict):
         return keep_all, {}
 

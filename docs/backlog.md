@@ -965,7 +965,12 @@ letture Firestore), così il numero ha una fonte misurata e non una stima.
   meno coin nella domanda; se no, leggere la risposta.
   **Confermato il 29 set alle 09:10 UTC** (ops 0356): «2119+2000 token · troncata: finito lo spazio
   max_tokens». Ogni volta ~0,06 $ pagati e buttati, fino a 8 al giorno (~0,48 $): la risposta non ci
-  sta nei 2000 token. Rimedio da decidere: più spazio, o meno coin nella domanda.
+  sta nei 2000 token. **Fatto il 29 set (sì del proprietario: «dai più spazio al filtro monete»):**
+  `MAX_TOKENS` 5000 in `bot/ai/universe_filter.py` e motivi in poche parole nella domanda (5000 token
+  ≈ 70 s, sotto il timeout di 120 s). **Metro:** nella sezione SPESA AI di `ai-stato` la riga
+  «tagliate a metà» di ai-universe deve sparire, e nel log del giro «[ai-universe] escluse N» o
+  nessuna esclusione al posto di «senza JSON». Il costo per chiamata sale (fino a ~0,14 $ se usa tutto
+  lo spazio): il contatore dirà quanto.
 * **La narrativa della domenica** (`learning_loop`, runner GitHub) falliva sempre con «'ThinkingBlock'
   object has no attribute 'text'»: il secret GitHub `ANTHROPIC_MODEL` è vuoto, quindi gira il modello
   di default, che ragiona prima di rispondere, e il codice leggeva solo il primo blocco. **Corretto il
