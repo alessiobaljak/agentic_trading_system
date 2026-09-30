@@ -27,7 +27,7 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 
 **Stato al 30 set (rilettura completa delle 70 voci, verificata contro i risultati ops).**
 Conteggio dopo la pulizia del 30 set (64 voci): 2 aspettano il sì (F2, J12 — J12 in memoria, non
-si fa finché il proprietario non lo dice), 1 approvata e in lavorazione (H5, sì del 30 set), 18 in
+si fa finché il proprietario non lo dice), H5 fatta il 30 set e in misura fino al 7 ott, 18 in
 misura, 11 fatte in parte, 14 aperte, 6 parcheggiate, 12 fatte (restano come memoria finché non si
 decide di spostarle nel diario). Stati che il testo delle voci non dice ancora:
 * **H5 riaperta, ma il numero del `portafoglio` non la decide:** il 25 set «è il mercato» (ops 0232),
@@ -673,6 +673,30 @@ Spento. Si riaccende solo se `portafoglio` misura un win rate dopo 4 perdite pi�
 basso di quello incondizionato con t ≥ 2 su ≥ 200 osservazioni.
 
 ### H5. La misura che separa mercato da esecuzione
+**30 set: FATTA la misura FUORI CAMPIONE (sì del proprietario), in misura fino al 7 ott.**
+Il confronto del «PERIODO DEL PAPER» misurava la selezione, non l'esecuzione: sugli stessi giorni
+16-24 set il simulato fa −1.357 con le coppie del 25 set (ops 0232) e +8.465 con quelle del 30
+(ops 0359). Ora `portafoglio` (voce ops già esistente) stampa la sezione «FUORI CAMPIONE»: per ogni
+validata solo i trade del motore nati DOPO la sua validazione (`validated_at`; per le coppie senza
+data il 25 set 12:00 UTC, quando il campo è arrivato sulla macchina per tutte le promozioni — non il
+21, verificato col revisore), accanto ai trade del paper sulle stesse coppie e negli stessi istanti,
+con R medio, vinti, max R, primo target, differenza e margine (2 errori standard), più tre righe di
+scomposizione: «stessi segnali» (paper e motore entrano insieme), «non aperti» (segnali del motore
+che il paper non ha preso), trade del paper senza un segnale del motore. La vecchia «Lettura» del
+periodo non conclude più né «mercato» né «esecuzione». **Regola decisa prima di vedere i numeri,
+il 7 ott:** con almeno 80 trade del motore: motore ≤ 0 → la promessa non regge dopo la validazione
+(selezione del gate o mercato cambiato: la misura da sola non li separa) e la prossima modifica va
+nel gate; motore > 0 e motore − paper oltre il margine → esecuzione, la prossima modifica va su
+ingressi e uscite del bot; altrimenti si rilegge il 14 ott. **Limiti dichiarati:** (a) sopravvivenza:
+le validate rimosse non si rigiocano (il report le conta e dà l'R del paper su di esse); (b) scala,
+break-even e keep di oggi, non del giorno della validazione (il report conta i trade del paper con
+config diversa e l'R senza di loro); (c) il paper salta segnali, il motore no (riga «non aperti»);
+il margine tratta i trade come indipendenti (con un effetto di giornata comune copre ~81% invece
+del 95%, simulazione del correttore). **Da decidere col proprietario prima del 7 ott:** se la regola
+debba poggiare sulla riga accoppiata «stessi segnali» invece che sulla media di tutti i trade, e un
+minimo di trade per il paper. Per separare gate e mercato servirebbe il motore sulle coppie NON
+scelte negli stessi giorni (backtest in più: non fatto).
+
 **Risposta del 25 set (ops 0232, portafoglio sulle 160 coppie dal 16 set):** anche il portafoglio simulato perde nel periodo del paper, −1.516 su 10.000 (−15%) con 8 giorni su 10 in perdita, contro −46,65 del paper (−5%): **è il mercato, non l'esecuzione**; il paper ha perso meno perché ha size dimezzata e freni. Chiuso il dubbio sull'esecuzione; resta il fatto che il gate ha promesso su un mercato diverso da quello di queste due settimane (deriva globale).
 
 **Misurato il 24 set sera (ops 0211, 8 coppie rigirate):** dal 16 set i segnali del gate aperti dal paper sono 15 (PF 0,50, win rate 53%) e quelli non aperti 9 (PF 1,23, win rate 56%; 6 short su 9). Indizio che il percorso live scarta segnali migliori di quelli che apre, ma 9 trade non decidono niente. Prossimo passo: contare i motivi dei rifiuti nel log del bot (cooldown, tetto per coin, stop troppo largo, soglia) nel periodo del paper.
@@ -948,6 +972,12 @@ letture Firestore), così il numero ha una fonte misurata e non una stima.
   «tagliate a metà» di ai-universe deve sparire, e nel log del giro «[ai-universe] escluse N» o
   nessuna esclusione al posto di «senza JSON». Il costo per chiamata sale (fino a ~0,14 $ se usa tutto
   lo spazio): il contatore dirà quanto.
+  **30 set:** col filtro finalmente non troncato, la passata a 1 ora (che usa `--symbols`) ha perso
+  10 coin su 30 giudicate dal solo nome (ops 0365), e con `--symbols` la riaggiunta delle coin in
+  maturazione non gira. Corretto col sì del proprietario: con `--symbols` il filtro non si applica
+  (`discover_strategies.filtra_universo`). Resta aperto: il filtro riceve solo i simboli, senza
+  storia né volume (era pensato con `history_days`, `volume_24h`, `atr_pct`), quindi giudica a
+  memoria anche nel giro principale (dove però tocca solo coin senza coppie in corso).
 * **La narrativa della domenica** (`learning_loop`, runner GitHub) falliva sempre con «'ThinkingBlock'
   object has no attribute 'text'»: il secret GitHub `ANTHROPIC_MODEL` è vuoto, quindi gira il modello
   di default, che ragiona prima di rispondere, e il codice leggeva solo il primo blocco. **Corretto il

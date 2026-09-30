@@ -3455,6 +3455,27 @@ def _merge_discover_shards(fb, args) -> int:
     return 0
 
 
+def filtra_universo(symbols, scelto_apposta: bool, filtro) -> tuple[list[str], dict, bool]:
+    """Il filtro di contesto dell'AI sull'universo, ma SOLO quando l'elenco delle
+    coin non e' stato scelto apposta. Ritorna (coin da valutare, {coin: motivo di
+    esclusione}, filtro applicato si'/no). `filtro` e' la funzione del filtro
+    (`ai_filter_universe` nel giro vero), passata da fuori per poterla provare.
+
+    SALTATO CON --symbols (30 set 2026, si' del proprietario). Un elenco passato
+    con --symbols e' gia' una scelta: la passata a 1 ora ci mette le coin che
+    hanno coppie validate o in corso. Il filtro invece le giudica dal solo nome:
+    alle 06:10 UTC del 30 set ne ha tolte 10 su 30 (UB, HEMI, SKYAI, MUBARAK,
+    BULLA, SAHARA, AVAAI, USELESS, HEI, TRUMP · ops 0365). Nel giro principale la
+    riaggiunta delle coin in maturazione rimedia per le coppie in corso; con
+    --symbols quella riaggiunta non gira, e le coppie in corso su una coin tolta
+    si fermavano a meta' strada. Senza --symbols non cambia niente."""
+    symbols = list(symbols)
+    if scelto_apposta:
+        return symbols, {}, False
+    tenute, escluse = filtro([{"symbol": s} for s in symbols])
+    return tenute, escluse, True
+
+
 def main() -> int:
     # IL TEMPO DEL GIRO SI MISURA QUI, e si salva su Firebase. Il 22 set 2026 per
     # sapere quanto durava un giro servivano `servizi` + `processi` + il journal,
@@ -3657,8 +3678,14 @@ def main() -> int:
         # FILTRO DI CONTESTO: toglie dall'imbuto le coin su cui una validazione non
         # sarebbe informativa (storia dentro la sola fase di listing, illiquide,
         # prezzo guidato da eventi discreti). Fail-open: senza AI non toglie nulla.
-        full_symbols, _excluded = ai_filter_universe(
-            [{"symbol": s} for s in full_symbols])
+        # Con --symbols NON si applica (30 set 2026): l'elenco e' gia' una scelta,
+        # e la riaggiunta delle coin in maturazione qui sotto con --symbols non
+        # gira. Il perche' completo in `filtra_universo`.
+        full_symbols, _excluded, _filtrato = filtra_universo(
+            full_symbols, bool(getattr(args, "symbols", "")), ai_filter_universe)
+        if not _filtrato:
+            print(f"[discover] filtro AI dell'universo saltato: elenco scelto apposta "
+                  f"(--symbols), {len(full_symbols)} coin tenute tutte")
         for _sym, _why in list(_excluded.items())[:10]:
             print(f"[discover]   escluso {_sym}: {_why}")
         # L'UNIVERSO RUOTA, LA VALIDAZIONE NO. Il top-N per volume cambia ogni giorno —

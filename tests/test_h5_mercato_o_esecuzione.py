@@ -194,8 +194,24 @@ def test_pnl_paper_per_giorno_ricade_su_exit_time_iso_e_salta_i_trade_senza_data
 
 
 def test_lettura_periodo_paper_i_casi():
-    assert "esecuzione/parita'" in pb.lettura_periodo_paper(50.0, -30.0, "2026-09-16")
-    assert "e' il mercato" in pb.lettura_periodo_paper(-20.0, -30.0, "2026-09-16")
+    # 30 set 2026: simulato in utile e paper in perdita NON e' piu' «esecuzione,
+    # non il mercato»: quel confronto misura anche la selezione, e rimanda alla
+    # sezione FUORI CAMPIONE (sugli stessi giorni il simulato cambia segno col
+    # solo cambiare delle coppie validate: -1.357 il 25 set, +8.465 il 30)
+    divario = pb.lettura_periodo_paper(50.0, -30.0, "2026-09-16")
+    assert "non il mercato" not in divario and "esecuzione/parita'" not in divario
+    assert "FUORI CAMPIONE" in divario and "SELEZIONE" in divario
+    # un solo «:» nella frase (prima: «...o selezione: questo confronto misura
+    # anche la SELEZIONE: le coppie...»)
+    assert divario.count(":") == 1
+    # 30 set 2026, revisione: anche col simulato in perdita la riga NON conclude
+    # «e' il mercato». Il -1.357 del 25 set era proprio un simulato in perdita,
+    # diventato +8.465 cambiando solo le coppie: il segno dipende dalla selezione
+    # in tutti e due i versi, e la proposta approvata chiede di rimandare sempre
+    perde = pb.lettura_periodo_paper(-1357.0, -40.0, "2026-09-16")
+    assert "e' il mercato" not in perde and "non l'esecuzione" not in perde
+    assert "anche il portafoglio simulato perde" in perde and "FUORI CAMPIONE" in perde
+    assert "holdout" not in perde
     assert "nessun divario" in pb.lettura_periodo_paper(50.0, 10.0, "2026-09-16")
     assert "non e' leggibile" in pb.lettura_periodo_paper(50.0, None, "2026-09-16")
     # l'avvertimento sulla selezione (holdout = ultimi 45 giorni) c'e' sempre
@@ -217,7 +233,7 @@ def test_sezione_periodo_paper_stampa_e_riassume(capsys):
     assert out["simulato_totale"] == 6.0          # il 15 non conta
     assert out["paper_totale"] == -4.0
     assert out["giorni_utile"] == 1 and out["giorni_perdita"] == 1
-    assert "esecuzione/parita'" in out["lettura"]
+    assert "FUORI CAMPIONE" in out["lettura"] and "non il mercato" not in out["lettura"]
     assert not pb.contiene_liste_annidate(out)
     testo = capsys.readouterr().out
     assert "PERIODO DEL PAPER" in testo and "2026-09-17" in testo and "-4.00" in testo

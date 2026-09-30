@@ -2235,3 +2235,17 @@ Regola d'uscita del backlog: una voce si toglie quando si decide di non farla, s
   più largo». Il report continua a contarli.
 Restano: **I9** (isteresi della proposta keep 0,75: pronta, seconda dopo H5) e **B4, I5, H1**, che
 il 30 set erano state scartate solo come proposta del giorno, non come voci.
+
+### 30 settembre, 09:40: filtro monete fuori dalla passata a 1 ora; la misura fuori campione (H5)
+
+Sì del proprietario a tutte e due. (1) Con un elenco di monete scelto apposta (`--symbols`, la
+passata a 1 ora) il filtro AI non si applica più: stanotte ne aveva tolte 10 su 30 giudicandole dal
+nome (ops 0365). Senza `--symbols` il giro principale resta identico. (2) Il `portafoglio` stampa la
+sezione FUORI CAMPIONE: i trade del motore nati dopo la validazione di ogni coppia contro i trade del
+paper sulle stesse coppie, con la regola scritta prima dei numeri (backlog H5): decisione il 7 ott,
+con almeno 80 trade del motore. Revisione avversaria su tre fronti (validità statistica, codice,
+lettore): 14 rilievi, tutti corretti; il più importante, le coppie senza data di validazione
+partono dal 25 set 12:00 UTC e non dal 21 (prima di allora la data non era scritta per le generate,
+quindi una parte della misura sarebbe rimasta in campione). Suite 1928 test verdi (senza
+`test_allowlist_runnable`). Il bot non va riavviato: la discovery e il `portafoglio` prendono il
+codice dal repo al giro successivo.
