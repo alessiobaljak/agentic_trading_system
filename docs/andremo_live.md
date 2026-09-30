@@ -2146,3 +2146,52 @@ segnaposto del codice, non una misura.
   in testa alla risposta). Da ora i verdetti del trailing portano l'ora in cui sono stati dati.
 Suite 1892 test verdi (senza `test_allowlist_runnable`, che lancia comandi di rete). Firestore: zero
 letture in più nel bot, ~1 scrittura per chiamata AI, 9 letture in `ai-stato`. Bot da riavviare.
+
+### Controllo del 30 settembre (08:20 ora italiana, ops 0358-0370)
+
+**Da correggere prima di tutto: il filtro monete AI toglie monete alla passata a 1 ora.** Col
+cambio del 29 sera (5000 token, D7) il filtro ha smesso di essere tagliato e ha cominciato a
+escludere davvero: alle 06:10 UTC 10 monete su 30 della passata a 1 ora (UB, HEMI, SKYAI, MUBARAK,
+BULLA, SAHARA, AVAAI, USELESS, HEI, TRUMP: «listing recente, storia troppo corta», ops 0365). Il
+modello riceve solo i simboli, senza storia né volumi (`discover_strategies.py:3660`), quindi
+giudica a memoria. Nel giro a 15 minuti la riaggiunta delle coin con coppie in corso lo neutralizza
+(`coin_in_maturazione`, riaggiunta dopo il filtro), ma la passata a 1 ora usa `--symbols` e salta la
+riaggiunta: le coppie a 1 ora in corso su quelle monete si fermano. Proposta (serve il sì): con un
+elenco scelto apposta (`--symbols`) il filtro non si applica.
+
+**Nessun guasto.** Bot vivo (PID dal 29 set 10:12), controllo ogni ora, foto del learning del 30
+set scritta alle 00:20. Letture Firestore del bot: 8.621 in 21 ore (~9.800 al giorno), 63% dai
+rifiutati (ops 0364). Giro del gate 05:08-07:09, 2h01, solo urgenti (ops 0363).
+
+**Numeri.** 189 trade chiusi (182 validate + 7 esplorativi), 106 vinti (56%), −68,65 USDT, equity
+931,35, DRY_RUN True, costi 29,66 su un lordo di −38,99; 2 posizioni aperte (MUBARAK long, STX
+short, 0,28% a rischio); max 9 contemporanee (ops 0360, 0361). 29 set chiuso a −0,17 (conto); dal
+16 al 29 set 5 giorni in utile e 9 in perdita (ops 0359). BTC dal primo giorno +9,9% contro −6,9%
+nostro (ops 0358). Uscite: 83 stop −236,68, 84 trailing +89,30, 19 scale-out +44,48; 88% senza
+primo TP; mfe mediana 0,87R. Stop per classe: 39 ingresso, 43 uscita, 1 protezione; i 5 stop nuovi
+tutti «mai andati a favore» (ops 0366). Validate 202 su 70 coin, copertura 35,0% (obiettivo
+raggiunto), 562 coppie a 2/3, 181 idonee il 1 ott; t ≥ 2 per 26 su 42 (ops 0363). Declassate 160.
+Passata a 1 ora 0,94% contro 0,20% a 15 minuti. Declassate sul paper 27 trade R +0,065 contro
+attive 116 R −0,119 (metro al 3 ott). Esplorative 7 chiuse, 6 vinte, +2,67. Selettore NON BATTE
+(0 su 3, 92.257 trade, ops 0368). Rifiutati «posizione aperta» −0,15R contro −0,21R: +0,06R, sotto
+lo 0,2R, nessuna ritaratura (ops 0370). Frequenza: 29 set 24 apribili contro 23 chiusi. Direzione:
+long 76 −31,76, short 106 −39,56; col contesto BTC noto (dal 25 set) long −12,98 su 46, short
++5,39 su 52 (ops 0360).
+
+**Come impara il trailing** (ops 0358, primo confronto fra foto: 29 set 10:12 → 30 set 00:20):
+70 verdetti sulle uscite trailing = 29 prematuri + 41 protetti; ieri +4 prematuri e +5 protetti.
+La proposta di keep 0,75 si allontana: 58,6% di protetti, mancano 3 protetti (ieri 1). Nessuna
+strategia arriva a 5 verdetti. Il gate ha scelto keep per 43 validate su 202 (0,35 ×14, 0,5 ×10,
+0,65 ×6, 0,75 ×13); cambiate stanotte 2 coppie (AVAAI e PLUME, tornate piene). Per keep in uso:
+0,5 → 122 trade, R −0,06; gli altri gruppi hanno 3-5 trade.
+
+**Cosa imparano le strategie:** ieri 10 promosse, 0 rimosse, 23 nuove declassate, 50 esplorative
+entrate e 60 scartate, 1 strategia in panchina (gen_c5194ce4 in alta incertezza); stanotte 5
+promosse, 20 declassate, 2 tornate piene. Numeri da capire: la foto dice «validate +5 / −2» ma
+nessuna rimozione nel diario delle vite; le esplorative entrate il 29 sono 50 nel conto di oggi e
+53 in quello di ieri alle 10:13.
+
+**Spesa AI** (ops 0362, prima misura; 29 set dalle 10 in poi, giornata non intera): 1,88 $ in 43
+chiamate: idee di strategie 0,95 $ (50%), filtro monete 0,38 $ (20%, 4 risposte su 10 tagliate
+prima del cambio), autopsia 0,34 $, ombra 0,21 $. Oggi fino alle 08:12: 0,87 $ in 18 chiamate, nessuna
+tagliata. A ~0,33 $ per giro del gate più l'ombra, circa 3 $ al giorno (stima).
