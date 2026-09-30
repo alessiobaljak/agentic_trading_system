@@ -58,6 +58,77 @@ decide di spostarle nel diario). Stati che il testo delle voci non dice ancora:
 
 ---
 
+## K. Revisione delle voci in sospeso (30 set) — scoperte nuove e verdetti
+
+Revisione completa in `docs/revisione_sospese_30set.md` (7 analisti con verifica su codice,
+conti e simulazioni; un critico statistico e uno da trader; sintesi). Richiesta del proprietario:
+«fai una revisione di quelle proposte per capire cosa davvero serve per migliorare il nostro
+modello». Nessuna voce è stata fatta: aspettano il sì.
+
+### K1. Regole delle letture del 3, 7 e 14 ott, scritte prima (proposta: serve adesso)
+Il verdetto «è il bot che esegue male» del 7 ott oggi si decide sulla media di tutti i trade (margine
+±0,25R); sugli stessi segnali il margine è ±0,16R e la differenza +0,04R (ops 0371). Pacchetto:
+riga «stessi segnali» per il verdetto sul bot con almeno 30 trade accoppiati, conteggio unico dei
+segnali (le gemelle contano doppio nel motore), margine per giornata, segnali non presi confrontati
+col portafoglio del motore (anche lui apre 995 segnali su 2.203), due righe per le coppie uscite
+(sopravvivenza: dall'8 ott circa le prime rimozioni rendono il motore più ottimista), regola del
+3 ott («uguale» solo se il margine esclude ±0,15R). ~1 giorno, nessun riavvio.
+
+### K2. H1-misura: salvare la t di ogni validata e dividere il fuori campione per t (serve adesso)
+La t c'è solo per le 42 validate NON declassate (202 − 160, ops 0363): si scrive solo quando una
+coppia ripassa. Serve il campo nel nucleo del registro e una passata una tantum sulle 202 (15-17
+minuti di VPS: voce ops in sfondo, riga nuova nella lista bianca da aggiungere a mano). In
+simulazione una t minima all'ultimo esame separa davvero le buone dalle fortunate (rapporto da 3,0 a
+5,4 con t ≥ 1,5), ma costa ~70% delle nuove validate: prima si guarda se sui dati veri la t prevede.
+
+### K3. Gruppo di controllo del fuori campione, da raccogliere da subito (serve adesso)
+H5 dice se le validate guadagnano DOPO essere state scelte, non PERCHÉ scelte. Raccolta: ~50
+candidate bocciate a giro (a caso, con almeno 30 trade) e una foto giornaliera delle conferme;
+dopo 14 giorni il motore le rigioca per gruppo (validate, 2 conferme, 1 conferma, bocciate).
+Risponde anche a «servono 3 conferme?» (F2) in ~15 giorni.
+
+### K4. I numeri del paper hanno la firma del caso
+Prezzo casuale con le nostre uscite contro il paper: stop 46% contro 44%, stop d'ingresso/uscita
+48,5/51,5% contro 47/52%, massimo toccato mediano 0,81R contro 0,87R, vinti 54% contro 56%, R medio
+−0,067 contro −0,084 ±0,09 (simulazione del 30 set su ops 0360, 0366). Le classi «ingresso/uscita»
+e «88% senza primo target» sono la forma delle regole d'uscita, non una diagnosi: le proposte
+basate solo su quelle classi vanno fermate.
+
+### K5. Il «quarto di size» di declassate ed esplorative quasi non agisce
+Il fattore riduce il rischio richiesto PRIMA del tetto per posizione (`bot/main.py:1555`,
+`risk_manager.py:139-148`); con gli stop tipici il tetto del 10% taglia comunque, e declassata e
+attiva finiscono quasi uguali (es. stop 1,3%: 0,125% contro 0,130% di rischio). Il controllo scrive
+«size ridotta»: non è vero. Non tocca ciò che si impara (tutto in R), ma chi volesse ridurre il
+danno delle coppie deboli deve sapere che oggi questa manopola non lo fa.
+
+### K6. Il freno globale ha un'uscita irraggiungibile (I2-bis)
+Per uscire serve anche un massimo toccato mediano sopra 1,05R: il paper è a 0,87R (ops 0366), il
+motore che guadagna a 1,03R (ops 0371), un prezzo casuale a 0,81R. La condizione scatta con e
+senza vantaggio: non dice niente. Da sistemare prima di qualunque discorso di denaro vero.
+
+### K7. L'AI riceve numeri sbagliati
+Oltre allo «scarto 0,000» (H2): a ogni giro legge «su 1320 valutazioni ne passano 0», fermo al 21
+set (oggi 24.503 valutazioni, 48 passate, ops 0363); il giro a 15 minuti legge l'autopsia della
+passata a 1 ora credendola sua (ops 0345, 0372).
+
+### K8. Righe in USDT che portano fuori strada, costi e scivolamento
+«Regime neutro −58,30», long/short e i conti per strategia mescolano size diverse e il periodo del
+difetto della sessione (fino al 26 set −77,93, dal 27 set +10,19, ops 0371): vanno rifatti in R col
+taglio al 27 set. I costi pesano 29,66 sui −68,65; motore e paper chiudono lo stop al suo prezzo
+esatto, senza scivolamento (`executor.py:549-563`): da verificare prima del denaro vero.
+
+### Verdetti della revisione sulle voci esistenti (il proprietario decide se toglierle)
+Non servono: F2 (70-77% delle coppie a 1-2 conferme non ripassa; il quarto di size non limita il
+danno, K5; la domanda la risolve K3), FR-leva (il −0,23R viene dal periodo del difetto), H1 con
+t ≥ 3 sulle finestre, H2 seconda metà, I9, A3, E4-adx (ADX ultima su 18 variabili, ops 0368), B4,
+B1 (a 1 ora lo stesso vocabolario passa 0,94% contro 0,20%: il limite sono i costi), I2 (spegnere
+il freno non cambia nessun R), I6 (il tetto toglierebbe trade in ordine d'arrivo, non i peggiori),
+D6-L2. Scelte del proprietario: filtro monete AI (spegnere, dare i dati, lasciare), ombra AI.
+J12: l'obiettivo «80% dei trade del paper con un ingresso del motore vicino» è all'81% (62 su 77,
+ops 0371): da chiudere se il proprietario è d'accordo. Dopo il 7 ott: H1-soglia sull'holdout,
+conti in R, riga «caso» nel controllo, pulizia dei dati all'AI, D6-IPOTESI (contare le coppie per
+origine), I6-misura, E4-gemelle.
+
 ## A. Uscite — dopo il verdetto dei 40 trade
 
 ### A1. La protezione del profitto si accende troppo tardi
