@@ -25,6 +25,30 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 
 ---
 
+**Stato al 30 set (rilettura completa delle 70 voci, verificata contro i risultati ops).**
+Conteggio: 2 aspettano il sì (F2, J12 — J12 in memoria, non si fa finché il proprietario non lo
+dice), 18 in misura, 11 fatte in parte, 17 aperte, 6 parcheggiate, 13 fatte, 3 superate. Stati
+che il testo delle voci non dice ancora:
+* **H5 non regge più:** il 25 set «è il mercato, non l'esecuzione» (ops 0232); rifatto il 28 e 29
+  set il portafoglio simulato dal 16 set fa +7.190 e +9.596 contro −69 e −67 del paper (ops 0328,
+  0339). Attenzione: il simulato usa le validate di OGGI, scelte anche su quei giorni, quindi è
+  gonfiato; ma il divario è troppo grande per essere solo quello. Domanda riaperta.
+* **I5 peggiorata:** validate senza PF promesso 125 su 199 (ops 0338), erano 72 su 131.
+* **B4 sbloccata:** la lettura AI dei referti aspettava 100 trade: sono 174 (ops 0340).
+* **F1 / F1ter:** 96 trade col voto del selettore (ops 0340), sopra i 40 richiesti; il voto non
+  distingue (0,653 vinti contro 0,644 persi) e il selettore non batte «apri tutto» (ops 0348).
+* **H1:** il numero che si aspettava c'è (25 validate su 38 con t ≥ 2, mediana 2,23, ops 0343),
+  ma la misura esiste solo per 38 validate su 199.
+* **C1:** a 1 ora passa lo 0,32% il 27, 0,69% il 28, 1,15% il 29 set, contro 0,22% a 15 minuti;
+  la passata copre 19-21 monete, non 30.
+* **Superate:** C2 e C3 (copertura 34,5% su 69 coin, ops 0343: sopra la soglia di 40 coin), A5
+  (idea smentita, ops 0210), G2 (il comando `portafoglio` esiste e gira ogni mattina), G4 (misurato:
+  0,21-0,26% dopo il cambio contro 0,3% prima, nessun miglioramento visibile).
+* **Numeri vecchi:** D1 (registro 399 KiB su 879, 278 byte a coppia, ops 0343), I2 (PF atteso
+  2,04, non 1,89), J10 (primo giro completo ridotto ~1h45, sopra l'1h30 voluto; stima dal log).
+
+---
+
 ## A. Uscite — dopo il verdetto dei 40 trade
 
 ### A1. La protezione del profitto si accende troppo tardi
