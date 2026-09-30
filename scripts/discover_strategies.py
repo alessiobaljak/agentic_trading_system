@@ -3439,6 +3439,51 @@ def pubblica_doc_gate(fb, **kw) -> dict | None:
         return None
 
 
+def _jsonabile(v):
+    """Un valore delle impostazioni scrivibile in JSON: numeri, testi e bool come
+    sono, tuple e liste come liste, il resto come testo."""
+    if v is None or isinstance(v, (bool, int, float, str)):
+        return v
+    if isinstance(v, (list, tuple)):
+        return [_jsonabile(x) for x in v]
+    return str(v)
+
+
+def motore_del_giro(args) -> dict:
+    """Le impostazioni del motore e del gate con cui il giro giudica le candidate
+    (30 set 2026, revisione del gruppo di controllo): vanno nella riga «tipo:
+    giro» della raccolta, perche' il rigioco di fra 14 giorni sappia con che
+    codice e che regole sono state giudicate. Il commit e' quello letto
+    all'AVVIO del processo (`gruppo_controllo.versione_codice`, chiamata in
+    `main`). Le GATE_* sono quelle effettive (dopo tuning.env: `settings`).
+    Fail-open campo per campo: un'impostazione illeggibile vale None."""
+    def _v(fn):
+        try:
+            return fn()
+        except Exception:  # noqa: BLE001
+            return None
+    return {
+        "commit": _v(gruppo_controllo.versione_codice),
+        "scale_out": _v(lambda: bool(settings.SCALE_OUT_ENABLED)),
+        "scale_out_r": _v(lambda: [float(x) for x in settings.SCALE_OUT_R_MULTIPLES]),
+        "sl_to_breakeven": _v(lambda: bool(settings.SCALE_OUT_SL_TO_BREAKEVEN)),
+        "profit_lock_keep": _v(lambda: float(settings.PROFIT_LOCK_KEEP)),
+        "entry_next_open": _v(lambda: bool(settings.BACKTEST_ENTRY_NEXT_OPEN)),
+        "parita": _v(lambda: bool(settings.BACKTEST_PARITY)),
+        "cooldown_ore": _v(lambda: float(settings.COOLDOWN_HOURS)),
+        # il modello dei costi del motore (`backtesting/engine.Backtester`): costo
+        # fisso round-trip + funding per 8 ore; lo spread per liquidita' e' nel
+        # codice (`bot/core/costs.py`), quindi nel commit
+        "costo_per_trade": _v(lambda: float(os.getenv("BACKTEST_COST_PER_TRADE", "0.0008"))),
+        "funding_per_8h": _v(lambda: float(os.getenv("BACKTEST_FUNDING_PER_8H", "0.0001"))),
+        "gate": _v(lambda: {k: _jsonabile(getattr(settings, k))
+                            for k in sorted(dir(settings)) if k.startswith("GATE_")}),
+        "min_passes": _v(lambda: int(MIN_PASSES)),
+        "fonte": _v(lambda: str(args.source)),
+        "timeframe_bot": _v(lambda: str(settings.ORCHESTRATOR_TIMEFRAME)),
+    }
+
+
 def raccogli_gruppo_controllo(idonee: list, reg: dict, existing: dict, specs: list,
                               specs_per_symbol: dict, args, end: str, letto_at: float,
                               modalita: str = "") -> str:
@@ -3448,11 +3493,25 @@ def raccogli_gruppo_controllo(idonee: list, reg: dict, existing: dict, specs: li
     (prima quelle della sua coin, poi le comuni). La foto usa le funzioni del
     registro (`coppie_validate`, `declassate`, `coppie_operate`) sul registro
     letto all'inizio del giro (`letto_at`), e la configurazione d'uscita con
-    `config_operata`: le stesse definizioni del bot. Non solleva."""
+    `config_operata`: le stesse definizioni del bot. Non solleva.
+
+    30 set 2026, revisione:
+      * `now=letto_at`: il nome dei file, il controllo «foto gia' fatta oggi» e
+        le righe usano lo stesso istante, quello in cui il registro e' stato
+        letto (prima il file prendeva il giorno di FINE giro);
+      * il timeframe di una generata la cui spec manca dal documento e' None,
+        non il timeframe del bot (una strategia a 1 ora si sarebbe dichiarata
+        a 15 minuti); una base resta al timeframe del bot. `spec_nota` dice se
+        la spec c'era;
+      * una volta al giorno, con la foto, le spec delle generate del registro
+        (`spec_foto_di`), e in ogni giro le impostazioni del motore
+        (`motore_del_giro`). Nessuna lettura Firestore in piu': `existing` e'
+        il documento delle spec gia' letto dal giro."""
     from bot.core.registry import declassate as _declassate
     pairs = decode_pairs((reg or {}).get("pairs"))
     comuni = {s.get("id"): s for s in (specs or []) if isinstance(s, dict)}
     tf_bot = settings.ORCHESTRATOR_TIMEFRAME
+    existing = existing if isinstance(existing, dict) else {}
 
     def spec_di(sym: str, sid: str):
         for s in (specs_per_symbol or {}).get(sym, []) or []:
@@ -3460,21 +3519,41 @@ def raccogli_gruppo_controllo(idonee: list, reg: dict, existing: dict, specs: li
                 return s
         return comuni.get(sid)
 
+    def _sid(rec: dict, key: str) -> str:
+        return str(rec.get("strategy") or key.split("|", 1)[-1])
+
+    def _generata(rec: dict, key: str) -> bool:
+        return bool(rec.get("generated")) or _sid(rec, key).startswith("gen_")
+
     def timeframe_di(rec: dict, key: str):
-        sp = (existing or {}).get(rec.get("strategy") or key.split("|", 1)[-1])
-        return (sp.get("timeframe") if isinstance(sp, dict) else None) or tf_bot
+        sp = existing.get(_sid(rec, key))
+        if isinstance(sp, dict):
+            return sp.get("timeframe") or tf_bot      # le spec vecchie non lo scrivono
+        return None if _generata(rec, key) else tf_bot
+
+    def spec_nota_di(rec: dict, key: str):
+        if not _generata(rec, key):
+            return None                               # una base non ha spec
+        return isinstance(existing.get(_sid(rec, key)), dict)
+
+    def spec_foto_di() -> list:
+        ids = sorted({_sid(rec, k) for k, rec in pairs.items() if isinstance(rec, dict)})
+        return [{"formato": gruppo_controllo.FORMATO, "tipo": "spec", "id": sid,
+                 "spec": existing[sid]}
+                for sid in ids if sid.startswith("gen_") and isinstance(existing.get(sid), dict)]
 
     def foto_di() -> list:
         validate = coppie_validate(pairs, letto_at)
         return gruppo_controllo.foto_conferme(
             pairs, letto_at, validate=validate, declassate=_declassate(pairs, validate),
             operate=coppie_operate(pairs, letto_at), timeframe_di=timeframe_di,
-            config_di=config_operata)
+            config_di=config_operata, spec_nota_di=spec_nota_di)
 
     return gruppo_controllo.raccogli(
         idonee=idonee, pairs=pairs, spec_di=spec_di, foto_di=foto_di,
         interval=args.interval, run_end=end, start=args.start, windows=args.windows,
-        modalita=modalita)
+        now=letto_at, modalita=modalita, motore=motore_del_giro(args),
+        spec_foto_di=spec_foto_di)
 
 
 def _merge_discover_shards(fb, args) -> int:
@@ -3552,6 +3631,11 @@ def main() -> int:
     # e il journal tiene 80 righe di cache che spingono via la fine del giro. Da
     # ora `gate_progress` (allowlist `gate`) lo stampa: inizio, fine, durata.
     t0 = time.time()
+    # LA VERSIONE DEL CODICE del giro (30 set 2026, gruppo di controllo): il
+    # commit si legge ORA, all'avvio, perche' l'agente ops puo' far avanzare il
+    # ramo mentre il giro gira; va nella riga «tipo: giro» della raccolta.
+    # Fail-open: senza git vale None.
+    gruppo_controllo.versione_codice()
     ap = argparse.ArgumentParser(description="Scoperta autonoma di nuove strategie.")
     ap.add_argument("--top", type=int, default=25, help="numero di crypto su cui validare")
     ap.add_argument("--symbols", default="",
@@ -3944,8 +4028,9 @@ def main() -> int:
 
         # IL GRUPPO DI CONTROLLO DEL FUORI CAMPIONE (30 set 2026, backlog K3,
         # `scripts/gruppo_controllo.py`): ~50 bocciate a caso con la loro spec e,
-        # al primo giro del giorno italiano, la foto delle conferme del registro
-        # come letto all'inizio del giro. File locali della VPS, come il dataset
+        # al primo giro PARTITO nel giorno italiano (`_ora`, l'istante in cui il
+        # registro e' stato letto), la foto delle conferme del registro come
+        # letto all'inizio del giro. File locali della VPS, come il dataset
         # del selettore; mai negli shard (non condividono il disco). Fail-open:
         # `raccogli` non solleva, e il try qui sotto copre il resto.
         if args.num_shards <= 1:

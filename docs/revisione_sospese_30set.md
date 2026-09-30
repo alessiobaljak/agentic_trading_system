@@ -208,7 +208,7 @@ La misura:
 ### C. Gruppo di controllo, da oggi (Serve adesso)
 
 **Cosa vuol dire.** Due raccolte che partono subito:
-- A ogni giro si salvano, con la data, circa 50 candidate bocciate con almeno 30 trade, scelte a caso fra le ~24.000 valutate.
+- A ogni giro si salvano, con la data, fino a 50 candidate bocciate con almeno 30 trade, scelte a caso fra le idonee di quel giro. Sono 50 a ogni giro, sia nel giro a 15 minuti (~24.000 valutate) sia nella passata a 1 ora, che ne valuta molte meno: quante sono davvero le idonee lo dice la riga di log «salvate N bocciate su M idonee» (corretto il 30 set, revisione della raccolta).
 - Ogni giorno si fotografano le conferme di ogni coppia.
   - Una coppia che il 1 ott ha 1 conferma resta nel gruppo «1 conferma», anche se poi conferma ancora.
   - Così i trade buoni non si spostano da un gruppo all'altro.
@@ -238,6 +238,12 @@ Dopo 14 giorni il motore rigioca tutti questi gruppi sui giorni successivi alla 
 
 **Come e quando sapremo.**
 - La regola si scrive prima: R medio del motore dopo la data, per gruppo, col margine per giornata.
+- Regole dell'analisi, scritte il 30 set prima dei numeri (revisione della raccolta; sono anche in testa a `scripts/gruppo_controllo.py`):
+  1. sempre separate per intervallo: le validate a 15 minuti solo contro le bocciate a 15 minuti, quelle a 1 ora in un confronto a parte (la quota di 50 è la stessa nei due giri, quindi senza separare circa metà delle bocciate sarebbe a 1 ora);
+  2. dentro un intervallo ogni bocciata pesa «idonee del giro / righe del giro», così un giro completo non pesa quanto un giro urgente;
+  3. una coppia estratta in più giri conta una volta sola (la prima estrazione);
+  4. fuori le righe raccolte da passate con la data di fine nel passato (per esempio `backfill_passes.sh`);
+  5. il gruppo si assegna per l'istante della riga, mai per il nome del file.
 - Prima lettura intorno al 15 ott, dopo H5.
 
 **Se non funziona.** Si cancellano i file e si toglie il codice. Nessun trade è stato toccato.

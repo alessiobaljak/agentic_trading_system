@@ -429,18 +429,29 @@ def confronto_3_ott(rows: list[dict]) -> dict:
     """Declassate contro attive dai trade entrati dal 27 set 19:40 UTC: R medio,
     differenza (declassate - attive) e margine (2 errori standard PER GIORNATA,
     lo stesso conto del FUORI CAMPIONE del `portafoglio`; se esce piu' stretto di
-    quello trade per trade si usa il piu' largo). Pura."""
+    quello trade per trade si usa il piu' largo). Pura.
+
+    30 set 2026, revisione: il calcolo e' quello della regola, invariato (anche
+    senza un minimo di trade per lato: metterlo ora, coi numeri gia' visti,
+    vorrebbe dire cambiare la regola). Si contano pero' i trade entrati dal 27
+    set 19:40 UTC e lasciati fuori perche' senza R (`declassate_senza_r`,
+    `attive_senza_r`): prima sparivano in silenzio."""
     from bot.learning.drift import r_multiplo
     from scripts.portafoglio_backtest import (errore_regola, errore_standard_differenza,
                                               errore_standard_per_giorno, statistiche_lato)
 
     lati: dict[str, list[tuple[float, str]]] = {"declassate": [], "attive": []}
+    senza_r = {"declassate": 0, "attive": 0}
     for t in rows:
         ts = _entry_ts(t)
-        r = r_multiplo(t)
-        if ts is None or ts < DAL_REGOLA_3_OTT or r is None:
+        if ts is None or ts < DAL_REGOLA_3_OTT:
             continue
-        lati["declassate" if t.get("declassata") else "attive"].append((r, giorno_locale(ts)))
+        lato = "declassate" if t.get("declassata") else "attive"
+        r = r_multiplo(t)
+        if r is None:
+            senza_r[lato] += 1
+            continue
+        lati[lato].append((r, giorno_locale(ts)))
     d = statistiche_lato([(r, None, None) for r, _ in lati["declassate"]])
     a = statistiche_lato([(r, None, None) for r, _ in lati["attive"]])
     diff = (d["r_medio"] - a["r_medio"]
@@ -450,6 +461,7 @@ def confronto_3_ott(rows: list[dict]) -> dict:
     margine = 2.0 * es if es is not None else None
     return {"declassate_n": d["n"], "declassate_r": d["r_medio"],
             "attive_n": a["n"], "attive_r": a["r_medio"],
+            "declassate_senza_r": senza_r["declassate"], "attive_senza_r": senza_r["attive"],
             "differenza": diff, "margine": margine, "esito": esito_3_ott(diff, margine)}
 
 
@@ -473,11 +485,15 @@ def print_declassate(rep: dict) -> None:
         print("  REGOLA DEL 3 OTT (regola scritta il 30 set, prima delle letture): solo i trade "
               "entrati dal 27 set 19:40 UTC (fine del difetto della sessione); «uguale» solo se "
               "il margine esclude ±0,15R, «diverso» se la differenza e' fuori dal margine, "
-              "altrimenti «non si decide». Margine = 2 errori standard per giornata.")
+              "altrimenti «non si decide». Margine = 2 errori standard, il piu' largo fra "
+              "quello per giornata e quello trade per trade; almeno 2 giornate.")
+        # 30 set 2026, revisione: il testo del margine ora e' quello del diario, e
+        # si dicono i trade lasciati fuori perche' senza R
         testo = (f"  dal 27 set 19:40 UTC: declassate {c['declassate_n']} trade R "
                  f"{_f(c['declassate_r'])} · attive {c['attive_n']} trade R {_f(c['attive_r'])} "
                  f"· differenza {_f(c['differenza'])}R, margine {_f(c['margine'], '±{:.3f}')}R "
-                 f"-> {c['esito'].upper()}")
+                 f"(esclusi perche' senza R: declassate {c.get('declassate_senza_r', 0)}, "
+                 f"attive {c.get('attive_senza_r', 0)}) -> {c['esito'].upper()}")
         if c["esito"] == "diverso":
             testo += (" (le declassate fanno " + ("meglio" if c["differenza"] > 0 else "peggio")
                       + " delle attive" + (", ma meno di 0,15R" if abs(c["differenza"]) < UGUALE_ENTRO_R

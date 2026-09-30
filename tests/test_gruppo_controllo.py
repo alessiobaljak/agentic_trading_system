@@ -221,7 +221,7 @@ def _raccogli(cartella, now=NOW, idonee=None, foto=None, interval="15m", seme=77
 
     def foto_di():
         chiamate.append(1)
-        return foto if foto is not None else [{"key": "A|x", "pass_count": 1}]
+        return foto if foto is not None else [{"tipo": "conferme", "key": "A|x", "pass_count": 1}]
     riga = gc.raccogli(idonee=idonee if idonee is not None else _voci(120), pairs={},
                        spec_di=lambda s, i: specs.get(i), foto_di=foto_di, interval=interval,
                        run_end="2026-09-30", start="2022-01-01", windows=3, now=now,
@@ -236,8 +236,11 @@ def test_foto_una_volta_al_giorno_italiano_e_bocciate_in_append(tmp_path, attivo
     assert "salvate 50 bocciate su 120 idonee (seme 777)" in r1 and "foto conferme: 1 coppie" in r1
     assert "foto conferme: già fatta oggi" in r2
     assert "[controllo-gruppi]" in capsys.readouterr().out
-    assert len(gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl")) == 100
-    assert len(gc.leggi(tmp_path / "2026-09-30_conferme.jsonl")) == 1
+    assert len(gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl", tipo="bocciata")) == 100
+    assert len(gc.leggi(tmp_path / "2026-09-30_conferme.jsonl", tipo="conferme")) == 1
+    # formato 2: una riga «tipo: giro» in testa a ogni giro, e nella foto
+    assert len(gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl", tipo="giro")) == 2
+    assert len(gc.leggi(tmp_path / "2026-09-30_conferme.jsonl", tipo="giro")) == 1
     # 22:30 UTC del 30 set = 00:30 del 1 ott in Italia: giorno nuovo, foto nuova
     tardi = datetime(2026, 9, 30, 22, 30, tzinfo=timezone.utc).timestamp()
     r3, c3 = _raccogli(tmp_path, now=tardi)
@@ -250,8 +253,9 @@ def test_formato_delle_bocciate_rileggibile_con_tutto_per_il_rigioco(tmp_path, a
     gc.raccogli(idonee=[v], pairs={}, spec_di=lambda s, i: sp if i == sp["id"] else None,
                 foto_di=lambda: [], interval="1h", run_end="2026-09-30", start="2022-01-01",
                 windows=3, now=NOW, seme=5, cartella=str(tmp_path), modalita="completa")
-    (riga,) = gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl")
-    assert riga["formato"] == gc.FORMATO and riga["tipo"] == "bocciata"
+    (giro, riga) = gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl")
+    assert giro["tipo"] == "giro" and riga["giro"] == giro["giro"]
+    assert riga["formato"] == gc.FORMATO == 2 and riga["tipo"] == "bocciata"
     assert riga["key"] == f"XUSDT|{sp['id']}" and riga["spec"] == sp      # spec INTERA
     assert riga["timeframe"] == "1h" and riga["interval"] == "1h"
     assert riga["valutata_at"] == NOW and riga["data_end"] == NOW - 900
@@ -265,7 +269,7 @@ def test_una_riga_con_nan_salta_da_sola(tmp_path, attivo):
     voci = _voci(2)
     voci[0]["pf"] = float("nan")
     _raccogli(tmp_path, idonee=voci)
-    righe = gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl")
+    righe = gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl", tipo="bocciata")
     assert [r["key"] for r in righe] == [voci[1]["key"]]
 
 
@@ -342,13 +346,16 @@ def test_ponte_della_discovery_scrive_spec_e_foto(tmp_path, attivo, monkeypatch)
                                        [comune], {"BUSDT": [figlia]}, args, "2026-09-30",
                                        NOW, "completa")
     assert "salvate 2 bocciate su 2 idonee" in riga and "foto conferme: 2 coppie" in riga
-    boc = {r["key"]: r for r in gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl")}
+    # 30 set 2026: il nome dei file viene da `letto_at` (NOW), non dall'orologio
+    # di fine giro, quindi il test non dipende piu' dalla data vera
+    boc = {r["key"]: r for r in gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl", tipo="bocciata")}
     assert set(boc) == {f"AUSDT|{comune['id']}", f"BUSDT|{figlia['id']}"}
     assert boc[f"BUSDT|{figlia['id']}"]["spec"] == figlia
-    foto = {r["key"]: r for r in gc.leggi(tmp_path / "2026-09-30_conferme.jsonl")}
+    foto = {r["key"]: r for r in gc.leggi(tmp_path / "2026-09-30_conferme.jsonl", tipo="conferme")}
     v = foto[f"VUSDT|{comune['id']}"]
     assert v["validata"] is True and v["declassata"] is True and v["pass_count"] == MIN_PASSES
     assert v["istante"] == NOW and v["timeframe"] == "15m" and v["uscita"]["scale_r_mults"]
+    assert v["spec_nota"] is True
     c = foto[f"CUSDT|{comune['id']}"]
     assert c["validata"] is False and c["declassata"] is False and c["pass_count"] == 1
 
@@ -359,3 +366,186 @@ def test_main_raccoglie_fuori_dagli_shard_e_prima_del_merge():
     assert "if args.num_shards <= 1:" in main[i_racc - 400:i_racc]
     assert i_racc < main.index("merge_into_registry(")
     assert 'idonee_controllo.extend(diag.get("controllo") or [])' in main
+
+
+# --------------------------------------------------------------------------- #
+# 6. revisione del 30 set 2026: formato 2, giorno dei file, foto esclusiva     #
+# --------------------------------------------------------------------------- #
+def _ponte(tmp_path, monkeypatch, pairs, existing, letto_at=NOW, idonee=None, source="auto"):
+    from bot.core.firebase_client import encode_pairs
+    monkeypatch.setattr(gc, "CONTROLLO_DIR", str(tmp_path))
+    args = SimpleNamespace(interval="15m", start="2022-01-01", windows=3, source=source)
+    return d.raccogli_gruppo_controllo(idonee or [], {"pairs": encode_pairs(pairs)}, existing,
+                                       list(existing.values()), {}, args, "2026-09-30",
+                                       letto_at, "completa")
+
+
+def test_giro_a_cavallo_della_mezzanotte_usa_l_istante_della_lettura(tmp_path, attivo, monkeypatch):
+    """Il giro legge il registro alle 23:30 italiane del 29 set e finisce dopo
+    mezzanotte (l'orologio vero e' ancora piu' avanti): la foto e le bocciate
+    vanno nel file del 29, con le righe del 29. Il giro PARTITO alle 00:40 del
+    30 fa la foto del 30; un altro giro partito il 29 la trova gia' fatta."""
+    sp = _spec(volume_mult=1.0)
+    pairs = {f"VUSDT|{sp['id']}": {"symbol": "VUSDT", "strategy": sp["id"], "generated": True,
+                                   "pass_count": 1, "last_seen_at": NOW - 3 * 86400}}
+    voce = gc.voce_idonea("AUSDT", sp, _esito(False), set(), GLOBALE)
+    sera = datetime(2026, 9, 29, 21, 30, tzinfo=timezone.utc).timestamp()     # 23:30 italiane
+    fine = datetime(2026, 9, 29, 22, 30, tzinfo=timezone.utc).timestamp()     # 00:30 del 30
+    monkeypatch.setattr(gc.time, "time", lambda: fine)
+    r1 = _ponte(tmp_path, monkeypatch, pairs, {sp["id"]: sp}, letto_at=sera, idonee=[voce])
+    assert "foto conferme: 1 coppie" in r1
+    assert sorted(p.name for p in tmp_path.glob("*.jsonl")) == [
+        "2026-09-29_bocciate.jsonl", "2026-09-29_conferme.jsonl", "2026-09-29_spec.jsonl"]
+    (f,) = gc.leggi(tmp_path / "2026-09-29_conferme.jsonl", tipo="conferme")
+    assert f["giorno"] == "2026-09-29" and f["istante"] == sera
+    (b,) = gc.leggi(tmp_path / "2026-09-29_bocciate.jsonl", tipo="bocciata")
+    assert b["giorno"] == "2026-09-29" and b["valutata_at"] == sera
+    # un altro giro partito il 29 (prima di mezzanotte) la trova gia' fatta
+    r2 = _ponte(tmp_path, monkeypatch, pairs, {sp["id"]: sp}, letto_at=sera + 900)
+    assert "foto conferme: già fatta oggi" in r2
+    # il primo giro PARTITO il 30 fa la foto del 30
+    r3 = _ponte(tmp_path, monkeypatch, pairs, {sp["id"]: sp}, letto_at=fine + 600)
+    assert "foto conferme: 1 coppie" in r3
+    assert os.path.exists(tmp_path / "2026-09-30_conferme.jsonl")
+
+
+def test_foto_esclusiva_e_file_vuoto_si_rifa(tmp_path, attivo, monkeypatch):
+    # un file vuoto (crash della macchina a meta' scrittura) non conta come foto
+    (tmp_path / "2026-09-30_conferme.jsonl").write_text("")
+    r, c = _raccogli(tmp_path)
+    assert c == [1] and "foto conferme: 1 coppie" in r
+    assert len(gc.leggi(tmp_path / "2026-09-30_conferme.jsonl", tipo="conferme")) == 1
+    # due giri insieme: chi arriva secondo trova il file creato dall'altro e non
+    # lo sovrascrive (creazione esclusiva, non «esiste? poi scrivo»)
+    prima = (tmp_path / "2026-09-30_conferme.jsonl").read_text()
+    monkeypatch.setattr(gc, "_foto_fatta", lambda p: False)
+    r, c = _raccogli(tmp_path, foto=[{"key": "B|y", "pass_count": 2}])
+    assert "foto conferme: già fatta da un altro giro" in r and c == [1]
+    assert (tmp_path / "2026-09-30_conferme.jsonl").read_text() == prima
+    # nessun temporaneo lasciato in giro
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_scrittura_a_parte_col_pid_e_fsync(tmp_path, monkeypatch):
+    sincronizzati = []
+    vero_fsync = os.fsync
+    monkeypatch.setattr(gc.os, "fsync", lambda fd: sincronizzati.append(fd) or vero_fsync(fd))
+    p = str(tmp_path / "x.jsonl")
+    assert gc._scrivi_a_parte(p, "a\n", esclusivo=True) is True
+    assert gc._scrivi_a_parte(p, "b\n", esclusivo=True) is False     # esiste: non si tocca
+    assert open(p).read() == "a\n" and len(sincronizzati) == 2
+    assert gc._scrivi_a_parte(p, "c\n") is True                     # non esclusivo: sostituisce
+    assert open(p).read() == "c\n" and not list(tmp_path.glob("*.tmp"))
+
+
+def test_elenco_delle_idonee_rifa_e_verifica_l_estrazione(tmp_path, attivo):
+    """Col seme salvato e l'elenco delle idonee del giro l'estrazione si rifa':
+    stesse 50 chiavi, e l'impronta nella riga del giro combacia."""
+    import hashlib
+    _raccogli(tmp_path, seme=777)
+    (giro,) = gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl", tipo="giro")
+    assert giro["seme"] == 777 and giro["popolazione"] == 120 and giro["campione"] == 50
+    chiavi = gc.leggi_idonee(tmp_path / giro["idonee_file"])
+    assert chiavi == sorted(v["key"] for v in _voci(120))
+    assert hashlib.sha256("\n".join(chiavi).encode()).hexdigest() == giro["idonee_sha256"]
+    rifatte = sorted(random.Random(giro["seme"]).sample(chiavi, min(giro["campione"], len(chiavi))))
+    boc = gc.leggi(tmp_path / "2026-09-30_bocciate.jsonl", tipo="bocciata")
+    assert [r["key"] for r in boc] == rifatte
+    assert all(r["giro"] == giro["giro"] for r in boc)
+
+
+def test_pulizia_degli_elenchi_delle_idonee_a_21_giorni(tmp_path):
+    gz = tmp_path / "2026-09-01_idonee_1-15m-1.txt.gz"
+    gz.write_bytes(b"x")
+    js = tmp_path / "2026-09-01_bocciate.jsonl"
+    js.write_text("{}\n")
+    tmp = tmp_path / "2026-09-01_conferme.jsonl.123.tmp"
+    tmp.write_text("{}")
+    for p in (gz, js, tmp):
+        os.utime(p, (NOW - 30 * 86400, NOW - 30 * 86400))
+    assert gc.pulisci(str(tmp_path), giorni=120, now=NOW, giorni_idonee=21) == 2
+    assert not gz.exists() and not tmp.exists() and js.exists()
+
+
+def test_riga_del_giro_con_versione_del_codice_e_impostazioni(tmp_path, attivo, monkeypatch):
+    from scripts.optimize import MIN_PASSES
+    monkeypatch.setattr(d.settings, "SCALE_OUT_ENABLED", True)
+    sp = _spec(volume_mult=1.0)
+    pairs = {f"VUSDT|{sp['id']}": {"symbol": "VUSDT", "strategy": sp["id"], "generated": True,
+                                   "pass_count": 1, "last_seen_at": NOW - 3600}}
+    voce = gc.voce_idonea("AUSDT", sp, _esito(False), set(), GLOBALE)
+    _ponte(tmp_path, monkeypatch, pairs, {sp["id"]: sp}, idonee=[voce], source="binance")
+    for nome, tipo in (("bocciate", "bocciata"), ("conferme", "conferme")):
+        (riga,) = gc.con_giro(gc.leggi(tmp_path / f"2026-09-30_{nome}.jsonl"))
+        assert riga["tipo"] == tipo
+        m = riga["motore"]
+        assert m["scale_out"] is True and m["fonte"] == "binance"
+        assert m["min_passes"] == MIN_PASSES and m["timeframe_bot"] == "15m"
+        assert m["gate"]["GATE_PF_THRESHOLD"] == d.settings.GATE_PF_THRESHOLD
+        assert set(m) >= {"commit", "scale_out_r", "entry_next_open", "parita",
+                          "cooldown_ore", "costo_per_trade", "funding_per_8h"}
+        assert m["commit"] is None or len(m["commit"]) == 40
+        assert riga["giro_info"]["interval"] == "15m" and riga["formato"] == 2
+
+
+def test_versione_del_codice_fail_open(monkeypatch):
+    def rotto(*a, **k):
+        raise FileNotFoundError("git")
+    monkeypatch.setattr(gc, "_VERSIONE", {})
+    monkeypatch.setattr(gc.subprocess, "run", rotto)
+    assert gc.versione_codice() is None
+    # letta una volta per processo: la seconda chiamata non rilancia git
+    monkeypatch.setattr(gc.subprocess, "run", lambda *a, **k: 1 / 0)
+    assert gc.versione_codice() is None
+
+
+def test_foto_spec_mancante_base_con_parametri_e_file_delle_spec(tmp_path, attivo, monkeypatch):
+    """Una generata a 1 ora con la spec: timeframe 1h. Una generata la cui spec
+    manca dal documento: timeframe None e spec_nota False (non il timeframe del
+    bot). Una base: timeframe del bot, parametri interi nella riga. Il file
+    delle spec del giorno ha la spec di ogni generata del registro che c'e'."""
+    ora1, persa = _spec(timeframe="1h"), _spec(volume_mult=2.0)
+    pairs = {
+        f"AUSDT|{ora1['id']}": {"symbol": "AUSDT", "strategy": ora1["id"], "generated": True,
+                                "pass_count": 2},
+        f"BUSDT|{persa['id']}": {"symbol": "BUSDT", "strategy": persa["id"], "generated": True,
+                                 "pass_count": 1},
+        "CUSDT|trend_base": {"symbol": "CUSDT", "strategy": "trend_base", "generated": False,
+                             "pass_count": 3, "last_params": {"adx_min": 25, "rr": 2.5,
+                                                              "atr_mult_stop": 1.8}},
+    }
+    _ponte(tmp_path, monkeypatch, pairs, {ora1["id"]: ora1})
+    foto = {r["key"]: r for r in gc.leggi(tmp_path / "2026-09-30_conferme.jsonl", tipo="conferme")}
+    a, b, c = (foto[f"AUSDT|{ora1['id']}"], foto[f"BUSDT|{persa['id']}"], foto["CUSDT|trend_base"])
+    assert a["timeframe"] == "1h" and a["spec_nota"] is True and "params" not in a
+    assert b["timeframe"] is None and b["spec_nota"] is False
+    assert c["timeframe"] == "15m" and c["spec_nota"] is None
+    assert c["params"] == {"adx_min": 25, "rr": 2.5, "atr_mult_stop": 1.8}
+    spec = gc.leggi(tmp_path / "2026-09-30_spec.jsonl", tipo="spec")
+    assert [(r["id"], r["spec"]) for r in spec] == [(ora1["id"], ora1)]
+
+
+def test_numero_scritto_male_nell_ambiente_non_blocca_l_import(monkeypatch, capsys):
+    import importlib
+    try:
+        monkeypatch.setenv("CONTROLLO_GRUPPI_CAMPIONE", "50.0")
+        monkeypatch.setenv("CONTROLLO_GRUPPI_TETTO_MB", "trecento")
+        importlib.reload(gc)
+        assert gc.CAMPIONE == 50 and gc.TETTO_MB == 300.0
+        assert "valore ignorato per CONTROLLO_GRUPPI_TETTO_MB" in capsys.readouterr().out
+        monkeypatch.setenv("CONTROLLO_GRUPPI_CAMPIONE", "40")
+        importlib.reload(gc)
+        assert gc.CAMPIONE == 40
+    finally:
+        monkeypatch.delenv("CONTROLLO_GRUPPI_CAMPIONE", raising=False)
+        monkeypatch.delenv("CONTROLLO_GRUPPI_TETTO_MB", raising=False)
+        importlib.reload(gc)
+    assert gc.CAMPIONE == 50
+
+
+def test_regole_dell_analisi_scritte_prima_dei_numeri():
+    doc = gc.__doc__
+    assert "REGOLE DELL'ANALISI" in doc and "scritte PRIMA di vedere i numeri" in doc
+    for pezzo in ("separate per `interval`", "popolazione / righe del giro",
+                  "conta una volta sola", "`run_end` diverso dal giorno della raccolta"):
+        assert pezzo in doc

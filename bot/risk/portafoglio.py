@@ -246,8 +246,14 @@ def diversification_ratio(pnl_giorno_portafoglio: dict[str, float],
 
 def simula(trades: list[dict], equity0: float, limiti: dict | None = None,
            secondi_barra: float = 900.0,
-           periodo: tuple[float, float] | None = None) -> dict:
+           periodo: tuple[float, float] | None = None,
+           aperti_out: list | None = None) -> dict:
     """Fa passare i trade, in ordine di ingresso, da un conto solo con i limiti.
+
+    `aperti_out` (30 set 2026, facoltativo): se c'e', ci si aggiunge ogni trade
+    APERTO (il dict normalizzato: symbol, direction, entry_ts, strategy...),
+    nell'ordine di apertura. Il dict che la funzione ritorna non cambia (va
+    anche su Firebase: niente liste in piu').
 
     `limiti` sovrascrive i valori di `limiti_default()` (chiavi: max_posizioni,
     una_per_coin, tetto_coin_giorno, tetto_direzione, cooldown_ore,
@@ -386,6 +392,8 @@ def simula(trades: list[dict], equity0: float, limiti: dict | None = None,
         pos = {**t, "direction": direzione, "rischio": rischio, "r": r, "pnl": r * rischio}
         aperti.append(pos)
         n_aperti += 1
+        if aperti_out is not None:
+            aperti_out.append(t)
         per_direzione[direzione]["n"] += 1
         aperti_per_giorno[giorno] += 1
         contemporanee.append(len(aperti))

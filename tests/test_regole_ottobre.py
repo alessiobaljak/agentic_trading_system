@@ -486,3 +486,213 @@ def test_output_del_main_su_70_coin_sotto_i_17_kb(monkeypatch, capsys):
     assert "FUORI CAMPIONE (H5)" in testo and "tutte le coppie operate" in testo
     assert "dati da cache:" not in testo
     assert len(testo) < 17_000, len(testo)
+
+
+# --------------------------------------------------------------------------- #
+# Revisione del 30 set 2026: applicazione fedele delle regole (soglie uguali)  #
+# --------------------------------------------------------------------------- #
+def _caso_selezione(n=90):
+    """Una coppia validata con `n` segnali del motore a +0,1R e 5 trade del paper."""
+    pairs = {"A|ga": {"validated_at": PAV}}
+    motore = [_m("A", "ga", PAV + 86400 + i * 7200, pnl_pct=0.001) for i in range(n)]
+    paper = [_p("A", "ga", PAV + 86400 + i * 7200 + 905, pnl=0.1) for i in range(5)]
+    return pairs, motore, paper
+
+
+def test_selezione_non_si_decide_senza_diario_delle_vite(capsys):
+    """Senza diario le coppie rimosse mancano dalla riga «tutte le coppie
+    operate»: la selezione non si decide (l'esecuzione si')."""
+    pairs, motore, paper = _caso_selezione()
+    ok = pb.sezione_fuori_campione(motore, paper, pairs, list(pairs), list(pairs),
+                                   PAV, PAV, {"events": []})
+    assert ok["lettura"].startswith("Selezione: il motore guadagna ancora")
+    assert ok["sopravvivenza_completa"] is True
+    no = pb.sezione_fuori_campione(motore, paper, pairs, list(pairs), list(pairs),
+                                   PAV, PAV, None)
+    assert no["lettura"].startswith(
+        "Selezione: non si decide: il diario delle vite non si legge")
+    assert "Esecuzione: non si decide: 5 accoppiati" in no["lettura"]
+    assert no["sopravvivenza_completa"] is False
+    # anche un diario con gli eventi illeggibili, o il flag passato dal main
+    assert not pb.diario_leggibile({"events": "non json"}) and pb.diario_leggibile({"events": []})
+    fc = pb.fuori_campione(motore, paper, pairs, list(pairs), PAV, sopravvivenza_completa=False)
+    assert "Selezione: non si decide: il diario" in fc["lettura"]
+    capsys.readouterr()
+
+
+def test_main_passa_la_sopravvivenza_incompleta(monkeypatch):
+    """Il main: diario assente, o coppie uscite non ricostruite -> la sezione
+    riceve `sopravvivenza_completa` falso."""
+    ora = time.time()
+    oggi = dt.datetime.fromtimestamp(ora, dt.timezone.utc).date()
+    monkeypatch.setattr(pb, "PAPER_START", (oggi - dt.timedelta(days=10)).isoformat())
+    pairs = {"AAAUSDT|gen_a": {"pass_count": 5, "last_seen_at": ora, "validated_at": ora - 6 * 86400}}
+
+    class _Wfo:
+        def __init__(self, **kw):
+            self.bt = None
+
+    monkeypatch.setattr(pb, "WalkForwardOptimizer", _Wfo)
+    monkeypatch.setattr(pb, "trades_della_coin", lambda sym, st, sp, a, i, bt: (
+        [_m(sym, s, ora - g * 86400) for s, _ in st for g in (3, 2)], [], 6000))
+    monkeypatch.setattr(pb, "_trade_paper", lambda fb_, dal_ts: [])
+    visti = []
+    monkeypatch.setattr(pb, "sezione_fuori_campione",
+                        lambda *a, **k: visti.append(k["sopravvivenza_completa"]) or {})
+
+    def gira(docs):
+        fb = _FbFinto(docs)
+        monkeypatch.setattr(pb, "get_firebase", lambda: fb)
+        assert pb.main([]) == 0
+
+    base = {("strategy_registry", "validated"): {"pairs": pairs},
+            ("discovered_strategies", "specs"): {"specs": {}}}
+    gira({**base, ("gate_history", "lifecycle"): {"events": []}})
+    gira(base)                                                   # diario assente
+    monkeypatch.setattr(pb, "coppie_uscite", lambda *a, **k: 1 / 0)
+    gira({**base, ("gate_history", "lifecycle"): {"events": []}})  # uscite non ricostruite
+    assert visti == [True, False, False]
+
+
+def test_rimossa_senza_promossa_parte_da_vissuta_giorni():
+    """Il diario tiene gli ultimi 500 eventi: se la «promossa» e' caduta,
+    l'inizio viene da `vissuta_giorni` della «rimossa» (mai prima della
+    promozione vera), non dal 25 set."""
+    rimossa_at = _ts(2026, 10, 8, 6)
+    vera = rimossa_at - 5.2537 * 86400                  # promozione vera
+    diario = {"events": [{"key": "RIM|gen_r", "tipo": "rimossa", "at": rimossa_at,
+                          "vissuta_giorni": round((rimossa_at - vera) / 86400, 2)}]}
+    u = pb.coppie_uscite({}, diario, [], [], PAV, ORA)["RIM|gen_r"]
+    atteso = rimossa_at - (5.25 - 0.005) * 86400
+    assert math.isclose(u["inizio"], atteso) and u["inizio"] >= vera
+    assert u["inizio"] > pb.VALIDATED_AT_DAL
+    # senza nemmeno `vissuta_giorni` si resta al 25 set 12:00
+    diario["events"][0]["vissuta_giorni"] = None
+    assert pb.coppie_uscite({}, diario, [], [], PAV, ORA)["RIM|gen_r"]["inizio"] == \
+        pb.VALIDATED_AT_DAL
+
+
+def test_segnale_preso_da_un_altra_strategia_conta_come_preso():
+    """Il paper entra su A long con g1, nel motore su A alla stessa candela
+    scatta solo la gemella g2: il segnale e' preso (non «non aperto»), ma non
+    finisce negli stessi segnali. In direzione opposta resta non preso."""
+    pairs = {"A|g1": {"validated_at": PAV}, "A|g2": {"validated_at": PAV}}
+    e = PAV + 86400
+    fc = pb.fuori_campione([_m("A", "g2", e)], [_p("A", "g1", e + 905)], pairs, list(pairs), PAV)
+    assert fc["segnali_presi"]["paper"] == 1 and fc["motore_non_aperti"]["n"] == 0
+    assert fc["stessi_segnali"]["n"] == 0
+    assert fc["paper_senza_segnale"] == 0 and fc["paper_su_altra_strategia"] == 1
+    corto = pb.fuori_campione([_m("A", "g2", e)], [_p("A", "g1", e + 905, direction="short")],
+                              pairs, list(pairs), PAV)
+    assert corto["segnali_presi"]["paper"] == 0 and corto["motore_non_aperti"]["n"] == 1
+    assert corto["paper_senza_segnale"] == 1 and corto["paper_su_altra_strategia"] == 0
+
+
+def test_esecuzione_sul_bordo_del_margine_non_si_decide():
+    """«Oltre il margine» e' strettamente maggiore, come nella regola del 3 ott."""
+    assert pb.lettura_esecuzione({"n": 30, "differenza": 0.2, "errore_regola": 0.1}
+                                 ).startswith("non si decide")
+    assert pb.lettura_esecuzione({"n": 30, "differenza": 0.2001, "errore_regola": 0.1}
+                                 ).startswith("e' esecuzione")
+    assert ts.esito_3_ott(0.2, 0.2) == "non si decide"
+
+
+def test_regola_3_ott_caso_limite_e_trade_senza_r(capsys):
+    """Il calcolo resta quello della regola (nessun minimo di trade aggiunto):
+    2 contro 2 a -1R su 2 giornate da' margine 0 ed esito «uguale». I trade
+    senza R si contano e si stampano."""
+    rows = [_tr(DAL3 + 600, -1.0, declassata=True), _tr(DAL3 + 600 + 86400, -1.0, declassata=True),
+            _tr(DAL3 + 700, -1.0), _tr(DAL3 + 700 + 86400, -1.0)]
+    c = ts.confronto_3_ott(rows)
+    assert c["margine"] == 0 and c["esito"] == "uguale"
+    senza = dict(_tr(DAL3 + 800, 0.5, declassata=True), size=0.0)       # senza R
+    prima = dict(_tr(DAL3 - 800, 0.5), size=0.0)                        # prima del 27 sera
+    c = ts.confronto_3_ott(rows + [senza, prima])
+    assert c["declassate_senza_r"] == 1 and c["attive_senza_r"] == 0 and c["declassate_n"] == 2
+    ts.print_declassate(ts.declassate_report(rows + [senza]))
+    out = capsys.readouterr().out
+    assert "esclusi perche' senza R: declassate 1, attive 0" in out
+    assert ("il piu' largo fra quello per giornata e quello trade per trade; almeno 2 "
+            "giornate") in out
+
+
+def test_riga_delle_coppie_rigiocate_accanto_al_totale(capsys):
+    pairs, diario = _registro_e_diario()
+    uscite = pb.coppie_uscite(pairs, diario, ["VIVA|gen_v"], [], PAV, ORA)
+    motore = [_m("VIVA", "gen_v", V + 3600 * (i + 1)) for i in range(3)]
+    rig = [_m("RIM", "gen_r", _ts(2026, 10, 2))]
+    pb.stampa_fuori_campione(pb.fuori_campione(motore, [], pairs, ["VIVA|gen_v"], PAV,
+                                               uscite=uscite, motore_uscite=rig),
+                             "2026-09-16", 1, None)
+    out = capsys.readouterr().out
+    assert ("coppie confrontate 4 (di cui 3 uscite dal registro e rigiocate) · con trade del "
+            "motore 2 (rigiocate 1) · con trade del paper 0 (rigiocate 0)") in out
+    # col paper su una coppia rigiocata, fra le coppie del paper ne conta una
+    paper = [_p("RIM", "gen_r", _ts(2026, 10, 2) + 905), _p("VIVA", "gen_v", V + 3600 + 905)]
+    fc = pb.fuori_campione(motore, paper, pairs, ["VIVA|gen_v"], PAV, uscite=uscite,
+                           motore_uscite=rig)
+    assert fc["coppie_con_paper"] == 2 and fc["sopravvivenza"]["rigiocate_con_paper"] == 1
+
+
+def _righe_segnali(trades):
+    righe = [{"sym": t["symbol"], "dir": t["direction"], "ts": t["entry_ts"], "r": 1.0,
+              "mfe": None, "tp": None, "giorno": "g", "uscita": False, "t": t} for t in trades]
+    return pb.segnali_unici(righe)[0], righe
+
+
+def test_portafoglio_del_motore_in_parita_senza_tetto_di_posizioni(monkeypatch):
+    """Sei segnali nella stessa candela su sei monete: in parita' (come il bot)
+    il massimo di posizioni non si applica e li apre tutti; fuori parita' 5."""
+    segnali, righe = _righe_segnali([_m(f"C{i}", "g", PAV + 3600) for i in range(6)])
+    monkeypatch.setattr(pb.settings, "BACKTEST_PARITY", True)
+    assert pb.quota_portafoglio_motore(segnali, righe, 900.0) == 6
+    monkeypatch.setattr(pb.settings, "BACKTEST_PARITY", False)
+    monkeypatch.setattr(pb.settings, "MAX_OPEN_POSITIONS", 5)
+    assert pb.quota_portafoglio_motore(segnali, righe, 900.0) == 5
+
+
+def test_segnali_in_comune_fra_paper_e_portafoglio_del_motore(capsys):
+    """Stessi conteggi non vuol dire stessi segnali. Due segnali su A a un'ora
+    l'uno dall'altro, lunghi 2 ore nel motore: il portafoglio del motore apre
+    solo il primo. Caso B: il paper li prende tutti e due. Caso C: il paper
+    prende solo il secondo (1 su 2 contro 1 su 2, nessuno in comune)."""
+    pairs = {"A|g": {"validated_at": PAV}}
+    t0 = PAV + 86400
+    motore = [_m("A", "g", t0, bars=8), _m("A", "g", t0 + 3600, bars=8)]
+    b = pb.fuori_campione(motore, [_p("A", "g", t0 + 905), _p("A", "g", t0 + 3600 + 905)],
+                          pairs, list(pairs), PAV)["segnali_presi"]
+    assert (b["paper"], b["portafoglio_motore"]) == (2, 1)
+    assert (b["in_comune"], b["solo_paper"], b["solo_motore"]) == (1, 1, 0)
+    fc = pb.fuori_campione(motore, [_p("A", "g", t0 + 3600 + 905)], pairs, list(pairs), PAV)
+    c = fc["segnali_presi"]
+    assert (c["paper"], c["portafoglio_motore"]) == (1, 1)
+    assert (c["in_comune"], c["solo_paper"], c["solo_motore"]) == (0, 1, 1)
+    pb.stampa_fuori_campione(fc, "2026-09-16", 0, None)
+    assert "(in comune 0, solo paper 1, solo motore 1)" in capsys.readouterr().out
+
+
+def test_stessi_segnali_solo_nello_stesso_verso():
+    """Caso E: un long del motore e uno short del paper sulla stessa coppia e
+    candela non sono lo stesso segnale. Caso F: long e short del motore alla
+    stessa candela, il paper short si abbina allo short e il long resta fra i
+    non aperti."""
+    pairs = {"A|g": {"validated_at": PAV}}
+    e = PAV + 86400
+    fc = pb.fuori_campione([_m("A", "g", e)], [_p("A", "g", e + 905, direction="short")],
+                           pairs, list(pairs), PAV)
+    assert fc["stessi_segnali"]["n"] == 0 and fc["paper_senza_segnale"] == 1
+    motore = [_m("A", "g", e, pnl_pct=0.01), _m("A", "g", e, pnl_pct=-0.01, direction="short")]
+    fc = pb.fuori_campione(motore, [_p("A", "g", e + 905, pnl=-0.5, direction="short")],
+                           pairs, list(pairs), PAV)
+    ss = fc["stessi_segnali"]
+    assert ss["n"] == 1 and math.isclose(ss["motore_r"], -1.0) and math.isclose(ss["paper_r"], -0.5)
+    assert fc["motore_non_aperti"]["n"] == 1 and math.isclose(fc["motore_non_aperti"]["r_medio"], 1.0)
+    # abbina_segnali: con la direzione solo lo stesso verso, senza come prima
+    righe = {"A|g": [[1000.0, 1.0, False, 0, "long"], [1000.0, 2.0, False, 1, "short"]]}
+    senza: list = []
+    abb, n_senza = pb.abbina_segnali(righe, [("A|g", 1100.0, 0.5, "short"),
+                                             ("A|g", 1200.0, 0.4, "short")], 1800.0,
+                                     senza_segnale=senza)
+    assert abb == [(2.0, 0.5)] and n_senza == 1 and senza == [("A|g", 1200.0, 0.4, "short")]
+    abb, _ = pb.abbina_segnali({"A|g": [[1000.0, 1.0, False]]}, [("A|g", 1100.0, 0.5)], 1800.0)
+    assert abb == [(1.0, 0.5)]

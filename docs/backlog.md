@@ -67,6 +67,15 @@ modello». Nessuna voce è stata fatta: aspettano il sì.
 
 ### K1. Regole delle letture del 3, 7 e 14 ott, scritte prima (proposta: serve adesso)
 **30 set: FATTO (sì del proprietario), regole scritte nel diario prima delle letture.** In `portafoglio` (FUORI CAMPIONE) e in `trades` (DECLASSATE). Dettaglio nel diario del 30 set.
+**30 set sera, revisione avversaria di A (e correzioni fedeli alla regola, soglie invariate):** la
+selezione dice «non si decide» se il diario delle vite non si legge (prima usciva un verdetto senza
+le coppie rimosse); «oltre il margine» = strettamente maggiore anche per l'esecuzione; abbinamenti
+paper/motore nello stesso verso; inizio della coppia rimossa ricavato dalla «rimossa» se la
+«promossa» è caduta dal diario (tetto 500 eventi). Restano: (a) un trade dello stesso verso alla
+barra dopo può «rubare» l'abbinamento a quello giusto (raro, non corretto); (b) **contare gli eventi
+del diario delle vite prima del 7 ott** (se vicini a 500, alzare `GATE_LIFECYCLE_MAX`); (c) la regola
+del 3 ott non ha un minimo di trade per lato: aggiungerlo ora, dopo aver visto 28 contro 22, vorrebbe
+dire cambiarla — decide il proprietario.
 Il verdetto «è il bot che esegue male» del 7 ott oggi si decide sulla media di tutti i trade (margine
 ±0,25R); sugli stessi segnali il margine è ±0,16R e la differenza +0,04R (ops 0371). Pacchetto:
 riga «stessi segnali» per il verdetto sul bot con almeno 30 trade accoppiati, conteggio unico dei
@@ -112,6 +121,20 @@ delle conferme di tutto il registro in `..._conferme.jsonl`. File locali sulla V
 giorno, rotazione 120 giorni, tetto 300 MB), zero letture Firebase. Resta da fare dopo il 7 ott: il
 rigioco (voce ops in sfondo) con le regole da scrivere prima: configurazione d'uscita con cui
 rigiocare, gruppo fissato alla prima foto, solo trade dopo `data_end`, margine per giornata.
+**30 set sera, revisione avversaria di C e correzioni:** la raccolta non cambia il giro (discovery
+vera lanciata con e senza: identica) e i record si rigiocano esattamente (106 su 106, poi 37 su 37
+col solo record «giro»). Aggiunti: una riga «giro» con commit, impostazioni del motore e le 15 soglie
+GATE_* (formato 2: le righe del formato 1, raccolte il 30 set pomeriggio, si ricostruiscono solo in
+modo approssimato); l'elenco compresso delle idonee a ogni giro (~125 KiB, 21 giorni) per rifare
+l'estrazione col seme; il file delle spec del giorno (le spec possono sparire da Firebase); `params`
+per le coppie base; timeframe None se la spec manca; foto con creazione esclusiva e giorno di inizio
+giro; numeri del .env letti senza far fallire l'import. **Regole dell'analisi (scritte prima dei
+numeri, in testa a `scripts/gruppo_controllo.py` e in `docs/revisione_sospese_30set.md`):** separare
+sempre 15 minuti e 1 ora (la quota di 50 a giro rende una bocciata a 1 ora ~9 volte più probabile);
+gruppo fissato alla prima foto; solo trade dopo `data_end`; margine per giornata. **Trovati, non
+fatti:** `rebuild_clean.sh` azzera le spec su Firebase senza copia; la lettura dei numeri dal .env
+con int()/float() all'import può far fallire l'avvio in tutto il repo (corretto solo in
+`gruppo_controllo`).
 H5 dice se le validate guadagnano DOPO essere state scelte, non PERCHÉ scelte. Raccolta: ~50
 candidate bocciate a giro (a caso, con almeno 30 trade) e una foto giornaliera delle conferme;
 dopo 14 giorni il motore le rigioca per gruppo (validate, 2 conferme, 1 conferma, bocciate).

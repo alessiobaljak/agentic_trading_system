@@ -792,7 +792,8 @@ def statistiche_abbinate(coppie: list[tuple[float, float]],
 
 
 def abbina_segnali(motore_per_coppia: dict, segnali_paper: list[tuple],
-                   tol: float, istanti: list | None = None
+                   tol: float, istanti: list | None = None,
+                   senza_segnale: list | None = None
                    ) -> tuple[list[tuple[float, float]], int]:
     """Per ogni trade del paper (coppia, ingresso, R) il trade del motore della
     STESSA coppia, non ancora usato, piu' vicino nel tempo entro `tol` secondi: la
@@ -804,19 +805,34 @@ def abbina_segnali(motore_per_coppia: dict, segnali_paper: list[tuple],
     paper non ha aperto. Ritorna le coppie (R motore, R paper) e quanti trade del
     paper non hanno un segnale del motore vicino. Se si passa la lista
     `istanti`, ci si aggiunge l'ingresso del paper di ogni coppia, nello stesso
-    ordine (serve al margine per giornata, 30 set 2026)."""
+    ordine (serve al margine per giornata, 30 set 2026).
+
+    30 set 2026, revisione: LA DIREZIONE. Se il trade del paper porta la sua
+    (quarto elemento: coppia, ingresso, R, direzione) e la riga del motore la
+    sua (quinto elemento: [ingresso, R, usato, indice, direzione]), si
+    abbinano solo trade nello stesso verso: una strategia generata opera nei due
+    versi, e uno short del paper contro un long del motore non e' «lo stesso
+    segnale». Senza la direzione (chiamate vecchie) si abbina come prima. Con
+    la lista `senza_segnale` ci si aggiungono i trade del paper rimasti senza
+    abbinamento (le tuple come sono arrivate)."""
     abbinati: list[tuple[float, float]] = []
     senza = 0
-    for k, te, r_p in sorted(segnali_paper, key=lambda x: (x[1], x[0])):
+    for voce in sorted(segnali_paper, key=lambda x: (x[1], x[0])):
+        k, te, r_p = voce[0], voce[1], voce[2]
+        dir_p = voce[3] if len(voce) > 3 else None
         migliore = None
         for riga in motore_per_coppia.get(k, ()):
             if riga[2]:
+                continue
+            if dir_p is not None and len(riga) > 4 and riga[4] != dir_p:
                 continue
             d = abs(riga[0] - te)
             if d <= tol and (migliore is None or d < abs(migliore[0] - te)):
                 migliore = riga
         if migliore is None:
             senza += 1
+            if senza_segnale is not None:
+                senza_segnale.append(voce)
             continue
         migliore[2] = True
         abbinati.append((migliore[1], r_p))
@@ -854,26 +870,60 @@ def segnali_unici(righe: list[dict]) -> tuple[list[dict], int]:
     return segnali, len(righe) - len(segnali)
 
 
-def quota_portafoglio_motore(segnali: list[dict], righe: list[dict],
-                             secondi_barra: float) -> int:
-    """Quanti di questi segnali APRIREBBE il portafoglio del motore (30 set 2026,
-    pacchetto A): una posizione per moneta, max posizioni, cooldown e tetto per
-    moneta del bot, senza i limiti what-if (la colonna «senza limiti» di sopra).
-    Serve a leggere i «non aperti»: anche il motore, con una posizione per
-    moneta, non puo' prenderli tutti (sui 60 giorni ne apre 995 su 2.203, ops
-    0371), quindi un segnale non preso non e' per forza colpa del bot.
+def aperti_portafoglio_motore(segnali: list[dict], righe: list[dict],
+                              secondi_barra: float) -> set[int]:
+    """QUALI di questi segnali (indici in `segnali`) APRIREBBE il portafoglio del
+    motore (30 set 2026, pacchetto A): una posizione per moneta, il cooldown e
+    il tetto di perdita per moneta al giorno, come nel bot. Serve a leggere i
+    «non aperti»: anche il motore, con una posizione per moneta, non puo'
+    prenderli tutti (sui 60 giorni ne apre 995 su 2.203, ops 0371), quindi un
+    segnale non preso non e' per forza colpa del bot.
+
+    30 set 2026, revisione:
+      * il tetto sul NUMERO di posizioni e' spento quando il bot gira in parita'
+        (`BACKTEST_PARITY`), come nel bot (bot/main.py: in parita' il massimo di
+        posizioni non si applica; il paper ne ha tenute 9 insieme). Fuori
+        parita' resta il massimo del bot;
+      * il tetto per direzione resta spento, e non perche' sia un what-if (e'
+        la regola del bot dall'8 set): nel bot, con la size ridotta (il freno
+        che la dimezza), ammette circa 8 posizioni nello stesso verso (backlog
+        I6), mentre qui, all'1% pieno per trade, ne ammetterebbe 3;
+      * si restituiscono gli INDICI, non solo quanti sono: cosi' si dice quanti
+        segnali sono presi da tutti e due, solo dal paper e solo dal motore.
+        Non e' un tetto per il paper: il paper esce con tempi e R suoi, quindi
+        cooldown e moneta occupata non coincidono, e puo' prendere segnali che
+        il portafoglio del motore non apre.
 
     Il portafoglio qui vede SOLO questi segnali (un trade per segnale, quello
-    della prima strategia in ordine di nome): il paper intanto aveva anche altre
-    coppie aperte, quindi e' un tetto alto per cio' che il paper poteva prendere."""
+    della prima strategia in ordine di nome)."""
     if not segnali:
-        return 0
+        return set()
     rappresentanti = []
-    for s in segnali:
-        membri = sorted((righe[i] for i in s["membri"]), key=lambda r: str(r["t"].get("strategy")))
-        rappresentanti.append(membri[0]["t"])
+    indice: dict[tuple, int] = {}
+    for i, s in enumerate(segnali):
+        membri = sorted((righe[j] for j in s["membri"]), key=lambda r: str(r["t"].get("strategy")))
+        t = membri[0]["t"]
+        rappresentanti.append(t)
+        indice[(str(t.get("symbol") or "?"), str(t.get("direction") or "long").lower(),
+                round(_num(t.get("entry_ts"))))] = i
     lim = {**limiti_default(), "tetto_direzione": 0.0, "tetto_giorno": 0.0, "netto_r_max": 0.0}
-    return int(simula(rappresentanti, 10_000.0, lim, secondi_barra=secondi_barra)["n_aperti"])
+    if settings.BACKTEST_PARITY:
+        lim["max_posizioni"] = 0
+    aperti: list[dict] = []
+    simula(rappresentanti, 10_000.0, lim, secondi_barra=secondi_barra, aperti_out=aperti)
+    out: set[int] = set()
+    for t in aperti:
+        i = indice.get((t["symbol"], t["direction"], round(float(t["entry_ts"]))))
+        if i is not None:
+            out.add(i)
+    return out
+
+
+def quota_portafoglio_motore(segnali: list[dict], righe: list[dict],
+                             secondi_barra: float) -> int:
+    """Quanti di questi segnali aprirebbe il portafoglio del motore (vedi
+    `aperti_portafoglio_motore`)."""
+    return len(aperti_portafoglio_motore(segnali, righe, secondi_barra))
 
 
 def _params_dal_paper(trade_paper: list[dict]) -> dict | None:
@@ -905,8 +955,9 @@ def coppie_uscite(pairs: dict, diario, validate, paper: list[dict] | None,
 
     Per coppia: {motivo, inizio, fine, params, rigiocabile, perche}.
       * «rimossa»: evento del diario delle vite (`gate_history/lifecycle`); il
-        record e' cancellato, quindi l'inizio viene dall'evento «promossa» (o
-        dal 25 set 12:00 se non c'e') e la configurazione d'uscita dall'ultimo
+        record e' cancellato, quindi l'inizio viene dall'evento «promossa» (se
+        e' caduto dal diario, da `vissuta_giorni` della «rimossa»; senza
+        nessuno dei due, dal 25 set 12:00) e la configurazione d'uscita dall'ultimo
         trade del paper (`_params_dal_paper`; senza, quella globale).
       * «sostituita» da una figlia dell'intorno: fino a `sostituita_at`.
       * «non piu' vista» (la moneta e' uscita dall'universo): fino a
@@ -938,7 +989,18 @@ def coppie_uscite(pairs: dict, diario, validate, paper: list[dict] | None,
             continue
         nate = [_num(x.get("at")) for x in eventi if x.get("key") == k
                 and x.get("tipo") == "promossa" and _num(x.get("at")) < _num(e.get("at"))]
-        rec = {"validated_at": max(nate)} if nate else {}
+        # 30 set 2026, revisione: il diario tiene gli ultimi VITE_MAX eventi, e la
+        # «promossa» puo' essere caduta. Allora l'inizio si ricava dalla
+        # «rimossa» (`vissuta_giorni`, arrotondato a 2 decimali): mezzo centesimo
+        # di giorno in meno sulla vita, cosi' l'inizio non cade mai prima della
+        # promozione vera. Il 25 set 12:00 resta solo se manca anche quella.
+        vissuta = _num_o_none(e.get("vissuta_giorni"))
+        if nate:
+            rec = {"validated_at": max(nate)}
+        elif vissuta is not None:
+            rec = {"validated_at": _num(e.get("at")) - (vissuta - 0.005) * 86400}
+        else:
+            rec = {}
         t0, _ = inizio_fuori_campione(rec, pavimento)
         out[k] = {"motivo": "rimossa", "inizio": t0, "fine": _num(e.get("at")),
                   "params": _params_dal_paper(paper_per_coppia.get(k, [])),
@@ -1080,13 +1142,21 @@ def lettura_esecuzione(ss: dict | None) -> str:
     if diff <= 0:
         return (f"non e' esecuzione: sugli stessi segnali il paper non fa peggio del motore "
                 f"({confronto}).")
-    if diff >= 2.0 * es:
+    # 30 set 2026, revisione: «oltre il margine» e' STRETTAMENTE maggiore, come
+    # nel diario e nella regola del 3 ott (`trade_stats.esito_3_ott`): sul bordo
+    # esatto non si decide
+    if diff > 2.0 * es:
         return (f"e' esecuzione: sugli stessi segnali il paper rende meno del motore oltre il "
                 f"margine ({confronto}). Per la regola la prossima modifica va su ingressi e "
                 f"uscite del bot.")
     if diff < QUASI_UGUALE_R:
         return f"non si decide: sugli stessi segnali fanno quasi uguale ({confronto})."
     serve = trade_che_servono(n, diff, es)
+    if serve is not None and serve <= n:
+        # sul bordo esatto del margine (30 set 2026): «servono N (oggi N)» si
+        # contraddirebbe; la regola dice «oltre», quindi si rilegge
+        return (f"non si decide: la differenza e' esattamente sul bordo del margine "
+                f"({confronto}); si rilegge il 14 ott.")
     if serve is None or serve > 10 * n:
         return (f"non si decide: la differenza e' piccola rispetto al margine ({confronto}), "
                 f"servirebbero piu' di 10 volte gli accoppiati di oggi.")
@@ -1094,7 +1164,16 @@ def lettura_esecuzione(ss: dict | None) -> str:
             f"{serve} accoppiati (oggi {n}) se resta questa.")
 
 
-def lettura_fuori_campione(m: dict, p: dict | None, ss: dict | None) -> str:
+#: la «selezione» senza il diario delle vite (30 set 2026, revisione): la regola
+#: la decide sulla riga «tutte le coppie operate» proprio per togliere il bias
+#: dei sopravvissuti, e senza diario le coppie RIMOSSE mancano da quella riga
+SELEZIONE_SENZA_DIARIO = (
+    "non si decide: il diario delle vite non si legge (o le coppie uscite non sono "
+    "state ricostruite), quindi la riga «tutte le coppie operate» e' incompleta.")
+
+
+def lettura_fuori_campione(m: dict, p: dict | None, ss: dict | None,
+                           sopravvivenza_completa: bool = True) -> str:
     """Le due letture della regola, in parole, con l'azione che ne segue.
 
     30 set 2026, pacchetto A (si' del proprietario, prima delle letture):
@@ -1102,10 +1181,17 @@ def lettura_fuori_campione(m: dict, p: dict | None, ss: dict | None) -> str:
     «stessi segnali» (`lettura_esecuzione`); si dicono sempre tutte e due, perche'
     possono valere insieme. Prima del pacchetto «esecuzione» si decideva sulla
     media di tutti i trade del motore contro tutti quelli del paper: quella
-    differenza resta stampata come riassunto, ma non decide piu'."""
+    differenza resta stampata come riassunto, ma non decide piu'.
+
+    30 set 2026, revisione: con `sopravvivenza_completa` falso (il diario delle
+    vite non si e' letto, o le coppie uscite non sono state ricostruite) la
+    «selezione» non si decide: la riga su cui la regola la decide sarebbe senza
+    le coppie rimosse. L'«esecuzione» resta: la riga «stessi segnali» non
+    dipende dalle uscite."""
     if p is None:
         return "non si decide: il paper non e' leggibile da qui (Firebase assente)."
-    return (f"Selezione: {lettura_selezione(m)} Esecuzione: {lettura_esecuzione(ss)} "
+    selezione = lettura_selezione(m) if sopravvivenza_completa else SELEZIONE_SENZA_DIARIO
+    return (f"Selezione: {selezione} Esecuzione: {lettura_esecuzione(ss)} "
             f"Si rilegge il 14 ott.")
 
 
@@ -1471,7 +1557,8 @@ def _paper(d: dict) -> str:
 def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
                    chiavi, pavimento: float, fine: float | None = None,
                    secondi_barra: float = 900.0, uscite: dict | None = None,
-                   motore_uscite: list[dict] | None = None, voti: dict | None = None) -> dict:
+                   motore_uscite: list[dict] | None = None, voti: dict | None = None,
+                   sopravvivenza_completa: bool = True) -> dict:
     """IL CONFRONTO. Funzione pura: trade del motore (i dict di `trade_in_dict`),
     trade del paper (dict di Firestore, None = non leggibile), registro
     (`pairs`), le coppie da confrontare (`chiavi`: validate E simulate, perche'
@@ -1511,7 +1598,21 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
     H1-misura (30 set 2026): `voti` (dal file della passata una tantum
     `scripts/t_validate.py`) e il registro danno la t di ogni coppia; la
     divisione per t (`divisione_per_t`) va in `voto_t`. Le regole di ottobre
-    qui sopra non cambiano."""
+    qui sopra non cambiano.
+
+    Revisione delle regole di ottobre (30 set 2026: applicazione fedele, soglie
+    invariate):
+      * `sopravvivenza_completa` falso (diario delle vite illeggibile o uscite
+        non ricostruite): la «selezione» non si decide (`lettura_fuori_campione`);
+      * «stessi segnali» solo fra trade nello STESSO verso (`abbina_segnali`);
+      * presi / non presi: un trade del paper senza gemella della sua coppia ma
+        su un segnale del motore della stessa moneta, candela (entro la
+        tolleranza) e direzione, di un'ALTRA strategia, prende quel segnale: e'
+        lo stesso segnale (`segnali_unici`), solo da un'altra gemella. Non entra
+        negli «stessi segnali» (la regola d'uscita e' un'altra) e si conta a
+        parte (`paper_su_altra_strategia`), fuori da «paper senza segnale»;
+      * i segnali presi da tutti e due, solo dal paper e solo dal portafoglio
+        del motore (`aperti_portafoglio_motore`)."""
     chiavi = list(chiavi)
     inizio: dict[str, float] = {}
     fine_coppia: dict[str, float] = {}
@@ -1586,7 +1687,9 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
             if r is None:
                 senza_r += 1
                 continue
-            righe_p.append({"k": k, "ts": ingresso, "r": r, "mfe": _num_o_none(t.get("mfe_r")),
+            righe_p.append({"k": k, "sym": str(t.get("symbol")),
+                            "dir": str(t.get("direction") or "long").lower(),
+                            "ts": ingresso, "r": r, "mfe": _num_o_none(t.get("mfe_r")),
                             "tp": tocca_tp1(t), "giorno": giorno_locale(ingresso),
                             "uscita": k in rigiocate})
             coppie_p.add(k)
@@ -1615,27 +1718,53 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
                  if righe_p is not None else None)
 
     stessi = non_aperti = presi = None
-    senza_segnale = 0
+    senza_segnale = su_altra_strategia = 0
     if paper is not None:
         # ogni trade del motore porta l'indice del suo segnale: abbinato uno,
-        # il segnale e' preso (anche le sue gemelle non sono «non aperte»)
+        # il segnale e' preso (anche le sue gemelle non sono «non aperte»).
+        # 30 set 2026, revisione: e la direzione, per abbinare solo lo stesso verso
+        tol = TOL_ABBINAMENTO_BARRE * secondi_barra
         motore_per_coppia: dict[str, list[list]] = defaultdict(list)
         for i, s in enumerate(segnali):
             for j in s["membri"]:
                 motore_per_coppia[righe_m[j]["k"]].append(
-                    [righe_m[j]["ts"], righe_m[j]["r"], False, i])
+                    [righe_m[j]["ts"], righe_m[j]["r"], False, i, righe_m[j]["dir"]])
         istanti: list = []
+        senza_lista: list = []
         abbinati, senza_segnale = abbina_segnali(
-            motore_per_coppia, [(r["k"], r["ts"], r["r"]) for r in righe_p],
-            TOL_ABBINAMENTO_BARRE * secondi_barra, istanti=istanti)
+            motore_per_coppia, [(r["k"], r["ts"], r["r"], r["dir"]) for r in righe_p],
+            tol, istanti=istanti, senza_segnale=senza_lista)
         stessi = statistiche_abbinate(abbinati, [giorno_locale(te) for te in istanti])
         preso = {riga[3] for righe in motore_per_coppia.values() for riga in righe if riga[2]}
+        # 30 set 2026, revisione: SOLO per presi / non presi, un trade del paper
+        # rimasto senza la gemella della sua coppia prende il segnale non ancora
+        # preso, piu' vicino entro la tolleranza, con la stessa moneta e
+        # direzione: e' lo stesso segnale di un'altra strategia. Ogni segnale
+        # una volta sola; gli «stessi segnali» non cambiano.
+        per_moneta: dict[tuple, list[int]] = defaultdict(list)
+        for i, s in enumerate(segnali):
+            per_moneta[(s["sym"], s["dir"])].append(i)
+        for k, te, _r, dir_p in sorted(senza_lista, key=lambda x: (x[1], x[0])):
+            migliore = None
+            for i in per_moneta.get((k.partition("|")[0], dir_p), ()):
+                d = abs(segnali[i]["ts"] - te)
+                if i not in preso and d <= tol and (
+                        migliore is None or d < abs(segnali[migliore]["ts"] - te)):
+                    migliore = i
+            if migliore is not None:
+                preso.add(migliore)
+                su_altra_strategia += 1
+        senza_segnale -= su_altra_strategia
         rs_na = [s["r"] for i, s in enumerate(segnali) if i not in preso]
         rs_si = [s["r"] for i, s in enumerate(segnali) if i in preso]
         non_aperti = {"n": len(rs_na), "r_medio": mean(rs_na) if rs_na else None}
+        aperti_m = aperti_portafoglio_motore(segnali, righe_m, secondi_barra)
         presi = {"segnali": len(segnali), "paper": len(preso),
                  "paper_r_motore": mean(rs_si) if rs_si else None,
-                 "portafoglio_motore": quota_portafoglio_motore(segnali, righe_m, secondi_barra)}
+                 "portafoglio_motore": len(aperti_m),
+                 # 30 set 2026, revisione: le due quote sugli STESSI segnali
+                 "in_comune": len(preso & aperti_m), "solo_paper": len(preso - aperti_m),
+                 "solo_motore": len(aperti_m - preso)}
 
     # le due righe della sopravvivenza: «ancora validate» ricontate da sole
     seg_val, _ = segnali_unici([r for r in righe_m if not r["uscita"]])
@@ -1649,6 +1778,9 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
                   "paper_n": p["n"] if p else None, "paper_r": p["r_medio"] if p else None},
         "rigiocate": len(rigiocate),
         "rigiocate_con_trade": len({r["k"] for r in righe_m if r["uscita"]}),
+        # 30 set 2026, revisione: quante delle coppie col paper sono rigiocate
+        # (prima la riga stampava il totale delle rigiocate accanto al paper)
+        "rigiocate_con_paper": len(coppie_p & set(rigiocate)),
         "rigiocate_config_globale": sum(1 for u in rigiocate.values() if not u.get("params")),
     }
     return {
@@ -1665,11 +1797,13 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
         "differenza": diff, "errore_standard": es, "errore_giorno": es_giorno,
         "stessi_segnali": stessi, "motore_non_aperti": non_aperti, "segnali_presi": presi,
         "paper_senza_segnale": senza_segnale,
+        "paper_su_altra_strategia": su_altra_strategia,
+        "sopravvivenza_completa": bool(sopravvivenza_completa),
         "paper_config_note": config_note, "paper_config_diverse": config_diverse,
         "paper_r_senza_config_diverse": mean(r_senza_diverse) if r_senza_diverse else None,
         "sopravvivenza": sopravvivenza,
         "voto_t": divisione_per_t(righe_m, righe_p, pairs, voti),
-        "lettura": lettura_fuori_campione(m, p, stessi),
+        "lettura": lettura_fuori_campione(m, p, stessi, sopravvivenza_completa),
     }
 
 
@@ -1722,10 +1856,22 @@ def paper_fuori_registro(paper: list[dict] | None, validate, dal_ts: float) -> d
             "senza_r": senza_r}
 
 
+def diario_leggibile(diario) -> bool:
+    """Il diario delle vite si e' letto e i suoi eventi sono un elenco (30 set
+    2026, revisione): e' la condizione per cui la riga «tutte le coppie
+    operate» contiene anche le coppie RIMOSSE."""
+    return rimosse_dal(diario, 0.0) is not None
+
+
 def _diario_vite(fb) -> dict | None:
-    """Il diario delle validate, UNA lettura. Fail-open: senza, il conto delle
-    rimosse dice «n.d.» e il resto del report non cambia. Chiamata posizionale:
-    i client finti dei test spesso hanno solo `get_doc(coll, doc)`."""
+    """Il diario delle validate, UNA lettura. Chiamata posizionale: i client
+    finti dei test spesso hanno solo `get_doc(coll, doc)`.
+
+    Fail-open sulla lettura, ma NON senza effetti (30 set 2026, revisione):
+    senza diario le coppie rimosse spariscono dalla riga «tutte le coppie
+    operate», il conto delle rimosse dice «n.d.» e la «selezione» non si decide
+    (`lettura_fuori_campione`). Prima questa docstring diceva che il resto del
+    report non cambiava: era vero quando il diario serviva solo a un conteggio."""
     try:
         doc = fb.get_doc("gate_history", "lifecycle")
     except Exception:  # noqa: BLE001 — una lettura fallita non deve fermare il report
@@ -1782,9 +1928,20 @@ def stampa_fuori_campione(fc: dict, dal: str, rimosse: int | None,
           f"in multipli del rischio (-1R = stop pieno); «max R» = massimo toccato (mediana); "
           f"«1° target» = quota che arriva al primo gradino.")
     sv = fc.get("sopravvivenza") or {}
-    print(f"  coppie confrontate {fc['coppie']} · con trade del motore {fc['coppie_con_motore']} "
-          f"· con trade del paper {fc['coppie_con_paper']} (di cui uscite dal registro e "
-          f"rigiocate {sv.get('rigiocate', 0)})")
+    # 30 set 2026, revisione: le rigiocate accanto al TOTALE delle coppie, e per
+    # motore e paper solo quelle che hanno trade (prima il totale stava accanto
+    # al paper e sembrava una parte delle sue coppie)
+    rig = sv.get("rigiocate", 0)
+    riga_c = f"  coppie confrontate {fc['coppie']}"
+    if rig:
+        riga_c += f" (di cui {rig} uscite dal registro e rigiocate)"
+    riga_c += f" · con trade del motore {fc['coppie_con_motore']}"
+    if rig:
+        riga_c += f" (rigiocate {sv.get('rigiocate_con_trade', 0)})"
+    riga_c += f" · con trade del paper {fc['coppie_con_paper']}"
+    if rig and fc.get("paper") is not None:
+        riga_c += f" (rigiocate {sv.get('rigiocate_con_paper', 0)})"
+    print(riga_c)
     print(f"  senza data di validazione (validate prima del 25 set: contate dal 25 set, 14:00 "
           f"italiane) {fc['senza_data']} · con data: {fc['validate_per_giorno']}")
     if fc["azzerate_contate"] or fc["azzerate_escluse"]:
@@ -1811,11 +1968,18 @@ def stampa_fuori_campione(fc: dict, dal: str, rimosse: int | None,
               f"giornata ({_margine(ss['errore_standard'])} trade per trade)")
     pr, na = fc.get("segnali_presi"), fc.get("motore_non_aperti")
     if pr is not None and na is not None:
+        comuni = ""
+        if "in_comune" in pr:
+            comuni = (f" (in comune {pr['in_comune']}, solo paper {pr['solo_paper']}, solo "
+                      f"motore {pr['solo_motore']})")
+        altra = fc.get("paper_su_altra_strategia") or 0
         print(f"  segnali presi: paper {_quota(pr['paper'], pr['segnali'])}; il portafoglio del "
               f"motore, anche lui una posizione per moneta, {_quota(pr['portafoglio_motore'], pr['segnali'])}"
-              f". Non presi dal paper {na['n']}, R medio {_fmt_r(na['r_medio'])} (presi "
+              f"{comuni}. Non presi dal paper {na['n']}, R medio {_fmt_r(na['r_medio'])} (presi "
               f"{_fmt_r(pr['paper_r_motore'])}): non e' un verdetto sul bot. Paper senza un segnale "
-              f"del motore {fc['paper_senza_segnale']}.")
+              f"del motore {fc['paper_senza_segnale']}"
+              + (f"; {altra} su un segnale di un'altra strategia (presi, fuori dagli stessi "
+                 f"segnali)" if altra else "") + ".")
     va, tu = sv.get("validate") or {}, sv.get("tutte") or {}
     if va and tu:
         def _sv(d):
@@ -1880,15 +2044,22 @@ def sezione_fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: 
                            diario, fine: float | None = None,
                            secondi_barra: float = 900.0, uscite: dict | None = None,
                            motore_uscite: list[dict] | None = None,
-                           voti: dict | None = None) -> dict:
+                           voti: dict | None = None,
+                           sopravvivenza_completa: bool | None = None) -> dict:
     """Calcola, stampa e ritorna il riepilogo per Firebase. `uscite` e
     `motore_uscite`: le coppie uscite dal registro e i loro trade rigiocati
-    (pacchetto A del 30 set 2026); senza, la sopravvivenza ha una riga sola."""
+    (pacchetto A del 30 set 2026); senza, la sopravvivenza ha una riga sola.
+    `sopravvivenza_completa` (30 set 2026, revisione): None = si ricava dal
+    diario (`diario_leggibile`); il main la passa falsa anche quando le coppie
+    uscite non si sono ricostruite. Falsa, la «selezione» non si decide."""
     dal = dt.datetime.fromtimestamp(pavimento, dt.timezone.utc).date().isoformat()
     uscite = uscite or {}
+    if sopravvivenza_completa is None:
+        sopravvivenza_completa = diario_leggibile(diario)
     fc = fuori_campione(motore, paper, pairs, simulate, pavimento, fine=fine,
                         secondi_barra=secondi_barra, uscite=uscite,
-                        motore_uscite=motore_uscite, voti=voti)
+                        motore_uscite=motore_uscite, voti=voti,
+                        sopravvivenza_completa=sopravvivenza_completa)
     rimosse = rimosse_dal(diario, dal_ts)
     visti = set(validate) | {k for k, u in uscite.items() if u.get("rigiocabile")}
     fuori_reg = paper_fuori_registro(paper, visti, dal_ts)
@@ -1977,6 +2148,9 @@ def main(argv: list[str] | None = None) -> int:
     dal_ts = None
     paper = diario = None
     uscite: dict[str, dict] = {}
+    # 30 set 2026, revisione: senza diario (o senza le coppie uscite) la riga
+    # «tutte le coppie operate» non ha le rimosse, e la «selezione» non si decide
+    sopravvivenza_completa = True
     if args.dal is None:
         try:
             dal_paper = dt.date.fromisoformat(PAPER_START)
@@ -1986,12 +2160,14 @@ def main(argv: list[str] | None = None) -> int:
             dal_ts = dt.datetime.combine(dal_paper, dt.time(), dt.timezone.utc).timestamp()
             paper = _trade_paper(fb, dal_ts)
             diario = _diario_vite(fb)
+            sopravvivenza_completa = diario_leggibile(diario)
             try:
                 uscite = coppie_uscite(pairs, diario, validate, paper, max(dal_ts, inizio_ts),
                                        ora.timestamp())
             except Exception as exc:  # noqa: BLE001 — senza, la sopravvivenza ha una riga sola
                 print(f"[portafoglio] coppie uscite non ricostruite ({str(exc)[:120]})")
                 uscite = {}
+                sopravvivenza_completa = False
     per_coin_uscite: dict[str, list[tuple[str, dict]]] = defaultdict(list)
     for k, u in sorted(uscite.items()):
         if u.get("rigiocabile"):
@@ -2116,7 +2292,8 @@ def main(argv: list[str] | None = None) -> int:
                     uscite=uscite, motore_uscite=trades_uscite,
                     # H1-misura (30 set 2026): la t della passata una tantum,
                     # da un file locale della VPS (nessuna lettura Firestore)
-                    voti=voti_t_da_file())
+                    voti=voti_t_da_file(),
+                    sopravvivenza_completa=sopravvivenza_completa)
             except Exception as exc:  # noqa: BLE001 — una sezione rotta non deve fermare il report
                 print(f"\n  FUORI CAMPIONE: saltata per un errore ({str(exc)[:120]}).")
 
