@@ -70,6 +70,23 @@ dal paper) sono stampati, e sono anche contati. Nessun backtest in piu': sono
 gli stessi trade simulati sopra; una sola lettura in piu' (il diario
 `gate_history/lifecycle`, per contare le coppie rimosse).
 
+PACCHETTO A (30 set 2026, si' del proprietario, regole scritte PRIMA delle
+letture del 3, 7 e 14 ott). Il verdetto «esecuzione» si decide solo sulla riga
+«stessi segnali» (paper e motore sullo stesso segnale, stesso mercato) e solo con
+almeno 30 accoppiati; «selezione» resta sul motore con almeno 80 segnali. I
+trade del motore con stessa moneta, candela e direzione contano una volta
+(doppioni fusi, contati). I margini sono per giornata (nelle giornate nere
+perdono tutti insieme). I segnali presi dal paper si leggono accanto a quelli
+che aprirebbe il portafoglio del motore (una posizione per moneta anche lui).
+Sopravvivenza: le coppie uscite dal registro dall'inizio del paper (rimosse,
+sostituite, non piu' viste) si rigiocano dalla loro validazione al giorno in cui
+sono uscite, con la spec gia' letta (nessuna lettura in piu') e la loro
+configurazione d'uscita (dal record, o dall'ultimo trade del paper se il record
+e' stato cancellato); le azzerate del 27 set no (la regola della sessione e'
+cambiata), e sono contate col loro peso nel paper. Sono gli unici backtest in
+piu' del report: uno per coppia uscita. Le righe «dati da cache» del
+caricatore si contano invece di stamparle (~3,6 KB su ~17, ops 0371).
+
 SOLA LETTURA sul registro. Pubblica un riepilogo compatto in
 `portfolio/backtest` (senza curva) in fail-open: se Firebase non c'e', il
 report resta a schermo e il codice d'uscita non cambia. Il riepilogo non deve
@@ -84,7 +101,9 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import contextlib
 import datetime as dt
+import io
 import json
 import math
 import os
@@ -97,6 +116,7 @@ from bot.config import settings, timeframe_hours
 from bot.core.firebase_client import decode_pairs, get_firebase
 from bot.core.tempo import fuso, giorno_da_iso, giorno_locale
 from bot.core.indicators import compute_indicator_frame
+from bot.core.registry import FRESH_DAYS, MIN_PASSES
 from bot.execution.exit_logic import breakeven_after_tp1, ladder_multiples, lock_keep
 # R e «primo gradino toccato» del paper con le STESSE funzioni della deriva,
 # e le stesse uscite esterne che la deriva scarta: una seconda definizione di R
@@ -542,16 +562,44 @@ QUASI_UGUALE_R = 0.05
 #: a barra chiusa, il bot entra dopo), cosi' «stessi segnali» e' lo stesso metro
 TOL_ABBINAMENTO_BARRE = 2
 
+#: sotto questi trade ACCOPPIATI (paper e motore sullo stesso segnale) il
+#: verdetto «esecuzione» non esce (30 set 2026, pacchetto A approvato dal
+#: proprietario, voce H5-b della revisione). La simulazione della revisione
+#: (scratchpad h5_min, 20.000 ripetizioni per numero di accoppiati) dava falsi
+#: allarmi sotto il 3% gia' da poche decine; 30 e' il minimo scritto nella
+#: proposta, non un numero tarato sui dati di oggi (oggi sono 62, ops 0371).
+MIN_ACCOPPIATI = 30
+
 #: la regola della «Lettura», scritta il 30 set PRIMA di vedere i numeri e
 #: stampata nel report: se la si cambia dopo aver letto un esito, non e' piu'
 #: una regola. Riscritta lo stesso giorno, prima della prima lettura (1 ott), in
 #: parole semplici e con cio' che la proposta approvata diceva gia': il minimo di
 #: 80 trade del motore e la rilettura del 14 ott.
+#:
+#: 30 set 2026, pacchetto A (si' del proprietario, prima delle letture del 3, 7 e
+#: 14 ott): il verdetto «esecuzione» si decide SOLO sulla riga «stessi segnali»,
+#: con almeno 30 accoppiati. Il motivo e' di struttura, non il numero di oggi:
+#: paper e motore entrano sullo stesso segnale nello stesso mercato, quindi la
+#: differenza misura come il bot esegue; la media di tutti i trade mescola anche
+#: i segnali che il paper non poteva prendere (una posizione per moneta, max 5)
+#: e l'effetto delle giornate nere, che li' non si cancella. La «selezione»
+#: resta sul motore (almeno 80 segnali, ora contati una volta sola), sulle coppie
+#: operate comprese quelle uscite dal registro. Il margine e' quello per giornata.
 REGOLA_FUORI_CAMPIONE = (
-    "DECISIONE IL 7 OTT (regola del 30 set): con almeno 80 trade del motore, motore <= 0 "
-    "-> il problema e' la scelta delle coppie, la prossima modifica va nel gate; motore > 0 "
-    "e sopra il paper oltre il margine -> il problema e' il bot, la prossima modifica va su "
-    "ingressi e uscite; altrimenti si rilegge il 14 ott.")
+    "REGOLE DEL 7 E 14 OTT (regola scritta il 30 set, prima delle letture). Selezione: "
+    "con almeno 80 segnali del motore su tutte le coppie operate, motore <= 0 -> la "
+    "prossima modifica va nel gate. Esecuzione: solo sulla riga «stessi segnali», con "
+    "almeno 30 trade accoppiati: paper sotto il motore oltre il margine per giornata -> la "
+    "prossima modifica va su ingressi e uscite del bot. Perche' quella riga: stesso segnale "
+    "e stesso mercato, cosi' misura l'esecuzione e non i segnali che il paper non poteva "
+    "prendere. Altrimenti si rilegge il 14 ott.")
+
+#: tre letture invece di una (30 set 2026): la stima e' della revisione del 30 set
+#: (docs/revisione_sospese_30set.md, voce A), non un conto di questo script
+TRE_LETTURE = (
+    "Tre letture (3, 7, 14 ott): la probabilita' che almeno una dia un verdetto per caso "
+    "sale da ~2,5% a ~7% (stima della revisione del 30 set); un verdetto isolato si "
+    "conferma il 14.")
 
 #: oltre questi giorni di validazione distinti, i piu' vecchi si sommano in uno
 #: (la riga deve restare corta anche fra tre mesi)
@@ -635,10 +683,13 @@ def inizio_fuori_campione(rec: dict, pavimento: float) -> tuple[float | None, st
 def statistiche_lato(righe: list[tuple]) -> dict:
     """n, R medio, dev. standard, quota vinti, mfe mediana e quota che tocca il
     primo gradino, da righe (R, mfe_r o None, tocca_tp1 o None). Valori NON
-    arrotondati: la differenza e l'errore standard si fanno su questi."""
+    arrotondati: la differenza e l'errore standard si fanno su questi.
+
+    `tocca_tp1` puo' essere anche una quota fra 0 e 1 (30 set 2026: un segnale
+    con piu' strategie gemelle porta la quota delle gemelle che lo toccano)."""
     rs = [float(r) for r, _, _ in righe]
     mfes = [float(m) for _, m, _ in righe if m is not None]
-    tp = [bool(x) for _, _, x in righe if x is not None]
+    tp = [float(x) for _, _, x in righe if x is not None]
     n = len(rs)
     return {
         "n": n,
@@ -661,6 +712,49 @@ def errore_standard_differenza(a: dict, b: dict | None) -> float | None:
     return math.sqrt(a["dev_std"] ** 2 / a["n"] + b["dev_std"] ** 2 / b["n"])
 
 
+def errore_standard_per_giorno(a: list[tuple], b: list[tuple] | None = None) -> float | None:
+    """L'errore standard RAGGRUPPATO PER GIORNATA (30 set 2026, pacchetto A):
+    della media di `a`, o della differenza media(a) - media(b) se c'e' `b`.
+    Righe (valore, giorno).
+
+    Perche': nelle giornate nere perdono tutti insieme (19, 23 e 26 set, ops
+    0371), quindi i trade dello stesso giorno non sono indipendenti e l'errore
+    «trade per trade» e' troppo stretto (con un effetto di giornata comune il
+    margine copre ~81% invece del 95%, backlog H5). Qui l'unita' e' la giornata:
+    per ogni giorno g si somma il contributo di ogni trade alla media (o alla
+    differenza), u_g = somma (x - media_a)/n_a - somma (y - media_b)/n_b, e la
+    varianza e' G/(G-1) x somma u_g^2 (G = giornate). Un effetto comune ai due
+    lati nello stesso giorno si cancella nella differenza, come deve. Con ogni
+    trade in un giorno suo da' esattamente l'errore trade per trade.
+
+    None con meno di 2 righe per lato o meno di 2 giornate: un errore inventato
+    e' peggio di nessuno."""
+    if len(a) < 2 or (b is not None and len(b) < 2):
+        return None
+    u: dict = defaultdict(float)
+    ma = mean(float(v) for v, _ in a)
+    for v, g in a:
+        u[g] += (float(v) - ma) / len(a)
+    if b is not None:
+        mb = mean(float(v) for v, _ in b)
+        for v, g in b:
+            u[g] -= (float(v) - mb) / len(b)
+    giornate = len(u)
+    if giornate < 2:
+        return None
+    return math.sqrt(giornate / (giornate - 1) * sum(x * x for x in u.values()))
+
+
+def errore_regola(es_trade: float | None, es_giorno: float | None) -> float | None:
+    """L'errore con cui decide la regola: quello PER GIORNATA; se per caso esce
+    piu' stretto di quello trade per trade (succede con poche giornate, perche'
+    anche lui e' una stima) si usa il piu' largo. None se quello per giornata
+    non si calcola: senza, la regola non decide (30 set 2026)."""
+    if es_giorno is None:
+        return None
+    return es_giorno if es_trade is None else max(es_trade, es_giorno)
+
+
 def trade_che_servono(n_tot: int, diff: float | None, es: float | None) -> int | None:
     """Quanti trade in tutto (motore + paper, nella stessa proporzione di oggi)
     servirebbero perche' QUESTA differenza arrivi a 2 errori standard: l'errore
@@ -672,23 +766,34 @@ def trade_che_servono(n_tot: int, diff: float | None, es: float | None) -> int |
     return int(math.ceil(n_tot * (2.0 * es / diff) ** 2))
 
 
-def statistiche_abbinate(coppie: list[tuple[float, float]]) -> dict:
+def statistiche_abbinate(coppie: list[tuple[float, float]],
+                         giorni: list[str] | None = None) -> dict:
     """«STESSI SEGNALI» (30 set 2026, revisione): (R del motore, R del paper) sui
     trade in cui paper e motore sono entrati insieme. La differenza qui e' solo
     il modo in cui il bot esegue (prezzi, uscite, tempi), senza la scelta dei
     segnali; confronto accoppiato, quindi l'errore standard e' quello delle
-    differenze trade per trade, sd(d)/sqrt(n)."""
+    differenze trade per trade, sd(d)/sqrt(n).
+
+    30 set 2026, pacchetto A: con `giorni` (il giorno di ogni coppia, stesso
+    ordine) anche l'errore PER GIORNATA delle differenze (`errore_giorno`) e
+    quello con cui decide la regola (`errore_regola`, vedi `errore_regola`). E'
+    la riga su cui si decide «esecuzione»."""
     n = len(coppie)
     d = [m - p for m, p in coppie]
+    es = stdev(d) / math.sqrt(n) if n >= 2 else None
+    es_g = (errore_standard_per_giorno(list(zip(d, giorni)))
+            if giorni is not None and len(giorni) == n else None)
     return {"n": n,
             "motore_r": mean(m for m, _ in coppie) if n else None,
             "paper_r": mean(p for _, p in coppie) if n else None,
             "differenza": mean(d) if n else None,
-            "errore_standard": stdev(d) / math.sqrt(n) if n >= 2 else None}
+            "errore_standard": es, "errore_giorno": es_g,
+            "errore_regola": errore_regola(es, es_g)}
 
 
 def abbina_segnali(motore_per_coppia: dict, segnali_paper: list[tuple],
-                   tol: float) -> tuple[list[tuple[float, float]], int]:
+                   tol: float, istanti: list | None = None
+                   ) -> tuple[list[tuple[float, float]], int]:
     """Per ogni trade del paper (coppia, ingresso, R) il trade del motore della
     STESSA coppia, non ancora usato, piu' vicino nel tempo entro `tol` secondi: la
     regola di `confronto_gate_paper._accoppia` (un trade del motore si usa una
@@ -697,7 +802,9 @@ def abbina_segnali(motore_per_coppia: dict, segnali_paper: list[tuple],
     `motore_per_coppia`: coppia -> lista di [ingresso, R, usato]; il flag `usato`
     viene scritto qui, e quelli rimasti False sono i segnali del motore che il
     paper non ha aperto. Ritorna le coppie (R motore, R paper) e quanti trade del
-    paper non hanno un segnale del motore vicino."""
+    paper non hanno un segnale del motore vicino. Se si passa la lista
+    `istanti`, ci si aggiunge l'ingresso del paper di ogni coppia, nello stesso
+    ordine (serve al margine per giornata, 30 set 2026)."""
     abbinati: list[tuple[float, float]] = []
     senza = 0
     for k, te, r_p in sorted(segnali_paper, key=lambda x: (x[1], x[0])):
@@ -713,7 +820,172 @@ def abbina_segnali(motore_per_coppia: dict, segnali_paper: list[tuple],
             continue
         migliore[2] = True
         abbinati.append((migliore[1], r_p))
+        if istanti is not None:
+            istanti.append(te)
     return abbinati, senza
+
+
+def segnali_unici(righe: list[dict]) -> tuple[list[dict], int]:
+    """CONTEGGIO UNICO DEI SEGNALI (30 set 2026, pacchetto A): i trade del motore
+    con la stessa moneta, la stessa candela d'ingresso e la stessa direzione sono
+    UN segnale. Due strategie gemelle (o anche diverse) che scattano insieme
+    sulla stessa moneta fanno due trade nel motore, ma il paper ne puo' aprire
+    uno solo (una posizione per moneta): contate due volte, pesano doppio e
+    rendono il margine troppo stretto.
+
+    `righe`: dict con `sym`, `dir`, `ts`, `r`, `mfe`, `tp`, `giorno`, `uscita`.
+    Il segnale porta l'R MEDIO dei suoi trade (le gemelle possono avere uscite
+    diverse), la mfe media, la quota che tocca il primo gradino, e `membri` (gli
+    indici delle righe). Ritorna (segnali, doppioni fusi)."""
+    per_chiave: dict[tuple, list[int]] = defaultdict(list)
+    for i, r in enumerate(righe):
+        per_chiave[(r["sym"], r["dir"], round(float(r["ts"])))].append(i)
+    segnali: list[dict] = []
+    for (sym, dirz, ts), idx in sorted(per_chiave.items(), key=lambda x: (x[0][2], x[0][0], x[0][1])):
+        rs = [righe[i]["r"] for i in idx]
+        mfes = [righe[i]["mfe"] for i in idx if righe[i]["mfe"] is not None]
+        tps = [float(righe[i]["tp"]) for i in idx if righe[i]["tp"] is not None]
+        segnali.append({
+            "sym": sym, "dir": dirz, "ts": float(ts), "r": mean(rs),
+            "mfe": mean(mfes) if mfes else None, "tp": mean(tps) if tps else None,
+            "giorno": righe[idx[0]]["giorno"], "membri": idx,
+            "uscita": all(righe[i].get("uscita") for i in idx),
+        })
+    return segnali, len(righe) - len(segnali)
+
+
+def quota_portafoglio_motore(segnali: list[dict], righe: list[dict],
+                             secondi_barra: float) -> int:
+    """Quanti di questi segnali APRIREBBE il portafoglio del motore (30 set 2026,
+    pacchetto A): una posizione per moneta, max posizioni, cooldown e tetto per
+    moneta del bot, senza i limiti what-if (la colonna «senza limiti» di sopra).
+    Serve a leggere i «non aperti»: anche il motore, con una posizione per
+    moneta, non puo' prenderli tutti (sui 60 giorni ne apre 995 su 2.203, ops
+    0371), quindi un segnale non preso non e' per forza colpa del bot.
+
+    Il portafoglio qui vede SOLO questi segnali (un trade per segnale, quello
+    della prima strategia in ordine di nome): il paper intanto aveva anche altre
+    coppie aperte, quindi e' un tetto alto per cio' che il paper poteva prendere."""
+    if not segnali:
+        return 0
+    rappresentanti = []
+    for s in segnali:
+        membri = sorted((righe[i] for i in s["membri"]), key=lambda r: str(r["t"].get("strategy")))
+        rappresentanti.append(membri[0]["t"])
+    lim = {**limiti_default(), "tetto_direzione": 0.0, "tetto_giorno": 0.0, "netto_r_max": 0.0}
+    return int(simula(rappresentanti, 10_000.0, lim, secondi_barra=secondi_barra)["n_aperti"])
+
+
+def _params_dal_paper(trade_paper: list[dict]) -> dict | None:
+    """La scala/break-even/keep con cui il paper ha operato una coppia, dal suo
+    ultimo trade che li porta: per le coppie RIMOSSE il record (e i suoi
+    `last_params`) e' cancellato, e il trade del paper e' l'unica traccia della
+    configurazione d'uscita con cui giravano. None se nessun trade la porta."""
+    for t in sorted(trade_paper, key=_ts_ingresso_paper, reverse=True):
+        out = {}
+        if t.get("scale_r_mults"):
+            out["scale_r_mults"] = list(t["scale_r_mults"])
+        if t.get("sl_to_breakeven") is not None:
+            out["sl_to_breakeven"] = bool(t["sl_to_breakeven"])
+        if _num_o_none(t.get("profit_lock_keep")) is not None:
+            out["profit_lock_keep"] = float(t["profit_lock_keep"])
+        if out:
+            return out
+    return None
+
+
+def coppie_uscite(pairs: dict, diario, validate, paper: list[dict] | None,
+                  pavimento: float, ora: float, fresh_days: float = FRESH_DAYS,
+                  min_passes: int = MIN_PASSES) -> dict[str, dict]:
+    """SOPRAVVIVENZA (30 set 2026, pacchetto A): le coppie operate e USCITE dal
+    registro dal `pavimento` in poi, con da quando e fino a quando il motore le
+    rigioca. Il motore rigira solo le validate di OGGI, e per costruzione escono
+    le peggiori (due finestre fallite): senza di loro il «motore dopo la
+    validazione» diventa piu' ottimista proprio fra le letture del 7 e del 14 ott.
+
+    Per coppia: {motivo, inizio, fine, params, rigiocabile, perche}.
+      * «rimossa»: evento del diario delle vite (`gate_history/lifecycle`); il
+        record e' cancellato, quindi l'inizio viene dall'evento «promossa» (o
+        dal 25 set 12:00 se non c'e') e la configurazione d'uscita dall'ultimo
+        trade del paper (`_params_dal_paper`; senza, quella globale).
+      * «sostituita» da una figlia dell'intorno: fino a `sostituita_at`.
+      * «non piu' vista» (la moneta e' uscita dall'universo): fino a
+        `last_seen_at` + FRESH_DAYS, quando smette di contare come validata.
+      * «azzerata» il 27 set (J13): NON rigiocabile, la regola della sessione e'
+        cambiata e il motore di oggi girerebbe una regola diversa da quella che
+        il paper ha operato.
+      * «ignota»: il paper l'ha operata ma non si sa quando e' uscita.
+    Le spec non si rileggono: stanno nel documento delle spec che il report legge
+    gia' (la discovery non le cancella mai). Pura."""
+    validate = set(validate)
+    paper = [t for t in (paper or []) if isinstance(t, dict) and not t.get("esplorativa")]
+    paper_per_coppia: dict[str, list[dict]] = defaultdict(list)
+    for t in paper:
+        paper_per_coppia[f"{t.get('symbol')}|{t.get('strategy')}"].append(t)
+    out: dict[str, dict] = {}
+
+    eventi = diario.get("events") if isinstance(diario, dict) else None
+    if isinstance(eventi, str):
+        try:
+            eventi = json.loads(eventi)
+        except ValueError:
+            eventi = None
+    eventi = [e for e in (eventi if isinstance(eventi, list) else [])
+              if isinstance(e, dict) and e.get("key")]
+    for e in sorted(eventi, key=lambda e: _num(e.get("at"))):
+        k = str(e["key"])
+        if e.get("tipo") != "rimossa" or k in validate or _num(e.get("at")) < pavimento:
+            continue
+        nate = [_num(x.get("at")) for x in eventi if x.get("key") == k
+                and x.get("tipo") == "promossa" and _num(x.get("at")) < _num(e.get("at"))]
+        rec = {"validated_at": max(nate)} if nate else {}
+        t0, _ = inizio_fuori_campione(rec, pavimento)
+        out[k] = {"motivo": "rimossa", "inizio": t0, "fine": _num(e.get("at")),
+                  "params": _params_dal_paper(paper_per_coppia.get(k, [])),
+                  "rigiocabile": True, "perche": ""}
+
+    for k, rec in (pairs or {}).items():
+        if k in validate or k in out or not isinstance(rec, dict):
+            continue
+        az = _num(rec.get("sessione_azzerata_at"))
+        va = _num(rec.get("validated_at"))
+        passate = int(_num(rec.get("pass_count")))
+        if az > 0 and va <= az:
+            if az >= pavimento and (va > 0 or k in paper_per_coppia):
+                out[k] = {"motivo": "azzerata", "inizio": None, "fine": az, "params": None,
+                          "rigiocabile": False, "perche": "regola della sessione cambiata"}
+            continue
+        if passate < min_passes:
+            continue
+        if rec.get("sostituita_da"):
+            fine_k, motivo = _num(rec.get("sostituita_at")), "sostituita"
+        else:
+            fine_k, motivo = _num(rec.get("last_seen_at")) + fresh_days * 86400, "non piu' vista"
+        if fine_k <= 0:
+            if k in paper_per_coppia:
+                out[k] = {"motivo": motivo, "inizio": None, "fine": None, "params": None,
+                          "rigiocabile": False, "perche": "data d'uscita ignota"}
+            continue
+        if fine_k < pavimento or fine_k > ora:
+            continue
+        t0, _ = inizio_fuori_campione(rec, pavimento)
+        out[k] = {"motivo": motivo, "inizio": t0, "fine": fine_k,
+                  "params": rec.get("last_params") if isinstance(rec.get("last_params"), dict) else None,
+                  "rigiocabile": t0 is not None and t0 < fine_k, "perche": ""}
+
+    for k, ts in paper_per_coppia.items():
+        if k in validate or k in out:
+            continue
+        if any(_ts_ingresso_paper(t) >= pavimento for t in ts):
+            out[k] = {"motivo": "ignota", "inizio": None, "fine": None, "params": None,
+                      "rigiocabile": False, "perche": "data d'uscita ignota"}
+    for k, u in out.items():
+        if u["rigiocabile"] and not (u["inizio"] is not None and u["fine"] is not None
+                                     and u["inizio"] < u["fine"]):
+            u["rigiocabile"], u["perche"] = False, "uscita prima dell'inizio"
+        if u["rigiocabile"] and not k.partition("|")[2].startswith("gen_"):
+            u["rigiocabile"], u["perche"] = False, "strategia base"
+    return out
 
 
 def _scala(v) -> tuple | None:
@@ -763,68 +1035,78 @@ def _fmt_r(v) -> str:
     return f"{v:+.3f}" if 0 < abs(v) < 0.01 else f"{v:+.2f}"
 
 
-def lettura_fuori_campione(m: dict, p: dict | None, diff: float | None,
-                           es: float | None) -> str:
-    """La regola del 30 set, in parole, con l'azione che ne segue.
+def lettura_selezione(m: dict) -> str:
+    """Il verdetto «selezione» (regola del 30 set, invariata nel pacchetto A salvo
+    il conteggio): sul motore, con almeno MIN_TRADE_MOTORE segnali (contati una
+    volta sola), motore <= 0 -> la promessa non regge dopo la validazione.
 
-    Revisione del 30 set, prima della prima lettura: (1) nessun verdetto sotto
-    MIN_TRADE_MOTORE trade del motore, come diceva la proposta: prima «selezione»
-    usciva gia' con 2 trade; (2) il margine della riga «selezione» (2 errori
-    standard della media del motore) si chiama «margine» come quello della
-    differenza; (3) motore <= 0 non separa il gate da un mercato cambiato dopo la
-    validazione, e lo si dice (l'azione della regola resta il gate); (4) se
-    valgono insieme motore <= 0 e una differenza oltre il margine, si dicono
-    tutte e due invece di fermarsi al primo ramo; (5) una differenza quasi nulla
-    non e' «campione piccolo», e' nessun divario.
+    Motore <= 0 non separa il gate da un mercato cambiato dopo la validazione, e
+    lo si dice (l'azione della regola resta il gate). Scartato: dire «selezione»
+    solo se motore + margine <= 0. Il confronto giusto per «la promessa non
+    regge» e' con la promessa (+0,18R in campione), non con lo zero: con quella
+    soglia un motore vero a 0 darebbe «selezione» solo ~2% delle volte."""
+    n = m.get("n") or 0
+    if n < MIN_TRADE_MOTORE:
+        return (f"non si decide: il motore ha solo {n} segnali dopo la validazione, ne "
+                f"servono almeno {MIN_TRADE_MOTORE}.")
+    es = m.get("errore_regola")
+    marg = "margine n.d." if es is None else f"margine ±{2.0 * es:.2f}R per giornata"
+    if m["r_medio"] <= 0:
+        return (f"la promessa non regge dopo la validazione: motore {_fmt_r(m['r_medio'])}R "
+                f"({marg}) su {n} segnali. O il gate sceglie coppie buone solo nei giorni "
+                f"su cui le ha provate, o il mercato e' cambiato: da qui non si separano. "
+                f"Per la regola la prossima modifica va nel gate.")
+    return (f"il motore guadagna ancora dopo la validazione ({_fmt_r(m['r_medio'])}R, {marg}, "
+            f"{n} segnali): nessun verdetto contro il gate.")
 
-    Scartato: dire «selezione» solo se motore + margine <= 0. Il confronto giusto
-    per «la promessa non regge» e' con la promessa (+0,18R in campione), non con
-    lo zero: con quella soglia un motore vero a 0, cioe' la promessa sparita del
-    tutto, darebbe «selezione» solo ~2% delle volte."""
+
+def lettura_esecuzione(ss: dict | None) -> str:
+    """Il verdetto «esecuzione» (30 set 2026, pacchetto A): SOLO sulla riga
+    «stessi segnali» e solo con almeno MIN_ACCOPPIATI trade accoppiati, col
+    margine per giornata. Stesso segnale e stesso mercato: la differenza e' il
+    modo in cui il bot esegue, non i segnali che non poteva prendere.
+
+    Dalla revisione del 30 set restano: «diff > 0» prima del margine (con
+    dispersione zero, margine 0, una differenza nulla direbbe esecuzione senza
+    divario); una differenza quasi nulla e' «nessun divario», non «campione
+    piccolo»; il numero di trade che servono solo se non e' assurdo."""
+    n = (ss or {}).get("n") or 0
+    if n < MIN_ACCOPPIATI:
+        return f"non si decide: {n} accoppiati, ne servono {MIN_ACCOPPIATI}."
+    es, diff = ss.get("errore_regola"), ss.get("differenza")
+    if es is None or diff is None:
+        return "non si decide: margine per giornata non calcolabile (servono almeno 2 giornate)."
+    confronto = f"differenza {_fmt_r(diff)}R, margine ±{2.0 * es:.2f}R per giornata"
+    if diff <= 0:
+        return (f"non e' esecuzione: sugli stessi segnali il paper non fa peggio del motore "
+                f"({confronto}).")
+    if diff >= 2.0 * es:
+        return (f"e' esecuzione: sugli stessi segnali il paper rende meno del motore oltre il "
+                f"margine ({confronto}). Per la regola la prossima modifica va su ingressi e "
+                f"uscite del bot.")
+    if diff < QUASI_UGUALE_R:
+        return f"non si decide: sugli stessi segnali fanno quasi uguale ({confronto})."
+    serve = trade_che_servono(n, diff, es)
+    if serve is None or serve > 10 * n:
+        return (f"non si decide: la differenza e' piccola rispetto al margine ({confronto}), "
+                f"servirebbero piu' di 10 volte gli accoppiati di oggi.")
+    return (f"non si decide: la differenza sta dentro il margine ({confronto}); servono circa "
+            f"{serve} accoppiati (oggi {n}) se resta questa.")
+
+
+def lettura_fuori_campione(m: dict, p: dict | None, ss: dict | None) -> str:
+    """Le due letture della regola, in parole, con l'azione che ne segue.
+
+    30 set 2026, pacchetto A (si' del proprietario, prima delle letture):
+    «selezione» sul motore (`lettura_selezione`), «esecuzione» SOLO sulla riga
+    «stessi segnali» (`lettura_esecuzione`); si dicono sempre tutte e due, perche'
+    possono valere insieme. Prima del pacchetto «esecuzione» si decideva sulla
+    media di tutti i trade del motore contro tutti quelli del paper: quella
+    differenza resta stampata come riassunto, ma non decide piu'."""
     if p is None:
         return "non si decide: il paper non e' leggibile da qui (Firebase assente)."
-    if m["n"] < MIN_TRADE_MOTORE:
-        return (f"non si decide: il motore ha solo {m['n']} trade dopo la validazione, ne "
-                f"servono almeno {MIN_TRADE_MOTORE} (regola del 30 set); si rilegge fra una "
-                f"settimana.")
-    confronto = (f"differenza {_fmt_r(diff)}R, margine ±{2.0 * es:.2f}R"
-                 if diff is not None and es is not None else "")
-    # «diff > 0» prima del margine: con dispersione zero (margine 0) una
-    # differenza nulla passerebbe «>= margine» e direbbe esecuzione senza divario
-    oltre = bool(confronto) and diff > 0 and diff >= 2.0 * es
-    if m["r_medio"] <= 0:
-        margine_m = 2.0 * m["dev_std"] / math.sqrt(m["n"])
-        testo = (f"la promessa non regge dopo la validazione: motore {_fmt_r(m['r_medio'])}R "
-                 f"(margine ±{margine_m:.2f}R) su {m['n']} trade. O il gate sceglie coppie "
-                 f"buone solo nei giorni su cui le ha provate, o il mercato e' cambiato: "
-                 f"questa misura da sola non li separa. Per la regola la prossima modifica "
-                 f"va nel gate")
-        if oltre:
-            testo += (f"; in piu' il paper fa peggio del motore oltre il margine "
-                      f"({confronto}): c'e' anche un problema del bot")
-        return testo + "."
-    if not confronto:
-        return ("non si decide: il paper ha meno di 2 trade dopo la validazione, niente "
-                "margine d'errore; si rilegge fra una settimana.")
-    if diff <= 0:
-        return ("non si decide: fuori campione il paper non fa peggio del motore, non c'e' "
-                "un divario del bot da spiegare; si rilegge fra una settimana.")
-    if oltre:
-        return (f"e' esecuzione: sulle stesse coppie il paper rende meno del motore oltre "
-                f"il margine ({confronto}); le righe «stessi segnali» e «non aperti» dicono "
-                f"se pesano le uscite o i segnali che il bot sceglie. Per la regola la "
-                f"prossima modifica va su ingressi e uscite.")
-    if diff < QUASI_UGUALE_R:
-        return (f"non si decide: motore e paper fanno quasi uguale ({confronto}), piu' "
-                f"trade difficilmente cambieranno il verdetto; si rilegge fra una settimana.")
-    n_oggi = m["n"] + p["n"]
-    serve = trade_che_servono(n_oggi, diff, es)
-    if serve is None or serve > 10 * n_oggi:
-        return (f"non si decide: la differenza e' piccola rispetto al margine ({confronto}), "
-                f"servirebbero piu' di 10 volte i trade di oggi; si rilegge fra una settimana.")
-    return (f"non si decide: la differenza sta dentro il margine ({confronto}); servono "
-            f"circa {serve} trade in tutto (oggi {n_oggi}) se resta questa; si rilegge fra "
-            f"una settimana.")
+    return (f"Selezione: {lettura_selezione(m)} Esecuzione: {lettura_esecuzione(ss)} "
+            f"Si rilegge il 14 ott.")
 
 
 def _per_giorno_validazione(giorni: Counter) -> str:
@@ -844,7 +1126,8 @@ def _per_giorno_validazione(giorni: Counter) -> str:
 
 def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
                    chiavi, pavimento: float, fine: float | None = None,
-                   secondi_barra: float = 900.0) -> dict:
+                   secondi_barra: float = 900.0, uscite: dict | None = None,
+                   motore_uscite: list[dict] | None = None) -> dict:
     """IL CONFRONTO. Funzione pura: trade del motore (i dict di `trade_in_dict`),
     trade del paper (dict di Firestore, None = non leggibile), registro
     (`pairs`), le coppie da confrontare (`chiavi`: validate E simulate, perche'
@@ -862,17 +1145,27 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
         UTC del run, esclusa). Il motore non vede niente dopo, quindi dal lato
         paper escono, contati, i trade entrati dopo e quelli usciti dopo (il loro
         gemello del motore sarebbe «ancora aperto»). None = nessun taglio.
-      * «stessi segnali»: il confronto non accoppiato mescola il modo in cui il
-        bot esegue con QUALI segnali prende (una posizione per coin, 5
-        posizioni, tetti): se prende meno segnali proprio sulle coppie buone, la
-        differenza cresce anche con un'esecuzione perfetta. Qui si abbina ogni
-        trade del paper al trade del motore sullo stesso segnale (`abbina_segnali`)
-        e si stampano a parte le due parti. La regola resta quella approvata:
-        tutte e due sono percorso del bot, non gate.
+      * «stessi segnali»: ogni trade del paper abbinato al trade del motore sullo
+        stesso segnale (`abbina_segnali`).
       * bias (b) contato: i trade del paper con scala/break-even/keep diversi da
-        quelli di oggi (`config_diversa`)."""
+        quelli di oggi (`config_diversa`).
+
+    Pacchetto A del 30 set 2026 (si' del proprietario, prima delle letture):
+      * i trade del motore con stessa moneta, candela e direzione contano UNA
+        volta (`segnali_unici`); le righe del motore sono segnali;
+      * margini PER GIORNATA (`errore_standard_per_giorno`) accanto a quelli
+        trade per trade; la regola usa quello per giornata;
+      * «esecuzione» decisa solo sugli stessi segnali (`lettura_esecuzione`);
+      * segnali presi dal paper contro quelli che aprirebbe il portafoglio del
+        motore (`quota_portafoglio_motore`);
+      * SOPRAVVIVENZA: le coppie uscite dal registro (`uscite`, da
+        `coppie_uscite`) e rigiocate (`motore_uscite`) entrano, ciascuna dalla
+        sua validazione al giorno in cui e' uscita; il confronto e le regole
+        sono su «tutte le coppie operate», e la riga «coppie ancora validate»
+        resta accanto."""
     chiavi = list(chiavi)
     inizio: dict[str, float] = {}
+    fine_coppia: dict[str, float] = {}
     origini: Counter = Counter()
     giorni_val: Counter = Counter()
     azzerate_contate = 0
@@ -886,15 +1179,22 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
                 azzerate_contate += 1
         if t0 is not None:
             inizio[k] = t0
+    rigiocate = {k: u for k, u in (uscite or {}).items()
+                 if u.get("rigiocabile") and k not in inizio}
+    for k, u in rigiocate.items():
+        inizio[k], fine_coppia[k] = float(u["inizio"]), float(u["fine"])
 
-    righe_m: list[tuple] = []
-    coppie_m: set = set()
-    motore_per_coppia: dict[str, list[list]] = defaultdict(list)
-    fine_dati = senza_stop = 0
-    for t in motore:
-        k = f"{t.get('symbol')}|{t.get('strategy')}"
+    def _dentro(k: str, ts: float) -> bool:
         t0 = inizio.get(k)
-        if t0 is None or _num(t.get("entry_ts")) < t0:
+        return t0 is not None and ts >= t0 and ts < fine_coppia.get(k, math.inf)
+
+    righe_m: list[dict] = []
+    coppie_m: set = set()
+    fine_dati = senza_stop = 0
+    for t in list(motore) + list(motore_uscite or []):
+        k = f"{t.get('symbol')}|{t.get('strategy')}"
+        entrata = _num(t.get("entry_ts"))
+        if not _dentro(k, entrata):
             continue
         if t.get("fine_dati"):
             fine_dati += 1
@@ -903,13 +1203,14 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
         if stop <= 0:
             senza_stop += 1
             continue
-        r = _num(t.get("pnl_pct")) / stop
-        righe_m.append((r, _num_o_none(t.get("mfe_r")), tocca_tp1(t)))
-        motore_per_coppia[k].append([_num(t.get("entry_ts")), r, False])
+        righe_m.append({"k": k, "t": t, "sym": str(t.get("symbol")),
+                        "dir": str(t.get("direction") or "long").lower(), "ts": entrata,
+                        "r": _num(t.get("pnl_pct")) / stop, "mfe": _num_o_none(t.get("mfe_r")),
+                        "tp": tocca_tp1(t), "giorno": giorno_locale(entrata),
+                        "uscita": k in rigiocate})
         coppie_m.add(k)
 
-    righe_p: list[tuple] | None = None
-    segnali_p: list[tuple] = []
+    righe_p: list[dict] | None = None
     coppie_p: set = set()
     esplorativi = esterne = senza_r = oltre_fine = 0
     config_note = config_diverse = 0
@@ -920,9 +1221,8 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
             if not isinstance(t, dict):
                 continue
             k = f"{t.get('symbol')}|{t.get('strategy')}"
-            t0 = inizio.get(k)
             ingresso = _ts_ingresso_paper(t)
-            if t0 is None or ingresso < t0:
+            if not _dentro(k, ingresso):
                 continue
             if t.get("esplorativa"):
                 esplorativi += 1
@@ -937,31 +1237,73 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
             if r is None:
                 senza_r += 1
                 continue
-            righe_p.append((r, _num_o_none(t.get("mfe_r")), tocca_tp1(t)))
-            segnali_p.append((k, ingresso, r))
+            righe_p.append({"k": k, "ts": ingresso, "r": r, "mfe": _num_o_none(t.get("mfe_r")),
+                            "tp": tocca_tp1(t), "giorno": giorno_locale(ingresso),
+                            "uscita": k in rigiocate})
             coppie_p.add(k)
-            diversa = config_diversa(t, (pairs.get(k) or {}).get("last_params"))
+            params = (rigiocate[k].get("params") if k in rigiocate
+                      else (pairs.get(k) or {}).get("last_params"))
+            diversa = config_diversa(t, params)
             if diversa is not None:
                 config_note += 1
                 config_diverse += int(diversa)
             if not diversa:
                 r_senza_diverse.append(r)
 
-    m = statistiche_lato(righe_m)
-    p = statistiche_lato(righe_p) if righe_p is not None else None
+    segnali, doppioni = segnali_unici(righe_m)
+    m = statistiche_lato([(s["r"], s["mfe"], s["tp"]) for s in segnali])
+    m["trade"], m["doppioni"] = len(righe_m), doppioni
+    es_m = m["dev_std"] / math.sqrt(m["n"]) if m["dev_std"] is not None else None
+    m["errore_giorno"] = errore_standard_per_giorno([(s["r"], s["giorno"]) for s in segnali])
+    m["errore_regola"] = errore_regola(es_m, m["errore_giorno"])
+    p = (statistiche_lato([(r["r"], r["mfe"], r["tp"]) for r in righe_p])
+         if righe_p is not None else None)
     diff = (m["r_medio"] - p["r_medio"]
             if p and m["r_medio"] is not None and p["r_medio"] is not None else None)
     es = errore_standard_differenza(m, p)
-    stessi = non_aperti = None
+    es_giorno = (errore_standard_per_giorno([(s["r"], s["giorno"]) for s in segnali],
+                                            [(r["r"], r["giorno"]) for r in righe_p])
+                 if righe_p is not None else None)
+
+    stessi = non_aperti = presi = None
     senza_segnale = 0
     if paper is not None:
-        abbinati, senza_segnale = abbina_segnali(motore_per_coppia, segnali_p,
-                                                 TOL_ABBINAMENTO_BARRE * secondi_barra)
-        stessi = statistiche_abbinate(abbinati)
-        rs_na = [r for righe in motore_per_coppia.values() for _, r, usato in righe if not usato]
+        # ogni trade del motore porta l'indice del suo segnale: abbinato uno,
+        # il segnale e' preso (anche le sue gemelle non sono «non aperte»)
+        motore_per_coppia: dict[str, list[list]] = defaultdict(list)
+        for i, s in enumerate(segnali):
+            for j in s["membri"]:
+                motore_per_coppia[righe_m[j]["k"]].append(
+                    [righe_m[j]["ts"], righe_m[j]["r"], False, i])
+        istanti: list = []
+        abbinati, senza_segnale = abbina_segnali(
+            motore_per_coppia, [(r["k"], r["ts"], r["r"]) for r in righe_p],
+            TOL_ABBINAMENTO_BARRE * secondi_barra, istanti=istanti)
+        stessi = statistiche_abbinate(abbinati, [giorno_locale(te) for te in istanti])
+        preso = {riga[3] for righe in motore_per_coppia.values() for riga in righe if riga[2]}
+        rs_na = [s["r"] for i, s in enumerate(segnali) if i not in preso]
+        rs_si = [s["r"] for i, s in enumerate(segnali) if i in preso]
         non_aperti = {"n": len(rs_na), "r_medio": mean(rs_na) if rs_na else None}
+        presi = {"segnali": len(segnali), "paper": len(preso),
+                 "paper_r_motore": mean(rs_si) if rs_si else None,
+                 "portafoglio_motore": quota_portafoglio_motore(segnali, righe_m, secondi_barra)}
+
+    # le due righe della sopravvivenza: «ancora validate» ricontate da sole
+    seg_val, _ = segnali_unici([r for r in righe_m if not r["uscita"]])
+    rp_val = [r["r"] for r in (righe_p or []) if not r["uscita"]]
+    sopravvivenza = {
+        "validate": {"motore_n": len(seg_val),
+                     "motore_r": mean(s["r"] for s in seg_val) if seg_val else None,
+                     "paper_n": len(rp_val) if righe_p is not None else None,
+                     "paper_r": mean(rp_val) if rp_val else None},
+        "tutte": {"motore_n": m["n"], "motore_r": m["r_medio"],
+                  "paper_n": p["n"] if p else None, "paper_r": p["r_medio"] if p else None},
+        "rigiocate": len(rigiocate),
+        "rigiocate_con_trade": len({r["k"] for r in righe_m if r["uscita"]}),
+        "rigiocate_config_globale": sum(1 for u in rigiocate.values() if not u.get("params")),
+    }
     return {
-        "coppie": len(chiavi), "coppie_con_motore": len(coppie_m),
+        "coppie": len(chiavi) + len(rigiocate), "coppie_con_motore": len(coppie_m),
         "coppie_con_paper": len(coppie_p),
         "senza_data": origini["senza_data"], "con_data": origini["validated_at"],
         "validate_per_giorno": _per_giorno_validazione(giorni_val),
@@ -971,13 +1313,13 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
         "motore_fine_dati": fine_dati, "motore_senza_stop": senza_stop,
         "paper_esplorativi": esplorativi, "paper_uscite_esterne": esterne,
         "paper_oltre_fine": oltre_fine, "paper_senza_r": senza_r,
-        "differenza": diff, "errore_standard": es,
-        "stessi_segnali": stessi, "motore_non_aperti": non_aperti,
+        "differenza": diff, "errore_standard": es, "errore_giorno": es_giorno,
+        "stessi_segnali": stessi, "motore_non_aperti": non_aperti, "segnali_presi": presi,
         "paper_senza_segnale": senza_segnale,
         "paper_config_note": config_note, "paper_config_diverse": config_diverse,
         "paper_r_senza_config_diverse": mean(r_senza_diverse) if r_senza_diverse else None,
-        "servono_trade": trade_che_servono(m["n"] + (p["n"] if p else 0), diff, es),
-        "lettura": lettura_fuori_campione(m, p, diff, es),
+        "sopravvivenza": sopravvivenza,
+        "lettura": lettura_fuori_campione(m, p, stessi),
     }
 
 
@@ -1056,72 +1398,107 @@ def _riga_lato(nome: str, s: dict | None, extra: str = "") -> str:
             f"{_r(s['mfe_mediana'], '{:.2f}R'):>8}{_r(s['tocca_tp1'], '{:.0%}'):>11}{extra}")
 
 
+def _quota(n: int, tot: int) -> str:
+    return f"{n} su {tot} ({n / tot:.0%})" if tot else f"{n} su 0"
+
+
 def stampa_fuori_campione(fc: dict, dal: str, rimosse: int | None,
-                          fuori_reg: dict | None) -> None:
-    """La sezione a schermo. Deve restare sotto ~3 KB: l'agente ops taglia
+                          fuori_reg: dict | None, non_rigiocate: Counter | None = None) -> None:
+    """La sezione a schermo. Deve restare sotto ~3,5 KB: l'agente ops taglia
     oltre 20.000 caratteri tenendo testa e coda, e questa sta nella coda.
 
     30 set 2026, revisione: il proprietario la legge dal telefono. Prima la
     domanda a cui risponde, poi cosa si conta e cosa vuol dire R, colonne con
     nomi semplici, un solo nome («margine») per i due errori, la regola con
-    l'azione e le date; niente nomi di campi o di collezioni."""
+    l'azione e le date; niente nomi di campi o di collezioni.
+
+    30 set 2026, pacchetto A: righe del motore in SEGNALI (doppioni fusi, e
+    quanti), margini per giornata, segnali presi dal paper contro il portafoglio
+    del motore (al posto del vecchio bias (c)), le due righe della
+    sopravvivenza (al posto del vecchio bias (a)), le regole scritte prima e la
+    riga sulle tre letture. Per restare nel limite si sono accorciate la
+    domanda e la spiegazione delle colonne."""
     print("\n" + "=" * 74)
     print("FUORI CAMPIONE (H5): le coppie validate guadagnano anche DOPO essere state scelte?")
     print("=" * 74)
     print("  Domanda: il paper perde perche' il bot esegue male (esecuzione) o perche' il gate "
           "sceglie coppie buone solo nei giorni su cui le ha provate (selezione)?")
-    print(f"  Contano solo i trade nati dopo la validazione di ogni coppia, mai prima del {dal}: "
-          f"giorni che il gate non aveva visto. R = esito in multipli del rischio (-1R = stop "
-          f"pieno); «max R» = il massimo toccato (mediana); «1° target» = quota che arriva al "
-          f"primo gradino.")
+    print(f"  Solo trade nati dopo la validazione di ogni coppia, mai prima del {dal}. R = esito "
+          f"in multipli del rischio (-1R = stop pieno); «max R» = massimo toccato (mediana); "
+          f"«1° target» = quota che arriva al primo gradino.")
+    sv = fc.get("sopravvivenza") or {}
     print(f"  coppie confrontate {fc['coppie']} · con trade del motore {fc['coppie_con_motore']} "
-          f"· con trade del paper {fc['coppie_con_paper']}")
+          f"· con trade del paper {fc['coppie_con_paper']} (di cui uscite dal registro e "
+          f"rigiocate {sv.get('rigiocate', 0)})")
     print(f"  senza data di validazione (validate prima del 25 set: contate dal 25 set, 14:00 "
           f"italiane) {fc['senza_data']} · con data: {fc['validate_per_giorno']}")
     if fc["azzerate_contate"] or fc["azzerate_escluse"]:
         print(f"  azzerate il 27 set: {fc['azzerate_contate']} contate da quando sono tornate "
               f"validate, {fc['azzerate_escluse']} fuori da tutti e due i lati (nessuna data dopo)")
+    m = fc["motore"]
+    print(f"  motore: {m.get('trade', m['n'])} trade = {m['n']} segnali ({m.get('doppioni', 0)} "
+          f"doppioni fusi: stessa moneta, candela e direzione contano una volta)")
     print(f"  {'':<8}{'trade':>6}{'R medio':>9}{'vinti':>7}{'max R':>8}{'1° target':>11}")
-    print(_riga_lato("motore", fc["motore"]))
+    print(_riga_lato("motore", m, f"   margine {_margine(m.get('errore_regola'))} per giornata"))
     p = fc["paper"]
     print(_riga_lato("paper", p, f"   ({fc['paper_senza_r']} senza R)" if p else ""))
     if fc["differenza"] is not None:
-        print(f"  motore - paper {_fmt_r(fc['differenza'])}R, margine d'errore "
-              f"{_margine(fc['errore_standard'])} (dentro il margine puo' essere caso)")
+        print(f"  motore - paper {_fmt_r(fc['differenza'])}R, margine {_margine(fc['errore_standard'])}"
+              f" trade per trade, {_margine(fc.get('errore_giorno'))} per giornata (solo "
+              f"riassunto: non decide)")
     ss = fc.get("stessi_segnali")
-    if ss and ss["n"]:
-        print(f"  stessi segnali (paper e motore entrano insieme): {ss['n']} trade · motore "
-              f"{_fmt_r(ss['motore_r'])}R · paper {_fmt_r(ss['paper_r'])}R · differenza "
-              f"{_fmt_r(ss['differenza'])}R, margine {_margine(ss['errore_standard'])}")
-    na = fc.get("motore_non_aperti")
-    if na is not None:
-        print(f"  non aperti: {na['n']} segnali del motore che il paper non ha preso, R medio "
-              f"{_fmt_r(na['r_medio'])} · trade del paper senza un segnale del motore "
-              f"{fc['paper_senza_segnale']}")
+    if ss is not None and not ss["n"]:
+        print("  stessi segnali (paper e motore entrano sullo stesso segnale): nessuno")
+    elif ss is not None:
+        print(f"  stessi segnali (paper e motore entrano sullo stesso segnale): {ss['n']} trade · "
+              f"motore {_fmt_r(ss['motore_r'])}R · paper {_fmt_r(ss['paper_r'])}R · differenza "
+              f"{_fmt_r(ss['differenza'])}R, margine {_margine(ss.get('errore_regola'))} per "
+              f"giornata ({_margine(ss['errore_standard'])} trade per trade)")
+    pr, na = fc.get("segnali_presi"), fc.get("motore_non_aperti")
+    if pr is not None and na is not None:
+        print(f"  segnali presi: paper {_quota(pr['paper'], pr['segnali'])}; il portafoglio del "
+              f"motore, anche lui una posizione per moneta, {_quota(pr['portafoglio_motore'], pr['segnali'])}"
+              f". Non presi dal paper {na['n']}, R medio {_fmt_r(na['r_medio'])} (presi "
+              f"{_fmt_r(pr['paper_r_motore'])}): non e' un verdetto sul bot. Paper senza un segnale "
+              f"del motore {fc['paper_senza_segnale']}.")
+    va, tu = sv.get("validate") or {}, sv.get("tutte") or {}
+    if va and tu:
+        def _sv(d):
+            return (f"motore {d['motore_n']} segnali {_fmt_r(d['motore_r'])}R · paper "
+                    f"{'n.d.' if d['paper_n'] is None else d['paper_n']} "
+                    f"{_fmt_r(d['paper_r'])}R")
+        print(f"  sopravvivenza · coppie ancora validate: {_sv(va)}")
+        print(f"                · tutte le coppie operate: {_sv(tu)} (le uscite rigiocate fino "
+              f"al giorno dell'uscita; {sv.get('rigiocate_config_globale', 0)} con l'uscita "
+              f"globale; rimosse dal {dal}: {'n.d.' if rimosse is None else rimosse})")
+    parti = []
+    if non_rigiocate:
+        motivi = " · ".join(f"{n} {m_}" for m_, n in non_rigiocate.most_common(3))
+        parti.append(f"non rigiocate {sum(non_rigiocate.values())} coppie uscite ({motivi})")
+    if fuori_reg and fuori_reg["n"]:
+        parti.append(f"il paper su {fuori_reg['coppie']} coppie non piu' validate e non "
+                     f"rigiocate fa {fuori_reg['n']} trade, R medio "
+                     f"{_fmt_r(fuori_reg['r_medio'])}: il motore non le vede")
+    if parti:
+        print("    " + "; ".join(parti))
     print(f"  Lettura: {fc['lettura']}")
     print(f"  {REGOLA_FUORI_CAMPIONE}")
+    print(f"  {TRE_LETTURE}")
     print(f"  fuori dal confronto: paper {fc['paper_esplorativi']} esplorativi, "
           f"{fc['paper_uscite_esterne']} chiusi a mano o d'emergenza, {fc['paper_oltre_fine']} "
           f"oltre la fine dei dati del motore; motore {fc['motore_fine_dati']} ancora aperti a "
           f"fine dati, {fc['motore_senza_stop']} senza stop")
-    print(f"  bias (a) validate rimosse dal {dal}: {'n.d.' if rimosse is None else rimosse}. "
-          f"Chi resta ha ripassato il gate anche dopo la validazione: il motore qui e' ottimista.")
-    if fuori_reg and fuori_reg["n"]:
-        print(f"    il paper su {fuori_reg['coppie']} coppie non piu' validate (rimosse, azzerate, "
-              f"sostituite) fa {fuori_reg['n']} trade, R medio {_fmt_r(fuori_reg['r_medio'])}: "
-              f"il motore non le vede")
     riga_b = (f"  bias (b) {fc['paper_config_diverse']} trade del paper su "
               f"{fc['paper_config_note']} hanno girato con scala, break-even o keep diversi "
               f"da quelli con cui il motore li rigira oggi")
     if fc["paper_config_diverse"] and fc["paper_r_senza_config_diverse"] is not None:
         riga_b += f"; senza di loro il paper fa {_fmt_r(fc['paper_r_senza_config_diverse'])}R"
     print(riga_b + ".")
-    print("  bias (c) il paper salta i segnali con la coin gia' aperta e ai tetti di "
-          "portafoglio, il motore no: e' la riga «non aperti».")
 
 
 def riepilogo_fuori_campione(fc: dict, dal: str, rimosse: int | None,
-                             fuori_reg: dict | None) -> dict:
+                             fuori_reg: dict | None,
+                             non_rigiocate: Counter | None = None) -> dict:
     """Per `portfolio/backtest` (campo `fuori_campione`): numeri arrotondati,
     niente liste (Firestore rifiuta le liste annidate, ops 0184)."""
     def arr(v):
@@ -1133,6 +1510,7 @@ def riepilogo_fuori_campione(fc: dict, dal: str, rimosse: int | None,
     out["dal"] = dal
     out["rimosse_dal_inizio_paper"] = rimosse
     out["paper_fuori_registro"] = arr(fuori_reg)
+    out["non_rigiocate"] = dict(non_rigiocate or {})
     out["regola"] = REGOLA_FUORI_CAMPIONE
     return out
 
@@ -1140,15 +1518,23 @@ def riepilogo_fuori_campione(fc: dict, dal: str, rimosse: int | None,
 def sezione_fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
                            simulate, validate, pavimento: float, dal_ts: float,
                            diario, fine: float | None = None,
-                           secondi_barra: float = 900.0) -> dict:
-    """Calcola, stampa e ritorna il riepilogo per Firebase."""
+                           secondi_barra: float = 900.0, uscite: dict | None = None,
+                           motore_uscite: list[dict] | None = None) -> dict:
+    """Calcola, stampa e ritorna il riepilogo per Firebase. `uscite` e
+    `motore_uscite`: le coppie uscite dal registro e i loro trade rigiocati
+    (pacchetto A del 30 set 2026); senza, la sopravvivenza ha una riga sola."""
     dal = dt.datetime.fromtimestamp(pavimento, dt.timezone.utc).date().isoformat()
+    uscite = uscite or {}
     fc = fuori_campione(motore, paper, pairs, simulate, pavimento, fine=fine,
-                        secondi_barra=secondi_barra)
+                        secondi_barra=secondi_barra, uscite=uscite,
+                        motore_uscite=motore_uscite)
     rimosse = rimosse_dal(diario, dal_ts)
-    fuori_reg = paper_fuori_registro(paper, validate, dal_ts)
-    stampa_fuori_campione(fc, dal, rimosse, fuori_reg)
-    return riepilogo_fuori_campione(fc, dal, rimosse, fuori_reg)
+    visti = set(validate) | {k for k, u in uscite.items() if u.get("rigiocabile")}
+    fuori_reg = paper_fuori_registro(paper, visti, dal_ts)
+    non_rigiocate = Counter(u.get("perche") or u.get("motivo") or "?"
+                            for u in uscite.values() if not u.get("rigiocabile"))
+    stampa_fuori_campione(fc, dal, rimosse, fuori_reg, non_rigiocate)
+    return riepilogo_fuori_campione(fc, dal, rimosse, fuori_reg, non_rigiocate)
 
 
 def _data(s: str) -> dt.date:
@@ -1220,24 +1606,81 @@ def main(argv: list[str] | None = None) -> int:
           f"cooldown {limiti['cooldown_ore']:.2f} h · rischio {limiti['rischio_per_trade'] * 100:.0f}%/trade")
     print("=" * 74)
 
+    # PACCHETTO A (30 set 2026): il paper e il diario delle vite si leggono PRIMA
+    # del giro delle coin (le stesse due letture di prima, solo spostate), perche'
+    # servono a sapere quali coppie sono USCITE dal registro dall'inizio del
+    # paper: il motore le rigioca, sulle stesse candele, fino al giorno in cui
+    # sono uscite (sopravvivenza). Le loro spec stanno nel documento delle spec
+    # letto qui sopra: nessuna lettura in piu'.
+    dal_paper: dt.date | None = None
+    dal_ts = None
+    paper = diario = None
+    uscite: dict[str, dict] = {}
+    if args.dal is None:
+        try:
+            dal_paper = dt.date.fromisoformat(PAPER_START)
+        except ValueError:
+            dal_paper = None
+        if dal_paper is not None:
+            dal_ts = dt.datetime.combine(dal_paper, dt.time(), dt.timezone.utc).timestamp()
+            paper = _trade_paper(fb, dal_ts)
+            diario = _diario_vite(fb)
+            try:
+                uscite = coppie_uscite(pairs, diario, validate, paper, max(dal_ts, inizio_ts),
+                                       ora.timestamp())
+            except Exception as exc:  # noqa: BLE001 — senza, la sopravvivenza ha una riga sola
+                print(f"[portafoglio] coppie uscite non ricostruite ({str(exc)[:120]})")
+                uscite = {}
+    per_coin_uscite: dict[str, list[tuple[str, dict]]] = defaultdict(list)
+    for k, u in sorted(uscite.items()):
+        if u.get("rigiocabile"):
+            sym, _, strat = k.partition("|")
+            per_coin_uscite[sym].append((strat, {"last_params": u.get("params") or {}}))
+
     bt = WalkForwardOptimizer(n_windows=1, interval=args.interval).bt
     trades: list[dict] = []
+    trades_uscite: list[dict] = []
     saltate: list[tuple[str, str]] = []
-    n_simulate = 0
-    for i, sym in enumerate(sorted(per_coin), 1):
+    n_simulate = n_da_cache = 0
+    monete = sorted(set(per_coin) | set(per_coin_uscite))
+    for i, sym in enumerate(monete, 1):
+        valide, extra = per_coin.get(sym, []), per_coin_uscite.get(sym, [])
+        nomi_extra = {s for s, _ in extra}
+        # la riga «dati da cache» del caricatore, una per coin, pesava ~3,6 KB
+        # dell'output (ops 0371): si conta invece di stamparla, e ogni altra riga
+        # del caricatore (download, fonti giu', serie parziali) resta (30 set 2026)
+        buf = io.StringIO()
         try:
-            tr, sk, n_c = trades_della_coin(sym, per_coin[sym], specs, args, inizio_ts, bt)
+            with contextlib.redirect_stdout(buf):
+                tr, sk, n_c = trades_della_coin(sym, valide + extra, specs, args, inizio_ts, bt)
         except Exception as exc:  # noqa: BLE001 — una coin rotta non deve fermare le altre
-            sk, tr, n_c = [(s, f"errore: {exc}") for s, _ in per_coin[sym]], [], 0
-        fatte = len(per_coin[sym]) - len(sk)
+            sk, tr, n_c = [(s, f"errore: {exc}") for s, _ in valide + extra], [], 0
+        for riga in buf.getvalue().splitlines():
+            if riga.startswith("[backtest] dati da cache:"):
+                n_da_cache += 1
+            elif riga.strip():
+                print(riga)
+        sk_val = [(s, m) for s, m in sk if s not in nomi_extra]
+        for s, m in sk:
+            if s in nomi_extra:
+                uscite[f"{sym}|{s}"].update(rigiocabile=False, perche=m)
+        fatte = len(valide) - len(sk_val)
         n_simulate += fatte
-        saltate.extend((f"{sym}|{s}", m) for s, m in sk)
-        trades.extend(tr)
-        print(f"  [{i:>2}/{len(per_coin)}] {sym:<14} {n_c:>6} candele · "
-              f"{fatte} strategie · {len(tr):>4} trade", flush=True)
+        saltate.extend((f"{sym}|{s}", m) for s, m in sk_val)
+        trades.extend(t for t in tr if t.get("strategy") not in nomi_extra)
+        trades_uscite.extend(t for t in tr if t.get("strategy") in nomi_extra)
+        coda = f" · uscite rigiocate {len(extra) - (len(sk) - len(sk_val))}" if extra else ""
+        print(f"  [{i:>2}/{len(monete)}] {sym:<14} {n_c:>6} candele · "
+              f"{fatte} strategie · {sum(1 for t in tr if t.get('strategy') not in nomi_extra):>4} "
+              f"trade{coda}", flush=True)
 
     print(f"\ncoppie simulate {n_simulate} · saltate {len(saltate)} · "
-          f"trade candidati {len(trades)}")
+          f"trade candidati {len(trades)} · candele da cache per {n_da_cache} coin")
+    if uscite:
+        n_rig = sum(1 for u in uscite.values() if u.get("rigiocabile"))
+        print(f"coppie uscite dal registro dal {PAPER_START}: {len(uscite)}, rigiocate {n_rig} "
+              f"({len(trades_uscite)} trade, solo per la sezione FUORI CAMPIONE, non nel "
+              f"portafoglio qui sotto)")
     for key, m in saltate:
         print(f"    saltata {key}: {m}")
     if not trades:
@@ -1280,20 +1723,17 @@ def main(argv: list[str] | None = None) -> int:
     # H5: nel run di default, il periodo del paper giorno per giorno, accanto
     # al paper vero. Con --dal la tabella sopra fa gia' lo stesso lavoro.
     # Subito dopo, il FUORI CAMPIONE (30 set 2026): stessi trade del paper (una
-    # lettura sola), stessi trade del motore (nessun backtest in piu'). Sta qui,
+    # lettura sola), stessi trade del motore, piu' quelli delle coppie uscite dal
+    # registro (pacchetto A: gli unici backtest in piu', uno per coppia uscita,
+    # sulle candele gia' caricate quando la coin e' anche fra le validate). Sta qui,
     # nella coda dell'output, perche' l'agente ops oltre 20.000 caratteri tiene
     # testa e coda e taglia il mezzo.
     periodo_paper: dict = {}
     fuori: dict = {}
     if args.dal is None:
-        try:
-            dal_paper = dt.date.fromisoformat(PAPER_START)
-        except ValueError:
-            dal_paper = None
+        if dal_paper is None:
             print(f"\n  PERIODO DEL PAPER: PAPER_START={PAPER_START!r} non e' una data, salto.")
-        if dal_paper is not None:
-            dal_ts = dt.datetime.combine(dal_paper, dt.time(), dt.timezone.utc).timestamp()
-            paper = _trade_paper(fb, dal_ts)
+        else:
             periodo_paper = sezione_periodo_paper(
                 sims[0], paper, dal_paper, ora.date(),
                 dt.datetime.fromtimestamp(inizio_ts, dt.timezone.utc).date())
@@ -1310,8 +1750,9 @@ def main(argv: list[str] | None = None) -> int:
             try:
                 fuori = sezione_fuori_campione(
                     trades, paper, pairs, simulate, validate,
-                    max(dal_ts, inizio_ts), dal_ts, _diario_vite(fb),
-                    fine=fine_motore, secondi_barra=secondi_barra)
+                    max(dal_ts, inizio_ts), dal_ts, diario,
+                    fine=fine_motore, secondi_barra=secondi_barra,
+                    uscite=uscite, motore_uscite=trades_uscite)
             except Exception as exc:  # noqa: BLE001 — una sezione rotta non deve fermare il report
                 print(f"\n  FUORI CAMPIONE: saltata per un errore ({str(exc)[:120]}).")
 

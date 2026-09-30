@@ -66,6 +66,7 @@ conti e simulazioni; un critico statistico e uno da trader; sintesi). Richiesta 
 modello». Nessuna voce è stata fatta: aspettano il sì.
 
 ### K1. Regole delle letture del 3, 7 e 14 ott, scritte prima (proposta: serve adesso)
+**30 set: FATTO (sì del proprietario), regole scritte nel diario prima delle letture.** In `portafoglio` (FUORI CAMPIONE) e in `trades` (DECLASSATE). Dettaglio nel diario del 30 set.
 Il verdetto «è il bot che esegue male» del 7 ott oggi si decide sulla media di tutti i trade (margine
 ±0,25R); sugli stessi segnali il margine è ±0,16R e la differenza +0,04R (ops 0371). Pacchetto:
 riga «stessi segnali» per il verdetto sul bot con almeno 30 trade accoppiati, conteggio unico dei

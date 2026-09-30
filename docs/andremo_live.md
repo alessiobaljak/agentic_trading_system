@@ -2258,3 +2258,27 @@ sulle 25 coppie che NON sono più validate (azzerate il 27 set, sostituite, rimo
 R −0,23: la perdita del paper sta soprattutto lì, su coppie che il gate ha già tolto o ridotto.
 Rimosse dal 16 set: 0 (bias di sopravvivenza piccolo per ora). Config diversa da oggi: 3 trade su
 77. Il minimo di 80 trade del motore è già raggiunto; si rilegge il 7 ott con la regola scritta.
+
+### 30 settembre, pomeriggio: le regole delle letture di ottobre, scritte PRIMA dei numeri (K1) e il gruppo di controllo (K3)
+
+Sì del proprietario («parti da A e C insieme, poi B»). **Regole, fissate oggi 30 set:**
+* **7 e 14 ott, «selezione»** (la promessa non regge dopo la validazione): motore fuori campione
+  con R medio ≤ 0 su almeno 80 SEGNALI unici (stessa moneta, candela e direzione contano una
+  volta: le gemelle non contano doppio), sulla riga «tutte le coppie operate» (le coppie uscite
+  dal registro rigiocate fino al giorno dell'uscita, per togliere il bias dei sopravvissuti).
+* **7 e 14 ott, «esecuzione»** (è il bot): SOLO sulla riga «stessi segnali» (paper e motore
+  entrano sullo stesso segnale: stesso mercato, così si misura l'esecuzione e non ciò che il paper
+  non poteva prendere), con almeno 30 trade accoppiati e la differenza oltre il margine.
+* **Margine:** 2 errori standard, il più largo fra quello per giornata (le giornate nere
+  colpiscono tutti insieme) e quello trade per trade; almeno 2 giornate.
+* I segnali non presi dal paper si confrontano con quelli presi dal portafoglio del motore (anche
+  lui una posizione per moneta): stampati, ma non sono un verdetto sul bot.
+* Tre letture (3, 7, 14 ott): la probabilità che almeno una suoni per caso sale da ~2,5% a ~7%
+  (stima della revisione); un verdetto isolato si conferma il 14.
+* **3 ott, declassate contro attive** (in `trades`): solo trade entrati dal 27 set 19:40 UTC (fine
+  del difetto della sessione); «diverso» se la differenza supera il margine; «uguale» solo se
+  differenza + margine sta sotto 0,15R; altrimenti «non si decide».
+La prima lettura (ops 0371) resta valida come riassunto; da ora la regola è questa.
+**Gruppo di controllo (K3), acceso:** a ogni giro ~50 bocciate a caso con la spec intera e, una
+volta al giorno, la foto delle conferme, in file locali sulla VPS (`data/gruppo_controllo/`).
+Il rigioco e le sue regole dopo il 7 ott. Suite 1961 test verdi (senza `test_allowlist_runnable`).

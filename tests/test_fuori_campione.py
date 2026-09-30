@@ -175,9 +175,10 @@ def test_statistiche_lato_e_primo_gradino_con_la_stessa_regola():
     la scala del trade se c'e', altrimenti quella globale."""
     pairs = {"A|g1": {"validated_at": V_A}}
     t = V_A + 600
+    # tre candele diverse: sulla stessa candela sarebbero UN segnale (pacchetto A)
     motore = [_m("A", "g1", t, pnl_pct=0.02, mfe=2.5, scala=[2.0, 4.0]),
-              _m("A", "g1", t, pnl_pct=-0.01, mfe=1.5, scala=[2.0, 4.0]),
-              _m("A", "g1", t, pnl_pct=0.01, mfe=0.2, scala=[2.0, 4.0])]
+              _m("A", "g1", t + 900, pnl_pct=-0.01, mfe=1.5, scala=[2.0, 4.0]),
+              _m("A", "g1", t + 1800, pnl_pct=0.01, mfe=0.2, scala=[2.0, 4.0])]
     paper = [_p("A", "g1", t, pnl=1.0, mfe=2.1, scale_r_mults=[2.0]),
              _p("A", "g1", t, pnl=-1.0, mfe=0.4, scale_r_mults=[2.0])]
     fc = pb.fuori_campione(motore, paper, pairs, ["A|g1"], PAV)
@@ -210,77 +211,99 @@ def test_trade_che_servono():
 
 
 # --------------------------------------------------------------------------- #
-# le letture della regola (30 set, riviste prima della prima lettura)         #
+# le letture della regola (30 set, riviste prima della prima lettura; pacchetto  #
+# A dello stesso giorno: selezione sul motore, esecuzione sugli stessi segnali)  #
 # --------------------------------------------------------------------------- #
-def _lato(valori):
-    return pb.statistiche_lato([(v, None, None) for v in valori])
+def _lato(valori, giorni=10):
+    """Un lato con il margine per giornata: i valori sparsi su `giorni` giornate
+    a rotazione (nessun effetto di giornata: margine per giornata ~ trade per trade)."""
+    s = pb.statistiche_lato([(v, None, None) for v in valori])
+    es = s["dev_std"] / math.sqrt(s["n"]) if s["dev_std"] is not None else None
+    s["errore_giorno"] = pb.errore_standard_per_giorno(
+        [(v, f"g{i % giorni}") for i, v in enumerate(valori)])
+    s["errore_regola"] = pb.errore_regola(es, s["errore_giorno"])
+    return s
 
 
-def _leggi(motore, paper):
-    m, p = _lato(motore), _lato(paper)
-    diff = m["r_medio"] - p["r_medio"]
-    return pb.lettura_fuori_campione(m, p, diff, pb.errore_standard_differenza(m, p))
+def _accoppiati(motore, paper, giorni=10):
+    coppie = list(zip(motore, paper))
+    return pb.statistiche_abbinate(coppie, [f"g{i % giorni}" for i in range(len(coppie))])
 
 
-def test_lettura_nessun_verdetto_sotto_80_trade_del_motore():
+def test_lettura_selezione_nessun_verdetto_sotto_80_segnali():
     """Il caso della revisione: con 2 trade a -0,01R la riga scriveva come un
-    fatto «il divario e' la selezione del gate». La proposta approvata diceva
-    che sotto circa 80 trade del motore il 7 ott non si decide."""
+    fatto «il divario e' la selezione del gate». Sotto 80 segnali non si decide."""
     assert pb.MIN_TRADE_MOTORE == 80
-    testo = _leggi([-0.01, 0.0], [-1.0, 0.5])
-    assert testo.startswith("non si decide: il motore ha solo 2 trade")
-    assert "almeno 80" in testo and "si rilegge" in testo
-    # neanche una differenza enorme decide sotto il minimo
-    assert _leggi([1.0, 1.1] * 39, [-1.0, -1.1] * 30).startswith(
-        "non si decide: il motore ha solo 78 trade")
+    testo = pb.lettura_selezione(_lato([-0.01, 0.0]))
+    assert testo.startswith("non si decide: il motore ha solo 2 segnali")
+    assert "almeno 80" in testo
+    assert pb.lettura_selezione(_lato([-1.0, -1.1] * 39)).startswith(
+        "non si decide: il motore ha solo 78 segnali")
 
 
 def test_lettura_selezione_se_il_motore_non_guadagna():
-    testo = _leggi([0.5, -0.5, -0.2, 0.1] * 20, [-1.0, -1.0, 0.5] * 10)
+    testo = pb.lettura_selezione(_lato([0.5, -0.5, -0.2, 0.1] * 20))
     assert testo.startswith("la promessa non regge dopo la validazione")
     # l'azione della regola, e il limite detto: gate o mercato, da qui non si separano
     assert "va nel gate" in testo and "il mercato e' cambiato" in testo
-    assert "margine ±" in testo and "su 80 trade" in testo
+    assert "per giornata" in testo and "su 80 segnali" in testo
     # R medio esattamente 0 e' selezione (<= 0)
-    assert _leggi([1.0, -1.0] * 40, [-1.0, -0.5] * 5).startswith("la promessa non regge")
+    assert pb.lettura_selezione(_lato([1.0, -1.0] * 40)).startswith("la promessa non regge")
+    assert "nessun verdetto contro il gate" in pb.lettura_selezione(_lato([1.0, -0.5] * 40))
 
 
-def test_lettura_selezione_ed_esecuzione_insieme():
-    """Motore <= 0 E paper peggio del motore oltre il margine: prima si diceva
-    solo il primo ramo; ora tutte e due."""
-    testo = _leggi([0.5, -0.5] * 50, [-1.0, -1.2, -0.8] * 30)
-    assert testo.startswith("la promessa non regge") and "anche un problema del bot" in testo
-    # senza divario d'esecuzione, solo il primo
-    assert "problema del bot" not in _leggi([0.5, -0.5] * 50, [0.5, -0.5] * 30)
+def test_lettura_esecuzione_solo_con_30_accoppiati():
+    """Pacchetto A: il verdetto «esecuzione» esce solo dalla riga «stessi
+    segnali» e solo con almeno 30 accoppiati. Con 29, anche un divario enorme
+    non decide; con 30 si'."""
+    assert pb.MIN_ACCOPPIATI == 30
+    m29, p29 = [1.0, 0.8, 1.2] * 9 + [1.0, 0.9], [-1.0, -0.8, -1.2] * 9 + [-1.0, -0.9]
+    testo = pb.lettura_esecuzione(_accoppiati(m29, p29))
+    assert testo == "non si decide: 29 accoppiati, ne servono 30."
+    testo = pb.lettura_esecuzione(_accoppiati(m29 + [1.1], p29 + [-1.1]))
+    assert testo.startswith("e' esecuzione: sugli stessi segnali il paper rende meno")
+    assert "ingressi e uscite" in testo and "per giornata" in testo
+    assert pb.lettura_esecuzione(None).startswith("non si decide: 0 accoppiati")
 
 
-def test_lettura_esecuzione_se_la_differenza_supera_il_margine():
-    motore = [1.0, 0.8, 1.2, 0.9, 1.1] * 16
-    paper = [-1.0, -0.8, -1.2, -0.9, -1.1] * 4
-    testo = _leggi(motore, paper)
-    assert testo.startswith("e' esecuzione: sulle stesse coppie il paper rende meno")
-    assert "ingressi e uscite" in testo and "stessi segnali" in testo
+def test_lettura_esecuzione_gli_altri_esiti():
+    # il paper non fa peggio del motore sugli stessi segnali
+    assert pb.lettura_esecuzione(_accoppiati([0.5] * 40, [0.6] * 40)).startswith(
+        "non e' esecuzione")
     # dispersione zero e differenza nulla: 0 >= 2 x 0, ma non c'e' nessun divario
-    assert "non fa peggio" in _leggi([1.0] * 80, [1.0, 1.0])
-
-
-def test_lettura_non_si_decide_dentro_il_margine():
-    testo = _leggi([2.0, -1.0, 1.5] * 30, [-1.0, 1.0, -0.5, 1.2])
+    assert pb.lettura_esecuzione(_accoppiati([1.0] * 40, [1.0] * 40)).startswith(
+        "non e' esecuzione")
+    # dentro il margine: quanti accoppiati servirebbero
+    m = [2.0, -1.0, 1.5, 0.3] * 10
+    p = [1.0, -1.2, 0.2, 1.3] * 10
+    testo = pb.lettura_esecuzione(_accoppiati(m, p))
     assert testo.startswith("non si decide: la differenza sta dentro il margine")
-    assert "servono circa" in testo and "si rilegge" in testo
-    # il paper che fa meglio del motore: nessun divario
-    assert "non fa peggio" in _leggi([0.5, 0.1, 0.3] * 30, [1.0, 2.0, 0.8])
-    # paper con meno di 2 trade: nessun margine, nessun «esecuzione»
-    assert "meno di 2 trade" in _leggi([1.0, 0.5] * 40, [-1.0])
-
-
-def test_lettura_quasi_uguale_senza_numeri_assurdi():
-    """Il caso della revisione: differenza +0,004R -> «serve ~6588812 trade»."""
-    testo = _leggi([0.9, -0.9, 0.004] * 30, [0.9, -0.9, 0.0] * 7)
+    assert "servono circa" in testo
+    # quasi uguale: niente numeri assurdi («serve ~6588812 trade»)
+    testo = pb.lettura_esecuzione(_accoppiati([0.9, -0.9, 0.004] * 12, [0.0, 0.9, -0.9] * 12))
     assert "quasi uguale" in testo and "servono circa" not in testo
-    # differenza non piccola ma sepolta nel rumore: niente numero, «piu' di 10 volte»
-    testo = _leggi([3.0, -3.0, 0.2] * 30, [3.0, -3.0, 0.0] * 3)
-    assert "piu' di 10 volte" in testo and "servono circa" not in testo
+    # tutti in una giornata: il margine per giornata non esiste, niente verdetto
+    ss = _accoppiati([1.0, 0.8] * 20, [-1.0, -0.8] * 20, giorni=1)
+    assert ss["errore_giorno"] is None and ss["errore_regola"] is None
+    assert "2 giornate" in pb.lettura_esecuzione(ss)
+
+
+def test_lettura_completa_dice_tutte_e_due_e_la_media_di_tutti_non_decide():
+    """Il caso della revisione: la media di tutti i trade mostra un divario
+    oltre il margine (il paper ha preso i segnali peggiori), ma sugli stessi
+    segnali il paper esegue come il motore: prima era «esecuzione», ora no."""
+    m = _lato([1.0, 0.8, 1.2, 0.9, 1.1] * 16)
+    p = _lato([-1.0, -0.8, -1.2, -0.9, -1.1] * 8)
+    ss = _accoppiati([0.1, -0.2, 0.3] * 12, [0.1, -0.2, 0.3] * 12)
+    testo = pb.lettura_fuori_campione(m, p, ss)
+    assert testo.startswith("Selezione: il motore guadagna ancora")
+    assert "Esecuzione: non e' esecuzione" in testo and "14 ott" in testo
+    # motore <= 0 E paper peggio sugli stessi segnali: tutte e due
+    testo = pb.lettura_fuori_campione(_lato([0.5, -0.5] * 50), p,
+                                      _accoppiati([1.0, 0.8] * 20, [-1.0, -0.8] * 20))
+    assert "la promessa non regge" in testo and "e' esecuzione" in testo
+    assert pb.lettura_fuori_campione(m, None, ss).startswith(
+        "non si decide: il paper non e' leggibile")
 
 
 def test_r_vicino_a_zero_con_tre_decimali():
@@ -486,7 +509,8 @@ def test_trades_della_coin_passa_scala_e_fine_dati(monkeypatch):
 
 
 # --------------------------------------------------------------------------- #
-# l'output: sotto ~2,5 KB, e il riepilogo per Firebase senza liste annidate    #
+# l'output: sotto ~3,8 KB (pacchetto A: +~0,7 KB), e il riepilogo per Firebase  #
+# senza liste annidate                                                         #
 # --------------------------------------------------------------------------- #
 def _dati_grandi():
     """202 coppie, ~1.600 trade del motore e ~600 del paper, date di
@@ -513,20 +537,28 @@ def _dati_grandi():
     return pairs, motore, paper, diario
 
 
-def test_sezione_sotto_due_kb_e_mezzo_e_riepilogo_pubblicabile(capsys):
+def test_sezione_sotto_3800_caratteri_e_riepilogo_pubblicabile(capsys):
+    """Prima del pacchetto A la sezione faceva ~2,9 KB su questi dati; ora ~3,7
+    KB (+~0,7 KB: righe in segnali, margini per giornata, segnali presi, due
+    righe di sopravvivenza, regole e tre letture). Il main compensa togliendo le
+    righe «dati da cache» (~3,6 KB, ops 0371)."""
     pairs, motore, paper, diario = _dati_grandi()
     out = pb.sezione_fuori_campione(motore, paper, pairs, list(pairs), list(pairs),
                                     PAV, PAV, diario)
     testo = capsys.readouterr().out
     assert "FUORI CAMPIONE (H5)" in testo and "Lettura:" in testo
-    assert pb.REGOLA_FUORI_CAMPIONE in testo and "DECISIONE IL 7 OTT" in testo
-    assert "Domanda:" in testo and "stessi segnali" in testo and "non aperti:" in testo
-    assert "bias (a)" in testo and "bias (b)" in testo and "bias (c)" in testo
+    assert pb.REGOLA_FUORI_CAMPIONE in testo
+    assert "regola scritta il 30 set, prima delle letture" in testo
+    assert pb.TRE_LETTURE in testo and "~7%" in testo
+    assert "Domanda:" in testo and "stessi segnali" in testo and "segnali presi:" in testo
+    assert "doppioni fusi" in testo and "per giornata" in testo
+    assert "coppie ancora validate" in testo and "tutte le coppie operate" in testo
+    assert "bias (b)" in testo
     assert "rimosse dal 2026-09-16: 15" in testo and "non piu' validate" in testo
     # niente nomi di campi o collezioni per chi legge dal telefono
     assert "validated_at" not in testo and "gate_history" not in testo
     assert "r_multiplo" not in testo and "e.s." not in testo
-    assert len(testo) < 3000, len(testo)
+    assert len(testo) < 3800, len(testo)
     # la distribuzione delle date non cresce coi mesi
     riga = next(r for r in testo.splitlines() if "senza data di validazione" in r)
     assert len(riga) < 200 and "fino al" in riga
