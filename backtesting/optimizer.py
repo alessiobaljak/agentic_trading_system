@@ -176,8 +176,12 @@ class WalkForwardOptimizer:
         pf_ex = pf_without_top(st.trades)
         ok = (n >= _st.GATE_HOLDOUT_MIN_TRADES and pf >= _st.GATE_HOLDOUT_PF and pnl > 0
               and pf_ex >= _st.GATE_MIN_PF_EX_TOP)
+        # IL VOTO t ANCHE ALL'ULTIMO ESAME (30 set 2026, H1-misura, si' del
+        # proprietario): la stessa statistica del walk-forward (`t_stat`), sui
+        # soli trade dell'holdout. Si MISURA e basta, il verdetto `ok` non cambia:
+        # serve a vedere se le coppie a t bassa perdono dopo la validazione.
         return {"pf": round(pf, 3), "pnl_pct": round(pnl, 4), "trades": n, "ok": ok,
-                "pf_ex_top": round(pf_ex, 3)}
+                "pf_ex_top": round(pf_ex, 3), "t": round(t_stat(st.trades), 3)}
 
     def optimize_symbol(self, symbol: str, candles: list[Candle],
                         context_by_ts: dict | None = None) -> list[OptResult]:

@@ -558,7 +558,9 @@ def test_sezione_sotto_3800_caratteri_e_riepilogo_pubblicabile(capsys):
     # niente nomi di campi o collezioni per chi legge dal telefono
     assert "validated_at" not in testo and "gate_history" not in testo
     assert "r_multiplo" not in testo and "e.s." not in testo
-    assert len(testo) < 3800, len(testo)
+    # +0,5 KB il 30 set 2026 (H1-misura): la regola del voto t e la divisione
+    # per t, approvate col tetto di mezzo KB in piu' sulla sezione
+    assert len(testo) < 3800 + 500, len(testo)
     # la distribuzione delle date non cresce coi mesi
     riga = next(r for r in testo.splitlines() if "senza data di validazione" in r)
     assert len(riga) < 200 and "fino al" in riga

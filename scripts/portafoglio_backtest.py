@@ -126,7 +126,7 @@ from bot.learning.drift import r_multiplo, tocca_tp1
 from bot.learning.trade_logger import TradeLogger
 from bot.risk.portafoglio import MOTIVI, limiti_default, simula
 from bot.strategies.generated import GeneratedStrategy
-from scripts.optimize import coppie_validate
+from scripts.optimize import coppie_validate, impronta_uscita
 
 #: da quando esiste il paper (H5, 24 set 2026). Env per spostarlo senza toccare
 #: il codice; il default e' il giorno in cui il bot ha iniziato a operare.
@@ -1124,10 +1124,354 @@ def _per_giorno_validazione(giorni: Counter) -> str:
     return " · ".join(parti)
 
 
+# --------------------------------------------------------------------------- #
+# H1-misura, 30 set 2026: il FUORI CAMPIONE diviso per voto t                  #
+# --------------------------------------------------------------------------- #
+#: la regola scritta il 30 set PRIMA dei numeri (docs/revisione_sospese_30set.md,
+#: voce B, si' del proprietario): si stampa sempre prima delle righe per t.
+#: 30 set 2026, revisione del lavoro B: il testo NON dice quale delle tre righe
+#: decide, con quale margine (di ogni gruppo o della differenza) e con quanti
+#: segnali; e' una scelta del proprietario, da fare prima della prima lettura.
+#: Finche' non c'e', il report stampa tutte e tre le righe coi due margini e lo
+#: dice (`righe_voto_t`): non si sceglie qui una lettura al posto suo.
+REGOLA_H1 = ("se le coppie a t bassa perdono dopo la validazione e quelle a t alta "
+             "guadagnano, oltre il margine, allora H1-soglia sull'holdout diventa la "
+             "prossima proposta; se no, H1 si chiude con questo numero")
+
+#: la soglia fra «t alta» e «t bassa» (quella della voce B approvata, e la riga di `gate`)
+SOGLIA_T = 2.0
+
+#: sotto 2 trade `t_stat` restituisce 0.0 per convenzione: non e' una misura, e
+#: la coppia resta fuori dai due gruppi (30 set 2026, revisione del lavoro B).
+#: Per l'holdout vale il minimo del gate (`GATE_HOLDOUT_MIN_TRADES`, oggi 5):
+#: una coppia con meno trade nell'ultimo esame il gate non l'avrebbe promossa, e
+#: con 2-4 trade la t esce enorme (11, o 99 con due trade uguali)
+MIN_TRADE_T = 2
+
+#: il file che la passata una tantum `scripts/t_validate.py` scrive SULLA VPS:
+#: la t di ogni validata (walk-forward e holdout) calcolata sui dati del giorno
+#: della sua validazione, con la configurazione d'uscita di oggi.
+#: File locale: il report non fa nessuna lettura Firestore in piu'.
+FILE_VOTI_T = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                           "data", "voto_t", "validate.json")
+
+
+def taglio_validazione(rec: dict | None) -> tuple[float | None, str]:
+    """(istante del taglio, origine): la mezzanotte UTC del giorno in cui la
+    coppia e' diventata validata, cioe' la fine dei dati del giro che l'ha
+    validata (la discovery carica le candele fino a «oggi» escluso). L'istante
+    di validazione e' quello del FUORI CAMPIONE (`inizio_fuori_campione`:
+    `validated_at`, oppure il 25 set per le validate senza data). None per le
+    azzerate del 27 set senza data dopo: il report le esclude da tutti e due i
+    lati. Sta qui (e `t_validate` la usa) perche' la passata e il report devono
+    dire la stessa cosa su «il giorno della validazione»."""
+    t0, origine = inizio_fuori_campione(rec if isinstance(rec, dict) else {}, 0.0)
+    if t0 is None:
+        return None, origine
+    giorno = dt.datetime.fromtimestamp(float(t0), dt.timezone.utc).date()
+    return dt.datetime.combine(giorno, dt.time(), dt.timezone.utc).timestamp(), origine
+
+
+def voti_t_da_file(path: str | None = None) -> dict:
+    """{coppia: voce} dal file della passata una tantum; {} se non c'e' o non si
+    legge (fail-open: senza file le coppie usano il registro o restano «senza t»)."""
+    try:
+        with open(path or FILE_VOTI_T, encoding="utf-8") as f:
+            doc = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    coppie = doc.get("coppie") if isinstance(doc, dict) else None
+    return coppie if isinstance(coppie, dict) else {}
+
+
+def voce_scaduta(v: dict, rec: dict | None) -> str | None:
+    """Perche' una voce del file NON vale per la coppia com'e' oggi, o None se
+    vale (30 set 2026, revisione del lavoro B):
+      * «altra_validazione»: la voce e' stata calcolata sui dati di un altro
+        giorno di validazione (la coppia e' uscita ed e' stata promossa di
+        nuovo): e' la t di un'altra vita;
+      * «config_cambiata»: la configurazione d'uscita con cui e' stata calcolata
+        (`uscita`, `optimize.impronta_uscita`) non e' quella che la coppia opera
+        oggi, cioe' quella con cui il motore la rigioca.
+    Senza record (coppia uscita e cancellata dal registro) la voce vale com'e':
+    e' proprio il caso per cui le voci non si cancellano mai. Un campo che la
+    voce non porta non si confronta."""
+    if not isinstance(rec, dict) or not rec:
+        return None
+    taglio, _ = taglio_validazione(rec)
+    fino_a = v.get("dati_fino_a")
+    if fino_a and taglio is not None:
+        giorno = dt.datetime.fromtimestamp(taglio, dt.timezone.utc).date().isoformat()
+        if str(fino_a) != giorno:
+            return "altra_validazione"
+    if v.get("uscita") is not None and v["uscita"] != impronta_uscita(rec.get("last_params")):
+        return "config_cambiata"
+    return None
+
+
+def _voto(t, n, th, nh, fonte: str) -> dict:
+    return {"t": _num_o_none(t), "n": int(_num(n)), "t_holdout": _num_o_none(th),
+            "n_holdout": int(_num(nh)), "fonte": fonte}
+
+
+def voto_t_con_motivo(k: str, rec: dict | None, voti: dict | None) -> tuple[dict | None, str]:
+    """(voto, da dove): il voto {t, n, t_holdout, n_holdout, fonte} di una
+    coppia per la divisione, oppure (None, perche' manca).
+
+    Prima il file della passata una tantum, se la voce vale per la coppia di
+    oggi (`voce_scaduta`). Poi la t FISSATA ALLA PROMOZIONE nel registro
+    (`val_t` & C., `optimize.fissa_voto_t`), se e' stata calcolata con la
+    configurazione d'uscita di oggi.
+
+    30 set 2026, revisione del lavoro B: prima il ripiego sul registro leggeva
+    `last_t`, e solo se l'ultimo passaggio era avvenuto entro la validazione.
+    Una coppia che ripassava usciva dai gruppi, e ripassare dipende proprio dai
+    giorni fuori campione: nei gruppi restavano soprattutto le coppie che poi
+    non ripassano (le declassate). La t fissata alla promozione non dipende da
+    cio' che succede dopo. Motivi di None: «senza_voto», «config_cambiata»,
+    «altra_validazione»."""
+    rec_ok = rec if isinstance(rec, dict) and rec else None
+    motivo = "senza_voto"
+    v = (voti or {}).get(k)
+    if isinstance(v, dict):
+        motivo = voce_scaduta(v, rec_ok) or ""
+        if not motivo:
+            return _voto(v.get("t"), v.get("n"), v.get("t_holdout"), v.get("n_holdout"),
+                         "passata"), "passata"
+    if rec_ok and (rec_ok.get("val_t") is not None or rec_ok.get("val_t_holdout") is not None):
+        if (rec_ok.get("val_uscita") is not None
+                and rec_ok["val_uscita"] != impronta_uscita(rec_ok.get("last_params"))):
+            return None, "config_cambiata"
+        return _voto(rec_ok.get("val_t"), rec_ok.get("val_trades"), rec_ok.get("val_t_holdout"),
+                     rec_ok.get("val_trades_holdout"), "registro"), "registro"
+    return None, motivo
+
+
+def voto_t_coppia(k: str, rec: dict | None, voti: dict | None) -> dict | None:
+    """La t di una coppia per la divisione (vedi `voto_t_con_motivo`); None = senza t."""
+    return voto_t_con_motivo(k, rec, voti)[0]
+
+
+def _divisione(righe_m: list[dict], segnali: list[dict], righe_p: list[dict] | None,
+               alta, vt: dict, campo_n: str) -> dict:
+    """Motore e paper divisi in due gruppi da `alta(k)` (True / False / None =
+    senza voto per questa riga).
+
+    30 set 2026, revisione del lavoro B: si divide per SEGNALE, non per coppia.
+    Un segnale (stessa moneta, candela e direzione) preso da una coppia a t alta
+    e da una a t bassa prima si contava in tutti e due i gruppi: la differenza
+    si schiacciava verso zero e il margine, che tratta i gruppi come
+    indipendenti, restava largo. Ora conta come fa una soglia vera: un segnale
+    va fra le «alte» se almeno una coppia che lo prende ha t alta (la soglia lo
+    terrebbe), col R medio delle sole coppie a t alta; fra le «basse» solo se
+    TUTTE le sue coppie hanno t bassa (la soglia lo toglierebbe); altrimenti e'
+    fuori. I gruppi non si sovrappongono. `condivisi`: segnali presi anche da una
+    coppia a t bassa, contati fra le alte. `trade_mediani`: i trade mediani su
+    cui e' calcolata la t (campo `campo_n`) delle coppie di ogni gruppo, il
+    controllo diretto di «t alta = solo tanti trade». Il paper resta per trade:
+    apre una posizione per moneta, quindi non ha doppioni."""
+    rg: dict = {"alta": [], "bassa": []}
+    coppie: dict = {"alta": set(), "bassa": set()}
+    fuori = condivisi = 0
+    for s in segnali:
+        membri = [(righe_m[i]["k"], righe_m[i]["r"]) for i in s["membri"]]
+        voti_m = [alta(k) for k, _ in membri]
+        if any(v is True for v in voti_m):
+            rs = [r for (_, r), v in zip(membri, voti_m) if v is True]
+            rg["alta"].append((mean(rs), s["giorno"]))
+            coppie["alta"].update(k for (k, _), v in zip(membri, voti_m) if v is True)
+            condivisi += int(any(v is False for v in voti_m))
+        elif voti_m and all(v is False for v in voti_m):
+            rg["bassa"].append((s["r"], s["giorno"]))
+            coppie["bassa"].update(k for k, _ in membri)
+        else:
+            fuori += 1
+    out: dict = {"fuori": fuori, "condivisi": condivisi}
+    stat: dict = {}
+    for nome, val in (("alta", True), ("bassa", False)):
+        s = statistiche_lato([(r, None, None) for r, _ in rg[nome]])
+        es = s["dev_std"] / math.sqrt(s["n"]) if s["dev_std"] is not None else None
+        s["errore_regola"] = errore_regola(es, errore_standard_per_giorno(rg[nome]))
+        stat[nome] = s
+        ns = [int(_num((vt.get(k) or {}).get(campo_n))) for k in coppie[nome]]
+        out[nome] = {"n": s["n"], "r_medio": s["r_medio"], "errore_regola": s["errore_regola"],
+                     "coppie": len(coppie[nome]), "trade_mediani": median(ns) if ns else None}
+        if righe_p is not None:
+            rp = [r["r"] for r in righe_p if alta(r["k"]) is val]
+            out[f"paper_{nome}"] = {"n": len(rp), "r_medio": mean(rp) if rp else None}
+    sa, sb = stat["alta"], stat["bassa"]
+    out["differenza"] = (sa["r_medio"] - sb["r_medio"]
+                         if sa["r_medio"] is not None and sb["r_medio"] is not None else None)
+    out["errore_differenza"] = errore_regola(
+        errore_standard_differenza(sa, sb),
+        errore_standard_per_giorno(rg["alta"], rg["bassa"])
+        if len(rg["alta"]) >= 2 and len(rg["bassa"]) >= 2 else None)
+    return out
+
+
+def divisione_per_t(righe_m: list[dict], righe_p: list[dict] | None, pairs: dict,
+                    voti: dict | None) -> dict:
+    """H1-misura (30 set 2026): i segnali del motore fuori campione (e il paper
+    sulle stesse coppie) divisi fra t alta (>= SOGLIA_T) e t bassa, per la t del
+    walk-forward e per quella dell'holdout; piu' la divisione per t/radice(n).
+    Nessuna lettura in piu': i voti vengono dal registro gia' letto e dal file
+    locale della passata.
+
+    Revisione del lavoro B (30 set 2026):
+      * una t su meno di MIN_TRADE_T trade (walk-forward) o meno di
+        GATE_HOLDOUT_MIN_TRADES (holdout) non e' una misura: fuori dai gruppi,
+        e contata (`fuori`) insieme alle coppie senza quel campo;
+      * la riga t/radice(n) DESCRIVE e non decide. La sua soglia e' FISSA: la
+        mediana delle voci del file della passata (`mediana_da` «passata»); solo
+        senza file e' quella delle coppie di questa lettura («lettura»). Prima
+        era sempre la seconda, e fra il 7 e il 14 ott i gruppi si sarebbero
+        rimescolati senza che cambiasse nessuna t. Attenzione nel leggerla: fra
+        le validate, selezionate dal gate, t/radice(n) alta vuol dire soprattutto
+        POCHI trade (i `trade_mediani` di ogni gruppo lo mostrano);
+      * «senza t» e' in segnali, come i gruppi, e dice quante sono coppie uscite
+        dal registro: la passata vota le validate e le uscite ancora nel
+        registro, non quelle gia' cancellate."""
+    chiavi = {r["k"] for r in righe_m} | {r["k"] for r in (righe_p or [])}
+    vt: dict = {}
+    da: Counter = Counter()
+    for k in chiavi:
+        vt[k], motivo = voto_t_con_motivo(k, pairs.get(k), voti)
+        da[motivo] += 1
+    minimi = {"t": ("n", MIN_TRADE_T),
+              "t_holdout": ("n_holdout", int(settings.GATE_HOLDOUT_MIN_TRADES))}
+
+    def _soglia(campo):
+        campo_n, minimo = minimi[campo]
+
+        def alta(k):
+            v = vt.get(k)
+            if not v or v.get(campo) is None or int(_num(v.get(campo_n))) < minimo:
+                return None
+            return float(v[campo]) >= SOGLIA_T
+        return alta
+
+    def _rapporto(t, n):
+        t, n = _num_o_none(t), int(_num(n))
+        return None if t is None or n < MIN_TRADE_T else t / math.sqrt(n)
+
+    dal_file = [x for x in (_rapporto(v.get("t"), v.get("n")) for v in (voti or {}).values()
+                            if isinstance(v, dict)) if x is not None]
+    rapporti = {k: x for k, x in ((k, _rapporto(v.get("t"), v.get("n")))
+                                  for k, v in vt.items() if v) if x is not None}
+    if dal_file:
+        med, med_da = median(dal_file), "passata"
+    else:
+        med, med_da = (median(rapporti.values()) if rapporti else None), "lettura"
+
+    def alta_rapporto(k):
+        return None if k not in rapporti or med is None else rapporti[k] >= med
+
+    segnali, _ = segnali_unici(righe_m)
+    senza = [s for s in segnali if all(not vt.get(righe_m[i]["k"]) for i in s["membri"])]
+    senza_coppie = {righe_m[i]["k"] for s in senza for i in s["membri"]}
+    uscite = {r["k"] for r in righe_m if r.get("uscita")}
+    return {"walk_forward": _divisione(righe_m, segnali, righe_p, _soglia("t"), vt, "n"),
+            "holdout": _divisione(righe_m, segnali, righe_p, _soglia("t_holdout"), vt,
+                                  "n_holdout"),
+            "t_su_radice_n": {**_divisione(righe_m, segnali, righe_p, alta_rapporto, vt, "n"),
+                              "mediana": med, "mediana_da": med_da},
+            "senza_t_segnali": len(senza), "senza_t_coppie": len(senza_coppie),
+            "senza_t_uscite": len(senza_coppie & uscite),
+            "da_passata": da["passata"], "da_registro": da["registro"],
+            "config_cambiata": da["config_cambiata"],
+            "altra_validazione": da["altra_validazione"]}
+
+
+def _grp(g: dict | None) -> str:
+    """«18 segnali +0.50R ±0.34» (segnali, R medio, margine per giornata del
+    gruppo); senza segnali «0 segnali», senza la R di «n.d.R»."""
+    if not g:
+        return "n.d."
+    testo = f"{g['n']} segnali"
+    if g.get("r_medio") is not None:
+        testo += f" {_fmt_r(g['r_medio'])}R"
+    if g.get("errore_regola") is not None:
+        testo += f" ±{2 * g['errore_regola']:.2f}"
+    return testo
+
+
+def _mediani(d: dict) -> str:
+    def _uno(g):
+        v = (g or {}).get("trade_mediani")
+        return "n.d." if v is None else f"{v:g}"
+    return f"trade mediani {_uno(d.get('alta'))} e {_uno(d.get('bassa'))}"
+
+
+def _riga_divisione(titolo: str, sotto: str, d: dict) -> str:
+    """Una riga della divisione per t, in parole: i due gruppi, la differenza
+    col suo margine, i trade mediani, quanti segnali restano fuori e quanti
+    sono condivisi."""
+    diff, e = d.get("differenza"), d.get("errore_differenza")
+    riga = (f"  {titolo}: {_grp(d.get('alta'))} · {sotto}: {_grp(d.get('bassa'))} · "
+            f"differenza {'n.d.' if diff is None else _fmt_r(diff) + 'R'}"
+            + ("" if e is None else f" ±{2 * e:.2f}")
+            + f" · {_mediani(d)} · fuori {d.get('fuori', 0)}, condivisi {d.get('condivisi', 0)}")
+    return riga
+
+
+def righe_voto_t(vt: dict) -> list[str]:
+    """Le righe a schermo della divisione per t: PRIMA la regola, poi i numeri
+    (30 set 2026).
+
+    Revisione del lavoro B (30 set 2026), il proprietario legge dal telefono:
+    una riga che dice cos'e' la t e che nessuna riga decide finche' la regola
+    non lo scrive; gruppi in parole («2 o piu'», «sotto 2»), in segnali, col
+    margine per giornata del gruppo e della differenza (la regola non dice
+    quale dei due conta: si stampano tutti e due); «n.d.» senza la R; «senza
+    t» in segnali, con quante sono uscite dal registro; da dove vengono le t.
+    Da ~0,5 KB a ~1,1 KB (misurato sui dati di prova del test): la sezione passa
+    da ~3,7 a ~4,3 KB, e tutto l'output del `portafoglio` resta sotto i 20.000
+    caratteri che l'agente ops conserva interi (ops 0373: 14.625 byte)."""
+    out = [f"  H1 (regola del 30 set): {REGOLA_H1}."]
+    if not (vt.get("da_passata") or vt.get("da_registro")):
+        out.append("  voto t: nessuna coppia con la t (la passata una tantum non e' ancora girata)")
+        return out
+    out.append("  t = guadagno medio diviso per quanto oscilla da un trade all'altro (alta = "
+               "regolare). ± = margine per giornata. Condivisi: segnali presi anche da una "
+               "coppia a t bassa, contati fra le alte. Quale riga decide non e' ancora scritto.")
+    out.append(_riga_divisione("t del gate 2 o piu'", "sotto 2", vt.get("walk_forward") or {})
+               + _paper(vt.get("walk_forward") or {}))
+    out.append(_riga_divisione("t dell'ultimo esame (45 giorni) 2 o piu'", "sotto 2",
+                               vt.get("holdout") or {}))
+    q = vt.get("t_su_radice_n") or {}
+    med = q.get("mediana")
+    out.append(_riga_divisione(f"t divisa per la radice dei trade, "
+                               f"{'n.d.' if med is None else f'{med:.2f}'} o piu'", "sotto", q)
+               + " (descrive, non decide)")
+    nc = vt.get("senza_t_coppie", 0)
+    riga = (f"  t dalla passata {vt.get('da_passata', 0)}, fissate alla validazione "
+            f"{vt.get('da_registro', 0)}; senza t {vt.get('senza_t_segnali', 0)} segnali "
+            f"({nc} {'coppia' if nc == 1 else 'coppie'}, uscite dal registro "
+            f"{vt.get('senza_t_uscite', 0)})")
+    scartate = [f"{n} {nome}" for nome, n in (("con la configurazione cambiata",
+                                               vt.get("config_cambiata", 0)),
+                                              ("di un'altra validazione",
+                                               vt.get("altra_validazione", 0))) if n]
+    if scartate:
+        riga += "; t scartate: " + ", ".join(scartate)
+    out.append(riga)
+    return out
+
+
+def _paper(d: dict) -> str:
+    """«; paper 6 +0.40R e 6 -0.60R» (trade del paper nei due gruppi)."""
+    if "paper_alta" not in d:
+        return ""
+
+    def _uno(g):
+        return f"{g['n']}" + ("" if g.get("r_medio") is None else f" {_fmt_r(g['r_medio'])}R")
+    return f"; paper {_uno(d['paper_alta'])} e {_uno(d['paper_bassa'])}"
+
+
 def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
                    chiavi, pavimento: float, fine: float | None = None,
                    secondi_barra: float = 900.0, uscite: dict | None = None,
-                   motore_uscite: list[dict] | None = None) -> dict:
+                   motore_uscite: list[dict] | None = None, voti: dict | None = None) -> dict:
     """IL CONFRONTO. Funzione pura: trade del motore (i dict di `trade_in_dict`),
     trade del paper (dict di Firestore, None = non leggibile), registro
     (`pairs`), le coppie da confrontare (`chiavi`: validate E simulate, perche'
@@ -1162,7 +1506,12 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
         `coppie_uscite`) e rigiocate (`motore_uscite`) entrano, ciascuna dalla
         sua validazione al giorno in cui e' uscita; il confronto e le regole
         sono su «tutte le coppie operate», e la riga «coppie ancora validate»
-        resta accanto."""
+        resta accanto.
+
+    H1-misura (30 set 2026): `voti` (dal file della passata una tantum
+    `scripts/t_validate.py`) e il registro danno la t di ogni coppia; la
+    divisione per t (`divisione_per_t`) va in `voto_t`. Le regole di ottobre
+    qui sopra non cambiano."""
     chiavi = list(chiavi)
     inizio: dict[str, float] = {}
     fine_coppia: dict[str, float] = {}
@@ -1319,6 +1668,7 @@ def fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: dict,
         "paper_config_note": config_note, "paper_config_diverse": config_diverse,
         "paper_r_senza_config_diverse": mean(r_senza_diverse) if r_senza_diverse else None,
         "sopravvivenza": sopravvivenza,
+        "voto_t": divisione_per_t(righe_m, righe_p, pairs, voti),
         "lettura": lettura_fuori_campione(m, p, stessi),
     }
 
@@ -1417,7 +1767,12 @@ def stampa_fuori_campione(fc: dict, dal: str, rimosse: int | None,
     del motore (al posto del vecchio bias (c)), le due righe della
     sopravvivenza (al posto del vecchio bias (a)), le regole scritte prima e la
     riga sulle tre letture. Per restare nel limite si sono accorciate la
-    domanda e la spiegazione delle colonne."""
+    domanda e la spiegazione delle colonne.
+
+    30 set 2026, revisione del lavoro B: la divisione per t in parole (per il
+    telefono) porta la sezione a ~4,3 KB sui dati di prova con i voti. Il
+    limite che conta e' quello dell'agente ops sull'output intero (20.000
+    caratteri, testa e coda): ops 0373 era 14.625 byte, restano ~5 KB."""
     print("\n" + "=" * 74)
     print("FUORI CAMPIONE (H5): le coppie validate guadagnano anche DOPO essere state scelte?")
     print("=" * 74)
@@ -1481,6 +1836,10 @@ def stampa_fuori_campione(fc: dict, dal: str, rimosse: int | None,
                      f"{_fmt_r(fuori_reg['r_medio'])}: il motore non le vede")
     if parti:
         print("    " + "; ".join(parti))
+    # H1-misura (30 set 2026): la regola scritta prima, poi la divisione per t
+    if fc.get("voto_t"):
+        for riga in righe_voto_t(fc["voto_t"]):
+            print(riga)
     print(f"  Lettura: {fc['lettura']}")
     print(f"  {REGOLA_FUORI_CAMPIONE}")
     print(f"  {TRE_LETTURE}")
@@ -1512,6 +1871,7 @@ def riepilogo_fuori_campione(fc: dict, dal: str, rimosse: int | None,
     out["paper_fuori_registro"] = arr(fuori_reg)
     out["non_rigiocate"] = dict(non_rigiocate or {})
     out["regola"] = REGOLA_FUORI_CAMPIONE
+    out["regola_h1"] = REGOLA_H1
     return out
 
 
@@ -1519,7 +1879,8 @@ def sezione_fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: 
                            simulate, validate, pavimento: float, dal_ts: float,
                            diario, fine: float | None = None,
                            secondi_barra: float = 900.0, uscite: dict | None = None,
-                           motore_uscite: list[dict] | None = None) -> dict:
+                           motore_uscite: list[dict] | None = None,
+                           voti: dict | None = None) -> dict:
     """Calcola, stampa e ritorna il riepilogo per Firebase. `uscite` e
     `motore_uscite`: le coppie uscite dal registro e i loro trade rigiocati
     (pacchetto A del 30 set 2026); senza, la sopravvivenza ha una riga sola."""
@@ -1527,7 +1888,7 @@ def sezione_fuori_campione(motore: list[dict], paper: list[dict] | None, pairs: 
     uscite = uscite or {}
     fc = fuori_campione(motore, paper, pairs, simulate, pavimento, fine=fine,
                         secondi_barra=secondi_barra, uscite=uscite,
-                        motore_uscite=motore_uscite)
+                        motore_uscite=motore_uscite, voti=voti)
     rimosse = rimosse_dal(diario, dal_ts)
     visti = set(validate) | {k for k, u in uscite.items() if u.get("rigiocabile")}
     fuori_reg = paper_fuori_registro(paper, visti, dal_ts)
@@ -1752,7 +2113,10 @@ def main(argv: list[str] | None = None) -> int:
                     trades, paper, pairs, simulate, validate,
                     max(dal_ts, inizio_ts), dal_ts, diario,
                     fine=fine_motore, secondi_barra=secondi_barra,
-                    uscite=uscite, motore_uscite=trades_uscite)
+                    uscite=uscite, motore_uscite=trades_uscite,
+                    # H1-misura (30 set 2026): la t della passata una tantum,
+                    # da un file locale della VPS (nessuna lettura Firestore)
+                    voti=voti_t_da_file())
             except Exception as exc:  # noqa: BLE001 — una sezione rotta non deve fermare il report
                 print(f"\n  FUORI CAMPIONE: saltata per un errore ({str(exc)[:120]}).")
 

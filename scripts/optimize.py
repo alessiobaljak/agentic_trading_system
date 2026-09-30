@@ -625,7 +625,142 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         # dalla potatura per MIN_PASSES finestre) e la riga di
                         # `gate_progress` la conta. Perso, la coppia sarebbe una
                         # candidata a zero pass qualunque: potata al primo merge.
-                        "sessione_azzerata_at"}
+                        "sessione_azzerata_at",
+                        # IL VOTO DI AFFIDABILITA' (30 set 2026, H1-misura, si' del
+                        # proprietario): la statistica t del walk-forward e
+                        # dell'holdout, col numero di trade su cui e' calcolata
+                        # (serve a leggere t/radice(n): «t alta» puo' voler dire
+                        # solo «tanti trade»). E' lo stesso buco chiuso per
+                        # `last_pf` il 26 set: una coppia promossa alla chiusura
+                        # della finestra senza ripassare arrivava fra le validate
+                        # SENZA t, perche' l'alleggerimento gliel'aveva tolta a 1-2
+                        # conferme (ops 0363: t per 42 validate su 202, esattamente
+                        # le non declassate). Quattro numeri con nomi di una
+                        # lettera nel formato compatto (`_BREVI`): ~43 byte a
+                        # coppia, perche' `json.dumps` scrive ", " e ": " fra i
+                        # campi (misurato con `encode_registry` il 30 set 2026,
+                        # revisione del lavoro B, su 1.190 coppie finte con la t
+                        # a 3 decimali: ~51 KB in tutto).
+                        "last_t", "last_trades", "last_t_holdout", "last_trades_holdout",
+                        # LA t FISSATA ALLA PROMOZIONE (30 set 2026, revisione del
+                        # lavoro B): i quattro numeri qui sopra COPIATI nell'istante
+                        # in cui la coppia diventa validata, piu' l'impronta della
+                        # configurazione d'uscita con cui sono stati calcolati. Non
+                        # si riscrivono piu' fino alla promozione successiva. Servono
+                        # al report H1: `last_t` si riscrive a ogni ripasso, e
+                        # ripassare dipende dai giorni fuori campione che il report
+                        # misura. Solo le coppie promosse almeno una volta: ~63 byte
+                        # l'una (misurato con `encode_registry` su una validata
+                        # tipica, nomi di una lettera).
+                        "val_t", "val_trades", "val_t_holdout", "val_trades_holdout",
+                        "val_uscita"}
+
+#: {campo del voto t di oggi: il suo gemello fissato alla promozione}
+#: (30 set 2026, revisione del lavoro B; vedi `fissa_voto_t`)
+CAMPI_T_VALIDAZIONE = {"last_t": "val_t", "last_trades": "val_trades",
+                       "last_t_holdout": "val_t_holdout",
+                       "last_trades_holdout": "val_trades_holdout"}
+
+
+def impronta_uscita(last_params) -> str:
+    """L'impronta della configurazione d'uscita salvata in `last_params` (scala
+    dei TP, break-even dopo il primo gradino, keep del profit-lock), come
+    stringa corta: «1,2,3/1/0.75»; «-» = campo assente (vale il default).
+
+    30 set 2026, revisione del lavoro B: serve SOLO a dire se la t di una
+    coppia e' stata calcolata con la configurazione che la coppia opera oggi
+    (il motore del `portafoglio` rigioca con i `last_params` di oggi). Confronta
+    i valori salvati, non la configurazione effettiva: un campo scritto uguale
+    al default conta come diverso da un campo assente, e la coppia resta «senza
+    t». E' l'errore dalla parte prudente. Una sola copia: la usano la
+    promozione (`fissa_voto_t`), la passata `scripts/t_validate.py` e il report."""
+    lp = last_params if isinstance(last_params, dict) else {}
+    scala = lp.get("scale_r_mults")
+    try:
+        s = ",".join(f"{float(x):g}" for x in scala) if scala else "-"
+    except (TypeError, ValueError):
+        s = "?"
+    be = lp.get("sl_to_breakeven")
+    b = "-" if be is None else ("1" if bool(be) else "0")
+    keep = lp.get("profit_lock_keep")
+    try:
+        k = "-" if keep is None or isinstance(keep, bool) else f"{float(keep):g}"
+    except (TypeError, ValueError):
+        k = "?"
+    return f"{s}/{b}/{k}"
+
+
+def fissa_voto_t(rec: dict) -> None:
+    """Copia il voto t di oggi nei campi fissati alla promozione (30 set 2026,
+    revisione del lavoro B). Si chiama SOLO da `_segna_promozione`, cioe'
+    nell'istante in cui la coppia attraversa la soglia: in tutti e tre i modi
+    di promozione (ripasso che chiude la finestra, chiusura senza ripassare,
+    conferme retroattive) `last_t` e' gia' quello dell'ultimo passaggio prima
+    della validazione.
+
+    Perche': il report H1 divide il fuori campione per t. Se usasse `last_t`,
+    che si riscrive a ogni ripasso, dovrebbe scartare chi ripassa (la t
+    conterrebbe giorni fuori campione), e ripassare dipende proprio da come
+    la coppia va dopo la validazione: nei gruppi resterebbero solo quelle che
+    non ripassano. La t fissata qui non dipende da cio' che succede dopo.
+
+    Un campo che manca oggi toglie anche il gemello: una t di una vita
+    precedente della coppia non deve restare accanto a un `validated_at` nuovo."""
+    presenti = False
+    for oggi, fisso in CAMPI_T_VALIDAZIONE.items():
+        if rec.get(oggi) is not None:
+            rec[fisso] = rec[oggi]
+            presenti = True
+        else:
+            rec.pop(fisso, None)
+    if presenti:
+        rec["val_uscita"] = impronta_uscita(rec.get("last_params"))
+    else:
+        rec.pop("val_uscita", None)
+
+
+def holdout_per_registro(holdout):
+    """Il dizionario dell'holdout come si salva nel registro: senza `t` (30 set
+    2026, revisione del lavoro B). La t dell'holdout c'e' gia' in
+    `last_t_holdout`: tenerla anche qui era un doppione (~12 byte per validata)
+    che nessuno legge. `strategy_params/current` la tiene (lo scrive dalle
+    entries, non dal registro): li' sono ~12 byte per coppia passata nel giro."""
+    if not isinstance(holdout, dict):
+        return holdout
+    return {k: v for k, v in holdout.items() if k != "t"}
+
+
+def scrivi_voto_t(rec: dict, t_wf, n_wf, holdout) -> None:
+    """Scrive nel record del registro il voto t del walk-forward e dell'holdout
+    (30 set 2026, H1-misura). Una funzione sola per i due merge (discovery e
+    optimize), cosi' le due strade non possono scrivere cose diverse.
+
+    Arrotondati a 3 decimali, come prima di questo lavoro (`last_t` era
+    `e["t_stat"]`, gia' a 3) e come il file della passata
+    (`scripts/t_validate.py`). 30 set 2026, revisione del lavoro B: a 2 decimali
+    una t fra 1,995 e 1,999 diventava 2.0 e passava la soglia t >= 2 del report
+    e di `statistica_t`, e la stessa t finiva «alta» dal registro e «bassa» dal
+    file. Il terzo decimale costa ~2,4 KB di registro (due campi, t e h, su
+    1.190 coppie finte: misurato con `encode_registry`). Un campo che manca
+    (holdout spento o non eseguito) non si scrive: meglio assente che uno zero
+    che sembra una misura. Non tocca nient'altro del record."""
+    try:
+        if t_wf is not None:
+            rec["last_t"] = round(float(t_wf), 3)
+    except (TypeError, ValueError):
+        pass
+    try:
+        if n_wf is not None:
+            rec["last_trades"] = int(n_wf)
+    except (TypeError, ValueError):
+        pass
+    h = holdout if isinstance(holdout, dict) else {}
+    try:
+        if h.get("t") is not None:
+            rec["last_t_holdout"] = round(float(h["t"]), 3)
+            rec["last_trades_holdout"] = int(h.get("trades") or 0)
+    except (TypeError, ValueError):
+        pass
 
 
 # LE COPPIE CHE IL BOT OPERA, in un posto solo: dal 25 set 2026 la regola vive in
@@ -1011,6 +1146,8 @@ def _segna_promozione(key: str, rec: dict, prima: int, adesso: float,
     if prima >= MIN_PASSES or dopo < MIN_PASSES:
         return
     rec["validated_at"] = adesso
+    # la t della validazione, fissata qui (30 set 2026, revisione del lavoro B)
+    fissa_voto_t(rec)
     nuove.append(_riga_vita(key, rec, "promossa", adesso))
 
 
@@ -1207,7 +1344,8 @@ def update_registry(fb, out: dict, passed_now: list[str],
         if key in passed_set:
             rec["last_params"] = e["params"]
             if e.get("holdout"):
-                rec["holdout"] = e["holdout"]
+                # senza la t, che sta gia' in `last_t_holdout` (30 set 2026)
+                rec["holdout"] = holdout_per_registro(e["holdout"])
             if e.get("regime_pf"):
                 rec["regime_pf"] = e["regime_pf"]
             rec["last_pf"] = e["oos_pf"]
@@ -1216,6 +1354,8 @@ def update_registry(fb, out: dict, passed_now: list[str],
                 rec["last_max_dd"] = e["oos_max_dd"]
             rec["last_trades"] = e["oos_trades"]
             rec["last_win_rate"] = e.get("oos_win_rate")
+            # il voto t (30 set 2026, H1-misura): anche per le coppie base
+            scrivi_voto_t(rec, e.get("t_stat"), e.get("oos_trades"), e.get("holdout"))
             tr = e.get("trailing") or {}
             rec["trailing_premature"] = tr.get("premature", 0)
             rec["trailing_protected"] = tr.get("protected", 0)

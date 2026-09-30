@@ -76,6 +76,27 @@ col portafoglio del motore (anche lui apre 995 segnali su 2.203), due righe per 
 3 ott («uguale» solo se il margine esclude ±0,15R). ~1 giorno, nessun riavvio.
 
 ### K2. H1-misura: salvare la t di ogni validata e dividere il fuori campione per t (serve adesso)
+**30 set: FATTO (sì del proprietario), revisione avversaria + correzioni + riverifica.** La t
+(walk-forward e holdout, coi trade) entra nel nucleo del registro (nomi brevi t, n, h, o) e si FISSA
+alla promozione (`val_t`, `val_trades`, `val_t_holdout`, `val_trades_holdout`, `val_uscita`: un
+ripasso non li cambia). La passata una tantum `scripts/t_validate.py` (voci ops `voto-t-completo`
+in sfondo e `voto-t-esito`, da aggiungere a mano sulla VPS) calcola la t di tutte le validate sui
+dati TAGLIATI al giorno della loro validazione, non scrive Firebase (file locale
+`data/voto_t/validate.json`), ha un lucchetto del kernel, salva dopo ogni coin, non parte se il gate
+gira o parte entro 40 minuti e ricontrolla prima di ogni coin, gira a priorità bassa. Il portafoglio
+divide il FUORI CAMPIONE per t (un segnale conta in un solo gruppo). Verificato: 252 valutazioni del
+gate identiche prima e dopo; merge identici salvo i campi t; registro nuovo leggibile dal codice
+vecchio. Durata non misurata sulla VPS (~33 s per coin per giorno di validazione diverso, su dati
+sintetici). **Da decidere prima del 7 ott (proprietario): la regola H1** — quale t decide
+(walk-forward o holdout), soglia (2 o 1,5), minimo di segnali per gruppo (proposta 80), esiti
+(proposta / chiusa se differenza + margine < 0,25R / non si sa ancora). Attesa realistica: la
+differenza stimata è piccola (+0,03/+0,09R): al 14 ott l'esito più probabile è «non si vede», da non
+leggere come «H1 smentita». **Avvertenza sul registro:** coi campi t la capienza scende da ~3.180 a
+~2.700 coppie (a ~50 coppie in più al giorno, fra ~3 settimane); oltre, scatta l'alleggerimento
+d'emergenza a ogni giro e le validate perdono `regime_pf` (il veto di regime lascerebbe passare
+tutto). Rimedio pronto da decidere prima: campi t nel nucleo solo per le coppie a 2+ conferme
+(capienza ~2.880) oppure tetto a ~2.600 coppie. Da controllare la riga «ci stanno ancora ~N coppie»
+di `gate`.
 La t c'è solo per le 42 validate NON declassate (202 − 160, ops 0363): si scrive solo quando una
 coppia ripassa. Serve il campo nel nucleo del registro e una passata una tantum sulle 202 (15-17
 minuti di VPS: voce ops in sfondo, riga nuova nella lista bianca da aggiungere a mano). In

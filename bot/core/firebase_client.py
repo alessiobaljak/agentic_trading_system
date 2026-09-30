@@ -75,6 +75,18 @@ _BREVI = {
     # i contatori della maggioranza della finestra (27 set 2026): su ~2.800
     # coppie i nomi lunghi costerebbero ~140 KB del documento
     "window_evals": "e", "window_passes": "s", "window_contata": "c",
+    # il voto t del walk-forward e dell'holdout coi loro trade (30 set 2026,
+    # H1-misura): nel nucleo per ~1.200 coppie con almeno una conferma. Misurati
+    # con questo `encode_registry` (revisione del lavoro B, 30 set, 1.190 coppie
+    # finte, t a 3 decimali): ~43 byte a coppia coi nomi di una lettera, ~89 coi
+    # nomi lunghi, cioe' ~51 KB contro ~106 KB
+    "last_t": "t", "last_trades": "n", "last_t_holdout": "h", "last_trades_holdout": "o",
+    # la stessa t FISSATA alla promozione, e l'impronta della configurazione
+    # d'uscita con cui e' stata calcolata (30 set 2026, `optimize.fissa_voto_t`):
+    # solo per le coppie promosse almeno una volta. Maiuscole: le minuscole
+    # corrispondenti sono gia' prese.
+    "val_t": "T", "val_trades": "N", "val_t_holdout": "H", "val_trades_holdout": "O",
+    "val_uscita": "U",
 }
 _LUNGHI = {v: k for k, v in _BREVI.items()}
 _TEMPI = {"last_seen_at", "last_passed_at", "window_start", "last_pass_data_end",

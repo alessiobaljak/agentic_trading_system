@@ -118,6 +118,24 @@ ingressi-esito: .venv/bin/python -m scripts.ingressi_report --esito
 # `SYM/strat` vale come `SYM|strat`: cosi' nella riga non c'e' una barra verticale.
 ingressi-orca: .venv/bin/python -m scripts.ingressi_report --coppia ORCAUSDT/gen_6d06dca0 --dettaglio
 ingressi-vet:  .venv/bin/python -m scripts.ingressi_report --coppia VETUSDT/gen_6d06dca0 --dettaglio
+# IL VOTO t DI TUTTE LE VALIDATE, UNA TANTUM (30 set 2026, H1-misura, si' del
+# proprietario): t del walk-forward e dell'holdout di ogni validata (e delle
+# uscite ancora nel registro), con la configurazione d'uscita che opera oggi,
+# tutte e due sui dati del giorno della sua validazione. Scrive SOLO
+# data/voto_t/validate.json (lo legge il `portafoglio` nella sezione FUORI
+# CAMPIONE), aggiornato dopo ogni coin: 2 letture Firebase, 0 scritture, il
+# registro non si tocca. Tempo STIMATO 15-20 minuti prima della revisione del
+# 30 set, ora di piu' (il walk-forward si ricalcola per ogni giorno di
+# validazione): supera i 900 s del canale, quindi in un'unita' transitoria come
+# `ingressi-completo`, con la priorita' bassa del gate (nice 15, disco «idle»:
+# non deve rubare CPU al bot). Non parte se il giro del gate gira o parte fra
+# meno di 40 minuti (aspetta, memoria), e si ferma prima di ogni coin se il giro
+# sta per partire. Un lucchetto del kernel impedisce due passate insieme; le
+# coppie gia' nel file non si rifanno. Il referto si legge con `voto-t-esito`
+# (dice anche se gira ancora o se sta aspettando il giro). NB: la lista bianca
+# vera sta sulla VPS: questa riga va ricopiata li' a mano.
+voto-t-completo: systemd-run --no-block --collect --unit=voto-t-completo --nice=15 --property=IOSchedulingClass=idle --property=WorkingDirectory=/root/agentic_trading_system /root/agentic_trading_system/.venv/bin/python -m scripts.t_validate --su-file --budget 0
+voto-t-esito: .venv/bin/python -m scripts.t_validate --esito
 
 # ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
 # la lista bianca stessa, per confrontarla con questo esempio quando si mette in

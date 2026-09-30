@@ -37,6 +37,10 @@ data/gruppo_controllo/
 # --sfondo`, 27 set 2026) e il pid del processo: dati della macchina, si leggono
 # con `ingressi-esito`, non si committano.
 data/ingressi_*
+# il voto t delle validate (30 set 2026, H1-misura: `scripts/t_validate.py`): il
+# file che il `portafoglio` legge, il referto, il pid e il lucchetto. Dati della
+# macchina, vivono sulla VPS.
+data/voto_t/
 
 # Node / Next.js
 dashboard/node_modules/

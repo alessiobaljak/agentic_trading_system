@@ -56,7 +56,8 @@ from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_histo
                               _segna_promozione, registra_vite,
                               coin_in_maturazione, drifted_from_paper, judge_window,
                               publish_timeline, conferme_da_proteggere, scrivi_registro,
-                              slim_registry, top_symbols_by_volume)
+                              holdout_per_registro, scrivi_voto_t, slim_registry,
+                              top_symbols_by_volume)
 
 # stato pesante per-worker (optimizer + specs + parametri), costruito una volta per
 # processo dall'initializer. Vedi _disc_init / _disc_one (parallelizzazione discovery).
@@ -1836,6 +1837,30 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
             stats_righe, bocciate)
 
 
+def trade_oos_finestre(opt: WalkForwardOptimizer, symbol: str, body, frame, crea,
+                       nome: str, context_by_ts=None) -> tuple:
+    """(stats OOS, ritorni per finestra) di una strategia sulle finestre del
+    walk-forward calcolate sul CORPO (`body`, holdout escluso). `crea()` da' una
+    strategia NUOVA per ogni finestra, gia' con la sua configurazione d'uscita.
+
+    Era il corpo di `_run_oos` dentro `evaluate_spec`; dal 30 set 2026 sta qui
+    perche' lo usa anche la passata una tantum del voto t
+    (`scripts/t_validate.py`): una sola copia della regola delle finestre, cosi'
+    la t della passata e quella del gate non possono divergere."""
+    st_all = StrategyStats(strategy=nome)
+    per_window: list[float] = []
+    for (_ta, _tb, sa, sb) in opt._windows(len(body)):
+        st = opt.bt.run_strategy(crea(), symbol, body[sa:sb],
+                                 frame=frame.iloc[sa:sb].reset_index(drop=True),
+                                 context_by_ts=context_by_ts)
+        st_all.trades.extend(st.trades)
+        # consistenza: solo le finestre con trade (una finestra senza segnali non
+        # e' una perdita -> non deve far fallire il gate).
+        if st.trades:
+            per_window.append(sum(t.pnl_pct for t in st.trades))
+    return st_all, per_window
+
+
 def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: dict,
                   scale_candidates=None, context_by_ts=None, righe_bocciate: bool = False,
                   run_end: str = "", interval: str = "", keep_candidates=None,
@@ -1875,9 +1900,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         """(stats OOS, ritorni per finestra) con una scala di TP data e, se
         indicati, la scelta sul break-even dopo il primo gradino e il keep del
         profit-lock (None = default globale, cioe' il comportamento di prima)."""
-        st_all = StrategyStats(strategy=spec["id"])
-        per_window: list[float] = []
-        for (_ta, _tb, sa, sb) in opt._windows(len(body)):
+        def crea():
             g = GeneratedStrategy(spec)
             if ladder:
                 g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(ladder)}
@@ -1886,15 +1909,9 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
             if keep is not None:
                 # il motore legge `lock_keep(strategy.params)` (25 set 2026)
                 g.params = {**(getattr(g, "params", {}) or {}), "profit_lock_keep": float(keep)}
-            st = opt.bt.run_strategy(g, symbol, body[sa:sb],
-                                     frame=frame.iloc[sa:sb].reset_index(drop=True),
-                                     context_by_ts=context_by_ts)
-            st_all.trades.extend(st.trades)
-            # consistenza: solo le finestre con trade (una finestra senza segnali non
-            # e' una perdita -> non deve far fallire il gate).
-            if st.trades:
-                per_window.append(sum(t.pnl_pct for t in st.trades))
-        return st_all, per_window
+            return g
+        return trade_oos_finestre(opt, symbol, body, frame, crea, spec["id"],
+                                  context_by_ts=context_by_ts)
 
     # 1) PRESELEZIONE con la scala globale: serve solo a scartare in fretta le spec
     #    senza speranza, prima di spendere 4 backtest per la scelta della scala.
@@ -2606,7 +2623,8 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
             rec["validated_at"] = now
             rec["conferme_retro"] = retro
         if e.get("holdout"):
-            rec["holdout"] = e["holdout"]
+            # senza la t, che sta gia' in `last_t_holdout` (30 set 2026)
+            rec["holdout"] = holdout_per_registro(e["holdout"])
         if e.get("regime_pf"):
             rec["regime_pf"] = e["regime_pf"]
         # NB: last_params si assegna PRIMA, poi si innesta la scala. Invertendo,
@@ -2625,8 +2643,9 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
         if e.get("profit_lock_keep") is not None:
             rec["last_params"]["profit_lock_keep"] = float(e["profit_lock_keep"])
         rec["last_pf"] = e["oos_pf"]
-        if e.get("t_stat") is not None:
-            rec["last_t"] = e["t_stat"]
+        # il voto t del walk-forward e dell'holdout, coi loro trade (30 set 2026,
+        # H1-misura): la stessa funzione del merge di optimize
+        scrivi_voto_t(rec, e.get("t_stat"), e.get("oos_trades"), e.get("holdout"))
         if e.get("oos_max_dd") is not None:
             rec["last_max_dd"] = e["oos_max_dd"]
         if e.get("direzione_pf"):

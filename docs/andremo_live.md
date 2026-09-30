@@ -2282,3 +2282,16 @@ La prima lettura (ops 0371) resta valida come riassunto; da ora la regola è que
 **Gruppo di controllo (K3), acceso:** a ogni giro ~50 bocciate a caso con la spec intera e, una
 volta al giorno, la foto delle conferme, in file locali sulla VPS (`data/gruppo_controllo/`).
 Il rigioco e le sue regole dopo il 7 ott. Suite 1961 test verdi (senza `test_allowlist_runnable`).
+
+### 30 settembre, sera: il voto t di ogni validata (K2) — fatto, controllato, riverificato
+
+Sì del proprietario («poi B»). Il voto t (quanto il guadagno medio di una strategia è grande
+rispetto a quanto oscilla) si salva nel registro e si fissa al giorno della promozione; una passata
+una tantum lo calcola per tutte le validate sui dati tagliati al giorno della loro validazione, in un
+file locale sulla VPS; il `portafoglio` divide il fuori campione per voto. Controllo avversario: 30
+agenti, 22 difetti confermati, 19 corretti (il più grave: la t del walk-forward della passata usava
+i dati di oggi; poi il rischio di sovrapporsi al giro del gate, l'arrotondamento che faceva passare
+1,997 per 2, un segnale contato in due gruppi); riverifica delle correzioni: 252 valutazioni del
+gate identiche, merge del registro identici salvo i campi nuovi, nessuna scrittura Firebase dalla
+passata. Suite 2001 verdi. Restano al proprietario: la regola H1 (quale t, soglia, minimo) prima
+del 7 ott, e aggiungere sulla VPS le due righe `voto-t-completo` e `voto-t-esito`.
