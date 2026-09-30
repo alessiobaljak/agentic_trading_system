@@ -26,9 +26,10 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 ---
 
 **Stato al 30 set (rilettura completa delle 70 voci, verificata contro i risultati ops).**
-Conteggio: 2 aspettano il sì (F2, J12 — J12 in memoria, non si fa finché il proprietario non lo
-dice), 18 in misura, 11 fatte in parte, 17 aperte, 6 parcheggiate, 13 fatte, 3 superate. Stati
-che il testo delle voci non dice ancora:
+Conteggio dopo la pulizia del 30 set (64 voci): 2 aspettano il sì (F2, J12 — J12 in memoria, non
+si fa finché il proprietario non lo dice), 1 approvata e in lavorazione (H5, sì del 30 set), 18 in
+misura, 11 fatte in parte, 14 aperte, 6 parcheggiate, 12 fatte (restano come memoria finché non si
+decide di spostarle nel diario). Stati che il testo delle voci non dice ancora:
 * **H5 riaperta, ma il numero del `portafoglio` non la decide:** il 25 set «è il mercato» (ops 0232),
   il 28-29 set «è esecuzione» (+7.190 e +9.596 simulati contro −69 e −67 del paper, ops 0328, 0339).
   Sugli STESSI giorni 16-24 set il simulato fa −1.357 con le 160 coppie del 25 set e +8.465 con le
@@ -49,9 +50,9 @@ che il testo delle voci non dice ancora:
   prima della promozione. Finché non ci entra, H1 non si può decidere.
 * **C1:** a 1 ora passa lo 0,32% il 27, 0,69% il 28, 1,15% il 29 set, contro 0,22% a 15 minuti;
   la passata copre 19-21 monete, non 30.
-* **Superate:** C2 e C3 (copertura 34,5% su 69 coin, ops 0343: sopra la soglia di 40 coin), A5
-  (idea smentita, ops 0210), G2 (il comando `portafoglio` esiste e gira ogni mattina), G4 (misurato:
-  0,21-0,26% dopo il cambio contro 0,3% prima, nessun miglioramento visibile).
+* **Tolte il 30 set** (sì del proprietario: «aggiorna il backlog rimuovendo le scartate»; il
+  verdetto di ognuna è nel diario, sezione «Voci tolte dal backlog il 30 set»): A5, C2, C3, D4,
+  I7, I8.
 * **Numeri vecchi:** D1 (registro 399 KiB su 879, 278 byte a coppia, ops 0343), I2 (PF atteso
   2,04, non 1,89), J10 (primo giro completo ridotto ~1h45, sopra l'1h30 voluto; stima dal log).
 
@@ -187,29 +188,6 @@ se i periodi toro pesano abbastanza. Nessuno ha mai chiesto *«sarebbe passata n
 domanda.
 
 ---
-
-### A5. I take profit non guardano il grafico: sono multipli dello stop
-**Stato:** **misurato il 24 set sera (ops 0210), ipotesi nella forma «massimo/minimo delle 24 ore» SMENTITA** — su 45 trade il livello strutturale sta in mediana a 3,96R, molto più lontano del primo gradino (1,5R): raggiunto nel 2% dei trade contro l'11% di TP1. Il problema non è dove stanno i bersagli, è che il prezzo non va lontano (escursione mediana 0,84R). La strada che resta è un primo gradino più basso, e la scala dal vissuto (0,75 / 1,5 / 2,25) è già fra le candidate che il gate confronta per coppia. Emersa il 24 set (domanda del proprietario su DOT: TP3 a 1,26 da un ingresso a 1,10).
-
-Oggi ogni gradino è `multiplo × R`, con R = distanza dello stop (ATR): la scala si
-adatta alla volatilità del trade, ma **non alla struttura** (massimi recenti,
-bande, VWAP, livelli dove il prezzo si è già fermato). I multipli sono scelti dal
-gate per coppia fra 4-5 scale fisse; TP3 a 5R è la coda, presa di rado per
-costruzione. I numeri di oggi dicono che il problema è il primo gradino: 19 stop su
-28 andati a favore ma sotto TP1, escursione mediana 0,84R contro un primo gradino a
-1,5R.
-
-**Cosa fare, in ordine, senza toccare nulla a mano:**
-1. **Misurare** (in `mfe`): all'ingresso di ogni trade la distanza in R dalla
-   resistenza/supporto più vicino (massimo/minimo delle ultime 96 barre, banda di
-   Bollinger) e quante volte l'escursione l'ha raggiunta. Se il livello
-   strutturale viene toccato più spesso di TP1, vale la pena.
-2. **Candidata strutturale nel gate**: gradino = min(multiplo × R, livello
-   strutturale), valutata per coppia accanto alle scale fisse e a quella dal
-   vissuto; vince chi rende di più su OOS e holdout, come oggi.
-3. **Nel bot** via `exit_logic` (parità: stessa funzione del motore).
-
-Non si abbassa TP1 a mano sul paper: sarebbe tarare sul vissuto.
 
 ## B. Ricerca — dove il sistema smette di cercare
 
@@ -479,14 +457,6 @@ paper, dove i costi sono 4,61 su un lordo di −13,39.
 
 **Serve:** il verdetto dei 40 trade. Cambiare timeframe azzera il confronto.
 
-### C2. L'universo è fermo a `--top 200`
-**Stato:** aperto · **da rivalutare dopo il 28 set**, quando le 74 coin a 2/3 avranno avuto la finestra: se la copertura resta sotto 40 coin, allargare a 250-300 col calcolo liberato da B2
-
-Allargarlo aumenterebbe le monete coperte (15% contro l'obiettivo del 35%), ma un
-giro dura già ~2h contro un timer di 3h.
-
-**Serve:** prima misurare quanto dura davvero un giro, poi decidere.
-
 ### C4. Il bot non si mette flat su FOMC/CPI/NFP
 **Stato:** aperto · rischio documentato dal 4 agosto, mai chiuso
 
@@ -512,14 +482,6 @@ Ricerca del 20 settembre: **nessuna fonte gratuita e verificata copre il caso.**
   NFP: **circa 140 righe**. Un CSV nel repo, nessuna API, nessuna licenza, nessuno
   scraper che si rompe durante un giro. Gli orari sono costanti (CPI e NFP 14:30
   ora italiana, FOMC 20:00). *È un ragionamento, non una fonte letta.*
-
-### C3. La copertura non raggiungerà mai il 35%
-**Stato:** **SUPERATA il 21 set** dalle azioni sulla copertura (B2 chiusa, semi 10→30). Si riapre solo se al 28 set la copertura è sotto 40 coin: allora si decide se il 35% ha ancora senso.
-
-Il gate è "pronto" per numero di coppie, non per copertura: 25 monete su 164 = 15%,
-contro un obiettivo del 35% che con questo tasso di passaggio non arriverà.
-
-**Serve:** decidere se l'obiettivo del 35% ha ancora senso o va sostituito.
 
 ---
 
@@ -762,20 +724,6 @@ La sesta ipotesi dei referti: le perdite «mai andate a favore» (classe ingress
 ### I6. Il cap di 5 posizioni è spento in parità
 `MAX_OPEN_POSITIONS` vale solo fuori dalla parità col gate; in parità il limite è il margine (10% dell'equity per posizione ≈ 10 posizioni); il paper ha già toccato 7 contemporanee. Con 160 coppie e il freno che dimezza la size, il tetto per direzione (3%) ammette ~8 posizioni nello stesso verso. Da decidere con `portafoglio` sulle 160 (in coda): cap in parità, o tetto direzionale più stretto finché il globale è in deriva, o stop giornaliero (H3).
 
-### I7. I verdetti delle uscite con incasso parziale non entrano in nessuna proposta
-Trovato il 29 set costruendo la sezione COME IMPARA IL TRAILING. Il bot dà il verdetto (prematuro /
-protetto / neutro) anche alle uscite `scale_out` (preso almeno il primo target, resto chiuso dallo
-stop), ma `conta_verdetti_trailing`, `conta_verdetti_strategia`, `compute_trailing_keep` e
-`soldi_sul_tavolo` contano solo `exit_reason == "trailing_stop"`, contro il commento di
-`bot/main.py` che li voleva insieme. Oggi 18 uscite scale_out (ops 0341). Da decidere se contarli:
-cambierebbe la proposta globale (oggi un verdetto sotto la soglia). Il report ora li mostra a parte.
-
-### I8. I verdetti dopo gli stop (rumore / inversione) non li usa nessuno
-`post_stop_verdict` e `post_stop_mfe_r` sono scritti su ogni stop dal 25 set, ma nessuna regola li
-legge. Sono la misura diretta di «stop troppo stretto» (rumore = il prezzo è poi tornato al primo
-target). Il report del mattino ora li conta; una regola (es. ipotesi «stop_stretto» dai rumori) va
-proposta coi numeri.
-
 ### I9. La proposta di keep del paper si accende e si spegne senza isteresi
 Il 28 set la proposta globale era 0,75 e il gate l'ha scelta per 28 coppie su 49 passate (ops 0325);
 il 29 set i protetti sono 37 su 62 = 59,7%, un verdetto sotto il 60%, e la proposta è sparita
@@ -940,9 +888,6 @@ ogni chiamante.
 
 `ANTHROPIC_MODEL=claude-opus-4-8`. Rimandato il 19 set per non cambiare due cose
 insieme mentre si verificava la chiave.
-
-### D4. LunarCrush — RIMOSSA dal backlog il 23 set
-**Stato:** **tolta su decisione del proprietario**: i dati esterni (sentiment, notizie, macro, open interest) si affrontano tutti insieme in una **sessione dedicata**, più avanti. Fino ad allora il sentiment resta un tilt di size come oggi.
 
 ### D5. `reset_paper.py` non azzera l'inizio del paper (né il prezzo BTC di partenza)
 **Stato:** aperto · trovato il 28 set leggendo `scripts/reset_paper.py` mentre si aggiungeva il benchmark BTC dal primo giorno

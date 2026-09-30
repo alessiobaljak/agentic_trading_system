@@ -2213,3 +2213,25 @@ altrimenti si rilegge il 14 ott. Verificato sul codice (`portafoglio_backtest.py
 incassi parziali porta i protetti al 55%, più lontani dal 60%), I8 (29% di «rumore» dopo gli stop è
 nel range del caso, 26-55%), I9 (seconda: pronta, ma agisce su 5 trade), H1 (t misurata su 42
 validate su 202).
+
+### 30 settembre: voci tolte dal backlog (sì del proprietario: «rimuovendo le scartate»)
+
+Regola d'uscita del backlog: una voce si toglie quando si decide di non farla, scrivendo perché.
+* **A5 — take profit presi dal grafico:** smentita. Il livello del grafico sta in mediana a 3,35R e
+  lo raggiunge il 7% dei trade, contro l'11% del primo gradino (ops 0366; già il 24 set, ops 0210).
+  I take profit restano multipli dello stop; la strada rimasta (un primo gradino più basso) è già
+  fra le scale che il gate prova.
+* **C2 — universo fermo al top 200:** la voce diceva di allargare solo se la copertura restava
+  sotto 40 coin: sono 70 (ops 0363).
+* **C3 — la copertura non arriverà al 35%:** smentita, 35,0% il 30 set (ops 0363).
+* **D4 — LunarCrush:** già tolta il 23 set per decisione del proprietario (i dati esterni si fanno
+  tutti insieme in una sessione dedicata); restava solo il titolo.
+* **I7 — contare le uscite con incasso parziale nelle proposte di keep:** contandole, i protetti
+  scendono dal 58,6% al 55,1% (49 su 89, conto del 30 set): la proposta si allontana e oggi non
+  cambierebbe nessuna scelta. Il report del mattino le mostra comunque a parte.
+* **I8 — usare i verdetti dopo gli stop («rumore» = il prezzo è poi tornato al primo target):**
+  23 «rumore» su 79 stop = 29%, dentro l'intervallo che darebbe il caso (26-55% per stop di
+  1,5-2,5 ATR e primo target a 1,5-2R, simulazione del 30 set): nessuna base per una regola «stop
+  più largo». Il report continua a contarli.
+Restano: **I9** (isteresi della proposta keep 0,75: pronta, seconda dopo H5) e **B4, I5, H1**, che
+il 30 set erano state scartate solo come proposta del giorno, non come voci.
