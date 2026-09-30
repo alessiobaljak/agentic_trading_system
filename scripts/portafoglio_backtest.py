@@ -1224,8 +1224,25 @@ REGOLA_H1 = ("se le coppie a t bassa perdono dopo la validazione e quelle a t al
              "guadagnano, oltre il margine, allora H1-soglia sull'holdout diventa la "
              "prossima proposta; se no, H1 si chiude con questo numero")
 
-#: la soglia fra «t alta» e «t bassa» (quella della voce B approvata, e la riga di `gate`)
+#: LA REGOLA CHE DECIDE (30 set 2026 sera, si' del proprietario: «H1: ultimo
+#: esame, soglia 1,5, minimo 80: si'»), scritta PRIMA che la prima lettura
+#: divisa per t uscisse (il `portafoglio` del 1 ott mattina). Decide SOLO la riga
+#: dell'ultimo esame (la t dell'holdout di 45 giorni, dove agirebbe la soglia
+#: proposta); la riga della t del gate e quella per radice dei trade descrivono.
+REGOLA_H1_DECISA = ("decide solo la t dell'ultimo esame (45 giorni), soglia 1,5; con almeno "
+                    "80 segnali per gruppo: t alta sopra t bassa oltre il margine -> "
+                    "H1-soglia sull'holdout e' la prossima proposta; differenza + margine "
+                    "sotto 0,25R -> H1 chiusa; altrimenti non si sa ancora (si rilegge a "
+                    "meta' novembre)")
+
+#: la soglia fra «t alta» e «t bassa» per la t del GATE (riga che descrive, come
+#: la riga di `gate`)
 SOGLIA_T = 2.0
+#: la soglia per la t dell'ULTIMO ESAME, quella che decide (regola del 30 set sera)
+SOGLIA_T_HOLDOUT = 1.5
+#: segnali minimi per gruppo prima di decidere, e il limite sotto cui H1 si chiude
+MIN_SEGNALI_H1 = 80
+LIMITE_CHIUSA_H1 = 0.25
 
 #: sotto 2 trade `t_stat` restituisce 0.0 per convenzione: non e' una misura, e
 #: la coppia resta fuori dai due gruppi (30 set 2026, revisione del lavoro B).
@@ -1426,6 +1443,8 @@ def divisione_per_t(righe_m: list[dict], righe_p: list[dict] | None, pairs: dict
     minimi = {"t": ("n", MIN_TRADE_T),
               "t_holdout": ("n_holdout", int(settings.GATE_HOLDOUT_MIN_TRADES))}
 
+    soglie = {"t": SOGLIA_T, "t_holdout": SOGLIA_T_HOLDOUT}
+
     def _soglia(campo):
         campo_n, minimo = minimi[campo]
 
@@ -1433,7 +1452,7 @@ def divisione_per_t(righe_m: list[dict], righe_p: list[dict] | None, pairs: dict
             v = vt.get(k)
             if not v or v.get(campo) is None or int(_num(v.get(campo_n))) < minimo:
                 return None
-            return float(v[campo]) >= SOGLIA_T
+            return float(v[campo]) >= soglie[campo]
         return alta
 
     def _rapporto(t, n):
@@ -1500,6 +1519,33 @@ def _riga_divisione(titolo: str, sotto: str, d: dict) -> str:
     return riga
 
 
+def lettura_h1(d: dict | None) -> str:
+    """Il verdetto di H1 con la regola decisa il 30 set sera (`REGOLA_H1_DECISA`),
+    sulla sola riga dell'ultimo esame: gruppi da almeno MIN_SEGNALI_H1 segnali;
+    «proposta» se la t alta rende piu' della bassa oltre il margine (2 errori
+    standard della differenza, strettamente maggiore come nelle regole di
+    ottobre); «chiusa» se anche nel caso migliore (differenza + margine) resta
+    sotto LIMITE_CHIUSA_H1; altrimenti «non si sa ancora»."""
+    d = d or {}
+    a, b = d.get("alta") or {}, d.get("bassa") or {}
+    na, nb = int(a.get("n") or 0), int(b.get("n") or 0)
+    if na < MIN_SEGNALI_H1 or nb < MIN_SEGNALI_H1:
+        return (f"H1: non si sa ancora: {na} e {nb} segnali, ne servono {MIN_SEGNALI_H1} per "
+                f"gruppo; si rilegge a meta' novembre.")
+    diff, e = d.get("differenza"), d.get("errore_differenza")
+    if diff is None or e is None:
+        return "H1: non si sa ancora: differenza o margine non calcolabili."
+    margine = 2.0 * e
+    testo = f"differenza {_fmt_r(diff)}R, margine ±{margine:.2f}"
+    if diff > margine:
+        return (f"H1: proposta ({testo}): chiedere t >= {SOGLIA_T_HOLDOUT:g} all'ultimo esame "
+                f"del gate diventa la prossima proposta.")
+    if diff + margine < LIMITE_CHIUSA_H1:
+        return (f"H1: chiusa ({testo}): anche nel caso migliore la t non separa oltre "
+                f"{LIMITE_CHIUSA_H1:g}R.")
+    return f"H1: non si sa ancora ({testo}); si rilegge a meta' novembre."
+
+
 def righe_voto_t(vt: dict) -> list[str]:
     """Le righe a schermo della divisione per t: PRIMA la regola, poi i numeri
     (30 set 2026).
@@ -1513,17 +1559,20 @@ def righe_voto_t(vt: dict) -> list[str]:
     Da ~0,5 KB a ~1,1 KB (misurato sui dati di prova del test): la sezione passa
     da ~3,7 a ~4,3 KB, e tutto l'output del `portafoglio` resta sotto i 20.000
     caratteri che l'agente ops conserva interi (ops 0373: 14.625 byte)."""
-    out = [f"  H1 (regola del 30 set): {REGOLA_H1}."]
+    out = [f"  H1 (regola del 30 set): {REGOLA_H1}.",
+           f"  REGOLA H1 DECISA (30 set sera, prima dei numeri): {REGOLA_H1_DECISA}."]
     if not (vt.get("da_passata") or vt.get("da_registro")):
         out.append("  voto t: nessuna coppia con la t (la passata una tantum non e' ancora girata)")
         return out
     out.append("  t = guadagno medio diviso per quanto oscilla da un trade all'altro (alta = "
                "regolare). ± = margine per giornata. Condivisi: segnali presi anche da una "
-               "coppia a t bassa, contati fra le alte. Quale riga decide non e' ancora scritto.")
+               "coppia a t bassa, contati fra le alte. Decide solo la riga dell'ultimo esame.")
     out.append(_riga_divisione("t del gate 2 o piu'", "sotto 2", vt.get("walk_forward") or {})
                + _paper(vt.get("walk_forward") or {}))
-    out.append(_riga_divisione("t dell'ultimo esame (45 giorni) 2 o piu'", "sotto 2",
-                               vt.get("holdout") or {}))
+    out.append(_riga_divisione(f"t dell'ultimo esame (45 giorni) {SOGLIA_T_HOLDOUT:g} o piu'",
+                               f"sotto {SOGLIA_T_HOLDOUT:g}", vt.get("holdout") or {})
+               + " (DECIDE)")
+    out.append("  " + lettura_h1(vt.get("holdout")))
     q = vt.get("t_su_radice_n") or {}
     med = q.get("mediana")
     out.append(_riga_divisione(f"t divisa per la radice dei trade, "
@@ -2036,6 +2085,8 @@ def riepilogo_fuori_campione(fc: dict, dal: str, rimosse: int | None,
     out["non_rigiocate"] = dict(non_rigiocate or {})
     out["regola"] = REGOLA_FUORI_CAMPIONE
     out["regola_h1"] = REGOLA_H1
+    out["regola_h1_decisa"] = REGOLA_H1_DECISA
+    out["lettura_h1"] = lettura_h1((fc.get("voto_t") or {}).get("holdout"))
     return out
 
 

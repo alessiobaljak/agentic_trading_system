@@ -94,13 +94,21 @@ class Settings:
     AI_HYPOTHESES_PER_RUN: int = int(os.getenv("AI_HYPOTHESES_PER_RUN", "20"))
     # filtro di contesto sull'universo: scarta le coin su cui non vale la pena
     # spendere validazione. FAIL-OPEN: senza AI non scarta nulla.
-    AI_UNIVERSE_FILTER: bool = os.getenv("AI_UNIVERSE_FILTER", "true").lower() == "true"
+    # 30 set 2026, si' del proprietario («filtro spegnilo tu»): default SPENTO. Giudicava
+    # le coin dal solo nome (ha escluso QUSDT, 393 giorni di storia, ops 0372), non e'
+    # ripetibile e non passa dal gate; effetto sui trade non misurabile (ops 0343/0363);
+    # ~0,45 $ al giorno. Le regole fisse (storia minima, top per volume) restano.
+    AI_UNIVERSE_FILTER: bool = os.getenv("AI_UNIVERSE_FILTER", "false").lower() == "true"
     # MODALITA' OMBRA: a ogni decisione il modello dice cosa farebbe, e la sua
     # scelta viene REGISTRATA accanto a quella vera. Non tocca nulla: serve a
     # rispondere con dei numeri alla domanda "aggiungerebbe valore?", prima di
     # dargli un ruolo. Una decisione LLM non e' riproducibile, quindi non e'
     # backtestabile: l'ombra e' l'unico modo di misurarla senza rischiare.
-    AI_SHADOW_ENABLED: bool = os.getenv("AI_SHADOW_ENABLED", "true").lower() == "true"
+    # 30 set 2026, si' del proprietario («ombra spegnila tu»): default SPENTA. Nessuna
+    # parte del sistema la usa; direbbe no all'85% dei trade (153 veti su 179, ops 0362);
+    # non puo' passare dal gate; 0,3-0,75 $ al giorno e ~1.200 letture Firebase. Le
+    # 229 decisioni gia' registrate restano in `ai_shadow`.
+    AI_SHADOW_ENABLED: bool = os.getenv("AI_SHADOW_ENABLED", "false").lower() == "true"
     # PASSO 2 — VETO. Il modello puo' solo dire "questo no", mai "prendi
     # quest'altro". E' l'unico ruolo operativo accettabile prima di una prova,
     # perche' e' falsificabile (si guarda a posteriori se i vietati avrebbero

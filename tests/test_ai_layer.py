@@ -19,6 +19,14 @@ from bot.config import settings
 
 
 # ---- estrazione JSON ------------------------------------------------------- #
+
+@pytest.fixture(autouse=True)
+def _funzione_accesa(monkeypatch):
+    """Dal 30 set 2026 AI_UNIVERSE_FILTER e' SPENTO di default (si' del proprietario): questi
+    test provano il comportamento quando e' acceso, quindi lo accendono qui (un
+    test che lo vuole spento lo rispegne dopo)."""
+    monkeypatch.setattr(settings, "AI_UNIVERSE_FILTER", True)
+
 def test_extract_json_ignores_prose_around_and_after():
     # find('{') + rfind('}') prenderebbe anche la coda: qui si bilanciano le graffe
     assert _extract_json('Ecco:\n{"a": 1}\nSpero sia utile. }') == {"a": 1}

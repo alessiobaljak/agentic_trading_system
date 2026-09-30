@@ -26,8 +26,8 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 ---
 
 **Stato al 30 set (rilettura completa delle 70 voci, verificata contro i risultati ops).**
-Conteggio dopo la pulizia del 30 set (64 voci): 2 aspettano il sì (F2, J12 — J12 in memoria, non
-si fa finché il proprietario non lo dice), H5 fatta il 30 set e in misura fino al 7 ott, 18 in
+Conteggio dopo la pulizia del 30 set (62 voci; F2 e J12 chiuse la sera del 30 set, verdetto nel
+diario), H5 fatta il 30 set e in misura fino al 7 ott, 18 in
 misura, 11 fatte in parte, 14 aperte, 6 parcheggiate, 12 fatte (restano come memoria finché non si
 decide di spostarle nel diario). Stati che il testo delle voci non dice ancora:
 * **H5 riaperta, ma il numero del `portafoglio` non la decide:** il 25 set «è il mercato» (ops 0232),
@@ -85,6 +85,13 @@ col portafoglio del motore (anche lui apre 995 segnali su 2.203), due righe per 
 3 ott («uguale» solo se il margine esclude ±0,15R). ~1 giorno, nessun riavvio.
 
 ### K2. H1-misura: salvare la t di ogni validata e dividere il fuori campione per t (serve adesso)
+**30 set sera: REGOLA H1 DECISA dal proprietario, prima della prima lettura divisa per t** («H1:
+ultimo esame, soglia 1,5, minimo 80: sì»): decide solo la t dell'ultimo esame (holdout di 45
+giorni), soglia 1,5; con almeno 80 segnali per gruppo: t alta sopra t bassa oltre il margine →
+H1-soglia sull'holdout è la prossima proposta; differenza + margine sotto 0,25R → H1 chiusa;
+altrimenti non si sa ancora (si rilegge a metà novembre). Nel report: `REGOLA_H1_DECISA`,
+`lettura_h1`. Passata del voto t fatta il 30 set (ops 0383): 213 coppie in 647 s; t del gate ≥ 2 in
+47 su 213 (mediana 1,27); t dell'ultimo esame ≥ 2 in 18 su 183 con almeno 5 trade.
 **30 set: FATTO (sì del proprietario), revisione avversaria + correzioni + riverifica.** La t
 (walk-forward e holdout, coi trade) entra nel nucleo del registro (nomi brevi t, n, h, o) e si FISSA
 alla promozione (`val_t`, `val_trades`, `val_t_holdout`, `val_trades_holdout`, `val_uscita`: un
@@ -676,32 +683,6 @@ Il proprietario ha chiesto di imparare il più possibile da ogni chiusura e ha d
 ### F1ter. Selettore in ombra: attivo dal 25 set (passo 2 del disegno)
 Il modello (che ancora NON BATTE «apri tutto», ops 0231) dà a ogni trade aperto dal bot la sua `p` e la scrive sul trade (`selector_p`, `selector_soglia`) e nel log `[selettore]`; `trades` stampa «SELETTORE IN OMBRA» (p media vinti vs persi, PnL sopra soglia vs tutti, correlazione da 10 trade). Si accende solo se batte su 2 finestre su 3 E la calibrazione sul paper non è piatta con ≥ 40 trade con p. Divergenze dichiarate fra bot e gate: stop del risk gate invece di quello grezzo, ora della decisione, contesto BTC fino a 60 minuti vecchio. Da mostrare in dashboard (colonna p nei trade chiusi) quando ci saranno i primi trade con p.
 
-### F2. Il gate a due livelli: «candidata» in paper a size ridotta, «validata» a size piena
-**Stato:** proposta del 23 set pomeriggio · **aspetta il sì del proprietario** · non si tocca il gate senza
-
-Domanda del proprietario: *«se una strategia in backtest funziona, poi sarà il paper
-a validarla nelle settimane successive: possiamo rivedere le tre settimane del gate?»*
-
-Quello che le 3 conferme fanno davvero: **non servono al paper, servono contro i
-falsi positivi**. Passa lo 0,3% delle candidate; con una sola finestra passerebbero
-molte strategie fortunate. E non sono tre settimane fisse: 3 pass con almeno 7 giorni
-di dati nuovi fra uno e l'altro (`NEW_DATA_MIN_HOURS=168`) = minimo 14 giorni.
-
-Perché «conferma il paper» da solo non basta: a 4-5 trade al giorno su 59 coppie,
-una coppia arriva a 8 trade in settimane — più lento del gate, non più veloce. E se
-il criterio si decide dopo aver visto i risultati, è BIRBUSDT al contrario.
-
-**Proposta:** due livelli, senza accorciare nulla.
-* **candidata** (1 pass + holdout): entra in paper subito, a un quarto della size, e
-  continua a raccogliere conferme nel gate;
-* **validata** (3 pass): size piena, come oggi;
-* regole d'uscita scritte PRIMA: deriva confermata o bocciatura nel gate = fuori;
-  statistiche del paper separate per livello.
-
-Si guadagna: più coin in paper e prima (oggi 27 su 165), più dati per il cervello,
-falsi positivi limitati dalla size. Costa: più coppie da rivalutare nel giro (il
-cronometro decide), paper più rumoroso se i due livelli non restano separati.
-
 ## G. Portafoglio e gate — quello che i sistemi seri fanno (24 set)
 
 ### G1. Rischio per direzione
@@ -938,26 +919,6 @@ Le ipotesi dei referti vanno e vengono con i trade (una strategia che vince uno 
 
 ### J11. Conferma a maggioranza della finestra — **FATTO il 27 set** (sì del proprietario)
 Il numero che l'ha decisa: l'autopsia delle validate (ops 0290) ha trovato che, valutate una volta sola, passavano 23 validate su 194 (una su otto); l'artefatto della scala globale ne spiegava solo 6. La regola «almeno un pass nella finestra di 7 giorni = una conferma» (`scripts/optimize.py::judge_window`) lasciava entrare le coppie al limite: valutate più volte a settimana, prima o poi passano per caso. Ora ogni valutazione della finestra si conta (`window_evals`, `window_passes`) e la finestra è una conferma solo se la coppia ha passato più della metà delle sue valutazioni (`CONFERMA_QUOTA_MIN = 0,5`, strettamente sopra). Resta un verdetto per finestra; le finestre aperte prima del 27 set chiudono con la regola vecchia, una sola volta. Contatori nel nucleo del registro e nel codec corto. Metro: quota di validate che passano una valutazione singola (`autopsia-validate`), 12% il 27 set, obiettivo sopra il 50% in tre settimane; PF vissuto delle validate nate con la regola nuova contro le vecchie su almeno 30 trade ciascuna. Effetto atteso: meno validate nuove, e più lente.
-
-### J12. Il paper entra dove entra il gate? — indagine aperta il 27 set
-**Il numero che l'ha aperta:** il referto settimanale del 27 set (ops 0304, `confronto`): sulle 8 coppie più operate solo **20 trade del paper su 37 (54%)** hanno un ingresso del motore entro 2 barre (per coppia: da 5/6 di SPXUSDT a 0/4 di HUMAUSDT). Il numero da solo non dice se il bot apre su una soglia diversa (un bug) o se il motore era semplicemente ancora dentro un trade precedente (una cascata delle uscite): sono due diagnosi opposte con lo stesso sintomo.
-
-**Fatto il 27 set (misura, nessuna modifica al bot):** `scripts/ingressi_report.py` (voce ops `ingressi`, sola lettura, deadline propria 720 s). Per OGNI trade del paper: la candela del segnale (`signal_candle_ts`, o `entry_time` riportato al confine), e una classe sola decisa in quest'ordine: ABBINATO (motore entro 2 barre, stesso metro di ops 0304: `_accoppia`, ogni trade del motore usato una volta), MOTORE_IN_POSIZIONE (era dentro un trade di quella coppia: cascata di un'uscita diversa), MOTORE_IN_COOLDOWN (`cooldown_bars`, barre dopo uno stop), REGOLA_NON_SCATTA (libero, ma la regola sul frame del motore non scatta a quella candela né alle due vicine — con il sotto-motivo: INDICATORI_DIVERSI = warmup, il bot costruisce su 200 candele; PREZZO_VIVO = il bot decide sul prezzo di qualche secondo dopo la chiusura; REGIME_DIVERSO; CONTESTO_BTC; REGOLA_DIVERSA = stessi valori e regola diversa, un bug; SEGNALE_SENZA_TRADE = setup non tradabile o segnale già abbinato; IGNOTO), ABBINATO_LONTANO (2-8 barre), SENZA_MOTORE. Per la classe 4 stampa gli indicatori del motore contro `indicators_at_entry` del trade (differenze > 5%), il regime visto dal motore contro `regime_at_entry`, se la spec guarda BTC o la 1h, e se la regola scatta «con 199 candele» (`compute_snapshot` sulle stesse candele del bot: il warmup puro, trade per trade). Poi una seconda passata del motore «come il bot» (`--finestra-bot`, da 200 barre prima del periodo del paper) e la quota di abbinati che ne esce — attenzione: toglie anche la coda dei trade precedenti, non solo il warmup. In fondo: conteggi per classe e sotto-motivo, quota di abbinati totale e per coppia, le 10 coppie con più non abbinati, e una `LETTURA:` da regole (classe di maggioranza fra i non abbinati → cascata dalle uscite / cooldown / warmup / prezzo vivo / bug / contesto).
-
-**Limiti dichiarati:** «stop» del motore è DEDOTTO (perdita chiusa prima dell'orizzonte: il SimTrade non porta il motivo dell'uscita); i trade del motore sono simulati sulla storia intera, senza holdout; una spec che guarda il mercato viene rigirata CON il contesto BTC (come `optimize.py`), mentre `confronto` non lo passa — per quelle spec i due referti non coincidono per costruzione; ~40 s per coppia sulla VPS (ops 0304: 302 s per 8 coppie), quindi con il default «tutte le coppie» il budget ne copre ~17 e le altre finiscono in «tempo (budget)»: per un'analisi completa `--budget 0` da tmux. **Non verificato dal vivo:** mai lanciato su Firebase e candele veri (da qui non si può); i test coprono il classificatore su trade sintetici, la diagnosi su candele sintetiche e l'uscita 0 senza Firebase.
-
-**Prima lettura (ops 0308, 27 set 11:20):** 17 coppie su 58 nel budget; 70 trade classificati, 36 abbinati (51%). I 34 non abbinati: **15 «senza motore» erano tutti la CACHE** — trade dal 26 set 15:45 in poi, dopo l'ultima candela in cache (lo script chiedeva `--end` = oggi, `cut_to` taglia a oggi 00:00 e `_covers_end` accetta una cache ferma a ieri): non una classe vera, un limite dello strumento. Tolti quelli, 36/55 (65%). Poi 5 «motore in posizione» + 3 «cooldown» (cascata delle uscite), **5 «prezzo vivo»** (DEXEUSDT|gen_fa304106, GPSUSDT: indicatori identici, regola scattata da una parte sola per 1-4 decimillesimi perché il bot decideva sul prezzo della candela in formazione), **5 «ignoto»** tutti di `gen_6d06dca0` su ORCAUSDT/VETUSDT (la regola non scatta nemmeno sui valori registrati dal paper; il motore 0 trade contro 6 del bot), 1 «segnale senza trade».
-
-**Fatto il 27 set pomeriggio (sì del proprietario alle tre azioni):**
-1. **La regola spiegata.** `GeneratedStrategy.spiega(asset, ctx, prezzo=None)` (sola lettura): la stessa `_verdetto` da cui nasce il segnale, feature per feature (`{feature: {long, short, valori}}`, `direzione_finale`, `motivo`, `prezzo`, `filtri`). Test: `spiega` e `generate_signal` concordano su 200 snapshot a caso × 12 spec (`tests/test_spiega.py`). In `ingressi_report`: `--coppia SYM|strat --dettaglio` (voci ops `ingressi-orca`, `ingressi-vet`, con `/` al posto di `|`): per ogni trade le barre k-2..k+1 del motore, i valori del paper col prezzo d'ingresso, con la chiusura e col prezzo di decisione ricostruito da `feats_at_entry.dist_ema` (l'`entry_price` porta lo slippage: NON è il prezzo su cui il bot ha deciso — ipotesi principale per l'IGNOTO, da verificare con il dettaglio), la `regola` sul trade contro la spec nel registro, `sostituita_da`/`genitore` del record, e una DIAGNOSI per trade (spec diversa / quale feature frena / prezzo vivo / il motore non ha aperto per altro).
-2. **La regola decide sulla chiusura.** `AssetSnapshot.close_chiusa` (chiusura dell'ultima candela CHIUSA del timeframe primario, `price_agent.build_snapshot`); `GeneratedStrategy._prezzo_decisione` la usa per la REGOLA quando `DECISIONE_SU_CHIUSURA=True` (default, `bot/config.py`); `price` resta vivo per ingresso, stop, rischio, feature. Il motore mette `close_chiusa = price` (`_snapshot_from_frame`): test che i trade del motore sono identici con l'interruttore acceso o spento. Le 6 strategie base NON sono toccate (usano ancora `asset.price`).
-3. **Lo strumento vede anche oggi e gira in sfondo.** `--end` = domani UTC per default; un trade oltre l'ultima candela dice «dopo l'ultima candela disponibile (hh:mm UTC)». `--sfondo` (voce `ingressi-completo`, `--budget 0`): doppio fork + setsid, referto in `data/ingressi_ultimo.txt` (gitignored), pid in `data/ingressi_ultimo.pid`, esce 0 subito — il canale ops uccide il figlio a 900 s, il nipote staccato sopravvive; in TEST MODE o senza Firebase vivo non stacca niente. `--esito` (voce `ingressi-esito`) stampa il referto, quando è stato scritto e se il processo gira ancora.
-
-**Non verificato dal vivo (27 set):** nessuna delle tre cose è stata lanciata sulla VPS. Da fare, in ordine: `ingressi-orca` e `ingressi-vet` (la diagnosi dell'IGNOTO), `aggiorna` + `riavvia-bot` (la decisione sulla chiusura entra solo al riavvio), poi `ingressi-completo` e dopo ~40 min `ingressi-esito`. Da misurare dopo qualche giorno: se la classe PREZZO_VIVO sparisce dai trade nuovi e se la quota di abbinati sale.
-
-**Metrica:** quota di ingressi ABBINATI su tutte le coppie operate — 54% il 26-27 set sulle 8 coppie più operate (ops 0304); 51% (65% tolta la cache) su 17 coppie il 27 set (ops 0308). **Obiettivo:** ≥ 80%, OPPURE una classe diversa da IGNOTO per ogni trade non abbinato (una divergenza spiegata è misurabile, una spiegata «a mano» no). Da leggere al primo `ops ingressi`: se la maggioranza è MOTORE_IN_POSIZIONE la strada è A (uscite), non la regola; se è INDICATORI_DIVERSI la proposta è dare al motore la stessa finestra del bot (o al bot una finestra più lunga), da misurare con `--finestra-bot` prima; se è REGOLA_DIVERSA è un bug da aprire subito.
-
-**28 set, in memoria (NON fare finché il proprietario non lo dice):** aggiungere a `scripts/ingressi_report.py` un filtro di data che di default considera solo i trade aperti dopo l'ultima modifica delle regole (27 set: chiusura della candela 14:22 UTC, ora della candela 15:27, sessione come filtro 19:40), e rilanciarlo dopo una settimana. Motivo: l'analisi completa del 27 sera (ops 0320, 46% abbinati) confrontava trade decisi con la regola vecchia della sessione con la regola nuova.
 
 ### J13. La sessione oraria leggeva l'orologio, non la candela — **corretto il 27 set**; la sera la feature e' diventata un FILTRO e le coppie che la usano sono state azzerate (opzione c)
 **Il numero che l'ha trovata:** i 5 trade «IGNOTO» dell'indagine sugli ingressi (ops 0310 `ingressi-orca`, 3 trade; ops 0311 `ingressi-vet`, 3 trade; 5 nella prima lettura di ops 0308), tutti di `gen_6d06dca0` = «rsi_extreme low=20 high=75 AND session hour_from=8 hour_to=16»: stessi indicatori del motore (entro 5%), regola che non scatta nemmeno sui valori scritti dal paper, e nel dettaglio la feature che frena è sempre `session` con `ora_utc=13` su candele delle 03:30 UTC — cioè l'ora in cui lo strumento GIRAVA (13:13 UTC), non l'ora della candela.

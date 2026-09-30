@@ -644,3 +644,12 @@ def test_nessun_identificativo_di_modello_nei_file_nuovi():
     for f in ("bot/ai/spesa.py", "tests/test_ai_spesa.py"):
         testo = pathlib.Path(f).read_text(encoding="utf-8").lower()
         assert ago not in testo, f
+
+
+def test_filtro_monete_e_ombra_spenti_di_default():
+    """30 set 2026, si' del proprietario: filtro monete AI e ombra AI spenti di
+    default (bot/config.py); si riaccendono solo con l'env esplicito."""
+    import importlib, os
+    import bot.config as cfg
+    assert 'os.getenv("AI_UNIVERSE_FILTER", "false")' in open(cfg.__file__).read()
+    assert 'os.getenv("AI_SHADOW_ENABLED", "false")' in open(cfg.__file__).read()

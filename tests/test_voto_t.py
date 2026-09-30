@@ -842,8 +842,10 @@ def test_la_regola_prima_dei_numeri_e_il_mezzo_kb(capsys):
     assert testo.index("H1-soglia") < testo.index("t del gate 2 o piu'")
     # la t spiegata, e detto che nessuna riga decide finche' la regola non lo scrive
     assert "guadagno medio diviso per quanto oscilla" in testo
-    assert "Quale riga decide non e' ancora scritto" in testo
-    assert "t dell'ultimo esame (45 giorni) 2 o piu'" in testo
+    assert "Decide solo la riga dell'ultimo esame" in testo
+    assert "REGOLA H1 DECISA" in testo and "soglia 1,5" in testo
+    assert "t dell'ultimo esame (45 giorni) 1.5 o piu'" in testo and "(DECIDE)" in testo
+    assert "H1: " in testo
     assert "t divisa per la radice dei trade, 0.18 o piu'" in testo
     assert "(descrive, non decide)" in testo
     # gruppi in parole e in segnali, margine del gruppo e della differenza
@@ -854,14 +856,14 @@ def test_la_regola_prima_dei_numeri_e_il_mezzo_kb(capsys):
     assert "|" not in testo and "n.d.R" not in testo
     # ~1,1 KB: tutto l'output del `portafoglio` resta sotto i 20.000 caratteri
     # che l'agente ops conserva interi (ops 0373: 14.625 byte)
-    assert len(testo.encode("utf-8")) <= 1200, len(testo.encode("utf-8"))
+    assert len(testo.encode("utf-8")) <= 1700, len(testo.encode("utf-8"))  # +~400: regola H1 decisa (30 set sera)
     # con la sezione intera: le righe stanno fra la sopravvivenza e la Lettura
     pb.stampa_fuori_campione(fc, "2026-09-16", 0, None)
     out = capsys.readouterr().out
     assert out.index("tutte le coppie operate") < out.index("H1 (regola") < out.index("Lettura:")
     # senza nessun voto: la regola e una riga sola
     vuoto = pb.righe_voto_t(pb.fuori_campione(motore, paper, pairs, list(pairs), PAV)["voto_t"])
-    assert len(vuoto) == 2 and "passata una tantum" in vuoto[1]
+    assert len(vuoto) == 3 and "REGOLA H1 DECISA" in vuoto[1] and "passata una tantum" in vuoto[2]
 
 
 def test_divisione_per_t_nel_main_senza_letture_in_piu(tmp_path, monkeypatch, capsys):
@@ -963,3 +965,18 @@ def test_la_soglia_di_t_su_radice_n_e_fissa_fra_una_lettura_e_l_altra():
     q = pb.fuori_campione(motore, paper, reg, list(reg), PAV)["voto_t"]["t_su_radice_n"]
     assert q["mediana_da"] == "lettura" and math.isclose(q["mediana"], (0.31 + 0.06) / 2)
 
+
+
+def test_lettura_h1_tre_esiti():
+    """Regola decisa il 30 set sera: ultimo esame, soglia 1,5, minimo 80 segnali
+    per gruppo; proposta oltre il margine, chiusa se differenza + margine < 0,25R."""
+    def d(na, nb, diff, e):
+        return {"alta": {"n": na}, "bassa": {"n": nb}, "differenza": diff,
+                "errore_differenza": e}
+    assert pb.SOGLIA_T_HOLDOUT == 1.5 and pb.MIN_SEGNALI_H1 == 80
+    assert "non si sa ancora: 79 e 200" in pb.lettura_h1(d(79, 200, 0.9, 0.01))
+    assert pb.lettura_h1(d(80, 80, 0.30, 0.10)).startswith("H1: proposta")
+    assert pb.lettura_h1(d(80, 80, 0.20, 0.10)).startswith("H1: non si sa ancora")  # bordo: 0,20 non > 0,20
+    assert pb.lettura_h1(d(100, 100, 0.05, 0.05)).startswith("H1: chiusa")  # 0,05 + 0,10 < 0,25
+    assert pb.lettura_h1(d(100, 100, 0.10, 0.08)).startswith("H1: non si sa ancora")  # 0,26
+    assert pb.lettura_h1(None).startswith("H1: non si sa ancora")

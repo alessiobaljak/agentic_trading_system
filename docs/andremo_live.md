@@ -2295,3 +2295,25 @@ i dati di oggi; poi il rischio di sovrapporsi al giro del gate, l'arrotondamento
 gate identiche, merge del registro identici salvo i campi nuovi, nessuna scrittura Firebase dalla
 passata. Suite 2001 verdi. Restano al proprietario: la regola H1 (quale t, soglia, minimo) prima
 del 7 ott, e aggiungere sulla VPS le due righe `voto-t-completo` e `voto-t-esito`.
+
+### 30 settembre, sera: regola H1 decisa, filtro monete e ombra AI spenti, F2 e J12 chiuse
+
+Decisioni del proprietario («H1: ultimo esame, soglia 1,5, minimo 80: sì, filtro spegnilo tu, ombra
+spegnilo tu, F2 e J12 chiudile»), prese PRIMA che il `portafoglio` stampasse i risultati divisi per t.
+* **Regola H1 (scritta prima dei numeri):** decide solo la t dell'ultimo esame (45 giorni), soglia
+  1,5; almeno 80 segnali per gruppo; «proposta» se la t alta rende più della bassa oltre il margine,
+  «chiusa» se differenza + margine < 0,25R, altrimenti «non si sa ancora» (metà novembre). La
+  passata del voto (ops 0383): 213 coppie votate in 647 s, t del gate ≥ 2 in 47 su 213, t
+  dell'ultimo esame ≥ 2 in 18 su 183.
+* **Filtro monete AI spento** (default `AI_UNIVERSE_FILTER=false`): giudicava dal nome (ha escluso
+  QUSDT, 393 giorni di storia), non ripetibile, nessun effetto misurabile sui trade; ~0,45 $/giorno.
+* **Ombra AI spenta** (default `AI_SHADOW_ENABLED=false`, serve il riavvio del bot): nessuno la
+  usava, veto sull'85% dei trade, non passa dal gate; 0,3-0,75 $/giorno e ~1.200 letture Firebase.
+  Le 229 decisioni registrate restano.
+* **F2 chiusa, non si fa** (strategie in paper dopo 1 conferma a un quarto di size): il 70-77% delle
+  coppie a 1-2 conferme non ripassa; il quarto di size non limita il rischio (K5); toglierebbe posto
+  alle validate. La domanda «servono 3 conferme?» la risponde il gruppo di controllo (K3) verso
+  metà ottobre: se 1 conferma bastasse, si riapre con quel numero.
+* **J12 chiusa, obiettivo raggiunto** («il paper entra dove entra il motore?»): 81% dei trade del
+  paper con un ingresso del motore vicino (64 su 79, ops 0373), contro l'80% richiesto. Il filtro di
+  data nello strumento `ingressi`, tenuto in memoria dal 28 set, non serve più.

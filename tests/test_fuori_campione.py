@@ -560,7 +560,7 @@ def test_sezione_sotto_3800_caratteri_e_riepilogo_pubblicabile(capsys):
     assert "r_multiplo" not in testo and "e.s." not in testo
     # +0,5 KB il 30 set 2026 (H1-misura): la regola del voto t e la divisione
     # per t, approvate col tetto di mezzo KB in piu' sulla sezione
-    assert len(testo) < 3800 + 500, len(testo)
+    assert len(testo) < 3800 + 800, len(testo)  # +300: la regola H1 decisa (30 set sera)
     # la distribuzione delle date non cresce coi mesi
     riga = next(r for r in testo.splitlines() if "senza data di validazione" in r)
     assert len(riga) < 200 and "fino al" in riga

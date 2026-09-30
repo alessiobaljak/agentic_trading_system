@@ -17,6 +17,14 @@ from bot.config import settings
 from bot.core.models import Regime
 
 
+
+@pytest.fixture(autouse=True)
+def _funzione_accesa(monkeypatch):
+    """Dal 30 set 2026 AI_SHADOW_ENABLED e' SPENTO di default (si' del proprietario): questi
+    test provano il comportamento quando e' acceso, quindi lo accendono qui (un
+    test che lo vuole spento lo rispegne dopo)."""
+    monkeypatch.setattr(settings, "AI_SHADOW_ENABLED", True)
+
 def _sig(sym="BTCUSDT", strat="breakout", conf=60.0):
     return {"symbol": sym, "strategy": strat, "direction": "long",
             "confidence": conf, "adjusted_confidence": conf, "coin_regime": Regime.SIDEWAYS}
