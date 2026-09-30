@@ -51,6 +51,7 @@ from bot.core.registry import (aggiorna_meta_gate, breakeven_n, conta_declassate
 from bot.learning.referti import (ESITI_ESTERNI, aggiorna_storia, chiave_storia,
                                   registra_esiti_storia)
 from scripts.gate_progress import riga_cervello
+from scripts import gruppo_controllo
 from scripts.optimize import (FRESH_DAYS, MIN_PASSES, NEW_DATA_MIN_S, _min_history,
                               _segna_promozione, registra_vite,
                               coin_in_maturazione, drifted_from_paper, judge_window,
@@ -1678,6 +1679,11 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
     n_eval = 0
     gia_validate = _W.get("gia_validate") or set()
     config_validate = _W.get("config_validate") or {}
+    # IL GRUPPO DI CONTROLLO (30 set 2026, backlog K3): le bocciate idonee al
+    # campione, come voci leggere (`scripts/gruppo_controllo.py`). Si guardano
+    # soltanto i risultati: nessun verdetto, seme od ordine cambia.
+    controllo: list = []
+    config_globale = config_globale_uscita()
     # le figlie dell'intorno si valutano SOLO sulla coin della madre; le
     # varianti TRONCATE (dai referti, con `ipotesi_da`) per ULTIME e con la cache
     # del motore svuotata prima e dopo: valutarle in mezzo alle altre faceva
@@ -1735,6 +1741,10 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
         n_eval += 1
         if not r["passed"] and key in gia_validate:
             bocciate[key] = _bocciata_leggera(sym, spec, r)
+        if not r["passed"]:
+            voce = gruppo_controllo.voce_idonea(sym, spec, r, gia_validate, config_globale)
+            if voce is not None:
+                controllo.append(voce)
         if r.get("oos_rows"):
             if not r["passed"]:
                 bocciate_scritte += 1
@@ -1818,8 +1828,11 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
         rss_mb = int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
     except Exception:  # noqa: BLE001
         rss_mb = 0
-    return (sym, entries, passed_keys, specs_passed, n_eval, summary,
-            {"binding": binding, "involved": involved, "near": near[:10], "rss_mb": rss_mb},
+    diag = {"binding": binding, "involved": involved, "near": near[:10], "rss_mb": rss_mb}
+    # le bocciate idonee al gruppo di controllo (30 set 2026): in `diag`, cosi'
+    # la forma della tupla resta quella di prima
+    diag["controllo"] = controllo
+    return (sym, entries, passed_keys, specs_passed, n_eval, summary, diag,
             stats_righe, bocciate)
 
 
@@ -3407,6 +3420,44 @@ def pubblica_doc_gate(fb, **kw) -> dict | None:
         return None
 
 
+def raccogli_gruppo_controllo(idonee: list, reg: dict, existing: dict, specs: list,
+                              specs_per_symbol: dict, args, end: str, letto_at: float,
+                              modalita: str = "") -> str:
+    """Il ponte fra il giro e `scripts/gruppo_controllo.py` (30 set 2026, K3).
+
+    La spec di una bocciata si riprende dall'id fra quelle valutate nel giro
+    (prima quelle della sua coin, poi le comuni). La foto usa le funzioni del
+    registro (`coppie_validate`, `declassate`, `coppie_operate`) sul registro
+    letto all'inizio del giro (`letto_at`), e la configurazione d'uscita con
+    `config_operata`: le stesse definizioni del bot. Non solleva."""
+    from bot.core.registry import declassate as _declassate
+    pairs = decode_pairs((reg or {}).get("pairs"))
+    comuni = {s.get("id"): s for s in (specs or []) if isinstance(s, dict)}
+    tf_bot = settings.ORCHESTRATOR_TIMEFRAME
+
+    def spec_di(sym: str, sid: str):
+        for s in (specs_per_symbol or {}).get(sym, []) or []:
+            if isinstance(s, dict) and s.get("id") == sid:
+                return s
+        return comuni.get(sid)
+
+    def timeframe_di(rec: dict, key: str):
+        sp = (existing or {}).get(rec.get("strategy") or key.split("|", 1)[-1])
+        return (sp.get("timeframe") if isinstance(sp, dict) else None) or tf_bot
+
+    def foto_di() -> list:
+        validate = coppie_validate(pairs, letto_at)
+        return gruppo_controllo.foto_conferme(
+            pairs, letto_at, validate=validate, declassate=_declassate(pairs, validate),
+            operate=coppie_operate(pairs, letto_at), timeframe_di=timeframe_di,
+            config_di=config_operata)
+
+    return gruppo_controllo.raccogli(
+        idonee=idonee, pairs=pairs, spec_di=spec_di, foto_di=foto_di,
+        interval=args.interval, run_end=end, start=args.start, windows=args.windows,
+        modalita=modalita)
+
+
 def _merge_discover_shards(fb, args) -> int:
     """Riunisce gli shard di discovery e aggiorna il registro UNA volta sola."""
     t0 = time.time()
@@ -3822,6 +3873,9 @@ def main() -> int:
         # le VALIDATE bocciate oggi, come voci leggere (26 set 2026): il merge le
         # usa per il confronto figlia/madre e per i contatori delle declassate
         bocciate_validate: dict[str, dict] = {}
+        # le bocciate idonee al GRUPPO DI CONTROLLO (30 set 2026, backlog K3):
+        # voci leggere dai worker, il campione si estrae dopo il ciclo
+        idonee_controllo: list[dict] = []
         for sym, entries, p_keys, p_specs, n_ev, summary, diag, rows, bocciate in parallel_map(
             _disc_one, symbols, workers=workers, initializer=_disc_init,
             initargs=(args, end, specs, scala_paper, specs_per_symbol, gia_validate,
@@ -3846,6 +3900,7 @@ def main() -> int:
             for k, v in (diag.get("involved") or {}).items():
                 diag_involved[k] = diag_involved.get(k, 0) + v
             diag_near.extend(diag.get("near") or [])
+            idonee_controllo.extend(diag.get("controllo") or [])
             if p_keys:
                 print(f"[discover] {sym}: {len(p_keys)} coppie passate ✅")
             if isinstance(diag, dict) and diag.get("rss_mb"):
@@ -3867,6 +3922,20 @@ def main() -> int:
                                            coppie_selettore_run)
         except Exception as exc:  # noqa: BLE001
             print(f"[selettore] dataset saltato (si prosegue): {exc}")
+
+        # IL GRUPPO DI CONTROLLO DEL FUORI CAMPIONE (30 set 2026, backlog K3,
+        # `scripts/gruppo_controllo.py`): ~50 bocciate a caso con la loro spec e,
+        # al primo giro del giorno italiano, la foto delle conferme del registro
+        # come letto all'inizio del giro. File locali della VPS, come il dataset
+        # del selettore; mai negli shard (non condividono il disco). Fail-open:
+        # `raccogli` non solleva, e il try qui sotto copre il resto.
+        if args.num_shards <= 1:
+            try:
+                raccogli_gruppo_controllo(idonee_controllo, reg, existing, specs,
+                                          specs_per_symbol, args, end, _ora, modalita)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[controllo-gruppi] raccolta saltata (si prosegue): {exc}")
+        idonee_controllo = []
 
         # Con gli shard ognuno vede una fetta dell'universo e sovrascriverebbe la
         # diagnosi degli altri: meglio nessuna autopsia che una parziale spacciata per

@@ -29,6 +29,10 @@ data_cache/
 # all'ingresso di ogni trade simulato): sono dati di ogni giro, vivono sulla VPS.
 # Il riepilogo sta su Firestore (selector/dataset).
 data/selettore/
+# il gruppo di controllo del fuori campione (30 set 2026, backlog K3): bocciate a
+# caso e foto giornaliera delle conferme, scritte dalla discovery. Dati della
+# macchina, vivono sulla VPS (scripts/gruppo_controllo.py).
+data/gruppo_controllo/
 # il referto dell'analisi degli ingressi lanciata in sfondo (`ingressi_report
 # --sfondo`, 27 set 2026) e il pid del processo: dati della macchina, si leggono
 # con `ingressi-esito`, non si committano.

@@ -82,6 +82,14 @@ simulazione una t minima all'ultimo esame separa davvero le buone dalle fortunat
 5,4 con t ≥ 1,5), ma costa ~70% delle nuove validate: prima si guarda se sui dati veri la t prevede.
 
 ### K3. Gruppo di controllo del fuori campione, da raccogliere da subito (serve adesso)
+**30 set: RACCOLTA ACCESA (sì del proprietario).** `scripts/gruppo_controllo.py`, chiamato dalla
+discovery a ogni giro (15 minuti e passata a 1 ora): ~50 bocciate a caso con almeno 30 trade e la
+spec intera (generatore casuale separato, seme salvato: verdetti e ordine del giro identici) in
+`data/gruppo_controllo/AAAA-MM-GG_bocciate.jsonl`, e al primo giro di ogni giorno italiano la foto
+delle conferme di tutto il registro in `..._conferme.jsonl`. File locali sulla VPS (~1,1-1,5 MB al
+giorno, rotazione 120 giorni, tetto 300 MB), zero letture Firebase. Resta da fare dopo il 7 ott: il
+rigioco (voce ops in sfondo) con le regole da scrivere prima: configurazione d'uscita con cui
+rigiocare, gruppo fissato alla prima foto, solo trade dopo `data_end`, margine per giornata.
 H5 dice se le validate guadagnano DOPO essere state scelte, non PERCHÉ scelte. Raccolta: ~50
 candidate bocciate a giro (a caso, con almeno 30 trade) e una foto giornaliera delle conferme;
 dopo 14 giorni il motore le rigioca per gruppo (validate, 2 conferme, 1 conferma, bocciate).
