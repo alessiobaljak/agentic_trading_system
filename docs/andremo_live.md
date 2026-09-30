@@ -2249,3 +2249,12 @@ partono dal 25 set 12:00 UTC e non dal 21 (prima di allora la data non era scrit
 quindi una parte della misura sarebbe rimasta in campione). Suite 1928 test verdi (senza
 `test_allowlist_runnable`). Il bot non va riavviato: la discovery e il `portafoglio` prendono il
 codice dal repo al giro successivo.
+**Prima lettura FUORI CAMPIONE (ops 0371, 30 set 09:50):** 202 coppie; motore dopo la validazione
+117 trade, R medio +0,12, vinti 69%; paper sulle stesse coppie e negli stessi istanti 77 trade, R
++0,001, vinti 65%; differenza +0,12R con margine ±0,25R: dentro il margine, non si decide (servono
+~824 trade in tutto se resta così). Scomposizione: stessi segnali 62 trade, motore +0,05R contro
+paper +0,01R; segnali del motore che il paper non ha preso 55, R +0,20. La cosa nuova: il paper
+sulle 25 coppie che NON sono più validate (azzerate il 27 set, sostituite, rimosse) fa 45 trade a
+R −0,23: la perdita del paper sta soprattutto lì, su coppie che il gate ha già tolto o ridotto.
+Rimosse dal 16 set: 0 (bias di sopravvivenza piccolo per ora). Config diversa da oggi: 3 trade su
+77. Il minimo di 80 trade del motore è già raggiunto; si rilegge il 7 ott con la regola scritta.
