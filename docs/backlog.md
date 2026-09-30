@@ -29,16 +29,24 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 Conteggio: 2 aspettano il sì (F2, J12 — J12 in memoria, non si fa finché il proprietario non lo
 dice), 18 in misura, 11 fatte in parte, 17 aperte, 6 parcheggiate, 13 fatte, 3 superate. Stati
 che il testo delle voci non dice ancora:
-* **H5 non regge più:** il 25 set «è il mercato, non l'esecuzione» (ops 0232); rifatto il 28 e 29
-  set il portafoglio simulato dal 16 set fa +7.190 e +9.596 contro −69 e −67 del paper (ops 0328,
-  0339). Attenzione: il simulato usa le validate di OGGI, scelte anche su quei giorni, quindi è
-  gonfiato; ma il divario è troppo grande per essere solo quello. Domanda riaperta.
-* **I5 peggiorata:** validate senza PF promesso 125 su 199 (ops 0338), erano 72 su 131.
+* **H5 riaperta, ma il numero del `portafoglio` non la decide:** il 25 set «è il mercato» (ops 0232),
+  il 28-29 set «è esecuzione» (+7.190 e +9.596 simulati contro −69 e −67 del paper, ops 0328, 0339).
+  Sugli STESSI giorni 16-24 set il simulato fa −1.357 con le 160 coppie del 25 set e +8.465 con le
+  202 di oggi (somme dal controllo del 30 set): cambia solo l'insieme di coppie, scelte anche su
+  quei giorni. Quel confronto misura la selezione, non l'esecuzione. (Corretto il 30 set: la prima
+  stesura diceva «troppo grande per essere solo quello», senza base.) Serve il confronto FUORI
+  CAMPIONE: proposta del 30 set nel diario.
+* **I5 in calo, non peggiorata:** 137 su 212 il 27 set (ops 0300) → 131 → 125 → 124 su 202 il 30 set
+  (ops 0358). La correzione (`scripts/optimize.py:610`) è del 26 set sera, non del 25, e funziona per
+  le nuove promosse; restano le vecchie validate, per lo più declassate, che non ripassano.
+  (Corretto il 30 set: la prima stesura confrontava con 72 su 131 del 25 set.)
 * **B4 sbloccata:** la lettura AI dei referti aspettava 100 trade: sono 174 (ops 0340).
 * **F1 / F1ter:** 96 trade col voto del selettore (ops 0340), sopra i 40 richiesti; il voto non
   distingue (0,653 vinti contro 0,644 persi) e il selettore non batte «apri tutto» (ops 0348).
-* **H1:** il numero che si aspettava c'è (25 validate su 38 con t ≥ 2, mediana 2,23, ops 0343),
-  ma la misura esiste solo per 38 validate su 199.
+* **H1:** il numero che si aspettava c'è (26 validate su 42 con t ≥ 2, mediana 2,23, ops 0363),
+  ma la misura esiste solo per 42 validate su 202: `last_t` non è nel nucleo del registro
+  (`scripts/optimize.py:572-628`; scritto solo a `discover_strategies.py:2615-2616`) e si perde
+  prima della promozione. Finché non ci entra, H1 non si può decidere.
 * **C1:** a 1 ora passa lo 0,32% il 27, 0,69% il 28, 1,15% il 29 set, contro 0,22% a 15 minuti;
   la passata copre 19-21 monete, non 30.
 * **Superate:** C2 e C3 (copertura 34,5% su 69 coin, ops 0343: sopra la soglia di 40 coin), A5

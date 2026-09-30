@@ -2195,3 +2195,21 @@ nessuna rimozione nel diario delle vite; le esplorative entrate il 29 sono 50 ne
 chiamate: idee di strategie 0,95 $ (50%), filtro monete 0,38 $ (20%, 4 risposte su 10 tagliate
 prima del cambio), autopsia 0,34 $, ombra 0,21 $. Oggi fino alle 08:12: 0,87 $ in 18 chiamate, nessuna
 tagliata. A ~0,33 $ per giro del gate più l'ombra, circa 3 $ al giorno (stima).
+
+**Proposta del giorno (serve il sì): H5, «dove perde il paper», misurato FUORI CAMPIONE.** Il numero
+che il `portafoglio` usa per dire «esecuzione o mercato» misura la selezione: sugli stessi giorni
+16-24 set il simulato fa −1.357 con le coppie del 25 set (ops 0232) e +8.465 con quelle di oggi
+(ops 0359). Cambia: una sezione FUORI CAMPIONE nel `portafoglio` (già lanciato ogni mattina): per
+ogni validata solo i trade del motore entrati DOPO la sua validazione (`validated_at`; il 21 set per
+le più vecchie), accanto ai trade del paper sulle stesse coppie e negli stessi giorni (senza
+esplorativi né coppie azzerate), con R medio, % vinti, mfe e primo target, differenza e 2 errori
+standard. Nessun backtest né lettura Firestore in più. Non cambia: bot, gate, registro, size,
+uscite, numero di trade. Metro: prima lettura il 1 ott, decisione il 7 ott con la regola scritta
+ora: motore fuori campione a R ≤ 0 → il divario è la selezione del gate e la prossima leva va nel
+gate; motore > 0 e sopra il paper di 2 errori standard → è esecuzione e la leva va sul bot;
+altrimenti si rilegge il 14 ott. Verificato sul codice (`portafoglio_backtest.py:102-160`,
+`optimize.py:1000-1014`); con ~150 trade del motore e ~100 del paper si legge una differenza di
+~0,28R. Scartate: I5 (si sta chiudendo da sola), B4 (nessun metro in 3 ore), I7 (contare gli
+incassi parziali porta i protetti al 55%, più lontani dal 60%), I8 (29% di «rumore» dopo gli stop è
+nel range del caso, 26-55%), I9 (seconda: pronta, ma agisce su 5 trade), H1 (t misurata su 42
+validate su 202).
