@@ -533,7 +533,14 @@ def _keep_testo(keep) -> str:
 
 def cambiamenti_24h(imp: dict | None, prec: dict | None) -> list[str]:
     """Le differenze fra l'impronta di adesso e quella del documento precedente,
-    in frasi. Vuota = «nessun pezzo del learning ha cambiato decisione»."""
+    in frasi. Vuota = «nessun pezzo del learning ha cambiato decisione».
+
+    1 ott 2026 (backlog J15): nonostante il nome, il confronto e' con il
+    controllo PRECEDENTE, cioe' di norma con UN'ORA FA (l'impronta in RTDB si
+    riscrive a ogni controllo), non con ieri. Il nome resta perche' e' un campo
+    del documento (schema, dashboard, test di parita'); chi stampa il testo lo
+    dice («rispetto al controllo di un'ora fa», `scripts/controllo.py`). Il
+    confronto con ieri sta nelle foto giornaliere (STORIA DEL LEARNING)."""
     if not isinstance(imp, dict) or not isinstance(prec, dict) or not prec:
         return []
     out: list[str] = []

@@ -10,6 +10,10 @@ Cancella:
   * /bot_status           (RTDB)  verrà riscritto dal bot al riavvio
   * /commands/kill_switch (RTDB)  riportato a False
   * /adapt_state          (RTDB)  cooldown coin/strategie (panchina) azzerati
+  * /account/paper_started_at (RTDB) inizio del paper: il bot lo riscrive al
+                                    riavvio (adesso, senza trade chiusi)
+  * /account/btc_inizio   (RTDB)  prezzo BTC del primo giorno: il bot lo
+                                    riscrive al giro orario dopo il riavvio
 
 Con --reset-learning azzera ANCHE i pesi appresi (strategy_weights) e i report
 'memory': il learning riparte davvero da zero (utile dopo un cambio timeframe, per
@@ -38,7 +42,15 @@ KEEP = [
 ]
 
 
-def main() -> int:
+#: (1 ott 2026, backlog D5) l'inizio del paper e il prezzo BTC di partenza:
+#: senza azzerarli, dopo un reset `giorni_paper` e il confronto «BTC tenuto dal
+#: primo giorno» partirebbero dal paper VECCHIO. A None il bot li riscrive da
+#: solo: `paper_started_at` alla riconciliazione dell'equity (bot/main.py, se
+#: manca), `btc_inizio` al giro orario (`TradingBot._btc_inizio_paper`).
+INIZIO_PAPER = ("/account/paper_started_at", "/account/btc_inizio")
+
+
+def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Reset dello stato paper trading.")
     ap.add_argument("--yes", action="store_true", help="conferma ed esegue la cancellazione")
     ap.add_argument("--equity", type=float, default=START_EQUITY,
@@ -46,7 +58,7 @@ def main() -> int:
     ap.add_argument("--reset-learning", action="store_true",
                     help="azzera ANCHE i pesi appresi (strategy_weights) e i report "
                          "'memory' -> il learning riparte da zero, non sbiadisce dal vecchio")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     fb = get_firebase()
     n_trades = len(fb.list_doc_ids("trades"))
@@ -55,7 +67,8 @@ def main() -> int:
     keep = [k for k in KEEP if not (args.reset_learning and k in ("strategy_weights", "memory"))]
 
     print("[reset] AZZERO:  /positions, collection 'trades', /risk_state, "
-          "/account/equity, /bot_status, /commands/kill_switch")
+          "/account/equity, /bot_status, /commands/kill_switch, "
+          "/account/paper_started_at, /account/btc_inizio (li riscrive il bot)")
     if args.reset_learning:
         print("[reset] AZZERO ANCHE (learning): strategy_weights/current, collection 'memory'")
     print(f"[reset] CONSERVO: {', '.join(keep)}")
@@ -74,6 +87,8 @@ def main() -> int:
     fb.set_rtdb("/bot_status", None)
     fb.set_rtdb("/commands/kill_switch", False)
     fb.set_rtdb("/adapt_state", None)   # cooldown coin/strategie azzerati
+    for path in INIZIO_PAPER:           # 1 ott 2026, D5: il bot li riscrive
+        fb.set_rtdb(path, None)
     if args.reset_learning:
         # updated_at=0 evita che la probation "trascini" i vecchi pesi: partono da zero
         fb.set_doc("strategy_weights", "current", {"weights": [], "updated_at": 0})

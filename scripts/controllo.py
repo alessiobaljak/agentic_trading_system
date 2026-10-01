@@ -16,6 +16,8 @@ due foto e, se manca quella di ieri, l'indice `/learning_indice` (RTDB, al
 massimo 3 letture; nessuna se il RTDB non risponde). Una lettura che fallisce
 lo dice nella sezione, il resto esce.
 `--json` resta com'era: solo il documento.
+Dal 1 ott 2026: la riga dei cambiamenti del learning dice che il confronto e'
+con il controllo di un'ora fa (J15), e sotto c'e' «PAPER CONTRO IL CASO» (K4).
 
 Sola lettura per default. `--publish` scrive il documento con
 `generato_da="ops"` (voce ops separata e commentata: e' un ripiego, il bot e'
@@ -92,21 +94,70 @@ def stampa(doc: dict) -> None:
               f"verificata {_quando(ct.get('verificata_at'))})")
 
     att = ((doc.get("learning") or {}).get("attivo") or {})
+    # 1 ott 2026 (backlog J15): il campo si chiama `cambiamenti_24h` ma confronta
+    # con l'impronta del controllo PRECEDENTE, riscritta ogni ora: e' «rispetto
+    # a un'ora fa», non «rispetto a ieri». Il nome del campo resta (lo leggono
+    # la dashboard e il test di parita' dello schema); il testo dice il vero e
+    # rimanda alla STORIA DEL LEARNING, che confronta con le foto di ieri.
     cambi = att.get("cambiamenti_24h")
-    print("\nCAMBIAMENTI DEL LEARNING dal controllo precedente:")
+    print("\nCAMBIAMENTI DEL LEARNING rispetto al controllo di un'ora fa "
+          f"(precedente: {_quando(prec) if prec else 'nessuno'}). NON e' il confronto con "
+          "ieri: quello e' nella STORIA DEL LEARNING, in fondo")
     if cambi:
         for c in cambi:
             print(f"  - {c}")
+    elif isinstance(cambi, list) and not prec:
+        print("  nessun controllo precedente: niente con cui confrontare")
     elif isinstance(cambi, list):
-        print("  nessuno: nessun pezzo del learning ha cambiato decisione")
+        print("  nessuno nell'ultima ora: nessun pezzo del learning ha cambiato decisione")
     else:
         print("  non calcolati")
+
+    stampa_firma_del_caso(doc.get("paper") or {})
 
     manca = doc.get("manca") or []
     if manca:
         print("\nCOSA QUESTO CONTROLLO NON PUO' DARE:")
         for r in manca:
             print(f"  - {r.get('evidenza')}: {r.get('perche')} -> {r.get('come_avere')}")
+
+
+def stampa_firma_del_caso(paper: dict) -> None:
+    """PAPER CONTRO IL CASO (1 ott 2026, backlog K4): accanto ai numeri d'uscita
+    del paper che il documento porta gia' (quota di stop, stop d'ingresso e
+    d'uscita, massimo toccato mediano, vinti), quelli di un prezzo CASUALE con
+    le nostre uscite: costanti della simulazione del 30 set
+    (`scripts.trade_stats.CASO_30SET`), non ricalcolate. R medio e primo
+    target non sono nel documento: li stampa `trades`. Solo testo stampato."""
+    print("\nPAPER CONTRO IL CASO (prezzo casuale con le nostre uscite):")
+    try:
+        from scripts.trade_stats import CASO_30SET as caso, FONTE_CASO
+    except Exception as exc:  # noqa: BLE001
+        print(f"  riferimento non disponibile ({type(exc).__name__})")
+        return
+    if not isinstance(paper, dict) or paper.get("errore") or not paper.get("trades"):
+        print("  sezione paper senza trade in questo controllo: niente da confrontare")
+        return
+
+    def _p(v):
+        try:
+            return f"{float(v) * 100:.0f}%"
+        except (TypeError, ValueError):
+            return "n/d"
+    stop = next((u for u in (paper.get("uscite") or []) if u.get("motivo") == "stop_loss"), {})
+    cs = paper.get("stop") or {}
+    tot = cs.get("totale") or 0
+    iu = (f"{cs.get('sbagliati', 0) / tot * 100:.0f}/{cs.get('quasi', 0) / tot * 100:.0f}%"
+          if tot else "n/d")
+    mfe = (paper.get("mfe") or {}).get("mediana_r")
+    mfe = f"{float(mfe):.2f}R" if mfe is not None else "n/d"
+    print(f"  stop {_p(stop.get('quota'))} (caso {_p(caso['stop'])}) · stop d'ingresso/uscita "
+          f"{iu} (caso {caso['stop_ingresso'] * 100:.1f}/{caso['stop_uscita'] * 100:.1f}%) · "
+          f"massimo toccato mediano {mfe} (caso {caso['mfe_mediana_r']:.2f}R) · vinti "
+          f"{_p(paper.get('win_rate'))} (caso {_p(caso['vinti'])})")
+    print(f"  fonte del caso: {FONTE_CASO}. Vicino al caso = le classi d'uscita sono la "
+          "forma delle regole, non una diagnosi. R medio (caso "
+          f"{caso['r_medio']:+.3f}) e primo target (caso {_p(caso['primo_target'])}): in `trades`")
 
 
 def _foto(fb, giorno: str):

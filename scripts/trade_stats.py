@@ -10,8 +10,11 @@ contemporanee al tetto) o i SEGNALI (poche aperture al giorno):
   * posizioni CONTEMPORANEE: massimo e media pesata nel tempo (sweep entry/exit)
   * coin e strategie distinte coinvolte
   * DIREZIONE: long vs short, incrociata col regime all'apertura
+  * CONTI IN R (1 ott 2026, K8): gli stessi gruppi in R, tutto e dal 27 set
+  * PAPER CONTRO IL CASO (1 ott 2026, K4): accanto ai numeri d'uscita, quelli
+    di un prezzo casuale con le nostre uscite (costanti del 30 set)
 
-L'ultimo blocco nasce da una domanda del proprietario (18 settembre) a cui nessun
+Il blocco DIREZIONE nasce da una domanda del proprietario (18 settembre) a cui nessun
 report sapeva rispondere: «come e' possibile che in una giornata di rialzo abbiamo
 aperto 4 posizioni su 5 short?». Il conteggio esisteva solo nella dashboard, a
 occhio, e nessuno lo incrociava col regime ne' col PnL — cioe' mancava proprio il
@@ -149,6 +152,174 @@ def print_direction_report(rep: dict) -> None:
 
 
 # --------------------------------------------------------------------------- #
+# I CONTI IN R (1 ott 2026, backlog K8)                                        #
+# --------------------------------------------------------------------------- #
+# Le righe in USDT qui sopra (long/short, regime, trend) e i conti per
+# strategia mescolano size diverse: piena, mezza col freno, ridotta per le
+# declassate. E mescolano il periodo del difetto della sessione (J13): fino al
+# 26 set -77,93 USDT, dal 27 set +10,19 (ops/results/0371). «Regime neutro
+# -58,30» diceva soprattutto questo. Qui gli stessi gruppi in R, che mette ogni
+# trade sulla stessa scala (quanto ha reso per ogni unita' di rischio preso
+# all'apertura), con due colonne: tutto, e solo i trade entrati dopo il
+# difetto. Le righe in USDT restano: questo blocco sta accanto, non al posto.
+#: quante strategie si mostrano per nome nel blocco in R (le altre in una riga)
+R_STRATEGIE_MAX = 8
+#: le righe del blocco: (gruppo, chiave, etichetta) nell'ordine di stampa
+_REGIMI_R = ("bull_trending", "bear_trending", "sideways", "high_uncertainty", "ignoto")
+_TREND_R = (("in_trend", "in trend"), ("contro", "CONTROTREND"),
+            ("neutro", "regime neutro"), ("ignoto", "regime ignoto"))
+_CONTESTO_R = ("long_con", "long_contro", "short_con", "short_contro", "ignoto")
+
+
+def _rischio_iniziale(t: dict) -> float | None:
+    """|entry - stop originale| x size, cioe' il denominatore di
+    `drift.r_multiplo` (stesso stop, stessa size). None se non si sa."""
+    from bot.learning.drift import stop_originale
+    stop = stop_originale(t)
+    if stop is None:
+        return None
+    try:
+        rischio = abs(float(t.get("entry_price") or 0) - stop) * float(t.get("size") or 0)
+    except (TypeError, ValueError):
+        return None
+    return rischio if rischio > 0 else None
+
+
+def _r_stat(valori: list[float], senza_r: int) -> dict:
+    return {"n": len(valori), "senza_r": senza_r,
+            "r_medio": round(sum(valori) / len(valori), 3) if valori else None,
+            "r_tot": round(sum(valori), 2) if valori else None}
+
+
+def conti_in_r_report(trades: list[dict], dal_ts: float | None = None) -> dict:
+    """Gli stessi gruppi delle righe in USDT, in R (`drift.r_multiplo`: pnl /
+    (|entry - stop originale| x size)), per «tutto» e per i soli trade ENTRATI
+    da `dal_ts` (default: 27 set 19:40 UTC, la fine del difetto della sessione,
+    lo stesso taglio della regola del 3 ott). Per ogni riga: n (trade con R), R
+    medio, R totale, senza_r (trade del gruppo senza stop originale o size:
+    fuori dall'R, ma contati). Righe in piu': i costi stimati in R
+    (`total_cost_usdt` / rischio) e il lordo in R (`gross_pnl_usdt` / rischio),
+    solo sui trade che portano quel campo. Pura."""
+    from bot.learning.drift import r_multiplo
+    from bot.learning.referti import casella_contesto, contesto_btc_del_trade
+
+    dal_ts = DAL_REGOLA_3_OTT if dal_ts is None else dal_ts
+    # (gruppo, chiave) -> {"tutto": ([r], senza), "dal": ([r], senza)}
+    acc: dict[tuple, dict[str, list]] = defaultdict(lambda: {"tutto": [[], 0], "dal": [[], 0]})
+    per_strategia_n: dict[str, int] = defaultdict(int)
+
+    def _metti(chiave, colonna, r):
+        cella = acc[chiave][colonna]
+        if r is None:
+            cella[1] += 1
+        else:
+            cella[0].append(r)
+
+    for t in trades or []:
+        d = _dir(t)
+        r = r_multiplo(t)
+        rischio = _rischio_iniziale(t)
+        ts = _entry_ts(t)
+        colonne = ["tutto"] + (["dal"] if ts is not None and ts >= dal_ts else [])
+        reg = _regime(t)
+        if reg is None:
+            trend = "ignoto"
+        elif d in ("long", "short"):
+            a = Orchestrator._trend_align(reg, d)
+            trend = "in_trend" if a > 0 else "contro" if a < 0 else "neutro"
+        else:
+            trend = None
+        gid = str(t.get("strategy") or "?")
+        per_strategia_n[gid] += 1
+        chiavi = [("tutte", "tutte"), ("strategia", gid)]
+        if d in ("long", "short"):
+            chiavi += [("direzione", d), ("regime", reg.value if reg else "ignoto"),
+                       ("contesto", casella_contesto(d, contesto_btc_del_trade(t)))]
+            if trend is not None:
+                chiavi.append(("trend", trend))
+        for col in colonne:
+            for k in chiavi:
+                _metti(k, col, r)
+            # i costi e il lordo, sullo stesso rischio: solo dove il campo c'e'
+            for nome, campo in (("costi", "total_cost_usdt"), ("lordo", "gross_pnl_usdt")):
+                v = t.get(campo)
+                try:
+                    v = float(v) if v is not None else None
+                except (TypeError, ValueError):
+                    v = None
+                _metti(("soldi", nome), col, None if (v is None or rischio is None) else v / rischio)
+
+    def _riga(k):
+        b = acc.get(k) or {"tutto": [[], 0], "dal": [[], 0]}
+        return {c: _r_stat(b[c][0], b[c][1]) for c in ("tutto", "dal")}
+
+    strategie = sorted(per_strategia_n, key=lambda g: (-per_strategia_n[g], g))
+    mostrate = strategie[:R_STRATEGIE_MAX]
+    altre: dict[str, dict] = {}
+    for col in ("tutto", "dal"):
+        vals, senza = [], 0
+        for g in strategie[R_STRATEGIE_MAX:]:
+            vals += acc[("strategia", g)][col][0]
+            senza += acc[("strategia", g)][col][1]
+        altre[col] = _r_stat(vals, senza)
+    return {
+        "dal_ts": dal_ts,
+        "tutte": _riga(("tutte", "tutte")),
+        "costi": _riga(("soldi", "costi")),
+        "lordo": _riga(("soldi", "lordo")),
+        "direzione": {d: _riga(("direzione", d)) for d in ("long", "short")},
+        "regime": {g: _riga(("regime", g)) for g in _REGIMI_R if ("regime", g) in acc},
+        "trend": {k: _riga(("trend", k)) for k, _ in _TREND_R if ("trend", k) in acc},
+        "contesto": {c: _riga(("contesto", c)) for c in _CONTESTO_R if ("contesto", c) in acc},
+        "strategia": {g: _riga(("strategia", g)) for g in mostrate},
+        "altre_strategie": {"n": len(strategie) - len(mostrate), **altre},
+    }
+
+
+def _cella_r(s: dict) -> str:
+    if not s["n"]:
+        return f"{0:>4} {'—':>7} {'—':>7} {s['senza_r']:>3}"
+    return f"{s['n']:>4} {s['r_medio']:>+7.3f} {s['r_tot']:>+7.2f} {s['senza_r']:>3}"
+
+
+def print_conti_in_r(rep: dict) -> None:
+    print("\nCONTI IN R (K8): R = pnl / (|entry - stop originale| x size), come DECLASSATE: "
+          "size diverse pesano uguale. Stessi trade delle righe in USDT. «dal 27/9» = "
+          "entrati dal 27 set 19:40 UTC (fine del difetto della sessione)")
+    print(f"  {'':<16} {'-------- tutto ---------':>24} ‖ {'------- dal 27/9 -------':>24}")
+    print(f"  {'':<16} {'n':>4} {'R medio':>7} {'R tot':>7} {'s/R':>3} ‖ "
+          f"{'n':>4} {'R medio':>7} {'R tot':>7} {'s/R':>3}")
+
+    def _p(etichetta, riga):
+        print(f"  {etichetta:<16} {_cella_r(riga['tutto'])} ‖ {_cella_r(riga['dal'])}")
+
+    _p("TUTTE (netto)", rep["tutte"])
+    _p("  lordo", rep["lordo"])
+    _p("  costi stimati", rep["costi"])
+    print(" direzione")
+    for d, riga in rep["direzione"].items():
+        _p(d, riga)
+    print(" regime all'apertura")
+    for g, riga in rep["regime"].items():
+        _p(g, riga)
+    print(" rispetto al trend")
+    for k, etichetta in _TREND_R:
+        if k in rep["trend"]:
+            _p(etichetta, rep["trend"][k])
+    print(" direzione x BTC (con = nel verso di BTC)")
+    for c, riga in rep["contesto"].items():
+        _p(c, riga)
+    print(f" per strategia (le prime {R_STRATEGIE_MAX} per trade)")
+    for g, riga in rep["strategia"].items():
+        _p(g, riga)
+    alt = rep["altre_strategie"]
+    if alt["n"]:
+        _p(f"altre {alt['n']}", alt)
+    print("  n = trade con R; s/R = senza stop originale o size (fuori dall'R; per lordo e "
+          "costi anche senza il campo); netto = lordo - costi (costi stimati dal modello)")
+
+
+# --------------------------------------------------------------------------- #
 # Il selettore in OMBRA (25 set 2026, docs/disegno_cervello.md punto 2 passo 2) #
 # --------------------------------------------------------------------------- #
 #: quanti trade con p servono prima di leggere la calibrazione sul paper (dal
@@ -256,6 +427,87 @@ def print_selettore_ombra(rep: dict) -> None:
     else:
         print(f"  correlazione p/esito: {'— (serie costante)' if c is None else f'{c:+.3f}'}")
     print(f"  regola: {rep['regola']}")
+
+
+# --------------------------------------------------------------------------- #
+# LA FIRMA DEL CASO (1 ott 2026, backlog K4)                                   #
+# --------------------------------------------------------------------------- #
+#: cosa darebbe un prezzo CASUALE con le nostre regole d'uscita. COSTANTI DI
+#: RIFERIMENTO, NON ricalcolate qui: vengono dalla simulazione del 30 set
+#: (docs/revisione_sospese_30set.md, sezione 4 punto 1; docs/backlog.md K4).
+#: Stanno accanto ai numeri del paper perche' le classi «ingresso/uscita» e
+#: «senza primo target» hanno la stessa forma anche senza alcun vantaggio:
+#: senza questo metro sembrano una diagnosi.
+CASO_30SET = {"stop": 0.46, "stop_ingresso": 0.485, "stop_uscita": 0.515,
+              "mfe_mediana_r": 0.81, "primo_target": 0.17, "vinti": 0.54,
+              "r_medio": -0.067}
+FONTE_CASO = ("simulazione del 30 set su prezzo casuale, docs/revisione_sospese_30set.md "
+              "e backlog K4: costanti, non ricalcolate")
+
+
+def _primo_gradino_del_trade(t: dict):
+    """Il primo gradino della scala di QUESTO trade (`scale_r_mults`), None se
+    manca: `metrics.classi_stop` allora usa quello globale (come `tocca_tp1`)."""
+    m = t.get("scale_r_mults")
+    return min(float(x) for x in m) if m else None
+
+
+def firma_del_caso_report(trades: list[dict]) -> dict:
+    """I numeri del paper che la revisione del 30 set ha messo accanto al caso:
+    quota di stop sulle uscite, stop d'ingresso (mfe < 0,25R) e d'uscita (fra
+    0,25R e il primo gradino) sul totale degli stop (`metrics.classi_stop`,
+    gradino del trade), massimo toccato mediano (`mfe_r`), quota arrivata al
+    primo target (`drift.tocca_tp1`), vinti, R medio (`drift.r_multiplo`). Pura."""
+    from bot.learning.drift import r_multiplo, tocca_tp1
+    from bot.learning.metrics import _ESITI_STOP, classi_stop
+
+    rows = list(trades or [])
+    n = len(rows)
+    cs = classi_stop(rows, _primo_gradino_del_trade)
+    mfe = [float(t["mfe_r"]) for t in rows if t.get("mfe_r") is not None]
+    tp1 = [x for x in (tocca_tp1(t) for t in rows) if x is not None]
+    rs = [r for r in (r_multiplo(t) for t in rows) if r is not None]
+
+    def _q(a, b):
+        return round(a / b, 3) if b else None
+    return {"n": n,
+            "stop": _q(sum(1 for t in rows if str(t.get("exit_reason", "")) in _ESITI_STOP), n),
+            "stop_n": cs["totale"],
+            "stop_ingresso": _q(cs["sbagliati"], cs["totale"]),
+            "stop_uscita": _q(cs["quasi"], cs["totale"]),
+            "mfe_mediana_r": round(median(mfe), 2) if mfe else None,
+            "primo_target": _q(sum(1 for x in tp1 if x), len(tp1)),
+            "vinti": _q(sum(1 for t in rows if float(t.get("pnl", 0) or 0) > 0), n),
+            "r_medio": round(mean(rs), 3) if rs else None, "r_n": len(rs)}
+
+
+def _pct(v) -> str:
+    return "n/d" if v is None else f"{v * 100:.0f}%"
+
+
+def print_firma_del_caso(rep: dict) -> None:
+    c = CASO_30SET
+    print(f"\nPAPER CONTRO IL CASO (K4): il paper ({rep['n']} trade) accanto a un prezzo "
+          f"CASUALE con le nostre uscite ({FONTE_CASO})")
+    print(f"  {'':<30} {'paper':>9} {'caso':>11}")
+    si, su = rep["stop_ingresso"], rep["stop_uscita"]
+    paper_iu = "n/d" if si is None else f"{si * 100:.0f}/{su * 100:.0f}%"
+    righe = (
+        ("stop (sulle uscite)", _pct(rep["stop"]), _pct(c["stop"])),
+        (f"stop ingresso/uscita (su {rep['stop_n']})", paper_iu,
+         f"{c['stop_ingresso'] * 100:.1f}/{c['stop_uscita'] * 100:.1f}%"),
+        ("massimo toccato mediano",
+         "n/d" if rep["mfe_mediana_r"] is None else f"{rep['mfe_mediana_r']:.2f}R",
+         f"{c['mfe_mediana_r']:.2f}R"),
+        ("arrivati al primo target", _pct(rep["primo_target"]), _pct(c["primo_target"])),
+        ("vinti", _pct(rep["vinti"]), _pct(c["vinti"])),
+        (f"R medio (su {rep['r_n']})",
+         "n/d" if rep["r_medio"] is None else f"{rep['r_medio']:+.3f}", f"{c['r_medio']:+.3f}"),
+    )
+    for nome, p, k in righe:
+        print(f"  {nome:<30} {p:>9} {k:>11}")
+    print("  vicino al caso = «stop d'ingresso/uscita» e «senza primo target» sono la forma "
+          "delle uscite, non una diagnosi")
 
 
 def print_contesto_btc(per_contesto: dict | None) -> None:
@@ -540,6 +792,12 @@ def keep_per_strategia_report(trades: list[dict]) -> list[dict]:
     return righe
 
 
+#: (1 ott 2026) le righe per nome della tabella del keep: almeno 2 verdetti,
+#: al massimo 20 strategie; le altre sommate in una riga
+KEEP_RIGHE_MIN_VERDETTI = 2
+KEEP_RIGHE_MAX = 20
+
+
 def print_keep_per_strategia(trades: list[dict]) -> None:
     print(f"\nKEEP PER STRATEGIA (proposta dal vissuto: >= {KEEP_STRATEGIA_MIN_VERDETTI} "
           f"verdetti trailing sul timeframe del bot; 0.25 se prematuri >= 60% e almeno "
@@ -551,12 +809,26 @@ def print_keep_per_strategia(trades: list[dict]) -> None:
         return
     print(f"  {'strategia':<14} {'verdetti':>8} {'prematuri':>16} {'protetti':>8} "
           f"{'proposta':>8} {'miss medio':>11}")
-    for r in righe:
+    # 1 ott 2026 (K8, spazio): con 76 strategie la tabella era ~3,5 KB e cresce
+    # ogni giorno, mentre l'agente ops taglia oltre 20.000 caratteri. Per nome
+    # solo le strategie con almeno KEEP_RIGHE_MIN_VERDETTI verdetti (al massimo
+    # KEEP_RIGHE_MAX): con un verdetto solo nessuna proposta e' vicina (ne
+    # servono KEEP_STRATEGIA_MIN_VERDETTI). Le altre in una riga, coi totali.
+    mostrate = [r for r in righe if r["n"] >= KEEP_RIGHE_MIN_VERDETTI][:KEEP_RIGHE_MAX]
+    nascoste = [r for r in righe if r not in mostrate]
+    for r in mostrate:
         prem = f"{r['prematuri']} (rumore {r['prematuri_rumore']})"
         prop = f"{r['proposta']:g}" if r["proposta"] is not None else "-"
         miss = f"{r['miss_medio']:.2f}" if r["miss_medio"] is not None else "n/d"
         print(f"  {r['strategia']:<14} {r['n']:>8} {prem:>16} {r['protetti']:>8} "
               f"{prop:>8} {miss:>11}")
+    if nascoste:
+        print(f"  + altre {len(nascoste)} strategie con meno verdetti: "
+              f"{sum(r['n'] for r in nascoste)} verdetti, prematuri "
+              f"{sum(r['prematuri'] for r in nascoste)}, protetti "
+              f"{sum(r['protetti'] for r in nascoste)}"
+              + (f", {sum(1 for r in nascoste if r['proposta'] is not None)} con proposta"
+                 if any(r["proposta"] is not None for r in nascoste) else ""))
     print("  miss medio = frazione del tragitto entry->TP lasciata sul tavolo all'uscita "
           "(0 = al TP, 1 = all'entrata): misura, non regola")
 
@@ -634,6 +906,8 @@ def main() -> int:
     print("trade e' limitato dai SEGNALI, non dalla liquidita'. Trade/giorno ~= segnali/giorno.")
 
     print_direction_report(direction_report(trades))
+    # I CONTI IN R (1 ott 2026, K8): gli stessi gruppi, in R e col taglio al 27 set
+    print_conti_in_r(conti_in_r_report(trades))
 
     # ---- I REFERTI (post_mortem) aggregati -------------------------------------
     # Scritti dal bot alla chiusura (bot/risk/setup_check.py), aggregati da
@@ -691,6 +965,9 @@ def main() -> int:
         else:
             print("\nREFERTI: nessun trade porta ancora `post_mortem` (si scrive sui "
                   "trade chiusi DOPO il rilascio del 23 set)")
+    # LA FIRMA DEL CASO (1 ott 2026, K4): accanto alle classi degli stop, cosa
+    # darebbe un prezzo casuale con le nostre uscite (costanti del 30 set)
+    print_firma_del_caso(firma_del_caso_report(trades))
     print_contesto_btc(doc.get("per_contesto"))
 
     # ---- LE SERIE DI PERDITE per strategia (freno di serie) --------------------
