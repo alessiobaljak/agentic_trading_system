@@ -2534,3 +2534,26 @@ risparmiati; rischio effettivo medio 0,12% contro 0,21% (il quarto agisce, a met
 differenza. Ombra AI: i trade che avrebbe vetato −0,100R (85) contro +0,226R (27) dove era d'accordo,
 diff −0,326 ±0,360 — vicino al margine, a favore dell'AI. Origine: tutti i 164 trade da strategie
 casuali o mutate (nessun trade da un'idea AI, una variante o l'intorno).
+
+### 1 ottobre, pomeriggio: stella polare, backlog in dashboard (J2), report giornaliero
+
+Richiesta del proprietario in 5 punti, uno alla volta.
+1. **Stella polare** in CLAUDE.md: oltre a massimizzare i profitti, ogni giorno il sistema deve
+   essere un passo più vicino, anche in ciò che abbiamo CAPITO; ogni azione risponde a «cosa ci
+   avvicina?» e «cosa abbiamo capito oggi?»; una funzione senza misura del contributo non è utile.
+2. **J2:** `bot/learning/backlog_doc.py` legge `docs/backlog.md` (nuovo gruppo 0 «Aspettano il tuo
+   sì»), `scripts/report_giornaliero.py --pubblica` lo scrive in `dashboard/backlog` e `/backlog`
+   dopo ogni giro del gate (lanciato dalla discovery in un processo a parte, 10 minuti al massimo).
+   Riquadro «Aspettano il tuo sì» nella scheda Controllo. Nessuna copia da aggiornare a mano.
+3. **Le funzioni servono?** (vedi la sezione di stasera sopra).
+5. **Report giornaliero:** `bot/learning/report.py`, nove sezioni FISSE (in breve; il paper ieri;
+   come va il gate; cosa ci dicono i dati — ingressi, uscite e trailing, stop, rischio, direzione;
+   le funzioni servono?; cosa abbiamo capito; cosa è cambiato nel sistema; aspetta il tuo sì e
+   prossime letture; salute e costi), pubblicato dopo ogni giro del gate in
+   `dashboard/report_giornaliero`, `/report_giornaliero` e `report_giornaliero/{giorno}` (storia).
+   Prima scheda della dashboard («Report»). Fonti nuove: `docs/capito.md` (cosa abbiamo capito,
+   scritto ogni mattina dal controllo) e `docs/letture.md` (il calendario delle letture). Letture
+   Firestore in più: ~1.700 al giorno (stima, quota 50.000). La routine del mattino segue la stessa
+   struttura, scrive `docs/capito.md` e mette le proposte nel gruppo 0 del backlog. Non verificato
+   ancora sulla macchina: la prima pubblicazione arriva alla fine del prossimo giro del gate; la
+   riga `report-giornaliero` per ripubblicare subito va aggiunta a mano alla lista bianca.
