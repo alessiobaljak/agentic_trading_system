@@ -919,6 +919,135 @@ def print_soglia_wr(rep: dict | None) -> None:
           "soglia a 0,45 e' una modifica del gate: dopo le letture del 7-14 ott, col numero")
 
 
+# --------------------------------------------------------------------------- #
+# COSA SAREBBE SUCCESSO SUL PAPER con stop giornaliero e freno di serie        #
+# (1 ott 2026, domanda del proprietario su H3 e H4, parcheggiate il 25 set)    #
+# --------------------------------------------------------------------------- #
+# Sola misura: rigioca i trade VERI del paper con una regola in piu' e dice
+# quanto sarebbe cambiato il risultato. Approssimazioni dichiarate: un trade
+# saltato non libera posto per altri (i trade del paper sono quelli che il bot
+# ha aperto davvero); la size dimezzata dimezza il PnL di quel trade. Nessuna
+# regola cambia qui: le due voci restano parcheggiate finche' il proprietario
+# non le riprende, e una modifica passerebbe dal gate (portafoglio simulato).
+#: l'equity con cui e' partito il paper (929,18 + 70,82 di perdite, ops 0387)
+EQUITY_INIZIO_PAPER = 1000.0
+
+
+def _uscita_ts(t: dict) -> float | None:
+    v = t.get("exit_ts")
+    try:
+        return float(v) if v is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
+def rigioca_paper(trades: list[dict], stop_giorno: float = 0.0, serie_k: int = 0,
+                  serie_globale: bool = False, serie_mult: float = 0.5,
+                  equity0: float = EQUITY_INIZIO_PAPER) -> dict:
+    """I trade del paper con UNA regola in piu'. Pura.
+
+    * `stop_giorno` (es. 0,03): un trade NON si apre se le chiusure dello
+      stesso giorno (ora italiana) avvenute PRIMA del suo ingresso hanno gia'
+      perso almeno `stop_giorno` x l'equity di inizio giornata.
+    * `serie_k` (es. 4): un trade si apre a `serie_mult` della size se prima
+      del suo ingresso la sua strategia (o tutto il bot, con `serie_globale`)
+      ha chiuso `serie_k` perdite di fila; la serie si azzera alla prima
+      vincita. Si contano solo i trade aperti davvero nel rigioco (un trade
+      saltato non entra nella serie).
+    Ritorna PnL, trade saltati e ridotti, giorni fermati, drawdown massimo
+    sulla curva delle chiusure, e il PnL per giorno."""
+    righe = []
+    for t in trades or []:
+        en, ex = _entry_ts(t), _uscita_ts(t)
+        if en is None or ex is None:
+            continue
+        try:
+            pnl = float(t.get("pnl", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        righe.append((float(en), ex, pnl, str(t.get("strategy") or "?")))
+    righe.sort(key=lambda r: (r[0], r[1]))
+    aperti: list[tuple] = []           # (ex, pnl_effettivo, strategia, giorno_uscita)
+    chiusi: list[tuple] = []           # (ex, pnl_effettivo, strategia)
+    saltati = ridotti = 0
+    giorni_fermati: set[str] = set()
+    serie_strat: dict[str, int] = defaultdict(int)
+    serie_glob = 0
+    for en, ex, pnl, gid in righe:
+        # le chiusure avvenute prima di questo ingresso, in ordine di uscita
+        aperti.sort(key=lambda a: a[0])
+        while aperti and aperti[0][0] <= en:
+            c = aperti.pop(0)
+            chiusi.append(c[:3])
+            if c[1] < 0:
+                serie_strat[c[2]] += 1
+                serie_glob += 1
+            elif c[1] > 0:
+                serie_strat[c[2]] = 0
+                serie_glob = 0
+        giorno = giorno_locale(en)
+        if stop_giorno > 0:
+            inizio = equity0 + sum(p for e, p, _ in chiusi if giorno_locale(e) < giorno)
+            oggi = sum(p for e, p, _ in chiusi if giorno_locale(e) == giorno)
+            if -oggi >= stop_giorno * inizio - 1e-9:
+                saltati += 1
+                giorni_fermati.add(giorno)
+                continue
+        mult = 1.0
+        if serie_k > 0 and (serie_glob if serie_globale else serie_strat[gid]) >= serie_k:
+            mult = serie_mult
+            ridotti += 1
+        aperti.append((ex, pnl * mult, gid))
+    chiusi.extend(a[:3] for a in aperti)
+    chiusi.sort(key=lambda c: c[0])
+    eq = picco = equity0
+    dd = 0.0
+    per_giorno: dict[str, float] = defaultdict(float)
+    for ex, p, _ in chiusi:
+        eq += p
+        picco = max(picco, eq)
+        dd = max(dd, (picco - eq) / picco if picco > 0 else 0.0)
+        per_giorno[giorno_locale(ex)] += p
+    return {"pnl": round(eq - equity0, 2), "n": len(chiusi), "saltati": saltati,
+            "ridotti": ridotti, "giorni_fermati": len(giorni_fermati),
+            "max_dd_pct": round(dd * 100, 2),
+            "per_giorno": {g: round(v, 2) for g, v in sorted(per_giorno.items())}}
+
+
+#: gli scenari del rigioco: (etichetta, argomenti)
+SCENARI_PAPER = (
+    ("com'e' andato davvero", {}),
+    ("stop giornaliero 2%", {"stop_giorno": 0.02}),
+    ("stop giornaliero 3%", {"stop_giorno": 0.03}),
+    ("freno di serie: 4 perdite della strategia -> meta'", {"serie_k": 4}),
+    ("freno di serie: 3 perdite della strategia -> meta'", {"serie_k": 3}),
+    ("freno di serie: 4 perdite del bot -> meta'", {"serie_k": 4, "serie_globale": True}),
+    ("freno di serie: 3 perdite del bot -> meta'", {"serie_k": 3, "serie_globale": True}),
+)
+
+
+def print_rigioco_paper(trades: list[dict]) -> None:
+    print("\nCOSA SAREBBE SUCCESSO SUL PAPER (H3 stop giornaliero, H4 freno di serie): i trade "
+          "veri rigiocati con una regola in piu'. Solo misura, nessuna regola cambia")
+    base = rigioca_paper(trades)
+    if not base["n"]:
+        print("  nessun trade con apertura e chiusura note")
+        return
+    peggiori = sorted(base["per_giorno"].items(), key=lambda kv: kv[1])[:3]
+    print(f"  {'scenario':<52}{'PnL':>9}{'diff':>8}{'max dd':>8}{'saltati':>8}"
+          f"{'ridotti':>8}{'gg fermi':>9}  " + " ".join(g[5:] for g, _ in peggiori))
+    for nome, kw in SCENARI_PAPER:
+        r = rigioca_paper(trades, **kw)
+        gp = " ".join(f"{r['per_giorno'].get(g, 0.0):>+6.2f}" for g, _ in peggiori)
+        print(f"  {nome:<52}{r['pnl']:>+9.2f}{r['pnl'] - base['pnl']:>+8.2f}"
+              f"{r['max_dd_pct']:>7.2f}%{r['saltati']:>8}{r['ridotti']:>8}"
+              f"{r['giorni_fermati']:>9}  {gp}")
+    print(f"  equity di partenza {EQUITY_INIZIO_PAPER:.0f}; le ultime colonne sono i 3 giorni "
+          f"peggiori del paper vero (ora italiana). Approssimazione: un trade saltato non "
+          f"libera posto per altri; meta' size = meta' PnL. Giudica il gate (portafoglio), "
+          f"non il paper")
+
+
 def main() -> int:
     fb = get_firebase()
     trades_letti = fb.query_collection("trades", order_by="exit_ts")
@@ -1194,6 +1323,9 @@ def main() -> int:
         print(f"[soglia-wr] registro non letto ({str(exc)[:80]})")
         rep_wr = None
     print_soglia_wr(rep_wr)
+
+    # STOP GIORNALIERO E FRENO DI SERIE SUL PAPER (1 ott 2026, H3/H4): solo misura
+    print_rigioco_paper(trades)
 
     # IL PAPER ESPLORATIVO (25 set 2026, F1bis): in fondo, coi suoi numeri e il
     # metro dell'esperimento dalla storia del registro esplorativo.

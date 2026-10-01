@@ -97,6 +97,13 @@ def limiti_default() -> dict:
         "rischio_per_trade": RISCHIO_PER_TRADE,
         "tetto_giorno": 0.0,
         "netto_r_max": 0.0,
+        # IL FRENO DI SERIE (1 ott 2026, what-if di H4: il bot non lo ha):
+        # dopo `serie_k` perdite di fila della strategia (o di tutto il conto,
+        # con `serie_globale`) il rischio del trade nuovo si moltiplica per
+        # `serie_mult`. 0 = spento.
+        "serie_k": 0,
+        "serie_mult": 0.5,
+        "serie_globale": False,
     }
 
 
@@ -295,6 +302,12 @@ def simula(trades: list[dict], equity0: float, limiti: dict | None = None,
     netto_r_max = float(lim.get("netto_r_max") or 0.0)
     cooldown_s = float(lim.get("cooldown_ore") or 0.0) * 3600.0
     rischio_frac = float(lim.get("rischio_per_trade") or RISCHIO_PER_TRADE)
+    serie_k = int(lim.get("serie_k") or 0)
+    serie_mult = float(lim.get("serie_mult") if lim.get("serie_mult") is not None else 0.5)
+    serie_globale = bool(lim.get("serie_globale"))
+    serie_strat: dict[str, int] = defaultdict(int)   # strategia -> perdite di fila chiuse
+    serie_conto = [0]                                 # tutto il conto (lista: si muta dentro)
+    ridotti_serie = 0
 
     pronti, senza_stop = _prepara(trades, secondi_barra)
     saltati: dict[str, int] = {m: 0 for m in MOTIVI}
@@ -335,6 +348,12 @@ def simula(trades: list[dict], equity0: float, limiti: dict | None = None,
             equity_a_fine_giorno[giorno] = equity
             curva_chiusure.append(equity)
             per_direzione[p["direction"]]["pnl"] += p["pnl"]
+            if p["pnl"] < 0:
+                serie_strat[p["strategy"]] += 1
+                serie_conto[0] += 1
+            elif p["pnl"] > 0:
+                serie_strat[p["strategy"]] = 0
+                serie_conto[0] = 0
             if p["pnl"] < 0:
                 perdite_coin_giorno[(p["symbol"], giorno)] += -p["pnl"]
                 if cooldown_s > 0:
@@ -387,6 +406,11 @@ def simula(trades: list[dict], equity0: float, limiti: dict | None = None,
         if motivo:
             saltati[motivo] += 1
             continue
+
+        if serie_k > 0 and (serie_conto[0] if serie_globale
+                            else serie_strat[t["strategy"]]) >= serie_k:
+            rischio *= serie_mult
+            ridotti_serie += 1
 
         r = t["pnl_pct"] / t["stop_pct"]
         pos = {**t, "direction": direzione, "rischio": rischio, "r": r, "pnl": r * rischio}
@@ -442,6 +466,7 @@ def simula(trades: list[dict], equity0: float, limiti: dict | None = None,
         "saltati": saltati,
         "saltati_direzione": saltati_direzione,
         "giorni_fermati": len(giorni_fermati),
+        "ridotti_serie": ridotti_serie,
         "trade_al_giorno": {
             "min": min(conteggi) if conteggi else 0,
             "media": (sum(conteggi) / len(conteggi)) if conteggi else 0.0,

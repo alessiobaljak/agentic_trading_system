@@ -312,6 +312,45 @@ def stampa_wr_condizionato(sim: dict) -> None:
           f"(incondizionato {inc['wr']:.1%}, t {d4['t']:.2f})")
 
 
+#: i what-if SINGOLI di H3 e H4 (1 ott 2026): ognuno aggiunge UNA regola alla
+#: colonna «senza limiti», cosi' si vede l'effetto della sola regola
+WHATIF_SINGOLI = (
+    ("stop giornaliero 2%", {"tetto_giorno": 0.02}),
+    ("stop giornaliero 3%", {"tetto_giorno": 0.03}),
+    ("serie: 4 perdite della strategia -> meta'", {"serie_k": 4}),
+    ("serie: 3 perdite della strategia -> meta'", {"serie_k": 3}),
+    ("serie: 4 perdite del conto -> meta'", {"serie_k": 4, "serie_globale": True}),
+    ("serie: 3 perdite del conto -> meta'", {"serie_k": 3, "serie_globale": True}),
+)
+
+
+def stampa_whatif_singoli(trades: list[dict], equity0: float, base_lim: dict, base: dict,
+                          secondi_barra: float, periodo: tuple) -> None:
+    """STOP GIORNALIERO E FRENO DI SERIE, UNO ALLA VOLTA (1 ott 2026, domanda del
+    proprietario su H3 e H4): la colonna «senza limiti» con una regola sola in
+    piu'. ATTENZIONE alla base: sono le coppie validate OGGI, scelte anche su
+    questi giorni, quindi il livello e' ottimista (vedi FUORI CAMPIONE); conta
+    la DIFFERENZA fra le righe, non il PnL."""
+    peggiori = sorted(base["pnl_per_giorno"].items(), key=lambda kv: kv[1])[:3]
+    print("\n  STOP GIORNALIERO (H3) E FRENO DI SERIE (H4), UNO ALLA VOLTA sulla colonna "
+          "«senza limiti» (giorni UTC; conta la differenza, il livello e' ottimista)")
+    print(f"  {'scenario':<44}{'PnL':>10}{'diff':>9}{'max dd':>8}{'saltati':>8}"
+          f"{'ridotti':>8}{'gg fermi':>9}  " + " ".join(g[5:] for g, _ in peggiori))
+
+    def _riga(nome, r):
+        gp = " ".join(f"{r['pnl_per_giorno'].get(g, 0.0):>+8.0f}" for g, _ in peggiori)
+        print(f"  {nome:<44}{r['pnl_totale']:>+10.0f}{r['pnl_totale'] - base['pnl_totale']:>+9.0f}"
+              f"{r['max_drawdown_pct']:>7.2f}%{r['n_candidati'] - r['n_aperti'] - (base['n_candidati'] - base['n_aperti']):>8}"
+              f"{r.get('ridotti_serie', 0):>8}{r['giorni_fermati']:>9}  {gp}")
+
+    _riga("senza limiti (base)", base)
+    for nome, extra in WHATIF_SINGOLI:
+        _riga(nome, simula(trades, equity0, {**base_lim, **extra},
+                           secondi_barra=secondi_barra, periodo=periodo))
+    print("  saltati = trade in piu' non aperti rispetto alla base; ridotti = aperti a meta' "
+          "rischio. Solo misura: il bot non ha nessuna delle due regole")
+
+
 def lettura_diversification(sim: dict) -> str:
     dr = sim["diversification_ratio"]
     if dr is None:
@@ -2349,6 +2388,7 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"\n  FUORI CAMPIONE: saltata per un errore ({str(exc)[:120]}).")
 
     stampa_wr_condizionato(sims[0])
+    stampa_whatif_singoli(trades, args.equity, scenari[0], sims[0], secondi_barra, periodo)
     print(f"\n  {lettura_diversification(sims[0])}")
 
     testo = lettura(sims, intestazioni)
