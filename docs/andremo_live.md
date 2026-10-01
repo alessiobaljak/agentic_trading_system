@@ -2317,3 +2317,34 @@ spegnilo tu, F2 e J12 chiudile»), prese PRIMA che il `portafoglio` stampasse i 
 * **J12 chiusa, obiettivo raggiunto** («il paper entra dove entra il motore?»): 81% dei trade del
   paper con un ingresso del motore vicino (64 su 79, ops 0373), contro l'80% richiesto. Il filtro di
   data nello strumento `ingressi`, tenuto in memoria dal 28 set, non serve più.
+
+### 1 ottobre: pulizia del backlog (sì del proprietario: «pulisci il registro»)
+
+Il backlog teneva come memoria anche voci già fatte, contro la sua regola d'uscita. Tolte, col verdetto (il testo intero resta nella storia di git):
+
+**Fatte (12):**
+* **A1** — la protezione del profitto si arma prima (21 set).
+* **A2** — il break-even lo sceglie il gate anche per le generate (21 set).
+* **B2** — le strategie scritte a mano tolte dalla ricerca: 0 validate su 1.312 valutazioni (21 set).
+* **B2bis** — tolto il controllo su `rr` che scartava 14 proposte AI su 19 (21 set).
+* **B3** — l'AI legge perché le candidate vengono bocciate (autopsia, 21 set).
+* **G1** — tetto di rischio per direzione (3%) attivo nel bot.
+* **G2** — il portafoglio delle coppie insieme è il comando `portafoglio`, gira ogni mattina.
+* **G4** — 40 candidate casuali a giro invece di 100 (24 set); misurato dopo: 0,21-0,26% di passaggio contro 0,3% prima, nessun miglioramento visibile.
+* **D2** — i dati sintetici non entrano più di nascosto quando Binance non risponde.
+* **D3** — il modello AI è configurabile; sulla VPS lo sceglie il proprietario.
+* **E2** — le proposte AI non vengono più scartate (20 su 20 accettate).
+* **E3** — Binance 451 dai runner GitHub: aggirato.
+
+**Non servono (10, dalla revisione del 30 set, `docs/revisione_sospese_30set.md`):**
+* **A3** — il rischio per trade che dipende dalla volatilità non cambia nessun risultato in R; è una scelta neutra (revisione del 30 set).
+* **B1** — far inventare formule all'AI: lo stesso vocabolario a 1 ora passa lo 0,94% contro lo 0,20% a 15 minuti (ops 0363): il limite sono i costi, non le parole.
+* **B4** — l'AI che legge i referti: la stessa domanda su 92.257 trade storici non trova condizioni utili (ops 0368), e su 143 referti anche il caso produce un «filo comune» apparente.
+* **F1** — accendere il selettore: NON BATTE «apri tutto» su 92.257 trade, 0 finestre su 3 (ops 0368); resta in ombra e si misura in F1ter.
+* **G5** — sopravvivenza dell'universo: nessuna correzione semplice; resta un avvertimento quando si leggono i backtest.
+* **H1** — t ≥ 3 sulle finestre: la mediana delle validate è 2,23 e la misura è sui dati usati per scegliere; sostituita da K2 (t dell'ultimo esame, regola decisa il 30 set).
+* **H2** — holdout diverso per ogni candidata: non riduce la fortuna della singola e toglie l'esame sul mercato recente; la soglia a 10 trade ritirata il 29 set; l'artefatto dello «scarto 0,000» passa in K7.
+* **I2** — spegnere il freno globale in paper non cambia nessun R; il difetto vero (uscita irraggiungibile) è K6.
+* **I6** — il tetto di 5 posizioni toglierebbe trade in ordine d'arrivo, non i peggiori; 0 rifiuti per rischio su 71 (ops 0370).
+* **I9** — isteresi del keep 0,75: 5 trade in tutto a −0,14R (ops 0358), e il gate sceglie il keep alto anche su un prezzo casuale.
+* **E4, parte del filtro `min_adx`** — l'ADX è la variabile che conta meno, ultima su 18 (ops 0368); E4 resta solo per le strategie gemelle.

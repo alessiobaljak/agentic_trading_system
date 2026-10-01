@@ -25,6 +25,15 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 
 ---
 
+**INDICE AL 1 OTT (dopo la pulizia: 48 voci).** Il dettaglio di ogni voce è più sotto.
+
+| Stato | Voci | Cosa serve |
+|---|---|---|
+| **Aperte (16)** | K2 (spazio del registro), D6 (leve della spesa AI), D7 (modello del runner GitHub), E4 (strategie gemelle), K7 (dati sbagliati all'AI), K8 (conti in R, costi), G3 (voto minimo nel gate), G6 (recenza nell'approvazione), B8 (varianti giudicate senza il paper), C4 (annunci USA), I4bis, I5, J1, J3, J4, J5, J15, D1, D5 | vedi ogni voce: chi decide e quando |
+| **In misura (21)** — si leggono da sole | 1 ott: J14 (letture Firebase), D6 (primo giorno intero di spesa) · 3 ott: A4 (declassate contro attive) · 7 ott: H5, K1 (selezione o esecuzione) · ~10 ott: J7, J9, I4ter · ~14-15 ott: H5 (rilettura), K3 (gruppo di controllo) · ~18 ott: J11, J13, C1 · ~26 ott: J6 · metà nov: K2 (regola H1) · senza data: F1bis (100 trade esplorativi), F1ter (selettore), I1 (panchina), I3, I4 (trailing), J8, J10, E1 | niente: leggere il numero alla data |
+| **Scoperte da ricordare (4)** | K4 (il paper ha la firma del caso), K5 (il quarto di size non agisce), K6 (uscita del freno irraggiungibile), K8 (costi e scivolamento: prima di soldi veri) | prima di un passaggio a soldi veri |
+| **Parcheggiate dal proprietario (6)** | B5, B6, B7 (dati esterni), H3 (stop giornaliero), H4 (freno di serie), J2 | solo se il proprietario le riprende |
+
 **Stato al 30 set (rilettura completa delle 70 voci, verificata contro i risultati ops).**
 Conteggio dopo la pulizia del 30 set (62 voci; F2 e J12 chiuse la sera del 30 set, verdetto nel
 diario), H5 fatta il 30 set e in misura fino al 7 ott, 18 in
@@ -177,7 +186,7 @@ difetto della sessione (fino al 26 set −77,93, dal 27 set +10,19, ops 0371): v
 taglio al 27 set. I costi pesano 29,66 sui −68,65; motore e paper chiudono lo stop al suo prezzo
 esatto, senza scivolamento (`executor.py:549-563`): da verificare prima del denaro vero.
 
-### Verdetti della revisione sulle voci esistenti (il proprietario decide se toglierle)
+### Verdetti della revisione sulle voci esistenti — APPLICATI il 1 ott (voci tolte, verdetto nel diario)
 Non servono: F2 (70-77% delle coppie a 1-2 conferme non ripassa; il quarto di size non limita il
 danno, K5; la domanda la risolve K3), FR-leva (il −0,23R viene dal periodo del difetto), H1 con
 t ≥ 3 sulle finestre, H2 seconda metà, I9, A3, E4-adx (ADX ultima su 18 variabili, ops 0368), B4,
@@ -190,77 +199,6 @@ conti in R, riga «caso» nel controllo, pulizia dei dati all'AI, D6-IPOTESI (co
 origine), I6-misura, E4-gemelle.
 
 ## A. Uscite — dopo il verdetto dei 40 trade
-
-### A1. La protezione del profitto si accende troppo tardi
-**Stato:** **FATTO il 21 set sera** (`lock_anchor` in `exit_logic`, usata da motore ed executor: ancora al PRIMO gradino). Il numero che l'ha deciso: 13 stop su 21 erano trade andati a favore (mfe mediana 0,69R) senza toccare il primo gradino, e uscivano a −1R pieno. Le coppie validate tengono i passaggi e vengono rigiudicate con la regola nuova (registro misto).
-
-Il profit-lock si arma a metà della distanza dall'**ultimo** gradino. Con la scala
-2/4/6 significa **3R**, mentre il primo incasso è a 2R: fra 2R e 3R il 70% della
-posizione è protetto solo al pareggio.
-
-```
-mfe mediana (15 trade) ..... 0,85R
-trade oltre 3R ............. 7%
-```
-
-I "runner" che un floor più basso taglierebbe sono **rari**; le inversioni nella
-zona scoperta sono il caso comune. Proposta del proprietario: stop al primo
-gradino una volta superato. Resa validabile: **ancorare il lock al PRIMO gradino
-invece che all'ultimo** (su 2/4/6 si armerebbe a 1R).
-
-**Serve:** farlo nel gate, rivalidare, poi il paper. **Non** prima dei 40 trade.
-
-### A2. Il break-even non è validato per le strategie generate
-**Stato:** **FATTO il 21 set sera** — `evaluate_spec` prova, sulla scala scelta, anche l'alternativa al default di `sl_to_breakeven` (una passata in più, non il doppio) e scrive la scelta in `last_params`; il bot la legge già (`breakeven_after_tp1`). Le coppie esistenti restano sul default finché non vengono rigiudicate.
-
-`breakeven_after_tp1` dice che «lo decide il gate per ogni coppia». Per le generate
-— cioè **tutte e 52 le validate** — non lo decide mai: non hanno griglia di ricerca,
-e il passaggio che sceglie la scala dei TP non sceglie anche questo flag. Girano
-tutte sul default globale `true`.
-
-È lo stesso buco già chiuso per la scala (*«le generate non hanno grid → senza
-questo passo restavano per sempre sulla scala globale»*), lasciato indietro su un
-parametro.
-
-**Serve:** estendere il ciclo che sceglie la scala perché provi anche
-`sl_to_breakeven`. Non è ovvio che convenga: protegge, ma con mfe mediana 0,85R il
-prezzo ritocca l'entrata di continuo e ogni volta chiude il 70% a zero.
-
-### A3. La manopola del rischio non fa quello che dice — e non come credevamo
-**Stato:** aperto · emerso 18 set · **corretto il 21 set: la regola era scritta al contrario**
-
-Con il cap per-posizione attivo, il rischio effettivo **non è fisso e non cala con
-stop larghi**. Dalla formula in `bot/risk/risk_manager.py:147`:
-
-```
-rischio effettivo = min( leva × cap_posizione × ampiezza_stop ,  rischio_impostato )
-                  = min( 2 × 0,10 × ampiezza_stop , 1% )
-```
-
-cioè **cresce con l'ampiezza dello stop** finché non tocca l'1% impostato:
-
-```
-stop 1,0%  →  0,20%       stop 4,4%  →  0,88%
-stop 2,0%  →  0,40%       stop 5,0%  →  1,00%  (il cap smette di mordere)
-stop 3,0%  →  0,60%       stop 8,0%  →  1,00%
-```
-
-La voce diceva *«più lo stop è largo meno si rischia»*: **è l'opposto**. Il ~0,35%
-osservato il 18 settembre non è il comportamento del sistema, è il comportamento
-del sistema **su coppie con stop stretti**.
-
-**Il numero misurato che lo ha fatto emergere** (21 set, USELESSUSDT, due short
-consecutivi di `gen_2031005e`): −8,25 e −8,65 su un'equity di ~970$, cioè **0,85% e
-0,89%** — praticamente l'intero 1% impostato, non un terzo. Lo stop era largo ~4,3%,
-normale per l'ATR di una micro-cap sul timeframe da 15 minuti.
-
-**Conseguenza pratica, che cambia la lettura di tutto il paper:** sulle coin
-volatili il sistema rischia il massimo consentito, su quelle tranquille un quinto.
-Il rischio per trade non è una costante ma una funzione della volatilità della
-coin — e nessuno lo stava leggendo così.
-
-**Serve:** decidere se il cap per posizione deve restare al 10%. Non è un difetto
-da riparare di nascosto — è una scelta. Toccarlo cambia la size a metà esperimento.
 
 ### A4. Quanto vive una strategia validata — la prova non si distrugge più
 **Stato:** **misura avviata il 21 set** · risposta fra qualche settimana
@@ -321,69 +259,6 @@ domanda.
 ---
 
 ## B. Ricerca — dove il sistema smette di cercare
-
-### B1. Il vocabolario è chiuso: 18 mattoncini
-**Stato:** aperto · la più importante di questa sezione · emerso 19 set · **primo passo il 21-22 set**: sei parole nuove (market_trend, market_fade, relative_strength, not_stretched, adx_below, htf_confirm), tutte additive. Il salto vero — l'AI che propone una feature come formula — resta da fare.
-
-L'AI può solo **combinare** 18 feature (RSI, Bollinger, MACD, VWAP, volume,
-sessione, volatilità). Non può inventarne una nuova. Tutto lo spazio di ricerca è
-chiuso lì dentro, per sempre.
-
-È probabilmente la causa di un'osservazione archiviata il 6 settembre: **quasi ogni
-strategia funziona su UNA sola moneta**. Se il vocabolario è troppo povero per
-descrivere una regolarità vera, l'unica cosa che resta da adattare è la storia
-della singola moneta.
-
-**Serve:** un percorso perché l'AI proponga una feature NUOVA come formula
-dichiarativa, validata dal gate come tutto il resto.
-
-### B2. Le strategie scritte a mano non hanno mai validato niente
-**Stato:** **FATTO il 21 set sera** — `OPTIMIZER_SKIP_BASE=true` (default nel codice): la valutazione delle base è saltata, resta la manutenzione del registro; le coppie base senza conferme escono con la regola delle stantie. Il calcolo liberato va ai semi della discovery (`DISCOVERY_SEEDS` 10→30, precedenza alle coin non coperte). Obiettivo: copertura, 26 coin su 165.
-
-```
-strategie base: 1312 valutazioni, 0 passate (0,00%)
-registro: 2024 coppie base · 574 generate
-```
-
-Le 8 strategie a mano non producono una singola coppia validata da quando il
-registro esiste, e occupano il 78% del registro.
-
-**Serve:** decidere se continuare a valutarle. Toglierle libererebbe tempo di
-calcolo e spazio; tenerle costa poco ma il conto è zero da settimane.
-
-### B2bis. `rr` non serve a niente, ma scarta il 74% delle proposte AI
-**Stato:** **FATTO il 21 set sera** — `rr` non è più richiesto né controllato dal validatore, e non compare più nel prompt; resta nella spec col default 2.0 perché fa parte dell'id.
-
-Sotto scale-out il take-profit non è più `rr × R`: è la **scala di gradini**. Il
-ramo scale-out ignora `target`, quindi **`rr` non ha nessun effetto sulle uscite** —
-lo dice la docstring di `effective_param_grid`, che per le strategie classiche lo
-sostituisce apposta nella griglia.
-
-Per le generate invece `rr` resta un campo obbligatorio e validato. Risultato
-misurato il 20 settembre: **14 proposte AI su 19 scartate** perché `rr` era sotto
-1,5, cioè per un parametro che non cambia un solo trade.
-
-**Serve:** decidere se per le generate `rr` vada ignorato del tutto (accettando
-qualsiasi valore, o togliendolo dalla spec) quando lo scale-out è attivo. Non
-toccato ora: cambiare cosa si valida a metà misurazione invalida il confronto fra
-le coppie validate prima e dopo.
-
-### B3. Nessuno chiede PERCHÉ le candidate muoiono
-**Stato:** **FATTO il 21 set notte** — `bot/ai/autopsia.py`: a ogni giro i 40 quasi-passaggi (feature, coin, criterio, scarto) vanno al modello, che risponde con schema, ipotesi e consigli; i consigli entrano nel contesto delle proposte dello stesso giro. Esito in `ai_hypotheses/autopsia`, visibile in `ai-stato`. L'AI legge e suggerisce, il gate decide.
-
-Il 68% muore su `total_return`, giro dopo giro. Contiamo i morti, non facciamo
-l'autopsia. Ci sono ~40 quasi-passaggi a ogni giro che nessuno legge.
-
-**Serve:** dare all'AI i quasi-passaggi e chiederle uno schema. È ipotesi sulla
-RICERCA, non su una strategia.
-
-### B4. Un referto su ogni trade chiuso
-**Stato:** **parte meccanica FATTA il 23 set** — `bot/risk/setup_check.py`: alla chiusura ogni trade riceve un referto (`post_mortem`: classe della morte, stop largo, lock mai armato, controtrend, verdetto) scritto nel documento del trade e stampato da `trades`; la stessa aritmetica blocca PRIMA i setup con stop oltre `MAX_STOP_PCT` (6%) nel gate e nel bot. **Aggregazione FATTA il 23 set pomeriggio** — `bot/learning/referti.py`: il bot somma i referti per strategia, coin e direzione e scrive `learning/referti` a ogni refresh dei pesi, con le IPOTESI che scattano da regole dichiarate prima (vedi F1). Resta la lettura narrativa dall'AI, a 100+ trade.
-
-Ogni trade registra indicatori all'entrata, regime, confidenza, dove è arrivato il
-prezzo, perché è uscito. **Nessuno li legge.** Con 15 trade è aneddoto; con 200
-diventa il dato più ricco che abbiamo — e l'AI è l'unica cosa capace di leggere 200
-referti e trovare il filo comune.
 
 ### B5. Notizie e dati macro
 **Stato:** rimandata alla **sessione dedicata ai dati esterni** (decisione del 23 set) · aperto · ricerca fatta il 20 set (30 agenti, 23 candidati, 8 confermati)
@@ -620,61 +495,6 @@ Ricerca del 20 settembre: **nessuna fonte gratuita e verificata copre il caso.**
 
 ## F. Apprendimento — l'obiettivo finale
 
-### F1. Il bot non sceglie quale trade aprire: apre tutti i segnali validi
-**Stato:** aperto · **è l'obiettivo finale del proprietario** · scritto il 23 set · **primo pezzo FATTO il 23 set pomeriggio** (vedi «Cosa è stato fatto» in fondo alla voce)
-
-Obiettivo dichiarato: *«che la scelta delle strategie e delle monete sia talmente
-avanzata da scegliere praticamente sempre quella corretta che ci porti in
-profitto»*. Cosa impara oggi il sistema, misurato sul codice:
-
-| dove impara | da cosa | su cosa agisce |
-|---|---|---|
-| pesi strategia × regime (`compute_weights`) | win rate dei trade chiusi | **size**, panchina a peso 0 |
-| freno da deriva | PF vissuto vs promesso (8 trade) | **size**, fallimento al gate |
-| scala dei TP dal vissuto (`ladder_from_mfe`) | quantili di mfe | **uscite**, passando dal gate |
-| keep del lock (dal 25 set: `evaluate_spec` nel gate, `keep_dal_paper`) | la storia della coppia decide fra 0,35 / 0,5 / 0,65; i verdetti prematuro/protetto del paper (tutte le coppie insieme, ≥ 8) propongono un quarto candidato: 0,25 se ≥ 60% prematuri, 0,75 se ≥ 60% protetti | **uscite**: il vincitore va in `last_params.profit_lock_keep` e motore e bot leggono lo stesso numero · `compute_trailing_keep` resta solo come ripiego per le coppie non ancora rigiudicate |
-| calibrazione della confidenza | esito vs confidenza | **size** — inerte: le generate escono tutte a 60 |
-| autopsia dei quasi-passaggi (B3) | 40 quasi-passaggi a giro | **proposte** dell'AI |
-
-**Il buco:** in parità col gate il bot apre *tutti* i segnali validi del ciclo, uno
-per coin. Nessun meccanismo dice «questo sì, quest'altro no»: la scelta è solo a
-monte (il gate) e, lentamente, la panchina a peso zero. Tutto ciò che impara modula
-size o uscite; **né gli ingressi (B8) né la selezione fra segnali**.
-
-**Perché non si fa «a mano»:** una scelta tarata sul vissuto del paper trasforma il
-paper da prova in training set — è BIRBUSDT. Le tre strade oneste, in ordine:
-
-1. **B8** — spostare l'apprendimento nel gate: ritarare le soglie di ingresso delle
-   spec in `watch`/`drift`. Alza la qualità del «sì» alla fonte.
-2. **Un selettore validato**: il criterio di scelta fra segnali (peso, PF per
-   regime, confidenza calibrata, mfe attesa) si simula nel backtest come una
-   strategia — «apri solo i segnali che il selettore avrebbe scelto» contro «apri
-   tutti» — e si misura se rende di più. Solo così la scelta è una prova, non
-   un'opinione.
-3. **Far parlare i referti** (B4) e l'**ombra** dell'AI (31 decisioni, 0 d'accordo
-   col bot): le due fonti ricche oggi mute. Servono 100+ trade.
-
-**A 37 trade, col paper in perdita e le short che non reggono, il profitto oggi
-viene da segnali migliori (gate), non dallo scegliere fra segnali.** Il selettore ha
-senso quando c'è qualcosa di buono fra cui scegliere.
-
-**Cosa è stato fatto il 23 set pomeriggio** (richiesta: «il sistema deve imparare
-da tutto quello che fa … e adattarsi tutti i giorni»; 40 trade, 6 giornate su 8 in
-perdita, −50,88 realizzato):
-
-| pezzo | dove | cosa fa | cosa NON fa |
-|---|---|---|---|
-| referti aggregati | `bot/learning/referti.py` → `learning/referti` | somma i referti per strategia, coin, direzione; fa scattare IPOTESI da regole scritte prima (3 short tutte perse → solo long; 3 perdite controtrend → conferma a 1 ora; 2 stop larghi → stop stretto) | non cambia nessun parametro |
-| varianti nel gate (B8) | `generator.py::varianti_da_referto`, `discover_strategies.py::varianti_dai_referti` | ogni ipotesi diventa una variante della stessa spec messa nel gate (3 conferme + holdout) al posto di candidate casuali | non entra in paper senza passare il gate; non allunga il giro |
-| freno di serie | `drift.py::serie_perdite`, `STREAK_BRAKE_*` | 4 perdite di fila su una strategia → size a metà, leva ×0,7, fino al primo guadagno. **SPENTO dal 24 set sera** (audit: scatta per caso al 30-44% delle strategie ogni mese; si riaccende solo se `portafoglio` misura un win rate dopo 4 perdite davvero più basso) | non spegne, non tara: frena e basta |
-
-Il ciclo è: referto → ipotesi (regola dichiarata) → variante nel gate → se passa,
-opera.
-
-**24 set:** il disegno del selettore (punto 2) e della ritaratura periodica (punto 1)
-è in `docs/disegno_cervello.md`. **Fatti il 24 set sera:** passo 0 del selettore (ogni trade simulato porta le variabili all'ingresso, `feats_ingresso`; la discovery scrive `data/selettore/<data>_<tf>.jsonl` e `selector/dataset`), passo 1 (addestramento e confronto offline «apri tutto» vs «selettore», comando ops `selettore`, chiave da aggiungere alla lista bianca), punto 1 (l'intorno, vedi B8). Aperti: passi 2 e 3 del selettore (ombra, poi accensione) dopo il verdetto del passo 1. Il paper non tara nulla da solo. **Il selettore validato (punto 2) e la
-lettura AI dei referti (B4) restano aperti**: servono 100+ trade.
-
 ### F1bis. Il «paper esplorativo» — proposto il 25 set, **FATTO il 25 set** (il proprietario ha detto sì)
 Il proprietario ha chiesto di imparare il più possibile da ogni chiusura e ha detto che in paper si può rischiare di più per validare ipotesi. Proposta: le coppie che passano per un pelo (quasi-passaggi, ~36 a giro) si operano in paper a un quarto della size, marcate `esplorativa`, escluse da pesi e freno; il gate le giudica anche col loro vissuto. Rischio: l'equity del paper si sporca di trade più deboli (per questo size ridotta e contatore separato). Simile a F2 ma senza le due settimane e senza rifare il ciclo.
 
@@ -685,23 +505,11 @@ Il modello (che ancora NON BATTE «apri tutto», ops 0231) dà a ogni trade aper
 
 ## G. Portafoglio e gate — quello che i sistemi seri fanno (24 set)
 
-### G1. Rischio per direzione
-**Stato:** **esisteva già dall'8 set** (`MAX_DIRECTIONAL_RISK_PCT=0.03`, `bot/main.py::_directional_risk_blocks`): l'audit del 24 set ha trovato che il 24 mattina ne avevo scritta una seconda copia, tolta la sera stessa. Nel bot la regola è una. Il backtest di portafoglio (G2, ops 0188 con la semantica del bot) dice che al 3% è quasi neutra (64 trade su 526 fermati, PnL −7%, drawdown invariato); con la size dimezzata dal freno globale ammette ~8 posizioni nello stesso verso: le regole di portafoglio che mancano davvero sono lo stop giornaliero e il netto in R (vedi H).
-
-### G2. Il gate valida coppie una alla volta, mai il portafoglio
-**Stato:** **script FATTO il 24 set** (`portafoglio`, da aggiungere alla lista bianca: `portafoglio: .venv/bin/python -m scripts.portafoglio_backtest`) — tutte le validate insieme sugli ultimi 60 giorni con i limiti veri del conto: trade al giorno, posizioni contemporanee, quante nella stessa direzione, giornate in utile/perdita, drawdown, e il confronto con/senza tetto per direzione. Dal 24 set sera simula anche lo stop giornaliero di portafoglio e il netto in R come what-if, misura il win rate dopo k perdite di fila (per decidere il freno di serie) e il diversification ratio. Aperto: leggerlo ogni settimana e decidere le regole di portafoglio sui suoi numeri (H).
-
 ### G3. La statistica t è misurata ma non decide
 **Stato:** **misura FATTA il 24 set** — `last_t` nel registro per ogni validata (scritto dalla discovery, cioè per tutte le generate), `gate` stampa quante reggerebbero t ≥ 2 e la mediana. L'audit propone t ≥ 3 come criterio (con centinaia di candidate per coin, 2 è il livello del rumore): **si decide dopo aver visto il numero** (H).
 
-### G4. Meno candidate a caso
-**Stato:** **FATTO il 24 set** — `DISCOVERY_RANDOM_MAX=40` (erano 100 a giro). Metro: tasso di passaggio in `gate_autopsy` prima e dopo (0,3% il 23 set).
-
 ### G6. La pesatura di recenza nel gate esiste ma nessuno la chiama
 **Stato:** **fatta a metà il 25 set, la metà che non cambia chi entra.** Nella discovery la SCELTA fra scale di TP, break-even e keep del lock (`_metrica_scelta` in `discover_strategies.py`) pesa i trade con l'emivita di 180 giorni (`GATE_RECENCY_HALFLIFE_DAYS`, 0 = uniforme): prima sette giorni nuovi su 4,6 anni valevano lo 0,42% dell'evidenza e la scelta non si spostava mai. I criteri di validazione (PF, win rate, ritorno, consistenza, holdout) restano NON pesati, per costruzione: il tasso di passaggio non cambia. Resta aperta l'altra metà — pesare anche la validazione — che cambia quali coppie entrano: va decisa con il tasso di passaggio prima/dopo come metro, e per ora non si fa.
-
-### G5. Sopravvivenza dell'universo
-**Stato:** aperto · noto — si valida sulle coin oggi nel top 200 per volume e si saltano le delistate: le strategie sono provate solo su chi è sopravvissuto. Da tenere a mente nel giudizio dei numeri; nessuna correzione semplice.
 
 ## H. Audit del 24 set — cose da decidere (proporre, non fare)
 
@@ -715,53 +523,6 @@ selettore anche con i quasi-passaggi (`passed`), verdetto del selettore per
 permutazione (prima «batte» valeva una moneta), interazioni direzione × mercato e
 regime nel selettore, dedup delle gemelle, freno di serie spento, madre sostituita
 visibile in dashboard e in `gate`.
-
-### H1. La statistica t come criterio del gate (t ≥ 3)
-Passa lo 0,3% delle candidate; il 70-77% delle coppie a 1-2 conferme non ripassa:
-firma del massimo di un rumore selezionato. `gate` stampa quante validate reggono
-t ≥ 2 e la mediana: **si decide dopo quel numero**. Metro: tasso di passaggio in
-`gate_autopsy` prima e dopo.
-
-### H2. Holdout non condiviso fra candidate
-Migliaia di candidate per giro puntano lo STESSO holdout di 45 giorni (PF ≥ 1,05 su
-5 trade: sotto il caso lo passa circa metà). Proposta: `GATE_HOLDOUT_MIN_TRADES` a
-10 e finestra di holdout per candidata (hash dell'id → mese fra gli ultimi 12).
-
-**29 set: la prima metà (5 → 10 trade) NON è la leva giusta — proposta ritirata.**
-Proposta al controllo del 29 set, poi misurata su richiesta del proprietario («vuol dire che il
-gate è troppo permissivo? che impatto sulle tempistiche?»). I numeri:
-* **Il gate è permissivo, sì:** paper PF 0,70 contro 2,04 promesso (ops 0338); chi passa le
-  finestre passa poi l'holdout nel 46% dei casi a 15 minuti (50 su 108, ops 0322) e nel 58% a 1 ora
-  (29 su 50, ops 0341).
-* **Ma 10 trade non toglie i fortunati.** Simulazione (stimata, non codice del repo: vinti +1,5R,
-  persi −1R, la regola vera dell'holdout con PF ≥ 1,05, ritorno > 0 e PF senza il migliore ≥ 1):
-  una strategia SENZA vantaggio passa il 31% delle volte con 5 trade e il 37% con 10; una con PF 2
-  passa il 63% e il 78%. Il rapporto buone/fortunate sale appena (da 2,0 a 2,1): «PF ≥ 1,05 e
-  ritorno > 0» per una strategia senza vantaggio resta quasi testa o croce a qualunque numero di
-  trade. Il revisore del 29 set, con un modello diverso, trova lo stesso (26% → 30%).
-* **Cosa farebbe davvero:** toglie le coppie che fanno pochi trade. Trade negli ultimi 45 giorni
-  delle validate: mediana 8, il 70% sotto 10 (ops 0290, 79 righe visibili su 194; dal portafoglio
-  ops 0339, ~8 a coppia). Il giro non si allunga (è una soglia, non un backtest in più) e il
-  calendario resta ≥ 14 giorni per validare; ma delle 492 coppie a 2/3 (ops 0343) si stima che il
-  45-75% perda la conferma, le 57 validate a size piena scenderebbero a ~15-32 in 2 notti e poi
-  sarebbero rimosse in 1-3 settimane (stime); le strategie a 1 ora, con meno trade al giorno,
-  pagano di più. E per ora le declassate sul paper fanno MEGLIO delle attive (18 trade +0,045R
-  contro 111 −0,102R, ops 0340): nessuna prova che bocciare di più migliori il paper.
-* **Le leve che riducono la fortuna** (da misurare prima di proporle): una statistica t
-  sull'holdout (H1 applicata all'holdout: con t ≥ 1,5 passerebbe per caso ~8-10%, ma passano meno
-  anche le buone), oppure la seconda metà di H2 (holdout diverso per candidata). Le tre conferme
-  poi sono poco indipendenti: fra una settimana e la successiva l'holdout condivide 38 giorni su 45.
-* **Prima di tutto un artefatto da togliere:** lo «scarto esattamente 0,000» delle quasi-passate
-  sull'holdout non è una misura: `optimizer.py:254` e `discover_strategies.py:2024` scrivono 0.0
-  d'ufficio a ogni bocciata sull'holdout, e la riga del quasi-passaggio porta PF e trade delle
-  FINESTRE, non dell'holdout (`discover_strategies.py:1754-1758`). L'AI lo legge come «esattamente
-  al limite» (ops 0230) e lo stesso 0,0 ordina queste coppie in fondo all'autopsia
-  (`-(shortfall or -9)`, `discover:518`, `:1808`, `:1822`) ma in cima alla scelta delle esplorative
-  (`_shortfall`, `discover:561-584`). Il 29 set, 21 dei 32 quasi-passaggi letti dall'AI erano
-  questo segnaposto (ops 0341), e il prompt dell'autopsia dice «15m» anche quando legge la passata
-  a 1 ora (`bot/ai/autopsia.py:77`). **Serve:** salvare PF/trade/PF senza il migliore
-  dell'HOLDOUT nel quasi-passaggio, uno scarto vero, lo stesso ordinamento nei due punti, il
-  timeframe giusto nel prompt. Non fatto il 29 set: non chiesto.
 
 ### H3. Stop giornaliero di portafoglio e netto in R
 **Stato: PARCHEGGIATA il 25 set** — il proprietario: «non voglio limitare la quantità, voglio trade migliori». Uno stop giornaliero riduce le perdite, non migliora gli ingressi: resta qui solo come memoria.
@@ -820,13 +581,6 @@ Con confidenza fissa 60 e soglia 30, «peso < 0,5» spegne la strategia in quel 
 
 **26 set (passo 4 del piano del 26 set 15:xx): la panchina non rifiuta più, riduce.** Il numero: nel log del 26 set i rifiuti erano 18 «posizione già aperta», 17 cooldown, 3 «confidenza sotto soglia», 0 per peso (ops 0268), quindi non era un problema oggi, ma il proprietario non vuole tetti sul numero di trade («riduci la size, non rifiutare»). Ora un peso che porta la confidenza sotto soglia passa con `peso_size = max(PANCHINA_PAVIMENTO, peso)` (0,25, dichiarato in `bot/config.py`) e main lo applica alla size (in più del `learn_mult` dell'allocazione: peso 0,3 → ×0,725 poi ×0,3, è ciò che chiede la specifica); nel log una riga `[panchina] SYM strat: peso 0.30 -> size x0.30` (non contata fra i rifiuti). Il peso 0 («strategia spenta dal learning») rifiuta ancora; con `PANCHINA_PAVIMENTO ≤ 0` torna il rifiuto di prima. Sul trade chiuso `size_factors_at_entry.peso_size`. **Metro:** R medio dei trade con `peso_size < 1` contro quelli a peso pieno su ≥ 30 casi (`trades`); se la panchina fa peggio, il pavimento scende; se fa uguale, i pesi non discriminano e I1 si chiude così.
 
-### I2. Il freno globale non ha una data di uscita
-Dimezza tutto finché il PF a 30 giorni non supera 0,6 × 1,89 ≈ 1,13. È il freno più forte del sistema e non compariva in nessun log: ora `stato` lo scrive. Il paper a size dimezzata impara più lentamente (meno euro per trade, stessi trade).
-
-**26 set (passo 4 del piano del 26 set 15:xx): il freno per gruppo, con una data di uscita.** Accanto al globale, `bot/learning/drift.py::compute_drift` calcola per ogni pool (famiglia × regime all'ingresso: `fam:<famiglia>|<regime>`; direzione × contesto BTC: `dir:<long|short>|<btc_su|btc_giu>`, il bucket «ignoto» escluso) un CUSUM a un lato sui multipli di R (R = pnl / (|entry − stop originale| × size), ripiego `post_mortem.stop_pct`, altrimenti il trade si salta) con allarme a `POOL_CUSUM_H` = 4 R di deficit cumulato e **ripresa** a `POOL_CUSUM_RIPRESA` = 2,5 R sopra il riferimento dopo l'allarme, più uno SPRT su «ha toccato TP1» (p0 0,45 / p1 0,25, α = β = 0,05). Soglie dichiarate in `bot/config.py` PRIMA di ogni misura, mai tarate sui trade del paper. `weight_factor` frena ×`POOL_BRAKE_FACTOR` (0,5) un pool in allarme senza ripresa, combinato col globale col **MINIMO** (mai il prodotto: dicono la stessa cosa a due grane). Nel doc `drift/current` le chiavi `pool` e `pool_famiglie`; `motivi_freno` nomina il pool. **Tre limiti dichiarati:** (1) il riferimento del pool è derivato dalle promesse del registro con perdita media posta a 1 R — media di (1 − wr)(PF − 1) delle validate del pool da `last_pf`/`last_win_rate` — quindi generoso rispetto al vivo (perdite spesso < 1 R per pareggio e trailing); 0,0 e `riferimento_nota` lo dice se non derivabile; (2) lo SPRT è **solo registrato** (`pool[k].sprt`): il freno ascolta il CUSUM, il replay confronta chi avrebbe suonato prima; (3) l'ARL0 del replay conta trade-pool (un trade sta in famiglia E direzione). **Metro:** la voce ops `replay` (`scripts/replay_freno.py`): per ogni pool il giorno in cui il CUSUM avrebbe suonato contro il freno globale (`global.dal`), il PnL del pool nei 7 giorni dopo, e i falsi allarmi su storia sana del gate (`data/selettore/*.jsonl`, sulla VPS): **suona dopo il globale = inutile; più di 5 allarmi ogni 100 trade sani = h troppo basso**. Il replay può solo bocciare le soglie, mai sceglierle. Non verificato dal vivo: il documento `drift/current` con `pool` arriva dal bot dopo il riavvio; il replay su dati veri va lanciato con `ops replay`.
-
-**27 set:** il freno per gruppo (CUSUM/SPRT, acceso il 26) è **spento** (`POOL_BRAKE_ENABLED=false`): il replay (ops 0288) lo ha bocciato con la regola dichiarata prima, perché in 6 gruppi su 7 sarebbe scattato dopo il freno globale. Resta non misurato il suo ruolo dopo che il globale si spegne (frenare solo i gruppi che perdono): da riprendere, con un replay dedicato, il giorno in cui il freno globale esce.
-
 ### I3. Il keep del trailing non scatterà mai con questi volumi
 **Stato:** **FATTO il 25 set** (richiesta del proprietario: «ogni dato raccolto deve arrivare al cervello e produrre una decisione»). Il numero che l'ha deciso: 8 verdetti per strategia contro 14 uscite trailing in 10 giorni su 21 strategie, quindi l'adattamento del bot non sarebbe mai scattato; e se fosse scattato, il gate avrebbe continuato a simulare keep 0,5 (paper e gate divergenti). Ora il keep è un parametro PER COPPIA scelto dal gate come la scala dei TP e il break-even: `evaluate_spec` prova 0,35 / 0,5 / 0,65 sulla scala e sul break-even già scelti (3 backtest in più per ogni spec che passa, non per le bocciate), il vincitore va in `last_params.profit_lock_keep`, motore e bot lo leggono con la stessa funzione (`lock_keep`). Il paper entra come in `scala_dal_paper`: `keep_dal_paper` somma i verdetti di TUTTE le coppie e, con almeno 8, propone un quarto candidato (0,25 se ≥ 60% prematuri, 0,75 se ≥ 60% protetti) che il gate mette a confronto con gli altri: il paper propone, la storia decide. Le coppie non ancora rigiudicate col nuovo parametro continuano col keep con cui sono state validate (chiave assente → comportamento di prima), quindi il registro misto non rompe la parità. Visibile in `gate` (riga «keep del lock scelto dal gate») e nel log del giro (`[paper] N verdetti trailing…`, `[cervello] keep…`). Da misurare nelle prossime settimane: quante coppie finiscono su 0,35 e quante su 0,65, e se sul paper i prematuri calano.
 
@@ -849,17 +603,6 @@ La sesta ipotesi dei referti: le perdite «mai andate a favore» (classe ingress
 
 ### I5. Validate senza promessa nel registro
 72 su 131 visibili senza `last_pf` (alleggerite quando non erano validate, promosse poi dalla chiusura della finestra): deriva e veto di regime in fail-open per loro. Corretto il 25 set: `last_pf` fra i campi che l'alleggerimento conserva; si riempie al prossimo passaggio di ognuna.
-
-### I6. Il cap di 5 posizioni è spento in parità
-`MAX_OPEN_POSITIONS` vale solo fuori dalla parità col gate; in parità il limite è il margine (10% dell'equity per posizione ≈ 10 posizioni); il paper ha già toccato 7 contemporanee. Con 160 coppie e il freno che dimezza la size, il tetto per direzione (3%) ammette ~8 posizioni nello stesso verso. Da decidere con `portafoglio` sulle 160 (in coda): cap in parità, o tetto direzionale più stretto finché il globale è in deriva, o stop giornaliero (H3).
-
-### I9. La proposta di keep del paper si accende e si spegne senza isteresi
-Il 28 set la proposta globale era 0,75 e il gate l'ha scelta per 28 coppie su 49 passate (ops 0325);
-il 29 set i protetti sono 37 su 62 = 59,7%, un verdetto sotto il 60%, e la proposta è sparita
-(ops 0345). Le coppie a 1-2 conferme che avevano preso 0,75 lo perdono al passaggio dopo (0,75 non è
-più fra i candidati; le validate lo tengono per l'isteresi del 10%). Una soglia che oscilla attorno
-al 60% cambia davvero cosa scelgono le coppie non ancora validate. Da valutare: isteresi (accende a
-60%, spegne sotto 55%) o candidato 0,75 sempre presente fra i fissi.
 
 ## J. Controllo orario e dashboard (25 set)
 
@@ -981,23 +724,6 @@ un problema di spazio in una perdita di dati.
 Il formato compatto ha spostato il vincolo da 3 giorni a mesi (272 KiB su 879, 108
 byte a coppia): c'è tempo per farla bene.
 
-### D2. I dati sintetici sono attivi per default
-**Stato:** **FATTO il 21 set notte** — default spento; i test lo accendono in `tests/conftest.py`, unico posto.
-
-`BACKTEST_ALLOW_SYNTHETIC` vale `true` di default. È spento esplicitamente ovunque
-si validi (unit systemd, script, workflow) e nelle analisi in lista bianca, ma
-qualunque percorso nuovo che carichi candele **ricade su dati inventati in
-silenzio** se Binance non risponde.
-
-**Serve:** invertire il default e accenderlo solo nei test. Richiede di verificare
-ogni chiamante.
-
-### D3. Il modello dell'AI è la versione precedente
-**Stato:** **FATTO il 21 set sera** — `ANTHROPIC_MODEL` default `claude-opus-5`. Dal 24 set il proprietario ha scelto sulla VPS `claude-opus-4-8` (più economico): l'env vince sul default, `ai-stato` dice quale gira.
-
-`ANTHROPIC_MODEL=claude-opus-4-8`. Rimandato il 19 set per non cambiare due cose
-insieme mentre si verificava la chiave.
-
 ### D5. `reset_paper.py` non azzera l'inizio del paper (né il prezzo BTC di partenza)
 **Stato:** aperto · trovato il 28 set leggendo `scripts/reset_paper.py` mentre si aggiungeva il benchmark BTC dal primo giorno
 
@@ -1086,24 +812,6 @@ allargarsi.**
 Se regge ai 40 trade, il trend smette di essere un suggerimento sulla size
 (`size_mult ≥ 0,5`) e diventa un **veto**. Oggi sarebbe una reazione al rumore.
 
-### E2. L'AI si vede scartare quasi tutte le proposte
-**Stato:** **CHIUSA il 21 set** — dal 20 set 20/20 proposte accettate a ogni giro e 2 spec di origine AI hanno passato il gate (`ai-stato`, 21 set 05:45 UTC). La correzione ha funzionato.
-
-Diagnosi misurata (`ai_hypotheses/last`, giro delle 08:41 ora italiana):
-
-```
-1 proposta accettata su 20
-rr=1.3 ×4 · rr=1.2 ×4 · rr=1 ×3 · rr=0.9 ×3   →  14 su 19
-rsi_momentum: manca il parametro mid ×1
-nessuna feature direzionale ×1
-```
-
-**Non** era il parametro mancante, come mi aspettavo: era `rr` sotto il minimo di
-1.5. E il prompt non nominava **nessuna** fascia numerica, quindi il modello non
-poteva saperlo. Corretto generando le fasce dalle stesse costanti che validano.
-
-Resta da vedere al prossimo giro se il tasso di accettazione sale.
-
 ### E4. Vendiamo le salite verticali, e con più strategie quasi gemelle
 **Stato:** **FATTO il 21 set sera** (vedi il blocco «FATTO» in fondo alla voce) · **resta aperto** `min_adx` sulle spec esistenti e le gemelle già validate, che si stampano a ogni giro e vanno decise.
 
@@ -1169,10 +877,3 @@ anche 3, ma non buttiamo via nulla»), senza azzerare il registro:
 **Resta aperto:** `min_adx` sulle spec esistenti non è stato toccato — cambiarlo
 cambierebbe strategie già validate. Le nuove hanno `adx_below` come alternativa.
 E le gemelle già validate sono ancora lì: vanno decise, non nascoste.
-
-### E3. Binance risponde 451 dai runner GitHub
-**Stato:** **CHIUSA il 21 set notte** — rimossi i quattro workflow che non potevano avere dati veri dai runner (optimize, discover, reset-optimizer, backtest). Tutto gira sulla VPS; niente più falsi guasti.
-
-Blocco geografico. La ricerca e la validazione girano sulla VPS dove Binance
-risponde, e i due workflow che avrebbero bisogno di dati veri hanno lo schedule
-disabilitato apposta. Registrato perché a ogni controllo sembra un guasto nuovo.
