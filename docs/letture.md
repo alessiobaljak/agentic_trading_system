@@ -8,7 +8,7 @@ nel report giornaliero in dashboard. Formato di ogni riga: `| AAAA-MM-GG | cosa 
 |---|---|---|
 | 2026-10-03 | Declassate contro attive (report trades, DECLASSATE) | regola del 3 ott, diario del 30 set |
 | 2026-10-07 | Fuori campione: il problema è il gate o il bot? (report portafoglio) | regole del 7 e 14 ott, diario del 30 set |
-| 2026-10-08 | R1, il gate rigiocato nel passato (prima lettura completa, stima) | regola R1, diario del 1 ott |
+| 2026-10-09 | R1, il gate rigiocato nel passato (prima lettura completa, stima: R1 lavora 2,5 ore al giorno al posto del giro delle 14) | regola R1, diario del 1 ott |
 | 2026-10-10 | Varianti dai referti e ipotesi d'ingresso (J9, I4ter) | backlog archivio |
 | 2026-10-14 | Fuori campione, seconda lettura | regole del 7 e 14 ott |
 | 2026-10-15 | Gruppo di controllo: servono 3 conferme? (K3) | backlog archivio K3 |

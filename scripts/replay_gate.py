@@ -87,6 +87,7 @@ from backtesting.data_loader import load_candles
 from backtesting.engine import HORIZON_BARS
 from backtesting.optimizer import WalkForwardOptimizer
 from backtesting.parallel import n_workers
+from bot.core import finestra_r1
 from backtesting.quality import looks_delisted
 from bot.config import settings, timeframe_hours
 from bot.core.indicators import compute_indicator_frame
@@ -108,6 +109,8 @@ DIR_UNITA = os.path.join(DIR_R1, "unita")
 FILE_ESITO = os.path.join(DIR_R1, "ultimo.txt")
 FILE_PID = os.path.join(DIR_R1, "ultimo.pid")
 FILE_LOCK = os.path.join(DIR_R1, "in_corso.lock")
+#: «R1 e' attivo»: il gate salta il giro delle 12 UTC (bot/core/finestra_r1.py)
+FILE_ATTIVO = finestra_r1.FILE_ATTIVO
 VERSIONE = 1
 
 #: la regola (docs/andremo_live.md, 1 ott 2026): 26 date, una ogni 14 giorni,
@@ -158,7 +161,9 @@ FINALI = ("ok", "storia", "delistata")
 #: i margini sul giro del gate: gli stessi del voto t
 MARGINE_PARTENZA_S = tv.MARGINE_PARTENZA_S
 MARGINE_FERMATA_S = tv.MARGINE_FERMATA_S
-ATTESA_MAX_S = tv.ATTESA_MAX_S
+#: 8 ore e non 4 (1 ott 2026): il controllo del mattino lancia R1 alle ~08:15
+#: italiane e la finestra libera arriva solo dopo il giro delle 09 UTC
+ATTESA_MAX_S = float(os.getenv("REPLAY_GATE_ATTESA_S", str(8 * 3600)))
 ATTESA_PASSO_S = tv.ATTESA_PASSO_S
 #: i processi pesanti: il giro del gate e la passata del voto t (ognuno coi suoi
 #: worker: due gruppi insieme non stanno in memoria)
@@ -480,8 +485,26 @@ def giro_in_corso(proc: str = "/proc", moduli: tuple = MODULI_PESANTI) -> list[i
     return sorted(trovati)
 
 
+#: quanto aspettare per ricontrollare, nell'ora del giro saltato: il servizio del
+#: gate parte lo stesso, vede la finestra di R1 ed esce in pochi secondi
+RICONTROLLO_SALTATO_S = 20.0
+
+
 def gate_in_arrivo(margine_s: float) -> str | None:
-    """None se si puo' lavorare; altrimenti perche' no, in una frase."""
+    """None se si puo' lavorare; altrimenti perche' no, in una frase.
+
+    Nell'ora del giro SALTATO (12 UTC, R1 attivo: bot/core/finestra_r1.py) il
+    servizio del gate parte comunque e si chiude subito: un gate «in corso» visto
+    in quell'ora si ricontrolla dopo RICONTROLLO_SALTATO_S, e conta solo se c'e'
+    ancora (un giro delle 09 UTC lungo, che sfora nelle 12, resta un giro vero)."""
+    motivo = _gate_in_arrivo(margine_s)
+    if motivo and finestra_r1.slot_saltato(time.time(), FILE_ATTIVO):
+        time.sleep(RICONTROLLO_SALTATO_S)
+        motivo = _gate_in_arrivo(margine_s)
+    return motivo
+
+
+def _gate_in_arrivo(margine_s: float) -> str | None:
     pids = giro_in_corso()
     if pids:
         return (f"il giro del gate (o la passata del voto t) e' in corso "
@@ -489,6 +512,10 @@ def gate_in_arrivo(margine_s: float) -> str | None:
     if servizio_gate_attivo():
         return f"il giro del gate e' in corso ({tv.SERVIZIO_GATE} attivo)"
     s = secondi_al_prossimo_giro()
+    # il giro delle 12 UTC si salta mentre R1 e' attivo (bot/core/finestra_r1.py):
+    # per R1 il «prossimo giro» e' quello dopo, 3 ore piu' tardi
+    if s is not None and finestra_r1.slot_saltato(time.time() + s, FILE_ATTIVO):
+        s += 3 * 3600.0
     if s is not None and s < margine_s:
         return f"il prossimo giro del gate parte fra {max(0.0, s) / 60:.0f} minuti"
     return None
@@ -956,6 +983,10 @@ def su_file(args) -> int:
         os.close(fd_out)
         with open(FILE_PID, "w", encoding="utf-8") as f:
             f.write(str(os.getpid()))
+        # R1 E' ATTIVO (1 ott 2026): da qui il gate salta il giro delle 12 UTC,
+        # finche' le date non sono tutte fatte (bot/core/finestra_r1.py)
+        with open(FILE_ATTIVO, "w", encoding="utf-8") as f:
+            f.write(f"{time.time():.0f}\n")
         di(f"[r1] su file, pid {os.getpid()}, avvio "
            f"{dt.datetime.now(dt.timezone.utc):%Y-%m-%d %H:%M:%S} UTC")
         try:
@@ -1036,6 +1067,15 @@ def _lancio(args) -> int:
     if interrotta:
         di(f"  LANCIO INTERROTTO: {interrotta}. Le unita' finite sono scritte; rilancia.")
     fatte = leggi_unita()
+    resto, _ = lavoro_da_fare(piano, fatte)
+    if not resto and len(date_complete(piano, fatte)) == len(piano["date"]):
+        # tutte le date fatte: il gate torna a 8 giri al giorno
+        try:
+            os.remove(FILE_ATTIVO)
+            di("[r1] TUTTE LE DATE FATTE: tolto il file «attivo», il gate torna a 8 giri "
+               "al giorno")
+        except OSError:
+            pass
     if prova and date_complete(piano, fatte):
         di(f"  PROVA PICCOLA FINITA: guarda i numeri qui sotto; se hanno senso, rilancia "
            f"`replay-gate` per le altre date.")

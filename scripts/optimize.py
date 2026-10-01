@@ -303,6 +303,13 @@ BINANCE_PERPS = [
 
 
 def main() -> int:
+    # LA FINESTRA DI R1 (1 ott 2026): finche' R1 lavora, il giro delle 12 UTC si
+    # salta (bot/core/finestra_r1.py). Prima di tutto, cosi' non carica niente.
+    from bot.core.finestra_r1 import giro_saltato_per_r1
+    _salto = giro_saltato_per_r1()
+    if _salto:
+        print(_salto, flush=True)
+        return 0
     p = argparse.ArgumentParser(description="Ottimizzazione walk-forward autonoma")
     p.add_argument("--symbols", default="BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT,XRPUSDT")
     p.add_argument("--top", type=int, default=0,

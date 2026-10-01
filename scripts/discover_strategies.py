@@ -3766,6 +3766,13 @@ def filtra_universo(symbols, scelto_apposta: bool, filtro) -> tuple[list[str], d
 
 
 def main() -> int:
+    # LA FINESTRA DI R1 (1 ott 2026): finche' R1 lavora, il giro delle 12 UTC si
+    # salta (bot/core/finestra_r1.py). Prima di tutto, cosi' non carica niente.
+    from bot.core.finestra_r1 import giro_saltato_per_r1
+    _salto = giro_saltato_per_r1()
+    if _salto:
+        print(_salto, flush=True)
+        return 0
     # IL TEMPO DEL GIRO SI MISURA QUI, e si salva su Firebase. Il 22 set 2026 per
     # sapere quanto durava un giro servivano `servizi` + `processi` + il journal,
     # e il journal tiene 80 righe di cache che spingono via la fine del giro. Da

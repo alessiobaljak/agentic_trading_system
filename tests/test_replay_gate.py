@@ -53,6 +53,7 @@ def _niente_gate_ne_file_veri(tmp_path, monkeypatch):
     monkeypatch.setattr(rv, "FILE_ESITO", str(base / "ultimo.txt"))
     monkeypatch.setattr(rv, "FILE_PID", str(base / "ultimo.pid"))
     monkeypatch.setattr(rv, "FILE_LOCK", str(base / "in_corso.lock"))
+    monkeypatch.setattr(rv, "FILE_ATTIVO", str(base / "attivo"))
     # il caricatore vero non deve mai partire (rete, cache del gate)
     monkeypatch.setattr(dl, "_drop_older", lambda *a, **k: (_ for _ in ()).throw(
         AssertionError("la cache del gate non si tocca")))

@@ -36,7 +36,7 @@ Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
 
-### R1. Rigiocare il gate nel passato — SÌ del proprietario il 1 ott: strumento pronto, prova piccola lanciata alle 13:49 (ops 0407)
+### R1. Rigiocare il gate nel passato — SÌ del proprietario il 1 ott; dal 2 ott lavora AL POSTO del giro del gate delle 14:00 italiane (sì del 1 ott sera)
 Invece di aspettare il 7-14 ott per sapere se il gate sceglie strategie con un vantaggio vero, si
 rifà il gate a 26 date passate e si guarda come sono andate dopo le promosse contro le bocciate.
 Regola da scrivere prima dei numeri: promosse meglio delle bocciate oltre il margine → il gate ha un

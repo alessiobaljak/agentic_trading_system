@@ -2571,3 +2571,20 @@ identici). Suite 2240 verdi, due volte di fila. Nuovi campi del trade: `versione
 confronta l'ingresso con la chiusura del segnale (prima era sempre 0); è solo un campo registrato.
 Letture Firestore in più: nessuna; scritture: ~1 per trade chiuso in più e 1 al giorno (stima). Non
 verificato sulla macchina: arriva col riavvio del bot (punti 1-10) e col prossimo giro (11-12).
+
+### 1 ottobre, sera: R1 al posto di un giro del gate al giorno (sì del proprietario)
+
+Il primo lancio di R1 (13:49) ha aspettato 4 ore senza trovare una pausa: ogni giro del gate dura
+~3 ore e il timer scatta ogni 3 ore (ops 0410-0411). Insieme non stanno in memoria: col gate in corso
+10 GB occupati su 15, 4 liberi, 6 processi al 100% (ops 0412-0413); R1 con 2 processi ne chiede ~4,6
+(stima). Deciso dal proprietario: «procedi con R1 al posto di un giro del gate al giorno». Fatto:
+`bot/core/finestra_r1.py` — finché esiste `data/replay_gate/attivo` (lo crea R1 al lancio e lo toglie
+quando le 26 date sono fatte) il giro delle 12:00 UTC (14:00 italiane) di optimize e discovery esce
+subito con la riga «[gate] giro delle 12:00 UTC SALTATO»; R1 conta come prossimo giro quello delle 15
+UTC, aspetta fino a 8 ore (lanciato dal controllo del mattino), e nell'ora saltata ricontrolla dopo 20 s
+un gate «in corso» (il servizio parte ed esce subito; un giro delle 09 che sfora resta un giro vero).
+Il giro completo di notte resta. Cosa si perde: ~1/8 delle candidate nuove al giorno e 3 ore di
+ritardo per le ipotesi urgenti una volta al giorno, per ~6-8 giorni (stima). Spegnimento a mano:
+cancellare il file `attivo` o `R1_SALTA_GIRO=0`. Possibile effetto collaterale: l'anomalia
+GATE_IN_RITARDO può diventare gialla nel pomeriggio (6 ore fra due giri). Prima lettura completa di R1
+stimata verso il 9 ottobre.
