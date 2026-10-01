@@ -25,13 +25,16 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 
 ---
 
-**INDICE AL 1 OTT (dopo la pulizia: 44 voci; J1, J3, J4, J5 chiuse col verdetto nel diario).** Il dettaglio di ogni voce è più sotto.
+**INDICE AL 1 OTT, aggiornato alle 11:30 ora italiana (J1, J3, J4, J5 chiuse col verdetto nel diario).** Il dettaglio di ogni voce è più sotto.
 
 | Stato | Voci | Cosa serve |
 |---|---|---|
-| **Aperte (15; K2, D6 e K8 compaiono anche in un'altra riga)** | K2 (spazio del registro: primo rimedio fatto il 1 ott), D6 (leve della spesa AI), D7 (modello del runner GitHub), E4 (strategie gemelle), K7 (dati sbagliati all'AI: fatta il 1 ott), K8 (conti in R, costi), G3 (voto minimo nel gate), G6 (recenza nell'approvazione), B8 (varianti giudicate senza il paper), C4 (annunci USA), I4bis, I5, J15, D1, D5 | vedi ogni voce: chi decide e quando |
+| **Fatte il 1 ott (restano sotto come memoria)** | K2 primo rimedio (spazio del registro), K7 (dati all'AI), D6-IPOTESI (riga ORIGINI), J6 (rifiutati nello stesso periodo), J15 (scritta «rispetto a un'ora fa»), D5 (reset del paper), K8 parte report (conti in R) | niente |
+| **Si possono fare adesso (non toccano uscite, size, freni)** | K10 conteggio (quante validate esistono solo per la soglia allentata: sola lettura), K11 (storia delle esplorative a 200 voci), scritta «in panchina» del log (K9) | il sì del proprietario |
+| **Dopo le letture del 7-14 ott (toccano gate, size o freni)** | K9 (leva 2x dopo una vincita), K10 rimettere la soglia, G3 e soglia H1 (metà nov), G6, B8 seconda metà, E4 gemelle, I5, D6 leve della spesa | il numero delle letture, poi il sì |
+| **Rinviate con motivo** | I4bis (serve un campo nuovo e un riavvio, nessun numero lo chiede), D1 (registro su più documenti: rifacimento rischioso, si fa se lo spazio non basta), D7 (modello del runner GitHub: azione del proprietario sul segreto) | vedi ogni voce |
 | **In misura (21)** — si leggono da sole | 1 ott: J14 (letture Firebase), D6 (primo giorno intero di spesa) · 3 ott: A4 (declassate contro attive) · 7 ott: H5, K1 (selezione o esecuzione) · ~10 ott: J7, J9, I4ter · ~14-15 ott: H5 (rilettura), K3 (gruppo di controllo) · ~18 ott: J11, J13, C1 · ~26 ott: J6 · metà nov: K2 (regola H1) · senza data: F1bis (100 trade esplorativi), F1ter (selettore), I1 (panchina), I3, I4 (trailing), J8, J10, E1 | niente: leggere il numero alla data |
-| **Scoperte da ricordare (4)** | K4 (il paper ha la firma del caso), K5 (il quarto di size non agisce), K6 (uscita del freno irraggiungibile), K8 (costi e scivolamento: prima di soldi veri) | prima di un passaggio a soldi veri |
+| **Scoperte da ricordare (5)** | K4 (il paper ha la firma del caso), K5 (il quarto di size non agisce), K6 (uscita del freno irraggiungibile), K8 (costi e scivolamento: prima di soldi veri), C4 (annunci USA) | prima di un passaggio a soldi veri |
 | **Parcheggiate dal proprietario (6)** | B5, B6, B7 (dati esterni), H3 (stop giornaliero), H4 (freno di serie), J2 | solo se il proprietario le riprende |
 
 **Stato al 30 set (rilettura completa delle 70 voci, verificata contro i risultati ops).**
