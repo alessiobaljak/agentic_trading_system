@@ -136,6 +136,21 @@ ingressi-vet:  .venv/bin/python -m scripts.ingressi_report --coppia VETUSDT/gen_
 # vera sta sulla VPS: questa riga va ricopiata li' a mano.
 voto-t-completo: systemd-run --no-block --collect --unit=voto-t-completo --nice=15 --property=IOSchedulingClass=idle --property=WorkingDirectory=/root/agentic_trading_system /root/agentic_trading_system/.venv/bin/python -m scripts.t_validate --su-file --budget 0
 voto-t-esito: .venv/bin/python -m scripts.t_validate --esito
+# R1, IL GATE RIGIOCATO NEL PASSATO (1 ott 2026, si' del proprietario): a 26
+# date passate il gate giudica candidate nuove coi soli dati fino alla data, poi
+# si guarda come vanno nei 14 giorni dopo passate e bocciate (regola in
+# docs/andremo_live.md). Scrive SOLO data/replay_gate/ (un file per coin x
+# data, appena finito): 0 letture e 0 scritture Firebase, il registro non si
+# tocca. ~13-17 ore in tutto (STIMA da una misura in locale): ogni lancio
+# lavora al massimo 2,5 ore e il successivo riprende; il PRIMO fa solo 2 date
+# (la prova piccola). Stesse protezioni del voto t: nice 15, disco «idle»,
+# lucchetto del kernel, non parte col giro del gate in corso o a meno di 40
+# minuti (aspetta, max 4 ore), si ferma prima di ogni unita' se il giro sta per
+# partire. Avanzamento e lettura
+# (PARZIALE finche' le 26 date non sono complete) con `replay-gate-esito`.
+# NB: la lista bianca vera sta sulla VPS: queste righe vanno ricopiate li' a mano.
+replay-gate: systemd-run --no-block --collect --unit=replay-gate --nice=15 --property=IOSchedulingClass=idle --property=WorkingDirectory=/root/agentic_trading_system /root/agentic_trading_system/.venv/bin/python -m scripts.replay_gate --su-file
+replay-gate-esito: .venv/bin/python -m scripts.replay_gate --esito
 
 # ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
 # la lista bianca stessa, per confrontarla con questo esempio quando si mette in

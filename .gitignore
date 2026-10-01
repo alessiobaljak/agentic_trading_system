@@ -41,6 +41,10 @@ data/ingressi_*
 # file che il `portafoglio` legge, il referto, il pid e il lucchetto. Dati della
 # macchina, vivono sulla VPS.
 data/voto_t/
+# R1, il gate rigiocato nel passato (1 ott 2026: `scripts/replay_gate.py`): il
+# piano, un file per coin x data, il referto, il pid e il lucchetto. Dati della
+# macchina, vivono sulla VPS.
+data/replay_gate/
 
 # Node / Next.js
 dashboard/node_modules/

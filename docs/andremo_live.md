@@ -2498,3 +2498,12 @@ perdita, non un vantaggio delle regole); sul portafoglio del gate, che guadagna,
 rimbalzi. Il win rate dopo 4 perdite di fila non cambia (62,5% su 8 contro 68,2%, t −0,34, ops 0387).
 Limite: il portafoglio del gate usa coppie scelte anche su quei giorni (livello ottimista); conta la
 differenza fra le righe. Nessuna regola cambia: H3 e H4 restano parcheggiate.
+**R1, lo strumento (1 ott, pomeriggio):** `scripts/replay_gate.py`, test in `tests/test_replay_gate.py`
+(suite 2138 verdi). Usa il verdetto del gate di produzione (`evaluate_spec`) con scale e keep fissi
+(niente dal paper), candele caricate fino a oggi e tagliate in memoria, 0 letture e 0 scritture
+Firebase, registro non toccato; scrive solo `data/replay_gate/`. 50 candidate per data (non 100: la
+misura in locale dava 22-28 ore con 100), 4 processi (misurati ~2,3 GB ciascuno). Ogni lancio lavora
+al massimo 2,5 ore nelle pause del gate e il successivo riprende; il primo fa solo 2 date (prova
+piccola). Stima totale (da una misura in locale, non sulla VPS): circa 20-25 ore di calcolo con 4
+processi, quindi più lanci. Limite in più rispetto alla regola: il costo del funding usa la media
+dell'ultimo periodo, anche dopo la data. Righe della lista bianca: `replay-gate`, `replay-gate-esito`.
