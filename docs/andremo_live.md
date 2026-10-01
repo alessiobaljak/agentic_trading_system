@@ -2348,3 +2348,9 @@ Il backlog teneva come memoria anche voci già fatte, contro la sua regola d'usc
 * **I6** — il tetto di 5 posizioni toglierebbe trade in ordine d'arrivo, non i peggiori; 0 rifiuti per rischio su 71 (ops 0370).
 * **I9** — isteresi del keep 0,75: 5 trade in tutto a −0,14R (ops 0358), e il gate sceglie il keep alto anche su un prezzo casuale.
 * **E4, parte del filtro `min_adx`** — l'ADX è la variabile che conta meno, ultima su 18 (ops 0368); E4 resta solo per le strategie gemelle.
+
+**Chiuse dopo (1 ott), senza lavoro da fare:**
+* **J1** — nessun lavoro finché i trade sono pochi (oggi ~190): il costo lo sorveglia da sola l'anomalia `CONTROLLO_LENTO` del controllo orario (oltre 2 s), che dirà quando servono le somme incrementali.
+* **J3** — non si fa, per scelta: un controllo vecchio È l'avviso che il bot è fermo, e il battito lo dice già; un timer in più non aggiunge informazione.
+* **J4** — fatta: il proprietario ha guardato la dashboard con dati veri (il 28 set ha trovato +1,26 contro +3,25 del 27 set, spiegato e corretto con i due totali «conto» e «validate»).
+* **J5** — non si fa: persistere i contatori costerebbe una scrittura per rifiuto; i rifiuti che contano sono già salvati e misurati dall'ombra dei rifiutati (J6, `rifiutati_report`).

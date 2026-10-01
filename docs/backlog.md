@@ -25,11 +25,11 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 
 ---
 
-**INDICE AL 1 OTT (dopo la pulizia: 48 voci).** Il dettaglio di ogni voce è più sotto.
+**INDICE AL 1 OTT (dopo la pulizia: 44 voci; J1, J3, J4, J5 chiuse col verdetto nel diario).** Il dettaglio di ogni voce è più sotto.
 
 | Stato | Voci | Cosa serve |
 |---|---|---|
-| **Aperte (16)** | K2 (spazio del registro), D6 (leve della spesa AI), D7 (modello del runner GitHub), E4 (strategie gemelle), K7 (dati sbagliati all'AI), K8 (conti in R, costi), G3 (voto minimo nel gate), G6 (recenza nell'approvazione), B8 (varianti giudicate senza il paper), C4 (annunci USA), I4bis, I5, J1, J3, J4, J5, J15, D1, D5 | vedi ogni voce: chi decide e quando |
+| **Aperte (15; K2, D6 e K8 compaiono anche in un'altra riga)** | K2 (spazio del registro), D6 (leve della spesa AI), D7 (modello del runner GitHub), E4 (strategie gemelle), K7 (dati sbagliati all'AI), K8 (conti in R, costi), G3 (voto minimo nel gate), G6 (recenza nell'approvazione), B8 (varianti giudicate senza il paper), C4 (annunci USA), I4bis, I5, J15, D1, D5 | vedi ogni voce: chi decide e quando |
 | **In misura (21)** — si leggono da sole | 1 ott: J14 (letture Firebase), D6 (primo giorno intero di spesa) · 3 ott: A4 (declassate contro attive) · 7 ott: H5, K1 (selezione o esecuzione) · ~10 ott: J7, J9, I4ter · ~14-15 ott: H5 (rilettura), K3 (gruppo di controllo) · ~18 ott: J11, J13, C1 · ~26 ott: J6 · metà nov: K2 (regola H1) · senza data: F1bis (100 trade esplorativi), F1ter (selettore), I1 (panchina), I3, I4 (trailing), J8, J10, E1 | niente: leggere il numero alla data |
 | **Scoperte da ricordare (4)** | K4 (il paper ha la firma del caso), K5 (il quarto di size non agisce), K6 (uscita del freno irraggiungibile), K8 (costi e scivolamento: prima di soldi veri) | prima di un passaggio a soldi veri |
 | **Parcheggiate dal proprietario (6)** | B5, B6, B7 (dati esterni), H3 (stop giornaliero), H4 (freno di serie), J2 | solo se il proprietario le riprende |
@@ -608,20 +608,8 @@ La sesta ipotesi dei referti: le perdite «mai andate a favore» (classe ingress
 
 Fatto il 25 set su richiesta del proprietario («check di tutto in automatico, le evidenze in dashboard ogni ora, la dashboard come un sistema serio»): il bot scrive ogni ora `dashboard/controllo` (`bot/learning/controllo.py`, schema in `docs/controllo_schema.md`), la discovery scrive `dashboard/gate` a ogni giro, la dashboard passa da 6+1 tab a 4+1 con il Controllo in prima pagina e 16 pannelli tolti. Rimandato, con il motivo:
 
-### J1. Totali «da sempre» del paper ricalcolati a ogni ora
-Il controllo rilegge tutti i trade chiusi ogni ora (oggi 55: costa niente). Oltre ~5.000 trade servono somme incrementali aggiornate a ogni chiusura. Metro: `meta.durata_ms` nel controllo (anomalia `CONTROLLO_LENTO` oltre 2 s).
-
 ### J2. «Cosa aspetta il sì» non è persistito
 Le voci in attesa del sì vivono qui nel backlog: il controllo le lascia `null` e lo dice. Persisterle (un doc scritto dal controllo del mattino) è possibile ma è un altro posto da tenere allineato a mano; si fa solo se il proprietario vuole vederle in dashboard.
-
-### J3. Il ripiego GitHub del controllo è lento quanto GitHub
-Se il bot è fermo, il controllo lo scrive lo snapshot di GitHub (ogni 2 ore sulla carta, 3-7 ore misurate). La dashboard lo segnala con «scritto dal ripiego» e il rosso oltre 2 ore: è voluto, un controllo vecchio È l'evidenza che qualcosa è fermo. Un timer sulla VPS (`ops controllo --publish`) sarebbe più regolare ma non aggiunge informazione: se il bot è giù lo dice il battito.
-
-### J4. Non verificato dal vivo
-La dashboard nuova è verificata con tipi, build e un test di parità campo per campo fra chi scrive (Python) e chi legge (TypeScript), non in un browser né con dati veri (nessun accesso a Firebase da qui): il ripiego RTDB→Firestore, la resa su telefono e le liste RTDB rese come oggetti vanno guardate dal proprietario al primo giro. Da segnalare qui ciò che non torna.
-
-### J5. Contatori che vivono in RAM
-`rifiuti_24h`, `errori_ciclo_1h` e `riavvii_24h` si azzerano al riavvio del bot (lo dicono `rifiuti_24h_dal` e l'anello `/avvii`). Persisterli su RTDB costa una scrittura per rifiuto: non ora.
 
 ### J7. Direzione × contesto BTC nei referti — **FATTO il 26 set** (misura, nessuna decisione)
 Dall'audit del flusso di learning: E1 dice «short 54 trade, −44,95», ma non dice se è «short» o «short con BTC su». Il dato c'è dal 25 set su ogni trade (`feats_at_entry.market_up`, la stessa variabile del gate e del selettore); i trade più vecchi restano «ignoto» (il contesto NON si ricava dagli indicatori della coin, che non sono BTC). Fatto in `bot/learning/referti.py`: `per_contesto` (globale e per strategia: long_con / long_contro / short_con / short_contro / ignoto, ognuna con trade, vinti, PnL) nel documento `learning/referti`, la tabella «DIREZIONE x CONTESTO BTC» in `trades`, e la settima ipotesi `controtrend_btc` (regola dichiarata: ≥ 3 perdite CONTRO il contesto — long con BTC giù, short con BTC su — e 0 vinti contro, per strategia), che la discovery prova come figlia `conferma_trend` (la conferma a 1 ora è il mattoncino che c'è) con l'etichetta `ipotesi = "controtrend_btc"`.
