@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato il 1 ottobre 2026, 13:00 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato il 1 ottobre 2026, 17:00 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
@@ -14,18 +14,29 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
 | **5. Solo se serve** | D1 | lo spazio del registro che finisce |
-| **6. Parcheggiate da te** | H3, H4, B5, B6, B7, J2 | che tu le riprenda |
+| **6. Parcheggiate da te** | H3, H4, B5, B6, B7 | che tu le riprenda |
 
 ---
 
+**Formato (1 ott 2026, J2):** questo file lo legge anche la macchina dopo ogni giro del gate
+(`bot/learning/backlog_doc.py`) e lo pubblica in Firebase (`dashboard/backlog`, RTDB `/backlog`):
+la dashboard mostra le voci senza una seconda copia da aggiornare. Quindi: un gruppo è
+`## N. Nome`, una voce è `### SIGLA. Titolo` (o, nel gruppo 6, `* **SIGLA. Titolo:** testo`), e
+le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
+
+## 0. Aspettano il tuo sì
+
+Nessuna voce in attesa del tuo sì.
+
 ## 1. In lavorazione
 
-### R1. Rigiocare il gate nel passato — **SÌ del proprietario il 1 ott, in lavorazione** (regola nel diario del 1 ott, scritta prima dei numeri)
+### R1. Rigiocare il gate nel passato — SÌ del proprietario il 1 ott: strumento pronto, prova piccola lanciata alle 13:49 (ops 0407)
 Invece di aspettare il 7-14 ott per sapere se il gate sceglie strategie con un vantaggio vero, si
 rifà il gate a 26 date passate e si guarda come sono andate dopo le promosse contro le bocciate.
 Regola da scrivere prima dei numeri: promosse meglio delle bocciate oltre il margine → il gate ha un
@@ -33,6 +44,10 @@ vantaggio; differenza + margine sotto 0,10R → il gate sceglie la fortuna; altr
 **Serve:** il tuo sì (prima una prova piccola, poi completa) e 2 righe nuove nella lista bianca
 della VPS da aggiungere a mano. **Attenzione tecnica:** non deve scrivere nel registro vero né
 cancellare la cache del gate (si caricano i dati fino a oggi e si tagliano in memoria).
+
+### J2. «Cosa aspetta il sì» in dashboard, senza aggiornarlo a mano — in lavorazione (1 ott)
+La macchina legge questo file dopo ogni giro del gate e lo pubblica in Firebase; la dashboard mostra
+le voci del gruppo 0 («Aspettano il tuo sì») e il resto del backlog. Una sola fonte, nessuna copia.
 
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
 
@@ -120,15 +135,23 @@ dopo K2): si fa se la riga «ci stanno ancora ~N coppie» del gate scende sotto 
 ## 6. Parcheggiate da te
 
 Restano solo come memoria; si riprendono se lo chiedi.
-* **H3. Stop giornaliero:** il bot si fermerebbe dopo una perdita del giorno (es. 3%). Nella
-  simulazione sulle 160 strategie (ops 0232) andava peggio (−21%: dopo il blocco si perde il rimbalzo).
-  Tu: «non voglio limitare la quantità, voglio trade migliori».
-* **Rigioco del 1 ott (ops 0404 paper, 0405 gate), richiesto dal proprietario:** sul paper stop e freni
-  migliorano di poco (il migliore, freno di serie dopo 3 perdite del bot: +15,62 su −81,11), sul portafoglio
-  del gate peggiorano tutti (stop 3%: −11.615 e drawdown da 11,7% a 20,3%; freno 3 perdite del conto:
-  −3.957). Sul paper aiutano solo perché tolgono esposizione a un sistema che perde: confermato parcheggio.
-* **H4. Freno di serie:** meno size dopo 4 perdite di fila. Misurato (ops 0232): win rate 56% dopo 4
-  perdite contro 63%, su 16 casi: nessuna prova che serva.
-* **B5, B6, B7. Dati esterni:** notizie e dati macro, storico di open interest e long/short,
-  registrazione nostra dello storico.
-* **J2.** «Cosa aspetta il sì» in dashboard: oggi vive qui.
+
+### H3. Stop giornaliero
+Il bot si fermerebbe per il resto del giorno dopo una perdita (es. 3%). Tu: «non voglio limitare la
+quantità, voglio trade migliori». Rigioco del 1 ott (ops 0404 paper, 0405 gate): sul paper +2,00 (3%)
+e +5,09 (2%) su −81,11; sul portafoglio del gate −11.615 (3%) col drawdown da 11,7% a 20,3%. Sul paper
+aiuta solo perché toglie esposizione a un sistema che perde: confermato il parcheggio.
+
+### H4. Freno di serie
+Meno size dopo una serie di perdite. Win rate dopo 4 perdite di fila 62,5% su 8 contro 68,2% (ops
+0387, t −0,34): nessuna prova che serva. Rigioco del 1 ott: sul paper il migliore (3 perdite del bot
+→ metà) +15,62 su −81,11; sul gate −3.957. Confermato il parcheggio.
+
+### B5. Notizie e dati macro
+Dati esterni: nessuna fonte gratuita e verificata (vedi C4).
+
+### B6. Storico di open interest e long/short
+Gratis ma mai usato; servirebbe come variabile nuova del gate.
+
+### B7. Registrare noi lo storico da oggi
+Non è «una riga di codice»: dettaglio nell'archivio.

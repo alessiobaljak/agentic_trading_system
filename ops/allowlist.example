@@ -151,6 +151,10 @@ voto-t-esito: .venv/bin/python -m scripts.t_validate --esito
 # NB: la lista bianca vera sta sulla VPS: queste righe vanno ricopiate li' a mano.
 replay-gate: systemd-run --no-block --collect --unit=replay-gate --nice=15 --property=IOSchedulingClass=idle --property=WorkingDirectory=/root/agentic_trading_system /root/agentic_trading_system/.venv/bin/python -m scripts.replay_gate --su-file
 replay-gate-esito: .venv/bin/python -m scripts.replay_gate --esito
+# LA DASHBOARD SENZA COPIE A MANO (1 ott 2026, J2 e report giornaliero): legge
+# docs/backlog.md (e i documenti del bot) e pubblica dashboard/backlog e /backlog.
+# Gira da solo dopo ogni giro del gate; questa riga serve per ripubblicare subito.
+report-giornaliero: .venv/bin/python -m scripts.report_giornaliero --pubblica
 
 # ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
 # la lista bianca stessa, per confrontarla con questo esempio quando si mette in

@@ -4358,5 +4358,34 @@ def main() -> int:
         raise
 
 
+#: tempo massimo del report per la dashboard dopo il giro (1 ott 2026)
+REPORT_DASHBOARD_TIMEOUT_S = 600
+
+
+def pubblica_dashboard_dopo_il_giro() -> None:
+    """Il BACKLOG (e dal 1 ott il report giornaliero) per la dashboard, dopo ogni
+    giro: `scripts/report_giornaliero.py --pubblica` in un PROCESSO A PARTE con un
+    tempo massimo, cosi' un suo errore o un suo blocco non tocca il gate (che ha
+    gia' scritto tutto). Spento nei test. Non solleva mai."""
+    if os.getenv("TRADING_BOT_TEST_MODE") or os.getenv("REPORT_DASHBOARD_SPENTO"):
+        return
+    import subprocess
+    import sys
+    try:
+        r = subprocess.run([sys.executable, "-m", "scripts.report_giornaliero", "--pubblica"],
+                           capture_output=True, text=True, timeout=REPORT_DASHBOARD_TIMEOUT_S,
+                           cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        for riga in (r.stdout or "").splitlines()[-6:]:
+            print(riga)
+        if r.returncode != 0:
+            print(f"[report] uscito con codice {r.returncode}: {(r.stderr or '')[-300:]}")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[report] non pubblicato ({type(exc).__name__}: {str(exc)[:120]})")
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        _rc = main()
+    finally:
+        pubblica_dashboard_dopo_il_giro()
+    raise SystemExit(_rc)

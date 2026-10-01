@@ -7,6 +7,7 @@ import { lista, useControllo, type Manca } from '../lib/controllo';
 import { useGateDoc } from '../lib/gate';
 import { durata } from '../lib/viz';
 
+import BacklogSi from './BacklogSi';
 import BotStatus from './BotStatus';
 import ControlloAnomalie from './ControlloAnomalie';
 import ControlloHero from './ControlloHero';
@@ -156,6 +157,7 @@ function ControlloTab() {
       <ControlloHero />
       <BotStatus />
       <ControlloAnomalie />
+      <BacklogSi />
       {stato !== 'assente' && doc && (
         <>
           <ControlloPaper />
