@@ -125,3 +125,10 @@ def test_pubblica_scrive_ultimo_e_storia(monkeypatch):
     rep = scritti[("dashboard", "report_giornaliero")]
     assert len(rep["sezioni"]) == 9 and scritti["/report_giornaliero"]["meta"]["giorno"]
     assert ("report_giornaliero", rep["meta"]["giorno"]) in scritti
+
+
+def test_testo_report_ha_tutte_le_sezioni():
+    rep = _vuoto(trades=[_t(-1.0, 10)])
+    t = rg.testo_report(rep)
+    for _, titolo in rp.SEZIONI:
+        assert f"== {titolo}" in t

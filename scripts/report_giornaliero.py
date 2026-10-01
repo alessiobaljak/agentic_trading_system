@@ -158,6 +158,25 @@ def doc_report(fb, backlog: dict, radice: str = RADICE, now: float | None = None
         r1=avanzamento_r1(radice), now=now, versione=_commit(radice))
 
 
+def testo_report(rep: dict, max_righe: int = 12) -> str:
+    """Il report in testo semplice, sezione per sezione: lo stampa la richiesta
+    ops `report-giornaliero`, cosi' chi non vede la dashboard (il controllo del
+    mattino, una sessione di lavoro) legge LO STESSO report pubblicato."""
+    out = [f"REPORT GIORNALIERO del {rep['meta'].get('giorno')} (versione "
+           f"{rep['meta'].get('commit')})"]
+    for s in rep.get("sezioni") or []:
+        out.append(f"\n== {s.get('titolo')}" + (f"  [ERRORE: {s['errore']}]" if s.get("errore") else ""))
+        for r in (s.get("righe") or [])[:max_righe]:
+            out.append(f"  - {r}")
+        tab = s.get("tabella") or {}
+        if tab.get("righe"):
+            if tab.get("colonne"):
+                out.append("    " + " | ".join(str(c) for c in tab["colonne"]))
+            for r in tab["righe"][:30]:
+                out.append("    " + " | ".join("" if x is None else str(x) for x in r))
+    return "\n".join(out)
+
+
 def _scrivi(fb, collezione: str, doc_id: str, percorso_rtdb: str, doc: dict) -> bool:
     """Firestore e specchio RTDB, come il documento del gate. Non solleva mai."""
     from bot.core.registry import pulisci_per_firestore
@@ -202,6 +221,7 @@ def main(argv: list[str] | None = None) -> int:
               f"({str(exc)[:120]})")
     print(f"[report] report del {rep['meta']['giorno']} pubblicato: {'si' if ok2 else 'NO'}"
           + (f" (sezioni con errore: {', '.join(errori)})" if errori else ""))
+    print(testo_report(rep))
     return 0 if (ok and ok2) else 1
 
 
