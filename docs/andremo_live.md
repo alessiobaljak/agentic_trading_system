@@ -2380,3 +2380,12 @@ Rifiutati «posizione aperta» −0,13R su 45: il report dice ancora «RITARARE�
 diversi (vedi la proposta). **Proposta del giorno (serve il sì): J6, confrontare rifiutati e aperti
 nello stesso periodo** in `rifiutati_report` (solo report; la regola non cambia). Trovato anche: la
 storia delle esplorative tagliata a 200 voci rompe la loro misura (backlog K11).
+
+### 1 ottobre, mattina: il report dei rifiutati confronta lo stesso periodo (J6)
+
+Sì del proprietario («correggi il report»). Scritto PRIMA del primo report nuovo, perché il verdetto
+su «posizione aperta» probabilmente si gira: gli aperti ora partono dall'istante del primo rifiutato
+registrato (26 set), per ora d'ingresso, con R netto e lordo; la regola resta quella scritta (almeno
+30 casi valutati e R dei rifiutati maggiore di R degli aperti); il margine si stampa solo come
+informazione (calcolato caso per caso, quindi probabilmente più stretto del vero). Lo 0,2R che il
+controllo del mattino aggiungeva a mano non serve più: la causa era il periodo diverso.

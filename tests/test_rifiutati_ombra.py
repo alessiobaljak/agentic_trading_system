@@ -468,27 +468,42 @@ def test_report_con_dati_confronta_con_gli_aperti(monkeypatch, capsys):
             "BUSDT": [_C(0, 100, 100.5, 97.5, 98, t0)],
             "CUSDT": _piatte(1, 100.0, t0) + [_C(1, 100, 104.5, 99.9, 104, t0)]}
     rifiutati.valuta_pendenti(fb, lambda s, tf, l: cand.get(s, []), now)
-    # due aperti: uno a +1R netto (rischio 2 x 10 = 20 USDT, pnl 20), uno a -1R
+    # due aperti ENTRATI dopo il primo rifiutato: uno a +1R netto (rischio
+    # 2 x 10 = 20 USDT, pnl 20; lordo 22 = +1,1R), uno a -1R (lordo -18 = -0,9R)
     fb.set_doc("trades", "t1", {"trade_id": "t1", "symbol": "XUSDT", "direction": "long",
                                 "entry_price": 100.0, "orig_stop": 98.0, "size": 10.0,
-                                "pnl": 20.0, "mfe_r": 1.4, "exit_ts": now - 3600})
+                                "pnl": 20.0, "gross_pnl_usdt": 22.0, "mfe_r": 1.4,
+                                "entry_ts": t0 + 2 * TF, "exit_ts": now - 3600})
     fb.set_doc("trades", "t2", {"trade_id": "t2", "symbol": "YUSDT", "direction": "short",
-                                "entry_price": 100.0, "post_mortem": {"stop_pct": 2.0},
-                                "size": 10.0, "pnl": -20.0, "mfe_r": 0.2, "exit_ts": now - 7200})
+                                "entry_price": 100.0, "post_mortem": {"stop_pct": 0.02},
+                                "size": 10.0, "pnl": -20.0, "gross_pnl_usdt": -18.0, "mfe_r": 0.2,
+                                "entry_time": datetime.fromtimestamp(t0 + 3 * TF, tz=timezone.utc).isoformat(),
+                                "exit_ts": now - 7200})
     fb.set_doc("trades", "t3", {"trade_id": "t3", "symbol": "ZUSDT", "direction": "long",
                                 "entry_price": 100.0, "size": 10.0, "pnl": 5.0,
-                                "exit_ts": now - 7200, "esplorativa": True})   # fuori
+                                "entry_ts": t0 + 2 * TF, "exit_ts": now - 7200,
+                                "esplorativa": True})                          # fuori
     fb.set_doc("trades", "t4", {"trade_id": "t4", "symbol": "WUSDT", "direction": "long",
                                 "entry_price": 100.0, "stop_price": 100.0, "size": 10.0,
-                                "pnl": 5.0, "exit_ts": now - 7200})            # senza R
+                                "pnl": 5.0, "entry_ts": t0 + 2 * TF, "exit_ts": now - 7200})  # senza R
+    # 1 ott 2026: entrato PRIMA del primo rifiutato, uscito dopo, a -5R: fino al
+    # 30 set entrava nel confronto (filtro per ora d'uscita); ora resta fuori
+    fb.set_doc("trades", "t5", {"trade_id": "t5", "symbol": "VUSDT", "direction": "long",
+                                "entry_price": 100.0, "orig_stop": 98.0, "size": 10.0,
+                                "pnl": -100.0, "entry_ts": t0 - 3600, "exit_ts": now - 600})
     assert rep.main(["--min-casi", "2"]) == 0
     out = capsys.readouterr().out
     assert "4 registrati" in out
     assert "cooldown" in out and "posizione aperta" in out
-    assert "APERTI nello stesso periodo: 2 trade con R calcolabile (1 senza)" in out
-    assert "R medio +0.00" in out
+    dal = rep.ora_italiana(t0 + 30)
+    assert (f"APERTI dal {dal} ora italiana (primo rifiutato registrato), per ora d'ingresso: "
+            "2 trade con R (1 senza R)") in out
+    assert "R netto medio +0.00" in out and "R lordo medio +0.10 (su 2 col lordo)" in out
+    assert "1 entrati prima e usciti dopo, 0 senza ora d'ingresso, 1 esplorativi" in out
     # cooldown: 2 valutati (+2R, -1R) -> R medio +0.50 > aperti 0.00 su 2 casi -> ritarare
     assert "cooldown" in out and "RITARARE" in out
+    # il margine si stampa accanto, come informazione
+    assert "solo informazione" in out and "MARGINE" in out
     # posizione aperta: 0 valutati -> campione insufficiente
     assert "campione insufficiente" in out
 
@@ -530,3 +545,101 @@ def test_il_bot_cabla_ombra_dei_rifiuti_e_storia_delle_ipotesi():
     assert "timeframes=self._timeframes_in_uso())" in src_run       # 28 set 2026: finestra per timeframe
     src_ref = inspect.getsource(bot_main.TradingBot._publish_referti)
     assert 'self.fb.set_doc("learning", "ipotesi_storia"' in src_ref
+
+
+# --------------------------------------------------------------------------- #
+# 8. lo stesso periodo (1 ott 2026, J6)                                        #
+# --------------------------------------------------------------------------- #
+def _aperto(tid, entry_ts, pnl, lordo=None, **kw):
+    """Un trade aperto long con rischio 20 USDT (entry 100, stop 98, size 10)."""
+    t = {"trade_id": tid, "symbol": "XUSDT", "direction": "long", "entry_price": 100.0,
+         "orig_stop": 98.0, "size": 10.0, "pnl": pnl, "entry_ts": entry_ts,
+         "exit_ts": (entry_ts or T0) + 3600}
+    if lordo is not None:
+        t["gross_pnl_usdt"] = lordo
+    t.update(kw)
+    return t
+
+
+def test_riassunto_da_il_primo_rifiutato_e_la_dispersione(monkeypatch):
+    monkeypatch.setattr(settings, "SCALE_OUT_ENABLED", False)
+    fb = _fb()
+    _registra(fb, symbol="AUSDT", now=T0 + 30)
+    _registra(fb, symbol="BUSDT", now=T0 + 30)
+    _registra(fb, symbol="CUSDT", now=T0 + 3 * TF + 30)
+    candele = {"AUSDT": _piatte(2) + [_C(2, 100, 104.5, 99.9, 104)],     # +2R
+               "BUSDT": [_C(0, 100, 100.5, 97.5, 98)]}                    # -1R
+    rifiutati.valuta_pendenti(fb, lambda s, tf, l: candele.get(s, []), T0 + 6 * TF)
+    r = rifiutati.riassunto(fb, giorni=30, now=T0 + 6 * TF)
+    assert r["primo_ts"] == pytest.approx(T0 + 30)
+    cd = r["per_motivo"]["cooldown"]
+    assert cd["pnl_r_dev"] == pytest.approx(2.1213, abs=1e-3)        # stdev(+2, -1)
+    assert rifiutati.riassunto(_fb(), now=T0)["primo_ts"] is None
+
+
+def test_aperti_filtrati_per_periodo_e_per_ora_d_ingresso():
+    dal = T0
+    trades = [
+        _aperto("dentro", T0 + 60, 20.0),
+        # entrato prima, uscito dopo il primo rifiutato: col vecchio filtro
+        # (ora d'uscita) era dentro, ora no
+        _aperto("prima", T0 - 3600, -20.0, exit_ts=T0 + 7200),
+        # l'ora d'ingresso letta anche da entry_time (ISO, anche senza fuso = UTC)
+        _aperto("iso", None, 10.0,
+                entry_time=datetime.fromtimestamp(T0 + 120, tz=timezone.utc).isoformat()),
+        _aperto("iso_naive", None, 10.0,
+                entry_time=datetime.fromtimestamp(T0 - 120, tz=timezone.utc)
+                .replace(tzinfo=None).isoformat()),
+        _aperto("senza_ora", None, 5.0),
+        _aperto("esplorativo", T0 + 60, 5.0, esplorativa=True),
+    ]
+    p = rep.aperti_del_periodo(trades, dal)
+    assert [t["trade_id"] for t in p["trades"]] == ["dentro", "iso"]
+    assert p["entrati_prima"] == 2 and p["senza_ora"] == 1 and p["esplorativi"] == 1
+    # senza un primo rifiutato non c'e' un periodo comune: nessun aperto
+    assert rep.aperti_del_periodo(trades, None)["trades"] == []
+
+
+def test_aperti_r_netto_e_lordo():
+    trades = [_aperto("a", T0, 20.0, lordo=24.0),      # +1,0R netto, +1,2R lordo
+              _aperto("b", T0, -20.0, lordo=-18.0),    # -1,0R netto, -0,9R lordo
+              _aperto("c", T0, 10.0),                   # +0,5R netto, lordo assente
+              {"trade_id": "d", "entry_price": 100.0, "size": 10.0, "pnl": 3.0,
+               "gross_pnl_usdt": 4.0}]                  # senza stop originale: senza R
+    s = rep.statistiche_aperti(trades)
+    assert s["n"] == 3 and s["senza_r"] == 1
+    assert s["pnl_r_medio"] == pytest.approx(round((1.0 - 1.0 + 0.5) / 3, 3))
+    assert s["lordo_n"] == 2 and s["lordo_r_medio"] == pytest.approx(0.15)
+    # lo stesso R dei conti in R di trade_stats (drift.r_multiplo)
+    from bot.learning.drift import r_multiplo
+    assert rep.r_aperto(trades[0]) == r_multiplo(trades[0]) == pytest.approx(1.0)
+    assert rep.r_lordo(trades[0]) == pytest.approx(1.2) and rep.r_lordo(trades[2]) is None
+
+
+def test_il_verdetto_cambia_quando_cambia_il_periodo():
+    """Il caso del 1 ott (numeri finti, stessa forma di ops 0371/0388/0398):
+    prima del primo rifiutato gli aperti perdono molto, dopo poco o niente.
+    Con tutti gli aperti la regola dice RITARARE, con lo stesso periodo «tiene»."""
+    primo = T0
+    prima = [_aperto(f"p{i}", T0 - 86400 - i * 600, -12.0, exit_ts=T0 + 3600) for i in range(40)]
+    dopo = [_aperto(f"d{i}", T0 + 600 + i * 600, 2.0 if i % 2 else -0.4) for i in range(30)]
+    pm = {"posizione aperta": {"n": 50, "valutati": 45, "pnl_r_medio": -0.13, "pnl_r_dev": 1.1}}
+    tutti = rep.statistiche_aperti(prima + dopo)
+    assert "RITARARE" in rep.verdetto(pm, tutti, min_casi=30)[0]
+    stesso = rep.statistiche_aperti(rep.aperti_del_periodo(prima + dopo, primo)["trades"])
+    assert stesso["n"] == 30 and stesso["pnl_r_medio"] == pytest.approx(0.04)
+    riga = rep.verdetto(pm, stesso, min_casi=30)[0]
+    assert "il freno tiene" in riga and "RITARARE" not in riga
+
+
+def test_il_margine_si_stampa_ma_non_decide():
+    pm = {"cooldown": {"n": 40, "valutati": 30, "pnl_r_medio": 0.05, "pnl_r_dev": 1.2}}
+    aperti = {"n": 60, "pnl_r_medio": 0.04, "pnl_r_dev": 0.9}
+    mg = rep.margine(pm["cooldown"], aperti)
+    assert mg == pytest.approx(2 * (1.2 ** 2 / 30 + 0.9 ** 2 / 60) ** 0.5)
+    riga = rep.verdetto(pm, aperti, min_casi=30)[0]
+    # +0,01 sta dentro un margine di ~0,5: la regola scritta dice comunque RITARARE
+    assert "RITARARE" in riga and f"differenza +0.01 ± {mg:.2f}, solo informazione" in riga
+    # senza dispersione il margine non si inventa
+    riga = rep.verdetto({"cooldown": {**pm["cooldown"], "pnl_r_dev": None}}, aperti, 30)[0]
+    assert "margine: non calcolabile" in riga and "RITARARE" in riga

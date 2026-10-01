@@ -50,7 +50,7 @@ from __future__ import annotations
 
 import time
 from datetime import datetime, timezone
-from statistics import mean, median
+from statistics import mean, median, stdev
 from typing import Callable, Optional
 
 from bot.config import settings
@@ -450,7 +450,15 @@ def chiudi_scaduti(fb, now: float, scadenza_s: float = SCADENZA_S,
 def riassunto(fb, giorni: int = 30, now: Optional[float] = None) -> dict:
     """Per classe di motivo: n, valutati, scaduti, in attesa, pnl_r medio,
     quota di vincenti (pnl_r > 0 fra i valutati), mfe_r mediana, esiti.
-    Un dict vuoto di motivi se non c'e' niente (mai un'eccezione)."""
+    Un dict vuoto di motivi se non c'e' niente (mai un'eccezione).
+
+    1 ott 2026 (J6), due campi in piu', letti solo da scripts/rifiutati_report.py:
+      * `primo_ts`: l'istante del primo rifiutato registrato nella finestra
+        (None se non ce n'e'). Il report prende gli aperti da qui, cosi' i due
+        gruppi coprono lo stesso periodo;
+      * per motivo, `pnl_r_dev`: la deviazione standard dei pnl_r valutati
+        (None sotto i 2), per il margine che il report stampa come informazione.
+    Cosa registra il bot non cambia, e non si legge niente in piu'."""
     now = time.time() if now is None else now
     dal = now - giorni * 86400
     try:
@@ -460,9 +468,13 @@ def riassunto(fb, giorni: int = 30, now: Optional[float] = None) -> dict:
         print(f"[rifiutati] riassunto saltato ({exc})")
         docs = []
     per_motivo: dict[str, dict] = {}
+    primo_ts: Optional[float] = None
     for d in docs:
         if not isinstance(d, dict):
             continue
+        ts = _num(d.get("ts"))
+        if ts is not None and (primo_ts is None or ts < primo_ts):
+            primo_ts = ts
         m = str(d.get("motivo_classe") or "altro")
         r = per_motivo.setdefault(m, {"n": 0, "valutati": 0, "scaduti": 0, "in_attesa": 0,
                                       "_pnl": [], "_mfe": [], "esiti": {}})
@@ -485,7 +497,9 @@ def riassunto(fb, giorni: int = 30, now: Optional[float] = None) -> dict:
     for m, r in per_motivo.items():
         pnl, mfe = r.pop("_pnl"), r.pop("_mfe")
         r["pnl_r_medio"] = round(mean(pnl), 3) if pnl else None
+        r["pnl_r_dev"] = round(stdev(pnl), 4) if len(pnl) >= 2 else None
         r["quota_vincenti"] = round(sum(1 for p in pnl if p > 0) / len(pnl), 3) if pnl else None
         r["mfe_r_mediana"] = round(median(mfe), 3) if mfe else None
         out[m] = r
-    return {"dal": dal, "giorni": giorni, "totale": len(docs), "per_motivo": out}
+    return {"dal": dal, "giorni": giorni, "totale": len(docs), "per_motivo": out,
+            "primo_ts": primo_ts}

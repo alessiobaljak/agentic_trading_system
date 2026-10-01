@@ -663,9 +663,9 @@ report scrive «posizione aperta: il freno si può RITARARE» e va corretto a ma
 rifiutati, registrati solo dal 26 set, con TUTTI gli aperti dal 16 set (`scripts/rifiutati_report.py:176`,
 filtro per ora d'uscita), cioè anche coi giorni del difetto della sessione (fino al 26 set −77,93,
 dal 27 +10,19, ops 0371). Nello stesso periodo il freno tiene: aperti dal 27 set +0,042R netti su 61
-(ops 0388), rifiutati «posizione aperta» −0,13R su 45 (ops 0398). Correzione proposta il 1 ott
-(serve il sì): aperti dallo stesso istante del primo rifiutato, R netto e lordo, margine stampato.
-La regola (≥ 30 casi, R dei rifiutati > R degli aperti) non cambia.
+(ops 0388), rifiutati «posizione aperta» −0,13R su 45 (ops 0398). **Corretto il 1 ott (sì del proprietario):** aperti dallo stesso istante del primo rifiutato, per ora
+d'ingresso, R netto e lordo, margine stampato solo come informazione. La regola (≥ 30 casi, R dei
+rifiutati > R degli aperti) non cambia.
 **Il numero che l'ha fatta emergere:** ops 0211 (24 set, 8 coppie rigirate): 9 segnali del gate NON aperti dal paper con PF 1,23 contro 15 aperti con PF 0,50 — e il rifiuto più frequente (ops 0268, «posizione già aperta su questa coin») finiva in `altro`. Un rifiuto lasciava una riga di log e un contatore in RAM: nessuno sapeva se avrebbe vinto, e i freni (cooldown, tetto per coin, soglia di peso, tetto esplorative, veto di regime, margine, rischio direzionale, stop largo) si potevano tarare solo a intuito.
 
 **Fatto:** ogni rifiuto con un segnale dietro viene scritto in Firestore `segnali_rifiutati/{YYYYMMDDHHMM}_{coin}_{strategia}` (una chiave per candela: idempotente) con entry, stop, target, scala, motivo e classe (`bot/learning/rifiutati.py::registra`; dall'orchestratore via `_rifiuto(..., dettaglio=...)`, da `_try_open` via `registra_decisione`). Ogni giro il bot valuta i pendenti sulle candele vere di Binance (`valuta_pendenti`, max 20 chiamate a giro) con le stesse uscite del motore (`simula_segnale`: stop, scala di TP, protezione del profitto, orizzonte 96 barre) e scrive `esito` (tp/stop/trailing/orizzonte), `pnl_r`, `mfe_r`, `mae_r`, `barre`; chi non ha candele entro orizzonte + 8 barre diventa `scaduto`. La voce ops `rifiutati` (`scripts/rifiutati_report.py`) stampa per motivo segnali, valutati, R medio, % vincenti, mfe mediana, e il confronto con gli APERTI dello stesso periodo in R netto. `motivo_rifiuto` ha la classe nuova `posizione aperta`.
