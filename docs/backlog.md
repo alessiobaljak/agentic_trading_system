@@ -204,7 +204,7 @@ vinta e 1 persa. Il rischio raddoppia quando morde il tetto del 10% (equity × l
 MITO e TST erano a leva 2,0x (docs/state.md). È fortuna amplificata e non passa dal gate. **Da
 decidere dopo le letture del 7-14 ott** (tocca la size): per esempio un minimo di trade prima che il
 peso alzi la leva. Correzione allo stesso giro: la pausa dopo 3 stop di fila è SPENTA in parità
-(`bot/main.py:1338`), non attiva come scritto in I1.
+(`bot/main.py:1338`), non attiva come scritto in I1. Il log però scrive lo stesso «strategia … in panchina dopo 3 stop consecutivi» (`bot/main.py:1233`, visto il 1 ott alle 08:34 UTC per gen_c0fd1d91, ops 0402): è una scritta che porta fuori strada, da correggere insieme a K9.
 
 ### K10. Il supervisore ha allentato una soglia del gate e non l'ha mai rimessa (trovato il 1 ott)
 `GATE_WIN_RATE_FLOOR` è scesa da 0,45 a 0,3966 (tra il 19 ago e l'8 set) per decisione del
