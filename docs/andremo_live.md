@@ -2526,3 +2526,11 @@ opposto «va contro»; altrimenti «non si vede ancora») e la sezione «LE FUNZ
 medio e USDT), esplorative, ombra AI (vetati contro accordi, legati per id), R per origine della
 strategia. Restano da misurare: keep e scala per coppia (rigioco degli stessi trade con i valori di
 default), autopsia AI (giri alterni), conferma a maggioranza (autopsia-validate settimanale).
+**Prima lettura (ops 0409, 18:xx ora italiana):** nessuna funzione ha ancora un verdetto oltre il
+margine. Freno globale: frena trade a −0,093R contro −0,173R dei non frenati (non si vede), ma in USDT
+ha risparmiato +12,90 su 48 trade. Declassate: −0,101R contro −0,123R (non si vede), +20,24 USDT
+risparmiati; rischio effettivo medio 0,12% contro 0,21% (il quarto agisce, a metà: K5). Pesi alti
+−0,083R contro −0,326R; leva > 1 −0,020R contro −0,138R (segno giusto, dentro il margine). Tilt: zero
+differenza. Ombra AI: i trade che avrebbe vetato −0,100R (85) contro +0,226R (27) dove era d'accordo,
+diff −0,326 ±0,360 — vicino al margine, a favore dell'AI. Origine: tutti i 164 trade da strategie
+casuali o mutate (nessun trade da un'idea AI, una variante o l'intorno).

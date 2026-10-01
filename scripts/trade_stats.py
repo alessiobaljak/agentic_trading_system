@@ -1071,8 +1071,10 @@ def print_funzioni_servono(trades_tutti: list[dict], decisioni_ombra: list[dict]
                   f"{v['usdt_risparmiati']:+.2f} USDT risparmiati (negativo = guadagni tolti)")
         if v.get("rischio_medio_pct"):
             rm = v["rischio_medio_pct"]
-            print(f"    rischio effettivo medio: declassate {rm.get('declassate')}% · "
-                  f"attive {rm.get('attive')}% (K5: il quarto agisce davvero?)")
+            def _pc(v):
+                return "—" if v is None else f"{v * 100:.2f}%"
+            print(f"    rischio effettivo medio: declassate {_pc(rm.get('declassate'))} · "
+                  f"attive {_pc(rm.get('attive'))} del capitale (K5: il quarto agisce davvero?)")
         if v.get("nota"):
             print(f"    nota: {v['nota']}")
     if specs is not None:
