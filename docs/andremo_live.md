@@ -2507,3 +2507,22 @@ al massimo 2,5 ore nelle pause del gate e il successivo riprende; il primo fa so
 piccola). Stima totale (da una misura in locale, non sulla VPS): circa 20-25 ore di calcolo con 4
 processi, quindi più lanci. Limite in più rispetto alla regola: il costo del funding usa la media
 dell'ultimo periodo, anche dopo la data. Righe della lista bianca: `replay-gate`, `replay-gate-esito`.
+
+### 1 ottobre, sera: «le funzioni servono?» — verifica e misura (punto 3 della richiesta)
+
+Verifica in sola lettura su ops 0386-0405. Quasi ogni funzione ha un CONTATORE (quante volte
+scatta), poche un confronto d'ESITO. **Misurate e non servono:** selettore (0/3 finestre, ops 0396;
+correlazione p/esito +0,063 su 130 trade, 0403), freno per gruppo (dopo il freno globale in 6 pool su 7,
+0288), freno di serie (0387, 0404-0405). **Misurata e serve, ma sul motore:** tetto per direzione (PnL
++48.444 → +56.445, drawdown 11,74% → 10,75%, 0387); nel paper non è mai scattato. **Troppo presto:**
+declassate (3 ott), esplorative (100 trade), varianti e intorno (0 promosse), cooldown e una per coin
+(segno a favore dentro il margine), voto t, fuori campione, sessione, passata a 1 ora, conferma a
+maggioranza. **Non misurate fino a oggi:** freno globale, panchina dei pesi, pesi→leva (K9), tilt,
+keep e scala per coppia, idee e autopsia AI, ombra AI, esplorative in R, rischio vero delle declassate.
+**Fatto:** `bot/learning/contributi.py` (regola dei verdetti scritta prima dei numeri: meno di 10 trade
+per gruppo «campione piccolo»; oltre 2 errori standard nel verso atteso «contribuisce», nel verso
+opposto «va contro»; altrimenti «non si vede ancora») e la sezione «LE FUNZIONI SERVONO?» nel report
+`trades`: freno globale, panchina, pesi alti, leva > 1, tilt, declassate (anche rischio effettivo
+medio e USDT), esplorative, ombra AI (vetati contro accordi, legati per id), R per origine della
+strategia. Restano da misurare: keep e scala per coppia (rigioco degli stessi trade con i valori di
+default), autopsia AI (giri alterni), conferma a maggioranza (autopsia-validate settimanale).

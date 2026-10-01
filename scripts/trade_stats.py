@@ -1048,6 +1048,43 @@ def print_rigioco_paper(trades: list[dict]) -> None:
           f"non il paper")
 
 
+# --------------------------------------------------------------------------- #
+# LE FUNZIONI SERVONO? (1 ott 2026, punto 3 della richiesta del proprietario) #
+# --------------------------------------------------------------------------- #
+def print_funzioni_servono(trades_tutti: list[dict], decisioni_ombra: list[dict] | None,
+                           specs: dict | None) -> None:
+    """Per ogni funzione che agisce sui trade: il gruppo toccato contro gli
+    altri in R, col verdetto della regola scritta in `bot/learning/contributi.py`
+    prima dei numeri, e i USDT risparmiati (o persi) dove la funzione riduce
+    solo la size."""
+    from bot.learning.contributi import contributi, ombra_ai, per_origine, riga_verdetto
+    print("\nLE FUNZIONI SERVONO? (gruppo toccato dalla funzione contro gli altri, in R netto; "
+          "regola in bot/learning/contributi.py, scritta prima dei numeri)")
+    voci = contributi(trades_tutti)
+    if decisioni_ombra is not None:
+        voci.append(ombra_ai(trades_tutti, decisioni_ombra))
+    for v in voci:
+        print(f"  {v['nome']}: {v['cosa']}")
+        print(f"    {riga_verdetto(v['confronto'])}")
+        if "usdt_risparmiati" in v:
+            print(f"    a size piena sugli stessi {v['n_usdt']} trade: "
+                  f"{v['usdt_risparmiati']:+.2f} USDT risparmiati (negativo = guadagni tolti)")
+        if v.get("rischio_medio_pct"):
+            rm = v["rischio_medio_pct"]
+            print(f"    rischio effettivo medio: declassate {rm.get('declassate')}% · "
+                  f"attive {rm.get('attive')}% (K5: il quarto agisce davvero?)")
+        if v.get("nota"):
+            print(f"    nota: {v['nota']}")
+    if specs is not None:
+        po = per_origine(trades_tutti, specs)
+        def _rr(v):
+            return "—" if v is None else f"{v:+.3f}R"
+        parti = " · ".join(f"{o} {st['n']} trade {_rr(st['r_medio'])}" for o, st in po.items())
+        print(f"  ORIGINE DELLE STRATEGIE nel paper (le idee AI rendono?): {parti or 'nessun trade'}")
+    print("  verdetti: «contribuisce» / «va contro» oltre il margine (2 errori standard), "
+          "altrimenti «non si vede ancora»; sotto 10 trade per gruppo «campione piccolo»")
+
+
 def main() -> int:
     fb = get_firebase()
     trades_letti = fb.query_collection("trades", order_by="exit_ts")
@@ -1326,6 +1363,21 @@ def main() -> int:
 
     # STOP GIORNALIERO E FRENO DI SERIE SUL PAPER (1 ott 2026, H3/H4): solo misura
     print_rigioco_paper(trades)
+
+    # LE FUNZIONI SERVONO? (1 ott 2026): due letture in piu' (le decisioni
+    # dell'ombra, ~240 documenti, e le spec), fail-open
+    try:
+        ombra = fb.query_collection("ai_shadow")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[funzioni] ombra non letta ({str(exc)[:80]})")
+        ombra = None
+    try:
+        from bot.core.firebase_client import decode_pairs as _dp
+        specs_doc = _dp((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+    except Exception as exc:  # noqa: BLE001
+        print(f"[funzioni] spec non lette ({str(exc)[:80]})")
+        specs_doc = None
+    print_funzioni_servono(trades_letti, ombra, specs_doc)
 
     # IL PAPER ESPLORATIVO (25 set 2026, F1bis): in fondo, coi suoi numeri e il
     # metro dell'esperimento dalla storia del registro esplorativo.
