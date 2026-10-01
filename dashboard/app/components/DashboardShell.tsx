@@ -8,6 +8,7 @@ import { useGateDoc } from '../lib/gate';
 import { durata } from '../lib/viz';
 
 import BacklogSi from './BacklogSi';
+import ReportGiornaliero from './ReportGiornaliero';
 import BotStatus from './BotStatus';
 import ControlloAnomalie from './ControlloAnomalie';
 import ControlloHero from './ControlloHero';
@@ -31,9 +32,12 @@ import LearningAttivoMisurato from './LearningAttivoMisurato';
 import LearningMisurato from './LearningMisurato';
 
 /**
- * Il guscio della dashboard (25 set 2026): cinque schede, e la prima e' il
- * CONTROLLO — quello che il proprietario apre dal telefono la mattina.
+ * Il guscio della dashboard (25 set 2026): cinque schede. Dal 1 ott 2026 la
+ * prima e' il REPORT GIORNALIERO — quello che il proprietario apre dal telefono
+ * la mattina (struttura fissa, scritta dalla macchina: bot/learning/report.py);
+ * poi il CONTROLLO orario.
  *
+ *   report       — il report del giorno prima, nove sezioni fisse;
  *   controllo    — «e' rotto? perde?»: semafori, anomalie, paper, learning e
  *                  gate in breve, tutto dal documento orario del bot;
  *   operativita  — grafico, posizioni aperte, trade chiusi (tempo reale);
@@ -47,7 +51,7 @@ import LearningMisurato from './LearningMisurato';
  * dieci componenti ognuno a modo suo) o stanno nelle schede gate/learning. I
  * vecchi hash nei segnalibri vengono girati sulla scheda nuova.
  */
-type TabId = 'controllo' | 'operativita' | 'gate' | 'learning' | 'impostazioni';
+type TabId = 'report' | 'controllo' | 'operativita' | 'gate' | 'learning' | 'impostazioni';
 type NavId = Exclude<TabId, 'impostazioni'>;
 
 /** I vecchi hash (segnalibri, link nelle issue) → scheda nuova. */
@@ -62,6 +66,13 @@ const VECCHI_HASH: Record<string, TabId> = {
 /* --- icone (inline SVG, stroke = currentColor) ---------------------------- */
 function Icon({ id }: { id: TabId }) {
   const p: Record<TabId, ReactNode> = {
+    // report: un foglio con le righe — «cosa e' successo ieri»
+    report: (
+      <>
+        <path d="M6 3h9l4 4v14H6z" />
+        <path d="M9 11h7M9 15h7M9 7h3" />
+      </>
+    ),
     // controllo: uno scudo con la spunta — «e' tutto a posto?»
     controllo: (
       <>
@@ -107,6 +118,13 @@ function Icon({ id }: { id: TabId }) {
 }
 
 const META: Record<TabId, { label: string; title: string; intro: string }> = {
+  report: {
+    label: 'Report',
+    title: 'Report giornaliero',
+    intro:
+      'Ogni mattina, sempre nella stessa forma: il paper di ieri, il gate, cosa dicono i dati, '
+      + 'se le funzioni servono, cosa abbiamo capito, cosa è cambiato e cosa aspetta il tuo sì.',
+  },
   controllo: {
     label: 'Controllo',
     title: 'Controllo',
@@ -136,7 +154,7 @@ const META: Record<TabId, { label: string; title: string; intro: string }> = {
   },
 };
 
-const NAV: NavId[] = ['controllo', 'operativita', 'gate', 'learning'];
+const NAV: NavId[] = ['report', 'controllo', 'operativita', 'gate', 'learning'];
 
 function isTab(v: string): v is TabId {
   return v in META;
@@ -254,7 +272,7 @@ function ControlloTab() {
 }
 
 export default function DashboardShell() {
-  const [tab, setTab] = useState<TabId>('controllo');
+  const [tab, setTab] = useState<TabId>('report');
   const [user, setUser] = useState<User | null>(null);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -270,7 +288,7 @@ export default function DashboardShell() {
         setTab(nuovo);
         window.history.replaceState(null, '', `#${nuovo}`);
       } else if (!h) {
-        setTab('controllo');
+        setTab('report');
       }
     };
     sync();
@@ -401,6 +419,8 @@ export default function DashboardShell() {
         </header>
 
         <div className="grid" key={tab} style={{ marginTop: 16 }}>
+          {tab === 'report' && <ReportGiornaliero />}
+
           {tab === 'controllo' && <ControlloTab />}
 
           {tab === 'operativita' && <OperativitaTab />}

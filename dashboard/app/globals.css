@@ -1578,3 +1578,25 @@ input[type='range'] {
   /* niente scorrimento orizzontale della pagina: cio' che e' largo scorre da solo */
   html, body { overflow-x: hidden; }
 }
+
+/* Report giornaliero (1 ott 2026): tabelle compatte, leggibili sul telefono */
+.tabella-report {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.tabella-report th,
+.tabella-report td {
+  padding: 4px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.tabella-report td:first-child { white-space: normal; min-width: 140px; }
+.tabella-report th { color: var(--text-dim); font-weight: 600; }
+.tabella-report .riga-gruppo td {
+  color: var(--text);
+  font-weight: 650;
+  padding-top: 10px;
+}
