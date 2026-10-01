@@ -313,3 +313,25 @@ def test_trade_stats_tabella_per_strategia(monkeypatch, capsys):
     assert "PER STRATEGIA (trade in perdita con referto)" in out
     assert "stop troppo largo        x2" in out
     assert "gen_y: stop_stretto — 2 perdite con stop troppo largo (campione 2)" in out
+
+
+# ---- I4bis (1 ott 2026): quando l'ipotesi scala_stretta e' SCATTATA --------- #
+def test_scala_stretta_scattata_ts_e_la_chiusura_della_terza_perdita():
+    """`scattata_ts` = chiusura della MIN_SCALA_STRETTA-esima perdita sotto il
+    primo gradino (in ordine di chiusura); `da_ts` resta il primo trade, perche'
+    decide il taglio della pre-registrazione."""
+    persi = [_t(pm=_pm(mfe=0.6), entry_ts=100.0 + i, exit_ts=e)
+             for i, e in enumerate((500.0, 300.0, 900.0, 700.0))]
+    vinto = _t(pnl=+3.0, entry_ts=50.0, exit_ts=60.0)
+    doc = aggrega_referti(persi + [vinto])
+    h = [x for x in doc["ipotesi"] if x["tipo"] == "scala_stretta"][0]
+    assert MIN_SCALA_STRETTA == 3
+    assert h["scattata_ts"] == 700.0          # 300, 500, 700: la terza
+    assert h["da_ts"] == 50.0                 # invariato: il primo trade
+
+
+def test_scattata_ts_solo_sulla_scala_stretta():
+    persi = [_t(direction="short", pm=_pm(classe="ingresso"), entry_ts=10.0 + i, exit_ts=20.0 + i)
+             for i in range(3)]
+    doc = aggrega_referti(persi)
+    assert doc["ipotesi"] and all("scattata_ts" not in h for h in doc["ipotesi"])

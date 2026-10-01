@@ -601,8 +601,8 @@ def test_la_configurazione_e_quella_dichiarata_e_il_backlog_dice_fatto():
     assert settings.ESPLORATIVE_MAX_APERTE == 3 and settings.ESPLORATIVE_MAX == 20
     import os
     root = os.path.join(os.path.dirname(__file__), "..")
-    with open(os.path.join(root, "docs", "backlog.md"), encoding="utf-8") as f:
+    with open(os.path.join(root, "docs", "backlog_archivio.md"), encoding="utf-8") as f:
         assert "### F1bis." in f.read() and True
-    with open(os.path.join(root, "docs", "backlog.md"), encoding="utf-8") as f:
+    with open(os.path.join(root, "docs", "backlog_archivio.md"), encoding="utf-8") as f:
         riga = next(r for r in f if r.startswith("### F1bis."))
     assert "FATTO il 25 set" in riga

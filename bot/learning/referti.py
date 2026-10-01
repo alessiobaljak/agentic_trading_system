@@ -481,6 +481,7 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
     # si valida su dati che finiscono prima di quella data (pre-registrazione,
     # audit del 24 set)
     primo_ts: dict[str, float] = {}
+    uscite_ts: dict[str, list[float]] = defaultdict(list)
     # le variabili d'ingresso, per strategia: delle PERDITE di classe ingresso
     # (mai andate a favore) e dei VINTI. Solo i valori noti: un None non e' un
     # numero (26 set 2026)
@@ -506,6 +507,13 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
         sym = str(t.get("symbol", "?") or "?")
         if ts is not None and (gid not in primo_ts or ts < primo_ts[gid]):
             primo_ts[gid] = ts
+        # quando e' CHIUSA ogni perdita «sotto il primo gradino» (1 ott 2026,
+        # backlog I4bis): serve a datare l'ipotesi scala_stretta, vedi sotto
+        if pnl < 0 and pm is not None and pm.get("classe") == "uscita":
+            fine = t.get("exit_ts")
+            fine = float(fine) if isinstance(fine, (int, float)) else ts
+            if fine is not None:
+                uscite_ts[gid].append(float(fine))
         _aggiungi(per_strat[gid], pnl, direzione, pm)
         _aggiungi(per_coin[sym], pnl, direzione, pm)
         if direzione in per_dir:
@@ -530,6 +538,16 @@ def aggrega_referti(trades: Iterable[dict]) -> dict:
                               contesto_strat.get(gid)):
             if gid in primo_ts:
                 h["da_ts"] = round(primo_ts[gid], 0)
+            # QUANDO E' SCATTATA (1 ott 2026, backlog I4bis, si' del proprietario):
+            # la chiusura della MIN_SCALA_STRETTA-esima perdita sotto il primo
+            # gradino. Serve SOLO alla freschezza della corsia urgente
+            # (`strategie_scala_stretta`); `da_ts` resta la data del primo trade,
+            # perche' decide il taglio della pre-registrazione della figlia:
+            # spostarlo metterebbe giorni del paper dentro la validazione.
+            if h.get("tipo") == "scala_stretta":
+                fini = sorted(uscite_ts.get(gid) or [])
+                if len(fini) >= MIN_SCALA_STRETTA:
+                    h["scattata_ts"] = round(fini[MIN_SCALA_STRETTA - 1], 0)
             ipotesi.append(h)
     ipotesi.sort(key=lambda h: (h["strategia"], h["tipo"]))
     # il riassunto delle condizioni d'ingresso per strategia: solo conteggi e

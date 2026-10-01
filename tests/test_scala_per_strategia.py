@@ -281,3 +281,16 @@ def test_l_ipotesi_scala_stretta_nasce_dai_referti_con_la_mediana_degli_mfe():
     # e la discovery la riconosce come fresca
     assert d.strategie_scala_stretta(doc, 1000.0 + 86400) == ["gen_a"]
     assert d.strategie_scala_stretta(doc, 1000.0 + 8 * 86400) == []
+
+
+def test_i4bis_la_freschezza_usa_scattata_ts_e_senza_ricade_su_da_ts():
+    """1 ott 2026 (I4bis): una strategia in paper da 20 giorni con l'ipotesi
+    scattata 1 giorno fa e' fresca; un referto di prima (senza `scattata_ts`)
+    si giudica col primo trade, come prima."""
+    doc = {"ipotesi": [
+        {"strategia": "gen_vecchia_ma_fresca", "tipo": "scala_stretta",
+         "da_ts": NOW - 20 * 86400, "scattata_ts": NOW - 86400},
+        {"strategia": "gen_scattata_tempo_fa", "tipo": "scala_stretta",
+         "da_ts": NOW - 20 * 86400, "scattata_ts": NOW - 9 * 86400},
+        {"strategia": "gen_referto_vecchio", "tipo": "scala_stretta", "da_ts": NOW - 2 * 86400}]}
+    assert d.strategie_scala_stretta(doc, NOW) == ["gen_vecchia_ma_fresca", "gen_referto_vecchio"]

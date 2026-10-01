@@ -1118,8 +1118,9 @@ SCALA_STRETTA_FRESCA_S = 7 * 86400
 def strategie_scala_stretta(doc: dict | None, now: float, cap: int = SCALA_STRETTA_MAX,
                             fresca_s: float = SCALA_STRETTA_FRESCA_S) -> list[str]:
     """Le strategie con un'ipotesi `scala_stretta` FRESCA nei referti del paper
-    (25 set 2026, backlog I4): `da_ts` (il primo trade del paper di quella
-    strategia) negli ultimi `fresca_s` secondi. Il gate le rigiudica nel giro
+    (25 set 2026, backlog I4): `scattata_ts` (dal 1 ott, I4bis: la chiusura
+    della perdita che ha fatto scattare l'ipotesi; in mancanza `da_ts`, il
+    primo trade del paper di quella strategia) negli ultimi `fresca_s` secondi. Il gate le rigiudica nel giro
     con in piu' la scala dai LORO mfe (`scale_per_strategia`): un candidato,
     non una decisione. Al massimo `cap`, le piu' recenti prima, poi per id: un
     giro «solo urgenti» deve restare breve. Fail-open: documento assente o
@@ -1133,8 +1134,11 @@ def strategie_scala_stretta(doc: dict | None, now: float, cap: int = SCALA_STRET
         gid = ip.get("strategia")
         if not isinstance(gid, str) or not gid:
             continue
+        # 1 ott 2026 (I4bis): la data in cui l'ipotesi e' SCATTATA
+        # (`scattata_ts`, scritta dal bot); senza (referti di prima) la data del
+        # primo trade, come prima
         try:
-            da_ts = float(ip.get("da_ts") or 0)
+            da_ts = float(ip.get("scattata_ts") or ip.get("da_ts") or 0)
         except (TypeError, ValueError):
             continue
         if da_ts <= 0 or now - da_ts > fresca_s:

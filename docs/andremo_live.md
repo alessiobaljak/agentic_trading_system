@@ -2442,3 +2442,18 @@ non_butta_le_coin_gia_votate`, coi processi) è caduto e ripassato da solo: da t
 **Primo conteggio K10 (ops 0403, 11:51 ora italiana):** 7 validate «allentate» (paper +0,244R su 11
 trade), 72 a ≥ 0,45 (−0,054R su 50), 129 senza win rate salvato (−0,137R su 57). Nessun segno contro
 la soglia bassa, ma il campione è minimo e il 62% delle validate non si può classificare: si rilegge.
+
+### 1 ottobre, primo pomeriggio: I4bis fatta, D7 chiusa, backlog rifatto
+
+* **I4bis** (sì del proprietario: «fai i4bis»). Il bot scrive in ogni ipotesi `scala_stretta` anche
+  `scattata_ts`: la chiusura della terza perdita sotto il primo gradino (`MIN_SCALA_STRETTA`). La
+  corsia urgente del gate (`strategie_scala_stretta`, 7 giorni) guarda quella data; senza (referti di
+  prima) usa `da_ts` come prima. **`da_ts` non cambia:** è il primo trade del paper e decide il taglio
+  della pre-registrazione delle figlie (`ipotesi_da`); spostarlo avrebbe messo giorni del paper nella
+  validazione. Effetto atteso: una strategia in paper da più di 7 giorni con l'ipotesi appena
+  scattata entra nel giro «solo urgenti». Codice del bot: vale dal riavvio. Test 2108 verdi.
+* **D7 chiusa:** il proprietario ha riempito il segreto `ANTHROPIC_MODEL` su GitHub. Da verificare nel
+  prossimo `ai-stato`: l'avviso «modello diverso» del lunedì deve sparire.
+* **Backlog rifatto** (richiesta del proprietario: solo le voci da fare o in attesa). `docs/backlog.md`
+  ha 6 gruppi e 21 voci; il file di prima, con le voci fatte e in misura e tutti i numeri, è
+  `docs/backlog_archivio.md`, invariato salvo l'intestazione e le due voci chiuse oggi.
