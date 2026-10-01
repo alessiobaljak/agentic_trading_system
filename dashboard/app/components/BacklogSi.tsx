@@ -1,6 +1,7 @@
 'use client';
 
-import { useBacklog, type GruppoBacklog } from '../lib/backlog';
+import { lista } from '../lib/controllo';
+import { useBacklog, type GruppoBacklog, type VoceBacklog } from '../lib/backlog';
 import ControlloSezione from './ControlloSezione';
 
 /**
@@ -13,8 +14,8 @@ import ControlloSezione from './ControlloSezione';
  */
 export default function BacklogSi({ aperta = false }: { aperta?: boolean }) {
   const { doc, caricamento, etaS } = useBacklog();
-  const si = doc?.aspetta_si ?? [];
-  const gruppi: GruppoBacklog[] = (doc?.gruppi ?? []).filter((g) => (g.numero ?? 0) !== 0);
+  const si = lista<VoceBacklog>(doc?.aspetta_si);
+  const gruppi: GruppoBacklog[] = lista<GruppoBacklog>(doc?.gruppi).filter((g) => (g.numero ?? 0) !== 0);
 
   return (
     <ControlloSezione
@@ -57,11 +58,11 @@ export default function BacklogSi({ aperta = false }: { aperta?: boolean }) {
           {gruppi.map((g, i) => (
             <details key={i} style={{ marginTop: 10 }}>
               <summary className="sotto-titolo" style={{ cursor: 'pointer' }}>
-                {g.numero}. {g.nome} ({(g.voci ?? []).length})
+                {g.numero}. {g.nome} ({lista<VoceBacklog>(g.voci).length})
                 {g.cosa_serve && <span className="muted"> · lo sblocca: {g.cosa_serve}</span>}
               </summary>
               <ul className="lista-grigia">
-                {(g.voci ?? []).map((v, j) => (
+                {lista<VoceBacklog>(g.voci).map((v, j) => (
                   <li key={j}>
                     <b>
                       {v.sigla}. {v.titolo}
