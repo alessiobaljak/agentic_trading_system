@@ -26,7 +26,7 @@ from backtesting.data_loader import load_candles
 from bot.strategies.generated import MARKET_FEATURES, MARKET_SYMBOL, famiglia_spec, spec_id
 from backtesting.engine import (StrategyStats, gate_verdict, max_drawdown, pf_by_regime,
                                 pf_without_top, t_stat, weighted_score_parts)
-from backtesting.optimizer import WalkForwardOptimizer
+from backtesting.optimizer import WalkForwardOptimizer, diagnosi_holdout
 from backtesting.parallel import n_workers, parallel_map
 from bot.config import settings
 from bot.core.firebase_client import decode_pairs, encode_pairs, get_firebase
@@ -439,7 +439,7 @@ SEEDS = int(os.getenv("DISCOVERY_SEEDS", "30"))
 
 
 def mutation_seeds(fb, existing: dict, limit: int = SEEDS,
-                   pairs: dict | None = None) -> list[dict]:
+                   pairs: dict | None = None, interval: str | None = None) -> list[dict]:
     """Le spec da cui vale la pena evolvere: i QUASI-PASSAGGI del run precedente,
     con precedenza a quelli sulle coin che NON copriamo ancora.
 
@@ -472,7 +472,11 @@ def mutation_seeds(fb, existing: dict, limit: int = SEEDS,
         # PRIMA l'autopsia della discovery: e' l'unica che contiene spec generate,
         # cioe' le uniche mutabili. Quella dell'optimizer parla di strategie BASE,
         # che non sono spec — leggerla da sola darebbe sempre lista vuota.
-        for doc_id in ("discover", "current"):
+        # 1 ott 2026 (K7): quella dello STESSO timeframe (`doc_autopsia`); fino
+        # al 30 set il giro a 15 minuti mutava i quasi-passaggi della passata a
+        # 1 ora, che scriveva lo stesso documento poco prima.
+        from bot.ai.autopsia import doc_autopsia
+        for doc_id in (doc_autopsia(interval), "current"):
             near.extend(((fb.get_doc("gate_autopsy", doc_id) or {})
                          .get("near_misses") or []))
     except Exception:  # noqa: BLE001
@@ -508,7 +512,8 @@ def mutation_seeds(fb, existing: dict, limit: int = SEEDS,
 
 
 def _publish_discover_autopsy(fb, evaluated: int, passed: int, binding: dict,
-                              involved: dict, near: list, top_near: int = 40) -> dict:
+                              involved: dict, near: list, top_near: int = 40,
+                              interval: str | None = None) -> dict:
     """Scrive l'autopsia della discovery, che e' dove sta il grosso del volume:
     l'optimizer valuta ~1500 coppie per run, la discovery oltre ventimila.
 
@@ -517,14 +522,18 @@ def _publish_discover_autopsy(fb, evaluated: int, passed: int, binding: dict,
     nasconderebbe proprio la differenza che interessa. Best-effort: una diagnosi
     non salvata non deve far fallire un run di validazione.
     """
-    near = sorted(near, key=lambda n: -(n.get("shortfall") or -9))[:top_near]
-    rep = {"updated_at": time.time(), "evaluated": evaluated, "passed": passed,
+    # stesso ordine di `seleziona_esplorative` (1 ott 2026, K7): vedi `_shortfall`
+    near = sorted(near, key=lambda n: -_shortfall(n))[:top_near]
+    # UN DOCUMENTO PER TIMEFRAME (1 ott 2026, K7): vedi `bot.ai.autopsia.doc_autopsia`
+    from bot.ai.autopsia import doc_autopsia
+    tf = str(interval or settings.ORCHESTRATOR_TIMEFRAME)
+    rep = {"updated_at": time.time(), "interval": tf, "evaluated": evaluated, "passed": passed,
            "diagnosed": int(sum(binding.values())),
            "binding": dict(sorted(binding.items(), key=lambda kv: -kv[1])),
            "involved": dict(sorted(involved.items(), key=lambda kv: -kv[1])),
            "near_misses": near, "near_miss_count": len(near)}
     try:
-        fb.set_doc("gate_autopsy", "discover", rep)
+        fb.set_doc("gate_autopsy", doc_autopsia(tf), rep)
     except Exception as exc:  # noqa: BLE001
         print(f"[autopsy] non salvata ({exc})")
     if rep["diagnosed"]:
@@ -691,7 +700,41 @@ def pubblica_esplorative(fb, near: list, validate, specs: dict, universo,
         return None
 
 
-def prove_dal_paper(fb) -> str:
+#: quanto puo' essere vecchia l'autopsia perche' la riga GATE vada all'AI (1 ott
+#: 2026, K7): il timer gira ogni 3 ore, quindi 12 ore sono quattro giri persi
+PROVE_GATE_FRESCA_S = 12 * 3600
+
+
+def riga_gate_per_prove(aut: dict | None, interval: str | None = None,
+                        now: float | None = None) -> str | None:
+    """La riga «GATE» delle prove all'AI, dall'autopsia del giro precedente dello
+    STESSO timeframe (1 ott 2026, backlog K7). Fino al 30 set veniva da
+    `gate_autopsy/current`, l'autopsia delle strategie BASE, ferma al 21 set
+    («su 1320 valutazioni ne passano 0», ops 0362, 0365) mentre i giri ne
+    facevano ~24.500 con 48 passate (ops 0363). Ora: solo se l'autopsia e' del
+    timeframe giusto e ha meno di PROVE_GATE_FRESCA_S; altrimenti nessuna riga
+    (meglio nessun numero che un numero vecchio). Pura."""
+    from bot.ai.autopsia import e_del_timeframe
+    now = time.time() if now is None else now
+    if not isinstance(aut, dict) or not e_del_timeframe(aut, interval):
+        return None
+    try:
+        quando = float(aut.get("updated_at") or 0)
+        valutate, passate = int(aut.get("evaluated") or 0), int(aut.get("passed") or 0)
+    except (TypeError, ValueError):
+        return None
+    binding = aut.get("binding") or {}
+    if quando <= 0 or now - quando > PROVE_GATE_FRESCA_S or valutate <= 0 or not binding:
+        return None
+    tf = str(interval or settings.ORCHESTRATOR_TIMEFRAME)
+    top = " · ".join(f"{k} {v}" for k, v in list(binding.items())[:4])
+    giorno = datetime.fromtimestamp(quando, timezone.utc).strftime("%d/%m %H:%M")
+    return (f"GATE (giro precedente a {tf}, finito il {giorno} UTC): su {valutate} "
+            f"valutazioni coin x strategia ne passano {passate}; muoiono soprattutto "
+            f"su {top}.")
+
+
+def prove_dal_paper(fb, interval: str | None = None, now: float | None = None) -> str:
     """Cosa il PAPER ha misurato, in forma leggibile da chi propone strategie.
 
     Fino al 19 settembre l'AI riceveva questo, e solo questo:
@@ -741,15 +784,17 @@ def prove_dal_paper(fb) -> str:
                 righe.append(f"Direzione {direzione}: {len(sel)} trade, {vinti} vinti, "
                              f"PnL {pnl:+.2f}.")
 
+    # la riga GATE dall'autopsia del giro precedente dello stesso timeframe (1 ott
+    # 2026, K7): vedi `riga_gate_per_prove`. Stessa lettura di prima (un
+    # documento), un altro documento.
     try:
-        aut = fb.get_doc("gate_autopsy", "current") or {}
+        from bot.ai.autopsia import doc_autopsia
+        aut = fb.get_doc("gate_autopsy", doc_autopsia(interval)) or {}
     except Exception:  # noqa: BLE001
         aut = {}
-    binding = aut.get("binding") or {}
-    if binding and aut.get("evaluated"):
-        top = " · ".join(f"{k} {v}" for k, v in list(binding.items())[:4])
-        righe.append(f"GATE: su {aut['evaluated']} valutazioni ne passano "
-                     f"{aut.get('passed', 0)}; muoiono soprattutto su {top}.")
+    riga_gate = riga_gate_per_prove(aut, interval, now)
+    if riga_gate:
+        righe.append(riga_gate)
 
     if not righe:
         return ""
@@ -1616,6 +1661,63 @@ def _disc_init(args, end: str, specs: list, scala_paper=None, specs_per_symbol=N
               keep_strategie=dict(keep_strategie or {}))
 
 
+def fonti_delle_spec(liste) -> dict:
+    """{id(oggetto spec): fonte} dalle liste del giro, nell'ordine dato (la
+    prima fonte vince). Per identita' dell'oggetto: la spec non si tocca, ne'
+    un campo in piu' ne' un id diverso (1 ott 2026, D6)."""
+    out: dict = {}
+    for nome, lista in liste:
+        for sp in lista or []:
+            out.setdefault(id(sp), nome)
+    return out
+
+
+def conta_spec_per_origine(specs, existing: dict, fonti: dict) -> dict:
+    """Le candidate del giro per origine (1 ott 2026, backlog D6). Pura.
+
+    `nuove` (id non ancora noto): ai / casuali / mutazioni / varianti, dalla
+    lista da cui vengono in questo giro. `note` (spec gia' passate almeno una
+    volta, rivalutate): per origine della spec salvata (`registry.origine_spec`:
+    li' casuali e mutazioni non si distinguono)."""
+    from bot.core.registry import origine_spec
+    existing = existing or {}
+    nuove = {"ai": 0, "casuali": 0, "mutazioni": 0, "varianti": 0}
+    note: dict[str, int] = {}
+    for sp in specs or []:
+        if not isinstance(sp, dict):
+            continue
+        sid = sp.get("id")
+        if sid in existing:
+            o = origine_spec(existing.get(sid))
+            note[o] = note.get(o, 0) + 1
+        else:
+            f = fonti.get(id(sp)) or "casuali"
+            f = f if f in nuove else "casuali"
+            nuove[f] += 1
+    return {"nuove": nuove, "note": note}
+
+
+def voce_quasi_passaggio(key: str, r: dict) -> dict:
+    """La voce di un QUASI-PASSAGGIO per l'autopsia (`near_misses`), dal
+    risultato `r` di `evaluate_spec`. Pura.
+
+    CADUTA SULL'HOLDOUT (1 ott 2026, backlog K7): i numeri della voce sono
+    quelli dell'HOLDOUT, dove la candidata e' caduta (PF, trade, PF senza i
+    colpi migliori, t), con la soglia che l'ha fermata in `criterio` e
+    `numeri: "holdout"`. Fino al 30 set portava PF e trade delle FINESTRE, che
+    aveva superato: all'AI e alle esplorative arrivava un PF che non spiegava
+    la caduta."""
+    b = r.get("fail_binding") or "?"
+    voce = {"key": key, "binding": b, "shortfall": r.get("fail_shortfall"),
+            "pf": r.get("pf"), "trades": r.get("trades"), "t_stat": r.get("t_stat")}
+    hold = r.get("holdout") if isinstance(r.get("holdout"), dict) else {}
+    if b == "holdout" and hold:
+        voce.update({"numeri": "holdout", "pf": hold.get("pf"), "trades": hold.get("trades"),
+                     "pf_ex_top": hold.get("pf_ex_top"), "t_stat": hold.get("t"),
+                     "criterio": (hold.get("scarto") or {}).get("criterio")})
+    return voce
+
+
 def _bocciata_leggera(sym: str, spec: dict, r: dict) -> dict:
     """La voce LEGGERA di una validata che oggi NON ha passato il gate (26 set
     2026): il perche' (criterio binding e criteri falliti), i numeri del verdetto
@@ -1763,10 +1865,7 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
             for c in r["fail_criteria"]:
                 involved[c] = involved.get(c, 0) + 1
             if r.get("near_miss"):
-                near.append({"key": f"{sym}|{spec['id']}", "binding": b,
-                             "shortfall": r.get("fail_shortfall"),
-                             "pf": r["pf"], "trades": r["trades"],
-                             "t_stat": r.get("t_stat")})
+                near.append(voce_quasi_passaggio(f"{sym}|{spec['id']}", r))
         if r["passed"]:
             retro = 0
             # le conferme retroattive servono alla PRIMA promozione: una variante
@@ -1816,7 +1915,9 @@ def _disc_one(sym: str) -> tuple[str, dict, list, dict, int, list, dict, list, d
             specs_passed[spec["id"]] = spec
             summary.append({"symbol": sym, "id": spec["id"], "pf": r["pf"],
                             "pnl": r["pnl"], "desc": GeneratedStrategy(spec).description})
-    near.sort(key=lambda n: -(n.get("shortfall") or -9))
+    # stesso ordine della scelta delle esplorative (1 ott 2026, K7): `_shortfall`
+    # tiene lo 0,0 come 0,0; con `or -9` uno 0,0 finiva in fondo invece che in testa
+    near.sort(key=lambda n: -_shortfall(n))
     if troncate:
         svuota_cache_motore(_W["opt"])      # la coin dopo riparte pulita
     if rows:
@@ -2039,6 +2140,7 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
     shortfall, near = verdict.shortfall, verdict.near_miss()
 
     hold: dict = {}
+    caduta_holdout = False
     if passed and opt.holdout_bars > 0:
         g = GeneratedStrategy(spec)
         if best_ladder:
@@ -2050,8 +2152,15 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
                                   context_by_ts=context_by_ts)
         passed = bool(hold.get("ok"))
         if not passed:
-            # supera tutto e cade sui dati mai visti: l'esito piu' informativo
-            failed, binding, shortfall, near = ["holdout"], "holdout", 0.0, True
+            # supera tutto e cade sui dati mai visti: l'esito piu' informativo.
+            # 1 ott 2026 (K7): criterio e binding restano «holdout» (l'autopsia
+            # conta come prima), ma lo scarto e' quello vero della soglia
+            # dell'holdout che ha fermato, e «quasi-passaggio» vale solo se e'
+            # una soglia sola mancata di meno del 10% (prima: scarto 0,0 e
+            # quasi-passaggio sempre). Il verdetto `passed` non cambia.
+            failed, binding = ["holdout"], "holdout"
+            shortfall, near = diagnosi_holdout(hold)
+            caduta_holdout = True
 
     # 4) MISURA, NON DECISIONE (26 set 2026): una validata passata sulla SUA
     #    configurazione sarebbe passata anche col passo 1 di prima (la globale)?
@@ -2087,9 +2196,13 @@ def evaluate_spec(opt: WalkForwardOptimizer, symbol: str, candles, frame, spec: 
         # break-even scelti al passo 2), cioe' quella che il bot opera davvero
         # Dal 24 set (audit) anche i QUASI-PASSAGGI, con `passed` False: un
         # selettore allenato solo sui vincitori non puo' imparare a dire «no».
+        # 1 ott 2026 (K7): le cadute sull'holdout scrivono le righe come prima
+        # (erano tutte «quasi-passaggi»), cosi' il dataset del selettore non
+        # cambia con lo scarto vero
         "oos_rows": (righe_selettore(oos.trades, symbol, spec, run_end, interval,
                                      passed=passed)
-                     if (passed or (righe_bocciate and near and not passed)) else []),
+                     if (passed or (righe_bocciate and (near or caduta_holdout)
+                                    and not passed)) else []),
         # ritorni per finestra OOS: servono al confronto APPAIATO figlia/madre
         "window_pnls": [round(float(w), 4) for w in window_pnls],
         # PF e campione PER DIREZIONE (E1, audit del 24 set): l'ipotesi «gli short
@@ -3699,7 +3812,7 @@ def main() -> int:
         #     candidate casuali, perche' ogni candidata in piu' e' un'estrazione in piu'
         #     della lotteria del confronto multiplo. Senza AI la quota resta casuale e il
         #     comportamento e' identico a prima.
-        prove = prove_dal_paper(fb)
+        prove = prove_dal_paper(fb, interval=args.interval)
         if prove:
             print(f"[discover] prove del paper passate all'AI:\n{prove}")
         # B3: i quasi-passaggi del giro precedente al modello, che risponde con uno
@@ -3707,7 +3820,7 @@ def main() -> int:
         # QUESTO giro. Fail-open: senza AI o senza autopsia si propone come prima.
         from bot.ai.autopsia import analizza as ai_autopsia, contesto_per_le_proposte
         try:
-            autopsia = ai_autopsia(fb)
+            autopsia = ai_autopsia(fb, interval=args.interval)
         except Exception as exc:  # noqa: BLE001
             autopsia = None
             print(f"[ai-autopsia] saltata ({str(exc)[:80]})")
@@ -3767,7 +3880,8 @@ def main() -> int:
         if n_casuali < args.generate - len(ai_specs) - len(varianti):
             print(f"[discover] candidate casuali limitate a {n_casuali} "
                   f"(DISCOVERY_RANDOM_MAX={RANDOM_MAX}): le altre fonti sono ragionate")
-        specs = ai_specs + varianti + generate_specs(n_casuali, seed=args.seed)
+        casuali = generate_specs(n_casuali, seed=args.seed)
+        specs = ai_specs + varianti + casuali
         existing_list, diag_reeval = specs_da_rivalutare(existing, reg, args.reeval_cap,
                                                          completa=_completa, now=_ora,
                                                          urgenti_extra=urgenti_uscita)
@@ -3782,13 +3896,21 @@ def main() -> int:
         # il registro serve a sapere quali coin sono GIA' coperte: i semi vanno
         # preferibilmente sulle altre, altrimenti l'evoluzione rinforza dove qualcosa
         # gia' funziona e il numero di monete operabili non si muove.
-        seeds = mutation_seeds(fb, existing, pairs=decode_pairs(reg.get("pairs")))
+        seeds = mutation_seeds(fb, existing, pairs=decode_pairs(reg.get("pairs")),
+                               interval=args.interval)
         if seeds:
             print(f"[discover] {len(seeds)} semi dai quasi-passaggi del run precedente")
         bases = seeds or existing_list[:SEEDS]
         n_semi = len(bases[:SEEDS])
-        for i, base in enumerate(bases[:SEEDS]):
-            specs.append(mutate(base, seed=args.seed + i + 1))
+        mutazioni = [mutate(base, seed=args.seed + i + 1)
+                     for i, base in enumerate(bases[:SEEDS])]
+        specs.extend(mutazioni)
+        # DA DOVE VIENE OGNI CANDIDATA (1 ott 2026, D6): l'origine si sa SOLO
+        # qui, prima che le liste si fondano (una mutazione non lascia segni
+        # sulla spec). Per identita' dell'oggetto: nessuna spec cambia.
+        fonti = fonti_delle_spec((("ai", ai_specs), ("varianti", varianti),
+                                  ("casuali", casuali), ("note", existing_list),
+                                  ("mutazioni", mutazioni)))
         # IL TIMEFRAME DELLA PASSATA sulle candidate nuove: una spec nata in una
         # passata a 1 ora e' una strategia a 1 ora, con il suo id (che include il
         # timeframe). Le spec gia' note NON si ristampano: si rivalutano solo quelle
@@ -3801,8 +3923,10 @@ def main() -> int:
                     nuove.append(sp)
                 continue
             if args.interval != tf_bot:
+                _orig = sp
                 sp = {**sp, "timeframe": args.interval}
                 sp["id"] = spec_id(sp)
+                fonti[id(sp)] = fonti.get(id(_orig), "casuali")
             nuove.append(sp)
         specs = nuove
         # de-dup per id
@@ -3812,6 +3936,7 @@ def main() -> int:
         if n_gemelle:
             print(f"[discover] {n_gemelle} candidate scartate perche' gemelle di una "
                   f"spec gia' nota (stessa logica, id diverso)")
+        spec_per_origine = conta_spec_per_origine(specs, existing, fonti)
         for sym, ids in gemelle_validate(decode_pairs(reg.get("pairs")), existing)[:8]:
             print(f"[discover] GEMELLE gia' validate su {sym}: {len(ids)} coppie con la "
                   f"stessa logica ({', '.join(ids[:4])}{'…' if len(ids) > 4 else ''})")
@@ -4046,7 +4171,8 @@ def main() -> int:
         # intera. Sulla VPS (non shardata) si pubblica sempre.
         if args.num_shards <= 1:
             _publish_discover_autopsy(fb, n_eval, len(passed_keys),
-                                      diag_binding, diag_involved, diag_near)
+                                      diag_binding, diag_involved, diag_near,
+                                      interval=args.interval)
 
         # SHARD: scrive il proprio risultato; il merge riunisce e aggiorna il registro.
         if args.num_shards > 1:
@@ -4175,6 +4301,12 @@ def main() -> int:
             # con `n_eval`; None se il giro non era ridotto (urgenti, --symbols,
             # shard, interruttore spento). Da qui lo legge `giro.riduzione`.
             "riduzione": riduzione,
+            # LE CANDIDATE DEL GIRO PER ORIGINE (1 ott 2026, backlog D6): spec,
+            # non valutazioni (ogni spec gira su tutte le coin del giro, o sulle
+            # sue nel giro ridotto); le figlie dell'intorno sono per coin.
+            # `gate_progress` le stampa nella riga «ORIGINI».
+            "spec_per_origine": dict(spec_per_origine,
+                                     intorno_figlie=int(sum(madri_intorno.values()))),
         }
         fb.set_doc("strategy_params", _doc_run, riepilogo_run)
         # IL DOCUMENTO DEL GATE, intero (25 set 2026): solo dal giro sul timeframe del

@@ -641,6 +641,8 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
                         # campi (misurato con `encode_registry` il 30 set 2026,
                         # revisione del lavoro B, su 1.190 coppie finte con la t
                         # a 3 decimali: ~51 KB in tutto).
+                        # 1 ott 2026 (K2): nel nucleo solo dalle coppie a
+                        # MIN_PASSES-1 conferme in su, vedi `nucleo_registro`.
                         "last_t", "last_trades", "last_t_holdout", "last_trades_holdout",
                         # LA t FISSATA ALLA PROMOZIONE (30 set 2026, revisione del
                         # lavoro B): i quattro numeri qui sopra COPIATI nell'istante
@@ -660,6 +662,31 @@ REGISTRY_CORE_FIELDS = {"pass_count", "last_pass_data_end", "fail_count",
 CAMPI_T_VALIDAZIONE = {"last_t": "val_t", "last_trades": "val_trades",
                        "last_t_holdout": "val_t_holdout",
                        "last_trades_holdout": "val_trades_holdout"}
+
+# LO SPAZIO DEL REGISTRO (1 ott 2026, backlog K2, si' del proprietario). Coi
+# quattro campi del voto t nel nucleo di OGNI coppia la capienza scendeva da
+# ~3.180 a ~2.700 coppie: oltre, l'alleggerimento d'emergenza toglie `regime_pf`
+# anche alle validate (e il veto di regime lascia passare tutto). Ora i quattro
+# campi restano nel nucleo SOLO per le coppie a MIN_PASSES-1 conferme o piu'.
+# Perche' non si perde niente: una coppia piu' indietro, per essere promossa,
+# deve RIPASSARE il gate almeno una volta quando ha gia' MIN_PASSES-1 conferme
+# (la finestra si chiude con una conferma solo se dentro c'e' stato almeno un
+# passaggio, e i contatori ripartono da zero a ogni chiusura), e quel
+# passaggio riscrive i quattro campi prima della promozione; le conferme
+# retroattive li scrivono nello stesso merge in cui la coppia arriva a
+# MIN_PASSES. I `val_*` fissati alla promozione (`fissa_voto_t`) restano
+# identici. La misura della capienza prima e dopo e' nel diario del 1 ott.
+CAMPI_T_NUCLEO = tuple(CAMPI_T_VALIDAZIONE)
+
+
+def nucleo_registro(rec: dict) -> dict:
+    """Il nucleo di un record del registro: i campi di `REGISTRY_CORE_FIELDS`,
+    senza i quattro del voto t se la coppia ha meno di MIN_PASSES-1 conferme
+    (1 ott 2026, K2). Una sola copia per i tre alleggerimenti (normale,
+    d'emergenza e scrittura minima)."""
+    tieni_t = int(rec.get("pass_count", 0) or 0) >= MIN_PASSES - 1
+    return {f: v for f, v in rec.items()
+            if f in REGISTRY_CORE_FIELDS and (tieni_t or f not in CAMPI_T_NUCLEO)}
 
 
 def impronta_uscita(last_params) -> str:
@@ -799,16 +826,14 @@ def slim_registry(pairs: dict, validated: list,
     E' una perdita cosmetica contro una perdita di settimane; non e' un pareggio.
     """
     keep = set(validated)
-    slim = {k: (r if k in keep else
-                {f: v for f, v in r.items() if f in REGISTRY_CORE_FIELDS})
+    slim = {k: (r if k in keep else nucleo_registro(r))
             for k, r in pairs.items()}
     enc = encode_registry(slim)
     n = len(enc.encode("utf-8"))
     if n <= max_bytes:
         return enc
 
-    emergenza = {k: {f: v for f, v in r.items() if f in REGISTRY_CORE_FIELDS}
-                 for k, r in pairs.items()}
+    emergenza = {k: nucleo_registro(r) for k, r in pairs.items()}
     enc2 = encode_registry(emergenza)
     print(f"[registry] ATTENZIONE: {n} byte oltre il tetto di {max_bytes} anche "
           f"dopo l'alleggerimento normale. Tolti i campi descrittivi ANCHE alle "
@@ -854,11 +879,23 @@ def autopsy(out: dict, top_near: int = 40) -> dict:
         for c in crits:
             involved[c] += 1
         if e.get("near_miss"):
-            near.append({"key": key, "binding": e.get("fail_binding"),
-                         "shortfall": e.get("fail_shortfall"),
-                         "pf": e.get("oos_pf"), "trades": e.get("oos_trades"),
-                         "t_stat": e.get("t_stat")})
-    near.sort(key=lambda n: -(n.get("shortfall") or -9))
+            voce = {"key": key, "binding": e.get("fail_binding"),
+                    "shortfall": e.get("fail_shortfall"),
+                    "pf": e.get("oos_pf"), "trades": e.get("oos_trades"),
+                    "t_stat": e.get("t_stat")}
+            # caduta sull'holdout (1 ott 2026, K7): i numeri dell'holdout, come
+            # nella discovery
+            hold = e.get("holdout") if isinstance(e.get("holdout"), dict) else {}
+            if e.get("fail_binding") == "holdout" and hold:
+                voce.update({"numeri": "holdout", "pf": hold.get("pf"),
+                             "trades": hold.get("trades"), "pf_ex_top": hold.get("pf_ex_top"),
+                             "t_stat": hold.get("t"),
+                             "criterio": (hold.get("scarto") or {}).get("criterio")})
+            near.append(voce)
+    # 1 ott 2026 (K7): lo 0,0 resta 0,0 (con `or -9` finiva in fondo), come
+    # nella discovery e nella scelta delle esplorative
+    near.sort(key=lambda n: -(float(n["shortfall"]) if n.get("shortfall") is not None
+                              else -9.0))
     return {
         "updated_at": time.time(),
         "evaluated": len(out), "passed": passed,
@@ -1511,8 +1548,7 @@ def scrivi_registro(fb, registry: dict, pairs: dict) -> bool:
 
     minimo = dict(registry)
     minimo["pairs"] = encode_registry(
-        {k: {f: v for f, v in r.items() if f in REGISTRY_CORE_FIELDS}
-         for k, r in pairs.items()})
+        {k: nucleo_registro(r) for k, r in pairs.items()})
     fb.set_doc("strategy_registry", "validated", minimo)
     print(f"[registry] salvato in forma minima: {len(pairs)} coppie, "
           f"{len(minimo['pairs'].encode('utf-8'))} byte. Le metriche descrittive "

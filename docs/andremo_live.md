@@ -2389,3 +2389,35 @@ registrato (26 set), per ora d'ingresso, con R netto e lordo; la regola resta qu
 30 casi valutati e R dei rifiutati maggiore di R degli aperti); il margine si stampa solo come
 informazione (calcolato caso per caso, quindi probabilmente più stretto del vero). Lo 0,2R che il
 controllo del mattino aggiungeva a mano non serve più: la causa era il periodo diverso.
+
+### 1 ottobre, mattina: lato gate delle voci aperte (K2 spazio, K7, D6-IPOTESI) — fatto; I4bis rinviata
+
+Parte della richiesta «fai tutte quelle 15 aperte». Il lavoro era stato interrotto alle 07:49 ora
+italiana a test già verdi e restava non salvato: riletto, suite rilanciata (2099 test verdi) e salvato
+alle ~11 ora italiana. **Nessun verdetto del gate cambia:** `passed` resta `hold.get("ok")` e i quattro
+controlli dell'holdout sono gli stessi; cambiano solo i campi descrittivi. **Nessun riavvio del bot:**
+tutto gira nel giro del gate (timer), che prende il codice nuovo da solo.
+* **K2, spazio del registro.** I quattro campi del voto t restano nel nucleo solo per le coppie a 2
+  conferme o più (`nucleo_registro`, stessa regola nei tre alleggerimenti). Chi arriva alla
+  promozione ha sempre la t dell'ultimo passaggio (test: stessa vita con e senza la regola, stessi
+  `val_*`). Misura su un registro finto con la distribuzione delle conferme di ops 0391 (1.630
+  coppie): da 435 a 401 KB nel nucleo, −34 KB (−8%), ~42 byte in meno per coppia sotto le 2 conferme.
+  Stima mia: lo spazio passa da ~14 a ~17-18 giorni a +99 coppie al giorno. Si controlla nella riga
+  «ci stanno ancora ~N coppie» di `gate` dopo il primo giro.
+* **K7, dati all'AI.** (1) Una caduta sull'holdout porta lo scarto vero della soglia che l'ha
+  fermata (`holdout_verdict`) e i numeri dell'holdout, non più «scarto 0,000» coi numeri delle
+  finestre; è «quasi-passaggio» solo con una soglia mancata di meno del 10%, come le altre. Effetto
+  voluto: meno cadute sull'holdout fra i quasi-passaggi, quindi cambiano i semi delle mutazioni e la
+  scelta delle esplorative; le righe del selettore restano come prima. Anche il gruppo di controllo
+  (K3) dal 1 ott registra il «quasi-passaggio» con la regola nuova. (2) La riga GATE delle prove
+  all'AI viene dall'autopsia del giro precedente dello stesso timeframe, solo se ha meno di 12 ore
+  (prima: «su 1320 valutazioni ne passano 0», fermo al 21 set). (3) Un'autopsia per timeframe:
+  la passata a 1 ora scrive `gate_autopsy/discover_1h`, il giro a 15 minuti legge solo la sua.
+* **D6-IPOTESI, le idee AI servono?** Nuova riga «ORIGINI» in `gate`: coppie nel registro, validate e
+  declassate per origine della spec (AI, casuali e mutazioni, varianti dai referti, intorno), più le
+  candidate dell'ultimo giro per origine. Si contano le coppie, non l'R (regola del 30 set). Le
+  candidate per origine compaiono dal primo giro finito col codice nuovo.
+* **I4bis rinviata.** `da_ts` decide anche il taglio della pre-registrazione (la validazione della
+  figlia finisce prima del primo trade del paper): spostarlo alla data dell'ipotesi metterebbe giorni
+  del paper dentro la validazione. Serve un campo separato scritto dal bot, cioè un riavvio, e il
+  backlog dice di farlo solo se i numeri mostrano che l'urgenza serve: oggi nessun numero lo mostra.

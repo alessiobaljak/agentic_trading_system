@@ -21,9 +21,9 @@ import random
 from dataclasses import dataclass, field
 from typing import Optional
 
-from backtesting.engine import (Backtester, StrategyStats, gate_verdict, max_drawdown,
-                                pf_by_regime, pf_without_top, t_stat,
-                                weighted_score_parts)
+from backtesting.engine import (Backtester, GateVerdict, StrategyStats, gate_verdict,
+                                holdout_verdict, max_drawdown, pf_by_regime,
+                                pf_without_top, t_stat, weighted_score_parts)
 from bot.core.indicators import compute_indicator_frame
 from bot.core.models import Candle
 from bot.strategies.base import STRATEGY_REGISTRY
@@ -71,6 +71,29 @@ class OptResult:
     # "profitto concentrato perche' il meccanismo e' quello". Serve a capire se
     # pf_ex_top stia bocciando edge veri (vedi t_stat in backtesting/engine.py).
     t_stat: float = 0.0
+
+
+def diagnosi_holdout(hold) -> tuple[float, bool]:
+    """(scarto, quasi-passaggio) di una candidata caduta sull'HOLDOUT (1 ott
+    2026, backlog K7). Lo scarto e' quello della soglia dell'holdout messa
+    peggio (`holdout_verdict`, salvato da `_holdout_check` in `scarto`); il
+    quasi-passaggio segue la stessa regola delle finestre (`GateVerdict.
+    near_miss`: un solo criterio, mancato di meno del 10%).
+
+    Fino al 30 set ogni caduta sull'holdout valeva «scarto 0,0, quasi-passaggio
+    si'». Il verdetto pass/bocciata NON dipende da qui. Senza la diagnosi
+    (holdout di un'altra versione del codice) si torna «lontana»: -1, non quasi."""
+    sc = hold.get("scarto") if isinstance(hold, dict) else None
+    if not isinstance(sc, dict) or sc.get("shortfall") is None:
+        return -1.0, False
+    try:
+        sf = float(sc["shortfall"])
+    except (TypeError, ValueError):
+        return -1.0, False
+    criteri = tuple(sc.get("criteri") or ())
+    v = GateVerdict(ok=False, failed=criteri, binding=str(sc.get("criterio") or ""),
+                    shortfall=sf)
+    return sf, bool(v.near_miss())
 
 
 class WalkForwardOptimizer:
@@ -180,8 +203,17 @@ class WalkForwardOptimizer:
         # proprietario): la stessa statistica del walk-forward (`t_stat`), sui
         # soli trade dell'holdout. Si MISURA e basta, il verdetto `ok` non cambia:
         # serve a vedere se le coppie a t bassa perdono dopo la validazione.
-        return {"pf": round(pf, 3), "pnl_pct": round(pnl, 4), "trades": n, "ok": ok,
-                "pf_ex_top": round(pf_ex, 3), "t": round(t_stat(st.trades), 3)}
+        out = {"pf": round(pf, 3), "pnl_pct": round(pnl, 4), "trades": n, "ok": ok,
+               "pf_ex_top": round(pf_ex, 3), "t": round(t_stat(st.trades), 3)}
+        if not ok:
+            # PERCHE' e' caduta, con lo scarto vero (1 ott 2026, K7): sugli stessi
+            # numeri non arrotondati del verdetto qui sopra, che non cambia. Solo
+            # per le cadute: una coppia che passa porta l'holdout nel registro, e
+            # li' questi campi non servirebbero a nessuno.
+            v = holdout_verdict(n, pf, pnl, pf_ex)
+            out["scarto"] = {"criterio": v.binding, "criteri": list(v.failed),
+                             "shortfall": v.shortfall}
+        return out
 
     def optimize_symbol(self, symbol: str, candles: list[Candle],
                         context_by_ts: dict | None = None) -> list[OptResult]:
@@ -255,7 +287,10 @@ class WalkForwardOptimizer:
                     # muore QUI, dopo aver superato tutto il resto: e' l'esito piu'
                     # informativo di tutti — la strategia regge sulle finestre di
                     # selezione e cade sui dati mai visti.
-                    failed, binding, shortfall, near = ["holdout"], "holdout", 0.0, True
+                    # 1 ott 2026 (K7): lo scarto e' quello vero della soglia
+                    # dell'holdout che l'ha fermata, non piu' 0,0 per tutte
+                    failed, binding = ["holdout"], "holdout"
+                    shortfall, near = diagnosi_holdout(hold)
             results.append(OptResult(
                 symbol=symbol, strategy=name,
                 best_params=history[-1] if history else {},

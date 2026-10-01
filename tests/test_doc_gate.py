@@ -292,7 +292,7 @@ def test_un_giro_caduto_scrive_errore_e_rilancia(monkeypatch):
     monkeypatch.setattr(d, "get_firebase", lambda: fb)
     monkeypatch.setattr(sys, "argv", ["discover", "--top", "1"])
 
-    def _esplode(_fb):
+    def _esplode(_fb, **_k):          # 1 ott 2026: ora riceve anche `interval`
         raise RuntimeError("boom del giro")
 
     monkeypatch.setattr(d, "prove_dal_paper", _esplode)

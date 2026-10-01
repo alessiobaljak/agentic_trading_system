@@ -29,7 +29,7 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 
 | Stato | Voci | Cosa serve |
 |---|---|---|
-| **Aperte (15; K2, D6 e K8 compaiono anche in un'altra riga)** | K2 (spazio del registro), D6 (leve della spesa AI), D7 (modello del runner GitHub), E4 (strategie gemelle), K7 (dati sbagliati all'AI), K8 (conti in R, costi), G3 (voto minimo nel gate), G6 (recenza nell'approvazione), B8 (varianti giudicate senza il paper), C4 (annunci USA), I4bis, I5, J15, D1, D5 | vedi ogni voce: chi decide e quando |
+| **Aperte (15; K2, D6 e K8 compaiono anche in un'altra riga)** | K2 (spazio del registro: primo rimedio fatto il 1 ott), D6 (leve della spesa AI), D7 (modello del runner GitHub), E4 (strategie gemelle), K7 (dati sbagliati all'AI: fatta il 1 ott), K8 (conti in R, costi), G3 (voto minimo nel gate), G6 (recenza nell'approvazione), B8 (varianti giudicate senza il paper), C4 (annunci USA), I4bis, I5, J15, D1, D5 | vedi ogni voce: chi decide e quando |
 | **In misura (21)** — si leggono da sole | 1 ott: J14 (letture Firebase), D6 (primo giorno intero di spesa) · 3 ott: A4 (declassate contro attive) · 7 ott: H5, K1 (selezione o esecuzione) · ~10 ott: J7, J9, I4ter · ~14-15 ott: H5 (rilettura), K3 (gruppo di controllo) · ~18 ott: J11, J13, C1 · ~26 ott: J6 · metà nov: K2 (regola H1) · senza data: F1bis (100 trade esplorativi), F1ter (selettore), I1 (panchina), I3, I4 (trailing), J8, J10, E1 | niente: leggere il numero alla data |
 | **Scoperte da ricordare (4)** | K4 (il paper ha la firma del caso), K5 (il quarto di size non agisce), K6 (uscita del freno irraggiungibile), K8 (costi e scivolamento: prima di soldi veri) | prima di un passaggio a soldi veri |
 | **Parcheggiate dal proprietario (6)** | B5, B6, B7 (dati esterni), H3 (stop giornaliero), H4 (freno di serie), J2 | solo se il proprietario le riprende |
@@ -121,7 +121,8 @@ leggere come «H1 smentita». **Avvertenza sul registro:** coi campi t la capien
 d'emergenza a ogni giro e le validate perdono `regime_pf` (il veto di regime lascerebbe passare
 tutto). Rimedio pronto da decidere prima: campi t nel nucleo solo per le coppie a 2+ conferme
 (capienza ~2.880) oppure tetto a ~2.600 coppie. Da controllare la riga «ci stanno ancora ~N coppie»
-di `gate`.
+di `gate`. **1 ott: FATTO il primo rimedio** (t nel nucleo solo dalle 2 conferme in su): −8% sul
+nucleo in una misura su dati finti, da ~14 a ~17-18 giorni di spazio (stima, diario del 1 ott).
 La t c'è solo per le 42 validate NON declassate (202 − 160, ops 0363): si scrive solo quando una
 coppia ripassa. Serve il campo nel nucleo del registro e una passata una tantum sulle 202 (15-17
 minuti di VPS: voce ops in sfondo, riga nuova nella lista bianca da aggiungere a mano). In
@@ -175,7 +176,7 @@ Per uscire serve anche un massimo toccato mediano sopra 1,05R: il paper è a 0,8
 motore che guadagna a 1,03R (ops 0371), un prezzo casuale a 0,81R. La condizione scatta con e
 senza vantaggio: non dice niente. Da sistemare prima di qualunque discorso di denaro vero.
 
-### K7. L'AI riceve numeri sbagliati
+### K7. L'AI riceve numeri sbagliati — **FATTO il 1 ott** (scarto vero sull'holdout, riga GATE fresca, un'autopsia per timeframe; diario del 1 ott). Resta la parte esplorative: K11
 Oltre allo «scarto 0,000» (H2): a ogni giro legge «su 1320 valutazioni ne passano 0», fermo al 21
 set (oggi 24.503 valutazioni, 48 passate, ops 0363); il giro a 15 minuti legge l'autopsia della
 passata a 1 ora credendola sua (ops 0345, 0372).
@@ -226,7 +227,7 @@ il freno non cambia nessun R), I6 (il tetto toglierebbe trade in ordine d'arrivo
 D6-L2. Scelte del proprietario: filtro monete AI (spegnere, dare i dati, lasciare), ombra AI.
 J12: l'obiettivo «80% dei trade del paper con un ingresso del motore vicino» è all'81% (62 su 77,
 ops 0371): da chiudere se il proprietario è d'accordo. Dopo il 7 ott: H1-soglia sull'holdout,
-conti in R, riga «caso» nel controllo, pulizia dei dati all'AI, D6-IPOTESI (contare le coppie per
+conti in R, riga «caso» nel controllo, pulizia dei dati all'AI (fatta il 1 ott), D6-IPOTESI (fatta il 1 ott: riga ORIGINI in `gate`; contare le coppie per
 origine), I6-misura, E4-gemelle.
 
 ## A. Uscite — dopo il verdetto dei 40 trade
@@ -623,7 +624,7 @@ Con confidenza fissa 60 e soglia 30, «peso < 0,5» spegne la strategia in quel 
 «Andato a favore ma sotto TP1» 19 su 31 stop, «lock mai armato» 6 su 6: contati, nessuna variante. Quinta ipotesi «uscita» (≥ 3 perdite sotto TP1 sulla stessa strategia → variante con la scala dal vissuto, nel gate con le conferme retroattive): **serve il sì** (cambia quali candidate entrano).
 
 ### I4bis. La freschezza dell'ipotesi «uscita» usa la data del primo trade
-`da_ts` del referto è il primo trade del paper della strategia, non il giorno in cui l'ipotesi è scattata: una strategia in paper da più di 7 giorni con 3 perdite sotto TP1 non entra come urgente da questa porta (entra nel giro completo, con la sua scala fra i candidati comunque). Serve un timestamp per ipotesi scritto dal bot: piccolo, da fare se i numeri mostrano che l'urgenza serve.
+`da_ts` del referto è il primo trade del paper della strategia, non il giorno in cui l'ipotesi è scattata: una strategia in paper da più di 7 giorni con 3 perdite sotto TP1 non entra come urgente da questa porta (entra nel giro completo, con la sua scala fra i candidati comunque). Serve un timestamp per ipotesi scritto dal bot: piccolo, da fare se i numeri mostrano che l'urgenza serve. **1 ott: rinviata di nuovo** — `da_ts` decide anche il taglio della pre-registrazione, quindi non si può spostare: serve un campo separato e un riavvio del bot.
 
 ### I4ter. Ipotesi sulle condizioni d'ingresso — **FATTO il 26 set** (sì del proprietario)
 La sesta ipotesi dei referti: le perdite «mai andate a favore» (classe ingresso, mfe < 0,25 R) di una strategia sono nate in una condizione riconoscibile, e i suoi vinti no. Regola dichiarata in `bot/learning/referti.py` (`MIN_INGRESSO`, `QUOTA_INGRESSO`, soglie): per ogni variabile fra ADX, volume/media, ATR% e RSI, scatta `ingresso_<variabile>` quando la strategia ha **≥ 4 perdite d'ingresso** con la variabile nota, **≥ 3 su 4** dallo stesso lato della soglia (ADX < 20; vol_ratio < 1; ATR% sopra il 75° percentile dei vinti o sopra il 3%; RSI 40-60) e la mediana dei vinti (≥ 2) dall'altro lato. Le variabili vengono da `feats_at_entry` (ogni trade dal 25 set) o, per i più vecchi, da `indicators_at_entry` con le stesse formule del gate (`variabili_ingresso_del_trade`). La figlia (`varianti_da_referto`) stringe di UN gradino del generatore il filtro corrispondente: `min_adx` → 25, `volume_mult` → 1,5 poi 2,0, banda RSI di `rsi_extreme` un gradino più larga; il gate la giudica come le altre varianti (conferme retroattive, holdout). Il paper propone, non tara: la soglia della figlia è del generatore, non il numero misurato.

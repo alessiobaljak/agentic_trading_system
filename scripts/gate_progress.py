@@ -36,8 +36,9 @@ from bot.core.firebase_client import decode_pairs, get_firebase
 # questo script stampa finiscono nel documento `dashboard/gate` scritto dalla
 # discovery, e due copie dello stesso conto prima o poi divergono. Qui si stampa,
 # li' si conta.
-from bot.core.registry import (conta_declassate, conta_keep, coppie_fresche, coppie_validate,
-                               distribuzione_pass, salute_registro, statistica_t)
+from bot.core.registry import (ORIGINI, conta_declassate, conta_keep, conta_per_origine,
+                               coppie_fresche, coppie_validate, distribuzione_pass,
+                               salute_registro, statistica_t)
 
 MIN_PASSES = int(os.getenv("OPTIMIZER_MIN_PASSES", "3"))
 NEW_DATA_MIN_S = float(os.getenv("OPTIMIZER_NEW_DATA_MIN_HOURS", "168")) * 3600
@@ -277,6 +278,55 @@ def riga_sessione(validated, specs: dict | None, pairs: dict | None = None) -> s
     return (f"  FEATURE session: {con} validate su {len(validated)} usano la sessione oraria "
             f"(fino al 27 set valutata con l'orologio del giro, non della candela: "
             f"passaggi da rifare){coda}")
+
+
+_NOMI_ORIGINE = {"ai": "AI", "casuali": "casuali (e mutazioni)", "varianti": "varianti dai referti",
+                 "intorno": "intorno", "base": "base", "spec_ignota": "spec non nota"}
+
+
+def _riga_giro_origini(nome: str, d: dict | None) -> str:
+    """«giro a 15m: nuove AI 5 · casuali 25 · mutazioni 30 · varianti 2; note ...»"""
+    sp = (d or {}).get("spec_per_origine") if isinstance(d, dict) else None
+    if not isinstance(sp, dict):
+        return f"{nome}: non registrate (arrivano col primo giro finito dal 1 ott)"
+    nu = sp.get("nuove") or {}
+    no = sp.get("note") or {}
+    parti_nu = " · ".join(f"{k} {int(nu.get(k) or 0)}"
+                          for k in ("ai", "casuali", "mutazioni", "varianti"))
+    parti_no = " · ".join(f"{_NOMI_ORIGINE.get(k, k)} {int(v or 0)}"
+                          for k, v in sorted(no.items(), key=lambda kv: -int(kv[1] or 0)))
+    fig = int(sp.get("intorno_figlie") or 0)
+    return (f"{nome}: nuove {parti_nu}" + (f" · figlie dell'intorno {fig}" if fig else "")
+            + f"; note rivalutate {parti_no or 'nessuna'}")
+
+
+def riga_origini(pairs: dict, validated, specs: dict | None, diag: dict | None = None,
+                 diag_1h: dict | None = None) -> str:
+    """«ORIGINI (le idee AI servono?)» (1 ott 2026, backlog D6). Per origine
+    della spec (`registry.origine_spec`: AI = la spec porta `mechanism`;
+    varianti/intorno = `origine`; il resto casuali o mutazioni, che a posteriori
+    non si distinguono): quante coppie sono nel registro (= hanno passato il gate
+    almeno una volta e non sono state rimosse), quante validate, quante
+    declassate; poi le spec candidate dell'ultimo giro a 15 minuti e della
+    passata a 1 ora per origine (`spec_per_origine` di `discovered_last_run*`).
+    Si contano le COPPIE, non l'R (regola della revisione del 30 set). Fonti:
+    `strategy_registry/validated`, `discovered_strategies/specs`,
+    `strategy_params/discovered_last_run` e `_1h`, gia' letti dal report. Pura."""
+    if not isinstance(specs, dict):
+        return "  ORIGINI: spec non leggibili, conteggio saltato"
+    conti = conta_per_origine(pairs if isinstance(pairs, dict) else {}, validated, specs)
+    parti = []
+    for o in ORIGINI:
+        c = conti.get(o) or {}
+        if not any(c.values()):
+            continue
+        parti.append(f"{_NOMI_ORIGINE.get(o, o)}: {c['registro']} nel registro / "
+                     f"{c['validate']} validate / {c['declassate']} declassate")
+    testa = ("  ORIGINI (le idee AI servono? si contano le coppie, non l'R; fonte: "
+             "registro + discovered_strategies/specs)\n    "
+             + (" · ".join(parti) or "registro vuoto"))
+    return (testa + "\n    " + _riga_giro_origini("candidate dell'ultimo giro", diag)
+            + "\n    " + _riga_giro_origini("candidate della passata a 1 ora", diag_1h))
 
 
 def riga_declassate(pairs: dict, validated, diag: dict | None = None) -> str:
@@ -566,6 +616,7 @@ def main() -> int:
     # e le DECLASSATE (26 set 2026): vedi riga_declassate
     print(riga_declassate(pairs, validated, diag))
     # e le validate che usano la SESSIONE ORARIA (27 set 2026, J13): vedi riga_sessione
+    _specs = None
     try:
         _specs = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
         print(riga_sessione(validated, _specs, pairs))
@@ -588,6 +639,9 @@ def main() -> int:
         d = int(d1h["duration_s"])
         print(f"  PASSATA A 1 ORA ({d1h.get('symbols', '?')} coin): {d // 60}m · "
               f"{d1h.get('n_eval', '?')} valutazioni · {d1h.get('n_passed', '?')} passate")
+    # LE IDEE AI SERVONO? (1 ott 2026, backlog D6): le coppie per origine della
+    # spec, coi documenti gia' letti qui sopra (nessuna lettura in piu')
+    print(riga_origini(pairs, validated, _specs, diag, d1h))
     if diag.get("n_specs_note"):
         tagliate = int(diag.get("n_specs_tagliate", 0) or 0)
         print(f"\n  RI-VALUTAZIONE (ultimo run discovery, {diag.get('reeval_modalita', 'completa')}): "

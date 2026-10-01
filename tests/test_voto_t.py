@@ -62,7 +62,9 @@ def _niente_systemd(monkeypatch):
 def test_la_t_e_nel_nucleo_e_sopravvive_all_alleggerimento_e_alla_codifica():
     assert set(CAMPI_T) <= op.REGISTRY_CORE_FIELDS
     assert set(CAMPI_VAL) <= op.REGISTRY_CORE_FIELDS and set(CAMPI_VAL) <= set(_BREVI)
-    rec = {"pass_count": 1, "last_seen_at": 1e9, "generated": True, "last_pf": 1.4,
+    # a 2 conferme (MIN_PASSES-1): dal 1 ott 2026 (K2) la t sta nel nucleo solo
+    # da qui in su; sotto si toglie (vedi i test K2 piu' sotto)
+    rec = {"pass_count": 2, "last_seen_at": 1e9, "generated": True, "last_pf": 1.4,
            "last_t": 1.87, "last_trades": 140, "last_t_holdout": 0.62,
            "last_trades_holdout": 9, "holdout": {"ok": True, "t": 0.62}, "regime_pf": {"x": 1}}
     pairs = {"AUSDT|gen_a": rec}
@@ -142,9 +144,20 @@ def test_il_merge_della_discovery_scrive_la_t_anche_a_una_coppia_non_validata():
     rec = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])["A|gen_t"]
     assert rec["pass_count"] == 1                        # 1 conferma: alleggerita
     assert "holdout" not in rec                          # il descrittivo se ne va...
+    # ...e dal 1 ott 2026 (K2) anche la t, a 1 conferma: la riscrive il
+    # passaggio a 2 conferme, prima di qualunque promozione
+    assert not any(c in rec for c in CAMPI_T)
+    assert not any(c in rec for c in CAMPI_VAL)          # non e' validata: niente t fissata
+    # al passaggio successivo, a 2 conferme, la t c'e' e resta
+    rec_mem = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])
+    rec_mem["A|gen_t"].update({"pass_count": 2, "window_start": 1e9 - 1})
+    fb.docs[("strategy_registry", "validated")] = {"pairs": encode_pairs(rec_mem)}
+    merge_into_registry(fb, {"A|gen_t": dict(e, data_end=1e9 + 3600)}, ["A|gen_t"],
+                        evaluated_symbols={"A"})
+    rec = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])["A|gen_t"]
+    assert rec["pass_count"] == 2
     assert (rec["last_t"], rec["last_trades"], rec["last_t_holdout"],
             rec["last_trades_holdout"]) == (2.31, 40, 1.234, 7)   # ...la t resta
-    assert not any(c in rec for c in CAMPI_VAL)          # non e' validata: niente t fissata
 
 
 class _FbMemoria:
@@ -980,3 +993,115 @@ def test_lettura_h1_tre_esiti():
     assert pb.lettura_h1(d(100, 100, 0.05, 0.05)).startswith("H1: chiusa")  # 0,05 + 0,10 < 0,25
     assert pb.lettura_h1(d(100, 100, 0.10, 0.08)).startswith("H1: non si sa ancora")  # 0,26
     assert pb.lettura_h1(None).startswith("H1: non si sa ancora")
+
+
+# --------------------------------------------------------------------------- #
+# K2 (1 ott 2026): la t nel nucleo solo da MIN_PASSES-1 conferme in su         #
+# --------------------------------------------------------------------------- #
+def test_k2_il_nucleo_tiene_la_t_solo_da_min_passes_meno_uno():
+    base = {"last_seen_at": 1e9, "generated": True, "last_pf": 1.4, "last_t": 1.87,
+            "last_trades": 140, "last_t_holdout": 0.62, "last_trades_holdout": 9,
+            "regime_pf": {"x": 1}, "val_t": 2.0}
+    for p in range(0, op.MIN_PASSES + 2):
+        n = op.nucleo_registro(dict(base, pass_count=p))
+        assert "regime_pf" not in n and n["last_pf"] == 1.4 and n["val_t"] == 2.0
+        if p >= op.MIN_PASSES - 1:
+            assert all(n[c] == base[c] for c in CAMPI_T), p
+        else:
+            assert not any(c in n for c in CAMPI_T), p
+    # senza pass_count (record vecchio o malformato) vale 0: niente t
+    assert not any(c in op.nucleo_registro(dict(base)) for c in CAMPI_T)
+
+
+def test_k2_stessa_regola_in_emergenza_e_nella_scrittura_minima():
+    rec1 = {"pass_count": 1, "last_t": 1.5, "last_trades": 30, "regime_pf": {"x": 1}}
+    rec2 = {"pass_count": 2, "last_t": 2.5, "last_trades": 50, "regime_pf": {"x": 1}}
+    rec3 = {"pass_count": 3, "last_t": 3.5, "last_trades": 70, "regime_pf": {"x": 1}}
+    pairs = {"A|gen_1": rec1, "A|gen_2": rec2, "A|gen_3": rec3}
+    emerg = decode_pairs(op.slim_registry(pairs, ["A|gen_3"], max_bytes=10))
+    assert "last_t" not in emerg["A|gen_1"]
+    assert emerg["A|gen_2"]["last_t"] == 2.5 and emerg["A|gen_3"]["last_t"] == 3.5
+    assert not any("regime_pf" in r for r in emerg.values())
+
+    class FbRifiuta:
+        def __init__(self):
+            self.n, self.scritto = 0, None
+
+        def set_doc(self, c, d, data):
+            self.n += 1
+            if self.n == 1:
+                raise RuntimeError("troppo grande")
+            self.scritto = data
+
+    fb = FbRifiuta()
+    op.scrivi_registro(fb, {"pairs": "x"}, pairs)
+    minimo = decode_pairs(fb.scritto["pairs"])
+    assert "last_t" not in minimo["A|gen_1"] and minimo["A|gen_2"]["last_t"] == 2.5
+
+
+def _k2_vita_fino_alla_promozione(monkeypatch, con_regola: bool) -> dict:
+    """Una coppia generata dalla prima conferma alla promozione, con la
+    contabilita' vera (`merge_into_registry` + `judge_window`) e il registro
+    riletto a ogni giro, cioe' alleggerito come su Firebase."""
+    from scripts.discover_strategies import merge_into_registry
+    if not con_regola:
+        monkeypatch.setattr(op, "CAMPI_T_NUCLEO", ())
+    fb = _FbMemoria()
+    d0, h, g = 1.7e9, 3600.0, 86400.0
+    t_per_giro = iter([1.1, 1.2, 1.3, 2.4, 2.5, 9.9])
+
+    def passa(de):
+        t = next(t_per_giro)
+        e = {"symbol": "A", "strategy": "gen_t", "params": {}, "oos_pf": 1.5,
+             "oos_pnl_pct": 0.3, "oos_trades": int(t * 10), "oos_win_rate": 0.5,
+             "passed": True, "holdout": {"ok": True, "t": t / 2, "trades": 7},
+             "data_end": de, "t_stat": t}
+        merge_into_registry(fb, {"A|gen_t": e}, ["A|gen_t"], evaluated_symbols={"A"})
+
+    def bocciata(de):
+        merge_into_registry(fb, {}, [], evaluated_symbols={"A"},
+                            evaluated_spec_ids={"gen_t"}, data_end_run=de)
+
+    def rec():
+        return decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])["A|gen_t"]
+
+    passa(d0)                    # prima vista: 1 conferma subito
+    passa(d0 + 3 * h)            # passa a 1 conferma: t scritta e (con K2) tolta
+    assert rec()["pass_count"] == 1
+    assert ("last_t" in rec()) is (not con_regola)
+    passa(d0 + 7 * g)            # chiude la finestra passando: 2 conferme, t c'e'
+    assert rec()["pass_count"] == 2 and rec()["last_t"] == 1.3
+    passa(d0 + 7 * g + 3 * h)    # passa a 2 conferme
+    passa(d0 + 7 * g + 6 * h)
+    assert rec()["last_t"] == 2.5
+    bocciata(d0 + 14 * g)        # chiusura SENZA ripassare: 2 su 3, promossa
+    r = rec()
+    assert r["pass_count"] == op.MIN_PASSES and r.get("validated_at")
+    return r
+
+
+def test_k2_la_t_fissata_alla_promozione_e_identica_con_e_senza_regola(monkeypatch):
+    """La promessa di K2: chi arriva alla promozione ha sempre la t dell'ultimo
+    passaggio, perche' quel passaggio avviene a MIN_PASSES-1 conferme. Stessa
+    vita, con e senza la regola: stessi `val_*`, stessa t, stessi contatori."""
+    con = _k2_vita_fino_alla_promozione(monkeypatch, True)
+    monkeypatch.undo()
+    senza = _k2_vita_fino_alla_promozione(monkeypatch, False)
+    campi = CAMPI_T + CAMPI_VAL + ("pass_count", "fail_count", "window_start",
+                                   "window_evals", "window_passes", "last_pass_data_end")
+    assert {c: con.get(c) for c in campi} == {c: senza.get(c) for c in campi}
+    assert con["val_t"] == 2.5 and con["val_trades"] == 25 and con["val_t_holdout"] == 1.25
+
+
+def test_k2_le_conferme_retroattive_portano_la_t_nello_stesso_merge():
+    from scripts.discover_strategies import merge_into_registry
+    fb = _FbMemoria()
+    e = {"symbol": "A", "strategy": "gen_r", "params": {}, "oos_pf": 1.5,
+         "oos_pnl_pct": 0.3, "oos_trades": 40, "oos_win_rate": 0.5, "passed": True,
+         "holdout": {"ok": True, "t": 1.2, "trades": 7}, "data_end": 1e9, "t_stat": 2.2,
+         "conferme_retro": op.MIN_PASSES - 1,
+         "spec": {"id": "gen_r", "origine": "referto", "genitore": "gen_m"}}
+    merge_into_registry(fb, {"A|gen_r": e}, ["A|gen_r"], evaluated_symbols={"A"})
+    rec = decode_pairs(fb.docs[("strategy_registry", "validated")]["pairs"])["A|gen_r"]
+    assert rec["pass_count"] == op.MIN_PASSES
+    assert (rec["last_t"], rec["val_t"], rec["val_t_holdout"]) == (2.2, 2.2, 1.2)

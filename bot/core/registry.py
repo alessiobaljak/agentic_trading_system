@@ -282,6 +282,65 @@ def conta_declassate(pairs: dict, validated) -> int:
 
 
 # --------------------------------------------------------------------------- #
+# DA DOVE VENGONO LE COPPIE (1 ott 2026, backlog D6: «le idee AI servono?»)    #
+# --------------------------------------------------------------------------- #
+#: le origini, nell'ordine in cui si stampano
+ORIGINI = ("ai", "casuali", "varianti", "intorno", "base", "spec_ignota")
+
+
+def origine_spec(spec, generata: bool = True) -> str:
+    """Da dove viene una spec, dai SOLI campi della spec (l'id e' lo stesso per
+    tutte, di proposito: «niente corsie preferenziali»):
+      * `origine: referto` -> «varianti» (dai referti del paper), `origine:
+        intorno` -> «intorno»: valgono anche se la madre era una spec AI (la
+        figlia ne copia i campi, `mechanism` compreso);
+      * `mechanism` -> «ai» (lo scrive solo `bot.ai.hypotheses`, ed e' la
+        stessa traccia che usa `ai-stato`);
+      * altrimenti «casuali»: estratte dal generatore O mutate attorno a un
+        quasi-passaggio (`mutate` non lascia un segno sulla spec: le due non si
+        distinguono a posteriori).
+    Una coppia non generata e' «base»; una generata senza spec nota e'
+    «spec_ignota». Pura."""
+    if not generata:
+        return "base"
+    if not isinstance(spec, dict):
+        return "spec_ignota"
+    origine = spec.get("origine")
+    if origine == "referto":
+        return "varianti"
+    if origine == "intorno":
+        return "intorno"
+    if spec.get("mechanism"):
+        return "ai"
+    return "casuali"
+
+
+def conta_per_origine(pairs: dict, validated, specs: dict | None) -> dict:
+    """{origine: {"registro", "validate", "declassate"}}: le COPPIE (coin x
+    strategia) per origine della spec. «registro» = coppie che hanno passato il
+    gate almeno una volta e sono ancora nel registro (chi e' stato rimosso non
+    c'e' piu'); «validate» = `validated` (madri sostituite escluse, come
+    `coppie_validate`); «declassate» = fra le validate, col flag (`declassate`).
+    Si contano le coppie, non l'R (revisione del 30 set: il risultato in R e'
+    delle letture di ottobre, non di questa riga). Pura."""
+    specs = specs if isinstance(specs, dict) else {}
+    validated = set(validated or ())
+    decl = declassate(pairs, validated)
+    out = {o: {"registro": 0, "validate": 0, "declassate": 0} for o in ORIGINI}
+    for k, r in (pairs or {}).items():
+        if not isinstance(r, dict):
+            continue
+        sid = str(r.get("strategy") or str(k).split("|", 1)[-1])
+        o = origine_spec(specs.get(sid), generata=bool(r.get("generated")))
+        out[o]["registro"] += 1
+        if k in validated:
+            out[o]["validate"] += 1
+        if k in decl:
+            out[o]["declassate"] += 1
+    return out
+
+
+# --------------------------------------------------------------------------- #
 # Il documento del gate: pulizia e scrittura                                   #
 # --------------------------------------------------------------------------- #
 _VIETATI_CHIAVE = str.maketrans({c: "_" for c in ".#$[]/"})

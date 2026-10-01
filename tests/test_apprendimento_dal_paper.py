@@ -20,8 +20,11 @@ DUE COSE VANNO PROTETTE QUI, e sono la ragione del file:
      trade scavalcherebbero la validazione;
   2. senza dati, tutto deve comportarsi ESATTAMENTE come prima.
 """
+import time
+
 import pytest
 
+from bot.config import settings
 from bot.execution.exit_logic import SCALE_LADDER_CANDIDATES, ladder_from_mfe
 from scripts.discover_strategies import (candidate_ladders, prove_dal_paper,
                                          scala_dal_paper)
@@ -120,9 +123,13 @@ def test_il_digest_contiene_i_fatti_che_servono():
                                                 "expected_pf": 1.88,
                                                 "mfe_median": 0.74,
                                                 "first_rung_r": 1.5}},
-              ("gate_autopsy", "current"): {"evaluated": 96727, "passed": 241,
-                                            "binding": {"total_return": 65969,
-                                                        "regime": 15233}}},
+              # dal 1 ott 2026 (K7) la riga GATE viene dall'autopsia del giro
+              # precedente dello stesso timeframe, se fresca
+              ("gate_autopsy", "discover"): {"evaluated": 96727, "passed": 241,
+                                             "interval": settings.ORCHESTRATOR_TIMEFRAME,
+                                             "updated_at": time.time() - 3600,
+                                             "binding": {"total_return": 65969,
+                                                         "regime": 15233}}},
         trades=[{"direction": "short", "pnl": -3.0}, {"direction": "short", "pnl": -2.0},
                 {"direction": "long", "pnl": 4.0}])
     testo = prove_dal_paper(fb)
@@ -168,7 +175,7 @@ def test_la_discovery_passa_davvero_le_prove_all_ai():
     from scripts import discover_strategies as d
 
     src = inspect.getsource(d.main)
-    assert "prove_dal_paper(fb)" in src
+    assert "prove_dal_paper(fb, interval=args.interval)" in src
     assert "market_context" in src and "prove" in src
 
 

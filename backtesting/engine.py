@@ -442,6 +442,35 @@ def gate_verdict(window_pnls: list[float], n_trades: int, pf: float,
                        binding=binding[0], shortfall=round(binding[1], 4))
 
 
+def holdout_verdict(n_trades: int, pf: float, pnl: float, pf_ex_top: float) -> GateVerdict:
+    """PERCHE' una candidata e' caduta sull'HOLDOUT, con uno scarto vero (1 ott
+    2026, backlog K7). Gli stessi quattro controlli di
+    `WalkForwardOptimizer._holdout_check` (trade minimi, PF, ritorno positivo,
+    PF senza i colpi migliori), sugli stessi numeri NON arrotondati: il verdetto
+    `ok` e' identico a quello del controllo, cambia solo che ora si sa quale
+    soglia ha fermato e di quanto.
+
+    Prima ogni caduta sull'holdout si scriveva con scarto 0,000 e «quasi
+    passaggio» sempre vero: all'AI arrivava «scarto 0,000» anche per un PF di
+    0,4 contro 1,3, e nella scelta delle esplorative quelle cadute venivano
+    prima di tutte. Il ritorno non positivo e' un criterio si'/no (scarto -1,
+    come il regime): una soglia a zero non ha una distanza relativa."""
+    failed: list[tuple] = []
+    if n_trades < settings.GATE_HOLDOUT_MIN_TRADES:
+        failed.append(("holdout_trades", _short(n_trades, settings.GATE_HOLDOUT_MIN_TRADES)))
+    if pf < settings.GATE_HOLDOUT_PF:
+        failed.append(("holdout_pf", _short(pf, settings.GATE_HOLDOUT_PF)))
+    if not pnl > 0:
+        failed.append(("holdout_pnl", -1.0))
+    if pf_ex_top < settings.GATE_MIN_PF_EX_TOP:
+        failed.append(("holdout_pf_ex_top", _short(pf_ex_top, settings.GATE_MIN_PF_EX_TOP)))
+    if not failed:
+        return GateVerdict(ok=True)
+    binding = min(failed, key=lambda x: x[1])
+    return GateVerdict(ok=False, failed=tuple(n for n, _ in failed),
+                       binding=binding[0], shortfall=round(binding[1], 4))
+
+
 def passes_gate(window_pnls: list[float], n_trades: int, pf: float,
                 win_rate: float, total_return: float,
                 max_dd: float | None = None,
