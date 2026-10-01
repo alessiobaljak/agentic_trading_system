@@ -2457,3 +2457,30 @@ la soglia bassa, ma il campione è minimo e il 62% delle validate non si può cl
 * **Backlog rifatto** (richiesta del proprietario: solo le voci da fare o in attesa). `docs/backlog.md`
   ha 6 gruppi e 21 voci; il file di prima, con le voci fatte e in misura e tutti i numeri, è
   `docs/backlog_archivio.md`, invariato salvo l'intestazione e le due voci chiuse oggi.
+
+### 1 ottobre, pomeriggio: R1, il gate rigiocato nel passato — REGOLA scritta PRIMA dei numeri
+
+Sì del proprietario («vai con R1»). Domanda: il gate sceglie strategie con un vantaggio vero, o
+soprattutto fortuna? Si rifà il gate nel passato e si guarda cosa succede DOPO la sua scelta.
+* **Date:** 26, una ogni 14 giorni all'indietro; la più recente è l'ultima che lascia 14 giorni interi
+  di dati dopo di sé (verso metà settembre 2026), la più vecchia circa un anno prima.
+* **A ogni data D:** il gate, con le stesse soglie di oggi (senza AI e senza la vita del registro),
+  giudica candidate nuove usando SOLO i dati fino a D (caricati fino a oggi e tagliati in memoria:
+  nessuna scrittura nel registro, in Firebase o nella cache del gate).
+* **Dopo:** i trade del motore delle stesse candidate entrati nei 14 giorni dopo D, in R netto
+  (costi del motore), con la configurazione d'uscita scelta dal gate.
+* **Gruppi:** «passate» (superano tutto il gate, holdout compreso, alla data D) contro «bocciate».
+* **Misura:** R medio a trade di ogni gruppo e differenza passate − bocciate; margine = 2 errori
+  standard, il più largo fra quello calcolato per data (26 differenze) e quello trade per trade.
+* **Esiti:** almeno 80 trade delle passate nei 14 giorni dopo, altrimenti «non si sa». Differenza
+  oltre il margine → **il gate ha un vantaggio vero** (il problema è il mercato o il bot). Differenza +
+  margine sotto 0,10R → **il gate sceglie soprattutto fortuna** (la prossima modifica va nel gate).
+  Altrimenti → **non si sa**.
+* **Solo informativo, non decide:** le coppie che passano a D, D − 7 e D − 14 giorni (come le
+  validate a 3 conferme), se il calcolo lo permette.
+* **Limiti dichiarati:** monete di oggi (le sopravvissute), motore senza scivolamento, niente AI:
+  alzano il livello di tutti, pesano poco sul confronto fra passate e bocciate. Non è il gate di
+  produzione: la vita del registro (finestre, declassate, purga) non c'è.
+* **Come gira:** prima una prova piccola (1-2 date), si controlla che i numeri abbiano senso, poi il
+  resto nelle pause del gate (mai insieme al giro, la memoria non basta). Due righe nuove nella lista
+  bianca della VPS, da aggiungere a mano dal proprietario.

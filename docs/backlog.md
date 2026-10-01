@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **1. Aspettano il tuo sì** | R1 (il gate rigiocato nel passato) | una tua risposta |
+| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -23,9 +23,9 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 ---
 
-## 1. Aspettano il tuo sì
+## 1. In lavorazione
 
-### R1. Rigiocare il gate nel passato (proposta del 1 ott)
+### R1. Rigiocare il gate nel passato — **SÌ del proprietario il 1 ott, in lavorazione** (regola nel diario del 1 ott, scritta prima dei numeri)
 Invece di aspettare il 7-14 ott per sapere se il gate sceglie strategie con un vantaggio vero, si
 rifà il gate a 26 date passate e si guarda come sono andate dopo le promosse contro le bocciate.
 Regola da scrivere prima dei numeri: promosse meglio delle bocciate oltre il margine → il gate ha un
