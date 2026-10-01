@@ -1448,7 +1448,7 @@ def manca(salute: dict | None = None, paper: dict | None = None) -> list[dict]:
                     "come_avere": "comando ops `stato` sulla VPS (state_snapshot col confronto col mercato)"})
     out.append({"evidenza": "cosa aspetta il si' del proprietario",
                 "perche": "vive in docs/backlog.md, non e' un dato del sistema",
-                "come_avere": "leggere docs/backlog.md (voce F1 per il learning)"})
+                "come_avere": "leggere docs/backlog.md (gruppo 1 dell'indice)"})
     return out
 
 
