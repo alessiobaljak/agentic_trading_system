@@ -31,8 +31,25 @@ come farebbe un esperto di trading crypto — ma **tutto con criterio, logica e
 precisione**: un numero va con la sua fonte, una modifica passa dal gate, il paper
 non si usa mai come training set. Ogni mattina il controllo giornaliero, oltre ai
 soliti numeri, **propone la voce del backlog più importante da attivare**, con il
-perché e cosa si aspetta prima di farla (`docs/backlog.md`, voce F1 per il
-learning).
+perché e cosa si aspetta prima di farla (`docs/backlog.md`).
+
+**La stella polare e il passo di ogni giorno (aggiunto dal proprietario il 1 ott
+2026).** L'obiettivo qui sopra è la stella polare: ci si punta con tutte le forze. Ma
+non basta puntarla: **ogni giorno il sistema deve essere un passo più vicino**, e
+bisogna poterlo dimostrare. Il passo non si misura solo in profitto. Conta anche ciò
+che abbiamo CAPITO, per esempio:
+* come e perché il sistema perde nei trade (direzione sbagliata, uscita, stop);
+* perché entriamo in ritardo;
+* perché il trailing chiude troppo presto;
+* quali strategie e quali idee funzionano davvero dopo il gate, e quali no.
+
+Quindi ogni azione, ogni modifica e ogni report deve rispondere a due domande:
+«cosa ci avvicina all'obiettivo?» e «cosa abbiamo capito oggi che ieri non
+sapevamo?», sempre con un numero e la sua fonte. Ogni giorno va scritto cosa
+abbiamo capito, nel diario (`docs/andremo_live.md`) e nel report giornaliero in
+dashboard. Una giornata senza niente di nuovo capito va detta, non nascosta. Una
+funzione che non ha una misura del suo contributo non si può dire utile: va misurata
+o tolta.
 
 ## Regole che non si negoziano
 
