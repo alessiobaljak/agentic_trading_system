@@ -2421,3 +2421,21 @@ tutto gira nel giro del gate (timer), che prende il codice nuovo da solo.
   figlia finisce prima del primo trade del paper): spostarlo alla data dell'ipotesi metterebbe giorni
   del paper dentro la validazione. Serve un campo separato scritto dal bot, cioè un riavvio, e il
   backlog dice di farlo solo se i numeri mostrano che l'urgenza serve: oggi nessun numero lo mostra.
+
+### 1 ottobre, mezzogiorno: K10 (conteggio), K11, scritta della panchina — fatti
+
+Sì del proprietario («procedi k10-k11 e la scritta fuorviante»). Nessuna soglia, uscita, size o freno
+cambia.
+* **K10, solo un conteggio.** Nuova sezione «SOGLIA DEL WIN RATE (K10)» nel report `trades`: le
+  validate divise per ultimo win rate del gate (≥ 0,45; fra la soglia di oggi e 0,45 = «allentata»,
+  cioè esistono solo perché il supervisore l'ha abbassata; sotto; non salvato) e l'R netto del paper
+  delle stesse coppie, tutto e dal 27 set. Approssimazione dichiarata: conta l'ultimo passaggio, non
+  tutti. Una lettura del registro in più per report. Rimettere la soglia resta dopo il 7-14 ott.
+* **K11.** Nel taglio a 200 voci della storia delle esplorative le «validata» restano per sempre e le
+  scartate tolte si sommano in `scartate_tolte`: «validate poi» e «scartate» non scendono più da soli.
+  La validata uscita fra ops 0363 e 0391 non si recupera (la chiave non è salvata altrove).
+* **Scritta del log.** In parità la riga dice «3 stop consecutivi (panchina spenta in parità: continua
+  a operare)» invece di «in panchina». Codice del bot: vale dal prossimo riavvio, che non serve
+  anticipare per questo.
+Test: 2105 verdi due volte di fila; una volta prima un test del voto t (`test_un_errore_su_una_coin_
+non_butta_le_coin_gia_votate`, coi processi) è caduto e ripassato da solo: da tenere d'occhio.

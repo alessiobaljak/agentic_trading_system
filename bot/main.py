@@ -1230,8 +1230,16 @@ class TradingBot:
                     if self._strat_streak[st] >= settings.STRATEGY_LOSS_STREAK:
                         self._strat_cooldown[st] = now + settings.STRATEGY_COOLDOWN_HOURS * 3600 * _ftf
                         self._strat_streak[st] = 0
-                        print(f"[main] strategia {st} in panchina dopo "
-                              f"{settings.STRATEGY_LOSS_STREAK} stop consecutivi")
+                        # in PARITA' la panchina non si applica (vedi `disabled` nel
+                        # ciclo): la riga lo dice, invece di far credere che la
+                        # strategia sia ferma (1 ott 2026, backlog K9)
+                        if settings.BACKTEST_PARITY:
+                            print(f"[main] strategia {st}: {settings.STRATEGY_LOSS_STREAK} "
+                                  f"stop consecutivi (panchina spenta in parita': continua "
+                                  f"a operare)")
+                        else:
+                            print(f"[main] strategia {st} in panchina dopo "
+                                  f"{settings.STRATEGY_LOSS_STREAK} stop consecutivi")
                 else:  # vincita -> la strategia funziona di nuovo
                     self._strat_streak[st] = 0
                     self._strat_cooldown.pop(st, None)
@@ -1800,7 +1808,8 @@ class TradingBot:
             self._strat_cooldown = {k: float(v) for k, v in (d.get("strat_cooldown") or {}).items()}
             n = sum(1 for v in self._coin_cooldown.values() if v > time.time())
             m = sum(1 for v in self._strat_cooldown.values() if v > time.time())
-            print(f"[main] cooldown ricaricati: {n} coin, {m} strategie in panchina")
+            print(f"[main] cooldown ricaricati: {n} coin, {m} strategie in panchina"
+                  + (" (spenta in parita': non si applica)" if settings.BACKTEST_PARITY else ""))
         except Exception as exc:  # noqa: BLE001
             print(f"[main] cooldown non ricaricati: {exc}")
 

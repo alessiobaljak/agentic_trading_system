@@ -152,7 +152,9 @@ def riga_esplorative(esp_doc: dict | None) -> str:
     attive = len(decode_pairs(esp_doc.get("pairs")))
     storia = decode_pairs(esp_doc.get("storia"))
     validate_poi = sum(1 for v in storia.values() if (v or {}).get("esito") == "validata")
-    scartate = sum(1 for v in storia.values() if (v or {}).get("esito") == "scartata")
+    # + le scartate uscite dalla storia per il taglio (1 ott 2026, K11)
+    scartate = (int(esp_doc.get("scartate_tolte") or 0)
+                + sum(1 for v in storia.values() if (v or {}).get("esito") == "scartata"))
     return f"  ESPLORATIVE: {attive} attive · validate poi {validate_poi} · scartate {scartate}"
 
 

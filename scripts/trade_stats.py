@@ -612,7 +612,9 @@ def esplorativo_report(trades: list[dict], esp_doc: dict | None) -> dict:
         attive = len(decode_pairs(esp_doc.get("pairs")))
         storia = decode_pairs(esp_doc.get("storia"))
         validate_poi = sum(1 for v in storia.values() if (v or {}).get("esito") == "validata")
-        scartate = sum(1 for v in storia.values() if (v or {}).get("esito") == "scartata")
+        # + le scartate uscite dalla storia per il taglio (1 ott 2026, K11)
+        scartate = (int(esp_doc.get("scartate_tolte") or 0)
+                    + sum(1 for v in storia.values() if (v or {}).get("esito") == "scartata"))
     return {"trades": len(rows), "vinti": sum(1 for t in rows if float(t.get("pnl", 0) or 0) > 0),
             "pnl": round(sum(float(t.get("pnl", 0) or 0) for t in rows), 2),
             "per_coppia": top, "coppie_attive": attive,
@@ -831,6 +833,90 @@ def print_keep_per_strategia(trades: list[dict]) -> None:
                  if any(r["proposta"] is not None for r in nascoste) else ""))
     print("  miss medio = frazione del tragitto entry->TP lasciata sul tavolo all'uscita "
           "(0 = al TP, 1 = all'entrata): misura, non regola")
+
+
+# --------------------------------------------------------------------------- #
+# LA SOGLIA DEL WIN RATE ALLENTATA (1 ott 2026, backlog K10)                   #
+# --------------------------------------------------------------------------- #
+# Fra il 19 ago e l'8 set il supervisore automatico ha abbassato
+# GATE_WIN_RATE_FLOOR da 0,45 a 0,3966 (`tuning.env`) e non l'ha piu' rimessa.
+# Qui si CONTA soltanto (sola lettura, nessuna soglia cambia): quante validate
+# hanno l'ultimo win rate del gate fra la soglia di oggi e 0,45, cioe' quelle
+# che con la soglia di prima sarebbero cadute, e come rendono nel paper in R.
+# Approssimazione dichiarata: `last_win_rate` e' l'ultimo passaggio, non tutti.
+#: la soglia prima dell'allentamento del supervisore
+SOGLIA_WR_ORIGINALE = 0.45
+
+
+def gruppo_win_rate(rec, soglia_oggi: float,
+                    originale: float = SOGLIA_WR_ORIGINALE) -> str:
+    """«piena» (ultimo win rate >= originale), «allentata» (fra la soglia di
+    oggi e l'originale: esiste solo grazie all'allentamento), «sotto» (sotto
+    anche la soglia di oggi: e' passata prima o con altri numeri) o «ignoto»
+    (campo assente, alleggerito). Pura."""
+    try:
+        wr = float((rec or {}).get("last_win_rate"))
+    except (TypeError, ValueError):
+        return "ignoto"
+    if wr >= originale:
+        return "piena"
+    return "allentata" if wr >= soglia_oggi else "sotto"
+
+
+def soglia_wr_report(trades: list[dict], pairs: dict | None, validate,
+                     soglia_oggi: float, dal_ts: float | None = None) -> dict:
+    """K10: le validate per gruppo di win rate (`gruppo_win_rate`) e i trade
+    del paper delle stesse coppie in R (netto, `drift.r_multiplo`), tutto e dal
+    27 set 19:40 UTC. I trade di coppie oggi non validate vanno in «non piu'
+    validate». Pura."""
+    from bot.learning.drift import r_multiplo
+    dal_ts = DAL_REGOLA_3_OTT if dal_ts is None else dal_ts
+    pairs = pairs if isinstance(pairs, dict) else {}
+    validate = set(validate or ())
+    gruppo = {k: gruppo_win_rate(pairs.get(k), soglia_oggi) for k in validate}
+    nomi = ("piena", "allentata", "sotto", "ignoto", "non_validate")
+    out = {g: {"coppie": 0, "tutto": [[], 0], "dal": [[], 0]} for g in nomi}
+    for g in gruppo.values():
+        out[g]["coppie"] += 1
+    for t in trades or []:
+        k = f"{t.get('symbol', '?')}|{t.get('strategy', '?')}"
+        g = gruppo.get(k, "non_validate")
+        r = r_multiplo(t)
+        ts = _entry_ts(t)
+        for col in ["tutto"] + (["dal"] if ts is not None and ts >= dal_ts else []):
+            if r is None:
+                out[g][col][1] += 1
+            else:
+                out[g][col][0].append(r)
+    return {"soglia_oggi": soglia_oggi, "originale": SOGLIA_WR_ORIGINALE,
+            "gruppi": {g: {"coppie": v["coppie"], "tutto": _r_stat(*v["tutto"]),
+                           "dal": _r_stat(*v["dal"])} for g, v in out.items()}}
+
+
+def _fr(v) -> str:
+    return "—" if v is None else f"{v:+.3f}"
+
+
+def print_soglia_wr(rep: dict | None) -> None:
+    print("\nSOGLIA DEL WIN RATE (K10): il supervisore l'ha abbassata e non l'ha rimessa. "
+          "Si conta e basta, nessuna soglia cambia qui")
+    if not rep:
+        print("  registro non letto: conteggio saltato")
+        return
+    print(f"  soglia di oggi {rep['soglia_oggi']:.4f} · prima {rep['originale']:.2f} · "
+          f"«allentata» = ultimo win rate del gate fra le due: con la soglia di prima "
+          f"sarebbe caduta (l'ultimo passaggio, non tutti: approssimazione)")
+    etichette = {"piena": "win rate >= 0,45", "allentata": "ALLENTATA",
+                 "sotto": "sotto la soglia di oggi", "ignoto": "win rate non salvato",
+                 "non_validate": "trade di coppie non piu' validate"}
+    print("                                   coppie ‖  paper tutto: n  R medio ‖ dal 27/9: n  R medio")
+    for g, et in etichette.items():
+        v = rep["gruppi"][g]
+        cop = "" if g == "non_validate" else str(v["coppie"])
+        print(f"  {et:<33}{cop:>5}  ‖ {v['tutto']['n']:>14}  {_fr(v['tutto']['r_medio']):>7} ‖ "
+              f"{v['dal']['n']:>11}  {_fr(v['dal']['r_medio']):>7}")
+    print("  lettura: solo un conteggio (pochi trade a coppia, nessun margine). Rimettere la "
+          "soglia a 0,45 e' una modifica del gate: dopo le letture del 7-14 ott, col numero")
 
 
 def main() -> int:
@@ -1094,6 +1180,20 @@ def main() -> int:
     # LE DECLASSATE (26 set 2026, passo 2): il vissuto delle validate declassate
     # dal gate contro quello delle attive, sugli stessi trade di qui sopra.
     print_declassate(declassate_report(trades))
+
+    # LA SOGLIA DEL WIN RATE ALLENTATA (1 ott 2026, K10): una lettura del
+    # registro in piu', fail-open
+    try:
+        from bot.core.firebase_client import decode_pairs
+        from bot.core.registry import coppie_validate
+        reg = fb.get_doc("strategy_registry", "validated") or {}
+        reg_pairs = decode_pairs(reg.get("pairs"))
+        rep_wr = soglia_wr_report(trades, reg_pairs, coppie_validate(reg_pairs),
+                                  float(settings.GATE_WIN_RATE_FLOOR))
+    except Exception as exc:  # noqa: BLE001
+        print(f"[soglia-wr] registro non letto ({str(exc)[:80]})")
+        rep_wr = None
+    print_soglia_wr(rep_wr)
 
     # IL PAPER ESPLORATIVO (25 set 2026, F1bis): in fondo, coi suoi numeri e il
     # metro dell'esperimento dalla storia del registro esplorativo.

@@ -561,8 +561,9 @@ def _publish_discover_autopsy(fb, evaluated: int, passed: int, binding: dict,
 # Ciclo di vita, semplice di proposito: una coppia resta finche' e' ancora un
 # quasi-passaggio O e' stata vista negli ultimi due giri (`last_seen` entro
 # ESPLORATIVE_ASSENZA_S); diventa validata -> storia «validata»; non vista da
-# piu' di due giri -> storia «scartata». La storia e' tagliata alle ultime
-# ESPLORATIVE_STORIA_MAX voci. Fail-open ovunque: un errore qui stampa e non
+# piu' di due giri -> storia «scartata». La storia e' tagliata a
+# ESPLORATIVE_STORIA_MAX voci, ma solo nelle scartate (1 ott 2026, K11): le
+# validate restano sempre, le scartate tolte si contano in `scartate_tolte`. Fail-open ovunque: un errore qui stampa e non
 # ferma mai il giro (il registro validato e' gia' scritto).
 ESPLORATIVE_STORIA_MAX = 200
 #: due giri da 3 ore, con margine: «vista negli ultimi 2 giri»
@@ -647,19 +648,32 @@ def aggiorna_esplorative(doc_prec: dict | None, selezione: list[dict], specs: di
             storia[key] = {"since": rec.get("since"), "fine": now, "esito": "scartata"}
             del pairs[key]
             scartate_giro += 1
+    # IL TAGLIO DELLA STORIA (1 ott 2026, backlog K11): le «validata» restano
+    # PER SEMPRE (sono poche, ed e' il metro dell'esperimento F1bis: fino al 30
+    # set uscivano dalla storia con le scartate e «validate poi» scendeva da 1 a
+    # 0 senza nessun cambiamento vero, ops 0363 -> 0391). Si tagliano solo le
+    # scartate piu' vecchie, e quante ne escono si somma in `scartate_tolte`,
+    # cosi' il totale delle scartate non cala.
+    tolte = int(_num(prec.get("scartate_tolte")) or 0)
     if len(storia) > ESPLORATIVE_STORIA_MAX:
-        recenti = sorted(storia.items(), key=lambda kv: -float((kv[1] or {}).get("fine") or 0))
-        storia = dict(recenti[:ESPLORATIVE_STORIA_MAX])
+        validate_st = {k: v for k, v in storia.items() if (v or {}).get("esito") == "validata"}
+        altre = sorted(((k, v) for k, v in storia.items() if k not in validate_st),
+                       key=lambda kv: -float((kv[1] or {}).get("fine") or 0))
+        posto = max(0, ESPLORATIVE_STORIA_MAX - len(validate_st))
+        tolte += sum(1 for _, v in altre[posto:] if (v or {}).get("esito") == "scartata")
+        storia = {**validate_st, **dict(altre[:posto])}
     specs_out: dict = {}
     for rec in pairs.values():
         gid = str((rec or {}).get("strategy") or "")
         sp = (specs or {}).get(gid) or specs_prec.get(gid)
         if isinstance(sp, dict):
             specs_out[gid] = sp
-    doc = {"updated_at": now, "pairs": pairs, "specs": specs_out, "storia": storia}
+    doc = {"updated_at": now, "pairs": pairs, "specs": specs_out, "storia": storia,
+           "scartate_tolte": tolte}
     stats = {"attive": len(pairs), "nuove": nuove,
              "validate_poi": sum(1 for v in storia.values() if (v or {}).get("esito") == "validata"),
-             "scartate": sum(1 for v in storia.values() if (v or {}).get("esito") == "scartata"),
+             "scartate": tolte + sum(1 for v in storia.values()
+                                     if (v or {}).get("esito") == "scartata"),
              "validate_giro": validate_giro, "scartate_giro": scartate_giro}
     return doc, stats
 
@@ -692,7 +706,8 @@ def pubblica_esplorative(fb, near: list, validate, specs: dict, universo,
         doc, stats = aggiorna_esplorative(prec, selezione, specs, validate, now)
         fb.set_doc("strategy_registry", "esplorative", {
             "updated_at": now, "pairs": encode_pairs(doc["pairs"]),
-            "specs": encode_pairs(doc["specs"]), "storia": encode_pairs(doc["storia"])})
+            "specs": encode_pairs(doc["specs"]), "storia": encode_pairs(doc["storia"]),
+            "scartate_tolte": doc["scartate_tolte"]})
         print(riga_esplorative(stats))
         return stats
     except Exception as exc:  # noqa: BLE001

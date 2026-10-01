@@ -30,7 +30,7 @@ sparisce senza verdetto è peggio di una voce mai scritta.
 | Stato | Voci | Cosa serve |
 |---|---|---|
 | **Fatte il 1 ott (restano sotto come memoria)** | K2 primo rimedio (spazio del registro), K7 (dati all'AI), D6-IPOTESI (riga ORIGINI), J6 (rifiutati nello stesso periodo), J15 (scritta «rispetto a un'ora fa»), D5 (reset del paper), K8 parte report (conti in R) | niente |
-| **Si possono fare adesso (non toccano uscite, size, freni)** | K10 conteggio (quante validate esistono solo per la soglia allentata: sola lettura), K11 (storia delle esplorative a 200 voci), scritta «in panchina» del log (K9) | il sì del proprietario |
+| **Fatte il 1 ott, pomeriggio** | K10 conteggio (riga SOGLIA DEL WIN RATE in `trades`), K11 (storia delle esplorative), scritta «in panchina» del log (dal prossimo riavvio) | niente |
 | **Dopo le letture del 7-14 ott (toccano gate, size o freni)** | K9 (leva 2x dopo una vincita), K10 rimettere la soglia, G3 e soglia H1 (metà nov), G6, B8 seconda metà, E4 gemelle, I5, D6 leve della spesa | il numero delle letture, poi il sì |
 | **Rinviate con motivo** | I4bis (serve un campo nuovo e un riavvio, nessun numero lo chiede), D1 (registro su più documenti: rifacimento rischioso, si fa se lo spazio non basta), D7 (modello del runner GitHub: azione del proprietario sul segreto) | vedi ogni voce |
 | **In misura (21)** — si leggono da sole | 1 ott: J14 (letture Firebase), D6 (primo giorno intero di spesa) · 3 ott: A4 (declassate contro attive) · 7 ott: H5, K1 (selezione o esecuzione) · ~10 ott: J7, J9, I4ter · ~14-15 ott: H5 (rilettura), K3 (gruppo di controllo) · ~18 ott: J11, J13, C1 · ~26 ott: J6 · metà nov: K2 (regola H1) · senza data: F1bis (100 trade esplorativi), F1ter (selettore), I1 (panchina), I3, I4 (trailing), J8, J10, E1 | niente: leggere il numero alla data |
@@ -190,7 +190,7 @@ difetto della sessione (fino al 26 set −77,93, dal 27 set +10,19, ops 0371): v
 taglio al 27 set. I costi pesano 29,66 sui −68,65; motore e paper chiudono lo stop al suo prezzo
 esatto, senza scivolamento (`executor.py:549-563`): da verificare prima del denaro vero.
 
-### K11. La storia delle esplorative tagliata a 200 voci rompe la loro misura (trovato il 1 ott)
+### K11. La storia delle esplorative tagliata a 200 voci rompe la loro misura (trovato il 1 ott) — **FATTO il 1 ott** (le validate restano per sempre, le scartate tolte si contano in `scartate_tolte`; la validata uscita fra ops 0363 e 0391 è persa: il conteggio riparte da quelle che ci sono)
 `discover_strategies.py:567`, `:650-652`, `:661-662`: la storia di `strategy_registry/esplorative` tiene
 200 voci; «esplorative poi validate» è sceso da 1 a 0 (ops 0363 → 0391) senza nessun cambiamento vero,
 perché la voce più vecchia è uscita dalla storia. È la misura che decide se il paper esplorativo
@@ -207,14 +207,14 @@ vinta e 1 persa. Il rischio raddoppia quando morde il tetto del 10% (equity × l
 MITO e TST erano a leva 2,0x (docs/state.md). È fortuna amplificata e non passa dal gate. **Da
 decidere dopo le letture del 7-14 ott** (tocca la size): per esempio un minimo di trade prima che il
 peso alzi la leva. Correzione allo stesso giro: la pausa dopo 3 stop di fila è SPENTA in parità
-(`bot/main.py:1338`), non attiva come scritto in I1. Il log però scrive lo stesso «strategia … in panchina dopo 3 stop consecutivi» (`bot/main.py:1233`, visto il 1 ott alle 08:34 UTC per gen_c0fd1d91, ops 0402): è una scritta che porta fuori strada, da correggere insieme a K9.
+(`bot/main.py:1338`), non attiva come scritto in I1. Il log però scrive lo stesso «strategia … in panchina dopo 3 stop consecutivi» (`bot/main.py:1233`, visto il 1 ott alle 08:34 UTC per gen_c0fd1d91, ops 0402): era una scritta che portava fuori strada: **corretta il 1 ott** (in parità ora dice «panchina spenta: continua a operare»; vale dal prossimo riavvio del bot).
 
 ### K10. Il supervisore ha allentato una soglia del gate e non l'ha mai rimessa (trovato il 1 ott)
 `GATE_WIN_RATE_FLOOR` è scesa da 0,45 a 0,3966 (tra il 19 ago e l'8 set) per decisione del
 supervisore automatico (`bot/learning/supervisor.py`, scritta in `tuning.env`, caricato con override:
 `bot/config.py:35`, usata in `backtesting/engine.py:408`); dal 16 set il supervisore è fermo («ready»,
 `supervisor.py:264-269`) ma la soglia allentata resta. Più strategie passano, non necessariamente
-migliori. **Da fare (sola lettura, nessun rischio):** contare quante validate oggi esistono SOLO
+migliori. **1 ott: conteggio FATTO** (sì del proprietario): sezione «SOGLIA DEL WIN RATE (K10)» nel report `trades`, coppie e R del paper per gruppo (approssimazione: l'ultimo win rate del gate, non tutti i passaggi). **Era da fare (sola lettura, nessun rischio):** contare quante validate oggi esistono SOLO
 grazie alla soglia a 0,397 (win rate fra 0,397 e 0,45) e come rendono fuori campione. Rimetterla a
 0,45 è una modifica del gate: dopo il 7-14 ott, col numero. Nota: `backlog.md` diceva che il
 supervisore regola `DECISION_THRESHOLD`: sbagliato, regola le soglie `GATE_*`.

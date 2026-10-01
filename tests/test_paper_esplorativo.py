@@ -172,7 +172,8 @@ def test_la_storia_e_tagliata_alle_200_voci_piu_recenti():
     doc, st = d.aggiorna_esplorative(prec, [], {}, [], NOW)
     assert len(doc["storia"]) == d.ESPLORATIVE_STORIA_MAX == 200
     assert "C0USDT|gen_0" not in doc["storia"] and "C204USDT|gen_204" in doc["storia"]
-    assert st["scartate"] == 200
+    # dal 1 ott 2026 (K11) le 5 tolte dalla storia restano nel conteggio
+    assert st["scartate"] == 205 and doc["scartate_tolte"] == 5
 
 
 def test_il_documento_precedente_si_legge_codificato_come_il_registro():
