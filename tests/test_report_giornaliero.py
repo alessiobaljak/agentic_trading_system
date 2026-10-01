@@ -132,3 +132,12 @@ def test_testo_report_ha_tutte_le_sezioni():
     t = rg.testo_report(rep)
     for _, titolo in rp.SEZIONI:
         assert f"== {titolo}" in t
+
+
+def test_gate_in_corso_lo_dice_e_mostra_il_giro_precedente():
+    gate = {"meta": {"stato": "in_corso", "iniziato_at": NOW - 3600, "generato_at": NOW - 7200,
+                     "durata_s": 7980}, "giro": {"valutazioni": 100, "passate": 3}, "registro": {}}
+    r = rp.sez_gate(gate, None, None)["righe"][0]
+    assert r.startswith("Un giro e' in corso dalle") and "precedente" in r and "2h13" in r
+    gate["meta"]["stato"] = "finito"
+    assert rp.sez_gate(gate, None, None)["righe"][0].startswith("Ultimo giro: finito")

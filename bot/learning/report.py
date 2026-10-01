@@ -235,12 +235,19 @@ def sez_gate(gate: dict | None, portafoglio: dict | None, r1: dict | None) -> di
                         fonte="dashboard/gate", errore="documento assente")
     at = _num(meta.get("generato_at"))
     durata = _num(meta.get("durata_s"))
-    righe.append(
-        f"Ultimo giro: {meta.get('stato') or 'n/d'} ({meta.get('modalita') or 'n/d'})"
-        + (f", finito alle {datetime.fromtimestamp(at, fuso()).strftime('%d/%m %H:%M')}"
-           if at else "")
-        + (f", durato {int(durata // 3600)}h{int(durata % 3600 // 60):02d}" if durata else "")
-        + f": {giro.get('valutazioni', 'n/d')} valutazioni, {giro.get('passate', 'n/d')} passate.")
+    ora = lambda x: datetime.fromtimestamp(x, fuso()).strftime("%d/%m %H:%M")  # noqa: E731
+    fatto = (f"{giro.get('valutazioni', 'n/d')} valutazioni, {giro.get('passate', 'n/d')} passate"
+             + (f", durato {int(durata // 3600)}h{int(durata % 3600 // 60):02d}" if durata else ""))
+    if meta.get("stato") == "in_corso":
+        # all'inizio di un giro il documento porta solo `meta` nuovo: i numeri
+        # (giro, registro) sono ancora quelli del giro precedente
+        inizio = _num(meta.get("iniziato_at"))
+        righe.append(f"Un giro e' in corso" + (f" dalle {ora(inizio)}" if inizio else "")
+                     + (f"; il precedente era finito alle {ora(at)}" if at else "")
+                     + f": {fatto}.")
+    else:
+        righe.append(f"Ultimo giro: {meta.get('stato') or 'n/d'} ({meta.get('modalita') or 'n/d'})"
+                     + (f", finito alle {ora(at)}" if at else "") + f": {fatto}.")
     delta = reg.get("validate_delta_giro")
     righe.append(
         f"Validate {reg.get('validate', 'n/d')}"
