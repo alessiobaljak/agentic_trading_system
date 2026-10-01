@@ -2354,3 +2354,29 @@ Il backlog teneva come memoria anche voci già fatte, contro la sua regola d'usc
 * **J3** — non si fa, per scelta: un controllo vecchio È l'avviso che il bot è fermo, e il battito lo dice già; un timer in più non aggiunge informazione.
 * **J4** — fatta: il proprietario ha guardato la dashboard con dati veri (il 28 set ha trovato +1,26 contro +3,25 del 27 set, spiegato e corretto con i due totali «conto» e «validate»).
 * **J5** — non si fa: persistere i contatori costerebbe una scrittura per rifiuto; i rifiuti che contano sono già salvati e misurati dall'ombra dei rifiutati (J6, `rifiutati_report`).
+
+### Controllo del 1 ottobre (08:15 ora italiana, ops 0386-0398)
+
+**Da guardare per primo: il giro completo del gate è durato 2h58** (03:53-06:52, ops 0391), a 2 minuti
+dalle 3 ore; nelle stesse ore il semaforo SISTEMA è stato giallo con una terza anomalia (03:18-06:20,
+ops 0392; codice non visibile nel log, probabilmente l'anomalia del gate in corso: non verificato).
+Alle 08:05 era verde. Il giro completo ha fatto 41.419 valutazioni e 356 passate (0,86%).
+**Spazio del registro:** 476 KiB su 879, «ci stanno ancora ~1.380 coppie» (ops 0391), a ~+99 coppie al
+giorno ~14 giorni: il lavoro K2 è in corso. **Filtro monete e ombra AI spenti:** nessuna «[ai-shadow]»
+dopo il riavvio (ultima decisione 30 set 17:47, ops 0390, 0392); 8 chiamate AI fino alle 08:13, quante ne
+fanno 2 giri senza filtro (deduzione: col filtro sarebbero 10). Letture Firestore 4.185 in ~11 ore.
+**Numeri:** 204 trade (196 validate + 8 esplorativi), 57% vinti, −70,82 USDT, equity 929,18, DRY_RUN
+True; 4 posizioni aperte tutte short (0,55% a rischio); 30 set chiuso a −2,18; dal 16 al 30 set 5 giorni
+in utile e 10 in perdita (ops 0387-0389). BTC dal primo giorno +11,4% contro −7,1% nostro. **In R dal
+27 set** (nuovo, ops 0388): +0,042R netti a trade su 61, +0,118R lordi, costi 0,076R; short +0,21R, long
+−0,09R. **Fuori campione** (letture stampate, regole del 30 set): «Selezione: il motore guadagna ancora
+dopo la validazione (+0.06R, margine ±0.18R per giornata, 89 segnali): nessun verdetto contro il gate.
+Esecuzione: non si decide (differenza +0.05R, margine ±0.16R)»; «H1: non si sa ancora: 18 e 65
+segnali, ne servono 80 per gruppo». Regola del 3 ott in anteprima: declassate +0,041R contro attive
++0,042R, NON SI DECIDE. Validate 208 su 71 coin; 613 coppie a 2/3; declassate 162; t ≥ 2 per 35 su 51.
+Passata a 1 ora 1,77% contro 0,86% a 15 minuti (30 coin: filtro saltato). Selettore NON BATTE. Spesa AI
+del 30 set (primo giorno intero, quasi tutto prima dello spegnimento): 2,80 $ in 57 chiamate (idee 55%).
+Rifiutati «posizione aperta» −0,13R su 45: il report dice ancora «RITARARE» per un confronto su periodi
+diversi (vedi la proposta). **Proposta del giorno (serve il sì): J6, confrontare rifiutati e aperti
+nello stesso periodo** in `rifiutati_report` (solo report; la regola non cambia). Trovato anche: la
+storia delle esplorative tagliata a 200 voci rompe la loro misura (backlog K11).

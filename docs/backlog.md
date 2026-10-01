@@ -186,6 +186,15 @@ difetto della sessione (fino al 26 set −77,93, dal 27 set +10,19, ops 0371): v
 taglio al 27 set. I costi pesano 29,66 sui −68,65; motore e paper chiudono lo stop al suo prezzo
 esatto, senza scivolamento (`executor.py:549-563`): da verificare prima del denaro vero.
 
+### K11. La storia delle esplorative tagliata a 200 voci rompe la loro misura (trovato il 1 ott)
+`discover_strategies.py:567`, `:650-652`, `:661-662`: la storia di `strategy_registry/esplorative` tiene
+200 voci; «esplorative poi validate» è sceso da 1 a 0 (ops 0363 → 0391) senza nessun cambiamento vero,
+perché la voce più vecchia è uscita dalla storia. È la misura che decide se il paper esplorativo
+(F1bis) si tiene (a 100 trade esplorativi; oggi 8). Da fare insieme alla parte esplorative di K7:
+tenere per sempre le voci «validata» o contarle a parte. Altre due scritte sbagliate notate lo stesso
+giorno: «QUANDO RIPARTE IL BOT fra −20727 giorni» in `gate` (ready è già True) e «si rilegge il 14 ott»
+scritto fisso nel FUORI CAMPIONE (`portafoglio_backtest.py:1159`, `:1195`).
+
 ### K9. I pesi riportano la leva a 2x dopo una sola vincita (trovato il 1 ott)
 Verifica del 1 ott (richiesta del proprietario: «il sistema può solo fare modifiche per guadagnare di
 più?»). `adaptation.py:210-228`, `risk_manager.py:65, 93, 149`, `metrics.py:485` (shrinkage k=5,
@@ -649,6 +658,14 @@ Le ipotesi dei referti vanno e vengono con i trade (una strategia che vince uno 
 **Limiti dichiarati:** negli shard (`--num-shards > 1`) gli esiti del merge non si scrivono (il merge degli shard non passa da qui); una variante bocciata e rinata al giro dopo torna «variante_creata» ma conserva `bocciata_at` (per questo `per_tipo` conta dai traguardi, non dall'ultimo esito). **Metrica:** la riga di `gate_progress`; da leggere a due settimane: un tipo con molte varianti e zero passate è una regola da rivedere (o da spegnere), uno con passate sopra il tasso delle casuali è una regola che funziona.
 
 ### J6. Ombra dei segnali rifiutati — **FATTO il 26 set (misura)**
+**1 ott: la causa del falso «si può RITARARE».** Da quattro mattine (ops 0329, 0350, 0370, 0398) il
+report scrive «posizione aperta: il freno si può RITARARE» e va corretto a mano. Causa: confronta i
+rifiutati, registrati solo dal 26 set, con TUTTI gli aperti dal 16 set (`scripts/rifiutati_report.py:176`,
+filtro per ora d'uscita), cioè anche coi giorni del difetto della sessione (fino al 26 set −77,93,
+dal 27 +10,19, ops 0371). Nello stesso periodo il freno tiene: aperti dal 27 set +0,042R netti su 61
+(ops 0388), rifiutati «posizione aperta» −0,13R su 45 (ops 0398). Correzione proposta il 1 ott
+(serve il sì): aperti dallo stesso istante del primo rifiutato, R netto e lordo, margine stampato.
+La regola (≥ 30 casi, R dei rifiutati > R degli aperti) non cambia.
 **Il numero che l'ha fatta emergere:** ops 0211 (24 set, 8 coppie rigirate): 9 segnali del gate NON aperti dal paper con PF 1,23 contro 15 aperti con PF 0,50 — e il rifiuto più frequente (ops 0268, «posizione già aperta su questa coin») finiva in `altro`. Un rifiuto lasciava una riga di log e un contatore in RAM: nessuno sapeva se avrebbe vinto, e i freni (cooldown, tetto per coin, soglia di peso, tetto esplorative, veto di regime, margine, rischio direzionale, stop largo) si potevano tarare solo a intuito.
 
 **Fatto:** ogni rifiuto con un segnale dietro viene scritto in Firestore `segnali_rifiutati/{YYYYMMDDHHMM}_{coin}_{strategia}` (una chiave per candela: idempotente) con entry, stop, target, scala, motivo e classe (`bot/learning/rifiutati.py::registra`; dall'orchestratore via `_rifiuto(..., dettaglio=...)`, da `_try_open` via `registra_decisione`). Ogni giro il bot valuta i pendenti sulle candele vere di Binance (`valuta_pendenti`, max 20 chiamate a giro) con le stesse uscite del motore (`simula_segnale`: stop, scala di TP, protezione del profitto, orizzonte 96 barre) e scrive `esito` (tp/stop/trailing/orizzonte), `pnl_r`, `mfe_r`, `mae_r`, `barre`; chi non ha candele entro orizzonte + 8 barre diventa `scaduto`. La voce ops `rifiutati` (`scripts/rifiutati_report.py`) stampa per motivo segnali, valutati, R medio, % vincenti, mfe mediana, e il confronto con gli APERTI dello stesso periodo in R netto. `motivo_rifiuto` ha la classe nuova `posizione aperta`.
