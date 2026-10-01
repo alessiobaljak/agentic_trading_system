@@ -2484,3 +2484,17 @@ soprattutto fortuna? Si rifà il gate nel passato e si guarda cosa succede DOPO 
 * **Come gira:** prima una prova piccola (1-2 date), si controlla che i numeri abbiano senso, poi il
   resto nelle pause del gate (mai insieme al giro, la memoria non basta). Due righe nuove nella lista
   bianca della VPS, da aggiungere a mano dal proprietario.
+
+### 1 ottobre, pomeriggio: stop giornaliero (H3) e freno di serie (H4) rigiocati — restano parcheggiati
+
+Domanda del proprietario: avrebbero avuto senso? Rigioco dei trade veri del paper (`trades`, ops 0404,
+trade delle validate, −81,11 USDT) e del portafoglio del motore sulle 208 validate di oggi, 60 giorni
+(`portafoglio`, ops 0405), una regola alla volta. **Paper:** stop 2% +5,09 · stop 3% +2,00 · serie 4
+della strategia +0,49 · serie 3 della strategia +2,61 · serie 4 del bot +9,28 · serie 3 del bot +15,62
+(drawdown da 8,11% a 6,56%). **Gate:** stop 2% −17.456 (drawdown da 11,74% a 17,02%) · stop 3% −11.615
+(20,31%) · serie 4 della strategia −116 · serie 3 −2.227 · serie 4 del conto −2.416 · serie 3 del conto
+−3.957. Lettura: sul paper ogni riduzione aiuta perché il paper perde (meno esposizione a un sistema in
+perdita, non un vantaggio delle regole); sul portafoglio del gate, che guadagna, tolgono soprattutto i
+rimbalzi. Il win rate dopo 4 perdite di fila non cambia (62,5% su 8 contro 68,2%, t −0,34, ops 0387).
+Limite: il portafoglio del gate usa coppie scelte anche su quei giorni (livello ottimista); conta la
+differenza fra le righe. Nessuna regola cambia: H3 e H4 restano parcheggiate.

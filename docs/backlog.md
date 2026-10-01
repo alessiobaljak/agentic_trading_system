@@ -123,6 +123,10 @@ Restano solo come memoria; si riprendono se lo chiedi.
 * **H3. Stop giornaliero:** il bot si fermerebbe dopo una perdita del giorno (es. 3%). Nella
   simulazione sulle 160 strategie (ops 0232) andava peggio (−21%: dopo il blocco si perde il rimbalzo).
   Tu: «non voglio limitare la quantità, voglio trade migliori».
+* **Rigioco del 1 ott (ops 0404 paper, 0405 gate), richiesto dal proprietario:** sul paper stop e freni
+  migliorano di poco (il migliore, freno di serie dopo 3 perdite del bot: +15,62 su −81,11), sul portafoglio
+  del gate peggiorano tutti (stop 3%: −11.615 e drawdown da 11,7% a 20,3%; freno 3 perdite del conto:
+  −3.957). Sul paper aiutano solo perché tolgono esposizione a un sistema che perde: confermato parcheggio.
 * **H4. Freno di serie:** meno size dopo 4 perdite di fila. Misurato (ops 0232): win rate 56% dopo 4
   perdite contro 63%, su 16 casi: nessuna prova che serva.
 * **B5, B6, B7. Dati esterni:** notizie e dati macro, storico di open interest e long/short,
