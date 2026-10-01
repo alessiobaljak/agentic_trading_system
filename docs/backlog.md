@@ -186,6 +186,28 @@ difetto della sessione (fino al 26 set −77,93, dal 27 set +10,19, ops 0371): v
 taglio al 27 set. I costi pesano 29,66 sui −68,65; motore e paper chiudono lo stop al suo prezzo
 esatto, senza scivolamento (`executor.py:549-563`): da verificare prima del denaro vero.
 
+### K9. I pesi riportano la leva a 2x dopo una sola vincita (trovato il 1 ott)
+Verifica del 1 ott (richiesta del proprietario: «il sistema può solo fare modifiche per guadagnare di
+più?»). `adaptation.py:210-228`, `risk_manager.py:65, 93, 149`, `metrics.py:485` (shrinkage k=5,
+prior 0,65): con peso > 0,80 la strategia torna a leva piena; ci si arriva con 1 vinta su 1, o 1
+vinta e 1 persa. Il rischio raddoppia quando morde il tetto del 10% (equity × leva × 10%). Il 1 ott
+MITO e TST erano a leva 2,0x (docs/state.md). È fortuna amplificata e non passa dal gate. **Da
+decidere dopo le letture del 7-14 ott** (tocca la size): per esempio un minimo di trade prima che il
+peso alzi la leva. Correzione allo stesso giro: la pausa dopo 3 stop di fila è SPENTA in parità
+(`bot/main.py:1338`), non attiva come scritto in I1.
+
+### K10. Il supervisore ha allentato una soglia del gate e non l'ha mai rimessa (trovato il 1 ott)
+`GATE_WIN_RATE_FLOOR` è scesa da 0,45 a 0,3966 (tra il 19 ago e l'8 set) per decisione del
+supervisore automatico (`bot/learning/supervisor.py`, scritta in `tuning.env`, caricato con override:
+`bot/config.py:35`, usata in `backtesting/engine.py:408`); dal 16 set il supervisore è fermo («ready»,
+`supervisor.py:264-269`) ma la soglia allentata resta. Più strategie passano, non necessariamente
+migliori. **Da fare (sola lettura, nessun rischio):** contare quante validate oggi esistono SOLO
+grazie alla soglia a 0,397 (win rate fra 0,397 e 0,45) e come rendono fuori campione. Rimetterla a
+0,45 è una modifica del gate: dopo il 7-14 ott, col numero. Nota: `backlog.md` diceva che il
+supervisore regola `DECISION_THRESHOLD`: sbagliato, regola le soglie `GATE_*`.
+Precisazione a K5: con stop larghi il quarto di size agisce davvero (PHA del 1 ott, stop ~4,3%: rischio
+da ~0,40% a ~0,14%, stima); «quasi non agisce» vale con stop stretti a leva 1x.
+
 ### Verdetti della revisione sulle voci esistenti — APPLICATI il 1 ott (voci tolte, verdetto nel diario)
 Non servono: F2 (70-77% delle coppie a 1-2 conferme non ripassa; il quarto di size non limita il
 danno, K5; la domanda la risolve K3), FR-leva (il −0,23R viene dal periodo del difetto), H1 con
