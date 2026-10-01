@@ -214,7 +214,7 @@ peso alzi la leva. Correzione allo stesso giro: la pausa dopo 3 stop di fila è 
 supervisore automatico (`bot/learning/supervisor.py`, scritta in `tuning.env`, caricato con override:
 `bot/config.py:35`, usata in `backtesting/engine.py:408`); dal 16 set il supervisore è fermo («ready»,
 `supervisor.py:264-269`) ma la soglia allentata resta. Più strategie passano, non necessariamente
-migliori. **1 ott: conteggio FATTO** (sì del proprietario): sezione «SOGLIA DEL WIN RATE (K10)» nel report `trades`, coppie e R del paper per gruppo (approssimazione: l'ultimo win rate del gate, non tutti i passaggi). **Era da fare (sola lettura, nessun rischio):** contare quante validate oggi esistono SOLO
+migliori. **1 ott: conteggio FATTO** (sì del proprietario): sezione «SOGLIA DEL WIN RATE (K10)» nel report `trades`, coppie e R del paper per gruppo (approssimazione: l'ultimo win rate del gate, non tutti i passaggi). **Primo numero (ops 0403):** 7 validate «allentate» su 208, paper +0,244R su 11 trade (dal 27 set +0,121R su 6) contro −0,054R su 50 delle 72 a ≥ 0,45: nessun segno che la soglia bassa porti strategie peggiori, campione minimo. Ma 129 validate su 208 non hanno il win rate salvato (alleggerite prima della promozione, come I5): il conteggio vede solo il 38%. Si rilegge quando le 129 ripassano il gate. **Era da fare (sola lettura, nessun rischio):** contare quante validate oggi esistono SOLO
 grazie alla soglia a 0,397 (win rate fra 0,397 e 0,45) e come rendono fuori campione. Rimetterla a
 0,45 è una modifica del gate: dopo il 7-14 ott, col numero. Nota: `backlog.md` diceva che il
 supervisore regola `DECISION_THRESHOLD`: sbagliato, regola le soglie `GATE_*`.

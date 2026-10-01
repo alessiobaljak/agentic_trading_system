@@ -2439,3 +2439,6 @@ cambia.
   anticipare per questo.
 Test: 2105 verdi due volte di fila; una volta prima un test del voto t (`test_un_errore_su_una_coin_
 non_butta_le_coin_gia_votate`, coi processi) è caduto e ripassato da solo: da tenere d'occhio.
+**Primo conteggio K10 (ops 0403, 11:51 ora italiana):** 7 validate «allentate» (paper +0,244R su 11
+trade), 72 a ≥ 0,45 (−0,054R su 50), 129 senza win rate salvato (−0,137R su 57). Nessun segno contro
+la soglia bassa, ma il campione è minimo e il 62% delle validate non si può classificare: si rilegge.
