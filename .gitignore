@@ -45,6 +45,10 @@ data/voto_t/
 # piano, un file per coin x data, il referto, il pid e il lucchetto. Dati della
 # macchina, vivono sulla VPS.
 data/replay_gate/
+# la storia del gate (1 ott 2026: `scripts/gate_storia.py`): una riga per giro e
+# una per coppia del registro, un file JSONL al mese. Dati della macchina, vivono
+# sulla VPS.
+data/gate_storia/
 
 # Node / Next.js
 dashboard/node_modules/

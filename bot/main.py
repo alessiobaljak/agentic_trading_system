@@ -89,6 +89,48 @@ def verdetto_post_stop(after, entry: float, orig_stop: float, primo_gradino: flo
     return {"verdict": verdict, "post_stop_mfe_r": mfe}
 
 
+def verdetti_classici(t: dict, reason, during, after, now: float, ex: float,
+                      window_s: float, long: bool, tp, sl) -> bool:
+    """I verdetti di sempre (trailing e post-stop), IDENTICI a prima del 1 ott
+    2026: estratti qui solo per far stare accanto le misure nuove. Scrive
+    sul posto in `t`; True se ha scritto un verdetto, False se aspetta."""
+    if reason == "stop_loss":
+        orig_stop = t.get("orig_stop") or sl
+        tps = t.get("tp_prices") or []
+        entry = float(t.get("entry_price", 0.0))
+        R = abs(entry - float(orig_stop))
+        primo = (float(tps[0]) if tps
+                 else (entry + 1.5 * R if long else entry - 1.5 * R))
+        res = verdetto_post_stop(after, entry, float(orig_stop), primo, long)
+        if res["post_stop_mfe_r"] is None:
+            return False   # R non calcolabile
+        # 'rumore'/'inversione' toccati sono DEFINITIVI; ne' l'uno ne'
+        # l'altro vale solo a finestra piena (-> 'inversione': non e'
+        # tornato al primo gradino entro l'orizzonte)
+        if res["verdict"] is None and now - ex < window_s:
+            return False
+        t["post_stop_verdict"] = res["verdict"] or "inversione"
+        t["post_stop_mfe_r"] = res["post_stop_mfe_r"]
+        # QUANDO e' stato dato (29 set 2026): senza, «verdetti nuovi
+        # ieri» nel controllo del mattino si stimava dal giorno di uscita
+        t["post_stop_verdict_at"] = float(now)
+        return True
+    res = trailing_reason(during, after, float(t.get("entry_price", 0.0)),
+                          float(t.get("exit_price", 0.0)), float(sl), float(tp), long)
+    # 'premature'/'protected' sono DEFINITIVI (TP o SL scattato dopo l'uscita)
+    # -> si scrivono SUBITO, niente attesa di 24h. 'neutral' (ne' TP ne' SL)
+    # e' valido solo a finestra piena; altrimenti aspetta piu' candele.
+    # (Il verdetto alla maniera del GATE, con l'ultimo gradino e lo stop
+    # ORIGINALE, e' `trailing_verdict_gate` in `cattura`: questo resta com'e'.)
+    if res["verdict"] == "neutral" and now - ex < window_s:
+        return False
+    t["trailing_verdict"] = res["verdict"]
+    t["trailing_miss_to_tp"] = res["miss_to_tp"]      # quanto tragitto lasciato sul tavolo
+    t["trailing_knockout_atr"] = res["knockout_atr"]  # rumore (<1) vs inversione reale
+    t["trailing_verdict_at"] = float(now)             # quando (29 set 2026, come sopra)
+    return True
+
+
 def _rtdb_muto(fb) -> bool:
     """Il RTDB del client non risponde (adesso)? Un client senza `degraded_for`
     (i finti dei test) vale «risponde»."""
@@ -320,6 +362,124 @@ def variabili_ingresso(btc_snap, asset, params, sparams: dict, tf: str, now: flo
         return None
 
 
+# --------------------------------------------------------------------------- #
+# LA CATTURA DEI DATI MANCANTI (1 ott 2026, bot/learning/cattura.py)           #
+# --------------------------------------------------------------------------- #
+# Funzioni di modulo, non metodi, per la stessa ragione di `fattori_size`: i
+# TradingBot finti dei test non devono conoscerle. Tutte SOLO misura e
+# FAIL-OPEN: nessuna puo' fermare il ciclo, aprire o chiudere qualcosa.
+def pubblica_versione(bot) -> None:
+    """VERSIONE E IMPOSTAZIONI IN VIGORE. A ogni avvio: il commit (git,
+    fail-open), l'impronta delle impostazioni e gli INTERRUTTORI per nome (lista
+    scritta a mano in `bot.learning.cattura.INTERRUTTORI`: MAI tutte le
+    impostazioni, che contengono le chiavi) in RTDB
+    `/avvii_config/{avviato_at intero}`, una scrittura per avvio. Sui trade va
+    solo {commit, config_hash}: cosi' un trade si lega alle regole con cui e'
+    stato aperto. Non solleva mai."""
+    try:
+        from bot.learning.cattura import versione_avvio
+        v = versione_avvio(float(bot._avviato_at))
+        bot._versione = v
+        bot.fb.set_rtdb(f"/avvii_config/{int(bot._avviato_at)}", v)
+        print(f"[main] versione dell'avvio: commit {v.get('commit')}, config {v.get('config_hash')}")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[main] versione dell'avvio non registrata: {exc}")
+
+
+def versione_trade(bot) -> dict | None:
+    """{commit, config_hash} dell'avvio, per la posizione (None se manca)."""
+    v = getattr(bot, "_versione", None)
+    if not isinstance(v, dict):
+        return None
+    return {"commit": v.get("commit"), "config_hash": v.get("config_hash")}
+
+
+def promessa_della_decisione(adaptation, decision) -> dict | None:
+    """La promessa del registro per la coppia della decisione, da cio' che
+    l'adattamento ha gia' in RAM (`promessa_per`). None se non c'e' o se
+    l'adattamento non la sa dire (i finti dei test). Mai un'eccezione."""
+    try:
+        fn = getattr(adaptation, "promessa_per", None)
+        return fn(decision.asset, decision.strategy) if callable(fn) else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def conta_giorno(bot, chiave: str, n: float = 1, now: float | None = None) -> None:
+    """Somma `n` al contatore `chiave` del giorno italiano di `now` (riga
+    `giorni/{data}`). Solo RAM, tiene gli ultimi 3 giorni. Fail-open."""
+    try:
+        from bot.core.tempo import giorno_locale
+        from bot.learning.cattura import conti_vuoti
+        now = time.time() if now is None else now
+        g = giorno_locale(now)
+        conti = getattr(bot, "_conti_giorno", None)
+        if not isinstance(conti, dict):
+            conti = {}
+            bot._conti_giorno = conti
+        c = conti.get(g)
+        if c is None:
+            c = conti[g] = conti_vuoti()
+            c["dal"] = float(now)
+            for vecchio in sorted(conti)[:-3]:
+                conti.pop(vecchio, None)
+        c[chiave] = c.get(chiave, 0) + n
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def conta_ciclo(bot, decisioni: int, aperti: int, now: float) -> None:
+    """I contatori del giorno per un ciclo di decisione: decisioni
+    dell'orchestratore, posizioni aperte, rifiuti del ciclo (quelli
+    dell'orchestratore e di `_try_open`, lo stesso contatore di
+    /decision_status) e scarti silenziosi. Solo RAM, fail-open."""
+    try:
+        conta_giorno(bot, "decisioni", int(decisioni), now)
+        conta_giorno(bot, "aperti", int(aperti), now)
+        orch = getattr(bot, "orchestrator", None)
+        rif = getattr(orch, "rifiuti_ciclo", None)
+        if callable(rif):
+            conta_giorno(bot, "rifiutati", sum(int(r.get("n") or 0) for r in rif()), now)
+        sil = getattr(orch, "scarti_silenziosi_ciclo", None)
+        if callable(sil):
+            conta_giorno(bot, "scarti_silenziosi", sum(int(r.get("n") or 0) for r in sil()), now)
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def scrivi_riga_del_giorno(bot, dati: dict, trades: list, now: float) -> None:
+    """UNA RIGA AL GIORNO, PER SEMPRE. Alla prima pubblicazione del controllo
+    di ogni giorno italiano si scrive la riga del giorno PRIMA in Firestore
+    `giorni/{YYYY-MM-DD}` (una scrittura al giorno, nessuna lettura Firestore:
+    i `dati` sono quelli appena letti per il controllo, i contatori sono in
+    RAM; al primo tentativo del processo si guarda una foglia RTDB per non
+    riscrivere dopo un riavvio). A differenza della foto del learning su RTDB
+    (cancellata dopo 35 giorni) questa non scade. Non solleva mai."""
+    try:
+        from bot.core.tempo import giorno_locale, inizio_giorno_locale
+        from bot.learning.cattura import riga_giorno, scrivi_riga_giorno
+        stato = getattr(bot, "_riga_giorno", None)
+        if not isinstance(stato, dict):
+            stato = {"giorno": None, "verificato": False}
+        ieri = giorno_locale(inizio_giorno_locale(now) - 1.0)
+        if stato.get("giorno") == ieri:
+            return
+        conti = getattr(bot, "_conti_giorno", None)
+        riga = riga_giorno(ieri, dati, (conti if isinstance(conti, dict) else {}).get(ieri), now,
+                           float(getattr(bot, "_decision_interval_s", 0) or 0),
+                           versione=getattr(bot, "_versione", None), trades=trades)
+        ok, verificato = scrivi_riga_giorno(bot.fb, ieri, riga, bool(stato.get("verificato")))
+        stato["verificato"] = verificato
+        if ok:
+            stato["giorno"] = ieri
+            print(f"[giorni] riga del {ieri}: cicli {riga.get('cicli')}/{riga.get('cicli_attesi')}, "
+                  f"aperti {riga.get('aperti')}, rifiutati {riga.get('rifiutati')}, "
+                  f"riavvii {riga.get('riavvii')}")
+        bot._riga_giorno = stato
+    except Exception as exc:  # noqa: BLE001
+        print(f"[giorni] riga del giorno saltata: {exc}")
+
+
 class TradingBot:
     def __init__(self) -> None:
         self.fb = get_firebase()
@@ -418,6 +578,16 @@ class TradingBot:
         # e' gia' scritto (da quel momento non si rilegge piu' nulla)
         self._btc_inizio_tentato_at = 0.0
         self._btc_inizio_fatto = False
+        # LA CATTURA DEI DATI MANCANTI (1 ott 2026, bot/learning/cattura.py).
+        # `_versione`: {commit, config_hash, interruttori} di QUESTO avvio,
+        # calcolata in `_publish_avvio`; sul trade va solo {commit, config_hash}.
+        # `_conti_giorno`: i contatori del giorno italiano in RAM (cicli,
+        # decisioni, aperti, rifiutati, scarti silenziosi, secondi di stream
+        # giu'), da cui la riga `giorni/{data}`; `_riga_giorno`: l'ultimo
+        # giorno scritto e se la foglia RTDB e' gia' stata guardata.
+        self._versione: dict | None = None
+        self._conti_giorno: dict[str, dict] = {}
+        self._riga_giorno: dict = {"giorno": None, "verificato": False}
 
     # ------------------------------------------------------------------ #
     def read_user_risk(self) -> RiskSettings:
@@ -876,6 +1046,7 @@ class TradingBot:
             self.fb.set_rtdb("/avvii", ring)
         except Exception as exc:  # noqa: BLE001
             print(f"[main] avvio non registrato su RTDB: {exc}")
+        pubblica_versione(self)
 
     def _stream_recovery_guard(self, now: float) -> bool:
         """True se il bot deve ASTENERSI dal decidere perche' lo stream si e' appena
@@ -1338,6 +1509,7 @@ class TradingBot:
         if not self.regime or not self.selected:
             return
 
+        conta_giorno(self, "cicli", 1, now)   # riga del giorno (1 ott 2026), solo RAM
         self.refresh_selected_snapshots()
         memory = self._load_memory()
         recent = self.logger.recent(20)
@@ -1364,14 +1536,17 @@ class TradingBot:
             # OMBRA: il modello dice cosa AVREBBE fatto, e resta li'. Dopo il giro
             # delle aperture, cosi' non aggiunge latenza alla decisione vera.
             self._record_shadow(opened, now, aperte=aperte)
+            conta_ciclo(self, len(opened), len(aperte), now)
             self._publish_decision_status()
             return
         decision = self.orchestrator.decide(self.selected, self.regime, memory, recent,
                                             disabled=disabled)
         if decision is None:
+            conta_ciclo(self, 0, 0, now)
             self._publish_decision_status()  # flat: motivo già in last_status
             return
-        self._try_open(decision, now, signal_candle_ts=boundary)
+        _aperta = self._try_open(decision, now, signal_candle_ts=boundary)
+        conta_ciclo(self, 1, 1 if _aperta is not None else 0, now)
 
     # ------------------------------------------------------------------ #
     def _esplorative_aperte(self) -> int:
@@ -1654,7 +1829,13 @@ class TradingBot:
                                           regola=getattr(decision, "reasoning", None) or None,
                                           size_factors=_size_factors,
                                           portafoglio_at_entry=_portafoglio,
-                                          signal_candle_ts=signal_candle_ts)
+                                          signal_candle_ts=signal_candle_ts,
+                                          # la cattura dei dati mancanti (1 ott 2026):
+                                          # solo annotazioni, tutte fail-open
+                                          versione=versione_trade(self),
+                                          promessa_gate=promessa_della_decisione(
+                                              getattr(self, "adaptation", None), decision),
+                                          regime_globale=getattr(self, "regime", None))
         if pos is not None:
             if getattr(decision, "esplorativa", False):
                 # la riga che distingue nel log un trade esplorativo da uno delle
@@ -1876,11 +2057,20 @@ class TradingBot:
                 status["rifiuti_24h_dal"] = self.orchestrator.rifiuti_24h_dal
             except Exception:  # noqa: BLE001
                 pass
+            # GLI SCARTI SILENZIOSI (1 ott 2026): segnali caduti senza «[rifiuto]»
+            # (esplorativa dietro una validata, secondo segnale sulla stessa
+            # coin nello stesso giro). Chiavi nuove, i conteggi dei rifiuti sopra
+            # non cambiano
+            try:
+                status["scarti_silenziosi_ciclo"] = self.orchestrator.scarti_silenziosi_ciclo()
+                status["scarti_silenziosi_24h"] = self.orchestrator.scarti_silenziosi_24h()
+            except Exception:  # noqa: BLE001
+                pass
             self.fb.set_rtdb("/decision_status", status)
 
     # ------------------------------------------------------------------ #
     def evaluate_pending_trailing(self, now: float, window_h: float = 24.0,
-                                  max_eval: int = 15) -> None:
+                                  max_eval: int = 15, max_nuovi: int = 10) -> None:
         """B1 (learning dal paper): assegna il verdetto trailing (prematuro/protetto)
         alle uscite TRAILING recenti che non ce l'hanno ancora, dal prezzo SUCCESSIVO
         reale (Binance). Il dato si accumula sui trade -> il learning potra' usarlo.
@@ -1892,30 +2082,48 @@ class TradingBot:
         `window_h` e' in ore del timeframe del bot (24h = 96 barre a 15m) e si
         scala col fattore del timeframe (96h per un trade a 1h). Prima si
         leggevano 300 candele di ORCHESTRATOR_TIMEFRAME e la finestra era di 24
-        ore fisse: per un trade a 1h erano 24 barre invece di 96."""
+        ore fisse: per un trade a 1h erano 24 barre invece di 96.
+
+        LA CATTURA DEI DATI MANCANTI (1 ott 2026, `bot.learning.cattura`): sulle
+        STESSE candele, tre misure in piu' (solo misura, nessuna decisione):
+        il verdetto trailing alla maniera del gate (`trailing_verdict_gate`),
+        cosa ha fatto il prezzo dopo l'uscita per OGNI uscita (`post_exit_*`) e
+        il motore del gate rigiocato sul segnale (`motore_*`). I verdetti di
+        sempre restano identici: stesso budget (`max_eval`), stesse regole. Un
+        trade che aspetta SOLO le misure nuove scarica candele solo quando le 96
+        barre dopo l'uscita sono chiuse (una volta, di solito) e con un budget
+        suo (`max_nuovi` chiamate per giro). Scritture: nella stessa
+        `logger.aggiorna` dei verdetti quando capitano insieme, altrimenti una
+        per trade. Nessuna lettura Firestore (i trade vengono dalla cache)."""
+        from bot.learning import cattura
         try:
             trades = self.logger.recent(limit=100)
         except Exception:  # noqa: BLE001
             return
         done = 0
+        nuovi = 0
+        chiamate_nuove = 0
         for t in trades:
-            if done >= max_eval:
-                break
             reason = t.get("exit_reason")
             # trailing_stop E scale_out: entrambi tagliano il "runner" prima del TP
             # finale -> il controfattuale (tenere fino a TP3?) allena il keep trailing.
             # stop_loss: il controfattuale post-stop (rumore/inversione).
-            if reason in ("trailing_stop", "scale_out"):
-                if t.get("trailing_verdict") is not None:
-                    continue
-            elif reason == "stop_loss":
-                if t.get("post_stop_verdict") is not None:
-                    continue
-            else:
+            # Oltre `max_eval` verdetti scritti nel giro, i verdetti di sempre
+            # aspettano il giro dopo (come prima, quando qui c'era un `break`).
+            vecchio = False
+            if done < max_eval:
+                if reason in ("trailing_stop", "scale_out"):
+                    vecchio = t.get("trailing_verdict") is None
+                elif reason == "stop_loss":
+                    vecchio = t.get("post_stop_verdict") is None
+            quali = cattura.pendenti(t)
+            if not vecchio and not quali:
                 continue
             tp, sl, ex = t.get("take_profit_price"), t.get("stop_price"), t.get("exit_ts")
             if tp is None or sl is None or ex is None:
-                continue   # dati mancanti
+                vecchio = False   # dati mancanti per i verdetti di sempre
+            if ex is None or (not vecchio and not quali):
+                continue
             tf = t.get("timeframe") or settings.ORCHESTRATOR_TIMEFRAME
             tf_s = timeframe_hours(tf) * 3600.0
             window_s = window_h * 3600 * fattore_timeframe(tf)
@@ -1926,56 +2134,43 @@ class TradingBot:
             needed = max(96 + 8, int((now - entry_ts) / tf_s) + 8)
             if needed > 1000:
                 continue   # troppo vecchio per le candele disponibili: non decidibile
+            if not vecchio:
+                # solo misure nuove: si scarica quando sono complete, col budget loro
+                if chiamate_nuove >= max_nuovi or not cattura.pronto_per_post(t, now, tf_s):
+                    continue
+                chiamate_nuove += 1
             try:
                 candles = self.price.get_candles(t.get("symbol", ""), tf, limit=needed)
             except Exception:  # noqa: BLE001
                 continue
             during = [c for c in candles if entry_ts <= c.open_time.timestamp() <= ex]
             after = [c for c in candles if ex <= c.open_time.timestamp() <= ex + window_s]
-            if len(after) < 2:
-                continue   # servono un paio di candele DOPO l'uscita per il controfattuale
             long = str(t.get("direction", "")).lower() == "long"
-            if reason == "stop_loss":
-                orig_stop = t.get("orig_stop") or sl
-                tps = t.get("tp_prices") or []
-                entry = float(t.get("entry_price", 0.0))
-                R = abs(entry - float(orig_stop))
-                primo = (float(tps[0]) if tps
-                         else (entry + 1.5 * R if long else entry - 1.5 * R))
-                res = verdetto_post_stop(after, entry, float(orig_stop), primo, long)
-                if res["post_stop_mfe_r"] is None:
-                    continue   # R non calcolabile
-                # 'rumore'/'inversione' toccati sono DEFINITIVI; ne' l'uno ne'
-                # l'altro vale solo a finestra piena (-> 'inversione': non e'
-                # tornato al primo gradino entro l'orizzonte)
-                if res["verdict"] is None and now - ex < window_s:
-                    continue
-                t["post_stop_verdict"] = res["verdict"] or "inversione"
-                t["post_stop_mfe_r"] = res["post_stop_mfe_r"]
-                # QUANDO e' stato dato (29 set 2026): senza, «verdetti nuovi
-                # ieri» nel controllo del mattino si stimava dal giorno di uscita
-                t["post_stop_verdict_at"] = float(now)
-            else:
-                res = trailing_reason(during, after, float(t.get("entry_price", 0.0)),
-                                      float(t.get("exit_price", 0.0)), float(sl), float(tp), long)
-                # 'premature'/'protected' sono DEFINITIVI (TP o SL scattato dopo l'uscita)
-                # -> si scrivono SUBITO, niente attesa di 24h. 'neutral' (ne' TP ne' SL)
-                # e' valido solo a finestra piena; altrimenti aspetta piu' candele.
-                if res["verdict"] == "neutral" and now - ex < window_s:
-                    continue
-                t["trailing_verdict"] = res["verdict"]
-                t["trailing_miss_to_tp"] = res["miss_to_tp"]      # quanto tragitto lasciato sul tavolo
-                t["trailing_knockout_atr"] = res["knockout_atr"]  # rumore (<1) vs inversione reale
-                t["trailing_verdict_at"] = float(now)             # quando (29 set 2026, come sopra)
+            scritto_vecchio = False
+            # servono un paio di candele DOPO l'uscita per il controfattuale
+            if vecchio and len(after) >= 2:
+                scritto_vecchio = verdetti_classici(t, reason, during, after, now, ex,
+                                                    window_s, long, tp, sl)
+            scritto_nuovo = cattura.cattura_dopo_uscita(t, candles, during, after, now, tf,
+                                                        tf_s, window_s, long)
+            if not (scritto_vecchio or scritto_nuovo):
+                continue
             try:
                 # riscrive il doc coi campi nuovi E allinea la cache dei trade
                 # (28 set 2026): `recent` non rilegge piu' Firestore a ogni candela
                 self.logger.aggiorna(t)
-                done += 1
+                if scritto_vecchio:
+                    done += 1
+                else:
+                    nuovi += 1
             except Exception:  # noqa: BLE001
                 pass
         if done:
             print(f"[main] verdetti (trailing/post-stop) assegnati a {done} trade paper")
+        if nuovi:
+            print(f"[cattura] misure dopo l'uscita (post-uscita/motore/verdetto gate) "
+                  f"aggiunte a {nuovi} trade paper")
+
 
     # ------------------------------------------------------------------ #
     def _publish_drift(self, trades: list[dict]) -> None:
@@ -2155,6 +2350,9 @@ class TradingBot:
             # su RTDB. Non solleva mai (fail-open dentro la funzione)
             self._foto_learning = foto_learning_giorno(self.fb, dati, now,
                                                        getattr(self, "_foto_learning", None))
+            # LA RIGA DEL GIORNO (1 ott 2026): stessi `dati`, una scrittura al
+            # giorno in Firestore `giorni/{data}`; non solleva mai
+            scrivi_riga_del_giorno(self, dati, trades, now)
         except Exception as exc:  # noqa: BLE001
             print(f"[controllo] pubblicazione saltata: {exc}")
 
@@ -2291,6 +2489,17 @@ class TradingBot:
                 # (/bot_status/errori_ciclo_1h) e avvisa oltre 3 (25 set 2026)
                 self._errori_ciclo.append(time.time())
             finally:
+                # minuti di stream giu' per la riga del giorno (1 ott 2026): una
+                # STIMA dichiarata, il tempo fra due iterazioni in cui lo stream
+                # risulta non sano (risoluzione: un giro del loop, ~30 s)
+                try:
+                    _t = time.time()
+                    _prima = getattr(self, "_stream_check_at", None) or _t
+                    self._stream_check_at = _t
+                    if self.stream is not None and not self.stream.is_healthy():
+                        conta_giorno(self, "stream_giu_s", max(0.0, _t - _prima), _t)
+                except Exception:  # noqa: BLE001
+                    pass
                 # heartbeat SEMPRE aggiornato a ogni iterazione, anche se il ciclo
                 # ha lanciato un'eccezione o lo scan ha bloccato a lungo: indica
                 # "il loop è vivo", non "il ciclo è andato a buon fine".

@@ -2557,3 +2557,17 @@ Richiesta del proprietario in 5 punti, uno alla volta.
    struttura, scrive `docs/capito.md` e mette le proposte nel gruppo 0 del backlog. Non verificato
    ancora sulla macchina: la prima pubblicazione arriva alla fine del prossimo giro del gate; la
    riga `report-giornaliero` per ripubblicare subito va aggiunta a mano alla lista bianca.
+
+### 1 ottobre, sera: i dati che non raccoglievamo (punto 4) — scritti, attendono il riavvio
+
+Verifica in sola lettura del codice, poi implementazione di 12 dati nuovi (backlog D8), SOLO
+raccolta: nessuna decisione di trading cambia. Prova: `tests/test_dati_parita.py` confronta il motore
+di prima e di dopo su dati fissi e 20 trade paper scriptati (aperture, uscite, PnL, gradini, equity
+identici). Suite 2240 verdi, due volte di fila. Nuovi campi del trade: `versione`, `promessa_gate`,
+`trailing_verdict_gate`, `post_exit_*`, `motore_*`, `lock_armed_at_s`, `stop_moves`, `t_mae_s`,
+`mae_before_tp1_r`, `close_segnale`, `ingresso_vs_segnale_r`, `snapshot_ts`, `open_interest_at_entry`,
+`regime_globale_at_entry`; per avvio `/avvii_config`; per giorno `giorni/{data}`; nel motore
+`SimTrade.exit_reason`; storia del gate in `data/gate_storia/`. Nota: `entry_slippage_pct` ora
+confronta l'ingresso con la chiusura del segnale (prima era sempre 0); è solo un campo registrato.
+Letture Firestore in più: nessuna; scritture: ~1 per trade chiuso in più e 1 al giorno (stima). Non
+verificato sulla macchina: arriva col riavvio del bot (punti 1-10) e col prossimo giro (11-12).

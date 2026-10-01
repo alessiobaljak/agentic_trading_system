@@ -139,6 +139,25 @@ class Position:
     portafoglio_at_entry: Optional[dict] = None
     # confine (epoch) della candela chiusa che ha prodotto la decisione
     signal_candle_ts: Optional[float] = None
+    # --- LA CATTURA DEI DATI MANCANTI (1 ott 2026, bot/learning/cattura.py) --- #
+    # Solo misura, come il blocco sopra: persistite in _write_position_state e
+    # ripristinate in _position_from_state (documenti vecchi -> None/[]).
+    # versione del codice e impronta delle impostazioni con cui si e' aperto
+    versione: Optional[dict] = None
+    # la promessa del registro per la coppia, congelata all'ingresso
+    promessa_gate: Optional[dict] = None
+    # il regime GLOBALE (di BTC) all'ingresso; `regime_at_entry` e' quello della coin
+    regime_globale: Optional[str] = None
+    # la qualita' dell'ingresso dallo snapshot (snapshot_ts, close_segnale, ...)
+    ingresso: Optional[dict] = None
+    # il percorso dello stop: quando il lock si e' armato (epoch) e a quanti R
+    # era lo stop in quel momento; i passi {t_s: secondi dall'ingresso, r: stop in R}
+    lock_armed_at: Optional[float] = None
+    lock_stop_first_r: Optional[float] = None
+    stop_moves: list = field(default_factory=list)
+    # epoch dell'ultimo peggioramento di low_water, e low_water al primo gradino
+    t_mae: Optional[float] = None
+    low_water_tp1: Optional[float] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
@@ -226,6 +245,9 @@ class ExecutionEngine:
         portafoglio_at_entry: Optional[dict] = None,
         signal_candle_ts: Optional[float] = None,
         declassata: bool = False,
+        versione: Optional[dict] = None,
+        promessa_gate: Optional[dict] = None,
+        regime_globale: Optional[str] = None,
     ) -> Optional[Position]:
         """Apre una posizione. `params` DEVE provenire dal final gate (approved).
         `selector_p`/`selector_soglia`: l'ombra del selettore (25 set 2026), solo
@@ -236,7 +258,9 @@ class ExecutionEngine:
         `size_factors`/`portafoglio_at_entry`/`signal_candle_ts` (26 set 2026):
         misure d'ingresso decise dal chiamante, solo annotate e persistite.
         `declassata` (26 set 2026, passo 2): la validata e' stata declassata dal
-        gate; come `esplorativa`, la size e' gia' dentro `params`, qui si annota."""
+        gate; come `esplorativa`, la size e' gia' dentro `params`, qui si annota.
+        `versione`/`promessa_gate`/`regime_globale` (1 ott 2026, la cattura dei
+        dati mancanti): solo annotati e persistiti, come i tre sopra."""
         if not params.approved or params.quantity <= 0:
             print(f"[execution] ordine rifiutato dal gate: {params.reject_reason}")
             return None
@@ -279,10 +303,40 @@ class ExecutionEngine:
             # nessun fill (o troppo piccolo): la posizione NON deve nascere, altrimenti
             # il bot gestirebbe qualcosa che sull'exchange non esiste
             return None
+        # DOPO il fill (in live l'entry e' quello eseguito): solo annotazione
+        self._annota_ingresso(pos, asset, versione, promessa_gate, regime_globale)
 
         self.open_positions[pos.symbol] = pos
         self._write_position_state(pos, mark_price=pos.entry_price)
         return pos
+
+    @staticmethod
+    def _annota_ingresso(pos: Position, asset: AssetSnapshot, versione, promessa_gate,
+                         regime_globale) -> None:
+        """LA CATTURA ALL'INGRESSO (1 ott 2026): versione, promessa del gate,
+        regime globale e qualita' dell'ingresso sulla posizione. Solo misura e
+        FAIL-OPEN: un errore qui lascia i campi a None e la posizione si apre
+        identica (stesso prezzo, stessa size, stessi livelli).
+
+        `expected_entry_price` = la chiusura della candela su cui la regola ha
+        deciso (`close_chiusa`): e' il prezzo «atteso» del commento della
+        Position («quello su cui l'orchestratore ha deciso»). Fino al 1 ott non
+        veniva mai impostato, quindi `entry_slippage_pct` usciva sempre 0. Il
+        prezzo eseguito NON cambia: cambia solo cio' con cui lo si confronta.
+        Senza `close_chiusa` (snapshot vecchi) resta None, come prima."""
+        try:
+            from bot.learning.cattura import qualita_ingresso
+            pos.versione = dict(versione) if isinstance(versione, dict) else None
+            pos.promessa_gate = dict(promessa_gate) if isinstance(promessa_gate, dict) else None
+            pos.regime_globale = (str(getattr(regime_globale, "value", regime_globale))
+                                  if regime_globale is not None else None)
+            q = qualita_ingresso(asset, pos.entry_price, pos.orig_stop,
+                                 pos.direction == Direction.LONG)
+            pos.ingresso = q
+            if q.get("close_segnale"):
+                pos.expected_entry_price = float(q["close_segnale"])
+        except Exception as exc:  # noqa: BLE001
+            print(f"[cattura] ingresso {getattr(pos, 'symbol', '?')} non annotato ({str(exc)[:80]})")
 
     @staticmethod
     def _opposite(pos: Position) -> str:
@@ -543,6 +597,7 @@ class ExecutionEngine:
             eff_stop = locked_stop(pos.entry_price, lock_anchor(ladder), long, pos.high_water,
                                    pos.stop_price, keep=keep)
             pos.trailing_active = eff_stop != pos.orig_stop
+            self._registra_stop(pos, eff_stop, long)   # solo misura (1 ott 2026)
 
             # 1) stop del RESIDUO (dopo il primo TP pos.stop_price = entry = break-even).
             #    PRIMA dei TP: se nello stesso range si toccano entrambi, l'ordine
@@ -601,6 +656,7 @@ class ExecutionEngine:
         eff_stop = locked_stop(pos.entry_price, pos.take_profit_price, long,
                                pos.high_water, pos.stop_price, keep=keep)
         pos.trailing_active = eff_stop != pos.stop_price
+        self._registra_stop(pos, eff_stop, long)       # solo misura (1 ott 2026)
 
         # stop (base o alzato dal profit-lock). Se è stato alzato, l'uscita è in
         # profitto -> TRAILING_STOP; altrimenti è lo stop-loss vero e proprio.
@@ -648,6 +704,29 @@ class ExecutionEngine:
         return self.update_position(symbol, mark_price)
 
     @staticmethod
+    def _registra_stop(pos: Position, eff_stop: float, long: bool) -> None:
+        """IL PERCORSO DELLO STOP (1 ott 2026): solo misura, FAIL-OPEN.
+          * la prima volta che il profit-lock si arma (lo stop effettivo diventa
+            diverso dallo stop base `stop_price`): l'istante e lo stop in R;
+          * un passo {t_s: secondi dall'ingresso, r: stop in R} quando lo stop
+            effettivo si sposta di almeno 0,05 R (al massimo 20 passi).
+        Con questi numeri «il trailing esce presto» si legge: quando si e'
+        armato, quanto ha bloccato subito, quante volte e' salito.
+        Lo stop in R ha il segno del trade: -1 = stop originale, 0 = pareggio."""
+        try:
+            from bot.learning.cattura import passo_stop, stop_in_r
+            now = time.time()
+            r = stop_in_r(eff_stop, pos.entry_price, pos.orig_stop, long)
+            if pos.lock_armed_at is None and eff_stop != pos.stop_price:
+                pos.lock_armed_at = now
+                pos.lock_stop_first_r = r
+            if pos.stop_moves is None:
+                pos.stop_moves = []
+            passo_stop(pos.stop_moves, r, now - pos.entry_time.timestamp())
+        except Exception:  # noqa: BLE001
+            pass
+
+    @staticmethod
     def _update_water_marks(pos: Position, hi: float, lo: float, long: bool) -> None:
         """Aggiorna a FINE TICK il miglior prezzo a favore (high_water, che decide
         il profit-lock) e, dal 26 set 2026, il peggior prezzo contro (low_water,
@@ -657,7 +736,10 @@ class ExecutionEngine:
         if new_hw != pos.high_water:
             pos.high_water = new_hw
             pos.t_mfe = time.time()
-        pos.low_water = min(pos.low_water, lo) if long else max(pos.low_water, hi)
+        new_lw = min(pos.low_water, lo) if long else max(pos.low_water, hi)
+        if new_lw != pos.low_water:
+            pos.t_mae = time.time()            # misura: ultimo peggioramento (1 ott 2026)
+        pos.low_water = new_lw
 
     def _partial_close(self, pos: Position, price: float, qty: float,
                        stage: Optional[int] = None) -> None:
@@ -690,6 +772,11 @@ class ExecutionEngine:
         })
         if pos.t_tp1 is None:
             pos.t_tp1 = _ts
+            # il peggior prezzo CONTRO visto fino al primo gradino (1 ott 2026):
+            # da qui `mae_before_tp1_r`. Il range del tick che riempie il TP1
+            # non c'e' ancora (low_water si aggiorna a fine tick): senza ordine
+            # nel range, meglio non attribuirgli un minimo forse successivo.
+            pos.low_water_tp1 = pos.low_water
         if self.dry_run:
             print(f"[DRY_RUN] SCALE-OUT {qty:.4f} {pos.symbol} @ {price} "
                   f"(netto {net:+.4f}, residuo {pos.remaining_qty:.4f})")
@@ -787,7 +874,7 @@ class ExecutionEngine:
         pnl_pct = pnl / margin if margin else 0.0
         from bot.core.models import IndicatorSnapshot
         ind = {k: IndicatorSnapshot(**v) for k, v in pos.indicators_at_entry.items()}
-        return ClosedTrade(
+        trade = ClosedTrade(
             trade_id=pos.position_id, symbol=pos.symbol, strategy=pos.strategy,
             direction=pos.direction, timeframe=pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME,
             entry_time=pos.entry_time,
@@ -855,6 +942,49 @@ class ExecutionEngine:
             latenza_s=(round(pos.entry_time.timestamp() - float(pos.signal_candle_ts), 3)
                        if pos.signal_candle_ts is not None else None),
         )
+        # LA CATTURA DEI DATI MANCANTI (1 ott 2026): assegnati DOPO la
+        # costruzione e in un try loro, cosi' un valore strano non puo' mai
+        # impedire la chiusura (pnl, uscita e costi qui sopra non cambiano)
+        try:
+            for k, v in self._misure_cattura(pos).items():
+                setattr(trade, k, v)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[cattura] misure di chiusura {pos.symbol} non annotate ({str(exc)[:80]})")
+        return trade
+
+    def _misure_cattura(self, pos: Position) -> dict:
+        """I campi nuovi del ClosedTrade (1 ott 2026), dalla posizione. Solo
+        misura; chi chiama li assegna in un try."""
+        out: dict = {}
+        out["versione"] = dict(pos.versione) if isinstance(pos.versione, dict) else None
+        out["promessa_gate"] = (dict(pos.promessa_gate)
+                                if isinstance(pos.promessa_gate, dict) else None)
+        try:
+            out["regime_globale_at_entry"] = (Regime(pos.regime_globale)
+                                              if pos.regime_globale else None)
+        except ValueError:
+            out["regime_globale_at_entry"] = None
+        ing = pos.ingresso if isinstance(pos.ingresso, dict) else {}
+        for k in ("snapshot_ts", "close_segnale", "ingresso_vs_segnale_r",
+                  "open_interest_at_entry", "volume_24h_at_entry", "mark_price_at_entry"):
+            out[k] = ing.get(k)
+        out["lock_armed_at_s"] = self._secondi_da_ingresso(pos, pos.lock_armed_at)
+        out["lock_stop_first_r"] = pos.lock_stop_first_r
+        out["stop_moves"] = [dict(m) for m in (pos.stop_moves or []) if isinstance(m, dict)][:20]
+        out["t_mae_s"] = self._secondi_da_ingresso(pos, pos.t_mae)
+        # MAE prima del primo gradino: dal low_water fotografato al TP1; se il
+        # TP1 non e' mai arrivato tutto il MAE e' «prima del TP1» (= mae_r).
+        # None per una posizione ripristinata che aveva gia' il TP1 senza foto.
+        R = abs(pos.entry_price - (pos.orig_stop or 0.0))
+        if not pos.orig_stop or R <= 0:
+            out["mae_before_tp1_r"] = None
+        elif pos.t_tp1 is None:
+            out["mae_before_tp1_r"] = self._mae_r(pos)
+        elif pos.low_water_tp1 is not None:
+            out["mae_before_tp1_r"] = round(abs(pos.entry_price - pos.low_water_tp1) / R, 3)
+        else:
+            out["mae_before_tp1_r"] = None
+        return out
 
     @staticmethod
     def _mae_r(pos: Position) -> Optional[float]:
@@ -973,6 +1103,18 @@ class ExecutionEngine:
             "size_factors": pos.size_factors,
             "portafoglio_at_entry": pos.portafoglio_at_entry,
             "signal_candle_ts": pos.signal_candle_ts,
+            # la cattura dei dati mancanti (1 ott 2026): stessa ragione delle
+            # misure sopra, un riavvio non deve cancellarle
+            "expected_entry_price": pos.expected_entry_price,
+            "versione": pos.versione,
+            "promessa_gate": pos.promessa_gate,
+            "regime_globale": pos.regime_globale,
+            "ingresso": pos.ingresso,
+            "lock_armed_at": pos.lock_armed_at,
+            "lock_stop_first_r": pos.lock_stop_first_r,
+            "stop_moves": [dict(m) for m in (pos.stop_moves or []) if isinstance(m, dict)],
+            "t_mae": pos.t_mae,
+            "low_water_tp1": pos.low_water_tp1,
         })
 
     # ------------------------------------------------------------------ #
@@ -1081,7 +1223,33 @@ class ExecutionEngine:
                                     if isinstance(p.get("portafoglio_at_entry"), dict) else None)
         _sc = p.get("signal_candle_ts")
         pos.signal_candle_ts = float(_sc) if _sc is not None else None
+        # la cattura dei dati mancanti (1 ott 2026): chiavi assenti -> None/[].
+        # In un try suo: un valore rotto lascia la misura vuota, non la posizione
+        # orfana (che e' cio' che il ripristino esiste per evitare)
+        try:
+            self._ripristina_cattura(pos, p)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[cattura] misure di {pos.symbol} non ripristinate ({str(exc)[:80]})")
         return pos
+
+    @staticmethod
+    def _ripristina_cattura(pos: Position, p: dict) -> None:
+        def _f(v):
+            return float(v) if v is not None else None
+        pos.expected_entry_price = _f(p.get("expected_entry_price"))
+        pos.versione = dict(p["versione"]) if isinstance(p.get("versione"), dict) else None
+        pos.promessa_gate = (dict(p["promessa_gate"])
+                             if isinstance(p.get("promessa_gate"), dict) else None)
+        pos.regime_globale = p.get("regime_globale") or None
+        pos.ingresso = dict(p["ingresso"]) if isinstance(p.get("ingresso"), dict) else None
+        pos.lock_armed_at = _f(p.get("lock_armed_at"))
+        pos.lock_stop_first_r = _f(p.get("lock_stop_first_r"))
+        _sm = p.get("stop_moves")
+        pos.stop_moves = ([{"t_s": float(m["t_s"]), "r": float(m["r"])} for m in _sm
+                           if isinstance(m, dict) and "t_s" in m and "r" in m]
+                          if isinstance(_sm, list) else [])
+        pos.t_mae = _f(p.get("t_mae"))
+        pos.low_water_tp1 = _f(p.get("low_water_tp1"))
 
     @staticmethod
     def _parse_dt(v) -> datetime:

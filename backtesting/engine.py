@@ -530,6 +530,18 @@ class SimTrade:
     # condizioni, e nessun modello puo' imparare a distinguere i segnali buoni.
     # Vuoto = trade costruito senza snapshot (test, replay vecchi).
     feats: dict = field(default_factory=dict)
+    # PERCHE' E' USCITO (1 ott 2026, la cattura dei dati mancanti): solo
+    # un'etichetta, nessun numero cambia. Valori:
+    #   «stop»          stop pieno prima di qualunque gradino/TP;
+    #   «trailing»      stop alzato dal profit-lock (lock armato);
+    #   «breakeven»     dopo il TP1, residuo uscito allo stop a pareggio;
+    #   «stop_dopo_tp1» dopo il TP1 senza pareggio, residuo allo stop originale;
+    #   «tp»            ultimo gradino (o TP unico) raggiunto;
+    #   «orizzonte»     chiuso d'ufficio dopo HORIZON_BARS barre;
+    #   «fine_dati»     la storia finisce prima dell'orizzonte.
+    # Lo stesso vocabolario dell'ombra dei rifiutati (`rifiutati.simula_segnale`
+    # usa «tp/stop/trailing/orizzonte»), con in piu' i casi che quella non separa.
+    exit_reason: Optional[str] = None
 
     def as_trade_dict(self) -> dict:
         """Formato compatibile con bot.learning.metrics."""
@@ -861,6 +873,7 @@ class Backtester:
             horizon = min(n - 1, i + HORIZON_BARS)
             best_fav = entry
             trailing_verdict = None
+            motivo_uscita = None     # solo etichetta (1 ott 2026): nessun numero cambia
 
             if ladder:
                 # --- percorso SCALE-OUT (parità con l'executor live) ---
@@ -887,6 +900,10 @@ class Backtester:
                         exit_price = eff_stop
                         if trailing:
                             trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, final_target, long)
+                        motivo_uscita = ("trailing" if trailing
+                                         else ("stop" if stage == 0
+                                               else ("breakeven" if stop_base == entry
+                                                     else "stop_dopo_tp1")))
                         done = True
                         break
                     # 2) fette di TP raggiunte in questa barra
@@ -899,11 +916,13 @@ class Backtester:
                     if fills and breakeven_after_tp1(getattr(strategy, "params", None)):
                         stop_base = entry   # break-even sul residuo dopo il primo TP
                     if stage >= len(ladder):
+                        motivo_uscita = "tp"
                         done = True
                         break
                     best_fav = max(best_fav, c.high) if long else min(best_fav, c.low)
                     j += 1
                 if not done:
+                    motivo_uscita = "orizzonte" if horizon == i + HORIZON_BARS else "fine_dati"
                     c = candles[min(j, horizon)]
                     ret = (c.close - entry) / entry if long else (entry - c.close) / entry
                     realized_pct += (1.0 - taken) * ret
@@ -925,21 +944,29 @@ class Backtester:
                         was_stop = True
                         if trailing:
                             trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
+                        motivo_uscita = "trailing" if trailing else "stop"
                         break
                     if long and c.high >= target:
-                        exit_price = target; break
+                        exit_price = target
+                        motivo_uscita = "tp"
+                        break
                     if (not long) and c.high >= eff_stop:
                         exit_price = eff_stop
                         was_stop = True
                         if trailing:
                             trailing_verdict = self._trailing_verdict(candles, j, horizon, stop, target, long)
+                        motivo_uscita = "trailing" if trailing else "stop"
                         break
                     if (not long) and c.low <= target:
-                        exit_price = target; break
+                        exit_price = target
+                        motivo_uscita = "tp"
+                        break
                     # aggiorna il miglior prezzo a favore DOPO i controlli di uscita
                     best_fav = max(best_fav, c.high) if long else min(best_fav, c.low)
                     exit_price = c.close
                     j += 1
+                if motivo_uscita is None:
+                    motivo_uscita = "orizzonte" if horizon == i + HORIZON_BARS else "fine_dati"
 
                 pnl_pct = (exit_price - entry) / entry if long else (entry - exit_price) / entry
             # uscite reali: fee+slippage (round-trip) + funding sui perpetual con SEGNO
@@ -965,6 +992,7 @@ class Backtester:
                 # una decina di letture per trade, nulla rispetto alla simulazione
                 feats=_feats_sicure(snap, tf, entry, stop, strategy, ctx_snap,
                                     candles[i].open_time.hour),
+                exit_reason=motivo_uscita,
             ))
             # ANTI-WHIPSAW, LA STESSA REGOLA DEL BOT. Dopo uno stop IN PERDITA la coin
             # si lascia stare per COOLDOWN_HOURS: il segnale che ha fatto entrare e'

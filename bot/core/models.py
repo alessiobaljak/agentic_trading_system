@@ -378,6 +378,45 @@ class ClosedTrade(BaseModel):
     signal_candle_ts: Optional[float] = None
     latenza_s: Optional[float] = None
 
+    # --- LA CATTURA DEI DATI MANCANTI (1 ott 2026, bot/learning/cattura.py) -- #
+    # Tutti di SOLA MISURA, come il blocco sopra: nessuno decide niente, nessun
+    # campo esistente cambia significato. None/[] sui trade precedenti.
+    #
+    # con che codice e con quali impostazioni e' stato aperto: {commit,
+    # config_hash}. La foto intera degli interruttori sta in RTDB
+    # `/avvii_config/{avviato_at}` (una per avvio): qui solo l'impronta.
+    versione: Optional[dict] = None
+    # cosa prometteva il gate per la coppia all'ingresso (pass_count,
+    # fail_count, last_pf, last_win_rate, last_t, val_t, validated_at,
+    # declassata, origine della spec; per un'esplorativa pf/shortfall/binding):
+    # il registro si riscrive a ogni giro, senza questa copia la promessa spariva
+    promessa_gate: Optional[dict] = None
+    # il regime GLOBALE (di BTC, quello del bot) all'ingresso. `regime_at_entry`
+    # e' il regime della COIN; `regime_confidence_at_entry` invece e' la
+    # confidenza della classificazione GLOBALE (di BTC), non di quella della coin
+    regime_globale_at_entry: Optional[Regime] = None
+    # LA QUALITA' DELL'INGRESSO, dallo snapshot (nessuna chiamata in piu'):
+    # l'ora dello snapshot, la chiusura su cui la regola ha deciso, e di quanti
+    # R l'ingresso e' peggiore di quella chiusura (positivo = entrati peggio).
+    # Accanto, cio' che lo snapshot portava gia': open interest, volume 24h, mark
+    snapshot_ts: Optional[float] = None
+    close_segnale: Optional[float] = None
+    ingresso_vs_segnale_r: Optional[float] = None
+    open_interest_at_entry: Optional[float] = None
+    volume_24h_at_entry: Optional[float] = None
+    mark_price_at_entry: Optional[float] = None
+    # IL PERCORSO DELLO STOP: secondi dall'ingresso al primo armamento del
+    # profit-lock e lo stop in R in quel momento (-1 = stop originale, 0 =
+    # pareggio); i passi {t_s: secondi, r: stop in R} a ogni spostamento >= 0,05
+    # R (max 20; dizionari perche' Firestore rifiuta liste dentro liste); i
+    # secondi all'ultimo peggioramento del MAE; il MAE prima del TP1 (= mae_r se
+    # il TP1 non e' mai arrivato)
+    lock_armed_at_s: Optional[float] = None
+    lock_stop_first_r: Optional[float] = None
+    stop_moves: list[dict] = Field(default_factory=list)
+    t_mae_s: Optional[float] = None
+    mae_before_tp1_r: Optional[float] = None
+
     @property
     def duration_seconds(self) -> float:
         return (self.exit_time - self.entry_time).total_seconds()

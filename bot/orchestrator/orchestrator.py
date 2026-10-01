@@ -114,6 +114,18 @@ class Orchestrator:
         self._rifiuti_conteggio: dict[str, int] = {}
         self._rifiuti_24h_lista: list[tuple[float, str]] = []
         self.rifiuti_24h_dal: float = time.time()
+        # GLI SCARTI SILENZIOSI (1 ott 2026, la cattura dei dati mancanti): due
+        # modi in cui un segnale valido cadeva in `decide_all` senza lasciare
+        # traccia, ne' riga «[rifiuto]» ne' contatore: l'esplorativa che cede il
+        # passo a una validata sulla stessa coin, e il secondo segnale sulla
+        # stessa coin nello stesso giro (uno per coin, come il conto reale).
+        # Contati A PARTE, per ciclo e nelle 24 ore (si azzerano al riavvio come
+        # gli altri), pubblicati in /decision_status da main e sommati nella riga
+        # del giorno. Non passano dall'ombra dei rifiuti: `rifiutati.registra`
+        # legge Firestore per ogni segnale (controllo del duplicato), e qui i
+        # casi possono essere decine a giro. Solo misura, nessuna decisione cambia.
+        self._scarti_ciclo: dict[str, int] = {}
+        self._scarti_24h_lista: list[tuple[float, str]] = []
 
     #: righe «[rifiuto]» stampate per ciclo; oltre, una riga «... e altri N».
     #: Con 160 coppie un regime sfavorevole puo' scartarne decine a ogni candela:
@@ -130,6 +142,35 @@ class Orchestrator:
     def nuovo_ciclo(self) -> None:
         """Azzera i conteggi del ciclo: da chiamare all'inizio di ogni decisione."""
         self._rifiuti_conteggio = {}
+        self._scarti_ciclo = {}
+
+    #: le due classi di scarto silenzioso (1 ott 2026)
+    SCARTO_DIETRO_VALIDATA = "esplorativa dietro una validata"
+    SCARTO_SECONDO_SEGNALE = "secondo segnale stessa coin"
+
+    def conta_scarto_silenzioso(self, classe: str, now: float | None = None) -> None:
+        """Conta uno scarto silenzioso (vedi __init__). Solo contatori in RAM."""
+        try:
+            self._scarti_ciclo[classe] = self._scarti_ciclo.get(classe, 0) + 1
+            self._scarti_24h_lista.append((time.time() if now is None else now, classe))
+        except Exception:  # noqa: BLE001
+            pass
+
+    def scarti_silenziosi_ciclo(self) -> list[dict]:
+        """[{motivo, n}] degli scarti silenziosi del ciclo in corso."""
+        conta = getattr(self, "_scarti_ciclo", None) or {}
+        return [{"motivo": m, "n": n} for m, n in sorted(conta.items(), key=lambda kv: (-kv[1], kv[0]))]
+
+    def scarti_silenziosi_24h(self, now: float | None = None) -> list[dict]:
+        """[{motivo, n}] degli scarti silenziosi delle ultime 24 ore."""
+        now = time.time() if now is None else now
+        lista = [(t, m) for t, m in (getattr(self, "_scarti_24h_lista", None) or [])
+                 if now - t <= 86400]
+        self._scarti_24h_lista = lista
+        conta: dict[str, int] = {}
+        for _t, m in lista:
+            conta[m] = conta.get(m, 0) + 1
+        return [{"motivo": m, "n": n} for m, n in sorted(conta.items(), key=lambda kv: (-kv[1], kv[0]))]
 
     def rifiuti_ciclo(self) -> list[dict]:
         """[{motivo, n}] del ciclo in corso, dal piu' frequente."""
@@ -434,7 +475,10 @@ class Orchestrator:
         n_esplorative = int(esplorative_aperte or 0)
         for s in signals:  # ordinati per adjusted_confidence desc
             if s.get("esplorativa") and s["symbol"] in coin_con_validata:
-                continue        # regola (a): la validata ha la precedenza, senza rifiuto
+                # regola (a): la validata ha la precedenza, senza rifiuto; dal 1 ott
+                # 2026 almeno contato (scarto silenzioso), la decisione non cambia
+                self.conta_scarto_silenzioso(self.SCARTO_DIETRO_VALIDATA)
+                continue
             if s["weight"] <= 0.0:
                 self._rifiuto(s["symbol"], s["strategy"],
                               f"peso {s['weight']:.2f} (strategia spenta dal learning)",
@@ -454,6 +498,8 @@ class Orchestrator:
                 # il pavimento impedisce che diventi un rifiuto travestito
                 peso_size = max(pavimento, min(1.0, float(s["weight"])))
             if s["symbol"] in seen:
+                # un segnale per coin: il secondo cade (contato dal 1 ott 2026)
+                self.conta_scarto_silenzioso(self.SCARTO_SECONDO_SEGNALE)
                 continue
             if s.get("esplorativa"):
                 if n_esplorative >= settings.ESPLORATIVE_MAX_APERTE:
@@ -485,6 +531,10 @@ class Orchestrator:
             d.adjusted_confidence = s["adjusted_confidence"]
             decisions.append(d)
         self._stampa_rifiuti()
+        # una riga compatta per gli scarti silenziosi del giro (1 ott 2026)
+        _sil = self.scarti_silenziosi_ciclo()
+        if _sil:
+            print("[scarti] " + ", ".join(f"{r['n']} {r['motivo']}" for r in _sil))
         self._record_status(
             regime, len(assets), signals, "decided" if decisions else "flat",
             f"parita' backtest: {len(decisions)} segnali validi aperti" if decisions

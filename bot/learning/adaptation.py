@@ -58,6 +58,12 @@ class AdaptationEngine:
         # confronto di `registro_cambiato`, che il loop del bot chiama ogni
         # minuto per ricaricare APPENA il gate scrive, non un'ora dopo
         self._registro_updated_at = None
+        # LA PROMESSA DEL GATE (1 ott 2026, la cattura dei dati mancanti): per
+        # ogni coppia validata, i pochi numeri del suo record (pass_count, PF,
+        # win rate, t, declassata...) presi dal registro GIA' letto in
+        # `load_params`: nessuna lettura in piu'. `promessa_per` li congela sul
+        # trade all'apertura. Solo misura: nessuna decisione li legge.
+        self._promesse: dict[str, dict] = {}
         self.load_weights()
         self.load_params()
         self.load_generated()
@@ -289,6 +295,16 @@ class AdaptationEngine:
                                 if isinstance(r, dict) and bool(r.get("declassata"))}
         except Exception:  # noqa: BLE001
             self._declassate = set()
+        # la promessa del gate per le validate (1 ott 2026): fail-open, un
+        # record rotto lascia il trade senza promessa, non ferma il caricamento
+        try:
+            from bot.learning.cattura import CAMPI_RECORD_PROMESSA
+            self._promesse = {str(k): {c: pairs[k].get(c) for c in CAMPI_RECORD_PROMESSA
+                                       if pairs[k].get(c) is not None}
+                              for k in validated
+                              if isinstance(k, str) and isinstance(pairs.get(k), dict)}
+        except Exception:  # noqa: BLE001
+            self._promesse = {}
         # GATE 0) il bot NON va in paper finche' il GATE 1 non e' "ready" (copertura
         # dell'universo >= soglia). Resta FLAT anche se qualche coppia e' gia'
         # validata: e' cio' che promette il Telegram ("GATE 1 SUPERATO -> paper").
@@ -439,6 +455,24 @@ class AdaptationEngine:
         if not settings.DECLASSATE_ENABLED:
             return False
         return f"{symbol}|{strategy}" in self._declassate
+
+    def promessa_per(self, symbol: str, strategy: str) -> Optional[dict]:
+        """La promessa del gate per la coppia, compatta (1 ott 2026, vedi
+        `bot.learning.cattura.promessa_gate`): dal record del registro validato
+        o, per un'esplorativa, dal registro esplorativo, con l'origine della
+        spec. None se la coppia non c'e'. Mai un'eccezione: e' solo misura."""
+        try:
+            from bot.learning.cattura import promessa_gate
+            key = f"{symbol}|{strategy}"
+            rec = (getattr(self, "_promesse", None) or {}).get(key)
+            esp = (self._esplorative or {}).get(key)
+            spec = (self._generated_specs or {}).get(strategy) \
+                or (self._esplorative_specs or {}).get(strategy)
+            generata = str(strategy).startswith("gen_") or bool((rec or {}).get("generated"))
+            return promessa_gate(rec, spec=spec, generata=generata,
+                                 esplorativa_rec=esp if isinstance(esp, dict) else None)
+        except Exception:  # noqa: BLE001
+            return None
 
     def is_esplorativa(self, symbol: str, strategy: str) -> bool:
         """True se la coppia e' nel registro esplorativo E non e' validata: una

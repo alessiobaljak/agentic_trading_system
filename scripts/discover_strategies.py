@@ -2895,6 +2895,12 @@ def merge_into_registry(fb, out: dict, passed_now: list[str],
     return validated
 
 
+#: il registro dell'ultima `finalizza_registro` di questo processo (1 ott 2026):
+#: `{"pairs", "validated", "at"}`, letto a fine giro da `scripts/gate_storia.py`
+#: per tenere la storia del gate senza rileggere Firestore. Solo misura.
+_ULTIMO_REGISTRO: dict = {}
+
+
 def finalizza_registro(fb, doc: dict, pairs: dict, now: float, max_pairs: int | None = None) -> list:
     """L'UNICO modo in cui la discovery scrive `strategy_registry/validated`:
     ricalcola le validate con la regola condivisa, tiene copertura/coins
@@ -2923,6 +2929,8 @@ def finalizza_registro(fb, doc: dict, pairs: dict, now: float, max_pairs: int | 
     if max_pairs is not None:
         doc["max_pairs"] = max_pairs      # il tetto con cui e' stato scritto (25 set 2026)
     scrivi_registro(fb, doc, pairs)
+    # per la storia del gate (1 ott 2026): il riferimento, non una copia
+    _ULTIMO_REGISTRO.update({"pairs": pairs, "validated": list(validated), "at": now})
     return validated
 
 
@@ -4328,6 +4336,18 @@ def main() -> int:
                                      intorno_figlie=int(sum(madri_intorno.values()))),
         }
         fb.set_doc("strategy_params", _doc_run, riepilogo_run)
+        # LA STORIA DEL GATE, TENUTA (1 ott 2026, scripts/gate_storia.py): una
+        # riga del giro e una per coppia del registro appena scritto, in un file
+        # JSONL del mese sulla macchina. Zero Firestore, fail-open.
+        try:
+            from scripts import gate_storia
+            gate_storia.registra_giro(
+                _ULTIMO_REGISTRO.get("pairs") or {}, _ULTIMO_REGISTRO.get("validated") or validated,
+                n_eval=n_eval, n_passed=len(passed_keys), binding=diag_binding,
+                durata_s=durata, modalita=modalita, commit=gruppo_controllo.versione_codice(),
+                interval=args.interval, now=time.time(), fase=fase_gate)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[gate-storia] saltata (si prosegue): {exc}")
         # IL DOCUMENTO DEL GATE, intero (25 set 2026): solo dal giro sul timeframe del
         # bot, che e' l'ultimo passo della unit (dopo optimize e la passata a 1 ora).
         # Il registro si rilegge DOPO il merge: e' quello che il bot operera'.

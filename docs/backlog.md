@@ -15,7 +15,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
 | **0. Aspettano il tuo sì** | nessuna | una tua risposta |
-| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attende il riavvio del bot) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -48,6 +48,18 @@ cancellare la cache del gate (si caricano i dati fino a oggi e si tagliano in me
 ### J2. «Cosa aspetta il sì» in dashboard, senza aggiornarlo a mano — in lavorazione (1 ott)
 La macchina legge questo file dopo ogni giro del gate e lo pubblica in Firebase; la dashboard mostra
 le voci del gruppo 0 («Aspettano il tuo sì») e il resto del backlog. Una sola fonte, nessuna copia.
+
+### D8. Raccolta dei dati mancanti (punto 4 del 1 ott) — scritta, ATTENDE IL RIAVVIO DEL BOT
+Dodici dati nuovi, solo raccolta (nessuna decisione cambia: provato con motore ed executor identici
+prima e dopo, `tests/test_dati_parita.py`): versione del codice e impostazioni per trade e per avvio;
+promessa del gate congelata all'ingresso; verdetto del trailing alla maniera del gate; cosa fa il
+prezzo dopo OGNI uscita; il motore rigiocato sullo stesso segnale; percorso dello stop e armamento del
+lock; qualità dell'ingresso (prezzo del segnale, ritardo in R); scarti silenziosi contati; una riga al
+giorno per sempre (`giorni/{data}`); regime globale all'ingresso; storia del gate in file locali;
+motivo d'uscita nel motore. I punti 11 e 12 (gate) partono da soli al prossimo giro; gli altri col
+riavvio del bot. **Resta da fare:** gli scarti silenziosi sono contati ma non simulati (costerebbe una
+lettura Firestore per segnale); `data/gate_storia` non ha una pulizia automatica (~1-4,5 MB al
+giorno, stima): da aggiungere se il disco lo chiede.
 
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
 
