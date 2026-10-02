@@ -15,7 +15,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
 | **0. Aspettano il tuo sì** | C5 (costi allineati a Binance) | una tua risposta |
-| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: sì del 2 ott) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -75,7 +75,7 @@ riavvio del bot. **Resta da fare:** gli scarti silenziosi sono contati ma non si
 lettura Firestore per segnale); `data/gate_storia` non ha una pulizia automatica (~1-4,5 MB al
 giorno, stima): da aggiungere se il disco lo chiede.
 
-### T2. La curva del vantaggio del segnale (solo misura) — SÌ del proprietario il 2 ott, in lavorazione (regola nel diario del 2 ott)
+### T2. La curva del vantaggio del segnale — FATTA il 2 ott: «nessun vantaggio misurabile» (ops 0437); la sezione resta nel report `mfe` e si rilegge col crescere dei trade
 Prima di toccare i TP, misurare SE e PER QUANTO i segnali delle strategie validate hanno un vantaggio:
 sui trade del motore fuori campione, il movimento medio dopo 1, 4, 12 e 24 ore (in mosse tipiche di
 24 ore della moneta) contro ingressi a caso sulla stessa moneta negli stessi giorni, con margine. Zero
@@ -129,7 +129,7 @@ di due (~−0,95 $/giorno, stima); (2) idee solo al giro completo (~−1,3 $/gio
 (3) modello più economico (scelta tua). Prima si legge la riga «ORIGINI» del gate (fatta il 1 ott):
 se le idee AI non producono validate, la leva (2) costa poco.
 
-### T1. I take profit non si adattano al singolo trade (verificato il 2 ott, domanda del proprietario)
+### T1. I take profit non si adattano al singolo trade (verificato il 2 ott) — CONGELATA dalla regola di T2 finché la curva del vantaggio non mostra un vantaggio
 Oggi la scala dei TP (multipli di R) è scelta dal gate PER COPPIA e congelata all'apertura
 (`bot/main.py:1795`, `:1818`; `executor.py:76-83`); per trade cambia solo il prezzo, perché R dipende
 dall'ATR del segnale (`exit_logic.py:132-137`, `strategies/base.py:112`). Il paper propone scale

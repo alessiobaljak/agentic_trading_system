@@ -2633,3 +2633,16 @@ stesso `costs.py`), salvo la finestra di volume dello spread e la fonte del fund
 revisore: l'ingresso vero sarebbe un ordine limite (in parte «maker», più economico), ma il paper
 riempie sempre subito: 0,10% è l'unico valore coerente con come riempie il paper. Proposta in backlog
 C5 (aspetta il sì): correggere dopo le letture del 14 ott, bot e gate insieme.
+
+### 2 ottobre, mattina: T2, primo esito — NESSUN VANTAGGIO MISURABILE (ops 0437)
+
+Con la regola scritta prima dei numeri: 201 trade del paper misurati su 15 giornate (23 saltati: 7
+senza candela chiusa subito prima, 16 col futuro oltre i dati), 20 ingressi a caso per segnale nelle 12
+ore DOPO. Vantaggio sul caso, in mosse tipiche di 24 ore: 1 ora −0,080 [−0,205; +0,029] · 4 ore −0,001
+[−0,129; +0,127] · 12 ore +0,026 [−0,217; +0,253] · 24 ore −0,068 [−0,341; +0,179]; in %: −0,25 · +0,04
+· −0,07 · −0,27. Tutte le durate dentro il margine: **«nessun vantaggio misurabile»**. Per la regola il
+lavoro sui TP si ferma (T1 congelata): il problema è l'ingresso o il gate (R1 lo dirà). Per verso
+(informativo): long e short entrambi dentro il margine. Limite: 15 giornate di un solo mercato; su
+prezzi a caso la regola dà «nessun vantaggio» ~3 volte su 4 anche quando il vantaggio manca davvero, e
+non dice quanto piccolo potrebbe essere un vantaggio vero (il margine a 4 ore è ±0,13 mosse tipiche,
+cioè circa ±0,5%).
