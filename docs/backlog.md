@@ -16,7 +16,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 |---|---|---|
 | **0. Aspettano il tuo sì** | nessuna | una tua risposta |
 | **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attende il riavvio del bot) | lo strumento, poi 2 righe nella lista bianca della VPS |
-| **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6 | il numero delle letture, poi il tuo sì |
+| **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
 | **5. Solo se serve** | D1 | lo spazio del registro che finisce |
@@ -104,6 +104,23 @@ sera, stima circa 2,10 $ al giorno. Leve, nessuna fatta: (1) idee e autopsia una
 di due (~−0,95 $/giorno, stima); (2) idee solo al giro completo (~−1,3 $/giorno, ma meno idee);
 (3) modello più economico (scelta tua). Prima si legge la riga «ORIGINI» del gate (fatta il 1 ott):
 se le idee AI non producono validate, la leva (2) costa poco.
+
+### T1. I take profit non si adattano al singolo trade (verificato il 2 ott, domanda del proprietario)
+Oggi la scala dei TP (multipli di R) è scelta dal gate PER COPPIA e congelata all'apertura
+(`bot/main.py:1795`, `:1818`; `executor.py:76-83`); per trade cambia solo il prezzo, perché R dipende
+dall'ATR del segnale (`exit_logic.py:132-137`, `strategies/base.py:112`). Il paper propone scale
+candidate (`scala_dal_paper`, scala per strategia con ≥ 5 trade: `discover_strategies.py:835-933`),
+il gate decide sulla storia. Numeri: 111 coppie su 209 hanno la scala 2/4/6 (primo TP a 2R) mentre
+il massimo a favore mediano dei trade è 0,85R e solo il 16% arriva a 1,5R; l'89% dei trade non tocca
+nessun TP (`docs/state.md` del 1 ott 23:53 UTC; ops 0394, 0417). Cose non fatte, da valutare dopo le
+letture (toccano le uscite): (a) misurare nel paper le 5 coppie con scala dal paper contro le altre;
+(b) scegliere scala, pareggio e keep INSIEME, non uno dopo l'altro (`:2082-2117`); (c) cercare anche
+le quote 30/30/40, oggi fisse; (d) le esplorative usano sempre la scala globale 1,5/3/5; (e) la scala
+globale dal paper mescola i timeframe; (f) multipli scelti all'apertura dalle condizioni del momento
+(volatilità, ADX) — solo se passa dal gate: i TP sui livelli del grafico sono già stati smentiti (A5).
+Note: la riga «0 con almeno 5 trade» del log del gate (ops 0411) conta solo la corsia urgente, non le
+strategie con scala propria (11 il 1 ott, ops 0386); il freno di deriva confronta l'mfe con il primo
+gradino GLOBALE (1,5R), non con quello della coppia (`drift.py:575-576`).
 
 ## 3. A metà novembre
 
