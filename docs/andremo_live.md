@@ -2698,3 +2698,17 @@ monete delle coppie validate (una lettura del registro; `restringi_alle_operate`
 altre stanno su disco ma non entrano nella lettura. La regola di R1 non cambia (scritta prima dei numeri,
 nessuna lettura ancora fatta); cambia solo l'insieme delle monete: «le monete che il bot opera» invece di
 «le prime 200 per volume». Stima: ~1/3 del lavoro, prima lettura verso il 9-10 ott (stima, da misurare).
+
+### 2 ottobre, 14:45: prima finestra di R1 — il gate ha saltato il giro, R1 lavora; 0 passate finora
+
+Il giro delle 12 UTC è stato saltato alle 12:09 UTC (optimize e discovery, ops 0440); il giro delle 09
+UTC era finito alle 11:13. R1 lavora con 4 processi: memoria 7 GB usati su 15, 7 liberi (ops 0441), nessun
+errore. Avanzamento (ops 0439, piano ancora a 200 monete: la restrizione alle operate parte dal prossimo
+lancio): 1 data completa su 26 e una in corso, 358 unità su 5.200, 110 s a unità. **Prova piccola, i
+numeri hanno senso a metà:** 14.150 candidate giudicate, 570.092 trade dopo la data delle bocciate a
+−0,11R (plausibile: strategie a caso che pagano i costi), ma **0 passate** (bocciate soprattutto su
+total_return 12.622). Senza passate la regola non può leggere niente («ne servono 80» trade). Da guardare
+nei prossimi giorni: se dopo ~5 date le passate restano ~0, R1 finirà «non si sa» per costruzione, e
+servirà più candidate per data (più tempo) o le candidate che il gate ha già visto passare (da decidere
+col proprietario, PRIMA di guardare il risultato). Che il giro delle 15 UTC riparta è da verificare nel
+controllo di domani.
