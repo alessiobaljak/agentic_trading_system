@@ -1,0 +1,161 @@
+# 0436-2ott-mattina-lista.req
+
+_eseguito: 2026-10-02 06:17 UTC_
+
+**richiesta:** `lista`
+**eseguito:** `cat ops/allowlist`
+**esito:** codice 0 in 0.0s
+
+```
+# LISTA BIANCA DELL'AGENTE OPS — copiala in `ops/allowlist` (senza .example).
+#
+# Questo file NON e' versionato, ed e' il punto in cui sta tutto il controllo:
+# l'agente esegue SOLO cio' che compare qui. Una richiesta puo' nominare una voce,
+# mai comporre un comando. Se fosse nel repo, chiunque possa committare potrebbe
+# ampliarla — e la lista bianca non sarebbe piu' una garanzia.
+#
+# Formato:   chiave: comando            (una riga, niente shell, niente pipe)
+#            chiave: comando +args      se la richiesta puo' aggiungere argomenti
+#
+# Regola pratica: aggiungi una voce solo se sei disposto a vederla eseguita
+# automaticamente, di notte, senza che tu la stia guardando.
+#
+# DUE COSE DA NON METTERE, imparate a caro prezzo:
+#  * niente `+args` se puoi evitarlo. Gli argomenti vengono appesi in coda al
+#    comando, e `/root/.env` o `--file=/root/.git-credentials` superano tutti i
+#    filtri: e' il chiamante a scegliere COSA il comando andra' a leggere.
+#  * niente `git remote -v` ne' `git config --list`: se il token e' nell'URL del
+#    remoto, uscirebbe in chiaro dentro una risposta committata.
+
+# ---- diagnosi (sola lettura) ----------------------------------------------
+autopsy:      .venv/bin/python -m scripts.gate_autopsy
+gate:         .venv/bin/python -m scripts.gate_progress
+supervisor:   .venv/bin/python -m scripts.supervisor --dry-run
+stato:        .venv/bin/python -m scripts.state_snapshot --no-write
+shadow:       .venv/bin/python -m scripts.shadow_report
+trades:       .venv/bin/python -m scripts.trade_stats
+connettivita: .venv/bin/python -m scripts.connectivity_check
+test:         .venv/bin/python -m pytest -q
+gate-top:     .venv/bin/python -m scripts.gate_progress --top 40
+autopsia-validate: .venv/bin/python -m scripts.autopsia_validate
+replay:       .venv/bin/python -m scripts.replay_freno
+rifiutati:    .venv/bin/python -m scripts.rifiutati_report
+ingressi:     .venv/bin/python -m scripts.ingressi_report
+ingressi-orca: .venv/bin/python -m scripts.ingressi_report --coppia ORCAUSDT/gen_6d06dca0 --dettaglio
+ingressi-vet:  .venv/bin/python -m scripts.ingressi_report --coppia VETUSDT/gen_6d06dca0 --dettaglio
+ingressi-completo: .venv/bin/python -m scripts.ingressi_report --sfondo --budget 0
+ingressi-esito: .venv/bin/python -m scripts.ingressi_report --esito
+ingressi-completo: systemd-run --no-block --collect --unit=ingressi-completo --property=WorkingDirectory=/root/agentic_trading_system /root/agentic_trading_system/.venv/bin/python -m scripts.ingressi_report --su-file --budget 0
+voto-t-completo: systemd-run --no-block --collect --unit=voto-t-completo --nice=15 --property=IOSchedulingClass=idle --property=WorkingDirectory=/root/agentic_trading_system /root/agentic_trading_system/.venv/bin/python -m scripts.t_validate --su-file --budget 0
+voto-t-esito: .venv/bin/python -m scripts.t_validate --esito
+replay-gate: systemd-run --no-block --collect --unit=replay-gate --nice=15 --property=IOSchedulingClass=idle --property=WorkingDirectory=/root/agentic_trading_system /root/agentic_trading_system/.venv/bin/python -m scripts.replay_gate --su-file
+replay-gate-esito: .venv/bin/python -m scripts.replay_gate --esito
+
+# ---- analisi che rispondono a una domanda aperta (tutte in sola lettura) ---
+# Nessuna di queste scrive niente: girano, stampano, e la risposta torna in
+# ops/results. Sono la differenza fra "credo che" e "ho misurato".
+spike:        .venv/bin/python -m scripts.spike_response
+gate-vs-paper: .venv/bin/python -m scripts.gate_vs_paper
+edge:         .venv/bin/python -m scripts.edge_stability
+frequenza:    .venv/bin/python -m scripts.signal_frequency
+sopravvivenza: .venv/bin/python -m scripts.survivorship_report
+# «le monete che a 15 min non copriamo, a un'altra scala si coprono?». SOLA LETTURA:
+# non scrive registro ne' spec ne' configurazione — una coppia validata a 1 ora e
+# scritta nel registro verrebbe operata dal bot a 15 minuti.
+timeframe:    .venv/bin/python -m scripts.timeframe_probe
+confidenza:   .venv/bin/python -m scripts.confidence_analysis
+# «l'AI sta lavorando?» in un comando solo. Prima servivano connettivita +
+# log-gate + shadow e la lettura incrociata dei loro log: una diagnosi cosi'
+# cara non viene rifatta, e infatti e' rimasta non fatta per sei giorni
+# mentre la chiave era rifiutata. Costa una chiamata da 5 token.
+ai-stato:     .venv/bin/python -m scripts.ai_status
+# quanto storico di open interest / long-short esiste per le coppie validate, e
+# quanto peserebbe sul disco. Legge il registro da Firebase (qui c'e', altrove
+# no) e il listing pubblico di data.binance.vision: non scarica lo storico e non
+# scrive niente. Backlog B6.
+storico-oi:   .venv/bin/python -m scripts.binance_metrics_probe
+# GATE contro PAPER su tutto cio' che si puo' confrontare, non solo il win rate:
+# gradini raggiunti (0/1/2/3 TP), perdite e vincite consecutive, mfe, PF, resa per
+# trade, e quanti trade del paper hanno un ingresso del gate entro due barre.
+# Include il METRO che mancava: quante volte il gate ha gia' attraversato una
+# striscia di perdite lunga come quella in corso.
+# Dura qualche minuto (una passata di backtest per coppia). Sola lettura.
+confronto:    .venv/bin/python -m scripts.confronto_gate_paper
+# le coppie validate INSIEME sugli ultimi 60 giorni, con i limiti veri del conto
+# (posizioni, una per coin, cooldown, tetto per coin) e il what-if del tetto di
+# rischio per direzione: trade al giorno, contemporanee, giornate, drawdown.
+# Carica le candele coin per coin: qualche minuto. Sola lettura sul registro.
+portafoglio:  .venv/bin/python -m scripts.portafoglio_backtest
+# dove arriva davvero il prezzo (mfe in R) e gli stop divisi per come sono morti:
+# sbagliati dall'inizio (ingresso) o andati a favore senza toccare il primo
+# gradino (uscita). Sola lettura.
+mfe:          .venv/bin/python -m scripts.mfe_report
+# selettore (disegno_cervello, punto 2 passo 1): «apri tutto» vs «selettore», offline, sola lettura
+selettore:    .venv/bin/python -m scripts.selettore_report
+# revalidate_costs e' DRY-RUN per default: senza --apply mostra e basta.
+costi:        .venv/bin/python -m scripts.revalidate_costs
+controllo:    .venv/bin/python -m scripts.controllo
+report-giornaliero: .venv/bin/python -m scripts.report_giornaliero --pubblica
+
+# ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
+# la lista bianca stessa, per confrontarla con questo esempio quando si mette in
+# ordine: contiene solo chiavi e comandi, nessun segreto. Sola lettura.
+lista:        cat ops/allowlist
+log-ops:      journalctl -u trading-ops.service -n 200 --no-pager
+ops-unit:     systemctl show trading-ops.service -p ActiveState -p SubState -p Result -p ExecMainStatus -p ExecMainStartTimestamp
+git-stato:    git status --short --branch
+git-storia:   git log --oneline -20 --decorate
+
+# ---- stato del sistema -----------------------------------------------------
+attivi:       systemctl is-active trading-bot.service trading-ops.timer trading-optimizer.timer trading-supervisor.timer
+servizi:      systemctl list-timers --no-pager trading-*
+log-bot:      journalctl -u trading-bot.service -n 120 --no-pager
+# i RIFIUTI d'ingresso delle ultime 24 ore (dal 25 set il bot stampa una riga
+# «[rifiuto] coin strategia direzione: motivo» per ogni segnale non aperto):
+# e' il conteggio che manca a H5. -g e' il filtro di journalctl, niente pipe.
+rifiuti:      journalctl -u trading-bot.service --since -24h --no-pager -g "\[rifiuto\]"
+log-gate:     journalctl -u trading-optimizer.service -n 80 --no-pager
+log-super:    journalctl -u trading-supervisor.service -n 40 --no-pager
+memoria:      free -g
+disco:        df -h /
+carico:       uptime
+# chi sta mangiando la CPU: serve a distinguere "l'optimizer sta lavorando" da
+# "l'optimizer e' piantato", che dai log sembrano uguali.
+processi:     ps -eo pid,pcpu,pmem,etime,args --sort=-pcpu
+# sessioni in background (fast_gate, backfill): senza questo non si sa se ce n'e'
+# una che sta girando da ore.
+tmux:         tmux ls
+# la cache delle candele e' la voce di disco che cresce: quattro anni a 15m per
+# centinaia di coin. Quando `disco` si riempie, la causa e' quasi sempre qui.
+cache:        du -sh .cache
+
+# ---- azioni operative (cambiano qualcosa, ma nulla di distruttivo) ---------
+aggiorna:     git pull
+riavvia-bot:  systemctl restart trading-bot.service
+lancia-gate:  systemctl start --no-block trading-optimizer.service
+lancia-super: .venv/bin/python -m scripts.supervisor
+# un timer puo' incepparsi (unit fallita, stato inconsistente): riavviarlo non
+# tocca il registro ne' le posizioni, rimette solo in moto la pianificazione.
+riavvia-gate: systemctl restart trading-optimizer.timer
+riavvia-super-timer: systemctl restart trading-supervisor.timer
+
+# ---- DISTRUTTIVE: lasciate commentate di proposito -------------------------
+# Queste due restano fuori ANCHE quando si e' tentati di "abilitare tutto adesso
+# che ci sono". Il criterio non e' quanto sono utili: e' che non si possono
+# annullare da lontano. Il backup che fast_gate scrive resta sul disco della
+# macchina, fuori da git, e non esiste uno script che lo ripristini — quindi da
+# remoto un errore qui e' definitivo.
+#
+# fast_gate AZZERA il registro validato: i passaggi accumulati (settimane di
+# attesa) spariscono. Abilitala solo quando vuoi davvero una rivalidazione da capo
+# E puoi guardare la macchina mentre lo fa.
+# fast-gate:  bash scripts/fast_gate.sh --yes
+# reset-paper: .venv/bin/python -m scripts.reset_paper --yes
+#
+# E per lo stesso motivo NON vanno messe, mai:
+#  * `revalidate_costs --apply` (la versione senza --apply e' sopra ed e' innocua);
+#  * qualunque cosa con `+args`;
+#  * `env`, `printenv`, `cat .env`, `git remote -v`, `git config --list`:
+#    stamperebbero un segreto dentro una risposta che finisce committata in un
+#    repo PUBBLICO. Un segreto finito li' e' compromesso per sempre.
+```
