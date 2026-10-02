@@ -2712,3 +2712,10 @@ nei prossimi giorni: se dopo ~5 date le passate restano ~0, R1 finirà «non si 
 servirà più candidate per data (più tempo) o le candidate che il gate ha già visto passare (da decidere
 col proprietario, PRIMA di guardare il risultato). Che il giro delle 15 UTC riparta è da verificare nel
 controllo di domani.
+**R1, punto di verifica fissato (2 ott, 16:xx, sì del proprietario), scritto PRIMA dei numeri:** dopo 5
+date complete (circa 2 giorni con le 71 monete) si contano le promosse. Se sono meno di 10, il piano
+cambia (più candidate per data, oppure anche le strategie che il gate vero ha già visto passare): la scelta
+si fa allora, ma il criterio è questo. Se sono abbastanza, si va fino in fondo. Domani si verifica se lo
+0 su 14.150 (ops 0439: bocciate per criterio total_return 12.622, trades 706, recovery 486) è plausibile
+per candidate casuali nuove o un difetto di R1 (storia minima alle date vecchie, severità dell'holdout).
+Fino ad allora R1 resta com'è (un giro del gate al giorno, 4 processi).
