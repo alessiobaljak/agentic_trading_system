@@ -63,7 +63,7 @@ cancellare la cache del gate (si caricano i dati fino a oggi e si tagliano in me
 La macchina legge questo file dopo ogni giro del gate e lo pubblica in Firebase; la dashboard mostra
 le voci del gruppo 0 («Aspettano il tuo sì») e il resto del backlog. Una sola fonte, nessuna copia.
 
-### D8. Raccolta dei dati mancanti (punto 4 del 1 ott) — scritta, ATTENDE IL RIAVVIO DEL BOT
+### D8. Raccolta dei dati mancanti (punto 4 del 1 ott) — ATTIVA dal riavvio del 1 ott 17:24 («[cattura]» nel log del bot)
 Dodici dati nuovi, solo raccolta (nessuna decisione cambia: provato con motore ed executor identici
 prima e dopo, `tests/test_dati_parita.py`): versione del codice e impostazioni per trade e per avvio;
 promessa del gate congelata all'ingresso; verdetto del trailing alla maniera del gate; cosa fa il

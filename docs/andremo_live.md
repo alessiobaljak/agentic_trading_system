@@ -2646,3 +2646,44 @@ lavoro sui TP si ferma (T1 congelata): il problema è l'ingresso o il gate (R1 l
 prezzi a caso la regola dà «nessun vantaggio» ~3 volte su 4 anche quando il vantaggio manca davvero, e
 non dice quanto piccolo potrebbe essere un vantaggio vero (il margine a 4 ore è ±0,13 mosse tipiche,
 cioè circa ±0,5%).
+
+### Controllo del 2 ottobre (mattina)
+
+**Da guardare per primo: un giro del gate è durato 3 h 04 (anomalia gialla GATE_SFORA, «gate lento»).** L'avviso
+è nel controllo orario delle 07:30, ristampato in coda al report nel log del gate alle 07:50 (ops 0425, 0435). Non è
+l'ultimo giro (solo urgenti, 05:47-07:50, 2 h 03, ops 0423): l'avviso legge la durata dell'ultimo giro *finito*, e
+durante un giro il documento del gate tiene quella del precedente (codice di controllo.py e discover_strategies.py).
+Probabilmente è il completo di stanotte: il report scrive «intorno 7 madri», un dato che i giri urgenti ricopiano dal
+completo (ieri il completo ne aveva 3, ops 0391), e le declassate sono cambiate stanotte (+2 −1, ops 0432). L'ora di
+fine non è nei file: non verificato. Semafori giallo/giallo con 3 anomalie, una di sistema, in tutti i controlli
+orari visibili dalle 04:29 alle 07:30 (il log parte alle 04:13, ops 0424); SISTEMA verde alle 08:17 (ops 0432).
+Nessun errore nelle righe di log lette. Letture Firestore 4.016 in ~14 ore dal riavvio (ops 0424). Spazio per ~1.289
+coppie (ops 0423). Spesa AI del 1 ott 2,07 $ in 31 chiamate (ops 0422). **Numeri:** 224 trade, 55%
+vinti, −77,22 USDT, equity 922,78, DRY_RUN True (ops 0421). Il 1 ott −9,57 (motore −3.570,11, secondo
+giorno peggiore su 60, ops 0429). Fino al 1 ott 5 giorni in utile e 11 in perdita (calcolo mio). BTC
++13,56% contro il nostro −7,72%. In R dal 27 set: −0,065 netti su 81 (ieri +0,042 su 61), +0,013 lordi
+(ieri +0,118), costi 0,078 (ops 0420, 0388). Long −0,171 su 43, short +0,056 su 38, regime neutro
+−0,317 su 39. Dei 20 trade nuovi, i 15 delle declassate fanno −8,12R e i 5 delle attive +0,35R (calcolo mio).
+**Fuori campione** (anteprima, ops 0429): «Selezione: la promessa non regge dopo la validazione:
+motore -0.03R (margine ±0.21R per giornata) su 106 segnali … Per la regola la prossima modifica va nel gate»
+(ieri +0,06 su 89, ops 0387). Esecuzione: «non si decide», +0,03 ±0,13 su 95. H1: 20 e 78 segnali, «non si sa ancora».
+Regola del 3 ott in anteprima: declassate −0,127R su 52 contro attive +0,047R su 29, differenza −0,174 ±0,389, NON SI
+DECIDE (ops 0420). **T2** (ops 0437): «nessun vantaggio misurabile» a 1, 4, 12 e 24 ore; T1 congelata. Validate 212 su
+71 coin (+4), declassate 163, 665 a 2/3, t ≥ 2 per 39 su 57. Le strategie AI hanno 0 validate su 103 nel registro
+(ops 0423). Trailing: 49 protetti su 87 (56,3%), ne mancano 8 (ops 0432). Selettore NON BATTE «apri tutto», 0/3
+finestre (ops 0428); la sua soglia è passata a 0,50, pubblicata dalla stessa ops 0428. R1: 0 date su 26, 85 unità su
+5.200, rilanciato alle 08:17 (ops 0433-0434). Restano ~45,8 ore di lavoro (stima in ops 0433): a 2,5 ore al giorno
+servirebbero ~18 giorni (calcolo mio), quindi la lettura del 9 ott non sembra raggiungibile. Report giornaliero
+pubblicato con 9 sezioni (ops 0435). Difetti veri: testo del fuori campione troncato (taglio a 400 caratteri) e D8
+«attende il riavvio» (il titolo in backlog.md non è aggiornato). Numeri che sembrano sbagliati ma misurano altro:
+«registro 1421» = coppie nel tetto (1 base + 1.420 con conferme), non le 1.761 totali; «intorno 7» = ultimo giro
+completo; trailing 110 contro 108, probabilmente gruppi di trade diversi (non verificato). Salute, 6 posizioni ed equity
+924,91 vengono dal controllo delle 07:30. Il riquadro «aspetta il sì» ha letto il backlog della versione 3377efb (08:04),
+prima del commit di C5 (08:13). **Proposta del giorno (serve il sì): C5.** Commissioni a 0,10% e funding con la scadenza
+vera, nel bot e nel gate insieme, dopo le letture del 14 ott (+0,012R di costi a trade, stima).
+**R1, tempi:** l'avanzamento vero (ops 0433: 85 unità su 5.200, 129 s a unità, ~45,8 ore rimaste con 4
+processi) sposta la prima lettura completa verso il 20 ott a 2,5 ore al giorno (stima). La stima del 1 ott
+(13-17 ore) contava 120-150 monete; il piano ne ha 200. Proposta al proprietario: limitare R1 alle monete
+che il bot opera davvero (71), circa 3 volte più veloce. Corretti nel report: taglio del testo del
+fuori campione a fine parola, titolo di D8.
+

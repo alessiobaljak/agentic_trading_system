@@ -104,6 +104,14 @@ def _r(t: dict) -> float | None:
         return None
 
 
+def _taglia(testo: str, n: int) -> str:
+    """Al massimo `n` caratteri, tagliando a fine parola con «…» (2 ott 2026: il
+    taglio secco a 400 spezzava le parole a meta')."""
+    if len(testo) <= n:
+        return testo
+    return testo[:n].rsplit(" ", 1)[0].rstrip(",;:") + " …"
+
+
 def _usd(v) -> str:
     return "—" if v is None else f"{v:+.2f}"
 
@@ -275,7 +283,7 @@ def sez_gate(gate: dict | None, portafoglio: dict | None, r1: dict | None) -> di
     fc = pf.get("fuori_campione") if isinstance(pf.get("fuori_campione"), dict) else {}
     if fc.get("lettura"):
         righe.append(f"Fuori campione (le validate guadagnano anche DOPO la scelta? ultimo "
-                     f"report del {str(pf.get('updated_at') or '')[:10]}): {str(fc['lettura'])[:400]}")
+                     f"report del {str(pf.get('updated_at') or '')[:10]}): {_taglia(str(fc['lettura']), 700)}")
     if r1:
         righe.append(f"R1, il gate rigiocato nel passato: {r1.get('date_finite', 0)} date su "
                      f"{r1.get('date_totali', 26)}, {r1.get('unita', 0)} unita' fatte.")
