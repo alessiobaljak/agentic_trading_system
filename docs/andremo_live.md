@@ -2619,3 +2619,17 @@ su prezzi a caso la regola dice «nessun vantaggio» ~75-81 volte su 100 (4 dura
 esito a una sola durata va letto con cautela. Corretto anche un difetto che toccava la tabella dei TP
 del 2 ott (ops 0419): la lettura della cache prendeva i file corti scritti dalla sezione A5 invece della
 storia del gate (HEMI 601 ingressi invece di 8640, SYRUP 1653).
+
+### 2 ottobre, mattina: i costi per trade contro Binance (richiesta del proprietario)
+
+Verifica in sola lettura, poi un secondo revisore ha ricontrollato codice, tariffe e conti. Commissioni:
+0,08% andata e ritorno nel modello contro 0,10% di Binance USDⓈ-M base da taker (0,05% a lato; 0,09%
+con lo sconto BNB): +4,77 USDT sui 222 trade del paper, ~+0,012R a trade (`docs/state.md` del 2 ott
+05:37 UTC: costi 33,21 = commissioni 19,07 + spread 14,16 + funding −0,01). Funding: il tasso per
+scadenza è trattato come «per 8 ore», ma molte monete piccole scadono ogni 4 ore e quelle al limite ogni
+ora (Binance, dal 2 mag 2025): sottostima ×2/×8 dove conta. Stop senza scivolamento (K8). Spread:
+quattro fasce misurate una volta, a mercato calmo. Gate e paper allineati fra loro (stessa variabile,
+stesso `costs.py`), salvo la finestra di volume dello spread e la fonte del funding. Nota del
+revisore: l'ingresso vero sarebbe un ordine limite (in parte «maker», più economico), ma il paper
+riempie sempre subito: 0,10% è l'unico valore coerente con come riempie il paper. Proposta in backlog
+C5 (aspetta il sì): correggere dopo le letture del 14 ott, bot e gate insieme.
