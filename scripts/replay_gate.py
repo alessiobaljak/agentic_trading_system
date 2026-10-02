@@ -35,8 +35,9 @@ data: niente dopo la data arriva al gate.
 DOVE SCRIVE: SOLO file locali in data/replay_gate/ (ignorata da git): il piano
 (`piano.json`: date, monete, semi, impostazioni), un file per unita' di lavoro
 (`unita/<data>/<coin>.json`, scritto una volta, in modo atomico, appena l'unita'
-e' finita), il referto della lancio in sfondo e il pid. NESSUNA lettura o
-scrittura Firebase, il registro non si tocca, nessun riavvio, DRY_RUN non
+e' finita), il referto della lancio in sfondo e il pid. NESSUNA scrittura
+Firebase (dal 2 ott una sola lettura del registro, per le monete operate: decisione
+del proprietario), il registro non si tocca, nessun riavvio, DRY_RUN non
 c'entra: il bot non vede niente di tutto questo.
 
 MAI INSIEME AL GIRO DEL GATE (la memoria non basta, docs/andremo_live.md 24
@@ -112,6 +113,8 @@ FILE_LOCK = os.path.join(DIR_R1, "in_corso.lock")
 #: «R1 e' attivo»: il gate salta il giro delle 12 UTC (bot/core/finestra_r1.py)
 FILE_ATTIVO = finestra_r1.FILE_ATTIVO
 VERSIONE = 1
+#: 2 ott 2026, decisione del proprietario: R1 solo sulle monete che il bot opera
+SOLO_MONETE_OPERATE = True
 
 #: la regola (docs/andremo_live.md, 1 ott 2026): 26 date, una ogni 14 giorni,
 #: e i 14 giorni dopo ogni data
@@ -839,6 +842,7 @@ def righe_lettura(piano: dict | None, fatte: dict) -> list[str]:
     finche' le 26 date non sono complete) e le righe informative."""
     if not piano:
         return ["[r1] nessun piano: il lavoro non e' ancora partito (lancia `replay-gate`)."]
+    fatte = unita_del_piano(piano, fatte)
     date_ = list(piano.get("date") or [])
     complete = date_complete(piano, fatte)
     unita = [u for u in fatte.values() if isinstance(u, dict)]
@@ -1015,13 +1019,63 @@ def _sotto_lucchetto(args, aspetta: bool) -> int:
     return _lancio(args)
 
 
+def unita_del_piano(piano: dict | None, fatte: dict) -> dict:
+    """Le sole unita' delle monete del piano (2 ott 2026: col piano ristretto
+    alle monete operate, le unita' gia' fatte delle altre restano su disco ma non
+    entrano nella lettura)."""
+    if not piano:
+        return fatte
+    monete = set(piano.get("universo") or [])
+    return {k: v for k, v in (fatte or {}).items() if k[1] in monete}
+
+
+def monete_operate() -> list[str] | None:
+    """Le monete delle coppie validate che il bot opera (registro, UNA lettura
+    Firestore). None se il registro non si legge: allora il piano non cambia."""
+    try:
+        from bot.core.firebase_client import decode_pairs, get_firebase
+        from bot.core.registry import coppie_validate
+        reg = get_firebase().get_doc("strategy_registry", "validated") or {}
+        coppie = coppie_validate(decode_pairs(reg.get("pairs")))
+        return sorted({k.split("|", 1)[0] for k in coppie}) or None
+    except Exception as exc:  # noqa: BLE001
+        di(f"[r1] monete operate non lette ({str(exc)[:120]}): piano invariato")
+        return None
+
+
+def restringi_alle_operate(piano: dict, operate: list[str] | None) -> dict:
+    """IL PIANO SULLE SOLE MONETE OPERATE (2 ott 2026, decisione del proprietario
+    «limita R1 alle 71 monete»): 200 monete erano ~45,8 ore di calcolo (ops 0433),
+    cioe' ~18 giorni a 2,5 ore al giorno. Una volta sola: le monete si fissano
+    nel piano e non cambiano piu' (le date, i semi e le candidate restano). Le
+    operate fuori dalla lista originale entrano anche loro. Pura."""
+    if piano.get("filtro") == "monete_operate" or not operate:
+        return piano
+    prima = list(piano.get("universo") or [])
+    nuovo = [c for c in prima if c in set(operate)] + [c for c in operate if c not in set(prima)]
+    return {**piano, "universo": nuovo, "filtro": "monete_operate",
+            "universo_prima": len(prima),
+            "filtro_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
+
+
 def carica_o_crea_piano(args, oggi: date) -> dict:
-    """Il piano scritto, o uno nuovo (con le monete di oggi) scritto subito."""
+    """Il piano scritto, o uno nuovo scritto subito; dal 2 ott ristretto UNA
+    volta alle monete operate (`restringi_alle_operate`)."""
     piano = leggi_piano()
     if piano and piano.get("versione") == VERSIONE:
+        if SOLO_MONETE_OPERATE and piano.get("filtro") != "monete_operate":
+            nuovo = restringi_alle_operate(piano, monete_operate())
+            if nuovo is not piano:
+                scrivi_atomico(FILE_PIANO, nuovo)
+                di(f"[r1] piano ristretto alle monete operate: {len(nuovo['universo'])} monete "
+                   f"(prima {nuovo['universo_prima']}); le unita' gia' fatte di queste restano")
+            return nuovo
         return piano
-    universo = top_symbols_by_volume(int(args.top))
+    operate = monete_operate() if SOLO_MONETE_OPERATE else None
+    universo = operate or top_symbols_by_volume(int(args.top))
     piano = crea_piano(args, oggi, universo)
+    if operate:
+        piano["filtro"] = "monete_operate"
     scrivi_atomico(FILE_PIANO, piano)
     di(f"[r1] piano nuovo: {len(piano['date'])} date ({piano['date'][-1]} -> "
        f"{piano['date'][0]}), {len(universo)} monete, {piano['candidate_per_data']} candidate "

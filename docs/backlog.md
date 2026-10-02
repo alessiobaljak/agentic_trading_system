@@ -14,9 +14,9 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | C5 (costi allineati a Binance) | una tua risposta |
+| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
 | **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
-| **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
+| **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
 | **5. Solo se serve** | D1 | lo spazio del registro che finisce |
@@ -32,21 +32,7 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-### C5. Costi allineati a quelli veri di Binance (verifica del 2 ott, richiesta del proprietario)
-Verifica sul codice e sulle tariffe ufficiali (FAQ Binance Futures, ricontrollata da un secondo
-revisore). (1) **Commissioni troppo basse:** il modello usa 0,08% andata e ritorno
-(`BACKTEST_COST_PER_TRADE`, `executor.py:178`, `engine.py:616`, `discover_strategies.py:3617`); Binance
-USDⓈ-M al livello base fa pagare 0,05% a lato da «taker» = 0,10% (0,09% pagando in BNB). Effetto sul
-paper: +4,77 USDT su 222 trade (−79,86 invece di −75,09), ~+0,012R a trade; nel gate PF −0,03/−0,04.
-(2) **Funding giusto nel totale (−0,01 USDT), sbagliato nella struttura:** il tasso di ogni scadenza è
-trattato come se fosse ogni 8 ore (`costs.py:27-39`), ma molte monete piccole pagano ogni 4 ore e quelle
-«tirate» ogni ora (regola Binance dal 2 mag 2025): sottostimato ×2 o ×8 proprio dove pesa. (3) **Stop
-senza scivolamento** (già K8): ~2,3 USDT per ogni 0,01% di scivolamento. (4) **Spread** plausibile ma
-misurato una volta sola, a mercato calmo, prima dell'8 set. Gate e paper restano allineati fra loro.
-**Proposta:** commissioni a 0,10% e funding con la sua scadenza vera, insieme nel bot e nel gate, con
-la data scritta. Cambiano i verdetti del gate (le coppie vicine a PF 1,25), quindi **meglio dopo le
-letture del 14 ott**, per non spostare il metro a metà misura. Prima: verificare che il `.env` della
-VPS non cambi già il valore (campo `versione` dei trade dal 1 ott). Dettaglio nel diario del 2 ott.
+Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
 
@@ -86,6 +72,22 @@ tutte le durate la differenza dal caso sta dentro il margine, il lavoro sui TP s
 e revisione critica nel diario; legata a T1 e a R1.
 
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
+
+### C5. Costi allineati a quelli veri di Binance — SÌ del proprietario il 2 ott, da fare DOPO le letture del 14 ott
+Verifica sul codice e sulle tariffe ufficiali (FAQ Binance Futures, ricontrollata da un secondo
+revisore). (1) **Commissioni troppo basse:** il modello usa 0,08% andata e ritorno
+(`BACKTEST_COST_PER_TRADE`, `executor.py:178`, `engine.py:616`, `discover_strategies.py:3617`); Binance
+USDⓈ-M al livello base fa pagare 0,05% a lato da «taker» = 0,10% (0,09% pagando in BNB). Effetto sul
+paper: +4,77 USDT su 222 trade (−79,86 invece di −75,09), ~+0,012R a trade; nel gate PF −0,03/−0,04.
+(2) **Funding giusto nel totale (−0,01 USDT), sbagliato nella struttura:** il tasso di ogni scadenza è
+trattato come se fosse ogni 8 ore (`costs.py:27-39`), ma molte monete piccole pagano ogni 4 ore e quelle
+«tirate» ogni ora (regola Binance dal 2 mag 2025): sottostimato ×2 o ×8 proprio dove pesa. (3) **Stop
+senza scivolamento** (già K8): ~2,3 USDT per ogni 0,01% di scivolamento. (4) **Spread** plausibile ma
+misurato una volta sola, a mercato calmo, prima dell'8 set. Gate e paper restano allineati fra loro.
+**Proposta:** commissioni a 0,10% e funding con la sua scadenza vera, insieme nel bot e nel gate, con
+la data scritta. Cambiano i verdetti del gate (le coppie vicine a PF 1,25), quindi **meglio dopo le
+letture del 14 ott**, per non spostare il metro a metà misura. Prima: verificare che il `.env` della
+VPS non cambi già il valore (campo `versione` dei trade dal 1 ott). Dettaglio nel diario del 2 ott.
 
 ### K9. La leva torna a 2x dopo una sola vincita
 Con peso > 0,80 una strategia torna a leva piena, e ci si arriva con 1 vinta su 1 (`adaptation.py`,

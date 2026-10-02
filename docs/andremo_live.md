@@ -2687,3 +2687,14 @@ processi) sposta la prima lettura completa verso il 20 ott a 2,5 ore al giorno (
 che il bot opera davvero (71), circa 3 volte più veloce. Corretti nel report: taglio del testo del
 fuori campione a fine parola, titolo di D8.
 
+
+### 2 ottobre: sì a C5 (dopo il 14 ott) e R1 sulle sole monete operate
+
+Sì del proprietario: «sì C5, e limita R1 alle 71 monete». **C5** va nel gruppo «dopo le letture»: commissioni
+0,10% e funding con la scadenza vera, nel bot e nel gate insieme, dopo il 14 ott, con la data scritta e il
+controllo del campo `versione` dei trade. **R1**: al prossimo lancio il piano si restringe UNA volta alle
+monete delle coppie validate (una lettura del registro; `restringi_alle_operate` in
+`scripts/replay_gate.py`). Date, semi e candidate restano; le unità già fatte di quelle monete restano, le
+altre stanno su disco ma non entrano nella lettura. La regola di R1 non cambia (scritta prima dei numeri,
+nessuna lettura ancora fatta); cambia solo l'insieme delle monete: «le monete che il bot opera» invece di
+«le prime 200 per volume». Stima: ~1/3 del lavoro, prima lettura verso il 9-10 ott (stima, da misurare).

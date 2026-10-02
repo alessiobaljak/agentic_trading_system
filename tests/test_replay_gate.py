@@ -465,9 +465,14 @@ def test_il_lancio_scrive_solo_i_suoi_file_poi_esito_parziale(monkeypatch, capsy
 def test_il_codice_non_tocca_firebase_ne_registro():
     with open(os.path.join(ROOT, "scripts", "replay_gate.py"), encoding="utf-8") as f:
         src = f.read()
-    for vietato in ("set_doc", "get_firebase", "backfill_passes", "merge_into_registry",
+    for vietato in ("set_doc", "set_rtdb", "backfill_passes", "merge_into_registry",
                     "finalizza_registro", "scrivi_righe_worker", "_disc_one", "_disc_init"):
         assert vietato not in src, vietato
+    # dal 2 ott UNA sola lettura del registro, per le monete operate (decisione del
+    # proprietario), e solo li'
+    import inspect
+    assert src.count("get_firebase") == 2           # import e chiamata, nella stessa funzione
+    assert "get_firebase" in inspect.getsource(rv.monete_operate)
     # e il caricatore solo con la fine del lancio (oggi)
     assert "load_candles(sym, cfg[\"interval\"], cfg[\"start\"], _S[\"end\"]" in src
 
@@ -490,3 +495,21 @@ def test_la_riga_della_lista_bianca():
     # le soglie della regola scritta il 1 ott (docs/andremo_live.md)
     assert math.isclose(rv.SOGLIA_FORTUNA_R, 0.10) and rv.MIN_TRADE_PASSATE == 80
     assert rv.N_DATE == 26 and rv.PASSO_GIORNI == 14 == rv.DOPO_GIORNI
+
+
+def test_restringi_alle_operate_una_volta_sola():
+    piano = {"versione": rv.VERSIONE, "universo": ["AUSDT", "BUSDT", "CUSDT"], "date": ["2026-09-17"]}
+    nuovo = rv.restringi_alle_operate(piano, ["CUSDT", "AUSDT", "ZUSDT"])
+    assert nuovo["universo"] == ["AUSDT", "CUSDT", "ZUSDT"]
+    assert nuovo["filtro"] == "monete_operate" and nuovo["universo_prima"] == 3
+    assert nuovo["date"] == piano["date"]
+    # gia' ristretto, o senza monete lette: invariato
+    assert rv.restringi_alle_operate(nuovo, ["AUSDT"]) is nuovo
+    assert rv.restringi_alle_operate(piano, None) is piano
+
+
+def test_la_lettura_conta_solo_le_unita_del_piano():
+    piano = {"universo": ["AUSDT"], "date": ["2026-09-17"]}
+    fatte = {("2026-09-17", "AUSDT"): {"stato": "ok"}, ("2026-09-17", "BUSDT"): {"stato": "ok"}}
+    assert list(rv.unita_del_piano(piano, fatte)) == [("2026-09-17", "AUSDT")]
+    assert rv.unita_del_piano(None, fatte) is fatte

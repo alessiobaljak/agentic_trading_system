@@ -106,7 +106,10 @@ def avanzamento_r1(radice: str = RADICE) -> dict | None:
     for d in date:
         cartella = os.path.join(base, "unita", str(d))
         try:
-            n = sum(1 for x in os.listdir(cartella) if x.endswith(".json"))
+            # solo le monete del piano (dal 2 ott il piano puo' essere ristretto
+            # alle monete operate: le unita' delle altre restano su disco)
+            n = sum(1 for x in os.listdir(cartella)
+                    if x.endswith(".json") and (not universo or x[:-5] in set(universo)))
         except OSError:
             n = 0
         unita += n
