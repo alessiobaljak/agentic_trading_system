@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **0. Aspettano il tuo sì** | T2 (curva del vantaggio del segnale: solo misura) | una tua risposta |
 | **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attende il riavvio del bot) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -32,7 +32,15 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-Nessuna voce in attesa del tuo sì.
+### T2. La curva del vantaggio del segnale (solo misura, proposta del 2 ott)
+Prima di toccare i TP, misurare SE e PER QUANTO i segnali delle strategie validate hanno un vantaggio:
+sui trade del motore fuori campione, il movimento medio dopo 1, 4, 12 e 24 ore (in mosse tipiche di
+24 ore della moneta) contro ingressi a caso sulla stessa moneta negli stessi giorni, con margine. Zero
+parametri nuovi, sola lettura, non tocca bot, gate né paper: si può fare subito. Dice dove va messo il
+TP (dove la curva smette di salire) o l'uscita a tempo. **Regola da scrivere prima dei numeri:** se a
+tutte le durate la differenza dal caso sta dentro il margine, il lavoro sui TP si ferma e il problema
+è l'ingresso. Contesto: domanda del proprietario «un trader quant serio come costruisce i TP?» (2 ott)
+e revisione critica nel diario; legata a T1 e a R1.
 
 ## 1. In lavorazione
 
@@ -124,7 +132,21 @@ casuali negli ultimi 90 giorni della stessa moneta, entro 96 candele e prima del
 massimo a favore mediano in 24 ore va da 1,6% a 5,5%. Nel paper il 1% dei trade prende 2 o 3 gradini.
 Il TP3 (40% della posizione) sta spesso oltre quanto la moneta si muove in un giorno: la scala in R
 non guarda l'orizzonte di 24 ore. Idea da dare al gate dopo le letture: candidate di scala tarate sul
-movimento tipico della moneta nell'orizzonte del trade. Note: la riga «0 con almeno 5 trade» del log del gate (ops 0411) conta solo la corsia urgente, non le
+movimento tipico della moneta nell'orizzonte del trade. **Revisione del 2 ott (domanda «come costruisce i TP un quant serio?»):** i TP vanno misurati sul
+movimento della moneta nel tempo del trade, non sullo stop (due «orologi» diversi), e scelti sul
+guadagno medio, non sul rapporto rischio/rendimento. Oggi i TP decidono poco: l'89% dei trade non ne
+tocca nessuno; decidono lo stop (44% delle uscite, −256,82 USDT) e la protezione del profitto (45%,
++98,61 USDT: `docs/state.md` del 1 ott 23:53 UTC). Attenzione: la protezione si arma a metà del
+primo TP (`exit_logic.py:175-188`), quindi spostare il TP1 sposta anche lei. In ordine, dopo le
+letture e solo se T2 mostra un vantaggio: (1) scala in «mosse tipiche di 24 ore» (ATR a 1 ora x √24),
+UNA PER FAMIGLIA invece che per coppia, 2 candidate scritte prima, convertite in R all'ingresso
+(l'executor non cambia), livello di armo della protezione fermo in R; prova contro la scala di oggi
+nelle finestre e su date mai viste (R1); si scarta se non vince del 10% in 2 finestre su 3 o se
+cambia segno spostando i TP del ±25%; (2) per le strategie di ritorno alla media (~70% dei trade
+simulati delle passate, ops 0396) TP sulla media (banda di mezzo fissata all'ingresso), stessa prova.
+Rinviate: ricerca congiunta scala/pareggio/keep (3-4 volte il tempo del giro), ricerca delle quote,
+trailing «chandelier» per il trend. Nota: le scale ricavate dal paper (`ladder_from_mfe`) imparano
+dalle uscite di oggi, che tagliano l'mfe: da togliere quando arriva (1). Note: la riga «0 con almeno 5 trade» del log del gate (ops 0411) conta solo la corsia urgente, non le
 strategie con scala propria (11 il 1 ott, ops 0386); il freno di deriva confronta l'mfe con il primo
 gradino GLOBALE (1,5R), non con quello della coppia (`drift.py:575-576`).
 
