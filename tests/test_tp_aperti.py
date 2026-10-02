@@ -1,4 +1,8 @@
 """I TP delle posizioni aperte sono raggiungibili? (2 ott 2026)."""
+import json
+import time
+from datetime import datetime, timedelta, timezone
+
 import scripts.tp_aperti as tp
 
 
@@ -57,3 +61,22 @@ def test_stampa_senza_cache_e_senza_posizioni(capsys):
     tp.stampa({"AUSDT": _pos()}, [{"scale_stage_reached": 1}], carica=lambda s, t: c)
     out = capsys.readouterr().out
     assert "TP prima dello stop" in out and "Nel paper" in out
+
+
+def test_carica_cache_preferisce_il_file_che_copre_i_giorni(tmp_path, monkeypatch):
+    """La sezione A5 di mfe_report scrive nella cache file corti con la fine piu'
+    recente: non devono vincere sul file lungo del gate (2 ott 2026, ops 0419)."""
+    from backtesting import data_loader as dl
+    from scripts import tp_aperti as tp
+
+    monkeypatch.setattr(dl, "_CACHE_DIR", str(tmp_path))
+    oggi = datetime.now(timezone.utc)
+    t0 = int(time.time()) // 900 * 900
+    righe = [[(t0 - 900 * k) * 1000, 1.0, 1.0, 1.0, 1.0, 1.0] for k in range(120 * 96, 0, -1)]
+    g = lambda d: (oggi + timedelta(days=d)).strftime("%Y-%m-%d")  # noqa: E731
+    (tmp_path / f"AUSDT_15m_2022-01-01_{g(0)}.json").write_text(
+        json.dumps({"source": "binance", "rows": righe}))
+    (tmp_path / f"AUSDT_15m_{g(-20)}_{g(1)}.json").write_text(
+        json.dumps({"source": "binance", "rows": righe[-20 * 96:]}))
+    c = tp.carica_cache("AUSDT", "15m", 60)
+    assert len(c) == 60 * 96 + tp.ORIZZONTE

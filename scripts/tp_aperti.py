@@ -22,6 +22,8 @@ from __future__ import annotations
 import json
 import os
 import statistics
+import time
+from datetime import datetime, timezone
 
 #: i giorni di storia su cui si misura
 GIORNI = 90
@@ -117,8 +119,17 @@ def carica_cache(symbol: str, timeframe: str, giorni: int = GIORNI):
         return None
     if not nomi:
         return None
-    # il file con la data di fine piu' recente (l'ultimo pezzo del nome)
-    nomi.sort(key=lambda n: n.rsplit("_", 1)[-1], reverse=True)
+    # prima i file che COPRONO i giorni chiesti, poi la fine piu' recente (2 ott
+    # 2026): la sezione A5 di mfe_report scrive nella stessa cartella file corti
+    # (da 3 giorni prima del primo ingresso a domani) con la fine piu' recente;
+    # ops 0419: HEMIUSDT letto su 601 ingressi invece di 8640
+    da = datetime.fromtimestamp(time.time() - giorni * 86400,
+                                tz=timezone.utc).strftime("%Y-%m-%d")
+
+    def _chiave(n: str) -> tuple:
+        inizio, fine = n[:-len(".json")].rsplit("_", 2)[-2:]
+        return (inizio <= da, fine)
+    nomi.sort(key=_chiave, reverse=True)
     candele = dl._cache_read(os.path.join(dl._CACHE_DIR, nomi[0]))
     if not candele:
         return None

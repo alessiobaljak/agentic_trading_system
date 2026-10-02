@@ -2609,3 +2609,13 @@ Domanda: i segnali delle strategie hanno un vantaggio sul caso, e per quanto tem
   ultimi giorni (scelte anche su quei giorni: misura ottimista).
 * Limiti dichiarati: il paper ha ~220 trade su ~16 giorni di un solo mercato; le uscite di oggi non
   toccano la misura (si guarda il prezzo, non il trade).
+**T2, come la regola si applica (scritto PRIMA del primo lancio sui dati veri, revisione del 2 ott):**
+«ingressi a caso negli stessi giorni» = nelle 12 ore DOPO il segnale, non prima: la direzione del
+segnale è decisa coi prezzi fino al segnale, e un ingresso a caso precedente con quella direzione
+conoscerebbe il proprio futuro (su prezzi a caso, con la direzione che segue le ultime 4 ore, il caso a
+±12 ore dava «peggio del caso» 100 volte su 100). «Dove la curva smette di salire» = dalla prima durata
+col margine sopra lo 0, la prima dopo cui il passo successivo non sale oltre il margine. Limite noto:
+su prezzi a caso la regola dice «nessun vantaggio» ~75-81 volte su 100 (4 durate, 16 giornate): un
+esito a una sola durata va letto con cautela. Corretto anche un difetto che toccava la tabella dei TP
+del 2 ott (ops 0419): la lettura della cache prendeva i file corti scritti dalla sezione A5 invece della
+storia del gate (HEMI 601 ingressi invece di 8640, SYRUP 1653).

@@ -352,6 +352,13 @@ def main() -> int:
         stampa_tp_aperti(fb.get_rtdb("/positions"), trades)
     except Exception as exc:  # noqa: BLE001
         print(f"\n[mfe] sezione TP delle posizioni aperte saltata: {exc}")
+    # --- 5) la curva del vantaggio del segnale (T2, 2 ott 2026) -------------- #
+    # ultima: l'esito sta nell'ultima riga, la coda che l'agente ops conserva
+    try:
+        from scripts.curva_vantaggio import stampa as stampa_curva
+        stampa_curva(trades)
+    except Exception as exc:  # noqa: BLE001
+        print(f"\n[mfe] sezione curva del vantaggio (T2) saltata: {exc}")
     return 0
 
 
