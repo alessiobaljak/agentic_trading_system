@@ -14,8 +14,8 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | T2 (curva del vantaggio del segnale: solo misura) | una tua risposta |
-| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attende il riavvio del bot) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: sì del 2 ott) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -32,15 +32,7 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-### T2. La curva del vantaggio del segnale (solo misura, proposta del 2 ott)
-Prima di toccare i TP, misurare SE e PER QUANTO i segnali delle strategie validate hanno un vantaggio:
-sui trade del motore fuori campione, il movimento medio dopo 1, 4, 12 e 24 ore (in mosse tipiche di
-24 ore della moneta) contro ingressi a caso sulla stessa moneta negli stessi giorni, con margine. Zero
-parametri nuovi, sola lettura, non tocca bot, gate né paper: si può fare subito. Dice dove va messo il
-TP (dove la curva smette di salire) o l'uscita a tempo. **Regola da scrivere prima dei numeri:** se a
-tutte le durate la differenza dal caso sta dentro il margine, il lavoro sui TP si ferma e il problema
-è l'ingresso. Contesto: domanda del proprietario «un trader quant serio come costruisce i TP?» (2 ott)
-e revisione critica nel diario; legata a T1 e a R1.
+Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
 
@@ -68,6 +60,16 @@ motivo d'uscita nel motore. I punti 11 e 12 (gate) partono da soli al prossimo g
 riavvio del bot. **Resta da fare:** gli scarti silenziosi sono contati ma non simulati (costerebbe una
 lettura Firestore per segnale); `data/gate_storia` non ha una pulizia automatica (~1-4,5 MB al
 giorno, stima): da aggiungere se il disco lo chiede.
+
+### T2. La curva del vantaggio del segnale (solo misura) — SÌ del proprietario il 2 ott, in lavorazione (regola nel diario del 2 ott)
+Prima di toccare i TP, misurare SE e PER QUANTO i segnali delle strategie validate hanno un vantaggio:
+sui trade del motore fuori campione, il movimento medio dopo 1, 4, 12 e 24 ore (in mosse tipiche di
+24 ore della moneta) contro ingressi a caso sulla stessa moneta negli stessi giorni, con margine. Zero
+parametri nuovi, sola lettura, non tocca bot, gate né paper: si può fare subito. Dice dove va messo il
+TP (dove la curva smette di salire) o l'uscita a tempo. **Regola da scrivere prima dei numeri:** se a
+tutte le durate la differenza dal caso sta dentro il margine, il lavoro sui TP si ferma e il problema
+è l'ingresso. Contesto: domanda del proprietario «un trader quant serio come costruisce i TP?» (2 ott)
+e revisione critica nel diario; legata a T1 e a R1.
 
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
 

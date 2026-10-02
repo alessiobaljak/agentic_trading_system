@@ -2588,3 +2588,24 @@ ritardo per le ipotesi urgenti una volta al giorno, per ~6-8 giorni (stima). Spe
 cancellare il file `attivo` o `R1_SALTA_GIRO=0`. Possibile effetto collaterale: l'anomalia
 GATE_IN_RITARDO può diventare gialla nel pomeriggio (6 ore fra due giri). Prima lettura completa di R1
 stimata verso il 9 ottobre.
+
+### 2 ottobre, mattina: T2, la curva del vantaggio del segnale — REGOLA scritta PRIMA dei numeri
+
+Sì del proprietario («fai la misura del punto 1… la mia idea alla fine è operare più come un quant»).
+Domanda: i segnali delle strategie hanno un vantaggio sul caso, e per quanto tempo dura?
+* **Campione pulito (decide):** i trade VERI del paper (mai usati per scegliere niente), ingresso e
+  verso registrati. Per ognuno, il movimento del prezzo dopo 1, 4, 12 e 24 ore dall'ingresso (4, 16,
+  48, 96 candele da 15 minuti), col segno della direzione, misurato in «mosse tipiche di 24 ore»
+  della moneta (calcolate sui 30 giorni PRIMA dell'ingresso, senza guardare avanti).
+* **Confronto:** ingressi a caso sulla stessa moneta negli stessi giorni (stessa direzione), stessa
+  misura. Vantaggio = media dei segnali − media del caso, a ogni durata.
+* **Margine:** intervallo al 95% con ricampionamento a blocchi di giornate (i trade dello stesso giorno
+  non sono indipendenti).
+* **Esiti:** se a TUTTE le durate il vantaggio sta dentro il margine → «nessun vantaggio misurabile»:
+  il lavoro sui TP si ferma, il problema è l'ingresso (o il gate: R1). Se a qualche durata è sopra il
+  margine → «c'è un vantaggio»: il TP va dove la curva smette di salire, e si passa a T1 dopo le
+  letture del 7-14 ott. Se è sotto il margine → «i segnali fanno peggio del caso»: lo si dice per primo.
+* **Solo informativo, non decide:** la stessa curva sui segnali del motore delle coppie validate negli
+  ultimi giorni (scelte anche su quei giorni: misura ottimista).
+* Limiti dichiarati: il paper ha ~220 trade su ~16 giorni di un solo mercato; le uscite di oggi non
+  toccano la misura (si guarda il prezzo, non il trade).
