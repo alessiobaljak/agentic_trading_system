@@ -345,6 +345,13 @@ def main() -> int:
         sezione_strutturale(usable, righe_max=args.limit)
     except Exception as exc:  # noqa: BLE001
         print(f"\n[mfe] sezione livello strutturale saltata: {exc}")
+    # --- 4) i TP delle posizioni APERTE sono raggiungibili? (2 ott 2026) ------- #
+    # in coda perche' l'agente ops tiene testa e coda dei report lunghi
+    try:
+        from scripts.tp_aperti import stampa as stampa_tp_aperti
+        stampa_tp_aperti(fb.get_rtdb("/positions"), trades)
+    except Exception as exc:  # noqa: BLE001
+        print(f"\n[mfe] sezione TP delle posizioni aperte saltata: {exc}")
     return 0
 
 
