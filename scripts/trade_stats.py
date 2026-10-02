@@ -1087,6 +1087,88 @@ def print_funzioni_servono(trades_tutti: list[dict], decisioni_ombra: list[dict]
           "altrimenti «non si vede ancora»; sotto 10 trade per gruppo «campione piccolo»")
 
 
+# --------------------------------------------------------------------------- #
+# L'AFFOLLAMENTO: quante posizioni nello stesso verso, insieme (2 ott 2026)   #
+# --------------------------------------------------------------------------- #
+# Il 2 ott alle 20:47 il bot ha aperto 10 long in 20 secondi (ops 0442-0443):
+# in parita' apre tutti i segnali validi del ciclo, il tetto di 5 posizioni e'
+# spento e il tetto per direzione (3% in rischio) con le puntate ridotte ammette
+# ~20 posizioni (backlog I6). Qui si MISURA, per decidere dopo le letture del
+# 7-14 ott: per ogni trade, quante posizioni nello stesso verso erano aperte al
+# suo ingresso (lui compreso), e come sono finiti i trade per fascia; piu' gli
+# «episodi» (>= 6 aperture nello stesso verso entro 5 minuti).
+#: le fasce di affollamento (posizioni nello stesso verso, trade compreso)
+FASCE_AFFOLLAMENTO = ((1, 2, "1-2"), (3, 5, "3-5"), (6, 10 ** 6, "6+"))
+#: una «ondata»: tante aperture nello stesso verso entro questi secondi
+ONDATA_S = 300
+ONDATA_MIN = 6
+
+
+def affollamento_report(trades: list[dict]) -> dict:
+    """Per fascia di affollamento: n, vinti, PnL, R netto medio (drift.r_multiplo);
+    e gli episodi (ondate) con data, verso, quante e PnL totale. Pura."""
+    from bot.learning.drift import r_multiplo
+    righe = []
+    for t in trades or []:
+        en, ex, d = _entry_ts(t), _uscita_ts(t), _dir(t)
+        if en is None or ex is None or d not in ("long", "short"):
+            continue
+        righe.append((en, ex, d, t))
+    fasce = {et: {"n": 0, "vinti": 0, "pnl": 0.0, "r": []} for _a, _b, et in FASCE_AFFOLLAMENTO}
+    for en, ex, d, t in righe:
+        insieme = sum(1 for en2, ex2, d2, _ in righe if d2 == d and en2 <= en < ex2)
+        for a, b, et in FASCE_AFFOLLAMENTO:
+            if a <= insieme <= b:
+                f = fasce[et]
+                f["n"] += 1
+                pnl = float(t.get("pnl", 0) or 0)
+                f["pnl"] += pnl
+                f["vinti"] += 1 if pnl > 0 else 0
+                r = r_multiplo(t)
+                if r is not None:
+                    f["r"].append(r)
+                break
+    out = {et: {"n": f["n"], "vinti": f["vinti"], "pnl": round(f["pnl"], 2),
+                "n_r": len(f["r"]),
+                "r_medio": round(sum(f["r"]) / len(f["r"]), 3) if f["r"] else None}
+           for et, f in fasce.items()}
+    # le ondate: aperture nello stesso verso raggruppate entro ONDATA_S
+    ondate = []
+    for d in ("long", "short"):
+        ap = sorted(((en, t) for en, _ex, d2, t in righe if d2 == d), key=lambda x: x[0])
+        i = 0
+        while i < len(ap):
+            j = i
+            while j + 1 < len(ap) and ap[j + 1][0] - ap[i][0] <= ONDATA_S:
+                j += 1
+            gruppo = ap[i:j + 1]
+            if len(gruppo) >= ONDATA_MIN:
+                ondate.append({"quando": giorno_locale(ap[i][0]) + " " + datetime.fromtimestamp(
+                    ap[i][0], timezone.utc).astimezone().strftime("%H:%M"), "verso": d,
+                    "n": len(gruppo),
+                    "pnl": round(sum(float(t.get("pnl", 0) or 0) for _, t in gruppo), 2)})
+            i = j + 1
+    ondate.sort(key=lambda o: o["quando"])
+    return {"fasce": out, "ondate": ondate}
+
+
+def print_affollamento(rep: dict) -> None:
+    print("\nAFFOLLAMENTO (2 ott 2026): posizioni nello stesso verso aperte all'ingresso del trade, "
+          "trade compreso. Solo misura: il tetto per direzione (3% in rischio) non cambia qui")
+    print(f"  {'insieme':<9}{'trade':>7}{'vinti':>7}{'PnL':>9}{'R medio':>9}")
+    for _a, _b, et in FASCE_AFFOLLAMENTO:
+        f = rep["fasce"][et]
+        r = "—" if f["r_medio"] is None else f"{f['r_medio']:+.3f}"
+        print(f"  {et:<9}{f['n']:>7}{f['vinti']:>7}{f['pnl']:>+9.2f}{r:>9}")
+    if rep["ondate"]:
+        print(f"  ondate (>= {ONDATA_MIN} aperture nello stesso verso entro {ONDATA_S // 60} minuti, ora "
+              f"italiana):")
+        for o in rep["ondate"][-10:]:
+            print(f"    {o['quando']}  {o['verso']:<5} {o['n']:>3} aperture  PnL {o['pnl']:+.2f}")
+    else:
+        print(f"  nessuna ondata di {ONDATA_MIN}+ aperture nello stesso verso entro {ONDATA_S // 60} minuti")
+
+
 def main() -> int:
     fb = get_firebase()
     trades_letti = fb.query_collection("trades", order_by="exit_ts")
@@ -1365,6 +1447,9 @@ def main() -> int:
 
     # STOP GIORNALIERO E FRENO DI SERIE SUL PAPER (1 ott 2026, H3/H4): solo misura
     print_rigioco_paper(trades)
+
+    # L'AFFOLLAMENTO (2 ott 2026): quante posizioni nello stesso verso insieme
+    print_affollamento(affollamento_report(trades))
 
     # LE FUNZIONI SERVONO? (1 ott 2026): due letture in piu' (le decisioni
     # dell'ombra, ~240 documenti, e le spec), fail-open

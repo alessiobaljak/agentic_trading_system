@@ -16,7 +16,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 |---|---|---|
 | **0. Aspettano il tuo sì** | nessuna | una tua risposta |
 | **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
-| **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
+| **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
 | **5. Solo se serve** | D1 | lo spazio del registro che finisce |
@@ -89,6 +89,14 @@ la data scritta. Cambiano i verdetti del gate (le coppie vicine a PF 1,25), quin
 letture del 14 ott**, per non spostare il metro a metà misura. Prima: verificare che il `.env` della
 VPS non cambi già il valore (campo `versione` dei trade dal 1 ott). Dettaglio nel diario del 2 ott.
 
+### I6. Troppe posizioni nello stesso verso insieme (misura dal 2 ott)
+Il 2 ott alle 20:47 10 long aperti in 20 s (ops 0442-0443): in parità il bot apre tutti i segnali
+validi, il tetto di 5 è spento, il tetto per direzione è in rischio (3%) e con le puntate ridotte
+ammette ~20 posizioni; la correlazione blocca solo chi arriva dopo. Nella simulazione il tetto per
+direzione alza il PnL e abbassa il drawdown (ops 0387). **Misura** nel report `trades`, sezione
+AFFOLLAMENTO (R per fascia 1-2 / 3-5 / 6+, ondate). **Da decidere dopo le letture:** un tetto sul
+NUMERO di posizioni per verso (es. 5) o un tetto per direzione che non si riduca col freno.
+
 ### K9. La leva torna a 2x dopo una sola vincita
 Con peso > 0,80 una strategia torna a leva piena, e ci si arriva con 1 vinta su 1 (`adaptation.py`,
 `risk_manager.py`, `metrics.py`). Il 1 ott XPL e TST erano a 2x. È fortuna amplificata e non passa
@@ -106,7 +114,7 @@ Oggi la recenza (emivita 180 giorni) pesa solo nella scelta di scala, break-even
 del gate no, quindi chi entra non cambia. Pesare anche la validazione cambia quali coppie passano:
 si decide col tasso di passaggio prima/dopo come metro.
 
-### B8. Le varianti giudicate senza i giorni del paper (seconda metà)
+### B8. Le varianti giudicate senza i giorni del paper (seconda metà) — dal 2 ott le varianti dai referti sono SPENTE (DISCOVERY_VARIANTI_REFERTI=false): da riaccendere solo col taglio di pre-registrazione
 Le varianti nate dai referti dovrebbero essere giudicate solo sui dati PRIMA del paper che le ha
 fatte nascere (pre-registrazione). Il taglio è spento dal 24 set (`DISCOVERY_VARIANTI_TRONCATE=false`)
 perché raddoppiava la memoria dei worker e ha ucciso quattro giri. Finché è spento, le figlie si
@@ -124,7 +132,7 @@ state alleggerite prima della promozione. Per loro deriva e veto di regime non a
 riempiono da sole quando ripassano il gate; riempirle prima riaccenderebbe il veto di regime, che è un
 freno: per questo dopo le letture.
 
-### D6. Le leve della spesa AI
+### D6. Le leve della spesa AI — il 2 ott SPENTE idee AI e autopsia (AI_HYPOTHESES_ENABLED=false): spesa attesa ~0 $; resta aperto solo se si riaccendono
 Spesa misurata il 30 set: 2,80 $ in 57 chiamate (idee 55%); con filtro monete e ombra spenti dal 30
 sera, stima circa 2,10 $ al giorno. Leve, nessuna fatta: (1) idee e autopsia una volta per giro invece
 di due (~−0,95 $/giorno, stima); (2) idee solo al giro completo (~−1,3 $/giorno, ma meno idee);

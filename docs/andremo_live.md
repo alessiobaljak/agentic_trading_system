@@ -2719,3 +2719,19 @@ si fa allora, ma il criterio è questo. Se sono abbastanza, si va fino in fondo.
 0 su 14.150 (ops 0439: bocciate per criterio total_return 12.622, trades 706, recovery 486) è plausibile
 per candidate casuali nuove o un difetto di R1 (storia minima alle date vecchie, severità dell'holdout).
 Fino ad allora R1 resta com'è (un giro del gate al giorno, 4 processi).
+
+### 2 ottobre, sera: affollamento misurato; idee AI e varianti dai referti SPENTE (decisione del proprietario)
+
+Alle 20:47 il bot ha aperto 10 long in 20 secondi (ops 0442-0443): in parità apre tutti i segnali validi
+del ciclo, il tetto di 5 posizioni è spento e il tetto per direzione (3% in rischio) con le puntate ridotte
+(freno ×0,5, declassate ×0,25) ammetteva 1,55%; il filtro di correlazione ha fermato solo RSR. Non è un
+guasto, è il rischio «un'unica scommessa sul mercato» (I6). **Fatto:** sezione «AFFOLLAMENTO» nel
+report `trades` (posizioni nello stesso verso all'ingresso, per fascia 1-2 / 3-5 / 6+ con n, vinti, PnL, R
+medio; e le «ondate» di 6+ aperture entro 5 minuti). Solo misura: si decide dopo le letture del 7-14 ott.
+**Spente** (sì del proprietario, «se pensi che non diano valore»): le idee dell'AI con l'autopsia
+(`AI_HYPOTHESES_ENABLED=false`: 0 validate su 103 spec AI, ops 0423; ~2,1 $ al giorno fra idee 1,54 e
+autopsia 0,56, ops 0390) e le varianti dai referti (`DISCOVERY_VARIANTI_REFERTI=false`: 0 promosse da
+quando esistono, ops 0391/0423; e il taglio di pre-registrazione era spento, B8). Restano: le ipotesi dei
+referti scritte nella storia (J9), la corsia urgente `scala_stretta` (I4/I4bis), il contatore ORIGINI.
+Partono dal prossimo giro del gate (nessun riavvio). Spesa AI attesa: ~0 $ al giorno sulla VPS. Si
+riaccendono quando ci sarà un vantaggio misurato su cui lavorare, o se R1 dice che il gate sceglie bene.

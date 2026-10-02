@@ -3853,20 +3853,28 @@ def main() -> int:
         # schema e con consigli; i consigli entrano nel contesto delle proposte di
         # QUESTO giro. Fail-open: senza AI o senza autopsia si propone come prima.
         from bot.ai.autopsia import analizza as ai_autopsia, contesto_per_le_proposte
-        try:
-            autopsia = ai_autopsia(fb, interval=args.interval)
-        except Exception as exc:  # noqa: BLE001
-            autopsia = None
-            print(f"[ai-autopsia] saltata ({str(exc)[:80]})")
+        autopsia = None
+        if settings.AI_HYPOTHESES_ENABLED:
+            try:
+                autopsia = ai_autopsia(fb, interval=args.interval)
+            except Exception as exc:  # noqa: BLE001
+                autopsia = None
+                print(f"[ai-autopsia] saltata ({str(exc)[:80]})")
         if autopsia:
             print(f"[ai-autopsia] schema: {autopsia.get('schema', '')[:300]}")
             print(f"[ai-autopsia] consigli: {autopsia.get('consigli', '')[:300]}")
-        ai_specs = ai_propose(min(settings.AI_HYPOTHESES_PER_RUN, args.generate),
-                              market_context=f"Timeframe operativo: {args.interval}. "
-                                             f"Universo: crypto futures USDT-M su Binance."
-                                             + (f"\n\n{prove}" if prove else "")
-                                             + (f"\n\n{contesto_per_le_proposte(autopsia)}"
-                                                if autopsia else ""))
+        if settings.AI_HYPOTHESES_ENABLED:
+            ai_specs = ai_propose(min(settings.AI_HYPOTHESES_PER_RUN, args.generate),
+                                  market_context=f"Timeframe operativo: {args.interval}. "
+                                                 f"Universo: crypto futures USDT-M su Binance."
+                                                 + (f"\n\n{prove}" if prove else "")
+                                                 + (f"\n\n{contesto_per_le_proposte(autopsia)}"
+                                                    if autopsia else ""))
+        else:
+            # 2 ott 2026 (decisione del proprietario): niente idee AI ne' autopsia;
+            # la quota resta casuale, come «senza AI»
+            ai_specs = []
+            print("[discover] idee AI e autopsia SPENTE (AI_HYPOTHESES_ENABLED=false, 2 ott 2026)")
         if ai_specs:
             print(f"[discover] {len(ai_specs)} ipotesi AI (motivate) + "
                   f"{args.generate - len(ai_specs)} casuali")
@@ -3895,9 +3903,16 @@ def main() -> int:
         reg = azzera_sessione(fb, existing, reg, _ora)
         doc_referti = leggi_referti(fb)
         esiti_referti: dict = {}
-        varianti = varianti_dai_referti(fb, existing, args.interval,
-                                        pairs=decode_pairs(reg.get("pairs")), doc=doc_referti,
-                                        esiti=esiti_referti)
+        if settings.DISCOVERY_VARIANTI_REFERTI:
+            varianti = varianti_dai_referti(fb, existing, args.interval,
+                                            pairs=decode_pairs(reg.get("pairs")), doc=doc_referti,
+                                            esiti=esiti_referti)
+        else:
+            # 2 ott 2026 (decisione del proprietario): 0 promosse da quando
+            # esistono; le ipotesi dei referti restano scritte (storia J9), la
+            # corsia urgente scala_stretta resta
+            varianti = []
+            print("[discover] varianti dai referti SPENTE (DISCOVERY_VARIANTI_REFERTI=false, 2 ott 2026)")
         # LA STORIA DELLE IPOTESI (26 set 2026, J9): le ipotesi nuove nascono
         # qui (anche prima che il bot scriva la storia dopo i referti) e le
         # figlie create o scartate in questo giro lasciano il loro esito

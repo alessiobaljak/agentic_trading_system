@@ -92,6 +92,18 @@ class Settings:
     # conto del confronto multiplo, cioe' una probabilita' in piu' di promuovere
     # un fortunato. Il resto delle spec resta casuale (esplorazione).
     AI_HYPOTHESES_PER_RUN: int = int(os.getenv("AI_HYPOTHESES_PER_RUN", "20"))
+    # LE IDEE DELL'AI SPENTE (2 ott 2026, decisione del proprietario «spegni le
+    # idee dell'AI … se pensi che non diano valore»): 0 validate su 103 spec AI
+    # nel registro (ops 0423), 1,54 $ al giorno (ops 0390). Con questo a false la
+    # discovery non chiede proposte ne' autopsia (che serve solo alle proposte);
+    # la quota resta casuale, come «senza AI». Riaccendere: AI_HYPOTHESES_ENABLED=true.
+    AI_HYPOTHESES_ENABLED: bool = os.getenv("AI_HYPOTHESES_ENABLED", "false").lower() == "true"
+    # LE VARIANTI DAI REFERTI SPENTE (2 ott 2026, stessa decisione): 0 promosse
+    # da quando esistono (ops 0423, 0391) e il taglio di pre-registrazione e'
+    # spento (B8), quindi le figlie si giudicano anche sui giorni che le hanno
+    # generate. La corsia urgente `scala_stretta` (I4/I4bis) NON e' una variante e
+    # resta. Riaccendere: DISCOVERY_VARIANTI_REFERTI=true.
+    DISCOVERY_VARIANTI_REFERTI: bool = os.getenv("DISCOVERY_VARIANTI_REFERTI", "false").lower() == "true"
     # filtro di contesto sull'universo: scarta le coin su cui non vale la pena
     # spendere validazione. FAIL-OPEN: senza AI non scarta nulla.
     # 30 set 2026, si' del proprietario («filtro spegnilo tu»): default SPENTO. Giudicava
