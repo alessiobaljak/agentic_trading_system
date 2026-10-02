@@ -118,7 +118,13 @@ letture (toccano le uscite): (a) misurare nel paper le 5 coppie con scala dal pa
 le quote 30/30/40, oggi fisse; (d) le esplorative usano sempre la scala globale 1,5/3/5; (e) la scala
 globale dal paper mescola i timeframe; (f) multipli scelti all'apertura dalle condizioni del momento
 (volatilità, ADX) — solo se passa dal gate: i TP sui livelli del grafico sono già stati smentiti (A5).
-Note: la riga «0 con almeno 5 trade» del log del gate (ops 0411) conta solo la corsia urgente, non le
+**Misura del 2 ott (ops 0419, sezione nuova del report `mfe`)** sulle 7 posizioni aperte: da ingressi
+casuali negli ultimi 90 giorni della stessa moneta, entro 96 candele e prima dello stop, il TP3 arriva
+0-16% delle volte (CROSS a +23,7%: 4%; ENA a −12,4%: 0%; HUMA a −12,8%: 1%) e il TP2 5-23%; il
+massimo a favore mediano in 24 ore va da 1,6% a 5,5%. Nel paper il 1% dei trade prende 2 o 3 gradini.
+Il TP3 (40% della posizione) sta spesso oltre quanto la moneta si muove in un giorno: la scala in R
+non guarda l'orizzonte di 24 ore. Idea da dare al gate dopo le letture: candidate di scala tarate sul
+movimento tipico della moneta nell'orizzonte del trade. Note: la riga «0 con almeno 5 trade» del log del gate (ops 0411) conta solo la corsia urgente, non le
 strategie con scala propria (11 il 1 ott, ops 0386); il freno di deriva confronta l'mfe con il primo
 gradino GLOBALE (1,5R), non con quello della coppia (`drift.py:575-576`).
 
