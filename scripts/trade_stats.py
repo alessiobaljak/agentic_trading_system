@@ -32,7 +32,7 @@ from statistics import mean, median
 from bot.config import settings
 from bot.core.firebase_client import get_firebase
 from bot.core.models import Regime
-from bot.core.tempo import giorno_locale
+from bot.core.tempo import fuso, giorno_locale
 from bot.learning.metrics import (KEEP_STRATEGIA_MIN_VERDETTI, conta_verdetti_strategia,
                                   proposta_keep_strategia, soldi_sul_tavolo)
 from bot.orchestrator.orchestrator import Orchestrator
@@ -1143,8 +1143,9 @@ def affollamento_report(trades: list[dict]) -> dict:
                 j += 1
             gruppo = ap[i:j + 1]
             if len(gruppo) >= ONDATA_MIN:
+                # ora italiana davvero (3 ott 2026: astimezone() senza fuso dava l'ora della VPS, UTC)
                 ondate.append({"quando": giorno_locale(ap[i][0]) + " " + datetime.fromtimestamp(
-                    ap[i][0], timezone.utc).astimezone().strftime("%H:%M"), "verso": d,
+                    ap[i][0], fuso()).strftime("%H:%M"), "verso": d,
                     "n": len(gruppo),
                     "pnl": round(sum(float(t.get("pnl", 0) or 0) for _, t in gruppo), 2)})
             i = j + 1

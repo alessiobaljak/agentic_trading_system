@@ -7,6 +7,14 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-03
+* Lettura ufficiale del 3 ott: le declassate (−0,131R su 70) contro le attive (+0,127R su 33) fanno −0,258R con margine ±0,458R → «non si decide» (ops 0445). Il quarto di puntata ha risparmiato 29,04 USDT, ma non si può dire che scelga trade peggiori.
+* Lo «0 promosse» di R1 su 16.000 candidate (ops 0458) è sospetto ma non dimostrato: il gate vero passa lo 0,19% di un mix di 92 strategie (39 casuali nuove, 28 mutazioni dei quasi-passaggi, 25 rivalutate; 44/22.632, ops 0448/0450) e non stampa quante delle 44 siano casuali. Le due date complete sono recenti (17 e 3 set), quindi non è «storia corta». Si decide solo a parità di candidate (R2).
+* R1 lavora 2,5 ore a lancio per costruzione (`BUDGET_S`): ieri 315 unità in ~2,4 ore di calcolo, poi fermo fino al lancio di stamattina. A 200 monete restano ~36 ore (ops 0458): la lettura del 10 ott non è raggiungibile senza la restrizione alle monete operate.
+* Metà degli stop sono ingressi sbagliati dall'inizio: 51 su 107 (48%) non vanno mai a favore di 0,25R, e dei 7 stop nuovi 5 sono così (ops 0451 vs 0426). Il selettore in ombra non li distingue: p media 0,649 nei vinti contro 0,648 nei persi, correlazione +0,003 su 166 (ops 0445).
+* L'ondata di 10 long del 2 ott è a +4,27 USDT sulle 8 chiuse (ops 0445) e la fascia «6+ posizioni nello stesso verso» è l'unica in R positivo (+0,026 su 11, contro −0,100 su 137 e −0,125 su 90). Su questi numeri l'affollamento non è dove si perde; campione piccolo.
+* Il motore dopo la validazione resta a −0,03R, ora su 130 segnali ±0,18 (ops 0454; ieri 106 ±0,21): il margine si stringe e il numero non si muove.
+
 ## 2026-10-02
 * T2: i segnali del paper non hanno un vantaggio misurabile sul caso. Il prezzo dopo 1, 4, 12 e 24
   ore dall'ingresso non si distingue da ingressi a caso sulla stessa moneta e direzione, nelle 12 ore

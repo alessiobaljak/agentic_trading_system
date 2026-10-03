@@ -6,7 +6,7 @@ nel report giornaliero in dashboard. Formato di ogni riga: `| AAAA-MM-GG | cosa 
 
 | Data | Cosa si legge | Regola |
 |---|---|---|
-| 2026-10-03 | Declassate contro attive (report trades, DECLASSATE) | regola del 3 ott, diario del 30 set |
+| 2026-10-03 | Declassate contro attive (report trades, DECLASSATE) — LETTA il 3 ott: NON SI DECIDE (declassate −0,131R su 70 contro attive +0,127R su 33, differenza −0,258R, margine ±0,458R; ops 0445); si rilegge il 14 ott con le altre | regola del 3 ott, diario del 30 set |
 | 2026-10-07 | Fuori campione: il problema è il gate o il bot? (report portafoglio) | regole del 7 e 14 ott, diario del 30 set |
 | 2026-10-10 | R1, il gate rigiocato nel passato (prima lettura completa, STIMA: dal 2 ott sulle sole monete operate, ~1/3 del lavoro, 2,5 ore al giorno) | regola R1, diario del 1 ott |
 | 2026-10-10 | Varianti dai referti e ipotesi d'ingresso (J9, I4ter) | backlog archivio |
