@@ -14,8 +14,8 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | R2 (R1 giudica come il gate vero?) | una tua risposta |
-| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), R2 (taratura di R1: sì del 3 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -32,7 +32,11 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-### R2. Taratura di R1 a parità di candidate: R1 giudica come il gate vero? — proposta del 3 ott, serve il tuo sì
+Nessuna voce in attesa del tuo sì.
+
+## 1. In lavorazione
+
+### R2. Taratura di R1 a parità di candidate: R1 giudica come il gate vero? — SÌ del proprietario il 3 ott: gira all'inizio del prossimo lancio di R1 (finestra del 4 ott, 14:00)
 R1 ha passato 0 candidate su 16.000 in 2 date recenti (17 e 3 set, ops 0458), mentre il gate vero
 nell'ultimo giro ne ha passate 44 su 22.632 (0,19%) da un mix di 92 strategie (39 casuali nuove, 28
 mutazioni dei quasi-passaggi, 25 rivalutate; ops 0448/0450) che non divide le 44 per origine: non si sa se
@@ -46,8 +50,6 @@ corretto; con 0-1 passate lo 0 di R1 è vero e scatta subito il cambio di piano 
 candidate per data, oppure le strategie che il gate ha già visto passare), senza aspettare le 5 date.
 Costo ~20-35 min (stima: 3.600 coppie contro 22.632 in 1 h 56, oppure 72 unità × 109 s / 4 processi) e
 un'opzione «giudica queste candidate» in `scripts/replay_gate.py`; non tocca bot, gate né paper.
-
-## 1. In lavorazione
 
 ### R1. Rigiocare il gate nel passato — SÌ del proprietario il 1 ott; dal 2 ott lavora AL POSTO del giro del gate delle 14:00 italiane (sì del 1 ott sera)
 Invece di aspettare il 7-14 ott per sapere se il gate sceglie strategie con un vantaggio vero, si

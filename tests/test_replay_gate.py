@@ -54,6 +54,9 @@ def _niente_gate_ne_file_veri(tmp_path, monkeypatch):
     monkeypatch.setattr(rv, "FILE_PID", str(base / "ultimo.pid"))
     monkeypatch.setattr(rv, "FILE_LOCK", str(base / "in_corso.lock"))
     monkeypatch.setattr(rv, "FILE_ATTIVO", str(base / "attivo"))
+    monkeypatch.setattr(rv, "DIR_R2", str(base / "r2"))
+    monkeypatch.setattr(rv, "DIR_UNITA_R2", str(base / "r2" / "unita"))
+    monkeypatch.setattr(rv, "FILE_R2_ESITO", str(base / "r2" / "esito.json"))
     # il caricatore vero non deve mai partire (rete, cache del gate)
     monkeypatch.setattr(dl, "_drop_older", lambda *a, **k: (_ for _ in ()).throw(
         AssertionError("la cache del gate non si tocca")))
@@ -436,17 +439,31 @@ def _finta(item):
                                 "fine_dati": 0, "senza_stop": 0, "uscita": None}])}
 
 
+def _finta_r2(passate_per_coin: int):
+    def f(item):
+        giorno, sym = item
+        p = [{"id": f"gen_{k}", "passata": True, "binding": None, "trade_gate": 30,
+              "uscita": None} for k in range(passate_per_coin)]
+        return {"data": giorno, "coin": sym, "stato": "ok", "n_candidate": 50, "passate": p,
+                "per_criterio": {"total_return": 50 - passate_per_coin}, "secondi": 3.0}
+    return f
+
+
 def test_il_lancio_scrive_solo_i_suoi_file_poi_esito_parziale(monkeypatch, capsys, tmp_path):
     import bot.core.firebase_client as fc
     monkeypatch.setattr(fc, "get_firebase", lambda: (_ for _ in ()).throw(
         AssertionError("niente Firebase")))
     monkeypatch.setattr(rv, "top_symbols_by_volume", lambda n: ["AUSDT", "BUSDT"])
     monkeypatch.setattr(rv, "_una_unita", _finta)
+    monkeypatch.setattr(rv, "_una_unita_r2", _finta_r2(0))
     monkeypatch.setattr(rv, "_init", lambda *a: None)
     monkeypatch.setattr(rv.d, "motore_del_giro", lambda args: {"gate": {}})
     assert rv.main(["--workers", "1"]) == 0
     out = capsys.readouterr().out
     assert "PROVA PICCOLA" in out and "PROVA PICCOLA FINITA" in out
+    # R2 e' passata PRIMA delle unita' di R1, una volta sola, e dice che lo 0 e' vero
+    assert out.index("[r2] TARATURA") < out.index("PROVA PICCOLA FINITA")
+    assert "lo 0 di R1 e' vero" in out and os.path.exists(rv.FILE_R2_ESITO)
     piano = rv.leggi_piano()
     assert len(piano["date"]) == 26 and piano["universo"] == ["AUSDT", "BUSDT"]
     fatte = rv.leggi_unita()
@@ -513,3 +530,45 @@ def test_la_lettura_conta_solo_le_unita_del_piano():
     fatte = {("2026-09-17", "AUSDT"): {"stato": "ok"}, ("2026-09-17", "BUSDT"): {"stato": "ok"}}
     assert list(rv.unita_del_piano(piano, fatte)) == [("2026-09-17", "AUSDT")]
     assert rv.unita_del_piano(None, fatte) is fatte
+
+
+
+def test_r2_regola_e_fermata_di_r1(monkeypatch, capsys, tmp_path):
+    """R2 con >= 3 passate: R1 si ferma (file «attivo» tolto) e non fa unita'."""
+    import bot.core.firebase_client as fc
+    monkeypatch.setattr(fc, "get_firebase", lambda: (_ for _ in ()).throw(AssertionError("no")))
+    monkeypatch.setattr(rv, "top_symbols_by_volume", lambda n: ["AUSDT", "BUSDT"])
+    monkeypatch.setattr(rv, "_una_unita", _finta)
+    monkeypatch.setattr(rv, "_una_unita_r2", _finta_r2(2))     # 2 per coin = 4 passate
+    monkeypatch.setattr(rv, "_init", lambda *a: None)
+    monkeypatch.setattr(rv.d, "motore_del_giro", lambda args: {"gate": {}})
+    os.makedirs(os.path.dirname(rv.FILE_ATTIVO), exist_ok=True)
+    open(rv.FILE_ATTIVO, "w").write("1")
+    assert rv.main(["--workers", "1"]) == 0
+    out = capsys.readouterr().out
+    assert "PIU' SEVERO" in out and "R1 SI FERMA" in out
+    assert not os.path.exists(rv.FILE_ATTIVO) and not rv.leggi_unita()
+    # l'esito stampa R2 prima di R1
+    assert rv.main(["--esito"]) == 0
+    out = capsys.readouterr().out
+    assert out.index("[r2] TARATURA") < out.index("[r1] AVANZAMENTO")
+    assert "PASSATE 4" in out
+
+
+def test_r2_lettura_e_lavoro():
+    piano = {"universo": ["AUSDT", "BUSDT", "CUSDT"]}
+    fatte = {"AUSDT": {"coin": "AUSDT", "stato": "ok", "n_candidate": 50, "passate": [{}],
+                       "per_criterio": {"pf": 49}},
+             "BUSDT": {"coin": "BUSDT", "stato": "errore", "tentativi": 1}}
+    assert [c for _g, c in rv.lavoro_r2(piano, fatte)] == ["BUSDT", "CUSDT"]
+    r = rv.lettura_r2(piano, fatte)
+    assert r["passate"] == 1 and r["fatte"] == 1 and not r["completa"] and r["esito"] == "in corso"
+    fatte["BUSDT"] = {"coin": "BUSDT", "stato": "ok", "n_candidate": 50, "passate": [],
+                      "per_criterio": {}}
+    fatte["CUSDT"] = {"coin": "CUSDT", "stato": "storia"}
+    r = rv.lettura_r2(piano, fatte)
+    assert r["completa"] and "lo 0 di R1 e' vero" in r["esito"]
+    fatte["BUSDT"]["passate"] = [{}]
+    assert "non si decide" in rv.lettura_r2(piano, fatte)["esito"]
+    fatte["BUSDT"]["passate"] = [{}, {}]
+    assert "SEVERO" in rv.lettura_r2(piano, fatte)["esito"]

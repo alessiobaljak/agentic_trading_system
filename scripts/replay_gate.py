@@ -116,6 +116,24 @@ VERSIONE = 1
 #: 2 ott 2026, decisione del proprietario: R1 solo sulle monete che il bot opera
 SOLO_MONETE_OPERATE = True
 
+# R2 — LA TARATURA DI R1 (3 ott 2026, si' del proprietario, backlog R2): R1 ha
+# passato 0 candidate su 16.000 in 2 date recenti (ops 0458). E' R1 troppo severo
+# o le candidate a caso quasi non passano nemmeno nel gate vero? Le STESSE 50
+# candidate di R1 alla data R2_DATA (seme della data) giudicate dal gate di
+# produzione coi dati di OGGI sulle monete del piano, in una cartella a parte:
+# niente registro, niente Firebase. REGOLA scritta prima dei numeri: con
+# R2_SOGLIA_SEVERO (3) o piu' passate R1 e' piu' severo del gate -> R1 SI FERMA
+# (file «attivo» tolto: il gate torna a 8 giri) finche' non e' corretto; con
+# 0-1 passate lo 0 di R1 e' vero -> scatta il cambio di piano del 2 ott (lo
+# decide il proprietario); con 2 non si decide. Gira UNA volta, all'inizio del
+# primo lancio che la trova non fatta, prima delle unita' di R1.
+R2_ATTIVO = True
+R2_DATA = "2026-09-17"
+R2_SOGLIA_SEVERO = 3
+DIR_R2 = os.path.join(DIR_R1, "r2")
+DIR_UNITA_R2 = os.path.join(DIR_R2, "unita")
+FILE_R2_ESITO = os.path.join(DIR_R2, "esito.json")
+
 #: la regola (docs/andremo_live.md, 1 ott 2026): 26 date, una ogni 14 giorni,
 #: e i 14 giorni dopo ogni data
 N_DATE = 26
@@ -780,17 +798,19 @@ def _una_unita(item) -> dict:
     return rec
 
 
-def esegui_e_salva(lavoro: list, workers: int, initargs: tuple, salva) -> tuple[list[dict], str | None]:
+def esegui_e_salva(lavoro: list, workers: int, initargs: tuple, salva,
+                   unita=None) -> tuple[list[dict], str | None]:
     """Unita' per unita', e `salva(record)` appena ognuna e' finita (nel padre,
     che tiene il lucchetto). Come `t_validate.esegui_e_salva`: un worker ucciso
     dal kernel non fa perdere le unita' gia' finite; le sue diventano
     «interrotta» (non si scrivono, si rifanno)."""
     righe: list[dict] = []
+    unita = unita or _una_unita
     if workers <= 1 or len(lavoro) <= 1:
         _init(*initargs)
         for item in lavoro:
             try:
-                rec = _una_unita(item)
+                rec = unita(item)
             except Exception as exc:  # noqa: BLE001
                 rec = {"data": item[0], "coin": item[1], "stato": "errore",
                        "errore": str(exc)[:120]}
@@ -799,7 +819,7 @@ def esegui_e_salva(lavoro: list, workers: int, initargs: tuple, salva) -> tuple[
         return righe, None
     interrotta = None
     with ProcessPoolExecutor(max_workers=workers, initializer=_init, initargs=initargs) as ex:
-        futuri = {ex.submit(_una_unita, item): item for item in lavoro}
+        futuri = {ex.submit(unita, item): item for item in lavoro}
         for f in as_completed(futuri):
             giorno, sym = futuri[f]
             try:
@@ -814,6 +834,119 @@ def esegui_e_salva(lavoro: list, workers: int, initargs: tuple, salva) -> tuple[
             salva(rec)
             righe.append(rec)
     return righe, interrotta
+
+
+# --------------------------------------------------------------------------- #
+# R2: le candidate di R1 giudicate dal gate vero, coi dati di oggi             #
+# --------------------------------------------------------------------------- #
+def _una_unita_r2(item) -> dict:
+    """UNA coin: le candidate della data R2 giudicate con TUTTE le candele
+    (fino a oggi, `end` del lancio), cioe' come il gate vero. Niente rigioco
+    dopo: conta solo chi passa."""
+    giorno, sym = item
+    base = {"data": giorno, "coin": sym}
+    if _scaduto():
+        return {**base, "stato": "tempo"}
+    ferma = gate_in_arrivo(MARGINE_FERMATA_S)
+    if ferma:
+        return {**base, "stato": "giro", "errore": ferma}
+    t0 = time.time()
+    try:
+        candles = _carica(sym)
+        if not candles:
+            return {**base, "stato": "errore", "errore": "nessuna candela"}
+        specs = _specs(giorno)
+        oggi = _ts(_S["end"]) + 86400.0            # tutte le candele caricate
+        esiti = giudica(_S["opt"], sym, candles, oggi, specs, contesto_gate)
+        if esiti is None:
+            return {**base, "stato": "storia", "secondi": round(time.time() - t0, 1)}
+        voci = [voce_candidata(sp, r) for sp, r in zip(specs, esiti)]
+        rec = {**base, "stato": "ok", "n_candidate": len(voci),
+               "passate": [v for v in voci if v["passata"]],
+               "per_criterio": dict(Counter(str(v.get("binding")) for v in voci
+                                           if not v["passata"]))}
+    except Exception as exc:  # noqa: BLE001
+        return {**base, "stato": "errore", "errore": str(exc)[:120],
+                "secondi": round(time.time() - t0, 1)}
+    rec["secondi"] = round(time.time() - t0, 1)
+    di(f"[r2] {sym}: {rec['n_candidate']} candidate, {len(rec['passate'])} passate nel "
+       f"gate di oggi, {rec['secondi']:.0f}s")
+    return rec
+
+
+def salva_unita_r2(rec: dict) -> bool:
+    """Come `salva_unita`, nella cartella di R2: solo esiti finali o errori (col
+    numero di tentativi, per non riprovare all'infinito)."""
+    if rec.get("stato") not in FINALI and rec.get("stato") != "errore":
+        return False
+    os.makedirs(DIR_UNITA_R2, exist_ok=True)
+    path = os.path.join(DIR_UNITA_R2, f"{rec['coin']}.json")
+    if rec.get("stato") == "errore":
+        prima = _leggi_json(path) or {}
+        rec = {**rec, "tentativi": int(prima.get("tentativi") or 0) + 1}
+    scrivi_atomico(path, rec)
+    return True
+
+
+def leggi_unita_r2(base: str | None = None) -> dict:
+    base = base or DIR_UNITA_R2
+    out: dict = {}
+    try:
+        nomi = os.listdir(base)
+    except OSError:
+        return out
+    for n in nomi:
+        if n.endswith(".json"):
+            rec = _leggi_json(os.path.join(base, n))
+            if isinstance(rec, dict):
+                out[rec.get("coin") or n[:-5]] = rec
+    return out
+
+
+def lavoro_r2(piano: dict, fatte: dict) -> list:
+    return [(R2_DATA, c) for c in (piano.get("universo") or [])
+            if not unita_chiusa(fatte.get(c))]
+
+
+def lettura_r2(piano: dict | None, fatte: dict) -> dict:
+    """I numeri di R2 e l'esito con la regola (scritta prima dei numeri)."""
+    monete = list((piano or {}).get("universo") or [])
+    ok = [r for c, r in fatte.items() if c in monete and r.get("stato") == "ok"]
+    passate = sum(len(r.get("passate") or []) for r in ok)
+    coppie = sum(int(r.get("n_candidate") or 0) for r in ok)
+    crit: Counter = Counter()
+    for r in ok:
+        crit.update(r.get("per_criterio") or {})
+    completa = bool(monete) and all(unita_chiusa(fatte.get(c)) for c in monete)
+    if not completa:
+        esito = "in corso"
+    elif passate >= R2_SOGLIA_SEVERO:
+        esito = "R1 E' PIU' SEVERO DEL GATE: R1 si ferma finche' non e' corretto"
+    elif passate <= 1:
+        esito = ("lo 0 di R1 e' vero: le candidate a caso quasi non passano nemmeno nel gate "
+                 "di oggi. Scatta il cambio di piano del 2 ott (lo decide il proprietario)")
+    else:
+        esito = "2 passate: non si decide"
+    return {"data": R2_DATA, "monete": len(monete), "fatte": len(ok), "coppie": coppie,
+            "passate": passate, "per_criterio": dict(crit.most_common(6)),
+            "completa": completa, "esito": esito}
+
+
+def righe_lettura_r2(piano: dict | None, fatte: dict) -> list[str]:
+    if not R2_ATTIVO or not piano:
+        return []
+    r = lettura_r2(piano, fatte)
+    if not r["fatte"] and not r["completa"]:
+        return ["[r2] taratura di R1 (le sue 50 candidate del 17 set nel gate di oggi): non "
+                "ancora fatta, parte all'inizio del prossimo lancio"]
+    out = [f"[r2] TARATURA DI R1 · candidate del {r['data']} giudicate dal gate di OGGI su "
+           f"{r['fatte']}/{r['monete']} monete · {r['coppie']} coppie · PASSATE {r['passate']}",
+           f"  REGOLA R2 (3 ott, scritta prima dei numeri): >= {R2_SOGLIA_SEVERO} passate -> R1 e' "
+           f"piu' severo del gate, si ferma finche' non e' corretto; 0-1 -> lo 0 di R1 e' vero, "
+           f"cambio di piano; 2 -> non si decide",
+           f"  bocciate per criterio: " + ", ".join(f"{k} {v}" for k, v in r["per_criterio"].items()),
+           f"  ESITO R2: {r['esito']}" + ("" if r["completa"] else " (PARZIALE)")]
+    return out
 
 
 # --------------------------------------------------------------------------- #
@@ -962,7 +1095,10 @@ def esito() -> int:
     else:
         di(f"[r1] nessun lancio in sfondo registrato ({FILE_ESITO}).")
     di("-" * 74)
-    for r in righe_lettura(leggi_piano(), leggi_unita()):
+    piano = leggi_piano()
+    for r in righe_lettura_r2(piano, leggi_unita_r2()):
+        di(r)
+    for r in righe_lettura(piano, leggi_unita()):
         di(r)
     return 0
 
@@ -1087,6 +1223,32 @@ def _lancio(args) -> int:
     # la fine dati del GATE: oggi, con la stessa chiamata (`date.today()`)
     end = date.today().isoformat()
     piano = carica_o_crea_piano(args, date.today())
+    workers = max(1, min(int(args.workers), n_workers()))
+    deadline = time.time() + float(args.budget) if float(args.budget) > 0 else 0.0
+    cfg = {k: piano[k] for k in ("interval", "start", "source", "windows", "candidate_per_data")}
+    # R2 PRIMA (3 ott 2026): una volta sola, sulle monete del piano
+    if R2_ATTIVO:
+        fatte_r2 = leggi_unita_r2()
+        lav2 = lavoro_r2(piano, fatte_r2)
+        if lav2:
+            di(f"[r2] taratura di R1: {len(lav2)} monete da giudicare col gate di oggi "
+               f"(candidate del {R2_DATA})")
+            esegui_e_salva(lav2, workers, (cfg, end, deadline, False), salva_unita_r2,
+                           unita=_una_unita_r2)
+            fatte_r2 = leggi_unita_r2()
+        let2 = lettura_r2(piano, fatte_r2)
+        if let2["completa"]:
+            scrivi_atomico(FILE_R2_ESITO, let2)
+        for r in righe_lettura_r2(piano, fatte_r2):
+            di(r)
+        if let2["completa"] and let2["passate"] >= R2_SOGLIA_SEVERO:
+            try:
+                os.remove(FILE_ATTIVO)
+            except OSError:
+                pass
+            di("[r2] R1 SI FERMA (regola R2): tolto il file «attivo», il gate torna a 8 giri "
+               "al giorno. Niente unita' di R1 in questo lancio.")
+            return 0
     fatte = leggi_unita()
     lavoro, prova = lavoro_da_fare(piano, fatte, limit=args.limit)
     di(f"[r1] {len(lavoro)} unita' (coin x data) da fare in questo lancio"
@@ -1097,14 +1259,10 @@ def _lancio(args) -> int:
     interrotta = None
     t0 = time.time()
     if lavoro:
-        workers = max(1, min(int(args.workers), n_workers()))
-        deadline = t0 + float(args.budget) if float(args.budget) > 0 else 0.0
         di(f"[r1] {workers} worker · budget "
            f"{'nessuno' if not deadline else f'{float(args.budget) / 3600:.1f} ore'} · "
            f"ogni unita' si scrive appena finita"
            + (" · conferme a 7 e 14 giorni ACCESE (informative)" if args.conferme else ""))
-        cfg = {k: piano[k] for k in ("interval", "start", "source", "windows",
-                                     "candidate_per_data")}
         righe, interrotta = esegui_e_salva(lavoro, workers, (cfg, end, deadline, args.conferme),
                                            salva_unita)
     stati = Counter(str(r.get("stato")) for r in righe)
