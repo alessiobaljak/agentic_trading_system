@@ -2789,3 +2789,44 @@ sa. Codice: `scripts/gate_sul_caso.py`, dentro il lancio di R1 dopo R2 e prima d
 di 100 candidate, 144 unità → ~20 min con 4 worker (stima). Nessuna riga nuova nella lista bianca. Gira nel
 lancio delle 13:10. Due test di R1 legati alla data (serie finta ferma al 1 ott, «delistata» da oggi) sistemati;
 suite: 2282 passati.
+
+### Referto settimanale del 4 ottobre (09:30 ora italiana)
+
+Fonti: ops 0481-0482 (confronto, servizi delle 09:19) e il controllo delle 08:00 (ops 0465-0479) per trades,
+mfe, gate, ai-stato, log-gate, rifiuti.
+1. **Quanto e come.** Settimana 28 set-4 ott: 119 trade delle validate (21+23+14+15+23+16+7 per giorno, ops
+   0465), **+14,09 USDT** sul conto (colonna paper del periodo, ops 0474): la prima settimana in utile. Totale:
+   264 trade, −62,59 USDT, equity 937,41, DRY_RUN True, costi 38,03 su un lordo di −24,56 (ops 0466).
+2. **Il lock taglia vincitori?** Verdetti del trailing a 15 minuti: 104 = 49 prematuri + 55 protetti (ops
+   0477); il 27 set 30 = 11 + 19. Nella settimana quindi 38 prematuri contro 36 protetti: **la prima settimana
+   con i prematuri sopra**, di 2. La regola chiede due settimane di fila prima di proporre: si riguarda domenica
+   prossima. Stop: 51 su 144 nei 7 giorni (ops 0479).
+3. **Come muoiono gli stop.** 111 stop: 52 ingresso, 58 uscita, 1 protezione (ops 0471); il 27 set 58: 23 /
+   34 / 1. Nella settimana 53 stop: **29 ingresso**, 24 uscita, 0 protezione: si è spostato verso gli ingressi
+   sbagliati dall'inizio.
+4. **Il paper entra dove entra il gate?** Sulle 8 coppie rigirate: 33 su 51 trade (65%, scarto mediano 16-18
+   minuti) (ops 0481); il 27 set 20 su 37 (54%). **Sopra il 60%.** Due coppie a 0 su 7: USELESSUSDT|gen_2031005e
+   e SUIUSDT|gen_490a90e5 (le altre sei fra 4/5 e 7/7): da guardare.
+5. **Le serie di perdite.** Paper: 8 di fila al massimo su 265 trade. Gate, tutte le coppie insieme in ordine
+   di tempo: 2.135 trade dal maggio 2023, serie più lunga 10, finestre di 8 tutte perse 3 su 2.128 (0,1%) (ops
+   0481). Sulle 8 coppie, nel periodo del paper: segnali del gate aperti dal paper PF 1,36 su 33, non aperti PF
+   0,80 su 28: «non distinguibile» (ops 0481; il 27 set 0,45 contro 0,66).
+6. **Le gemelle.** 1 candidata scartata come gemella nel giro delle 08:04; 8 gruppi di validate con la stessa
+   logica stampati (IDUSDT 3, USELESS, SKYAI due volte, MUBARAK, HEMI due volte, TRUMP) (ops 0470); il 27 set 8
+   gruppi. La stampa si ferma a 8: non si vede se crescono.
+7. **La copertura.** 223 validate su 76 coin, universo 200, copertura 38%; a 2/3 140 coin (747 coppie), a 1/3
+   112 coin (625 coppie) (ops 0468); il 27 set 212 su 68 coin, 124 coin a 2/3 (508), 132 a 1/3 (651).
+8. **Durata del giro.** Il giro finito alle 07:38 è durato **3 h 09** (anomalia GATE_SFORA; discovery 1 h 45,
+   passata a 1 ora 9 minuti) (ops 0470, 0468); quello partito alle 08:04 era ancora in corso alle 09:19, e per
+   questo il timer non mostra il prossimo avvio (ops 0482). Il 27 set: urgenti 1 h 13, completo 3 h 48. I giri
+   sono attaccati uno all'altro: è anche ciò che ha lasciato R1 senza spazio il 3 ott.
+9. **Le vite.** Nessuna riga «[vite]» nelle 80 righe del log lette (ops 0470).
+10. **L'AI.** Spenta dal 2 ott sera: ultime 20 proposte su 20 accettate il 2 ott alle 20:18; origine AI 1
+    validata su 223 (115 nel registro); chiave funzionante, nessuna chiamata ieri (ops 0467, 0468).
+11. **Il tetto per coin.** Zero blocchi: nelle 24 ore 6 «posizione già aperta», 1 correlazione, 1 veto di
+    regime (ops 0475); nei rifiutati dei 30 giorni nessun motivo «tetto» (ops 0476).
+
+Migliorato: prima settimana in utile (+14,09), ingressi allineati al gate al 65%, copertura a 76 coin.
+Peggiorato: giri del gate oltre le 3 ore e senza pause, stop della settimana soprattutto d'ingresso (29 su 53),
+prematuri del trailing sopra i protetti per la prima volta. Proposta (non fatta): guardare trade per trade
+perché su USELESSUSDT|gen_2031005e e SUIUSDT|gen_490a90e5 il paper entra dove il gate non entra (0 su 7).
