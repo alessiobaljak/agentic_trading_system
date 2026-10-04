@@ -7,6 +7,13 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-04
+* La stella polare è passata da −0,03R su 130 segnali (ops 0454) a +0,006R su 156, margine ±0,17 (ops 0474), per una giornata sola: il 3 ott 16 trade delle validate, 15 vinti, +0,869R a trade (ops 0479). Il numero oscilla intorno a zero dentro il margine: oggi la regola del 7 ott («motore ≤ 0 con almeno 80 segnali → la modifica va nel gate») non scatterebbe, ieri sì. Il verdetto del 7 ott può dipendere da un giorno buono o cattivo: per questo c'è la conferma del 14.
+* Entriamo un po' peggio del segnale: ingresso a +0,038R rispetto alla chiusura della candela del segnale, con 155 secondi di ritardo (mediane, dato D8 raccolto dal 1 ott; ops 0479). È circa metà dei costi stimati a trade (0,081R): non spiega le perdite da solo, ma pesa.
+* A 1 ora il gate passa diciotto volte più prove che a 15 minuti: 218 su 9.840 (2,2%, ops 0468) contro 25 su 20.667 (0,12%, ops 0470), in crescita da 141 e 193 nei giri prima. Non sappiamo se è un vantaggio vero o un filtro più facile: proposta G7 (il gate sul prezzo casuale) prima che le prime validate a 1 ora entrino nel paper (dall'8 ott).
+* Primo verdetto «contribuisce» nelle funzioni: i quasi-passaggi operati a un quarto (paper esplorativo) fanno +0,385R su 10 trade contro −0,065R delle validate, differenza +0,450 ±0,419 (ops 0465). È al limite del campione minimo (10) e il metro dice 100 trade; ma va nella stessa direzione di T2: oggi la scelta del gate non aggiunge un vantaggio misurabile.
+* T2 su 240 trade (ieri 207): a 1 ora i segnali vanno leggermente contro, −0,080 mosse tipiche, margine [−0,184; +0,013] (ops 0471). Ancora «nessun vantaggio misurabile», ma la prima ora è la più vicina a «peggio del caso».
+
 ## 2026-10-03
 * Lettura ufficiale del 3 ott: le declassate (−0,131R su 70) contro le attive (+0,127R su 33) fanno −0,258R con margine ±0,458R → «non si decide» (ops 0445). Il quarto di puntata ha risparmiato 29,04 USDT, ma non si può dire che scelga trade peggiori.
 * Lo «0 promosse» di R1 su 16.000 candidate (ops 0458) è sospetto ma non dimostrato: il gate vero passa lo 0,19% di un mix di 92 strategie (39 casuali nuove, 28 mutazioni dei quasi-passaggi, 25 rivalutate; 44/22.632, ops 0448/0450) e non stampa quante delle 44 siano casuali. Le due date complete sono recenti (17 e 3 set), quindi non è «storia corta». Si decide solo a parità di candidate (R2).

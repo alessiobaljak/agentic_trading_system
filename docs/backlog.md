@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato il 3 ottobre 2026, 09:00 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato il 4 ottobre 2026, 09:00 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **0. Aspettano il tuo sì** | G7 (il gate sul prezzo casuale: quante strategie passa per caso a 15 minuti e a 1 ora) | una tua risposta |
 | **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), R2 (taratura di R1: sì del 3 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -32,7 +32,21 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-Nessuna voce in attesa del tuo sì.
+### G7. Il gate sul prezzo casuale: quante strategie passa per caso, a 15 minuti e a 1 ora? — proposta del 4 ott, aspetta il tuo sì
+**Perché:** a 1 ora il gate passa il 2,2% delle prove (218 su 9.840, ops 0468; 141 e 193 nei giri
+prima), a 15 minuti lo 0,12% (25 su 20.667, ops 0470): diciotto volte tanto. Non sappiamo se a 1 ora
+le strategie sono migliori o se il filtro è più facile (meno trade per prova: un risultato buono per
+caso è più probabile). Le prime validate a 1 ora entrano nel paper dall'8 ott: va saputo prima.
+**Cosa:** le stesse candidate casuali del gate (generatore e seme di R1) giudicate dal gate di
+produzione (finestre, holdout, soglie di oggi; niente AI, niente registro, niente Firebase) su prezzi
+**senza vantaggio possibile**: le serie vere delle monete operate con i rendimenti delle candele
+rimescolati a blocchi di un giorno (stessa volatilità e stessi movimenti, ordine casuale). Prima 1 ora
+(~10-15 min di macchina, come la passata a 1 ora), poi 15 minuti se serve. **Regola scritta prima dei
+numeri:** quota di passaggio sul caso ≥ metà di quella vera → a quel timeframe il gate passa
+soprattutto rumore (la prossima modifica va nelle soglie del gate, con R1); ≤ un quinto → il gate
+filtra il rumore (il problema del paper è altrove); in mezzo → non si sa. **Non cambia:** bot, gate,
+registro, paper. **Metro:** due numeri, quota vera e quota sul caso, per timeframe, con il conteggio
+delle prove. Si fa girare nella finestra di R1 o fra due giri, mai insieme al gate.
 
 ## 1. In lavorazione
 

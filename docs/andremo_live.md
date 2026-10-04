@@ -2750,3 +2750,23 @@ gate, si ferma da solo (file «attivo» tolto, il gate torna a 8 giri) finché n
 R1 è vero e scatta il cambio di piano del 2 ott (lo decide il proprietario); 2 → non si decide.
 `replay-gate-esito` stampa R2 prima di R1. Il lancio di oggi (08:19) gira col codice di prima: R2 parte
 col lancio del 4 ott (finestra delle 14:00, ~30-35 min stimati su 72 monete), esito verso le 14:45.
+
+### Controllo del 4 ottobre (mattina)
+
+**Prima di tutto.** Il giro del gate finito alle 07:38 è durato 3 h 09 (anomalia GATE_SFORA, ops 0470): il servizio era partito verso le 04:29 e il giro successivo è partito alle 08:04, subito dopo; la discovery a 15 minuti ne ha usate 1 h 45 e la passata a 1 ora 9 minuti (ops 0468), il resto del tempo non è nei file letti. I giri sono ormai attaccati l'uno all'altro: è anche il motivo per cui il lancio di R1 di ieri mattina (08:19) ha trovato uno spazio di pochi minuti verso le 10:10, è partito e si è fermato alle 10:13 senza unità nuove (ops 0463), e alle 14:05 il gate ha saltato il suo giro con R1 fermo (ops 0464). Stamattina NON ho messo in coda `replay-gate`: un lancio delle 08:xx rifarebbe lo stesso giro a vuoto; il lancio è programmato alle 13:10 (promemoria della sessione), così parte nella finestra delle 14:00, con R2 all'inizio.
+
+**Numeri.** 264 trade, 57% vinti, −62,59 USDT (lordo −24,56, costi 38,03), equity 937,41, DRY_RUN True, 3 aperte con rischio 0,62% (ops 0466); massimo 12 posizioni insieme (ops 0465). Il 3 ott: 17 trade +18,85 USDT sul conto, 16 delle validate con 15 vinti e +0,869R a trade (ops 0479). Giornate complete dal 16 set: 7 in utile, 11 in perdita; oggi fin qui −4,38 (ops 0474). BTC dal primo giorno +12,1%, noi −6,3% (ops 0477). Dal 27 set +0,015R netti su 119, lordi +0,097, costi 0,082 (ops 0465; ieri −0,048 su 103). Direzione: long −0,143R su 104, short +0,008 su 111; dal 27 set long −0,073 su 69, short +0,137 su 50; regime neutro −0,108R su 64 dal 27 set (ops 0465). Stop: 52 su 111 sbagliati dall'inizio, 58 morti sotto il primo gradino (ops 0471).
+
+**Stella polare:** motore dopo la validazione **+0,006R su 156 segnali ±0,17** (ops 0474; ieri −0,03 su 130 ±0,18); stessi segnali motore +0,02R, paper −0,009R, differenza +0,03 ±0,10. Lettura stampata: nessun verdetto contro il gate, esecuzione non si decide; si legge il 7 e il 14 ott. Declassate dal 27 set: −0,058R su 84 contro attive +0,190R su 35, differenza −0,247 ±0,480 → non si decide (ops 0465; la lettura ufficiale era ieri). H1: 31 e 107 segnali, ne servono 80 per gruppo (ops 0474).
+
+**Gate.** Validate 223 su 76 coin, copertura 38%, declassate 169, 747 coppie a 2/3, spazio per ~1.021 coppie, t ≥ 2 per 48 su 71 (ieri 42 su 61) (ops 0468). Ultimo giro 20.667 valutazioni, 25 passate; passata a 1 ora 9.840 valutazioni, 218 passate (ops 0468). Nessuna validata e nessun trade a 1 ora ancora (attese dall'8 ott). Righe «idee AI e autopsia SPENTE» e «varianti dai referti SPENTE» presenti, varianti 0 create (ops 0470). Selettore: NON BATTE 0/3 (ops 0473); in ombra correlazione +0,002 su 182 (ops 0465).
+
+**R1:** fermo dalle 10:13 di ieri, 2 date su 26, 144 unità su 1.872 (piano a 72 monete), 0 promosse; R2 non ancora fatta (ops 0478). Il punto di verifica a 5 date non è raggiunto.
+
+**Funzioni:** primo «contribuisce», il paper esplorativo (10 trade +0,385R contro −0,065R delle validate, +0,450 ±0,419); tutte le altre «non si vede ancora» o «campione piccolo» (ops 0465). T2 su 240 trade: nessun vantaggio misurabile, a 1 ora −0,080 [−0,184; +0,013] (ops 0471). Trailing: 55 protetti su 104 (52,9%), ne mancano 19 per la proposta (ops 0477). Rifiutati: «posizione aperta» +0,01R contro aperti −0,03R su 73 (margine ±0,27, solo informazione; i rifiutati non hanno costi) (ops 0476).
+
+**Salute e costi.** Bot vivo, battito 30 s, controllo orario regolare (ops 0477); letture Firestore 7.763 nelle 24 h (ops 0469); nessun errore nelle righe lette; spesa AI di ieri: nessuna chiamata (ops 0467). Report giornaliero ripubblicato alle 08:20, versione 2966a58 (ops 0479).
+
+**Proposta del giorno:** G7, il gate sul prezzo casuale (gruppo 0 del backlog): quante candidate passa il gate su prezzi rimescolati, a 1 ora e a 15 minuti, contro le quote vere (2,2% e 0,12%). Aspetta il sì.
+
+**In parallelo (solo analisi, niente nel sistema):** il proprietario sta rivedendo una proposta di protocollo di ricerca per moneta con vault 2024-2026 (versione 2 in PDF, consegnata il 3 ott, non nel repo).
