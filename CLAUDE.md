@@ -86,6 +86,9 @@ l'agente sono giu', ed e' un'informazione che vale la pena dare subito.
 
 * **In italiano**, e semplice. Il proprietario lo ha chiesto esplicitamente: niente
   gergo se una frase normale basta.
+* **Niente sigle.** Non usare i codici del backlog (R1, G7, T2, C5...) parlando col proprietario: non
+  li ricorda (4 ott 2026). Si dice cosa fa la cosa, in parole semplici («la prova sui prezzi mescolati»);
+  la sigla, se serve, va solo nei file.
 * **Prima la risposta, poi il perche'.** Se la risposta e' "no", che sia la prima
   parola.
 * **Un numero va con la sua fonte.** "224 coppie a 1 pass" va bene se viene da un
