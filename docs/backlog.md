@@ -14,8 +14,8 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | R1b (dopo R2: cambiare il piano di R1 o fermarlo) | una tua risposta |
-| **1. In lavorazione** | G7 (il gate sul prezzo casuale: sì del 4 ott), R1 (il gate rigiocato nel passato: sì del 1 ott), R2 (taratura di R1: sì del 3 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **1. In lavorazione** | G7 (il gate sul prezzo casuale: sì del 4 ott, gira il 5 ott), R1 (fermata il 4 ott: si chiude col lancio del 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -32,20 +32,7 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-### R1b. Dopo R2: il piano di R1 cambia, o R1 si ferma? — aspetta la tua scelta (4 ott)
-**Il numero:** R2 ha giudicato le 50 candidate di R1 del 17 set col gate di oggi sulle 72 monete:
-**0 passate su 3.600 coppie** (ops 0485). Regola di R2: 0-1 → lo 0 di R1 è vero, il piano cambia e lo
-decidi tu. Nel frattempo R1 ha trovato la sua prima promossa (20 ago, 1 su 9.050 giudizi, 2 trade dopo).
-**Le opzioni fissate il 2 ott:** (a) più candidate per data: con ~1 promossa ogni 9.000 giudizi, per
-arrivare agli 80 trade della regola servirebbero ~40 promosse, cioè centinaia di migliaia di giudizi (stima:
-centinaia di ore di macchina) — non si fa in tempi utili; (b) mettere nel rigioco le strategie che il gate
-vero ha già fatto passare: ma sono state scelte guardando anche i giorni dopo la data (sguardo avanti), e
-il registro nasce a settembre, quindi vale solo per le date più recenti. **(c) proposta:** fermare R1 dopo
-G7 (il gate torna a 8 giri al giorno) e leggere la scelta del gate dove la si misura già senza sguardo avanti:
-il fuori campione del 7 e del 14 ott. Cosa abbiamo già capito da R1+R2: una candidata casuale nuova non passa
-quasi mai (0 su 3.600 oggi); le validate nascono dalla ricerca ripetuta (mutazioni dei quasi-passaggi,
-rivalutazioni a ogni giro), ed è lì che il conto delle prove esplode.
-
+Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
 
@@ -83,7 +70,7 @@ candidate per data, oppure le strategie che il gate ha già visto passare), senz
 Costo ~20-35 min (stima: 3.600 coppie contro 22.632 in 1 h 56, oppure 72 unità × 109 s / 4 processi) e
 un'opzione «giudica queste candidate» in `scripts/replay_gate.py`; non tocca bot, gate né paper.
 
-### R1. Rigiocare il gate nel passato — SÌ del proprietario il 1 ott; dal 2 ott lavora AL POSTO del giro del gate delle 14:00 italiane (sì del 1 ott sera)
+### R1. Rigiocare il gate nel passato — FERMATA dal proprietario il 4 ott (opzione c, dopo R2): il lancio del 5 ott fa solo la prova sul prezzo casuale (G7) e poi toglie il file «attivo»; il gate torna a 8 giri al giorno. La scelta del gate si legge nel fuori campione del 7 e 14 ott
 Invece di aspettare il 7-14 ott per sapere se il gate sceglie strategie con un vantaggio vero, si
 rifà il gate a 26 date passate e si guarda come sono andate dopo le promosse contro le bocciate.
 Regola da scrivere prima dei numeri: promosse meglio delle bocciate oltre il margine → il gate ha un

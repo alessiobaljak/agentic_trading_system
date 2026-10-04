@@ -158,6 +158,7 @@ def test_nel_lancio_dopo_r2_e_prima_di_r1(monkeypatch, capsys, tmp_path):
         AssertionError("niente Firebase")))
     monkeypatch.setattr(rv, "top_symbols_by_volume", lambda n: ["AUSDT", "BUSDT"])
     monkeypatch.setattr(rv, "_init", lambda *a: None)
+    monkeypatch.setattr(rv, "R1_FERMATA", False)      # qui si prova l'ordine R2 -> G7 -> R1
     monkeypatch.setattr(rv, "_una_unita", lambda item: {"data": item[0], "coin": item[1],
                                                          "stato": "storia"})
     monkeypatch.setattr(rv, "_una_unita_r2", lambda item: {
@@ -225,3 +226,41 @@ def test_l_unita_usa_lo_stato_del_modulo_che_la_lancia(monkeypatch):
     assert rec["stato"] == "errore" and "cfg" in rec["errore"]
     righe = g7.righe_lettura_g7(["AUSDT"], {("vero", "AUSDT"): {**rec, "tentativi": 1}})
     assert "errore 1" in righe[0] and "primo errore" in righe[0]
+
+
+def test_r1_fermata_dopo_la_prova_completa(monkeypatch, capsys, tmp_path):
+    """4 ott 2026, decisione del proprietario: con R1_FERMATA il lancio fa G7 e
+    basta; a prova completa toglie il file «attivo», altrimenti lo lascia (serve
+    la finestra per rifarla). Mai unita' di R1."""
+    import bot.core.firebase_client as fc
+    monkeypatch.setattr(fc, "get_firebase", lambda: (_ for _ in ()).throw(AssertionError("no")))
+    monkeypatch.setattr(rv, "top_symbols_by_volume", lambda n: ["AUSDT", "BUSDT"])
+    monkeypatch.setattr(rv, "_init", lambda *a: None)
+    monkeypatch.setattr(rv, "R1_FERMATA", True)
+    monkeypatch.setattr(rv, "_una_unita", lambda item: (_ for _ in ()).throw(
+        AssertionError("R1 non deve lavorare")))
+    monkeypatch.setattr(rv, "_una_unita_r2", lambda item: {
+        "data": item[0], "coin": item[1], "stato": "ok", "n_candidate": 50, "passate": [],
+        "per_criterio": {"total_return": 50}})
+    esiti = {"vero": "ok", "caso": "errore"}
+
+    def finta_g7(item, rv_mod=None):
+        v, c = item
+        if esiti[v] == "errore":
+            return {"data": v, "coin": c, "stato": "errore", "errore": "finto"}
+        return {"data": v, "coin": c, "stato": "ok", "n_candidate": 100,
+                "passate": ["gen_1"] * (12 if v == "vero" else 1), "per_criterio": {}}
+    monkeypatch.setattr(g7, "_una_unita_g7", finta_g7)
+    os.makedirs(os.path.dirname(rv.FILE_ATTIVO), exist_ok=True)
+    open(rv.FILE_ATTIVO, "w").write("1")
+    # prova NON completa (il caso in errore): il file resta, R1 non lavora
+    assert rv.main(["--workers", "1"]) == 0
+    out = capsys.readouterr().out
+    assert "R1 FERMATA" in out and "resta finche'" in out and os.path.exists(rv.FILE_ATTIVO)
+    assert not rv.leggi_unita()
+    # al lancio dopo la prova si completa: il file va via
+    esiti["caso"] = "ok"
+    assert rv.main(["--workers", "1"]) == 0
+    out = capsys.readouterr().out
+    assert "tolto il file" in out and not os.path.exists(rv.FILE_ATTIVO)
+    assert "FILTRA" in out and not rv.leggi_unita()

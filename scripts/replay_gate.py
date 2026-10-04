@@ -129,6 +129,15 @@ SOLO_MONETE_OPERATE = True
 # decide il proprietario); con 2 non si decide. Gira UNA volta, all'inizio del
 # primo lancio che la trova non fatta, prima delle unita' di R1.
 R2_ATTIVO = True
+# R1 FERMATA DAL PROPRIETARIO (4 ott 2026, dopo R2: «c, fermala dopo la prova di
+# domani»). R2 ha detto che lo 0 di R1 e' vero (0 passate su 3.600, ops 0485):
+# con ~1 promossa ogni 9.000 giudizi R1 non arriva agli 80 trade della regola
+# in tempi utili. Quindi: il lancio fa ancora G7 (il gate sul prezzo casuale);
+# quando G7 e' completa, il file «attivo» si toglie (il gate torna a 8 giri al
+# giorno) e le unita' di R1 non si fanno piu'. Finche' G7 non e' completa il
+# file resta (serve la finestra delle 12 UTC per rifarla), ma R1 non lavora.
+# Le unita' gia' fatte restano su disco e `--esito` le legge come prima.
+R1_FERMATA = True
 R2_DATA = "2026-09-17"
 R2_SOGLIA_SEVERO = 3
 DIR_R2 = os.path.join(DIR_R1, "r2")
@@ -1279,6 +1288,22 @@ def _lancio(args) -> int:
             scrivi_atomico(os.path.join(g7.dir_g7(), "esito.json"), let7)
         for r in g7.righe_lettura_g7(monete, fatte_g7):
             di(r)
+        if R1_FERMATA:
+            if let7["completa"]:
+                try:
+                    os.remove(FILE_ATTIVO)
+                except OSError:
+                    pass
+                di("[r1] R1 FERMATA (decisione del proprietario del 4 ott, dopo R2): la prova sul "
+                   "prezzo casuale e' completa, tolto il file «attivo», il gate torna a 8 giri al "
+                   "giorno. Niente unita' di R1.")
+            else:
+                di("[r1] R1 FERMATA (decisione del proprietario del 4 ott): niente unita' di R1; "
+                   "il file «attivo» resta finche' la prova sul prezzo casuale non e' completa.")
+            fatte = leggi_unita()
+            for r in righe_lettura(piano, fatte):
+                di(r)
+            return 0
     fatte = leggi_unita()
     lavoro, prova = lavoro_da_fare(piano, fatte, limit=args.limit)
     di(f"[r1] {len(lavoro)} unita' (coin x data) da fare in questo lancio"

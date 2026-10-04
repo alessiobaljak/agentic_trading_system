@@ -2863,3 +2863,22 @@ SECONDO modulo con lo stato vuoto → errore a ogni unità. Nei test non si vede
 Corretto: il pool riceve `replay_gate._una_unita_g7`, che passa il proprio modulo (`sys.modules[__name__]`); test
 nuovo che lo controlla; la lettura di G7 ora stampa gli stati delle unità e il primo errore. Le unità in errore
 (1 tentativo) si rifanno al prossimo lancio. Suite: 2283 passati. G7 gira nel lancio di domani alle 13:10.
+
+### 4 ottobre, 15:50: R1 fermata (opzione c, decisione del proprietario); da +18 a −10
+
+Il proprietario ha scelto (c): «fermala dopo la prova di domani». Fatto nel codice (`R1_FERMATA` in
+`scripts/replay_gate.py`): il lancio del 5 ott fa la prova sul prezzo casuale; quando è completa toglie il
+file «attivo» (il gate torna a 8 giri al giorno) e non fa unità di R1; se non è completa il file resta per
+rifarla nella finestra del giorno dopo, ma R1 non lavora comunque. Test nuovo; suite 2284 passati. Le 190
+unità fatte restano su disco e `replay-gate-esito` le legge come prima (lettura: NON SI SA, 2 trade delle
+promosse su 80). Richiesta del proprietario, scritta in CLAUDE.md: niente sigle nelle risposte.
+
+**Da +18,85 (3 ott) a −10 (4 ott, 15:48).** Realizzato −62,59 alle 08:20 con il 4 ott a −4,38 (ops 0466, 0474)
+→ −68,35 alle 15:48 (ops 0488): oggi −10,14 USDT su 17 trade aperti (ops 0486). Dai log (ops 0469, 0487; manca
+il tratto 06:00-13:17, fuori dalle 120 righe): 7 stop (ZORA, STX, SOPH, PNUT, SYRUP −3,24, PLUME, TA) e 4
+uscite trailing piccole (UB, GRIFFAIN, ZORA, MUBARAK). Dei 7 stop, 2 «direzione sbagliata» (SOPH mfe 0,23R,
+PNUT 0,10R) e 5 «a favore ma sotto il primo gradino» (SYRUP fino a 0,81R, poi stop pieno). Ieri 16 trade delle
+validate, 15 vinti, +0,869R a trade (ops 0479), quasi tutti chiusi dal trailing. È la forma del sistema, non un
+evento: le vincite sono piccole (massimo a favore mediano 0,84R contro un primo incasso a 1,5-2R), gli stop
+sono interi (−1R), e nei 19 giorni del paper le giornate vanno da −17,66 a +18,85 (ops 0474). Senza vantaggio
+all'ingresso (curva del vantaggio: nessuno misurabile), il segno del giorno lo decide il mercato.
