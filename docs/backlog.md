@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **0. Aspettano il tuo sì** | R1b (dopo R2: cambiare il piano di R1 o fermarlo) | una tua risposta |
 | **1. In lavorazione** | G7 (il gate sul prezzo casuale: sì del 4 ott), R1 (il gate rigiocato nel passato: sì del 1 ott), R2 (taratura di R1: sì del 3 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -32,11 +32,24 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-Nessuna voce in attesa del tuo sì.
+### R1b. Dopo R2: il piano di R1 cambia, o R1 si ferma? — aspetta la tua scelta (4 ott)
+**Il numero:** R2 ha giudicato le 50 candidate di R1 del 17 set col gate di oggi sulle 72 monete:
+**0 passate su 3.600 coppie** (ops 0485). Regola di R2: 0-1 → lo 0 di R1 è vero, il piano cambia e lo
+decidi tu. Nel frattempo R1 ha trovato la sua prima promossa (20 ago, 1 su 9.050 giudizi, 2 trade dopo).
+**Le opzioni fissate il 2 ott:** (a) più candidate per data: con ~1 promossa ogni 9.000 giudizi, per
+arrivare agli 80 trade della regola servirebbero ~40 promosse, cioè centinaia di migliaia di giudizi (stima:
+centinaia di ore di macchina) — non si fa in tempi utili; (b) mettere nel rigioco le strategie che il gate
+vero ha già fatto passare: ma sono state scelte guardando anche i giorni dopo la data (sguardo avanti), e
+il registro nasce a settembre, quindi vale solo per le date più recenti. **(c) proposta:** fermare R1 dopo
+G7 (il gate torna a 8 giri al giorno) e leggere la scelta del gate dove la si misura già senza sguardo avanti:
+il fuori campione del 7 e del 14 ott. Cosa abbiamo già capito da R1+R2: una candidata casuale nuova non passa
+quasi mai (0 su 3.600 oggi); le validate nascono dalla ricerca ripetuta (mutazioni dei quasi-passaggi,
+rivalutazioni a ogni giro), ed è lì che il conto delle prove esplode.
+
 
 ## 1. In lavorazione
 
-### G7. Il gate sul prezzo casuale: quante strategie passa per caso, a 1 ora? — SÌ del proprietario il 4 ott: gira nel lancio di R1 del 4 ott (finestra delle 14:00), dopo R2
+### G7. Il gate sul prezzo casuale: quante strategie passa per caso, a 1 ora? — SÌ del proprietario il 4 ott; il primo lancio (4 ott) non ha fatto prove per un difetto mio, corretto: gira al lancio del 5 ott, 13:10
 **Perché:** a 1 ora il giro vero passa il 2,2% delle prove (218 su 9.840, ops 0468), a 15 minuti lo
 0,12% (25 su 20.667, ops 0470); le prime validate a 1 ora entrano nel paper dall'8 ott. **Precisazione
 scritta prima dei numeri (4 ott):** le due quote non si confrontano fra loro: la passata a 1 ora rivaluta
@@ -55,7 +68,7 @@ unità di R1; solo file locali in `data/replay_gate/g7/1h/`; esito in `replay-ga
 ~20 minuti con 4 worker (misurati ~30 s a unità di 100 candidate in locale su candele finte, 144 unità).
 15 minuti si aggiunge solo se serve. **Non cambia:** bot, gate, registro, paper.
 
-### R2. Taratura di R1 a parità di candidate: R1 giudica come il gate vero? — SÌ del proprietario il 3 ott: gira all'inizio del prossimo lancio di R1 (finestra del 4 ott, 14:00)
+### R2. Taratura di R1 a parità di candidate — FATTA il 4 ott: 0 passate su 3.600 → lo 0 di R1 è vero (ops 0485); la scelta del piano è in R1b
 R1 ha passato 0 candidate su 16.000 in 2 date recenti (17 e 3 set, ops 0458), mentre il gate vero
 nell'ultimo giro ne ha passate 44 su 22.632 (0,19%) da un mix di 92 strategie (39 casuali nuove, 28
 mutazioni dei quasi-passaggi, 25 rivalutate; ops 0448/0450) che non divide le 44 per origine: non si sa se

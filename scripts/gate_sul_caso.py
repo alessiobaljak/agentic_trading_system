@@ -143,10 +143,17 @@ def rimescola(candles: list, seme: int) -> list:
 # --------------------------------------------------------------------------- #
 # L'unita' di lavoro (nei worker di R1)                                        #
 # --------------------------------------------------------------------------- #
-def _una_unita_g7(item) -> dict:
+def _una_unita_g7(item, rv=None) -> dict:
     """UNA moneta in UNA variante: le candidate giudicate dal gate di oggi con
-    tutte le candele (come R2), vere o rimescolate. Conta solo chi passa."""
-    rv = _rv()
+    tutte le candele (come R2), vere o rimescolate. Conta solo chi passa.
+
+    `rv` e' il modulo di R1 IN CUI GIRA IL WORKER (4 ott 2026, ops 0485): sulla
+    VPS R1 parte con `python -m scripts.replay_gate`, cioe' come `__main__`, e
+    lo stato del worker (`_S`, riempito da `_init`) sta in `__main__`, non nel
+    modulo `scripts.replay_gate` che un import da qui caricherebbe di nuovo
+    (vuoto). Per questo il lancio passa `replay_gate._una_unita_g7`, che chiama
+    questa funzione col proprio modulo."""
+    rv = rv or _rv()
     variante, sym = item
     base = {"data": variante, "coin": sym}
     if rv._scaduto():
@@ -278,9 +285,13 @@ def righe_lettura_g7(monete: list[str] | None, fatte: dict) -> list[str]:
         return [f"[g7] il gate sul prezzo casuale ({INTERVALLO}): non ancora fatto, parte nel "
                 f"prossimo lancio dopo R2"]
     v, c = r["vero"], r["caso"]
+    stati = Counter(str(x.get("stato")) for x in fatte.values())
+    errori = [str(x.get("errore")) for x in fatte.values() if x.get("stato") == "errore"]
     return [
         f"[g7] IL GATE SUL PREZZO CASUALE ({INTERVALLO}) · {N_CANDIDATE} candidate nuove (seme "
-        f"{SEME}) · monete a confronto {r['a_pari']}/{r['monete']}",
+        f"{SEME}) · monete a confronto {r['a_pari']}/{r['monete']} · unita' scritte: "
+        + " · ".join(f"{k} {n}" for k, n in sorted(stati.items()))
+        + (f" · primo errore: {errori[0][:100]}" if errori else ""),
         f"  REGOLA G7 (4 ott, scritta prima dei numeri): {REGOLA_G7}",
         f"  candele vere: {v['passate']} passate su {v['prove']} prove = {_pct(v['quota'])}"
         + (f" · bocciate per criterio: " + ", ".join(f"{k} {n}" for k, n in v["per_criterio"].items())

@@ -77,6 +77,7 @@ import json
 import math
 import multiprocessing
 import os
+import sys
 import time
 from collections import Counter
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -874,6 +875,14 @@ def _una_unita_r2(item) -> dict:
     return rec
 
 
+def _una_unita_g7(item) -> dict:
+    """L'unita' di G7 (scripts/gate_sul_caso.py) col modulo di QUESTO processo:
+    lanciato con `python -m`, lo stato dei worker sta in `__main__` (ops 0485:
+    importato da gate_sul_caso il modulo era un altro, vuoto)."""
+    from scripts import gate_sul_caso as g7
+    return g7._una_unita_g7(item, sys.modules[__name__])
+
+
 def salva_unita_r2(rec: dict) -> bool:
     """Come `salva_unita`, nella cartella di R2: solo esiti finali o errori (col
     numero di tentativi, per non riprovare all'infinito)."""
@@ -1263,7 +1272,7 @@ def _lancio(args) -> int:
             di(f"[g7] il gate sul prezzo casuale: {len(lav7)} unita' (moneta x vero/caso) a "
                f"{g7.INTERVALLO}, {g7.N_CANDIDATE} candidate nuove")
             esegui_e_salva(lav7, workers, ({**cfg, "interval": g7.INTERVALLO}, end, deadline,
-                                           False), g7.salva_unita_g7, unita=g7._una_unita_g7)
+                                           False), g7.salva_unita_g7, unita=_una_unita_g7)
             fatte_g7 = g7.leggi_unita_g7()
         let7 = g7.lettura_g7(monete, fatte_g7)
         if let7["completa"]:

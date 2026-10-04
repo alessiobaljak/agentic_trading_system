@@ -165,7 +165,8 @@ def test_nel_lancio_dopo_r2_e_prima_di_r1(monkeypatch, capsys, tmp_path):
         "per_criterio": {"total_return": 50}})
     ordine = []
 
-    def finta_g7(item):
+    def finta_g7(item, rv_mod=None):
+        assert rv_mod is rv               # il modulo del processo, non una copia
         ordine.append(item)
         v, c = item
         n = 12 if v == "vero" else 1
@@ -178,6 +179,7 @@ def test_nel_lancio_dopo_r2_e_prima_di_r1(monkeypatch, capsys, tmp_path):
         < out.index("PROVA PICCOLA")
     assert ordine[:2] == [("vero", "AUSDT"), ("vero", "BUSDT")]
     assert "FILTRA" in out                                   # 2 su 200 contro 24 su 200
+    assert "unita' scritte: ok 4" in out
     assert os.path.exists(os.path.join(g7.dir_g7(), "esito.json"))
     scritti = [os.path.join(r, f) for r, _d, fs in os.walk(tmp_path) for f in fs]
     assert all(p.startswith(rv.DIR_R1) for p in scritti)
@@ -199,3 +201,27 @@ def test_niente_firebase_ne_registro():
         src = f.read()
     for vietato in ("get_firebase", "set_doc", "set_rtdb", "merge_into_registry", "_disc_one"):
         assert vietato not in src, vietato
+
+
+def test_l_unita_usa_lo_stato_del_modulo_che_la_lancia(monkeypatch):
+    """Ops 0485, 4 ott: sulla VPS R1 gira come `python -m scripts.replay_gate`
+    (modulo `__main__`) e lo stato dei worker sta li'. L'unita' passata al pool
+    e' quella di replay_gate, che passa il PROPRIO modulo; con un modulo vuoto
+    l'unita' finisce in errore e la lettura lo dice."""
+    import sys
+    visti = []
+    monkeypatch.setattr(g7, "_una_unita_g7", lambda item, rv_mod=None: visti.append(rv_mod) or {})
+    rv._una_unita_g7(("vero", "AUSDT"))
+    assert visti == [sys.modules[rv.__name__]]
+    monkeypatch.undo()
+    # un modulo senza stato (il caso della VPS prima della correzione): errore, scritto
+    vuoto = type(sys)("vuoto")
+    for nome in ("_scaduto", "gate_in_arrivo", "MARGINE_FERMATA_S", "_carica", "_S", "di"):
+        setattr(vuoto, nome, getattr(rv, nome))
+    vuoto._S = {}
+    vuoto._scaduto = lambda: False
+    vuoto._carica = lambda sym: (_ for _ in ()).throw(KeyError("cfg"))
+    rec = g7._una_unita_g7(("vero", "AUSDT"), vuoto)
+    assert rec["stato"] == "errore" and "cfg" in rec["errore"]
+    righe = g7.righe_lettura_g7(["AUSDT"], {("vero", "AUSDT"): {**rec, "tentativi": 1}})
+    assert "errore 1" in righe[0] and "primo errore" in righe[0]

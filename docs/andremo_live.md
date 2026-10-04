@@ -2847,3 +2847,19 @@ motore ancora dentro il trade precedente, nessuno «regola che non scatta». Que
 feature per feature `--dettaglio` in lista bianca c'è solo per ORCA e VET). Conseguenza: nessuna modifica da
 fare; conferma che le misure «dal 27 set 19:40» (declassate, fuori campione, R dal 27/9) partono dal punto
 giusto. Allineamento ingressi sulle 8 coppie del confronto senza i 14 trade di prima della correzione: 33 su 37.
+
+### 4 ottobre, 13:55: R2 fatta, G7 rimandata per un mio difetto (ops 0484-0485)
+
+R1 lanciato alle 13:12 (ops 0484). **R2: 0 passate su 3.600** coppie (50 candidate del 17 set × 72 monete,
+gate di oggi; bocciate soprattutto su total_return 3.175, poi recovery 150, trades 146) → per la regola del 3
+ott **lo 0 di R1 è vero** e il cambio di piano lo decide il proprietario (voce R1b nel gruppo 0, con le opzioni
+del 2 ott e una terza: fermare R1 dopo G7 e leggere la scelta del gate nel fuori campione del 7 e 14 ott).
+R1 intanto ha la prima promossa: data 20 ago, 1 su 9.050 giudizi, 2 trade dopo a +0,89R (190 unità su 1.872).
+
+**G7 non ha fatto nessuna prova**: «monete a confronto 0/72, 0 prove» (ops 0485). Causa (dedotta, il referto non
+mostra le righe [g7]): sulla VPS R1 gira come `python -m scripts.replay_gate`, cioè come modulo `__main__`; lo
+stato dei worker (`_S`) lo riempie `__main__._init`, mentre l'unità di G7 importava `scripts.replay_gate`, un
+SECONDO modulo con lo stato vuoto → errore a ogni unità. Nei test non si vedeva perché lì il modulo è uno solo.
+Corretto: il pool riceve `replay_gate._una_unita_g7`, che passa il proprio modulo (`sys.modules[__name__]`); test
+nuovo che lo controlla; la lettura di G7 ora stampa gli stati delle unità e il primo errore. Le unità in errore
+(1 tentativo) si rifanno al prossimo lancio. Suite: 2283 passati. G7 gira nel lancio di domani alle 13:10.
