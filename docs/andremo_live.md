@@ -2882,3 +2882,12 @@ validate, 15 vinti, +0,869R a trade (ops 0479), quasi tutti chiusi dal trailing.
 evento: le vincite sono piccole (massimo a favore mediano 0,84R contro un primo incasso a 1,5-2R), gli stop
 sono interi (−1R), e nei 19 giorni del paper le giornate vanno da −17,66 a +18,85 (ops 0474). Senza vantaggio
 all'ingresso (curva del vantaggio: nessuno misurabile), il segno del giorno lo decide il mercato.
+
+### 4 ottobre, 16:30: «abbassare il primo incasso a 0,8R?» — una colonna in più, nessun cambio
+
+Risposta al proprietario: non prima delle letture del 7-14 ott (regola del 30 set e di T2). Numeri (ops 0471):
+modello semplificato 1/1,5/2,5 −0,35R contro 2/4/6 −0,85R; 58 stop su 111 sotto il primo gradino, mfe mediana
+0,49R; 68% dei trade a 0,5R, 42% a 1R. Il gate ha già 0,75/1,25/1,75 fra le candidate (scelta per 5 coppie).
+Fatto, col suo sì: colonna 0,8/1,6/2,4 nella tabella «R medi incassati per scala» del report `mfe`,
+dichiarata SOLO MISURA (`SCALE_SOLO_MISURA` in `scripts/mfe_report.py`): il gate non la prova, il bot non la
+opera. Test `tests/test_scala_solo_misura.py`. Si legge col controllo del 7 ott.

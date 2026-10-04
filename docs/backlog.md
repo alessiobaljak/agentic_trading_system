@@ -209,6 +209,7 @@ trailing «chandelier» per il trend. Nota: le scale ricavate dal paper (`ladder
 dalle uscite di oggi, che tagliano l'mfe: da togliere quando arriva (1). Note: la riga «0 con almeno 5 trade» del log del gate (ops 0411) conta solo la corsia urgente, non le
 strategie con scala propria (11 il 1 ott, ops 0386); il freno di deriva confronta l'mfe con il primo
 gradino GLOBALE (1,5R), non con quello della coppia (`drift.py:575-576`).
+**4 ott (domanda del proprietario: «abbassare il primo incasso a 0,8R?»).** Risposta: non prima del 14 ott. Numeri a favore: nel modello semplificato le scale strette perdono meno (1/1,5/2,5 −0,35R contro 2/4/6 −0,85R su 264 trade, ops 0471); 58 stop su 111 morti sotto il primo gradino con mfe mediana 0,49R. Contro: senza vantaggio all'ingresso cambia la forma, non il segno; e il gate ha già 0,75/1,25/1,75 fra le candidate e la sceglie per 5 coppie sole, perché sulla storia le scale larghe rendono di più. Fatto: colonna 0,8/1,6/2,4 SOLO MISURA nella tabella del report `mfe` (`SCALE_SOLO_MISURA`); si legge il 7 e il 14 ott. Se regge, la mossa è far decidere al gate coppia per coppia.
 
 ## 3. A metà novembre
 

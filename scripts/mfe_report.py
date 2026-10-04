@@ -203,6 +203,14 @@ def lettura_strutturale(ri: dict) -> str:
     return testo
 
 
+#: SCALE SOLO IN TABELLA (4 ott 2026, domanda del proprietario: «non possiamo
+#: abbassare il primo incasso a 0,8R?»): si misurano accanto alle candidate del
+#: gate, ma il gate NON le prova e il bot NON le opera. Le uscite non si toccano
+#: prima delle letture del 7-14 ott; se il numero regge, la mossa e' far scegliere
+#: al gate coppia per coppia, non imporre un livello a tutti.
+SCALE_SOLO_MISURA: tuple[tuple[float, ...], ...] = ((0.8, 1.6, 2.4),)
+
+
 def banked_r(mfe: float, mults, fracs) -> float:
     """R incassati da una scala, dato il massimo raggiunto (MODELLO SEMPLIFICATO).
 
@@ -318,21 +326,22 @@ def main() -> int:
         print(f"  ({cs['nota']})")
 
     print(f"\nR medi incassati per scala (modello semplificato, quote {fracs}):")
+    scale = tuple(SCALE_LADDER_CANDIDATES) + SCALE_SOLO_MISURA
     head2 = "gruppo".ljust(34) + "n".rjust(4) + \
-        "".join(f"  {'/'.join(f'{m:g}' for m in c)}".rjust(14) for c in SCALE_LADDER_CANDIDATES)
+        "".join(f"  {'/'.join(f'{m:g}' for m in c)}".rjust(14) for c in scale)
     print(head2)
     print("-" * len(head2))
     for k, vals in rows[: args.limit]:
         line = k[:33].ljust(34) + str(len(vals)).rjust(4)
-        scores = [sum(banked_r(v, c, fracs) for v in vals) / len(vals)
-                  for c in SCALE_LADDER_CANDIDATES]
+        scores = [sum(banked_r(v, c, fracs) for v in vals) / len(vals) for c in scale]
         best = max(range(len(scores)), key=lambda i: scores[i])
         for i, sc in enumerate(scores):
             cell = f"{sc:+.3f}" + (" *" if i == best else "  ")
             line += cell.rjust(14)
         print(line)
 
-    print("\n(*) scala col miglior R medio in questo gruppo, secondo il modello")
+    print("\n    0.8/1.6/2.4 = SOLO MISURA (4 ott 2026): il gate non la prova, il bot non la opera.")
+    print("(*) scala col miglior R medio in questo gruppo, secondo il modello")
     print("    semplificato: gradini raggiunti = incassati, residuo a break-even.")
     print("    Serve a SCEGLIERE le candidate — la validazione vera la fa il GATE,")
     print("    che simula il percorso completo con lo stop che si sposta.")
