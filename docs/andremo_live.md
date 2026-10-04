@@ -2830,3 +2830,20 @@ Migliorato: prima settimana in utile (+14,09), ingressi allineati al gate al 65%
 Peggiorato: giri del gate oltre le 3 ore e senza pause, stop della settimana soprattutto d'ingresso (29 su 53),
 prematuri del trailing sopra i protetti per la prima volta. Proposta (non fatta): guardare trade per trade
 perché su USELESSUSDT|gen_2031005e e SUIUSDT|gen_490a90e5 il paper entra dove il gate non entra (0 su 7).
+
+### 4 ottobre, 10:40: USELESS e SUI trade per trade (sì del proprietario, ops 0483)
+
+Lo strumento `ingressi` (sola lettura, 736 s; 18 coppie rigirate su 127, le altre 109 fuori per il tempo) dice,
+per i 14 trade di USELESSUSDT|gen_2031005e e SUIUSDT|gen_490a90e5: tutti **short**, tutti fra il 21 set 08:30 e
+il 27 set 11:15 UTC, tutti «la regola non scatta» con sotto-motivo IGNOTO: il motore non li riproduce nemmeno
+sui valori degli indicatori registrati dal paper, nello stesso regime. È la stessa firma dei 5 trade di
+`gen_6d06dca0` che il 27 set hanno fatto trovare il difetto della sessione oraria (J13, corretto il 27 set alle
+19:40 UTC: la feature `session` leggeva l'ora del processo, e fuori sessione ammetteva solo lo short). Su tutte
+le 18 coppie rigirate i trade non riprodotti visibili sono 20, tutti short, tutti prima della correzione
+(anche HUMAUSDT|gen_fca11c08 ×4, PROM ×1, SYRUP ×1); dopo la correzione 8 trade rigirati: 7 abbinati e 1 col
+motore ancora dentro il trade precedente, nessuno «regola che non scatta». Quei 20 trade fanno −33,57 USDT
+(USELESS −24,39, HUMA −13,47, SUI +1,22, PROM +4,48, SYRUP −1,41), circa metà della perdita totale del paper
+(−62,59, ops 0466). **Non verificato:** che le due spec usino `session` (la spec non è stampata; il dettaglio
+feature per feature `--dettaglio` in lista bianca c'è solo per ORCA e VET). Conseguenza: nessuna modifica da
+fare; conferma che le misure «dal 27 set 19:40» (declassate, fuori campione, R dal 27/9) partono dal punto
+giusto. Allineamento ingressi sulle 8 coppie del confronto senza i 14 trade di prima della correzione: 33 su 37.
