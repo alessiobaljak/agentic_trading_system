@@ -1098,6 +1098,9 @@ def esito() -> int:
     piano = leggi_piano()
     for r in righe_lettura_r2(piano, leggi_unita_r2()):
         di(r)
+    from scripts import gate_sul_caso as g7
+    for r in g7.righe_lettura_g7((piano or {}).get("universo"), g7.leggi_unita_g7()):
+        di(r)
     for r in righe_lettura(piano, leggi_unita()):
         di(r)
     return 0
@@ -1249,6 +1252,24 @@ def _lancio(args) -> int:
             di("[r2] R1 SI FERMA (regola R2): tolto il file «attivo», il gate torna a 8 giri "
                "al giorno. Niente unita' di R1 in questo lancio.")
             return 0
+    # G7 DOPO R2 (4 ott 2026): il gate sul prezzo casuale, a 1 ora, sulle monete
+    # del piano (scripts/gate_sul_caso.py); finche' non e' completo
+    from scripts import gate_sul_caso as g7
+    if g7.G7_ATTIVO:
+        monete = list(piano.get("universo") or [])
+        fatte_g7 = g7.leggi_unita_g7()
+        lav7 = g7.lavoro_g7(monete, fatte_g7)
+        if lav7:
+            di(f"[g7] il gate sul prezzo casuale: {len(lav7)} unita' (moneta x vero/caso) a "
+               f"{g7.INTERVALLO}, {g7.N_CANDIDATE} candidate nuove")
+            esegui_e_salva(lav7, workers, ({**cfg, "interval": g7.INTERVALLO}, end, deadline,
+                                           False), g7.salva_unita_g7, unita=g7._una_unita_g7)
+            fatte_g7 = g7.leggi_unita_g7()
+        let7 = g7.lettura_g7(monete, fatte_g7)
+        if let7["completa"]:
+            scrivi_atomico(os.path.join(g7.dir_g7(), "esito.json"), let7)
+        for r in g7.righe_lettura_g7(monete, fatte_g7):
+            di(r)
     fatte = leggi_unita()
     lavoro, prova = lavoro_da_fare(piano, fatte, limit=args.limit)
     di(f"[r1] {len(lavoro)} unita' (coin x data) da fare in questo lancio"

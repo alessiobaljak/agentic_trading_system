@@ -61,6 +61,9 @@ def _niente_gate_ne_file_veri(tmp_path, monkeypatch):
     monkeypatch.setattr(dl, "_drop_older", lambda *a, **k: (_ for _ in ()).throw(
         AssertionError("la cache del gate non si tocca")))
     monkeypatch.setattr(dl, "funding_rate_for", lambda s: None)
+    # G7 (il gate sul prezzo casuale) ha i suoi test: qui spento
+    from scripts import gate_sul_caso as g7
+    monkeypatch.setattr(g7, "G7_ATTIVO", False)
     rv._S.clear()
     yield
     rv._S.clear()
@@ -129,6 +132,9 @@ def test_al_gate_non_arriva_niente_dopo_la_data(monkeypatch):
     specs += [s for s in rv.candidate_della_data(giorno, 60) if not rv.usa_mercato(s)][:1]
     assert len(specs) == 3
     monkeypatch.setattr(rv, "candidate_della_data", lambda g, n: specs)
+    # la serie finta finisce il 1 ott: da qualche giorno dopo sembrerebbe delistata
+    # (il test e' sul taglio alla data, non sul delisting)
+    monkeypatch.setattr(rv, "looks_delisted", lambda *a, **k: False)
     rv._init(_cfg(), OGGI, 0.0)
     rv._S["min_history"] = 2000
     rec = rv._una_unita((giorno, "AUSDT"))
@@ -146,6 +152,7 @@ def test_al_gate_non_arriva_niente_dopo_la_data(monkeypatch):
 def test_storia_corta_alla_data(monkeypatch):
     monkeypatch.setattr(rv, "load_candles", lambda *a, **k: _serie("AUSDT", giorni=40))
     monkeypatch.setattr(rv, "candidate_della_data", lambda g, n: [])
+    monkeypatch.setattr(rv, "looks_delisted", lambda *a, **k: False)   # serie finta al 1 ott
     rv._init(_cfg(), OGGI, 0.0)
     rec = rv._una_unita(("2026-09-10", "AUSDT"))
     assert rec["stato"] == "storia"          # un anno di storia alla data, come il gate

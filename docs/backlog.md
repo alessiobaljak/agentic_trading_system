@@ -14,8 +14,8 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | G7 (il gate sul prezzo casuale: quante strategie passa per caso a 15 minuti e a 1 ora) | una tua risposta |
-| **1. In lavorazione** | R1 (il gate rigiocato nel passato: sì del 1 ott), R2 (taratura di R1: sì del 3 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **1. In lavorazione** | G7 (il gate sul prezzo casuale: sì del 4 ott), R1 (il gate rigiocato nel passato: sì del 1 ott), R2 (taratura di R1: sì del 3 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -32,23 +32,28 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-### G7. Il gate sul prezzo casuale: quante strategie passa per caso, a 15 minuti e a 1 ora? — proposta del 4 ott, aspetta il tuo sì
-**Perché:** a 1 ora il gate passa il 2,2% delle prove (218 su 9.840, ops 0468; 141 e 193 nei giri
-prima), a 15 minuti lo 0,12% (25 su 20.667, ops 0470): diciotto volte tanto. Non sappiamo se a 1 ora
-le strategie sono migliori o se il filtro è più facile (meno trade per prova: un risultato buono per
-caso è più probabile). Le prime validate a 1 ora entrano nel paper dall'8 ott: va saputo prima.
-**Cosa:** le stesse candidate casuali del gate (generatore e seme di R1) giudicate dal gate di
-produzione (finestre, holdout, soglie di oggi; niente AI, niente registro, niente Firebase) su prezzi
-**senza vantaggio possibile**: le serie vere delle monete operate con i rendimenti delle candele
-rimescolati a blocchi di un giorno (stessa volatilità e stessi movimenti, ordine casuale). Prima 1 ora
-(~10-15 min di macchina, come la passata a 1 ora), poi 15 minuti se serve. **Regola scritta prima dei
-numeri:** quota di passaggio sul caso ≥ metà di quella vera → a quel timeframe il gate passa
-soprattutto rumore (la prossima modifica va nelle soglie del gate, con R1); ≤ un quinto → il gate
-filtra il rumore (il problema del paper è altrove); in mezzo → non si sa. **Non cambia:** bot, gate,
-registro, paper. **Metro:** due numeri, quota vera e quota sul caso, per timeframe, con il conteggio
-delle prove. Si fa girare nella finestra di R1 o fra due giri, mai insieme al gate.
+Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
+
+### G7. Il gate sul prezzo casuale: quante strategie passa per caso, a 1 ora? — SÌ del proprietario il 4 ott: gira nel lancio di R1 del 4 ott (finestra delle 14:00), dopo R2
+**Perché:** a 1 ora il giro vero passa il 2,2% delle prove (218 su 9.840, ops 0468), a 15 minuti lo
+0,12% (25 su 20.667, ops 0470); le prime validate a 1 ora entrano nel paper dall'8 ott. **Precisazione
+scritta prima dei numeri (4 ott):** le due quote non si confrontano fra loro: la passata a 1 ora rivaluta
+soprattutto spec già note a 1 ora (259 su 328, riga ORIGINI di ops 0468), cioè coppie già passate,
+mentre il giro «solo urgenti» a 15 minuti è quasi tutto candidate nuove. Il confronto si fa quindi a
+parità di tutto: **100 candidate nuove** (generatore del gate, seme 20261004) sulle **72 monete del piano
+di R1**, giudicate dal gate di produzione a 1 ora due volte: sulle candele vere e sulle stesse candele
+**rimescolate candela per candela** (ogni candela tiene forma e volume, cambia solo l'ordine: stesso
+prezzo d'inizio e di fine, nessuna dipendenza nel tempo). Il rimescolamento a blocchi di un giorno della
+proposta è stato scartato prima dei numeri: dentro il giorno terrebbe gli schemi veri. **Regola:** quota
+sul caso ≥ metà di quella vera → a 1 ora il gate passa soprattutto rumore (la prossima modifica va nelle
+soglie del gate, con R1); ≤ un quinto → il gate filtra il rumore (il problema del paper è altrove); in
+mezzo → non si sa; con meno di 10 passate sulle candele vere → non si sa (troppo poche per un rapporto).
+**Dove:** `scripts/gate_sul_caso.py`, dentro il lancio di R1 (comando `replay-gate`), dopo R2 e prima delle
+unità di R1; solo file locali in `data/replay_gate/g7/1h/`; esito in `replay-gate-esito`. Costo stimato
+~20 minuti con 4 worker (misurati ~30 s a unità di 100 candidate in locale su candele finte, 144 unità).
+15 minuti si aggiunge solo se serve. **Non cambia:** bot, gate, registro, paper.
 
 ### R2. Taratura di R1 a parità di candidate: R1 giudica come il gate vero? — SÌ del proprietario il 3 ott: gira all'inizio del prossimo lancio di R1 (finestra del 4 ott, 14:00)
 R1 ha passato 0 candidate su 16.000 in 2 date recenti (17 e 3 set, ops 0458), mentre il gate vero

@@ -2770,3 +2770,22 @@ col lancio del 4 ott (finestra delle 14:00, ~30-35 min stimati su 72 monete), es
 **Proposta del giorno:** G7, il gate sul prezzo casuale (gruppo 0 del backlog): quante candidate passa il gate su prezzi rimescolati, a 1 ora e a 15 minuti, contro le quote vere (2,2% e 0,12%). Aspetta il sì.
 
 **In parallelo (solo analisi, niente nel sistema):** il proprietario sta rivedendo una proposta di protocollo di ricerca per moneta con vault 2024-2026 (versione 2 in PDF, consegnata il 3 ott, non nel repo).
+
+### 4 ottobre, mattina: G7 scritta (sì del proprietario)
+
+Il proprietario ha detto «sì G7, procedi». Scrivendola ho visto un difetto della proposta, corretto PRIMA di
+qualunque numero: la quota a 1 ora del giro vero (2,2%) contiene soprattutto spec già note a 1 ora (259 su 328
+nella riga ORIGINI, ops 0468), cioè coppie che erano già passate; quella a 15 minuti (0,12%) è quasi tutta di
+candidate nuove. Il «diciotto volte» del controllo di stamattina era soprattutto composizione (corretto in
+capito.md). Quindi G7 confronta a parità di tutto: 100 candidate NUOVE (generatore del gate, seme 20261004)
+sulle 72 monete del piano di R1, giudicate dal gate di produzione a 1 ora sulle candele vere e sulle stesse
+candele rimescolate candela per candela (forma e volume di ogni candela uguali, ordine casuale; stesso inizio e
+stessa fine). Il rimescolamento a blocchi di un giorno è stato scartato: dentro il giorno terrebbe gli schemi
+veri. **Regola (scritta prima dei numeri):** quota sul caso ≥ metà di quella vera → a 1 ora il gate passa
+soprattutto rumore (la prossima modifica va nelle soglie del gate, con R1); ≤ un quinto → il gate filtra il
+rumore (il problema del paper è altrove); in mezzo → non si sa; meno di 10 passate sulle candele vere → non si
+sa. Codice: `scripts/gate_sul_caso.py`, dentro il lancio di R1 dopo R2 e prima delle unità di R1, solo file in
+`data/replay_gate/g7/1h/`; esito in `replay-gate-esito`. Misurato in locale su candele finte: ~30 s per unità
+di 100 candidate, 144 unità → ~20 min con 4 worker (stima). Nessuna riga nuova nella lista bianca. Gira nel
+lancio delle 13:10. Due test di R1 legati alla data (serie finta ferma al 1 ott, «delistata» da oggi) sistemati;
+suite: 2282 passati.
