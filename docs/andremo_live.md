@@ -2907,3 +2907,10 @@ il gate a 1 ora non distingue il rumore; con numeri così piccoli il doppio può
 (0,11%) uguale a quella delle candidate nuove a 15 minuti nel giro vero (25 su 20.667, 0,12%, ops 0470) e
 coerente con R2 (0 su 3.600): il 2,2% della passata a 1 ora è composizione (spec già note), come scritto il 4.
 Da verificare col `log-gate` dopo le 14:04: che il giro delle 14:00 sia partito (file «attivo» tolto).
+
+### 5 ottobre, 14:20: il giro delle 14:00 è tornato (ops 0507)
+
+Il lancio delle 13:13 ha aspettato la fine del giro in corso (finito 13:28, 2 h 10, 63 passate) e ha fatto la
+prova sui prezzi mescolati dalle 13:28 alle 13:48: 20 minuti per 144 unità, come stimato. Alle 14:05 il gate è
+partito regolarmente, senza la riga «giro delle 12:00 UTC SALTATO»: il file «attivo» è stato tolto, il gate è
+tornato a 8 giri al giorno. Il gate rigiocato nel passato è chiuso: 8 date su 26 restano su disco.
