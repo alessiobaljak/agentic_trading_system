@@ -7,6 +7,14 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-05
+* Il numero guida è tornato a −0,03R su 182 segnali, margine ±0,17 (ops 0498; ieri +0,006 su 156): la lettura stampata dice già «la promessa non regge dopo la validazione: la prossima modifica va nel gate». Il verdetto resta al 7 ott, ma in tre giorni il numero ha oscillato fra −0,03 e +0,006 senza mai uscire dal margine: è un sistema a zero, non un sistema in calo.
+* Il gate rigiocato nel passato, su 8 date complete (ops 0502): 6 promosse su 25.631 giudizi, e i loro 45 trade fanno −0,22R contro −0,14R delle bocciate (differenza −0,08 ±0,31, non decide: ne servono 80). Primo indizio diretto che la scelta del gate non è migliore del mucchio; con R2 (0 su 3.600) chiude il quadro: le validate nascono dalla ricerca ripetuta, non da candidate buone.
+* La colonna 0,8/1,6/2,4 chiesta ieri: nel modello semplificato è la scala che perde meno, −0,20R a trade su 291 contro −0,37 (1/1,5/2,5) e −0,86 (2/4/6) (ops 0495). Conferma che il primo incasso è lontano, ma non cambia il segno: anche la scala migliore resta sotto zero in quel modello.
+* Il paper esplorativo non «contribuisce» più: 11 trade a +0,242R contro −0,089R, differenza +0,331 ±0,475 → non si vede ancora (ops 0489; ieri «contribuisce» su 10). Era il limite del campione minimo, come scritto ieri.
+* La prova sul prezzo casuale del 4 ott ha scritto 144 unità in errore, tutte «'cfg'» (ops 0502): conferma la causa dedotta ieri (stato dei worker in un altro modulo), corretta. Gira oggi alle 13:10.
+* Il giro completo della notte è durato 3 h 22 (ops 0492) con 42.274 valutazioni e 421 passate: l'intorno delle quasi-promosse ha generato 213 figlie (riga ORIGINI). È il meccanismo della ricerca ripetuta che gonfia il conto delle prove.
+
 ## 2026-10-04
 * La stella polare è passata da −0,03R su 130 segnali (ops 0454) a +0,006R su 156, margine ±0,17 (ops 0474), per una giornata sola: il 3 ott 16 trade delle validate, 15 vinti, +0,869R a trade (ops 0479). Il numero oscilla intorno a zero dentro il margine: oggi la regola del 7 ott («motore ≤ 0 con almeno 80 segnali → la modifica va nel gate») non scatterebbe, ieri sì. Il verdetto del 7 ott può dipendere da un giorno buono o cattivo: per questo c'è la conferma del 14.
 * Entriamo un po' peggio del segnale: ingresso a +0,038R rispetto alla chiusura della candela del segnale, con 155 secondi di ritardo (mediane, dato D8 raccolto dal 1 ott; ops 0479). È circa metà dei costi stimati a trade (0,081R): non spiega le perdite da solo, ma pesa.
