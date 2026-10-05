@@ -15,7 +15,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
 | **0. Aspettano il tuo sì** | P0 (il protocollo di ricerca per moneta: Passo 0) | una tua risposta |
-| **1. In lavorazione** | G7 (il gate sul prezzo casuale: sì del 4 ott, gira il 5 ott), R1 (fermata il 4 ott: si chiude col lancio del 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **1. In lavorazione** | G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -39,7 +39,7 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 1. In lavorazione
 
-### G7. Il gate sul prezzo casuale: quante strategie passa per caso, a 1 ora? — SÌ del proprietario il 4 ott; il primo lancio (4 ott) non ha fatto prove per un difetto mio, corretto: gira al lancio del 5 ott, 13:10
+### G7. Il gate sul prezzo casuale: quante strategie passa per caso, a 1 ora? — FATTA il 5 ott: candele vere 8 passate su 7.200 (0,11%), rimescolate 16 su 7.200 (0,22%), rapporto 2,0 → per la regola NON SI SA (meno di 10 passate sul vero), ops 0506
 **Perché:** a 1 ora il giro vero passa il 2,2% delle prove (218 su 9.840, ops 0468), a 15 minuti lo
 0,12% (25 su 20.667, ops 0470); le prime validate a 1 ora entrano nel paper dall'8 ott. **Precisazione
 scritta prima dei numeri (4 ott):** le due quote non si confrontano fra loro: la passata a 1 ora rivaluta
