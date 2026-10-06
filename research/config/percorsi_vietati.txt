@@ -1,0 +1,45 @@
+# Percorsi vietati al protocollo di ricerca (PROTOCOLLO.md, sezione 2 e Passo 0).
+#
+# PROPOSTA DEL PASSO 0, DA APPROVARE DALL'UTENTE (6 ottobre 2026). L'elenco e'
+# stato scritto guardando solo i NOMI di cartelle e file del bot, senza aprirli:
+# sono i posti dove vivono dati, log, risultati e segreti costruiti sul periodo
+# del vault. Nel dubbio un percorso e' vietato.
+#
+# Come lo legge il guardiano (research/src/guardiano.py):
+#   * una riga che finisce con "/" e' una cartella, contata dalla radice del
+#     repo ("data/" NON tocca "research/data/");
+#   * una riga con "*" o senza "/" e' un pattern sul nome del file, e vale solo
+#     FUORI da research/: dentro research/data/, research/universo/*.csv e
+#     research/campagne/ i .csv e i .jsonl sono dati di mercato e log legittimi;
+#   * "#" apre un commento; le righe vuote si ignorano.
+# I segreti (.env, *.env, tuning.env, *service-account*.json, *.pem, *.key)
+# sono vietati OVUNQUE dal guardiano, anche se qui sono elencati per chiarezza.
+
+# cartelle del bot con stato, dati, risultati e documenti scritti sul periodo del vault
+ops/
+data_cache/
+data/
+.cache/
+docs/
+backtesting/output/
+dashboard/
+tests/
+firebase/
+
+# segreti
+.env
+*.env
+tuning.env
+*service-account*.json
+
+# copie di sicurezza di trade e gate del paper
+trades_backup_*.json
+gate_backup_*.json
+
+# file di dati, log e risultati, in qualunque cartella fuori da research/
+*.jsonl
+*.log
+*.db
+*.sqlite
+*.parquet
+*.csv

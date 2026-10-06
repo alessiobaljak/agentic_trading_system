@@ -85,6 +85,18 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/research/src/guardiano.py\"",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

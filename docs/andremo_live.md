@@ -2918,3 +2918,29 @@ tornato a 8 giri al giorno. Il gate rigiocato nel passato è chiuso: 8 date su 2
 ### Controllo del 6 ottobre (mattina)
 
 Nessun guasto: bot vivo (battito 12 s, ops 0520), controllo orario regolare, letture Firestore 8.444/24 h (ops 0512), spesa AI di ieri 0 (ops 0510), nessun errore nelle righe lette; le 80 righe del log del gate sono solo candele del giro in corso (ops 0513): prova indiretta di AI e varianti spente dalla riga ORIGINI (nuove AI 0, varianti 0, ops 0511). Nessuna riga «giro delle 12:00 UTC SALTATO». **Giro completo della notte 3 h 28** (anomalia GATE_SFORA, ops 0520): 43.147 valutazioni, 429 passate, 204 figlie dell'intorno (ops 0511). **Numeri:** 309 trade, 57%, −77,42 USDT (lordo −33,02, costi 44,40), equity 922,58, DRY_RUN True, 3 aperte con 0,50% (ops 0509). Il 5 ott: 23 trade delle validate −6,52 USDT, −0,135R a trade (ops 0521); conto −6,38; oggi fin qui −2,40 (ops 0517). Giornate del paper: 7 in utile, 14 in perdita su 21. Dal 27 set −0,057R netti su 162 (lordo +0,037, costi 0,093; ops 0508). Long −0,110R su 85, short +0,002 su 77, regime neutro −0,182R su 93 (dal 27 set). Stop: 132, 61 ingresso / 70 uscita / 1 (ops 0514). **Stella polare:** motore dopo la validazione −0,04R su 202 ±0,16 (ops 0517; ieri −0,03 su 182); stessi segnali motore −0,04, paper −0,08, differenza +0,04 ±0,07; lettura stampata: «la promessa non regge … la prossima modifica va nel gate»; **domani 7 ott la lettura ufficiale**. Declassate dal 27 set: −0,119R su 114 contro +0,092 su 48, −0,211 ±0,353 → non si decide (ops 0508). Curva del vantaggio su 309: nessun vantaggio (ops 0514). Scale: 0,8/1,6/2,4 −0,21R (migliore), 2/4/6 −0,86 (ops 0514). Funzioni: tutte «non si vede ancora» (7, ops 0508). **Gate:** 257 validate su 82 coin, 781 a 2/3, spazio ~758, t ≥ 2 per 79 su 112, declassate 173 (ops 0511); passata a 1 ora 281 su 12.810; nessuna validata né trade a 1 ora. Selettore NON BATTE (ops 0516). Rifiuti 24 h: 7 «posizione già aperta», 1 cooldown (ops 0518). Trailing 7 giorni: 38 prematuri, 26 protetti (ops 0521). D8: ingresso +0,027R rispetto al segnale, latenza 159 s (ops 0521). Report pubblicato alle 08:21, versione ecc5247 (ops 0521). **Proposta del giorno:** nessuna nuova: nel gruppo 0 aspetta ancora il sì il Passo 0 del protocollo di ricerca (versione 4.3 rivista il 5-6 ott).
+
+### 6 ottobre, sera: Passo 0 del protocollo di ricerca (sì del proprietario: «sì alla 4.3, sì ai branch, vai col Passo 0»)
+
+Fatto in giornata, con cinque agenti in parallelo e quattro revisori avversari (36 difetti confermati e corretti,
+elenco in `research/CHANGELOG.md`). Nel repo: `research/PROTOCOLLO.md` (4.3 con i due ritocchi: branch
+`research/…` e guardiano), `research/src/motore.py` (motore di backtest secondo la sezione 7: barre chiuse,
+ingresso all'apertura successiva, stop prima del target nella barra, gap in apertura, funding ai settlement con
+la regola della stessa candela, costi per lato e moltiplicatore, dimensione e leva con riduzione al tetto,
+liquidazione isolated/cross sul mark, ritardo di una barra, cucitura dei contratti, fine dati), `src/dati.py`
+(caricatore da data.binance.vision con il blocco del vault prima di ogni accesso, impronte SHA-256, aggregazione
+dei timeframe, elenco contratti), `src/statistica.py` (bootstrap a blocchi, differenza «netta», p-value con
+correzione, Benjamini-Hochberg, entrate casuali, criterio del vault), `src/guardiano.py` (hook PreToolUse
+registrato in `.claude/settings.json`, attivo solo con `research/.sessione`), `src/fatti.py` (controllo dei
+riferimenti file:riga di `config/regole_dimensione.md`), `config/regole_dimensione.md` (548 righe, 303
+riferimenti al codice del bot), `config/percorsi_vietati.txt`, `config/parametri.yaml` (bozza, stato
+`bozza_passo_0`). Test: 371 nella cartella `research/src/tests` più i 2.286 del repo, tutti passati.
+**Verifiche sulla rete vera** (dopo che il proprietario ha aperto gli host nell'ambiente): BTCUSDT 1h gennaio
+2023 scaricato (744 candele, 744 mark, 93 settlement), checksum remoto uguale allo SHA-256 locale; il blocco del
+vault ha rifiutato una richiesta fino al 2024-01-01 PRIMA di toccare la rete; buy and hold di gennaio 2023 a mano
+16537,5 → 23119,4 = +39,80% lordo, il motore dà +39,80% lordo e +39,62% netto; una strategia banale sui dati veri
+gira con mark e funding (9 trade). L'archivio mensile parte da gennaio 2020; i delistati ci sono (LUNA, FTT, SRM,
+BTCST, RAY); fapi.binance.com risponde 451 dalla regione del server, www.binance.com/fapi/v1/exchangeInfo no
+(924 contratti); l'indice del bucket sta su s3-ap-northeast-1.amazonaws.com (1000 simboli a pagina). Non
+verificabili dalla sessione: tabella commissioni e documentazione (pagine costruite dal browser).
+**STOP del Passo 0:** sei decisioni aperte in `parametri.yaml` (commissione taker, serie dello stop e workingType,
+modalità di margine, porta d'ingresso nel bot per le strategie in codice, coda del 2019, percorsi vietati).

@@ -1,0 +1,198 @@
+# Parametri del protocollo di ricerca (research/PROTOCOLLO.md, sezione 3).
+#
+# BOZZA DEL PASSO 0, 6 ottobre 2026: NON ancora approvata. Dopo l'approvazione
+# dell'utente `stato` diventa "congelato" e nessun valore cambia piu'. Nessun
+# valore qui e' stato scelto guardando dati di mercato o risultati di strategie.
+# Ogni fatto porta la sua fonte: "verificato" (visto il 6 ott dalla sessione di
+# lavoro) oppure "da_confermare" (non raggiungibile dalla sessione: lo conferma
+# l'utente). Il dettaglio dei fatti sul bot, con file:riga, e' in
+# config/regole_dimensione.md.
+
+stato: bozza_passo_0
+versione_protocollo: "4.3"
+data_bozza: 2026-10-06
+
+# --------------------------------------------------------------------------- #
+# 3.1 Periodi (fissi)
+# --------------------------------------------------------------------------- #
+periodi:
+  in_sample:
+    inizio: "inizio dei dati della moneta nell'archivio (file mensili di data.binance.vision)"
+    fine: 2023-12-31
+    nota: >-
+      L'archivio mensile dei futures parte da gennaio 2020 (verificato: BTCUSDT 1h
+      2019-12 assente, 2020-01 presente; stesso per il funding). I file giornalieri
+      coprono solo dal 2019-12-31. BTCUSDT e' quotato dal 2019-09-08 (exchangeInfo):
+      i mesi settembre-dicembre 2019 di BTC, ETH (dal 2019-11-27) e BCH (dal 2019-12-19)
+      restano fuori e lo si dichiara. Decisione aperta n. 5.
+  vault:
+    inizio: 2024-01-01
+    fine: 2026-09-30
+    apertura: "solo dopo la frase esatta «APRI IL VAULT», una volta sola (file vault/APERTURA.md)"
+
+# --------------------------------------------------------------------------- #
+# 3.2 Fatti (trovati al Passo 0)
+# --------------------------------------------------------------------------- #
+fatti:
+  fonte_dati:
+    valore: "data.binance.vision (futures/um, file mensili: klines, markPriceKlines, fundingRate)"
+    stato: verificato
+    come: >-
+      Il 6 ott, dopo l'apertura della rete dell'ambiente: scaricati BTCUSDT 1h gennaio
+      2023 (744 candele), mark price gennaio 2023 (744), funding gennaio 2023 (93
+      settlement a 8 ore); il checksum SHA-256 pubblicato accanto allo zip combacia
+      con il file scaricato. Formato: CSV con intestazione, timestamp in millisecondi
+      (il caricatore gestisce anche i microsecondi). Il caricatore e' src/dati.py:
+      rifiuta le date oltre il 2023-12-31 prima di toccare la rete (provato sulla rete
+      vera il 6 ott).
+    rete: >-
+      Gli host data.binance.vision, www.binance.com e s3-ap-northeast-1.amazonaws.com
+      devono essere aperti nella politica di rete dell'ambiente della sessione (fatto
+      dall'utente il 6 ott). fapi.binance.com risponde HTTP 451 dalla regione del server.
+  contratti_delistati_disponibili:
+    valore: true
+    stato: verificato
+    come: >-
+      File presenti per cinque contratti non piu' negoziati: SRMUSDT, BTCSTUSDT,
+      FTTUSDT, LUNAUSDT, RAYUSDT (candele, mark price e funding). L'indice del bucket
+      (host s3-ap-northeast-1.amazonaws.com, solo per il coordinamento) elenca 847
+      contratti in USDT, compresi i delistati.
+  fonte_lista_contratti:
+    valore: https://www.binance.com/fapi/v1/exchangeInfo
+    stato: verificato
+    come: >-
+      L'indirizzo ufficiale fapi.binance.com/fapi/v1/exchangeInfo risponde 451 dalla
+      regione del server; lo stesso JSON si legge da www.binance.com: 924 contratti,
+      BTCUSDT onboardDate 2019-09-08, 89 perpetui in USDT quotati prima del 2022-01-01
+      (status TRADING). Contiene solo i contratti di oggi: i delistati vengono
+      dall'indice del bucket (sopra), con listing e delisting dedotti dal primo e
+      ultimo file mensile disponibile (da dichiarare al Passo 1).
+  serie_segnali:
+    valore: "last price (candele klines)"
+    stato: fisso
+  serie_stop:
+    valore_proposto: "last price (ombre high/low delle candele klines)"
+    stato: da_decidere
+    nel_bot: >-
+      In paper lo stop scatta sul percorso del prezzo tra un tick e l'altro, costruito
+      dal MID bid/ask dello stream (bot/core/price_stream.py:258, bot/main.py:1362-1369)
+      o, se lo stream non e' sano, dalle ombre delle candele 1m last (main.py:728-737),
+      sempre allargato al mark price (bot/execution/executor.py:570-571); si riempie
+      al livello esatto (executor.py:618, 667). Nel gate scatta sulle ombre delle
+      candele last (backtesting/engine.py:942, 953). Nessun ordine vero porta
+      workingType (zero occorrenze): gli ordini STOP_MARKET userebbero il default di
+      Binance, CONTRACT_PRICE = last.
+    da_confermare_utente: "che il default di workingType per gli ordini STOP_MARKET sia CONTRACT_PRICE (documentazione Binance, non raggiungibile dalla sessione)"
+  serie_liquidazioni:
+    valore: "mark price (candele markPriceKlines)"
+    stato: da_confermare
+    da_confermare_utente: "documentazione Binance: la liquidazione si calcola sul mark price"
+  commissione_taker_per_lato:
+    valore: 0.0005
+    stato: da_confermare
+    da_confermare_utente: "tabella commissioni USDS-M Futures, livello base: taker 0,05% per lato (la pagina del sito non e' leggibile dalla sessione)"
+    nel_bot: >-
+      BACKTEST_COST_PER_TRADE 0.0008 = 0,08% del nozionale per l'intero trade,
+      commissione e slippage insieme (executor.py:178, engine.py:613-616), piu' uno
+      spread stimato per fascia di volume (bot/execution/costs.py:13-24). Il percorso
+      live (mai usato) entra con ordini LIMIT ed esce sempre a mercato
+      (executor.py:363-366, 462, 480, 786-800): contare tutto come taker e' prudente.
+  regole_dimensione_bot:
+    rischio_per_trade: 0.01
+    rischio_fonte: "DEFAULT_RISK_PER_TRADE (bot/config.py:162), tetto 0.03 (bot/risk/hard_limits.py:18); quantita' = capitale x rischio / |prezzo - stop| (bot/risk/risk_manager.py:124-138)"
+    leva_max: 2.0
+    leva_fonte: "DEFAULT_LEVERAGE 2.0 (config.py:161), per trade arrotondata a intero 1-3 (risk_manager.py:84-93), tetto assoluto 5 (hard_limits.py:17); nozionale limitato a capitale x leva (risk_manager.py:140-153)"
+    modalita_margine_proposta: isolated
+    modalita_margine_nota: >-
+      Il bot NON la imposta (nessun marginType in bot/, backtesting/, scripts/): nel
+      live varrebbe il default del conto Binance. Il motore di ricerca calcola la
+      liquidazione per singolo trade come se il margine fosse isolato: e' la
+      stima piu' prudente (liquidazione piu' vicina). Decisione aperta n. 3.
+    tasso_margine_mantenimento: 0.025
+    tasso_margine_nota: >-
+      maintMarginPercent letto da exchangeInfo il 6 ott: 2.5000 per BTCUSDT, ETHUSDT,
+      SOLUSDT, DOGEUSDT (campo generico, piu' prudente dei livelli reali per
+      posizioni piccole). Con leva 2 la distanza di liquidazione e' circa il 47%:
+      il controllo dello stop (0,8 volte) non e' mai stretto con stop del 1-6%.
+    capitale_iniziale: 1000
+    capitale_fonte: "equity del paper per default (bot/main.py:604-607)"
+    stop_massimo_bot: 0.06
+    stop_massimo_fonte: "MAX_STOP_PCT (config.py:693, bot/risk/setup_check.py:37-59): nel bot uno stop oltre il 6% rende il setup non tradabile; il motore di ricerca lo riporta, non lo impone"
+    orizzonte_bot: "96 barre del timeframe della posizione (executor.py:180-188; engine.py:43): il protocollo lascia la durata libera; un candidato con posizioni piu' lunghe non va in paper cosi' com'e'"
+  esecuzione_strategie_bot:
+    forma: >-
+      Due: strategie in codice (classe base Strategy, bot/strategies/base.py:36-76,
+      registrazione con @register_strategy e import in bot/strategies/__init__.py)
+      e spec dichiarative (GeneratedStrategy, bot/strategies/generated.py).
+    codice_eseguibile: "sì tecnicamente, no in pratica senza un'aggiunta"
+    perche: >-
+      Una coppia opera solo se «SIMBOLO|nome» sta in strategy_registry/validated
+      (bot/learning/adaptation.py:498-510), che scrive SOLO il gate (scripts/optimize.py:1493-1500):
+      una strategia del protocollo dovrebbe passare il gate del bot, cosa che il
+      protocollo non vuole (regole congelate, vault gia' usato). Serve un percorso
+      «coppia del protocollo» che la abiliti senza il gate (stima: adaptation.py
+      is_enabled e filtro di robustezza :255-272, piu' il file della strategia).
+      In piu' dal vivo gli indicatori esistono solo per 1m, 5m, 15m, 1h
+      (config.py:281; bot/agents/price_agent.py:151-165): un candidato a 2h-1d
+      richiede altre modifiche (candele e orizzonte). Decisione aperta n. 4.
+    backtest_interno: >-
+      Esiste: backtesting/engine.py, Backtester.run_strategy (engine.py:606-629,
+      798-1009), accetta qualunque Strategy e restituisce i trade con istante e
+      prezzo d'ingresso, prezzo e motivo d'uscita. Con BACKTEST_ENTRY_NEXT_OPEN=true
+      (config.py:667-668) entra all'apertura della barra dopo, come il motore di
+      ricerca: il test di parita' del Passo 9 e' possibile su segnali e trade, non
+      sui risultati in R o in denaro (il bot non simula dimensione, leva o liquidazione).
+  timeframe_bot: "15m per default (config.py:165-169), 1h per le spec che lo dichiarano"
+  percorsi_vietati: "config/percorsi_vietati.txt (proposta del Passo 0, da approvare)"
+
+# --------------------------------------------------------------------------- #
+# 3.3 Scelte basate sui dati (si verificano al Passo 1)
+# --------------------------------------------------------------------------- #
+scelte_dati:
+  finestra_volume: {inizio: 2023-01-01, fine: 2023-12-31, misura: "volume medio giornaliero in USDT"}
+  liquidita_minima_usdt_giorno: 20000000
+  storia_minima_anni: 2            # listing prima del 2022-01-01
+  numero_monete_campagna: 20
+  monete_prova_processo: 3
+  slippage_per_lato:               # fasce sul volume medio giornaliero in USDT
+    - {volume_minimo: 1000000000, slippage: 0.0001}
+    - {volume_minimo: 200000000, slippage: 0.0002}
+    - {volume_minimo: 50000000, slippage: 0.0005}
+    - {volume_minimo: 20000000, slippage: 0.0010}
+
+# --------------------------------------------------------------------------- #
+# 3.4 Regole d'esame (fisse)
+# --------------------------------------------------------------------------- #
+regole_esame:
+  timeframe_ammessi: [15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d]
+  riempimento_intrabarra: stop_prima
+  budget_varianti_per_moneta: 30
+  divisione_costruzione_validazione: {costruzione: 0.70, validazione: 0.30}
+  trade_minimi: {costruzione: 100, validazione: 30, vault: 30}
+  metodo_asticella: {nome: benjamini_hochberg, q: 0.10}
+  simulazioni_caso: 1000
+  criterio_vault:
+    profit_factor_minimo: 1.10
+    trade_minimi: 30
+    rendimento_totale_positivo: true
+    r_medio_sopra_percentile_caso: 90
+  soglia_correlazione_stessi_giorni: 0.5
+  margine_minimo_da_liquidazione: 0.8
+  trasferimento_monete_minime: 2
+  idea_di_gruppo_monete_minime: 3
+  paper_trade_minimi: 50
+  paper_durata_massima_mesi: 12
+  paper_soglia_conferma:
+    conferma: "dopo 50 trade: R medio positivo dopo costi reali e meno del 10% dei trade diversi dal backtest sugli stessi giorni"
+    bocciatura: "R medio non positivo alla stessa scadenza, oppure drawdown oltre 1,5 volte il massimo del backtest in qualsiasi momento"
+
+# --------------------------------------------------------------------------- #
+# Decisioni aperte per l'utente (STOP del Passo 0)
+# --------------------------------------------------------------------------- #
+decisioni_aperte:
+  1: "commissione taker del livello base: confermare 0,05% per lato dalla tabella Binance"
+  2: "serie_stop: last price (proposta), sapendo che il paper del bot usa il mid bid/ask allargato al mark; confermare che il default di workingType e' CONTRACT_PRICE e che la liquidazione e' sul mark price"
+  3: "modalita' di margine: il bot non la imposta; il motore calcola come isolated per trade (prudente). Confermare, oppure scegliere cross"
+  4: "strategie in codice nel bot: l'aggiunta «coppia del protocollo» (abilitazione senza il gate, piu' candele e orizzonte per i timeframe oltre 1h) si fa prima delle campagne o prima del Passo 9?"
+  5: "coda del 2019 (BTC da settembre, ETH da novembre, BCH da dicembre): esclusa perche' l'archivio mensile parte da gennaio 2020; i file giornalieri coprono solo dal 2019-12-31. Confermare l'esclusione"
+  6: "percorsi_vietati.txt: approvare l'elenco proposto"
