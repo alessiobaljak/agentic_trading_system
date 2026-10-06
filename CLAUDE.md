@@ -57,7 +57,11 @@ o tolta.
   iniziare senza una richiesta esplicita, ripetuta e consapevole del proprietario.
   Non e' un parametro di ricerca.
 * **Non si lavora su altri branch.** Lo sviluppo va sul branch di default di questo
-  repo. Non aprire pull request se non e' stato chiesto.
+  repo. Non aprire pull request se non e' stato chiesto. **Unica eccezione (si' del
+  proprietario del 6 ott 2026):** i branch del protocollo di ricerca,
+  `research/coordinamento`, `research/campagna/<SIMBOLO>` e
+  `research/archivio/campagna/<SIMBOLO>`, come descritto in `research/PROTOCOLLO.md`
+  (sezione 5). Il bot, la macchina e la dashboard leggono solo il branch di default.
 * **Mai un segreto in un commit.** Niente chiavi, token, `.env`, output di
   `git remote -v` o `git config --list` (il token puo' essere dentro l'URL del
   remoto). Un segreto finito in un repo pubblico e' compromesso per sempre, anche se
@@ -67,6 +71,16 @@ o tolta.
 * **Non dichiarare fatto cio' che non e' verificato.** Se i test non girano, dillo.
   Se una cosa e' stata saltata, dillo. Questa e' la regola che il proprietario ha
   chiesto piu' volte.
+
+## Il protocollo di ricerca (dal 6 ott 2026)
+
+Le strategie nuove nascono dal **protocollo di ricerca per moneta** (`research/PROTOCOLLO.md`,
+versione 4.3, approvata dal proprietario il 6 ott): idee con un perche', periodo chiuso
+(«vault», 2024-01-01 → 2026-09-30) che si apre una volta sola, un branch per campagna e un
+guardiano meccanico (`research/src/guardiano.py`, attivo solo se esiste `research/.sessione`).
+Chi lavora in una sessione di campagna legge solo i percorsi ammessi dal Passo 3 del
+protocollo e non scrive ipotesi o risultati in questo file. Il gate attuale resta acceso come
+gruppo di controllo finche' il proprietario non decide altrimenti.
 
 ## Non hai accesso alla VPS — ma hai un canale
 
