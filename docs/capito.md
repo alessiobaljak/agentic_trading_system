@@ -7,6 +7,13 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-06
+* Il numero guida resta sotto zero mentre il margine si stringe: −0,04R su 202 segnali ±0,16 (ops 0517; il 3 ott −0,03 su 130 ±0,18). La lettura ufficiale è domani: con questi numeri la regola («motore ≤ 0 con almeno 80 segnali») scatterebbe, e la lettura stampata lo dice già. Non è più un'oscillazione: in quattro giorni non è mai andato oltre +0,006.
+* Il registro cresce da solo mentre il paper resta fermo: 257 validate su 82 monete (ops 0511), erano 235 ieri e 223 sabato. La spinta è l'«intorno» delle quasi-promosse: 204 figlie nel giro della notte, 3 promosse. Spazio nel registro ~758 coppie: di questo passo (stima: ~100 coppie al giorno fra validate e in attesa) l'allarme dei 400 arriva fra 3-4 giorni, non settimane.
+* Dal 27 set il lordo è ancora positivo (+0,037R su 162) e i costi (0,093R) lo rovesciano in −0,057R (ops 0508): è la terza lettura di fila con lo stesso segno. Sui long si perde (−0,110R su 85), sugli short si pareggia (+0,002 su 77); il regime neutro resta il peggiore (−0,182R su 93).
+* Nei 7 giorni il trailing ha chiuso troppo presto 38 volte e ha protetto 26 (ops 0521): seconda settimana con i prematuri sopra i protetti. La regola del referto settimanale (due settimane di fila → proporre di allentare il keep) si applica domenica, non prima.
+* Le letture di Firebase salgono: 8.444 nelle 24 ore (ops 0512; il 4 ott 7.763), quasi tutte dai rifiutati (4.843). Lontano dalla quota (50.000), ma la tendenza va tenuta d'occhio.
+
 ## 2026-10-05
 * Il numero guida è tornato a −0,03R su 182 segnali, margine ±0,17 (ops 0498; ieri +0,006 su 156): la lettura stampata dice già «la promessa non regge dopo la validazione: la prossima modifica va nel gate». Il verdetto resta al 7 ott, ma in tre giorni il numero ha oscillato fra −0,03 e +0,006 senza mai uscire dal margine: è un sistema a zero, non un sistema in calo.
 * Il gate rigiocato nel passato, su 8 date complete (ops 0502): 6 promosse su 25.631 giudizi, e i loro 45 trade fanno −0,22R contro −0,14R delle bocciate (differenza −0,08 ±0,31, non decide: ne servono 80). Primo indizio diretto che la scelta del gate non è migliore del mucchio; con R2 (0 su 3.600) chiude il quadro: le validate nascono dalla ricerca ripetuta, non da candidate buone.
