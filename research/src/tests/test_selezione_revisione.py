@@ -22,7 +22,11 @@ from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
-import yaml
+
+# pyyaml e' una dipendenza dichiarata (requirements.txt), ma se manca questo file
+# si salta invece di far morire la raccolta di TUTTA la suite (7 ott 2026: i test
+# di GitHub erano rossi per questo)
+yaml = pytest.importorskip("yaml")
 
 from research.src import selezione as sel
 
