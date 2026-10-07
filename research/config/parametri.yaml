@@ -1,14 +1,16 @@
 # Parametri del protocollo di ricerca (research/PROTOCOLLO.md, sezione 3).
 #
-# BOZZA DEL PASSO 0, 6 ottobre 2026: NON ancora approvata. Dopo l'approvazione
-# dell'utente `stato` diventa "congelato" e nessun valore cambia piu'. Nessun
+# APPROVATA dal proprietario il 7 ottobre 2026 («ok a tutte, vai col Passo 1»):
+# le sei decisioni aperte sono chiuse con i valori proposti. Da qui nessun
+# valore cambia piu' (stato: congelato). Nessun
 # valore qui e' stato scelto guardando dati di mercato o risultati di strategie.
 # Ogni fatto porta la sua fonte: "verificato" (visto il 6 ott dalla sessione di
 # lavoro) oppure "da_confermare" (non raggiungibile dalla sessione: lo conferma
 # l'utente). Il dettaglio dei fatti sul bot, con file:riga, e' in
 # config/regole_dimensione.md.
 
-stato: bozza_passo_0
+stato: congelato
+approvato_il: 2026-10-07
 versione_protocollo: "4.3"
 data_bozza: 2026-10-06
 
@@ -72,7 +74,7 @@ fatti:
     stato: fisso
   serie_stop:
     valore_proposto: "last price (ombre high/low delle candele klines)"
-    stato: da_decidere
+    stato: approvato_2026-10-07
     nel_bot: >-
       In paper lo stop scatta sul percorso del prezzo tra un tick e l'altro, costruito
       dal MID bid/ask dello stream (bot/core/price_stream.py:258, bot/main.py:1362-1369)
@@ -187,9 +189,9 @@ regole_esame:
     bocciatura: "R medio non positivo alla stessa scadenza, oppure drawdown oltre 1,5 volte il massimo del backtest in qualsiasi momento"
 
 # --------------------------------------------------------------------------- #
-# Decisioni aperte per l'utente (STOP del Passo 0)
+# Decisioni del Passo 0: tutte APPROVATE il 7 ott 2026 con i valori proposti
 # --------------------------------------------------------------------------- #
-decisioni_aperte:
+decisioni_passo_0:
   1: "commissione taker del livello base: confermare 0,05% per lato dalla tabella Binance"
   2: "serie_stop: last price (proposta), sapendo che il paper del bot usa il mid bid/ask allargato al mark; confermare che il default di workingType e' CONTRACT_PRICE e che la liquidazione e' sul mark price"
   3: "modalita' di margine: il bot non la imposta; il motore calcola come isolated per trade (prudente). Confermare, oppure scegliere cross"
