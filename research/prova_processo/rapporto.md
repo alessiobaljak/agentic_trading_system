@@ -258,3 +258,57 @@ congelato fino al Passo 7, come prevede la sezione 10.
    troverebbero quasi certamente «nessuna strategia» per gli stessi motivi della sezione 5.
 4. Tutte le modifiche al protocollo passano da una nuova versione del `PROTOCOLLO.md` (4.4) e da
    `parametri.yaml`, approvate prima di aprire qualunque campagna.
+
+---
+
+## 9. Aggiornamento del 7 ottobre, sera: la decisione del proprietario e la versione 4.4
+
+**La decisione.** Il proprietario ha chiesto perché non rifare le tre campagne con regole
+cambiate invece di passare subito alla campagna di gruppo, e ha approvato quattro modifiche
+(«sì, rifalle con queste quattro modifiche»): una sola stima dei trade, una sola lettura di
+«nettamente», minimo in costruzione da 100 a 70 trade, budget usato per intero. Le
+raccomandazioni della sezione 8 di questo rapporto («non rifare le tre campagne») sono superate:
+si rifanno con la 4.4. La campagna di gruppo resta il passo successivo se anche così non esce
+niente. Il proprietario ha anche chiesto di non parlare più di costi in dollari delle sessioni
+(abbonamento): i numeri di costo delle sezioni 2 e 8 restano come traccia, non come argomento.
+
+**Una correzione a questo rapporto.** La sezione 7 diceva che `lezioni/metodo.md` resta congelato
+fino al Passo 7. Il Passo 2 dice invece che le lezioni della prova ci entrano ADESSO, e da qui il
+file resta congelato. Sono entrate il 7 ottobre, filtrate dal coordinamento: solo metodo e
+trappole dei dati, nessun risultato, perché le campagne rifatte sono sulle stesse monete.
+
+**Come sono nate le modifiche, per trasparenza.** La lettura unica di «nettamente» nasce anche
+dall'aver visto, nelle lezioni di metodo proposte di una campagna, una variante il cui esito in
+costruzione cambiava fra i due calcoli. La nuova lettura è quella corretta per la statistica, ed è
+stata tarata con simulazioni senza vantaggio (sotto); nessuna regola è stata scelta per far
+passare una variante. Il minimo di 70 trade nasce dai conteggi degli scarti della prova (16 stime
+fra 70 e 99 trade): conteggi di segnali, non risultati. Il testo della 4.4 che le campagne leggono
+non racconta niente di questo: il racconto sta qui.
+
+**Una lettura che il coordinamento non doveva fare.** Contando i campi di processo del log di
+BTCUSDT per questo rapporto, il coordinamento ha visto il testo di una nota di chiusura che
+riassume la variante più vicina della campagna (meccanismo e timeframe). Non è entrata in nessun
+documento letto dalle campagne, e non ha guidato nessuna regola della 4.4.
+
+**Due giri di revisione avversaria della 4.4** (5 revisori e 5 verificatori per giro, più un
+agente sul guardiano). Il primo giro ha trovato, fra gli altri:
+- la regola «nettamente» scritta in modo semplice dava falsi positivi sopra il dichiarato: dal
+  4-9% fino al 30% con pochi blocchi, contro il 2,3%;
+- il branch archiviato ha le stesse cartelle della campagna rifatta, e il guardiano non bloccava
+  la storia dei commit, gli hash qualsiasi e gli strumenti GitHub;
+- la scheda della moneta con la data di listing diceva se una moneta è delistata.
+
+Il secondo giro ha trovato:
+- con R asimmetrici «netta» ancora fino all'8% e il p-value sotto 0,10 fino al 24%;
+- la verifica a costi doppi che non poteva fallire, e il criterio del ritardo che lasciava passare
+  un lookahead;
+- l'ordine di avvio della campagna, che permetteva di committare sul principale;
+- un `git fetch` senza nome che stampava i nomi degli archivi.
+
+Tutto corretto nella 4.4. Taratura finale (simulazioni senza vantaggio, 30-70 trade, trade
+indipendenti, a grappoli o asimmetrici): «netta» fra lo 0 e il 2%, p-value sotto 0,10 fra il 6 e
+l'11%.
+
+**Stato.** Testo della 4.4 sul branch principale, da rivedere dal proprietario. I branch delle tre
+campagne della prova si archiviano (Passo 2, comandi scritti nel protocollo) solo dopo la sua
+approvazione, e solo dopo si riaprono le tre campagne.
