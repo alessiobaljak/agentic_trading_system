@@ -1,0 +1,30 @@
+{
+  "I-22-long": {
+    "idea": "I-22",
+    "direzione": "long",
+    "timeframe": "4h",
+    "barre_costruzione": 5958,
+    "segnali": 1326,
+    "trade_stimati_distanza_h": 69,
+    "trade_stimati_uscita_segnale": null,
+    "trade_stimati": 69,
+    "h_barre": 24,
+    "k_atr": 2.0,
+    "rr_target": null,
+    "sotto_minimo": true
+  },
+  "I-22-short": {
+    "idea": "I-22",
+    "direzione": "short",
+    "timeframe": "4h",
+    "barre_costruzione": 5958,
+    "segnali": 2342,
+    "trade_stimati_distanza_h": 109,
+    "trade_stimati_uscita_segnale": null,
+    "trade_stimati": 109,
+    "h_barre": 24,
+    "k_atr": 2.0,
+    "rr_target": null,
+    "sotto_minimo": false
+  }
+}

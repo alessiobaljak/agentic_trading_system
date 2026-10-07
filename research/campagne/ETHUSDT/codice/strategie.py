@@ -317,7 +317,16 @@ def i21(s: Serie):
     return segn, Uscita(k_atr=2.0, h_barre=6), 20
 
 
+# --- I-22 inversione a lungo orizzonte: ribasso profondo dal massimo a 30 giorni, 4h -------------------
+def i22(s: Serie):
+    hi, lo = comune.massimo_precedente(s.high, 180), comune.minimo_precedente(s.low, 180)
+    segn = np.where(s.close <= 0.75 * hi, 1, np.where(s.close >= 1.33 * lo, -1, 0))
+    segn[~np.isfinite(hi)] = 0
+    return segn, Uscita(k_atr=2.0, h_barre=24), 180
+
+
 IDEE: Dict[str, Idea] = {
+    "I-22": Idea("I-22", "inversione a lungo orizzonte dopo ribasso profondo (o rialzo ampio) a 30 giorni", "4h", False, i22),
     "I-20i": Idea("I-20i", "inversione dopo movimento oltre 1 sigma a volume alto", "4h", False, i20_inversione),
     "I-20c": Idea("I-20c", "continuazione dopo movimento oltre 1 sigma a volume basso", "4h", False, i20_continuazione),
     "I-21": Idea("I-21", "candela avvolgente dopo 3 candele contrarie", "4h", False, i21),
@@ -365,6 +374,7 @@ FONTI = {
     "I-20i": "Conrad, Hameed, Niden, «Volume and Autocovariances in Short-Horizon Individual Security Returns», J. Finance 1994",
     "I-20c": "Conrad, Hameed, Niden, «Volume and Autocovariances in Short-Horizon Individual Security Returns», J. Finance 1994",
     "I-21": "Marshall, Young, Rose, «Candlestick technical trading strategies: Can they create value for investors?», J. Banking & Finance 2006",
+    "I-22": "De Bondt e Thaler, «Does the Stock Market Overreact?», J. Finance 1985",
 }
 
 MECCANISMI = {
@@ -390,4 +400,5 @@ MECCANISMI = {
     "I-20i": "dopo un movimento oltre 1 sigma fatto con scambi intensi, la pressione di liquidita' rientra: inversione nelle 2 barre dopo",
     "I-20c": "dopo un movimento oltre 1 sigma fatto con scambi scarsi, l'informazione si diffonde lentamente: continuazione nelle 2 barre dopo",
     "I-21": "la candela avvolgente dopo 3 candele contrarie e' letta da molti operatori come inversione: profezia che si autoavvera a breve (la fonte prevede che non valga)",
+    "I-22": "dopo un ribasso del 25 % dal massimo a 30 giorni (o un rialzo del 33 % dal minimo) la reazione eccessiva si corregge nei 4 giorni dopo",
 }

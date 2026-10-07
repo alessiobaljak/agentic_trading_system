@@ -1,0 +1,44 @@
+{
+ "long": {
+  "n": 1204,
+  "pf": 97.288,
+  "r_medio": 0.3779,
+  "win_rate": 0.999,
+  "percentile_caso": 100.0,
+  "netto_vs_caso": {
+   "differenza": 0.3955,
+   "errore_standard": 0.0132,
+   "netta": true,
+   "segno": 1,
+   "degenere": false,
+   "blocco": 3
+  },
+  "con_ritardo_1_barra": {
+   "n": 992,
+   "pf": 0.821,
+   "r_medio": -0.0172,
+   "win_rate": 0.433
+  }
+ },
+ "short": {
+  "n": 1082,
+  "pf": 55.203,
+  "r_medio": 0.3823,
+  "win_rate": 0.998,
+  "percentile_caso": 100.0,
+  "netto_vs_caso": {
+   "differenza": 0.4166,
+   "errore_standard": 0.0139,
+   "netta": true,
+   "segno": 1,
+   "degenere": false,
+   "blocco": 3
+  },
+  "con_ritardo_1_barra": {
+   "n": 904,
+   "pf": 0.799,
+   "r_medio": -0.0212,
+   "win_rate": 0.395
+  }
+ }
+}

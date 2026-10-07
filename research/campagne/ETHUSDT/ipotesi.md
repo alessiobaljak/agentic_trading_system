@@ -767,3 +767,43 @@ simmetrico → short. Uscita: H = 6 barre, stop a 2 ATR(14). Varianti: long, sho
 
 **Previsione.** Profit factor 0,9-1,1 in entrambe; non netto. Probabile stima sotto 100
 per direzione (figura rara): in tal caso scarto senza budget.
+
+---
+
+## Quinto lotto (scritto il 7 ottobre 2026 dopo il quarto lotto, prima di testare)
+
+Quattro lotti, 22 varianti, nessun candidato (note N006-N010). Budget: 8 varianti. Resta
+una famiglia con una fonte vera non ancora provata: l'inversione a lungo orizzonte, che è
+cosa diversa dall'inversione a una candela (I-04) e dall'ancoraggio al massimo (I-19).
+Dopo questa, le idee con fonte anteriore al 2024 e meccanismo distinto da quelli già
+provati si esauriscono: il budget residuo resta non speso e lo si dichiara (il protocollo
+lo prevede: «da usare per intero se le idee non si esauriscono prima»).
+
+## Famiglia Q — Inversione a lungo orizzonte
+
+### I-22 Dopo un ribasso profondo dal massimo a 30 giorni (e dopo un rialzo ampio dal minimo)
+
+**Fonte.** «Does the Stock Market Overreact?», Werner F. M. De Bondt e Richard Thaler,
+*Journal of Finance* 40(3), 1985: i perdenti su orizzonti lunghi battono poi i vincenti,
+per reazione eccessiva alle notizie negative e successiva correzione.
+
+**Affermazione verificabile.** Su candele da 4h, quando la chiusura è almeno il 25 % sotto
+il massimo degli high delle 180 barre precedenti (30 giorni), i 4 giorni successivi hanno
+rendimento positivo in eccesso rispetto a entrate casuali long; quando è almeno il 33 %
+sopra il minimo dei low delle 180 barre precedenti, negativo (short).
+
+**Sotto-domande.** Un ribasso del 25 % in un mese su ETH è «profondo» o normale (nel 2022
+lo è stato spesso)? La correzione arriva in giorni o in settimane? Il rimbalzo c'è solo se
+BTC ha smesso di scendere (C3)?
+
+**Spiegazioni concorrenti specifiche.** (S1) *il ribasso continua* (i mercati in crollo
+restano in crollo): R medio negativo per il long, il 2022 lo mostrerebbe. (S2) *è il
+trend 2020-21 per lo short al contrario*: lo short dopo rialzi ampi perde nel 2020-21. (S3)
+*pochi episodi raggruppati* (C7, C10): i segnali si concentrano in 4-5 periodi.
+
+**Ipotesi completa.** ETHUSDT, 4h. Long se close ≤ 0,75 × massimo degli high delle 180
+barre precedenti; short se close ≥ 1,33 × minimo dei low delle 180 barre precedenti.
+Uscita: H = 24 barre, stop a 2 ATR(14). Varianti: long, short.
+
+**Previsione.** Long: profit factor 0,9-1,1, R medio intorno a zero, con il 2022 negativo;
+short: 0,8-1,0. Stima dei trade probabilmente al limite dei 100 (episodi raggruppati).

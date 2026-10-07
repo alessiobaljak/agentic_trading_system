@@ -47,6 +47,7 @@ MOTIVI = {
     "I-20i": "movimenti oltre 1 sigma a volume alto: pochi per questa direzione",
     "I-20c": "movimenti oltre 1 sigma a volume basso: pochi per questa direzione",
     "I-21": "la candela avvolgente dopo 3 contrarie e' una figura rara",
+    "I-22": "ribassi del 25 % (o rialzi del 33 %) in 30 giorni: episodi rari e raggruppati",
 }
 
 for chiave, v in stime.items():
