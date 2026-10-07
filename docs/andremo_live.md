@@ -2985,3 +2985,16 @@ installato nell'ambiente di lavoro. Dodici esecuzioni rosse (su tre branch, comp
 spesso). Corretto con 45e664d: `pyyaml==6.0.1` in `requirements.txt`, il test del revisore si salta se la
 libreria manca, e la CI esegue anche `research/src/tests`. Verificato: esecuzione verde sul principale (45e664d)
 e sul coordinamento (9b43703); il branch della campagna BTC ha ricevuto l'unione del principale.
+
+### 7 ottobre, 10:45: la campagna BTC ha consegnato; aperte ETH e SOL
+
+Controllo del coordinamento sulla sessione BTC (session_01RiExzKeGEKfRUjT3ggDfyA): ferma allo STOP della
+consegna dalle 09:34, stato «aspetta indicazioni», contesto usato 312k token, costo 15,8 $. Branch
+`research/campagna/BTCUSDT`: 6 commit di campagna (Fase 0, strumenti, Fase 1, secondo blocco, consegna) in
+circa 2 ore e mezza. Log: 92 voci (28 registrazioni di cui 16 varianti e 12 verifiche, 28 risultati, 11 scarti
+per stima dei trade, 25 note; 2 note citano un errore, nessuna il guardiano). Consegna: «nessuna strategia valida
+trovata per questa moneta», periodo di validazione mai toccato, nessun candidato al vault. Nessuna correzione a
+`src/` dalla campagna. Ipotesi NON lette dal coordinamento (regola 7). Il processo regge: aperte alle 10:43 le
+sessioni ETHUSDT (session_01QrieoTra2fHED872FVjnVs) e SOLUSDT (session_01HuCxs6U8hiZkZiv6uR6bYJ) con lo stesso
+messaggio (simbolo cambiato, divieto esplicito di leggere le altre campagne). Prossimo controllo alle 14:43; a
+tre consegne fatte, il rapporto della prova di processo (Passo 2, punto 4) sul branch di coordinamento.
