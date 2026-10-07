@@ -62,8 +62,7 @@ Fasce di slippage: 0,01% BTC, ETH, SOL; 0,02% da XRP a DYDX; 0,05% MASK, FTM, GA
 Prova di processo (Passo 2): le prime 3, BTCUSDT, ETHUSDT, SOLUSDT.
 
 **Sopravvivenza (sezione 11).** Le monete idonee ma non più negoziate oggi sono 24 su 100, e due stanno fra le
-20 di campagna: MATICUSDT e FTMUSDT, che risultano migrate ad altri simboli dopo il 2023 (ipotesi, da verificare
-al Passo 5: vedi `collegamenti.md`). Quante monete «avrebbero superato i filtri ma oggi non hanno dati» non si
+20 di campagna: MATICUSDT (file fino al 2024-09, assente da exchangeInfo) e FTMUSDT (file fino al 2026-09, su exchangeInfo con stato diverso da TRADING al 7 ott): ipotesi di migrazione ad altri simboli, da verificare al Passo 5 (vedi `collegamenti.md`). Quante monete «avrebbero superato i filtri ma oggi non hanno dati» non si
 può contare: l'archivio è la fonte stessa dei dati, e se un contratto non c'è non lo si vede; i 12 esclusi
 per fine dati prima del 2024 sono i contratti morti durante l'in-sample.
 

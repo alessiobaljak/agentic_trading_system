@@ -18,7 +18,7 @@ ridenominazioni. Se al Passo 3 una campagna trova un buco o un salto di prezzo n
 |---|---|---|---|
 | MATICUSDT | POLUSDT | 2024 | migrazione del token 1:1 |
 | RNDRUSDT | RENDERUSDT | 2024 | ridenominazione |
-| FTMUSDT | SUSDT | inizio 2025 | migrazione 1:1 |
+| FTMUSDT | SUSDT | 2025 | migrazione 1:1; nell'archivio FTMUSDT ha file fino al 2026-09 e oggi non è TRADING: da capire sui dati |
 | KLAYUSDT | KAIAUSDT | 2024 | migrazione |
 | AGIXUSDT, OCEANUSDT | FETUSDT | 2024 | fusione di token: rapporto diverso da 1, da verificare |
 
@@ -30,7 +30,7 @@ altrimenti il contratto si tratta come delistato (regola «Delisting» della sez
 ## Trovati al Passo 1 (7 ott 2026)
 
 Fra le 20 monete di campagna, due non sono più negoziate con il simbolo del 2023: **MATICUSDT** (ultimo file
-nell'archivio 2024-09, ipotesi POLUSDT) e **FTMUSDT** (ultimo file 2025-01, ipotesi SUSDT). Le loro campagne
+nell'archivio 2024-09, ipotesi POLUSDT) e **FTMUSDT** (file nell'archivio fino al 2026-09, ma su exchangeInfo al 7 ott 2026 lo stato non è TRADING: contratto in chiusura; ipotesi di continuazione SUSDT, da verificare). Le loro campagne
 valgono per il vault e il trasferimento (regola del Passo 1); la cucitura si decide al Passo 5 sui dati.
 Contratti spariti durante l'in-sample (nessuno di campagna): 1000BTTCUSDT, AKROUSDT, ANCUSDT, BTTUSDT,
 DODOUSDT, KEEPUSDT, LUNAUSDT, NUUSDT, YFIIUSDT.
