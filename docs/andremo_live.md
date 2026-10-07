@@ -3032,3 +3032,20 @@ il proprietario (campagna di gruppo, regole uniche di stima e di «nettamente»,
 rapporto raccomanda di no — e se fermare le altre 17 campagne singole finché il protocollo non cambia). Il
 marcatore di coordinamento è stato creato per scrivere il rapporto e rimosso subito dopo: durante quel tempo il
 guardiano ha rifiutato, giustamente, una lettura di `docs/` dal branch di coordinamento.
+
+### 7 ottobre, 17:20: rifare le tre campagne con regole cambiate, prima del gruppo
+
+Domande del proprietario: le varianti non spese sono state provate? No: 14 su Bitcoin, 7 su Ethereum e 13 su
+Solana non sono state usate (note di chiusura dei tre log), e nessuna variante di una moneta è stata provata
+sulle altre (le campagne sono cieche fra loro fino al confronto finale). Perché la campagna di gruppo invece di
+cambiare le regole e rifare le tre? Correzione del coordinamento: si possono rifare, e conviene farlo PRIMA. Il
+periodo di validazione delle tre monete non è mai stato toccato (zero candidati), quindi rifarle con il
+protocollo 4.4 non porta nessun conto in sospeso (Passo 2: branch vecchi in archivio, branch nuovi dal
+principale). Regole da cambiare, nessuna scelta sui risultati di una strategia: stima dei trade unica (su Solana
+la stessa idea dava 83 o 105 trade), lettura unica di «nettamente» (su Solana una variante era netta a un
+campione e non netta a due), minimo in costruzione da 100 a 70 per direzione (70 è il minimo coerente con i 30
+in validazione, perché la validazione ha circa il 43% dei trade della costruzione; entrerebbero 16 idee
+scartate con stime fra 70 e 99), budget pieno con i ritocchi delle idee vicine ammessi nella sola costruzione.
+Il rapporto raccomandava di non rifarle: superato da questa analisi. Trasparenza: leggendo le note di processo
+del log BTC il coordinamento ha visto la sintesi di una variante (nota F5-01); non entra in nessun documento
+del protocollo. Il proprietario ha anche chiesto di non parlare più di costi: regola aggiunta a `CLAUDE.md`.

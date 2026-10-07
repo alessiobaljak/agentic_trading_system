@@ -103,6 +103,9 @@ l'agente sono giu', ed e' un'informazione che vale la pena dare subito.
 * **Niente sigle.** Non usare i codici del backlog (R1, G7, T2, C5...) parlando col proprietario: non
   li ricorda (4 ott 2026). Si dice cosa fa la cosa, in parole semplici («la prova sui prezzi mescolati»);
   la sigla, se serve, va solo nei file.
+* **Niente costi.** Non parlare del costo in dollari delle sessioni o delle campagne: il proprietario ha
+  l'abbonamento e le campagne non consumano API a pagamento (7 ott 2026). Contano il tempo e i limiti d'uso,
+  e solo se fermano il lavoro.
 * **Prima la risposta, poi il perche'.** Se la risposta e' "no", che sia la prima
   parola.
 * **Un numero va con la sua fonte.** "224 coppie a 1 pass" va bene se viene da un
