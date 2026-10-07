@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato il 7 ottobre 2026, 07:45 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato il 7 ottobre 2026, 08:40 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
