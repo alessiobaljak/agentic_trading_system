@@ -23,8 +23,11 @@ trappole dei dati. Quelle che sono diventate regole stanno nella versione 4.4 de
   pratiche: file e testi si scrivono con lo strumento di scrittura dei file, mai con heredoc; il
   messaggio di commit si scrive in un file dentro `data/insample/<SIMBOLO>/` (ammessa e fuori da
   git) e si passa con `git commit -F`; i comandi restano semplici, senza redirezioni né variabili
-  della shell. La storia dei commit si legge solo per la propria cartella
-  (`git log -- research/campagne/<SIMBOLO>/`). Un rifiuto si registra nel log e non si aggira.
+  della shell. Con git: la storia dei commit si legge solo per la propria cartella
+  (`git log -- research/campagne/<SIMBOLO>/`, senza `-p`); `fetch`, `pull` e `push` solo con il nome
+  del proprio branch; `git diff` solo contro HEAD; niente merge, rebase, cherry-pick, revert. Le
+  pagine web si aprono solo da siti di pubblicazioni e da Wikipedia. Un rifiuto si registra nel log
+  e non si aggira.
 * **Il primo push si fa nei primi minuti.** Una sessione della prova è nata senza il permesso di
   scrivere sul repository e lo ha scoperto dopo, perdendo il lavoro locale. Se il primo push
   fallisce: STOP e avvisa l'utente.

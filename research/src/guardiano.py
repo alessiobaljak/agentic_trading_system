@@ -127,6 +127,9 @@ _HOST_AMMESSI_WEB = (
     "arxiv.org", "ssrn.com", "doi.org", "nber.org", "jstor.org", "sciencedirect.com",
     "springer.com", "wiley.com", "tandfonline.com", "oup.com", "cambridge.org",
     "semanticscholar.org", "researchgate.net", "repec.org", "wikipedia.org",
+    # editori a cui rimanda spesso doi.org per gli articoli di finanza
+    "aeaweb.org", "informs.org", "mdpi.com", "elsevier.com", "sagepub.com", "emerald.com",
+    "cfainstitute.org", "pm-research.com",
 )
 #: testi che una ricerca sul web in campagna non puo' contenere (in minuscolo):
 #: portano a questo repository, ai suoi branch o agli specchi che li servono
