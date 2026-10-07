@@ -1,0 +1,117 @@
+{
+ "variante": {
+  "idea": "I-01",
+  "tf": "4h",
+  "direzione": "long",
+  "fonte": "Gerritsen, Bouri, Ramezanifar, Roubaud, 'The profitability of technical trading rules in the Bitcoin market', Finance Research Letters 34, 2020; Brock, Lakonishok, LeBaron, 'Simple Technical Trading Rules and the Stochastic Properties of Stock Returns', Journal of Finance 47(5), 1992",
+  "meccanismo": "continuazione dopo la rottura del canale di 30 barre (seguaci del trend e stop di chi era contro)",
+  "parametri": {
+   "canale_ingresso_barre": 30,
+   "canale_uscita_barre": 15,
+   "stop_atr": 2.0,
+   "atr_n": 14,
+   "max_barre": 60
+  },
+  "occupazione": 15,
+  "previsione": "long: PF 0,95-1,20, R medio 0/+0,10, 120-180 trade, non netto sul caso long",
+  "previsione_pf": [
+   0.95,
+   1.2
+  ],
+  "criterio_successo": "R medio > 0 dopo costi; R medio sopra il 90° percentile delle entrate casuali con la stessa uscita; differenza netta (> 2 errori standard, bootstrap a blocchi) dalla simulazione mediana e dalla baseline incondizionata; almeno 100 trade in costruzione",
+  "id": "BTCUSDT-V01-long"
+ },
+ "periodo": "costruzione",
+ "metriche": {
+  "n_trade": 72,
+  "profit_factor": 1.5093,
+  "win_rate": 0.3333,
+  "r_medio": 0.3863,
+  "r_mediano": -1.0239,
+  "rendimento_totale": 0.2913,
+  "drawdown_max": 0.0831,
+  "rendimento_per_anno": {
+   "2020": 0.31,
+   "2021": 0.0217,
+   "2022": -0.0351
+  },
+  "r_medio_per_anno": {
+   "2020": 0.9855,
+   "2021": 0.1026,
+   "2022": -0.2022
+  },
+  "n_trade_per_anno": {
+   "2020": 29,
+   "2021": 26,
+   "2022": 17
+  },
+  "esiti": {
+   "stop": 37,
+   "target": 0,
+   "segnale": 35,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "n_segnali_non_validi": 0,
+  "costi_totali": 131.53,
+  "funding_totale": 100.73,
+  "durata_barre": {
+   "media": 27.6,
+   "max": 61,
+   "mediana": 22.0
+  },
+  "stop_pct": {
+   "medio": 0.04,
+   "quota_oltre_6pct": 0.083
+  },
+  "per_direzione": {
+   "long": {
+    "n": 72,
+    "r_medio": 0.3863
+   },
+   "short": {
+    "n": 0,
+    "r_medio": 0.0
+   }
+  },
+  "n_buchi_dati": 0
+ },
+ "blocco_bootstrap": {
+  "trade": 1,
+  "ridotto": false
+ },
+ "baseline_c_buy_and_hold": {
+  "long": 1.6566,
+  "short": -1.6614
+ },
+ "baseline_a_incondizionata": {
+  "n_trade": 275,
+  "r_medio": 0.0754,
+  "confronto": {
+   "differenza": 0.3109,
+   "errore_standard": 0.3187,
+   "margine": 0.6375,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "baseline_b_casuale": {
+  "n_sim": 100,
+  "r_medio_caso_mediano": 0.211,
+  "r_medio_caso_p90": 0.5097,
+  "percentile_del_candidato": 77.0,
+  "confronto_con_sim_mediana": {
+   "differenza": 0.1729,
+   "errore_standard": 0.379,
+   "margine": 0.7579,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "criterio_successo_superato": false,
+ "previsione_corretta": false
+}
