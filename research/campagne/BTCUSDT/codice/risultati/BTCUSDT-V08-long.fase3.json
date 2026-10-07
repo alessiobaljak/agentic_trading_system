@@ -1,0 +1,183 @@
+{
+ "per_anno": {
+  "2020": {
+   "n": 25,
+   "r_medio": 0.112,
+   "win": 0.64,
+   "pnl": 28.36,
+   "funding": 0.18
+  },
+  "2021": {
+   "n": 35,
+   "r_medio": 0.113,
+   "win": 0.54,
+   "pnl": 40.88,
+   "funding": -0.01
+  },
+  "2022": {
+   "n": 62,
+   "r_medio": 0.05,
+   "win": 0.56,
+   "pnl": 32.99,
+   "funding": -0.61
+  }
+ },
+ "per_livello_funding": {
+  "0<=funding<0.0001": {
+   "n": 21,
+   "r_medio": -0.032,
+   "win": 0.52,
+   "pnl": -7.92,
+   "funding": -0.43
+  },
+  "funding<0": {
+   "n": 101,
+   "r_medio": 0.104,
+   "win": 0.58,
+   "pnl": 110.16,
+   "funding": -0.01
+  }
+ },
+ "per_trend": {
+  "sopra_sma50": {
+   "n": 35,
+   "r_medio": -0.021,
+   "win": 0.43,
+   "pnl": -8.39,
+   "funding": -0.03
+  },
+  "sotto_sma50": {
+   "n": 87,
+   "r_medio": 0.122,
+   "win": 0.63,
+   "pnl": 110.63,
+   "funding": -0.4
+  }
+ },
+ "per_giorno_settimana": {
+  "0": {
+   "n": 22,
+   "r_medio": 0.293,
+   "win": 0.82,
+   "pnl": 68.53,
+   "funding": -0.38
+  },
+  "1": {
+   "n": 17,
+   "r_medio": 0.059,
+   "win": 0.53,
+   "pnl": 10.65,
+   "funding": 0.07
+  },
+  "2": {
+   "n": 19,
+   "r_medio": 0.016,
+   "win": 0.47,
+   "pnl": 2.39,
+   "funding": -0.16
+  },
+  "3": {
+   "n": 16,
+   "r_medio": 0.168,
+   "win": 0.69,
+   "pnl": 28.06,
+   "funding": 0.02
+  },
+  "4": {
+   "n": 24,
+   "r_medio": -0.004,
+   "win": 0.58,
+   "pnl": -2.14,
+   "funding": -0.15
+  },
+  "5": {
+   "n": 10,
+   "r_medio": 0.069,
+   "win": 0.5,
+   "pnl": 7.13,
+   "funding": -0.01
+  },
+  "6": {
+   "n": 14,
+   "r_medio": -0.082,
+   "win": 0.29,
+   "pnl": -12.38,
+   "funding": 0.17
+  }
+ },
+ "per_ora_segnale": {
+  "0": {
+   "n": 41,
+   "r_medio": 0.168,
+   "win": 0.59,
+   "pnl": 73.58,
+   "funding": -0.05
+  },
+  "16": {
+   "n": 35,
+   "r_medio": 0.005,
+   "win": 0.57,
+   "pnl": 0.84,
+   "funding": -0.07
+  },
+  "8": {
+   "n": 46,
+   "r_medio": 0.061,
+   "win": 0.57,
+   "pnl": 27.82,
+   "funding": -0.32
+  }
+ },
+ "per_esito": {
+  "segnale": {
+   "n": 118,
+   "r_medio": 0.118,
+   "win": 0.59,
+   "pnl": 145.21,
+   "funding": -0.38
+  },
+  "stop": {
+   "n": 4,
+   "r_medio": -1.016,
+   "win": 0.0,
+   "pnl": -42.97,
+   "funding": -0.05
+  }
+ },
+ "scomposizione_pnl": {
+  "pnl_netto": 102.24,
+  "pnl_prezzo_lordo": 128.45,
+  "funding_incassato": -0.43,
+  "commissioni_e_slippage": 25.78,
+  "quota_funding_su_netto": -0.004
+ },
+ "distribuzione_r": {
+  "min": -1.019,
+  "p10": -0.484,
+  "mediana": 0.068,
+  "p90": 0.56,
+  "max": 2.014,
+  "r_medio_senza_i_5_migliori": 0.02,
+  "r_medio_senza_i_5_peggiori": 0.1261
+ },
+ "cluster": {
+  "primo_del_cluster": {
+   "n": 80,
+   "r_medio": 0.122
+  },
+  "successivo_nel_cluster": {
+   "n": 42,
+   "r_medio": 0.003
+  }
+ },
+ "rendimento_3_barre_grezzo": {
+  "segnale": {
+   "n": 281,
+   "medio_pct": 0.924
+  },
+  "altre_barre": {
+   "n": 2784,
+   "medio_pct": 0.097
+  }
+ }
+}

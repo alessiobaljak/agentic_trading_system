@@ -230,6 +230,7 @@ def strategia_da_regole(serie: Serie, entra: Entra, uscita: Dict[str, object]):
     max_barre = uscita.get("max_barre")
     chiudi_su_opposto = bool(uscita.get("chiudi_su_opposto", False))
     chiudi_custom = uscita.get("chiudi")
+    stop_fn = uscita.get("stop_fn")  # (i, direzione) -> prezzo dello stop, alternativa a stop_atr/stop_pct
     atr = serie.atr(atr_n) if (stop_atr is not None or target_atr is not None) else None
     durata = serie.durata_ms
 
@@ -251,7 +252,11 @@ def strategia_da_regole(serie: Serie, entra: Entra, uscita: Dict[str, object]):
             return None
         prezzo = serie.c[i]
         lato = 1 if direzione == "long" else -1
-        if stop_atr is not None:
+        if stop_fn is not None:
+            stop = stop_fn(i, direzione)
+            if stop is None or not np.isfinite(stop):
+                return None
+        elif stop_atr is not None:
             a = atr[i]
             if not np.isfinite(a) or a <= 0:
                 return None
@@ -259,7 +264,7 @@ def strategia_da_regole(serie: Serie, entra: Entra, uscita: Dict[str, object]):
         elif stop_pct is not None:
             stop = prezzo * (1 - lato * float(stop_pct))
         else:
-            raise ValueError("serve stop_atr o stop_pct")
+            raise ValueError("serve stop_atr, stop_pct o stop_fn")
         target = None
         if target_atr is not None:
             target = prezzo + lato * float(target_atr) * atr[i]

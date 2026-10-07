@@ -48,7 +48,7 @@ def main(argv):
     stima = s.stima_trade(serie, entra, d.COSTRUZIONE, int(v["occupazione"]))
     base = {"id": id_, "idea": v["idea"], "fonte": v["fonte"], "meccanismo": v["meccanismo"],
             "timeframe": v["tf"], "direzione": v["direzione"], "parametri": v["parametri"],
-            "uscita": {k: val for k, val in uscita.items() if k != "chiudi"} | ({"chiudi": "regola custom (vedi varianti.py)"} if "chiudi" in uscita else {}),
+            "uscita": {k: val for k, val in uscita.items() if not callable(val)} | {k: "regola custom (vedi varianti.py)" for k, val in uscita.items() if callable(val)},
             "periodo": "costruzione", "stima_trade": stima}
     if stima["trade_stimati"] < TRADE_MINIMI_COSTRUZIONE:
         s.registra({**base, "tipo": "scarto", "motivo": f"stima dei trade {stima['trade_stimati']} sotto il minimo di {TRADE_MINIMI_COSTRUZIONE} in costruzione: non si testa, nessun budget consumato"})

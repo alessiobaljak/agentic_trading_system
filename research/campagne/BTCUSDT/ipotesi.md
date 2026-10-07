@@ -265,3 +265,131 @@ doppi.
 | S-01 | Deriva del prezzo nelle ore intorno al settlement del funding (i long vendono prima di pagare) | nessuna fonte pubblicata prima del 2024 con titolo, autore e data che io possa citare con certezza: senza fonte l'idea non entra |
 | S-02 | Ciclo del dimezzamento (halving) e stagionalita' pluriennale | il meccanismo richiede candele oltre 1 giorno e cicli di anni: fuori dai timeframe ammessi (regola 10) |
 | S-03 | Qualunque idea basata su cosa e' successo dal 2024 in poi (flussi di strumenti nuovi, eventi) | regola 8: niente conoscenza del vault |
+
+---
+
+# Secondo blocco (scritto dopo i risultati del primo blocco, il 2026-10-07)
+
+Le idee qui sotto sono nuove ipotesi, non ritocchi delle precedenti, tranne I-04b che nasce dalla
+Fase 3 di I-04 (studio dei fallimenti, voce di log `BTCUSDT-V08-long` fase 3) ed e' dichiarata come
+tale. Valgono le spiegazioni concorrenti comuni C1-C6.
+
+## I-04b — Funding negativo in assoluto (variante nata dai fallimenti di I-04)
+
+**Fonte.** Le stesse di I-04 (Schmeling, Schrimpf, Todorov 2023; He, Manela, Ross, von Wachter 2022).
+**Origine.** Fase 3 di V08: dei 122 trade, i 101 con funding strettamente negativo hanno R medio
+0,10, i 21 nel decile ma con funding ≥ 0 hanno R medio −0,03; il funding incassato e' irrilevante
+(0,4% del risultato). La definizione «funding < 0» e' piu' semplice del decile mobile ed e' quella
+del meccanismo: quando gli short pagano i long, il posizionamento netto e' corto.
+**Affermazione verificabile.** Dopo un settlement con tasso negativo, un long di 3 settlement (24
+ore) ha R medio positivo e batte nettamente le entrate casuali long con la stessa uscita.
+**Spiegazioni concorrenti aggiunte.** S1: e' la stessa cosa di V08 con i trade peggiori tolti a
+posteriori (prevede: in validazione non regge; smentita: regge in validazione). S2: dipende dai 5
+trade migliori (prevede: R mediano ≈ 0; smentita: mediana positiva e R medio positivo anche senza
+i 5 migliori). S3: funding negativo capita quasi solo nel 2022 (prevede: trade concentrati in un
+anno; smentita: trade e R positivi in piu' anni).
+**Ipotesi completa.** BTCUSDT; timeframe 8h; segnale alla chiusura della barra se l'ultimo
+settlement entro la chiusura ha tasso < 0 → long; stop 2 ATR(14); uscita a 3 barre. Solo long.
+**Previsione.** 100-140 trade, PF 1,2-1,6, R medio +0,05/+0,12; percentile sopra 90 ma differenza
+forse ancora non netta (margine ~0,10 R).
+
+## I-07 — Rottura dell'intervallo di apertura del giorno UTC (opening range breakout)
+
+**Fonte.** Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», 1990
+(la rottura dell'intervallo della prima parte della sessione anticipa la direzione della sessione).
+**Affermazione verificabile.** Se un'ora chiude sopra il massimo della prima ora del giorno UTC
+(00:00-01:00), il prezzo tende a chiudere il giorno piu' in alto: un long aperto all'ora dopo con
+stop al minimo della prima ora e uscita alla fine del giorno ha R medio positivo e batte le entrate
+casuali long con la stessa uscita. Simmetrico per lo short. Falsificata se non e' cosi' dopo i costi.
+**Sotto-domande.** Il «giorno» di BTC: UTC, dove cadono il settlement del funding (00:00) e la
+candela giornaliera di Binance; oppure il giorno americano (13:30 UTC). Chi opera: chi reagisce
+alla direzione presa nella prima ora (seguaci) e chi ha stop oltre l'intervallo. Vale solo quando
+la prima ora e' ampia (volatile)?
+**Spiegazioni concorrenti aggiunte.** S1: a 1 ora i costi (0,12% andata e ritorno) mangiano un
+movimento medio di poche decine di punti base (prevede PF < 1 netto). S2: le rotture dell'intervallo
+di un'ora sola sono rumore (prevede win rate < 45%, molti stop). S3: lo stop al minimo della prima
+ora e' stretto: ATR orario ~0,8% e intervallo ~0,6%, quindi R grandi e rumorosi (prevede: R medio
+instabile, dipendente da pochi trade). S4: il giorno UTC non e' la sessione giusta (prevede nessun
+effetto; una variante sul giorno americano e' una verifica, non una scelta).
+**Ipotesi completa.** BTCUSDT; timeframe 1h; per ogni giorno UTC, dalla chiusura della barra 01:00
+in poi (barre 1-22), il primo close sopra il massimo della barra 00:00 → long; sotto il minimo →
+short; stop all'estremo opposto della prima ora, con un minimo di 1 ATR(14) di distanza (altrimenti
+il rischio in prezzo sarebbe minuscolo e la dimensione enorme); uscita all'apertura delle 00:00 del
+giorno dopo (chiudi alla chiusura della barra 23:00); un solo trade per giorno. Direzioni separate.
+**Previsione.** 400-600 trade per direzione, PF 0,85-1,05, R medio ≤ 0: i costi vincono.
+
+## I-08 — Ritracciamento breve dentro il trend (RSI a 2 periodi)
+
+**Fonte.** Connors, Alvarez, «Short Term Trading Strategies That Work», TradingMarkets Publishing,
+2009 (RSI a 2 periodi sotto 10 con prezzo sopra la media a 200 periodi: acquisto del ritracciamento,
+uscita al rientro dell'RSI); Wilder, «New Concepts in Technical Trading Systems», 1978 (RSI).
+**Affermazione verificabile.** Quando il prezzo e' sopra la media a 200 barre e l'RSI(2) scende
+sotto 10, un long tenuto finche' l'RSI(2) supera 60 (o al massimo 10 barre) ha R medio positivo
+e batte nettamente le entrate casuali long con la stessa uscita. Short simmetrico (sotto la media,
+RSI(2) sopra 90). Falsificata se no.
+**Sotto-domande.** Chi fornisce liquidita' dopo 2 barre di vendite in un rialzo: chi compra i
+ribassi (dip buyers) e i market maker che hanno accumulato inventario; l'effetto e' di ore-giorni.
+Vale a 4 ore come a 1 giorno? Dipende dalla volatilita'?
+**Spiegazioni concorrenti aggiunte.** S1: e' il trend 2020-21 (i long rendono perche' il mercato
+sale; prevede: non batte il caso long con la stessa uscita). S2: il filtro della media a 200
+seleziona il 2020-21 e nient'altro (prevede: quasi nessun trade nel 2022). S3: la soglia 10/60 e'
+un picco (prevede: 5/15 e 50/70 danno segno diverso). S4: l'uscita su RSI fa durare poco i trade
+vincenti e molto i perdenti fino allo stop (prevede: R mediano piccolo positivo, pochi stop grandi).
+**Ipotesi completa.** BTCUSDT; timeframe 4h (motivo: la fonte usa il giornaliero, ma il
+meccanismo, fornitura di liquidita' dopo un ritracciamento di 2 barre, non ha una scala
+privilegiata in un mercato 24/7; a 4 ore la media a 200 barre copre 33 giorni e i segnali sono
+abbastanza; a 1 giorno la stima dei trade e' sotto il minimo per costruzione: 823 giorni utili dopo
+il riscaldamento × ~10% ≈ 80); long se close > SMA200 e RSI(2) < 10; stop 2 ATR(14); uscita quando
+RSI(2) > 60 o a 10 barre. Short se close < SMA200 e RSI(2) > 90, uscita RSI(2) < 40. Direzioni
+separate. Verifiche: 2h e 8h; soglie 5/15; costi doppi.
+**Previsione.** Long 150-250 trade, PF 1,0-1,3, R medio 0/+0,10, non netto sul caso long. Short
+100-200 trade, PF 0,8-1,0.
+
+## I-09 — Premio del volume alto
+
+**Fonte.** Gervais, Kaniel, Mingelgrin, «The High-Volume Return Premium», Journal of Finance 56(3),
+2001 (un giorno con volume anomalo e' seguito da rendimenti piu' alti nelle settimane seguenti,
+per l'attenzione che attira).
+**Affermazione verificabile.** Dopo un giorno con volume sopra il 90° percentile dei 50 giorni
+precedenti, un long di 5 giorni ha R medio positivo e batte nettamente le entrate casuali long
+con la stessa uscita. Falsificata se no.
+**Sotto-domande.** L'attenzione porta compratori nuovi (retail) che spingono il prezzo per giorni;
+in crypto il volume anomalo e' spesso un crollo con liquidazioni: l'effetto vale anche allora?
+E' asimmetrico (giorni di volume alto in salita vs in discesa)?
+**Spiegazioni concorrenti aggiunte.** S1: e' il trend (prevede: non batte il caso long). S2: il
+volume alto segue i crolli e il «premio» e' il rimbalzo dopo liquidazioni, cioe' un'altra idea
+(prevede: R positivo solo nei giorni di volume alto con rendimento negativo). S3: il volume
+cresce nel tempo (2020→2021) e il percentile mobile su 50 giorni e' sbilanciato (prevede: segnali
+ammucchiati nei periodi di crescita del volume).
+**Ipotesi completa.** BTCUSDT; timeframe 1d (scala della fonte); long alla chiusura del giorno con
+volume > 90° percentile dei 50 giorni precedenti; stop 2 ATR(14); uscita a 5 barre. Solo long (la
+fonte e' solo long). Verifica: 12h, costi doppi, percentile 80.
+**Previsione.** Stima ~60-80 trade: probabile scarto per pochi trade. Se si testa: PF 0,9-1,2.
+
+## I-10 — Compressione delle bande di Bollinger e rottura
+
+**Fonte.** Bollinger, «Bollinger on Bollinger Bands», McGraw-Hill, 2001 (la «squeeze»: quando
+l'ampiezza delle bande e' al minimo di 6 mesi, segue un'espansione, e la direzione e' quella della
+prima chiusura fuori dalla banda).
+**Affermazione verificabile.** Quando l'ampiezza delle bande (20, 2) e' al minimo delle 120 barre
+precedenti e il close esce da una banda, un trade in quella direzione tenuto 20 barre (o fino allo
+stop) ha R medio positivo e batte nettamente le entrate casuali con la stessa uscita.
+**Sotto-domande.** La volatilita' e' ciclica (compressione → espansione): e' un fatto noto; la
+DIREZIONE dell'espansione e' prevedibile dalla prima rottura? Chi opera: chi aspettava la rottura
+(breakout traders) e chi ha stop fuori dalle bande.
+**Spiegazioni concorrenti aggiunte.** S1: la compressione predice la volatilita', non la
+direzione (prevede: baseline (a) sulle stesse barre da' lo stesso R). S2: pochi segnali, dipendenti
+da 2-3 trade (prevede: R mediano ≈ 0). S3: la finestra di 120 barre e' arbitraria (prevede: 60 e
+240 danno segno diverso).
+**Ipotesi completa.** BTCUSDT; timeframe 4h; ampiezza = (banda alta − banda bassa)/media con SMA 20
+e 2 deviazioni standard; segnale se l'ampiezza della barra precedente e' ≤ minimo delle 120 barre
+precedenti e il close supera la banda alta (long) o scende sotto la banda bassa (short); stop 2
+ATR(14); uscita a 20 barre. Direzioni separate.
+**Previsione.** Stima 20-50 trade per direzione: probabile scarto per pochi trade.
+
+## I-04 short al 85° percentile (verifica dichiarata in I-04)
+
+La variante short al 90° percentile e' stata scartata dalla stima (90 trade). La soglia 85° era
+dichiarata in I-04 come verifica di robustezza: si usa qui come variante short, con stima prima.
+**Previsione.** 100-130 trade, PF 0,9-1,1, R medio ≈ 0: il funding alto accompagna i rialzi del
+2020-21 e lo short perde sul prezzo piu' di quanto incassa.

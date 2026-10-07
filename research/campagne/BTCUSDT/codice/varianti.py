@@ -203,3 +203,182 @@ for _id, _dir in (("BTCUSDT-V10-long", "long"), ("BTCUSDT-V11-short", "short")):
          previsione=f"{_dir}: 50-90 trade (forse sotto il minimo), PF 0,9-1,1",
          previsione_pf=[0.90, 1.10],
          criterio_successo=CRITERIO)
+
+
+# =========================================================================== secondo blocco
+# --------------------------------------------------------------------------- I-04b
+def _entra_funding_negativo(serie: s.Serie):
+    f = serie.funding_ultimo()
+    return lambda i: "long" if (np.isfinite(f[i]) and f[i] < 0) else None
+
+
+_reg("BTCUSDT-V12-long", idea="I-04b", tf="8h", direzione="long",
+     fonte="come I-04: Schmeling, Schrimpf, Todorov, 'Crypto Carry', BIS WP 1087, 2023; He, Manela, Ross, von Wachter, 'Fundamentals of Perpetual Futures', arXiv 2212.06888, 2022. Variante nata dalla Fase 3 di V08",
+     meccanismo="posizionamento netto corto (gli short pagano i long) seguito da rimbalzo",
+     parametri={"condizione": "ultimo settlement entro la chiusura con tasso < 0", "stop_atr": 2.0, "atr_n": 14, "max_barre": 3},
+     entra=_entra_funding_negativo,
+     uscita=(lambda serie: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 3}),
+     direzione_di=(lambda serie: (lambda i: "long")),
+     occupazione=3,
+     previsione="100-140 trade, PF 1,2-1,6, R medio +0,05/+0,12; percentile > 90 ma differenza forse non netta",
+     previsione_pf=[1.2, 1.6], criterio_successo=CRITERIO)
+
+# --------------------------------------------------------------------------- I-04 short 85°
+_reg("BTCUSDT-V13-short", idea="I-04", tf="8h", direzione="short",
+     fonte="Schmeling, Schrimpf, Todorov, 'Crypto Carry', BIS Working Papers 1087, aprile 2023; He, Manela, Ross, von Wachter, 'Fundamentals of Perpetual Futures', arXiv 2212.06888, dicembre 2022",
+     meccanismo="rientro di un posizionamento affollato segnalato dal funding alto (85° percentile su 90 giorni)",
+     parametri={"percentile": 85, "finestra_settlement": 270, "stop_atr": 2.0, "atr_n": 14, "max_barre": 3},
+     entra=(lambda serie: _entra_funding(serie, "short", q=85.0)),
+     uscita=(lambda serie: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 3}),
+     direzione_di=(lambda serie: (lambda i: "short")),
+     occupazione=3,
+     previsione="100-130 trade, PF 0,9-1,1, R medio ~0",
+     previsione_pf=[0.9, 1.1], criterio_successo=CRITERIO)
+
+# --------------------------------------------------------------------------- I-07
+def _prima_barra_del_giorno(serie: s.Serie, ora_inizio: int = 0):
+    """Per ogni barra i, l'indice j della barra ``ora_inizio`` del suo giorno (UTC); -1 se manca."""
+    ora, giorno = serie.ora, serie.giorno
+    primo = {}
+    for i in range(serie.n):
+        if ora[i] == ora_inizio:
+            primo[int(giorno[i])] = i
+    out = np.full(serie.n, -1, dtype=np.int64)
+    for i in range(serie.n):
+        g = int(giorno[i]) if ora[i] >= ora_inizio else int(giorno[i]) - 1
+        out[i] = primo.get(g, -1)
+    return out
+
+
+def _prima_rottura(serie: s.Serie, ora_inizio: int = 0):
+    """lato[i] = +1/-1 se i e' la PRIMA barra del giorno (dopo la prima ora) con close fuori dall'intervallo della prima ora; 0 altrimenti."""
+    j_di = _prima_barra_del_giorno(serie, ora_inizio)
+    h, l, c = serie.h, serie.l, serie.c
+    lato = np.zeros(serie.n, dtype=np.int64)
+    gia = set()
+    for i in range(serie.n):
+        j = j_di[i]
+        if j < 0 or j >= i or (i - j) > 22 or j in gia:
+            continue
+        if c[i] > h[j]:
+            lato[i] = 1; gia.add(j)
+        elif c[i] < l[j]:
+            lato[i] = -1; gia.add(j)
+    return lato, j_di
+
+
+def _entra_orb(serie: s.Serie, direzione: str, ora_inizio: int = 0):
+    lato, _ = _prima_rottura(serie, ora_inizio)
+    voluto = 1 if direzione == "long" else -1
+    return lambda i: direzione if lato[i] == voluto else None
+
+
+def _uscita_orb(serie: s.Serie, ora_inizio: int = 0):
+    """Stop all'estremo opposto della prima ora (almeno 1 ATR dal close); «chiudi» alla chiusura della barra prima dell'ora di inizio."""
+    _, j_di = _prima_rottura(serie, ora_inizio)
+    atr = serie.atr(14)
+    h, l, c, ora = serie.h, serie.l, serie.c, serie.ora
+
+    def stop_fn(i: int, direzione: str):
+        j = j_di[i]
+        a = atr[i]
+        if j < 0 or not np.isfinite(a):
+            return None
+        return min(l[j], c[i] - a) if direzione == "long" else max(h[j], c[i] + a)
+
+    def chiudi(i: int, pos) -> bool:
+        return bool(ora[i] == (ora_inizio - 1) % 24)
+    return {"stop_fn": stop_fn, "atr_n": 14, "chiudi": chiudi}
+
+
+for _id, _dir in (("BTCUSDT-V14-long", "long"), ("BTCUSDT-V15-short", "short")):
+    _reg(_id, idea="I-07", tf="1h", direzione=_dir,
+         fonte="Crabel, 'Day Trading with Short Term Price Patterns and Opening Range Breakout', 1990",
+         meccanismo="la rottura dell'intervallo della prima ora del giorno UTC anticipa la direzione del giorno",
+         parametri={"prima_ora": "00:00-01:00 UTC", "stop": "estremo opposto della prima ora, almeno 1 ATR(14) dal close del segnale", "uscita": "chiusura della barra 23:00 (apertura 00:00)", "un_trade_al_giorno": True},
+         entra=(lambda serie, d=_dir: _entra_orb(serie, d)),
+         uscita=(lambda serie: _uscita_orb(serie)),
+         direzione_di=(lambda serie, d=_dir: (lambda i: d)),
+         occupazione=12,
+         previsione=f"{_dir}: 400-600 trade, PF 0,85-1,05, R medio <= 0",
+         previsione_pf=[0.85, 1.05], criterio_successo=CRITERIO)
+
+# --------------------------------------------------------------------------- I-08
+def _entra_rsi2(serie: s.Serie, direzione: str, soglia: float = 10.0, n_sma: int = 200):
+    rsi, sma200, c = serie.rsi(2), s.sma(serie.c, n_sma), serie.c
+    if direzione == "long":
+        return lambda i: "long" if (np.isfinite(rsi[i]) and np.isfinite(sma200[i]) and c[i] > sma200[i] and rsi[i] < soglia) else None
+    return lambda i: "short" if (np.isfinite(rsi[i]) and np.isfinite(sma200[i]) and c[i] < sma200[i] and rsi[i] > 100 - soglia) else None
+
+
+def _chiudi_rsi2(serie: s.Serie, uscita_long: float = 60.0):
+    rsi = serie.rsi(2)
+
+    def chiudi(i: int, pos) -> bool:
+        if pos.direzione == "long":
+            return bool(np.isfinite(rsi[i]) and rsi[i] > uscita_long)
+        return bool(np.isfinite(rsi[i]) and rsi[i] < 100 - uscita_long)
+    return chiudi
+
+
+for _id, _dir in (("BTCUSDT-V16-long", "long"), ("BTCUSDT-V17-short", "short")):
+    _reg(_id, idea="I-08", tf="4h", direzione=_dir,
+         fonte="Connors, Alvarez, 'Short Term Trading Strategies That Work', TradingMarkets Publishing, 2009; Wilder, 'New Concepts in Technical Trading Systems', 1978",
+         meccanismo="fornitura di liquidita' dopo un ritracciamento di 2 barre dentro il trend (media a 200 barre)",
+         parametri={"rsi_periodi": 2, "soglia_ingresso": 10 if _dir == "long" else 90, "soglia_uscita": 60 if _dir == "long" else 40, "sma": 200, "stop_atr": 2.0, "atr_n": 14, "max_barre": 10},
+         entra=(lambda serie, d=_dir: _entra_rsi2(serie, d)),
+         uscita=(lambda serie: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 10, "chiudi": _chiudi_rsi2(serie)}),
+         direzione_di=(lambda serie, d=_dir: (lambda i: d)),
+         occupazione=10,
+         previsione=("long: 150-250 trade, PF 1,0-1,3, R medio 0/+0,10, non netto sul caso long" if _dir == "long" else "short: 100-200 trade, PF 0,8-1,0"),
+         previsione_pf=([1.0, 1.3] if _dir == "long" else [0.8, 1.0]), criterio_successo=CRITERIO)
+
+# --------------------------------------------------------------------------- I-09
+def _entra_volume(serie: s.Serie, q: float = 90.0, n: int = 50):
+    soglia = _percentile_precedente(serie.v, n, q)
+    v = serie.v
+    return lambda i: "long" if (np.isfinite(soglia[i]) and v[i] > soglia[i]) else None
+
+
+_reg("BTCUSDT-V18-long", idea="I-09", tf="1d", direzione="long",
+     fonte="Gervais, Kaniel, Mingelgrin, 'The High-Volume Return Premium', Journal of Finance 56(3), 2001",
+     meccanismo="attenzione attirata dal volume anomalo, seguita da acquisti",
+     parametri={"percentile_volume": 90, "finestra_giorni": 50, "stop_atr": 2.0, "atr_n": 14, "max_barre": 5},
+     entra=_entra_volume,
+     uscita=(lambda serie: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 5}),
+     direzione_di=(lambda serie: (lambda i: "long")),
+     occupazione=5,
+     previsione="60-80 trade stimati: probabile scarto; se si testa PF 0,9-1,2",
+     previsione_pf=[0.9, 1.2], criterio_successo=CRITERIO)
+
+# --------------------------------------------------------------------------- I-10
+def _entra_squeeze(serie: s.Serie, direzione: str, n: int = 20, k: float = 2.0, finestra: int = 120):
+    m, sd = s.sma(serie.c, n), s.rolling_std(serie.c, n)
+    alta, bassa = m + k * sd, m - k * sd
+    ampiezza = (alta - bassa) / m
+    minimo_prec = s.shift(s.rolling_min(ampiezza, finestra), 1)
+    amp_prec = s.shift(ampiezza, 1)
+    c = serie.c
+
+    def entra(i: int):
+        if not (np.isfinite(minimo_prec[i]) and np.isfinite(amp_prec[i])) or amp_prec[i] > minimo_prec[i]:
+            return None
+        if direzione == "long" and c[i] > alta[i]:
+            return "long"
+        if direzione == "short" and c[i] < bassa[i]:
+            return "short"
+        return None
+    return entra
+
+
+for _id, _dir in (("BTCUSDT-V19-long", "long"), ("BTCUSDT-V20-short", "short")):
+    _reg(_id, idea="I-10", tf="4h", direzione=_dir,
+         fonte="Bollinger, 'Bollinger on Bollinger Bands', McGraw-Hill, 2001",
+         meccanismo="espansione della volatilita' dopo la compressione, nella direzione della prima rottura",
+         parametri={"bande": "SMA 20, 2 deviazioni standard", "finestra_minimo_ampiezza": 120, "stop_atr": 2.0, "atr_n": 14, "max_barre": 20},
+         entra=(lambda serie, d=_dir: _entra_squeeze(serie, d)),
+         uscita=(lambda serie: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 20}),
+         direzione_di=(lambda serie, d=_dir: (lambda i: d)),
+         occupazione=20,
+         previsione=f"{_dir}: 20-50 trade stimati: probabile scarto",
+         previsione_pf=[0.8, 1.2], criterio_successo=CRITERIO)
