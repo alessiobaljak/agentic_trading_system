@@ -2998,3 +2998,15 @@ trovata per questa moneta», periodo di validazione mai toccato, nessun candidat
 sessioni ETHUSDT (session_01QrieoTra2fHED872FVjnVs) e SOLUSDT (session_01HuCxs6U8hiZkZiv6uR6bYJ) con lo stesso
 messaggio (simbolo cambiato, divieto esplicito di leggere le altre campagne). Prossimo controllo alle 14:43; a
 tre consegne fatte, il rapporto della prova di processo (Passo 2, punto 4) sul branch di coordinamento.
+
+### 7 ottobre, 12:35: SOL ha consegnato, ETH va riaperta
+
+Controllo a richiesta del proprietario. **SOLUSDT** (session_01HuCxs6U8hiZkZiv6uR6bYJ): consegna alle 11:39, in
+meno di un'ora; log 56 voci (20 registrazioni, 17 varianti, 11 scarti, 1 correzione), «nessuna strategia valida
+trovata», 8 proposte di metodo in `lezioni_metodo_proposte.md` (da leggere nel rapporto della prova); costo
+equivalente 17,8 $. **ETHUSDT** (session_01QrieoTra2fHED872FVjnVs): bloccata alle 11:00 su `git push` 403: la
+sessione era nata SENZA il repo fra le sorgenti autorizzate (la stessa chiamata di creazione aveva funzionato per
+BTC e SOL: un'incostanza della piattaforma); 17 minuti di lavoro locale persi, 5,8 $. Rimedio: nuova sessione ETH
+aperta alle 12:35 con il repo indicato esplicitamente come sorgente e l'istruzione di fermarsi se il primo push
+fallisce. Lezione per il coordinamento: passare sempre la sorgente alla creazione e controllare il primo push
+entro mezz'ora.
