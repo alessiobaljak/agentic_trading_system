@@ -2944,3 +2944,19 @@ BTCST, RAY); fapi.binance.com risponde 451 dalla regione del server, www.binance
 verificabili dalla sessione: tabella commissioni e documentazione (pagine costruite dal browser).
 **STOP del Passo 0:** sei decisioni aperte in `parametri.yaml` (commissione taker, serie dello stop e workingType,
 modalità di margine, porta d'ingresso nel bot per le strategie in codice, coda del 2019, percorsi vietati).
+
+### 7 ottobre, 07:45: Passo 0 approvato, Passo 1 fatto (sì del proprietario: «ok a tutte, vai col Passo 1»)
+
+Parametri congelati (`research/config/parametri.yaml`, stato `congelato`, approvato il 7 ott con i valori
+proposti). **Passo 1**, sul branch `research/coordinamento`: criterio scritto prima dei numeri in
+`universo/selezione_log.md`; modulo `research/src/selezione.py` + `passo1.py` con 10+1 test, revisione avversaria
+(12 difetti, 1 grave: la scheda rivelava il delisting; tutti corretti, 444 test verdi nella cartella research,
+2286 nel repo); eseguito due volte (la seconda col codice corretto, stesso esito). Numeri: 895 contratti perpetui
+in USDT con dati; 100 idonee; 759 esclusi per listing dal 2022, 12 per dati finiti prima del 2024, 26 per volume;
+24 idonee non più negoziate oggi; 20 di campagna (BTC, ETH, SOL, XRP, DOGE, BNB, LTC, MATIC, BCH, LINK, AVAX, ADA,
+TRB, FIL, 1000SHIB, DYDX, MASK, FTM, GALA, ETC), di cui MATIC e FTM non più negoziate con quel simbolo. Nessuna
+cucitura applicata: 9 contratti spariti nel 2022-2023 non toccano le 20. Schede delle 20 sul branch principale
+(`research/campagne/<SIMBOLO>/scheda_moneta.md`, solo informazioni al 2023-12-31). Dati del 2023 (candele
+giornaliere) in `research/data/`, fuori da git. Nota di processo: in questa sessione, che fa anche il controllo
+del mattino, il marcatore `research/.sessione` è stato creato solo durante i due giri della selezione e tolto
+subito dopo, per non bloccare le letture del controllo. **STOP del Passo 1:** conferma della lista dal proprietario.
