@@ -238,7 +238,43 @@ def i16(s: Serie):
     return segn, Uscita(k_atr=2.0, h_barre=8), 20
 
 
+# =====================================================================================
+# Terzo lotto (ipotesi.md, «Terzo lotto di idee»), scritto prima dei risultati del secondo
+# =====================================================================================
+
+
+# --- I-17 autocorrelazione dei rendimenti giornalieri, 1d ------------------------------------------
+def i17(s: Serie):
+    r = comune.rendimenti(s.close)
+    segn = np.where(r > 0, 1, np.where(r < 0, -1, 0))
+    segn[~np.isfinite(r)] = 0
+    return segn, Uscita(k_atr=2.0, h_barre=1), 15
+
+
+# --- I-18 attraversamento di un livello tondo, 1h ------------------------------------------------------
+def i18(s: Serie):
+    prev = np.concatenate(([np.nan], s.close[:-1]))
+    passo = np.where(s.close < 1000.0, 10.0, 100.0)
+    # livello tondo attraversato verso l'alto: esiste L = k*passo con prev < L <= close
+    su = np.floor(s.close / passo) * passo
+    giu = np.ceil(s.close / passo) * passo
+    segn = np.where((prev < su) & (su <= s.close), 1, np.where((prev > giu) & (giu >= s.close), -1, 0))
+    segn[~np.isfinite(prev)] = 0
+    return segn, Uscita(k_atr=2.0, h_barre=2), 20
+
+
+# --- I-19 vicinanza al massimo e al minimo a 30 giorni, 4h -------------------------------------------
+def i19(s: Serie):
+    hi, lo = comune.massimo_precedente(s.high, 180), comune.minimo_precedente(s.low, 180)
+    segn = np.where(s.close >= 0.98 * hi, 1, np.where(s.close <= 1.02 * lo, -1, 0))
+    segn[~np.isfinite(hi)] = 0
+    return segn, Uscita(k_atr=2.0, h_barre=24), 180
+
+
 IDEE: Dict[str, Idea] = {
+    "I-17": Idea("I-17", "autocorrelazione dei rendimenti giornalieri", "1d", False, i17),
+    "I-18": Idea("I-18", "attraversamento di un livello tondo", "1h", False, i18),
+    "I-19": Idea("I-19", "vicinanza al massimo e al minimo a 30 giorni", "4h", False, i19),
     "I-13": Idea("I-13", "squilibrio degli ordini a mercato (compratori aggressivi)", "1h", False, i13),
     "I-14": Idea("I-14", "premio del perpetuo sul prezzo mark", "1h", False, i14),
     "I-15": Idea("I-15", "rottura del range d'apertura del giorno UTC", "1h", False, i15),
@@ -274,6 +310,9 @@ FONTI = {
     "I-14": "Alexander, Choi, Park, Park, «BitMEX bitcoin derivatives: Price discovery, informational efficiency, and hedging effectiveness», J. Futures Markets 2020; He, Manela, Ross, von Wachter 2022",
     "I-15": "Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», 1990",
     "I-16": "Baur, Cahill, Godfrey, Liu, «Bitcoin time-of-day, day-of-week and month-of-year effects in returns and trading volume», Finance Research Letters 2019",
+    "I-17": "Lo e MacKinlay, «Stock Market Prices Do Not Follow Random Walks», Rev. Financial Studies 1988; Urquhart, «The inefficiency of Bitcoin», Economics Letters 2016",
+    "I-18": "Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical Analysis», J. Finance 2003",
+    "I-19": "George e Hwang, «The 52-Week High and Momentum Investing», J. Finance 2004",
 }
 
 MECCANISMI = {
@@ -293,4 +332,7 @@ MECCANISMI = {
     "I-14": "un premio estremo del perpetuo sul mark (oltre il 90° o sotto il 10° percentile a 30 giorni) rientra nelle ore successive",
     "I-15": "la prima chiusura oraria oltre mezzo ATR giornaliero dall'apertura del giorno UTC continua fino a fine giornata",
     "I-16": "le ore della sessione americana rendono di piu' e quelle asiatiche di meno, per i flussi legati ai mercati tradizionali",
+    "I-17": "il segno del rendimento giornaliero continua il giorno dopo (autocorrelazione positiva a breve)",
+    "I-18": "gli ordini di stop si raggruppano oltre i numeri tondi: attraversato il livello, il movimento accelera per 2 ore",
+    "I-19": "vicino al massimo (minimo) a 30 giorni gli operatori ancorati vendono (comprano) troppo presto e poi rincorrono: continuazione per 4 giorni",
 }

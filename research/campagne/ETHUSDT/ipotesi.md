@@ -595,3 +595,101 @@ Variante short: alla chiusura della barra delle 23:00 short, uscita H = 8 (apert
 
 **Previsione.** Entrambe sotto i costi: profit factor 0,95-1,05, R medio circa 0; nessuna
 batte nettamente le entrate casuali.
+
+---
+
+## Terzo lotto di idee (scritto il 7 ottobre 2026 mentre il secondo lotto girava, prima di vederne i risultati)
+
+Il primo lotto è finito: nessuna delle 9 varianti ha battuto le baseline (nota N006 del
+log). Il secondo lotto (6 varianti) gira. Budget dopo i due lotti: 15 varianti. Tre idee
+di famiglie non ancora toccate: autocorrelazione a un giorno (la forma più semplice di
+dipendenza seriale), livelli tondi (ordini raggruppati), vicinanza al massimo recente
+(ancoraggio). Le previsioni tengono conto di quanto capito dal primo lotto: a 1 ora i costi
+mangiano l'effetto, quindi le previsioni sono più basse di prima.
+
+## Famiglia L — Dipendenza seriale a un giorno
+
+### I-17 Autocorrelazione dei rendimenti giornalieri
+
+**Fonte.** «Stock Market Prices Do Not Follow Random Walks: Evidence from a Simple
+Specification Test», Andrew W. Lo e A. Craig MacKinlay, *Review of Financial Studies*
+1(1), 1988 (rapporto delle varianze: autocorrelazione positiva a breve); «The
+inefficiency of Bitcoin», Andrew Urquhart, *Economics Letters* 148, 2016
+(autocorrelazione dei rendimenti giornalieri di Bitcoin nei primi anni, in calo nel tempo).
+
+**Affermazione verificabile.** Il segno del rendimento della candela giornaliera (UTC)
+predice il segno del giorno dopo: long dopo un giorno positivo e short dopo uno negativo
+battono le entrate casuali con la stessa uscita.
+
+**Sotto-domande.** Vale solo per giorni grandi (oltre 1 σ)? Si è ridotto dal 2020 al 2022
+(Urquhart lo trova in calo)? È il momento di BTC (C3)?
+
+**Spiegazioni concorrenti specifiche.** (S1) *è il trend 2020-21*: il long vince e lo
+short perde; smentita se lo short vince nel 2022. (S2) *inversione, non continuazione*
+(Lehmann a un giorno): R medio negativo. (S3) *la candela giornaliera UTC è arbitraria*:
+previsione, lo stesso test su candele da 12h non dà nulla (verifica sugli adiacenti).
+
+**Ipotesi completa.** ETHUSDT, 1d. Long se il rendimento della candela appena chiusa è
+> 0; short se < 0. Uscita: H = 1 barra (apertura del giorno dopo), stop a 2 ATR(14)
+giornaliero (spesso oltre il 6 % del bot: si dichiara). Varianti: long, short.
+
+**Previsione.** Circa 500 trade per direzione. Long: profit factor 1,0-1,15 per il trend,
+non netto rispetto alle entrate casuali long. Short: profit factor 0,85-1,0.
+
+## Famiglia M — Livelli tondi
+
+### I-18 Attraversamento di un livello tondo
+
+**Fonte.** «Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive
+Success of Technical Analysis», Carol L. Osler, *Journal of Finance* 58(5), 2003: gli
+ordini di stop si raggruppano appena oltre i numeri tondi e quelli di presa di profitto
+appena prima; superato il livello, gli stop accelerano il movimento.
+
+**Affermazione verificabile.** Su candele da 1 ora, quando la chiusura attraversa verso
+l'alto un livello tondo (multiplo del passo alla seconda cifra significativa: 10 USDT sotto
+1.000, 100 USDT da 1.000 a 9.999) le 2 ore successive hanno rendimento positivo in eccesso
+rispetto a entrate casuali long; simmetrico verso il basso.
+
+**Sotto-domande.** Il passo giusto cambia col prezzo (ETH è passata da 130 a 4.800 USDT
+in costruzione)? L'accelerazione dura minuti (non si vede a 1h) o ore? I livelli «grossi»
+(500, 1.000) contano di più dei piccoli?
+
+**Spiegazioni concorrenti specifiche.** (S1) *l'effetto è intra-barra e a 1h è già
+finito*: R medio nullo. (S2) *è il momento a 1 ora* (una chiusura che attraversa un
+livello è anche una barra positiva): previsione, la baseline «ogni barra positiva» fa
+lo stesso. (S3) *gli ordini tondi non esistono sui perpetui con leva*: C1.
+
+**Ipotesi completa.** ETHUSDT, 1h. Passo = 10 se prezzo < 1.000, 100 altrimenti. Long se
+esiste un livello L multiplo del passo con close precedente < L ≤ close; short se close
+precedente > L ≥ close. Uscita: H = 2 barre, stop a 2 ATR(14). Varianti: long, short.
+
+**Previsione.** Profit factor 0,8-0,95 in entrambe le direzioni (costi a 1 ora);
+percentile fra le entrate casuali sotto 90. Non batte le baseline.
+
+## Famiglia N — Ancoraggio al massimo recente
+
+### I-19 Vicinanza al massimo (e al minimo) a 30 giorni
+
+**Fonte.** «The 52-Week High and Momentum Investing», Thomas J. George e Chuan-Yang
+Hwang, *Journal of Finance* 59(5), 2004: la vicinanza del prezzo al suo massimo recente
+predice la continuazione, perché gli operatori ancorati al massimo vendono troppo presto e
+poi rincorrono.
+
+**Affermazione verificabile.** Su candele da 4h, quando la chiusura è entro il 2 % del
+massimo delle 180 barre precedenti (30 giorni), le 24 barre successive (4 giorni) hanno
+rendimento positivo in eccesso rispetto a entrate casuali long; quando è entro il 2 % del
+minimo a 180 barre, negativo (short).
+
+**Sotto-domande.** È diverso dalla rottura del canale (I-02)? Lì serve la rottura, qui
+basta la vicinanza: più segnali. Vale nel 2022 per lo short? È il trend (C2)?
+
+**Spiegazioni concorrenti specifiche.** (S1) *è I-01 e I-02 con un altro nome* (trend).
+(S2) *vicino al massimo si inverte* (presa di profitto): R medio negativo. (S3) *pochi
+periodi* (C10): tutto nel 2021.
+
+**Ipotesi completa.** ETHUSDT, 4h. Long se close ≥ 0,98 × massimo degli high delle 180
+barre precedenti; short se close ≤ 1,02 × minimo dei low delle 180 barre precedenti.
+Uscita: H = 24 barre, stop a 2 ATR(14). Varianti: long, short.
+
+**Previsione.** Long: profit factor 1,0-1,2 ma non netto rispetto alle entrate casuali
+long (trend). Short: profit factor 0,8-1,0.

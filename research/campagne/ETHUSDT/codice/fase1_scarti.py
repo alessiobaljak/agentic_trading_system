@@ -41,6 +41,9 @@ MOTIVI = {
     "I-14": "premio del perpetuo oltre i percentili estremi: pochi segnali indipendenti",
     "I-15": "rotture del range d'apertura: pochi giorni oltre mezzo ATR",
     "I-16": "una barra al giorno: non puo' essere sotto 100",
+    "I-17": "un segnale al giorno per direzione: sotto 100 solo se i giorni sono pochi",
+    "I-18": "attraversamenti di livelli tondi: pochi con il passo scelto",
+    "I-19": "chiusure entro il 2 % del massimo o del minimo a 30 giorni: poche per questa direzione",
 }
 
 for chiave, v in stime.items():
