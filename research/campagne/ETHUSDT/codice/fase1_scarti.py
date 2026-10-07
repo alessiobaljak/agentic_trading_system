@@ -44,6 +44,9 @@ MOTIVI = {
     "I-17": "un segnale al giorno per direzione: sotto 100 solo se i giorni sono pochi",
     "I-18": "attraversamenti di livelli tondi: pochi con il passo scelto",
     "I-19": "chiusure entro il 2 % del massimo o del minimo a 30 giorni: poche per questa direzione",
+    "I-20i": "movimenti oltre 1 sigma a volume alto: pochi per questa direzione",
+    "I-20c": "movimenti oltre 1 sigma a volume basso: pochi per questa direzione",
+    "I-21": "la candela avvolgente dopo 3 contrarie e' una figura rara",
 }
 
 for chiave, v in stime.items():

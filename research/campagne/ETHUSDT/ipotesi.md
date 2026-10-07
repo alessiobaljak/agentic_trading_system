@@ -693,3 +693,77 @@ Uscita: H = 24 barre, stop a 2 ATR(14). Varianti: long, short.
 
 **Previsione.** Long: profit factor 1,0-1,2 ma non netto rispetto alle entrate casuali
 long (trend). Short: profit factor 0,8-1,0.
+
+---
+
+## Quarto lotto di idee (scritto il 7 ottobre 2026 mentre il terzo lotto girava, prima di vederne i risultati)
+
+Secondo lotto concluso senza candidati (nota N007). Budget dopo tre lotti: 11 varianti.
+Due famiglie ancora non toccate: l'autocorrelazione condizionata al volume e le figure di
+candele. Dopo questo lotto restano 5 varianti per la Fase 5.
+
+## Famiglia O — Autocorrelazione condizionata al volume
+
+### I-20 Inversione dopo movimenti a volume alto, continuazione dopo movimenti a volume basso
+
+**Fonte.** «Volume and Autocovariances in Short-Horizon Individual Security Returns»,
+Jennifer S. Conrad, Allaudeen Hameed, Cathy Niden, *Journal of Finance* 49(4), 1994: i
+rendimenti a breve si invertono dopo periodi di scambi intensi (pressione di liquidità
+che rientra) e continuano dopo periodi di scambi scarsi (informazione che si diffonde
+lentamente).
+
+**Affermazione verificabile.** Su candele da 4h, dopo una candela con rendimento oltre
+1 deviazione standard (180 barre precedenti): se il suo volume in USDT è sopra la mediana
+delle 180 barre precedenti, la barra successiva ha segno opposto in eccesso rispetto a
+entrate casuali; se è sotto la mediana, stesso segno.
+
+**Sotto-domande.** Vale in entrambe le direzioni? Il volume alto nelle crypto è
+liquidazione (quindi inversione più forte al ribasso)? Il volume basso è notte o fine
+settimana (collegamento con I-08 e I-16)?
+
+**Spiegazioni concorrenti specifiche.** (S1) *è I-04 con una soglia più bassa*
+(l'inversione dopo candele grandi), e I-04 non ha abbastanza eventi: qui la soglia a 1 σ
+dà più trade ma effetto più debole. (S2) *il volume misura la volatilità* (C4). (S3)
+*quattro varianti da una fonte sola alzano la probabilità di un falso positivo* (C1):
+si dichiara e l'asticella ne tiene conto.
+
+**Ipotesi completa.** ETHUSDT, 4h. Rendimento della barra chiusa r, soglia 1 σ a 180
+barre, volume della barra (volume × chiusura) contro la mediana a 180 barre. Varianti:
+(a) long dopo r < −1 σ a volume alto (inversione); (b) short dopo r > +1 σ a volume alto
+(inversione); (c) long dopo r > +1 σ a volume basso (continuazione); (d) short dopo
+r < −1 σ a volume basso (continuazione). Uscita: H = 2 barre, stop a 2 ATR(14).
+
+**Previsione.** (a) profit factor 1,0-1,15, la più promettente (rimbalzo dopo
+liquidazioni); (b) 0,85-1,0 nel 2020-21; (c) 1,0-1,1 per il trend; (d) 0,8-0,95. Nessuna
+netta.
+
+## Famiglia P — Figure di candele
+
+### I-21 Candela avvolgente (engulfing) rialzista e ribassista
+
+**Fonte.** «Candlestick technical trading strategies: Can they create value for
+investors?», Ben R. Marshall, Martin R. Young, Lawrence C. Rose, *Journal of Banking &
+Finance* 30(8), 2006: le figure di candele, fra cui l'avvolgente, non hanno valore
+predittivo sui titoli del Dow Jones. L'ipotesi si prova perché la figura è usata da
+molti operatori crypto (possibile profezia che si autoavvera a breve), con la previsione
+dichiarata che la fonte abbia ragione.
+
+**Affermazione verificabile.** Su candele da 4h, una candela rialzista il cui corpo
+avvolge interamente il corpo della candela ribassista precedente, dopo almeno 3 candele
+ribassiste, è seguita da un rendimento positivo in eccesso nelle 6 barre successive;
+simmetrico per l'avvolgente ribassista.
+
+**Sotto-domande.** Conta il contesto (dopo una discesa) o la sola figura? Il corpo
+avvolgente è solo una candela grande (I-04)? 
+
+**Spiegazioni concorrenti specifiche.** (S1) *è una candela anomala* (I-04): stessa
+cosa con un altro nome. (S2) *la figura segna la fine di una discesa per costruzione*
+(dopo 3 candele giù, la media torna): previsione, la baseline «dopo 3 candele giù,
+qualunque candela» fa lo stesso. (S3) *Marshall e colleghi hanno ragione* (C1).
+
+**Ipotesi completa.** ETHUSDT, 4h. Rialzista: 3 candele con close < open, poi una con
+close > open, open ≤ close precedente e close ≥ open precedente → long. Ribassista:
+simmetrico → short. Uscita: H = 6 barre, stop a 2 ATR(14). Varianti: long, short.
+
+**Previsione.** Profit factor 0,9-1,1 in entrambe; non netto. Probabile stima sotto 100
+per direzione (figura rara): in tal caso scarto senza budget.

@@ -271,7 +271,56 @@ def i19(s: Serie):
     return segn, Uscita(k_atr=2.0, h_barre=24), 180
 
 
+# =====================================================================================
+# Quarto lotto (ipotesi.md, «Quarto lotto di idee»), scritto prima dei risultati del terzo
+# =====================================================================================
+
+
+def _i20_base(s: Serie):
+    r = comune.rendimenti(s.close)
+    sigma = np.full(len(r), np.nan)
+    sigma[1:] = comune.dev_standard_mobile(np.nan_to_num(r, nan=0.0), 180)[:-1]
+    vol_usdt = s.volume * s.close
+    mediana = comune.percentile_mobile(vol_usdt, 180, 50)
+    alto = vol_usdt > mediana
+    basso = vol_usdt < mediana
+    valido = np.isfinite(r) & np.isfinite(sigma) & np.isfinite(mediana)
+    return r, sigma, alto, basso, valido
+
+
+# I-20a long dopo r < -1 sigma a volume alto; I-20b short dopo r > +1 sigma a volume alto (inversione)
+def i20_inversione(s: Serie):
+    r, sigma, alto, basso, valido = _i20_base(s)
+    segn = np.where(valido & alto & (r < -sigma), 1, np.where(valido & alto & (r > sigma), -1, 0))
+    return segn, Uscita(k_atr=2.0, h_barre=2), 182
+
+
+# I-20c long dopo r > +1 sigma a volume basso; I-20d short dopo r < -1 sigma a volume basso (continuazione)
+def i20_continuazione(s: Serie):
+    r, sigma, alto, basso, valido = _i20_base(s)
+    segn = np.where(valido & basso & (r > sigma), 1, np.where(valido & basso & (r < -sigma), -1, 0))
+    return segn, Uscita(k_atr=2.0, h_barre=2), 182
+
+
+# --- I-21 candela avvolgente dopo 3 candele contrarie, 4h --------------------------------------------
+def i21(s: Serie):
+    o, c = s.open, s.close
+    n = len(c)
+    segn = np.zeros(n, dtype=int)
+    for i in range(4, n):
+        tre_giu = all(c[j] < o[j] for j in range(i - 3, i))
+        tre_su = all(c[j] > o[j] for j in range(i - 3, i))
+        if tre_giu and c[i] > o[i] and o[i] <= c[i - 1] and c[i] >= o[i - 1]:
+            segn[i] = 1
+        elif tre_su and c[i] < o[i] and o[i] >= c[i - 1] and c[i] <= o[i - 1]:
+            segn[i] = -1
+    return segn, Uscita(k_atr=2.0, h_barre=6), 20
+
+
 IDEE: Dict[str, Idea] = {
+    "I-20i": Idea("I-20i", "inversione dopo movimento oltre 1 sigma a volume alto", "4h", False, i20_inversione),
+    "I-20c": Idea("I-20c", "continuazione dopo movimento oltre 1 sigma a volume basso", "4h", False, i20_continuazione),
+    "I-21": Idea("I-21", "candela avvolgente dopo 3 candele contrarie", "4h", False, i21),
     "I-17": Idea("I-17", "autocorrelazione dei rendimenti giornalieri", "1d", False, i17),
     "I-18": Idea("I-18", "attraversamento di un livello tondo", "1h", False, i18),
     "I-19": Idea("I-19", "vicinanza al massimo e al minimo a 30 giorni", "4h", False, i19),
@@ -313,6 +362,9 @@ FONTI = {
     "I-17": "Lo e MacKinlay, «Stock Market Prices Do Not Follow Random Walks», Rev. Financial Studies 1988; Urquhart, «The inefficiency of Bitcoin», Economics Letters 2016",
     "I-18": "Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical Analysis», J. Finance 2003",
     "I-19": "George e Hwang, «The 52-Week High and Momentum Investing», J. Finance 2004",
+    "I-20i": "Conrad, Hameed, Niden, «Volume and Autocovariances in Short-Horizon Individual Security Returns», J. Finance 1994",
+    "I-20c": "Conrad, Hameed, Niden, «Volume and Autocovariances in Short-Horizon Individual Security Returns», J. Finance 1994",
+    "I-21": "Marshall, Young, Rose, «Candlestick technical trading strategies: Can they create value for investors?», J. Banking & Finance 2006",
 }
 
 MECCANISMI = {
@@ -335,4 +387,7 @@ MECCANISMI = {
     "I-17": "il segno del rendimento giornaliero continua il giorno dopo (autocorrelazione positiva a breve)",
     "I-18": "gli ordini di stop si raggruppano oltre i numeri tondi: attraversato il livello, il movimento accelera per 2 ore",
     "I-19": "vicino al massimo (minimo) a 30 giorni gli operatori ancorati vendono (comprano) troppo presto e poi rincorrono: continuazione per 4 giorni",
+    "I-20i": "dopo un movimento oltre 1 sigma fatto con scambi intensi, la pressione di liquidita' rientra: inversione nelle 2 barre dopo",
+    "I-20c": "dopo un movimento oltre 1 sigma fatto con scambi scarsi, l'informazione si diffonde lentamente: continuazione nelle 2 barre dopo",
+    "I-21": "la candela avvolgente dopo 3 candele contrarie e' letta da molti operatori come inversione: profezia che si autoavvera a breve (la fonte prevede che non valga)",
 }
