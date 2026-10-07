@@ -63,4 +63,7 @@ VARIANTI = {
     # I-12 compressione 1h
     "I-12-1h-long": ("I-12", "1h", "long", lambda per: st.Compressione(n=20, k=2.0, n_minimo=100, atr_n=20, stop_mult=2.0, target_mult=3.0, barre_uscita=48), 48),
     "I-12-1h-short": ("I-12", "1h", "short", lambda per: st.Compressione(n=20, k=2.0, n_minimo=100, atr_n=20, stop_mult=2.0, target_mult=3.0, barre_uscita=48), 48),
+    # I-13 sbilanciamento degli ordini 1h (aggiunto dopo la Fase 2 delle prime 12 idee)
+    "I-13-1h-long": ("I-13", "1h", "long", lambda per: st.Sbilanciamento(taker=cp.carica_taker("1h", per), n_somma=4, finestra=200, percentile=95, atr_n=24, stop_mult=1.5, barre_uscita=6), 6),
+    "I-13-1h-short": ("I-13", "1h", "short", lambda per: st.Sbilanciamento(taker=cp.carica_taker("1h", per), n_somma=4, finestra=200, percentile=95, atr_n=24, stop_mult=1.5, barre_uscita=6), 6),
 }

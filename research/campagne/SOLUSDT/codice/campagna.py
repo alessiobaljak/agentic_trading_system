@@ -338,3 +338,21 @@ def ora_utc(ts: np.ndarray) -> np.ndarray:
 def giorno_settimana(ts: np.ndarray) -> np.ndarray:
     """0 = lunedi' ... 6 = domenica (UTC)."""
     return ((ts // 86_400_000 + 3) % 7).astype(int)
+
+
+def carica_taker(tf: str, periodo: Tuple[date, date], simbolo: str = SIMBOLO) -> Dict[int, Tuple[float, float]]:
+    """{ts: (volume taker buy, volume)} dai file klines del periodo (colonne 9 e 5 di Binance)."""
+    chiave = (simbolo, tf, periodo, "taker")
+    if chiave in _cache:
+        return _cache[chiave]
+    from pathlib import Path
+    out: Dict[int, Tuple[float, float]] = {}
+    ini, fine = dati.ms_da_data(periodo[0]), dati.ms_da_data(periodo[1]) + 86_400_000
+    cartella = Path(dati.RADICE_DEFAULT) / "data" / "insample" / simbolo / "klines" / tf
+    for z in sorted(cartella.glob("*.zip")):
+        for riga in dati.righe_csv_da_zip(z):
+            ts = dati.normalizza_ts(int(riga[0]))
+            if ini <= ts < fine and ts not in out:
+                out[ts] = (float(riga[9]), float(riga[5]))
+    _cache[chiave] = out
+    return out

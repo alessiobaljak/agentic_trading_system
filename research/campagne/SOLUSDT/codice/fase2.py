@@ -30,6 +30,7 @@ FONTI = {
     "I-07": "Way of the Turtle, Curtis M. Faith, McGraw-Hill, 2007 (regola del canale di Donchian)",
     "I-08": "Bollinger on Bollinger Bands, John Bollinger, McGraw-Hill, 2001",
     "I-09": "Simple Technical Trading Rules and the Stochastic Properties of Stock Returns, Brock, Lakonishok, LeBaron, Journal of Finance 47(5), 1992",
+    "I-13": "Order imbalance and individual stock returns: Theory and evidence, Chordia, Subrahmanyam, Journal of Financial Economics 72(3), 2004",
     "I-10": "Virtual relationships: Short- and long-run evidence from BitCoin and altcoin markets, Ciaian, Rajcaniova, Kancs, Journal of International Financial Markets, Institutions and Money 52, 2018",
 }
 MECCANISMI = {
@@ -41,6 +42,7 @@ MECCANISMI = {
     "I-07": "ordini di stop e inseguimento oltre i massimi/minimi recenti",
     "I-08": "eccesso di breve periodo e fornitura di liquidita'",
     "I-09": "acquisti sui ribassi dentro una tendenza riconosciuta",
+    "I-13": "persistenza del flusso degli ordini a mercato spezzati su piu' ore",
     "I-10": "diffusione del movimento di BTC alle altcoin con ritardo",
 }
 PREVISIONI = {
@@ -59,6 +61,8 @@ PREVISIONI = {
     "I-09-1h-short": "R medio circa zero",
     "I-10-1h-long": "R medio circa zero",
     "I-10-1h-short": "R medio circa zero",
+    "I-13-1h-long": "R medio circa zero",
+    "I-13-1h-short": "R medio circa zero; se c'e' qualcosa e' qui (le vendite forzate persistono piu' degli acquisti)",
 }
 STIME = {
     "I-01-4h-long": {"grezzi": 160, "non_sovrapposti": 105}, "I-01-4h-short": {"grezzi": 161, "non_sovrapposti": 101},
@@ -69,6 +73,7 @@ STIME = {
     "I-08-1h-long": {"grezzi": 1075, "non_sovrapposti": 299}, "I-08-1h-short": {"grezzi": 1126, "non_sovrapposti": 293},
     "I-09-1h-long": {"grezzi": 1069, "non_sovrapposti": 170}, "I-09-1h-short": {"grezzi": 1228, "non_sovrapposti": 176},
     "I-10-1h-long": {"grezzi": 271, "non_sovrapposti": 136}, "I-10-1h-short": {"grezzi": 188, "non_sovrapposti": 107},
+    "I-13-1h-long": {"grezzi": 1021, "non_sovrapposti": 473}, "I-13-1h-short": {"grezzi": 1095, "non_sovrapposti": 458},
 }
 CRITERIO = ("sui dati di costruzione: almeno 100 trade; profit factor dopo costi sopra 1; R medio sopra il 90° percentile "
             "degli R medi di 200 entrate casuali con la stessa uscita; differenza dalla simulazione casuale mediana oltre 2 "

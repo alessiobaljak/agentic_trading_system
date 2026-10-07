@@ -515,3 +515,45 @@ class Compressione(Regola):
 
     def chiudi(self, i, pos):
         return self.barre_in_posizione(i, pos) >= self.p["barre_uscita"]
+
+
+# ---------------------------------------------------------------------------
+# I-13 sbilanciamento degli ordini (quota di volume taker buy)
+# ---------------------------------------------------------------------------
+class Sbilanciamento(Regola):
+    """p: taker (dict ts -> (taker_buy_volume, volume)), n_somma, finestra, percentile, atr_n, stop_mult, barre_uscita."""
+    def precalcola(self, candele):
+        super().precalcola(candele)
+        tk = self.p["taker"]
+        tb = np.array([tk.get(t, (np.nan, np.nan))[0] for t in self.ts])
+        vv = np.array([tk.get(t, (np.nan, np.nan))[1] for t in self.ts])
+        n = self.p["n_somma"]
+        self.quota = np.full(self.n, np.nan)
+        for i in range(n - 1, self.n):
+            s = vv[i - n + 1:i + 1].sum()
+            if np.isfinite(s) and s > 0:
+                self.quota[i] = tb[i - n + 1:i + 1].sum() / s
+        f, perc = self.p["finestra"], self.p["percentile"]
+        self.alto = np.full(self.n, np.nan); self.basso = np.full(self.n, np.nan)
+        for i in range(f + n, self.n):
+            st_ = self.quota[i - f:i]
+            st_ = st_[np.isfinite(st_)]
+            if len(st_) >= f // 2:
+                self.alto[i] = np.percentile(st_, perc); self.basso[i] = np.percentile(st_, 100 - perc)
+        self.atr = cp.atr(self.h, self.l, self.c, self.p["atr_n"])
+
+    def condizione(self, i):
+        q = self.quota[i]
+        if not np.isfinite(q) or not np.isfinite(self.alto[i]):
+            return None
+        if q > self.alto[i]:
+            return "long"
+        if q < self.basso[i]:
+            return "short"
+        return None
+
+    def uscita(self, i, direzione):
+        return self.segnale_stop_atr(i, direzione, self.atr, self.p["stop_mult"])
+
+    def chiudi(self, i, pos):
+        return self.barre_in_posizione(i, pos) >= self.p["barre_uscita"]

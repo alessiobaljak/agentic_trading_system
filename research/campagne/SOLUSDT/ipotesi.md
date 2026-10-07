@@ -342,3 +342,33 @@ prevede, e cosa la smentirebbe.
   scarta per meccanismo non trasferibile.
 - **Cicli di settimane o mesi** (stagionalità mensile di Kaiser 2019): richiedono candele
   oltre 1 giorno o troppo pochi trade: scarto per regola 10.
+
+## I-13 — Sbilanciamento degli ordini (volume taker), aggiunto il 2026-10-07 dopo la Fase 2 delle prime 12 idee
+
+Aggiunto perché la Fase 5 chiede di cercare famiglie diverse finché resta budget: è l'unica
+famiglia (flusso degli ordini) non ancora toccata, e i file di Binance portano il volume
+degli acquisti taker per candela. Scritto PRIMA di qualunque test su questa idea.
+
+- **Fonte.** «Order imbalance and individual stock returns: Theory and evidence», Tarun
+  Chordia, Avanidhar Subrahmanyam, Journal of Financial Economics 72(3), 2004 (lo
+  sbilanciamento degli ordini a mercato predice i rendimenti successivi nel breve
+  periodo, perché i grandi ordini vengono spezzati e il flusso persiste).
+- **Affermazione verificabile.** Su SOLUSDT, quando la quota di volume comprato con
+  ordini a mercato (taker buy) sulle ultime 4 barre è estrema rispetto alla sua storia
+  recente, il rendimento successivo è nella direzione dello sbilanciamento: un long dopo
+  uno sbilanciamento in acquisto (short dopo uno in vendita) ha R medio positivo,
+  superiore all'entrata casuale.
+- **Sotto-domande.** Quanto estremo (95° percentile su 200 barre)? Quanto dura la
+  persistenza: ore. Chi opera: chi spezza ordini grandi su più ore; la controparte sono
+  i market maker, che poi si ricoprono.
+- **Spiegazioni concorrenti specifiche.** (S1) lo sbilanciamento è contemporaneo al
+  movimento, non lo precede: il prezzo si è già mosso (previsione: R zero, come I-10).
+  (S2) lo sbilanciamento estremo coincide con gli shock di I-05 (stesso segnale sotto
+  altro nome; previsione: trade quasi coincidenti con I-05). Più C1-C10, C12.
+- **Ipotesi completa.** SOLUSDT; meccanismo: persistenza del flusso degli ordini
+  spezzati; timeframe **1h**; direzione **quella dello sbilanciamento, long e short
+  separate**. Regola: quota taker buy sulle ultime 4 barre (somma acquisti taker /
+  somma volume) sopra il 95° percentile delle 200 barre precedenti → long; sotto il 5°
+  → short; stop a 1,5 ATR(24); uscita a tempo dopo 6 barre o stop. Nessun target.
+- **Previsione.** R medio circa zero in entrambe le direzioni; se c'è qualcosa, è nello
+  short (le vendite forzate persistono più degli acquisti).
