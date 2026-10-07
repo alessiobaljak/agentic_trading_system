@@ -2974,3 +2974,14 @@ e `CAMPAGNA BTCUSDT`, più le note pratiche (branch `research/campagna/BTCUSDT` 
 perché la macchina è temporanea, marcatore e test del guardiano, strumenti in `research/src/`, log solo in
 aggiunta, STOP nella sua sessione). ETHUSDT e SOLUSDT partono quando la campagna BTC mostra che il processo regge
 (è la prova di processo). Le 80 idonee non di campagna diventano monete di verifica al Passo 6.
+
+### 7 ottobre, 10:05: i test di GitHub tornano verdi
+
+Il proprietario riceveva molte email di job falliti. Causa: dal commit delle 07:38 (5ca2c8e) il file
+`research/src/tests/test_selezione_revisione.py` importava `yaml`, che non è fra le dipendenze del repo; il test
+`tests/test_allowlist_runnable.py` lancia davvero la voce `test` della lista bianca (`pytest -q` dalla radice),
+che raccoglie anche i test della ricerca, e moriva in raccolta. Localmente non si vedeva perché `pyyaml` è
+installato nell'ambiente di lavoro. Dodici esecuzioni rosse (su tre branch, compresa la campagna BTC che pusha
+spesso). Corretto con 45e664d: `pyyaml==6.0.1` in `requirements.txt`, il test del revisore si salta se la
+libreria manca, e la CI esegue anche `research/src/tests`. Verificato: esecuzione verde sul principale (45e664d)
+e sul coordinamento (9b43703); il branch della campagna BTC ha ricevuto l'unione del principale.
