@@ -1,0 +1,116 @@
+{
+ "variante": {
+  "idea": "I-07",
+  "tf": "1h",
+  "direzione": "short",
+  "fonte": "Crabel, 'Day Trading with Short Term Price Patterns and Opening Range Breakout', 1990",
+  "meccanismo": "la rottura dell'intervallo della prima ora del giorno UTC anticipa la direzione del giorno",
+  "parametri": {
+   "prima_ora": "00:00-01:00 UTC",
+   "stop": "estremo opposto della prima ora, almeno 1 ATR(14) dal close del segnale",
+   "uscita": "chiusura della barra 23:00 (apertura 00:00)",
+   "un_trade_al_giorno": true
+  },
+  "occupazione": 12,
+  "previsione": "short: 400-600 trade, PF 0,85-1,05, R medio <= 0",
+  "previsione_pf": [
+   0.85,
+   1.05
+  ],
+  "criterio_successo": "R medio > 0 dopo costi; R medio sopra il 90° percentile delle entrate casuali con la stessa uscita; differenza netta (> 2 errori standard, bootstrap a blocchi) dalla simulazione mediana e dalla baseline incondizionata; almeno 100 trade in costruzione",
+  "id": "BTCUSDT-V15-short"
+ },
+ "periodo": "costruzione",
+ "metriche": {
+  "n_trade": 524,
+  "profit_factor": 0.8446,
+  "win_rate": 0.3225,
+  "r_medio": -0.0958,
+  "r_mediano": -1.0353,
+  "rendimento_totale": -0.4255,
+  "drawdown_max": 0.512,
+  "rendimento_per_anno": {
+   "2020": -0.177,
+   "2021": -0.1348,
+   "2022": -0.1931
+  },
+  "r_medio_per_anno": {
+   "2020": -0.106,
+   "2021": -0.0639,
+   "2022": -0.1204
+  },
+  "n_trade_per_anno": {
+   "2020": 180,
+   "2021": 182,
+   "2022": 162
+  },
+  "esiti": {
+   "stop": 299,
+   "target": 0,
+   "segnale": 224,
+   "liquidazione": 0,
+   "fine_dati": 1
+  },
+  "n_ridotti": 18,
+  "n_violazioni_liquidazione": 0,
+  "n_segnali_non_validi": 0,
+  "costi_totali": 341.01,
+  "funding_totale": -61.78,
+  "durata_barre": {
+   "media": 13.5,
+   "max": 23,
+   "mediana": 13.0
+  },
+  "stop_pct": {
+   "medio": 0.018,
+   "quota_oltre_6pct": 0.011
+  },
+  "per_direzione": {
+   "long": {
+    "n": 0,
+    "r_medio": 0.0
+   },
+   "short": {
+    "n": 524,
+    "r_medio": -0.0958
+   }
+  },
+  "n_buchi_dati": 0
+ },
+ "blocco_bootstrap": {
+  "trade": 1,
+  "ridotto": false
+ },
+ "baseline_c_buy_and_hold": {
+  "long": 1.6566,
+  "short": -1.6614
+ },
+ "baseline_a_incondizionata": {
+  "n_trade": 2698,
+  "r_medio": -0.1512,
+  "confronto": {
+   "differenza": 0.0554,
+   "errore_standard": 0.0821,
+   "margine": 0.1643,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "baseline_b_casuale": {
+  "n_sim": 100,
+  "r_medio_caso_mediano": -0.118,
+  "r_medio_caso_p90": -0.047,
+  "percentile_del_candidato": 67.0,
+  "confronto_con_sim_mediana": {
+   "differenza": 0.0218,
+   "errore_standard": 0.1021,
+   "margine": 0.2043,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "criterio_successo_superato": false,
+ "previsione_corretta": false
+}

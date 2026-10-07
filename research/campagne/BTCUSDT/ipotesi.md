@@ -393,3 +393,91 @@ La variante short al 90° percentile e' stata scartata dalla stima (90 trade). L
 dichiarata in I-04 come verifica di robustezza: si usa qui come variante short, con stima prima.
 **Previsione.** 100-130 trade, PF 0,9-1,1, R medio ≈ 0: il funding alto accompagna i rialzi del
 2020-21 e lo short perde sul prezzo piu' di quanto incassa.
+
+---
+
+# Terzo blocco (scritto il 2026-10-07 dopo i risultati di V12, V13, V16, V17; V14 e V15 ancora in corso)
+
+Famiglie non ancora provate: regime di volatilita'; contrazione dell'intervallo giornaliero. Piu' la
+variante di I-02 a 5 giorni gia' dichiarata in I-02 come verifica di robustezza (la variante a 7
+giorni era stata scartata dalla stima dei trade, non da un risultato).
+
+## I-11 — Regime di bassa volatilita' (esposizione gestita dalla volatilita')
+
+**Fonte.** Moreira, Muir, «Volatility-Managed Portfolios», Journal of Finance 72(4), 2017 (ridurre
+l'esposizione quando la varianza recente e' alta e aumentarla quando e' bassa migliora il
+rendimento per unita' di rischio, perche' i rendimenti attesi non salgono con la varianza).
+**Affermazione verificabile.** Quando la volatilita' realizzata dei 20 giorni precedenti e' sotto la
+mediana dei 120 giorni precedenti, un long di 3 giorni ha R medio positivo e batte nettamente le
+entrate casuali long con la stessa uscita (che includono anche i giorni di alta volatilita').
+Falsificata se no.
+**Sotto-domande.** Chi opera: in bassa volatilita' la leva e' meno costosa e meno rischiosa e il
+rendimento per unita' di rischio e' piu' alto; i crolli (e le liquidazioni a catena) avvengono in
+alta volatilita'. L'effetto e' sul rendimento per rischio, non sul rendimento: con R (per unita'
+di rischio) e stop in ATR si misura proprio quello. Vale anche nel 2022?
+**Spiegazioni concorrenti aggiunte.** S1: in bassa volatilita' lo stop a 2 ATR e' stretto in
+prezzo e scatta piu' spesso (prevede: molti stop). S2: la bassa volatilita' coincide con le fasi
+laterali, R ≈ 0 (prevede: R medio ≈ 0, non diverso dal caso). S3: e' il trend (prevede: non batte
+il caso long). S4: la mediana a 120 giorni e' arbitraria (prevede: 60 e 240 danno segno diverso).
+**Ipotesi completa.** BTCUSDT; timeframe 1d; volatilita' realizzata = deviazione standard dei
+rendimenti giornalieri dei 20 giorni precedenti; segnale se e' sotto la mediana dei suoi valori nei
+120 giorni precedenti → long; stop 2 ATR(14); uscita a 3 barre (scelta prima della stima: il
+meccanismo non fissa una durata; 3 giorni danno abbastanza trade). Solo long.
+**Previsione.** 100-140 trade, PF 1,0-1,3, R medio 0/+0,08, percentile 60-90, non netta.
+
+## I-02b — Momentum di serie temporale a 5 giorni (verifica dichiarata in I-02)
+
+**Fonte.** Le stesse di I-02 (Moskowitz, Ooi, Pedersen 2012; Liu, Tsyvinski 2021).
+**Origine.** La variante a 7 giorni (V03, V04) e' stata scartata dalla stima dei trade (97 e 84,
+occupazione 7 barre). La finestra a 5 giorni era dichiarata in I-02 come verifica di robustezza;
+5 giorni sono «una settimana» nei mercati tradizionali della fonte. Uscita a 5 barre.
+**Ipotesi completa.** BTCUSDT; 1d; long se close/close di 5 barre prima − 1 > 0; stop 2 ATR(14);
+uscita a 5 barre. Short simmetrico. Direzioni separate.
+**Previsione.** Long 120-150 trade, PF 1,0-1,25, non netto sul caso long; short PF 0,85-1,05.
+
+## I-12 — Contrazione dell'intervallo giornaliero (NR7) e rottura
+
+**Fonte.** Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», 1990
+(un giorno con l'intervallo piu' stretto degli ultimi 7, «NR7», precede un'espansione; si entra
+alla rottura dell'intervallo del giorno stretto).
+**Affermazione verificabile.** Dopo un giorno NR7, la prima ora del giorno seguente che chiude
+sopra il massimo del giorno NR7 apre un long con R medio positivo (stop al minimo del giorno NR7,
+almeno 1 ATR orario; uscita alla fine del giorno), nettamente sopra le entrate casuali long con la
+stessa uscita. Short simmetrico. Falsificata se no.
+**Sotto-domande.** La contrazione e' prevedibile per la volatilita' (ciclo compressione-espansione),
+la direzione e' data dalla prima rottura: vale? Chi opera: chi aspettava la rottura e gli stop
+fuori dall'intervallo stretto.
+**Spiegazioni concorrenti aggiunte.** S1: la contrazione predice l'ampiezza, non la direzione
+(prevede: R ≈ 0 e simmetrico fra long e short). S2: pochi trade (prevede: scarto per stima). S3:
+stop stretto in prezzo e R rumorosi (prevede: dipendenza da pochi trade).
+**Ipotesi completa.** BTCUSDT; timeframe 1h (il giorno NR7 si legge dalle 24 barre del giorno UTC
+precedente); nel giorno dopo un NR7, il primo close orario sopra il massimo del giorno NR7 → long,
+sotto il minimo → short; stop all'estremo opposto del giorno NR7 (almeno 1 ATR(14) orario dal
+close); uscita alla chiusura della barra 23:00; un trade al giorno. Direzioni separate.
+**Previsione.** Stima 60-100 trade per direzione: probabile scarto. Se si testa: PF 0,9-1,1.
+
+---
+
+# Quarto blocco (Fase 5, scritto il 2026-10-07 con 14 varianti usate)
+
+## I-13 — Ritorno alla media dalle bande di Bollinger
+
+**Fonte.** Bollinger, «Bollinger on Bollinger Bands», McGraw-Hill, 2001; Lento, Gradojevic, Wright,
+«Investment information content in Bollinger Bands», Applied Financial Economics Letters 3(4), 2007
+(la regola contrarian sulle bande, comprare sotto la banda bassa e vendere sopra la banda alta,
+risulta profittevole in diversi mercati).
+**Affermazione verificabile.** Quando il close chiude sotto la banda bassa (SMA 20, 2 deviazioni
+standard), un long tenuto fino al rientro sopra la media (o al massimo 10 barre) ha R medio
+positivo e batte nettamente le entrate casuali long con la stessa uscita. Short simmetrico sopra
+la banda alta. Falsificata se no.
+**Sotto-domande.** Chi opera: fornitori di liquidita' dopo un eccesso di 2 deviazioni; l'effetto e'
+di ore-giorni. Differisce da I-08 (RSI a 2 periodi) perche' non ha il filtro di trend e misura
+l'eccesso in deviazioni standard, non in barre consecutive.
+**Spiegazioni concorrenti aggiunte.** S1: sotto la banda bassa ci si arriva nei crolli con
+liquidazioni, che continuano (prevede: molti stop, R negativo per i long). S2: uscita alla media
+= trade vincenti corti e perdenti lunghi (prevede: win rate alto, R medio basso). S3: e' la stessa
+cosa di I-08 (prevede: stesso esito negativo).
+**Ipotesi completa.** BTCUSDT; timeframe 4h (come I-08, stesso meccanismo di fornitura di
+liquidita'); long se close < SMA20 − 2·deviazione standard(20); stop 2 ATR(14); uscita quando close
+> SMA20 o a 10 barre. Short simmetrico. Direzioni separate.
+**Previsione.** 100-160 trade per direzione, PF 0,85-1,05, R medio ≤ 0: come I-08.

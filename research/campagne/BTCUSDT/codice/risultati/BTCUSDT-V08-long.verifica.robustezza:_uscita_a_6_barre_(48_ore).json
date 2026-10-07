@@ -1,0 +1,94 @@
+{
+ "periodo": "costruzione",
+ "metriche": {
+  "n_trade": 91,
+  "profit_factor": 1.6026,
+  "win_rate": 0.5495,
+  "r_medio": 0.1359,
+  "r_mediano": 0.0549,
+  "rendimento_totale": 0.129,
+  "drawdown_max": 0.0388,
+  "rendimento_per_anno": {
+   "2020": 0.051,
+   "2021": 0.0367,
+   "2022": 0.0363
+  },
+  "r_medio_per_anno": {
+   "2020": 0.2949,
+   "2021": 0.159,
+   "2022": 0.0725
+  },
+  "n_trade_per_anno": {
+   "2020": 17,
+   "2021": 23,
+   "2022": 51
+  },
+  "esiti": {
+   "stop": 10,
+   "target": 0,
+   "segnale": 81,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "n_segnali_non_validi": 0,
+  "costi_totali": 21.0,
+  "funding_totale": 1.37,
+  "durata_barre": {
+   "media": 6.7,
+   "max": 7,
+   "mediana": 7.0
+  },
+  "stop_pct": {
+   "medio": 0.0697,
+   "quota_oltre_6pct": 0.527
+  },
+  "per_direzione": {
+   "long": {
+    "n": 91,
+    "r_medio": 0.1359
+   },
+   "short": {
+    "n": 0,
+    "r_medio": 0.0
+   }
+  },
+  "n_buchi_dati": 0
+ },
+ "blocco_bootstrap": {
+  "trade": 1,
+  "ridotto": false
+ },
+ "baseline_c_buy_and_hold": {
+  "long": 1.6566,
+  "short": -1.6614
+ },
+ "baseline_a_incondizionata": {
+  "n_trade": 489,
+  "r_medio": 0.0087,
+  "confronto": {
+   "differenza": 0.1272,
+   "errore_standard": 0.084,
+   "margine": 0.168,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "baseline_b_casuale": {
+  "n_sim": 50,
+  "r_medio_caso_mediano": 0.017,
+  "r_medio_caso_p90": 0.1279,
+  "percentile_del_candidato": 90.0,
+  "confronto_con_sim_mediana": {
+   "differenza": 0.1168,
+   "errore_standard": 0.1192,
+   "margine": 0.2385,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "r_medio_senza_5_migliori": 0.0383
+}

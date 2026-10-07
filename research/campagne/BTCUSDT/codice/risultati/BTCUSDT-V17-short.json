@@ -1,0 +1,119 @@
+{
+ "variante": {
+  "idea": "I-08",
+  "tf": "4h",
+  "direzione": "short",
+  "fonte": "Connors, Alvarez, 'Short Term Trading Strategies That Work', TradingMarkets Publishing, 2009; Wilder, 'New Concepts in Technical Trading Systems', 1978",
+  "meccanismo": "fornitura di liquidita' dopo un ritracciamento di 2 barre dentro il trend (media a 200 barre)",
+  "parametri": {
+   "rsi_periodi": 2,
+   "soglia_ingresso": 90,
+   "soglia_uscita": 40,
+   "sma": 200,
+   "stop_atr": 2.0,
+   "atr_n": 14,
+   "max_barre": 10
+  },
+  "occupazione": 10,
+  "previsione": "short: 100-200 trade, PF 0,8-1,0",
+  "previsione_pf": [
+   0.8,
+   1.0
+  ],
+  "criterio_successo": "R medio > 0 dopo costi; R medio sopra il 90° percentile delle entrate casuali con la stessa uscita; differenza netta (> 2 errori standard, bootstrap a blocchi) dalla simulazione mediana e dalla baseline incondizionata; almeno 100 trade in costruzione",
+  "id": "BTCUSDT-V17-short"
+ },
+ "periodo": "costruzione",
+ "metriche": {
+  "n_trade": 126,
+  "profit_factor": 0.9822,
+  "win_rate": 0.6667,
+  "r_medio": -0.0024,
+  "r_mediano": 0.139,
+  "rendimento_totale": -0.0053,
+  "drawdown_max": 0.0461,
+  "rendimento_per_anno": {
+   "2020": -0.0284,
+   "2021": 0.0215,
+   "2022": 0.0022
+  },
+  "r_medio_per_anno": {
+   "2020": -0.0908,
+   "2021": 0.0505,
+   "2022": 0.0066
+  },
+  "n_trade_per_anno": {
+   "2020": 31,
+   "2021": 43,
+   "2022": 52
+  },
+  "esiti": {
+   "stop": 25,
+   "target": 0,
+   "segnale": 101,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "n_segnali_non_validi": 0,
+  "costi_totali": 36.42,
+  "funding_totale": -2.54,
+  "durata_barre": {
+   "media": 4.4,
+   "max": 10,
+   "mediana": 4.0
+  },
+  "stop_pct": {
+   "medio": 0.0486,
+   "quota_oltre_6pct": 0.238
+  },
+  "per_direzione": {
+   "long": {
+    "n": 0,
+    "r_medio": 0.0
+   },
+   "short": {
+    "n": 126,
+    "r_medio": -0.0024
+   }
+  },
+  "n_buchi_dati": 0
+ },
+ "blocco_bootstrap": {
+  "trade": 1,
+  "ridotto": false
+ },
+ "baseline_c_buy_and_hold": {
+  "long": 1.6566,
+  "short": -1.6614
+ },
+ "baseline_a_incondizionata": {
+  "n_trade": 1773,
+  "r_medio": -0.0413,
+  "confronto": {
+   "differenza": 0.0389,
+   "errore_standard": 0.0568,
+   "margine": 0.1137,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "baseline_b_casuale": {
+  "n_sim": 100,
+  "r_medio_caso_mediano": -0.0312,
+  "r_medio_caso_p90": 0.0122,
+  "percentile_del_candidato": 79.0,
+  "confronto_con_sim_mediana": {
+   "differenza": 0.028,
+   "errore_standard": 0.0706,
+   "margine": 0.1411,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "criterio_successo_superato": false,
+ "previsione_corretta": true
+}

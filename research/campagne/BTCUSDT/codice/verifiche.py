@@ -31,7 +31,20 @@ import varianti as V  # noqa: E402
 def _v12_entra(serie):
     return V._entra_funding_negativo(serie)
 
+def _v08_entra(q):
+    return lambda se: V._entra_funding(se, "long", q=q)
+
+
 VICINI = {
+    "BTCUSDT-V08-long": [
+        ("stop 1,5 ATR", "8h", _v08_entra(90.0), lambda se: {"stop_atr": 1.5, "atr_n": 14, "max_barre": 3}, None),
+        ("stop 3 ATR", "8h", _v08_entra(90.0), lambda se: {"stop_atr": 3.0, "atr_n": 14, "max_barre": 3}, None),
+        ("uscita a 2 barre (16 ore)", "8h", _v08_entra(90.0), lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 2}, None),
+        ("uscita a 4 barre (32 ore)", "8h", _v08_entra(90.0), lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 4}, None),
+        ("uscita a 6 barre (48 ore)", "8h", _v08_entra(90.0), lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 6}, None),
+        ("percentile 85 (soglia piu' larga)", "8h", _v08_entra(85.0), lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 3}, None),
+        ("percentile 95 (soglia piu' stretta)", "8h", _v08_entra(95.0), lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 3}, None),
+    ],
     "BTCUSDT-V12-long": [
         ("stop 1,5 ATR", "8h", _v12_entra, lambda se: {"stop_atr": 1.5, "atr_n": 14, "max_barre": 3}, None),
         ("stop 3 ATR", "8h", _v12_entra, lambda se: {"stop_atr": 3.0, "atr_n": 14, "max_barre": 3}, None),
@@ -42,6 +55,10 @@ VICINI = {
     ],
 }
 ADIACENTI = {
+    "BTCUSDT-V08-long": [
+        ("timeframe 4h, stessa regola (270 settlement = 540 barre), uscita a 6 barre (24 ore)", "4h", lambda se: V._entra_funding(se, "long", q=90.0, n=540), lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 6}, None),
+        ("timeframe 12h, stessa regola (270 settlement = 180 barre), uscita a 2 barre (24 ore)", "12h", lambda se: V._entra_funding(se, "long", q=90.0, n=180), lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 2}, None),
+    ],
     "BTCUSDT-V12-long": [
         ("timeframe 4h, stessa regola, uscita a 6 barre (24 ore)", "4h", _v12_entra, lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 6}, None),
         ("timeframe 12h, stessa regola, uscita a 2 barre (24 ore)", "12h", _v12_entra, lambda se: {"stop_atr": 2.0, "atr_n": 14, "max_barre": 2}, None),

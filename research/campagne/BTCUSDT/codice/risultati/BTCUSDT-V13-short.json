@@ -1,0 +1,114 @@
+{
+ "variante": {
+  "idea": "I-04",
+  "tf": "8h",
+  "direzione": "short",
+  "fonte": "Schmeling, Schrimpf, Todorov, 'Crypto Carry', BIS Working Papers 1087, aprile 2023; He, Manela, Ross, von Wachter, 'Fundamentals of Perpetual Futures', arXiv 2212.06888, dicembre 2022",
+  "meccanismo": "rientro di un posizionamento affollato segnalato dal funding alto (85° percentile su 90 giorni)",
+  "parametri": {
+   "percentile": 85,
+   "finestra_settlement": 270,
+   "stop_atr": 2.0,
+   "atr_n": 14,
+   "max_barre": 3
+  },
+  "occupazione": 3,
+  "previsione": "100-130 trade, PF 0,9-1,1, R medio ~0",
+  "previsione_pf": [
+   0.9,
+   1.1
+  ],
+  "criterio_successo": "R medio > 0 dopo costi; R medio sopra il 90° percentile delle entrate casuali con la stessa uscita; differenza netta (> 2 errori standard, bootstrap a blocchi) dalla simulazione mediana e dalla baseline incondizionata; almeno 100 trade in costruzione",
+  "id": "BTCUSDT-V13-short"
+ },
+ "periodo": "costruzione",
+ "metriche": {
+  "n_trade": 111,
+  "profit_factor": 0.8829,
+  "win_rate": 0.4955,
+  "r_medio": -0.0262,
+  "r_mediano": -0.0061,
+  "rendimento_totale": -0.0304,
+  "drawdown_max": 0.0805,
+  "rendimento_per_anno": {
+   "2020": -0.0101,
+   "2021": -0.0205
+  },
+  "r_medio_per_anno": {
+   "2020": -0.0204,
+   "2021": -0.0302
+  },
+  "n_trade_per_anno": {
+   "2020": 45,
+   "2021": 66
+  },
+  "esiti": {
+   "stop": 8,
+   "target": 0,
+   "segnale": 103,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "n_segnali_non_validi": 0,
+  "costi_totali": 1.54,
+  "funding_totale": -20.15,
+  "durata_barre": {
+   "media": 3.9,
+   "max": 4,
+   "mediana": 4.0
+  },
+  "stop_pct": {
+   "medio": 0.0677,
+   "quota_oltre_6pct": 0.514
+  },
+  "per_direzione": {
+   "long": {
+    "n": 0,
+    "r_medio": 0.0
+   },
+   "short": {
+    "n": 111,
+    "r_medio": -0.0262
+   }
+  },
+  "n_buchi_dati": 0
+ },
+ "blocco_bootstrap": {
+  "trade": 1,
+  "ridotto": false
+ },
+ "baseline_c_buy_and_hold": {
+  "long": 1.6566,
+  "short": -1.6614
+ },
+ "baseline_a_incondizionata": {
+  "n_trade": 801,
+  "r_medio": -0.0419,
+  "confronto": {
+   "differenza": 0.0157,
+   "errore_standard": 0.0566,
+   "margine": 0.1133,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "baseline_b_casuale": {
+  "n_sim": 100,
+  "r_medio_caso_mediano": -0.0319,
+  "r_medio_caso_p90": 0.0362,
+  "percentile_del_candidato": 53.0,
+  "confronto_con_sim_mediana": {
+   "differenza": 0.0035,
+   "errore_standard": 0.074,
+   "margine": 0.148,
+   "netta": false,
+   "segno": 1,
+   "degenere": false
+  }
+ },
+ "criterio_successo_superato": false,
+ "previsione_corretta": false
+}
