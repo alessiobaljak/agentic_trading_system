@@ -1,0 +1,31 @@
+{
+  "esito": {
+    "ETHUSDT/klines/15m": {
+      "file": 48,
+      "mesi_attesi": 48,
+      "mesi_assenti": []
+    },
+    "ETHUSDT/klines/1d": {
+      "file": 48,
+      "mesi_attesi": 48,
+      "mesi_assenti": []
+    },
+    "ETHUSDT/markPriceKlines/15m": {
+      "file": 48,
+      "mesi_attesi": 48,
+      "mesi_assenti": []
+    },
+    "ETHUSDT/fundingRate/": {
+      "file": 48,
+      "mesi_attesi": 48,
+      "mesi_assenti": []
+    },
+    "BTCUSDT/klines/15m": {
+      "file": 48,
+      "mesi_attesi": 48,
+      "mesi_assenti": []
+    }
+  },
+  "checksum_mancanti": [],
+  "n_impronte_ethusdt": 192
+}
