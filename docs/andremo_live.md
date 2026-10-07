@@ -3010,3 +3010,25 @@ BTC e SOL: un'incostanza della piattaforma); 17 minuti di lavoro locale persi, 5
 aperta alle 12:35 con il repo indicato esplicitamente come sorgente e l'istruzione di fermarsi se il primo push
 fallisce. Lezione per il coordinamento: passare sempre la sorgente alla creazione e controllare il primo push
 entro mezz'ora.
+
+### 7 ottobre, 16:55: tre consegne, nessuna strategia, il rapporto della prova di processo
+
+ETHUSDT ha consegnato alle 15:32 (seconda sessione, session_01Tutf22KnSqe6bmwQBThmF9; commit a60898c):
+«nessuna strategia valida trovata per questa moneta», 23 varianti su 30, 22 scarti per stima dei trade, 81 voci
+di log, 3 ore di orologio, 22,7 $ (più i 5,8 $ della prima sessione persa). Con BTC (16 varianti, 55 minuti,
+15,8 $) e SOL (17 varianti, 56 minuti, 17,8 $) la prova di processo è completa: 56 varianti testate, 44 scarti,
+34 varianti di budget non spese, 0 candidati arrivati alla validazione, 62 $ in tutto. Rapporto scritto in
+`research/prova_processo/rapporto.md` sul branch `research/coordinamento` (commit bbfaf55), leggendo solo
+conteggi, date, campi di processo dei log, prime righe delle consegne, lezioni di metodo proposte e CHANGELOG:
+le ipotesi restano chiuse fino al Passo 7. Diagnosi del rapporto: la ricerca per moneta singola con 100 trade
+minimi per direzione scarta le idee lente prima di provarle (34 scarti su 44 a 4 ore o più lente, 28 stime fra
+50 e 99) e non ha i trade per confermare i segnali (8 varianti su 56 sopra il 96-97° percentile delle entrate
+casuali, circa 2 attese per caso, nessuna oltre 2 errori standard a blocchi); le campagne si fermano per
+mancanza di idee con fonte, non per budget. Dodici proposte al protocollo, la prima è la campagna di gruppo
+(trade contati su più monete, regola scritta prima dei numeri, già prevista dalla sezione 11). Problemi di
+strumenti: una sessione nata senza il repo fra le sorgenti (push 403), nove rifiuti del guardiano su ETH tutti
+su forme della shell, il mark price con buchi risolto tre volte in tre codici diversi. STOP del Passo 2: decide
+il proprietario (campagna di gruppo, regole uniche di stima e di «nettamente», se rifare le tre campagne — il
+rapporto raccomanda di no — e se fermare le altre 17 campagne singole finché il protocollo non cambia). Il
+marcatore di coordinamento è stato creato per scrivere il rapporto e rimosso subito dopo: durante quel tempo il
+guardiano ha rifiutato, giustamente, una lettura di `docs/` dal branch di coordinamento.
