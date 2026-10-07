@@ -41,6 +41,48 @@ Solo errori di metodo e trappole dei dati: niente idee, meccanismi o risultati. 
    0,02-0,05 % per lato, non 0,01 %. Il test a costi doppi copre in parte; una fascia per anno
    sarebbe più onesta per le monete con il 2020 in costruzione.
 
+## Nate nelle Fasi 2 e 5 (7 ottobre 2026)
+
+7. **Il percentile fra 200 strategie casuali e il bootstrap a blocchi dicono cose diverse,
+   e il protocollo fa bene a chiedere il secondo.** Quattro varianti su 23 sono sopra il
+   97° percentile delle entrate casuali (per caso se ne attende meno di una), ma nessuna
+   supera 1,5 errori standard a blocchi: i trade vicini sono dipendenti e il percentile
+   li conta come indipendenti. Nei report vanno sempre riportati entrambi, con il
+   percentile dichiarato come indizio e non come prova.
+
+8. **Un controllo positivo degli strumenti costa dieci minuti e chiude un'obiezione intera.**
+   Una strategia con lookahead dichiarato (legge la barra successiva), con la stessa
+   uscita e le stesse baseline delle varianti vere, deve risultare nettamente sopra il
+   caso e crollare col ritardo di una barra. Su ETHUSDT lo ha fatto (30 errori standard,
+   poi profit factor 0,8). Da aggiungere alla Fase 0 di ogni campagna, prima della prima
+   variante: se non passa, nessun risultato vale.
+
+9. **Le previsioni sulle idee a 1 ora vanno scritte al netto dei costi, non al lordo.** Le
+   mie erano sistematicamente ottimiste di 0,1-0,3 di profit factor sulle idee a 1 ora: il
+   costo di 0,12 % per giro su durate di 1-4 ore vale 0,05-0,1 R per trade. Una regola
+   pratica: prima di scrivere la previsione, calcolare il costo in R con l'ATR del
+   timeframe, e dichiararlo.
+
+10. **La stessa fonte non deve dare quattro varianti.** L'idea sul volume condizionato
+    (I-20) ha prodotto quattro varianti (due direzioni per due condizioni): alza la
+    probabilità di un falso positivo dentro un'idea sola. L'asticella lo corregge in
+    validazione, ma in costruzione conviene un tetto di due varianti per fonte, o
+    dichiarare la cosa come ho fatto nel log.
+
+11. **Il budget non speso va dichiarato con il motivo.** Qui 7 varianti su 30: le idee
+    con fonte anteriore al 2024 e meccanismo nuovo si sono esaurite, e spendere il resto
+    su soglie o timeframe diversi di idee fallite sarebbe selezione sul risultato. Il
+    protocollo lo permette; il rapporto della prova di processo dovrebbe dire se 30 è il
+    numero giusto o se le campagne tendono a fermarsi prima.
+
+12. **Chi lancia più lotti deve farli in serie, non in parallelo.** Gli id del log sono
+    progressivi e il file è uno: due processi che registrano insieme possono prendere lo
+    stesso id. In questa campagna i lotti sono andati in serie e il controllo positivo,
+    che non usa gli id progressivi, è girato in parallelo; da scrivere nella nota di
+    apertura.
+
+## Nate nella Fase 0 e nella Fase 1, seguito
+
 6. **Il campo del volume delle candele è in moneta base.** `Candela.volume` è in ETH, non in
    USDT: per il volume in USDT serve la colonna `quote_volume` dei CSV (letta direttamente
    dagli zip) oppure l'approssimazione volume × chiusura. Da esporre nel caricatore.

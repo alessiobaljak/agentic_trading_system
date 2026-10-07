@@ -1,0 +1,1198 @@
+[
+ {
+  "id": "ETHUSDT-001",
+  "idea": "I-01",
+  "nome": "momento di serie temporale a 7 giorni",
+  "timeframe": "4h",
+  "direzione": "long",
+  "variante_n": 1,
+  "n_trade": 275,
+  "profit_factor": 1.381,
+  "r_medio": 0.178,
+  "win_rate": 0.338,
+  "rendimento_totale": 0.5772,
+  "drawdown_max": 0.1305,
+  "percentile_caso": 95.5,
+  "differenza_vs_caso": 0.0941,
+  "errore_standard": 0.1341,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 92,
+    "r_medio": 0.4069,
+    "somma_r": 37.44
+   },
+   "2021": {
+    "n": 112,
+    "r_medio": 0.1917,
+    "somma_r": 21.47
+   },
+   "2022": {
+    "n": 71,
+    "r_medio": -0.1401,
+    "somma_r": -9.95
+   }
+  },
+  "esiti": {
+   "stop": 46,
+   "target": 0,
+   "segnale": 229,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 99,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 165.18,
+  "costi_totali": 266.9,
+  "pnl_lordo_prezzo": 844.12,
+  "pnl_netto": 577.22,
+  "previsione": "R medio fra 0 e +0,10, profit factor 1,0-1,15, forte nel 2020-21 e nullo nel 2022; NON batte nettamente le entrate casuali long (e' il trend di fondo)",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 246
+ },
+ {
+  "id": "ETHUSDT-002",
+  "idea": "I-01",
+  "nome": "momento di serie temporale a 7 giorni",
+  "timeframe": "4h",
+  "direzione": "short",
+  "variante_n": 2,
+  "n_trade": 251,
+  "profit_factor": 0.86,
+  "r_medio": -0.0403,
+  "win_rate": 0.307,
+  "rendimento_totale": -0.1131,
+  "drawdown_max": 0.2359,
+  "percentile_caso": 70.5,
+  "differenza_vs_caso": 0.0261,
+  "errore_standard": 0.0971,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 76,
+    "r_medio": -0.2099,
+    "somma_r": -15.95
+   },
+   "2021": {
+    "n": 92,
+    "r_medio": -0.0992,
+    "somma_r": -9.13
+   },
+   "2022": {
+    "n": 83,
+    "r_medio": 0.1804,
+    "somma_r": 14.98
+   }
+  },
+  "esiti": {
+   "stop": 43,
+   "target": 0,
+   "segnale": 207,
+   "liquidazione": 0,
+   "fine_dati": 1
+  },
+  "n_stop_oltre_6pct": 93,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -16.83,
+  "costi_totali": 35.65,
+  "pnl_lordo_prezzo": -77.49,
+  "pnl_netto": -113.13,
+  "previsione": "R medio intorno a zero o negativo, profit factor sotto 1, con il 2022 positivo; non batte le baseline",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 230
+ },
+ {
+  "id": "ETHUSDT-003",
+  "idea": "I-03",
+  "nome": "inversione RSI a 2 periodi",
+  "timeframe": "1h",
+  "direzione": "long",
+  "variante_n": 3,
+  "n_trade": 1579,
+  "profit_factor": 0.745,
+  "r_medio": -0.0773,
+  "win_rate": 0.629,
+  "rendimento_totale": -0.7149,
+  "drawdown_max": 0.7315,
+  "percentile_caso": 1.5,
+  "differenza_vs_caso": -0.0235,
+  "errore_standard": 0.0192,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 524,
+    "r_medio": -0.0281,
+    "somma_r": -14.74
+   },
+   "2021": {
+    "n": 569,
+    "r_medio": -0.1019,
+    "somma_r": -57.96
+   },
+   "2022": {
+    "n": 486,
+    "r_medio": -0.1015,
+    "somma_r": -49.33
+   }
+  },
+  "esiti": {
+   "stop": 373,
+   "target": 0,
+   "segnale": 1205,
+   "liquidazione": 0,
+   "fine_dati": 1
+  },
+  "n_stop_oltre_6pct": 93,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 31.95,
+  "costi_totali": 555.62,
+  "pnl_lordo_prezzo": -159.26,
+  "pnl_netto": -714.88,
+  "previsione": "win rate 60-65 %, R medio 0 a +0,05, profit factor 1,0-1,1 a costi semplici; non batte nettamente le entrate casuali",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 1257
+ },
+ {
+  "id": "ETHUSDT-004",
+  "idea": "I-03",
+  "nome": "inversione RSI a 2 periodi",
+  "timeframe": "1h",
+  "direzione": "short",
+  "variante_n": 4,
+  "n_trade": 1622,
+  "profit_factor": 0.656,
+  "r_medio": -0.074,
+  "win_rate": 0.606,
+  "rendimento_totale": -0.7089,
+  "drawdown_max": 0.7393,
+  "percentile_caso": 2.0,
+  "differenza_vs_caso": -0.0204,
+  "errore_standard": 0.0187,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 627,
+    "r_medio": -0.1014,
+    "somma_r": -63.6
+   },
+   "2021": {
+    "n": 567,
+    "r_medio": -0.0962,
+    "somma_r": -54.53
+   },
+   "2022": {
+    "n": 428,
+    "r_medio": -0.0045,
+    "somma_r": -1.91
+   }
+  },
+  "esiti": {
+   "stop": 328,
+   "target": 0,
+   "segnale": 1294,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 60,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -20.1,
+  "costi_totali": 392.65,
+  "pnl_lordo_prezzo": -316.23,
+  "pnl_netto": -708.89,
+  "previsione": "win rate 55-62 %, R medio intorno a zero o negativo nel 2020-21; profit factor sotto 1; non batte le baseline",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 1330
+ },
+ {
+  "id": "ETHUSDT-005",
+  "idea": "I-05",
+  "nome": "ritardo di ETH su BTC",
+  "timeframe": "1h",
+  "direzione": "long",
+  "variante_n": 5,
+  "n_trade": 644,
+  "profit_factor": 0.946,
+  "r_medio": -0.0129,
+  "win_rate": 0.464,
+  "rendimento_totale": -0.0932,
+  "drawdown_max": 0.2804,
+  "percentile_caso": 88.5,
+  "differenza_vs_caso": 0.0267,
+  "errore_standard": 0.0367,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 198,
+    "r_medio": 0.0664,
+    "somma_r": 13.14
+   },
+   "2021": {
+    "n": 342,
+    "r_medio": -0.0447,
+    "somma_r": -15.3
+   },
+   "2022": {
+    "n": 104,
+    "r_medio": -0.0593,
+    "somma_r": -6.17
+   }
+  },
+  "esiti": {
+   "stop": 79,
+   "target": 0,
+   "segnale": 565,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 76,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 44.32,
+  "costi_totali": 323.07,
+  "pnl_lordo_prezzo": 229.84,
+  "pnl_netto": -93.23,
+  "previsione": "R medio +0,02 a +0,08, win rate 52-55 %, profit factor 1,0-1,1; vantaggio decrescente per anno; forse netto rispetto alle entrate casuali ma non a costi doppi",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 636
+ },
+ {
+  "id": "ETHUSDT-006",
+  "idea": "I-05",
+  "nome": "ritardo di ETH su BTC",
+  "timeframe": "1h",
+  "direzione": "short",
+  "variante_n": 6,
+  "n_trade": 491,
+  "profit_factor": 0.691,
+  "r_medio": -0.087,
+  "win_rate": 0.397,
+  "rendimento_totale": -0.3554,
+  "drawdown_max": 0.3776,
+  "percentile_caso": 12.0,
+  "differenza_vs_caso": -0.03,
+  "errore_standard": 0.0402,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 139,
+    "r_medio": -0.1401,
+    "somma_r": -19.47
+   },
+   "2021": {
+    "n": 252,
+    "r_medio": -0.0825,
+    "somma_r": -20.8
+   },
+   "2022": {
+    "n": 100,
+    "r_medio": -0.0243,
+    "somma_r": -2.43
+   }
+  },
+  "esiti": {
+   "stop": 63,
+   "target": 0,
+   "segnale": 428,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 64,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -11.39,
+  "costi_totali": 132.02,
+  "pnl_lordo_prezzo": -223.42,
+  "pnl_netto": -355.44,
+  "previsione": "R medio +0,02 a +0,08, win rate 52-55 %, profit factor 1,0-1,1; stesso andamento del long",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 487
+ },
+ {
+  "id": "ETHUSDT-007",
+  "idea": "I-09",
+  "nome": "momento intragiornaliero",
+  "timeframe": "1h",
+  "direzione": "long",
+  "variante_n": 7,
+  "n_trade": 380,
+  "profit_factor": 0.718,
+  "r_medio": -0.0407,
+  "win_rate": 0.45,
+  "rendimento_totale": -0.1457,
+  "drawdown_max": 0.1519,
+  "percentile_caso": 69.0,
+  "differenza_vs_caso": 0.0079,
+  "errore_standard": 0.0236,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 131,
+    "r_medio": -0.0536,
+    "somma_r": -7.02
+   },
+   "2021": {
+    "n": 152,
+    "r_medio": -0.0186,
+    "somma_r": -2.83
+   },
+   "2022": {
+    "n": 97,
+    "r_medio": -0.0578,
+    "somma_r": -5.6
+   }
+  },
+  "esiti": {
+   "stop": 10,
+   "target": 0,
+   "segnale": 370,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 22,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 13.09,
+  "costi_totali": 170.23,
+  "pnl_lordo_prezzo": 24.53,
+  "pnl_netto": -145.7,
+  "previsione": "profit factor 0,9-1,05, R medio 0 a -0,03: i costi mangiano l'effetto; non batte le baseline",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 380
+ },
+ {
+  "id": "ETHUSDT-008",
+  "idea": "I-09",
+  "nome": "momento intragiornaliero",
+  "timeframe": "1h",
+  "direzione": "short",
+  "variante_n": 8,
+  "n_trade": 351,
+  "profit_factor": 0.877,
+  "r_medio": -0.0149,
+  "win_rate": 0.499,
+  "rendimento_totale": -0.0531,
+  "drawdown_max": 0.1235,
+  "percentile_caso": 98.5,
+  "differenza_vs_caso": 0.0389,
+  "errore_standard": 0.0256,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 116,
+    "r_medio": 0.0226,
+    "somma_r": 2.62
+   },
+   "2021": {
+    "n": 144,
+    "r_medio": -0.0559,
+    "somma_r": -8.05
+   },
+   "2022": {
+    "n": 91,
+    "r_medio": 0.0019,
+    "somma_r": 0.18
+   }
+  },
+  "esiti": {
+   "stop": 4,
+   "target": 0,
+   "segnale": 346,
+   "liquidazione": 0,
+   "fine_dati": 1
+  },
+  "n_stop_oltre_6pct": 26,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 0.48,
+  "costi_totali": 154.35,
+  "pnl_lordo_prezzo": 101.28,
+  "pnl_netto": -53.08,
+  "previsione": "profit factor 0,9-1,05, R medio 0 a -0,03; non batte le baseline",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 351
+ },
+ {
+  "id": "ETHUSDT-009",
+  "idea": "I-10",
+  "nome": "funding estremo come segnale contrario",
+  "timeframe": "8h",
+  "direzione": "short",
+  "variante_n": 9,
+  "n_trade": 190,
+  "profit_factor": 0.77,
+  "r_medio": -0.0312,
+  "win_rate": 0.505,
+  "rendimento_totale": -0.0586,
+  "drawdown_max": 0.0815,
+  "percentile_caso": 48.0,
+  "differenza_vs_caso": -0.001,
+  "errore_standard": 0.0335,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 71,
+    "r_medio": -0.0551,
+    "somma_r": -3.92
+   },
+   "2021": {
+    "n": 69,
+    "r_medio": -0.0512,
+    "somma_r": -3.53
+   },
+   "2022": {
+    "n": 50,
+    "r_medio": 0.0305,
+    "somma_r": 1.53
+   }
+  },
+  "esiti": {
+   "stop": 4,
+   "target": 0,
+   "segnale": 186,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 151,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -6.89,
+  "costi_totali": 23.06,
+  "pnl_lordo_prezzo": -35.52,
+  "pnl_netto": -58.58,
+  "previsione": "profit factor 1,0-1,2 grazie al funding incassato; sul solo prezzo circa 1,0; non batte nettamente le entrate casuali short sull'R",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 187
+ },
+ {
+  "id": "ETHUSDT-010",
+  "idea": "I-14",
+  "nome": "premio del perpetuo sul prezzo mark",
+  "timeframe": "1h",
+  "direzione": "short",
+  "variante_n": 10,
+  "n_trade": 1549,
+  "profit_factor": 0.777,
+  "r_medio": -0.0533,
+  "win_rate": 0.451,
+  "rendimento_totale": -0.5785,
+  "drawdown_max": 0.6116,
+  "percentile_caso": 50.5,
+  "differenza_vs_caso": 0.0003,
+  "errore_standard": 0.0255,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 482,
+    "r_medio": -0.0961,
+    "somma_r": -46.34
+   },
+   "2021": {
+    "n": 589,
+    "r_medio": -0.0495,
+    "somma_r": -29.16
+   },
+   "2022": {
+    "n": 478,
+    "r_medio": -0.0146,
+    "somma_r": -7.0
+   }
+  },
+  "esiti": {
+   "stop": 203,
+   "target": 0,
+   "segnale": 1345,
+   "liquidazione": 0,
+   "fine_dati": 1
+  },
+  "n_stop_oltre_6pct": 129,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -35.67,
+  "costi_totali": 415.11,
+  "pnl_lordo_prezzo": -163.43,
+  "pnl_netto": -578.54,
+  "previsione": "R medio +0,02 a +0,06 lordo, profit factor 1,0-1,1; muore a costi doppi; non batte nettamente le entrate casuali",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 1494
+ },
+ {
+  "id": "ETHUSDT-011",
+  "idea": "I-14",
+  "nome": "premio del perpetuo sul prezzo mark",
+  "timeframe": "1h",
+  "direzione": "long",
+  "variante_n": 11,
+  "n_trade": 1598,
+  "profit_factor": 0.884,
+  "r_medio": -0.0329,
+  "win_rate": 0.487,
+  "rendimento_totale": -0.4319,
+  "drawdown_max": 0.4814,
+  "percentile_caso": 75.5,
+  "differenza_vs_caso": 0.0118,
+  "errore_standard": 0.0245,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 506,
+    "r_medio": 0.0025,
+    "somma_r": 1.27
+   },
+   "2021": {
+    "n": 592,
+    "r_medio": -0.0202,
+    "somma_r": -11.93
+   },
+   "2022": {
+    "n": 500,
+    "r_medio": -0.0839,
+    "somma_r": -41.94
+   }
+  },
+  "esiti": {
+   "stop": 247,
+   "target": 0,
+   "segnale": 1351,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 152,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 50.99,
+  "costi_totali": 651.08,
+  "pnl_lordo_prezzo": 219.21,
+  "pnl_netto": -431.88,
+  "previsione": "R medio +0,02 a +0,06 lordo, profit factor 1,0-1,1; stesso andamento dello short",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 1526
+ },
+ {
+  "id": "ETHUSDT-012",
+  "idea": "I-15",
+  "nome": "rottura del range d'apertura del giorno UTC",
+  "timeframe": "1h",
+  "direzione": "long",
+  "variante_n": 12,
+  "n_trade": 287,
+  "profit_factor": 1.315,
+  "r_medio": 0.1499,
+  "win_rate": 0.477,
+  "rendimento_totale": 0.508,
+  "drawdown_max": 0.1174,
+  "percentile_caso": 99.0,
+  "differenza_vs_caso": 0.1273,
+  "errore_standard": 0.1024,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 103,
+    "r_medio": 0.3849,
+    "somma_r": 39.65
+   },
+   "2021": {
+    "n": 112,
+    "r_medio": 0.1252,
+    "somma_r": 14.02
+   },
+   "2022": {
+    "n": 72,
+    "r_medio": -0.1478,
+    "somma_r": -10.64
+   }
+  },
+  "esiti": {
+   "stop": 81,
+   "target": 0,
+   "segnale": 206,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 16,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 67.56,
+  "costi_totali": 270.38,
+  "pnl_lordo_prezzo": 778.35,
+  "pnl_netto": 507.97,
+  "previsione": "profit factor 1,0-1,1, R medio 0 a +0,05; non netto rispetto alle entrate casuali long (trend 2020-21)",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 287
+ },
+ {
+  "id": "ETHUSDT-013",
+  "idea": "I-15",
+  "nome": "rottura del range d'apertura del giorno UTC",
+  "timeframe": "1h",
+  "direzione": "short",
+  "variante_n": 13,
+  "n_trade": 256,
+  "profit_factor": 1.017,
+  "r_medio": 0.0144,
+  "win_rate": 0.391,
+  "rendimento_totale": 0.0191,
+  "drawdown_max": 0.1305,
+  "percentile_caso": 94.0,
+  "differenza_vs_caso": 0.0869,
+  "errore_standard": 0.0997,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 84,
+    "r_medio": 0.0171,
+    "somma_r": 1.43
+   },
+   "2021": {
+    "n": 95,
+    "r_medio": -0.0008,
+    "somma_r": -0.07
+   },
+   "2022": {
+    "n": 77,
+    "r_medio": 0.0302,
+    "somma_r": 2.33
+   }
+  },
+  "esiti": {
+   "stop": 87,
+   "target": 0,
+   "segnale": 169,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 20,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -8.75,
+  "costi_totali": 104.47,
+  "pnl_lordo_prezzo": 123.55,
+  "pnl_netto": 19.08,
+  "previsione": "profit factor 0,9-1,05, R medio intorno a zero; non batte le baseline",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 256
+ },
+ {
+  "id": "ETHUSDT-014",
+  "idea": "I-16",
+  "nome": "ore americane (long) e ore asiatiche (short)",
+  "timeframe": "1h",
+  "direzione": "long",
+  "variante_n": 14,
+  "n_trade": 1022,
+  "profit_factor": 1.036,
+  "r_medio": 0.0218,
+  "win_rate": 0.491,
+  "rendimento_totale": 0.1867,
+  "drawdown_max": 0.265,
+  "percentile_caso": 97.5,
+  "differenza_vs_caso": 0.0489,
+  "errore_standard": 0.0444,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 365,
+    "r_medio": 0.0988,
+    "somma_r": 36.07
+   },
+   "2021": {
+    "n": 365,
+    "r_medio": 0.0206,
+    "somma_r": 7.53
+   },
+   "2022": {
+    "n": 292,
+    "r_medio": -0.0731,
+    "somma_r": -21.33
+   }
+  },
+  "esiti": {
+   "stop": 319,
+   "target": 0,
+   "segnale": 703,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 40,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 99.54,
+  "costi_totali": 803.91,
+  "pnl_lordo_prezzo": 990.59,
+  "pnl_netto": 186.67,
+  "previsione": "profit factor 0,95-1,05, R medio circa 0; non batte nettamente le entrate casuali",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 1022
+ },
+ {
+  "id": "ETHUSDT-015",
+  "idea": "I-16",
+  "nome": "ore americane (long) e ore asiatiche (short)",
+  "timeframe": "1h",
+  "direzione": "short",
+  "variante_n": 15,
+  "n_trade": 1022,
+  "profit_factor": 0.921,
+  "r_medio": -0.0206,
+  "win_rate": 0.467,
+  "rendimento_totale": -0.2163,
+  "drawdown_max": 0.2821,
+  "percentile_caso": 98.5,
+  "differenza_vs_caso": 0.042,
+  "errore_standard": 0.036,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 365,
+    "r_medio": -0.0317,
+    "somma_r": -11.59
+   },
+   "2021": {
+    "n": 365,
+    "r_medio": -0.0257,
+    "somma_r": -9.37
+   },
+   "2022": {
+    "n": 292,
+    "r_medio": -0.0005,
+    "somma_r": -0.14
+   }
+  },
+  "esiti": {
+   "stop": 195,
+   "target": 0,
+   "segnale": 827,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 56,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -31.09,
+  "costi_totali": 389.28,
+  "pnl_lordo_prezzo": 173.02,
+  "pnl_netto": -216.26,
+  "previsione": "profit factor 0,95-1,05, R medio circa 0; non batte nettamente le entrate casuali",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 1023
+ },
+ {
+  "id": "ETHUSDT-016",
+  "idea": "I-17",
+  "nome": "autocorrelazione dei rendimenti giornalieri",
+  "timeframe": "1d",
+  "direzione": "long",
+  "variante_n": 16,
+  "n_trade": 359,
+  "profit_factor": 0.874,
+  "r_medio": -0.0178,
+  "win_rate": 0.471,
+  "rendimento_totale": -0.0644,
+  "drawdown_max": 0.1198,
+  "percentile_caso": 14.0,
+  "differenza_vs_caso": -0.0222,
+  "errore_standard": 0.029,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 128,
+    "r_medio": 0.0275,
+    "somma_r": 3.53
+   },
+   "2021": {
+    "n": 136,
+    "r_medio": -0.0304,
+    "somma_r": -4.13
+   },
+   "2022": {
+    "n": 95,
+    "r_medio": -0.0611,
+    "somma_r": -5.8
+   }
+  },
+  "esiti": {
+   "stop": 11,
+   "target": 0,
+   "segnale": 348,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 358,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 24.34,
+  "costi_totali": 56.56,
+  "pnl_lordo_prezzo": -7.84,
+  "pnl_netto": -64.4,
+  "previsione": "profit factor 1,0-1,15 per il trend 2020-21, non netto rispetto alle entrate casuali long",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 359
+ },
+ {
+  "id": "ETHUSDT-017",
+  "idea": "I-17",
+  "nome": "autocorrelazione dei rendimenti giornalieri",
+  "timeframe": "1d",
+  "direzione": "short",
+  "variante_n": 17,
+  "n_trade": 324,
+  "profit_factor": 0.677,
+  "r_medio": -0.0465,
+  "win_rate": 0.444,
+  "rendimento_totale": -0.1415,
+  "drawdown_max": 0.1467,
+  "percentile_caso": 14.5,
+  "differenza_vs_caso": -0.02,
+  "errore_standard": 0.0294,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 111,
+    "r_medio": -0.0851,
+    "somma_r": -9.44
+   },
+   "2021": {
+    "n": 112,
+    "r_medio": -0.043,
+    "somma_r": -4.81
+   },
+   "2022": {
+    "n": 101,
+    "r_medio": -0.008,
+    "somma_r": -0.81
+   }
+  },
+  "esiti": {
+   "stop": 5,
+   "target": 0,
+   "segnale": 318,
+   "liquidazione": 0,
+   "fine_dati": 1
+  },
+  "n_stop_oltre_6pct": 323,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -8.69,
+  "costi_totali": 16.96,
+  "pnl_lordo_prezzo": -124.55,
+  "pnl_netto": -141.51,
+  "previsione": "profit factor 0,85-1,0; R medio negativo nel 2020-21, positivo nel 2022; non batte le baseline",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 324
+ },
+ {
+  "id": "ETHUSDT-018",
+  "idea": "I-18",
+  "nome": "attraversamento di un livello tondo",
+  "timeframe": "1h",
+  "direzione": "long",
+  "variante_n": 18,
+  "n_trade": 1912,
+  "profit_factor": 0.778,
+  "r_medio": -0.0407,
+  "win_rate": 0.434,
+  "rendimento_totale": -0.5515,
+  "drawdown_max": 0.5753,
+  "percentile_caso": 70.0,
+  "differenza_vs_caso": 0.0055,
+  "errore_standard": 0.0163,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 659,
+    "r_medio": -0.041,
+    "somma_r": -27.04
+   },
+   "2021": {
+    "n": 834,
+    "r_medio": -0.0413,
+    "somma_r": -34.44
+   },
+   "2022": {
+    "n": 419,
+    "r_medio": -0.039,
+    "somma_r": -16.34
+   }
+  },
+  "esiti": {
+   "stop": 94,
+   "target": 0,
+   "segnale": 1818,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 165,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 36.64,
+  "costi_totali": 620.38,
+  "pnl_lordo_prezzo": 68.89,
+  "pnl_netto": -551.49,
+  "previsione": "profit factor 0,8-0,95 (costi a 1 ora); percentile sotto 90 fra le entrate casuali; non batte le baseline",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 1906
+ },
+ {
+  "id": "ETHUSDT-019",
+  "idea": "I-18",
+  "nome": "attraversamento di un livello tondo",
+  "timeframe": "1h",
+  "direzione": "short",
+  "variante_n": 19,
+  "n_trade": 1815,
+  "profit_factor": 0.68,
+  "r_medio": -0.0605,
+  "win_rate": 0.396,
+  "rendimento_totale": -0.675,
+  "drawdown_max": 0.6767,
+  "percentile_caso": 36.0,
+  "differenza_vs_caso": -0.0048,
+  "errore_standard": 0.0163,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 599,
+    "r_medio": -0.0784,
+    "somma_r": -46.96
+   },
+   "2021": {
+    "n": 787,
+    "r_medio": -0.0599,
+    "somma_r": -47.14
+   },
+   "2022": {
+    "n": 429,
+    "r_medio": -0.0368,
+    "somma_r": -15.77
+   }
+  },
+  "esiti": {
+   "stop": 67,
+   "target": 0,
+   "segnale": 1748,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 172,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -15.83,
+  "costi_totali": 416.08,
+  "pnl_lordo_prezzo": -258.93,
+  "pnl_netto": -675.01,
+  "previsione": "profit factor 0,8-0,95; non batte le baseline",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 1811
+ },
+ {
+  "id": "ETHUSDT-020",
+  "idea": "I-20i",
+  "nome": "inversione dopo movimento oltre 1 sigma a volume alto",
+  "timeframe": "4h",
+  "direzione": "long",
+  "variante_n": 20,
+  "n_trade": 513,
+  "profit_factor": 0.96,
+  "r_medio": -0.007,
+  "win_rate": 0.54,
+  "rendimento_totale": -0.0421,
+  "drawdown_max": 0.1466,
+  "percentile_caso": 58.0,
+  "differenza_vs_caso": 0.0038,
+  "errore_standard": 0.0333,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 161,
+    "r_medio": 0.0267,
+    "somma_r": 4.3
+   },
+   "2021": {
+    "n": 185,
+    "r_medio": 0.0355,
+    "somma_r": 6.57
+   },
+   "2022": {
+    "n": 167,
+    "r_medio": -0.0867,
+    "somma_r": -14.48
+   }
+  },
+  "esiti": {
+   "stop": 49,
+   "target": 0,
+   "segnale": 464,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 260,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": 17.96,
+  "costi_totali": 127.77,
+  "pnl_lordo_prezzo": 85.68,
+  "pnl_netto": -42.1,
+  "previsione": "profit factor 1,0-1,15 (rimbalzo dopo discese a volume alto, la piu' promettente del lotto); non netta",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 481
+ },
+ {
+  "id": "ETHUSDT-021",
+  "idea": "I-20i",
+  "nome": "inversione dopo movimento oltre 1 sigma a volume alto",
+  "timeframe": "4h",
+  "direzione": "short",
+  "variante_n": 21,
+  "n_trade": 531,
+  "profit_factor": 0.77,
+  "r_medio": -0.042,
+  "win_rate": 0.486,
+  "rendimento_totale": -0.2051,
+  "drawdown_max": 0.2372,
+  "percentile_caso": 43.5,
+  "differenza_vs_caso": -0.0025,
+  "errore_standard": 0.0289,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 197,
+    "r_medio": -0.0639,
+    "somma_r": -12.59
+   },
+   "2021": {
+    "n": 200,
+    "r_medio": -0.0557,
+    "somma_r": -11.13
+   },
+   "2022": {
+    "n": 134,
+    "r_medio": 0.0106,
+    "somma_r": 1.43
+   }
+  },
+  "esiti": {
+   "stop": 31,
+   "target": 0,
+   "segnale": 500,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 249,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -18.02,
+  "costi_totali": 79.86,
+  "pnl_lordo_prezzo": -125.23,
+  "pnl_netto": -205.1,
+  "previsione": "profit factor 0,85-1,0 nel 2020-21; non netta",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 513
+ },
+ {
+  "id": "ETHUSDT-022",
+  "idea": "I-21",
+  "nome": "candela avvolgente dopo 3 candele contrarie",
+  "timeframe": "4h",
+  "direzione": "short",
+  "variante_n": 22,
+  "n_trade": 123,
+  "profit_factor": 0.835,
+  "r_medio": -0.0567,
+  "win_rate": 0.488,
+  "rendimento_totale": -0.0715,
+  "drawdown_max": 0.131,
+  "percentile_caso": 42.0,
+  "differenza_vs_caso": -0.0104,
+  "errore_standard": 0.1016,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 40,
+    "r_medio": -0.0499,
+    "somma_r": -2.0
+   },
+   "2021": {
+    "n": 39,
+    "r_medio": -0.1782,
+    "somma_r": -6.95
+   },
+   "2022": {
+    "n": 44,
+    "r_medio": 0.0448,
+    "somma_r": 1.97
+   }
+  },
+  "esiti": {
+   "stop": 32,
+   "target": 0,
+   "segnale": 91,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 51,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -7.9,
+  "costi_totali": 20.7,
+  "pnl_lordo_prezzo": -50.78,
+  "pnl_netto": -71.48,
+  "previsione": "profit factor 0,9-1,1; non netta (la fonte prevede nessun valore)",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 120
+ },
+ {
+  "id": "ETHUSDT-023",
+  "idea": "I-22",
+  "nome": "inversione a lungo orizzonte dopo ribasso profondo (o rialzo ampio) a 30 giorni",
+  "timeframe": "4h",
+  "direzione": "short",
+  "variante_n": 23,
+  "n_trade": 185,
+  "profit_factor": 0.545,
+  "r_medio": -0.2834,
+  "win_rate": 0.292,
+  "rendimento_totale": -0.4166,
+  "drawdown_max": 0.4377,
+  "percentile_caso": 0.5,
+  "differenza_vs_caso": -0.2052,
+  "errore_standard": 0.143,
+  "netta": false,
+  "r_per_anno": {
+   "2020": {
+    "n": 70,
+    "r_medio": -0.3169,
+    "somma_r": -22.19
+   },
+   "2021": {
+    "n": 90,
+    "r_medio": -0.278,
+    "somma_r": -25.02
+   },
+   "2022": {
+    "n": 25,
+    "r_medio": -0.2092,
+    "somma_r": -5.23
+   }
+  },
+  "esiti": {
+   "stop": 118,
+   "target": 0,
+   "segnale": 67,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "n_stop_oltre_6pct": 56,
+  "n_ridotti": 0,
+  "n_violazioni_liquidazione": 0,
+  "funding_totale": -60.72,
+  "costi_totali": -28.36,
+  "pnl_lordo_prezzo": -444.94,
+  "pnl_netto": -416.58,
+  "previsione": "profit factor 0,8-1,0, R medio negativo nel 2020-21 (i rialzi ampi continuano) e positivo nel 2022; non netto rispetto alle entrate casuali short",
+  "esito_fase2": "non batte le baseline: si ferma qui",
+  "trade_stimati": 109
+ }
+]
