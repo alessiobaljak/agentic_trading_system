@@ -138,6 +138,39 @@ def serie(intervallo: str, inizio: date, fine: date, con_btc: bool = False) -> S
     return Serie(intervallo, last, mark, funding(inizio, fine), btc)
 
 
+def flusso_taker(s: Serie, inizio: date, fine: date) -> Tuple[np.ndarray, np.ndarray]:
+    """(quote_volume, taker_buy_quote_volume) per barra di ``s``, sommati dalle 15m (colonne 7 e 10 dei CSV).
+
+    Dati del secondo lotto (I-13): si leggono dagli stessi zip gia' scaricati, senza rete.
+    """
+    chiave = ("taker", s.intervallo, inizio, fine)
+    if chiave not in _CACHE:
+        durata = dati.durata_intervallo(s.intervallo)
+        per_barra: Dict[int, List[float]] = {}
+        for anno, mese in dati.mesi_del_periodo(inizio, fine):
+            p = dati.percorso_mese(SIMBOLO, "klines", "15m", anno, mese, RADICE)
+            if not p.is_file():
+                continue
+            for r in dati.righe_csv_da_zip(p):
+                ts = dati.normalizza_ts(r[0])
+                b = per_barra.setdefault(ts // durata * durata, [0.0, 0.0])
+                b[0] += float(r[7])
+                b[1] += float(r[10])
+        q = np.array([per_barra.get(int(t), [np.nan, np.nan])[0] for t in s.ts])
+        tb = np.array([per_barra.get(int(t), [np.nan, np.nan])[1] for t in s.ts])
+        _CACHE[chiave] = (q, tb)
+    return _CACHE[chiave]  # type: ignore[return-value]
+
+
+def premio_sul_mark(s: Serie) -> np.ndarray:
+    """close last / close mark - 1, per barra (I-14). NaN dove la candela mark manca (si e' usata la last)."""
+    mark_close = np.array([c.close for c in s.mark])
+    presenti = np.array([m is not l for m, l in zip(s.mark, s.last)])
+    out = s.close / mark_close - 1.0
+    out[~presenti] = np.nan
+    return out
+
+
 def indice_prima_barra(s: Serie, giorno: date) -> int:
     """Indice della prima barra che apre da ``giorno`` (UTC) in poi."""
     return int(np.searchsorted(s.ts, dati.ms_da_data(giorno)))

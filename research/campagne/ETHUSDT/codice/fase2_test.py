@@ -34,7 +34,9 @@ RISULTATI.mkdir(exist_ok=True)
 def esegui_variante(codice: str, nome_dir: str, extra: dict, registra: bool = True) -> dict:
     idea = strategie.IDEE[codice]
     direzione = 1 if nome_dir == "long" else -1
-    stime = json.loads((QUI.parent / "fase1_stime.json").read_text(encoding="utf-8"))
+    stime: dict = {}
+    for nome_file in sorted(QUI.parent.glob("fase1_stime*.json")):  # un file per lotto
+        stime.update(json.loads(nome_file.read_text(encoding="utf-8")))
     stima = stime[f"{codice}-{nome_dir}"]
     s = comune.serie(idea.timeframe, comune.INIZIO_DATI, comune.FINE_COSTRUZIONE, con_btc=idea.con_btc)
     segn_tutti, uscita, riscaldamento = idea.costruisci(s)

@@ -462,3 +462,136 @@ casuale long.
 Vedi il log: ogni registrazione porta `trade_stimati`, contati sui soli segnali dei
 dati di costruzione con la regola di non sovrapposizione (un segnale si conta solo
 se dista dal precedente contato almeno la durata massima H della posizione).
+
+*Correzione del 7 ottobre (voce ETHUSDT-C001 del log):* per le idee con uscita su
+segnale si usa una seconda stima che simula solo entrate e uscite da segnale; la
+regola qui sopra resta per le altre. La modifica è avvenuta dopo aver visto i
+conteggi dei segnali, mai un rendimento.
+
+---
+
+## Secondo lotto di idee (scritto il 7 ottobre 2026 mentre il primo lotto girava, prima di vederne i risultati)
+
+Il primo lotto ha lasciato 14 varianti scartate per pochi trade e 9 in test: 21 varianti
+di budget libere. Il proprietario chiede di spendere il budget su famiglie diverse. Le
+quattro idee qui sotto usano dati che il primo lotto non toccava (flusso degli ordini,
+prezzo mark, apertura del giorno, ora del giorno). Regole comuni, baseline e spiegazioni
+concorrenti C1-C10 come sopra.
+
+## Famiglia H — Flusso degli ordini
+
+### I-13 Squilibrio degli ordini a mercato (compratori aggressivi contro venditori aggressivi)
+
+**Fonte.** «Order imbalance, liquidity, and market returns», Tarun Chordia, Richard Roll,
+Avanidhar Subrahmanyam, *Journal of Financial Economics* 65(1), 2002: lo squilibrio fra
+acquisti e vendite aggressive è legato ai rendimenti e quello passato predice, debolmente,
+quelli futuri (pressione di inventario dei market maker che si scarica con ritardo).
+
+**Affermazione verificabile.** Su candele da 1 ora, se nelle ultime 4 ore la quota di
+volume in USDT scambiato da compratori aggressivi (campo taker_buy_quote_volume di Binance)
+supera il 58 %, le 2 ore successive hanno rendimento positivo in eccesso rispetto a entrate
+casuali; sotto il 42 %, negativo.
+
+**Sotto-domande.** Lo squilibrio continua (pressione) o inverte (inventario che si
+scarica)? Conta di più a volume alto? Il campo di Binance misura davvero gli aggressori
+(sì, per costruzione: è il lato che prende liquidità)?
+
+**Spiegazioni concorrenti specifiche.** (S1) *lo squilibrio è già nel prezzo*: il
+rendimento delle 4 ore spiega tutto e lo squilibrio non aggiunge nulla. (S2) *inversione,
+non continuazione*: R medio negativo. (S3) *scambi fittizi o automi che alternano*:
+artefatto (C5).
+
+**Ipotesi completa.** ETHUSDT, 1h. Quota compratori aggressivi a 4 barre = somma
+taker_buy_quote / somma quote_volume. Long se > 0,58; short se < 0,42. Uscita: H = 2
+barre, stop a 2 ATR(14). Varianti: long, short.
+
+**Previsione.** R medio +0,01 a +0,04 lordo, profit factor 1,0-1,05: sotto i costi doppi.
+Non batte le baseline.
+
+## Famiglia I — Base del perpetuo
+
+### I-14 Premio del perpetuo sul prezzo mark
+
+**Fonte.** «BitMEX bitcoin derivatives: Price discovery, informational efficiency, and
+hedging effectiveness», Carol Alexander, Jaehyuk Choi, Heungju Park, Sungbin Park,
+*Journal of Futures Markets* 40(1), 2020 (il perpetuo guida il prezzo spot ma il suo premio
+sull'indice rientra); He, Manela, Ross, von Wachter 2022 (vedi I-10): il funding ancora
+il perpetuo all'indice.
+
+**Affermazione verificabile.** Su candele da 1 ora, quando il rapporto fra chiusura last
+e chiusura mark meno 1 (il premio del perpetuo) supera il 90° percentile delle 720 barre
+precedenti (30 giorni), le barre successive hanno rendimento negativo in eccesso (il
+premio rientra); sotto il 10°, positivo.
+
+**Sotto-domande.** Il rientro è del last verso il mark o del mark verso il last? Il
+premio estremo coincide con le candele anomale (I-04)? Dura un'ora o meno?
+
+**Spiegazioni concorrenti specifiche.** (S1) *il premio estremo è un picco di una barra e
+rientra dentro la stessa barra*: a 1h non resta nulla. (S2) *è I-04 travestita*. (S3) *il
+mark è una media del premio, quindi il «premio» misura il momento a brevissimo*:
+previsione, segno uguale a I-03.
+
+**Ipotesi completa.** ETHUSDT, 1h. premio = close_last / close_mark − 1. Short se premio
+> 90° percentile mobile (720 barre precedenti); long se < 10°. Uscita: H = 4 barre, stop
+a 2 ATR(14). Varianti: short, long.
+
+**Previsione.** R medio +0,02 a +0,06 lordo in entrambe le direzioni; profit factor
+1,0-1,1; muore a costi doppi.
+
+## Famiglia J — Rottura del range d'apertura
+
+### I-15 Rottura del range d'apertura del giorno UTC
+
+**Fonte.** «Day Trading with Short Term Price Patterns and Opening Range Breakout», Toby
+Crabel, 1990: il primo movimento del giorno oltre una frazione del range medio tende a
+continuare fino alla chiusura.
+
+**Affermazione verificabile.** Su candele da 1 ora, la prima chiusura del giorno UTC
+sopra l'apertura del giorno più 0,5 volte l'ATR giornaliero (14 giorni precedenti) è
+seguita, fino alla fine del giorno, da un rendimento positivo in eccesso rispetto a
+entrate casuali con la stessa uscita; simmetrico al ribasso.
+
+**Sotto-domande.** Nelle crypto l'apertura a 00:00 UTC è un riferimento che qualcuno
+guarda (settlement del funding, candela giornaliera)? La continuazione dura ore o si
+esaurisce? Vale di più nei giorni con range stretto il giorno prima (I-11)?
+
+**Spiegazioni concorrenti specifiche.** (S1) *è il momento intragiornaliero* (I-09 e
+I-01 a poche barre). (S2) *falsa rottura e inversione*: R medio negativo. (S3) *il
+risultato sta nei giorni di trend 2020-21* (C2, C10).
+
+**Ipotesi completa.** ETHUSDT, 1h, con l'ATR a 14 giorni calcolato sulle candele
+giornaliere precedenti. Long alla prima chiusura oraria > apertura del giorno + 0,5
+ATR giornaliero; short alla prima < apertura − 0,5 ATR giornaliero; un solo ingresso al
+giorno. Uscita: alla chiusura della barra delle 23:00 (cioè all'apertura delle 00:00),
+stop a 2 ATR(14) orario, H = 24 barre. Varianti: long, short.
+
+**Previsione.** Profit factor 1,0-1,1, R medio 0 a +0,05; non netto rispetto alle
+entrate casuali long nel 2020-21.
+
+## Famiglia K — Sessione del giorno
+
+### I-16 Ore americane e ore asiatiche
+
+**Fonte.** Baur, Cahill, Godfrey, Liu, *Finance Research Letters* 31, 2019 (effetti
+dell'ora del giorno nei rendimenti e nei volumi di Bitcoin, legati agli orari dei mercati
+tradizionali).
+
+**Affermazione verificabile.** Le ore della sessione azionaria americana (13:00-21:00
+UTC) hanno rendimento medio positivo in eccesso rispetto a entrate casuali long con la
+stessa durata; le ore asiatiche (00:00-08:00 UTC) negativo (short in eccesso).
+
+**Sotto-domande.** L'effetto è dei flussi istituzionali americani del 2020-22
+(correlazione con le azioni) o un artefatto del trend? Cambia con l'ora legale (13:30
+contro 14:30 UTC)?
+
+**Spiegazioni concorrenti specifiche.** (S1) *è il trend 2020-21 distribuito sulle ore*
+(C2): la baseline a ogni barra long lo rivela. (S2) *Kaiser: niente di stabile* (C1). (S3)
+*effetto dell'ora legale*: si verifica spezzando per stagione.
+
+**Ipotesi completa.** ETHUSDT, 1h. Variante long: alla chiusura della barra delle 12:00
+(che chiude alle 13:00) long, uscita H = 8 barre (apertura delle 21:00), stop a 2 ATR(14).
+Variante short: alla chiusura della barra delle 23:00 short, uscita H = 8 (apertura delle
+08:00), stop a 2 ATR(14).
+
+**Previsione.** Entrambe sotto i costi: profit factor 0,95-1,05, R medio circa 0; nessuna
+batte nettamente le entrate casuali.

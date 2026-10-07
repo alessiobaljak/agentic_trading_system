@@ -46,8 +46,12 @@ def stima_con_uscita_segnale(sg: np.ndarray, uscita, da: int, a: int) -> int:
     return n
 
 
+NOME_USCITA = sys.argv[1] if len(sys.argv) > 1 else "fase1_stime.json"
+FILTRO = set(sys.argv[2:])  # codici delle idee da stimare; vuoto = tutte
 stime = {}
 for codice, idea in strategie.IDEE.items():
+    if FILTRO and codice not in FILTRO:
+        continue
     s = comune.serie(idea.timeframe, comune.INIZIO_DATI, comune.FINE_COSTRUZIONE, con_btc=idea.con_btc)
     segn, uscita, riscaldamento = idea.costruisci(s)
     da = max(riscaldamento, 0)
@@ -69,4 +73,4 @@ for codice, idea in strategie.IDEE.items():
         }
         print(f"{codice} {nome:5s} {idea.timeframe:3s} barre {a - da:6d} segnali {n_segnali:6d} stima(distanza H) {n_stima:5d} stima(uscita segnale) {str(n_stima2):>5s}" + ("  <-- sotto 100" if decisiva < MINIMO_COSTRUZIONE else ""))
 
-(QUI.parent / "fase1_stime.json").write_text(json.dumps(stime, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+(QUI.parent / NOME_USCITA).write_text(json.dumps(stime, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

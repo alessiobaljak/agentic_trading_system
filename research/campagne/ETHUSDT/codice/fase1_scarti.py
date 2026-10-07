@@ -10,7 +10,9 @@ sys.path.insert(0, str(QUI))
 import strategie  # noqa: E402
 from log import aggiungi, leggi  # noqa: E402
 
-stime = json.loads((QUI.parent / "fase1_stime.json").read_text(encoding="utf-8"))
+stime: dict = {}
+for nome_file in sorted(QUI.parent.glob("fase1_stime*.json")):
+    stime.update(json.loads(nome_file.read_text(encoding="utf-8")))
 ids = {v.get("id") for v in leggi()}
 
 if "ETHUSDT-C001" not in ids:
@@ -35,6 +37,10 @@ MOTIVI = {
     "I-10": "funding sotto il 10° percentile mobile: 111 segnali ma raggruppati, 94 trade stimati",
     "I-11": "compressione sotto 0,5 seguita da rottura: 8 segnali per direzione in tutto",
     "I-12": "volume sopra il 90° percentile a 12h con tenuta di 6 barre: 98 trade stimati, appena sotto il minimo",
+    "I-13": "quota di compratori aggressivi oltre le soglie: pochi segnali",
+    "I-14": "premio del perpetuo oltre i percentili estremi: pochi segnali indipendenti",
+    "I-15": "rotture del range d'apertura: pochi giorni oltre mezzo ATR",
+    "I-16": "una barra al giorno: non puo' essere sotto 100",
 }
 
 for chiave, v in stime.items():

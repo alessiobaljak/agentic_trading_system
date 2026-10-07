@@ -172,7 +172,77 @@ def i12(s: Serie):
     return segn, Uscita(k_atr=2.0, h_barre=6), 100
 
 
+# =====================================================================================
+# Secondo lotto (ipotesi.md, «Secondo lotto di idee»), scritto prima dei risultati del primo
+# =====================================================================================
+
+
+# --- I-13 squilibrio degli ordini a mercato, 1h ----------------------------------------------
+def i13(s: Serie):
+    q, tb = comune.flusso_taker(s, comune.INIZIO_DATI, comune.FINE_IN_SAMPLE)
+    q4 = comune.media_mobile(np.nan_to_num(q, nan=0.0), 4) * 4
+    tb4 = comune.media_mobile(np.nan_to_num(tb, nan=0.0), 4) * 4
+    quota = np.where(q4 > 0, tb4 / np.where(q4 > 0, q4, 1.0), np.nan)
+    segn = np.where(quota > 0.58, 1, np.where(quota < 0.42, -1, 0))
+    segn[~np.isfinite(quota)] = 0
+    return segn, Uscita(k_atr=2.0, h_barre=2), 20
+
+
+# --- I-14 premio del perpetuo sul mark, 1h -----------------------------------------------------
+def i14(s: Serie):
+    premio = comune.premio_sul_mark(s)
+    p = np.nan_to_num(premio, nan=0.0)
+    alto, basso = comune.percentile_mobile(p, 720, 90), comune.percentile_mobile(p, 720, 10)
+    segn = np.where(premio > alto, -1, np.where(premio < basso, 1, 0))
+    segn[~np.isfinite(premio) | ~np.isfinite(alto)] = 0
+    return segn, Uscita(k_atr=2.0, h_barre=4), 722
+
+
+# --- I-15 rottura del range d'apertura del giorno UTC, 1h ------------------------------------------
+def i15(s: Serie):
+    ore = np.array([comune.ora_utc(int(t)) for t in s.ts])
+    giorno = s.ts // comune.MS_GIORNO
+    # ATR giornaliero dei 14 giorni PRECEDENTI, dalle candele giornaliere aggregate
+    giorni = comune.candele("1d", comune.INIZIO_DATI, comune.FINE_IN_SAMPLE)
+    chiusure = np.array([c.close for c in giorni])
+    alti, bassi = np.array([c.high for c in giorni]), np.array([c.low for c in giorni])
+    prev = np.concatenate(([chiusure[0]], chiusure[:-1]))
+    tr = np.maximum(alti - bassi, np.maximum(np.abs(alti - prev), np.abs(bassi - prev)))
+    atr_g = comune.media_mobile(tr, 14)
+    atr_del_giorno = {int(c.ts // comune.MS_GIORNO) + 1: atr_g[i] for i, c in enumerate(giorni)}  # vale dal giorno DOPO
+    segn = np.zeros(len(s.ts), dtype=int)
+    apertura: Dict[int, float] = {}
+    gia_entrato: Dict[int, bool] = {}
+    for i in range(len(s.ts)):
+        g = int(giorno[i])
+        if ore[i] == 0:
+            apertura[g] = s.open[i]
+        a, atrg = apertura.get(g), atr_del_giorno.get(g, np.nan)
+        if a is None or not np.isfinite(atrg) or gia_entrato.get(g) or ore[i] >= 22:
+            continue
+        if s.close[i] > a + 0.5 * atrg:
+            segn[i], gia_entrato[g] = 1, True
+        elif s.close[i] < a - 0.5 * atrg:
+            segn[i], gia_entrato[g] = -1, True
+
+    def chiusura(i, pos):
+        return ore[i] == 23  # chiude all'apertura delle 00:00
+
+    return segn, Uscita(k_atr=2.0, h_barre=24, chiusura_segnale=chiusura), 24 * 15
+
+
+# --- I-16 ore americane (long) e ore asiatiche (short), 1h ------------------------------------------
+def i16(s: Serie):
+    ore = np.array([comune.ora_utc(int(t)) for t in s.ts])
+    segn = np.where(ore == 12, 1, np.where(ore == 23, -1, 0))
+    return segn, Uscita(k_atr=2.0, h_barre=8), 20
+
+
 IDEE: Dict[str, Idea] = {
+    "I-13": Idea("I-13", "squilibrio degli ordini a mercato (compratori aggressivi)", "1h", False, i13),
+    "I-14": Idea("I-14", "premio del perpetuo sul prezzo mark", "1h", False, i14),
+    "I-15": Idea("I-15", "rottura del range d'apertura del giorno UTC", "1h", False, i15),
+    "I-16": Idea("I-16", "ore americane (long) e ore asiatiche (short)", "1h", False, i16),
     "I-01": Idea("I-01", "momento di serie temporale a 7 giorni", "4h", False, i01),
     "I-02": Idea("I-02", "rottura del canale a 30 barre", "4h", False, i02),
     "I-03": Idea("I-03", "inversione RSI a 2 periodi", "1h", False, i03),
@@ -200,6 +270,10 @@ FONTI = {
     "I-10": "He, Manela, Ross, von Wachter, «Fundamentals of Perpetual Futures», 2022 (arXiv 2212.06888); Schmeling, Schrimpf, Todorov, «Crypto carry», BIS WP 1087, 2023",
     "I-11": "Bollinger, «Bollinger on Bollinger Bands», 2001; Connors e Raschke, «Street Smarts», 1995",
     "I-12": "Gervais, Kaniel, Mingelgrin, «The High-Volume Return Premium», J. Finance 2001; Blume, Easley, O'Hara, J. Finance 1994",
+    "I-13": "Chordia, Roll, Subrahmanyam, «Order imbalance, liquidity, and market returns», J. Financial Economics 2002",
+    "I-14": "Alexander, Choi, Park, Park, «BitMEX bitcoin derivatives: Price discovery, informational efficiency, and hedging effectiveness», J. Futures Markets 2020; He, Manela, Ross, von Wachter 2022",
+    "I-15": "Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», 1990",
+    "I-16": "Baur, Cahill, Godfrey, Liu, «Bitcoin time-of-day, day-of-week and month-of-year effects in returns and trading volume», Finance Research Letters 2019",
 }
 
 MECCANISMI = {
@@ -215,4 +289,8 @@ MECCANISMI = {
     "I-10": "un funding estremo segnala leva affollata da un lato, che si sgonfia fino al settlement dopo",
     "I-11": "dopo una compressione della volatilita' (30 barre sotto meta' di 180) la rottura del range avvia un movimento ampio nello stesso verso",
     "I-12": "una candela con volume nel 10 % piu' alto attira attenzione e precede rendimenti positivi (premio del volume alto)",
+    "I-13": "la pressione degli ordini aggressivi delle ultime 4 ore (quota compratori sopra 58 % o sotto 42 %) continua per 2 ore per l'inventario dei market maker",
+    "I-14": "un premio estremo del perpetuo sul mark (oltre il 90° o sotto il 10° percentile a 30 giorni) rientra nelle ore successive",
+    "I-15": "la prima chiusura oraria oltre mezzo ATR giornaliero dall'apertura del giorno UTC continua fino a fine giornata",
+    "I-16": "le ore della sessione americana rendono di piu' e quelle asiatiche di meno, per i flussi legati ai mercati tradizionali",
 }
