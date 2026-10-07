@@ -78,7 +78,12 @@ def carica_riferimento(tf: str, periodo: Tuple[date, date]) -> List[Candela]:
     """Candele last di BTCUSDT (riferimento di mercato), senza allineamento al mark."""
     chiave = (RIFERIMENTO, tf, periodo, "solo_last")
     if chiave not in _cache:
-        _cache[chiave] = dati.carica_candele(RIFERIMENTO, tf, periodo[0], periodo[1])
+        cand = dati.carica_candele(RIFERIMENTO, tf, periodo[0], periodo[1])
+        if not cand and tf in ("2h", "4h", "6h", "8h", "12h"):
+            # BTC e' scaricato a 30m, 1h e 1d: gli altri timeframe si aggregano dal 1h
+            # (coerenza verificata in fase0_dati.md: le aggregate coincidono con le native)
+            cand = dati.aggrega_candele(dati.carica_candele(RIFERIMENTO, "1h", periodo[0], periodo[1]), tf)
+        _cache[chiave] = cand
     return _cache[chiave]
 
 
