@@ -325,7 +325,7 @@ def test_campagna_glob(campagna_btc):
         ("git status", 0),
         # dal 7 ott 2026 (test_guardiano_4_4.py) `git log` senza un percorso della propria
         # cartella e' vietato in campagna: stampava i messaggi di tutto il branch principale
-        # (come e' finito il tentativo precedente, i commit del bot nel periodo del vault)
+        # (il lavoro di coordinamento, i commit del bot nel periodo del vault)
         ("git log --oneline -5", 2),
         ("git log --oneline -5 -- research/campagne/BTCUSDT/", 0),
         ("git log research/campagna/ETHUSDT", 2),
@@ -340,9 +340,12 @@ def test_campagna_glob(campagna_btc):
         ("git fetch origin research/coordinamento", 2),
         ("git diff research/archivio", 2),
         ("git show origin/research/campagna/ETHUSDT:research/campagne/ETHUSDT/log.jsonl", 2),
-        ("git pull origin research/campagna/BTCUSDT", 0),
-        ("git push origin research/campagna/BTCUSDT", 0),
-        ("git add research/campagne/BTCUSDT/log.jsonl && git commit -m 'campagna: log'", 0),
+        # dal 7 ott 2026 commit, push e pull passano solo se git dice che HEAD e' sul proprio
+        # branch: questa radice finta non e' un repo git, quindi nel dubbio si blocca. Sul
+        # proprio branch di un repo vero sono ammessi (test_guardiano_4_4.py, passi della sessione)
+        ("git pull origin research/campagna/BTCUSDT", 2),
+        ("git push origin research/campagna/BTCUSDT", 2),
+        ("git add research/campagne/BTCUSDT/log.jsonl && git commit -m 'campagna: log'", 2),
         ("git diff research/src/motore.py", 0),
         ("grep -r rsi research/campagne/ETHUSDT", 2),
         ("grep -r rsi .", 2),
