@@ -18,10 +18,12 @@ Come decide:
     accorgersi del guardiano. Se c'e' ma e' rotto, blocca: un marcatore
     illeggibile e' un errore da sistemare, non da ignorare;
   * `{"tipo": "campagna", "simbolo": "X"}` -> lista BIANCA (Passo 3): solo i
-    percorsi ammessi della campagna; tutto il resto e' vietato;
+    percorsi ammessi della campagna e solo gli strumenti ammessi; tutto il
+    resto e' vietato;
   * `{"tipo": "coordinamento"}` -> lista NERA: tutto ammesso tranne i
     `percorsi_vietati`, i segreti e `research/data/vault/` finche' il vault e'
-    chiuso (manca `research/vault/APERTURA.md`);
+    chiuso (manca `research/vault/APERTURA.md`); gli strumenti diversi da
+    file, ricerche e Bash non li guarda;
   * in modalita' attiva qualunque errore imprevisto blocca (fail-closed): un
     guardiano che si rompe non deve aprire la porta.
 
@@ -36,6 +38,34 @@ leggono tutto il repo senza nominare un percorso (`grep -r`, `find`,
 marcatore, il guardiano stesso e la lista dei vietati non devono essere
 riscrivibili da chi e' sorvegliato.
 
+Cosa ha aggiunto la revisione del 7 ottobre 2026 (test_guardiano_4_4.py),
+prima di rifare le campagne: i tentativi precedenti vivono in
+`research/archivio/campagna/<SIMBOLO>`, con file agli STESSI percorsi della
+campagna nuova, e il branch principale ha nei messaggi dei commit come sono
+finiti e ~1.500 commit del bot scritti nel periodo del vault. Quindi, in
+campagna:
+  * la STORIA (`git log`, `shortlog`, `whatchanged`, `rev-list`, `blame`,
+    `annotate`, `cherry`, `format-patch`) si guarda solo ristretta alla propria
+    cartella `research/campagne/<SIMBOLO>/`: senza percorso, o con un percorso
+    fuori, stamperebbe i messaggi di tutto il branch principale. Le opzioni che
+    scavalcano il filtro sul percorso (`--sparse`, `--boundary`, `--full-diff`...)
+    sono vietate, e per `log` e simili i percorsi vanno dopo `--` (un'opzione
+    con valore, `--grep percorso`, se li ingoia lascia git senza filtro);
+  * `git show` si usa solo nella forma `<rif>:<percorso>`, che stampa il file e
+    non il messaggio del commit;
+  * un hash e' "proprio" solo se e' un antenato di HEAD (`git merge-base
+    --is-ancestor`): un hash dell'archivio puo' arrivare da `git fetch`;
+  * `show-branch`, `name-rev`, `describe` (nomi dei branch) e i comandi che
+    eseguono altro o copiano l'albero (`difftool`, `submodule`,
+    `checkout-index`, `var`, `--work-tree`, `grep -O`) sono vietati; un file
+    scritto da un'opzione (`--output=`) si giudica come scrittura;
+  * gli strumenti diversi da file, ricerche e Bash passano solo se sono in una
+    lista BIANCA: gli strumenti MCP (GitHub legge ogni branch, le sessioni
+    remote ricordano il tentativo precedente) e gli Artifact sono vietati;
+    WebFetch e' ammesso tranne verso GitHub, claude.ai e anthropic.com.
+  Per questo `.claude/settings.json` registra il guardiano per TUTTI gli
+  strumenti (matcher `*`); senza marcatore la risposta resta immediata.
+
 Il guardiano NON legge il contenuto dei file che il modello scrive ed esegue:
 uno script in una cartella ammessa puo' fare cio' che vuole. E' una barriera
 contro la deriva e la distrazione, non contro un avversario con il codice in
@@ -48,13 +78,16 @@ verdetto, per poter essere provate senza eseguire lo script.
 from __future__ import annotations
 
 import fnmatch
+import functools
 import glob
 import itertools
 import json
 import os
 import re
 import shlex
+import subprocess
 import sys
+import urllib.parse
 from dataclasses import dataclass, field
 
 #: strumenti che indicano un singolo file
@@ -63,6 +96,25 @@ _STRUMENTI_FILE = {"Read", "Write", "Edit", "MultiEdit", "NotebookEdit"}
 _STRUMENTI_SCRITTURA = {"Write", "Edit", "MultiEdit", "NotebookEdit"}
 #: strumenti di ricerca: guardano una cartella intera
 _STRUMENTI_RICERCA = {"Glob", "Grep"}
+#: in campagna, gli altri strumenti passano solo se sono qui (lista BIANCA): non
+#: leggono file ne' storia (liste di cose da fare, processi gia' giudicati,
+#: ricerca sul web, sotto-agenti le cui azioni passano a loro volta dal
+#: guardiano). WebFetch si giudica a parte, per indirizzo. Tutto il resto, in
+#: particolare ogni `mcp__*` (GitHub legge qualunque branch, le sessioni remote
+#: hanno nei prompt il tentativo precedente) e gli Artifact, e' vietato.
+_STRUMENTI_AMMESSI_CAMPAGNA = frozenset({
+    "TodoWrite", "TaskCreate", "TaskGet", "TaskList", "TaskUpdate", "TaskStop", "TaskOutput",
+    "BashOutput", "KillShell", "KillBash", "ToolSearch", "WebSearch", "Agent", "Task",
+    "AskUserQuestion", "Skill", "EnterPlanMode", "ExitPlanMode",
+})
+#: domini che WebFetch non apre in campagna (anche i sottodomini): GitHub serve
+#: ogni branch di questo repo pubblico, archivio compreso (anche da
+#: raw.githubusercontent.com); claude.ai e anthropic.com le sessioni e gli artifact.
+_HOST_VIETATI_WEB = ("github.com", "githubusercontent.com", "githubassets.com", "github.io",
+                     "claude.ai", "anthropic.com")
+#: un nome di dominio semplice: lettere, cifre e trattini, l'ultima parte comincia
+#: con una lettera (cosi' un indirizzo IP, scritto in qualunque forma, non passa)
+_HOST_VALIDO = re.compile(r"^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z](?:[a-z0-9-]*[a-z0-9])?$")
 
 #: nomi di file che contengono segreti: vietati sempre, in ogni cartella.
 #: Si confrontano con il NOME del file (basename), non con il percorso.
@@ -115,8 +167,10 @@ _GRAFFE = re.compile(r"\{([^{}]*,[^{}]*)\}")
 _VARIABILE_IN_TESTA = re.compile(r"^\$(?:([A-Za-z_][A-Za-z0-9_]*)|\{([A-Za-z_][A-Za-z0-9_]*)\})")
 #: una sequenza che `printf`/`echo -e`/`$'..'` trasformano in un carattere (`\x2f` = `/`)
 _ESCAPE_NASCOSTO = re.compile(r"\\(?:x[0-9A-Fa-f]|[0-7]{2,3}|u[0-9A-Fa-f]{4}|U)")
-#: un hash di git (abbreviato o pieno)
-_HASH = re.compile(r"^[0-9a-f]{7,40}$")
+#: un hash di git (abbreviato o pieno), con eventuali `~N` / `^N`
+_HASH = re.compile(r"^([0-9a-f]{7,40})(?:~[0-9]*|\^[0-9]*)*$")
+#: quanto puo' durare la domanda a git "questo hash e' un antenato di HEAD?"
+_TEMPO_GIT = 3
 #: HEAD con eventuali `~N` / `^N` (la storia del PROPRIO branch)
 _HEAD = re.compile(r"^HEAD(?:~[0-9]*|\^[0-9]*)*$")
 #: un comando di `sed` che legge o scrive un file o esegue una shell (`r f`, `w f`, `e cmd`)
@@ -168,9 +222,13 @@ _VARIABILI_PERICOLOSE = {
     "CLAUDE_PROJECT_DIR",
 }
 
-#: sottocomandi git vietati in campagna: cambiano branch, esportano un albero,
-#: mostrano l'intera storia o i riferimenti di tutti i branch, o la configurazione
-#: (che contiene l'URL del remoto, forse col token).
+#: sottocomandi git vietati in campagna: cambiano branch, esportano o copiano un
+#: albero (`checkout-index --prefix=`), mostrano l'intera storia o i nomi e i
+#: riferimenti di tutti i branch (`show-branch`, `name-rev`, `describe`), la
+#: configurazione (che contiene l'URL del remoto, forse col token: `config`,
+#: `var -l`), o eseguono un programma scelto da chi chiama (`difftool -x`,
+#: `mergetool`, `submodule foreach`). `diff-tree` e `range-diff` stampano i
+#: messaggi dei commit anche fuori dalla propria cartella: basta `git diff`.
 _GIT_VIETATI = {
     "checkout", "switch", "merge", "rebase", "worktree", "archive", "cat-file",
     "reflog", "ls-remote", "for-each-ref", "show-ref", "bundle", "fast-export",
@@ -179,30 +237,44 @@ _GIT_VIETATI = {
     "gui", "citool", "pack-refs", "update-ref", "symbolic-ref", "read-tree",
     "write-tree", "commit-tree", "mktree", "unpack-file", "verify-pack", "pack-objects",
     "unpack-objects", "index-pack", "fsck", "svn", "p4", "cvsexportcommit", "request-pull",
+    "show-branch", "name-rev", "describe", "diff-tree", "range-diff", "checkout-index",
+    "var", "difftool", "mergetool", "submodule", "send-email", "imap-send",
+    "upload-pack", "receive-pack", "upload-archive", "http-backend", "shell",
 }
 #: sottocomandi git che prendono riferimenti (branch, commit): si controllano uno a uno
 _GIT_CON_RIFERIMENTI = {
     "log", "show", "diff", "blame", "grep", "rev-parse", "rev-list", "merge-base",
-    "describe", "name-rev", "ls-tree", "restore", "reset", "cherry-pick", "revert",
-    "branch", "tag", "range-diff", "format-patch", "shortlog", "whatchanged",
-    "fetch", "pull", "push", "cherry", "notes", "diff-tree", "diff-index", "ls-files",
+    "ls-tree", "restore", "reset", "cherry-pick", "revert",
+    "branch", "tag", "format-patch", "shortlog", "whatchanged",
+    "fetch", "pull", "push", "cherry", "notes", "diff-index", "ls-files",
     "annotate", "count-objects", "verify-commit", "verify-tag", "stash",
 }
-#: sottocomandi git che modificano l'albero di lavoro o l'indice
+#: sottocomandi git che mostrano la STORIA, cioe' i messaggi dei commit. La
+#: storia del branch di campagna e' quella del branch principale: in campagna si
+#: guarda solo ristretta alla propria cartella `research/campagne/<SIMBOLO>/`.
+_GIT_STORIA = {"log", "shortlog", "whatchanged", "rev-list", "blame", "annotate", "cherry", "format-patch"}
+#: comandi di storia in cui un'opzione con valore puo' ingoiare il percorso
+#: (`git log --grep research/campagne/X/` cerca il testo e non filtra nulla):
+#: per questi i percorsi vanno dopo `--`. `blame` vuole comunque un file.
+_GIT_STORIA_CON_DOPPIO_TRATTINO = {"log", "shortlog", "whatchanged", "rev-list", "format-patch", "cherry"}
+#: opzioni che, nei comandi di storia, mostrano commit che NON toccano i percorsi
+#: dati (`--sparse` tutti, `--boundary` e `--simplify-by-decoration` quelli di
+#: confine o con un nome) o file fuori (`--full-diff`, `--follow` sui nomi vecchi)
+_GIT_STORIA_OPZIONI_VIETATE = ("--sparse", "--boundary", "--simplify-by-decoration", "--full-diff",
+                               "--follow", "--merge", "--bisect")
+#: sottocomandi git che modificano l'albero di lavoro o l'indice (o scrivono file)
 _GIT_SCRIVE = {
     "rm", "mv", "add", "restore", "clean", "apply", "am", "stash", "reset", "commit",
-    "revert", "cherry-pick", "checkout", "switch", "merge", "rebase", "pull",
+    "revert", "cherry-pick", "checkout", "switch", "merge", "rebase", "pull", "format-patch",
 }
 #: opzioni di git che allargano lo sguardo a tutti i branch o ai reflog
 _GIT_OPZIONI_VIETATE = ("--all", "--branches", "--remotes", "--tags", "--glob", "--mirror",
                         "--walk-reflogs", "-g", "--reflog", "--exclude-hidden", "--alternate-refs")
-#: `git log`: opzioni che stampano il CONTENUTO dei file, non solo i commit
-_GIT_LOG_CONTENUTO = ("-p", "--patch", "-u", "--unified", "--cc", "-c", "--full-diff", "--raw",
-                      "--patch-with-stat", "--patch-with-raw", "--combined-all-paths")
-_GIT_LOG_CONTENUTO_PREFISSI = ("-L", "-S", "-G", "-U", "--pickaxe", "--unified=")
-#: `git show`: opzioni con cui NON stampa il contenuto
-_GIT_SHOW_SOLO_META = ("-s", "--no-patch", "--stat", "--name-only", "--name-status", "--summary",
-                       "--shortstat", "--numstat", "--dirstat", "--check")
+#: opzioni che prendono riferimenti o percorsi da stdin o da un file: il guardiano
+#: non li vede (un hash dell'archivio passerebbe per `echo <hash> | git log --stdin`)
+_GIT_OPZIONI_DA_FUORI = ("--stdin", "--pathspec-from-file")
+#: opzioni globali di git (prima del sottocomando) che prendono un valore separato
+_GIT_GLOBALI_CON_VALORE = ("-C", "--namespace", "--exec-path")
 #: parole che `git stash` accetta come proprio sottocomando
 _GIT_STASH_PAROLE = {"push", "pop", "list", "drop", "apply", "show", "clear", "save", "branch", "create", "store"}
 
@@ -657,55 +729,193 @@ def _script_di_shell(argomenti: list[str]) -> str | None:
     return next((a for a in argomenti if not a.startswith("-")), None)
 
 
+@functools.lru_cache(maxsize=64)
+def _antenato_di_head(sha: str, radice: str) -> bool:
+    """True se `sha` e' un commit della storia del branch corrente (antenato di HEAD).
+
+    Lo chiede a git (`merge-base --is-ancestor`), senza shell, nella radice del
+    repo, con un tempo massimo. Le variabili `GIT_*` dell'ambiente non passano
+    (potrebbero puntare a un altro repo) e git non cerca un repo sopra la
+    radice. Qualunque errore (non e' un repo, hash ambiguo, non e' un commit,
+    tempo scaduto) vale "no": nel dubbio l'hash non e' proprio.
+    """
+    ambiente = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    ambiente["GIT_CEILING_DIRECTORIES"] = os.path.dirname(radice)
+    try:
+        esito = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", sha, "HEAD"],
+            cwd=radice, env=ambiente, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL, timeout=_TEMPO_GIT, check=False,
+        )
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return False
+    return esito.returncode == 0
+
+
 def _e_riferimento_proprio(token: str, ctx: Contesto) -> bool:
-    """HEAD (con `~N`/`^N`), il proprio branch (anche `origin/...`) o un hash."""
+    """HEAD (con `~N`/`^N`), il proprio branch (anche `origin/...`) o un hash proprio.
+
+    Un hash (anche con `~N`/`^N`) e' proprio solo se e' un antenato di HEAD:
+    un hash qualunque puo' venire dall'archivio del tentativo precedente (lo
+    stampa `git fetch`), e `git show <hash>:research/campagne/X/log.jsonl`
+    leggerebbe proprio quello. Se la base e' un antenato, lo sono anche i suoi
+    genitori. Intervalli (`a..b`), `@{...}`, `^{...}`, `:/testo` non sono propri.
+    """
     proprio = ctx.proprio_branch
-    return bool(_HEAD.match(token) or token in (proprio, f"origin/{proprio}") or _HASH.match(token))
+    if _HEAD.match(token) or token in (proprio, f"origin/{proprio}"):
+        return True
+    m = _HASH.match(token)
+    return m is not None and _antenato_di_head(m.group(1), ctx.radice)
+
+
+def _opzione_lunga(opzione: str, lunghe: tuple[str, ...]) -> bool:
+    """True se `opzione` (prima di `=`) e' una delle `lunghe` o un loro inizio.
+
+    I comandi di git costruiti su parse-options accettano le abbreviazioni:
+    `git grep --open=cmd` e' `--open-files-in-pager=cmd`, `git branch --al` e'
+    `--all`. Le opzioni corte (`-g`) contano solo se uguali.
+    """
+    nome = opzione.split("=", 1)[0]
+    if nome in lunghe:
+        return True
+    return nome.startswith("--") and len(nome) > 2 and any(lunga.startswith(nome) for lunga in lunghe if lunga.startswith("--"))
+
+
+def _destinazioni_git(sub: str, resto: list[str]) -> list[str]:
+    """I file (o le cartelle) che un'opzione fa SCRIVERE a git.
+
+    `--output=<file>` (log, show, diff... e anche `diff-files`) scrive l'uscita
+    in un file: con un'uscita vuota svuoterebbe `research/.sessione`, e senza
+    marcatore il guardiano si spegne. `format-patch -o <cartella>` e
+    `--output-directory` scrivono le patch. Un'opzione senza valore restituisce
+    "" (che si rifiuta: e' la radice).
+    """
+    destinazioni: list[str] = []
+    for j, a in enumerate(resto):
+        if a == "--":
+            break
+        nome, uguale, valore = a.partition("=")
+        if _opzione_lunga(nome, ("--output", "--output-directory")) or (sub == "format-patch" and nome == "-o"):
+            destinazioni.append(valore if uguale else (resto[j + 1] if j + 1 < len(resto) else ""))
+        elif sub == "format-patch" and a.startswith("-o") and len(a) > 2:
+            destinazioni.append(a[2:])
+    return destinazioni
+
+
+def _lettere_corte(opzione: str, con_valore: str) -> str:
+    """Le lettere di un gruppo di opzioni corte (`-nO` -> `nO`), fino alla prima
+    che prende un valore attaccato (`-L1,5` -> `L`): il resto e' il valore."""
+    if not opzione.startswith("-") or opzione.startswith("--"):
+        return ""
+    lettere = ""
+    for c in opzione[1:]:
+        lettere += c
+        if c in con_valore:
+            break
+    return lettere
+
+
+def _file_di_meno_l(a: str) -> str | None:
+    """`git log -L<inizio>,<fine>:<file>` o `-L:<funzione>:<file>`: il file, o None."""
+    if not a.startswith("-L") or len(a) <= 2:
+        return None
+    return a[2:].rpartition(":")[2] if ":" in a[2:] else ""
 
 
 def _giudica_git(argomenti: list[str], ctx: Contesto, comando: str) -> Verdetto:
-    """git in campagna: solo il proprio branch, e mai il contenuto dell'intera storia.
+    """git in campagna: solo il proprio branch, mai il contenuto dell'intera storia,
+    mai i messaggi dei commit fuori dalla propria cartella.
 
-    La storia del branch di campagna contiene TUTTO il repo (docs/ compreso):
-    `git log -p`, `git show HEAD`, `git diff HEAD~5` lo stamperebbero. Quindi
-    chi mostra contenuti deve nominare un percorso ammesso; chi prende
-    riferimenti deve usare HEAD, il proprio branch o un hash; `ref:percorso`
-    si giudica anche nella parte dopo i due punti.
+    La storia del branch di campagna contiene TUTTO il repo (docs/ compreso) e
+    tutti i messaggi del branch principale: `git log -p`, `git show HEAD`,
+    `git diff HEAD~5` li stamperebbero. Quindi:
+      * chi prende riferimenti deve usare HEAD, il proprio branch o un hash
+        antenato di HEAD; `rif:percorso` si giudica anche dopo i due punti;
+      * i comandi di STORIA (`_GIT_STORIA`) vogliono almeno un percorso, e tutti
+        i percorsi dentro `research/campagne/<SIMBOLO>/` (per `log` e simili
+        dopo `--`); senza le opzioni che scavalcano il filtro;
+      * `git show` solo come `<rif>:<percorso>` (il file, senza il messaggio);
+      * `diff` con un riferimento e `grep` vogliono un percorso ammesso;
+      * un file scritto da un'opzione (`--output=`, `format-patch -o`) si
+        giudica come scrittura.
     """
     rifiuta = lambda motivo: Verdetto(False, f"{comando!r} ({motivo})")  # noqa: E731
-    # opzioni globali: `-c chiave=valore` cambia pager/editor/alias, e il guardiano non lo vede
+    # opzioni globali: `-c chiave=valore` cambia pager/editor/alias, e il guardiano non lo vede;
+    # `--work-tree`/`--git-dir` portano git su un altro albero (`reset --hard` lo riempirebbe
+    # con tutto il repo) o su un altro repository
     i = 0
     while i < len(argomenti) and argomenti[i].startswith("-"):
-        if argomenti[i] in ("-c", "--config-env"):
+        globale = argomenti[i].split("=", 1)[0]
+        if globale in ("-c", "--config-env"):
             return rifiuta("git -c cambia la configurazione sotto il guardiano")
-        i += 2 if argomenti[i] in ("-C", "--git-dir", "--work-tree", "--namespace", "--exec-path") else 1
+        if globale in ("--work-tree", "--git-dir"):
+            return rifiuta(f"git {globale} porta git su un altro albero di lavoro o un altro repository")
+        i += 2 if argomenti[i] in _GIT_GLOBALI_CON_VALORE else 1
     if i >= len(argomenti):
         return OK
     sub, resto = argomenti[i], argomenti[i + 1:]
     if sub in _GIT_VIETATI:
-        return rifiuta(f"git {sub} e' fuori dal proprio branch")
+        return rifiuta(f"git {sub} e' fuori dal proprio branch o esegue cio' che il guardiano non vede")
     if sub == "remote" and resto:
         return rifiuta("git remote con argomenti mostra l'URL del remoto")
+    for destinazione in _destinazioni_git(sub, resto):
+        if not giudica_percorso(destinazione, ctx, scrittura=True).consentito:
+            return rifiuta(f"git {sub} scrive in {destinazione!r}, che in campagna non si puo' scrivere")
+    if sub == "format-patch" and "--stdout" not in resto and not _destinazioni_git(sub, resto):
+        return rifiuta("git format-patch scrive le patch nella cartella corrente: usa --stdout o -o con la propria cartella")
+    if sub == "grep" and any(_opzione_lunga(a, ("--open-files-in-pager",)) or "O" in _lettere_corte(a, "efABCmO")
+                             for a in itertools.takewhile(lambda x: x != "--", resto)):
+        return rifiuta("git grep -O esegue un programma scelto da chi chiama")
     if sub not in _GIT_CON_RIFERIMENTI:
         return OK  # status, add, commit, rm, mv, clean, init, help...: niente riferimenti
+    storia = sub in _GIT_STORIA
     for a in resto:
-        if a.split("=", 1)[0] in _GIT_OPZIONI_VIETATE:
+        if _opzione_lunga(a, _GIT_OPZIONI_VIETATE):
             return rifiuta(f"git {sub} {a} guarda tutti i branch")
-        if sub == "branch" and (a in ("--verbose", "--list") or (
+        if _opzione_lunga(a, _GIT_OPZIONI_DA_FUORI):
+            return rifiuta(f"git {sub} {a} prende riferimenti o percorsi che il guardiano non vede")
+        if storia and _opzione_lunga(a, _GIT_STORIA_OPZIONI_VIETATE):
+            return rifiuta(f"git {sub} {a} mostra commit o file fuori dai percorsi dati")
+        if sub in ("blame", "annotate") and any(c in "CS" for c in _lettere_corte(a, "LMCS")):
+            # -C: righe copiate da ALTRI file (e i messaggi dei loro commit); -S: storia da un file
+            return rifiuta(f"git {sub} {a} guarda fuori dal file dato")
+        if sub == "branch" and (_opzione_lunga(a, ("--verbose", "--list")) or (
                 a.startswith("-") and not a.startswith("--") and any(c in "arv" for c in a[1:]))):
             return rifiuta(f"git branch {a} mostra gli altri branch e i loro hash")
-        if a.startswith("--source=") and not _e_riferimento_proprio(a.split("=", 1)[1], ctx):
-            return rifiuta(f"git {sub} {a} legge da un altro branch")
+        # `--source=<rif>` (anche abbreviato) e `restore -s<rif>` attaccato: il riferimento va controllato
+        sorgente = None
+        if "=" in a and _opzione_lunga(a, ("--source",)):
+            sorgente = a.split("=", 1)[1]
+        elif sub == "restore" and "s" in (lettere := _lettere_corte(a, "s")) and len(a) > len(lettere) + 1:
+            sorgente = a[len(lettere) + 1:]
+        if sorgente is not None and not _e_riferimento_proprio(sorgente, ctx):
+            return rifiuta(f"git {sub} {a} legge da un altro branch o da un commit che non e' nella propria storia")
     # operandi: prima di `--` possono essere riferimenti, dopo solo percorsi
-    con_percorso_ammesso = False
+    percorsi: list[str] = []  # operandi giudicati come percorsi (tutti ammessi)
+    percorsi_prima_del_doppio_trattino = False
+    riferimenti: list[str] = []  # riferimenti propri, anche quelli di `rif:percorso`
+    rif_percorso = 0  # operandi `rif:percorso`
+    operandi_semplici = 0  # operandi che non sono `rif:percorso`
     dopo_doppio_trattino = False
     pattern_visto = False
     remoto_visto = False
+    salta_valore = False  # il valore separato di `--output <file>` / `-o <cartella>`, gia' giudicato
     for a in resto:
+        if salta_valore:
+            salta_valore = False
+            continue
         if a == "--":
             dopo_doppio_trattino = True
             continue
         if a.startswith("-") and not dopo_doppio_trattino:
+            salta_valore = ("=" not in a and _opzione_lunga(a, ("--output", "--output-directory"))) or (
+                sub == "format-patch" and a == "-o")
+            if sub in ("log", "whatchanged"):
+                file_l = _file_di_meno_l(a)
+                if file_l is not None:  # `-L1,5:file`: un percorso della storia
+                    if not file_l or not giudica_percorso(file_l, ctx).consentito:
+                        return rifiuta(f"git {sub} {a}: percorso vietato")
+                    percorsi.append(file_l)
             continue
         if not dopo_doppio_trattino and sub == "stash" and a in _GIT_STASH_PAROLE:
             continue
@@ -718,33 +928,44 @@ def _giudica_git(argomenti: list[str], ctx: Contesto, comando: str) -> Verdetto:
         riferimento, _, percorso = a.partition(":") if (":" in a and not dopo_doppio_trattino) else ("", "", "")
         if riferimento:
             if not _e_riferimento_proprio(riferimento, ctx):
-                return rifiuta(f"git {sub} {a} legge da un altro branch")
+                return rifiuta(f"git {sub} {a} legge da un altro branch o da un commit che non e' nella propria storia")
             if not giudica_percorso(percorso, ctx).consentito:
                 return rifiuta(f"git {sub} {a}: percorso vietato")
+            riferimenti.append(riferimento)
+            rif_percorso += 1
             continue
+        operandi_semplici += 1
         if not dopo_doppio_trattino and _e_riferimento_proprio(a, ctx):
+            riferimenti.append(a)
             continue
         if _candidato_percorso(a, ctx.primo_livello) is None and not os.path.lexists(os.path.join(ctx.radice, a)):
-            # ne' riferimento proprio ne' percorso: `main`, un nome calcolato, un tag
-            return rifiuta(f"git {sub} {a} non e' HEAD, il proprio branch o un percorso ammesso")
-        if giudica_percorso(a, ctx).consentito:
-            con_percorso_ammesso = True
-        else:
+            # ne' riferimento proprio ne' percorso: `main`, un nome calcolato, un tag, un intervallo,
+            # un hash che non e' un antenato di HEAD
+            return rifiuta(f"git {sub} {a} non e' HEAD, il proprio branch, un commit della propria storia "
+                           "o un percorso ammesso")
+        if not giudica_percorso(a, ctx).consentito:
             return rifiuta(f"git {sub} {a}: percorso vietato")
-    # chi stampa contenuti deve restringersi a un percorso ammesso
-    riferimenti = [a for a in resto if not a.startswith("-") and _e_riferimento_proprio(a.split(":", 1)[0], ctx)]
-    if sub in ("log", "whatchanged", "format-patch"):
-        mostra = any(a in _GIT_LOG_CONTENUTO or a.startswith(_GIT_LOG_CONTENUTO_PREFISSI) for a in resto) or any(
-            a.startswith("-") and not a.startswith("--") and any(c in "puLSGUc" for c in a[1:]) for a in resto)
-        if sub != "log":
-            mostra = True
-        if mostra and not con_percorso_ammesso:
-            return rifiuta(f"git {sub} stampa il contenuto di tutta la storia: serve un percorso ammesso")
+        percorsi.append(a)
+        percorsi_prima_del_doppio_trattino |= not dopo_doppio_trattino
+    con_percorso_ammesso = bool(percorsi)
+    if storia:
+        cartella = f"research/campagne/{ctx.simbolo}"
+        if rif_percorso:
+            return rifiuta(f"git {sub} vuole commit e percorsi, non `rif:percorso`")
+        if sub in _GIT_STORIA_CON_DOPPIO_TRATTINO and percorsi_prima_del_doppio_trattino:
+            return rifiuta(f"git {sub}: in campagna i percorsi vanno dopo `--` (un'opzione con valore "
+                           "puo' ingoiarli e lasciare git senza filtro)")
+        if not percorsi:
+            return rifiuta(f"git {sub} senza percorso stampa i messaggi di tutta la storia: "
+                           f"serve `-- {cartella}/`")
+        for p in percorsi:
+            if not _sotto(normalizza(p, ctx.radice), cartella):
+                return rifiuta(f"git {sub} {p}: in campagna la storia si guarda solo per {cartella}/")
     elif sub == "show":
-        solo_meta = any(a.split("=", 1)[0] in _GIT_SHOW_SOLO_META or a.startswith(("--format", "--pretty")) for a in resto)
-        if not solo_meta and not con_percorso_ammesso:
-            return rifiuta("git show stampa il contenuto di un commit intero: serve un percorso ammesso")
-    elif sub in ("diff", "diff-tree", "diff-index", "range-diff"):
+        if not rif_percorso or operandi_semplici or dopo_doppio_trattino:
+            return rifiuta("git show stampa il messaggio di un commit (forse del branch principale): "
+                           "in campagna solo `<rif>:<percorso>`")
+    elif sub in ("diff", "diff-index"):
         if (riferimenti or sub != "diff") and not con_percorso_ammesso:
             return rifiuta(f"git {sub} con un riferimento confronta tutta la storia: serve un percorso ammesso")
     elif sub == "grep" and not con_percorso_ammesso:
@@ -789,6 +1010,11 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
                 continue  # gia' giudicato come comando
             if ctx.campagna and t in propri:
                 continue  # e' ESATTAMENTE il proprio branch: non e' un percorso
+            if ctx.campagna and prog == "git" and ":" in t:
+                riferimento, _, dopo_i_due_punti = t.partition(":")
+                if riferimento and _e_riferimento_proprio(riferimento, ctx):
+                    # `<rif>:<percorso>` (`git show HEAD~1:research/...`): conta il percorso
+                    t = dopo_i_due_punti
             parole = espandi_token(t, ctx)
             if parole is None:
                 return Verdetto(False, f"{comando!r} (il token {t!r} viene espanso dalla shell in modo imprevedibile)")
@@ -811,8 +1037,53 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
 # ---------------------------------------------------------------------------
 
 
+def giudica_url(url, ctx: Contesto) -> Verdetto:
+    """WebFetch in campagna: ammesso, tranne verso GitHub, claude.ai e anthropic.com.
+
+    Il repo e' pubblico: github.com, api.github.com e raw.githubusercontent.com
+    servono qualunque branch, archivio del tentativo precedente compreso; da
+    claude.ai si arriva alle sessioni e agli artifact. L'indirizzo si legge con
+    `urllib.parse`; si rifiuta se non e' http(s), se non ha un host, se l'host
+    non e' un nome di dominio semplice (un IP, caratteri codificati o non ASCII
+    che il browser riscriverebbe in `github.com`), se contiene `\\` o spazi (che
+    il browser e Python leggono in modo diverso), se nomina un branch del
+    protocollo che non e' il proprio (`cdn.../gh/...@research/archivio/...`).
+    """
+    if not isinstance(url, str) or not url.strip():
+        return Verdetto(False, "WebFetch senza indirizzo")
+    rifiuta = lambda motivo: Verdetto(False, f"WebFetch {url!r} ({motivo})")  # noqa: E731
+    if "\\" in url or any(c.isspace() or ord(c) < 32 or ord(c) == 127 for c in url.strip()):
+        return rifiuta("l'indirizzo contiene `\\` o spazi")
+    try:
+        parti = urllib.parse.urlsplit(url.strip())
+        host = parti.hostname
+    except ValueError:
+        return rifiuta("indirizzo illeggibile")
+    if parti.scheme.lower() not in ("http", "https"):
+        return rifiuta("solo indirizzi http o https")
+    if not host:
+        return rifiuta("indirizzo senza host")
+    host = urllib.parse.unquote(host).lower().rstrip(".")
+    if not _HOST_VALIDO.match(host):
+        return rifiuta(f"l'host {host!r} non e' un nome di dominio semplice")
+    for dominio in _HOST_VIETATI_WEB:
+        if host == dominio or host.endswith("." + dominio):
+            return rifiuta(f"{dominio} serve gli altri branch di questo repo o le sessioni passate")
+    for m in _BRANCH.finditer(urllib.parse.unquote(url)):
+        if m.group(0) != ctx.proprio_branch:
+            return rifiuta(f"branch {m.group(0)}")
+    return OK
+
+
 def giudica_azione(nome: str, ingresso: dict, ctx: Contesto) -> Verdetto:
-    """Il verdetto sull'azione: file singolo, ricerca o comando. Nel dubbio blocca (in campagna)."""
+    """Il verdetto sull'azione: file singolo, ricerca, comando o altro strumento.
+
+    In campagna nel dubbio blocca: un percorso o un comando mancante si
+    rifiuta, e uno strumento che non e' ne' file ne' ricerca ne' Bash passa solo
+    se e' nella lista BIANCA `_STRUMENTI_AMMESSI_CAMPAGNA` (WebFetch se l'
+    indirizzo passa `giudica_url`). In coordinamento gli altri strumenti non
+    sono affare del guardiano.
+    """
     severo = ctx.campagna
     if nome in _STRUMENTI_FILE:
         percorso = ingresso.get("file_path") or ingresso.get("notebook_path")
@@ -835,8 +1106,17 @@ def giudica_azione(nome: str, ingresso: dict, ctx: Contesto) -> Verdetto:
         if not isinstance(comando, str):
             return Verdetto(False, "Bash senza comando") if severo else OK
         return giudica_comando(comando, ctx)
-    # strumenti non coperti dall'hook: non e' compito nostro
-    return OK
+    if not severo:
+        return OK  # coordinamento: gli altri strumenti non sono compito nostro
+    if nome == "WebFetch":
+        return giudica_url(ingresso.get("url"), ctx)
+    if nome in _STRUMENTI_AMMESSI_CAMPAGNA:
+        return OK
+    return Verdetto(
+        False,
+        f"lo strumento {nome} (non e' fra quelli ammessi in campagna: puo' leggere altri branch, "
+        "la storia o le sessioni precedenti)",
+    )
 
 
 def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:

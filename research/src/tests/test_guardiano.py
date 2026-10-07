@@ -323,9 +323,14 @@ def test_campagna_glob(campagna_btc):
         ("set", 2),
         ("/usr/bin/printenv", 2),
         ("git status", 0),
-        ("git log --oneline -5", 0),
+        # dal 7 ott 2026 (test_guardiano_4_4.py) `git log` senza un percorso della propria
+        # cartella e' vietato in campagna: stampava i messaggi di tutto il branch principale
+        # (come e' finito il tentativo precedente, i commit del bot nel periodo del vault)
+        ("git log --oneline -5", 2),
+        ("git log --oneline -5 -- research/campagne/BTCUSDT/", 0),
         ("git log research/campagna/ETHUSDT", 2),
-        ("git log research/campagna/BTCUSDT", 0),
+        ("git log research/campagna/BTCUSDT", 2),
+        ("git log research/campagna/BTCUSDT -- research/campagne/BTCUSDT/", 0),
         ("git checkout research/coordinamento", 2),
         ("git checkout -- research/src/motore.py", 2),
         ("git switch research/campagna/ETHUSDT", 2),
@@ -492,7 +497,9 @@ def test_guardiano_registrato_in_settings():
     pre = hooks["PreToolUse"]
     assert isinstance(pre, list) and pre
     voce = next(v for v in pre if "guardiano.py" in json.dumps(v))
-    assert voce["matcher"] == "Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep|Bash"
+    # dal 7 ott 2026 il guardiano vede TUTTI gli strumenti (prima solo file, ricerche e
+    # Bash): in campagna gli strumenti MCP e WebFetch leggono altri branch del repo
+    assert voce["matcher"] == "*"
     comando = voce["hooks"][0]
     assert comando["type"] == "command"
     assert comando["command"] == 'python3 "$CLAUDE_PROJECT_DIR/research/src/guardiano.py"'

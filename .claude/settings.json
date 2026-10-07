@@ -88,7 +88,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep|Bash",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
