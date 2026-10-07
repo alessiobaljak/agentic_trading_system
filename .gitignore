@@ -69,3 +69,6 @@ ops/allowlist
 # Protocollo di ricerca (6 ott 2026): dati di mercato e marcatore di sessione, mai in git
 research/data/
 research/.sessione
+
+# copie di lavoro temporanee degli agenti
+.claude/worktrees/

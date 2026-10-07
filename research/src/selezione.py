@@ -36,14 +36,13 @@ Due cose NON sono filtri ma segnalazioni per lo STOP del Passo 1:
     (possibile meta' nuova), e il coordinamento li mostra allo STOP.
     ``serie_collegata`` resta uguale al simbolo finche' l'utente non decide.
 
-Data di listing: ``onboardDate`` di exchangeInfo per i contratti di oggi; per i
-delistati il primo mese nell'archivio (approssimazione dichiarata: l'archivio
-mensile parte da gennaio 2020, quindi un contratto piu' vecchio compare come
-2020-01). Da dove viene la data (``listing_da``) resta nel CSV del branch di
-coordinamento e NON va nella scheda della moneta: «archivio» vorrebbe dire
-«delistata», cioe' un'informazione successiva al 2023. Data di delisting:
-l'ultimo mese nell'archivio, solo per i contratti non piu' negoziati; resta
-sul branch di coordinamento.
+Date di listing e di delisting, e da dove vengono, restano nel CSV del branch
+di coordinamento: la scheda della moneta NON le riporta. La scheda dice solo il
+primo mese di dati, che e' l'inizio dell'in-sample (sezione 3.1) ed e' uguale
+per una moneta viva e per una delistata con gli stessi dati al 2023-12-31. (Fino
+al 7 ott la scheda portava anche la data di listing: per una delistata coincideva
+col primo mese di dati, per una viva quasi mai, e bastava confrontarle per
+sapere se la moneta e' ancora negoziata.)
 """
 from __future__ import annotations
 
@@ -85,8 +84,8 @@ NUMERO_MONETE_CAMPAGNA = 20
 #: breve (sospensioni) da mesi interi mancanti: e' una soglia di attenzione
 SOGLIA_COPERTURA_2023 = 350
 #: un contratto sparito o nato fra questa data e la fine del 2023 potrebbe
-#: essere la meta' vecchia o nuova di un cambio di nome (es. «1000x», MATIC ->
-#: POL): si segnala allo STOP, non si decide qui
+#: essere la meta' vecchia o nuova di un cambio di nome (es. «1000x», o un
+#: simbolo nuovo dopo una migrazione): si segnala allo STOP, non si decide qui
 INIZIO_PERIODO_SOSPETTO = date(2022, 1, 1)
 #: la colonna del volume in valuta di quotazione nel CSV delle candele
 COLONNA_QUOTE_VOLUME = 7
@@ -548,23 +547,20 @@ def scheda_moneta(c: Candidata) -> str:
     successivi): e' l'unica cosa che una sessione di campagna sa della moneta.
 
     Due monete con gli stessi dati al 2023-12-31 hanno la stessa scheda, viva o
-    delistata che sia. Percio' NON si scrive da dove viene la data di listing
-    («archivio» vorrebbe dire «assente da exchangeInfo oggi», cioe' delistata),
-    la riga sull'approssimazione e' uguale per tutte (per i delistati la data e'
-    il primo giorno del primo mese di dati), e non compaiono ``negoziata_oggi``,
-    ``listing_da`` ne' ``serie_collegata``."""
-    assert c.listing is not None and c.fascia_slippage is not None
+    delistata che sia. Percio' la scheda NON porta la data di listing: per una
+    delistata la data viene dal primo mese dell'archivio e coincide col primo
+    mese di dati, per una viva viene da exchangeInfo e quasi mai coincide, e il
+    confronto direbbe se la moneta e' ancora negoziata. Non compaiono neppure
+    ``negoziata_oggi``, ``listing_da`` ne' ``serie_collegata``. Il primo mese di
+    dati e' l'inizio dell'in-sample (sezione 3.1, Fase 0)."""
+    assert c.fascia_slippage is not None
     return (
         f"# {c.simbolo}\n\n"
         "Scheda scritta dal coordinamento al Passo 1 del protocollo. Contiene solo cio' che era\n"
         "vero al 31 dicembre 2023: una sessione di campagna non cerca altro sulla moneta.\n\n"
         "| Campo | Valore |\n|---|---|\n"
         f"| Simbolo (Binance USDS-M, perpetuo in USDT) | `{c.simbolo}` |\n"
-        f"| Data di listing dei futures | {c.listing.isoformat()} |\n"
-        # l'etichetta non dice «archivio»: e' la parola con cui il CSV di coordinamento
-        # marca la fonte della data dei delistati, e la scheda non deve contenerla
-        f"| Primo mese di dati | {c.primo_mese.isoformat() if c.primo_mese else 'n.d.'} |\n"
+        f"| Primo mese di dati (inizio dell'in-sample) | {c.primo_mese.isoformat() if c.primo_mese else 'n.d.'} |\n"
         f"| Fascia di slippage per lato (volume medio 2023) | {c.fascia_slippage:.4%} |\n"
-        "| Fine dell'in-sample | 2023-12-31 |\n\n"
-        "La data di listing può essere approssimata al primo giorno del mese.\n"
+        "| Fine dell'in-sample | 2023-12-31 |\n"
     )

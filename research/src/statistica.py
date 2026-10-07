@@ -15,10 +15,20 @@ Cosa c'e' qui, e perche'
   ricampiona pezzi contigui di serie, lunghi almeno quanto la dipendenza
   (sezione 8: almeno la durata massima di una posizione, e comunque almeno un
   giorno), cosi' la dipendenza dentro il blocco si conserva.
-* ``differenza_nettamente``: la regola «nettamente» del protocollo, cioe'
-  differenza dalla baseline oltre 2 errori standard.
-* ``p_value_unilaterale`` e ``p_value_bootstrap_vs_caso``: il p-value che entra
-  nell'asticella.
+* ``lunghezza_blocco``: il blocco del bootstrap in numero di trade, dalla
+  regola in tempo della sezione 8 (dalla 4.4, uguale per tutte le campagne).
+* ``batte_nettamente``: la regola «nettamente» del protocollo dalla versione
+  4.4: la media del candidato supera UN numero di baseline oltre la soglia di
+  Student in errori standard della differenza, con l'errore del bootstrap
+  corretto per il blocco e almeno ``MINIMO_BLOCCHI`` blocchi (sezione 8).
+  ``baseline_casuale`` e ``baseline_da_trade`` preparano quel numero per le
+  baseline (b) e (a); ``percentile_del_candidato`` da' l'indizio del log.
+* ``p_value_vs_baseline``: il p-value che entra nell'asticella dalla 4.4.
+* ``differenza_nettamente`` e ``p_value_bootstrap_vs_caso``: le versioni fino
+  alla 4.3, a due serie. Restano per rileggere le campagne archiviate; NON sono
+  la regola del protocollo dalla 4.4 (confrontare il candidato con UNA sola
+  corsa casuale somma il rumore di quella corsa, che la baseline non ha).
+* ``p_value_unilaterale``: il mattone dei p-value.
 * ``benjamini_hochberg``: l'asticella, con la procedura esatta della sezione 8.
 * le metriche in R (profit factor, win rate, drawdown, rendimento per anno),
   ``entrate_casuali`` per costruire la baseline (b) e il tasso del caso,
@@ -174,7 +184,14 @@ def differenza_nettamente(
     n: int = 2000,
     seme: int = 0,
 ) -> Dict[str, object]:
-    """La regola «nettamente» della sezione 8: differenza oltre 2 errori standard.
+    """La regola «nettamente» FINO ALLA 4.3: differenza fra due serie oltre 2 errori standard.
+
+    Dalla versione 4.4 la regola del protocollo e' ``batte_nettamente``: questa
+    funzione resta solo per rileggere le campagne archiviate. Usata contro UNA
+    corsa casuale (per esempio la mediana delle simulazioni) somma l'errore
+    standard di quella corsa, che e' grande quanto quello del candidato, mentre
+    la baseline (b) e' la media di centinaia di corse e quasi non ha errore: il
+    margine viene circa 1,4 volte piu' largo del dovuto.
 
     ``a`` e' il candidato, ``b`` la baseline (stesso effetto senza condizione,
     entrata casuale, buy and hold a trade...). Le due serie si ricampionano
@@ -225,6 +242,243 @@ def differenza_nettamente(
     }
 
 
+GIORNO_MS = 86_400_000
+
+
+def lunghezza_blocco(ts_entrata: Sequence[int], ts_uscita: Sequence[int], minimo_ms: int = GIORNO_MS) -> int:
+    """Il blocco del bootstrap in NUMERO DI TRADE, dalla regola in tempo della sezione 8.
+
+    La sezione 8 dice: il blocco e' lungo almeno quanto la durata massima di una
+    posizione, e comunque almeno un giorno. Il bootstrap pero' lavora su trade,
+    non su ore: fino alla 4.3 ogni campagna faceva la conversione a modo suo.
+    Dalla 4.4 la conversione e' questa, uguale per tutti:
+
+    * finestra = max(durata massima fra i trade (uscita - entrata), ``minimo_ms``);
+    * blocco = il massimo numero di trade che ESCONO dentro una qualunque
+      finestra di quella lunghezza, [t, t + finestra), con t l'uscita di un trade;
+      almeno 1.
+
+    Cosi' i trade che possono dipendere l'uno dall'altro (sovrapposti, dello
+    stesso giorno) finiscono nello stesso blocco. Si calcola sui trade di cui si
+    stima l'errore (il candidato, oppure la serie della baseline (a)), nel
+    periodo che si sta giudicando. Timestamp in millisecondi.
+    """
+    entrate = [int(x) for x in ts_entrata]
+    uscite = [int(x) for x in ts_uscita]
+    if not entrate or len(entrate) != len(uscite):
+        raise ValueError("servono entrate e uscite non vuote e della stessa lunghezza")
+    if any(u < e for e, u in zip(entrate, uscite)):
+        raise ValueError("un trade esce prima di entrare")
+    finestra = max(max(u - e for e, u in zip(entrate, uscite)), int(minimo_ms))
+    if finestra <= 0:
+        raise ValueError("la finestra deve essere positiva")
+    ordinate = sorted(uscite)
+    blocco = 1
+    j = 0
+    for i, t in enumerate(ordinate):
+        while j < len(ordinate) and ordinate[j] < t + finestra:
+            j += 1
+        blocco = max(blocco, j - i)
+    return blocco
+
+
+#: sotto questo numero di blocchi interi il bootstrap a blocchi non stima l'errore:
+#: il candidato e' «non valutabile» (sezione 8, dalla 4.4; ``parametri.yaml``,
+#: ``minimo_blocchi_bootstrap``). Con 2 blocchi l'errore crolla e un candidato
+#: senza vantaggio risulterebbe «netto» una volta su tre.
+MINIMO_BLOCCHI = 3
+
+#: «oltre 2 errori standard» con una normale e' la coda del 2,275%: la soglia
+#: della sezione 8 e' il quantile 0,97725 della t di Student con i gradi di
+#: liberta' dei blocchi, che con molti blocchi torna a 2.
+LIVELLO_NETTAMENTE = 0.97725
+
+
+def baseline_casuale(r_medi_simulazioni: Sequence[float]) -> Dict[str, object]:
+    """La baseline (b) come UN numero: media degli R medi delle simulazioni casuali.
+
+    Le simulazioni sono strategie a entrate casuali con la stessa uscita, la
+    stessa direzione e lo stesso periodo del candidato: le esegue
+    ``motore.simula_baseline_casuale`` (sezione 8, dalla 4.4), che restituisce
+    gia' questo dizionario. Il numero di simulazioni e' ``simulazioni_baseline_casuale``
+    di ``parametri.yaml``.
+
+    Ritorna:
+    * ``media``: la media degli R medi, cioe' il numero da battere;
+    * ``errore_standard``: l'errore di QUELLA media, deviazione standard degli R
+      medi (ddof=1) divisa per la radice del numero di simulazioni. Con 200
+      simulazioni e' circa un quattordicesimo dell'errore di una corsa sola;
+    * ``n_simulazioni``, ``percentile_90`` (riferimento: il ``criterio_vault`` usa
+      il 90° percentile delle ``simulazioni_caso`` del vault, non queste) e
+      ``valori`` (per ``percentile_del_candidato``, che si riporta come indizio,
+      mai come prova).
+
+    Servono almeno 2 simulazioni (con una sola l'errore della media non si stima).
+    """
+    arr = _come_array(r_medi_simulazioni, "r_medi_simulazioni")
+    if arr.size < 2:
+        raise ValueError("servono almeno 2 simulazioni per stimare l'errore della media")
+    return {
+        "media": float(arr.mean()),
+        "errore_standard": float(arr.std(ddof=1) / math.sqrt(arr.size)),
+        "n_simulazioni": int(arr.size),
+        "percentile_90": float(np.percentile(arr, 90, method="linear")),
+        "valori": arr,
+    }
+
+
+def percentile_del_candidato(r_medio_candidato: float, r_medi_simulazioni: Sequence[float]) -> float:
+    """Quota, per 100, delle simulazioni con R medio STRETTAMENTE minore del candidato.
+
+    E' il «percentile fra le simulazioni casuali» che il log riporta (sezione 6)
+    come indizio, mai come prova: le simulazioni hanno trade meno dipendenti fra
+    loro di quelli del candidato, e il percentile li conta come indipendenti.
+    """
+    arr = _come_array(r_medi_simulazioni, "r_medi_simulazioni")
+    return float(100.0 * np.count_nonzero(arr < float(r_medio_candidato)) / arr.size)
+
+
+def _errore_media_corretto(arr: np.ndarray, lunghezza_blocco: int, n: int, seme: int) -> Tuple[float, int]:
+    """Errore standard della media dal bootstrap a blocchi, corretto, e i blocchi interi.
+
+    Il bootstrap a blocchi circolari sottostima la varianza della media di un
+    fattore circa (1 - b/n) (b blocco, n trade): l'errore si moltiplica per
+    radice(n / (n - b)). Senza la correzione, con blocchi lunghi, un candidato
+    senza vantaggio risultava «netto» fino a tre volte piu' spesso del dichiarato.
+    Chi chiama ha gia' controllato che i blocchi interi siano almeno MINIMO_BLOCCHI.
+    """
+    b = int(lunghezza_blocco)
+    boot = bootstrap_blocchi(arr, b, n=n, seme=seme)
+    errore = float(boot["errore_standard"])
+    # una serie costante da' in virgola mobile 1e-16, non 0
+    if errore <= 1e-12 * max(1.0, abs(float(arr.mean()))):
+        errore = 0.0
+    return errore * math.sqrt(arr.size / (arr.size - b)), arr.size // b
+
+
+def baseline_da_trade(r_baseline: Sequence[float], lunghezza_blocco: int, n: int = 2000, seme: int = 0) -> Dict[str, object]:
+    """La baseline (a) come UN numero: R medio dei trade della baseline e il suo errore.
+
+    La baseline (a) e' la variante senza la condizione d'ingresso dell'ipotesi
+    (sezione 8): una sola serie di trade, ordinata per uscita, non senza rumore.
+    Il suo errore si stima come quello del candidato (bootstrap a blocchi con la
+    correzione del blocco), con il blocco calcolato da ``lunghezza_blocco`` sui
+    SUOI trade.
+
+    Ritorna ``media``, ``errore_standard``, ``n_trade``, ``n_blocchi`` e
+    ``valutabile``: False se i blocchi interi sono meno di MINIMO_BLOCCHI; in
+    quel caso l'errore e' infinito e nessun candidato puo' batterla nettamente
+    (il giudizio prudente).
+    """
+    arr = _come_array(r_baseline, "r_baseline")
+    b = int(lunghezza_blocco)
+    if b < 1:
+        raise ValueError("lunghezza_blocco deve essere almeno 1")
+    if arr.size // b < MINIMO_BLOCCHI:
+        return {"media": float(arr.mean()), "errore_standard": math.inf, "n_trade": int(arr.size),
+                "n_blocchi": int(arr.size // b), "valutabile": False}
+    errore, k = _errore_media_corretto(arr, b, n, seme)
+    return {"media": float(arr.mean()), "errore_standard": errore, "n_trade": int(arr.size),
+            "n_blocchi": int(k), "valutabile": True}
+
+
+def _confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme) -> Dict[str, object]:
+    """Il calcolo comune di ``batte_nettamente`` e ``p_value_vs_baseline``."""
+    from scipy.stats import t as student  # scipy e' fra le dipendenze del repo (requirements.txt)
+
+    arr = _come_array(r_candidato, "r_candidato")
+    base = float(baseline_media)
+    errore_base = float(baseline_errore_standard)
+    if math.isnan(base) or math.isinf(base) or math.isnan(errore_base) or errore_base < 0:
+        raise ValueError("baseline_media deve essere un numero finito e baseline_errore_standard non negativo")
+    b = int(lunghezza_blocco)
+    if b < 1:
+        raise ValueError("lunghezza_blocco deve essere almeno 1")
+    differenza = float(arr.mean()) - base
+    k = arr.size // b
+    non_valutabile = {
+        "differenza": differenza, "errore_standard": math.inf, "margine": math.inf, "soglia": math.inf,
+        "gradi_liberta": max(0, k - 1), "netta": False, "t": -math.inf, "p_value": 1.0,
+        "errore_candidato": math.inf, "n_blocchi": int(k), "valutabile": False,
+    }
+    if k < MINIMO_BLOCCHI or math.isinf(errore_base):
+        return non_valutabile
+    errore_c, _ = _errore_media_corretto(arr, b, n, seme)
+    errore = math.sqrt(errore_c ** 2 + errore_base ** 2)
+    if errore == 0.0:
+        # nessun rumore stimabile (serie costante e baseline senza errore): un
+        # errore 0 non e' una precisione infinita, e' una serie che non varia.
+        return dict(non_valutabile, errore_candidato=0.0)
+    gradi = k - 1
+    soglia = float(student.ppf(LIVELLO_NETTAMENTE, gradi))
+    t = differenza / errore
+    return {
+        "differenza": differenza,
+        "errore_standard": errore,
+        "margine": soglia * errore,
+        "soglia": soglia,
+        "gradi_liberta": int(gradi),
+        "netta": bool(t > soglia),
+        "t": float(t),
+        "p_value": float(student.sf(t, gradi)),
+        "errore_candidato": errore_c,
+        "n_blocchi": int(k),
+        "valutabile": True,
+    }
+
+
+def batte_nettamente(
+    r_candidato: Sequence[float],
+    lunghezza_blocco: int,
+    baseline_media: float,
+    baseline_errore_standard: float,
+    n: int = 2000,
+    seme: int = 0,
+) -> Dict[str, object]:
+    """La regola «nettamente» della sezione 8 dalla versione 4.4. Una sola lettura.
+
+    Il candidato (i suoi R, ORDINATI PER USCITA) batte nettamente una baseline se
+    la differenza fra il suo R medio e il NUMERO della baseline supera la soglia
+    in errori standard della differenza:
+
+        differenza = media(r_candidato) - baseline_media
+        errore     = radice(e_c^2 + baseline_errore_standard^2)
+        t          = differenza / errore
+        netta      = t > soglia        (solo verso l'alto)
+
+    * ``e_c`` e' l'errore della media del candidato dal bootstrap a blocchi
+      (``lunghezza_blocco`` trade per blocco, da ``lunghezza_blocco()``),
+      moltiplicato per radice(n / (n - b)): il bootstrap a blocchi sottostima la
+      varianza della media di circa (1 - b/n);
+    * ``soglia`` e' il quantile 0,97725 della t di Student con k - 1 gradi di
+      liberta', dove k = n // b e' il numero di blocchi interi: con molti blocchi
+      vale circa 2 («oltre 2 errori standard», la coda del 2,275%), con pochi e'
+      piu' alta perche' l'errore stesso e' stimato male;
+    * sotto ``MINIMO_BLOCCHI`` blocchi interi, o con l'errore della baseline
+      infinito, o senza alcun rumore stimabile, il candidato e' NON VALUTABILE:
+      ``valutabile`` False, ``netta`` False, ``t`` = -inf (in fondo all'ordine dei
+      ritocchi, regola 6), ``p_value`` 1.
+
+    ``baseline_errore_standard`` e' obbligatorio: per la (b) e' quello di
+    ``baseline_casuale`` (piccolo), per la (a) quello di ``baseline_da_trade``.
+    ``n`` e ``seme`` sono quelli di ``parametri.yaml`` (2000 e 0) e non si
+    cambiano per rilanciare. Il buy and hold (baseline (c)) non passa da qui.
+
+    Perche' cosi' e non con due serie (``differenza_nettamente``, fino alla 4.3):
+    la (b) e' la MEDIA di 200 strategie casuali e il suo errore e' piccolo;
+    confrontare il candidato con UNA corsa casuale aggiungeva il rumore di quella
+    corsa. Ma toglierlo e basta avrebbe lasciato scoperti i difetti del bootstrap
+    (blocchi lunghi, pochi blocchi) che quel rumore in piu' copriva per caso: la
+    correzione del blocco e la soglia di Student li coprono apposta.
+
+    Ritorna ``differenza``, ``errore_standard``, ``margine`` (soglia x errore),
+    ``soglia``, ``gradi_liberta``, ``netta``, ``t``, ``p_value`` (lo stesso di
+    ``p_value_vs_baseline``: netta vuol dire p_value < 0,02275), ``errore_candidato``
+    (gia' corretto), ``n_blocchi`` e ``valutabile``.
+    """
+    return _confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme)
+
+
 # ---------------------------------------------------------------------------
 # p-value e asticella
 # ---------------------------------------------------------------------------
@@ -254,9 +508,13 @@ def p_value_bootstrap_vs_caso(
     n: int = 2000,
     seme: int = 0,
 ) -> float:
-    """p-value unilaterale: l'R medio del candidato supera quello del caso per caso?
+    """p-value unilaterale FINO ALLA 4.3: il candidato contro UNA serie di trade casuali.
 
-    E' il p-value dell'asticella (sezione 8): «la probabilita' di ottenere per
+    Dalla versione 4.4 il p-value dell'asticella e' ``p_value_vs_baseline``
+    (contro la MEDIA delle simulazioni casuali): questa funzione resta solo per
+    rileggere le campagne archiviate.
+
+    Era il p-value dell'asticella (sezione 8 fino alla 4.3): «la probabilita' di ottenere per
     caso un R medio cosi' superiore a quello dell'entrata casuale con la stessa
     uscita, stimata con bootstrap a blocchi sui trade di validazione».
 
@@ -292,6 +550,30 @@ def p_value_bootstrap_vs_caso(
     differenze = np.asarray(boot_cand["campioni"]) - np.asarray(boot_caso["campioni"])
     # quota dei campioni con differenza <= 0 == quota di (-differenza) >= 0
     return p_value_unilaterale(0.0, -differenze)
+
+
+def p_value_vs_baseline(
+    r_candidato: Sequence[float],
+    lunghezza_blocco: int,
+    baseline_media: float,
+    baseline_errore_standard: float,
+    n: int = 2000,
+    seme: int = 0,
+) -> float:
+    """p-value unilaterale dell'asticella (sezione 8, dalla versione 4.4).
+
+    «La probabilita' di ottenere per caso un R medio cosi' superiore a quello
+    dell'entrata casuale con la stessa uscita», sui trade di validazione: e' lo
+    stesso calcolo di ``batte_nettamente`` (stesso errore corretto, stessi gradi
+    di liberta'), letto come coda superiore della t di Student. Per costruzione
+    un candidato «netto» ha p-value sotto 0,02275, e viceversa: le due regole non
+    possono dire cose diverse sugli stessi trade.
+
+    Non valutabile (meno di ``MINIMO_BLOCCHI`` blocchi interi, errore della
+    baseline infinito, nessun rumore stimabile): 1.0, cioe' nessuna evidenza
+    misurabile; il candidato non passa l'asticella.
+    """
+    return float(_confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme)["p_value"])
 
 
 def benjamini_hochberg(p_values: Sequence[float], q: float = 0.10) -> List[bool]:

@@ -152,13 +152,14 @@ def test_passo1_da_capo_a_fondo(tmp_path):
     righe = (tmp_path / "universo" / "candidate.csv").read_text(encoding="utf-8").splitlines()
     assert len(righe) == 10 and righe[0].startswith("simbolo,serie_collegata,")
     scheda = (tmp_path / "campagne" / "DEADUSDT" / "scheda_moneta.md").read_text(encoding="utf-8")
-    assert "2020-02-01" in scheda and "2024" not in scheda
+    assert "2020-02-01" in scheda and "2024" not in scheda  # il primo mese di dati
     # la scheda non dice da dove viene la data: «archivio» vorrebbe dire «delistata»
     assert "archivio" not in scheda and "exchangeInfo" not in scheda
     scheda_btc = (tmp_path / "campagne" / "BTCUSDT" / "scheda_moneta.md").read_text(encoding="utf-8")
-    assert "2019-09-08" in scheda_btc and "exchangeInfo" not in scheda_btc
-    assert "La data di listing può essere approssimata al primo giorno del mese." in scheda and \
-        "La data di listing può essere approssimata al primo giorno del mese." in scheda_btc
+    assert "2020-01-01" in scheda_btc and "exchangeInfo" not in scheda_btc
+    # dal 7 ott la scheda non porta la data di listing (confrontata col primo mese di
+    # dati direbbe se la moneta e' viva): il listing resta nel CSV di coordinamento
+    assert "2019-09-08" not in scheda_btc and "listing" not in scheda.lower() and "listing" not in scheda_btc.lower()
     assert not (tmp_path / "campagne" / "ALTUSDT").exists()
     conteggi = json.loads((tmp_path / "universo" / "conteggi.json").read_text(encoding="utf-8"))
     assert conteggi["conteggi"]["idonee_delistate_oggi"] == 1

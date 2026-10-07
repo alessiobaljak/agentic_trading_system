@@ -18,7 +18,8 @@ Convenzioni
     confronta con lo stop, cioe' il suo ``workingType``);
   - ``candele_mark``: il mark price, su cui si valuta la liquidazione.
   Se ``candele_stop`` o ``candele_mark`` sono ``None`` si usa ``candele``.
-* Solo barre chiuse: la strategia alla barra ``i`` riceve ``candele[:i+1]``;
+* Solo barre chiuse: la strategia alla barra ``i`` riceve le barre ``0..i``
+  (una ``StoriaChiusa``: si legge come ``candele[:i+1]`` ma non la copia);
   l'ingresso avviene all'apertura della barra ``i + 1 + ritardo_barre``.
 * Il momento esatto in cui, dentro una barra, succedono le cose non si conosce:
   dove serve una scelta si prende quella PEGGIORE per il trade (stop prima del
@@ -109,7 +110,10 @@ from __future__ import annotations
 
 import math
 from bisect import bisect_right
-from dataclasses import dataclass
+from collections.abc import Sequence as SequenceABC
+from itertools import islice
+import operator
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from typing import Callable, Dict, List, Literal, Optional, Sequence, Tuple, Union
 
@@ -166,7 +170,12 @@ class Posizione:
 
 @dataclass
 class Parametri:
-    """Parametri del motore. I default sono quelli del protocollo (sezione 3)."""
+    """Parametri del motore. I default sono D'ESEMPIO (usati dai test del Passo 0).
+
+    I parametri di una campagna si prendono da ``config/parametri.yaml`` (rischio,
+    leva, commissione, margine di mantenimento 0,025, ...) e dalla fascia di
+    slippage di ``campagne/<SIMBOLO>/scheda_moneta.md`` (sezione 7).
+    """
 
     commissione_per_lato: float = 0.0005
     slippage_per_lato: float = 0.0002
@@ -234,6 +243,60 @@ class Risultato:
 
 
 Strategia = Callable[[Sequence[Candela], Optional[Posizione]], Union[Segnale, str, None]]
+
+
+class StoriaChiusa(SequenceABC):
+    """Le barre chiuse fino alla barra corrente, in sola lettura, SENZA copiarle.
+
+    Fino al 7 ott 2026 ``esegui`` passava alla strategia ``candele[: i + 1]``,
+    una copia della storia a ogni barra: il tempo cresceva col quadrato delle
+    barre (a 1 ora, circa 26.000 barre in tre anni, piu' di un secondo per
+    esecuzione), e le 200 simulazioni della baseline (b) diventavano ore. La
+    vista si comporta come quella copia per tutte le letture: ``len``, indici
+    interi (anche negativi; un indice non intero alza TypeError come una lista),
+    fette (che restituiscono una lista), iterazione, ``in``, ``index``,
+    ``count``. Non e' una lista: ``storia + altra_lista`` non funziona, e chi
+    vuole una lista scrive ``list(storia)``.
+
+    Niente futuro, neppure per sbaglio: ``esegui`` costruisce la vista sopra una
+    lista che contiene SOLO le barre gia' chiuse (cresce di una barra alla
+    volta), quindi anche l'attributo interno ``_base`` non arriva oltre la barra
+    corrente. Un indice oltre alza IndexError.
+    """
+
+    __slots__ = ("_base", "_n")
+
+    def __init__(self, base: Sequence[Candela], n: int) -> None:
+        self._base = base
+        self._n = n
+
+    def __len__(self) -> int:
+        return self._n
+
+    def __getitem__(self, indice):
+        if isinstance(indice, slice):
+            inizio, fine, passo = indice.indices(self._n)
+            if passo == 1:
+                return list(self._base[inizio:fine]) if fine > inizio else []
+            return [self._base[k] for k in range(inizio, fine, passo)]
+        k = operator.index(indice)
+        if k < 0:
+            k += self._n
+        if k < 0 or k >= self._n:
+            raise IndexError("indice fuori dalla storia chiusa")
+        return self._base[k]
+
+    def __iter__(self):
+        return islice(self._base, self._n)
+
+    def __eq__(self, altra) -> bool:
+        try:
+            return len(altra) == self._n and all(a == b for a, b in zip(self, altra))
+        except TypeError:
+            return NotImplemented
+
+    def __repr__(self) -> str:
+        return f"StoriaChiusa({self._n} barre)"
 
 
 # ---------------------------------------------------------------------------
@@ -650,6 +713,7 @@ def esegui(
     n_capitale_esaurito = 0
     n_funding_in_buco = 0
     n = len(candele)
+    visibili: List[Candela] = []  # le barre chiuse fin qui: la sola cosa che la strategia puo' raggiungere
 
     def registra(trade: Trade) -> None:
         nonlocal capitale
@@ -717,7 +781,8 @@ def esegui(
             break
 
         # 4. chiusura della barra: la strategia vede solo barre chiuse
-        decisione = strategia(candele[: i + 1], pos)
+        visibili.append(barra)
+        decisione = strategia(StoriaChiusa(visibili, i + 1), pos)
         if isinstance(decisione, Segnale):
             if pos is None and ingresso_pendente is None:
                 indice = i + 1 + parametri.ritardo_barre
@@ -744,6 +809,168 @@ def esegui(
         n_buchi_dati=n_buchi,
         n_funding_in_buco=n_funding_in_buco,
     )
+
+
+# ---------------------------------------------------------------------------
+# Stima dei trade (sezione 8, dalla versione 4.4)
+# ---------------------------------------------------------------------------
+
+
+def _strategia_nuova(crea_strategia: Callable[[], Strategia], chi: str) -> Strategia:
+    """Chiama la fabbrica e controlla che restituisca una strategia."""
+    try:
+        strategia = crea_strategia()
+    except TypeError as e:
+        raise TypeError(
+            f"{chi} vuole la FUNZIONE che crea la strategia (senza argomenti), non la strategia: "
+            f"ogni esecuzione del motore usa un'istanza nuova (sezione 7). Errore: {e}"
+        ) from e
+    if not callable(strategia):
+        raise TypeError(f"{chi}: la fabbrica deve restituire una strategia (una funzione di storia e posizione)")
+    return strategia
+
+
+def conta_trade(
+    candele: List[Candela],
+    crea_strategia: Callable[[], Strategia],
+    fine_costruzione_ts: int,
+    parametri: Parametri,
+    candele_stop: Optional[List[Candela]] = None,
+    candele_mark: Optional[List[Candela]] = None,
+    funding: Sequence[Tuple[int, float]] = (),
+) -> Dict[str, int]:
+    """La stima dei trade del protocollo, uguale per tutte le campagne (sezione 8).
+
+    Fino alla 4.3 ogni campagna stimava a modo suo (occupazione dichiarata,
+    distanza fra segnali, durata misurata con entrate casuali) e la stessa idea
+    poteva passare o no il minimo secondo la regola scelta. Dalla 4.4 la stima
+    E' il numero di trade del test: questo motore, con le regole complete della
+    variante, gli stessi ``parametri`` (costi), lo stesso funding e le stesse
+    serie del test, sui soli dati di costruzione. Non serve indovinare quanto
+    dura una posizione: la decide l'uscita della variante, barra per barra.
+
+    Restituisce SOLO conteggi, mai risultati: niente R, pnl, profit factor ne'
+    esiti delle uscite (quanti stop e quanti target direbbero gia' come va la
+    variante). Si chiama una volta sola per variante, sulle regole esatte che si
+    registrano, e il numero va nel log (sezione 8): contare regole che non si
+    registrano e' vietato, perche' con un'uscita solo a stop il numero di trade
+    dice gia' se dopo gli ingressi il prezzo va a favore.
+
+    ``crea_strategia`` e' la FUNZIONE che crea la strategia (senza argomenti):
+    ogni esecuzione del motore usa un'istanza nuova, cosi' lo stato interno di
+    una strategia (indicatori aggiornati barra per barra, contatori) non passa
+    dal conteggio al test vero. Passare la strategia gia' creata alza TypeError.
+
+    ``fine_costruzione_ts`` (ms) e' obbligatorio: la fine del periodo di
+    costruzione scritta nel log in Fase 0. Una candela che chiude dopo alza
+    ValueError, cosi' la stima non tocca mai il periodo di validazione.
+
+    Ritorna: ``trade`` (totale), ``long``, ``short``, ``segnali_non_validi``
+    (stop o target dalla parte sbagliata), ``segnali_senza_barra`` (segnali
+    troppo vicini alla fine dei dati) e ``barre`` (candele usate).
+    """
+    strategia = _strategia_nuova(crea_strategia, "conta_trade")
+    if not candele:
+        return {"trade": 0, "long": 0, "short": 0, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 0}
+    for nome, serie in (("candele", candele), ("candele_stop", candele_stop), ("candele_mark", candele_mark)):
+        oltre = [c for c in (serie or []) if c.close_ts > int(fine_costruzione_ts)]
+        if oltre:
+            raise ValueError(
+                f"conta_trade: {len(oltre)} {nome} chiudono dopo la fine della costruzione "
+                f"({fine_costruzione_ts}); la stima si fa solo sui dati di costruzione"
+            )
+    funding_costruzione = [(t, r) for t, r in funding if t <= int(fine_costruzione_ts)]
+    risultato = esegui(candele, candele_stop, candele_mark, funding_costruzione, strategia, parametri)
+    return {
+        "trade": len(risultato.trades),
+        "long": sum(1 for t in risultato.trades if t.direzione == "long"),
+        "short": sum(1 for t in risultato.trades if t.direzione == "short"),
+        "segnali_non_validi": risultato.n_segnali_non_validi,
+        "segnali_senza_barra": risultato.n_segnali_senza_barra,
+        "barre": len(candele),
+    }
+
+
+def durata_media_barre(trades: Sequence[Trade], ms_per_barra: int) -> int:
+    """Durata media dei trade in barre, arrotondata all'intero piu' vicino (almeno 1).
+
+    E' la distanza minima fra gli ingressi casuali della baseline (b) (sezione 8).
+    La durata di un trade e' (ts_uscita - ts_entrata) / ms_per_barra: un'uscita
+    dentro una barra ha ts_uscita alla chiusura della barra (sezione 7, «Tempi»).
+    """
+    if not trades:
+        raise ValueError("servono trade per calcolare la durata media")
+    if ms_per_barra <= 0:
+        raise ValueError("ms_per_barra deve essere positivo")
+    media = sum((t.ts_uscita - t.ts_entrata) / ms_per_barra for t in trades) / len(trades)
+    return max(1, int(math.floor(media + 0.5)))
+
+
+def simula_baseline_casuale(
+    candele: List[Candela],
+    crea_strategia_casuale: Callable[[frozenset], Strategia],
+    n_trade: int,
+    durata_media: int,
+    parametri: Parametri,
+    candele_stop: Optional[List[Candela]] = None,
+    candele_mark: Optional[List[Candela]] = None,
+    funding: Sequence[Tuple[int, float]] = (),
+    barre_vietate: Sequence[Tuple[int, int]] = (),
+    n_simulazioni: int = 200,
+    primo_seme: int = 0,
+) -> Dict[str, object]:
+    """La baseline (b) della sezione 8, eseguita sempre allo stesso modo.
+
+    Per ogni seme da ``primo_seme`` a ``primo_seme + n_simulazioni - 1`` (di regola
+    0..199, ``parametri.yaml``):
+    1. ``statistica.entrate_casuali`` sceglie ``n_trade`` barre (il numero di trade
+       del candidato nel periodo), distanti almeno ``durata_media`` barre
+       (``durata_media_barre`` dei trade del candidato), fuori dalle
+       ``barre_vietate`` (riscaldamento degli indicatori della variante, periodi
+       esclusi in Fase 0; in validazione anche tutte le barre di costruzione) e
+       dall'ultima barra, che si esclude da sola (un segnale li' non entra piu');
+    2. ``crea_strategia_casuale(ingressi)`` crea la strategia casuale: alla
+       CHIUSURA di ogni barra il cui indice e' in ``ingressi``, se non ha una
+       posizione, emette il Segnale della variante (stessa direzione, stesso
+       modo di calcolare stop e target), e poi esce con l'uscita della variante;
+    3. il motore la esegue una posizione alla volta, con gli stessi ``parametri``,
+       funding e serie del candidato.
+
+    Siccome le durate variano, una simulazione puo' avere qualche trade in meno di
+    ``n_trade`` (un ingresso che cade mentre la posizione e' aperta si salta): e'
+    voluto e si riporta (``trade_per_simulazione``). Le simulazioni senza alcun
+    trade non entrano nella media e si contano (``simulazioni_vuote``); se ne
+    restano meno di 2, ValueError. Se ``entrate_casuali`` non trova ``n_trade``
+    ingressi, alza ValueError: la variante e' non valutabile contro la (b).
+
+    Ritorna il dizionario di ``statistica.baseline_casuale`` sugli R medi (media,
+    errore_standard, n_simulazioni, percentile_90, valori) piu'
+    ``trade_per_simulazione`` e ``simulazioni_vuote``.
+    """
+    from research.src import statistica  # import qui: statistica non dipende dal motore
+
+    if n_trade < 1:
+        raise ValueError("n_trade deve essere almeno 1")
+    # un segnale alla chiusura dell'ultima barra non ha una barra in cui entrare
+    vietate = list(barre_vietate) + [(len(candele) - 1, len(candele))]
+    r_medi: List[float] = []
+    trade_per_sim: List[int] = []
+    vuote = 0
+    for seme in range(primo_seme, primo_seme + n_simulazioni):
+        ingressi = frozenset(statistica.entrate_casuali(len(candele), n_trade, durata_media, seme, vietate))
+        strategia = _strategia_nuova(lambda: crea_strategia_casuale(ingressi), "simula_baseline_casuale")
+        ris = esegui(candele, candele_stop, candele_mark, list(funding), strategia, parametri)
+        if not ris.trades:
+            vuote += 1
+            continue
+        r_medi.append(sum(t.r for t in ris.trades) / len(ris.trades))
+        trade_per_sim.append(len(ris.trades))
+    if len(r_medi) < 2:
+        raise ValueError(f"simula_baseline_casuale: solo {len(r_medi)} simulazioni con trade su {n_simulazioni}")
+    base = statistica.baseline_casuale(r_medi)
+    base["trade_per_simulazione"] = trade_per_sim
+    base["simulazioni_vuote"] = vuote
+    return base
 
 
 # ---------------------------------------------------------------------------
