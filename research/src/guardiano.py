@@ -99,6 +99,7 @@ import re
 import shlex
 import subprocess
 import sys
+import unicodedata
 import urllib.parse
 from dataclasses import dataclass, field
 
@@ -1397,7 +1398,36 @@ def giudica_url(url, ctx: Contesto) -> Verdetto:
     for m in _BRANCH.finditer(decodificato):
         if m.group(0) != ctx.proprio_branch:
             return rifiuta(f"branch {m.group(0)}")
+    # un indirizzo dentro l'indirizzo (`?url=https://...`, `?redirect=//...`) o un
+    # hash di commit: un sito ammesso con un rinvio aperto porterebbe altrove, e
+    # con un hash il controllo dei nomi dei branch non scatta (prova del 7 ott)
+    parti = urllib.parse.urlsplit(decodificato)
+    resto = (parti.path + "?" + parti.query + "#" + parti.fragment).lower()
+    if "http:" in resto or "https:" in resto or "//" in (parti.query + parti.fragment) or "www." in (parti.query + parti.fragment):
+        return rifiuta("l'indirizzo ne contiene un altro (rinvio)")
+    # (nel percorso un hash di 40 cifre e' normale, per esempio gli articoli di
+    # semanticscholar; nei parametri no)
+    if re.search(r"(?<![0-9a-f])[0-9a-f]{40}(?![0-9a-f])", (parti.query + "#" + parti.fragment).lower()):
+        return rifiuta("l'indirizzo contiene un hash di commit nei parametri")
     return OK
+
+
+#: lettere di altri alfabeti che sembrano latine (omoglifi): si riportano alla
+#: lettera latina prima di cercare le parole vietate, cosi' «gіthub» con una
+#: «і» cirillica non sfugge al filtro
+_OMOGLIFI = str.maketrans({
+    "а": "a", "е": "e", "і": "i", "ї": "i", "о": "o", "р": "p", "с": "c", "у": "y", "х": "x",
+    "һ": "h", "ԁ": "d", "ѕ": "s", "ј": "j", "ӏ": "l", "ԛ": "q", "ԝ": "w", "ɡ": "g", "ı": "i",
+    "к": "k", "м": "m", "т": "t", "в": "b", "н": "h", "ս": "u", "ո": "n", "ᴜ": "u", "ʜ": "h",
+    "α": "a", "ο": "o", "ρ": "p", "ι": "i", "κ": "k", "ν": "v", "τ": "t", "υ": "u", "χ": "x",
+})
+
+
+def _testo_normalizzato(testo: str) -> str:
+    """Minuscolo, NFKC, omoglifi riportati al latino, SENZA spazi, punteggiatura e
+    caratteri invisibili: «G i t H u b», «git-hub» e «gіthub» diventano «github»."""
+    testo = unicodedata.normalize("NFKC", testo).lower().translate(_OMOGLIFI)
+    return "".join(c for c in testo if c.isalnum() or c == "/")
 
 
 def _host_di_dominio(valore: str) -> str:
@@ -1427,8 +1457,9 @@ def giudica_ricerca_web(ingresso: dict, ctx: Contesto) -> Verdetto:
     if decodificata is None:
         return rifiuta("testo codificato troppe volte")
     testo = decodificata.lower()
+    compatto = _testo_normalizzato(decodificata)
     for parola in _PAROLE_VIETATE_RICERCA:
-        if parola in testo:
+        if parola in testo or _testo_normalizzato(parola) in compatto:
             return rifiuta(f"contiene {parola!r}: porta a questo repository o ai suoi branch")
     for m in re.finditer(r"\bsite\s*:\s*(\S*)", testo):
         host = _host_di_dominio(m.group(1))
