@@ -11,17 +11,21 @@ Uso (dal coordinamento):
     python -m research.src.passo1            # scrive in research/universo/ e research/campagne/*/scheda_moneta.md
 Le candele giornaliere del 2023 finiscono in research/data/insample/<SIMBOLO>/klines/1d/
 (fuori da git) e restano utili alle campagne.
+
+Oltre alla lista, ``conteggi.json`` porta le due segnalazioni per lo STOP: le
+idonee con copertura del 2023 incompleta (si segnalano, non si escludono) e le
+sospette ridenominazioni (contratti spariti o nati nel 2022-2023), per cui il
+coordinamento chiede all'utente prima di ricucire qualunque serie.
 """
 from __future__ import annotations
 
-import csv
 import json
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from research.src import dati
 from research.src import selezione as sel
@@ -47,7 +51,8 @@ def contratti_di_oggi(fetch=None) -> Dict[str, dict]:
 
 
 def candidata_da_archivio(simbolo: str, oggi: Dict[str, dict], nomi_file: List[str]) -> sel.Candidata:
-    """La candidata con listing, primo e ultimo mese; il volume si aggiunge dopo."""
+    """La candidata con listing, primo e ultimo mese; il volume si aggiunge dopo.
+    ``listing_da`` resta nel CSV di coordinamento: la scheda non lo stampa."""
     primo, ultimo = sel.primo_e_ultimo_mese(nomi_file)
     contratto = oggi.get(simbolo)
     negoziata = bool(contratto) and contratto.get("status") == "TRADING"
@@ -61,15 +66,18 @@ def candidata_da_archivio(simbolo: str, oggi: Dict[str, dict], nomi_file: List[s
                          primo_mese=primo, ultimo_mese=ultimo)
 
 
-def volume_2023(simbolo: str, radice: Path = RADICE, fetch=None):
-    """(media, giorni) del volume in USDT nel 2023 dalle candele giornaliere, scaricate
-    (o gia' su disco) con il caricatore e il suo blocco del vault."""
+def volume_2023(simbolo: str, radice: Path = RADICE, fetch=None) -> Tuple[Optional[float], int, Optional[date]]:
+    """(media, giorni, ultimo giorno presente) del volume in USDT nel 2023 dalle candele
+    giornaliere, scaricate (o gia' su disco) con il caricatore e il suo blocco del vault.
+    L'ultimo giorno serve al filtro «fine dati al giorno»: il file 2023-12 puo' esserci
+    anche se il contratto e' morto a meta' dicembre."""
     percorsi = dati.scarica_periodo(simbolo, "klines", "1d", sel.INIZIO_FINESTRA_VOLUME,
                                     sel.FINE_FINESTRA_VOLUME, radice, fetch)
     giorni = []
     for p in percorsi:
         giorni.extend(sel.volume_quote_giornaliero(dati.righe_csv_da_zip(p)))
-    return sel.volume_medio_nella_finestra(giorni)
+    media, n, ultimo_ts = sel.volume_medio_nella_finestra(giorni)
+    return media, n, (None if ultimo_ts is None else sel.data_da_ms(ultimo_ts))
 
 
 def esegui(radice: Path = RADICE, fetch=None, n: int = sel.NUMERO_MONETE_CAMPAGNA,
@@ -89,24 +97,22 @@ def esegui(radice: Path = RADICE, fetch=None, n: int = sel.NUMERO_MONETE_CAMPAGN
             candidate.append(candidata_da_archivio(simbolo, oggi, nomi))
     _di(f"[passo1] indice letto per {len(candidate)} contratti in {time.time() - t0:.0f}s")
 
-    # il volume si scarica solo per chi passa i filtri sul listing e sulla fine dei dati:
-    # le altre sono escluse comunque e non vale la pena scaricare 12 file a testa
-    da_scaricare = [c for c in candidate
-                    if c.listing is not None and c.listing < sel.LIMITE_LISTING
-                    and c.ultimo_mese is not None and c.ultimo_mese >= sel.FINE_FINESTRA_VOLUME]
+    # il volume si scarica solo per chi non e' gia' escluso dai filtri che non lo
+    # richiedono (listing, primo mese, fine dei dati al mese): per le altre sarebbero
+    # 12 file a testa buttati
+    da_scaricare = [c for c in candidate if not sel.motivi_prima_del_volume(c)]
     _di(f"[passo1] volume 2023 da scaricare per {len(da_scaricare)} contratti")
     for i, c in enumerate(da_scaricare, 1):
         try:
-            c.volume_medio_2023, c.giorni_2023 = volume_2023(c.simbolo, radice, fetch)
+            c.volume_medio_2023, c.giorni_2023, c.ultimo_giorno_2023 = volume_2023(c.simbolo, radice, fetch)
         except Exception as exc:  # noqa: BLE001 - un contratto rotto non ferma la selezione
-            c.motivi_esclusione.append(f"errore nello scarico del 2023: {str(exc)[:80]}")
+            # il motivo resta: `valuta` AGGIUNGE ai motivi presenti e, vedendo questo,
+            # non scrive «nessun volume nel 2023» (sarebbe falso: non si e' potuto leggere)
+            c.motivi_esclusione.append(f"{sel.MOTIVO_ERRORE_SCARICO}{str(exc)[:80]}")
             _di(f"[passo1] {c.simbolo}: {str(exc)[:120]}")
         if i % 20 == 0:
             _di(f"[passo1] volume letto per {i}/{len(da_scaricare)} ({time.time() - t0:.0f}s)")
     risultato = sel.seleziona(candidate, n=n)
-    # un errore di scarico resta un motivo di esclusione anche se `valuta` li riscrive
-    for c in risultato["escluse"]:
-        pass
     risultato["secondi"] = round(time.time() - t0)
     risultato["checksum_mancanti"] = list(dati.CHECKSUM_MANCANTI)
     if scrivi:
@@ -122,7 +128,10 @@ def scrivi_risultati(risultato: dict, candidate: List[sel.Candidata], radice: Pa
     sel.scrivi_csv(universo / "monete_campagna.csv", risultato["campagna"])
     sel.scrivi_csv(universo / "monete_idonee_non_campagna.csv", risultato["altre_idonee"])
     with open(universo / "conteggi.json", "w", encoding="utf-8") as f:
-        json.dump({"conteggi": risultato["conteggi"], "secondi": risultato["secondi"],
+        json.dump({"conteggi": risultato["conteggi"],
+                   "copertura_incompleta": risultato["copertura_incompleta"],
+                   "sospette_ridenominazioni": risultato["sospette_ridenominazioni"],
+                   "secondi": risultato["secondi"],
                    "checksum_mancanti": risultato["checksum_mancanti"],
                    "data": date.today().isoformat()}, f, ensure_ascii=False, indent=1)
     for c in risultato["campagna"]:
@@ -141,6 +150,13 @@ def main(argv: Optional[List[str]] = None) -> int:
         _di(f"  {c.simbolo:14s} listing {c.listing} ({c.listing_da}) · volume 2023 "
             f"{c.volume_medio_2023 / 1e6:,.0f} M USDT/giorno su {c.giorni_2023} giorni · "
             f"slippage {c.fascia_slippage:.2%} · {'negoziata' if c.negoziata_oggi else 'DELISTATA'}")
+    # le segnalazioni per lo STOP: si mostrano all'utente, non si decidono qui
+    _di(f"[passo1] idonee con copertura 2023 sotto {sel.SOGLIA_COPERTURA_2023} giorni (segnalate, non escluse): "
+        f"{', '.join(r['copertura_incompleta']) or 'nessuna'}")
+    s = r["sospette_ridenominazioni"]
+    _di(f"[passo1] sospette ridenominazioni, da chiedere allo STOP: sparite nel 2022-2023 "
+        f"{', '.join(s['sparite_2022_2023']) or 'nessuna'}; listate nel 2022-2023 "
+        f"{', '.join(s['listate_2022_2023']) or 'nessuna'}")
     return 0
 
 
