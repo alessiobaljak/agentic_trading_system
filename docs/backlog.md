@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato il 6 ottobre 2026, 09:00 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato il 7 ottobre 2026, 08:40 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
@@ -15,7 +15,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
 | **0. Aspettano il tuo sì** | nessuna | una tua risposta |
-| **1. In lavorazione** | P0 (il protocollo di ricerca per moneta, Passo 0: sì del 6 ott), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **1. In lavorazione** | P0 (il protocollo di ricerca: Passi 0-1 approvati, prova di processo su BTC in corso dal 7 ott), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -36,7 +36,7 @@ Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
 
-### P0. Il protocollo di ricerca per moneta: Passo 0 (preparazione e parametri) — FATTO il 6 ott sera, allo STOP: la tabella dei parametri (`research/config/parametri.yaml`, 6 decisioni aperte) aspetta l'approvazione del proprietario; poi Passo 1
+### P0. Il protocollo di ricerca per moneta — Passi 0 e 1 fatti e approvati (7 ott: «confermo la lista»); Passo 2 (prova di processo) IN CORSO dal 7 ott 08:40: sessione di campagna BTCUSDT aperta dal coordinamento (branch `research/campagna/BTCUSDT`); ETH e SOL dopo, quando BTC mostra che il processo regge
 **Perché:** cinque misure indipendenti dicono la stessa cosa: il gate non trova un vantaggio. Entrate a caso rendono come i segnali (240 trade, ops 0471); dopo la scelta del gate le validate fanno −0,03R su 182 segnali ±0,17 (ops 0498, lettura stampata: «la prossima modifica va nel gate»); una candidata nuova a caso non passa quasi mai (0 su 3.600, ops 0485); i costi superano il lordo (−0,089R netti, +0,088R di costi su 241, ops 0489); il gate rigiocato nel passato, su 8 date, dà promosse peggiori delle bocciate (−0,22R contro −0,14R su 45 trade, non decide, ops 0502). Aspettare il 14 ott non cambia il verdetto.
 **Cosa:** salvare `research/PROTOCOLLO.md` (versione 4.2, rivista il 5 ott) ed eseguire il **Passo 0**: fatti (fonte dati e contratti delistati, commissioni, serie degli stop, regole di dimensione e forma di esecuzione del bot), motore con il blocco del periodo chiuso, test di controllo, tabella dei parametri da approvare. Non tocca dati di mercato né il bot. **Regola scritta prima:** il Passo 0 finisce con una tabella e uno STOP; nessuna campagna parte senza l'approvazione dei parametri. **Metro:** la tabella completa, i test di controllo passati, e la risposta alla domanda «il bot può eseguire una strategia scritta come codice?». **Non cambia:** bot, gate, paper, registro; le letture del 7 e 14 ott restano.
 
