@@ -75,8 +75,9 @@ Dimensione, leva e liquidazione (scelte documentate)
 * Se nella stessa barra il mark tocca la liquidazione E la serie stop tocca lo
   stop (senza gap), vince lo stop se e' piu' vicino all'entrata della
   liquidazione (il prezzo deve passare prima da li'), altrimenti la liquidazione.
-* Lo stop SCATTA sulla serie stop (di norma il mark price, su cui nessuno
-  scambia) ma si RIEMPIE sul last price: il prezzo di riferimento e' lo stop
+* Lo stop SCATTA sulla serie stop (per il protocollo il last price,
+  ``serie_stop`` di parametri.yaml, cioe' ``candele_stop=None``; se si passasse il
+  mark price, su cui nessuno scambia) ma si RIEMPIE sul last price: il prezzo di riferimento e' lo stop
   (o l'apertura del last, se la serie stop apre gia' oltre lo stop), ma mai
   fuori dall'intervallo low-high del last nella barra. Se il last non e' mai
   sceso fino allo stop di un long, il riempimento e' il minimo del last (il
@@ -816,14 +817,14 @@ def esegui(
 # ---------------------------------------------------------------------------
 
 
-def _strategia_nuova(crea_strategia: Callable[[], Strategia], chi: str) -> Strategia:
-    """Chiama la fabbrica e controlla che restituisca una strategia."""
+def _strategia_nuova(crea_strategia: Callable[..., Strategia], chi: str, attesa: str, *argomenti) -> Strategia:
+    """Chiama la fabbrica (con ``argomenti``) e controlla che restituisca una strategia."""
     try:
-        strategia = crea_strategia()
+        strategia = crea_strategia(*argomenti)
     except TypeError as e:
         raise TypeError(
-            f"{chi} vuole la FUNZIONE che crea la strategia (senza argomenti), non la strategia: "
-            f"ogni esecuzione del motore usa un'istanza nuova (sezione 7). Errore: {e}"
+            f"{chi} vuole {attesa}: ogni esecuzione del motore usa un'istanza nuova "
+            f"della strategia (sezione 7). Errore: {e}"
         ) from e
     if not callable(strategia):
         raise TypeError(f"{chi}: la fabbrica deve restituire una strategia (una funzione di storia e posizione)")
@@ -869,7 +870,8 @@ def conta_trade(
     (stop o target dalla parte sbagliata), ``segnali_senza_barra`` (segnali
     troppo vicini alla fine dei dati) e ``barre`` (candele usate).
     """
-    strategia = _strategia_nuova(crea_strategia, "conta_trade")
+    strategia = _strategia_nuova(crea_strategia, "conta_trade",
+                                 "crea() SENZA argomenti, la funzione che crea la strategia della variante")
     if not candele:
         return {"trade": 0, "long": 0, "short": 0, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 0}
     for nome, serie in (("candele", candele), ("candele_stop", candele_stop), ("candele_mark", candele_mark)):
@@ -943,9 +945,16 @@ def simula_baseline_casuale(
     restano meno di 2, ValueError. Se ``entrate_casuali`` non trova ``n_trade``
     ingressi, alza ValueError: la variante e' non valutabile contro la (b).
 
-    Ritorna il dizionario di ``statistica.baseline_casuale`` sugli R medi (media,
-    errore_standard, n_simulazioni, percentile_90, valori) piu'
-    ``trade_per_simulazione`` e ``simulazioni_vuote``.
+    Gli ingressi casuali si estraggono solo fra le barre in cui il segnale
+    della variante e' valido: le altre vanno in ``barre_vietate``
+    (``barre_vietate_segnale_non_valido``). I segnali scartati comunque dal
+    motore si contano per simulazione e si riportano.
+
+    Ritorna il dizionario di ``statistica.baseline_casuale`` sugli R medi (tipo
+    "b", media, errore_standard, errore_minimo_candidato, n_simulazioni,
+    percentile_90, valori) piu' ``trade_per_simulazione``, ``simulazioni_vuote``,
+    ``segnali_non_validi_per_simulazione`` e ``segnali_senza_barra_per_simulazione``.
+    Si passa cosi' com'e' a ``statistica.contro_baseline``.
     """
     from research.src import statistica  # import qui: statistica non dipende dal motore
 
@@ -955,11 +964,21 @@ def simula_baseline_casuale(
     vietate = list(barre_vietate) + [(len(candele) - 1, len(candele))]
     r_medi: List[float] = []
     trade_per_sim: List[int] = []
+    non_validi: List[int] = []
+    senza_barra: List[int] = []
     vuote = 0
-    for seme in range(primo_seme, primo_seme + n_simulazioni):
-        ingressi = frozenset(statistica.entrate_casuali(len(candele), n_trade, durata_media, seme, vietate))
-        strategia = _strategia_nuova(lambda: crea_strategia_casuale(ingressi), "simula_baseline_casuale")
+    semi = list(range(primo_seme, primo_seme + n_simulazioni))
+    tutti_gli_ingressi = statistica.entrate_casuali_per_semi(len(candele), n_trade, durata_media, semi, vietate)
+    for ingressi_lista in tutti_gli_ingressi:
+        ingressi = frozenset(ingressi_lista)
+        strategia = _strategia_nuova(
+            crea_strategia_casuale, "simula_baseline_casuale",
+            "crea_casuale(ingressi): una funzione con UN argomento (l'insieme degli indici delle barre di "
+            "segnale) che restituisce la strategia CASUALE: alla chiusura di quelle barre il segnale della "
+            "variante, poi la sua uscita", ingressi)
         ris = esegui(candele, candele_stop, candele_mark, list(funding), strategia, parametri)
+        non_validi.append(ris.n_segnali_non_validi)
+        senza_barra.append(ris.n_segnali_senza_barra)
         if not ris.trades:
             vuote += 1
             continue
@@ -970,7 +989,53 @@ def simula_baseline_casuale(
     base = statistica.baseline_casuale(r_medi)
     base["trade_per_simulazione"] = trade_per_sim
     base["simulazioni_vuote"] = vuote
+    base["segnali_non_validi_per_simulazione"] = non_validi
+    base["segnali_senza_barra_per_simulazione"] = senza_barra
     return base
+
+
+def barre_vietate_segnale_non_valido(
+    candele: List[Candela],
+    crea_segnale: Callable[[], Callable[[Sequence[Candela]], Optional[Segnale]]],
+    parametri: Parametri,
+) -> List[Tuple[int, int]]:
+    """Le barre in cui il segnale della variante NON sarebbe valido, da vietare alla (b).
+
+    ``crea_segnale()`` restituisce la funzione che, date le barre chiuse fino a
+    una barra, calcola il Segnale che la variante emetterebbe li' (direzione,
+    stop, target) SENZA la condizione d'ingresso, oppure None se non si puo'
+    calcolare (per esempio durante il riscaldamento degli indicatori). E' lo
+    stesso calcolo che la strategia casuale usa agli ingressi.
+
+    Una barra i e' vietata se il segnale e' None, se e' l'ultima barra, o se il
+    motore lo scarterebbe entrando all'apertura della barra i + 1 (stop o target
+    dalla parte sbagliata dell'entrata con lo slippage). Senza questo, gli
+    ingressi casuali della (b) cadrebbero anche dove il segnale non e' valido, il
+    motore li scarterebbe in silenzio e la (b) terrebbe solo le barre in cui
+    stop e target sono validi: meta' della condizione d'ingresso dentro la
+    baseline (revisione del 7 ott 2026). Le barre vietate si passano a
+    ``simula_baseline_casuale`` in ``barre_vietate`` (insieme al resto), e la
+    loro quota si riporta. Ritorna intervalli (inizio incluso, fine esclusa).
+    """
+    segnale_alla_barra = crea_segnale()
+    if not callable(segnale_alla_barra):
+        raise TypeError("crea_segnale() deve restituire una funzione delle barre chiuse")
+    vietate: List[Tuple[int, int]] = []
+    visibili: List[Candela] = []
+    n = len(candele)
+    for i, barra in enumerate(candele):
+        visibili.append(barra)
+        valida = False
+        if i < n - 1:
+            segnale = segnale_alla_barra(StoriaChiusa(visibili, i + 1))
+            if isinstance(segnale, Segnale):
+                valida = _apri_posizione(segnale, candele[i + 1], parametri.capitale_iniziale, parametri) is not None
+        if not valida:
+            if vietate and vietate[-1][1] == i:
+                vietate[-1] = (vietate[-1][0], i + 1)
+            else:
+                vietate.append((i, i + 1))
+    return vietate
 
 
 # ---------------------------------------------------------------------------

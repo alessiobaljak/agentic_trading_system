@@ -308,6 +308,11 @@ def baseline_casuale(r_medi_simulazioni: Sequence[float]) -> Dict[str, object]:
     * ``errore_standard``: l'errore di QUELLA media, deviazione standard degli R
       medi (ddof=1) divisa per la radice del numero di simulazioni. Con 200
       simulazioni e' circa un quattordicesimo dell'errore di una corsa sola;
+    * ``errore_minimo_candidato``: la deviazione standard degli R medi delle
+      simulazioni, cioe' l'errore della media di una strategia senza vantaggio
+      con gli stessi trade: e' il pavimento dell'errore del candidato in
+      ``contro_baseline``;
+    * ``tipo`` = "b";
     * ``n_simulazioni``, ``percentile_90`` (riferimento: il ``criterio_vault`` usa
       il 90° percentile delle ``simulazioni_caso`` del vault, non queste) e
       ``valori`` (per ``percentile_del_candidato``, che si riporta come indizio,
@@ -319,8 +324,13 @@ def baseline_casuale(r_medi_simulazioni: Sequence[float]) -> Dict[str, object]:
     if arr.size < 2:
         raise ValueError("servono almeno 2 simulazioni per stimare l'errore della media")
     return {
+        "tipo": "b",
         "media": float(arr.mean()),
         "errore_standard": float(arr.std(ddof=1) / math.sqrt(arr.size)),
+        # la dispersione degli R medi delle simulazioni e' l'errore di una
+        # strategia SENZA vantaggio con gli stessi trade: l'errore del candidato
+        # non si stima mai sotto questo pavimento (vedi ``contro_baseline``)
+        "errore_minimo_candidato": float(arr.std(ddof=1)),
         "n_simulazioni": int(arr.size),
         "percentile_90": float(np.percentile(arr, 90, method="linear")),
         "valori": arr,
@@ -365,25 +375,29 @@ def baseline_da_trade(r_baseline: Sequence[float], lunghezza_blocco: int, n: int
     correzione del blocco), con il blocco calcolato da ``lunghezza_blocco`` sui
     SUOI trade.
 
-    Ritorna ``media``, ``errore_standard``, ``n_trade``, ``n_blocchi`` e
-    ``valutabile``: False se i blocchi interi sono meno di MINIMO_BLOCCHI; in
-    quel caso l'errore e' infinito e nessun candidato puo' batterla nettamente
-    (il giudizio prudente).
+    Ritorna ``tipo`` = "a", ``media``, ``errore_standard``, ``n_trade``,
+    ``n_blocchi``, ``deviazione_standard`` (degli R dei suoi trade: divisa per la
+    radice dei trade del candidato da' il pavimento dell'errore del candidato in
+    ``contro_baseline``) e ``valutabile``: False se i blocchi interi sono meno di
+    MINIMO_BLOCCHI; in quel caso l'errore e' infinito e nessun candidato puo'
+    batterla nettamente (il giudizio prudente).
     """
     arr = _come_array(r_baseline, "r_baseline")
     b = int(lunghezza_blocco)
     if b < 1:
         raise ValueError("lunghezza_blocco deve essere almeno 1")
+    deviazione = float(arr.std(ddof=1)) if arr.size > 1 else 0.0
     if arr.size // b < MINIMO_BLOCCHI:
-        return {"media": float(arr.mean()), "errore_standard": math.inf, "n_trade": int(arr.size),
-                "n_blocchi": int(arr.size // b), "valutabile": False}
+        return {"tipo": "a", "media": float(arr.mean()), "errore_standard": math.inf, "n_trade": int(arr.size),
+                "n_blocchi": int(arr.size // b), "deviazione_standard": deviazione, "valutabile": False}
     errore, k = _errore_media_corretto(arr, b, n, seme)
-    return {"media": float(arr.mean()), "errore_standard": errore, "n_trade": int(arr.size),
-            "n_blocchi": int(k), "valutabile": True}
+    return {"tipo": "a", "media": float(arr.mean()), "errore_standard": errore, "n_trade": int(arr.size),
+            "n_blocchi": int(k), "deviazione_standard": deviazione, "valutabile": True}
 
 
-def _confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme) -> Dict[str, object]:
-    """Il calcolo comune di ``batte_nettamente`` e ``p_value_vs_baseline``."""
+def _confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme,
+               errore_minimo_candidato: float = 0.0) -> Dict[str, object]:
+    """Il calcolo comune di ``batte_nettamente``, ``p_value_vs_baseline`` e ``contro_baseline``."""
     from scipy.stats import t as student  # scipy e' fra le dipendenze del repo (requirements.txt)
 
     arr = _come_array(r_candidato, "r_candidato")
@@ -391,6 +405,11 @@ def _confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_st
     errore_base = float(baseline_errore_standard)
     if math.isnan(base) or math.isinf(base) or math.isnan(errore_base) or errore_base < 0:
         raise ValueError("baseline_media deve essere un numero finito e baseline_errore_standard non negativo")
+    pavimento = float(errore_minimo_candidato)
+    if not math.isfinite(pavimento) or pavimento < 0:
+        raise ValueError("errore_minimo_candidato deve essere un numero finito non negativo")
+    if not np.isfinite(arr).all():
+        raise ValueError("r_candidato contiene valori non finiti")
     b = int(lunghezza_blocco)
     if b < 1:
         raise ValueError("lunghezza_blocco deve essere almeno 1")
@@ -404,10 +423,17 @@ def _confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_st
     if k < MINIMO_BLOCCHI or math.isinf(errore_base):
         return non_valutabile
     errore_c, _ = _errore_media_corretto(arr, b, n, seme)
+    # Il pavimento: con R asimmetrici (molti piccoli guadagni, rare grandi
+    # perdite) i ricampionamenti con meno perdite hanno insieme media alta ed
+    # errore piccolo, e una serie di soli vincenti ha errore 0. L'errore del
+    # candidato non scende mai sotto quello di una strategia senza vantaggio con
+    # gli stessi trade (revisione del 7 ott 2026).
+    errore_c = max(errore_c, pavimento)
     errore = math.sqrt(errore_c ** 2 + errore_base ** 2)
-    if errore == 0.0:
-        # nessun rumore stimabile (serie costante e baseline senza errore): un
-        # errore 0 non e' una precisione infinita, e' una serie che non varia.
+    if errore_c == 0.0:
+        # nessun rumore stimabile nel candidato (serie costante, nessun
+        # pavimento): un errore 0 non e' una precisione infinita, e' una serie
+        # che non varia.
         return dict(non_valutabile, errore_candidato=0.0)
     gradi = k - 1
     soglia = float(student.ppf(LIVELLO_NETTAMENTE, gradi))
@@ -434,8 +460,14 @@ def batte_nettamente(
     baseline_errore_standard: float,
     n: int = 2000,
     seme: int = 0,
+    errore_minimo_candidato: float = 0.0,
 ) -> Dict[str, object]:
     """La regola «nettamente» della sezione 8 dalla versione 4.4. Una sola lettura.
+
+    Nelle campagne si usa attraverso ``contro_baseline``, che prende il numero
+    della baseline, il suo errore e il pavimento dell'errore del candidato dal
+    dizionario di ``baseline_casuale`` o ``baseline_da_trade``: cosi' nessuno li
+    passa a mano sbagliando.
 
     Il candidato (i suoi R, ORDINATI PER USCITA) batte nettamente una baseline se
     la differenza fra il suo R medio e il NUMERO della baseline supera la soglia
@@ -476,7 +508,46 @@ def batte_nettamente(
     ``p_value_vs_baseline``: netta vuol dire p_value < 0,02275), ``errore_candidato``
     (gia' corretto), ``n_blocchi`` e ``valutabile``.
     """
-    return _confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme)
+    return _confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme,
+                      errore_minimo_candidato)
+
+
+def contro_baseline(
+    r_candidato: Sequence[float],
+    lunghezza_blocco: int,
+    baseline: Dict[str, object],
+    n: int = 2000,
+    seme: int = 0,
+) -> Dict[str, object]:
+    """Il confronto della sezione 8 con una baseline gia' calcolata. E' QUESTO che si usa.
+
+    ``baseline`` e' il dizionario di ``baseline_casuale`` (o di
+    ``motore.simula_baseline_casuale``, che lo restituisce) per la (b), oppure di
+    ``baseline_da_trade`` per la (a). Da li' si prendono il numero, il suo errore
+    e il pavimento dell'errore del candidato:
+    * (b): la deviazione standard degli R medi delle simulazioni
+      (``errore_minimo_candidato``);
+    * (a): la deviazione standard degli R della (a) divisa per la radice del
+      numero di trade del candidato.
+    Una (a) non valutabile rende non valutabile anche il confronto (errore
+    infinito). Ritorna il risultato di ``batte_nettamente`` (``netta``, ``t``,
+    ``soglia``, ``p_value``, ``valutabile``...) piu' ``baseline_media``,
+    ``baseline_errore_standard`` ed ``errore_minimo``.
+    """
+    tipo = baseline.get("tipo")
+    arr = _come_array(r_candidato, "r_candidato")
+    if tipo == "b":
+        pavimento = float(baseline["errore_minimo_candidato"])
+    elif tipo == "a":
+        pavimento = float(baseline["deviazione_standard"]) / math.sqrt(arr.size)
+    else:
+        raise ValueError("baseline: serve il dizionario di baseline_casuale (tipo b) o di baseline_da_trade (tipo a)")
+    ris = _confronto(arr, lunghezza_blocco, float(baseline["media"]), float(baseline["errore_standard"]), n, seme,
+                     pavimento)
+    ris.update({"baseline_media": float(baseline["media"]),
+                "baseline_errore_standard": float(baseline["errore_standard"]),
+                "errore_minimo": pavimento})
+    return ris
 
 
 # ---------------------------------------------------------------------------
@@ -559,8 +630,12 @@ def p_value_vs_baseline(
     baseline_errore_standard: float,
     n: int = 2000,
     seme: int = 0,
+    errore_minimo_candidato: float = 0.0,
 ) -> float:
     """p-value unilaterale dell'asticella (sezione 8, dalla versione 4.4).
+
+    Nelle campagne si legge da ``contro_baseline(...)["p_value"]`` con la (b)
+    calcolata sul periodo di validazione.
 
     «La probabilita' di ottenere per caso un R medio cosi' superiore a quello
     dell'entrata casuale con la stessa uscita», sui trade di validazione: e' lo
@@ -573,7 +648,8 @@ def p_value_vs_baseline(
     baseline infinito, nessun rumore stimabile): 1.0, cioe' nessuna evidenza
     misurabile; il candidato non passa l'asticella.
     """
-    return float(_confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme)["p_value"])
+    return float(_confronto(r_candidato, lunghezza_blocco, baseline_media, baseline_errore_standard, n, seme,
+                            errore_minimo_candidato)["p_value"])
 
 
 def benjamini_hochberg(p_values: Sequence[float], q: float = 0.10) -> List[bool]:
@@ -775,6 +851,37 @@ def entrate_casuali(
             ammessi[lo:hi] = False
     if n_trade == 0:
         return []
+    return entrate_casuali_per_semi(n_barre, n_trade, durata_media_barre, [seme], barre_vietate)[0]
+
+
+def entrate_casuali_per_semi(
+    n_barre: int,
+    n_trade: int,
+    durata_media_barre: int,
+    semi: Sequence[int],
+    barre_vietate: Sequence[Tuple[int, int]] = (),
+) -> List[List[int]]:
+    """Come ``entrate_casuali``, per piu' semi, costruendo la tabella UNA volta.
+
+    La tabella delle configurazioni dipende solo da barre ammesse, numero di
+    trade e distanza, non dal seme: ricostruirla per ognuna delle 200
+    simulazioni della baseline (b) era il 60-80% del suo tempo (a 15 minuti,
+    decine di minuti per una (b)). Per ogni seme l'estrazione e' identica a
+    quella di ``entrate_casuali`` con lo stesso seme: stessi indici.
+    """
+    if n_barre <= 0:
+        raise ValueError("n_barre deve essere positivo")
+    if n_trade < 0:
+        raise ValueError("n_trade non puo' essere negativo")
+    distanza = max(1, int(durata_media_barre))
+    ammessi = np.ones(n_barre, dtype=bool)
+    for inizio, fine in barre_vietate:
+        lo = max(0, int(inizio))
+        hi = min(n_barre, int(fine))
+        if hi > lo:
+            ammessi[lo:hi] = False
+    if n_trade == 0:
+        return [[] for _ in semi]
     log_conf = _log_configurazioni(ammessi, n_trade, distanza)
     if not np.isfinite(log_conf[0, n_trade]):
         massimo = int(np.flatnonzero(np.isfinite(log_conf[0]))[-1])
@@ -782,6 +889,11 @@ def entrate_casuali(
             f"impossibile piazzare {n_trade} ingressi a distanza {distanza} "
             f"su {n_barre} barre con {int(ammessi.sum())} ammesse: ne entrano al massimo {massimo}"
         )
+    return [_estrai(ammessi, log_conf, n_trade, distanza, n_barre, seme) for seme in semi]
+
+
+def _estrai(ammessi: np.ndarray, log_conf: np.ndarray, n_trade: int, distanza: int, n_barre: int, seme: int) -> List[int]:
+    """L'estrazione uniforme di ``entrate_casuali`` per un seme, dalla tabella gia' fatta."""
     rng = np.random.default_rng(seme)
     # un'estrazione uniforme per barra, tirate tutte insieme: stesso seme,
     # stessi numeri, stessa configurazione.

@@ -129,7 +129,7 @@ def test_conta_trade_usa_gli_stessi_costi_del_test_vero():
 
 def test_conta_trade_vuole_la_fabbrica_non_la_strategia():
     candele = serie_a_dente(50)
-    with pytest.raises(TypeError, match="FUNZIONE"):
+    with pytest.raises(TypeError, match="SENZA argomenti"):
         motore.conta_trade(candele, strategia_ogni_k(5, "long", 2), candele[-1].close_ts, Parametri())
 
 
@@ -498,3 +498,96 @@ def test_parametri_yaml_uguali_alle_costanti_del_codice():
     assert regole["simulazioni_baseline_casuale"] == 200
     assert regole["semi_baseline_casuale"] == {"primo": 0, "ultimo": 199}
     assert regole["bootstrap"] == {"ricampionamenti": 2000, "seme": 0}
+
+
+# ---------------------------------------------------------------------------
+# revisione del 7 ott, secondo giro: pavimento dell'errore, contro_baseline,
+# ingressi casuali per piu' semi, segnali non validi nella (b), date della Fase 0
+# ---------------------------------------------------------------------------
+
+
+def test_soli_vincenti_contro_la_b_non_sono_netti():
+    # 30 trade tutti a +0,1R: senza pavimento l'errore del candidato e' 0 e il t
+    # esplode contro qualunque (b) con un minimo di errore. Il pavimento e'
+    # l'errore di una strategia senza vantaggio con gli stessi trade.
+    rng = np.random.default_rng(1)
+    base = st.baseline_casuale(list(rng.normal(0.0, 0.15, 200)))
+    r = st.contro_baseline([0.1] * 30, 1, base)
+    assert r["valutabile"] is True and r["netta"] is False
+    assert r["errore_minimo"] == pytest.approx(base["errore_minimo_candidato"])
+
+
+def test_contro_baseline_a_usa_la_deviazione_divisa_per_la_radice_dei_trade():
+    rng = np.random.default_rng(2)
+    a = st.baseline_da_trade(list(rng.normal(0.0, 0.8, 600)), 2)
+    cand = list(rng.normal(0.4, 0.8, 100))
+    r = st.contro_baseline(cand, 2, a)
+    assert r["errore_minimo"] == pytest.approx(a["deviazione_standard"] / 10.0)
+    assert r["netta"] is True
+    a_non_valutabile = st.baseline_da_trade(list(rng.normal(0, 1, 40)), 15)
+    r = st.contro_baseline(cand, 2, a_non_valutabile)
+    assert r["valutabile"] is False and r["netta"] is False and r["t"] == -math.inf
+
+
+def test_contro_baseline_rifiuta_un_dizionario_qualsiasi():
+    with pytest.raises(ValueError):
+        st.contro_baseline([0.1] * 30, 1, {"media": 0.0, "errore_standard": 0.0})
+
+
+def test_entrate_casuali_per_semi_uguali_a_entrate_casuali():
+    vietate = [(0, 30), (500, 520)]
+    insieme = st.entrate_casuali_per_semi(2000, 60, 7, list(range(10)), vietate)
+    for seme in range(10):
+        assert insieme[seme] == st.entrate_casuali(2000, 60, 7, seme, vietate)
+
+
+def _crea_segnale_ritorno_alla_media():
+    def segnale(storia):
+        if len(storia) < 20:
+            return None
+        media = sum(c.close for c in storia[-20:]) / 20
+        c = storia[-1].close
+        return Segnale("long", stop=c * 0.9, target=media)
+    return segnale
+
+
+def test_la_b_esclude_le_barre_dove_il_segnale_non_e_valido():
+    # Target sulla media: quando il prezzo sta sopra la media il target e' dalla
+    # parte sbagliata e il motore scarterebbe l'ingresso. Senza escludere quelle
+    # barre la (b) perde in silenzio circa meta' degli ingressi.
+    candele = serie_a_dente(800)
+    vietate = motore.barre_vietate_segnale_non_valido(candele, _crea_segnale_ritorno_alla_media, Parametri())
+    assert vietate and vietate[0][0] == 0  # il riscaldamento (segnale None) e' vietato
+
+    def crea_casuale(ingressi):
+        segnale = _crea_segnale_ritorno_alla_media()
+
+        def strategia(storia, posizione):
+            if posizione is None and (len(storia) - 1) in ingressi:
+                return segnale(storia)
+            return None
+        return strategia
+
+    senza = motore.simula_baseline_casuale(candele, crea_casuale, 30, 5, Parametri(), n_simulazioni=10)
+    con = motore.simula_baseline_casuale(candele, crea_casuale, 30, 5, Parametri(), barre_vietate=vietate,
+                                         n_simulazioni=10)
+    assert sum(senza["segnali_non_validi_per_simulazione"]) > 0
+    assert sum(con["segnali_non_validi_per_simulazione"]) == 0
+
+
+def test_simula_baseline_casuale_spiega_quale_fabbrica_vuole():
+    candele = serie_a_dente(200)
+    with pytest.raises(TypeError, match="UN argomento"):
+        motore.simula_baseline_casuale(candele, lambda: strategia_ogni_k(5, "long", 2), 10, 5, Parametri(),
+                                       n_simulazioni=3)
+
+
+def test_periodi_campagna_con_numeri_interi():
+    from datetime import date
+    from research.src import dati
+    bnb = dati.periodi_campagna(date(2020, 2, 1))
+    assert bnb["giorni"] == 1430 and bnb["giorni_costruzione"] == 1001  # in virgola mobile verrebbe 1000
+    assert bnb["fine_costruzione"] == date(2022, 10, 28) and bnb["fine_costruzione_ts"] == 1667001599999
+    btc = dati.periodi_campagna(date(2020, 1, 1))
+    assert btc["giorni"] == 1461 and btc["fine_costruzione"] == date(2022, 10, 18)
+    assert btc["fine_costruzione_ts"] == 1666137599999 and btc["inizio_validazione"] == date(2022, 10, 19)
