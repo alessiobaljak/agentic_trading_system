@@ -3049,3 +3049,16 @@ scartate con stime fra 70 e 99), budget pieno con i ritocchi delle idee vicine a
 Il rapporto raccomandava di non rifarle: superato da questa analisi. Trasparenza: leggendo le note di processo
 del log BTC il coordinamento ha visto la sintesi di una variante (nota F5-01); non entra in nessun documento
 del protocollo. Il proprietario ha anche chiesto di non parlare più di costi: regola aggiunta a `CLAUDE.md`.
+
+### 7 ottobre, 23:30: la versione 4.4 è scritta e rivista; manca il sì del proprietario
+
+Il proprietario ha detto «sì, rifalle con queste quattro modifiche». Il coordinamento ha scritto la versione 4.4 del
+protocollo e gli strumenti comuni, poi due giri di revisione avversaria (cinque revisori e cinque verificatori per
+giro) e un agente dedicato al guardiano. Primo giro: la regola «nettamente» fatta in modo semplice dava troppi falsi
+positivi; il guardiano lasciava leggere la storia dei commit, gli hash dell'archivio e gli strumenti GitHub; la
+scheda con la data di listing diceva se una moneta è delistata. Secondo giro: R asimmetrici, costi doppi e ritardo
+senza criterio vero, ordine di avvio della campagna, `git fetch` che stampa gli archivi, ingressi persi nella baseline
+casuale, date in virgola mobile. Corretto tutto tranne due punti del guardiano, che aspettano il rapporto di un
+attaccante dedicato. Commit sul principale: b9659df, c4248a3, f989853, 3cffbae; rapporto della prova aggiornato sul
+coordinamento (aa05619). Test: 710 della ricerca passano. Prossimo passo: il testo al proprietario; dopo il suo ok,
+archiviazione dei tre branch e riapertura delle tre campagne.
