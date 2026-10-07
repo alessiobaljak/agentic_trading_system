@@ -67,12 +67,12 @@ tutte.
   200 ore).** Soddisfa quattro condizioni su cinque: R 0,14, profit factor 1,30, sopra
   tutte le 200 entrate casuali condizionate alla stessa tendenza, R residuo dopo BTC 0,10,
   positivo nel 2021 e nel 2022, regge senza i 3 migliori. Fallisce la condizione «netta»
-  (differenza 0,17, margine 0,24, p 0,085). FASE5_I09
+  (differenza 0,17, margine 0,24, p 0,085). Fase 5 (500 entrate casuali, altro seme): percentile 99,6; con il giudizio «netta» a un campione (errore standard del solo candidato contro la media del caso) la differenza è 0,17 con margine 0,16: netta per un soffio. Resta fallita per il criterio registrato.
 * **I-05 long (continuazione dopo una barra oltre 3 deviazioni al rialzo).** R 0,24 al
   99,5° percentile, p 0,07, ma mediana −0,99 (metà dei trade finisce sullo stop), 2021
-  +0,56 e 2022 −0,13: è un'idea che vive nel rialzo del 2021. FASE5_I05
+  +0,56 e 2022 −0,13: è un'idea che vive nel rialzo del 2021. Fase 5: percentile 98,8; «netta» a un campione falsa (0,28 contro margine 0,31).
 * **I-01 long (momentum a 5 giorni su candele 4h).** R 0,26 e profit factor 1,64, ma
-  mediana −0,15 e senza i 3 trade migliori R 0,02: tre ingressi dell'estate 2021. FASE5_I01
+  mediana −0,15 e senza i 3 trade migliori R 0,02: tre ingressi dell'estate 2021. Fase 5: percentile 99,4; «netta» a un campione falsa (0,16 contro margine 0,39): la varianza di 3 trade.
 
 Regola 4 e 5 del protocollo: il criterio non si reinterpreta dopo aver visto i numeri. Le
 tre varianti sono fallite. L'osservazione sulla condizione «netta» è una proposta di metodo

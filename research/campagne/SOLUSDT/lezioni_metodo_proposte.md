@@ -7,7 +7,9 @@ Solo errori di metodo e trappole dei dati: niente idee, meccanismi o risultati. 
    sulle 200.** Lo strumento `differenza_nettamente` ricampiona due serie (candidato e una
    sola corsa casuale, la mediana) e somma i due errori: il margine viene largo e il
    giudizio può dire «non netto» a un candidato che sta sopra tutte e 200 le simulazioni.
-   Nella campagna è successo tre volte. Proposta: scrivere nel protocollo quale delle due
+   Nella campagna è successo tre volte; per una variante (log SOLUSDT-033) la versione a un
+   campione dice «netta» (0,17 contro 0,16) e quella a due campioni «non netta» (0,17 contro
+   0,24): la decisione dipende da quale versione si legge nel protocollo. Proposta: scrivere nel protocollo quale delle due
    versioni vale (percentile della distribuzione simulata, oppure differenza dalla MEDIA
    della distribuzione con l'errore standard del solo candidato), e usare sempre quella. In
    questa campagna ho rispettato il criterio registrato, come deve essere; la lezione è che

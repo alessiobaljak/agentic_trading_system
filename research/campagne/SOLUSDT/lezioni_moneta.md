@@ -78,7 +78,9 @@ il capitale).
    entrate casuali condizionate alla stessa tendenza, R residuo dopo BTC 0,10, regge senza i
    3 migliori (0,12). Fallisce la sola condizione «netta» contro la simulazione casuale
    mediana (differenza 0,17, margine 0,24, p 0,085). Il criterio era scritto prima del
-   test e vale così com'è: non è un candidato. È l'unica idea che varrebbe la pena riprovare
+   test e vale così com'è: non è un candidato. (Fase 5, informativa: contro 500 entrate
+   casuali con altro seme sta al 99,6° percentile; col giudizio «netta» a un campione passa
+   per un soffio, 0,17 contro 0,16.) È l'unica idea che varrebbe la pena riprovare
    in una campagna futura con una regola scritta meglio PRIMA (vedi lezioni di metodo).
 9. **Ritardo da BTC (I-10).** Il long ha R 0,08 ma R residuo dopo BTC 0,01: è BTC. Lo
    short perde. Nessun ritardo sfruttabile a 1 ora: SOL si muove insieme a BTC.
