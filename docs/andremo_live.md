@@ -3098,3 +3098,56 @@ ETHUSDT e SOLUSDT copia del branch in `research/archivio/campagna/<SIMBOLO>`, co
 git della sessione (HTTP 403: politica, non rete); non si riprova per altre vie. Serve che il proprietario li
 cancelli da GitHub; un controllo in background apre le tre campagne appena i nomi spariscono. Archiviate anche le
 quattro sessioni di campagna della prova (BTC, SOL, le due ETH), così nessuna può riscrivere sui nomi vecchi.
+
+### 8 ottobre, 07:15: le tre campagne riaperte con la versione 4.4
+
+Il proprietario ha cancellato da GitHub i tre nomi vecchi `research/campagna/<SIMBOLO>` (verificato: restano solo i
+tre archivi, con gli stessi hash, e il coordinamento). Aperte alle 05:13 UTC tre sessioni di campagna con il
+repository come sorgente esplicita e il messaggio di apertura della 4.4 (ordine di avvio della sezione 9, regole
+pratiche del guardiano, strumenti comuni, budget per intero, nessun accenno alla prova): BTCUSDT
+session_017QE4DEoPbuHDKpzc3gh9m3, ETHUSDT session_01HEDsRZbsCXFwsg5pwrfzgw, SOLUSDT session_016DsPdvdJrgz2v1tiYadgKj.
+Controllo del primo push entro 35 minuti; il coordinamento non legge le ipotesi fino al Passo 7.
+
+### 8 ottobre, 07:25: Bitcoin e Solana riaperte
+
+Alle 05:18 UTC la sessione ETHUSDT lavorava (branch creato, test del guardiano), mentre BTCUSDT e SOLUSDT risultavano
+ancora ferme all'istante di creazione. Il coordinamento le ha archiviate alle 05:19 e riaperte una alla volta:
+BTCUSDT session_01U7S57s6evHNkcLaH2xfzLE (05:19 UTC), SOLUSDT session_01PU8tnr13mv82SqNMA2VNY7 (05:20 UTC). Errore
+del coordinamento: SOLUSDT stava partendo proprio in quel momento (aggiornata alle 05:19:03); non aveva fatto nulla
+(nessun branch, nessuna memoria usata), quindi non si è perso lavoro. Lezione: una sessione nel cloud può metterci
+più di 5 minuti ad avviarsi; si giudica ferma solo dopo 20-25 minuti senza aggiornamenti.
+
+### 8 ottobre, 10:35: Bitcoin consegna con un candidato; Solana ferma su una domanda
+
+**BTCUSDT** (session_01U7S57s6evHNkcLaH2xfzLE) ha consegnato alle 06:47 UTC: 30 varianti (5 ritocchi, 25 famiglie),
+57 verifiche, una in validazione; dalla consegna, riga dell'esito: «Un candidato va al vault, con esito provvisorio:
+BTCUSDT-V10», che passa l'asticella con p-value 0,048 perché è l'unico candidato. È il primo candidato del
+protocollo. Il riassunto automatico della sessione diceva «none survived»: fa fede la consegna. Il vault si apre
+solo dopo le consegne di tutte le monete di campagna (Passo 5). La campagna ha trovato e corretto un errore del
+caricatore (il funding di Binance arriva fino a 47 ms dopo l'ora piena: 2.233 settlement su 4.383 per BTCUSDT 2020-
+2023, e il motore non lo riconosceva come momento ambiguo): commit 2fedf41, portato sul principale (adfb831, 1026
+test della ricerca passati) e unito nel branch di SOLUSDT (87ff673). ETHUSDT e SOLUSDT hanno usato il caricatore
+vecchio: effetto atteso piccolo (incassi di funding all'ingresso contati quando sono ambigui), da elencare fra i test
+da rieseguire al Passo 4. **SOLUSDT** (session_01PU8tnr13mv82SqNMA2VNY7) è ferma dalle 05:51 UTC su una domanda
+all'utente, che nessuno vedeva: una variante batte nettamente le due baseline ma ha R medio dopo i costi negativo;
+entra o no nell'ordine dei ritocchi? La regola 6 esclude le varianti che battono le due baseline «perché sono
+candidati», ma dalla 4.4 un candidato deve anche avere R medio positivo: il caso non è scritto. Lo decide il
+proprietario. Ritocchi e uso del budget: ETHUSDT 30 varianti senza ritocchi (consegnata alle 05:58 UTC).
+
+- 8 ott, 11:37: SOLUSDT ancora ferma sulla domanda delle 05:51 UTC (22 varianti, nessun ritocco); il proprietario ha il testo da incollare. BTCUSDT ed ETHUSDT consegnate.
+
+- 8 ott, 12:16: il proprietario ha risposto «sì» a SOLUSDT: una variante che batte le due baseline ma ha R medio dopo i costi non positivo entra nell'ordine dei ritocchi con il suo t contro la baseline (b). La regola va scritta nella 4.5 (backlog P1, punto 1). La sessione si è riattivata alle 10:14 UTC.
+
+- 8 ott, 12:25: il proprietario chiede che ogni nuova sessione di campagna usi Opus 5.5 con ultracode. Scritto in CLAUDE.md (sezione del protocollo) e nel backlog P1 per la 4.5. Le tre campagne aperte oggi lo rispettano già (get_session: modello claude-opus-5-5, ultracode attivo).
+
+### 8 ottobre, 13:40: tre consegne con la versione 4.4, un candidato
+
+SOLUSDT ha consegnato alle 11:19 UTC (session_01PU8tnr13mv82SqNMA2VNY7): «Nessuna strategia valida trovata per questa
+moneta»; 30 varianti (8 ritocchi, 22 famiglie), 41 verifiche, nessun candidato in validazione; 22 voci di
+correzione = ricalcolo delle varianti già fatte dopo la correzione del caricatore del funding. Riepilogo delle tre
+(conteggi dai log e righe dell'esito delle consegne): BTCUSDT 30 varianti, 5 ritocchi, 25 famiglie, 57 verifiche, 1
+candidato in validazione → «un candidato va al vault, con esito provvisorio» (p-value 0,048, unico candidato);
+ETHUSDT 30 varianti, 0 ritocchi, 30 famiglie, 6 verifiche, nessun candidato → nessuna strategia valida; SOLUSDT come
+sopra. Durate (ora di Roma): BTC 07:19-08:47; ETH 07:13-07:58; SOL 07:20-13:19, di cui 4 ore e 20 ferma sulla
+domanda dei ritocchi. Test da rieseguire prima del vault (Passo 4): le 30 varianti di ETHUSDT con il caricatore del
+funding corretto (BTC lo aveva già corretto nei suoi dati, SOL ha ricalcolato). STOP: decide il proprietario.

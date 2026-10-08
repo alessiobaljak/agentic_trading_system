@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato l'8 ottobre 2026, 06:20 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato l'8 ottobre 2026, 07:40 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
@@ -14,9 +14,9 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | nessuna voce nuova: aspetta il tuo ok il testo della versione 4.4 del protocollo (voce P0, gruppo 1) | una tua risposta |
-| **1. In lavorazione** | P0 (il protocollo di ricerca: prova di processo fatta il 7 ott; versione 4.4 scritta e rivista, da approvare; poi si rifanno le tre campagne), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
-| **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
+| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **1. In lavorazione** | P0 (il protocollo di ricerca: tre campagne 4.4 consegnate l'8 ott, un candidato al vault; allo STOP), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
 | **5. Solo se serve** | D1 | lo spazio del registro che finisce |
@@ -36,7 +36,7 @@ Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
 
-### P0. Il protocollo di ricerca per moneta — Passi 0, 1 e 2 fatti; il 7 ott il proprietario ha scelto di RIFARE le tre campagne della prova con la versione 4.4 («sì, rifalle con queste quattro modifiche»): stima dei trade unica, «nettamente» unico, minimo 70, budget per intero. Testo 4.4 scritto, rivisto in due giri avversari, sul branch principale (b9659df, c4248a3, 3cffbae): DA RIVEDERE DAL PROPRIETARIO; dopo il suo ok si archiviano i tre branch e si riaprono le tre campagne. La campagna di gruppo resta il passo dopo se anche così non esce niente
+### P0. Il protocollo di ricerca per moneta — versione 4.4 approvata l'8 ott; le tre campagne BTCUSDT, ETHUSDT e SOLUSDT rifatte e CONSEGNATE l'8 ott: BTCUSDT con un candidato al vault (esito provvisorio, p-value 0,048), ETHUSDT e SOLUSDT nessuna strategia valida. ALLO STOP: il proprietario decide come proseguire (altre 17 monete con la 4.5, oppure meno monete per arrivare prima al vault) e la rilettura di ETHUSDT con il caricatore del funding corretto
 **Perché:** cinque misure indipendenti dicono la stessa cosa: il gate non trova un vantaggio. Entrate a caso rendono come i segnali (240 trade, ops 0471); dopo la scelta del gate le validate fanno −0,03R su 182 segnali ±0,17 (ops 0498, lettura stampata: «la prossima modifica va nel gate»); una candidata nuova a caso non passa quasi mai (0 su 3.600, ops 0485); i costi superano il lordo (−0,089R netti, +0,088R di costi su 241, ops 0489); il gate rigiocato nel passato, su 8 date, dà promosse peggiori delle bocciate (−0,22R contro −0,14R su 45 trade, non decide, ops 0502). Aspettare il 14 ott non cambia il verdetto.
 **Cosa:** salvare `research/PROTOCOLLO.md` (versione 4.2, rivista il 5 ott) ed eseguire il **Passo 0**: fatti (fonte dati e contratti delistati, commissioni, serie degli stop, regole di dimensione e forma di esecuzione del bot), motore con il blocco del periodo chiuso, test di controllo, tabella dei parametri da approvare. Non tocca dati di mercato né il bot. **Regola scritta prima:** il Passo 0 finisce con una tabella e uno STOP; nessuna campagna parte senza l'approvazione dei parametri. **Metro:** la tabella completa, i test di controllo passati, e la risposta alla domanda «il bot può eseguire una strategia scritta come codice?». **Non cambia:** bot, gate, paper, registro; le letture del 7 e 14 ott restano.
 
@@ -111,6 +111,35 @@ tutte le durate la differenza dal caso sta dentro il margine, il lavoro sui TP s
 e revisione critica nel diario; legata a T1 e a R1.
 
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
+
+### P1. Correzioni al protocollo emerse dalle campagne 4.4 (da raccogliere in una versione 4.5)
+**Perché (8 ott):** (1) la regola 6 esclude dai ritocchi le varianti che battono le due baseline «perché sono
+candidati», ma dalla 4.4 un candidato deve anche avere R medio dopo i costi positivo: una variante che batte il
+caso e perde dopo i costi non ha una regola (SOLUSDT si è fermata alle 05:51 UTC per chiederlo; DECISO dal proprietario l'8 ott alle 10:14 UTC: «sì», entra nell'ordine dei ritocchi con il suo t contro la (b)); (2) una campagna
+che fa una domanda resta ferma senza che nessuno la veda: 2 ore e 40 perse prima del controllo del coordinamento;
+(3) il proprietario chiede se rimettere un tempo minimo di lavoro o allargare il budget (8 ott); (4) ogni
+sessione di campagna usa il modello Opus 5.5 con ultracode attivo (richiesta del proprietario, 8 ott: già in
+CLAUDE.md, da scrivere nella sezione 9 del protocollo). **Cosa:** scrivere
+nella 4.5 la risposta del proprietario al punto 1; controlli del coordinamento ogni ora mentre una campagna lavora,
+con la domanda girata al proprietario; la scelta sul punto 3. **Non cambia:** le campagne in corso finiscono con le
+regole con cui sono partite, salvo la risposta del proprietario alla domanda di SOLUSDT. **Quando:** prima delle
+campagne del Passo 4.
+
+### G8. Una porta nel gate per direzione e mercato: niente long validati solo su mercati in salita
+**Perché (8 ott, domanda del proprietario: «con un mercato in discesa apriamo più long che short?»):** BTC
+−4,4% dal 5 all'8 ott (candele giornaliere Binance), e ieri il paper ha aperto 31 long e 9 short (ops 0551).
+Non è un caso isolato: con il regime ribassista all'apertura il paper ha aperto 60 long e 36 short, con quello
+rialzista 35 long e 58 short (ops 0538). La casella più frequente è «long mentre BTC scende»: 79 trade dal
+27 set, −0,229R a trade, la peggiore; «short mentre BTC sale» +0,134R su 48 (ops 0538; margine non stampato,
+stima a mano ~±0,3). Il 7 ott alle 04:18 12 long aperti in 5 minuti, −5,15 USDT (ops 0538). Il riduttore di
+size sui trade controcorrente non mostra effetto (−0,170R toccati contro −0,078, «non si vede ancora»).
+Era già previsto da J7 (archivio, 26 set): «se i trade contro il contesto perdono, il passo dopo è una porta
+nel gate per direzione × contesto». **Cosa:** il gate giudica ogni coppia anche per direzione e contesto di
+BTC (salita / discesa) sulla sua storia, e una coppia opera una direzione solo nel contesto in cui lì regge;
+regola e soglie scritte prima dei numeri. **Non cambia:** il paper non si ritocca da solo (sarebbe usarlo come
+training set); uscite, size e freni. **Metro:** il fuori campione delle coppie dopo la porta contro quelle di
+oggi, con la regola del 30 set. **Quando:** dopo la seconda lettura del 14 ott, se conferma «la prossima
+modifica va nel gate»; serve il sì del proprietario.
 
 ### C5. Costi allineati a quelli veri di Binance — SÌ del proprietario il 2 ott, da fare DOPO le letture del 14 ott
 Verifica sul codice e sulle tariffe ufficiali (FAQ Binance Futures, ricontrollata da un secondo
