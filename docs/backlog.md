@@ -115,7 +115,7 @@ e revisione critica nel diario; legata a T1 e a R1.
 ### P1. Correzioni al protocollo emerse dalle campagne 4.4 (da raccogliere in una versione 4.5)
 **Perché (8 ott):** (1) la regola 6 esclude dai ritocchi le varianti che battono le due baseline «perché sono
 candidati», ma dalla 4.4 un candidato deve anche avere R medio dopo i costi positivo: una variante che batte il
-caso e perde dopo i costi non ha una regola (SOLUSDT si è fermata alle 05:51 UTC per chiederlo); (2) una campagna
+caso e perde dopo i costi non ha una regola (SOLUSDT si è fermata alle 05:51 UTC per chiederlo; DECISO dal proprietario l'8 ott alle 10:14 UTC: «sì», entra nell'ordine dei ritocchi con il suo t contro la (b)); (2) una campagna
 che fa una domanda resta ferma senza che nessuno la veda: 2 ore e 40 perse prima del controllo del coordinamento;
 (3) il proprietario chiede se rimettere un tempo minimo di lavoro o allargare il budget (8 ott). **Cosa:** scrivere
 nella 4.5 la risposta del proprietario al punto 1; controlli del coordinamento ogni ora mentre una campagna lavora,
