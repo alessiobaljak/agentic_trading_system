@@ -56,7 +56,10 @@ def carica(tf: str, fine: date):
     comuni = {c.ts for c in last} & {c.ts for c in mark}
     last = [c for c in last if c.ts in comuni]
     mark = [c for c in mark if c.ts in comuni]
-    funding = dati.carica_funding(SIMBOLO, PRIMO_GIORNO, fine)
+    # I settlement nei file hanno fino a 47 ms di ritardo sull'ora piena (fase0_dati.md):
+    # si riportano al minuto, cosi' il motore riconosce i settlement all'apertura di una
+    # barra (momenti ambigui, sezione 7) invece di attribuirli alla barra intera.
+    funding = [(t - t % 60_000, r) for t, r in dati.carica_funding(SIMBOLO, PRIMO_GIORNO, fine)]
     _CACHE[chiave] = (last, mark, funding)
     return _CACHE[chiave]
 
