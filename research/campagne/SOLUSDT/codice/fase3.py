@@ -25,7 +25,7 @@ from varianti import VARIANTI, rendimenti  # noqa: E402
 def forza(vid, s, i):
     """La grandezza del segnale alla barra i, se la variante ne ha una (None altrimenti)."""
     c = s.last
-    if vid in ("SOLUSDT-014", "SOLUSDT-015"):
+    if vid in ("SOLUSDT-014", "SOLUSDT-015", "SOLUSDT-025"):
         per_ts = {x.ts: k for k, x in enumerate(c)}
         j = per_ts.get(c[i].ts - 23 * 3_600_000)
         return None if j is None else c[j].close / c[j].open - 1
@@ -77,7 +77,7 @@ def principale(vid):
     for nome, m in (("btc_su", btc == 1), ("btc_giu", btc == -1)):
         if m.sum():
             out[nome] = {"trade": int(m.sum()), "r_medio": round(float(r[m].mean()), 4)}
-    if vid in ("SOLUSDT-014", "SOLUSDT-015"):
+    if vid in ("SOLUSDT-014", "SOLUSDT-015", "SOLUSDT-025"):
         # Gao et al. (2018): anche la penultima mezz'ora (qui la barra di segnale 23:00-23:30) e il resto del giorno
         c = s.last
         per_ts = {x.ts: k for k, x in enumerate(c)}

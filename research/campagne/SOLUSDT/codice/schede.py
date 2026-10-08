@@ -105,7 +105,15 @@ EXTRA["SOLUSDT-025"] = ("SOLUSDT-015", "SOLUSDT-015",
 S["SOLUSDT-025"] = ("I-09", "prima mezz'ora UTC -> ultima mezz'ora, stop 3 ATR", "short",
                     {"condizione": "alla chiusura della barra 23:00-23:30 UTC, close < open della barra 00:00-00:30 dello stesso giorno", "stop": "3 ATR(14) sopra", "target": None, "uscita": "a tempo dopo 1 barra"},
                     "R medio fra -0,02 e +0,01; t contro la (b) fra 1,5 e 2,3 (lo stop cambia la scala dell'R per candidato e (b) insieme)")
-TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m", "SOLUSDT-025": "30m"}
+EXTRA["SOLUSDT-026"] = ("SOLUSDT-015", "SOLUSDT-025",
+                        "aggiunge a 025 il filtro 'close della barra di segnale sotto la SMA di 200 barre (30m)'. Perche': "
+                        "studio dei fallimenti di 025 sui dati di costruzione (voce SOLUSDT-N023): sopra la media R -0,028 su "
+                        "173 trade, sotto +0,009 su 193; distanza dalla SMA200 in terzili +0,005 / -0,009 / -0,021. Stesso "
+                        "timeframe, direzione, stop (3 ATR) e uscita di 025.")
+S["SOLUSDT-026"] = ("I-09", "prima mezz'ora UTC -> ultima mezz'ora, stop 3 ATR, solo sotto la SMA200", "short",
+                    {"condizione": "alla chiusura della barra 23:00-23:30 UTC, close < open della barra 00:00-00:30 dello stesso giorno, e close < SMA200 (30m)", "stop": "3 ATR(14) sopra", "target": None, "uscita": "a tempo dopo 1 barra"},
+                    "R medio fra -0,01 e +0,02; t contro la (b) fra 1,5 e 3 (filtro scelto sui dati di costruzione)")
+TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m", "SOLUSDT-025": "30m", "SOLUSDT-026": "30m"}
 TF.update(TF_EXTRA)
 
 
