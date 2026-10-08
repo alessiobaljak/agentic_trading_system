@@ -379,3 +379,112 @@ le C1-C9 le spiegazioni concorrenti siano almeno 10 (regola della Fase 1, punto 
    la costruzione utile parte dal 2021.
    * **V24 (long).** Close ≥ 0,95 × massimo degli high delle 365 barre precedenti → long;
      stop 6% sotto il close; «chiudi» dopo 5 barre.
+
+---
+
+# Seconda tornata di idee nuove (scritta dopo il primo lotto, prima dei suoi test)
+
+Il primo lotto (V01-V24) e' nel log. Queste idee vengono da fonti diverse e da meccanismi
+non ancora provati; nessuna e' scelta guardando i risultati del primo lotto, con una
+eccezione dichiarata qui sotto. Restano 10 varianti di budget.
+
+**Idea esclusa e perche'.** Il ritorno alla media settimanale (Bruce N. Lehmann, «Fads,
+Martingales, and Market Efficiency», Quarterly Journal of Economics 105(1), 1990: chi ha
+perso nella settimana guadagna nella successiva) su BTC sarebbe «long dopo una settimana
+negativa, per una settimana»: e' lo specchio di V02, di cui ho gia' visto il risultato.
+Sceglierla ora vorrebbe dire scegliere guardando un risultato: non si prova.
+
+Le spiegazioni concorrenti comuni C1-C9 valgono anche qui.
+
+## I-14 — Il giorno piu' stretto di sette (NR7)
+
+1. **Fonte.** Toby Crabel, «Day Trading with Short Term Price Patterns and Opening Range
+   Breakout», Traders Press, 1990: un giorno con il range piu' stretto degli ultimi sette
+   annuncia un'espansione il giorno dopo; si entra sulla rottura del suo massimo o minimo.
+2. **Affermazione.** Il giorno dopo un NR7, una chiusura oraria sopra il massimo (sotto il
+   minimo) del giorno NR7 e' seguita, fino a fine giornata, da un R medio superiore a un
+   long (short) entrato a caso con la stessa uscita. Falsa se non batte la (b).
+3. **Sotto-domande.** L'espansione ha una direzione prevedibile o e' solo volatilita'?
+   Chi opera: chi vende volatilita' nei giorni calmi e si copre alla rottura, ordini stop
+   ai bordi del range stretto.
+4. **Spiegazioni proprie.** P1: espansione dopo compressione, direzione data dalla
+   rottura: R positivo nei due versi. P2: l'espansione c'e' ma la rottura e' falsa quanto
+   vera: R vicino a zero. P3: e' la stessa cosa di I-06 (rottura di giornata): R simile a
+   V10 e V11.
+5. Come in tabella comune.
+6. **Ipotesi.** Timeframe 1h (si guarda la rottura dentro la giornata; il giorno NR7 si
+   calcola dalle 24 barre orarie di ciascun giorno UTC, servono tutte e 24 per ciascuno dei
+   7 giorni). Un solo ingresso per giorno, nessun segnale sulla barra delle 23:00, uscita
+   alla chiusura della barra delle 23:00 UTC.
+   * **V25 (long).** Ieri e' un NR7 (range di ieri < range di ciascuno dei 6 giorni prima)
+     e il close orario supera per la prima volta nel giorno il massimo di ieri → long; stop
+     = minimo di ieri.
+   * **V26 (short).** Specchio: close sotto il minimo di ieri → short; stop = massimo di
+     ieri.
+
+## I-15 — La «molla» e la «spinta» (falsa rottura)
+
+1. **Fonte.** Henry O. Pruden, «The Three Skills of Top Trading: Behavioral Systems
+   Building, Pattern Recognition, and Mental State Management», Wiley, 2007 (il metodo di
+   Wyckoff: la «spring» e' una discesa sotto il supporto che rientra subito, l'«upthrust»
+   lo specchio sopra la resistenza; segnalano che l'offerta, o la domanda, e' esaurita).
+2. **Affermazione.** Una barra a 4 ore che scende sotto il minimo delle 20 barre
+   precedenti ma chiude sopra quel minimo e' seguita da un R medio long superiore a un
+   long a caso con la stessa uscita (V27); specchio per lo short (V28). Falsa se non batte
+   la (b).
+3. **Sotto-domande.** Conta il volume della barra? Quanto sotto il supporto? Chi opera:
+   chi fa scattare gli stop sotto il minimo e poi compra (raccolta di liquidita'), chi
+   vende in ritardo.
+4. **Spiegazioni proprie.** P1: raccolta di liquidita' sotto il minimo, poi rialzo: R
+   positivo. P2: la falsa rottura e' solo rumore attorno a un livello: R vicino a zero.
+   P3: e' il contrario di I-02: se le rotture proseguono (V03 e V04), le false rotture
+   perdono.
+5. Come in tabella comune.
+6. **Ipotesi.** Timeframe 4h; stop appena oltre l'estremo della barra; uscita dopo 6 barre
+   (un giorno).
+   * **V27 (long).** low < minimo dei low delle 20 barre precedenti e close > quel minimo
+     → long; stop = low della barra × 0,999; «chiudi» dopo 6 barre.
+   * **V28 (short).** high > massimo degli high delle 20 barre precedenti e close < quel
+     massimo → short; stop = high della barra × 1,001; «chiudi» dopo 6 barre.
+
+## I-16 — Prezzo che supera la media mobile di 50 periodi
+
+1. **Fonte.** William Brock, Josef Lakonishok, Blake LeBaron, «Simple Technical Trading
+   Rules and the Stochastic Properties of Stock Returns», Journal of Finance 47(5),
+   dicembre 1992: la regola della media mobile variabile (comprare quando il prezzo supera
+   la media di 50 periodi oltre una banda dell'1%) dava rendimenti superiori a quelli dei
+   modelli nulli.
+2. **Affermazione.** Dopo che il close a 4 ore supera la SMA(50) di oltre l'1% (dal basso),
+   la posizione long tenuta finche' il close non scende sotto la SMA(50) dell'1% ha un R
+   medio superiore a un long a caso con la stessa uscita. Falsa se non batte la (b).
+3. **Sotto-domande.** Funziona solo nei trend lunghi? Chi opera: chi segue il trend per
+   regola, chi entra in ritardo.
+4. **Spiegazioni proprie.** P1: trend persistenti: R positivo con pochi trade grandi. P2:
+   a 4 ore le medie sono rumore: molte entrate e uscite in perdita, R negativo. P3: e' lo
+   stesso trend di I-01 e I-02: R simile a V03.
+5. Come in tabella comune.
+6. **Ipotesi.** Timeframe 4h (la fonte usa giorni; a 1d in costruzione gli incroci sono
+   poche decine). Solo long, una variante (la fonte prova soprattutto i segnali d'acquisto).
+   * **V29 (long).** close > 1,01 × SMA(50) e close precedente ≤ 1,01 × SMA(50) precedente
+     → long; stop = close − 3 × ATR(14); «chiudi» quando close < 0,99 × SMA(50).
+
+## I-17 — Il premio del volume alto
+
+1. **Fonte.** Simon Gervais, Ron Kaniel, Dan H. Mingelgrin, «The High-Volume Return
+   Premium», Journal of Finance 56(3), giugno 2001: dopo un periodo con volume insolitamente
+   alto (il piu' alto del periodo di riferimento di 50) il prezzo sale nel periodo
+   successivo, perche' il volume attira attenzione e nuovi compratori.
+2. **Affermazione.** Dopo una barra a 4 ore con il volume piu' alto delle 50 barre (la
+   barra e le 49 precedenti), le 6 barre successive hanno un R medio long superiore a un
+   long a caso con la stessa uscita. Falsa se non batte la (b).
+3. **Sotto-domande.** Dipende dal segno della barra di volume alto? Chi opera: nuovi
+   compratori attirati dall'attenzione; oppure liquidazioni (volume alto nei crolli).
+4. **Spiegazioni proprie.** P1: attenzione e nuovi compratori: R positivo. P2: il volume
+   alto e' quasi sempre un crollo o un'impennata (liquidazioni): dopo, ritorno alla media,
+   direzione legata al segno della barra. P3: la fonte e' su azioni in sezione trasversale;
+   in serie storica su una moneta sola l'effetto puo' non esistere.
+5. Come in tabella comune.
+6. **Ipotesi.** Timeframe 4h (la fonte usa giorni e settimane; a 1d i segnali in
+   costruzione sono poche decine). Volume in moneta base (colonna `volume`).
+   * **V30 (long).** volume della barra > volume di ciascuna delle 49 barre precedenti →
+     long; stop = close − 2 × ATR(14); «chiudi» dopo 6 barre.

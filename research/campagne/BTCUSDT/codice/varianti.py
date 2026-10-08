@@ -573,4 +573,165 @@ def v24():
     return Variante("V24", tf, "long", prepara, condizione, _stop_pct("long", 0.06), _uscita_tempo(5, tf))
 
 
-TUTTE = {f"V{n:02d}": globals()[f"v{n:02d}"] for n in range(1, 25)}
+# ---------------------------------------------------------------------------
+# I-14 NR7, 1h
+# ---------------------------------------------------------------------------
+
+def _i14(direzione, vid):
+    tf = "1h"
+    GIORNO = 86_400_000
+
+    def prepara(candele):
+        giorni = {}
+        for c in candele:
+            d = giorni.setdefault(c.ts // GIORNO, {"high": -math.inf, "low": math.inf, "n": 0})
+            d["high"] = max(d["high"], c.high)
+            d["low"] = min(d["low"], c.low)
+            d["n"] += 1
+        return giorni
+
+    def _ieri(stato, storia):
+        g = storia[-1].ts // GIORNO
+        dd = [stato.get(g - k) for k in range(1, 8)]
+        if any(d is None or d["n"] != 24 for d in dd):
+            return None
+        rng = [d["high"] - d["low"] for d in dd]
+        return dd[0], all(rng[0] < r for r in rng[1:])
+
+    def condizione(stato, storia):
+        x = _ieri(stato, storia)
+        if x is None:
+            return None
+        ieri, nr7 = x
+        ts = storia[-1].ts
+        if not nr7 or (ts % GIORNO) // 3_600_000 == 23:
+            return False
+        oltre = (lambda c: c > ieri["high"]) if direzione == "long" else (lambda c: c < ieri["low"])
+        if not oltre(storia[-1].close):
+            return False
+        inizio = ts - ts % GIORNO
+        k = len(storia) - 2
+        while k >= 0 and storia[k].ts >= inizio:
+            if oltre(storia[k].close):
+                return False
+            k -= 1
+        return True
+
+    def segnale(stato, storia):
+        x = _ieri(stato, storia)
+        if x is None:
+            return None
+        ieri = x[0]
+        return Segnale(direzione, stop=ieri["low"] if direzione == "long" else ieri["high"])
+
+    def uscita(stato, storia, pos):
+        return "chiudi" if (storia[-1].ts % GIORNO) // 3_600_000 == 23 else None
+
+    return Variante(vid, tf, direzione, prepara, condizione, segnale, uscita)
+
+
+def v25():
+    return _i14("long", "V25")
+
+
+def v26():
+    return _i14("short", "V26")
+
+
+# ---------------------------------------------------------------------------
+# I-15 molla e spinta, 4h
+# ---------------------------------------------------------------------------
+
+def _i15(direzione, vid):
+    tf = "4h"
+
+    def prepara(candele):
+        h, l = arr(candele, "high"), arr(candele, "low")
+        return per_ts(candele, max20=massimo_precedente(h, 20), min20=minimo_precedente(l, 20))
+
+    def condizione(stato, storia):
+        s = stato[storia[-1].ts]
+        if nan(s["min20"]):
+            return None
+        b = storia[-1]
+        if direzione == "long":
+            return b.low < s["min20"] and b.close > s["min20"]
+        return b.high > s["max20"] and b.close < s["max20"]
+
+    def segnale(stato, storia):
+        b = storia[-1]
+        return Segnale(direzione, stop=b.low * 0.999 if direzione == "long" else b.high * 1.001)
+
+    return Variante(vid, tf, direzione, prepara, condizione, segnale, _uscita_tempo(6, tf))
+
+
+def v27():
+    return _i15("long", "V27")
+
+
+def v28():
+    return _i15("short", "V28")
+
+
+# ---------------------------------------------------------------------------
+# I-16 media mobile di 50 con banda dell'1%, 4h
+# ---------------------------------------------------------------------------
+
+def v29():
+    tf = "4h"
+
+    def prepara(candele):
+        c = arr(candele, "close")
+        m = sma(c, 50)
+        prec = np.full(c.size, np.nan)
+        prec_m = np.full(c.size, np.nan)
+        prec[1:] = c[:-1]
+        prec_m[1:] = m[:-1]
+        return per_ts(candele, m=m, prec=prec, prec_m=prec_m, atr14=atr(candele, 14))
+
+    def condizione(stato, storia):
+        s = stato[storia[-1].ts]
+        if nan(s["prec_m"]) or nan(s["atr14"]):
+            return None
+        return storia[-1].close > 1.01 * s["m"] and s["prec"] <= 1.01 * s["prec_m"]
+
+    def segnale(stato, storia):
+        s = stato[storia[-1].ts]
+        if nan(s["atr14"]):
+            return None
+        return Segnale("long", stop=storia[-1].close - 3 * s["atr14"])
+
+    def uscita(stato, storia, pos):
+        s = stato[storia[-1].ts]
+        return "chiudi" if not nan(s["m"]) and storia[-1].close < 0.99 * s["m"] else None
+
+    return Variante("V29", tf, "long", prepara, condizione, segnale, uscita)
+
+
+# ---------------------------------------------------------------------------
+# I-17 volume alto, 4h
+# ---------------------------------------------------------------------------
+
+def v30():
+    tf = "4h"
+
+    def prepara(candele):
+        v = arr(candele, "volume")
+        return per_ts(candele, vol=v, max49=massimo_precedente(v, 49), atr14=atr(candele, 14))
+
+    def condizione(stato, storia):
+        s = stato[storia[-1].ts]
+        if nan(s["max49"]) or nan(s["atr14"]):
+            return None
+        return s["vol"] > s["max49"]
+
+    def segnale(stato, storia):
+        s = stato[storia[-1].ts]
+        if nan(s["atr14"]):
+            return None
+        return Segnale("long", stop=storia[-1].close - 2 * s["atr14"])
+
+    return Variante("V30", tf, "long", prepara, condizione, segnale, _uscita_tempo(6, tf))
+
+
+TUTTE = {f"V{n:02d}": globals()[f"v{n:02d}"] for n in range(1, 31)}
