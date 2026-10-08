@@ -18,12 +18,11 @@ data_bozza: 2026-10-06
 # approvato le quattro modifiche il 7 ott («sì, rifalle con queste quattro
 # modifiche»): stima dei trade unica, lettura unica di «nettamente», minimo in
 # costruzione da 100 a 70, budget usato per intero; piu' le correzioni nate dalla
-# loro revisione. Il testo della 4.4 va rivisto dal proprietario prima di
-# riaprire le campagne. Nessun valore e' stato scelto per far passare una
+# loro revisione. Testo approvato dal proprietario l'8 ott 2026 alle 05:08 UTC. Nessun valore e' stato scelto per far passare una
 # strategia: il dettaglio e' in PROTOCOLLO.md, appendice 3.
 modifiche_4_4:
   approvate_il: 2026-10-07
-  testo_protocollo: da_rivedere_dal_proprietario
+  testo_protocollo: approvato_2026-10-08T05:08Z
 
 # --------------------------------------------------------------------------- #
 # 3.1 Periodi (fissi)

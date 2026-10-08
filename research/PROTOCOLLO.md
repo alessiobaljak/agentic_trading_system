@@ -1,6 +1,6 @@
 # Protocollo di ricerca strategie crypto — versione 4.4
 
-> Versione 4.4, scritta il 7 ottobre 2026 dopo la prova di processo (Passo 2). Il proprietario ha approvato le quattro modifiche il 7 ottobre («sì, rifalle con queste quattro modifiche»): una sola stima dei trade, una sola lettura di «nettamente», minimo in costruzione da 100 a 70 trade, budget usato per intero. Il testo è da rivedere dal proprietario prima di riaprire le campagne; all'approvazione qui si scrive l'istante esatto, in UTC (serve al controllo della sezione 9).
+> Versione 4.4, scritta il 7 ottobre 2026 dopo la prova di processo (Passo 2). Il proprietario ha approvato le quattro modifiche il 7 ottobre («sì, rifalle con queste quattro modifiche»): una sola stima dei trade, una sola lettura di «nettamente», minimo in costruzione da 100 a 70 trade, budget usato per intero. **Testo approvato dal proprietario il 2026-10-08 alle 05:08 UTC** («ok alla 4.4, archivia e riapri le tre campagne»): è l'istante che usa il controllo della sezione 9.
 > La versione 4.3 era stata approvata il 6 ottobre 2026 («sì alla 4.3, sì ai branch, vai col Passo 0»). Questo file è la versione operativa del protocollo. Le modifiche rispetto alla versione 4.2 sono nella prima appendice, i ritocchi del 6 ottobre nella seconda, le modifiche della 4.4 nella terza.
 
 ## Come usare questo file

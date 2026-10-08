@@ -75,7 +75,7 @@ o tolta.
 ## Il protocollo di ricerca (dal 6 ott 2026)
 
 Le strategie nuove nascono dal **protocollo di ricerca per moneta** (`research/PROTOCOLLO.md`,
-versione 4.3, approvata dal proprietario il 6 ott): idee con un perche', periodo chiuso
+versione 4.4, testo approvato dal proprietario l'8 ott 2026 alle 05:08 UTC): idee con un perche', periodo chiuso
 («vault», 2024-01-01 → 2026-09-30) che si apre una volta sola, un branch per campagna e un
 guardiano meccanico (`research/src/guardiano.py`, attivo solo se esiste `research/.sessione`).
 Chi lavora in una sessione di campagna legge solo i percorsi ammessi dal Passo 3 del
