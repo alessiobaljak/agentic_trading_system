@@ -22,6 +22,9 @@ F_OSLER03 = "Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Ex
 F_GERVAIS = "Simon Gervais, Ron Kaniel, Dan H. Mingelgrin, «The High-Volume Return Premium», Journal of Finance 56(3), 2001"
 F_BP = "Markus K. Brunnermeier e Lasse Heje Pedersen, «Market Liquidity and Funding Liquidity», Review of Financial Studies 22(6), 2009"
 F_OSLER00 = "Carol L. Osler, «Support for Resistance: Technical Analysis and Intraday Exchange Rates», FRBNY Economic Policy Review 6(2), luglio 2000"
+F_CHORDIA = "Tarun Chordia e Avanidhar Subrahmanyam, «Order imbalance and individual stock returns: Theory and evidence», Journal of Financial Economics 72(3), 2004"
+F_HESTON = "Steven L. Heston, Robert A. Korajczyk, Ronnie Sadka, «Intraday Patterns in the Cross-Section of Stock Returns», Journal of Finance 65(4), 2010"
+F_WILLIAMS = "Larry Williams, «Long-Term Secrets to Short-Term Trading», John Wiley & Sons, 1999"
 
 
 def _s(idea, fonte, meccanismo, regole, r_min, r_max, netta_b=False):
@@ -86,4 +89,16 @@ SCHEDE = {
                 "1h short: massimo della barra > massimo del giorno UTC prima e chiusura sotto; stop al massimo della barra piu' 0,25 ATR al massimo 6%; esce dopo 6 barre", -0.15, 0.10),
     "I-14b": _s("I-14", F_OSLER00, "supporto al minimo del giorno prima",
                 "1h long: minimo della barra < minimo del giorno UTC prima e chiusura sopra; stop al minimo della barra meno 0,25 ATR al massimo 6%; esce dopo 6 barre", -0.10, 0.15),
+    "I-15a": _s("I-15", F_CHORDIA, "squilibrio degli ordini: piu' acquisti a mercato, poi rialzo il giorno dopo",
+                "1d long: quota taker buy / volume del giorno > media dei 30 giorni precedenti; esce dopo 1 barra; stop al 6%", -0.10, 0.10),
+    "I-15b": _s("I-15", F_CHORDIA, "squilibrio degli ordini: piu' vendite a mercato, poi ribasso il giorno dopo",
+                "1d short: quota taker buy < media dei 30 giorni precedenti; esce dopo 1 barra; stop al 6%", -0.10, 0.10),
+    "I-16a": _s("I-16", F_HESTON, "periodicita' intragiornaliera: l'ora migliore dei 20 giorni passati",
+                "1h long: la prossima ora e' quella con la media piu' alta degli ultimi 20 rendimenti di ogni ora, se > 0; esce dopo 1 barra; stop a 2 ATR(14) al massimo 6%", -0.12, 0.00),
+    "I-16b": _s("I-16", F_HESTON, "periodicita' intragiornaliera: l'ora peggiore dei 20 giorni passati",
+                "1h short: la prossima ora e' quella con la media piu' bassa, se < 0; esce dopo 1 barra; stop a 2 ATR(14) al massimo 6%", -0.12, 0.00),
+    "I-17a": _s("I-17", F_WILLIAMS, "rottura di volatilita' verso l'alto dall'apertura del giorno",
+                "1h long: prima barra del giorno (apertura 00-22 UTC) con chiusura > apertura del giorno + 0,5 x escursione di ieri; esce alla chiusura della barra delle 23; stop all'apertura del giorno al massimo 6%", -0.10, 0.15),
+    "I-17b": _s("I-17", F_WILLIAMS, "rottura di volatilita' verso il basso dall'apertura del giorno",
+                "1h short: prima barra del giorno con chiusura < apertura del giorno - 0,5 x escursione di ieri; esce alla chiusura della barra delle 23; stop all'apertura del giorno al massimo 6%", -0.15, 0.10),
 }

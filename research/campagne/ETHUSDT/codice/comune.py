@@ -109,6 +109,27 @@ class Serie:
         self.btc = btc
         self.tolte_last = tolte_last
         self.tolte_mark = tolte_mark
+        self._taker: Optional[Dict[int, float]] = None
+
+    @property
+    def taker(self) -> Dict[int, float]:
+        """Quota del volume comprato a mercato per barra: {ts: taker_buy_volume / volume}.
+
+        Dalle colonne dei file klines di Binance (la decima e' taker_buy_volume), che le
+        candele del motore non portano. Letta una volta, solo per le barre della serie.
+        """
+        if self._taker is None:
+            ts_serie = {c.ts for c in self.last}
+            quote: Dict[int, float] = {}
+            fine = datetime.fromtimestamp(self.last[-1].ts / 1000, tz=timezone.utc).date()
+            for anno, mese in dati.mesi_del_periodo(PRIMO_GIORNO, fine):
+                for r in dati.righe_csv_da_zip(dati.percorso_mese(SIMBOLO, "klines", self.tf, anno, mese)):
+                    ts = dati.normalizza_ts(r[0])
+                    volume = float(r[5])
+                    if ts in ts_serie and volume > 0:
+                        quote[ts] = float(r[9]) / volume
+            self._taker = quote
+        return self._taker
 
 
 _CACHE: Dict[Tuple[str, str], Serie] = {}

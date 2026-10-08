@@ -560,6 +560,138 @@ class GiornoPrima(Variante):
         return self.barre_in_posizione(storia, pos) >= self.uscita
 
 
+# --------------------------------------------------------------------------- #
+# I-15 squilibrio degli ordini (1d)
+# --------------------------------------------------------------------------- #
+class Squilibrio(Variante):
+    def __init__(self, serie, direzione, n=30, uscita=1, stop_pct=0.06):
+        super().__init__(serie)
+        self.direzione = direzione
+        self.n = n
+        self.uscita = uscita
+        self.stop_pct = stop_pct
+        self.quote = serie.taker
+        self.finestra = deque(maxlen=n)
+        self.media_prec = None
+        self.q = None
+
+    def aggiorna(self, barra, i):
+        self.q = self.quote.get(barra.ts)
+        self.media_prec = sum(self.finestra) / self.n if len(self.finestra) == self.n else None
+        if self.q is not None:
+            self.finestra.append(self.q)
+
+    def pronta(self):
+        return self.media_prec is not None
+
+    def calcola_segnale(self, storia):
+        c = storia[-1].close
+        return segnale_da_distanza(self.direzione, c, self.stop_pct * c)
+
+    def condizione(self, storia):
+        if self.q is None:
+            return False
+        return self.q > self.media_prec if self.direzione == "long" else self.q < self.media_prec
+
+    def esci(self, storia, pos):
+        return self.barre_in_posizione(storia, pos) >= self.uscita
+
+
+# --------------------------------------------------------------------------- #
+# I-16 periodicita' oraria (1h)
+# --------------------------------------------------------------------------- #
+class StessaOra(Variante):
+    def __init__(self, serie, direzione, n_giorni=20, uscita=1, k_stop=2.0):
+        super().__init__(serie)
+        self.direzione = direzione
+        self.n = n_giorni
+        self.uscita = uscita
+        self.k = k_stop
+        self.atr = ATR(14)
+        self.per_ora = [deque(maxlen=n_giorni) for _ in range(24)]
+
+    def aggiorna(self, barra, i):
+        self.atr.aggiorna(barra.high, barra.low, barra.close)
+        ora = (barra.ts % GIORNO_MS) // 3_600_000
+        self.per_ora[ora].append(barra.close / barra.open - 1.0)
+
+    def pronta(self):
+        return self.atr.valore is not None and all(len(d) == self.n for d in self.per_ora)
+
+    def calcola_segnale(self, storia):
+        return segnale_da_distanza(self.direzione, storia[-1].close, self.k * self.atr.valore)
+
+    def condizione(self, storia):
+        prossima = ((storia[-1].ts % GIORNO_MS) // 3_600_000 + 1) % 24
+        medie = [sum(d) / len(d) for d in self.per_ora]
+        if self.direzione == "long":
+            migliore = max(range(24), key=lambda h: medie[h])
+            return prossima == migliore and medie[migliore] > 0
+        peggiore = min(range(24), key=lambda h: medie[h])
+        return prossima == peggiore and medie[peggiore] < 0
+
+    def esci(self, storia, pos):
+        return self.barre_in_posizione(storia, pos) >= self.uscita
+
+
+# --------------------------------------------------------------------------- #
+# I-17 rottura di volatilita' dall'apertura del giorno (1h)
+# --------------------------------------------------------------------------- #
+class RotturaVolatilita(Variante):
+    def __init__(self, serie, direzione, k=0.5):
+        super().__init__(serie)
+        self.direzione = direzione
+        self.k = k
+        self.giorno = None
+        self.apertura = None
+        self.max_oggi = None
+        self.min_oggi = None
+        self.escursione_ieri = None
+        self.segnalato_oggi = False
+        self.prima_rottura = False
+
+    def aggiorna(self, barra, i):
+        giorno = barra.ts // GIORNO_MS
+        if giorno != self.giorno:
+            if self.giorno is not None and giorno == self.giorno + 1 and self.max_oggi is not None:
+                self.escursione_ieri = self.max_oggi - self.min_oggi
+            else:
+                self.escursione_ieri = None  # primo giorno o giorno saltato (buco)
+            self.giorno = giorno
+            self.apertura = barra.open if barra.ts % GIORNO_MS == 0 else None  # serve la barra delle 00:00
+            self.max_oggi, self.min_oggi = barra.high, barra.low
+            self.segnalato_oggi = False
+        else:
+            self.max_oggi = max(self.max_oggi, barra.high)
+            self.min_oggi = min(self.min_oggi, barra.low)
+        # la prima barra del giorno che chiude oltre la soglia (indipendente da chi chiama)
+        self.prima_rottura = False
+        if self.escursione_ieri is not None and self.apertura is not None and not self.segnalato_oggi:
+            soglia = self.k * self.escursione_ieri
+            if self.direzione == "long":
+                rottura = barra.close > self.apertura + soglia
+            else:
+                rottura = barra.close < self.apertura - soglia
+            if rottura:
+                self.segnalato_oggi = True
+                self.prima_rottura = True
+
+    def pronta(self):
+        return self.escursione_ieri is not None and self.apertura is not None
+
+    def calcola_segnale(self, storia):
+        return segnale_da_livello(self.direzione, storia[-1].close, self.apertura)
+
+    def condizione(self, storia):
+        b = storia[-1]
+        if (b.ts % GIORNO_MS) // 3_600_000 > 22:
+            return False
+        return self.prima_rottura
+
+    def esci(self, storia, pos):
+        return (storia[-1].ts % GIORNO_MS) // 3_600_000 == 23
+
+
 VARIANTI = {
     "I-01a": (MomentumSettimana, {"direzione": "long"}, "1d"),
     "I-01b": (MomentumSettimana, {"direzione": "short"}, "1d"),
@@ -588,4 +720,10 @@ VARIANTI = {
     "I-13b": (VenditeForzate, {"direzione": "short"}, "1h"),
     "I-14a": (GiornoPrima, {"direzione": "short"}, "1h"),
     "I-14b": (GiornoPrima, {"direzione": "long"}, "1h"),
+    "I-15a": (Squilibrio, {"direzione": "long"}, "1d"),
+    "I-15b": (Squilibrio, {"direzione": "short"}, "1d"),
+    "I-16a": (StessaOra, {"direzione": "long"}, "1h"),
+    "I-16b": (StessaOra, {"direzione": "short"}, "1h"),
+    "I-17a": (RotturaVolatilita, {"direzione": "long"}, "1h"),
+    "I-17b": (RotturaVolatilita, {"direzione": "short"}, "1h"),
 }

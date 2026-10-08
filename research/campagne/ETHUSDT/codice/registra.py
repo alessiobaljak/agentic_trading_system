@@ -19,6 +19,8 @@ import idee  # noqa: E402
 import registro  # noqa: E402
 import schede  # noqa: E402
 
+BUDGET = 30  # budget_varianti_per_moneta di parametri.yaml
+
 
 def parametri_completi(V, kw):
     firma = inspect.signature(V.__init__)
@@ -41,6 +43,8 @@ def main() -> None:
     voci = registro.voci()
     if any(v.get("variante_ipotesi") == nome and v["tipo"] in ("registrazione", "scarto") for v in voci):
         raise SystemExit(f"{nome} e' gia' stata contata: non si riconta")
+    if registro.prossimo_variante_n() > BUDGET:
+        raise SystemExit(f"budget di {BUDGET} varianti esaurito: {nome} non si conta e non si testa")
     conteggio = comune.conta(V, kw, tf)
     ident = prossimo_id(voci)
     voce = {
