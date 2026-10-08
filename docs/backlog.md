@@ -14,8 +14,8 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | nessuna voce nuova: aspetta il tuo ok il testo della versione 4.4 del protocollo (voce P0, gruppo 1) | una tua risposta |
-| **1. In lavorazione** | P0 (il protocollo di ricerca: prova di processo fatta il 7 ott; versione 4.4 scritta e rivista, da approvare; poi si rifanno le tre campagne), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **1. In lavorazione** | P0 (il protocollo di ricerca: versione 4.4 approvata l'8 ott; le tre campagne della prova riaperte con la 4.4), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -36,7 +36,7 @@ Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
 
-### P0. Il protocollo di ricerca per moneta — Passi 0, 1 e 2 fatti; il 7 ott il proprietario ha scelto di RIFARE le tre campagne della prova con la versione 4.4 («sì, rifalle con queste quattro modifiche»): stima dei trade unica, «nettamente» unico, minimo 70, budget per intero. Testo 4.4 scritto, rivisto in due giri avversari, sul branch principale (b9659df, c4248a3, 3cffbae): DA RIVEDERE DAL PROPRIETARIO; dopo il suo ok si archiviano i tre branch e si riaprono le tre campagne. La campagna di gruppo resta il passo dopo se anche così non esce niente
+### P0. Il protocollo di ricerca per moneta — versione 4.4 approvata dal proprietario l'8 ott alle 05:08 UTC; branch della prova archiviati in `research/archivio/campagna/<SIMBOLO>`; le tre campagne BTCUSDT, ETHUSDT e SOLUSDT RIAPERTE l'8 ott alle 05:13 UTC con la 4.4. Prossimo STOP: le tre consegne, poi il riepilogo e la decisione sulle altre 17 monete (o sulla campagna di gruppo)
 **Perché:** cinque misure indipendenti dicono la stessa cosa: il gate non trova un vantaggio. Entrate a caso rendono come i segnali (240 trade, ops 0471); dopo la scelta del gate le validate fanno −0,03R su 182 segnali ±0,17 (ops 0498, lettura stampata: «la prossima modifica va nel gate»); una candidata nuova a caso non passa quasi mai (0 su 3.600, ops 0485); i costi superano il lordo (−0,089R netti, +0,088R di costi su 241, ops 0489); il gate rigiocato nel passato, su 8 date, dà promosse peggiori delle bocciate (−0,22R contro −0,14R su 45 trade, non decide, ops 0502). Aspettare il 14 ott non cambia il verdetto.
 **Cosa:** salvare `research/PROTOCOLLO.md` (versione 4.2, rivista il 5 ott) ed eseguire il **Passo 0**: fatti (fonte dati e contratti delistati, commissioni, serie degli stop, regole di dimensione e forma di esecuzione del bot), motore con il blocco del periodo chiuso, test di controllo, tabella dei parametri da approvare. Non tocca dati di mercato né il bot. **Regola scritta prima:** il Passo 0 finisce con una tabella e uno STOP; nessuna campagna parte senza l'approvazione dei parametri. **Metro:** la tabella completa, i test di controllo passati, e la risposta alla domanda «il bot può eseguire una strategia scritta come codice?». **Non cambia:** bot, gate, paper, registro; le letture del 7 e 14 ott restano.
 

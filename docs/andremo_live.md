@@ -3098,3 +3098,12 @@ ETHUSDT e SOLUSDT copia del branch in `research/archivio/campagna/<SIMBOLO>`, co
 git della sessione (HTTP 403: politica, non rete); non si riprova per altre vie. Serve che il proprietario li
 cancelli da GitHub; un controllo in background apre le tre campagne appena i nomi spariscono. Archiviate anche le
 quattro sessioni di campagna della prova (BTC, SOL, le due ETH), così nessuna può riscrivere sui nomi vecchi.
+
+### 8 ottobre, 07:15: le tre campagne riaperte con la versione 4.4
+
+Il proprietario ha cancellato da GitHub i tre nomi vecchi `research/campagna/<SIMBOLO>` (verificato: restano solo i
+tre archivi, con gli stessi hash, e il coordinamento). Aperte alle 05:13 UTC tre sessioni di campagna con il
+repository come sorgente esplicita e il messaggio di apertura della 4.4 (ordine di avvio della sezione 9, regole
+pratiche del guardiano, strumenti comuni, budget per intero, nessun accenno alla prova): BTCUSDT
+session_017QE4DEoPbuHDKpzc3gh9m3, ETHUSDT session_01HEDsRZbsCXFwsg5pwrfzgw, SOLUSDT session_016DsPdvdJrgz2v1tiYadgKj.
+Controllo del primo push entro 35 minuti; il coordinamento non legge le ipotesi fino al Passo 7.
