@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato l'8 ottobre 2026, 06:20 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato l'8 ottobre 2026, 07:40 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
@@ -16,7 +16,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 |---|---|---|
 | **0. Aspettano il tuo sì** | nessuna | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: versione 4.4 approvata l'8 ott; le tre campagne della prova riaperte con la 4.4), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
-| **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
+| **2. Dopo le letture del 7-14 ott** | G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
 | **5. Solo se serve** | D1 | lo spazio del registro che finisce |
@@ -111,6 +111,22 @@ tutte le durate la differenza dal caso sta dentro il margine, il lavoro sui TP s
 e revisione critica nel diario; legata a T1 e a R1.
 
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
+
+### G8. Una porta nel gate per direzione e mercato: niente long validati solo su mercati in salita
+**Perché (8 ott, domanda del proprietario: «con un mercato in discesa apriamo più long che short?»):** BTC
+−4,4% dal 5 all'8 ott (candele giornaliere Binance), e ieri il paper ha aperto 31 long e 9 short (ops 0551).
+Non è un caso isolato: con il regime ribassista all'apertura il paper ha aperto 60 long e 36 short, con quello
+rialzista 35 long e 58 short (ops 0538). La casella più frequente è «long mentre BTC scende»: 79 trade dal
+27 set, −0,229R a trade, la peggiore; «short mentre BTC sale» +0,134R su 48 (ops 0538; margine non stampato,
+stima a mano ~±0,3). Il 7 ott alle 04:18 12 long aperti in 5 minuti, −5,15 USDT (ops 0538). Il riduttore di
+size sui trade controcorrente non mostra effetto (−0,170R toccati contro −0,078, «non si vede ancora»).
+Era già previsto da J7 (archivio, 26 set): «se i trade contro il contesto perdono, il passo dopo è una porta
+nel gate per direzione × contesto». **Cosa:** il gate giudica ogni coppia anche per direzione e contesto di
+BTC (salita / discesa) sulla sua storia, e una coppia opera una direzione solo nel contesto in cui lì regge;
+regola e soglie scritte prima dei numeri. **Non cambia:** il paper non si ritocca da solo (sarebbe usarlo come
+training set); uscite, size e freni. **Metro:** il fuori campione delle coppie dopo la porta contro quelle di
+oggi, con la regola del 30 set. **Quando:** dopo la seconda lettura del 14 ott, se conferma «la prossima
+modifica va nel gate»; serve il sì del proprietario.
 
 ### C5. Costi allineati a quelli veri di Binance — SÌ del proprietario il 2 ott, da fare DOPO le letture del 14 ott
 Verifica sul codice e sulle tariffe ufficiali (FAQ Binance Futures, ricontrollata da un secondo
