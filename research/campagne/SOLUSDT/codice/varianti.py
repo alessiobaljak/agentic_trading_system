@@ -247,23 +247,40 @@ def _i08(s: Serie) -> Regole:
 # I-09 prima mezz'ora -> ultima mezz'ora (30m)
 # --------------------------------------------------------------------------- #
 
-def _i09(direzione: str):
+def _i09(direzione: str, filtro_sma200: bool = False, filtro_giorno: bool = False):
+    """filtro_sma200 (ritocco SOLUSDT-023 di 015): solo con il close sotto (short) la SMA di 200 barre.
+    filtro_giorno (ritocco SOLUSDT-024 di 015): solo se il giorno UTC, dall'apertura delle 00:00 al close
+    della barra di segnale (23:30), e' in calo (short) / in rialzo (long)."""
     def costr(s: Serie) -> Regole:
         c, close, h, l, o, n = base(s)
         a = atr(c, 14)
         per_ts = {x.ts: k for k, x in enumerate(c)}
         ora = 3_600_000
         prima = np.full(n, np.nan)  # alla barra delle 23:00: rendimento della prima mezz'ora del giorno
+        giorno = np.full(n, np.nan)  # alla barra delle 23:00: rendimento dall'apertura delle 00:00 al suo close
         for k, x in enumerate(c):
             if x.ts % (24 * ora) == 23 * ora:
                 j = per_ts.get(x.ts - 23 * ora)
                 if j is not None:
                     prima[k] = c[j].close / c[j].open - 1
-        pronto = pronto_da(n, a)
-        if direzione == "long":
-            cond = lambda i: not math.isnan(prima[i]) and prima[i] > 0
+                    giorno[k] = x.close / c[j].open - 1
+        if filtro_sma200:
+            m200 = sma(close, 200)
+            pronto = pronto_da(n, a, m200)
         else:
-            cond = lambda i: not math.isnan(prima[i]) and prima[i] < 0
+            m200 = None
+            pronto = pronto_da(n, a)
+        if direzione == "long":
+            base_cond = lambda i: not math.isnan(prima[i]) and prima[i] > 0
+            filtro = (lambda i: close[i] > m200[i]) if filtro_sma200 else (lambda i: True)
+        else:
+            base_cond = lambda i: not math.isnan(prima[i]) and prima[i] < 0
+            filtro = (lambda i: close[i] < m200[i]) if filtro_sma200 else (lambda i: True)
+        if filtro_giorno:
+            fg = (lambda i: giorno[i] > 0) if direzione == "long" else (lambda i: giorno[i] < 0)
+        else:
+            fg = lambda i: True
+        cond = lambda i: base_cond(i) and filtro(i) and fg(i)
         return Regole(segnale_atr(direzione, close, a, 2.0, None, pronto), cond, esci_dopo(1))
     return costr
 
@@ -403,6 +420,8 @@ VARIANTI: Dict[str, tuple] = {
     "SOLUSDT-010b": ("4h", _i06b),
     "SOLUSDT-017b": ("8h", _i10("long", 0.0001)),
     "SOLUSDT-020b": ("1d", _i12b),
+    "SOLUSDT-023": ("30m", _i09("short", filtro_sma200=True)),  # ritocco di 015
+    "SOLUSDT-024": ("30m", _i09("short", filtro_giorno=True)),  # ritocco di 015
     "SOLUSDT-021": ("1h", _i13("long")),
     "SOLUSDT-022": ("1h", _i13("short")),
 }

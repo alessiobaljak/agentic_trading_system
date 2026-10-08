@@ -77,6 +77,22 @@ def principale(vid):
     for nome, m in (("btc_su", btc == 1), ("btc_giu", btc == -1)):
         if m.sum():
             out[nome] = {"trade": int(m.sum()), "r_medio": round(float(r[m].mean()), 4)}
+    if vid in ("SOLUSDT-014", "SOLUSDT-015"):
+        # Gao et al. (2018): anche la penultima mezz'ora (qui la barra di segnale 23:00-23:30) e il resto del giorno
+        c = s.last
+        per_ts = {x.ts: k for k, x in enumerate(c)}
+        penultima = np.array([c[i].close / c[i].open - 1 for i in seg])
+        giorno = []
+        for i in seg:
+            j = per_ts.get(c[i].ts - 23 * 3_600_000)
+            giorno.append(np.nan if j is None else c[i].close / c[j].open - 1)
+        giorno = np.array(giorno)
+        for nome, m in (("penultima_giu", penultima < 0), ("penultima_su", penultima >= 0),
+                        ("giorno_giu", giorno < 0), ("giorno_su", giorno >= 0)):
+            if m.sum():
+                out[nome] = {"trade": int(m.sum()), "r_medio": round(float(r[m].mean()), 4)}
+        dist = np.array([close[i] / m200[i] - 1 if not math.isnan(m200[i]) else np.nan for i in seg])
+        out.update(gruppi("distanza_sma200", dist, r))
     gs = {}
     for t in tr:
         g = datetime.fromtimestamp(t.ts_entrata / 1000, tz=timezone.utc).weekday()

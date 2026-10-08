@@ -76,8 +76,29 @@ TF = {k: v for k, v in {
     "SOLUSDT-016": "8h", "SOLUSDT-017": "8h", "SOLUSDT-018": "1h", "SOLUSDT-019": "1h", "SOLUSDT-020": "1d",
     "SOLUSDT-021": "1h", "SOLUSDT-022": "1h"}.items()}
 
-# ritocchi e varianti aggiunte: (famiglia, ritocco_di, cosa cambia)
-EXTRA = {}
+# ritocchi: (famiglia, ritocco_di, cosa cambia e perche')
+EXTRA = {
+    "SOLUSDT-023": ("SOLUSDT-015", "SOLUSDT-015",
+                    "aggiunge il filtro 'close della barra di segnale sotto la SMA di 200 barre (30m, circa 4 giorni)'. "
+                    "Perche': studio dei fallimenti di 015 sui dati di costruzione (voce SOLUSDT-N020): sotto la media "
+                    "R medio +0,017 su 193 trade, sopra -0,046 su 173; la forza della prima mezz'ora non separa (terzili "
+                    "+0,005 / -0,046 / +0,003). Stesso timeframe, direzione, meccanismo, stop e uscita."),
+}
+S["SOLUSDT-023"] = ("I-09", "prima mezz'ora UTC -> ultima mezz'ora, solo sotto la SMA200", "short",
+                    {"condizione": "alla chiusura della barra 23:00-23:30 UTC, close < open della barra 00:00-00:30 dello stesso giorno, e close < SMA200 (30m)",
+                     "stop": "2 ATR(14) sopra", "target": None, "uscita": "a tempo dopo 1 barra"},
+                    "R medio fra -0,02 e +0,03; t contro la (b) fra 1 e 3 (il filtro e' scelto sui dati di costruzione: il t in costruzione e' gonfiato, giudica la validazione)")
+EXTRA["SOLUSDT-024"] = ("SOLUSDT-015", "SOLUSDT-015",
+                        "aggiunge il filtro 'giorno UTC in calo dall'apertura delle 00:00 al close della barra di segnale "
+                        "(23:30)'. Perche': secondo studio dei fallimenti di 015 sui dati di costruzione (voce SOLUSDT-N021): "
+                        "giorno in rialzo R -0,033 su 158 trade, in calo +0,003 su 208; e' il momentum dell'intera giornata, "
+                        "lo stesso meccanismo della fonte (Gao et al. 2018). Non usa la media di 200 barre di 023. Stesso "
+                        "timeframe, direzione, stop e uscita.")
+S["SOLUSDT-024"] = ("I-09", "prima mezz'ora UTC -> ultima mezz'ora, solo nei giorni in calo", "short",
+                    {"condizione": "alla chiusura della barra 23:00-23:30 UTC, close < open della barra 00:00-00:30 dello stesso giorno, e close della barra di segnale < open della barra 00:00", "stop": "2 ATR(14) sopra", "target": None, "uscita": "a tempo dopo 1 barra"},
+                    "R medio fra -0,02 e +0,02; t contro la (b) fra 1 e 2,5 (filtro scelto sui dati di costruzione)")
+TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m"}
+TF.update(TF_EXTRA)
 
 
 def scheda(vid):
