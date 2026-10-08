@@ -126,6 +126,30 @@ nella 4.5 la risposta del proprietario al punto 1; controlli del coordinamento o
 con la domanda girata al proprietario; la scelta sul punto 3. **Non cambia:** le campagne in corso finiscono con le
 regole con cui sono partite, salvo la risposta del proprietario alla domanda di SOLUSDT. **Quando:** prima delle
 campagne del Passo 4.
+**Analisi dell'8 ott sera (domanda del proprietario: «aprire le altre 17 o rilanciare le 3 con più varianti e più
+tempo?»; tre letture indipendenti più una critica avversaria, solo file del principale e del coordinamento):**
+consiglio aprire le 17 e NON rilanciare le 3, dopo una giornata di preparazione. Numeri: (a) le 3 monete hanno già
+46/53/47 varianti sugli stessi dati di costruzione (rapporto della prova r.33 + 30 a testa); un terzo giro con lo
+stesso modello e le stesse fonti ripete idee, e la probabilità di almeno una famiglia «netta» per caso per moneta
+sui tre giri è stimata 80-93%; (b) rifare BTC toglie dal vault il suo candidato (r.318-319, r.441: resta solo nel
+conteggio m); (c) il vault si apre solo dopo tutte le consegne (r.439): le 17 vanno fatte comunque; (d) il tempo
+non è il limite: 6 campagne su 6 in 45-180 minuti, il tempo perso è nei blocchi (SOL 4 h 20 ferma); più tempo a
+budget fermo non aggiunge prove; il testo dei «90 minuti» non è in nessuna versione committata (la 4.3, primo
+commit 613d552, dice già «Non c'è un tempo minimo»); (e) il budget è una regola uguale per tutte (r.90, r.553):
+alzarlo per le 17 obbliga a rifare le 3 e BTC perde il candidato; consiglio 30; (f) il limite vero è la potenza:
+un vantaggio vero di 0,15 R arriva al vault circa il 12% delle volte (stima), da qui la campagna di gruppo.
+**Preparazione proposta prima delle 17:** 4.5 di solo processo (ritocchi già decisi, controlli orari, ultracode
+verificato, frase «l'obiettivo è trovare, non finire» nell'apertura, misure di processo nella consegna: minuti per
+idea, spiegazioni concorrenti per idea, candidati da idee nuove separati dai ritocchi); PROVA A PLACEBO sui dati
+veri delle monete idonee non di campagna fino al 2023 (segnali di tipo reale spostati nel tempo di uno sfasamento
+casuale; soglia scritta prima: «netta» al massimo 3%, p sotto 0,10 al massimo 12%; se fallisce si corregge
+«nettamente» per tutte e 20 e si rifanno anche le 3) perché la persistenza fra trade lontani non è coperta (r.504);
+il caricatore unico per last e mark price che il rapporto della prova prescrive prima del Passo 4 (r.227-229);
+decidere se e quando la campagna di gruppo; prima di «APRI IL VAULT» una soglia di trasferimento proporzionale al
+numero di monete di verifica (la regola ammette monete nate nel vault: con 1% per caso, 19% di passaggi casuali su
+80 monete, 44% su 150). Monete con poca storia: 1000SHIB, MASK, DYDX, GALA hanno 596-682 giorni di costruzione
+contro 1022 di BTC; MATIC ha il vault che finisce il 2024-09-30. Stima dei tempi: circa 1 giorno di preparazione,
+2-3 giorni di calendario per le 17 su 3 posti (XRP, DOGE, BNB per prime). Aspetta il sì del proprietario.
 
 ### G8. Una porta nel gate per direzione e mercato: niente long validati solo su mercati in salita
 **Perché (8 ott, domanda del proprietario: «con un mercato in discesa apriamo più long che short?»):** BTC
