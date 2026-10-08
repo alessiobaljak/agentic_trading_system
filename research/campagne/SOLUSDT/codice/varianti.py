@@ -247,7 +247,7 @@ def _i08(s: Serie) -> Regole:
 # I-09 prima mezz'ora -> ultima mezz'ora (30m)
 # --------------------------------------------------------------------------- #
 
-def _i09(direzione: str, filtro_sma200: bool = False, filtro_giorno: bool = False):
+def _i09(direzione: str, filtro_sma200: bool = False, filtro_giorno: bool = False, k_stop: float = 2.0):
     """filtro_sma200 (ritocco SOLUSDT-023 di 015): solo con il close sotto (short) la SMA di 200 barre.
     filtro_giorno (ritocco SOLUSDT-024 di 015): solo se il giorno UTC, dall'apertura delle 00:00 al close
     della barra di segnale (23:30), e' in calo (short) / in rialzo (long)."""
@@ -281,7 +281,7 @@ def _i09(direzione: str, filtro_sma200: bool = False, filtro_giorno: bool = Fals
         else:
             fg = lambda i: True
         cond = lambda i: base_cond(i) and filtro(i) and fg(i)
-        return Regole(segnale_atr(direzione, close, a, 2.0, None, pronto), cond, esci_dopo(1))
+        return Regole(segnale_atr(direzione, close, a, k_stop, None, pronto), cond, esci_dopo(1))
     return costr
 
 
@@ -422,6 +422,7 @@ VARIANTI: Dict[str, tuple] = {
     "SOLUSDT-020b": ("1d", _i12b),
     "SOLUSDT-023": ("30m", _i09("short", filtro_sma200=True)),  # ritocco di 015
     "SOLUSDT-024": ("30m", _i09("short", filtro_giorno=True)),  # ritocco di 015
+    "SOLUSDT-025": ("30m", _i09("short", k_stop=3.0)),  # ritocco di 015
     "SOLUSDT-021": ("1h", _i13("long")),
     "SOLUSDT-022": ("1h", _i13("short")),
 }
