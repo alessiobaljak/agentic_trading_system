@@ -83,12 +83,13 @@ protocollo e non scrive ipotesi o risultati in questo file. Il gate attuale rest
 gruppo di controllo finche' il proprietario non decide altrimenti.
 
 **Ogni sessione di campagna si apre con il modello `claude-opus-5-5` e con ultracode attivo** (richiesta
-del proprietario, 8 ott 2026). Nella creazione si passano la sorgente del repository e il branch
-principale, e **non** si passa `model`: modello e ultracode si ereditano dalla sessione che crea, che deve
-avere entrambi. Passare `model` esplicitamente toglie ultracode (successo l'8 ott alle 13:24 UTC con il
-ricalcolo di Ethereum: sessione archiviata e riaperta). Dopo l'avvio (può servire anche più di 5 minuti)
-si controlla con `get_session` che il modello sia `claude-opus-5-5` e che `flag_settings.ultracode` sia
-`true`; se no la sessione si archivia e si riapre da una sessione che ce l'ha.
+del proprietario, 8 ott 2026). Nella creazione si passano la sorgente del repository e il branch principale;
+modello e ultracode si ereditano dalla sessione che crea (per ultracode non c'e' un parametro). L'eredita'
+non e' sicura: l'8 ott le sessioni create fra le 05:12 e le 05:20 UTC avevano ultracode dalla creazione, le
+tre create fra le 13:24 e le 13:50 UTC no, con o senza `model` passato, con gli stessi parametri; la causa
+non e' nota. Dopo la creazione si controlla con `get_session` che il modello sia `claude-opus-5-5` e che
+`external_metadata.flag_settings.ultracode` sia `true`; se manca, non si riapre a ripetizione: si dice al
+proprietario, che decide se lasciarla lavorare o fermarla.
 
 ## Non hai accesso alla VPS — ma hai un canale
 
