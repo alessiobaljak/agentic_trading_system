@@ -3088,3 +3088,13 @@ Rifiuti: soprattutto «posizione già aperta» e cooldown (ops 0548); i rifiutat
 sono ferme alla consegna (ultimi commit del 7 ott); il testo della 4.4 aspetta il sì del proprietario. **Proposta del
 giorno:** nessuna voce nuova (il protocollo è allo STOP: approvazione della 4.4). Da tenere d'occhio: lo spazio del
 registro, che domani scende sotto 400 (voce D1, gruppo 5).
+
+### 8 ottobre, 07:15: versione 4.4 approvata; archivi fatti, cancellazione dei nomi vecchi bloccata
+
+Il proprietario: «ok alla 4.4, archivia e riapri le tre campagne» (05:08 UTC). Scritto l'istante nell'intestazione del
+protocollo, in `parametri.yaml` e in CLAUDE.md (commit 632671e). Archiviazione secondo il Passo 2: per BTCUSDT,
+ETHUSDT e SOLUSDT copia del branch in `research/archivio/campagna/<SIMBOLO>`, con l'hash controllato uguale
+(b60dd84, a60898c, d1955b4). La cancellazione dei nomi vecchi `research/campagna/<SIMBOLO>` è rifiutata dal canale
+git della sessione (HTTP 403: politica, non rete); non si riprova per altre vie. Serve che il proprietario li
+cancelli da GitHub; un controllo in background apre le tre campagne appena i nomi spariscono. Archiviate anche le
+quattro sessioni di campagna della prova (BTC, SOL, le due ETH), così nessuna può riscrivere sui nomi vecchi.
