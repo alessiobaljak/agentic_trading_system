@@ -684,6 +684,150 @@ vende alla resistenza e chi prende profitto. Tempo: ore.
 
 ---
 
+## Idee aggiunte dopo i primi test (scritte l'8 ottobre 2026, prima di contarle)
+
+Le tre idee qui sotto sono state scritte DOPO aver visto i risultati di costruzione di
+I-01 ... I-07 (lo si dichiara), e prima di qualunque conteggio o test loro. Non nascono da
+quei risultati: sono meccanismi di famiglie non ancora provate (squilibrio degli ordini,
+periodicita' oraria, rottura di volatilita' dentro il giorno), ognuno con la sua fonte. Il
+protocollo vuole il budget usato per intero e le idee nuove con fonte prima dei ritocchi
+(regola 6). Si testano solo finche' c'e' budget (30 varianti).
+
+---
+
+## I-15 — Lo squilibrio degli ordini del giorno prevede il giorno dopo
+
+**Fonte.** Tarun Chordia e Avanidhar Subrahmanyam, «Order imbalance and individual stock
+returns: Theory and evidence», Journal of Financial Economics 72(3), 2004, pp. 485-518.
+Lo squilibrio fra acquisti e vendite avviati da chi prende liquidita' in un giorno prevede
+il rendimento del giorno dopo: chi ha informazione spezza gli ordini su piu' giorni e chi fa
+mercato aggiusta il prezzo con ritardo.
+
+**Affermazione falsificabile.** Su ETHUSDT, dopo un giorno in cui la quota di volume
+comprato a mercato (taker buy / volume, colonne dei file di Binance) supera la sua media
+dei 30 giorni prima, un long di un giorno ha un R medio piu' alto di un long casuale con la
+stessa uscita; specchio per la quota sotto la media e lo short.
+
+**Sotto-domande.** Conta la dimensione dello squilibrio? Vale nei giorni di volume alto?
+Chi agisce: chi compra a mercato con informazione o con fretta; chi fa mercato rimane
+corto e alza i prezzi. Tempo: un giorno.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Caso | t sotto 1 | t oltre la soglia |
+| 2 | Lo squilibrio e' solo il rendimento del giorno (si compra quando sale): e' momentum di un giorno | stesso effetto della continuazione dopo un giorno positivo | — |
+| 3 | Nei futures la quota di taker buy ha un livello strutturale diverso da 0,5 | (tolto confrontando con la media dei 30 giorni) | — |
+| 4 | Trend di fondo | come la (b) | batte la (b) |
+| 5 | E' solo il mercato | — (contesto) | — |
+| 6 | Volatilita' | — | — |
+| 7 | Costi: 0,02 R a giro con stop al 6% | piccoli | — |
+| 8 | Artefatto: la classificazione taker dell'exchange include ordini di liquidazione (vendite forzate a mercato) | la quota bassa segnala liquidazioni, poi rimbalzo (short in perdita) | — |
+| 9 | Pochi giorni estremi | senza i 3 migliori crolla | — |
+| 10 | Informazione spezzata su piu' giorni (l'ipotesi) | R sopra la (b) in piu' anni | t sotto 1 |
+
+**Ipotesi completa.** ETHUSDT, squilibrio degli ordini, 1d.
+
+**Varianti.** Quota del giorno = taker_buy_volume / volume della candela giornaliera last.
+* **I-15a** — 1d, long. Condizione: quota del giorno appena chiuso > media delle quote dei
+  30 giorni precedenti (escluso il giorno corrente). Uscita dopo 1 barra. Stop al 6%.
+  Previsione: R medio fra -0,10 e +0,10; non batte nettamente la (b).
+* **I-15b** — 1d, short. Condizione: quota < media dei 30 giorni precedenti. Uscita dopo 1
+  barra. Stop al 6%. Previsione: R medio fra -0,10 e +0,10; non batte nettamente la (b).
+
+---
+
+## I-16 — La stessa ora dei giorni passati (periodicita' intragiornaliera)
+
+**Fonte.** Steven L. Heston, Robert A. Korajczyk e Ronnie Sadka, «Intraday Patterns in the
+Cross-Section of Stock Returns», The Journal of Finance 65(4), 2010, pp. 1369-1407. Il
+rendimento di un titolo in una mezz'ora del giorno e' legato a quello della stessa mezz'ora
+nei giorni precedenti, fino a 40 giorni: flussi di scambio che si ripetono alla stessa ora
+(istituzioni, ribilanciamenti).
+
+**Affermazione falsificabile.** Su ETHUSDT a 1 ora, l'ora del giorno con il rendimento medio
+piu' alto negli ultimi 20 giorni (se positivo) ha, il giorno dopo, un R medio per un long di
+un'ora piu' alto di un'ora casuale con la stessa uscita; specchio per l'ora peggiore
+(media negativa) e lo short.
+
+**Sotto-domande.** Le ore "forti" sono legate a sessioni (Asia, Europa, America) o al
+funding (00, 08, 16 UTC)? Quanto sono stabili? Chi agisce: flussi ricorrenti alla stessa
+ora. Tempo: un'ora.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Caso: con 24 ore la migliore delle 24 medie e' alta per caso (selezione) | R vicino alla (b) | t oltre la soglia |
+| 2 | Costi: 0,047 R a giro con stop a 2 ATR, contro un movimento medio orario minimo | R medio negativo | R dopo costi positivo |
+| 3 | Stagionalita' fissa (un'ora sempre forte) invece di periodicita' mobile | — | — |
+| 4 | Volatilita' oraria diversa | — | — |
+| 5 | Trend di fondo | — | — |
+| 6 | E' solo il mercato | — (contesto) | — |
+| 7 | Artefatto: il settlement del funding alle 00, 08, 16 sposta i prezzi a ore fisse | ore scelte vicine ai settlement | — |
+| 8 | Pochi giorni estremi | senza i 3 migliori crolla | — |
+| 9 | Flussi ricorrenti (l'ipotesi) | R sopra la (b) | t sotto 1 |
+| 10 | 20 giorni sono troppo pochi per stimare la media di un'ora (rumore) | effetto nullo | — |
+
+**Ipotesi completa.** ETHUSDT, periodicita' oraria, 1h.
+
+**Varianti.**
+* **I-16a** — 1h, long. Alla chiusura di ogni barra si guarda l'ora successiva h: se h e'
+  l'ora con la media piu' alta degli ultimi 20 rendimenti (chiusura/apertura - 1) di
+  ciascuna delle 24 ore, e quella media e' > 0, long all'apertura dell'ora h. Uscita dopo
+  1 barra. Stop a 2 ATR(14), al massimo 6%. Previsione: R medio fra -0,12 e 0,00; non batte
+  nettamente la (b).
+* **I-16b** — 1h, short, specchio (l'ora con la media piu' bassa, se < 0). Previsione: R
+  medio fra -0,12 e 0,00; non batte nettamente la (b).
+
+---
+
+## I-17 — Rottura di volatilita' dall'apertura del giorno
+
+**Fonte.** Larry Williams, «Long-Term Secrets to Short-Term Trading», John Wiley & Sons,
+1999. La rottura di volatilita': quando il prezzo si allontana dall'apertura del giorno di
+una frazione dell'escursione del giorno prima, il giorno tende a chiudere in quella
+direzione (espansione dell'escursione).
+
+**Affermazione falsificabile.** Su ETHUSDT, la prima volta in un giorno UTC che una barra di
+1 ora chiude sopra apertura del giorno + 0,5 x (massimo - minimo del giorno prima), un long
+tenuto fino alla fine del giorno ha un R medio piu' alto di un long casuale con la stessa
+uscita; specchio sotto l'apertura e short.
+
+**Sotto-domande.** Conta l'ora della rottura? La dimensione dell'escursione di ieri? Chi
+agisce: chi segue la giornata, gli stop sopra i massimi del giorno. Tempo: ore, fino alla
+fine del giorno.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Caso | t sotto 1 | t oltre la soglia |
+| 2 | Trend di fondo | long buono nel 2020-2021 come la (b) | batte la (b) |
+| 3 | E' solo il mercato | — (contesto) | — |
+| 4 | Volatilita': le rotture accadono nei giorni volatili, in entrambe le direzioni | come la (b) | — |
+| 5 | Costi: stop all'apertura del giorno (distanza grande), costo sotto 0,03 R | piccoli | — |
+| 6 | Artefatto del giorno UTC | (non provato) | — |
+| 7 | Falsa rottura: ritorno verso l'apertura | molti stop | — |
+| 8 | Pochi giorni estremi | senza i 3 migliori crolla | — |
+| 9 | Espansione dell'escursione nella direzione della rottura (l'ipotesi) | R sopra la (b) | t sotto 1 |
+| 10 | Momentum intragiornaliero gia' coperto da altre idee (I-06) | — | — |
+
+**Ipotesi completa.** ETHUSDT, rottura di volatilita' intragiornaliera, 1h.
+
+**Varianti.**
+* **I-17a** — 1h, long. Condizione: barra con apertura fra le 00:00 e le 22:00 UTC; prima
+  barra del giorno con chiusura > apertura del giorno + 0,5 x escursione del giorno UTC
+  precedente. Uscita: "chiudi" alla chiusura della barra delle 23:00 (fine del giorno).
+  Stop all'apertura del giorno, con distanza al massimo 6%. Previsione: R medio fra -0,10 e
+  +0,15; non batte nettamente la (b).
+* **I-17b** — 1h, short, specchio (chiusura < apertura del giorno - 0,5 x escursione di
+  ieri; stop all'apertura del giorno). Previsione: R medio fra -0,15 e +0,10; non batte
+  nettamente la (b).
+
+---
+
 ## Ordine dei test
 
 Le idee si contano e si testano nell'ordine di questo file (I-01 ... I-14), una variante
