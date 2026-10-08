@@ -361,6 +361,31 @@ almeno 10 spiegazioni concorrenti.
 
 ---
 
+## Varianti allentate dopo gli scarti per trade insufficienti (scritte prima di ogni test)
+
+Il conteggio con `conta_trade` (voce SOLUSDT-N009) ha dato sotto 70 trade: 004 (62), 005 (56),
+006 (52), 007 (45), 010 (58), 017 (36), 020 (44). Nessuna di queste idee è stata ancora testata.
+Per ognuna una sola variante allentata, con lo stesso meccanismo, scelta solo per far crescere il
+numero di ingressi (regola 6: è ancora una variante dell'idea nuova). Se anche questa resta sotto
+il minimo, l'idea in quella direzione si chiude.
+
+- **SOLUSDT-004b** (I-02, 2h, short): come 004 ma su candele di 2h (20 e 10 barre, ATR(20)): le
+  rotture al ribasso di 20 barre a 4h erano poche; a 2h il canale è di circa 1,7 giorni. Previsione:
+  R medio fra −0,1 e +0,2.
+- **SOLUSDT-005b** (I-03, 2h, long): incrocio sopra 1,01 × SMA50 su candele di 2h, tenuta di 120
+  barre (sempre 10 giorni, come la fonte); stop 3 ATR(14). Previsione: R medio fra −0,05 e +0,2.
+- **SOLUSDT-006b** (I-04, 4h, long): come 006 con RSI(2) < 10 (la soglia più larga discussa da
+  Connors e Alvarez). Previsione: R medio fra −0,05 e +0,15.
+- **SOLUSDT-007b** (I-04, 4h, short): come 007 con RSI(2) > 90. Previsione: R medio fra −0,1 e +0,1.
+- **SOLUSDT-010b** (I-06, 4h, long): come 010 con volume > 1,5 × la media delle 42 barre precedenti.
+  Previsione: R medio fra −0,1 e +0,15.
+- **SOLUSDT-017b** (I-10, 8h, long): come 017 con media dei 3 tassi < −0,0001 (funding chiaramente
+  negativo: short pagano). Previsione: R medio fra −0,1 e +0,2.
+- **SOLUSDT-020b** (I-12, 1d, long): volume sopra l'80° percentile delle 49 barre precedenti,
+  uscita dopo 3 barre. Previsione: R medio fra −0,1 e +0,15.
+
+---
+
 ## Criterio di successo (uguale per tutte)
 
 Battere nettamente la baseline (a) e la (b) con `contro_baseline` sul periodo di costruzione, con

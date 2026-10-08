@@ -21,6 +21,14 @@ BOZZE = comune.dati.RADICE_DEFAULT / "data" / "insample" / comune.SIMBOLO / "boz
 
 
 def main(argv):
+    if argv[0] == "conta":
+        for vid in argv[1:]:
+            tf, costruttrice = VARIANTI[vid][0], VARIANTI[vid][1]
+            ris = {"id": vid, "timeframe": tf, "conta_trade": comune.conta(tf, costruttrice)}
+            BOZZE.mkdir(parents=True, exist_ok=True)
+            (BOZZE / f"conta_{vid}.json").write_text(json.dumps(ris))
+            print(json.dumps(ris))
+        return
     comando, vid = argv[0], argv[1]
     opzioni = argv[2:]
     tf, costruttrice = VARIANTI[vid][0], VARIANTI[vid][1]
