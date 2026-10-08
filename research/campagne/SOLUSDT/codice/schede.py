@@ -130,8 +130,26 @@ EXTRA["SOLUSDT-028"] = ("SOLUSDT-012", "SOLUSDT-012",
 S["SOLUSDT-028"] = ("I-07", "NR7 e rottura al ribasso, solo sotto la SMA200", "short",
                     {"condizione": "barra i-1 NR7 e close[i] < low[i-1], e close[i] < SMA200 (4h)", "stop": "high[i-1]", "target": None, "uscita": "a tempo dopo 6 barre"},
                     "R medio fra 0 e +0,2; t contro la (b) fra 1 e 3 (filtro scelto sui dati di costruzione)")
+EXTRA["SOLUSDT-029"] = ("SOLUSDT-012", "SOLUSDT-028",
+                        "aggiunge a 028 il filtro 'ATR(14) / close della barra di segnale < 4,5%'. Perche': studio dei "
+                        "fallimenti di 028 sui dati di costruzione (voce SOLUSDT-N026): terzili di volatilita' (confini 3,26% "
+                        "e 4,31%) R +0,29 / +0,25 / -0,002: lo short sulla rottura di una NR7 non rende quando la volatilita' "
+                        "e' gia' alta. Soglia 4,5%: un numero tondo appena sopra il confine del terzile alto, scelto su questi "
+                        "dati (dichiarato). Stesso timeframe, direzione, stop e uscita.")
+S["SOLUSDT-029"] = ("I-07", "NR7 e rottura al ribasso, sotto la SMA200, volatilita' non alta", "short",
+                    {"condizione": "barra i-1 NR7 e close[i] < low[i-1], close[i] < SMA200 (4h) e ATR(14)/close[i] < 0,045", "stop": "high[i-1]", "target": None, "uscita": "a tempo dopo 6 barre"},
+                    "R medio fra 0 e +0,35; t contro la (b) fra 1 e 3 (filtri scelti sui dati di costruzione)")
+EXTRA["SOLUSDT-030"] = ("SOLUSDT-012", "SOLUSDT-028",
+                        "uscita a tempo da 6 a 12 barre (2 giorni); condizione, filtro della SMA200 e stop di 028 invariati. "
+                        "Perche': studio delle uscite di 028 sui dati di costruzione (voce SOLUSDT-N027, codice/fase3_uscite.py): "
+                        "dopo le 58 uscite a tempo il prezzo continua a favore di +0,25 R in media nelle 6 barre seguenti (55% "
+                        "a favore); i 43 trade usciti per stop alla scadenza sarebbero a -1,45 R (solo 8 in guadagno), quindi "
+                        "lo stop non si tocca.")
+S["SOLUSDT-030"] = ("I-07", "NR7 e rottura al ribasso, sotto la SMA200, tenuta 12 barre", "short",
+                    {"condizione": "barra i-1 NR7 e close[i] < low[i-1], e close[i] < SMA200 (4h)", "stop": "high[i-1]", "target": None, "uscita": "a tempo dopo 12 barre"},
+                    "R medio fra 0 e +0,4; t contro la (b) fra 1 e 2,5")
 TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m", "SOLUSDT-025": "30m", "SOLUSDT-026": "30m", "SOLUSDT-027": "30m",
-            "SOLUSDT-028": "4h"}
+            "SOLUSDT-028": "4h", "SOLUSDT-029": "4h", "SOLUSDT-030": "4h"}
 TF.update(TF_EXTRA)
 
 

@@ -205,10 +205,12 @@ _i06b = _i06_gen(1.5)
 # I-07 NR7 e rottura (4h)
 # --------------------------------------------------------------------------- #
 
-def _i07(direzione: str, filtro_sma200: bool = False):
-    """filtro_sma200 (ritocco SOLUSDT-028 di 012): solo con il close sotto (short) / sopra (long) la SMA200."""
+def _i07(direzione: str, filtro_sma200: bool = False, atr_massimo: Optional[float] = None, tenuta: int = 6):
+    """filtro_sma200 (ritocco SOLUSDT-028 di 012): solo con il close sotto (short) / sopra (long) la SMA200.
+    atr_massimo (ritocco SOLUSDT-029 di 028): solo se ATR(14) / close della barra di segnale < atr_massimo."""
     def costr(s: Serie) -> Regole:
         c, close, h, l, o, n = base(s)
+        a14 = atr(c, 14) if atr_massimo is not None else None
         rng = h - l
         minimo7 = rolling_min(rng, 7)
         nr7 = (rng <= minimo7) & ~np.isnan(minimo7)  # la barra ha l'escursione minima delle ultime 7
@@ -217,6 +219,8 @@ def _i07(direzione: str, filtro_sma200: bool = False):
         if filtro_sma200:
             m200 = sma(close, 200)
             pronto &= ~np.isnan(m200)
+        if atr_massimo is not None:
+            pronto &= ~np.isnan(a14)
         lato = 1 if direzione == "long" else -1
 
         def segnale(i):
@@ -232,8 +236,9 @@ def _i07(direzione: str, filtro_sma200: bool = False):
         else:
             cond0 = lambda i: i >= 1 and nr7[i - 1] and close[i] < l[i - 1]
             filtro = (lambda i: close[i] < m200[i]) if filtro_sma200 else (lambda i: True)
-        cond = lambda i: cond0(i) and filtro(i)
-        return Regole(segnale, cond, esci_dopo(6))
+        fv = (lambda i: a14[i] / close[i] < atr_massimo) if atr_massimo is not None else (lambda i: True)
+        cond = lambda i: cond0(i) and filtro(i) and fv(i)
+        return Regole(segnale, cond, esci_dopo(tenuta))
     return costr
 
 
@@ -433,6 +438,8 @@ VARIANTI: Dict[str, tuple] = {
     "SOLUSDT-026": ("30m", _i09("short", filtro_sma200=True, k_stop=3.0)),  # ritocco di 025
     "SOLUSDT-027": ("30m", _i09("short", filtro_giorno=True, k_stop=3.0)),  # ritocco di 025
     "SOLUSDT-028": ("4h", _i07("short", filtro_sma200=True)),  # ritocco di 012
+    "SOLUSDT-029": ("4h", _i07("short", filtro_sma200=True, atr_massimo=0.045)),  # ritocco di 028 (scarto)
+    "SOLUSDT-030": ("4h", _i07("short", filtro_sma200=True, tenuta=12)),  # ritocco di 028
     "SOLUSDT-021": ("1h", _i13("long")),
     "SOLUSDT-022": ("1h", _i13("short")),
 }
