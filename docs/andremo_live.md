@@ -3116,3 +3116,20 @@ BTCUSDT session_01U7S57s6evHNkcLaH2xfzLE (05:19 UTC), SOLUSDT session_01PU8tnr13
 del coordinamento: SOLUSDT stava partendo proprio in quel momento (aggiornata alle 05:19:03); non aveva fatto nulla
 (nessun branch, nessuna memoria usata), quindi non si è perso lavoro. Lezione: una sessione nel cloud può metterci
 più di 5 minuti ad avviarsi; si giudica ferma solo dopo 20-25 minuti senza aggiornamenti.
+
+### 8 ottobre, 10:35: Bitcoin consegna con un candidato; Solana ferma su una domanda
+
+**BTCUSDT** (session_01U7S57s6evHNkcLaH2xfzLE) ha consegnato alle 06:47 UTC: 30 varianti (5 ritocchi, 25 famiglie),
+57 verifiche, una in validazione; dalla consegna, riga dell'esito: «Un candidato va al vault, con esito provvisorio:
+BTCUSDT-V10», che passa l'asticella con p-value 0,048 perché è l'unico candidato. È il primo candidato del
+protocollo. Il riassunto automatico della sessione diceva «none survived»: fa fede la consegna. Il vault si apre
+solo dopo le consegne di tutte le monete di campagna (Passo 5). La campagna ha trovato e corretto un errore del
+caricatore (il funding di Binance arriva fino a 47 ms dopo l'ora piena: 2.233 settlement su 4.383 per BTCUSDT 2020-
+2023, e il motore non lo riconosceva come momento ambiguo): commit 2fedf41, portato sul principale (adfb831, 1026
+test della ricerca passati) e unito nel branch di SOLUSDT (87ff673). ETHUSDT e SOLUSDT hanno usato il caricatore
+vecchio: effetto atteso piccolo (incassi di funding all'ingresso contati quando sono ambigui), da elencare fra i test
+da rieseguire al Passo 4. **SOLUSDT** (session_01PU8tnr13mv82SqNMA2VNY7) è ferma dalle 05:51 UTC su una domanda
+all'utente, che nessuno vedeva: una variante batte nettamente le due baseline ma ha R medio dopo i costi negativo;
+entra o no nell'ordine dei ritocchi? La regola 6 esclude le varianti che battono le due baseline «perché sono
+candidati», ma dalla 4.4 un candidato deve anche avere R medio positivo: il caso non è scritto. Lo decide il
+proprietario. Ritocchi e uso del budget: ETHUSDT 30 varianti senza ritocchi (consegnata alle 05:58 UTC).

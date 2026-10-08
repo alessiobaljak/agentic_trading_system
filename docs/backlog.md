@@ -16,7 +16,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 |---|---|---|
 | **0. Aspettano il tuo sì** | nessuna | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: versione 4.4 approvata l'8 ott; le tre campagne della prova riaperte con la 4.4), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
-| **2. Dopo le letture del 7-14 ott** | G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
+| **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
 | **5. Solo se serve** | D1 | lo spazio del registro che finisce |
@@ -111,6 +111,17 @@ tutte le durate la differenza dal caso sta dentro il margine, il lavoro sui TP s
 e revisione critica nel diario; legata a T1 e a R1.
 
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
+
+### P1. Correzioni al protocollo emerse dalle campagne 4.4 (da raccogliere in una versione 4.5)
+**Perché (8 ott):** (1) la regola 6 esclude dai ritocchi le varianti che battono le due baseline «perché sono
+candidati», ma dalla 4.4 un candidato deve anche avere R medio dopo i costi positivo: una variante che batte il
+caso e perde dopo i costi non ha una regola (SOLUSDT si è fermata alle 05:51 UTC per chiederlo); (2) una campagna
+che fa una domanda resta ferma senza che nessuno la veda: 2 ore e 40 perse prima del controllo del coordinamento;
+(3) il proprietario chiede se rimettere un tempo minimo di lavoro o allargare il budget (8 ott). **Cosa:** scrivere
+nella 4.5 la risposta del proprietario al punto 1; controlli del coordinamento ogni ora mentre una campagna lavora,
+con la domanda girata al proprietario; la scelta sul punto 3. **Non cambia:** le campagne in corso finiscono con le
+regole con cui sono partite, salvo la risposta del proprietario alla domanda di SOLUSDT. **Quando:** prima delle
+campagne del Passo 4.
 
 ### G8. Una porta nel gate per direzione e mercato: niente long validati solo su mercati in salita
 **Perché (8 ott, domanda del proprietario: «con un mercato in discesa apriamo più long che short?»):** BTC
