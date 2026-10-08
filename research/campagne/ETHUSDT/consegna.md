@@ -95,3 +95,23 @@ trasferimento, nessuna stima di trade in paper.
 Nessuna regola da portare al bot. (Per la cronaca: il candidato scartato sarebbe stato
 eseguibile a 1 ora con stop sotto il 6%, ma l'orizzonte di 6 ore e l'abilitazione senza il
 gate richiedono l'aggiunta decisa al Passo 0, `config/regole_dimensione.md`.)
+
+## Ricalcolo dopo la correzione del funding (8 ottobre)
+
+Il caricatore del funding ora arrotonda al secondo l'istante dei settlement (CHANGELOG
+2026-10-08). Ho rifatto, con lo stesso codice, gli stessi parametri e gli stessi semi, ogni
+calcolo della campagna che usa il funding (registrazione N023, esito N027, 72 voci
+`correzione` nel log).
+
+* **Risultati cambiati:** 38 su 72. Cambiano i numeri delle 30 varianti testate, del
+  controllo positivo (2) e delle 6 verifiche della Fase 4; i 34 conteggi dei trade sono
+  identici. L'R medio scende sempre un poco: il funding al settlement in apertura di barra
+  ora si conta solo se è un costo.
+* **Differenza più grande in R medio:** -0,0075 su ETHUSDT-015 (da -0,137 a -0,144). Il
+  candidato ETHUSDT-026 passa da +0,0233 a +0,0228 R, con t contro la (b) da 2,67 a 2,67
+  (2,665 → 2,672).
+* **Esiti cambiati: nessuno.** ETHUSDT-026 resta l'unico candidato e cade ancora in Fase 4
+  per costi doppi (R medio -0,077) e per il ritardo di una barra (t 1,270, serve 1,336). Il
+  controllo positivo resta superato. La validazione resta intatta.
+
+La conclusione non cambia: nessuna strategia valida trovata per ETHUSDT.
