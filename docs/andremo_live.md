@@ -3139,3 +3139,15 @@ proprietario. Ritocchi e uso del budget: ETHUSDT 30 varianti senza ritocchi (con
 - 8 ott, 12:16: il proprietario ha risposto «sì» a SOLUSDT: una variante che batte le due baseline ma ha R medio dopo i costi non positivo entra nell'ordine dei ritocchi con il suo t contro la baseline (b). La regola va scritta nella 4.5 (backlog P1, punto 1). La sessione si è riattivata alle 10:14 UTC.
 
 - 8 ott, 12:25: il proprietario chiede che ogni nuova sessione di campagna usi Opus 5.5 con ultracode. Scritto in CLAUDE.md (sezione del protocollo) e nel backlog P1 per la 4.5. Le tre campagne aperte oggi lo rispettano già (get_session: modello claude-opus-5-5, ultracode attivo).
+
+### 8 ottobre, 13:40: tre consegne con la versione 4.4, un candidato
+
+SOLUSDT ha consegnato alle 11:19 UTC (session_01PU8tnr13mv82SqNMA2VNY7): «Nessuna strategia valida trovata per questa
+moneta»; 30 varianti (8 ritocchi, 22 famiglie), 41 verifiche, nessun candidato in validazione; 22 voci di
+correzione = ricalcolo delle varianti già fatte dopo la correzione del caricatore del funding. Riepilogo delle tre
+(conteggi dai log e righe dell'esito delle consegne): BTCUSDT 30 varianti, 5 ritocchi, 25 famiglie, 57 verifiche, 1
+candidato in validazione → «un candidato va al vault, con esito provvisorio» (p-value 0,048, unico candidato);
+ETHUSDT 30 varianti, 0 ritocchi, 30 famiglie, 6 verifiche, nessun candidato → nessuna strategia valida; SOLUSDT come
+sopra. Durate (ora di Roma): BTC 07:19-08:47; ETH 07:13-07:58; SOL 07:20-13:19, di cui 4 ore e 20 ferma sulla
+domanda dei ritocchi. Test da rieseguire prima del vault (Passo 4): le 30 varianti di ETHUSDT con il caricatore del
+funding corretto (BTC lo aveva già corretto nei suoi dati, SOL ha ricalcolato). STOP: decide il proprietario.
