@@ -734,4 +734,102 @@ def v30():
     return Variante("V30", tf, "long", prepara, condizione, segnale, _uscita_tempo(6, tf))
 
 
-TUTTE = {f"V{n:02d}": globals()[f"v{n:02d}"] for n in range(1, 31)}
+# ---------------------------------------------------------------------------
+# Ritocchi (regola 6)
+# ---------------------------------------------------------------------------
+
+def v31():
+    """Ritocco di V19: in piu' il filtro «giornata in calo alla chiusura delle 23:30»."""
+    base = v19()
+    GIORNO = 86_400_000
+    cond_base = base.condizione
+
+    def condizione(stato, storia):
+        c = cond_base(stato, storia)
+        if not c:
+            return c
+        ts = storia[-1].ts
+        p = stato.get(ts // GIORNO)
+        return storia[-1].close < p[0]  # p[0] = apertura del giorno (barra 00:00)
+
+    return Variante("V31", base.tf, base.direzione, base.prepara, condizione, base.segnale, base.uscita)
+
+
+def v32():
+    """Ritocco di V31: in piu' il filtro di volatilita' bassa.
+
+    Volatilita' = deviazione standard dei rendimenti logaritmici a 30 minuti delle ultime
+    960 barre (20 giorni), barra del segnale compresa. Filtro: alla barra delle 23:00 la
+    volatilita' e' <= alla mediana dei valori alle barre delle 23:00 dei 365 giorni prima.
+    """
+    base = v31()
+    GIORNO = 86_400_000
+
+    def prepara(candele):
+        stato = base.prepara(candele)
+        c = arr(candele, "close")
+        lr = np.zeros(c.size)
+        lr[1:] = np.diff(np.log(c))
+        s1 = np.cumsum(np.insert(lr, 0, 0.0))
+        s2 = np.cumsum(np.insert(lr * lr, 0, 0.0))
+        n = 960
+        vol = {}
+        storico = []  # (ts, vol) alle barre delle 23:00
+        mediana = {}
+        for i, x in enumerate(candele):
+            if x.ts % GIORNO != 23 * 3_600_000 or i < n:
+                continue
+            m = (s1[i + 1] - s1[i + 1 - n]) / n
+            var = (s2[i + 1] - s2[i + 1 - n]) / n - m * m
+            v = math.sqrt(max(var, 0.0) * n / (n - 1))
+            prec = [w for t, w in storico if t >= x.ts - 365 * GIORNO]
+            if len(prec) >= 300:
+                mediana[x.ts] = float(np.median(prec))
+            vol[x.ts] = v
+            storico.append((x.ts, v))
+        stato = dict(stato)
+        stato["_vol"] = vol
+        stato["_mediana"] = mediana
+        return stato
+
+    def condizione(stato, storia):
+        ts = storia[-1].ts
+        if not stato["_mediana"] or ts < min(stato["_mediana"]):
+            return None  # riscaldamento: la variante non puo' ancora entrare
+        c = base.condizione(stato, storia)
+        if not c:
+            return c
+        if ts not in stato["_mediana"]:
+            return None
+        return stato["_vol"][ts] <= stato["_mediana"][ts]
+
+    return Variante("V32", base.tf, base.direzione, prepara, condizione, base.segnale, base.uscita)
+
+
+def v33():
+    """Ritocco di V31: in piu' il filtro «solo sabato e domenica» (giorno UTC del segnale)."""
+    base = v31()
+
+    def condizione(stato, storia):
+        c = base.condizione(stato, storia)
+        if not c:
+            return c
+        return datetime.fromtimestamp(storia[-1].ts / 1000, tz=timezone.utc).weekday() >= 5
+
+    return Variante("V33", base.tf, base.direzione, base.prepara, condizione, base.segnale, base.uscita)
+
+
+def v34():
+    """Ritocco di V31: in piu' i due filtri di V32 (volatilita' bassa) e V33 (fine settimana)."""
+    a, b = v32(), v33()
+
+    def condizione(stato, storia):
+        c = a.condizione(stato, storia)
+        if not c:
+            return c
+        return b.condizione(stato, storia)
+
+    return Variante("V34", a.tf, a.direzione, a.prepara, condizione, a.segnale, a.uscita)
+
+
+TUTTE = {f"V{n:02d}": globals()[f"v{n:02d}"] for n in range(1, 35)}

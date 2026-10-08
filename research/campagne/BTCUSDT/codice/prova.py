@@ -26,6 +26,9 @@ def _variante_n():
 def prova(vid, ritocco_di=None, famiglia=None):
     v = varianti.TUTTE[vid]()
     meta = REGISTRO[vid]
+    if meta.get("ritocco_di"):
+        ritocco_di = f"{SIMBOLO}-{meta['ritocco_di']}"
+        famiglia = f"{SIMBOLO}-{meta['famiglia']}"
     lid = f"{SIMBOLO}-{vid}"
     if _gia(vid, ("risultato", "scarto")):
         print(vid, "gia' fatta")
@@ -36,6 +39,7 @@ def prova(vid, ritocco_di=None, famiglia=None):
         n = conteggio["trade"]
         if n < MINIMO:
             aggiungi_log({"id": lid, "tipo": "scarto", "idea": meta["idea"], "fonte": meta["fonte"],
+                          "famiglia": famiglia or lid, "ritocco_di": ritocco_di,
                           "meccanismo": meta["meccanismo"], "timeframe": v.tf, "direzione": v.direzione,
                           "parametri": meta["parametri"], "trade_stimati": n, "conteggio": conteggio,
                           "motivo": f"sotto i trade minimi di costruzione ({n} < {MINIMO}): non si testa, non consuma budget"})
@@ -46,7 +50,8 @@ def prova(vid, ritocco_di=None, famiglia=None):
                       "meccanismo": meta["meccanismo"], "timeframe": v.tf, "direzione": v.direzione,
                       "parametri": meta["parametri"], "periodo": "costruzione",
                       "previsione": meta["previsione"]["testo"], "criterio_successo": CRITERIO,
-                      "trade_stimati": n, "conteggio": conteggio, "variante_n": _variante_n()})
+                      "trade_stimati": n, "conteggio": conteggio, "variante_n": _variante_n(),
+                      **({"cambia": meta["cambia"]} if meta.get("cambia") else {})})
     else:
         n = reg[-1]["trade_stimati"]
     esito = quadro.valuta_costruzione(v)
