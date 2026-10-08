@@ -3151,3 +3151,5 @@ ETHUSDT 30 varianti, 0 ritocchi, 30 famiglie, 6 verifiche, nessun candidato → 
 sopra. Durate (ora di Roma): BTC 07:19-08:47; ETH 07:13-07:58; SOL 07:20-13:19, di cui 4 ore e 20 ferma sulla
 domanda dei ritocchi. Test da rieseguire prima del vault (Passo 4): le 30 varianti di ETHUSDT con il caricatore del
 funding corretto (BTC lo aveva già corretto nei suoi dati, SOL ha ricalcolato). STOP: decide il proprietario.
+
+- 8 ott, 15:40: il proprietario chiede di ricalcolare prima Ethereum. Unito il principale (con la correzione del caricatore del funding) nel branch della campagna ETHUSDT (8f908c5). Prima sessione di ricalcolo (session_01VXzCWnuWAtgxRXF9T3bpoA) aperta passando il modello in modo esplicito: get_session mostra che così ultracode NON passa. Archiviata e riaperta alle 15:34 ora di Roma senza passare il modello (session_01UE1EnkhKiumXfxCM55DcrZ), riparte dal suo commit di apertura b717e22. Cosa abbiamo capito: per avere Opus 5.5 con ultracode il modello va ereditato, non passato; regola corretta in CLAUDE.md. Controllo alle 16:25 ora di Roma.

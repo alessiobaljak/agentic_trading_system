@@ -119,7 +119,8 @@ caso e perde dopo i costi non ha una regola (SOLUSDT si è fermata alle 05:51 UT
 che fa una domanda resta ferma senza che nessuno la veda: 2 ore e 40 perse prima del controllo del coordinamento;
 (3) il proprietario chiede se rimettere un tempo minimo di lavoro o allargare il budget (8 ott); (4) ogni
 sessione di campagna usa il modello Opus 5.5 con ultracode attivo (richiesta del proprietario, 8 ott: già in
-CLAUDE.md, da scrivere nella sezione 9 del protocollo). **Cosa:** scrivere
+CLAUDE.md, da scrivere nella sezione 9 del protocollo; il modello si eredita dalla sessione che crea, NON si passa:
+passato in modo esplicito toglie ultracode, visto l'8 ott alle 13:24 UTC). **Cosa:** scrivere
 nella 4.5 la risposta del proprietario al punto 1; controlli del coordinamento ogni ora mentre una campagna lavora,
 con la domanda girata al proprietario; la scelta sul punto 3. **Non cambia:** le campagne in corso finiscono con le
 regole con cui sono partite, salvo la risposta del proprietario alla domanda di SOLUSDT. **Quando:** prima delle
