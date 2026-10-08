@@ -8,9 +8,11 @@ import registro  # noqa: E402
 
 voci = registro.voci()
 reg = {v["id"]: v for v in voci if v.get("tipo") == "registrazione"}
-for v in voci:
-    if v.get("tipo") != "risultato":
-        continue
+ultimo = {}
+for v in voci:  # l'ultimo risultato valido per id: una 'correzione' sostituisce il risultato precedente
+    if v.get("tipo") in ("risultato", "correzione") and "metriche" in v:
+        ultimo[v["id"]] = v
+for v in sorted(ultimo.values(), key=lambda x: reg.get(x["id"], {}).get("variante_n", 0)):
     m, a, b = v["metriche"], v["baseline_a"], v["baseline_b"]
     r = reg.get(v["id"], {})
     print(f"{v['id']:<14} n{r.get('variante_n')} {r.get('timeframe'):>4} {r.get('direzione'):<5} tr {m.get('trade'):>4} "

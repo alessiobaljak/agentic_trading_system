@@ -43,7 +43,38 @@ def risultato(vid, ris):
     return voce
 
 
+MOTIVO_FUNDING = ("ricalcolo dopo la correzione del caricatore del funding (CHANGELOG 2026-10-08, istante dei "
+                  "settlement al secondo) e della curva del capitale dai pnl_pct (voce SOLUSDT-N017): stesse regole, "
+                  "stessa registrazione; sostituisce il risultato precedente con lo stesso id")
+
+
+def ricalcola(vid):
+    """Voce 'correzione' che rimanda al risultato sbagliato: stesse regole, strumenti corretti."""
+    precedenti = [v for v in registro.voci() if v.get("id") == vid and v.get("tipo") in ("risultato", "correzione")]
+    if not precedenti:
+        raise ValueError(f"{vid}: nessun risultato da correggere")
+    reg = [v for v in registro.voci() if v.get("id") == vid and v.get("tipo") == "registrazione"][-1]
+    tf, costr = VARIANTI[vid][0], VARIANTI[vid][1]
+    ris = comune.valuta(tf, costr, "costruzione")
+    voce = risultato(vid, ris)
+    voce["tipo"] = "correzione"
+    voce["corregge"] = {"tipo": precedenti[-1]["tipo"], "data": precedenti[-1]["data"],
+                        "r_medio_prima": precedenti[-1]["metriche"].get("r_medio"),
+                        "t_b_prima": precedenti[-1]["baseline_b"].get("t")}
+    voce["motivo"] = MOTIVO_FUNDING
+    voce["trade_uguali_alla_stima"] = voce["metriche"].get("trade") == reg["trade_stimati"]
+    registro.aggiungi(voce)
+    (schede.BOZZE / f"ris_{vid}.json").write_text(json.dumps(comune.pulito(ris), ensure_ascii=False, default=str))
+    print(vid, "ricalcolo trade", voce["metriche"].get("trade"), "stima", reg["trade_stimati"], "R",
+          voce["metriche"].get("r_medio"), "(prima", voce["corregge"]["r_medio_prima"], ") t_b",
+          voce["baseline_b"].get("t"), "(prima", voce["corregge"]["t_b_prima"], ") cand", voce["candidato"], flush=True)
+
+
 if __name__ == "__main__":
+    if sys.argv[1] == "ricalcola":
+        for vid in sys.argv[2:]:
+            ricalcola(vid)
+        sys.exit(0)
     n = int(sys.argv[1])
     for vid in sys.argv[2:]:
         schede.principale("registra", vid, n)

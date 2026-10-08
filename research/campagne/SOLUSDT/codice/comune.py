@@ -101,10 +101,18 @@ class Serie:
     funding: List[Tuple[int, float]]
 
 
+def _versione_caricatore() -> str:
+    """Impronta di src/dati.py: se il caricatore cambia (es. CHANGELOG 2026-10-08), la cache si rifà."""
+    return dati.impronta_file(Path(dati.__file__))
+
+
 def carica(tf: str, periodo: str = "costruzione") -> Serie:
     """Serie del timeframe: 'costruzione' (fino alla fine della costruzione) o 'validazione' (tutto)."""
-    if not (CACHE / f"{tf}.pkl").is_file() or not (CACHE / "funding.pkl").is_file():
+    versione = CACHE / "versione_caricatore.txt"
+    aggiornata = versione.is_file() and versione.read_text().strip() == _versione_caricatore()
+    if not aggiornata or not (CACHE / f"{tf}.pkl").is_file() or not (CACHE / "funding.pkl").is_file():
         _prepara_cache()
+        versione.write_text(_versione_caricatore() + "\n")
     with open(CACHE / f"{tf}.pkl", "rb") as f:
         d = pickle.load(f)
     with open(CACHE / "funding.pkl", "rb") as f:
@@ -350,10 +358,13 @@ def valuta(tf: str, costruttrice: Costruttrice, periodo: str = "costruzione", pa
     vinti = sum(t.pnl for t in trades if t.pnl > 0)
     persi = -sum(t.pnl for t in trades if t.pnl < 0)
     migliori = sorted(r, reverse=True)[3:]
+    # curva del capitale dai rendimenti dei trade (pnl / capitale all'ingresso), partendo dal
+    # capitale iniziale: in costruzione coincide con capitale + somma dei pnl (una posizione alla
+    # volta); in validazione non dipende dal capitale lasciato dalla costruzione.
     curva = [(trades[0].ts_entrata, parametri.capitale_iniziale)]
     cap = parametri.capitale_iniziale
     for t in trades:
-        cap += t.pnl
+        cap *= 1 + t.pnl_pct
         curva.append((t.ts_uscita, cap))
     out["metriche"] = {
         "profit_factor": round(vinti / persi, 4) if persi > 0 else None,
