@@ -755,7 +755,7 @@ def v31():
     return Variante("V31", base.tf, base.direzione, base.prepara, condizione, base.segnale, base.uscita)
 
 
-def v32():
+def v32(quantile=0.5, vid="V32"):
     """Ritocco di V31: in piu' il filtro di volatilita' bassa.
 
     Volatilita' = deviazione standard dei rendimenti logaritmici a 30 minuti delle ultime
@@ -784,7 +784,7 @@ def v32():
             v = math.sqrt(max(var, 0.0) * n / (n - 1))
             prec = [w for t, w in storico if t >= x.ts - 365 * GIORNO]
             if len(prec) >= 300:
-                mediana[x.ts] = float(np.median(prec))
+                mediana[x.ts] = float(np.quantile(prec, quantile))
             vol[x.ts] = v
             storico.append((x.ts, v))
         stato = dict(stato)
@@ -803,7 +803,7 @@ def v32():
             return None
         return stato["_vol"][ts] <= stato["_mediana"][ts]
 
-    return Variante("V32", base.tf, base.direzione, prepara, condizione, base.segnale, base.uscita)
+    return Variante(vid, base.tf, base.direzione, prepara, condizione, base.segnale, base.uscita)
 
 
 def v33():
@@ -832,4 +832,54 @@ def v34():
     return Variante("V34", a.tf, a.direzione, a.prepara, condizione, a.segnale, a.uscita)
 
 
-TUTTE = {f"V{n:02d}": globals()[f"v{n:02d}"] for n in range(1, 35)}
+def v35():
+    """Ritocco di V31: filtro di volatilita' come V32 ma con soglia al 75° percentile."""
+    return v32(quantile=0.75, vid="V35")
+
+
+def v36(M=2190, vid="V36"):
+    """Ritocco di V28: in piu' il filtro di volatilita' alta.
+
+    Volatilita' = deviazione standard dei rendimenti logaritmici a 4 ore delle ultime 960
+    barre, barra del segnale compresa (la misura dello studio dei fallimenti). Filtro: sopra
+    la mediana dei suoi valori nelle 2.190 barre precedenti (365 giorni).
+    """
+    base = v28()
+    N = 960
+
+    def prepara(candele):
+        stato = base.prepara(candele)
+        c = arr(candele, "close")
+        lr = np.zeros(c.size)
+        lr[1:] = np.diff(np.log(c))
+        s1 = np.cumsum(np.insert(lr, 0, 0.0))
+        s2 = np.cumsum(np.insert(lr * lr, 0, 0.0))
+        vol = np.full(c.size, np.nan)
+        for i in range(N, c.size):
+            m = (s1[i + 1] - s1[i + 1 - N]) / N
+            vol[i] = math.sqrt(max((s2[i + 1] - s2[i + 1 - N]) / N - m * m, 0.0) * N / (N - 1))
+        med = np.full(c.size, np.nan)
+        for i in range(N + M, c.size):
+            med[i] = np.median(vol[i - M:i])
+        for x, v, mm in zip(candele, vol, med):
+            stato[x.ts] = dict(stato[x.ts], vol=float(v), med=float(mm))
+        return stato
+
+    def condizione(stato, storia):
+        s = stato[storia[-1].ts]
+        if nan(s["med"]):
+            return None
+        c = base.condizione(stato, storia)
+        if not c:
+            return c
+        return s["vol"] > s["med"]
+
+    return Variante(vid, base.tf, base.direzione, prepara, condizione, base.segnale, base.uscita)
+
+
+def v37():
+    """Ritocco di V28: come V36 ma la mediana si calcola sulle 1.095 barre precedenti (182 giorni)."""
+    return v36(M=1095, vid="V37")
+
+
+TUTTE = {f"V{n:02d}": globals()[f"v{n:02d}"] for n in range(1, 38)}
