@@ -3062,3 +3062,29 @@ casuale, date in virgola mobile. Corretto tutto tranne due punti del guardiano, 
 attaccante dedicato. Commit sul principale: b9659df, c4248a3, f989853, 3cffbae; rapporto della prova aggiornato sul
 coordinamento (aa05619). Test: 710 della ricerca passano. Prossimo passo: il testo al proprietario; dopo il suo ok,
 archiviazione dei tre branch e riapertura delle tre campagne.
+
+### Controllo dell'8 ottobre (mattina)
+
+**Nessun guasto.** Bot vivo (battito 2 s, ops 0550), controllo orario regolare (03:24 UTC, ops 0542), letture Firestore
+12.109 nelle 24 ore (rifiutati 8.456; ieri 8.674, ops 0542), spesa AI di ieri 0 (nessuna chiamata, ops 0540), nessun
+errore nelle righe lette. Le righe «SPENTE» non sono nelle 80 righe del log del gate (solo candele del giro in corso,
+ops 0543): prova indiretta dalla riga ORIGINI (nuove AI 0, varianti 0, ops 0541). **Giro della notte 4 h 47**
+(GATE_SFORA, 21:18-02:06 UTC): 81.788 valutazioni (il giro prima 45.069), 228 passate, 254 coin (ops 0541). **Spazio
+del registro ~496 coppie** (ieri ~603): sotto 400 domani. **Numeri:** 377 trade, 55%, −98,04 USDT (lordo −45,16),
+equity 902,30, DRY_RUN True, 8 aperte con 1,24% a rischio, massimo 15 insieme (ops 0539; nei trade 14, ops 0538).
+Ieri 40 trade delle validate, −10,39 USDT, −0,191R a trade (lordo −0,093, costi 0,098); 7 giorni −0,144R su 162
+(ops 0551). Giornate: dal 16 set 7 in utile e 16 in perdita sulla colonna paper (ops 0547). Dal 27 set −0,101R
+netti su 227 (lordo −0,004, costi 0,097); long −0,190R su 134, short +0,027 su 93; regime neutro −0,110 su 111
+(ops 0538). **Fuori campione:** motore −0,08R su 279 segnali ±0,14 (ieri −0,05 su 230); stessi segnali paper −0,11
+contro motore −0,08, differenza +0,03 ±0,06 → la lettura stampata resta «la prossima modifica va nel gate»,
+esecuzione non si decide; seconda lettura ufficiale il 14 ott (ops 0547). Stop: 167, sbagliati dall'inizio 75, sotto
+il primo gradino 91 (ops 0544). Curva del vantaggio: nessun vantaggio (ops 0544). Scale: 0,8/1,6/2,4 −0,26R
+(migliore), 2/4/6 −0,86. Declassate dal 27 set −0,129R su 158 contro −0,036 su 69: −0,094 ±0,281 → non si decide
+(ops 0538). Funzioni: tutte «non si vede ancora» o campione piccolo (ops 0538). Selettore: non batte (ops 0546).
+Rifiuti: soprattutto «posizione già aperta» e cooldown (ops 0548); i rifiutati per cooldown +0,04R contro aperti
+−0,10 su 56, ma sono prezzo puro senza costi (ops 0549). **Gate:** 279 validate su 84 coin, 855 a 2/3, t ≥ 2 per
+98 su 137, declassate 182; passata a 1 ora 328 su 15.360; nessuna validata né trade a 1 ora stampati. Una strategia
+(gen_fa304106) ha 10 perdite di fila, freno di serie spento (ops 0539). Protocollo: le tre campagne della prova
+sono ferme alla consegna (ultimi commit del 7 ott); il testo della 4.4 aspetta il sì del proprietario. **Proposta del
+giorno:** nessuna voce nuova (il protocollo è allo STOP: approvazione della 4.4). Da tenere d'occhio: lo spazio del
+registro, che domani scende sotto 400 (voce D1, gruppo 5).

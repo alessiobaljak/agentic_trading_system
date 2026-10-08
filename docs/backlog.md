@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato il 7 ottobre 2026, 08:40 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato l'8 ottobre 2026, 06:20 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
+| **0. Aspettano il tuo sì** | nessuna voce nuova: aspetta il tuo ok il testo della versione 4.4 del protocollo (voce P0, gruppo 1) | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: prova di processo fatta il 7 ott; versione 4.4 scritta e rivista, da approvare; poi si rifanno le tre campagne), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |

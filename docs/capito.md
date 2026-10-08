@@ -7,6 +7,13 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-08
+* Il numero guida peggiora ancora, con più segnali: dopo la scelta del gate il motore fa −0,08R a trade su 279 segnali, margine ±0,14R per giornata (ops 0547); ieri −0,05 su 230 (ops 0532). La lettura del 7 ott («la prossima modifica va nel gate») si rafforza invece di attenuarsi; sugli stessi segnali paper e motore restano vicini (+0,03 ±0,06): il problema continua a essere cosa sceglie il gate, non come esegue il bot.
+* Il giro della notte del gate ha fatto quasi il doppio del lavoro: 81.788 valutazioni contro 45.069 del giro prima, ed è durato 4 h 47 invece di 3 h 21 (ops 0541, ops 0526). Le coin valutate sono 254. Il motivo del raddoppio non è stampato: va capito prima che i giri si accavallino.
+* Lo spazio del registro scende di circa 107 coppie al giorno: ~496 stamattina, ~603 ieri (ops 0541, ops 0526). Di questo passo la soglia d'allarme dei 400 si supera domani (9 ott): la voce D1 del gruppo 5 («solo se serve») sta per servire.
+* Le letture di Firebase sono salite del 40% in un giorno: 12.109 nelle 24 ore contro 8.674 ieri, e 8.456 vengono dai segnali rifiutati (ops 0542, ops 0527). Lontane dalla quota (50.000), ma crescono più in fretta dei trade.
+* Dal 27 set i long perdono −0,190R a trade su 134 e gli short guadagnano +0,027R su 93 (ops 0538): quinta lettura di fila con lo stesso segno. L'unico angolo in utile resta lo short contro il verso di BTC: +0,134R su 48.
+
 ## 2026-10-06
 * Il numero guida resta sotto zero mentre il margine si stringe: −0,04R su 202 segnali ±0,16 (ops 0517; il 3 ott −0,03 su 130 ±0,18). La lettura ufficiale è domani: con questi numeri la regola («motore ≤ 0 con almeno 80 segnali») scatterebbe, e la lettura stampata lo dice già. Non è più un'oscillazione: in quattro giorni non è mai andato oltre +0,006.
 * Il registro cresce da solo mentre il paper resta fermo: 257 validate su 82 monete (ops 0511), erano 235 ieri e 223 sabato. La spinta è l'«intorno» delle quasi-promosse: 204 figlie nel giro della notte, 3 promosse. Spazio nel registro ~758 coppie: di questo passo (stima: ~100 coppie al giorno fra validate e in attesa) l'allarme dei 400 arriva fra 3-4 giorni, non settimane.
