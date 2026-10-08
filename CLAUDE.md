@@ -82,6 +82,12 @@ Chi lavora in una sessione di campagna legge solo i percorsi ammessi dal Passo 3
 protocollo e non scrive ipotesi o risultati in questo file. Il gate attuale resta acceso come
 gruppo di controllo finche' il proprietario non decide altrimenti.
 
+**Ogni sessione di campagna si apre con il modello `claude-opus-5-5` e con ultracode attivo** (richiesta
+del proprietario, 8 ott 2026). Nella creazione si passa `model: "claude-opus-5-5"`, la sorgente del
+repository e il branch principale; ultracode passa dalla sessione che crea: dopo la creazione si
+controlla con `get_session` che `flag_settings.ultracode` sia `true`, e se no la sessione si archivia e
+si riapre da una sessione che ce l'ha.
+
 ## Non hai accesso alla VPS — ma hai un canale
 
 Non puoi entrare sulla macchina ne' leggere Firebase. Puoi pero' **chiedere alla VPS

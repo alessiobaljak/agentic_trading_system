@@ -3137,3 +3137,5 @@ proprietario. Ritocchi e uso del budget: ETHUSDT 30 varianti senza ritocchi (con
 - 8 ott, 11:37: SOLUSDT ancora ferma sulla domanda delle 05:51 UTC (22 varianti, nessun ritocco); il proprietario ha il testo da incollare. BTCUSDT ed ETHUSDT consegnate.
 
 - 8 ott, 12:16: il proprietario ha risposto «sì» a SOLUSDT: una variante che batte le due baseline ma ha R medio dopo i costi non positivo entra nell'ordine dei ritocchi con il suo t contro la baseline (b). La regola va scritta nella 4.5 (backlog P1, punto 1). La sessione si è riattivata alle 10:14 UTC.
+
+- 8 ott, 12:25: il proprietario chiede che ogni nuova sessione di campagna usi Opus 5.5 con ultracode. Scritto in CLAUDE.md (sezione del protocollo) e nel backlog P1 per la 4.5. Le tre campagne aperte oggi lo rispettano già (get_session: modello claude-opus-5-5, ultracode attivo).

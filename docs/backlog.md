@@ -117,7 +117,9 @@ e revisione critica nel diario; legata a T1 e a R1.
 candidati», ma dalla 4.4 un candidato deve anche avere R medio dopo i costi positivo: una variante che batte il
 caso e perde dopo i costi non ha una regola (SOLUSDT si è fermata alle 05:51 UTC per chiederlo; DECISO dal proprietario l'8 ott alle 10:14 UTC: «sì», entra nell'ordine dei ritocchi con il suo t contro la (b)); (2) una campagna
 che fa una domanda resta ferma senza che nessuno la veda: 2 ore e 40 perse prima del controllo del coordinamento;
-(3) il proprietario chiede se rimettere un tempo minimo di lavoro o allargare il budget (8 ott). **Cosa:** scrivere
+(3) il proprietario chiede se rimettere un tempo minimo di lavoro o allargare il budget (8 ott); (4) ogni
+sessione di campagna usa il modello Opus 5.5 con ultracode attivo (richiesta del proprietario, 8 ott: già in
+CLAUDE.md, da scrivere nella sezione 9 del protocollo). **Cosa:** scrivere
 nella 4.5 la risposta del proprietario al punto 1; controlli del coordinamento ogni ora mentre una campagna lavora,
 con la domanda girata al proprietario; la scelta sul punto 3. **Non cambia:** le campagne in corso finiscono con le
 regole con cui sono partite, salvo la risposta del proprietario alla domanda di SOLUSDT. **Quando:** prima delle
