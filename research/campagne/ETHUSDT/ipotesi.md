@@ -828,6 +828,65 @@ fine del giorno.
 
 ---
 
+## I-18 — Dopo una barra grande con volume alto, il prezzo continua (cascata)
+
+Scritta l'8 ottobre 2026 dopo 29 varianti testate, per l'ultima unita' di budget. **Nasce
+dallo studio dei fallimenti** (Fase 3, voce ETHUSDT-N011): il rimbalzo di I-13 non c'e', il
+prezzo continua. Il protocollo ammette una strategia nata dai fallimenti solo come idea
+nuova con la sua fonte: e' questa. Lo si dichiara perche' pesa sul giudizio: un'idea scelta
+dopo aver visto che il contrario fallisce sui dati di costruzione avra' quasi certamente un
+buon risultato di costruzione; il giudice vero e' la validazione, che non e' stata toccata.
+
+**Fonte.** Guillermo Llorente, Roni Michaely, Gideon Saar e Jiang Wang, «Dynamic
+Volume-Return Relation of Individual Stocks», The Review of Financial Studies 15(4), 2002,
+pp. 1005-1047: i rendimenti generati da scambi speculativi (informati) con volume alto
+tendono a continuare, quelli da scambi di copertura a invertirsi. A sostegno del meccanismo
+a cascata: Carol L. Osler, «Stop-loss orders and price cascades in currency markets»,
+Journal of International Money and Finance 24(2), 2005, pp. 219-241 (gli stop scattano a
+ondate e il movimento accelera e dura).
+
+**Affermazione falsificabile.** Su ETHUSDT a 1 ora, dopo una barra che scende di oltre 2
+ATR(24) dall'apertura alla chiusura con volume oltre 3 volte la media delle 24 barre prima,
+uno short tenuto 6 ore ha un R medio piu' alto di uno short casuale con la stessa uscita.
+
+**Sotto-domande.** Vale di piu' quando il funding era alto (piu' long a leva da
+liquidare)? Dura piu' di 6 ore? Chi agisce: le liquidazioni dei long a leva e gli stop dei
+long, che vendono a mercato a ondate; chi ha informazione. Tempo: ore.
+
+**Perche' solo lo short (una sola variante).** C'e' un'unita' di budget. Fra le due
+direzioni si sceglie con il meccanismo, non con il risultato: nel periodo di costruzione la
+leva affollata e' quasi sempre dal lato dei long (funding positivo nel 97% dei settlement
+del 2020 e nel 96% del 2021, `fase0_dati.md`), quindi le cascate di liquidazioni piu'
+frequenti sono al ribasso. (Il fallimento piu' forte di I-13 era invece dall'altro lato,
+I-13b: non si sceglie quello.)
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Caso e selezione: l'idea e' scelta dopo aver visto I-13a fallire sugli stessi dati | buon risultato di costruzione, nullo in validazione | effetto anche in validazione |
+| 2 | Volatilita': dopo una barra estrema la volatilita' resta alta; uno short casuale con la stessa uscita la prende uguale | R come la (b) | batte la (b) |
+| 3 | Trend di fondo (il 2022 e' in ribasso) | short buono solo nel 2022 | R sopra la (b) anche nel 2020-2021 |
+| 4 | E' solo il mercato: la caduta e' di BTC | — (contesto) | — |
+| 5 | Costi: stop sopra il massimo della barra, distanza grande, costo sotto 0,03 R | piccoli | — |
+| 6 | Artefatto: il volume del motore e' in ETH, non in USDT | — | — |
+| 7 | Pochi eventi estremi (marzo 2020, maggio 2021) | senza i 3 migliori crolla | R senza i 3 migliori sopra la (b) |
+| 8 | Rimbalzo che arriva dopo: la cascata dura meno di 6 ore e poi rimbalza | R vicino a zero | — |
+| 9 | Liquidazioni a ondate e informazione (l'ipotesi) | R sopra la (b) in piu' anni | t sotto 1 |
+| 10 | Il funding: lo short incassa il funding positivo | aiuta lo short di poco | — |
+
+**Ipotesi completa.** ETHUSDT, continuazione dopo una barra di vendite forzate, 1h.
+
+**Variante.**
+* **I-18a** — 1h, short. Condizione: chiusura - apertura < -2 x ATR(24) calcolato sulle barre
+  precedenti, e volume > 3 volte la media del volume delle 24 barre precedenti (la stessa
+  condizione di I-13a). Uscita dopo 6 barre. Stop: massimo della barra del segnale piu' 0,5
+  ATR(24), con distanza al massimo 6%. Previsione: R medio fra +0,05 e +0,30 dopo i costi;
+  batte nettamente la (b) (per la selezione dichiarata qui sopra, non per un vantaggio
+  provato).
+
+---
+
 ## Ordine dei test
 
 Le idee si contano e si testano nell'ordine di questo file (I-01 ... I-14), una variante

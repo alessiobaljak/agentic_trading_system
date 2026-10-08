@@ -512,15 +512,40 @@ class VenditeForzate(Variante):
 
 
 # --------------------------------------------------------------------------- #
+# I-18 continuazione dopo una barra di vendite forzate (1h)
+# --------------------------------------------------------------------------- #
+class Cascata(VenditeForzate):
+    """Stessa condizione di I-13a (caduta oltre 2 ATR con volume oltre 3 volte), ma short."""
+
+    PARAMETRI_IN_BARRE = ("n", "uscita")
+
+    def __init__(self, serie, direzione="short", n=24, k_corpo=2.0, k_volume=3.0, uscita=6, k_stop=0.5):
+        super().__init__(serie, direzione, n=n, k_corpo=k_corpo, k_volume=k_volume, uscita=uscita, k_stop=k_stop)
+
+    def calcola_segnale(self, storia):
+        b = storia[-1]
+        return segnale_da_livello("short", b.close, b.high + self.k_stop * self.atr_prec)
+
+    def condizione(self, storia):
+        b = storia[-1]
+        if b.volume <= self.k_volume * self.vol_prec:
+            return False
+        return b.close - b.open < -self.k_corpo * self.atr_prec
+
+
+# --------------------------------------------------------------------------- #
 # I-14 rifiuto al massimo / minimo del giorno prima (1h)
 # --------------------------------------------------------------------------- #
 class GiornoPrima(Variante):
-    def __init__(self, serie, direzione, uscita=6, k_stop=0.25):
+    #: parametri espressi in barre (si convertono nella verifica dei timeframe adiacenti)
+    PARAMETRI_IN_BARRE = ("uscita", "n_atr")
+
+    def __init__(self, serie, direzione, uscita=6, k_stop=0.25, n_atr=14):
         super().__init__(serie)
         self.direzione = direzione
         self.uscita = uscita
         self.k_stop = k_stop
-        self.atr = ATR(14)
+        self.atr = ATR(n_atr)
         self.giorno = None
         self.max_oggi = None
         self.min_oggi = None
@@ -726,4 +751,5 @@ VARIANTI = {
     "I-16b": (StessaOra, {"direzione": "short"}, "1h"),
     "I-17a": (RotturaVolatilita, {"direzione": "long"}, "1h"),
     "I-17b": (RotturaVolatilita, {"direzione": "short"}, "1h"),
+    "I-18a": (Cascata, {"direzione": "short"}, "1h"),
 }

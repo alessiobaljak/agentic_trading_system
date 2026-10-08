@@ -25,6 +25,9 @@ F_OSLER00 = "Carol L. Osler, «Support for Resistance: Technical Analysis and In
 F_CHORDIA = "Tarun Chordia e Avanidhar Subrahmanyam, «Order imbalance and individual stock returns: Theory and evidence», Journal of Financial Economics 72(3), 2004"
 F_HESTON = "Steven L. Heston, Robert A. Korajczyk, Ronnie Sadka, «Intraday Patterns in the Cross-Section of Stock Returns», Journal of Finance 65(4), 2010"
 F_WILLIAMS = "Larry Williams, «Long-Term Secrets to Short-Term Trading», John Wiley & Sons, 1999"
+F_LLORENTE = ("Guillermo Llorente, Roni Michaely, Gideon Saar, Jiang Wang, «Dynamic Volume-Return Relation of Individual "
+              "Stocks», Review of Financial Studies 15(4), 2002; a sostegno Carol L. Osler, «Stop-loss orders and price "
+              "cascades in currency markets», Journal of International Money and Finance 24(2), 2005")
 
 
 def _s(idea, fonte, meccanismo, regole, r_min, r_max, netta_b=False):
@@ -101,4 +104,8 @@ SCHEDE = {
                 "1h long: prima barra del giorno (apertura 00-22 UTC) con chiusura > apertura del giorno + 0,5 x escursione di ieri; esce alla chiusura della barra delle 23; stop all'apertura del giorno al massimo 6%", -0.10, 0.15),
     "I-17b": _s("I-17", F_WILLIAMS, "rottura di volatilita' verso il basso dall'apertura del giorno",
                 "1h short: prima barra del giorno con chiusura < apertura del giorno - 0,5 x escursione di ieri; esce alla chiusura della barra delle 23; stop all'apertura del giorno al massimo 6%", -0.15, 0.10),
+    "I-18a": dict(_s("I-18", F_LLORENTE, "continuazione dopo una barra di vendite forzate (cascata di liquidazioni dei long)",
+                     "1h short: chiusura - apertura < -2 ATR(24) precedente e volume > 3 volte la media di 24 barre; esce dopo 6 barre; stop al massimo della barra piu' 0,5 ATR(24) al massimo 6%",
+                     0.05, 0.30, netta_b=True),
+                  nota="idea nata dallo studio dei fallimenti di I-13 (ETHUSDT-N011), con fonte; selezione dichiarata in ipotesi.md"),
 }

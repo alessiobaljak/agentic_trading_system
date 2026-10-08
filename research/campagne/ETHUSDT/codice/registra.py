@@ -67,6 +67,8 @@ def main() -> None:
         "trade_stimati": conteggio["trade"],
         "conteggio": conteggio,
     }
+    if "nota" in scheda:
+        voce["nota_idea"] = scheda["nota"]
     if "cosa_cambia" in scheda:
         voce["cosa_cambia"] = scheda["cosa_cambia"]
         voce["perche"] = scheda["perche"]
