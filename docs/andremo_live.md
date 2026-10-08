@@ -3107,3 +3107,12 @@ repository come sorgente esplicita e il messaggio di apertura della 4.4 (ordine 
 pratiche del guardiano, strumenti comuni, budget per intero, nessun accenno alla prova): BTCUSDT
 session_017QE4DEoPbuHDKpzc3gh9m3, ETHUSDT session_01HEDsRZbsCXFwsg5pwrfzgw, SOLUSDT session_016DsPdvdJrgz2v1tiYadgKj.
 Controllo del primo push entro 35 minuti; il coordinamento non legge le ipotesi fino al Passo 7.
+
+### 8 ottobre, 07:25: Bitcoin e Solana riaperte
+
+Alle 05:18 UTC la sessione ETHUSDT lavorava (branch creato, test del guardiano), mentre BTCUSDT e SOLUSDT risultavano
+ancora ferme all'istante di creazione. Il coordinamento le ha archiviate alle 05:19 e riaperte una alla volta:
+BTCUSDT session_01U7S57s6evHNkcLaH2xfzLE (05:19 UTC), SOLUSDT session_01PU8tnr13mv82SqNMA2VNY7 (05:20 UTC). Errore
+del coordinamento: SOLUSDT stava partendo proprio in quel momento (aggiornata alle 05:19:03); non aveva fatto nulla
+(nessun branch, nessuna memoria usata), quindi non si è perso lavoro. Lezione: una sessione nel cloud può metterci
+più di 5 minuti ad avviarsi; si giudica ferma solo dopo 20-25 minuti senza aggiornamenti.
