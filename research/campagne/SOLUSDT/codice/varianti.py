@@ -205,15 +205,17 @@ _i06b = _i06_gen(1.5)
 # I-07 NR7 e rottura (4h)
 # --------------------------------------------------------------------------- #
 
-def _i07(direzione: str, filtro_sma200: bool = False, atr_massimo: Optional[float] = None, tenuta: int = 6):
+def _i07(direzione: str, filtro_sma200: bool = False, atr_massimo: Optional[float] = None, tenuta: int = 6,
+         forza_massima: Optional[float] = None, finestra_nr: int = 7):
     """filtro_sma200 (ritocco SOLUSDT-028 di 012): solo con il close sotto (short) / sopra (long) la SMA200.
     atr_massimo (ritocco SOLUSDT-029 di 028): solo se ATR(14) / close della barra di segnale < atr_massimo."""
     def costr(s: Serie) -> Regole:
         c, close, h, l, o, n = base(s)
         a14 = atr(c, 14) if atr_massimo is not None else None
         rng = h - l
-        minimo7 = rolling_min(rng, 7)
-        nr7 = (rng <= minimo7) & ~np.isnan(minimo7)  # la barra ha l'escursione minima delle ultime 7
+        # finestra_nr (ritocco SOLUSDT-032 di 030): NR4 invece di NR7 (Crabel descrive entrambe)
+        minimo7 = rolling_min(rng, finestra_nr)
+        nr7 = (rng <= minimo7) & ~np.isnan(minimo7)  # la barra ha l'escursione minima delle ultime finestra_nr
         pronto = np.zeros(n, dtype=bool)
         pronto[1:] = ~np.isnan(minimo7[:-1])
         if filtro_sma200:
@@ -237,7 +239,9 @@ def _i07(direzione: str, filtro_sma200: bool = False, atr_massimo: Optional[floa
             cond0 = lambda i: i >= 1 and nr7[i - 1] and close[i] < l[i - 1]
             filtro = (lambda i: close[i] < m200[i]) if filtro_sma200 else (lambda i: True)
         fv = (lambda i: a14[i] / close[i] < atr_massimo) if atr_massimo is not None else (lambda i: True)
-        cond = lambda i: cond0(i) and filtro(i) and fv(i)
+        # forza_massima (ritocco SOLUSDT-031 di 030): |close[i] / close[i-1] - 1| della barra di rottura sotto la soglia
+        ff = (lambda i: abs(close[i] / close[i - 1] - 1) < forza_massima) if forza_massima is not None else (lambda i: True)
+        cond = lambda i: cond0(i) and filtro(i) and fv(i) and ff(i)
         return Regole(segnale, cond, esci_dopo(tenuta))
     return costr
 
@@ -440,6 +444,8 @@ VARIANTI: Dict[str, tuple] = {
     "SOLUSDT-028": ("4h", _i07("short", filtro_sma200=True)),  # ritocco di 012
     "SOLUSDT-029": ("4h", _i07("short", filtro_sma200=True, atr_massimo=0.045)),  # ritocco di 028 (scarto)
     "SOLUSDT-030": ("4h", _i07("short", filtro_sma200=True, tenuta=12)),  # ritocco di 028
+    "SOLUSDT-031": ("4h", _i07("short", filtro_sma200=True, tenuta=12, forza_massima=0.03)),  # ritocco di 030 (scarto)
+    "SOLUSDT-032": ("4h", _i07("short", filtro_sma200=True, tenuta=12, finestra_nr=4)),  # ritocco di 030
     "SOLUSDT-021": ("1h", _i13("long")),
     "SOLUSDT-022": ("1h", _i13("short")),
 }

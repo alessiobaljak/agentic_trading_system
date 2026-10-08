@@ -148,8 +148,28 @@ EXTRA["SOLUSDT-030"] = ("SOLUSDT-012", "SOLUSDT-028",
 S["SOLUSDT-030"] = ("I-07", "NR7 e rottura al ribasso, sotto la SMA200, tenuta 12 barre", "short",
                     {"condizione": "barra i-1 NR7 e close[i] < low[i-1], e close[i] < SMA200 (4h)", "stop": "high[i-1]", "target": None, "uscita": "a tempo dopo 12 barre"},
                     "R medio fra 0 e +0,4; t contro la (b) fra 1 e 2,5")
+EXTRA["SOLUSDT-031"] = ("SOLUSDT-012", "SOLUSDT-030",
+                        "aggiunge a 030 il filtro '|close / close precedente - 1| della barra di rottura < 3%'. Perche': studio "
+                        "dei fallimenti di 030 sui dati di costruzione (voce SOLUSDT-N028): terzili della forza della barra di "
+                        "rottura (confini 1,47% e 3,18%) R +0,17 / +0,60 / -0,04; lo stesso schema in 012 (+0,07 / +0,18 / -0,21) "
+                        "e in 028 (+0,34 / +0,19 / +0,004): le rotture con una barra gia' molto ampia si esauriscono. Soglia 3%: "
+                        "numero tondo vicino al confine del terzile, scelto su questi dati (dichiarato). Tenuta, stop e filtro "
+                        "della SMA200 di 030 invariati.")
+S["SOLUSDT-031"] = ("I-07", "NR7 e rottura al ribasso, sotto la SMA200, tenuta 12 barre, barra di rottura sotto il 3%", "short",
+                    {"condizione": "barra i-1 NR7 e close[i] < low[i-1], close[i] < SMA200 (4h) e |close[i]/close[i-1] - 1| < 0,03", "stop": "high[i-1]", "target": None, "uscita": "a tempo dopo 12 barre"},
+                    "R medio fra 0 e +0,5; t contro la (b) fra 1 e 3 (filtri scelti sui dati di costruzione)")
+EXTRA["SOLUSDT-032"] = ("SOLUSDT-012", "SOLUSDT-030",
+                        "NR4 invece di NR7: la barra i-1 ha l'escursione minima fra le barre i-4..i-1 (parametro del "
+                        "meccanismo, dalla stessa fonte, che descrive NR4 e NR7). Tenuta 12 barre, stop all'high della barra "
+                        "stretta, filtro della SMA200 di 030 invariati. Perche': lo studio di 030 (voci SOLUSDT-N028 e N029) "
+                        "non trova un altro fallimento sistematico che lasci almeno 70 trade (le fasce fini della forza della "
+                        "rottura non sono monotone: 4-5% -0,80 su 6 trade, 3-4% +1,03 su 10); il limite di 030 e' l'errore "
+                        "con 85 trade, e la NR4 da' piu' ingressi dallo stesso meccanismo.")
+S["SOLUSDT-032"] = ("I-07", "NR4 e rottura al ribasso, sotto la SMA200, tenuta 12 barre", "short",
+                    {"condizione": "barra i-1 NR4 (escursione minima fra le barre i-4..i-1) e close[i] < low[i-1], e close[i] < SMA200 (4h)", "stop": "high[i-1]", "target": None, "uscita": "a tempo dopo 12 barre"},
+                    "R medio fra -0,05 e +0,3; t contro la (b) fra 0,5 e 2,5")
 TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m", "SOLUSDT-025": "30m", "SOLUSDT-026": "30m", "SOLUSDT-027": "30m",
-            "SOLUSDT-028": "4h", "SOLUSDT-029": "4h", "SOLUSDT-030": "4h"}
+            "SOLUSDT-028": "4h", "SOLUSDT-029": "4h", "SOLUSDT-030": "4h", "SOLUSDT-031": "4h", "SOLUSDT-032": "4h"}
 TF.update(TF_EXTRA)
 
 
