@@ -150,6 +150,24 @@ numero di monete di verifica (la regola ammette monete nate nel vault: con 1% pe
 80 monete, 44% su 150). Monete con poca storia: 1000SHIB, MASK, DYDX, GALA hanno 596-682 giorni di costruzione
 contro 1022 di BTC; MATIC ha il vault che finisce il 2024-09-30. Stima dei tempi: circa 1 giorno di preparazione,
 2-3 giorni di calendario per le 17 su 3 posti (XRP, DOGE, BNB per prime). Aspetta il sì del proprietario.
+**Scenario «solo il candidato BTC dopo le 17» (domanda del proprietario, 8 ott sera; verificato da due controlli
+indipendenti sul protocollo e sui numeri):** (1) il vault non si apre da solo: servono le consegne, i test rifatti e
+la frase «APRI IL VAULT» (r.439); nessuna regola obbliga ad aprirlo subito, e aprirlo per un solo candidato consuma
+il 2024-2026 per sempre, per tutte le monete e le idee future (r.35, r.115). (2) «0 su 17» non distingue «nessun
+vantaggio» da «vantaggi piccoli che una moneta sola non mostra» (con R medi di 0,05-0,10 servono 300-500 trade,
+capito 7 ott): la campagna di gruppo non è nel protocollo, va scritta come regola nuova PRIMA dei numeri e prima del
+vault, dicendo su quali dati costruisce e valida (validazioni intatte delle monete senza candidati, oppure le 80
+monete idonee non di campagna); conviene scriverla insieme alla 4.5, prima che le 17 consegnino. (3) BTC nel vault:
+passa fra circa 13% e 44% delle volte (stima: fiducia che sia vero 22-52% con la calibrazione di Sellke-Berger per
+p 0,048, potenza 0,5-0,75, passaggio per caso 3-10%, anche oltre il 10% con trade a grappoli); il suo p 0,048 non è
+«netto» (soglia 0,02275) e passa l'asticella solo perché è l'unico candidato (m ≤ 2). (4) Il trasferimento si fa
+comunque (r.454), anche se BTC fallisce; serve una soglia proporzionale alle monete di verifica. (5) Se passa: paper
+solo su richiesta, prima un'aggiunta al bot (oggi opera solo coppie del gate, indicatori fino a 1h, posizioni al
+massimo 96 barre) e il test di parità; 50 trade a circa 2 al mese (frequenza minima) sono circa 24 mesi, oltre i 12:
+STOP, decide il proprietario (r.483). (6) Se fallisce: resta fallito (r.444); si fa il Passo 7 (confronto dei
+fallimenti); il protocollo non dice cosa viene dopo e non c'è un secondo periodo chiuso: va deciso prima dei numeri;
+intanto resta il solo gate (−0,08R su 279 segnali). (7) Il candidato BTC è fragile anche prima del vault: una prova a
+placebo bocciata, una regola d'esame cambiata o un ricalcolo dopo una correzione a src/ possono farlo cadere.
 
 ### G8. Una porta nel gate per direzione e mercato: niente long validati solo su mercati in salita
 **Perché (8 ott, domanda del proprietario: «con un mercato in discesa apriamo più long che short?»):** BTC
