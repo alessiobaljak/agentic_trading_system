@@ -18,8 +18,8 @@ def main() -> None:
     for nome in sys.argv[1:]:
         d = json.loads((LAVORO / f"{nome}.json").read_text(encoding="utf-8"))
         e = d["esito"]
-        print(f"== {nome} ({d['timeframe']}, {d['secondi']} s)")
-        if d["azione"] == "conta":
+        print(f"== {nome} ({d.get('timeframe', '')}, {d.get('secondi', '')} s)")
+        if d.get("azione") == "conta":
             print("  ", e)
             continue
         m = e["metriche"]
