@@ -122,7 +122,16 @@ EXTRA["SOLUSDT-027"] = ("SOLUSDT-015", "SOLUSDT-025",
 S["SOLUSDT-027"] = ("I-09", "prima mezz'ora UTC -> ultima mezz'ora, stop 3 ATR, solo nei giorni in calo", "short",
                     {"condizione": "alla chiusura della barra 23:00-23:30 UTC, close < open della barra 00:00-00:30 dello stesso giorno, e close della barra di segnale < open della barra 00:00", "stop": "3 ATR(14) sopra", "target": None, "uscita": "a tempo dopo 1 barra"},
                     "R medio fra -0,015 e +0,015; t contro la (b) fra 1,5 e 2,5")
-TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m", "SOLUSDT-025": "30m", "SOLUSDT-026": "30m", "SOLUSDT-027": "30m"}
+EXTRA["SOLUSDT-028"] = ("SOLUSDT-012", "SOLUSDT-012",
+                        "aggiunge a 012 il filtro 'close della barra di segnale sotto la SMA di 200 barre (4h, circa 33 "
+                        "giorni)'. Perche': studio dei fallimenti di 012 sui dati di costruzione (voce SOLUSDT-N025): sopra la "
+                        "media R -0,19 su 80 trade, sotto +0,18 su 99; la rottura al ribasso di una NR7 funziona nel trend al "
+                        "ribasso e fallisce contro il trend. Stesso timeframe, direzione, stop (high della NR7) e uscita.")
+S["SOLUSDT-028"] = ("I-07", "NR7 e rottura al ribasso, solo sotto la SMA200", "short",
+                    {"condizione": "barra i-1 NR7 e close[i] < low[i-1], e close[i] < SMA200 (4h)", "stop": "high[i-1]", "target": None, "uscita": "a tempo dopo 6 barre"},
+                    "R medio fra 0 e +0,2; t contro la (b) fra 1 e 3 (filtro scelto sui dati di costruzione)")
+TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m", "SOLUSDT-025": "30m", "SOLUSDT-026": "30m", "SOLUSDT-027": "30m",
+            "SOLUSDT-028": "4h"}
 TF.update(TF_EXTRA)
 
 

@@ -205,7 +205,8 @@ _i06b = _i06_gen(1.5)
 # I-07 NR7 e rottura (4h)
 # --------------------------------------------------------------------------- #
 
-def _i07(direzione: str):
+def _i07(direzione: str, filtro_sma200: bool = False):
+    """filtro_sma200 (ritocco SOLUSDT-028 di 012): solo con il close sotto (short) / sopra (long) la SMA200."""
     def costr(s: Serie) -> Regole:
         c, close, h, l, o, n = base(s)
         rng = h - l
@@ -213,6 +214,9 @@ def _i07(direzione: str):
         nr7 = (rng <= minimo7) & ~np.isnan(minimo7)  # la barra ha l'escursione minima delle ultime 7
         pronto = np.zeros(n, dtype=bool)
         pronto[1:] = ~np.isnan(minimo7[:-1])
+        if filtro_sma200:
+            m200 = sma(close, 200)
+            pronto &= ~np.isnan(m200)
         lato = 1 if direzione == "long" else -1
 
         def segnale(i):
@@ -223,9 +227,12 @@ def _i07(direzione: str):
                 return None
             return Segnale(direzione, stop, None)
         if direzione == "long":
-            cond = lambda i: i >= 1 and nr7[i - 1] and close[i] > h[i - 1]
+            cond0 = lambda i: i >= 1 and nr7[i - 1] and close[i] > h[i - 1]
+            filtro = (lambda i: close[i] > m200[i]) if filtro_sma200 else (lambda i: True)
         else:
-            cond = lambda i: i >= 1 and nr7[i - 1] and close[i] < l[i - 1]
+            cond0 = lambda i: i >= 1 and nr7[i - 1] and close[i] < l[i - 1]
+            filtro = (lambda i: close[i] < m200[i]) if filtro_sma200 else (lambda i: True)
+        cond = lambda i: cond0(i) and filtro(i)
         return Regole(segnale, cond, esci_dopo(6))
     return costr
 
@@ -425,6 +432,7 @@ VARIANTI: Dict[str, tuple] = {
     "SOLUSDT-025": ("30m", _i09("short", k_stop=3.0)),  # ritocco di 015
     "SOLUSDT-026": ("30m", _i09("short", filtro_sma200=True, k_stop=3.0)),  # ritocco di 025
     "SOLUSDT-027": ("30m", _i09("short", filtro_giorno=True, k_stop=3.0)),  # ritocco di 025
+    "SOLUSDT-028": ("4h", _i07("short", filtro_sma200=True)),  # ritocco di 012
     "SOLUSDT-021": ("1h", _i13("long")),
     "SOLUSDT-022": ("1h", _i13("short")),
 }
