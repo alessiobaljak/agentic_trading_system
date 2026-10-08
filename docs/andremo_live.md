@@ -3133,3 +3133,5 @@ all'utente, che nessuno vedeva: una variante batte nettamente le due baseline ma
 entra o no nell'ordine dei ritocchi? La regola 6 esclude le varianti che battono le due baseline «perché sono
 candidati», ma dalla 4.4 un candidato deve anche avere R medio positivo: il caso non è scritto. Lo decide il
 proprietario. Ritocchi e uso del budget: ETHUSDT 30 varianti senza ritocchi (consegnata alle 05:58 UTC).
+
+- 8 ott, 11:37: SOLUSDT ancora ferma sulla domanda delle 05:51 UTC (22 varianti, nessun ritocco); il proprietario ha il testo da incollare. BTCUSDT ed ETHUSDT consegnate.
