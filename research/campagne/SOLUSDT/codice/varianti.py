@@ -301,6 +301,57 @@ def _i09(direzione: str, filtro_sma200: bool = False, filtro_giorno: bool = Fals
     return costr
 
 
+def i09_generale(direzione: str, filtro_sma200: bool = False, filtro_giorno: bool = False, k_stop: float = 2.0,
+                 n_atr_min: int = 420, n_sma_min: int = 6000, tenuta_min: int = 30):
+    """La regola della famiglia di 015 con le durate in MINUTI, per le verifiche della Fase 4.
+
+    A 30m con i valori predefiniti (ATR 14 barre = 420 minuti, SMA 200 barre = 6000 minuti,
+    tenuta 1 barra = 30 minuti) e' la stessa regola di _i09 (controllo: codice/controllo_generale.py).
+    Su un altro timeframe i parametri in barre si convertono per tenere la stessa durata (sezione
+    Fase 4, punto 2: intero piu' vicino, almeno 1): la «prima mezz'ora» sono le barre che aprono fra le
+    00:00 e le 00:30 UTC (a 1h la prima barra, 00:00-01:00); l'ingresso e' a 24:00 meno la tenuta
+    (in barre) e la barra di segnale e' quella che chiude in quell'istante.
+    """
+    def costr(s: Serie) -> Regole:
+        c, close, h, l, o, n = base(s)
+        passo = ms_tf(s.tf)
+        minuto = 60_000
+        barre = lambda minuti: max(1, int(math.floor(minuti * minuto / passo + 0.5)))
+        a = atr(c, barre(n_atr_min))
+        tenuta = barre(tenuta_min)
+        giorno_ms = 24 * 3_600_000
+        ingresso = giorno_ms - tenuta * passo  # istante dell'ingresso nel giorno (ms dalla mezzanotte)
+        per_ts = {x.ts: k for k, x in enumerate(c)}
+        prima = np.full(n, np.nan)
+        giorno = np.full(n, np.nan)
+        n_prima = max(1, (30 * minuto) // passo)  # barre della prima mezz'ora (almeno una)
+        for k, x in enumerate(c):
+            if (x.ts + passo) % giorno_ms == ingresso:
+                mezzanotte = x.ts - (x.ts % giorno_ms)
+                idx = [per_ts.get(mezzanotte + q * passo) for q in range(n_prima)]
+                if all(j is not None for j in idx) and idx[-1] <= k:
+                    prima[k] = c[idx[-1]].close / c[idx[0]].open - 1
+                    giorno[k] = x.close / c[idx[0]].open - 1
+        if filtro_sma200:
+            m = sma(close, barre(n_sma_min))
+            pronto = pronto_da(n, a, m)
+        else:
+            m = None
+            pronto = pronto_da(n, a)
+        lato = 1 if direzione == "long" else -1
+
+        def cond(i):
+            if math.isnan(prima[i]) or lato * prima[i] <= 0:
+                return False
+            if filtro_sma200 and not (lato * (close[i] - m[i]) > 0):
+                return False
+            if filtro_giorno and not (lato * giorno[i] > 0):
+                return False
+            return True
+        return Regole(segnale_atr(direzione, close, a, k_stop, None, pronto), cond, esci_dopo(tenuta))
+    return costr
+
+
 # --------------------------------------------------------------------------- #
 # I-10 funding estremo (8h)
 # --------------------------------------------------------------------------- #

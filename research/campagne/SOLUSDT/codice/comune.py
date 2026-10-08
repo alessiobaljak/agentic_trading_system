@@ -295,9 +295,9 @@ def fabbrica_segnale(serie: Serie, costruttrice: Costruttrice):
     return crea_segnale
 
 
-def conta(tf: str, costruttrice: Costruttrice) -> Dict[str, int]:
+def conta(tf: str, costruttrice: Costruttrice, parametri: Parametri = PARAMETRI) -> Dict[str, int]:
     s = carica(tf, "costruzione")
-    return motore.conta_trade(s.last, fabbrica(s, costruttrice), FINE_COSTRUZIONE_TS, PARAMETRI,
+    return motore.conta_trade(s.last, fabbrica(s, costruttrice), FINE_COSTRUZIONE_TS, parametri,
                               candele_stop=None, candele_mark=s.mark, funding=s.funding)
 
 
