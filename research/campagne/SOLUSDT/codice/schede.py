@@ -113,7 +113,16 @@ EXTRA["SOLUSDT-026"] = ("SOLUSDT-015", "SOLUSDT-025",
 S["SOLUSDT-026"] = ("I-09", "prima mezz'ora UTC -> ultima mezz'ora, stop 3 ATR, solo sotto la SMA200", "short",
                     {"condizione": "alla chiusura della barra 23:00-23:30 UTC, close < open della barra 00:00-00:30 dello stesso giorno, e close < SMA200 (30m)", "stop": "3 ATR(14) sopra", "target": None, "uscita": "a tempo dopo 1 barra"},
                     "R medio fra -0,01 e +0,02; t contro la (b) fra 1,5 e 3 (filtro scelto sui dati di costruzione)")
-TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m", "SOLUSDT-025": "30m", "SOLUSDT-026": "30m"}
+EXTRA["SOLUSDT-027"] = ("SOLUSDT-015", "SOLUSDT-025",
+                        "aggiunge a 025 il filtro 'giorno UTC in calo dall'apertura delle 00:00 al close della barra di "
+                        "segnale'. Perche': studio dei fallimenti di 025 (voci SOLUSDT-N023 e N024): giorno in rialzo R -0,020 "
+                        "su 158 trade, in calo +0,0002 su 208; e' il momentum della giornata, coerente con la fonte. Scartato "
+                        "il filtro della penultima mezz'ora (in rialzo +0,007, in calo -0,025): va contro la continuazione "
+                        "descritta da Gao et al., quindi e' piu' probabilmente rumore. Stesso timeframe, direzione, stop e uscita.")
+S["SOLUSDT-027"] = ("I-09", "prima mezz'ora UTC -> ultima mezz'ora, stop 3 ATR, solo nei giorni in calo", "short",
+                    {"condizione": "alla chiusura della barra 23:00-23:30 UTC, close < open della barra 00:00-00:30 dello stesso giorno, e close della barra di segnale < open della barra 00:00", "stop": "3 ATR(14) sopra", "target": None, "uscita": "a tempo dopo 1 barra"},
+                    "R medio fra -0,015 e +0,015; t contro la (b) fra 1,5 e 2,5")
+TF_EXTRA = {"SOLUSDT-023": "30m", "SOLUSDT-024": "30m", "SOLUSDT-025": "30m", "SOLUSDT-026": "30m", "SOLUSDT-027": "30m"}
 TF.update(TF_EXTRA)
 
 

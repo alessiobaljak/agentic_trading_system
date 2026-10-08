@@ -424,6 +424,7 @@ VARIANTI: Dict[str, tuple] = {
     "SOLUSDT-024": ("30m", _i09("short", filtro_giorno=True)),  # ritocco di 015
     "SOLUSDT-025": ("30m", _i09("short", k_stop=3.0)),  # ritocco di 015
     "SOLUSDT-026": ("30m", _i09("short", filtro_sma200=True, k_stop=3.0)),  # ritocco di 025
+    "SOLUSDT-027": ("30m", _i09("short", filtro_giorno=True, k_stop=3.0)),  # ritocco di 025
     "SOLUSDT-021": ("1h", _i13("long")),
     "SOLUSDT-022": ("1h", _i13("short")),
 }
