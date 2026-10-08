@@ -302,7 +302,8 @@ def _i09(direzione: str, filtro_sma200: bool = False, filtro_giorno: bool = Fals
 
 
 def i09_generale(direzione: str, filtro_sma200: bool = False, filtro_giorno: bool = False, k_stop: float = 2.0,
-                 n_atr_min: int = 420, n_sma_min: int = 6000, tenuta_min: int = 30):
+                 n_atr_min: int = 420, n_sma_min: int = 6000, tenuta_min: int = 30,
+                 uscita_min: Optional[int] = None):
     """La regola della famiglia di 015 con le durate in MINUTI, per le verifiche della Fase 4.
 
     A 30m con i valori predefiniti (ATR 14 barre = 420 minuti, SMA 200 barre = 6000 minuti,
@@ -320,7 +321,10 @@ def i09_generale(direzione: str, filtro_sma200: bool = False, filtro_giorno: boo
         a = atr(c, barre(n_atr_min))
         tenuta = barre(tenuta_min)
         giorno_ms = 24 * 3_600_000
-        ingresso = giorno_ms - tenuta * passo  # istante dell'ingresso nel giorno (ms dalla mezzanotte)
+        # uscita_min: solo per la prova dell'ora placebo (Fase 5): fine della tenuta a quei minuti dalla
+        # mezzanotte UTC invece che alle 24:00 (720 = ingresso alle 11:30, uscita alle 12:00)
+        fine_tenuta = giorno_ms if uscita_min is None else uscita_min * minuto
+        ingresso = (fine_tenuta - tenuta * passo) % giorno_ms  # istante dell'ingresso nel giorno (ms dalla mezzanotte)
         per_ts = {x.ts: k for k, x in enumerate(c)}
         prima = np.full(n, np.nan)
         giorno = np.full(n, np.nan)

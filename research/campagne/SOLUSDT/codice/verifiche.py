@@ -94,7 +94,19 @@ def esegui_verifica(vid, nome, tf, regola, parametri, descrizione):
           "netta_b", ris.get("baseline_b", {}).get("netta"), flush=True)
 
 
+def placebo(vid):
+    """Fase 5: la stessa regola con l'ingresso a un'ora qualunque (11:30 UTC, uscita alle 12:00)."""
+    base = dict(CANDIDATI[vid], n_atr_min=420, n_sma_min=6000, tenuta_min=30, uscita_min=720)
+    return ("placebo_ora_11_30", "30m", base, comune.PARAMETRI,
+            "Fase 5, prova dello scettico: stessa regola ma ingresso alle 11:30 UTC e uscita alle 12:00 (ora placebo); "
+            "se il t contro la (b) e' simile, l'effetto non e' dell'ultima mezz'ora ma del momentum generico a 30 minuti")
+
+
 if __name__ == "__main__":
+    if sys.argv[1] == "placebo":
+        for vid in sys.argv[2:]:
+            esegui_verifica(vid, *placebo(vid))
+        sys.exit(0)
     for vid in sys.argv[1:]:
         for caso in casi(vid):
             esegui_verifica(vid, *caso)
