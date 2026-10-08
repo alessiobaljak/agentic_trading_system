@@ -654,13 +654,23 @@ def carica_candele(
 def carica_funding_dettaglio(
     simbolo: str, inizio: date, fine: date, radice: Path = RADICE_DEFAULT
 ) -> List[Tuple[int, int, float]]:
-    """Righe (ts ms, ore, tasso) di funding dal disco, ordinate, senza duplicati, nel periodo."""
+    """Righe (ts ms, ore, tasso) di funding dal disco, ordinate, senza duplicati, nel periodo.
+
+    L'istante di ogni settlement si arrotonda per difetto al secondo. Nei file di
+    Binance il ``calc_time`` e' spesso qualche millisecondo dopo l'ora piena (per
+    BTCUSDT 2020-2023: 2.233 settlement su 4.383, fino a 47 ms; campagna BTCUSDT,
+    8 ott 2026). Senza l'arrotondamento il motore non riconosce il settlement che
+    cade all'apertura di una barra (momento ambiguo della sezione 7): all'ingresso
+    lo conta anche se e' un incasso, all'uscita per «chiudi» lo perde anche se e'
+    un costo.
+    """
     da_ms, a_ms = ms_da_data(inizio), ms_da_data(fine + timedelta(days=1))
     per_ts: Dict[int, Tuple[int, int, float]] = {}
     for percorso in _percorsi_presenti(simbolo, "fundingRate", None, inizio, fine, radice):
-        for riga in funding_da_zip(percorso):
-            if da_ms <= riga[0] < a_ms and riga[0] not in per_ts:
-                per_ts[riga[0]] = riga
+        for ts, ore, tasso in funding_da_zip(percorso):
+            ts -= ts % 1000
+            if da_ms <= ts < a_ms and ts not in per_ts:
+                per_ts[ts] = (ts, ore, tasso)
     return [per_ts[ts] for ts in sorted(per_ts)]
 
 
