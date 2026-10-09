@@ -435,7 +435,7 @@ def blocco_di(trades) -> int:
 
 def _riassunto_b(base: Dict, quota_vietate: float) -> Dict:
     return {
-        "media": base["media"], "errore_standard": base["errore_standard"],
+        "media": base["media"], "errore_numero": base["errore_standard"],
         "errore_minimo_candidato": base["errore_minimo_candidato"], "n_simulazioni": base["n_simulazioni"],
         "trade_per_simulazione_medio": float(np.mean(base["trade_per_simulazione"])),
         "simulazioni_vuote": base["simulazioni_vuote"],
@@ -475,7 +475,7 @@ def valuta(v: Variante, s: Dict, par: Parametri, solo_da_ts: Optional[int] = Non
         ba = blocco_di(ta)
         base_a = statistica.baseline_da_trade([t.r for t in ta], ba, n=2000, seme=0)
         conf_a = statistica.contro_baseline(r, b, base_a, n=2000, seme=0)
-        out["baseline_a"] = dict(media=base_a["media"], errore_standard=base_a["errore_standard"],
+        out["baseline_a"] = dict(media=base_a["media"], errore_numero=base_a["errore_standard"],
                                  n_trade=base_a["n_trade"], blocco=ba, n_blocchi_a=base_a["n_blocchi"],
                                  **_riassunto_confronto(conf_a))
     else:
