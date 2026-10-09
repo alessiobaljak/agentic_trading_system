@@ -402,6 +402,10 @@ barre: il ritardo più corto che si può provare con costi sopportabili).
   MASK della barra < 0,5 × rendimento BTC. Stop 2 ATR(1h), nessun target, uscita dopo 4 barre.
 * **I-08-S** short: rendimento BTC < -2 deviazioni e rendimento MASK > 0,5 × rendimento BTC
   (cioè è sceso meno della metà). Stessa uscita.
+* **I-08-Lb** e **I-08-Sb** (aggiunte dopo che I-08-L e I-08-S sono state scartate per i trade
+  minimi, 58 e 36 trade stimati, prima di qualunque test dell'idea; regola 6): soglia su BTC a
+  1,5 deviazioni invece di 2, il resto uguale. Motivo: stessa idea, movimenti di BTC meno rari.
+  Previsione per entrambe: R medio fra -0,15 e +0,05, non batte nettamente la (b).
 
 ---
 
@@ -646,6 +650,55 @@ differenza col last è lo scarto di breve periodo.
 * **I-14-L** long: scarto < 5° percentile e < 0. Stessa uscita.
 
 ---
+
+## I-15 — Momento intraday: la prima mezz'ora predice l'ultima
+
+Scritta il 9 ottobre dopo i test delle idee I-01 … I-14 (nessun risultato di quelle idee entra
+qui: è un meccanismo diverso, con la sua fonte, cercato perché le idee con fonte vanno usate prima
+dei ritocchi, regola 6).
+
+**Fonte.** Lei Gao, Yufeng Han, Sophia Zhengzi Li, Guofu Zhou, «Market Intraday Momentum»,
+Journal of Financial Economics 129(2), agosto 2018: il rendimento della prima mezz'ora predice
+quello dell'ultima mezz'ora della giornata. Per le crypto: Zhuzhu Wen, Elie Bouri, Yahua Xu,
+Yang Zhao, «Intraday return predictability in the cryptocurrency markets: Momentum, reversal,
+or both», North American Journal of Economics and Finance 62, 2022.
+
+**Affermazione falsificabile.** Su MASKUSDT a 30 minuti, il segno del rendimento della barra
+00:00-00:30 UTC predice il segno della barra 23:30-24:00 UTC dello stesso giorno: il trade nella
+direzione del primo rendimento, tenuto solo l'ultima mezz'ora, ha R medio più alto di un
+ingresso casuale nella stessa direzione con la stessa uscita (una barra). Smentita: non batte
+nettamente la (b).
+
+**Sotto-domande.** Nelle azioni il meccanismo è l'informazione della notte che arriva
+all'apertura e il ribilanciamento di fine giornata; nelle crypto la «giornata» è convenzionale
+(candela giornaliera UTC, settlement del funding a 00:00). Chi opera alle 23:30: chi chiude o
+copre posizioni prima della candela giornaliera e del settlement.
+
+**Spiegazioni concorrenti.**
+
+1. *Effetto casuale.* Smentita: `t` sopra soglia.
+2. *Nessuna giornata vera* (mezzanotte UTC è un istante qualsiasi). Previsione: R uguale alla (b). Smentita: R sopra.
+3. *Effetto costi* (una sola barra da 30 minuti: il movimento tipico, circa 0,5-1%, è dello stesso
+   ordine del costo di un giro, 0,2%; con stop di 2 ATR circa 0,08 R). Previsione: R medio vicino a
+   -0,08. Smentita: R medio positivo e regge a costi doppi.
+4. *È solo il mercato* (BTC fa lo stesso). Si dichiara.
+5. *Settlement del funding a 00:00* (il trade si chiude esattamente al settlement: momento
+   ambiguo, contato solo se costo). Previsione: piccolo costo in più. Si dichiara.
+6. *Trend di fondo.* Smentita: batte la (b) nella stessa direzione.
+7. *Volatilità.* Smentita: batte la (b) con lo stesso stop.
+8. *Artefatto dei dati* (giornate con buchi). Smentita: poche giornate con buchi.
+9. *Pochi trade estremi.* Smentita: senza i 3 migliori resta sopra.
+10. *Un solo anno.* Smentita: più della metà degli anni.
+11. *Lookahead.* Il segnale è noto alle 00:30, l'ingresso è alle 23:30: col ritardo di una barra
+    il trade cade nella barra dopo, a cavallo della mezzanotte. Si dichiara.
+
+**Ipotesi completa.** MASKUSDT, momento intraday, timeframe 30 minuti (la fonte lavora a mezz'ore).
+
+* **I-15-L** long: alla chiusura della barra delle 23:00 UTC, se la barra delle 00:00 UTC dello
+  stesso giorno ha chiuso sopra la sua apertura. Stop 2 ATR(30m), nessun target, uscita dopo 1
+  barra. Previsione: R medio fra -0,15 e +0,02, non batte nettamente la (b).
+* **I-15-S** short: lo stesso se la barra delle 00:00 ha chiuso sotto la sua apertura. Previsione
+  uguale.
 
 ## Previsioni (scritte dopo la Fase 0, prima del primo test)
 

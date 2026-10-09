@@ -15,6 +15,7 @@ F = {
     "I-11": "Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», Traders Press, 1990",
     "I-12": "Chordia, Subrahmanyam, «Order imbalance and individual stock returns: Theory and evidence», Journal of Financial Economics 72(3), 2004; Silantyev, «Order flow analysis of cryptocurrency markets», Digital Finance 1, 2019",
     "I-13": "Liu, Tsyvinski, Wu, «Common Risk Factors in Cryptocurrency», Journal of Finance 77(2), 2022",
+    "I-15": "Gao, Han, Li, Zhou, «Market Intraday Momentum», Journal of Financial Economics 129(2), 2018; Wen, Bouri, Xu, Zhao, «Intraday return predictability in the cryptocurrency markets: Momentum, reversal, or both», North American Journal of Economics and Finance 62, 2022",
     "I-14": "He, Manela, Ross, von Wachter, «Fundamentals of Perpetual Futures», arXiv 2212.06888, dicembre 2022",
 }
 M = {
@@ -24,7 +25,7 @@ M = {
     "I-07": "scarico dopo il pump con volume anomalo", "I-08": "MASK in ritardo su BTC",
     "I-09": "compressione delle bande e rottura", "I-10": "martello e stella cadente agli estremi di 24 ore",
     "I-11": "rottura dell'intervallo 00-02 UTC", "I-12": "squilibrio degli ordini aggressivi",
-    "I-13": "trend di BTC che trascina MASK", "I-14": "scarto fra last e mark price",
+    "I-13": "trend di BTC che trascina MASK", "I-15": "la prima mezz'ora UTC predice l'ultima", "I-14": "scarto fra last e mark price",
 }
 
 
@@ -51,7 +52,11 @@ VARIANTI = {
     "MASKUSDT-012b": (v.I07Sb, _m("I-07", "MASKUSDT-012b", {"finestra_barre": 3, "deviazioni": 2.5, "multiplo_volume": 2, "riferimento_barre": 168, "stop_atr": 2, "uscita_barre": 24}, NO, -0.15, 0.15)),
     "MASKUSDT-013": (v.I08L, _m("I-08", "MASKUSDT-013", {"deviazioni_btc": 2, "finestra_dev": 168, "frazione_mask": 0.5, "stop_atr": 2, "uscita_barre": 4}, NO, -0.15, 0.05)),
     "MASKUSDT-014": (v.I08S, _m("I-08", "MASKUSDT-014", {"deviazioni_btc": 2, "finestra_dev": 168, "frazione_mask": 0.5, "stop_atr": 2, "uscita_barre": 4}, NO, -0.15, 0.05)),
-    "MASKUSDT-015": (v.I09L, _m("I-09", "MASKUSDT-015", {"bande_barre": 20, "bande_dev": 2, "percentile_larghezza": 20, "finestra_percentile": 500, "barre_compressione": 10, "stop_atr": 2, "target_rapporto": 2, "uscita_barre": 48}, NO, -0.15, 0.10)),
+    "MASKUSDT-013b": (v.I08Lb, _m("I-08", "MASKUSDT-013b", {"deviazioni_btc": 1.5, "finestra_dev": 168, "frazione_mask": 0.5, "stop_atr": 2, "uscita_barre": 4}, NO, -0.15, 0.05)),
+    "MASKUSDT-014b": (v.I08Sb, _m("I-08", "MASKUSDT-014b", {"deviazioni_btc": 1.5, "finestra_dev": 168, "frazione_mask": 0.5, "stop_atr": 2, "uscita_barre": 4}, NO, -0.15, 0.05)),
+    "MASKUSDT-026": (v.I15L, _m("I-15", "MASKUSDT-026", {"barra_segnale_utc": "00:00", "barra_ingresso_utc": "23:30", "stop_atr": 2, "uscita_barre": 1}, NO, -0.15, 0.02)),
+    "MASKUSDT-027": (v.I15S, _m("I-15", "MASKUSDT-027", {"barra_segnale_utc": "00:00", "barra_ingresso_utc": "23:30", "stop_atr": 2, "uscita_barre": 1}, NO, -0.15, 0.02)),
+    "MASKUSDT-015":(v.I09L, _m("I-09", "MASKUSDT-015", {"bande_barre": 20, "bande_dev": 2, "percentile_larghezza": 20, "finestra_percentile": 500, "barre_compressione": 10, "stop_atr": 2, "target_rapporto": 2, "uscita_barre": 48}, NO, -0.15, 0.10)),
     "MASKUSDT-016": (v.I09S, _m("I-09", "MASKUSDT-016", {"bande_barre": 20, "bande_dev": 2, "percentile_larghezza": 20, "finestra_percentile": 500, "barre_compressione": 10, "stop_atr": 2, "target_rapporto": 2, "uscita_barre": 48}, NO, -0.15, 0.10)),
     "MASKUSDT-017": (v.I10L, _m("I-10", "MASKUSDT-017", {"ombra_su_corpo": 2, "ombra_opposta_max": 0.25, "estremo_barre": 24, "stop_atr": 2, "target_rapporto": 1, "uscita_barre": 12}, NO, -0.15, 0.05)),
     "MASKUSDT-018": (v.I10S, _m("I-10", "MASKUSDT-018", {"ombra_su_corpo": 2, "ombra_opposta_max": 0.25, "estremo_barre": 24, "stop_atr": 2, "target_rapporto": 1, "uscita_barre": 12}, NO, -0.15, 0.05)),

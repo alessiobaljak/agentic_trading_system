@@ -305,16 +305,65 @@ class I08(VarianteATR):
 
 class I08L(I08):
     direzione = "long"
+    dev = 2.0
 
     def condizione(self, st, i):
-        return st["rb"][i] > 2.0 * st["sdb"][i] and st["rm"][i] < 0.5 * st["rb"][i]
+        return st["rb"][i] > self.dev * st["sdb"][i] and st["rm"][i] < 0.5 * st["rb"][i]
 
 
 class I08S(I08):
     direzione = "short"
+    dev = 2.0
 
     def condizione(self, st, i):
-        return st["rb"][i] < -2.0 * st["sdb"][i] and st["rm"][i] > 0.5 * st["rb"][i]
+        return st["rb"][i] < -self.dev * st["sdb"][i] and st["rm"][i] > 0.5 * st["rb"][i]
+
+
+class I08Lb(I08L):
+    dev = 1.5
+
+
+class I08Sb(I08S):
+    dev = 1.5
+
+
+# ---------------------------------------------------------------------------
+# I-15 momento intraday, 30m
+# ---------------------------------------------------------------------------
+class I15(VarianteATR):
+    tf = "30m"
+    k_stop = 2.0
+    rr = None
+    barre_max = 1
+
+    def prepara_condizione(self, st):
+        cs = st["candele"]
+        n = len(cs)
+        primo = {}  # giorno -> segno della barra 00:00
+        for c in cs:
+            d = datetime.fromtimestamp(c.ts / 1000, tz=timezone.utc)
+            if d.hour == 0 and d.minute == 0:
+                primo[_giorno(c.ts)] = 1 if c.close > c.open else (-1 if c.close < c.open else 0)
+        seg = np.zeros(n, dtype=int)
+        for i, c in enumerate(cs):
+            d = datetime.fromtimestamp(c.ts / 1000, tz=timezone.utc)
+            if d.hour == 23 and d.minute == 0:
+                seg[i] = primo.get(_giorno(c.ts), 0)
+        st["seg"] = seg
+
+
+class I15L(I15):
+    direzione = "long"
+
+    def condizione(self, st, i):
+        return st["seg"][i] == 1
+
+
+class I15S(I15):
+    direzione = "short"
+
+    def condizione(self, st, i):
+        return st["seg"][i] == -1
 
 
 # ---------------------------------------------------------------------------
