@@ -3162,3 +3162,31 @@ funding corretto (BTC lo aveva già corretto nei suoi dati, SOL ha ricalcolato).
 
 - 8 ott, sera tardi: CORREZIONE della riga sopra. Il «31-63%» di probabilità che il candidato BTC sia vero è il massimo possibile (rapporto di verosimiglianza 4,0, vale solo se il vantaggio vero è esattamente quello osservato), non una stima centrale: con la calibrazione usuale di Sellke-Berger (2,5) viene 22-52% partendo dalla stessa fiducia del 10-30%. La probabilità che passi il vault è circa 13-44% (stima). Trovato da due controlli indipendenti sulla domanda del proprietario «cosa succede se le 17 non trovano niente oltre BTC?» (risposta e numeri nel backlog, voce P1). Cosa abbiamo capito: aprire il vault per un solo candidato lo consuma per sempre; la campagna di gruppo va scritta prima dei numeri e prima del vault; anche se BTC passa, il paper alla frequenza minima del protocollo durerebbe circa 24 mesi e il bot oggi non sa eseguirlo senza un'aggiunta.
 
+### Controllo del 9 ottobre (mattina)
+
+**Nessun guasto.** Bot vivo (battito 7 s, ops 0565), controllo orario regolare (03:34 UTC, ops 0557), nessun errore
+nelle letture. Spesa AI di ieri 0 (nessuna chiamata, ops 0555). Letture Firestore 14.521 nelle 24 ore (rifiutati
+10.793; ieri 12.109, ops 0557). Le righe «SPENTE» non sono nelle righe del log del gate (solo candele del giro in
+corso, ops 0558): prova indiretta dalla riga ORIGINI (nuove AI 0, varianti 0, ops 0556). **Giro della notte 3 h 47**
+(GATE_SFORA, 21:19-01:06 UTC): 60.984 valutazioni, 180 passate, 252 coin (ops 0556). **Registro:** 2.185 coppie
+(ieri 2.340), spazio ~537 (ieri ~496): non scende più. **Numeri:** 417 trade nel periodo del paper, −111,27 USDT
+(ops 0562); equity 890,11, DRY_RUN True, 9 aperte con 1,16% a rischio, massimo 15 insieme (ops 0554; nei trade 14,
+ops 0553). Ieri 39 trade delle validate, −15,36 USDT, −0,149R a trade (lordo −0,071, costi 0,078); 7 giorni −0,121R
+su 186, 1 giornata in utile e 6 in perdita (ops 0566). Giornate dal 16 set: 7 in utile e 16 in perdita fino all'8 ott
+(ops 0562). Dal 27 set −0,109R netti su 264 (lordo −0,015, costi 0,094); long −0,198R su 160, short +0,029 su 104;
+long contro BTC −0,233 su 105, short contro BTC +0,134 su 48 (ops 0553). Ieri long 29 a −0,293R, short 10 a
++0,267R (ops 0566). **Fuori campione:** motore −0,08R su 322 segnali ±0,12 (ieri −0,08 su 279 ±0,14); stessi
+segnali paper −0,12 contro motore −0,09, differenza +0,03 ±0,06 → lettura stampata invariata: «la prossima
+modifica va nel gate», esecuzione non si decide; seconda lettura il 14 ott (ops 0562). Stop 184 su 417: 82
+sbagliati dall'inizio, 101 sotto il primo gradino (ops 0559). Curva del vantaggio: nessun vantaggio su 337 trade
+(ops 0559). Scale: 0,8/1,6/2,4 −0,27R (migliore), 2/4/6 −0,85. Declassate −0,101R su 177 contro attive −0,125 su
+87: +0,024 ±0,261 → non si decide (ops 0553). Funzioni: tutte «non si vede ancora» o campione piccolo (ops 0566).
+Selettore: non batte, 0 finestre su 3 (ops 0561). Rifiutati per cooldown +0,18R su 60 contro aperti −0,11, ma sono
+prezzo puro (aperti lordi −0,02): differenza +0,29 ±0,34 (ops 0564). **Gate:** 238 validate su 78 coin (ieri 279
+su 84: ieri 33 promosse, 71 rimosse, ops 0565), 723 a 2/3, t ≥ 2 per 118 su 168, declassate 122; passata a 1 ora
+344 su 16.860; nessuna validata né trade a 1 ora (ops 0559: altri timeframe 0). gen_fa304106 a 11 perdite di fila,
+oggi senza validate (ops 0553). **Protocollo:** le tre campagne sono ferme alla consegna (ultimi commit: BTC
+8634b6a, ETH f66fcf0, SOL 8eb1804, tutti dell'8 ott); aspettano i tre sì del proprietario (17 monete senza rifare le
+3, budget 30, giornata di preparazione). **Proposta del giorno:** nessuna voce nuova (il protocollo è allo STOP).
+Calendario: annullata la lettura del 10 ott sul gate rigiocato nel passato (fermato il 4 ott).
+
