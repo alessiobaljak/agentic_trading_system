@@ -633,3 +633,16 @@ poco più di 8 giorni). Posizioni di 10 barre.
 
 **Previsioni.** Costi 0,023 R. Profit factor fra 0,8 e 1,3 per entrambe; nessuna batte nettamente
 la (b).
+
+---
+
+# Ritocchi (regola 6)
+
+Le idee con fonte sono esaurite dopo 25 varianti testate (nota LTCUSDT-N010 del log, con l'elenco
+delle fonti consultate). I ritocchi seguono l'ordine per `t` contro la (b) e sono registrati nel log
+prima del test, con `ritocco_di`, cosa cambia e perché.
+
+* **LTCUSDT-026**, ritocco della 014 (t 1,95, prima della lista; nota LTCUSDT-N011): stesso short sul
+  breakout del range d'apertura, solo nei giorni in cui l'altezza del range delle 00-03 UTC è sotto la
+  mediana delle altezze dei 20 giorni precedenti (il range stretto di Crabel). Previsione: circa metà
+  dei trade, profit factor fra 0,8 e 1,3, R medio fra −0,1 e +0,1, non netta contro la (b).

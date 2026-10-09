@@ -325,10 +325,33 @@ class RangeApertura(Base):
                 if s["close"][i] < basso and not visto_sotto.get(g):
                     primo_sotto[i] = True
                     visto_sotto[g] = True
+        # altezza relativa del range di ogni giorno completo e mediana dei 20 giorni completi precedenti
+        altezza_giorno = {}
+        for g, idx in per_giorno.items():
+            if len(idx) == 4:
+                alto = max(s["high"][j] for j in idx)
+                basso = min(s["low"][j] for j in idx)
+                altezza_giorno[g] = (alto - basso) / basso
+        giorni = sorted(altezza_giorno)
+        mediana_prec = {}
+        for k, g in enumerate(giorni):
+            if k >= 20:
+                mediana_prec[g] = float(np.median([altezza_giorno[x] for x in giorni[k - 20:k]]))
+        stretto = np.zeros(n, dtype=bool)
+        primo = n
+        for i in range(n):
+            g = int(giorno[i])
+            if g in mediana_prec:
+                primo = min(primo, i)
+                stretto[i] = altezza_giorno[g] < mediana_prec[g]
+        if getattr(self, "solo_stretto", False):
+            self.riscaldamento = primo  # la variante col filtro puo' entrare solo da qui
         return {"close": s["close"], "ora": ora, "r_alto": r_alto, "r_basso": r_basso,
-                "primo_sopra": primo_sopra, "primo_sotto": primo_sotto}
+                "primo_sopra": primo_sopra, "primo_sotto": primo_sotto, "stretto": stretto}
 
     def entra(self, i, ind):
+        if getattr(self, "solo_stretto", False) and not ind["stretto"][i]:
+            return False
         return bool(ind["primo_sopra"][i]) if self.direzione == "long" else bool(ind["primo_sotto"][i])
 
     def stop_distanza(self, i, ind):
@@ -570,6 +593,11 @@ FONTE_I11 = ("Guillermo Llorente, Roni Michaely, Gideon Saar, Jiang Wang, «Dyna
 FONTE_I12 = ("Songrun He, Asaf Manela, Omri Ross, Victor von Wachter, «Fundamentals of Perpetual Futures», arXiv "
              "2212.06888, prima versione dicembre 2022")
 
+def _stretto(v):
+    v.solo_stretto = True
+    return v
+
+
 FONTE_I13 = ("William Brock, Josef Lakonishok, Blake LeBaron, «Simple Technical Trading Rules and the Stochastic "
              "Properties of Stock Returns», Journal of Finance 47(5), dicembre 1992; Robert Hudson, Andrew Urquhart, "
              "«Technical trading and cryptocurrencies», Annals of Operations Research 297(1), 2021 (online 2019)")
@@ -729,6 +757,15 @@ REGISTRO = {
         "meccanismo": "attraversamento verso il basso della media a 50 barre oltre la banda dell'1%, tenuta fissa",
         "parametri": {"media": 50, "banda": 0.01, "tenuta_barre": 10, "stop": 0.06},
         "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-026": (lambda: _stretto(RangeApertura("short")), {
+        "idea": "I-07", "fonte": FONTE_I07, "famiglia": "LTCUSDT-014", "ritocco_di": "LTCUSDT-014",
+        "meccanismo": "breakout al ribasso del range delle prime 4 ore UTC, solo nei giorni con range stretto",
+        "parametri": {"range_ore": "00-03 UTC", "finestra_ingresso": "04-20 UTC", "uscita": "chiusura della barra delle 23",
+                      "stop": "massimo del range, al massimo 6%",
+                      "filtro": "altezza del range < mediana delle altezze dei 20 giorni precedenti"},
+        "cosa_cambia": "aggiunge il filtro del range stretto alla 014",
+        "perche": "Crabel lega i breakout migliori ai range d'apertura stretti (contrazione prima dell'espansione); lo studio dei fallimenti della 014 non mostra un fallimento sistematico (nota LTCUSDT-N011)",
+        "previsione": "meno trade (circa la meta'), profit factor fra 0,8 e 1,3, R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
     "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {
         "idea": "I-10", "fonte": FONTE_I10,
         "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo",
