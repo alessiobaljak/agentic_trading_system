@@ -622,6 +622,17 @@ class MomentoSerieFiltro(MomentoSerie):
         return super().condizione(x, s, i) and (rl < 0 if self.direzione == "short" else rl > 0)
 
 
+class MomentoSerieUscitaSegnale(MomentoSerie):
+    """I-01 con uscita a segnale: si chiude alla prima chiusura in cui il rendimento a ``giorni``
+    giorni cambia segno (torna >= 0 per lo short, <= 0 per il long). Nessuna tenuta fissa."""
+
+    def esci(self, x, s, i, tenute, pos):
+        r = x["r"][i]
+        if not _ok(r):
+            return False
+        return r >= 0 if self.direzione == "short" else r <= 0
+
+
 VARIANTI = {
     "BCHUSDT-001": lambda: MomentoSerie("BCHUSDT-001", "long"),
     "BCHUSDT-002": lambda: MomentoSerie("BCHUSDT-002", "short"),
@@ -659,4 +670,5 @@ VARIANTI = {
     "BCHUSDT-033": lambda: MomentoSerieFiltro("BCHUSDT-033", "short", giorni_lunghi=30),
     "BCHUSDT-034": lambda: MomentoSerieFiltro("BCHUSDT-034", "short", giorni_lunghi=30, tenuta=5),
     "BCHUSDT-035": lambda: MomentoSerie("BCHUSDT-035", "short", giorni=14),
+    "BCHUSDT-036": lambda: MomentoSerieUscitaSegnale("BCHUSDT-036", "short"),
 }
