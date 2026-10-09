@@ -88,6 +88,36 @@ def rsi(c, n):
     return out
 
 
+def percentile_precedente(x, n, q):
+    """q-esimo percentile (lineare) delle n barre PRIMA della barra i; NaN se nella finestra c'e' un NaN."""
+    out = np.full(len(x), np.nan)
+    for i in range(n, len(x)):
+        w = x[i - n:i]
+        if not np.isnan(w).any():
+            out[i] = np.percentile(w, q)
+    return out
+
+
+def deviazione_precedente(x, n):
+    """Deviazione standard (ddof=1) delle n barre PRIMA della barra i; NaN se nella finestra c'e' un NaN."""
+    out = np.full(len(x), np.nan)
+    for i in range(n, len(x)):
+        w = x[i - n:i]
+        if not np.isnan(w).any():
+            out[i] = np.std(w, ddof=1)
+    return out
+
+
+def somma_mobile(x, n):
+    """Somma delle n barre fino alla barra i compresa; NaN se ce n'e' uno nella finestra."""
+    out = np.full(len(x), np.nan)
+    for i in range(n - 1, len(x)):
+        w = x[i - n + 1:i + 1]
+        if not np.isnan(w).any():
+            out[i] = np.sum(w)
+    return out
+
+
 def deviazione_mobile(x, n):
     out = np.full(len(x), np.nan)
     for i in range(n - 1, len(x)):

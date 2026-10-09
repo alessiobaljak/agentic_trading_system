@@ -100,6 +100,25 @@ def mesi_illiquidi() -> Dict[str, float]:
 
 
 _CACHE: Dict[str, dict] = {}
+_CACHE_TAKER: Dict[str, dict] = {}
+
+
+def volume_aggressivo(tf: str) -> Dict[int, tuple]:
+    """{ts: (quote_volume, taker_buy_quote_volume)} dai file klines di MASKUSDT (colonne 7 e 10).
+
+    Una riga senza le colonne o con valori vuoti non compare (la barra non ha il dato).
+    """
+    if tf in _CACHE_TAKER:
+        return _CACHE_TAKER[tf]
+    out: Dict[int, tuple] = {}
+    for p in dati._percorsi_presenti(SIMBOLO, "klines", tf, INIZIO, FINE, dati.RADICE_DEFAULT):
+        for riga in dati.righe_csv_da_zip(p):
+            ts = dati.normalizza_ts(riga[0])
+            if ts in out or len(riga) < 11 or not riga[7].strip() or not riga[10].strip():
+                continue
+            out[ts] = (float(riga[7]), float(riga[10]))
+    _CACHE_TAKER[tf] = out
+    return out
 
 
 def carica(tf: str) -> dict:
