@@ -413,6 +413,11 @@ proprie dell'idea (S1, S2, ...).
      fra −0,15 e +0,15.
    * **XRPUSDT-V17 (short)**: compressione e close[i] < banda inferiore[i] → short; stop sopra;
      tenuta 24. Previsione: fra −0,15 e +0,15.
+   * **Ripiego aggiunto il 2026-10-09 dopo i soli conteggi** (V16: 28 trade, V17: 26; nessun test
+     di questa idea fatto, nessun risultato visto; regola 6, «allentare le soglie di uno scarto»):
+     compressione = larghezza al minimo delle ultime **240** barre (10 giorni) in una delle **24**
+     barre prima (un giorno), il resto uguale: **XRPUSDT-V16b (long)** e **XRPUSDT-V17b (short)**.
+     Se restano sotto 70, l'idea è scartata.
 
 ---
 

@@ -194,15 +194,15 @@ def _i08(direzione):
 # ---------------------------------------------------------------------------
 
 
-def _i09(direzione):
+def _i09(direzione, finestra=480, recenti=10):
     def prepara(s):
         c = s["close"]
         m, sd = q.sma(c, 20), q.rolling_std(c, 20)
         su, giu = m + 2 * sd, m - 2 * sd
         larg = 4 * sd / m
-        minimo = q.rolling_min(larg, 480)
+        minimo = q.rolling_min(larg, finestra)
         al_minimo = (larg <= minimo + 1e-15).astype(float)  # la barra j e' il minimo delle 480 fino a j
-        recente = q.ritardato(q.rolling_max(al_minimo, 10), 1)  # una delle barre i-10..i-1
+        recente = q.ritardato(q.rolling_max(al_minimo, recenti), 1)  # una delle barre i-recenti..i-1
         recente = _nan_falso(recente > 0)
         cond = recente & ((c > su) if direzione == "long" else (c < giu))
         return {"cond": _nan_falso(cond), "stop": stop_da(s, 2.0, direzione), "target": None, "warmup": 500}
@@ -360,6 +360,8 @@ VARIANTI = {
     "XRPUSDT-V15": Variante("XRPUSDT-V15", "4h", "short", _i08("short"), 30, {"idea": "I-08"}),
     "XRPUSDT-V16": Variante("XRPUSDT-V16", "1h", "long", _i09("long"), 24, {"idea": "I-09"}),
     "XRPUSDT-V17": Variante("XRPUSDT-V17", "1h", "short", _i09("short"), 24, {"idea": "I-09"}),
+    "XRPUSDT-V16b": Variante("XRPUSDT-V16b", "1h", "long", _i09("long", 240, 24), 24, {"idea": "I-09"}),
+    "XRPUSDT-V17b": Variante("XRPUSDT-V17b", "1h", "short", _i09("short", 240, 24), 24, {"idea": "I-09"}),
     "XRPUSDT-V18": Variante("XRPUSDT-V18", "1h", "long", _i10("long", 0.10), 4, {"idea": "I-10"}),
     "XRPUSDT-V19": Variante("XRPUSDT-V19", "1h", "short", _i10("short", 0.10), 4, {"idea": "I-10"}),
     "XRPUSDT-V18b": Variante("XRPUSDT-V18b", "1h", "long", _i10("long", 0.06), 4, {"idea": "I-10"}),

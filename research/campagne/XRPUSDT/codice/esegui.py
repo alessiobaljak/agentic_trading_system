@@ -73,6 +73,8 @@ PARAMETRI = {
     "XRPUSDT-V15": ("close < media200 e RSI2 > 90; uscita close < media5; stop min(2,5 ATR14, 6%); tenuta 30", "R medio fra -0,15 e +0,10"),
     "XRPUSDT-V16": ("larghezza bande al minimo di 480 barre in una delle 10 barre prima e close > banda superiore (20, 2); stop min(2 ATR14, 6%); tenuta 24", "R medio fra -0,15 e +0,15"),
     "XRPUSDT-V17": ("larghezza bande al minimo di 480 barre in una delle 10 barre prima e close < banda inferiore (20, 2); stop min(2 ATR14, 6%); tenuta 24", "R medio fra -0,15 e +0,15"),
+    "XRPUSDT-V16b": ("larghezza bande al minimo di 240 barre in una delle 24 barre prima e close > banda superiore (20, 2); stop min(2 ATR14, 6%); tenuta 24", "R medio fra -0,15 e +0,15"),
+    "XRPUSDT-V17b": ("larghezza bande al minimo di 240 barre in una delle 24 barre prima e close < banda inferiore (20, 2); stop min(2 ATR14, 6%); tenuta 24", "R medio fra -0,15 e +0,15"),
     "XRPUSDT-V18": ("squilibrio taker 4 barre > +0,10; stop min(1,5 ATR14, 6%); tenuta 4", "R medio fra -0,10 e +0,10"),
     "XRPUSDT-V19": ("squilibrio taker 4 barre < -0,10; stop min(1,5 ATR14, 6%); tenuta 4", "R medio fra -0,10 e +0,10"),
     "XRPUSDT-V18b": ("squilibrio taker 4 barre > +0,06; stop min(1,5 ATR14, 6%); tenuta 4", "R medio fra -0,10 e +0,10"),
