@@ -598,6 +598,30 @@ def _bande_1h(id, direzione):
     return _Bande1h(id, direzione)
 
 
+# ---------------------------------------------------------------------------
+# Ritocchi (regola 6): stessa idea, timeframe, direzione e meccanismo
+# ---------------------------------------------------------------------------
+class MomentoSerieFiltro(MomentoSerie):
+    """I-01 con un filtro nato dallo studio dei fallimenti: anche il rendimento a ``giorni_lunghi``
+    giorni deve essere dalla stessa parte (negativo per lo short, positivo per il long)."""
+
+    def __init__(self, id, direzione, giorni_lunghi=30, **kw):
+        super().__init__(id, direzione, **kw)
+        self.giorni_lunghi = giorni_lunghi
+        self.riscaldamento = max(self.riscaldamento, giorni_lunghi)
+
+    def prepara(self, s):
+        x = super().prepara(s)
+        x["r_lungo"] = ind.rendimento(s["close"], self.giorni_lunghi)
+        return x
+
+    def condizione(self, x, s, i):
+        rl = x["r_lungo"][i]
+        if not _ok(rl):
+            return False
+        return super().condizione(x, s, i) and (rl < 0 if self.direzione == "short" else rl > 0)
+
+
 VARIANTI = {
     "BCHUSDT-001": lambda: MomentoSerie("BCHUSDT-001", "long"),
     "BCHUSDT-002": lambda: MomentoSerie("BCHUSDT-002", "short"),
@@ -632,4 +656,5 @@ VARIANTI = {
     "BCHUSDT-030": lambda: SopraMedia("BCHUSDT-030", "long", n=10),
     "BCHUSDT-031": lambda: SopraMedia("BCHUSDT-031", "short", n=10),
     "BCHUSDT-032": lambda: VolatilitaBassa("BCHUSDT-032", "long"),
+    "BCHUSDT-033": lambda: MomentoSerieFiltro("BCHUSDT-033", "short", giorni_lunghi=30),
 }
