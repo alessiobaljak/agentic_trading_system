@@ -49,7 +49,8 @@ def registra(ident):
     base = {"id": ident, "idea": reg["idea"], "famiglia": reg.get("famiglia", ident),
             "ritocco_di": reg.get("ritocco_di"), "fonte": reg["fonte"], "meccanismo": reg["meccanismo"],
             "timeframe": var.tf, "direzione": var.direzione, "parametri": var.descrizione()["parametri"],
-            "regole": reg["regole"], "periodo": "costruzione", "trade_stimati": c["trade"], "conta_trade": c}
+            "regole": reg["regole"], "periodo": "costruzione",
+            "cambia": reg.get("cambia"), "perche": reg.get("perche"), "trade_stimati": c["trade"], "conta_trade": c}
     if c["trade"] < C.TRADE_MINIMI_COSTRUZIONE:
         voce = dict(base, tipo="scarto", motivo=f"sotto i trade minimi di costruzione ({c['trade']} < 70): non si testa, nessun budget")
         if reg.get("ritocco_di"):

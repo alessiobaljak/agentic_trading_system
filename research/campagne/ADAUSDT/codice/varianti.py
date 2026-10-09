@@ -656,4 +656,82 @@ VARIANTI.update({
     "ADAUSDT-033": _comp2("short"),
 })
 
+class AperturaTF(Apertura):
+    """Apertura su un timeframe diverso da 15m (solo per la verifica dei timeframe adiacenti): fine della
+    giornata = ultima barra prima della mezzanotte UTC, completezza dell'intervallo col passo del timeframe."""
+
+    def prepara(self, D):
+        P = C.arrays(D["candele"])
+        passo = D["passo"]
+        n = len(P["c"])
+        b = self.p["barre_intervallo"]
+        alto = np.full(n, np.nan)
+        basso = np.full(n, np.nan)
+        ammesso = np.zeros(n, dtype=bool)
+        giorno = P["ts"] // 86_400_000
+        fine = ((P["ts"] + passo) % 86_400_000) == 0
+        inizio = {}
+        for i in range(n):
+            inizio.setdefault(giorno[i], i)
+        for i in range(n):
+            j = inizio[giorno[i]]
+            h, _ = _ora(P["ts"][i])
+            if _ora(P["ts"][j]) == (0, 0) and i >= j + b and np.all(P["ts"][j + 1:j + b] - P["ts"][j:j + b - 1] == passo):
+                alto[i] = P["h"][j:j + b].max()
+                basso[i] = P["l"][j:j + b].min()
+                ammesso[i] = h < self.p["ultima_ora"]
+        P.update(alto=alto, basso=basso, fine=fine, ammesso=ammesso)
+        return P
+
+
+def _ape_tf(d, tf, barre):
+    v = AperturaTF(barre_intervallo=barre, ultima_ora=20)
+    v.direzione = d
+    v.tf = tf
+    return v
+
+
+class AperturaFiltro(Apertura):
+    """Apertura con un filtro di tendenza (ritocco nato dallo studio dei fallimenti): long solo con la
+    chiusura sopra la media semplice di `giorni_media` giorni, short solo sotto."""
+
+    def prepara(self, D):
+        P = Apertura.prepara(self, D)
+        P["media"] = C.sma(P["c"], int(self.p["giorni_media"] * 86_400_000 // D["passo"]))
+        return P
+
+    def condizione(self, i, P):
+        m = P["media"][i]
+        if not np.isfinite(m):
+            return False
+        if self.direzione == "long" and not P["c"][i] > m:
+            return False
+        if self.direzione == "short" and not P["c"][i] < m:
+            return False
+        return Apertura.condizione(self, i, P)
+
+
+def _ape_f(d, giorni):
+    v = AperturaFiltro(barre_intervallo=4, ultima_ora=20, giorni_media=giorni)
+    v.direzione = d
+    return v
+
+
+VARIANTI.update({
+    "ADAUSDT-034": _ape_f("long", 20),
+})
+
+# timeframe adiacenti per le verifiche della Fase 4 (parametri in barre convertiti alla stessa durata)
+ADIACENTI = {
+    "ADAUSDT-025": [_ape_tf("short", "30m", 2)],
+}
+
+PREVISIONI_VERIFICHE = {
+    ("ADAUSDT-025", "costi_doppi"): "R medio a costi doppi negativo (circa -0,04: il costo di un giro e' ~0,06 R con lo stop medio del 2,5%); la (b) a costi doppi peggiora di piu' (stop piccoli): forse ancora netta, ma R non positivo: verifica NON superata",
+    ("ADAUSDT-025", "ritardo"): "t contro la (b) col ritardo resta positivo e circa uguale (il meccanismo e' la distanza dello stop): superata",
+    ("ADAUSDT-025", "intrabarra"): "nessuna differenza: la variante non ha target",
+    ("ADAUSDT-025", "robustezza"): "t positivo nei casi, netta in almeno meta' (per lo stesso motivo della distanza dello stop)",
+    ("ADAUSDT-025", "timeframe"): "a 30 minuti t positivo",
+}
+
 from registrazioni import REG  # noqa: E402,F401
