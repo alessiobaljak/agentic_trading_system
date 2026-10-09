@@ -261,6 +261,8 @@ class Lunedi(Base):
 class Strettoia(Base):
     """I-10: Bollinger 20/2 con ampiezza nel quinto piu' basso delle ultime 120; 4h; uscita dopo 12."""
     tf, barre, stop_atr = "4h", 12, 2.0
+    finestra = 120
+    percentile = 20
 
     def __init__(self, direzione):
         self.direzione = direzione
@@ -272,10 +274,11 @@ class Strettoia(Base):
         sd = q.rolling_std(c, 20)
         amp = 4 * sd / m
         p20 = np.full(len(c), np.nan)
-        for i in range(119, len(c)):
-            w = amp[i - 119:i + 1]
+        F = self.finestra
+        for i in range(F - 1, len(c)):
+            w = amp[i - F + 1:i + 1]
             if np.isfinite(w).all():
-                p20[i] = np.percentile(w, 20)
+                p20[i] = np.percentile(w, self.percentile)
         self.m, self.sd, self.amp, self.p20 = m, sd, amp, p20
         self.primo_indice = q.primo_finito(self.a, self.p20)
 
@@ -431,7 +434,98 @@ class NR4(Base):
         return self.ore[i] == 23
 
 
+def dmi(d, n=14):
+    """+DI, -DI e ADX di Wilder (medie di Wilder, causali)."""
+    h, l, c = d["high"], d["low"], d["close"]
+    N = len(c)
+    up = np.zeros(N)
+    dn = np.zeros(N)
+    tr = np.zeros(N)
+    for i in range(1, N):
+        u, w = h[i] - h[i - 1], l[i - 1] - l[i]
+        up[i] = u if (u > w and u > 0) else 0.0
+        dn[i] = w if (w > u and w > 0) else 0.0
+        tr[i] = max(h[i] - l[i], abs(h[i] - c[i - 1]), abs(l[i] - c[i - 1]))
+    pdi = np.full(N, np.nan)
+    mdi = np.full(N, np.nan)
+    adx = np.full(N, np.nan)
+    if N <= 2 * n:
+        return pdi, mdi, adx
+    s_tr, s_up, s_dn = tr[1:n + 1].sum(), up[1:n + 1].sum(), dn[1:n + 1].sum()
+    dx = np.full(N, np.nan)
+    for i in range(n, N):
+        if i > n:
+            s_tr = s_tr - s_tr / n + tr[i]
+            s_up = s_up - s_up / n + up[i]
+            s_dn = s_dn - s_dn / n + dn[i]
+        if s_tr > 0:
+            pdi[i] = 100 * s_up / s_tr
+            mdi[i] = 100 * s_dn / s_tr
+            somma = pdi[i] + mdi[i]
+            dx[i] = 100 * abs(pdi[i] - mdi[i]) / somma if somma > 0 else 0.0
+    adx[2 * n - 1] = np.nanmean(dx[n:2 * n])
+    for i in range(2 * n, N):
+        adx[i] = (adx[i - 1] * (n - 1) + dx[i]) / n
+    return pdi, mdi, adx
+
+
+class Direzionale(Base):
+    """I-16: incrocio +DI/-DI con ADX > 25; uscita all'incrocio opposto; 4h; stop 2,5 ATR."""
+    tf, stop_atr = "4h", 2.5
+
+    def __init__(self, direzione):
+        self.direzione = direzione
+
+    def prepara(self, d):
+        super().prepara(d)
+        self.p, self.m, self.adx = dmi(d)
+        self.primo_indice = q.primo_finito(self.a, self.adx) + 1
+
+    def condizione(self, i):
+        p, m = self.p, self.m
+        if self.direzione == "long":
+            return p[i] > m[i] and p[i - 1] <= m[i - 1] and self.adx[i] > 25
+        return m[i] > p[i] and m[i - 1] <= p[i - 1] and self.adx[i] > 25
+
+    def esci(self, i, barre_tenute):
+        if self.direzione == "long":
+            return self.m[i] > self.p[i]
+        return self.p[i] > self.m[i]
+
+
+def allentata(classe, direzione, **attributi):
+    """Variante allentata di un'idea: stessa classe con attributi di classe diversi (tf, n, barre, k)."""
+    v = classe(direzione)
+    for k, val in attributi.items():
+        setattr(v, k, val)
+    return v
+
+
+class GiornoAnomaloK(GiornoAnomalo):
+    k = 1.5
+
+    def condizione(self, i):
+        if self.direzione == "long":
+            return self.r[i] > self.m_prima[i] + self.k * self.sd_prima[i]
+        return self.r[i] < self.m_prima[i] - self.k * self.sd_prima[i]
+
+
 VARIANTI = {
+    "DOGEUSDT-040": lambda: allentata(Strettoia, "short", tf="1h", barre=24),
+    "DOGEUSDT-041": lambda: allentata(Strettoia, "short", tf="1h", stop_atr=3.0),
+    "DOGEUSDT-042": lambda: allentata(Strettoia, "short", tf="1h", stop_atr=3.0, finestra=480),
+    "DOGEUSDT-043": lambda: allentata(Strettoia, "short", tf="1h", stop_atr=3.0, percentile=10),
+    "DOGEUSDT-044": lambda: allentata(Strettoia, "short", tf="1h", stop_atr=4.0),
+    "DOGEUSDT-032": lambda: allentata(RotturaCanale, "long", n=20, barre=12),
+    "DOGEUSDT-033": lambda: allentata(RotturaCanale, "short", n=20, barre=12),
+    "DOGEUSDT-034": lambda: allentata(Strettoia, "long", tf="1h"),
+    "DOGEUSDT-035": lambda: allentata(Strettoia, "short", tf="1h"),
+    "DOGEUSDT-036": lambda: allentata(GiornoAnomaloK, "long", k=1.0),
+    "DOGEUSDT-037": lambda: allentata(GiornoAnomaloK, "short", k=1.0),
+    "DOGEUSDT-038": lambda: allentata(Direzionale, "long", tf="1h"),
+    "DOGEUSDT-039": lambda: allentata(Direzionale, "short", tf="1h"),
+    "DOGEUSDT-030": lambda: Direzionale("long"),
+    "DOGEUSDT-031": lambda: Direzionale("short"),
     "DOGEUSDT-024": lambda: Squilibrio("long"),
     "DOGEUSDT-025": lambda: Squilibrio("short"),
     "DOGEUSDT-026": lambda: NumeroTondo("long"),

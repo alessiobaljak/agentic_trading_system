@@ -358,3 +358,85 @@ ancora toccate, non per somiglianza con un risultato.
      alla chiusura della barra 23:00. Stop 2 ATR.
    * **I-15-S** (DOGEUSDT-029): specchio short.
    Previsione: R medio fra −0,10 e +0,10.
+
+---
+
+Idea I-16 scritta dopo i risultati delle varianti 1-29 (nessun candidato). È l'ultima famiglia
+con fonte che trovo non ancora coperta: un trend misurato con la forza direzionale e con
+un'uscita su segnale (non a tempo), diversa dalle uscite a tempo delle altre idee di trend.
+
+## Idea I-16 — Incrocio dei movimenti direzionali con trend forte
+
+1. **Fonte.** J. Welles Wilder Jr., «New Concepts in Technical Trading Systems», Trend Research,
+   1978 (indici +DI, −DI e ADX).
+2. **Affermazione.** Su DOGEUSDT a 4 ore, quando +DI incrocia sopra −DI con ADX(14) > 25, il
+   prezzo prosegue al rialzo fino all'incrocio opposto più del caso (short: specchio).
+3. **Sotto-domande.** L'ADX alto arriva tardi? Chi opera: chi segue il trend. Tempo: giorni.
+4. **Spiegazioni specifiche.** S1 L'incrocio arriva dopo il movimento (ritardo dell'indicatore)
+   → R negativo. S2 Su DOGE i trend sono pochi e brevi, i falsi incroci molti → win rate basso
+   e R dominato da pochi trade.
+6. **Varianti.** Timeframe 4h.
+   * **I-16-L** (DOGEUSDT-030): 4h, long quando +DI(14) passa sopra −DI(14) nella barra e ADX(14)
+     > 25; uscita quando −DI > +DI alla chiusura. Stop 2,5 ATR.
+   * **I-16-S** (DOGEUSDT-031): specchio short.
+   Previsione: R medio fra −0,10 e +0,15.
+
+---
+
+## Varianti allentate delle idee rimaste tutte sotto i 70 trade (regola 6)
+
+Le idee I-03, I-10, I-12 e I-16 hanno avuto entrambe le varianti scartate dalla stima dei trade
+(sotto 70), senza alcun risultato di test. La regola 6 ammette di allentarne le soglie per
+raggiungere il minimo, senza aver visto risultati: sono ancora varianti delle idee nuove, non
+ritocchi. Le scelte sotto sono le più vicine all'originale che danno più ingressi (canale e
+tenuta più corti, timeframe più corto con gli stessi parametri in barre, soglia più bassa).
+Le previsioni restano quelle delle idee.
+
+* **I-03-L2** (DOGEUSDT-032) e **I-03-S2** (DOGEUSDT-033): 4h, canale di 20 barre invece di 50,
+  uscita dopo 12 barre invece di 30, stop 2 ATR.
+* **I-10-L2** (DOGEUSDT-034) e **I-10-S2** (DOGEUSDT-035): come I-10 ma a 1h (stessi parametri
+  in barre: bande 20/2, percentile sulle 120 ampiezze, uscita dopo 12 barre).
+* **I-12-L2** (DOGEUSDT-036) e **I-12-S2** (DOGEUSDT-037): come I-12 con soglia 1 deviazione
+  standard invece di 1,5.
+* **I-16-L2** (DOGEUSDT-038) e **I-16-S2** (DOGEUSDT-039): come I-16 a 1h.
+
+---
+
+## Ritocchi (regola 6), nell'ordine del `t` contro la (b)
+
+Idee con fonte esaurite (nota del log). Ogni ritocco si scrive qui prima del test, con la
+variante di partenza, cosa cambia e perché. Non cambia timeframe, direzione né meccanismo.
+
+* **Ritocco 1 — DOGEUSDT-040**, ritocco di DOGEUSDT-035 (prima della lista, `t` 1,33). Cambia
+  solo l'uscita: a tempo dopo 24 barre invece di 12. Perché: nei trade di costruzione le uscite
+  a tempo hanno R medio +0,54 e i trade migliori (fino a 6 R) arrivano alla fine della finestra;
+  la fonte dice che l'espansione dopo la strettoia dura più di qualche barra. Previsione: R
+  medio fra 0 e +0,20, `t` contro la (b) sotto la soglia (mi aspetto che la dipendenza da pochi
+  trade resti). Esito: R 0,123, `t` contro la (b) 0,59.
+* **Ritocco 2 — DOGEUSDT-041**, ritocco di DOGEUSDT-035 (ancora prima della lista, `t` 1,33,
+  famiglia con 1 ritocco). Cambia solo lo stop: 3 ATR invece di 2, uscita a 12 barre come
+  l'originale. Perché: l'ATR misurato dentro una strettoia è basso per costruzione, quindi uno
+  stop a 2 ATR è stretto rispetto alla volatilità dell'espansione che l'idea cerca; in
+  costruzione 35 trade su 133 sono usciti a stop. Previsione: R medio fra −0,05 e +0,15, `t`
+  contro la (b) sotto la soglia. Esito: R 0,112, `t` contro la (b) 1,81, (a) 1,87: non netta.
+* **Ritocco 3 — DOGEUSDT-042**, ritocco di DOGEUSDT-041 (prima della lista, `t` 1,81; famiglia
+  DOGEUSDT-035 con 2 ritocchi). Cambia solo la finestra su cui si misura la strettoia: il
+  20° percentile dell'ampiezza delle ultime 480 barre (20 giorni) invece di 120 (5 giorni);
+  stop 3 ATR e uscita a 12 barre come DOGEUSDT-041. Perché: la fonte chiama strettoia
+  un'ampiezza al minimo di un periodo lungo (mesi); a 1 ora 120 barre sono 5 giorni, una
+  «strettoia» relativa a una settimana. Previsione: meno trade; R medio fra −0,05 e +0,15.
+  Esito: 130 trade, R 0,158, `t` contro la (b) 2,14 (soglia 2,04) e contro la (a) 2,19:
+  candidato in Fase 2 dopo tre ritocchi della stessa famiglia (da trattare con sospetto).
+* **Ritocco 4 — DOGEUSDT-043**, ritocco di DOGEUSDT-041 (prima della lista dei non candidati,
+  `t` 1,81; famiglia DOGEUSDT-035 con 3 ritocchi). Cambia solo la soglia della strettoia: 10°
+  percentile dell'ampiezza delle ultime 120 barre invece del 20°; stop 3 ATR e uscita a 12 barre
+  come DOGEUSDT-041. Perché: una strettoia più estrema, più vicina all'«ampiezza al minimo» della
+  fonte, senza allungare la finestra (quella è già stata provata in DOGEUSDT-042). Previsione:
+  meno trade (forse sotto 70); R medio fra −0,05 e +0,15. Esito: 80 trade, R 0,072, `t` contro
+  la (b) 0,99.
+* **Ritocco 5 — DOGEUSDT-044**, ritocco di DOGEUSDT-041 (ancora prima della lista, `t` 1,81;
+  famiglia DOGEUSDT-035 con 4 ritocchi: questo è l'ultimo ammesso, ed è l'ultima variante del
+  budget). Cambia solo lo stop: 4 ATR invece di 3. Perché: lo stesso motivo del ritocco 2
+  (ATR basso dentro la strettoia), che spostando lo stop da 2 a 3 ATR ha ridotto gli stop;
+  si guarda se il motivo regge un passo oltre. Previsione: R medio fra −0,05 e +0,15; più
+  stop oltre il 6% del prezzo (tetto del bot).
