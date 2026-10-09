@@ -232,6 +232,67 @@ def cond_numero_tondo(segno: int):
     return f
 
 
+def prepara_continua_fine_giorno(n: int, z: float, segno: int, k_atr: float):
+    """I-15: dopo un'ora oltre z deviazioni (nella direzione segno), posizione fino a fine giorno UTC."""
+    def prepara(candele, extra):
+        c = I.arr(candele, "close")
+        a = I.atr(candele, 14)
+        r = I.rendimenti(c, 1)
+        s = I.std_precedente(r, n)
+        giorno = [I.utc(x.ts).strftime("%Y-%m-%d") for x in candele]
+        ora = [I.utc(x.ts).hour for x in candele]
+
+        def entra(i):
+            if ora[i] == 23 or not I.ok(r[i], s[i]) or s[i] <= 0:
+                return False
+            return r[i] > z * s[i] if segno > 0 else r[i] < -z * s[i]
+
+        def esci(i, ie):
+            return ora[i] == 23 or giorno[i] != giorno[ie]
+        return C.Prep(entra, _stop_atr("long" if segno > 0 else "short", k_atr, c, a), esci)
+    return prepara
+
+
+def cond_stessa_ora(giorni: int, segno: int):
+    """I-16: media dei rendimenti (close/open - 1) della stessa ora UTC della barra dopo, nei giorni precedenti."""
+    def f(candele, extra):
+        rend = {x.ts: x.close / x.open - 1 for x in candele}
+        ora_ms = 3_600_000
+
+        def entra(i):
+            prossima = candele[i].ts + ora_ms
+            valori = [rend.get(prossima - 24 * ora_ms * k) for k in range(1, giorni + 1)]
+            if any(v is None for v in valori):
+                return False
+            m = sum(valori) / giorni
+            return m > 0 if segno > 0 else m < 0
+        return entra
+    return f
+
+
+def cond_stretta(n: int, k: float, finestra_min: int, recente: int, segno: int):
+    """I-17: ampiezza delle bande al minimo delle finestra_min barre precedenti in una delle ultime `recente` barre, poi rottura."""
+    def f(candele, extra):
+        c = I.arr(candele, "close")
+        m = I.sma(c, n)
+        sd = np.full(len(c), math.nan)
+        for i in range(n - 1, len(c)):
+            sd[i] = c[i - n + 1:i + 1].std(ddof=0)
+        alta, bassa = m + k * sd, m - k * sd
+        ampiezza = (alta - bassa) / m
+        minimo_prec = I.min_precedente(ampiezza, finestra_min)
+        stretta = np.array([I.ok(ampiezza[i], minimo_prec[i]) and ampiezza[i] <= minimo_prec[i] for i in range(len(c))])
+
+        def entra(i):
+            if i < recente or not I.ok(alta[i], bassa[i]):
+                return False
+            if not stretta[i - recente:i].any():
+                return False
+            return c[i] > alta[i] if segno > 0 else c[i] < bassa[i]
+        return entra
+    return f
+
+
 # ---------------------------------------------------------------------------
 # Registro delle varianti (come in ipotesi.md)
 # ---------------------------------------------------------------------------
@@ -250,6 +311,10 @@ FONTI = {
     "I-11": "Osler, Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical Analysis, Journal of Finance 58(5), 2003",
     "I-12": "George e Hwang, The 52-Week High and Momentum Investing, Journal of Finance 59(5), 2004",
     "I-13": "Zaremba, Bilgin, Long, Mercik e Szczygielski, Up or down? Short-term reversal, momentum, and liquidity effects in cryptocurrency markets, International Review of Financial Analysis 78, 2021",
+    "I-14": "Kozlowski, Puleo e Zhou, Cryptocurrency return reversals, Applied Economics Letters 28(11), 2021 (online 2020)",
+    "I-15": "Caporale e Plastun, Momentum effects in the cryptocurrency market after one-day abnormal returns, CESifo Working Paper 7917, 2019; Saef, Nagy, Sizov e Hardle, Understanding jumps in high frequency digital asset markets, arXiv 2110.09429, ottobre 2021",
+    "I-16": "Heston, Korajczyk e Sadka, Intraday Patterns in the Cross-Section of Stock Returns, Journal of Finance 65(4), 2010",
+    "I-17": "Bollinger, Bollinger on Bollinger Bands, McGraw-Hill, 2001",
 }
 
 PREV_NULLA = "R medio fra -0,10 e +0,05, t contro la (b) fra -1,5 e +1,5: non candidato"
@@ -346,5 +411,38 @@ VARIANTI: Dict[str, Dict[str, object]] = {
     "V23": dict(idea="I-13", tf="1d", direzione="short", meccanismo="momentum giornaliero",
                 parametri={"rendimento_barre": 1, "soglia": "< 0", "uscita_barre": 1, "stop_atr": 2},
                 prepara=costruttore("short", 2, 1, cond_rend_k(1, -1)),
+                previsione=PREV_NULLA),
+    # seconda tornata (ipotesi.md, scritta dopo V01-V23 e prima dei test di queste)
+    "V24": dict(idea="I-14", tf="1d", direzione="long", meccanismo="inversione giornaliera dopo un giorno negativo",
+                parametri={"rendimento_barre": 1, "soglia": "< 0", "uscita_barre": 1, "stop_atr": 2},
+                prepara=costruttore("long", 2, 1, cond_rend_k(1, -1)),
+                previsione="R medio fra 0 e +0,08, t contro la (b) fra 0 e +2,5: forse vicino alla soglia, ma la scelta viene dai risultati di V23"),
+    "V25": dict(idea="I-14", tf="1d", direzione="short", meccanismo="inversione giornaliera dopo un giorno positivo",
+                parametri={"rendimento_barre": 1, "soglia": "> 0", "uscita_barre": 1, "stop_atr": 2},
+                prepara=costruttore("short", 2, 1, cond_rend_k(1, +1)),
+                previsione="R medio fra -0,05 e +0,06, t contro la (b) fra 0 e +2,5: non candidato o al limite"),
+    "V26": dict(idea="I-15", tf="1h", direzione="long", meccanismo="continuazione dopo un'ora anomala al rialzo fino a fine giorno",
+                parametri={"finestra_std": 168, "z": 3, "uscita": "fine del giorno UTC", "stop_atr": 2, "esclusa_ora": 23},
+                prepara=prepara_continua_fine_giorno(168, 3, +1, 2),
+                previsione="R medio fra -0,05 e +0,15, t contro la (b) fra 0 e +3"),
+    "V27": dict(idea="I-15", tf="1h", direzione="short", meccanismo="continuazione dopo un'ora anomala al ribasso fino a fine giorno",
+                parametri={"finestra_std": 168, "z": 3, "uscita": "fine del giorno UTC", "stop_atr": 2, "esclusa_ora": 23},
+                prepara=prepara_continua_fine_giorno(168, 3, -1, 2),
+                previsione="R medio fra -0,05 e +0,15, t contro la (b) fra 0 e +3"),
+    "V28": dict(idea="I-16", tf="1h", direzione="long", meccanismo="periodicita' oraria (stessa ora dei 20 giorni prima)",
+                parametri={"giorni": 20, "soglia": "media > 0", "uscita_barre": 1, "stop_atr": 2},
+                prepara=costruttore("long", 2, 1, cond_stessa_ora(20, +1)),
+                previsione="R medio fra -0,10 e 0 (costi), t contro la (b) fra -1,5 e +1,5: non candidato"),
+    "V29": dict(idea="I-16", tf="1h", direzione="short", meccanismo="periodicita' oraria (stessa ora dei 20 giorni prima)",
+                parametri={"giorni": 20, "soglia": "media < 0", "uscita_barre": 1, "stop_atr": 2},
+                prepara=costruttore("short", 2, 1, cond_stessa_ora(20, -1)),
+                previsione="R medio fra -0,10 e 0 (costi), t contro la (b) fra -1,5 e +1,5: non candidato"),
+    "V30": dict(idea="I-17", tf="1h", direzione="long", meccanismo="stretta delle bande e rottura al rialzo",
+                parametri={"bande_barre": 20, "deviazioni": 2, "minimo_su_barre": 120, "stretta_nelle_ultime": 5, "uscita_barre": 12, "stop_atr": 2},
+                prepara=costruttore("long", 2, 12, cond_stretta(20, 2, 120, 5, +1)),
+                previsione=PREV_NULLA),
+    "V31": dict(idea="I-17", tf="1h", direzione="short", meccanismo="stretta delle bande e rottura al ribasso",
+                parametri={"bande_barre": 20, "deviazioni": 2, "minimo_su_barre": 120, "stretta_nelle_ultime": 5, "uscita_barre": 12, "stop_atr": 2},
+                prepara=costruttore("short", 2, 12, cond_stretta(20, 2, 120, 5, -1)),
                 previsione=PREV_NULLA),
 }

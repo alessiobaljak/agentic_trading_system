@@ -435,3 +435,118 @@ basta il segno).
 **Varianti.**
 * V22 — long se il rendimento della barra i (close/close precedente − 1) è positivo.
 * V23 — short se è negativo.
+
+---
+
+# Seconda tornata di idee (scritta il 9 ottobre 2026 alle 15:00 UTC, dopo V01-V23, prima dei loro test)
+
+**Dichiarazione.** Le idee I-14 e I-15 sono nate dallo studio dei fallimenti (voce N009 del log):
+I-13 (momentum giornaliero) e I-03 (inversione dopo un'ora estrema) hanno perso contro il caso in
+modo sistematico. Sono idee nuove con una fonte propria, come chiede la Fase 3, ma la scelta di
+provarle è stata guidata dai risultati di costruzione: il rischio di aver trovato rumore è più alto
+che per le prime tredici, e lo dice anche la validazione, che giudica una volta sola. I-16 e I-17
+non vengono dai risultati.
+
+## I-14 — Inversione giornaliera
+
+**Fonte.** Adam Kozlowski, Michael Puleo e Jian Zhou, «Cryptocurrency return reversals», Applied
+Economics Letters 28(11), 2021 (online 2020): fra 200 criptovalute il rendimento passato si inverte a
+frequenza giornaliera, settimanale e mensile; l'effetto è il compenso di chi offre liquidità ed è più
+forte nelle monete meno liquide.
+
+**Affermazione falsificabile.** Dopo un giorno UTC negativo il giorno dopo rende più di un giorno a caso,
+long; dopo un giorno positivo rende meno, short.
+
+**Sotto-domande.** Chi: chi offre liquidità a chi ha venduto (comprato) con fretta; chi prende profitto.
+Quando: il giorno dopo. Dimensione: tutti i giorni, solo il segno (la fonte ordina per rendimento,
+qui la moneta è una sola).
+
+**Spiegazioni concorrenti.** 1 caso (319-352 trade: il rumore è piccolo, ma la scelta di provarla viene
+dai risultati: è il rischio principale); 2 trend di fondo; 3 è solo il mercato (inversione giornaliera di
+BTC); 4 volatilità (i giorni dopo un ribasso sono più volatili: lo stop in ATR si allarga); 5 costi
+(0,007 R); 6 artefatto; 7 pochi trade estremi (marzo 2020); 8 un solo regime; 9 rimbalzo dopo i soli
+crolli grandi (la media la fanno pochi giorni); 10 è il rovescio di V22 e V23: se il loro risultato è
+rumore, questa variante lo rispecchia e la validazione lo scopre.
+
+**Ipotesi.** LINKUSDT, 1d, posizione 1 barra, stop 2 ATR(14).
+
+**Varianti.**
+* V24 — long se il rendimento della barra i è negativo.
+* V25 — short se è positivo.
+
+## I-15 — Continuazione dopo un'ora anomala fino alla fine del giorno
+
+**Fonti.** Guglielmo Maria Caporale e Alex Plastun, «Momentum effects in the cryptocurrency market after
+one-day abnormal returns», CESifo Working Paper 7917, 2019 (poi Financial Markets and Portfolio
+Management 34, 2020): nei giorni con rendimento anomalo il prezzo continua nella direzione del movimento
+fino alla fine del giorno. Danial Saef, Odett Nagy, Sergej Sizov e Wolfgang Karl Härdle, «Understanding
+jumps in high frequency digital asset markets», arXiv 2110.09429, 18 ottobre 2021: un salto positivo durante il giorno rende
+probabile un rendimento positivo a fine giornata, e viceversa; nessun effetto sul giorno dopo.
+
+**Affermazione falsificabile.** Dopo un'ora con rendimento oltre 3 deviazioni standard delle 168 ore
+prima, la posizione nella direzione del movimento tenuta fino alla fine del giorno UTC rende più di
+ingressi a caso con la stessa uscita.
+
+**Sotto-domande.** Chi: liquidazioni a cascata e stop che scattano, chi insegue il movimento. Quando:
+lo stesso giorno (le fonti dicono fino a fine giornata, non oltre). L'ora anomala si misura come in
+I-03 (stesso indicatore già scritto prima dei risultati); non si entra se l'ora anomala è l'ultima del
+giorno.
+
+**Spiegazioni concorrenti.** 1 caso; 2 trend di fondo; 3 è solo il mercato (le ore anomale di LINK sono
+quelle di BTC, ed è BTC a continuare); 4 volatilità; 5 costi (0,04 R); 6 artefatto (ore vicine ai
+buchi); 7 pochi trade estremi; 8 un solo regime; 9 è lo specchio di V05 e V06: con un'uscita diversa
+(fine giornata invece di 6 ore) può non valere; 10 la soglia 3 è presa da I-03 e non è ottimizzata.
+
+**Ipotesi.** LINKUSDT, 1h, uscita a fine giorno UTC, stop 2 ATR(14).
+
+**Varianti.**
+* V26 — long dopo un'ora sopra +3 deviazioni standard.
+* V27 — short dopo un'ora sotto −3 deviazioni standard.
+
+## I-16 — Periodicità oraria: la stessa ora dei giorni precedenti
+
+**Fonte.** Steven Heston, Robert Korajczyk e Ronnie Sadka, «Intraday Patterns in the Cross-Section of
+Stock Returns», Journal of Finance 65(4), 2010: il rendimento di una mezz'ora è correlato positivamente
+con quello della stessa mezz'ora dei giorni precedenti, per molte settimane (flussi ricorrenti a ore
+fisse).
+
+**Affermazione falsificabile.** Se la media dei rendimenti della prossima ora (stessa ora UTC) nei 20 giorni
+precedenti è positiva, quell'ora rende più di un'ora a caso, long; se negativa, meno, short.
+
+**Sotto-domande.** Chi: flussi ricorrenti (ribilanciamenti, fixing, orari di borse e sessioni, funding
+alle 00, 08, 16 UTC). La fonte è sulle azioni e trasversale; qui una sola moneta nel tempo. Con un'ora di
+posizione il costo (0,04 R) è grande rispetto all'effetto atteso, che nella fonte è di pochi punti base.
+
+**Spiegazioni concorrenti.** 1 caso; 2 trend di fondo; 3 è solo il mercato; 4 volatilità (ore diverse,
+volatilità diverse); 5 costi (l'effetto è minuscolo: previsione R medio negativo); 6 artefatto; 7 pochi
+trade estremi; 8 un solo regime; 9 i flussi a ore fisse sono quelli del funding (ore 00, 08, 16), e
+l'effetto vive solo lì; 10 finestra di 20 giorni (robustezza 16 e 24).
+
+**Ipotesi.** LINKUSDT, 1h, posizione 1 barra, stop 2 ATR(14).
+
+**Varianti.**
+* V28 — long se la media dei 20 rendimenti della stessa ora nei 20 giorni precedenti è positiva.
+* V29 — short se è negativa.
+
+## I-17 — Compressione della volatilità e rottura (la «stretta» delle bande)
+
+**Fonte.** John Bollinger, «Bollinger on Bollinger Bands», McGraw-Hill, 2001: a una fase di volatilità
+minima (bande strette) segue un'espansione; la direzione si prende dalla rottura della banda.
+
+**Affermazione falsificabile.** Se nelle ultime 5 ore l'ampiezza delle bande (20 ore, 2 deviazioni) ha
+toccato il minimo delle 120 ore precedenti e ora la chiusura esce sopra la banda alta, le 12 ore
+dopo rendono più di 12 ore a caso, long (simmetrico sotto la banda bassa, short).
+
+**Spiegazioni concorrenti.** 1 caso; 2 trend di fondo; 3 è solo il mercato; 4 volatilità (dopo la stretta
+la volatilità sale per costruzione: lo stop in ATR è stretto all'ingresso e l'R si gonfia o si sgonfia);
+5 costi (0,04 R); 6 artefatto; 7 pochi trade estremi; 8 un solo regime; 9 falsa rottura; 10 soglie
+(20, 2, 120, 5).
+
+**Ipotesi.** LINKUSDT, 1h, posizione 12 barre, stop 2 ATR(14).
+
+**Varianti.**
+* V30 — long alla rottura della banda alta dopo una stretta.
+* V31 — short alla rottura della banda bassa dopo una stretta.
+
+Se una variante di queste quattro idee resta sotto i 70 trade non consuma budget; il budget rimasto
+dopo le idee nuove va ai ritocchi nell'ordine della regola 6.
