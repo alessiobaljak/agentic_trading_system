@@ -147,6 +147,7 @@ def contesto(tf: str, periodo: str = "costruzione") -> Contesto:
         "quote_volume": [s["volume_usdt"].get(c.ts) if s["volume_usdt"].get(c.ts) is not None else np.nan
                          for c in candele],
         "btc_close": [btc.get(c.ts, np.nan) for c in candele],
+        "mark_close": [c.close for c in mark],
     })
     # ultimo tasso di funding gia' regolato alla chiusura di ogni barra (noto a quell'istante)
     f_ts = np.array([t for t, _ in funding], dtype=np.int64)

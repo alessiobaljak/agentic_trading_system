@@ -32,6 +32,15 @@ F_PUMP = ("Josh Kamps, Bennett Kleinberg, 'To the moon: defining and detecting c
           "Crime Science 7, 2018")
 
 
+F_HKS = ("Steven L. Heston, Robert A. Korajczyk, Ronnie Sadka, 'Intraday Patterns in the Cross-Section of "
+         "Stock Returns', Journal of Finance 65(4), 2010")
+F_PERP = ("Songrun He, Asaf Manela, Omri Ross, Victor von Wachter, 'Fundamentals of Perpetual Futures', "
+          "arXiv 2212.06888, dicembre 2022")
+F_OSLER03 = ("Carol L. Osler, 'Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive "
+             "Success of Technical Analysis', Journal of Finance 58(5), 2003")
+F_GAO = "Lei Gao, Yufeng Han, Sophia Zhenzhen Li, Guofu Zhou, 'Market intraday momentum', Journal of Financial Economics 129(2), 2018"
+
+
 def _prev(lo, hi, testo=""):
     return {"r_medio_min": lo, "r_medio_max": hi,
             "testo": testo or f"R medio dopo i costi fra {lo} e {hi}; t contro la (b) sotto la soglia"}
@@ -176,6 +185,63 @@ CATALOGO = {
                      "meccanismo": "pompa organizzata: dopo il salto di prezzo e volume il prezzo ricade",
                      "regole": "1h; rendimento della barra > 3 deviazioni standard delle 168 precedenti e volume USDT > 3 volte la media delle 168 precedenti; short; uscita dopo 24 barre; stop 2 ATR(24) max 6%",
                      "previsione": _prev(-0.30, 0.20)},
+    # ---- varianti allentate dopo gli scarti (ipotesi.md, 18:39 UTC) ----
+    "GALAUSDT-025": {"classe": V.Donchian, "tf": "2h", "direzione": "long", "parametri": {},
+                     "idea": "I-02", "fonte": F_TURTLE,
+                     "meccanismo": "rottura del massimo di 20 barre: ordini in rottura e stop oltre il massimo spingono il prezzo",
+                     "regole": "2h; ingresso alla chiusura sopra il massimo delle 20 barre precedenti; uscita alla chiusura sotto il minimo delle 10 barre precedenti; stop 2 ATR(20) max 6%; nessun target",
+                     "previsione": _prev(-0.20, 0.15)},
+    "GALAUSDT-026": {"classe": V.Donchian, "tf": "2h", "direzione": "short", "parametri": {},
+                     "idea": "I-02", "fonte": F_TURTLE,
+                     "meccanismo": "rottura del minimo di 20 barre: ordini in rottura e stop sotto il minimo spingono il prezzo",
+                     "regole": "2h; ingresso alla chiusura sotto il minimo delle 20 barre precedenti; uscita alla chiusura sopra il massimo delle 10 barre precedenti; stop 2 ATR(20) max 6%; nessun target",
+                     "previsione": _prev(-0.20, 0.15)},
+    "GALAUSDT-028": {"classe": V.FundingEstremo, "tf": "8h", "direzione": "short", "parametri": {"quantile": 0.70},
+                     "idea": "I-05", "fonte": F_CARRY,
+                     "meccanismo": "funding alto = long a leva affollati: il prezzo poi scende",
+                     "regole": "8h; ultimo funding regolato > 70o percentile dei 90 regolamenti precedenti e > 0; uscita dopo 3 barre; stop 2 ATR(14) max 6%",
+                     "previsione": _prev(-0.15, 0.10)},
+    # ---- idee nuove I-14 .. I-17 ----
+    "GALAUSDT-029": {"classe": V.PeriodicitaOraria, "tf": "1h", "direzione": "long", "parametri": {},
+                     "idea": "I-14", "fonte": F_HKS,
+                     "meccanismo": "flussi ripetuti alla stessa ora: l'ora che ha reso nelle ultime 20 giornate rende ancora",
+                     "regole": "1h; z = media/(dev/radice 20) dei rendimenti dell'ora successiva nelle ultime 20 giornate > 1,5; long per 1 barra; stop 2 ATR(24) max 6%",
+                     "previsione": _prev(-0.20, 0.05)},
+    "GALAUSDT-030": {"classe": V.PeriodicitaOraria, "tf": "1h", "direzione": "short", "parametri": {},
+                     "idea": "I-14", "fonte": F_HKS,
+                     "meccanismo": "flussi ripetuti alla stessa ora: l'ora che ha perso nelle ultime 20 giornate perde ancora",
+                     "regole": "1h; z dei rendimenti dell'ora successiva nelle ultime 20 giornate < -1,5; short per 1 barra; stop 2 ATR(24) max 6%",
+                     "previsione": _prev(-0.20, 0.05)},
+    "GALAUSDT-031": {"classe": V.ScartoMark, "tf": "1h", "direzione": "long", "parametri": {},
+                     "idea": "I-15", "fonte": F_PERP,
+                     "meccanismo": "il perpetuo sotto il mark piu' del solito si riallinea salendo",
+                     "regole": "1h; z dello scarto (close last - close mark)/close mark rispetto alle 168 barre precedenti < -2; uscita dopo 2 barre; stop 2 ATR(24) max 6%",
+                     "previsione": _prev(-0.20, 0.05)},
+    "GALAUSDT-032": {"classe": V.ScartoMark, "tf": "1h", "direzione": "short", "parametri": {},
+                     "idea": "I-15", "fonte": F_PERP,
+                     "meccanismo": "il perpetuo sopra il mark piu' del solito si riallinea scendendo",
+                     "regole": "1h; z dello scarto last-mark rispetto alle 168 barre precedenti > 2; uscita dopo 2 barre; stop 2 ATR(24) max 6%",
+                     "previsione": _prev(-0.20, 0.05)},
+    "GALAUSDT-033": {"classe": V.NumeriTondi, "tf": "1h", "direzione": "short", "parametri": {},
+                     "idea": "I-16", "fonte": F_OSLER03,
+                     "meccanismo": "ordini di presa di profitto sui numeri tondi: il rialzo si ferma e torna indietro",
+                     "regole": "1h; L = primo multiplo di u=10^floor(log10 close prec.)/2 sopra il close precedente; massimo >= L e close < L; stop L + 0,5 ATR(24) (max 6%); target 2 R; uscita dopo 24 barre",
+                     "previsione": _prev(-0.20, 0.10)},
+    "GALAUSDT-034": {"classe": V.NumeriTondi, "tf": "1h", "direzione": "long", "parametri": {},
+                     "idea": "I-16", "fonte": F_OSLER03,
+                     "meccanismo": "ordini di presa di profitto sui numeri tondi: il ribasso si ferma e torna indietro",
+                     "regole": "1h; L = primo multiplo di u sotto il close precedente; minimo <= L e close > L; stop L - 0,5 ATR(24) (max 6%); target 2 R; uscita dopo 24 barre",
+                     "previsione": _prev(-0.20, 0.10)},
+    "GALAUSDT-035": {"classe": V.MomentumGiornata, "tf": "30m", "direzione": "long", "parametri": {},
+                     "idea": "I-17", "fonte": F_GAO,
+                     "meccanismo": "la prima mezz'ora della giornata UTC predice l'ultima",
+                     "regole": "30m; alla chiusura della barra delle 23:00, long se la barra delle 00:00 dello stesso giorno ha close > open; uscita dopo 1 barra; stop 2 ATR(48) max 6%",
+                     "previsione": _prev(-0.30, 0.05)},
+    "GALAUSDT-036": {"classe": V.MomentumGiornata, "tf": "30m", "direzione": "short", "parametri": {},
+                     "idea": "I-17", "fonte": F_GAO,
+                     "meccanismo": "la prima mezz'ora della giornata UTC predice l'ultima",
+                     "regole": "30m; alla chiusura della barra delle 23:00, short se la barra delle 00:00 dello stesso giorno ha close < open; uscita dopo 1 barra; stop 2 ATR(48) max 6%",
+                     "previsione": _prev(-0.30, 0.05)},
 }
 
 

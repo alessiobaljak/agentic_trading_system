@@ -430,6 +430,123 @@ nuova). Gli scarti: GALAUSDT-003 e 004 (41 e 46 trade), 005 (53), 009 (41), 022 
 
 ---
 
+## Idee nuove aggiunte dopo i primi risultati (2026-10-09, circa 18:45 UTC)
+
+Dopo i test delle varianti 1-18 restano 12 unità di budget: con le tre varianti allentate valide
+(025, 026, 028) ne restano 9, e la regola 6 vuole prima le idee nuove con fonte. Le quattro idee
+qui sotto erano nell'elenco di partenza della sessione (scritto prima di caricare i prezzi, ma non
+in questo file); sono scritte qui DOPO aver letto la tabella dei risultati delle varianti 1-18, e
+lo si dichiara: nessuna è un ritocco di quelle varianti, e nessuna nasce dai loro numeri. Il
+rischio da dichiarare è un altro: I-17 è un momentum di breve, e le varianti 1-18 vicine alla
+soglia (011, 015, 014, 017) sono di quel tipo. Le altre tre sono famiglie nuove.
+
+## I-14 Periodicità oraria dei rendimenti
+
+1. **Fonte**: Steven L. Heston, Robert A. Korajczyk, Ronnie Sadka, «Intraday Patterns in the
+   Cross-Section of Stock Returns», Journal of Finance 65(4), 2010: il rendimento di un titolo in
+   una mezz'ora del giorno predice il rendimento nella stessa mezz'ora dei giorni successivi, per
+   settimane (ordini di grandi operatori spezzati e ripetuti alla stessa ora, flussi periodici).
+2. **Affermazione**: se nelle ultime 20 giornate l'ora h di GALAUSDT ha avuto un rendimento medio
+   positivo (negativo) in modo marcato (media divisa per il suo errore oltre 1,5), l'ora h di oggi
+   rende più (meno) di un'ora casuale.
+3. **Sotto-domande**: le crypto hanno flussi periodici (regolamento del funding alle 00, 08, 16;
+   apertura delle borse asiatiche, europee, americane)? Chi opera: operatori che eseguono ogni
+   giorno alla stessa ora. L'effetto dura un'ora.
+4. **Spiegazioni concorrenti**: C1-C6, più
+   - C7 *volatilità per ora* (le ore americane muovono di più, senza direzione): prevede R ≈ (b).
+   - C8 *ora del funding*: il movimento attorno ai regolamenti; prevede segnali concentrati alle 00,
+     08, 16.
+   - C9 *rumore delle 20 osservazioni*: con 20 giorni la media è quasi tutta rumore; prevede R ≈ (b).
+   - C10 *costi*: un'ora tenuta con stop di 2 ATR costa circa 0,08-0,10 R; prevede R netto negativo
+     anche con un vantaggio lordo piccolo.
+6. **Ipotesi**: candele da 1 ora. Per ogni ora del giorno: media e deviazione standard dei
+   rendimenti (close/open - 1) di quell'ora nelle ultime 20 giornate in cui c'è; z = media /
+   (deviazione / radice di 20). Alla chiusura della barra, se l'ora successiva ha z > 1,5 → long
+   (z < -1,5 → short) per una barra; stop 2 ATR(24), al massimo il 6%.
+   - **GALAUSDT-029** long; **GALAUSDT-030** short.
+   - Previsione: R medio fra -0,20 e +0,05.
+
+## I-15 Scarto fra prezzo del perpetuo e mark price
+
+1. **Fonte**: Songrun He, Asaf Manela, Omri Ross, Victor von Wachter, «Fundamentals of Perpetual
+   Futures», arXiv 2212.06888, dicembre 2022: il prezzo del perpetuo si scosta dal prezzo a pronti,
+   e lo scarto si richiude per l'arbitraggio e il funding. Il mark price di Binance è costruito dal
+   prezzo a pronti (indice) più una media dello scarto: last - mark misura lo scarto di breve.
+2. **Affermazione**: quando alla chiusura di un'ora il last è sotto il mark più del solito (scarto
+   sotto la media delle 168 ore precedenti di oltre 2 deviazioni standard), nelle 2 ore successive
+   il last sale più di un ingresso long casuale (lo scarto si richiude dal lato del perpetuo).
+   Speculare per lo short.
+3. **Sotto-domande**: lo scarto si chiude in secondi (arbitraggisti automatici) o in ore? Si
+   richiude muovendo il perpetuo o l'indice? Solo il primo caso guadagna.
+4. **Spiegazioni concorrenti**: C1-C6, più
+   - C7 *scarto chiuso dall'indice*: il prezzo a pronti scende verso il perpetuo; prevede R ≈ (b).
+   - C8 *scarto chiuso in secondi*: alla chiusura dell'ora lo scarto è già un residuo; prevede nessun
+     effetto.
+   - C9 *crollo in corso*: last sotto mark durante le vendite forzate; il prezzo continua a scendere;
+     prevede perdite del long nei giorni di crollo.
+   - C10 *rumore della chiusura*: il last della chiusura è un solo scambio, il mark è una media;
+     prevede rientro meccanico piccolo, mangiato dai costi.
+6. **Ipotesi**: candele da 1 ora; scarto = (close last - close mark) / close mark; z rispetto a
+   media e deviazione delle 168 barre precedenti. Long con z < -2, short con z > 2; uscita dopo 2
+   barre; stop 2 ATR(24), al massimo il 6%.
+   - **GALAUSDT-031** long; **GALAUSDT-032** short.
+   - Previsione: R medio fra -0,20 e +0,05.
+
+## I-16 Numeri tondi: ordini di presa di profitto
+
+1. **Fonte**: Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the
+   Predictive Success of Technical Analysis», Journal of Finance 58(5), 2003: gli ordini di presa di
+   profitto si accumulano sui numeri tondi, quindi una tendenza si ferma e torna indietro più spesso
+   quando arriva su un numero tondo.
+2. **Affermazione**: quando in un'ora il prezzo sale fino al primo numero tondo sopra il close
+   precedente e chiude sotto di esso (rifiutato), nelle 24 ore successive scende più di uno short
+   casuale. Speculare per il long sul numero tondo sotto.
+3. **Sotto-domande**: cos'è «tondo» per una moneta da pochi centesimi? Qui: multipli di metà della
+   potenza di 10 del prezzo (per 0,035: 0,030, 0,035, 0,040; per 0,35: 0,30, 0,35, 0,40). Chi
+   opera: piccoli operatori con ordini su prezzi tondi.
+4. **Spiegazioni concorrenti**: C1-C6, più
+   - C7 *qualunque massimo rifiutato rientra*: prevede lo stesso effetto per livelli non tondi
+     (stessa logica di I-04).
+   - C8 *livelli troppo radi*: con passi del 10-40% del prezzo gli eventi sono pochi; prevede scarto
+     o risultato da pochi trade.
+   - C9 *stop oltre il tondo*: superato il tondo gli stop accelerano (la stessa fonte); prevede che i
+     rifiuti falliscano spesso e in grande.
+   - C10 *trend di fondo*: nel ribasso del 2022 i rifiuti sui tondi sopra funzionano solo perché il
+     prezzo scende comunque (C3).
+6. **Ipotesi**: candele da 1 ora; passo u = 10^floor(log10 close precedente) / 2. Short: livello L =
+   primo multiplo di u sopra il close precedente; massimo della barra ≥ L e close < L. Stop: L più
+   0,5 ATR(24) (distanza dal close, al massimo il 6%); target 2 R; uscita dopo 24 barre. Long
+   speculare con il primo multiplo sotto il close precedente.
+   - **GALAUSDT-033** short; **GALAUSDT-034** long.
+   - Previsione: R medio fra -0,20 e +0,10.
+
+## I-17 Momentum dentro la giornata
+
+1. **Fonte**: Lei Gao, Yufeng Han, Sophia Zhenzhen Li, Guofu Zhou, «Market intraday momentum»,
+   Journal of Financial Economics 129(2), 2018: il rendimento della prima mezz'ora del giorno
+   predice quello dell'ultima mezz'ora (operatori informati e ribilanciamenti a fine giornata).
+2. **Affermazione**: con la giornata UTC, se la prima mezz'ora (00:00-00:30) chiude in salita
+   (discesa), l'ultima mezz'ora (23:30-24:00) rende più (meno) di una mezz'ora casuale.
+3. **Sotto-domande**: le crypto non chiudono: c'è un «fine giornata»? La chiusura delle candele
+   giornaliere UTC e il regolamento del funding delle 00:00 sono punti di riferimento comuni.
+4. **Spiegazioni concorrenti**: C1-C6, più
+   - C7 *nessuna giornata nelle crypto*: prevede R ≈ (b).
+   - C8 *funding delle 00:00*: chi chiude prima del regolamento muove l'ultima mezz'ora; prevede un
+     effetto legato al segno del funding, non della prima mezz'ora.
+   - C9 *costi*: una mezz'ora con stop di 2 ATR(48) (circa 1-1,5%) costa 0,13-0,20 R; prevede R netto
+     negativo.
+   - C10 *pochi grandi giorni*: prevede R dominato dai giorni di crollo.
+6. **Ipotesi**: candele da 30 minuti; segnale alla chiusura della barra delle 23:00 (ingresso alle
+   23:30), long se la barra delle 00:00 dello stesso giorno ha close > open, short se close < open;
+   uscita dopo 1 barra (alle 00:00); stop 2 ATR(48), al massimo il 6%.
+   - **GALAUSDT-035** long; **GALAUSDT-036** short.
+   - Previsione: R medio fra -0,30 e +0,05.
+
+Ordine di registrazione: 025, 026, 028, poi 029-036. Le varianti oltre la trentesima unità di
+budget non si testano.
+
+---
+
 Famiglie di meccanismi coperte dalle idee nuove: seguire la tendenza (I-01, I-02), ritorno
 verso la media di breve (I-03), microstruttura e stop (I-04), posizionamento a leva (I-05),
 ritardo fra monete (I-06), compressione della volatilità (I-07), volume e informazione (I-08,

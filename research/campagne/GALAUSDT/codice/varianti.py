@@ -486,3 +486,138 @@ class PompaScarico(ConStopATR):
         if not valido(r, s, v, vm) or s <= 0:
             return False
         return v > self.p["k_volume"] * vm and r > self.p["k_sigma"] * s
+
+
+# ---------------------------------------------------------------------------
+# I-14 Periodicita' oraria (Heston, Korajczyk, Sadka)
+# ---------------------------------------------------------------------------
+
+
+class PeriodicitaOraria(ConStopATR):
+    parametri_numerici = {"giorni": 20, "z_ingresso": 1.5, "n_atr_barre": 24, "k_stop": 2.0, "k_target": 0.0,
+                          "uscita_tempo_barre": 1}
+
+    def prepara(self, df):
+        a = self._base(df)
+        n = len(df)
+        g = int(self.p["giorni"])
+        r = df["close"] / df["open"] - 1
+        ora = df["ora"].to_numpy()
+        # z dell'ora h aggiornato all'ultima barra di quell'ora (compresa), poi portato in avanti
+        z_per_ora = np.full((24, n), np.nan)
+        for h in range(24):
+            idx = np.where(ora == h)[0]
+            if len(idx) == 0:
+                continue
+            rh = r.iloc[idx]
+            m = rh.rolling(g, min_periods=g).mean()
+            s = rh.rolling(g, min_periods=g).std()
+            z = (m / (s / np.sqrt(g))).to_numpy()
+            col = pd.Series(np.nan, index=range(n))
+            col.iloc[idx] = z
+            z_per_ora[h] = col.ffill().to_numpy()
+        a["z_per_ora"] = z_per_ora
+        a["ora"] = ora
+        return a
+
+    def condizione(self, a, i, df):
+        prossima = (int(a["ora"][i]) + 1) % 24
+        z = a["z_per_ora"][prossima][i]
+        if not valido(z):
+            return False
+        return z > self.p["z_ingresso"] if self.direzione == "long" else z < -self.p["z_ingresso"]
+
+
+# ---------------------------------------------------------------------------
+# I-15 Scarto fra last e mark
+# ---------------------------------------------------------------------------
+
+
+class ScartoMark(ConStopATR):
+    parametri_numerici = {"finestra_barre": 168, "z_ingresso": 2.0, "n_atr_barre": 24, "k_stop": 2.0,
+                          "k_target": 0.0, "uscita_tempo_barre": 2}
+
+    def prepara(self, df):
+        a = self._base(df)
+        n = int(self.p["finestra_barre"])
+        b = (df["close"] - df["mark_close"]) / df["mark_close"]
+        m = b.shift(1).rolling(n, min_periods=n).mean()
+        s = b.shift(1).rolling(n, min_periods=n).std()
+        a["z"] = ((b - m) / s).to_numpy()
+        return a
+
+    def condizione(self, a, i, df):
+        z = a["z"][i]
+        if not valido(z):
+            return False
+        return z < -self.p["z_ingresso"] if self.direzione == "long" else z > self.p["z_ingresso"]
+
+
+# ---------------------------------------------------------------------------
+# I-16 Numeri tondi (Osler 2003)
+# ---------------------------------------------------------------------------
+
+
+class NumeriTondi(Variante):
+    parametri_numerici = {"n_atr_barre": 24, "margine_stop_atr": 0.5, "k_target": 2.0, "uscita_tempo_barre": 24}
+
+    def prepara(self, df):
+        c = df["close"].to_numpy()
+        cp = np.concatenate([[np.nan], c[:-1]])
+        with np.errstate(invalid="ignore", divide="ignore"):
+            u = np.power(10.0, np.floor(np.log10(cp))) / 2
+            sopra = np.ceil(cp / u * (1 + 1e-12)) * u  # primo multiplo strettamente sopra
+            sotto = np.floor(cp / u * (1 - 1e-12)) * u  # primo multiplo strettamente sotto
+        return {"atr": atr(df, int(self.p["n_atr_barre"])), "close": c, "high": df["high"].to_numpy(),
+                "low": df["low"].to_numpy(), "sopra": sopra, "sotto": sotto}
+
+    def segnale(self, a, i, df):
+        c, at = a["close"][i], a["atr"][i]
+        if self.direzione == "short":
+            livello = a["sopra"][i]
+            if not valido(c, at, livello):
+                return None
+            dist = max(livello - c, 0.0) + self.p["margine_stop_atr"] * at
+        else:
+            livello = a["sotto"][i]
+            if not valido(c, at, livello):
+                return None
+            dist = max(c - livello, 0.0) + self.p["margine_stop_atr"] * at
+        return segnale_stop(self.direzione, c, dist, self.p["k_target"])
+
+    def condizione(self, a, i, df):
+        c = a["close"][i]
+        if self.direzione == "short":
+            livello = a["sopra"][i]
+            return valido(livello) and a["high"][i] >= livello and c < livello
+        livello = a["sotto"][i]
+        return valido(livello) and a["low"][i] <= livello and c > livello
+
+    def esci(self, a, i, df, tenute, pos):
+        n = int(self.p["uscita_tempo_barre"])
+        return n > 0 and tenute >= n
+
+
+# ---------------------------------------------------------------------------
+# I-17 Momentum dentro la giornata (Gao, Han, Li, Zhou)
+# ---------------------------------------------------------------------------
+
+
+class MomentumGiornata(ConStopATR):
+    parametri_numerici = {"n_atr_barre": 48, "k_stop": 2.0, "k_target": 0.0, "uscita_tempo_barre": 1}
+
+    def prepara(self, df):
+        a = self._base(df)
+        prima = (df["ora"] == 0) & (df["minuto"] == 0)
+        r = (df["close"] / df["open"] - 1).where(prima)
+        a["r_prima"] = r.groupby(df["giorno"]).transform("max").to_numpy()  # una sola barra per giorno
+        a["ultima"] = ((df["ora"] == 23) & (df["minuto"] == 0)).to_numpy()
+        return a
+
+    def condizione(self, a, i, df):
+        if not a["ultima"][i]:
+            return False
+        r = a["r_prima"][i]
+        if not valido(r):
+            return False
+        return r > 0 if self.direzione == "long" else r < 0
