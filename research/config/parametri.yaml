@@ -188,6 +188,7 @@ regole_esame:
   p_value_asticella: statistica.p_value_vs_baseline   # dalla 4.4: stesso calcolo di «nettamente»
   blocco_bootstrap: statistica.lunghezza_blocco   # dalla 4.4: il blocco in trade, dalla regola in tempo della sezione 8
   baseline_casuale: motore.simula_baseline_casuale   # dalla 4.4: la baseline (b), sempre eseguita cosi'
+  soglia_trasferimento: statistica.monete_richieste_trasferimento   # dalla 4.5 (in attesa di approvazione): Passo 6 punto 4
   simulazioni_baseline_casuale: 200  # dalla 4.4: simulazioni della baseline (b) in costruzione e in validazione
   semi_baseline_casuale: {primo: 0, ultimo: 199}
   bootstrap: {ricampionamenti: 2000, seme: 0}   # fissi: non si rilancia mai con altri semi
