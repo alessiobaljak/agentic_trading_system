@@ -17,6 +17,8 @@ from lancia import scrivi_esito  # noqa: E402
 import os  # noqa: E402
 
 CAND = os.environ.get("CANDIDATO", "BNBUSDT-043")
+if len(sys.argv) > 1 and sys.argv[1].startswith("BNBUSDT-"):
+    CAND = sys.argv.pop(1)
 if CAND == "BNBUSDT-043":
     BASE = dict(max_barre=12, k_stop=2.5, soglia_rsi=5.0, n_lunga=200, n_corta=5, atr_rel_min=0.015, n_atr=14, n_rsi=2)
     FILTRO = ("atr_rel_min", lambda ind: ~(ind["atr"] >= 0.015 * ind["close"]),
