@@ -462,7 +462,7 @@ F12 = ("L. Gao, Y. Han, S. Z. Li, G. Zhou, 'Market intraday momentum', Journal o
        "D. Shen, A. Urquhart, P. Wang, 'Bitcoin intraday time series momentum', The Financial Review 57(2), 2022")
 
 
-def _i12(direzione):
+def _i12(direzione, soglia=0.0, nome=None):
     def prepara(serie):
         ind = _base(serie)
         apertura_giorno = {}
@@ -480,14 +480,14 @@ def _i12(direzione):
         return ind
 
     if direzione == "long":
-        ingresso = lambda ind, i: ind["rg"][i] is not None and ind["rg"][i] > 0
+        ingresso = lambda ind, i: ind["rg"][i] is not None and ind["rg"][i] > soglia
     else:
-        ingresso = lambda ind, i: ind["rg"][i] is not None and ind["rg"][i] < 0
-    nome = "I-12-L" if direzione == "long" else "I-12-S"
+        ingresso = lambda ind, i: ind["rg"][i] is not None and ind["rg"][i] < soglia
+    nome = nome or ("I-12-L" if direzione == "long" else "I-12-S")
     var = Variante(nome, "30m", direzione, prepara, ingresso, _stop(2.0, direzione), max_barre=1)
     meta = _meta("I-12", nome, F12, "momento dentro la giornata: l'ultima mezz'ora UTC segue il resto del giorno",
-                 {"barra_segnale": "23:00-23:30 UTC", "rendimento_da": "apertura 00:00 UTC", "stop_atr": 2.0,
-                  "atr_barre": 14, "uscita_barre": 1, "target": None},
+                 {"barra_segnale": "23:00-23:30 UTC", "rendimento_da": "apertura 00:00 UTC", "soglia_rendimento_giornata": soglia,
+                  "stop_atr": 2.0, "atr_barre": 14, "uscita_barre": 1, "target": None},
                  "R medio fra -0,35 e -0,05 (costi); non netto")
     return var, meta
 
@@ -703,3 +703,46 @@ def controllo_positivo():
 
     ingresso = lambda ind, i: bool(ind["fut"][i])
     return Variante("CONTROLLO", "1h", "long", prepara, ingresso, _stop(2.0, "long"), max_barre=1)
+
+
+# ---------------------------------------------------------------------------
+# Ritocchi (regola 6): ognuno scritto qui PRIMA del suo test, nell'ordine del t contro la (b)
+# ---------------------------------------------------------------------------
+
+
+def _r1():
+    var, meta = _i12("short", soglia=-0.05, nome="R1 (ritocco di ETCUSDT-023)")
+    meta["previsione"] = ("R medio fra -0,10 e +0,05: il quartile delle giornate sotto -5,66% era +0,033 in costruzione, "
+                          "ma con meno trade e una soglia scelta guardando i dati mi aspetto meno; non netto contro la (b)")
+    extra = {"ritocco_di": "ETCUSDT-023", "famiglia": "ETCUSDT-023",
+             "cosa_cambia": "soglia del rendimento della giornata da < 0 a < -5% (filtro nato dalla Fase 3, nota ETCUSDT-N011)",
+             "perche": "in costruzione le giornate in calo leggero perdono per i costi; la fonte dice che l'effetto e' piu' forte "
+                       "nei giorni di volatilita' alta"}
+    return var, meta, extra
+
+
+def _r2():
+    var, meta = _i12("short", soglia=0.0, nome="R2 (ritocco di ETCUSDT-023)")
+    var.max_barre = 2
+    meta["parametri"]["uscita_barre"] = 2
+    meta["previsione"] = ("R medio fra -0,08 e +0,02: stesso costo per trade e un'ora di movimento invece di mezz'ora; "
+                          "se il momento si ferma a mezzanotte l'R scende; non netto contro la (b)")
+    extra = {"ritocco_di": "ETCUSDT-023", "famiglia": "ETCUSDT-023",
+             "cosa_cambia": "uscita dopo 2 barre (fino alle 00:30 UTC) invece di 1",
+             "perche": "il guadagno lordo per trade (+0,045 R) e' piu' piccolo dei costi (0,08 R, nota ETCUSDT-N011): una "
+                       "tenuta piu' lunga, con lo stesso costo, prova se il movimento continua oltre la mezzanotte"}
+    return var, meta, extra
+
+
+def _r3():
+    var, meta = _i12("short", soglia=-0.03, nome="R3 (ritocco di ETCUSDT-023)")
+    meta["previsione"] = ("R medio fra -0,06 e +0,01: la soglia a -3% tiene le giornate sotto -5,66% (+0,033 in Fase 3) e "
+                          "quelle fra -3% e -5,66% (negative); se l'effetto cresce col calo, sta fra 023 e R1; non netto")
+    extra = {"ritocco_di": "ETCUSDT-023", "famiglia": "ETCUSDT-023",
+             "cosa_cambia": "soglia del rendimento della giornata da < 0 a < -3%",
+             "perche": "prova se l'effetto cresce gradualmente con il calo della giornata (Fase 3, nota ETCUSDT-N011) o "
+                       "esiste solo nelle giornate estreme"}
+    return var, meta, extra
+
+
+RITOCCHI = {"R1": _r1, "R2": _r2, "R3": _r3}

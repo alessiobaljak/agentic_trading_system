@@ -103,6 +103,10 @@ def controllo():
 if __name__ == "__main__":
     if sys.argv[1] == "--controllo":
         controllo()
+    elif sys.argv[1] in V.RITOCCHI:
+        var, meta, extra = V.RITOCCHI[sys.argv[1]]()
+        esegui_variante(var, meta, ritocco_di=extra["ritocco_di"], famiglia=extra["famiglia"],
+                        extra={k: v for k, v in extra.items() if k not in ("ritocco_di", "famiglia")})
     else:
         var, meta = V.CATALOGO[sys.argv[1]]()
         esegui_variante(var, meta)
