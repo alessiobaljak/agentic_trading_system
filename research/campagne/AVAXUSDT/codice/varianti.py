@@ -59,7 +59,7 @@ class ControlloPositivo(_UscitaTempo):
     def indicatori(self, ctx):
         prossima_su = np.full(ctx.n, np.nan)
         prossima_su[:-1] = (ctx.c[1:] > ctx.o[1:]).astype(float)  # FUTURO, di proposito
-        return {"atr": atr(ctx, 14), "futuro": prossima_su}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "futuro": prossima_su}
 
     def riscaldamento(self, ind):
         return int(np.flatnonzero(np.isfinite(ind["atr"]))[0])
@@ -73,7 +73,7 @@ class ControlloPositivo(_UscitaTempo):
 class MomentumSerie(_UscitaTempo):
     def indicatori(self, ctx):
         L = int(self.parametri["lookback"])
-        return {"atr": atr(ctx, 14), "ret": ctx.c / _ritardo(ctx.c, L) - 1}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "ret": ctx.c / _ritardo(ctx.c, L) - 1}
 
     def condizione(self, ctx, ind, i):
         r = ind["ret"][i]
@@ -113,7 +113,7 @@ class Donchian(Variante):
 
 class Rsi2(Variante):
     def indicatori(self, ctx):
-        return {"atr": atr(ctx, 14), "rsi": rsi(ctx.c, 2), "sma_lunga": sma(ctx.c, int(self.parametri["media_lunga"])),
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "rsi": rsi(ctx.c, 2), "sma_lunga": sma(ctx.c, int(self.parametri["media_lunga"])),
                 "sma_corta": sma(ctx.c, int(self.parametri["media_corta"]))}
 
     def condizione(self, ctx, ind, i):
@@ -137,7 +137,7 @@ class Rsi2(Variante):
 
 class Funding(_UscitaTempo):
     def indicatori(self, ctx):
-        return {"atr": atr(ctx, 14), "funding": funding_ultimo(ctx)}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "funding": funding_ultimo(ctx)}
 
     def condizione(self, ctx, ind, i):
         f = ind["funding"][i]
@@ -151,7 +151,7 @@ class Funding(_UscitaTempo):
 class RitardoBtc(_UscitaTempo):
     def indicatori(self, ctx):
         b = btc_close(ctx)
-        return {"atr": atr(ctx, 14), "rb": b / _ritardo(b, 1) - 1, "ra": ctx.c / _ritardo(ctx.c, 1) - 1}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "rb": b / _ritardo(b, 1) - 1, "ra": ctx.c / _ritardo(ctx.c, 1) - 1}
 
     def riscaldamento(self, ind):
         return int(np.flatnonzero(np.isfinite(ind["atr"]))[0])
@@ -177,7 +177,7 @@ class MomentoGiorno(_UscitaTempo):
                 corrente = ctx.o[i] if ctx.ts[i] % 86_400_000 == 0 else np.nan  # solo se la barra 00:00 c'e'
             apertura[i] = corrente
         minuti = (ctx.ts % 86_400_000) // 60_000
-        return {"atr": atr(ctx, 14), "ret_giorno": ctx.c / apertura - 1,
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "ret_giorno": ctx.c / apertura - 1,
                 "ultima": (minuti == int(self.parametri["minuto_segnale"])).astype(float)}
 
     def riscaldamento(self, ind):
@@ -196,7 +196,7 @@ class MomentoGiorno(_UscitaTempo):
 
 class GiornoSettimana(_UscitaTempo):
     def indicatori(self, ctx):
-        return {"atr": atr(ctx, 14), "gs": giorno_settimana(ctx).astype(float)}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "gs": giorno_settimana(ctx).astype(float)}
 
     def condizione(self, ctx, ind, i):
         # la barra i e' quella del giorno prima di quello voluto (alla sua chiusura si entra)
@@ -210,7 +210,7 @@ class ReazioneEccessiva(_UscitaTempo):
         r = ctx.c / _ritardo(ctx.c, 1) - 1
         sd = _ritardo(deviazione_mobile(np.nan_to_num(r, nan=0.0), int(self.parametri["finestra"])), 1)
         sd[: int(self.parametri["finestra"]) + 1] = np.nan
-        return {"atr": atr(ctx, 14), "z": r / sd}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "z": r / sd}
 
     def condizione(self, ctx, ind, i):
         z, s = ind["z"][i], self.parametri["soglia_z"]
@@ -235,7 +235,7 @@ class Squilibrio(_UscitaTempo):
         media = _ritardo(sma(q0, f), 1)
         sd = _ritardo(deviazione_mobile(q0, f), 1)
         z = (quota - media) / sd
-        return {"atr": atr(ctx, 14), "z": z}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "z": z}
 
     def riscaldamento(self, ind):
         return int(np.flatnonzero(np.isfinite(ind["z"]) & np.isfinite(ind["atr"]))[0])
@@ -286,7 +286,7 @@ class RotturaGiorno(Variante):
                     visto_su = True
                 if ctx.c[i] < apertura[i] - k * escursione_prec[i]:
                     visto_giu = True
-        return {"atr": atr(ctx, 14), "apertura": apertura, "escursione": escursione_prec,
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "apertura": apertura, "escursione": escursione_prec,
                 "gia_sopra": gia_sopra, "gia_sotto": gia_sotto, "fine_giorno": fine_giorno}
 
     def riscaldamento(self, ind):
@@ -330,7 +330,7 @@ class Compressione(Variante):
         recente[~np.isfinite(minimo)] = np.nan
         primo_ok = int(self.parametri["finestra_min"]) + n - 2 + w
         recente[:primo_ok] = np.nan
-        return {"atr": atr(ctx, 14), "media": m, "sup": m + k * sd, "inf": m - k * sd, "recente": recente}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "media": m, "sup": m + k * sd, "inf": m - k * sd, "recente": recente}
 
     def condizione(self, ctx, ind, i):
         if ind["recente"][i] != 1.0:
@@ -352,7 +352,7 @@ class ForzaRelativa(_UscitaTempo):
     def indicatori(self, ctx):
         L = int(self.parametri["lookback"])
         rapporto = ctx.c / btc_close(ctx)
-        return {"atr": atr(ctx, 14), "ret_rel": rapporto / _ritardo(rapporto, L) - 1}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "ret_rel": rapporto / _ritardo(rapporto, L) - 1}
 
     def condizione(self, ctx, ind, i):
         r = ind["ret_rel"][i]
@@ -365,7 +365,7 @@ class VolumeAlto(_UscitaTempo):
     def indicatori(self, ctx):
         f = int(self.parametri["finestra"])
         media = _ritardo(sma(ctx.v, f), 1)
-        return {"atr": atr(ctx, 14), "rel": ctx.v / media}
+        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "rel": ctx.v / media}
 
     def condizione(self, ctx, ind, i):
         return ind["rel"][i] > self.parametri["multiplo"]
