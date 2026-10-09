@@ -496,3 +496,60 @@ long o liquidità; lo short è lo specchio e lo provo come variante separata).
 |---|---|---|
 | BCHUSDT-023 | long | close > media a 20 giorni e close precedente ≤ media precedente: long all'apertura dopo; stop di sicurezza 3 × ATR(14) sotto il close; uscita all'apertura dopo la prima chiusura sotto la media |
 | BCHUSDT-024 | short | specchio |
+
+---
+
+## Varianti allentate degli scarti (regola 6: ancora varianti delle idee nuove)
+
+Le varianti BCHUSDT-011, 012, 014, 021, 022, 023 e 024 sono state scartate dalla conta (67,
+67, 39, 23, 30, 50, 51 trade, sotto 70). Nessun risultato di queste regole è stato visto (la
+conta restituisce solo il numero di trade). Le allento una volta sola, con un motivo che viene
+dalla fonte, non dai risultati delle altre idee. Le spiegazioni concorrenti restano quelle
+dell'idea.
+
+| Variante | Idea | Cosa cambia | Perché |
+|---|---|---|---|
+| BCHUSDT-025 | I-06 long | soglia della sovra-reazione: media + 0,5 deviazioni (era + 1) | la fonte usa una soglia mobile fra «media + 1 deviazione» e varianti più basse; 0,5 tiene il giorno «insolito» con circa il doppio dei segnali |
+| BCHUSDT-026 | I-06 short | specchio, + 0,5 deviazioni | come sopra |
+| BCHUSDT-027 | I-08 long | volume sopra l'80° percentile (era 90°) dei 49 giorni prima, tenuta 5 giorni (era 10) | il premio della fonte si accumula nei primi giorni del mese successivo; con il 90° e 10 giorni i trade sono 39 |
+| BCHUSDT-028 | I-12 long | stessa regola su candele 1h, stessi parametri in barre (20, 2, 125, 10) | la compressione di Bollinger è definita in barre ed è usata su ogni scala; su 4h i trade sono 23 |
+| BCHUSDT-029 | I-12 short | specchio su 1h | come sopra |
+| BCHUSDT-030 | I-13 long | media a 10 giorni (era 20) | la fonte prova medie da 5 a 100 giorni; 10 è nel suo insieme e raddoppia gli incroci |
+| BCHUSDT-031 | I-13 short | specchio, media a 10 giorni | come sopra |
+
+Su 1h i costi delle varianti I-12 sono più alti in R (stop 2 ATR orari ~2,5%, costi ~0,06 R).
+
+---
+
+## I-14 — Volatilità bassa: più rendimento per unità di rischio (1d)
+
+**Fonte.** A. Moreira, T. Muir, «Volatility-Managed Portfolios», *Journal of Finance* 72(4),
+agosto 2017: il rendimento atteso non sale in proporzione alla volatilità, quindi i periodi di
+volatilità bassa hanno un rendimento per unità di rischio più alto.
+
+**Affermazione verificabile.** Quando la volatilità realizzata degli ultimi 7 giorni è sotto la
+sua mediana dei 90 giorni precedenti, i 5 giorni successivi rendono in R (rischio misurato con
+l'ATR) più di un ingresso qualunque con la stessa uscita.
+
+**Sotto-domande.** Vale per un singolo asset crypto o solo per portafogli diversificati? Chi
+muove il prezzo: nei periodi calmi la leva disponibile e la propensione al rischio salgono,
+i periodi agitati coincidono con le vendite forzate. Tempo: giorni.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → `t` < 2.
+2. *Effetto di scala dell'R* → con volatilità bassa lo stop in ATR è stretto e un movimento normale vale più R; la (b) entra anche nei periodi agitati con stop larghi: l'R della (b) ha un'altra scala. Previsione: differenza in R senza differenza in percentuale. Lo guardo nel rendimento in percentuale.
+3. *Rottura dopo la calma* → la calma precede movimenti grandi in una direzione qualsiasi: per il long conta solo la direzione; nessun vantaggio atteso.
+4. *Trend di fondo* → anno per anno con la (b).
+5. *È solo il mercato* → annoto.
+6. *Il risultato della fonte è di portafoglio* → per un asset solo l'effetto potrebbe non esistere.
+7. *Pochi trade estremi* → senza i 3 migliori.
+8. *Costi* → stop 2,5 ATR (~10%) → ~0,015 R.
+9. *Funding* → il long paga nel 2020-21.
+10. *Volatilità bassa = poco interesse* → nei periodi calmi il prezzo scivola (nessun compratore): R sotto la (b).
+
+**Ipotesi completa.** BCHUSDT, regime di volatilità, candele 1d, una variante (la fonte riguarda
+l'esposizione lunga).
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-032 | long | deviazione standard dei rendimenti giornalieri degli ultimi 7 giorni < mediana di quella misura nei 90 giorni precedenti: long all'apertura dopo; stop 2,5 × ATR(14) sotto il close; uscita dopo 5 giorni tenuti |

@@ -555,6 +555,49 @@ class SopraMedia(comune.Variante):
         return c < m if self.direzione == "long" else c > m
 
 
+# ---------------------------------------------------------------------------
+# I-14 Volatilita' bassa: rendimento per rischio piu' alto (Moreira e Muir), 1d
+# ---------------------------------------------------------------------------
+class VolatilitaBassa(comune.Variante):
+    tf = "1d"
+
+    def __init__(self, id, direzione="long", n_vol=7, finestra=90, tenuta=5, atr_stop=2.5):
+        self.id, self.direzione, self.n_vol, self.finestra, self.tenuta, self.atr_stop = (
+            id, direzione, n_vol, finestra, tenuta, atr_stop)
+        self.riscaldamento = n_vol + finestra + 1
+
+    def prepara(self, s):
+        import pandas as pd
+        c = s["close"]
+        r = c / ind.precedente(c, 1) - 1
+        vol = ind.dev_std(r, self.n_vol)
+        mediana = ind.precedente(pd.Series(vol).rolling(self.finestra, min_periods=self.finestra).median().to_numpy(), 1)
+        return {"vol": vol, "mediana": mediana, "atr": ind.atr(s["high"], s["low"], c, 14)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        v, m = x["vol"][i], x["mediana"][i]
+        return _ok(v, m) and v < m
+
+    def esci(self, x, s, i, tenute, pos):
+        return tenute >= self.tenuta
+
+
+class _Bande1h(CompressioneBande):
+    """Stessa regola di I-12 su 1h, stessi parametri in barre (20, 2, 125, 10)."""
+    tf = "1h"
+
+
+def _bande_1h(id, direzione):
+    return _Bande1h(id, direzione)
+
+
 VARIANTI = {
     "BCHUSDT-001": lambda: MomentoSerie("BCHUSDT-001", "long"),
     "BCHUSDT-002": lambda: MomentoSerie("BCHUSDT-002", "short"),
@@ -580,4 +623,13 @@ VARIANTI = {
     "BCHUSDT-022": lambda: CompressioneBande("BCHUSDT-022", "short"),
     "BCHUSDT-023": lambda: SopraMedia("BCHUSDT-023", "long"),
     "BCHUSDT-024": lambda: SopraMedia("BCHUSDT-024", "short"),
+    # varianti delle idee nuove con le soglie allentate dopo lo scarto (senza risultati visti)
+    "BCHUSDT-025": lambda: SovraReazione("BCHUSDT-025", "long", k=0.5),
+    "BCHUSDT-026": lambda: SovraReazione("BCHUSDT-026", "short", k=0.5),
+    "BCHUSDT-027": lambda: VolumeAlto("BCHUSDT-027", "long", quantile=0.8, tenuta=5),
+    "BCHUSDT-028": lambda: _bande_1h("BCHUSDT-028", "long"),
+    "BCHUSDT-029": lambda: _bande_1h("BCHUSDT-029", "short"),
+    "BCHUSDT-030": lambda: SopraMedia("BCHUSDT-030", "long", n=10),
+    "BCHUSDT-031": lambda: SopraMedia("BCHUSDT-031", "short", n=10),
+    "BCHUSDT-032": lambda: VolatilitaBassa("BCHUSDT-032", "long"),
 }
