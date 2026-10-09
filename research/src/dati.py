@@ -85,14 +85,24 @@ Formato dei CSV di Binance
 * fundingRate: calc_time, funding_interval_hours, last_funding_rate. Nei file
   vecchi la colonna funding_interval_hours manca: allora vale 8 (l'intervallo
   storico di Binance).
+
+Last e mark: un caricatore solo
+-------------------------------
+Il motore vuole last e mark allineati barra per barra, ma il mark ha buchi che
+il last non ha (e viceversa), in giorni diversi da moneta a moneta. Nella prova
+di processo tre campagne hanno scritto tre codici diversi per allinearli:
+``carica_serie_allineate`` e' la regola unica (intersezione delle barre, barre
+tolte elencate e contate, volume in USDT dalla colonna ``quote_volume``).
 """
 
 from __future__ import annotations
 
+import bisect
 import csv
 import hashlib
 import io
 import json
+import math
 import os
 import urllib.error
 import urllib.parse
@@ -161,6 +171,10 @@ ORE_FUNDING_DEFAULT = 8
 #: Nomi con cui Binance apre la riga di intestazione dei CSV (klines/markPriceKlines
 #: e fundingRate). Solo questi fanno saltare la prima riga: tutto il resto solleva.
 NOMI_INTESTAZIONE = ("open_time", "calc_time")
+
+#: Indice della colonna ``quote_volume`` (volume in valuta di quotazione, cioe' USDT)
+#: nei CSV klines di Binance: la stessa costante di ``selezione.COLONNA_QUOTE_VOLUME``.
+COLONNA_QUOTE_VOLUME = 7
 
 MS_ORA = 3_600_000
 MS_GIORNO = 24 * MS_ORA
@@ -545,6 +559,62 @@ def candele_da_zip(percorso: Path) -> List[Candela]:
     return candele
 
 
+def volume_usdt_da_zip(percorso: Path) -> Dict[int, float]:
+    """Volume in USDT di ogni barra di un file mensile klines: {ts di apertura in ms: quote_volume}.
+
+    Serve al filtro di liquidita' della Fase 0 (PROTOCOLLO.md, Fase 0 punto 3:
+    il volume medio giornaliero in USDT si legge dalla colonna ``quote_volume``).
+    ``Candela.volume`` e' in moneta base: moltiplicarlo per il close darebbe
+    solo un'approssimazione (il prezzo si muove dentro la barra) da
+    dichiarare, mentre la colonna 7 del CSV e' il numero contato da Binance.
+
+    La lettura e' la stessa di ``candele_da_zip``: ``righe_csv_da_zip`` toglie
+    BOM e intestazione (e solleva su una prima riga che non e' ne' un dato ne'
+    un'intestazione nota), ``normalizza_ts`` riporta i microsecondi ai
+    millisecondi. Cosi' le chiavi coincidono coi ``ts`` delle candele dello
+    stesso file. Tra due righe con lo stesso ``ts`` vale la prima, come in
+    ``carica_candele``, anche quando la prima non ha il volume: un doppione
+    non deve prestare il suo volume a una barra che non e' la sua.
+
+    Una riga senza la colonna (meno di 8 campi) o con la colonna vuota non ha
+    il volume: la sua barra NON compare nel dizionario e chi lo usa (come
+    ``carica_serie_allineate``) la conta come mancante. Uno zero al suo posto
+    la farebbe sembrare illiquida, cioe' un numero inventato. Un valore che
+    c'e' ma non e' un numero finito e non negativo e' invece un file corrotto
+    e solleva ``ValueError``: un NaN passerebbe il filtro di liquidita'
+    (``nan < soglia`` e' falso) e un negativo abbasserebbe la media del mese,
+    in silenzio.
+
+    Solo klines: il mark price e' un indice su cui nessuno scambia, le sue
+    colonne di volume non misurano niente. Un percorso che passa da una
+    cartella ``markPriceKlines`` (o ``fundingRate``) solleva ``ValueError``.
+    """
+    parti = Path(percorso).parts
+    for tipo_vietato in ("markPriceKlines", "fundingRate"):
+        if tipo_vietato in parti:
+            raise ValueError(
+                f"{percorso}: il volume in USDT si legge solo dai file klines, non da {tipo_vietato}"
+            )
+    volumi: Dict[int, float] = {}
+    visti = set()
+    for riga in righe_csv_da_zip(percorso):
+        ts = normalizza_ts(riga[0])
+        if ts in visti:
+            continue
+        visti.add(ts)
+        if len(riga) <= COLONNA_QUOTE_VOLUME or not riga[COLONNA_QUOTE_VOLUME].strip():
+            continue
+        testo = riga[COLONNA_QUOTE_VOLUME]
+        try:
+            valore = float(testo)
+        except ValueError:
+            raise ValueError(f"{percorso}: quote_volume non numerico {testo!r} nella riga {riga}") from None
+        if not math.isfinite(valore) or valore < 0:
+            raise ValueError(f"{percorso}: quote_volume non valido {testo!r} nella riga {riga}")
+        volumi[ts] = valore
+    return volumi
+
+
 def funding_da_zip(percorso: Path) -> List[Tuple[int, int, float]]:
     """Righe (ts ms, intervallo in ore, tasso) di un file mensile fundingRate.
 
@@ -775,6 +845,143 @@ def aggrega_candele(candele: Sequence[Candela], intervallo: str, solo_complete: 
             )
         )
     return risultato
+
+
+# ---------------------------------------------------------------------------
+# Last e mark allineati (il caricatore unico della Fase 0)
+# ---------------------------------------------------------------------------
+
+
+def carica_serie_allineate(
+    simbolo: str,
+    intervallo: str,
+    inizio: date,
+    fine: date,
+    radice: Path = RADICE_DEFAULT,
+    aggrega_da: Optional[str] = None,
+) -> Dict[str, object]:
+    """Last e mark price dal disco sugli STESSI ``ts``, con le barre tolte elencate e il volume in USDT.
+
+    E' il caricatore unico chiesto dal rapporto della prova di processo: il
+    motore (``esegui``, tramite ``allinea_serie``) vuole il mark allineato
+    barra per barra alle candele dei segnali e solleva se ne manca una; il
+    mark ha buchi che il last non ha e viceversa, in giorni diversi da moneta
+    a moneta (anche giorni interi), e nella prova tre campagne hanno scritto
+    tre regole diverse per allinearli. Con questa funzione la regola e' una
+    sola, uguale per tutte le campagne, ed e' scritta qui invece che nel
+    codice delle varianti.
+
+    La regola e' l'INTERSEZIONE: si tengono solo i ``ts`` presenti in
+    entrambe le serie, in ordine. Non si riempie in avanti il mark (ne' si
+    usa il last al suo posto) perche' sul mark il motore valuta la
+    liquidazione e prende il prezzo del funding: una barra di mark inventata
+    (piatta sul close precedente, o copiata dal last, che ha ombre diverse)
+    sposterebbe la liquidazione, facendola sparire dove il mark vero l'avrebbe
+    toccata o comparire dove non l'ha toccata. Senza il mark la barra non si
+    puo' valutare, quindi si toglie. Una barra tolta diventa per il motore un
+    buco, che lui conta (``n_buchi_dati``); i settlement di funding caduti nel
+    buco con posizione aperta si addebitano sull'ultimo mark disponibile e si
+    contano a parte (``n_funding_in_buco``). Le barre tolte (quante e quali,
+    da una parte e dall'altra) si dichiarano in ``fase0_dati.md``.
+
+    Le due serie si leggono con ``carica_candele`` (``klines`` per il last,
+    ``markPriceKlines`` per il mark): stessi file, stesso filtro per date,
+    stessa deduplica. Il blocco del vault si controlla comunque all'inizio,
+    con ``controlla_vault(fine, radice)``, PRIMA di qualunque accesso al
+    disco. La serie dello stop non si carica: per il protocollo e' il last
+    (``serie_stop`` di parametri.yaml, ``candele_stop=None`` nel motore).
+
+    Con ``aggrega_da`` (es. ``"1m"`` o ``"15m"``) si leggono i file di
+    quell'intervallo e ENTRAMBE le serie si aggregano a ``intervallo`` con
+    ``aggrega_candele(..., solo_complete=True)`` prima dell'intersezione: un
+    gruppo incompleto in una serie non esiste per quella serie. Quindi
+    un'ora completa nel last ma monca nel mark finisce in ``tolte_last``;
+    un'ora monca in tutte e due non finisce in nessuna lista (e' un buco di
+    entrambe), ma si vede nei conteggi ``n_gruppi_incompleti_*``.
+
+    Il volume in USDT viene dalla colonna ``quote_volume`` dei file klines
+    (``volume_usdt_da_zip``), solo per le barre tenute. Con ``aggrega_da`` e'
+    la somma dei quote_volume delle barre di partenza del gruppo (quelle con
+    ``ts`` fra apertura e chiusura della barra aggregata, cioe' esattamente il
+    gruppo di ``aggrega_candele``). Se una barra tenuta (o una sola barra del
+    suo gruppo) non ha il quote_volume, il valore e' ``None`` e si conta in
+    ``n_volume_mancante``: mai uno zero, che la farebbe sembrare illiquida.
+    Attenzione: per il filtro di liquidita' mensile il protocollo usa le
+    candele GIORNALIERE del last; le giornate tolte dall'intersezione qui non
+    hanno il volume. Chi vuole la media su tutti i giorni del last legge i
+    file ``1d`` con ``volume_usdt_da_zip``.
+
+    Se una delle due serie e' vuota (nessun file, o nessuna barra nel
+    periodo) il risultato e' vuoto ma i conteggi ci sono: nessuna eccezione,
+    cosi' la campagna lo vede e lo dichiara.
+
+    Ritorna un dizionario con:
+
+    * ``candele``: il last sulle barre tenute (lista di ``Candela``, ``ts``
+      strettamente crescenti), da passare a ``esegui`` come ``candele``;
+    * ``candele_mark``: il mark sugli stessi ``ts``, da passare come
+      ``candele_mark``;
+    * ``tolte_last``: i ``ts`` presenti nel last ma non nel mark, ordinati;
+    * ``tolte_mark``: i ``ts`` presenti nel mark ma non nel last, ordinati;
+    * ``n_tolte_last``, ``n_tolte_mark``: le loro lunghezze;
+    * ``volume_usdt``: {ts: volume in USDT o ``None``} per le barre tenute;
+    * ``n_volume_mancante``: quante barre tenute hanno ``None``;
+    * ``n_gruppi_incompleti_last``, ``n_gruppi_incompleti_mark``: con
+      ``aggrega_da``, i gruppi scartati perche' incompleti in ciascuna serie
+      (0 senza ``aggrega_da``).
+    """
+    controlla_vault(fine, radice)
+    sorgente = aggrega_da or intervallo
+    last_sorgente = carica_candele(simbolo, sorgente, inizio, fine, radice, tipo="klines")
+    mark_sorgente = carica_candele(simbolo, sorgente, inizio, fine, radice, tipo="markPriceKlines")
+
+    n_incompleti_last = n_incompleti_mark = 0
+    if aggrega_da:
+        last = aggrega_candele(last_sorgente, intervallo, solo_complete=True)
+        mark = aggrega_candele(mark_sorgente, intervallo, solo_complete=True)
+        # Stessa funzione senza il filtro: i gruppi in piu' sono quelli scartati perche' monchi.
+        n_incompleti_last = len(aggrega_candele(last_sorgente, intervallo, solo_complete=False)) - len(last)
+        n_incompleti_mark = len(aggrega_candele(mark_sorgente, intervallo, solo_complete=False)) - len(mark)
+    else:
+        last, mark = last_sorgente, mark_sorgente
+
+    mark_per_ts = {c.ts: c for c in mark}
+    ts_last = {c.ts for c in last}
+    candele = [c for c in last if c.ts in mark_per_ts]
+    candele_mark = [mark_per_ts[c.ts] for c in candele]
+    tolte_last = [c.ts for c in last if c.ts not in mark_per_ts]
+    tolte_mark = [c.ts for c in mark if c.ts not in ts_last]
+
+    volume_usdt: Dict[int, Optional[float]] = {}
+    if candele:
+        volumi_sorgente: Dict[int, float] = {}
+        for percorso in _percorsi_presenti(simbolo, "klines", sorgente, inizio, fine, radice):
+            for ts, valore in volume_usdt_da_zip(percorso).items():
+                volumi_sorgente.setdefault(ts, valore)  # come carica_candele: vale il primo file letto
+        ts_sorgente = [c.ts for c in last_sorgente]
+        for candela in candele:
+            if aggrega_da:
+                da = bisect.bisect_left(ts_sorgente, candela.ts)
+                a = bisect.bisect_right(ts_sorgente, candela.close_ts)
+                membri = ts_sorgente[da:a]
+            else:
+                membri = [candela.ts]
+            valori = [volumi_sorgente.get(ts) for ts in membri]
+            volume_usdt[candela.ts] = None if any(v is None for v in valori) else sum(valori)
+    n_volume_mancante = sum(1 for v in volume_usdt.values() if v is None)
+
+    return {
+        "candele": candele,
+        "candele_mark": candele_mark,
+        "tolte_last": tolte_last,
+        "tolte_mark": tolte_mark,
+        "n_tolte_last": len(tolte_last),
+        "n_tolte_mark": len(tolte_mark),
+        "volume_usdt": volume_usdt,
+        "n_volume_mancante": n_volume_mancante,
+        "n_gruppi_incompleti_last": n_incompleti_last,
+        "n_gruppi_incompleti_mark": n_incompleti_mark,
+    }
 
 
 # ---------------------------------------------------------------------------
