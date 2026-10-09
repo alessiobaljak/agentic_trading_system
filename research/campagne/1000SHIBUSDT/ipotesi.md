@@ -21,6 +21,12 @@ Regole comuni a tutte le varianti (scritte prima del primo test):
 * stop calcolato sulla chiusura della barra di segnale; il motore lo rifiuta se
   l'apertura successiva è già oltre (segnale non valido);
 * «ATR» è l'ATR di Wilder a 14 barre del timeframe della variante, se non detto altro;
+* **tetto dello stop:** uno stop scritto «k ATR» è k ATR dalla chiusura, ma mai più lontano
+  del 6% della chiusura (`stop_massimo_bot` di parametri.yaml: oltre, il bot non può
+  eseguire il trade). Aggiunto prima di qualunque test di un'idea, dopo aver letto in Fase 0
+  l'ATR mediano per timeframe (4h: 3,0%; 1d: 8,0%): senza tetto gli stop a 3 ATR su 4 ore
+  (circa 9%) e a 2 ATR su 1 giorno (circa 16%) renderebbero il candidato non eseguibile dal
+  bot. Il tetto vale anche per la (a) e la (b), che usano lo stesso calcolo del segnale;
 * «σ a N barre» è la deviazione standard dei rendimenti di chiusura delle N barre
   precedenti, esclusa la barra di segnale.
 
