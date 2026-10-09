@@ -3244,3 +3244,20 @@ buco del guardiano.
 - 9 ott, 20:16 (controllo orario): **MASKUSDT consegnata** alle 17:50 UTC (33 minuti): «nessuna strategia valida» (un candidato in costruzione, non arrivato al vault); 30 varianti, 5 ritocchi, 6 scarti. **FILUSDT consegnata** alle 17:52 UTC, dopo la risposta del proprietario nella sessione: «nessuna strategia valida»; 30 varianti, 8 ritocchi, 9 scarti; la sua attesa è durata circa 1 ora e mezza (16:21-17:52 UTC). DYDXUSDT ha finito le 30 varianti e lavora sulle verifiche. Aperte **FTMUSDT** (session_013Pzt3QyUzv4VRA8nL3YvNU) e **GALAUSDT** (session_01RS7UAZ2GiXeAxScmvtsW24) alle 18:16 UTC. Conto: 16 monete consegnate su 20, 3 candidati per il vault (esiti provvisori, da confermare con la regola dell'R positivo in validazione). Resta da aprire ETCUSDT.
 
 - 9 ott, 21:15 (controllo orario): **DYDXUSDT consegnata** alle 18:41 UTC (84 minuti): «nessuna strategia valida»; 30 varianti, 9 ritocchi, 9 scarti (un candidato arrivato alla validazione, non al vault). **GALAUSDT consegnata** alle 18:50 UTC (34 minuti): «nessuna strategia valida»; 30 varianti, 2 ritocchi, 7 scarti. **FTMUSDT consegnata** alle 18:51 UTC (35 minuti): «nessuna strategia valida»; 30 varianti, 4 ritocchi, 8 scarti. Aperta l'ultima, **ETCUSDT** (session_01ENLVBQKjjYqSUT92mimU9i), alle 19:15 UTC. Conto: 19 monete consegnate su 20; 3 candidati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; esiti provvisori). Quando ETCUSDT consegna, il controllo orario fa il riepilogo del Passo 4.
+
+### 9 ottobre, 23:20: tutte e 20 le monete hanno consegnato — riepilogo del Passo 4
+
+**ETCUSDT consegnata** alle 20:28 UTC (63 minuti dal log): «nessuna strategia valida»; 30 varianti, 7 ritocchi, 9 scarti.
+Riepilogo completo sul branch di coordinamento (`research/passo4/riepilogo.md`, e6d7e38a). Numeri: 20 monete su 20,
+600 varianti, 101 ritocchi, 7 candidati arrivati in validazione, **3 confermati per il vault**: BTCUSDT-V10 (136
+trade in validazione, p 0,048, m 1, R medio positivo), BNBUSDT-045 (32 trade, p 0,031, m 1, R positivo),
+ADAUSDT-037 (82 trade, p 0,014, m 1, R positivo); tutti con riserve scritte dalle campagne stesse (pochi trade che
+fanno il risultato, costi alti). Nessuna campagna 4.5 ha toccato `src/`: nessun test da rieseguire. Regola dei
+ritocchi: BTCUSDT ha 2 varianti nette contro le due baseline con R medio non positivo (la sua scelta dei ritocchi
+avrebbe potuto essere diversa), ETHUSDT 1 ma nessun ritocco: decide il proprietario se rifare BTCUSDT. Probabilità
+per moneta del trasferimento: 0,02. Routine oraria disattivata. Cosa abbiamo capito: (1) le campagne della 4.5
+lavorano 25-85 minuti ciascuna (mediana circa 41, dal log) e usano tutte le 30 varianti; (2) 3 candidati su 6
+valutabili hanno superato la soglia in validazione, contro 0,2-0,6 attesi se fossero tutti senza vantaggio: un
+indizio da rileggere al Passo 7, il giudice è il vault; (3) ultracode è arrivato solo all'ultima apertura (ETCUSDT,
+19:15 UTC), per una causa che resta non nota. STOP: il proprietario decide la campagna di gruppo e BTCUSDT; il vault
+si apre solo con «APRI IL VAULT».
