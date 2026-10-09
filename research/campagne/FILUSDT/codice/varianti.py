@@ -386,16 +386,34 @@ def rend_btc_dal_giorno(s, barre_dal_giorno: int = 5):
 
 def i15(direzione: str, id_: str, atr_pct_minimo: float = 0.0, tf: str = "4h", ora_barra_segnale: int = 16,
         barre_max: int = 1, n_atr_filtro: int = 14, n_atr_stop: int = 14, k_atr: float = 1.5,
-        btc_giorno_minimo: Optional[float] = None) -> Variante:
+        btc_giorno_minimo: Optional[float] = None, btc_giorno_massimo: Optional[float] = None,
+        stop_massimo_pct: Optional[float] = None, vol_rel_minimo: Optional[float] = None,
+        atr_pct_massimo: Optional[float] = None) -> Variante:
     def ingresso(s):
         _, ap, _ = _giorno_apertura_escursione(s)
         alle_20 = q.ora_utc(s) == ora_barra_segnale  # a 4h la barra 16-20 UTC: alla sua chiusura sono le 20
         volatile = (q.atr(s, n_atr_filtro) / s.c) > atr_pct_minimo
+        if atr_pct_massimo is not None:
+            volatile = volatile & ((q.atr(s, n_atr_filtro) / s.c) < atr_pct_massimo)
         base = alle_20 & volatile & ((s.c > ap) if direzione == "long" else (s.c < ap))
         if btc_giorno_minimo is not None:
             base = base & (rend_btc_dal_giorno(s) > btc_giorno_minimo)
+        if btc_giorno_massimo is not None:
+            base = base & (rend_btc_dal_giorno(s) < btc_giorno_massimo)
+        if vol_rel_minimo is not None:
+            # volume USDT della barra / media dei volumi delle 42 barre fino alla corrente (7 giorni a 4h)
+            vol_rel = s.v_usdt / q.sma(np.nan_to_num(s.v_usdt), 42)
+            base = base & (vol_rel > vol_rel_minimo)
         return base
-    return Variante(id_, tf, direzione, ingresso, _stop_atr(direzione, n_atr_stop, k_atr), barre_max=barre_max,
+
+    def stop(s):
+        st = _stop_atr(direzione, n_atr_stop, k_atr)(s)
+        if stop_massimo_pct is None:
+            return st
+        if direzione == "long":
+            return np.maximum(st, s.c * (1 - stop_massimo_pct))
+        return np.minimum(st, s.c * (1 + stop_massimo_pct))
+    return Variante(id_, tf, direzione, ingresso, stop, barre_max=barre_max,
                     descrizione=f"I-15 momento dentro il giorno {direzione}")
 
 
@@ -455,6 +473,13 @@ TUTTE = {
     # Ritocchi (regola 6), in ordine di registrazione
     "FILUSDT-032": lambda: i15("long", "FILUSDT-032", atr_pct_minimo=0.028),
     "FILUSDT-033": lambda: i15("long", "FILUSDT-033", btc_giorno_minimo=0.005),
+    "FILUSDT-034": lambda: i15("long", "FILUSDT-034", atr_pct_minimo=0.028, btc_giorno_minimo=0.005),
+    "FILUSDT-035": lambda: i15("long", "FILUSDT-035", atr_pct_minimo=0.028, btc_giorno_minimo=0.024),
+    "FILUSDT-036": lambda: i15("long", "FILUSDT-036", atr_pct_minimo=0.028, btc_giorno_minimo=0.005,
+                               stop_massimo_pct=0.055),
+    "FILUSDT-037": lambda: i15("short", "FILUSDT-037", btc_giorno_massimo=-0.005),
+    "FILUSDT-038": lambda: i15("short", "FILUSDT-038", btc_giorno_massimo=-0.005, vol_rel_minimo=0.68),
+    "FILUSDT-039": lambda: i15("short", "FILUSDT-039", btc_giorno_massimo=-0.005, atr_pct_massimo=0.043),
 }
 
 # Verifiche della Fase 4 per il candidato FILUSDT-016 (le regole del candidato non cambiano:
