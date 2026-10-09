@@ -196,4 +196,52 @@ VARIANTI = {
                     {"condizione": "rendimento della barra < -1 dev. std (60 barre) e volume > 1,5 x media delle 30 barre precedenti",
                      "stop": "2 ATR(14)", "target": None, "uscita": "a tempo dopo 2 barre"},
                     (-0.10, 0.20)),
+    # --- ritocchi (regola 6) ---
+    "FTMUSDT-035": ("I-01", lambda: V.i01("FTMUSDT-035", "short", 7),
+                    "momento di 1 settimana: dopo 7 giorni in ribasso il ribasso continua",
+                    {"condizione": "close/close(-7) - 1 < 0", "stop": "2,5 ATR(14)", "target": None, "uscita": "a tempo dopo 5 barre"},
+                    (-0.10, 0.15),
+                    {"famiglia": "FTMUSDT-002", "ritocco_di": "FTMUSDT-002",
+                     "cosa_cambia": "finestra del rendimento passato da 14 a 7 giorni. Perche': lo studio dei fallimenti di "
+                                    "FTMUSDT-002 non mostra un fallimento sistematico da filtrare (il regime non lo spiega, nota "
+                                    "FTMUSDT-N009); la fonte (Liu, Tsyvinski) da' l'effetto da 1 a 4 settimane e quello a 1 "
+                                    "settimana e' il piu' vicino alla tenuta di 5 giorni. Si prova l'altro estremo dell'orizzonte "
+                                    "della fonte invece di stringere filtri sui trade visti",
+                     "previsione_extra": "differenza piccola rispetto a FTMUSDT-002; la finestra corta cambia segno piu' spesso"}),
+    "FTMUSDT-036": ("I-01", lambda: V.i01("FTMUSDT-036", "short", 14, 3),
+                    "momento di 2 settimane, short, tenuta piu' corta",
+                    {"condizione": "close/close(-14) - 1 < 0", "stop": "2,5 ATR(14)", "target": None, "uscita": "a tempo dopo 3 barre"},
+                    (-0.10, 0.15),
+                    {"famiglia": "FTMUSDT-002", "ritocco_di": "FTMUSDT-002",
+                     "cosa_cambia": "uscita a tempo da 5 a 3 barre. Perche': nello studio dei fallimenti di FTMUSDT-002 (nota "
+                                    "FTMUSDT-N009) le uscite a tempo valgono in media +0,145 R e i 7 stop -1 R ciascuno, arrivati "
+                                    "durante la tenuta (rimbalzi violenti contro lo short); una tenuta piu' corta riduce "
+                                    "l'esposizione a quei rimbalzi. Secondo ritocco della famiglia FTMUSDT-002, prima nell'ordine "
+                                    "(t contro la (b) 1,60)",
+                     "previsione_extra": "meno stop, R medio simile o un po' piu' basso; nessuna garanzia di battere la (b)"}),
+    "FTMUSDT-037": ("I-01", lambda: V.i01("FTMUSDT-037", "short", 14, 3, 0.10),
+                    "momento di 2 settimane, short, solo dopo ribassi di 14 giorni oltre il 10%",
+                    {"condizione": "close/close(-14) - 1 < -0,10", "stop": "2,5 ATR(14)", "target": None, "uscita": "a tempo dopo 3 barre"},
+                    (-0.10, 0.20),
+                    {"famiglia": "FTMUSDT-002", "ritocco_di": "FTMUSDT-036",
+                     "cosa_cambia": "soglia del rendimento di 14 giorni da 0 a -10%. Perche': FTMUSDT-036 batte la (b) ma non la "
+                                    "(a) (t 1,47): la condizione 'rendimento negativo' vale meta' dei giorni e distingue poco "
+                                    "dall'entrare sempre. La sotto-domanda scritta in ipotesi.md prima dei test ('vale di piu' "
+                                    "quando il movimento delle 14 giornate e' grande?') dice dove guardare; -10% e' circa mezza "
+                                    "deviazione standard di 14 giorni di FTM, scelta senza guardare la distribuzione dei trade. "
+                                    "Lo studio dei fallimenti (2021 negativo in entrambi i semestri, regime che non spiega) non "
+                                    "da' un filtro migliore. Terzo ritocco della famiglia, primo nell'ordine (t contro la (b) 2,22)",
+                     "previsione_extra": "meno trade (rischio di scarto sotto 70); R medio piu' alto se il meccanismo e' il "
+                                         "momento, uguale se e' solo il ribasso del 2022"}),
+    "FTMUSDT-038": ("I-01", lambda: V.i01("FTMUSDT-038", "short", 28, 3),
+                    "momento di 4 settimane, short, tenuta 3 giorni",
+                    {"condizione": "close/close(-28) - 1 < 0", "stop": "2,5 ATR(14)", "target": None, "uscita": "a tempo dopo 3 barre"},
+                    (-0.10, 0.15),
+                    {"famiglia": "FTMUSDT-002", "ritocco_di": "FTMUSDT-036",
+                     "cosa_cambia": "finestra del rendimento passato da 14 a 28 giorni (tenuta 3 come FTMUSDT-036). Perche': "
+                                    "FTMUSDT-036 resta prima nell'ordine (t contro la (b) 2,22); la soglia piu' severa "
+                                    "(FTMUSDT-037) e la finestra di 7 giorni (FTMUSDT-035) non hanno aiutato; resta l'altro "
+                                    "estremo dell'orizzonte della fonte (4 settimane), che segue trend piu' lunghi e cambia "
+                                    "segno meno spesso. Quarto ritocco della famiglia, ultima variante del budget",
+                     "previsione_extra": "simile a FTMUSDT-036; se il vantaggio e' il ribasso del 2022, R positivo solo nel 2022"}),
 }

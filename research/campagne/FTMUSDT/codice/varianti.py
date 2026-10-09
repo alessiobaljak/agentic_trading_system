@@ -56,17 +56,17 @@ def controllo_positivo():
 # I-01 momento della serie temporale (1d)
 # ---------------------------------------------------------------------------
 
-def i01(id_, direzione):
+def i01(id_, direzione, finestra=14, tenuta=5, soglia=0.0):
     def prepara(s):
-        return {"atr": ind.atr(s, 14), "r14": ind.rendimento(s.c, 14)}
+        return {"atr": ind.atr(s, 14), "r14": ind.rendimento(s.c, finestra)}
 
     def condizione(ctx, i):
         r = ctx["r14"][i]
         if not _ok(r):
             return False
-        return r > 0 if direzione == "long" else r < 0
+        return r > soglia if direzione == "long" else r < -soglia
 
-    return Variante(id_, "1d", direzione, prepara, condizione, _segnale_atr(direzione, 2.5), _uscita_tempo(5))
+    return Variante(id_, "1d", direzione, prepara, condizione, _segnale_atr(direzione, 2.5), _uscita_tempo(tenuta))
 
 
 # ---------------------------------------------------------------------------
