@@ -641,6 +641,46 @@ differenza col last è lo scarto di breve periodo.
 
 ---
 
+## Previsioni (scritte dopo la Fase 0, prima del primo test)
+
+Costi di un giro in R dalla Fase 0: circa 0,06 R a 1 ora con stop di 2 ATR, 0,07 R con 1,5 ATR,
+0,04 R con 3 ATR; circa 0,03 R a 4 ore con 2 ATR, 0,02 R con 3 ATR; 0,02 R a 8 ore. Una entrata
+casuale ha quindi R medio atteso di circa meno il costo (la (b) del controllo positivo a 1 ora con
+uscita dopo una barra: -0,05 R). Il prior generale, da fonti costruite su altri mercati e su
+orizzonti più lunghi, è che la maggior parte di queste regole NON batta nettamente la (b) su una
+moneta sola con 70-300 trade: la potenza è bassa (sezione 11).
+
+| Variante | R medio dopo i costi previsto | Batte nettamente la (b)? |
+|---|---|---|
+| I-01-L | da -0,15 a +0,10 | no |
+| I-01-S | da -0,10 a +0,15 | no |
+| I-02-L | da -0,15 a +0,05 | no |
+| I-02-S | da -0,10 a +0,10 | no |
+| I-03-L | da -0,10 a +0,10 | forse (il meccanismo delle liquidazioni è il più specifico ai futures) |
+| I-03-S | da -0,15 a +0,05 | no |
+| I-04-L | da -0,10 a +0,05 | no |
+| I-04-S | da -0,10 a +0,05 | no |
+| I-05-S | da -0,10 a +0,15 | no, ma è la fonte più recente e specifica alle crypto |
+| I-05-L | da -0,15 a +0,15 | no |
+| I-06-L | da -0,20 a +0,10 | no |
+| I-07-S / I-07-Sb | da -0,15 a +0,15 | no |
+| I-08-L | da -0,15 a +0,05 | no (a 1 ora il ritardo di minuti non si vede) |
+| I-08-S | da -0,15 a +0,05 | no |
+| I-09-L | da -0,15 a +0,10 | no |
+| I-09-S | da -0,15 a +0,10 | no |
+| I-10-L | da -0,15 a +0,05 | no |
+| I-10-S | da -0,15 a +0,05 | no |
+| I-11-L | da -0,15 a +0,05 | no |
+| I-11-S | da -0,15 a +0,05 | no |
+| I-12-L | da -0,15 a +0,05 | no |
+| I-12-S | da -0,15 a +0,05 | no |
+| I-13-L | da -0,15 a +0,10 | no |
+| I-14-S | da -0,15 a +0,05 | no |
+| I-14-L | da -0,15 a +0,05 | no |
+
+Il criterio di successo è lo stesso per tutte (sezione 8, Fase 2): batte nettamente la (a) e la
+(b) con `contro_baseline` e ha R medio dopo i costi positivo.
+
 ## Idee considerate e non registrate
 
 * **Effetto del giorno della settimana o dell'ora** (Guglielmo Maria Caporale, Alex Plastun, «The
