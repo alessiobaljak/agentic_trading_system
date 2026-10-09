@@ -410,3 +410,23 @@ nettamente la (b) e crollare con il ritardo di una barra. Si registra come nota.
    - **V-21 (long).** volume(i) > 3 × media del volume delle 180 barre precedenti → long; stop
      close − 2·ATR(14); uscita dopo 6 barre.
    Previsione: R medio fra −0,1 e 0,1.
+
+---
+
+## Aggiunta del 9 ottobre: varianti allentate dopo la stima dei trade
+
+Scritta dopo `conta_trade` e PRIMA di qualunque test di queste idee (nessun risultato visto).
+Cinque varianti sono sotto i 70 trade minimi e sono scarti (log): V-03 (64), V-04 (62),
+V-18 (15), V-19 (27), V-21 (49). La regola 6 ammette di allentare le soglie di uno scarto per
+raggiungere i trade minimi senza aver visto risultati: è ancora una variante dell'idea nuova.
+Le spiegazioni concorrenti restano quelle della sua idea. Una stessa fonte resta a due varianti
+testate al massimo (le varianti scartate non sono testate).
+
+* **I-02, V-22 (long) e V-23 (short).** Donchian a 4 ore con canale d'ingresso di 10 barre e
+  d'uscita di 5 (la metà: stesse proporzioni delle Tartarughe), stop 2·ATR(20). Motivo: 20/10
+  dà 62-64 trade. Previsione invariata (R medio fra −0,05 e 0,15).
+* **I-10, V-24 (long) e V-25 (short).** Compressione allentata: l'ampiezza delle bande è
+  «compressa» se sta nel 20% più basso delle ultime 125 barre (invece del minimo), rottura entro
+  10 barre. Motivo: col minimo stretto i trade sono 15-27. Previsione invariata.
+* **I-12, V-26 (long).** Volume oltre 2 volte la media delle 180 barre precedenti (invece di 3).
+  Motivo: con 3 volte i trade sono 49. Previsione invariata.

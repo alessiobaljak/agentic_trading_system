@@ -14,6 +14,20 @@ from comune import (Variante, atr, btc_close, deviazione_mobile, ema, funding_ul
                     massimo_mobile, minimo_mobile, ora_utc, rsi, sma)
 
 
+def quantile_mobile(x: np.ndarray, n: int, q: float) -> np.ndarray:
+    """Quantile q delle ultime n barre, barra corrente compresa (interpolazione lineare); NaN prima.
+    Un valore infinito nella finestra (riscaldamento) rende il risultato NaN."""
+    from numpy.lib.stride_tricks import sliding_window_view
+    out = np.full(len(x), np.nan)
+    if len(x) < n:
+        return out
+    w = sliding_window_view(x, n)
+    v = np.quantile(w, q, axis=1)
+    v[~np.isfinite(w).all(axis=1)] = np.nan
+    out[n - 1:] = v
+    return out
+
+
 def _ritardo(x: np.ndarray, k: int) -> np.ndarray:
     """x spostato di k barre in avanti (valore di k barre fa); NaN all'inizio."""
     out = np.full(len(x), np.nan)
@@ -275,7 +289,11 @@ class Compressione(Variante):
         m = sma(ctx.c, n)
         sd = deviazione_mobile(ctx.c, n)
         ampiezza = 2 * k * sd / m
-        minimo = minimo_mobile(np.nan_to_num(ampiezza, nan=np.inf), int(self.parametri["finestra_min"]))
+        q = self.parametri.get("quantile")
+        if q is None:
+            minimo = minimo_mobile(np.nan_to_num(ampiezza, nan=np.inf), int(self.parametri["finestra_min"]))
+        else:
+            minimo = quantile_mobile(np.nan_to_num(ampiezza, nan=np.inf), int(self.parametri["finestra_min"]), q)
         compresso = np.where(np.isfinite(ampiezza) & np.isfinite(minimo), (ampiezza <= minimo).astype(float), np.nan)
         w = int(self.parametri["entro"]) + 1
         recente = massimo_mobile(np.nan_to_num(compresso, nan=0.0), w)
@@ -343,6 +361,11 @@ VARIANTI = {
     "V-17": RotturaGiorno("AVAXUSDT-V17", "1h", "short", k=0.5),
     "V-18": Compressione("AVAXUSDT-V18", "4h", "long", n=20, k=2.0, finestra_min=125, entro=10, mult_atr=2.0),
     "V-19": Compressione("AVAXUSDT-V19", "4h", "short", n=20, k=2.0, finestra_min=125, entro=10, mult_atr=2.0),
+    "V-22": Donchian("AVAXUSDT-V22", "4h", "long", ingresso=10, uscita=5, atr=20, mult_atr=2.0),
+    "V-23": Donchian("AVAXUSDT-V23", "4h", "short", ingresso=10, uscita=5, atr=20, mult_atr=2.0),
+    "V-24": Compressione("AVAXUSDT-V24", "4h", "long", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
+    "V-25": Compressione("AVAXUSDT-V25", "4h", "short", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
+    "V-26": VolumeAlto("AVAXUSDT-V26", "4h", "long", finestra=180, multiplo=2.0, barre=6, mult_atr=2.0),
     "V-20": ForzaRelativa("AVAXUSDT-V20", "1d", "long", lookback=14, barre=3, mult_atr=2.0),
     "V-21": VolumeAlto("AVAXUSDT-V21", "4h", "long", finestra=180, multiplo=3.0, barre=6, mult_atr=2.0),
 }
