@@ -58,7 +58,7 @@ def rsi(c, n):
     ms = su.ewm(alpha=1 / n, adjust=False, min_periods=n).mean()
     mg = giu.ewm(alpha=1 / n, adjust=False, min_periods=n).mean()
     rs = ms / mg
-    out = (100 - 100 / (1 + rs)).to_numpy()
+    out = (100 - 100 / (1 + rs)).to_numpy().copy()
     out[(mg.to_numpy() == 0) & np.isfinite(ms.to_numpy())] = 100.0
     return out
 
