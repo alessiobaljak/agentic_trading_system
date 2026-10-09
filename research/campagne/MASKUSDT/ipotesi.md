@@ -727,6 +727,12 @@ e si scrive qui prima del test.
   mediano è 5,8% e 54 trade su 114 hanno lo stop oltre il 6%, il tetto del bot
   (`stop_massimo_bot`): con 1,5 ATR la maggior parte rientra. Previsione: più stop, R medio fra
   -0,05 e +0,20, `t` contro la (b) fra 0,5 e 2.
+* **R-5, ritocco di MASKUSDT-028** (prima della lista con `t` 2,08 dopo 031; quinto e ultimo
+  ritocco della famiglia; ultima unità del budget). Due cambi: il filtro del funding nato dai
+  fallimenti (nota MASKUSDT-N007, come 029) e lo stop a 1,5 ATR (come 031, per il tetto del 6% del
+  bot). Motivo: è la sola forma della famiglia che il bot potrebbe eseguire con il filtro.
+  Previsione: R medio fra 0 e +0,25, `t` contro la (b) fra 1 e 2,5. Se diventa candidato, in
+  validazione va solo il candidato della famiglia con il `t` più alto in costruzione.
 
 ## Previsioni (scritte dopo la Fase 0, prima del primo test)
 

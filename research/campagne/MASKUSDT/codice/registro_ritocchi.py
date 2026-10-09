@@ -40,6 +40,10 @@ class R4(R1):
     k_stop = 1.5
 
 
+class R5(R2):
+    k_stop = 1.5
+
+
 def _r(idea, famiglia, di, cambia, par, prev, lo, hi):
     return {"idea": idea, "famiglia": famiglia, "ritocco_di": di, "fonte": F[idea], "meccanismo": M[idea],
             "parametri": par, "cosa_cambia": cambia,
@@ -64,4 +68,9 @@ VARIANTI = {
                             "stop da 2 a 1,5 ATR (target a 2 volte lo stop): stop sotto il tetto del 6% del bot nella maggior parte dei trade",
                             {"deviazioni": 3, "finestra_dev": 168, "stop_atr": 1.5, "target_rapporto": 2, "uscita_barre": 12},
                             "t contro la (b) fra 0,5 e 2", -0.05, 0.20)),
+    "MASKUSDT-032": (R5, _r("I-03", "MASKUSDT-006", "MASKUSDT-028",
+                            "filtro del funding (nota MASKUSDT-N007) e stop da 2 a 1,5 ATR (tetto del 6% del bot)",
+                            {"deviazioni": 3, "finestra_dev": 168, "stop_atr": 1.5, "target_rapporto": 2, "uscita_barre": 12,
+                             "funding_minimo_ingresso": 0},
+                            "t contro la (b) fra 1 e 2,5", 0.0, 0.25)),
 }
