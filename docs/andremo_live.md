@@ -3209,3 +3209,22 @@ tempismo della regola (su serie sintetiche: p sotto 0,10 al 13,1% contro il 6,2%
 
 - 9 ott, 13:55: **prova con le strategie finte finita: l'esame regge.** 160 coppie moneta-timeframe su 160, nessun errore, regole del commit 8b6abf6b, risultati in `research/taratura/placebo/risultati.md` (branch di coordinamento, ee34519f). M1 «netta» per caso 0,41% (6 su 1.479, soglia 3%); M2 p sotto 0,10 in validazione 3,26% (44 su 1.348, soglia 13%). Per la regola scritta prima: si procede con la 4.5, nessuna delle tre campagne va rifatta per questa prova. Cosa abbiamo capito: (1) l'esame non scambia il rumore per vantaggio nemmeno sui prezzi veri; (2) è più severo di quanto dichiara (il `t` delle placebo ha deviazione 0,815 invece di 1, p sotto 0,10 nel 3,3% dei casi invece del 10%): protegge dal falso, ma un vantaggio piccolo vero passa più difficilmente, un'altra ragione per la campagna di gruppo; (3) l'unica regola da manuale sopra il 2% è l'incrocio delle medie a 1 ora (5 su 154), segnali rari a grappoli lunghi. Bozza 4.5 corretta dopo la revisione di tre lettori (51 osservazioni, molte sovrapposte) e completata con questi numeri: pronta per l'approvazione del proprietario.
 
+
+### 9 ottobre, 14:15: versione 4.5 approvata, le prime tre delle 17 campagne aperte; test di GitHub di nuovo verdi
+
+Il proprietario: «sì alla 4.5 con i tre punti» (registrato alle 12:06 UTC: intestazione del protocollo,
+`parametri.yaml`, CLAUDE.md). I tre punti: consegne 4.4 di BTC, ETH e SOL valide; soglia del trasferimento della
+4.5 anche per il candidato BTC; sessioni aperte dal coordinamento su delega. Aperte con il messaggio approvato
+(`research/apertura/campagna.md`, branch di coordinamento, 27461905), senza passare il modello: XRPUSDT
+session_018XtuZQjD6K6JuhyWmrpoX3 (12:13 UTC), DOGEUSDT session_01N3TABJoPHzkdukLxkAb7DX e BNBUSDT
+session_01RFD6pyRzfbFCXDfYijUi9G (12:14 UTC). Routine oraria `trig_01LGmfrQRrAL3Qm9N9bQJPiB` (ogni ora ai :14):
+stato, primi push, domande girate al proprietario, apertura della moneta successiva a ogni consegna.
+
+**Le email di GitHub.** Il proprietario chiede di non riceverne una per ogni esecuzione: venivano dai test, che
+fallivano a OGNI push (tutte le esecuzioni dall'8 ottobre, run 833-862), e GitHub manda un'email per ogni
+esecuzione fallita. Due cause: (1) un buco vero del guardiano, visibile solo con il git dei server di GitHub
+(2.55): `git log --no-walk HEAD~1 -- <cartella>` stampava il messaggio di un commit del principale; ora il
+guardiano rifiuta `--no-walk` nei comandi di storia (CHANGELOG); (2) il lettore del backlog non riconosceva
+«Aggiornato l'8 ottobre» e il report in dashboard perdeva la data. Dopo la correzione (89f1d376) i test su GitHub
+passano (run 863). Cosa abbiamo capito: un test rosso a ogni push nasconde i problemi veri; questo nascondeva un
+buco del guardiano.
