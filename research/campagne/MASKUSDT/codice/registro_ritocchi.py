@@ -32,6 +32,10 @@ class R2(R1):
         return super().condizione(st, i) and st["f"][i] >= 0
 
 
+class R3(R1):
+    barre_max = 24
+
+
 def _r(idea, famiglia, di, cambia, par, prev, lo, hi):
     return {"idea": idea, "famiglia": famiglia, "ritocco_di": di, "fonte": F[idea], "meccanismo": M[idea],
             "parametri": par, "cosa_cambia": cambia,
@@ -48,4 +52,8 @@ VARIANTI = {
                             {"deviazioni": 3, "finestra_dev": 168, "stop_atr": 2, "target_rapporto": 2, "uscita_barre": 12,
                              "funding_minimo_ingresso": 0},
                             "t contro la (b) fra 1,5 e 3, puo' essere netto", 0.05, 0.35)),
+    "MASKUSDT-030": (R3, _r("I-03", "MASKUSDT-006", "MASKUSDT-028",
+                            "uscita a tempo da 12 a 24 barre (nota MASKUSDT-N007)",
+                            {"deviazioni": 3, "finestra_dev": 168, "stop_atr": 2, "target_rapporto": 2, "uscita_barre": 24},
+                            "t contro la (b) fra 1 e 2,5", 0.0, 0.25)),
 }

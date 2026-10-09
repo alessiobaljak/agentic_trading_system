@@ -715,6 +715,12 @@ e si scrive qui prima del test.
   l'ultimo funding regolato entro la chiusura della barra del segnale è negativo. Il resto come
   028. Previsione: circa 85 trade, R medio fra +0,05 e +0,35, `t` contro la (b) fra 1,5 e 3; può
   essere netto, ma il filtro è al limite del rumore e in validazione può sparire.
+* **R-3, ritocco di MASKUSDT-028** (dopo 029, che è candidato e quindi fuori dalla lista: prima
+  della lista è di nuovo 028 con `t` 2,08; famiglia MASKUSDT-006, terzo ritocco). Cambia solo
+  l'uscita a tempo, da 12 a 24 barre. Motivo (nota MASKUSDT-N007): le 63 uscite a tempo a 12 barre
+  hanno R medio +0,55. Nessun filtro del funding. Previsione: R medio fra 0 e +0,25, `t` contro la
+  (b) fra 1 e 2,5. Se diventa candidato, in validazione va comunque un solo candidato della
+  famiglia (quello con il `t` più alto).
 
 ## Previsioni (scritte dopo la Fase 0, prima del primo test)
 
