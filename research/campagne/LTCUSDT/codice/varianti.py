@@ -379,8 +379,9 @@ class Squeeze(Base):
     tf = "4h"
     riscaldamento = 141
 
-    def __init__(self, direzione):
+    def __init__(self, direzione, percentile=0.1):
         self.direzione = direzione
+        self.percentile = percentile
 
     def prepara(self, candele):
         import pandas as pd
@@ -390,7 +391,7 @@ class Squeeze(Base):
         sd = I.rolling_std(c, 20)
         su, giu = m + 2 * sd, m - 2 * sd
         bw = (su - giu) / m
-        q = pd.Series(bw).rolling(120, min_periods=120).quantile(0.1).to_numpy()
+        q = pd.Series(bw).rolling(120, min_periods=120).quantile(self.percentile).to_numpy()
         squeeze_prec = I.ritardo(bw, 1) <= I.ritardo(q, 2)  # bw[i-1] <= 10° percentile di bw[i-121..i-2]
         return {"close": c, "media": m, "su": su, "giu": giu, "squeeze_prec": squeeze_prec}
 
@@ -569,6 +570,18 @@ REGISTRO = {
         "idea": "I-09", "fonte": FONTE_I09,
         "meccanismo": "breakout sotto la banda inferiore dopo una compressione della volatilita'",
         "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 10,
+                      "stop": "media a 20 barre, al massimo 6%", "uscita": "close sopra la media o 30 barre"},
+        "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-016b": (lambda: Squeeze("long", 0.2), {
+        "idea": "I-09", "fonte": FONTE_I09,
+        "meccanismo": "breakout sopra la banda superiore dopo una compressione della volatilita'; squeeze allentato al 20° percentile dopo lo scarto della 016",
+        "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 20,
+                      "stop": "media a 20 barre, al massimo 6%", "uscita": "close sotto la media o 30 barre"},
+        "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-017b": (lambda: Squeeze("short", 0.2), {
+        "idea": "I-09", "fonte": FONTE_I09,
+        "meccanismo": "breakout sotto la banda inferiore dopo una compressione della volatilita'; squeeze allentato al 20° percentile",
+        "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 20,
                       "stop": "media a 20 barre, al massimo 6%", "uscita": "close sopra la media o 30 barre"},
         "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
     "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {

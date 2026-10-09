@@ -441,6 +441,12 @@ alle ultime settimane, scelta per avere eventi a sufficienza; scelta fatta prima
 **Previsioni.** Stop tipico 1,5-3% (metà della larghezza compressa), costi 0,05-0,1 R. Long e short:
 profit factor fra 0,8 e 1,3; nessuna batte nettamente la (b).
 
+**Aggiunta del 2026-10-09, dopo lo scarto di LTCUSDT-016 (50 trade stimati, nessun test fatto per
+questa idea).** Allento la soglia dello squeeze per raggiungere i trade minimi, senza aver visto
+risultati (regola 6): **LTCUSDT-016b**, uguale alla 016 con lo squeeze al 20° percentile invece del
+10°. Per lo short, scritta ora prima di contare la 017: *se LTCUSDT-017 è uno scarto*, la sostituisce
+**LTCUSDT-017b**, uguale con il 20° percentile. Previsioni identiche.
+
 ---
 
 ## I-10 — Inerzia dopo un giorno anomalo
