@@ -374,7 +374,7 @@ def pd_median(x, n):
 # I-13 incrocio di medie 10/50 (4h)
 # ---------------------------------------------------------------------------
 
-def i13(id_, direzione):
+def i13(id_, direzione, tf="4h"):
     def prepara(s):
         return {"atr": ind.atr(s, 20), "m10": ind.media_mobile(s.c, 10), "m50": ind.media_mobile(s.c, 50)}
 
@@ -392,14 +392,14 @@ def i13(id_, direzione):
             return None
         return "chiudi" if ((a < b) if direzione == "long" else (a > b)) else None
 
-    return Variante(id_, "4h", direzione, prepara, condizione, _segnale_atr(direzione, 3.0), uscita)
+    return Variante(id_, tf, direzione, prepara, condizione, _segnale_atr(direzione, 3.0), uscita)
 
 
 # ---------------------------------------------------------------------------
 # I-14 calo con volume alto che torna indietro (1d)
 # ---------------------------------------------------------------------------
 
-def i14(id_):
+def i14(id_, tf="1d"):
     def prepara(s):
         r = ind.log_rend(s.c)
         sd60 = ind.dev_std_mobile(r, 60)
@@ -412,7 +412,7 @@ def i14(id_):
             return False
         return r < -sd and ctx["serie"].v[i] > 1.5 * vm
 
-    return Variante(id_, "1d", "long", prepara, condizione, _segnale_atr("long", 2.0), _uscita_tempo(2))
+    return Variante(id_, tf, "long", prepara, condizione, _segnale_atr("long", 2.0), _uscita_tempo(2))
 
 
 # ---------------------------------------------------------------------------

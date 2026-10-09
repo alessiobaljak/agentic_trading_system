@@ -650,6 +650,12 @@ una direzione per variante.
 * **I-13-S** (4h, short): incrocio verso il basso; stop = close + 3 × ATR(20); uscita:
   media(10) > media(50) → chiudi.
 
+**Aggiunta dopo la stima dei trade** (2026-10-09, prima di qualunque test di I-13): a 4h
+sono scarti (53 trade ciascuna: FTMUSDT-023 e 024). Allentamento della regola 6: stessa
+regola in barre a 2 ore (medie di 10 e 50 barre = 20 e 100 ore).
+
+* **I-13-L2** (2h, long) e **I-13-S2** (2h, short): come I-13-L e I-13-S, a 2 ore.
+
 ---
 
 ## I-14 — Movimenti con volume alto che tornano indietro
@@ -688,6 +694,14 @@ forzate). Una variante.
 * **I-14-L** (1d, long): r = rendimento logaritmico del giorno; condizione r < −1 ×
   dev. std(r, 60 giorni) e volume(i) > 1,5 × media(volume, 30 giorni precedenti);
   stop = close − 2 × ATR(14); uscita a tempo dopo 2 barre.
+
+**Aggiunta dopo la stima dei trade** (2026-10-09, prima di qualunque test di I-14): a 1d
+è uno scarto (23 trade: FTMUSDT-025). Allentamento della regola 6: la stessa regola in
+barre su candele da 4 ore (la pressione di liquidità della fonte si vede anche su
+rendimenti più brevi; dev. std su 60 barre = 10 giorni, volume medio delle 30 barre
+precedenti = 5 giorni, tenuta 2 barre = 8 ore; stop 2 ATR(14) di barre da 4 ore).
+
+* **I-14-L2** (4h, long): come I-14-L, a 4 ore.
 
 ---
 
