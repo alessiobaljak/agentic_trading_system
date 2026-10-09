@@ -452,7 +452,225 @@ def _i11(direzione):
     return var, meta
 
 
+# ---------------------------------------------------------------------------
+# Idee aggiunte il 9 ottobre alle 19:48 UTC (ipotesi.md, I-12 ... I-17)
+# ---------------------------------------------------------------------------
+GIORNO = 86_400_000
+ORA = 3_600_000
+
+F12 = ("L. Gao, Y. Han, S. Z. Li, G. Zhou, 'Market intraday momentum', Journal of Financial Economics 129(2), 2018; "
+       "D. Shen, A. Urquhart, P. Wang, 'Bitcoin intraday time series momentum', The Financial Review 57(2), 2022")
+
+
+def _i12(direzione):
+    def prepara(serie):
+        ind = _base(serie)
+        apertura_giorno = {}
+        for c in serie.candele:
+            if c.ts % GIORNO == 0:
+                apertura_giorno[c.ts] = c.open
+        rg = [None] * serie.n
+        for i, c in enumerate(serie.candele):
+            if c.ts % GIORNO == 23 * ORA:  # barra 23:00-23:30 UTC
+                a = apertura_giorno.get(c.ts - c.ts % GIORNO)
+                if a:
+                    rg[i] = c.close / a - 1
+        ind["rg"] = rg
+        ind["riscaldamento"] = _riscaldamento(ind["atr"])
+        return ind
+
+    if direzione == "long":
+        ingresso = lambda ind, i: ind["rg"][i] is not None and ind["rg"][i] > 0
+    else:
+        ingresso = lambda ind, i: ind["rg"][i] is not None and ind["rg"][i] < 0
+    nome = "I-12-L" if direzione == "long" else "I-12-S"
+    var = Variante(nome, "30m", direzione, prepara, ingresso, _stop(2.0, direzione), max_barre=1)
+    meta = _meta("I-12", nome, F12, "momento dentro la giornata: l'ultima mezz'ora UTC segue il resto del giorno",
+                 {"barra_segnale": "23:00-23:30 UTC", "rendimento_da": "apertura 00:00 UTC", "stop_atr": 2.0,
+                  "atr_barre": 14, "uscita_barre": 1, "target": None},
+                 "R medio fra -0,35 e -0,05 (costi); non netto")
+    return var, meta
+
+
+F13 = "R. Hudson, A. Urquhart, 'Technical trading and cryptocurrencies', Annals of Operations Research 297, 2021 (online 2019)"
+
+
+def _i13(direzione):
+    def prepara(serie):
+        ind = _base(serie)
+        ind["m10"] = C.a_lista(C.sma(ind["c_np"], 10))
+        ind["m30"] = C.a_lista(C.sma(ind["c_np"], 30))
+        ind["riscaldamento"] = _riscaldamento(ind["m30"], ind["atr"]) + 1
+        return ind
+
+    if direzione == "long":
+        ingresso = lambda ind, i: ind["m10"][i] > ind["m30"][i] and ind["m10"][i - 1] <= ind["m30"][i - 1]
+        uscita = lambda ind, i, pos: ind["m10"][i] < ind["m30"][i]
+    else:
+        ingresso = lambda ind, i: ind["m10"][i] < ind["m30"][i] and ind["m10"][i - 1] >= ind["m30"][i - 1]
+        uscita = lambda ind, i, pos: ind["m10"][i] > ind["m30"][i]
+    nome = "I-13-L" if direzione == "long" else "I-13-S"
+    var = Variante(nome, "4h", direzione, prepara, ingresso, _stop(3.0, direzione), uscita=uscita)
+    meta = _meta("I-13", nome, F13, "incrocio di medie mobili: seguire il trend fino all'incrocio opposto",
+                 {"media_veloce": 10, "media_lenta": 30, "stop_atr": 3.0, "atr_barre": 14, "uscita": "incrocio opposto",
+                  "target": None},
+                 "R medio fra -0,10 e +0,15; non netto")
+    return var, meta
+
+
+F14 = ("C. L. Osler, 'Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical "
+       "Analysis', Journal of Finance 58(5), 2003")
+
+
+def _passo_tondo(prezzo):
+    return 5.0 if prezzo >= 10 else 1.0
+
+
+def _i14(direzione):
+    def prepara(serie):
+        ind = _base(serie)
+        c = ind["c"]
+        su = [False] * serie.n
+        giu = [False] * serie.n
+        for i in range(1, serie.n):
+            p = _passo_tondo(c[i - 1])
+            if c[i] > c[i - 1]:
+                livello = math.floor(c[i] / p) * p  # tondo piu' alto <= close
+                su[i] = c[i - 1] < livello <= c[i]
+            elif c[i] < c[i - 1]:
+                livello = math.ceil(c[i] / p) * p  # tondo piu' basso >= close
+                giu[i] = c[i - 1] >= livello > c[i]
+        ind["su"], ind["giu"] = su, giu
+        ind["riscaldamento"] = _riscaldamento(ind["atr"])
+        return ind
+
+    if direzione == "long":
+        ingresso = lambda ind, i: ind["su"][i]
+    else:
+        ingresso = lambda ind, i: ind["giu"][i]
+    nome = "I-14-L" if direzione == "long" else "I-14-S"
+    var = Variante(nome, "1h", direzione, prepara, ingresso, _stop(2.0, direzione), max_barre=4)
+    meta = _meta("I-14", nome, F14, "gli ordini stop appena oltre i numeri tondi accelerano il movimento che li attraversa",
+                 {"passo_tondo": "5 USDT (1 USDT sotto i 10)", "stop_atr": 2.0, "atr_barre": 14, "uscita_barre": 4,
+                  "target": None},
+                 "R medio fra -0,15 e +0,05; non netto")
+    return var, meta
+
+
+F15 = "Y. Amihud, 'Illiquidity and stock returns: cross-section and time-series effects', Journal of Financial Markets 5(1), 2002"
+
+
+def _i15():
+    def prepara(serie):
+        ind = _base(serie)
+        c = ind["c_np"]
+        r = _rendimenti_1(c)
+        q = np.array([np.nan if serie.volume_usdt.get(x.ts) in (None, 0) else serie.volume_usdt[x.ts] for x in serie.candele])
+        il = np.abs(r) / q
+        il6 = np.full(serie.n, np.nan)
+        for i in range(6, serie.n):
+            w = il[i - 5:i + 1]
+            if not np.isnan(w).any():
+                il6[i] = np.mean(w)
+        ind["il6"] = C.a_lista(il6)
+        ind["q90"] = C.a_lista(_percentile_precedente(il6, 300, 90))
+        ind["riscaldamento"] = _riscaldamento(ind["q90"], ind["atr"])
+        return ind
+
+    ingresso = lambda ind, i: ind["il6"][i] is not None and ind["q90"][i] is not None and ind["il6"][i] >= ind["q90"][i]
+    var = Variante("I-15-L", "4h", "long", prepara, ingresso, _stop(2.0, "long"), max_barre=30)
+    meta = _meta("I-15", "I-15-L", F15, "illiquidita' alta = premio per chi tiene l'attivita' (compenso per la liquidita')",
+                 {"illiquidita_barre": 6, "finestra_percentile_barre": 300, "percentile": 90, "stop_atr": 2.0,
+                  "atr_barre": 14, "uscita_barre": 30, "target": None},
+                 "R medio fra -0,10 e +0,15; non netto")
+    return var, meta
+
+
+F16 = "T. Crabel, 'Day Trading with Short Term Price Patterns and Opening Range Breakout', Traders Press, 1990"
+
+
+def _i16(direzione):
+    def prepara(serie):
+        ind = _base(serie)
+        per_ts = {c.ts: c for c in serie.candele}
+        segnale = [False] * serie.n
+        rotto = {}
+        for i, c in enumerate(serie.candele):
+            g0 = c.ts - c.ts % GIORNO
+            ora = (c.ts % GIORNO) // ORA
+            if not (4 <= ora <= 22) or rotto.get(g0):
+                continue
+            primi = [per_ts.get(g0 + k * ORA) for k in range(4)]
+            if any(p is None for p in primi):
+                continue
+            hi = max(p.high for p in primi)
+            lo = min(p.low for p in primi)
+            if direzione == "long" and c.close > hi:
+                segnale[i] = True
+                rotto[g0] = True
+            if direzione == "short" and c.close < lo:
+                segnale[i] = True
+                rotto[g0] = True
+        ind["seg"] = segnale
+        ind["ora23"] = [(c.ts % GIORNO) // ORA == 23 for c in serie.candele]
+        ind["riscaldamento"] = _riscaldamento(ind["atr"])
+        return ind
+
+    ingresso = lambda ind, i: ind["seg"][i]
+    uscita = lambda ind, i, pos: ind["ora23"][i]
+    nome = "I-16-L" if direzione == "long" else "I-16-S"
+    var = Variante(nome, "1h", direzione, prepara, ingresso, _stop(2.0, direzione), max_barre=24, uscita=uscita)
+    meta = _meta("I-16", nome, F16, "la rottura dell'intervallo delle prime 4 ore UTC indica la direzione della giornata",
+                 {"intervallo": "00:00-03:59 UTC", "ingresso_ore": "04:00-22:00, prima rottura del giorno", "stop_atr": 2.0,
+                  "atr_barre": 14, "uscita": "alla chiusura della barra delle 23:00 UTC", "target": None},
+                 "R medio fra -0,15 e +0,05; non netto")
+    return var, meta
+
+
+F17 = ("E. Gatev, W. N. Goetzmann, K. G. Rouwenhorst, 'Pairs Trading: Performance of a Relative-Value Arbitrage Rule', "
+       "Review of Financial Studies 19(3), 2006")
+
+
+def _i17(direzione):
+    def prepara(serie):
+        ind = _base(serie)
+        btc = C.btc_allineato(serie)
+        x = np.array([np.nan if b is None else math.log(c.close / b.close) for c, b in zip(serie.candele, btc)])
+        z = np.full(serie.n, np.nan)
+        for i in range(180, serie.n):
+            w = x[i - 180:i]
+            w = w[~np.isnan(w)]
+            if len(w) >= 150 and not math.isnan(x[i]):
+                s = np.std(w, ddof=1)
+                if s > 0:
+                    z[i] = (x[i] - np.mean(w)) / s
+        ind["z"] = C.a_lista(z)
+        ind["riscaldamento"] = _riscaldamento(ind["atr"]) if serie.n else 0
+        ind["riscaldamento"] = max(ind["riscaldamento"], 180)
+        return ind
+
+    if direzione == "long":
+        ingresso = lambda ind, i: ind["z"][i] is not None and ind["z"][i] < -2
+        uscita = lambda ind, i, pos: ind["z"][i] is not None and ind["z"][i] > 0
+    else:
+        ingresso = lambda ind, i: ind["z"][i] is not None and ind["z"][i] > 2
+        uscita = lambda ind, i, pos: ind["z"][i] is not None and ind["z"][i] < 0
+    nome = "I-17-L" if direzione == "long" else "I-17-S"
+    var = Variante(nome, "4h", direzione, prepara, ingresso, _stop(3.0, direzione), max_barre=30, uscita=uscita)
+    meta = _meta("I-17", nome, F17, "il rapporto ETC/BTC torna verso la sua media dopo un distacco (gamba sola su ETC)",
+                 {"finestra_barre": 180, "soglia_z": 2.0, "uscita": "z torna a 0 o 30 barre", "stop_atr": 3.0,
+                  "atr_barre": 14, "target": None},
+                 "R medio fra -0,15 e +0,10; non netto")
+    return var, meta
+
+
 CATALOGO = {
+    "I-12-L": lambda: _i12("long"), "I-12-S": lambda: _i12("short"),
+    "I-13-L": lambda: _i13("long"), "I-13-S": lambda: _i13("short"),
+    "I-14-L": lambda: _i14("long"), "I-14-S": lambda: _i14("short"),
+    "I-15-L": _i15,
+    "I-16-L": lambda: _i16("long"), "I-16-S": lambda: _i16("short"),
+    "I-17-L": lambda: _i17("long"), "I-17-S": lambda: _i17("short"),
     "I-01-L": lambda: _i01("long"), "I-01-S": lambda: _i01("short"),
     "I-02-L": lambda: _i02("long"), "I-02-S": lambda: _i02("short"),
     "I-03-L": lambda: _i03("long"), "I-03-S": lambda: _i03("short"),

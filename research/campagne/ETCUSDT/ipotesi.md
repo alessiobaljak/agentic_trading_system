@@ -480,3 +480,250 @@ non darebbe abbastanza ingressi in tre anni).
   media(5), al più dopo 20 barre.
 
 **Previsione.** R medio fra −0,10 e +0,10; non netto.
+
+---
+
+# Idee aggiunte il 9 ottobre 2026 alle 19:48 UTC
+
+Scritte dopo i risultati delle prime 9 varianti e dei primi 6 scarti (I-02, I-05 e I-10 sotto i 70 trade
+in entrambe le direzioni). Il budget si usa per intero e le idee nuove con fonte vengono prima dei
+ritocchi (regola 6): queste sono idee nuove, ognuna con un meccanismo e una fonte propri, non
+modifiche delle precedenti. Le ho scelte cercando famiglie non ancora provate (ordini ai numeri tondi,
+apertura della giornata, illiquidità, valore relativo con BTC) più due della famiglia del trend con
+una formulazione diversa (incrocio di medie, momento dentro la giornata). Nessuna è nata da un
+numero visto: dai risultati ho preso solo il fatto che il budget è ancora quasi tutto da usare.
+
+## I-12 — Momento dentro la giornata: l'ultima mezz'ora segue il resto del giorno
+
+**Fonte.** L. Gao, Y. Han, S. Z. Li, G. Zhou, «Market intraday momentum», *Journal of Financial
+Economics* 129(2), 2018; per BTC: D. Shen, A. Urquhart, P. Wang, «Bitcoin intraday time series
+momentum», *The Financial Review* 57(2), 2022: il rendimento della giornata fino all'ultima mezz'ora
+predice il segno dell'ultima mezz'ora.
+
+**Affermazione falsificabile.** Su ETCUSDT, se il rendimento dalle 00:00 UTC alla chiusura della barra
+delle 23:00-23:30 è positivo, la mezz'ora 23:30-24:00 ha rendimento più alto della (a) e della (b) per
+un long; se è negativo, lo stesso per lo short.
+
+**Sotto-domande.** Chi opera nell'ultima mezz'ora UTC: chi ribilancia a fine giornata (fondi, prodotti
+indicizzati con prezzo di riferimento giornaliero), chi chiude posizioni prima del taglio del giorno.
+L'effetto è di pochi punti base: i costi sono la domanda vera.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | `t` entro ±2 | `t` oltre la soglia |
+| 2 | Effetto costi: il movimento di mezz'ora è dell'ordine dei costi | R lordo forse positivo, netto negativo (circa −0,2 R) | Netto positivo |
+| 3 | Il taglio UTC non è speciale per ETC (la fonte è su BTC e azioni) | Nessun effetto | — |
+| 4 | Trend di fondo (giornate in salita nel 2021) | Long buono solo nel 2021 | Più anni |
+| 5 | «È solo il mercato» | Uguale a BTC | — |
+| 6 | Volatilità dell'ultima mezz'ora | Più stop | — |
+| 7 | Pochi trade estremi | Crolla senza i 3 migliori | Regge |
+| 8 | Artefatto dei dati (barre mancanti a fine giornata) | — | Controllo dei buchi |
+| 9 | Inversione a breve (rimbalzo dell'ultima barra) | R negativo | R positivo |
+| 10 | Funding alle 00:00 UTC: chi chiude prima del settlement muove il prezzo | Effetto legato al segno del funding | Effetto anche con funding vicino a zero |
+
+**Ipotesi.** ETCUSDT, momento dentro la giornata, timeframe 30m (la fonte è sulla mezz'ora).
+
+**Varianti.**
+* **I-12-L**: alla chiusura della barra 23:00-23:30 UTC, long se close / apertura della barra delle 00:00
+  dello stesso giorno − 1 > 0; stop 2 ATR(14, 30m) sotto; uscita dopo 1 barra.
+* **I-12-S**: short se lo stesso rendimento è < 0; stop 2 ATR sopra; uscita dopo 1 barra.
+
+**Previsione.** R medio fra −0,35 e −0,05 (costi); non netto.
+
+---
+
+## I-13 — Incrocio di medie mobili
+
+**Fonte.** R. Hudson, A. Urquhart, «Technical trading and cryptocurrencies», *Annals of Operations
+Research* 297, 2021 (online 2019): le regole a medie mobili hanno potere predittivo sulle crypto
+principali.
+
+**Affermazione falsificabile.** Su ETCUSDT a 4 ore, dopo che la media a 10 barre incrocia verso l'alto
+quella a 30, il long tenuto fino all'incrocio opposto ha R più alto della (a) e della (b); lo specchio per
+lo short.
+
+**Sotto-domande.** Come I-01: chi segue il trend con regole e in ritardo. Gli incroci frequenti in un
+mercato senza direzione costano.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | `t` entro ±2 | `t` oltre la soglia |
+| 2 | Falsi incroci nei mercati laterali | Molte piccole perdite | — |
+| 3 | Trend di fondo | Long solo nel 2020-21, short solo nel 2022 | Più anni |
+| 4 | «È solo il mercato» | Incroci insieme a BTC | Contro la (b) |
+| 5 | Sovrapposizione con I-01 | Stessi periodi in posizione | — |
+| 6 | Pochi trend lunghi fanno tutto | Crolla senza i 3 migliori | Regge |
+| 7 | Volatilità | — | — |
+| 8 | Costi | Netto nullo | Netto positivo |
+| 9 | Funding alto nei rialzi | Costo grande per il long | Funding piccolo |
+| 10 | Artefatto dei buchi | — | — |
+
+**Ipotesi.** ETCUSDT, incrocio 10/30, timeframe 4h.
+
+**Varianti.**
+* **I-13-L**: long alla barra in cui media(10) passa sopra media(30) (sotto o uguale alla barra prima);
+  stop 3 ATR sotto; uscita quando media(10) < media(30).
+* **I-13-S**: short all'incrocio verso il basso; stop 3 ATR sopra; uscita quando media(10) > media(30).
+
+**Previsione.** R medio fra −0,10 e +0,15; non netto.
+
+---
+
+## I-14 — Ordini ai numeri tondi
+
+**Fonte.** C. L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive
+Success of Technical Analysis», *Journal of Finance* 58(5), 2003: gli ordini stop si accumulano appena
+oltre i numeri tondi; quando il prezzo li attraversa, gli stop scattano e il movimento accelera.
+
+**Affermazione falsificabile.** Su ETCUSDT, dopo un'ora che chiude sopra un livello tondo (multiplo di 5
+USDT, o di 1 USDT sotto i 10 USDT) che l'ora prima era sopra il close, le 4 ore dopo hanno rendimento per
+un long più alto della (a) e della (b); simmetricamente per l'attraversamento verso il basso.
+
+**Sotto-domande.** Chi ha ordini ai numeri tondi: operatori al dettaglio e regole semplici. La cascata
+di stop è di minuti-ore. Vale di più per i tondi «grandi» (multipli di 10)?
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | `t` entro ±2 | `t` oltre la soglia |
+| 2 | Gli ordini take-profit ai tondi fanno rimbalzare (Osler: inversione prima del tondo) | R negativo dopo l'attraversamento | R positivo |
+| 3 | La cascata finisce dentro l'ora del segnale | R come la (b) | Sopra la (b) |
+| 4 | Trend di fondo | Long buono solo nel 2021 | Più anni |
+| 5 | «È solo il mercato» | — | Contro la (b) |
+| 6 | I tondi di ETC non sono salienti come quelli di una valuta | Nessun effetto | — |
+| 7 | Costi sull'1h | Netto nullo | Netto positivo |
+| 8 | Volatilità | — | — |
+| 9 | Pochi trade estremi | Crolla senza i 3 migliori | Regge |
+| 10 | Il livello scelto (5 o 1 USDT) è arbitrario | — | Si dichiara; nessuna scelta dopo i dati |
+
+**Ipotesi.** ETCUSDT, attraversamento dei numeri tondi, timeframe 1h.
+
+**Varianti.**
+* **I-14-L**: long se esiste un livello tondo L con close della barra prima < L ≤ close della barra
+  (passo 5 USDT se il close prima è ≥ 10, 1 USDT se è sotto); stop 2 ATR sotto; uscita dopo 4 barre.
+* **I-14-S**: short se close della barra prima ≥ L > close; stop 2 ATR sopra; uscita dopo 4 barre.
+
+**Previsione.** R medio fra −0,15 e +0,05; non netto.
+
+---
+
+## I-15 — Illiquidità alta, rendimento atteso più alto
+
+**Fonte.** Y. Amihud, «Illiquidity and stock returns: cross-section and time-series effects», *Journal
+of Financial Markets* 5(1), 2002: l'illiquidità (|rendimento| / volume) alta prevede rendimenti più alti
+(compenso per chi tiene un'attività illiquida).
+
+**Affermazione falsificabile.** Su ETCUSDT, quando l'illiquidità delle ultime 24 ore (media di
+|rendimento| / volume in USDT delle 6 barre da 4h) è nel 10% più alto delle 300 barre precedenti, le 30
+barre dopo hanno rendimento per un long più alto della (a) e della (b).
+
+**Sotto-domande.** Quando ETC è illiquida: fine settimana, periodi senza notizie, oppure crolli con
+pochi compratori. Chi fornisce liquidità chiede un premio.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | `t` entro ±2 | `t` oltre la soglia |
+| 2 | Illiquidità = movimenti grandi con poco volume = crollo in corso | R negativo | R positivo |
+| 3 | Volume basso = poca attenzione (I-06, opposto) | R negativo | R positivo |
+| 4 | Trend di fondo | Buono solo nel 2021 | Più anni |
+| 5 | «È solo il mercato» | — | Contro la (b) |
+| 6 | Fine settimana | Segnali concentrati nel fine settimana | — |
+| 7 | Volatilità | Più stop | — |
+| 8 | Costi (slippage reale più alto quando è illiquida, non modellato) | Il backtest è ottimista | Si dichiara |
+| 9 | Pochi trade estremi | Crolla senza i 3 migliori | Regge |
+| 10 | Artefatto: volume mancante o anomalo | — | Controllo dei volumi |
+
+**Ipotesi.** ETCUSDT, illiquidità anomala, timeframe 4h.
+
+**Variante.**
+* **I-15-L**: long se l'illiquidità delle ultime 6 barre ≥ 90° percentile delle 300 barre precedenti;
+  stop 2 ATR sotto; uscita dopo 30 barre. (Una sola variante: la fonte dà una sola direzione.)
+
+**Previsione.** R medio fra −0,10 e +0,15; non netto.
+
+---
+
+## I-16 — Rottura dell'intervallo di apertura della giornata
+
+**Fonte.** T. Crabel, *Day Trading with Short Term Price Patterns and Opening Range Breakout*, Traders
+Press, 1990: la rottura dell'intervallo dei primi momenti della seduta indica la direzione della
+giornata.
+
+**Affermazione falsificabile.** Su ETCUSDT, la prima ora della giornata UTC (dalle 04:00 alle 22:00) che
+chiude sopra il massimo delle 4 ore 00:00-03:59 dà un long, tenuto fino a fine giornata, con R più alto
+della (a) e della (b); simmetricamente sotto il minimo.
+
+**Sotto-domande.** Le crypto non hanno apertura: l'inizio del giorno UTC è il taglio delle candele
+giornaliere e della sessione asiatica. Chi rompe l'intervallo: operatori che guardano il giorno.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | `t` entro ±2 | `t` oltre la soglia |
+| 2 | Nessuna apertura vera nelle crypto | Nessun effetto | — |
+| 3 | Falsa rottura | Stop presto | — |
+| 4 | Trend di fondo | Un anno solo | Più anni |
+| 5 | «È solo il mercato» | — | Contro la (b) |
+| 6 | Sovrapposizione col momento dentro la giornata (I-12) | — | — |
+| 7 | Costi sull'1h | Netto nullo | Netto positivo |
+| 8 | Volatilità | — | — |
+| 9 | Pochi trade estremi | Crolla senza i 3 migliori | Regge |
+| 10 | Artefatto: giorni con buchi nei dati | — | Controllo |
+
+**Ipotesi.** ETCUSDT, rottura dell'intervallo 00:00-04:00 UTC, timeframe 1h.
+
+**Varianti.**
+* **I-16-L**: long alla prima barra del giorno (ore 04:00-22:00) che chiude sopra il massimo delle barre
+  00:00-03:00 dello stesso giorno (tutte e quattro presenti); stop 2 ATR sotto; uscita alla chiusura
+  della barra delle 23:00 (cioè all'apertura del giorno dopo).
+* **I-16-S**: short alla prima chiusura sotto il minimo; stop 2 ATR sopra; stessa uscita.
+
+**Previsione.** R medio fra −0,15 e +0,05; non netto.
+
+---
+
+## I-17 — Valore relativo con BTC (una gamba di una coppia)
+
+**Fonte.** E. Gatev, W. N. Goetzmann, K. G. Rouwenhorst, «Pairs Trading: Performance of a Relative-Value
+Arbitrage Rule», *Review of Financial Studies* 19(3), 2006: due prezzi che si muovono insieme tornano
+verso il loro rapporto abituale dopo che se ne allontanano.
+
+**Affermazione falsificabile.** Su ETCUSDT a 4 ore, quando il logaritmo di ETC/BTC è sotto la sua media
+delle 180 barre precedenti di più di 2 deviazioni standard, il long su ETC fino al ritorno alla media
+(al più 30 barre) ha R più alto della (a) e della (b); simmetricamente lo short sopra +2.
+
+**Sotto-domande.** Qui si tiene solo ETC, non la copertura su BTC: il risultato contiene anche il
+movimento di BTC. Chi riporta il rapporto: arbitraggisti fra monete. Vale se ETC si è staccata per una
+notizia sua (allora no).
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | `t` entro ±2 | `t` oltre la soglia |
+| 2 | Notizia propria di ETC (attacchi alla rete del 2020, fusione di Ethereum del 2022): il distacco continua | R negativo | R positivo |
+| 3 | Il movimento di BTC domina la gamba sola | R legato al rendimento di BTC | — |
+| 4 | Trend di fondo | Un anno solo | Più anni |
+| 5 | «È solo il mercato» | — | Contro la (b) |
+| 6 | Momento relativo (I-01 su ETC/BTC) | Il distacco continua | — |
+| 7 | Volatilità | — | — |
+| 8 | Costi | Netto nullo | Netto positivo |
+| 9 | Pochi trade estremi | Crolla senza i 3 migliori | Regge |
+| 10 | Artefatto: barre di BTC mancanti | — | Allineamento per ts |
+
+**Ipotesi.** ETCUSDT, rapporto con BTC fuori dalla norma, timeframe 4h.
+
+**Varianti.**
+* **I-17-L**: long se z = (log(ETC/BTC) − media delle 180 barre precedenti) / deviazione delle stesse < −2;
+  stop 3 ATR sotto; uscita quando z > 0 o dopo 30 barre.
+* **I-17-S**: short se z > 2; stop 3 ATR sopra; uscita quando z < 0 o dopo 30 barre.
+
+**Previsione.** R medio fra −0,15 e +0,10; non netto.
