@@ -1,0 +1,33 @@
+{
+ "predefiniti": {
+  "trade": 124,
+  "r_medio": 0.1492,
+  "r_medio_senza_3_migliori": 0.07022,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.058,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.1948,
+    "trade": 76
+   },
+   "2023": {
+    "r_medio": 0.9729,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.3969,
+  "drawdown_max": -0.0525,
+  "b_media": -0.05264,
+  "t_b": 2.12421,
+  "soglia_b": 2.06446,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": 2.41378,
+  "netta_a": true,
+  "percentile_caso": 99.5
+ }
+}
