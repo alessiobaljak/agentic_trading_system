@@ -356,6 +356,13 @@ class RangeApertura(Base):
 
     def stop_distanza(self, i, ind):
         c = ind["close"][i]
+        fisso = getattr(self, "stop_fisso", None)
+        if fisso is not None:
+            # stesso campo di validita' del segnale originale (range definito, close dalla parte giusta)
+            riferimento = ind["r_basso"][i] if self.direzione == "long" else ind["r_alto"][i]
+            if math.isnan(riferimento):
+                return None
+            return fisso
         if self.direzione == "long":
             b = ind["r_basso"][i]
             if math.isnan(b) or b >= c:
@@ -598,6 +605,11 @@ def _stretto(v):
     return v
 
 
+def _stop_fisso(v, d):
+    v.stop_fisso = d
+    return v
+
+
 FONTE_I13 = ("William Brock, Josef Lakonishok, Blake LeBaron, «Simple Technical Trading Rules and the Stochastic "
              "Properties of Stock Returns», Journal of Finance 47(5), dicembre 1992; Robert Hudson, Andrew Urquhart, "
              "«Technical trading and cryptocurrencies», Annals of Operations Research 297(1), 2021 (online 2019)")
@@ -766,6 +778,14 @@ REGISTRO = {
         "cosa_cambia": "aggiunge il filtro del range stretto alla 014",
         "perche": "Crabel lega i breakout migliori ai range d'apertura stretti (contrazione prima dell'espansione); lo studio dei fallimenti della 014 non mostra un fallimento sistematico (nota LTCUSDT-N011)",
         "previsione": "meno trade (circa la meta'), profit factor fra 0,8 e 1,3, R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
+    "LTCUSDT-027": (lambda: _stop_fisso(RangeApertura("short"), 0.03), {
+        "idea": "I-07", "fonte": FONTE_I07, "famiglia": "LTCUSDT-014", "ritocco_di": "LTCUSDT-014",
+        "meccanismo": "breakout al ribasso del range delle prime 4 ore UTC con stop fisso al 3%",
+        "parametri": {"range_ore": "00-03 UTC", "finestra_ingresso": "04-20 UTC", "uscita": "chiusura della barra delle 23",
+                      "stop": 0.03},
+        "cosa_cambia": "stop fisso al 3% sopra il close di segnale invece del massimo del range",
+        "perche": "separare la direzione del breakout dal rumore della posizione dello stop (nota LTCUSDT-N012)",
+        "previsione": "circa gli stessi 554 trade; profit factor fra 0,8 e 1,2; R medio fra -0,1 e +0,05; non batte nettamente la (b)"}),
     "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {
         "idea": "I-10", "fonte": FONTE_I10,
         "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo",

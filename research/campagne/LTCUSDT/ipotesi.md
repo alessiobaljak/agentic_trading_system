@@ -646,3 +646,7 @@ prima del test, con `ritocco_di`, cosa cambia e perché.
   breakout del range d'apertura, solo nei giorni in cui l'altezza del range delle 00-03 UTC è sotto la
   mediana delle altezze dei 20 giorni precedenti (il range stretto di Crabel). Previsione: circa metà
   dei trade, profit factor fra 0,8 e 1,3, R medio fra −0,1 e +0,1, non netta contro la (b).
+  Esito: t contro la (b) 1,13, peggio della 014.
+* **LTCUSDT-027**, secondo ritocco della 014 (ancora prima della lista; nota LTCUSDT-N012): stop fisso
+  al 3% sopra il close di segnale invece del massimo del range. Previsione: circa 554 trade, profit
+  factor fra 0,8 e 1,2, R medio fra −0,1 e +0,05, non netta contro la (b).
