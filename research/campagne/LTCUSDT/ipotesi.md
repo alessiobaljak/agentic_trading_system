@@ -654,3 +654,7 @@ prima del test, con `ritocco_di`, cosa cambia e perché.
 * **LTCUSDT-028**, terzo ritocco della 014 (ancora prima della lista; nota LTCUSDT-N013): ingresso
   solo per i breakout delle 04-07 UTC, stop al massimo del range. Previsione: circa metà dei trade,
   profit factor fra 0,8 e 1,3, R medio fra −0,1 e +0,1, non netta contro la (b).
+  Esito: t contro la (b) 1,38, R medio −0,026.
+* **LTCUSDT-029**, quarto ritocco della 014 (ancora prima della lista; nota LTCUSDT-N014): stop al
+  massimo del range con un minimo del 2% (e un massimo del 6%). Previsione: 554 trade, profit factor
+  fra 0,8 e 1,2, R medio fra −0,1 e +0,05, t contro la (b) sotto quello della 014, non netta.

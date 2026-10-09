@@ -374,7 +374,7 @@ class RangeApertura(Base):
         a = ind["r_alto"][i]
         if math.isnan(a) or a <= c:
             return None
-        return min((a - c) / c, STOP_MAX)
+        return min(max((a - c) / c, getattr(self, "stop_minimo", 0.0)), STOP_MAX)
 
     def esci(self, i, ind, pos):
         return int(ind["ora"][i]) == 23
@@ -613,6 +613,11 @@ def _finestra(v, ultima_ora):
     return v
 
 
+def _stop_minimo(v, d):
+    v.stop_minimo = d
+    return v
+
+
 def _stop_fisso(v, d):
     v.stop_fisso = d
     return v
@@ -802,6 +807,14 @@ REGISTRO = {
         "cosa_cambia": "finestra d'ingresso ridotta dalle 04-20 alle 04-07 UTC",
         "perche": "breakout presto nella giornata, come in Crabel (nota LTCUSDT-N013)",
         "previsione": "circa la meta' dei trade; profit factor fra 0,8 e 1,3; R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
+    "LTCUSDT-029": (lambda: _stop_minimo(RangeApertura("short"), 0.02), {
+        "idea": "I-07", "fonte": FONTE_I07, "famiglia": "LTCUSDT-014", "ritocco_di": "LTCUSDT-014",
+        "meccanismo": "breakout al ribasso del range delle prime 4 ore UTC, stop al massimo del range con un minimo del 2%",
+        "parametri": {"range_ore": "00-03 UTC", "finestra_ingresso": "04-20 UTC", "uscita": "chiusura della barra delle 23",
+                      "stop": "massimo del range, almeno 2% e al massimo 6%"},
+        "cosa_cambia": "pavimento del 2% alla distanza dello stop",
+        "perche": "togliere gli stop vicinissimi che fanno rumore e costi in R (nota LTCUSDT-N014)",
+        "previsione": "554 trade; profit factor fra 0,8 e 1,2; R medio fra -0,1 e +0,05; t contro la (b) sotto quello della 014; non batte nettamente la (b)"}),
     "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {
         "idea": "I-10", "fonte": FONTE_I10,
         "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo",
