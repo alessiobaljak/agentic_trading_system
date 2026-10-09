@@ -384,6 +384,88 @@ strategia non conosce). Si registra come nota prima e dopo (lezioni/metodo.md).
    * **I-11 b, short.** Chiusura < media 200 e RSI(2) > 90; uscita: chiusura < media 5;
      stop + 3 ATR.
 
+## Varianti in più delle idee scartate per pochi trade (scritte dopo i conteggi, prima di ogni loro test)
+
+Il conteggio ha messo sotto i 70 trade I-03 a (40), I-03 b (57), I-04 a (64), I-05 a (55),
+I-06 a (69), I-10 a (14) e I-10 b (15) (log, scarti S01-S07). Il conteggio non dice nulla
+del risultato (le uscite sono a tempo o su indicatori, non solo a stop). Qui le soglie si
+allentano una volta sola, senza aver visto alcun risultato di queste idee (regola 6):
+
+* **I-03 c, long, 2h** e **I-03 d, short, 2h.** Le stesse regole di I-03 a e b (rottura
+  di 20 barre, uscita sul canale di 10, stop 2 ATR a 20) su candele da 2 ore. Motivo: le
+  regole delle tartarughe sono scritte in barre; su 2 ore il canale copre 40 ore, ancora
+  movimenti di più giorni, con il doppio delle occasioni.
+* **I-04 c, short, 4h.** Come I-04 a ma con funding ≥ 0,0002 (il doppio del valore standard
+  invece del triplo). Motivo: la fonte usa il carry come misura continua di affollamento,
+  non una soglia fissa.
+* **I-05 b, long, 4h.** Come I-05 a ma con volume a 24 ore ≥ 1,5 volte la media giornaliera
+  dei 50 giorni prima. Motivo: la fonte definisce «alto» il volume nel decile più alto, che
+  su questa moneta corrisponde a soglie più basse del doppio.
+* **I-06 b, short, 15m.** Come I-06 a ma con rendimento della barra ≥ 3%. Motivo: 69 trade
+  sono a un passo dal minimo; il 3% in 15 minuti resta un movimento estremo (circa 4,5 volte
+  l'ATR mediano a 15 minuti, `fase0_dati.md`).
+* **I-10 c, long, 1h** e **I-10 d, short, 1h.** Le stesse regole di I-10 a e b (bande a 20,
+  compressione al minimo di 120 barre) su candele da 1 ora, con la compressione cercata nelle
+  ultime 12 barre invece di 6. Motivo: il libro definisce la compressione in barre; a 4 ore
+  le compressioni sono troppo rare in 682 giorni.
+
+## I-13 Momento dopo un rendimento anomalo
+
+Nata anche dallo studio dei fallimenti di I-02 (nota di Fase 3 nel log: gli short dopo un
+salto orario oltre 3 sigma perdono in tutti gli anni, t contro la (b) -2,33). Per la regola
+della Fase 3 una strategia diversa nata dai fallimenti vale solo con una sua fonte, scritta
+qui; lo si dichiara perché è un'idea suggerita dai dati di costruzione, quindi più esposta
+al caso: la giudicherà la validazione.
+
+1. **Fonte.** Guglielmo Maria Caporale, Alex Plastun, «Momentum effects in the
+   cryptocurrency market after one-day abnormal returns», Financial Markets and Portfolio
+   Management 34(3), settembre 2020: dopo un giorno di rendimento anomalo (oltre la media più
+   k deviazioni standard) il prezzo tende a continuare nella stessa direzione il giorno dopo.
+2. **Affermazione.** Su 4 ore, dopo una barra con rendimento oltre 2 sigma (sigma dei
+   rendimenti delle 120 barre precedenti, 20 giorni) nella direzione della variante, le 6
+   barre seguenti (1 giorno) vanno nella stessa direzione più di un ingresso casuale con la
+   stessa uscita.
+3. **Sotto-domande.** Più forte con volume alto? Nelle fasi di mania? Chi opera: chi
+   insegue il prezzo (al dettaglio), le liquidazioni dei contrari a leva che si propagano
+   per ore, l'attenzione che porta nuovi operatori.
+4. **Spiegazioni concorrenti (10).** N1-N6; N7 *inversione*: il contrario (fonte di I-02);
+   N8 *grappoli*: pochi giorni di mania (maggio, ottobre 2021) fanno tutto; N9 *scelta sui
+   dati*: l'idea è suggerita dai dati di costruzione, quindi in costruzione sembra buona per
+   costruzione (la si giudica in validazione); N10 *volatilità*: dopo i salti la volatilità
+   resta alta e uno stop in ATR non cambia l'R atteso.
+5. **Previsioni e smentite.** N7: R negativo; N8: senza i 3 migliori sotto la (b), R per
+   anno concentrato nel 2021; N9: netta in costruzione e niente in validazione; N10: R entro
+   la (b).
+6. **Ipotesi e varianti.** Timeframe 4h (la fonte è giornaliera; a 1d i trade in 682 giorni
+   sarebbero pochi: 4 ore con una tenuta di 1 giorno conservano l'orizzonte della fonte).
+   * **I-13 a, long.** Condizione: rendimento della barra > 2 σ (120 barre precedenti).
+     Uscita dopo 6 barre. Stop chiusura − 2 ATR (al massimo 6%). Riscaldamento 121.
+   * **I-13 b, short.** Rendimento < −2 σ. Stop + 2 ATR. Uscita dopo 6 barre.
+
+## I-14 Incrocio con la media mobile
+
+1. **Fonte.** William Brock, Josef Lakonishok, Blake LeBaron, «Simple Technical Trading
+   Rules and the Stochastic Properties of Stock Returns», Journal of Finance 47(5), dicembre
+   1992: le regole delle medie mobili (prezzo che incrocia la media a 50, 150, 200 periodi) con
+   tenuta fissa di 10 periodi danno rendimenti dopo i segnali d'acquisto più alti di quelli
+   dopo i segnali di vendita.
+2. **Affermazione.** Su 4 ore, quando la chiusura incrocia dal basso la media a 50 barre, le
+   10 barre seguenti rendono più di un long casuale con la stessa uscita; specularmente
+   l'incrocio dall'alto per lo short.
+3. **Sotto-domande.** Funziona in tendenza o in laterale? Chi opera: i seguaci di tendenza
+   che usano proprio queste medie; la lenta diffusione dell'informazione.
+4. **Spiegazioni concorrenti (10).** N1-N6; N7 *falsi incroci in laterale*: molti incroci in
+   fila senza seguito; N8 *è I-01 travestito*: stesso momento di breve; N9 *pubblicazione*:
+   dopo il 1992 la regola è nota e il vantaggio è sparito (anche sulle crypto); N10 *un solo
+   periodo*: la tendenza di ottobre 2021.
+5. **Previsioni e smentite.** N7: R negativo nei mesi laterali (2022 estate, 2023); N8: R
+   simile a I-01 negli stessi giorni; N9: R entro la (b); N10: senza i 3 migliori sotto la (b).
+6. **Ipotesi e varianti.** Timeframe 4h (con la tenuta fissa di 10 periodi della fonte, a 1d
+   i trade sarebbero pochi).
+   * **I-14 a, long.** Condizione: chiusura > media 50 e chiusura precedente ≤ media 50
+     precedente. Uscita dopo 10 barre. Stop chiusura − 2 ATR (al massimo 6%). Riscaldamento 51.
+   * **I-14 b, short.** Incrocio dall'alto. Stop + 2 ATR. Uscita dopo 10 barre.
+
 ## I-12 Squilibrio fra compratori e venditori aggressivi
 
 1. **Fonte.** Tarun Chordia, Avanidhar Subrahmanyam, «Order imbalance and individual
@@ -408,3 +490,52 @@ strategia non conosce). Si registra come nota prima e dopo (lezioni/metodo.md).
      delle quote a 24 barre delle 720 barre precedenti. Uscita dopo 24 barre. Stop chiusura
      − 3 ATR. Riscaldamento 744.
    * **I-12 b, short.** Quota < 10° percentile. Stop + 3 ATR. Stessa uscita.
+
+## I-15 Ordini raggruppati ai numeri tondi
+
+1. **Fonte.** Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation
+   for the Predictive Success of Technical Analysis», Journal of Finance 58(5), ottobre
+   2003: gli ordini stop-loss si raggruppano appena oltre i numeri tondi, quindi quando il
+   prezzo attraversa un numero tondo gli stop scattano a cascata e il movimento accelera
+   nella direzione dell'attraversamento.
+2. **Affermazione.** Su 1 ora, quando la chiusura attraversa verso l'alto un «numero tondo»
+   (multiplo di 10^(⌊log10 prezzo⌋ − 1), cioè un prezzo con due cifre significative: per
+   1000SHIBUSDT a 0,012 sono 0,012, 0,013, …), le 6 ore seguenti salgono più di un long
+   casuale con la stessa uscita; specularmente verso il basso.
+3. **Sotto-domande.** Vale di più per i numeri «più tondi» (0,010, 0,020)? Chi opera: gli
+   operatori al dettaglio che mettono stop e ordini ai numeri tondi; la cascata degli stop.
+4. **Spiegazioni concorrenti (10).** N1-N6; N7 *prese di profitto*: la stessa fonte dice
+   che i take-profit stanno PROPRIO sui numeri tondi, quindi il prezzo può fermarsi lì; N8
+   *griglia arbitraria*: i numeri tondi di 1000SHIBUSDT (prezzo per 1000 monete) non sono
+   quelli che guardano gli operatori di SHIB; N9 *è un momento orario*: l'attraversamento
+   coincide con barre forti (nota N013); N10 *costi*: il movimento in più è piccolo.
+5. **Previsioni e smentite.** N7: R negativo; N8: R entro la (b); N9: R simile alla (b) con
+   trade concentrati sulle barre forti; N10: R lordo < costo.
+6. **Ipotesi e varianti.** Timeframe 1h (una cascata di stop dura minuti-ore).
+   * **I-15 a, long.** Condizione: esiste un numero tondo L con chiusura precedente < L ≤
+     chiusura. Uscita dopo 6 barre. Stop chiusura − 2,5 ATR (al massimo 6%). Riscaldamento 15.
+   * **I-15 b, short.** Chiusura precedente > L ≥ chiusura. Stop + 2,5 ATR. Uscita dopo 6.
+
+## I-16 Effetto lotteria (rendimento massimo recente)
+
+1. **Fonte.** Turan G. Bali, Nusret Cakici, Robert F. Whitelaw, «Maxing out: Stocks as
+   lotteries and the cross-section of expected returns», Journal of Financial Economics
+   99(2), febbraio 2011: dopo un rendimento giornaliero massimo molto alto nel mese
+   precedente i rendimenti seguenti sono più bassi (gli investitori pagano troppo i
+   biglietti della lotteria).
+2. **Affermazione.** Su 4 ore, quando il massimo dei rendimenti a 24 ore (6 barre) delle
+   ultime 180 barre (30 giorni) è almeno il 25%, i 3 giorni seguenti rendono meno di un
+   ingresso casuale: uno short guadagna più della (b).
+3. **Sotto-domande.** La fonte è fra titoli; qui è nel tempo di una moneta sola: vale lo
+   stesso? Chi opera: gli operatori al dettaglio attratti dai salti; i prezzi gonfiati che
+   rientrano nelle settimane dopo.
+4. **Spiegazioni concorrenti (10).** N1-N6; N7 *momento*: dopo un salto enorme continua la
+   mania; N8 *un solo regime*: tutti i salti del 25% sono del 2021; N9 *trasposizione*: un
+   effetto fra titoli non dice nulla sul tempo di un titolo solo; N10 *volatilità*: dopo i
+   salti la volatilità è alta, con stop in ATR (al tetto del 6%) l'R non cambia.
+5. **Previsioni e smentite.** N7: R negativo nel 2021; N8: trade concentrati nel 2021; N9:
+   R entro la (b); N10: R entro la (b).
+6. **Ipotesi e varianti.** Timeframe 4h.
+   * **I-16 a, short.** Condizione sopra. Uscita dopo 18 barre. Stop chiusura + 3 ATR (al
+     massimo 6%). Riscaldamento 186. Una sola variante: la fonte predice solo rendimenti più
+     bassi.

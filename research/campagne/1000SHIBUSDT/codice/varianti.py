@@ -421,3 +421,295 @@ registra(q.Variante(
     segnale=segnale_atr("short", 3.0), esci=esci_dopo(24), riscaldamento=744,
     descrizione={"condizione": "quota aggressiva in acquisto a 24 barre < 10 percentile delle 720 barre precedenti",
                  "uscita": "dopo 24 barre", "stop": "3 ATR(14)"}))
+
+
+# --------------------------------------------------------------------------- #
+# Varianti allentate delle idee scartate per pochi trade (ipotesi.md)
+# --------------------------------------------------------------------------- #
+
+for nome, base in (("I-03c", "I-03a"), ("I-03d", "I-03b")):
+    b = VARIANTI[base]
+    registra(q.Variante(id=nome, tf="2h", direzione=b.direzione, prepara=b.prepara, ingresso=b.ingresso,
+                        segnale=b.segnale, esci=b.esci, riscaldamento=b.riscaldamento,
+                        descrizione=dict(b.descrizione, timeframe="2h")))
+
+registra(q.Variante(
+    id="I-04c", tf="4h", direzione="short", prepara=_prep_i04,
+    ingresso=lambda i, ind: ind["f"][i] >= 0.0002,
+    segnale=segnale_atr("short", 3.0), esci=esci_dopo(18), riscaldamento=15,
+    descrizione={"condizione": "ultimo funding >= 0,0002", "uscita": "dopo 18 barre", "stop": "3 ATR(14)"}))
+
+registra(q.Variante(
+    id="I-05b", tf="4h", direzione="long", prepara=_prep_i05,
+    ingresso=lambda i, ind: ind["s6"][i] >= 1.5 * ind["media_giorno"][i],
+    segnale=segnale_atr("long", 3.0), esci=esci_dopo(18), riscaldamento=306,
+    descrizione={"condizione": "volume USDT 24h >= 1,5 x media giornaliera dei 50 giorni prima",
+                 "uscita": "dopo 18 barre", "stop": "3 ATR(14)"}))
+
+registra(q.Variante(
+    id="I-06b", tf="15m", direzione="short", prepara=_prep_i06,
+    ingresso=lambda i, ind: ind["r"][i] >= 0.03 and ind["v"][i] >= 5 * ind["m96"][i],
+    segnale=segnale_atr("short", 2.0), esci=esci_dopo(16), riscaldamento=97,
+    descrizione={"condizione": "rendimento barra >= 3% e volume USDT >= 5 x media 96 barre precedenti",
+                 "uscita": "dopo 16 barre", "stop": "2 ATR(14)"}))
+
+
+def _prep_i10_1h(candele, serie):
+    c = q.arr(candele, "close")
+    m = q.media_mobile(c, 20)
+    s = q.deviazione_mobile(c, 20)
+    amp = 4 * s / m
+    min120 = q.ritardato(q.minimo_mobile(amp, 120), 1)
+    alla_minima = (amp <= min120).astype(float)
+    alla_minima[np.isnan(min120)] = np.nan
+    recente = np.full(len(c), np.nan)
+    for k in range(152, len(c)):
+        recente[k] = np.nanmax(alla_minima[k - 11:k + 1])
+    return {"atr": q.atr(candele, 14), "c": c, "m": m, "su": m + 2 * s, "giu": m - 2 * s, "sq": recente}
+
+
+registra(q.Variante(
+    id="I-10c", tf="1h", direzione="long", prepara=_prep_i10_1h,
+    ingresso=lambda i, ind: ind["sq"][i] > 0.5 and ind["c"][i] > ind["su"][i],
+    segnale=segnale_atr("long", 2.0), esci=lambda i, ind, c, p, b: ind["c"][i] < ind["m"][i],
+    riscaldamento=152, descrizione={"condizione": "ampiezza bande al minimo di 120 barre nelle ultime 12 e chiusura > banda alta",
+                                     "uscita": "chiusura < media 20", "stop": "2 ATR(14)"}))
+registra(q.Variante(
+    id="I-10d", tf="1h", direzione="short", prepara=_prep_i10_1h,
+    ingresso=lambda i, ind: ind["sq"][i] > 0.5 and ind["c"][i] < ind["giu"][i],
+    segnale=segnale_atr("short", 2.0), esci=lambda i, ind, c, p, b: ind["c"][i] > ind["m"][i],
+    riscaldamento=152, descrizione={"condizione": "ampiezza bande al minimo di 120 barre nelle ultime 12 e chiusura < banda bassa",
+                                     "uscita": "chiusura > media 20", "stop": "2 ATR(14)"}))
+
+
+# --------------------------------------------------------------------------- #
+# I-13 Momento dopo un rendimento anomalo (4h)
+# --------------------------------------------------------------------------- #
+
+
+def _prep_i13(candele, serie):
+    c = q.arr(candele, "close")
+    r = rendimenti(c)
+    return {"atr": q.atr(candele, 14), "r": r, "sig": sigma_precedente(r, 120)}
+
+
+registra(q.Variante(
+    id="I-13a", tf="4h", direzione="long", prepara=_prep_i13,
+    ingresso=lambda i, ind: ind["r"][i] > 2 * ind["sig"][i],
+    segnale=segnale_atr("long", 2.0), esci=esci_dopo(6), riscaldamento=121,
+    descrizione={"condizione": "rendimento della barra > 2 sigma a 120", "uscita": "dopo 6 barre", "stop": "2 ATR(14)"}))
+registra(q.Variante(
+    id="I-13b", tf="4h", direzione="short", prepara=_prep_i13,
+    ingresso=lambda i, ind: ind["r"][i] < -2 * ind["sig"][i],
+    segnale=segnale_atr("short", 2.0), esci=esci_dopo(6), riscaldamento=121,
+    descrizione={"condizione": "rendimento della barra < -2 sigma a 120", "uscita": "dopo 6 barre", "stop": "2 ATR(14)"}))
+
+
+# --------------------------------------------------------------------------- #
+# I-14 Incrocio con la media a 50 (4h)
+# --------------------------------------------------------------------------- #
+
+
+def _prep_i14(candele, serie):
+    c = q.arr(candele, "close")
+    m = q.media_mobile(c, 50)
+    return {"atr": q.atr(candele, 14), "c": c, "m": m, "c1": q.ritardato(c, 1), "m1": q.ritardato(m, 1)}
+
+
+registra(q.Variante(
+    id="I-14a", tf="4h", direzione="long", prepara=_prep_i14,
+    ingresso=lambda i, ind: ind["c"][i] > ind["m"][i] and ind["c1"][i] <= ind["m1"][i],
+    segnale=segnale_atr("long", 2.0), esci=esci_dopo(10), riscaldamento=51,
+    descrizione={"condizione": "chiusura incrocia dal basso la media 50", "uscita": "dopo 10 barre", "stop": "2 ATR(14)"}))
+# --------------------------------------------------------------------------- #
+# Ritocchi (regola 6), nell'ordine del log
+# --------------------------------------------------------------------------- #
+
+registra(q.Variante(
+    id="R1-I-08b", tf="30m", direzione="short", prepara=_prep_i08,
+    ingresso=lambda i, ind: ind["r_prima"][i] <= -0.009,
+    segnale=segnale_atr("short", 2.0), esci=esci_dopo(1), riscaldamento=48,
+    descrizione={"ritocco_di": "I-08b", "condizione": "barra 23:00 UTC e rendimento della barra 00:00 <= -0,9%",
+                 "uscita": "dopo 1 barra", "stop": "2 ATR(14)"}))
+
+
+def _prep_r2_i08b(candele, serie):
+    ind = _prep_i08(candele, serie)
+    o, c = q.arr(candele, "open"), q.arr(candele, "close")
+    ind["r_penultima"] = c / o - 1  # rendimento della barra di segnale (23:00-23:30)
+    return ind
+
+
+registra(q.Variante(
+    id="R2-I-08b", tf="30m", direzione="short", prepara=_prep_r2_i08b,
+    ingresso=lambda i, ind: ind["r_prima"][i] <= -0.009 and ind["r_penultima"][i] < 0,
+    segnale=segnale_atr("short", 2.0), esci=esci_dopo(1), riscaldamento=48,
+    descrizione={"ritocco_di": "I-08b", "condizione": "barra 23:00 UTC, rendimento della barra 00:00 <= -0,9% "
+                 "e rendimento della barra 23:00 < 0", "uscita": "dopo 1 barra", "stop": "2 ATR(14)"}))
+
+
+def _prep_r3_i08b(candele, serie):
+    ind = _prep_i08(candele, serie)
+    o, c = q.arr(candele, "open"), q.arr(candele, "close")
+    ts = np.array([x.ts for x in candele])
+    giorno = ts // dati.MS_GIORNO
+    minuto = (ts % dati.MS_GIORNO) // 60000
+    apertura = {}
+    for j in range(len(candele)):
+        if minuto[j] == 0:
+            apertura[giorno[j]] = o[j]
+    r_giorno = np.full(len(c), np.nan)
+    for j in range(len(candele)):
+        if minuto[j] == 23 * 60 and giorno[j] in apertura:
+            r_giorno[j] = c[j] / apertura[giorno[j]] - 1  # dalle 00:00 alla chiusura delle 23:30
+    ind["r_giorno"] = r_giorno
+    return ind
+
+
+registra(q.Variante(
+    id="R3-I-08b", tf="30m", direzione="short", prepara=_prep_r3_i08b,
+    ingresso=lambda i, ind: ind["r_prima"][i] <= -0.009 and ind["r_giorno"][i] < 0,
+    segnale=segnale_atr("short", 2.0), esci=esci_dopo(1), riscaldamento=48,
+    descrizione={"ritocco_di": "I-08b", "condizione": "barra 23:00 UTC, rendimento della barra 00:00 <= -0,9% "
+                 "e rendimento del giorno fino alle 23:30 < 0", "uscita": "dopo 1 barra", "stop": "2 ATR(14)"}))
+
+
+registra(q.Variante(
+    id="R4-I-08b", tf="30m", direzione="short", prepara=_prep_r3_i08b,
+    ingresso=lambda i, ind: ind["r_prima"][i] < 0 and ind["r_giorno"][i] < 0,
+    segnale=segnale_atr("short", 2.0), esci=esci_dopo(1), riscaldamento=48,
+    descrizione={"ritocco_di": "I-08b", "condizione": "barra 23:00 UTC, rendimento della barra 00:00 < 0 "
+                 "e rendimento del giorno fino alle 23:30 < 0", "uscita": "dopo 1 barra", "stop": "2 ATR(14)"}))
+
+
+registra(q.Variante(
+    id="R5-I-08b", tf="30m", direzione="short", prepara=_prep_r3_i08b,
+    ingresso=lambda i, ind: ind["r_prima"][i] <= -0.005 and ind["r_giorno"][i] < 0,
+    segnale=segnale_atr("short", 2.0), esci=esci_dopo(1), riscaldamento=48,
+    descrizione={"ritocco_di": "R4-I-08b", "condizione": "barra 23:00 UTC, rendimento della barra 00:00 <= -0,5% "
+                 "e rendimento del giorno fino alle 23:30 < 0", "uscita": "dopo 1 barra", "stop": "2 ATR(14)"}))
+
+
+def fai_r1_i08b(nome, tf="30m", soglia=-0.009, k=2.0, n_atr=14, uscita=1, minuto_segnale=None,
+                barre_prima=1, filtro_giorno=False):
+    """Le regole di R1-I-08b con parametri spostati (verifiche di Fase 4).
+
+    ``barre_prima``: quante barre del timeframe formano la prima mezz'ora (2 a 15m, 1 a 30m e,
+    per definizione, la prima ora a 1h); ``minuto_segnale``: il minuto del giorno della barra
+    di segnale (la barra che chiude quando inizia l'ultima mezz'ora, o l'ultima ora a 1h).
+    """
+    ms = q.MS[tf]
+    if minuto_segnale is None:
+        minuto_segnale = 24 * 60 - 30 - ms // 60000
+
+    def prep(candele, serie):
+        o, c = q.arr(candele, "open"), q.arr(candele, "close")
+        ts = np.array([x.ts for x in candele])
+        giorno = ts // dati.MS_GIORNO
+        minuto = (ts % dati.MS_GIORNO) // 60000
+        apertura, chiusura = {}, {}
+        for j in range(len(candele)):
+            if minuto[j] == 0:
+                apertura[giorno[j]] = o[j]
+            if minuto[j] == (barre_prima - 1) * ms // 60000:
+                chiusura[giorno[j]] = c[j]
+        r_prima = np.full(len(c), np.nan)
+        r_giorno = np.full(len(c), np.nan)
+        for j in range(len(candele)):
+            g = giorno[j]
+            if minuto[j] == minuto_segnale and g in apertura and g in chiusura:
+                r_prima[j] = chiusura[g] / apertura[g] - 1
+                r_giorno[j] = c[j] / apertura[g] - 1
+        return {"atr": q.atr(candele, n_atr), "r_prima": r_prima, "r_giorno": r_giorno}
+
+    if filtro_giorno:
+        ingresso = lambda i, ind: ind["r_prima"][i] <= soglia and ind["r_giorno"][i] < 0  # noqa: E731
+    else:
+        ingresso = lambda i, ind: ind["r_prima"][i] <= soglia  # noqa: E731
+    return q.Variante(
+        id=nome, tf=tf, direzione="short", prepara=prep,
+        ingresso=ingresso,
+        segnale=segnale_atr("short", k), esci=esci_dopo(uscita), riscaldamento=max(48, n_atr + 1),
+        descrizione={"base": "R1-I-08b", "tf": tf, "soglia": soglia, "k": k, "n_atr": n_atr, "uscita": uscita})
+
+
+for _nome, _kw in {
+    "R1-I-08b_soglia_-0.0072": {"soglia": -0.0072}, "R1-I-08b_soglia_-0.0108": {"soglia": -0.0108},
+    "R1-I-08b_k_1.6": {"k": 1.6}, "R1-I-08b_k_2.4": {"k": 2.4},
+    "R1-I-08b_atr_11": {"n_atr": 11}, "R1-I-08b_atr_17": {"n_atr": 17},
+    "R1-I-08b_uscita_2": {"uscita": 2},
+    "R1-I-08b_tf_15m": {"tf": "15m", "n_atr": 28, "uscita": 2, "barre_prima": 2},
+    "R1-I-08b_tf_1h": {"tf": "1h", "n_atr": 7, "uscita": 1, "barre_prima": 1, "minuto_segnale": 22 * 60},
+    "R1-I-08b_copia": {},
+}.items():
+    registra(fai_r1_i08b(_nome, **_kw))
+
+for _nome, _kw in {
+    "R5-I-08b_soglia_-0.004": {"soglia": -0.004}, "R5-I-08b_soglia_-0.006": {"soglia": -0.006},
+    "R5-I-08b_k_1.6": {"k": 1.6}, "R5-I-08b_k_2.4": {"k": 2.4},
+    "R5-I-08b_atr_11": {"n_atr": 11}, "R5-I-08b_atr_17": {"n_atr": 17},
+    "R5-I-08b_uscita_2": {"uscita": 2},
+    "R5-I-08b_tf_15m": {"tf": "15m", "n_atr": 28, "uscita": 2, "barre_prima": 2},
+    "R5-I-08b_tf_1h": {"tf": "1h", "n_atr": 7, "uscita": 1, "barre_prima": 1, "minuto_segnale": 22 * 60},
+    "R5-I-08b_copia": {},
+    # Fase 5, prova dello scettico: le stesse regole a un'ora diversa (non l'ultima mezz'ora)
+    "R5-I-08b_ora_11": {"minuto_segnale": 11 * 60},
+    "R5-I-08b_ora_17": {"minuto_segnale": 17 * 60},
+}.items():
+    registra(fai_r1_i08b(_nome, **dict({"soglia": -0.005, "filtro_giorno": True}, **_kw)))
+
+
+def _prep_i15(candele, serie):
+    c = q.arr(candele, "close")
+    c1 = q.ritardato(c, 1)
+    su = np.zeros(len(c))
+    giu = np.zeros(len(c))
+    for k in range(1, len(c)):
+        a, b = c1[k], c[k]
+        passo = 10.0 ** (np.floor(np.log10(b)) - 1)
+        if a < b:
+            # esiste L = n*passo con a < L <= b ?
+            if np.floor(b / passo + 1e-9) * passo > a + 1e-15:
+                su[k] = 1
+        elif a > b:
+            passo_a = 10.0 ** (np.floor(np.log10(a)) - 1)
+            p = min(passo, passo_a)
+            if np.ceil(b / p - 1e-9) * p < a - 1e-15:
+                giu[k] = 1
+    return {"atr": q.atr(candele, 14), "su": su, "giu": giu}
+
+
+registra(q.Variante(
+    id="I-15a", tf="1h", direzione="long", prepara=_prep_i15,
+    ingresso=lambda i, ind: ind["su"][i] > 0.5,
+    segnale=segnale_atr("long", 2.5), esci=esci_dopo(6), riscaldamento=15,
+    descrizione={"condizione": "la chiusura attraversa verso l'alto un prezzo con due cifre significative",
+                 "uscita": "dopo 6 barre", "stop": "2,5 ATR(14)"}))
+registra(q.Variante(
+    id="I-15b", tf="1h", direzione="short", prepara=_prep_i15,
+    ingresso=lambda i, ind: ind["giu"][i] > 0.5,
+    segnale=segnale_atr("short", 2.5), esci=esci_dopo(6), riscaldamento=15,
+    descrizione={"condizione": "la chiusura attraversa verso il basso un prezzo con due cifre significative",
+                 "uscita": "dopo 6 barre", "stop": "2,5 ATR(14)"}))
+
+
+def _prep_i16(candele, serie):
+    c = q.arr(candele, "close")
+    r6 = np.full(len(c), np.nan)
+    r6[6:] = c[6:] / c[:-6] - 1
+    return {"atr": q.atr(candele, 14), "max30": q.massimo_mobile(np.nan_to_num(r6, nan=-1.0), 180)}
+
+
+registra(q.Variante(
+    id="I-16a", tf="4h", direzione="short", prepara=_prep_i16,
+    ingresso=lambda i, ind: ind["max30"][i] >= 0.25,
+    segnale=segnale_atr("short", 3.0), esci=esci_dopo(18), riscaldamento=186,
+    descrizione={"condizione": "massimo dei rendimenti a 24 ore delle ultime 180 barre >= 25%",
+                 "uscita": "dopo 18 barre", "stop": "3 ATR(14)"}))
+
+
+registra(q.Variante(
+    id="I-14b", tf="4h", direzione="short", prepara=_prep_i14,
+    ingresso=lambda i, ind: ind["c"][i] < ind["m"][i] and ind["c1"][i] >= ind["m1"][i],
+    segnale=segnale_atr("short", 2.0), esci=esci_dopo(10), riscaldamento=51,
+    descrizione={"condizione": "chiusura incrocia dall'alto la media 50", "uscita": "dopo 10 barre", "stop": "2 ATR(14)"}))
