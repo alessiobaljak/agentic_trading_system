@@ -743,6 +743,107 @@ VARIANTI.update({
 })
 VARIANTI["ADAUSDT-035"].direzione = "long"
 
+
+class AperturaDueGiorni(Apertura):
+    """Apertura long che esce alla fine del giorno UTC SUCCESSIVO a quello dell'ingresso (ritocco 3
+    della famiglia 024: uscita piu' lunga)."""
+
+    def prepara(self, D):
+        P = Apertura.prepara(self, D)
+        P["giorno"] = P["ts"] // 86_400_000
+        return P
+
+    def uscita(self, i, P, barre):
+        ingresso = i - barre + 1
+        return bool(P["fine"][i] and P["giorno"][i] > P["giorno"][ingresso])
+
+
+VARIANTI["ADAUSDT-036"] = AperturaDueGiorni(barre_intervallo=4, ultima_ora=20)
+VARIANTI["ADAUSDT-036"].direzione = "long"
+
+
+class AperturaDueFiltri(AperturaFiltro):
+    """Ritocco 4 della famiglia 024: filtro di tendenza (media 20 giorni) E forza relativa (BTC in calo 24 ore)."""
+
+    def prepara(self, D):
+        P = AperturaFiltro.prepara(self, D)
+        P["btc24"] = AperturaForzaRelativa.prepara(self, D)["btc24"]
+        return P
+
+    def condizione(self, i, P):
+        r = P["btc24"][i]
+        if not (np.isfinite(r) and r < 0):
+            return False
+        return AperturaFiltro.condizione(self, i, P)
+
+
+VARIANTI["ADAUSDT-037"] = AperturaDueFiltri(barre_intervallo=4, ultima_ora=20, giorni_media=20)
+VARIANTI["ADAUSDT-037"].direzione = "long"
+
+
+class AperturaRotturaFallita(Apertura):
+    """Ritocco 5 della famiglia 024: esce anche alla chiusura che torna sotto il massimo della prima ora
+    (rottura fallita), oltre che a fine giornata."""
+
+    def uscita(self, i, P, barre):
+        if P["fine"][i]:
+            return True
+        a = P["alto"][i]
+        return bool(np.isfinite(a) and P["c"][i] < a)
+
+
+VARIANTI["ADAUSDT-038"] = AperturaRotturaFallita(barre_intervallo=4, ultima_ora=20)
+VARIANTI["ADAUSDT-038"].direzione = "long"
+
+
+class MezzOraVolatile(MezzOra):
+    """Ritocco 1 della famiglia 009: entra solo se lo stop (1,5 ATR(48)) dista almeno `stop_minimo` dal prezzo."""
+
+    def condizione(self, i, P):
+        a = P["atr"][i]
+        if not (np.isfinite(a) and self.p["stop_atr"] * a / P["c"][i] >= self.p["stop_minimo"]):
+            return False
+        return MezzOra.condizione(self, i, P)
+
+
+VARIANTI["ADAUSDT-039"] = MezzOraVolatile(atr_n=48, stop_atr=1.5, stop_minimo=0.0176)
+VARIANTI["ADAUSDT-039"].direzione = "short"
+
+
+class MezzOraVolatileBTC(MezzOraVolatile):
+    """Ritocco 2 della famiglia 009: filtro di volatilita' di 039 piu' BTC in calo nelle 24 ore prima."""
+
+    def prepara(self, D):
+        P = MezzOra.prepara(self, D)
+        b = D["btc_close"]
+        n = int(86_400_000 // D["passo"])
+        r = np.full(len(b), np.nan)
+        r[n:] = b[n:] / b[:-n] - 1.0
+        P["btc24"] = r
+        return P
+
+    def condizione(self, i, P):
+        r = P["btc24"][i]
+        if not (np.isfinite(r) and r < 0):
+            return False
+        return MezzOraVolatile.condizione(self, i, P)
+
+
+VARIANTI["ADAUSDT-040"] = MezzOraVolatileBTC(atr_n=48, stop_atr=1.5, stop_minimo=0.0176)
+VARIANTI["ADAUSDT-040"].direzione = "short"
+
+
+class MezzOraVolatileBTCDue(MezzOraVolatileBTC):
+    """Ritocco 3 della famiglia 009: le regole di 040 con uscita dopo 2 barre (alle 00:30), cosi' la
+    posizione short attraversa il settlement di funding delle 00:00."""
+
+    def uscita(self, i, P, barre):
+        return barre >= 2
+
+
+VARIANTI["ADAUSDT-041"] = MezzOraVolatileBTCDue(atr_n=48, stop_atr=1.5, stop_minimo=0.0176)
+VARIANTI["ADAUSDT-041"].direzione = "short"
+
 class AperturaTFFiltro(AperturaTF):
     prepara_base = AperturaTF.prepara
 
@@ -762,12 +863,104 @@ def _ape_tf_f(d, tf, barre, giorni):
 
 
 # timeframe adiacenti per le verifiche della Fase 4 (parametri in barre convertiti alla stessa durata)
+class AperturaTFForza(AperturaTF):
+    def prepara(self, D):
+        P = AperturaTF.prepara(self, D)
+        b = D["btc_close"]
+        n = int(86_400_000 // D["passo"])
+        r = np.full(len(b), np.nan)
+        r[n:] = b[n:] / b[:-n] - 1.0
+        P["btc24"] = r
+        return P
+
+    condizione = AperturaForzaRelativa.condizione
+
+
+_af30 = AperturaTFForza(barre_intervallo=2, ultima_ora=20)
+_af30.direzione, _af30.tf = "long", "30m"
+
+class AperturaTFDueFiltri(AperturaTFFiltro):
+    def prepara(self, D):
+        P = AperturaTFFiltro.prepara(self, D)
+        b = D["btc_close"]
+        n = int(86_400_000 // D["passo"])
+        r = np.full(len(b), np.nan)
+        r[n:] = b[n:] / b[:-n] - 1.0
+        P["btc24"] = r
+        return P
+
+    condizione = AperturaDueFiltri.condizione
+
+
+_a2f30 = AperturaTFDueFiltri(barre_intervallo=2, ultima_ora=20, giorni_media=20)
+_a2f30.direzione, _a2f30.tf = "long", "30m"
+
+class MezzOraTF(MezzOraVolatileBTC):
+    """La regola di 040 su un altro timeframe (solo verifica dei timeframe adiacenti): il «primo periodo» e
+    la «tenuta» durano mezz'ora convertita in barre (almeno 1); ATR su 24 ore di barre."""
+
+    def prepara(self, D):
+        P = C.arrays(D["candele"])
+        passo = D["passo"]
+        P["atr"] = C.atr(P["h"], P["l"], P["c"], self.p["atr_n"])
+        nb = self.p["barre"]
+        n = len(P["c"])
+        giorno = P["ts"] // 86_400_000
+        inizio = {}
+        for i in range(n):
+            inizio.setdefault(giorno[i], i)
+        prima = np.full(n, np.nan)
+        ultima = np.zeros(n, dtype=bool)
+        for i in range(n):
+            j = inizio[giorno[i]]
+            if (P["ts"][j] % 86_400_000) == 0 and i >= j + nb - 1 and P["ts"][j + nb - 1] - P["ts"][j] == (nb - 1) * passo:
+                prima[i] = P["c"][j + nb - 1] / P["o"][j] - 1.0
+            # barra di segnale: chiude quando restano `barre` barre alla mezzanotte
+            ultima[i] = ((P["ts"][i] + (nb + 1) * passo) % 86_400_000) == 0
+        P["prima"], P["ultima"] = prima, ultima
+        b = D["btc_close"]
+        m = int(86_400_000 // passo)
+        r = np.full(len(b), np.nan)
+        r[m:] = b[m:] / b[:-m] - 1.0
+        P["btc24"] = r
+        P["pronto"] = P["atr"]
+        return P
+
+    def uscita(self, i, P, barre):
+        return barre >= self.p["barre"]
+
+
+def _mo_tf(tf, barre, atr_n):
+    v = MezzOraTF(atr_n=atr_n, stop_atr=1.5, stop_minimo=0.0176, barre=barre)
+    v.direzione, v.tf = "short", tf
+    return v
+
+
 ADIACENTI = {
+    "ADAUSDT-040": [_mo_tf("15m", 2, 96), _mo_tf("1h", 1, 24)],
+    "ADAUSDT-037": [_a2f30],
+    "ADAUSDT-035": [_af30],
     "ADAUSDT-034": [_ape_tf_f("long", "30m", 2, 20)],
     "ADAUSDT-025": [_ape_tf("short", "30m", 2)],
 }
 
 PREVISIONI_VERIFICHE = {
+    ("ADAUSDT-040", "costi_doppi"): "R medio a costi doppi circa 0,00 (0,057 meno ~0,053 R): sul filo, probabile fallimento",
+    ("ADAUSDT-040", "ritardo"): "col ritardo l'ingresso cade a mezzanotte, fuori dal meccanismo: t molto piu' basso, forse crollo (sotto la meta' di 3,41)",
+    ("ADAUSDT-040", "intrabarra"): "nessuna differenza (niente target)",
+    ("ADAUSDT-040", "robustezza"): "t positivo nella maggior parte dei casi, netto in meno della meta'",
+    ("ADAUSDT-040", "timeframe"): "a 15 minuti t positivo; a 1 ora (ultima ora, non ultima mezz'ora) t vicino a 0",
+    ("ADAUSDT-039", "costi_doppi"): "R medio a costi doppi circa -0,045 (0,008 meno ~0,053 R): NON superata",
+    ("ADAUSDT-037", "costi_doppi"): "R medio a costi doppi circa 0,20 (0,25 meno ~0,055 R): positivo; t contro la (b) a costi doppi ancora netto: superata",
+    ("ADAUSDT-037", "ritardo"): "t col ritardo positivo, forse sotto la meta' di 2,51 (filtri scelti sui dati: fragili)",
+    ("ADAUSDT-037", "intrabarra"): "nessuna differenza (niente target)",
+    ("ADAUSDT-037", "robustezza"): "t positivo nella maggior parte dei casi, netto in meno della meta': probabile fallimento (picco da due filtri scelti sui dati)",
+    ("ADAUSDT-037", "timeframe"): "a 30 minuti t positivo ma piu' basso",
+    ("ADAUSDT-035", "costi_doppi"): "R medio a costi doppi negativo di poco (circa -0,02), come 034: NON superata",
+    ("ADAUSDT-035", "ritardo"): "t col ritardo positivo, sopra la meta' di 2,32",
+    ("ADAUSDT-035", "intrabarra"): "nessuna differenza (niente target)",
+    ("ADAUSDT-035", "robustezza"): "t positivo in tutti i casi, netto in circa meta'",
+    ("ADAUSDT-035", "timeframe"): "a 30 minuti t positivo",
     ("ADAUSDT-034", "costi_doppi"): "R medio a costi doppi vicino a zero (0,07 meno ~0,05 R di costi in piu'): probabile fallimento o positivo di poco",
     ("ADAUSDT-034", "ritardo"): "t contro la (b) col ritardo positivo e oltre la meta' di 2,23",
     ("ADAUSDT-034", "intrabarra"): "nessuna differenza (niente target)",
