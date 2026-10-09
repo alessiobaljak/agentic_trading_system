@@ -371,6 +371,83 @@ class Lunedi(Base):
 
 
 # ---------------------------------------------------------------------------
+# I-09 squeeze delle bande (LTCUSDT-016, -017)
+# ---------------------------------------------------------------------------
+
+
+class Squeeze(Base):
+    tf = "4h"
+    riscaldamento = 141
+
+    def __init__(self, direzione):
+        self.direzione = direzione
+
+    def prepara(self, candele):
+        import pandas as pd
+        s = I.serie(candele)
+        c = s["close"]
+        m = I.sma(c, 20)
+        sd = I.rolling_std(c, 20)
+        su, giu = m + 2 * sd, m - 2 * sd
+        bw = (su - giu) / m
+        q = pd.Series(bw).rolling(120, min_periods=120).quantile(0.1).to_numpy()
+        squeeze_prec = I.ritardo(bw, 1) <= I.ritardo(q, 2)  # bw[i-1] <= 10° percentile di bw[i-121..i-2]
+        return {"close": c, "media": m, "su": su, "giu": giu, "squeeze_prec": squeeze_prec}
+
+    def entra(self, i, ind):
+        if not ind["squeeze_prec"][i]:
+            return False
+        c = ind["close"][i]
+        return bool(c > ind["su"][i]) if self.direzione == "long" else bool(c < ind["giu"][i])
+
+    def stop_distanza(self, i, ind):
+        c, m = ind["close"][i], ind["media"][i]
+        if math.isnan(m):
+            return None
+        d = (c - m) / c if self.direzione == "long" else (m - c) / c
+        if d <= 0:
+            return None
+        return min(d, STOP_MAX)
+
+    def esci(self, i, ind, pos):
+        c, m = ind["close"][i], ind["media"][i]
+        if quadro.tempo_in_barre(i, ind, pos) >= 30:
+            return True
+        return bool(c < m) if self.direzione == "long" else bool(c > m)
+
+
+# ---------------------------------------------------------------------------
+# I-10 inerzia dopo un giorno anomalo (LTCUSDT-018, -019 e le condizionali b)
+# ---------------------------------------------------------------------------
+
+
+class GiornoAnomalo(Base):
+    tf = "1d"
+    riscaldamento = 31
+
+    def __init__(self, direzione, k):
+        self.direzione = direzione
+        self.k = k
+
+    def prepara(self, candele):
+        s = I.serie(candele)
+        r = I.rendimento(s["close"], 1)
+        return {"close": s["close"], "r": r, "m": I.ritardo(I.sma(r, 30), 1), "s": I.ritardo(I.rolling_std(r, 30), 1)}
+
+    def entra(self, i, ind):
+        r, m, s = ind["r"][i], ind["m"][i], ind["s"][i]
+        if math.isnan(r) or math.isnan(m) or math.isnan(s):
+            return False
+        return bool(r > m + self.k * s) if self.direzione == "long" else bool(r < m - self.k * s)
+
+    def stop_distanza(self, i, ind):
+        return STOP_MAX
+
+    def esci(self, i, ind, pos):
+        return quadro.tempo_in_barre(i, ind, pos) >= 1
+
+
+# ---------------------------------------------------------------------------
 # Registro
 # ---------------------------------------------------------------------------
 
@@ -390,6 +467,10 @@ FONTE_I07 = ("Toby Crabel, «Day Trading with Short Term Price Patterns and Open
              "1990")
 FONTE_I08 = ("Guglielmo Maria Caporale, Alex Plastun, «The day of the week effect in the cryptocurrency market», "
              "Finance Research Letters 31, dicembre 2019")
+
+FONTE_I09 = "John Bollinger, «Bollinger on Bollinger Bands», McGraw-Hill, 2001 (lo squeeze)"
+FONTE_I10 = ("Guglielmo Maria Caporale, Alex Plastun, «Price overreactions in the cryptocurrency market», Journal of "
+             "Economic Studies 46(5), 2019 (CESifo Working Paper 7280, 2018)")
 
 REGISTRO = {
     "LTCUSDT-001": (lambda: MomentumSettimanale("long"), {
@@ -478,4 +559,36 @@ REGISTRO = {
         "meccanismo": "rendimento anomalo del lunedi'",
         "parametri": {"giorno": "lunedi' (UTC)", "tenuta_barre": 1, "stop": 0.06},
         "previsione": "profit factor fra 0,8 e 1,3; R medio fra -0,05 e +0,1; non batte nettamente la (b)"}),
+    "LTCUSDT-016": (lambda: Squeeze("long"), {
+        "idea": "I-09", "fonte": FONTE_I09,
+        "meccanismo": "breakout sopra la banda superiore dopo una compressione della volatilita'",
+        "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 10,
+                      "stop": "media a 20 barre, al massimo 6%", "uscita": "close sotto la media o 30 barre"},
+        "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-017": (lambda: Squeeze("short"), {
+        "idea": "I-09", "fonte": FONTE_I09,
+        "meccanismo": "breakout sotto la banda inferiore dopo una compressione della volatilita'",
+        "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 10,
+                      "stop": "media a 20 barre, al massimo 6%", "uscita": "close sopra la media o 30 barre"},
+        "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {
+        "idea": "I-10", "fonte": FONTE_I10,
+        "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo",
+        "parametri": {"finestra": 30, "soglia_sd": 1.5, "tenuta_barre": 1, "stop": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,3; R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
+    "LTCUSDT-018b": (lambda: GiornoAnomalo("long", 1.0), {
+        "idea": "I-10", "fonte": FONTE_I10,
+        "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo; soglia allentata scritta prima di ogni test",
+        "parametri": {"finestra": 30, "soglia_sd": 1.0, "tenuta_barre": 1, "stop": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,3; R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
+    "LTCUSDT-019": (lambda: GiornoAnomalo("short", 1.5), {
+        "idea": "I-10", "fonte": FONTE_I10,
+        "meccanismo": "inerzia il giorno dopo un giorno anomalo al ribasso",
+        "parametri": {"finestra": 30, "soglia_sd": 1.5, "tenuta_barre": 1, "stop": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,3; R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
+    "LTCUSDT-019b": (lambda: GiornoAnomalo("short", 1.0), {
+        "idea": "I-10", "fonte": FONTE_I10,
+        "meccanismo": "inerzia il giorno dopo un giorno anomalo al ribasso; soglia allentata scritta prima di ogni test",
+        "parametri": {"finestra": 30, "soglia_sd": 1.0, "tenuta_barre": 1, "stop": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,3; R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
 }

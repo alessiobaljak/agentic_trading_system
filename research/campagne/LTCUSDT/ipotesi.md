@@ -396,3 +396,91 @@ Spiegazioni concorrenti per questa idea: 12.
 
 **Previsioni.** Costi 0,023 R; R per trade = rendimento del giorno / 6%. Profit factor fra 0,8 e 1,3,
 R medio fra −0,05 e +0,1; non batte nettamente la (b).
+
+---
+
+## I-09 — Compressione della volatilità e breakout (lo «squeeze» delle bande di Bollinger)
+
+**Fonte.** John Bollinger, «Bollinger on Bollinger Bands», McGraw-Hill, 2001: una larghezza delle
+bande ai minimi di lungo periodo (lo «squeeze») precede un'espansione della volatilità; l'uscita del
+prezzo da una banda dopo lo squeeze indica la direzione del movimento.
+
+**Affermazione verificabile.** Dopo una fase in cui la larghezza delle bande (20 periodi, 2 deviazioni
+standard) di LTCUSDT a 4 ore è fra le più basse delle ultime 120 barre, un close sopra la banda
+superiore è seguito da un rialzo più ampio di quello di un long preso a caso con la stessa uscita;
+specchio sotto la banda inferiore.
+
+**Sotto-domande.** L'espansione arriva sempre, ma la direzione si indovina dal primo breakout? Chi
+opera: la compressione accumula ordini e stop vicini al prezzo; l'espansione li fa scattare. Tempi:
+giorni (decine di barre a 4 ore).
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | L'espansione c'è ma la direzione è casuale (primo breakout falso) | molti stop alla media centrale, R vicino a zero | R positivo e pochi stop |
+| S2 | Lo stop alla media centrale è troppo vicino: rumore | stop frequenti nelle prime barre | pochi stop iniziali |
+| S3 | È un breakout come I-02, senza informazione in più dalla compressione | stesso R della variante di I-02 | R più alto della I-02 nella stessa direzione |
+
+Spiegazioni concorrenti per questa idea: 13.
+
+**Ipotesi completa.** LTCUSDT, breakout dopo compressione della volatilità, candele 4h (la fonte è
+giornaliera con riferimento a «sei mesi»; a 4 ore 120 barre sono 20 giorni: la compressione relativa
+alle ultime settimane, scelta per avere eventi a sufficienza; scelta fatta prima di contare).
+
+**Varianti:**
+
+* **LTCUSDT-016** — 4h, long. Larghezza delle bande = (banda superiore − banda inferiore) / media a
+  20 barre. Squeeze alla barra i−1: la larghezza in i−1 è ≤ al 10° percentile delle larghezze delle
+  120 barre precedenti (i−121 … i−2). Ingresso alla chiusura della barra i se c'è squeeze in i−1 e
+  close[i] > banda superiore[i]. Stop: alla media a 20 barre (al massimo 6%). Uscita: alla chiusura
+  della prima barra con close < media a 20 barre, oppure dopo 30 barre. Nessun target.
+* **LTCUSDT-017** — 4h, short. Specchio: squeeze in i−1 e close[i] < banda inferiore[i]; stop alla media
+  a 20 barre (al massimo 6%); uscita alla prima chiusura sopra la media, o dopo 30 barre.
+
+**Previsioni.** Stop tipico 1,5-3% (metà della larghezza compressa), costi 0,05-0,1 R. Long e short:
+profit factor fra 0,8 e 1,3; nessuna batte nettamente la (b).
+
+---
+
+## I-10 — Inerzia dopo un giorno anomalo
+
+**Fonte.** Guglielmo Maria Caporale e Alex Plastun, «Price overreactions in the cryptocurrency
+market», Journal of Economic Studies 46(5), 2019 (CESifo Working Paper 7280, 2018). Studiano bitcoin,
+litecoin, ripple e dash: dopo un giorno anomalo il movimento del giorno dopo è più ampio, in entrambe
+le direzioni, che dopo un giorno normale; una strategia d'inerzia (nella direzione del giorno
+anomalo) sembra profittevole ma non si distingue dal caso, una contraria non è profittevole (riassunto
+della fonte, letto il 2026-10-09 sulla pagina dell'editore).
+
+**Affermazione verificabile.** Dopo un giorno con rendimento di LTCUSDT anomalo verso l'alto (oltre la
+media più 1,5 deviazioni standard dei 30 giorni precedenti), il giorno dopo un long rende più di un
+long preso a caso con la stessa uscita; specchio per i giorni anomali verso il basso.
+
+**Sotto-domande.** Il giorno anomalo nasce da una notizia (continua) o da liquidazioni (si inverte)?
+La fonte trova che l'inerzia non batte il caso: mi aspetto quindi poco; lo provo perché la fonte
+include proprio LTC (fino al 2018) e la dimensione del movimento successivo è maggiore.
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | Il giorno dopo è solo più volatile, non orientato | R vicino a zero con dispersione alta | R positivo netto |
+| S2 | Costi e stop rendono negativo ciò che è positivo lordo | R lordo positivo, netto no | R netto positivo |
+| S3 | La fonte ha già detto che non batte il caso: risultato atteso nullo | t contro la (b) vicino a 0 | t oltre la soglia |
+
+Spiegazioni concorrenti per questa idea: 13.
+
+**Ipotesi completa.** LTCUSDT, inerzia dopo un giorno anomalo, candele 1d, posizione di un giorno.
+
+**Varianti:**
+
+* **LTCUSDT-018** — 1d, long. Rendimento del giorno r[i] = close[i]/close[i−1] − 1; media m e deviazione
+  standard s dei rendimenti dei 30 giorni precedenti (i−30 … i−1). Ingresso se r[i] > m + 1,5 s.
+  Uscita dopo 1 barra. Stop 6% sotto il close di segnale.
+  *Se `conta_trade` dà meno di 70 trade* (scarto), la sostituisce **LTCUSDT-018b**: soglia m + 1,0 s,
+  scritta ora.
+* **LTCUSDT-019** — 1d, short. Specchio: r[i] < m − 1,5 s; uscita dopo 1 barra; stop 6% sopra.
+  *Se scarto*, la sostituisce **LTCUSDT-019b**: soglia m − 1,0 s, scritta ora.
+
+**Previsioni.** Costi 0,023 R. Profit factor fra 0,8 e 1,3, R medio fra −0,1 e +0,1; nessuna batte
+nettamente la (b) (la fonte stessa non trova differenze dal caso).
