@@ -4,6 +4,8 @@ Ogni funzione restituisce una ``quadro.Variante``. Le regole stanno anche in ``i
 """
 from __future__ import annotations
 
+from typing import Optional
+
 import numpy as np
 
 import quadro as q
@@ -344,6 +346,79 @@ def i13(direzione: str, id_: str, k: float = 0.6, tf: str = "1h") -> Variante:
                     descrizione=f"I-13 rottura di volatilita' {direzione}")
 
 
+# ---------------------------------------------------------------------------
+# I-14 Shock di illiquidita' (4h)
+# ---------------------------------------------------------------------------
+
+def i14(id_: str) -> Variante:
+    def ingresso(s):
+        r1 = np.abs(q.rendimento(s.c, 1))
+        illiq = r1 / s.v_usdt
+        illiq = np.nan_to_num(illiq, nan=0.0)
+        cs = np.cumsum(np.insert(illiq, 0, 0.0))
+        n = len(illiq)
+        out = np.zeros(n, dtype=bool)
+        for i in range(186, n):
+            recente = (cs[i + 1] - cs[i - 5]) / 6
+            prima = (cs[i - 5] - cs[i - 185]) / 180
+            out[i] = prima > 0 and recente > 2 * prima
+        return out
+    return Variante(id_, "4h", "long", ingresso, _stop_atr("long", 14, 1.5), barre_max=18,
+                    descrizione="I-14 shock di illiquidita' long")
+
+
+# ---------------------------------------------------------------------------
+# I-15 Momento dentro il giorno (4h, ultima fascia)
+# ---------------------------------------------------------------------------
+
+def rend_btc_dal_giorno(s, barre_dal_giorno: int = 5):
+    """Rendimento di BTC dall'apertura del giorno UTC (close della barra che chiude a mezzanotte).
+
+    A 4 ore, alla chiusura della barra 16-20 la barra che chiude a mezzanotte e' 5 barre prima;
+    se in mezzo c'e' un buco della serie (ts non a distanza giusta) il valore e' NaN.
+    """
+    out = np.full(len(s.c), np.nan)
+    k = barre_dal_giorno
+    giusto = (s.ts[k:] - s.ts[:-k]) == k * q.MS[s.tf]
+    out[k:] = np.where(giusto, s.btc_c[k:] / s.btc_c[:-k] - 1, np.nan)
+    return out
+
+
+def i15(direzione: str, id_: str, atr_pct_minimo: float = 0.0, tf: str = "4h", ora_barra_segnale: int = 16,
+        barre_max: int = 1, n_atr_filtro: int = 14, n_atr_stop: int = 14, k_atr: float = 1.5,
+        btc_giorno_minimo: Optional[float] = None) -> Variante:
+    def ingresso(s):
+        _, ap, _ = _giorno_apertura_escursione(s)
+        alle_20 = q.ora_utc(s) == ora_barra_segnale  # a 4h la barra 16-20 UTC: alla sua chiusura sono le 20
+        volatile = (q.atr(s, n_atr_filtro) / s.c) > atr_pct_minimo
+        base = alle_20 & volatile & ((s.c > ap) if direzione == "long" else (s.c < ap))
+        if btc_giorno_minimo is not None:
+            base = base & (rend_btc_dal_giorno(s) > btc_giorno_minimo)
+        return base
+    return Variante(id_, tf, direzione, ingresso, _stop_atr(direzione, n_atr_stop, k_atr), barre_max=barre_max,
+                    descrizione=f"I-15 momento dentro il giorno {direzione}")
+
+
+# ---------------------------------------------------------------------------
+# I-16 Incrocio del close con la media a 50 barre (4h)
+# ---------------------------------------------------------------------------
+
+def i16(direzione: str, id_: str) -> Variante:
+    def ingresso(s):
+        m = q.sma(s.c, 50)
+        prima_c, prima_m = np.roll(s.c, 1), np.roll(m, 1)
+        prima_m[0] = np.nan
+        if direzione == "long":
+            return (s.c > m) & (prima_c <= prima_m)
+        return (s.c < m) & (prima_c >= prima_m)
+
+    def uscita(s):
+        m = q.sma(s.c, 50)
+        return (s.c < m) if direzione == "long" else (s.c > m)
+    return Variante(id_, "4h", direzione, ingresso, _stop_atr(direzione, 14, 1.5), uscita=uscita,
+                    descrizione=f"I-16 incrocio con la media {direzione}")
+
+
 TUTTE = {
     "controllo": controllo_positivo,
     "FILUSDT-001": lambda: i01("long", "FILUSDT-001"),
@@ -372,6 +447,14 @@ TUTTE = {
     "FILUSDT-024": lambda: i12("short", "FILUSDT-024"),
     "FILUSDT-025": lambda: i13("long", "FILUSDT-025"),
     "FILUSDT-026": lambda: i13("short", "FILUSDT-026"),
+    "FILUSDT-027": lambda: i14("FILUSDT-027"),
+    "FILUSDT-028": lambda: i15("long", "FILUSDT-028"),
+    "FILUSDT-029": lambda: i15("short", "FILUSDT-029"),
+    "FILUSDT-030": lambda: i16("long", "FILUSDT-030"),
+    "FILUSDT-031": lambda: i16("short", "FILUSDT-031"),
+    # Ritocchi (regola 6), in ordine di registrazione
+    "FILUSDT-032": lambda: i15("long", "FILUSDT-032", atr_pct_minimo=0.028),
+    "FILUSDT-033": lambda: i15("long", "FILUSDT-033", btc_giorno_minimo=0.005),
 }
 
 # Verifiche della Fase 4 per il candidato FILUSDT-016 (le regole del candidato non cambiano:
@@ -405,3 +488,16 @@ for _k, _p in _V24.items():
 _V25 = {"R01": dict(k=0.48), "R02": dict(k=0.72), "T30m": dict(tf="30m"), "T2h": dict(tf="2h")}
 for _k, _p in _V25.items():
     TUTTE[f"FILUSDT-025-{_k}"] = (lambda p=_p, k=_k: i13("long", f"FILUSDT-025-{k}", **p))
+
+# Verifiche della Fase 4 per il candidato FILUSDT-032 (ritocco di 028: I-15 long con filtro di volatilita').
+_V32 = {
+    "R01": dict(atr_pct_minimo=0.0224), "R02": dict(atr_pct_minimo=0.0336),
+    "R03": dict(n_atr_filtro=11), "R04": dict(n_atr_filtro=17),
+    "R05": dict(n_atr_stop=11), "R06": dict(n_atr_stop=17),
+    "R07": dict(k_atr=1.2), "R08": dict(k_atr=1.8),
+    "R10": dict(barre_max=2),
+    "T2h": dict(tf="2h", ora_barra_segnale=18, barre_max=2, n_atr_filtro=28, n_atr_stop=28),
+    "T6h": dict(tf="6h", ora_barra_segnale=12, barre_max=1, n_atr_filtro=9, n_atr_stop=9),
+}
+for _k, _p in _V32.items():
+    TUTTE[f"FILUSDT-032-{_k}"] = (lambda p=_p, k=_k: i15("long", f"FILUSDT-032-{k}", **dict({"atr_pct_minimo": 0.028}, **p)))

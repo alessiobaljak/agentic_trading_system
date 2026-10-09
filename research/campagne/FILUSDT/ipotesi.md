@@ -603,3 +603,120 @@ previsioni: con stop più stretti il costo in R cresce.
    Motivo: 0,6 è dentro l'intervallo 0,5-0,7 suggerito dalla fonte; l'apertura del giorno come
    stop è la sua regola naturale (se il prezzo torna lì la rottura è fallita).
 7. **Previsione.** R medio fra −0,10 e +0,10, non netto.
+
+---
+
+Nota (scritta dopo i risultati delle varianti 1-18 e la Fase 4 di 016, 024, 025): le due idee
+seguenti vengono da famiglie non ancora provate (illiquidità; momento dentro il giorno). La
+seconda è vicina per orizzonte a I-13 (che ha dato il candidato FILUSDT-025): lo dichiaro, e la
+regola è diversa (segno del rendimento della giornata, ultima fascia di 4 ore, senza soglia di
+escursione e senza stop all'apertura).
+
+## I-14 — Shock di illiquidità
+
+1. **Fonte.** Yakov Amihud, «Illiquidity and stock returns: cross-section and time-series
+   effects», *Journal of Financial Markets* 5(1), gennaio 2002: un aumento inatteso
+   dell'illiquidità fa scendere i prezzi nello stesso periodo e alza i rendimenti attesi dopo
+   (premio di illiquidità); misura: |rendimento| / volume in valuta.
+2. **Affermazione verificabile.** Su FILUSDT a 4 ore, quando l'illiquidità media dell'ultimo
+   giorno (6 barre) è oltre il doppio di quella dei 30 giorni precedenti (180 barre), i 3 giorni
+   successivi rendono più di un long casuale con la stessa uscita.
+3. **Sotto-domande.** Chi opera: i fornitori di liquidità si ritirano (volatilità, paura) e chi
+   resta chiede uno sconto; quando la liquidità torna il prezzo recupera. L'effetto è di giorni.
+4. **Spiegazioni concorrenti:**
+   1. *Effetto casuale:* `t` contro la (b) sotto la soglia.
+   2. *È solo il mercato:* gli shock di illiquidità sono di tutto il mercato.
+   3. *Illiquidità da notizie negative:* il prezzo continua a scendere; prevede R sotto la (b).
+   4. *Volume basso nei fine settimana:* lo shock è solo il calendario; prevede segnali concentrati
+      nel fine settimana e nessun vantaggio.
+   5. *Volatilità:* l'illiquidità sale con |rendimento|: è un segnale di volatilità, non di
+      liquidità; prevede R vicino alla (b).
+   6. *Trend di fondo:* lo misura la (b).
+   7. *Artefatto dei dati:* barre con volume quasi nullo vicino ai buchi danno illiquidità enorme;
+      pochi segnali lì.
+   8. *Costi:* trascurabili su 3 giorni.
+   9. *Pochi episodi:* i crolli del 2021 fanno tutto.
+   10. *Funding:* dopo gli shock il funding scende, i long incassano.
+   11. *Effetto delle azioni non trasferibile:* sulle crypto la liquidità dei futures è alta anche
+       nei momenti di stress.
+5. Previsioni e smentite accanto a ogni spiegazione.
+6. **Ipotesi completa.** FILUSDT, shock di illiquidità, candele da 4 ore.
+   * **I-14 V1 (long):** illiquidità della barra = |close / close precedente − 1| / volume USDT;
+     se la media delle ultime 6 barre è > 2 × la media delle 180 barre precedenti → long. Uscita
+     dopo 18 barre (3 giorni). Stop close − 1,5 × ATR(14).
+   Una sola variante: la fonte indica una sola direzione (premio, non sconto).
+7. **Previsione.** R medio fra −0,10 e +0,15, non netto.
+
+---
+
+## I-15 — Momento dentro il giorno (ultima fascia)
+
+1. **Fonte.** Lei Gao, Yufeng Han, Sophia Zhengzi Li, Guofu Zhou, «Market intraday momentum»,
+   *Journal of Financial Economics* 129(2), agosto 2018: il rendimento della prima parte della
+   giornata predice quello dell'ultima mezz'ora (operatori che ribilanciano e coprono a fine
+   giornata). Per Bitcoin: Dehua Shen, Andrew Urquhart, Pengfei Wang, «Bitcoin intraday time series
+   momentum», *The Financial Review* 57(2), 2022 (pubblicato online nel 2021).
+2. **Affermazione verificabile.** Su FILUSDT, il segno del rendimento dall'apertura del giorno UTC
+   alle 20:00 predice il segno dell'ultima fascia di 4 ore (20-24 UTC): un long quando il giorno è
+   positivo (uno short quando è negativo) tenuto per quella fascia rende più di una fascia di 4
+   ore scelta a caso.
+3. **Sotto-domande.** Chi opera: chi chiude o copre le posizioni prima della fine del giorno UTC
+   (ultimo settlement del funding alle 00:00, chiusure giornaliere dei fondi); l'effetto è di una
+   fascia.
+4. **Spiegazioni concorrenti:**
+   1. *Effetto casuale:* `t` sotto la soglia.
+   2. *È solo il mercato:* lo stesso effetto di BTC.
+   3. *Inversione a fine giorno:* chi ha guadagnato prende profitto; prevede R sotto la (b).
+   4. *Trend di fondo:* nel ribasso i giorni negativi sono di più e lo short è quasi sempre acceso;
+      lo misura la (b).
+   5. *Costi:* una fascia di 4 ore vale poco rispetto a costi e stop.
+   6. *Volatilità:* l'ultima fascia ha volatilità diversa dalle altre.
+   7. *Artefatto dei dati:* i giorni con buchi hanno aperture spostate; pochi.
+   8. *Funding:* il settlement delle 00:00 cade all'uscita; flussi di chiusura prima del pagamento.
+   9. *Mercato senza chiusura:* sulle crypto la fine del giorno UTC non è una chiusura; prevede
+      nessun effetto.
+   10. *Pochi episodi:* pochi giorni estremi.
+   11. *Instabilità nel tempo:* l'effetto c'è in un anno e non negli altri.
+5. Previsioni e smentite accanto a ogni spiegazione.
+6. **Ipotesi completa.** FILUSDT, momento dentro il giorno, candele da 4 ore.
+   * **I-15 V1 (long):** alla chiusura della barra 16-20 UTC, se close > apertura del giorno UTC →
+     long sulla barra 20-24. Uscita dopo 1 barra. Stop close − 1,5 × ATR(14).
+   * **I-15 V2 (short):** alla chiusura della barra 16-20 UTC, se close < apertura del giorno →
+     short sulla barra 20-24. Uscita dopo 1 barra. Stop close + 1,5 × ATR(14).
+7. **Previsione.** R medio fra −0,05 e +0,05, non netto.
+
+---
+
+## I-16 — Incrocio del prezzo con la media mobile
+
+1. **Fonte.** Dirk F. Gerritsen, Elie Bouri, Ehsan Ramezanifar, David Roubaud, «The profitability
+   of technical trading rules in the Bitcoin market», *Finance Research Letters* 34, 2020: le
+   regole a media mobile e di rottura del canale hanno battuto il comprare e tenere su Bitcoin.
+   La regola a media mobile variabile viene da Brock, Lakonishok, LeBaron (1992), già fonte di I-02,
+   le cui varianti sono tutte scarti (nessuna testata).
+2. **Affermazione verificabile.** Su FILUSDT a 4 ore, un long aperto quando il close incrocia al
+   rialzo la media semplice a 50 barre e chiuso all'incrocio al ribasso rende più di un long
+   casuale con la stessa uscita; speculare per gli short.
+3. **Sotto-domande.** Il trend dura abbastanza da pagare i falsi incroci? Chi opera:
+   trend-follower e posizionamento lento degli operatori; l'effetto dura giorni o settimane.
+4. **Spiegazioni concorrenti:**
+   1. *Effetto casuale:* `t` sotto la soglia.
+   2. *È solo il mercato:* gli incroci di FIL seguono quelli di BTC.
+   3. *Falsi incroci in laterale:* molte piccole perdite; prevede win rate basso e R vicino alla (b).
+   4. *Trend di fondo:* nel ribasso gli short vincono comunque; lo misura la (b).
+   5. *Uscita in ritardo:* l'incrocio al ribasso arriva dopo che il trend è finito; prevede
+      guadagni restituiti.
+   6. *Volatilità:* stop colpiti in volatilità alta.
+   7. *Artefatto dei dati:* buchi che creano incroci falsi; pochi.
+   8. *Costi:* trade brevi nei falsi incroci; costi in R moderati.
+   9. *Pochi episodi:* un solo trend lungo del 2021 fa tutto.
+   10. *Funding:* i long nei trend al rialzo pagano funding alto.
+   11. *Regola nota e arbitrata:* la regola è pubblica da decenni; prevede R vicino alla (b).
+5. Previsioni e smentite accanto a ogni spiegazione.
+6. **Ipotesi completa.** FILUSDT, incrocio con la media, candele da 4 ore (50 barre sono poco più
+   di 8 giorni: la scala intermedia delle regole a giorni della fonte).
+   * **I-16 V1 (long):** close[i] > media semplice a 50 barre[i] e close[i−1] ≤ media[i−1] → long.
+     Uscita quando il close scende sotto la media. Stop close − 1,5 × ATR(14).
+   * **I-16 V2 (short):** close[i] < media[i] e close[i−1] ≥ media[i−1] → short. Uscita quando il
+     close sale sopra la media. Stop close + 1,5 × ATR(14).
+7. **Previsione.** R medio fra −0,10 e +0,10, non netto; win rate sotto il 35%.
