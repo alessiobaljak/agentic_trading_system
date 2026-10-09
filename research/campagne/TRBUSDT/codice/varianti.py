@@ -70,16 +70,16 @@ def _i01(direzione):
 
 
 # --------------------------------------------------------------------------- I-02
-def _i02(direzione):
+def _i02(direzione, canale=50, tenere=60, suffisso=""):
     tf = "4h"
 
     def prepara(candele):
-        ctx = _base(candele, 50)
+        ctx = _base(candele, canale)
         h, l = ctx["h"], ctx["l"]
         mx = np.full(len(h), np.nan)
         mn = np.full(len(h), np.nan)
-        mx[1:] = ind.rolling_max(h, 50)[:-1]
-        mn[1:] = ind.rolling_min(l, 50)[:-1]
+        mx[1:] = ind.rolling_max(h, canale)[:-1]
+        mn[1:] = ind.rolling_min(l, canale)[:-1]
         ctx["max_prec"], ctx["min_prec"] = mx, mn
         return ctx
 
@@ -88,8 +88,8 @@ def _i02(direzione):
             return np.isfinite(ctx["max_prec"][i]) and ctx["c"][i] > ctx["max_prec"][i]
         return np.isfinite(ctx["min_prec"][i]) and ctx["c"][i] < ctx["min_prec"][i]
 
-    return banco.Variante(f"I-02-{direzione[0].upper()}", tf, direzione, prepara, condizione,
-                          _stop_atr(direzione, 2.0), _uscita_tempo(60, tf))
+    return banco.Variante(f"I-02-{direzione[0].upper()}{suffisso}", tf, direzione, prepara, condizione,
+                          _stop_atr(direzione, 2.0), _uscita_tempo(tenere, tf))
 
 
 # --------------------------------------------------------------------------- I-03
@@ -140,7 +140,7 @@ def _i04(soglia_volume, soglia_rialzo, nome):
 
 
 # --------------------------------------------------------------------------- I-05
-def _i05(direzione):
+def _i05(direzione, alto=90, basso=10, suffisso=""):
     tf = "8h"
 
     def prepara(candele):
@@ -162,8 +162,8 @@ def _i05(direzione):
             fin = f[i - 270:i]
             fin = fin[np.isfinite(fin)]
             if len(fin) >= 200:
-                p90[i] = np.percentile(fin, 90)
-                p10[i] = np.percentile(fin, 10)
+                p90[i] = np.percentile(fin, alto)
+                p10[i] = np.percentile(fin, basso)
         ctx.update({"f": f, "p90": p90, "p10": p10})
         ctx["pronto"] = np.isfinite(p90) & np.isfinite(f)
         return ctx
@@ -176,7 +176,7 @@ def _i05(direzione):
             return f >= ctx["p90"][i] and f > 0.0001
         return f <= ctx["p10"][i] and f < 0
 
-    return banco.Variante(f"I-05-{direzione[0].upper()}", tf, direzione, prepara, condizione,
+    return banco.Variante(f"I-05-{direzione[0].upper()}{suffisso}", tf, direzione, prepara, condizione,
                           _stop_atr(direzione, 2.0), _uscita_tempo(9, tf))
 
 
@@ -201,8 +201,7 @@ def _i06():
 
 
 # --------------------------------------------------------------------------- I-07
-def _i07(direzione):
-    tf = "4h"
+def _i07(direzione, tf="4h", suffisso=""):
 
     def prepara(candele):
         ctx = _base(candele, 140)
@@ -232,7 +231,7 @@ def _i07(direzione):
             return None
         return Segnale(direzione, m, None)
 
-    return banco.Variante(f"I-07-{direzione[0].upper()}", tf, direzione, prepara, condizione, segnale,
+    return banco.Variante(f"I-07-{direzione[0].upper()}{suffisso}", tf, direzione, prepara, condizione, segnale,
                           _uscita_tempo(30, tf))
 
 
@@ -268,13 +267,12 @@ def _i08(direzione):
 
 
 # --------------------------------------------------------------------------- I-09
-def _i09():
-    tf = "1d"
+def _i09(tf="1d", finestra=20, tenere=5, nome="I-09-L"):
 
     def prepara(candele):
-        ctx = _base(candele, 20)
+        ctx = _base(candele, finestra)
         mv = np.full(len(ctx["v"]), np.nan)
-        mv[1:] = ind.sma(ctx["v"], 20)[:-1]
+        mv[1:] = ind.sma(ctx["v"], finestra)[:-1]
         ctx["mv"] = mv
         return ctx
 
@@ -282,7 +280,76 @@ def _i09():
         m = ctx["mv"][i]
         return np.isfinite(m) and m > 0 and ctx["v"][i] > 2 * m
 
-    return banco.Variante("I-09-L", tf, "long", prepara, condizione, _stop_atr("long", 2.0), _uscita_tempo(5, tf))
+    return banco.Variante(nome, tf, "long", prepara, condizione, _stop_atr("long", 2.0), _uscita_tempo(tenere, tf))
+
+
+# --------------------------------------------------------------------------- I-14
+def _i14():
+    tf = "4h"
+
+    def prepara(candele):
+        ctx = _base(candele, 42 + 540)
+        c, v = ctx["c"], ctx["v"]
+        r = np.full(len(c), np.nan)
+        r[1:] = np.abs(c[1:] / c[:-1] - 1)
+        usdt = v * c
+        x = np.where(usdt > 0, r / np.where(usdt > 0, usdt, 1), np.nan)
+        a = np.full(len(c), np.nan)
+        for i in range(42, len(c)):
+            fin = x[i - 41:i + 1]
+            if np.isfinite(fin).all():
+                a[i] = fin.mean()
+        soglia = np.full(len(c), np.nan)
+        for i in range(42 + 540, len(c)):
+            fin = a[i - 540:i]
+            fin = fin[np.isfinite(fin)]
+            if len(fin) >= 400:
+                soglia[i] = np.percentile(fin, 90)
+        ctx["a"], ctx["soglia"] = a, soglia
+        return ctx
+
+    def condizione(ctx, i):
+        return np.isfinite(ctx["a"][i]) and np.isfinite(ctx["soglia"][i]) and ctx["a"][i] >= ctx["soglia"][i]
+
+    return banco.Variante("I-14-L", tf, "long", prepara, condizione, _stop_atr("long", 2.0), _uscita_tempo(42, tf))
+
+
+# --------------------------------------------------------------------------- I-15
+def _i15(direzione):
+    tf = "4h"
+
+    def prepara(candele):
+        ctx = _base(candele, 43 + 540)
+        c = ctx["c"]
+        r = np.full(len(c), np.nan)
+        r[1:] = c[1:] / c[:-1] - 1
+        s = np.full(len(c), np.nan)
+        for i in range(42, len(c)):
+            fin = r[i - 41:i + 1]
+            if np.isfinite(fin).all():
+                d = fin - fin.mean()
+                sd = np.sqrt((d ** 2).mean())
+                if sd > 0:
+                    s[i] = (d ** 3).mean() / sd ** 3
+        alto = np.full(len(c), np.nan)
+        basso = np.full(len(c), np.nan)
+        for i in range(43 + 540, len(c)):
+            fin = s[i - 540:i]
+            fin = fin[np.isfinite(fin)]
+            if len(fin) >= 400:
+                alto[i] = np.percentile(fin, 90)
+                basso[i] = np.percentile(fin, 10)
+        ctx.update({"s": s, "alto": alto, "basso": basso})
+        return ctx
+
+    def condizione(ctx, i):
+        s = ctx["s"][i]
+        if direzione == "short":
+            return np.isfinite(s) and np.isfinite(ctx["alto"][i]) and s >= ctx["alto"][i]
+        return np.isfinite(s) and np.isfinite(ctx["basso"][i]) and s <= ctx["basso"][i]
+
+    return banco.Variante(f"I-15-{direzione[0].upper()}", tf, direzione, prepara, condizione,
+                          _stop_atr(direzione, 2.0), _uscita_tempo(18, tf))
 
 
 # --------------------------------------------------------------------------- I-10
@@ -429,6 +496,13 @@ VARIANTI = {
     "I-11-L": lambda: _i11("long"), "I-11-S": lambda: _i11("short"),
     "I-12-L": lambda: _i12("long"), "I-12-S": lambda: _i12("short"),
     "I-13-L": lambda: _i13("long"), "I-13-S": lambda: _i13("short"),
+    # aggiunte dopo gli scarti per trade stimati (ipotesi.md, 2026-10-09)
+    "I-02-L2": lambda: _i02("long", 20, 30, "2"), "I-02-S2": lambda: _i02("short", 20, 30, "2"),
+    "I-05-S2": lambda: _i05("short", 75, 25, "2"), "I-05-L2": lambda: _i05("long", 75, 25, "2"),
+    "I-07-L2": lambda: _i07("long", "1h", "2"), "I-07-S2": lambda: _i07("short", "1h", "2"),
+    "I-09-L2": lambda: _i09("12h", 40, 10, "I-09-L2"),
+    "I-14-L": _i14,
+    "I-15-S": lambda: _i15("short"), "I-15-L": lambda: _i15("long"),
 }
 
 FONTI = {
@@ -445,6 +519,8 @@ FONTI = {
     "I-11": "Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical Analysis», Journal of Finance 58(5), ottobre 2003",
     "I-12": "Pagonidis, «The IBS Effect: Mean Reversion in Equity ETFs», articolo NAAIM, 2013",
     "I-13": "Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», Traders Press, 1990",
+    "I-14": "Amihud, «Illiquidity and stock returns: cross-section and time-series effects», Journal of Financial Markets 5(1), gennaio 2002",
+    "I-15": "Boyer, Mitton, Vorkink, «Expected Idiosyncratic Skewness», Review of Financial Studies 23(1), gennaio 2010; Barberis, Huang, «Stocks as Lotteries», American Economic Review 98(5), dicembre 2008",
 }
 
 MECCANISMI = {
@@ -461,6 +537,8 @@ MECCANISMI = {
     "I-11": "numeri tondi: dopo l'attraversamento di un numero tondo il movimento continua per 12 ore",
     "I-12": "posizione della chiusura nella barra: chiusura vicina al minimo/massimo del giorno, ritorno il giorno dopo",
     "I-13": "rottura del range della prima ora UTC: la giornata continua nel verso della rottura",
+    "I-14": "premio dell'illiquidita': dopo un'illiquidita' di Amihud a 7 giorni ai massimi di 90 giorni il prezzo sale",
+    "I-15": "preferenza per le lotterie: dopo un'asimmetria dei rendimenti estrema il prezzo va nel verso opposto",
 }
 
 PARAMETRI = {
@@ -488,6 +566,16 @@ PARAMETRI = {
     "I-12-S": {"ibs_soglia": 0.8, "stop_pct": 0.06, "tenere_barre": 1},
     "I-13-L": {"range": "00:00-01:00 UTC", "ultima_ora_segnale": 22, "stop": "minimo del range", "uscita": "chiusura 23:45-24:00"},
     "I-13-S": {"range": "00:00-01:00 UTC", "ultima_ora_segnale": 22, "stop": "massimo del range", "uscita": "chiusura 23:45-24:00"},
+    "I-02-L2": {"canale_barre": 20, "stop_atr": 2.0, "tenere_barre": 30},
+    "I-02-S2": {"canale_barre": 20, "stop_atr": 2.0, "tenere_barre": 30},
+    "I-05-S2": {"media_settlement": 3, "finestra_percentile": 270, "percentile": 75, "funding_minimo": 0.0001, "stop_atr": 2.0, "tenere_barre": 9},
+    "I-05-L2": {"media_settlement": 3, "finestra_percentile": 270, "percentile": 25, "funding_massimo": 0.0, "stop_atr": 2.0, "tenere_barre": 9},
+    "I-07-L2": {"bande_barre": 20, "bande_deviazioni": 2, "finestra_percentile": 120, "percentile": 20, "stop": "media20", "tenere_barre": 30},
+    "I-07-S2": {"bande_barre": 20, "bande_deviazioni": 2, "finestra_percentile": 120, "percentile": 20, "stop": "media20", "tenere_barre": 30},
+    "I-09-L2": {"volume_su_media": 2.0, "finestra_media": 40, "stop_atr": 2.0, "tenere_barre": 10},
+    "I-14-L": {"finestra_illiquidita": 42, "finestra_percentile": 540, "percentile": 90, "stop_atr": 2.0, "tenere_barre": 42},
+    "I-15-S": {"finestra_asimmetria": 42, "finestra_percentile": 540, "percentile": 90, "stop_atr": 2.0, "tenere_barre": 18},
+    "I-15-L": {"finestra_asimmetria": 42, "finestra_percentile": 540, "percentile": 10, "stop_atr": 2.0, "tenere_barre": 18},
 }
 
 # Previsioni scritte prima dei test: intervallo dell'R medio dopo i costi in costruzione e attesa su «nettamente».
@@ -516,4 +604,14 @@ PREVISIONI = {
     "I-12-S": ((-0.10, 0.10), "non batte nettamente la (b)"),
     "I-13-L": ((-0.20, 0.05), "non batte nettamente la (b): costi alti in R"),
     "I-13-S": ((-0.20, 0.05), "non batte nettamente la (b)"),
+    "I-02-L2": ((-0.20, 0.10), "non batte nettamente la (b)"),
+    "I-02-S2": ((-0.25, 0.10), "non batte nettamente la (b)"),
+    "I-05-S2": ((-0.20, 0.15), "non batte nettamente la (b); se sotto 70 trade, scarto"),
+    "I-05-L2": ((-0.15, 0.20), "non batte nettamente la (b); se sotto 70 trade, scarto"),
+    "I-07-L2": ((-0.20, 0.05), "non batte nettamente la (b)"),
+    "I-07-S2": ((-0.20, 0.05), "non batte nettamente la (b)"),
+    "I-09-L2": ((-0.15, 0.10), "non batte nettamente la (b)"),
+    "I-14-L": ((-0.15, 0.15), "non batte nettamente la (b)"),
+    "I-15-S": ((-0.25, 0.10), "non batte nettamente la (b)"),
+    "I-15-L": ((-0.10, 0.15), "non batte nettamente la (b)"),
 }

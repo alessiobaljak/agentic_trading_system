@@ -406,3 +406,83 @@ candele last di BTCUSDT dello stesso timeframe (solo come riferimento, mai come 
      chiusura della barra 23:45-24:00.
    * **I-13-S** short alla prima chiusura sotto il minimo; stop = massimo del range; «chiudi» alla
      chiusura della barra 23:45-24:00.
+
+---
+
+## Aggiunte del 2026-10-09 dopo gli scarti per trade stimati (prima di qualunque test di queste idee)
+
+Le idee I-02, I-05, I-07 e I-09 non sono mai state testate: tutte le loro varianti sono finite
+`scarto` per trade stimati sotto 70 (I-02-L 38, I-02-S 30, I-05-S 36, I-05-L 28, I-07-L 40,
+I-07-S 33, I-09-L 27). Il protocollo (regola 6) ammette di allentare le soglie di uno scarto per
+raggiungere i trade minimi, senza aver visto risultati: sono ancora varianti dell'idea nuova. Le
+nuove varianti cambiano solo la scala (finestre più corte o timeframe più corto); fonte,
+spiegazioni concorrenti e meccanismo restano quelli scritti sopra. Per ogni fonte restano al
+massimo due varianti testate (`lezioni/metodo.md`): gli scarti non sono test.
+
+* **I-02-L2 / I-02-S2** (rottura del canale, 4h): canale di **20** barre invece di 50, tenere
+  **30** barre invece di 60 (stessa proporzione 50:60 circa dimezzata; la regola resta «rottura del
+  massimo/minimo locale, tieni un periodo fisso»); stop 2 ATR.
+* **I-05-S2 / I-05-L2** (funding affollato, 8h): soglie al **75°** e al **25°** percentile invece
+  di 90° e 10°, il resto uguale (f > 0,0001 per lo short, f < 0 per il long; tenere 9 barre).
+* **I-07-L2 / I-07-S2** (compressione e rottura): timeframe **1h** invece di 4h con gli stessi
+  parametri in barre (bande a 20, finestra del percentile 120, 20° percentile), tenere 30 barre;
+  stop alla media a 20. Motivo: a 4h le compressioni seguite da rottura sono 33-40 in costruzione;
+  a 1h il fenomeno è lo stesso su una scala di ore invece che di giorni.
+* **I-09-L2** (volume alto): timeframe **12h**, volume della barra oltre 2 volte la media delle 40
+  barre precedenti (20 giorni), tenere **10** barre (5 giorni), stop 2 ATR.
+
+---
+
+## I-14 — Premio dell'illiquidità nel tempo
+
+1. **Fonte.** Y. Amihud, «Illiquidity and stock returns: cross-section and time-series effects»,
+   Journal of Financial Markets 5(1), gennaio 2002 (l'illiquidità attesa più alta richiede
+   rendimenti attesi più alti; un aumento dell'illiquidità abbassa i prezzi oggi e alza i
+   rendimenti attesi).
+2. **Affermazione.** Su TRBUSDT, quando l'illiquidità di Amihud degli ultimi 7 giorni (media di
+   |rendimento| / volume in USDT delle barre 4h) è nel 10% più alto dei 90 giorni precedenti, i 7
+   giorni seguenti hanno un rendimento più alto del normale: long con R medio dopo i costi
+   positivo e sopra la (b).
+3. **Sotto-domande.** Vale nei ribassi (illiquidità che sale con le vendite)? Chi opera: i
+   fornitori di liquidità chiedono un premio quando il mercato è sottile; i venditori forzati
+   spingono il prezzo sotto il valore. Tempi: giorni.
+4. **Spiegazioni concorrenti** (previsione → smentita): 1. *Caso* → `t` oltre la soglia.
+   2. *Illiquidità = abbandono della moneta*: la moneta perde interesse e continua a scendere →
+   R sotto la (b). 3. *Trend di fondo*: l'illiquidità sale nei mercati in calo (2022) → long
+   perdenti. 4. *È solo il mercato*: l'illiquidità è di tutto il mercato (BTC fermo). 5. *Volatilità*:
+   |rendimento| alto fa salire la misura → il segnale è «volatilità alta», non illiquidità; R
+   dominato dagli stop. 6. *Artefatto*: il volume in moneta cambia con il prezzo → si usa il volume
+   in USDT (prezzo × volume della barra, approssimazione dichiarata). 7. *Mesi illiquidi esclusi*: i
+   segnali più forti cadono nei mesi già esclusi dal filtro → pochi trade. 8. *Costi*: lo slippage
+   vero nei periodi sottili è più alto del modellato → costi doppi. 9. *Pochi episodi*. 10. *Anno*.
+6. **Ipotesi completa.** TRBUSDT, illiquidità, 4h, long. A = media su 42 barre (7 giorni) di
+   |c/c[-1] − 1| / (volume × c) per barra; soglia = 90° percentile dei valori di A delle 540 barre
+   precedenti (90 giorni).
+   * **I-14-L** long se A[i] ≥ soglia; stop c[i] − 2 ATR; tenere 42 barre. Una sola variante (la
+     fonte afferma un premio, nella sola direzione long).
+
+---
+
+## I-15 — Preferenza per le lotterie: asimmetria dei rendimenti
+
+1. **Fonte.** B. Boyer, T. Mitton, K. Vorkink, «Expected Idiosyncratic Skewness», Review of
+   Financial Studies 23(1), gennaio 2010 (i titoli con asimmetria positiva attesa, «biglietti della
+   lotteria», hanno rendimenti futuri più bassi). Sul meccanismo: N. Barberis, M. Huang, «Stocks as
+   Lotteries: The Implications of Probability Weighting for Security Prices», American Economic
+   Review 98(5), dicembre 2008.
+2. **Affermazione.** Su TRBUSDT, quando l'asimmetria dei rendimenti a 4h degli ultimi 7 giorni è
+   nel 10% più alto dei 90 giorni precedenti, i 3 giorni dopo il prezzo scende (short con R medio
+   positivo e sopra la (b)); quando è nel 10% più basso, sale (long).
+3. **Sotto-domande.** Vale di più dopo un rialzo forte? Chi opera: compratori attratti da pochi
+   rialzi enormi pagano troppo; poi il prezzo torna. Tempi: giorni.
+4. **Spiegazioni concorrenti**: 1. *Caso*. 2. *Momentum*: l'asimmetria positiva nasce da un
+   rialzo che continua → short perdenti. 3. *Pump and dump*: è l'idea I-04 vista su più giorni →
+   simile alla sua (b). 4. *Trend di fondo*. 5. *È solo il mercato*. 6. *Volatilità*: asimmetria
+   alta con volatilità alta → stop. 7. *Misura rumorosa*: con 42 rendimenti l'asimmetria dipende da
+   uno o due valori → segnale quasi casuale, R ≈ (b). 8. *Artefatto*: barre anomale (ombre) non
+   entrano (si usano le chiusure). 9. *Costi* piccoli a 3 giorni. 10. *Pochi episodi*.
+6. **Ipotesi completa.** TRBUSDT, asimmetria, 4h. S = asimmetria (momento terzo standardizzato) dei
+   42 rendimenti di chiusura più recenti; soglie = 90° e 10° percentile dei valori di S delle 540
+   barre precedenti.
+   * **I-15-S** short se S[i] ≥ 90° percentile; stop c[i] + 2 ATR; tenere 18 barre.
+   * **I-15-L** long se S[i] ≤ 10° percentile; stop c[i] − 2 ATR; tenere 18 barre.
