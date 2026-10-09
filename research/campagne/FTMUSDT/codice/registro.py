@@ -22,6 +22,9 @@ FONTI = {
     "I-13": "Brock, Lakonishok, LeBaron, 'Simple Technical Trading Rules and the Stochastic Properties of Stock Returns', "
             "Journal of Finance, dicembre 1992; Hudson, Urquhart, 'Technical trading and cryptocurrencies', Annals of OR, 2021",
     "I-14": "Campbell, Grossman, Wang, 'Trading Volume and Serial Correlation in Stock Returns', QJE 108(4), novembre 1993",
+    "I-15": "Carol L. Osler, 'Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of "
+            "Technical Analysis', Journal of Finance 58(5), ottobre 2003; Osler, 'Stop-loss orders and price cascades in "
+            "currency markets', Journal of International Money and Finance 24(2), 2005",
     "I-10": "He, Manela, Ross, von Wachter, 'Fundamentals of Perpetual Futures', arXiv 2212.06888, dicembre 2022",
 }
 
@@ -158,4 +161,24 @@ VARIANTI = {
                     {"condizione": "close < min(low 20 barre precedenti)", "stop": "2 ATR(20)", "target": None,
                      "uscita": "close > max(high 10 barre precedenti)"},
                     (-0.15, 0.15)),
+    "FTMUSDT-028": ("I-09", lambda: V.i09("FTMUSDT-028", "long", "2h"),
+                    "compressione delle bande e uscita verso l'alto, a 2 ore (allentamento dello scarto FTMUSDT-016)",
+                    {"condizione": "larghezza bande(i-1) <= 20o percentile di 120 barre e close > banda alta",
+                     "stop": "2 ATR(20)", "target": None, "uscita": "close < media(20)"},
+                    (-0.15, 0.15)),
+    "FTMUSDT-029": ("I-09", lambda: V.i09("FTMUSDT-029", "short", "2h"),
+                    "compressione delle bande e uscita verso il basso, a 2 ore (allentamento dello scarto FTMUSDT-017)",
+                    {"condizione": "larghezza bande(i-1) <= 20o percentile di 120 barre e close < banda bassa",
+                     "stop": "2 ATR(20)", "target": None, "uscita": "close > media(20)"},
+                    (-0.15, 0.15)),
+    "FTMUSDT-030": ("I-15", lambda: V.i15("FTMUSDT-030", "long"),
+                    "attraversamento verso l'alto di un numero tondo: scattano gli stop degli short (cascata)",
+                    {"condizione": "close supera il primo multiplo di 10^(floor(log10 close(-1))-1) sopra close(-1)",
+                     "stop": "2 ATR(24)", "target": None, "uscita": "a tempo dopo 3 barre"},
+                    (-0.15, 0.10)),
+    "FTMUSDT-031": ("I-15", lambda: V.i15("FTMUSDT-031", "short"),
+                    "attraversamento verso il basso di un numero tondo: scattano gli stop dei long (cascata)",
+                    {"condizione": "close scende al primo multiplo di 10^(floor(log10 close(-1))-1) sotto close(-1)",
+                     "stop": "2 ATR(24)", "target": None, "uscita": "a tempo dopo 3 barre"},
+                    (-0.15, 0.10)),
 }

@@ -473,6 +473,13 @@ in 851 giorni), una direzione per variante.
 * **I-09-S** (4h, short): stessa compressione e close(i) < media(20) − 2 × dev.
   std(20); stop = close + 2 × ATR(20); uscita: close > media(20) → chiudi.
 
+**Aggiunta dopo la stima dei trade** (2026-10-09, prima di qualunque test di I-09): a 4h
+sono scarti (43 e 39 trade: log FTMUSDT-016 e 017). Allentamento della regola 6, senza
+risultati di questa idea: stessa regola in barre su candele da 2 ore (bande di 20 barre
+= 40 ore, confronto su 120 barre = 10 giorni).
+
+* **I-09-L2** (2h, long) e **I-09-S2** (2h, short): come I-09-L e I-09-S, a 2 ore.
+
 ---
 
 ## I-10 — Premio del perpetuo sul mark price
@@ -681,3 +688,52 @@ forzate). Una variante.
 * **I-14-L** (1d, long): r = rendimento logaritmico del giorno; condizione r < −1 ×
   dev. std(r, 60 giorni) e volume(i) > 1,5 × media(volume, 30 giorni precedenti);
   stop = close − 2 × ATR(14); uscita a tempo dopo 2 barre.
+
+---
+
+## I-15 — Ordini di stop oltre i numeri tondi (cascate dopo l'attraversamento)
+
+Scritta il 9 ottobre 2026 dopo aver visto i risultati delle varianti 1-13 (nessuna netta
+contro la (b)); l'idea viene da una fonte e da una famiglia di meccanismi non ancora
+toccata (struttura degli ordini), non dai risultati.
+
+**Fonti.** Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation
+for the Predictive Success of Technical Analysis», Journal of Finance 58(5), ottobre
+2003: gli ordini di take profit si raccolgono sui numeri tondi, gli stop loss appena
+oltre; quindi i trend rallentano o si invertono ai numeri tondi e accelerano dopo averli
+attraversati. Carol L. Osler, «Stop-loss orders and price cascades in currency markets»,
+Journal of International Money and Finance 24(2), 2005: dopo l'attraversamento di un
+livello tondo il prezzo si muove più in fretta nella stessa direzione.
+
+**Affermazione verificabile.** Su FTMUSDT a 1 ora, quando il close attraversa verso
+l'alto un numero tondo (passo = 10^(⌊log10 prezzo⌋ − 1): 0,01 sotto 1 USDT, 0,1 da 1 a 10)
+che il close precedente non aveva superato, un long tenuto 3 ore ha R medio dopo i costi
+più alto della (a) e della (b). Specchio per lo short.
+
+**Sotto-domande.** Su FTM, mercato con molti piccoli operatori, gli stop si mettono
+davvero oltre i tondi (0,50, 1,00, 2,00)? I tondi «forti» (1,00) contano più di quelli
+deboli (0,47)? Qui il passo li tratta allo stesso modo: si dichiara. Tempo: le cascate
+della fonte durano minuti o ore.
+
+**Spiegazioni concorrenti** (oltre a C1-C8):
+
+* C9 **Il tondo non conta su FTM**: Previsione: R come la (b).
+* C10 **Take profit al tondo successivo**: il movimento si ferma al prossimo tondo.
+  Previsione: guadagni piccoli, mangiati dai costi.
+* C11 **Il passo cambia con il prezzo**: sotto 1 USDT il passo dello 0,01 vale 1-10%;
+  sopra 1 USDT il passo dello 0,1 vale 3-10%: attraversamenti più rari sopra 1.
+  Contesto da riportare per anno.
+* C12 **Ogni attraversamento è un momento a 1 ora**: la condizione seleziona barre in
+  salita. Previsione: stesso segno del momento a breve; la (b) non lo cattura.
+* C13 **Il close attraversa ma il movimento era già avvenuto dentro la barra**: si
+  entra dopo la cascata. Previsione: R peggiore, sensibile al ritardo.
+
+**Ipotesi.** FTMUSDT, attraversamento dei numeri tondi, timeframe 1h, una direzione per
+variante.
+
+* **I-15-L** (1h, long): passo P = 10^(⌊log10 close(i−1)⌋ − 1); L = il più piccolo
+  multiplo di P strettamente sopra close(i−1); condizione close(i) ≥ L; stop = close −
+  2 × ATR(24); uscita a tempo dopo 3 barre.
+* **I-15-S** (1h, short): L = il più grande multiplo di P strettamente sotto close(i−1)
+  (o uguale a close(i−1) se ne è un multiplo, escluso); condizione close(i) ≤ L; stop =
+  close + 2 × ATR(24); uscita a tempo dopo 3 barre.

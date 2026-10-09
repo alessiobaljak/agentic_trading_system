@@ -276,7 +276,7 @@ def i08(id_, direzione):
 # I-09 compressione delle bande e rottura (4h)
 # ---------------------------------------------------------------------------
 
-def i09(id_, direzione):
+def i09(id_, direzione, tf="4h"):
     def prepara(s):
         m = ind.media_mobile(s.c, 20)
         sd = ind.dev_std_mobile(s.c, 20) * math.sqrt(19 / 20)  # dev. std della popolazione, come Bollinger
@@ -300,7 +300,7 @@ def i09(id_, direzione):
             return None
         return "chiudi" if ((c < m) if direzione == "long" else (c > m)) else None
 
-    return Variante(id_, "4h", direzione, prepara, condizione, _segnale_atr(direzione, 2.0), uscita)
+    return Variante(id_, tf, direzione, prepara, condizione, _segnale_atr(direzione, 2.0), uscita)
 
 
 # ---------------------------------------------------------------------------
@@ -413,3 +413,29 @@ def i14(id_):
         return r < -sd and ctx["serie"].v[i] > 1.5 * vm
 
     return Variante(id_, "1d", "long", prepara, condizione, _segnale_atr("long", 2.0), _uscita_tempo(2))
+
+
+# ---------------------------------------------------------------------------
+# I-15 attraversamento dei numeri tondi (1h)
+# ---------------------------------------------------------------------------
+
+def i15(id_, direzione):
+    def prepara(s):
+        n = len(s.c)
+        attraversa = np.zeros(n, dtype=bool)
+        for i in range(1, n):
+            p = s.c[i - 1]
+            passo = 10.0 ** (math.floor(math.log10(p)) - 1)
+            k = p / passo
+            if direzione == "long":
+                livello = (math.floor(k + 1e-9) + 1) * passo
+                attraversa[i] = s.c[i] >= livello - 1e-12
+            else:
+                livello = (math.ceil(k - 1e-9) - 1) * passo
+                attraversa[i] = s.c[i] <= livello + 1e-12
+        return {"atr": ind.atr(s, 24), "att": attraversa}
+
+    def condizione(ctx, i):
+        return bool(ctx["att"][i])
+
+    return Variante(id_, "1h", direzione, prepara, condizione, _segnale_atr(direzione, 2.0), _uscita_tempo(3))
