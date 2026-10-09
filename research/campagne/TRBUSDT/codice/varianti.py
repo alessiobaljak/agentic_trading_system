@@ -315,7 +315,97 @@ def _i14():
 
 
 # --------------------------------------------------------------------------- I-15
-def _i15(direzione):
+def _i16(direzione):
+    tf = "1h"
+
+    def prepara(candele):
+        ctx = _base(candele, 175)
+        c = ctx["c"]
+        r1 = np.full(len(c), np.nan)
+        r1[1:] = c[1:] / c[:-1] - 1
+        r6 = ind.rendimento(c, 6)
+        vr = np.full(len(c), np.nan)
+        for i in range(174, len(c)):
+            a = r1[i - 167:i + 1]
+            b = r6[i - 167:i + 1]
+            if np.isfinite(a).all() and np.isfinite(b).all():
+                v1 = np.var(a, ddof=1)
+                if v1 > 0:
+                    vr[i] = np.var(b, ddof=1) / (6 * v1)
+        ctx["vr"], ctx["r6"] = vr, r6
+        return ctx
+
+    def condizione(ctx, i):
+        vr, r6 = ctx["vr"][i], ctx["r6"][i]
+        if not (np.isfinite(vr) and np.isfinite(r6)) or vr <= 1.2:
+            return False
+        return r6 > 0 if direzione == "long" else r6 < 0
+
+    return banco.Variante(f"I-16-{direzione[0].upper()}", tf, direzione, prepara, condizione,
+                          _stop_atr(direzione, 1.5), _uscita_tempo(6, tf))
+
+
+def _i17():
+    tf = "4h"
+
+    def prepara(candele):
+        ctx = _base(candele, 43 + 540)
+        c = ctx["c"]
+        r = np.full(len(c), np.nan)
+        r[1:] = c[1:] / c[:-1] - 1
+        s = np.full(len(c), np.nan)
+        for i in range(42, len(c)):
+            fin = r[i - 41:i + 1]
+            if np.isfinite(fin).all():
+                s[i] = np.std(fin, ddof=1)
+        soglia = np.full(len(c), np.nan)
+        for i in range(43 + 540, len(c)):
+            fin = s[i - 540:i]
+            fin = fin[np.isfinite(fin)]
+            if len(fin) >= 400:
+                soglia[i] = np.percentile(fin, 20)
+        ctx["s"], ctx["soglia"] = s, soglia
+        return ctx
+
+    def condizione(ctx, i):
+        return np.isfinite(ctx["s"][i]) and np.isfinite(ctx["soglia"][i]) and ctx["s"][i] <= ctx["soglia"][i]
+
+    return banco.Variante("I-17-L", tf, "long", prepara, condizione, _stop_atr("long", 2.0), _uscita_tempo(18, tf))
+
+
+def _i18(direzione):
+    tf = "4h"
+
+    def prepara(candele):
+        ctx = _base(candele, 14)
+        o, h, l, c = ctx["o"], ctx["h"], ctx["l"], ctx["c"]
+        corpo = np.abs(c - o)
+        rng = h - l
+        inf = np.minimum(o, c) - l
+        sup = h - np.maximum(o, c)
+        r6 = ind.rendimento(c, 6)
+        with np.errstate(invalid="ignore"):
+            martello = (inf > 2 * corpo) & (inf > 0.6 * rng) & (c >= l + 2 / 3 * rng) & (r6 < 0) & (rng > 0)
+            stella = (sup > 2 * corpo) & (sup > 0.6 * rng) & (c <= h - 2 / 3 * rng) & (r6 > 0) & (rng > 0)
+        ctx["martello"], ctx["stella"] = martello, stella
+        return ctx
+
+    def condizione(ctx, i):
+        return bool(ctx["martello"][i] if direzione == "long" else ctx["stella"][i])
+
+    def segnale(ctx, i):
+        a = ctx["atr"][i]
+        if not np.isfinite(a) or not ctx["pronto"][i]:
+            return None
+        if direzione == "long":
+            return Segnale("long", ctx["l"][i] - 0.5 * a, None)
+        return Segnale("short", ctx["h"][i] + 0.5 * a, None)
+
+    return banco.Variante(f"I-18-{direzione[0].upper()}", tf, direzione, prepara, condizione, segnale,
+                          _uscita_tempo(12, tf))
+
+
+def _i15(direzione, a_pct=90, b_pct=10, tenere=18, suffisso=""):
     tf = "4h"
 
     def prepara(candele):
@@ -337,8 +427,8 @@ def _i15(direzione):
             fin = s[i - 540:i]
             fin = fin[np.isfinite(fin)]
             if len(fin) >= 400:
-                alto[i] = np.percentile(fin, 90)
-                basso[i] = np.percentile(fin, 10)
+                alto[i] = np.percentile(fin, a_pct)
+                basso[i] = np.percentile(fin, b_pct)
         ctx.update({"s": s, "alto": alto, "basso": basso})
         return ctx
 
@@ -348,8 +438,8 @@ def _i15(direzione):
             return np.isfinite(s) and np.isfinite(ctx["alto"][i]) and s >= ctx["alto"][i]
         return np.isfinite(s) and np.isfinite(ctx["basso"][i]) and s <= ctx["basso"][i]
 
-    return banco.Variante(f"I-15-{direzione[0].upper()}", tf, direzione, prepara, condizione,
-                          _stop_atr(direzione, 2.0), _uscita_tempo(18, tf))
+    return banco.Variante(f"I-15-{direzione[0].upper()}{suffisso}", tf, direzione, prepara, condizione,
+                          _stop_atr(direzione, 2.0), _uscita_tempo(tenere, tf))
 
 
 # --------------------------------------------------------------------------- I-10
@@ -503,6 +593,11 @@ VARIANTI = {
     "I-09-L2": lambda: _i09("12h", 40, 10, "I-09-L2"),
     "I-14-L": _i14,
     "I-15-S": lambda: _i15("short"), "I-15-L": lambda: _i15("long"),
+    # secondo giro (ipotesi.md, 2026-10-09)
+    "I-15-S2": lambda: _i15("short", 80, 20, 12, "2"), "I-15-L2": lambda: _i15("long", 80, 20, 12, "2"),
+    "I-16-L": lambda: _i16("long"), "I-16-S": lambda: _i16("short"),
+    "I-17-L": _i17,
+    "I-18-L": lambda: _i18("long"), "I-18-S": lambda: _i18("short"),
 }
 
 FONTI = {
@@ -521,6 +616,9 @@ FONTI = {
     "I-13": "Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», Traders Press, 1990",
     "I-14": "Amihud, «Illiquidity and stock returns: cross-section and time-series effects», Journal of Financial Markets 5(1), gennaio 2002",
     "I-15": "Boyer, Mitton, Vorkink, «Expected Idiosyncratic Skewness», Review of Financial Studies 23(1), gennaio 2010; Barberis, Huang, «Stocks as Lotteries», American Economic Review 98(5), dicembre 2008",
+    "I-16": "Lo, MacKinlay, «Stock Market Prices Do Not Follow Random Walks: Evidence from a Simple Specification Test», Review of Financial Studies 1(1), 1988",
+    "I-17": "Moreira, Muir, «Volatility-Managed Portfolios», Journal of Finance 72(4), agosto 2017",
+    "I-18": "Nison, «Japanese Candlestick Charting Techniques», New York Institute of Finance, 1991",
 }
 
 MECCANISMI = {
@@ -539,6 +637,9 @@ MECCANISMI = {
     "I-13": "rottura del range della prima ora UTC: la giornata continua nel verso della rottura",
     "I-14": "premio dell'illiquidita': dopo un'illiquidita' di Amihud a 7 giorni ai massimi di 90 giorni il prezzo sale",
     "I-15": "preferenza per le lotterie: dopo un'asimmetria dei rendimenti estrema il prezzo va nel verso opposto",
+    "I-16": "regime di autocorrelazione: con rapporto delle varianze a 6 ore sopra 1,2 il rendimento di 6 ore continua",
+    "I-17": "volatilita' bassa: rendimento per rischio piu' alto quando la volatilita' a 7 giorni e' ai minimi di 90 giorni",
+    "I-18": "ombre di rifiuto: martello dopo un calo, stella cadente dopo un rialzo, poi inversione",
 }
 
 PARAMETRI = {
@@ -576,6 +677,13 @@ PARAMETRI = {
     "I-14-L": {"finestra_illiquidita": 42, "finestra_percentile": 540, "percentile": 90, "stop_atr": 2.0, "tenere_barre": 42},
     "I-15-S": {"finestra_asimmetria": 42, "finestra_percentile": 540, "percentile": 90, "stop_atr": 2.0, "tenere_barre": 18},
     "I-15-L": {"finestra_asimmetria": 42, "finestra_percentile": 540, "percentile": 10, "stop_atr": 2.0, "tenere_barre": 18},
+    "I-15-S2": {"finestra_asimmetria": 42, "finestra_percentile": 540, "percentile": 80, "stop_atr": 2.0, "tenere_barre": 12},
+    "I-15-L2": {"finestra_asimmetria": 42, "finestra_percentile": 540, "percentile": 20, "stop_atr": 2.0, "tenere_barre": 12},
+    "I-16-L": {"finestra_varianze": 168, "orizzonte": 6, "soglia_rapporto": 1.2, "stop_atr": 1.5, "tenere_barre": 6},
+    "I-16-S": {"finestra_varianze": 168, "orizzonte": 6, "soglia_rapporto": 1.2, "stop_atr": 1.5, "tenere_barre": 6},
+    "I-17-L": {"finestra_volatilita": 42, "finestra_percentile": 540, "percentile": 20, "stop_atr": 2.0, "tenere_barre": 18},
+    "I-18-L": {"ombra_su_corpo": 2, "ombra_su_intervallo": 0.6, "chiusura_terzo": "alto", "calo_barre": 6, "stop": "minimo - 0,5 ATR", "tenere_barre": 12},
+    "I-18-S": {"ombra_su_corpo": 2, "ombra_su_intervallo": 0.6, "chiusura_terzo": "basso", "rialzo_barre": 6, "stop": "massimo + 0,5 ATR", "tenere_barre": 12},
 }
 
 # Previsioni scritte prima dei test: intervallo dell'R medio dopo i costi in costruzione e attesa su «nettamente».
@@ -614,4 +722,11 @@ PREVISIONI = {
     "I-14-L": ((-0.15, 0.15), "non batte nettamente la (b)"),
     "I-15-S": ((-0.25, 0.10), "non batte nettamente la (b)"),
     "I-15-L": ((-0.10, 0.15), "non batte nettamente la (b)"),
+    "I-15-S2": ((-0.25, 0.10), "non batte nettamente la (b)"),
+    "I-15-L2": ((-0.10, 0.15), "non batte nettamente la (b)"),
+    "I-16-L": ((-0.15, 0.05), "non batte nettamente la (b): rapporto delle varianze rumoroso"),
+    "I-16-S": ((-0.15, 0.05), "non batte nettamente la (b)"),
+    "I-17-L": ((-0.15, 0.10), "non batte nettamente la (b)"),
+    "I-18-L": ((-0.15, 0.10), "non batte nettamente la (b)"),
+    "I-18-S": ((-0.15, 0.10), "non batte nettamente la (b)"),
 }

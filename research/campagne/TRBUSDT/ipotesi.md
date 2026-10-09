@@ -486,3 +486,79 @@ massimo due varianti testate (`lezioni/metodo.md`): gli scarti non sono test.
    barre precedenti.
    * **I-15-S** short se S[i] ≥ 90° percentile; stop c[i] + 2 ATR; tenere 18 barre.
    * **I-15-L** long se S[i] ≤ 10° percentile; stop c[i] − 2 ATR; tenere 18 barre.
+
+---
+
+## Aggiunte del 2026-10-09, secondo giro (prima di qualunque test di queste idee)
+
+Scarti del secondo giro (trade stimati): I-02-S2 60, I-05-S2 53, I-05-L2 46, I-09-L2 47, I-14-L
+25, I-15-S 44, I-15-L 48. I-15 non è mai stata testata: una variante allentata per direzione.
+I-02, I-05, I-09 e I-14 non si allentano ancora: si dichiarano come idee che su questa moneta non
+arrivano ai trade minimi con soglie vicine a quelle della fonte.
+
+* **I-15-S2 / I-15-L2** (asimmetria): soglie all'**80°** e al **20°** percentile invece di 90° e
+  10°, tenere **12** barre invece di 18 (2 giorni); il resto uguale.
+
+## I-16 — Regime di autocorrelazione (rapporto delle varianze)
+
+1. **Fonte.** A. W. Lo, A. C. MacKinlay, «Stock Market Prices Do Not Follow Random Walks: Evidence
+   from a Simple Specification Test», Review of Financial Studies 1(1), 1988 (il rapporto delle
+   varianze misura l'autocorrelazione dei rendimenti: sopra 1 i rendimenti brevi si seguono).
+2. **Affermazione.** Su TRBUSDT, quando il rapporto delle varianze a 6 ore degli ultimi 7 giorni
+   (varianza dei rendimenti a 6 barre / (6 × varianza dei rendimenti a 1 barra), barre 1h) è sopra
+   1,2, il rendimento delle ultime 6 ore continua nelle 6 ore dopo: R medio dopo i costi positivo e
+   sopra la (b).
+3. **Sotto-domande.** Il regime dura più di qualche giorno? Chi opera: chi insegue il prezzo in un
+   mercato di notizie. Tempi: ore.
+4. **Spiegazioni concorrenti**: 1. *Caso*. 2. *Rapporto rumoroso*: con 168 barre l'errore del
+   rapporto è circa ±0,2 → il segnale è quasi casuale, R ≈ (b). 3. *Regime già finito* quando si
+   misura → R ≈ (b). 4. *Volatilità*: rapporto alto dopo un singolo grande movimento → stop.
+   5. *Trend di fondo*. 6. *È solo il mercato*. 7. *Costi*: 6 ore con stop a 1,5 ATR orari, costo
+   circa 0,04 R. 8. *Pochi episodi*. 9. *Artefatto*: buchi nella serie gonfiano i rendimenti a 6
+   barre. 10. *Inversione*: altcoin poco liquida, il rendimento torna.
+6. **Ipotesi completa.** TRBUSDT, 1h. VR = var(r6 sovrapposti, 168 barre) / (6 × var(r1, 168 barre)).
+   * **I-16-L** long se VR > 1,2 e c[i]/c[i-6] − 1 > 0; stop c[i] − 1,5 ATR; tenere 6 barre.
+   * **I-16-S** short se VR > 1,2 e c[i]/c[i-6] − 1 < 0; stop c[i] + 1,5 ATR; tenere 6 barre.
+
+## I-17 — Volatilità bassa, rendimento per rischio più alto
+
+1. **Fonte.** A. Moreira, T. Muir, «Volatility-Managed Portfolios», Journal of Finance 72(4),
+   agosto 2017 (i rendimenti non crescono con la volatilità: il rendimento per unità di rischio è
+   più alto quando la volatilità recente è bassa).
+2. **Affermazione.** Su TRBUSDT, un long aperto quando la volatilità realizzata dei 7 giorni
+   precedenti (barre 4h) è nel 20% più basso dei 90 giorni precedenti, tenuto 3 giorni con stop a 2
+   ATR, ha R medio dopo i costi positivo e sopra la (b) (che misura in R lo stesso long a caso).
+3. **Sotto-domande.** Vale in tutti i trend? Chi opera: con volatilità bassa la leva e il rischio
+   degli operatori salgono lentamente, la domanda cresce. Tempi: giorni.
+4. **Spiegazioni concorrenti**: 1. *Caso*. 2. *Calma prima della tempesta*: la volatilità bassa
+   precede rotture in entrambi i versi → R ≈ (b). 3. *Effetto dello stop in ATR*: con ATR basso lo
+   stop è stretto e scatta più spesso → R sotto la (b) per costruzione? No: la (b) usa lo stesso
+   stop, ma con ATR medio; lo smentisce un R sopra la (b). 4. *Trend di fondo*: volatilità bassa nei
+   mercati in calo lento (2022) → long perdenti. 5. *È solo il mercato*. 6. *Costi* in R più alti
+   con stop stretti (circa 0,03 R). 7. *Pochi episodi*. 8. *Artefatto*: periodi di dati piatti.
+   9. *Mesi illiquidi*: la volatilità bassa coincide con i mesi esclusi. 10. *Anno*.
+6. **Ipotesi completa.** TRBUSDT, 4h, long. σ7 = deviazione standard dei 42 rendimenti di
+   chiusura più recenti; soglia = 20° percentile dei valori di σ7 delle 540 barre precedenti.
+   * **I-17-L** long se σ7[i] ≤ soglia; stop c[i] − 2 ATR; tenere 18 barre. Una sola variante.
+
+## I-18 — Ombre di rifiuto (martello e stella cadente)
+
+1. **Fonte.** S. Nison, «Japanese Candlestick Charting Techniques», New York Institute of Finance,
+   1991 (il «martello» dopo un calo e la «stella cadente» dopo un rialzo segnalano il rifiuto di un
+   prezzo e l'inversione).
+2. **Affermazione.** Su TRBUSDT, una barra 4h con ombra inferiore oltre 2 volte il corpo e oltre
+   il 60% dell'intervallo, chiusa nel terzo alto, dopo un calo di 24 ore, è seguita da 2 giorni al
+   rialzo: R medio dopo i costi positivo e sopra la (b); specchio per la stella cadente.
+3. **Sotto-domande.** Conta il volume della barra? Chi opera: venditori esauriti, compratori che
+   assorbono; stop presi sotto il minimo e poi il prezzo torna. Tempi: barre successive.
+4. **Spiegazioni concorrenti**: 1. *Caso*. 2. *Ombra = caccia agli stop, poi continua il trend* →
+   R sotto la (b). 3. *Ombre anomale dell'archivio* (`fase0_anomalie.json`): stampe di un istante
+   senza significato → R ≈ (b). 4. *Trend di fondo*. 5. *È solo il mercato*. 6. *Volatilità*.
+   7. *Costi* piccoli a 4h (0,03 R a 1 ATR). 8. *Pochi episodi*. 9. *Stop sotto l'ombra* (lontano)
+   → R per trade piccolo ma regolare. 10. *Anno*.
+6. **Ipotesi completa.** TRBUSDT, 4h. Corpo = |c − o|; intervallo = h − l; ombra inferiore =
+   min(o, c) − l; ombra superiore = h − max(o, c).
+   * **I-18-L** long se ombra inferiore > 2 × corpo, ombra inferiore > 0,6 × intervallo,
+     c ≥ l + 2/3 × intervallo e c[i]/c[i-6] − 1 < 0; stop = l[i] − 0,5 ATR; tenere 12 barre.
+   * **I-18-S** short se ombra superiore > 2 × corpo, ombra superiore > 0,6 × intervallo,
+     c ≤ h − 2/3 × intervallo e c[i]/c[i-6] − 1 > 0; stop = h[i] + 0,5 ATR; tenere 12 barre.
