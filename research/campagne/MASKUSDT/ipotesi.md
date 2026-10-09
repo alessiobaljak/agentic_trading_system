@@ -721,6 +721,12 @@ e si scrive qui prima del test.
   hanno R medio +0,55. Nessun filtro del funding. Previsione: R medio fra 0 e +0,25, `t` contro la
   (b) fra 1 e 2,5. Se diventa candidato, in validazione va comunque un solo candidato della
   famiglia (quello con il `t` più alto).
+* **R-4, ritocco di MASKUSDT-028** (prima della lista con `t` 2,08 dopo il risultato di 030;
+  quarto ritocco della famiglia MASKUSDT-006). Cambia lo stop da 2 a 1,5 ATR (target sempre a 2
+  volte lo stop, quindi 3 ATR; uscita a 12 barre). Motivo, esterno ai risultati: in 028 lo stop
+  mediano è 5,8% e 54 trade su 114 hanno lo stop oltre il 6%, il tetto del bot
+  (`stop_massimo_bot`): con 1,5 ATR la maggior parte rientra. Previsione: più stop, R medio fra
+  -0,05 e +0,20, `t` contro la (b) fra 0,5 e 2.
 
 ## Previsioni (scritte dopo la Fase 0, prima del primo test)
 

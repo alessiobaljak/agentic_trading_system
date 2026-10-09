@@ -36,6 +36,10 @@ class R3(R1):
     barre_max = 24
 
 
+class R4(R1):
+    k_stop = 1.5
+
+
 def _r(idea, famiglia, di, cambia, par, prev, lo, hi):
     return {"idea": idea, "famiglia": famiglia, "ritocco_di": di, "fonte": F[idea], "meccanismo": M[idea],
             "parametri": par, "cosa_cambia": cambia,
@@ -56,4 +60,8 @@ VARIANTI = {
                             "uscita a tempo da 12 a 24 barre (nota MASKUSDT-N007)",
                             {"deviazioni": 3, "finestra_dev": 168, "stop_atr": 2, "target_rapporto": 2, "uscita_barre": 24},
                             "t contro la (b) fra 1 e 2,5", 0.0, 0.25)),
+    "MASKUSDT-031": (R4, _r("I-03", "MASKUSDT-006", "MASKUSDT-028",
+                            "stop da 2 a 1,5 ATR (target a 2 volte lo stop): stop sotto il tetto del 6% del bot nella maggior parte dei trade",
+                            {"deviazioni": 3, "finestra_dev": 168, "stop_atr": 1.5, "target_rapporto": 2, "uscita_barre": 12},
+                            "t contro la (b) fra 0,5 e 2", -0.05, 0.20)),
 }
