@@ -322,6 +322,66 @@ quelle comuni, e le proprie sono almeno due.
      minimo della larghezza delle 1080 barre precedenti.
    * **V-22 short**: chiusura < banda bassa con la stessa condizione.
 
+## Varianti aggiunte dopo i conteggi (scritte prima del primo test di queste idee)
+
+Scritte il 2026-10-09 dopo gli scarti `MATICUSDT-S01`…`S11` (sotto i 70 trade), prima di vedere
+qualunque risultato di queste idee (regola 6: allentare le soglie di uno scarto senza aver visto
+risultati è ancora una variante dell'idea nuova). Al massimo due varianti testate per fonte.
+
+* **I-02, V-23 long / V-24 short** (canale di 5 giorni). Hudson e Urquhart provano le rotture di
+  canale con finestre da 5 a 250 giorni (insieme di regole di Sullivan, Timmermann e White, 1999):
+  5 giorni è la finestra più corta della classe. 4h; ingresso: chiusura oltre il massimo (minimo)
+  delle 30 barre precedenti; uscita: chiusura oltre il minimo (massimo) delle 15 barre precedenti;
+  stop comune.
+* **I-05, V-25 long / V-26 short** (RSI a 2 sotto 10 / sopra 90): Connors e Alvarez riportano anche
+  soglie fino a 10; il resto uguale a V-09 / V-10.
+* **I-08, V-29 long** (volume del giorno > 1,5 volte la media dei 50 giorni precedenti, uscita dopo
+  5 barre): soglia più bassa; resto come V-15.
+* **I-11, V-27 long / V-28 short** (stessa regola «1-50» su barre di 1h: media di 1200 barre = 50
+  giorni). Il timeframe più fine vede più incroci della stessa media. Rischio dichiarato: la prova
+  a placebo segnala che gli incroci di medie a 1h hanno «netta» per caso più spesso del 2%
+  (sezione 11 del protocollo).
+* **I-12, V-30 long / V-31 short** (stretta su una finestra più corta): larghezza minima delle
+  ultime 20 barre ≤ 1,2 × minimo delle 360 barre precedenti (60 giorni invece di 6 mesi); resto come
+  V-21 / V-22.
+
+## I-13 Squilibrio fra acquisti e vendite aggressivi
+
+1. **Fonte.** Chordia, T., Subrahmanyam, A., «Order imbalance and individual stock returns: Theory
+   and evidence», Journal of Financial Economics 72(3), 2004: lo squilibrio degli ordini di un
+   giorno predice positivamente il rendimento del giorno dopo (chi spezza ordini grandi continua a
+   comprare). Per le crypto: Silantyev, E., «Order flow analysis of cryptocurrency markets»,
+   Digital Finance 1, 2019 (lo squilibrio dei trade spiega i movimenti di prezzo del perpetuo).
+2. **Affermazione.** Su MATICUSDT, dopo 6 ore con una quota di volume comprato dagli aggressori
+   (taker buy) insolitamente alta, il prezzo sale nelle 6 ore dopo più che dopo un ingresso a caso
+   (simmetrico per le vendite).
+3. **Sotto-domande.** Lo squilibrio predice o solo accompagna (Silantyev: contemporaneo)? Chi opera:
+   chi spezza ordini grandi in più ore.
+4. **Spiegazioni proprie.** P1 Solo contemporaneo (prevede nessun effetto dopo). P2 Squilibrio da
+   liquidazioni forzate (prevede ritorno, non continuazione).
+5. **Ipotesi completa.** Timeframe 1h. Squilibrio delle ultime 6 barre = somma del volume taker buy
+   / somma del volume − 0,5 (colonna `taker_buy_volume` dei file klines). Soglia: media + 2
+   deviazioni standard (− 2 per lo short) dello stesso squilibrio sulle 720 barre precedenti (30
+   giorni). Uscita dopo 6 barre; stop comune.
+6. **Varianti.** **V-32 long** sopra la soglia alta; **V-33 short** sotto la soglia bassa.
+
+## I-14 Forza relativa contro BTCUSDT (momento fra crypto)
+
+1. **Fonte.** Liu, Y., Tsyvinski, A., Wu, X., «Common Risk Factors in Cryptocurrency», NBER Working
+   Paper 25882, maggio 2019 (poi Journal of Finance, 2022): il momento fra crypto (chi ha reso più
+   delle altre nelle ultime settimane continua a rendere di più) è uno dei tre fattori.
+2. **Affermazione.** Su MATICUSDT, dopo una settimana in cui ha reso più di BTCUSDT, nella settimana
+   dopo rende più di un ingresso a caso nella stessa direzione (simmetrico: dopo una settimana
+   peggiore di BTCUSDT rende meno).
+3. **Sotto-domande.** È diverso dal momento della moneta da sola (I-01)? Lo è quando la moneta sale
+   meno di BTCUSDT pur salendo. Chi opera: rotazioni di capitale fra crypto.
+4. **Spiegazioni proprie.** P1 È il momento assoluto travestito (prevede gli stessi trade di I-01).
+   P2 Ritorno della forza relativa (prevede R negativo).
+5. **Ipotesi completa.** Timeframe 4h, 42 barre (7 giorni), uscita dopo 42 barre, stop comune. Il
+   confronto usa le chiusure di BTCUSDT sugli stessi istanti (solo riferimento di mercato).
+6. **Varianti.** **V-34 long**: rendimento di 42 barre di MATICUSDT > quello di BTCUSDT; **V-35
+   short**: minore.
+
 ## Idee scartate prima del test
 
 * **Anticipo di BTCUSDT su MATICUSDT (lead-lag).** Scartata per contaminazione (nota

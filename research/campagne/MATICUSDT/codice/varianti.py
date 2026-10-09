@@ -283,7 +283,7 @@ def V20(s):
 
 
 # ------------------------------------------------------------------ I-12
-def _stretta(s):
+def _stretta(s, finestra=1080, fattore=1.1):
     m = quadro.sma(s.c, 20)
     sd = quadro.dev_std_mobile(s.c, 20)
     larg = 4 * sd / m
@@ -292,10 +292,10 @@ def _stretta(s):
     for i in range(s.n):
         if i >= 19 and not np.isnan(larg[i - 19:i + 1]).any():
             min20[i] = larg[i - 19:i + 1].min()
-        if i >= 1080 + 19 and not np.isnan(larg[i - 1080:i]).any():
-            min1080[i] = larg[i - 1080:i].min()
+        if i >= finestra + 19 and not np.isnan(larg[i - finestra:i]).any():
+            min1080[i] = larg[i - finestra:i].min()
     pronto = _ok(m, sd, min20, min1080, quadro.atr(s, 14))
-    stretta = pronto & (np.nan_to_num(min20, nan=np.inf) <= 1.1 * np.nan_to_num(min1080))
+    stretta = pronto & (np.nan_to_num(min20, nan=np.inf) <= fattore * np.nan_to_num(min1080))
     return m, sd, stretta, pronto
 
 
@@ -311,3 +311,145 @@ def V22(s):
     m, sd, stretta, pronto = _stretta(s)
     return Regole(s, "short", stretta & (s.c < m - 2 * sd), stop_short(s, pronto), tenuta=30,
                   uscita=pronto & (s.c > m))
+
+
+# ------------------------------------------------------------------ varianti allentate (dopo i conteggi)
+@tf("4h")
+def V23(s):
+    hh = quadro.massimo_precedente(s.h, 30)
+    ll = quadro.minimo_precedente(s.l, 15)
+    pronto = _ok(hh, ll, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.c > hh), stop_long(s, pronto), uscita=pronto & (s.c < ll))
+
+
+@tf("4h")
+def V24(s):
+    ll = quadro.minimo_precedente(s.l, 30)
+    hh = quadro.massimo_precedente(s.h, 15)
+    pronto = _ok(hh, ll, quadro.atr(s, 14))
+    return Regole(s, "short", pronto & (s.c < ll), stop_short(s, pronto), uscita=pronto & (s.c > hh))
+
+
+@tf("4h")
+def V25(s):
+    m200, m5, r2 = quadro.sma(s.c, 200), quadro.sma(s.c, 5), quadro.rsi(s.c, 2)
+    pronto = _ok(m200, m5, r2, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.c > m200) & (r2 < 10), stop_long(s, pronto),
+                  uscita=pronto & (s.c > m5))
+
+
+@tf("4h")
+def V26(s):
+    m200, m5, r2 = quadro.sma(s.c, 200), quadro.sma(s.c, 5), quadro.rsi(s.c, 2)
+    pronto = _ok(m200, m5, r2, quadro.atr(s, 14))
+    return Regole(s, "short", pronto & (s.c < m200) & (r2 > 90), stop_short(s, pronto),
+                  uscita=pronto & (s.c < m5))
+
+
+def _media_n(s, n):
+    m = quadro.sma(s.c, n)
+    prima = np.concatenate([[np.nan], s.c[:-1] - m[:-1]])
+    pronto = _ok(m, prima, quadro.atr(s, 14))
+    return m, prima, pronto
+
+
+@tf("1h")
+def V27(s):
+    m, prima, pronto = _media_n(s, 1200)
+    return Regole(s, "long", pronto & (s.c > m) & (np.nan_to_num(prima) <= 0), stop_long(s, pronto),
+                  uscita=pronto & (s.c < m))
+
+
+@tf("1h")
+def V28(s):
+    m, prima, pronto = _media_n(s, 1200)
+    return Regole(s, "short", pronto & (s.c < m) & (np.nan_to_num(prima) >= 0), stop_short(s, pronto),
+                  uscita=pronto & (s.c > m))
+
+
+@tf("1d")
+def V29(s):
+    media = np.full(s.n, np.nan)
+    for i in range(50, s.n):
+        media[i] = s.qv[i - 50:i].mean()
+    pronto = _ok(media, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.qv > 1.5 * np.nan_to_num(media, nan=np.inf)), stop_long(s, pronto), tenuta=5)
+
+
+@tf("4h")
+def V30(s):
+    m, sd, stretta, pronto = _stretta(s, 360, 1.2)
+    return Regole(s, "long", stretta & (s.c > m + 2 * sd), stop_long(s, pronto), tenuta=30,
+                  uscita=pronto & (s.c < m))
+
+
+@tf("4h")
+def V31(s):
+    m, sd, stretta, pronto = _stretta(s, 360, 1.2)
+    return Regole(s, "short", stretta & (s.c < m - 2 * sd), stop_short(s, pronto), tenuta=30,
+                  uscita=pronto & (s.c > m))
+
+
+# ------------------------------------------------------------------ I-13
+def _taker_buy(s: Serie) -> np.ndarray:
+    """Volume taker buy (moneta base, colonna 9 dei file klines) sugli stessi ts della serie."""
+    from research.src import dati
+    fine = quadro.FINE_COSTRUZIONE if s.periodo == "costruzione" else quadro.FINE_VALIDAZIONE
+    per_ts = {}
+    for p in dati._percorsi_presenti(quadro.SIMBOLO, "klines", s.tf, quadro.INIZIO, fine, dati.RADICE_DEFAULT):
+        for riga in dati.righe_csv_da_zip(p):
+            ts = dati.normalizza_ts(riga[0])
+            if ts not in per_ts and len(riga) > 9 and riga[9].strip():
+                per_ts[ts] = float(riga[9])
+    return np.array([per_ts.get(int(t), np.nan) for t in s.ts])
+
+
+def _squilibrio(s: Serie):
+    tb = _taker_buy(s)
+    q = np.full(s.n, np.nan)
+    for i in range(5, s.n):
+        v = s.v[i - 5:i + 1].sum()
+        if v > 0:
+            q[i] = tb[i - 5:i + 1].sum() / v - 0.5
+    media = np.full(s.n, np.nan)
+    sd = np.full(s.n, np.nan)
+    for i in range(725, s.n):
+        w = q[i - 720:i]
+        if not np.isnan(w).any():
+            media[i], sd[i] = w.mean(), w.std(ddof=1)
+    pronto = _ok(q, media, sd, quadro.atr(s, 14))
+    return q, media, sd, pronto
+
+
+@tf("1h")
+def V32(s):
+    q, media, sd, pronto = _squilibrio(s)
+    return Regole(s, "long", pronto & (np.nan_to_num(q) > np.nan_to_num(media + 2 * sd, nan=np.inf)),
+                  stop_long(s, pronto), tenuta=6)
+
+
+@tf("1h")
+def V33(s):
+    q, media, sd, pronto = _squilibrio(s)
+    return Regole(s, "short", pronto & (np.nan_to_num(q) < np.nan_to_num(media - 2 * sd, nan=-np.inf)),
+                  stop_short(s, pronto), tenuta=6)
+
+
+# ------------------------------------------------------------------ I-14
+def _relativo(s: Serie):
+    rm = quadro.rendimento(s.c, 42)
+    rb = quadro.rendimento(s.btc_c, 42)
+    pronto = _ok(rm, rb, quadro.atr(s, 14))
+    return rm - rb, pronto
+
+
+@tf("4h")
+def V34(s):
+    d, pronto = _relativo(s)
+    return Regole(s, "long", pronto & (np.nan_to_num(d) > 0), stop_long(s, pronto), tenuta=42)
+
+
+@tf("4h")
+def V35(s):
+    d, pronto = _relativo(s)
+    return Regole(s, "short", pronto & (np.nan_to_num(d) < 0), stop_short(s, pronto), tenuta=42)
