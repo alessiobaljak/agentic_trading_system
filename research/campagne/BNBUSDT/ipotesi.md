@@ -738,3 +738,62 @@ Quanto dura: una settimana.
 * `I-17-L` (`varianti.i17()`): asimmetria dei rendimenti logaritmici delle ultime 42 barre a 4h ≤
   10° percentile della stessa misura sulle ultime 540 barre → long per 42 barre; stop 2 ATR(14).
   Previsione: probabile scarto per trade minimi; se testata, R medio fra −0,10 e +0,15.
+
+---
+
+# Aggiunte del 9 ottobre 2026, dopo il secondo lotto
+
+Scritte dopo il secondo lotto (voci BNBUSDT-023..033) e PRIMA di qualunque conteggio di quanto
+segue.
+
+## Varianti allentate di scarti (regola 6), per idee di cui nessuna variante è stata testata
+
+* `I-08-L15`, `I-08-S15` (`varianti.i08(direzione, k=1.5)`): soglia della sovrareazione a 1,5
+  deviazioni standard invece di 2 (gli scarti avevano 69 e 53 trade). Caporale e Plastun usano
+  più soglie per definire la sovrareazione; 1,5 resta un movimento insolito (circa il 7% delle
+  finestre se i rendimenti fossero normali). Previsione: R medio fra −0,10 e +0,10.
+* `I-15-L20`, `I-15-S20` (`varianti.i15(direzione, soglia=20)`): ADX che sale sopra 20 invece di
+  25 (scarti a 46 trade). Wilder e la pratica successiva usano 20-25 come confine fra mercato
+  senza tendenza e con tendenza. Previsione: R medio fra −0,10 e +0,10.
+* `I-17-L20` (`varianti.i17(q=0.2)`): asimmetria nel 20% più basso invece del 10% (scarto a 44
+  trade). Amaya e colleghi ordinano i titoli in quintili e decili: il quintile più basso è nella
+  fonte. Previsione: R medio fra −0,10 e +0,15.
+
+## I-18 — Ordini di stop oltre i numeri tondi
+
+**Fonte.** Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the
+Predictive Success of Technical Analysis», Journal of Finance 58(5), ottobre 2003: gli ordini di
+presa di profitto si concentrano esattamente sui numeri tondi, quelli di stop appena oltre; quando
+il prezzo attraversa un numero tondo, gli stop eseguiti alimentano il movimento nella stessa
+direzione.
+
+**Affermazione verificabile.** Su BNBUSDT a 1h, dopo una chiusura che attraversa al rialzo il
+primo numero tondo sopra la chiusura precedente, le 6 ore successive salgono più di un ingresso
+casuale con la stessa uscita (simmetrico al ribasso).
+
+**Sotto-domande.** Quale «numero tondo» per una moneta che è passata da 15 a 690 USDT? Qui il
+passo è un decimo della potenza di 10 sotto il prezzo (a 300 USDT i multipli di 10, a 30 USDT i
+multipli di 1): scelto prima di contare. Chi opera: chi ha stop e ordini fermi sui livelli tondi.
+Quanto dura: ore.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | t vicino a 0 | t oltre la soglia |
+| 2 | Trend di fondo | long vince nel 2021 | anche nel 2022 |
+| 3 | È solo il mercato | R correlato a BTC | bassa |
+| 4 | Volatilità: attraversare un livello è più probabile nelle ore volatili | costi in R più bassi, lordo simile | differenza nel lordo |
+| 5 | Pochi trade estremi | senza i 3 migliori sotto la (b) | sopra |
+| 6 | Artefatto: con prezzi bassi (2020) il passo di 1 USDT è grande rispetto al prezzo | segnali rari nel 2020 | — |
+| 7 | Effetto costi a 1h | R netto negativo | — |
+| 8 | I numeri tondi delle valute non sono quelli delle crypto | nessun effetto | effetto |
+| 9 | Attraversare un livello è solo un movimento di prezzo: momentum orario mascherato | risultati come un momentum a 1 ora | — |
+| 10 | Presa di profitto sul livello: inversione | R sotto la (b) | sopra |
+
+**Varianti.**
+* `I-18-L` (`varianti.i18("long")`): chiusura ≥ primo numero tondo sopra la chiusura precedente →
+  long 6 barre; stop 2 ATR(14).
+* `I-18-S` (`varianti.i18("short")`): chiusura ≤ primo numero tondo sotto la chiusura precedente →
+  short 6 barre; stop 2 ATR(14).
+Previsione: R medio fra −0,15 e +0,05; nessuna batte la (b).

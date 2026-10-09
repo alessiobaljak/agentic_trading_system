@@ -39,6 +39,7 @@ F = {
     "I-15": "J. Welles Wilder, «New Concepts in Technical Trading Systems», Trend Research, 1978",
     "I-16": "Yakov Amihud, «Illiquidity and stock returns: cross-section and time-series effects», Journal of Financial Markets 5(1), 2002",
     "I-17": "Amaya, Christoffersen, Jacobs, Vasquez, «Does realized skewness predict the cross-section of equity returns?», Journal of Financial Economics 118(1), 2015",
+    "I-18": "Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical Analysis», Journal of Finance 58(5), 2003",
 }
 
 # etichetta: (idea, fabbrica, meccanismo, parametri, (r_min, r_max), batte_b_previsto)
@@ -105,6 +106,20 @@ SPEC = {
                {"ingresso": "illiquidita' di Amihud 6 barre >= 90 percentile di 180", "uscita": "6 barre", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
     "I-17-L": ("I-17", lambda vid: V.i17(vid), "asimmetria realizzata negativa",
                {"ingresso": "asimmetria rendimenti 42 barre <= 10 percentile delle ultime 540", "uscita": "42 barre", "stop": "2 ATR(14)"}, (-0.10, 0.15), False),
+    "I-08-L15": ("I-08", lambda vid: V.i08("long", vid, 1.5), "continuazione dopo sovrareazione",
+                 {"ingresso": "r24 > media180 + 1,5 dev std", "uscita": "6 barre", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
+    "I-08-S15": ("I-08", lambda vid: V.i08("short", vid, 1.5), "continuazione dopo sovrareazione",
+                 {"ingresso": "r24 < media180 - 1,5 dev std", "uscita": "6 barre", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
+    "I-15-L20": ("I-15", lambda vid: V.i15("long", vid, 20.0), "forza della tendenza (ADX)",
+                 {"ingresso": "ADX(14) sale sopra 20 con +DI > -DI", "uscita": "-DI > +DI", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
+    "I-15-S20": ("I-15", lambda vid: V.i15("short", vid, 20.0), "forza della tendenza (ADX)",
+                 {"ingresso": "ADX(14) sale sopra 20 con -DI > +DI", "uscita": "+DI > -DI", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
+    "I-17-L20": ("I-17", lambda vid: V.i17(vid, 0.2), "asimmetria realizzata negativa",
+                 {"ingresso": "asimmetria rendimenti 42 barre <= 20 percentile delle ultime 540", "uscita": "42 barre", "stop": "2 ATR(14)"}, (-0.10, 0.15), False),
+    "I-18-L": ("I-18", lambda vid: V.i18("long", vid), "ordini di stop oltre i numeri tondi",
+               {"ingresso": "close attraversa al rialzo il primo numero tondo sopra la chiusura precedente", "uscita": "6 barre", "stop": "2 ATR(14)"}, (-0.15, 0.05), False),
+    "I-18-S": ("I-18", lambda vid: V.i18("short", vid), "ordini di stop oltre i numeri tondi",
+               {"ingresso": "close attraversa al ribasso il primo numero tondo sotto la chiusura precedente", "uscita": "6 barre", "stop": "2 ATR(14)"}, (-0.15, 0.05), False),
 }
 
 

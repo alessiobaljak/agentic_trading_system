@@ -261,7 +261,7 @@ def i07(vid: str, q: float = 0.9) -> Variante:
 # I-08 Sovrareazione seguita da continuazione (Caporale, Plastun 2019, J. Econ. Studies)
 # ---------------------------------------------------------------------------
 
-def i08(direzione: str, vid: str) -> Variante:
+def i08(direzione: str, vid: str, k: float = 2.0) -> Variante:
     def prepara(candele):
         o = C.array_ohlcv(candele)
         o["atr"] = C.atr(o, 14)
@@ -271,9 +271,9 @@ def i08(direzione: str, vid: str) -> Variante:
         o["s"] = C.rolling_std(r24, 180)
         return o
     if direzione == "long":
-        cond = lambda ind, i: bool(ind["r24"][i] > ind["m"][i] + 2 * ind["s"][i])  # noqa: E731
+        cond = lambda ind, i: bool(ind["r24"][i] > ind["m"][i] + k * ind["s"][i])  # noqa: E731
     else:
-        cond = lambda ind, i: bool(ind["r24"][i] < ind["m"][i] - 2 * ind["s"][i])  # noqa: E731
+        cond = lambda ind, i: bool(ind["r24"][i] < ind["m"][i] - k * ind["s"][i])  # noqa: E731
     return Variante(vid, "4h", direzione, prepara, cond, _stop_atr(direzione, 2.0), _uscita_tempo(6))
 
 
@@ -446,14 +446,14 @@ def _dmi(o, n: int = 14):
     return pdi, mdi, adx
 
 
-def i15(direzione: str, vid: str) -> Variante:
+def i15(direzione: str, vid: str, soglia: float = 25.0) -> Variante:
     def prepara(candele):
         o = C.array_ohlcv(candele)
         o["atr"] = C.atr(o, 14)
         pdi, mdi, adx = _dmi(o, 14)
         prec = C.ritardo(adx, 1)
         with np.errstate(invalid="ignore"):
-            o["adx_su"] = (adx > 25) & (prec <= 25)
+            o["adx_su"] = (adx > soglia) & (prec <= soglia)
             o["pdi_mag"] = pdi > mdi
             o["mdi_mag"] = mdi > pdi
         return o
@@ -499,7 +499,7 @@ def i16(vid: str) -> Variante:
 # I-17 Asimmetria realizzata negativa (Amaya, Christoffersen, Jacobs, Vasquez 2015)
 # ---------------------------------------------------------------------------
 
-def i17(vid: str) -> Variante:
+def i17(vid: str, q: float = 0.1) -> Variante:
     def prepara(candele):
         from numpy.lib.stride_tricks import sliding_window_view
         o = C.array_ohlcv(candele)
@@ -516,8 +516,38 @@ def i17(vid: str) -> Variante:
             with np.errstate(invalid="ignore", divide="ignore"):
                 sk[n:] = s3 / s2 ** 1.5
         o["sk"] = sk
-        o["sk_q10"] = _quantile_mobile(np.nan_to_num(sk, nan=-np.inf), 540, 0.1)
+        o["sk_q10"] = _quantile_mobile(np.nan_to_num(sk, nan=-np.inf), 540, q)
         o["sk_q10"][:600] = np.nan
         return o
     cond = lambda ind, i: bool(ind["sk"][i] <= ind["sk_q10"][i])  # noqa: E731
     return Variante(vid, "4h", "long", prepara, cond, _stop_atr("long", 2.0), _uscita_tempo(42))
+
+
+# ---------------------------------------------------------------------------
+# I-18 Attraversamento dei numeri tondi (Osler 2003)
+# ---------------------------------------------------------------------------
+
+def _passo_tondo(p: float) -> float:
+    """Passo dei numeri tondi: un decimo della potenza di 10 sotto il prezzo (p=300 -> 10, p=30 -> 1)."""
+    return 10 ** (math.floor(math.log10(p)) - 1)
+
+
+def i18(direzione: str, vid: str) -> Variante:
+    def prepara(candele):
+        o = C.array_ohlcv(candele)
+        o["atr"] = C.atr(o, 14)
+        su = np.zeros(len(candele), dtype=bool)
+        giu = np.zeros(len(candele), dtype=bool)
+        c = o["close"]
+        for i in range(1, len(candele)):
+            passo = _passo_tondo(c[i - 1])
+            livello_su = math.floor(c[i - 1] / passo) * passo + passo  # primo tondo sopra la chiusura precedente
+            livello_giu = math.ceil(c[i - 1] / passo) * passo - passo  # primo tondo sotto
+            su[i] = c[i] >= livello_su
+            giu[i] = c[i] <= livello_giu
+        o["attraversa_su"] = su
+        o["attraversa_giu"] = giu
+        return o
+    chiave = "attraversa_su" if direzione == "long" else "attraversa_giu"
+    cond = lambda ind, i: bool(ind[chiave][i])  # noqa: E731
+    return Variante(vid, "1h", direzione, prepara, cond, _stop_atr(direzione, 2.0), _uscita_tempo(6))
