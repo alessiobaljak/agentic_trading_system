@@ -190,6 +190,7 @@ regole_esame:
   blocco_bootstrap: statistica.lunghezza_blocco   # dalla 4.4: il blocco in trade, dalla regola in tempo della sezione 8
   baseline_casuale: motore.simula_baseline_casuale   # dalla 4.4: la baseline (b), sempre eseguita cosi'
   soglia_trasferimento: statistica.monete_richieste_trasferimento   # dalla 4.5: Passo 6 punto 4
+  validazione_r_medio_positivo: true   # correzione del 9 ott 2026 (si' del proprietario alle 17:35 UTC): in validazione serve anche R medio dopo i costi > 0
   simulazioni_baseline_casuale: 200  # dalla 4.4: simulazioni della baseline (b) in costruzione e in validazione
   semi_baseline_casuale: {primo: 0, ultimo: 199}
   bootstrap: {ricampionamenti: 2000, seme: 0}   # fissi: non si rilancia mai con altri semi
