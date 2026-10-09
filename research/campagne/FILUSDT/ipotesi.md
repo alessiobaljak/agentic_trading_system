@@ -127,6 +127,17 @@ altre monete.
 7. **Previsione.** R medio fra −0,10 e +0,15; win rate sotto il 40%; nessuna delle due nettamente
    sopra la (b).
 
+**Aggiunta del 2026-10-09, dopo il conteggio dei trade (nessun risultato visto).** V1 e V2 sono
+scarti: `conta_trade` dà 52 e 49 trade, sotto i 70 minimi. Le varianti che seguono allentano le
+soglie per arrivare ai trade minimi (regola 6: è ancora una variante dell'idea nuova), con i
+parametri del «sistema 1» della fonte delle tartarughe (rottura di 20, uscita a 10), sulla
+stessa scala di 4 ore. Restano due varianti testabili per questa fonte.
+   * **I-02 V3 (long):** close > massimo degli high delle 20 barre precedenti → long. Stop close −
+     2 × ATR(14). Uscita quando il close scende sotto il minimo dei low delle 10 barre precedenti.
+   * **I-02 V4 (short):** close < minimo dei low delle 20 barre precedenti → short. Stop close +
+     2 × ATR(14). Uscita quando il close sale sopra il massimo degli high delle 10 barre precedenti.
+   Previsione per V3 e V4: come sopra (R medio fra −0,10 e +0,15, non netto).
+
 ---
 
 ## I-03 — Inversione a breve dopo i movimenti estremi
