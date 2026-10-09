@@ -224,8 +224,15 @@ class I06L(VarianteATR):
     def pronta(self, st, i):
         return super().pronta(st, i) and _ok(st["v6"][i], st["rif6"][i])
 
+    multiplo = 2.5
+
     def condizione(self, st, i):
-        return st["v6"][i] > 2.5 * st["rif6"][i]
+        return st["v6"][i] > self.multiplo * st["rif6"][i]
+
+
+class I06Lb(I06L):
+    multiplo = 1.5
+    barre_max = 12
 
 
 # ---------------------------------------------------------------------------

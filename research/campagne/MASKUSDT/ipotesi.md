@@ -312,6 +312,12 @@ su 6 barre aggiornate ogni 4 ore).
 * **I-06-L** long: volume in USDT delle ultime 6 barre > 2,5 × media dei volumi di 6 barre delle
   294 barre precedenti (49 giorni). Stop 3 ATR(4h), nessun target, uscita dopo 30 barre (5
   giorni). Solo long: la fonte è un premio, non una regola simmetrica.
+* **I-06-Lb** (aggiunta dopo lo scarto di I-06-L per i trade minimi, 21 trade stimati, prima di
+  qualunque test dell'idea; regola 6: allentare le soglie di uno scarto senza aver visto risultati
+  è ancora una variante dell'idea nuova): volume delle 6 barre > 1,5 × il riferimento; uscita dopo
+  12 barre (2 giorni) invece di 30, perché con 5 giorni di posizione gli ingressi possibili in 592
+  giorni sono al massimo circa 120. Stop 3 ATR(4h). Previsione: R medio fra -0,20 e +0,10, non
+  batte nettamente la (b).
 
 ---
 
