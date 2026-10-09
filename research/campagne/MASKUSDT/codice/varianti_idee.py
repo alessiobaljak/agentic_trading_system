@@ -90,11 +90,13 @@ class I03(VarianteATR):
     k_stop = 2.0
     rr = 1.0
     barre_max = 6
+    finestra_dev = 168  # attributi per le verifiche della Fase 4: valori registrati invariati
+    dev = 3.0
 
     def prepara_condizione(self, st):
         r1 = rendimento(st["c"], 1)
         st["r1"] = r1
-        st["sd168"] = deviazione_precedente(r1, 168)
+        st["sd168"] = deviazione_precedente(r1, self.finestra_dev)
 
     def pronta(self, st, i):
         return super().pronta(st, i) and _ok(st["r1"][i], st["sd168"][i])
@@ -104,14 +106,14 @@ class I03L(I03):
     direzione = "long"
 
     def condizione(self, st, i):
-        return st["r1"][i] < -3.0 * st["sd168"][i]
+        return st["r1"][i] < -self.dev * st["sd168"][i]
 
 
 class I03S(I03):
     direzione = "short"
 
     def condizione(self, st, i):
-        return st["r1"][i] > 3.0 * st["sd168"][i]
+        return st["r1"][i] > self.dev * st["sd168"][i]
 
 
 # ---------------------------------------------------------------------------

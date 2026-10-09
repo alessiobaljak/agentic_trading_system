@@ -254,11 +254,11 @@ def vietate_liquidita(permesse: np.ndarray) -> List[tuple]:
     return out
 
 
-def conta(var) -> Dict[str, int]:
+def conta(var, par: Optional[Parametri] = None) -> Dict[str, int]:
     """``conta_trade`` sulle regole esatte della variante (una volta sola per variante)."""
     per = periodo(var.tf)
     crea, _, _, _ = fabbriche(var, per)
-    return motore.conta_trade(per.candele, crea, FINE_COSTRUZIONE_TS, parametri(),
+    return motore.conta_trade(per.candele, crea, FINE_COSTRUZIONE_TS, par or parametri(),
                               candele_mark=per.mark, funding=per.funding)
 
 
