@@ -77,7 +77,7 @@ def esegui_variante(var, meta, ritocco_di=None, famiglia=None, extra=None):
 
 def controllo():
     var = V.controllo_positivo()
-    registro.scrivi({"id": "ETCUSDT-N-CP1", "tipo": "nota", "testo": "Controllo positivo degli strumenti (lezioni/metodo.md), "
+    registro.scrivi({"id": "ETCUSDT-N-CP3", "tipo": "nota", "testo": "Controllo positivo degli strumenti (lezioni/metodo.md), "
                      "PRIMA dell'esecuzione: strategia che legge di proposito la barra dopo (entra long se la barra di "
                      "ingresso chiudera' sopra la sua apertura), 1h, stop 2 ATR, uscita dopo 1 barra, stesse baseline delle "
                      "varianti. Attesa: batte nettamente la (a) e la (b); col ritardo di una barra il t contro la (b) "
@@ -95,7 +95,7 @@ def controllo():
     }
     ok = bool(sintesi["senza_ritardo"]["netta_a"] and sintesi["senza_ritardo"]["netta_b"]
               and sintesi["ritardo_1"]["t_b"] < 0.5 * sintesi["senza_ritardo"]["t_b"])
-    registro.scrivi({"id": "ETCUSDT-N-CP2", "tipo": "nota", "testo": "Controllo positivo, DOPO: " +
+    registro.scrivi({"id": "ETCUSDT-N-CP4", "tipo": "nota", "testo": "Controllo positivo, DOPO: " +
                      ("superato" if ok else "NON superato"), "esito": sintesi, "superato": ok})
     C.stampa(json.dumps(sintesi, ensure_ascii=False, default=str))
 
