@@ -113,6 +113,7 @@ e revisione critica nel diario; legata a T1 e a R1.
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
 
 ### P1. Correzioni al protocollo emerse dalle campagne 4.4 (da raccogliere in una versione 4.5)
+**Stato (9 ott sera):** versione 4.5 SCRITTA in bozza (`research/PROTOCOLLO.md`, commit 895467e1 → bea507fd: corretta dopo la revisione di tre lettori indipendenti), prova a placebo FATTA (l'esame regge: «netta» per caso 0,41%, p sotto 0,10 in validazione 3,26%; `research/taratura/placebo/risultati.md` sul branch di coordinamento), caricatore unico FATTO (a5dd6863). **Aspetta il sì del proprietario** alla 4.5, con tre scelte esplicite: consegne 4.4 di BTC, ETH e SOL valide; soglia del trasferimento più severa anche per il candidato BTC; delega al coordinamento per aprire le sessioni delle 17.
 **Perché (8 ott):** (1) la regola 6 esclude dai ritocchi le varianti che battono le due baseline «perché sono
 candidati», ma dalla 4.4 un candidato deve anche avere R medio dopo i costi positivo: una variante che batte il
 caso e perde dopo i costi non ha una regola (SOLUSDT si è fermata alle 05:51 UTC per chiederlo; DECISO dal proprietario l'8 ott alle 10:14 UTC: «sì», entra nell'ordine dei ritocchi con il suo t contro la (b)); (2) una campagna
