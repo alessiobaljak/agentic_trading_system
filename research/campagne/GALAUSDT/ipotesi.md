@@ -401,6 +401,32 @@ lo scarto, e lo dice `conta_trade`.
 
 ---
 
+## Varianti aggiunte dopo gli scarti per pochi trade (2026-10-09, 18:39 UTC)
+
+Scritte dopo la registrazione delle 24 varianti (log, voci da GALAUSDT-001 a GALAUSDT-024) e
+PRIMA di qualunque risultato di test: nessun test di queste idee era stato eseguito (la regola 6
+ammette di allentare le soglie di uno scarto, senza aver visto risultati, come variante dell'idea
+nuova). Gli scarti: GALAUSDT-003 e 004 (41 e 46 trade), 005 (53), 009 (41), 022 e 023 (20 e 15).
+
+* **I-02, GALAUSDT-025 (long) e GALAUSDT-026 (short)**: le stesse regole delle tartarughe (20 e 10
+  barre, stop 2 ATR(20) al massimo il 6%) su candele da **2 ore** invece che da 4. Motivo: con 20
+  barre da 4 ore le rotture sono troppo rare; la candela da 2 ore tiene i parametri della fonte e
+  dimezza la durata del canale (40 ore). Previsione: R medio fra -0,20 e +0,15.
+* **I-03, GALAUSDT-027 (long)**: le regole di GALAUSDT-005 su candele da **2 ore** (RSI(2) < 10,
+  close sopra la media a 200 barre, uscita sopra la media a 5, stop 3 ATR(14) al massimo il 6%).
+  Motivo: in costruzione il prezzo è stato sotto la media lunga per gran parte del tempo e i
+  segnali long con il filtro di tendenza sono pochi. Con GALAUSDT-006 fanno le due varianti della
+  fonte. Previsione: R medio fra -0,15 e +0,15.
+* **I-05, GALAUSDT-028 (short)**: le regole di GALAUSDT-009 con il **70° percentile** invece
+  dell'85° (funding regolato sopra il 70° percentile dei 90 precedenti e positivo, uscita dopo 3
+  barre da 8 ore, stop 2 ATR(14) al massimo il 6%). Motivo: con l'85° i segnali sono 41. Con
+  GALAUSDT-010 fanno le due varianti della fonte. Previsione: R medio fra -0,15 e +0,10.
+* **I-12**: nessuna variante allentata. Per arrivare a 70 trade la soglia dovrebbe scendere verso
+  1 deviazione standard, che non è più una «reazione eccessiva» nel senso della fonte: l'idea
+  resta uno scarto per pochi trade.
+
+---
+
 Famiglie di meccanismi coperte dalle idee nuove: seguire la tendenza (I-01, I-02), ritorno
 verso la media di breve (I-03), microstruttura e stop (I-04), posizionamento a leva (I-05),
 ritardo fra monete (I-06), compressione della volatilità (I-07), volume e informazione (I-08,

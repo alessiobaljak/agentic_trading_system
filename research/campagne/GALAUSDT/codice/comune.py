@@ -205,7 +205,7 @@ def rsi(close: pd.Series, n: int) -> np.ndarray:
     su = d.clip(lower=0).ewm(alpha=1 / n, adjust=False).mean()
     giu = (-d.clip(upper=0)).ewm(alpha=1 / n, adjust=False).mean()
     rs = su / giu.replace(0, np.nan)
-    v = (100 - 100 / (1 + rs)).to_numpy()
+    v = (100 - 100 / (1 + rs)).to_numpy().copy()
     v[np.isnan(v) & (giu.to_numpy() == 0)] = 100.0
     v[:n] = np.nan
     return v
