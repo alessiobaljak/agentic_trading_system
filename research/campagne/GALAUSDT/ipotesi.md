@@ -417,6 +417,9 @@ nuova). Gli scarti: GALAUSDT-003 e 004 (41 e 46 trade), 005 (53), 009 (41), 022 
   Motivo: in costruzione il prezzo è stato sotto la media lunga per gran parte del tempo e i
   segnali long con il filtro di tendenza sono pochi. Con GALAUSDT-006 fanno le due varianti della
   fonte. Previsione: R medio fra -0,15 e +0,15.
+  **RITIRATA** (log, correzione GALAUSDT-N007): il risultato di GALAUSDT-006, prima variante
+  testata di I-03, era già nel log (18:39:12 UTC) quando questa variante è stata scritta. Non si
+  registra e non si testa.
 * **I-05, GALAUSDT-028 (short)**: le regole di GALAUSDT-009 con il **70° percentile** invece
   dell'85° (funding regolato sopra il 70° percentile dei 90 precedenti e positivo, uscita dopo 3
   barre da 8 ore, stop 2 ATR(14) al massimo il 6%). Motivo: con l'85° i segnali sono 41. Con
