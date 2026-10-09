@@ -302,7 +302,70 @@ def _i11(direzione):
     return crea
 
 
+# ---------------------------------------------------------------------------
+# Varianti aggiunte dopo gli scarti (ipotesi.md, 2026-10-09 17:47 UTC)
+# ---------------------------------------------------------------------------
+
+def _i05b(direzione, k_mov=1.5, k_vol=2.0):
+    def crea(ctx: Contesto) -> Spec:
+        a = atr(ctx, 14)
+        sig = segnale_atr(ctx, direzione, 2.0, 25)
+        v = ctx.volume_usdt
+
+        def cond(i):
+            if i < 25 or not np.isfinite(a[i - 1]):
+                return False
+            media_v = np.nanmean(v[i - 24:i])
+            if not (np.isfinite(v[i]) and np.isfinite(media_v) and media_v > 0):
+                return False
+            r1 = ctx.c[i] / ctx.c[i - 1] - 1.0
+            soglia = k_mov * a[i - 1] / ctx.c[i - 1]
+            volume_alto = v[i] > k_vol * media_v
+            if direzione == "long":
+                return volume_alto and r1 < -soglia
+            return volume_alto and r1 > soglia
+        return Spec(sig, cond, uscita_tempo(ctx, 12))
+    return crea
+
+
+def _i06b(direzione):
+    def crea(ctx: Contesto) -> Spec:
+        f = funding_ultimo(ctx)
+        sig = segnale_atr(ctx, direzione, 2.0, 14)
+
+        def cond(i):
+            if not np.isfinite(f[i]):
+                return False
+            return f[i] > 0.0001 if direzione == "short" else f[i] < 0.0
+        return Spec(sig, cond, uscita_tempo(ctx, 3))
+    return crea
+
+
+def _i12(direzione, finestra=168, z_soglia=2.0, uscita=4):
+    def crea(ctx: Contesto) -> Spec:
+        mark = np.array([m.close for m in ctx.candele_mark])
+        sc = ctx.c / mark - 1.0
+        z = np.full(ctx.n, np.nan)
+        for i in range(finestra, ctx.n):
+            w = sc[i - finestra:i]
+            sd = w.std()
+            if sd > 0:
+                z[i] = (sc[i] - w.mean()) / sd
+        sig = segnale_atr(ctx, direzione, 2.0, finestra)
+
+        def cond(i):
+            if not np.isfinite(z[i]):
+                return False
+            return z[i] > z_soglia if direzione == "short" else z[i] < -z_soglia
+        return Spec(sig, cond, uscita_tempo(ctx, uscita))
+    return crea
+
+
 CREA: Dict[str, Callable] = {
+    "I02h_long": _i02("long"), "I02h_short": _i02("short"),
+    "I05b_long": _i05b("long"), "I05b_short": _i05b("short"),
+    "I06b_short": _i06b("short"), "I06b_long": _i06b("long"),
+    "I12_short": _i12("short"), "I12_long": _i12("long"),
     "controllo_positivo": controllo_positivo,
     "I01_long": _i01("long"), "I01_short": _i01("short"),
     "I02_long": _i02("long"), "I02_short": _i02("short"),

@@ -513,3 +513,87 @@ ATR(14).
 **Varianti.**
 * `I11_long` — long se la quota comprata dai taker nella barra è sopra 0,5.
 * `I11_short` — short se è sotto 0,5.
+
+---
+
+## Varianti aggiunte il 2026-10-09 alle 17:47 UTC, dopo gli scarti e prima di ogni test di queste idee
+
+Regola 6: allentare le soglie di uno scarto per raggiungere i trade minimi, senza aver visto risultati,
+è ancora una variante dell'idea nuova. Le idee I-02, I-05 e I-06 hanno avuto solo scarti (conteggi
+40/54, 57/65, 30/61; voci S001-S006): nessun loro risultato è stato visto. Le spiegazioni concorrenti
+restano quelle scritte sopra.
+
+### I-02 (rottura del canale) — su candele da 1 ora
+
+Motivo: sulle 4 ore le rotture di 50 barre sono 40 e 54. Si tiene il parametro della fonte (50 barre,
+tenuta 10 barre) e si scende a 1 ora: 50 ore sono circa due giorni di livelli visibili; il meccanismo
+(ordini concentrati oltre il massimo o il minimo recente) vale a ogni scala in cui i livelli sono visibili.
+Stop 2 ATR(14) orario (circa il 4%, eseguibile dal bot).
+
+* `I02h_long` — long se close > massimo degli high delle 50 barre orarie precedenti; uscita dopo 10 barre.
+* `I02h_short` — short se close < minimo dei low delle 50 barre precedenti; speculare.
+
+### I-05 (ritorno dopo movimento forte con volume alto) — soglie più larghe
+
+Motivo: con −2 ATR e volume 3 volte la media gli eventi sono 57 e 65. Si allarga a 1,5 ATR e volume 2
+volte la media delle 24 ore: resta un movimento fuori dal normale con partecipazione insolita (la
+condizione di Campbell, Grossman e Wang), meno estremo.
+
+* `I05b_long` — rendimento della barra < −1,5 × ATR(14)/close della barra prima e volume > 2 × media 24
+  barre; long, uscita dopo 12 barre, stop 2 ATR.
+* `I05b_short` — rendimento > +1,5 ATR relativi e lo stesso volume; short; speculare.
+
+### I-06 (funding affollato) — soglia al livello base
+
+Motivo: a ±0,03% i casi sono 30 e 61. La soglia si porta ai confini naturali del meccanismo del
+funding di Binance: sopra lo 0,01% (il livello del solo tasso d'interesse) il premio del perpetuo è
+positivo, cioè i long pagano più del livello base; sotto zero gli short pagano i long. Meno estremo, ma è
+ancora «la folla paga per stare da quella parte».
+
+* `I06b_short` — short se l'ultimo funding regolato è > 0,0001; 8h, uscita dopo 3 barre, stop 2 ATR.
+* `I06b_long` — long se è < 0; speculare.
+
+---
+
+## I-12 — Il perpetuo caro o economico rispetto al mark
+
+**Fonte.** Songrun He, Asaf Manela, Omri Ross e Victor von Wachter, «Fundamentals of Perpetual
+Futures», arXiv 2212.06888, dicembre 2022 (lo scarto fra prezzo del perpetuo e prezzo a pronti è grande,
+cambia nel tempo e si richiude: il funding e l'arbitraggio lo spingono verso zero).
+
+**Affermazione verificabile.** Il mark price di Binance segue il prezzo dell'indice a pronti (con una media
+del premio): quando il close del last è molto sopra il close del mark rispetto al solito (scarto relativo
+oltre 2 deviazioni standard della sua media delle 168 ore precedenti), nelle 4 ore seguenti il last scende
+più di un ingresso casuale, perché il perpetuo torna verso il prezzo a pronti; speculare quando è molto
+sotto. Falsificata se la variante non batte nettamente la (a) e la (b).
+
+**Sotto-domande.** Lo scarto si richiude muovendo il perpetuo o muovendo il pronti verso il perpetuo (in
+quel caso non c'è nulla da guadagnare in direzione)? Vale con scarti grandi in giorni volatili? Chi
+opera: gli arbitraggisti fra pronti e perpetuo, chi incassa il funding; chi ha spinto il perpetuo con la
+leva. Quando: in ore (il funding si regola ogni 8 ore).
+
+**Spiegazioni concorrenti.**
+1. Effetto casuale. → `t` vicino a 0.
+2. Lo scarto si richiude dal lato del pronti (il perpetuo guida la scoperta del prezzo): il last
+   prosegue nella direzione del premio. → R sotto la (b).
+3. Lo scarto last-mark è rumore di microstruttura alla chiusura della barra (un solo scambio), senza
+   contenuto. → Nessun vantaggio.
+4. È momento di breve: il last è sopra il mark perché è appena salito (il mark segue con ritardo per
+   la media del premio). → Il segnale coincide con «la barra è salita molto»; il risultato è quello di un
+   ritorno verso la media di un'ora.
+5. Trend di fondo. → Come la (b) della direzione.
+6. È solo il mercato. → (si dichiara).
+7. Costi: tenuta 4 ore, stop 2 ATR orari (costo circa 0,03 R).
+8. Pochi episodi estremi.
+9. Un solo anno.
+10. Artefatto: barre del mark mancanti o ricostruite (le due giornate tolte; il mark che parte prima del
+    last). → Da guardare.
+11. Il premio è alto per settimane (regime) e lo z-score a 168 ore lo segue in ritardo.
+
+**Ipotesi completa.** DYDXUSDT, scarto del perpetuo dal mark, candele da 1 ora, tenuta 4 barre, stop 2
+ATR(14). Scarto = close del last / close del mark − 1; z = (scarto − media delle 168 barre precedenti) /
+deviazione standard delle 168 barre precedenti.
+
+**Varianti.**
+* `I12_short` — short se z > 2.
+* `I12_long` — long se z < −2.
