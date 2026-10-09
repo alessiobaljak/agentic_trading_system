@@ -13,7 +13,7 @@ import comune as C
 import varianti as V
 
 nome = sys.argv[1]
-var, meta = V.CATALOGO[nome]()
+var, meta = V.CATALOGO[nome]() if nome in V.CATALOGO else V.RITOCCHI[nome]()[:2]
 serie, ind, ris = C.trade_di(var)
 idx = {c.ts: i for i, c in enumerate(serie.candele)}
 trades = [t for t in ris.trades]

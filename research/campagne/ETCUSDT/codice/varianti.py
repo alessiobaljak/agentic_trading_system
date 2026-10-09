@@ -745,4 +745,63 @@ def _r3():
     return var, meta, extra
 
 
-RITOCCHI = {"R1": _r1, "R2": _r2, "R3": _r3}
+def _r4():
+    var, meta = _i12("short", soglia=-0.03, nome="R4 (ritocco di ETCUSDT-035)")
+    base = var.ingresso
+    var.ingresso = lambda ind, i: base(ind, i) and 2.0 * ind["atr"][i] / ind["c"][i] >= 0.025
+    meta["parametri"]["filtro_volatilita"] = "2 ATR(14, 30m) / close >= 2,5%"
+    meta["previsione"] = ("R medio fra -0,04 e +0,03: il filtro toglie il quartile peggiore di 035 (-0,063), ma il taglio "
+                          "e' scelto sui dati; netto contro la (b) probabile come 035, candidato incerto")
+    extra = {"ritocco_di": "ETCUSDT-035", "famiglia": "ETCUSDT-023",
+             "cosa_cambia": "aggiunto il filtro: distanza dello stop (2 ATR della 30m) almeno il 2,5% del close",
+             "perche": "Fase 3 di 035 (nota ETCUSDT-N012): le mezz'ore poco volatili perdono (-0,063 R); la fonte dice "
+                       "che l'effetto e' piu' forte nei giorni volatili"}
+    return var, meta, extra
+
+
+def _r5():
+    var, meta = _i12("short", soglia=-0.05, nome="R5 (ritocco di ETCUSDT-035)")
+    base = var.ingresso
+    var.ingresso = lambda ind, i: base(ind, i) and 2.0 * ind["atr"][i] / ind["c"][i] >= 0.025
+    meta["parametri"]["filtro_volatilita"] = "2 ATR(14, 30m) / close >= 2,5%"
+    meta["previsione"] = ("R medio fra -0,03 e +0,04, trade vicini al minimo (circa 80-100): le due condizioni insieme "
+                          "tolgono le giornate in calo leggero e le mezz'ore calme; netto contro la (b) probabile")
+    extra = {"ritocco_di": "ETCUSDT-035", "famiglia": "ETCUSDT-023",
+             "cosa_cambia": "soglia della giornata da < -3% a < -5% e filtro di volatilita' (stop a 2 ATR almeno il 2,5% del close)",
+             "perche": "Fase 3 di 035 (nota ETCUSDT-N012): perdono sia le giornate fra -3% e -5,8% sia le mezz'ore calme; "
+                       "ultimo ritocco ammesso della famiglia (5 su 5)"}
+    return var, meta, extra
+
+
+def _r6():
+    var, meta = _i01("short")
+    var.id = "R6 (ritocco di ETCUSDT-002)"
+    var.segnale = _stop(3.0, "short")
+    meta["nome"] = var.id
+    meta["parametri"]["stop_atr"] = 3.0
+    meta["previsione"] = ("R medio fra +0,05 e +0,35 (meno stop presi, ma ogni R vale meno perche' il rischio e' piu' largo); "
+                          "t contro la (b) fra 1 e 2,5: non netto piu' probabile di netto")
+    extra = {"ritocco_di": "ETCUSDT-002", "famiglia": "ETCUSDT-002",
+             "cosa_cambia": "stop da 2 a 3 ATR(14, 4h)",
+             "perche": "Fase 3 di 002 (nota ETCUSDT-N013): il 46% dei trade esce allo stop prima che la tesi a 7 giorni si "
+                       "compia; lo stop oltre il 6% non e' eseguibile dal bot cosi' com'e' (si dichiara)"}
+    return var, meta, extra
+
+
+def _r7():
+    var, meta = _i01("short")
+    var.id = "R7 (ritocco di ETCUSDT-002)"
+    base = var.ingresso
+    var.ingresso = lambda ind, i: base(ind, i) and ind["c"][i] / ind["o_np"][i] - 1 >= -0.02
+    meta["nome"] = var.id
+    meta["parametri"]["filtro_barra_segnale"] = "rendimento della barra del segnale (close/open - 1) >= -2%"
+    meta["previsione"] = ("R medio fra +0,15 e +0,40; t contro la (b) fra 1 e 2,5; il quartile tolto in Fase 3 e' di soli 29 "
+                          "trade e la differenza puo' essere rumore: non netto piu' probabile")
+    extra = {"ritocco_di": "ETCUSDT-002", "famiglia": "ETCUSDT-002",
+             "cosa_cambia": "aggiunto il filtro: nessuno short se la barra del segnale e' scesa piu' del 2%",
+             "perche": "Fase 3 di 002 (nota ETCUSDT-N013): gli short entrati dopo una barra di 4h in forte calo (quartile "
+                       "sotto -2,3%) rendono -0,25 R contro +0,27 di media; possibile rimbalzo a breve dopo il calo"}
+    return var, meta, extra
+
+
+RITOCCHI = {"R1": _r1, "R2": _r2, "R3": _r3, "R4": _r4, "R5": _r5, "R6": _r6, "R7": _r7}
