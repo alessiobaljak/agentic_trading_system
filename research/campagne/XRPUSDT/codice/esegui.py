@@ -101,7 +101,7 @@ def esegui(vid: str, meta_extra=None) -> None:
     v = VARIANTI[vid]
     idea = v.descrizione["idea"]
     meta = dict(META[idea])
-    regole, previsione = PARAMETRI[vid]
+    regole, previsione = PARAMETRI.get(vid, (None, None))
     if meta_extra:
         meta.update(meta_extra)
         regole = meta.pop("regole", regole)
@@ -138,6 +138,37 @@ def esegui(vid: str, meta_extra=None) -> None:
                  f"btc={m.get('btc_in_direzione_medio')} xrp={m.get('xrp_in_direzione_medio')}")
 
 
+#: Ritocchi (regola 6): ognuno registrato con ritocco_di, famiglia, cosa cambia e perche', previsione.
+RITOCCHI = {
+    "XRPUSDT-V21r1": {
+        "ritocco_di": "XRPUSDT-V21", "famiglia": "XRPUSDT-V21",
+        "cosa_cambia": "aggiunto un filtro: nessun ingresso se la barra del segnale e' scesa oltre il 10% "
+                       "(close[i]/close[i-1]-1 >= -0,10). Perche': studio dei fallimenti (nota Fase 3): le 9 entrate "
+                       "dopo cadute oltre il 12% sono tutte stop pieni; un premio negativo durante un crollo non rientra.",
+        "regole": "premio last/mark < -0,0015 e rendimento della barra del segnale >= -10%; stop min(1,5 ATR14, 6%); tenuta 4",
+        "previsione": "circa 220-230 trade; R medio fra 0,00 e +0,10; t contro la (b) fra 1,5 e 2,5: puo' superare "
+                      "la soglia solo di poco, e il filtro e' costruito su 9-19 trade, quindi va letto come fragile",
+    },
+    "XRPUSDT-V21r2": {
+        "ritocco_di": "XRPUSDT-V21r1", "famiglia": "XRPUSDT-V21",
+        "cosa_cambia": "tenuta da 4 a 8 barre, il resto uguale a V21r1. Perche': studio dei fallimenti (note Fase 3 di "
+                       "V21 e V21r1): il movimento medio dopo l'ingresso, senza stop, cresce fino alla sesta-settima "
+                       "chiusura (+0,25 R) mentre l'uscita e' alla quarta; i trade usciti a tempo valgono +0,37 R, gli stop -1,05 R.",
+        "regole": "premio last/mark < -0,0015 e rendimento della barra del segnale >= -10%; stop min(1,5 ATR14, 6%); tenuta 8",
+        "previsione": "meno trade (circa 200-215); R medio fra 0,00 e +0,12; t contro la (b) fra 1,0 e 2,5: tenendo di "
+                      "piu' crescono anche gli stop, e il guadagno medio in piu' (circa 0,06 R) e' piccolo rispetto al rumore",
+    },
+    "XRPUSDT-V21r3": {
+        "ritocco_di": "XRPUSDT-V21r1", "famiglia": "XRPUSDT-V21",
+        "cosa_cambia": "soglia del premio da -0,0015 a -0,0020, il resto uguale a V21r1 (tenuta 4). Perche': studio dei "
+                       "fallimenti di V21 (codice/fallimenti.py, premio al segnale): i 189 trade con premio arrotondato "
+                       "a -0,2% (fra -0,15% e -0,25%) hanno R medio -0,034, quelli oltre -0,25% sono positivi.",
+        "regole": "premio last/mark < -0,0020 e rendimento della barra del segnale >= -10%; stop min(1,5 ATR14, 6%); tenuta 4",
+        "previsione": "meno trade, forse vicino o sotto i 70 (allora scarto); se sopra: R medio fra 0,00 e +0,20, t contro "
+                      "la (b) fra 1,0 e 2,5 (meno trade = errore piu' grande)",
+    },
+}
+
 if __name__ == "__main__":
     for vid in sys.argv[1:]:
-        esegui(vid)
+        esegui(vid, RITOCCHI.get(vid))

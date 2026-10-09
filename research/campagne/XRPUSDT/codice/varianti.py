@@ -229,11 +229,13 @@ def _i10(direzione, soglia):
 # ---------------------------------------------------------------------------
 
 
-def _i11(direzione, soglia):
+def _i11(direzione, soglia, caduta_massima=None):
     def prepara(s):
         mark = np.array([c.close for c in s["mark"]])
         p = s["close"] / mark - 1
         cond = (p > soglia) if direzione == "short" else (p < -soglia)
+        if caduta_massima is not None:  # ritocco: niente ingressi dopo una barra crollata oltre la soglia
+            cond = cond & (rendimento(s["close"], 1) >= -caduta_massima)
         return {"cond": _nan_falso(cond), "stop": stop_da(s, 1.5, direzione), "target": None, "warmup": 14}
     return prepara
 
@@ -370,6 +372,9 @@ VARIANTI = {
     "XRPUSDT-V21": Variante("XRPUSDT-V21", "1h", "long", _i11("long", 0.0015), 4, {"idea": "I-11"}),
     "XRPUSDT-V20b": Variante("XRPUSDT-V20b", "1h", "short", _i11("short", 0.0010), 4, {"idea": "I-11"}),
     "XRPUSDT-V21b": Variante("XRPUSDT-V21b", "1h", "long", _i11("long", 0.0010), 4, {"idea": "I-11"}),
+    "XRPUSDT-V21r1": Variante("XRPUSDT-V21r1", "1h", "long", _i11("long", 0.0015, 0.10), 4, {"idea": "I-11"}),
+    "XRPUSDT-V21r2": Variante("XRPUSDT-V21r2", "1h", "long", _i11("long", 0.0015, 0.10), 8, {"idea": "I-11"}),
+    "XRPUSDT-V21r3": Variante("XRPUSDT-V21r3", "1h", "long", _i11("long", 0.0020, 0.10), 4, {"idea": "I-11"}),
     "XRPUSDT-V22": Variante("XRPUSDT-V22", "1h", "long", _i12("long"), 6, {"idea": "I-12"}),
     "XRPUSDT-V23": Variante("XRPUSDT-V23", "1h", "short", _i12("short"), 6, {"idea": "I-12"}),
     "XRPUSDT-V24": Variante("XRPUSDT-V24", "30m", "long", _i13("long"), 1, {"idea": "I-13"}),
