@@ -990,3 +990,29 @@ def criterio_vault(
             "trade_minimi": int(trade_minimi),
         },
     }
+
+
+def monete_richieste_trasferimento(n_monete: int, p_caso: float, livello: float = 0.05, minimo: int = 2) -> int:
+    """Su quante monete un candidato deve passare per «trasferirsi» (Passo 6, dalla 4.5).
+
+    Il piu' piccolo k, mai sotto ``minimo`` (``trasferimento_monete_minime``), per cui la
+    probabilita' di almeno k passaggi PER CASO su ``n_monete`` monete e' sotto ``livello``
+    (``trasferimento.livello_caso``), con ``p_caso`` la probabilita' che una strategia senza
+    vantaggio passi su una moneta (il piu' alto fra ``trasferimento.caso_per_moneta_minimo`` e
+    la «netta per caso» della prova a placebo). Binomiale: le monete correlate sono gia' state
+    fuse in una prima di contare ``n_monete``. Con una soglia fissa a 2, su 80 monete con
+    l'1% a moneta, 2 passaggi escono per caso il 19% delle volte.
+
+    Se nemmeno k = n_monete basta (poche monete), restituisce n_monete + 1: il trasferimento
+    non si puo' dimostrare e l'esito e' «non si sa».
+    """
+    from scipy.stats import binom
+
+    n = int(n_monete)
+    p = float(p_caso)
+    if n < 0 or not (0.0 <= p <= 1.0) or not (0.0 < livello < 1.0):
+        raise ValueError("servono n_monete >= 0, p_caso in [0, 1] e livello in (0, 1)")
+    for k in range(max(int(minimo), 1), n + 1):
+        if float(binom.sf(k - 1, n, p)) < livello:  # sf(k-1) = P(X >= k)
+            return k
+    return n + 1

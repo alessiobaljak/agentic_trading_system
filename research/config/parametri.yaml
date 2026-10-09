@@ -20,6 +20,9 @@ data_bozza: 2026-10-06
 # costruzione da 100 a 70, budget usato per intero; piu' le correzioni nate dalla
 # loro revisione. Testo approvato dal proprietario l'8 ott 2026 alle 05:08 UTC. Nessun valore e' stato scelto per far passare una
 # strategia: il dettaglio e' in PROTOCOLLO.md, appendice 3.
+modifiche_4_5:
+  scritte_il: 2026-10-09
+  approvate_il: null                 # finche' e' null vale la 4.4 (intestazione di PROTOCOLLO.md)
 modifiche_4_4:
   approvate_il: 2026-10-07
   testo_protocollo: approvato_2026-10-08T05:08Z
@@ -201,6 +204,9 @@ regole_esame:
   soglia_correlazione_stessi_giorni: 0.5
   margine_minimo_da_liquidazione: 0.8
   trasferimento_monete_minime: 2
+  trasferimento:                     # dalla 4.5 (in attesa di approvazione): Passo 6 punto 4, soglia che cresce con le monete
+    livello_caso: 0.05               # il numero richiesto e' il piu' piccolo k con P(almeno k passaggi per caso) < 0,05
+    caso_per_moneta_minimo: 0.02     # probabilita' per moneta: il piu' alto fra questo e la «netta per caso» della prova a placebo
   idea_di_gruppo_monete_minime: 3
   paper_trade_minimi: 50
   paper_durata_massima_mesi: 12
