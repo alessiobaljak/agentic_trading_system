@@ -145,6 +145,14 @@ SPEC["I-03-1h-T12-A15"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=12, at
                            "inversione di breve in tendenza (RSI 2)",
                            {"ingresso": "close > SMA200 e RSI2 < 5 e ATR(14) >= 1,5% del close", "uscita": "close > SMA5 oppure 12 barre",
                             "stop": "2,5 ATR(14)"}, (-0.02, 0.15), False)
+RITOCCHI["I-03-1h-T12-D17"] = ("BNBUSDT-041", "aggiunto il filtro close - SMA200 >= 1,7 ATR(14) alla barra di segnale (resto come BNBUSDT-041)",
+                               "Fase 3 su BNBUSDT-041 (nota BNBUSDT-N024): per terzili della distanza del close dalla SMA200 in ATR "
+                               "(confini 1,72 e 3,72) R medio -0,077, +0,058, +0,028: i cali che portano il prezzo vicino alla media "
+                               "lunga sono spesso rotture della tendenza, non cali dentro la tendenza")
+SPEC["I-03-1h-T12-D17"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=12, dist_lunga_atr=1.7),
+                           "inversione di breve in tendenza (RSI 2)",
+                           {"ingresso": "close > SMA200 + 1,7 ATR(14) e RSI2 < 5", "uscita": "close > SMA5 oppure 12 barre",
+                            "stop": "2,5 ATR(14)"}, (-0.03, 0.08), False)
 SPEC["I-03-1h-T12"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=12), "inversione di breve in tendenza (RSI 2)",
                        {"ingresso": "close > SMA200 e RSI2 < 5", "uscita": "close > SMA5 oppure 12 barre", "stop": "2,5 ATR(14)"},
                        (-0.05, 0.08), False)

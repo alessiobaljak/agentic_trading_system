@@ -14,8 +14,19 @@ import registro  # noqa: E402
 import varianti as V  # noqa: E402
 from lancia import scrivi_esito  # noqa: E402
 
-CAND = "BNBUSDT-043"
-BASE = dict(max_barre=12, k_stop=2.5, soglia_rsi=5.0, n_lunga=200, n_corta=5, atr_rel_min=0.015, n_atr=14, n_rsi=2)
+import os  # noqa: E402
+
+CAND = os.environ.get("CANDIDATO", "BNBUSDT-043")
+if CAND == "BNBUSDT-043":
+    BASE = dict(max_barre=12, k_stop=2.5, soglia_rsi=5.0, n_lunga=200, n_corta=5, atr_rel_min=0.015, n_atr=14, n_rsi=2)
+    FILTRO = ("atr_rel_min", lambda ind: ~(ind["atr"] >= 0.015 * ind["close"]),
+              "la (b) entra solo nelle barre con ATR(14) >= 1,5% della chiusura")
+elif CAND == "BNBUSDT-044":
+    BASE = dict(max_barre=12, k_stop=2.5, soglia_rsi=5.0, n_lunga=200, n_corta=5, dist_lunga_atr=1.7, n_atr=14, n_rsi=2)
+    FILTRO = ("dist_lunga_atr", lambda ind: ~(ind["close"] - ind["sma200"] >= 1.7 * ind["atr"]),
+              "la (b) entra solo nelle barre con close - SMA200 >= 1,7 ATR(14), cioe' in forte tendenza")
+else:
+    raise SystemExit(f"candidato sconosciuto {CAND}")
 
 
 def fab(tf="1h", **mod):
@@ -25,8 +36,12 @@ def fab(tf="1h", **mod):
 
 
 ROBUSTEZZA = [("soglia_rsi", 4.0), ("soglia_rsi", 6.0), ("n_lunga", 160), ("n_lunga", 240), ("n_corta", 4), ("n_corta", 6),
-              ("k_stop", 2.0), ("k_stop", 3.0), ("max_barre", 10), ("max_barre", 14), ("atr_rel_min", 0.012),
-              ("atr_rel_min", 0.018), ("n_atr", 11), ("n_atr", 17), ("n_rsi", 1), ("n_rsi", 3)]
+              ("k_stop", 2.0), ("k_stop", 3.0), ("max_barre", 10), ("max_barre", 14)]
+if CAND == "BNBUSDT-043":
+    ROBUSTEZZA += [("atr_rel_min", 0.012), ("atr_rel_min", 0.018)]
+else:
+    ROBUSTEZZA += [("dist_lunga_atr", 1.36), ("dist_lunga_atr", 2.04)]
+ROBUSTEZZA += [("n_atr", 11), ("n_atr", 17), ("n_rsi", 1), ("n_rsi", 3)]
 
 VERIFICHE = {}
 for nome, val in ROBUSTEZZA:
@@ -44,17 +59,15 @@ VERIFICHE["costi_doppi"] = {"fab": fab(), "kw": {"moltiplicatore_costi": 2.0, "c
                             "criterio": "batte ancora nettamente la (b) a costi doppi e R medio a costi doppi positivo"}
 VERIFICHE["ritardo"] = {"fab": fab(), "kw": {"ritardo_barre": 1, "con_a": False},
                         "descrizione": "esecuzione ritardata di una barra, (b) ricalcolata col ritardo",
-                        "criterio": "t contro la (b) positivo e almeno meta' del t senza ritardo (2,48)"}
+                        "criterio": "t contro la (b) positivo e almeno meta' del t senza ritardo"}
 VERIFICHE["intrabarra_opposta"] = {"fab": fab(), "kw": {"riempimento": "target_prima", "con_a": False},
                                    "descrizione": "regola intra-barra opposta (target prima): la variante non ha target, atteso identico",
                                    "criterio": "si dichiara la differenza"}
-VERIFICHE["scettico_b_volatile"] = {
-    "fab": fab(), "kw": {"con_a": False,
-                         "vieta_extra": lambda ind: ~(ind["atr"] >= 0.015 * ind["close"])},
-    "descrizione": ("prova dello scettico (Fase 5): la (b) entra solo nelle barre con ATR(14) >= 1,5% della chiusura, "
-                    "come il filtro del candidato; se il vantaggio era solo il minor peso dei costi nelle ore volatili, "
-                    "contro questa (b) sparisce"),
-    "criterio": "t contro questa (b) oltre la soglia: il vantaggio non e' solo l'effetto dei costi; t vicino a 0: lo e'"}
+VERIFICHE["scettico_b_volatile" if CAND == "BNBUSDT-043" else "scettico_b_tendenza"] = {
+    "fab": fab(), "kw": {"con_a": False, "vieta_extra": FILTRO[1]},
+    "descrizione": (f"prova dello scettico (Fase 5): {FILTRO[2]}, come il filtro del candidato; se il vantaggio era "
+                    "solo l'effetto del filtro, contro questa (b) sparisce"),
+    "criterio": "t contro questa (b) oltre la soglia: il vantaggio non e' solo l'effetto del filtro; t vicino a 0: lo e'"}
 
 
 def esegui(nome):

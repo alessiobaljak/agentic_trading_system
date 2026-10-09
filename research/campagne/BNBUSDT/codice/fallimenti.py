@@ -69,6 +69,21 @@ for chiave in sorted(righe[0]["ind"]):
     if np.all(np.isfinite(vals)) and len(set(vals)) > 3:
         qq = np.quantile(vals, [1/3, 2/3])
         gruppo(f"{chiave} al segnale (terzili)", lambda r, c=chiave, qq=qq: int(np.searchsorted(qq, r["ind"][c])))
+out.append("-- medie delle caratteristiche all'ingresso, stop contro uscite sul segnale")
+for chiave in ["atr_rel", "ora", "giorno"] + sorted(righe[0]["ind"]):
+    def val(r, c=chiave):
+        return r[c] if c in r else r["ind"][c]
+    a = [val(r) for r in righe if r["esito"] == "stop"]
+    b = [val(r) for r in righe if r["esito"] != "stop"]
+    if np.all(np.isfinite(a + b)):
+        out.append(f"   {chiave}: stop {np.mean(a):.5g}  altri {np.mean(b):.5g}")
+# distanza del close dalla SMA lunga in ATR e caduta dell'ultima barra in ATR
+if "sma200" in righe[0]["ind"]:
+    for r in righe:
+        r["dist_sma_lunga_atr"] = (r["ind"]["close"] - r["ind"]["sma200"]) / r["ind"]["atr"]
+    q = np.quantile([r["dist_sma_lunga_atr"] for r in righe], [1/3, 2/3])
+    out.append(f"-- distanza del close dalla SMA lunga in ATR: terzili {q.round(2).tolist()}")
+    gruppo("distanza dalla SMA lunga in ATR (terzili)", lambda r: int(np.searchsorted(q, r["dist_sma_lunga_atr"])))
 testo = "\n".join(out)
 print(testo)
 (C.dati.RADICE_DEFAULT / "data" / "insample" / "BNBUSDT" / f"fallimenti_{etichetta}.txt").write_text(testo, encoding="utf-8")

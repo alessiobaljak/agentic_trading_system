@@ -159,7 +159,7 @@ def i02(direzione: str, vid: str) -> Variante:
 
 def i03(tf: str, vid: str, max_barre: int = 0, k_stop: float = 2.5, soglia_rsi: float = 5.0,
         n_lunga: int = 200, n_corta: int = 5, atr_rel_min: float = 0.0, n_atr: int = 14,
-        n_rsi: int = 2) -> Variante:
+        n_rsi: int = 2, dist_lunga_atr: float = 0.0) -> Variante:
     """Con ``max_barre`` > 0 si esce anche dopo quelle barre in posizione (ritocco di BNBUSDT-005)."""
     def prepara(candele):
         o = C.array_ohlcv(candele)
@@ -171,7 +171,8 @@ def i03(tf: str, vid: str, max_barre: int = 0, k_stop: float = 2.5, soglia_rsi: 
             o["esci"] = o["close"] > o["sma5"]
         return o
     cond = lambda ind, i: bool(ind["close"][i] > ind["sma200"][i] and ind["rsi2"][i] < soglia_rsi  # noqa: E731
-                               and ind["atr"][i] >= atr_rel_min * ind["close"][i])
+                               and ind["atr"][i] >= atr_rel_min * ind["close"][i]
+                               and ind["close"][i] - ind["sma200"][i] >= dist_lunga_atr * ind["atr"][i])
     base = _uscita_su_indicatore("esci")
 
     def uscita(ind, i, barre, pos, candele):
