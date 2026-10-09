@@ -321,3 +321,95 @@ def i10(id_, direzione):
         return _ok(p, ctx["p01"][i]) and p < 0 and p <= ctx["p01"][i]
 
     return Variante(id_, "1h", direzione, prepara, condizione, _segnale_atr(direzione, 2.0), _uscita_tempo(4))
+
+
+# ---------------------------------------------------------------------------
+# I-11 prima mezz'ora -> ultima mezz'ora (30m)
+# ---------------------------------------------------------------------------
+
+def i11(id_, direzione):
+    def prepara(s):
+        n = len(s.c)
+        r_prima = np.full(n, np.nan)
+        prima = {}
+        for i in range(n):
+            g, resto = divmod(int(s.ts[i]), 86_400_000)
+            if resto == 0:
+                prima[g] = s.c[i] / s.o[i] - 1
+            if resto == 23 * 3_600_000 and g in prima:  # barra delle 23:00: si entra alle 23:30
+                r_prima[i] = prima[g]
+        return {"atr": ind.atr(s, 48), "r_prima": r_prima}
+
+    def condizione(ctx, i):
+        r = ctx["r_prima"][i]
+        if not _ok(r):
+            return False
+        return r > 0 if direzione == "long" else r < 0
+
+    return Variante(id_, "30m", direzione, prepara, condizione, _segnale_atr(direzione, 2.0), _uscita_tempo(1))
+
+
+# ---------------------------------------------------------------------------
+# I-12 volatilita' bassa (1d)
+# ---------------------------------------------------------------------------
+
+def i12(id_):
+    def prepara(s):
+        vol30 = ind.dev_std_mobile(ind.log_rend(s.c), 30)
+        med = pd_median(vol30, 180)
+        return {"atr": ind.atr(s, 14), "vol30": vol30, "med": med}
+
+    def condizione(ctx, i):
+        v, m = ctx["vol30"][i], ctx["med"][i]
+        return _ok(v, m) and v < m
+
+    return Variante(id_, "1d", "long", prepara, condizione, _segnale_atr("long", 2.5), _uscita_tempo(5))
+
+
+def pd_median(x, n):
+    return ind.percentile_mobile(x, n, 0.5)
+
+
+# ---------------------------------------------------------------------------
+# I-13 incrocio di medie 10/50 (4h)
+# ---------------------------------------------------------------------------
+
+def i13(id_, direzione):
+    def prepara(s):
+        return {"atr": ind.atr(s, 20), "m10": ind.media_mobile(s.c, 10), "m50": ind.media_mobile(s.c, 50)}
+
+    def condizione(ctx, i):
+        if i < 1:
+            return False
+        a, b, a1, b1 = ctx["m10"][i], ctx["m50"][i], ctx["m10"][i - 1], ctx["m50"][i - 1]
+        if not _ok(a, b, a1, b1):
+            return False
+        return (a > b and a1 <= b1) if direzione == "long" else (a < b and a1 >= b1)
+
+    def uscita(ctx, i, pos):
+        a, b = ctx["m10"][i], ctx["m50"][i]
+        if not _ok(a, b):
+            return None
+        return "chiudi" if ((a < b) if direzione == "long" else (a > b)) else None
+
+    return Variante(id_, "4h", direzione, prepara, condizione, _segnale_atr(direzione, 3.0), uscita)
+
+
+# ---------------------------------------------------------------------------
+# I-14 calo con volume alto che torna indietro (1d)
+# ---------------------------------------------------------------------------
+
+def i14(id_):
+    def prepara(s):
+        r = ind.log_rend(s.c)
+        sd60 = ind.dev_std_mobile(r, 60)
+        vm30 = ind.media_mobile(np.concatenate([[np.nan], s.v[:-1]]), 30)  # 30 giorni PRECEDENTI
+        return {"atr": ind.atr(s, 14), "r": r, "sd60": sd60, "vm30": vm30}
+
+    def condizione(ctx, i):
+        r, sd, vm = ctx["r"][i], ctx["sd60"][i], ctx["vm30"][i]
+        if not _ok(r, sd, vm):
+            return False
+        return r < -sd and ctx["serie"].v[i] > 1.5 * vm
+
+    return Variante(id_, "1d", "long", prepara, condizione, _segnale_atr("long", 2.0), _uscita_tempo(2))

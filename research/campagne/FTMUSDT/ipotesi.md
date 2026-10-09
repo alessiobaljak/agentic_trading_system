@@ -506,3 +506,167 @@ Solo il primo dà guadagno allo short. In quanto tempo: ore.
   4 barre.
 * **I-10-L** (1h, long): condizione p < 0 e p ≤ 1° percentile delle ultime 720 barre;
   stop = close − 2 × ATR(24); uscita a tempo dopo 4 barre.
+
+---
+
+## I-11 — Momento dentro la giornata (prima mezz'ora → ultima mezz'ora)
+
+**Fonte.** Dehua Shen, Andrew Urquhart, Pengfei Wang, «Bitcoin intraday time-series
+momentum», Financial Review 57(2), maggio 2022 (manoscritto accettato settembre 2021):
+il rendimento della prima mezz'ora della giornata predice quello dell'ultima mezz'ora;
+gli autori lo attribuiscono all'offerta di liquidità. La fonte definisce la giornata con
+il volume (il mercato non chiude); qui la giornata è quella UTC, e lo si dichiara.
+
+**Affermazione verificabile.** Su FTMUSDT a 30 minuti, se il rendimento della prima
+mezz'ora della giornata UTC (00:00-00:30) è positivo, un long aperto alle 23:30 e chiuso
+alle 00:00 ha R medio dopo i costi più alto della (a) e della (b). Specchio per lo short.
+
+**Sotto-domande.** Chi muove l'ultima mezz'ora: chi riequilibra a fine giornata (fondi
+con valutazione giornaliera alle 00:00 UTC), chi chiude posizioni di giornata. Perché
+la prima mezz'ora conterrebbe l'informazione: notizie della notte asiatica, flussi
+d'apertura. Il movimento atteso in 30 minuti è dello stesso ordine dei costi (sezione
+11, «Costi a orizzonte corto»): serve un effetto grande.
+
+**Spiegazioni concorrenti** (oltre a C1-C8):
+
+* C9 **Costi**: con una tenuta di 30 minuti il costo di un giro (0,20%) è circa un
+  decimo di R con stop di 2 ATR a 30 minuti. Previsione: R netto negativo anche con un
+  effetto lordo vero.
+* C10 **Effetto solo su bitcoin**: la fonte studia bitcoin; su un'altcoin i flussi di
+  fine giornata sono diversi. Previsione: nessun effetto.
+* C11 **Giornata UTC diversa da quella della fonte**: Previsione: effetto più debole.
+* C12 **Rumore a 30 minuti**: R per trade molto dispersi; i blocchi sono molti (un
+  trade al giorno), quindi l'errore è stimato bene: qui il caso si vede.
+* C13 **Funding alle 00:00**: l'uscita coincide con un settlement; il motore lo conta
+  solo se è un costo (momento ambiguo). Effetto piccolo ma sistematico contro il long
+  in funding positivo.
+
+**Ipotesi.** FTMUSDT, momento dentro la giornata, timeframe 30m (la regola è in mezz'ore),
+una direzione per variante.
+
+**Varianti:**
+
+* **I-11-L** (30m, long): condizione: la barra i è quella delle 23:00 (si entra alle
+  23:30) e close(barra 00:00 dello stesso giorno) > open(stessa barra); stop = close −
+  2 × ATR(48); uscita a tempo dopo 1 barra.
+* **I-11-S** (30m, short): rendimento della prima mezz'ora negativo; stop = close + 2 ×
+  ATR(48); uscita a tempo dopo 1 barra.
+
+---
+
+## I-12 — Rendimento per rischio più alto quando la volatilità è bassa
+
+**Fonte.** Alan Moreira, Tyler Muir, «Volatility-Managed Portfolios», Journal of Finance
+72(4), agosto 2017: la volatilità a breve si prevede, il rendimento atteso no; quindi il
+rendimento per unità di rischio è più alto quando la volatilità recente è bassa.
+
+**Affermazione verificabile.** Su FTMUSDT, un long aperto all'apertura del giorno dopo
+che la volatilità realizzata degli ultimi 30 giorni è sotto la sua mediana degli
+ultimi 180 giorni, tenuto 5 giorni con stop in ATR, ha R medio dopo i costi (cioè
+rendimento per unità di rischio) più alto della (a) e della (b).
+
+**Sotto-domande.** Su una crypto, la volatilità bassa è calma prima del movimento o
+assenza di interesse? Le fasi di alta volatilità del 2021-2022 sono crolli e bolle:
+i rendimenti per unità di rischio peggiori? Il long è l'unica direzione della fonte
+(il premio per il rischio è di chi tiene l'attività).
+
+**Spiegazioni concorrenti** (oltre a C1-C8):
+
+* C9 **Premio per il rischio assente nelle crypto**: senza un premio medio positivo non
+  c'è nulla da riscalare. Previsione: R vicino a zero come la (b).
+* C10 **Volatilità bassa = mercato laterale**: in laterale il long a 5 giorni non va da
+  nessuna parte. Previsione: R vicino a zero, pochi stop.
+* C11 **Volatilità bassa prima dei crolli**: la calma del 2022 precede crolli
+  (maggio, novembre). Previsione: R negativo nel 2022.
+* C12 **Lo stop in ATR riscala già il rischio**: in R anche la (b) è riscalata per
+  volatilità; la condizione aggiunge solo la scelta dei periodi. Previsione: differenza
+  piccola.
+* C13 **Trend del 2021**: i periodi a volatilità bassa del 2021 cadono in rialzo.
+
+**Ipotesi.** FTMUSDT, volatilità bassa, timeframe 1d (la fonte è mensile, il meccanismo
+è lento; 1d è il timeframe più lungo ammesso), long. Una variante: la fonte dà una
+direzione sola.
+
+* **I-12-L** (1d, long): vol30 = dev. std dei rendimenti logaritmici giornalieri degli
+  ultimi 30 giorni; condizione vol30 < mediana di vol30 negli ultimi 180 giorni; stop =
+  close − 2,5 × ATR(14); uscita a tempo dopo 5 barre.
+
+---
+
+## I-13 — Incrocio di medie mobili
+
+**Fonti.** William Brock, Josef Lakonishok, Blake LeBaron, «Simple Technical Trading
+Rules and the Stochastic Properties of Stock Returns», Journal of Finance 47(5), dicembre
+1992 (regole di medie mobili 1-50, 1-150, 5-150, 1-200). Robert Hudson, Andrew Urquhart,
+«Technical trading and cryptocurrencies», Annals of Operations Research 297, 2021
+(online 2019): le stesse famiglie di regole su bitcoin e altre crypto.
+
+**Affermazione verificabile.** Su FTMUSDT a 4 ore, quando la media di 10 barre incrocia
+verso l'alto quella di 50, un long chiuso all'incrocio opposto (o allo stop) ha R medio
+dopo i costi più alto della (a) e della (b). Specchio per lo short.
+
+**Sotto-domande.** È lo stesso meccanismo di I-01 e I-02 (trend), con un'uscita diversa:
+il trend è persistente abbastanza da superare i falsi incroci? Il rischio principale è
+che non aggiunga nulla alle altre idee di trend: lo dirà il confronto.
+
+**Spiegazioni concorrenti** (oltre a C1-C8):
+
+* C9 **Falsi incroci in laterale**: molte piccole perdite. Previsione: quota di vincenti
+  bassa e R dipendente da pochi trade lunghi (C8).
+* C10 **Stesso effetto di I-02**: Previsione: segno del risultato uguale a I-02 nella
+  stessa direzione.
+* C11 **L'uscita sull'incrocio opposto lascia correre**: la (b) con la stessa uscita
+  guadagna quasi uguale.
+* C12 **Ritardo delle medie**: l'incrocio arriva tardi, dopo gran parte del movimento.
+  Previsione: R negativo dopo i costi.
+* C13 **Trend del periodo**: long nel 2021, short nel 2022.
+
+**Ipotesi.** FTMUSDT, incrocio di medie, timeframe 4h (con 851 giorni le regole
+giornaliere della fonte danno pochi incroci; 10 e 50 barre a 4 ore ≈ 1,7 e 8,3 giorni),
+una direzione per variante.
+
+**Varianti:**
+
+* **I-13-L** (4h, long): condizione media(10)(i) > media(50)(i) e media(10)(i−1) ≤
+  media(50)(i−1); stop = close − 3 × ATR(20); uscita: media(10) < media(50) → chiudi.
+* **I-13-S** (4h, short): incrocio verso il basso; stop = close + 3 × ATR(20); uscita:
+  media(10) > media(50) → chiudi.
+
+---
+
+## I-14 — Movimenti con volume alto che tornano indietro
+
+**Fonte.** John Y. Campbell, Sanford J. Grossman, Jiang Wang, «Trading Volume and Serial
+Correlation in Stock Returns», Quarterly Journal of Economics 108(4), novembre 1993: i
+movimenti di prezzo accompagnati da volume alto tendono a invertirsi (pressione di
+liquidità di chi deve scambiare), quelli con volume basso molto meno.
+
+**Affermazione verificabile.** Su FTMUSDT a 1 giorno, dopo un giorno con rendimento
+sotto −1 deviazione standard (rendimenti degli ultimi 60 giorni) e volume (in moneta)
+oltre 1,5 volte la media dei 30 giorni precedenti, un long tenuto 2 giorni ha R medio
+dopo i costi più alto della (a) e della (b).
+
+**Sotto-domande.** Il volume alto in un giorno di calo è vendita forzata (liquidazioni,
+fondi in uscita) o informazione (molti che sanno qualcosa)? La fonte dice che nel primo
+caso il prezzo torna. Su un'altcoin le notizie proprie sono frequenti (C9). Tempo: la
+fonte usa rendimenti giornalieri e settimanali.
+
+**Spiegazioni concorrenti** (oltre a C1-C8):
+
+* C9 **Informazione**: il volume alto accompagna una notizia; il calo continua.
+* C10 **È I-03 su un altro orizzonte**: stesso segno di I-03-L. Contesto.
+* C11 **Mercato**: i giorni di calo con volume alto sono giorni di calo di tutto il
+  mercato; il rimbalzo è di BTC.
+* C12 **Pochi eventi**: condizioni doppie su 1d danno poche decine di segnali: forse
+  sotto 70 (scarto).
+* C13 **Volume in moneta**: con il prezzo che cambia molto, il volume in FTM e in USDT
+  non coincidono; la regola usa il volume in moneta della candela (Candela.volume),
+  confrontato con i 30 giorni precedenti, dove il prezzo cambia meno.
+
+**Ipotesi.** FTMUSDT, inversione dopo volume alto, timeframe 1d, long (la fonte parla di
+inversione in entrambi i versi; si prova il verso del calo, quello delle vendite
+forzate). Una variante.
+
+* **I-14-L** (1d, long): r = rendimento logaritmico del giorno; condizione r < −1 ×
+  dev. std(r, 60 giorni) e volume(i) > 1,5 × media(volume, 30 giorni precedenti);
+  stop = close − 2 × ATR(14); uscita a tempo dopo 2 barre.
