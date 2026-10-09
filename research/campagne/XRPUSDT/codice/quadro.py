@@ -382,7 +382,7 @@ def _anno(ts):
     return datetime.fromtimestamp(int(ts) / 1000, tz=timezone.utc).year
 
 
-def misure_trade(trades: Sequence[motore.Trade], ris: Optional[motore.Risultato]) -> Dict:
+def misure_trade(trades: Sequence[motore.Trade], ris: Optional[motore.Risultato], s: Optional[Dict] = None) -> Dict:
     tr = sorted(trades, key=lambda t: t.ts_uscita)
     r = [t.r for t in tr]
     per_anno = {}
@@ -406,6 +406,21 @@ def misure_trade(trades: Sequence[motore.Trade], ris: Optional[motore.Risultato]
         "stop_oltre_6pct": sum(1 for t in tr if abs(t.entrata - t.stop) / t.entrata > 0.06),
         "durata_media_ore": float(np.mean([(t.ts_uscita - t.ts_entrata) / 3.6e6 for t in tr])) if tr else 0.0,
     }
+    if s is not None and tr:
+        # G6 «e' solo il mercato»: rendimento di BTC nella finestra di ogni trade, nella direzione del trade
+        ts = s["ts"]
+        bc = s["btc_close"]
+        vals = []
+        for t in tr:
+            j = int(np.searchsorted(ts, t.ts_entrata))  # barra d'ingresso
+            k = int(np.searchsorted(ts, t.ts_uscita, side="right")) - 1  # barra che contiene l'uscita
+            if t.ts_uscita == ts[min(k, len(ts) - 1)]:  # uscita all'apertura: vale la chiusura prima
+                k -= 1
+            if j - 1 >= 0 and 0 <= k < len(ts) and np.isfinite(bc[j - 1]) and np.isfinite(bc[k]):
+                vals.append(motore.segno(t.direzione) * (bc[k] / bc[j - 1] - 1))
+        xrp = [motore.segno(t.direzione) * (t.uscita / t.entrata - 1) for t in tr]
+        out["btc_in_direzione_medio"] = float(np.mean(vals)) if vals else None
+        out["xrp_in_direzione_medio"] = float(np.mean(xrp))
     if ris is not None:
         m = motore.calcola_metriche(motore.Risultato(tr, ris.curva_capitale, ris.capitale_iniziale, ris.capitale_finale))
         out["drawdown_max"] = m["drawdown_max"]
@@ -460,7 +475,7 @@ def valuta(v: Variante, s: Dict, par: Parametri, solo_da_ts: Optional[int] = Non
     c, m, f = s["candele"], s["mark"], s["funding"]
     ris = motore.esegui(c, None, m, f, prep.crea_candidato()(), par)
     trades = [t for t in ris.trades if solo_da_ts is None or t.ts_entrata >= solo_da_ts]
-    out = {"metriche": misure_trade(trades, ris)}
+    out = {"metriche": misure_trade(trades, ris, s)}
     if len(trades) < 2:
         out["esito"] = "troppo_pochi_trade"
         return out

@@ -570,11 +570,90 @@ proprie dell'idea (S1, S2, ...).
 
 ---
 
+## I-14 — Momentum relativo: XRP contro BTC
+
+Aggiunta il 2026-10-09 mentre giravano V02-V25, prima di vederne gli esiti (avevo visto solo V01
+e V02, momentum assoluto a una settimana, nessuno dei due vicino a battere il caso).
+
+1. **Fonte**: Yukun Liu, Aleh Tsyvinski e Xi Wu, «Common Risk Factors in Cryptocurrency», NBER
+   Working Paper 25882, maggio 2019 (poi Journal of Finance 77(2), 2022): fra le crypto c'è un
+   fattore momentum trasversale: le monete che hanno reso più delle altre continuano a farlo.
+2. **Affermazione verificabile**: quando XRP ha reso più di BTC negli ultimi 7 giorni, nella
+   settimana dopo rende più del caso (long); quando ha reso meno, rende meno del caso (short).
+   Diversa da I-01: qui conta la forza RELATIVA a BTC, non il segno del rendimento di XRP.
+3. **Sotto-domande**: una sola altra moneta (BTC) come termine di confronto, perché la campagna
+   non ha dati di altre monete; il mercato comune si toglie per differenza. Chi opera: investitori
+   che spostano capitale verso le monete «che vanno», attenzione dei media. Quando: settimane.
+4-5. **Spiegazioni concorrenti**:
+
+   | | Spiegazione | Cosa prevede qui | Cosa la smentisce |
+   |---|---|---|---|
+   | G1 | Caso | `t` (b) sotto soglia | sopra soglia, stesso segno negli anni |
+   | G2 | Volatilità | XRP batte BTC nei periodi in cui XRP è più volatile: R cambia per lo stop | stessa quota di stop della (b) |
+   | G3 | Trend di fondo | long buono nel 2021, short nel 2022 | batte la (b) in entrambi |
+   | G4 | Artefatto dei dati | BTC parte il 2020-01-01, XRP il 06: primi 7 giorni | riscaldamento di 14 barre li esclude |
+   | G5 | Costi | 0,023 R | — |
+   | G6 | Solo il mercato | il segnale coincide con quello di I-01 (XRP sale quando sale tutto) | segnali diversi da I-01 in molti giorni |
+   | G7 | Lo fa l'uscita | (a) e (b) simili | batte nettamente (a) e (b) |
+   | S1 | Rientro del rapporto XRP/BTC (l'opposto) | R sotto la (b) | — |
+   | S2 | Pochi episodi (XRP che raddoppia in pochi giorni) | R dominato da 2-3 trade | senza i 3 migliori resta |
+   | S3 | Notizie proprie di XRP (causa legale): il distacco da BTC continua per motivi non ripetibili | il risultato viene da dicembre 2020 | resta togliendo dicembre 2020 |
+
+6. **Ipotesi completa**: XRPUSDT, timeframe **1d**. rel = (close XRP[i]/close XRP[i−7] − 1) −
+   (close BTC[i]/close BTC[i−7] − 1), con le chiusure di BTC sugli stessi giorni. Riscaldamento 14.
+   * **XRPUSDT-V26 (long)**: rel > 0 → long; stop min(2 ATR14, 6%) sotto; nessun target; tenuta 7.
+     Previsione: R medio fra −0,10 e +0,15; non batte nettamente la (b).
+   * **XRPUSDT-V27 (short)**: rel < 0 → short; stop sopra; tenuta 7. Previsione: fra −0,15 e +0,10.
+
+---
+
+## I-15 — Rottura dell'intervallo di apertura della giornata UTC
+
+1. **Fonte**: Toby Crabel, «Day Trading with Short Term Price Patterns and Opening Range
+   Breakout», Traders Press, 1990: la rottura dell'intervallo dei primi minuti od ore di una
+   sessione indica la direzione del resto della giornata.
+2. **Affermazione verificabile**: con la giornata UTC, quando una chiusura oraria fra le 02:00 e le
+   23:00 supera per la prima volta nel giorno il massimo delle prime due ore (00:00-02:00), XRP fino
+   a fine giornata sale più del caso (long); quando scende per la prima volta sotto il minimo delle
+   prime due ore, scende più del caso (short).
+3. **Sotto-domande**: le crypto non hanno apertura vera; la mezzanotte UTC è il confine delle
+   candele giornaliere, che molti guardano. Due ore scelte a priori (la fonte usa intervalli brevi
+   all'apertura; due ore su 24 sono l'equivalente di circa 30 minuti di una sessione azionaria).
+   Chi opera: chi segue la rottura, stop sopra e sotto l'intervallo. Quando: entro la giornata.
+4-5. **Spiegazioni concorrenti**:
+
+   | | Spiegazione | Cosa prevede qui | Cosa la smentisce |
+   |---|---|---|---|
+   | G1 | Caso | `t` (b) sotto soglia | sopra |
+   | G2 | Volatilità | rotture nei giorni volatili | rendimento in direzione positivo |
+   | G3 | Trend di fondo | rotture verso l'alto buone solo nel 2020-21 | anche nel 2022 |
+   | G4 | Artefatto dei dati | giorni con buchi (intervallo d'apertura incompleto) | — si esige che le barre 00:00 e 01:00 esistano |
+   | G5 | Costi | 0,07 R a giro | R netto positivo |
+   | G6 | Solo il mercato | rotture insieme a BTC | — |
+   | G7 | Lo fa l'uscita | (a) e (b) simili | batte nettamente |
+   | S1 | Falsa rottura e rientro nell'intervallo | R sotto la (b) | — |
+   | S2 | Momentum a 1 ora (la rottura è un movimento) | stesso risultato di una regola sul rendimento | — |
+   | S3 | La mezzanotte UTC non ha significato per XRP | `t` vicino a zero | — |
+
+6. **Ipotesi completa**: XRPUSDT, timeframe **1h**. Massimo e minimo dell'intervallo = massimo
+   degli high e minimo dei low delle barre delle 00:00 e 01:00 dello stesso giorno (servono
+   entrambe). Segnale alle chiusure delle barre dalle 02:00 alle 22:00 (l'ingresso deve cadere entro
+   le 23:00), solo la prima rottura del giorno in quella direzione. Uscita per segnale alla
+   chiusura della barra delle 23:00 (si esce all'apertura di mezzanotte). Riscaldamento 14.
+   * **XRPUSDT-V28 (long)**: prima chiusura del giorno sopra il massimo dell'intervallo → long;
+     stop min(1,5 ATR14, 6%) sotto; nessun target; uscita a fine giornata; tenuta massima 22.
+     Previsione: R medio fra −0,10 e +0,10.
+   * **XRPUSDT-V29 (short)**: prima chiusura del giorno sotto il minimo dell'intervallo → short;
+     stop sopra; uscita a fine giornata; tenuta 22. Previsione: fra −0,10 e +0,10.
+
+---
+
 ## Riepilogo
 
-13 idee, 25 varianti (più i ripieghi dichiarati, che sostituiscono una variante solo se quella
+15 idee (I-14 e I-15 aggiunte dopo), 29 varianti (più i ripieghi dichiarati, che sostituiscono una variante solo se quella
 resta sotto i 70 trade). Famiglie di meccanismi: momentum di prezzo (I-01, I-03, I-07),
 rientro dopo domanda di liquidità (I-02, I-08), leva e funding (I-04), calendario (I-05, I-13),
 legame con BTC (I-06), volatilità (I-09), flusso degli ordini (I-10), premio del perpetuo
-(I-11), ordini sui numeri tondi (I-12). Restano 5 unità del budget: per altre idee con fonte se
-le trovo, poi per i ritocchi nell'ordine della regola 6.
+(I-11), ordini sui numeri tondi (I-12), forza relativa (I-14), rottura dell'intervallo d'apertura
+(I-15). Se tutte le varianti superano i 70 trade resta 1 unità del budget: per un'altra idea con
+fonte se la trovo, poi per i ritocchi nell'ordine della regola 6.
