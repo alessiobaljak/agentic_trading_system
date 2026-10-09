@@ -700,6 +700,17 @@ copre posizioni prima della candela giornaliera e del settlement.
 * **I-15-S** short: lo stesso se la barra delle 00:00 ha chiuso sotto la sua apertura. Previsione
   uguale.
 
+## Ritocchi (regola 6, dopo la nota MASKUSDT-N005: idee con fonte esaurite)
+
+Ogni ritocco si sceglie con `codice/ordine_ritocchi.py` (prima della lista per `t` contro la (b))
+e si scrive qui prima del test.
+
+* **R-1, ritocco di MASKUSDT-006** (I-03-S, short dopo barra > +3 deviazioni; prima della lista
+  con `t` 1,54). Cambia l'uscita: target da 1 a 2 volte lo stop (4 ATR) e uscita a tempo da 6 a
+  12 barre. Motivo (Fase 3, nota MASKUSDT-N006): le 50 uscite a tempo a 6 ore hanno R medio
+  +0,20, il rientro non è finito. Stessa entrata, stesso stop. Previsione: R medio fra -0,05 e
+  +0,20; `t` contro la (b) fra 0,5 e 2; probabilmente non netto.
+
 ## Previsioni (scritte dopo la Fase 0, prima del primo test)
 
 Costi di un giro in R dalla Fase 0: circa 0,06 R a 1 ora con stop di 2 ATR, 0,07 R con 1,5 ATR,
