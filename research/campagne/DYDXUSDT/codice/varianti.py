@@ -361,7 +361,72 @@ def _i12(direzione, finestra=168, z_soglia=2.0, uscita=4):
     return crea
 
 
+def _i10_stop_atr(direzione, k_stop=2.0, uscita=6):
+    """Ritocco di I-10: stessa condizione, stop a k ATR(14) dal close invece del lato della barra stretta."""
+    def crea(ctx: Contesto) -> Spec:
+        rng = ctx.h - ctx.l
+        nr7 = np.zeros(ctx.n, dtype=bool)
+        for j in range(6, ctx.n):
+            nr7[j] = rng[j] < rng[j - 6:j].min()
+        sig = segnale_atr(ctx, direzione, k_stop, 14)
+
+        def cond(i):
+            if i < 7 or not nr7[i - 1]:
+                return False
+            return ctx.c[i] > ctx.h[i - 1] if direzione == "long" else ctx.c[i] < ctx.l[i - 1]
+        return Spec(sig, cond, uscita_tempo(ctx, uscita))
+    return crea
+
+
+def _i10_uscita(direzione, uscita):
+    """Ritocco di I-10: stop originale (lato della barra stretta), tenuta diversa."""
+    def crea(ctx: Contesto) -> Spec:
+        base = _i10(direzione)(ctx)
+        return Spec(base.segnale, base.condizione, uscita_tempo(ctx, uscita))
+    return crea
+
+
+def _i10_volume_basso(direzione, uscita=6, finestra=20):
+    """Ritocco di I-10: come 013, solo se il volume in USDT della barra del segnale non supera la media delle 20 prima."""
+    def crea(ctx: Contesto) -> Spec:
+        base = _i10(direzione)(ctx)
+        v = ctx.volume_usdt
+
+        def cond(i):
+            if i < finestra or not base.condizione(i):
+                return False
+            media = v[i - finestra:i].mean()
+            return bool(np.isfinite(v[i]) and np.isfinite(media) and v[i] <= media)
+
+        def sig(i):
+            return base.segnale(i) if i >= finestra else None
+        return Spec(sig, cond, uscita_tempo(ctx, uscita))
+    return crea
+
+
+def _i10_volume_basso_trend(direzione, uscita=6, finestra=20, media=50):
+    """Ritocco di 024: in piu' il close della barra del segnale sotto (short) o sopra (long) la media a 50."""
+    def crea(ctx: Contesto) -> Spec:
+        base = _i10_volume_basso(direzione, uscita, finestra)(ctx)
+        m = sma(ctx.c, media)
+
+        def cond(i):
+            if i < media or not np.isfinite(m[i]) or not base.condizione(i):
+                return False
+            return ctx.c[i] < m[i] if direzione == "short" else ctx.c[i] > m[i]
+
+        def sig(i):
+            return base.segnale(i) if i >= media else None
+        return Spec(sig, cond, base.esci)
+    return crea
+
+
 CREA: Dict[str, Callable] = {
+    "I10_short_volume_basso_uscita12": _i10_volume_basso("short", uscita=12),
+    "I10_short_volume_basso_trend": _i10_volume_basso_trend("short"),
+    "I10_short_volume_basso": _i10_volume_basso("short"),
+    "I10_short_stop2atr": _i10_stop_atr("short"),
+    "I10_short_uscita12": _i10_uscita("short", 12),
     "I02h_long": _i02("long"), "I02h_short": _i02("short"),
     "I05b_long": _i05b("long"), "I05b_short": _i05b("short"),
     "I06b_short": _i06b("short"), "I06b_long": _i06b("long"),

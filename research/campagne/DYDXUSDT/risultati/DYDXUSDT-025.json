@@ -1,0 +1,934 @@
+{
+ "registrazione": {
+  "id": "DYDXUSDT-025",
+  "tipo": "registrazione",
+  "tipo_test": "variante",
+  "variante": "I10_short_volume_basso_uscita12",
+  "famiglia": "DYDXUSDT-013",
+  "ritocco_di": "DYDXUSDT-024",
+  "idea": "I-10",
+  "fonte": "Crabel, Day Trading with Short Term Price Patterns and Opening Range Breakout, Traders Press, 1990",
+  "meccanismo": "compressione poi rottura al ribasso con volume non sopra la media, tenuta piu' lunga",
+  "timeframe": "4h",
+  "direzione": "short",
+  "parametri": {
+   "barre_confronto": 7,
+   "stop": "high della barra stretta",
+   "uscita_barre": 12,
+   "filtro_volume": "<= media 20 barre"
+  },
+  "cosa_cambia": "tenuta da 6 a 12 barre",
+  "perche": "in 024 il guadagno sta nelle 45 uscite a tempo (+1,37 R), le altre divisioni dello studio (N008) lasciano meno di 70 trade; la tenuta e' l'unica leva rimasta che non toglie trade. Il precedente 013 -> 023 (stessa modifica) aveva lasciato R simile e abbassato il t: non mi aspetto un miglioramento",
+  "previsione": "circa 75-83 trade, R medio fra +0,1 e +0,4, t contro la (b) fra 0,7 e 1,6",
+  "criterio_successo": "batte nettamente la (a) e la (b) e R medio dopo i costi > 0",
+  "periodo": "costruzione",
+  "trade_stimati": 79,
+  "conteggio": {
+   "trade": 79,
+   "long": 0,
+   "short": 79,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "barre": 3510
+  },
+  "variante_n": 25
+ },
+ "risultato": {
+  "id": "DYDXUSDT-025",
+  "tipo": "risultato",
+  "variante": "I10_short_volume_basso_uscita12",
+  "metriche": {
+   "trade": 79,
+   "profit_factor": 1.3184425691919726,
+   "r_medio": 0.2183816331135152,
+   "r_medio_per_anno": {
+    "2021": 0.3799043699663011,
+    "2022": 0.17154245058291173,
+    "2023": 0.1516516007085481
+   },
+   "trade_per_anno": {
+    "2021": 19,
+    "2022": 47,
+    "2023": 13
+   },
+   "r_medio_senza_3_migliori": -0.019429674452588985,
+   "drawdown_max": 0.07640664475520532,
+   "rendimento_totale": 0.17271857739306035,
+   "rendimento_per_anno": {
+    "2021": 0.07083189048730242,
+    "2022": 0.07533400119746164,
+    "2023": 0.01842518472836732
+   },
+   "win_rate": 0.35443037974683544,
+   "esiti": {
+    "stop": 46,
+    "target": 0,
+    "segnale": 32,
+    "liquidazione": 0,
+    "fine_dati": 1
+   },
+   "n_ridotti": 0,
+   "n_violazioni_liquidazione": 0,
+   "n_segnali_non_validi": 0,
+   "n_buchi_dati": 2,
+   "n_funding_in_buco": 3,
+   "funding_totale": -4.314483214292221,
+   "costi_totali": 36.119611429242646,
+   "stop_medio_pct": 0.04054687323506558,
+   "quota_stop_oltre_6pct": 0.1518987341772152
+  },
+  "blocco": 2,
+  "baseline_a": {
+   "differenza": 0.3622782777463694,
+   "errore_standard": 0.3674057363601907,
+   "errore_candidato": 0.34722073824948285,
+   "errore_minimo": 0.34722073824948285,
+   "baseline_media": -0.1438966446328542,
+   "baseline_errore_standard": 0.12010301428298145,
+   "t": 0.9860441519922418,
+   "soglia": 2.0679659878475833,
+   "netta": false,
+   "valutabile": true,
+   "n_blocchi": 39,
+   "p_value": 0.16517426093877824,
+   "media": -0.1438966446328542,
+   "n_trade": 647,
+   "blocco": 9,
+   "n_blocchi_a": 71,
+   "valutabile_a": true
+  },
+  "baseline_b": {
+   "differenza": 0.27395382490836434,
+   "errore_standard": 0.3263679726111608,
+   "errore_candidato": 0.32555509968615315,
+   "errore_minimo": 0.32555509968615315,
+   "baseline_media": -0.05557219179484917,
+   "baseline_errore_standard": 0.023020221863794134,
+   "t": 0.8394016812267195,
+   "soglia": 2.0679659878475833,
+   "netta": false,
+   "valutabile": true,
+   "n_blocchi": 39,
+   "p_value": 0.20324696221125008,
+   "media": -0.05557219179484917,
+   "n_simulazioni": 200,
+   "trade_per_simulazione_medio": 75.485,
+   "durata_media_barre": 7,
+   "quota_barre_vietate_segnale_non_valido": 0.20883190883190883,
+   "quota_barre_vietate_totale": 0.20883190883190883,
+   "segnali_scartati_per_simulazione_medio": 0.0,
+   "simulazioni_vuote": 0,
+   "percentile_90": 0.31403030178787267
+  },
+  "percentile_caso": 82.5,
+  "buy_and_hold_per_anno": {
+   "2021": {
+    "long": -0.3914650896536582,
+    "short": 0.3893678395288793
+   },
+   "2022": {
+    "long": -0.864388180430424,
+    "short": 0.8631429585088732
+   },
+   "2023": {
+    "long": 1.5226361879166816,
+    "short": -1.5281819232267502
+   }
+  },
+  "valutabile": true,
+  "candidato": false,
+  "trade_uguali_alla_stima": true
+ },
+ "trades": [
+  {
+   "ts_entrata": 1631736000000,
+   "ts_uscita": 1631764799999,
+   "r": -1.0136724137596973,
+   "esito": "stop",
+   "entrata": 11.157768,
+   "uscita": 12.192438,
+   "stop": 12.19,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1631966400000,
+   "ts_uscita": 1632139200000,
+   "r": 2.0183150741848306,
+   "esito": "segnale",
+   "entrata": 16.211757,
+   "uscita": 12.5685132,
+   "stop": 18.015,
+   "funding": -0.058614357308274814
+  },
+  {
+   "ts_entrata": 1632312000000,
+   "ts_uscita": 1632326399999,
+   "r": -1.0157521456447738,
+   "esito": "stop",
+   "entrata": 12.6744646,
+   "uscita": 13.687737,
+   "stop": 13.685,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1632456000000,
+   "ts_uscita": 1632599999999,
+   "r": -1.0127059164411953,
+   "esito": "stop",
+   "entrata": 13.342331000000001,
+   "uscita": 14.265852599999999,
+   "stop": 14.263,
+   "funding": -0.05399374757510441
+  },
+  {
+   "ts_entrata": 1632988800000,
+   "ts_uscita": 1633161600000,
+   "r": 1.6331992491929397,
+   "esito": "segnale",
+   "entrata": 25.984802,
+   "uscita": 22.8855762,
+   "stop": 27.875,
+   "funding": -0.06445318860184421
+  },
+  {
+   "ts_entrata": 1633204800000,
+   "ts_uscita": 1633319999999,
+   "r": -1.0109986673319593,
+   "esito": "stop",
+   "entrata": 23.3993192,
+   "uscita": 24.414882,
+   "stop": 24.41,
+   "funding": -0.1766634614785678
+  },
+  {
+   "ts_entrata": 1633435200000,
+   "ts_uscita": 1633579199999,
+   "r": -1.0088417126546954,
+   "esito": "stop",
+   "entrata": 23.4163158,
+   "uscita": 24.4518894,
+   "stop": 24.447,
+   "funding": -0.19122813851693676
+  },
+  {
+   "ts_entrata": 1633651200000,
+   "ts_uscita": 1633723199999,
+   "r": -1.0119991099582157,
+   "esito": "stop",
+   "entrata": 21.760647000000002,
+   "uscita": 22.649528999999998,
+   "stop": 22.645,
+   "funding": -0.18052253238616997
+  },
+  {
+   "ts_entrata": 1634400000000,
+   "ts_uscita": 1634572800000,
+   "r": 4.206524486081233,
+   "esito": "segnale",
+   "entrata": 22.5214948,
+   "uscita": 19.993997999999998,
+   "stop": 23.13,
+   "funding": -0.8631245108831644
+  },
+  {
+   "ts_entrata": 1634918400000,
+   "ts_uscita": 1634932799999,
+   "r": -1.0481571130973872,
+   "esito": "stop",
+   "entrata": 19.2521488,
+   "uscita": 19.7429478,
+   "stop": 19.739,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1635019200000,
+   "ts_uscita": 1635192000000,
+   "r": 0.7354640533103525,
+   "esito": "segnale",
+   "entrata": 19.3541284,
+   "uscita": 19.0418076,
+   "stop": 19.858,
+   "funding": -1.558260026234254
+  },
+  {
+   "ts_entrata": 1635451200000,
+   "ts_uscita": 1635479999999,
+   "r": -1.0441831036382236,
+   "esito": "stop",
+   "entrata": 15.693860599999999,
+   "uscita": 16.130225399999997,
+   "stop": 16.127,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1635566400000,
+   "ts_uscita": 1635739200000,
+   "r": 1.2043469512173963,
+   "esito": "segnale",
+   "entrata": 15.7508492,
+   "uscita": 15.116022599999999,
+   "stop": 16.3,
+   "funding": -0.7708387403702511
+  },
+  {
+   "ts_entrata": 1636963200000,
+   "ts_uscita": 1637136000000,
+   "r": 7.479444831817868,
+   "esito": "segnale",
+   "entrata": 14.7260542,
+   "uscita": 12.8365668,
+   "stop": 14.979,
+   "funding": -0.6571283362783913
+  },
+  {
+   "ts_entrata": 1637208000000,
+   "ts_uscita": 1637323199999,
+   "r": -1.0201843233596326,
+   "esito": "stop",
+   "entrata": 13.1063782,
+   "uscita": 13.7207436,
+   "stop": 13.718,
+   "funding": -0.06832991926693073
+  },
+  {
+   "ts_entrata": 1637467200000,
+   "ts_uscita": 1637582399999,
+   "r": -1.0133563016049325,
+   "esito": "stop",
+   "entrata": 13.5592876,
+   "uscita": 14.1988392,
+   "stop": 14.196,
+   "funding": -0.13998349591643994
+  },
+  {
+   "ts_entrata": 1638057600000,
+   "ts_uscita": 1638230400000,
+   "r": 1.3307115483583887,
+   "esito": "segnale",
+   "entrata": 12.9754044,
+   "uscita": 12.5715138,
+   "stop": 13.274,
+   "funding": -0.22499954252852344
+  },
+  {
+   "ts_entrata": 1638504000000,
+   "ts_uscita": 1638518399999,
+   "r": -1.0482235830366686,
+   "esito": "stop",
+   "entrata": 13.092381000000001,
+   "uscita": 13.4256846,
+   "stop": 13.423,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1638705600000,
+   "ts_uscita": 1638878400000,
+   "r": -0.14174877427590415,
+   "esito": "segnale",
+   "entrata": 9.235152600000001,
+   "uscita": 9.3058608,
+   "stop": 9.764,
+   "funding": -0.10205170333855643
+  },
+  {
+   "ts_entrata": 1640894400000,
+   "ts_uscita": 1641067200000,
+   "r": 0.43261267226297206,
+   "esito": "segnale",
+   "entrata": 8.6412714,
+   "uscita": 8.4506898,
+   "stop": 9.064,
+   "funding": -0.021419941567335024
+  },
+  {
+   "ts_entrata": 1641816000000,
+   "ts_uscita": 1641931199999,
+   "r": -1.026052015304719,
+   "esito": "stop",
+   "entrata": 6.5526892000000005,
+   "uscita": 6.859371599999999,
+   "stop": 6.858,
+   "funding": -0.004375122130456941
+  },
+  {
+   "ts_entrata": 1642204800000,
+   "ts_uscita": 1642247999999,
+   "r": -1.0362675797417253,
+   "esito": "stop",
+   "entrata": 7.6694658,
+   "uscita": 7.9855968,
+   "stop": 7.984,
+   "funding": 0.06743686404466605
+  },
+  {
+   "ts_entrata": 1642392000000,
+   "ts_uscita": 1642564800000,
+   "r": 0.8987990614729653,
+   "esito": "segnale",
+   "entrata": 7.332533199999999,
+   "uscita": 7.0224041999999995,
+   "stop": 7.671,
+   "funding": -0.039448146627507126
+  },
+  {
+   "ts_entrata": 1643011200000,
+   "ts_uscita": 1643068799999,
+   "r": -1.015412173294058,
+   "esito": "stop",
+   "entrata": 5.5448908,
+   "uscita": 6.0382074,
+   "stop": 6.037,
+   "funding": 0.012674312842095137
+  },
+  {
+   "ts_entrata": 1643313600000,
+   "ts_uscita": 1643399999999,
+   "r": -1.0275355119377123,
+   "esito": "stop",
+   "entrata": 5.7078581999999995,
+   "uscita": 5.928185399999999,
+   "stop": 5.927,
+   "funding": -0.046772894476386384
+  },
+  {
+   "ts_entrata": 1643889600000,
+   "ts_uscita": 1643903999999,
+   "r": -1.0840002621622884,
+   "esito": "stop",
+   "entrata": 5.7718454,
+   "uscita": 5.856171000000001,
+   "stop": 5.855,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1644076800000,
+   "ts_uscita": 1644134399999,
+   "r": -1.0545326611252044,
+   "esito": "stop",
+   "entrata": 6.7006596,
+   "uscita": 6.8393676,
+   "stop": 6.838,
+   "funding": -0.04906781741666018
+  },
+  {
+   "ts_entrata": 1644811200000,
+   "ts_uscita": 1644854399999,
+   "r": -1.0273589138600012,
+   "esito": "stop",
+   "entrata": 6.7466504,
+   "uscita": 7.093418399999999,
+   "stop": 7.092,
+   "funding": 0.03287055738513978
+  },
+  {
+   "ts_entrata": 1645070400000,
+   "ts_uscita": 1645243200000,
+   "r": 2.223262920597588,
+   "esito": "segnale",
+   "entrata": 7.1495698,
+   "uscita": 6.3972792,
+   "stop": 7.483,
+   "funding": 0.12797699262906734
+  },
+  {
+   "ts_entrata": 1645272000000,
+   "ts_uscita": 1645444800000,
+   "r": 1.503469427011129,
+   "esito": "segnale",
+   "entrata": 6.168766,
+   "uscita": 5.6821361999999995,
+   "stop": 6.487,
+   "funding": 0.0731354733400043
+  },
+  {
+   "ts_entrata": 1645905600000,
+   "ts_uscita": 1646078399999,
+   "r": -1.0593566242548633,
+   "esito": "stop",
+   "entrata": 5.4109176,
+   "uscita": 5.586117,
+   "stop": 5.585,
+   "funding": 0.22482780101763788
+  },
+  {
+   "ts_entrata": 1646366400000,
+   "ts_uscita": 1646539200000,
+   "r": 1.0861264652175562,
+   "esito": "segnale",
+   "entrata": 5.34893,
+   "uscita": 5.0600118,
+   "stop": 5.613,
+   "funding": -0.12200044561665438
+  },
+  {
+   "ts_entrata": 1646971200000,
+   "ts_uscita": 1647100799999,
+   "r": -1.0241958658774217,
+   "esito": "stop",
+   "entrata": 4.6210756,
+   "uscita": 4.7999598,
+   "stop": 4.799,
+   "funding": -0.0807159327297545
+  },
+  {
+   "ts_entrata": 1647561600000,
+   "ts_uscita": 1647633599999,
+   "r": -1.040108900070331,
+   "esito": "stop",
+   "entrata": 4.7230552,
+   "uscita": 4.855971,
+   "stop": 4.855,
+   "funding": -0.03702685745823278
+  },
+  {
+   "ts_entrata": 1648180800000,
+   "ts_uscita": 1648195199999,
+   "r": -1.0645702196365296,
+   "esito": "stop",
+   "entrata": 5.217956200000001,
+   "uscita": 5.3170632,
+   "stop": 5.316,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1649145600000,
+   "ts_uscita": 1649318400000,
+   "r": 4.6652573496789005,
+   "esito": "segnale",
+   "entrata": 6.6926612,
+   "uscita": 5.656131,
+   "stop": 6.914,
+   "funding": -0.10352802315862664
+  },
+  {
+   "ts_entrata": 1650801600000,
+   "ts_uscita": 1650974400000,
+   "r": 3.2476764801358953,
+   "esito": "segnale",
+   "entrata": 4.6040790000000005,
+   "uscita": 4.4168832,
+   "stop": 4.661,
+   "funding": -0.4123532894069683
+  },
+  {
+   "ts_entrata": 1652198400000,
+   "ts_uscita": 1652371200000,
+   "r": 4.853338984337975,
+   "esito": "segnale",
+   "entrata": 2.9284141999999997,
+   "uscita": 1.7783556,
+   "stop": 3.163,
+   "funding": 0.43016349712190527
+  },
+  {
+   "ts_entrata": 1652515200000,
+   "ts_uscita": 1652615999999,
+   "r": -1.0258938542472207,
+   "esito": "stop",
+   "entrata": 1.8866226000000001,
+   "uscita": 2.0764152,
+   "stop": 2.076,
+   "funding": 0.15250787697737472
+  },
+  {
+   "ts_entrata": 1654128000000,
+   "ts_uscita": 1654300800000,
+   "r": 1.2590297274871205,
+   "esito": "segnale",
+   "entrata": 1.8206358,
+   "uscita": 1.7063412,
+   "stop": 1.909,
+   "funding": 0.1652522071657884
+  },
+  {
+   "ts_entrata": 1655280000000,
+   "ts_uscita": 1655323199999,
+   "r": -1.0170966343948697,
+   "esito": "stop",
+   "entrata": 1.089782,
+   "uscita": 1.1982396,
+   "stop": 1.198,
+   "funding": 0.04977908225290352
+  },
+  {
+   "ts_entrata": 1655467200000,
+   "ts_uscita": 1655640000000,
+   "r": -0.4476157318651183,
+   "esito": "segnale",
+   "entrata": 1.1547690000000002,
+   "uscita": 1.1692338,
+   "stop": 1.195,
+   "funding": 0.6789876355303681
+  },
+  {
+   "ts_entrata": 1657094400000,
+   "ts_uscita": 1657166399999,
+   "r": -1.0279206835105916,
+   "esito": "stop",
+   "entrata": 1.7976404000000001,
+   "uscita": 1.8923784,
+   "stop": 1.892,
+   "funding": 0.04966614021255077
+  },
+  {
+   "ts_entrata": 1657281600000,
+   "ts_uscita": 1657310399999,
+   "r": -1.0263914089278972,
+   "esito": "stop",
+   "entrata": 1.929614,
+   "uscita": 2.0304059999999997,
+   "stop": 2.03,
+   "funding": 0.02958948292170636
+  },
+  {
+   "ts_entrata": 1657368000000,
+   "ts_uscita": 1657540800000,
+   "r": 2.749695494517515,
+   "esito": "segnale",
+   "entrata": 2.084583,
+   "uscita": 1.8283656,
+   "stop": 2.177,
+   "funding": 0.01720395899094564
+  },
+  {
+   "ts_entrata": 1657785600000,
+   "ts_uscita": 1657828799999,
+   "r": -1.0476304197242268,
+   "esito": "stop",
+   "entrata": 1.7626473999999999,
+   "uscita": 1.8213641999999999,
+   "stop": 1.821,
+   "funding": 0.12278881929871063
+  },
+  {
+   "ts_entrata": 1658606400000,
+   "ts_uscita": 1658620799999,
+   "r": -1.041296172527808,
+   "esito": "stop",
+   "entrata": 2.1115776,
+   "uscita": 2.1744348,
+   "stop": 2.174,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1659412800000,
+   "ts_uscita": 1659585600000,
+   "r": -0.3239065448337209,
+   "esito": "segnale",
+   "entrata": 2.2615476,
+   "uscita": 2.310462,
+   "stop": 2.428,
+   "funding": 0.18298423914849343
+  },
+  {
+   "ts_entrata": 1660780800000,
+   "ts_uscita": 1660953600000,
+   "r": 5.469282942847194,
+   "esito": "segnale",
+   "entrata": 1.9016195999999999,
+   "uscita": 1.645329,
+   "stop": 1.948,
+   "funding": 0.2059939865457692
+  },
+  {
+   "ts_entrata": 1661011200000,
+   "ts_uscita": 1661068799999,
+   "r": -1.076040329784187,
+   "esito": "stop",
+   "entrata": 1.6286742,
+   "uscita": 1.665333,
+   "stop": 1.665,
+   "funding": 0.25570558410854466
+  },
+  {
+   "ts_entrata": 1661313600000,
+   "ts_uscita": 1661414399999,
+   "r": -1.0387409558622152,
+   "esito": "stop",
+   "entrata": 1.7606477999999999,
+   "uscita": 1.8373674,
+   "stop": 1.837,
+   "funding": 0.12123718767563224
+  },
+  {
+   "ts_entrata": 1661500800000,
+   "ts_uscita": 1661673600000,
+   "r": 1.1609308997494743,
+   "esito": "segnale",
+   "entrata": 1.7286542,
+   "uscita": 1.6273254,
+   "stop": 1.813,
+   "funding": 0.23739660207793375
+  },
+  {
+   "ts_entrata": 1663286400000,
+   "ts_uscita": 1663315199999,
+   "r": -1.0602265675271365,
+   "esito": "stop",
+   "entrata": 1.3157368,
+   "uscita": 1.3442688,
+   "stop": 1.344,
+   "funding": 0.0430309238387613
+  },
+  {
+   "ts_entrata": 1664064000000,
+   "ts_uscita": 1664193599999,
+   "r": -1.0276374722392039,
+   "esito": "stop",
+   "entrata": 1.2347530000000002,
+   "uscita": 1.2862572,
+   "stop": 1.286,
+   "funding": -0.022914200419393967
+  },
+  {
+   "ts_entrata": 1664625600000,
+   "ts_uscita": 1664798400000,
+   "r": 2.209690757058521,
+   "esito": "segnale",
+   "entrata": 1.2647469999999998,
+   "uscita": 1.2282456,
+   "stop": 1.281,
+   "funding": -0.470073012422706
+  },
+  {
+   "ts_entrata": 1665273600000,
+   "ts_uscita": 1665287999999,
+   "r": -1.0744143850499754,
+   "esito": "stop",
+   "entrata": 1.2437512,
+   "uscita": 1.2642528,
+   "stop": 1.264,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1665806400000,
+   "ts_uscita": 1665979200000,
+   "r": 0.8599206782037462,
+   "esito": "segnale",
+   "entrata": 1.5036992,
+   "uscita": 1.4662932,
+   "stop": 1.546,
+   "funding": -0.12481864139291482
+  },
+  {
+   "ts_entrata": 1666411200000,
+   "ts_uscita": 1666454399999,
+   "r": -1.0680003078057194,
+   "esito": "stop",
+   "entrata": 1.419716,
+   "uscita": 1.4432886,
+   "stop": 1.443,
+   "funding": -0.06921628749557858
+  },
+  {
+   "ts_entrata": 1667520000000,
+   "ts_uscita": 1667534399999,
+   "r": -1.0506123312838622,
+   "esito": "stop",
+   "entrata": 1.5936812,
+   "uscita": 1.6323264,
+   "stop": 1.632,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1669392000000,
+   "ts_uscita": 1669435199999,
+   "r": -1.042130209924831,
+   "esito": "stop",
+   "entrata": 1.8076384,
+   "uscita": 1.8603720000000001,
+   "stop": 1.86,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1669478400000,
+   "ts_uscita": 1669535999999,
+   "r": -1.0565777451269134,
+   "esito": "stop",
+   "entrata": 1.7956408000000001,
+   "uscita": 1.8343668,
+   "stop": 1.834,
+   "funding": -0.0034189996881185004
+  },
+  {
+   "ts_entrata": 1670040000000,
+   "ts_uscita": 1670212800000,
+   "r": -0.09365775493435026,
+   "esito": "segnale",
+   "entrata": 1.8536292,
+   "uscita": 1.8593718,
+   "stop": 1.923,
+   "funding": -0.1780926321529721
+  },
+  {
+   "ts_entrata": 1670328000000,
+   "ts_uscita": 1670500800000,
+   "r": 5.780076499699402,
+   "esito": "segnale",
+   "entrata": 1.7516496000000001,
+   "uscita": 1.5923184000000001,
+   "stop": 1.779,
+   "funding": -0.17667716740661288
+  },
+  {
+   "ts_entrata": 1670774400000,
+   "ts_uscita": 1670788799999,
+   "r": -1.1462337351387017,
+   "esito": "stop",
+   "entrata": 1.6156768000000001,
+   "uscita": 1.6293258,
+   "stop": 1.629,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1671364800000,
+   "ts_uscita": 1671537600000,
+   "r": -0.12355860135132453,
+   "esito": "segnale",
+   "entrata": 1.4067186,
+   "uscita": 1.4082815999999998,
+   "stop": 1.444,
+   "funding": 0.5152928782809768
+  },
+  {
+   "ts_entrata": 1672084800000,
+   "ts_uscita": 1672113599999,
+   "r": -1.0617026095563735,
+   "esito": "stop",
+   "entrata": 1.1297739999999998,
+   "uscita": 1.1522303999999999,
+   "stop": 1.152,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1672747200000,
+   "ts_uscita": 1672804799999,
+   "r": -1.0369822922497036,
+   "esito": "stop",
+   "entrata": 1.1607678000000001,
+   "uscita": 1.1962392,
+   "stop": 1.196,
+   "funding": -0.037748202049658376
+  },
+  {
+   "ts_entrata": 1673870400000,
+   "ts_uscita": 1674043200000,
+   "r": 1.452883171816968,
+   "esito": "segnale",
+   "entrata": 1.4987002,
+   "uscita": 1.3872773999999999,
+   "stop": 1.575,
+   "funding": -0.13117298753352552
+  },
+  {
+   "ts_entrata": 1674129600000,
+   "ts_uscita": 1674187199999,
+   "r": -1.0413408592026203,
+   "esito": "stop",
+   "entrata": 1.3027393999999999,
+   "uscita": 1.3382676,
+   "stop": 1.338,
+   "funding": -0.04307307590865346
+  },
+  {
+   "ts_entrata": 1674820800000,
+   "ts_uscita": 1674863999999,
+   "r": -1.0168154553568602,
+   "esito": "stop",
+   "entrata": 2.1325734,
+   "uscita": 2.2784556,
+   "stop": 2.278,
+   "funding": -0.017017597815294824
+  },
+  {
+   "ts_entrata": 1675353600000,
+   "ts_uscita": 1675526400000,
+   "r": 1.1374245721791476,
+   "esito": "segnale",
+   "entrata": 3.3923213999999997,
+   "uscita": 3.2026404,
+   "stop": 3.559,
+   "funding": -0.21833183099841005
+  },
+  {
+   "ts_entrata": 1675569600000,
+   "ts_uscita": 1675742400000,
+   "r": 0.16036894601824014,
+   "esito": "segnale",
+   "entrata": 3.0003998,
+   "uscita": 2.9695937999999997,
+   "stop": 3.188,
+   "funding": -0.13866846900919666
+  },
+  {
+   "ts_entrata": 1676750400000,
+   "ts_uscita": 1676793599999,
+   "r": -1.0444371211491905,
+   "esito": "stop",
+   "entrata": 3.004399,
+   "uscita": 3.080616,
+   "stop": 3.08,
+   "funding": -0.045732885024041624
+  },
+  {
+   "ts_entrata": 1677859200000,
+   "ts_uscita": 1678032000000,
+   "r": 3.28092899334868,
+   "esito": "segnale",
+   "entrata": 2.6364726000000003,
+   "uscita": 2.4724944,
+   "stop": 2.686,
+   "funding": -0.24834984583920544
+  },
+  {
+   "ts_entrata": 1678708800000,
+   "ts_uscita": 1678723199999,
+   "r": -1.0298453097152989,
+   "esito": "stop",
+   "entrata": 2.1475704,
+   "uscita": 2.2364472,
+   "stop": 2.236,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1679328000000,
+   "ts_uscita": 1679500800000,
+   "r": 0.3152355384490318,
+   "esito": "segnale",
+   "entrata": 2.629474,
+   "uscita": 2.5935186,
+   "stop": 2.739,
+   "funding": -0.1259082366044997
+  },
+  {
+   "ts_entrata": 1680408000000,
+   "ts_uscita": 1680436799999,
+   "r": -1.0879476602860805,
+   "esito": "stop",
+   "entrata": 2.434513,
+   "uscita": 2.4684936,
+   "stop": 2.468,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1680984000000,
+   "ts_uscita": 1681012799999,
+   "r": -1.061675323171013,
+   "esito": "stop",
+   "entrata": 2.4125174,
+   "uscita": 2.460492,
+   "stop": 2.46,
+   "funding": 0.0
+  },
+  {
+   "ts_entrata": 1681891200000,
+   "ts_uscita": 1681948799999,
+   "r": 2.943673608529825,
+   "esito": "fine_dati",
+   "entrata": 3.0823834000000003,
+   "uscita": 2.7835566,
+   "stop": 3.183,
+   "funding": -0.032871074666422605
+  }
+ ]
+}
