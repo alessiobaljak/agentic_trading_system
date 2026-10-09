@@ -207,9 +207,15 @@ def fabbriche(var, per: Periodo):
                 if pos is None:
                     if not permesse[i]:
                         return None
+                    # prima il segnale (None nel riscaldamento), poi la condizione: la condizione
+                    # non si valuta mai dove gli indicatori non sono pronti (correzione del 9 ott,
+                    # nota MASKUSDT-N004; esito identico per le varianti gia' testate)
+                    segnale = var.segnale(st, i)
+                    if segnale is None:
+                        return None
                     if con_condizione and not var.condizione(st, i):
                         return None
-                    return var.segnale(st, i)
+                    return segnale
                 return var.uscita(st, i, pos, _barre_dall_ingresso(ts_arr, pos.ts_entrata, i))
             return strategia
         return crea
