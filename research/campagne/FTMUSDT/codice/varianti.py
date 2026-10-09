@@ -73,7 +73,7 @@ def i01(id_, direzione):
 # I-02 rottura del canale di Donchian (4h)
 # ---------------------------------------------------------------------------
 
-def i02(id_, direzione):
+def i02(id_, direzione, tf="4h"):
     def prepara(s):
         return {"atr": ind.atr(s, 20), "max20": ind.massimo_precedente(s.h, 20), "min20": ind.minimo_precedente(s.l, 20),
                 "max10": ind.massimo_precedente(s.h, 10), "min10": ind.minimo_precedente(s.l, 10)}
@@ -90,7 +90,7 @@ def i02(id_, direzione):
             return "chiudi" if _ok(ctx["min10"][i]) and c < ctx["min10"][i] else None
         return "chiudi" if _ok(ctx["max10"][i]) and c > ctx["max10"][i] else None
 
-    return Variante(id_, "4h", direzione, prepara, condizione, _segnale_atr(direzione, 2.0), uscita)
+    return Variante(id_, tf, direzione, prepara, condizione, _segnale_atr(direzione, 2.0), uscita)
 
 
 # ---------------------------------------------------------------------------

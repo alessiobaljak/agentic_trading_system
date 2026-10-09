@@ -153,6 +153,17 @@ della fonte, non per il risultato.
 * **I-02-S** (4h, short): condizione close(i) < min(low(i−20..i−1)); stop = close +
   2 × ATR(20); uscita: close(i) > max(high(i−10..i−1)) → chiudi.
 
+**Aggiunta dopo la stima dei trade** (2026-10-09, prima di qualunque test di I-02): le
+due varianti a 4h sono scarti (62 trade ciascuna, sotto 70: log FTMUSDT-003 e 004).
+Regola 6: allentare uno scarto per raggiungere il minimo, senza aver visto risultati di
+quell'idea, è ancora una variante dell'idea nuova. Si scende di un timeframe, con la
+stessa regola in barre (il meccanismo non dipende dalla durata della candela, sopra):
+
+* **I-02-L2** (2h, long): come I-02-L, su candele da 2 ore (range di 20 barre = 40 ore).
+* **I-02-S2** (2h, short): come I-02-S, su candele da 2 ore.
+
+Restano due varianti testate per la fonte (le due a 4h non sono state testate).
+
 ---
 
 ## I-03 — Ritorno dopo un movimento estremo (offerta di liquidità)
