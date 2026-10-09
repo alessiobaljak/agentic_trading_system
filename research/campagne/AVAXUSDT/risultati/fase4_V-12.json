@@ -1,0 +1,130 @@
+{
+ "candidato": "AVAXUSDT-V12",
+ "t_b_costruzione": 3.523072,
+ "media_b": -0.055999,
+ "robustezza": {
+  "casi": [
+   {
+    "caso": "barre=0",
+    "esito": "non costruibile: una posizione di 0 barre non esiste; dichiarato, non conta"
+   },
+   {
+    "caso": "barre=2",
+    "trade": 376,
+    "r_medio": 0.0072,
+    "t_b": 2.285923,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "mult_atr=1.6",
+    "trade": 376,
+    "r_medio": 0.0098,
+    "t_b": 3.55944,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "mult_atr=2.4",
+    "trade": 376,
+    "r_medio": 0.006,
+    "t_b": 3.53241,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "atr_n=11",
+    "trade": 376,
+    "r_medio": 0.0077,
+    "t_b": 3.565577,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "atr_n=17",
+    "trade": 376,
+    "r_medio": 0.0072,
+    "t_b": 3.543222,
+    "netta_b": true,
+    "valutabile": true
+   }
+  ],
+  "previsti": 6,
+  "contano": 5,
+  "nette": 5,
+  "superata": true
+ },
+ "timeframe_adiacenti": {
+  "casi": [
+   {
+    "timeframe": "15m",
+    "parametri": {
+     "minuto_segnale": 1395,
+     "barre": 2,
+     "atr_n": 28
+    },
+    "trade": 376,
+    "r_medio": 0.0129,
+    "t_b": 3.734442,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "timeframe": "1h",
+    "parametri": {
+     "minuto_segnale": 1320,
+     "barre": 1,
+     "atr_n": 7
+    },
+    "trade": 390,
+    "r_medio": 0.0224,
+    "t_b": 3.47821,
+    "netta_b": true,
+    "valutabile": true
+   }
+  ],
+  "superata": true
+ },
+ "ritardo": {
+  "trade": 373,
+  "r_medio": -0.0582,
+  "t_b": 0.055511,
+  "media_b": -0.059567,
+  "superata": false
+ },
+ "costi_doppi": {
+  "trade": 376,
+  "r_medio": -0.0517,
+  "t_b": 3.247485,
+  "media_b": -0.110541,
+  "netta_b": true,
+  "superata": false
+ },
+ "intrabarra_opposta": {
+  "r_medio": 0.0072,
+  "differenza_r": 0.0,
+  "t_b": 3.523072
+ },
+ "stabilita": {
+  "anni_con_10_trade": [
+   "2020",
+   "2021",
+   "2022"
+  ],
+  "anni_sopra_b": [
+   "2021",
+   "2022"
+  ],
+  "superata": true
+ },
+ "trade_estremi": {
+  "r_senza_3_migliori": -0.0078,
+  "media_b": -0.055999,
+  "superata": true
+ },
+ "liquidazione": {
+  "violazioni": 0,
+  "superata": true
+ },
+ "tutte_superate": false
+}

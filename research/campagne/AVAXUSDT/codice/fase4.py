@@ -45,6 +45,7 @@ def spostamenti_intero(v):
 NUMERICI = {
     "V-14": {"finestra": "int", "soglia_z": "float", "barre": "int", "mult_atr": "float", "atr_n": "int"},
     "V-12": {"barre": "int", "mult_atr": "float", "atr_n": "int"},
+    "R-01": {"barre": "int", "mult_atr": "float", "atr_n": "int", "min_abs": "float"},
 }
 # Timeframe adiacenti con i parametri in barre convertiti alla stessa durata
 ADIACENTI = {
@@ -52,6 +53,7 @@ ADIACENTI = {
     # 15m: segnale alla chiusura della barra 23:15-23:30, uscita dopo 2 barre (00:00), ATR 28 barre;
     # 1h: la mezz'ora non esiste: segnale alla chiusura della barra 22:00-23:00 (ingresso 23:00), 1 barra, ATR 7
     "V-12": [("15m", {"minuto_segnale": 1395, "barre": 2, "atr_n": 28}), ("1h", {"minuto_segnale": 1320, "barre": 1, "atr_n": 7})],
+    "R-01": [("15m", {"minuto_segnale": 1395, "barre": 2, "atr_n": 28}), ("1h", {"minuto_segnale": 1320, "barre": 1, "atr_n": 7})],
 }
 
 

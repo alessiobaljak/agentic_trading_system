@@ -1,0 +1,109 @@
+{
+ "id": "AVAXUSDT-R01",
+ "tipo": "risultato",
+ "periodo": "costruzione",
+ "metriche": {
+  "trade": 284,
+  "profit_factor": 1.1554,
+  "r_medio": 0.0181,
+  "win_rate": 0.4754,
+  "r_medio_per_anno": {
+   "2020": -0.0502,
+   "2021": 0.0481,
+   "2022": -0.0134
+  },
+  "trade_per_anno": {
+   "2020": 14,
+   "2021": 154,
+   "2022": 116
+  },
+  "r_medio_senza_3_migliori": -0.0045,
+  "rendimento_totale": 0.0512,
+  "rendimento_per_anno": {
+   "2020": -0.0071,
+   "2021": 0.0759,
+   "2022": -0.016
+  },
+  "drawdown_max": 0.036,
+  "esiti": {
+   "stop": 0,
+   "target": 0,
+   "segnale": 284,
+   "liquidazione": 0,
+   "fine_dati": 0
+  },
+  "trade_ridotti_leva": 0,
+  "violazioni_liquidazione": 0,
+  "stop_oltre_6_per_cento": 28,
+  "distanza_stop_mediana_pct": 2.979,
+  "costo_medio_r": 0.0559,
+  "durata_media_barre": 2,
+  "segnali_non_validi": 0,
+  "buchi_dati": 4
+ },
+ "blocco": 4,
+ "baseline_a": {
+  "differenza": 0.072937,
+  "errore_standard": 0.024777,
+  "margine": 0.050455,
+  "soglia": 2.03635,
+  "gradi_liberta": 70,
+  "netta": true,
+  "t": 2.94372,
+  "p_value": 0.002199,
+  "errore_candidato": 0.024526,
+  "n_blocchi": 71,
+  "valutabile": true,
+  "baseline_media": -0.054806,
+  "baseline_errore_standard": 0.003517,
+  "errore_minimo": 0.019849,
+  "media": -0.054806,
+  "n_trade": 18382,
+  "blocco_a": 102,
+  "valutabile_a": true
+ },
+ "baseline_b": {
+  "differenza": 0.073688,
+  "errore_standard": 0.024565,
+  "margine": 0.050024,
+  "soglia": 2.03635,
+  "gradi_liberta": 70,
+  "netta": true,
+  "t": 2.999675,
+  "p_value": 0.001871,
+  "errore_candidato": 0.024526,
+  "n_blocchi": 71,
+  "valutabile": true,
+  "baseline_media": -0.055558,
+  "baseline_errore_standard": 0.001387,
+  "errore_minimo": 0.019622,
+  "media": -0.055558,
+  "n_simulazioni": 200,
+  "trade_per_simulazione": {
+   "media": 284.0,
+   "minimo": 284,
+   "massimo": 284
+  },
+  "simulazioni_vuote": 0,
+  "segnali_scartati_per_simulazione_media": 0.0,
+  "quota_barre_vietate_segnale": 0.0004,
+  "durata_media_barre": 2
+ },
+ "percentile_caso": 100.0,
+ "buy_and_hold_per_anno": {
+  "2020": {
+   "long": -0.1889,
+   "short": 0.1864
+  },
+  "2021": {
+   "long": 33.2886,
+   "short": -33.3513
+  },
+  "2022": {
+   "long": -0.9013,
+   "short": 0.9001
+  }
+ },
+ "valutabile": true,
+ "candidato": true
+}

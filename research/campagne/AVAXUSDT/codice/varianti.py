@@ -189,6 +189,8 @@ class MomentoGiorno(_UscitaTempo):
         r = ind["ret_giorno"][i]
         if not np.isfinite(r):
             return False
+        if abs(r) < self.parametri.get("min_abs", 0.0):  # filtro dei ritocchi (Fase 3)
+            return False
         return r > 0 if self.direzione == "long" else r < 0
 
 
@@ -402,6 +404,8 @@ VARIANTI = {
     "V-30": Squilibrio("AVAXUSDT-V30", "4h", "short", finestra=180, soglia_z=2.0, barre=6, mult_atr=2.0),
     "V-31": Compressione("AVAXUSDT-V31", "1h", "long", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
     "V-32": Compressione("AVAXUSDT-V32", "1h", "short", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
+    # ritocchi (regola 6)
+    "R-01": MomentoGiorno("AVAXUSDT-R01", "30m", "long", minuto_segnale=1380, barre=1, mult_atr=2.0, min_abs=0.015),
     "V-20": ForzaRelativa("AVAXUSDT-V20", "1d", "long", lookback=14, barre=3, mult_atr=2.0),
     "V-21": VolumeAlto("AVAXUSDT-V21", "4h", "long", finestra=180, multiplo=3.0, barre=6, mult_atr=2.0),
 }
