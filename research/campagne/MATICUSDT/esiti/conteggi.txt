@@ -33,3 +33,14 @@ V32 {"trade": 138, "long": 138, "short": 0, "segnali_non_validi": 0, "segnali_se
 V33 {"trade": 206, "long": 0, "short": 206, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 19241} 
 V34 {"trade": 161, "long": 161, "short": 0, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 4811} 
 V35 {"trade": 163, "long": 0, "short": 163, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 4811} 
+V36 {"trade": 113, "long": 113, "short": 0, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 4811} 
+V37 {"trade": 184, "long": 0, "short": 184, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 4811} 
+V38 {"trade": 141, "long": 0, "short": 141, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 19241} 
+V39 {"trade": 102, "long": 0, "short": 102, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 19241} 
+V40 {"trade": 124, "long": 0, "short": 124, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 19241} 
+V41 {"trade": 141, "long": 0, "short": 141, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 19241} 
+V42 {"trade": 123, "long": 0, "short": 123, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 19241} 
+V43 {"trade": 80, "long": 80, "short": 0, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 802} 
+V44 {"trade": 54, "long": 54, "short": 0, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 802} 
+V45 {"trade": 88, "long": 88, "short": 0, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 802} 
+V46 {"trade": 73, "long": 73, "short": 0, "segnali_non_validi": 0, "segnali_senza_barra": 0, "barre": 802} 

@@ -453,3 +453,109 @@ def V34(s):
 def V35(s):
     d, pronto = _relativo(s)
     return Regole(s, "short", pronto & (np.nan_to_num(d) < 0), stop_short(s, pronto), tenuta=42)
+
+
+# ------------------------------------------------------------------ ritocchi
+@tf("1h")
+def V38(s):
+    """Ritocco 1 di V33 (MATICUSDT-018): solo quando BTCUSDT ha rendimento <= 0 nelle 24 ore prima."""
+    q, media, sd, pronto = _squilibrio(s)
+    btc24 = quadro.rendimento(s.btc_c, 24)
+    pronto = pronto & ~np.isnan(btc24)
+    return Regole(s, "short", pronto & (np.nan_to_num(q) < np.nan_to_num(media - 2 * sd, nan=-np.inf))
+                  & (np.nan_to_num(btc24, nan=1.0) <= 0), stop_short(s, pronto), tenuta=6)
+
+
+@tf("1h")
+def V39(s):
+    """Ritocco 2 della famiglia MATICUSDT-018, da V38: uscita dopo 24 barre invece di 6."""
+    reg = V38(s)
+    return Regole(s, "short", reg.ingresso, reg.stop, tenuta=24)
+
+
+@tf("1h")
+def V40(s):
+    """Ritocco 3 della famiglia MATICUSDT-018, da V38: uscita dopo 12 barre invece di 6."""
+    reg = V38(s)
+    return Regole(s, "short", reg.ingresso, reg.stop, tenuta=12)
+
+
+@tf("1h")
+def V41(s):
+    """Ritocco 4 della famiglia MATICUSDT-018, da V38: stop a min(3 ATR14, 6%) invece di min(2 ATR14, 6%)."""
+    reg = V38(s)
+    a = quadro.atr(s, 14)
+    pronto = ~np.isnan(reg.stop)
+    st = np.where(pronto, s.c + np.minimum(3 * a, 0.06 * s.c), np.nan)
+    return Regole(s, "short", reg.ingresso, st, tenuta=6)
+
+
+@tf("1h")
+def V42(s):
+    """Ritocco 5 della famiglia MATICUSDT-018, da V41: uscita dopo 12 barre invece di 6."""
+    reg = V41(s)
+    return Regole(s, "short", reg.ingresso, reg.stop, tenuta=12)
+
+
+@tf("1d")
+def V43(s):
+    """Ritocco 1 della famiglia MATICUSDT-016, da V29: soglia del volume 1,3 volte la media invece di 1,5."""
+    media = np.full(s.n, np.nan)
+    for i in range(50, s.n):
+        media[i] = s.qv[i - 50:i].mean()
+    pronto = _ok(media, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.qv > 1.3 * np.nan_to_num(media, nan=np.inf)), stop_long(s, pronto), tenuta=5)
+
+
+@tf("1d")
+def V44(s):
+    """Ritocco 2 della famiglia MATICUSDT-016, da V29: uscita dopo 10 barre invece di 5."""
+    reg = V29(s)
+    return Regole(s, "long", reg.ingresso, reg.stop, tenuta=10)
+
+
+@tf("1d")
+def V45(s):
+    """Ritocco 3 della famiglia MATICUSDT-016, da V29: uscita dopo 3 barre invece di 5."""
+    reg = V29(s)
+    return Regole(s, "long", reg.ingresso, reg.stop, tenuta=3)
+
+
+@tf("1d")
+def V46(s):
+    """Ritocco 4 della famiglia MATICUSDT-016, da V29: soglia del volume 1,4 volte la media."""
+    media = np.full(s.n, np.nan)
+    for i in range(50, s.n):
+        media[i] = s.qv[i - 50:i].mean()
+    pronto = _ok(media, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.qv > 1.4 * np.nan_to_num(media, nan=np.inf)), stop_long(s, pronto), tenuta=5)
+
+
+# ------------------------------------------------------------------ I-15
+def _illiquidita(s: Serie):
+    r = np.abs(quadro.rendimento(s.c, 1))
+    x = r / s.qv
+    il = np.full(s.n, np.nan)
+    for i in range(42, s.n):
+        w = x[i - 41:i + 1]
+        if not np.isnan(w).any():
+            il[i] = w.mean()
+    med = np.full(s.n, np.nan)
+    for i in range(42 + 540, s.n):
+        w = il[i - 540:i]
+        if not np.isnan(w).any():
+            med[i] = np.median(w)
+    pronto = _ok(il, med, quadro.atr(s, 14))
+    return il, med, pronto
+
+
+@tf("4h")
+def V36(s):
+    il, med, pronto = _illiquidita(s)
+    return Regole(s, "long", pronto & (np.nan_to_num(il) > np.nan_to_num(med, nan=np.inf)), stop_long(s, pronto), tenuta=42)
+
+
+@tf("4h")
+def V37(s):
+    il, med, pronto = _illiquidita(s)
+    return Regole(s, "short", pronto & (np.nan_to_num(il, nan=np.inf) < np.nan_to_num(med)), stop_short(s, pronto), tenuta=42)

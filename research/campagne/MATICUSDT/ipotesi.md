@@ -382,6 +382,29 @@ risultati è ancora una variante dell'idea nuova). Al massimo due varianti testa
 6. **Varianti.** **V-34 long**: rendimento di 42 barre di MATICUSDT > quello di BTCUSDT; **V-35
    short**: minore.
 
+## I-15 Premio per l'illiquidità nel tempo (Amihud)
+
+Scritta il 2026-10-09 dopo i risultati delle varianti 1-11, che sono di altre idee; questa idea non
+nasce da quei risultati ma dalla ricerca di famiglie di meccanismi non ancora usate (la liquidità).
+
+1. **Fonte.** Amihud, Y., «Illiquidity and stock returns: cross-section and time-series effects»,
+   Journal of Financial Markets 5(1), 2002: nel tempo, un'illiquidità attesa più alta porta
+   rendimenti attesi più alti (compenso per l'illiquidità); la misura è la media di |rendimento| /
+   volume in valuta.
+2. **Affermazione.** Su MATICUSDT, quando l'illiquidità dell'ultima settimana è sopra la sua mediana
+   dei 90 giorni precedenti, il rendimento della settimana dopo è più alto di un ingresso a caso;
+   quando è sotto, più basso.
+3. **Sotto-domande.** L'illiquidità alta coincide con i ribassi (volume che si secca)? Chi opera:
+   fornitori di liquidità che chiedono un compenso più alto; capitale che torna quando la
+   liquidità torna.
+4. **Spiegazioni proprie.** P1 L'illiquidità alta segue i crolli e il ritorno è solo rimbalzo
+   (prevede R concentrato dopo i ribassi). P2 In crypto il volume è guidato dall'attenzione, non
+   dalla liquidità (prevede l'opposto: volume alto → rialzo, cioè illiquidità alta → R basso).
+5. **Ipotesi completa.** Timeframe 4h. Illiquidità = media sulle ultime 42 barre (7 giorni) di
+   |rendimento della barra| / volume in USDT della barra; confronto con la mediana dei valori della
+   stessa misura nelle 540 barre precedenti (90 giorni). Uscita dopo 42 barre; stop comune.
+6. **Varianti.** **V-36 long**: illiquidità sopra la mediana; **V-37 short**: sotto la mediana.
+
 ## Idee scartate prima del test
 
 * **Anticipo di BTCUSDT su MATICUSDT (lead-lag).** Scartata per contaminazione (nota
