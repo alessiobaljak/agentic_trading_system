@@ -559,4 +559,101 @@ for _k, _v in VARIANTI.items():
     if _k in ("ADAUSDT-005", "ADAUSDT-016", "ADAUSDT-017", "ADAUSDT-018", "ADAUSDT-019"):
         _v.direzione = "long"
 
+# I-14 Squilibrio degli ordini aggressivi (Chordia e Subrahmanyam) ----------------------------------
+
+class Squilibrio(StopATR):
+    tf = "1h"
+
+    def prepara(self, D):
+        P = self.base(D)
+        q = C.quota_acquisti_aggressivi(D)
+        v = P["v"]
+        sq = np.where(np.isfinite(q), (2 * q - 1) * v, 0.0)  # acquisti - vendite aggressive, in moneta
+        w, m = self.p["finestra"], self.p["storia"]
+        cs = np.cumsum(np.insert(sq, 0, 0.0))
+        cv = np.cumsum(np.insert(v, 0, 0.0))
+        imb = np.full(len(v), np.nan)
+        imb[w - 1:] = (cs[w:] - cs[:-w]) / np.maximum(cv[w:] - cv[:-w], 1e-12)
+        alto = np.full(len(v), np.nan)
+        basso = np.full(len(v), np.nan)
+        for i in range(m + w, len(v)):
+            st = imb[i - m:i]
+            alto[i] = np.quantile(st, self.p["quantile"])
+            basso[i] = np.quantile(st, 1 - self.p["quantile"])
+        P["imb"], P["alto"], P["basso"] = imb, alto, basso
+        P["pronto"] = alto
+        return P
+
+    def condizione(self, i, P):
+        x = P["imb"][i]
+        if not (np.isfinite(x) and np.isfinite(P["alto"][i])):
+            return False
+        return bool(x > P["alto"][i]) if self.direzione == "long" else bool(x < P["basso"][i])
+
+    def uscita(self, i, P, barre):
+        return barre >= self.p["tenuta"]
+
+
+# I-15 Inversione di breve periodo come fornitura di liquidita' (Nagel) ----------------------------
+
+class Inversione(StopATR):
+    tf = "4h"
+
+    def prepara(self, D):
+        P = self.base(D)
+        w, m = self.p["finestra"], self.p["storia"]
+        r = C.rendimento(P["c"], w)
+        s = np.full(len(r), np.nan)
+        for i in range(m + w, len(r)):
+            s[i] = r[i - m:i].std(ddof=1)
+        P["r"], P["s"] = r, s
+        P["pronto"] = s
+        return P
+
+    def condizione(self, i, P):
+        r, s = P["r"][i], P["s"][i]
+        if not (np.isfinite(r) and np.isfinite(s)):
+            return False
+        k = self.p["k"]
+        return bool(r < -k * s) if self.direzione == "long" else bool(r > k * s)
+
+    def uscita(self, i, P, barre):
+        return barre >= self.p["tenuta"]
+
+
+def _sq(d):
+    v = Squilibrio(finestra=24, storia=720, quantile=0.9, tenuta=24, stop_atr=2.0)
+    v.direzione = d
+    return v
+
+
+def _inv(d):
+    v = Inversione(finestra=6, storia=360, k=2.0, tenuta=6, stop_atr=3.0)
+    v.direzione = d
+    return v
+
+
+def _ecc2(d):
+    v = Eccesso(finestra=30, k=0.5, tenuta=1, stop_atr=2.0)
+    v.direzione = d
+    return v
+
+
+def _comp2(d):
+    v = Compressione(bande=20, storia=60, recente=5, stop_atr=2.0)
+    v.direzione = d
+    return v
+
+
+VARIANTI.update({
+    "ADAUSDT-026": _sq("long"),
+    "ADAUSDT-027": _sq("short"),
+    "ADAUSDT-028": _inv("long"),
+    "ADAUSDT-029": _inv("short"),
+    "ADAUSDT-030": _ecc2("long"),
+    "ADAUSDT-031": _ecc2("short"),
+    "ADAUSDT-032": _comp2("long"),
+    "ADAUSDT-033": _comp2("short"),
+})
+
 from registrazioni import REG  # noqa: E402,F401

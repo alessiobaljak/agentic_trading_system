@@ -91,6 +91,28 @@ def carica(tf: str, periodo: str = "costruzione") -> Dict[str, object]:
     return ris
 
 
+def quota_acquisti_aggressivi(D: dict) -> np.ndarray:
+    """Per ogni barra di D: taker_buy_volume / volume (colonne 9 e 5 dei CSV klines del last).
+
+    Fra 0 e 1; NaN se la barra non ha la colonna o ha volume zero. Stessa lettura dei file del
+    caricatore (righe_csv_da_zip), stessi ts normalizzati; vale la prima riga di un ts doppio.
+    """
+    tf = D["tf"]
+    fine = FINE_COSTRUZIONE if D["candele"][-1].close_ts <= FINE_COSTRUZIONE_TS else FINE_VALIDAZIONE
+    per_ts: Dict[int, float] = {}
+    for p in dati._percorsi_presenti(SIMBOLO, "klines", tf, INIZIO, fine, dati.RADICE_DEFAULT):
+        for riga in dati.righe_csv_da_zip(p):
+            ts = dati.normalizza_ts(riga[0])
+            if ts in per_ts:
+                continue
+            try:
+                vol, tb = float(riga[5]), float(riga[9])
+                per_ts[ts] = tb / vol if vol > 0 else np.nan
+            except (IndexError, ValueError):
+                per_ts[ts] = np.nan
+    return np.array([per_ts.get(c.ts, np.nan) for c in D["candele"]])
+
+
 def maschera_esclusi(candele: Sequence[Candela]) -> np.ndarray:
     return np.array([mese_ms(c.ts) in MESI_ESCLUSI for c in candele], dtype=bool)
 

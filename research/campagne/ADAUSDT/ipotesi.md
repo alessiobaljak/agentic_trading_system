@@ -529,6 +529,99 @@ giorni con prima ora stretta? Chi opera: chi apre a inizio giornata UTC (Asia ma
 
 ---
 
+---
+
+# Seconda serie (scritta il 2026-10-09 alle 15:41 UTC)
+
+Scritta dopo i conteggi della prima serie (8 scarti per trade minimi: 005, 006, 007, 014, 015, 016,
+017, 018) e mentre le 17 varianti registrate erano in test, PRIMA di leggere qualunque loro
+risultato. Due idee nuove (I-14, I-15) e due allentamenti di idee rimaste senza alcuna variante
+testabile (I-04, I-08): la regola 6 dice che allentare le soglie di uno scarto per raggiungere i
+trade minimi, senza aver visto risultati, è ancora una variante dell'idea nuova. Per I-04 e I-08 le
+varianti testate restano due per fonte (le prime due sono scarti, non testate).
+
+## I-14 — Squilibrio degli ordini aggressivi
+
+**Fonte.** Tarun Chordia, Avanidhar Subrahmanyam, «Order imbalance and individual stock returns:
+Theory and evidence», Journal of Financial Economics 72(3), 2004: i grandi operatori spezzano gli
+ordini nel tempo, quindi lo squilibrio fra acquisti e vendite aggressive è persistente, e lo squilibrio
+passato predice positivamente i rendimenti successivi.
+
+**Affermazione.** Su ADA, quando lo squilibrio degli ultimi 24 ore (acquisti meno vendite aggressive,
+cioè dei «taker», sul volume) è sopra il 90° percentile delle ultime 720 ore, le 24 ore successive
+rendono più del caso (long); simmetrico sotto il 10° percentile (short).
+
+**Sotto-domande.** Lo squilibrio dei taker su Binance misura davvero ordini informati o il rumore degli
+operatori al dettaglio con leva? Vale con volume alto? Quanto dura: ore-giorni (gli ordini spezzati).
+
+**Spiegazioni concorrenti.**
+1. *Caso.*
+2. *Lo squilibrio è il prezzo già mosso.* Acquisti aggressivi = prezzo salito nelle 24 ore: il segnale è un momento a 24 ore. Prevede lo stesso R di un ingresso dopo 24 ore in salita (non misurato dalla (a)).
+3. *Inversione per pressione temporanea.* La fonte stessa: controllando lo squilibrio corrente il segno si inverte. Prevede R negativo dopo squilibri estremi.
+4. *Trend di fondo.*
+5. *Solo il mercato.* Lo squilibrio di ADA segue quello di tutte le monete.
+6. *Liquidazioni.* Gli acquisti aggressivi estremi sono chiusure forzate di short: finite quelle, il prezzo torna. Prevede R negativo per il long.
+7. *Costi.* 0,047 R a giro.
+8. *Volatilità.*
+9. *Artefatto del dato taker.* La colonna taker_buy_volume misura il lato aggressivo secondo Binance; barre senza dato → squilibrio 0 (pochi casi).
+10. *Grappoli.* Squilibri estremi consecutivi: trade dipendenti.
+
+**Ipotesi completa.** ADAUSDT, ordini spezzati e persistenti, 1h, posizione di 24 ore.
+
+**Varianti.**
+* ADAUSDT-026: 1h, long. Squilibrio = somma su 24 barre di (2 × quota taker − 1) × volume, divisa per il
+  volume delle 24 barre; ingresso se sopra il 90° percentile dei valori delle 720 barre precedenti;
+  uscita dopo 24 barre; stop 2 ATR(14).
+* ADAUSDT-027: 1h, short se sotto il 10° percentile.
+
+## I-15 — Inversione di breve periodo come compenso per chi fornisce liquidità
+
+**Fonte.** Stefan Nagel, «Evaporating Liquidity», Review of Financial Studies 25(7), 2012 (NBER WP
+17653, 2011): i rendimenti delle strategie di inversione a breve sono il compenso di chi fornisce
+liquidità, e crescono quando il mercato è sotto stress. Anche Bruce N. Lehmann, «Fads, Martingales,
+and Market Efficiency», Quarterly Journal of Economics 105(1), 1990.
+
+**Affermazione.** Su ADA, dopo un calo di 24 ore (6 barre da 4 ore) oltre 2 deviazioni standard dei
+rendimenti a 24 ore dei 60 giorni precedenti, le 24 ore successive rendono più del caso (long);
+simmetrico dopo un rialzo eccessivo (short).
+
+**Sotto-domande.** Vale di più in fasi di stress (volatilità alta)? Chi vende: chi deve ridurre
+(liquidazioni, margini); chi compra: chi fornisce liquidità e vuole un premio. Quanto: 1-5 giorni.
+
+**Spiegazioni concorrenti.**
+1. *Caso.*
+2. *Momento (l'opposto).* Prevede R negativo: i cali continuano (cfr. I-04, inerzia).
+3. *Trend di fondo.* Long dopo i cali nel 2022 = contro il trend.
+4. *Solo il mercato.*
+5. *Volatilità.* Dopo i cali la volatilità è alta: stop a 3 ATR largo, R con varianza alta.
+6. *Coltello che cade.* Crolli veri (maggio 2021, giugno e novembre 2022): poche perdite enormi.
+7. *Costi.* 0,015 R: piccoli.
+8. *Funding.* Dopo i cali il funding scende: i long pagano poco.
+9. *Grappoli.* Le soglie scattano per più barre consecutive dello stesso evento: trade dipendenti, blocco lungo.
+10. *Pochi trade.* Eventi a 2 deviazioni: forse 5% delle barre per lato, ma a grappoli: conta il numero.
+
+**Ipotesi completa.** ADAUSDT, premio per la liquidità dopo movimenti eccessivi, 4h (rendimento a 24
+ore aggiornato ogni 4 ore), posizione di 24 ore.
+
+**Varianti.**
+* ADAUSDT-028: 4h, long. Ingresso se il rendimento delle ultime 6 barre < −2 deviazioni standard dei
+  rendimenti a 6 barre delle 360 barre precedenti; uscita dopo 6 barre; stop 3 ATR(14).
+* ADAUSDT-029: 4h, short se il rendimento > +2 deviazioni.
+
+## I-04, varianti allentate (le prime due erano scarti: 62 e 52 trade)
+
+* ADAUSDT-030: come 006 (1d long dopo reazione eccessiva al rialzo) con k = 0,5 invece di 1. Motivo:
+  raggiungere i trade minimi; la fonte usa più valori di k e l'affermazione (inerzia dopo un movimento
+  insolitamente grande) resta la stessa con una soglia più bassa.
+* ADAUSDT-031: come 007 (1d short dopo reazione eccessiva al ribasso) con k = 0,5.
+
+## I-08, varianti allentate (le prime due erano scarti: 15 e 21 trade)
+
+* ADAUSDT-032: come 014 (4h long, compressione e rottura della banda alta) con la compressione
+  misurata sul minimo delle 60 barre precedenti (10 giorni) invece di 120. Motivo: trade minimi; il
+  meccanismo (volatilità al minimo recente, poi espansione) è lo stesso con una memoria più corta.
+* ADAUSDT-033: come 015 (short) con 60 barre.
+
 ## Idee considerate e non scritte come varianti
 
 * **Effetti di calendario (ora del giorno, giorno della settimana)**: Dirk G. Baur, Daniel Cahill,

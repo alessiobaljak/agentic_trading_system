@@ -17,6 +17,9 @@ F11 = "Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanat
 F12 = "Avellaneda, Lee, «Statistical arbitrage in the U.S. equities market», Quantitative Finance 10(7), 2010"
 F13 = "Toby Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», Traders Press, 1990"
 
+F14 = "Chordia, Subrahmanyam, «Order imbalance and individual stock returns: Theory and evidence», Journal of Financial Economics 72(3), 2004"
+F15 = "Stefan Nagel, «Evaporating Liquidity», Review of Financial Studies 25(7), 2012 (NBER WP 17653, 2011); Lehmann, «Fads, Martingales, and Market Efficiency», Quarterly Journal of Economics 105(1), 1990"
+
 
 def r(idea, fonte, mecc, regole, prev, **k):
     d = {"idea": idea, "fonte": fonte, "meccanismo": mecc, "regole": regole, "previsione": prev,
@@ -98,6 +101,30 @@ REG = {
     "ADAUSDT-024": r("I-13", F13, "la rottura del massimo della prima ora UTC prosegue nella giornata",
                      "15m long: chiusura passa sopra il massimo delle barre 00:00-01:00, barra prima delle 20:00; stop al minimo della prima ora; uscita a fine giornata",
                      "R medio dopo i costi fra -0,10 e +0,05; non netta"),
+    "ADAUSDT-026": r("I-14", F14, "squilibrio persistente degli acquisti aggressivi: il prezzo continua a salire",
+                     "1h long: squilibrio taker 24 barre > 90° percentile delle 720 precedenti; uscita dopo 24 barre; stop 2 ATR(14)",
+                     "R medio fra -0,10 e +0,05; t contro la (b) fra -1,5 e +1; non netta"),
+    "ADAUSDT-027": r("I-14", F14, "squilibrio persistente delle vendite aggressive: il prezzo continua a scendere",
+                     "1h short: squilibrio taker 24 barre < 10° percentile delle 720 precedenti; uscita dopo 24 barre; stop 2 ATR(14)",
+                     "R medio fra -0,10 e +0,05; non netta"),
+    "ADAUSDT-028": r("I-15", F15, "premio per la liquidita' dopo un calo eccessivo di 24 ore",
+                     "4h long: rendimento 6 barre < -2 dev. std dei rendimenti a 6 barre delle 360 precedenti; uscita dopo 6 barre; stop 3 ATR(14)",
+                     "R medio fra -0,10 e +0,15, varianza alta; t contro la (b) fra -1 e +1,5; non netta"),
+    "ADAUSDT-029": r("I-15", F15, "premio per la liquidita' dopo un rialzo eccessivo di 24 ore",
+                     "4h short: rendimento 6 barre > +2 dev. std; uscita dopo 6 barre; stop 3 ATR(14)",
+                     "R medio fra -0,15 e +0,10; non netta"),
+    "ADAUSDT-030": r("I-04", F04, "inerzia dopo una reazione eccessiva al rialzo (soglia allentata)",
+                     "1d long: chiusura/apertura-1 > media+0,5 dev. std dei rendimenti assoluti dei 30 giorni precedenti; uscita dopo 1 barra; stop 2 ATR(14)",
+                     "R medio fra -0,10 e +0,10; non netta"),
+    "ADAUSDT-031": r("I-04", F04, "inerzia dopo una reazione eccessiva al ribasso (soglia allentata)",
+                     "1d short: chiusura/apertura-1 < -(media+0,5 dev. std); uscita dopo 1 barra; stop 2 ATR(14)",
+                     "R medio fra -0,10 e +0,10; non netta"),
+    "ADAUSDT-032": r("I-08", F08, "dopo la compressione (minimo di 60 barre) la rottura della banda alta prosegue",
+                     "4h long: compressione (ampiezza <= minimo 60 barre) in una delle ultime 6 barre e chiusura > banda alta (20, 2); uscita chiusura < media 20; stop 2 ATR(14)",
+                     "R medio fra -0,10 e +0,15; non netta"),
+    "ADAUSDT-033": r("I-08", F08, "dopo la compressione (minimo di 60 barre) la rottura della banda bassa prosegue",
+                     "4h short: compressione (60 barre) e chiusura < banda bassa; uscita chiusura > media 20; stop 2 ATR(14)",
+                     "R medio fra -0,10 e +0,10; non netta"),
     "ADAUSDT-025": r("I-13", F13, "la rottura del minimo della prima ora UTC prosegue nella giornata",
                      "15m short: chiusura passa sotto il minimo della prima ora, prima delle 20:00; stop al massimo della prima ora; uscita a fine giornata",
                      "R medio dopo i costi fra -0,10 e +0,05; non netta"),
