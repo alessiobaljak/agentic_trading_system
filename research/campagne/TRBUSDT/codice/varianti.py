@@ -524,7 +524,7 @@ def _i12(direzione):
 
 
 # --------------------------------------------------------------------------- I-13
-def _i13(direzione):
+def _i13(direzione, ora_minima=0, nome=None, margine_atr=0.0):
     tf = "15m"
 
     def prepara(candele):
@@ -553,7 +553,8 @@ def _i13(direzione):
                 alto[k], basso[k] = hi, lo
                 rotto = ctx["c"][k] > hi if direzione == "long" else ctx["c"][k] < lo
                 if rotto and d not in gia:
-                    primo[k] = True
+                    # la prima rottura del giorno; con ora_minima vale solo se arriva da quell'ora in poi
+                    primo[k] = g.hour >= ora_minima
                     gia.add(d)
         ctx.update({"alto": alto, "basso": basso, "primo": primo, "fine_giorno": fine_giorno})
         return ctx
@@ -562,12 +563,18 @@ def _i13(direzione):
         hi, lo = ctx["alto"][i], ctx["basso"][i]
         if not (np.isfinite(hi) and np.isfinite(lo)):
             return None
-        return Segnale(direzione, lo if direzione == "long" else hi, None)
+        m = 0.0
+        if margine_atr:
+            a = ctx["atr"][i]
+            if not np.isfinite(a):
+                return None
+            m = margine_atr * a
+        return Segnale(direzione, lo - m if direzione == "long" else hi + m, None)
 
     def uscita(ctx, i, pos):
         return "chiudi" if ctx["fine_giorno"][i] and int(ctx["ts"][i]) >= pos.ts_entrata else None
 
-    return banco.Variante(f"I-13-{direzione[0].upper()}", tf, direzione, prepara,
+    return banco.Variante(nome or f"I-13-{direzione[0].upper()}", tf, direzione, prepara,
                           lambda ctx, i: bool(ctx["primo"][i]), segnale, uscita)
 
 
@@ -598,6 +605,10 @@ VARIANTI = {
     "I-16-L": lambda: _i16("long"), "I-16-S": lambda: _i16("short"),
     "I-17-L": _i17,
     "I-18-L": lambda: _i18("long"), "I-18-S": lambda: _i18("short"),
+    # ritocchi (regola 6)
+    "I-13-S-R1": lambda: _i13("short", 4, "I-13-S-R1"),
+    "I-13-S-R2": lambda: _i13("short", 8, "I-13-S-R2"),
+    "I-13-S-R3": lambda: _i13("short", 0, "I-13-S-R3", 0.5),
 }
 
 FONTI = {
