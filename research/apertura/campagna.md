@@ -1,4 +1,4 @@
-# Messaggio di apertura delle sessioni di campagna (versione 4.5)
+# Messaggio di apertura delle sessioni di campagna (versione 4.5, approvato con il testo il 9 ottobre 2026 alle 12:06 UTC)
 
 Il coordinamento lo manda così com'è, sostituendo solo `{SIMBOLO}` (Passo 4, punto 1). Nessuna parola in più.
 Una seconda sessione della stessa campagna riceve lo stesso testo più la frase «riprendi dalla nota del log».

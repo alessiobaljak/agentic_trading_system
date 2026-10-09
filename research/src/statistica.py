@@ -1003,8 +1003,9 @@ def monete_richieste_trasferimento(n_monete: int, p_caso: float, livello: float 
     fuse in una prima di contare ``n_monete``. Con una soglia fissa a 2, su 80 monete con
     l'1% a moneta, 2 passaggi escono per caso il 19% delle volte.
 
-    Se nemmeno k = n_monete basta (poche monete), restituisce n_monete + 1: il trasferimento
-    non si puo' dimostrare e l'esito e' «non si sa».
+    Se nemmeno k = n_monete basta (poche monete), restituisce un numero piu' grande di
+    n_monete (mai sotto ``minimo``): il trasferimento non si puo' dimostrare e l'esito e'
+    «non si sa».
     """
     from scipy.stats import binom
 
@@ -1015,4 +1016,4 @@ def monete_richieste_trasferimento(n_monete: int, p_caso: float, livello: float 
     for k in range(max(int(minimo), 1), n + 1):
         if float(binom.sf(k - 1, n, p)) < livello:  # sf(k-1) = P(X >= k)
             return k
-    return n + 1
+    return max(int(minimo), n + 1)

@@ -24,7 +24,8 @@ def test_il_numero_e_il_piu_piccolo_sotto_il_livello():
 def test_mai_sotto_il_minimo_e_non_si_sa_con_poche_monete():
     assert monete_richieste_trasferimento(5, 0.001) == 2
     assert monete_richieste_trasferimento(2, 0.5) == 3  # neanche 2 su 2 basta: «non si sa»
-    assert monete_richieste_trasferimento(0, 0.02) == 1
+    assert monete_richieste_trasferimento(0, 0.02) == 2  # mai sotto il minimo, e piu' di 0 monete: «non si sa»
+    assert monete_richieste_trasferimento(1, 0.02) == 2
 
 
 def test_valori_non_validi():

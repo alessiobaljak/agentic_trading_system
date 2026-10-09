@@ -25,7 +25,9 @@ GRUPPO_SI = 0
 _GRUPPO = re.compile(r"^##\s+(\d+)\.\s+(.+?)\s*$")
 _VOCE = re.compile(r"^###\s+([A-Z][A-Za-z0-9-]*)\.\s+(.+?)\s*$")
 _RIGA_INDICE = re.compile(r"^\|\s*\*\*(\d+)\.\s+([^*|]+?)\*\*\s*\|([^|]*)\|([^|]*)\|\s*$")
-_AGGIORNATO = re.compile(r"\*\*Aggiornato il ([^*]+?)\.\*\*")
+# «Aggiornato il 9 ottobre» ma anche «Aggiornato l'8 ottobre» e «l'11 ottobre» (8 ott 2026: la data
+# con l'apostrofo non si leggeva e il report in dashboard la perdeva)
+_AGGIORNATO = re.compile(r"\*\*Aggiornato (?:il |l['’])([^*]+?)\.\*\*")
 
 
 def _pulisci(testo: str) -> str:

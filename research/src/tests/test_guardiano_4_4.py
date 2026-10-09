@@ -344,7 +344,6 @@ def test_la_sessione_con_il_remoto_e_quella_della_sezione_9(sessione_condivisa: 
         "git log --oneline research/campagna/BTCUSDT -- research/campagne/BTCUSDT/",
         "git log --oneline {padre} -- research/campagne/BTCUSDT/",
         "git log --oneline {vecchio} -- research/campagne/BTCUSDT/",
-        "git log --no-walk --format=%B HEAD~1 -- research/campagne/BTCUSDT/",
         "git log --pretty=format:%s --name-only -- research/campagne/BTCUSDT/",
         "git shortlog HEAD -- research/campagne/BTCUSDT/",
         "git rev-list --format=%B HEAD -- research/campagne/BTCUSDT/",
@@ -416,6 +415,10 @@ def test_storia_fuori_dalla_propria_cartella_rifiutata(repo: _Repo, comando: str
         "git cherry -v HEAD~1",
         "git format-patch -1 -- research/campagne/BTCUSDT/",  # scriverebbe le patch nella radice
         "git log --follow -- research/campagne/BTCUSDT/scheda_moneta.md",
+        # con git 2.55 (server di GitHub) stampa il messaggio di HEAD~1 anche se non tocca la cartella
+        "git log --no-walk --format=%B HEAD~1 -- research/campagne/BTCUSDT/",
+        "git log --no-walk=unsorted HEAD~1 -- research/campagne/BTCUSDT/",
+        "git rev-list --no-walk --format=%B HEAD~1 -- research/campagne/BTCUSDT/",
         "git log HEAD~1..HEAD -- research/campagne/BTCUSDT/",
         "git log HEAD@{{1}} -- research/campagne/BTCUSDT/",
         "git log -L1,1:CLAUDE.md",
