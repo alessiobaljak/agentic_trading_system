@@ -242,6 +242,19 @@ CATALOGO = {
                      "meccanismo": "la prima mezz'ora della giornata UTC predice l'ultima",
                      "regole": "30m; alla chiusura della barra delle 23:00, short se la barra delle 00:00 dello stesso giorno ha close < open; uscita dopo 1 barra; stop 2 ATR(48) max 6%",
                      "previsione": _prev(-0.30, 0.05)},
+    # ---- ritocchi (regola 6), nell'ordine del t contro la (b) ----
+    "GALAUSDT-037": {"classe": V.RitardoBTC, "tf": "1h", "direzione": "long", "parametri": {"atr_min_rel": 0.0146},
+                     "idea": "I-06", "fonte": F_LOMAC, "famiglia": "GALAUSDT-011", "ritocco_di": "GALAUSDT-011",
+                     "cosa_cambia": "aggiunto il filtro ATR(24)/close > 1,46% (soglia del terzile basso dell'ATR relativo dei trade di 011 in costruzione): nel terzile basso R medio -0,034 contro +0,105 e +0,130 negli altri due (nota GALAUSDT-N008); con stop stretti i costi pesano di piu' in R",
+                     "meccanismo": "l'informazione comune arriva prima su BTC: GALAUSDT recupera in ritardo",
+                     "regole": "come GALAUSDT-011 (1h; BTC > 2 dev. std delle 168 barre precedenti e GALAUSDT < BTC nella barra; uscita dopo 3 barre; stop 2 ATR(24) max 6%) piu' il filtro ATR(24)/close > 0,0146",
+                     "previsione": _prev(-0.05, 0.20, "R medio fra -0,05 e +0,20; t contro la (b) vicino alla soglia, probabile ancora sotto (il filtro toglie un terzo dei trade e alza l'errore)")},
+    "GALAUSDT-038": {"classe": V.RitardoBTC, "tf": "1h", "direzione": "long", "parametri": {"k_stop": 3.0},
+                     "idea": "I-06", "fonte": F_LOMAC, "famiglia": "GALAUSDT-011", "ritocco_di": "GALAUSDT-011",
+                     "cosa_cambia": "stop da 2 a 3 ATR(24) (max 6%). Dopo 037 l'ordine del t contro la (b) mette ancora 011 in testa (1,945; 015 1,844; 037 1,811). In 011 i 16 stop costano -1,05 R ciascuno e le uscite a tempo rendono +0,19 R (nota GALAUSDT-N008); il filtro di volatilita' (037) non ha aiutato. Uno stop piu' largo abbassa il costo di un giro in R (circa da 0,05 a 0,03 R) e gli stop toccati dal rumore delle 3 ore",
+                     "meccanismo": "l'informazione comune arriva prima su BTC: GALAUSDT recupera in ritardo",
+                     "regole": "come GALAUSDT-011 (1h; BTC > 2 dev. std delle 168 barre precedenti e GALAUSDT < BTC nella barra; uscita dopo 3 barre) con stop 3 ATR(24) max 6%",
+                     "previsione": _prev(-0.02, 0.12, "R medio fra -0,02 e +0,12 (R piu' piccolo perche' il rischio per trade e' piu' largo); t contro la (b) simile a 011, sotto la soglia")},
 }
 
 

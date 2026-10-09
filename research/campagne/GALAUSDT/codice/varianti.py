@@ -268,6 +268,9 @@ class RitardoBTC(ConStopATR):
         rb, rg, sb = a["rb"][i], a["rg"][i], a["sb"][i]
         if not valido(rb, rg, sb) or sb <= 0:
             return False
+        minimo = float(self.p.get("atr_min_rel", 0.0) or 0.0)
+        if minimo > 0 and not (valido(a["atr"][i]) and a["atr"][i] / a["close"][i] > minimo):
+            return False  # filtro del ritocco: volatilita' relativa sotto la soglia
         k = self.p["k_sigma"]
         if self.direzione == "long":
             return rb > k * sb and rg < rb
