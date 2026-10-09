@@ -312,9 +312,12 @@ _GIT_STORIA = {"log", "shortlog", "whatchanged", "rev-list", "blame", "annotate"
 _GIT_STORIA_CON_DOPPIO_TRATTINO = {"log", "shortlog", "whatchanged", "rev-list"}
 #: opzioni che, nei comandi di storia, mostrano commit che NON toccano i percorsi
 #: dati (`--sparse` tutti, `--boundary` e `--simplify-by-decoration` quelli di
-#: confine o con un nome) o file fuori (`--full-diff`, `--follow` sui nomi vecchi)
+#: confine o con un nome, `--no-walk` il commit nominato: con git 2.55, sui server
+#: di GitHub, `git log --no-walk HEAD~1 -- <cartella>` stampa il messaggio di HEAD~1
+#: anche se non tocca la cartella; con git 2.43 no) o file fuori (`--full-diff`,
+#: `--follow` sui nomi vecchi)
 _GIT_STORIA_OPZIONI_VIETATE = ("--sparse", "--boundary", "--simplify-by-decoration", "--full-diff",
-                               "--follow", "--merge", "--bisect")
+                               "--follow", "--merge", "--bisect", "--no-walk")
 #: opzioni che, nei comandi di storia, stampano il CONTENUTO dei commit (patch,
 #: righe, parole) o scelgono i commit in base al contenuto (`-S`, `-G`): la
 #: storia della propria cartella comincia sul branch principale, con versioni

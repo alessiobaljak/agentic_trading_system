@@ -75,12 +75,17 @@ o tolta.
 ## Il protocollo di ricerca (dal 6 ott 2026)
 
 Le strategie nuove nascono dal **protocollo di ricerca per moneta** (`research/PROTOCOLLO.md`,
-versione 4.4, testo approvato dal proprietario l'8 ott 2026 alle 05:08 UTC): idee con un perche', periodo chiuso
+versione 4.5, testo approvato dal proprietario il 9 ott 2026 alle 12:06 UTC): idee con un perche', periodo chiuso
 («vault», 2024-01-01 → 2026-09-30) che si apre una volta sola, un branch per campagna e un
 guardiano meccanico (`research/src/guardiano.py`, attivo solo se esiste `research/.sessione`).
 Chi lavora in una sessione di campagna legge solo i percorsi ammessi dal Passo 3 del
 protocollo e non scrive ipotesi o risultati in questo file. Il gate attuale resta acceso come
 gruppo di controllo finche' il proprietario non decide altrimenti.
+Dalla 4.5 (sì del proprietario del 9 ott 2026) le sessioni delle campagne rimanenti le apre il coordinamento su
+delega, al massimo tre campagne in corso, con il messaggio di apertura approvato (`research/apertura/campagna.md`
+sul branch di coordinamento), un controllo ogni ora e le domande delle campagne girate subito al proprietario
+(Passo 4 del protocollo). La prova a placebo dell'esame (`research/taratura/placebo/`, branch di coordinamento)
+dice che l'esame regge sui prezzi veri.
 
 **Ogni sessione di campagna si apre con il modello `claude-opus-5-5` e con ultracode attivo** (richiesta
 del proprietario, 8 ott 2026). Nella creazione si passano la sorgente del repository e il branch principale;

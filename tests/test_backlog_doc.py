@@ -102,3 +102,11 @@ def test_la_discovery_pubblica_dopo_ogni_giro_in_un_processo_a_parte():
     assert "subprocess.run" in corpo and "timeout=" in corpo and "TRADING_BOT_TEST_MODE" in corpo
     # nei test non parte niente
     d.pubblica_dashboard_dopo_il_giro()
+
+
+def test_la_data_con_l_apostrofo_si_legge():
+    # «Aggiornato l'8 ottobre»: fino al 9 ott 2026 la data si perdeva e il test sul backlog vero falliva
+    for testo, atteso in (("**Aggiornato l'8 ottobre 2026, 07:40 ora italiana.**", "8 ottobre 2026, 07:40 ora italiana"),
+                          ("**Aggiornato l’11 ottobre 2026.**", "11 ottobre 2026"),
+                          ("**Aggiornato il 9 ottobre 2026.**", "9 ottobre 2026")):
+        assert leggi_backlog(testo + "\n")["aggiornato"] == atteso

@@ -11,7 +11,7 @@
 
 stato: congelato
 approvato_il: 2026-10-07
-versione_protocollo: "4.4"
+versione_protocollo: "4.5"
 data_bozza: 2026-10-06
 
 # Versione 4.4 (dopo la prova di processo del 7 ott 2026). Il proprietario ha
@@ -22,7 +22,8 @@ data_bozza: 2026-10-06
 # strategia: il dettaglio e' in PROTOCOLLO.md, appendice 3.
 modifiche_4_5:
   scritte_il: 2026-10-09
-  approvate_il: null                 # finche' e' null vale la 4.4 (intestazione di PROTOCOLLO.md)
+  approvate_il: 2026-10-09
+  testo_protocollo: approvato_2026-10-09T12:06Z   # «si' alla 4.5 con i tre punti»
 modifiche_4_4:
   approvate_il: 2026-10-07
   testo_protocollo: approvato_2026-10-08T05:08Z
@@ -188,7 +189,7 @@ regole_esame:
   p_value_asticella: statistica.p_value_vs_baseline   # dalla 4.4: stesso calcolo di «nettamente»
   blocco_bootstrap: statistica.lunghezza_blocco   # dalla 4.4: il blocco in trade, dalla regola in tempo della sezione 8
   baseline_casuale: motore.simula_baseline_casuale   # dalla 4.4: la baseline (b), sempre eseguita cosi'
-  soglia_trasferimento: statistica.monete_richieste_trasferimento   # dalla 4.5 (in attesa di approvazione): Passo 6 punto 4
+  soglia_trasferimento: statistica.monete_richieste_trasferimento   # dalla 4.5: Passo 6 punto 4
   simulazioni_baseline_casuale: 200  # dalla 4.4: simulazioni della baseline (b) in costruzione e in validazione
   semi_baseline_casuale: {primo: 0, ultimo: 199}
   bootstrap: {ricampionamenti: 2000, seme: 0}   # fissi: non si rilancia mai con altri semi
@@ -205,7 +206,7 @@ regole_esame:
   soglia_correlazione_stessi_giorni: 0.5
   margine_minimo_da_liquidazione: 0.8
   trasferimento_monete_minime: 2
-  trasferimento:                     # dalla 4.5 (in attesa di approvazione): Passo 6 punto 4, soglia che cresce con le monete
+  trasferimento:                     # dalla 4.5: Passo 6 punto 4, soglia che cresce con le monete
     livello_caso: 0.05               # il numero richiesto e' il piu' piccolo k con P(almeno k passaggi per caso) < 0,05
     caso_per_moneta_minimo: 0.02     # probabilita' per moneta: il piu' alto fra questo e la «netta per caso» della prova a placebo
   idea_di_gruppo_monete_minime: 3
