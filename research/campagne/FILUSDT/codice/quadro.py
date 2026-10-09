@@ -307,11 +307,13 @@ def intervalli_da_maschera(vietata: np.ndarray) -> List[Tuple[int, int]]:
 # ---------------------------------------------------------------------------
 
 
-def conta(v: Variante) -> Dict[str, int]:
+def conta(v: Variante, moltiplicatore_costi: float = 1.0, ritardo_barre: int = 0,
+          riempimento: str = "stop_prima") -> Dict[str, int]:
     s = carica(v.tf, "costruzione")
     k = calcola(v, s)
     return motore.conta_trade(s.candele, fabbrica_strategia(k), comune.PERIODI["fine_costruzione_ts"],
-                              comune.parametri(), candele_mark=s.mark, funding=s.funding)
+                              comune.parametri(moltiplicatore_costi, ritardo_barre, riempimento),
+                              candele_mark=s.mark, funding=s.funding)
 
 
 def _anno(ts: int) -> int:

@@ -168,13 +168,14 @@ def i07(id_: str) -> Variante:
 # I-08 Ritardo rispetto a BTC (1h)
 # ---------------------------------------------------------------------------
 
-def i08(direzione: str, id_: str) -> Variante:
+def i08(direzione: str, id_: str, soglia: float = 0.02, barre_rend: int = 4, barre_max: int = 8,
+        n_atr: int = 24, k_atr: float = 1.5, tf: str = "1h") -> Variante:
     def ingresso(s):
-        rb, rf = q.rendimento(s.btc_c, 4), q.rendimento(s.c, 4)
+        rb, rf = q.rendimento(s.btc_c, barre_rend), q.rendimento(s.c, barre_rend)
         if direzione == "long":
-            return (rb > 0.02) & (rf < rb)
-        return (rb < -0.02) & (rf > rb)
-    return Variante(id_, "1h", direzione, ingresso, _stop_atr(direzione, 24, 1.5), barre_max=8,
+            return (rb > soglia) & (rf < rb)
+        return (rb < -soglia) & (rf > rb)
+    return Variante(id_, tf, direzione, ingresso, _stop_atr(direzione, n_atr, k_atr), barre_max=barre_max,
                     descrizione=f"I-08 ritardo rispetto a BTC {direzione}")
 
 
@@ -198,3 +199,17 @@ TUTTE = {
     "FILUSDT-016": lambda: i08("long", "FILUSDT-016"),
     "FILUSDT-017": lambda: i08("short", "FILUSDT-017"),
 }
+
+# Verifiche della Fase 4 per il candidato FILUSDT-016 (le regole del candidato non cambiano:
+# ogni voce e' un caso di verifica, mai una variante da adottare).
+_V16 = {
+    "R01": dict(soglia=0.016), "R02": dict(soglia=0.024),
+    "R03": dict(barre_rend=3), "R04": dict(barre_rend=5),
+    "R05": dict(barre_max=6), "R06": dict(barre_max=10),
+    "R07": dict(n_atr=19), "R08": dict(n_atr=29),
+    "R09": dict(k_atr=1.2), "R10": dict(k_atr=1.8),
+    "T30m": dict(tf="30m", barre_rend=8, barre_max=16, n_atr=48),
+    "T2h": dict(tf="2h", barre_rend=2, barre_max=4, n_atr=12),
+}
+for _k, _p in _V16.items():
+    TUTTE[f"FILUSDT-016-{_k}"] = (lambda p=_p, k=_k: i08("long", f"FILUSDT-016-{k}", **p))

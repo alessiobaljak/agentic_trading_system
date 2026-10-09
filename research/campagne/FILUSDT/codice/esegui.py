@@ -25,16 +25,17 @@ def main(argv):
     modo, nome = argv[1], argv[2]
     v = varianti.TUTTE[nome]()
     CARTELLA_ESITI.mkdir(parents=True, exist_ok=True)
-    if modo == "conta":
-        c = quadro.conta(v)
-        print(json.dumps(c))
-        (CARTELLA_ESITI / f"{nome}_conta.json").write_text(json.dumps(c))
-        return
     periodo = argv[3] if len(argv) > 3 else "costruzione"
     costi = float(argv[4]) if len(argv) > 4 else 1.0
     ritardo = int(argv[5]) if len(argv) > 5 else 0
     riempimento = argv[6] if len(argv) > 6 else "stop_prima"
     etichetta = argv[7] if len(argv) > 7 else "test"
+    if modo == "conta":
+        c = quadro.conta(v, costi, ritardo, riempimento)
+        print(json.dumps(c))
+        suffisso = "" if etichetta == "test" else f"_{etichetta}"
+        (CARTELLA_ESITI / f"{nome}_conta{suffisso}.json").write_text(json.dumps(c))
+        return
     t0 = time.time()
     ris = quadro.esegui_test(v, periodo, costi, ritardo, riempimento)
     trades = ris.pop("_trades", [])
