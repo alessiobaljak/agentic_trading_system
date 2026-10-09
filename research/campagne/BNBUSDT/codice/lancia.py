@@ -35,6 +35,10 @@ F = {
     "I-11": "Shen, Urquhart, Wang, «Bitcoin intraday time series momentum», Financial Review 57(2), 2022",
     "I-12": "Brunnermeier, Pedersen, «Market Liquidity and Funding Liquidity», Review of Financial Studies 22(6), 2009",
     "I-13": "Lakonishok, Smidt, «Are Seasonal Anomalies Real? A Ninety-Year Perspective», Review of Financial Studies 1(4), 1988",
+    "I-14": "Alan Moreira, Tyler Muir, «Volatility-Managed Portfolios», Journal of Finance 72(4), 2017",
+    "I-15": "J. Welles Wilder, «New Concepts in Technical Trading Systems», Trend Research, 1978",
+    "I-16": "Yakov Amihud, «Illiquidity and stock returns: cross-section and time-series effects», Journal of Financial Markets 5(1), 2002",
+    "I-17": "Amaya, Christoffersen, Jacobs, Vasquez, «Does realized skewness predict the cross-section of equity returns?», Journal of Financial Economics 118(1), 2015",
 }
 
 # etichetta: (idea, fabbrica, meccanismo, parametri, (r_min, r_max), batte_b_previsto)
@@ -85,6 +89,22 @@ SPEC = {
                {"ingresso": "close - open < -2 ATR(14) precedente", "uscita": "12 barre", "stop": "2 ATR(14)"}, (-0.10, 0.15), False),
     "I-13-L": ("I-13", lambda vid: V.i13(vid), "cambio del mese",
                {"ingresso": "vigilia dell'ultimo giorno del mese", "uscita": "4 barre", "stop": "2 ATR(14)"}, (-0.05, 0.05), False),
+    "I-06-L1h": ("I-06", lambda vid: V.i06("long", vid, "1h"), "rottura dopo compressione delle bande",
+                 {"timeframe": "1h", "ingresso": "min larghezza 6 barre <= min 120 barre e close > banda sup.", "uscita": "close < SMA20", "stop": "2 ATR(14)"}, (-0.15, 0.05), False),
+    "I-06-S1h": ("I-06", lambda vid: V.i06("short", vid, "1h"), "rottura dopo compressione delle bande",
+                 {"timeframe": "1h", "ingresso": "min larghezza 6 barre <= min 120 barre e close < banda inf.", "uscita": "close > SMA20", "stop": "2 ATR(14)"}, (-0.15, 0.05), False),
+    "I-07-L80": ("I-07", lambda vid: V.i07(vid, 0.8), "premio del volume alto",
+                 {"ingresso": "volume >= 80 percentile degli ultimi 50 giorni", "uscita": "5 barre", "stop": "2 ATR(14)"}, (-0.05, 0.10), False),
+    "I-14-L": ("I-14", lambda vid: V.i14(vid), "volatilita' bassa, rendimento per rischio piu' alto",
+               {"ingresso": "dev std rendimenti 42 barre <= 33 percentile delle ultime 540", "uscita": "6 barre", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
+    "I-15-L": ("I-15", lambda vid: V.i15("long", vid), "forza della tendenza (ADX)",
+               {"ingresso": "ADX(14) sale sopra 25 con +DI > -DI", "uscita": "-DI > +DI", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
+    "I-15-S": ("I-15", lambda vid: V.i15("short", vid), "forza della tendenza (ADX)",
+               {"ingresso": "ADX(14) sale sopra 25 con -DI > +DI", "uscita": "+DI > -DI", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
+    "I-16-L": ("I-16", lambda vid: V.i16(vid), "shock di illiquidita'",
+               {"ingresso": "illiquidita' di Amihud 6 barre >= 90 percentile di 180", "uscita": "6 barre", "stop": "2 ATR(14)"}, (-0.10, 0.10), False),
+    "I-17-L": ("I-17", lambda vid: V.i17(vid), "asimmetria realizzata negativa",
+               {"ingresso": "asimmetria rendimenti 42 barre <= 10 percentile delle ultime 540", "uscita": "42 barre", "stop": "2 ATR(14)"}, (-0.10, 0.15), False),
 }
 
 

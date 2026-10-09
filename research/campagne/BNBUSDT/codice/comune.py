@@ -150,10 +150,15 @@ def array_ohlcv(candele: Sequence[Candela]) -> Dict[str, np.ndarray]:
 
 
 def sma(x: np.ndarray, n: int) -> np.ndarray:
+    """Media mobile semplice; NaN solo nelle finestre che contengono un NaN.
+
+    Correzione del 9 ott 2026 (voce di log BNBUSDT-N013): la versione con la somma
+    cumulata propagava un NaN iniziale a tutta la serie (I-08 dava 0 trade).
+    """
+    from numpy.lib.stride_tricks import sliding_window_view
     out = np.full(len(x), np.nan)
     if len(x) >= n:
-        c = np.cumsum(np.insert(x, 0, 0.0))
-        out[n - 1:] = (c[n:] - c[:-n]) / n
+        out[n - 1:] = sliding_window_view(np.asarray(x, dtype=float), n).mean(axis=1)
     return out
 
 

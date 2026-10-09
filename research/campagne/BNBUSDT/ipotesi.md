@@ -567,3 +567,174 @@ trade in costruzione: scarto previsto per trade minimi).
 **Varianti.**
 * `I-13-L` (`varianti.i13()`): alla chiusura della barra che precede l'ultimo giorno del mese →
   long per 4 barre; stop 2 ATR(14). Previsione: sotto i 70 trade, quindi scarto.
+
+---
+
+# Aggiunte del 9 ottobre 2026, dopo il primo lotto
+
+Scritte dopo il primo lotto (voci da BNBUSDT-001 a BNBUSDT-022) e PRIMA di qualunque conteggio di
+quanto segue.
+
+## Correzione: I-08
+
+Gli scarti BNBUSDT-013 e BNBUSDT-014 (0 trade) vengono da un errore del codice della campagna
+(`comune.sma` propagava un NaN iniziale a tutta la serie), non dalle regole. Le regole di I-08
+restano quelle scritte sopra, senza modifiche; si ricontano col codice corretto (voce di
+correzione BNBUSDT-N013). Le altre varianti già testate non usano medie su serie con NaN: i loro
+numeri non cambiano.
+
+## Varianti allentate degli scarti (regola 6: allentare le soglie di uno scarto senza aver visto risultati)
+
+Solo per idee di cui NON è stata testata nessuna variante: I-06, I-07 e I-12 (I-03 no: la sua
+variante a 1h è già stata testata). Le soglie si allentano senza aver visto alcun risultato:
+degli scarti si conosce solo il numero di trade.
+
+* `I-06-L1h` e `I-06-S1h` (`varianti.i06(direzione, tf="1h")`): stesse regole di I-06 a 1h. Gli
+  scarti a 4h avevano 23 trade ciascuno. A 1h la finestra della compressione (120 barre) è di 5
+  giorni invece di 20: si guarda una compressione più breve, che resta nel meccanismo della fonte
+  (larghezza delle bande al minimo recente seguita da una chiusura fuori banda). Previsione: R
+  medio fra −0,15 e +0,05 (costi più alti a 1h); nessuna batte la (b).
+* `I-07-L80` (`varianti.i07(q=0.8)`): volume nel 20% più alto degli ultimi 50 giorni invece del
+  10% (lo scarto aveva 46 trade). Gervais e colleghi usano il decile più alto; il quintile è
+  l'allentamento minimo che può arrivare ai trade minimi. Previsione: R medio fra −0,05 e +0,10.
+* `I-12-2` (già scritta sopra, condizionata allo scarto di I-12-3, che ha 45 trade): soglia a 2 ATR.
+
+## I-14 — Volatilità bassa
+
+**Fonte.** Alan Moreira, Tyler Muir, «Volatility-Managed Portfolios», Journal of Finance 72(4),
+agosto 2017: il rendimento atteso non sale quanto la varianza quando la volatilità è alta, quindi
+il rendimento per unità di rischio è più alto nei periodi di volatilità bassa.
+
+**Affermazione verificabile.** Su BNBUSDT a 4h, un long aperto quando la volatilità realizzata
+degli ultimi 7 giorni è nel terzo più basso degli ultimi 90 giorni ha R medio (rendimento per
+unità di rischio, con lo stop in ATR) più alto di un long aperto a caso con la stessa uscita.
+
+**Sotto-domande.** L'effetto è sul rendimento o solo sul rischio (lo stop in ATR normalizza già il
+rischio)? Chi opera: nei periodi calmi la leva è più bassa e meno gente viene liquidata. Quanto
+dura: la fonte è mensile; qui l'orizzonte è di un giorno per arrivare ai trade minimi, scelto prima
+di contare.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | t vicino a 0 | t oltre la soglia |
+| 2 | Trend di fondo | vince solo nel 2020-2021 | anche nel 2022 |
+| 3 | È solo il mercato | R correlato a BTC | bassa |
+| 4 | Lo stop in ATR stretto nei periodi calmi rende i costi più pesanti in R | R netto più basso della (b) pur con lordo simile | — |
+| 5 | Pochi trade estremi (rotture dopo la calma) | senza i 3 migliori sotto la (b) | sopra |
+| 6 | Artefatto dei dati | — | — |
+| 7 | Effetto costi | vedi 4 | — |
+| 8 | La calma precede le rotture in entrambe le direzioni: nessuna direzione preferita | R come la (b) | sopra |
+| 9 | Il risultato di Moreira e Muir riguarda la gestione dell'esposizione, non l'ingresso | nessun vantaggio per singolo trade | vantaggio |
+| 10 | La volatilità realizzata e l'ATR misurano la stessa cosa: la regola sceglie solo stop stretti | costi in R alti, nessuna differenza nel lordo | differenza nel lordo |
+
+**Varianti.**
+* `I-14-L` (`varianti.i14()`): deviazione standard dei rendimenti logaritmici delle ultime 42
+  barre a 4h ≤ 33° percentile della stessa misura sulle ultime 540 barre → long 6 barre; stop
+  2 ATR(14). Previsione: R medio fra −0,10 e +0,10; non batte la (b).
+
+## I-15 — Forza della tendenza con l'ADX
+
+**Fonte.** J. Welles Wilder Jr., «New Concepts in Technical Trading Systems», Trend Research,
+1978: l'indice di movimento direzionale (ADX) misura la forza della tendenza; un ADX che sale
+sopra 25 indica una tendenza da seguire nella direzione dell'indicatore direzionale dominante.
+
+**Affermazione verificabile.** Su BNBUSDT a 4h, quando l'ADX(14) sale sopra 25 con +DI sopra −DI,
+il long tenuto finché −DI non supera +DI ha R medio più alto di un ingresso casuale con la stessa
+uscita (simmetrico per lo short).
+
+**Sotto-domande.** L'ADX arriva in ritardo, a tendenza già fatta? Chi opera: chi segue la tendenza.
+Quanto dura: giorni.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | t vicino a 0 | t oltre la soglia |
+| 2 | Trend di fondo | long vince solo nel 2020-2021 | anche nel 2022 |
+| 3 | È solo il mercato | R correlato a BTC | bassa |
+| 4 | Volatilità alta quando l'ADX sale | stop larghi, costi in R bassi | differenza nel lordo |
+| 5 | Pochi trade estremi | senza i 3 migliori sotto la (b) | sopra |
+| 6 | Artefatto dei dati | — | — |
+| 7 | Effetto costi | piccolo a 4h | — |
+| 8 | Ritardo dell'indicatore: ingresso a fine movimento | R sotto la (b) | sopra |
+| 9 | Stessa informazione di I-02 e I-10 (altre regole di tendenza) | risultati simili | diversi |
+| 10 | Uscita sul cambio dei DI troppo rapida | R mediano negativo | positivo |
+
+**Varianti.**
+* `I-15-L` (`varianti.i15("long")`): ADX(14) passa da ≤ 25 a > 25 con +DI > −DI → long; uscita
+  quando −DI > +DI; stop 2 ATR(14).
+* `I-15-S` (`varianti.i15("short")`): ADX passa sopra 25 con −DI > +DI → short; uscita quando
+  +DI > −DI.
+Previsione: R medio fra −0,10 e +0,10; nessuna batte la (b).
+
+## I-16 — Shock di illiquidità
+
+**Fonte.** Yakov Amihud, «Illiquidity and stock returns: cross-section and time-series effects»,
+Journal of Financial Markets 5(1), 2002: un aumento inatteso dell'illiquidità abbassa i prezzi
+nello stesso momento e alza il rendimento atteso dopo (premio per l'illiquidità nel tempo).
+
+**Affermazione verificabile.** Su BNBUSDT a 4h, quando l'illiquidità di Amihud delle ultime 24 ore
+(media di |rendimento| / volume in USDT su 6 barre) è nel 10% più alto degli ultimi 30 giorni, il
+long delle 24 ore successive ha R medio più alto di un long a caso con la stessa uscita.
+
+**Sotto-domande.** Lo shock di illiquidità è un calo o un aumento di prezzo? (la misura usa il
+valore assoluto). Chi opera: fornitori di liquidità che chiedono un premio. Quanto dura: la fonte
+è mensile e annuale; qui un giorno, per i trade minimi.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | t vicino a 0 | t oltre la soglia |
+| 2 | Trend di fondo | vince nel 2021 | anche nel 2022 |
+| 3 | È solo il mercato | R correlato a BTC | bassa |
+| 4 | Volatilità: l'illiquidità alta è soprattutto |rendimento| alto | risultati come I-08 | diversi |
+| 5 | Pochi trade estremi | senza i 3 migliori sotto la (b) | sopra |
+| 6 | Artefatto: volume basso nei giorni senza mark o nel 2020 | segnali concentrati nel 2020 | distribuiti |
+| 7 | Effetto costi | piccolo | — |
+| 8 | Il premio di Amihud è su orizzonti lunghi: niente su un giorno | R come la (b) | sopra |
+| 9 | Momenti illiquidi = fine settimana, con effetti di calendario | segnali concentrati nel fine settimana | — |
+| 10 | Shock dopo un rialzo e dopo un ribasso si annullano | R vicino alla (b) | — |
+
+**Varianti.**
+* `I-16-L` (`varianti.i16()`): media su 6 barre di |rendimento logaritmico| / volume in USDT
+  (colonna `quote_volume`) ≥ 90° percentile della stessa misura sulle ultime 180 barre → long 6
+  barre; stop 2 ATR(14). Previsione: R medio fra −0,10 e +0,10; non batte la (b).
+
+## I-17 — Asimmetria realizzata negativa
+
+**Fonte.** Diego Amaya, Peter Christoffersen, Kris Jacobs, Aurelio Vasquez, «Does realized
+skewness predict the cross-section of equity returns?», Journal of Financial Economics 118(1),
+ottobre 2015: i titoli con asimmetria realizzata (dai rendimenti infragiornalieri della settimana)
+molto negativa hanno rendimenti più alti la settimana dopo.
+
+**Affermazione verificabile.** Su BNBUSDT, quando l'asimmetria dei rendimenti a 4h degli ultimi 7
+giorni è nel 10% più basso degli ultimi 90 giorni, il long dei 7 giorni successivi ha R medio più
+alto di un long a caso con la stessa uscita.
+
+**Sotto-domande.** È un effetto di sezione trasversale (fra titoli) o vale anche nel tempo per una
+sola moneta? Qui lo si prova nel tempo: è un adattamento, dichiarato. Chi opera: investitori che
+cercano «biglietti della lotteria» (asimmetria positiva) e trascurano quelli ad asimmetria negativa.
+Quanto dura: una settimana.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentisce |
+|---|---|---|---|
+| 1 | Effetto casuale | t vicino a 0 | t oltre la soglia |
+| 2 | Trend di fondo | vince nel 2020-2021 | anche nel 2022 |
+| 3 | È solo il mercato | R correlato a BTC | bassa |
+| 4 | Asimmetria negativa = un crollo recente: è un rimbalzo dopo un crollo | risultati come I-12 | diversi |
+| 5 | Pochi trade estremi | senza i 3 migliori sotto la (b) | sopra |
+| 6 | Artefatto dei dati (barre anomale) | — | — |
+| 7 | Effetto costi | trascurabile su 7 giorni | — |
+| 8 | L'effetto è fra titoli, non nel tempo | nessun vantaggio | vantaggio |
+| 9 | Con 7 giorni di posizione i trade sono pochi | scarto per trade minimi | — |
+| 10 | Il crollo continua | R sotto la (b) | sopra |
+
+**Varianti.**
+* `I-17-L` (`varianti.i17()`): asimmetria dei rendimenti logaritmici delle ultime 42 barre a 4h ≤
+  10° percentile della stessa misura sulle ultime 540 barre → long per 42 barre; stop 2 ATR(14).
+  Previsione: probabile scarto per trade minimi; se testata, R medio fra −0,10 e +0,15.

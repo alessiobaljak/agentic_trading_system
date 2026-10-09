@@ -219,7 +219,7 @@ def i05(direzione: str, vid: str) -> Variante:
 # I-06 Compressione delle bande di Bollinger (Bollinger 2001)
 # ---------------------------------------------------------------------------
 
-def i06(direzione: str, vid: str) -> Variante:
+def i06(direzione: str, vid: str, tf: str = "4h") -> Variante:
     def prepara(candele):
         o = C.array_ohlcv(candele)
         o["atr"] = C.atr(o, 14)
@@ -240,18 +240,18 @@ def i06(direzione: str, vid: str) -> Variante:
     else:
         cond = lambda ind, i: bool(ind["squeeze"][i] and ind["close"][i] < ind["inf"][i])  # noqa: E731
         usc = _uscita_su_indicatore("esci_short")
-    return Variante(vid, "4h", direzione, prepara, cond, _stop_atr(direzione, 2.0), usc)
+    return Variante(vid, tf, direzione, prepara, cond, _stop_atr(direzione, 2.0), usc)
 
 
 # ---------------------------------------------------------------------------
 # I-07 Premio del volume alto (Gervais, Kaniel, Mingelgrin 2001)
 # ---------------------------------------------------------------------------
 
-def i07(vid: str) -> Variante:
+def i07(vid: str, q: float = 0.9) -> Variante:
     def prepara(candele):
         o = C.array_ohlcv(candele)
         o["atr"] = C.atr(o, 14)
-        o["vq90"] = _quantile_mobile(o["volume"], 50, 0.9)
+        o["vq90"] = _quantile_mobile(o["volume"], 50, q)
         return o
     cond = lambda ind, i: bool(ind["volume"][i] >= ind["vq90"][i])  # noqa: E731
     return Variante(vid, "1d", "long", prepara, cond, _stop_atr("long", 2.0), _uscita_tempo(5))
@@ -386,3 +386,138 @@ def i13(vid: str) -> Variante:
         return o
     cond = lambda ind, i: bool(ind["vigilia"][i])  # noqa: E731
     return Variante(vid, "1d", "long", prepara, cond, _stop_atr("long", 2.0), _uscita_tempo(4))
+
+
+# ---------------------------------------------------------------------------
+# I-14 Volatilita' bassa (Moreira, Muir 2017)
+# ---------------------------------------------------------------------------
+
+def i14(vid: str) -> Variante:
+    def prepara(candele):
+        o = C.array_ohlcv(candele)
+        o["atr"] = C.atr(o, 14)
+        lr = np.diff(np.log(o["close"]), prepend=np.nan)
+        rv = C.rolling_std(lr, 42)
+        o["rv"] = rv
+        o["rv_q33"] = _quantile_mobile(np.nan_to_num(rv, nan=np.inf), 540, 1 / 3)
+        o["rv_q33"][:582] = np.nan
+        return o
+    cond = lambda ind, i: bool(ind["rv"][i] <= ind["rv_q33"][i])  # noqa: E731
+    return Variante(vid, "4h", "long", prepara, cond, _stop_atr("long", 2.0), _uscita_tempo(6))
+
+
+# ---------------------------------------------------------------------------
+# I-15 Forza della tendenza con l'ADX (Wilder 1978)
+# ---------------------------------------------------------------------------
+
+def _dmi(o, n: int = 14):
+    """+DI, -DI e ADX di Wilder, causali."""
+    h, l = o["high"], o["low"]
+    su = np.diff(h, prepend=h[0])
+    giu = -np.diff(l, prepend=l[0])
+    pdm = np.where((su > giu) & (su > 0), su, 0.0)
+    mdm = np.where((giu > su) & (giu > 0), giu, 0.0)
+    tr = C.true_range(o)
+    N = len(h)
+
+    def wilder(x):
+        out = np.full(N, np.nan)
+        if N <= n:
+            return out
+        m = x[1:n + 1].sum()
+        out[n] = m
+        for i in range(n + 1, N):
+            m = m - m / n + x[i]
+            out[i] = m
+        return out
+    atr_w, p, m = wilder(tr), wilder(pdm), wilder(mdm)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        pdi = 100 * p / atr_w
+        mdi = 100 * m / atr_w
+        dx = 100 * np.abs(pdi - mdi) / (pdi + mdi)
+    adx = np.full(N, np.nan)
+    inizio = 2 * n
+    if N > inizio:
+        a = np.nanmean(dx[n + 1:inizio + 1])
+        adx[inizio] = a
+        for i in range(inizio + 1, N):
+            a = (a * (n - 1) + dx[i]) / n
+            adx[i] = a
+    return pdi, mdi, adx
+
+
+def i15(direzione: str, vid: str) -> Variante:
+    def prepara(candele):
+        o = C.array_ohlcv(candele)
+        o["atr"] = C.atr(o, 14)
+        pdi, mdi, adx = _dmi(o, 14)
+        prec = C.ritardo(adx, 1)
+        with np.errstate(invalid="ignore"):
+            o["adx_su"] = (adx > 25) & (prec <= 25)
+            o["pdi_mag"] = pdi > mdi
+            o["mdi_mag"] = mdi > pdi
+        return o
+    if direzione == "long":
+        cond = lambda ind, i: bool(ind["adx_su"][i] and ind["pdi_mag"][i])  # noqa: E731
+        usc = _uscita_su_indicatore("mdi_mag")
+    else:
+        cond = lambda ind, i: bool(ind["adx_su"][i] and ind["mdi_mag"][i])  # noqa: E731
+        usc = _uscita_su_indicatore("pdi_mag")
+    return Variante(vid, "4h", direzione, prepara, cond, _stop_atr(direzione, 2.0), usc)
+
+
+# ---------------------------------------------------------------------------
+# I-16 Shock di illiquidita' (Amihud 2002)
+# ---------------------------------------------------------------------------
+
+def _volume_usdt(candele, tf: str) -> np.ndarray:
+    fine = datetime.fromtimestamp(candele[-1].close_ts / 1000, tz=timezone.utc).date()
+    per_ts = {}
+    for p in C.dati._percorsi_presenti(C.SIMBOLO, "klines", tf, C.INIZIO, fine, C.dati.RADICE_DEFAULT):
+        for ts, v in C.dati.volume_usdt_da_zip(p).items():
+            per_ts.setdefault(ts, v)
+    return np.array([per_ts.get(c.ts, np.nan) for c in candele])
+
+
+def i16(vid: str) -> Variante:
+    def prepara(candele):
+        o = C.array_ohlcv(candele)
+        o["atr"] = C.atr(o, 14)
+        qv = _volume_usdt(candele, "4h")
+        r = np.abs(np.diff(np.log(o["close"]), prepend=np.nan))
+        with np.errstate(invalid="ignore", divide="ignore"):
+            ill = C.sma(r / qv * 1e9, 6)
+        o["ill"] = ill
+        o["ill_q90"] = _quantile_mobile(np.nan_to_num(ill, nan=np.inf), 180, 0.9)
+        o["ill_q90"][:190] = np.nan
+        return o
+    cond = lambda ind, i: bool(ind["ill"][i] >= ind["ill_q90"][i])  # noqa: E731
+    return Variante(vid, "4h", "long", prepara, cond, _stop_atr("long", 2.0), _uscita_tempo(6))
+
+
+# ---------------------------------------------------------------------------
+# I-17 Asimmetria realizzata negativa (Amaya, Christoffersen, Jacobs, Vasquez 2015)
+# ---------------------------------------------------------------------------
+
+def i17(vid: str) -> Variante:
+    def prepara(candele):
+        from numpy.lib.stride_tricks import sliding_window_view
+        o = C.array_ohlcv(candele)
+        o["atr"] = C.atr(o, 14)
+        lr = np.diff(np.log(o["close"]), prepend=0.0)
+        sk = np.full(len(lr), np.nan)
+        n = 42
+        if len(lr) > n:
+            w = sliding_window_view(lr[1:], n)  # finestra che termina alla barra i (indice i = j + n)
+            m = w.mean(axis=1, keepdims=True)
+            d = w - m
+            s2 = (d ** 2).mean(axis=1)
+            s3 = (d ** 3).mean(axis=1)
+            with np.errstate(invalid="ignore", divide="ignore"):
+                sk[n:] = s3 / s2 ** 1.5
+        o["sk"] = sk
+        o["sk_q10"] = _quantile_mobile(np.nan_to_num(sk, nan=-np.inf), 540, 0.1)
+        o["sk_q10"][:600] = np.nan
+        return o
+    cond = lambda ind, i: bool(ind["sk"][i] <= ind["sk_q10"][i])  # noqa: E731
+    return Variante(vid, "4h", "long", prepara, cond, _stop_atr("long", 2.0), _uscita_tempo(42))
