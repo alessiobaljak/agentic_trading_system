@@ -589,3 +589,47 @@ sulle stesse barre, allineato da `carica_serie_allineate`), posizioni di 4 ore.
 
 **Previsioni.** Costi 0,05 R; movimenti attesi di poche decine di punti base: R piccoli. Profit
 factor fra 0,8 e 1,2 per entrambe; nessuna batte nettamente la (b).
+
+---
+
+## I-13 — Incrocio con la media mobile e tenuta fissa
+
+**Fonte.** William Brock, Josef Lakonishok e Blake LeBaron, «Simple Technical Trading Rules and the
+Stochastic Properties of Stock Returns», Journal of Finance 47(5), dicembre 1992 (regola «a media
+mobile a lunghezza fissa»: dopo che il prezzo attraversa la media lunga oltre una banda dell'1%, si
+tiene la posizione 10 periodi). Sulle crypto: Robert Hudson e Andrew Urquhart, «Technical trading and
+cryptocurrencies», Annals of Operations Research 297(1), 2021 (online 2019): le regole tecniche, fra
+cui le medie mobili, mostrano capacità di previsione e profitto nelle crypto, con costi di pareggio
+sopra i costi tipici.
+
+**Affermazione verificabile.** Dopo che il close di LTCUSDT attraversa verso l'alto la media dei
+close a 50 barre oltre una banda dell'1%, il rendimento delle 10 barre successive è più alto di
+quello di un long a caso con la stessa uscita; specchio verso il basso.
+
+**Sotto-domande.** L'attraversamento segnala l'inizio di un trend o solo rumore intorno alla media
+(falsi segnali in laterale)? Chi opera: i tanti sistemi a media mobile. Tempi: 10 periodi, come la
+fonte.
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | È lo stesso momentum della I-01/I-02: nessuna informazione nuova | risultato simile alla 003/004 | risultato diverso |
+| S2 | Falsi incroci in fasi laterali | molti trade nei mesi senza trend, R negativo | R positivo anche lì |
+| S3 | Le regole della fonte erano giornaliere su indici azionari: su LTC a 4h non trasferiscono | R uguale al caso | batte la (b) |
+
+Spiegazioni concorrenti per questa idea: 13.
+
+**Ipotesi completa.** LTCUSDT, regola a media mobile con banda e tenuta fissa, candele 4h (la regola
+giornaliera della fonte su meno di tre anni darebbe pochi incroci; a 4 ore la media a 50 barre è
+poco più di 8 giorni). Posizioni di 10 barre.
+
+**Varianti:**
+
+* **LTCUSDT-024** — 4h, long. Ingresso alla chiusura della barra i se close[i] > 1,01 × media a 50[i] e
+  close[i−1] ≤ 1,01 × media a 50[i−1]. Uscita dopo 10 barre. Stop 6% sotto il close di segnale.
+* **LTCUSDT-025** — 4h, short. Ingresso se close[i] < 0,99 × media a 50[i] e close[i−1] ≥ 0,99 × media
+  a 50[i−1]. Uscita dopo 10 barre. Stop 6% sopra.
+
+**Previsioni.** Costi 0,023 R. Profit factor fra 0,8 e 1,3 per entrambe; nessuna batte nettamente
+la (b).

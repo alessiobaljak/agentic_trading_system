@@ -508,6 +508,39 @@ class PremioMark(Base):
 
 
 # ---------------------------------------------------------------------------
+# I-13 incrocio della media mobile con banda e tenuta fissa (LTCUSDT-024, -025)
+# ---------------------------------------------------------------------------
+
+
+class IncrocioMedia(Base):
+    tf = "4h"
+    riscaldamento = 50
+
+    def __init__(self, direzione):
+        self.direzione = direzione
+
+    def prepara(self, candele):
+        s = I.serie(candele)
+        c = s["close"]
+        m = I.sma(c, 50)
+        return {"close": c, "c_prec": I.ritardo(c, 1), "m": m, "m_prec": I.ritardo(m, 1)}
+
+    def entra(self, i, ind):
+        c, cp, m, mp = ind["close"][i], ind["c_prec"][i], ind["m"][i], ind["m_prec"][i]
+        if math.isnan(m) or math.isnan(mp):
+            return False
+        if self.direzione == "long":
+            return bool(c > 1.01 * m and cp <= 1.01 * mp)
+        return bool(c < 0.99 * m and cp >= 0.99 * mp)
+
+    def stop_distanza(self, i, ind):
+        return STOP_MAX
+
+    def esci(self, i, ind, pos):
+        return quadro.tempo_in_barre(i, ind, pos) >= 10
+
+
+# ---------------------------------------------------------------------------
 # Registro
 # ---------------------------------------------------------------------------
 
@@ -536,6 +569,10 @@ FONTE_I11 = ("Guillermo Llorente, Roni Michaely, Gideon Saar, Jiang Wang, «Dyna
              "Individual Stocks», Review of Financial Studies 15(4), 2002")
 FONTE_I12 = ("Songrun He, Asaf Manela, Omri Ross, Victor von Wachter, «Fundamentals of Perpetual Futures», arXiv "
              "2212.06888, prima versione dicembre 2022")
+
+FONTE_I13 = ("William Brock, Josef Lakonishok, Blake LeBaron, «Simple Technical Trading Rules and the Stochastic "
+             "Properties of Stock Returns», Journal of Finance 47(5), dicembre 1992; Robert Hudson, Andrew Urquhart, "
+             "«Technical trading and cryptocurrencies», Annals of Operations Research 297(1), 2021 (online 2019)")
 
 REGISTRO = {
     "LTCUSDT-001": (lambda: MomentumSettimanale("long"), {
@@ -682,6 +719,16 @@ REGISTRO = {
         "meccanismo": "convergenza dell'ultimo prezzo verso il mark quando il premio e' anomalo verso il basso",
         "parametri": {"finestra": 168, "soglia_sd": 3.0, "tenuta_barre": 4, "stop_atr": 2.0, "atr": 24, "stop_massimo": 0.06},
         "previsione": "profit factor fra 0,8 e 1,2; non batte nettamente la (b)"}),
+    "LTCUSDT-024": (lambda: IncrocioMedia("long"), {
+        "idea": "I-13", "fonte": FONTE_I13,
+        "meccanismo": "attraversamento verso l'alto della media a 50 barre oltre la banda dell'1%, tenuta fissa",
+        "parametri": {"media": 50, "banda": 0.01, "tenuta_barre": 10, "stop": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-025": (lambda: IncrocioMedia("short"), {
+        "idea": "I-13", "fonte": FONTE_I13,
+        "meccanismo": "attraversamento verso il basso della media a 50 barre oltre la banda dell'1%, tenuta fissa",
+        "parametri": {"media": 50, "banda": 0.01, "tenuta_barre": 10, "stop": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
     "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {
         "idea": "I-10", "fonte": FONTE_I10,
         "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo",
