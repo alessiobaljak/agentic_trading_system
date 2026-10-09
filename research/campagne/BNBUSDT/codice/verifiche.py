@@ -27,6 +27,10 @@ elif CAND == "BNBUSDT-044":
     BASE = dict(max_barre=12, k_stop=2.5, soglia_rsi=5.0, n_lunga=200, n_corta=5, dist_lunga_atr=1.7, n_atr=14, n_rsi=2)
     FILTRO = ("dist_lunga_atr", lambda ind: ~(ind["close"] - ind["sma200"] >= 1.7 * ind["atr"]),
               "la (b) entra solo nelle barre con close - SMA200 >= 1,7 ATR(14), cioe' in forte tendenza")
+elif CAND == "BNBUSDT-045":
+    BASE = dict(max_barre=12, k_stop=2.5, soglia_rsi=5.0, n_lunga=200, n_corta=5, solo_fine_settimana=True, n_atr=14, n_rsi=2)
+    FILTRO = ("fine_settimana", lambda ind: ~(ind["gs"] >= 5),
+              "la (b) entra solo nelle barre di sabato e domenica UTC")
 else:
     raise SystemExit(f"candidato sconosciuto {CAND}")
 
@@ -41,7 +45,7 @@ ROBUSTEZZA = [("soglia_rsi", 4.0), ("soglia_rsi", 6.0), ("n_lunga", 160), ("n_lu
               ("k_stop", 2.0), ("k_stop", 3.0), ("max_barre", 10), ("max_barre", 14)]
 if CAND == "BNBUSDT-043":
     ROBUSTEZZA += [("atr_rel_min", 0.012), ("atr_rel_min", 0.018)]
-else:
+elif CAND == "BNBUSDT-044":
     ROBUSTEZZA += [("dist_lunga_atr", 1.36), ("dist_lunga_atr", 2.04)]
 ROBUSTEZZA += [("n_atr", 11), ("n_atr", 17), ("n_rsi", 1), ("n_rsi", 3)]
 
@@ -65,7 +69,7 @@ VERIFICHE["ritardo"] = {"fab": fab(), "kw": {"ritardo_barre": 1, "con_a": False}
 VERIFICHE["intrabarra_opposta"] = {"fab": fab(), "kw": {"riempimento": "target_prima", "con_a": False},
                                    "descrizione": "regola intra-barra opposta (target prima): la variante non ha target, atteso identico",
                                    "criterio": "si dichiara la differenza"}
-VERIFICHE["scettico_b_volatile" if CAND == "BNBUSDT-043" else "scettico_b_tendenza"] = {
+VERIFICHE["scettico_b_" + {"BNBUSDT-043": "volatile", "BNBUSDT-044": "tendenza", "BNBUSDT-045": "fine_settimana"}[CAND]] = {
     "fab": fab(), "kw": {"con_a": False, "vieta_extra": FILTRO[1]},
     "descrizione": (f"prova dello scettico (Fase 5): {FILTRO[2]}, come il filtro del candidato; se il vantaggio era "
                     "solo l'effetto del filtro, contro questa (b) sparisce"),

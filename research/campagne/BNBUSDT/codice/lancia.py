@@ -153,6 +153,16 @@ SPEC["I-03-1h-T12-D17"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=12, di
                            "inversione di breve in tendenza (RSI 2)",
                            {"ingresso": "close > SMA200 + 1,7 ATR(14) e RSI2 < 5", "uscita": "close > SMA5 oppure 12 barre",
                             "stop": "2,5 ATR(14)"}, (-0.03, 0.08), False)
+RITOCCHI["I-03-1h-T12-W"] = ("BNBUSDT-041", "aggiunto il filtro: solo barre di segnale che aprono di sabato o domenica (UTC); resto come BNBUSDT-041",
+                             "Fase 3 su BNBUSDT-005/041 (nota BNBUSDT-N018): R medio per giorno del segnale lun -0,054, mar -0,103, "
+                             "mer -0,056, gio +0,030, ven -0,061, sab +0,143, dom +0,143 (73 trade nel fine settimana); medie stop "
+                             "contro altri: giorno 2,15 contro 3,15 (N024). Motivo: nel fine settimana la liquidita' e' piu' sottile "
+                             "e i cali sono piu' spesso pressione di liquidita' che informazione. Rischio dichiarato prima: gruppo "
+                             "scelto guardando 7 gruppi, probabilita' alta che sia fortuna")
+SPEC["I-03-1h-T12-W"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=12, solo_fine_settimana=True),
+                         "inversione di breve in tendenza (RSI 2)",
+                         {"ingresso": "close > SMA200 e RSI2 < 5, solo sabato e domenica UTC", "uscita": "close > SMA5 oppure 12 barre",
+                          "stop": "2,5 ATR(14)"}, (-0.05, 0.15), False)
 SPEC["I-03-1h-T12"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=12), "inversione di breve in tendenza (RSI 2)",
                        {"ingresso": "close > SMA200 e RSI2 < 5", "uscita": "close > SMA5 oppure 12 barre", "stop": "2,5 ATR(14)"},
                        (-0.05, 0.08), False)
