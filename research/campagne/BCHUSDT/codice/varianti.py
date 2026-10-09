@@ -633,6 +633,27 @@ class MomentoSerieUscitaSegnale(MomentoSerie):
         return r >= 0 if self.direzione == "short" else r <= 0
 
 
+class RotturaVolatilitaFiltro(RotturaVolatilita):
+    """I-04 con il filtro nato dallo studio dei fallimenti (nota BCHUSDT-N016): per lo short il close
+    deve essere sotto la media semplice delle ultime ``n_media`` barre orarie (sopra per il long)."""
+
+    def __init__(self, id, direzione, n_media=50, **kw):
+        super().__init__(id, direzione, **kw)
+        self.n_media = n_media
+        self.riscaldamento = max(self.riscaldamento, n_media)
+
+    def prepara(self, s):
+        x = super().prepara(s)
+        x["media"] = ind.sma(s["close"], self.n_media)
+        return x
+
+    def condizione(self, x, s, i):
+        m = x["media"][i]
+        if not _ok(m) or not super().condizione(x, s, i):
+            return False
+        return s["close"][i] < m if self.direzione == "short" else s["close"][i] > m
+
+
 VARIANTI = {
     "BCHUSDT-001": lambda: MomentoSerie("BCHUSDT-001", "long"),
     "BCHUSDT-002": lambda: MomentoSerie("BCHUSDT-002", "short"),
@@ -672,4 +693,5 @@ VARIANTI = {
     "BCHUSDT-035": lambda: MomentoSerie("BCHUSDT-035", "short", giorni=14),
     "BCHUSDT-036": lambda: MomentoSerieUscitaSegnale("BCHUSDT-036", "short"),
     "BCHUSDT-037": lambda: MomentoSerie("BCHUSDT-037", "short", atr_stop=4.0),
+    "BCHUSDT-038": lambda: RotturaVolatilitaFiltro("BCHUSDT-038", "short", n_media=50),
 }
