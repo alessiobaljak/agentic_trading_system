@@ -7,6 +7,10 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-09 (pomeriggio: la prova con le strategie finte)
+* **L'esame delle campagne non scambia il rumore per vantaggio, nemmeno sui prezzi veri.** 1.479 strategie senza vantaggio (regole da manuale spostate nel tempo, 80 monete fuori dalla lista, solo fino al 2023) giudicate come una campagna: «nette» lo 0,41% (soglia scritta prima 3%, dichiarato 0-2%); p sotto 0,10 in validazione il 3,26% (soglia 13%, dichiarato 6-11%) (`research/taratura/placebo/risultati.md`, branch di coordinamento).
+* **L'esame è più severo di quanto dice, e costa potenza.** Il `t` delle strategie finte ha deviazione standard 0,815 invece di 1: un vantaggio piccolo ma vero passa meno spesso del previsto. Non si allenta l'esame guardando questi numeri; la risposta già scritta è la campagna di gruppo, che somma i trade di più monete.
+
 ## 2026-10-09
 * **Lo spazio del registro non scende in linea retta: si libera a ondate.** Le coppie nel registro sono passate da 2.340 a 2.185 e le validate da 279 a 238 (ieri 33 promosse e 71 rimosse), e lo spazio è risalito da ~496 a ~537 coppie (ops 0556, 0565; ieri ops 0541). La previsione di ieri («sotto 400 domani») era sbagliata perché proiettava in linea retta: le uscite per finestre scadute arrivano a gruppi. La voce D1 non serve ancora.
 * **Il numero guida tiene il segno con più segnali e un margine più stretto:** dopo la scelta del gate il motore fa −0,08R a trade su 322 segnali, ±0,12R per giornata (ops 0562); ieri −0,08 su 279 ±0,14. Sugli stessi segnali paper −0,12, motore −0,09, differenza +0,03 ±0,06. La seconda lettura ufficiale (14 ott) si avvicina con lo stesso verdetto: il problema è cosa sceglie il gate.
