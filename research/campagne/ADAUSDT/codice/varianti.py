@@ -717,16 +717,62 @@ def _ape_f(d, giorni):
     return v
 
 
+class AperturaForzaRelativa(Apertura):
+    """Apertura long con il filtro di forza relativa (ritocco 2 della famiglia 024): BTC in calo nelle
+    24 ore prima della barra di segnale."""
+
+    def prepara(self, D):
+        P = Apertura.prepara(self, D)
+        b = D["btc_close"]
+        n = int(86_400_000 // D["passo"])
+        r = np.full(len(b), np.nan)
+        r[n:] = b[n:] / b[:-n] - 1.0
+        P["btc24"] = r
+        return P
+
+    def condizione(self, i, P):
+        r = P["btc24"][i]
+        if not (np.isfinite(r) and r < 0):
+            return False
+        return Apertura.condizione(self, i, P)
+
+
 VARIANTI.update({
     "ADAUSDT-034": _ape_f("long", 20),
+    "ADAUSDT-035": AperturaForzaRelativa(barre_intervallo=4, ultima_ora=20),
 })
+VARIANTI["ADAUSDT-035"].direzione = "long"
+
+class AperturaTFFiltro(AperturaTF):
+    prepara_base = AperturaTF.prepara
+
+    def prepara(self, D):
+        P = self.prepara_base(D)
+        P["media"] = C.sma(P["c"], int(self.p["giorni_media"] * 86_400_000 // D["passo"]))
+        return P
+
+    condizione = AperturaFiltro.condizione
+
+
+def _ape_tf_f(d, tf, barre, giorni):
+    v = AperturaTFFiltro(barre_intervallo=barre, ultima_ora=20, giorni_media=giorni)
+    v.direzione = d
+    v.tf = tf
+    return v
+
 
 # timeframe adiacenti per le verifiche della Fase 4 (parametri in barre convertiti alla stessa durata)
 ADIACENTI = {
+    "ADAUSDT-034": [_ape_tf_f("long", "30m", 2, 20)],
     "ADAUSDT-025": [_ape_tf("short", "30m", 2)],
 }
 
 PREVISIONI_VERIFICHE = {
+    ("ADAUSDT-034", "costi_doppi"): "R medio a costi doppi vicino a zero (0,07 meno ~0,05 R di costi in piu'): probabile fallimento o positivo di poco",
+    ("ADAUSDT-034", "ritardo"): "t contro la (b) col ritardo positivo e oltre la meta' di 2,23",
+    ("ADAUSDT-034", "intrabarra"): "nessuna differenza (niente target)",
+    ("ADAUSDT-034", "robustezza"): "t positivo in tutti i casi, netto in meno della meta' (il filtro e' scelto sui dati: probabile picco)",
+    ("ADAUSDT-034", "timeframe"): "a 30 minuti t positivo",
     ("ADAUSDT-025", "costi_doppi"): "R medio a costi doppi negativo (circa -0,04: il costo di un giro e' ~0,06 R con lo stop medio del 2,5%); la (b) a costi doppi peggiora di piu' (stop piccoli): forse ancora netta, ma R non positivo: verifica NON superata",
     ("ADAUSDT-025", "ritardo"): "t contro la (b) col ritardo resta positivo e circa uguale (il meccanismo e' la distanza dello stop): superata",
     ("ADAUSDT-025", "intrabarra"): "nessuna differenza: la variante non ha target",
