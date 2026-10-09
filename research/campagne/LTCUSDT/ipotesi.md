@@ -222,3 +222,177 @@ suo assorbimento sono di ore; la settimana di riferimento sono 168 barre). Posiz
 
 **Previsioni.** Stop tipico 2 × ATR orario ≈ 1,5-3%: costi 0,05-0,1 R a giro. Long: profit factor
 fra 0,9 e 1,4, R medio fra −0,1 e +0,15; short: fra 0,8 e 1,2. Nessuna batte nettamente la (b).
+
+---
+
+## I-05 — Affollamento della leva misurato dal funding
+
+**Fonte.** Maik Schmeling, Andreas Schrimpf e Karamfil Todorov, «Crypto Carry», BIS Working Papers
+n. 1087, marzo 2023. Il carry delle crypto (premio dei futures e funding dei perpetui) è alto quando
+la domanda di esposizione a leva degli investitori che inseguono il trend è alta; un carry alto
+precede una probabilità maggiore di liquidazioni e crolli.
+
+**Affermazione verificabile.** Quando il funding di LTCUSDT resta alto per un giorno (media degli
+ultimi 3 settlement noti ≥ 0,05% per 8 ore, cinque volte il livello base dello 0,01%), nei 3 giorni
+successivi uno short rende più di uno short preso a caso con la stessa uscita (prezzo che scende più
+il funding incassato). Specchio: con funding negativo per un giorno (short affollati) un long rende
+più di un long a caso.
+
+**Sotto-domande.** Conta la durata dell'affollamento o il livello? Chi opera: long a leva che pagano
+per restare in posizione, arbitraggisti che vendono il perpetuo e comprano il sottostante; quando il
+prezzo scende le liquidazioni dei long a leva lo spingono più giù. Tempi: liquidazioni nei giorni
+successivi, la fonte guarda orizzonti di giorni e settimane.
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | Funding alto = trend forte che continua (il funding segue il prezzo) | gli short perdono più della (b) nel 2021 | gli short battono la (b) anche nel 2021 |
+| S2 | Il guadagno dello short è solo il funding incassato | R medio ≈ funding medio incassato in R | R medio molto più grande del funding |
+| S3 | Gli episodi di funding alto sono pochi e a grappoli (un paio di mesi del 2021) | pochi blocchi indipendenti, risultato da uno o due episodi | R positivo in più episodi distinti |
+
+Spiegazioni concorrenti per questa idea: 13.
+
+**Ipotesi completa.** LTCUSDT, contrarian sull'affollamento della leva, candele 8h (allineate ai
+settlement delle 00, 08 e 16 UTC: il segnale nasce a ogni settlement). Alla chiusura della barra i
+si usano solo i settlement con istante ≤ chiusura della barra (quello che cade esattamente alla fine
+della barra non si usa: prudenza sul momento in cui il tasso diventa noto). Posizioni di 3 giorni
+(9 barre).
+
+**Varianti:**
+
+* **LTCUSDT-009** — 8h, short. Ingresso se la media degli ultimi 3 settlement noti è ≥ 0,0005.
+  Uscita dopo 9 barre. Stop 6% sopra il close di segnale. Nessun target.
+  *Se `conta_trade` dà meno di 70 trade* (scarto, nessun test), la sostituisce **LTCUSDT-009b**:
+  uguale con soglia 0,0003 (tre volte il livello base), scritta ora, prima di qualunque test di
+  questa idea.
+* **LTCUSDT-010** — 8h, long. Ingresso se la media degli ultimi 3 settlement noti è < 0 (short
+  affollati). Uscita dopo 9 barre. Stop 6% sotto il close di segnale.
+
+**Previsioni.** Costi 0,023 R a giro; lo short incassa funding (con 0,05% per 9 settlement circa
+0,07 R). Short: profit factor fra 0,8 e 1,3, R medio fra −0,15 e +0,15; long: fra 0,8 e 1,3. Nessuna
+batte nettamente la (b) (episodi a grappoli: pochi blocchi).
+
+---
+
+## I-06 — Ordini concentrati intorno ai numeri tondi
+
+**Fonte.** Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the
+Predictive Success of Technical Analysis», Journal of Finance 58(5), ottobre 2003. Gli ordini di
+stop sono concentrati appena oltre i numeri tondi (stop di acquisto appena sopra, di vendita appena
+sotto), gli ordini di presa di profitto sui numeri tondi: quando il prezzo attraversa un numero
+tondo, gli stop scattano a catena e il movimento accelera nella stessa direzione.
+
+**Affermazione verificabile.** Quando il close orario di LTCUSDT attraversa verso l'alto un numero
+tondo, nelle 6 ore successive il prezzo sale più di quanto farebbe dopo un ingresso long a caso con
+la stessa uscita; specchio per l'attraversamento verso il basso.
+
+**Sotto-domande.** Quali numeri sono «tondi» per chi opera su LTC? Più forte sui livelli più tondi
+(100, 200) che su quelli intermedi? Chi opera: trader al dettaglio con stop e ordini su livelli
+tondi; i loro stop sono ordini a mercato. Tempi: la cascata di stop è veloce, ore.
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | I numeri tondi di LTC non sono speciali: l'attraversamento è solo un movimento in corso (momentum orario generico) | stesso risultato con livelli spostati di mezzo intervallo | — (verifica possibile solo come ritocco) |
+| S2 | Gli ordini di presa di profitto sul livello fanno tornare indietro il prezzo (inversione, non continuazione) | molti stop subito dopo l'ingresso | pochi stop nelle prime barre |
+| S3 | Attraversamenti ripetuti avanti e indietro in fasi laterali | molti trade a grappoli sullo stesso livello in pochi giorni, R negativo | R positivo anche togliendo i trade ripetuti |
+
+Spiegazioni concorrenti per questa idea: 13.
+
+**Ipotesi completa.** LTCUSDT, continuazione dopo l'attraversamento di un numero tondo, candele 1h.
+Numeri tondi: multipli di 5 USDT quando il prezzo è sotto 100, multipli di 10 USDT da 100 in su
+(intervalli fra il 5% e il 10% del prezzo: livelli che si vedono sul grafico e su cui si mettono
+ordini). Posizioni di 6 ore.
+
+**Varianti:**
+
+* **LTCUSDT-011** — 1h, long. Ingresso alla chiusura della barra i se esiste un numero tondo L con
+  close[i-1] < L ≤ close[i]. Uscita dopo 6 barre. Stop 2 × ATR24 sotto il close di segnale, al
+  massimo 6%. Nessun target.
+* **LTCUSDT-012** — 1h, short. Specchio: close[i-1] > L ≥ close[i]. Uscita dopo 6 barre. Stop 2 × ATR24
+  sopra, al massimo 6%.
+
+**Previsioni.** Stop tipico 1,5-3%, costi 0,05-0,1 R a giro. Long e short: profit factor fra 0,8 e
+1,2, R medio fra −0,15 e +0,1; nessuna batte nettamente la (b).
+
+---
+
+## I-07 — Breakout del range d'apertura della giornata
+
+**Fonte.** Toby Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout»,
+Traders Press, 1990: l'uscita del prezzo dal range dei primi momenti della seduta indica la direzione
+della giornata.
+
+**Affermazione verificabile.** Quando, dopo le 04:00 UTC, un close orario di LTCUSDT supera il
+massimo delle prime quattro ore della giornata UTC (00:00-03:59), il prezzo a fine giornata è più
+alto di quanto farebbe dopo un ingresso long a caso con la stessa uscita; specchio per il minimo.
+
+**Sotto-domande.** In crypto la giornata «apre» davvero alle 00:00 UTC? (È l'apertura della candela
+giornaliera di Binance, su cui molti calcolano i livelli.) Le prime quattro ore sono la mattina
+asiatica; l'uscita dal range avviene spesso all'arrivo di Europa e Stati Uniti, con più volume. Chi
+opera: sistemi intraday sui livelli della giornata, stop sopra/sotto il range. Tempi: entro la
+giornata.
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | In un mercato 24 ore su 24 l'apertura UTC non ha un ruolo: è un breakout qualunque | stesso risultato con range di un altro orario | — (solo come ritocco) |
+| S2 | I costi su un movimento intragiornaliero mangiano tutto | R lordo positivo, netto negativo | R netto positivo |
+| S3 | I breakout falliscono e tornano nel range (stop al minimo del range) | stop frequenti | pochi stop |
+
+Spiegazioni concorrenti per questa idea: 13.
+
+**Ipotesi completa.** LTCUSDT, breakout del range delle prime 4 ore UTC, candele 1h, al massimo un
+trade al giorno, chiusura a fine giornata.
+
+**Varianti:**
+
+* **LTCUSDT-013** — 1h, long. Range = massimo e minimo delle barre 00:00, 01:00, 02:00, 03:00 UTC
+  della stessa giornata. Ingresso alla chiusura della prima barra della giornata, fra quella delle
+  04:00 e quella delle 20:00 comprese, con close > massimo del range (al massimo un ingresso al
+  giorno: se nella giornata c'è già stato un segnale, niente). Stop: al minimo del range (al massimo
+  6% sotto il close di segnale). Uscita: alla chiusura della barra delle 23:00 (si esce all'apertura
+  delle 00:00).
+* **LTCUSDT-014** — 1h, short. Specchio: close < minimo del range; stop al massimo del range (al
+  massimo 6%); stessa uscita.
+
+**Previsioni.** Stop tipico 2-4% (range di 4 ore più il tratto fino al breakout), costi 0,04-0,07 R.
+Long e short: profit factor fra 0,8 e 1,2; nessuna batte nettamente la (b).
+
+---
+
+## I-08 — Effetto del giorno della settimana (lunedì)
+
+**Fonte.** Guglielmo Maria Caporale e Alex Plastun, «The day of the week effect in the
+cryptocurrency market», Finance Research Letters 31, dicembre 2019: per BTC rendimenti anomali
+(più alti) il lunedì.
+
+**Affermazione verificabile.** Il rendimento di LTCUSDT dall'apertura del lunedì (00:00 UTC)
+all'apertura del martedì è in media più alto di quello di un giorno preso a caso tenuto long con la
+stessa uscita.
+
+**Sotto-domande.** Il lunedì sconta le notizie del fine settimana e il ritorno dei flussi
+istituzionali (mercati tradizionali chiusi nel fine settimana)? Vale per una moneta diversa da BTC?
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | L'effetto è di BTC e LTC lo segue solo in parte | lunedì di LTC positivi solo quando BTC sale | — (contesto con BTC) |
+| S2 | Ricerca su più giorni della settimana: il lunedì è uscito per caso nella fonte | nessun effetto su LTC | effetto netto su LTC |
+
+Spiegazioni concorrenti per questa idea: 12.
+
+**Ipotesi completa.** LTCUSDT, long il lunedì, candele 1d.
+
+**Variante:**
+
+* **LTCUSDT-015** — 1d, long. Ingresso alla chiusura della barra giornaliera della domenica
+  (si entra all'apertura del lunedì). Uscita dopo 1 barra (all'apertura del martedì). Stop 6% sotto
+  il close di segnale. Nessun target.
+
+**Previsioni.** Costi 0,023 R; R per trade = rendimento del giorno / 6%. Profit factor fra 0,8 e 1,3,
+R medio fra −0,05 e +0,1; non batte nettamente la (b).
