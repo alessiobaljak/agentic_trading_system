@@ -32,8 +32,10 @@ def prossimi_numeri():
     return n_var + 1, n_scarti + 1
 
 
-def main(percorso: str) -> None:
+def main(percorso: str, chiave: str = None) -> None:
     reg = json.loads(Path(percorso).read_text(encoding="utf-8"))
+    if chiave is not None:
+        reg = dict(reg[chiave])
     nome = reg.pop("nome")
     crea_spec = varianti.CREA[nome]
     tf = reg["timeframe"]
@@ -85,4 +87,5 @@ def main(percorso: str) -> None:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    for k in sys.argv[2:] or [None]:
+        main(sys.argv[1], k)
