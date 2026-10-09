@@ -235,10 +235,25 @@ def test_scheda_moneta_senza_informazioni_dopo_il_2023():
     assert "2024" not in testo and "delist" not in testo.lower()
     # la fonte della data direbbe «delistata»: non c'e'; la riga sull'approssimazione e' per tutte
     assert "archivio" not in testo and "exchangeInfo" not in testo
-    assert "La data di listing può essere approssimata al primo giorno del mese." in testo
+    # niente data di listing: per una morta coincide col primo mese di dati, per una viva no
+    assert "listing" not in testo.lower()
     assert "serie" not in testo.lower()
     # stessi dati al 2023-12-31: stessa scheda, viva o morta che sia
     assert sel.scheda_moneta(viva) == testo
+
+
+def test_scheda_moneta_uguale_qualunque_sia_la_fonte_della_data_di_listing():
+    """Revisione del 7 ott: una data di listing col giorno esatto (exchangeInfo, moneta
+    viva) e una al primo del mese uguale al primo mese di dati (archivio, moneta
+    delistata) davano schede diverse. Ora la scheda non porta la data."""
+    from dataclasses import replace
+    base = _cand("AUSDT", oggi=True, volume=300e6)
+    viva = replace(base, listing=date(2020, 10, 14), listing_da="exchangeInfo", primo_mese=date(2020, 10, 1))
+    morta = replace(base, listing=date(2020, 10, 1), listing_da="archivio", primo_mese=date(2020, 10, 1))
+    assert sel.scheda_moneta(viva) == sel.scheda_moneta(morta)
+    vecchia_viva = replace(base, listing=date(2019, 9, 8), listing_da="exchangeInfo", primo_mese=date(2020, 1, 1))
+    vecchia_morta = replace(base, listing=date(2020, 1, 1), listing_da="archivio", primo_mese=date(2020, 1, 1))
+    assert sel.scheda_moneta(vecchia_viva) == sel.scheda_moneta(vecchia_morta)
 
 
 def _pagina(chiavi, troncata=False, prossimo=None):

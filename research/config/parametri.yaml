@@ -11,8 +11,18 @@
 
 stato: congelato
 approvato_il: 2026-10-07
-versione_protocollo: "4.3"
+versione_protocollo: "4.4"
 data_bozza: 2026-10-06
+
+# Versione 4.4 (dopo la prova di processo del 7 ott 2026). Il proprietario ha
+# approvato le quattro modifiche il 7 ott («sì, rifalle con queste quattro
+# modifiche»): stima dei trade unica, lettura unica di «nettamente», minimo in
+# costruzione da 100 a 70, budget usato per intero; piu' le correzioni nate dalla
+# loro revisione. Testo approvato dal proprietario l'8 ott 2026 alle 05:08 UTC. Nessun valore e' stato scelto per far passare una
+# strategia: il dettaglio e' in PROTOCOLLO.md, appendice 3.
+modifiche_4_4:
+  approvate_il: 2026-10-07
+  testo_protocollo: approvato_2026-10-08T05:08Z
 
 # --------------------------------------------------------------------------- #
 # 3.1 Periodi (fissi)
@@ -24,9 +34,8 @@ periodi:
     nota: >-
       L'archivio mensile dei futures parte da gennaio 2020 (verificato: BTCUSDT 1h
       2019-12 assente, 2020-01 presente; stesso per il funding). I file giornalieri
-      coprono solo dal 2019-12-31. BTCUSDT e' quotato dal 2019-09-08 (exchangeInfo):
-      i mesi settembre-dicembre 2019 di BTC, ETH (dal 2019-11-27) e BCH (dal 2019-12-19)
-      restano fuori e lo si dichiara. Decisione aperta n. 5.
+      coprono solo dal 2019-12-31. I mesi del 2019 delle monete quotate prima del
+      2020 restano fuori e lo si dichiara. Decisione aperta n. 5.
   vault:
     inizio: 2024-01-01
     fine: 2026-09-30
@@ -64,9 +73,8 @@ fatti:
     stato: verificato
     come: >-
       L'indirizzo ufficiale fapi.binance.com/fapi/v1/exchangeInfo risponde 451 dalla
-      regione del server; lo stesso JSON si legge da www.binance.com: 924 contratti,
-      BTCUSDT onboardDate 2019-09-08, 89 perpetui in USDT quotati prima del 2022-01-01
-      (status TRADING). Contiene solo i contratti di oggi: i delistati vengono
+      regione del server; lo stesso JSON si legge da www.binance.com. Contiene solo
+      i contratti di oggi (per questo resta al coordinamento): i delistati vengono
       dall'indice del bucket (sopra), con listing e delisting dedotti dal primo e
       ultimo file mensile disponibile (da dichiarare al Passo 1).
   serie_segnali:
@@ -112,9 +120,9 @@ fatti:
       stima piu' prudente (liquidazione piu' vicina). Decisione aperta n. 3.
     tasso_margine_mantenimento: 0.025
     tasso_margine_nota: >-
-      maintMarginPercent letto da exchangeInfo il 6 ott: 2.5000 per BTCUSDT, ETHUSDT,
-      SOLUSDT, DOGEUSDT (campo generico, piu' prudente dei livelli reali per
-      posizioni piccole). Con leva 2 la distanza di liquidazione e' circa il 47%:
+      maintMarginPercent letto da exchangeInfo il 6 ott: 2.5000, uguale nei contratti
+      controllati (campo generico, piu' prudente dei livelli reali per posizioni
+      piccole). Con leva 2 la distanza di liquidazione e' circa il 47%:
       il controllo dello stop (0,8 volte) non e' mai stretto con stop del 1-6%.
     capitale_iniziale: 1000
     capitale_fonte: "equity del paper per default (bot/main.py:604-607)"
@@ -169,8 +177,20 @@ regole_esame:
   timeframe_ammessi: [15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d]
   riempimento_intrabarra: stop_prima
   budget_varianti_per_moneta: 30
+  budget_uso: intero                # dalla 4.4: la Fase 5 arriva quando le 30 varianti sono state testate, salvo l'avanzo dichiarato della regola 6
   divisione_costruzione_validazione: {costruzione: 0.70, validazione: 0.30}
-  trade_minimi: {costruzione: 100, validazione: 30, vault: 30}
+  trade_minimi: {costruzione: 70, validazione: 30, vault: 30}   # dalla 4.4 (era 100 in costruzione): 70 x 30/70 = 30
+  stima_trade: motore.conta_trade   # dalla 4.4: una sola regola (sezione 8)
+  nettamente: statistica.batte_nettamente   # dalla 4.4: una sola lettura (sezione 8)
+  p_value_asticella: statistica.p_value_vs_baseline   # dalla 4.4: stesso calcolo di «nettamente»
+  blocco_bootstrap: statistica.lunghezza_blocco   # dalla 4.4: il blocco in trade, dalla regola in tempo della sezione 8
+  baseline_casuale: motore.simula_baseline_casuale   # dalla 4.4: la baseline (b), sempre eseguita cosi'
+  simulazioni_baseline_casuale: 200  # dalla 4.4: simulazioni della baseline (b) in costruzione e in validazione
+  semi_baseline_casuale: {primo: 0, ultimo: 199}
+  bootstrap: {ricampionamenti: 2000, seme: 0}   # fissi: non si rilancia mai con altri semi
+  minimo_blocchi_bootstrap: 3        # sotto: «non valutabile» (statistica.MINIMO_BLOCCHI)
+  livello_nettamente: 0.97725        # quantile della t di Student: «oltre 2 errori standard» (statistica.LIVELLO_NETTAMENTE)
+  ritocchi_massimi_per_famiglia: 5   # dalla 4.4 (regola 6)
   metodo_asticella: {nome: benjamini_hochberg, q: 0.10}
   simulazioni_caso: 1000
   criterio_vault:
@@ -196,5 +216,5 @@ decisioni_passo_0:
   2: "serie_stop: last price (proposta), sapendo che il paper del bot usa il mid bid/ask allargato al mark; confermare che il default di workingType e' CONTRACT_PRICE e che la liquidazione e' sul mark price"
   3: "modalita' di margine: il bot non la imposta; il motore calcola come isolated per trade (prudente). Confermare, oppure scegliere cross"
   4: "strategie in codice nel bot: l'aggiunta «coppia del protocollo» (abilitazione senza il gate, piu' candele e orizzonte per i timeframe oltre 1h) si fa prima delle campagne o prima del Passo 9?"
-  5: "coda del 2019 (BTC da settembre, ETH da novembre, BCH da dicembre): esclusa perche' l'archivio mensile parte da gennaio 2020; i file giornalieri coprono solo dal 2019-12-31. Confermare l'esclusione"
+  5: "coda del 2019 (monete quotate prima del 2020): esclusa perche' l'archivio mensile parte da gennaio 2020; i file giornalieri coprono solo dal 2019-12-31. Confermare l'esclusione"
   6: "percorsi_vietati.txt: approvare l'elenco proposto"
