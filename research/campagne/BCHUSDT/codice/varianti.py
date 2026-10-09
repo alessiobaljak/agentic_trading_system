@@ -671,4 +671,5 @@ VARIANTI = {
     "BCHUSDT-034": lambda: MomentoSerieFiltro("BCHUSDT-034", "short", giorni_lunghi=30, tenuta=5),
     "BCHUSDT-035": lambda: MomentoSerie("BCHUSDT-035", "short", giorni=14),
     "BCHUSDT-036": lambda: MomentoSerieUscitaSegnale("BCHUSDT-036", "short"),
+    "BCHUSDT-037": lambda: MomentoSerie("BCHUSDT-037", "short", atr_stop=4.0),
 }
