@@ -59,6 +59,8 @@ def esegui_variante(vid, classe, meta):
     base = {"idea": meta["idea"], "famiglia": meta.get("famiglia", vid), "ritocco_di": meta.get("ritocco_di"),
             "fonte": meta["fonte"], "meccanismo": meta["meccanismo"], "timeframe": var.tf,
             "direzione": var.direzione, "parametri": meta["parametri"], "periodo": "costruzione"}
+    if meta.get("cosa_cambia"):
+        base["cosa_cambia"] = meta["cosa_cambia"]
     if n < quadro.TRADE_MINIMI_COSTRUZIONE:
         registro.aggiungi(dict(id=vid, tipo="scarto", **base, trade_stimati=n, conteggio=conteggio,
                                motivo=f"trade stimati {n} sotto il minimo di costruzione (70)"))

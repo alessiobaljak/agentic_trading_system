@@ -710,6 +710,11 @@ e si scrive qui prima del test.
   12 barre. Motivo (Fase 3, nota MASKUSDT-N006): le 50 uscite a tempo a 6 ore hanno R medio
   +0,20, il rientro non è finito. Stessa entrata, stesso stop. Previsione: R medio fra -0,05 e
   +0,20; `t` contro la (b) fra 0,5 e 2; probabilmente non netto.
+* **R-2, ritocco di MASKUSDT-028** (prima della lista con `t` 2,08; famiglia MASKUSDT-006, secondo
+  ritocco). Aggiunge un filtro nato dai fallimenti (nota MASKUSDT-N007): nessun ingresso se
+  l'ultimo funding regolato entro la chiusura della barra del segnale è negativo. Il resto come
+  028. Previsione: circa 85 trade, R medio fra +0,05 e +0,35, `t` contro la (b) fra 1,5 e 3; può
+  essere netto, ma il filtro è al limite del rumore e in validazione può sparire.
 
 ## Previsioni (scritte dopo la Fase 0, prima del primo test)
 
