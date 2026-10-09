@@ -179,6 +179,160 @@ def i08(direzione: str, id_: str, soglia: float = 0.02, barre_rend: int = 4, bar
                     descrizione=f"I-08 ritardo rispetto a BTC {direzione}")
 
 
+# ---------------------------------------------------------------------------
+# I-09 Compressione e rottura delle bande (4h)
+# ---------------------------------------------------------------------------
+
+def i09(direzione: str, id_: str) -> Variante:
+    def bande(s):
+        m = q.sma(s.c, 20)
+        sd = q.dev_std_mobile(s.c, 20)
+        return m, m + 2 * sd, m - 2 * sd
+
+    def ingresso(s):
+        m, su, giu = bande(s)
+        amp = (su - giu) / m
+        n = len(s.c)
+        compressa = np.zeros(n, dtype=bool)
+        for i in range(120 + 19, n):
+            rif = amp[i - 120:i]
+            compressa[i] = amp[i] < np.nanpercentile(rif, 20)
+        recente = np.zeros(n, dtype=bool)
+        for i in range(5, n):
+            recente[i] = compressa[i - 5:i].any()
+        if direzione == "long":
+            return recente & (s.c > su)
+        return recente & (s.c < giu)
+
+    def uscita(s):
+        m = q.sma(s.c, 20)
+        return (s.c < m) if direzione == "long" else (s.c > m)
+    return Variante(id_, "4h", direzione, ingresso, _stop_atr(direzione, 14, 1.5), uscita=uscita,
+                    descrizione=f"I-09 compressione e rottura {direzione}")
+
+
+# ---------------------------------------------------------------------------
+# I-10 Giorni di volume molto alto (1d)
+# ---------------------------------------------------------------------------
+
+def i10(id_: str) -> Variante:
+    def ingresso(s):
+        v = s.v_usdt
+        out = np.zeros(len(v), dtype=bool)
+        for i in range(49, len(v)):
+            finestra = np.sort(v[i - 49:i + 1])
+            out[i] = v[i] >= finestra[-5]
+        return out
+    return Variante(id_, "1d", "long", ingresso, _stop_atr("long", 14, 1.0), barre_max=3,
+                    descrizione="I-10 volume alto long")
+
+
+# ---------------------------------------------------------------------------
+# I-11 Squilibrio degli ordini aggressivi (1h)
+# ---------------------------------------------------------------------------
+
+def _z_squilibrio(s):
+    tb = q.acquisti_taker_usdt(s)
+    v = s.v_usdt
+    netto = np.nan_to_num(2 * tb - v, nan=0.0)
+    vv = np.nan_to_num(v, nan=0.0)
+    cs_n = np.cumsum(np.insert(netto, 0, 0.0))
+    cs_v = np.cumsum(np.insert(vv, 0, 0.0))
+    S = np.full(len(v), np.nan)
+    S[23:] = (cs_n[24:] - cs_n[:-24]) / (cs_v[24:] - cs_v[:-24])
+    z = np.full(len(v), np.nan)
+    for i in range(24 + 720, len(v)):
+        rif = S[i - 720:i]
+        z[i] = (S[i] - rif.mean()) / rif.std(ddof=1)
+    return z
+
+
+def i11(direzione: str, id_: str) -> Variante:
+    def ingresso(s):
+        z = _z_squilibrio(s)
+        return (z > 2) if direzione == "long" else (z < -2)
+    return Variante(id_, "1h", direzione, ingresso, _stop_atr(direzione, 24, 1.5), barre_max=24,
+                    descrizione=f"I-11 squilibrio degli ordini {direzione}")
+
+
+# ---------------------------------------------------------------------------
+# I-12 Stagionalita' della fascia di 4 ore (4h)
+# ---------------------------------------------------------------------------
+
+def _t_fascia_successiva(s, n_oss=30):
+    fascia = (s.ts // 14_400_000) % 6
+    rend = s.c / s.o - 1.0
+    storia = {f: [] for f in range(6)}
+    t = np.full(len(s.c), np.nan)
+    for i in range(len(s.c)):
+        storia[int(fascia[i])].append(rend[i])
+        prossima = (int(fascia[i]) + 1) % 6
+        h = storia[prossima]
+        if len(h) >= n_oss:
+            x = np.array(h[-n_oss:])
+            sd = x.std(ddof=1)
+            t[i] = x.mean() / (sd / np.sqrt(n_oss)) if sd > 0 else np.nan
+    return t
+
+
+def i12(direzione: str, id_: str) -> Variante:
+    def ingresso(s):
+        t = _t_fascia_successiva(s)
+        return (t > 1.5) if direzione == "long" else (t < -1.5)
+    return Variante(id_, "4h", direzione, ingresso, _stop_atr(direzione, 14, 1.5), barre_max=1,
+                    descrizione=f"I-12 stagionalita' della fascia {direzione}")
+
+
+# ---------------------------------------------------------------------------
+# I-13 Rottura di volatilita' dall'apertura del giorno (1h)
+# ---------------------------------------------------------------------------
+
+def _giorno_apertura_escursione(s):
+    giorno = s.ts // 86_400_000
+    n = len(s.c)
+    apertura = np.full(n, np.nan)
+    escursione_prec = np.full(n, np.nan)
+    alto, basso, ap = {}, {}, {}
+    for i in range(n):
+        d = int(giorno[i])
+        if d not in ap:
+            ap[d] = s.o[i]
+            alto[d], basso[d] = s.h[i], s.l[i]
+        else:
+            alto[d], basso[d] = max(alto[d], s.h[i]), min(basso[d], s.l[i])
+        apertura[i] = ap[d]
+        if d - 1 in alto:
+            escursione_prec[i] = alto[d - 1] - basso[d - 1]
+    return giorno, apertura, escursione_prec
+
+
+def i13(direzione: str, id_: str) -> Variante:
+    def ingresso(s):
+        giorno, ap, esc = _giorno_apertura_escursione(s)
+        ora = q.ora_utc(s)
+        if direzione == "long":
+            cond = s.c > ap + 0.6 * esc
+        else:
+            cond = s.c < ap - 0.6 * esc
+        cond = cond & (ora < 23)
+        prima = np.zeros(len(s.c), dtype=bool)
+        visto = set()
+        for i in range(len(s.c)):
+            if cond[i] and int(giorno[i]) not in visto:
+                prima[i] = True
+                visto.add(int(giorno[i]))
+        return prima
+
+    def stop(s):
+        _, ap, _ = _giorno_apertura_escursione(s)
+        return ap
+
+    def uscita(s):
+        return q.ora_utc(s) == 23
+    return Variante(id_, "1h", direzione, ingresso, stop, uscita=uscita,
+                    descrizione=f"I-13 rottura di volatilita' {direzione}")
+
+
 TUTTE = {
     "controllo": controllo_positivo,
     "FILUSDT-001": lambda: i01("long", "FILUSDT-001"),
@@ -198,6 +352,15 @@ TUTTE = {
     "FILUSDT-015": lambda: i07("FILUSDT-015"),
     "FILUSDT-016": lambda: i08("long", "FILUSDT-016"),
     "FILUSDT-017": lambda: i08("short", "FILUSDT-017"),
+    "FILUSDT-018": lambda: i09("long", "FILUSDT-018"),
+    "FILUSDT-019": lambda: i09("short", "FILUSDT-019"),
+    "FILUSDT-020": lambda: i10("FILUSDT-020"),
+    "FILUSDT-021": lambda: i11("long", "FILUSDT-021"),
+    "FILUSDT-022": lambda: i11("short", "FILUSDT-022"),
+    "FILUSDT-023": lambda: i12("long", "FILUSDT-023"),
+    "FILUSDT-024": lambda: i12("short", "FILUSDT-024"),
+    "FILUSDT-025": lambda: i13("long", "FILUSDT-025"),
+    "FILUSDT-026": lambda: i13("short", "FILUSDT-026"),
 }
 
 # Verifiche della Fase 4 per il candidato FILUSDT-016 (le regole del candidato non cambiano:

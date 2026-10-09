@@ -181,6 +181,21 @@ def dev_std_mobile(x: np.ndarray, n: int) -> np.ndarray:
     return out
 
 
+def acquisti_taker_usdt(s: Serie) -> np.ndarray:
+    """Volume in USDT degli acquisti aggressivi (colonna taker_buy_quote_volume, indice 10) per barra.
+
+    Letto dagli stessi file mensili del last; NaN dove manca.
+    """
+    per_ts: Dict[int, float] = {}
+    cartella = comune.CARTELLA_DATI / "klines" / s.tf
+    for p in sorted(cartella.glob("*.zip")):
+        for riga in dati.righe_csv_da_zip(p):
+            ts = dati.normalizza_ts(riga[0])
+            if ts not in per_ts and len(riga) > 10 and riga[10].strip():
+                per_ts[ts] = float(riga[10])
+    return np.array([per_ts.get(int(t), np.nan) for t in s.ts])
+
+
 def ora_utc(s: Serie) -> np.ndarray:
     return (s.ts // 3_600_000) % 24
 

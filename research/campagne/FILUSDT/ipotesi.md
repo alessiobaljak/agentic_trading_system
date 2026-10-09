@@ -395,3 +395,211 @@ percentuale, con il motivo scritto qui prima del test.
    Motivo: 2% in 4 ore è un movimento netto di BTC; 8 ore è la scala dell'aggiustamento in ore
    della fonte; 1,5 ATR orari (circa 4-5%) sotto il tetto del bot.
 7. **Previsione.** R medio fra −0,10 e +0,10, non netto, in entrambe.
+
+---
+
+Nota (scritta dopo i risultati delle varianti 1-12 e della Fase 4 di FILUSDT-016): le idee
+seguenti non derivano da quei risultati; vengono da fonti di famiglie di meccanismi non ancora
+provate (volatilità, attenzione e volume, flusso degli ordini, stagionalità intraday). La lezione
+dei costi (FILUSDT-016 cade a costi doppi con uno stop medio del 3%) vale come avvertenza per le
+previsioni: con stop più stretti il costo in R cresce.
+
+## I-09 — Compressione della volatilità seguita da rottura (Bollinger squeeze)
+
+1. **Fonte.** John Bollinger, «Bollinger on Bollinger Bands», McGraw-Hill, 2001: dopo una fase di
+   bande strette (volatilità bassa) arriva una fase di volatilità alta, e la prima chiusura fuori
+   dalla banda dà la direzione del movimento («the Squeeze»).
+2. **Affermazione verificabile.** Su FILUSDT a 4 ore, quando l'ampiezza delle bande è stata fra il
+   20% più basso delle 120 barre precedenti in una delle ultime 5 barre e il close chiude sopra
+   la banda superiore, il movimento successivo (fino al ritorno sotto la media a 20) rende più di
+   un long casuale con la stessa uscita; speculare sotto la banda inferiore per gli short.
+3. **Sotto-domande.** Chi opera: in compressione gli ordini si accumulano vicino al range (stop e
+   ordini condizionati); la rottura li fa scattare in sequenza. L'effetto dovrebbe vedersi nelle
+   prime barre dopo la rottura.
+4. **Spiegazioni concorrenti:**
+   1. *Effetto casuale:* `t` contro la (b) sotto la soglia.
+   2. *È solo il mercato:* le compressioni di FIL coincidono con quelle di BTC.
+   3. *Falsa rottura:* in laterale la rottura rientra; prevede R sotto la (b).
+   4. *Volatilità in espansione senza direzione:* la volatilità sale ma il segno è casuale;
+      prevede R vicino alla (b) con dispersione alta.
+   5. *Trend di fondo:* lo misura la (b).
+   6. *Artefatto dei dati:* i buchi del 2022 producono bande strette false; pochi segnali lì.
+   7. *Costi:* con uscita alla media a 20 i trade sono brevi; costi alti in R.
+   8. *Pochi episodi:* due rotture del 2021 fanno tutto.
+   9. *Funding:* trascurabile su pochi giorni.
+   10. *Regola nata su azioni e indici:* su una moneta piccola le rotture possono essere spinte
+       da pochi ordini grandi e rientrare.
+   11. *Uscita troppo vicina:* la media a 20 è vicina dopo una compressione; si esce presto.
+5. Previsioni e smentite accanto a ogni spiegazione.
+6. **Ipotesi completa.** FILUSDT, compressione e rottura, candele da 4 ore (le bande a 20 barre
+   coprono poco più di 3 giorni; 120 barre sono 20 giorni di riferimento).
+   * **I-09 V1 (long):** ampiezza = (banda superiore − banda inferiore) / media, bande a 20 barre e
+     2 deviazioni standard; compressa se l'ampiezza è sotto il 20° percentile delle 120 barre
+     precedenti; ingresso se una delle ultime 5 barre (esclusa la corrente) era compressa e il
+     close supera la banda superiore → long. Uscita quando il close scende sotto la media a 20.
+     Stop close − 1,5 × ATR(14).
+   * **I-09 V2 (short):** stessa compressione, close sotto la banda inferiore → short. Uscita
+     quando il close sale sopra la media a 20. Stop close + 1,5 × ATR(14).
+7. **Previsione.** R medio fra −0,10 e +0,15, non netto.
+
+---
+
+## I-10 — Premio dei giorni con volume molto alto (attenzione)
+
+1. **Fonte.** Simon Gervais, Ron Kaniel, Dan H. Mingelgrin, «The High-Volume Return Premium»,
+   *The Journal of Finance* 56(3), giugno 2001: i titoli con volume anormalmente alto in un giorno
+   (decile più alto rispetto ai 49 giorni precedenti) hanno rendimenti più alti nei giorni e nelle
+   settimane successive, perché l'aumento di visibilità porta nuovi compratori.
+2. **Affermazione verificabile.** Su FILUSDT, dopo un giorno con volume in USDT fra i 5 più alti
+   degli ultimi 50 (il giorno compreso), i 3 giorni successivi rendono più di un long casuale di 3
+   giorni con lo stesso stop.
+3. **Sotto-domande.** Vale anche quando il giorno di volume alto è un crollo? Chi opera: nuovi
+   operatori attirati dall'attenzione; l'effetto della fonte dura settimane, qui si guarda la
+   parte iniziale.
+4. **Spiegazioni concorrenti:**
+   1. *Effetto casuale:* `t` sotto la soglia.
+   2. *È solo il mercato:* i giorni di volume alto di FIL sono giorni di volume alto di tutto il
+      mercato.
+   3. *Volume da crollo:* il volume alto arriva soprattutto nei crolli, che continuano; prevede R
+      sotto la (b).
+   4. *Volatilità:* dopo il volume alto la volatilità è alta; stop colpiti più spesso.
+   5. *Trend di fondo:* lo misura la (b).
+   6. *Artefatto dei dati:* i giorni vicini ai buchi hanno volume parziale; pochi.
+   7. *Costi:* trascurabili su 3 giorni (stop largo).
+   8. *Pochi episodi:* le giornate di aprile e maggio 2021 fanno tutto.
+   9. *Funding:* nei giorni di attenzione il funding sale e i long pagano.
+   10. *Effetto delle azioni non trasferibile:* sulle crypto l'attenzione è già massima nei giorni
+       di volume; prevede R vicino alla (b).
+   11. *Volume dei futures non è attenzione:* include arbitraggi e coperture.
+5. Previsioni e smentite accanto a ogni spiegazione.
+6. **Ipotesi completa.** FILUSDT, volume alto, candele da 1 giorno.
+   * **I-10 V1 (long):** volume USDT del giorno ≥ il quinto più alto dei 50 giorni fino al
+     corrente compreso → long. Uscita dopo 3 barre. Stop close − 1 × ATR(14) giornaliero.
+   Una sola variante: la fonte indica una sola direzione.
+   Motivo dello stop: 1 ATR giornaliero di FIL è circa il 7-9%, oltre il tetto del bot; con meno
+   di 1 ATR un movimento normale di 3 giorni chiuderebbe il trade. Lo dichiaro: se fosse un
+   candidato, il bot non lo eseguirebbe così com'è.
+7. **Previsione.** R medio fra −0,15 e +0,15, non netto.
+
+---
+
+## I-11 — Squilibrio degli ordini aggressivi (flusso degli ordini)
+
+1. **Fonte.** Tarun Chordia e Avanidhar Subrahmanyam, «Order imbalance and individual stock
+   returns: Theory and evidence», *Journal of Financial Economics* 72(3), giugno 2004: lo
+   squilibrio fra acquisti e vendite aggressivi di un giorno predice positivamente il rendimento
+   del giorno successivo, perché i market maker distribuiscono nel tempo gli ordini grandi
+   (frazionati) e l'inventario.
+2. **Affermazione verificabile.** Su FILUSDT a 1 ora, quando lo squilibrio degli acquisti
+   aggressivi (volume in USDT degli acquisti «taker» meno quello delle vendite, sulle ultime 24
+   barre, diviso il volume) è oltre 2 deviazioni standard sopra la sua media dei 30 giorni
+   precedenti, le 24 ore successive rendono più di un long casuale con la stessa uscita;
+   speculare per gli short con lo squilibrio sotto −2 deviazioni.
+3. **Sotto-domande.** Chi opera: chi compra grandi quantità le spezza in ordini a mercato per ore;
+   lo squilibrio persiste e il prezzo segue. L'effetto della fonte è di un giorno.
+4. **Spiegazioni concorrenti:**
+   1. *Effetto casuale:* `t` sotto la soglia.
+   2. *È solo il mercato:* lo squilibrio di FIL è quello di tutto il mercato.
+   3. *Squilibrio già nel prezzo:* il prezzo si è già mosso mentre lo squilibrio si formava;
+      prevede R vicino alla (b).
+   4. *Liquidazioni:* le vendite aggressive sono liquidazioni forzate che poi si invertono;
+      prevede short in perdita.
+   5. *Trend di fondo:* lo misura la (b).
+   6. *Volatilità:* lo squilibrio arriva con volatilità alta.
+   7. *Artefatto dei dati:* la colonna taker dei file mensili ha errori o barre a zero; pochi casi.
+   8. *Costi:* 24 ore di movimento contro stop di 1,5 ATR orari: costi moderati in R.
+   9. *Pochi episodi:* grandi ondate del 2021.
+   10. *Funding:* lo squilibrio di acquisti spinge il funding in su; i long pagano.
+   11. *Arbitraggio fra borse:* gli ordini aggressivi sui futures sono la gamba di un arbitraggio
+       con lo spot; non portano informazione direzionale.
+5. Previsioni e smentite accanto a ogni spiegazione.
+6. **Ipotesi completa.** FILUSDT, squilibrio degli ordini aggressivi, candele da 1 ora.
+   * **I-11 V1 (long):** squilibrio a 24 barre S = Σ(2 × acquisti taker in USDT − volume USDT) /
+     Σ volume USDT sulle barre i−23..i; z = (S − media di S sulle 720 barre precedenti) /
+     deviazione standard di S sulle stesse barre; se z > 2 → long. Uscita dopo 24 barre. Stop
+     close − 1,5 × ATR(24).
+   * **I-11 V2 (short):** z < −2 → short. Uscita dopo 24 barre. Stop close + 1,5 × ATR(24).
+7. **Previsione.** R medio fra −0,10 e +0,10, non netto.
+
+---
+
+## I-12 — Stagionalità dell'ora del giorno (rendimenti periodici)
+
+1. **Fonte.** Steven L. Heston, Robert A. Korajczyk, Ronnie Sadka, «Intraday Patterns in the
+   Cross-Section of Stock Returns», *The Journal of Finance* 65(4), agosto 2010: il rendimento di
+   un titolo in una certa mezz'ora del giorno tende a ripetersi nella stessa mezz'ora dei giorni
+   successivi, per flussi di ordini che si ripetono alla stessa ora (operatori istituzionali,
+   ribilanciamenti, aperture di altri mercati).
+2. **Affermazione verificabile.** Su FILUSDT, per ogni fascia di 4 ore del giorno (UTC), se la
+   media dei rendimenti di quella fascia negli ultimi 30 giorni è positiva con t > 1,5, la stessa
+   fascia di oggi rende più di una fascia scelta a caso (long); speculare con t < −1,5 (short).
+3. **Sotto-domande.** Chi opera: flussi che si ripetono all'apertura dell'Asia, dell'Europa e
+   degli Stati Uniti, e i settlement del funding (00, 08, 16 UTC). L'effetto è di una sola fascia.
+4. **Spiegazioni concorrenti:**
+   1. *Effetto casuale:* con 30 osservazioni un t di 1,5 esce spesso per caso; `t` contro la (b)
+      sotto la soglia.
+   2. *È solo il mercato:* la stagionalità è quella di BTC.
+   3. *Trend di fondo:* in un ribasso tutte le fasce hanno media negativa e il segnale short è
+      quasi sempre acceso; lo misura la (b).
+   4. *Costi:* il movimento di una fascia di 4 ore vale poco rispetto a costi e stop.
+   5. *Volatilità per fascia:* le fasce differiscono per volatilità, non per rendimento.
+   6. *Artefatto dei dati:* i giorni mancanti spostano poco.
+   7. *Funding:* le fasce che contengono un settlement hanno flussi di chiusura prima del
+      pagamento; può essere la vera causa; prevede effetto solo nelle fasce dei settlement.
+   8. *Instabilità:* la stagionalità cambia di mese in mese; prevede R vicino alla (b).
+   9. *Pochi episodi:* pochi giorni estremi alzano la media di una fascia.
+   10. *Persistenza troppo debole sulle crypto:* senza orari d'apertura la periodicità non c'è.
+   11. *Stop raramente toccato:* in una sola barra lo stop conta poco; R = rendimento della fascia
+       diviso la distanza dello stop, quindi piccolo.
+5. Previsioni e smentite accanto a ogni spiegazione.
+6. **Ipotesi completa.** FILUSDT, stagionalità della fascia oraria, candele da 4 ore (sei fasce al
+   giorno: abbastanza ampie da contenere un flusso, abbastanza poche per avere 30 osservazioni
+   al mese per fascia).
+   * **I-12 V1 (long):** alla chiusura della barra i, per la fascia della barra i+1 (stessa ora
+     del giorno), media e t dei rendimenti open→close delle ultime 30 barre di quella fascia; se t
+     > 1,5 → long. Uscita dopo 1 barra. Stop close − 1,5 × ATR(14).
+   * **I-12 V2 (short):** se t < −1,5 → short. Uscita dopo 1 barra. Stop close + 1,5 × ATR(14).
+7. **Previsione.** R medio fra −0,05 e +0,05, non netto.
+
+---
+
+## I-13 — Rottura di volatilità dall'apertura del giorno
+
+1. **Fonte.** Larry R. Williams, «Long-Term Secrets to Short-Term Trading», Wiley, 1999: comprare
+   quando il prezzo sale oltre l'apertura del giorno di una frazione dell'escursione del giorno
+   prima («volatility breakout»), e uscire alla fine del giorno; speculare per vendere. Anche
+   Toby Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», Traders
+   Press, 1990.
+2. **Affermazione verificabile.** Su FILUSDT, quando dentro il giorno UTC il close orario supera
+   l'apertura del giorno di oltre 0,6 volte l'escursione (massimo − minimo) del giorno precedente,
+   un long tenuto fino alla fine del giorno rende più di un long casuale con la stessa uscita e lo
+   stesso stop; speculare sotto per gli short.
+3. **Sotto-domande.** Chi opera: un movimento ampio rispetto alla volatilità recente segnala un
+   flusso direzionale (notizie, grandi ordini) che continua nella giornata. L'effetto è di ore.
+4. **Spiegazioni concorrenti:**
+   1. *Effetto casuale:* `t` sotto la soglia.
+   2. *È solo il mercato:* le rotture di FIL sono movimenti di BTC.
+   3. *Inversione dentro il giorno:* dopo un movimento ampio il prezzo torna verso l'apertura;
+      prevede stop frequenti.
+   4. *Trend di fondo:* lo misura la (b).
+   5. *Volatilità:* il segnale sceglie giorni volatili.
+   6. *Artefatto dei dati:* giorni con buchi hanno escursioni falsate; pochi.
+   7. *Costi:* stop all'apertura del giorno, distanza circa 0,6 escursioni: costi piccoli in R.
+   8. *Pochi episodi:* pochi giorni estremi fanno tutto.
+   9. *Fine del giorno arbitraria:* sulle crypto la «fine del giorno» UTC non è un orario di
+      chiusura; prevede che l'uscita conti poco.
+   10. *Funding:* il settlement delle 16 UTC cade dentro molti trade; piccolo.
+   11. *Regola nata sui futures azionari con orari di borsa:* sulle crypto continue l'apertura del
+       giorno non è un prezzo speciale; prevede R vicino alla (b).
+5. Previsioni e smentite accanto a ogni spiegazione.
+6. **Ipotesi completa.** FILUSDT, rottura di volatilità, candele da 1 ora (si entra nell'ora dopo la
+   rottura; il giorno e l'escursione del giorno prima si calcolano dalle candele orarie UTC).
+   * **I-13 V1 (long):** alla chiusura di una barra oraria del giorno (ore 00-22 UTC), se il close
+     > apertura del giorno + 0,6 × (massimo − minimo del giorno precedente) ed è la prima barra
+     del giorno con questa condizione → long. Stop: l'apertura del giorno. Uscita alla chiusura
+     della barra delle 23 UTC (all'apertura del giorno dopo).
+   * **I-13 V2 (short):** close < apertura del giorno − 0,6 × escursione del giorno prima, prima
+     barra del giorno con la condizione → short. Stop: l'apertura del giorno. Uscita come V1.
+   Motivo: 0,6 è dentro l'intervallo 0,5-0,7 suggerito dalla fonte; l'apertura del giorno come
+   stop è la sua regola naturale (se il prezzo torna lì la rottura è fallita).
+7. **Previsione.** R medio fra −0,10 e +0,10, non netto.
