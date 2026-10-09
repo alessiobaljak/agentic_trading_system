@@ -20,6 +20,15 @@ def adesso() -> str:
     ).stdout.strip()
 
 
+def _converti(x):
+    """Numeri di numpy e insiemi in tipi JSON."""
+    if hasattr(x, "item"):
+        return x.item()
+    if isinstance(x, (set, frozenset, tuple)):
+        return list(x)
+    raise TypeError(f"non serializzabile: {type(x)}")
+
+
 def aggiungi(voce: dict) -> dict:
     ordinata = {}
     for chiave in ("id", "tipo", "tipo_test"):
@@ -30,7 +39,7 @@ def aggiungi(voce: dict) -> dict:
         if chiave not in ordinata and chiave != "data":
             ordinata[chiave] = valore
     with open(LOG, "a", encoding="utf-8") as flusso:
-        flusso.write(json.dumps(ordinata, ensure_ascii=False) + "\n")
+        flusso.write(json.dumps(ordinata, ensure_ascii=False, default=_converti) + "\n")
     return ordinata
 
 

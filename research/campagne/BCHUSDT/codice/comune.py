@@ -442,8 +442,8 @@ def esamina(v: Variante, periodo: str = "costruzione", moltiplicatore_costi: flo
 
     # baseline (b)
     durata = motore.durata_media_barre(trades, serie["ms_barra"])
-    vietate = list(motore.barre_vietate_segnale_non_valido(candele, crea_segnale, p))
-    vietate += _intervalli(serie["escluso"])
+    vietate_segnale = list(motore.barre_vietate_segnale_non_valido(candele, crea_segnale, p))
+    vietate = vietate_segnale + _intervalli(serie["escluso"])
     if periodo == "validazione":
         n_costr = int(np.searchsorted(serie["ts"], INIZIO_VALIDAZIONE_TS))
         vietate.append((0, n_costr))
@@ -457,8 +457,7 @@ def esamina(v: Variante, periodo: str = "costruzione", moltiplicatore_costi: flo
             simulazioni_vuote=int(base_b["simulazioni_vuote"]),
             segnali_scartati_per_simulazione_medio=round(float(np.mean(base_b["segnali_non_validi_per_simulazione"])), 3),
             quota_barre_vietate=round(_quota_vietata(vietate, n), 4),
-            quota_barre_vietate_segnale_non_valido=round(_quota_vietata(
-                motore.barre_vietate_segnale_non_valido(candele, crea_segnale, p), n), 4),
+            quota_barre_vietate_segnale_non_valido=round(_quota_vietata(vietate_segnale, n), 4),
             durata_media_barre=int(durata))
         out["percentile_caso"] = statistica.percentile_del_candidato(float(np.mean(rc)), base_b["valori"])
     except ValueError as e:
