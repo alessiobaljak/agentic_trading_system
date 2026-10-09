@@ -496,3 +496,96 @@ Spiegazioni concorrenti per questa idea: 13.
 
 **Previsioni.** Costi 0,023 R. Profit factor fra 0,8 e 1,3, R medio fra −0,1 e +0,1; nessuna batte
 nettamente la (b) (la fonte stessa non trova differenze dal caso).
+
+---
+
+## I-11 — Continuazione dopo movimenti con volume alto (scambi informati)
+
+**Da dove nasce (dichiarato).** Dallo studio di un fallimento: la LTCUSDT-008 (short dopo un balzo
+orario con volume alto) ha perso molto più del caso nel 2020-21 (R medio −0,165 contro −0,051 della
+(b)), e la 007 (long dopo un crollo con volume alto) ha perso molto nel 2022. Una strategia diversa
+nata dai fallimenti è un'idea nuova e vale solo con una fonte (Fase 3): questa idea ha la sua fonte,
+ma **l'ho scelta dopo aver visto quei risultati di costruzione**: il suo esito in costruzione è
+quindi meno informativo di quello delle altre idee, e lo giudicherà solo la validazione.
+
+**Fonte.** Guillermo Llorente, Roni Michaely, Gideon Saar e Jiang Wang, «Dynamic Volume-Return
+Relation of Individual Stocks», Review of Financial Studies 15(4), 2002: quando il volume alto nasce
+da scambi informati (speculazione), i rendimenti che lo accompagnano continuano; quando nasce da
+coperture, si invertono.
+
+**Affermazione verificabile.** Dopo una barra oraria di LTCUSDT con rendimento oltre +2,5 deviazioni
+standard e volume oltre 3 volte la mediana della settimana precedente, un long tenuto 12 ore rende più
+di un long a caso con la stessa uscita; specchio per lo short dopo un crollo con volume alto.
+
+**Sotto-domande.** Su una moneta piccola rispetto a BTC, gli scambi informati sono prevalenti nei
+movimenti estremi (notizie, flussi)? Il regime conta (rialzo 2020-21, ribasso 2022)? Tempi: ore.
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | È lo specchio della 007/008: il «vantaggio» è solo il trend di fondo di ogni anno | il long vince nel 2020-21 e perde nel 2022 come la (b) | batte la (b) in ogni anno |
+| S2 | Selezione a posteriori: l'idea è scelta sui dati che la giudicano | buon risultato in costruzione, nullo in validazione | (solo la validazione può dirlo) |
+| S3 | Costi: la differenza di 0,1 R sul caso si mangia nei costi | R netto vicino a zero | R netto positivo |
+
+Spiegazioni concorrenti per questa idea: 13.
+
+**Ipotesi completa.** LTCUSDT, continuazione dopo shock orari con volume alto, candele 1h, 12 ore.
+Stesso ingresso, stop e uscita della I-04 con la direzione opposta (così le due idee restano
+confrontabili).
+
+**Varianti:**
+
+* **LTCUSDT-020** — 1h, long. Ingresso se r[i] > +2,5 × deviazione standard dei rendimenti delle 168
+  barre precedenti e volume > 3 × mediana delle 168 barre precedenti. Uscita dopo 12 barre. Stop 2 ×
+  ATR24 sotto il close, al massimo 6%.
+* **LTCUSDT-021** — 1h, short. Ingresso se r[i] < −2,5 × deviazione standard e volume > 3 × mediana. Uscita
+  dopo 12 barre. Stop 2 × ATR24 sopra, al massimo 6%.
+
+**Previsioni.** Costi 0,05 R. Visto il risultato della 008, il long dovrebbe stare sopra il caso:
+profit factor fra 1,0 e 1,4, R medio fra 0 e +0,15, ma non netto contro la (b) (circa 200 trade,
+errore circa 0,08). Short: profit factor fra 0,8 e 1,2, R medio fra −0,1 e +0,05, non netto.
+
+---
+
+## I-12 — Scarto fra l'ultimo prezzo e il mark price (premio del perpetuo)
+
+**Fonte.** Songrun He, Asaf Manela, Omri Ross e Victor von Wachter, «Fundamentals of Perpetual
+Futures», arXiv 2212.06888, prima versione dicembre 2022: il prezzo dei perpetui si allontana dal
+suo valore di non-arbitraggio (legato allo spot) più che nei mercati valutari tradizionali, e gli
+scostamenti vengono riassorbiti; una strategia di arbitraggio che li sfrutta ha un rapporto
+rendimento-rischio alto.
+
+**Affermazione verificabile.** Il mark price di Binance segue l'indice spot (più una media del
+premio). Quando alla chiusura di una barra oraria l'ultimo prezzo di LTCUSDT sta sopra il mark di
+molto più del solito (premio oltre la media + 3 deviazioni standard della settimana precedente), nelle
+4 ore successive uno short sull'ultimo prezzo rende più di uno short a caso con la stessa uscita
+(l'ultimo prezzo torna verso il valore di riferimento). Specchio per il premio molto negativo.
+
+**Sotto-domande.** Lo scostamento si chiude con il perpetuo che torna verso lo spot, o con lo spot
+che raggiunge il perpetuo (il perpetuo che anticipa)? Se vale la seconda, la direzione giusta è
+l'opposta e la variante perde. Chi opera: arbitraggisti fra spot e perpetuo. Tempi: minuti-ore.
+
+**Spiegazioni concorrenti specifiche:**
+
+| # | Spiegazione | Cosa prevede | Cosa la smentisce |
+|---|---|---|---|
+| S1 | Il perpetuo anticipa lo spot: il premio annuncia un movimento nella sua direzione | lo short perde più della (b) | lo short batte la (b) |
+| S2 | Lo scostamento si chiude in pochi minuti, prima dell'ingresso alla barra dopo | R uguale al caso | R diverso dal caso |
+| S3 | Il premio è alto solo nei momenti di volatilità estrema (liquidazioni) | trade a grappoli nei giorni di crollo/balzo | trade distribuiti |
+
+Spiegazioni concorrenti per questa idea: 13.
+
+**Ipotesi completa.** LTCUSDT, convergenza dell'ultimo prezzo verso il mark, candele 1h (il mark è
+sulle stesse barre, allineato da `carica_serie_allineate`), posizioni di 4 ore.
+
+**Varianti:**
+
+* **LTCUSDT-022** — 1h, short. Premio p[i] = close last[i] / close mark[i] − 1. Ingresso se p[i] >
+  media + 3 × deviazione standard dei premi delle 168 barre precedenti. Uscita dopo 4 barre. Stop 2 ×
+  ATR24 sopra il close, al massimo 6%.
+* **LTCUSDT-023** — 1h, long. Ingresso se p[i] < media − 3 × deviazione standard. Uscita dopo 4 barre.
+  Stop 2 × ATR24 sotto, al massimo 6%.
+
+**Previsioni.** Costi 0,05 R; movimenti attesi di poche decine di punti base: R piccoli. Profit
+factor fra 0,8 e 1,2 per entrambe; nessuna batte nettamente la (b).

@@ -453,6 +453,61 @@ class GiornoAnomalo(Base):
 
 
 # ---------------------------------------------------------------------------
+# I-11 continuazione dopo shock con volume alto (LTCUSDT-020, -021)
+# ---------------------------------------------------------------------------
+
+
+class ContinuazioneVolume(ShockVolume):
+    def entra(self, i, ind):
+        r, sd, v, m = ind["r1"][i], ind["sd"][i], ind["vol"][i], ind["med_vol"][i]
+        if math.isnan(r) or math.isnan(sd) or math.isnan(m) or sd <= 0:
+            return False
+        if v <= 3 * m:
+            return False
+        return bool(r > 2.5 * sd) if self.direzione == "long" else bool(r < -2.5 * sd)
+
+
+# ---------------------------------------------------------------------------
+# I-12 premio del perpetuo sul mark (LTCUSDT-022, -023)
+# ---------------------------------------------------------------------------
+
+
+class PremioMark(Base):
+    tf = "1h"
+    riscaldamento = 169
+
+    def __init__(self, direzione):
+        self.direzione = direzione
+
+    def prepara(self, candele):
+        from datetime import datetime, timezone
+        from research.src import dati
+        s = I.serie(candele)
+        fine = datetime.fromtimestamp(candele[-1].close_ts / 1000, tz=timezone.utc).date()
+        al = dati.carica_serie_allineate(quadro.SIMBOLO, self.tf, quadro.PRIMO_GIORNO, fine)
+        mark = {m.ts: m.close for m in al["candele_mark"]}
+        mc = np.array([mark[c.ts] for c in candele], dtype=float)  # stesse barre: la serie e' gia' allineata
+        p = s["close"] / mc - 1
+        return {"close": s["close"], "p": p, "m": I.ritardo(I.sma(p, 168), 1),
+                "sd": I.ritardo(I.rolling_std(p, 168), 1), "atr24": I.atr(s["high"], s["low"], s["close"], 24)}
+
+    def entra(self, i, ind):
+        p, m, sd = ind["p"][i], ind["m"][i], ind["sd"][i]
+        if math.isnan(m) or math.isnan(sd) or sd <= 0:
+            return False
+        return bool(p > m + 3 * sd) if self.direzione == "short" else bool(p < m - 3 * sd)
+
+    def stop_distanza(self, i, ind):
+        a = ind["atr24"][i]
+        if math.isnan(a):
+            return None
+        return min(2 * a / ind["close"][i], STOP_MAX)
+
+    def esci(self, i, ind, pos):
+        return quadro.tempo_in_barre(i, ind, pos) >= 4
+
+
+# ---------------------------------------------------------------------------
 # Registro
 # ---------------------------------------------------------------------------
 
@@ -476,6 +531,11 @@ FONTE_I08 = ("Guglielmo Maria Caporale, Alex Plastun, «The day of the week effe
 FONTE_I09 = "John Bollinger, «Bollinger on Bollinger Bands», McGraw-Hill, 2001 (lo squeeze)"
 FONTE_I10 = ("Guglielmo Maria Caporale, Alex Plastun, «Price overreactions in the cryptocurrency market», Journal of "
              "Economic Studies 46(5), 2019 (CESifo Working Paper 7280, 2018)")
+
+FONTE_I11 = ("Guillermo Llorente, Roni Michaely, Gideon Saar, Jiang Wang, «Dynamic Volume-Return Relation of "
+             "Individual Stocks», Review of Financial Studies 15(4), 2002")
+FONTE_I12 = ("Songrun He, Asaf Manela, Omri Ross, Victor von Wachter, «Fundamentals of Perpetual Futures», arXiv "
+             "2212.06888, prima versione dicembre 2022")
 
 REGISTRO = {
     "LTCUSDT-001": (lambda: MomentumSettimanale("long"), {
@@ -600,6 +660,28 @@ REGISTRO = {
         "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 20,
                       "stop": "media a 20 barre, al massimo 6%", "uscita": "close sopra la media o 30 barre"},
         "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-020": (lambda: ContinuazioneVolume("long"), {
+        "idea": "I-11", "fonte": FONTE_I11,
+        "meccanismo": "continuazione dopo un balzo orario con volume alto (scambi informati); idea nata dallo studio del fallimento della 008, dichiarato",
+        "parametri": {"finestra": 168, "soglia_sd": 2.5, "soglia_volume_mediana": 3.0, "tenuta_barre": 12,
+                      "stop_atr": 2.0, "atr": 24, "stop_massimo": 0.06},
+        "previsione": "profit factor fra 1,0 e 1,4; R medio fra 0 e +0,15; non batte nettamente la (b)"}),
+    "LTCUSDT-021": (lambda: ContinuazioneVolume("short"), {
+        "idea": "I-11", "fonte": FONTE_I11,
+        "meccanismo": "continuazione dopo un crollo orario con volume alto (scambi informati); idea nata dallo studio dei fallimenti della 007, dichiarato",
+        "parametri": {"finestra": 168, "soglia_sd": 2.5, "soglia_volume_mediana": 3.0, "tenuta_barre": 12,
+                      "stop_atr": 2.0, "atr": 24, "stop_massimo": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,2; R medio fra -0,1 e +0,05; non batte nettamente la (b)"}),
+    "LTCUSDT-022": (lambda: PremioMark("short"), {
+        "idea": "I-12", "fonte": FONTE_I12,
+        "meccanismo": "convergenza dell'ultimo prezzo verso il mark quando il premio e' anomalo verso l'alto",
+        "parametri": {"finestra": 168, "soglia_sd": 3.0, "tenuta_barre": 4, "stop_atr": 2.0, "atr": 24, "stop_massimo": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,2; non batte nettamente la (b)"}),
+    "LTCUSDT-023": (lambda: PremioMark("long"), {
+        "idea": "I-12", "fonte": FONTE_I12,
+        "meccanismo": "convergenza dell'ultimo prezzo verso il mark quando il premio e' anomalo verso il basso",
+        "parametri": {"finestra": 168, "soglia_sd": 3.0, "tenuta_barre": 4, "stop_atr": 2.0, "atr": 24, "stop_massimo": 0.06},
+        "previsione": "profit factor fra 0,8 e 1,2; non batte nettamente la (b)"}),
     "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {
         "idea": "I-10", "fonte": FONTE_I10,
         "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo",
