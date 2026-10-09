@@ -657,4 +657,5 @@ VARIANTI = {
     "BCHUSDT-031": lambda: SopraMedia("BCHUSDT-031", "short", n=10),
     "BCHUSDT-032": lambda: VolatilitaBassa("BCHUSDT-032", "long"),
     "BCHUSDT-033": lambda: MomentoSerieFiltro("BCHUSDT-033", "short", giorni_lunghi=30),
+    "BCHUSDT-034": lambda: MomentoSerieFiltro("BCHUSDT-034", "short", giorni_lunghi=30, tenuta=5),
 }
