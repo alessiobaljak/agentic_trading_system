@@ -1,0 +1,5 @@
+{
+ "soglia_usdt_giorno": 20000000,
+ "fonte": "candele 1d del last, colonna quote_volume (volume_usdt_da_zip), tutti i giorni",
+ "mesi_esclusi": []
+}
