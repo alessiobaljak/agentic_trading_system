@@ -16,10 +16,10 @@ from research.campagne.XRPUSDT.codice.quadro import Variante
 TETTO_STOP = 0.06
 
 
-def stop_da(s: Dict, k: float, direzione: str) -> np.ndarray:
-    """Stop = chiusura -/+ min(k x ATR14, 6% della chiusura)."""
+def stop_da(s: Dict, k: float, direzione: str, n_atr: int = 14) -> np.ndarray:
+    """Stop = chiusura -/+ min(k x ATR(n_atr), 6% della chiusura)."""
     c = s["close"]
-    dist = np.minimum(k * q.atr(s, 14), TETTO_STOP * c)
+    dist = np.minimum(k * q.atr(s, n_atr), TETTO_STOP * c)
     return c - dist if direzione == "long" else c + dist
 
 
@@ -229,14 +229,15 @@ def _i10(direzione, soglia):
 # ---------------------------------------------------------------------------
 
 
-def _i11(direzione, soglia, caduta_massima=None):
+def _i11(direzione, soglia, caduta_massima=None, k=1.5, n_atr=14):
     def prepara(s):
         mark = np.array([c.close for c in s["mark"]])
         p = s["close"] / mark - 1
         cond = (p > soglia) if direzione == "short" else (p < -soglia)
         if caduta_massima is not None:  # ritocco: niente ingressi dopo una barra crollata oltre la soglia
             cond = cond & (rendimento(s["close"], 1) >= -caduta_massima)
-        return {"cond": _nan_falso(cond), "stop": stop_da(s, 1.5, direzione), "target": None, "warmup": 14}
+        return {"cond": _nan_falso(cond), "stop": stop_da(s, k, direzione, n_atr), "target": None,
+                "warmup": max(14, n_atr)}
     return prepara
 
 
