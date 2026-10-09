@@ -417,6 +417,10 @@ class Squeeze(Base):
         return bool(c < m) if self.direzione == "long" else bool(c > m)
 
 
+class Squeeze2h(Squeeze):
+    tf = "2h"
+
+
 # ---------------------------------------------------------------------------
 # I-10 inerzia dopo un giorno anomalo (LTCUSDT-018, -019 e le condizionali b)
 # ---------------------------------------------------------------------------
@@ -581,6 +585,18 @@ REGISTRO = {
     "LTCUSDT-017b": (lambda: Squeeze("short", 0.2), {
         "idea": "I-09", "fonte": FONTE_I09,
         "meccanismo": "breakout sotto la banda inferiore dopo una compressione della volatilita'; squeeze allentato al 20° percentile",
+        "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 20,
+                      "stop": "media a 20 barre, al massimo 6%", "uscita": "close sopra la media o 30 barre"},
+        "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-016c": (lambda: Squeeze2h("long", 0.2), {
+        "idea": "I-09", "fonte": FONTE_I09,
+        "meccanismo": "breakout sopra la banda superiore dopo una compressione della volatilita'; 2h, squeeze al 20° percentile dopo gli scarti",
+        "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 20,
+                      "stop": "media a 20 barre, al massimo 6%", "uscita": "close sotto la media o 30 barre"},
+        "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),
+    "LTCUSDT-017c": (lambda: Squeeze2h("short", 0.2), {
+        "idea": "I-09", "fonte": FONTE_I09,
+        "meccanismo": "breakout sotto la banda inferiore dopo una compressione della volatilita'; 2h, squeeze al 20° percentile dopo gli scarti",
         "parametri": {"bande": 20, "deviazioni": 2, "finestra_squeeze": 120, "percentile_squeeze": 20,
                       "stop": "media a 20 barre, al massimo 6%", "uscita": "close sopra la media o 30 barre"},
         "previsione": "profit factor fra 0,8 e 1,3; non batte nettamente la (b)"}),

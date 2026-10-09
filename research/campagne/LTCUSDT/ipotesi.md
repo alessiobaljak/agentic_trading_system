@@ -447,6 +447,12 @@ risultati (regola 6): **LTCUSDT-016b**, uguale alla 016 con lo squeeze al 20° p
 10°. Per lo short, scritta ora prima di contare la 017: *se LTCUSDT-017 è uno scarto*, la sostituisce
 **LTCUSDT-017b**, uguale con il 20° percentile. Previsioni identiche.
 
+**Seconda aggiunta, dopo gli scarti di 017 (48), 016b (68) e 017b (57); ancora nessun test.** Ultimo
+tentativo, poi l'idea si chiude come scarto: **LTCUSDT-016c** e **LTCUSDT-017c**, uguali alle 016b e
+017b ma su candele 2h (stessi parametri in barre: la compressione è relativa alle ultime 120 barre,
+10 giorni, e il breakout si misura sulle bande a 20 barre; più eventi a parità di storia). Previsioni
+identiche.
+
 ---
 
 ## I-10 — Inerzia dopo un giorno anomalo
