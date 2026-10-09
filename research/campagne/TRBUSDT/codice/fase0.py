@@ -74,7 +74,25 @@ def main():
     numeri["volume_medio_giorno_usdt_per_mese"] = {m: round(sum(v) / len(v)) for m, v in sorted(per_mese.items())}
     numeri["mesi_sotto_soglia"] = sorted(m for m, v in per_mese.items() if sum(v) / len(v) < SOGLIA_LIQUIDITA)
     numeri["giorni_per_mese"] = {m: len(v) for m, v in sorted(per_mese.items())}
-    numeri["checksum_mancanti"] = list(dati.CHECKSUM_MANCANTI)
+    # Ricontrollo delle impronte contro il CHECKSUM pubblicato accanto a ogni zip (stessi URL dello scarico)
+    confronto = {"uguali": 0, "diverse": [], "checksum_assente": []}
+    for simbolo, mappa in impronte.items():
+        for nome, sha in mappa.items():
+            parti = nome.split("/")
+            tipo = parti[0]
+            file = parti[-1]
+            anno, mese = int(file[-11:-7]), int(file[-6:-4])
+            intervallo = parti[1] if tipo != "fundingRate" else None
+            url = dati.url_mese(simbolo, tipo, intervallo, anno, mese)
+            contenuto = dati.fetch_http(dati.url_checksum(url))
+            if contenuto is None:
+                confronto["checksum_assente"].append(f"{simbolo}/{nome}")
+                continue
+            if dati.leggi_checksum(contenuto, url) == sha:
+                confronto["uguali"] += 1
+            else:
+                confronto["diverse"].append(f"{simbolo}/{nome}")
+    numeri["confronto_checksum"] = confronto
     with open(CARTELLA / "fase0_numeri.json", "w", encoding="utf-8") as f:
         json.dump(numeri, f, indent=1, ensure_ascii=False)
     print("fatto")
