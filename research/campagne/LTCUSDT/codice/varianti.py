@@ -352,6 +352,9 @@ class RangeApertura(Base):
     def entra(self, i, ind):
         if getattr(self, "solo_stretto", False) and not ind["stretto"][i]:
             return False
+        ultima_ora = getattr(self, "ultima_ora_ingresso", 20)
+        if int(ind["ora"][i]) > ultima_ora:
+            return False
         return bool(ind["primo_sopra"][i]) if self.direzione == "long" else bool(ind["primo_sotto"][i])
 
     def stop_distanza(self, i, ind):
@@ -605,6 +608,11 @@ def _stretto(v):
     return v
 
 
+def _finestra(v, ultima_ora):
+    v.ultima_ora_ingresso = ultima_ora
+    return v
+
+
 def _stop_fisso(v, d):
     v.stop_fisso = d
     return v
@@ -786,6 +794,14 @@ REGISTRO = {
         "cosa_cambia": "stop fisso al 3% sopra il close di segnale invece del massimo del range",
         "perche": "separare la direzione del breakout dal rumore della posizione dello stop (nota LTCUSDT-N012)",
         "previsione": "circa gli stessi 554 trade; profit factor fra 0,8 e 1,2; R medio fra -0,1 e +0,05; non batte nettamente la (b)"}),
+    "LTCUSDT-028": (lambda: _finestra(RangeApertura("short"), 7), {
+        "idea": "I-07", "fonte": FONTE_I07, "famiglia": "LTCUSDT-014", "ritocco_di": "LTCUSDT-014",
+        "meccanismo": "breakout al ribasso del range delle prime 4 ore UTC, solo se avviene fra le 04 e le 07 UTC",
+        "parametri": {"range_ore": "00-03 UTC", "finestra_ingresso": "04-07 UTC", "uscita": "chiusura della barra delle 23",
+                      "stop": "massimo del range, al massimo 6%"},
+        "cosa_cambia": "finestra d'ingresso ridotta dalle 04-20 alle 04-07 UTC",
+        "perche": "breakout presto nella giornata, come in Crabel (nota LTCUSDT-N013)",
+        "previsione": "circa la meta' dei trade; profit factor fra 0,8 e 1,3; R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
     "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {
         "idea": "I-10", "fonte": FONTE_I10,
         "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo",
