@@ -334,7 +334,110 @@ class GiornoAnomalo(Base):
         return self.r[i] < self.m_prima[i] - 1.5 * self.sd_prima[i]
 
 
+def quota_aggressivi_1d():
+    """{ts: taker_buy_quote_volume / quote_volume} dalle candele 1d del last (colonne 10 e 7 del CSV)."""
+    out = {}
+    for anno, mese in q.dati.mesi_del_periodo(q.INIZIO, q.FINE):
+        p = q.dati.percorso_mese(q.SIMBOLO, "klines", "1d", anno, mese, q.dati.RADICE_DEFAULT)
+        if not p.is_file():
+            continue
+        for riga in q.dati.righe_csv_da_zip(p):
+            ts = q.dati.normalizza_ts(riga[0])
+            if ts in out or len(riga) < 11:
+                continue
+            qv, tb = float(riga[7]), float(riga[10])
+            out[ts] = tb / qv if qv > 0 else np.nan
+    return out
+
+
+class Squilibrio(Base):
+    """I-13: quota del volume degli acquirenti aggressivi del giorno contro 0,5; 1d; uscita dopo 1 barra."""
+    tf, barre, stop_atr = "1d", 1, 2.0
+
+    def __init__(self, direzione):
+        self.direzione = direzione
+
+    def prepara(self, d):
+        super().prepara(d)
+        qa = quota_aggressivi_1d()
+        self.quota = np.array([qa.get(int(t), np.nan) for t in d["ts"]])
+
+    def condizione(self, i):
+        x = self.quota[i]
+        if not np.isfinite(x):
+            return False
+        return x > 0.5 if self.direzione == "long" else x < 0.5
+
+
+class NumeroTondo(Base):
+    """I-14: chiusura oraria che attraversa un multiplo di 0,01; uscita dopo 6 barre."""
+    tf, barre, stop_atr = "1h", 6, 2.0
+
+    def __init__(self, direzione):
+        self.direzione = direzione
+
+    def prepara(self, d):
+        super().prepara(d)
+        c = self.c
+        livello_prima = np.floor(np.concatenate([[np.nan], c[:-1]]) / 0.01)
+        livello_ora = np.floor(c / 0.01)
+        self.su = livello_ora > livello_prima
+        self.giu = livello_ora < livello_prima
+
+    def condizione(self, i):
+        return bool(self.su[i]) if self.direzione == "long" else bool(self.giu[i])
+
+
+class NR4(Base):
+    """I-15: giorno UTC precedente con escursione minima delle ultime 4; rottura oraria; uscita a fine giorno."""
+    tf, stop_atr = "1h", 2.0
+
+    def __init__(self, direzione):
+        self.direzione = direzione
+
+    def prepara(self, d):
+        super().prepara(d)
+        ore, _, _, giorno = _ora_e_giorno(d["ts"])
+        self.ore = ore
+        n = len(d["ts"])
+        hi, lo = {}, {}
+        for k in range(n):
+            g = giorno[k]
+            hi[g] = max(hi.get(g, -np.inf), d["high"][k])
+            lo[g] = min(lo.get(g, np.inf), d["low"][k])
+
+        def nr4(g):
+            if not all((g - j) in hi for j in range(4)):
+                return False
+            r = [hi[g - j] - lo[g - j] for j in range(4)]
+            return r[0] < min(r[1:])
+
+        self.cond = np.zeros(n, dtype=bool)
+        s = 1 if self.direzione == "long" else -1
+        gia = set()
+        for k in range(n):
+            g = giorno[k]
+            if ore[k] >= 23 or g in gia or not nr4(g - 1):
+                continue
+            livello = hi[g - 1] if s == 1 else lo[g - 1]
+            if s * (d["close"][k] - livello) > 0:
+                gia.add(g)
+                self.cond[k] = True
+
+    def condizione(self, i):
+        return bool(self.cond[i])
+
+    def esci(self, i, barre_tenute):
+        return self.ore[i] == 23
+
+
 VARIANTI = {
+    "DOGEUSDT-024": lambda: Squilibrio("long"),
+    "DOGEUSDT-025": lambda: Squilibrio("short"),
+    "DOGEUSDT-026": lambda: NumeroTondo("long"),
+    "DOGEUSDT-027": lambda: NumeroTondo("short"),
+    "DOGEUSDT-028": lambda: NR4("long"),
+    "DOGEUSDT-029": lambda: NR4("short"),
     "DOGEUSDT-001": lambda: Momento7("long"),
     "DOGEUSDT-002": lambda: Momento7("short"),
     "DOGEUSDT-003": lambda: PrimaMezzora("long"),

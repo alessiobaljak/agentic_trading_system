@@ -291,3 +291,70 @@ Ogni idea qui sotto ha queste otto spiegazioni concorrenti, più almeno due sue.
    * **I-12-S** (DOGEUSDT-023): short se < media − 1,5 deviazioni.
    Previsione: R medio fra −0,10 e +0,10. Mi aspetto meno di 70 trade (giorni anomali circa
    il 7%): in quel caso è uno scarto.
+
+---
+
+Idee I-13, I-14, I-15 scritte il 9 ottobre 2026 dopo il conteggio delle prime 23 varianti (8
+scarti sotto i 70 trade) e dopo aver visto i risultati di DOGEUSDT-001, 002 e 003 (nessuno
+vicino a un vantaggio). Sono meccanismi diversi da quelli già provati (flusso degli ordini,
+ordini fermi ai numeri tondi, contrazione dell'escursione), cercati per coprire famiglie non
+ancora toccate, non per somiglianza con un risultato.
+
+## Idea I-13 — Squilibrio degli ordini aggressivi
+
+1. **Fonte.** Tarun Chordia, Avanidhar Subrahmanyam, «Order imbalance and individual stock
+   returns: Theory and evidence», Journal of Financial Economics 72(3), giugno 2004: lo
+   squilibrio fra ordini di acquisto e di vendita di un giorno prevede il rendimento del giorno
+   dopo con lo stesso segno (gli intermediari spalmano nel tempo gli ordini grandi).
+2. **Affermazione.** Su DOGEUSDT, dopo un giorno in cui il volume degli acquirenti aggressivi
+   (colonna `taker_buy_quote_volume` delle candele) supera il 50% del volume in USDT, il
+   rendimento del giorno dopo è più alto del caso; sotto il 50%, più basso.
+3. **Sotto-domande.** Conta l'ampiezza dello squilibrio? Chi opera: chi spezza ordini grandi in
+   più giorni. Tempo: un giorno.
+4. **Spiegazioni specifiche.** S1 La quota degli aggressivi è quasi sempre vicina al 50% e il
+   segno è rumore → nessun effetto. S2 Lo squilibrio è solo il rendimento dello stesso giorno
+   (chi compra aggressivo spinge il prezzo) → stesso esito del momento di un giorno.
+6. **Varianti.** Timeframe 1d (la fonte usa giorni).
+   * **I-13-L** (DOGEUSDT-024): 1d, long se quota aggressivi in acquisto > 0,5. Uscita dopo 1
+     barra. Stop 2 ATR.
+   * **I-13-S** (DOGEUSDT-025): 1d, short se quota < 0,5. Uscita dopo 1 barra. Stop 2 ATR.
+   Previsione: R medio fra −0,10 e +0,10.
+
+## Idea I-14 — Numeri tondi e ordini fermi
+
+1. **Fonte.** Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for
+   the Predictive Success of Technical Analysis», Journal of Finance 58(5), ottobre 2003: gli
+   ordini stop si concentrano appena oltre i numeri tondi, e quando il prezzo li attraversa
+   gli stop eseguiti spingono il prezzo nella stessa direzione.
+2. **Affermazione.** Su DOGEUSDT, dopo una chiusura oraria che attraversa verso l'alto (verso il
+   basso) un multiplo di 0,01 USDT, il prezzo nelle 6 ore dopo prosegue nella stessa direzione
+   più del caso.
+3. **Sotto-domande.** Contano di più i livelli «molto tondi» (0,10, 0,20)? Chi opera: chi ha
+   messo stop e ordini d'ingresso sui livelli tondi. Tempo: ore.
+4. **Spiegazioni specifiche.** S1 Gli ordini di presa di profitto sui tondi fanno invece
+   rimbalzare il prezzo → R negativo. S2 A prezzi bassi (0,05-0,10) un centesimo è un movimento
+   del 10-20% e l'attraversamento è raro e già lungo → pochi trade e concentrati.
+6. **Varianti.** Timeframe 1h.
+   * **I-14-L** (DOGEUSDT-026): 1h, long se esiste un multiplo di 0,01 con close precedente
+     sotto e close corrente sopra. Uscita dopo 6 barre. Stop 2 ATR.
+   * **I-14-S** (DOGEUSDT-027): specchio short.
+   Previsione: R medio fra −0,10 e +0,10.
+
+## Idea I-15 — Giorno stretto e rottura del giorno dopo
+
+1. **Fonte.** Toby Crabel, «Day Trading with Short Term Price Patterns and Opening Range
+   Breakout», Traders Press, 1990: dopo un giorno con l'escursione più stretta degli ultimi 4
+   («NR4») il movimento del giorno dopo tende a essere ampio, nella direzione della rottura.
+2. **Affermazione.** Su DOGEUSDT, il giorno dopo un NR4 (giorno UTC con escursione minima delle
+   ultime 4), una chiusura oraria sopra (sotto) il massimo (minimo) del giorno NR4 è seguita
+   da un proseguimento fino a fine giornata più del caso.
+3. **Sotto-domande.** Conta la volatilità di fondo? Chi opera: ordini fermi sopra e sotto il
+   giorno stretto. Tempo: ore.
+4. **Spiegazioni specifiche.** S1 È la stessa cosa della rottura di volatilità (I-04) → stesso
+   esito. S2 Le rotture dei giorni stretti sono spesso false (si rientra) → R negativo.
+6. **Varianti.** Timeframe 1h.
+   * **I-15-L** (DOGEUSDT-028): 1h, long alla prima chiusura oraria del giorno sopra il massimo
+     del giorno precedente, se il giorno precedente è NR4; non dopo la barra 22:00; uscita
+     alla chiusura della barra 23:00. Stop 2 ATR.
+   * **I-15-S** (DOGEUSDT-029): specchio short.
+   Previsione: R medio fra −0,10 e +0,10.

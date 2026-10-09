@@ -13,6 +13,9 @@ F = {
     "I-10": "John Bollinger, «Bollinger on Bollinger Bands», McGraw-Hill, 2001",
     "I-11": "Bruce N. Lehmann, «Fads, Martingales, and Market Efficiency», Quarterly Journal of Economics, febbraio 1990",
     "I-12": "Caporale, Plastun, «Price overreactions in the cryptocurrency market», Journal of Economic Studies, 2019 (CESifo WP 6861, gennaio 2018)",
+    "I-13": "Chordia, Subrahmanyam, «Order imbalance and individual stock returns: Theory and evidence», Journal of Financial Economics, giugno 2004",
+    "I-14": "Carol L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical Analysis», Journal of Finance, ottobre 2003",
+    "I-15": "Toby Crabel, «Day Trading with Short Term Price Patterns and Opening Range Breakout», Traders Press, 1990",
 }
 
 CRITERIO = ("candidato in Fase 2: batte nettamente la (a) e la (b) (contro_baseline, sezione 8) "
@@ -72,4 +75,16 @@ META = {
                       {"ingresso": "rendimento del giorno > media + 1,5 sd dei 30 giorni prima", "uscita": "a tempo dopo 1 barra", "stop": "2 ATR14", "target": None}, (-0.10, 0.10)),
     "DOGEUSDT-023": m("I-12", "inerzia dopo un giorno anomalo", "1d", "short",
                       {"ingresso": "rendimento del giorno < media - 1,5 sd dei 30 giorni prima", "uscita": "a tempo dopo 1 barra", "stop": "2 ATR14", "target": None}, (-0.10, 0.10)),
+    "DOGEUSDT-024": m("I-13", "squilibrio degli ordini aggressivi del giorno", "1d", "long",
+                      {"ingresso": "taker_buy_quote_volume / quote_volume del giorno > 0,5", "uscita": "a tempo dopo 1 barra", "stop": "2 ATR14", "target": None}, (-0.10, 0.10)),
+    "DOGEUSDT-025": m("I-13", "squilibrio degli ordini aggressivi del giorno", "1d", "short",
+                      {"ingresso": "taker_buy_quote_volume / quote_volume del giorno < 0,5", "uscita": "a tempo dopo 1 barra", "stop": "2 ATR14", "target": None}, (-0.10, 0.10)),
+    "DOGEUSDT-026": m("I-14", "attraversamento di un numero tondo e ordini stop", "1h", "long",
+                      {"ingresso": "close attraversa verso l'alto un multiplo di 0,01", "uscita": "a tempo dopo 6 barre", "stop": "2 ATR14", "target": None}, (-0.10, 0.10)),
+    "DOGEUSDT-027": m("I-14", "attraversamento di un numero tondo e ordini stop", "1h", "short",
+                      {"ingresso": "close attraversa verso il basso un multiplo di 0,01", "uscita": "a tempo dopo 6 barre", "stop": "2 ATR14", "target": None}, (-0.10, 0.10)),
+    "DOGEUSDT-028": m("I-15", "rottura del giorno stretto (NR4)", "1h", "long",
+                      {"ingresso": "giorno precedente NR4 e prima chiusura oraria sopra il suo massimo, non dopo la barra 22:00", "uscita": "chiusura della barra 23:00", "stop": "2 ATR14", "target": None}, (-0.10, 0.10)),
+    "DOGEUSDT-029": m("I-15", "rottura del giorno stretto (NR4)", "1h", "short",
+                      {"ingresso": "giorno precedente NR4 e prima chiusura oraria sotto il suo minimo, non dopo la barra 22:00", "uscita": "chiusura della barra 23:00", "stop": "2 ATR14", "target": None}, (-0.10, 0.10)),
 }
