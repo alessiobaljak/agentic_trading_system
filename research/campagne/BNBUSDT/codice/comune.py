@@ -432,7 +432,7 @@ def _riassunto_b(base: Dict[str, object], cb: Dict[str, object], vietate_quota: 
 
 def valuta(v: Variante, tf: Optional[str] = None, moltiplicatore_costi: float = 1.0, ritardo_barre: int = 0,
            riempimento: str = "stop_prima", periodo: str = "costruzione", con_a: bool = True,
-           btc: bool = True) -> Dict[str, object]:
+           btc: bool = True, vieta_extra: Optional[Callable[[Dict[str, np.ndarray]], np.ndarray]] = None) -> Dict[str, object]:
     """Test completo di una variante su costruzione o validazione, con le baseline (a) e (b).
 
     periodo "costruzione": candele fino al 2022-10-28. periodo "validazione": serie
@@ -484,6 +484,10 @@ def valuta(v: Variante, tf: Optional[str] = None, moltiplicatore_costi: float = 
     n_vietate_segnale = sum(b - a for a, b in vietate)
     ctx = contesto(v, candele)
     vietate = vietate + intervalli(ctx.esclusi)
+    if vieta_extra is not None:  # solo per le prove dello scettico: (b) ristretta a certe barre
+        extra = np.asarray(vieta_extra(ctx.ind), dtype=bool)
+        vietate = vietate + intervalli(extra)
+        out["barre_vietate_extra_quota"] = float(extra.mean())
     if da_ts:
         primo_val = next(i for i, c in enumerate(candele) if c.ts >= da_ts)
         vietate.append((0, primo_val))

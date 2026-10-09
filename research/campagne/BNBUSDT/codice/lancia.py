@@ -123,6 +123,33 @@ SPEC = {
 }
 
 
+# Ritocchi (regola 6): etichetta -> (ritocco_di, cosa cambia, perche')
+RITOCCHI = {
+    "I-03-1h-T12": ("BNBUSDT-005", "aggiunta un'uscita a tempo dopo 12 barre in posizione (resta l'uscita sopra la SMA5 e lo stop a 2,5 ATR)",
+                    "Fase 3 su BNBUSDT-005 (nota BNBUSDT-N018): 39 stop su 270 trade a -1,04 R ciascuno cancellano il guadagno delle "
+                    "231 uscite sul segnale (+0,18 R); il terzo dei trade piu' lunghi ha R medio -0,13 contro +0,08 dei piu' brevi: "
+                    "se il rimbalzo non arriva entro mezza giornata il trade tende a finire sullo stop"),
+}
+RITOCCHI["I-03-1h-T4"] = ("BNBUSDT-041", "uscita a tempo dopo 4 barre in posizione invece di 12 (resto invariato)",
+                          "Fase 3 su BNBUSDT-041 (nota BNBUSDT-N019): durata mediana 4 barre, 90 percentile 6; l'uscita a 12 barre "
+                          "non scattava quasi mai. I trade ancora aperti dopo 5 barre (46 su 270) hanno R medio fra -0,24 e -0,39 e "
+                          "quota vincenti fra 0 e 0,33: se il prezzo non torna sopra la SMA5 in 4 ore, si esce")
+SPEC["I-03-1h-T4"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=4), "inversione di breve in tendenza (RSI 2)",
+                      {"ingresso": "close > SMA200 e RSI2 < 5", "uscita": "close > SMA5 oppure 4 barre", "stop": "2,5 ATR(14)"},
+                      (-0.03, 0.08), False)
+RITOCCHI["I-03-1h-T12-A15"] = ("BNBUSDT-041", "aggiunto il filtro ATR(14) >= 1,5% della chiusura alla barra di segnale (resto come BNBUSDT-041)",
+                               "Fase 3 su BNBUSDT-005/041 (note BNBUSDT-N018 e N020): per terzili dell'ATR relativo al prezzo R medio "
+                               "-0,044, -0,029, +0,081; confine del terzo alto 0,01497. Con ATR basso lo stop e' stretto in prezzo e i "
+                               "costi (0,14% a giro) pesano di piu' in R")
+SPEC["I-03-1h-T12-A15"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=12, atr_rel_min=0.015),
+                           "inversione di breve in tendenza (RSI 2)",
+                           {"ingresso": "close > SMA200 e RSI2 < 5 e ATR(14) >= 1,5% del close", "uscita": "close > SMA5 oppure 12 barre",
+                            "stop": "2,5 ATR(14)"}, (-0.02, 0.15), False)
+SPEC["I-03-1h-T12"] = ("I-03", lambda vid: V.i03("1h", vid, max_barre=12), "inversione di breve in tendenza (RSI 2)",
+                       {"ingresso": "close > SMA200 e RSI2 < 5", "uscita": "close > SMA5 oppure 12 barre", "stop": "2,5 ATR(14)"},
+                       (-0.05, 0.08), False)
+
+
 def scrivi_esito(testo: str) -> None:
     with ESITI.open("a", encoding="utf-8") as f:
         f.write(testo + "\n")
@@ -145,6 +172,10 @@ def esegui_etichetta(etichetta: str) -> None:
                    "fonte": F[idea], "meccanismo": mecc, "timeframe": v.tf, "direzione": v.direzione,
                    "parametri": par, "periodo": "costruzione", "trade_stimati": conteggio["trade"],
                    "conteggio": conteggio}
+    if etichetta in RITOCCHI:
+        di, cosa, perche = RITOCCHI[etichetta]
+        famiglia = next(x["famiglia"] for x in registro.leggi() if x["id"] == di and x["tipo"] == "registrazione")
+        comune_voce.update({"famiglia": famiglia, "ritocco_di": di, "cosa_cambia": cosa, "perche": perche})
     if conteggio["trade"] < 70:
         registro.aggiungi(dict(comune_voce, tipo="scarto",
                                motivo=f"conta_trade {conteggio['trade']} trade, sotto il minimo di 70 in costruzione"))

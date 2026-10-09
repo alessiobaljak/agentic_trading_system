@@ -157,18 +157,26 @@ def i02(direzione: str, vid: str) -> Variante:
 # I-03 RSI a 2 periodi sopra la media a 200 (Connors, Alvarez 2008)
 # ---------------------------------------------------------------------------
 
-def i03(tf: str, vid: str) -> Variante:
+def i03(tf: str, vid: str, max_barre: int = 0, k_stop: float = 2.5, soglia_rsi: float = 5.0,
+        n_lunga: int = 200, n_corta: int = 5, atr_rel_min: float = 0.0, n_atr: int = 14,
+        n_rsi: int = 2) -> Variante:
+    """Con ``max_barre`` > 0 si esce anche dopo quelle barre in posizione (ritocco di BNBUSDT-005)."""
     def prepara(candele):
         o = C.array_ohlcv(candele)
-        o["atr"] = C.atr(o, 14)
-        o["rsi2"] = C.rsi(o["close"], 2)
-        o["sma200"] = C.sma(o["close"], 200)
-        o["sma5"] = C.sma(o["close"], 5)
+        o["atr"] = C.atr(o, n_atr)
+        o["rsi2"] = C.rsi(o["close"], n_rsi)
+        o["sma200"] = C.sma(o["close"], n_lunga)
+        o["sma5"] = C.sma(o["close"], n_corta)
         with np.errstate(invalid="ignore"):
             o["esci"] = o["close"] > o["sma5"]
         return o
-    cond = lambda ind, i: bool(ind["close"][i] > ind["sma200"][i] and ind["rsi2"][i] < 5)  # noqa: E731
-    return Variante(vid, tf, "long", prepara, cond, _stop_atr("long", 2.5), _uscita_su_indicatore("esci"))
+    cond = lambda ind, i: bool(ind["close"][i] > ind["sma200"][i] and ind["rsi2"][i] < soglia_rsi  # noqa: E731
+                               and ind["atr"][i] >= atr_rel_min * ind["close"][i])
+    base = _uscita_su_indicatore("esci")
+
+    def uscita(ind, i, barre, pos, candele):
+        return base(ind, i, barre, pos, candele) or (max_barre > 0 and barre >= max_barre)
+    return Variante(vid, tf, "long", prepara, cond, _stop_atr("long", k_stop), uscita)
 
 
 # ---------------------------------------------------------------------------
