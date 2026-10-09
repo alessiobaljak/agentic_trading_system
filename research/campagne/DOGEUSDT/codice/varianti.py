@@ -263,6 +263,8 @@ class Strettoia(Base):
     tf, barre, stop_atr = "4h", 12, 2.0
     finestra = 120
     percentile = 20
+    nb = 20     # barre delle bande
+    kb = 2.0    # deviazioni standard della banda d'ingresso
 
     def __init__(self, direzione):
         self.direzione = direzione
@@ -270,8 +272,8 @@ class Strettoia(Base):
     def prepara(self, d):
         super().prepara(d)
         c = self.c
-        m = q.sma(c, 20)
-        sd = q.rolling_std(c, 20)
+        m = q.sma(c, self.nb)
+        sd = q.rolling_std(c, self.nb)
         amp = 4 * sd / m
         p20 = np.full(len(c), np.nan)
         F = self.finestra
@@ -286,8 +288,8 @@ class Strettoia(Base):
         if not (self.amp[i] <= self.p20[i]):
             return False
         if self.direzione == "long":
-            return self.c[i] > self.m[i] + 2 * self.sd[i]
-        return self.c[i] < self.m[i] - 2 * self.sd[i]
+            return self.c[i] > self.m[i] + self.kb * self.sd[i]
+        return self.c[i] < self.m[i] - self.kb * self.sd[i]
 
 
 class BarraEstrema(Base):

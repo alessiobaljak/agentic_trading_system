@@ -315,11 +315,12 @@ def _tagli(d, periodo):
     return d["candele"], d["mark"], list(funding())
 
 
-def conta(v):
+def conta(v, parametri=PARAMETRI, stop_mark=False):
     d = serie(v.tf)
     v.prepara(d)
     cand, mark, fund = _tagli(d, "costruzione")
-    return motore.conta_trade(cand, crea_variante(v), FINE_COSTR_TS, PARAMETRI, candele_mark=mark, funding=fund)
+    return motore.conta_trade(cand, crea_variante(v), FINE_COSTR_TS, parametri,
+                              candele_stop=mark if stop_mark else None, candele_mark=mark, funding=fund)
 
 
 def _intervalli_da_maschera(maschera):
@@ -407,12 +408,17 @@ def btc_durante(trades, direzione, tf):
             "quota_a_favore": float(np.mean([x > 0 for x in vals])) if vals else None}
 
 
-def valuta(v, periodo="costruzione", parametri=PARAMETRI, n_sim=200):
-    """Test completo di una variante: candidato, (a), (b), metriche. Ritorna (dizionario, trades)."""
+def valuta(v, periodo="costruzione", parametri=PARAMETRI, n_sim=200, stop_mark=False):
+    """Test completo di una variante: candidato, (a), (b), metriche. Ritorna (dizionario, trades).
+
+    ``stop_mark``: solo per la verifica «dettagli del feed» (lo stop scatta sul mark, come nel
+    paper del bot che allarga il range al mark); la regola del protocollo e' lo stop sul last.
+    """
     d = serie(v.tf)
     v.prepara(d)
     cand, mark, fund = _tagli(d, periodo)
-    ris = motore.esegui(cand, None, mark, fund, crea_variante(v)(), parametri)
+    stop = mark if stop_mark else None
+    ris = motore.esegui(cand, stop, mark, fund, crea_variante(v)(), parametri)
     if periodo == "costruzione":
         trades = ris.trades
     else:
@@ -429,7 +435,7 @@ def valuta(v, periodo="costruzione", parametri=PARAMETRI, n_sim=200):
     out["blocco"] = blocco
 
     # baseline (a): senza condizione d'ingresso e senza filtri, dalla prima barra in cui la variante puo' entrare
-    ris_a = motore.esegui(cand, None, mark, fund, crea_a(v)(), parametri)
+    ris_a = motore.esegui(cand, stop, mark, fund, crea_a(v)(), parametri)
     ta = sorted(ris_a.trades, key=lambda t: t.ts_uscita)
     if periodo != "costruzione":
         ta = [t for t in ta if t.ts_entrata > FINE_COSTR_TS]
@@ -457,7 +463,7 @@ def valuta(v, periodo="costruzione", parametri=PARAMETRI, n_sim=200):
     durata = motore.durata_media_barre(trades, TF_MS[v.tf])
     try:
         base_b = motore.simula_baseline_casuale(cand, crea_casuale(v), len(trades), durata, parametri,
-                                                candele_mark=mark, funding=fund, barre_vietate=vietate,
+                                                candele_stop=stop, candele_mark=mark, funding=fund, barre_vietate=vietate,
                                                 n_simulazioni=n_sim)
         cmp_b = statistica.contro_baseline(r, blocco, base_b)
         out["baseline_b"] = {"media": base_b["media"], "errore_standard": base_b["errore_standard"],
