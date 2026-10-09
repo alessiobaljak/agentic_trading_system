@@ -174,3 +174,325 @@ rispetto a 15m), due varianti.
 | BCHUSDT-008 | short | specchio: prima chiusura sotto apertura − 0,5 × range; stop all'apertura del giorno |
 
 k = 0,5 è il valore più usato nella fonte. Costo ≈ 0,05 R.
+
+---
+
+## I-05 — Attraversamento dei livelli tondi (1h)
+
+**Fonte.** C. L. Osler, «Currency Orders and Exchange Rate Dynamics: An Explanation for the
+Predictive Success of Technical Analysis», *Journal of Finance* 58(5), ottobre 2003: gli ordini
+stop si accumulano appena oltre i numeri tondi; quando il prezzo li attraversa, gli stop
+eseguiti spingono il prezzo nella stessa direzione (trend rapidi dopo l'attraversamento).
+
+**Affermazione verificabile.** Dopo una chiusura oraria che attraversa verso l'alto (il basso)
+un multiplo di 10 USDT (di 100 sopra 1.000 USDT), il prezzo delle 12 ore successive va in
+quella direzione più di un ingresso orario qualunque con la stessa uscita.
+
+**Sotto-domande.** Più forte sui multipli di 50 e 100 che su quelli di 10? Chi muove il
+prezzo: stop dei venditori allo scoperto sopra il numero tondo (compre forzate), stop dei long
+sotto (vendite forzate). Tempo: ore.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → `t` < 2.
+2. *Trend di fondo* → più attraversamenti verso l'alto negli anni di rialzo: la (b) ha la stessa direzione, il confronto lo neutralizza anno per anno.
+3. *È solo il mercato* → annoto.
+4. *Ordini take-profit sui tondi (inversione)* → Osler trova anche inversioni AL numero tondo: chi attraversa può rientrare; R sotto la (b).
+5. *Il passo è arbitrario* → con il prezzo fra 100 e 1.600 USDT il passo 10 è circa 1-3% (molti attraversamenti) e il passo 100 sopra 1.000 è circa 7-10%: l'effetto sarebbe diverso per livello; non lo separo in questa variante.
+6. *Volatilità* → più attraversamenti nelle ore volatili; neutralizzata dalla (b).
+7. *Costi* → stop a 1 ATR orario sotto il livello, ~1,5% → costi ~0,09 R: il vantaggio deve essere grande; costi doppi.
+8. *Pochi trade estremi* → senza i 3 migliori.
+9. *Artefatto: attraversamenti a ripetizione* → il prezzo che oscilla attorno a un tondo dà molti segnali in poche ore; la tenuta di 12 barre e una posizione alla volta li riducono.
+10. *Il numero tondo non è visibile a tutti* → su un perpetuo in USDT i livelli psicologici sono quelli del prezzo in dollari, coerente: nessuna previsione diversa.
+
+**Ipotesi completa.** BCHUSDT, ordini sui numeri tondi, candele 1h (l'effetto è di ore), due varianti.
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-009 | long | passo = 10^(cifre intere del close precedente − 2) (10 fra 100 e 999, 100 fra 1.000 e 9.999); la chiusura precedente ≤ un multiplo del passo < la chiusura attuale: long all'apertura dopo; stop al livello attraversato − 1 × ATR(24 ore); nessun target; uscita dopo 12 barre tenute |
+| BCHUSDT-010 | short | specchio: attraversamento verso il basso; stop al livello + 1 ATR |
+
+Costo ≈ 0,05-0,10 R.
+
+---
+
+## I-06 — Inerzia dopo le giornate di sovra-reazione (1d)
+
+**Fonte.** G. M. Caporale, A. Plastun, «Price overreactions in the cryptocurrency market»,
+*Journal of Economic Studies* 46(5), 2019 (CESifo Working Paper 6861, gennaio 2018): dopo una
+giornata di sovra-reazione il movimento del giorno dopo è più ampio; una strategia di inerzia
+(nella direzione della sovra-reazione) sembrava redditizia ma non distinguibile dal caso.
+
+**Affermazione verificabile.** Dopo un giorno con rendimento apertura-chiusura oltre la media
+più una deviazione standard dei rendimenti assoluti dei 30 giorni precedenti (verso l'alto o il
+basso), il giorno dopo va nella stessa direzione più di un giorno qualunque.
+
+**Sotto-domande.** Più forte dopo i ribassi (liquidazioni a catena) o dopo i rialzi? Chi muove
+il prezzo: notizie che si incorporano in più giorni, rincorsa di chi arriva tardi. Tempo: un giorno.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → la fonte stessa dice «non distinguibile dal caso»: prior basso.
+2. *Inversione (sovra-reazione vera)* → il giorno dopo rientra: R sotto la (b).
+3. *Trend di fondo* → anno per anno con la (b).
+4. *È solo il mercato* → annoto.
+5. *Volatilità a grappoli* → dopo un giorno estremo la volatilità resta alta; senza direzione non dà R positivo con la (b) che usa lo stesso stop.
+6. *Pochi trade estremi* → senza i 3 migliori.
+7. *Costi* → stop 2 ATR giornalieri (~10%), costi ~0,015 R: irrilevanti.
+8. *Artefatto del confine del giorno UTC* → il rendimento apertura-chiusura dipende dall'ora del confine; annoto.
+9. *Funding* → piccolo su un giorno.
+10. *Soglia mobile* → nei periodi calmi anche un movimento modesto passa la soglia; nessuna previsione diversa, ma rende il segnale meno «estremo».
+
+**Ipotesi completa.** BCHUSDT, inerzia dopo la sovra-reazione, candele 1d (come la fonte), due varianti.
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-011 | long | close/open − 1 del giorno > media + 1 deviazione standard dei |close/open − 1| dei 30 giorni prima: long all'apertura dopo; stop 2 × ATR(14) sotto il close; uscita all'apertura successiva (1 giorno) |
+| BCHUSDT-012 | short | specchio: close/open − 1 < −(media + 1 deviazione standard) |
+
+---
+
+## I-07 — Il lunedì (1d)
+
+**Fonte.** G. M. Caporale, A. Plastun, «The day of the week effect in the cryptocurrency
+market», *Finance Research Letters* 31, 2019 (online novembre 2018; CESifo WP 6716, ottobre
+2017): i rendimenti di BTC il lunedì sono più alti degli altri giorni; le altre monete studiate
+(LTC, XRP, DASH) non mostrano l'anomalia.
+
+**Affermazione verificabile.** Il rendimento di BCHUSDT dal lunedì 00:00 al martedì 00:00 UTC
+è più alto di quello di un giorno qualunque con la stessa uscita.
+
+**Sotto-domande.** È un effetto di BTC trasmesso a BCH? Chi muove il prezzo: riapertura dei
+mercati tradizionali e flussi istituzionali dopo il fine settimana. Tempo: un giorno.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → con ~146 lunedì in costruzione, un effetto di 0,5% al giorno è sotto il rumore (~5% di deviazione giornaliera): prior molto basso.
+2. *La fonte trova l'effetto solo per BTC* → su BCH nessun effetto.
+3. *È solo il mercato* → se c'è, è quello di BTC; annoto.
+4. *Trend di fondo* → la (b) long ha lo stesso trend.
+5. *Pochi lunedì estremi* → senza i 3 migliori.
+6. *Volatilità del lunedì* → più movimento ma senza direzione.
+7. *Costi* → ~0,015 R.
+8. *Il confine UTC* → il «lunedì» dei mercati tradizionali comincia più tardi (Asia/Europa/USA); annoto.
+9. *Funding* → piccolo.
+10. *Artefatto di selezione nella fonte* → l'effetto è stato trovato su un periodo e una moneta; previsione: non si ripete fuori campione.
+
+**Ipotesi completa.** BCHUSDT, calendario, candele 1d, una sola variante (la fonte indica il long).
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-013 | long | alla chiusura della domenica: long all'apertura del lunedì; stop 2 × ATR(14) sotto il close; uscita all'apertura del martedì |
+
+---
+
+## I-08 — Il premio del volume alto (1d)
+
+**Fonte.** S. Gervais, R. Kaniel, D. H. Mingelgrin, «The High-Volume Return Premium», *Journal
+of Finance* 56(3), giugno 2001: dopo un volume insolitamente alto (fra il 10% più alto dei 50
+giorni), il titolo rende di più nel mese successivo; spiegazione: la visibilità attira nuovi
+compratori.
+
+**Affermazione verificabile.** Dopo un giorno con volume in USDT sopra il 90° percentile dei 49
+giorni precedenti, i 10 giorni successivi rendono più di un periodo qualunque di 10 giorni con
+la stessa uscita.
+
+**Sotto-domande.** Dipende dal segno del rendimento del giorno di volume? Chi muove il prezzo:
+nuovi compratori attirati dall'attenzione; nelle crypto il volume alto spesso coincide con i
+crolli. Tempo: 1-4 settimane (10 giorni per avere abbastanza trade).
+
+**Spiegazioni concorrenti:**
+1. *Caso* → `t` < 2.
+2. *Volume alto = capitolazione* → nelle crypto i giorni di volume massimo sono spesso crolli; dopo, rimbalzo (vantaggio long) o continuazione (svantaggio); previsione ambigua.
+3. *Trend di fondo* → anno per anno con la (b).
+4. *È solo il mercato* → il volume alto di BCH coincide con quello del mercato; annoto.
+5. *Volatilità* → dopo il volume alto la volatilità resta alta; lo stop in ATR si allarga; neutralizzato dalla (b).
+6. *Pochi trade estremi* → senza i 3 migliori.
+7. *Costi* → stop 3 ATR (~15%) → costi ~0,01 R.
+8. *Il meccanismo è delle azioni poco seguite* → BCH è già molto visibile: nessun effetto.
+9. *Artefatto di volume* → volumi gonfiati da eventi tecnici (es. maggio 2021) concentrati in pochi giorni; senza i 3 migliori.
+10. *Funding* → il long paga funding nel 2020-21; piccolo.
+
+**Ipotesi completa.** BCHUSDT, attenzione e volume, candele 1d, una variante (il meccanismo della fonte è solo rialzista).
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-014 | long | volume in USDT del giorno > 90° percentile dei 49 giorni precedenti: long all'apertura dopo; stop 3 × ATR(14) sotto il close; uscita dopo 10 giorni tenuti |
+
+---
+
+## I-09 — Inversione dei movimenti grandi con volume alto (4h)
+
+**Fonte.** J. Y. Campbell, S. J. Grossman, J. Wang, «Trading Volume and Serial Correlation in
+Stock Returns», *Quarterly Journal of Economics* 108(4), novembre 1993: i movimenti di prezzo
+accompagnati da volume alto tendono a invertirsi (chi chiede liquidità per motivi non
+informativi paga uno sconto a chi la fornisce, e il prezzo poi rientra).
+
+**Affermazione verificabile.** Dopo una barra di 4 ore con rendimento oltre 2 deviazioni
+standard (delle 100 barre precedenti) e volume oltre il doppio della media delle 100 barre
+precedenti, le 24 ore successive vanno in direzione opposta più di un ingresso qualunque con la
+stessa uscita.
+
+**Sotto-domande.** Più forte dopo i ribassi (liquidazioni forzate) che dopo i rialzi? Chi muove
+il prezzo: venditori forzati e chi assorbe. Tempo: ore, un giorno.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → `t` < 2.
+2. *Continuazione per informazione* → il volume alto porta notizie vere: il movimento continua; R sotto la (b).
+3. *Cascate di liquidazioni* → nelle crypto il calo con volume può continuare per ore prima di invertire: l'ingresso alla barra dopo è presto; previsione: R negativo nelle prime barre.
+4. *Trend di fondo* → anno per anno con la (b).
+5. *È solo il mercato* → annoto.
+6. *Volatilità* → neutralizzata dalla (b).
+7. *Pochi trade estremi* → un paio di rimbalzi (marzo 2020); senza i 3 migliori.
+8. *Costi* → stop 2,5 ATR(4h) ~4,5% → costi ~0,03 R.
+9. *Pochi segnali* → la doppia condizione può dare pochi trade: lo dice la conta.
+10. *Artefatto dei dati* → barre dopo il buco del 2022-10-02: il rendimento della prima barra dopo il buco è su 28 ore; al massimo un segnale.
+
+**Ipotesi completa.** BCHUSDT, inversione con volume, candele 4h, due varianti.
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-015 | long | rendimento della barra / deviazione standard dei rendimenti delle 100 barre prima < −2 e volume in USDT > 2 × media delle 100 barre prima: long all'apertura dopo; stop 2,5 × ATR(14) sotto il close; uscita dopo 6 barre tenute |
+| BCHUSDT-016 | short | specchio: rendimento standardizzato > +2 con volume > 2 volte la media |
+
+---
+
+## I-10 — Funding estremo: la parte affollata paga (8h)
+
+**Fonte.** S. He, A. Manela, O. Ross, V. von Wachter, «Fundamentals of Perpetual Futures»,
+arXiv 2212.06888, prima versione dicembre 2022: il funding misura lo scarto fra perpetuo e
+spot, cioè lo squilibrio della domanda di leva; gli scarti sono grandi e si chiudono.
+Riformulazione mia (da dichiarare): un funding molto alto indica long a leva affollati, che
+chiudono o vengono liquidati e spingono il prezzo in basso; specchio per il funding molto basso.
+
+**Affermazione verificabile.** Dopo un settlement con tasso di funding sopra il 90° percentile
+dei 90 settlement precedenti (30 giorni), le 24 ore successive rendono meno di un ingresso
+qualunque (short); dopo un tasso sotto il 10° percentile rendono di più (long).
+
+**Sotto-domande.** Vale solo sopra soglie assolute (es. oltre 0,05%)? Chi muove il prezzo: chi
+è a leva dalla parte affollata, chi fa arbitraggio (vende perpetuo, compra spot). Tempo: ore, giorni.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → `t` < 2.
+2. *Momento* → il funding alto segue i rialzi e i rialzi continuano: R dello short sotto la (b).
+3. *L'arbitraggio chiude lo scarto sul perpetuo, non sul prezzo* → lo scarto si chiude con il perpetuo che scende verso lo spot di poco (0,05%): troppo poco per un R visibile; nessun vantaggio.
+4. *Trend di fondo* → funding alto nel 2020-21 (rialzo): lo short perde con il trend; la (b) short ha lo stesso trend.
+5. *È solo il mercato* → il funding di BCH segue quello di tutto il mercato; annoto.
+6. *Il percentile mobile non è «estremo»* → nei periodi calmi il decile alto è un funding normale; previsione: effetto diluito.
+7. *Costi e funding* → lo short incassa il funding alto: l'R migliora per il funding incassato, non per il prezzo; lo separo guardando il funding totale.
+8. *Volatilità* → neutralizzata dalla (b).
+9. *Pochi trade estremi* → senza i 3 migliori.
+10. *Artefatto dell'istante* → il tasso del settlement si conosce al settlement (apertura della barra); il segnale usa il settlement all'apertura della barra appena chiusa: nessun anticipo.
+
+**Ipotesi completa.** BCHUSDT, posizionamento a leva, candele 8h (allineate ai settlement di 8
+ore: 00, 08, 16 UTC), due varianti.
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-017 | short | tasso del settlement all'apertura della barra > 90° percentile dei 90 settlement precedenti: short all'apertura dopo; stop 2 × ATR(14 barre) sopra il close; uscita dopo 3 barre tenute (24 ore) |
+| BCHUSDT-018 | long | tasso < 10° percentile dei 90 precedenti: long; stop 2 ATR sotto; uscita dopo 3 barre |
+
+---
+
+## I-11 — Flusso degli ordini aggressivi (1h)
+
+**Fonte.** M. D. D. Evans, R. K. Lyons, «Order Flow and Exchange Rate Dynamics», *Journal of
+Political Economy* 110(1), febbraio 2002: il flusso netto degli ordini aggressivi porta
+informazione e ha un effetto persistente sul prezzo.
+
+**Affermazione verificabile.** Quando la quota degli acquisti aggressivi (volume in USDT dei
+compratori taker / volume totale) delle ultime 4 ore supera di 2 deviazioni standard la sua
+media dei 30 giorni precedenti, le 4 ore successive salgono più di un ingresso orario
+qualunque (specchio per le vendite aggressive).
+
+**Sotto-domande.** Il flusso predice o accompagna soltanto il prezzo? Chi muove il prezzo:
+operatori informati che eseguono a pezzi. Tempo: ore.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → `t` < 2.
+2. *Effetto contemporaneo, non predittivo* → il flusso muove il prezzo nella stessa ora e poi basta: nessun vantaggio dopo.
+3. *Inversione* → il prezzo spinto dal flusso rientra (pressione temporanea): R sotto la (b).
+4. *Trend di fondo* → anno per anno.
+5. *È solo il mercato* → annoto.
+6. *Costi* → stop 2 ATR orari ~2,5% → costi ~0,06 R; con tenuta di 4 ore il movimento atteso è piccolo: serve un vantaggio grande.
+7. *Volatilità* → neutralizzata dalla (b).
+8. *Artefatto della colonna* → la colonna taker_buy dei file Binance è ciò che dichiara di essere (acquisti dal lato taker); nessuna verifica indipendente.
+9. *Pochi trade estremi* → senza i 3 migliori.
+10. *Robot di mercato* → negli anni la quota cambia per la struttura del mercato; la standardizzazione mobile lo assorbe in parte.
+
+**Ipotesi completa.** BCHUSDT, flusso degli ordini, candele 1h, due varianti.
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-019 | long | quota acquisti aggressivi delle ultime 4 barre, standardizzata con media e deviazione standard delle 720 barre precedenti, > +2: long all'apertura dopo; stop 2 × ATR(24) sotto il close; uscita dopo 4 barre tenute |
+| BCHUSDT-020 | short | specchio: standardizzata < −2 |
+
+---
+
+## I-12 — Compressione delle bande di Bollinger e rottura (4h)
+
+**Fonte.** J. Bollinger, *Bollinger on Bollinger Bands*, McGraw-Hill, 2001: una larghezza delle
+bande al minimo di mesi («squeeze») precede un'espansione di volatilità; la direzione si prende
+dalla rottura della banda.
+
+**Affermazione verificabile.** Se la larghezza delle bande (20 barre, 2 deviazioni) ha toccato
+nelle ultime 10 barre il minimo delle ultime 125 barre (~21 giorni), una chiusura sopra la banda
+superiore (sotto l'inferiore) è seguita da un movimento nella stessa direzione maggiore di un
+ingresso qualunque con la stessa uscita.
+
+**Sotto-domande.** Chi muove il prezzo: ordini accumulati durante la calma che si eseguono alla
+rottura; venditori di volatilità che coprono. Tempo: giorni.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → `t` < 2.
+2. *Falsa rottura* → la prima rottura dopo la calma rientra («head fake», citato dallo stesso Bollinger): R sotto la (b).
+3. *Trend di fondo* → anno per anno.
+4. *È solo il mercato* → annoto.
+5. *Volatilità* → dopo la compressione la volatilità sale per costruzione (ritorno alla media), senza direzione; la (b) usa lo stesso stop ma entra anche fuori dalla compressione: la (b) e la (a) misurano cose diverse.
+6. *Pochi trade estremi* → senza i 3 migliori.
+7. *Costi* → stop 2 ATR(4h) ~3,5% → costi ~0,04 R.
+8. *Pochi segnali* → la doppia condizione può dare pochi trade: lo dice la conta.
+9. *Uscita* → l'uscita sulla media a 20 da sola fa il risultato; la (a) lo misura.
+10. *Somiglianza con I-02* → è anche una rottura, ma condizionata alla calma: se vince solo come rottura, I-02 lo avrebbe mostrato.
+
+**Ipotesi completa.** BCHUSDT, compressione di volatilità, candele 4h, due varianti.
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-021 | long | minimo della larghezza (4 × deviazione standard / media, 20 barre) delle ultime 10 barre ≤ minimo delle ultime 125 barre, e close > media + 2 deviazioni: long all'apertura dopo; stop 2 × ATR(14) sotto il close; uscita all'apertura dopo la prima chiusura sotto la media a 20 |
+| BCHUSDT-022 | short | specchio: close < media − 2 deviazioni; uscita alla prima chiusura sopra la media |
+
+---
+
+## I-13 — Il prezzo sopra la media mobile (1d)
+
+**Fonte.** A. Detzel, H. Liu, J. Strauss, G. Zhou, Y. Zhu, «Bitcoin: Predictability and
+Profitability via Technical Analysis», working paper, gennaio 2018 (pubblicato come «Learning
+and predictability via technical analysis: Evidence from bitcoin and stocks with hard-to-value
+fundamentals», *Financial Management* 50(1), 2021): il rapporto fra prezzo e media mobile (5-100
+giorni) predice i rendimenti giornalieri di BTC; con fondamentali difficili da valutare gli
+investitori imparano dai prezzi.
+
+**Affermazione verificabile.** Dopo che il close giornaliero passa sopra la media a 20 giorni
+(sotto), i giorni fino al ritorno sotto (sopra) la media rendono più di un ingresso qualunque con
+la stessa uscita.
+
+**Sotto-domande.** Chi muove il prezzo: investitori che imparano lentamente dai prezzi. Tempo:
+settimane.
+
+**Spiegazioni concorrenti:**
+1. *Caso* → `t` < 2.
+2. *Falsi incroci* → in laterale gli incroci si ripetono e perdono i costi: R sotto la (b).
+3. *Trend di fondo* → anno per anno.
+4. *È solo il mercato* → lo studio è su BTC; per BCH è trasmissione; annoto.
+5. *Somiglianza con I-01 e I-02* → è un'altra misura di trend; se vince, va confrontata con le altre due famiglie di trend (Fase 5).
+6. *Pochi trade estremi* → le regole di trend vivono di poche corse lunghe; senza i 3 migliori.
+7. *Costi* → stop 3 ATR (~15%) → ~0,01 R.
+8. *Uscita* → l'uscita sulla media da sola fa il risultato; la (a) lo misura.
+9. *Volatilità* → neutralizzata dalla (b).
+10. *Funding* → il long paga nel 2020-21.
+
+**Ipotesi completa.** BCHUSDT, apprendimento dai prezzi, candele 1d, due varianti (la fonte usa
+long o liquidità; lo short è lo specchio e lo provo come variante separata).
+
+| Variante | Direzione | Regole |
+|---|---|---|
+| BCHUSDT-023 | long | close > media a 20 giorni e close precedente ≤ media precedente: long all'apertura dopo; stop di sicurezza 3 × ATR(14) sotto il close; uscita all'apertura dopo la prima chiusura sotto la media |
+| BCHUSDT-024 | short | specchio |

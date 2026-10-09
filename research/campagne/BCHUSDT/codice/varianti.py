@@ -204,6 +204,357 @@ class RotturaVolatilita(comune.Variante):
         return x["ora"][i] >= 23  # chiusura all'apertura del giorno dopo
 
 
+# ---------------------------------------------------------------------------
+# I-05 Attraversamento dei livelli tondi (Osler), 1h
+# ---------------------------------------------------------------------------
+def _passo_tondo(p):
+    """Il passo dei livelli tondi: 10 per prezzi fra 100 e 1000, 100 fra 1000 e 10000, ecc."""
+    return 10.0 ** (np.floor(np.log10(p)) - 1)
+
+
+class LivelliTondi(comune.Variante):
+    tf = "1h"
+    riscaldamento = 25
+
+    def __init__(self, id, direzione, tenuta=12, atr_stop=1.0):
+        self.id, self.direzione, self.tenuta, self.atr_stop = id, direzione, tenuta, atr_stop
+
+    def prepara(self, s):
+        c = s["close"]
+        cp = ind.precedente(c, 1)
+        passo = _passo_tondo(np.where(np.isfinite(cp), cp, c))
+        if self.direzione == "long":
+            livello = np.floor(c / passo) * passo          # il livello tondo piu' alto sotto il close
+            attraversa = (cp <= livello) & (c > livello)
+        else:
+            livello = np.ceil(c / passo) * passo           # il livello tondo piu' basso sopra il close
+            attraversa = (cp >= livello) & (c < livello)
+        return {"livello": livello, "attraversa": attraversa.astype(float),
+                "atr": ind.atr(s["high"], s["low"], c, 24)}
+
+    def stop_target(self, x, s, i):
+        a, lv = x["atr"][i], x["livello"][i]
+        if not _ok(a, lv):
+            return None
+        return (lv - self.atr_stop * a, None) if self.direzione == "long" else (lv + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        return bool(x["attraversa"][i] > 0)
+
+    def esci(self, x, s, i, tenute, pos):
+        return tenute >= self.tenuta
+
+
+# ---------------------------------------------------------------------------
+# I-06 Inerzia dopo le giornate di sovra-reazione (Caporale e Plastun), 1d
+# ---------------------------------------------------------------------------
+class SovraReazione(comune.Variante):
+    tf = "1d"
+
+    def __init__(self, id, direzione, finestra=30, k=1.0, atr_stop=2.0):
+        self.id, self.direzione, self.finestra, self.k, self.atr_stop = id, direzione, finestra, k, atr_stop
+        self.riscaldamento = finestra + 1
+
+    def prepara(self, s):
+        r = s["close"] / s["open"] - 1
+        ar = np.abs(r)
+        soglia = ind.precedente(ind.sma(ar, self.finestra) + self.k * ind.dev_std(ar, self.finestra), 1)
+        return {"r": r, "soglia": soglia, "atr": ind.atr(s["high"], s["low"], s["close"], 14)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        r, sg = x["r"][i], x["soglia"][i]
+        if not _ok(r, sg):
+            return False
+        return r > sg if self.direzione == "long" else r < -sg
+
+    def esci(self, x, s, i, tenute, pos):
+        return tenute >= 1
+
+
+# ---------------------------------------------------------------------------
+# I-07 Lunedi' (Caporale e Plastun), 1d
+# ---------------------------------------------------------------------------
+class Lunedi(comune.Variante):
+    tf = "1d"
+    riscaldamento = 14
+
+    def __init__(self, id, direzione="long", atr_stop=2.0):
+        self.id, self.direzione, self.atr_stop = id, direzione, atr_stop
+
+    def prepara(self, s):
+        # 1970-01-01 era giovedi': (giorni + 3) % 7 == 0 e' lunedi', == 6 e' domenica
+        giorno_sett = ((s["ts"] // GIORNO) + 3) % 7
+        return {"gs": giorno_sett.astype(float), "atr": ind.atr(s["high"], s["low"], s["close"], 14)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        return x["gs"][i] == 6  # chiusura della domenica: ingresso all'apertura del lunedi'
+
+    def esci(self, x, s, i, tenute, pos):
+        return tenute >= 1
+
+
+# ---------------------------------------------------------------------------
+# I-08 Premio del volume alto (Gervais, Kaniel, Mingelgrin), 1d
+# ---------------------------------------------------------------------------
+class VolumeAlto(comune.Variante):
+    tf = "1d"
+
+    def __init__(self, id, direzione="long", finestra=49, quantile=0.9, tenuta=10, atr_stop=3.0):
+        self.id, self.direzione, self.finestra, self.q, self.tenuta, self.atr_stop = (
+            id, direzione, finestra, quantile, tenuta, atr_stop)
+        self.riscaldamento = finestra + 1
+
+    def prepara(self, s):
+        import pandas as pd
+        v = s["volume_usdt"]
+        soglia = pd.Series(v).rolling(self.finestra, min_periods=self.finestra).quantile(self.q).to_numpy()
+        return {"v": v, "soglia": ind.precedente(soglia, 1), "atr": ind.atr(s["high"], s["low"], s["close"], 14)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        v, sg = x["v"][i], x["soglia"][i]
+        return _ok(v, sg) and v > sg
+
+    def esci(self, x, s, i, tenute, pos):
+        return tenute >= self.tenuta
+
+
+# ---------------------------------------------------------------------------
+# I-09 Inversione dei movimenti grandi con volume alto (Campbell, Grossman, Wang), 4h
+# ---------------------------------------------------------------------------
+class InversioneVolume(comune.Variante):
+    tf = "4h"
+
+    def __init__(self, id, direzione, finestra=100, z=2.0, vol_rapporto=2.0, tenuta=6, atr_stop=2.5):
+        self.id, self.direzione, self.finestra, self.z, self.vr, self.tenuta, self.atr_stop = (
+            id, direzione, finestra, z, vol_rapporto, tenuta, atr_stop)
+        self.riscaldamento = finestra + 1
+
+    def prepara(self, s):
+        c = s["close"]
+        r = c / ind.precedente(c, 1) - 1
+        sd = ind.precedente(ind.dev_std(r, self.finestra), 1)
+        vm = ind.precedente(ind.sma(s["volume_usdt"], self.finestra), 1)
+        return {"z": r / sd, "vr": s["volume_usdt"] / vm, "atr": ind.atr(s["high"], s["low"], c, 14)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        z, vr = x["z"][i], x["vr"][i]
+        if not _ok(z, vr) or vr <= self.vr:
+            return False
+        return z < -self.z if self.direzione == "long" else z > self.z
+
+    def esci(self, x, s, i, tenute, pos):
+        return tenute >= self.tenuta
+
+
+# ---------------------------------------------------------------------------
+# I-10 Funding estremo: la parte affollata paga (He, Manela, Ross, von Wachter), 8h
+# ---------------------------------------------------------------------------
+class FundingEstremo(comune.Variante):
+    tf = "8h"
+
+    def __init__(self, id, direzione, finestra=90, quantile=0.9, tenuta=3, atr_stop=2.0):
+        self.id, self.direzione, self.finestra, self.q, self.tenuta, self.atr_stop = (
+            id, direzione, finestra, quantile, tenuta, atr_stop)
+        self.riscaldamento = finestra + 1
+
+    def prepara(self, s):
+        import bisect
+        import pandas as pd
+        f_ts = [t for t, _ in s["funding"]]
+        f_r = [r for _, r in s["funding"]]
+        chiusure = s["ts"] + s["ms_barra"] - 1
+        f = np.full(len(chiusure), np.nan)
+        for k, t in enumerate(chiusure):
+            j = bisect.bisect_right(f_ts, int(t)) - 1
+            if j >= 0 and int(t) - f_ts[j] < s["ms_barra"]:
+                f[k] = f_r[j]
+        serie_f = pd.Series(f)
+        alto = serie_f.rolling(self.finestra, min_periods=self.finestra).quantile(self.q).to_numpy()
+        basso = serie_f.rolling(self.finestra, min_periods=self.finestra).quantile(1 - self.q).to_numpy()
+        return {"f": f, "alto": ind.precedente(alto, 1), "basso": ind.precedente(basso, 1),
+                "atr": ind.atr(s["high"], s["low"], s["close"], 14)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        f, hi, lo = x["f"][i], x["alto"][i], x["basso"][i]
+        if not _ok(f, hi, lo):
+            return False
+        # short quando i long sono affollati (funding nel decile alto), long nello specchio
+        return f > hi if self.direzione == "short" else f < lo
+
+    def esci(self, x, s, i, tenute, pos):
+        return tenute >= self.tenuta
+
+
+# ---------------------------------------------------------------------------
+# I-11 Flusso degli ordini aggressivi (Evans e Lyons), 1h
+# ---------------------------------------------------------------------------
+_TAKER = {}
+
+
+def quota_acquisti_aggressivi(tf):
+    """{ts: (taker_buy_quote_volume, quote_volume)} dai file klines di BCHUSDT (colonne 10 e 7)."""
+    if tf in _TAKER:
+        return _TAKER[tf]
+    from research.src import dati
+    out = {}
+    for p in sorted((comune.CARTELLA_DATI / "klines" / tf).glob("*.zip")):
+        for riga in dati.righe_csv_da_zip(p):
+            ts = dati.normalizza_ts(riga[0])
+            if ts not in out and len(riga) > 10 and riga[10].strip() and riga[7].strip():
+                out[ts] = (float(riga[10]), float(riga[7]))
+    _TAKER[tf] = out
+    return out
+
+
+class FlussoAggressivo(comune.Variante):
+    tf = "1h"
+
+    def __init__(self, id, direzione, barre=4, finestra=720, z=2.0, tenuta=4, atr_stop=2.0):
+        self.id, self.direzione, self.barre, self.finestra, self.z, self.tenuta, self.atr_stop = (
+            id, direzione, barre, finestra, z, tenuta, atr_stop)
+        self.riscaldamento = finestra + barre + 1
+
+    def prepara(self, s):
+        tk = quota_acquisti_aggressivi(self.tf)
+        compra = np.array([tk.get(int(t), (np.nan, np.nan))[0] for t in s["ts"]])
+        tutto = np.array([tk.get(int(t), (np.nan, np.nan))[1] for t in s["ts"]])
+        quota = ind.somma(compra, self.barre) / ind.somma(tutto, self.barre)
+        m = ind.precedente(ind.sma(quota, self.finestra), 1)
+        sd = ind.precedente(ind.dev_std(quota, self.finestra), 1)
+        return {"z": (quota - m) / sd, "atr": ind.atr(s["high"], s["low"], s["close"], 24)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        z = x["z"][i]
+        if not _ok(z):
+            return False
+        return z > self.z if self.direzione == "long" else z < -self.z
+
+    def esci(self, x, s, i, tenute, pos):
+        return tenute >= self.tenuta
+
+
+# ---------------------------------------------------------------------------
+# I-12 Compressione delle bande di Bollinger e rottura (Bollinger), 4h
+# ---------------------------------------------------------------------------
+class CompressioneBande(comune.Variante):
+    tf = "4h"
+
+    def __init__(self, id, direzione, n=20, k=2.0, n_minimo=125, recente=10, atr_stop=2.0):
+        self.id, self.direzione, self.n, self.k, self.n_min, self.recente, self.atr_stop = (
+            id, direzione, n, k, n_minimo, recente, atr_stop)
+        self.riscaldamento = n + n_minimo
+
+    def prepara(self, s):
+        c = s["close"]
+        m = ind.sma(c, self.n)
+        sd = ind.dev_std(c, self.n)
+        larghezza = 2 * self.k * sd / m
+        compresso = ind.minimo(larghezza, self.recente) <= ind.minimo(larghezza, self.n_min)
+        return {"media": m, "su": m + self.k * sd, "giu": m - self.k * sd, "compresso": compresso.astype(float),
+                "atr": ind.atr(s["high"], s["low"], c, 14)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        if not x["compresso"][i] > 0:
+            return False
+        c = s["close"][i]
+        if self.direzione == "long":
+            return _ok(x["su"][i]) and c > x["su"][i]
+        return _ok(x["giu"][i]) and c < x["giu"][i]
+
+    def esci(self, x, s, i, tenute, pos):
+        m, c = x["media"][i], s["close"][i]
+        if not _ok(m):
+            return False
+        return c < m if self.direzione == "long" else c > m
+
+
+# ---------------------------------------------------------------------------
+# I-13 Prezzo sopra la media mobile (Detzel, Liu, Strauss, Zhou, Zhu), 1d
+# ---------------------------------------------------------------------------
+class SopraMedia(comune.Variante):
+    tf = "1d"
+
+    def __init__(self, id, direzione, n=20, atr_stop=3.0):
+        self.id, self.direzione, self.n, self.atr_stop = id, direzione, n, atr_stop
+        self.riscaldamento = max(n, 14) + 1
+
+    def prepara(self, s):
+        c = s["close"]
+        m = ind.sma(c, self.n)
+        return {"m": m, "mp": ind.precedente(m, 1), "cp": ind.precedente(c, 1),
+                "atr": ind.atr(s["high"], s["low"], c, 14)}
+
+    def stop_target(self, x, s, i):
+        a = x["atr"][i]
+        if not _ok(a):
+            return None
+        c = s["close"][i]
+        return (c - self.atr_stop * a, None) if self.direzione == "long" else (c + self.atr_stop * a, None)
+
+    def condizione(self, x, s, i):
+        c, m, cp, mp = s["close"][i], x["m"][i], x["cp"][i], x["mp"][i]
+        if not _ok(m, cp, mp):
+            return False
+        if self.direzione == "long":
+            return c > m and cp <= mp
+        return c < m and cp >= mp
+
+    def esci(self, x, s, i, tenute, pos):
+        m, c = x["m"][i], s["close"][i]
+        if not _ok(m):
+            return False
+        return c < m if self.direzione == "long" else c > m
+
+
 VARIANTI = {
     "BCHUSDT-001": lambda: MomentoSerie("BCHUSDT-001", "long"),
     "BCHUSDT-002": lambda: MomentoSerie("BCHUSDT-002", "short"),
@@ -213,4 +564,20 @@ VARIANTI = {
     "BCHUSDT-006": lambda: RsiBreve("BCHUSDT-006", "short"),
     "BCHUSDT-007": lambda: RotturaVolatilita("BCHUSDT-007", "long"),
     "BCHUSDT-008": lambda: RotturaVolatilita("BCHUSDT-008", "short"),
+    "BCHUSDT-009": lambda: LivelliTondi("BCHUSDT-009", "long"),
+    "BCHUSDT-010": lambda: LivelliTondi("BCHUSDT-010", "short"),
+    "BCHUSDT-011": lambda: SovraReazione("BCHUSDT-011", "long"),
+    "BCHUSDT-012": lambda: SovraReazione("BCHUSDT-012", "short"),
+    "BCHUSDT-013": lambda: Lunedi("BCHUSDT-013", "long"),
+    "BCHUSDT-014": lambda: VolumeAlto("BCHUSDT-014", "long"),
+    "BCHUSDT-015": lambda: InversioneVolume("BCHUSDT-015", "long"),
+    "BCHUSDT-016": lambda: InversioneVolume("BCHUSDT-016", "short"),
+    "BCHUSDT-017": lambda: FundingEstremo("BCHUSDT-017", "short"),
+    "BCHUSDT-018": lambda: FundingEstremo("BCHUSDT-018", "long"),
+    "BCHUSDT-019": lambda: FlussoAggressivo("BCHUSDT-019", "long"),
+    "BCHUSDT-020": lambda: FlussoAggressivo("BCHUSDT-020", "short"),
+    "BCHUSDT-021": lambda: CompressioneBande("BCHUSDT-021", "long"),
+    "BCHUSDT-022": lambda: CompressioneBande("BCHUSDT-022", "short"),
+    "BCHUSDT-023": lambda: SopraMedia("BCHUSDT-023", "long"),
+    "BCHUSDT-024": lambda: SopraMedia("BCHUSDT-024", "short"),
 }
