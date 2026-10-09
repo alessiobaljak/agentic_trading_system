@@ -3190,3 +3190,19 @@ oggi senza validate (ops 0553). **Protocollo:** le tre campagne sono ferme alla 
 3, budget 30, giornata di preparazione). **Proposta del giorno:** nessuna voce nuova (il protocollo è allo STOP).
 Calendario: annullata la lettura del 10 ott sul gate rigiocato nel passato (fermato il 4 ott).
 
+
+### 9 ottobre: la prova con strategie finte e la bozza della versione 4.5
+
+Il proprietario: «ok, procedi con la prova e scrivi la 4.5». **Prova a placebo** (sul branch di coordinamento,
+`research/taratura/placebo/`): sui prezzi veri delle 80 monete idonee che non sono di campagna, solo fino al
+2023, regole d'ingresso da manuale spostate nel tempo (quindi senza vantaggio), giudicate con gli strumenti delle
+campagne. Domanda: l'esame promuove strategie senza vantaggio più spesso di quanto dichiara (0-2% «nette», 6-11%
+p sotto 0,10)? Soglie e conseguenze scritte prima (M1 3%, M2 13%; se superate STOP, correzione per tutte e 20 e si
+rifanno anche BTC, ETH e SOL). Due revisori indipendenti hanno trovato prima del lancio un errore che avrebbe
+falsato la prova (lo sfasamento fra un quarto e tre quarti del periodo dava alle regole contrarie un vantaggio e
+alle rotture uno svantaggio, con lo stesso segno su tutte le monete) e cinque punti importanti: corretti. Regole
+committate (8b6abf6b) e prova lanciata: 160 coppie moneta-timeframe, circa 2 ore e un quarto. **Bozza 4.5**
+committata sul principale (895467e1), con l'intestazione che la rende inutilizzabile prima dell'approvazione;
+caricatore unico di last e mark (a5dd6863, 23 test). Cosa abbiamo capito: costruire una placebo «senza vantaggio»
+è meno banale di quanto sembra; lo sfasamento deve coprire quasi tutto il periodo, altrimenti eredita il
+tempismo della regola (su serie sintetiche: p sotto 0,10 al 13,1% contro il 6,2% per l'RSI long).
