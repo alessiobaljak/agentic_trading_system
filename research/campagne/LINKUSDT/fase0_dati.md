@@ -24,7 +24,10 @@ mese (regola della Fase 0); la differenza si dichiara qui.
 * Riferimento di mercato: klines last di BTCUSDT sugli stessi nove timeframe, 2020-01 → 2023-12.
 * Impronte SHA-256 di ogni file: `impronte.json` in questa cartella (912 file LINKUSDT).
   Impronta di `impronte.json`: `407cef8003f4cae8f69120b094aacd36e4a1bb164d9ca82819e36366257760b9`.
-  Le impronte dei file di BTCUSDT sono in `impronte_btcusdt.json` (aggiunte a scarico finito).
+  Le impronte dei 432 file di BTCUSDT sono in `impronte_btcusdt.json` (impronta
+  `7dbb21b9675aba9cabc252c2b0e556840420c482ff907f453e301d3011840049`). Lo scarico è finito senza errori
+  d'integrità; l'elenco dei CHECKSUM remoti mancanti di quello scarico non è stato letto (l'uscita del
+  comando era in una cartella vietata dal guardiano, voce N002 del log).
 * Serie dello stop: last (parametri.yaml); il motore riceve `candele_stop=None`.
 
 ## Allineamento last e mark (`carica_serie_allineate`, file nativi di ogni timeframe)
