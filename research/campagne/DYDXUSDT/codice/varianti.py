@@ -421,7 +421,52 @@ def _i10_volume_basso_trend(direzione, uscita=6, finestra=20, media=50):
     return crea
 
 
+def segnale_pct(ctx: Contesto, direzione: str, pct: float, riscaldamento: int):
+    """Stop a una percentuale fissa dal close della barra del segnale; nessun target."""
+    def s(i: int):
+        if i < riscaldamento:
+            return None
+        stop = ctx.c[i] * (1 - pct) if direzione == "long" else ctx.c[i] * (1 + pct)
+        return Segnale(direzione, float(stop))
+    return s
+
+
+def _con_stop_pct(crea_base, direzione, pct, riscaldamento=14):
+    """Ritocco dello stop: stessa condizione e uscita, stop a pct dal close."""
+    def crea(ctx: Contesto) -> Spec:
+        base = crea_base(ctx)
+        return Spec(segnale_pct(ctx, direzione, pct, riscaldamento), base.condizione, base.esci)
+    return crea
+
+
+def _con_uscita(crea_base, barre):
+    """Ritocco della tenuta: stessa condizione e stesso stop, uscita dopo ``barre`` barre."""
+    def crea(ctx: Contesto) -> Spec:
+        base = crea_base(ctx)
+        return Spec(base.segnale, base.condizione, uscita_tempo(ctx, barre))
+    return crea
+
+
+def _i11_soglia(direzione, soglia):
+    """Ritocco di I-11: soglia diversa sulla quota degli acquisti dei taker."""
+    def crea(ctx: Contesto) -> Spec:
+        base = _i11(direzione)(ctx)
+        q = quota_acquisti_taker(ctx)
+
+        def cond(i):
+            if not np.isfinite(q[i]):
+                return False
+            return q[i] < soglia if direzione == "short" else q[i] > soglia
+        return Spec(base.segnale, cond, base.esci)
+    return crea
+
+
 CREA: Dict[str, Callable] = {
+    "I11_short_soglia049": _i11_soglia("short", 0.49),
+    "I11_short_soglia048": _i11_soglia("short", 0.48),
+    "I11_short_soglia049_uscita2": _con_uscita(_i11_soglia("short", 0.49), 2),
+    "I11_short_uscita2": _con_uscita(_i11("short"), 2),
+    "I11_short_stop6": _con_stop_pct(_i11("short"), "short", 0.06),
     "I10_short_volume_basso_uscita12": _i10_volume_basso("short", uscita=12),
     "I10_short_volume_basso_trend": _i10_volume_basso_trend("short"),
     "I10_short_volume_basso": _i10_volume_basso("short"),
