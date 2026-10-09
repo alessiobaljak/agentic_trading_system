@@ -89,8 +89,8 @@ soglia, e a costi doppi non è più netto.
 
 Dal log (orologio della macchina, `date -u`):
 
-* Durata dalla prima all'ultima voce del log: 2026-10-09 12:23:09 → la voce di consegna
-  (vedi l'ultima voce del log); nessuna pausa. Fino alla Fase 5: 41 minuti. Prima della prima
+* Durata dalla prima all'ultima voce del log: 2026-10-09 12:23:09 → 13:05:01 UTC, 42 minuti;
+  nessuna pausa, quindi 42 minuti anche senza pause. Prima della prima
   voce del log ci sono circa 3 minuti di apertura (branch, marcatore, test del guardiano).
 * Minuti per idea (dalla registrazione della prima variante all'ultimo risultato): I-01 0,2;
   I-02 1,0; I-03 4,7; I-04 1,4; I-05 1,4; I-06 1,5; I-07 1,5; I-08 1,6; I-09 1,6; I-10 15,5
