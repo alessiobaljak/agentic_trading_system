@@ -1,78 +1,79 @@
 # Stato sistema (snapshot)
-_Generato: 2026-10-09 00:23 UTC_
+_Generato: 2026-10-09 09:05 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
-- regime: high_uncertainty
+- regime: sideways
 - DRY_RUN: True
-- equity: **$891.10**
-- ultimo heartbeat: 2026-10-09 00:23 UTC
+- equity: **$891.23**
+- ultimo heartbeat: 2026-10-09 09:04 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-10-09 00:17 UTC)
+- esito: **⚪ FLAT** (2026-10-09 09:02 UTC)
 - motivo: nessun segnale valido sopra soglia
-- asset valutati: 78 · segnali: 0
+- asset valutati: 77 · segnali: 0
 
 ## Posizioni aperte
-- 1000PEPEUSDT: long qty=23232.83864416426 @ 0.0038355 uPnL=-0.15350914996359538 · rischio 0.13% · leva 1.0x
-- CATIUSDT: long qty=1376.2010259094363 @ 0.06493 uPnL=-0.03362392590614212 · rischio 0.13% · leva 1.0x
-- FLOCKUSDT: short qty=932.3605413548871 @ 0.05519 uPnL=0.10815009739898783 · rischio 0.16% · leva 2.0x
-- OPENUSDT: short qty=345.22453484123287 @ 0.1055 uPnL=0.5293683865784706 · rischio 0.13% · leva 1.0x
-- ORCAUSDT: long qty=6.138150985724379 @ 2.304 uPnL=0.23439342574201832 · rischio 0.08% · leva 2.0x
-- PUMPUSDT: long qty=5935.407081674678 @ 0.005571 uPnL=-0.22908254525970698 · rischio 0.14% · leva 1.0x
-- SOPHUSDT: long qty=3488.379283296348 @ 0.003417 uPnL=0.5210991914942595 · rischio 0.06% · leva 1.0x
-- SUPERUSDT: short qty=160.6202750568671 @ 0.22567 uPnL=0.35400527632757867 · rischio 0.13% · leva 1.0x
-- VETUSDT: long qty=3480.9731003354473 @ 0.007367 uPnL=0.5656681939989534 · rischio 0.13% · leva 1.0x
-- ZORAUSDT: short qty=5199.946952160894 @ 0.006897 uPnL=-0.27978277942176555 · rischio 0.13% · leva 1.0x
-- **rischio aperto totale: 1.21%** dell'equity su 10 posizioni
+- 0GUSDT: long qty=222.53545070918454 @ 0.2803 uPnL=1.521154238611429 · rischio 0.20% · leva 1.0x
+- CATIUSDT: long qty=963.3407181366055 @ 0.06493 uPnL=1.8612139109243353 · rischio 0.13% · leva 1.0x
+- FLOCKUSDT: short qty=932.3605413548871 @ 0.05519 uPnL=-0.9269237698550994 · rischio 0.16% · leva 2.0x
+- HEMIUSDT: long qty=15250.366163370016 @ 0.005844 uPnL=-0.155386013161563 · rischio 0.11% · leva 1.0x
+- PUMPUSDT: long qty=5935.407081674678 @ 0.005571 uPnL=0.6894064606351135 · rischio 0.14% · leva 1.0x
+- SOPHUSDT: long qty=3488.379283296348 @ 0.003417 uPnL=0.7506848267718732 · rischio 0.06% · leva 1.0x
+- VETUSDT: long qty=1989.1274859059697 @ 0.007367 uPnL=0.7912509222658304 · rischio 0.13% · leva 1.0x
+- ZORAUSDT: short qty=5199.946952160894 @ 0.006897 uPnL=-0.977331786439595 · rischio 0.13% · leva 1.0x
+- **rischio aperto totale: 1.06%** dell'equity su 8 posizioni
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
-- copertura universo: **78/200 crypto (39%)** · obiettivo ≥ 35%
-- coppie validate (>= 3 pass OOS): **238**
-- universo scansionato: 0GUSDT, 1000BONKUSDT, 1000FLOKIUSDT, 1000PEPEUSDT, 1000SHIBUSDT, 2ZUSDT, 4USDT, AAVEUSDT, ACEUSDT, ADAUSDT, AEROUSDT, AEVOUSDT, AIAUSDT, AINUSDT, AIOTUSDT, AKEUSDT, AKTUSDT, ALGOUSDT, ALICEUSDT, APEUSDT, API3USDT, APRUSDT, APTUSDT, ARBUSDT, ARKUSDT, ARUSDT, ASTERUSDT, ATOMUSDT, AVAXUSDT, AVNTUSDT, AXSUSDT, BANKUSDT, BASEDUSDT, BCHUSDT, BEAMXUSDT, BEATUSDT, BILLUSDT, BIOUSDT, BNBUSDT, BOMEUSDT, BRUSDT, BTCUSDT, BTRUSDT, BTWUSDT, CAKEUSDT, CAPUSDT, CCUSDT, CHIPUSDT, CHZUSDT, CLOUSDT, COMPUSDT, COTIUSDT, CRVUSDT, CTSIUSDT, CTUSDT, CVXUSDT, CYBERUSDT, DASHUSDT, DEXEUSDT, DOGEUSDT, DOSUSDT, DOTUSDT, DYDXUSDT, EDUUSDT, EGLDUSDT, EIGENUSDT, ENAUSDT, ENJUSDT, ENSUSDT, ERAUSDT, ESPUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FIDAUSDT, FILUSDT, FLUIDUSDT, FORMUSDT, GALAUSDT, GIGGLEUSDT, GRAMUSDT, GRASSUSDT, GRIFFAINUSDT, GRTUSDT, GTCUSDT, HBARUSDT, HEMIUSDT, HYPEUSDT, ICPUSDT, IMXUSDT, INJUSDT, IOTAUSDT, JCTUSDT, JSTUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, LABUSDT, LDOUSDT, LINKUSDT, LITUSDT, LPTUSDT, LSKUSDT, LTCUSDT, LYNUSDT, MAGMAUSDT, MANAUSDT, MARSCOINUSDT, METUSDT, MINAUSDT, MONUSDT, MORPHOUSDT, MOVRUSDT, MUBARAKUSDT, NEARUSDT, NEIROUSDT, NIGHTUSDT, NILUSDT, NMRUSDT, NOMUSDT, OGNUSDT, ONDOUSDT, ONEUSDT, ONTUSDT, ONUSDT, OPENUSDT, OPNUSDT, OPUSDT, ORCAUSDT, ORDIUSDT, PARTIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PHAUSDT, PLUMEUSDT, POLUSDT, PONSUSDT, PROMUSDT, PUMPUSDT, PYTHUSDT, QNTUSDT, QUSDT, RAYSOLUSDT, RENDERUSDT, RESOLVUSDT, REUSDT, RIVERUSDT, RLCUSDT, RUNEUSDT, RVNUSDT, SAGAUSDT, SANDUSDT, SCRUSDT, SEIUSDT, SENTUSDT, SKLUSDT, SKYUSDT, SOLUSDT, SOONUSDT, SPXUSDT, STRKUSDT, STXUSDT, SUIUSDT, SYNUSDT, TAOUSDT, TAUSDT, TIAUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, UAIUSDT, UBUSDT, UNIUSDT, USELESSUSDT, USUSDT, VETUSDT, VIRTUALUSDT, VTHOUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, WUSDT, XAUTUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, ZAMAUSDT, ZECUSDT, ZENUSDT, ZKUSDT, ZROUSDT, 币安人生USDT, 牛来USDT, 龙虾USDT
-- aggiornato: 2026-10-08 21:18 UTC
+- copertura universo: **77/200 crypto (38%)** · obiettivo ≥ 35%
+- coppie validate (>= 3 pass OOS): **236**
+- universo scansionato: 0GUSDT, 1000BONKUSDT, 1000FLOKIUSDT, 1000PEPEUSDT, 1000SHIBUSDT, 2ZUSDT, 4USDT, AAVEUSDT, ACEUSDT, ADAUSDT, AEROUSDT, AEVOUSDT, AIAUSDT, AINUSDT, AIOTUSDT, AKEUSDT, AKTUSDT, ALGOUSDT, ALICEUSDT, ALLOUSDT, APEUSDT, API3USDT, APRUSDT, APTUSDT, ARBUSDT, ARKUSDT, ARUSDT, ASTERUSDT, ATOMUSDT, AVAXUSDT, AVNTUSDT, AXSUSDT, BANKUSDT, BATUSDT, BCHUSDT, BEAMXUSDT, BEATUSDT, BILLUSDT, BIOUSDT, BNBUSDT, BOMEUSDT, BRUSDT, BTCUSDT, BTRUSDT, BTWUSDT, CAKEUSDT, CAPUSDT, CCUSDT, CHIPUSDT, CHZUSDT, CLOUSDT, COMPUSDT, COTIUSDT, CRVUSDT, CTSIUSDT, CTUSDT, CYBERUSDT, DASHUSDT, DEXEUSDT, DODOXUSDT, DOGEUSDT, DOSUSDT, DOTUSDT, DYDXUSDT, EDUUSDT, EGLDUSDT, EIGENUSDT, ENAUSDT, ENJUSDT, ENSOUSDT, ENSUSDT, ERAUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, EULUSDT, FARTCOINUSDT, FETUSDT, FIDAUSDT, FILUSDT, FORMUSDT, GALAUSDT, GIGGLEUSDT, GRAMUSDT, GRASSUSDT, GRIFFAINUSDT, GRTUSDT, GTCUSDT, HBARUSDT, HEMIUSDT, HYPEUSDT, ICPUSDT, IMXUSDT, INJUSDT, IOTAUSDT, JCTUSDT, JSTUSDT, JTOUSDT, JUPUSDT, KAITOUSDT, LABUSDT, LDOUSDT, LINKUSDT, LITUSDT, LPTUSDT, LSKUSDT, LTCUSDT, LYNUSDT, MAGMAUSDT, MANAUSDT, MARSCOINUSDT, METUSDT, MINAUSDT, MONUSDT, MORPHOUSDT, MOVRUSDT, MUBARAKUSDT, NEARUSDT, NEIROUSDT, NIGHTUSDT, NILUSDT, NMRUSDT, NOMUSDT, OGNUSDT, ONDOUSDT, ONEUSDT, ONTUSDT, ONUSDT, OPENUSDT, OPNUSDT, OPUSDT, ORCAUSDT, ORDIUSDT, PARTIUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PEOPLEUSDT, PHAUSDT, PLUMEUSDT, POLUSDT, PONSUSDT, PROMUSDT, PUMPUSDT, PYTHUSDT, QNTUSDT, QUSDT, RAYSOLUSDT, RENDERUSDT, RESOLVUSDT, REUSDT, RIVERUSDT, RLCUSDT, RUNEUSDT, RVNUSDT, SAGAUSDT, SANDUSDT, SCRUSDT, SEIUSDT, SENTUSDT, SKLUSDT, SKYUSDT, SOLUSDT, SOONUSDT, SPXUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUSDT, SYNUSDT, SYRUPUSDT, TAOUSDT, TIAUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, UAIUSDT, UNIUSDT, USELESSUSDT, USUSDT, VETUSDT, VIRTUALUSDT, VVVUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, WUSDT, XAUTUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, ZAMAUSDT, ZECUSDT, ZENUSDT, ZKUSDT, ZROUSDT, 币安人生USDT, 牛来USDT, 龙虾USDT
+- aggiornato: 2026-10-09 04:48 UTC
 
 ### Salute del registro
 
-- composizione: **1 base** · **2162 generate** (di cui 1826 con almeno una conferma)
-- occupazione: 2163/3000 — ok
+- composizione: **1 base** · **2138 generate** (di cui 1802 con almeno una conferma)
+- occupazione: 2139/3000 — ok
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
 |---|---|---|---|---|---|
 | RUNEUSDT | gen_434083c5 | 3 | 1.709 | 148% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| TUTUSDT | gen_4465723e | 4 | 1.53 | 125% | scale_r_mults=[1.5, 3.0, 5.0] |
 | MUBARAKUSDT | gen_1f7ead60 | 4 | 2.776 | 114% | scale_r_mults=[2.0, 4.0, 6.0] |
 | STXUSDT | gen_00e50229 | 3 | 1.339 | 111% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| UBUSDT | gen_d926b0fd | 3 | 1.779 | 107% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | PTBUSDT | gen_684d7623 | 3 | 1.871 | 107% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| PARTIUSDT | gen_871647b8 | 4 | 2.226 | 106% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | BANKUSDT | gen_2010adf6 | 3 | 1.596 | 104% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| UBUSDT | gen_d926b0fd | 3 | 1.789 | 103% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| PARTIUSDT | gen_871647b8 | 4 | 2.117 | 102% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| SPXUSDT | gen_725cb5f4 | 4 | 1.708 | 92% | scale_r_mults=[0.75, 1.5, 3.0] |
+| UBUSDT | gen_92b77c39 | 3 | 1.527 | 97% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| XPINUSDT | gen_f311acf9 | 3 | 3.094 | 96% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | SYRUPUSDT | gen_4c6df481 | 4 | 1.544 | 90% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
-| DEXEUSDT | gen_b31d8b93 | 4 | 1.881 | 87% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
+| XPINUSDT | gen_2e0818c8 | 3 | 4.045 | 87% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | BRUSDT | gen_95fb50ce | 3 | 1.727 | 87% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | STXUSDT | gen_14e1775b | 4 | 1.74 | 87% | scale_r_mults=[2.0, 4.0, 6.0] |
 | STXUSDT | gen_68ebd3b9 | 4 | 1.748 | 86% | scale_r_mults=[2.0, 4.0, 6.0] |
-| XPINUSDT | gen_2e0818c8 | 3 | 4.01 | 85% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| IDUSDT | gen_6bc43e03 | 3 | 1.537 | 84% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| IDUSDT | gen_c5430258 | 3 | 1.537 | 84% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| IDUSDT | gen_dd9238bf | 3 | 1.537 | 84% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | ORCAUSDT | gen_9a383fff | 5 | 1.978 | 82% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True |
-| DOTUSDT | gen_919c110c | 4 | 1.462 | 82% | scale_r_mults=[2.0, 4.0, 6.0] |
-| SEIUSDT | gen_4f890271 | 4 | 1.851 | 82% | scale_r_mults=[2.0, 4.0, 6.0] |
 | TAUSDT | gen_01fbe76f | 3 | 1.702 | 82% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | ORCAUSDT | gen_e6ddc613 | 5 | 1.94 | 81% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True |
+| UBUSDT | gen_fb3229db | 3 | 1.953 | 79% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| QUSDT | gen_3ee1484b | 4 | 2.814 | 79% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
+| QUSDT | gen_e75ddbfd | 4 | 2.814 | 79% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
+| IDUSDT | gen_6bc43e03 | 4 | 1.502 | 79% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| IDUSDT | gen_c5430258 | 4 | 1.502 | 79% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| IDUSDT | gen_dd9238bf | 4 | 1.502 | 79% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| UBUSDT | gen_f3e1ade7 | 3 | 2.728 | 77% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | TAUSDT | gen_543186c5 | 4 | 2.012 | 76% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | XPINUSDT | gen_c60cc1b9 | 4 | 3.25 | 74% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | BULLAUSDT | gen_0eb59b31 | 3 | 2.568 | 72% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| UBUSDT | gen_1e8c6a66 | 3 | 1.816 | 72% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| UBUSDT | gen_902fb1fd | 3 | 1.816 | 72% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | TAUSDT | gen_194e2514 | 3 | 2.013 | 71% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | TAUSDT | gen_1bb04e1a | 3 | 2.013 | 71% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| QUSDT | gen_3ee1484b | 4 | 2.537 | 71% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
-| QUSDT | gen_e75ddbfd | 4 | 2.537 | 71% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
 | QUSDT | gen_da608d9f | 4 | 2.444 | 71% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
+| SCRUSDT | gen_116faa2d | 3 | 1.876 | 71% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| PARTIUSDT | gen_64263ae7 | 3 | 1.953 | 70% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | TAUSDT | gen_fa5179ea | 3 | 1.964 | 70% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | QUSDT | gen_85fadf54 | 4 | 1.86 | 70% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
 | MUBARAKUSDT | gen_e933160c | 4 | 1.889 | 69% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
@@ -80,94 +81,100 @@ _Generato: 2026-10-09 00:23 UTC_
 | TAUSDT | gen_b5d63a02 | 3 | 2.089 | 69% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | CROSSUSDT | gen_4e6e1ae0 | 3 | 2.855 | 68% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | ZECUSDT | gen_e6ddc613 | 3 | 1.465 | 68% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| UBUSDT | gen_1e8c6a66 | 3 | 1.757 | 66% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| UBUSDT | gen_902fb1fd | 3 | 1.757 | 66% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | GPSUSDT | gen_871647b8 | 5 | 1.517 | 64% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| SCRUSDT | gen_bd8f158b | 4 | 2.035 | 63% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | PUMPUSDT | gen_1000366e | 3 | 1.936 | 63% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| SCRUSDT | gen_0e030446 | 3 | 1.975 | 61% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| BULLAUSDT | gen_cec62f22 | 3 | 4.06 | 61% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| UBUSDT | gen_655a47f5 | 3 | 1.918 | 61% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| AVAAIUSDT | gen_c8529192 | 3 | 2.456 | 61% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| BULLAUSDT | gen_cec62f22 | 3 | 4.061 | 61% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| JUPUSDT | gen_bb762669 | 5 | 1.614 | 60% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | MYXUSDT | gen_a5b0e4de | 3 | 3.066 | 60% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| SCRUSDT | gen_bd8f158b | 4 | 1.928 | 60% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | UBUSDT | gen_15837112 | 4 | 1.689 | 60% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| XPINUSDT | gen_871647b8 | 3 | 2.6 | 59% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | PUMPUSDT | gen_ab1d9bb7 | 3 | 1.795 | 59% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| JUPUSDT | gen_bb762669 | 4 | 1.599 | 59% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| XPINUSDT | gen_9a383fff | 3 | 3.087 | 59% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| XPINUSDT | gen_871647b8 | 3 | 2.571 | 58% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| KERNELUSDT | gen_96ed157e | 3 | 3.306 | 59% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| GRASSUSDT | gen_f4ac85e0 | 3 | 1.568 | 58% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| XPINUSDT | gen_9a383fff | 3 | 3.066 | 58% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| BMTUSDT | gen_be64073c | 3 | 2.843 | 58% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | NEIROUSDT | gen_413f1bd7 | 3 | 2.132 | 58% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
 | SKYAIUSDT | gen_6191df86 | 4 | 2.866 | 57% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | QUSDT | gen_bf2be656 | 4 | 3.527 | 57% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
-| KERNELUSDT | gen_96ed157e | 3 | 3.197 | 56% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| XPINUSDT | gen_902fb1fd | 3 | 2.439 | 55% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| HUMAUSDT | gen_da39a23a | 4 | 2.258 | 54% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.75 |
-| HUMAUSDT | gen_ea57f794 | 3 | 2.041 | 53% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| SCRUSDT | gen_0e030446 | 3 | 1.851 | 57% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| HUMAUSDT | gen_ea57f794 | 3 | 2.088 | 56% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| XPINUSDT | gen_902fb1fd | 3 | 2.412 | 54% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| HUMAUSDT | gen_da39a23a | 5 | 2.258 | 54% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.75 |
+| AVAAIUSDT | gen_08c22b92 | 3 | 2.086 | 53% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | UBUSDT | gen_0ec2c344 | 4 | 1.751 | 52% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | UBUSDT | gen_4348f9d4 | 4 | 1.751 | 52% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| QUSDT | gen_a3088356 | 3 | 4.134 | 52% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| UBUSDT | gen_ab1d9bb7 | 3 | 1.751 | 52% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | HYPEUSDT | gen_f19b67e8 | 3 | 1.672 | 52% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | MUBARAKUSDT | gen_f86f7370 | 3 | 2.937 | 52% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| ARKMUSDT | gen_96ed157e | 3 | 1.799 | 51% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | QUSDT | gen_18c839a0 | 5 | 2.883 | 51% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
 | QUSDT | gen_b1ac5c24 | 4 | 2.883 | 51% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
 | UBUSDT | gen_4e6e1ae0 | 3 | 2.591 | 50% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| QUSDT | gen_a3088356 | 3 | 4.01 | 50% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | MITOUSDT | gen_8feb4e23 | 3 | 2.487 | 50% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| CATIUSDT | gen_b3e46005 | 4 | 2.874 | 50% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | HEMIUSDT | gen_acea368d | 3 | 1.738 | 49% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | PTBUSDT | gen_dd5bfb74 | 3 | 1.715 | 49% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | PLUMEUSDT | gen_353f3f19 | 3 | 2.731 | 49% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | PLUMEUSDT | gen_e94b056d | 4 | 2.731 | 49% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| SCRUSDT | gen_d2dc954d | 3 | 2.065 | 49% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | SKYAIUSDT | gen_f68b811d | 4 | 2.355 | 48% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | STXUSDT | gen_a5b0e4de | 4 | 1.449 | 48% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| MUBARAKUSDT | gen_f19b67e8 | 3 | 1.54 | 47% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| UBUSDT | gen_53b10d52 | 3 | 2.403 | 47% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | ZECUSDT | gen_7b4a474b | 3 | 1.413 | 47% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | PUMPUSDT | gen_08664b28 | 3 | 1.519 | 47% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| CATIUSDT | gen_b3e46005 | 4 | 2.605 | 47% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| MUBARAKUSDT | gen_6d369d09 | 3 | 1.581 | 46% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | GALAUSDT | gen_b9aa9989 | 4 | 1.922 | 46% | scale_r_mults=[1.0, 1.25, 2.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | SAHARAUSDT | gen_6b94025f | 5 | 2.111 | 46% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | SKYAIUSDT | gen_4cadc09b | 3 | 2.012 | 45% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | UBUSDT | gen_887d87df | 3 | 2.601 | 45% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| SCRUSDT | gen_d2dc954d | 3 | 1.89 | 44% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | SAHARAUSDT | gen_cb8176f2 | 3 | 1.856 | 44% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | 1000PEPEUSDT | gen_f9d90376 | 3 | 1.552 | 44% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| UBUSDT | gen_434f29e6 | 3 | 2.077 | 43% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | SKYAIUSDT | gen_b1f90b17 | 3 | 2.488 | 43% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | PNUTUSDT | gen_4810faab | 4 | 2.577 | 43% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| BANKUSDT | gen_5b7f8f78 | 3 | 2.186 | 42% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| AKTUSDT | gen_f4c1300a | 3 | 2.355 | 42% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | UBUSDT | gen_8981d5f2 | 4 | 2.418 | 42% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| OPENUSDT | gen_2bb283ca | 4 | 2.811 | 42% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| OPENUSDT | gen_bbeaf73b | 3 | 2.811 | 42% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| BANKUSDT | gen_5b7f8f78 | 3 | 2.185 | 42% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | FORMUSDT | gen_c647ead7 | 3 | 2.205 | 41% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | AINUSDT | gen_057ea246 | 3 | 1.984 | 41% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | AVAAIUSDT | gen_1eec02f5 | 3 | 1.961 | 41% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | BSVUSDT | gen_c429c4c6 | 3 | 1.649 | 41% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| UBUSDT | gen_434f29e6 | 3 | 2.023 | 41% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | SKYAIUSDT | gen_eb2ece0c | 5 | 2.754 | 40% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| HEMIUSDT | gen_108c996b | 4 | 1.986 | 40% | scale_r_mults=[2.0, 4.0, 6.0] |
-| HEMIUSDT | gen_93131ef1 | 4 | 1.986 | 40% | scale_r_mults=[2.0, 4.0, 6.0] |
+| OPENUSDT | gen_2bb283ca | 4 | 2.605 | 40% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| OPENUSDT | gen_bbeaf73b | 3 | 2.605 | 40% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | ZORAUSDT | gen_d85b1f05 | 3 | 1.89 | 40% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | OPENUSDT | gen_d2840ddb | 3 | 3.746 | 39% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | SAHARAUSDT | gen_66848d49 | 3 | 1.646 | 39% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| XPINUSDT | gen_45e3b02a | 3 | 3.8 | 38% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| PARTIUSDT | gen_b50fc231 | 3 | 1.615 | 38% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | BULLAUSDT | gen_867c4e9c | 3 | 2.191 | 38% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| XPINUSDT | gen_45e3b02a | 3 | 3.751 | 38% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| AVAAIUSDT | gen_9758394b | 3 | 1.782 | 37% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | SAHARAUSDT | gen_711892bf | 3 | 1.724 | 37% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | GUNUSDT | gen_4f890271 | 3 | 2.02 | 37% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | OPENUSDT | gen_d606fde3 | 3 | 3.352 | 37% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | SAHARAUSDT | gen_60d64cfd | 4 | 2.67 | 37% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | TAOUSDT | gen_82d2c2da | 3 | 1.547 | 36% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| PARTIUSDT | gen_b50fc231 | 3 | 1.575 | 36% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | BULLAUSDT | gen_99c9c036 | 3 | 2.266 | 34% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | SKYAIUSDT | gen_0c99400e | 3 | 2.059 | 34% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | SKYAIUSDT | gen_955f400d | 3 | 1.844 | 34% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | SAHARAUSDT | gen_1eec02f5 | 4 | 2.05 | 33% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
 | BIOUSDT | gen_867c4e9c | 3 | 2.081 | 33% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | RENDERUSDT | gen_fdaa6e0b | 3 | 1.846 | 32% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| SYRUPUSDT | gen_f3b97917 | 4 | 2.064 | 32% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | ASTERUSDT | gen_049a08f7 | 3 | 1.7 | 31% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| SYRUPUSDT | gen_f3b97917 | 4 | 2.043 | 31% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | OPENUSDT | gen_14e1775b | 3 | 2.782 | 31% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | ASTERUSDT | gen_96efce1b | 3 | 1.606 | 30% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | MUBARAKUSDT | gen_49c2f657 | 4 | 1.721 | 29% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
 | PUNDIXUSDT | gen_71180be0 | 3 | 2.449 | 29% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| HUMAUSDT | gen_630b2a40 | 3 | 1.933 | 27% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | UBUSDT | gen_f3661202 | 4 | 1.679 | 27% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| FLOCKUSDT | gen_2350695a | 3 | 1.669 | 27% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | HEIUSDT | gen_c1b30752 | 3 | 2.759 | 26% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | HEIUSDT | gen_c7b5f40d | 3 | 2.759 | 26% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| FLOCKUSDT | gen_2350695a | 3 | 1.594 | 25% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| HUMAUSDT | gen_630b2a40 | 3 | 1.83 | 25% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | ZORAUSDT | gen_722052d4 | 3 | 2.276 | 25% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | MUBARAKUSDT | gen_1e2af031 | 5 | 2.143 | 25% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | SKYAIUSDT | gen_bd109329 | 3 | 1.583 | 25% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
@@ -178,17 +185,17 @@ _Generato: 2026-10-09 00:23 UTC_
 | FLOCKUSDT | gen_c5194ce4 | 3 | 1.955 | 24% | scale_r_mults=[0.75, 1.25, 1.75], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | MUBARAKUSDT | gen_2053cba6 | 5 | 1.484 | 23% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
 | AINUSDT | gen_ef115241 | 3 | 1.74 | 21% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
-| MAVIAUSDT | gen_608b892e | 3 | 1.755 | 20% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
+| MAVIAUSDT | gen_608b892e | 3 | 1.775 | 21% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | RAYSOLUSDT | gen_a01bcc1a | 3 | 1.533 | 19% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
-| AIOUSDT | gen_fc644cd2 | 3 | 3.335 | 18% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| AIOUSDT | gen_fc644cd2 | 3 | 3.254 | 18% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | BULLAUSDT | gen_7ac562e3 | 4 | 1.839 | 17% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True |
 | AVAAIUSDT | gen_e50a9211 | 4 | 1.525 | 17% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | ZORAUSDT | gen_f4e37ccc | 3 | 2.541 | 15% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | 1000BONKUSDT | gen_86a8b183 | 3 | 1.732 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
+| AINUSDT | gen_d8656ab7 | 3 | 1.665 | 0% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | AIOUSDT | gen_581d4a68 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
 | ASTERUSDT | gen_37836d3c | 3 | 1.666 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | ASTERUSDT | gen_d74845a5 | 3 | 1.774 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| AVAAIUSDT | gen_08c22b92 | 3 | 1.923 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | AVAAIUSDT | gen_dbe19eb2 | 3 | 1.525 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | BANKUSDT | gen_1efbb088 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | BANKUSDT | gen_fb3d971f | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
@@ -202,33 +209,25 @@ _Generato: 2026-10-09 00:23 UTC_
 | CVCUSDT | gen_8c9b332f | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | CVCUSDT | gen_cb4d9121 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | DEXEUSDT | gen_b9c251a1 | 3 | None | 0% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True |
-| DOTUSDT | gen_22b2cade | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
-| DOTUSDT | gen_5af56024 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | DOTUSDT | gen_f1550028 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
-| ENAUSDT | gen_bb762669 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | ENAUSDT | gen_e85db5f1 | 3 | 1.797 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | FORMUSDT | gen_1eec02f5 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True |
 | GRIFFAINUSDT | gen_de018454 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | HEIUSDT | gen_9a383fff | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
-| HEMIUSDT | gen_2350695a | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | HEMIUSDT | gen_4b4f7174 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
-| HEMIUSDT | gen_71f018a9 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
-| HEMIUSDT | gen_f001d778 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
-| HEMIUSDT | gen_f156ca1b | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
+| HEMIUSDT | gen_c1f71d65 | 3 | 1.54 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | HEMIUSDT | gen_f695fd53 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | HUMAUSDT | gen_3203c892 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
-| HUMAUSDT | gen_771790b1 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
-| HUMAUSDT | gen_a32bee42 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
-| HUMAUSDT | gen_b2f350ff | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
-| HUMAUSDT | gen_c694b252 | 3 | None | 0% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True |
-| HUMAUSDT | gen_f1550028 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
+| HUMAUSDT | gen_60c9259a | 3 | 2.184 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | HUSDT | gen_22b2cade | 3 | 2.257 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | HUSDT | gen_5af56024 | 3 | 2.257 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | IDOLUSDT | gen_5ad54558 | 3 | 2.23 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
+| IDOLUSDT | gen_931ca7de | 3 | 2.168 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | IDOLUSDT | gen_c429c4c6 | 3 | 2.852 | 0% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | KERNELUSDT | gen_c647ead7 | 3 | 2.131 | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | MITOUSDT | gen_8b91ba18 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | MTLUSDT | gen_4b4f7174 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
+| MYXUSDT | gen_8931b93c | 3 | 1.583 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | ONGUSDT | gen_73ae3696 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | OPENUSDT | gen_46f0717f | 3 | 2.477 | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | OPENUSDT | gen_4f25eca9 | 3 | 2.246 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
@@ -236,9 +235,7 @@ _Generato: 2026-10-09 00:23 UTC_
 | OPENUSDT | gen_bb762669 | 3 | 2.864 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.35 |
 | OPENUSDT | gen_c7a02fce | 3 | 2.246 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | OPENUSDT | gen_f3661202 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
-| ORCAUSDT | gen_3b9c62e9 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ORCAUSDT | gen_902fb1fd | 3 | None | 0% | scale_r_mults=[1.0, 1.5, 2.5] |
-| ORCAUSDT | gen_fb3d971f | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | PTBUSDT | gen_630b2a40 | 3 | 2.368 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | PUMPUSDT | gen_13cc61f2 | 3 | 3.302 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | PUNDIXUSDT | gen_96c1ed1b | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
@@ -249,10 +246,12 @@ _Generato: 2026-10-09 00:23 UTC_
 | STEEMUSDT | gen_4508a416 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | STEEMUSDT | gen_addf82da | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | STXUSDT | gen_d606fde3 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
+| STXUSDT | gen_f5b63594 | 3 | 1.381 | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | SUIUSDT | gen_8c9b332f | 3 | None | 0% | scale_r_mults=[1.0, 2.0, 3.0] |
 | SUPERUSDT | gen_0eb999b7 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | TAUSDT | gen_49c2f657 | 3 | 2.112 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | TAUSDT | gen_4e6e1ae0 | 3 | 2.15 | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.75 |
+| TAUSDT | gen_6e8a4220 | 3 | 2.102 | 0% | scale_r_mults=[1.0, 2.0, 3.0], sl_to_breakeven=True, profit_lock_keep=0.65 |
 | TAUSDT | gen_b028553e | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | TAUSDT | gen_b0e86c70 | 3 | 2.477 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | TAUSDT | gen_c08c5114 | 3 | 2.962 | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
@@ -264,7 +263,6 @@ _Generato: 2026-10-09 00:23 UTC_
 | UBUSDT | gen_0d7be682 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | UBUSDT | gen_2a2898b0 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
 | UBUSDT | gen_3b9c62e9 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
-| UBUSDT | gen_53b10d52 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True |
 | UBUSDT | gen_5b847426 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | UBUSDT | gen_8e475cd9 | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 | UBUSDT | gen_bbe21d3f | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
@@ -273,12 +271,10 @@ _Generato: 2026-10-09 00:23 UTC_
 | USELESSUSDT | gen_96c1ed1b | 3 | 2.06 | 0% | scale_r_mults=[1.5, 3.0, 5.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
 | USELESSUSDT | gen_acea368d | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | USELESSUSDT | gen_e09c5203 | 3 | 1.636 | 0% | scale_r_mults=[2.0, 4.0, 6.0], sl_to_breakeven=True, profit_lock_keep=0.5 |
-| VETUSDT | gen_b2f350ff | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | VETUSDT | gen_b9c251a1 | 3 | None | 0% | scale_r_mults=[1.0, 1.5, 2.5], sl_to_breakeven=True |
 | VETUSDT | gen_fb3d971f | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | WALUSDT | gen_2b41880d | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | WALUSDT | gen_cee79cdd | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
-| ZKUSDT | gen_c61d9322 | 3 | None | 0% | scale_r_mults=[2.0, 4.0, 6.0] |
 | ZORAUSDT | gen_ceab7f6a | 3 | None | 0% | scale_r_mults=[1.5, 3.0, 5.0] |
 
 ## Ultimo run di ottimizzazione
@@ -292,34 +288,34 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
+| holdout | 1 | 0.1% |
+| recovery | 64 | 4.8% |
 | total_return | 1207 | 91.4% |
 | pf_ex_top | 3 | 0.2% |
-| recovery | 64 | 4.8% |
-| trades | 6 | 0.5% |
 | regime | 22 | 1.7% |
-| holdout | 1 | 0.1% |
+| trades | 6 | 0.5% |
 | consistency | 17 | 1.3% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
-**strategie generate** — 22500 valutazioni, 54 passate (0.24%) · 2026-10-08 20:19 UTC
+**strategie generate** — 44191 valutazioni, 526 passate (1.19%) · 2026-10-09 04:48 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| recovery | 1284 | 5.7% |
-| pf_ex_top | 70 | 0.3% |
-| trades | 1017 | 4.5% |
-| regime | 1757 | 7.8% |
-| total_return | 17927 | 79.9% |
-| holdout | 96 | 0.4% |
-| consistency | 295 | 1.3% |
+| holdout | 557 | 1.3% |
+| pf_ex_top | 417 | 1.0% |
+| total_return | 32909 | 75.4% |
+| recovery | 3547 | 8.1% |
+| regime | 4046 | 9.3% |
+| trades | 1128 | 2.6% |
+| consistency | 1061 | 2.4% |
 
-- quasi-passaggi (un solo criterio, di poco): **36** — sono i semi delle mutazioni del run successivo
+- quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-10-09 00:00 UTC · coppie validate: **259** · GATE 1 pronto: True
-- tasso di passaggio misurato: **0.227%**
+- ultimo giro: 2026-10-09 09:02 UTC · coppie validate: **258** · GATE 1 pronto: True
+- tasso di passaggio misurato: **1.156%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -336,35 +332,35 @@ _Nessuna coppia ha passato in questo run._
 - `none` — GATE 1 superato: il paper opera, la taratura si ferma
 
 ## Trade chiusi — perché usciamo
-- totale: **413** · vinti: 227 (55%) · PnL realizzato: **-109.48**
+- totale: **420** · vinti: 231 (55%) · PnL realizzato: **-111.10**
 
-- costi: **56.51 USDT** su 413 trade (0.14/trade) _(stimati dal modello del gate, non misurati dai fill)_
-  - commissioni 31.40 · spread 24.92 · funding +0.19
-  - lordo -52.96 → netto -109.48 · **break-even 6.34%** dell'equity
+- costi: **56.90 USDT** su 420 trade (0.14/trade) _(stimati dal modello del gate, non misurati dai fill)_
+  - commissioni 31.65 · spread 25.07 · funding +0.17
+  - lordo -54.20 → netto -111.10 · **break-even 6.38%** dell'equity
   - piu' costose: DEXEUSDT 3.13 · SYRUPUSDT 3.06 · SPXUSDT 2.02 · ZORAUSDT 2.00 · UBUSDT 1.95
-  - ⚠️ Costi operativi elevati: servono 6.34% solo per pareggiare (soglia 1.5%)
+  - ⚠️ Costi operativi elevati: servono 6.38% solo per pareggiare (soglia 1.5%)
 
 | Uscita | Trade | % | PnL |
 |---|---|---|---|
-| Trailing stop | 183 | 44% | +151.09 |
-| Stop loss (prima di qualsiasi TP) | 182 | 44% | -380.97 |
-| Scale-out (>=1 TP incassato, residuo a BE) | 35 | 8% | +71.97 |
+| Trailing stop | 186 | 44% | +152.69 |
+| Stop loss (prima di qualsiasi TP) | 185 | 44% | -384.98 |
+| Scale-out (>=1 TP incassato, residuo a BE) | 36 | 9% | +72.75 |
 | Time exit (orizzonte scaduto) | 9 | 2% | +19.70 |
 | Take profit (fino all'ultimo gradino) | 4 | 1% | +28.73 |
 
-- gradini raggiunti (su 413 trade): 0 TP: 370 (90%) · 1 TP: 32 (8%) · 2 TP: 7 (2%) · 3 TP: 4 (1%)
+- gradini raggiunti (su 420 trade): 0 TP: 376 (90%) · 1 TP: 33 (8%) · 2 TP: 7 (2%) · 3 TP: 4 (1%)
 
-- **drawdown di portafoglio: 113.06 USDT** (ritorno -109.48 · recovery -0.97) · max 15 posizioni aperte insieme
-  - il gate prometteva recovery ≥ 2.0 per ogni coppia (peggiore in registro: 0.00); il PORTAFOGLIO realizza -0.97
+- **drawdown di portafoglio: 113.06 USDT** (ritorno -111.10 · recovery -0.98) · max 15 posizioni aperte insieme
+  - il gate prometteva recovery ≥ 2.0 per ogni coppia (peggiore in registro: 0.00); il PORTAFOGLIO realizza -0.98
   _uscite in ordine di TEMPO: e' la buca vera, quella che il gate non vede perche' valida una coppia alla volta._
 
-- escursione favorevole (mfe_r, 413 trade): mediana **0.81R** · ≥1R: 38% · ≥1.5R: 14% · ≥3R: 3% · ≥5R: 0%
+- escursione favorevole (mfe_r, 420 trade): mediana **0.81R** · ≥1R: 38% · ≥1.5R: 14% · ≥3R: 3% · ≥5R: 0%
   _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
 
 ## Deriva paper vs gate
 _il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
 
-- **globale**: drift · 396 trade · PF vissuto 0.702 vs 2.023 atteso · mfe mediana 0.8R
+- **globale**: drift · 402 trade · PF vissuto 0.7 vs 2.022 atteso · mfe mediana 0.8R
 
 - **freno globale attivo**: size x0.5 e leva x0.71 (radice) su OGNI trade finche' il PF a 30 giorni resta sotto 0.6 x atteso (motivo: PF 0.70 vs 2.02 atteso · mfe mediana 0.80R < primo TP 1.50R)
 
@@ -374,35 +370,35 @@ _il gate promette sulla storia, il paper misura il presente. `drift` = promessa 
 | USELESSUSDT|gen_2031005e | watch | 7 | 0.304 / 1.54 | PF 0.30 vs 1.54 atteso · mfe mediana 0.80R < primo TP 2.00R |
 | QUSDT|gen_18c839a0 | watch | 6 | 0.535 / 2.883 | PF 0.53 vs 2.88 atteso · mfe mediana 0.91R < primo TP 1.50R |
 | FLOCKUSDT|gen_c5194ce4 | watch | 5 | 0.04 / 1.955 | PF 0.04 vs 1.96 atteso · mfe mediana 0.20R < primo TP 0.75R |
-| SPXUSDT|gen_725cb5f4 | watch | 5 | 0.526 / 1.708 | PF 0.53 vs 1.71 atteso · mfe mediana 0.47R < primo TP 0.75R |
 | AVAAIUSDT|gen_e50a9211 | watch | 4 | 0.345 / 1.525 | PF 0.35 vs 1.52 atteso |
-| MUBARAKUSDT|gen_1f7ead60 | watch | 4 | 0.108 / 2.776 | PF 0.11 vs 2.78 atteso · mfe mediana 1.25R < primo TP 2.00R |
 | PTBUSDT|gen_684d7623 | watch | 4 | 1.377 / 1.871 | mfe mediana 0.53R < primo TP 1.00R |
-| DEXEUSDT|gen_b31d8b93 | watch | 4 | 0.149 / 1.881 | PF 0.15 vs 1.88 atteso · mfe mediana 1.23R < primo TP 2.00R |
+| MUBARAKUSDT|gen_1f7ead60 | watch | 4 | 0.108 / 2.776 | PF 0.11 vs 2.78 atteso · mfe mediana 1.25R < primo TP 2.00R |
 | HUMAUSDT|gen_fca11c08 | watch | 4 | 0.0 / 1.657 | PF 0.00 vs 1.66 atteso · mfe mediana 0.10R < primo TP 2.00R |
-| STXUSDT|gen_14e1775b | watch | 3 | 0.266 / 1.74 | PF 0.27 vs 1.74 atteso · mfe mediana 0.44R < primo TP 2.00R |
-| ORCAUSDT|gen_6d06dca0 | watch | 3 | 0.0 / 1.967 | PF 0.00 vs 1.97 atteso · mfe mediana 0.49R < primo TP 1.50R |
-| FORMUSDT|gen_c647ead7 | watch | 3 | 99.0 / 2.205 | mfe mediana 0.51R < primo TP 0.75R |
 | JTOUSDT|gen_f238d283 | watch | 3 | 0.653 / 1.64 | PF 0.65 vs 1.64 atteso |
-| VETUSDT|gen_6d06dca0 | watch | 3 | 0.386 / 1.631 | PF 0.39 vs 1.63 atteso |
 | UBUSDT|gen_f3661202 | watch | 3 | 0.923 / 1.679 | PF 0.92 vs 1.68 atteso · mfe mediana 1.03R < primo TP 2.00R |
-| SEIUSDT|gen_4f890271 | watch | 3 | 2.078 / 1.851 | mfe mediana 1.09R < primo TP 2.00R |
-| BULLAUSDT|gen_5a52c06b | watch | 3 | 0.213 / 1.801 | PF 0.21 vs 1.80 atteso · mfe mediana 0.52R < primo TP 1.50R |
+| STXUSDT|gen_14e1775b | watch | 3 | 0.266 / 1.74 | PF 0.27 vs 1.74 atteso · mfe mediana 0.44R < primo TP 2.00R |
 | SYRUPUSDT|gen_af734c68 | watch | 3 | 0.407 / 1.493 | PF 0.41 vs 1.49 atteso · mfe mediana 0.94R < primo TP 1.50R |
-| QUSDT|gen_bf2be656 | watch | 2 | 0.0 / 3.527 | PF 0.00 vs 3.53 atteso · mfe mediana 0.43R < primo TP 1.50R |
+| ORCAUSDT|gen_6d06dca0 | watch | 3 | 0.0 / 1.967 | PF 0.00 vs 1.97 atteso · mfe mediana 0.49R < primo TP 1.50R |
+| BULLAUSDT|gen_5a52c06b | watch | 3 | 0.213 / 1.801 | PF 0.21 vs 1.80 atteso · mfe mediana 0.52R < primo TP 1.50R |
+| VETUSDT|gen_6d06dca0 | watch | 3 | 0.386 / 1.631 | PF 0.39 vs 1.63 atteso |
+| FORMUSDT|gen_c647ead7 | watch | 3 | 99.0 / 2.205 | mfe mediana 0.51R < primo TP 0.75R |
+| AIOUSDT|gen_fc644cd2 | watch | 2 | 99.0 / 3.254 | mfe mediana 0.59R < primo TP 1.00R |
+| QUSDT|gen_85fadf54 | watch | 2 | 0.0 / 1.86 | PF 0.00 vs 1.86 atteso · mfe mediana 0.38R < primo TP 1.50R |
+| SYRUPUSDT|gen_f3b97917 | watch | 2 | 99.0 / 2.064 | mfe mediana 1.16R < primo TP 2.00R |
+| GALAUSDT|gen_b9aa9989 | watch | 2 | 0.415 / 1.922 | PF 0.41 vs 1.92 atteso |
 
 - serie di perdite (freno SPENTO dal 24 set, solo misura): **gen_fa304106** (11 perdite di fila), **gen_ceab7f6a** (4 perdite di fila)
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **costante** · 396 trade · correlazione None · influenza applicata **x1.0**
-- tutte le strategie generate escono a confidenza 60: la calibrazione non puo' misurare nulla finche' la confidenza non varia (396 trade, confidenza 60-60)
+- verdetto: **costante** · 402 trade · correlazione None · influenza applicata **x1.0**
+- tutte le strategie generate escono a confidenza 60: la calibrazione non puo' misurare nulla finche' la confidenza non varia (402 trade, confidenza 60-60)
 
 | Fascia di confidenza | Trade | Win rate | Esito medio |
 |---|---|---|---|
-| 60.0–60.0 | 132 | 51% | -0.48% |
-| 60.0–60.0 | 132 | 64% | +0.08% |
-| 60.0–60.0 | 132 | 48% | -0.71% |
+| 60.0–60.0 | 134 | 51% | -0.42% |
+| 60.0–60.0 | 134 | 63% | +0.04% |
+| 60.0–60.0 | 134 | 49% | -0.68% |
 
 _se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
