@@ -658,3 +658,7 @@ prima del test, con `ritocco_di`, cosa cambia e perché.
 * **LTCUSDT-029**, quarto ritocco della 014 (ancora prima della lista; nota LTCUSDT-N014): stop al
   massimo del range con un minimo del 2% (e un massimo del 6%). Previsione: 554 trade, profit factor
   fra 0,8 e 1,2, R medio fra −0,1 e +0,05, t contro la (b) sotto quello della 014, non netta.
+  Esito: t contro la (b) 1,44, R medio −0,077.
+* **LTCUSDT-030**, quinto e ultimo ritocco della 014 (nota LTCUSDT-N015): uscita alle 23 UTC del
+  giorno dopo l'ingresso. Previsione: 300-400 trade, profit factor fra 0,8 e 1,3, R medio fra −0,1 e
+  +0,1, non netta.

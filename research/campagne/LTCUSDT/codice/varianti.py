@@ -377,7 +377,12 @@ class RangeApertura(Base):
         return min(max((a - c) / c, getattr(self, "stop_minimo", 0.0)), STOP_MAX)
 
     def esci(self, i, ind, pos):
-        return int(ind["ora"][i]) == 23
+        if int(ind["ora"][i]) != 23:
+            return False
+        if getattr(self, "giorno_dopo", False):
+            # esce alle 23 del giorno dopo quello d'ingresso
+            return int(ind["_ts"][i] // 86_400_000) > int(pos.ts_entrata // 86_400_000)
+        return True
 
 
 # ---------------------------------------------------------------------------
@@ -613,6 +618,11 @@ def _finestra(v, ultima_ora):
     return v
 
 
+def _giorno_dopo(v):
+    v.giorno_dopo = True
+    return v
+
+
 def _stop_minimo(v, d):
     v.stop_minimo = d
     return v
@@ -815,6 +825,14 @@ REGISTRO = {
         "cosa_cambia": "pavimento del 2% alla distanza dello stop",
         "perche": "togliere gli stop vicinissimi che fanno rumore e costi in R (nota LTCUSDT-N014)",
         "previsione": "554 trade; profit factor fra 0,8 e 1,2; R medio fra -0,1 e +0,05; t contro la (b) sotto quello della 014; non batte nettamente la (b)"}),
+    "LTCUSDT-030": (lambda: _giorno_dopo(RangeApertura("short")), {
+        "idea": "I-07", "fonte": FONTE_I07, "famiglia": "LTCUSDT-014", "ritocco_di": "LTCUSDT-014",
+        "meccanismo": "breakout al ribasso del range delle prime 4 ore UTC, uscita alle 23 UTC del giorno dopo",
+        "parametri": {"range_ore": "00-03 UTC", "finestra_ingresso": "04-20 UTC",
+                      "uscita": "chiusura della barra delle 23 del giorno dopo l'ingresso", "stop": "massimo del range, al massimo 6%"},
+        "cosa_cambia": "uscita spostata dalla fine della giornata alla fine della giornata successiva",
+        "perche": "dare al movimento il tempo di superare costi e rumore (nota LTCUSDT-N015)",
+        "previsione": "meno trade della 014 (circa 300-400); profit factor fra 0,8 e 1,3; R medio fra -0,1 e +0,1; non batte nettamente la (b)"}),
     "LTCUSDT-018": (lambda: GiornoAnomalo("long", 1.5), {
         "idea": "I-10", "fonte": FONTE_I10,
         "meccanismo": "inerzia il giorno dopo un giorno anomalo al rialzo",
