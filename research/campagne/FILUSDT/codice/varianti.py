@@ -260,13 +260,19 @@ def i11(direzione: str, id_: str) -> Variante:
 # ---------------------------------------------------------------------------
 
 def _t_fascia_successiva(s, n_oss=30):
-    fascia = (s.ts // 14_400_000) % 6
+    """t dei rendimenti delle ultime n_oss barre della fascia (ora del giorno) della barra successiva.
+
+    La fascia e' lunga quanto la barra: 6 fasce al giorno a 4 ore, 12 a 2 ore, 4 a 6 ore.
+    """
+    durata = q.MS[s.tf]
+    n_fasce = 86_400_000 // durata
+    fascia = (s.ts // durata) % n_fasce
     rend = s.c / s.o - 1.0
-    storia = {f: [] for f in range(6)}
+    storia = {f: [] for f in range(n_fasce)}
     t = np.full(len(s.c), np.nan)
     for i in range(len(s.c)):
         storia[int(fascia[i])].append(rend[i])
-        prossima = (int(fascia[i]) + 1) % 6
+        prossima = (int(fascia[i]) + 1) % n_fasce
         h = storia[prossima]
         if len(h) >= n_oss:
             x = np.array(h[-n_oss:])
@@ -275,11 +281,12 @@ def _t_fascia_successiva(s, n_oss=30):
     return t
 
 
-def i12(direzione: str, id_: str) -> Variante:
+def i12(direzione: str, id_: str, n_oss: int = 30, soglia_t: float = 1.5, k_atr: float = 1.5,
+        n_atr: int = 14, barre_max: int = 1, tf: str = "4h") -> Variante:
     def ingresso(s):
-        t = _t_fascia_successiva(s)
-        return (t > 1.5) if direzione == "long" else (t < -1.5)
-    return Variante(id_, "4h", direzione, ingresso, _stop_atr(direzione, 14, 1.5), barre_max=1,
+        t = _t_fascia_successiva(s, n_oss)
+        return (t > soglia_t) if direzione == "long" else (t < -soglia_t)
+    return Variante(id_, tf, direzione, ingresso, _stop_atr(direzione, n_atr, k_atr), barre_max=barre_max,
                     descrizione=f"I-12 stagionalita' della fascia {direzione}")
 
 
@@ -306,15 +313,19 @@ def _giorno_apertura_escursione(s):
     return giorno, apertura, escursione_prec
 
 
-def i13(direzione: str, id_: str) -> Variante:
+def _ultima_barra_del_giorno(s):
+    """True per la barra che chiude alla fine del giorno UTC (23 a 1h, 23:30 a 30m, 22 a 2h)."""
+    return ((s.close_ts + 1) % 86_400_000) == 0
+
+
+def i13(direzione: str, id_: str, k: float = 0.6, tf: str = "1h") -> Variante:
     def ingresso(s):
         giorno, ap, esc = _giorno_apertura_escursione(s)
-        ora = q.ora_utc(s)
         if direzione == "long":
-            cond = s.c > ap + 0.6 * esc
+            cond = s.c > ap + k * esc
         else:
-            cond = s.c < ap - 0.6 * esc
-        cond = cond & (ora < 23)
+            cond = s.c < ap - k * esc
+        cond = cond & ~_ultima_barra_del_giorno(s)
         prima = np.zeros(len(s.c), dtype=bool)
         visto = set()
         for i in range(len(s.c)):
@@ -328,8 +339,8 @@ def i13(direzione: str, id_: str) -> Variante:
         return ap
 
     def uscita(s):
-        return q.ora_utc(s) == 23
-    return Variante(id_, "1h", direzione, ingresso, stop, uscita=uscita,
+        return _ultima_barra_del_giorno(s)
+    return Variante(id_, tf, direzione, ingresso, stop, uscita=uscita,
                     descrizione=f"I-13 rottura di volatilita' {direzione}")
 
 
@@ -376,3 +387,21 @@ _V16 = {
 }
 for _k, _p in _V16.items():
     TUTTE[f"FILUSDT-016-{_k}"] = (lambda p=_p, k=_k: i08("long", f"FILUSDT-016-{k}", **p))
+
+# Verifiche della Fase 4 per il candidato FILUSDT-024 (I-12 short, 4h).
+_V24 = {
+    "R01": dict(n_oss=24), "R02": dict(n_oss=36),
+    "R03": dict(soglia_t=1.2), "R04": dict(soglia_t=1.8),
+    "R05": dict(k_atr=1.2), "R06": dict(k_atr=1.8),
+    "R07": dict(n_atr=11), "R08": dict(n_atr=17),
+    "R10": dict(barre_max=2),
+    "T2h": dict(tf="2h", barre_max=2, n_atr=28),
+    "T6h": dict(tf="6h", barre_max=1, n_atr=9),
+}
+for _k, _p in _V24.items():
+    TUTTE[f"FILUSDT-024-{_k}"] = (lambda p=_p, k=_k: i12("short", f"FILUSDT-024-{k}", **p))
+
+# Verifiche della Fase 4 per il candidato FILUSDT-025 (I-13 long, 1h).
+_V25 = {"R01": dict(k=0.48), "R02": dict(k=0.72), "T30m": dict(tf="30m"), "T2h": dict(tf="2h")}
+for _k, _p in _V25.items():
+    TUTTE[f"FILUSDT-025-{_k}"] = (lambda p=_p, k=_k: i13("long", f"FILUSDT-025-{k}", **p))
