@@ -46,6 +46,8 @@ NUMERICI = {
     "V-14": {"finestra": "int", "soglia_z": "float", "barre": "int", "mult_atr": "float", "atr_n": "int"},
     "V-12": {"barre": "int", "mult_atr": "float", "atr_n": "int"},
     "R-01": {"barre": "int", "mult_atr": "float", "atr_n": "int", "min_abs": "float"},
+    "R-02": {"barre": "int", "mult_atr": "float", "atr_n": "int", "max_barra": "float"},
+    "R-03": {"barre": "int", "mult_atr": "float", "atr_n": "int", "min_abs": "float", "max_barra": "float"},
 }
 # Timeframe adiacenti con i parametri in barre convertiti alla stessa durata
 ADIACENTI = {
@@ -54,6 +56,9 @@ ADIACENTI = {
     # 1h: la mezz'ora non esiste: segnale alla chiusura della barra 22:00-23:00 (ingresso 23:00), 1 barra, ATR 7
     "V-12": [("15m", {"minuto_segnale": 1395, "barre": 2, "atr_n": 28}), ("1h", {"minuto_segnale": 1320, "barre": 1, "atr_n": 7})],
     "R-01": [("15m", {"minuto_segnale": 1395, "barre": 2, "atr_n": 28}), ("1h", {"minuto_segnale": 1320, "barre": 1, "atr_n": 7})],
+    # max_barra e' in percentuale della barra di segnale: resta uguale (regola dei timeframe adiacenti)
+    "R-02": [("15m", {"minuto_segnale": 1395, "barre": 2, "atr_n": 28}), ("1h", {"minuto_segnale": 1320, "barre": 1, "atr_n": 7})],
+    "R-03": [("15m", {"minuto_segnale": 1395, "barre": 2, "atr_n": 28}), ("1h", {"minuto_segnale": 1320, "barre": 1, "atr_n": 7})],
 }
 
 

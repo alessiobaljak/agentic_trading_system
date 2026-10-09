@@ -177,7 +177,10 @@ class MomentoGiorno(_UscitaTempo):
                 corrente = ctx.o[i] if ctx.ts[i] % 86_400_000 == 0 else np.nan  # solo se la barra 00:00 c'e'
             apertura[i] = corrente
         minuti = (ctx.ts % 86_400_000) // 60_000
-        return {"atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "ret_giorno": ctx.c / apertura - 1,
+        extra = {}
+        if "min_vol_rel" in self.parametri:
+            extra["vol_rel"] = ctx.v / sma(ctx.v, 30)
+        return {**extra, "atr": atr(ctx, int(self.parametri.get("atr_n", 14))), "ret_giorno": ctx.c / apertura - 1,
                 "ultima": (minuti == int(self.parametri["minuto_segnale"])).astype(float)}
 
     def riscaldamento(self, ind):
@@ -191,6 +194,17 @@ class MomentoGiorno(_UscitaTempo):
             return False
         if abs(r) < self.parametri.get("min_abs", 0.0):  # filtro dei ritocchi (Fase 3)
             return False
+        vm = self.parametri.get("min_vol_rel")  # filtro dei ritocchi: volume della barra di segnale / media 30
+        if vm is not None and not (ind["vol_rel"][i] > vm):
+            return False
+        am = self.parametri.get("max_atr_rel")  # filtro dei ritocchi: ATR(14)/prezzo
+        if am is not None and not (ind["atr"][i] / ctx.c[i] <= am):
+            return False
+        mb = self.parametri.get("max_barra")  # filtro dei ritocchi: esaurimento nella barra di segnale
+        if mb is not None and i > 0:
+            rb = ctx.c[i] / ctx.c[i - 1] - 1
+            if (self.direzione == "long" and rb > mb) or (self.direzione == "short" and rb < -mb):
+                return False
         return r > 0 if self.direzione == "long" else r < 0
 
 
@@ -406,6 +420,10 @@ VARIANTI = {
     "V-32": Compressione("AVAXUSDT-V32", "1h", "short", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
     # ritocchi (regola 6)
     "R-01": MomentoGiorno("AVAXUSDT-R01", "30m", "long", minuto_segnale=1380, barre=1, mult_atr=2.0, min_abs=0.015),
+    "R-02": MomentoGiorno("AVAXUSDT-R02", "30m", "long", minuto_segnale=1380, barre=1, mult_atr=2.0, max_barra=0.008),
+    "R-03": MomentoGiorno("AVAXUSDT-R03", "30m", "long", minuto_segnale=1380, barre=1, mult_atr=2.0, min_abs=0.015, max_barra=0.008),
+    "R-04": MomentoGiorno("AVAXUSDT-R04", "30m", "long", minuto_segnale=1380, barre=1, mult_atr=2.0, min_vol_rel=1.0),
+    "R-05": MomentoGiorno("AVAXUSDT-R05", "30m", "long", minuto_segnale=1380, barre=1, mult_atr=2.0, max_atr_rel=0.0105),
     "V-20": ForzaRelativa("AVAXUSDT-V20", "1d", "long", lookback=14, barre=3, mult_atr=2.0),
     "V-21": VolumeAlto("AVAXUSDT-V21", "4h", "long", finestra=180, multiplo=3.0, barre=6, mult_atr=2.0),
 }
