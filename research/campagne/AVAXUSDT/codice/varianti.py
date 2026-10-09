@@ -11,7 +11,7 @@ from __future__ import annotations
 import numpy as np
 
 from comune import (Variante, atr, btc_close, deviazione_mobile, ema, funding_ultimo, giorno_settimana,
-                    massimo_mobile, minimo_mobile, ora_utc, rsi, sma)
+                    massimo_mobile, minimo_mobile, ora_utc, rsi, sma, taker_buy)
 
 
 def quantile_mobile(x: np.ndarray, n: int, q: float) -> np.ndarray:
@@ -217,6 +217,36 @@ class ReazioneEccessiva(_UscitaTempo):
         return z > s if self.direzione == "long" else z < -s
 
 
+class Inversione(ReazioneEccessiva):
+    """I-13: dopo un salto estremo si entra CONTRO il salto."""
+
+    def condizione(self, ctx, ind, i):
+        z, s = ind["z"][i], self.parametri["soglia_z"]
+        return z < -s if self.direzione == "long" else z > s
+
+
+# --- I-14 squilibrio degli ordini aggressivi a 4 ore -------------------------------------
+
+class Squilibrio(_UscitaTempo):
+    def indicatori(self, ctx):
+        f = int(self.parametri["finestra"])
+        quota = taker_buy(ctx) / ctx.v
+        q0 = np.nan_to_num(quota, nan=0.5)
+        media = _ritardo(sma(q0, f), 1)
+        sd = _ritardo(deviazione_mobile(q0, f), 1)
+        z = (quota - media) / sd
+        return {"atr": atr(ctx, 14), "z": z}
+
+    def riscaldamento(self, ind):
+        return int(np.flatnonzero(np.isfinite(ind["z"]) & np.isfinite(ind["atr"]))[0])
+
+    def condizione(self, ctx, ind, i):
+        z, s = ind["z"][i], self.parametri["soglia_z"]
+        if not np.isfinite(z):
+            return False
+        return z > s if self.direzione == "long" else z < -s
+
+
 # --- I-09 rottura della volatilita' del giorno a 1 ora -----------------------------------
 
 class RotturaGiorno(Variante):
@@ -366,6 +396,12 @@ VARIANTI = {
     "V-24": Compressione("AVAXUSDT-V24", "4h", "long", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
     "V-25": Compressione("AVAXUSDT-V25", "4h", "short", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
     "V-26": VolumeAlto("AVAXUSDT-V26", "4h", "long", finestra=180, multiplo=2.0, barre=6, mult_atr=2.0),
+    "V-27": Inversione("AVAXUSDT-V27", "1h", "long", finestra=720, soglia_z=3.0, barre=3, mult_atr=2.0),
+    "V-28": Inversione("AVAXUSDT-V28", "1h", "short", finestra=720, soglia_z=3.0, barre=3, mult_atr=2.0),
+    "V-29": Squilibrio("AVAXUSDT-V29", "4h", "long", finestra=180, soglia_z=2.0, barre=6, mult_atr=2.0),
+    "V-30": Squilibrio("AVAXUSDT-V30", "4h", "short", finestra=180, soglia_z=2.0, barre=6, mult_atr=2.0),
+    "V-31": Compressione("AVAXUSDT-V31", "1h", "long", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
+    "V-32": Compressione("AVAXUSDT-V32", "1h", "short", n=20, k=2.0, finestra_min=125, entro=10, quantile=0.2, mult_atr=2.0),
     "V-20": ForzaRelativa("AVAXUSDT-V20", "1d", "long", lookback=14, barre=3, mult_atr=2.0),
     "V-21": VolumeAlto("AVAXUSDT-V21", "4h", "long", finestra=180, multiplo=3.0, barre=6, mult_atr=2.0),
 }

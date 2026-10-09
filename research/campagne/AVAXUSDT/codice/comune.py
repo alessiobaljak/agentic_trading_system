@@ -293,6 +293,23 @@ def btc_close(ctx: Contesto) -> np.ndarray:
     return np.array([b.close if b is not None else np.nan for b in ctx.btc])
 
 
+_TAKER: Dict[str, Dict[int, float]] = {}
+
+
+def taker_buy(ctx: Contesto) -> np.ndarray:
+    """Volume comprato da ordini aggressivi (colonna taker_buy_volume dei klines) per barra; NaN se manca."""
+    if ctx.tf not in _TAKER:
+        per_ts: Dict[int, float] = {}
+        for p in sorted((CARTELLA_DATI / "klines" / ctx.tf).glob("*.zip")):
+            for riga in dati.righe_csv_da_zip(p):
+                ts = dati.normalizza_ts(riga[0])
+                if ts not in per_ts and len(riga) > 9 and riga[9].strip():
+                    per_ts[ts] = float(riga[9])
+        _TAKER[ctx.tf] = per_ts
+    per_ts = _TAKER[ctx.tf]
+    return np.array([per_ts.get(int(t), np.nan) for t in ctx.ts])
+
+
 def ora_utc(ctx: Contesto) -> np.ndarray:
     return (ctx.ts // 3_600_000) % 24
 

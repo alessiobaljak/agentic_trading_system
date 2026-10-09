@@ -430,3 +430,79 @@ testate al massimo (le varianti scartate non sono testate).
   10 barre. Motivo: col minimo stretto i trade sono 15-27. Previsione invariata.
 * **I-12, V-26 (long).** Volume oltre 2 volte la media delle 180 barre precedenti (invece di 3).
   Motivo: con 3 volte i trade sono 49. Previsione invariata.
+* V-24 e V-25 restano sotto il minimo (52 e 54): scarti.
+
+---
+
+## Seconda tornata di idee (scritta il 9 ottobre mentre giravano i test della prima, senza averne visto alcun risultato)
+
+## I-13 Inversione dopo un salto orario estremo
+
+1. **Fonte.** J. B. Atkins, E. A. Dyl, «Price Reversals, Bid-Ask Spreads, and Market Efficiency»,
+   Journal of Financial and Quantitative Analysis 25(4), 1990 (dopo variazioni di prezzo
+   grandi il prezzo torna in parte indietro); per le crypto A. Zaremba, M. H. Bilgin, H. Long, A.
+   Mercik, J. Szczygielski, «Up or down? Short-term reversal, momentum, and liquidity effects in
+   cryptocurrency markets», International Review of Financial Analysis 78, 2021.
+2. **Affermazione.** Dopo un'ora con rendimento sotto −3 deviazioni standard (calcolate sulle 720
+   ore precedenti, 30 giorni) il prezzo nelle 3 ore successive recupera più di un long casuale
+   con la stessa uscita; specchio dopo un'ora sopra +3 deviazioni.
+3. **Sotto-domande.** Vale per i salti con volume alto (liquidazioni a catena) più che per quelli
+   con volume basso? Chi opera: fornitori di liquidità che comprano le vendite forzate, arbitraggisti;
+   effetto in ore.
+4-5. **Spiegazioni concorrenti.**
+   | Spiegazione | Previsione | Smentita |
+   |---|---|---|
+   | Caso | `t` entro ±2 | `t` oltre soglia |
+   | Volatilità | Dopo un salto la volatilità resta alta: R grandi nei due sensi | Segno stabile |
+   | Trend di fondo | Salti verso il basso nel 2022: il long perde come la (b) | Battere la (b) |
+   | Artefatto dei dati | Salti da barre anomale o da buchi | Barre allineate col mark |
+   | Effetto costi | Stop 2 ATR orario ≈ 2,5-4% dopo un salto: costo 0,04-0,06 R | R netto positivo |
+   | È solo il mercato | I salti di AVAX sono salti di BTC | — |
+   | Continuazione (la tesi di I-08) | Dopo il salto il prezzo continua: R medio negativo | R medio positivo |
+   | Cascata di liquidazioni non finita | Il primo recupero fallisce, nuovo minimo | — |
+   | Notizia vera della moneta | Nessun recupero | — |
+   | Rimbalzo tecnico dentro la stessa ora | L'ingresso alla barra dopo arriva tardi | — |
+6. **Varianti.** 1 ora (il riassorbimento di una vendita forzata è questione di ore).
+   - **V-27 (long).** z = rendimento orario / devstd dei rendimenti delle 720 ore precedenti;
+     z < −3 → long; stop close − 2·ATR(14); uscita dopo 3 barre.
+   - **V-28 (short).** z > +3 → short; stop close + 2·ATR(14); uscita dopo 3 barre.
+   Previsione: R medio fra −0,1 e 0,1.
+
+## I-14 Squilibrio degli ordini aggressivi (compratori contro venditori), a 4 ore
+
+1. **Fonte.** T. Chordia, A. Subrahmanyam, «Order imbalance and individual stock returns: Theory
+   and evidence», Journal of Financial Economics 72(3), 2004: lo squilibrio degli ordini predice
+   i rendimenti successivi (con segno positivo, per la suddivisione degli ordini grandi).
+2. **Affermazione.** Quando la quota di volume comprato da ordini aggressivi (colonna
+   `taker_buy_volume` delle candele) in una barra di 4 ore è oltre 2 deviazioni sopra la sua media
+   delle 180 barre precedenti, il prezzo nelle 24 ore dopo sale più di un long casuale con la
+   stessa uscita; specchio per lo squilibrio verso i venditori.
+3. **Sotto-domande.** Lo squilibrio persiste (ordini grandi spezzati)? Chi opera: grandi
+   operatori che eseguono a pezzi; effetto in ore-giorni.
+4-5. **Spiegazioni concorrenti.**
+   | Spiegazione | Previsione | Smentita |
+   |---|---|---|
+   | Caso | `t` entro ±2 | `t` oltre soglia |
+   | Volatilità | Squilibri nelle barre volatili, R grandi nei due sensi | Segno stabile |
+   | Trend di fondo | Squilibri d'acquisto nel 2021 | Battere la (b) |
+   | Artefatto dei dati | Il campo taker_buy di Binance conta in modo diverso nel tempo | Distribuzione stabile della quota |
+   | Effetto costi | Stop 2 ATR a 4 ore: costo piccolo | — |
+   | È solo il mercato | Squilibri comuni con BTC | — |
+   | Lo squilibrio è contemporaneo, non predittivo | Il prezzo si è già mosso nella barra: dopo niente | R medio vicino alla (b) |
+   | Esaurimento (ultimo compratore) | Dopo lo squilibrio il prezzo torna indietro | R medio negativo |
+   | Liquidazioni (ordini a mercato forzati) | Squilibrio da liquidazioni, poi inversione | — |
+   | Arbitraggisti fra piattaforme | Lo squilibrio riflette prezzi altrove, già arbitraggiato | — |
+6. **Varianti.** 4 ore.
+   - **V-29 (long).** quota = taker_buy_volume / volume; z = (quota − media delle 180 barre
+     precedenti) / devstd delle stesse; z > 2 → long; stop close − 2·ATR(14); uscita dopo 6 barre.
+   - **V-30 (short).** z < −2 → short; stop close + 2·ATR(14); uscita dopo 6 barre.
+   Previsione: R medio fra −0,1 e 0,1.
+
+## I-10 ripresa a 1 ora (stessa idea, non ancora testata: varianti nuove dell'idea)
+
+Le due varianti a 4 ore sono scarti anche allentate. Il meccanismo (compressione della
+volatilità seguita da espansione) non dipende dalla durata della candela; a 1 ora le barre sono
+quattro volte di più. Stesse regole di V-24/V-25 (20 barre, 2 deviazioni, compressione nel 20%
+più basso delle ultime 125 barre, rottura entro 10 barre, stop 2·ATR(14), uscita alla media):
+**V-31 (long)** e **V-32 (short)** a 1 ora. Previsione invariata. Le spiegazioni concorrenti
+sono quelle di I-10; in più: a 1 ora i costi pesano di più (stop ≈ 2-3%, 0,05-0,07 R a giro).
