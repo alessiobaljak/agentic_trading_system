@@ -3360,3 +3360,16 @@ Il proprietario: «fammi sapere appena finisce e domani mattina non eseguire il 
 controllo giornaliero è spenta (trig_01R8zXziePx4RH7k3xfkYDnv) e si riaccende da sola l'11 ottobre alle 06:30 ora
 italiana, dopo l'orario delle 05:45, così riparte dal 12. Il controllo orario scrive subito al proprietario quando
 finisce la prova a placebo di gruppo e quando la campagna di gruppo consegna.
+
+### 10 ottobre, 22:05 ora italiana (20:05 UTC): la sessione di gruppo chiede una scelta sul controllo degli strumenti
+
+Alle 19:12 UTC la terza sessione di gruppo, finita la Fase 0 (80 monete scaricate), si è fermata con una domanda:
+il suo controllo positivo degli strumenti non passava per poco (1,96 contro la soglia 2,07) e chiede di scegliere fra
+1) considerarlo passato, 2) rifarlo con un'uscita a 1 giorno (consigliata dalla sessione), 3) cambiare il calcolo
+dell'incertezza. Il coordinamento ha letto la domanda (solo il riassunto, nessun file del branch) e l'ha girata al
+proprietario. Diagnosi del coordinamento, sullo stesso strumento e sulle stesse 80 monete con le uscite della prova
+a placebo (branch di coordinamento, `research/taratura/controllo_positivo_gruppo/esito.md`): con uscite a tempo di
+1-2 giorni il controllo passa con t circa 6,1 (soglia 2,03) e crolla con il ritardo di una barra; con un'uscita senza
+chiusura a tempo il confronto è non valutabile. Cosa abbiamo capito: gli strumenti di gruppo funzionano; un'uscita
+senza tempo massimo rende l'esame di gruppo quasi cieco, perché la posizione più lunga allunga il blocco per tutte
+le monete. Consiglio al proprietario: la strada 2. Aspetta la sua risposta nella sessione.
