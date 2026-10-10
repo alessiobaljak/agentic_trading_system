@@ -1,38 +1,39 @@
 # Stato sistema (snapshot)
-_Generato: 2026-10-10 18:36 UTC_
+_Generato: 2026-10-10 23:34 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
-- equity: **$891.84**
-- ultimo heartbeat: 2026-10-10 18:35 UTC
+- equity: **$892.92**
+- ultimo heartbeat: 2026-10-10 23:33 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
-- esito: **⚪ FLAT** (2026-10-10 18:32 UTC)
+- esito: **⚪ FLAT** (2026-10-10 23:32 UTC)
 - motivo: nessun segnale valido sopra soglia
 - asset valutati: 77 · segnali: 0
 
 ## Posizioni aperte
-- AINUSDT: short qty=584.6121924080657 @ 0.04313 uPnL=0.7012279711495712 · rischio 0.13% · leva 1.0x
-- AVAAIUSDT: long qty=10047.570155653133 @ 0.008838 uPnL=-0.5106075235004046 · rischio 0.15% · leva 1.0x
-- SAHARAUSDT: short qty=10066.934025128941 @ 0.008821 uPnL=-0.40900022864285507 · rischio 0.09% · leva 1.0x
-- USELESSUSDT: short qty=257.0119474202278 @ 0.1868 uPnL=0.11760111583953711 · rischio 0.13% · leva 1.0x
-- ZORAUSDT: long qty=12228.750574417048 @ 0.007293 uPnL=-0.16732539029946794 · rischio 0.12% · leva 1.0x
-- **rischio aperto totale: 0.61%** dell'equity su 5 posizioni
+- AINUSDT: long qty=1163.6671661448097 @ 0.04178 uPnL=-0.5611106333490933 · rischio 0.14% · leva 1.0x
+- AVAAIUSDT: long qty=10047.570155653133 @ 0.008838 uPnL=-0.009474532619068138 · rischio 0.15% · leva 1.0x
+- GRIFFAINUSDT: long qty=1369.4626636428784 @ 0.017712 uPnL=-0.06303981991453013 · rischio 0.09% · leva 1.0x
+- SAHARAUSDT: short qty=10066.934025128941 @ 0.008821 uPnL=0.04676445337017504 · rischio 0.09% · leva 1.0x
+- USELESSUSDT: short qty=257.0119474202278 @ 0.1868 uPnL=-0.025420413470776327 · rischio 0.13% · leva 1.0x
+- ZORAUSDT: long qty=12201.655820198976 @ 0.007318 uPnL=-0.08214618851829093 · rischio 0.10% · leva 1.0x
+- **rischio aperto totale: 0.68%** dell'equity su 6 posizioni
 
 ## GATE 1 — Validazione strategie
 - stato: **✅ SUPERATO — pronti per il paper trading**
 - copertura universo: **77/200 crypto (38%)** · obiettivo ≥ 35%
 - coppie validate (>= 3 pass OOS): **238**
-- universo scansionato: 0GUSDT, 1000BONKUSDT, 1000FLOKIUSDT, 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ACEUSDT, ACTUSDT, ADAUSDT, AEROUSDT, AGTUSDT, AINUSDT, AIOTUSDT, AKEUSDT, ALGOUSDT, ALICEUSDT, ALTUSDT, APEUSDT, API3USDT, APRUSDT, APTUSDT, ARBUSDT, ARKUSDT, ARPAUSDT, ARUSDT, ASTERUSDT, ATOMUSDT, AUSDT, AVAXUSDT, AXSUSDT, AZTECUSDT, BATUSDT, BCHUSDT, BELUSDT, BILLUSDT, BNBUSDT, BOMEUSDT, BREVUSDT, BRUSDT, BTCUSDT, BTWUSDT, BULLAUSDT, C98USDT, CAKEUSDT, CAPUSDT, CCUSDT, CFXUSDT, CHIPUSDT, CHRUSDT, CHZUSDT, CKBUSDT, COMPUSDT, COTIUSDT, CRVUSDT, CTSIUSDT, CTUSDT, CYBERUSDT, DASHUSDT, DOGEUSDT, DOSUSDT, DOTUSDT, DUSKUSDT, EDUUSDT, EIGENUSDT, ENAUSDT, ENJUSDT, ERAUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FILUSDT, FOLKSUSDT, FRAXUSDT, GALAUSDT, GMTUSDT, GRAMUSDT, GRASSUSDT, GRIFFAINUSDT, GTCUSDT, GWEIUSDT, HBARUSDT, HUMAUSDT, HYPEUSDT, ICPUSDT, IMXUSDT, INJUSDT, JASMYUSDT, JCTUSDT, JSTUSDT, JTOUSDT, JUPUSDT, KAIAUSDT, KITEUSDT, LABUSDT, LAUSDT, LDOUSDT, LINKUSDT, LITUSDT, LPTUSDT, LSKUSDT, LTCUSDT, LUMIAUSDT, LYNUSDT, MAGICUSDT, MAGMAUSDT, MANAUSDT, MANTAUSDT, MARSCOINUSDT, MAVUSDT, METUSDT, MINAUSDT, MONUSDT, MORPHOUSDT, MOVRUSDT, MUBARAKUSDT, NEARUSDT, NEOUSDT, NIGHTUSDT, NILUSDT, NMRUSDT, OGNUSDT, ONDOUSDT, ONEUSDT, ONGUSDT, ONTUSDT, ONUSDT, OPGUSDT, OPNUSDT, OPUSDT, ORCAUSDT, ORDIUSDT, OUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PHAUSDT, PIXELUSDT, PLUMEUSDT, POLUSDT, PONSUSDT, PROMUSDT, PUMPUSDT, PYTHUSDT, QNTUSDT, QUSDT, RAYSOLUSDT, RENDERUSDT, RIVERUSDT, RLCUSDT, RONINUSDT, ROSEUSDT, SAGAUSDT, SANDUSDT, SEIUSDT, SENTUSDT, SKLUSDT, SKYUSDT, SOLUSDT, SOONUSDT, STABLEUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUSDT, TAOUSDT, THETAUSDT, TIAUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, UNIUSDT, USELESSUSDT, USUSDT, VELODROMEUSDT, VELVETUSDT, VETUSDT, VIRTUALUSDT, VTHOUSDT, VVVUSDT, WALUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, WUSDT, XAIUSDT, XAUTUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, YGGUSDT, ZAMAUSDT, ZECUSDT, ZKUSDT, ZROUSDT, 币安人生USDT, 牛来USDT, 龙虾USDT
-- aggiornato: 2026-10-10 18:16 UTC
+- universo scansionato: 0GUSDT, 1000BONKUSDT, 1000FLOKIUSDT, 1000PEPEUSDT, 1000SHIBUSDT, AAVEUSDT, ACEUSDT, ACTUSDT, ADAUSDT, AEROUSDT, AGTUSDT, AINUSDT, AIOTUSDT, AKEUSDT, ALGOUSDT, ALICEUSDT, ALTUSDT, APEUSDT, API3USDT, APRUSDT, APTUSDT, ARBUSDT, ARKUSDT, ARPAUSDT, ARUSDT, ASTERUSDT, ATOMUSDT, AUSDT, AVAXUSDT, AXSUSDT, AZTECUSDT, BATUSDT, BCHUSDT, BELUSDT, BILLUSDT, BNBUSDT, BOMEUSDT, BREVUSDT, BRUSDT, BTCUSDT, BTWUSDT, BULLAUSDT, C98USDT, CAKEUSDT, CAPUSDT, CCUSDT, CFXUSDT, CHIPUSDT, CHRUSDT, CHZUSDT, CKBUSDT, COMPUSDT, COTIUSDT, CRVUSDT, CTSIUSDT, CTUSDT, CYBERUSDT, DASHUSDT, DOGEUSDT, DOSUSDT, DOTUSDT, DUSKUSDT, EDUUSDT, EIGENUSDT, ENAUSDT, ENJUSDT, ERAUSDT, ETCUSDT, ETHFIUSDT, ETHUSDT, FARTCOINUSDT, FETUSDT, FILUSDT, FOLKSUSDT, FRAXUSDT, GALAUSDT, GMTUSDT, GRAMUSDT, GRASSUSDT, GRIFFAINUSDT, GTCUSDT, GWEIUSDT, HBARUSDT, HUMAUSDT, HYPEUSDT, ICPUSDT, IMXUSDT, INITUSDT, INJUSDT, JCTUSDT, JSTUSDT, JTOUSDT, JUPUSDT, KAIAUSDT, KAITOUSDT, KITEUSDT, LABUSDT, LAUSDT, LDOUSDT, LINKUSDT, LITUSDT, LPTUSDT, LSKUSDT, LTCUSDT, LUMIAUSDT, LYNUSDT, MAGICUSDT, MAGMAUSDT, MANAUSDT, MANTAUSDT, MARSCOINUSDT, MAVUSDT, METUSDT, MINAUSDT, MONUSDT, MORPHOUSDT, MOVRUSDT, MUBARAKUSDT, NEARUSDT, NEOUSDT, NIGHTUSDT, NILUSDT, NMRUSDT, OGNUSDT, ONDOUSDT, ONEUSDT, ONGUSDT, ONTUSDT, ONUSDT, OPGUSDT, OPNUSDT, OPUSDT, ORCAUSDT, ORDIUSDT, OUSDT, PAXGUSDT, PENDLEUSDT, PENGUUSDT, PHAUSDT, PIXELUSDT, PLUMEUSDT, POLUSDT, PONSUSDT, PROMUSDT, PUMPUSDT, PYTHUSDT, QNTUSDT, QUSDT, RAYSOLUSDT, RENDERUSDT, RIVERUSDT, RLCUSDT, RONINUSDT, ROSEUSDT, SAGAUSDT, SANDUSDT, SEIUSDT, SENTUSDT, SKLUSDT, SKYUSDT, SOLUSDT, SOONUSDT, STABLEUSDT, STRKUSDT, STXUSDT, SUIUSDT, SUSDT, TAOUSDT, THETAUSDT, TIAUSDT, TRBUSDT, TRUMPUSDT, TRXUSDT, UNIUSDT, USELESSUSDT, USUSDT, VELODROMEUSDT, VIRTUALUSDT, VTHOUSDT, VVVUSDT, WALUSDT, WIFUSDT, WLDUSDT, WLFIUSDT, WUSDT, XAIUSDT, XAUTUSDT, XLMUSDT, XMRUSDT, XPLUSDT, XRPUSDT, YGGUSDT, ZAMAUSDT, ZECUSDT, ZENUSDT, ZKUSDT, ZROUSDT, 币安人生USDT, 牛来USDT, 龙虾USDT
+- aggiornato: 2026-10-10 21:22 UTC
 
 ### Salute del registro
 
-- composizione: **1 base** · **2274 generate** (di cui 1938 con almeno una conferma)
-- occupazione: 2275/3000 — ok
+- composizione: **1 base** · **2288 generate** (di cui 1952 con almeno una conferma)
+- occupazione: 2289/3000 — ok
 
 ### Strategie VALIDATE (operate dal bot)
 | Coin | Strategia | Passes | PF | PnL OOS | Parametri |
@@ -287,34 +288,34 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| pf_ex_top | 3 | 0.2% |
-| holdout | 1 | 0.1% |
-| consistency | 17 | 1.3% |
-| total_return | 1207 | 91.4% |
-| trades | 6 | 0.5% |
 | regime | 22 | 1.7% |
+| pf_ex_top | 3 | 0.2% |
 | recovery | 64 | 4.8% |
+| trades | 6 | 0.5% |
+| total_return | 1207 | 91.4% |
+| consistency | 17 | 1.3% |
+| holdout | 1 | 0.1% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
-**strategie generate** — 22525 valutazioni, 58 passate (0.26%) · 2026-10-10 17:31 UTC
+**strategie generate** — 22780 valutazioni, 60 passate (0.26%) · 2026-10-10 20:10 UTC
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| holdout | 79 | 0.4% |
-| recovery | 1697 | 7.6% |
-| regime | 1592 | 7.1% |
-| total_return | 17998 | 80.1% |
-| trades | 606 | 2.7% |
-| consistency | 270 | 1.2% |
-| pf_ex_top | 225 | 1.0% |
+| regime | 1613 | 7.1% |
+| pf_ex_top | 98 | 0.4% |
+| total_return | 18882 | 83.1% |
+| trades | 526 | 2.3% |
+| recovery | 1219 | 5.4% |
+| consistency | 284 | 1.2% |
+| holdout | 98 | 0.4% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
 ## Supervisore (taratura automatica)
 
-- ultimo giro: 2026-10-10 18:03 UTC · coppie validate: **261** · GATE 1 pronto: True
-- tasso di passaggio misurato: **0.243%**
+- ultimo giro: 2026-10-10 23:00 UTC · coppie validate: **261** · GATE 1 pronto: True
+- tasso di passaggio misurato: **0.249%**
 
 **Parametri modificati rispetto ai default:**
 
@@ -331,35 +332,35 @@ _Nessuna coppia ha passato in questo run._
 - `none` — GATE 1 superato: il paper opera, la taratura si ferma
 
 ## Trade chiusi — perché usciamo
-- totale: **453** · vinti: 254 (56%) · PnL realizzato: **-108.16**
+- totale: **455** · vinti: 256 (56%) · PnL realizzato: **-107.08**
 
-- costi: **61.19 USDT** su 453 trade (0.14/trade) _(stimati dal modello del gate, non misurati dai fill)_
-  - commissioni 33.88 · spread 27.12 · funding +0.20
-  - lordo -46.96 → netto -108.16 · **break-even 6.86%** dell'equity
-  - piu' costose: DEXEUSDT 3.13 · SYRUPUSDT 3.08 · GPSUSDT 2.10 · ZORAUSDT 2.08 · UBUSDT 2.07
-  - ⚠️ Costi operativi elevati: servono 6.86% solo per pareggiare (soglia 1.5%)
+- costi: **61.36 USDT** su 455 trade (0.14/trade) _(stimati dal modello del gate, non misurati dai fill)_
+  - commissioni 33.97 · spread 27.20 · funding +0.19
+  - lordo -45.72 → netto -107.08 · **break-even 6.87%** dell'equity
+  - piu' costose: DEXEUSDT 3.13 · SYRUPUSDT 3.08 · ZORAUSDT 2.22 · GPSUSDT 2.10 · UBUSDT 2.07
+  - ⚠️ Costi operativi elevati: servono 6.87% solo per pareggiare (soglia 1.5%)
 
 | Uscita | Trade | % | PnL |
 |---|---|---|---|
-| Trailing stop | 204 | 45% | +162.20 |
+| Trailing stop | 206 | 45% | +163.27 |
 | Stop loss (prima di qualsiasi TP) | 194 | 43% | -398.76 |
 | Scale-out (>=1 TP incassato, residuo a BE) | 39 | 9% | +78.12 |
 | Time exit (orizzonte scaduto) | 12 | 3% | +21.55 |
 | Take profit (fino all'ultimo gradino) | 4 | 1% | +28.73 |
 
-- gradini raggiunti (su 453 trade): 0 TP: 404 (89%) · 1 TP: 36 (8%) · 2 TP: 9 (2%) · 3 TP: 4 (1%)
+- gradini raggiunti (su 455 trade): 0 TP: 406 (89%) · 1 TP: 36 (8%) · 2 TP: 9 (2%) · 3 TP: 4 (1%)
 
-- **drawdown di portafoglio: 113.19 USDT** (ritorno -108.16 · recovery -0.96) · max 15 posizioni aperte insieme
-  - il gate prometteva recovery ≥ 2.0 per ogni coppia (peggiore in registro: 0.00); il PORTAFOGLIO realizza -0.96
+- **drawdown di portafoglio: 113.19 USDT** (ritorno -107.08 · recovery -0.95) · max 15 posizioni aperte insieme
+  - il gate prometteva recovery ≥ 2.0 per ogni coppia (peggiore in registro: 0.00); il PORTAFOGLIO realizza -0.95
   _uscite in ordine di TEMPO: e' la buca vera, quella che il gate non vede perche' valida una coppia alla volta._
 
-- escursione favorevole (mfe_r, 453 trade): mediana **0.81R** · ≥1R: 39% · ≥1.5R: 15% · ≥3R: 3% · ≥5R: 0%
+- escursione favorevole (mfe_r, 455 trade): mediana **0.81R** · ≥1R: 39% · ≥1.5R: 15% · ≥3R: 3% · ≥5R: 0%
   _quanto lontano arriva il prezzo, in unità di R: dice se la scala di TP è raggiungibile. Dettaglio: `python -m scripts.mfe_report`_
 
 ## Deriva paper vs gate
 _il gate promette sulla storia, il paper misura il presente. `drift` = promessa contraddetta -> size/leva frenate subito e fallimento al gate alla prossima passata._
 
-- **globale**: drift · 433 trade · PF vissuto 0.721 vs 2.016 atteso · mfe mediana 0.81R
+- **globale**: drift · 434 trade · PF vissuto 0.722 vs 2.016 atteso · mfe mediana 0.81R
 
 - **freno globale attivo**: size x0.5 e leva x0.71 (radice) su OGNI trade finche' il PF a 30 giorni resta sotto 0.6 x atteso (motivo: PF 0.72 vs 2.02 atteso · mfe mediana 0.81R < primo TP 1.50R)
 
@@ -368,36 +369,36 @@ _il gate promette sulla storia, il paper misura il presente. `drift` = promessa 
 | SYRUPUSDT|gen_4c6df481 | drift | 9 | 1.092 / 1.544 | mfe mediana 1.01R < primo TP 2.00R |
 | USELESSUSDT|gen_2031005e | watch | 7 | 0.304 / 1.54 | PF 0.30 vs 1.54 atteso · mfe mediana 0.80R < primo TP 2.00R |
 | QUSDT|gen_18c839a0 | watch | 6 | 0.535 / 2.883 | PF 0.53 vs 2.88 atteso · mfe mediana 0.91R < primo TP 1.50R |
-| AVAAIUSDT|gen_e50a9211 | watch | 4 | 0.345 / 1.525 | PF 0.35 vs 1.52 atteso |
-| PTBUSDT|gen_684d7623 | watch | 4 | 1.377 / 1.871 | mfe mediana 0.53R < primo TP 1.00R |
-| BULLAUSDT|gen_7ac562e3 | watch | 4 | 0.898 / 1.839 | PF 0.90 vs 1.84 atteso |
-| HUMAUSDT|gen_fca11c08 | watch | 4 | 0.0 / 1.657 | PF 0.00 vs 1.66 atteso · mfe mediana 0.10R < primo TP 2.00R |
 | MUBARAKUSDT|gen_1f7ead60 | watch | 4 | 0.108 / 2.776 | PF 0.11 vs 2.78 atteso · mfe mediana 1.25R < primo TP 2.00R |
-| UBUSDT|gen_f3661202 | watch | 3 | 0.923 / 1.679 | PF 0.92 vs 1.68 atteso · mfe mediana 1.03R < primo TP 2.00R |
-| VETUSDT|gen_6d06dca0 | watch | 3 | 0.386 / 1.631 | PF 0.39 vs 1.63 atteso |
-| SYRUPUSDT|gen_af734c68 | watch | 3 | 0.407 / 1.493 | PF 0.41 vs 1.49 atteso · mfe mediana 0.94R < primo TP 1.50R |
-| FORMUSDT|gen_c647ead7 | watch | 3 | 99.0 / 2.206 | mfe mediana 0.51R < primo TP 0.75R |
+| BULLAUSDT|gen_7ac562e3 | watch | 4 | 0.898 / 1.839 | PF 0.90 vs 1.84 atteso |
+| PTBUSDT|gen_684d7623 | watch | 4 | 1.377 / 1.871 | mfe mediana 0.53R < primo TP 1.00R |
+| HUMAUSDT|gen_fca11c08 | watch | 4 | 0.0 / 1.657 | PF 0.00 vs 1.66 atteso · mfe mediana 0.10R < primo TP 2.00R |
+| AVAAIUSDT|gen_e50a9211 | watch | 4 | 0.345 / 1.525 | PF 0.35 vs 1.52 atteso |
 | ORCAUSDT|gen_6d06dca0 | watch | 3 | 0.0 / 1.967 | PF 0.00 vs 1.97 atteso · mfe mediana 0.49R < primo TP 1.50R |
 | GALAUSDT|gen_b9aa9989 | watch | 3 | 0.54 / 1.922 | PF 0.54 vs 1.92 atteso · mfe mediana 0.55R < primo TP 1.00R |
-| BULLAUSDT|gen_5a52c06b | watch | 3 | 0.213 / 1.801 | PF 0.21 vs 1.80 atteso · mfe mediana 0.52R < primo TP 1.50R |
-| CATIUSDT|gen_b3e46005 | watch | 3 | 1.519 / 2.605 | PF 1.52 vs 2.60 atteso |
+| SYRUPUSDT|gen_af734c68 | watch | 3 | 0.407 / 1.493 | PF 0.41 vs 1.49 atteso · mfe mediana 0.94R < primo TP 1.50R |
 | JTOUSDT|gen_f238d283 | watch | 3 | 0.653 / 1.64 | PF 0.65 vs 1.64 atteso |
-| QUSDT|gen_bf2be656 | watch | 2 | 0.0 / 3.527 | PF 0.00 vs 3.53 atteso · mfe mediana 0.43R < primo TP 1.50R |
-| HUSDT|gen_22b2cade | watch | 2 | 0.927 / 2.257 | PF 0.93 vs 2.26 atteso |
-| MUBARAKUSDT|gen_e933160c | watch | 2 | 0.243 / 1.889 | PF 0.24 vs 1.89 atteso |
+| UBUSDT|gen_f3661202 | watch | 3 | 0.923 / 1.679 | PF 0.92 vs 1.68 atteso · mfe mediana 1.03R < primo TP 2.00R |
+| BULLAUSDT|gen_5a52c06b | watch | 3 | 0.213 / 1.801 | PF 0.21 vs 1.80 atteso · mfe mediana 0.52R < primo TP 1.50R |
+| VETUSDT|gen_6d06dca0 | watch | 3 | 0.386 / 1.631 | PF 0.39 vs 1.63 atteso |
+| FORMUSDT|gen_c647ead7 | watch | 3 | 99.0 / 2.206 | mfe mediana 0.51R < primo TP 0.75R |
+| CATIUSDT|gen_b3e46005 | watch | 3 | 1.519 / 2.605 | PF 1.52 vs 2.60 atteso |
+| KERNELUSDT|gen_c647ead7 | watch | 2 | 0.133 / 2.131 | PF 0.13 vs 2.13 atteso · mfe mediana 1.04R < primo TP 2.00R |
+| SYRUPUSDT|gen_f3b97917 | watch | 2 | 99.0 / 2.064 | mfe mediana 1.16R < primo TP 2.00R |
+| MUBARAKUSDT|gen_49c2f657 | watch | 2 | 0.532 / 1.721 | PF 0.53 vs 1.72 atteso |
 
 - serie di perdite (freno SPENTO dal 24 set, solo misura): **gen_fa304106** (11 perdite di fila)
 
 ## Calibrazione della confidenza
 _la confidenza del segnale modula size e leva: qui si verifica che predica davvero l'esito, invece di darlo per scontato._
 
-- verdetto: **costante** · 433 trade · correlazione None · influenza applicata **x1.0**
-- tutte le strategie generate escono a confidenza 60: la calibrazione non puo' misurare nulla finche' la confidenza non varia (433 trade, confidenza 60-60)
+- verdetto: **costante** · 434 trade · correlazione None · influenza applicata **x1.0**
+- tutte le strategie generate escono a confidenza 60: la calibrazione non puo' misurare nulla finche' la confidenza non varia (434 trade, confidenza 60-60)
 
 | Fascia di confidenza | Trade | Win rate | Esito medio |
 |---|---|---|---|
-| 60.0–60.0 | 144 | 54% | -0.24% |
-| 60.0–60.0 | 144 | 60% | -0.10% |
-| 60.0–60.0 | 145 | 52% | -0.58% |
+| 60.0–60.0 | 144 | 55% | -0.22% |
+| 60.0–60.0 | 144 | 60% | -0.08% |
+| 60.0–60.0 | 146 | 52% | -0.61% |
 
 _se l'esito medio CRESCE dalla fascia bassa all'alta, la confidenza ordina correttamente i trade._
