@@ -1490,7 +1490,7 @@ def _formato_branch_sicuro(valore: str) -> bool:
         fine = valore.find(")", i)
         if fine == -1:
             return False
-        campo = re.split(r"[:)]", valore[i + 2:fine], 1)[0].strip().lower()
+        campo = re.split(r"[:)]", valore[i + 2:fine], maxsplit=1)[0].strip().lower()
         if campo not in _BRANCH_CAMPI_SICURI:
             return False
         i = fine + 1
