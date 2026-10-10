@@ -3339,3 +3339,17 @@ in campagna, quindi la sessione non poteva rimediare da sola. Correzione: lo scr
 le dipendenze della ricerca, e controlla che ci siano (de2618ae). Aperta su delega la seconda sessione
 (session_01VJKFhoptfjZhGcBSqzY5Vg, 17:43 UTC) con lo stesso messaggio più «riprendi dalla nota del log»; la prima non va
 ripresa. Il controllo orario segue la seconda. Ultracode non risultava attivo nella prima.
+
+### 10 ottobre, 20:36 ora italiana (18:36 UTC): anche la seconda sessione ferma, causa trovata, aperta la terza
+
+La seconda sessione di gruppo (session_01VJKFhoptfjZhGcBSqzY5Vg) si è fermata alle 17:53 UTC con lo stesso problema,
+e il suo riassunto ha dato la causa: sulle macchine delle sessioni nuove c'è Python 3.13, e numpy 1.26.4 (la versione
+fissata in requirements.txt) non si installa su 3.13; il pip della sessione è vietato dal guardiano. Riprodotto qui:
+su Python 3.13 numpy 1.26.4 non si installa, senza versione fissata si installano numpy 2.5.3 e scipy 1.18.1, e con
+queste versioni i test degli strumenti della ricerca passano tutti (2374). Su Python 3.13 un avviso di Python nel
+guardiano faceva fallire un test: corretto (maxsplit per nome). Correzioni: script d'avvio con le versioni fissate se
+si può e altrimenti le ultime compatibili, per `python` e `python3` (e761cc05); la correzione del guardiano portata sul
+branch della campagna con un solo commit senza estrarre il branch, a sessioni ferme (2bfb2f99, regole.md sezione 11,
+punto 6). Aperta la terza sessione (session_01Lt3FVBCW5Kg531Pe7rjHRp, 18:35 UTC); le prime due non vanno riprese.
+Cosa abbiamo capito: le macchine delle sessioni non sono tutte uguali (Python 3.11 qui, 3.13 lì), e il divieto di pip
+in campagna rende obbligatorio che lo script d'avvio installi da solo tutto ciò che serve alla ricerca.
