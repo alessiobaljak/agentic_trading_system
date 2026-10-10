@@ -235,7 +235,9 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
      metà verso l'alto, per s da 0 a S − 1; se L − 2 · margine + 1 è meno di S, si usano tutti gli sfasamenti interi
      da margine a L − margine, una volta ciascuno, e si dichiara quanti sono;
    * un ingresso spostato si salta, e si conta, se cade fuori dalla finestra della sua moneta, in una barra che manca
-     nella serie della moneta, in una barra vietata o mentre la posizione è aperta;
+     nella serie della moneta, in una barra vietata o mentre la posizione è aperta (anche quando due ingressi della
+     stessa moneta cadono nella stessa barra: succede solo con un segnale prima della finestra, per un buco o per il
+     ritardo);
    * per ogni s: M'(s) = R medio dei trade sommati della strategia sfasata, n'(s) = numero dei suoi trade;
    * pavimento delle sfasate = deviazione standard (con ddof 1) dei valori (M'(s) − media delle M') ×
      radice(n'(s) / N), sulle s con almeno un trade; con meno di 2 sfasate con trade la variante è non valutabile. La
@@ -249,8 +251,8 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
 7. **Candidato.** In costruzione una variante diventa candidato se batte nettamente la (a) e la (b) di gruppo e il
    suo R medio dopo i costi, sui trade sommati, è positivo. Una variante non valutabile non è un vantaggio. La
    **vicinanza** (ordine dei ritocchi) è il `t` contro la (b) di gruppo.
-8. **(c)**: buy and hold per anno, long e short, di ogni moneta con trade, combinato con gli stessi pesi w_j: solo
-   contesto, come nella sezione 8 del protocollo.
+8. **(c)**: buy and hold per anno, long e short, di ogni moneta con trade, combinato con gli stessi pesi w_j (in un anno in cui una moneta non ha candele il suo
+   termine manca, e si riporta la somma dei pesi delle monete presenti): solo contesto, come nella sezione 8 del protocollo.
 9. **Si riportano sempre** (solo come informazione, mai come prova): blocco, k, massimo di uscite in un giorno UTC,
    durata massima di una posizione, monete con trade, quota della moneta più presente, ed effetto grappolo =
    errore del candidato² × N / varianza degli R, con l'errore del bootstrap già corretto per il blocco e preso PRIMA
@@ -348,7 +350,7 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
 5. **Asticella**: `benjamini_hochberg` al 10% sui p-value del campo `p_value` di `contro_baseline`, con i trade
    sommati di validazione, la (b) di gruppo di validazione e il pavimento delle sfasate di validazione. m (il numero
    di candidati dell'asticella) conta tutti i candidati di gruppo che hanno girato in validazione: chi ha meno di 300
-   trade o è non valutabile entra con p-value 1, e chi cade per l'R medio resta nel conteggio. Il gruppo è una
+   trade o è non valutabile (contro la (a), contro la (b) o per il pavimento delle sfasate) entra con p-value 1, e chi cade per l'R medio resta nel conteggio. Il gruppo è una
    campagna a sé: la sua m non si unisce a quelle delle monete singole.
 6. Si riportano, senza che decidano: quota della moneta più presente, prova sulle monete, effetto grappolo. L'esito
    è provvisorio: lo conferma il coordinamento, che controlla anche il segno dell'R medio sommato.
@@ -554,8 +556,8 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
 6. **Calcoli lunghi.** Prima di ogni calcolo che dura più di 20 minuti la sessione pusha un commit intitolato
    «calcolo in corso fino alle HH:MM UTC circa»: il coordinamento non la giudica ferma fino a quell'ora più metà
    della durata annunciata. Ogni calcolo si lancia in background con il tempo massimo dello strumento (7.200.000 ms),
-   in pezzi sotto le 2 ore, e riprende da dove era rimasto (sezione 8, punto 1). Se un calcolo supera 3 volte la stima
-   della sezione 14, la sessione scrive una nota nel log e lo dice all'utente; l'esito di una variante non cambia per
+   in pezzi sotto le 2 ore, e riprende da dove era rimasto (sezione 8, punto 1). Uno script che chiama `gruppo.py` con più processi tiene la chiamata sotto `if __name__ == "__main__":`. Se un
+   calcolo supera 3 volte la stima della sezione 14, la sessione scrive una nota nel log e lo dice all'utente; l'esito di una variante non cambia per
    la velocità.
 7. **Storia, commit e push.** In una macchina di sessione la storia è limitata, e il guardiano ammette la storia dei
    commit solo con formati di date e hash: `git log --format='%h %cI' -- research/campagne/GRUPPO/` (anche con
@@ -646,7 +648,8 @@ ricalcolati a ogni barra i tempi possono raddoppiare.)
   della prova.
 * **Filtro di liquidità.** Il filtro legge il volume di tutto il mese della barra: in un mese in cui una moneta crolla
   o smette di avere candele, il candidato può non entrare anche nei giorni prima. È uno sguardo avanti di al massimo
-  un mese, lo stesso della Fase 0 del protocollo, e vale uguale in costruzione, validazione e vault.
+  un mese, lo stesso della Fase 0 del protocollo, e vale uguale in costruzione, validazione e vault. In costruzione il
+  verdetto di gennaio 2023 usa anche il volume dei giorni dal 17 al 31, che sono di validazione.
 * **Il bot e molte monete.** Non è verificato che il bot sappia eseguire una strategia su decine di monete, e i suoi
   limiti di portafoglio la cambierebbero (sezione 10, punto 3).
 * **Il guardiano** giudica le azioni, non gli script (sezione 11 del protocollo); il divieto di leggere le appendici
