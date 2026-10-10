@@ -203,14 +203,24 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
    di Student con k − 1 gradi, come nella sezione 8 del protocollo.
 3. **La baseline (a) di gruppo.** Per ogni moneta j con n_j > 0 si esegue la (a) della sezione 8 del protocollo su
    quella moneta e si calcola `baseline_da_trade` sui suoi trade, con il blocco di `lunghezza_blocco` sui SUOI trade:
-   numero A_j, errore e_j, deviazione standard dev_j. Numero di gruppo: A = Σ w_j · A_j. Errore: Σ w_j · e_j, cioè le
+   numero A_j, errore e_j, deviazione standard dev_j. D è la deviazione combinata radice(Σ n_i · dev_i² / Σ n_i) sulle
+   sole monete con almeno 2 trade della (a). Casi:
+   * almeno 3 blocchi interi: A_j, e_j e dev_j come escono;
+   * meno di 3 blocchi interi e almeno 2 trade: e_j = il più alto fra dev_j e D (l'errore di un trade solo, che non
+     scende sotto la dispersione tipica quando dev_j viene da pochissimi trade);
+   * esattamente 1 trade: A_j = l'R di quel trade, e_j = D, e nella deviazione combinata la sua dev_j vale D;
+   * 0 trade: la moneta resta fuori dal numero A e dalla combinazione della (a) (i pesi si ricalcolano sulle monete
+     che hanno la (a)); l'R medio del candidato resta su tutti i trade; si riportano le monete lasciate fuori e la
+     quota dei trade del candidato che portano.
+   Numero di gruppo: A = Σ w_j · A_j, con w_j = n_j / Σ n delle monete della combinazione. Errore: Σ w_j · e_j, cioè le
    monete trattate come se si muovessero insieme (non sottostima mai; nella simulazione del coordinamento costava al
-   massimo circa il 15% di errore in più, stima). Se la (a) di una moneta ha meno di 3 blocchi interi, il suo e_j si
-   prende uguale al più alto fra dev_j e la deviazione standard combinata qui sotto (l'errore di un trade solo, che
-   non scende sotto la dispersione tipica quando dev_j viene da pochissimi trade); se ha meno di 2 trade, la variante
-   è non valutabile. Deviazione standard combinata: radice(Σ n_j · dev_j² / N), così il pavimento della (a) in
-   `contro_baseline` vale radice(Σ n_j · dev_j²) / N. Una moneta senza trade del candidato pesa zero e non ha (a). Lo
-   calcola solo `statistica.baseline_da_trade_di_gruppo`.
+   massimo circa il 15% di errore in più, stima). Deviazione standard combinata: radice(Σ n_j · dev_j² / Σ n_j) sulle
+   monete della combinazione, così il pavimento della (a) in `contro_baseline` è quello di sempre. Una moneta senza
+   trade del candidato pesa zero e non ha (a). La variante è non valutabile contro la (a) se nessuna moneta ha almeno 2
+   trade della (a), oppure se le monete lasciate fuori portano più del 10% dei trade del candidato. Lo calcola solo
+   `statistica.baseline_da_trade_di_gruppo`. (Prima della chiusura della bozza bastava una moneta con meno di 2 trade
+   della (a) per rendere non valutabile la variante: con 80 monete una moneta poco liquida nel 2023 lo faceva
+   succedere in 2 delle 6 validazioni della prova di funzionamento del coordinamento.)
 4. **La baseline (b) di gruppo.** Per ogni moneta j con n_j > 0 si esegue `simula_baseline_casuale` come nella
    sezione 8 del protocollo: n_j ingressi, durata media = `durata_media_barre` dei trade del candidato sulla moneta j,
    barre vietate della moneta j (riscaldamento, mesi sotto la liquidità, segnale non valido, e in validazione tutte
@@ -466,7 +476,9 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
    elenco stanno solo sul branch di coordinamento, si committano prima di «APRI IL VAULT» e la loro impronta va in
    `vault/APERTURA.md`. `vault/APERTURA.md` contiene anche il candidato di gruppo con le impronte dei
    suoi file, le impronte di `monete.csv`, delle schede e di questo file, il rimando all'elenco del punto 1.3 e la
-   scelta del proprietario sul trasferimento (punto 2). `vault/risultati.md` riporta il totale sommato, la tabella per
+   scelta del proprietario sul trasferimento (punto 2). Prima del giro il coordinamento controlla che ogni moneta del gruppo abbia i file del vault (candele del timeframe,
+   funding e candele giornaliere del last) fino al suo ultimo giorno con candele: senza marcatore `gruppo.py` non si
+   ferma da solo. `vault/risultati.md` riporta il totale sommato, la tabella per
    moneta e, a parte, le monete che smettono di avere candele.
 5. **Passo 7**: nel giudizio d'insieme il candidato di gruppo conta come un candidato, con il suo tasso del caso; non
    è un'«idea di gruppo». Al punto 3 si unisce anche `research/campagna/GRUPPO`, e le sue lezioni entrano come
@@ -596,7 +608,8 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
 * `motore.simula_baseline_casuale`: una chiave in più, `r_medio_per_seme`, l'R medio di ogni seme (vuoto per le
   simulazioni senza trade), senza cambiare nulla per le campagne singole.
 * `motore.simula_sfasamento_comune`: le strategie sfasate della sezione 5 e le sfasate del vault della sezione 9.
-* `motore.metriche_di_gruppo`: le metriche dei trade sommati con le chiavi del `criterio_vault`.
+* `motore.metriche_di_gruppo`: le metriche dei trade sommati con le chiavi del `criterio_vault`; `motore.somme_dei_trade`
+  e `motore.metriche_di_gruppo_da_somme`: le stesse metriche dalle somme per moneta, per le sfasate del vault.
 * `statistica.ordina_trade_di_gruppo`, `statistica.baseline_da_trade_di_gruppo`,
   `statistica.baseline_casuale_di_gruppo`, `statistica.pavimento_sfasamento`, `statistica.effetto_grappolo`,
   `statistica.estremi_di_gruppo`, e `statistica.contro_baseline(..., pavimento_minimo=0.0)` (con 0 è identica a
