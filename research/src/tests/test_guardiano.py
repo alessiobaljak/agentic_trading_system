@@ -327,10 +327,14 @@ def test_campagna_glob(campagna_btc):
         # cartella e' vietato in campagna: stampava i messaggi di tutto il branch principale
         # (il lavoro di coordinamento, i commit del bot nel periodo del vault)
         ("git log --oneline -5", 2),
-        ("git log --oneline -5 -- research/campagne/BTCUSDT/", 0),
+        # dal 10 ott 2026 (test_guardiano_gruppo.py) in un clone a storia limitata la storia
+        # si guarda solo con date e hash, e questa radice finta non e' un repo git: git non sa
+        # dire se e' limitata, quindi vale come limitata. `--oneline` e il formato predefinito
+        # qui sono rifiutati (lo provano i test del gruppo); con un formato di date e hash no
+        ("git log --format=%h -5 -- research/campagne/BTCUSDT/", 0),
         ("git log research/campagna/ETHUSDT", 2),
         ("git log research/campagna/BTCUSDT", 2),
-        ("git log research/campagna/BTCUSDT -- research/campagne/BTCUSDT/", 0),
+        ("git log --format=%cI research/campagna/BTCUSDT -- research/campagne/BTCUSDT/", 0),
         ("git checkout research/coordinamento", 2),
         ("git checkout -- research/src/motore.py", 2),
         ("git switch research/campagna/ETHUSDT", 2),

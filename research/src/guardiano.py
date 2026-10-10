@@ -20,6 +20,12 @@ Come decide:
   * `{"tipo": "campagna", "simbolo": "X"}` -> lista BIANCA (Passo 3): solo i
     percorsi ammessi della campagna e solo gli strumenti ammessi; tutto il
     resto e' vietato;
+  * `{"tipo": "campagna", "simbolo": "GRUPPO"}` -> la campagna di gruppo (Passo
+    4bis, testo completo in `research/campagne/GRUPPO/regole.md`, sezione 12):
+    la stessa lista BIANCA, ma i dati ammessi sono quelli delle monete di
+    `research/campagne/GRUPPO/monete.csv` (e di BTCUSDT), e solo se quel file ha
+    l'impronta SHA-256 scritta qui (`_IMPRONTA_MONETE_GRUPPO`); se non ce l'ha,
+    ogni azione e' rifiutata;
   * `{"tipo": "coordinamento"}` -> lista NERA: tutto ammesso tranne i
     `percorsi_vietati`, i segreti e `research/data/vault/` finche' il vault e'
     chiuso (manca `research/vault/APERTURA.md`); gli strumenti diversi da
@@ -78,6 +84,24 @@ campagna:
   Per questo `.claude/settings.json` registra il guardiano per TUTTI gli
   strumenti (matcher `*`); senza marcatore la risposta resta immediata.
 
+Cosa ha aggiunto la campagna di gruppo (10 ottobre 2026, Passo 4bis;
+test_guardiano_gruppo.py):
+  * i dati in-sample non sono piu' una cartella fissa della lista bianca:
+    `research/data/insample/<X>` e' ammesso solo se X sta in un insieme ESATTO
+    (mai per prefisso, mai la cartella madre da sola): {simbolo, BTCUSDT} per
+    una moneta, {le 80 monete di `monete.csv`, BTCUSDT} per GRUPPO. Per una
+    moneta il comportamento e' identico a prima;
+  * l'elenco del gruppo vale solo con l'impronta approvata
+    (`leggi_monete_gruppo`): chi lo riscrive (anche con uno script, che il
+    guardiano non legge) non si allarga i permessi, si ferma;
+  * l'elenco, le schede, `regole.md` e `via_libera_validazione.md` della
+    campagna di gruppo sono in sola lettura per ogni sessione di campagna;
+  * in un clone a storia limitata (shallow) il commit di confine sembra
+    toccare ogni cartella: `git log -- <propria cartella>` ne stamperebbe il
+    messaggio, che puo' essere del coordinamento o del bot. Li' la storia si
+    guarda solo con un formato fatto di date e hash (`--format=%h %cI`), e
+    `blame` senza le forme "porcelain" (vedi `_giudica_storia_clone_limitato`).
+
 Il guardiano NON legge il contenuto dei file che il modello scrive ed esegue:
 uno script in una cartella ammessa puo' fare cio' che vuole. E' una barriera
 contro la deriva e la distrazione, non contro un avversario con il codice in
@@ -92,11 +116,13 @@ from __future__ import annotations
 import fnmatch
 import functools
 import glob
+import hashlib
 import itertools
 import json
 import os
 import re
 import shlex
+import stat
 import subprocess
 import sys
 import unicodedata
@@ -168,23 +194,50 @@ _CAMPAGNA_FILE = (
     ".gitignore",
 )
 #: cartelle ammesse in una campagna (tutto il contenuto). `{S}` e' il simbolo.
+#: I dati in-sample non sono qui: `research/data/insample/<X>` si decide con un
+#: insieme esatto di monete (`monete_dati_ammesse`), mai per prefisso.
 _CAMPAGNA_CARTELLE = (
     "research/config",
     "research/src",
     "research/campagne/{S}",
-    "research/data/insample/{S}",
-    "research/data/insample/BTCUSDT",
     ".claude",
 )
+#: la cartella madre dei dati in-sample: da sola non e' mai ammessa in campagna
+#: (una ricerca o un elenco li' vedrebbe le cartelle di tutte le monete)
+_DATI_INSAMPLE = "research/data/insample"
+#: la moneta di riferimento del mercato, i cui dati ogni campagna puo' usare
+#: (mai la sua cartella di campagna `research/campagne/BTCUSDT/`, se non e' la propria)
+MONETA_RIFERIMENTO = "BTCUSDT"
+
+#: la campagna di gruppo (Passo 4bis; testo completo in `research/campagne/GRUPPO/regole.md`)
+SIMBOLO_GRUPPO = "GRUPPO"
+#: l'elenco delle monete del gruppo: intestazione `simbolo`, una moneta per riga,
+#: in ordine alfabetico, a capo LF. Vale SOLO se i suoi byte hanno l'impronta
+#: `_IMPRONTA_MONETE_GRUPPO`: la sessione di gruppo puo' scrivere nella propria
+#: cartella con uno script (il guardiano non legge gli script), e con un elenco
+#: libero si allargherebbe i permessi ai dati delle monete di campagna.
+#: Elenco e impronta li cambia solo il coordinamento, nello stesso commit.
+MONETE_GRUPPO = "research/campagne/GRUPPO/monete.csv"
+_IMPRONTA_MONETE_GRUPPO = "0cf217c3c7c4c23934fa1e37dc908618741cd8082514623b281abcbcdf99d8e2"
+_NUMERO_MONETE_GRUPPO = 80
+#: oltre questa dimensione l'elenco non si legge nemmeno (quello vero e' ~1 KB)
+_MAX_BYTE_MONETE_GRUPPO = 64 * 1024
+
 #: in campagna si possono LEGGERE ma mai SCRIVERE: sono il guardiano stesso, il
-#: suo marcatore, la sua lista dei vietati e la configurazione che lo registra.
-#: Una sessione sorvegliata che puo' riscriverli si libera da sola.
+#: suo marcatore, la sua lista dei vietati e la configurazione che lo registra
+#: (una sessione sorvegliata che puo' riscriverli si libera da sola); e i file
+#: della campagna di gruppo scritti dal coordinamento e approvati con il testo
+#: (l'elenco delle monete, le schede con la fascia di slippage, il testo stesso
+#: e il via libera alla validazione: regole.md, sezione 12, punto 3).
 _PROTETTI_FILE = (
     "research/.sessione",
     "research/src/guardiano.py",
     "research/config/percorsi_vietati.txt",
+    MONETE_GRUPPO,
+    "research/campagne/GRUPPO/regole.md",
+    "research/campagne/GRUPPO/via_libera_validazione.md",
 )
-_PROTETTI_CARTELLE = (".claude",)
+_PROTETTI_CARTELLE = (".claude", "research/campagne/GRUPPO/schede")
 
 #: riferimento a un branch del protocollo dentro un comando
 _BRANCH = re.compile(r"research/(?:coordinamento|archivio|campagna)(?:/[A-Za-z0-9_.-]+)?")
@@ -235,6 +288,20 @@ _PREFISSI_TRASPARENTI = {
 _GREP_RICORSIVI = {"rg", "ag", "ack", "pt", "ugrep", "ug"}
 _GREP = {"grep", "egrep", "fgrep"} | _GREP_RICORSIVI
 _FIND = {"find", "fd", "fdfind"}
+#: programmi che, con un operando NUDO (un nome senza `/`), lo SCRIVONO o lo toccano:
+#: il bersaglio e' un file, non un dato. Servono a giudicare un nome nudo dopo un `cd`
+#: in una cartella ammessa (`cd research/src && cp /dev/null guardiano.py`), che altrimenti
+#: non verrebbe riconosciuto come percorso. `ln` e' gia' vietato altrove.
+_PROGRAMMI_BERSAGLIO = {
+    "cp", "mv", "rm", "rmdir", "tee", "touch", "install", "truncate",
+    "mkdir", "mkfifo", "shred", "unlink",
+}
+#: programmi che CANCELLANO o SPOSTANO: non devono colpire un bersaglio che CONTIENE
+#: un file o una cartella protetti (cancellare la cartella madre toglierebbe il protetto
+#: dal disco o, con `git rm`, dal branch).
+_PROGRAMMI_DISTRUTTIVI = {"rm", "rmdir", "mv", "shred", "unlink"}
+#: opzioni di `find` che cancellano o eseguono (rendono `find` un comando distruttivo)
+_FIND_DISTRUGGE = ("-delete", "-exec", "-execdir", "-ok", "-okdir")
 #: programmi che leggono soltanto: con questi un file protetto si puo' aprire
 _LETTORI = {
     "cat", "head", "tail", "less", "more", "wc", "grep", "egrep", "fgrep", "rg",
@@ -335,11 +402,48 @@ _GIT_STORIA_CORTE_CON_VALORE = "nUlOSGLMCB"
 #: opzioni lunghe che sono un INIZIO di quelle vietate ma esistono da sole (git
 #: preferisce sempre il nome esatto all'abbreviazione)
 _GIT_STORIA_OPZIONI_ESATTE_AMMESSE = ("--color", "--text")
+#: in un clone a storia limitata (shallow), i soli segnaposto ammessi nel
+#: `--format`/`--pretty` dei comandi di storia: date (`%ad %aD %ar %at %ai %aI
+#: %as %ah`, e le stesse con `c`), hash (`%H %h %T %t %P %p`) e separatori
+#: (`%n`, `%%`, `%xNN`). Il resto del formato e' testo scritto da chi chiama.
+_SEGNAPOSTO_DATE_HASH = re.compile(r"%(?:[ac][dDrtiIsh]|[HhTtPpn%]|x[0-9A-Fa-f]{2})")
+#: `blame`/`annotate` in forma "porcelain": stampano `summary <messaggio>` per ogni commit
+_GIT_BLAME_PORCELLANA = ("--porcelain", "--line-porcelain", "--incremental")
+#: i soli valori di `shortlog --group` che non stampano parti del messaggio
+#: (`trailer:<x>` e `format:<f>` le stampano)
+_GIT_SHORTLOG_GRUPPI_AMMESSI = ("author", "committer")
+#: in un clone a storia limitata, le sole opzioni ammesse nei comandi di storia
+#: (lista BIANCA, nomi esatti; quelle con valore solo nella forma `--x=valore`).
+#: Una lista nera non bastava: un'opzione con valore separato ingoia il formato
+#: (`git log --until --format=%h` o `--grep --format=%h --invert-grep` stampano
+#: con il formato predefinito, cioe' con i messaggi), e `--grep=`/`--author=`
+#: farebbero del commit di confine un oracolo sul suo messaggio.
+_GIT_STORIA_LIMITATA_FLAG = frozenset({
+    "--reverse", "--stat", "--numstat", "--shortstat", "--name-only", "--name-status", "--summary",
+    "--compact-summary", "--raw", "-s", "--no-patch", "--first-parent", "--no-merges", "--merges",
+    "--topo-order", "--date-order", "--author-date-order", "--graph", "--parents", "--children",
+    "--abbrev-commit", "--no-abbrev-commit", "--no-color", "--color", "-z", "--no-renames",
+    "--no-decorate", "--full-history", "--dense", "--simplify-merges",
+})
+_GIT_STORIA_LIMITATA_CON_VALORE = ("--format=", "--pretty=", "--date=", "--max-count=", "--skip=", "--since=",
+                                   "--after=", "--until=", "--before=", "--abbrev=", "--stat=", "--color=")
+#: ...in piu', per sottocomando (in `shortlog` `-n`, `-c` e `--committer` sono
+#: interruttori; in `log` `-n` prende un valore e `-c` stampa le differenze)
+_GIT_STORIA_LIMITATA_FLAG_PER = {
+    "rev-list": frozenset({"--count", "--timestamp"}),
+    "shortlog": frozenset({"-n", "--numbered", "--summary", "-e", "--email", "-c", "--committer", "-ns", "-sn"}),
+}
 #: sottocomandi git che modificano l'albero di lavoro o l'indice (o scrivono file)
 _GIT_SCRIVE = {
     "rm", "mv", "add", "restore", "clean", "apply", "am", "stash", "reset", "commit",
     "revert", "cherry-pick", "checkout", "switch", "merge", "rebase", "pull", "format-patch",
 }
+#: sottocomandi git i cui operandi nudi sono percorsi (file nominati): un nome nudo
+#: dopo un `cd` va risolto nella cartella effettiva e giudicato (`git rm monete.csv`)
+_GIT_BERSAGLIO = {"add", "rm", "mv", "restore"}
+#: sottocomandi git che cancellano o spostano un file nominato: non devono colpire un
+#: bersaglio che CONTIENE un protetto (`git rm -r --cached research/campagne/GRUPPO`)
+_GIT_DISTRUTTIVI = {"rm", "mv"}
 #: opzioni di git che allargano lo sguardo a tutti i branch o ai reflog
 _GIT_OPZIONI_VIETATE = ("--all", "--branches", "--remotes", "--tags", "--glob", "--mirror",
                         "--walk-reflogs", "-g", "--reflog", "--exclude-hidden", "--alternate-refs")
@@ -392,6 +496,8 @@ class Contesto:
     vietati: tuple[str, ...] = ()
     vault_aperto: bool = False
     primo_livello: frozenset[str] = field(default_factory=frozenset)
+    #: solo per la campagna di gruppo: le monete di `monete.csv`, gia' verificate
+    monete_gruppo: frozenset[str] = field(default_factory=frozenset)
 
     @property
     def etichetta(self) -> str:
@@ -402,6 +508,10 @@ class Contesto:
     @property
     def campagna(self) -> bool:
         return self.tipo == "campagna"
+
+    @property
+    def gruppo(self) -> bool:
+        return self.campagna and self.simbolo == SIMBOLO_GRUPPO
 
     @property
     def proprio_branch(self) -> str:
@@ -480,20 +590,95 @@ def leggi_vietati(radice: str) -> tuple[str, ...]:
     return tuple(voci)
 
 
+class ElencoGruppoNonApprovato(ValueError):
+    """L'elenco delle monete del gruppo non e' quello approvato: si blocca tutto."""
+
+
+def leggi_monete_gruppo(radice: str, impronta: str = _IMPRONTA_MONETE_GRUPPO) -> tuple[str, ...]:
+    """Le monete della campagna di gruppo, da `research/campagne/GRUPPO/monete.csv`, in ordine.
+
+    Si legge solo con il marcatore GRUPPO. Prima i BYTE: il file deve essere un
+    file regolare, raggiunto senza link simbolici, e il suo SHA-256 deve essere
+    `impronta` (di norma quella approvata, scritta in questo file, che la
+    sessione non puo' riscrivere). Poi, come seconda difesa, il contenuto:
+    intestazione `simbolo`; ogni riga `[A-Z0-9]+` (niente `/`, `..`, minuscole,
+    righe vuote, `\\r`); niente doppioni; ne' GRUPPO ne' BTCUSDT (che e' sempre
+    ammessa come riferimento); nessuna moneta con una cartella
+    `research/campagne/<S>` (le monete di campagna non entrano nel gruppo);
+    esattamente `_NUMERO_MONETE_GRUPPO` righe.
+
+    Qualunque cosa non torni solleva `ElencoGruppoNonApprovato` (un ValueError).
+    """
+    radice = os.path.realpath(radice)
+    percorso = os.path.join(radice, *MONETE_GRUPPO.split("/"))
+    try:
+        info = os.lstat(percorso)
+        if not stat.S_ISREG(info.st_mode):
+            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} non e' un file regolare (un link o una cartella)")
+        if os.path.realpath(percorso) != percorso:
+            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} si raggiunge attraverso un link simbolico")
+        if info.st_size > _MAX_BYTE_MONETE_GRUPPO:
+            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} e' troppo grande ({info.st_size} byte)")
+        with open(percorso, "rb") as f:
+            dati = f.read(_MAX_BYTE_MONETE_GRUPPO + 1)
+    except OSError as e:
+        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} non si legge: {e.strerror or e}") from None
+    if len(dati) > _MAX_BYTE_MONETE_GRUPPO:
+        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} e' troppo grande")
+    trovata = hashlib.sha256(dati).hexdigest()
+    if trovata != impronta:
+        raise ElencoGruppoNonApprovato(f"impronta SHA-256 di {MONETE_GRUPPO} {trovata[:16]}..., "
+                                       f"approvata {impronta[:16]}...")
+    try:
+        testo = dati.decode("utf-8")
+    except UnicodeDecodeError:
+        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} non e' testo UTF-8") from None
+    righe = testo.split("\n")
+    if righe and righe[-1] == "":
+        righe.pop()  # l'a capo dell'ultima riga
+    if not righe or righe[0] != "simbolo":
+        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: la prima riga deve essere 'simbolo'")
+    monete = righe[1:]
+    for n, moneta in enumerate(monete, start=2):
+        if not re.fullmatch(r"[A-Z0-9]+", moneta):
+            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}, riga {n}: {moneta!r} non e' un simbolo [A-Z0-9]+")
+    if len(set(monete)) != len(monete):
+        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: una moneta compare due volte")
+    for vietata in (SIMBOLO_GRUPPO, MONETA_RIFERIMENTO):
+        if vietata in monete:
+            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: {vietata} non puo' essere una moneta del gruppo")
+    di_campagna = [m for m in monete if os.path.lexists(os.path.join(radice, "research", "campagne", m))]
+    if di_campagna:
+        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: {', '.join(di_campagna[:3])} ha una cartella "
+                                       "research/campagne/<S> (moneta di campagna)")
+    if len(monete) != _NUMERO_MONETE_GRUPPO:
+        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: {len(monete)} monete invece di {_NUMERO_MONETE_GRUPPO}")
+    return tuple(monete)
+
+
 def costruisci_contesto(radice: str, marcatore: dict) -> Contesto:
+    """Il contesto della sessione. Con il marcatore GRUPPO legge e verifica l'elenco
+    delle monete (`leggi_monete_gruppo`): se non e' quello approvato solleva
+    `ElencoGruppoNonApprovato`, e `main` rifiuta ogni azione."""
     # la radice si risolve sul disco: i percorsi si confrontano con la sua forma reale
     radice = os.path.realpath(radice)
     try:
         primo_livello = frozenset(os.listdir(radice))
     except OSError:
         primo_livello = frozenset()
+    tipo = marcatore["tipo"]
+    simbolo = marcatore.get("simbolo", "")
+    monete_gruppo: frozenset[str] = frozenset()
+    if tipo == "campagna" and simbolo == SIMBOLO_GRUPPO:
+        monete_gruppo = frozenset(leggi_monete_gruppo(radice))
     return Contesto(
         radice=radice,
-        tipo=marcatore["tipo"],
-        simbolo=marcatore.get("simbolo", ""),
+        tipo=tipo,
+        simbolo=simbolo,
         vietati=leggi_vietati(radice),
         vault_aperto=os.path.isfile(os.path.join(radice, "research", "vault", "APERTURA.md")),
         primo_livello=primo_livello,
+        monete_gruppo=monete_gruppo,
     )
 
 
@@ -563,16 +748,50 @@ def e_vietato_da_elenco(rel: str, vietati: tuple[str, ...]) -> bool:
     return False
 
 
-def ammesso_in_campagna(rel: str, simbolo: str) -> bool:
-    """Lista bianca del Passo 3. `research/campagne/BTCUSDT` solo se il simbolo e' BTCUSDT."""
+def monete_dati_ammesse(simbolo: str, monete_gruppo: frozenset[str] = frozenset()) -> frozenset[str]:
+    """Le monete di cui una campagna puo' usare i dati in-sample (insieme ESATTO).
+
+    Una moneta: la propria e BTCUSDT. Il gruppo: le monete di `monete.csv` (gia'
+    verificate da `leggi_monete_gruppo`) e BTCUSDT; mai `GRUPPO` stesso.
+    """
+    if simbolo == SIMBOLO_GRUPPO:
+        return frozenset(monete_gruppo) | {MONETA_RIFERIMENTO}
+    return frozenset({simbolo, MONETA_RIFERIMENTO})
+
+
+def ammesso_in_campagna(rel: str, simbolo: str, monete_gruppo: frozenset[str] = frozenset()) -> bool:
+    """Lista bianca del Passo 3 (e, per GRUPPO, della sezione 12 di `campagne/GRUPPO/regole.md`).
+
+    `research/campagne/BTCUSDT` solo se il simbolo e' BTCUSDT. In
+    `research/data/insample/` il primo nome dopo la cartella madre deve stare,
+    tale e quale, in `monete_dati_ammesse`: niente prefissi (`ETH` non apre
+    `ETHUSDT`), niente maiuscole/minuscole diverse, e la cartella madre da sola
+    non e' ammessa.
+    """
     if rel in _CAMPAGNA_FILE:
         return True
-    return any(_sotto(rel, c.format(S=simbolo)) for c in _CAMPAGNA_CARTELLE)
+    if any(_sotto(rel, c.format(S=simbolo)) for c in _CAMPAGNA_CARTELLE):
+        return True
+    pezzi = rel.split("/")
+    if pezzi[:3] == _DATI_INSAMPLE.split("/") and len(pezzi) >= 4:
+        return pezzi[3] in monete_dati_ammesse(simbolo, monete_gruppo)
+    return False
 
 
 def e_protetto(rel: str) -> bool:
-    """I file che in campagna si leggono ma non si scrivono (il guardiano e i suoi)."""
+    """I file che in campagna si leggono ma non si scrivono (il guardiano e i suoi,
+    e i file approvati della campagna di gruppo)."""
     return rel in _PROTETTI_FILE or any(_sotto(rel, c) for c in _PROTETTI_CARTELLE)
+
+
+def _contiene_protetto(rel: str) -> bool:
+    """True se `rel` E' o CONTIENE un file/una cartella protetti.
+
+    Serve ai comandi che cancellano o spostano (`rm -r`, `git rm --cached`,
+    `find -delete`...): colpire la cartella madre di un protetto lo toglierebbe
+    dal disco o dal branch, aggirando la protezione in sola lettura.
+    """
+    return any(_sotto(p, rel) for p in _PROTETTI_FILE + _PROTETTI_CARTELLE)
 
 
 def giudica_percorso(percorso: str, ctx: Contesto, *, radice_ok: bool = False, scrittura: bool = False) -> Verdetto:
@@ -598,7 +817,7 @@ def giudica_percorso(percorso: str, ctx: Contesto, *, radice_ok: bool = False, s
             return rifiuto
         if scrittura and e_protetto(rel):
             return rifiuto
-        if not ammesso_in_campagna(rel, ctx.simbolo):
+        if not ammesso_in_campagna(rel, ctx.simbolo, ctx.monete_gruppo):
             return rifiuto
         if e_vietato_da_elenco(rel, ctx.vietati):
             return rifiuto
@@ -749,12 +968,17 @@ def espandi_token(token: str, ctx: Contesto) -> list[str] | None:
     return risultato
 
 
-def _candidato_percorso(token: str, primo_livello: frozenset[str]) -> str | None:
+def _candidato_percorso(token: str, primo_livello: frozenset[str], bersaglio: bool = False) -> str | None:
     """Il frammento di un token che sembra un percorso, o None.
 
     Un percorso e' un token con `/`, o che comincia con `.` o `~`, o che e' il
     nome di una voce di primo livello del repo (`docs`, `ops`...). Si tolgono
     prima le redirezioni (`2>file`) e le opzioni `--x=file`.
+
+    Con `bersaglio` vale anche un NOME NUDO (senza `/`): e' il caso del bersaglio di
+    una redirezione o di un comando che scrive un file nominato dopo un `cd`. Chi
+    chiama controlla poi che il nome esista davvero nella cartella effettiva, cosi'
+    un nome di programma o un'opzione non vengono scambiati per un percorso.
     """
     t = token
     t = re.sub(r"^[0-9]*[<>]+", "", t)
@@ -764,7 +988,7 @@ def _candidato_percorso(token: str, primo_livello: frozenset[str]) -> str | None
         return None
     if "/" in t or t.startswith((".", "~")) or t in primo_livello or e_segreto(t):
         return t
-    return None
+    return t if bersaglio else None
 
 
 def _ha_percorso(argomenti: list[str], ctx: Contesto) -> bool:
@@ -883,6 +1107,161 @@ def _branch_corrente(radice: str) -> str | None:
     if esito.returncode != 0:
         return None
     return esito.stdout.strip() or None
+
+
+@functools.lru_cache(maxsize=4)
+def _clone_limitato(radice: str) -> bool:
+    """True se il repo e' un clone a storia limitata (`git rev-parse --is-shallow-repository`).
+
+    Stesse cautele di `_antenato_di_head`. Se git non risponde, risponde con un
+    errore (anche: la radice non e' un repo) o con qualcosa che non e' `false`,
+    vale True: nel dubbio la storia si tratta come limitata.
+    """
+    try:
+        esito = subprocess.run(
+            ["git", "rev-parse", "--is-shallow-repository"],
+            cwd=radice, env=_ambiente_git(radice), stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, timeout=_TEMPO_GIT, check=False, text=True,
+        )
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return True
+    return esito.returncode != 0 or esito.stdout.strip() != "false"
+
+
+def _formato_solo_date_e_hash(valore: str) -> bool:
+    """True se il valore di `--format=`/`--pretty=` stampa solo date, hash e separatori.
+
+    `format:`/`tformat:` in testa si tolgono. Un valore senza `%` (e senza quei
+    prefissi) e' un formato con nome o un suo inizio (`oneline`, `o`, `medium`,
+    `reference`, `raw`...), e tutti stampano il messaggio: no. Ogni `%` deve
+    aprire un segnaposto di `_SEGNAPOSTO_DATE_HASH`; il testo fra i segnaposto
+    e' di chi chiama e non stampa nulla del commit.
+    """
+    for prefisso in ("format:", "tformat:"):
+        if valore.startswith(prefisso):
+            valore = valore[len(prefisso):]
+            break
+    else:
+        if "%" not in valore:
+            return False
+    i = 0
+    while i < len(valore):
+        if valore[i] != "%":
+            i += 1
+            continue
+        m = _SEGNAPOSTO_DATE_HASH.match(valore, i)
+        if m is None:
+            return False
+        i = m.end()
+    return True
+
+
+#: i soli campi di `for-each-ref`/`git branch --format` che non stampano messaggi di
+#: commit: hash, tipo e dimensione dell'oggetto, date, nomi di ref. ESCLUSI
+#: %(contents...), %(subject), %(body), %(trailers), %(describe), %(taggername)... che
+#: stamperebbero il messaggio di qualunque branch locale (main e research/coordinamento
+#: restano locali e portano messaggi del coordinamento).
+_BRANCH_CAMPI_SICURI = frozenset({
+    "objectname", "objecttype", "objectsize", "deltabase", "head", "refname", "symref",
+    "upstream", "push", "worktreepath", "committerdate", "authordate", "creatordate", "taggerdate",
+})
+
+
+def _formato_branch_sicuro(valore: str) -> bool:
+    """True se il `--format`/`--pretty` di `git branch` (sintassi `for-each-ref`, `%(...)`)
+    stampa solo hash, date e nomi di ref, mai il messaggio di un commit.
+
+    Ogni `%(...)` deve nominare un campo di `_BRANCH_CAMPI_SICURI` (il resto, dopo `:`,
+    e' un formato di data o un modificatore innocuo). Un `%` che non apre `%(...)` o
+    `%%` si rifiuta. Il testo fra i segnaposto non stampa nulla del commit.
+    """
+    i = 0
+    while i < len(valore):
+        if valore[i] != "%":
+            i += 1
+            continue
+        if valore.startswith("%%", i):
+            i += 2
+            continue
+        if not valore.startswith("%(", i):
+            return False
+        fine = valore.find(")", i)
+        if fine == -1:
+            return False
+        campo = re.split(r"[:)]", valore[i + 2:fine], 1)[0].strip().lower()
+        if campo not in _BRANCH_CAMPI_SICURI:
+            return False
+        i = fine + 1
+    return True
+
+
+def _giudica_storia_clone_limitato(sub: str, resto: list[str], cartella: str, rifiuta) -> Verdetto:
+    """Un comando di storia (gia' ristretto alla propria cartella) in un clone a storia limitata.
+
+    In un clone shallow il commit di confine non ha genitori: per git aggiunge
+    TUTTI i file del repo, quindi `git log -- <propria cartella>` lo mostra con
+    il suo messaggio, che puo' essere del coordinamento o di un commit del bot
+    scritto nel periodo del vault (riprodotto il 10 ottobre 2026 con un clone
+    `--depth 2`). Qui quindi:
+      * `log`, `whatchanged`, `shortlog` passano solo con un `--format`/`--pretty`
+        fatto di date, hash e separatori (`_formato_solo_date_e_hash`); il
+        formato predefinito, `--oneline`, i formati con nome, `%s`, `%b`, `%B`
+        no; `shortlog --group` solo per autore o committer;
+      * `rev-list` stampa di suo solo gli hash: passa senza formato, ma non con
+        `--header`, `--oneline` o un formato che stampa altro;
+      * per questi quattro, ogni opzione deve essere nella lista BIANCA
+        `_GIT_STORIA_LIMITATA_*` (quelle con valore solo come `--x=valore`):
+        un'opzione con valore separato ingoierebbe il `--format` e git
+        userebbe il formato predefinito;
+      * `blame` e `annotate` stampano di suo hash, autore, data e righe del file
+        (che si leggono comunque): passano, ma non nelle forme "porcelain"
+        (`-p`, `--porcelain`, `--line-porcelain`, `--incremental`), che stampano
+        `summary <messaggio>`.
+    Il comando della sezione 9 del protocollo
+    (`git log --reverse --format=%cI origin/<proprio branch> -- <cartella>/log.jsonl`)
+    resta ammesso. Se non si e' potuto sapere se il clone e' limitato, vale come limitato.
+    """
+    perche = ("questo clone ha la storia limitata (shallow), o git non ha saputo dirlo: il suo commit di "
+              "confine sembra toccare ogni cartella e ne stamperebbe il messaggio, che puo' essere del "
+              "coordinamento o del bot")
+    esempio = f"`git log --format='%h %cI' -- {cartella}/` (anche con --stat o --name-only)"
+    opzioni = list(itertools.takewhile(lambda x: x != "--", resto))
+    if sub in ("blame", "annotate"):
+        for a in opzioni:
+            if _opzione_lunga(a, _GIT_BLAME_PORCELLANA) or "p" in _lettere_corte(a, "LMCS"):
+                return rifiuta(f"git {sub} {a} stampa il messaggio di ogni commit; {perche}. "
+                               f"Senza {a} git {sub} stampa solo hash, autore e data")
+        return OK
+    flag = _GIT_STORIA_LIMITATA_FLAG | _GIT_STORIA_LIMITATA_FLAG_PER.get(sub, frozenset())
+    formati = 0
+    for a in opzioni:
+        if not a.startswith("-"):
+            continue  # un riferimento, gia' giudicato (`-` da solo, il branch precedente, no)
+        nome, uguale, valore = a.partition("=")
+        if a == "--oneline" or (sub == "rev-list" and a == "--header"):
+            return rifiuta(f"git {sub} {a} stampa i messaggi dei commit; {perche}. Qui la storia si guarda "
+                           f"solo con date e hash: {esempio}")
+        if nome in ("--pretty", "--format"):
+            if not uguale or not _formato_solo_date_e_hash(valore):
+                return rifiuta(f"git {sub} {a} stampa i messaggi dei commit; {perche}. Qui il formato puo' "
+                               f"contenere solo date e hash (%cI, %cd, %ad, %aI, %H, %h, %ct, %at...) e "
+                               f"separatori: {esempio}")
+            formati += 1
+            continue
+        if sub == "shortlog" and nome == "--group":
+            if valore not in _GIT_SHORTLOG_GRUPPI_AMMESSI or not uguale:
+                return rifiuta(f"git shortlog {a}: qui si raggruppa solo per autore o committer "
+                               f"(`--group=author`); {perche}")
+            continue
+        if a in flag or (uguale and nome + "=" in _GIT_STORIA_LIMITATA_CON_VALORE) or (
+                sub != "shortlog" and re.fullmatch(r"-n?[0-9]+", a)):
+            continue
+        return rifiuta(f"git {sub} {a}: {perche}, e qui i comandi di storia accettano solo date e hash e "
+                       f"poche opzioni (le opzioni con valore come `--x=valore`): {esempio}")
+    if not formati and sub != "rev-list":
+        return rifiuta(f"git {sub} senza --format stampa i messaggi dei commit; {perche}. Qui la storia si "
+                       f"guarda solo con date e hash: {esempio}")
+    return OK
 
 
 def _e_riferimento_proprio(token: str, ctx: Contesto) -> bool:
@@ -1121,7 +1500,8 @@ def _giudica_git_sottocomando(sub: str, resto: list[str], ctx: Contesto, rifiuta
       * i comandi di STORIA (`_GIT_STORIA`) vogliono almeno un percorso, e tutti
         i percorsi dentro `research/campagne/<SIMBOLO>/` (per `log` e simili
         dopo `--`); senza le opzioni che scavalcano il filtro o stampano il
-        contenuto dei commit;
+        contenuto dei commit; in un clone a storia limitata, solo con date e
+        hash (`_giudica_storia_clone_limitato`);
       * `git show` solo come `<rif>:<percorso>` (il file, senza il messaggio);
       * `diff` con un riferimento, `grep`, `ls-tree` e `ls-files` vogliono un
         percorso ammesso;
@@ -1169,6 +1549,15 @@ def _giudica_git_sottocomando(sub: str, resto: list[str], ctx: Contesto, rifiuta
         if sub == "branch" and (_opzione_lunga(a, ("--verbose", "--list")) or (
                 a.startswith("-") and not a.startswith("--") and any(c in "arv" for c in a[1:]))):
             return rifiuta(f"git branch {a} mostra gli altri branch e i loro hash")
+        if sub == "branch" and _opzione_lunga(a, ("--format", "--pretty")):
+            # `git branch --format=%(subject)` stampa il messaggio di OGNI branch locale
+            # (main e research/coordinamento portano messaggi del coordinamento). La regola
+            # dei cloni limitati non tocca `branch`: lo si controlla qui, in ogni clone.
+            _, uguale, valore = a.partition("=")
+            if not uguale or not _formato_branch_sicuro(valore):
+                return rifiuta("git branch --format puo' stampare i messaggi di altri branch "
+                               "(%(contents), %(subject), %(body), %(trailers)): qui il formato puo' "
+                               "contenere solo hash, date e nomi di ref (`--format=%(objectname)`)")
         # `--source=<rif>`, `ls-files --with-tree=<rif>` (anche abbreviati) e `restore -s<rif>`
         # attaccato: il riferimento va controllato
         sorgente = None
@@ -1250,6 +1639,10 @@ def _giudica_git_sottocomando(sub: str, resto: list[str], ctx: Contesto, rifiuta
         for p in percorsi:
             if not _sotto(normalizza(p, ctx.radice), cartella):
                 return rifiuta(f"git {sub} {p}: in campagna la storia si guarda solo per {cartella}/")
+        # in un clone a storia limitata, solo date e hash (git si interroga solo qui,
+        # per i comandi di storia gia' ammessi)
+        if _clone_limitato(ctx.radice):
+            return _giudica_storia_clone_limitato(sub, resto, cartella, rifiuta)
     elif sub == "show":
         if not rif_percorso or operandi_semplici or dopo_doppio_trattino:
             return rifiuta("git show stampa il messaggio di un commit (forse del branch principale): "
@@ -1265,8 +1658,63 @@ def _giudica_git_sottocomando(sub: str, resto: list[str], ctx: Contesto, rifiuta
     return OK
 
 
+def _rebase(cand: str, cwd_rel: str | None) -> str | None:
+    """Il candidato risolto rispetto alla cartella di lavoro EFFETTIVA (dopo i `cd`).
+
+    Un percorso assoluto o con `~` non dipende dalla cartella: torna com'e'. Un
+    percorso relativo si attacca a `cwd_rel`; se `cwd_rel` e' None (un `cd` che non
+    si e' saputo risolvere) torna None, e chi chiama rifiuta: nel dubbio si blocca.
+    """
+    if os.path.isabs(cand) or cand.startswith("~"):
+        return cand
+    if cwd_rel is None:
+        return None
+    return os.path.join(cwd_rel, cand) if cwd_rel else cand
+
+
+def _find_distrugge(argomenti: list[str]) -> bool:
+    """True se un `find` cancella o esegue (`-delete`, `-exec`...): allora e' distruttivo."""
+    return any(a in _FIND_DISTRUGGE for a in argomenti)
+
+
+def _nuova_cwd(argomenti: list[str], cwd_rel: str | None, ctx: Contesto) -> str | None:
+    """La cartella dopo un `cd`/`pushd`, relativa alla radice; None se non si sa.
+
+    Un solo operando, risolto (niente `$(...)`, una sola parola). Si attacca alla
+    cartella corrente e si normalizza; fuori dalla radice, o `cd`/`cd -`/`popd` o
+    piu' operandi, vale None (fail-closed: da li' ogni percorso relativo si rifiuta).
+    """
+    operandi = [a for a in argomenti if not a.startswith("-")]
+    if len(operandi) != 1:
+        return None  # `cd` (home), `cd -`, `popd`, o piu' operandi
+    parole = espandi_token(operandi[0], ctx)
+    if parole is None or len(parole) != 1:
+        return None
+    p = parole[0]
+    if os.path.isabs(p) or p.startswith("~"):
+        base: str | None = p
+    elif cwd_rel is None:
+        return None
+    else:
+        base = os.path.join(cwd_rel, p)
+    rel = normalizza(base, ctx.radice)
+    if rel.startswith(".."):
+        return None  # fuori dalla radice
+    return "" if rel == "." else rel
+
+
 def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdetto:
-    """Giudica una riga di shell: i branch, i programmi, poi ogni percorso (espanso)."""
+    """Giudica una riga di shell: i branch, i programmi, poi ogni percorso (espanso).
+
+    I percorsi relativi si risolvono rispetto alla cartella di lavoro EFFETTIVA, cioe'
+    seguendo i `cd`/`pushd` del comando (`cwd_rel`): senza, `cd research/src && cp
+    /dev/null guardiano.py` sfuggirebbe, perche' il nome nudo `guardiano.py` si
+    giudicava dalla radice e li' non e' un percorso. Per lo stesso motivo, in campagna,
+    un operando nudo (senza `/`) e' trattato come percorso quando segue una redirezione
+    o quando il programma scrive/cancella un file nominato (`_PROGRAMMI_BERSAGLIO`,
+    `git add/rm/mv/restore`). I comandi che cancellano o spostano (`_PROGRAMMI_DISTRUTTIVI`,
+    `find -delete`, `git rm/mv`) non possono colpire un bersaglio che CONTIENE un protetto.
+    """
     if ctx.campagna:
         # qualunque riferimento a un branch del protocollo che non sia il proprio
         for m in _BRANCH.finditer(comando):
@@ -1275,6 +1723,7 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
     propri = {ctx.proprio_branch, f"origin/{ctx.proprio_branch}"}
     # i refspec del proprio branch (`HEAD:refs/heads/research/campagna/X`), che `_giudica_git` ha gia' giudicato
     refspec_propri = (_refspec_push(ctx) | _refspec_fetch(ctx)) if ctx.campagna else frozenset()
+    cwd_rel: str | None = ""  # cartella di lavoro effettiva, relativa alla radice; None = ignota (dopo un cd fuori posto)
     for separatore, segmento in _segmenti(_spezza(comando)):
         prog, argomenti, assegnazioni = _programma_effettivo(segmento)
         if ctx.campagna:
@@ -1285,9 +1734,19 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
             if not v.consentito:
                 return v
         scrive_di_norma = prog not in _LETTORI
+        sub = ""
         if prog == "git":
             sub = next((a for a in argomenti if not a.startswith("-")), "")
             scrive_di_norma = sub in _GIT_SCRIVE
+        # in campagna, un operando NUDO (senza `/`) e' un percorso quando segue una
+        # redirezione o quando il programma scrive/tocca un file nominato
+        bersaglio_operandi = ctx.campagna and (
+            prog in _PROGRAMMI_BERSAGLIO or (prog == "git" and sub in _GIT_BERSAGLIO))
+        # comandi che cancellano o spostano: non devono colpire un bersaglio che contiene un protetto
+        distrugge = ctx.campagna and (
+            prog in _PROGRAMMI_DISTRUTTIVI
+            or (prog in _FIND and _find_distrugge(argomenti))
+            or (prog == "git" and sub in _GIT_DISTRUTTIVI))
         # `sh -c '...'`: il comando interno si giudica come comando, in ogni modalita'
         script = _script_di_shell(argomenti) if prog in _SHELL else None
         if script is not None:
@@ -1315,16 +1774,31 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
             if parole is None:
                 return Verdetto(False, f"{comando!r} (il token {t!r} viene espanso dalla shell in modo imprevedibile)")
             for parola in parole:
-                cand = _candidato_percorso(parola, ctx.primo_livello)
+                nudo_ammesso = dopo_redirezione or bersaglio_operandi
+                cand = _candidato_percorso(parola, ctx.primo_livello, bersaglio=nudo_ammesso)
                 if cand is None or (ctx.campagna and prog == "git" and cand in propri):
                     continue  # `--source=origin/<proprio branch>`: un riferimento, gia' giudicato
+                base = _rebase(cand, cwd_rel)
+                if base is None:
+                    return Verdetto(False, f"{comando!r} (percorso {cand}: cartella di lavoro ignota dopo un cd)")
+                # un nome NUDO (riconosciuto solo perche' bersaglio) e' un percorso solo se
+                # esiste davvero nella cartella effettiva: cosi' non scambiamo per percorso il
+                # nome del programma, un'opzione, un sottocomando o un riferimento git
+                nudo = ("/" not in cand and not cand.startswith((".", "~"))
+                        and cand not in ctx.primo_livello and not e_segreto(cand))
+                if nudo and not dopo_redirezione and not os.path.lexists(os.path.join(ctx.radice, base)):
+                    continue
                 v = giudica_percorso(
-                    cand, ctx,
+                    base, ctx,
                     radice_ok=(prog in ("cd", "pushd")),
                     scrittura=(dopo_redirezione or scrive_di_norma),
                 )
                 if not v.consentito:
                     return Verdetto(False, f"{comando!r} (percorso {cand})")
+                if distrugge and _contiene_protetto(normalizza(base, ctx.radice)):
+                    return Verdetto(False, f"{comando!r} (cancella o sposta {cand}, che contiene un file protetto)")
+        if ctx.campagna and prog in ("cd", "pushd", "popd"):
+            cwd_rel = None if prog == "popd" else _nuova_cwd(argomenti, cwd_rel, ctx)
     return OK
 
 
@@ -1528,9 +2002,35 @@ def giudica_azione(nome: str, ingresso: dict, ctx: Contesto) -> Verdetto:
 
 def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:
     oggetto = " ".join(oggetto.splitlines())  # una riga sola, sempre
+    regola = ("Passo 4bis, research/campagne/GRUPPO/regole.md sezione 12" if ctx.gruppo else "Passo 3")
+    nota = ""
+    # quando il guardiano ha gia' indicato la forma giusta (la storia dei cloni limitati, o
+    # dove scrivere il messaggio di commit del gruppo) non ha senso chiedere all'utente: la
+    # sessione usa la forma indicata. `lezioni/metodo.md` e PROTOCOLLO.md riga 272 (congelati)
+    # consigliano ancora la forma vecchia; la differenza resta aperta nel backlog.
+    autonomo = "shallow" in oggetto
+    if ctx.gruppo and f"{_DATI_INSAMPLE}/{SIMBOLO_GRUPPO}" in oggetto:
+        # `lezioni/metodo.md` consiglia `data/insample/<SIMBOLO>/` per i file fuori da git
+        # (il messaggio di commit da passare con `git commit -F`): per il gruppo non esiste
+        nota = (f" Per il gruppo {_DATI_INSAMPLE}/{SIMBOLO_GRUPPO}/ non esiste: i file fuori da git "
+                f"(per esempio il messaggio di commit) vanno in {_DATI_INSAMPLE}/{MONETA_RIFERIMENTO}/.")
+        autonomo = True
+    chiusura = ("Usa la forma indicata qui sopra, non serve chiedere all'utente."
+                if autonomo else "Registra il rifiuto nel log e chiedi all'utente.")
     return (
         f"[guardiano] azione rifiutata ({ctx.etichetta}): {oggetto} e' fuori dai percorsi "
-        "ammessi dal protocollo (Passo 3). Registra il rifiuto nel log e chiedi all'utente."
+        f"ammessi dal protocollo ({regola}).{nota} {chiusura}"
+    )
+
+
+def messaggio_elenco_gruppo(errore: Exception) -> str:
+    """Il rifiuto di OGNI azione quando l'elenco delle monete del gruppo non e' quello approvato."""
+    motivo = " ".join(str(errore).splitlines())
+    return (
+        f"[guardiano] l'elenco delle monete del gruppo non e' quello approvato ({motivo}): avvisa l'utente. "
+        f"Finche' {MONETE_GRUPPO} non torna quello scritto dal coordinamento (Passo 4bis, "
+        "research/campagne/GRUPPO/regole.md sezione 12, punto 4) ogni azione della sessione campagna GRUPPO "
+        "e' rifiutata; non correggerlo da solo."
     )
 
 
@@ -1557,7 +2057,12 @@ def main() -> int:
                 file=sys.stderr,
             )
             return 2
-        ctx = costruisci_contesto(radice, marcatore)
+        try:
+            ctx = costruisci_contesto(radice, marcatore)
+        except ElencoGruppoNonApprovato as e:
+            # campagna di gruppo con un elenco che non e' quello approvato: niente passa
+            print(messaggio_elenco_gruppo(e), file=sys.stderr)
+            return 2
         nome = dati.get("tool_name")
         ingresso = dati.get("tool_input")
         if not isinstance(nome, str) or not isinstance(ingresso, dict):
