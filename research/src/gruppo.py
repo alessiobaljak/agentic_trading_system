@@ -20,7 +20,8 @@ Le funzioni pubbliche
   giudicati con l'esame di gruppo senza ritardo e con il ritardo di una barra.
 * ``esame_vault`` (sezione 9, e sezione 10, punto 2, per il trasferimento), per
   il coordinamento: il ``criterio_vault`` sui trade sommati con le sfasate del
-  vault e il tasso del caso.
+  vault e il tasso del caso; da riportare la (b), il pavimento e la prova sulle
+  monete. Ha anche lui il file di avanzamento con la ripresa.
 * ``asticella_di_gruppo`` (sezione 7, punti 4-5): Benjamini-Hochberg sui
   p-value di validazione dei candidati del gruppo.
 * ``controlla_via_libera`` (sezione 7, punto 2), ``parametri_moneta``,
@@ -143,7 +144,11 @@ marcatore di campagna (qualunque simbolo):
   si esamina solo l'elenco ufficiale con i dati della Fase 0 (sezione 0, punto 4);
 * ``esame_vault`` si rifiuta (e' del coordinamento);
 * le candele di BTCUSDT del timeframe dell'esame devono esserci e coprire la serie
-  di ogni moneta (``_controlla_btc``); fuori campagna se ne riporta solo il numero.
+  di ogni moneta (``_controlla_btc``); fuori campagna se ne riporta solo il numero;
+* ogni moneta deve avere nel periodo candele del timeframe (last e mark), funding e
+  candele 1d del last (``_controlla_dati_in_campagna``, in ``_prepara``): se no
+  ValueError invece di una moneta con zero trade, costi senza funding o tutti i mesi
+  sotto la liquidita' (regole.md, sezione 2, punto 5).
 
 Questi controlli stanno nel corpo comune dell'esame (``_esame``), non solo nelle
 funzioni pubbliche. Il via libera si controlla com'e' scritto nella sezione 7,
@@ -200,9 +205,11 @@ Processi e avanzamento (sezione 12, punto 6, e sezione 13)
   ripartire l'esame da capo (oggi l'esame si ferma subito con
   ``ErroreDiMoneta``; con il ``Pool`` di prima ripartiva all'infinito).
 * Il file di avanzamento ``<cartella_campagna>/avanzamento/<id>_<periodo>.jsonl``
-  e' in sola aggiunta: una riga JSON per pezzo finito, con l'impronta
-  dell'esame (SHA-256 dei file della sezione 13, del modulo della variante e di
-  ``p``, piu' timeframe, periodo, opzioni, monete e origine degli ingressi),
+  (per ``esame_vault``: ``<cartella>/avanzamento/vault_<timeframe>.jsonl``, con
+  ``cartella`` obbligatoria e fuori da ``research/campagne/``) e' in sola
+  aggiunta: una riga JSON per pezzo finito, con l'impronta dell'esame (SHA-256
+  dei file della sezione 13, del modulo della variante e di ``p``, piu'
+  timeframe, periodo, opzioni, monete e origine degli ingressi),
   l'impronta dei dati che il pezzo ha letto (``_impronta_dei_dati``: last, mark,
   funding, mesi sotto la liquidita', slippage, BTCUSDT, periodo; per le sfasate
   anche i loro ingressi) e i secondi di calcolo. Alla ripresa ogni pezzo va
@@ -216,8 +223,11 @@ Processi e avanzamento (sezione 12, punto 6, e sezione 13)
 * I dati di un pezzo nel file sono compatti (si committano, regole.md,
   sezione 8, punto 1): per le sfasate, per ogni s, il numero dei trade e la
   somma esatta (``math.fsum``) dei loro R (``statistica.riassunto_sfasate``);
-  M'(s) e n'(s) li calcola ``statistica.medie_sfasate`` (una sola lettura,
-  indipendente dall'ordine), in costruzione, in validazione e nel vault.
+  nel vault, per ogni s, le quattro somme di ``motore.somme_dei_trade`` (numero
+  dei trade, somma degli R, dei guadagni e delle perdite in USDT), che danno le
+  metriche di ogni sfasata con ``motore.metriche_di_gruppo_da_somme``. M'(s) e
+  n'(s) li calcola ``statistica.medie_sfasate`` (una sola lettura, indipendente
+  dall'ordine), in costruzione, in validazione e nel vault (sulle prime due somme).
 
 Scelte documentate
 ------------------
@@ -251,12 +261,11 @@ Scelte documentate
   (``senza_pavimento_sfasate``), che la prova a placebo riporta (sezione 15).
 * Nel vault (``esame_vault``) ogni moneta gira dal primo giorno dei suoi dati
   (indicatori caldi, come in validazione) e contano i trade entrati dal
-  2024-01-01. I trade delle sfasate del vault arrivano dai processi in forma
-  compatta (32 byte per trade) e diventano ``TradeSfasato`` una s alla volta.
-  Memoria attesa nel processo principale (stima, non misurata su un vault
-  vero): circa 32 byte x trade sfasati, cioe' circa 0,2 GB a 1h con 7.000 trade
-  per sfasata e circa 1 GB a 15m con 30.000; in ogni processo del gruppo la
-  tabella della (b) di una moneta a 15m su quattro anni arriva a circa 1 GB.
+  2024-01-01. Dai processi le sfasate del vault arrivano come quattro somme per
+  s (``per_s_vault``), non come trade: nel processo principale restano i trade
+  del candidato e circa 1.000 x 4 numeri per moneta. In ogni processo del gruppo
+  la tabella della (b) di una moneta a 15m su quattro anni arriva a circa 1 GB
+  (stima, non misurata su un vault vero).
 """
 
 from __future__ import annotations
@@ -275,7 +284,6 @@ import sys
 import time
 import traceback
 import types
-from array import array
 from bisect import bisect_left, bisect_right
 from collections import Counter
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
@@ -288,7 +296,7 @@ import numpy as np
 
 from research.src import dati, motore, statistica
 from research.src.guardiano import MONETA_RIFERIMENTO, leggi_monete_gruppo
-from research.src.motore import Candela, Parametri, Segnale, StoriaChiusa, TradeSfasato
+from research.src.motore import Candela, Parametri, Segnale, StoriaChiusa
 
 # ---------------------------------------------------------------------------
 # Costanti
@@ -933,8 +941,11 @@ class CaricatoreDisco:
       ``candele_mark``: mark sugli stessi ts (``dati.carica_serie_allineate``),
       ``funding``: [(ts, tasso)] (``dati.carica_funding``),
       ``mesi_sotto_liquidita``: [(anno, mese)] (``dati.mesi_sotto_liquidita``)},
-      piu', facoltativo, ``barre_tolte``: {``last``, ``mark``} (le barre tolte
-      dall'allineamento, i «dettagli del feed» della sezione 6, punto 2.6);
+      piu', facoltativi, ``barre_tolte``: {``last``, ``mark``} (le barre tolte
+      dall'allineamento, i «dettagli del feed» della sezione 6, punto 2.6) e
+      ``giorni_1d``: i giorni con il volume nei file 1d del last nei mesi del
+      periodo (``dati.liquidita_mensile``). In campagna ``_prepara`` vuole
+      ``giorni_1d`` > 0: senza i file 1d ogni mese sarebbe sotto la soglia;
     * ``btc(timeframe, inizio, fine)`` -> le candele last di BTCUSDT
       (``dati.carica_candele``).
 
@@ -957,6 +968,7 @@ class CaricatoreDisco:
             "funding": dati.carica_funding(simbolo, inizio, fine, radice),
             "mesi_sotto_liquidita": dati.mesi_sotto_liquidita(simbolo, inizio, fine, radice),
             "barre_tolte": {"last": allineate["n_tolte_last"], "mark": allineate["n_tolte_mark"]},
+            "giorni_1d": sum(int(v["giorni"]) for v in dati.liquidita_mensile(simbolo, inizio, fine, radice).values()),
         }
 
     def btc(self, timeframe: str, inizio: date, fine: date) -> List[Candela]:
@@ -978,7 +990,12 @@ def _controlla_candele(nome: str, candele: Sequence[Candela], da_ms: int, a_ms: 
 
 
 def _carica_moneta(caricatore, simbolo: str, timeframe: str, inizio: date, fine: date) -> Dict[str, object]:
-    """I dati di una moneta dal caricatore, controllati: dentro il periodo, mark allineato, funding ordinato."""
+    """I dati di una moneta dal caricatore, controllati: dentro il periodo, mark allineato, funding ordinato.
+
+    ``giorni_1d`` (facoltativo nel caricatore, None se manca) passa senza controlli: lo guarda ``_prepara``
+    in campagna. Non entra nell'impronta dei dati (``_impronta_dei_dati``): i mesi sotto la liquidita' ci sono
+    gia'.
+    """
     serie = caricatore.serie(simbolo, timeframe, inizio, fine)
     da_ms, a_ms = dati.ms_da_data(inizio), dati.ms_da_data(fine + timedelta(days=1))
     candele = _controlla_candele(f"{simbolo} last", serie["candele"], da_ms, a_ms)
@@ -990,8 +1007,10 @@ def _carica_moneta(caricatore, simbolo: str, timeframe: str, inizio: date, fine:
         raise ValueError(f"{simbolo}: funding fuori dal periodo richiesto")
     mesi = sorted({(int(a), int(m)) for a, m in serie["mesi_sotto_liquidita"]})
     tolte = serie.get("barre_tolte")
+    giorni_1d = serie.get("giorni_1d")
     return {"candele": candele, "candele_mark": mark, "funding": funding, "mesi_sotto_liquidita": mesi,
-            "barre_tolte": None if tolte is None else {"last": int(tolte["last"]), "mark": int(tolte["mark"])}}
+            "barre_tolte": None if tolte is None else {"last": int(tolte["last"]), "mark": int(tolte["mark"])},
+            "giorni_1d": None if giorni_1d is None else int(giorni_1d)}
 
 
 _BTC_IN_MEMORIA: Dict[Tuple[bytes, str, str], Tuple[List[Candela], str]] = {}
@@ -1157,12 +1176,40 @@ def _controlla_impronte_nel_processo(compito: Mapping) -> None:
         raise RuntimeError(f"il codice di questo processo non e' quello dell'esame: cambiati {', '.join(diverse)}")
 
 
+def _controlla_dati_in_campagna(simbolo: str, timeframe: str, inizio: date, fine: date,
+                                serie: Mapping) -> None:
+    """In una sessione di campagna ogni moneta ha i dati della Fase 0 nel periodo (regole.md, sezione 2, punti 2, 3, 5 e 7).
+
+    ValueError se mancano le candele del timeframe (last e mark), il funding o
+    le candele 1d del last (``giorni_1d`` nullo o assente): senza i primi la
+    moneta darebbe zero trade e peserebbe zero senza avviso, senza il funding i
+    costi sarebbero piu' bassi, senza i file 1d ogni mese sarebbe sotto la soglia
+    di liquidita'. Una variante si giudicherebbe su una parte delle monete (per
+    esempio su una macchina nuova, dopo uno STOP, prima di riscaricare). Senza
+    marcatore (coordinamento, prova a placebo, test) non si chiama.
+    """
+    periodo = f"fra {inizio.isoformat()} e {fine.isoformat()}"
+    if not serie["candele"]:
+        raise ValueError(f"{simbolo}: nessuna candela {timeframe} di last e mark {periodo}: mancano i dati della "
+                         "Fase 0 (regole.md, sezione 2, punti 3 e 5): riscaricali e confronta le impronte prima "
+                         "di qualunque calcolo")
+    if not serie["funding"]:
+        raise ValueError(f"{simbolo}: nessun regolamento di funding {periodo}: mancano i dati della Fase 0 "
+                         "(regole.md, sezione 2, punti 2 e 5): riscaricali e confronta le impronte prima di "
+                         "qualunque calcolo")
+    if not serie.get("giorni_1d"):
+        raise ValueError(f"{simbolo}: nessuna candela 1d del last {periodo}: il filtro di liquidita' metterebbe "
+                         "ogni mese sotto la soglia (regole.md, sezione 2, punti 2, 5 e 7): riscarica i file 1d "
+                         "e confronta le impronte prima di qualunque calcolo")
+
+
 def _prepara(compito: Mapping) -> _Preparato:
     """Carica i dati della moneta e costruisce contesto, fabbriche e ingressi dati (contratto, punti 3-5).
 
     Il modulo della variante si esegue da capo per il pezzo (``_modulo_del_pezzo``).
-    ``impronta_dati`` (``_impronta_dei_dati``) e ``btc`` (``_controlla_btc``) vanno
-    nel pezzo.
+    In campagna (il marcatore letto da chi avvia l'esame) i dati della moneta devono
+    esserci (``_controlla_dati_in_campagna``). ``impronta_dati``
+    (``_impronta_dei_dati``) e ``btc`` (``_controlla_btc``) vanno nel pezzo.
     """
     modulo = _modulo_del_pezzo(compito["modulo"], compito["impronta_variante"])
     caricatore = compito["caricatore"]
@@ -1172,6 +1219,8 @@ def _prepara(compito: Mapping) -> _Preparato:
     inizio, fine = date.fromisoformat(compito["inizio"]), date.fromisoformat(compito["fine"])
     serie = _carica_moneta(caricatore, simbolo, compito["timeframe"], inizio, fine)
     candele = serie["candele"]
+    if compito.get("in_campagna"):
+        _controlla_dati_in_campagna(simbolo, compito["timeframe"], inizio, fine, serie)
     btc, impronta_btc = _btc(caricatore, compito["timeframe"], fine)
     info_btc = _controlla_btc(btc, candele, simbolo, bool(compito.get("in_campagna")))
     orologio = _Orologio()
@@ -1372,11 +1421,14 @@ def _pezzo_sfasate(compito: Mapping, prep: _Preparato) -> Tuple[Dict[str, object
 
     In costruzione e in validazione il pezzo tiene solo ``per_s``
     (``statistica.riassunto_sfasate``: [n_j(s), somma esatta degli R] per ogni s),
-    che va nel file di avanzamento. Nel vault (``trade_completi``) servono anche
-    i trade di ogni s, per le metriche di ogni sfasata: si restituiscono in forma
-    compatta (``trade_compatti``: per ogni s il numero dei trade e, in fila per
-    tutte le s, quattro ``array`` di interi e reali: ts d'entrata, ts d'uscita, R,
-    pnl; 32 byte per trade invece di circa 280 di una lista di Python).
+    che va nel file di avanzamento. Nel vault (``trade_completi`` True nel
+    compito, una chiave che entra nell'impronta del pezzo) il pezzo tiene
+    ``per_s_vault``: per ogni s le quattro somme di ``motore.somme_dei_trade``
+    ([n_j(s), somma degli R, somma dei guadagni, somma delle perdite in USDT]),
+    che bastano a ``motore.metriche_di_gruppo_da_somme`` (profit factor,
+    risultato, R medio di ogni sfasata) e, con le prime due colonne, a
+    ``statistica.medie_sfasate`` (M'(s), n'(s)). Anche queste vanno nel file di
+    avanzamento (regole.md, sezione 9, punto 4, e sezione 13).
     """
     secondi: Dict[str, float] = {}
     t0 = time.perf_counter()
@@ -1404,27 +1456,10 @@ def _pezzo_sfasate(compito: Mapping, prep: _Preparato) -> Tuple[Dict[str, object
         "capitale_esaurito": sum(x["capitale_esaurito"] for x in per_s),
     }
     if compito["trade_completi"]:
-        trade_in_fila = [t for x in per_s for t in x["trade"]]
-        pezzo["trade_compatti"] = {
-            "conteggi": array("q", [len(x["trade"]) for x in per_s]),
-            "ts_entrata": array("q", [t.ts_entrata for t in trade_in_fila]),
-            "ts_uscita": array("q", [t.ts_uscita for t in trade_in_fila]),
-            "r": array("d", [t.r for t in trade_in_fila]),
-            "pnl": array("d", [t.pnl for t in trade_in_fila]),
-        }
+        pezzo["per_s_vault"] = [motore.somme_dei_trade(x["trade"]) for x in per_s]
     else:
         pezzo["per_s"] = statistica.riassunto_sfasate([[t.r for t in x["trade"]] for x in per_s])
     return pezzo, secondi
-
-
-def _trade_compatti_per_s(compatti: Mapping[str, array]) -> Iterator[List[TradeSfasato]]:
-    """I trade di ogni s dalla forma compatta di ``_pezzo_sfasate`` (vault), uno s alla volta, come ``motore.TradeSfasato``."""
-    inizio = 0
-    for quanti in compatti["conteggi"]:
-        fine = inizio + quanti
-        yield [TradeSfasato(compatti["ts_entrata"][k], compatti["ts_uscita"][k], compatti["r"][k], compatti["pnl"][k])
-               for k in range(inizio, fine)]
-        inizio = fine
 
 
 #: Gli ingressi specifici di un pezzo delle sfasate che entrano nella sua impronta (oltre ai dati della moneta).
@@ -2513,11 +2548,32 @@ def asticella_di_gruppo(risultati_validazione: Sequence[Mapping]) -> Dict[str, o
 # ---------------------------------------------------------------------------
 
 
+def _controlla_cartella_del_vault(cartella, radice, nome: str = "cartella") -> Path:
+    """La cartella del vault (o ``file_trade``): obbligatoria e fuori da ``research/campagne/`` (regole.md, sezione 9, e sezione 13).
+
+    I numeri del vault sono del coordinamento e non vanno mai in ``campagne/``
+    (ne' sul branch principale ne' su quello della campagna): ne' sotto
+    ``<research del progetto>/campagne/`` ne' sotto ``<radice>/campagne/``.
+    Vale per la cartella del file di avanzamento e, se dato, per ``file_trade``,
+    che tiene i trade sommati del vault (revisione avversaria del 10 ottobre
+    2026). ValueError se no.
+    """
+    if cartella is None:
+        raise ValueError(f"esame_vault: serve {nome} (il file di avanzamento del vault, fuori da research/campagne/)")
+    percorso = Path(cartella).resolve()
+    for vietata in {(Path(dati.RADICE_DEFAULT) / "campagne").resolve(), (Path(radice) / "campagne").resolve()}:
+        if percorso == vietata or vietata in percorso.parents:
+            raise ValueError(f"esame_vault: {nome} {percorso} e' sotto {vietata}: i numeri del vault sono del "
+                             "coordinamento e non vanno in campagne/ (regole.md, sezione 9)")
+    return percorso
+
+
 def esame_vault(
     modulo: Union[str, Path],
     p: Mapping,
     timeframe: str,
     *,
+    cartella: Union[str, Path],
     processi: int = 4,
     radice: Union[str, Path] = dati.RADICE_DEFAULT,
     monete: Optional[Union[Sequence[str], Mapping[str, int]]] = None,
@@ -2542,28 +2598,49 @@ def esame_vault(
       vault spostati tutti dello stesso intervallo, in cerchio sulla finestra del
       vault (``griglia_sfasamenti`` con S = ``gruppo.fittizie_vault``, a 1d meno);
       la finestra di una moneta finisce con il suo ultimo giorno con candele.
-    * Il ``criterio_vault`` sui trade sommati (sezione 9, punto 2) con le metriche
-      di ``motore.metriche_di_gruppo``: profit factor almeno 1,10, almeno 300 trade,
-      risultato totale positivo, R medio sopra il 90° percentile degli R medi
-      delle sfasate con almeno un trade.
+    * Il ``criterio_vault`` sui trade sommati del candidato (sezione 9, punto 2)
+      con le metriche di ``motore.metriche_di_gruppo``: profit factor almeno 1,10,
+      almeno 300 trade, risultato totale positivo, R medio sopra il 90° percentile
+      degli R medi delle sfasate con almeno un trade.
     * Il tasso del caso (sezione 9, punto 4): la quota delle sfasate che passano
-      le stesse condizioni (``criterio_vault`` con ``trade_minimi`` = 0 sulle loro
-      metriche, piu' i 300 trade del candidato, che valgono per tutte); quelle
-      senza trade restano nel denominatore e non passano.
+      le stesse condizioni (``criterio_vault`` con ``trade_minimi`` = 0 sulle
+      metriche di ``motore.metriche_di_gruppo_da_somme``, dalle quattro somme per
+      s e per moneta di ``motore.somme_dei_trade``: numero dei trade, somma degli
+      R, somma dei guadagni e somma delle perdite in USDT; piu' i 300 trade del
+      candidato, che valgono per tutte); quelle senza trade restano nel
+      denominatore e non passano. Gli R medi delle sfasate (e il loro 90°
+      percentile) vengono dalla stessa funzione.
     * Solo da riportare (sezione 9, punto 5): la (b) di gruppo del vault (semi
-      1000·j + s, 200 per moneta) e il confronto con il pavimento delle sfasate;
-      la distribuzione di n'(s) / N e le sfasate senza trade; la quota della
-      moneta piu' presente; la tabella per moneta; le monete che smettono di
-      avere candele.
+      1000·j + s, 200 per moneta) e il confronto con il pavimento delle sfasate
+      (M'(s) e n'(s) con ``statistica.medie_sfasate`` sulle prime due somme); la
+      distribuzione di n'(s) / N e le sfasate senza trade; la quota della moneta
+      piu' presente; la prova sulle monete (``estremi``,
+      ``statistica.estremi_di_gruppo`` con B e le b_j della (b) del vault, None se
+      la (b) non e' valutabile; sezione 4, punto 3, e sezione 6, punto 2.5); la
+      tabella per moneta; le monete che smettono di avere candele.
 
-    Senza file di avanzamento: i trade delle 1.000 sfasate sarebbero troppi per
-    un file da conservare. ``file_trade``, se dato, riceve i trade sommati. Con un
-    marcatore di campagna alza ``dati.VietatoInCampagna``: il vault e' del
-    coordinamento.
+    ``cartella`` (obbligatoria, fuori da ``research/campagne/``): il file di
+    avanzamento ``<cartella>/avanzamento/vault_<timeframe>.jsonl``, in sola
+    aggiunta e con la ripresa automatica come in ``esame_di_gruppo``
+    (``_Avanzamento``: una riga per pezzo, l'impronta dell'esame con periodo
+    «vault», monete con la loro j e date del vault, l'impronta dei dati del
+    pezzo). Un vault interrotto (per esempio dal tempo massimo di un comando) si
+    rilancia con gli stessi argomenti e riprende dai pezzi gia' fatti; ripreso o
+    fatto tutto di fila, e con 1 o 4 processi, da' gli stessi numeri. Le righe
+    delle sfasate tengono le quattro somme per s (``per_s_vault``), non i trade.
+    Un'altra chiamata con la stessa cartella e lo stesso timeframe (un altro
+    candidato, il trasferimento) ha un'altra impronta: le sue righe restano nel
+    file e non si riusano (``ripresa.righe_di_altre_impronte``).
+    ``file_trade``, se dato, riceve i trade sommati; anche lui fuori da
+    ``research/campagne/``. Con un marcatore di campagna alza
+    ``dati.VietatoInCampagna``: il vault e' del coordinamento.
     """
     if _in_campagna():
         raise dati.VietatoInCampagna("esame_vault: e' del coordinamento, mai di una sessione di campagna "
                                      "(regole.md, sezione 9)")
+    cartella = _controlla_cartella_del_vault(cartella, radice)
+    if file_trade is not None:
+        file_trade = _controlla_cartella_del_vault(file_trade, radice, "file_trade")
     processi = _controlla_processi(processi)
     regole = regole_del_gruppo()
     opzioni = _opzioni_del_motore(regole, 1.0, 0, None)
@@ -2575,15 +2652,28 @@ def esame_vault(
     inizio_vault_ts = dati.ms_da_data(dati.INIZIO_VAULT)
     fine_vault_ts = dati.ms_da_data(dati.FINE_VAULT + timedelta(days=1)) - 1
     in_ordine = sorted(posizioni, key=lambda s: (primi[s], s))
+    impronte = _impronta_dell_esame(base, posizioni, {
+        "periodo": "vault", "con_baseline_a": False, "ingressi": {"tipo": "modulo"},
+        "inizio_vault": dati.INIZIO_VAULT.isoformat(), "fine_vault": dati.FINE_VAULT.isoformat(),
+        "primi_mesi": {s: primi[s].isoformat() for s in sorted(primi)}})
+    file_avanzamento = cartella / "avanzamento" / f"vault_{timeframe}.jsonl"
+    avanzamento = _Avanzamento(file_avanzamento, impronte)
 
     def compito_moneta(simbolo: str, tipo: str, **altro) -> Dict[str, object]:
         return dict(base, tipo=tipo, simbolo=simbolo, j=posizioni[simbolo], periodo="vault",
                     sorgente={"tipo": "modulo"}, inizio=primi[simbolo].isoformat(),
                     fine=dati.FINE_VAULT.isoformat(), inizio_conteggio_ts=inizio_vault_ts, con_a=False, **altro)
 
+    def ripresa() -> Dict[str, int]:
+        return {"pezzi_ripresi": avanzamento.pezzi_ripresi, "pezzi_calcolati": avanzamento.pezzi_calcolati,
+                "righe_di_altre_impronte": avanzamento.righe_di_altre_impronte,
+                "righe_illeggibili": avanzamento.righe_illeggibili}
+
+    # fase 1: test e (b) di ogni moneta; ogni pezzo passa dal file di avanzamento (sezione 13)
     pezzi1: Dict[str, Dict[str, object]] = {}
-    for risultato in _esegui_compiti([compito_moneta(s, "fase1") for s in in_ordine], processi):
-        pezzi1[risultato["simbolo"]] = json.loads(json.dumps(_in_json(risultato["dati"])))
+    compiti = [compito_moneta(s, "fase1", riusabili=avanzamento.impronte_salvate("fase1", s)) for s in in_ordine]
+    for risultato in _esegui_compiti(compiti, processi):
+        pezzi1[risultato["simbolo"]] = avanzamento.prendi(risultato)
     pezzi1 = {s: pezzi1[s] for s in sorted(pezzi1)}
     ordinati, trade_in_ordine = _trade_sommati(pezzi1)
     n_j = {s: len(pezzi1[s]["trade"]["righe"]) for s in pezzi1}
@@ -2604,8 +2694,10 @@ def esame_vault(
         "periodo": "vault",
         "timeframe": timeframe,
         "parametri": json.loads(base["p_json"]),
-        "impronte": {"variante": base["impronta_variante"], "strumenti": base["impronte"],
-                     "parametri": _sha256_testo(base["p_json"])},
+        "impronte": {"esame": impronte["impronta"], "codice": impronte["impronta_codice"],
+                     "variante": base["impronta_variante"], "strumenti": base["impronte"],
+                     "parametri": impronte["impronta_parametri"]},
+        "file": {"avanzamento": str(file_avanzamento), "trade": None if file_trade is None else str(file_trade)},
         "metriche": dict(metriche, trade=metriche["n_trade"]),
         "monete_nel_gruppo": len(posizioni),
         "monete_nel_periodo": len(nel_periodo),
@@ -2630,33 +2722,31 @@ def esame_vault(
     if totale == 0:
         criterio = statistica.criterio_vault(metriche, math.inf, trade_minimi=trade_minimi, pf_minimo=pf_minimo)
         risultato.update({"criterio": criterio, "passa": False, "tasso_del_caso": None, "sfasate": None,
-                          "baseline_b": None, "percentile_90_sfasate": None})
+                          "baseline_b": None, "percentile_90_sfasate": None, "estremi": None,
+                          "ripresa": ripresa()})
         return _in_json(risultato)
 
+    # fase 2: le sfasate del vault, con la griglia comune; ogni pezzo passa dal file di avanzamento
     griglia = _griglia("vault", con_trade, pezzi1, None, ms, regole, regole["fittizie_vault"])
     compiti = [compito_moneta(s, "sfasate", ts_segnali=pezzi1[s]["ts_segnali"],
                               finestra_unione=griglia["finestra_unione"],
                               finestra_moneta=[inizio_vault_ts, min(fine_giorno[s], fine_vault_ts)],
                               sfasamenti=griglia["sfasamenti"], impronta_vietate=pezzi1[s]["vietate"]["impronta"],
-                              trade_completi=True)
+                              trade_completi=True,
+                              riusabili=avanzamento.impronte_salvate("sfasate", s, griglia["impronta"]))
                for s in in_ordine if s in con_trade]
     pezzi2: Dict[str, Dict[str, object]] = {}
     for r_pezzo in _esegui_compiti(compiti, processi):
-        pezzi2[r_pezzo["simbolo"]] = r_pezzo["dati"]
+        pezzi2[r_pezzo["simbolo"]] = avanzamento.prendi(r_pezzo, griglia["impronta"])
+    pezzi2 = {s: pezzi2[s] for s in sorted(pezzi2)}
     numero = griglia["numero"]
-    # una s alla volta: i TradeSfasato di una sfasata esistono solo mentre se ne calcolano le metriche
-    metriche_s = []
-    riassunti: Dict[str, List[List[object]]] = {s: [] for s in sorted(pezzi2)}
-    per_s = {s: _trade_compatti_per_s(pezzi2[s]["trade_compatti"]) for s in sorted(pezzi2)}
-    for _ in range(numero):
-        trade_s = {s: next(per_s[s]) for s in sorted(pezzi2)}
-        for s, trade in trade_s.items():
-            riassunti[s].extend(statistica.riassunto_sfasate([[t.r for t in trade]]))
-        metriche_s.append(motore.metriche_di_gruppo({s: v for s, v in trade_s.items() if v}, len(nel_periodo),
-                                                    regole["capitale_per_moneta"], regole["trade_migliori_tolti"]))
-    # il criterio di ogni sfasata sulle sue metriche (sezione 9, punto 4); il pavimento con la lettura comune
-    # di M'(s) (statistica.medie_sfasate, sezione 5, punto 5)
-    m_sfasate, n_sfasate = statistica.medie_sfasate(riassunti, numero)
+    # il pavimento con la lettura comune di M'(s) e n'(s) (statistica.medie_sfasate, sezione 5, punto 5) sulle
+    # prime due somme; il criterio di ogni sfasata sulle sue metriche dalle somme (sezione 9, punto 4)
+    m_sfasate, n_sfasate = statistica.medie_sfasate(
+        {s: [[v[0], v[1]] for v in pezzi2[s]["per_s_vault"]] for s in pezzi2}, numero)
+    metriche_s = [motore.metriche_di_gruppo_da_somme({s: pezzi2[s]["per_s_vault"][k] for s in pezzi2},
+                                                     len(nel_periodo), regole["capitale_per_moneta"])
+                  for k in range(numero)]
     con_trade_s = [m["r_medio"] for m in metriche_s if m["n_trade"] > 0]
     percentile_90 = (statistica.percentile(con_trade_s, regole["percentile_caso_vault"]) if con_trade_s
                      else math.inf)
@@ -2686,7 +2776,7 @@ def esame_vault(
                            "segnali_coincidenti": sum(pezzi2[s]["segnali_coincidenti"] for s in sorted(pezzi2)),
                            "dettaglio": dettaglio}),
     })
-    # (b) di gruppo del vault e confronto, solo da riportare (sezione 9, punto 5)
+    # (b) di gruppo del vault, confronto e prova sulle monete, solo da riportare (sezione 9, punto 5)
     r = [t.r for t in ordinati]
     blocco = statistica.lunghezza_blocco([t.ts_entrata for t in ordinati], [t.ts_uscita for t in ordinati])
     base_b = statistica.baseline_casuale_di_gruppo(
@@ -2695,4 +2785,9 @@ def esame_vault(
     conf_b = _confronto(r, blocco, base_b, pavimento, regole)
     risultato["baseline_b"] = dict({k: v for k, v in base_b.items() if k != "valori"}, **conf_b,
                                    pavimento_sfasate=pavimento["pavimento"], blocco=blocco)
+    risultato["estremi"] = (statistica.estremi_di_gruppo(
+        ordinati, base_b["media"], base_b["b_per_moneta"], regole["trade_migliori_tolti"],
+        regole["giorni_migliori_tolti"], regole["monete_migliori_tolte"])
+        if base_b["valutabile"] and math.isfinite(base_b["media"]) else None)
+    risultato["ripresa"] = ripresa()
     return _in_json(risultato)

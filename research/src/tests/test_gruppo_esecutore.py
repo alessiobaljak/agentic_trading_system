@@ -21,8 +21,12 @@ comune, funding a 8 ore) e la variante d'esempio ``dati_gruppo/variante_esempio.
 10. le correzioni dopo la revisione del 10 ottobre: il modulo eseguito da capo per ogni moneta, gli import
    ammessi, la strategia casuale che rifa' i trade del test, la ripresa con l'impronta dei dati, i controlli di
    campagna nel corpo dell'esame, la cartella della prova a placebo, t = -inf per le varianti non valutabili, il
-   buy and hold con gli stessi pesi, le candele di BTCUSDT, un buco prima della validazione, i trade compatti
-   del vault, M'(s) dalla lettura comune, un processo che muore.
+   buy and hold con gli stessi pesi, le candele di BTCUSDT, un buco prima della validazione, M'(s) dalla
+   lettura comune, un processo che muore;
+11. il terzo giro di revisione: ``esame_vault`` con il file di avanzamento (cartella obbligatoria fuori da
+   ``campagne/``, 1 o 4 processi, interrotto e ripreso: stessi numeri), le sfasate del vault come quattro
+   somme per s e per moneta con le metriche di ``metriche_di_gruppo`` entro 1e-12 relativo, la prova sulle
+   monete nel vault; in campagna ogni moneta deve avere candele, funding e candele 1d del last.
 
 Il marcatore si cerca in ``dati.RADICE_PROGETTO``: una fixture automatica (qui per ogni test, e in ``conftest.py``
 per tutta la sessione, prima delle fixture di modulo) la punta a una cartella vuota, cosi' questi test non dipendono
@@ -149,7 +153,9 @@ class CaricatoreFinto:
         funding = [f for f in _funding_intero(simbolo, primo, self._fine(simbolo), self.seme) if da <= f[0] < a]
         return {"candele": candele, "candele_mark": list(candele), "funding": funding,
                 "mesi_sotto_liquidita": [(an, me) for s, an, me in self.mesi_sotto if s == simbolo],
-                "barre_tolte": {"last": 0, "mark": 0}}
+                "barre_tolte": {"last": 0, "mark": 0},
+                # i giorni dei file 1d del last: qui un giorno per ogni giorno con candele
+                "giorni_1d": len({c.ts // GIORNO for c in candele})}
 
     def btc(self, timeframe, inizio, fine):
         tutte = _serie_intera("BTCUSDT", "2021-01-01", self.fine_generale, dati.durata_intervallo(timeframe),
@@ -697,6 +703,9 @@ def test_il_filtro_di_liquidita_dal_disco(tmp_path):
     assert car.scheda("BBBUSDT")["slippage_per_lato"] == 0.001
     serie = car.serie("AAAUSDT", "1d", date(2022, 1, 1), date(2023, 1, 1))
     assert serie["mesi_sotto_liquidita"] == [poco] and serie["barre_tolte"] == {"last": 0, "mark": 0}
+    # i giorni dei file 1d del last nei mesi interi del periodo (dati.liquidita_mensile): 2022 e gennaio 2023
+    assert serie["giorni_1d"] == 365 + 31
+    assert car.serie("AAAUSDT", "1d", date(2021, 6, 1), date(2021, 7, 31))["giorni_1d"] == 0
     ris = gruppo.esame_di_gruppo(VARIANTE, dict(P, registra_ingressi=False), "1d", "costruzione", "GRUPPO-002",
                                  processi=1, radice=radice, monete=["AAAUSDT", "BBBUSDT"])
     assert Path(ris["file"]["trade"]).parent == radice / "campagne" / "GRUPPO" / "trade"
@@ -818,12 +827,13 @@ def test_in_campagna_monete_caricatore_e_radice_sono_quelli_ufficiali(tmp_path, 
         lambda: gruppo.conta_trade_di_gruppo(VARIANTE, P, "1d", processi=1, radice=tmp_path),
         lambda: gruppo.controllo_positivo(VARIANTE, P, "1d", "long", processi=1, cartella_campagna=tmp_path,
                                           caricatore=car, monete=monete_di(car)),
-        lambda: gruppo.esame_vault(VARIANTE, P, "1d", processi=1, caricatore=car, monete=monete_di(car)),
-        lambda: gruppo.esame_vault(VARIANTE, P, "1d", processi=1),
+        lambda: gruppo.esame_vault(VARIANTE, P, "1d", cartella=tmp_path / "vault", processi=1, caricatore=car,
+                                   monete=monete_di(car)),
+        lambda: gruppo.esame_vault(VARIANTE, P, "1d", cartella=tmp_path / "vault", processi=1),
     ):
         with pytest.raises(dati.VietatoInCampagna):
             chiamata()
-    assert CHIAMATE == []
+    assert CHIAMATE == [] and not (tmp_path / "vault").exists()
     # fuori campagna gli stessi argomenti vanno bene
     (progetto / "research" / ".sessione").unlink()
     assert gruppo.conta_trade_di_gruppo(VARIANTE, dict(P, registra_ingressi=False), "1d", processi=1,
@@ -990,15 +1000,26 @@ def test_controllo_positivo_passa_senza_ritardo_e_crolla_con_il_ritardo(tmp_path
                                   monete=monete_di(car), id="cp-sbagliato")
 
 
+#: le quattro monete sintetiche del vault: BBBUSDT smette di avere candele il 2025-06-30, AAAUSDT ha marzo 2025
+#: sotto la liquidita'
+VAULT_MONETE = (("AAAUSDT", "2023-07-01", 0.0005), ("BBBUSDT", "2023-09-01", 0.001), ("CCCUSDT", "2023-07-01", 0.0005),
+                ("DDDUSDT", "2023-07-01", 0.001))
+VAULT_ARGOMENTI = dict(mesi_sotto=(("AAAUSDT", 2025, 3),), buchi=(), fine_dati=(("BBBUSDT", "2025-06-30"),),
+                       fine_generale="2026-09-30")
+VAULT_J = {"AAAUSDT": 0, "BBBUSDT": 1, "CCCUSDT": 2, "DDDUSDT": 3}
+
+
+def vault(cartella, caricatore=None, q=None, processi=1, **altro):
+    caricatore = caricatore or CaricatoreFinto(monete=VAULT_MONETE, **VAULT_ARGOMENTI)
+    q = q or {"n": 3, "stop": 0.06, "target": 0.09, "durata": 2}
+    return gruppo.esame_vault(VARIANTE, q, "1d", cartella=cartella, processi=processi, monete=VAULT_J,
+                              caricatore=caricatore, **altro)
+
+
 def test_esame_vault(tmp_path):
-    car = CaricatoreFinto(monete=(("AAAUSDT", "2023-07-01", 0.0005), ("BBBUSDT", "2023-09-01", 0.001),
-                                  ("CCCUSDT", "2023-07-01", 0.0005), ("DDDUSDT", "2023-07-01", 0.001)),
-                          mesi_sotto=(("AAAUSDT", 2025, 3),), buchi=(), fine_dati=(("BBBUSDT", "2025-06-30"),),
-                          fine_generale="2026-09-30")
+    car = CaricatoreFinto(monete=VAULT_MONETE, **VAULT_ARGOMENTI)
     q = {"n": 3, "stop": 0.06, "target": 0.09, "durata": 2, "registra_ingressi": True}
-    ris = gruppo.esame_vault(VARIANTE, q, "1d", processi=1, monete={"AAAUSDT": 0, "BBBUSDT": 1, "CCCUSDT": 2,
-                                                                     "DDDUSDT": 3},
-                             caricatore=car, file_trade=tmp_path / "vault.jsonl")
+    ris = vault(tmp_path / "coordinamento", car, q, file_trade=tmp_path / "vault.jsonl")
     salvati = [json.loads(r) for r in (tmp_path / "vault.jsonl").read_text("utf-8").splitlines()]
     assert len(salvati) == ris["metriche"]["trade"] >= 300 and all(t["ts_entrata"] >= ms(date(2024, 1, 1)) for t in salvati)
     assert ris["monete_che_smettono"] == {"BBBUSDT": "2025-06-30"}
@@ -1028,6 +1049,30 @@ def test_esame_vault(tmp_path):
     for blocco in blocchi[1:201] + blocchi[804:804 + sf["sfasate"]]:  # AAAUSDT, la prima (piu' lunga, poi in ordine)
         assert not (set(blocco) & vietate)
     assert "t" in ris["baseline_b"] and ris["baseline_b"]["pavimento_sfasate"] is not None
+    # la prova sulle monete, solo da riportare (regole.md, sezione 9, punto 5): estremi_di_gruppo con B e le b_j
+    # della (b) del vault, sui trade sommati
+    assert ris["baseline_b"]["valutabile"] is True
+    attesi = statistica.estremi_di_gruppo(
+        [statistica.TradeDiGruppo(t["simbolo"], t["ts_entrata"], t["ts_uscita"], t["r"], t["pnl"]) for t in salvati],
+        ris["baseline_b"]["media"], ris["baseline_b"]["b_per_moneta"], 30, 3, 3)
+    assert ris["estremi"] == json.loads(json.dumps(attesi))
+    assert "passa" not in ris["estremi"] and ris["passa"] == ris["criterio"]["esito"]
+    # il file di avanzamento: una riga per pezzo, le sfasate con le quattro somme per s e non i trade
+    righe = [json.loads(r) for r in (tmp_path / "coordinamento" / "avanzamento" / "vault_1d.jsonl").read_text(
+        "utf-8").splitlines()]
+    assert ris["file"]["avanzamento"] == str(tmp_path / "coordinamento" / "avanzamento" / "vault_1d.jsonl")
+    assert sorted((r["pezzo"], r["simbolo"]) for r in righe) == sorted(
+        [("fase1", s) for s in VAULT_J] + [("sfasate", s) for s in VAULT_J])
+    assert {r["impronta"] for r in righe} == {ris["impronte"]["esame"]}
+    for riga in righe:
+        if riga["pezzo"] == "sfasate":
+            assert "trade_compatti" not in riga["dati"] and "per_s" not in riga["dati"]
+            somme = riga["dati"]["per_s_vault"]
+            assert len(somme) == sf["sfasate"] and all(len(v) == 4 and isinstance(v[0], int) for v in somme)
+    n_s = [sum(r["dati"]["per_s_vault"][k][0] for r in righe if r["pezzo"] == "sfasate") for k in range(sf["sfasate"])]
+    assert n_s == [d["n_trade"] for d in sf["dettaglio"]]
+    assert ris["ripresa"] == {"pezzi_ripresi": 0, "pezzi_calcolati": 8, "righe_di_altre_impronte": 0,
+                              "righe_illeggibili": 0}
 
 
 def test_esame_vault_a_vault_chiuso(tmp_path):
@@ -1038,8 +1083,34 @@ def test_esame_vault_a_vault_chiuso(tmp_path):
         "| Campo | Valore |\n|---|---|\n| Simbolo | `AAAUSDT` |\n| Primo mese di dati | 2022-01-01 |\n"
         "| Fascia di slippage per lato | 0.0500% |\n| Fine dell'in-sample | 2023-12-31 |\n", "utf-8")
     with pytest.raises(gruppo.ErroreDiMoneta, match="VaultChiuso") as errore:
-        gruppo.esame_vault(VARIANTE, P, "1d", processi=1, radice=radice, monete=["AAAUSDT"])
+        gruppo.esame_vault(VARIANTE, P, "1d", cartella=tmp_path / "coordinamento", processi=1, radice=radice,
+                           monete=["AAAUSDT"])
     assert isinstance(errore.value.__cause__, dati.VaultChiuso)
+
+
+def test_esame_vault_vuole_una_cartella_fuori_da_campagne(tmp_path):
+    """Il file di avanzamento del vault: cartella obbligatoria e fuori da research/campagne/ (regole.md, sezione 9)."""
+    radice = tmp_path / "research"
+    with pytest.raises(TypeError, match="cartella"):
+        gruppo.esame_vault(VARIANTE, P, "1d", processi=1, radice=radice, monete=VAULT_J,
+                           caricatore=CaricatoreFinto(monete=VAULT_MONETE, **VAULT_ARGOMENTI))
+    for cartella in (None, radice / "campagne", radice / "campagne" / "GRUPPO" / "vault",
+                     dati.RADICE_DEFAULT / "campagne" / "GRUPPO" / "vault"):
+        with pytest.raises(ValueError, match="cartella"):
+            vault(cartella, radice=radice)
+    assert CHIAMATE == [] and not radice.exists()
+    assert not (dati.RADICE_DEFAULT / "campagne" / "GRUPPO" / "vault").exists()
+
+
+def test_esame_vault_vuole_file_trade_fuori_da_campagne(tmp_path):
+    """Revisione avversaria: anche ``file_trade``, che tiene i trade sommati del vault, non va in research/campagne/."""
+    radice = tmp_path / "research"
+    for file_trade in (radice / "campagne" / "GRUPPO" / "trade" / "vault.jsonl",
+                       dati.RADICE_DEFAULT / "campagne" / "GRUPPO" / "trade" / "vault_revisione.jsonl"):
+        with pytest.raises(ValueError, match="file_trade .* e' sotto"):
+            vault(tmp_path / "coordinamento", radice=radice, file_trade=file_trade)
+        assert not file_trade.exists()
+    assert CHIAMATE == [] and not radice.exists() and not (tmp_path / "coordinamento").exists()
 
 
 def test_asticella_di_gruppo():
@@ -1070,6 +1141,40 @@ class CaricatoreSenzaBtc(CaricatoreFinto):
 
     def btc(self, timeframe, inizio, fine):
         return []
+
+
+@dataclasses.dataclass(frozen=True)
+class CaricatoreGuastoAlleSfasate(CaricatoreFinto):
+    """Il caricatore finto, ma la seconda lettura di ``guasto_alle_sfasate`` (il pezzo delle sfasate) fallisce.
+
+    Conta le letture in ``CHIAMATE``: vale solo con ``processi=1``.
+    """
+
+    guasto_alle_sfasate: str = ""
+
+    def serie(self, simbolo, timeframe, inizio, fine):
+        if simbolo == self.guasto_alle_sfasate and any(c[0] == simbolo for c in CHIAMATE):
+            raise RuntimeError("guasto simulato nelle sfasate")
+        return super().serie(simbolo, timeframe, inizio, fine)
+
+
+@dataclasses.dataclass(frozen=True)
+class CaricatoreConDatiMancanti(CaricatoreFinto):
+    """Il caricatore finto, ma a ogni moneta manca una parte dei dati della Fase 0 (``manca``)."""
+
+    manca: str = ""
+
+    def serie(self, simbolo, timeframe, inizio, fine):
+        serie = dict(super().serie(simbolo, timeframe, inizio, fine))
+        if self.manca == "candele":
+            serie["candele"], serie["candele_mark"] = [], []
+        elif self.manca == "funding":
+            serie["funding"] = []
+        elif self.manca == "giorni_1d":
+            serie["giorni_1d"] = 0
+        elif self.manca == "giorni_1d_assente":
+            del serie["giorni_1d"]
+        return serie
 
 
 def _variante_modificata(tmp_path: Path, nome: str, *sostituzioni) -> Path:
@@ -1344,6 +1449,48 @@ def test_le_candele_di_btc_si_riportano_e_in_campagna_devono_esserci(tmp_path):
             gruppo._prepara(dict(compito, in_campagna=True))
 
 
+@pytest.mark.parametrize("manca, motivo", [
+    ("candele", "nessuna candela 1d di last e mark fra 2022-01-01 e 2023-01-16"),
+    ("funding", "nessun regolamento di funding fra 2022-01-01 e 2023-01-16"),
+    ("giorni_1d", "nessuna candela 1d del last fra 2022-01-01 e 2023-01-16"),
+    ("giorni_1d_assente", "nessuna candela 1d del last"),
+])
+def test_in_campagna_ogni_moneta_deve_avere_i_dati_della_fase_0(manca, motivo):
+    """Terzo giro di revisione, dati mancanti: in campagna una moneta senza dati non pesa zero in silenzio.
+
+    Senza le candele del timeframe la moneta darebbe zero trade, senza il funding costi piu' bassi, senza i file 1d
+    del last tutti i mesi sotto la liquidita' (regole.md, sezione 2, punto 5): con il marcatore (letto da chi avvia
+    l'esame e passato ai pezzi) ``_prepara`` alza ValueError; senza marcatore nulla cambia.
+    """
+    caricatore = CaricatoreConDatiMancanti(monete=TRE[:1], manca=manca)
+    regole = gruppo.regole_del_gruppo()
+    opzioni = gruppo._opzioni_del_motore(regole, 1.0, 0, None)
+    base = gruppo._compito_base(VARIANTE, P, "1d", regole, opzioni, caricatore)
+    compito = dict(base, tipo="fase1", simbolo="AAAUSDT", j=0, periodo="costruzione", sorgente={"tipo": "modulo"},
+                   inizio="2022-01-01", fine="2023-01-16", inizio_conteggio_ts=None, con_a=True)
+    senza = gruppo._prepara(dict(compito, in_campagna=False))
+    assert (len(senza.candele) == 0) == (manca == "candele") and (len(senza.funding) == 0) == (manca == "funding")
+    with pytest.raises(ValueError, match=motivo) as errore:
+        gruppo._prepara(dict(compito, in_campagna=True))
+    assert "AAAUSDT" in str(errore.value) and "regole.md, sezione 2" in str(errore.value)
+    # con tutti i dati, in campagna, si passa
+    completo = dict(compito, caricatore=CaricatoreFinto(monete=TRE[:1]))
+    assert len(gruppo._prepara(dict(completo, in_campagna=True)).candele) > 0
+
+
+def test_senza_marcatore_i_dati_mancanti_non_cambiano_l_esame(tmp_path):
+    """Senza marcatore (prova a placebo, coordinamento) una moneta senza candele resta una moneta con zero trade."""
+    q = dict(P, registra_ingressi=False)
+    ris = esame(tmp_path, caricatore=CaricatoreConDatiMancanti(monete=TRE[:2], manca="candele"), p=q)
+    assert ris["metriche"]["trade"] == 0 and ris["valutabile"] is False
+    assert all(v["barre"] == 0 and v["trade"] == 0 for v in ris["per_moneta"].values())
+    conta = gruppo.conta_trade_di_gruppo(VARIANTE, q, "1d", processi=1, monete=["AAAUSDT", "BBBUSDT"],
+                                         caricatore=CaricatoreConDatiMancanti(monete=TRE[:2], manca="giorni_1d"))
+    uguale = gruppo.conta_trade_di_gruppo(VARIANTE, q, "1d", processi=1, monete=["AAAUSDT", "BBBUSDT"],
+                                          caricatore=CaricatoreFinto(monete=TRE[:2]))
+    assert json.dumps(conta, sort_keys=True) == json.dumps(uguale, sort_keys=True)
+
+
 def test_un_buco_prima_della_validazione_con_il_ritardo_non_ferma_l_esame(tmp_path):
     """Revisione, prova_buco: a 1d, con il ritardo di una barra e un buco il giorno prima della validazione.
 
@@ -1372,19 +1519,80 @@ def test_un_buco_prima_della_validazione_con_il_ritardo_non_ferma_l_esame(tmp_pa
     assert (p_primo, p_ultimo) == (-3, L - 3)
 
 
-def test_i_trade_compatti_delle_sfasate_del_vault():
-    """Revisione, memoria del vault: 4 array per moneta, i TradeSfasato rifatti una s alla volta."""
-    per_s = [[motore.TradeSfasato(1, 5, 0.5, 2.0), motore.TradeSfasato(7, 9, -1.0, -4.0)], [],
-             [motore.TradeSfasato(3, 4, 0.25, 1.0)]]
-    compatti = {"conteggi": gruppo.array("q", [len(x) for x in per_s]),
-                "ts_entrata": gruppo.array("q", [t.ts_entrata for x in per_s for t in x]),
-                "ts_uscita": gruppo.array("q", [t.ts_uscita for x in per_s for t in x]),
-                "r": gruppo.array("d", [t.r for x in per_s for t in x]),
-                "pnl": gruppo.array("d", [t.pnl for x in per_s for t in x])}
-    assert list(gruppo._trade_compatti_per_s(compatti)) == per_s
-    import pickle
-    molti = {k: (v * 10_000) for k, v in compatti.items() if k != "conteggi"}
-    assert len(pickle.dumps(molti)) / (3 * 10_000) < 33  # 32 byte per trade (una lista di Python ne costa circa 280)
+def test_le_sfasate_del_vault_hanno_le_metriche_di_metriche_di_gruppo(tmp_path, monkeypatch):
+    """Terzo giro di revisione, voce del vault: le sfasate del vault sono quattro somme per s e per moneta.
+
+    Con le somme (``motore.somme_dei_trade``) e ``motore.metriche_di_gruppo_da_somme`` ogni sfasata ha le metriche
+    che ``motore.metriche_di_gruppo`` darebbe sui suoi trade: lo stesso numero di trade, profit factor, rendimento
+    e R medio uguali entro 1e-12 relativo (regole.md, sezione 9, punto 4).
+    """
+    visti = []
+    vera = motore.somme_dei_trade
+
+    def spia(trade):
+        trade = list(trade)
+        visti.append(trade)
+        return vera(trade)
+
+    monkeypatch.setattr(motore, "somme_dei_trade", spia)
+    ris = vault(tmp_path / "coordinamento")
+    sf = ris["sfasate"]
+    numero = sf["sfasate"]
+    # un pezzo per moneta con trade, nell'ordine dei compiti (primo mese, poi simbolo), una chiamata per s
+    ordine = [s for s in sorted(VAULT_J, key=lambda s: (dict((m, p) for m, p, _ in VAULT_MONETE)[s], s))
+              if ris["per_moneta"][s]["trade"] > 0]
+    assert len(visti) == len(ordine) * numero
+    per_moneta = {s: visti[i * numero:(i + 1) * numero] for i, s in enumerate(ordine)}
+    vicini = 0
+    for k, d in enumerate(sf["dettaglio"]):
+        attese = motore.metriche_di_gruppo({s: per_moneta[s][k] for s in ordine if per_moneta[s][k]},
+                                           ris["monete_nel_periodo"], 1000.0)
+        assert d["n_trade"] == attese["n_trade"]
+        for chiave in ("profit_factor", "rendimento_totale"):
+            assert d[chiave] == pytest.approx(attese[chiave], rel=1e-12, abs=0.0), (k, chiave)
+        assert (d["r_medio"] is None) == (attese["n_trade"] == 0)
+        if attese["n_trade"]:
+            assert d["r_medio"] == pytest.approx(attese["r_medio"], rel=1e-12, abs=0.0), k
+            vicini += 1
+    assert vicini > 0.9 * numero
+
+
+def test_esame_vault_con_1_o_4_processi_e_dopo_un_interruzione_da_gli_stessi_numeri(tmp_path):
+    """Terzo giro di revisione: il vault ha il file di avanzamento in sola aggiunta e la ripresa (regole.md, sezione 13).
+
+    Un vault interrotto nelle sfasate (per esempio dal tempo massimo di un comando) si rilancia con gli stessi
+    argomenti e riprende dai pezzi gia' fatti: con 1 processo, con 4, interrotto e ripreso (anche con 4 processi)
+    i numeri sono gli stessi.
+    """
+    uno = vault(tmp_path / "uno")
+    quattro = vault(tmp_path / "quattro", processi=4)
+    assert senza_file(uno) == senza_file(quattro)
+    assert quattro["ripresa"]["pezzi_calcolati"] == 8 and quattro["ripresa"]["pezzi_ripresi"] == 0
+    # interrotto alle sfasate di DDDUSDT: i compiti vanno per primo mese (AAA, CCC, DDD del 2023-07, poi BBB)
+    CHIAMATE.clear()
+    guasto = CaricatoreGuastoAlleSfasate(monete=VAULT_MONETE, guasto_alle_sfasate="DDDUSDT", **VAULT_ARGOMENTI)
+    with pytest.raises(gruppo.ErroreDiMoneta, match="guasto simulato nelle sfasate"):
+        vault(tmp_path / "ripreso", guasto)
+    file = tmp_path / "ripreso" / "avanzamento" / "vault_1d.jsonl"
+    salvate = [(r["pezzo"], r["simbolo"]) for r in map(json.loads, file.read_text("utf-8").splitlines())]
+    assert sorted(salvate) == sorted([("fase1", s) for s in VAULT_J] + [("sfasate", "AAAUSDT"), ("sfasate", "CCCUSDT")])
+    # una riga interrotta a meta' si ignora
+    with open(file, "ab") as flusso:
+        flusso.write(b'{"formato": 2, "impronta": "tron')
+    ripreso = vault(tmp_path / "ripreso", processi=4)
+    assert senza_file(ripreso) == senza_file(uno)
+    assert ripreso["ripresa"] == {"pezzi_ripresi": 6, "pezzi_calcolati": 2, "righe_di_altre_impronte": 0,
+                                  "righe_illeggibili": 1}
+    # ripreso a pezzi tutti fatti: niente da calcolare, nessuna riga nuova
+    prima = len(file.read_text("utf-8").splitlines())
+    tutto = vault(tmp_path / "ripreso")
+    assert senza_file(tutto) == senza_file(uno)
+    assert tutto["ripresa"]["pezzi_ripresi"] == 8 and tutto["ripresa"]["pezzi_calcolati"] == 0
+    assert len(file.read_text("utf-8").splitlines()) == prima
+    # un altro candidato nella stessa cartella non riusa nulla e non cancella le righe di prima
+    altro = vault(tmp_path / "ripreso", q={"n": 3, "stop": 0.06, "target": 0.09, "durata": 3})
+    assert altro["ripresa"]["pezzi_ripresi"] == 0 and altro["ripresa"]["righe_di_altre_impronte"] == prima - 1
+    assert altro["impronte"]["esame"] != uno["impronte"]["esame"]
 
 
 def test_il_vault_prende_m_sfasate_dalla_lettura_comune(tmp_path, monkeypatch):
@@ -1400,14 +1608,15 @@ def test_il_vault_prende_m_sfasate_dalla_lettura_comune(tmp_path, monkeypatch):
     car = CaricatoreFinto(monete=(("AAAUSDT", "2023-07-01", 0.0005), ("BBBUSDT", "2023-09-01", 0.001)), mesi_sotto=(),
                           buchi=(), fine_generale="2026-09-30")
     q = {"n": 3, "stop": 0.06, "target": 0.09, "durata": 2}
-    ris = gruppo.esame_vault(VARIANTE, q, "1d", processi=1, monete={"AAAUSDT": 0, "BBBUSDT": 1}, caricatore=car)
+    ris = gruppo.esame_vault(VARIANTE, q, "1d", cartella=tmp_path / "coordinamento", processi=1,
+                             monete={"AAAUSDT": 0, "BBBUSDT": 1}, caricatore=car)
     assert len(chiamate) == 1 and chiamate[0][1] == ris["sfasate"]["sfasate"]
     medie, quanti = vera(*chiamate[0])
     assert quanti == [d["n_trade"] for d in ris["sfasate"]["dettaglio"]]
     pav = statistica.pavimento_sfasamento(medie, quanti, ris["metriche"]["trade"])
     assert ris["baseline_b"]["pavimento_sfasate"] == pav["pavimento"]
-    # il criterio di ogni sfasata resta sulle sue metriche (sezione 9, punto 4): stessi R medi a meno degli
-    # arrotondamenti
+    # il criterio di ogni sfasata resta sulle sue metriche (sezione 9, punto 4, motore.metriche_di_gruppo_da_somme):
+    # stessi R medi a meno degli arrotondamenti
     for m, d in zip(medie, ris["sfasate"]["dettaglio"]):
         assert (m is None) == (d["r_medio"] is None) and (m is None or m == pytest.approx(d["r_medio"], rel=1e-12))
 

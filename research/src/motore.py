@@ -116,6 +116,9 @@ Campagna di gruppo (campagne/GRUPPO/regole.md, sezione 13)
   punto 5, e sezione 9, punti 3-4), con i trade in ``TradeSfasato``.
 * ``metriche_di_gruppo``: le metriche dei trade sommati con le chiavi di
   ``statistica.criterio_vault`` (sezione 9, punto 2).
+* ``somme_dei_trade`` e ``metriche_di_gruppo_da_somme``: le stesse quattro chiavi
+  di ``criterio_vault`` dalle somme per moneta (numero dei trade, somma degli R,
+  dei guadagni e delle perdite), per le sfasate del vault (sezione 9, punto 4).
 * ``posizioni_aperte_insieme``: il massimo di posizioni aperte insieme, per
   direzione (sezione 8, punto 2).
 """
@@ -1452,8 +1455,9 @@ def metriche_di_gruppo(
     ``TradeSfasato`` delle sfasate o dizionari letti dal JSON: servono ``r``,
     ``pnl``, ``ts_entrata`` e ``ts_uscita``. Le chiavi di ``criterio_vault``
     (``profit_factor``, ``n_trade``, ``rendimento_totale``, ``r_medio``) ci
-    sono tutte: cosi' lo stesso dizionario giudica il candidato e ogni sfasata
-    del vault (sezione 9, punto 4).
+    sono tutte: giudicano il candidato (sezione 9, punto 2). Le sfasate del vault
+    hanno le stesse quattro chiavi, con le stesse regole, da
+    ``metriche_di_gruppo_da_somme`` (sezione 9, punto 4).
 
     Ordine fisso dei trade sommati (sezione 5, punto 1): per istante d'uscita,
     poi per simbolo, poi per istante d'entrata; tutte le somme si fanno in
@@ -1557,6 +1561,120 @@ def metriche_di_gruppo(
         "monete_nel_periodo": n_monete,
         "capitale_totale": capitale_totale,
         "per_moneta": per_moneta,
+    }
+
+
+def somme_dei_trade(trade: Iterable[object]) -> List[object]:
+    """Le quattro somme dei trade di UNA moneta per ``metriche_di_gruppo_da_somme`` (``campagne/GRUPPO/regole.md``, sezione 9, punto 4).
+
+    ``trade``: ``Trade``, ``TradeSfasato`` o dizionari letti dal JSON (servono
+    ``r`` e ``pnl``). Ritorna ``[n, somma degli R, somma dei pnl positivi, somma
+    dei valori assoluti dei pnl negativi]``, le tre somme con ``math.fsum``
+    (esatte e indipendenti dall'ordine dei trade; la somma degli R e' la stessa
+    di ``statistica.riassunto_sfasate``). Un pnl nullo non e' ne' un guadagno ne'
+    una perdita, come in ``metriche_di_gruppo``. ValueError per un R o un pnl non
+    finito.
+    """
+    r_valori: List[float] = []
+    guadagni: List[float] = []
+    perdite: List[float] = []
+    for t in trade:
+        r, pnl = float(_campo(t, "r")), float(_campo(t, "pnl"))
+        if not (math.isfinite(r) and math.isfinite(pnl)):
+            raise ValueError(f"somme_dei_trade: R ({r!r}) o pnl ({pnl!r}) non finiti")
+        r_valori.append(r)
+        if pnl > 0:
+            guadagni.append(pnl)
+        elif pnl < 0:
+            perdite.append(-pnl)
+    return [len(r_valori), math.fsum(r_valori), math.fsum(guadagni), math.fsum(perdite)]
+
+
+def metriche_di_gruppo_da_somme(
+    somme_per_moneta: Mapping[str, Sequence[object]],
+    n_monete_nel_periodo: int,
+    capitale_per_moneta: float,
+) -> Dict[str, object]:
+    """Le quattro chiavi di ``statistica.criterio_vault`` dalle somme per moneta, con le regole di ``metriche_di_gruppo`` (``campagne/GRUPPO/regole.md``, sezione 9, punto 4).
+
+    Serve alle sfasate del vault: per ogni s bastano, per ogni moneta, i quattro
+    numeri di ``somme_dei_trade`` (numero dei trade, somma degli R, somma dei
+    guadagni e somma delle perdite in USDT) invece dei trade, cosi' il pezzo di
+    una moneta sta nel file di avanzamento (circa 1.000 x 4 numeri). ``somme_per_moneta``
+    e' {simbolo: [n, somma_r, somma_guadagni, somma_perdite]}; una moneta con n = 0
+    non conta fra le monete con trade.
+
+    * ``n_trade``: la somma degli n;
+    * ``profit_factor``: somma dei guadagni / somma delle perdite; senza perdite
+      inf se c'e' un guadagno, 0 senza guadagni (come ``metriche_di_gruppo``);
+    * ``pnl_totale`` = guadagni - perdite, e ``rendimento_totale`` = ``pnl_totale`` /
+      (``capitale_per_moneta`` x ``n_monete_nel_periodo``), 0 con capitale 0;
+      ValueError se ``n_monete_nel_periodo`` e' minore delle monete con trade;
+    * ``r_medio``: somma degli R / ``n_trade``, 0 senza trade.
+
+    Le somme fra monete sono ``math.fsum``, in ordine dei caratteri dei simboli:
+    l'esito non dipende dall'ordine delle monete. Sugli stessi trade
+    ``metriche_di_gruppo`` somma in ordine d'uscita con ``sum``: ``n_trade`` e'
+    identico, profit factor, rendimento e R medio differiscono solo per gli
+    arrotondamenti (test: entro 1e-12 relativo). Ritorna anche ``somma_r``,
+    ``somma_guadagni``, ``somma_perdite``, ``monete_con_trade``,
+    ``monete_nel_periodo`` e ``capitale_totale``. ValueError per una voce che non
+    ha quattro numeri, un n negativo o non intero, una somma non finita, guadagni
+    o perdite negativi, o somme diverse da 0 con n = 0.
+    """
+    quanti: List[int] = []
+    somme_r: List[float] = []
+    somme_vinti: List[float] = []
+    somme_persi: List[float] = []
+    monete_con_trade = 0
+    for simbolo in sorted(somme_per_moneta):
+        voce = list(somme_per_moneta[simbolo])
+        if len(voce) != 4:
+            raise ValueError(f"{simbolo}: servono [n, somma_r, somma_guadagni, somma_perdite], non {voce!r}")
+        n_s, somma_r, vinti, persi = voce
+        try:
+            intero = None if isinstance(n_s, bool) else operator.index(n_s)
+        except TypeError:
+            intero = None
+        if intero is None or intero < 0:
+            raise ValueError(f"{simbolo}: numero di trade non valido ({n_s!r})")
+        n_s = intero
+        somma_r, vinti, persi = float(somma_r), float(vinti), float(persi)
+        if not all(math.isfinite(x) for x in (somma_r, vinti, persi)) or vinti < 0 or persi < 0:
+            raise ValueError(f"{simbolo}: somme non valide ({voce!r})")
+        if n_s == 0 and (somma_r != 0.0 or vinti != 0.0 or persi != 0.0):
+            raise ValueError(f"{simbolo}: somme diverse da 0 senza trade ({voce!r})")
+        if n_s:
+            monete_con_trade += 1
+        quanti.append(n_s)
+        somme_r.append(somma_r)
+        somme_vinti.append(vinti)
+        somme_persi.append(persi)
+    n_monete = operator.index(n_monete_nel_periodo)
+    if n_monete < monete_con_trade:
+        raise ValueError(f"n_monete_nel_periodo = {n_monete}, ma le monete con trade sono {monete_con_trade}")
+    capitale_totale = float(capitale_per_moneta) * n_monete
+    n = sum(quanti)
+    somma_r = math.fsum(somme_r)
+    somma_vinti = math.fsum(somme_vinti)
+    somma_persi = math.fsum(somme_persi)
+    if somma_persi > 0:
+        profit_factor = somma_vinti / somma_persi
+    else:
+        profit_factor = math.inf if somma_vinti > 0 else 0.0
+    pnl_totale = somma_vinti - somma_persi
+    return {
+        "profit_factor": profit_factor,
+        "n_trade": n,
+        "pnl_totale": pnl_totale,
+        "rendimento_totale": pnl_totale / capitale_totale if capitale_totale > 0 else 0.0,
+        "r_medio": somma_r / n if n else 0.0,
+        "somma_r": somma_r,
+        "somma_guadagni": somma_vinti,
+        "somma_perdite": somma_persi,
+        "monete_con_trade": monete_con_trade,
+        "monete_nel_periodo": n_monete,
+        "capitale_totale": capitale_totale,
     }
 
 

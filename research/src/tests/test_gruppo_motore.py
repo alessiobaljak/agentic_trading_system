@@ -9,6 +9,10 @@
   della strategia casuale a ogni s.
 * ``metriche_di_gruppo`` (sezione 9, punto 2) e ``posizioni_aperte_insieme``
   (sezione 8, punto 2), calcolate a mano.
+* ``somme_dei_trade`` e ``metriche_di_gruppo_da_somme`` (sezione 9, punto 4: le
+  sfasate del vault): a mano, e sugli stessi trade uguali a ``metriche_di_gruppo``
+  (lo stesso numero di trade; profit factor, rendimento e R medio entro 1e-12
+  relativo).
 
 Candele da 1 ora. Nei test degli sfasamenti la barra in posizione p ha
 ts = T0 + p * ORA, con T0 la mezzanotte UTC del 2022-01-01: la posizione e'
@@ -527,6 +531,126 @@ def test_trade_migliori_tolti_predefinito_uguale_a_parametri_yaml():
     # e trenta trade migliori tolti su trentuno lasciano il peggiore
     trade = {"AAA": [TradeSfasato(i * ORA, i * ORA + 1, float(i), 1.0) for i in range(31)]}
     assert motore.metriche_di_gruppo(trade, 1, 1000.0)["r_medio_senza_30_migliori"] == 0.0
+
+
+# ---------------------------------------------------------------------------
+# somme_dei_trade e metriche_di_gruppo_da_somme (terzo giro di revisione, il vault)
+# ---------------------------------------------------------------------------
+
+
+def _somme(trade_per_moneta):
+    return {s: motore.somme_dei_trade(v) for s, v in trade_per_moneta.items()}
+
+
+def test_somme_dei_trade_a_mano():
+    # AAA: R 1 e -1,5, pnl +10 e -30; BBB: R 2, -0,5, -0,75, pnl +20, -5, -4
+    somme = _somme(_trade_a_mano())
+    assert somme == {"AAA": [2, -0.5, 10.0, 30.0], "BBB": [3, 0.75, 20.0, 9.0]}
+    # un pnl nullo conta come trade ma non e' ne' un guadagno ne' una perdita (come metriche_di_gruppo)
+    assert motore.somme_dei_trade([TradeSfasato(0, 1, 0.0, 0.0), {"r": 0.5, "pnl": 2.0, "ts_entrata": 1,
+                                                                    "ts_uscita": 2}]) == [2, 0.5, 2.0, 0.0]
+    assert motore.somme_dei_trade([]) == [0, 0.0, 0.0, 0.0]
+    # la somma degli R e' quella di statistica.riassunto_sfasate, ed e' esatta: non dipende dall'ordine
+    r = [0.1] * 10 + [1e16, -1e16]
+    trade = [TradeSfasato(i, i + 1, x, x) for i, x in enumerate(r)]
+    assert motore.somme_dei_trade(trade)[:2] == st.riassunto_sfasate([r])[0]
+    assert motore.somme_dei_trade(trade) == motore.somme_dei_trade(list(reversed(trade)))
+    for cattivo in (math.inf, math.nan):
+        with pytest.raises(ValueError, match="non finiti"):
+            motore.somme_dei_trade([TradeSfasato(0, 1, cattivo, 1.0)])
+        with pytest.raises(ValueError, match="non finiti"):
+            motore.somme_dei_trade([TradeSfasato(0, 1, 1.0, cattivo)])
+
+
+def test_metriche_di_gruppo_da_somme_a_mano():
+    # gli stessi numeri di test_metriche_di_gruppo_a_mano: profit factor 30 / 39, risultato -9 USDT su 3.000,
+    # R medio 0,05
+    m = motore.metriche_di_gruppo_da_somme(_somme(_trade_a_mano()), 3, 1000.0)
+    assert m["n_trade"] == 5 and m["monete_con_trade"] == 2 and m["monete_nel_periodo"] == 3
+    assert m["profit_factor"] == pytest.approx(30 / 39, rel=1e-15)
+    assert m["pnl_totale"] == -9.0 and m["capitale_totale"] == 3000.0
+    assert m["rendimento_totale"] == pytest.approx(-0.003, rel=1e-15)
+    assert m["r_medio"] == pytest.approx(0.05, rel=1e-12)
+    assert (m["somma_guadagni"], m["somma_perdite"]) == (30.0, 39.0)
+    esito = st.criterio_vault(m, r_caso_percentile_90=0.0, trade_minimi=0)
+    assert esito["condizioni"] == {"profit_factor": False, "trade_minimi": True,
+                                   "rendimento_positivo": False, "sopra_il_caso": True}
+
+
+def _trade_casuali(seme: int):
+    """Quattro monete: una senza trade, le altre con 50-600 trade, R e pnl reali di segno misto."""
+    rng = np.random.default_rng(seme)
+    trade = {"DDD": []}
+    for simbolo in ("AAA", "BBB", "CCC"):
+        n = int(rng.integers(50, 600))
+        entrate = np.sort(rng.choice(np.arange(10_000), size=n, replace=False))
+        durate = rng.integers(1, 40, size=n)
+        r = rng.normal(0.08, 1.1, size=n)
+        rischio = rng.uniform(5.0, 15.0, size=n)
+        trade[simbolo] = [TradeSfasato(T0 + int(e) * ORA, T0 + int(e + d) * ORA, float(x), float(x * q))
+                          for e, d, x, q in zip(entrate, durate, r, rischio)]
+    return trade
+
+
+@pytest.mark.parametrize("seme", range(8))
+def test_metriche_di_gruppo_da_somme_uguali_a_metriche_di_gruppo_sugli_stessi_trade(seme):
+    trade = _trade_casuali(seme)
+    attese = motore.metriche_di_gruppo(trade, 5, 1000.0)
+    m = motore.metriche_di_gruppo_da_somme(_somme(trade), 5, 1000.0)
+    assert m["n_trade"] == attese["n_trade"] and m["monete_con_trade"] == attese["monete_con_trade"] == 3
+    assert m["capitale_totale"] == attese["capitale_totale"]
+    for chiave in ("profit_factor", "rendimento_totale", "r_medio", "pnl_totale"):
+        assert m[chiave] == pytest.approx(attese[chiave], rel=1e-12, abs=0.0), chiave
+    # stesse condizioni del criterio_vault
+    for soglia in (0.0, attese["r_medio"] / 2):
+        esito, atteso = st.criterio_vault(m, soglia, trade_minimi=0), st.criterio_vault(attese, soglia, trade_minimi=0)
+        assert esito["condizioni"] == atteso["condizioni"] and esito["esito"] == atteso["esito"]
+    # l'ordine delle monete e la forma delle somme (riletta da un JSON) non cambiano nulla, bit per bit
+    rovescio = {s: _somme(trade)[s] for s in reversed(sorted(trade))}
+    import json
+    assert motore.metriche_di_gruppo_da_somme(rovescio, 5, 1000.0) == m
+    assert motore.metriche_di_gruppo_da_somme(json.loads(json.dumps(_somme(trade))), 5, 1000.0) == m
+
+
+def test_metriche_di_gruppo_da_somme_casi_limite_come_metriche_di_gruppo():
+    x = _ms(2023, 1, 2)
+    casi = {
+        "senza trade": {"AAA": [], "BBB": []},
+        "solo guadagni": {"AAA": [TradeSfasato(x - ORA, x, 1.0, 10.0)], "BBB": []},
+        "solo perdite": {"AAA": [TradeSfasato(x - ORA, x, -1.0, -10.0)], "BBB": [TradeSfasato(x, x + ORA, -0.5, -4.0)]},
+        "pnl nullo": {"AAA": [TradeSfasato(x - ORA, x, 0.0, 0.0)], "BBB": []},
+    }
+    for nome, trade in casi.items():
+        attese = motore.metriche_di_gruppo(trade, 2, 1000.0)
+        m = motore.metriche_di_gruppo_da_somme(_somme(trade), 2, 1000.0)
+        for chiave in ("profit_factor", "n_trade", "rendimento_totale", "r_medio"):
+            assert m[chiave] == attese[chiave], (nome, chiave)
+    assert motore.metriche_di_gruppo_da_somme({}, 0, 1000.0)["n_trade"] == 0
+    assert motore.metriche_di_gruppo_da_somme({"AAA": [1, 0.5, 2.0, 0.0]}, 1, 0.0)["rendimento_totale"] == 0.0
+
+
+@pytest.mark.parametrize("somme, motivo", [
+    ({"AAA": [1, 0.5, 2.0]}, "servono"),
+    ({"AAA": [-1, 0.5, 2.0, 0.0]}, "numero di trade"),
+    ({"AAA": [1.5, 0.5, 2.0, 0.0]}, "numero di trade"),
+    ({"AAA": [True, 0.5, 2.0, 0.0]}, "numero di trade"),
+    ({"AAA": [1, math.nan, 2.0, 0.0]}, "somme non valide"),
+    ({"AAA": [1, 0.5, math.inf, 0.0]}, "somme non valide"),
+    ({"AAA": [1, 0.5, -2.0, 0.0]}, "somme non valide"),
+    ({"AAA": [1, 0.5, 2.0, -1.0]}, "somme non valide"),
+    ({"AAA": [0, 0.5, 0.0, 0.0]}, "senza trade"),
+])
+def test_metriche_di_gruppo_da_somme_controlli(somme, motivo):
+    with pytest.raises(ValueError, match=motivo):
+        motore.metriche_di_gruppo_da_somme(somme, 1, 1000.0)
+
+
+def test_metriche_di_gruppo_da_somme_monete_nel_periodo():
+    with pytest.raises(ValueError, match="monete con trade"):
+        motore.metriche_di_gruppo_da_somme(_somme(_trade_a_mano()), 1, 1000.0)
+    # una moneta con zero trade non conta fra quelle con trade
+    assert motore.metriche_di_gruppo_da_somme({"AAA": [0, 0.0, 0.0, 0.0], "BBB": [1, 1.0, 1.0, 0.0]}, 1,
+                                              1000.0)["monete_con_trade"] == 1
 
 
 # ---------------------------------------------------------------------------

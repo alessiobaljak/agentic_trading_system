@@ -1621,10 +1621,11 @@ def medie_sfasate(riassunti_per_moneta: Mapping[str, Sequence[Sequence[object]]]
     risultato non dipende dall'ordine delle monete ne' da quello dei trade.
 
     E' la sola lettura di M'(s) per ``pavimento_sfasamento``, in costruzione, in
-    validazione e nel vault (sezione 0, punto 4). Nel vault il ``criterio_vault``
-    di ogni sfasata (sezione 9, punto 4) si giudica invece, per regola, sulle
-    metriche di ``motore.metriche_di_gruppo`` della sfasata: e' un'altra grandezza
-    (le sue quattro condizioni), non il pavimento.
+    validazione e nel vault (sezione 0, punto 4; nel vault sulle prime due delle
+    quattro somme per s di ``motore.somme_dei_trade``). Nel vault il
+    ``criterio_vault`` di ogni sfasata (sezione 9, punto 4) si giudica invece, per
+    regola, sulle metriche di ``motore.metriche_di_gruppo_da_somme`` della sfasata:
+    e' un'altra grandezza (le sue quattro condizioni), non il pavimento.
     """
     if isinstance(numero_sfasamenti, bool):
         raise ValueError("numero_sfasamenti: serve un intero")

@@ -130,6 +130,7 @@ verdetto, per poter essere provate senza eseguire lo script.
 """
 from __future__ import annotations
 
+import ast
 import fnmatch
 import functools
 import glob
@@ -577,6 +578,9 @@ _FORMA_SILENZIOSA = "aggiungi -q (o --quiet)"
 #: `python -m research.campagne.<S>...`, forma gia' usata e ora tolta dalla regola
 #: «solo -m pytest»; lo script per percorso e' gia' ammesso e ha lo stesso rischio).
 _FORMA_SCRIPT = "lancia lo script per percorso"
+#: la frase del rifiuto della storia nei cloni limitati: anche li' il rifiuto dice la forma
+#: giusta e non chiede all'utente (`messaggio_rifiuto`)
+_STORIA_LIMITATA = "storia limitata (shallow)"
 #: il nome di un remoto (`origin`): non un indirizzo, non un percorso
 _NOME_REMOTO = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 #: le opzioni ammesse in campagna per push, fetch e pull (lista BIANCA, nomi
@@ -1519,7 +1523,7 @@ def _giudica_storia_clone_limitato(sub: str, resto: list[str], cartella: str, ri
     (`git log --reverse --format=%cI origin/<proprio branch> -- <cartella>/log.jsonl`)
     resta ammesso. Se non si e' potuto sapere se il clone e' limitato, vale come limitato.
     """
-    perche = ("questo clone ha la storia limitata (shallow), o git non ha saputo dirlo: il suo commit di "
+    perche = (f"questo clone ha la {_STORIA_LIMITATA}, o git non ha saputo dirlo: il suo commit di "
               "confine sembra toccare ogni cartella e ne stamperebbe il messaggio, che puo' essere del "
               "coordinamento o del bot")
     esempio = f"`git log --format='%h %cI' -- {cartella}/` (anche con --stat o --name-only)"
@@ -2392,6 +2396,91 @@ def giudica_azione(nome: str, ingresso: dict, ctx: Contesto) -> Verdetto:
     )
 
 
+#: dove lo strumento salva l'uscita di un comando in background e un'uscita troppo lunga
+_USCITA_TASKS = re.compile(r"/tmp/claude-[^/]*/(?:.*/)?tasks(?:/|$)")
+_USCITA_TOOL_RESULTS = re.compile(r"/\.claude/projects/(?:.*/)?tool-results(?:/|$)")
+
+
+def _comando_e_motivo(oggetto: str) -> tuple[str, str] | None:
+    """(comando, motivo) di un rifiuto di un comando, che ha la forma `repr(comando) (motivo)`; None se no.
+
+    Il comando si riconosce rileggendo il letterale di Python con cui comincia
+    l'oggetto (`ast.literal_eval`): cosi' un `' (` scritto dentro il comando non
+    sposta il confine fra comando e motivo.
+    """
+    if oggetto[:1] not in ("'", '"') or not oggetto.endswith(")"):
+        return None
+    inizio = 1
+    while True:
+        fine = oggetto.find(oggetto[0] + " (", inizio)
+        if fine < 0:
+            return None
+        letterale = oggetto[:fine + 1]
+        try:
+            comando = ast.literal_eval(letterale)
+        except Exception:  # noqa: BLE001 - non e' ancora la fine del letterale
+            comando = None
+        if isinstance(comando, str) and repr(comando) == letterale:
+            return comando, oggetto[fine + 3:-1]
+        inizio = fine + 1
+
+
+def _motivo_del_rifiuto(oggetto: str, profondita: int = 0) -> str:
+    """Il motivo di un rifiuto senza il testo del comando: cio' che il guardiano ha rifiutato, scritto da lui.
+
+    Per un comando l'oggetto e' `repr(comando) (motivo)`, e per `sh -c` il motivo e'
+    `dentro sh -c: <oggetto del comando interno>`: si prende il motivo piu' interno.
+    Per gli altri strumenti l'oggetto e' gia' cio' che si rifiuta (il percorso di
+    Read, Edit, Grep, Glob; `Glob con schema ...`; `lo strumento X (...)`).
+    """
+    diviso = _comando_e_motivo(oggetto)
+    if diviso is None:
+        return oggetto
+    motivo = diviso[1]
+    interno = re.match(r"dentro \S+ -c: (.*)\Z", motivo, re.S)
+    if interno and profondita <= _MAX_PROFONDITA:
+        return _motivo_del_rifiuto(interno.group(1), profondita + 1)
+    return motivo
+
+
+def _uscita_dello_strumento(oggetto: str) -> bool:
+    """True se la cosa RIFIUTATA e' l'uscita di un comando come la salva lo strumento, o Monitor.
+
+    Lo strumento scrive l'uscita di un comando in background (e di un comando passato
+    in background allo scadere del tempo) in `/tmp/claude-<...>/tasks/<id>.output`, e
+    un'uscita troppo lunga in `~/.claude/projects/<...>/tool-results/<file>`: tutti e
+    due fuori dai percorsi ammessi. Monitor non e' nella lista bianca. Sono rifiuti
+    giusti, ma per la sessione di gruppo, che lancia calcoli di ore, l'alternativa e'
+    scritta (regole.md, sezione 12, punto 6): `messaggio_rifiuto` la indica invece di
+    chiedere all'utente (terzo giro di revisione del 10 ottobre 2026).
+
+    Conta solo il motivo del rifiuto (`_motivo_del_rifiuto`), non il testo del comando:
+    per Read, Grep e Glob il percorso (o lo schema di Glob), per un comando il percorso
+    rifiutato, `(percorso X)` dopo il comando, anche dentro `sh -c`. Un comando
+    rifiutato per un altro motivo (un programma di rete, i dati del vault, un altro
+    branch) che nomina anche quei file, magari in un commento, chiede ancora
+    all'utente (revisione avversaria del 10 ottobre 2026).
+    """
+    motivo = _motivo_del_rifiuto(oggetto)
+    if motivo.startswith("lo strumento "):
+        return motivo.startswith("lo strumento Monitor ")
+    if motivo.startswith(("WebFetch ", "WebSearch ")):
+        return False
+    if motivo.startswith("Glob con schema "):
+        diviso = _comando_e_motivo(motivo[len("Glob con schema "):])
+        return diviso is not None and _e_uscita_dello_strumento(diviso[0])
+    if oggetto[:1] in ("'", '"') and _comando_e_motivo(oggetto) is not None:
+        # un comando: conta solo un percorso rifiutato
+        if not motivo.startswith("percorso "):
+            return False
+        motivo = motivo[len("percorso "):].removesuffix(": cartella di lavoro ignota dopo un cd")
+    return _e_uscita_dello_strumento(motivo)
+
+
+def _e_uscita_dello_strumento(percorso: str) -> bool:
+    return bool(_USCITA_TASKS.search(percorso) or _USCITA_TOOL_RESULTS.search(percorso))
+
+
 def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:
     oggetto = " ".join(oggetto.splitlines())  # una riga sola, sempre
     regola = ("Passo 4bis, research/campagne/GRUPPO/regole.md sezione 12" if ctx.gruppo else "Passo 3")
@@ -2401,12 +2490,27 @@ def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:
     # sessione usa la forma indicata. `lezioni/metodo.md` e PROTOCOLLO.md riga 272 (congelati)
     # consigliano ancora la forma vecchia; la differenza resta aperta nel backlog. Lo stesso
     # per `git reset`/`git stash` senza -q: il rifiuto dice la forma con -q.
-    autonomo = "shallow" in oggetto or _FORMA_SILENZIOSA in oggetto or _FORMA_SCRIPT in oggetto
-    if ctx.gruppo and f"{_DATI_INSAMPLE}/{SIMBOLO_GRUPPO}" in oggetto:
+    # Le forme si cercano nel MOTIVO del rifiuto, scritto dal guardiano, non nel testo del
+    # comando: `echo shallow; cat research/data/vault/x` chiede ancora all'utente (revisione
+    # avversaria del 10 ottobre 2026).
+    motivo = _motivo_del_rifiuto(oggetto)
+    autonomo = _STORIA_LIMITATA in motivo or _FORMA_SILENZIOSA in motivo or _FORMA_SCRIPT in motivo
+    if ctx.gruppo and f"{_DATI_INSAMPLE}/{SIMBOLO_GRUPPO}" in motivo:
         # `lezioni/metodo.md` consiglia `data/insample/<SIMBOLO>/` per i file fuori da git
         # (il messaggio di commit da passare con `git commit -F`): per il gruppo non esiste
         nota = (f" Per il gruppo {_DATI_INSAMPLE}/{SIMBOLO_GRUPPO}/ non esiste: i file fuori da git "
                 f"(per esempio il messaggio di commit) vanno in {_DATI_INSAMPLE}/{MONETA_RIFERIMENTO}/.")
+        autonomo = True
+    if ctx.gruppo and _uscita_dello_strumento(oggetto):
+        # il file d'uscita dello strumento e Monitor restano vietati: la forma giusta e' la
+        # redirezione nella cartella della campagna, che il guardiano ammette
+        cartella = f"research/campagne/{SIMBOLO_GRUPPO}"
+        nota += (f" L'uscita di un comando si legge dai file {cartella}/lavoro/<nome>.out e .err della "
+                 f"redirezione (regole.md, sezione 12, punto 6): lancia `python3 -u {cartella}/codice/<nome>.py > "
+                 f"{cartella}/lavoro/<nome>.out 2> {cartella}/lavoro/<nome>.err` (mai `2>&1`), aspetta la "
+                 "notifica di fine del comando e leggi quei due file con Read, a pezzi; per un comando gia' "
+                 "lanciato senza redirezione, rilancialo cosi'. Non aprire il file d'uscita dello strumento e "
+                 "non usare Monitor.")
         autonomo = True
     chiusura = ("Usa la forma indicata qui sopra, non serve chiedere all'utente."
                 if autonomo else "Registra il rifiuto nel log e chiedi all'utente.")
