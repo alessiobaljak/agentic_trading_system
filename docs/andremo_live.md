@@ -3311,3 +3311,20 @@ mancante rispetto ai primi mesi delle schede. La più tarda è ROSEUSDT, con il 
 per un giorno. Sulle 80 monete l'allineamento giornaliero toglie 410 giorni presenti solo nel last e 260 presenti
 solo nel mark. Cosa abbiamo capito: nessuna moneta del gruppo uscirà per storia corta, quindi l'elenco del vault
 del gruppo è deciso adesso, prima di qualunque test.
+
+### 10 ottobre, sera: testo della campagna di gruppo in vigore, prova di gruppo lanciata, sessione di gruppo aperta
+
+* **Il testo completo** (`research/campagne/GRUPPO/regole.md`) è in vigore dal 2026-10-10 alle 17:11 UTC (commit
+  6e84ef42), dopo tre giri di revisione avversaria: 75 rilievi nel primo (28 confermati fra bloccanti e importanti),
+  54 nel secondo (18), 11 nel terzo (7), tutti risolti nel testo o nel codice. Due scelte prese dal coordinamento per
+  il proprietario, nel verso prudente, sono nella voce P3 del backlog (taglio comune; trasferimento sui trade sommati,
+  da decidere prima del vault).
+* **Gli strumenti** (`research/src/gruppo.py` e le funzioni di gruppo in statistica, motore, dati) sono scritti,
+  rivisti da revisori avversari e committati (2a88046a): research/src/tests 2374 passati, tests/ 2287 passati, su una
+  copia isolata. **Il guardiano** è stato esteso al gruppo e rinforzato per tutte le campagne (rete, patch e tar,
+  cartelle, config in sola lettura, storia nei cloni limitati).
+* **La prova a placebo di gruppo** ha le regole chiuse alle 17:10 UTC con le cinque impronte (branch di
+  coordinamento, 39d09587) ed è stata lanciata alle 17:11 UTC: in corso, circa 15-16 ore di calcolo (stima dalla prova
+  di funzionamento). I suoi numeri restano sul branch di coordinamento fino alla consegna del gruppo.
+* **La sessione di gruppo** è aperta su delega alle 17:12 UTC (session_01FzzZ5SUK8q2QzvhreZxD74), modello configurato
+  claude-opus-5-5. Il controllo orario è riattivato con le istruzioni del gruppo; il controllo del mattino è aggiornato.
