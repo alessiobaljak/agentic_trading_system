@@ -1,16 +1,9 @@
 # Campagna di gruppo — testo completo del Passo 4bis
 
-> **BOZZA del 10 ottobre 2026.** Il proprietario l'ha approvata in anticipo il 2026-10-10 alle 06:35 UTC, prima che
-> fosse scritta («devo uscire, il testo è approvato appena hai finito, parti con l'esecuzione»). Finché questo riquadro
-> comincia con «**BOZZA», nessuna sessione di gruppo parte. Il coordinamento chiude la bozza con un commit che cambia
-> solo questo riquadro e lo sostituisce per intero con il paragrafo che segue, senza le virgolette « » che qui
-> sotto lo racchiudono (il riquadro deve cominciare esattamente con `> **In vigore dal `), con al posto di AAAA-MM-GG HH:MM
-> l'istante preso con `date -u` subito prima di quel commit (non le 06:35 dell'approvazione anticipata):
->
-> «**In vigore dal AAAA-MM-GG HH:MM UTC** (preso con `date -u` subito prima del commit che lo ha scritto; è l'istante
+> **In vigore dal 2026-10-10 17:11 UTC** (preso con `date -u` subito prima del commit che lo ha scritto; è l'istante
 > che il controllo della sezione 9 del protocollo usa per `research/campagna/GRUPPO`). Testo approvato in anticipo dal
 > proprietario il 2026-10-10 alle 06:35 UTC, prima che fosse scritto («devo uscire, il testo è approvato appena hai
-> finito, parti con l'esecuzione»).»
+> finito, parti con l'esecuzione»).
 
 Questo file completa il Passo 4bis di `research/PROTOCOLLO.md` (versione 4.5). Il Passo 4bis ha già fissato, prima di
 qualunque numero: le monete (punto 1), il giudizio sui trade sommati con il blocco calcolato sui trade di tutte le
