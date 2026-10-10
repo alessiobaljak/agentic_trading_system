@@ -920,6 +920,7 @@ def simula_baseline_casuale(
     barre_vietate: Sequence[Tuple[int, int]] = (),
     n_simulazioni: int = 200,
     primo_seme: int = 0,
+    rifiuta_poche_simulazioni: bool = True,
 ) -> Dict[str, object]:
     """La baseline (b) della sezione 8, eseguita sempre allo stesso modo.
 
@@ -955,6 +956,29 @@ def simula_baseline_casuale(
     percentile_90, valori) piu' ``trade_per_simulazione``, ``simulazioni_vuote``,
     ``segnali_non_validi_per_simulazione`` e ``segnali_senza_barra_per_simulazione``.
     Si passa cosi' com'e' a ``statistica.contro_baseline``.
+
+    Campagna di gruppo (``campagne/GRUPPO/regole.md``, sezione 5, punto 4, e
+    sezione 13). Il dizionario ha in piu' la chiave ``r_medio_per_seme``: una
+    lista lunga ``n_simulazioni``, nell'ordine dei semi (posizione s = seme
+    ``primo_seme + s``), con l'R medio di ogni simulazione e ``None`` per quelle
+    senza trade. E' la m_j(s) della sezione 5, punto 4: il gruppo combina le
+    simulazioni con lo STESSO s su monete diverse, quindi gli serve sapere quale
+    seme ha dato quale R medio, anche quando qualche simulazione e' vuota (le
+    chiavi ``valori`` e ``trade_per_simulazione`` saltano le vuote e perdono la
+    posizione). Per le campagne singole non cambia nient'altro.
+
+    ``rifiuta_poche_simulazioni`` (predefinito True, il comportamento di sempre):
+    con meno di 2 simulazioni con trade alza ValueError. Con False (uso di
+    gruppo) non alza: restituisce comunque ``r_medio_per_seme`` e i conteggi
+    (``trade_per_simulazione``, ``simulazioni_vuote``,
+    ``segnali_non_validi_per_simulazione``, ``segnali_senza_barra_per_simulazione``),
+    SENZA le chiavi di ``statistica.baseline_casuale`` (niente ``tipo``: il
+    dizionario non si puo' passare a ``contro_baseline`` per sbaglio). Decidere
+    se la variante e' non valutabile («una moneta con n_j > 0 ha meno di 2
+    simulazioni con trade») spetta a ``statistica.baseline_casuale_di_gruppo``.
+    Con 2 simulazioni con trade o piu' il risultato e' identico a quello del
+    predefinito. Gli ingressi che non entrano (``entrate_casuali``) alzano
+    ValueError anche con False.
     """
     from research.src import statistica  # import qui: statistica non dipende dal motore
 
@@ -963,6 +987,7 @@ def simula_baseline_casuale(
     # un segnale alla chiusura dell'ultima barra non ha una barra in cui entrare
     vietate = list(barre_vietate) + [(len(candele) - 1, len(candele))]
     r_medi: List[float] = []
+    r_medio_per_seme: List[Optional[float]] = []
     trade_per_sim: List[int] = []
     non_validi: List[int] = []
     senza_barra: List[int] = []
@@ -981,16 +1006,28 @@ def simula_baseline_casuale(
         senza_barra.append(ris.n_segnali_senza_barra)
         if not ris.trades:
             vuote += 1
+            r_medio_per_seme.append(None)
             continue
-        r_medi.append(sum(t.r for t in ris.trades) / len(ris.trades))
+        r_medio = sum(t.r for t in ris.trades) / len(ris.trades)
+        r_medi.append(r_medio)
+        r_medio_per_seme.append(r_medio)
         trade_per_sim.append(len(ris.trades))
     if len(r_medi) < 2:
-        raise ValueError(f"simula_baseline_casuale: solo {len(r_medi)} simulazioni con trade su {n_simulazioni}")
+        if rifiuta_poche_simulazioni:
+            raise ValueError(f"simula_baseline_casuale: solo {len(r_medi)} simulazioni con trade su {n_simulazioni}")
+        return {
+            "r_medio_per_seme": r_medio_per_seme,
+            "trade_per_simulazione": trade_per_sim,
+            "simulazioni_vuote": vuote,
+            "segnali_non_validi_per_simulazione": non_validi,
+            "segnali_senza_barra_per_simulazione": senza_barra,
+        }
     base = statistica.baseline_casuale(r_medi)
     base["trade_per_simulazione"] = trade_per_sim
     base["simulazioni_vuote"] = vuote
     base["segnali_non_validi_per_simulazione"] = non_validi
     base["segnali_senza_barra_per_simulazione"] = senza_barra
+    base["r_medio_per_seme"] = r_medio_per_seme
     return base
 
 
@@ -1036,6 +1073,222 @@ def barre_vietate_segnale_non_valido(
             else:
                 vietate.append((i, i + 1))
     return vietate
+
+
+# ---------------------------------------------------------------------------
+# Campagna di gruppo: le strategie sfasate (campagne/GRUPPO/regole.md, sezioni 5, 9, 13)
+# ---------------------------------------------------------------------------
+
+
+class TradeSfasato(NamedTuple):
+    """Un trade di una strategia sfasata, con solo quello che serve al gruppo.
+
+    ``campagne/GRUPPO/regole.md``, sezione 5, punto 5 (pavimento delle sfasate:
+    l'R di ogni trade) e sezione 9, punti 3-4 (sfasate del vault: profit factor e
+    risultato totale in USDT, R medio, anno d'uscita). ``r`` e' l'R del trade,
+    ``pnl`` il risultato netto in USDT sul capitale della moneta, ``ts_entrata``
+    e ``ts_uscita`` in ms come in ``Trade``. E' una tupla: occupa poco quando le
+    sfasate sono 200 (o 1.000 nel vault) per 80 monete, si passa fra processi
+    con pickle, e ``metriche_di_gruppo`` la legge come un ``Trade``.
+    """
+
+    ts_entrata: int
+    ts_uscita: int
+    r: float
+    pnl: float
+
+
+def simula_sfasamento_comune(
+    candele: List[Candela],
+    crea_strategia_casuale: Callable[[frozenset], Strategia],
+    ts_segnali: Sequence[int],
+    finestra_unione: Tuple[int, int],
+    finestra_moneta: Tuple[int, int],
+    ms_per_barra: int,
+    sfasamenti: Sequence[int],
+    parametri: Parametri,
+    candele_stop: Optional[List[Candela]] = None,
+    candele_mark: Optional[List[Candela]] = None,
+    funding: Sequence[Tuple[int, float]] = (),
+    barre_vietate: Sequence[Tuple[int, int]] = (),
+) -> Dict[str, object]:
+    """Le strategie sfasate di UNA moneta (``campagne/GRUPPO/regole.md``, sezione 5, punto 5, e sezione 9, punti 3-4).
+
+    La strategia sfasata s prende gli ingressi del candidato (le barre di
+    segnale) su tutte le monete e li sposta tutti dello stesso intervallo d_s,
+    in cerchio sulla finestra del periodo; emette il segnale della variante ed
+    esce con la sua uscita: e' la strategia casuale della (b) con gli ingressi
+    spostati. Questa funzione fa il lavoro di una moneta, cosi' il gruppo lo
+    distribuisce una moneta per processo (sezione 13): lo spostamento e' lo
+    stesso su tutte le monete perche' dipende solo dall'istante, dalla finestra
+    unione e da d_s, mai dalla moneta.
+
+    Argomenti:
+
+    * ``candele``, ``candele_stop``, ``candele_mark``, ``funding``,
+      ``parametri``: la serie della moneta e i suoi parametri, gli stessi del
+      test e della (b) (in validazione la serie dall'inizio della costruzione,
+      sezione 1, punto 5). ``candele`` e' il last gia' allineato al mark
+      (``dati.carica_serie_allineate``).
+    * ``crea_strategia_casuale``: la funzione della moneta che, dato l'insieme
+      degli indici delle barre di segnale, crea la strategia casuale (la stessa
+      della (b), ``simula_baseline_casuale``). Si chiama con un'istanza NUOVA per
+      ogni s (sezione 7 del protocollo).
+    * ``ts_segnali``: gli istanti (``ts``, cioe' l'apertura) delle barre di
+      SEGNALE dei trade del candidato su questa moneta nel periodo (la barra
+      alla cui chiusura la variante ha emesso il segnale, non quella
+      d'ingresso). Ognuno deve essere una barra della serie e cadere sulla
+      griglia del calendario della finestra unione; ValueError se no, se due
+      coincidono o se distano L barre o piu' (lo spostamento non sarebbe piu'
+      una rotazione). Un istante prima o dopo la finestra unione (per esempio la
+      barra di segnale del 2023-01-16 di un trade entrato il 2023-01-17, primo
+      giorno di validazione) si sposta con la stessa aritmetica del cerchio e si
+      conta in ``segnali_fuori_dalla_finestra_unione``.
+    * ``finestra_unione``: (inizio, fine) in ms della finestra del periodo,
+      l'unione delle finestre delle monete con trade del candidato (sezione 5,
+      punto 5; nel vault, il vault: sezione 9, punto 3). ``fine`` e' l'ultimo
+      millisecondo INCLUSO, come ``close_ts`` e ``fine_costruzione_ts`` (per il
+      2023-01-16: 23:59:59.999). L = (fine + 1 - inizio) / ``ms_per_barra``,
+      contato sul calendario, buchi compresi; se la divisione non e' esatta
+      ValueError (di solito vuol dire una fine passata esclusa).
+    * ``finestra_moneta``: (inizio, fine incluso) in ms della finestra della
+      moneta: in costruzione dal suo primo giorno di dati al 2023-01-16, in
+      validazione dal 2023-01-17 al 2023-12-31, nel vault fino al suo ultimo
+      giorno con candele (sezione 10, punto 1.2).
+    * ``ms_per_barra``: la durata della barra del timeframe della variante.
+    * ``sfasamenti``: i d_s in barre, nell'ordine di s (``statistica.griglia_sfasamenti``).
+    * ``barre_vietate``: intervalli di indici (inizio incluso, fine esclusa)
+      vietati agli ingressi, gli stessi della (b) della moneta (riscaldamento,
+      mesi sotto la liquidita', segnale non valido, in validazione le barre
+      prima del 2023-01-17: sezione 2, punto 7, e sezione 5, punto 4). Come
+      nella (b) e' vietata anche l'ultima barra della serie (un segnale li' non
+      ha una barra in cui entrare).
+
+    Per ogni s, per ogni istante di segnale: posizione p = (istante - inizio
+    della finestra unione) / ``ms_per_barra``; nuova posizione (p + d_s) modulo
+    L; nuovo istante = inizio + nuova posizione x ``ms_per_barra``. L'ingresso
+    spostato si salta, e si conta, nell'ordine (sezione 5, punto 5):
+
+    * ``fuori_finestra``: la barra spostata non sta tutta nella finestra della moneta;
+    * ``buco``: nessuna barra della serie della moneta ha quel ``ts``;
+    * ``vietata``: la barra e' in ``barre_vietate`` (o e' l'ultima);
+    * ``posizione_aperta``: il motore non lo trasforma in un trade perche'
+      cade mentre la posizione e' aperta (o mentre un ingresso e' gia' in
+      attesa, con ``ritardo_barre`` > 0). Si conta per differenza: ingressi
+      passati al motore - trade - segnali non validi - segnali senza barra -
+      segnali con capitale esaurito (questi tre si riportano a parte). Se la
+      differenza viene negativa la strategia casuale ha emesso segnali fuori
+      dagli ingressi: ValueError.
+
+    Nessun numero casuale: stessi argomenti, stesso risultato.
+
+    Ritorna un dizionario con ``L``, ``n_segnali``,
+    ``segnali_fuori_dalla_finestra_unione``, ``sfasamenti`` (i d_s usati, come
+    interi), ``saltati_totali`` (i quattro conteggi sommati su tutti gli s) e
+    ``per_sfasamento``: una lista nell'ordine di ``sfasamenti``, con per ogni s
+    un dizionario ``d`` (d_s), ``trade`` (lista di ``TradeSfasato`` nell'ordine
+    del motore, cioe' d'uscita), ``ingressi`` (quanti ingressi spostati sono
+    arrivati al motore), ``saltati`` ({motivo: numero}, i quattro motivi
+    sopra), ``segnali_non_validi``, ``segnali_senza_barra`` e
+    ``capitale_esaurito``. M'(s) e n'(s) del gruppo si ottengono sommando i
+    ``trade`` dello stesso s su tutte le monete (``statistica.pavimento_sfasamento``).
+    """
+    ms = operator.index(ms_per_barra)
+    if ms <= 0:
+        raise ValueError("ms_per_barra deve essere positivo")
+    inizio_u, fine_u = (operator.index(x) for x in finestra_unione)
+    durata = fine_u + 1 - inizio_u
+    if durata <= 0 or durata % ms != 0:
+        raise ValueError(
+            f"finestra unione ({inizio_u}, {fine_u}): la durata (fine inclusa) di {durata} ms non e' un multiplo "
+            f"positivo della barra ({ms} ms); la fine va passata INCLUSA (es. 23:59:59.999)"
+        )
+    L = durata // ms
+    inizio_m, fine_m = (operator.index(x) for x in finestra_moneta)
+    if fine_m < inizio_m:
+        raise ValueError(f"finestra della moneta vuota: ({inizio_m}, {fine_m})")
+
+    _verifica_serie(candele)  # ts crescenti, prima di costruire l'indice per ts
+    indice_per_ts = {c.ts: i for i, c in enumerate(candele)}
+    n = len(candele)
+
+    posizioni: List[int] = []
+    fuori_unione = 0
+    for valore in ts_segnali:
+        ts = operator.index(valore)
+        if ts not in indice_per_ts:
+            raise ValueError(f"l'istante di segnale {ts} non e' una barra della serie della moneta")
+        scarto = ts - inizio_u
+        if scarto % ms != 0:
+            raise ValueError(f"l'istante di segnale {ts} non cade sulla griglia del calendario della finestra unione")
+        p = scarto // ms
+        if not 0 <= p < L:
+            fuori_unione += 1
+        posizioni.append(p)
+    if len(set(posizioni)) != len(posizioni):
+        raise ValueError("due istanti di segnale coincidono")
+    if posizioni and max(posizioni) - min(posizioni) >= L:
+        raise ValueError(f"gli istanti di segnale coprono {max(posizioni) - min(posizioni) + 1} barre, oltre L = {L}")
+
+    vietata = bytearray(n)
+    # come nella (b): un segnale alla chiusura dell'ultima barra non ha una barra in cui entrare
+    for inizio, fine in list(barre_vietate) + [(n - 1, n)]:
+        lo, hi = max(0, int(inizio)), min(n, int(fine))
+        if hi > lo:
+            vietata[lo:hi] = b"\x01" * (hi - lo)
+
+    funding_lista = list(funding)
+    sfas = [operator.index(d) for d in sfasamenti]
+    per_sfasamento: List[Dict[str, object]] = []
+    totali = {"fuori_finestra": 0, "buco": 0, "vietata": 0, "posizione_aperta": 0}
+    for d in sfas:
+        saltati = {"fuori_finestra": 0, "buco": 0, "vietata": 0, "posizione_aperta": 0}
+        ingressi = set()
+        for p in posizioni:
+            ts = inizio_u + ((p + d) % L) * ms
+            if ts < inizio_m or ts + ms - 1 > fine_m:
+                saltati["fuori_finestra"] += 1
+                continue
+            i = indice_per_ts.get(ts)
+            if i is None:
+                saltati["buco"] += 1
+                continue
+            if vietata[i]:
+                saltati["vietata"] += 1
+                continue
+            ingressi.add(i)
+        strategia = _strategia_nuova(
+            crea_strategia_casuale, "simula_sfasamento_comune",
+            "crea_casuale(ingressi): una funzione con UN argomento (l'insieme degli indici delle barre di "
+            "segnale) che restituisce la strategia CASUALE della (b): alla chiusura di quelle barre il segnale "
+            "della variante, poi la sua uscita", frozenset(ingressi))
+        ris = esegui(candele, candele_stop, candele_mark, funding_lista, strategia, parametri)
+        saltati["posizione_aperta"] = (len(ingressi) - len(ris.trades) - ris.n_segnali_non_validi
+                                       - ris.n_segnali_senza_barra - ris.n_segnali_capitale_esaurito)
+        if saltati["posizione_aperta"] < 0:
+            raise ValueError(
+                f"sfasamento {d}: {len(ris.trades)} trade e {ris.n_segnali_non_validi} segnali non validi da "
+                f"{len(ingressi)} ingressi: la strategia casuale emette segnali fuori dagli ingressi"
+            )
+        for motivo, quanti in saltati.items():
+            totali[motivo] += quanti
+        per_sfasamento.append({
+            "d": d,
+            "trade": [TradeSfasato(t.ts_entrata, t.ts_uscita, t.r, t.pnl) for t in ris.trades],
+            "ingressi": len(ingressi),
+            "saltati": saltati,
+            "segnali_non_validi": ris.n_segnali_non_validi,
+            "segnali_senza_barra": ris.n_segnali_senza_barra,
+            "capitale_esaurito": ris.n_segnali_capitale_esaurito,
+        })
+    return {
+        "L": L,
+        "n_segnali": len(posizioni),
+        "segnali_fuori_dalla_finestra_unione": fuori_unione,
+        "sfasamenti": sfas,
+        "saltati_totali": totali,
+        "per_sfasamento": per_sfasamento,
+    }
 
 
 # ---------------------------------------------------------------------------
