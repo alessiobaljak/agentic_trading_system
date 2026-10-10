@@ -40,6 +40,12 @@ def main():
             raise ValueError("la stima dice scarto: si registra come scarto")
         if tipo == "scarto" and voce["esito_stima"] != "scarto":
             raise ValueError("la stima dice registrabile")
+        if voce.get("famiglia") is None and voce.get("ritocco_di") is None:
+            voce["famiglia"] = voce["id"]
+        if tipo == "registrazione" and voce.get("tipo_test") == "variante":
+            precedenti = [json.loads(x) for x in (CARTELLA_GRUPPO / "log.jsonl").read_text().splitlines() if x.strip()]
+            voce["variante_n"] = 1 + sum(1 for x in precedenti if x.get("tipo") == "registrazione"
+                                         and x.get("tipo_test") == "variante")
     elif tipo == "risultato":
         esame = json.loads((LAVORO / spec.pop("esame")).read_text())
         voce = {"id": spec.pop("id"), "tipo": "risultato", "data": data}

@@ -1,0 +1,9 @@
+{"tipo_test": "variante", "idea": "I-01", "variante_nome": "I-01-L", "famiglia": null, "ritocco_di": null,
+ "fonte": "Moskowitz, Ooi, Pedersen, «Time series momentum», Journal of Financial Economics 104(2), maggio 2012; Liu, Tsyvinski, «Risks and Returns of Cryptocurrency», NBER Working Paper 24877, agosto 2018",
+ "meccanismo": "continuazione a 1-4 settimane del rendimento passato (sottoreazione, inseguimento del trend degli investitori piccoli)",
+ "timeframe": "1d", "direzione": "long", "modulo": "i01_momento.py",
+ "parametri": {"direzione": "long", "ritorno_barre": 21, "tenuta": 7, "atr": 14, "stop_atr": 3.0},
+ "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra -0,02 e +0,06; t contro la (b) di gruppo fra -1 e +2; costo di un giro circa 0,008 R",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo (contro_baseline con il pavimento delle sfasate) e R medio dopo i costi sui trade sommati positivo",
+ "conta": "I-01-L_conta.json"}
