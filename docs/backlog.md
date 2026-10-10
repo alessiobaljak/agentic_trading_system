@@ -32,11 +32,21 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-Nessuna voce in attesa del tuo sì.
+### P3. Campagna di gruppo: due scelte che il coordinamento ha preso per te il 10 ott (puoi cambiarle)
+**Perché:** il 10 ott alle 06:35 UTC il proprietario ha approvato in anticipo il testo della campagna di gruppo
+(«il testo è approvato appena hai finito, parti con l'esecuzione») ed è uscito. Due punti erano domande per lui.
+**Cosa:** (1) **Taglio comune** fra costruzione e validazione per tutte le 80 monete (costruzione fino al
+2023-01-16, validazione dal 2023-01-17 al 2023-12-31) al posto del 70/30 per moneta già approvato: con il 70/30 il
+34,5% dei giorni-moneta di validazione (9.666 su 27.986) cadrebbe nella costruzione di un'altra moneta (calcolo del
+coordinamento sui primi mesi delle schede). Si può tornare indietro solo prima del lancio della prova a placebo di
+gruppo. (2) **Trasferimento del candidato di gruppo**: oggi vale il Passo 6 moneta per moneta, dove un candidato di
+gruppo darebbe spesso «non si sa» (pochi trade per moneta, stima); il coordinamento propone di rendere decisiva la
+prova sui trade sommati delle monete fuori dal gruppo (`research/campagne/GRUPPO/regole.md`, sezione 10, punto 2).
+Va deciso prima di «APRI IL VAULT». **Non cambia:** le 20 campagne consegnate e i 3 candidati.
 
 ## 1. In lavorazione
 
-### P0. Il protocollo di ricerca per moneta — versione 4.5 (approvata il 9 ott). TUTTE E 20 LE MONETE HANNO CONSEGNATO il 9 ott: 3 candidati confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; riepilogo in `research/passo4/riepilogo.md` sul branch di coordinamento). Il 10 ott il proprietario ha deciso: (1) SÌ alla campagna di gruppo prima del vault, (2) NO a rifare BTCUSDT. IN CORSO: il testo completo della campagna di gruppo (Passo 4bis) da far approvare prima di qualunque test; poi guardiano esteso, schede delle 80 monete e sessione di gruppo. Il vault si apre solo con «APRI IL VAULT», dopo la consegna del gruppo
+### P0. Il protocollo di ricerca per moneta — versione 4.5 (approvata il 9 ott). TUTTE E 20 LE MONETE HANNO CONSEGNATO il 9 ott: 3 candidati confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; riepilogo in `research/passo4/riepilogo.md` sul branch di coordinamento). Il 10 ott il proprietario ha deciso: (1) SÌ alla campagna di gruppo prima del vault, (2) NO a rifare BTCUSDT. IN CORSO (10 ott): testo completo della campagna di gruppo (`research/campagne/GRUPPO/regole.md`, approvato in anticipo dal proprietario alle 06:35 UTC) in bozza dopo tre giri di revisione; schede delle 80 monete, guardiano esteso e strumenti di gruppo scritti, rivisti e committati (research/src/tests 2271 passati); prova a placebo di gruppo in preparazione; poi chiusura della bozza e sessione di gruppo. Il vault si apre solo con «APRI IL VAULT», dopo la consegna del gruppo
 **Perché:** cinque misure indipendenti dicono la stessa cosa: il gate non trova un vantaggio. Entrate a caso rendono come i segnali (240 trade, ops 0471); dopo la scelta del gate le validate fanno −0,03R su 182 segnali ±0,17 (ops 0498, lettura stampata: «la prossima modifica va nel gate»); una candidata nuova a caso non passa quasi mai (0 su 3.600, ops 0485); i costi superano il lordo (−0,089R netti, +0,088R di costi su 241, ops 0489); il gate rigiocato nel passato, su 8 date, dà promosse peggiori delle bocciate (−0,22R contro −0,14R su 45 trade, non decide, ops 0502). Aspettare il 14 ott non cambia il verdetto.
 **Cosa:** salvare `research/PROTOCOLLO.md` (versione 4.2, rivista il 5 ott) ed eseguire il **Passo 0**: fatti (fonte dati e contratti delistati, commissioni, serie degli stop, regole di dimensione e forma di esecuzione del bot), motore con il blocco del periodo chiuso, test di controllo, tabella dei parametri da approvare. Non tocca dati di mercato né il bot. **Regola scritta prima:** il Passo 0 finisce con una tabella e uno STOP; nessuna campagna parte senza l'approvazione dei parametri. **Metro:** la tabella completa, i test di controllo passati, e la risposta alla domanda «il bot può eseguire una strategia scritta come codice?». **Non cambia:** bot, gate, paper, registro; le letture del 7 e 14 ott restano.
 
@@ -111,6 +121,24 @@ tutte le durate la differenza dal caso sta dentro il margine, il lavoro sui TP s
 e revisione critica nel diario; legata a T1 e a R1.
 
 ## 2. Dopo le letture del 7-14 ottobre (toccano gate, size o freni)
+
+### P2. Trovate preparando la campagna di gruppo (10 ott) e non fatte
+**Perché:** le revisioni avversarie del testo e del guardiano (10 ott) hanno trovato cose che non servono alla
+sessione di gruppo o che toccano testi congelati. **Cosa, una per una:**
+(1) `lezioni/metodo.md` (congelato fino al Passo 7) consiglia `git log -- research/campagne/<SIMBOLO>/`, che nelle
+macchine di sessione (storia limitata) il guardiano ora rifiuta: il rifiuto indica la forma giusta, il testo va
+aggiornato al Passo 7; (2) il messaggio di apertura delle campagne singole (`apertura/campagna.md`) ha l'ordine
+«committa e poi scrivi la nota» che nel gruppo è stato corretto: da allineare prima di una nuova campagna singola;
+(3) il guardiano del coordinamento non segue `bash -o pipefail -c '…'` (il coordinamento non è una sessione di
+ricerca, rischio basso); (4) restano programmi che eseguono comandi propri (vim -c, ed, m4, java /dev/stdin) e gli
+script, che possono aprire la rete: limite già scritto (sezione 11 del protocollo); (5) proposta della revisione degli
+strumenti, non fatta: legare la validazione del gruppo ai soli candidati congelati con un file
+`candidati/validazione.json` e la sua impronta nel via libera (oggi lo garantisce la regola, non lo strumento);
+(6) strategie fra monete e funding come misura dell'affollamento: escluse o non provate dalla prova di gruppo
+(`regole.md`, sezioni 3 e 15), dopo il vault non avranno un periodo chiuso; (7) a 15 minuti la (b) di una moneta su
+quattro anni occupa circa 1,1 GB per processo (stima della revisione): a 15m conviene usare 2 processi.
+**Non cambia:** nulla per le campagne consegnate.
+
 
 ### P1. Correzioni al protocollo emerse dalle campagne 4.4 (da raccogliere in una versione 4.5)
 **Stato (9 ott sera):** versione 4.5 SCRITTA in bozza (`research/PROTOCOLLO.md`, commit 895467e1 → bea507fd: corretta dopo la revisione di tre lettori indipendenti), prova a placebo FATTA (l'esame regge: «netta» per caso 0,41%, p sotto 0,10 in validazione 3,26%; `research/taratura/placebo/risultati.md` sul branch di coordinamento), caricatore unico FATTO (a5dd6863). **Approvata il 9 ott alle 12:06 UTC** (correzione del 9 ott alle 17:35 UTC: in validazione serve anche R medio dopo i costi positivo, per tutti i candidati). Le tre scelte approvate: consegne 4.4 di BTC, ETH e SOL valide; soglia del trasferimento più severa anche per il candidato BTC; delega al coordinamento per aprire le sessioni delle 17.
