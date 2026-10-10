@@ -761,6 +761,29 @@ def test_uguale_e_indirizzi_in_campagna(campagna_btc, comando, atteso):
     assert codice == atteso, err
 
 
+def test_indirizzo_ammesso_non_apre_una_strada_ai_file(campagna_btc):
+    """Per la shell `https://arxiv.org/x` e' anche un percorso (`https:` e' un nome di
+    cartella valido): un indirizzo ammesso non deve diventare un modo di scrivere o leggere
+    un file senza che il percorso sia giudicato."""
+    # con `.` o `..` fra le `/` si rifiuta sempre (dopo un `mkdir -p https:/arxiv.org`
+    # porterebbe a research/src/guardiano.py)
+    for comando in (
+        "cd research/campagne/BTCUSDT && sed -i 's|a|b|' https://arxiv.org/../../../../src/guardiano.py",
+        "echo x > https://arxiv.org/../research/src/guardiano.py",
+        "echo https://arxiv.org/./abs/1",
+    ):
+        assert _bash(campagna_btc, comando)[0] == 2, comando
+    # se `https:` esiste davvero (qui un link verso docs/, come lo farebbe uno script),
+    # la parola si giudica anche come percorso
+    (campagna_btc / "research/campagne/BTCUSDT/https:").symlink_to("../../../docs")
+    assert _bash(campagna_btc, "cd research/campagne/BTCUSDT && cat https://arxiv.org/x")[0] == 2
+    assert _bash(campagna_btc, "cd research/campagne/BTCUSDT && echo x > https://arxiv.org/x")[0] == 2
+    # dalla radice, dove `https:` non c'e', l'indirizzo resta solo un indirizzo
+    assert _bash(campagna_btc, "echo https://arxiv.org/abs/1 >> research/campagne/BTCUSDT/fonti.md")[0] == 0
+    # dopo un cd che non si sa risolvere, nel dubbio si rifiuta
+    assert _bash(campagna_btc, "cd /tmp && echo https://arxiv.org/abs/1")[0] == 2
+
+
 def test_candidato_percorso_spezza_solo_dopo_opzione_o_variabile():
     from research.src import guardiano as g
 

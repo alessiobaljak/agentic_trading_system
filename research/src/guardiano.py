@@ -1965,6 +1965,12 @@ def _giudica_indirizzo_nel_comando(parola: str, ctx: Contesto, comando: str) -> 
     altrimenti la parola intera (`-ohttps://...` non e' un indirizzo: si rifiuta)."""
     cand = _candidato_percorso(parola, ctx.primo_livello, bersaglio=True)
     indirizzo = cand if cand is not None and "://" in cand else parola
+    if any(pezzo in (".", "..") for pezzo in parola.split("/")):
+        # per la shell la parola e' anche un percorso (`https:` e' una cartella): con `..`
+        # (`cd research/src && sed -i ... https://arxiv.org/../../guardiano.py`, dopo un
+        # `mkdir -p https:/arxiv.org`) arriverebbe a un file protetto senza essere giudicata
+        return Verdetto(False, f"{comando!r} (l'indirizzo {indirizzo!r} contiene `.` o `..` fra le `/`: "
+                               "come percorso uscirebbe dalla cartella)")
     v = giudica_url(indirizzo, ctx)
     if v.consentito:
         return OK
@@ -2053,9 +2059,19 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
                 if ctx.campagna and "://" in parola:
                     # un indirizzo: passa solo se WebFetch lo aprirebbe (articoli scientifici,
                     # Wikipedia), e non si giudica come percorso
+                    if cwd_rel is None:
+                        return Verdetto(False, f"{comando!r} (indirizzo {parola}: cartella di lavoro ignota dopo un cd)")
                     v = _giudica_indirizzo_nel_comando(parola, ctx, comando)
                     if not v.consentito:
                         return v
+                    primo = parola.split("/", 1)[0]
+                    if primo and os.path.lexists(os.path.join(ctx.radice, cwd_rel, primo)):
+                        # sul disco c'e' davvero `https:` (una cartella o un link): per la shell la
+                        # parola e' anche un percorso, e come tale si giudica
+                        v = giudica_percorso(os.path.join(cwd_rel, parola) if cwd_rel else parola, ctx,
+                                             scrittura=(dopo_redirezione or scrive_di_norma))
+                        if not v.consentito:
+                            return Verdetto(False, f"{comando!r} (percorso {parola})")
                     continue
                 nudo_ammesso = dopo_redirezione or bersaglio_operandi
                 cand = _candidato_percorso(parola, ctx.primo_livello, bersaglio=nudo_ammesso,

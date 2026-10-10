@@ -34,7 +34,8 @@ di coordinamento al Passo 1, sono due: ``lista_contratti`` (la lista dei
 contratti con date di listing e delisting, letta da due URL in ordine perche'
 l'host delle API risponde 451 da alcune reti) ed ``elenca_simboli_archivio``
 (i simboli che hanno dati nell'archivio, delistati compresi). Una sessione di
-campagna non deve chiamarle.
+campagna non deve chiamarle, e con il marcatore di campagna le due funzioni la
+rifiutano (vedi «In una sessione di campagna» qui sotto).
 
 Niente elenchi di directory remote (con una sola eccezione)
 -----------------------------------------------------------
@@ -93,6 +94,57 @@ il last non ha (e viceversa), in giorni diversi da moneta a moneta. Nella prova
 di processo tre campagne hanno scritto tre codici diversi per allinearli:
 ``carica_serie_allineate`` e' la regola unica (intersezione delle barre, barre
 tolte elencate e contate, volume in USDT dalla colonna ``quote_volume``).
+
+In una sessione di campagna: cosa il caricatore rifiuta
+------------------------------------------------------
+(``campagne/GRUPPO/regole.md``, sezione 2, punto 4, sezione 12, punto 4, e
+sezione 13.) Il caricatore legge il marcatore della sessione come lo legge il
+guardiano, con le sue funzioni (``guardiano.marcatore_presente`` e
+``guardiano.leggi_marcatore``) e nello stesso percorso:
+``<RADICE_PROGETTO>/research/.sessione``. ``RADICE_PROGETTO`` e' la cartella che
+contiene ``research/``, calcolata da QUESTO file; non e' mai l'argomento
+``radice`` delle funzioni, che dice solo dove stanno i dati (nei test e' una
+cartella temporanea, e uno script potrebbe sceglierne un'altra): il controllo
+non deve dipendere da dove si scrivono i dati. Un test che vuole simulare un
+marcatore cambia la costante (``monkeypatch.setattr(dati, "RADICE_PROGETTO", ...)``).
+
+* nessun marcatore, un marcatore vuoto o ``{"tipo": "coordinamento"}``: tutto
+  come prima, nessun controllo;
+* ``{"tipo": "campagna", ...}`` (qualunque simbolo): ``lista_contratti`` ed
+  ``elenca_simboli_archivio`` alzano ``VietatoInCampagna`` prima di toccare la
+  rete. Direbbero quali monete sono ancora negoziate oggi;
+* ``{"tipo": "campagna", "simbolo": "GRUPPO"}``: le funzioni che scaricano o
+  caricano i dati di un simbolo (``scarica_mese``, ``scarica_periodo``,
+  ``carica_candele``, ``carica_funding``, ``carica_funding_dettaglio``,
+  ``carica_serie_allineate``, ``calcola_impronte`` e le funzioni che le usano,
+  ``liquidita_mensile`` e ``mesi_sotto_liquidita``) rifiutano i simboli fuori
+  dall'elenco ``research/campagne/GRUPPO/monete.csv`` e da BTCUSDT. L'elenco si
+  legge con ``guardiano.leggi_monete_gruppo``, cioe' solo se ha l'impronta
+  approvata: se non ce l'ha ogni simbolo e' rifiutato, BTCUSDT compreso, come
+  nel guardiano. L'insieme ammesso e' ``guardiano.monete_dati_ammesse``: una
+  sola fonte per il guardiano e per il caricatore;
+* ``{"tipo": "campagna", "simbolo": S}`` con una moneta sola: le stesse
+  funzioni rifiutano i simboli diversi da S e da BTCUSDT (Passo 3 del
+  protocollo, percorsi ammessi);
+* un marcatore che c'e' ma e' rotto: ogni funzione controllata alza
+  ``VietatoInCampagna`` (come il guardiano, che allora blocca tutto).
+
+Le funzioni che leggono un percorso (``candele_da_zip``, ``volume_usdt_da_zip``,
+``funding_da_zip``) e quelle che costruiscono nomi e URL senza toccare rete o
+disco non controllano nulla. Come il guardiano, e' una barriera contro la
+distrazione, non contro uno script scritto per aggirarla.
+
+Campagna di gruppo (``campagne/GRUPPO/regole.md``, sezione 13)
+--------------------------------------------------------------
+* ``periodi_gruppo``: il taglio comune fra costruzione e validazione e le date
+  di ogni moneta (sezione 1, punto 3), con numeri interi;
+* ``leggi_scheda_gruppo``: primo mese di dati e fascia di slippage dalla scheda
+  della moneta (sezione 1, punto 2, e sezione 2, punto 8);
+* ``liquidita_mensile``, ``mesi_sotto_liquidita``, ``barra_vietata_liquidita`` e
+  ``barre_vietate_liquidita``: il filtro di liquidita' (sezione 2, punto 7), con la
+  soglia ``liquidita_minima_usdt_giorno`` di ``parametri.yaml``;
+* ``VietatoInCampagna`` e i controlli descritti sopra (sezione 2, punto 4, e
+  sezione 12, punto 4).
 """
 
 from __future__ import annotations
@@ -103,16 +155,20 @@ import hashlib
 import io
 import json
 import math
+import operator
 import os
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
 from datetime import date, datetime, timedelta, timezone
+from decimal import Decimal
 from pathlib import Path
-from typing import Callable, Dict, Iterator, List, Optional, Sequence, Tuple, Union
+from typing import Callable, Collection, Dict, FrozenSet, Iterator, List, Mapping, Optional, Sequence, Tuple, Union
 
+from research.src import guardiano
 from research.src.motore import Candela
 
 # ---------------------------------------------------------------------------
@@ -127,6 +183,17 @@ FINE_VAULT = date(2026, 9, 30)
 
 #: La cartella research/ del repo, calcolata da questo file (research/src/dati.py).
 RADICE_DEFAULT = Path(__file__).resolve().parent.parent
+#: La radice del progetto: la cartella che contiene research/, calcolata da questo file.
+#: Qui, e solo qui, si cerca il marcatore della sessione (``<RADICE_PROGETTO>/research/.sessione``,
+#: lo stesso percorso del guardiano): mai sotto l'argomento ``radice`` delle funzioni.
+#: I test che simulano un marcatore la cambiano con monkeypatch (si legge a ogni chiamata).
+RADICE_PROGETTO = RADICE_DEFAULT.parent
+#: I parametri congelati del progetto (sezione 3 del protocollo; sezione 0, punto 5, delle
+#: regole del gruppo). Le soglie si leggono sempre da qui, mai da sotto ``radice``: ``radice``
+#: dice dove stanno i dati, i numeri dell'esame sono quelli del progetto.
+PERCORSO_PARAMETRI = RADICE_DEFAULT / "config" / "parametri.yaml"
+#: Dove stanno le schede delle monete del gruppo, relativo a ``radice`` (regole.md, sezione 1, punto 2).
+CARTELLA_SCHEDE_GRUPPO = Path("campagne") / "GRUPPO" / "schede"
 
 BASE_URL = "https://data.binance.vision/data/futures/um/monthly"
 URL_EXCHANGE_INFO = "https://fapi.binance.com/fapi/v1/exchangeInfo"
@@ -190,6 +257,21 @@ class OltreIlVault(ValueError):
     """Richiesta di dati oltre il 2026-09-30: e' il periodo del paper, mai dato di ricerca."""
 
 
+class VietatoInCampagna(Exception):
+    """Richiesta che una sessione di campagna non puo' fare (``campagne/GRUPPO/regole.md``, sezione 2, punto 4, e sezione 12, punto 4).
+
+    La lista dei contratti di oggi o l'indice dell'archivio con il marcatore di
+    campagna; i dati di un simbolo fuori dall'insieme ammesso della campagna
+    (per GRUPPO le monete di ``monete.csv`` e BTCUSDT, per una moneta sola la
+    moneta e BTCUSDT); qualunque richiesta controllata con un marcatore rotto o,
+    per GRUPPO, con un elenco che non ha l'impronta approvata.
+
+    Non e' un ``OSError`` ne' un ``ValueError`` di proposito: chi prende gli errori
+    di rete (``_scarica_exchange_info`` passa all'URL successivo su ``OSError``)
+    o i dati malformati non deve inghiottire un rifiuto e riprovare.
+    """
+
+
 class IntegritaFallita(ValueError):
     """Lo sha256 del file scaricato non combacia col CHECKSUM remoto (o il CHECKSUM e' illeggibile).
 
@@ -248,6 +330,111 @@ def controlla_vault(fine: date, radice: Path = RADICE_DEFAULT) -> None:
         raise VaultChiuso(
             f"richiesti dati fino al {fine.isoformat()}, oltre il {FINE_IN_SAMPLE.isoformat()}: "
             f"il vault e' chiuso (manca {Path(radice) / 'vault' / 'APERTURA.md'})"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Sessione di campagna: cosa il caricatore rifiuta (regole.md del gruppo, 2.4 e 12.4)
+# ---------------------------------------------------------------------------
+
+
+def marcatore_di_campagna() -> Optional[Dict[str, str]]:
+    """Il marcatore della sessione se dice ``campagna``, altrimenti ``None`` (``campagne/GRUPPO/regole.md``, sezione 12, punti 2 e 4).
+
+    Lo legge il guardiano, con le sue funzioni e nel suo percorso:
+    ``guardiano.marcatore_presente`` e ``guardiano.leggi_marcatore`` su
+    ``RADICE_PROGETTO`` (la cartella che contiene ``research/``, calcolata da
+    questo file e letta a ogni chiamata), mai sull'argomento ``radice`` delle
+    funzioni del modulo:
+
+    * nessun marcatore, o un marcatore vuoto (solo spazi): ``None``, come per il
+      guardiano, che allora non fa nulla;
+    * ``{"tipo": "coordinamento"}``: ``None``, il caricatore lavora come prima;
+    * ``{"tipo": "campagna", "simbolo": S}``: ``{"tipo": "campagna", "simbolo": S}``;
+    * un marcatore che c'e' ma e' rotto (JSON illeggibile, tipo sconosciuto,
+      simbolo che non e' ``[A-Z0-9_]+``): ``VietatoInCampagna``. Il guardiano in
+      quel caso blocca ogni azione: il caricatore fa lo stesso, perche' un
+      marcatore rotto si sistema, non si ignora.
+    """
+    radice = str(RADICE_PROGETTO)
+    if not guardiano.marcatore_presente(radice):
+        return None
+    try:
+        marcatore = guardiano.leggi_marcatore(radice)
+    except (ValueError, OSError) as errore:
+        raise VietatoInCampagna(
+            f"il marcatore {guardiano.percorso_marcatore(radice)} e' rotto ({errore}): il caricatore rifiuta "
+            "ogni richiesta controllata finche' non e' sistemato (come il guardiano)"
+        ) from errore
+    if marcatore.get("tipo") != "campagna":
+        return None
+    return {"tipo": "campagna", "simbolo": str(marcatore["simbolo"])}
+
+
+def simboli_ammessi_in_campagna() -> Optional[FrozenSet[str]]:
+    """I simboli di cui la sessione di campagna puo' scaricare e caricare i dati; ``None`` fuori campagna (``campagne/GRUPPO/regole.md``, sezione 12, punto 4).
+
+    E' ``guardiano.monete_dati_ammesse``, la stessa fonte del guardiano: per
+    ``GRUPPO`` le monete di ``research/campagne/GRUPPO/monete.csv`` lette con
+    ``guardiano.leggi_monete_gruppo`` (solo con l'impronta approvata) piu'
+    BTCUSDT; per una moneta sola la moneta e BTCUSDT. Un elenco del gruppo che
+    non ha l'impronta approvata (o non si legge) alza ``VietatoInCampagna``:
+    come nel guardiano, finche' l'elenco non torna quello approvato nessun
+    simbolo passa, BTCUSDT compreso.
+    """
+    marcatore = marcatore_di_campagna()
+    if marcatore is None:
+        return None
+    simbolo = marcatore["simbolo"]
+    monete_gruppo: FrozenSet[str] = frozenset()
+    if simbolo == guardiano.SIMBOLO_GRUPPO:
+        try:
+            monete_gruppo = frozenset(guardiano.leggi_monete_gruppo(str(RADICE_PROGETTO)))
+        except (ValueError, OSError) as errore:
+            raise VietatoInCampagna(
+                f"sessione di campagna GRUPPO con un elenco delle monete che non e' quello approvato ({errore}): "
+                "il caricatore rifiuta ogni simbolo (campagne/GRUPPO/regole.md, sezione 12, punto 4)"
+            ) from errore
+    return frozenset(guardiano.monete_dati_ammesse(simbolo, monete_gruppo))
+
+
+def controlla_simbolo_in_campagna(simbolo: str, chi: str = "dati") -> None:
+    """Alza ``VietatoInCampagna`` se una sessione di campagna chiede i dati di un simbolo fuori dal suo insieme (``campagne/GRUPPO/regole.md``, sezione 2, punto 4, e sezione 12, punto 4).
+
+    Fuori campagna (nessun marcatore, marcatore vuoto, coordinamento) non fa
+    nulla. ``chi`` e' il nome della funzione che chiede, per il messaggio. Lo
+    chiamano, prima di toccare rete o file di dati, ``scarica_mese``,
+    ``scarica_periodo``, ``carica_serie_allineate``, ``calcola_impronte`` e
+    ``_percorsi_presenti`` (cioe' ``carica_candele``, ``carica_funding``,
+    ``carica_funding_dettaglio`` e il filtro di liquidita').
+    """
+    ammessi = simboli_ammessi_in_campagna()
+    if ammessi is None or simbolo in ammessi:
+        return
+    marcatore = marcatore_di_campagna() or {}
+    proprio = marcatore.get("simbolo", "?")
+    if proprio == guardiano.SIMBOLO_GRUPPO:
+        motivo = (f"{simbolo!r} non e' fra le monete di {guardiano.MONETE_GRUPPO} ne' "
+                  f"{guardiano.MONETA_RIFERIMENTO} (campagne/GRUPPO/regole.md, sezione 12, punto 4)")
+    else:
+        motivo = (f"{simbolo!r} non e' {proprio} ne' {guardiano.MONETA_RIFERIMENTO} "
+                  "(PROTOCOLLO.md, Passo 3, percorsi ammessi)")
+    raise VietatoInCampagna(f"{chi}: in una sessione di campagna {proprio} il caricatore rifiuta i dati di {motivo}")
+
+
+def controlla_fuori_campagna(chi: str, perche: str) -> None:
+    """Alza ``VietatoInCampagna`` se il marcatore dice ``campagna``, con qualunque simbolo (``campagne/GRUPPO/regole.md``, sezione 2, punto 4, e sezione 12, punto 4).
+
+    Serve alle due eccezioni del Passo 1 riservate al coordinamento,
+    ``lista_contratti`` ed ``elenca_simboli_archivio``: in campagna direbbero
+    quali monete sono ancora negoziate oggi (sezione 4, regola 1, del
+    protocollo). ``perche'`` completa il messaggio.
+    """
+    marcatore = marcatore_di_campagna()
+    if marcatore is not None:
+        raise VietatoInCampagna(
+            f"{chi}: vietata in una sessione di campagna ({marcatore['simbolo']}): {perche} "
+            "(PROTOCOLLO.md, sezione 4, regola 1; campagne/GRUPPO/regole.md, sezione 2, punto 4)"
         )
 
 
@@ -438,9 +625,15 @@ def scarica_mese(
     diversa solleva ``IntegritaFallita`` e il file NON si scrive; un CHECKSUM
     assente (404) si accetta e si segna in ``CHECKSUM_MANCANTI``. Un file
     gia' su disco non si riscarica e non si ricontrolla.
+
+    In una sessione di campagna un simbolo fuori dall'insieme ammesso alza
+    ``VietatoInCampagna`` subito dopo il controllo del vault, prima di toccare
+    rete o disco (``controlla_simbolo_in_campagna``; regole del gruppo,
+    sezione 12, punto 4).
     """
     _controlla_tipo(tipo)
     controlla_vault(date(anno, mese, 1), radice)
+    controlla_simbolo_in_campagna(simbolo, "scarica_mese")
     percorso = percorso_mese(simbolo, tipo, intervallo, anno, mese, radice)
     if percorso.is_file():
         return percorso
@@ -478,10 +671,14 @@ def scarica_periodo(
     tutto con ``IntegritaFallita`` (i mesi gia' scritti restano, sono buoni),
     e a fine scarico ``CHECKSUM_MANCANTI`` dice quali URL non avevano il
     CHECKSUM.
+
+    In una sessione di campagna un simbolo fuori dall'insieme ammesso alza
+    ``VietatoInCampagna`` prima del primo mese (``controlla_simbolo_in_campagna``).
     """
     _controlla_tipo(tipo)
     mesi = list(mesi_del_periodo(inizio, fine))  # valida anche inizio <= fine
     controlla_vault(fine, radice)
+    controlla_simbolo_in_campagna(simbolo, "scarica_periodo")
     percorsi: List[Path] = []
     for anno, mese in mesi:
         percorso = scarica_mese(simbolo, tipo, intervallo, anno, mese, radice, fetch, verifica_checksum)
@@ -679,12 +876,276 @@ def periodi_campagna(primo_giorno: date) -> Dict[str, object]:
         "inizio_validazione_ts": ms_da_data(inizio_validazione),
     }
 
+
+def periodi_gruppo(primi_giorni: Mapping[str, date]) -> Dict[str, object]:
+    """Il taglio comune fra costruzione e validazione della campagna di gruppo e le date di ogni moneta (``campagne/GRUPPO/regole.md``, sezione 1, punto 3).
+
+    ``primi_giorni`` e' {simbolo: primo giorno del primo mese di dati della
+    scheda} (``leggi_scheda_gruppo(s)["primo_mese"]``). Tutto con numeri interi,
+    come ``periodi_campagna``:
+
+    * i giorni-moneta di una moneta sono i giorni dal suo primo giorno al
+      2023-12-31 compreso; ``giorni_moneta`` e' la loro somma su tutte le monete;
+    * l'obiettivo e' (70 x ``giorni_moneta``) // 100 (``gruppo.quota_costruzione``
+      di ``parametri.yaml``, 0,70, scritta come intero per non perdere un
+      giorno in virgola mobile);
+    * il taglio D e' il PRIMO giorno in cui la somma, su tutte le monete, dei
+      giorni dal primo giorno di dati a D compreso raggiunge l'obiettivo (una
+      moneta che comincia dopo D non conta prima del suo inizio);
+    * per tutte le monete la costruzione finisce a D, alle 23:59:59.999 UTC
+      (``fine_costruzione_ts``, l'argomento di ``motore.conta_trade``), e la
+      validazione va da D + 1 al 2023-12-31.
+
+    Sulle 80 schede del gruppo: D = 2023-01-16, 349 giorni di validazione,
+    93.167 giorni-moneta, obiettivo 65.216, 65.247 di costruzione, costruzione
+    da 412 a 1.112 giorni per moneta (regola 1.3; lo ripete il test). Con una
+    moneta sola il taglio e' quello di ``periodi_campagna``.
+
+    ValueError (TypeError per una data che non e' una ``date`` pura: un
+    ``datetime`` porterebbe un'ora) se non c'e' nessuna moneta, se un simbolo e'
+    vuoto, se un primo giorno e' dopo il 2023-12-31, se una moneta comincia dopo
+    il taglio (non avrebbe costruzione) o se non resta nessun giorno di
+    validazione.
+
+    Ritorna un dizionario con:
+
+    * ``fine_costruzione`` (D), ``inizio_validazione`` (D + 1),
+      ``fine_validazione`` (2023-12-31), come ``date``;
+    * ``fine_costruzione_ts`` (D 23:59:59.999 UTC) e ``inizio_validazione_ts``
+      (D + 1 00:00 UTC) in ms;
+    * ``giorni_validazione`` (uguale per tutte le monete), ``giorni_moneta``,
+      ``giorni_moneta_obiettivo``, ``giorni_moneta_costruzione`` (la somma a D,
+      che puo' superare l'obiettivo di meno delle monete attive in D) e
+      ``giorni_moneta_validazione``;
+    * ``monete``: {simbolo: date della moneta}, in ordine dei caratteri, con le
+      chiavi di ``periodi_campagna`` (``inizio``, ``giorni``,
+      ``giorni_costruzione``, ``fine_costruzione``, ``inizio_validazione``,
+      ``fine_validazione``, ``inizio_ts``, ``fine_costruzione_ts``,
+      ``inizio_validazione_ts``) piu' ``giorni_validazione``.
+    """
+    if not primi_giorni:
+        raise ValueError("periodi_gruppo: nessuna moneta")
+    fine = FINE_IN_SAMPLE
+    for simbolo, primo in primi_giorni.items():
+        if not isinstance(simbolo, str) or not simbolo:
+            raise ValueError(f"periodi_gruppo: simbolo non valido {simbolo!r}")
+        if isinstance(primo, datetime) or not isinstance(primo, date):
+            raise TypeError(f"periodi_gruppo: il primo giorno di {simbolo} deve essere una date, non {primo!r}")
+        if primo > fine:
+            raise ValueError(f"periodi_gruppo: il primo giorno di {simbolo} ({primo}) e' dopo la fine dell'in-sample")
+    simboli = sorted(primi_giorni)
+    giorni = {s: (fine - primi_giorni[s]).days + 1 for s in simboli}
+    giorni_moneta = sum(giorni.values())
+    obiettivo = (70 * giorni_moneta) // 100
+
+    # Si scorre il calendario dal primo giorno piu' antico: ogni giorno aggiunge
+    # una unita' per ogni moneta che ha gia' dati. A fine 2023 la somma e' tutta
+    # ``giorni_moneta`` >= obiettivo, quindi il ciclo si ferma entro il 2023-12-31.
+    inizi = sorted(primi_giorni.values())
+    taglio = inizi[0]
+    attive = 0
+    prossima = 0
+    somma = 0
+    while True:
+        while prossima < len(inizi) and inizi[prossima] <= taglio:
+            attive += 1
+            prossima += 1
+        somma += attive
+        if somma >= obiettivo:
+            break
+        taglio += timedelta(days=1)
+
+    giorni_validazione = (fine - taglio).days
+    if giorni_validazione < 1:
+        raise ValueError(f"periodi_gruppo: taglio al {taglio}, nessun giorno di validazione")
+    tardive = [s for s in simboli if primi_giorni[s] > taglio]
+    if tardive:
+        raise ValueError(
+            f"periodi_gruppo: {', '.join(tardive)} comincia dopo il taglio ({taglio}): nessun giorno di costruzione"
+        )
+    inizio_validazione = taglio + timedelta(days=1)
+    inizio_validazione_ts = ms_da_data(inizio_validazione)
+    fine_costruzione_ts = inizio_validazione_ts - 1
+    monete: Dict[str, Dict[str, object]] = {}
+    for s in simboli:
+        primo = primi_giorni[s]
+        monete[s] = {
+            "inizio": primo,
+            "giorni": giorni[s],
+            "giorni_costruzione": (taglio - primo).days + 1,
+            "giorni_validazione": giorni_validazione,
+            "fine_costruzione": taglio,
+            "inizio_validazione": inizio_validazione,
+            "fine_validazione": fine,
+            "inizio_ts": ms_da_data(primo),
+            "fine_costruzione_ts": fine_costruzione_ts,
+            "inizio_validazione_ts": inizio_validazione_ts,
+        }
+    return {
+        "fine_costruzione": taglio,
+        "fine_costruzione_ts": fine_costruzione_ts,
+        "inizio_validazione": inizio_validazione,
+        "inizio_validazione_ts": inizio_validazione_ts,
+        "fine_validazione": fine,
+        "giorni_validazione": giorni_validazione,
+        "giorni_moneta": giorni_moneta,
+        "giorni_moneta_obiettivo": obiettivo,
+        "giorni_moneta_costruzione": somma,
+        "giorni_moneta_validazione": giorni_moneta - somma,
+        "monete": monete,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Parametri del progetto e schede del gruppo
+# ---------------------------------------------------------------------------
+
+
+def _leggi_parametri(percorso: Optional[Path] = None) -> Dict[str, object]:
+    """Il contenuto di ``parametri.yaml`` (di norma ``PERCORSO_PARAMETRI``, letto a ogni chiamata; ``campagne/GRUPPO/regole.md``, sezione 0, punto 5)."""
+    import yaml  # qui: il resto del modulo non ne ha bisogno
+
+    with open(percorso if percorso is not None else PERCORSO_PARAMETRI, encoding="utf-8") as flusso:
+        contenuto = yaml.safe_load(flusso)
+    if not isinstance(contenuto, dict):
+        raise ValueError(f"{percorso or PERCORSO_PARAMETRI}: atteso un dizionario YAML")
+    return contenuto
+
+
+def _numero_positivo(valore: object, dove: str) -> float:
+    """Un numero finito e positivo letto da ``parametri.yaml``; ValueError per tutto il resto, anche un booleano (``campagne/GRUPPO/regole.md``, sezione 0, punto 5)."""
+    if isinstance(valore, bool) or not isinstance(valore, (int, float)) or not math.isfinite(valore) or valore <= 0:
+        raise ValueError(f"parametri.yaml, {dove}: atteso un numero positivo, trovato {valore!r}")
+    return float(valore)
+
+
+def liquidita_minima_usdt_giorno(percorso_parametri: Optional[Path] = None) -> float:
+    """La soglia del filtro di liquidita': ``scelte_dati.liquidita_minima_usdt_giorno`` di ``parametri.yaml`` (``campagne/GRUPPO/regole.md``, sezione 2, punto 7).
+
+    Oggi 20.000.000 USDT al giorno. Si legge dal ``parametri.yaml`` del progetto
+    (``PERCORSO_PARAMETRI``), mai da sotto l'argomento ``radice`` delle funzioni
+    dei dati: e' il file congelato di cui la prova a placebo registra
+    l'impronta (regole.md, sezione 11, punto 1). ``percorso_parametri`` serve
+    solo ai test del lettore. ValueError se la chiave manca o non e' un numero
+    positivo.
+    """
+    parametri = _leggi_parametri(percorso_parametri)
+    scelte = parametri.get("scelte_dati")
+    if not isinstance(scelte, dict) or "liquidita_minima_usdt_giorno" not in scelte:
+        raise ValueError("parametri.yaml: manca scelte_dati.liquidita_minima_usdt_giorno")
+    return _numero_positivo(scelte["liquidita_minima_usdt_giorno"], "scelte_dati.liquidita_minima_usdt_giorno")
+
+
+def fasce_slippage_per_lato(percorso_parametri: Optional[Path] = None) -> Tuple[float, ...]:
+    """Gli slippage per lato delle fasce di ``scelte_dati.slippage_per_lato`` di ``parametri.yaml``, nell'ordine del file (``campagne/GRUPPO/regole.md``, sezione 2, punto 8).
+
+    Servono a ``leggi_scheda_gruppo`` per controllare che la fascia scritta
+    nella scheda sia una di quelle approvate. Stesso file e stesse regole di
+    ``liquidita_minima_usdt_giorno``.
+    """
+    parametri = _leggi_parametri(percorso_parametri)
+    scelte = parametri.get("scelte_dati")
+    fasce = scelte.get("slippage_per_lato") if isinstance(scelte, dict) else None
+    if not isinstance(fasce, list) or not fasce:
+        raise ValueError("parametri.yaml: manca scelte_dati.slippage_per_lato")
+    valori: List[float] = []
+    for fascia in fasce:
+        if not isinstance(fascia, dict) or "slippage" not in fascia:
+            raise ValueError(f"parametri.yaml: fascia di slippage senza 'slippage': {fascia!r}")
+        valori.append(_numero_positivo(fascia["slippage"], "scelte_dati.slippage_per_lato"))
+    return tuple(valori)
+
+
+#: (chiave, inizio del nome del campo) delle righe della tabella di una scheda del gruppo.
+_CAMPI_SCHEDA_GRUPPO = (
+    ("simbolo", "Simbolo"),
+    ("primo_mese", "Primo mese di dati"),
+    ("slippage", "Fascia di slippage per lato"),
+    ("fine_in_sample", "Fine dell'in-sample"),
+)
+_PRIMO_MESE = re.compile(r"(\d{4})-(\d{2})-01")
+_PERCENTUALE = re.compile(r"(\d+(?:\.\d+)?)%")
+
+
+def leggi_scheda_gruppo(simbolo: str, radice: Path = RADICE_DEFAULT) -> Dict[str, object]:
+    """Primo mese di dati e fascia di slippage di una moneta del gruppo, dalla sua scheda (``campagne/GRUPPO/regole.md``, sezione 1, punto 2, e sezione 2, punto 8).
+
+    Legge ``<radice>/campagne/GRUPPO/schede/<SIMBOLO>.md``, la tabella con una
+    riga per campo (``| Campo | Valore |``). Ogni campo deve comparire in UNA
+    sola riga, riconosciuta dall'inizio del nome:
+
+    * «Simbolo»: il valore (tra apici inversi) deve essere ``simbolo``;
+    * «Primo mese di dati»: ``AAAA-MM-01``, il primo giorno del primo mese di
+      dati, cioe' l'inizio dell'in-sample e della costruzione;
+    * «Fascia di slippage per lato»: una percentuale (``0.0500%``), convertita in
+      frazione per lato con l'aritmetica decimale (``0.0500%`` -> 0.0005,
+      ``0.1000%`` -> 0.001: gli stessi float di ``parametri.yaml``), che deve
+      essere una delle fasce di ``scelte_dati.slippage_per_lato``
+      (``fasce_slippage_per_lato``);
+    * «Fine dell'in-sample»: deve essere 2023-12-31.
+
+    ``simbolo`` deve essere ``[A-Z0-9]+`` (mai un percorso). Il file mancante
+    alza l'errore del sistema (``FileNotFoundError``); un campo mancante,
+    doppio o diverso da quanto sopra alza ValueError.
+
+    Ritorna {``simbolo``, ``primo_mese`` (``date``, il giorno 1: l'argomento di
+    ``periodi_gruppo``), ``slippage_per_lato`` (float, per ``Parametri``),
+    ``fine_in_sample`` (``date``)}.
+    """
+    if not isinstance(simbolo, str) or not re.fullmatch(r"[A-Z0-9]+", simbolo):
+        raise ValueError(f"leggi_scheda_gruppo: simbolo non valido {simbolo!r}")
+    percorso = Path(radice) / CARTELLA_SCHEDE_GRUPPO / f"{simbolo}.md"
+    testo = percorso.read_text(encoding="utf-8")
+    trovati: Dict[str, List[str]] = {chiave: [] for chiave, _ in _CAMPI_SCHEDA_GRUPPO}
+    for riga in testo.splitlines():
+        riga = riga.strip()
+        if len(riga) < 2 or not (riga.startswith("|") and riga.endswith("|")):
+            continue
+        celle = [cella.strip() for cella in riga[1:-1].split("|")]
+        if len(celle) != 2:
+            continue
+        nome, valore = celle
+        for chiave, inizio_nome in _CAMPI_SCHEDA_GRUPPO:
+            if nome.startswith(inizio_nome):
+                trovati[chiave].append(valore)
+    valori: Dict[str, str] = {}
+    for chiave, inizio_nome in _CAMPI_SCHEDA_GRUPPO:
+        if len(trovati[chiave]) != 1:
+            raise ValueError(f"{percorso}: attesa una riga «{inizio_nome}», trovate {len(trovati[chiave])}")
+        valori[chiave] = trovati[chiave][0]
+
+    if valori["simbolo"].strip("`").strip() != simbolo:
+        raise ValueError(f"{percorso}: la scheda e' di {valori['simbolo']!r}, non di {simbolo!r}")
+    corrispondenza = _PRIMO_MESE.fullmatch(valori["primo_mese"])
+    if not corrispondenza:
+        raise ValueError(f"{percorso}: primo mese {valori['primo_mese']!r} non e' nella forma AAAA-MM-01")
+    primo_mese = date(int(corrispondenza.group(1)), int(corrispondenza.group(2)), 1)
+    if primo_mese > FINE_IN_SAMPLE:
+        raise ValueError(f"{percorso}: primo mese {primo_mese} dopo la fine dell'in-sample")
+    if valori["fine_in_sample"] != FINE_IN_SAMPLE.isoformat():
+        raise ValueError(f"{percorso}: fine dell'in-sample {valori['fine_in_sample']!r}, attesa {FINE_IN_SAMPLE}")
+    corrispondenza = _PERCENTUALE.fullmatch(valori["slippage"])
+    if not corrispondenza:
+        raise ValueError(f"{percorso}: fascia di slippage {valori['slippage']!r} non e' una percentuale")
+    slippage = float(Decimal(corrispondenza.group(1)) / Decimal(100))
+    fasce = fasce_slippage_per_lato()
+    if slippage not in fasce:
+        raise ValueError(f"{percorso}: slippage {slippage} non e' una fascia di parametri.yaml {fasce}")
+    return {
+        "simbolo": simbolo,
+        "primo_mese": primo_mese,
+        "slippage_per_lato": slippage,
+        "fine_in_sample": FINE_IN_SAMPLE,
+    }
+
+
 def _percorsi_presenti(
     simbolo: str, tipo: str, intervallo: Optional[str], inizio: date, fine: date, radice: Path
 ) -> List[Path]:
-    """I file del periodo che esistono su disco. Il controllo del vault viene prima."""
+    """I file del periodo che esistono su disco. Il controllo del vault viene prima, poi quello della campagna."""
     mesi = list(mesi_del_periodo(inizio, fine))
     controlla_vault(fine, radice)
+    controlla_simbolo_in_campagna(simbolo, f"caricamento di {tipo}")
     percorsi = [percorso_mese(simbolo, tipo, intervallo, anno, mese, radice) for anno, mese in mesi]
     return [p for p in percorsi if p.is_file()]
 
@@ -915,6 +1376,11 @@ def carica_serie_allineate(
     periodo) il risultato e' vuoto ma i conteggi ci sono: nessuna eccezione,
     cosi' la campagna lo vede e lo dichiara.
 
+    In una sessione di campagna un simbolo fuori dall'insieme ammesso (per
+    GRUPPO: fuori da ``monete.csv`` e da BTCUSDT) alza ``VietatoInCampagna``
+    dopo il controllo del vault, prima di leggere un file
+    (``controlla_simbolo_in_campagna``; regole del gruppo, sezione 12, punto 4).
+
     Ritorna un dizionario con:
 
     * ``candele``: il last sulle barre tenute (lista di ``Candela``, ``ts``
@@ -931,6 +1397,7 @@ def carica_serie_allineate(
       (0 senza ``aggrega_da``).
     """
     controlla_vault(fine, radice)
+    controlla_simbolo_in_campagna(simbolo, "carica_serie_allineate")
     sorgente = aggrega_da or intervallo
     last_sorgente = carica_candele(simbolo, sorgente, inizio, fine, radice, tipo="klines")
     mark_sorgente = carica_candele(simbolo, sorgente, inizio, fine, radice, tipo="markPriceKlines")
@@ -985,6 +1452,139 @@ def carica_serie_allineate(
 
 
 # ---------------------------------------------------------------------------
+# Filtro di liquidita' (regole del gruppo, sezione 2, punto 7)
+# ---------------------------------------------------------------------------
+
+
+def mese_utc(ts_ms: int) -> Tuple[int, int]:
+    """(anno, mese) in UTC dell'istante ``ts_ms`` (ms), con aritmetica intera (``campagne/GRUPPO/regole.md``, sezione 2, punto 7).
+
+    «Il mese di una barra e' quello della sua apertura in UTC»: si passa il
+    ``ts`` di apertura. Niente fusi orari locali e niente virgola mobile: i
+    giorni sono ``ts_ms // MS_GIORNO`` dal 1970-01-01. Un ``ts`` non intero alza
+    TypeError (``operator.index``).
+    """
+    giorno = date(1970, 1, 1) + timedelta(days=operator.index(ts_ms) // MS_GIORNO)
+    return giorno.year, giorno.month
+
+
+def liquidita_mensile(
+    simbolo: str, inizio: date, fine: date, radice: Path = RADICE_DEFAULT
+) -> Dict[Tuple[int, int], Dict[str, object]]:
+    """Il volume medio giornaliero in USDT di ogni mese e se e' sotto la liquidita' minima (``campagne/GRUPPO/regole.md``, sezione 2, punto 7; Fase 0, punto 3, del protocollo).
+
+    La regola, tutta qui (la sessione non scrive il filtro):
+
+    * il volume si legge dai file ``1d`` del LAST (``klines``) con
+      ``volume_usdt_da_zip``, cioe' dalla colonna ``quote_volume``; tra due righe
+      con lo stesso ``ts`` vale la prima letta (mesi in ordine), come in
+      ``carica_serie_allineate``;
+    * ogni candela giornaliera va nel mese della sua apertura in UTC
+      (``mese_utc``);
+    * la media e' sui giorni PRESENTI nel mese: la somma dei volumi diviso il
+      numero dei giorni con il volume. Un giorno senza candela, o con la candela
+      ma senza la colonna del volume, non entra ne' nella somma ne' nel
+      conteggio (mai uno zero inventato);
+    * un mese e' sotto la soglia se la media e' strettamente sotto
+      ``liquidita_minima_usdt_giorno()`` (20.000.000 USDT, ``parametri.yaml``);
+      un mese senza nessun giorno con il volume (senza candele giornaliere) e'
+      sotto la soglia.
+
+    I mesi sono quelli toccati da [``inizio``, ``fine``] (``mesi_del_periodo``),
+    e ogni mese si giudica INTERO, su tutti i suoi giorni presenti, qualunque
+    sia il giorno di ``inizio`` e ``fine``: cosi' lo stesso mese ha lo stesso
+    verdetto in costruzione e in validazione (gennaio 2023, che il taglio del
+    gruppo divide, e' uno solo). Il blocco del vault si controlla sull'ultimo
+    giorno dell'ultimo mese, prima di ogni accesso al disco; in campagna vale
+    ``controlla_simbolo_in_campagna``.
+
+    Ritorna {(anno, mese): {``giorni``: giorni presenti con il volume,
+    ``volume_medio_usdt``: la media (``None`` senza giorni),
+    ``sotto_soglia``: bool}} per ogni mese, in ordine.
+    """
+    mesi = list(mesi_del_periodo(inizio, fine))
+    primo_giorno = date(mesi[0][0], mesi[0][1], 1)
+    ultimo_giorno = _ultimo_giorno_del_mese(*mesi[-1])
+    controlla_vault(ultimo_giorno, radice)
+    controlla_simbolo_in_campagna(simbolo, "liquidita_mensile")
+    soglia = liquidita_minima_usdt_giorno()
+
+    volumi: Dict[int, float] = {}
+    for percorso in _percorsi_presenti(simbolo, "klines", "1d", primo_giorno, ultimo_giorno, radice):
+        for ts, valore in volume_usdt_da_zip(percorso).items():
+            volumi.setdefault(ts, valore)
+    per_mese: Dict[Tuple[int, int], List[float]] = {mese: [] for mese in mesi}
+    for ts in sorted(volumi):
+        mese = mese_utc(ts)
+        if mese in per_mese:
+            per_mese[mese].append(volumi[ts])
+
+    risultato: Dict[Tuple[int, int], Dict[str, object]] = {}
+    for mese in mesi:
+        valori = per_mese[mese]
+        media = sum(valori) / len(valori) if valori else None
+        risultato[mese] = {
+            "giorni": len(valori),
+            "volume_medio_usdt": media,
+            "sotto_soglia": media is None or media < soglia,
+        }
+    return risultato
+
+
+def mesi_sotto_liquidita(
+    simbolo: str, inizio: date, fine: date, radice: Path = RADICE_DEFAULT
+) -> List[Tuple[int, int]]:
+    """I mesi (anno, mese) sotto la liquidita' minima, in ordine (``campagne/GRUPPO/regole.md``, sezione 2, punto 7).
+
+    E' la sola funzione che dice quali mesi sono sotto la soglia: la usa
+    ``gruppo.py`` per ``conta_trade``, il test, la (a), la (b) e le sfasate, e la
+    sessione per i mesi scritti in ``fase0_dati.md``. La regola e' quella di
+    ``liquidita_mensile`` (file ``1d`` del last, media sui giorni presenti,
+    soglia di ``parametri.yaml``, mese senza candele giornaliere sotto la
+    soglia, mesi interi).
+    """
+    return [mese for mese, voce in liquidita_mensile(simbolo, inizio, fine, radice).items() if voce["sotto_soglia"]]
+
+
+def barra_vietata_liquidita(ts_apertura: int, mesi_sotto: Collection[Tuple[int, int]]) -> bool:
+    """True se la barra che apre a ``ts_apertura`` (ms) cade in un mese sotto la liquidita' minima (``campagne/GRUPPO/regole.md``, sezione 2, punto 7).
+
+    Il mese di una barra e' quello della sua APERTURA in UTC (``mese_utc``),
+    anche se la barra chiude nel mese dopo. ``mesi_sotto`` e' il risultato di
+    ``mesi_sotto_liquidita`` (coppie (anno, mese); vanno bene anche liste di
+    due interi, come tornano da un JSON). Su una barra vietata la variante non
+    apre posizioni dai suoi segnali; una posizione gia' aperta esce con la sua
+    uscita. Funzione pura.
+    """
+    return mese_utc(ts_apertura) in {(int(a), int(m)) for a, m in mesi_sotto}
+
+
+def barre_vietate_liquidita(
+    candele: Sequence[Union[Candela, int]], mesi_sotto: Collection[Tuple[int, int]]
+) -> List[Tuple[int, int]]:
+    """Gli indici delle barre di ``candele`` nei mesi sotto la liquidita' minima, come intervalli (``campagne/GRUPPO/regole.md``, sezione 2, punto 7).
+
+    ``candele`` sono le barre della serie (``Candela``, o direttamente i ``ts``
+    di apertura); ogni barra si giudica con ``barra_vietata_liquidita``.
+    Ritorna intervalli (inizio incluso, fine esclusa) di indici consecutivi,
+    nel formato di ``motore.barre_vietate_segnale_non_valido``: si passano
+    cosi' come sono in ``barre_vietate`` di ``motore.simula_baseline_casuale``
+    e ``motore.simula_sfasamento_comune`` (insieme alle altre barre vietate),
+    cosi' la (b) e le sfasate vietano le stesse barre del filtro. Funzione pura.
+    """
+    mesi = {(int(a), int(m)) for a, m in mesi_sotto}
+    vietate: List[Tuple[int, int]] = []
+    for i, candela in enumerate(candele):
+        ts = candela.ts if isinstance(candela, Candela) else candela
+        if mese_utc(ts) in mesi:
+            if vietate and vietate[-1][1] == i:
+                vietate[-1] = (vietate[-1][0], i + 1)
+            else:
+                vietate.append((i, i + 1))
+    return vietate
+
+
+# ---------------------------------------------------------------------------
 # Impronte (SHA-256) dei file scaricati
 # ---------------------------------------------------------------------------
 
@@ -1008,7 +1608,11 @@ def calcola_impronte(simbolo: str, radice: Path = RADICE_DEFAULT) -> Dict[str, s
     Il nome e' relativo a ``data/insample/<SIMBOLO>`` con le barre in avanti
     (es. ``klines/1h/BTCUSDT-1h-2023-01.zip``), cosi' e' uguale su ogni macchina.
     Solo i dati in-sample: quelli del vault non fanno parte della campagna.
+    In una sessione di campagna un simbolo fuori dall'insieme ammesso alza
+    ``VietatoInCampagna`` (``controlla_simbolo_in_campagna``), anche per
+    ``registra_impronte`` e ``verifica_impronte``, che passano da qui.
     """
+    controlla_simbolo_in_campagna(simbolo, "calcola_impronte")
     cartella = _cartella_insample(simbolo, radice)
     if not cartella.is_dir():
         return {}
@@ -1106,7 +1710,14 @@ def lista_contratti(fetch: Optional[Fetch] = None) -> List[Dict[str, object]]:
     ``maintMarginPercent`` e ``liquidationFee`` (``CAMPI_CONTRATTO_FACOLTATIVI``)
     compaiono solo se la fonte li manda, col valore grezzo cosi' come arriva
     (stringa decimale): convertirli a float farebbe perdere le cifre dichiarate.
+
+    Con il marcatore di una sessione di campagna (qualunque simbolo) alza
+    ``VietatoInCampagna`` prima di toccare la rete (``controlla_fuori_campagna``;
+    regole del gruppo, sezione 2, punto 4, e sezione 12, punto 4).
     """
+    controlla_fuori_campagna(
+        "lista_contratti", "la lista dei contratti di oggi dice quali monete sono ancora negoziate"
+    )
     contenuto = _scarica_exchange_info(fetch or fetch_http)
     risposta = json.loads(contenuto)
     contratti: List[Dict[str, object]] = []
@@ -1202,7 +1813,14 @@ def elenca_simboli_archivio(fetch: Optional[Fetch] = None, prefisso: str = PREFI
     quando ogni contratto ha dati. Ritorna i soli nomi delle cartelle (es.
     ``BTCUSDT``), ordinati e senza doppioni. Un 404 sull'indice solleva; una
     pagina troncata il cui marker non avanza solleva (mai un giro infinito).
+
+    Con il marcatore di una sessione di campagna (qualunque simbolo) alza
+    ``VietatoInCampagna`` prima di toccare la rete (``controlla_fuori_campagna``;
+    regole del gruppo, sezione 2, punto 4, e sezione 12, punto 4).
     """
+    controlla_fuori_campagna(
+        "elenca_simboli_archivio", "l'indice dell'archivio dice quali contratti esistono oggi"
+    )
     scarica = fetch or fetch_http
     simboli = set()
     marker: Optional[str] = None
