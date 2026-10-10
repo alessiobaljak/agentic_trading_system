@@ -214,8 +214,9 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
      quota dei trade del candidato che portano.
    Numero di gruppo: A = Σ w_j · A_j, con w_j = n_j / Σ n delle monete della combinazione. Errore: Σ w_j · e_j, cioè le
    monete trattate come se si muovessero insieme (non sottostima mai; nella simulazione del coordinamento costava al
-   massimo circa il 15% di errore in più, stima). Deviazione standard combinata: radice(Σ n_j · dev_j² / Σ n_j) sulle
-   monete della combinazione, così il pavimento della (a) in `contro_baseline` è quello di sempre. Una moneta senza
+   massimo circa il 15% di errore in più, stima). Deviazione standard combinata: radice(Σ n_j · dev_j² / N_c) sulle
+   monete della combinazione, con N_c i trade del candidato su quelle monete; il pavimento della (a) in `contro_baseline` è
+   radice(Σ n_j · dev_j²) / N_c (con nessuna moneta lasciata fuori, N_c = N ed è quello di sempre). Una moneta senza
    trade del candidato pesa zero e non ha (a). La variante è non valutabile contro la (a) se nessuna moneta ha almeno 2
    trade della (a), oppure se le monete lasciate fuori portano più del 10% dei trade del candidato. Lo calcola solo
    `statistica.baseline_da_trade_di_gruppo`. (Prima della chiusura della bozza bastava una moneta con meno di 2 trade

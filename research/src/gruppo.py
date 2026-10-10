@@ -253,6 +253,14 @@ Scelte documentate
   dal messaggio di ``statistica.entrate_casuali_per_semi`` («impossibile
   piazzare»): la moneta entra nella (b) di gruppo come «ingressi che non
   entrano» e la variante e' non valutabile (sezione 5, punto 4).
+* La (a) di ogni moneta con trade del candidato arriva sempre a
+  ``statistica.baseline_da_trade_di_gruppo``: con un trade solo come il
+  dizionario di ``baseline_da_trade`` (da sola non valutabile), senza trade
+  della (a) come None. Che cosa ne fa il gruppo (la moneta con un trade entra
+  con e_j = D, quella senza trade resta fuori, oltre il 10% dei trade del
+  candidato la variante e' non valutabile contro la (a)) lo decide solo quella
+  funzione (sezione 5, punto 3); ``baseline_a`` riporta le monete lasciate
+  fuori e la quota dei trade del candidato che portano.
 * Se il pavimento delle sfasate non e' valutabile (meno di 2 sfasate con
   trade) la variante e' non valutabile: i due confronti si calcolano con
   ``contro_baseline`` su una copia della baseline segnata non valutabile, cosi'
@@ -1366,7 +1374,8 @@ def _pezzo_fase1(compito: Mapping, prep: _Preparato) -> Tuple[Dict[str, object],
     if not trade:
         return pezzo, secondi
 
-    # (a) della moneta: i SUOI trade, il SUO blocco (sezione 5, punto 3)
+    # (a) della moneta: i SUOI trade, il SUO blocco (sezione 5, punto 3). Anche con un trade solo si calcola, e
+    # senza trade resta None: le due arrivano cosi' a statistica.baseline_da_trade_di_gruppo, che le tratta.
     if compito["con_a"]:
         t0 = time.perf_counter()
         ris_a = motore.esegui(candele, None, prep.mark, prep.funding, prep.fabbriche.a(), prep.parametri)

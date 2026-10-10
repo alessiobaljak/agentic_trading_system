@@ -19,6 +19,9 @@ Solo per i test, in ``p``:
   qualcosa oltre la chiusura dell'ultima barra ricevuta (nella vista o nella lista sotto la vista);
 * ``registra_ingressi``: ``crea_casuale`` aggiunge a ``REGISTRO["ingressi"]`` gli ingressi che riceve;
 * ``a_ingressi_massimi``: la (a) entra al piu' tante volte (una (a) di pochi trade).
+* ``a_ingressi_per_apertura``: {"<apertura della prima barra, intera>": massimo}: sulle monete la cui prima barra
+  apre a quel prezzo la (a) entra al piu' ``massimo`` volte (una (a) di 0 o 1 trade su UNA moneta: la variante non
+  vede il simbolo, ma nel caricatore finto dei test la prima barra di ogni moneta apre a un prezzo intero suo).
 """
 
 import sys
@@ -157,7 +160,8 @@ def crea_variante(ctx, p):
 
 def crea_a(ctx, p):
     n, durata = int(p["n"]), int(p["durata"])
-    massimo = p.get("a_ingressi_massimi")
+    massimo_comune = p.get("a_ingressi_massimi")
+    per_apertura = p.get("a_ingressi_per_apertura") or {}
     _sonda(ctx, p, None)
 
     def crea():
@@ -167,6 +171,7 @@ def crea_a(ctx, p):
         def strategia(storia, posizione):
             i = len(storia) - 1
             _sonda(ctx, p, storia[-1].close_ts)
+            massimo = per_apertura.get(str(round(storia[0].open)), massimo_comune)
             if posizione is None:
                 stato["entrata"] = None
                 if i >= n and (massimo is None or stato["segnali"] < massimo):

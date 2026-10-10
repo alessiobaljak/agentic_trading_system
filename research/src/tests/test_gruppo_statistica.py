@@ -344,6 +344,11 @@ def test_a_di_gruppo_una_moneta_uguale_alla_a_singola():
         for chiave in ("tipo", "media", "errore_standard", "deviazione_standard", "valutabile", "n_trade"):
             assert _stesso_valore(gruppo[chiave], singola[chiave]), chiave
         assert gruppo["pesi"] == {"ETHUSDT": 1.0} and gruppo["n_trade_candidato"] == n_cand
+        # la regola delle monete con 0 o 1 trade della (a) non tocca nulla: nessuna moneta fuori, D = dev
+        assert gruppo["monete_lasciate_fuori"] == [] and gruppo["monete_con_un_trade"] == []
+        assert gruppo["trade_candidato_lasciati_fuori"] == 0 and gruppo["quota_trade_candidato_lasciati_fuori"] == 0.0
+        assert gruppo["n_trade_candidato_combinazione"] == n_cand and gruppo["n_monete_combinazione"] == 1
+        assert _stesso_valore(gruppo["deviazione_d"], singola["deviazione_standard"])
         r_cand = list(rng.normal(0.1, 1.0, n_cand))
         blocco_c = int(rng.integers(1, 6))
         assert st.contro_baseline(r_cand, blocco_c, gruppo) == st.contro_baseline(r_cand, blocco_c, singola)
@@ -420,10 +425,14 @@ def test_a_di_gruppo_pochi_blocchi_e_deviazione_piccola_prende_quella_combinata(
     assert g["per_moneta"]["AAAUSDT"]["errore_usato"] == pytest.approx(d, rel=1e-14)
     assert g["errore_standard"] == pytest.approx(0.5 * d + 0.5 * a_tanti["errore_standard"], rel=1e-14)
     assert g["errore_standard"] > 10 * (0.5 * a_pochi["deviazione_standard"] + 0.5 * a_tanti["errore_standard"])
-    # una (a) che manca: D non esiste, la variante e' non valutabile, l'errore usato non si inventa
+    # una (a) senza trade su una moneta che porta il 50% dei trade del candidato: la moneta resta fuori, D viene
+    # dalla sola AAA (D = dev_AAA, quindi e_AAA = dev_AAA), e la variante e' non valutabile (oltre il 10%)
     g = st.baseline_da_trade_di_gruppo({"AAAUSDT": a_pochi, "BBBUSDT": None}, {"AAAUSDT": 50, "BBBUSDT": 50})
     assert g["valutabile"] is False and math.isinf(g["errore_standard"])
-    assert math.isnan(g["per_moneta"]["AAAUSDT"]["errore_usato"])
+    assert g["monete_lasciate_fuori"] == ["BBBUSDT"] and g["quota_trade_candidato_lasciati_fuori"] == 0.5
+    assert g["deviazione_d"] == a_pochi["deviazione_standard"]
+    assert g["per_moneta"]["AAAUSDT"]["errore_usato"] == a_pochi["deviazione_standard"]
+    assert g["media"] == a_pochi["media"] and g["pesi"] == {"AAAUSDT": 1.0}
 
 
 def test_a_di_gruppo_due_monete_vere():
@@ -439,25 +448,262 @@ def test_a_di_gruppo_due_monete_vere():
         math.sqrt((n1 * a1["deviazione_standard"] ** 2 + n2 * a2["deviazione_standard"] ** 2) / 100), rel=1e-14)
 
 
-def test_a_di_gruppo_non_valutabile_senza_eccezioni():
-    base = {"AAAUSDT": _dizionario_a(0.2, 0.04, 1.0, 50, 10), "BBBUSDT": _dizionario_a(0.3, math.inf, 0.0, 1, 0)}
-    g = st.baseline_da_trade_di_gruppo(base, {"AAAUSDT": 3, "BBBUSDT": 1})
-    assert g["valutabile"] is False and math.isinf(g["errore_standard"])
-    assert g["monete_con_meno_di_2_trade"] == ["BBBUSDT"] and "BBBUSDT" in g["motivo"]
-    assert g["media"] == pytest.approx(0.75 * 0.2 + 0.25 * 0.3)
+def test_a_di_gruppo_una_moneta_con_un_trade_a_mano():
+    # Regole.md 5.3 (chiusura della bozza): con un trade solo della (a), A_j = l'R di quel trade, e_j = D e nella
+    # deviazione combinata dev_j = D. A mano, n = 3, 2 e 1 (N = 6, pesi 1/2, 1/3, 1/6):
+    # AAA (a) valutabile: A = 0,2, e = 0,04, dev = 1. BBB: un trade di R 0,3. CCC (a) valutabile: A = -0,1, e = 0,06,
+    # dev = 3. D sulle sole monete con almeno 2 trade: radice((3 · 1 + 1 · 9) / 4) = radice(3).
+    base = {"AAAUSDT": _dizionario_a(0.2, 0.04, 1.0, 50, 10), "BBBUSDT": _dizionario_a(0.3, math.inf, 0.0, 1, 0),
+            "CCCUSDT": _dizionario_a(-0.1, 0.06, 3.0, 40, 8)}
+    g = st.baseline_da_trade_di_gruppo(base, {"AAAUSDT": 3, "BBBUSDT": 2, "CCCUSDT": 1})
+    assert g["valutabile"] is True and g["motivo"] is None
+    assert g["monete_con_un_trade"] == ["BBBUSDT"] and g["monete_lasciate_fuori"] == []
+    assert g["monete_errore_da_deviazione"] == []
+    assert g["deviazione_d"] == pytest.approx(math.sqrt(3), rel=1e-15)
+    assert g["per_moneta"]["BBBUSDT"]["errore_usato"] == g["deviazione_d"]
+    assert g["per_moneta"]["BBBUSDT"]["deviazione_usata"] == g["deviazione_d"]
+    assert g["per_moneta"]["BBBUSDT"]["media"] == 0.3  # l'R di quel trade
+    assert g["media"] == pytest.approx(0.2 / 2 + 0.3 / 3 - 0.1 / 6, rel=1e-15)                       # 11/60
+    assert g["errore_standard"] == pytest.approx(0.04 / 2 + math.sqrt(3) / 3 + 0.06 / 6, rel=1e-15)  # 0,6073
+    # deviazione combinata sulle monete della combinazione, con dev_BBB = D: radice(1/2 + 3/3 + 9/6) = radice(3)
+    assert g["deviazione_standard"] == pytest.approx(math.sqrt(3), rel=1e-15)
+    assert g["pesi"] == pytest.approx({"AAAUSDT": 0.5, "BBBUSDT": 1 / 3, "CCCUSDT": 1 / 6}, rel=1e-15)
+    assert g["n_trade"] == 91 and g["n_trade_candidato"] == g["n_trade_candidato_combinazione"] == 6
+    # il pavimento della (a) in contro_baseline: radice(somma n_j dev_j^2) / N = radice(3 + 2 · 3 + 9) / 6
     r = [0.5, -0.1, 0.3, 0.1, 0.2, 0.0]
     ris = st.contro_baseline(r, 1, g)
+    assert ris["errore_minimo"] == pytest.approx(math.sqrt(18) / 6, rel=1e-15)
+    assert ris["valutabile"] is True and math.isfinite(ris["t"])
+    assert ris["differenza"] == pytest.approx(float(np.mean(r)) - 11 / 60, rel=1e-14)
+    # la (a) vera di un trade solo (baseline_da_trade) entra cosi' com'e'
+    uno = st.baseline_da_trade([0.3], 4)
+    assert uno["n_trade"] == 1 and uno["valutabile"] is False and uno["deviazione_standard"] == 0.0
+    g2 = st.baseline_da_trade_di_gruppo(dict(base, BBBUSDT=uno), {"AAAUSDT": 3, "BBBUSDT": 2, "CCCUSDT": 1})
+    for chiave in ("media", "errore_standard", "deviazione_standard", "valutabile", "deviazione_d"):
+        assert g2[chiave] == g[chiave], chiave
+
+
+def test_a_di_gruppo_una_moneta_senza_trade_sotto_e_sopra_il_dieci_per_cento():
+    # A mano: AAA (a) valutabile, A = 0,2, e = 0,04, dev = 1, n = 60; CCC (a) valutabile, A = -0,1, e = 0,08,
+    # dev = 2, n = 30; BBB senza trade della (a), n = 10. N = 100, combinazione N_c = 90, pesi 2/3 e 1/3.
+    base = {"AAAUSDT": _dizionario_a(0.2, 0.04, 1.0, 50, 10), "BBBUSDT": None,
+            "CCCUSDT": _dizionario_a(-0.1, 0.08, 2.0, 30, 6)}
+    g = st.baseline_da_trade_di_gruppo(base, {"AAAUSDT": 60, "BBBUSDT": 10, "CCCUSDT": 30})
+    # BBB porta esattamente il 10% dei trade del candidato: e' ancora valutabile
+    assert g["valutabile"] is True and g["motivo"] is None
+    assert g["monete_lasciate_fuori"] == ["BBBUSDT"] and g["per_moneta"]["BBBUSDT"] is None
+    assert g["trade_candidato_lasciati_fuori"] == 10 and g["quota_trade_candidato_lasciati_fuori"] == 0.1
+    assert g["n_trade_candidato"] == 100 and g["n_trade_candidato_combinazione"] == 90
+    assert g["n_monete"] == 3 and g["n_monete_combinazione"] == 2
+    assert g["pesi"] == pytest.approx({"AAAUSDT": 2 / 3, "CCCUSDT": 1 / 3}, rel=1e-15) and "BBBUSDT" not in g["pesi"]
+    assert g["media"] == pytest.approx(0.1, rel=1e-14)                  # 2/3 · 0,2 - 1/3 · 0,1
+    assert g["errore_standard"] == pytest.approx(0.16 / 3, rel=1e-14)   # 2/3 · 0,04 + 1/3 · 0,08
+    assert g["deviazione_standard"] == pytest.approx(math.sqrt(2), rel=1e-15) == g["deviazione_d"]
+    assert g["n_trade"] == 80
+    # il candidato resta su tutti i suoi 100 trade; il pavimento della (a) e' radice(somma n_j dev_j^2) / N_c,
+    # sulle monete della combinazione: radice(60 · 1 + 30 · 4) / 90
+    rng = np.random.default_rng(31)
+    r = list(rng.normal(0.2, 1.0, 100))
+    ris = st.contro_baseline(r, 2, g, dettagli=True)
+    assert ris["errore_minimo"] == ris["errore_minimo_baseline"] == pytest.approx(math.sqrt(180) / 90, rel=1e-15)
+    assert ris["differenza"] == pytest.approx(float(np.mean(r)) - 0.1, rel=1e-13)
+    assert ris["valutabile"] is True and math.isfinite(ris["t"])
+    # appena sopra il 10% (11 trade su 101): non valutabile, senza eccezioni; il numero resta quello della combinazione
+    g = st.baseline_da_trade_di_gruppo(base, {"AAAUSDT": 60, "BBBUSDT": 11, "CCCUSDT": 30})
+    assert g["valutabile"] is False and math.isinf(g["errore_standard"])
+    assert "BBBUSDT" in g["motivo"] and "10%" in g["motivo"] and "11" in g["motivo"]
+    assert g["quota_trade_candidato_lasciati_fuori"] == 11 / 101
+    assert g["media"] == pytest.approx(0.1, rel=1e-14) and g["deviazione_standard"] == pytest.approx(math.sqrt(2))
+    ris = st.contro_baseline(r + [0.0], 2, g)
     assert ris["valutabile"] is False and ris["netta"] is False and ris["t"] == -math.inf and ris["p_value"] == 1.0
-    # una (a) senza trade (None): numero e deviazione non esistono, il confronto e' non valutabile e non alza
-    base["BBBUSDT"] = None
+    # il confine e' esatto, sugli interi: 1 su 10 si', 1 su 9 no
+    a = _dizionario_a(0.2, 0.04, 1.0, 50, 10)
+    assert st.baseline_da_trade_di_gruppo({"AAAUSDT": a, "BBBUSDT": None}, {"AAAUSDT": 9, "BBBUSDT": 1})["valutabile"]
+    assert not st.baseline_da_trade_di_gruppo({"AAAUSDT": a, "BBBUSDT": None},
+                                              {"AAAUSDT": 8, "BBBUSDT": 1})["valutabile"]
+
+
+def test_a_di_gruppo_nessuna_moneta_con_due_trade_non_valutabile_senza_eccezioni():
+    # due monete con un trade solo della (a): D non esiste, la variante e' non valutabile; il numero c'e'
+    base = {"AAAUSDT": _dizionario_a(0.3, math.inf, 0.0, 1, 0), "BBBUSDT": _dizionario_a(-0.1, math.inf, 0.0, 1, 0)}
     g = st.baseline_da_trade_di_gruppo(base, {"AAAUSDT": 3, "BBBUSDT": 1})
-    assert g["valutabile"] is False and math.isnan(g["media"]) and math.isnan(g["deviazione_standard"])
-    assert g["per_moneta"]["BBBUSDT"] is None
-    ris = st.contro_baseline(r, 1, g, dettagli=True)
-    assert ris["valutabile"] is False and ris["netta"] is False and math.isnan(ris["differenza"])
-    assert ris["errore_candidato_senza_pavimento"] is not None  # 6 blocchi: l'errore del candidato si stima
+    assert g["valutabile"] is False and math.isinf(g["errore_standard"])
+    assert "nessuna moneta ha almeno 2 trade della (a)" in g["motivo"]
+    assert g["monete_con_un_trade"] == ["AAAUSDT", "BBBUSDT"] and g["monete_lasciate_fuori"] == []
+    assert g["media"] == pytest.approx(0.75 * 0.3 - 0.25 * 0.1, rel=1e-15)
+    assert math.isnan(g["deviazione_standard"]) and math.isnan(g["deviazione_d"])
+    assert math.isnan(g["per_moneta"]["AAAUSDT"]["errore_usato"])
+    r = [0.5, -0.1, 0.3, 0.1]
+    ris = st.contro_baseline(r, 1, g)
+    assert ris["valutabile"] is False and ris["netta"] is False and ris["t"] == -math.inf and ris["p_value"] == 1.0
     ris = st.contro_baseline(r, 1, g, pavimento_minimo=0.3, dettagli=True)
     assert ris["valutabile"] is False and ris["origine_pavimento"] == "pavimento_minimo"
+    assert ris["errore_candidato_senza_pavimento"] is not None  # 4 blocchi: l'errore del candidato si stima
+    # un trade solo e una moneta fuori (25% dei trade): i due motivi insieme
+    g = st.baseline_da_trade_di_gruppo({"AAAUSDT": base["AAAUSDT"], "BBBUSDT": None}, {"AAAUSDT": 3, "BBBUSDT": 1})
+    assert g["valutabile"] is False and "nessuna moneta" in g["motivo"] and "BBBUSDT" in g["motivo"]
+    assert g["media"] == 0.3 and g["pesi"] == {"AAAUSDT": 1.0}
+    # tutte le monete senza trade della (a): il numero non esiste, nessuna divisione per zero
+    g = st.baseline_da_trade_di_gruppo({"AAAUSDT": None, "BBBUSDT": None}, {"AAAUSDT": 3, "BBBUSDT": 1})
+    assert g["valutabile"] is False and math.isnan(g["media"]) and math.isnan(g["deviazione_standard"])
+    assert g["pesi"] == {} and g["n_trade_candidato_combinazione"] == 0 and g["n_trade"] == 0
+    assert g["quota_trade_candidato_lasciati_fuori"] == 1.0
+    ris = st.contro_baseline(r, 1, g, dettagli=True)
+    assert ris["valutabile"] is False and ris["netta"] is False and math.isnan(ris["differenza"])
+    assert math.isnan(ris["errore_minimo"])
+    # una moneta sola con un trade o senza trade della (a): non valutabile, come nelle campagne singole
+    for sola in (base["AAAUSDT"], None):
+        g = st.baseline_da_trade_di_gruppo({"ETHUSDT": sola}, {"ETHUSDT": 5})
+        assert g["valutabile"] is False and st.contro_baseline([0.1, 0.2, 0.3, 0.0, 0.1], 1, g)["valutabile"] is False
+
+
+def test_a_di_gruppo_i_quattro_casi_insieme_al_confine_del_dieci_per_cento_a_mano():
+    # Revisione: tutti i casi della sezione 5, punto 3, nello stesso esame, con la moneta fuori esattamente al 10%.
+    # AAA: (a) con 10 blocchi, A = 0,2, e = 0,04, dev = 1, n = 40. BBB: un trade solo di R 0,5, n = 20.
+    # CCC: (a) di 4 trade in 2 blocchi, A = -0,1, dev = 0,5, n = 30. DDD: nessun trade della (a), n = 10.
+    # EEE: nessun trade del candidato (la sua (a), se c'e', si ignora). N = 100, N_c = 90.
+    # D sulle sole AAA e CCC: radice((40 · 1 + 30 · 0,25) / 70) = radice(19/28) (con BBB a dev 0 sarebbe
+    # radice(47,5 / 90), con DDD dentro altro ancora). e_CCC = max(0,5, D) = D; e_BBB = D; dev_BBB = D.
+    base = {"AAAUSDT": _dizionario_a(0.2, 0.04, 1.0, 50, 10), "BBBUSDT": _dizionario_a(0.5, math.inf, 0.0, 1, 0),
+            "CCCUSDT": _dizionario_a(-0.1, math.inf, 0.5, 4, 2), "DDDUSDT": None,
+            "EEEUSDT": _dizionario_a(9.0, 9.0, 9.0, 90, 9)}
+    n = {"AAAUSDT": 40, "BBBUSDT": 20, "CCCUSDT": 30, "DDDUSDT": 10, "EEEUSDT": 0}
+    d = math.sqrt(19 / 28)
+    g = st.baseline_da_trade_di_gruppo(base, n)
+    assert g["valutabile"] is True and g["motivo"] is None
+    assert g["monete_lasciate_fuori"] == ["DDDUSDT"] and g["monete_con_un_trade"] == ["BBBUSDT"]
+    assert g["monete_errore_da_deviazione"] == ["CCCUSDT"]
+    assert g["trade_candidato_lasciati_fuori"] == 10 and g["quota_trade_candidato_lasciati_fuori"] == 0.1
+    assert g["n_trade_candidato"] == 100 and g["n_trade_candidato_combinazione"] == 90
+    assert g["n_monete"] == 4 and g["n_monete_combinazione"] == 3 and "EEEUSDT" not in g["per_moneta"]
+    assert g["pesi"] == pytest.approx({"AAAUSDT": 4 / 9, "BBBUSDT": 2 / 9, "CCCUSDT": 3 / 9}, rel=1e-15)
+    assert g["deviazione_d"] == pytest.approx(d, rel=1e-15)
+    assert g["per_moneta"]["CCCUSDT"]["errore_usato"] == g["deviazione_d"]
+    voce_bbb = g["per_moneta"]["BBBUSDT"]
+    assert voce_bbb["errore_usato"] == voce_bbb["deviazione_usata"] == g["deviazione_d"]
+    assert g["per_moneta"]["AAAUSDT"]["errore_usato"] == 0.04
+    assert g["media"] == pytest.approx((40 * 0.2 + 20 * 0.5 - 30 * 0.1) / 90, rel=1e-14)          # 1/6
+    assert g["errore_standard"] == pytest.approx((40 * 0.04 + 50 * d) / 90, rel=1e-14)
+    # deviazione combinata: radice((40 · 1 + 20 · D² + 30 · 0,25) / 90), che qui torna D
+    assert g["deviazione_standard"] == pytest.approx(math.sqrt((40 + 20 * 19 / 28 + 7.5) / 90), rel=1e-14)
+    assert g["n_trade"] == 55
+    # pavimento della (a): radice(somma n_j dev_j² sulla combinazione) / N_c; il candidato resta su tutti i 100 trade
+    r = list(np.random.default_rng(41).normal(0.3, 1.0, 100))
+    ris = st.contro_baseline(r, 2, g, dettagli=True)
+    assert ris["errore_minimo_baseline"] == pytest.approx(math.sqrt(40 + 20 * 19 / 28 + 7.5) / 90, rel=1e-14)
+    assert ris["differenza"] == pytest.approx(float(np.mean(r)) - 1 / 6, rel=1e-12)
+    assert ris["valutabile"] is True and math.isfinite(ris["t"])
+    # un trade in piu' sulla moneta fuori (11 su 101): solo il motivo del 10%, i numeri della combinazione restano
+    g11 = st.baseline_da_trade_di_gruppo(base, dict(n, DDDUSDT=11))
+    assert g11["valutabile"] is False and math.isinf(g11["errore_standard"])
+    assert "DDDUSDT" in g11["motivo"] and "nessuna moneta" not in g11["motivo"]
+    for chiave in ("media", "deviazione_standard", "deviazione_d", "pesi", "n_trade_candidato_combinazione"):
+        assert g11[chiave] == g[chiave], chiave
+    ris = st.contro_baseline(r + [0.0], 2, g11, dettagli=True)
+    assert ris["valutabile"] is False and ris["t"] == -math.inf and ris["p_value"] == 1.0
+    assert ris["errore_minimo_baseline"] == pytest.approx(math.sqrt(40 + 20 * 19 / 28 + 7.5) / 90, rel=1e-14)
+
+
+def _a_di_gruppo_prima(baseline_per_moneta, trade_candidato_per_moneta):
+    """``baseline_da_trade_di_gruppo`` com'era fino al commit 9849d696 (terza bozza di regole.md), copiata qui."""
+    positivi = st._trade_candidato_positivi(trade_candidato_per_moneta)
+    st._controlla_monete(baseline_per_moneta, trade_candidato_per_moneta, positivi, "baseline_per_moneta")
+    somma = st._somma_in_ordine
+    n_totale = sum(positivi.values())
+    pesi = {s: n_j / n_totale for s, n_j in positivi.items()}
+    per_moneta, poche, da_deviazione, termini_media, termini_varianza = {}, [], [], [], []
+    numero_mancante = False
+    trade_baseline = 0
+    for simbolo, n_j in positivi.items():
+        base = baseline_per_moneta[simbolo]
+        if base is None:
+            poche.append(simbolo)
+            per_moneta[simbolo] = None
+            numero_mancante = True
+            continue
+        media_j = float(base["media"])
+        deviazione_j = float(base["deviazione_standard"])
+        errore_j = float(base["errore_standard"])
+        trade_j = int(base["n_trade"])
+        blocchi_j = int(base["n_blocchi"])
+        errore_da_deviazione = blocchi_j < st.MINIMO_BLOCCHI
+        if errore_da_deviazione:
+            da_deviazione.append(simbolo)
+        if trade_j < 2:
+            poche.append(simbolo)
+        trade_baseline += trade_j
+        w_j = pesi[simbolo]
+        termini_media.append(w_j * media_j)
+        termini_varianza.append(w_j * (deviazione_j * deviazione_j))
+        per_moneta[simbolo] = {
+            "n_trade_candidato": n_j, "peso": w_j, "media": media_j, "errore_standard": errore_j,
+            "errore_usato": None, "deviazione_standard": deviazione_j, "n_trade": trade_j,
+            "n_blocchi": blocchi_j, "errore_da_deviazione": errore_da_deviazione,
+        }
+    deviazione_combinata = math.nan if numero_mancante else math.sqrt(somma(termini_varianza))
+    termini_errore = []
+    for simbolo, voce in per_moneta.items():
+        if voce is None:
+            continue
+        if voce["errore_da_deviazione"]:
+            voce["errore_usato"] = (math.nan if numero_mancante
+                                    else max(voce["deviazione_standard"], deviazione_combinata))
+        else:
+            voce["errore_usato"] = voce["errore_standard"]
+        termini_errore.append(voce["peso"] * voce["errore_usato"])
+    valutabile = not poche
+    return {
+        "tipo": "a",
+        "media": math.nan if numero_mancante else somma(termini_media),
+        "errore_standard": somma(termini_errore) if valutabile else math.inf,
+        "deviazione_standard": deviazione_combinata,
+        "valutabile": valutabile,
+        "motivo": None if valutabile else f"la (a) ha meno di 2 trade su: {', '.join(poche)}",
+        "n_trade": trade_baseline,
+        "n_trade_candidato": n_totale,
+        "n_monete": len(positivi),
+        "pesi": pesi,
+        "monete_errore_da_deviazione": da_deviazione,
+        "per_moneta": per_moneta,
+    }
+
+
+def test_a_di_gruppo_con_almeno_2_trade_ovunque_e_identica_a_prima():
+    # Con tutte le monete con almeno 2 trade della (a) (anche sotto i 3 blocchi) la regola nuova da' gli stessi
+    # numeri di quella di prima, bit per bit, e contro_baseline gli stessi confronti.
+    rng = np.random.default_rng(32)
+    simboli = ["1INCHUSDT", "AAVEUSDT", "ADAUSDT", "ETCUSDT", "MKRUSDT", "ZRXUSDT"]
+    pochi_blocchi = 0
+    for caso in range(150):
+        quante = int(rng.integers(1, len(simboli) + 1))
+        scelte = sorted(rng.choice(simboli, size=quante, replace=False).tolist())
+        base, n = {}, {}
+        for s in scelte:
+            r_a = list(rng.normal(float(rng.normal(0, 0.1)), float(rng.uniform(0.2, 2.0)), int(rng.integers(2, 120))))
+            base[s] = st.baseline_da_trade(r_a, int(rng.integers(1, 25)), n=200, seme=caso)
+            pochi_blocchi += base[s]["n_blocchi"] < st.MINIMO_BLOCCHI
+            n[s] = int(rng.integers(0, 60))
+        if not any(n.values()):
+            n[scelte[0]] = 1
+        nuovo = st.baseline_da_trade_di_gruppo(base, n)
+        prima = _a_di_gruppo_prima(base, n)
+        for chiave, valore in prima.items():
+            if chiave == "per_moneta":
+                for s, voce in valore.items():
+                    for k, v in voce.items():
+                        assert _stesso_valore(nuovo["per_moneta"][s][k], v), (caso, s, k)
+            else:
+                assert _stesso_valore(nuovo[chiave], valore) if not isinstance(valore, (dict, list)) \
+                    else nuovo[chiave] == valore, (caso, chiave)
+        assert nuovo["monete_lasciate_fuori"] == [] and nuovo["monete_con_un_trade"] == []
+        assert nuovo["deviazione_d"] == nuovo["deviazione_standard"]
+        totale = sum(n.values())
+        r = list(rng.normal(0.05, 1.0, totale))
+        blocco = int(rng.integers(1, 5))
+        minimo = float(rng.choice([0.0, 0.01, 0.2]))
+        assert st.contro_baseline(r, blocco, nuovo, pavimento_minimo=minimo, dettagli=True) == \
+            st.contro_baseline(r, blocco, prima, pavimento_minimo=minimo, dettagli=True)
+    assert pochi_blocchi > 50  # i casi sotto i 3 blocchi ci sono davvero
 
 
 def test_a_di_gruppo_monete_senza_trade_e_monete_mancanti():
@@ -493,6 +739,26 @@ def test_a_di_gruppo_invariante_all_ordine_delle_monete():
         risultato = st.baseline_da_trade_di_gruppo({s: base[s] for s in ordine}, {s: n[s] for s in reversed(ordine)})
         assert risultato == riferimento
         assert list(risultato["pesi"]) == sorted(risultato["pesi"])
+
+
+def test_a_di_gruppo_con_monete_fuori_e_di_un_trade_invariante_all_ordine():
+    rng = np.random.default_rng(27)
+    simboli = ["ZRXUSDT", "1INCHUSDT", "AAVEUSDT", "ETCUSDT", "MKRUSDT", "ADAUSDT", "DOGEUSDT", "SOLUSDT"]
+    base = {s: st.baseline_da_trade(list(rng.normal(0, 1, int(rng.integers(20, 200)))), int(rng.integers(1, 30)))
+            for s in simboli}
+    base["ETCUSDT"] = st.baseline_da_trade([0.4], 1)  # un trade solo
+    base["MKRUSDT"] = None                            # nessun trade della (a)
+    n = {s: int(rng.integers(20, 80)) for s in simboli}
+    n["MKRUSDT"] = 5
+    riferimento = st.baseline_da_trade_di_gruppo(base, n)
+    assert riferimento["valutabile"] is True
+    assert riferimento["monete_lasciate_fuori"] == ["MKRUSDT"] and riferimento["monete_con_un_trade"] == ["ETCUSDT"]
+    rnd = random.Random(3)
+    for _ in range(10):
+        ordine = simboli[:]
+        rnd.shuffle(ordine)
+        risultato = st.baseline_da_trade_di_gruppo({s: base[s] for s in ordine}, {s: n[s] for s in reversed(ordine)})
+        assert risultato == riferimento
 
 
 # ---------------------------------------------------------------------------

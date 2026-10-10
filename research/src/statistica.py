@@ -585,7 +585,10 @@ def contro_baseline(
     * (b): la deviazione standard degli R medi delle simulazioni
       (``errore_minimo_candidato``);
     * (a): la deviazione standard degli R della (a) divisa per la radice del
-      numero di trade del candidato.
+      numero di trade del candidato (per la (a) di gruppo, la radice dei trade
+      del candidato sulle monete della sua combinazione,
+      ``n_trade_candidato_combinazione``: senza monete lasciate fuori dalla (a)
+      sono tutti, regole.md, sezione 5, punto 3).
     Una (a) non valutabile rende non valutabile anche il confronto (errore
     infinito). Ritorna il risultato di ``batte_nettamente`` (``netta``, ``t``,
     ``soglia``, ``p_value``, ``valutabile``...) piu' ``baseline_media``,
@@ -623,7 +626,12 @@ def contro_baseline(
     if tipo == "b":
         pavimento_baseline = float(baseline["errore_minimo_candidato"])
     elif tipo == "a":
-        pavimento_baseline = float(baseline["deviazione_standard"]) / math.sqrt(arr.size)
+        # La (a) di gruppo divide per la radice dei trade del candidato sulle monete della sua combinazione
+        # (regole.md, sezione 5, punto 3): sono tutti i trade del candidato, salvo le monete lasciate fuori dalla
+        # (a). Senza la chiave (campagne singole) sono i trade del candidato, come prima.
+        n_pavimento = operator.index(baseline.get("n_trade_candidato_combinazione", arr.size))
+        pavimento_baseline = (float(baseline["deviazione_standard"]) / math.sqrt(n_pavimento) if n_pavimento > 0
+                              else math.nan)
     else:
         raise ValueError("baseline: serve il dizionario di baseline_casuale (tipo b) o di baseline_da_trade (tipo a)")
     media = float(baseline["media"])
@@ -1261,6 +1269,13 @@ def _controlla_monete(per_moneta: Mapping[str, object], trade_candidato_per_mone
         raise ValueError(f"{nome}: mancano le monete con trade del candidato {mancanti}")
 
 
+#: La quota massima dei trade del candidato che le monete lasciate fuori dalla (a) di gruppo (0 trade della
+#: (a)) possono portare: oltre, la variante e' non valutabile contro la (a) (regole.md, sezione 5, punto 3).
+#: Una frazione di interi (numeratore, denominatore), cosi' il confronto con i trade e' esatto: 10% e' ancora
+#: valutabile, appena sopra no.
+QUOTA_MASSIMA_FUORI_DALLA_A = (1, 10)
+
+
 def baseline_da_trade_di_gruppo(
     baseline_per_moneta: Mapping[str, Optional[Dict[str, object]]],
     trade_candidato_per_moneta: Mapping[str, int],
@@ -1269,64 +1284,83 @@ def baseline_da_trade_di_gruppo(
 
     ``baseline_per_moneta``: {simbolo: dizionario di ``baseline_da_trade``} della (a)
     di ogni moneta j con n_j > 0, calcolato sui SUOI trade con il blocco di
-    ``lunghezza_blocco`` sui suoi trade; None se la (a) di quella moneta non ha
-    trade (``baseline_da_trade`` non si puo' chiamare). ``trade_candidato_per_moneta``:
-    {simbolo: n_j}, i trade del candidato su ogni moneta nel periodo; le monete con
-    n_j = 0 pesano zero e non hanno (a) (se il loro dizionario c'e', si ignora).
-    N = somma degli n_j, w_j = n_j / N.
+    ``lunghezza_blocco`` sui suoi trade (anche con un trade solo); None se la (a)
+    di quella moneta non ha trade (``baseline_da_trade`` non si puo' chiamare).
+    ``trade_candidato_per_moneta``: {simbolo: n_j}, i trade del candidato su ogni
+    moneta nel periodo; le monete con n_j = 0 pesano zero e non hanno (a) (se il
+    loro dizionario c'e', si ignora). N = somma degli n_j.
 
-    * numero: A = somma di w_j · A_j (A_j la ``media`` della (a) della moneta);
-    * deviazione standard combinata D: radice(somma di n_j · dev_j² / N),
-      calcolata come radice(somma di w_j · dev_j²), sulle monete con n_j > 0;
-      cosi' il pavimento della (a) in ``contro_baseline`` (deviazione / radice(N))
-      vale radice(somma di n_j · dev_j²) / N;
-    * errore: somma di w_j · e_j, con e_j l'``errore_standard`` della (a) della
-      moneta, oppure, se la (a) ha meno di ``MINIMO_BLOCCHI`` (3) blocchi interi,
-      il PIU' ALTO fra la sua ``deviazione_standard`` (dev_j) e D (terza bozza di
-      regole.md, sezione 5, punto 3: l'errore di un trade solo, che non scende
-      sotto la dispersione tipica quando dev_j viene da pochissimi trade); le
-      monete trattate come se si muovessero insieme, un errore che non sottostima.
-      Quando D non esiste (una (a) senza trade) la variante e' comunque non
-      valutabile e ``errore_usato`` di quelle monete e' NaN.
+    Le monete con la (a) (almeno un trade della (a)) formano la COMBINAZIONE;
+    N_c = somma dei loro n_j e w_j = n_j / N_c. D e' la deviazione combinata
+    radice(somma di n_i · dev_i² / somma di n_i) sulle sole monete con almeno 2
+    trade della (a) (n_i i trade del candidato, dev_i la ``deviazione_standard``
+    della loro (a)). Per ogni moneta, con A_j la ``media`` della sua (a):
 
-    Se la (a) di una moneta con n_j > 0 ha meno di 2 trade (o e' None) la
-    variante e' non valutabile: ``valutabile`` False ed ``errore_standard``
-    infinito, come la (a) non valutabile delle campagne singole, cosi'
-    ``contro_baseline`` da' un confronto non valutabile; se una (a) e' None il
-    numero e la deviazione non esistono (NaN).
+    * almeno ``MINIMO_BLOCCHI`` (3) blocchi interi: e_j l'``errore_standard`` e
+      dev_j la ``deviazione_standard`` della sua (a), come escono;
+    * meno di 3 blocchi interi e almeno 2 trade: e_j = il PIU' ALTO fra dev_j e D
+      (l'errore di un trade solo, che non scende sotto la dispersione tipica
+      quando dev_j viene da pochissimi trade);
+    * esattamente 1 trade: A_j = l'R di quel trade (la ``media`` della sua (a)),
+      e_j = D e, nella deviazione combinata, dev_j = D;
+    * 0 trade (None): la moneta resta fuori dal numero e dalla combinazione; l'R
+      medio del candidato resta su tutti i suoi N trade (lo calcola chi chiama);
+      le monete lasciate fuori e la quota dei trade del candidato che portano si
+      riportano.
+
+    Numero A = somma di w_j · A_j; errore = somma di w_j · e_j (le monete trattate
+    come se si muovessero insieme: un errore che non sottostima); deviazione
+    standard combinata = radice(somma di n_j · dev_j² / N_c) sulle monete della
+    combinazione, calcolata come radice(somma di w_j · dev_j²). Il pavimento della
+    (a) in ``contro_baseline`` e' questa deviazione divisa per la radice di N_c
+    (``n_trade_candidato_combinazione``), cioe' radice(somma di n_j · dev_j²) / N_c,
+    con la somma e N_c sulle monete della combinazione: senza monete lasciate fuori
+    N_c = N e il pavimento e' quello di sempre.
+
+    La variante e' NON VALUTABILE contro la (a) (``valutabile`` False ed
+    ``errore_standard`` infinito, come la (a) non valutabile delle campagne
+    singole, cosi' ``contro_baseline`` da' un confronto non valutabile) se nessuna
+    moneta ha almeno 2 trade della (a) (D non esiste: la deviazione e gli errori
+    delle monete con un trade sono NaN), oppure se le monete lasciate fuori portano
+    piu' del 10% dei trade del candidato (``QUOTA_MASSIMA_FUORI_DALLA_A``,
+    confronto esatto sugli interi: 10 · trade lasciati fuori > N). Con tutte le
+    monete fuori il numero non esiste (NaN).
 
     Ritorna un dizionario di tipo "a", da passare cosi' com'e' a
     ``contro_baseline``: ``tipo``, ``media``, ``errore_standard``,
     ``deviazione_standard``, ``valutabile``, ``motivo`` (None o la frase del
     perche' non e' valutabile), ``n_trade`` (i trade delle (a), sommati),
-    ``n_trade_candidato`` (N), ``n_monete`` (quelle con n_j > 0), ``pesi``
-    ({simbolo: w_j}), ``monete_errore_da_deviazione``,
-    ``monete_con_meno_di_2_trade`` e ``per_moneta`` ({simbolo: numeri della moneta,
-    con ``errore_usato`` = e_j}, None per una (a) senza trade).
+    ``n_trade_candidato`` (N), ``n_trade_candidato_combinazione`` (N_c),
+    ``n_monete`` (quelle con n_j > 0), ``n_monete_combinazione``, ``pesi``
+    ({simbolo: w_j} delle monete della combinazione), ``deviazione_d`` (D, NaN se
+    non esiste), ``monete_errore_da_deviazione`` (almeno 2 trade e meno di 3
+    blocchi), ``monete_con_un_trade``, ``monete_lasciate_fuori``,
+    ``trade_candidato_lasciati_fuori``, ``quota_trade_candidato_lasciati_fuori``
+    (sul totale N) e ``per_moneta`` ({simbolo: numeri della moneta, con
+    ``errore_usato`` = e_j e ``deviazione_usata`` = la dev_j della deviazione
+    combinata}, None per una moneta lasciata fuori).
 
-    Con una moneta sola il peso e' 1, D = dev_j bit per bit (radice(1 · dev²)) e,
-    se la sua (a) ha almeno 3 blocchi interi, numero, errore e deviazione sono
-    quelli di ``baseline_da_trade`` bit per bit. Con meno di 3 blocchi le due
-    regole sono diverse per scelta di regole.md (qui e_j = max(dev_j, D) = dev_j e
-    il confronto si fa; nelle campagne singole la (a) e' non valutabile).
+    Con tutte le monete con almeno 2 trade della (a) i numeri sono quelli della
+    regola di prima, bit per bit (stessi termini, stesse somme nello stesso
+    ordine). Con una moneta sola il peso e' 1, D = dev_j bit per bit (radice(1 ·
+    dev²)) e, se la sua (a) ha almeno 3 blocchi interi, numero, errore e deviazione
+    sono quelli di ``baseline_da_trade`` bit per bit. Con meno di 3 blocchi e
+    almeno 2 trade le due regole sono diverse per scelta di regole.md (qui e_j =
+    max(dev_j, D) = dev_j e il confronto si fa; nelle campagne singole la (a) e'
+    non valutabile); con un trade solo o nessuno, su una moneta sola, la variante
+    e' non valutabile come nelle campagne singole.
     """
     positivi = _trade_candidato_positivi(trade_candidato_per_moneta)
     _controlla_monete(baseline_per_moneta, trade_candidato_per_moneta, positivi, "baseline_per_moneta")
     n_totale = sum(positivi.values())
-    pesi = {s: n_j / n_totale for s, n_j in positivi.items()}
     per_moneta: Dict[str, Optional[Dict[str, object]]] = {}
-    poche: List[str] = []
-    da_deviazione: List[str] = []
-    termini_media: List[float] = []
-    termini_varianza: List[float] = []
-    numero_mancante = False
-    trade_baseline = 0
+    fuori: List[str] = []
     for simbolo, n_j in positivi.items():
         base = baseline_per_moneta[simbolo]
         if base is None:
-            poche.append(simbolo)
+            # 0 trade della (a): fuori dal numero e dalla combinazione (sezione 5, punto 3)
+            fuori.append(simbolo)
             per_moneta[simbolo] = None
-            numero_mancante = True
             continue
         if base.get("tipo") != "a":
             raise ValueError(f"baseline di {simbolo}: serve il dizionario di baseline_da_trade (tipo a)")
@@ -1337,49 +1371,79 @@ def baseline_da_trade_di_gruppo(
         blocchi_j = operator.index(base["n_blocchi"])
         if not math.isfinite(media_j) or not math.isfinite(deviazione_j) or deviazione_j < 0 or trade_j < 1:
             raise ValueError(f"baseline di {simbolo}: numeri non validi (media {media_j}, deviazione "
-                             f"{deviazione_j}, trade {trade_j})")
+                             f"{deviazione_j}, trade {trade_j}; una (a) senza trade si passa come None)")
         errore_da_deviazione = blocchi_j < MINIMO_BLOCCHI
         if not errore_da_deviazione and (not math.isfinite(errore_j) or errore_j < 0):
             raise ValueError(f"baseline di {simbolo}: errore non valido ({errore_j}) con {blocchi_j} blocchi")
-        if errore_da_deviazione:
-            da_deviazione.append(simbolo)
-        if trade_j < 2:
-            poche.append(simbolo)
-        trade_baseline += trade_j
-        w_j = pesi[simbolo]
-        termini_media.append(w_j * media_j)
-        termini_varianza.append(w_j * (deviazione_j * deviazione_j))
         per_moneta[simbolo] = {
-            "n_trade_candidato": n_j, "peso": w_j, "media": media_j, "errore_standard": errore_j,
-            "errore_usato": None, "deviazione_standard": deviazione_j, "n_trade": trade_j,
-            "n_blocchi": blocchi_j, "errore_da_deviazione": errore_da_deviazione,
+            "n_trade_candidato": n_j, "peso": None, "media": media_j, "errore_standard": errore_j,
+            "errore_usato": None, "deviazione_standard": deviazione_j, "deviazione_usata": None,
+            "n_trade": trade_j, "n_blocchi": blocchi_j, "errore_da_deviazione": errore_da_deviazione,
+            "un_trade": trade_j == 1,
         }
-    # D, la deviazione standard combinata: serve prima degli errori (sezione 5, punto 3)
-    deviazione_combinata = math.nan if numero_mancante else math.sqrt(_somma_in_ordine(termini_varianza))
+    combinazione = [s for s, voce in per_moneta.items() if voce is not None]
+    con_due = [s for s in combinazione if not per_moneta[s]["un_trade"]]
+    un_trade = [s for s in combinazione if per_moneta[s]["un_trade"]]
+    da_deviazione = [s for s in con_due if per_moneta[s]["errore_da_deviazione"]]
+
+    # D, sulle sole monete con almeno 2 trade della (a): serve prima degli errori
+    if con_due:
+        n_due = sum(positivi[s] for s in con_due)
+        deviazione_d = math.sqrt(_somma_in_ordine(
+            [(positivi[s] / n_due) * (per_moneta[s]["deviazione_standard"] * per_moneta[s]["deviazione_standard"])
+             for s in con_due]))
+    else:
+        deviazione_d = math.nan
+
+    n_combinazione = sum(positivi[s] for s in combinazione)
+    pesi = {s: positivi[s] / n_combinazione for s in combinazione}
+    termini_media: List[float] = []
+    termini_varianza: List[float] = []
     termini_errore: List[float] = []
-    for simbolo, voce in per_moneta.items():
-        if voce is None:
-            continue
-        if voce["errore_da_deviazione"]:
-            voce["errore_usato"] = (math.nan if numero_mancante
-                                    else max(voce["deviazione_standard"], deviazione_combinata))
+    for simbolo in combinazione:
+        voce = per_moneta[simbolo]
+        w_j = pesi[simbolo]
+        voce["peso"] = w_j
+        if voce["un_trade"]:
+            voce["errore_usato"] = deviazione_d
+            voce["deviazione_usata"] = deviazione_d
         else:
-            voce["errore_usato"] = voce["errore_standard"]
-        termini_errore.append(voce["peso"] * voce["errore_usato"])
-    valutabile = not poche
+            voce["errore_usato"] = (max(voce["deviazione_standard"], deviazione_d) if voce["errore_da_deviazione"]
+                                    else voce["errore_standard"])
+            voce["deviazione_usata"] = voce["deviazione_standard"]
+        termini_media.append(w_j * voce["media"])
+        termini_varianza.append(w_j * (voce["deviazione_usata"] * voce["deviazione_usata"]))
+        termini_errore.append(w_j * voce["errore_usato"])
+
+    trade_fuori = sum(positivi[s] for s in fuori)
+    numeratore, denominatore = QUOTA_MASSIMA_FUORI_DALLA_A
+    motivi: List[str] = []
+    if not con_due:
+        motivi.append("nessuna moneta ha almeno 2 trade della (a)"
+                      + (f" (un trade solo su: {', '.join(un_trade)})" if un_trade else ""))
+    if denominatore * trade_fuori > numeratore * n_totale:
+        motivi.append(f"le monete senza trade della (a) ({', '.join(fuori)}) portano {trade_fuori} trade del "
+                      f"candidato su {n_totale}, piu' del {100 * numeratore // denominatore}%")
+    valutabile = not motivi
     return {
         "tipo": "a",
-        "media": math.nan if numero_mancante else _somma_in_ordine(termini_media),
+        "media": _somma_in_ordine(termini_media) if combinazione else math.nan,
         "errore_standard": _somma_in_ordine(termini_errore) if valutabile else math.inf,
-        "deviazione_standard": deviazione_combinata,
+        "deviazione_standard": (math.sqrt(_somma_in_ordine(termini_varianza)) if con_due else math.nan),
         "valutabile": valutabile,
-        "motivo": None if valutabile else f"la (a) ha meno di 2 trade su: {', '.join(poche)}",
-        "n_trade": trade_baseline,
+        "motivo": "; ".join(motivi) if motivi else None,
+        "n_trade": sum(per_moneta[s]["n_trade"] for s in combinazione),
         "n_trade_candidato": n_totale,
+        "n_trade_candidato_combinazione": n_combinazione,
         "n_monete": len(positivi),
+        "n_monete_combinazione": len(combinazione),
         "pesi": pesi,
+        "deviazione_d": deviazione_d,
         "monete_errore_da_deviazione": da_deviazione,
-        "monete_con_meno_di_2_trade": poche,
+        "monete_con_un_trade": un_trade,
+        "monete_lasciate_fuori": fuori,
+        "trade_candidato_lasciati_fuori": trade_fuori,
+        "quota_trade_candidato_lasciati_fuori": trade_fuori / n_totale,
         "per_moneta": per_moneta,
     }
 

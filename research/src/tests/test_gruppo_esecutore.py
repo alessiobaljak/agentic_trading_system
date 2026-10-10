@@ -1407,6 +1407,73 @@ def test_una_variante_non_valutabile_per_la_sola_a_ha_t_meno_infinito_e_p_value_
     assert math.isfinite(costruzione["baseline_b"]["t"])
 
 
+def _apertura_della_prima_barra(simbolo: str) -> str:
+    """La chiave di ``a_ingressi_per_apertura`` della variante d'esempio: la prima barra apre qui (caricatore finto)."""
+    return str(20 + zlib.crc32(simbolo.encode()) % 80)
+
+
+#: tre monete lunghe e una che comincia tardi (pochi trade del candidato: meno del 10% del totale)
+QUATTRO = (("AAAUSDT", "2021-01-01", 0.0005), ("BBBUSDT", "2021-01-01", 0.001), ("CCCUSDT", "2021-01-01", 0.0005),
+           ("DDDUSDT", "2022-10-01", 0.0005))
+
+
+def test_le_monete_con_0_o_1_trade_della_a_arrivano_alla_a_di_gruppo(tmp_path):
+    """Regole.md, sezione 5, punto 3 (chiusura della bozza): una moneta con 1 trade della (a) entra con e_j = D, una
+    con 0 trade resta fuori; sotto il 10% dei trade del candidato la (a) di gruppo si fa, sopra no. Nessun errore
+    prima della funzione."""
+    aperture = {s: _apertura_della_prima_barra(s) for s, _, _ in QUATTRO}
+    assert len(set(aperture.values())) == len(aperture)
+    car = CaricatoreFinto(monete=QUATTRO, mesi_sotto=(), buchi=())
+    p = dict(P, registra_ingressi=False, a_ingressi_per_apertura={aperture["DDDUSDT"]: 0, aperture["BBBUSDT"]: 1})
+    ris = esame(tmp_path, caricatore=car, p=p)
+    p1 = pezzi(ris, "fase1")
+    n = {s: len(p1[s]["dati"]["trade"]["righe"]) for s in aperture}
+    tot = sum(n.values())
+    assert all(n[s] > 0 for s in n) and ris["metriche"]["trade"] == tot
+    a = {s: p1[s]["dati"]["a"] for s in n}
+    assert a["DDDUSDT"]["n_trade"] == 0 and a["DDDUSDT"]["base"] is None
+    assert a["BBBUSDT"]["n_trade"] == 1 and a["BBBUSDT"]["base"]["n_trade"] == 1
+    assert all(a[s]["base"]["n_blocchi"] >= 3 for s in ("AAAUSDT", "CCCUSDT"))
+    assert 10 * n["DDDUSDT"] <= tot  # la moneta che comincia tardi porta meno del 10% dei trade del candidato
+    base_a = ris["baseline_a"]
+    assert base_a["monete_lasciate_fuori"] == ["DDDUSDT"] and base_a["monete_con_un_trade"] == ["BBBUSDT"]
+    assert base_a["trade_candidato_lasciati_fuori"] == n["DDDUSDT"]
+    assert base_a["quota_trade_candidato_lasciati_fuori"] == n["DDDUSDT"] / tot
+    assert base_a["valutabile"] is True and base_a["senza_pavimento_sfasate"]["valutabile"] is True
+    assert not any("(a)" in m for m in ris["motivi_non_valutabile"])
+    # a mano: D sulle monete con almeno 2 trade della (a); pesi sulle monete della combinazione
+    due = ("AAAUSDT", "CCCUSDT")
+    comb = ("AAAUSDT", "BBBUSDT", "CCCUSDT")
+    n_c = sum(n[s] for s in comb)
+    d = math.sqrt(sum(n[s] * a[s]["base"]["deviazione_standard"] ** 2 for s in due) / sum(n[s] for s in due))
+    numero = sum(n[s] * a[s]["base"]["media"] for s in comb) / n_c
+    errore = (n["AAAUSDT"] * a["AAAUSDT"]["base"]["errore_standard"] + n["BBBUSDT"] * d
+              + n["CCCUSDT"] * a["CCCUSDT"]["base"]["errore_standard"]) / n_c
+    assert math.isclose(base_a["deviazione_d"], d, rel_tol=1e-12)
+    assert math.isclose(base_a["media"], numero, rel_tol=1e-12)
+    assert math.isclose(base_a["errore_standard"], errore, rel_tol=1e-12)
+    assert math.isclose(base_a["deviazione_standard"], d, rel_tol=1e-12)
+    assert base_a["n_trade_candidato_combinazione"] == n_c and base_a["n_trade_candidato"] == tot
+    # il pavimento della (a): radice(somma n_j dev_j^2) / N_c, con dev_BBB = D
+    pavimento_a = math.sqrt(n["AAAUSDT"] * a["AAAUSDT"]["base"]["deviazione_standard"] ** 2 + n["BBBUSDT"] * d ** 2
+                            + n["CCCUSDT"] * a["CCCUSDT"]["base"]["deviazione_standard"] ** 2) / n_c
+    assert math.isclose(base_a["errore_minimo_baseline"], pavimento_a, rel_tol=1e-12)
+    # l'R medio del candidato resta su tutti i trade, anche quelli della moneta lasciata fuori
+    assert math.isclose(base_a["differenza"], ris["metriche"]["r_medio"] - numero, rel_tol=1e-12, abs_tol=1e-15)
+    assert ris["per_moneta"]["DDDUSDT"]["a"] is None and ris["per_moneta"]["BBBUSDT"]["a"]["n_trade"] == 1
+
+    # la stessa (a) senza trade su una moneta lunga: oltre il 10% dei trade, la variante e' non valutabile
+    p = dict(P, registra_ingressi=False, a_ingressi_per_apertura={aperture["CCCUSDT"]: 0})
+    ris = esame(tmp_path / "sopra", caricatore=car, p=p, nome="GRUPPO-002")
+    n_ccc = ris["per_moneta"]["CCCUSDT"]["trade"]
+    assert 10 * n_ccc > ris["metriche"]["trade"]
+    assert ris["baseline_a"]["valutabile"] is False and ris["baseline_a"]["monete_lasciate_fuori"] == ["CCCUSDT"]
+    assert "CCCUSDT" in ris["baseline_a"]["motivo"] and "10%" in ris["baseline_a"]["motivo"]
+    assert any("(a)" in m and "CCCUSDT" in m for m in ris["motivi_non_valutabile"])
+    assert ris["valutabile"] is False and ris["t"] == -math.inf and ris["candidato"] is False
+    assert ris["baseline_b"]["valutabile"] is True and math.isfinite(ris["baseline_b"]["t"])
+
+
 def test_buy_and_hold_con_gli_stessi_pesi_anche_con_una_moneta_assente(tmp_path):
     """La (c) con gli stessi w_j (regole.md, sezione 5, punto 8): una moneta senza candele in un anno non ripesa le altre."""
     car = CaricatoreFinto(monete=(("AAAUSDT", "2021-07-01", 0.0005), ("BBBUSDT", "2022-03-01", 0.001)), mesi_sotto=(),
