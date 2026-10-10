@@ -3282,3 +3282,12 @@ su 77 coin, 731 a 2/3, t ≥ 2 per 135 su 191, declassate 105; passata a 1 ora 3
 proprietario (campagna di gruppo; rifare BTCUSDT). **Proposta del giorno:** nessuna voce nuova (il protocollo è allo
 STOP). Da tenere d'occhio: lo spazio del registro (~444) e le letture di Firebase dai rifiutati.
 
+
+### 10 ottobre, 07:40 ora italiana (05:40 UTC): il proprietario sceglie la campagna di gruppo e tiene la consegna di Bitcoin
+
+Risposta allo STOP del Passo 4: «sì alla campagna di gruppo, no a rifare Bitcoin». Quindi: (1) prima del vault si fa
+la campagna di gruppo (Passo 4bis) sulle 80 monete idonee che non hanno una campagna propria, sommando i trade di
+ogni variante; il coordinamento scrive ora il testo completo delle regole, che il proprietario approva prima di
+qualunque test e prima di aprire la sessione; (2) la consegna 4.4 di BTCUSDT resta valida e il suo candidato resta
+fra i tre per il vault. Registrato anche sul branch di coordinamento (`research/passo4/riepilogo.md`, 97f2a1bf).
+Il vault aspetta la consegna del gruppo.

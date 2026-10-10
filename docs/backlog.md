@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato l'8 ottobre 2026, 07:40 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato il 10 ottobre 2026, 07:45 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
@@ -36,7 +36,7 @@ Nessuna voce in attesa del tuo sì.
 
 ## 1. In lavorazione
 
-### P0. Il protocollo di ricerca per moneta — versione 4.5 (approvata il 9 ott). TUTTE E 20 LE MONETE HANNO CONSEGNATO il 9 ott: 3 candidati confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; riepilogo in `research/passo4/riepilogo.md` sul branch di coordinamento). ALLO STOP del Passo 4: il proprietario decide (1) la campagna di gruppo prima del vault, (2) se rifare BTCUSDT per la regola dei ritocchi; il vault si apre solo con «APRI IL VAULT»
+### P0. Il protocollo di ricerca per moneta — versione 4.5 (approvata il 9 ott). TUTTE E 20 LE MONETE HANNO CONSEGNATO il 9 ott: 3 candidati confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; riepilogo in `research/passo4/riepilogo.md` sul branch di coordinamento). Il 10 ott il proprietario ha deciso: (1) SÌ alla campagna di gruppo prima del vault, (2) NO a rifare BTCUSDT. IN CORSO: il testo completo della campagna di gruppo (Passo 4bis) da far approvare prima di qualunque test; poi guardiano esteso, schede delle 80 monete e sessione di gruppo. Il vault si apre solo con «APRI IL VAULT», dopo la consegna del gruppo
 **Perché:** cinque misure indipendenti dicono la stessa cosa: il gate non trova un vantaggio. Entrate a caso rendono come i segnali (240 trade, ops 0471); dopo la scelta del gate le validate fanno −0,03R su 182 segnali ±0,17 (ops 0498, lettura stampata: «la prossima modifica va nel gate»); una candidata nuova a caso non passa quasi mai (0 su 3.600, ops 0485); i costi superano il lordo (−0,089R netti, +0,088R di costi su 241, ops 0489); il gate rigiocato nel passato, su 8 date, dà promosse peggiori delle bocciate (−0,22R contro −0,14R su 45 trade, non decide, ops 0502). Aspettare il 14 ott non cambia il verdetto.
 **Cosa:** salvare `research/PROTOCOLLO.md` (versione 4.2, rivista il 5 ott) ed eseguire il **Passo 0**: fatti (fonte dati e contratti delistati, commissioni, serie degli stop, regole di dimensione e forma di esecuzione del bot), motore con il blocco del periodo chiuso, test di controllo, tabella dei parametri da approvare. Non tocca dati di mercato né il bot. **Regola scritta prima:** il Passo 0 finisce con una tabella e uno STOP; nessuna campagna parte senza l'approvazione dei parametri. **Metro:** la tabella completa, i test di controllo passati, e la risposta alla domanda «il bot può eseguire una strategia scritta come codice?». **Non cambia:** bot, gate, paper, registro; le letture del 7 e 14 ott restano.
 
