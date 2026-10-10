@@ -102,6 +102,23 @@ test_guardiano_gruppo.py):
     guarda solo con un formato fatto di date e hash (`--format=%h %cI`), e
     `blame` senza le forme "porcelain" (vedi `_giudica_storia_clone_limitato`).
 
+Cosa ha aggiunto la seconda revisione del 10 ottobre 2026 (per ogni campagna;
+test_guardiano.py in fondo e test_guardiano_gruppo.py, sezione K):
+  * i programmi di rete (`curl`, `wget`, `gh`, `pip`, `nc`...: `_PROGRAMMI_RETE`)
+    sono vietati, anche con il percorso assoluto, dietro i prefissi trasparenti,
+    dentro `sh -c` e `find -exec`; i dati passano solo da `research/src/dati.py`;
+  * l'interprete con `-m` esegue solo `pytest`; il codice da stdin (`-i`,
+    `/dev/stdin`, `PYTHONINSPECT`, `bash -s`) e' vietato come `-c`;
+  * un token si spezza al `=` solo dopo un'opzione o un nome di variabile (prima
+    `https://x?symbol=Y` lasciava giudicare solo `Y`); una parola con `://` passa
+    solo se `giudica_url` la ammette;
+  * `research/config/` e' in sola lettura; i lettori che scrivono (`sort -o`,
+    `uniq in out`) e ogni programma che scrive un nome nudo dopo un `cd`
+    (`cd research/src && sed -i ... guardiano.py`) si giudicano come scrittura;
+  * `git reset` e `git stash` solo con `-q` (senza, stampano l'oggetto del commit
+    HEAD, che subito dopo l'apertura del branch e' un commit del principale), e
+    `git stash list` mai.
+
 Il guardiano NON legge il contenuto dei file che il modello scrive ed esegue:
 uno script in una cartella ammessa puo' fare cio' che vuole. E' una barriera
 contro la deriva e la distrazione, non contro un avversario con il codice in
@@ -228,7 +245,11 @@ _MAX_BYTE_MONETE_GRUPPO = 64 * 1024
 #: (una sessione sorvegliata che puo' riscriverli si libera da sola); e i file
 #: della campagna di gruppo scritti dal coordinamento e approvati con il testo
 #: (l'elenco delle monete, le schede con la fascia di slippage, il testo stesso
-#: e il via libera alla validazione: regole.md, sezione 12, punto 3).
+#: e il via libera alla validazione: regole.md, sezione 12, punto 3). E tutta
+#: `research/config/` (revisione del 10 ottobre 2026): e' congelata, nessuna campagna
+#: la scrive (PROTOCOLLO.md, Passo 3; regole.md, sezione 12, punto 3), e contiene i
+#: numeri dell'esame (`parametri.yaml`, sezione `gruppo` compresa) che la sessione
+#: stessa legge: con un Edit cambierebbe il proprio esame.
 _PROTETTI_FILE = (
     "research/.sessione",
     "research/src/guardiano.py",
@@ -237,7 +258,7 @@ _PROTETTI_FILE = (
     "research/campagne/GRUPPO/regole.md",
     "research/campagne/GRUPPO/via_libera_validazione.md",
 )
-_PROTETTI_CARTELLE = (".claude", "research/campagne/GRUPPO/schede")
+_PROTETTI_CARTELLE = (".claude", "research/campagne/GRUPPO/schede", "research/config")
 
 #: riferimento a un branch del protocollo dentro un comando
 _BRANCH = re.compile(r"research/(?:coordinamento|archivio|campagna)(?:/[A-Za-z0-9_.-]+)?")
@@ -245,6 +266,9 @@ _BRANCH = re.compile(r"research/(?:coordinamento|archivio|campagna)(?:/[A-Za-z0-
 _SEPARATORI = {"&&", "||", ";", "|", "(", ")", ";;", "&", "|&"}
 #: una redirezione in uscita: il token DOPO e' un file che viene scritto
 _REDIREZIONE_SCRITTURA = re.compile(r"^(?:[0-9]*>+[&|]?|&>>?|<>)$")
+#: cio' che puo' stare prima del `=` perche' il token si spezzi li': un'opzione
+#: (`-o`, `--uscita`, `--format`) o un nome di variabile (`of`, `PYTHONHASHSEED`)
+_PRIMA_DELL_UGUALE = re.compile(r"^(?:--?[A-Za-z0-9][A-Za-z0-9_.-]*|[A-Za-z_][A-Za-z0-9_]*)$")
 #: un'espansione di graffe con virgola: `{a,b}` -> `a`, `b`
 _GRAFFE = re.compile(r"\{([^{}]*,[^{}]*)\}")
 #: `$NOME` o `${NOME}` in testa a un token
@@ -270,10 +294,45 @@ _BUILTIN_AMBIENTE = {"export", "declare", "typeset"}
 _PROGRAMMI_VIETATI_CAMPAGNA = {
     "eval", "xargs", "ln", "source", ".",
     "awk", "gawk", "mawk", "nawk",
-    "perl", "ruby", "node", "nodejs", "php", "lua", "luajit",
+    "perl", "ruby", "node", "nodejs", "php", "lua", "luajit", "jshell",
+    # lanciano il comando che segue (o una riga di shell) senza essere fra i prefissi
+    # trasparenti: il guardiano giudicherebbe loro, non il programma vero
+    # (`setsid curl ...`, `script -c 'curl ...'`, `watch 'curl ...'`)
+    "setsid", "script", "watch", "flock", "strace", "ltrace", "taskset", "chrt", "unshare", "nsenter",
 }
+#: programmi che aprono la rete (scaricano, inviano, si collegano, installano pacchetti):
+#: in campagna vietati. Revisione del 10 ottobre 2026: `curl '...?symbol=X'` passava
+#: (il `=` faceva giudicare solo cio' che lo seguiva), e con lui la lista dei contratti
+#: di oggi, l'indice dell'archivio (quali monete sono morte), i file del vault scritti in
+#: `data/insample/`, e con `gh` gli altri branch. I dati passano dal caricatore, che ha
+#: il blocco del vault e i rifiuti della sezione 12 di `campagne/GRUPPO/regole.md`.
+#: Uno script in una cartella ammessa apre comunque la rete (il guardiano non lo legge):
+#: questo chiude la strada diretta, non tutte.
+_PROGRAMMI_RETE = frozenset({
+    # la lista della revisione
+    "curl", "wget", "wget2", "aria2c", "http", "https", "httpie", "httpx", "xh", "curlie",
+    "lynx", "w3m", "links", "elinks", "nc", "ncat", "netcat", "socat", "telnet", "ftp", "sftp",
+    "scp", "ssh", "rsync", "openssl", "gh", "aws", "gsutil", "gcloud", "bq", "uv", "uvx",
+    "pip", "pip3", "pipx", "bun", "bunx", "npm", "npx", "pnpm", "yarn", "deno", "busybox",
+    # installati nell'ambiente delle sessioni (verificato con `command -v` il 10 ott 2026):
+    # scaricano pacchetti o parlano con la rete
+    "go", "cargo", "rustup", "gem", "cpan", "composer", "corepack", "poetry", "mvn", "gradle",
+    "docker", "git-lfs", "playwright", "claude",
+})
+#: le versioni con il numero (`pip3.12`, `uv0.5`...): stessi programmi
+_PROGRAMMI_RETE_CON_VERSIONE = re.compile(r"^(?:pip|pip3|pipx|uv|uvx)[0-9.]+$")
+_MOTIVO_RETE = ("apre la rete: in campagna i dati si scaricano solo con research/src/dati.py, "
+                "le pagine solo con WebFetch")
 #: interpreti che con `-c` / `-` eseguono codice dalla riga di comando o da stdin
 _INTERPRETI = re.compile(r"^(?:python|python3|python3\.[0-9]+|pypy|pypy3)$")
+#: opzioni corte dell'interprete che prendono un valore (attaccato, `-Wignore`, o separato)
+_INTERPRETE_CORTE_CON_VALORE = "WX"
+#: opzioni lunghe dell'interprete che prendono un valore separato
+_INTERPRETE_LUNGHE_CON_VALORE = ("--check-hash-based-pycs",)
+#: in campagna l'unico modulo che l'interprete esegue con `-m`: e' il solo citato da
+#: PROTOCOLLO.md, lezioni/metodo.md, regole.md e dai messaggi di apertura. Gli altri
+#: (`pip`, `uv`, `http.server`, `urllib.request`...) aprono la rete o eseguono altro.
+_MODULI_AMMESSI_CAMPAGNA = frozenset({"pytest"})
 #: shell: con `-c` il comando interno si giudica a sua volta
 _SHELL = {"sh", "bash", "dash", "zsh", "ksh", "mksh", "fish"}
 #: prefissi che eseguono il comando che segue senza cambiarne il senso.
@@ -302,13 +361,18 @@ _PROGRAMMI_BERSAGLIO = {
 _PROGRAMMI_DISTRUTTIVI = {"rm", "rmdir", "mv", "shred", "unlink"}
 #: opzioni di `find` che cancellano o eseguono (rendono `find` un comando distruttivo)
 _FIND_DISTRUGGE = ("-delete", "-exec", "-execdir", "-ok", "-okdir")
+#: opzioni di `find` seguite da un comando che `find` esegue (fino a `;` o `+`)
+_FIND_ESEGUE = ("-exec", "-execdir", "-ok", "-okdir")
 #: programmi che leggono soltanto: con questi un file protetto si puo' aprire
+#: (tranne le forme di `_lettore_che_scrive`: `sort -o`, `uniq in out`, `xxd in out`)
 _LETTORI = {
     "cat", "head", "tail", "less", "more", "wc", "grep", "egrep", "fgrep", "rg",
     "diff", "ls", "stat", "file", "cmp", "md5sum", "sha1sum", "sha256sum", "cut",
     "sort", "uniq", "nl", "od", "hexdump", "xxd", "strings", "tr", "column", "cd",
     "python", "python3", "test", "[", "realpath", "readlink", "dirname", "basename",
 }
+#: lettori che con DUE operandi scrivono il secondo (`uniq in out`, `xxd in out`)
+_LETTORI_CON_USCITA = {"uniq", "xxd"}
 #: variabili che, assegnate davanti a un comando, gli fanno eseguire altro
 #: (`GIT_PAGER='cat docs/x' git log`) o cambiano dove legge.
 _VARIABILI_PERICOLOSE = {
@@ -318,6 +382,8 @@ _VARIABILI_PERICOLOSE = {
     "GIT_EXTERNAL_DIFF", "GIT_DIR", "GIT_WORK_TREE", "GIT_CONFIG", "GIT_CONFIG_GLOBAL",
     "GIT_CONFIG_SYSTEM", "GIT_CONFIG_PARAMETERS", "HOME", "PATH", "IFS", "CDPATH",
     "CLAUDE_PROJECT_DIR",
+    # come `python -i`: finito lo script, l'interprete esegue il codice che arriva da stdin
+    "PYTHONINSPECT",
 }
 #: in campagna ogni altra variabile `GIT_*` e' vietata: `GIT_EXEC_PATH` fa eseguire
 #: a git i programmi di un'altra cartella, `GIT_CONFIG_COUNT`/`KEY_n`/`VALUE_n`
@@ -458,6 +524,15 @@ _GIT_STASH_PAROLE = {"push", "pop", "list", "drop", "apply", "show", "clear", "s
 #: (un merge dal principale) una voce dello stash, che `stash show -p` stampa;
 #: `branch` crea un branch e ci passa sopra
 _GIT_STASH_VIETATE = {"branch", "create", "store"}
+#: le parole di `git stash` che in campagna vogliono `-q`/`--quiet`: senza, `push` e
+#: `save` stampano «WIP on <branch>: <hash> <oggetto di HEAD>» (subito dopo l'apertura
+#: del branch HEAD e' un commit del branch principale), e per uniformita' anche `pop`,
+#: `apply` e `drop`. `show` e `clear` non stampano messaggi di commit (e `clear` non
+#: accetta `-q`); `list` e' vietata a parte (`_giudica_git_silenzioso`).
+_GIT_STASH_SILENZIOSE = {"push", "save", "pop", "apply", "drop"}
+#: la frase con cui il guardiano indica la forma giusta di `reset` e `stash`: il
+#: rifiuto non chiede all'utente (`messaggio_rifiuto`)
+_FORMA_SILENZIOSA = "aggiungi -q (o --quiet)"
 #: il nome di un remoto (`origin`): non un indirizzo, non un percorso
 _NOME_REMOTO = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 #: le opzioni ammesse in campagna per push, fetch e pull (lista BIANCA, nomi
@@ -968,12 +1043,21 @@ def espandi_token(token: str, ctx: Contesto) -> list[str] | None:
     return risultato
 
 
-def _candidato_percorso(token: str, primo_livello: frozenset[str], bersaglio: bool = False) -> str | None:
+def _candidato_percorso(token: str, primo_livello: frozenset[str], bersaglio: bool = False,
+                        uguale_stretto: bool = True) -> str | None:
     """Il frammento di un token che sembra un percorso, o None.
 
     Un percorso e' un token con `/`, o che comincia con `.` o `~`, o che e' il
     nome di una voce di primo livello del repo (`docs`, `ops`...). Si tolgono
     prima le redirezioni (`2>file`) e le opzioni `--x=file`.
+
+    Il token si spezza al primo `=` solo se cio' che sta prima e' un'opzione
+    (`-x`, `--nome`) o un nome di variabile (`of=`, `PYTHONHASHSEED=`): altrimenti
+    si giudica la parola intera. Prima del 10 ottobre 2026 si spezzava sempre, e di
+    `https://host/x?symbol=OCEANUSDT` o di `research/campagne/ALTRA/a=b` restava solo
+    cio' che segue il `=`, che non sembra un percorso: l'indirizzo o il file non si
+    giudicavano. `uguale_stretto=False` e' la regola di prima (il coordinamento, che
+    questa revisione non cambia).
 
     Con `bersaglio` vale anche un NOME NUDO (senza `/`): e' il caso del bersaglio di
     una redirezione o di un comando che scrive un file nominato dopo un `cd`. Chi
@@ -983,7 +1067,9 @@ def _candidato_percorso(token: str, primo_livello: frozenset[str], bersaglio: bo
     t = token
     t = re.sub(r"^[0-9]*[<>]+", "", t)
     if "=" in t and not t.startswith("="):
-        t = t.split("=", 1)[1]
+        prima, _, dopo = t.partition("=")
+        if not uguale_stretto or _PRIMA_DELL_UGUALE.match(prima):
+            t = dopo
     if not t or t.startswith("-"):
         return None
     if "/" in t or t.startswith((".", "~")) or t in primo_livello or e_segreto(t):
@@ -1028,15 +1114,35 @@ def _giudica_programma(prog: str, argomenti: list[str], separatore: str, ctx: Co
         for a in argomenti:
             if _variabile_pericolosa(a.split("=", 1)[0]):
                 return rifiuta(f"{prog} {a.split('=', 1)[0]} cambia cio' che i comandi successivi fanno")
+    if prog in _PROGRAMMI_RETE or _PROGRAMMI_RETE_CON_VERSIONE.match(prog):
+        return rifiuta(f"{prog} {_MOTIVO_RETE}")
     if prog in _PROGRAMMI_VIETATI_CAMPAGNA:
         return rifiuta(f"{prog} esegue cio' che il guardiano non puo' vedere")
     if _INTERPRETI.match(prog):
         if any(a in ("-c", "-") for a in argomenti):
             return rifiuta(f"{prog} -c esegue codice che il guardiano non puo' vedere")
-        if not any(a == "-m" or a in ("-V", "--version", "-h", "--help") or not a.startswith("-") for a in argomenti):
-            return rifiuta(f"{prog} senza script legge il codice da stdin")
-    if prog in _SHELL and not _script_di_shell(argomenti) and not any(not a.startswith("-") for a in argomenti):
-        return rifiuta(f"{prog} senza script legge i comandi da stdin")
+        lettere, modulo, script = _opzioni_interprete(argomenti)
+        if "c" in lettere:
+            return rifiuta(f"{prog} -c esegue codice che il guardiano non puo' vedere")
+        if "i" in lettere:
+            return rifiuta(f"{prog} -i, finito lo script, esegue il codice che arriva da stdin")
+        if modulo is not None:
+            if modulo not in _MODULI_AMMESSI_CAMPAGNA:
+                return rifiuta(f"{prog} -m {modulo}: in campagna l'unico modulo ammesso e' pytest "
+                               "(`python -m pytest ...`); gli altri (pip, uv, http.server...) aprono la rete "
+                               "o eseguono cio' che il guardiano non vede")
+        elif script is None:
+            if not any(a in ("-V", "--version", "-h", "--help") for a in argomenti):
+                return rifiuta(f"{prog} senza script legge il codice da stdin")
+        elif e_dispositivo(_assoluto(script, ctx.radice)):
+            return rifiuta(f"{prog} {script} legge il codice da stdin")
+    if prog in _SHELL:
+        lettere, operando = _opzioni_shell(argomenti)
+        if "c" not in lettere:
+            if operando is None or operando == "-":
+                return rifiuta(f"{prog} senza script legge i comandi da stdin")
+            if "s" in lettere or e_dispositivo(_assoluto(operando, ctx.radice)):
+                return rifiuta(f"{prog} {'-s' if 's' in lettere else operando} legge i comandi da stdin")
     if prog == "sed":
         for a in argomenti:
             if not a.startswith("-") and _candidato_percorso(a, ctx.primo_livello) is None and _SED_FILE.search(a):
@@ -1048,16 +1154,122 @@ def _giudica_programma(prog: str, argomenti: list[str], separatore: str, ctx: Co
             return rifiuta(f"{prog} ricorsivo senza percorso guarda tutto il repo")
     if prog in _FIND and not _ha_percorso(argomenti, ctx):
         return rifiuta(f"{prog} senza percorso guarda tutto il repo")
+    if prog in _FIND:
+        # `find ... -exec curl ... \;`: il comando eseguito da find si giudica come comando
+        for interno in _comandi_di_find(argomenti):
+            if profondita >= _MAX_PROFONDITA:
+                return rifiuta(f"{prog} -exec annidato troppe volte")
+            v = giudica_comando(shlex.join(interno), ctx, profondita + 1)
+            if not v.consentito:
+                return rifiuta(f"dentro {prog} -exec: {v.oggetto}")
     if prog == "git":
         return _giudica_git(argomenti, ctx, comando)
     return OK
 
 
-def _script_di_shell(argomenti: list[str]) -> str | None:
-    """Il comando interno di `sh -c '...'` (o `-lc`, `-ec`), oppure None."""
+def _comandi_di_find(argomenti: list[str]) -> list[list[str]]:
+    """I comandi che `find` esegue: dopo `-exec`/`-execdir`/`-ok`/`-okdir`, fino a `;`
+    (che `_segmenti` ha gia' tolto come separatore) o `+`."""
+    comandi: list[list[str]] = []
+    i = 0
+    while i < len(argomenti):
+        if argomenti[i] in _FIND_ESEGUE:
+            j = i + 1
+            while j < len(argomenti) and argomenti[j] not in (";", "+"):
+                j += 1
+            if j > i + 1:
+                comandi.append(argomenti[i + 1:j])
+            i = j
+        i += 1
+    return comandi
+
+
+def _lettore_che_scrive(prog: str, argomenti: list[str]) -> bool:
+    """Un lettore di `_LETTORI` che in questa forma SCRIVE un file: `sort -o f`
+    (`--output`), `uniq in out`, `xxd in out`. Allora tutti i suoi percorsi si
+    giudicano come scrittura (come per `cp`): `sort -o research/config/parametri.yaml`
+    riscriverebbe un file in sola lettura."""
+    if prog == "sort":
+        return any(_opzione_lunga(a, ("--output",)) or "o" in _lettere_corte(a, "kotST") for a in argomenti)
+    if prog in _LETTORI_CON_USCITA:
+        operandi = [a for a in itertools.takewhile(lambda x: x != "--", argomenti) if not a.startswith("-")]
+        dopo = list(itertools.dropwhile(lambda x: x != "--", argomenti))[1:]
+        return len(operandi) + len(dopo) >= 2
+    return False
+
+
+def _script_di_shell(argomenti: list[str], campagna: bool = False) -> str | None:
+    """Il comando interno di `sh -c '...'` (o `-lc`, `-ec`), oppure None.
+
+    In campagna l'operando si cerca con `_opzioni_shell`, che salta il valore di
+    `-o`/`-O` (`bash -o pipefail -c 'cmd'`: il comando e' `cmd`, non `pipefail`);
+    fuori dalla campagna resta la regola di prima.
+    """
+    if campagna:
+        lettere, operando = _opzioni_shell(argomenti)
+        return operando if "c" in lettere else None
     if not any(a.startswith("-") and not a.startswith("--") and "c" in a[1:] for a in argomenti):
         return None
     return next((a for a in argomenti if not a.startswith("-")), None)
+
+
+def _opzioni_shell(argomenti: list[str]) -> tuple[str, str | None]:
+    """(lettere delle opzioni corte, primo operando) di `sh`, `bash`...
+
+    Le opzioni sono quelle prima del primo operando (`-x`, `+x`, `-euo pipefail`):
+    il valore di `-o`/`-O`/`+o`/`+O` si salta, `--nome` si ignora, dopo `--` viene
+    l'operando. Con `c` fra le lettere l'operando e' il comando; senza, e' il file
+    dei comandi (con `s` fra le lettere i comandi arrivano comunque da stdin).
+    """
+    lettere = ""
+    i = 0
+    while i < len(argomenti):
+        a = argomenti[i]
+        if a == "--":
+            return lettere, (argomenti[i + 1] if i + 1 < len(argomenti) else None)
+        if len(a) > 1 and a[0] in "-+" and not a.startswith("--"):
+            lettere += a[1:]
+            i += 2 if a[-1] in "oO" else 1
+            continue
+        if a.startswith("--"):
+            i += 1
+            continue
+        return lettere, a
+    return lettere, None
+
+
+def _opzioni_interprete(argomenti: list[str]) -> tuple[str, str | None, str | None]:
+    """(lettere delle opzioni corte, modulo di `-m`, script) di `python`.
+
+    Le opzioni dell'interprete sono quelle PRIMA dello script o del modulo (dopo,
+    sono argomenti dello script). Si leggono come fa l'interprete: le lettere corte
+    si possono unire (`-Ic`, `-Bm pip`, `-mpip`), `-c` e `-m` prendono il resto della
+    parola o la parola dopo, `-W` e `-X` un valore (attaccato o separato) che non e'
+    lo script. Prima di questa revisione `python3 -Ic '...'` e `python3 -mpip`
+    passavano, e il valore di `-W ignore` era preso per lo script.
+    """
+    lettere = ""
+    i = 0
+    while i < len(argomenti):
+        a = argomenti[i]
+        if a == "--":
+            return lettere, None, (argomenti[i + 1] if i + 1 < len(argomenti) else None)
+        if not a.startswith("-") or a == "-":
+            return lettere, None, a
+        if a.startswith("--"):
+            i += 2 if (a in _INTERPRETE_LUNGHE_CON_VALORE) else 1
+            continue
+        salta = 1
+        for j, c in enumerate(a[1:], start=1):
+            lettere += c
+            if c in "cm":
+                valore = a[j + 1:] or (argomenti[i + 1] if i + 1 < len(argomenti) else "")
+                return lettere, (valore if c == "m" else None), None
+            if c in _INTERPRETE_CORTE_CON_VALORE:
+                salta = 1 if a[j + 1:] else 2
+                break
+        i += salta
+    return lettere, None, None
 
 
 def _ambiente_git(radice: str) -> dict:
@@ -1409,6 +1621,43 @@ def _giudica_sincronizzazione(sub: str, resto: list[str], ctx: Contesto, rifiuta
     return OK
 
 
+def _giudica_git_silenzioso(sub: str, resto: list[str], rifiuta) -> Verdetto:
+    """`git reset` e `git stash` in campagna: solo con `-q`/`--quiet`.
+
+    Senza, stampano l'oggetto (la prima riga del messaggio) del commit HEAD:
+    `git reset --hard` «HEAD is now at <hash> <oggetto>», `git stash` «Saved working
+    directory and index state WIP on <branch>: <hash> <oggetto>». Subito dopo
+    l'apertura del branch (sezione 9 del protocollo) HEAD e' un commit del branch
+    principale, con un messaggio del coordinamento o del bot. Per `reset` vale per ogni
+    forma; per `stash` per `push` (anche implicito), `save`, `pop`, `apply`, `drop`
+    (`_GIT_STASH_SILENZIOSE`). `git stash list` stampa lo stesso oggetto per ogni voce
+    fatta senza `-m`, ANCHE con `-q` (provato con git 2.43): in campagna e' vietato.
+    `show` (stampa solo le differenze) e `clear` (non stampa nulla, e non accetta `-q`)
+    restano come prima.
+    """
+    opzioni = list(itertools.takewhile(lambda x: x != "--", resto))
+    parola = ""
+    if sub == "stash":
+        parola = resto[0] if resto and resto[0] in _GIT_STASH_PAROLE else "push"
+        if parola == "list":
+            return rifiuta("git stash list stampa l'oggetto del commit da cui e' partita ogni voce dello stash "
+                           "(subito dopo l'apertura del branch, un commit del branch principale), anche con -q: "
+                           "in campagna non si usa. Una voce fatta con `git stash push -q -m <nota>` si riprende "
+                           "con `git stash pop -q`")
+        if parola not in _GIT_STASH_SILENZIOSE:
+            return OK
+    silenzioso = any(_opzione_lunga(a, ("--quiet",)) or "q" in _lettere_corte(a, "m") for a in opzioni)
+    if silenzioso:
+        return OK
+    if sub == "reset":
+        forma = shlex.join(["git", "reset", "-q", *resto])
+    else:
+        forma = shlex.join(["git", "stash", parola, "-q", *(resto[1:] if resto and resto[0] == parola else resto)])
+    return rifiuta(f"git {sub}{' ' + parola if parola else ''} senza -q stampa l'oggetto del commit HEAD (subito "
+                   f"dopo l'apertura del branch, un commit del branch principale): {_FORMA_SILENZIOSA}, "
+                   f"cioe' `{forma}`")
+
+
 def _giudica_commit(resto: list[str], rifiuta) -> Verdetto:
     """`git commit` in campagna: mai il messaggio di un altro commit.
 
@@ -1527,6 +1776,10 @@ def _giudica_git_sottocomando(sub: str, resto: list[str], ctx: Contesto, rifiuta
                 return rifiuta(f"git stash {a} lavora su un commit qualunque o cambia branch")
             if "a" in _lettere_corte(a, "m"):
                 return rifiuta("git stash -a mette da parte anche i file ignorati da git, marcatore compreso")
+    if sub in ("reset", "stash"):
+        verdetto = _giudica_git_silenzioso(sub, resto, rifiuta)
+        if not verdetto.consentito:
+            return verdetto
     if sub not in _GIT_CON_RIFERIMENTI:
         return OK  # status, add, rm, mv, diff-files, help...: niente riferimenti
     storia = sub in _GIT_STORIA
@@ -1703,6 +1956,23 @@ def _nuova_cwd(argomenti: list[str], cwd_rel: str | None, ctx: Contesto) -> str 
     return "" if rel == "." else rel
 
 
+def _giudica_indirizzo_nel_comando(parola: str, ctx: Contesto, comando: str) -> Verdetto:
+    """In campagna, una parola di un comando che contiene `://`: passa solo se
+    `giudica_url` la ammette, cioe' solo se e' un indirizzo che WebFetch aprirebbe
+    (siti di articoli scientifici e Wikipedia). Serve, per esempio, a scrivere la
+    fonte di un'idea in un file (`echo https://arxiv.org/abs/... >> fonti.md`).
+    Se la parola e' `--opzione=indirizzo` o `nome=indirizzo` si giudica l'indirizzo;
+    altrimenti la parola intera (`-ohttps://...` non e' un indirizzo: si rifiuta)."""
+    cand = _candidato_percorso(parola, ctx.primo_livello, bersaglio=True)
+    indirizzo = cand if cand is not None and "://" in cand else parola
+    v = giudica_url(indirizzo, ctx)
+    if v.consentito:
+        return OK
+    return Verdetto(False, f"{comando!r} (l'indirizzo {indirizzo!r}: in campagna un indirizzo in un comando passa "
+                           f"solo se WebFetch lo aprirebbe, cioe' verso i siti di articoli scientifici e Wikipedia; "
+                           f"{v.oggetto})")
+
+
 def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdetto:
     """Giudica una riga di shell: i branch, i programmi, poi ogni percorso (espanso).
 
@@ -1711,9 +1981,12 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
     /dev/null guardiano.py` sfuggirebbe, perche' il nome nudo `guardiano.py` si
     giudicava dalla radice e li' non e' un percorso. Per lo stesso motivo, in campagna,
     un operando nudo (senza `/`) e' trattato come percorso quando segue una redirezione
-    o quando il programma scrive/cancella un file nominato (`_PROGRAMMI_BERSAGLIO`,
-    `git add/rm/mv/restore`). I comandi che cancellano o spostano (`_PROGRAMMI_DISTRUTTIVI`,
-    `find -delete`, `git rm/mv`) non possono colpire un bersaglio che CONTIENE un protetto.
+    o quando il programma scrive un file (ogni programma fuori da `_LETTORI`, i lettori
+    che scrivono di `_lettore_che_scrive`, `git add/rm/mv/restore` e gli altri
+    sottocomandi di `_GIT_SCRIVE`). I comandi che cancellano o spostano
+    (`_PROGRAMMI_DISTRUTTIVI`, `find -delete`, `git rm/mv`) non possono colpire un
+    bersaglio che CONTIENE un protetto. In campagna una parola con `://` e' un indirizzo
+    e passa solo se WebFetch lo aprirebbe (`_giudica_indirizzo_nel_comando`).
     """
     if ctx.campagna:
         # qualunque riferimento a un branch del protocollo che non sia il proprio
@@ -1733,22 +2006,25 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
             v = _giudica_programma(prog, argomenti, separatore, ctx, comando, profondita)
             if not v.consentito:
                 return v
-        scrive_di_norma = prog not in _LETTORI
+        scrive_di_norma = prog not in _LETTORI or _lettore_che_scrive(prog, argomenti)
         sub = ""
         if prog == "git":
             sub = next((a for a in argomenti if not a.startswith("-")), "")
             scrive_di_norma = sub in _GIT_SCRIVE
         # in campagna, un operando NUDO (senza `/`) e' un percorso quando segue una
-        # redirezione o quando il programma scrive/tocca un file nominato
+        # redirezione o quando il programma scrive/tocca un file nominato. Dal 10 ottobre
+        # 2026 vale per ogni programma che scrive, non solo per `_PROGRAMMI_BERSAGLIO`:
+        # `cd research/src && sed -i 's|a|b|' guardiano.py` (o `dd of=guardiano.py`)
+        # passava. Il nome si giudica solo se esiste nella cartella effettiva.
         bersaglio_operandi = ctx.campagna and (
-            prog in _PROGRAMMI_BERSAGLIO or (prog == "git" and sub in _GIT_BERSAGLIO))
+            scrive_di_norma or prog in _PROGRAMMI_BERSAGLIO or (prog == "git" and sub in _GIT_BERSAGLIO))
         # comandi che cancellano o spostano: non devono colpire un bersaglio che contiene un protetto
         distrugge = ctx.campagna and (
             prog in _PROGRAMMI_DISTRUTTIVI
             or (prog in _FIND and _find_distrugge(argomenti))
             or (prog == "git" and sub in _GIT_DISTRUTTIVI))
         # `sh -c '...'`: il comando interno si giudica come comando, in ogni modalita'
-        script = _script_di_shell(argomenti) if prog in _SHELL else None
+        script = _script_di_shell(argomenti, campagna=ctx.campagna) if prog in _SHELL else None
         if script is not None:
             if profondita >= _MAX_PROFONDITA:
                 return Verdetto(False, f"{comando!r} ({prog} -c annidato troppe volte)")
@@ -1774,8 +2050,16 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
             if parole is None:
                 return Verdetto(False, f"{comando!r} (il token {t!r} viene espanso dalla shell in modo imprevedibile)")
             for parola in parole:
+                if ctx.campagna and "://" in parola:
+                    # un indirizzo: passa solo se WebFetch lo aprirebbe (articoli scientifici,
+                    # Wikipedia), e non si giudica come percorso
+                    v = _giudica_indirizzo_nel_comando(parola, ctx, comando)
+                    if not v.consentito:
+                        return v
+                    continue
                 nudo_ammesso = dopo_redirezione or bersaglio_operandi
-                cand = _candidato_percorso(parola, ctx.primo_livello, bersaglio=nudo_ammesso)
+                cand = _candidato_percorso(parola, ctx.primo_livello, bersaglio=nudo_ammesso,
+                                           uguale_stretto=ctx.campagna)
                 if cand is None or (ctx.campagna and prog == "git" and cand in propri):
                     continue  # `--source=origin/<proprio branch>`: un riferimento, gia' giudicato
                 base = _rebase(cand, cwd_rel)
@@ -2007,8 +2291,9 @@ def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:
     # quando il guardiano ha gia' indicato la forma giusta (la storia dei cloni limitati, o
     # dove scrivere il messaggio di commit del gruppo) non ha senso chiedere all'utente: la
     # sessione usa la forma indicata. `lezioni/metodo.md` e PROTOCOLLO.md riga 272 (congelati)
-    # consigliano ancora la forma vecchia; la differenza resta aperta nel backlog.
-    autonomo = "shallow" in oggetto
+    # consigliano ancora la forma vecchia; la differenza resta aperta nel backlog. Lo stesso
+    # per `git reset`/`git stash` senza -q: il rifiuto dice la forma con -q.
+    autonomo = "shallow" in oggetto or _FORMA_SILENZIOSA in oggetto
     if ctx.gruppo and f"{_DATI_INSAMPLE}/{SIMBOLO_GRUPPO}" in oggetto:
         # `lezioni/metodo.md` consiglia `data/insample/<SIMBOLO>/` per i file fuori da git
         # (il messaggio di commit da passare con `git commit -F`): per il gruppo non esiste

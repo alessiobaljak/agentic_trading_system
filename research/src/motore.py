@@ -105,18 +105,32 @@ Costi
   delle posizioni e' presa al settlement e un ordine mandato all'apertura
   arriva dopo), settlement nello stesso istante dell'uscita per "chiudi", e
   settlement nella stessa barra di un'uscita per stop/target/liquidazione.
+
+Campagna di gruppo (campagne/GRUPPO/regole.md, sezione 13)
+---------------------------------------------------------
+* ``simula_baseline_casuale`` ha la chiave ``r_medio_per_seme`` (l'R medio di
+  ogni seme, ``None`` per le simulazioni vuote) e, con
+  ``rifiuta_poche_simulazioni=False``, non alza con meno di 2 simulazioni con
+  trade: per le campagne singole non cambia nulla.
+* ``simula_sfasamento_comune``: le strategie sfasate di una moneta (sezione 5,
+  punto 5, e sezione 9, punti 3-4), con i trade in ``TradeSfasato``.
+* ``metriche_di_gruppo``: le metriche dei trade sommati con le chiavi di
+  ``statistica.criterio_vault`` (sezione 9, punto 2).
+* ``posizioni_aperte_insieme``: il massimo di posizioni aperte insieme, per
+  direzione (sezione 8, punto 2).
 """
 
 from __future__ import annotations
 
 import math
 from bisect import bisect_right
+from collections.abc import Mapping as MappingABC
 from collections.abc import Sequence as SequenceABC
 from itertools import islice
 import operator
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
-from typing import Callable, Dict, List, Literal, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, Iterable, List, Literal, Mapping, NamedTuple, Optional, Sequence, Tuple, Union
 
 Direzione = Literal["long", "short"]
 Esito = Literal["stop", "target", "segnale", "liquidazione", "fine_dati"]
@@ -1388,3 +1402,177 @@ def buy_and_hold(candele: Sequence[Candela], parametri: Parametri, direzione: Di
     commissioni = parametri.commissione_per_lato * parametri.moltiplicatore_costi * (entrata + uscita)
     pnl = segno(direzione) * (uscita - entrata) - commissioni
     return pnl / entrata
+
+
+# ---------------------------------------------------------------------------
+# Campagna di gruppo: metriche dei trade sommati (campagne/GRUPPO/regole.md, sezioni 8, 9, 13)
+# ---------------------------------------------------------------------------
+
+
+def _campo(trade: object, nome: str):
+    """Il campo ``nome`` di un trade: attributo (``Trade``, ``TradeSfasato``) o chiave (dizionario da JSON).
+
+    Serve a ``metriche_di_gruppo`` e ``posizioni_aperte_insieme`` (``campagne/GRUPPO/regole.md``,
+    sezione 13), che ricevono i trade del candidato, delle sfasate o riletti dai file di ``trade/``.
+    """
+    if isinstance(trade, MappingABC):
+        return trade[nome]
+    return getattr(trade, nome)
+
+
+def metriche_di_gruppo(
+    trade_per_moneta: Mapping[str, Sequence[object]],
+    n_monete_nel_periodo: int,
+    capitale_per_moneta: float,
+    trade_migliori_tolti: int = 30,
+) -> Dict[str, object]:
+    """Le metriche dei trade sommati di tutte le monete (``campagne/GRUPPO/regole.md``, sezione 9, punto 2, e sezione 8, punto 1).
+
+    ``trade_per_moneta`` e' {simbolo: trade della moneta}, ogni moneta con il suo
+    capitale iniziale ``capitale_per_moneta`` (1.000 USDT, ``parametri.yaml``,
+    sezione 2, punto 8). I trade possono essere ``Trade`` del motore,
+    ``TradeSfasato`` delle sfasate o dizionari letti dal JSON: servono ``r``,
+    ``pnl``, ``ts_entrata`` e ``ts_uscita``. Le chiavi di ``criterio_vault``
+    (``profit_factor``, ``n_trade``, ``rendimento_totale``, ``r_medio``) ci
+    sono tutte: cosi' lo stesso dizionario giudica il candidato e ogni sfasata
+    del vault (sezione 9, punto 4).
+
+    Ordine fisso dei trade sommati (sezione 5, punto 1): per istante d'uscita,
+    poi per simbolo, poi per istante d'entrata; tutte le somme si fanno in
+    quell'ordine, quindi l'esito non cambia con l'ordine delle monete in
+    ``trade_per_moneta``. Con una moneta sola i numeri sono quelli di
+    ``calcola_metriche`` (stesso ordine, stesse somme).
+
+    * ``profit_factor``: somma dei pnl positivi / somma dei valori assoluti dei
+      pnl negativi, su tutti i trade di tutte le monete (sezione 9, punto 2.1);
+      senza perdite inf se c'e' un guadagno, 0 senza guadagni (come ``calcola_metriche``);
+    * ``n_trade``: i trade sommati (punto 2.2);
+    * ``pnl_totale``: la somma dei pnl in USDT (il «risultato totale» del punto 2.3);
+    * ``rendimento_totale`` = ``pnl_totale`` / ``capitale_totale``, con
+      ``capitale_totale`` = ``capitale_per_moneta`` x ``n_monete_nel_periodo``.
+      DICHIARATO: ``n_monete_nel_periodo`` e' il numero delle monete con almeno
+      una barra nel periodo giudicato, con o senza trade (lo sa chi chiama: i
+      trade non lo dicono). Il punto 2.3 guarda solo il segno, che non dipende
+      dal denominatore; il numero serve solo a riportarlo. ValueError se e'
+      minore delle monete con trade;
+    * ``r_medio``: la media semplice degli R di tutti i trade (0 senza trade,
+      come ``calcola_metriche``);
+    * ``r_medio_per_anno``: {anno d'uscita UTC: R medio dei trade usciti nell'anno};
+    * ``r_medio_senza_<k>_migliori`` (k = ``trade_migliori_tolti``, 30 per il
+      gruppo: ``parametri.yaml``, ``gruppo.fase4.trade_migliori_tolti``; sezione
+      6, punto 2.5): l'R medio senza i k trade con l'R piu' alto; None se non
+      resta nessun trade;
+    * ``drawdown_max``: la caduta massima dal picco, come frazione del picco,
+      sulla curva del capitale del gruppo = ``capitale_totale`` + pnl sommati in
+      ordine d'uscita (``drawdown_massimo``, positiva come in
+      ``calcola_metriche``). I trade che escono nello stesso istante, su monete
+      diverse, entrano nella curva insieme, in un punto solo: in quell'istante
+      non c'e' un prima e un dopo. ``drawdown_max_usdt`` e' la stessa caduta in USDT;
+    * ``monete_con_trade``, ``monete_nel_periodo``, ``capitale_totale``;
+    * ``per_moneta``: {simbolo: {``n_trade``, ``r_medio``}} per le monete con trade.
+    """
+    k = operator.index(trade_migliori_tolti)
+    if k < 0:
+        raise ValueError("trade_migliori_tolti non puo' essere negativo")
+    righe: List[Tuple[int, str, int, float, float]] = []  # (ts_uscita, simbolo, ts_entrata, r, pnl)
+    for simbolo in sorted(trade_per_moneta):
+        for t in trade_per_moneta[simbolo]:
+            righe.append((int(_campo(t, "ts_uscita")), str(simbolo), int(_campo(t, "ts_entrata")),
+                          float(_campo(t, "r")), float(_campo(t, "pnl"))))
+    righe.sort(key=lambda riga: riga[:3])
+    monete_con_trade = sorted({riga[1] for riga in righe})
+    n_monete = operator.index(n_monete_nel_periodo)
+    if n_monete < len(monete_con_trade):
+        raise ValueError(f"n_monete_nel_periodo = {n_monete}, ma le monete con trade sono {len(monete_con_trade)}")
+    capitale_totale = float(capitale_per_moneta) * n_monete
+
+    n = len(righe)
+    r_valori = [riga[3] for riga in righe]
+    pnl_valori = [riga[4] for riga in righe]
+    somma_vinti = sum(p for p in pnl_valori if p > 0)
+    somma_persi = -sum(p for p in pnl_valori if p < 0)
+    if somma_persi > 0:
+        profit_factor = somma_vinti / somma_persi
+    else:
+        profit_factor = math.inf if somma_vinti > 0 else 0.0
+    pnl_totale = sum(pnl_valori)
+
+    per_anno: Dict[int, List[float]] = {}
+    for riga in righe:
+        per_anno.setdefault(_anno(riga[0]), []).append(riga[3])
+    restanti = sorted(r_valori, reverse=True)[k:]
+
+    # curva del capitale del gruppo: un punto per istante d'uscita
+    curva: List[Tuple[int, float]] = [(righe[0][0] if righe else 0, capitale_totale)]
+    capitale = capitale_totale
+    j = 0
+    while j < n:
+        istante = righe[j][0]
+        somma_istante = 0.0
+        while j < n and righe[j][0] == istante:
+            somma_istante += righe[j][4]
+            j += 1
+        capitale += somma_istante
+        curva.append((istante, capitale))
+    picco = -math.inf
+    caduta_usdt = 0.0
+    for _, valore in curva:
+        picco = max(picco, valore)
+        caduta_usdt = max(caduta_usdt, picco - valore)
+
+    per_moneta: Dict[str, Dict[str, object]] = {}
+    for simbolo in monete_con_trade:
+        r_moneta = [riga[3] for riga in righe if riga[1] == simbolo]
+        per_moneta[simbolo] = {"n_trade": len(r_moneta), "r_medio": sum(r_moneta) / len(r_moneta)}
+
+    return {
+        "profit_factor": profit_factor,
+        "n_trade": n,
+        "pnl_totale": pnl_totale,
+        "rendimento_totale": pnl_totale / capitale_totale if capitale_totale > 0 else 0.0,
+        "r_medio": sum(r_valori) / n if n else 0.0,
+        "r_medio_per_anno": {anno: sum(valori) / len(valori) for anno, valori in sorted(per_anno.items())},
+        f"r_medio_senza_{k}_migliori": sum(restanti) / len(restanti) if restanti else None,
+        "drawdown_max": drawdown_massimo(curva),
+        "drawdown_max_usdt": caduta_usdt,
+        "monete_con_trade": len(monete_con_trade),
+        "monete_nel_periodo": n_monete,
+        "capitale_totale": capitale_totale,
+        "per_moneta": per_moneta,
+    }
+
+
+def posizioni_aperte_insieme(trade: Iterable[object]) -> Dict[str, int]:
+    """Il massimo di posizioni aperte nello stesso istante, per direzione (``campagne/GRUPPO/regole.md``, sezione 8, punto 2, e sezione 10, punto 3).
+
+    ``trade`` sono i trade sommati di tutte le monete, in una lista sola
+    (``Trade`` o dizionari con ``direzione``, ``ts_entrata``, ``ts_uscita``).
+    Una posizione e' aperta da ``ts_entrata`` compreso a ``ts_uscita`` escluso:
+    nello stesso istante le uscite vengono prima degli ingressi, come nel
+    motore («all'apertura: prima le chiusure da segnale, poi gli ingressi»).
+    Cosi' una posizione chiusa all'apertura di una barra e una aperta alla
+    stessa apertura non contano come aperte insieme. Serve alla consegna e al
+    paper: il bot tiene poche posizioni insieme (``config/regole_dimensione.md``).
+
+    Ritorna {``long``: massimo dei long, ``short``: massimo degli short,
+    ``totale``: massimo delle due direzioni insieme}. ValueError se un trade
+    esce prima di entrare o ha una direzione sconosciuta.
+    """
+    eventi: List[Tuple[int, int, str]] = []  # (istante, 0 = uscita / 1 = ingresso, direzione)
+    for t in trade:
+        direzione = _campo(t, "direzione")
+        if direzione not in ("long", "short"):
+            raise ValueError(f"direzione sconosciuta: {direzione!r}")
+        entrata, uscita = int(_campo(t, "ts_entrata")), int(_campo(t, "ts_uscita"))
+        if uscita < entrata:
+            raise ValueError(f"un trade esce ({uscita}) prima di entrare ({entrata})")
+        eventi.append((entrata, 1, direzione))
+        eventi.append((uscita, 0, direzione))
+    eventi.sort()
+    aperte = {"long": 0, "short": 0}
+    massimo = {"long": 0, "short": 0, "totale": 0}
+    for _, tipo, direzione in eventi:
+        aperte[direzione] += 1 if tipo == 1 else -1
+        massimo[direzione] = max(massimo[direzione], aperte[direzione])
+        massimo["totale"] = max(massimo["totale"], aperte["long"] + aperte["short"])
+    return massimo

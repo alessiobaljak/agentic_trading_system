@@ -515,3 +515,375 @@ def test_guardiano_registrato_in_settings():
     assert settings["permissions"]["deny"]
     assert "Bash(printenv*)" in settings["permissions"]["deny"]
     assert settings["permissions"]["allow"]
+
+
+# ===========================================================================
+# revisione del 10 ottobre 2026 (vale per OGNI campagna, una moneta o il gruppo:
+# per il gruppo vedi anche test_guardiano_gruppo.py, sezione K)
+# ===========================================================================
+
+#: i programmi di rete della revisione: in campagna si rifiutano tutti
+PROGRAMMI_RETE = (
+    "curl", "wget", "wget2", "aria2c", "http", "https", "httpie", "httpx", "xh", "curlie",
+    "lynx", "w3m", "links", "elinks", "nc", "ncat", "netcat", "socat", "telnet", "ftp", "sftp",
+    "scp", "ssh", "rsync", "openssl", "gh", "aws", "gsutil", "gcloud", "bq", "uv", "uvx",
+    "pip", "pip3", "pipx", "bun", "bunx", "npm", "npx", "pnpm", "yarn", "deno", "busybox",
+)
+#: ...e quelli installati nell'ambiente delle sessioni che scaricano pacchetti o parlano
+#: con la rete (`command -v`, 10 ott 2026), con le versioni numerate di pip
+PROGRAMMI_RETE_INSTALLATI = (
+    "go", "cargo", "rustup", "gem", "cpan", "composer", "corepack", "poetry", "mvn", "gradle",
+    "docker", "git-lfs", "playwright", "claude", "pip3.12", "pip3.11",
+)
+MOTIVO_RETE = ("apre la rete: in campagna i dati si scaricano solo con research/src/dati.py, "
+               "le pagine solo con WebFetch")
+
+
+@pytest.mark.parametrize("programma", PROGRAMMI_RETE + PROGRAMMI_RETE_INSTALLATI)
+def test_rete_programmi_vietati_in_campagna(campagna_btc, programma):
+    codice, err = _bash(campagna_btc, f"{programma} --help")
+    assert codice == 2, f"BUCO: {programma} consentito in campagna"
+    assert err.startswith(RIFIUTO), err
+    assert f"{programma} {MOTIVO_RETE}" in err, err
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        # i comandi della revisione (rev1, voce 23): passavano tutti, con e senza gruppo
+        "curl -s 'https://www.binance.com/fapi/v1/exchangeInfo?symbol=OCEANUSDT'",
+        "wget -qO- 'https://www.binance.com/fapi/v1/exchangeInfo?a=b'",
+        "curl -sI 'https://data.binance.vision/data/futures/um/monthly/klines/OCEANUSDT/1d/"
+        "OCEANUSDT-1d-2024-06.zip?a=1'",
+        "curl -s -o research/data/insample/BTCUSDT/x.zip 'https://data.binance.vision/data/futures/um/monthly/"
+        "klines/BTCUSDT/1d/BTCUSDT-1d-2025-06.zip?a=1'",
+        "curl -s 'https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?delimiter=%2F"
+        "&prefix=data%2Ffutures%2Fum%2Fmonthly%2Fklines%2F'",
+        "gh issue list",
+        "gh pr list",
+        "gh api 'repos/o/r/commits?sha=main'",
+        "gh api 'repos/o/r/contents/research?ref=research%2Fcampagna%2FBNBUSDT'",
+        "curl 'https://api.github.com/repos/o/r/commits?sha=main'",
+        "httpx 'https://www.binance.com/fapi/v1/exchangeInfo?a=b'",
+        "python3 -m pip download -d research/data/insample/BTCUSDT 'https://data.binance.vision/x.zip?a=1'",
+        "uvx --from httpie http 'www.binance.com/x?a=b'",
+        "bun -e 'fetch(1)'",
+        "npx -y qualcosa",
+        "nc -z www.binance.com 443",
+        "openssl s_client -connect www.binance.com:443",
+        # con il percorso assoluto e attraverso i prefissi e le shell
+        "/usr/bin/curl -s https://www.binance.com/x",
+        "/usr/local/bin/gh issue list",
+        "env curl www.binance.com",
+        "command curl www.binance.com",
+        "exec curl www.binance.com",
+        "nice curl www.binance.com",
+        "nice -n 10 curl www.binance.com",
+        "timeout 5 wget www.binance.com",
+        "timeout -s KILL 5 wget www.binance.com",
+        "nohup curl www.binance.com",
+        "nohup curl www.binance.com &",
+        "time curl www.binance.com",
+        "stdbuf -o0 curl www.binance.com",
+        "sudo curl www.binance.com",
+        "xargs curl < research/campagne/BTCUSDT/indirizzi.txt",
+        "cat research/campagne/BTCUSDT/indirizzi.txt | xargs wget",
+        "sh -c 'curl www.binance.com'",
+        "bash -c \"wget www.binance.com\"",
+        "bash -lc 'curl www.binance.com'",
+        "bash -o pipefail -c 'curl www.binance.com'",
+        "sh -c \"sh -c 'nc -z www.binance.com 443'\"",
+        "echo x && curl www.binance.com",
+        "true; wget www.binance.com",
+        "(curl www.binance.com)",
+        "cat research/campagne/BTCUSDT/x | curl -d @- www.binance.com",
+        "find research/campagne/BTCUSDT -exec curl www.binance.com \\;",
+        "find research/campagne/BTCUSDT -name x -exec sh -c 'wget www.binance.com' \\;",
+        # programmi che lanciano il comando che segue senza essere prefissi trasparenti
+        "setsid curl www.binance.com",
+        "script -qc 'curl www.binance.com' /dev/null",
+        "watch -n 1 curl www.binance.com",
+        "flock research/campagne/BTCUSDT/x curl www.binance.com",
+        "strace -f curl www.binance.com",
+        "taskset 1 curl www.binance.com",
+    ],
+)
+def test_rete_comandi_rifiutati_in_campagna(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, f"BUCO: {comando!r} consentito in campagna"
+    assert err.startswith(RIFIUTO), err
+
+
+@pytest.mark.parametrize("comando", [
+    "curl -s 'https://www.binance.com/fapi/v1/exchangeInfo?symbol=OCEANUSDT'",
+    "wget -qO- 'https://www.binance.com/fapi/v1/exchangeInfo?a=b'",
+    "gh issue list",
+    "python3 -m pip list",
+    "echo https://github.com/x/y",
+    "setsid curl www.binance.com",
+])
+def test_rete_coordinamento_e_senza_marcatore_come_prima(coordinamento, comando):
+    """Fuori dalla campagna non cambia nulla."""
+    assert _bash(coordinamento, comando) == (0, "")
+    _marcatore(coordinamento, None)
+    assert _bash(coordinamento, comando) == (0, "")
+
+
+# ---------------------------------------------------------------------------
+# interpreti: con -m solo pytest; niente codice da stdin
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "python3 -m pip list",
+        "python -m pip download x",
+        "python3 -mpip list",
+        "python3 -Bm pip list",
+        "python3 -B -m pip list",
+        "python3 -I -m http.server",
+        "python3 -m http.server 8000",
+        "python3 -m urllib.request https://www.binance.com",
+        "python3 -m uv pip install x",
+        "python3.12 -m pip list",
+        "pypy3 -m pip list",
+        "python3 -m pytest.__main__",
+        "python3 -m",
+        "python3 -W ignore -m pip list",
+        # codice in linea o da stdin, anche con le lettere unite o un valore di -W/-X
+        "python3 -Ic 'print(1)'",
+        "python3 -Bc 'print(1)'",
+        "python3 -i research/src/motore.py",
+        "python3 /dev/stdin",
+        "python3 /dev/fd/0",
+        "python3 -W ignore",
+        "python3 -X importtime",
+        "PYTHONINSPECT=1 python3 research/src/motore.py",
+        "bash /dev/stdin",
+        "bash -s",
+        "bash -s x",
+        "sh -",
+        "bash -o pipefail",
+        "echo 'curl www.binance.com' | bash /dev/stdin",
+    ],
+)
+def test_interpreti_m_diverso_da_pytest_e_stdin_rifiutati(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, f"BUCO: {comando!r} consentito in campagna"
+    assert err.startswith(RIFIUTO), err
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "python -m pytest research/src/tests -q -p no:cacheprovider",
+        "python3 -m pytest research/src/tests/test_guardiano.py -q -p no:cacheprovider",
+        # i comandi dei due messaggi di apertura (research/apertura/campagna.md e gruppo.md)
+        "python -m pytest research/src/tests/test_guardiano.py research/src/tests/test_guardiano_4_4.py "
+        "-q -p no:cacheprovider",
+        "python -m pytest research/src/tests/test_guardiano.py research/src/tests/test_guardiano_4_4.py "
+        "research/src/tests/test_guardiano_gruppo.py -q -p no:cacheprovider",
+        "python3 -mpytest -q research/src/tests",
+        "python3 -B -m pytest -q research/src/tests",
+        "python3 -X importtime -W ignore -m pytest -q research/src/tests",
+        # dopo lo script, -m e -c sono argomenti dello script
+        "python3 research/src/motore.py -m pip",
+        "python3 -W ignore research/src/motore.py",
+        "python3 -u research/src/motore.py",
+        "python3 -V",
+        "python3 --version",
+        "bash research/campagne/BTCUSDT/x.sh",
+        "bash -x research/campagne/BTCUSDT/x.sh",
+        "bash -euo pipefail research/campagne/BTCUSDT/x.sh",
+    ],
+)
+def test_interpreti_pytest_e_script_ammessi(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 0, err
+
+
+def test_interpreti_m_in_coordinamento_come_prima(coordinamento):
+    for comando in ("python3 -m pip list", "python3 -Ic 'print(1)'", "python3 /dev/stdin"):
+        assert _bash(coordinamento, comando) == (0, ""), comando
+
+
+def test_opzioni_interprete_si_leggono_come_python():
+    from research.src import guardiano as g
+
+    assert g._opzioni_interprete(["-m", "pytest", "-q"]) == ("m", "pytest", None)
+    assert g._opzioni_interprete(["-mpytest"]) == ("m", "pytest", None)
+    assert g._opzioni_interprete(["-Bm", "pip"]) == ("Bm", "pip", None)
+    assert g._opzioni_interprete(["-W", "ignore", "x.py", "-m", "pip"]) == ("W", None, "x.py")
+    assert g._opzioni_interprete(["-Wignore", "-X", "importtime", "x.py"]) == ("WX", None, "x.py")
+    assert g._opzioni_interprete(["-Ic", "print(1)"])[0] == "Ic"
+    assert g._opzioni_interprete(["--check-hash-based-pycs", "always", "x.py"]) == ("", None, "x.py")
+    assert g._opzioni_interprete(["-B"]) == ("B", None, None)
+
+
+# ---------------------------------------------------------------------------
+# il `=`: si spezza solo dopo un'opzione o un nome di variabile
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "comando, atteso",
+    [
+        # prima si giudicava solo cio' che segue il `=` (`b`, `OCEANUSDT`), che non e' un percorso
+        ("cat research/campagne/ETHUSDT/a=b", 2),
+        ("cat docs/a=b", 2),
+        ("echo x > research/campagne/ETHUSDT/a=b", 2),
+        ("cat research/campagne/BTCUSDT/a=b", 0),
+        # gli indirizzi: passano solo quelli che WebFetch aprirebbe
+        ("echo 'https://www.binance.com/fapi/v1/exchangeInfo?symbol=OCEANUSDT'", 2),
+        ("echo www.binance.com/fapi/v1/exchangeInfo?a=b", 2),
+        ("echo --url=https://www.binance.com/x", 2),
+        ("echo -ohttps://www.binance.com/x", 2),
+        ("echo https://github.com/o/r >> research/campagne/BTCUSDT/fonti.md", 2),
+        ("echo 'https://arxiv.org/abs/1?url=https://github.com/x' >> research/campagne/BTCUSDT/fonti.md", 2),
+        ("echo https://arxiv.org/abs/1234.5678 >> research/campagne/BTCUSDT/fonti.md", 0),
+        ("echo 'https://en.wikipedia.org/wiki/Momentum_(finance)' >> research/campagne/BTCUSDT/fonti.md", 0),
+        ("echo --fonte=https://doi.org/10.1016/j.jfineco.2011.11.003 >> research/campagne/BTCUSDT/fonti.md", 0),
+        # cio' che si spezzava e deve continuare a spezzarsi
+        ("python research/src/dati.py --uscita=research/data/insample/BTCUSDT", 0),
+        ("python research/src/dati.py --uscita=research/data/insample/ETHUSDT", 2),
+        ("python3 research/src/motore.py --soglia=0.5", 0),
+        ("dd if=research/data/insample/BTCUSDT/a of=research/data/insample/BTCUSDT/x bs=1 count=0", 0),
+        ("dd of=research/data/insample/BTCUSDT/x", 0),
+        ("dd of=research/campagne/ETHUSDT/x", 2),
+        ("PYTHONHASHSEED=0 python3 script.py", 0),
+        ("PYTHONHASHSEED=0 python3 research/src/motore.py", 0),
+        ("git log --format='%h %cI' -- research/campagne/BTCUSDT/", 0),
+    ],
+)
+def test_uguale_e_indirizzi_in_campagna(campagna_btc, comando, atteso):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == atteso, err
+
+
+def test_candidato_percorso_spezza_solo_dopo_opzione_o_variabile():
+    from research.src import guardiano as g
+
+    vuoto = frozenset()
+    assert g._candidato_percorso("--uscita=research/x", vuoto) == "research/x"
+    assert g._candidato_percorso("-o=research/x", vuoto) == "research/x"
+    assert g._candidato_percorso("of=research/x", vuoto) == "research/x"
+    assert g._candidato_percorso("PYTHONHASHSEED=0", vuoto) is None
+    assert g._candidato_percorso("--format=%h %cI", vuoto) is None
+    url = "https://www.binance.com/fapi/v1/exchangeInfo?symbol=OCEANUSDT"
+    assert g._candidato_percorso(url, vuoto) == url
+    assert g._candidato_percorso("www.binance.com/x?a=b", vuoto) == "www.binance.com/x?a=b"
+    assert g._candidato_percorso("research/campagne/ETHUSDT/a=b", vuoto) == "research/campagne/ETHUSDT/a=b"
+    assert g._candidato_percorso("a.b=c/d", vuoto) == "a.b=c/d"
+    # la regola di prima, che il coordinamento tiene
+    assert g._candidato_percorso(url, vuoto, uguale_stretto=False) is None
+    assert g._candidato_percorso("research/campagne/ETHUSDT/a=b", vuoto, uguale_stretto=False) is None
+
+
+# ---------------------------------------------------------------------------
+# research/config in sola lettura (una moneta; per il gruppo vedi test_guardiano_gruppo.py)
+# ---------------------------------------------------------------------------
+
+FILE_CONFIG = ("research/config/parametri.yaml", "research/config/regole_dimensione.md")
+
+_SCRITTURE_CONFIG = [
+    ("Write", lambda p: {"file_path": p, "content": "x"}),
+    ("Edit", lambda p: {"file_path": p, "old_string": "a", "new_string": "b"}),
+    ("MultiEdit", lambda p: {"file_path": p, "edits": [{"old_string": "a", "new_string": "b"}]}),
+    ("Bash", lambda p: {"command": f"cp research/campagne/BTCUSDT/log.jsonl {p}"}),
+    ("Bash", lambda p: {"command": f"sed -i 's|a|b|' {p}"}),
+    ("Bash", lambda p: {"command": f"sed -i -e 's|a|b|' {p}"}),
+    ("Bash", lambda p: {"command": f"echo x > {p}"}),
+    ("Bash", lambda p: {"command": f"echo x >> {p}"}),
+    ("Bash", lambda p: {"command": f"echo x | tee {p}"}),
+    ("Bash", lambda p: {"command": f"echo x | tee -a {p}"}),
+    ("Bash", lambda p: {"command": f"rm {p}"}),
+    ("Bash", lambda p: {"command": f"rm -f {p}"}),
+    ("Bash", lambda p: {"command": f"mv {p} research/campagne/BTCUSDT/vecchio"}),
+    ("Bash", lambda p: {"command": f"mv research/campagne/BTCUSDT/log.jsonl {p}"}),
+    ("Bash", lambda p: {"command": f"touch {p}"}),
+    ("Bash", lambda p: {"command": f"truncate -s 0 {p}"}),
+    ("Bash", lambda p: {"command": f"dd of={p}"}),
+    ("Bash", lambda p: {"command": f"sort -o {p} {p}"}),
+    ("Bash", lambda p: {"command": f"uniq research/campagne/BTCUSDT/log.jsonl {p}"}),
+    ("Bash", lambda p: {"command": f"git rm {p}"}),
+    ("Bash", lambda p: {"command": f"git restore {p}"}),
+    ("Bash", lambda p: {"command": f"cd research/config && sed -i 's|a|b|' {os.path.basename(p)}"}),
+    ("Bash", lambda p: {"command": f"cd research/config && echo x > {os.path.basename(p)}"}),
+    ("Bash", lambda p: {"command": f"cd research/config && rm {os.path.basename(p)}"}),
+]
+
+
+def _config_sul_disco(radice):
+    for percorso in FILE_CONFIG:
+        (radice / percorso).write_text("a\n")
+
+
+@pytest.mark.parametrize("percorso", FILE_CONFIG)
+@pytest.mark.parametrize("strumento, ingresso", _SCRITTURE_CONFIG,
+                         ids=[f"{s}-{i}" for i, (s, _) in enumerate(_SCRITTURE_CONFIG)])
+def test_config_in_sola_lettura_in_campagna(campagna_btc, percorso, strumento, ingresso):
+    _config_sul_disco(campagna_btc)
+    codice, err = _esegui(campagna_btc, strumento, ingresso(percorso))
+    assert codice == 2, f"BUCO: {strumento} {ingresso(percorso)} consentito"
+    assert err.startswith(RIFIUTO), err
+
+
+@pytest.mark.parametrize("comando", ["rm -rf research/config", "rm -r research/config/", "mv research/config x",
+                                     "find research/config -delete", "cp -r research/campagne/BTCUSDT research/config"])
+def test_config_cartella_intera_in_sola_lettura(campagna_btc, comando):
+    _config_sul_disco(campagna_btc)
+    assert _bash(campagna_btc, comando)[0] == 2
+
+
+@pytest.mark.parametrize("percorso", FILE_CONFIG)
+def test_config_si_legge_in_campagna(campagna_btc, percorso):
+    _config_sul_disco(campagna_btc)
+    assert _read(campagna_btc, percorso)[0] == 0
+    for comando in (f"cat {percorso}", "ls research/config", "grep -r gruppo research/config",
+                    f"head -5 {percorso}", f"sha256sum {percorso}", f"sort {percorso}",
+                    f"diff {percorso} research/campagne/BTCUSDT/log.jsonl"):
+        codice, err = _bash(campagna_btc, comando)
+        assert codice == 0, f"{comando}: {err}"
+    assert _esegui(campagna_btc, "Grep", {"pattern": "x", "path": "research/config"})[0] == 0
+    assert _esegui(campagna_btc, "Glob", {"pattern": "*", "path": "research/config"})[0] == 0
+
+
+def test_config_in_coordinamento_si_scrive_come_prima(coordinamento):
+    _config_sul_disco(coordinamento)
+    for percorso in FILE_CONFIG:
+        assert _esegui(coordinamento, "Write", {"file_path": percorso, "content": "x"}) == (0, "")
+        assert _bash(coordinamento, f"sed -i 's|a|b|' {percorso}") == (0, "")
+
+
+# ---------------------------------------------------------------------------
+# cio' che la sessione fa davvero resta ammesso (comandi senza git; quelli con git,
+# in un repo vero, in test_guardiano_4_4.py e test_guardiano_gruppo.py)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "python3 research/campagne/BTCUSDT/codice/x.py",
+        "python3 research/campagne/BTCUSDT/codice/x.py --simbolo BTCUSDT --uscita=research/campagne/BTCUSDT/r.json",
+        # (`2>&1` resta rifiutato come prima: lezioni/metodo.md lo sa)
+        "nohup python3 research/campagne/BTCUSDT/codice/x.py > research/campagne/BTCUSDT/x.log &",
+        "python -m pytest research/src/tests -q -p no:cacheprovider",
+        "dd of=research/data/insample/BTCUSDT/x",
+        "PYTHONHASHSEED=0 python3 script.py",
+        "date -u",
+        "ls research/campagne/BTCUSDT",
+        "cat research/lezioni/metodo.md",
+        "sha256sum research/data/insample/BTCUSDT/x.zip",
+        "echo nota >> research/campagne/BTCUSDT/ipotesi.md",
+        "find research/campagne/BTCUSDT -name '*.pyc' -delete",
+        "find research/campagne/BTCUSDT/codice -name '*.py' -exec python3 {} \\;",
+        "sort -o research/campagne/BTCUSDT/ordinato.txt research/campagne/BTCUSDT/log.jsonl",
+        "cd research/campagne/BTCUSDT && sed -i 's|a|b|' log.jsonl",
+        "cd research/data/insample/BTCUSDT && touch nuovo.csv",
+    ],
+)
+def test_comandi_della_sessione_ammessi(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 0, err

@@ -97,6 +97,7 @@ def _radice_gruppo(radice: Path, marcatore=None) -> Path:
     (radice / "research" / "config").mkdir(parents=True)
     shutil.copy(VIETATI_REPO, radice / "research" / "config" / "percorsi_vietati.txt")
     _scrivi(radice, "research/config/parametri.yaml", "gruppo: {}\n")
+    _scrivi(radice, "research/config/regole_dimensione.md", "regole di dimensione\n")
     _scrivi(radice, "research/src/motore.py", "# motore\n")
     # i protetti devono ESISTERE sul disco: i comandi che scrivono un nome nudo
     # (cp/rm/mv dopo un cd) si giudicano solo se il bersaglio esiste nella cartella
@@ -1337,3 +1338,259 @@ def test_J_un_rifiuto_normale_chiede_ancora_all_utente(gruppo: Path):
     """La formula «chiedi all'utente» resta per i rifiuti senza un'alternativa indicata."""
     codice, errore = _read(gruppo, "research/data/insample/ETHUSDT/x.zip")
     assert codice == 2 and "chiedi all'utente" in errore, errore
+
+
+# ---------------------------------------------------------------------------
+# K. seconda revisione del 10 ottobre 2026 (rev1, voci 23 e 26): la rete, gli
+#    interpreti con -m, il `=`, research/config, git pull --ff-only, reset e stash.
+#    Valgono per ogni campagna (test_guardiano.py, sezione «revisione del 10
+#    ottobre 2026»); qui con il marcatore GRUPPO e, dove serve, con una moneta sola.
+# ---------------------------------------------------------------------------
+
+_MOTIVO_RETE = ("apre la rete: in campagna i dati si scaricano solo con research/src/dati.py, "
+                "le pagine solo con WebFetch")
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        # i sei comandi della revisione: passavano con il marcatore GRUPPO, in HEAD e nel working tree
+        "curl -s 'https://www.binance.com/fapi/v1/exchangeInfo?symbol=OCEANUSDT'",
+        "wget -qO- 'https://www.binance.com/fapi/v1/exchangeInfo?a=b'",
+        "curl -sI 'https://data.binance.vision/data/futures/um/monthly/klines/OCEANUSDT/1d/"
+        "OCEANUSDT-1d-2024-06.zip?a=1'",
+        "curl -s -o research/data/insample/OCEANUSDT/x.zip 'https://data.binance.vision/data/futures/um/monthly/"
+        "klines/OCEANUSDT/1d/OCEANUSDT-1d-2025-06.zip?a=1'",
+        "curl -s -o research/data/insample/BTCUSDT/x.zip 'https://data.binance.vision/data/futures/um/monthly/"
+        "klines/BTCUSDT/1d/BTCUSDT-1d-2025-06.zip?a=1'",
+        "curl -s 'https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?delimiter=%2F"
+        "&prefix=data%2Ffutures%2Fum%2Fmonthly%2Fklines%2F'",
+        # e quelli che la verifica ha aggiunto
+        "gh issue list",
+        "gh api 'repos/o/r/contents/research?ref=research%2Fcampagna%2FBNBUSDT'",
+        "httpx 'https://www.binance.com/fapi/v1/exchangeInfo?a=b'",
+        "python3 -m pip download -d research/data/insample/BTCUSDT 'https://data.binance.vision/x.zip?a=1'",
+        "uvx --from httpie http 'www.binance.com/x?a=b'",
+        "nc -z www.binance.com 443",
+        "/usr/bin/curl www.binance.com",
+        "env wget www.binance.com",
+        "timeout 60 curl www.binance.com",
+        "nohup wget www.binance.com &",
+        "bash -c 'curl www.binance.com'",
+        "find research/campagne/GRUPPO -exec curl www.binance.com \\;",
+    ],
+)
+def test_K_rete_rifiutata_nel_gruppo(gruppo: Path, comando: str):
+    _rifiutato(_bash(gruppo, comando))
+
+
+@pytest.mark.parametrize("programma", sorted(g._PROGRAMMI_RETE))
+def test_K_ogni_programma_di_rete_rifiutato_nel_gruppo(gruppo: Path, programma: str):
+    codice, errore = _bash(gruppo, f"{programma} www.binance.com")
+    _rifiutato((codice, errore))
+    assert f"{programma} {_MOTIVO_RETE}" in errore, errore
+
+
+@pytest.mark.parametrize("comando, atteso", [
+    ("python3 -m pip list", 2),
+    ("python -m http.server", 2),
+    ("python3 -mpip install x", 2),
+    ("python3 -Ic 'print(1)'", 2),
+    ("python -m pytest research/src/tests/test_guardiano.py research/src/tests/test_guardiano_4_4.py "
+     "research/src/tests/test_guardiano_gruppo.py -q -p no:cacheprovider", 0),
+    ("python -m pytest research/src/tests -q -p no:cacheprovider", 0),
+    ("python3 research/campagne/GRUPPO/codice/strategia.py", 0),
+    ("PYTHONHASHSEED=0 python3 research/campagne/GRUPPO/codice/strategia.py", 0),
+])
+def test_K_interpreti_nel_gruppo(gruppo: Path, comando: str, atteso: int):
+    codice, errore = _bash(gruppo, comando)
+    assert codice == atteso, errore
+
+
+@pytest.mark.parametrize("comando, atteso", [
+    ("cat research/campagne/ETHUSDT/a=b", 2),
+    ("cat research/data/insample/ETHUSDT/a=b", 2),
+    ("echo 'https://www.binance.com/fapi/v1/exchangeInfo?symbol=OCEANUSDT'", 2),
+    ("echo https://arxiv.org/abs/1234.5678 >> research/campagne/GRUPPO/fonti.md", 0),
+    ("dd of=research/data/insample/BTCUSDT/x", 0),
+    ("dd of=research/data/insample/ETHUSDT/x", 2),
+    ("cat research/campagne/GRUPPO/a=b", 0),
+])
+def test_K_uguale_e_indirizzi_nel_gruppo(gruppo: Path, comando: str, atteso: int):
+    codice, errore = _bash(gruppo, comando)
+    assert codice == atteso, errore
+
+
+_FILE_CONFIG = ("research/config/parametri.yaml", "research/config/regole_dimensione.md")
+_SCRITTURE_CONFIG = [
+    ("Write", lambda p: {"file_path": p, "content": "gruppo: {minimo_trade: 1}\n"}),
+    ("Edit", lambda p: {"file_path": p, "old_string": "gruppo", "new_string": "x"}),
+    ("MultiEdit", lambda p: {"file_path": p, "edits": [{"old_string": "gruppo", "new_string": "x"}]}),
+    ("Bash", lambda p: {"command": f"cp research/campagne/GRUPPO/ipotesi.md {p}"}),
+    ("Bash", lambda p: {"command": f"sed -i -e 's|a|b|' {p}"}),
+    ("Bash", lambda p: {"command": f"echo x > {p}"}),
+    ("Bash", lambda p: {"command": f"echo x >> {p}"}),
+    ("Bash", lambda p: {"command": f"echo x | tee {p}"}),
+    ("Bash", lambda p: {"command": f"rm {p}"}),
+    ("Bash", lambda p: {"command": f"mv {p} research/campagne/GRUPPO/vecchio"}),
+    ("Bash", lambda p: {"command": f"mv research/campagne/GRUPPO/ipotesi.md {p}"}),
+    ("Bash", lambda p: {"command": f"cd research/config && sed -i 's|a|b|' {p.rsplit('/', 1)[1]}"}),
+    ("Bash", lambda p: {"command": f"cd research/config && echo x > {p.rsplit('/', 1)[1]}"}),
+]
+
+
+@pytest.mark.parametrize("percorso", _FILE_CONFIG)
+@pytest.mark.parametrize("strumento, ingresso", _SCRITTURE_CONFIG,
+                         ids=[f"{s}-{i}" for i, (s, _) in enumerate(_SCRITTURE_CONFIG)])
+def test_K_config_in_sola_lettura_nel_gruppo(gruppo: Path, percorso: str, strumento: str, ingresso):
+    """`parametri.yaml` ha la sezione `gruppo` con i numeri dell'esame, che la sessione legge:
+    con un Edit cambierebbe il proprio esame (rev1, voce 26)."""
+    _rifiutato(_esegui(gruppo, strumento, ingresso(percorso)))
+
+
+@pytest.mark.parametrize("strumento, ingresso", _SCRITTURE_CONFIG,
+                         ids=[f"{s}-{i}" for i, (s, _) in enumerate(_SCRITTURE_CONFIG)])
+def test_K_config_in_sola_lettura_per_una_moneta(tmp_path_factory, strumento: str, ingresso):
+    radice = _radice_gruppo(tmp_path_factory.mktemp("config_sol") / "repo", {"tipo": "campagna", "simbolo": "SOLUSDT"})
+    for percorso in _FILE_CONFIG:
+        _rifiutato(_esegui(radice, strumento, ingresso(percorso)), "sessione campagna SOLUSDT")
+    assert _bash(radice, "rm -rf research/config")[0] == 2
+    assert _read(radice, "research/config/parametri.yaml")[0] == 0
+
+
+@pytest.mark.parametrize("comando", ["rm -rf research/config", "rm -r research/config/", "mv research/config x"])
+def test_K_config_cartella_intera_nel_gruppo(gruppo: Path, comando: str):
+    _rifiutato(_bash(gruppo, comando))
+
+
+@pytest.mark.parametrize("percorso", _FILE_CONFIG)
+def test_K_config_si_legge_nel_gruppo(gruppo: Path, percorso: str):
+    assert _read(gruppo, percorso)[0] == 0
+    for comando in (f"cat {percorso}", "ls research/config", "grep -r gruppo research/config"):
+        codice, errore = _bash(gruppo, comando)
+        assert codice == 0, f"{comando}: {errore}"
+
+
+def test_K_config_e_protetta_per_ogni_campagna():
+    for percorso in _FILE_CONFIG + ("research/config", "research/config/percorsi_vietati.txt",
+                                    "research/config/nuovo.yaml"):
+        assert g.e_protetto(percorso), percorso
+    assert not g.e_protetto("research/configurazione/x")
+
+
+def test_K_pull_ff_only_del_proprio_branch_ammesso_e_funzionante(completa: Path):
+    """Regole.md, sezione 7, punto 2, e il messaggio di apertura: prima della validazione la
+    sessione fa `git pull --ff-only origin research/campagna/GRUPPO` e cerca il via libera,
+    che il coordinamento ha appena spinto sul branch."""
+    coordinamento = completa.parent / "coordinamento"
+    assert _git(coordinamento, "branch", "--show-current") == PROPRIO
+    _scrivi(coordinamento, "research/campagne/GRUPPO/via_libera_validazione.md", "via libera\n")
+    _commit(coordinamento, "coordinamento: via libera alla validazione")
+    _git(coordinamento, "push", "-q", "origin", "HEAD")
+    for comando in (f"git pull --ff-only origin {PROPRIO}", f"git pull -q --ff-only origin {PROPRIO}"):
+        codice, errore = _bash(completa, comando)
+        assert codice == 0, f"{comando}: {errore}"
+    codice, uscita = _bash_vero_esito(completa, f"git pull --ff-only origin {PROPRIO}")
+    assert codice == 0, uscita
+    for riservato in RISERVATI:
+        assert riservato not in uscita, f"git pull --ff-only stampa {riservato}"
+    assert (completa / "research/campagne/GRUPPO/via_libera_validazione.md").read_text() == "via libera\n"
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "git pull --ff-only",
+        "git pull --ff-only origin",
+        "git pull --ff-only origin main",
+        "git pull --ff-only origin HEAD",
+        "git pull --ff-only origin research/campagna/BTCUSDT",
+        "git pull --ff-only origin research/archivio/campagna/GRUPPO",
+        "git pull --ff-only origin research/coordinamento",
+        "git pull --ff-only origin refs/heads/main",
+        "git pull --ff-only origin 'research%2Fcampagna%2FBTCUSDT'",
+        f"git pull --ff-only origin {PROPRIO} main",
+        f"git pull --ff-only origin {PROPRIO}:main",
+        f"git pull --ff-only --all origin {PROPRIO}",
+        f"git pull --ff-only ../origine.git {PROPRIO}",
+        f"git pull --ff-only https://github.com/o/r {PROPRIO}",
+        "git pull",
+        "git pull origin main",
+        "git fetch",
+        "git fetch --all",
+        "git fetch origin main",
+        "git fetch origin refs/heads/research/campagna/BTCUSDT",
+        f"git fetch origin {PROPRIO} main",
+        "git fetch --ff-only origin main",
+    ],
+)
+def test_K_pull_e_fetch_di_altri_branch_rifiutati(completa_condivisa: Path, comando: str):
+    _rifiutato(_bash(completa_condivisa, comando))
+
+
+@pytest.mark.parametrize("comando, atteso", [
+    ("git reset --hard", 2),
+    ("git reset -- research/campagne/GRUPPO/ipotesi.md", 2),
+    ("git stash", 2),
+    ("git stash list", 2),
+    ("git stash list -q", 2),
+    ("git reset -q --hard", 0),
+    ("git reset --quiet -- research/campagne/GRUPPO/ipotesi.md", 0),
+    ("git stash -q", 0),
+    ("git stash push -q -m 'prima di provare' -- research/campagne/GRUPPO/", 0),
+    ("git stash pop -q", 0),
+])
+def test_K_reset_e_stash_solo_con_q_nel_gruppo(completa_condivisa: Path, comando: str, atteso: int):
+    codice, errore = _bash(completa_condivisa, comando)
+    assert codice == atteso, errore
+    if atteso == 2 and "list" not in comando:
+        assert "aggiungi -q (o --quiet)" in errore and "non serve chiedere all'utente" in errore, errore
+
+
+def test_K_comandi_della_sessione_di_gruppo_ammessi_e_funzionanti(completa: Path):
+    """I comandi che regole.md, lezioni/metodo.md e il messaggio di apertura (research/apertura/
+    gruppo.md, branch di coordinamento) suggeriscono: il guardiano li ammette, e git, eseguito
+    davvero, li fa senza errori e senza stampare nulla di riservato."""
+    _scrivi(completa, "research/campagne/GRUPPO/ipotesi.md", "ipotesi\n")
+    _scrivi(completa, "research/campagne/GRUPPO/codice/x.py", "print('ok')\n")
+    _scrivi(completa, "research/data/insample/BTCUSDT/messaggio.txt", "campagna di gruppo: ipotesi\n")
+    eseguiti = [
+        f"git fetch origin {PROPRIO}",
+        "git branch --show-current",
+        "git status",
+        "date -u",
+        "python3 research/campagne/GRUPPO/codice/x.py",
+        "PYTHONHASHSEED=0 python3 research/campagne/GRUPPO/codice/x.py",
+        "git add research/campagne/GRUPPO/ipotesi.md research/campagne/GRUPPO/codice/x.py",
+        "git diff HEAD -- research/campagne/GRUPPO/",
+        "git diff --cached -- research/campagne/GRUPPO/",
+        "git commit -F research/data/insample/BTCUSDT/messaggio.txt",
+        f"git push -u origin {PROPRIO}",
+        f"git pull origin {PROPRIO}",
+        f"git pull --ff-only origin {PROPRIO}",
+        "git log --format='%h %cI' -- research/campagne/GRUPPO/",
+        f"git log --reverse --format=%cI origin/{PROPRIO} -- research/campagne/GRUPPO/log.jsonl",
+        "git log -- research/campagne/GRUPPO/",
+        "git diff",
+    ]
+    for comando in eseguiti:
+        codice, errore = _bash(completa, comando)
+        assert codice == 0, f"{comando}: {errore}"
+        codice, uscita = _bash_vero_esito(completa, comando)
+        assert codice == 0, f"{comando}: {uscita}"
+        for riservato in RISERVATI:
+            assert riservato not in uscita, f"{comando!r} stampa {riservato}"
+    # questi solo giudicati: `dd` aspetterebbe stdin, pytest qui non ha i test
+    for comando in ("dd of=research/data/insample/BTCUSDT/x",
+                    "python -m pytest research/src/tests -q -p no:cacheprovider",
+                    "python -m pytest research/src/tests/test_guardiano.py research/src/tests/test_guardiano_4_4.py "
+                    "research/src/tests/test_guardiano_gruppo.py -q -p no:cacheprovider"):
+        codice, errore = _bash(completa, comando)
+        assert codice == 0, f"{comando}: {errore}"
+
+
+def test_K_nella_storia_limitata_il_log_con_date_e_hash_resta_ammesso(limitata: Path):
+    comando = "git log --format='%h %cI' -- research/campagne/GRUPPO/"
+    assert _bash(limitata, comando)[0] == 0
+    codice, uscita = _bash_vero_esito(limitata, comando)
+    assert codice == 0 and not any(r in uscita for r in RISERVATI), uscita

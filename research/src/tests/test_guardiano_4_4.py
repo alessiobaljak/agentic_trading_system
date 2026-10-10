@@ -886,10 +886,16 @@ _SCRIVE_SUL_BRANCH = [
     "git push origin HEAD",
     "git push -u origin research/campagna/BTCUSDT",
     "git pull origin research/campagna/BTCUSDT",
-    "git reset --hard",
-    "git reset -- research/campagne/BTCUSDT/log.jsonl",
-    "git stash",
-    "git stash list",
+    "git pull --ff-only origin research/campagna/BTCUSDT",
+    # dal 10 ott 2026 `reset` e `stash` solo con -q: senza, stampano l'oggetto del commit
+    # HEAD («HEAD is now at <hash> <oggetto>», «WIP on <branch>: <hash> <oggetto>»), che
+    # subito dopo l'apertura del branch e' un commit del branch principale (il coordinamento
+    # o il bot). `git stash list` lo stampa anche con -q, ed e' vietato. Le forme senza -q
+    # sono in test_reset_e_stash_senza_q_stampano_l_oggetto_di_head, qui sotto.
+    "git reset -q --hard",
+    "git reset -q -- research/campagne/BTCUSDT/log.jsonl",
+    "git stash -q",
+    "git stash pop -q",
 ]
 
 
@@ -921,6 +927,63 @@ def test_sul_proprio_branch_commit_e_push_ammessi(sessione_condivisa: Path):
     for comando in _SCRIVE_SUL_BRANCH:
         codice, errore = _bash(sessione_condivisa, comando)
         assert codice == 0, f"{comando!r}: {errore}"
+
+
+_RESET_E_STASH_SENZA_Q = [
+    "git reset --hard",
+    "git reset --hard HEAD",
+    "git reset -- research/campagne/BTCUSDT/log.jsonl",
+    "git reset",
+    "git stash",
+    "git stash push",
+    "git stash push -m nota -- research/campagne/BTCUSDT/",
+    "git stash save nota",
+    "git stash pop",
+    "git stash apply",
+    "git stash drop",
+    "git stash list",
+    "git stash list -q",
+    "git stash list --quiet",
+]
+
+
+def test_reset_e_stash_senza_q_stampano_l_oggetto_di_head(sessione: Path):
+    """Il buco (revisione del 10 ottobre 2026): subito dopo l'apertura del branch, se il
+    remoto non aveva ancora il proprio branch, HEAD e' l'ultimo commit del branch
+    principale. Qui lo si rifa' portando il proprio branch sulla punta di main (senza
+    marcatore, come fa la sezione 9): `git reset --hard` e `git stash` ne stampano
+    l'oggetto, che e' un messaggio del coordinamento; `git stash list` lo stampa anche
+    con -q. Le forme con -q non stampano nulla, e il guardiano ammette solo quelle."""
+    marcatore = (sessione / "research" / ".sessione").read_text()
+    (sessione / "research" / ".sessione").unlink()
+    _git(sessione, "reset", "-q", "--hard", "origin/main")
+    (sessione / "research" / ".sessione").write_text(marcatore)
+    assert _git(sessione, "branch", "--show-current") == PROPRIO
+    assert MSG_PRINCIPALE in _git(sessione, "log", "-1", "--format=%s")
+    # la prova: senza -q l'oggetto di HEAD (del principale) finisce sullo schermo
+    assert MSG_PRINCIPALE in _bash_vero(sessione, "git reset --hard")
+    _scrivi(sessione, "research/src/motore.py", "# motore cambiato\n")
+    assert MSG_PRINCIPALE in _bash_vero(sessione, "git stash")
+    assert MSG_PRINCIPALE in _bash_vero(sessione, "git stash list -q")
+    _git(sessione, "stash", "drop", "-q")
+    # il guardiano rifiuta le forme senza -q, e dice quella giusta senza chiedere all'utente
+    for comando in _RESET_E_STASH_SENZA_Q:
+        codice, errore = _bash(sessione, comando)
+        assert codice == 2, f"BUCO: il guardiano consente {comando!r}"
+        assert errore.startswith(RIFIUTO), errore
+        if "list" not in comando:
+            assert "aggiungi -q (o --quiet)" in errore and "non serve chiedere all'utente" in errore, errore
+    # ...e ammette quelle con -q, che eseguite davvero non stampano nulla di riservato
+    _scrivi(sessione, "research/src/motore.py", "# motore cambiato\n")
+    for comando in ("git stash -q", "git stash pop -q", "git stash push -q -m 'prima di provare'",
+                    "git stash apply --quiet", "git stash drop -q", "git reset -q --hard",
+                    "git reset --quiet -- research/campagne/BTCUSDT/log.jsonl", "git stash show",
+                    "git stash clear"):
+        codice, errore = _bash(sessione, comando)
+        assert codice == 0, f"{comando!r}: {errore}"
+        uscita = _bash_vero(sessione, comando)
+        for riservato in (MSG_PRINCIPALE, MSG_CLAUDE, MSG_ARCHIVIO, "C2", "C3"):
+            assert riservato not in uscita, f"{comando!r} stampa {riservato}: {uscita}"
 
 
 @pytest.mark.parametrize(
@@ -1261,8 +1324,9 @@ def test_comandi_che_tolgono_il_marcatore_rifiutati(repo_nuovo: _Repo, comando: 
         "git restore --staged -- research/campagne/BTCUSDT/scheda_moneta.md",
         "git reset -q -- research/campagne/BTCUSDT/scheda_moneta.md",
         "git reset -q --hard origin/research/campagna/BTCUSDT",
-        "git stash list",
-        "git stash push -m 'prima di provare' -- research/campagne/BTCUSDT/",
+        # dal 10 ott 2026 `stash` solo con -q, e `stash list` vietato (stampa l'oggetto di
+        # HEAD anche con -q): test_reset_e_stash_senza_q_stampano_l_oggetto_di_head
+        "git stash push -q -m 'prima di provare' -- research/campagne/BTCUSDT/",
         "git log --stat -- research/campagne/BTCUSDT/",
         "git ls-files -- research/campagne/BTCUSDT/",
         "git ls-tree -r --name-only HEAD -- research/campagne/BTCUSDT/",
