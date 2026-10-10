@@ -1594,3 +1594,182 @@ def test_K_nella_storia_limitata_il_log_con_date_e_hash_resta_ammesso(limitata: 
     assert _bash(limitata, comando)[0] == 0
     codice, uscita = _bash_vero_esito(limitata, comando)
     assert codice == 0 and not any(r in uscita for r in RISERVATI), uscita
+
+
+# ---------------------------------------------------------------------------
+# L. revisione avversaria del 10 ottobre 2026 (rev1): patch/tar, pytest --pastebin,
+#    le versioni con il trattino, `-m` del repo, il valore di -o/-O, l'indirizzo
+#    scritto, i valori delle opzioni di uniq/xxd, altri lanciatori. Valgono per
+#    ogni campagna (test_guardiano.py); qui con il marcatore GRUPPO e con SOLUSDT.
+# ---------------------------------------------------------------------------
+
+
+def _radice_sol(tmp_path_factory) -> Path:
+    return _radice_gruppo(tmp_path_factory.mktemp("sol") / "repo", {"tipo": "campagna", "simbolo": "SOLUSDT"})
+
+
+# P1: patch/tar scrivono su un bersaglio nominato solo nei dati di ingresso. I bersagli
+# piu' pericolosi sono proprio i file protetti: il guardiano, il marcatore, la config.
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "patch -p1 < research/campagne/GRUPPO/codice/evil.diff",   # header: research/src/guardiano.py
+        "tar xf research/campagne/GRUPPO/codice/s.tar",            # contiene research/.sessione
+        "tar xf research/campagne/GRUPPO/codice/c.tar",            # contiene research/config/parametri.yaml
+        "cpio -idv",
+        "unzip research/campagne/GRUPPO/codice/s.zip",
+        "bsdtar xf research/campagne/GRUPPO/codice/s.tar",
+        "pax -r -f research/campagne/GRUPPO/codice/s.tar",
+        "nohup tar xf research/campagne/GRUPPO/codice/s.tar",
+        "sh -c 'patch -p1 < research/campagne/GRUPPO/codice/evil.diff'",
+    ],
+)
+def test_L_estrazione_vietata_nel_gruppo(gruppo: Path, comando: str):
+    codice, errore = _bash(gruppo, comando)
+    _rifiutato((codice, errore))
+    assert "dati di ingresso" in errore, errore
+
+
+def test_L_estrazione_vietata_per_una_moneta(tmp_path_factory):
+    radice = _radice_sol(tmp_path_factory)
+    for comando in ("patch -p1 < research/campagne/SOLUSDT/codice/e.diff",
+                    "tar xf research/campagne/SOLUSDT/codice/s.tar"):
+        _rifiutato(_bash(radice, comando), "sessione campagna SOLUSDT")
+    # i file protetti restano sul disco: il guardiano ha rifiutato prima di eseguire
+    assert "segnaposto" in (radice / "research/src/guardiano.py").read_text()
+    assert (radice / "research/.sessione").read_text().strip()
+
+
+# P2: pytest --pastebin invia il report a bpaste.net
+@pytest.mark.parametrize("comando, atteso", [
+    ("python3 -m pytest --pastebin=all", 2),
+    ("python -m pytest --pastebin all research/src/tests", 2),
+    ("python -m pytest research/src/tests -q -p no:cacheprovider", 0),
+    ("python -m pytest research/src/tests -k pastebin", 0),
+])
+def test_L_pytest_pastebin_nel_gruppo(gruppo: Path, comando: str, atteso: int):
+    codice, errore = _bash(gruppo, comando)
+    assert codice == atteso, errore
+    if atteso == 2:
+        assert "bpaste.net" in errore, errore
+
+
+# P3: le versioni con il trattino dei programmi di rete
+@pytest.mark.parametrize("programma", ["pip-3.12", "pip3-3.12", "uv-0.5", "uvx-0.5"])
+def test_L_rete_versione_con_trattino_nel_gruppo(gruppo: Path, programma: str):
+    codice, errore = _bash(gruppo, f"{programma} install requests")
+    _rifiutato((codice, errore))
+    assert _MOTIVO_RETE in errore, errore
+
+
+# P4: `python -m research.campagne.<propria>...` e `research.src...`: rifiuto autonomo
+@pytest.mark.parametrize("simbolo", ["GRUPPO", "SOLUSDT"])
+def test_L_m_modulo_del_repo_rifiutato_ma_autonomo(tmp_path_factory, simbolo):
+    radice = _radice_gruppo(tmp_path_factory.mktemp(f"m_{simbolo}") / "repo",
+                            {"tipo": "campagna", "simbolo": simbolo})
+    etichetta = f"sessione campagna {simbolo}"
+    for comando in (f"python -m research.campagne.{simbolo}.codice.x",
+                    "python3 -m research.src.dati"):
+        codice, errore = _bash(radice, comando)
+        assert codice == 2, errore
+        assert etichetta in errore, errore
+        assert "lancia lo script per percorso" in errore, errore
+        assert f"research/campagne/{simbolo}/codice" in errore, errore
+        assert "non serve chiedere all'utente" in errore, errore
+        assert "Registra il rifiuto nel log" not in errore, errore
+
+
+# P5: il valore di -o/-O (e di --rcfile/--init-file) non e' il comando di -c
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "bash -oc pipefail 'curl www.binance.com'",
+        "bash -euoc pipefail 'wget www.binance.com'",
+        "sh -oc pipefail 'curl www.binance.com'",
+        "bash -Oc extglob 'gh issue list'",
+        "bash -oc pipefail 'cd docs && head -c 60 state.md'",
+        "bash --init-file research/campagne/GRUPPO/ipotesi.md -c 'cd docs && head -c 60 state.md'",
+    ],
+)
+def test_L_opzioni_shell_non_nascondono_il_comando(gruppo: Path, comando: str):
+    _rifiutato(_bash(gruppo, comando))
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "bash -oc pipefail 'cat research/campagne/GRUPPO/ipotesi.md'",
+        "bash -euoc pipefail 'python3 research/campagne/GRUPPO/codice/strategia.py'",
+    ],
+)
+def test_L_opzioni_shell_comando_interno_lecito_passa(gruppo: Path, comando: str):
+    codice, errore = _bash(gruppo, comando)
+    assert codice == 0, errore
+
+
+# P6: un indirizzo usato come operando da un programma che scrive e' anche un percorso
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "mkdir -p https://arxiv.org/abs",
+        "cp research/campagne/GRUPPO/ipotesi.md https://arxiv.org/abs/x",
+        "git add https://arxiv.org/abs/x",
+        "touch https://arxiv.org/x",
+    ],
+)
+def test_L_indirizzo_scritto_si_giudica_come_percorso(gruppo: Path, comando: str):
+    _rifiutato(_bash(gruppo, comando))
+
+
+@pytest.mark.parametrize("comando, atteso", [
+    ("echo https://arxiv.org/abs/1234.5678 >> research/campagne/GRUPPO/fonti.md", 0),
+    ("echo x > https://arxiv.org/x", 2),
+])
+def test_L_indirizzo_stampato_o_rediretto_nel_gruppo(gruppo: Path, comando: str, atteso: int):
+    codice, errore = _bash(gruppo, comando)
+    assert codice == atteso, errore
+
+
+# P7: i valori delle opzioni di uniq e xxd non sono operandi (non sono scritture)
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "xxd -s 16 research/config/parametri.yaml",
+        "xxd -l 64 research/config/parametri.yaml",
+        "uniq -f 1 research/config/parametri.yaml",
+        "uniq -w 3 research/campagne/GRUPPO/monete.csv",
+        "uniq --check-chars 3 research/config/parametri.yaml",
+    ],
+)
+def test_L_uniq_xxd_lettura_con_opzioni_valore(gruppo: Path, comando: str):
+    codice, errore = _bash(gruppo, comando)
+    assert codice == 0, errore
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "uniq research/campagne/GRUPPO/log.jsonl research/config/parametri.yaml",
+        "xxd research/campagne/GRUPPO/log.jsonl research/config/parametri.yaml",
+        "xxd -s 1 research/campagne/GRUPPO/log.jsonl research/config/parametri.yaml",
+    ],
+)
+def test_L_uniq_xxd_in_out_resta_scrittura(gruppo: Path, comando: str):
+    _rifiutato(_bash(gruppo, comando))
+
+
+# P8: altri lanciatori
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "su -c 'gh issue list'",
+        "runuser -u root -- bash -c 'cd docs && head -c 30 state.md'",
+        "systemd-run --pipe curl www.binance.com",
+        "tmux new-session -d 'curl www.binance.com'",
+        "screen -dm curl www.binance.com",
+        "gdb -batch -ex 'shell curl www.binance.com'",
+        "make -f research/campagne/GRUPPO/codice/Makefile",
+    ],
+)
+def test_L_lanciatori_vietati_nel_gruppo(gruppo: Path, comando: str):
+    _rifiutato(_bash(gruppo, comando))

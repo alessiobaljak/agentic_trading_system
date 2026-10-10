@@ -910,3 +910,278 @@ def test_config_in_coordinamento_si_scrive_come_prima(coordinamento):
 def test_comandi_della_sessione_ammessi(campagna_btc, comando):
     codice, err = _bash(campagna_btc, comando)
     assert codice == 0, err
+
+
+# ===========================================================================
+# revisione avversaria del 10 ottobre 2026 (rev1): altri buchi, per OGNI campagna
+# (per il gruppo e una moneta singola vedi test_guardiano_gruppo.py, sezione L)
+# ===========================================================================
+
+# --- P1: patch/tar scrivono su un bersaglio nominato solo nei dati di ingresso ---
+# (il diff o l'archivio sta nella propria cartella ed e' ammesso; il percorso scritto
+# e' dentro quel file, che il guardiano non legge). Riscrivere guardiano.py o azzerare
+# research/.sessione spegne il guardiano; riscrivere parametri.yaml cambia l'esame.
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "patch -p1 < research/campagne/BTCUSDT/codice/evil.diff",
+        "patch -p1 -i research/campagne/BTCUSDT/codice/evil.diff",
+        "patch research/src/guardiano.py research/campagne/BTCUSDT/codice/e.diff",
+        "tar xf research/campagne/BTCUSDT/s.tar",
+        "tar -xzf research/campagne/BTCUSDT/s.tgz -C research",
+        "cpio -idv",
+        "unzip research/campagne/BTCUSDT/s.zip",
+        "bsdtar xf research/campagne/BTCUSDT/s.tar",
+        "pax -r -f research/campagne/BTCUSDT/s.tar",
+        # anche dietro un prefisso trasparente e dentro una shell
+        "timeout 60 tar xf research/campagne/BTCUSDT/s.tar",
+        "nohup tar xf research/campagne/BTCUSDT/s.tar",
+        "sh -c 'patch -p1 < research/campagne/BTCUSDT/codice/evil.diff'",
+    ],
+)
+def test_estrazione_vietata_in_campagna(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, f"BUCO: {comando!r} consentito (scriverebbe un file non dichiarato)"
+    assert err.startswith(RIFIUTO), err
+    assert "dati di ingresso" in err, err
+
+
+# --- P2: pytest ha --pastebin, che invia il report a bpaste.net (rete) ---
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "python3 -m pytest --pastebin=all",
+        "python -m pytest --pastebin all",
+        "python -m pytest --pastebin=failed research/src/tests",
+        "python3 -m pytest research/src/tests --pastebin=all -q",
+    ],
+)
+def test_pytest_pastebin_rifiutato(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, f"BUCO: {comando!r} consentito (apre la rete via bpaste.net)"
+    assert "bpaste.net" in err, err
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "python -m pytest research/src/tests -q -p no:cacheprovider",
+        "python3 -m pytest -q research/src/tests --maxfail=1",
+        # `-k pastebin` cerca i test che contengono 'pastebin': non e' l'opzione --pastebin
+        "python -m pytest research/src/tests -k pastebin",
+    ],
+)
+def test_pytest_senza_pastebin_ammesso(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 0, err
+
+
+# --- P3: le versioni con il trattino dei programmi di rete (pip-3.12) ---
+
+
+@pytest.mark.parametrize("programma", ["pip-3.12", "pip3-3.12", "pipx-1.2", "uv-0.5", "uvx-0.5"])
+def test_rete_versione_con_trattino_vietata(campagna_btc, programma):
+    codice, err = _bash(campagna_btc, f"{programma} install requests")
+    assert codice == 2, f"BUCO: {programma} consentito in campagna"
+    assert MOTIVO_RETE in err, err
+
+
+# --- P4: `python -m research.campagne.<propria>...` e `research.src...` erano una ---
+# forma gia' usata (4 campagne su 20) e ora tolta dalla regola «solo -m pytest»: il
+# rifiuto resta, ma e' autonomo (indica la forma per percorso, non ferma la sessione).
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "python -m research.campagne.BTCUSDT.codice.x",
+        "python3 -m research.campagne.BTCUSDT.codice.strategia --simbolo BTCUSDT",
+        "python3 -m research.src.dati",
+        "nohup python3 -m research.campagne.BTCUSDT.codice.x > research/campagne/BTCUSDT/x.log &",
+    ],
+)
+def test_m_modulo_del_repo_rifiutato_ma_autonomo(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, err
+    assert _FORMA_SCRIPT in err, err
+    assert "research/campagne/BTCUSDT/codice" in err, err
+    # NON chiede all'utente: la sessione usa la forma indicata e va avanti
+    assert "non serve chiedere all'utente" in err, err
+    assert "Registra il rifiuto nel log" not in err, err
+
+
+_FORMA_SCRIPT = "lancia lo script per percorso"
+
+
+# --- P5: il valore di -o/-O (e di --rcfile/--init-file) non e' il comando di -c ---
+# bash: `-oc pipefail 'cmd'` = `-o pipefail`, `-c`, e il comando e' `cmd`.
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "bash -oc pipefail 'curl www.binance.com'",
+        "bash -euoc pipefail 'wget www.binance.com'",
+        "sh -oc pipefail 'curl www.binance.com'",
+        "bash -Oc extglob 'gh issue list'",
+        "bash -oc pipefail 'pip download x'",
+        "bash -oc pipefail 'cat docs/state.md'",
+        "bash --init-file research/campagne/BTCUSDT/x -c 'cat docs/state.md'",
+        "bash --rcfile research/campagne/BTCUSDT/x -c 'cat docs/state.md'",
+    ],
+)
+def test_opzioni_shell_non_nascondono_il_comando(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, f"BUCO: {comando!r} consentito (il comando vero non si giudicava)"
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "bash -oc pipefail 'cat research/campagne/BTCUSDT/log.jsonl'",
+        "bash -euoc pipefail 'python3 research/campagne/BTCUSDT/codice/x.py'",
+    ],
+)
+def test_opzioni_shell_comando_interno_lecito_passa(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 0, err
+
+
+def test_opzioni_shell_salta_i_valori_di_o_e_O():
+    from research.src import guardiano as g
+
+    assert g._opzioni_shell(["-oc", "pipefail", "cmd"]) == ("oc", "cmd")
+    assert g._opzioni_shell(["-euoc", "pipefail", "cmd"]) == ("euoc", "cmd")
+    assert g._opzioni_shell(["-Oc", "extglob", "cmd"]) == ("Oc", "cmd")
+    assert g._opzioni_shell(["-o", "pipefail", "-c", "cmd"]) == ("oc", "cmd")
+    assert g._opzioni_shell(["--init-file", "f", "-c", "cmd"]) == ("c", "cmd")
+    assert g._opzioni_shell(["--rcfile", "f", "-c", "cmd"]) == ("c", "cmd")
+    assert g._opzioni_shell(["-c", "cmd"]) == ("c", "cmd")
+    assert g._opzioni_shell(["-o", "pipefail"]) == ("o", None)
+
+
+# --- P6: un indirizzo usato come operando da un programma che scrive e' anche un ---
+# percorso (`https:` e' un nome di cartella): va giudicato, o `mkdir -p https://x`
+# crea `https:/x` nella radice del repo. echo/printf che lo stampano restano ammessi.
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "mkdir -p https://arxiv.org/abs",
+        "mkdir -p https://arxiv.org/abs && cp research/campagne/BTCUSDT/log.jsonl https://arxiv.org/abs/",
+        "cp research/campagne/BTCUSDT/log.jsonl https://arxiv.org/abs/x",
+        "git add https://arxiv.org/abs/x",
+        "touch https://arxiv.org/x",
+        "tee https://arxiv.org/x",
+    ],
+)
+def test_indirizzo_scritto_si_giudica_come_percorso(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, f"BUCO: {comando!r} consentito (scriverebbe https:/... nella radice)"
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "echo https://arxiv.org/abs/1234.5678 >> research/campagne/BTCUSDT/fonti.md",
+        "printf '%s' https://arxiv.org/abs/1 >> research/campagne/BTCUSDT/fonti.md",
+    ],
+)
+def test_indirizzo_stampato_resta_ammesso(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 0, err
+
+
+# --- P7: i VALORI delle opzioni di uniq e xxd (-f 1, -s 16, -l 64) non sono operandi ---
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "xxd -s 16 research/config/parametri.yaml",
+        "xxd -l 64 research/config/parametri.yaml",
+        "xxd -c 8 research/config/parametri.yaml",
+        "xxd -g 2 research/config/parametri.yaml",
+        "xxd -s 16 -l 64 research/config/parametri.yaml",
+        "uniq -f 1 research/config/parametri.yaml",
+        "uniq -s 2 research/config/parametri.yaml",
+        "uniq -w 3 research/config/parametri.yaml",
+        "uniq --skip-fields=1 research/config/parametri.yaml",
+        "uniq --check-chars 3 research/config/parametri.yaml",
+    ],
+)
+def test_uniq_xxd_lettura_con_opzioni_valore(campagna_btc, comando):
+    _config_sul_disco(campagna_btc)
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 0, err
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "uniq research/campagne/BTCUSDT/log.jsonl research/config/parametri.yaml",
+        "xxd research/campagne/BTCUSDT/log.jsonl research/config/parametri.yaml",
+        "uniq -c research/campagne/BTCUSDT/log.jsonl research/config/parametri.yaml",
+        "xxd -s 1 research/campagne/BTCUSDT/log.jsonl research/config/parametri.yaml",
+    ],
+)
+def test_uniq_xxd_in_out_resta_scrittura(campagna_btc, comando):
+    _config_sul_disco(campagna_btc)
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, f"BUCO: {comando!r} consentito (scrive su research/config)"
+
+
+def test_lettore_che_scrive_salta_i_valori_delle_opzioni():
+    from research.src import guardiano as g
+
+    assert not g._lettore_che_scrive("xxd", ["-s", "16", "f"])
+    assert not g._lettore_che_scrive("uniq", ["-f", "1", "f"])
+    assert not g._lettore_che_scrive("uniq", ["-f1", "f"])  # valore attaccato
+    assert g._lettore_che_scrive("uniq", ["in", "out"])
+    assert g._lettore_che_scrive("xxd", ["a", "b"])
+    assert g._lettore_che_scrive("xxd", ["-s", "1", "in", "out"])
+
+
+# --- P8: altri lanciatori (su, runuser, systemd-run, tmux, screen, gdb, make) ---
+
+
+@pytest.mark.parametrize(
+    "comando",
+    [
+        "su -c 'gh issue list'",
+        "runuser -u root -- bash -c 'cat docs/state.md'",
+        "systemd-run --pipe curl www.binance.com",
+        "tmux new-session -d 'curl www.binance.com'",
+        "screen -dm curl www.binance.com",
+        "gdb -batch -ex 'shell curl www.binance.com'",
+        "make -f research/campagne/BTCUSDT/codice/Makefile",
+    ],
+)
+def test_lanciatori_vietati_in_campagna(campagna_btc, comando):
+    codice, err = _bash(campagna_btc, comando)
+    assert codice == 2, f"BUCO: {comando!r} consentito (esegue cio' che il guardiano non vede)"
+    assert err.startswith(RIFIUTO), err
+
+
+# --- i nuovi divieti non toccano il coordinamento ne' le sessioni senza marcatore ---
+
+
+def test_nuovi_divieti_non_toccano_il_coordinamento(coordinamento):
+    for comando in (
+        "patch -p1 < research/campagne/BTCUSDT/codice/evil.diff",
+        "tar xf research/campagne/BTCUSDT/s.tar",
+        "su -c 'echo ciao'",
+        "make",
+        "python3 -m pytest --pastebin=all",
+        "pip-3.12 install requests",
+        "bash -oc pipefail 'curl www.binance.com'",
+        "mkdir -p https://arxiv.org/abs",
+    ):
+        assert _bash(coordinamento, comando) == (0, ""), comando
+    _config_sul_disco(coordinamento)
+    assert _bash(coordinamento, "xxd -s 16 research/config/parametri.yaml") == (0, "")
