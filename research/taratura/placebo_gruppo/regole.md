@@ -52,9 +52,10 @@ direzioni × 2 timeframe × 4 = **96 placebo per periodo**.
    ottobre (punto 3.3): per incrocio delle medie, rottura e MACD stop a 1,5 ATR e target a 2,5 ATR; per RSI,
    Bollinger e momento stop a 2 ATR, nessun target, chiusura dopo 24 barre a 1 ora e 12 a 4 ore.
 4. Le prime 60 barre di ogni serie non hanno segnali (riscaldamento).
-5. Gli ingressi della placebo si passano a `gruppo.py` con l'argomento riservato alla prova a placebo (gli ingressi
-   del candidato già calcolati per moneta, al posto della funzione della variante): il resto dell'esame è identico a
-   quello della sessione.
+5. Gli ingressi della placebo si passano a `gruppo.py` con l'argomento `ingressi_placebo` (`regole.md`, sezione 13: gli
+   ingressi già calcolati per moneta, al posto della funzione che crea la strategia della variante; la (a), la
+   strategia casuale e il segnale restano le funzioni di un modulo come quelli della sessione). Il resto dell'esame è
+   identico a quello della sessione. La prova gira senza marcatore di campagna, come chiede `regole.md`.
 
 ## 4. Il giudizio
 
@@ -63,15 +64,15 @@ direzioni × 2 timeframe × 4 = **96 placebo per periodo**.
   confronto con la (b) è valutabile.
 * **Validazione**: la stessa placebo, sfasata con il suo seme sulla finestra di validazione, si giudica se ha almeno
   300 trade sommati: p_value contro la (b) di gruppo di validazione, con il pavimento delle sfasate.
-* Il controllo del via libera di `esame_di_gruppo` in validazione riguarda la cartella della campagna di gruppo
-  (`research/campagne/GRUPPO/`): la prova lavora in una cartella sua, fuori da git, e non lo incontra (è la prova che
-  produce il via libera).
+* Il controllo del via libera di `esame_di_gruppo` in validazione c'è solo con un marcatore di campagna (`regole.md`,
+  sezione 7, punto 2): la prova gira senza marcatore e non lo incontra (è la prova che produce il via libera).
 
 ## 5. Le misure e le soglie (`regole.md`, sezione 11, punto 3)
 
 Prima di qualunque quota, due controlli, nell'ordine; se uno manca si stampano solo i conteggi e ci si ferma:
 * **Copertura**: ci sono tutte le 24 combinazioni × 4 sfasamenti × 2 periodi; gli errori si contano e si elencano.
-* **Campione**: almeno **80** placebo valutabili in costruzione e 80 in validazione. Se in un periodo sono meno, si
+* **Campione**: almeno **80** placebo valutabili in costruzione (con almeno 700 trade e nessuna moneta oltre il 10%) e
+  80 in validazione (con almeno 300 trade). Se in un periodo sono meno, si
   aggiungono sfasamenti k = 4, 5, … a tutte le combinazioni, decisi sul solo conteggio.
 
 Ogni placebo valutabile ha z = Φ⁻¹(1 − p_value) del confronto con la (b). L'esame **regge** se valgono tutte:
