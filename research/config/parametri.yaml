@@ -231,7 +231,8 @@ decisioni_passo_0:
 # --------------------------------------------------------------------------- #
 # Campagna di gruppo (Passo 4bis): testo completo in campagne/GRUPPO/regole.md,
 # approvato in anticipo dal proprietario il 10 ott 2026 alle 06:35 UTC; vale
-# dall'istante scritto nella prima riga di regole.md. Congelata con quel testo.
+# dall'istante scritto nell'intestazione di regole.md al posto della parola
+# BOZZA. Congelata con quel testo.
 # --------------------------------------------------------------------------- #
 gruppo:
   testo: campagne/GRUPPO/regole.md
@@ -243,14 +244,14 @@ gruppo:
   budget_varianti: 30
   ritocchi_massimi_per_famiglia: 5
   trade_minimi: {costruzione: 700, validazione: 300, vault: 300}   # sui trade sommati; 700 = 300 x 70/30
-  quota_massima_moneta: 0.10                  # in costruzione (e Fase 4) oltre questa quota la variante e' uno scarto
+  quota_massima_moneta: 0.10                  # in costruzione oltre questa quota la variante e' uno scarto; in Fase 4 il caso si dichiara e non conta
   simulazioni_baseline_casuale: 200           # per moneta
   semi_baseline_casuale: "1000*j + s, j = posizione in monete.csv, s = 0..199"
   sfasamenti_pavimento: 200                   # strategie sfasate (pavimento), s = 0..199
   fittizie_vault: 1000                        # strategie fittizie del vault, s = 0..999
-  margine_sfasamento_giorni: 30               # m = max(30 giorni, durata massima dei trade), al massimo L // 4
+  margine_sfasamento_giorni: 30               # margine = max(30 giorni, durata massima dei trade), al massimo L // 4
   capitale_per_moneta_usdt: 1000
   fase4: {anni_trade_minimi: 100, trade_migliori_tolti: 30, giorni_migliori_tolti: 3, monete_migliori_tolte: 3}
   validazione_r_medio_positivo: true
   asticella: {nome: benjamini_hochberg, q: 0.10, m: "solo i candidati di gruppo"}
-  placebo_soglie: {netta_costruzione_max: 0.03, p_sotto_010_validazione_max: 0.13, deviazione_t_max: 1.10}
+  placebo_soglie: {netta_costruzione_max: 0.03, p_sotto_010_validazione_max: 0.13, placebo_valutabili_minime_per_periodo: 80}   # piu' la condizione sugli z (regole.md, sezione 11, punto 3)
