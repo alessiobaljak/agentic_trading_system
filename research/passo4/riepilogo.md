@@ -67,3 +67,14 @@ scelto dai filtri. Il vault giudica.
 
 Domande al proprietario: (1) campagna di gruppo (Passo 4bis) prima del vault, sì o no; (2) rifare BTCUSDT per la
 regola dei ritocchi, sì o no. Il vault si apre solo con «APRI IL VAULT».
+
+## Risposta del proprietario (10 ottobre 2026, circa 05:40 UTC)
+
+«sì alla campagna di gruppo, no a rifare Bitcoin».
+
+1. **Campagna di gruppo (Passo 4bis): sì.** Il coordinamento scrive il testo completo (budget, minimi di trade,
+   come si combinano baseline ed errori, asticella, verifiche della Fase 4, giudizio nel vault, monete che muoiono
+   durante il vault) e lo porta al proprietario per l'approvazione, prima di qualunque test e prima di aprire la
+   sessione. Il vault aspetta la consegna della campagna di gruppo (Passo 5, prerequisiti).
+2. **Rifare BTCUSDT: no.** La consegna 4.4 di BTCUSDT resta valida (era già il primo dei tre punti approvati con la
+   4.5) e il suo candidato BTCUSDT-V10 resta fra i tre per il vault.
