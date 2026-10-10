@@ -3291,3 +3291,12 @@ ogni variante; il coordinamento scrive ora il testo completo delle regole, che i
 qualunque test e prima di aprire la sessione; (2) la consegna 4.4 di BTCUSDT resta valida e il suo candidato resta
 fra i tre per il vault. Registrato anche sul branch di coordinamento (`research/passo4/riepilogo.md`, 97f2a1bf).
 Il vault aspetta la consegna del gruppo.
+
+### 10 ottobre, 07:50 ora italiana (05:50 UTC): approvazione anticipata del testo della campagna di gruppo
+
+Il proprietario, prima di uscire: «devo uscire, il testo è approvato appena hai finito, parti con l'esecuzione». Il
+coordinamento lo legge così: il testo completo del Passo 4bis vale come approvato nell'istante del commit che lo
+chiude (dopo la revisione), e da lì il coordinamento prepara strumenti, guardiano e schede e apre la sessione di
+gruppo su delega (Passo 4, punto 1), con i controlli orari. Ogni scelta che spetterebbe al proprietario si prende
+nel verso più prudente e gli si riporta al ritorno, così può cambiarla prima che la sessione vada avanti. Il vault
+resta chiuso: si apre solo con «APRI IL VAULT».
