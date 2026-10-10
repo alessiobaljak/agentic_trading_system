@@ -3292,7 +3292,7 @@ qualunque test e prima di aprire la sessione; (2) la consegna 4.4 di BTCUSDT res
 fra i tre per il vault. Registrato anche sul branch di coordinamento (`research/passo4/riepilogo.md`, 97f2a1bf).
 Il vault aspetta la consegna del gruppo.
 
-### 10 ottobre, 07:50 ora italiana (05:50 UTC): approvazione anticipata del testo della campagna di gruppo
+### 10 ottobre, 08:35 ora italiana (06:35 UTC): approvazione anticipata del testo della campagna di gruppo
 
 Il proprietario, prima di uscire: «devo uscire, il testo è approvato appena hai finito, parti con l'esecuzione». Il
 coordinamento lo legge così: il testo completo del Passo 4bis vale come approvato nell'istante del commit che lo
