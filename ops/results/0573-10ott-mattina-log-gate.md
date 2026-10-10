@@ -1,0 +1,90 @@
+# 0573-10ott-mattina-log-gate.req
+
+_eseguito: 2026-10-10 03:47 UTC_
+
+**richiesta:** `log-gate`
+**eseguito:** `journalctl -u trading-optimizer.service -n 80 --no-pager`
+**esito:** codice 0 in 0.1s
+
+```
+Oct 10 03:05:32 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 95560) (WIFUSDT 15m)
+Oct 10 03:06:10 Trading-Agent python[2380063]: [discover] GRASSUSDT|gen_2a39d2a2 (variante di gen_f4ac85e0, intorno:volume_mult=2): conferme retroattive 0/2
+Oct 10 03:06:36 Trading-Agent python[2380105]: [discover] STXUSDT|gen_afa705ab (variante di gen_f5b63594, intorno:volume_mult=1.5): conferme retroattive 2/2 -> VALIDATA oggi
+Oct 10 03:07:28 Trading-Agent python[2380105]: [backtest] cache riusata (tagliata da 2026-10-09): 94792 candele (LSKUSDT 15m)
+Oct 10 03:07:41 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 109969) (CYBERUSDT 15m)
+Oct 10 03:08:06 Trading-Agent python[2380063]: [discover] GRASSUSDT|gen_3a730b29 (variante di gen_f4ac85e0, intorno:min_adx=25): conferme retroattive 2/2 -> VALIDATA oggi
+Oct 10 03:08:07 Trading-Agent python[2380063]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 61963) (GRIFFAINUSDT 15m)
+Oct 10 03:08:19 Trading-Agent python[2380084]: [discover] 1000BONKUSDT|gen_d2840ddb (variante di gen_2a2898b0, intorno:stoch_extreme.low=20): conferme retroattive 0/2
+Oct 10 03:09:18 Trading-Agent python[2380105]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 33663) (ONUSDT 15m)
+Oct 10 03:09:19 Trading-Agent python[2380105]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 50639) (AIOTUSDT 15m)
+Oct 10 03:09:36 Trading-Agent python[2380021]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 167329) (VETUSDT 15m)
+Oct 10 03:09:46 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 35299 candele (LYNUSDT 15m)
+Oct 10 03:09:50 Trading-Agent python[2380063]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 37186) (0GUSDT 15m)
+Oct 10 03:10:08 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 16964) (CHIPUSDT 15m)
+Oct 10 03:10:12 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 167329) (GALAUSDT 15m)
+Oct 10 03:10:16 Trading-Agent python[2380105]: [backtest] cache riusata (tagliata da 2026-10-09): 120127 candele (1000FLOKIUSDT 15m)
+Oct 10 03:10:55 Trading-Agent python[2380063]: [backtest] cache riusata (tagliata da 2026-10-09): 62163 candele (PHAUSDT 15m)
+Oct 10 03:11:43 Trading-Agent python[2380000]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 34037) (币安人生USDT 15m)
+Oct 10 03:11:45 Trading-Agent python[2380000]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 98553) (ACEUSDT 15m)
+Oct 10 03:12:39 Trading-Agent python[2380063]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 34310) (RIVERUSDT 15m)
+Oct 10 03:12:40 Trading-Agent python[2380063]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 26269) (ZAMAUSDT 15m)
+Oct 10 03:12:43 Trading-Agent python[2380063]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 43139) (ERAUSDT 15m)
+Oct 10 03:12:59 Trading-Agent python[2380105]: [backtest] cache riusata (tagliata da 2026-10-09): 60623 candele (PROMUSDT 15m)
+Oct 10 03:13:36 Trading-Agent python[2380063]: [backtest] cache riusata (tagliata da 2026-10-09): 167233 candele (ONEUSDT 15m)
+Oct 10 03:13:48 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 32307 candele (UAIUSDT 15m)
+Oct 10 03:13:49 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 32303 candele (FOLKSUSDT 15m)
+Oct 10 03:13:52 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 120721 candele (EDUUSDT 15m)
+Oct 10 03:13:56 Trading-Agent python[2380021]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 101515) (BEAMXUSDT 15m)
+Oct 10 03:14:18 Trading-Agent python[2380042]: [backtest] cache riusata (tagliata da 2026-10-09): 163283 candele (IMXUSDT 15m)
+Oct 10 03:14:24 Trading-Agent python[2380105]: [backtest] cache riusata (tagliata da 2026-10-09): 65319 candele (MORPHOUSDT 15m)
+Oct 10 03:16:11 Trading-Agent python[2380105]: [backtest] cache riusata (tagliata da 2026-10-09): 54093 candele (NILUSDT 15m)
+Oct 10 03:16:59 Trading-Agent python[2380000]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 160069) (APEUSDT 15m)
+Oct 10 03:17:36 Trading-Agent python[2380105]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 39223) (BTRUSDT 15m)
+Oct 10 03:17:40 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 102479) (ORDIUSDT 15m)
+Oct 10 03:19:02 Trading-Agent python[2380105]: [backtest] cache riusata (tagliata da 2026-10-09): 167233 candele (ARUSDT 15m)
+Oct 10 03:20:06 Trading-Agent python[2380084]: [backtest] cache riusata (tagliata da 2026-10-09): 167233 candele (AXSUSDT 15m)
+Oct 10 03:20:16 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 22021 candele (OPNUSDT 15m)
+Oct 10 03:20:17 Trading-Agent python[2380000]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 29141) (NIGHTUSDT 15m)
+Oct 10 03:20:18 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 102958) (CAKEUSDT 15m)
+Oct 10 03:20:20 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 167233 candele (LPTUSDT 15m)
+Oct 10 03:23:29 Trading-Agent python[2380084]: [backtest] cache riusata (tagliata da 2026-10-09): 49023 candele (CVCUSDT 15m)
+Oct 10 03:23:48 Trading-Agent python[2380042]: [backtest] cache riusata (tagliata da 2026-10-09): 167233 candele (TRBUSDT 15m)
+Oct 10 03:24:07 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 36147 candele (LIGHTUSDT 15m)
+Oct 10 03:24:37 Trading-Agent python[2380084]: [backtest] cache riusata (tagliata da 2026-10-09): 37893 candele (SKYUSDT 15m)
+Oct 10 03:25:17 Trading-Agent python[2380000]: [backtest] cache ESTESA di 289 candele (invece di riscaricarne 167329) (C98USDT 15m)
+Oct 10 03:25:29 Trading-Agent python[2380084]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 167329) (ONTUSDT 15m)
+Oct 10 03:27:24 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 107175) (ARKUSDT 15m)
+Oct 10 03:28:53 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 48351 candele (SOONUSDT 15m)
+Oct 10 03:29:33 Trading-Agent python[2380084]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 167329) (ZENUSDT 15m)
+Oct 10 03:29:57 Trading-Agent python[2380042]: [backtest] cache riusata (tagliata da 2026-10-09): 167233 candele (ROSEUSDT 15m)
+Oct 10 03:30:44 Trading-Agent python[2380021]: [backtest] cache riusata (tagliata da 2026-10-09): 24267 candele (GWEIUSDT 15m)
+Oct 10 03:30:45 Trading-Agent python[2380000]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 167329) (MANAUSDT 15m)
+Oct 10 03:30:47 Trading-Agent python[2380021]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 87703) (SAGAUSDT 15m)
+Oct 10 03:32:52 Trading-Agent python[2380021]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 39055) (HEMIUSDT 15m)
+Oct 10 03:33:24 Trading-Agent python[2380084]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 25204) (AIAUSDT 15m)
+Oct 10 03:33:28 Trading-Agent python[2380084]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 106319) (BICOUSDT 15m)
+Oct 10 03:34:03 Trading-Agent python[2380021]: [backtest] cache riusata (tagliata da 2026-10-09): 34599 candele (EULUSDT 15m)
+Oct 10 03:34:06 Trading-Agent python[2380021]: [backtest] cache riusata (tagliata da 2026-10-09): 119759 candele (UMAUSDT 15m)
+Oct 10 03:34:11 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 54477) (PLUMEUSDT 15m)
+Oct 10 03:34:35 Trading-Agent python[2380000]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 51767) (BANKUSDT 15m)
+Oct 10 03:35:57 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 14944) (BILLUSDT 15m)
+Oct 10 03:36:11 Trading-Agent python[2380084]: [backtest] cache riusata (tagliata da 2026-10-09): 167233 candele (RUNEUSDT 15m)
+Oct 10 03:36:38 Trading-Agent python[2380021]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 57261) (KAITOUSDT 15m)
+Oct 10 03:36:44 Trading-Agent python[2380042]: [backtest] dati da binance: 167329 candele
+Oct 10 03:36:50 Trading-Agent python[2380000]: [backtest] dati da binance: 96425 candele
+Oct 10 03:38:48 Trading-Agent python[2380000]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 167329) (COTIUSDT 15m)
+Oct 10 03:40:11 Trading-Agent python[2380042]: [backtest] cache riusata (tagliata da 2026-10-09): 64078 candele (SPXUSDT 15m)
+Oct 10 03:40:19 Trading-Agent python[2380063]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 156851) (JASMYUSDT 15m)
+Oct 10 03:42:01 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 33175) (KITEUSDT 15m)
+Oct 10 03:42:05 Trading-Agent python[2380042]: [backtest] cache riusata (tagliata da 2026-10-09): 167233 candele (COMPUSDT 15m)
+Oct 10 03:42:59 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 16259 candele (OPGUSDT 15m)
+Oct 10 03:43:00 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 47873 candele (AUSDT 15m)
+Oct 10 03:44:15 Trading-Agent python[2380000]: [backtest] cache riusata (tagliata da 2026-10-09): 33075 candele (ATUSDT 15m)
+Oct 10 03:44:16 Trading-Agent python[2380000]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 45275) (HUSDT 15m)
+Oct 10 03:44:23 Trading-Agent python[2380063]: [backtest] dati da binance: 10322 candele
+Oct 10 03:44:26 Trading-Agent python[2380063]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 167329) (ENJUSDT 15m)
+Oct 10 03:46:06 Trading-Agent python[2380042]: [backtest] cache riusata (tagliata da 2026-10-09): 5605 candele (DOSUSDT 15m)
+Oct 10 03:46:07 Trading-Agent python[2380042]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 37957) (AVNTUSDT 15m)
+Oct 10 03:46:13 Trading-Agent python[2380021]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 43356) (VELVETUSDT 15m)
+Oct 10 03:46:47 Trading-Agent python[2380105]: [backtest] cache ESTESA di 193 candele (invece di riscaricarne 75311) (SYNUSDT 15m)
+```
