@@ -42,14 +42,27 @@ python -m pip install --quiet --upgrade pip || echo "[session-start] upgrade pip
 # non possono installare pacchetti (il guardiano vieta pip in campagna), quindi
 # devono arrivare qui anche se un pacchetto del bot non si installa. Il 10 ott
 # 2026 la prima sessione della campagna di gruppo si e' fermata senza pytest e scipy.
+# Le versioni fissate in requirements.txt (numpy 1.26.4) non si installano su
+# Python 3.13, che e' il Python di alcune macchine di sessione (seconda sessione
+# di gruppo, 10 ott): se le versioni fissate falliscono si installano le ultime
+# compatibili. Gli strumenti della ricerca passano tutti i loro test anche con
+# Python 3.13, numpy 2.5.3 e scipy 1.18.1 (prova del coordinamento, 10 ott).
+# Si fa per ogni interprete distinto fra `python` e `python3`.
 RICERCA="$(grep -i -E '^(numpy|scipy|pyyaml|pytest)==' requirements.txt | tr '\n' ' ')"
-python -m pip install --quiet $RICERCA \
-  || echo "[session-start] ATTENZIONE: dipendenze della ricerca non installate ($RICERCA)"
+VISTI=""
+for PY in python python3; do
+  command -v "$PY" >/dev/null 2>&1 || continue
+  ESEGUIBILE="$("$PY" -c 'import sys; print(sys.executable)' 2>/dev/null || echo "$PY")"
+  case " $VISTI " in *" $ESEGUIBILE "*) continue ;; esac
+  VISTI="$VISTI $ESEGUIBILE"
+  "$PY" -m pip install --quiet $RICERCA 2>/dev/null \
+    || "$PY" -m pip install --quiet numpy scipy pyyaml pytest \
+    || echo "[session-start] ATTENZIONE: dipendenze della ricerca non installate per $ESEGUIBILE"
+  "$PY" -c "import numpy, scipy, yaml, pytest, sys; print('[session-start] ricerca pronta per', sys.executable, sys.version.split()[0], 'numpy', numpy.__version__, 'scipy', scipy.__version__)" \
+    || echo "[session-start] ATTENZIONE: manca una dipendenza della ricerca per $ESEGUIBILE (numpy, scipy, pyyaml o pytest)"
+done
 python -m pip install --quiet -r requirements.txt \
   || echo "[session-start] ATTENZIONE: alcune dipendenze del bot non installate (non bloccante per la ricerca)"
-python -c "import numpy, scipy, yaml, pytest" 2>/dev/null \
-  && echo "[session-start] dipendenze della ricerca presenti (numpy, scipy, pyyaml, pytest)" \
-  || echo "[session-start] ATTENZIONE: manca una dipendenza della ricerca (numpy, scipy, pyyaml o pytest)"
 
 echo "[session-start] Installazione dipendenze Node (dashboard)..."
 if [ -f dashboard/package.json ]; then
