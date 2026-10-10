@@ -7,6 +7,13 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-10
+* **Il numero guida migliora un poco ma resta sotto zero:** dopo la scelta del gate il motore fa −0,05R a trade su 351 segnali, ±0,11R per giornata (ops 0577); ieri −0,08 su 322 ±0,12. Con la regola del 14 ott («motore ≤ 0 con almeno 80 segnali») la lettura direbbe ancora «la prossima modifica va nel gate»; sugli stessi segnali paper e motore restano vicini (+0,02 ±0,05).
+* **Una giornata buona non cambia il quadro:** ieri le validate hanno fatto +0,171R a trade su 24, trainate dai long (+0,566R su 16) mentre gli short hanno perso (−0,619R su 8) (ops 0581). Dal 27 set i long restano a −0,140R su 176 e gli short a +0,004R su 111 (ops 0568): un giorno su 23 non sposta il segno.
+* **Lo spazio del registro torna a scendere a ondate:** ~444 coppie (ieri ~537, ops 0571 e 0556): 93 in meno in un giorno; con questo passo l'allarme dei 400 arriva fra uno e due giorni.
+* **Le letture di Firebase crescono come previsto ieri:** 16.811 nelle 24 ore, di cui 13.241 dai segnali rifiutati (ops 0572); ieri 14.521: +2.290, contro i ~2.400 stimati. La quota gratuita (50.000) si toccherebbe in circa due settimane.
+* **Il protocollo di ricerca ha finito le campagne:** 20 monete su 20, 600 varianti, 7 candidati in validazione, 3 confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT), tutti fragili per dichiarazione delle campagne stesse; 3 su 6 valutabili sotto la soglia contro 0,2-0,6 attesi per puro caso: un indizio, lo decide il vault (`research/passo4/riepilogo.md`, branch di coordinamento).
+
 ## 2026-10-09 (pomeriggio: la prova con le strategie finte)
 * **L'esame delle campagne non scambia il rumore per vantaggio, nemmeno sui prezzi veri.** 1.479 strategie senza vantaggio (regole da manuale spostate nel tempo, 80 monete fuori dalla lista, solo fino al 2023) giudicate come una campagna: «nette» lo 0,41% (soglia scritta prima 3%, dichiarato 0-2%); p sotto 0,10 in validazione il 3,26% (soglia 13%, dichiarato 6-11%) (`research/taratura/placebo/risultati.md`, branch di coordinamento).
 * **L'esame è più severo di quanto dice, e costa potenza.** Il `t` delle strategie finte ha deviazione standard 0,815 invece di 1: un vantaggio piccolo ma vero passa meno spesso del previsto. Non si allenta l'esame guardando questi numeri; la risposta già scritta è la campagna di gruppo, che somma i trade di più monete.

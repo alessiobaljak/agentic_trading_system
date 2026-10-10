@@ -3261,3 +3261,24 @@ valutabili hanno superato la soglia in validazione, contro 0,2-0,6 attesi se fos
 indizio da rileggere al Passo 7, il giudice è il vault; (3) ultracode è arrivato solo all'ultima apertura (ETCUSDT,
 19:15 UTC), per una causa che resta non nota. STOP: il proprietario decide la campagna di gruppo e BTCUSDT; il vault
 si apre solo con «APRI IL VAULT».
+
+### Controllo del 10 ottobre (mattina)
+
+**Nessun guasto.** Bot vivo (battito 16 s, ops 0580), controllo orario regolare (03:40 UTC), nessun errore nelle
+letture. Spesa AI di ieri 0 (ops 0570). Letture Firestore 16.811 nelle 24 ore (rifiutati 13.241; ieri 14.521, ops
+0572). Prova indiretta delle funzioni AI spente: ORIGINI «nuove ai 0», varianti 0 (ops 0571). **Giro della notte 3 h 47**
+(GATE_SFORA, 21:23-01:10 UTC): 57.311 valutazioni, 185 passate, 257 coin. **Registro:** spazio ~444 coppie (ieri
+~537). **Numeri:** 440 trade nel periodo del paper, −109,41 USDT (ops 0577); equity 890,58, DRY_RUN True, 4 aperte con
+0,46% a rischio (ops 0581). Ieri 24 trade delle validate, +1,28 USDT, +0,171R a trade (lordo +0,257, costi 0,086); 7
+giorni −0,077R su 187, 1 giornata in utile e 6 in perdita (ops 0581). Giornate dal 16 set: 8 in utile e 16 in
+perdita fino al 9 ott (ops 0577). Dal 27 set −0,080R netti su 283; long −0,140R su 176, short +0,004 su 111; short
+contro BTC +0,125 su 52 (ops 0568, 0581). **Fuori campione:** motore −0,05R su 351 segnali ±0,11 (ieri −0,08 su 322);
+stessi segnali paper −0,10 contro motore −0,07, differenza +0,02 ±0,05 → lettura stampata invariata (ops 0577);
+seconda lettura il 14 ott. Stop: 85 sbagliati dall'inizio e 105 sotto il primo gradino (ops 0574). Curva del vantaggio:
+nessun vantaggio (ops 0574). Declassate +0,018 ±0,253 → non si decide (ops 0568). Selettore: non batte (ops 0576).
+Rifiutati per cooldown +0,22R su 65 contro aperti −0,09, prezzo puro: +0,31 ±0,32 (ops 0579). **Gate:** 236 validate
+su 77 coin, 731 a 2/3, t ≥ 2 per 135 su 191, declassate 105; passata a 1 ora 359 su 17.790; nessun trade a 1 ora (ops
+0574). **Protocollo:** 20 monete su 20 consegnate, 3 candidati per il vault; STOP del Passo 4 sulle due decisioni del
+proprietario (campagna di gruppo; rifare BTCUSDT). **Proposta del giorno:** nessuna voce nuova (il protocollo è allo
+STOP). Da tenere d'occhio: lo spazio del registro (~444) e le letture di Firebase dai rifiutati.
+
