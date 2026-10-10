@@ -12,6 +12,7 @@ di validazione; e «modulo»: il file in codice/, di cui si scrive lo SHA-256.
 import hashlib
 import json
 import sys
+from datetime import datetime, timezone
 
 from comune import CARTELLA_GRUPPO, aggiungi_al_log, prossimo_id
 
@@ -21,6 +22,8 @@ CODICE = CARTELLA_GRUPPO / "codice"
 
 def main():
     tipo, spec_file, data = sys.argv[1], LAVORO / sys.argv[2], sys.argv[3]
+    if data == "adesso":  # l'orologio della macchina, lo stesso di date -u
+        data = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     spec = json.loads(spec_file.read_text())
     if tipo in ("registrazione", "scarto"):
         conta = json.loads((LAVORO / spec.pop("conta")).read_text())
@@ -51,8 +54,8 @@ def main():
         voce = {"id": spec.pop("id"), "tipo": "risultato", "data": data}
         voce.update(esame)
         voce.update(spec)
-    elif tipo == "nota":
-        voce = {"id": prossimo_id(), "tipo": "nota", "data": data}
+    elif tipo in ("nota", "correzione"):
+        voce = {"id": prossimo_id(), "tipo": tipo, "data": data}
         voce.update(spec)
     else:
         raise ValueError(tipo)
