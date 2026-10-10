@@ -21,10 +21,16 @@ CODICE = CARTELLA_GRUPPO / "codice"
 
 
 def main():
-    tipo, spec_file, data = sys.argv[1], LAVORO / sys.argv[2], sys.argv[3]
-    if data == "adesso":  # l'orologio della macchina, lo stesso di date -u
-        data = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    spec = json.loads(spec_file.read_text())
+    tipo, spec_file, data_arg = sys.argv[1], LAVORO / sys.argv[2], sys.argv[3]
+    contenuto = json.loads(spec_file.read_text())
+    for spec in (contenuto if isinstance(contenuto, list) else [contenuto]):
+        data = data_arg
+        if data == "adesso":  # l'orologio della macchina, lo stesso di date -u
+            data = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        una_voce(tipo, spec, data)
+
+
+def una_voce(tipo, spec, data):
     if tipo in ("registrazione", "scarto"):
         conta = json.loads((LAVORO / spec.pop("conta")).read_text())
         modulo = spec["modulo"]

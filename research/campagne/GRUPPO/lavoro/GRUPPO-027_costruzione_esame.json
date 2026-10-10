@@ -1,0 +1,6113 @@
+{
+ "baseline_a": {
+  "baseline_errore_standard": 0.19503088868059157,
+  "baseline_media": -0.08840035645384085,
+  "deviazione_d": 0.9710245277099474,
+  "deviazione_standard": 0.9710245277099474,
+  "differenza": 0.05084789627046121,
+  "errore_candidato": 0.12089562920459247,
+  "errore_candidato_senza_pavimento": 0.12089562920459247,
+  "errore_differenza": 0.2294619809474232,
+  "errore_minimo": 0.06710541892501436,
+  "errore_minimo_baseline": 0.03437389566992261,
+  "errore_standard": 0.19503088868059157,
+  "gradi_liberta": 10,
+  "margine": 0.5240181068409427,
+  "media": -0.08840035645384085,
+  "monete_con_un_trade": [],
+  "monete_errore_da_deviazione": [
+   "KLAYUSDT"
+  ],
+  "monete_lasciate_fuori": [],
+  "motivo": null,
+  "motivo_non_valutabile": null,
+  "n_blocchi": 11,
+  "n_monete": 80,
+  "n_monete_combinazione": 80,
+  "n_trade": 2290,
+  "n_trade_candidato": 798,
+  "n_trade_candidato_combinazione": 798,
+  "netta": false,
+  "origine_pavimento": "pavimento_minimo",
+  "p_value": 0.41454394886298274,
+  "pavimento_minimo": 0.06710541892501436,
+  "pavimento_sfasate": 0.06710541892501436,
+  "pesi": {
+   "1000XECUSDT": 0.0037593984962406013,
+   "1INCHUSDT": 0.0037593984962406013,
+   "AAVEUSDT": 0.008771929824561403,
+   "ALGOUSDT": 0.008771929824561403,
+   "ALPHAUSDT": 0.005012531328320802,
+   "ANKRUSDT": 0.013784461152882205,
+   "ARPAUSDT": 0.006265664160401002,
+   "ARUSDT": 0.002506265664160401,
+   "ATOMUSDT": 0.018796992481203006,
+   "AUDIOUSDT": 0.005012531328320802,
+   "AXSUSDT": 0.02882205513784461,
+   "BAKEUSDT": 0.002506265664160401,
+   "BANDUSDT": 0.007518796992481203,
+   "BELUSDT": 0.011278195488721804,
+   "BLZUSDT": 0.017543859649122806,
+   "C98USDT": 0.008771929824561403,
+   "CELOUSDT": 0.006265664160401002,
+   "CELRUSDT": 0.008771929824561403,
+   "CHZUSDT": 0.015037593984962405,
+   "COMPUSDT": 0.010025062656641603,
+   "CRVUSDT": 0.012531328320802004,
+   "CTSIUSDT": 0.002506265664160401,
+   "DASHUSDT": 0.020050125313283207,
+   "DOTUSDT": 0.018796992481203006,
+   "EGLDUSDT": 0.020050125313283207,
+   "ENJUSDT": 0.021303258145363407,
+   "EOSUSDT": 0.02631578947368421,
+   "FLMUSDT": 0.008771929824561403,
+   "GRTUSDT": 0.008771929824561403,
+   "GTCUSDT": 0.006265664160401002,
+   "HBARUSDT": 0.010025062656641603,
+   "ICPUSDT": 0.005012531328320802,
+   "ICXUSDT": 0.007518796992481203,
+   "IOTAUSDT": 0.012531328320802004,
+   "KAVAUSDT": 0.011278195488721804,
+   "KLAYUSDT": 0.006265664160401002,
+   "KNCUSDT": 0.016290726817042606,
+   "KSMUSDT": 0.010025062656641603,
+   "LINAUSDT": 0.007518796992481203,
+   "LPTUSDT": 0.002506265664160401,
+   "LRCUSDT": 0.020050125313283207,
+   "MANAUSDT": 0.012531328320802004,
+   "MKRUSDT": 0.021303258145363407,
+   "MTLUSDT": 0.007518796992481203,
+   "NEARUSDT": 0.023809523809523808,
+   "NEOUSDT": 0.017543859649122806,
+   "NKNUSDT": 0.007518796992481203,
+   "OCEANUSDT": 0.012531328320802004,
+   "OGNUSDT": 0.011278195488721804,
+   "OMGUSDT": 0.015037593984962405,
+   "ONTUSDT": 0.010025062656641603,
+   "PEOPLEUSDT": 0.008771929824561403,
+   "QTUMUSDT": 0.016290726817042606,
+   "RENUSDT": 0.010025062656641603,
+   "RLCUSDT": 0.017543859649122806,
+   "ROSEUSDT": 0.005012531328320802,
+   "RUNEUSDT": 0.017543859649122806,
+   "SANDUSDT": 0.02631578947368421,
+   "SFPUSDT": 0.016290726817042606,
+   "SKLUSDT": 0.010025062656641603,
+   "SNXUSDT": 0.006265664160401002,
+   "STMXUSDT": 0.0037593984962406013,
+   "STORJUSDT": 0.013784461152882205,
+   "SUSHIUSDT": 0.013784461152882205,
+   "SXPUSDT": 0.016290726817042606,
+   "THETAUSDT": 0.018796992481203006,
+   "TOMOUSDT": 0.008771929824561403,
+   "TRXUSDT": 0.02882205513784461,
+   "UNFIUSDT": 0.010025062656641603,
+   "UNIUSDT": 0.008771929824561403,
+   "VETUSDT": 0.020050125313283207,
+   "WAVESUSDT": 0.02631578947368421,
+   "XEMUSDT": 0.0037593984962406013,
+   "XLMUSDT": 0.021303258145363407,
+   "XMRUSDT": 0.008771929824561403,
+   "XTZUSDT": 0.018796992481203006,
+   "YFIUSDT": 0.021303258145363407,
+   "ZECUSDT": 0.013784461152882205,
+   "ZILUSDT": 0.017543859649122806,
+   "ZRXUSDT": 0.005012531328320802
+  },
+  "quota_trade_candidato_lasciati_fuori": 0.0,
+  "senza_pavimento_sfasate": {
+   "differenza": 0.05084789627046121,
+   "errore_candidato": 0.12089562920459247,
+   "errore_minimo": 0.03437389566992261,
+   "errore_standard": 0.2294619809474232,
+   "netta": false,
+   "p_value": 0.41454394886298274,
+   "soglia": 2.28368161329964,
+   "t": 0.22159617057481967,
+   "valutabile": true
+  },
+  "soglia": 2.28368161329964,
+  "t": 0.22159617057481967,
+  "tipo": "a",
+  "trade_candidato_lasciati_fuori": 0,
+  "valutabile": true
+ },
+ "baseline_b": {
+  "b_per_moneta": {
+   "1000XECUSDT": 0.18670122172842024,
+   "1INCHUSDT": 0.04700092314159399,
+   "AAVEUSDT": -0.044283002676431274,
+   "ALGOUSDT": -0.0769717645036845,
+   "ALPHAUSDT": 0.1340975945397842,
+   "ANKRUSDT": 0.06961910658829917,
+   "ARPAUSDT": 0.005397734989672451,
+   "ARUSDT": 0.265580868396545,
+   "ATOMUSDT": -0.12677394836502887,
+   "AUDIOUSDT": 0.2558181656075067,
+   "AXSUSDT": -0.18367606660095256,
+   "BAKEUSDT": 0.34742225817205613,
+   "BANDUSDT": -0.07970460440092808,
+   "BELUSDT": -0.029859025334945083,
+   "BLZUSDT": -0.21053764183737012,
+   "C98USDT": 0.2984981667687122,
+   "CELOUSDT": 0.028879727222625405,
+   "CELRUSDT": 0.009681565836092141,
+   "CHZUSDT": -0.0027188660419269427,
+   "COMPUSDT": 0.061926497096093554,
+   "CRVUSDT": -0.14893688089471052,
+   "CTSIUSDT": -0.3595227001120277,
+   "DASHUSDT": -0.06987347665456727,
+   "DOTUSDT": -0.03824322016655123,
+   "EGLDUSDT": -0.08129599622879351,
+   "ENJUSDT": -0.05122600169853328,
+   "EOSUSDT": -0.02064304324853268,
+   "FLMUSDT": 0.014644349178809926,
+   "GRTUSDT": 0.144115004874581,
+   "GTCUSDT": 0.09937166098127172,
+   "HBARUSDT": 0.1745472297049725,
+   "ICPUSDT": 0.15341573118423582,
+   "ICXUSDT": -0.06554520187281115,
+   "IOTAUSDT": 0.009504307533828915,
+   "KAVAUSDT": 0.003544038436529683,
+   "KLAYUSDT": 0.18964789106282773,
+   "KNCUSDT": -0.15926071284826665,
+   "KSMUSDT": 0.06005360123252082,
+   "LINAUSDT": -0.09972065450702836,
+   "LPTUSDT": -0.4370691439338522,
+   "LRCUSDT": -0.007123343508664008,
+   "MANAUSDT": 0.09212007167532889,
+   "MKRUSDT": -0.009970549988822505,
+   "MTLUSDT": -0.2381037283570623,
+   "NEARUSDT": -0.02435922323735949,
+   "NEOUSDT": -0.04001866503321656,
+   "NKNUSDT": -0.03759128615351623,
+   "OCEANUSDT": -0.09593427189437627,
+   "OGNUSDT": -0.05394498019100605,
+   "OMGUSDT": -0.17933615509167464,
+   "ONTUSDT": 0.03311532869700904,
+   "PEOPLEUSDT": 0.008655414307714153,
+   "QTUMUSDT": -0.1394636509022434,
+   "RENUSDT": -0.009375944886807796,
+   "RLCUSDT": -0.2224130082229128,
+   "ROSEUSDT": 0.31561295413540386,
+   "RUNEUSDT": -0.053457418795268864,
+   "SANDUSDT": 0.0006970641538123587,
+   "SFPUSDT": 0.045894227150334956,
+   "SKLUSDT": 0.09804479341982031,
+   "SNXUSDT": -0.0910931767701149,
+   "STMXUSDT": 0.0114515110346886,
+   "STORJUSDT": -0.1606566996182244,
+   "SUSHIUSDT": -0.039922512193073544,
+   "SXPUSDT": 0.12127805179817275,
+   "THETAUSDT": -0.12227593865225257,
+   "TOMOUSDT": -0.06252496683581171,
+   "TRXUSDT": -0.2615704093299546,
+   "UNFIUSDT": -0.06372156304389197,
+   "UNIUSDT": 0.02804005647699459,
+   "VETUSDT": -0.06747913528320365,
+   "WAVESUSDT": -0.03532769612824135,
+   "XEMUSDT": 0.0633682612441314,
+   "XLMUSDT": 0.004123102839408303,
+   "XMRUSDT": -0.23669662666622046,
+   "XTZUSDT": -4.688358235984097e-05,
+   "YFIUSDT": 0.08034001974010993,
+   "ZECUSDT": -0.03915208812766248,
+   "ZILUSDT": 0.08088552050515513,
+   "ZRXUSDT": -0.012191142824481034
+  },
+  "baseline_errore_standard": 0.0017806413080544144,
+  "baseline_media": -0.03527363644456862,
+  "differenza": -0.0022788237388110186,
+  "errore_candidato": 0.12089562920459247,
+  "errore_candidato_senza_pavimento": 0.12089562920459247,
+  "errore_differenza": 0.12090874180241172,
+  "errore_minimo": 0.06710541892501436,
+  "errore_minimo_baseline": 0.02518207087572321,
+  "errore_minimo_candidato": 0.02518207087572321,
+  "errore_standard": 0.0017806413080544144,
+  "gradi_liberta": 10,
+  "m_mancanti": 0,
+  "m_parziali": 0,
+  "margine": 0.2761170705413612,
+  "media": -0.03527363644456862,
+  "monete_con_meno_di_2_simulazioni": [],
+  "monete_senza_ingressi": [],
+  "motivo": null,
+  "motivo_non_valutabile": null,
+  "n_blocchi": 11,
+  "n_monete": 80,
+  "n_simulazioni": 200,
+  "n_trade_candidato": 798,
+  "netta": false,
+  "origine_pavimento": "pavimento_minimo",
+  "p_value": 0.5073332305523546,
+  "pavimento_minimo": 0.06710541892501436,
+  "pavimento_sfasate": 0.06710541892501436,
+  "percentile_90": -0.002152122611079388,
+  "percentile_caso": 44.0,
+  "pesi": {
+   "1000XECUSDT": 0.0037593984962406013,
+   "1INCHUSDT": 0.0037593984962406013,
+   "AAVEUSDT": 0.008771929824561403,
+   "ALGOUSDT": 0.008771929824561403,
+   "ALPHAUSDT": 0.005012531328320802,
+   "ANKRUSDT": 0.013784461152882205,
+   "ARPAUSDT": 0.006265664160401002,
+   "ARUSDT": 0.002506265664160401,
+   "ATOMUSDT": 0.018796992481203006,
+   "AUDIOUSDT": 0.005012531328320802,
+   "AXSUSDT": 0.02882205513784461,
+   "BAKEUSDT": 0.002506265664160401,
+   "BANDUSDT": 0.007518796992481203,
+   "BELUSDT": 0.011278195488721804,
+   "BLZUSDT": 0.017543859649122806,
+   "C98USDT": 0.008771929824561403,
+   "CELOUSDT": 0.006265664160401002,
+   "CELRUSDT": 0.008771929824561403,
+   "CHZUSDT": 0.015037593984962405,
+   "COMPUSDT": 0.010025062656641603,
+   "CRVUSDT": 0.012531328320802004,
+   "CTSIUSDT": 0.002506265664160401,
+   "DASHUSDT": 0.020050125313283207,
+   "DOTUSDT": 0.018796992481203006,
+   "EGLDUSDT": 0.020050125313283207,
+   "ENJUSDT": 0.021303258145363407,
+   "EOSUSDT": 0.02631578947368421,
+   "FLMUSDT": 0.008771929824561403,
+   "GRTUSDT": 0.008771929824561403,
+   "GTCUSDT": 0.006265664160401002,
+   "HBARUSDT": 0.010025062656641603,
+   "ICPUSDT": 0.005012531328320802,
+   "ICXUSDT": 0.007518796992481203,
+   "IOTAUSDT": 0.012531328320802004,
+   "KAVAUSDT": 0.011278195488721804,
+   "KLAYUSDT": 0.006265664160401002,
+   "KNCUSDT": 0.016290726817042606,
+   "KSMUSDT": 0.010025062656641603,
+   "LINAUSDT": 0.007518796992481203,
+   "LPTUSDT": 0.002506265664160401,
+   "LRCUSDT": 0.020050125313283207,
+   "MANAUSDT": 0.012531328320802004,
+   "MKRUSDT": 0.021303258145363407,
+   "MTLUSDT": 0.007518796992481203,
+   "NEARUSDT": 0.023809523809523808,
+   "NEOUSDT": 0.017543859649122806,
+   "NKNUSDT": 0.007518796992481203,
+   "OCEANUSDT": 0.012531328320802004,
+   "OGNUSDT": 0.011278195488721804,
+   "OMGUSDT": 0.015037593984962405,
+   "ONTUSDT": 0.010025062656641603,
+   "PEOPLEUSDT": 0.008771929824561403,
+   "QTUMUSDT": 0.016290726817042606,
+   "RENUSDT": 0.010025062656641603,
+   "RLCUSDT": 0.017543859649122806,
+   "ROSEUSDT": 0.005012531328320802,
+   "RUNEUSDT": 0.017543859649122806,
+   "SANDUSDT": 0.02631578947368421,
+   "SFPUSDT": 0.016290726817042606,
+   "SKLUSDT": 0.010025062656641603,
+   "SNXUSDT": 0.006265664160401002,
+   "STMXUSDT": 0.0037593984962406013,
+   "STORJUSDT": 0.013784461152882205,
+   "SUSHIUSDT": 0.013784461152882205,
+   "SXPUSDT": 0.016290726817042606,
+   "THETAUSDT": 0.018796992481203006,
+   "TOMOUSDT": 0.008771929824561403,
+   "TRXUSDT": 0.02882205513784461,
+   "UNFIUSDT": 0.010025062656641603,
+   "UNIUSDT": 0.008771929824561403,
+   "VETUSDT": 0.020050125313283207,
+   "WAVESUSDT": 0.02631578947368421,
+   "XEMUSDT": 0.0037593984962406013,
+   "XLMUSDT": 0.021303258145363407,
+   "XMRUSDT": 0.008771929824561403,
+   "XTZUSDT": 0.018796992481203006,
+   "YFIUSDT": 0.021303258145363407,
+   "ZECUSDT": 0.013784461152882205,
+   "ZILUSDT": 0.017543859649122806,
+   "ZRXUSDT": 0.005012531328320802
+  },
+  "quota_barre_vietate_segnale_non_valido": 0.11479776804009961,
+  "segnali_scartati_per_simulazione_medi": 0.0,
+  "semi": {
+   "formula": "1000*j + s",
+   "primo_per_moneta": {
+    "1000XECUSDT": 0,
+    "1INCHUSDT": 1000,
+    "AAVEUSDT": 2000,
+    "ALGOUSDT": 3000,
+    "ALPHAUSDT": 4000,
+    "ANKRUSDT": 5000,
+    "ARPAUSDT": 6000,
+    "ARUSDT": 7000,
+    "ATOMUSDT": 8000,
+    "AUDIOUSDT": 9000,
+    "AXSUSDT": 10000,
+    "BAKEUSDT": 11000,
+    "BANDUSDT": 12000,
+    "BELUSDT": 13000,
+    "BLZUSDT": 14000,
+    "C98USDT": 15000,
+    "CELOUSDT": 16000,
+    "CELRUSDT": 17000,
+    "CHZUSDT": 18000,
+    "COMPUSDT": 19000,
+    "CRVUSDT": 20000,
+    "CTSIUSDT": 21000,
+    "DASHUSDT": 22000,
+    "DOTUSDT": 23000,
+    "EGLDUSDT": 24000,
+    "ENJUSDT": 25000,
+    "EOSUSDT": 26000,
+    "FLMUSDT": 27000,
+    "GRTUSDT": 28000,
+    "GTCUSDT": 29000,
+    "HBARUSDT": 30000,
+    "ICPUSDT": 31000,
+    "ICXUSDT": 32000,
+    "IOTAUSDT": 33000,
+    "KAVAUSDT": 34000,
+    "KLAYUSDT": 35000,
+    "KNCUSDT": 36000,
+    "KSMUSDT": 37000,
+    "LINAUSDT": 38000,
+    "LPTUSDT": 39000,
+    "LRCUSDT": 40000,
+    "MANAUSDT": 41000,
+    "MKRUSDT": 42000,
+    "MTLUSDT": 43000,
+    "NEARUSDT": 44000,
+    "NEOUSDT": 45000,
+    "NKNUSDT": 46000,
+    "OCEANUSDT": 47000,
+    "OGNUSDT": 48000,
+    "OMGUSDT": 49000,
+    "ONTUSDT": 50000,
+    "PEOPLEUSDT": 51000,
+    "QTUMUSDT": 52000,
+    "RENUSDT": 53000,
+    "RLCUSDT": 54000,
+    "ROSEUSDT": 55000,
+    "RUNEUSDT": 56000,
+    "SANDUSDT": 57000,
+    "SFPUSDT": 58000,
+    "SKLUSDT": 59000,
+    "SNXUSDT": 60000,
+    "STMXUSDT": 61000,
+    "STORJUSDT": 62000,
+    "SUSHIUSDT": 63000,
+    "SXPUSDT": 64000,
+    "THETAUSDT": 65000,
+    "TOMOUSDT": 66000,
+    "TRXUSDT": 67000,
+    "UNFIUSDT": 68000,
+    "UNIUSDT": 69000,
+    "VETUSDT": 70000,
+    "WAVESUSDT": 71000,
+    "XEMUSDT": 72000,
+    "XLMUSDT": 73000,
+    "XMRUSDT": 74000,
+    "XTZUSDT": 75000,
+    "YFIUSDT": 76000,
+    "ZECUSDT": 77000,
+    "ZILUSDT": 78000,
+    "ZRXUSDT": 79000
+   },
+   "simulazioni_per_moneta": 200
+  },
+  "senza_pavimento_sfasate": {
+   "differenza": -0.0022788237388110186,
+   "errore_candidato": 0.12089562920459247,
+   "errore_minimo": 0.02518207087572321,
+   "errore_standard": 0.12090874180241172,
+   "netta": false,
+   "p_value": 0.5073332305523546,
+   "soglia": 2.28368161329964,
+   "t": -0.018847468800354053,
+   "valutabile": true
+  },
+  "simulazioni_con_trade_per_moneta": {
+   "1000XECUSDT": 200,
+   "1INCHUSDT": 200,
+   "AAVEUSDT": 200,
+   "ALGOUSDT": 200,
+   "ALPHAUSDT": 200,
+   "ANKRUSDT": 200,
+   "ARPAUSDT": 200,
+   "ARUSDT": 200,
+   "ATOMUSDT": 200,
+   "AUDIOUSDT": 200,
+   "AXSUSDT": 200,
+   "BAKEUSDT": 200,
+   "BANDUSDT": 200,
+   "BELUSDT": 200,
+   "BLZUSDT": 200,
+   "C98USDT": 200,
+   "CELOUSDT": 200,
+   "CELRUSDT": 200,
+   "CHZUSDT": 200,
+   "COMPUSDT": 200,
+   "CRVUSDT": 200,
+   "CTSIUSDT": 200,
+   "DASHUSDT": 200,
+   "DOTUSDT": 200,
+   "EGLDUSDT": 200,
+   "ENJUSDT": 200,
+   "EOSUSDT": 200,
+   "FLMUSDT": 200,
+   "GRTUSDT": 200,
+   "GTCUSDT": 200,
+   "HBARUSDT": 200,
+   "ICPUSDT": 200,
+   "ICXUSDT": 200,
+   "IOTAUSDT": 200,
+   "KAVAUSDT": 200,
+   "KLAYUSDT": 200,
+   "KNCUSDT": 200,
+   "KSMUSDT": 200,
+   "LINAUSDT": 200,
+   "LPTUSDT": 200,
+   "LRCUSDT": 200,
+   "MANAUSDT": 200,
+   "MKRUSDT": 200,
+   "MTLUSDT": 200,
+   "NEARUSDT": 200,
+   "NEOUSDT": 200,
+   "NKNUSDT": 200,
+   "OCEANUSDT": 200,
+   "OGNUSDT": 200,
+   "OMGUSDT": 200,
+   "ONTUSDT": 200,
+   "PEOPLEUSDT": 200,
+   "QTUMUSDT": 200,
+   "RENUSDT": 200,
+   "RLCUSDT": 200,
+   "ROSEUSDT": 200,
+   "RUNEUSDT": 200,
+   "SANDUSDT": 200,
+   "SFPUSDT": 200,
+   "SKLUSDT": 200,
+   "SNXUSDT": 200,
+   "STMXUSDT": 200,
+   "STORJUSDT": 200,
+   "SUSHIUSDT": 200,
+   "SXPUSDT": 200,
+   "THETAUSDT": 200,
+   "TOMOUSDT": 200,
+   "TRXUSDT": 200,
+   "UNFIUSDT": 200,
+   "UNIUSDT": 200,
+   "VETUSDT": 200,
+   "WAVESUSDT": 200,
+   "XEMUSDT": 200,
+   "XLMUSDT": 200,
+   "XMRUSDT": 200,
+   "XTZUSDT": 200,
+   "YFIUSDT": 200,
+   "ZECUSDT": 200,
+   "ZILUSDT": 200,
+   "ZRXUSDT": 200
+  },
+  "simulazioni_per_moneta": 200,
+  "soglia": 2.28368161329964,
+  "t": -0.018847468800354053,
+  "tipo": "b",
+  "trade_per_simulazione_medio": 694.385,
+  "valutabile": true
+ },
+ "blocco": 68,
+ "btc": {
+  "candele": 1112,
+  "prima_ts": 1577836800000,
+  "ultima_close_ts": 1673913599999
+ },
+ "buy_and_hold_per_anno": {
+  "2020": {
+   "long": 0.24535655700515194,
+   "monete_presenti": 52,
+   "peso_presente": 0.7744360902255638,
+   "short": -0.2502451300336561
+  },
+  "2021": {
+   "long": 9.222713188108212,
+   "monete_presenti": 80,
+   "peso_presente": 1.0,
+   "short": -9.2581459023488
+  },
+  "2022": {
+   "long": -0.801810983410002,
+   "monete_presenti": 80,
+   "peso_presente": 1.0,
+   "short": 0.8000279731662225
+  },
+  "2023": {
+   "long": 0.40226804916706915,
+   "monete_presenti": 80,
+   "peso_presente": 1.0,
+   "short": -0.40882567956906135
+  }
+ },
+ "candidato": false,
+ "date": {
+  "fine_costruzione": "2023-01-16",
+  "fine_validazione": "2023-12-31",
+  "giorni_validazione": 349,
+  "inizio_validazione": "2023-01-17"
+ },
+ "durata_massima_barre": 35,
+ "durata_massima_ms": 3024000000,
+ "effetto_grappolo": 12.352876256656128,
+ "estremi": {
+  "senza_giorni_migliori": {
+   "b_ripesata": -0.03611560583445996,
+   "giorni_tolti": [
+    "2022-12-05",
+    "2022-12-04",
+    "2022-04-29"
+   ],
+   "r_medio": -0.0799369320122469,
+   "somme_r_giorni_tolti": [
+    13.031313759870324,
+    9.781058672856862,
+    9.251823582439469
+   ],
+   "superata": false,
+   "trade_rimasti": 776,
+   "trade_tolti": 22
+  },
+  "senza_monete_migliori": {
+   "b_ripesata": -0.035560147746019136,
+   "monete_tolte": [
+    "AAVEUSDT",
+    "LINAUSDT",
+    "GTCUSDT"
+   ],
+   "r_medio": -0.062359254290732316,
+   "somme_r_monete_tolte": [
+    7.101509740811062,
+    6.579071077321537,
+    4.992774302301653
+   ],
+   "superata": false,
+   "trade_rimasti": 780,
+   "trade_tolti": 18
+  },
+  "senza_trade_migliori": {
+   "b": -0.03527363644456862,
+   "r_medio": -0.12214031092884814,
+   "superata": false,
+   "trade_rimasti": 768,
+   "trade_tolti": 30
+  },
+  "tutte_superate": false
+ },
+ "file": {
+  "avanzamento": "/home/user/agentic_trading_system/research/campagne/GRUPPO/avanzamento/GRUPPO-027_costruzione.jsonl",
+  "trade": "/home/user/agentic_trading_system/research/campagne/GRUPPO/trade/GRUPPO-027_costruzione.jsonl"
+ },
+ "id": "GRUPPO-027",
+ "impronte": {
+  "codice": "064150f25f6ab11e48cac76e7d198205b5ca57f59e5395338b9962c475f5ba6a",
+  "esame": "75a94d2ff1c31ddccf4e94ddaf88630168278c95276cccb7abdb181781073302",
+  "parametri": "526f1b1e06f782a5bcd0053a37548378cf2eaa485ebe8f85fd9657cfc16fd2ae",
+  "strumenti": {
+   "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7",
+   "research/src/dati.py": "4b9ed237125ede9fc6d5103cdf93f6a382309649e34d5b07686f58be59ab8a6d",
+   "research/src/gruppo.py": "1f3fe8c8218cd32711b153b05872ac1042e417b2d7fe3b142a2a1972794c81cb",
+   "research/src/motore.py": "5a3998c5f0a1535d255b5bf6fc3a367a5805a7ff9766024d74df096816e89c42",
+   "research/src/statistica.py": "ca027d2687d9129a533077eb980c0517bd09c476331659d61eaf15dda45c9e5a"
+  },
+  "variante": "125b98464ec6f2b4ff0c8051a15a88d03ebbf234f1b5e3f23fda37c0e9ad08ba"
+ },
+ "ingressi": {
+  "tipo": "modulo"
+ },
+ "liquidazione": {
+  "trade_ridotti": 0,
+  "violazioni": 17
+ },
+ "metriche": {
+  "capitale_totale": 80000.0,
+  "drawdown_max": 0.01610795915762719,
+  "drawdown_max_usdt": 1288.6367326101754,
+  "monete_con_trade": 80,
+  "monete_nel_periodo": 80,
+  "n_trade": 798,
+  "per_moneta": {
+   "1000XECUSDT": {
+    "n_trade": 3,
+    "r_medio": 0.6187042833999876
+   },
+   "1INCHUSDT": {
+    "n_trade": 3,
+    "r_medio": 0.8095175358010409
+   },
+   "AAVEUSDT": {
+    "n_trade": 7,
+    "r_medio": 1.0145013915444374
+   },
+   "ALGOUSDT": {
+    "n_trade": 7,
+    "r_medio": 0.4727926440804125
+   },
+   "ALPHAUSDT": {
+    "n_trade": 4,
+    "r_medio": 0.22801443323669657
+   },
+   "ANKRUSDT": {
+    "n_trade": 11,
+    "r_medio": 0.02921029202158896
+   },
+   "ARPAUSDT": {
+    "n_trade": 5,
+    "r_medio": -0.09309291076620284
+   },
+   "ARUSDT": {
+    "n_trade": 2,
+    "r_medio": 1.3214309539619424
+   },
+   "ATOMUSDT": {
+    "n_trade": 15,
+    "r_medio": -0.1909732092583738
+   },
+   "AUDIOUSDT": {
+    "n_trade": 4,
+    "r_medio": 0.3867207305518686
+   },
+   "AXSUSDT": {
+    "n_trade": 23,
+    "r_medio": -0.35998398407329174
+   },
+   "BAKEUSDT": {
+    "n_trade": 2,
+    "r_medio": 1.561617661816401
+   },
+   "BANDUSDT": {
+    "n_trade": 6,
+    "r_medio": -0.08535576768806226
+   },
+   "BELUSDT": {
+    "n_trade": 9,
+    "r_medio": -0.014614049057016576
+   },
+   "BLZUSDT": {
+    "n_trade": 14,
+    "r_medio": -0.08997938364343223
+   },
+   "C98USDT": {
+    "n_trade": 7,
+    "r_medio": 0.34186673315427507
+   },
+   "CELOUSDT": {
+    "n_trade": 5,
+    "r_medio": 0.3841504571070825
+   },
+   "CELRUSDT": {
+    "n_trade": 7,
+    "r_medio": 0.04535990749601696
+   },
+   "CHZUSDT": {
+    "n_trade": 12,
+    "r_medio": -0.03696501097940819
+   },
+   "COMPUSDT": {
+    "n_trade": 8,
+    "r_medio": 0.16001404396900207
+   },
+   "CRVUSDT": {
+    "n_trade": 10,
+    "r_medio": -0.07718915991535807
+   },
+   "CTSIUSDT": {
+    "n_trade": 2,
+    "r_medio": -0.12546694985735396
+   },
+   "DASHUSDT": {
+    "n_trade": 16,
+    "r_medio": -0.49325737316301194
+   },
+   "DOTUSDT": {
+    "n_trade": 15,
+    "r_medio": -0.060660177872539536
+   },
+   "EGLDUSDT": {
+    "n_trade": 16,
+    "r_medio": -0.45097942956787
+   },
+   "ENJUSDT": {
+    "n_trade": 17,
+    "r_medio": -0.5365576150915781
+   },
+   "EOSUSDT": {
+    "n_trade": 21,
+    "r_medio": 0.061640085732933295
+   },
+   "FLMUSDT": {
+    "n_trade": 7,
+    "r_medio": -0.14261192386334492
+   },
+   "GRTUSDT": {
+    "n_trade": 7,
+    "r_medio": 0.3958874230195172
+   },
+   "GTCUSDT": {
+    "n_trade": 5,
+    "r_medio": 0.9985548604603306
+   },
+   "HBARUSDT": {
+    "n_trade": 8,
+    "r_medio": -0.09833002755183784
+   },
+   "ICPUSDT": {
+    "n_trade": 4,
+    "r_medio": -0.14873357914033966
+   },
+   "ICXUSDT": {
+    "n_trade": 6,
+    "r_medio": -0.33038528696394015
+   },
+   "IOTAUSDT": {
+    "n_trade": 10,
+    "r_medio": -0.17047321018073042
+   },
+   "KAVAUSDT": {
+    "n_trade": 9,
+    "r_medio": -0.2670895002002553
+   },
+   "KLAYUSDT": {
+    "n_trade": 5,
+    "r_medio": -0.22421297028489384
+   },
+   "KNCUSDT": {
+    "n_trade": 13,
+    "r_medio": -0.15539871655871712
+   },
+   "KSMUSDT": {
+    "n_trade": 8,
+    "r_medio": 0.40094584502617475
+   },
+   "LINAUSDT": {
+    "n_trade": 6,
+    "r_medio": 1.096511846220256
+   },
+   "LPTUSDT": {
+    "n_trade": 2,
+    "r_medio": -0.18192378222249678
+   },
+   "LRCUSDT": {
+    "n_trade": 16,
+    "r_medio": -0.07530217050246214
+   },
+   "MANAUSDT": {
+    "n_trade": 10,
+    "r_medio": -0.31432018015262086
+   },
+   "MKRUSDT": {
+    "n_trade": 17,
+    "r_medio": -0.053880263359305534
+   },
+   "MTLUSDT": {
+    "n_trade": 6,
+    "r_medio": 0.09205941730170998
+   },
+   "NEARUSDT": {
+    "n_trade": 19,
+    "r_medio": -0.2301576381703466
+   },
+   "NEOUSDT": {
+    "n_trade": 14,
+    "r_medio": -0.04803915216298906
+   },
+   "NKNUSDT": {
+    "n_trade": 6,
+    "r_medio": 0.7682845959136914
+   },
+   "OCEANUSDT": {
+    "n_trade": 10,
+    "r_medio": 0.1564164669411025
+   },
+   "OGNUSDT": {
+    "n_trade": 9,
+    "r_medio": -0.011023769705449486
+   },
+   "OMGUSDT": {
+    "n_trade": 12,
+    "r_medio": 0.23066981190664318
+   },
+   "ONTUSDT": {
+    "n_trade": 8,
+    "r_medio": -0.014744456790535695
+   },
+   "PEOPLEUSDT": {
+    "n_trade": 7,
+    "r_medio": -0.10344423586111703
+   },
+   "QTUMUSDT": {
+    "n_trade": 13,
+    "r_medio": -0.14158235483083292
+   },
+   "RENUSDT": {
+    "n_trade": 8,
+    "r_medio": 0.4627108465391406
+   },
+   "RLCUSDT": {
+    "n_trade": 14,
+    "r_medio": -0.26085591758180077
+   },
+   "ROSEUSDT": {
+    "n_trade": 4,
+    "r_medio": 0.4212413069154071
+   },
+   "RUNEUSDT": {
+    "n_trade": 14,
+    "r_medio": -0.6955882591045446
+   },
+   "SANDUSDT": {
+    "n_trade": 21,
+    "r_medio": -0.17082496683655676
+   },
+   "SFPUSDT": {
+    "n_trade": 13,
+    "r_medio": 0.32054660146480624
+   },
+   "SKLUSDT": {
+    "n_trade": 8,
+    "r_medio": 0.017411360522150143
+   },
+   "SNXUSDT": {
+    "n_trade": 5,
+    "r_medio": 0.23102486444799078
+   },
+   "STMXUSDT": {
+    "n_trade": 3,
+    "r_medio": 1.297741406647869
+   },
+   "STORJUSDT": {
+    "n_trade": 11,
+    "r_medio": 0.07221184269594177
+   },
+   "SUSHIUSDT": {
+    "n_trade": 11,
+    "r_medio": 0.12666461098284337
+   },
+   "SXPUSDT": {
+    "n_trade": 13,
+    "r_medio": -0.3203258118262106
+   },
+   "THETAUSDT": {
+    "n_trade": 15,
+    "r_medio": -0.3988332233374023
+   },
+   "TOMOUSDT": {
+    "n_trade": 7,
+    "r_medio": -0.19587067108415473
+   },
+   "TRXUSDT": {
+    "n_trade": 23,
+    "r_medio": -0.19551634965181441
+   },
+   "UNFIUSDT": {
+    "n_trade": 8,
+    "r_medio": 0.027040524716926778
+   },
+   "UNIUSDT": {
+    "n_trade": 7,
+    "r_medio": 0.0029407870756671234
+   },
+   "VETUSDT": {
+    "n_trade": 16,
+    "r_medio": -0.22229094040496522
+   },
+   "WAVESUSDT": {
+    "n_trade": 21,
+    "r_medio": -0.1438978840797684
+   },
+   "XEMUSDT": {
+    "n_trade": 3,
+    "r_medio": 0.3540444087084637
+   },
+   "XLMUSDT": {
+    "n_trade": 17,
+    "r_medio": -0.0939276693559757
+   },
+   "XMRUSDT": {
+    "n_trade": 7,
+    "r_medio": -0.2648689594565043
+   },
+   "XTZUSDT": {
+    "n_trade": 15,
+    "r_medio": 0.016668463861066116
+   },
+   "YFIUSDT": {
+    "n_trade": 17,
+    "r_medio": 0.0897024891769974
+   },
+   "ZECUSDT": {
+    "n_trade": 11,
+    "r_medio": -0.042350333730495154
+   },
+   "ZILUSDT": {
+    "n_trade": 14,
+    "r_medio": 0.007467046880878812
+   },
+   "ZRXUSDT": {
+    "n_trade": 4,
+    "r_medio": 0.2764986661749772
+   }
+  },
+  "pnl_totale": -295.91468430834607,
+  "profit_factor": 0.9159283991136064,
+  "r_medio": -0.03755246018337961,
+  "r_medio_per_anno": {
+   "2020": -0.19108880737925793,
+   "2021": -0.2349478478081624,
+   "2022": 0.31477767256092043,
+   "2023": -0.2887087368653423
+  },
+  "r_medio_senza_30_migliori": -0.12214031092884813,
+  "rendimento_totale": -0.003698933553854326,
+  "trade": 798
+ },
+ "moneta_piu_presente": "AXSUSDT",
+ "monete_con_trade": 80,
+ "monete_nel_gruppo": 80,
+ "monete_nel_periodo": 80,
+ "motivi_non_valutabile": [],
+ "n_blocchi": 11,
+ "opzioni": {
+  "con_baseline_a": true,
+  "moltiplicatore_costi": 1.0,
+  "riempimento_intrabarra": "stop_prima",
+  "ritardo_barre": 0
+ },
+ "p_value": 0.5073332305523546,
+ "parametri": {
+  "atr": 14,
+  "direzione": "short",
+  "finestra": 30,
+  "finestra_rif": 90,
+  "multiplo": 5.0,
+  "stop_atr": 3.0,
+  "tenuta": 30
+ },
+ "pavimento_sfasate": {
+  "L": 1112,
+  "durata_massima_barre": 35,
+  "finestra_unione": [
+   1577836800000,
+   1673913599999
+  ],
+  "ingressi_totali": 92648,
+  "margine": 35,
+  "margine_richiesto": 35,
+  "media_r_sfasate": -0.03509843998521347,
+  "numero": 200,
+  "pavimento": 0.06710541892501436,
+  "quota_trade_massima": 0.5789473684210527,
+  "quota_trade_mediana": 0.37280701754385964,
+  "quota_trade_minima": 0.2932330827067669,
+  "saltati_totali": {
+   "buco": 3364,
+   "fuori_finestra": 35767,
+   "posizione_aperta": 29452,
+   "vietata": 27821
+  },
+  "segnali_coincidenti": 0,
+  "segnali_fuori_dalla_finestra_unione": 0,
+  "sfasamenti_richiesti": 200,
+  "sfasate": 200,
+  "sfasate_con_trade": 200,
+  "sfasate_senza_trade": 0,
+  "tutti_gli_interi": false,
+  "valutabile": true
+ },
+ "per_moneta": {
+  "1000XECUSDT": {
+   "a": {
+    "blocco": 2,
+    "deviazione_standard": 1.0618610892844937,
+    "errore_standard": 0.4613546477359399,
+    "media": 0.09197484702646164,
+    "n_blocchi": 3,
+    "n_trade": 7,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.18670122172842024,
+   "b_simulazioni_con_trade": 200,
+   "barre": 485,
+   "barre_nel_periodo": 485,
+   "barre_tolte_allineamento": {
+    "last": 2,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "47f165928e9bb7a4f74393041e61b89fddbbc5e6b0fb893ad67d7cfd3fa76790",
+    "liquidita": 226,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 316
+   },
+   "conteggi": {
+    "buchi_dati": 2,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 3
+   },
+   "ingressi_dati": null,
+   "j": 0,
+   "long": 0,
+   "mesi_sotto_liquidita": 8,
+   "peso": 0.0037593984962406013,
+   "pnl": 18.644239279164125,
+   "r_medio": 0.6187042833999876,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 62,
+    "n_segnali": 3,
+    "saltati_totali": {
+     "buco": 10,
+     "fuori_finestra": 349,
+     "posizione_aperta": 0,
+     "vietata": 179
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 3,
+   "slippage_per_lato": 0.001,
+   "trade": 3,
+   "violazioni_liquidazione": 0
+  },
+  "1INCHUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9293825205612998,
+    "errore_standard": 0.2003181860643459,
+    "media": 0.1394248012342268,
+    "n_blocchi": 8,
+    "n_trade": 26,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.04700092314159399,
+   "b_simulazioni_con_trade": 200,
+   "barre": 752,
+   "barre_nel_periodo": 752,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "70f984eaa271b514b71da72202a41f5204b93e3e48bd3b58771e4c846ce6934e",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 3
+   },
+   "ingressi_dati": null,
+   "j": 1,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.0037593984962406013,
+   "pnl": 24.513966824503413,
+   "r_medio": 0.8095175358010409,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 341,
+    "n_segnali": 3,
+    "saltati_totali": {
+     "buco": 15,
+     "fuori_finestra": 192,
+     "posizione_aperta": 0,
+     "vietata": 52
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 3,
+   "slippage_per_lato": 0.001,
+   "trade": 3,
+   "violazioni_liquidazione": 0
+  },
+  "AAVEUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 1.0217426434924284,
+    "errore_standard": 0.18105520392792973,
+    "media": -0.023580888125223808,
+    "n_blocchi": 6,
+    "n_trade": 33,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": -0.044283002676431274,
+   "b_simulazioni_con_trade": 200,
+   "barre": 822,
+   "barre_nel_periodo": 822,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "dff884c9c306abfd80b6bc3b4c09f5cdf3d0ac48c5aae7d9f78eac1e839adab8",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 2,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.008771929824561403,
+   "pnl": 73.23506248005,
+   "r_medio": 1.0145013915444374,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 892,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 22,
+     "fuori_finestra": 365,
+     "posizione_aperta": 6,
+     "vietata": 121
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.0005,
+   "trade": 7,
+   "violazioni_liquidazione": 1
+  },
+  "ALGOUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 1.044965812645584,
+    "errore_standard": 0.19271347057576166,
+    "media": -0.10142957205264971,
+    "n_blocchi": 7,
+    "n_trade": 39,
+    "valutabile": true
+   },
+   "b_durata_media": 25,
+   "b_ingressi_entrano": true,
+   "b_j": -0.0769717645036845,
+   "b_simulazioni_con_trade": 200,
+   "barre": 944,
+   "barre_nel_periodo": 944,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 15
+   },
+   "barre_vietate": {
+    "impronta": "6d3254be7be2161dc3ad8b29804bd87e8bff53d57c38e16d0b0c6e9e7ee7f3aa",
+    "liquidita": 107,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 170
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 3,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.008771929824561403,
+   "pnl": 33.22351456757463,
+   "r_medio": 0.4727926440804125,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 949,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 21,
+     "fuori_finestra": 203,
+     "posizione_aperta": 223,
+     "vietata": 227
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.001,
+   "trade": 7,
+   "violazioni_liquidazione": 0
+  },
+  "ALPHAUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 1.0202761914329732,
+    "errore_standard": 0.22702599717963307,
+    "media": 0.044518621012135974,
+    "n_blocchi": 7,
+    "n_trade": 23,
+    "valutabile": true
+   },
+   "b_durata_media": 27,
+   "b_ingressi_entrano": true,
+   "b_j": 0.1340975945397842,
+   "b_simulazioni_con_trade": 200,
+   "barre": 784,
+   "barre_nel_periodo": 784,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "ab52b34b2ac245b2c421131a63024b36f918cb83845d9cd98efb5895427495dd",
+    "liquidita": 222,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 274
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 4
+   },
+   "ingressi_dati": null,
+   "j": 4,
+   "long": 0,
+   "mesi_sotto_liquidita": 8,
+   "peso": 0.005012531328320802,
+   "pnl": 8.96606062130399,
+   "r_medio": 0.22801443323669657,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 346,
+    "n_segnali": 4,
+    "saltati_totali": {
+     "buco": 18,
+     "fuori_finestra": 234,
+     "posizione_aperta": 0,
+     "vietata": 202
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 4,
+   "slippage_per_lato": 0.001,
+   "trade": 4,
+   "violazioni_liquidazione": 1
+  },
+  "ANKRUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.0163425849569414,
+    "errore_standard": 0.16223649728419837,
+    "media": 0.07525610345892214,
+    "n_blocchi": 6,
+    "n_trade": 25,
+    "valutabile": true
+   },
+   "b_durata_media": 21,
+   "b_ingressi_entrano": true,
+   "b_j": 0.06961910658829917,
+   "b_simulazioni_con_trade": 200,
+   "barre": 714,
+   "barre_nel_periodo": 714,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "be5f69e5d6ec819cc25ae75ad6cf2e6e0466473302a2b59ea4bbcd6ac7637472",
+    "liquidita": 97,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 92,
+    "totale": 183
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 15,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 11
+   },
+   "ingressi_dati": null,
+   "j": 5,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.013784461152882205,
+   "pnl": 2.721170260840134,
+   "r_medio": 0.02921029202158896,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1011,
+    "n_segnali": 11,
+    "saltati_totali": {
+     "buco": 66,
+     "fuori_finestra": 759,
+     "posizione_aperta": 261,
+     "vietata": 364
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 11,
+   "slippage_per_lato": 0.001,
+   "trade": 11,
+   "violazioni_liquidazione": 0
+  },
+  "ARPAUSDT": {
+   "a": {
+    "blocco": 2,
+    "deviazione_standard": 1.032299131996301,
+    "errore_standard": 0.31016922973756567,
+    "media": 0.1788319754754754,
+    "n_blocchi": 4,
+    "n_trade": 8,
+    "valutabile": true
+   },
+   "b_durata_media": 27,
+   "b_ingressi_entrano": true,
+   "b_j": 0.005397734989672451,
+   "b_simulazioni_con_trade": 200,
+   "barre": 454,
+   "barre_nel_periodo": 454,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "22ea947fa5bdd44df943eafcd91b79219452412e68b34d7598033ab3ba635c38",
+    "liquidita": 169,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 259
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 5
+   },
+   "ingressi_dati": null,
+   "j": 6,
+   "long": 0,
+   "mesi_sotto_liquidita": 6,
+   "peso": 0.006265664160401002,
+   "pnl": -4.757110026803238,
+   "r_medio": -0.09309291076620284,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 140,
+    "n_segnali": 5,
+    "saltati_totali": {
+     "buco": 19,
+     "fuori_finestra": 611,
+     "posizione_aperta": 0,
+     "vietata": 230
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 5,
+   "slippage_per_lato": 0.0005,
+   "trade": 5,
+   "violazioni_liquidazione": 0
+  },
+  "ARUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9965661195931506,
+    "errore_standard": 0.18100553377174408,
+    "media": 0.19281647661471185,
+    "n_blocchi": 5,
+    "n_trade": 15,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.265580868396545,
+   "b_simulazioni_con_trade": 200,
+   "barre": 474,
+   "barre_nel_periodo": 474,
+   "barre_tolte_allineamento": {
+    "last": 2,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "98e47dce956c7ed727f1fec518eec0b679a6b27b5194e496fb6ac1449db5abcf",
+    "liquidita": 34,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 122
+   },
+   "conteggi": {
+    "buchi_dati": 2,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 2
+   },
+   "ingressi_dati": null,
+   "j": 7,
+   "long": 0,
+   "mesi_sotto_liquidita": 2,
+   "peso": 0.002506265664160401,
+   "pnl": 26.68438942125102,
+   "r_medio": 1.3214309539619424,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 109,
+    "n_segnali": 2,
+    "saltati_totali": {
+     "buco": 13,
+     "fuori_finestra": 232,
+     "posizione_aperta": 0,
+     "vietata": 46
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 2,
+   "slippage_per_lato": 0.001,
+   "trade": 2,
+   "violazioni_liquidazione": 0
+  },
+  "ATOMUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.9017041590310532,
+    "errore_standard": 0.13639946467338937,
+    "media": -0.260620362404173,
+    "n_blocchi": 9,
+    "n_trade": 48,
+    "valutabile": true
+   },
+   "b_durata_media": 19,
+   "b_ingressi_entrano": true,
+   "b_j": -0.12677394836502887,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1073,
+   "barre_nel_periodo": 1073,
+   "barre_tolte_allineamento": {
+    "last": 2,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "006b58fa923c573430e0061d48d37a011befceac241393eee0ebbe8da5fa27ce",
+    "liquidita": 176,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 177
+   },
+   "conteggi": {
+    "buchi_dati": 2,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 15
+   },
+   "ingressi_dati": null,
+   "j": 8,
+   "long": 0,
+   "mesi_sotto_liquidita": 6,
+   "peso": 0.018796992481203006,
+   "pnl": -28.90926523004554,
+   "r_medio": -0.1909732092583738,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2393,
+    "n_segnali": 15,
+    "saltati_totali": {
+     "buco": 23,
+     "fuori_finestra": 87,
+     "posizione_aperta": 837,
+     "vietata": 497
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 15,
+   "slippage_per_lato": 0.0005,
+   "trade": 15,
+   "violazioni_liquidazione": 1
+  },
+  "AUDIOUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9392837624007002,
+    "errore_standard": 0.21935296084346445,
+    "media": 0.02527991807996589,
+    "n_blocchi": 5,
+    "n_trade": 17,
+    "valutabile": true
+   },
+   "b_durata_media": 26,
+   "b_ingressi_entrano": true,
+   "b_j": 0.2558181656075067,
+   "b_simulazioni_con_trade": 200,
+   "barre": 514,
+   "barre_nel_periodo": 514,
+   "barre_tolte_allineamento": {
+    "last": 2,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "e262b3265bea353cf6ae1dcfa1a07b606c47aecee015069055f2851ae2bbc78c",
+    "liquidita": 91,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 182
+   },
+   "conteggi": {
+    "buchi_dati": 2,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 4
+   },
+   "ingressi_dati": null,
+   "j": 9,
+   "long": 0,
+   "mesi_sotto_liquidita": 3,
+   "peso": 0.005012531328320802,
+   "pnl": 15.424579816457232,
+   "r_medio": 0.3867207305518686,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 215,
+    "n_segnali": 4,
+    "saltati_totali": {
+     "buco": 22,
+     "fuori_finestra": 440,
+     "posizione_aperta": 38,
+     "vietata": 123
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 4,
+   "slippage_per_lato": 0.001,
+   "trade": 4,
+   "violazioni_liquidazione": 0
+  },
+  "AXSUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 0.8765438267886742,
+    "errore_standard": 0.21019428174802127,
+    "media": -0.2970927571627848,
+    "n_blocchi": 6,
+    "n_trade": 38,
+    "valutabile": true
+   },
+   "b_durata_media": 16,
+   "b_ingressi_entrano": true,
+   "b_j": -0.18367606660095256,
+   "b_simulazioni_con_trade": 200,
+   "barre": 781,
+   "barre_nel_periodo": 781,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "1601c80628bda58614d81512e35062232ff6e1aa2ff23401105e935bf8173638",
+    "liquidita": 73,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 23
+   },
+   "ingressi_dati": null,
+   "j": 10,
+   "long": 0,
+   "mesi_sotto_liquidita": 3,
+   "peso": 0.02882205513784461,
+   "pnl": -80.48591226030574,
+   "r_medio": -0.35998398407329174,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2776,
+    "n_segnali": 23,
+    "saltati_totali": {
+     "buco": 107,
+     "fuori_finestra": 1335,
+     "posizione_aperta": 1201,
+     "vietata": 382
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 23,
+   "slippage_per_lato": 0.0005,
+   "trade": 23,
+   "violazioni_liquidazione": 0
+  },
+  "BAKEUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 1.2022083220441966,
+    "errore_standard": 0.2675538079381829,
+    "media": 0.3789036087671296,
+    "n_blocchi": 5,
+    "n_trade": 16,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.34742225817205613,
+   "b_simulazioni_con_trade": 200,
+   "barre": 607,
+   "barre_nel_periodo": 607,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "de6a429919813d53932e52b9498ac0efff0717c42b9c4ddfcbe7b88a38f8bc4f",
+    "liquidita": 137,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 227
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 2
+   },
+   "ingressi_dati": null,
+   "j": 11,
+   "long": 0,
+   "mesi_sotto_liquidita": 5,
+   "peso": 0.002506265664160401,
+   "pnl": 31.338845076951667,
+   "r_medio": 1.561617661816401,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 122,
+    "n_segnali": 2,
+    "saltati_totali": {
+     "buco": 8,
+     "fuori_finestra": 186,
+     "posizione_aperta": 0,
+     "vietata": 84
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 2,
+   "slippage_per_lato": 0.0005,
+   "trade": 2,
+   "violazioni_liquidazione": 0
+  },
+  "BANDUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9474898747564071,
+    "errore_standard": 0.15254666645657552,
+    "media": -0.07767827206194285,
+    "n_blocchi": 12,
+    "n_trade": 36,
+    "valutabile": true
+   },
+   "b_durata_media": 23,
+   "b_ingressi_entrano": true,
+   "b_j": -0.07970460440092808,
+   "b_simulazioni_con_trade": 200,
+   "barre": 895,
+   "barre_nel_periodo": 895,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "1a6f46db85ec0961789f8c770674802d698c73440079bbd5248a17634e77703c",
+    "liquidita": 91,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 156
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 6
+   },
+   "ingressi_dati": null,
+   "j": 12,
+   "long": 0,
+   "mesi_sotto_liquidita": 3,
+   "peso": 0.007518796992481203,
+   "pnl": -5.3040331614695795,
+   "r_medio": -0.08535576768806226,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 791,
+    "n_segnali": 6,
+    "saltati_totali": {
+     "buco": 43,
+     "fuori_finestra": 210,
+     "posizione_aperta": 229,
+     "vietata": 156
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 6,
+   "slippage_per_lato": 0.001,
+   "trade": 6,
+   "violazioni_liquidazione": 0
+  },
+  "BELUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9561319554986248,
+    "errore_standard": 0.22152930405659274,
+    "media": 0.044351483802940454,
+    "n_blocchi": 7,
+    "n_trade": 23,
+    "valutabile": true
+   },
+   "b_durata_media": 24,
+   "b_ingressi_entrano": true,
+   "b_j": -0.029859025334945083,
+   "b_simulazioni_con_trade": 200,
+   "barre": 789,
+   "barre_nel_periodo": 789,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "812b39cb06ed8820cc4c360f9a12e6d519ce4953a7574d04dbc3ee2a913db4a4",
+    "liquidita": 214,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 229
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 9
+   },
+   "ingressi_dati": null,
+   "j": 13,
+   "long": 0,
+   "mesi_sotto_liquidita": 8,
+   "peso": 0.011278195488721804,
+   "pnl": -1.6585183661508922,
+   "r_medio": -0.014614049057016576,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 860,
+    "n_segnali": 9,
+    "saltati_totali": {
+     "buco": 30,
+     "fuori_finestra": 524,
+     "posizione_aperta": 175,
+     "vietata": 386
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 9,
+   "slippage_per_lato": 0.001,
+   "trade": 9,
+   "violazioni_liquidazione": 0
+  },
+  "BLZUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.8308475096578617,
+    "errore_standard": 0.12676642027075538,
+    "media": -0.23107227313076525,
+    "n_blocchi": 9,
+    "n_trade": 27,
+    "valutabile": true
+   },
+   "b_durata_media": 21,
+   "b_ingressi_entrano": true,
+   "b_j": -0.21053764183737012,
+   "b_simulazioni_con_trade": 200,
+   "barre": 845,
+   "barre_nel_periodo": 845,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "8c000caeae0705bdcd5e4d73e68debd731969bb3c6eac6ad5d902cbba0bea997",
+    "liquidita": 304,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 304
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 15,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 14
+   },
+   "ingressi_dati": null,
+   "j": 14,
+   "long": 0,
+   "mesi_sotto_liquidita": 11,
+   "peso": 0.017543859649122806,
+   "pnl": -13.035348553666275,
+   "r_medio": -0.08997938364343223,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1287,
+    "n_segnali": 14,
+    "saltati_totali": {
+     "buco": 64,
+     "fuori_finestra": 653,
+     "posizione_aperta": 429,
+     "vietata": 796
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 14,
+   "slippage_per_lato": 0.0005,
+   "trade": 14,
+   "violazioni_liquidazione": 1
+  },
+  "C98USDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.8171172291317645,
+    "errore_standard": 0.16947890389591988,
+    "media": 0.371264564508357,
+    "n_blocchi": 4,
+    "n_trade": 16,
+    "valutabile": true
+   },
+   "b_durata_media": 26,
+   "b_ingressi_entrano": true,
+   "b_j": 0.2984981667687122,
+   "b_simulazioni_con_trade": 200,
+   "barre": 510,
+   "barre_nel_periodo": 510,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "d2c037604daf05ab561abff86db55c0f4d577643e841fd09a25e896b37c4691d",
+    "liquidita": 31,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 122
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 15,
+   "long": 0,
+   "mesi_sotto_liquidita": 1,
+   "peso": 0.008771929824561403,
+   "pnl": 24.114613632751098,
+   "r_medio": 0.34186673315427507,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 437,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 33,
+     "fuori_finestra": 773,
+     "posizione_aperta": 70,
+     "vietata": 157
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.001,
+   "trade": 7,
+   "violazioni_liquidazione": 0
+  },
+  "CELOUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 1.1834186950255787,
+    "errore_standard": 0.3619905113900283,
+    "media": 0.02414228589129863,
+    "n_blocchi": 4,
+    "n_trade": 12,
+    "valutabile": true
+   },
+   "b_durata_media": 25,
+   "b_ingressi_entrano": true,
+   "b_j": 0.028879727222625405,
+   "b_simulazioni_con_trade": 200,
+   "barre": 476,
+   "barre_nel_periodo": 476,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "73317712e3f275949033b0e419860abef3911c1a3df13c773b1b6b12388ed2c6",
+    "liquidita": 126,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 213
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 1,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 5
+   },
+   "ingressi_dati": null,
+   "j": 16,
+   "long": 0,
+   "mesi_sotto_liquidita": 5,
+   "peso": 0.006265664160401002,
+   "pnl": 19.040287809905998,
+   "r_medio": 0.3841504571070825,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 204,
+    "n_segnali": 5,
+    "saltati_totali": {
+     "buco": 25,
+     "fuori_finestra": 579,
+     "posizione_aperta": 28,
+     "vietata": 192
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 5,
+   "slippage_per_lato": 0.001,
+   "trade": 5,
+   "violazioni_liquidazione": 0
+  },
+  "CELRUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.0688377594962009,
+    "errore_standard": 0.30065629670613797,
+    "media": -0.09540301585281862,
+    "n_blocchi": 4,
+    "n_trade": 19,
+    "valutabile": true
+   },
+   "b_durata_media": 17,
+   "b_ingressi_entrano": true,
+   "b_j": 0.009681565836092141,
+   "b_simulazioni_con_trade": 200,
+   "barre": 658,
+   "barre_nel_periodo": 658,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "cc904a9d00acf4e518ab4718d22974daec7505495d2d94f6e1d40504855e5547",
+    "liquidita": 198,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 262
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 17,
+   "long": 0,
+   "mesi_sotto_liquidita": 7,
+   "peso": 0.008771929824561403,
+   "pnl": 2.6284692753834946,
+   "r_medio": 0.04535990749601696,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 442,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 36,
+     "fuori_finestra": 570,
+     "posizione_aperta": 200,
+     "vietata": 352
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.001,
+   "trade": 7,
+   "violazioni_liquidazione": 0
+  },
+  "CHZUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.9193305100371227,
+    "errore_standard": 0.15061323316221265,
+    "media": -0.03785129603575234,
+    "n_blocchi": 7,
+    "n_trade": 29,
+    "valutabile": true
+   },
+   "b_durata_media": 24,
+   "b_ingressi_entrano": true,
+   "b_j": -0.0027188660419269427,
+   "b_simulazioni_con_trade": 200,
+   "barre": 725,
+   "barre_nel_periodo": 725,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 20
+   },
+   "barre_vietate": {
+    "impronta": "2ac1424ceaae6479960f3231df25d4b273eeb1bf60876321118cc0f5c38e9503",
+    "liquidita": 11,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 12
+   },
+   "ingressi_dati": null,
+   "j": 18,
+   "long": 0,
+   "mesi_sotto_liquidita": 1,
+   "peso": 0.015037593984962405,
+   "pnl": -4.878259662516782,
+   "r_medio": -0.03696501097940819,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1313,
+    "n_segnali": 12,
+    "saltati_totali": {
+     "buco": 48,
+     "fuori_finestra": 838,
+     "posizione_aperta": 415,
+     "vietata": 201
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 12,
+   "slippage_per_lato": 0.0005,
+   "trade": 12,
+   "violazioni_liquidazione": 0
+  },
+  "COMPUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.8839531107846507,
+    "errore_standard": 0.16578629812977605,
+    "media": -0.026634543610105737,
+    "n_blocchi": 9,
+    "n_trade": 36,
+    "valutabile": true
+   },
+   "b_durata_media": 22,
+   "b_ingressi_entrano": true,
+   "b_j": 0.061926497096093554,
+   "b_simulazioni_con_trade": 200,
+   "barre": 924,
+   "barre_nel_periodo": 924,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "cdb5af84c1fc24df23e5528eee96f3f5db5d20820fe08b21b7863629b57e615a",
+    "liquidita": 94,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 153
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 8
+   },
+   "ingressi_dati": null,
+   "j": 19,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.010025062656641603,
+   "pnl": 12.498489455738374,
+   "r_medio": 0.16001404396900207,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1093,
+    "n_segnali": 8,
+    "saltati_totali": {
+     "buco": 54,
+     "fuori_finestra": 226,
+     "posizione_aperta": 106,
+     "vietata": 227
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 8,
+   "slippage_per_lato": 0.0005,
+   "trade": 8,
+   "violazioni_liquidazione": 0
+  },
+  "CRVUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.9156982498032549,
+    "errore_standard": 0.1696982857400822,
+    "media": -0.10515904863923885,
+    "n_blocchi": 9,
+    "n_trade": 36,
+    "valutabile": true
+   },
+   "b_durata_media": 20,
+   "b_ingressi_entrano": true,
+   "b_j": -0.14893688089471052,
+   "b_simulazioni_con_trade": 200,
+   "barre": 861,
+   "barre_nel_periodo": 861,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "8e429fe8676baaee4e547cc731372a562efa2f65f943c7ab0328dd7576370176",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 10
+   },
+   "ingressi_dati": null,
+   "j": 20,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.012531328320802004,
+   "pnl": -8.192805296715603,
+   "r_medio": -0.07718915991535807,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1360,
+    "n_segnali": 10,
+    "saltati_totali": {
+     "buco": 9,
+     "fuori_finestra": 459,
+     "posizione_aperta": 377,
+     "vietata": 172
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 10,
+   "slippage_per_lato": 0.0005,
+   "trade": 10,
+   "violazioni_liquidazione": 0
+  },
+  "CTSIUSDT": {
+   "a": {
+    "blocco": 1,
+    "deviazione_standard": 0.864877458432433,
+    "errore_standard": 0.353718202887549,
+    "media": -0.11654541071198961,
+    "n_blocchi": 6,
+    "n_trade": 6,
+    "valutabile": true
+   },
+   "b_durata_media": 17,
+   "b_ingressi_entrano": true,
+   "b_j": -0.3595227001120277,
+   "b_simulazioni_con_trade": 200,
+   "barre": 446,
+   "barre_nel_periodo": 446,
+   "barre_tolte_allineamento": {
+    "last": 2,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "93ffa167b5252d6b9058d1c915831ec2bf677263a6a1926da58a17656e09594b",
+    "liquidita": 262,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 346
+   },
+   "conteggi": {
+    "buchi_dati": 2,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 2
+   },
+   "ingressi_dati": null,
+   "j": 21,
+   "long": 0,
+   "mesi_sotto_liquidita": 10,
+   "peso": 0.002506265664160401,
+   "pnl": -2.6034203015158397,
+   "r_medio": -0.12546694985735396,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 25,
+    "n_segnali": 2,
+    "saltati_totali": {
+     "buco": 10,
+     "fuori_finestra": 244,
+     "posizione_aperta": 8,
+     "vietata": 121
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 2,
+   "slippage_per_lato": 0.001,
+   "trade": 2,
+   "violazioni_liquidazione": 0
+  },
+  "DASHUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9677176049019641,
+    "errore_standard": 0.15114155266780863,
+    "media": -0.12841711705322736,
+    "n_blocchi": 12,
+    "n_trade": 36,
+    "valutabile": true
+   },
+   "b_durata_media": 17,
+   "b_ingressi_entrano": true,
+   "b_j": -0.06987347665456727,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1077,
+   "barre_nel_periodo": 1077,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "fcabb65e9ffe3082cfbc0753722b19471f3fec486f3998eae50e5b5e8881721a",
+    "liquidita": 362,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 363
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 16
+   },
+   "ingressi_dati": null,
+   "j": 22,
+   "long": 0,
+   "mesi_sotto_liquidita": 12,
+   "peso": 0.020050125313283207,
+   "pnl": -76.80328452293539,
+   "r_medio": -0.49325737316301194,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2022,
+    "n_segnali": 16,
+    "saltati_totali": {
+     "buco": 10,
+     "fuori_finestra": 96,
+     "posizione_aperta": 932,
+     "vietata": 1072
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 16,
+   "slippage_per_lato": 0.001,
+   "trade": 16,
+   "violazioni_liquidazione": 1
+  },
+  "DOTUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 1.0037031738331093,
+    "errore_standard": 0.200169741514205,
+    "media": -0.11324867350506694,
+    "n_blocchi": 6,
+    "n_trade": 41,
+    "valutabile": true
+   },
+   "b_durata_media": 17,
+   "b_ingressi_entrano": true,
+   "b_j": -0.03824322016655123,
+   "b_simulazioni_con_trade": 200,
+   "barre": 871,
+   "barre_nel_periodo": 871,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 2
+   },
+   "barre_vietate": {
+    "impronta": "f953a90b0d8be69e902077275a45b892cbf5bcb7d59e15402ca92c75ee404dc9",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 15
+   },
+   "ingressi_dati": null,
+   "j": 23,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.018796992481203006,
+   "pnl": -9.771598379844683,
+   "r_medio": -0.060660177872539536,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2050,
+    "n_segnali": 15,
+    "saltati_totali": {
+     "buco": 86,
+     "fuori_finestra": 605,
+     "posizione_aperta": 752,
+     "vietata": 259
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 15,
+   "slippage_per_lato": 0.0005,
+   "trade": 15,
+   "violazioni_liquidazione": 0
+  },
+  "EGLDUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 1.046560658118644,
+    "errore_standard": 0.19887078155761836,
+    "media": -0.18210271934395791,
+    "n_blocchi": 6,
+    "n_trade": 41,
+    "valutabile": true
+   },
+   "b_durata_media": 16,
+   "b_ingressi_entrano": true,
+   "b_j": -0.08129599622879351,
+   "b_simulazioni_con_trade": 200,
+   "barre": 854,
+   "barre_nel_periodo": 854,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "1507b5717181cf2e2a323c073e9a183e46d73094f4c22c91247ebb73ad7dd99e",
+    "liquidita": 78,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 16
+   },
+   "ingressi_dati": null,
+   "j": 24,
+   "long": 0,
+   "mesi_sotto_liquidita": 3,
+   "peso": 0.020050125313283207,
+   "pnl": -70.47738884378391,
+   "r_medio": -0.45097942956787,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2152,
+    "n_segnali": 16,
+    "saltati_totali": {
+     "buco": 41,
+     "fuori_finestra": 746,
+     "posizione_aperta": 988,
+     "vietata": 261
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 16,
+   "slippage_per_lato": 0.001,
+   "trade": 16,
+   "violazioni_liquidazione": 0
+  },
+  "ENJUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.9479852725803078,
+    "errore_standard": 0.20241999059278393,
+    "media": -0.2124352526716613,
+    "n_blocchi": 7,
+    "n_trade": 38,
+    "valutabile": true
+   },
+   "b_durata_media": 15,
+   "b_ingressi_entrano": true,
+   "b_j": -0.05122600169853328,
+   "b_simulazioni_con_trade": 200,
+   "barre": 833,
+   "barre_nel_periodo": 833,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "c57363754ef223b74a102d1df13b412131a5564eac3e3aa00b20b317608ae8cc",
+    "liquidita": 125,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 126
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 15,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 17
+   },
+   "ingressi_dati": null,
+   "j": 25,
+   "long": 0,
+   "mesi_sotto_liquidita": 5,
+   "peso": 0.021303258145363407,
+   "pnl": -88.20537844042816,
+   "r_medio": -0.5365576150915781,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2113,
+    "n_segnali": 17,
+    "saltati_totali": {
+     "buco": 115,
+     "fuori_finestra": 788,
+     "posizione_aperta": 1151,
+     "vietata": 384
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 17,
+   "slippage_per_lato": 0.001,
+   "trade": 17,
+   "violazioni_liquidazione": 1
+  },
+  "EOSUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9367837278322076,
+    "errore_standard": 0.13912798458214207,
+    "media": -0.025765550127980433,
+    "n_blocchi": 15,
+    "n_trade": 46,
+    "valutabile": true
+   },
+   "b_durata_media": 22,
+   "b_ingressi_entrano": true,
+   "b_j": -0.02064304324853268,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1104,
+   "barre_nel_periodo": 1104,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "aca93f5c2905246046dab95d682995eb6dec96d30a4a93bd2df099a61fcd92d0",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 1,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 21
+   },
+   "ingressi_dati": null,
+   "j": 26,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.02631578947368421,
+   "pnl": 12.031546800404124,
+   "r_medio": 0.061640085732933295,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 3810,
+    "n_segnali": 21,
+    "saltati_totali": {
+     "buco": 28,
+     "fuori_finestra": 0,
+     "posizione_aperta": 1003,
+     "vietata": 362
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 21,
+   "slippage_per_lato": 0.0005,
+   "trade": 21,
+   "violazioni_liquidazione": 0
+  },
+  "FLMUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.8818623447137485,
+    "errore_standard": 0.17222207923152055,
+    "media": -0.18804475946647464,
+    "n_blocchi": 6,
+    "n_trade": 26,
+    "valutabile": true
+   },
+   "b_durata_media": 20,
+   "b_ingressi_entrano": true,
+   "b_j": 0.014644349178809926,
+   "b_simulazioni_con_trade": 200,
+   "barre": 834,
+   "barre_nel_periodo": 834,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "e79dc77dc867ecaede908916a52e0d548c4f7e421117963733f3ef6057ffa843",
+    "liquidita": 321,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 323
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 27,
+   "long": 0,
+   "mesi_sotto_liquidita": 11,
+   "peso": 0.008771929824561403,
+   "pnl": -10.201330628468876,
+   "r_medio": -0.14261192386334492,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 596,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 46,
+     "fuori_finestra": 326,
+     "posizione_aperta": 207,
+     "vietata": 432
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.001,
+   "trade": 7,
+   "violazioni_liquidazione": 1
+  },
+  "GRTUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.010234536663031,
+    "errore_standard": 0.1910080038520864,
+    "media": 0.18075592428726409,
+    "n_blocchi": 7,
+    "n_trade": 28,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.144115004874581,
+   "b_simulazioni_con_trade": 200,
+   "barre": 753,
+   "barre_nel_periodo": 753,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "ce8623be2b877934d1794be49f6535daa773378d5136a3bb7384c67fc3b5dea5",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 9,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 28,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.008771929824561403,
+   "pnl": 28.01490315484987,
+   "r_medio": 0.3958874230195172,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 802,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 28,
+     "fuori_finestra": 448,
+     "posizione_aperta": 24,
+     "vietata": 122
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.0005,
+   "trade": 7,
+   "violazioni_liquidazione": 0
+  },
+  "GTCUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9265626572881843,
+    "errore_standard": 0.1734320883279685,
+    "media": 0.16034995839251756,
+    "n_blocchi": 5,
+    "n_trade": 16,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.09937166098127172,
+   "b_simulazioni_con_trade": 200,
+   "barre": 579,
+   "barre_nel_periodo": 579,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "a72670a58dc09ba17b794f3c8af8c939c40081412181d6c58ff1b72d22070ecf",
+    "liquidita": 107,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 197
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 5
+   },
+   "ingressi_dati": null,
+   "j": 29,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.006265664160401002,
+   "pnl": 51.057119400781154,
+   "r_medio": 0.9985548604603306,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 313,
+    "n_segnali": 5,
+    "saltati_totali": {
+     "buco": 16,
+     "fuori_finestra": 495,
+     "posizione_aperta": 7,
+     "vietata": 176
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 5,
+   "slippage_per_lato": 0.001,
+   "trade": 5,
+   "violazioni_liquidazione": 0
+  },
+  "HBARUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.0528280863447002,
+    "errore_standard": 0.2904191444058895,
+    "media": 0.012898436832377402,
+    "n_blocchi": 5,
+    "n_trade": 21,
+    "valutabile": true
+   },
+   "b_durata_media": 24,
+   "b_ingressi_entrano": true,
+   "b_j": 0.1745472297049725,
+   "b_simulazioni_con_trade": 200,
+   "barre": 665,
+   "barre_nel_periodo": 665,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "8d6e57c85f06d3c7776b79df8c529d3f1e799f9aed83c8b195db127b918db8d3",
+    "liquidita": 123,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 214
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 12,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 8
+   },
+   "ingressi_dati": null,
+   "j": 30,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.010025062656641603,
+   "pnl": -7.98002015018133,
+   "r_medio": -0.09833002755183784,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 605,
+    "n_segnali": 8,
+    "saltati_totali": {
+     "buco": 31,
+     "fuori_finestra": 649,
+     "posizione_aperta": 132,
+     "vietata": 315
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 8,
+   "slippage_per_lato": 0.001,
+   "trade": 8,
+   "violazioni_liquidazione": 0
+  },
+  "ICPUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9633961141210269,
+    "errore_standard": 0.2287751451773823,
+    "media": 0.4404249881888082,
+    "n_blocchi": 5,
+    "n_trade": 16,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.15341573118423582,
+   "b_simulazioni_con_trade": 200,
+   "barre": 588,
+   "barre_nel_periodo": 588,
+   "barre_tolte_allineamento": {
+    "last": 2,
+    "mark": 26
+   },
+   "barre_vietate": {
+    "impronta": "d0f1fba970c79d6b74d1490ba2e1b6b222d075e73826a139a5f67058f8f3864a",
+    "liquidita": 96,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 92,
+    "totale": 187
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 4
+   },
+   "ingressi_dati": null,
+   "j": 31,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.005012531328320802,
+   "pnl": -6.008955694589179,
+   "r_medio": -0.14873357914033966,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 270,
+    "n_segnali": 4,
+    "saltati_totali": {
+     "buco": 29,
+     "fuori_finestra": 371,
+     "posizione_aperta": 0,
+     "vietata": 130
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 4,
+   "slippage_per_lato": 0.0005,
+   "trade": 4,
+   "violazioni_liquidazione": 0
+  },
+  "ICXUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9777690832446281,
+    "errore_standard": 0.1984814899626861,
+    "media": -0.19216235149552297,
+    "n_blocchi": 8,
+    "n_trade": 26,
+    "valutabile": true
+   },
+   "b_durata_media": 16,
+   "b_ingressi_entrano": true,
+   "b_j": -0.06554520187281115,
+   "b_simulazioni_con_trade": 200,
+   "barre": 847,
+   "barre_nel_periodo": 847,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "e9fea18db7791e8f19d836c8e59d6bab18bc0f0173e95c1544a80f83863b32d7",
+    "liquidita": 351,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 352
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 6
+   },
+   "ingressi_dati": null,
+   "j": 32,
+   "long": 0,
+   "mesi_sotto_liquidita": 12,
+   "peso": 0.007518796992481203,
+   "pnl": -19.86117915118907,
+   "r_medio": -0.33038528696394015,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 506,
+    "n_segnali": 6,
+    "saltati_totali": {
+     "buco": 19,
+     "fuori_finestra": 280,
+     "posizione_aperta": 238,
+     "vietata": 395
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 6,
+   "slippage_per_lato": 0.001,
+   "trade": 6,
+   "violazioni_liquidazione": 0
+  },
+  "IOTAUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.9919491925095782,
+    "errore_standard": 0.2470311433651593,
+    "media": -0.07797372581433215,
+    "n_blocchi": 5,
+    "n_trade": 28,
+    "valutabile": true
+   },
+   "b_durata_media": 16,
+   "b_ingressi_entrano": true,
+   "b_j": 0.009504307533828915,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1064,
+   "barre_nel_periodo": 1064,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "bfbacb58392e03b3dbb45535bd6fee71a818fb09c3b67e65fe43dee17cd8876d",
+    "liquidita": 523,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 523
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 10
+   },
+   "ingressi_dati": null,
+   "j": 33,
+   "long": 0,
+   "mesi_sotto_liquidita": 18,
+   "peso": 0.012531328320802004,
+   "pnl": -17.434086790294003,
+   "r_medio": -0.17047321018073042,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 926,
+    "n_segnali": 10,
+    "saltati_totali": {
+     "buco": 29,
+     "fuori_finestra": 59,
+     "posizione_aperta": 436,
+     "vietata": 986
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 10,
+   "slippage_per_lato": 0.001,
+   "trade": 10,
+   "violazioni_liquidazione": 0
+  },
+  "KAVAUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.9561781491002243,
+    "errore_standard": 0.17306592236641172,
+    "media": -0.07106899292358511,
+    "n_blocchi": 8,
+    "n_trade": 35,
+    "valutabile": true
+   },
+   "b_durata_media": 19,
+   "b_ingressi_entrano": true,
+   "b_j": 0.003544038436529683,
+   "b_simulazioni_con_trade": 200,
+   "barre": 896,
+   "barre_nel_periodo": 896,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "4f672dfad7129fdab11b07c82a62039d294900e3b0f404db011f98d98dffb90c",
+    "liquidita": 92,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 128
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 9
+   },
+   "ingressi_dati": null,
+   "j": 34,
+   "long": 0,
+   "mesi_sotto_liquidita": 3,
+   "peso": 0.011278195488721804,
+   "pnl": -24.087355813854465,
+   "r_medio": -0.2670895002002553,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1227,
+    "n_segnali": 9,
+    "saltati_totali": {
+     "buco": 54,
+     "fuori_finestra": 299,
+     "posizione_aperta": 354,
+     "vietata": 220
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 9,
+   "slippage_per_lato": 0.0005,
+   "trade": 9,
+   "violazioni_liquidazione": 1
+  },
+  "KLAYUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 1.1436318374889414,
+    "errore_standard": Infinity,
+    "media": 0.12269401485281803,
+    "n_blocchi": 2,
+    "n_trade": 8,
+    "valutabile": false
+   },
+   "b_durata_media": 14,
+   "b_ingressi_entrano": true,
+   "b_j": 0.18964789106282773,
+   "b_simulazioni_con_trade": 200,
+   "barre": 460,
+   "barre_nel_periodo": 460,
+   "barre_tolte_allineamento": {
+    "last": 2,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "829ac64397920a3048bc91d1fad23cfbcfdab5575d5e5111014fbcc8fea87163",
+    "liquidita": 280,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 319
+   },
+   "conteggi": {
+    "buchi_dati": 2,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 5
+   },
+   "ingressi_dati": null,
+   "j": 35,
+   "long": 0,
+   "mesi_sotto_liquidita": 10,
+   "peso": 0.006265664160401002,
+   "pnl": -11.475068519319326,
+   "r_medio": -0.22421297028489384,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 85,
+    "n_segnali": 5,
+    "saltati_totali": {
+     "buco": 12,
+     "fuori_finestra": 610,
+     "posizione_aperta": 44,
+     "vietata": 293
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 5,
+   "slippage_per_lato": 0.001,
+   "trade": 5,
+   "violazioni_liquidazione": 0
+  },
+  "KNCUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9371838592457047,
+    "errore_standard": 0.19054772504359205,
+    "media": -0.1400949138643586,
+    "n_blocchi": 10,
+    "n_trade": 31,
+    "valutabile": true
+   },
+   "b_durata_media": 22,
+   "b_ingressi_entrano": true,
+   "b_j": -0.15926071284826665,
+   "b_simulazioni_con_trade": 200,
+   "barre": 933,
+   "barre_nel_periodo": 933,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "fa0e562f6a0e9b5131779387b75b29b48e174f2857fe811bf3af2fcaf9a26e02",
+    "liquidita": 162,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 225
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 13
+   },
+   "ingressi_dati": null,
+   "j": 36,
+   "long": 0,
+   "mesi_sotto_liquidita": 6,
+   "peso": 0.016290726817042606,
+   "pnl": -20.605775846580936,
+   "r_medio": -0.15539871655871712,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1611,
+    "n_segnali": 13,
+    "saltati_totali": {
+     "buco": 63,
+     "fuori_finestra": 371,
+     "posizione_aperta": 457,
+     "vietata": 555
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 13,
+   "slippage_per_lato": 0.001,
+   "trade": 13,
+   "violazioni_liquidazione": 0
+  },
+  "KSMUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.0458963969612982,
+    "errore_standard": 0.21697127066434257,
+    "media": -0.09185952895531901,
+    "n_blocchi": 8,
+    "n_trade": 35,
+    "valutabile": true
+   },
+   "b_durata_media": 28,
+   "b_ingressi_entrano": true,
+   "b_j": 0.06005360123252082,
+   "b_simulazioni_con_trade": 200,
+   "barre": 819,
+   "barre_nel_periodo": 819,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "378a5502a8878ee57725d7eb6454ada698e10932faa27b8e209dc8f6f00e9fa3",
+    "liquidita": 110,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 122
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 8
+   },
+   "ingressi_dati": null,
+   "j": 37,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.010025062656641603,
+   "pnl": 32.2769017098507,
+   "r_medio": 0.40094584502617475,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 969,
+    "n_segnali": 8,
+    "saltati_totali": {
+     "buco": 31,
+     "fuori_finestra": 418,
+     "posizione_aperta": 95,
+     "vietata": 182
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 8,
+   "slippage_per_lato": 0.001,
+   "trade": 8,
+   "violazioni_liquidazione": 0
+  },
+  "LINAUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.989559515143692,
+    "errore_standard": 0.1882555194124481,
+    "media": 0.026393293475440588,
+    "n_blocchi": 7,
+    "n_trade": 21,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": -0.09972065450702836,
+   "b_simulazioni_con_trade": 200,
+   "barre": 663,
+   "barre_nel_periodo": 663,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "2cce0b41ad4aee777b2a3a0cbc4ad39ee9aecec18a867b77eab8bfa172838ea8",
+    "liquidita": 92,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 183
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 6
+   },
+   "ingressi_dati": null,
+   "j": 38,
+   "long": 0,
+   "mesi_sotto_liquidita": 3,
+   "peso": 0.007518796992481203,
+   "pnl": 67.51194122075876,
+   "r_medio": 1.096511846220256,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 487,
+    "n_segnali": 6,
+    "saltati_totali": {
+     "buco": 31,
+     "fuori_finestra": 486,
+     "posizione_aperta": 5,
+     "vietata": 196
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 6,
+   "slippage_per_lato": 0.0005,
+   "trade": 6,
+   "violazioni_liquidazione": 0
+  },
+  "LPTUSDT": {
+   "a": {
+    "blocco": 1,
+    "deviazione_standard": 1.1185369698665608,
+    "errore_standard": 0.6443251223101721,
+    "media": 0.25303390519831276,
+    "n_blocchi": 3,
+    "n_trade": 3,
+    "valutabile": true
+   },
+   "b_durata_media": 26,
+   "b_ingressi_entrano": true,
+   "b_j": -0.4370691439338522,
+   "b_simulazioni_con_trade": 200,
+   "barre": 430,
+   "barre_nel_periodo": 430,
+   "barre_tolte_allineamento": {
+    "last": 2,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "1f8d77b9c578eb5819c128cf2b0c758edeb44a109f5e35bb37295343531bd354",
+    "liquidita": 290,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 380
+   },
+   "conteggi": {
+    "buchi_dati": 2,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 2
+   },
+   "ingressi_dati": null,
+   "j": 39,
+   "long": 0,
+   "mesi_sotto_liquidita": 10,
+   "peso": 0.002506265664160401,
+   "pnl": -3.7085218228034273,
+   "r_medio": -0.18192378222249678,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 8,
+    "n_segnali": 2,
+    "saltati_totali": {
+     "buco": 6,
+     "fuori_finestra": 256,
+     "posizione_aperta": 0,
+     "vietata": 130
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 2,
+   "slippage_per_lato": 0.0005,
+   "trade": 2,
+   "violazioni_liquidazione": 0
+  },
+  "LRCUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 0.9252668931381184,
+    "errore_standard": 0.16815922334126404,
+    "media": -0.16293394927239266,
+    "n_blocchi": 5,
+    "n_trade": 34,
+    "valutabile": true
+   },
+   "b_durata_media": 18,
+   "b_ingressi_entrano": true,
+   "b_j": -0.007123343508664008,
+   "b_simulazioni_con_trade": 200,
+   "barre": 814,
+   "barre_nel_periodo": 814,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "e65a7f0fdcdd9f8efb7ffe274f479d4d967dd0583951ff252937884a82af5861",
+    "liquidita": 196,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 213
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 16
+   },
+   "ingressi_dati": null,
+   "j": 40,
+   "long": 0,
+   "mesi_sotto_liquidita": 7,
+   "peso": 0.020050125313283207,
+   "pnl": -12.748977419241102,
+   "r_medio": -0.07530217050246214,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1663,
+    "n_segnali": 16,
+    "saltati_totali": {
+     "buco": 70,
+     "fuori_finestra": 836,
+     "posizione_aperta": 733,
+     "vietata": 631
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 16,
+   "slippage_per_lato": 0.001,
+   "trade": 16,
+   "violazioni_liquidazione": 0
+  },
+  "MANAUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 1.0805893207936648,
+    "errore_standard": 0.2835421574920479,
+    "media": -0.036526941741329054,
+    "n_blocchi": 4,
+    "n_trade": 28,
+    "valutabile": true
+   },
+   "b_durata_media": 15,
+   "b_ingressi_entrano": true,
+   "b_j": 0.09212007167532889,
+   "b_simulazioni_con_trade": 200,
+   "barre": 667,
+   "barre_nel_periodo": 667,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "0da2c659d1d6b3ff3c96efb5738c4011a39cbadd717ee774818f9325453d0ad6",
+    "liquidita": 30,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 109
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 10
+   },
+   "ingressi_dati": null,
+   "j": 41,
+   "long": 0,
+   "mesi_sotto_liquidita": 1,
+   "peso": 0.012531328320802004,
+   "pnl": -31.346755275736868,
+   "r_medio": -0.31432018015262086,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 962,
+    "n_segnali": 10,
+    "saltati_totali": {
+     "buco": 39,
+     "fuori_finestra": 793,
+     "posizione_aperta": 456,
+     "vietata": 206
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 10,
+   "slippage_per_lato": 0.0005,
+   "trade": 10,
+   "violazioni_liquidazione": 0
+  },
+  "MKRUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.8905483919734921,
+    "errore_standard": 0.14409460967350476,
+    "media": -0.11038555845020803,
+    "n_blocchi": 9,
+    "n_trade": 36,
+    "valutabile": true
+   },
+   "b_durata_media": 19,
+   "b_ingressi_entrano": true,
+   "b_j": -0.009970549988822505,
+   "b_simulazioni_con_trade": 200,
+   "barre": 881,
+   "barre_nel_periodo": 881,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "eb0657ea147e79dbdb20f2d48172f8b0f0db3a15dedeccda4de84935566a280b",
+    "liquidita": 153,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 173
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 17
+   },
+   "ingressi_dati": null,
+   "j": 42,
+   "long": 0,
+   "mesi_sotto_liquidita": 5,
+   "peso": 0.021303258145363407,
+   "pnl": -9.888350658898329,
+   "r_medio": -0.053880263359305534,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2095,
+    "n_segnali": 17,
+    "saltati_totali": {
+     "buco": 60,
+     "fuori_finestra": 691,
+     "posizione_aperta": 880,
+     "vietata": 554
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 17,
+   "slippage_per_lato": 0.0005,
+   "trade": 17,
+   "violazioni_liquidazione": 0
+  },
+  "MTLUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.9339478524190088,
+    "errore_standard": 0.26396608900519974,
+    "media": -0.10214724276916982,
+    "n_blocchi": 4,
+    "n_trade": 22,
+    "valutabile": true
+   },
+   "b_durata_media": 18,
+   "b_ingressi_entrano": true,
+   "b_j": -0.2381037283570623,
+   "b_simulazioni_con_trade": 200,
+   "barre": 650,
+   "barre_nel_periodo": 650,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "0c8403dab630a674e9b9beda730192b4f22c3fbc473059a324471a198d534a7c",
+    "liquidita": 90,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 181
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 6
+   },
+   "ingressi_dati": null,
+   "j": 43,
+   "long": 0,
+   "mesi_sotto_liquidita": 3,
+   "peso": 0.007518796992481203,
+   "pnl": 5.17331953254596,
+   "r_medio": 0.09205941730170998,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 483,
+    "n_segnali": 6,
+    "saltati_totali": {
+     "buco": 41,
+     "fuori_finestra": 477,
+     "posizione_aperta": 127,
+     "vietata": 199
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 6,
+   "slippage_per_lato": 0.0005,
+   "trade": 6,
+   "violazioni_liquidazione": 0
+  },
+  "NEARUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 1.0139374512535722,
+    "errore_standard": 0.18922411626656732,
+    "media": -0.11569142863261697,
+    "n_blocchi": 7,
+    "n_trade": 36,
+    "valutabile": true
+   },
+   "b_durata_media": 18,
+   "b_ingressi_entrano": true,
+   "b_j": -0.02435922323735949,
+   "b_simulazioni_con_trade": 200,
+   "barre": 813,
+   "barre_nel_periodo": 813,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "4baaacd0fb63fdf07b05d75d34b0e8e4a3c27de1e2a74c2bf598a0e4034f5488",
+    "liquidita": 109,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 110
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 9,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 19
+   },
+   "ingressi_dati": null,
+   "j": 44,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.023809523809523808,
+   "pnl": -43.66939773284675,
+   "r_medio": -0.2301576381703466,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2341,
+    "n_segnali": 19,
+    "saltati_totali": {
+     "buco": 89,
+     "fuori_finestra": 980,
+     "posizione_aperta": 905,
+     "vietata": 390
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 19,
+   "slippage_per_lato": 0.0005,
+   "trade": 19,
+   "violazioni_liquidazione": 0
+  },
+  "NEOUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 0.9801644739993116,
+    "errore_standard": 0.15495571942963038,
+    "media": -0.1606646341016811,
+    "n_blocchi": 7,
+    "n_trade": 43,
+    "valutabile": true
+   },
+   "b_durata_media": 22,
+   "b_ingressi_entrano": true,
+   "b_j": -0.04001866503321656,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1058,
+   "barre_nel_periodo": 1058,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "f1479df45035ef9179cfedfcde670b42c3edc3d720ff82a8e31bb8c963fab77a",
+    "liquidita": 319,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 320
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 14
+   },
+   "ingressi_dati": null,
+   "j": 45,
+   "long": 0,
+   "mesi_sotto_liquidita": 11,
+   "peso": 0.017543859649122806,
+   "pnl": -7.341722836124843,
+   "r_medio": -0.04803915216298906,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1840,
+    "n_segnali": 14,
+    "saltati_totali": {
+     "buco": 58,
+     "fuori_finestra": 84,
+     "posizione_aperta": 619,
+     "vietata": 818
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 14,
+   "slippage_per_lato": 0.0005,
+   "trade": 14,
+   "violazioni_liquidazione": 0
+  },
+  "NKNUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 1.0706055980799136,
+    "errore_standard": 0.2287602578133332,
+    "media": 0.06496800736620295,
+    "n_blocchi": 6,
+    "n_trade": 18,
+    "valutabile": true
+   },
+   "b_durata_media": 27,
+   "b_ingressi_entrano": true,
+   "b_j": -0.03759128615351623,
+   "b_simulazioni_con_trade": 200,
+   "barre": 641,
+   "barre_nel_periodo": 641,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "963243e78e49aea001e1a96e19b783c98909d94a3961507556763a871ca7126a",
+    "liquidita": 199,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 259
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 6
+   },
+   "ingressi_dati": null,
+   "j": 46,
+   "long": 0,
+   "mesi_sotto_liquidita": 7,
+   "peso": 0.007518796992481203,
+   "pnl": 46.92108299260693,
+   "r_medio": 0.7682845959136914,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 377,
+    "n_segnali": 6,
+    "saltati_totali": {
+     "buco": 16,
+     "fuori_finestra": 522,
+     "posizione_aperta": 36,
+     "vietata": 285
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 6,
+   "slippage_per_lato": 0.001,
+   "trade": 6,
+   "violazioni_liquidazione": 0
+  },
+  "OCEANUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.975132169162043,
+    "errore_standard": 0.17295599060903688,
+    "media": -0.09786743994345529,
+    "n_blocchi": 8,
+    "n_trade": 32,
+    "valutabile": true
+   },
+   "b_durata_media": 22,
+   "b_ingressi_entrano": true,
+   "b_j": -0.09593427189437627,
+   "b_simulazioni_con_trade": 200,
+   "barre": 794,
+   "barre_nel_periodo": 794,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "a4e4c3149abda167ae4af42a5ea166c418d5b0ce659adf50bd45fc43fb814ca2",
+    "liquidita": 116,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 117
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 9,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 10
+   },
+   "ingressi_dati": null,
+   "j": 47,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.012531328320802004,
+   "pnl": 15.324142276493218,
+   "r_medio": 0.1564164669411025,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1184,
+    "n_segnali": 10,
+    "saltati_totali": {
+     "buco": 24,
+     "fuori_finestra": 572,
+     "posizione_aperta": 151,
+     "vietata": 220
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 10,
+   "slippage_per_lato": 0.0005,
+   "trade": 10,
+   "violazioni_liquidazione": 1
+  },
+  "OGNUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9414819314344346,
+    "errore_standard": 0.18574946307113746,
+    "media": -0.13816580442748969,
+    "n_blocchi": 6,
+    "n_trade": 18,
+    "valutabile": true
+   },
+   "b_durata_media": 19,
+   "b_ingressi_entrano": true,
+   "b_j": -0.05394498019100605,
+   "b_simulazioni_con_trade": 200,
+   "barre": 645,
+   "barre_nel_periodo": 645,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "262d8d5bd1b4ba56977112c9adda4272497a87fad7e768184732531ea8cac4b4",
+    "liquidita": 168,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 258
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 9
+   },
+   "ingressi_dati": null,
+   "j": 48,
+   "long": 0,
+   "mesi_sotto_liquidita": 6,
+   "peso": 0.011278195488721804,
+   "pnl": -1.4729218949041893,
+   "r_medio": -0.011023769705449486,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 563,
+    "n_segnali": 9,
+    "saltati_totali": {
+     "buco": 15,
+     "fuori_finestra": 784,
+     "posizione_aperta": 230,
+     "vietata": 438
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 9,
+   "slippage_per_lato": 0.0005,
+   "trade": 9,
+   "violazioni_liquidazione": 0
+  },
+  "OMGUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.0283361858860345,
+    "errore_standard": 0.1697336585408428,
+    "media": -0.1488382445659809,
+    "n_blocchi": 8,
+    "n_trade": 33,
+    "valutabile": true
+   },
+   "b_durata_media": 24,
+   "b_ingressi_entrano": true,
+   "b_j": -0.17933615509167464,
+   "b_simulazioni_con_trade": 200,
+   "barre": 918,
+   "barre_nel_periodo": 918,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "46aa824c1ff072bf3afcbce8d39ce996c37c7c5205f5457d9841fa4c1474bfa7",
+    "liquidita": 229,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 289
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 12
+   },
+   "ingressi_dati": null,
+   "j": 49,
+   "long": 0,
+   "mesi_sotto_liquidita": 8,
+   "peso": 0.015037593984962405,
+   "pnl": 27.37487655031582,
+   "r_medio": 0.23066981190664318,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1313,
+    "n_segnali": 12,
+    "saltati_totali": {
+     "buco": 30,
+     "fuori_finestra": 419,
+     "posizione_aperta": 289,
+     "vietata": 638
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 12,
+   "slippage_per_lato": 0.001,
+   "trade": 12,
+   "violazioni_liquidazione": 0
+  },
+  "ONTUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.8963338333069161,
+    "errore_standard": 0.1763798659625542,
+    "media": -0.04942020530182991,
+    "n_blocchi": 7,
+    "n_trade": 31,
+    "valutabile": true
+   },
+   "b_durata_media": 22,
+   "b_ingressi_entrano": true,
+   "b_j": 0.03311532869700904,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1064,
+   "barre_nel_periodo": 1064,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "f0d8b7b5f9b39341f95ee9c5634525ef98bf50a8218c59351e33a7569a8bf697",
+    "liquidita": 431,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 431
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 8
+   },
+   "ingressi_dati": null,
+   "j": 50,
+   "long": 0,
+   "mesi_sotto_liquidita": 15,
+   "peso": 0.010025062656641603,
+   "pnl": -1.477769640954031,
+   "r_medio": -0.014744456790535695,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 894,
+    "n_segnali": 8,
+    "saltati_totali": {
+     "buco": 22,
+     "fuori_finestra": 48,
+     "posizione_aperta": 207,
+     "vietata": 636
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 8,
+   "slippage_per_lato": 0.001,
+   "trade": 8,
+   "violazioni_liquidazione": 1
+  },
+  "PEOPLEUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9381259951669964,
+    "errore_standard": 0.26737222086767376,
+    "media": -0.12055375794046823,
+    "n_blocchi": 4,
+    "n_trade": 13,
+    "valutabile": true
+   },
+   "b_durata_media": 21,
+   "b_ingressi_entrano": true,
+   "b_j": 0.008655414307714153,
+   "b_simulazioni_con_trade": 200,
+   "barre": 383,
+   "barre_nel_periodo": 383,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "5a982c17da0a200125c3a8a3a541e0cfda31c31d09bd7255774b4436476feb8b",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 51,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.008771929824561403,
+   "pnl": -7.564442034770919,
+   "r_medio": -0.10344423586111703,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 307,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 39,
+     "fuori_finestra": 934,
+     "posizione_aperta": 123,
+     "vietata": 120
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.001,
+   "trade": 7,
+   "violazioni_liquidazione": 0
+  },
+  "QTUMUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.9850399296759964,
+    "errore_standard": 0.15287533134612133,
+    "media": -0.17623987883811243,
+    "n_blocchi": 8,
+    "n_trade": 35,
+    "valutabile": true
+   },
+   "b_durata_media": 21,
+   "b_ingressi_entrano": true,
+   "b_j": -0.1394636509022434,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1055,
+   "barre_nel_periodo": 1055,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "2e7d88943ed75c93ec7ea7e73df73cbdad99c4224c7b0fcbb64c6b7da7dcff52",
+    "liquidita": 452,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 452
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 13
+   },
+   "ingressi_dati": null,
+   "j": 52,
+   "long": 0,
+   "mesi_sotto_liquidita": 16,
+   "peso": 0.016290726817042606,
+   "pnl": -18.871470604102086,
+   "r_medio": -0.14158235483083292,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1361,
+    "n_segnali": 13,
+    "saltati_totali": {
+     "buco": 63,
+     "fuori_finestra": 77,
+     "posizione_aperta": 439,
+     "vietata": 1099
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 13,
+   "slippage_per_lato": 0.001,
+   "trade": 13,
+   "violazioni_liquidazione": 0
+  },
+  "RENUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.922492406899508,
+    "errore_standard": 0.16743350897751172,
+    "media": -0.07573239145140126,
+    "n_blocchi": 8,
+    "n_trade": 32,
+    "valutabile": true
+   },
+   "b_durata_media": 27,
+   "b_ingressi_entrano": true,
+   "b_j": -0.009375944886807796,
+   "b_simulazioni_con_trade": 200,
+   "barre": 819,
+   "barre_nel_periodo": 819,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "6b1a59b4fd6cd097b5fc5edb540423e4b2623279caf22b6b7d1057e8410fb830",
+    "liquidita": 136,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 147
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 8
+   },
+   "ingressi_dati": null,
+   "j": 53,
+   "long": 0,
+   "mesi_sotto_liquidita": 5,
+   "peso": 0.010025062656641603,
+   "pnl": 37.47128044644802,
+   "r_medio": 0.4627108465391406,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 932,
+    "n_segnali": 8,
+    "saltati_totali": {
+     "buco": 33,
+     "fuori_finestra": 414,
+     "posizione_aperta": 79,
+     "vietata": 221
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 8,
+   "slippage_per_lato": 0.001,
+   "trade": 8,
+   "violazioni_liquidazione": 1
+  },
+  "RLCUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.9800285571141621,
+    "errore_standard": 0.22628296644685109,
+    "media": -0.11286553846720755,
+    "n_blocchi": 7,
+    "n_trade": 30,
+    "valutabile": true
+   },
+   "b_durata_media": 18,
+   "b_ingressi_entrano": true,
+   "b_j": -0.2224130082229128,
+   "b_simulazioni_con_trade": 200,
+   "barre": 889,
+   "barre_nel_periodo": 889,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "218f631bbf65c9793296e1f8176d2b8f22c2662b1510f699bd6a42c0690a4e92",
+    "liquidita": 215,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 247
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 14
+   },
+   "ingressi_dati": null,
+   "j": 54,
+   "long": 0,
+   "mesi_sotto_liquidita": 8,
+   "peso": 0.017543859649122806,
+   "pnl": -36.495454918840835,
+   "r_medio": -0.26085591758180077,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1551,
+    "n_segnali": 14,
+    "saltati_totali": {
+     "buco": 108,
+     "fuori_finestra": 485,
+     "posizione_aperta": 590,
+     "vietata": 656
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 14,
+   "slippage_per_lato": 0.001,
+   "trade": 14,
+   "violazioni_liquidazione": 1
+  },
+  "ROSEUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 1.221974920573083,
+    "errore_standard": 0.3263743660005897,
+    "media": 0.1019787068925465,
+    "n_blocchi": 4,
+    "n_trade": 13,
+    "valutabile": true
+   },
+   "b_durata_media": 17,
+   "b_ingressi_entrano": true,
+   "b_j": 0.31561295413540386,
+   "b_simulazioni_con_trade": 200,
+   "barre": 376,
+   "barre_nel_periodo": 376,
+   "barre_tolte_allineamento": {
+    "last": 1,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "15d7a706a65d49283d77bdc7eef2d4a69ff4f70192afeee5b931a7aa9e5dece8",
+    "liquidita": 61,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 152
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 4
+   },
+   "ingressi_dati": null,
+   "j": 55,
+   "long": 0,
+   "mesi_sotto_liquidita": 2,
+   "peso": 0.005012531328320802,
+   "pnl": 16.641289679795335,
+   "r_medio": 0.4212413069154071,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 131,
+    "n_segnali": 4,
+    "saltati_totali": {
+     "buco": 28,
+     "fuori_finestra": 535,
+     "posizione_aperta": 52,
+     "vietata": 106
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 4,
+   "slippage_per_lato": 0.001,
+   "trade": 4,
+   "violazioni_liquidazione": 0
+  },
+  "RUNEUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.9559880467302287,
+    "errore_standard": 0.17595110829089602,
+    "media": -0.20568779008892107,
+    "n_blocchi": 7,
+    "n_trade": 39,
+    "valutabile": true
+   },
+   "b_durata_media": 13,
+   "b_ingressi_entrano": true,
+   "b_j": -0.053457418795268864,
+   "b_simulazioni_con_trade": 200,
+   "barre": 858,
+   "barre_nel_periodo": 858,
+   "barre_tolte_allineamento": {
+    "last": 7,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "992c48641f240374c50853fa7a97962deee65d68f1a84a902e45578e75636d4b",
+    "liquidita": 119,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 120
+   },
+   "conteggi": {
+    "buchi_dati": 4,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 14
+   },
+   "ingressi_dati": null,
+   "j": 56,
+   "long": 0,
+   "mesi_sotto_liquidita": 4,
+   "peso": 0.017543859649122806,
+   "pnl": -93.50167199074627,
+   "r_medio": -0.6955882591045446,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1811,
+    "n_segnali": 14,
+    "saltati_totali": {
+     "buco": 21,
+     "fuori_finestra": 652,
+     "posizione_aperta": 1023,
+     "vietata": 316
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 14,
+   "slippage_per_lato": 0.0005,
+   "trade": 14,
+   "violazioni_liquidazione": 0
+  },
+  "SANDUSDT": {
+   "a": {
+    "blocco": 7,
+    "deviazione_standard": 1.0425399847472128,
+    "errore_standard": 0.20438868062363655,
+    "media": -0.1877080432798584,
+    "n_blocchi": 5,
+    "n_trade": 38,
+    "valutabile": true
+   },
+   "b_durata_media": 15,
+   "b_ingressi_entrano": true,
+   "b_j": 0.0006970641538123587,
+   "b_simulazioni_con_trade": 200,
+   "barre": 711,
+   "barre_nel_periodo": 711,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "d5c20382c0653d0e6c73e0c470ee8c37ea32e627ed9ee443c2cd4974e8a16f85",
+    "liquidita": 7,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 21,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 21
+   },
+   "ingressi_dati": null,
+   "j": 57,
+   "long": 0,
+   "mesi_sotto_liquidita": 1,
+   "peso": 0.02631578947368421,
+   "pnl": -36.42342526887143,
+   "r_medio": -0.17082496683655676,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2246,
+    "n_segnali": 21,
+    "saltati_totali": {
+     "buco": 135,
+     "fuori_finestra": 1457,
+     "posizione_aperta": 1088,
+     "vietata": 362
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 21,
+   "slippage_per_lato": 0.0005,
+   "trade": 21,
+   "violazioni_liquidazione": 0
+  },
+  "SFPUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 1.0104029880653793,
+    "errore_standard": 0.1908997386008744,
+    "media": -0.00906054385325745,
+    "n_blocchi": 8,
+    "n_trade": 24,
+    "valutabile": true
+   },
+   "b_durata_media": 21,
+   "b_ingressi_entrano": true,
+   "b_j": 0.045894227150334956,
+   "b_simulazioni_con_trade": 200,
+   "barre": 686,
+   "barre_nel_periodo": 686,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "93ccc09f7d0e36d19a7b7faa4916875c2f6733d4460acc1c1a323744753d8a4b",
+    "liquidita": 126,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 212
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 13
+   },
+   "ingressi_dati": null,
+   "j": 58,
+   "long": 0,
+   "mesi_sotto_liquidita": 5,
+   "peso": 0.016290726817042606,
+   "pnl": 41.77851962072917,
+   "r_medio": 0.32054660146480624,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1043,
+    "n_segnali": 13,
+    "saltati_totali": {
+     "buco": 69,
+     "fuori_finestra": 986,
+     "posizione_aperta": 351,
+     "vietata": 502
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 13,
+   "slippage_per_lato": 0.001,
+   "trade": 13,
+   "violazioni_liquidazione": 1
+  },
+  "SKLUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.0798561288467163,
+    "errore_standard": 0.23003620685072967,
+    "media": 0.00199474325769355,
+    "n_blocchi": 6,
+    "n_trade": 25,
+    "valutabile": true
+   },
+   "b_durata_media": 12,
+   "b_ingressi_entrano": true,
+   "b_j": 0.09804479341982031,
+   "b_simulazioni_con_trade": 200,
+   "barre": 759,
+   "barre_nel_periodo": 759,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "ca405d67dd920797ee73581c68d1f44108a1e5ae793116640691cd70e83f5489",
+    "liquidita": 192,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 227
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 8
+   },
+   "ingressi_dati": null,
+   "j": 59,
+   "long": 0,
+   "mesi_sotto_liquidita": 7,
+   "peso": 0.010025062656641603,
+   "pnl": 0.5832048556351914,
+   "r_medio": 0.017411360522150143,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 739,
+    "n_segnali": 8,
+    "saltati_totali": {
+     "buco": 27,
+     "fuori_finestra": 512,
+     "posizione_aperta": 451,
+     "vietata": 322
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 8,
+   "slippage_per_lato": 0.001,
+   "trade": 8,
+   "violazioni_liquidazione": 0
+  },
+  "SNXUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.9502728955407437,
+    "errore_standard": 0.18163561532539402,
+    "media": -0.03546769601692369,
+    "n_blocchi": 7,
+    "n_trade": 36,
+    "valutabile": true
+   },
+   "b_durata_media": 29,
+   "b_ingressi_entrano": true,
+   "b_j": -0.0910931767701149,
+   "b_simulazioni_con_trade": 200,
+   "barre": 880,
+   "barre_nel_periodo": 880,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "93de143e19e43cbdfa176661dca126d2beab0a1cbb139547ee1b22cff072b0ec",
+    "liquidita": 61,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 5
+   },
+   "ingressi_dati": null,
+   "j": 60,
+   "long": 0,
+   "mesi_sotto_liquidita": 2,
+   "peso": 0.006265664160401002,
+   "pnl": 11.499493119876334,
+   "r_medio": 0.23102486444799078,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 692,
+    "n_segnali": 5,
+    "saltati_totali": {
+     "buco": 18,
+     "fuori_finestra": 204,
+     "posizione_aperta": 11,
+     "vietata": 86
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 5,
+   "slippage_per_lato": 0.0005,
+   "trade": 5,
+   "violazioni_liquidazione": 0
+  },
+  "STMXUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.0518794018105813,
+    "errore_standard": 0.26544134738993597,
+    "media": -0.03175360052202278,
+    "n_blocchi": 3,
+    "n_trade": 15,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.0114515110346886,
+   "b_simulazioni_con_trade": 200,
+   "barre": 660,
+   "barre_nel_periodo": 660,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "35edb717cf51d6f128ad75b9788eab692597275004ddf70649b811a60e27ccd5",
+    "liquidita": 258,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 348
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 3
+   },
+   "ingressi_dati": null,
+   "j": 61,
+   "long": 0,
+   "mesi_sotto_liquidita": 9,
+   "peso": 0.0037593984962406013,
+   "pnl": 39.477287711326916,
+   "r_medio": 1.297741406647869,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 152,
+    "n_segnali": 3,
+    "saltati_totali": {
+     "buco": 15,
+     "fuori_finestra": 244,
+     "posizione_aperta": 0,
+     "vietata": 189
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 3,
+   "slippage_per_lato": 0.0005,
+   "trade": 3,
+   "violazioni_liquidazione": 0
+  },
+  "STORJUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9663099858705461,
+    "errore_standard": 0.16457844308024927,
+    "media": -0.09728360856879488,
+    "n_blocchi": 10,
+    "n_trade": 31,
+    "valutabile": true
+   },
+   "b_durata_media": 24,
+   "b_ingressi_entrano": true,
+   "b_j": -0.1606566996182244,
+   "b_simulazioni_con_trade": 200,
+   "barre": 842,
+   "barre_nel_periodo": 842,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "285ca33e441fc331dbbc5c05f780de0ebccbe1dab8f6b0de862111688e000f60",
+    "liquidita": 199,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 200
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 12,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 11
+   },
+   "ingressi_dati": null,
+   "j": 62,
+   "long": 0,
+   "mesi_sotto_liquidita": 7,
+   "peso": 0.013784461152882205,
+   "pnl": 7.456482775628597,
+   "r_medio": 0.07221184269594177,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1219,
+    "n_segnali": 11,
+    "saltati_totali": {
+     "buco": 51,
+     "fuori_finestra": 514,
+     "posizione_aperta": 239,
+     "vietata": 416
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 11,
+   "slippage_per_lato": 0.0005,
+   "trade": 11,
+   "violazioni_liquidazione": 0
+  },
+  "SUSHIUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 1.0224869756100325,
+    "errore_standard": 0.20285457299440285,
+    "media": -0.09444828708793894,
+    "n_blocchi": 7,
+    "n_trade": 37,
+    "valutabile": true
+   },
+   "b_durata_media": 22,
+   "b_ingressi_entrano": true,
+   "b_j": -0.039922512193073544,
+   "b_simulazioni_con_trade": 200,
+   "barre": 854,
+   "barre_nel_periodo": 854,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "1507b5717181cf2e2a323c073e9a183e46d73094f4c22c91247ebb73ad7dd99e",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 11
+   },
+   "ingressi_dati": null,
+   "j": 63,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.013784461152882205,
+   "pnl": 13.361772754676878,
+   "r_medio": 0.12666461098284337,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1478,
+    "n_segnali": 11,
+    "saltati_totali": {
+     "buco": 31,
+     "fuori_finestra": 511,
+     "posizione_aperta": 451,
+     "vietata": 180
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 11,
+   "slippage_per_lato": 0.0005,
+   "trade": 11,
+   "violazioni_liquidazione": 0
+  },
+  "SXPUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 1.088389872708863,
+    "errore_standard": 0.23658838392923445,
+    "media": 0.04612371716431564,
+    "n_blocchi": 6,
+    "n_trade": 30,
+    "valutabile": true
+   },
+   "b_durata_media": 19,
+   "b_ingressi_entrano": true,
+   "b_j": 0.12127805179817275,
+   "b_simulazioni_con_trade": 200,
+   "barre": 904,
+   "barre_nel_periodo": 904,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "c3fee25037d6fb26cd97115ab0ed9dc3207739567170c4b74f5e4b0c52e8672b",
+    "liquidita": 138,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 228
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 13
+   },
+   "ingressi_dati": null,
+   "j": 64,
+   "long": 0,
+   "mesi_sotto_liquidita": 5,
+   "peso": 0.016290726817042606,
+   "pnl": -41.246438533467206,
+   "r_medio": -0.3203258118262106,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1522,
+    "n_segnali": 13,
+    "saltati_totali": {
+     "buco": 67,
+     "fuori_finestra": 452,
+     "posizione_aperta": 598,
+     "vietata": 559
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 13,
+   "slippage_per_lato": 0.0005,
+   "trade": 13,
+   "violazioni_liquidazione": 1
+  },
+  "THETAUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 0.9540093742526378,
+    "errore_standard": 0.19576771210157537,
+    "media": -0.24074388540579528,
+    "n_blocchi": 7,
+    "n_trade": 42,
+    "valutabile": true
+   },
+   "b_durata_media": 23,
+   "b_ingressi_entrano": true,
+   "b_j": -0.12227593865225257,
+   "b_simulazioni_con_trade": 200,
+   "barre": 959,
+   "barre_nel_periodo": 959,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "560bcaa3f6ef8af5dafaa220f32b254a2fe4e04dbdc40dba47f65c5eb18f1f02",
+    "liquidita": 91,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 121
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 15
+   },
+   "ingressi_dati": null,
+   "j": 65,
+   "long": 0,
+   "mesi_sotto_liquidita": 3,
+   "peso": 0.018796992481203006,
+   "pnl": -58.85483279083585,
+   "r_medio": -0.3988332233374023,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2222,
+    "n_segnali": 15,
+    "saltati_totali": {
+     "buco": 91,
+     "fuori_finestra": 346,
+     "posizione_aperta": 569,
+     "vietata": 341
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 15,
+   "slippage_per_lato": 0.001,
+   "trade": 15,
+   "violazioni_liquidazione": 0
+  },
+  "TOMOUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 1.0169423709439316,
+    "errore_standard": 0.21913764649259349,
+    "media": 0.05219640377321857,
+    "n_blocchi": 7,
+    "n_trade": 21,
+    "valutabile": true
+   },
+   "b_durata_media": 25,
+   "b_ingressi_entrano": true,
+   "b_j": -0.06252496683581171,
+   "b_simulazioni_con_trade": 200,
+   "barre": 821,
+   "barre_nel_periodo": 821,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "36c8be4e1303d26cd89870343e946aeb7df7c81338a9be648bafab1a517f2c65",
+    "liquidita": 339,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 339
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 66,
+   "long": 0,
+   "mesi_sotto_liquidita": 12,
+   "peso": 0.008771929824561403,
+   "pnl": -13.806978269455513,
+   "r_medio": -0.19587067108415473,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 577,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 22,
+     "fuori_finestra": 365,
+     "posizione_aperta": 86,
+     "vietata": 436
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.0005,
+   "trade": 7,
+   "violazioni_liquidazione": 0
+  },
+  "TRXUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.8164804982152932,
+    "errore_standard": 0.14289298605704423,
+    "media": -0.2627319959101138,
+    "n_blocchi": 9,
+    "n_trade": 47,
+    "valutabile": true
+   },
+   "b_durata_media": 19,
+   "b_ingressi_entrano": true,
+   "b_j": -0.2615704093299546,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1087,
+   "barre_nel_periodo": 1087,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "b9dd90174871cb96fcbbae3830cd5babb35db5f186d58f8e5917f3ba4e951c48",
+    "liquidita": 139,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 169
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 23
+   },
+   "ingressi_dati": null,
+   "j": 67,
+   "long": 0,
+   "mesi_sotto_liquidita": 5,
+   "peso": 0.02882205513784461,
+   "pnl": -44.92386407661496,
+   "r_medio": -0.19551634965181441,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 3760,
+    "n_segnali": 23,
+    "saltati_totali": {
+     "buco": 98,
+     "fuori_finestra": 0,
+     "posizione_aperta": 1400,
+     "vietata": 742
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 23,
+   "slippage_per_lato": 0.0005,
+   "trade": 23,
+   "violazioni_liquidazione": 0
+  },
+  "UNFIUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.818857494401838,
+    "errore_standard": 0.10963350740661296,
+    "media": 0.05573607523107308,
+    "n_blocchi": 8,
+    "n_trade": 24,
+    "valutabile": true
+   },
+   "b_durata_media": 26,
+   "b_ingressi_entrano": true,
+   "b_j": -0.06372156304389197,
+   "b_simulazioni_con_trade": 200,
+   "barre": 686,
+   "barre_nel_periodo": 686,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 23
+   },
+   "barre_vietate": {
+    "impronta": "f7e04f9263e846467cb4e02dc94c22a376ca62ead8eb91be82777bf8a880c0c2",
+    "liquidita": 59,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 119
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 8
+   },
+   "ingressi_dati": null,
+   "j": 68,
+   "long": 0,
+   "mesi_sotto_liquidita": 2,
+   "peso": 0.010025062656641603,
+   "pnl": 1.9204472369019308,
+   "r_medio": 0.027040524716926778,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 778,
+    "n_segnali": 8,
+    "saltati_totali": {
+     "buco": 41,
+     "fuori_finestra": 606,
+     "posizione_aperta": 152,
+     "vietata": 175
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 8,
+   "slippage_per_lato": 0.0005,
+   "trade": 8,
+   "violazioni_liquidazione": 1
+  },
+  "UNIUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.8811833940325319,
+    "errore_standard": 0.19762633051097012,
+    "media": -0.053366700603454935,
+    "n_blocchi": 6,
+    "n_trade": 33,
+    "valutabile": true
+   },
+   "b_durata_media": 26,
+   "b_ingressi_entrano": true,
+   "b_j": 0.02804005647699459,
+   "b_simulazioni_con_trade": 200,
+   "barre": 845,
+   "barre_nel_periodo": 845,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 1
+   },
+   "barre_vietate": {
+    "impronta": "b760fa897d6dae64efa87de15eef53ceef557768e6eccf6665a3931ff0fff4cf",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 69,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.008771929824561403,
+   "pnl": 0.09050570603881392,
+   "r_medio": 0.0029407870756671234,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 922,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 32,
+     "fuori_finestra": 325,
+     "posizione_aperta": 126,
+     "vietata": 121
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.0005,
+   "trade": 7,
+   "violazioni_liquidazione": 0
+  },
+  "VETUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 1.008592861447744,
+    "errore_standard": 0.16523193118327306,
+    "media": -0.22572636768517684,
+    "n_blocchi": 8,
+    "n_trade": 49,
+    "valutabile": true
+   },
+   "b_durata_media": 19,
+   "b_ingressi_entrano": true,
+   "b_j": -0.06747913528320365,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1057,
+   "barre_nel_periodo": 1057,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "99b6c1789d3e77f3f583ddc461c5289a596de4409aa992d019135ee2fcffd473",
+    "liquidita": 170,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 171
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 16
+   },
+   "ingressi_dati": null,
+   "j": 70,
+   "long": 0,
+   "mesi_sotto_liquidita": 6,
+   "peso": 0.020050125313283207,
+   "pnl": -35.74238408483882,
+   "r_medio": -0.22229094040496522,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2520,
+    "n_segnali": 16,
+    "saltati_totali": {
+     "buco": 69,
+     "fuori_finestra": 94,
+     "posizione_aperta": 925,
+     "vietata": 517
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 16,
+   "slippage_per_lato": 0.001,
+   "trade": 16,
+   "violazioni_liquidazione": 1
+  },
+  "WAVESUSDT": {
+   "a": {
+    "blocco": 6,
+    "deviazione_standard": 0.9978251021129703,
+    "errore_standard": 0.18991207436699437,
+    "media": -0.18768455690331856,
+    "n_blocchi": 7,
+    "n_trade": 43,
+    "valutabile": true
+   },
+   "b_durata_media": 21,
+   "b_ingressi_entrano": true,
+   "b_j": -0.03532769612824135,
+   "b_simulazioni_con_trade": 200,
+   "barre": 877,
+   "barre_nel_periodo": 877,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "1335ab307d6edba99e5f0b928329933c9cd65ad115211683a14f821e80ecb647",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 92,
+    "totale": 92
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 12,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 21
+   },
+   "ingressi_dati": null,
+   "j": 71,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.02631578947368421,
+   "pnl": -30.867022561617542,
+   "r_medio": -0.1438978840797684,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2906,
+    "n_segnali": 21,
+    "saltati_totali": {
+     "buco": 75,
+     "fuori_finestra": 851,
+     "posizione_aperta": 987,
+     "vietata": 368
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 21,
+   "slippage_per_lato": 0.0005,
+   "trade": 21,
+   "violazioni_liquidazione": 0
+  },
+  "XEMUSDT": {
+   "a": {
+    "blocco": 2,
+    "deviazione_standard": 0.8695641186021219,
+    "errore_standard": 0.2312100332354235,
+    "media": 0.14512257722244115,
+    "n_blocchi": 7,
+    "n_trade": 14,
+    "valutabile": true
+   },
+   "b_durata_media": 30,
+   "b_ingressi_entrano": true,
+   "b_j": 0.0633682612441314,
+   "b_simulazioni_con_trade": 200,
+   "barre": 674,
+   "barre_nel_periodo": 674,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "8e0e072e77fced6cd0ffd442a681bc9eef22ba141df5f7e98be89e0f49081d33",
+    "liquidita": 226,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 316
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 3
+   },
+   "ingressi_dati": null,
+   "j": 72,
+   "long": 0,
+   "mesi_sotto_liquidita": 8,
+   "peso": 0.0037593984962406013,
+   "pnl": 10.664449107697246,
+   "r_medio": 0.3540444087084637,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 182,
+    "n_segnali": 3,
+    "saltati_totali": {
+     "buco": 5,
+     "fuori_finestra": 243,
+     "posizione_aperta": 0,
+     "vietata": 170
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 3,
+   "slippage_per_lato": 0.001,
+   "trade": 3,
+   "violazioni_liquidazione": 0
+  },
+  "XLMUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.935375813948528,
+    "errore_standard": 0.14190134207223742,
+    "media": 0.011489991305927488,
+    "n_blocchi": 10,
+    "n_trade": 40,
+    "valutabile": true
+   },
+   "b_durata_media": 19,
+   "b_ingressi_entrano": true,
+   "b_j": 0.004123102839408303,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1082,
+   "barre_nel_periodo": 1082,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "67dae0031b77075876bbaffcd3264a0115274291c4ccef67ef254a4b4f5b86fc",
+    "liquidita": 255,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 256
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 17
+   },
+   "ingressi_dati": null,
+   "j": 73,
+   "long": 0,
+   "mesi_sotto_liquidita": 9,
+   "peso": 0.021303258145363407,
+   "pnl": -16.624472322027145,
+   "r_medio": -0.0939276693559757,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2497,
+    "n_segnali": 17,
+    "saltati_totali": {
+     "buco": 97,
+     "fuori_finestra": 0,
+     "posizione_aperta": 1028,
+     "vietata": 806
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 17,
+   "slippage_per_lato": 0.0005,
+   "trade": 17,
+   "violazioni_liquidazione": 0
+  },
+  "XMRUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.9323502813889691,
+    "errore_standard": 0.15772838438761563,
+    "media": -0.1729605012286146,
+    "n_blocchi": 9,
+    "n_trade": 38,
+    "valutabile": true
+   },
+   "b_durata_media": 29,
+   "b_ingressi_entrano": true,
+   "b_j": -0.23669662666622046,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1073,
+   "barre_nel_periodo": 1073,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 2
+   },
+   "barre_vietate": {
+    "impronta": "44895782b834982d7ae3fa22b53f7139a9ffe0161d6f2aaeda122bfa4b434af5",
+    "liquidita": 241,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 242
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 7
+   },
+   "ingressi_dati": null,
+   "j": 74,
+   "long": 0,
+   "mesi_sotto_liquidita": 8,
+   "peso": 0.008771929824561403,
+   "pnl": -18.68263344933315,
+   "r_medio": -0.2648689594565043,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1026,
+    "n_segnali": 7,
+    "saltati_totali": {
+     "buco": 9,
+     "fuori_finestra": 42,
+     "posizione_aperta": 17,
+     "vietata": 323
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 7,
+   "slippage_per_lato": 0.001,
+   "trade": 7,
+   "violazioni_liquidazione": 0
+  },
+  "XTZUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.9827669729704754,
+    "errore_standard": 0.14688058485808939,
+    "media": -0.07604809836737249,
+    "n_blocchi": 11,
+    "n_trade": 45,
+    "valutabile": true
+   },
+   "b_durata_media": 20,
+   "b_ingressi_entrano": true,
+   "b_j": -4.688358235984097e-05,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1070,
+   "barre_nel_periodo": 1070,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 2
+   },
+   "barre_vietate": {
+    "impronta": "550f60dff0b223905c9f180b50642c5654b5ebc6bf4c6d1a6601a43302063c96",
+    "liquidita": 62,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 153
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 15
+   },
+   "ingressi_dati": null,
+   "j": 75,
+   "long": 0,
+   "mesi_sotto_liquidita": 2,
+   "peso": 0.018796992481203006,
+   "pnl": 1.8084321211124965,
+   "r_medio": 0.016668463861066116,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2462,
+    "n_segnali": 15,
+    "saltati_totali": {
+     "buco": 29,
+     "fuori_finestra": 84,
+     "posizione_aperta": 753,
+     "vietata": 425
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 15,
+   "slippage_per_lato": 0.001,
+   "trade": 15,
+   "violazioni_liquidazione": 0
+  },
+  "YFIUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 0.8916783817335253,
+    "errore_standard": 0.14005608536942063,
+    "media": 0.017425412604987686,
+    "n_blocchi": 8,
+    "n_trade": 33,
+    "valutabile": true
+   },
+   "b_durata_media": 23,
+   "b_ingressi_entrano": true,
+   "b_j": 0.08034001974010993,
+   "b_simulazioni_con_trade": 200,
+   "barre": 858,
+   "barre_nel_periodo": 858,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 5
+   },
+   "barre_vietate": {
+    "impronta": "9e21da493704aeae1fd1121684d669058e6483b63a25c9dd6abdd099b988d2c7",
+    "liquidita": 0,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 91
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 3,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 17
+   },
+   "ingressi_dati": null,
+   "j": 76,
+   "long": 0,
+   "mesi_sotto_liquidita": 0,
+   "peso": 0.021303258145363407,
+   "pnl": 14.863972018745269,
+   "r_medio": 0.0897024891769974,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 2297,
+    "n_segnali": 17,
+    "saltati_totali": {
+     "buco": 131,
+     "fuori_finestra": 686,
+     "posizione_aperta": 560,
+     "vietata": 286
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 17,
+   "slippage_per_lato": 0.001,
+   "trade": 17,
+   "violazioni_liquidazione": 0
+  },
+  "ZECUSDT": {
+   "a": {
+    "blocco": 4,
+    "deviazione_standard": 1.033331614100125,
+    "errore_standard": 0.14871772635350342,
+    "media": -0.04372546869363224,
+    "n_blocchi": 10,
+    "n_trade": 40,
+    "valutabile": true
+   },
+   "b_durata_media": 24,
+   "b_ingressi_entrano": true,
+   "b_j": -0.03915208812766248,
+   "b_simulazioni_con_trade": 200,
+   "barre": 1066,
+   "barre_nel_periodo": 1066,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "00b6b6c0758af81e26fee171bf59ebdd37586d111fd373806f2ba3d8c9c2e0bb",
+    "liquidita": 208,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 209
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 11
+   },
+   "ingressi_dati": null,
+   "j": 77,
+   "long": 0,
+   "mesi_sotto_liquidita": 7,
+   "peso": 0.013784461152882205,
+   "pnl": -5.123021815645498,
+   "r_medio": -0.042350333730495154,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1675,
+    "n_segnali": 11,
+    "saltati_totali": {
+     "buco": 29,
+     "fuori_finestra": 64,
+     "posizione_aperta": 383,
+     "vietata": 432
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 11,
+   "slippage_per_lato": 0.001,
+   "trade": 11,
+   "violazioni_liquidazione": 1
+  },
+  "ZILUSDT": {
+   "a": {
+    "blocco": 5,
+    "deviazione_standard": 0.9852868698638726,
+    "errore_standard": 0.18950354307011463,
+    "media": -0.08508057535283563,
+    "n_blocchi": 7,
+    "n_trade": 36,
+    "valutabile": true
+   },
+   "b_durata_media": 18,
+   "b_ingressi_entrano": true,
+   "b_j": 0.08088552050515513,
+   "b_simulazioni_con_trade": 200,
+   "barre": 932,
+   "barre_nel_periodo": 932,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 6
+   },
+   "barre_vietate": {
+    "impronta": "663e7c38c1ed110e714d53c64ca94ecf0e491e02f341aa13de25603c868c3705",
+    "liquidita": 197,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 198
+   },
+   "conteggi": {
+    "buchi_dati": 5,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 6,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 14
+   },
+   "ingressi_dati": null,
+   "j": 78,
+   "long": 0,
+   "mesi_sotto_liquidita": 7,
+   "peso": 0.017543859649122806,
+   "pnl": 0.097398596140295,
+   "r_medio": 0.007467046880878812,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 1825,
+    "n_segnali": 14,
+    "saltati_totali": {
+     "buco": 75,
+     "fuori_finestra": 390,
+     "posizione_aperta": 723,
+     "vietata": 510
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 14,
+   "slippage_per_lato": 0.001,
+   "trade": 14,
+   "violazioni_liquidazione": 0
+  },
+  "ZRXUSDT": {
+   "a": {
+    "blocco": 3,
+    "deviazione_standard": 0.9888182304417634,
+    "errore_standard": 0.19515964498467087,
+    "media": -0.025241212379404382,
+    "n_blocchi": 8,
+    "n_trade": 25,
+    "valutabile": true
+   },
+   "b_durata_media": 16,
+   "b_ingressi_entrano": true,
+   "b_j": -0.012191142824481034,
+   "b_simulazioni_con_trade": 200,
+   "barre": 931,
+   "barre_nel_periodo": 931,
+   "barre_tolte_allineamento": {
+    "last": 6,
+    "mark": 0
+   },
+   "barre_vietate": {
+    "impronta": "ef15bd1d07e1a9515130824945cf8c2d37eb73288fd4a61137fd04a36bbe4de9",
+    "liquidita": 359,
+    "prima_del_periodo": 0,
+    "segnale_non_valido": 91,
+    "totale": 390
+   },
+   "conteggi": {
+    "buchi_dati": 3,
+    "capitale_esaurito": 0,
+    "funding_in_buco": 0,
+    "segnali_non_validi": 0,
+    "segnali_senza_barra": 0,
+    "trade_prima_del_periodo": 0
+   },
+   "controllo_casuale": {
+    "trade_rifatti": 4
+   },
+   "ingressi_dati": null,
+   "j": 79,
+   "long": 0,
+   "mesi_sotto_liquidita": 13,
+   "peso": 0.005012531328320802,
+   "pnl": 10.769883423755342,
+   "r_medio": 0.2764986661749772,
+   "ridotti": 0,
+   "sfasate": {
+    "ingressi_totali": 380,
+    "n_segnali": 4,
+    "saltati_totali": {
+     "buco": 21,
+     "fuori_finestra": 116,
+     "posizione_aperta": 187,
+     "vietata": 283
+    },
+    "segnali_coincidenti": 0,
+    "segnali_fuori_dalla_finestra_unione": 0
+   },
+   "short": 4,
+   "slippage_per_lato": 0.001,
+   "trade": 4,
+   "violazioni_liquidazione": 0
+  }
+ },
+ "percentile_caso": 44.0,
+ "periodo": "costruzione",
+ "posizioni_aperte_insieme": {
+  "long": 0,
+  "short": 59,
+  "totale": 59
+ },
+ "quota_moneta_piu_presente": 0.02882205513784461,
+ "quota_monete_sopra_b_j": {
+  "monete_con_almeno_10_trade": 37,
+  "quota": 0.32432432432432434,
+  "sopra_b_j": 12
+ },
+ "ripresa": {
+  "pezzi_calcolati": 160,
+  "pezzi_ripresi": 0,
+  "righe_di_altre_impronte": 0,
+  "righe_illeggibili": 0
+ },
+ "stabilita": {
+  "anni": {
+   "2021": {
+    "b_ripesata": -0.045213495655683625,
+    "r_medio": -0.2349478478081624,
+    "sopra": false,
+    "trade": 405
+   },
+   "2022": {
+    "b_ripesata": -0.012984003948420086,
+    "r_medio": 0.31477767256092043,
+    "sopra": true,
+    "trade": 286
+   }
+  },
+  "anni_che_contano": 2,
+  "anni_sopra": 1,
+  "superata": false,
+  "trade_minimi_per_anno": 100
+ },
+ "t": -0.018847468800354053,
+ "timeframe": "1d",
+ "trade_minimi": {
+  "minimo": 700,
+  "superati": true
+ },
+ "uscite_massime_in_un_giorno": 28,
+ "valutabile": true
+}
