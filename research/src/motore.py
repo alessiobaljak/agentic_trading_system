@@ -1152,12 +1152,19 @@ def simula_sfasamento_comune(
       SEGNALE dei trade del candidato su questa moneta nel periodo (la barra
       alla cui chiusura la variante ha emesso il segnale, non quella
       d'ingresso). Ognuno deve essere una barra della serie e cadere sulla
-      griglia del calendario della finestra unione; ValueError se no, se due
-      coincidono o se distano L barre o piu' (lo spostamento non sarebbe piu'
-      una rotazione). Un istante prima o dopo la finestra unione (per esempio la
+      griglia del calendario della finestra unione; ValueError se no o se due
+      coincidono. Un istante prima o dopo la finestra unione (per esempio la
       barra di segnale del 2023-01-16 di un trade entrato il 2023-01-17, primo
-      giorno di validazione) si sposta con la stessa aritmetica del cerchio e si
-      conta in ``segnali_fuori_dalla_finestra_unione``.
+      giorno di validazione, o del 2023-01-14 se il 15 e il 16 mancano nella
+      serie) si sposta con la stessa aritmetica del cerchio e si conta in
+      ``segnali_fuori_dalla_finestra_unione``. Due istanti con lo stesso resto
+      modulo L (distanti un multiplo di L barre: succede solo con un segnale fuori
+      dalla finestra unione, per esempio con un buco o con il ritardo subito prima
+      dell'inizio della validazione) cadono nella stessa barra per ogni d_s: il
+      motore ci apre una posizione sola, e l'altro ingresso si salta e si conta in
+      ``posizione_aperta`` (cade mentre la posizione del primo e' aperta), con il
+      numero a parte in ``segnali_coincidenti`` (regole.md, sezione 2, punto 9: i
+      buchi non rendono mai non valutabile una variante).
     * ``finestra_unione``: (inizio, fine) in ms della finestra del periodo,
       l'unione delle finestre delle monete con trade del candidato (sezione 5,
       punto 5; nel vault, il vault: sezione 9, punto 3). ``fine`` e' l'ultimo
@@ -1188,24 +1195,30 @@ def simula_sfasamento_comune(
     * ``vietata``: la barra e' in ``barre_vietate`` (o e' l'ultima);
     * ``posizione_aperta``: il motore non lo trasforma in un trade perche'
       cade mentre la posizione e' aperta (o mentre un ingresso e' gia' in
-      attesa, con ``ritardo_barre`` > 0). Si conta per differenza: ingressi
-      passati al motore - trade - segnali non validi - segnali senza barra -
-      segnali con capitale esaurito (questi tre si riportano a parte). Se la
-      differenza viene negativa la strategia casuale ha emesso segnali fuori
-      dagli ingressi: ValueError.
+      attesa, con ``ritardo_barre`` > 0, o nella stessa barra di un altro
+      ingresso coincidente). Si conta per differenza: ingressi spostati arrivati
+      fin qui - trade - segnali non validi - segnali senza barra - segnali con
+      capitale esaurito (questi tre si riportano a parte). Se la differenza viene
+      negativa la strategia casuale ha emesso segnali fuori dagli ingressi:
+      ValueError.
 
     Nessun numero casuale: stessi argomenti, stesso risultato.
 
     Ritorna un dizionario con ``L``, ``n_segnali``,
-    ``segnali_fuori_dalla_finestra_unione``, ``sfasamenti`` (i d_s usati, come
-    interi), ``saltati_totali`` (i quattro conteggi sommati su tutti gli s) e
-    ``per_sfasamento``: una lista nell'ordine di ``sfasamenti``, con per ogni s
-    un dizionario ``d`` (d_s), ``trade`` (lista di ``TradeSfasato`` nell'ordine
-    del motore, cioe' d'uscita), ``ingressi`` (quanti ingressi spostati sono
-    arrivati al motore), ``saltati`` ({motivo: numero}, i quattro motivi
-    sopra), ``segnali_non_validi``, ``segnali_senza_barra`` e
-    ``capitale_esaurito``. M'(s) e n'(s) del gruppo si ottengono sommando i
-    ``trade`` dello stesso s su tutte le monete (``statistica.pavimento_sfasamento``).
+    ``segnali_fuori_dalla_finestra_unione``, ``segnali_coincidenti`` (quanti
+    istanti hanno lo stesso resto modulo L di un istante prima di loro),
+    ``sfasamenti`` (i d_s usati, come interi), ``saltati_totali`` (i quattro
+    conteggi sommati su tutti gli s) e ``per_sfasamento``: una lista nell'ordine
+    di ``sfasamenti``, con per ogni s un dizionario ``d`` (d_s), ``trade`` (lista
+    di ``TradeSfasato`` nell'ordine del motore, cioe' d'uscita), ``ingressi``
+    (quanti ingressi spostati hanno passato i primi tre controlli: ``ingressi`` +
+    ``fuori_finestra`` + ``buco`` + ``vietata`` = ``n_segnali``), ``coincidenti``
+    (quanti di questi cadono nella barra di un altro), ``saltati`` ({motivo:
+    numero}, i quattro motivi sopra), ``segnali_non_validi``,
+    ``segnali_senza_barra`` e ``capitale_esaurito``. M'(s) e n'(s) del gruppo si
+    ottengono dai ``trade`` dello stesso s su tutte le monete con
+    ``statistica.riassunto_sfasate`` (per moneta) e ``statistica.medie_sfasate``
+    (fra le monete), e vanno a ``statistica.pavimento_sfasamento``.
     """
     ms = operator.index(ms_per_barra)
     if ms <= 0:
@@ -1241,8 +1254,8 @@ def simula_sfasamento_comune(
         posizioni.append(p)
     if len(set(posizioni)) != len(posizioni):
         raise ValueError("due istanti di segnale coincidono")
-    if posizioni and max(posizioni) - min(posizioni) >= L:
-        raise ValueError(f"gli istanti di segnale coprono {max(posizioni) - min(posizioni) + 1} barre, oltre L = {L}")
+    # lo spostamento e' una rotazione sui resti modulo L: due istanti con lo stesso resto cadono insieme
+    coincidenti = len(posizioni) - len({p % L for p in posizioni})
 
     vietata = bytearray(n)
     # come nella (b): un segnale alla chiusura dell'ultima barra non ha una barra in cui entrare
@@ -1257,6 +1270,7 @@ def simula_sfasamento_comune(
     totali = {"fuori_finestra": 0, "buco": 0, "vietata": 0, "posizione_aperta": 0}
     for d in sfas:
         saltati = {"fuori_finestra": 0, "buco": 0, "vietata": 0, "posizione_aperta": 0}
+        arrivati = 0  # ingressi spostati che passano i primi tre controlli, coincidenti compresi
         ingressi = set()
         for p in posizioni:
             ts = inizio_u + ((p + d) % L) * ms
@@ -1270,6 +1284,7 @@ def simula_sfasamento_comune(
             if vietata[i]:
                 saltati["vietata"] += 1
                 continue
+            arrivati += 1
             ingressi.add(i)
         strategia = _strategia_nuova(
             crea_strategia_casuale, "simula_sfasamento_comune",
@@ -1277,9 +1292,10 @@ def simula_sfasamento_comune(
             "segnale) che restituisce la strategia CASUALE della (b): alla chiusura di quelle barre il segnale "
             "della variante, poi la sua uscita", frozenset(ingressi))
         ris = esegui(candele, candele_stop, candele_mark, funding_lista, strategia, parametri)
-        saltati["posizione_aperta"] = (len(ingressi) - len(ris.trades) - ris.n_segnali_non_validi
+        saltati["posizione_aperta"] = (arrivati - len(ris.trades) - ris.n_segnali_non_validi
                                        - ris.n_segnali_senza_barra - ris.n_segnali_capitale_esaurito)
-        if saltati["posizione_aperta"] < 0:
+        if len(ingressi) - len(ris.trades) - ris.n_segnali_non_validi - ris.n_segnali_senza_barra \
+                - ris.n_segnali_capitale_esaurito < 0:
             raise ValueError(
                 f"sfasamento {d}: {len(ris.trades)} trade e {ris.n_segnali_non_validi} segnali non validi da "
                 f"{len(ingressi)} ingressi: la strategia casuale emette segnali fuori dagli ingressi"
@@ -1289,7 +1305,8 @@ def simula_sfasamento_comune(
         per_sfasamento.append({
             "d": d,
             "trade": [TradeSfasato(t.ts_entrata, t.ts_uscita, t.r, t.pnl) for t in ris.trades],
-            "ingressi": len(ingressi),
+            "ingressi": arrivati,
+            "coincidenti": arrivati - len(ingressi),
             "saltati": saltati,
             "segnali_non_validi": ris.n_segnali_non_validi,
             "segnali_senza_barra": ris.n_segnali_senza_barra,
@@ -1299,6 +1316,7 @@ def simula_sfasamento_comune(
         "L": L,
         "n_segnali": len(posizioni),
         "segnali_fuori_dalla_finestra_unione": fuori_unione,
+        "segnali_coincidenti": coincidenti,
         "sfasamenti": sfas,
         "saltati_totali": totali,
         "per_sfasamento": per_sfasamento,

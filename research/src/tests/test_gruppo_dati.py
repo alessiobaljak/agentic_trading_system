@@ -36,7 +36,7 @@ from typing import List, Optional, Sequence
 import pytest
 import yaml
 
-from research.src import dati, guardiano
+from research.src import dati, guardiano, selezione
 from research.src.dati import VaultChiuso, VietatoInCampagna
 from research.src.motore import Candela
 from research.src.tests.test_dati import FetchFinto, zip_in_memoria
@@ -531,6 +531,10 @@ def rifiuta_lista_e_indice() -> None:
         dati.lista_contratti(fetch)
     with pytest.raises(VietatoInCampagna, match="elenca_simboli_archivio"):
         dati.elenca_simboli_archivio(fetch)
+    # anche l'indice dei FILE di un simbolo (selezione, Passo 1): direbbe fino a quando la moneta ha dati
+    for simbolo in ("AAVEUSDT", "BTCUSDT", "ETHUSDT"):
+        with pytest.raises(VietatoInCampagna, match="elenca_file_archivio"):
+            selezione.elenca_file_archivio(simbolo, "1d", fetch)
     assert fetch.chiamate == []
 
 
@@ -593,15 +597,24 @@ INDICE = (
     "</ListBucketResult>"
 ).encode()
 
+INDICE_FILE = (
+    '<?xml version="1.0" encoding="UTF-8"?>'
+    '<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><IsTruncated>false</IsTruncated>'
+    "<Contents><Key>data/futures/um/monthly/klines/ETHUSDT/1d/ETHUSDT-1d-2023-01.zip</Key></Contents>"
+    "</ListBucketResult>"
+).encode()
+
 
 def tutto_come_prima(radice: Path) -> None:
     """Senza campagna: ogni simbolo passa, lista dei contratti e indice dell'archivio si leggono."""
     scarica_e_carica("ETHUSDT", radice)
     scarica_e_carica("BTCUSDT", radice)
     fetch = FetchFinto({dati.URL_EXCHANGE_INFO: EXCHANGE_INFO,
-                        dati.url_indice_archivio(dati.PREFISSO_KLINES_ARCHIVIO): INDICE})
+                        dati.url_indice_archivio(dati.PREFISSO_KLINES_ARCHIVIO): INDICE,
+                        selezione.url_indice_file(selezione.prefisso_archivio("ETHUSDT", "1d")): INDICE_FILE})
     assert [c["symbol"] for c in dati.lista_contratti(fetch)] == ["ETHUSDT"]
     assert dati.elenca_simboli_archivio(fetch) == ["ETHUSDT"]
+    assert selezione.elenca_file_archivio("ETHUSDT", "1d", fetch) == ["ETHUSDT-1d-2023-01.zip"]
     assert dati.marcatore_di_campagna() is None
     assert dati.simboli_ammessi_in_campagna() is None
 

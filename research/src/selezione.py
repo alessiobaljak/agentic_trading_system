@@ -478,7 +478,17 @@ def elenca_file_archivio(simbolo: str, intervallo: Optional[str] = "1d", fetch: 
     marker che avanza, o ancora troncata dopo ``MAX_PAGINE_INDICE`` pagine,
     solleva ``RuntimeError``; e si tengono solo le chiavi sotto il prefisso,
     perche' una chiave di un'altra cartella diventerebbe un mese di questo
-    simbolo."""
+    simbolo.
+
+    Con il marcatore di una sessione di campagna (qualunque simbolo) alza
+    ``dati.VietatoInCampagna`` prima di costruire l'indirizzo e di toccare la
+    rete (``dati.controlla_fuori_campagna``): in campagna non si elenca mai
+    l'archivio (``campagne/GRUPPO/regole.md``, sezione 2, punto 4, e sezione 12,
+    punto 4; sezione 4, regola 1, del protocollo), come per
+    ``dati.elenca_simboli_archivio``."""
+    dati.controlla_fuori_campagna(
+        "selezione.elenca_file_archivio",
+        "l'indice dei file di un simbolo dice fino a quando la moneta ha dati, compreso il periodo del vault")
     scarica = fetch or dati.fetch_http
     prefisso = prefisso_archivio(simbolo, intervallo, tipo)
     chiavi: List[str] = []

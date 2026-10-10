@@ -369,8 +369,53 @@ def test_sfasamento_rifiuta_argomenti_sbagliati():
         _sfasa(candele, crea, [T0 + 30 * ORA], finestra(0, 23), finestra(0, 23), [1])
     with pytest.raises(ValueError, match="coincidono"):
         _sfasa(candele, crea, [T0 + 3 * ORA, T0 + 3 * ORA], finestra(0, 23), finestra(0, 23), [1])
-    with pytest.raises(ValueError, match="oltre L"):
-        _sfasa(candele, crea, [T0 + 1 * ORA, T0 + 12 * ORA], finestra(0, 9), finestra(0, 23), [1])
+
+
+def test_segnali_che_coprono_piu_di_l_barre_con_un_buco_prima_della_finestra():
+    # Validazione con il ritardo di una barra e un buco subito prima della finestra (revisione del 10 ottobre):
+    # la serie va dalla posizione 0 alla 47 senza la 23; finestra unione e della moneta 24..47 (L = 24), barre
+    # prima vietate. Il trade entrato alla prima barra della finestra (24) ha il segnale due barre prima nella
+    # serie, alla posizione 21 (p = -3); un altro ha il segnale alla 45 (p = 21). Prima gli istanti «coprivano 25
+    # barre, oltre L» e l'esame si fermava; ora lo spostamento e' una rotazione sui resti: -3 e 21 hanno lo
+    # stesso resto modulo 24, quindi cadono sempre nella stessa barra. Con d = 5 vanno entrambi a (21 + 5) mod
+    # 24 = 2, posizione 26 = indice 25: un ingresso solo, l'altro saltato e contato «a posizione aperta».
+    posizioni = [p for p in range(48) if p != 23]
+    candele = serie_su_posizioni(posizioni)
+    registro = []
+    ris = _sfasa(candele, crea_casuale_fabbrica(2, registro), [T0 + 21 * ORA, T0 + 45 * ORA], finestra(24, 47),
+                 finestra(24, 47), [5, 2], vietate=[(0, 23)])
+    assert ris["segnali_fuori_dalla_finestra_unione"] == 1 and ris["segnali_coincidenti"] == 1
+    s5, s2 = ris["per_sfasamento"]
+    assert registro[0] == frozenset({25})
+    assert s5["ingressi"] == 2 and s5["coincidenti"] == 1 and len(s5["trade"]) == 1
+    assert s5["saltati"] == {"fuori_finestra": 0, "buco": 0, "vietata": 0, "posizione_aperta": 1}
+    # d = 2: (21 + 2) mod 24 = 23, posizione 47, l'ultima barra: vietata per tutti e due
+    assert s2["ingressi"] == 0 and s2["coincidenti"] == 0
+    assert s2["saltati"] == {"fuori_finestra": 0, "buco": 0, "vietata": 2, "posizione_aperta": 0}
+    for s in ris["per_sfasamento"]:
+        assert s["ingressi"] + s["saltati"]["fuori_finestra"] + s["saltati"]["buco"] + s["saltati"]["vietata"] \
+            == ris["n_segnali"]
+    # due istanti a distanza L - 2 (resti diversi) non coincidono
+    ris = _sfasa(candele, crea_casuale_fabbrica(2), [T0 + 22 * ORA, T0 + 44 * ORA], finestra(24, 47),
+                 finestra(24, 47), [5], vietate=[(0, 23)])
+    assert ris["segnali_coincidenti"] == 0 and ris["per_sfasamento"][0]["ingressi"] == 2
+
+
+def test_il_caso_della_revisione_a_1d_non_si_ferma():
+    # serie 1d dal 2022-01-01 al 2023-12-31 senza il 2023-01-15 e il 2023-01-16; segnali al 2023-01-14 (il trade
+    # entra il 2023-01-17, primo giorno di validazione) e al 2023-12-30; finestre dal 2023-01-17 al 2023-12-31.
+    giorno = 86_400_000
+    inizio = _ms(2023, 1, 17)
+    togli = {_ms(2023, 1, 15), _ms(2023, 1, 16)}
+    candele = [Candela(ts, 100.0, 101.0, 99.0, 100.5, 1.0, ts + giorno - 1)
+               for ts in range(_ms(2022, 1, 1), _ms(2024, 1, 1), giorno) if ts not in togli]
+    finestra_v = (inizio, _ms(2024, 1, 1) - 1)
+    prima = sum(1 for c in candele if c.ts < inizio)
+    ris = motore.simula_sfasamento_comune(candele, crea_casuale_fabbrica(2), [_ms(2023, 1, 14), _ms(2023, 12, 30)],
+                                          finestra_v, finestra_v, giorno, [30, 100, 200], Parametri(),
+                                          barre_vietate=[(0, prima)])
+    assert ris["L"] == 349 and ris["segnali_fuori_dalla_finestra_unione"] == 1 and ris["segnali_coincidenti"] == 0
+    assert all(s["ingressi"] == 2 for s in ris["per_sfasamento"])
 
 
 # ---------------------------------------------------------------------------

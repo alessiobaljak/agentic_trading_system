@@ -7,8 +7,10 @@ Quattro famiglie di prove, come chiede la sezione 13 di regole.md:
 * due monete calcolate a mano;
 * l'esito non cambia con l'ordine delle monete (ne' dei trade);
 * casi limite (non valutabile, liste vuote, parita', arrotondamenti).
-In piu': ``contro_baseline`` con ``pavimento_minimo`` = 0 e' identica alla
-versione di prima, confrontata con una copia congelata qui sotto.
+In piu': ``contro_baseline`` con ``pavimento_minimo`` = 0 (e ``dettagli`` False,
+il predefinito) e' identica alla versione di prima, stesse chiavi e stessi
+valori, confrontata con una copia congelata qui sotto; con ``dettagli=True`` ha in
+piu' le quattro chiavi informative del gruppo.
 """
 from __future__ import annotations
 
@@ -102,10 +104,13 @@ def _stesso_valore(a, b) -> bool:
     return type(a) is type(b) and a == b
 
 
-def _uguale_a_prima(nuovo: dict, prima: dict) -> None:
+def _uguale_a_prima(nuovo: dict, prima: dict, dettagli: bool = False) -> None:
     for chiave, valore in prima.items():
         assert _stesso_valore(nuovo[chiave], valore), (chiave, nuovo[chiave], valore)
-    assert set(nuovo) == set(prima) | CHIAVI_NUOVE
+    if dettagli:
+        assert set(nuovo) == set(prima) | CHIAVI_NUOVE
+    else:  # con i predefiniti: lo stesso dizionario di prima, anche nell'ordine delle chiavi
+        assert list(nuovo) == list(prima)
 
 
 def _casi_confronto():
@@ -137,6 +142,10 @@ def _casi_confronto():
 # ---------------------------------------------------------------------------
 
 
+def test_le_chiavi_dei_dettagli_di_gruppo():
+    assert CHIAVI_NUOVE == set(st.CHIAVI_DETTAGLI_DI_GRUPPO)
+
+
 def test_contro_baseline_con_pavimento_zero_e_identica_a_prima():
     casi = 0
     for r, blocco, base in _casi_confronto():
@@ -144,6 +153,7 @@ def test_contro_baseline_con_pavimento_zero_e_identica_a_prima():
         _uguale_a_prima(st.contro_baseline(r, blocco, base), prima)
         _uguale_a_prima(st.contro_baseline(r, blocco, base, pavimento_minimo=0.0), prima)
         _uguale_a_prima(st.contro_baseline(r, blocco, base, 2000, 0, 0), prima)
+        _uguale_a_prima(st.contro_baseline(r, blocco, base, dettagli=True), prima, dettagli=True)
         casi += 1
     assert casi == 35
 
@@ -176,7 +186,8 @@ def test_contro_baseline_le_chiavi_nuove_con_pavimento_zero():
     rng = np.random.default_rng(3)
     base = st.baseline_casuale(list(rng.normal(0.0, 0.15, 200)))
     r = list(rng.normal(0.1, 1.0, 120))
-    ris = st.contro_baseline(r, 4, base)
+    assert not CHIAVI_NUOVE & set(st.contro_baseline(r, 4, base))
+    ris = st.contro_baseline(r, 4, base, dettagli=True)
     assert ris["pavimento_minimo"] == 0.0
     assert ris["origine_pavimento"] == "baseline"
     assert ris["errore_minimo"] == ris["errore_minimo_baseline"] == base["errore_minimo_candidato"]
@@ -189,7 +200,7 @@ def test_contro_baseline_pavimento_minimo_piu_alto_vince():
     base = st.baseline_casuale(list(rng.normal(0.0, 0.05, 200)))
     r = list(rng.normal(0.2, 1.0, 150))
     minimo = 0.5  # molto sopra l'errore del bootstrap (~0,08) e il pavimento della (b) (~0,05)
-    ris = st.contro_baseline(r, 3, base, pavimento_minimo=minimo)
+    ris = st.contro_baseline(r, 3, base, pavimento_minimo=minimo, dettagli=True)
     assert ris["errore_minimo"] == minimo and ris["origine_pavimento"] == "pavimento_minimo"
     assert ris["errore_minimo_baseline"] == base["errore_minimo_candidato"]
     assert ris["errore_candidato"] == minimo
@@ -198,12 +209,12 @@ def test_contro_baseline_pavimento_minimo_piu_alto_vince():
     atteso = st.batte_nettamente(r, 3, base["media"], base["errore_standard"], errore_minimo_candidato=minimo)
     assert {k: ris[k] for k in atteso} == atteso
     # un pavimento_minimo sotto quello della baseline non cambia nulla, a parte la chiave che lo riporta
-    basso = st.contro_baseline(r, 3, base, pavimento_minimo=base["errore_minimo_candidato"] / 2)
-    zero = st.contro_baseline(r, 3, base)
+    basso = st.contro_baseline(r, 3, base, pavimento_minimo=base["errore_minimo_candidato"] / 2, dettagli=True)
+    zero = st.contro_baseline(r, 3, base, dettagli=True)
     assert {k: v for k, v in basso.items() if k != "pavimento_minimo"} == \
            {k: v for k, v in zero.items() if k != "pavimento_minimo"}
     # a pari valore il pavimento resta «della baseline»
-    pari = st.contro_baseline(r, 3, base, pavimento_minimo=base["errore_minimo_candidato"])
+    pari = st.contro_baseline(r, 3, base, pavimento_minimo=base["errore_minimo_candidato"], dettagli=True)
     assert pari["origine_pavimento"] == "baseline"
 
 
@@ -211,7 +222,7 @@ def test_contro_baseline_pavimento_minimo_contro_la_a():
     rng = np.random.default_rng(5)
     a = st.baseline_da_trade(list(rng.normal(0.0, 0.8, 600)), 2)
     cand = list(rng.normal(0.4, 0.8, 100))
-    ris = st.contro_baseline(cand, 2, a, pavimento_minimo=1.0)
+    ris = st.contro_baseline(cand, 2, a, pavimento_minimo=1.0, dettagli=True)
     assert ris["errore_minimo_baseline"] == a["deviazione_standard"] / 10.0
     assert ris["errore_minimo"] == 1.0 and ris["origine_pavimento"] == "pavimento_minimo"
     assert ris["netta"] is False  # 0,4 di differenza su un errore di almeno 1
@@ -227,11 +238,11 @@ def test_contro_baseline_pavimento_minimo_non_valido(valore):
 def test_contro_baseline_errore_senza_pavimento_none_sotto_tre_blocchi_e_calcolato_con_a_non_valutabile():
     rng = np.random.default_rng(6)
     base = st.baseline_casuale(list(rng.normal(0.0, 0.1, 50)))
-    assert st.contro_baseline(list(rng.normal(0, 1, 8)), 3, base)["errore_candidato_senza_pavimento"] is None
+    assert st.contro_baseline(list(rng.normal(0, 1, 8)), 3, base, dettagli=True)["errore_candidato_senza_pavimento"] is None
     # (a) non valutabile: il confronto non lo e', ma l'errore del candidato si stima lo stesso
     a = st.baseline_da_trade(list(rng.normal(0, 1, 40)), 15)
     r = list(rng.normal(0.1, 1.0, 60))
-    ris = st.contro_baseline(r, 2, a)
+    ris = st.contro_baseline(r, 2, a, dettagli=True)
     assert ris["valutabile"] is False
     assert ris["errore_candidato_senza_pavimento"] == st._errore_media_corretto(np.asarray(r), 2, 2000, 0)[0]
 
@@ -375,12 +386,44 @@ def test_a_di_gruppo_due_monete_a_mano():
     # il pavimento della (a) in contro_baseline e' radice(somma n_j dev_j^2) / N = radice(7) / 4
     ris = st.contro_baseline([0.5, -0.1, 0.3, 0.1], 1, g)
     assert ris["errore_minimo"] == pytest.approx(math.sqrt(7) / 4)
-    # con la seconda moneta sotto i 3 blocchi il suo e_j e' la sua deviazione standard (2)
+    # con la seconda moneta sotto i 3 blocchi il suo e_j e' il piu' alto fra la sua deviazione standard (2) e
+    # quella combinata, radice((3 · 1 + 1 · 4) / 4) = 1,32: cioe' 2
     base["BBBUSDT"] = _dizionario_a(-0.2, math.inf, 2.0, 40, 2)
     g = st.baseline_da_trade_di_gruppo(base, {"AAAUSDT": 3, "BBBUSDT": 1})
     assert g["valutabile"] is True and g["monete_errore_da_deviazione"] == ["BBBUSDT"]
     assert g["errore_standard"] == pytest.approx(0.75 * 0.04 + 0.25 * 2.0)
     assert g["per_moneta"]["BBBUSDT"]["errore_usato"] == 2.0
+
+
+def test_a_di_gruppo_pochi_blocchi_e_deviazione_piccola_prende_quella_combinata():
+    # Terza bozza di regole.md, sezione 5, punto 3: con meno di 3 blocchi interi e_j = max(dev_j, D), con
+    # D = radice(somma n_j dev_j^2 / N). A mano: n = 1 e 3 (N = 4, pesi 0,25 e 0,75).
+    # AAA: (a) di 2 trade in 1 blocco, A = 0,3, dev 0,5 (poco dispersi). BBB: (a) valutabile, A = -0,1,
+    # e = 0,05, dev = 2. D = radice(0,25 · 0,25 + 0,75 · 4) = radice(3,0625) = 1,75 > 0,5, quindi e_AAA = 1,75.
+    # Errore della (a) di gruppo = 0,25 · 1,75 + 0,75 · 0,05 = 0,475 (con e_AAA = dev_AAA sarebbe 0,1625).
+    base = {"AAAUSDT": _dizionario_a(0.3, math.inf, 0.5, 2, 1), "BBBUSDT": _dizionario_a(-0.1, 0.05, 2.0, 300, 30)}
+    g = st.baseline_da_trade_di_gruppo(base, {"AAAUSDT": 1, "BBBUSDT": 3})
+    assert g["valutabile"] is True and g["monete_errore_da_deviazione"] == ["AAAUSDT"]
+    assert g["deviazione_standard"] == 1.75
+    assert g["per_moneta"]["AAAUSDT"]["errore_usato"] == 1.75
+    assert g["per_moneta"]["BBBUSDT"]["errore_usato"] == 0.05
+    assert g["errore_standard"] == pytest.approx(0.475, rel=1e-15)
+    assert g["media"] == pytest.approx(0.25 * 0.3 - 0.75 * 0.1, rel=1e-15)
+    # il caso della revisione: (a) di 2 trade [0,10; 0,11] su una moneta, 300 trade normali sull'altra,
+    # 50 trade del candidato su ciascuna: l'errore e' quello con D, circa 14 volte quello con dev_j
+    rng = np.random.default_rng(26)
+    a_pochi = st.baseline_da_trade([0.10, 0.11], 1)
+    a_tanti = st.baseline_da_trade(list(rng.normal(0.0, 0.9, 300)), 1)
+    assert a_pochi["n_blocchi"] == 2 and a_tanti["valutabile"] is True
+    g = st.baseline_da_trade_di_gruppo({"AAAUSDT": a_pochi, "BBBUSDT": a_tanti}, {"AAAUSDT": 50, "BBBUSDT": 50})
+    d = math.sqrt((50 * a_pochi["deviazione_standard"] ** 2 + 50 * a_tanti["deviazione_standard"] ** 2) / 100)
+    assert g["per_moneta"]["AAAUSDT"]["errore_usato"] == pytest.approx(d, rel=1e-14)
+    assert g["errore_standard"] == pytest.approx(0.5 * d + 0.5 * a_tanti["errore_standard"], rel=1e-14)
+    assert g["errore_standard"] > 10 * (0.5 * a_pochi["deviazione_standard"] + 0.5 * a_tanti["errore_standard"])
+    # una (a) che manca: D non esiste, la variante e' non valutabile, l'errore usato non si inventa
+    g = st.baseline_da_trade_di_gruppo({"AAAUSDT": a_pochi, "BBBUSDT": None}, {"AAAUSDT": 50, "BBBUSDT": 50})
+    assert g["valutabile"] is False and math.isinf(g["errore_standard"])
+    assert math.isnan(g["per_moneta"]["AAAUSDT"]["errore_usato"])
 
 
 def test_a_di_gruppo_due_monete_vere():
@@ -410,10 +453,10 @@ def test_a_di_gruppo_non_valutabile_senza_eccezioni():
     g = st.baseline_da_trade_di_gruppo(base, {"AAAUSDT": 3, "BBBUSDT": 1})
     assert g["valutabile"] is False and math.isnan(g["media"]) and math.isnan(g["deviazione_standard"])
     assert g["per_moneta"]["BBBUSDT"] is None
-    ris = st.contro_baseline(r, 1, g)
+    ris = st.contro_baseline(r, 1, g, dettagli=True)
     assert ris["valutabile"] is False and ris["netta"] is False and math.isnan(ris["differenza"])
     assert ris["errore_candidato_senza_pavimento"] is not None  # 6 blocchi: l'errore del candidato si stima
-    ris = st.contro_baseline(r, 1, g, pavimento_minimo=0.3)
+    ris = st.contro_baseline(r, 1, g, pavimento_minimo=0.3, dettagli=True)
     assert ris["valutabile"] is False and ris["origine_pavimento"] == "pavimento_minimo"
 
 
@@ -581,7 +624,7 @@ def test_b_di_gruppo_non_valutabile_senza_eccezioni():
     assert g["valutabile"] is False and g["n_simulazioni"] == 1 and math.isnan(g["errore_minimo_candidato"])
     ris = st.contro_baseline(r, 1, g)
     assert ris["valutabile"] is False and ris["p_value"] == 1.0
-    ris = st.contro_baseline(r, 1, g, pavimento_minimo=0.2)  # con il pavimento delle sfasate: idem, senza eccezioni
+    ris = st.contro_baseline(r, 1, g, pavimento_minimo=0.2, dettagli=True)  # con il pavimento delle sfasate: idem
     assert ris["valutabile"] is False and ris["errore_minimo"] == 0.2
     assert ris["origine_pavimento"] == "pavimento_minimo"
     # nessuna M(s): neanche il numero
@@ -666,6 +709,63 @@ def test_pavimento_sfasamento_non_valutabile_e_errori():
 
 
 # ---------------------------------------------------------------------------
+# riassunto_sfasate e medie_sfasate: la sola lettura di M'(s) e n'(s) (regole.md, sezione 5, punto 5)
+# ---------------------------------------------------------------------------
+
+
+def test_medie_sfasate_a_mano():
+    # tre sfasate, due monete. s = 0: AAA [1, -0,5], BBB [0,25] -> M' = 0,75 / 3 = 0,25, n' = 3;
+    # s = 1: nessun trade -> None, 0; s = 2: solo BBB [2, 1] -> 1,5, 2.
+    aaa = st.riassunto_sfasate([[1.0, -0.5], [], []])
+    bbb = st.riassunto_sfasate([[0.25], [], [2.0, 1.0]])
+    assert aaa == [[2, 0.5], [0, 0.0], [0, 0.0]] and bbb == [[1, 0.25], [0, 0.0], [2, 3.0]]
+    medie, quanti = st.medie_sfasate({"BBBUSDT": bbb, "AAAUSDT": aaa}, 3)
+    assert medie == [0.25, None, 1.5] and quanti == [3, 0, 2]
+    # va dritta a pavimento_sfasamento
+    pav = st.pavimento_sfasamento(medie, quanti, 10)
+    assert pav["sfasate_con_trade"] == 2 and pav["sfasate_senza_trade"] == 1
+
+
+def test_medie_sfasate_esatte_e_invarianti_all_ordine():
+    rng = np.random.default_rng(64)
+    monete = {s: [list(rng.normal(0, 1, int(rng.integers(0, 40)))) for _ in range(25)]
+              for s in ("ZRXUSDT", "1INCHUSDT", "AAVEUSDT")}
+    riassunti = {s: st.riassunto_sfasate(v) for s, v in monete.items()}
+    medie, quanti = st.medie_sfasate(riassunti, 25)
+    for k in range(25):
+        tutti = [x for s in sorted(monete) for x in monete[s][k]]
+        assert quanti[k] == len(tutti)
+        if tutti:
+            # fsum delle somme esatte di ogni moneta: a meno di un arrotondamento per moneta, la somma esatta
+            assert medie[k] == pytest.approx(math.fsum(tutti) / len(tutti), rel=1e-15, abs=1e-15)
+        else:
+            assert medie[k] is None
+    # stesso risultato, bit per bit, con le monete e i trade in un altro ordine
+    rovescio = {s: st.riassunto_sfasate([list(reversed(x)) for x in monete[s]]) for s in reversed(sorted(monete))}
+    assert st.medie_sfasate(rovescio, 25) == (medie, quanti)
+
+
+def test_medie_sfasate_errori():
+    with pytest.raises(ValueError):  # numero di sfasate diverso
+        st.medie_sfasate({"AAAUSDT": [[1, 0.1]]}, 2)
+    with pytest.raises(ValueError):  # somma senza trade
+        st.medie_sfasate({"AAAUSDT": [[0, 0.1]]}, 1)
+    with pytest.raises(ValueError):  # trade negativi
+        st.medie_sfasate({"AAAUSDT": [[-1, 0.1]]}, 1)
+    with pytest.raises(ValueError):
+        st.riassunto_sfasate([[0.1, math.nan]])
+    assert st.medie_sfasate({}, 2) == ([None, None], [0, 0])
+
+
+def test_b_ripesata_e_pubblica_e_a_mano():
+    trade = [_t("AAAUSDT", 1, 2, 0.1), _t("AAAUSDT", 3, 4, 0.2), _t("BBBUSDT", 1, 2, 0.3)]
+    assert st.b_ripesata(trade, {"AAAUSDT": 0.3, "BBBUSDT": -0.3}) == pytest.approx((2 * 0.3 - 0.3) / 3)
+    assert st.b_ripesata([], {}) is None
+    with pytest.raises(ValueError):
+        st.b_ripesata(trade, {"AAAUSDT": 0.3})
+
+
+# ---------------------------------------------------------------------------
 # griglia_sfasamenti (regole.md, sezione 5, punto 5, e sezione 9, punto 3)
 # ---------------------------------------------------------------------------
 
@@ -724,7 +824,7 @@ def test_effetto_grappolo_a_mano():
 def test_effetto_grappolo_vicino_a_uno_con_trade_indipendenti():
     r = list(np.random.default_rng(61).normal(0.0, 1.0, 2000))
     base = st.baseline_casuale(list(np.random.default_rng(62).normal(0, 0.02, 200)))
-    errore = st.contro_baseline(r, 1, base)["errore_candidato_senza_pavimento"]
+    errore = st.contro_baseline(r, 1, base, dettagli=True)["errore_candidato_senza_pavimento"]
     assert st.effetto_grappolo(errore, r) == pytest.approx(1.0, abs=0.1)
 
 

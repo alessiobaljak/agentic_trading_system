@@ -38,10 +38,12 @@ Cosa c'e' qui, e perche'
   trade sommati di tutte le monete in un ordine fisso),
   ``baseline_da_trade_di_gruppo`` e ``baseline_casuale_di_gruppo`` (la (a) e la
   (b) di gruppo, combinate moneta per moneta con i pesi dei trade),
-  ``griglia_sfasamenti`` e ``pavimento_sfasamento`` (il pavimento delle strategie
-  sfasate, che va a ``contro_baseline`` come ``pavimento_minimo``),
-  ``effetto_grappolo`` ed ``estremi_di_gruppo``. Con una moneta sola e
-  ``pavimento_minimo`` 0 danno i numeri delle campagne singole.
+  ``griglia_sfasamenti``, ``riassunto_sfasate``, ``medie_sfasate`` e
+  ``pavimento_sfasamento`` (il pavimento delle strategie sfasate, che va a
+  ``contro_baseline`` come ``pavimento_minimo``), ``effetto_grappolo``,
+  ``b_ripesata`` ed ``estremi_di_gruppo``. Con una moneta sola e
+  ``pavimento_minimo`` 0 danno i numeri delle campagne singole;
+  ``contro_baseline`` con i predefiniti e' identica a prima.
 
 Convenzioni
 -----------
@@ -560,6 +562,11 @@ def _pavimento_minimo_valido(pavimento_minimo: object) -> float:
     return valore
 
 
+#: Le chiavi che ``contro_baseline`` aggiunge solo con ``dettagli=True`` (campagna di gruppo).
+CHIAVI_DETTAGLI_DI_GRUPPO = ("errore_minimo_baseline", "pavimento_minimo", "origine_pavimento",
+                             "errore_candidato_senza_pavimento")
+
+
 def contro_baseline(
     r_candidato: Sequence[float],
     lunghezza_blocco: int,
@@ -567,6 +574,7 @@ def contro_baseline(
     n: int = 2000,
     seme: int = 0,
     pavimento_minimo: float = 0.0,
+    dettagli: bool = False,
 ) -> Dict[str, object]:
     """Il confronto della sezione 8 con una baseline gia' calcolata. E' QUESTO che si usa.
 
@@ -583,17 +591,19 @@ def contro_baseline(
     ``soglia``, ``p_value``, ``valutabile``...) piu' ``baseline_media``,
     ``baseline_errore_standard`` ed ``errore_minimo``.
 
-    Campagna di gruppo (``campagne/GRUPPO/regole.md``, sezione 5, punto 6).
-    ``pavimento_minimo`` e' il pavimento delle strategie sfasate
+    Campagna di gruppo (``campagne/GRUPPO/regole.md``, sezione 5, punto 6, e
+    sezione 13). ``pavimento_minimo`` e' il pavimento delle strategie sfasate
     (``pavimento_sfasamento``): il pavimento usato e' il PIU' ALTO fra quello della
-    baseline e ``pavimento_minimo``. Con 0 (il predefinito, le campagne singole)
-    il pavimento e' quello della baseline e ogni chiave di prima ha lo stesso
-    valore, bit per bit. ``baseline`` puo' essere anche il dizionario di
-    ``baseline_da_trade_di_gruppo`` (tipo "a") o di ``baseline_casuale_di_gruppo``
-    (tipo "b"): una baseline con ``valutabile`` False rende il confronto non
-    valutabile anche quando il suo numero non esiste (NaN), senza eccezioni.
+    baseline e ``pavimento_minimo``. Con 0 e ``dettagli`` False (i predefiniti, le
+    campagne singole) il risultato e' IDENTICO a prima: stesse chiavi, stessi
+    valori bit per bit (sezione 13: «con 0 e' identica a prima»). ``baseline`` puo'
+    essere anche il dizionario di ``baseline_da_trade_di_gruppo`` (tipo "a") o di
+    ``baseline_casuale_di_gruppo`` (tipo "b"): una baseline con ``valutabile``
+    False rende il confronto non valutabile anche quando il suo numero non
+    esiste (NaN), senza eccezioni.
 
-    Chiavi in piu' rispetto a prima, solo informative:
+    Con ``dettagli=True`` (lo usa solo ``gruppo.py``) il dizionario ha in piu' le
+    chiavi ``CHIAVI_DETTAGLI_DI_GRUPPO``, solo informative:
     * ``errore_minimo_baseline``: il pavimento della baseline;
     * ``pavimento_minimo``: quello passato;
     * ``origine_pavimento``: "baseline" se il pavimento usato (``errore_minimo``)
@@ -603,7 +613,9 @@ def contro_baseline(
       bootstrap a blocchi, gia' corretto per il blocco, PRIMA di qualunque
       pavimento (serve all'effetto grappolo della sezione 5, punto 9, di
       regole.md: ``effetto_grappolo``); None con meno di ``MINIMO_BLOCCHI``
-      blocchi interi. E' lo stesso bootstrap (stesso seme) del confronto.
+      blocchi interi. E' lo stesso bootstrap (stesso seme) del confronto; se il
+      confronto e' non valutabile per la baseline il bootstrap si fa solo per
+      questa chiave.
     """
     tipo = baseline.get("tipo")
     arr = _come_array(r_candidato, "r_candidato")
@@ -638,13 +650,15 @@ def contro_baseline(
         # una baseline non valutabile ha errore infinito (cosi' gia' la (a) delle campagne singole)
         ris, errore_senza_pavimento = _confronto_dettagliato(
             arr, lunghezza_blocco, media, math.inf if baseline_non_valutabile else errore_base, n, seme, pavimento)
+    ris.update({"baseline_media": media,
+                "baseline_errore_standard": errore_base,
+                "errore_minimo": pavimento})
+    if not dettagli:
+        return ris
     if errore_senza_pavimento is None and arr.size // int(lunghezza_blocco) >= MINIMO_BLOCCHI:
         # il confronto e' non valutabile per la baseline, ma l'errore del candidato si stima
         errore_senza_pavimento, _ = _errore_media_corretto(arr, int(lunghezza_blocco), n, seme)
-    ris.update({"baseline_media": media,
-                "baseline_errore_standard": errore_base,
-                "errore_minimo": pavimento,
-                "errore_minimo_baseline": pavimento_baseline,
+    ris.update({"errore_minimo_baseline": pavimento_baseline,
                 "pavimento_minimo": minimo,
                 "origine_pavimento": origine,
                 "errore_candidato_senza_pavimento": errore_senza_pavimento})
@@ -1262,13 +1276,18 @@ def baseline_da_trade_di_gruppo(
     N = somma degli n_j, w_j = n_j / N.
 
     * numero: A = somma di w_j · A_j (A_j la ``media`` della (a) della moneta);
+    * deviazione standard combinata D: radice(somma di n_j · dev_j² / N),
+      calcolata come radice(somma di w_j · dev_j²), sulle monete con n_j > 0;
+      cosi' il pavimento della (a) in ``contro_baseline`` (deviazione / radice(N))
+      vale radice(somma di n_j · dev_j²) / N;
     * errore: somma di w_j · e_j, con e_j l'``errore_standard`` della (a) della
-      moneta, oppure la sua ``deviazione_standard`` (dev_j) se la (a) ha meno di
-      ``MINIMO_BLOCCHI`` (3) blocchi interi; le monete trattate come se si
-      muovessero insieme, un errore che non sottostima;
-    * deviazione standard combinata: radice(somma di n_j · dev_j² / N), calcolata
-      come radice(somma di w_j · dev_j²); cosi' il pavimento della (a) in
-      ``contro_baseline`` (deviazione / radice(N)) vale radice(somma di n_j · dev_j²) / N.
+      moneta, oppure, se la (a) ha meno di ``MINIMO_BLOCCHI`` (3) blocchi interi,
+      il PIU' ALTO fra la sua ``deviazione_standard`` (dev_j) e D (terza bozza di
+      regole.md, sezione 5, punto 3: l'errore di un trade solo, che non scende
+      sotto la dispersione tipica quando dev_j viene da pochissimi trade); le
+      monete trattate come se si muovessero insieme, un errore che non sottostima.
+      Quando D non esiste (una (a) senza trade) la variante e' comunque non
+      valutabile e ``errore_usato`` di quelle monete e' NaN.
 
     Se la (a) di una moneta con n_j > 0 ha meno di 2 trade (o e' None) la
     variante e' non valutabile: ``valutabile`` False ed ``errore_standard``
@@ -1285,11 +1304,11 @@ def baseline_da_trade_di_gruppo(
     ``monete_con_meno_di_2_trade`` e ``per_moneta`` ({simbolo: numeri della moneta,
     con ``errore_usato`` = e_j}, None per una (a) senza trade).
 
-    Con una moneta sola il peso e' 1 e, se la sua (a) ha almeno 3 blocchi
-    interi, numero, errore e deviazione sono quelli di ``baseline_da_trade`` bit
-    per bit. Con meno di 3 blocchi le due regole sono diverse per scelta di
-    regole.md (qui e_j = dev_j e il confronto si fa; nelle campagne singole la (a)
-    e' non valutabile).
+    Con una moneta sola il peso e' 1, D = dev_j bit per bit (radice(1 · dev²)) e,
+    se la sua (a) ha almeno 3 blocchi interi, numero, errore e deviazione sono
+    quelli di ``baseline_da_trade`` bit per bit. Con meno di 3 blocchi le due
+    regole sono diverse per scelta di regole.md (qui e_j = max(dev_j, D) = dev_j e
+    il confronto si fa; nelle campagne singole la (a) e' non valutabile).
     """
     positivi = _trade_candidato_positivi(trade_candidato_per_moneta)
     _controlla_monete(baseline_per_moneta, trade_candidato_per_moneta, positivi, "baseline_per_moneta")
@@ -1299,7 +1318,6 @@ def baseline_da_trade_di_gruppo(
     poche: List[str] = []
     da_deviazione: List[str] = []
     termini_media: List[float] = []
-    termini_errore: List[float] = []
     termini_varianza: List[float] = []
     numero_mancante = False
     trade_baseline = 0
@@ -1321,9 +1339,8 @@ def baseline_da_trade_di_gruppo(
             raise ValueError(f"baseline di {simbolo}: numeri non validi (media {media_j}, deviazione "
                              f"{deviazione_j}, trade {trade_j})")
         errore_da_deviazione = blocchi_j < MINIMO_BLOCCHI
-        errore_usato = deviazione_j if errore_da_deviazione else errore_j
-        if not math.isfinite(errore_usato) or errore_usato < 0:
-            raise ValueError(f"baseline di {simbolo}: errore non valido ({errore_usato}) con {blocchi_j} blocchi")
+        if not errore_da_deviazione and (not math.isfinite(errore_j) or errore_j < 0):
+            raise ValueError(f"baseline di {simbolo}: errore non valido ({errore_j}) con {blocchi_j} blocchi")
         if errore_da_deviazione:
             da_deviazione.append(simbolo)
         if trade_j < 2:
@@ -1331,19 +1348,30 @@ def baseline_da_trade_di_gruppo(
         trade_baseline += trade_j
         w_j = pesi[simbolo]
         termini_media.append(w_j * media_j)
-        termini_errore.append(w_j * errore_usato)
         termini_varianza.append(w_j * (deviazione_j * deviazione_j))
         per_moneta[simbolo] = {
             "n_trade_candidato": n_j, "peso": w_j, "media": media_j, "errore_standard": errore_j,
-            "errore_usato": errore_usato, "deviazione_standard": deviazione_j, "n_trade": trade_j,
+            "errore_usato": None, "deviazione_standard": deviazione_j, "n_trade": trade_j,
             "n_blocchi": blocchi_j, "errore_da_deviazione": errore_da_deviazione,
         }
+    # D, la deviazione standard combinata: serve prima degli errori (sezione 5, punto 3)
+    deviazione_combinata = math.nan if numero_mancante else math.sqrt(_somma_in_ordine(termini_varianza))
+    termini_errore: List[float] = []
+    for simbolo, voce in per_moneta.items():
+        if voce is None:
+            continue
+        if voce["errore_da_deviazione"]:
+            voce["errore_usato"] = (math.nan if numero_mancante
+                                    else max(voce["deviazione_standard"], deviazione_combinata))
+        else:
+            voce["errore_usato"] = voce["errore_standard"]
+        termini_errore.append(voce["peso"] * voce["errore_usato"])
     valutabile = not poche
     return {
         "tipo": "a",
         "media": math.nan if numero_mancante else _somma_in_ordine(termini_media),
         "errore_standard": _somma_in_ordine(termini_errore) if valutabile else math.inf,
-        "deviazione_standard": math.nan if numero_mancante else math.sqrt(_somma_in_ordine(termini_varianza)),
+        "deviazione_standard": deviazione_combinata,
         "valutabile": valutabile,
         "motivo": None if valutabile else f"la (a) ha meno di 2 trade su: {', '.join(poche)}",
         "n_trade": trade_baseline,
@@ -1516,6 +1544,10 @@ def pavimento_sfasamento(
     con trade), ``sfasate``, ``sfasate_con_trade``, ``sfasate_senza_trade`` e la
     distribuzione di n'(s) / N su tutte le s (``quota_trade_minima``,
     ``quota_trade_mediana``, ``quota_trade_massima``; None senza sfasate).
+
+    M'(s) e n'(s) si calcolano con ``medie_sfasate`` (da ``riassunto_sfasate`` di
+    ogni moneta), la sola lettura dei trade sommati delle sfasate per il pavimento,
+    in costruzione, in validazione e nel vault.
     """
     medie = list(r_medio_sfasate)
     quanti = [operator.index(x) for x in trade_sfasate]
@@ -1557,6 +1589,65 @@ def pavimento_sfasamento(
     media = float(arr_m.mean())
     valori = (arr_m - media) * np.sqrt(arr_k / n_totale)
     return dict({"pavimento": float(np.std(valori, ddof=1)), "valutabile": True, "media_r_sfasate": media}, **info)
+
+
+def riassunto_sfasate(r_per_sfasata: Sequence[Sequence[float]]) -> List[List[object]]:
+    """Le sfasate di UNA moneta in forma compatta: [n_j(s), somma esatta dei suoi R] per ogni s (regole.md, sezione 5, punto 5).
+
+    ``r_per_sfasata``: per ogni s, nell'ordine di s, gli R dei trade della
+    strategia sfasata s sulla moneta (``motore.simula_sfasamento_comune``,
+    ``per_sfasamento[s]["trade"]``). La somma e' ``math.fsum``: esatta e
+    indipendente dall'ordine dei trade. E' la forma che ``gruppo.py`` salva nel
+    file di avanzamento e che ``medie_sfasate`` combina fra le monete.
+    ValueError per un R non finito.
+    """
+    riassunto: List[List[object]] = []
+    for s, valori in enumerate(r_per_sfasata):
+        lista = [float(x) for x in valori]
+        if not all(math.isfinite(x) for x in lista):
+            raise ValueError(f"sfasata {s}: R non finiti")
+        riassunto.append([len(lista), math.fsum(lista)])
+    return riassunto
+
+
+def medie_sfasate(riassunti_per_moneta: Mapping[str, Sequence[Sequence[object]]],
+                  numero_sfasamenti: int) -> Tuple[List[Optional[float]], List[int]]:
+    """M'(s) e n'(s) dei trade sommati di tutte le monete, per ogni s (regole.md, sezione 5, punto 5, e sezione 9, punto 3).
+
+    ``riassunti_per_moneta``: {simbolo: ``riassunto_sfasate`` della moneta}, ogni
+    lista lunga ``numero_sfasamenti`` (ValueError se no). n'(s) = somma degli
+    n_j(s); M'(s) = ``math.fsum`` delle somme delle monete con trade in s, in
+    ordine dei caratteri dei simboli, diviso n'(s); None se n'(s) = 0. Il
+    risultato non dipende dall'ordine delle monete ne' da quello dei trade.
+
+    E' la sola lettura di M'(s) per ``pavimento_sfasamento``, in costruzione, in
+    validazione e nel vault (sezione 0, punto 4). Nel vault il ``criterio_vault``
+    di ogni sfasata (sezione 9, punto 4) si giudica invece, per regola, sulle
+    metriche di ``motore.metriche_di_gruppo`` della sfasata: e' un'altra grandezza
+    (le sue quattro condizioni), non il pavimento.
+    """
+    if isinstance(numero_sfasamenti, bool):
+        raise ValueError("numero_sfasamenti: serve un intero")
+    numero = operator.index(numero_sfasamenti)
+    if numero < 0:
+        raise ValueError("numero_sfasamenti non puo' essere negativo")
+    quanti = [0] * numero
+    somme: List[List[float]] = [[] for _ in range(numero)]
+    for simbolo in sorted(riassunti_per_moneta):
+        righe = list(riassunti_per_moneta[simbolo])
+        if len(righe) != numero:
+            raise ValueError(f"le sfasate di {simbolo} sono {len(righe)}, non {numero}")
+        for s, (n_s, somma) in enumerate(righe):
+            if isinstance(n_s, bool) or operator.index(n_s) < 0:
+                raise ValueError(f"sfasata {s} di {simbolo}: numero di trade non valido ({n_s!r})")
+            n_s = operator.index(n_s)
+            valore = float(somma)
+            if not math.isfinite(valore) or (n_s == 0 and valore != 0.0):
+                raise ValueError(f"sfasata {s} di {simbolo}: somma degli R non valida ({somma!r}) con {n_s} trade")
+            quanti[s] += n_s
+            if n_s:
+                somme[s].append(valore)
+    return [math.fsum(somme[s]) / quanti[s] if quanti[s] else None for s in range(numero)], quanti
 
 
 def griglia_sfasamenti(barre_finestra: int, margine: int, numero_sfasamenti: int) -> Dict[str, object]:
@@ -1663,8 +1754,17 @@ def _data_del_giorno(giorno: int) -> str:
     return datetime.fromtimestamp(giorno * 86_400, tz=timezone.utc).date().isoformat()
 
 
-def _b_ripesata(trade: Sequence[object], b_per_moneta: Mapping[str, Optional[float]]) -> Optional[float]:
-    """Σ r_j · b_j / Σ r_j, con r_j i trade di ``trade`` della moneta j (regole.md, sezione 6, punto 2.5)."""
+def b_ripesata(trade: Sequence[object], b_per_moneta: Mapping[str, Optional[float]]) -> Optional[float]:
+    """La B ripesata: Σ r_j · b_j / Σ r_j, con r_j i trade di ``trade`` della moneta j (regole.md, sezione 6, punti 2.4 e 2.5).
+
+    ``trade``: oggetti con ``simbolo`` (di norma ``TradeDiGruppo``);
+    ``b_per_moneta``: le b_j della (b) di gruppo (``baseline_casuale_di_gruppo``,
+    chiave ``b_per_moneta``), gia' calcolate. La usano gli estremi
+    (``estremi_di_gruppo``) e la stabilita' della Fase 4 (``gruppo.py``): una sola
+    lettura. Le somme vanno in ordine dei caratteri dei simboli, con i pesi
+    calcolati prima. None senza trade; ValueError se manca la b_j di una moneta
+    con trade o se non e' finita.
+    """
     if not trade:
         return None
     conteggi: Dict[str, int] = {}
@@ -1681,6 +1781,7 @@ def _b_ripesata(trade: Sequence[object], b_per_moneta: Mapping[str, Optional[flo
             raise ValueError(f"b_per_moneta: b_j di {simbolo} non finita ({b_j!r})")
         termini.append((conteggi[simbolo] / totale) * valore)
     return _somma_in_ordine(termini)
+
 
 
 def _r_medio(trade: Sequence[object]) -> Optional[float]:
@@ -1768,15 +1869,15 @@ def estremi_di_gruppo(
     via_giorni = set(giorni_tolti)
     rimasti = [t for t in ordinati if _giorno_utc(t.ts_uscita) not in via_giorni]
     r_medio = _r_medio(rimasti)
-    b_ripesata = _b_ripesata(rimasti, b_per_moneta)
+    soglia_ripesata = b_ripesata(rimasti, b_per_moneta)
     senza_giorni = {
-        "superata": bool(r_medio is not None and r_medio > b_ripesata),
+        "superata": bool(r_medio is not None and r_medio > soglia_ripesata),
         "giorni_tolti": [_data_del_giorno(g) for g in giorni_tolti],
         "somme_r_giorni_tolti": [somme_giorni[g] for g in giorni_tolti],
         "trade_tolti": len(ordinati) - len(rimasti),
         "trade_rimasti": len(rimasti),
         "r_medio": r_medio,
-        "b_ripesata": b_ripesata,
+        "b_ripesata": soglia_ripesata,
     }
 
     # Prova sulle monete: via tutti i trade delle monete con la somma di R piu' alta.
@@ -1788,15 +1889,15 @@ def estremi_di_gruppo(
     via_monete = set(monete_tolte)
     rimasti = [t for t in ordinati if t.simbolo not in via_monete]
     r_medio = _r_medio(rimasti)
-    b_ripesata = _b_ripesata(rimasti, b_per_moneta)
+    soglia_ripesata = b_ripesata(rimasti, b_per_moneta)
     senza_monete = {
-        "superata": bool(r_medio is not None and r_medio > b_ripesata),
+        "superata": bool(r_medio is not None and r_medio > soglia_ripesata),
         "monete_tolte": monete_tolte,
         "somme_r_monete_tolte": [somme_monete[s] for s in monete_tolte],
         "trade_tolti": len(ordinati) - len(rimasti),
         "trade_rimasti": len(rimasti),
         "r_medio": r_medio,
-        "b_ripesata": b_ripesata,
+        "b_ripesata": soglia_ripesata,
     }
     return {
         "senza_trade_migliori": senza_trade,
