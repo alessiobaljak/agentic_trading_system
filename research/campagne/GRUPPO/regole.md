@@ -3,7 +3,8 @@
 > **BOZZA del 10 ottobre 2026.** Il proprietario l'ha approvata in anticipo il 2026-10-10 alle 06:35 UTC, prima che
 > fosse scritta («devo uscire, il testo è approvato appena hai finito, parti con l'esecuzione»). Finché questo riquadro
 > comincia con «**BOZZA», nessuna sessione di gruppo parte. Il coordinamento chiude la bozza con un commit che cambia
-> solo questo riquadro e lo sostituisce per intero con il paragrafo che segue, con al posto di AAAA-MM-GG HH:MM
+> solo questo riquadro e lo sostituisce per intero con il paragrafo che segue, senza le virgolette « » che qui
+> sotto lo racchiudono (il riquadro deve cominciare esattamente con `> **In vigore dal `), con al posto di AAAA-MM-GG HH:MM
 > l'istante preso con `date -u` subito prima di quel commit (non le 06:35 dell'approvazione anticipata):
 >
 > «**In vigore dal AAAA-MM-GG HH:MM UTC** (preso con `date -u` subito prima del commit che lo ha scritto; è l'istante
@@ -100,7 +101,11 @@ tutte le monete.
    riscritte; in `fase0_dati.md` una riga per ogni file di impronte, con il suo SHA-256. A ogni sessione nuova,
    prima di qualunque test, si confrontano con `verifica_impronte` i file di ogni moneta con le impronte registrate:
    un file registrato che manca o ha un'impronta diversa è sempre STOP (sezione 5 del protocollo), e non fa mai
-   uscire la moneta.
+   uscire la moneta. Una macchina nuova (manca `research/.sessione`, che non è in git, come `data/`) vale come una
+   sessione nuova anche a metà sessione, per esempio alla ripresa da uno STOP: dopo i punti 1 e 2 del messaggio di
+   apertura e prima di qualunque calcolo si rifanno i punti 3 e 5 di questa sezione (riscarico e confronto delle
+   impronte). In campagna `gruppo.py` si ferma con un errore se una moneta non ha candele del timeframe, funding o
+   candele giornaliere del last nel periodo.
 6. `fase0_dati.md` ha una tabella per moneta: buchi; mesi presenti di last, mark e funding rispetto a quelli
    attesi; barre tolte dall'allineamento, per timeframe; intervallo del funding nel tempo; volume medio per anno;
    mesi sotto la liquidità minima.
@@ -317,16 +322,19 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
       all'utente: «pronta per la validazione: serve il via libera (regole.md, sezione 7, punto 2)». Da lì, fino alla
       frase del coordinamento o alla risposta dell'utente, non fa né commit né push.
    2. *Il coordinamento.* Solo se la prova a placebo di gruppo (sezione 11) ha detto che l'esame regge con le cinque
-      impronte della sezione 11, punto 1, e solo quando in cima al branch della campagna c'è il commit «pausa per il
-      via libera alla validazione»: (1) `git fetch origin research/campagna/GRUPPO` e
-      `git log -1 --format=%s origin/research/campagna/GRUPPO` (se il titolo è un altro, aspetta il giro successivo),
-      e annota la punta con `git rev-parse`; (2) per i soli cinque file, `git cat-file blob <punta>:<percorso> |
+      impronte della sezione 11, punto 1, e solo quando la punta del branch della campagna è il commit «pausa per il
+      via libera alla validazione» oppure un commit del coordinamento fatto sopra di lui (una correzione della
+      sezione 11, punto 6, o un via libera da riscrivere): (1) `git fetch origin research/campagna/GRUPPO` e
+      `git log -1 --format=%s origin/research/campagna/GRUPPO`, e annota la punta con `git rev-parse`; se il titolo è
+      «pausa per il via libera alla validazione», annota nel diario quell'hash come hash della pausa; se è un altro,
+      va avanti solo se `git log --format=%H <hash della pausa>..<punta>` stampa soltanto hash di commit del
+      coordinamento annotati nel diario, altrimenti aspetta il giro successivo; (2) per i soli cinque file, `git cat-file blob <punta>:<percorso> |
       sha256sum`, confrontato con le impronte della prova: se una è diversa, niente via libera e si rifà la prova
       (sezione 11, punto 2); (3) un solo commit sopra la punta, che tocca solo
       `research/campagne/GRUPPO/via_libera_validazione.md`, fatto senza estrarre il branch (con l'API di GitHub su quel
       branch, oppure con `git hash-object`, un indice temporaneo, `git read-tree <punta>`, `git update-index`,
       `git write-tree`, `git commit-tree -p <punta>` e un push senza forzare), intitolato «campagna di gruppo: via
-      libera alla validazione»; (4) se il push è rifiutato, si ricomincia da (1). Su quel branch, fino al Passo 7, il
+      libera alla validazione»; (4) se il push è rifiutato, si ricomincia da (1); se riesce, annota nel diario l'hash del commit. Su quel branch, fino al Passo 7, il
       coordinamento non usa mai checkout, worktree, diff, `git show` di un commit, `log -p`, `--stat`,
       `--name-only`, `ls-tree`. Il file contiene la riga «esito: l'esame di gruppo regge (regole.md, sezione 11)» e
       cinque righe nel formato di `sha256sum` (`<impronta>  <percorso dalla radice del repository>`) per
@@ -399,11 +407,13 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
    stesso 90° percentile. La condizione dei 300 trade si giudica sul candidato e vale per tutte le sue sfasate: i loro
    ingressi saltati vengono dallo spostamento, non dalla strategia. Profit factor, risultato totale e R medio sopra il
    90° percentile si giudicano su ogni sfasata (`criterio_vault` con `trade_minimi` = 0 sulle metriche di
-   `motore.metriche_di_gruppo`). Il 90° percentile si calcola sulle sfasate con almeno un trade; quelle senza trade
+   `motore.metriche_di_gruppo_da_somme`: per ogni s e per ogni moneta numero dei trade, somma degli R, somma dei
+   guadagni e somma delle perdite in USDT). Il 90° percentile si calcola sulle sfasate con almeno un trade; quelle senza trade
    restano nel denominatore e non passano. Si riportano la distribuzione di n'(s) / N e il numero di sfasate senza
    trade.
 5. Si riportano, senza che decidano: il confronto con la (b) di gruppo del vault (semi 1000·j + s, blocco sui trade
-   sommati, pavimento delle sfasate); la quota della moneta più presente; la tabella per moneta; a parte, le monete
+   sommati, pavimento delle sfasate); la quota della moneta più presente; la prova sulle monete (sezione 6, punto
+   2.5); la tabella per moneta; a parte, le monete
    che smettono di avere candele nel vault.
 
 ## 10. Monete che muoiono nel vault, trasferimento, paper, giudizio d'insieme
@@ -436,7 +446,8 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
    trade del vault su ogni moneta e la probabilità per moneta dei candidati singoli. In tutte e due le vie il candidato
    di gruppo gira sulle monete fuori dal gruppo solo con `gruppo.esame_vault`, che passa alle sue funzioni le candele
    di quella moneta, quelle di BTCUSDT e il funding di quella moneta, con il filtro di liquidità della sezione 9, punto
-   1. Non cambia nulla per la sessione di gruppo.
+   1, attraverso un caricatore del coordinamento passato con `caricatore=` (stesse regole del punto 4), la cui scheda
+   dà la fascia di slippage di questo punto. Non cambia nulla per la sessione di gruppo.
 3. **Paper** (Passo 9, solo se il proprietario lo chiede): costruzione, validazione e vault si giudicano sui trade
    sommati, senza limiti di portafoglio. Prerequisito in più: il bot sa eseguire la strategia su tutte le monete
    negoziate del gruppo. Il bot oggi tiene poche posizioni insieme (`config/regole_dimensione.md`): prima del paper il
@@ -447,7 +458,13 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
    placebo delle monete singole): la consegna del gruppo e l'esito della prova a placebo di gruppo. Al punto 2 del
    Passo 5 si scaricano anche i dati del vault delle monete del gruppo, comprese le candele giornaliere del last (filtro di
    liquidità, sezione 9, punto 1), fino all'ultimo giorno con candele, ricucendo
-   solo le migrazioni del punto 1.3. `vault/APERTURA.md` contiene anche il candidato di gruppo con le impronte dei
+   solo le migrazioni del punto 1.3. La cucitura non sta nei file su disco: la fa il caricatore del coordinamento che si
+   passa a `gruppo.esame_vault` con `caricatore=` (gli stessi metodi di `gruppo.CaricatoreDisco`): per una moneta
+   dell'elenco carica il vecchio simbolo fino al suo ultimo giorno con candele e il nuovo da lì al 2026-09-30, unisce
+   last e mark con `motore.ricuci_serie`, prende il funding di ciascun simbolo nel suo tratto e i mesi sotto la
+   liquidità di ciascuno (il mese della cucitura è vietato se è sotto la soglia per almeno uno dei due). Codice ed
+   elenco stanno solo sul branch di coordinamento, si committano prima di «APRI IL VAULT» e la loro impronta va in
+   `vault/APERTURA.md`. `vault/APERTURA.md` contiene anche il candidato di gruppo con le impronte dei
    suoi file, le impronte di `monete.csv`, delle schede e di questo file, il rimando all'elenco del punto 1.3 e la
    scelta del proprietario sul trasferimento (punto 2). `vault/risultati.md` riporta il totale sommato, la tabella per
    moneta e, a parte, le monete che smettono di avere candele.
@@ -556,7 +573,12 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
 6. **Calcoli lunghi.** Prima di ogni calcolo che dura più di 20 minuti la sessione pusha un commit intitolato
    «calcolo in corso fino alle HH:MM UTC circa»: il coordinamento non la giudica ferma fino a quell'ora più metà
    della durata annunciata. Ogni calcolo si lancia in background con il tempo massimo dello strumento (7.200.000 ms),
-   in pezzi sotto le 2 ore, e riprende da dove era rimasto (sezione 8, punto 1). Uno script che chiama `gruppo.py` con più processi tiene la chiamata sotto `if __name__ == "__main__":`. Se un
+   in pezzi sotto le 2 ore, e riprende da dove era rimasto (sezione 8, punto 1). L'uscita di uno script va sempre in
+   due file della cartella della campagna: `python3 -u research/campagne/GRUPPO/codice/<nome>.py >
+   research/campagne/GRUPPO/lavoro/<nome>.out 2> research/campagne/GRUPPO/lavoro/<nome>.err` (mai `2>&1`); quando arriva
+   la notifica di fine si leggono quei due file. Il file d'uscita che lo strumento indica per un comando in background,
+   o dove salva un'uscita troppo lunga, sta fuori dai percorsi ammessi e non si apre; non si usa Monitor. I test di
+   `research/src/tests/` si lanciano in primo piano con il tempo di 600.000 ms (durano alcuni minuti). Uno script che chiama `gruppo.py` con più processi tiene la chiamata sotto `if __name__ == "__main__":`. Se un
    calcolo supera 3 volte la stima della sezione 14, la sessione scrive una nota nel log e lo dice all'utente; l'esito di una variante non cambia per
    la velocità.
 7. **Storia, commit e push.** In una macchina di sessione la storia è limitata, e il guardiano ammette la storia dei
@@ -621,7 +643,8 @@ Tutto sul periodo che si giudica (costruzione, oppure validazione), con i trade 
 
 Una variante in costruzione, con (b) e pavimento delle sfasate: pochi minuti a 1d e 4h, 5-11 minuti a 1h, 20-45 a
 15m; validazione 7-15 minuti a 1h; Fase 4 per candidato 2-3,5 ore a 1h, 4-8 a 15m; Fase 0 a ogni sessione nuova
-circa 30 minuti più circa 20 per ogni timeframe in uso. Campagna intera: 2-4 giorni di sessioni. (Stime del
+circa 30 minuti più circa 20 per ogni timeframe in uso. Campagna intera: 2-4 giorni di sessioni. Vault del candidato di gruppo (lo fa il coordinamento): circa 40 minuti a 1h e
+circa 3 ore a 15m (stima), in pezzi con il file di avanzamento. (Stime del
 coordinamento dal ritmo misurato della prova del 9 ottobre e da prove di velocità del motore; con indicatori pesanti
 ricalcolati a ogni barra i tempi possono raddoppiare.)
 
@@ -657,7 +680,7 @@ ricalcolati a ogni barra i tempi possono raddoppiare.)
   candidato di BTCUSDT c'è; la sezione 11 del protocollo riporta la prova a placebo fatta su queste stesse 80 monete
   (solo strategie senza vantaggio) e nomina la regola da manuale che l'esame promuove più spesso per caso.
 * **Copertura dei dati.** Fuori dalla sessione il coordinamento ha scaricato le candele giornaliere di last e mark
-  (controllo della storia: 80 su 80) e, per la prova a placebo, le candele a 1 ora di last e mark e il funding. I loro
+  (controllo della storia: 80 su 80) e, per la prova a placebo, le candele a 1 ora e a 4 ore di last e mark e il funding. I loro
   conteggi non arrivano alla sessione, che misura da sé la copertura in Fase 0, per ogni timeframe che scarica.
 * **La prova a placebo di gruppo** usa lo stesso spostamento comune del pavimento: dove il pavimento decide, la prova
   regge in parte per costruzione; per questo riporta anche le misure senza pavimento.
@@ -679,7 +702,7 @@ ricalcolati a ogni barra i tempi possono raddoppiare.)
 | §4 regola 1 (vault chiuso) | Uguale, per tutte le 80 monete |
 | §4 regola 6 (variante, ritocco, famiglia) | Una variante è una regola per tutte le monete (sezione 3) |
 | §4 regola 7 (indipendenza) | La sessione non legge le campagne delle monete singole né il coordinamento (sezione 12) |
-| §5 cartelle | `campagne/GRUPPO/` con `monete.csv`, `schede/`, `regole.md`, `log.jsonl`, `fase0_dati.md`, `impronte/`, `timeframe_in_uso.txt`, `trade/`, `avanzamento/`, `ipotesi.md`, `codice/`, `candidati/`, `consegna.md`, lezioni; `via_libera_validazione.md` solo sul branch della campagna |
+| §5 cartelle | `campagne/GRUPPO/` con `monete.csv`, `schede/`, `regole.md`, `log.jsonl`, `fase0_dati.md`, `impronte/`, `timeframe_in_uso.txt`, `trade/`, `avanzamento/`, `lavoro/` (uscite degli script), `ipotesi.md`, `codice/`, `candidati/`, `consegna.md`, lezioni; `via_libera_validazione.md` solo sul branch della campagna |
 | §5 e Passo 4, punto 1 (il coordinamento unisce il principale nei branch aperti) | Mai in `research/campagna/GRUPPO` fino al Passo 7: le correzioni arrivano con un commit solo, a sessione ferma (sezione 11, punto 6) |
 | §6 log, `trade_stimati` di validazione | `id` `GRUPPO-NNN`, una voce per variante (sezione 8); stima di validazione × 349 / giorni di costruzione per moneta (sezione 4, punto 4) |
 | §6 controllo positivo degli strumenti (`lezioni/metodo.md`) | Solo con `gruppo.controllo_positivo` (sezione 5, punto 10) |
