@@ -3328,3 +3328,14 @@ del gruppo è deciso adesso, prima di qualunque test.
   di funzionamento). I suoi numeri restano sul branch di coordinamento fino alla consegna del gruppo.
 * **La sessione di gruppo** è aperta su delega alle 17:12 UTC (session_01FzzZ5SUK8q2QzvhreZxD74), modello configurato
   claude-opus-5-5. Il controllo orario è riattivato con le istruzioni del gruppo; il controllo del mattino è aggiornato.
+
+### 10 ottobre, 19:45 ora italiana (17:45 UTC): la prima sessione di gruppo si è fermata, aperta la seconda
+
+La prima sessione di gruppo (session_01FzzZ5SUK8q2QzvhreZxD74, aperta alle 17:12 UTC) ha aperto il suo branch e alle
+17:18 UTC si è fermata chiedendo un intervento: nell'ambiente mancavano pytest e scipy (riassunto della sessione:
+«campaign paused: pytest and scipy missing from env»). Causa probabile, non verificata: lo script d'avvio installa
+tutte le dipendenze in un comando solo e si ferma se un pacchetto qualsiasi fallisce, e da oggi il guardiano vieta pip
+in campagna, quindi la sessione non poteva rimediare da sola. Correzione: lo script d'avvio installa prima, da sole,
+le dipendenze della ricerca, e controlla che ci siano (de2618ae). Aperta su delega la seconda sessione
+(session_01VJKFhoptfjZhGcBSqzY5Vg, 17:43 UTC) con lo stesso messaggio più «riprendi dalla nota del log»; la prima non va
+ripresa. Il controllo orario segue la seconda. Ultracode non risultava attivo nella prima.
