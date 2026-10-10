@@ -3353,3 +3353,10 @@ branch della campagna con un solo commit senza estrarre il branch, a sessioni fe
 punto 6). Aperta la terza sessione (session_01Lt3FVBCW5Kg531Pe7rjHRp, 18:35 UTC); le prime due non vanno riprese.
 Cosa abbiamo capito: le macchine delle sessioni non sono tutte uguali (Python 3.11 qui, 3.13 lì), e il divieto di pip
 in campagna rende obbligatorio che lo script d'avvio installi da solo tutto ciò che serve alla ricerca.
+
+### 10 ottobre, 21:12 ora italiana: niente controllo giornaliero domattina
+
+Il proprietario: «fammi sapere appena finisce e domani mattina non eseguire il report giornaliero». La routine del
+controllo giornaliero è spenta (trig_01R8zXziePx4RH7k3xfkYDnv) e si riaccende da sola l'11 ottobre alle 06:30 ora
+italiana, dopo l'orario delle 05:45, così riparte dal 12. Il controllo orario scrive subito al proprietario quando
+finisce la prova a placebo di gruppo e quando la campagna di gruppo consegna.
