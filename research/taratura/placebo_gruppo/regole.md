@@ -1,10 +1,10 @@
 # Prova a placebo dell'esame di gruppo — regole scritte PRIMA dei numeri
 
-> **BOZZA.** Scritte dal coordinamento il 10 ottobre 2026, prima di calcolare qualunque risultato, come chiede
+> **Regole chiuse il 2026-10-10 alle 17:10 UTC**, prima di calcolare qualunque risultato, come chiede
 > `research/campagne/GRUPPO/regole.md`, sezione 11 (approvato in anticipo dal proprietario il 10 ottobre alle 06:35
-> UTC). Questo file si committa e si pusha prima del lancio, con le impronte degli strumenti (punto 7) al posto di
-> questa riga: l'hash del commit va in `risultati.md`. Dopo il lancio le regole non cambiano; un errore trovato si
-> corregge con una voce nuova in `risultati.md`, che dice cosa è cambiato e perché, e si rilancia tutto.
+> UTC). Questo file si committa e si pusha prima del lancio, con le impronte degli strumenti al punto 7: l'hash del
+> commit va in `risultati.md`. Dopo il lancio le regole non cambiano; un errore trovato si corregge con una voce nuova
+> in `risultati.md`, che dice cosa è cambiato e perché, e si rilancia tutto.
 
 ## 1. La domanda
 
@@ -108,10 +108,18 @@ codice e le cinque impronte del punto 7, e il lancio rifiuta codice non committa
 
 ## 7. Gli strumenti (impronte SHA-256 al commit del lancio)
 
-Da scrivere al posto della riga BOZZA prima del lancio: `research/src/gruppo.py`, `research/src/statistica.py`,
-`research/src/motore.py`, `research/src/dati.py`, `research/config/parametri.yaml`, con l'hash del commit del branch
-principale da cui vengono. Il codice della prova (`placebo_gruppo.py`, `esegui.py`, `riassunto.py`) sta in questa
-cartella e non entra nelle impronte.
+Dal branch principale al commit `2a88046a7abed7e2e2bbdc0bef5448eb70b09f4b` (formato di `sha256sum`):
+
+```
+1f3fe8c8218cd32711b153b05872ac1042e417b2d7fe3b142a2a1972794c81cb  research/src/gruppo.py
+ca027d2687d9129a533077eb980c0517bd09c476331659d61eaf15dda45c9e5a  research/src/statistica.py
+5a3998c5f0a1535d255b5bf6fc3a367a5805a7ff9766024d74df096816e89c42  research/src/motore.py
+4b9ed237125ede9fc6d5103cdf93f6a382309649e34d5b07686f58be59ab8a6d  research/src/dati.py
+7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7  research/config/parametri.yaml
+```
+
+Il codice della prova (`placebo_gruppo.py`, `esegui.py`, `riassunto.py`) sta in questa cartella e non entra nelle
+cinque impronte; entra nell'identità di ogni riga di esito, con questo file.
 
 ## 8. Cosa la prova non dice
 
