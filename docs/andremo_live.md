@@ -3300,3 +3300,14 @@ chiude (dopo la revisione), e da lì il coordinamento prepara strumenti, guardia
 gruppo su delega (Passo 4, punto 1), con i controlli orari. Ogni scelta che spetterebbe al proprietario si prende
 nel verso più prudente e gli si riporta al ritorno, così può cambiarla prima che la sessione vada avanti. Il vault
 resta chiuso: si apre solo con «APRI IL VAULT».
+
+### 10 ottobre, mattina: controllo della storia delle 80 monete del gruppo (prima di congelare il testo)
+
+Il testo della campagna di gruppo (`research/campagne/GRUPPO/regole.md`, sezione 2, punto 9) fa uscire una moneta
+solo se la sua storia comincia il 2022-01-01 o dopo, misurata sul primo giorno con last e mark giornalieri entrambi
+presenti. Il coordinamento l'ha controllato prima di congelare il testo, scaricando le candele giornaliere di last e
+mark delle 80 monete fino al 2023-12 (fuori da git): **80 su 80 lo superano**, nessun errore di scarico, nessun mese
+mancante rispetto ai primi mesi delle schede. La più tarda è ROSEUSDT, con il primo giorno comune il 2021-12-31: passa
+per un giorno. Sulle 80 monete l'allineamento giornaliero toglie 410 giorni presenti solo nel last e 260 presenti
+solo nel mark. Cosa abbiamo capito: nessuna moneta del gruppo uscirà per storia corta, quindi l'elenco del vault
+del gruppo è deciso adesso, prima di qualunque test.
