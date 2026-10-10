@@ -46,8 +46,9 @@ def main():
         salva(f"{ident}_{periodo}_esame", r)
         print("salvato", ident, periodo)
     elif azione == "positivo":
-        r = gruppo.controllo_positivo(modulo, p, tf, sys.argv[5], processi=4)
-        salva("controllo_positivo", r)
+        ident = sys.argv[6] if len(sys.argv) > 6 else "GRUPPO-controllo-positivo"
+        r = gruppo.controllo_positivo(modulo, p, tf, sys.argv[5], id=ident, processi=4)
+        salva("controllo_positivo" if len(sys.argv) <= 6 else ident, r)
         print(json.dumps({k: r[k] for k in ("passa", "condizioni", "t_senza_ritardo", "t_con_ritardo")},
                          ensure_ascii=False))
     print(f"secondi: {time.time() - t0:.0f}")
