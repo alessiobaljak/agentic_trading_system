@@ -18,12 +18,13 @@ moneta per moneta; questa misura l'esame di gruppo.
 
 * Le 80 monete di `research/campagne/GRUPPO/monete.csv`, nessun'altra.
 * Da data.binance.vision, solo fino al **2023-12-31**, scaricati con `research/src/dati.py` (che rifiuta ogni data
-  oltre) in una radice fuori da git: candele a 1 ora del last e del mark, candele giornaliere del last (per il filtro
-  di liquidità) e del mark, funding. Il 10 ottobre lo scarico ha dato, per le 80 monete, 3.061 mesi di candele a 1
+  oltre) in una radice fuori da git: candele a 1 ora e a 4 ore del last e del mark, candele giornaliere del last (per il filtro di liquidità) e del mark,
+  funding. Il 10 ottobre lo scarico ha dato, per le 80 monete, 3.061 mesi di candele a 1
   ora del last e del mark e 3.044 mesi di funding (17 mesi senza file: buchi, il funding lì vale zero). Il vault non
   si tocca.
-* Due timeframe: 1 ora e 4 ore (4 ore aggregate dalle candele a 1 ora con `carica_serie_allineate(...,
-  aggrega_da="1h")`, solo gruppi completi).
+* Due timeframe: 1 ora e 4 ore, dai file mensili di quel timeframe (last e mark) scaricati con `research/src/dati.py`,
+  come li scarica la sessione (`regole.md`, sezione 2, punto 3). Si leggono solo con `gruppo.CaricatoreDisco` (anche
+  per calcolare gli istanti di segnale), senza un caricatore della prova.
 * Periodi, filtro di liquidità, parametri di ogni moneta, costi, last e mark allineati: esattamente quelli della
   sessione di gruppo, perché tutto passa da `research/src/gruppo.py` (`regole.md`, sezioni 1, 2 e 13). Costruzione
   fino al 2023-01-16, validazione dal 2023-01-17 al 2023-12-31.
