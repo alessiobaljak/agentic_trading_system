@@ -356,6 +356,8 @@ veri. Lo diranno le letture.
 L'unico rimedio che scala, ma tocca bot, learning, quattro script e la dashboard: farlo di fretta
 rischia di perdere settimane di conferme. Oggi c'è spazio per circa 17-18 giorni (stima del 1 ott,
 dopo K2): si fa se la riga «ci stanno ancora ~N coppie» del gate scende sotto ~500 (soglia proposta, non decisa).
+**11 ott: ~325 coppie** (771 KiB su 879, ops 0586; il 10 ott ~444, ops 0571), sotto i 400 dell'allarme del
+controllo giornaliero e sotto i ~500 di qui: proposta al proprietario nel referto settimanale dell'11 ott, non fatta.
 
 ## 6. Parcheggiate da te
 

@@ -3373,3 +3373,81 @@ a placebo (branch di coordinamento, `research/taratura/controllo_positivo_gruppo
 chiusura a tempo il confronto è non valutabile. Cosa abbiamo capito: gli strumenti di gruppo funzionano; un'uscita
 senza tempo massimo rende l'esame di gruppo quasi cieco, perché la posizione più lunga allunga il blocco per tutte
 le monete. Consiglio al proprietario: la strada 2. Aspetta la sua risposta nella sessione.
+
+### 11 ottobre, notte: la sessione di gruppo è ferma, la prova di gruppo in corso
+
+La sessione di gruppo ha ripreso dopo la risposta del proprietario (secondo controllo positivo con uscita a 1 giorno,
+commit a23c99df delle 22:06 ora italiana), ha registrato e provato le prime varianti su candele giornaliere (ultimo
+commit c5797275 delle 22:17) e da allora è ferma, scollegata dalla sua macchina, senza un commit «calcolo in corso» che
+copra l'attesa (solo titoli e stato della sessione, nessun file del branch). Avvisato il proprietario alle 23:15: per
+farla ripartire scrive nella sessione «continua: riprendi dalla nota del log». Prova di gruppo in corso: la macchina del
+coordinamento si è riavviata alle 04:38; i file degli esiti erano integri, salvati sul branch di coordinamento
+(12b3b52f) e il lancio è ripreso dalle prove mancanti.
+
+### Referto settimanale dell'11 ottobre (06:20 ora italiana)
+
+Fonti: ops 0583-0595 delle 05:47-06:00 (trades, stato, ai-stato, gate, log-bot, log-gate, mfe, portafoglio, rifiuti,
+rifiutati, controllo, confronto, servizi). Stamattina niente report giornaliero, per richiesta del proprietario.
+1. **Quanto e come.** Settimana 5-11 ott (l'11 fino alle 06:00): 170 trade delle validate (23+25+40+39+24+16+3 per
+   giorno, ops 0583), **−41,33 USDT** sul conto (colonna paper del periodo: −6,38, −7,80, −12,95, −12,51, +1,58,
+   −1,16, −2,11; ops 0590), dopo la settimana prima a +14,09. Dal referto del 4 ott: da 264 a 458 trade, da −62,59 a
+   −109,19 USDT. Totale: 458 trade, 56% vinti, −109,19 USDT (−10,9% contro BTC +9,5% nello stesso periodo), equity
+   891,26, DRY_RUN True, costi 61,74 su un lordo di −47,45 (ops 0584). Numero guida: il motore dopo la scelta del gate
+   fa −0,05R a trade su 368 segnali, ±0,11 per giornata; sugli stessi segnali paper −0,09, motore −0,06 (ops 0590; il
+   10 ott −0,05 su 351).
+2. **Il lock taglia vincitori?** Verdetti del trailing a 15 minuti: 183 = 90 prematuri (21 da rumore) + 93 protetti,
+   più 20 neutri (ops 0593); il 4 ott 104 = 49 + 55. Nella settimana 79 verdetti: **41 prematuri contro 38 protetti**,
+   la seconda settimana di fila con i prematuri sopra (il 4 ott 38 contro 36). La regola del referto chiede di
+   proporre di allentare il keep del lock: **proposto, non fatto, e sconsigliato.** Uno scarto di 3 su 79 sta dentro il
+   caso (la differenza fra le due parti, a puro caso, oscilla di circa ±9); nel totale i protetti sono ancora sopra (93
+   contro 90); la regola del sistema per proporre un keep diverso (60% da una parte) non scatta (50,8% protetti); il
+   keep lo sceglie già il gate coppia per coppia per 195 validate su 239 (il valore di partenza vale solo per 44) (ops
+   0593). Per keep in uso: 0,75 ha 7 prematuri e 0 protetti (R −0,23 su 18), 0,35 4 e 6 (R −0,04 su 21): gruppi non
+   confrontabili, solo misura.
+3. **Come muoiono gli stop.** 196 stop su 458: 87 d'ingresso (mai sopra 0,25R a favore), 108 d'uscita (a favore ma
+   sotto il primo gradino), 1 di protezione (ops 0589); il 4 ott 111: 52 / 58 / 1. Nella settimana 85 stop: 35
+   d'ingresso, **50 d'uscita**, 0 di protezione: il contrario della settimana prima (29 d'ingresso su 53). Paper contro
+   il prezzo casuale: stop 44% (caso 46%), ingresso/uscita 45/54% (caso 48,5/51,5%) (ops 0593).
+4. **Il paper entra dove entra il gate?** Sulle 8 coppie rigirate: **58 su 72** trade con un ingresso del gate entro 2
+   barre (81%), scarto mediano 16-18 minuti (ops 0594); il 4 ott 33 su 51 (65%). Sopra il 60%. Resta a 0 su 7
+   USELESSUSDT|gen_2031005e: sono trade di prima della correzione della sessione oraria del 27 set (diario del 4 ott,
+   10:40); senza di loro 58 su 65. Le altre sette coppie fra 6 su 7 e 10 su 10.
+5. **Le serie di perdite.** Paper: 8 di fila al massimo su 458 trade, come su 265 la settimana prima (ops 0594). Gate,
+   tutte le coppie insieme in ordine di tempo: 2.072 trade dal 14 dic 2024, serie più lunga 9, finestre di 8 tutte
+   perse 3 su 2.065 (0,1%) (ops 0594). Segnali del gate nel periodo del paper sulle 8 coppie: aperti dal paper PF 0,74
+   su 58, non aperti PF 0,79 su 43; lettura stampata «il gate ha promesso su un regime che non c'è più» (ops 0594; il 4
+   ott 1,36 contro 0,80). gen_fa304106 è a 11 perdite di fila (freno di serie spento, solo misura; ops 0583).
+6. **Le gemelle.** Non visibili: le 80 righe del log del gate sono tutte del giro in corso (candele e conferme
+   dell'intorno), nessuna riga sulle gemelle (ops 0588). Non si sa se crescono.
+7. **La copertura.** 239 validate su 77 coin, universo 200, copertura 38,5%; a 2/3 750 coppie su 133 coin, a 1/3 970
+   su 143 (ops 0586); il 4 ott 223 su 76 coin, 747 coppie a 2/3 (140 coin), 625 a 1/3 (112). **Spazio del registro:
+   ~325 coppie** (771 KiB su 879, 88%; ops 0586), sotto la soglia d'allarme dei 400 del controllo giornaliero e sotto i
+   ~500 della voce D1 del backlog (gruppo 5); il 10 ott ~444 (ops 0571). Scende a ondate, ma oltre il limite Firestore
+   rifiuta la scrittura e il giro perde le conferme appena guadagnate.
+8. **Durata del giro.** L'ultimo giro (solo urgenti, 66.750 valutazioni, 267 coin) è durato **4 h 18**, dalle 23:22
+   alle 03:40 (anomalia GATE_SFORA; ops 0586, 0593); il 4 ott 3 h 09. Circa 15.500 valutazioni l'ora, come nei giorni
+   scorsi (16-17 mila). Il giro dopo è partito subito (timer: ultimo avvio alle 03:40, prossimo non indicato perché il
+   giro è in corso; ops 0595): i giri restano attaccati. Passata a 1 ora: 16 minuti, 19.290 valutazioni, 417 passate
+   (ops 0586).
+9. **Le vite.** Nessuna riga «[vite]» nelle 80 righe del log (ops 0588). Dal controllo: il 10 ott 19 validate promosse
+   e 16 rimosse (fra le rimosse HEIUSDT|gen_9a383fff, vissuta 14,1 giorni), declassate nuove 14, tornate piene 3,
+   esplorative 61 entrate, 0 promosse, 59 scartate; stanotte 1 promossa e 0 rimosse (ops 0593).
+10. **L'AI.** Spenta dal 2 ott sera: ultime proposte 20 su 20 accettate il 2 ott alle 20:18; di origine AI 78 su 1.449
+    fra le spec che hanno passato il gate, nel registro 117 con 4 validate (2 declassate) su 239; chiave funzionante
+    (modello stampato in ops 0585), nessuna chiamata ieri né oggi (ops 0585, 0586).
+11. **Il tetto per coin.** Zero blocchi: nelle 24 ore 1 veto di regime e 1 «posizione già aperta» (ops 0591); nei
+    306 rifiutati dei 30 giorni nessun motivo «tetto» fra quelli nominati (posizione aperta 202, cooldown 65, stop
+    troppo largo 18, altro 15, veto di regime 4, margine 2; ops 0592); i 15 «altro» non sono distinti.
+
+Cosa abbiamo capito questa settimana: il paper entra quasi sempre dove entra il gate (81%) e sugli stessi segnali fa
+quasi come il motore, quindi le perdite vengono da cosa il gate sceglie e dalla forma delle uscite, non da un bot che
+entra altrove; e dopo due settimane il trailing non taglia i vincitori più di quanto li protegga (90 contro 93).
+
+Migliorato: ingressi allineati al gate all'81% (dal 65%); validate da 223 a 239 e coppie a 1/3 da 625 a 970; la serie
+di perdite più lunga del paper resta 8 con quasi il doppio dei trade.
+Peggiorato: settimana a −41,33 USDT dopo la prima in utile (equity da 937,41 a 891,26); spazio del registro a ~325
+coppie, sotto l'allarme; giro del gate a 4 h 18 (da 3 h 09); stop della settimana soprattutto d'uscita (50 su 85).
+Proposta (non fatta): decidere adesso come liberare spazio nel registro (la voce D1, «il registro su più documenti», o
+prima un rimedio più piccolo), perché un altro calo a ondate come quello di ieri (−119 coppie) lo porta al limite in
+pochi giorni. Per la regola del referto anche allentare il keep del lock: proposto ma sconsigliato, i numeri stanno
+dentro il caso.
