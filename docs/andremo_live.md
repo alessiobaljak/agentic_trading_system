@@ -3513,3 +3513,11 @@ Sì del proprietario: archiviate le tre sessioni della campagna di gruppo (sessi
 session_01VJKFhoptfjZhGcBSqzY5Vg, session_01Lt3FVBCW5Kg531Pe7rjHRp). Il branch `research/campagna/GRUPPO` resta com'è.
 Routine accese adesso: nessuna (controllo giornaliero, referto settimanale e controllo orario spenti). La seconda
 lettura ufficiale del 14 ott la faceva il controllo giornaliero: va fatta a mano, se il proprietario la chiede.
+
+### 11 ottobre, 19:29 ora italiana: il proprietario ha scritto «APRI IL VAULT»
+
+Alle 17:29 UTC il proprietario ha scritto in chat esattamente «APRI IL VAULT» (un'ora prima aveva scritto «Apri il
+vault» in minuscolo: il coordinamento ha chiesto la frase esatta, come vuole il protocollo). Prerequisiti del Passo 5:
+tutte le campagne consegnate (20 monete e il gruppo), test della ricerca rieseguiti (2374 passati, 11 ott), esito
+della prova a placebo per moneta (9 ott: regge). Il file d'apertura si crea appena i lanciatori dei tre candidati sono
+corretti, verificati e committati, così il codice che giudica è congelato prima di vedere i dati.
