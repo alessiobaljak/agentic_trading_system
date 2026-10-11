@@ -3536,3 +3536,25 @@ candidati girano una volta sola, uno alla volta.
 Fuori dal vault: le e-mail di GitHub venivano da un test che falliva solo su GitHub dal 10 ottobre (lo script lanciato
 a parte non trovava il pacchetto `research` senza PYTHONPATH): corretto, la prova su GitHub è tornata verde (run
 38165200292). Il workflow dei test ora gira solo sul branch principale.
+
+### 11 ottobre, 23:40 ora italiana: il vault boccia tutti e tre i candidati (Passo 5)
+
+Ogni candidato ha girato una volta sola sul periodo 2024-01-01 → 2026-09-30 (`research/vault/risultati.md`, branch di
+coordinamento, commit 8e831841; dettagli in `research/vault/<ID>_vault.md`):
+* **BTCUSDT-V10** (rottura dall'apertura del giorno, long, 1 ora): 325 trade, R medio +0,031, profit factor **1,067**
+  contro il minimo 1,10, rendimento +9,8%, sopra il 90° percentile delle entrate casuali. **Non passa** per il solo
+  profit factor. Positivo solo il 2024 (+0,159), poi −0,041 e −0,046. Batte comunque nettamente le entrate casuali
+  (baseline (b): t 3,01, p 0,0015). Tasso del caso 0,1%.
+* **BNBUSDT-045** (cali bruschi nella tendenza, fine settimana, long, 1 ora): 94 trade, R medio −0,087, profit factor
+  0,55, rendimento −9,1%. **Non passa** su tre condizioni su quattro; come la media delle entrate casuali. Tasso del caso 0,4%.
+* **ADAUSDT-037** (rottura dell'intervallo d'apertura con due filtri, long, 15 minuti): 167 trade, R medio −0,164,
+  profit factor 0,79, rendimento −26,3%. **Non passa** su tre condizioni su quattro. Tasso del caso 1,5%.
+Dati del vault completi per le tre monete (un giorno di mark mancante a giugno 2026, solo avviso). Passaggi attesi per
+puro caso sui tre: circa 0,02; passaggi veri: 0. Errore del coordinamento durante il giro: un comando d'attesa sbagliato
+(cercava il proprio testo e non finiva mai) ha fatto partire ADAUSDT due ore dopo la fine di BNBUSDT; nessun effetto sui
+risultati. STOP del Passo 5: il proprietario decide se fare il trasferimento (Passo 6) o passare al giudizio d'insieme
+(Passo 7).
+
+Cosa abbiamo capito: i tre migliori risultati di 20 campagne per moneta (600 varianti) non reggono sugli anni successivi;
+il più solido, BTCUSDT-V10, conserva un vantaggio rispetto alle entrate casuali ma più piccolo dei costi, e calante anno
+dopo anno; gli altri due vivevano di pochi trade, come le loro campagne avevano scritto.

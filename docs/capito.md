@@ -7,6 +7,11 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-11 (sera: il vault)
+* **Nessuno dei tre candidati regge sugli anni chiusi 2024-2026.** BTCUSDT-V10 profit factor 1,067 contro il minimo 1,10 (325 trade, R medio +0,031); BNBUSDT-045 0,55 (94 trade, −0,087); ADAUSDT-037 0,79 (167 trade, −0,164) (`research/vault/risultati.md`, branch di coordinamento). Per puro caso ci si aspettavano circa 0,02 passaggi su tre: il risultato è coerente con «nessun vantaggio sfruttabile trovato».
+* **Il vantaggio di BTCUSDT-V10 è vero ma si consuma e non paga i costi:** R a trade +0,149 in costruzione, +0,048 in validazione, +0,031 nel vault, e nel vault positivo solo nel 2024 (+0,159) poi −0,04 nel 2025 e nel 2026; contro le entrate casuali con la stessa uscita resta nettamente sopra (t 3,01, p 0,0015) (`research/vault/BTCUSDT-V10_vault.md`).
+* **Le riserve scritte dalle campagne erano giuste:** BNB (32 trade di validazione, cinque ritocchi) e ADA (validazione che dipendeva da 3 trade) nel vault fanno come le entrate casuali o peggio (stesse fonti).
+
 ## 2026-10-11 (la campagna di gruppo ha consegnato)
 * **Anche sommando 80 monete non si trova un vantaggio che superi il caso.** La campagna di gruppo ha usato tutte le 30 varianti (20 idee nuove con fonte pubblicata prima del 2024, 10 ritocchi) e nessuna è diventata candidato; la più vicina ha t 2,06 contro una soglia di 2,16, con R medio dopo i costi di +0,008 a trade (`research/campagne/GRUPPO/consegna.md`, branch `research/campagna/GRUPPO`, commit 121eb4ab).
 * **Dove un effetto c'è, è più piccolo dei costi.** Il ritardo delle monete dopo un'ora forte di BTC rende +0,04-0,09R a trade prima dei costi, contro 0,05-0,07R di costi per giro; il rientro del rendimento proprio della moneta al netto di BTC, a 4 ore, arriva a +0,11R prima dei costi ma vive soprattutto nei giorni di vendite generali, quando l'esame conta molti trade come poche scommesse (stessa consegna).
