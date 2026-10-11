@@ -3466,3 +3466,10 @@ letto alla lettera, spegnendo solo il controllo giornaliero, e stamattina alle 0
 della domenica. Spente entrambe le routine del mattino («Paper: controllo giornaliero + proposta dal backlog» e
 «Paper: referto settimanale»); la regola è scritta in CLAUDE.md. Resta acceso solo il controllo orario della campagna
 di gruppo.
+
+### 11 ottobre, 09:55 ora italiana: prova di gruppo finita: regge
+
+La prova a placebo dell'esame di gruppo è finita alle 07:52 UTC: **finita: regge** (regole.md, sezione 11, punto 5: i
+numeri restano sul branch di coordinamento, `research/taratura/placebo_gruppo/risultati.md`, commit 80f594a4, fino
+alla consegna del gruppo). Le cinque impronte degli strumenti sono quelle scritte nelle regole della prova prima del
+lancio. Il via libera alla validazione si scrive quando la sessione di gruppo lo chiede (sezione 7, punto 2).
