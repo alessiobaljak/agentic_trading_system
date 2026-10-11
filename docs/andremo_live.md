@@ -3451,3 +3451,9 @@ Proposta (non fatta): decidere adesso come liberare spazio nel registro (la voce
 prima un rimedio più piccolo), perché un altro calo a ondate come quello di ieri (−119 coppie) lo porta al limite in
 pochi giorni. Per la regola del referto anche allentare il keep del lock: proposto ma sconsigliato, i numeri stanno
 dentro il caso.
+
+### 11 ottobre, 06:30 ora italiana: controllo giornaliero riacceso
+
+La routine del controllo giornaliero è di nuovo accesa, con lo stesso testo e lo stesso orario (05:45 ora italiana):
+il prossimo controllo è domani, 12 ottobre. Quello di oggi è stato saltato, come chiesto dal proprietario il 10 ottobre
+alle 21:12.
