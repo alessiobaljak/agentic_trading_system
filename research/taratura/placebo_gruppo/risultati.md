@@ -11,7 +11,8 @@ con `riassunto.py` (uscita completa in fondo, codice d'uscita 0).
 
 **Le cinque impronte** (punto 7 delle regole) sono quelle delle righe e quelle dei file del branch principale l'11
 ottobre alle 07:55 UTC (`sha256sum`), invariate dal commit 2a88046a (dopo, sul principale, è cambiato solo
-`research/src/guardiano.py`, che non è fra le cinque):
+`research/src/guardiano.py`, che non è fra le cinque, con una modifica che non cambia il comportamento, più il riquadro
+d'intestazione di `research/campagne/GRUPPO/regole.md` e `research/CHANGELOG.md`):
 
 ```
 1f3fe8c8218cd32711b153b05872ac1042e417b2d7fe3b142a2a1972794c81cb  research/src/gruppo.py
@@ -36,11 +37,11 @@ ca027d2687d9129a533077eb980c0517bd09c476331659d61eaf15dda45c9e5a  research/src/s
 Copertura: 192 righe su 192 (24 combinazioni × 4 sfasamenti × 2 periodi), 0 errori. Campione: 85 placebo valutabili
 in costruzione e 93 in validazione (minimo 80 per periodo: nessuno sfasamento in più). Non valutabili: 11 in
 costruzione e 2 in validazione con meno di 3 blocchi interi (o candidato senza rumore stimabile), 1 in validazione
-perché gli ingressi casuali non entrano su GTCUSDT. Nessuna placebo sotto i minimi di trade (trade sommati: mediana
-8.573 in costruzione, minimo 1.551; mediana 5.260 in validazione, minimo 931). Intervalli al 95% ricampionando le 24
+perché gli ingressi casuali non entrano su GTCUSDT. Nessuna placebo sotto i minimi di trade (trade sommati: minimo
+1.551 in costruzione e 931 in validazione; mediana 8.573 e 5.260 fra le valutabili, 8.462,5 e 4.713 su tutte le 96). Intervalli al 95% ricampionando le 24
 combinazioni: coda M3 0,03-0,59% in costruzione e 1,04-5,49% in validazione, quota M2 0-5,38%: le soglie stanno fuori.
 
-**Ricalcolo indipendente** del coordinamento dagli esiti grezzi (z = Φ⁻¹(T(t)) con la t di Student del confronto con
+**Ricalcolo indipendente** dagli esiti grezzi (script in `verifica/ricalcolo.py`, senza `riassunto.py`) (z = Φ⁻¹(T(t)) con la t di Student del confronto con
 la (b), stesse esclusioni): 85 / 0 / μ 0,055 / σ 0,672 / 0,19% in costruzione, 93 / 2 / μ 0,068 / σ 0,643 / 2,95% in
 validazione. Coincide.
 
@@ -48,10 +49,12 @@ validazione. Coincide.
 
 * **L'esame di gruppo non promuove il rumore**, nemmeno con i trade a grappoli fra monete: nessuna placebo «netta» in
   costruzione, 2 su 93 sotto p 0,10 in validazione (2,15% contro il 10% che darebbe il caso puro).
-* **È più severo di quanto dichiara, ancora più dell'esame per moneta.** Gli z hanno deviazione standard 0,67 in
-  costruzione e 0,64 in validazione invece di 1 (il 9 ottobre, per moneta, 0,815), con il centro giusto (μ 0,06-0,07).
-  Il prezzo è la **potenza**: un vantaggio vero ma piccolo passa più difficilmente di quanto dice la sezione 15 di
-  `regole.md`. Le regole d'esame non si cambiano guardando questi numeri.
+* **È più severo di quanto dichiara, un po' più dell'esame per moneta.** Gli z hanno deviazione standard 0,67 in
+  costruzione e 0,64 in validazione invece di 1, con il centro giusto (μ 0,06-0,07); gli z della prova del 9 ottobre,
+  per moneta, hanno 0,795 e 0,745 (ricalcolati dai suoi esiti; lo 0,815 scritto quel giorno era il t, solo in
+  costruzione). In validazione il margine è stretto: l'estremo alto dell'intervallo al 95% di σ è 0,738. Il prezzo
+  probabile, non misurato da questa prova, è la **potenza**: un vantaggio vero ma piccolo passerebbe più difficilmente
+  di quanto stima la sezione 15 di `regole.md`. Le regole d'esame non si cambiano guardando questi numeri.
 * **Regge anche senza il pavimento delle strategie sfasate** (solo informativo): M2 3 su 93, M3 4,58% in validazione;
   in costruzione 0 nette, M3 0,25%. Dove il pavimento delle sfasate decide (19 placebo in costruzione, 33 in
   validazione), la deviazione standard di (R medio − B)/pavimento è 0,578 e 0,833: sotto 1,10, quindi **nessuna
@@ -62,19 +65,51 @@ validazione. Coincide.
   del 10 ottobre (circa un decimo, simulazione del coordinamento in `regole.md`, sezione 15). La moneta più presente
   pesa al massimo il 4,32% dei trade (limite 10%).
 * **Da tenere per il vault (informativo):** in validazione 14 placebo su 93 (15,05%) hanno R medio sopra il 90°
-  percentile delle proprie sfasate, contro il 10% atteso (con 93 placebo il caso dà circa 9 ± 3: 14 è sopra di circa
-  1,6 deviazioni). Le sfasate abbassano molto il 26% stimato per gli ingressi casuali indipendenti (`regole.md`,
-  sezione 9), ma la condizione del percentile può passare per caso un po' più del 10%: il tasso del caso del vault si
-  calcola comunque come scrive la sezione 9, punto 4.
+  percentile delle proprie sfasate, contro il 10% atteso (in costruzione 8 su 85, 9,4%). Trattandole come indipendenti
+  il caso darebbe circa 9 ± 3 (14 è sopra di circa 1,6 deviazioni), ma i 4 sfasamenti di una combinazione partono dagli
+  stessi ingressi, quindi non lo sono del tutto. Il confronto con il 26% stimato per gli ingressi casuali indipendenti
+  (`regole.md`, sezione 9) viene da un'altra simulazione, non da questa prova. Il tasso del caso del vault si calcola
+  comunque come scrive la sezione 9, punto 4.
 
 ## Limiti
 
 Regole d'ingresso e uscite fisse da manuale, non le idee della campagna; solo regole su una moneta alla volta; nessuna
-verifica della Fase 4. In 70 righe su 192 (incrocio delle medie, rottura e MACD, le uscite senza chiusura a tempo) la
-durata massima dei trade è a meno di 60 barre dal margine di 30 giorni: lo spostamento in cerchio potrebbe far
-guardare a un trade i prezzi vicini al segnale vero, ma le regole da manuale non hanno vantaggio e nessuna lettura
-cambia togliendo la sfasata più vicina. La prova misura i falsi positivi dell'esame di gruppo, non la sua potenza su
-un vantaggio vero.
+verifica della Fase 4 (per esempio 14 violazioni di liquidazione in 11 righe di costruzione, 6 delle quali fra le 85
+valutabili: le regole non le escludono; togliendole la costruzione scenderebbe a 79 placebo, sotto il minimo di 80).
+In 70 placebo valutabili su 178 (84 righe su 192; incrocio delle medie, rottura e MACD, le uscite senza chiusura a
+tempo) la durata massima dei trade arriva a meno di 60 barre dal margine di 30 giorni, e in 68 di queste lo supera
+(mediana 1,7 volte il margine, massimo 6 volte). Un trade può guardare i prezzi del proprio segnale vero solo se dura
+almeno L − d: succede in 4 placebo valutabili, tutte con z al massimo 1,08. Togliendo tutte le 70, la prova regge lo
+stesso: 0 nette su 52 e M3 0,29% in costruzione, 1 su 56 e M3 3,11% in validazione (`verifica/v3.py`). Fra le
+sfasate del pavimento, quelle che cadono poche barre prima del segnale vero hanno un R medio molto più alto delle
+altre (fino a 12,9 deviazioni; `verifica/v5.py`): alzano il pavimento, e togliendo la più vicina nessuna lettura cambia.
+La prova misura i falsi positivi dell'esame di gruppo, non la sua potenza su un vantaggio vero.
+
+## Verifica indipendente e correzioni del testo (11 ottobre, 10:30 ora italiana)
+
+Tre controllori indipendenti hanno provato a smentire «regge» leggendo solo gli esiti grezzi, le regole e il codice
+(sola lettura): **nessuno l'ha smentito**. Ricalcolo da zero senza `riassunto.py` (`verifica/ricalcolo.py`): stessa
+copertura (192, 0 errori, 0 duplicati, semi crc32 e sfasamenti tutti secondo le regole), un'unica identità in tutte le
+righe, `commit_file_della_prova` 39d09587 in tutte, le cinque impronte uguali nelle righe, al punto 7 delle regole e
+sul branch principale; stessi n, M1, M2, M3. Le righe salvate nei commit parziali sono uguali a quelle finali; la prima
+riga è delle 17:13:06 UTC, dopo il commit delle regole (17:10:51). Il p_value di ogni riga è quello della t di Student
+del suo t (contro la (b), senza pavimento e contro la (a)). Con 20.000 ricampionamenti e un altro seme nessuno supera le
+soglie.
+
+Correzioni fatte sopra, rispetto alla prima versione di questo file (commit 80f594a4), nessuna delle quali cambia
+l'esito: il conteggio dei limiti era «70 righe su 192» (sono 70 valutabili su 178, 84 righe su 192) e descriveva male
+le durate; le mediane dei trade erano delle sole valutabili; il confronto con il 9 ottobre usava il t invece dello z;
+la potenza era scritta come un fatto; mancavano le violazioni di liquidazione; le modifiche al principale dopo 2a88046a
+non erano tutte nominate; il ricalcolo indipendente non aveva lo script nel repository (ora `verifica/`).
+
+**Da sapere sull'intestazione delle regole** («chiuse … prima di calcolare qualunque risultato»): alla lettera non è
+esatta. Prima della chiusura delle 17:10 hanno girato una prova di fumo su poche monete (12:56 UTC, un p_value contro
+la (b)) e un lancio di funzionamento sui prezzi veri delle 80 monete (15:03 UTC) per 4 etichette uguali a quattro della
+prova vera (incrocio delle medie long, 1 ora e 4 ore, costruzione e validazione, sfasamento 0), più 8 esami con k = 900.
+Le regole che decidono (n, valutabilità, soglie, M1-M3) erano già quelle finali nel commit cf03ac39 delle 13:12 UTC,
+prima del lancio di funzionamento: fra cf03ac39 e 39d09587 cambiano solo l'intestazione e le impronte. Le soglie sono
+quelle della prova del 9 ottobre. Il cambio di strumento del pomeriggio (2a88046a) tocca solo la baseline (a), che
+M1-M3 non usano.
 
 ## Cosa succede adesso (scritto nelle regole, punto 6)
 
