@@ -60,6 +60,20 @@
      ],
      "intervalli_tolte_mark": [],
      "primo_giorno_in_comune": "2021-09-17"
+    },
+    "1h": {
+     "barre": 19989,
+     "tolte_last": 72,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-09-17"
+     ],
+     "primo_giorno_in_comune": "2021-09-17"
     }
    },
    "storia_ok": true,
@@ -158,6 +172,19 @@
      ],
      "intervalli_tolte_mark": [],
      "primo_giorno_in_comune": "2020-12-25"
+    },
+    "1h": {
+     "barre": 26390,
+     "tolte_last": 48,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-12-25"
+     ],
+     "primo_giorno_in_comune": "2020-12-25"
     }
    },
    "storia_ok": true,
@@ -238,6 +265,19 @@
      "barre": 7019,
      "tolte_last": 12,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-16"
+     ],
+     "primo_giorno_in_comune": "2020-10-16"
+    },
+    "1h": {
+     "barre": 28073,
+     "tolte_last": 48,
+     "tolte_mark": 4,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -332,6 +372,19 @@
       "2020-06-01..2020-06-16"
      ],
      "primo_giorno_in_comune": "2020-06-16"
+    },
+    "1h": {
+     "barre": 30999,
+     "tolte_last": 48,
+     "tolte_mark": 369,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-01..2020-06-16"
+     ],
+     "primo_giorno_in_comune": "2020-06-16"
     }
    },
    "storia_ok": true,
@@ -413,6 +466,19 @@
      "barre": 6791,
      "tolte_last": 12,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-23"
+     ],
+     "primo_giorno_in_comune": "2020-11-23"
+    },
+    "1h": {
+     "barre": 27161,
+     "tolte_last": 48,
+     "tolte_mark": 4,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -529,6 +595,22 @@
       "2021-01-25..2021-01-26"
      ],
      "primo_giorno_in_comune": "2021-01-26"
+    },
+    "1h": {
+     "barre": 25481,
+     "tolte_last": 192,
+     "tolte_mark": 17,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-25..2021-01-26"
+     ],
+     "primo_giorno_in_comune": "2021-01-26"
     }
    },
    "storia_ok": true,
@@ -618,6 +700,19 @@
       "2023-02-24"
      ],
      "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-10-19"
+    },
+    "1h": {
+     "barre": 19245,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-10-19"
+     ],
      "primo_giorno_in_comune": "2021-10-19"
     }
    },
@@ -718,6 +813,20 @@
       "2021-09-27"
      ],
      "primo_giorno_in_comune": "2021-09-28"
+    },
+    "1h": {
+     "barre": 19725,
+     "tolte_last": 72,
+     "tolte_mark": 25,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-09-27..2021-09-28"
+     ],
+     "primo_giorno_in_comune": "2021-09-28"
     }
    },
    "storia_ok": true,
@@ -807,6 +916,19 @@
      "barre": 8529,
      "tolte_last": 12,
      "tolte_mark": 7,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-06..2020-02-07"
+     ],
+     "primo_giorno_in_comune": "2020-02-07"
+    },
+    "1h": {
+     "barre": 34116,
+     "tolte_last": 48,
+     "tolte_mark": 28,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -906,6 +1028,20 @@
       "2023-02-24"
      ],
      "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-08-19"
+    },
+    "1h": {
+     "barre": 20685,
+     "tolte_last": 72,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-08-19"
+     ],
      "primo_giorno_in_comune": "2021-08-19"
     }
    },
@@ -1010,6 +1146,22 @@
       "2020-11-20"
      ],
      "primo_giorno_in_comune": "2020-11-20"
+    },
+    "1h": {
+     "barre": 27089,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-20"
+     ],
+     "primo_giorno_in_comune": "2020-11-20"
     }
    },
    "storia_ok": true,
@@ -1095,6 +1247,19 @@
       "2023-02-24"
      ],
      "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-05-19"
+    },
+    "1h": {
+     "barre": 22913,
+     "tolte_last": 48,
+     "tolte_mark": 3,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-05-19"
+     ],
      "primo_giorno_in_comune": "2021-05-19"
     }
    },
@@ -1199,6 +1364,22 @@
       "2020-07-29"
      ],
      "primo_giorno_in_comune": "2020-07-29"
+    },
+    "1h": {
+     "barre": 29825,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-29"
+     ],
+     "primo_giorno_in_comune": "2020-07-29"
     }
    },
    "storia_ok": true,
@@ -1282,6 +1463,19 @@
      "barre": 6821,
      "tolte_last": 12,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-18"
+     ],
+     "primo_giorno_in_comune": "2020-11-18"
+    },
+    "1h": {
+     "barre": 27281,
+     "tolte_last": 48,
+     "tolte_mark": 5,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -1388,6 +1582,22 @@
      "barre": 7157,
      "tolte_last": 48,
      "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-16..2020-09-17"
+     ],
+     "primo_giorno_in_comune": "2020-09-17"
+    },
+    "1h": {
+     "barre": 28625,
+     "tolte_last": 192,
+     "tolte_mark": 19,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -1518,6 +1728,19 @@
      ],
      "intervalli_tolte_mark": [],
      "primo_giorno_in_comune": "2021-08-24"
+    },
+    "1h": {
+     "barre": 20589,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-08-24"
+     ],
+     "primo_giorno_in_comune": "2021-08-24"
     }
    },
    "storia_ok": true,
@@ -1605,6 +1828,19 @@
      ],
      "intervalli_tolte_mark": [],
      "primo_giorno_in_comune": "2021-09-27"
+    },
+    "1h": {
+     "barre": 19773,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-09-27"
+     ],
+     "primo_giorno_in_comune": "2021-09-27"
     }
    },
    "storia_ok": true,
@@ -1691,6 +1927,19 @@
       "2023-02-24"
      ],
      "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-03-29"
+    },
+    "1h": {
+     "barre": 24137,
+     "tolte_last": 48,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-29"
+     ],
      "primo_giorno_in_comune": "2021-03-29"
     }
    },
@@ -1792,6 +2041,19 @@
       "2021-01-01..2021-01-21"
      ],
      "primo_giorno_in_comune": "2021-01-21"
+    },
+    "1h": {
+     "barre": 25745,
+     "tolte_last": 48,
+     "tolte_mark": 487,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-01..2021-01-21"
+     ],
+     "primo_giorno_in_comune": "2021-01-21"
     }
    },
    "storia_ok": true,
@@ -1877,6 +2139,22 @@
      "barre": 7630,
      "tolte_last": 48,
      "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-30"
+     ],
+     "primo_giorno_in_comune": "2020-06-30"
+    },
+    "1h": {
+     "barre": 30519,
+     "tolte_last": 192,
+     "tolte_mark": 7,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -1988,6 +2266,22 @@
       "2020-09-01"
      ],
      "primo_giorno_in_comune": "2020-09-01"
+    },
+    "1h": {
+     "barre": 29009,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-01"
+     ],
+     "primo_giorno_in_comune": "2020-09-01"
     }
    },
    "storia_ok": true,
@@ -2072,6 +2366,20 @@
       "2023-02-24"
      ],
      "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-10-26"
+    },
+    "1h": {
+     "barre": 19053,
+     "tolte_last": 72,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-10-26"
+     ],
      "primo_giorno_in_comune": "2021-10-26"
     }
    },
@@ -2166,6 +2474,19 @@
      "barre": 8548,
      "tolte_last": 12,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04"
+     ],
+     "primo_giorno_in_comune": "2020-02-04"
+    },
+    "1h": {
+     "barre": 34192,
+     "tolte_last": 48,
+     "tolte_mark": 3,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -2289,6 +2610,22 @@
       "2020-08-20..2020-08-22"
      ],
      "primo_giorno_in_comune": "2020-08-22"
+    },
+    "1h": {
+     "barre": 29249,
+     "tolte_last": 192,
+     "tolte_mark": 53,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-20..2020-08-22"
+     ],
+     "primo_giorno_in_comune": "2020-08-22"
     }
    },
    "storia_ok": true,
@@ -2367,6 +2704,19 @@
      "barre": 7211,
      "tolte_last": 12,
      "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-13..2020-09-14"
+     ],
+     "primo_giorno_in_comune": "2020-09-14"
+    },
+    "1h": {
+     "barre": 28841,
+     "tolte_last": 48,
+     "tolte_mark": 20,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -2475,6 +2825,22 @@
       "2020-09-29"
      ],
      "primo_giorno_in_comune": "2020-09-29"
+    },
+    "1h": {
+     "barre": 28337,
+     "tolte_last": 192,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-29"
+     ],
+     "primo_giorno_in_comune": "2020-09-29"
     }
    },
    "storia_ok": true,
@@ -2569,6 +2935,19 @@
       "2020-01-08"
      ],
      "primo_giorno_in_comune": "2020-01-08"
+    },
+    "1h": {
+     "barre": 34840,
+     "tolte_last": 48,
+     "tolte_mark": 3,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-08"
+     ],
+     "primo_giorno_in_comune": "2020-01-08"
     }
    },
    "storia_ok": true,
@@ -2651,6 +3030,21 @@
      "barre": 7091,
      "tolte_last": 12,
      "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-29",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-29"
+    },
+    "1h": {
+     "barre": 28361,
+     "tolte_last": 48,
+     "tolte_mark": 124,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -2780,6 +3174,21 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-12-19"
+    },
+    "1h": {
+     "barre": 26417,
+     "tolte_last": 48,
+     "tolte_mark": 122,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-12-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-12-19"
     }
    },
    "storia_ok": true,
@@ -2869,6 +3278,21 @@
       "2023-02-24"
      ],
      "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-06-11"
+    },
+    "1h": {
+     "barre": 22245,
+     "tolte_last": 48,
+     "tolte_mark": 121,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-06-11",
       "2022-02-26..2022-02-28",
       "2022-04-01..2022-04-02"
      ],
@@ -2966,6 +3390,21 @@
      "barre": 6077,
      "tolte_last": 12,
      "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-17",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-17"
+    },
+    "1h": {
+     "barre": 24305,
+     "tolte_last": 48,
+     "tolte_mark": 124,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -3089,6 +3528,21 @@
       "2022-09-01..2022-09-26"
      ],
      "primo_giorno_in_comune": "2021-05-11"
+    },
+    "1h": {
+     "barre": 22459,
+     "tolte_last": 72,
+     "tolte_mark": 627,
+     "intervalli_tolte_last": [
+      "2022-06-19",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-05-11",
+      "2022-09-01..2022-09-27"
+     ],
+     "primo_giorno_in_comune": "2021-05-11"
     }
    },
    "storia_ok": true,
@@ -3179,6 +3633,22 @@
      "barre": 7169,
      "tolte_last": 48,
      "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-14..2020-09-15"
+     ],
+     "primo_giorno_in_comune": "2020-09-15"
+    },
+    "1h": {
+     "barre": 28674,
+     "tolte_last": 192,
+     "tolte_mark": 19,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -3292,6 +3762,21 @@
      "barre": 8470,
      "tolte_last": 12,
      "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-12",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-12"
+    },
+    "1h": {
+     "barre": 33880,
+     "tolte_last": 48,
+     "tolte_mark": 124,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -3423,6 +3908,22 @@
       "2020-07-28"
      ],
      "primo_giorno_in_comune": "2020-07-28"
+    },
+    "1h": {
+     "barre": 29849,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-28"
+     ],
+     "primo_giorno_in_comune": "2020-07-28"
     }
    },
    "storia_ok": true,
@@ -3516,6 +4017,20 @@
      ],
      "intervalli_tolte_mark": [
       "2021-10-11"
+     ],
+     "primo_giorno_in_comune": "2021-10-12"
+    },
+    "1h": {
+     "barre": 19389,
+     "tolte_last": 72,
+     "tolte_mark": 17,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-10-11..2021-10-12"
      ],
      "primo_giorno_in_comune": "2021-10-12"
     }
@@ -3626,6 +4141,21 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-06-22"
+    },
+    "1h": {
+     "barre": 30736,
+     "tolte_last": 48,
+     "tolte_mark": 122,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-22",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-06-22"
     }
    },
    "storia_ok": true,
@@ -3718,6 +4248,21 @@
      "barre": 7001,
      "tolte_last": 12,
      "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-14",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-14"
+    },
+    "1h": {
+     "barre": 28001,
+     "tolte_last": 48,
+     "tolte_mark": 124,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -3834,6 +4379,21 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2021-03-19"
+    },
+    "1h": {
+     "barre": 24257,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-19"
     }
    },
    "storia_ok": true,
@@ -3921,6 +4481,20 @@
       "2023-02-24"
      ],
      "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-11-11"
+    },
+    "1h": {
+     "barre": 18669,
+     "tolte_last": 72,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-11-11"
+     ],
      "primo_giorno_in_comune": "2021-11-11"
     }
    },
@@ -4040,6 +4614,21 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-10-19"
+    },
+    "1h": {
+     "barre": 27881,
+     "tolte_last": 48,
+     "tolte_mark": 122,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-19"
     }
    },
    "storia_ok": true,
@@ -4147,6 +4736,21 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2021-03-15"
+    },
+    "1h": {
+     "barre": 24353,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-15"
     }
    },
    "storia_ok": true,
@@ -4230,6 +4834,21 @@
      "barre": 7373,
      "tolte_last": 12,
      "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-13",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-13"
+    },
+    "1h": {
+     "barre": 29489,
+     "tolte_last": 48,
+     "tolte_mark": 124,
      "intervalli_tolte_last": [
       "2022-10-02",
       "2023-02-24"
@@ -4330,6 +4949,22 @@
      "barre": 5987,
      "tolte_last": 48,
      "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-30..2021-03-31"
+     ],
+     "primo_giorno_in_comune": "2021-03-31"
+    },
+    "1h": {
+     "barre": 23945,
+     "tolte_last": 192,
+     "tolte_mark": 19,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -4452,6 +5087,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-10-15"
+    },
+    "1h": {
+     "barre": 27856,
+     "tolte_last": 168,
+     "tolte_mark": 143,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-14..2020-10-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-15"
     }
    },
    "storia_ok": true,
@@ -4539,6 +5191,22 @@
      "barre": 8434,
      "tolte_last": 48,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-17"
+     ],
+     "primo_giorno_in_comune": "2020-02-17"
+    },
+    "1h": {
+     "barre": 33736,
+     "tolte_last": 192,
+     "tolte_mark": 4,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -4646,6 +5314,22 @@
      "barre": 5933,
      "tolte_last": 48,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-04-09"
+     ],
+     "primo_giorno_in_comune": "2021-04-09"
+    },
+    "1h": {
+     "barre": 23729,
+     "tolte_last": 192,
+     "tolte_mark": 4,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -4770,6 +5454,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-11-03"
+    },
+    "1h": {
+     "barre": 27401,
+     "tolte_last": 168,
+     "tolte_mark": 143,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-02..2020-11-03",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-11-03"
     }
    },
    "storia_ok": true,
@@ -4862,6 +5563,23 @@
      "barre": 5957,
      "tolte_last": 42,
      "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-04-01",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-04-01"
+    },
+    "1h": {
+     "barre": 23825,
+     "tolte_last": 168,
+     "tolte_mark": 125,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -4971,6 +5689,23 @@
      "barre": 7594,
      "tolte_last": 42,
      "tolte_mark": 38,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-01..2020-07-02",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-07-02"
+    },
+    "1h": {
+     "barre": 30375,
+     "tolte_last": 168,
+     "tolte_mark": 153,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -5098,6 +5833,22 @@
       "2020-02-11"
      ],
      "primo_giorno_in_comune": "2020-02-11"
+    },
+    "1h": {
+     "barre": 33880,
+     "tolte_last": 192,
+     "tolte_mark": 3,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-11"
+     ],
+     "primo_giorno_in_comune": "2020-02-11"
     }
    },
    "storia_ok": true,
@@ -5211,6 +5962,21 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2021-12-24"
+    },
+    "1h": {
+     "barre": 17540,
+     "tolte_last": 48,
+     "tolte_mark": 137,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-12-23..2021-12-24",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-12-24"
     }
    },
    "storia_ok": true,
@@ -5299,6 +6065,22 @@
      "barre": 8416,
      "tolte_last": 48,
      "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-19..2020-02-20"
+     ],
+     "primo_giorno_in_comune": "2020-02-20"
+    },
+    "1h": {
+     "barre": 33664,
+     "tolte_last": 192,
+     "tolte_mark": 21,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -5424,6 +6206,22 @@
       "2020-10-13"
      ],
      "primo_giorno_in_comune": "2020-10-13"
+    },
+    "1h": {
+     "barre": 28001,
+     "tolte_last": 192,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-13"
+     ],
+     "primo_giorno_in_comune": "2020-10-13"
     }
    },
    "storia_ok": true,
@@ -5520,6 +6318,23 @@
      "barre": 7421,
      "tolte_last": 42,
      "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-31",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-07-31"
+    },
+    "1h": {
+     "barre": 29681,
+     "tolte_last": 168,
+     "tolte_mark": 125,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -5640,6 +6455,21 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2021-12-31"
+    },
+    "1h": {
+     "barre": 17373,
+     "tolte_last": 48,
+     "tolte_mark": 145,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-12-30..2021-12-31",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-12-31"
     }
    },
    "storia_ok": true,
@@ -5731,6 +6561,22 @@
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-04"
+     ],
+     "primo_giorno_in_comune": "2020-09-04"
+    },
+    "1h": {
+     "barre": 28937,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
       "2022-10-02",
       "2023-02-24"
      ],
@@ -5843,6 +6689,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2021-01-25"
+    },
+    "1h": {
+     "barre": 25409,
+     "tolte_last": 168,
+     "tolte_mark": 125,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-25",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-01-25"
     }
    },
    "storia_ok": true,
@@ -5924,6 +6787,21 @@
      "barre": 6203,
      "tolte_last": 42,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-02-24"
+     ],
+     "primo_giorno_in_comune": "2021-02-24"
+    },
+    "1h": {
+     "barre": 24809,
+     "tolte_last": 168,
+     "tolte_mark": 5,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -6043,6 +6921,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-12-08"
+    },
+    "1h": {
+     "barre": 26561,
+     "tolte_last": 168,
+     "tolte_mark": 123,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-12-08",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-12-08"
     }
    },
    "storia_ok": true,
@@ -6149,6 +7044,21 @@
       "2020-08-14"
      ],
      "primo_giorno_in_comune": "2020-08-14"
+    },
+    "1h": {
+     "barre": 29465,
+     "tolte_last": 168,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-14"
+     ],
+     "primo_giorno_in_comune": "2020-08-14"
     }
    },
    "storia_ok": true,
@@ -6232,6 +7142,21 @@
      "barre": 6047,
      "tolte_last": 42,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-22"
+     ],
+     "primo_giorno_in_comune": "2021-03-22"
+    },
+    "1h": {
+     "barre": 24185,
+     "tolte_last": 168,
+     "tolte_mark": 4,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -6364,6 +7289,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-09-16"
+    },
+    "1h": {
+     "barre": 28553,
+     "tolte_last": 168,
+     "tolte_mark": 140,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-15..2020-09-16",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-16"
     }
    },
    "storia_ok": true,
@@ -6473,6 +7415,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-09-04"
+    },
+    "1h": {
+     "barre": 28841,
+     "tolte_last": 168,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-04",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-04"
     }
    },
    "storia_ok": true,
@@ -6555,6 +7514,21 @@
      "barre": 7510,
      "tolte_last": 42,
      "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-21"
+     ],
+     "primo_giorno_in_comune": "2020-07-21"
+    },
+    "1h": {
+     "barre": 30039,
+     "tolte_last": 168,
+     "tolte_mark": 6,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -6665,6 +7639,21 @@
       "2020-05-26..2020-05-27"
      ],
      "primo_giorno_in_comune": "2020-05-27"
+    },
+    "1h": {
+     "barre": 31360,
+     "tolte_last": 168,
+     "tolte_mark": 21,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-05-26..2020-05-27"
+     ],
+     "primo_giorno_in_comune": "2020-05-27"
     }
    },
    "storia_ok": true,
@@ -6751,6 +7740,21 @@
      "barre": 7013,
      "tolte_last": 42,
      "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-12"
+     ],
+     "primo_giorno_in_comune": "2020-10-12"
+    },
+    "1h": {
+     "barre": 28049,
+     "tolte_last": 168,
+     "tolte_mark": 4,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -6874,6 +7878,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-01-15"
+    },
+    "1h": {
+     "barre": 34432,
+     "tolte_last": 168,
+     "tolte_mark": 125,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-01-15"
     }
    },
    "storia_ok": true,
@@ -6967,6 +7988,23 @@
      "barre": 6203,
      "tolte_last": 42,
      "tolte_mark": 139,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-02-01..2021-02-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-02-19"
+    },
+    "1h": {
+     "barre": 24809,
+     "tolte_last": 168,
+     "tolte_mark": 559,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -7079,6 +8117,21 @@
       "2020-09-17..2020-09-18"
      ],
      "primo_giorno_in_comune": "2020-09-18"
+    },
+    "1h": {
+     "barre": 28625,
+     "tolte_last": 168,
+     "tolte_mark": 24,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-17..2020-09-18"
+     ],
+     "primo_giorno_in_comune": "2020-09-18"
     }
    },
    "storia_ok": true,
@@ -7165,6 +8218,23 @@
      "barre": 8428,
      "tolte_last": 42,
      "tolte_mark": 32,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-14",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-14"
+    },
+    "1h": {
+     "barre": 33712,
+     "tolte_last": 168,
+     "tolte_mark": 125,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -7284,6 +8354,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-08-12"
+    },
+    "1h": {
+     "barre": 29393,
+     "tolte_last": 168,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-12",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-12"
     }
    },
    "storia_ok": true,
@@ -7370,6 +8457,23 @@
      "barre": 6131,
      "tolte_last": 42,
      "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-03",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-03"
+    },
+    "1h": {
+     "barre": 24521,
+     "tolte_last": 168,
+     "tolte_mark": 124,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -7491,6 +8595,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-01-20"
+    },
+    "1h": {
+     "barre": 34312,
+     "tolte_last": 168,
+     "tolte_mark": 143,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-19..2020-01-20",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-01-20"
     }
    },
    "storia_ok": true,
@@ -7593,6 +8714,21 @@
       "2020-02-01..2020-02-03"
      ],
      "primo_giorno_in_comune": "2020-02-03"
+    },
+    "1h": {
+     "barre": 34096,
+     "tolte_last": 168,
+     "tolte_mark": 56,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-01..2020-02-03"
+     ],
+     "primo_giorno_in_comune": "2020-02-03"
     }
    },
    "storia_ok": true,
@@ -7685,6 +8821,21 @@
      "barre": 8506,
      "tolte_last": 42,
      "tolte_mark": 13,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04..2020-02-06"
+     ],
+     "primo_giorno_in_comune": "2020-02-06"
+    },
+    "1h": {
+     "barre": 34024,
+     "tolte_last": 168,
+     "tolte_mark": 51,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -7798,6 +8949,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-08-31"
+    },
+    "1h": {
+     "barre": 28937,
+     "tolte_last": 168,
+     "tolte_mark": 122,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-31",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-31"
     }
    },
    "storia_ok": true,
@@ -7889,6 +9057,23 @@
      "barre": 8482,
      "tolte_last": 42,
      "tolte_mark": 37,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04..2020-02-05",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-05"
+    },
+    "1h": {
+     "barre": 33928,
+     "tolte_last": 168,
+     "tolte_mark": 147,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",
@@ -8012,6 +9197,23 @@
       "2022-04-01..2022-04-02"
      ],
      "primo_giorno_in_comune": "2020-06-18"
+    },
+    "1h": {
+     "barre": 30711,
+     "tolte_last": 168,
+     "tolte_mark": 146,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-17..2020-06-18",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-06-18"
     }
    },
    "storia_ok": true,
@@ -8103,6 +9305,21 @@
      "barre": 7672,
      "tolte_last": 42,
      "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-24"
+     ],
+     "primo_giorno_in_comune": "2020-06-24"
+    },
+    "1h": {
+     "barre": 30687,
+     "tolte_last": 168,
+     "tolte_mark": 7,
      "intervalli_tolte_last": [
       "2021-07-01",
       "2021-07-24..2021-07-27",

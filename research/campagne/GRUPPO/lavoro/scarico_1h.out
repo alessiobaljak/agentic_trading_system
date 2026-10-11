@@ -8,3 +8,10 @@ file da controllare o scaricare: 6122
 3500/6122 in 356 s
 4000/6122 in 407 s
 4500/6122 in 458 s
+5000/6122 in 508 s
+5500/6122 in 557 s
+6000/6122 in 606 s
+finito in 619 s
+errori: 0 checksum mancanti: 0
+impronte scritte: klines_1h.json 3061 file
+impronte scritte: markPriceKlines_1h.json 3061 file
