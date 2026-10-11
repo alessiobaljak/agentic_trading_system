@@ -78,3 +78,13 @@ regola dei ritocchi, sì o no. Il vault si apre solo con «APRI IL VAULT».
    sessione. Il vault aspetta la consegna della campagna di gruppo (Passo 5, prerequisiti).
 2. **Rifare BTCUSDT: no.** La consegna 4.4 di BTCUSDT resta valida (era già il primo dei tre punti approvati con la
    4.5) e il suo candidato BTCUSDT-V10 resta fra i tre per il vault.
+
+## Passo 4bis: la campagna di gruppo ha consegnato (11 ottobre 2026, 07:49 UTC)
+
+**Nessuna strategia valida trovata per il gruppo** (`research/campagne/GRUPPO/consegna.md`, commit 121eb4ab sul branch
+`research/campagna/GRUPPO`): 30 varianti su 30 (20 idee nuove, 10 ritocchi), 6 scarti, nessun candidato; la più
+vicina t 2,06 contro la soglia 2,16 (GRUPPO-048). La prova a placebo di gruppo dice che l'esame regge
+(`research/taratura/placebo_gruppo/risultati.md`). Per il vault restano i 3 candidati delle monete singole:
+BTCUSDT-V10, BNBUSDT e ADAUSDT. La regola sul trasferimento del candidato di gruppo (scelta (2) del 10 ottobre) è
+senza oggetto. Prerequisiti del Passo 5 che mancano: rilanciare i test da rieseguire, e la frase «APRI IL VAULT» del
+proprietario.
