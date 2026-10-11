@@ -1,0 +1,6 @@
+[
+ ["i24_candela_inversione.py", {"direzione": "long", "tendenza": 5, "ombra": 0.6, "chiusura_quota": 0.67, "tenuta": 2, "atr": 14, "stop_atr": 3.0}, 86400000],
+ ["i24_candela_inversione.py", {"direzione": "short", "tendenza": 5, "ombra": 0.6, "chiusura_quota": 0.67, "tenuta": 2, "atr": 14, "stop_atr": 3.0}, 86400000],
+ ["i26_residuo_momento.py", {"direzione": "long", "orizzonte": 21, "finestra_beta": 90, "soglia_z": 1.0, "tenuta": 7, "atr": 14, "stop_atr": 3.0}, 86400000],
+ ["i26_residuo_momento.py", {"direzione": "short", "orizzonte": 21, "finestra_beta": 90, "soglia_z": 1.0, "tenuta": 7, "atr": 14, "stop_atr": 3.0}, 86400000]
+]

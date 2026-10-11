@@ -601,3 +601,95 @@ per direzione. Modulo `codice/i19_residuo.py`:
 
 Previsione (al netto dei costi): long R medio fra −0,05 e +0,08, `t` fra −1 e +2; short R medio fra −0,08 e +0,05,
 `t` fra −1,5 e +1. Criterio di successo: candidato.
+
+---
+
+*Idee aggiunte l'11 ottobre 2026, dopo i primi 12 test (scritte prima dei loro test). Perché queste: i test su 1d
+hanno mostrato che l'esame di gruppo pesa molto gli ingressi che cadono negli stessi giorni su tutte le monete
+(pavimento delle sfasate); si cercano meccanismi in famiglie diverse da quelle già provate e con ingressi propri di
+ogni moneta. È una scelta di famiglie, non di parametri: nessun parametro qui viene da un risultato.*
+
+## I-24 — Candela di inversione dopo un movimento
+
+**1. Fonte.** Gunduz Caginalp, Henry Laurent, «The predictive power of price patterns», Applied Mathematical Finance
+5(3-4), 1998: le figure di inversione delle candele giapponesi, dopo un movimento, hanno potere predittivo sui
+giorni successivi nei titoli dell'indice S&P 500.
+
+**2. Affermazione verificabile.** Dopo un calo di 5 giorni, una barra con ombra bassa lunga (almeno il 60%
+dell'intervallo) e chiusura nella parte alta (almeno il 67% dell'intervallo dal minimo) — chi vendeva è stato
+respinto — è seguita da 2 giorni con rendimento più alto del caso. Per il gruppo: il long così ha R medio sopra la
+(b) e la (a); lo short simmetrico (stella cadente dopo un rialzo) idem.
+
+**Perché su monete diverse per la stessa ragione.** La figura descrive un rifiuto del prezzo dentro la barra
+(vendite assorbite da compratori): un fatto di chi scambia in quella barra, non della moneta. Gli ingressi
+dipendono dalla barra della singola moneta e cadono meno insieme di quelli delle idee di mercato.
+
+**3. Sotto-domande.** Vale con volume alto nella barra? Più nelle monete liquide? Quanto dura: 1-3 giorni? Chi opera:
+venditori forzati respinti, compratori che entrano sul minimo.
+
+**4-5. Spiegazioni concorrenti.**
+1. *Effetto casuale.* Prevede `t` vicino a 0. Smentita: `t` sopra la soglia.
+2. *È solo il mercato, prima forma.* La figura arriva nei giorni di rimbalzo del mercato intero. Prevede (b) vicina. Smentita: batte nettamente la (b).
+3. *È solo il mercato, seconda forma: una sola scommessa ripetuta.* Le figure cadono negli stessi giorni (rimbalzi generali dopo i cali). Prevede pavimento delle sfasate alto. Smentita: batte nettamente con il pavimento.
+4. *La figura non dice nulla sulle crypto (mercato 24 ore, niente apertura e chiusura vere).* La barra giornaliera UTC è un taglio arbitrario. Prevede `t` vicino a 0. Smentita: `t` positivo.
+5. *Continuazione del calo.* Prevede `t` negativo. Smentita: `t` positivo.
+6. *Volatilità.* Le figure arrivano con intervalli larghi: ATR alto, R compresso. Prevede R vicino a 0. Smentita: R netto positivo.
+7. *Costi.* Due giorni di tenuta, costo circa 0,008 R con stop a 3 ATR: non decide. Controllo.
+8. *Pochi trade estremi.* Prevede che le prove degli estremi cadano. Smentita: superate.
+9. *Trend di fondo.* Prevede R per anno legato al buy and hold. Smentita: R positivo in più della metà degli anni con almeno 100 trade.
+10. *Troppo pochi segnali.* Figure rare: rischio di trade sotto 700 (scarto). Da dichiarare.
+11. *Artefatto dei dati.* Barre con massimo o minimo errati (picchi isolati) fanno ombre finte. Prevede segnali concentrati su poche barre anomale. Smentita: trade diffusi.
+
+**6. Ipotesi completa.** Tutte le 80 monete; meccanismo: rifiuto del prezzo dentro la barra dopo un movimento;
+timeframe 1d (la fonte usa candele giornaliere); una variante per direzione. Modulo `codice/i24_candela_inversione.py`:
+* **I-24-L** long: `{"direzione": "long", "tendenza": 5, "ombra": 0.6, "chiusura_quota": 0.67, "tenuta": 2, "atr": 14,
+  "stop_atr": 3.0}`. 5 giorni di calo prima; ombra di almeno il 60% e chiusura nel terzo alto: la definizione usuale
+  del martello; tenuta 2 giorni, l'orizzonte breve della fonte.
+* **I-24-S** short: gli stessi parametri con `"direzione": "short"`.
+
+Previsione (al netto dei costi): R medio fra −0,05 e +0,06, `t` fra −1 e +1,5 in entrambe le direzioni; rischio di
+scarto per trade sotto 700. Criterio di successo: candidato.
+
+---
+
+## I-26 — Momento del rendimento proprio della moneta, al netto di BTC
+
+**1. Fonte.** David Blitz, Joop Huij, Martin Martens, «Residual momentum», Journal of Empirical Finance 18(3), giugno
+2011: il momento calcolato sui rendimenti al netto dei fattori comuni è più stabile del momento sui rendimenti
+totali, perché non dipende dall'esposizione al mercato.
+
+**2. Affermazione verificabile.** Quando il rendimento proprio della moneta delle ultime 3 settimane (residuo
+rispetto a BTC, beta stimato sui 90 giorni prima) è alto (z sopra 1), la settimana dopo la moneta continua a fare
+meglio. Per il gruppo: il long così, tenuto 7 giorni, ha R medio sopra la (b) e la (a); lo short simmetrico (z sotto
+−1) idem.
+
+**Perché su monete diverse per la stessa ragione.** La parte del rendimento che non viene da BTC è la notizia propria
+della moneta; la sottoreazione alle notizie proprie è un comportamento degli investitori. Togliere BTC toglie la
+parte del momento che è solo il mercato (I-01) e rende gli ingressi meno sincronizzati fra le monete.
+
+**3. Sotto-domande.** Il residuo rispetto a BTC basta, o resta il trend comune delle alt? Quanto dura? Chi opera:
+investitori che reagiscono lentamente alle notizie della singola moneta.
+
+**4-5. Spiegazioni concorrenti.**
+1. *Effetto casuale.* Prevede `t` vicino a 0. Smentita: `t` sopra la soglia.
+2. *È solo il mercato, prima forma.* Il residuo rispetto a BTC contiene il trend comune delle alt. Prevede risultato simile a I-01. Smentita: batte nettamente la (b).
+3. *È solo il mercato, seconda forma.* Residui alti negli stessi periodi (stagioni delle alt). Prevede pavimento delle sfasate alto. Smentita: batte nettamente con il pavimento.
+4. *Inversione (I-19 a orizzonte più lungo).* Prevede `t` negativo. Smentita: `t` positivo.
+5. *Beta instabile.* Residuo dominato dall'errore del beta. Prevede `t` vicino a 0. Smentita: `t` positivo.
+6. *Pochi trade estremi.* Poche monete con rialzi propri enormi. Prevede che le prove degli estremi cadano. Smentita: superate.
+7. *Trend di fondo.* Prevede R per anno legato al buy and hold. Smentita: R positivo in più della metà degli anni.
+8. *Volatilità.* Prevede R compresso. Smentita: R netto positivo.
+9. *Costi e funding.* Le monete che salgono più di BTC hanno funding alto: il long paga. Prevede R netto sotto il lordo. Controllo.
+10. *Sopravvivenza.* Le monete vive hanno avuto residui positivi persistenti. Prevede (b) long positiva. Smentita: batte la (b).
+11. *Potenza bassa contro la (a).* Con tenuta 7 l'errore della (a) di gruppo è grande (nota GRUPPO-011): rischio di battere la (b) ma non la (a). Da dichiarare.
+
+**6. Ipotesi completa.** Tutte le 80 monete; meccanismo: sottoreazione alle notizie proprie della moneta; timeframe
+1d (orizzonte di settimane); una variante per direzione. Modulo `codice/i26_residuo_momento.py` (lo stesso calcolo
+del residuo di I-19, con il segno della condizione opposto):
+* **I-26-L** long: `{"direzione": "long", "orizzonte": 21, "finestra_beta": 90, "soglia_z": 1.0, "tenuta": 7,
+  "atr": 14, "stop_atr": 3.0}`. 21 giorni come I-01 (così le due idee si leggono una contro l'altra); beta su 90
+  giorni prima del movimento; z sopra 1: un residuo forte ma non raro; tenuta una settimana.
+* **I-26-S** short: gli stessi parametri con `"direzione": "short"`.
+
+Previsione (al netto dei costi): long R medio fra −0,03 e +0,08, `t` fra −1 e +2; short R medio fra −0,05 e +0,04,
+`t` fra −1,5 e +1,5. Criterio di successo: candidato.
