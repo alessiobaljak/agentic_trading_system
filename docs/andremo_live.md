@@ -3521,3 +3521,18 @@ vault» in minuscolo: il coordinamento ha chiesto la frase esatta, come vuole il
 tutte le campagne consegnate (20 monete e il gruppo), test della ricerca rieseguiti (2374 passati, 11 ott), esito
 della prova a placebo per moneta (9 ott: regge). Il file d'apertura si crea appena i lanciatori dei tre candidati sono
 corretti, verificati e committati, così il codice che giudica è congelato prima di vedere i dati.
+
+### 11 ottobre, 21:26 ora italiana: vault aperto (Passo 5)
+
+Il file d'apertura è sul branch di coordinamento (`research/vault/APERTURA.md`, commit de09b557, 19:26 UTC): i tre
+candidati congelati (BTCUSDT-V10, BNBUSDT-045, ADAUSDT-037) con gli SHA-256 dei loro file, ricontrollati contro i
+commit delle campagne; probabilità per moneta del trasferimento 0,02; le scelte scritte prima dei dati (semi 0-999 per
+le 1000 entrate casuali, serie calda dall'inizio della campagna e trade contati dal 2024-01-01, stesso criterio per le
+fittizie, regola dei dati che non consuma il vault prima di eseguire il candidato) e le impronte dei tre lanciatori,
+committati prima (commit 92946ab2). I lanciatori rifanno a vault chiuso la validazione consegnata: identica per BNB, a
+meno dell'ultima cifra del p-value per BTC e ADA (virgola mobile dell'ambiente); tre giri di verifica avversaria. I
+candidati girano una volta sola, uno alla volta.
+
+Fuori dal vault: le e-mail di GitHub venivano da un test che falliva solo su GitHub dal 10 ottobre (lo script lanciato
+a parte non trovava il pacchetto `research` senza PYTHONPATH): corretto, la prova su GitHub è tornata verde (run
+38165200292). Il workflow dei test ora gira solo sul branch principale.
