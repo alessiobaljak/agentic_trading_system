@@ -1,6 +1,6 @@
 # Backlog — solo le cose DA FARE o IN ATTESA
 
-**Aggiornato il 10 ottobre 2026, 07:45 ora italiana.** Su richiesta del proprietario qui restano
+**Aggiornato l'11 ottobre 2026, 10:30 ora italiana.** Su richiesta del proprietario qui restano
 solo le voci ancora da fare o in attesa di qualcosa. Le voci fatte e le misure già avviate (che si
 leggono da sole alla loro data: 3, 7, 14 ott, metà novembre) sono in `docs/backlog_archivio.md`,
 con tutti i numeri; il calendario delle letture è nel diario (`docs/andremo_live.md`) e nel
@@ -14,8 +14,8 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | nessuna | una tua risposta |
-| **1. In lavorazione** | P0 (il protocollo di ricerca: tre campagne 4.4 consegnate l'8 ott, un candidato al vault; allo STOP), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
+| **0. Aspettano il tuo sì** | P4 (aprire il vault per i 3 candidati delle monete singole) | la frase «APRI IL VAULT» |
+| **1. In lavorazione** | P0 (il protocollo di ricerca: 20 monete e il gruppo consegnati, 3 candidati per il vault; allo STOP prima del vault), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
 | **4. Prima dei soldi veri** | C4, K8, K5, K6, K4 | la decisione di passare a soldi veri |
@@ -32,21 +32,22 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
-### P3. Campagna di gruppo: due scelte che il coordinamento ha preso per te il 10 ott (puoi cambiarle)
-**Perché:** il 10 ott alle 06:35 UTC il proprietario ha approvato in anticipo il testo della campagna di gruppo
-(«il testo è approvato appena hai finito, parti con l'esecuzione») ed è uscito. Due punti erano domande per lui.
-**Cosa:** (1) **Taglio comune** fra costruzione e validazione per tutte le 80 monete (costruzione fino al
-2023-01-16, validazione dal 2023-01-17 al 2023-12-31) al posto del 70/30 per moneta già approvato: con il 70/30 il
-34,5% dei giorni-moneta di validazione (9.666 su 27.986) cadrebbe nella costruzione di un'altra moneta (calcolo del
-coordinamento sui primi mesi delle schede). Si può tornare indietro solo prima del lancio della prova a placebo di
-gruppo. (2) **Trasferimento del candidato di gruppo**: oggi vale il Passo 6 moneta per moneta, dove un candidato di
-gruppo darebbe spesso «non si sa» (pochi trade per moneta, stima); il coordinamento propone di rendere decisiva la
-prova sui trade sommati delle monete fuori dal gruppo (`research/campagne/GRUPPO/regole.md`, sezione 10, punto 2).
-Va deciso prima di «APRI IL VAULT». **Non cambia:** le 20 campagne consegnate e i 3 candidati.
+### P4. Aprire il vault per i 3 candidati delle monete singole (BTCUSDT, BNBUSDT, ADAUSDT)
+**Perché:** il protocollo di ricerca è arrivato al Passo 5. Le 20 campagne per moneta hanno consegnato il 9 ott con 3
+candidati confermati, tutti fragili per dichiarazione delle campagne (`research/passo4/riepilogo.md`, branch di
+coordinamento); la campagna di gruppo ha consegnato l'11 ott alle 07:49 UTC «nessuna strategia valida trovata per il
+gruppo» (30 varianti su 30, nessuna diventata candidato; `research/campagne/GRUPPO/consegna.md` sul suo branch); le due
+prove a placebo dicono che gli esami reggono (per moneta il 9 ott, di gruppo l'11 ott). **Cosa:** solo dopo la frase
+«APRI IL VAULT» scritta dal proprietario, il coordinamento rilancia i test da rieseguire (prerequisito del Passo 5),
+crea `vault/APERTURA.md`, scarica i dati dal 2024-01-01 al 2026-09-30 e giudica i 3 candidati una volta sola (Passo
+5), poi il trasferimento (Passo 6). **Non cambia:** il bot, il gate, il paper. Il vault si apre una volta sola.
+**Le due scelte del 10 ott (ex P3, chiusa l'11 ott):** il taglio comune fra costruzione e validazione è stato usato
+dalla campagna di gruppo e non si può più cambiare; la regola sul trasferimento del candidato di gruppo è rimasta
+senza oggetto, perché il gruppo non ha candidati.
 
 ## 1. In lavorazione
 
-### P0. Il protocollo di ricerca per moneta — versione 4.5 (approvata il 9 ott). TUTTE E 20 LE MONETE HANNO CONSEGNATO il 9 ott: 3 candidati confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; riepilogo in `research/passo4/riepilogo.md` sul branch di coordinamento). Il 10 ott il proprietario ha deciso: (1) SÌ alla campagna di gruppo prima del vault, (2) NO a rifare BTCUSDT. IN CORSO (10 ott sera): testo completo della campagna di gruppo (`research/campagne/GRUPPO/regole.md`) IN VIGORE dalle 17:11 UTC dopo tre giri di revisione; strumenti e guardiano committati (research/src/tests 2374 passati); prova a placebo di gruppo lanciata alle 17:11 UTC (circa 15-16 ore, stima); sessione di gruppo aperta alle 17:12 UTC (session_01FzzZ5SUK8q2QzvhreZxD74), controllo orario attivo. Il vault si apre solo con «APRI IL VAULT», dopo la consegna del gruppo
+### P0. Il protocollo di ricerca per moneta — versione 4.5 (approvata il 9 ott). TUTTE E 20 LE MONETE HANNO CONSEGNATO il 9 ott: 3 candidati confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; riepilogo in `research/passo4/riepilogo.md` sul branch di coordinamento). Il 10 ott il proprietario ha deciso: (1) SÌ alla campagna di gruppo prima del vault, (2) NO a rifare BTCUSDT. L'11 ott la campagna di gruppo ha consegnato «nessuna strategia valida» (30 varianti su 30) e la prova a placebo di gruppo dice che l'esame di gruppo regge (`research/taratura/placebo_gruppo/risultati.md`, branch di coordinamento). Il vault si apre solo con «APRI IL VAULT» (voce P4)
 **Perché:** cinque misure indipendenti dicono la stessa cosa: il gate non trova un vantaggio. Entrate a caso rendono come i segnali (240 trade, ops 0471); dopo la scelta del gate le validate fanno −0,03R su 182 segnali ±0,17 (ops 0498, lettura stampata: «la prossima modifica va nel gate»); una candidata nuova a caso non passa quasi mai (0 su 3.600, ops 0485); i costi superano il lordo (−0,089R netti, +0,088R di costi su 241, ops 0489); il gate rigiocato nel passato, su 8 date, dà promosse peggiori delle bocciate (−0,22R contro −0,14R su 45 trade, non decide, ops 0502). Aspettare il 14 ott non cambia il verdetto.
 **Cosa:** salvare `research/PROTOCOLLO.md` (versione 4.2, rivista il 5 ott) ed eseguire il **Passo 0**: fatti (fonte dati e contratti delistati, commissioni, serie degli stop, regole di dimensione e forma di esecuzione del bot), motore con il blocco del periodo chiuso, test di controllo, tabella dei parametri da approvare. Non tocca dati di mercato né il bot. **Regola scritta prima:** il Passo 0 finisce con una tabella e uno STOP; nessuna campagna parte senza l'approvazione dei parametri. **Metro:** la tabella completa, i test di controllo passati, e la risposta alla domanda «il bot può eseguire una strategia scritta come codice?». **Non cambia:** bot, gate, paper, registro; le letture del 7 e 14 ott restano.
 

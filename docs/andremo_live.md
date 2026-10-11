@@ -3481,3 +3481,28 @@ Routine da una sola esecuzione legato a quella sessione (trig_01EntrBhUwHSBKrFBd
 UTC) è partito alle 07:59:42 UTC con esito «consegnato», e la sessione ha lavorato sul messaggio subito dopo (ultimo
 aggiornamento 07:59:49 UTC). **Il canale funziona**, con circa 40 secondi di ritardo sull'orario programmato. Sessione
 di prova archiviata. Il via libera alla sessione di gruppo si manderà così, con il promemoria a 15 minuti.
+
+### 11 ottobre, 10:30 ora italiana: la campagna di gruppo ha consegnato — nessuna strategia valida
+
+Consegna alle 07:49 UTC (commit 121eb4ab sul branch `research/campagna/GRUPPO`, sessione
+session_01Lt3FVBCW5Kg531Pe7rjHRp ferma allo STOP finale). Riga del verdetto in `consegna.md`: «Esito: nessuna strategia
+valida trovata per il gruppo.» Budget usato per intero: 30 varianti (20 da idee nuove con fonte, 10 ritocchi su due
+famiglie) più 6 scarti per la stima dei trade. Log: 85 voci (30 registrazioni, 30 risultati, 6 scarti, 18 note, 1
+correzione). Controllo del coordinamento sul log: le 30 voci di risultato hanno tutte «candidato» falso e sono tutte
+valutabili. Nessun candidato, quindi nessuna validazione: il periodo 2023 non è stato usato e il via libera non è
+servito. La più vicina: t 2,06 contro la soglia 2,16 (GRUPPO-048, R medio dopo i costi +0,008).
+
+Ora che il gruppo ha consegnato, i numeri della prova a placebo di gruppo possono entrare qui (regole.md, sezione 11,
+punto 5): 192 prove, 0 errori; 0 «nette» su 85 in costruzione (limite 2), 2 su 93 sotto p 0,10 in validazione (limite
+12), condizione sull'insieme 0,19% (limite 3%) e 2,95% (limite 13%); deviazione standard degli z 0,67 e 0,64; effetto
+grappolo mediano 12,5 e 12,2. Tre controllori indipendenti hanno rifatto i conti senza smentire l'esito
+(`research/taratura/placebo_gruppo/risultati.md`, commit eddee347, branch di coordinamento).
+
+Spento il controllo orario della campagna di gruppo (lavoro finito). Nel backlog la voce P3 (le due scelte del 10 ott)
+è chiusa: il taglio comune è stato usato, la regola sul trasferimento del candidato di gruppo è senza oggetto. Nuova
+voce P4 nel gruppo 0: aprire il vault per i 3 candidati delle monete singole, solo con «APRI IL VAULT».
+
+Cosa abbiamo capito: con 80 monete che si muovono insieme i trade sommati valgono circa un dodicesimo del loro numero,
+e gli effetti trovati (ritardo dopo BTC, rientro rispetto a BTC) sono veri ma più piccoli dei costi; l'esame di gruppo
+è affidabile contro il rumore e severo, quindi «nessuna strategia valida» vuol dire «nessun vantaggio che si distingua
+dal caso con questi dati», non «nessun vantaggio» (la campagna lo scrive da sé nei limiti).
