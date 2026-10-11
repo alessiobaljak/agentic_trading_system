@@ -1694,6 +1694,7 @@ def test_un_processo_che_muore_ferma_l_esame_invece_di_lasciarlo_fermo(tmp_path)
     Si prova in un interprete a parte con un tempo massimo: se l'esame restasse fermo il test fallirebbe
     invece di bloccare la suite.
     """
+    import os
     import subprocess
     import sys
 
@@ -1723,9 +1724,13 @@ def test_un_processo_che_muore_ferma_l_esame_invece_di_lasciarlo_fermo(tmp_path)
     con_guardia.write_text(corpo + f"if __name__ == '__main__':\n    prova({str(variante)!r})\n", "utf-8")
     senza_guardia = tmp_path / "senza_guardia.py"
     senza_guardia.write_text(corpo + "prova(VARIANTE)\n", "utf-8")
+    # lo script sta in tmp_path: Python mette nel percorso la sua cartella, non cwd, quindi il pacchetto `research`
+    # si trova solo con PYTHONPATH (in locale lo mette lo script d'avvio della sessione, su GitHub no)
+    ambiente = dict(os.environ)
+    ambiente["PYTHONPATH"] = os.pathsep.join(filter(None, [str(RADICE_REPO), ambiente.get("PYTHONPATH")]))
     for script in (con_guardia, senza_guardia):
         uscita = subprocess.run([sys.executable, str(script)], cwd=RADICE_REPO, capture_output=True, text=True,
-                                timeout=180)
+                                timeout=180, env=ambiente)
         righe = [r for r in uscita.stdout.splitlines() if r.startswith("ESITO")]
         assert righe == ["ESITO: ErroreDiMoneta True"], (script.name, uscita.stdout[-2000:], uscita.stderr[-2000:])
     # un SystemExit del codice della variante diventa ErroreDiMoneta anche nel processo che chiama
