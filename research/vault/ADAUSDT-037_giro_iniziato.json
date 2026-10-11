@@ -1,0 +1,107 @@
+{
+ "candidato": "ADAUSDT-037",
+ "etichetta": "vault",
+ "stato": "finito",
+ "motivo": null,
+ "dettagli": null,
+ "nota": "creato in modo esclusivo (O_EXCL) PRIMA di scaricare e leggere i dati del periodo (R2, D5): finche' esiste, il giro non riparte, salvo la ripresa dello stesso giro (stessa impronta d'avvio). Finche' candidato_eseguito e' false, uno STOP non ha consumato il vault (D4).",
+ "candidato_eseguito": true,
+ "impronta_avvio_sha256": "312ac0a6dfe3b19dca2677248247085ec7e5f9d865546367c9790132713c503a",
+ "impronta_avvio": {
+  "candidato": "ADAUSDT-037",
+  "etichetta": "vault",
+  "lanciatore": "/home/user/coordinamento/research/vault_strumenti/ADAUSDT.py",
+  "sha256_lanciatore": "ed89a4d0104762bae6345b7c562ee8f79c900a9a3df17ef328edf72b70064c98",
+  "versioni": {
+   "python": "3.11.17",
+   "numpy": "1.26.4",
+   "scipy": "1.13.0"
+  },
+  "commit": "47d6b2cce7d9ac8983c0bfa680c5c82696eae6aa",
+  "sha256_codice": {
+   "research/campagne/ADAUSDT/candidati/ADAUSDT-037/regole.md": "731a06569ef2d6f4408af87c648b7e2b0f3b92a02475ff41a27241b5c73654c9",
+   "research/campagne/ADAUSDT/codice/varianti.py": "e447ec1898e2b62f0600a9e0450fb8da3b6544590a8e7abf0f0c51bbdad04841",
+   "research/campagne/ADAUSDT/codice/comune.py": "acf2086ab5c3f302dfc1f5b708398197e33f6a7683f23426b3ceeb323a667215",
+   "research/campagne/ADAUSDT/codice/registrazioni.py": "861f7dc8761a21f07138ceef2a9aa9ab1cd14813e28936fb3dc91768cd3913bd",
+   "research/campagne/ADAUSDT/codice/validazione.py": "228e16a68d05e9312303eaf240775300a5bd91f2098a6eb9a5f143ef19c214cf",
+   "research/campagne/ADAUSDT/codice/run.py": "99f50c6ca28b05a894ebbf5bb8ebe0bb39df9ebc32d05d2602f4d0dbac7f945f",
+   "research/campagne/ADAUSDT/codice/registro.py": "a2629684dcba6d344e7050343c63d884f56c2e2df7d538fd7b6eac091ebc48d3",
+   "research/src/dati.py": "395b52409494f79ebec28a57866162b60aa37750cb15482232f536b3bf49a950",
+   "research/src/motore.py": "b3d5e1a93954f5b8cad34b74937592cf2b0ade237cbcc1e789a0ee195e6b0970",
+   "research/src/statistica.py": "e5d5f0e42b7f4823b6db4a91152b32fc6b2d2bf6b0b3bddf4183ee542d1c3f92",
+   "research/src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "research/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "research/campagne/ADAUSDT/impronte.json": "7d3b9d8915a35db71127933fca3c38d8edf121402772d360ee795f3523ef2911",
+   "research/config/parametri.yaml": "736fe598b5179db70d3f63f134922fea428322ce40476c59c9204740653b066f"
+  },
+  "sha256_apertura": "df3a379d16364e024f7870f0f8c9dbeeb61e1cf9803299c874990407ee0169ce",
+  "regole_esame": {
+   "file": "/home/user/vault_ADAUSDT/research/config/parametri.yaml",
+   "sha256": "736fe598b5179db70d3f63f134922fea428322ce40476c59c9204740653b066f",
+   "stato": "congelato",
+   "simulazioni_caso": 1000,
+   "simulazioni_baseline_casuale": 200,
+   "semi_baseline_casuale": {
+    "primo": 0,
+    "ultimo": 199
+   },
+   "bootstrap": {
+    "ricampionamenti": 2000,
+    "seme": 0
+   },
+   "profit_factor_minimo": 1.1,
+   "trade_minimi_vault": 30,
+   "trade_minimi_vault_sezione_8": 30,
+   "rendimento_totale_positivo": true,
+   "percentile_caso": 90
+  },
+  "n_caso": 1000,
+  "semi_caso": [
+   0,
+   999
+  ],
+  "pezzo": 50,
+  "taglio_ts": 1704067199999,
+  "fine": "2026-09-30",
+  "sha256_dati_insample_elenco": "4a1b4e22780c1f082e6cc397775ed3ff41f7f971afa423d91e50a89ea2a45c14"
+ },
+ "risultato_atteso": "/home/user/coordinamento/research/vault/ADAUSDT-037_vault.json",
+ "avanzamento": "/home/user/coordinamento/research/vault_strumenti/avanzamento/ADAUSDT-037",
+ "tentativi": [
+  {
+   "pid": 9365,
+   "inizio": "2026-10-11T21:32:38Z",
+   "ripresa": false,
+   "candidato_gia_eseguito": false
+  }
+ ],
+ "iniziato": "2026-10-11T21:32:38Z",
+ "storia": [
+  {
+   "data": "2026-10-11T21:32:38Z",
+   "stato": "iniziato: dati del periodo non ancora letti"
+  },
+  {
+   "data": "2026-10-11T21:34:54Z",
+   "stato": "lettura dei dati del periodo (D2-D3), candidato non ancora eseguito"
+  },
+  {
+   "data": "2026-10-11T21:35:18Z",
+   "stato": "candidato in esecuzione: da qui ogni fine scrive un risultato (R5)"
+  },
+  {
+   "data": "2026-10-11T21:38:49Z",
+   "stato": "finito"
+  }
+ ],
+ "sha256_dati_elenco": "c16ce1bde81220368dc9b6eeec8e818bf2cfbc309fcf6d7a09fd3596806df951",
+ "n_file_dati": 324,
+ "impronta_giro": "3743db28c8c5e6cf40ac7153c0251f048cf734d6b7fd0ea4dd2f3d348899b2ec",
+ "sha256_dati_tentativi_precedenti": [],
+ "aggiornato": "2026-10-11T21:38:49Z",
+ "candidato_eseguito_dal": "2026-10-11T21:35:18Z",
+ "risultato": "/home/user/coordinamento/research/vault/ADAUSDT-037_vault.json",
+ "sha256_risultato": "eeb3bb05666ba93dace5b10c4cd6f71fb647c85948e8535175f663ef045ef782",
+ "esito": "non passa",
+ "finito": "2026-10-11T21:38:49Z"
+}
