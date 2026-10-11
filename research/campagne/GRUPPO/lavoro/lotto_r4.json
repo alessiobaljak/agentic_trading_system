@@ -1,0 +1,11 @@
+[
+{"tipo_test": "variante", "idea": "I-07", "variante_nome": "I-07-L-r4", "famiglia": "GRUPPO-040", "ritocco_di": "GRUPPO-046",
+ "fonte": "Koutmos, «Return and volatility spillovers among cryptocurrencies», Economics Letters 173, dicembre 2018 (ritocco)",
+ "meccanismo": "lo stesso di GRUPPO-040: diffusione lenta da BTC alle alt",
+ "cosa_cambia": "rispetto a GRUPPO-046: frazione da 0,25 a 0 (la moneta non è salita affatto nell'ora di BTC); soglia_dev 2,5, tenuta 4, stop, timeframe e direzione uguali",
+ "perche": "ordine della regola 6 dopo GRUPPO-046: in testa GRUPPO-046 (t 2,01; poi 040 1,55, 044 1,49, 037 1,44, 030 1,23); quarto ritocco della famiglia GRUPPO-040 (al massimo 5). Fase 3 di GRUPPO-046: prima dei costi +0,076 R contro un costo di 0,071; GRUPPO-044 (moneta ferma) aveva +0,083 lordo. Un ritardo più netto dovrebbe alzare il lordo per trade, con meno trade di GRUPPO-046 e più di GRUPPO-044.",
+ "timeframe": "1h", "direzione": "long",
+ "modulo": "i07_ritardo_btc.py", "p_file": "p_r4_i07_L.json", "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra -0,02 e +0,04; t contro la (b) fra +0,8 e +2,2; trade fra 1.200 e 2.200",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo e R medio dopo i costi positivo"}
+]
