@@ -38,8 +38,8 @@ perché e cosa si aspetta prima di farla (`docs/backlog.md`).
 giornaliero + proposta dal backlog» e «Paper: referto settimanale» sono spente: non si
 riaccendono, non si eseguono a mano e non si sostituiscono con altro finché il proprietario non lo
 chiede esplicitamente. Un «non farlo domattina» vale per TUTTI i report del mattino, non solo per
-quello nominato (l'11 ott il referto settimanale è partito lo stesso: errore). Resta acceso il
-controllo orario della campagna di gruppo.
+quello nominato (l'11 ott il referto settimanale è partito lo stesso: errore). Anche il controllo
+orario della campagna di gruppo è spento dall'11 ott: la campagna ha consegnato.
 
 **La stella polare e il passo di ogni giorno (aggiunto dal proprietario il 1 ott
 2026).** L'obiettivo qui sopra è la stella polare: ci si punta con tutte le forze. Ma

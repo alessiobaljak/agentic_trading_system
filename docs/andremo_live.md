@@ -3506,3 +3506,10 @@ Cosa abbiamo capito: con 80 monete che si muovono insieme i trade sommati valgon
 e gli effetti trovati (ritardo dopo BTC, rientro rispetto a BTC) sono veri ma più piccoli dei costi; l'esame di gruppo
 è affidabile contro il rumore e severo, quindi «nessuna strategia valida» vuol dire «nessun vantaggio che si distingua
 dal caso con questi dati», non «nessun vantaggio» (la campagna lo scrive da sé nei limiti).
+
+### 11 ottobre, 14:45 ora italiana: sessioni di gruppo archiviate
+
+Sì del proprietario: archiviate le tre sessioni della campagna di gruppo (session_01FzzZ5SUK8q2QzvhreZxD74,
+session_01VJKFhoptfjZhGcBSqzY5Vg, session_01Lt3FVBCW5Kg531Pe7rjHRp). Il branch `research/campagna/GRUPPO` resta com'è.
+Routine accese adesso: nessuna (controllo giornaliero, referto settimanale e controllo orario spenti). La seconda
+lettura ufficiale del 14 ott la faceva il controllo giornaliero: va fatta a mano, se il proprietario la chiede.
