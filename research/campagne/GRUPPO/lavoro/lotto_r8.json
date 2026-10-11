@@ -1,0 +1,11 @@
+[
+{"tipo_test": "variante", "idea": "I-19", "variante_nome": "I-19-L-r3", "famiglia": "GRUPPO-037", "ritocco_di": "GRUPPO-050",
+ "fonte": "Da, Liu, Schaumburg, «A Closer Look at the Short-Term Return Reversal», Management Science 60(3), marzo 2014 (ritocco)",
+ "meccanismo": "lo stesso di GRUPPO-037: rientro della pressione di liquidità propria della moneta, al netto di BTC",
+ "cosa_cambia": "rispetto a GRUPPO-050: soglia_z da 1,5 a 1,0; orizzonte, beta, tenuta, stop, timeframe e direzione uguali",
+ "perche": "ordine della regola 6 dopo GRUPPO-050: le varianti con t più alto (048, 046) sono della famiglia GRUPPO-040, chiusa; la prima con famiglia aperta è GRUPPO-050 (t 1,80); terzo ritocco della famiglia GRUPPO-037. Da GRUPPO-049 a GRUPPO-037 a GRUPPO-050 (soglia 2,5 / 2 / 1,5) i blocchi crescono (5 / 11 / 21) più di quanto cali l'R per trade (0,089 / 0,085 / 0,049), e il t sale (0,91 / 1,44 / 1,80). Un passo in più nella stessa direzione verifica se la crescita dei blocchi continua a pesare più del calo dell'R; è anche il limite basso sensato di «molto più di quanto spiega BTC».",
+ "timeframe": "4h", "direzione": "long",
+ "modulo": "i19_residuo.py", "p_file": "p_r3_i19_L.json", "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra +0,01 e +0,05; t contro la (b) fra +1 e +2,3; trade fra 9.000 e 14.000",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo e R medio dopo i costi positivo"}
+]
