@@ -1,0 +1,11 @@
+[
+{"tipo_test": "variante", "idea": "I-07", "variante_nome": "I-07-L-r1", "famiglia": "GRUPPO-040", "ritocco_di": "GRUPPO-040",
+ "fonte": "Koutmos, «Return and volatility spillovers among cryptocurrencies», Economics Letters 173, dicembre 2018 (ritocco)",
+ "meccanismo": "lo stesso di GRUPPO-040: diffusione lenta da BTC alle alt",
+ "cosa_cambia": "soglia_dev da 2 a 3 (ora di BTC più estrema) e frazione da 0,5 a 0 (la moneta non è salita affatto nella stessa ora); uscita, stop, timeframe e direzione uguali",
+ "perche": "Fase 3 (nota GRUPPO-043): il recupero prima dei costi è circa +0,043 R contro un costo di circa 0,073 R per giro; un ritardo più grande per trade dovrebbe dare un recupero più grande a parità di costo. Primo della lista dei ritocchi (t contro la (b) 1,55).",
+ "timeframe": "1h", "direzione": "long",
+ "modulo": "i07_ritardo_btc.py", "p_file": "p_r1_i07_L.json", "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra -0,06 e +0,03; t contro la (b) fra 0 e +2; meno trade (fra 1.000 e 4.000)",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo e R medio dopo i costi positivo"}
+]
