@@ -3473,3 +3473,11 @@ La prova a placebo dell'esame di gruppo è finita alle 07:52 UTC: **finita: regg
 numeri restano sul branch di coordinamento, `research/taratura/placebo_gruppo/risultati.md`, commit 80f594a4, fino
 alla consegna del gruppo). Le cinque impronte degli strumenti sono quelle scritte nelle regole della prova prima del
 lancio. Il via libera alla validazione si scrive quando la sessione di gruppo lo chiede (sezione 7, punto 2).
+
+### 11 ottobre, 10:00 ora italiana: provato il canale delle frasi verso la sessione (regole.md, sezione 12, punto 1)
+
+Sessione di prova senza repository e senza marcatore (session_01K52aLrpQKTP37ZCKSJ9ntf, aperta alle 07:56 UTC). Un
+Routine da una sola esecuzione legato a quella sessione (trig_01EntrBhUwHSBKrFBdeVXor3, programmato per le 07:59:00
+UTC) è partito alle 07:59:42 UTC con esito «consegnato», e la sessione ha lavorato sul messaggio subito dopo (ultimo
+aggiornamento 07:59:49 UTC). **Il canale funziona**, con circa 40 secondi di ritardo sull'orario programmato. Sessione
+di prova archiviata. Il via libera alla sessione di gruppo si manderà così, con il promemoria a 15 minuti.
