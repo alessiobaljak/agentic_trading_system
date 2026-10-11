@@ -1,0 +1,1314 @@
+{
+ "esito": "registrabile",
+ "fine_costruzione": "2023-01-16",
+ "ingressi": {
+  "tipo": "modulo"
+ },
+ "minimo": 700,
+ "moneta_piu_presente": "EOSUSDT",
+ "monete_con_trade": 80,
+ "motivi": [],
+ "opzioni": {
+  "moltiplicatore_costi": 1.0,
+  "riempimento_intrabarra": "stop_prima",
+  "ritardo_barre": 0
+ },
+ "parametri": {
+  "atr": 14,
+  "direzione": "long",
+  "finestra_beta": 180,
+  "orizzonte": 6,
+  "soglia_z": 2.0,
+  "stop_atr": 2.0,
+  "tenuta": 6
+ },
+ "per_moneta": {
+  "1000XECUSDT": {
+   "barre": 2910,
+   "barre_vietate_liquidita": 1356,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 10,
+   "mesi_sotto_liquidita": 8,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 10
+  },
+  "1INCHUSDT": {
+   "barre": 4510,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 40,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 40
+  },
+  "AAVEUSDT": {
+   "barre": 4931,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 45,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 45
+  },
+  "ALGOUSDT": {
+   "barre": 5662,
+   "barre_vietate_liquidita": 640,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 46,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 46
+  },
+  "ALPHAUSDT": {
+   "barre": 4703,
+   "barre_vietate_liquidita": 1331,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 27,
+   "mesi_sotto_liquidita": 8,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 27
+  },
+  "ANKRUSDT": {
+   "barre": 4283,
+   "barre_vietate_liquidita": 581,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 28,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 28
+  },
+  "ARPAUSDT": {
+   "barre": 2724,
+   "barre_vietate_liquidita": 1014,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 12,
+   "mesi_sotto_liquidita": 6,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 12
+  },
+  "ARUSDT": {
+   "barre": 2844,
+   "barre_vietate_liquidita": 204,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 14,
+   "mesi_sotto_liquidita": 2,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 14
+  },
+  "ATOMUSDT": {
+   "barre": 6441,
+   "barre_vietate_liquidita": 1053,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 53,
+   "mesi_sotto_liquidita": 6,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 53
+  },
+  "AUDIOUSDT": {
+   "barre": 3084,
+   "barre_vietate_liquidita": 546,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 19,
+   "mesi_sotto_liquidita": 3,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 19
+  },
+  "AXSUSDT": {
+   "barre": 4685,
+   "barre_vietate_liquidita": 437,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 34,
+   "mesi_sotto_liquidita": 3,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 34
+  },
+  "BAKEUSDT": {
+   "barre": 3641,
+   "barre_vietate_liquidita": 822,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 28,
+   "mesi_sotto_liquidita": 5,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 28
+  },
+  "BANDUSDT": {
+   "barre": 5369,
+   "barre_vietate_liquidita": 546,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 39,
+   "mesi_sotto_liquidita": 3,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 39
+  },
+  "BELUSDT": {
+   "barre": 4733,
+   "barre_vietate_liquidita": 1283,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 28,
+   "mesi_sotto_liquidita": 8,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 28
+  },
+  "BLZUSDT": {
+   "barre": 5069,
+   "barre_vietate_liquidita": 1823,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 23,
+   "mesi_sotto_liquidita": 11,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 23
+  },
+  "C98USDT": {
+   "barre": 3060,
+   "barre_vietate_liquidita": 186,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 23,
+   "mesi_sotto_liquidita": 1,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 23
+  },
+  "CELOUSDT": {
+   "barre": 2856,
+   "barre_vietate_liquidita": 756,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 17,
+   "mesi_sotto_liquidita": 5,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 17
+  },
+  "CELRUSDT": {
+   "barre": 3947,
+   "barre_vietate_liquidita": 1188,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 19,
+   "mesi_sotto_liquidita": 7,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 19
+  },
+  "CHZUSDT": {
+   "barre": 4349,
+   "barre_vietate_liquidita": 65,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 35,
+   "mesi_sotto_liquidita": 1,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 35
+  },
+  "COMPUSDT": {
+   "barre": 5542,
+   "barre_vietate_liquidita": 562,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 40,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 40
+  },
+  "CRVUSDT": {
+   "barre": 5165,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 38,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 38
+  },
+  "CTSIUSDT": {
+   "barre": 2676,
+   "barre_vietate_liquidita": 1572,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 8,
+   "mesi_sotto_liquidita": 10,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 8
+  },
+  "DASHUSDT": {
+   "barre": 6460,
+   "barre_vietate_liquidita": 2170,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 57,
+   "mesi_sotto_liquidita": 12,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 57
+  },
+  "DOTUSDT": {
+   "barre": 5225,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 38,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 38
+  },
+  "EGLDUSDT": {
+   "barre": 5123,
+   "barre_vietate_liquidita": 467,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 48,
+   "mesi_sotto_liquidita": 3,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 48
+  },
+  "ENJUSDT": {
+   "barre": 4997,
+   "barre_vietate_liquidita": 749,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 38,
+   "mesi_sotto_liquidita": 5,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 38
+  },
+  "EOSUSDT": {
+   "barre": 6622,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 66,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 66
+  },
+  "FLMUSDT": {
+   "barre": 5003,
+   "barre_vietate_liquidita": 1926,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 33,
+   "mesi_sotto_liquidita": 11,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 33
+  },
+  "GRTUSDT": {
+   "barre": 4517,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 27,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 27
+  },
+  "GTCUSDT": {
+   "barre": 3474,
+   "barre_vietate_liquidita": 642,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 19,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 19
+  },
+  "HBARUSDT": {
+   "barre": 3989,
+   "barre_vietate_liquidita": 738,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 21,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 21
+  },
+  "ICPUSDT": {
+   "barre": 3528,
+   "barre_vietate_liquidita": 576,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 20,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 20
+  },
+  "ICXUSDT": {
+   "barre": 5081,
+   "barre_vietate_liquidita": 2105,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 27,
+   "mesi_sotto_liquidita": 12,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 27
+  },
+  "IOTAUSDT": {
+   "barre": 6382,
+   "barre_vietate_liquidita": 3136,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 32,
+   "mesi_sotto_liquidita": 18,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 32
+  },
+  "KAVAUSDT": {
+   "barre": 5375,
+   "barre_vietate_liquidita": 552,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 47,
+   "mesi_sotto_liquidita": 3,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 47
+  },
+  "KLAYUSDT": {
+   "barre": 2760,
+   "barre_vietate_liquidita": 1680,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 11,
+   "mesi_sotto_liquidita": 10,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 11
+  },
+  "KNCUSDT": {
+   "barre": 5596,
+   "barre_vietate_liquidita": 970,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 40,
+   "mesi_sotto_liquidita": 6,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 40
+  },
+  "KSMUSDT": {
+   "barre": 4913,
+   "barre_vietate_liquidita": 659,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 35,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 35
+  },
+  "LINAUSDT": {
+   "barre": 3977,
+   "barre_vietate_liquidita": 552,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 21,
+   "mesi_sotto_liquidita": 3,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 21
+  },
+  "LPTUSDT": {
+   "barre": 2580,
+   "barre_vietate_liquidita": 1740,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 5,
+   "mesi_sotto_liquidita": 10,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 5
+  },
+  "LRCUSDT": {
+   "barre": 4883,
+   "barre_vietate_liquidita": 1175,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 30,
+   "mesi_sotto_liquidita": 7,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 30
+  },
+  "MANAUSDT": {
+   "barre": 4001,
+   "barre_vietate_liquidita": 180,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 24,
+   "mesi_sotto_liquidita": 1,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 24
+  },
+  "MKRUSDT": {
+   "barre": 5285,
+   "barre_vietate_liquidita": 918,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 32,
+   "mesi_sotto_liquidita": 5,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 32
+  },
+  "MTLUSDT": {
+   "barre": 3899,
+   "barre_vietate_liquidita": 540,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 31,
+   "mesi_sotto_liquidita": 3,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 31
+  },
+  "NEARUSDT": {
+   "barre": 4876,
+   "barre_vietate_liquidita": 652,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 19,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 19
+  },
+  "NEOUSDT": {
+   "barre": 6346,
+   "barre_vietate_liquidita": 1912,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 52,
+   "mesi_sotto_liquidita": 11,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 52
+  },
+  "NKNUSDT": {
+   "barre": 3845,
+   "barre_vietate_liquidita": 1194,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 9,
+   "mesi_sotto_liquidita": 7,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 9
+  },
+  "OCEANUSDT": {
+   "barre": 4763,
+   "barre_vietate_liquidita": 695,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 31,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 31
+  },
+  "OGNUSDT": {
+   "barre": 3869,
+   "barre_vietate_liquidita": 1008,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 20,
+   "mesi_sotto_liquidita": 6,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 20
+  },
+  "OMGUSDT": {
+   "barre": 5506,
+   "barre_vietate_liquidita": 1372,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 37,
+   "mesi_sotto_liquidita": 8,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 37
+  },
+  "ONTUSDT": {
+   "barre": 6382,
+   "barre_vietate_liquidita": 2584,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 37,
+   "mesi_sotto_liquidita": 15,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 37
+  },
+  "PEOPLEUSDT": {
+   "barre": 2297,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 14,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 14
+  },
+  "QTUMUSDT": {
+   "barre": 6328,
+   "barre_vietate_liquidita": 2710,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 35,
+   "mesi_sotto_liquidita": 16,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 35
+  },
+  "RENUSDT": {
+   "barre": 4913,
+   "barre_vietate_liquidita": 815,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 32,
+   "mesi_sotto_liquidita": 5,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 32
+  },
+  "RLCUSDT": {
+   "barre": 5333,
+   "barre_vietate_liquidita": 1289,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 23,
+   "mesi_sotto_liquidita": 8,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 23
+  },
+  "ROSEUSDT": {
+   "barre": 2256,
+   "barre_vietate_liquidita": 366,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 10,
+   "mesi_sotto_liquidita": 2,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 10
+  },
+  "RUNEUSDT": {
+   "barre": 5153,
+   "barre_vietate_liquidita": 713,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 40,
+   "mesi_sotto_liquidita": 4,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 40
+  },
+  "SANDUSDT": {
+   "barre": 4265,
+   "barre_vietate_liquidita": 41,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 23,
+   "mesi_sotto_liquidita": 1,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 23
+  },
+  "SFPUSDT": {
+   "barre": 4115,
+   "barre_vietate_liquidita": 755,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 27,
+   "mesi_sotto_liquidita": 5,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 27
+  },
+  "SKLUSDT": {
+   "barre": 4553,
+   "barre_vietate_liquidita": 1151,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 17,
+   "mesi_sotto_liquidita": 7,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 17
+  },
+  "SNXUSDT": {
+   "barre": 5279,
+   "barre_vietate_liquidita": 366,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 39,
+   "mesi_sotto_liquidita": 2,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 39
+  },
+  "STMXUSDT": {
+   "barre": 3959,
+   "barre_vietate_liquidita": 1548,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 18,
+   "mesi_sotto_liquidita": 9,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 18
+  },
+  "STORJUSDT": {
+   "barre": 5051,
+   "barre_vietate_liquidita": 1193,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 28,
+   "mesi_sotto_liquidita": 7,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 28
+  },
+  "SUSHIUSDT": {
+   "barre": 5123,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 35,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 35
+  },
+  "SXPUSDT": {
+   "barre": 5422,
+   "barre_vietate_liquidita": 828,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 44,
+   "mesi_sotto_liquidita": 5,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 44
+  },
+  "THETAUSDT": {
+   "barre": 5752,
+   "barre_vietate_liquidita": 546,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 46,
+   "mesi_sotto_liquidita": 3,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 46
+  },
+  "TOMOUSDT": {
+   "barre": 4925,
+   "barre_vietate_liquidita": 2033,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 28,
+   "mesi_sotto_liquidita": 12,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 28
+  },
+  "TRXUSDT": {
+   "barre": 6520,
+   "barre_vietate_liquidita": 832,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 55,
+   "mesi_sotto_liquidita": 5,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 55
+  },
+  "UNFIUSDT": {
+   "barre": 4115,
+   "barre_vietate_liquidita": 354,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 30,
+   "mesi_sotto_liquidita": 2,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 30
+  },
+  "UNIUSDT": {
+   "barre": 5069,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 51,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 51
+  },
+  "VETUSDT": {
+   "barre": 6340,
+   "barre_vietate_liquidita": 1018,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 47,
+   "mesi_sotto_liquidita": 6,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 47
+  },
+  "WAVESUSDT": {
+   "barre": 5261,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 27,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 27
+  },
+  "XEMUSDT": {
+   "barre": 4043,
+   "barre_vietate_liquidita": 1356,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 25,
+   "mesi_sotto_liquidita": 8,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 25
+  },
+  "XLMUSDT": {
+   "barre": 6490,
+   "barre_vietate_liquidita": 1528,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 43,
+   "mesi_sotto_liquidita": 9,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 43
+  },
+  "XMRUSDT": {
+   "barre": 6436,
+   "barre_vietate_liquidita": 1444,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 52,
+   "mesi_sotto_liquidita": 8,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 52
+  },
+  "XTZUSDT": {
+   "barre": 6418,
+   "barre_vietate_liquidita": 372,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 56,
+   "mesi_sotto_liquidita": 2,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 56
+  },
+  "YFIUSDT": {
+   "barre": 5147,
+   "barre_vietate_liquidita": 0,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 45,
+   "mesi_sotto_liquidita": 0,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 45
+  },
+  "ZECUSDT": {
+   "barre": 6394,
+   "barre_vietate_liquidita": 1246,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 54,
+   "mesi_sotto_liquidita": 7,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 54
+  },
+  "ZILUSDT": {
+   "barre": 5590,
+   "barre_vietate_liquidita": 1180,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 38,
+   "mesi_sotto_liquidita": 7,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 38
+  },
+  "ZRXUSDT": {
+   "barre": 5584,
+   "barre_vietate_liquidita": 2152,
+   "btc": {
+    "candele": 6672,
+    "prima_ts": 1577836800000,
+    "ultima_close_ts": 1673913599999
+   },
+   "long": 30,
+   "mesi_sotto_liquidita": 13,
+   "segnali_non_validi": 0,
+   "segnali_senza_barra": 0,
+   "short": 0,
+   "trade": 30
+  }
+ },
+ "quota_massima": 0.1,
+ "quota_moneta_piu_presente": 0.02593320235756385,
+ "stima_trade_validazione": 1051.8148632934929,
+ "timeframe": "4h",
+ "trade_stimati": 2545,
+ "trade_stimati_per_moneta": {
+  "1000XECUSDT": 10,
+  "1INCHUSDT": 40,
+  "AAVEUSDT": 45,
+  "ALGOUSDT": 46,
+  "ALPHAUSDT": 27,
+  "ANKRUSDT": 28,
+  "ARPAUSDT": 12,
+  "ARUSDT": 14,
+  "ATOMUSDT": 53,
+  "AUDIOUSDT": 19,
+  "AXSUSDT": 34,
+  "BAKEUSDT": 28,
+  "BANDUSDT": 39,
+  "BELUSDT": 28,
+  "BLZUSDT": 23,
+  "C98USDT": 23,
+  "CELOUSDT": 17,
+  "CELRUSDT": 19,
+  "CHZUSDT": 35,
+  "COMPUSDT": 40,
+  "CRVUSDT": 38,
+  "CTSIUSDT": 8,
+  "DASHUSDT": 57,
+  "DOTUSDT": 38,
+  "EGLDUSDT": 48,
+  "ENJUSDT": 38,
+  "EOSUSDT": 66,
+  "FLMUSDT": 33,
+  "GRTUSDT": 27,
+  "GTCUSDT": 19,
+  "HBARUSDT": 21,
+  "ICPUSDT": 20,
+  "ICXUSDT": 27,
+  "IOTAUSDT": 32,
+  "KAVAUSDT": 47,
+  "KLAYUSDT": 11,
+  "KNCUSDT": 40,
+  "KSMUSDT": 35,
+  "LINAUSDT": 21,
+  "LPTUSDT": 5,
+  "LRCUSDT": 30,
+  "MANAUSDT": 24,
+  "MKRUSDT": 32,
+  "MTLUSDT": 31,
+  "NEARUSDT": 19,
+  "NEOUSDT": 52,
+  "NKNUSDT": 9,
+  "OCEANUSDT": 31,
+  "OGNUSDT": 20,
+  "OMGUSDT": 37,
+  "ONTUSDT": 37,
+  "PEOPLEUSDT": 14,
+  "QTUMUSDT": 35,
+  "RENUSDT": 32,
+  "RLCUSDT": 23,
+  "ROSEUSDT": 10,
+  "RUNEUSDT": 40,
+  "SANDUSDT": 23,
+  "SFPUSDT": 27,
+  "SKLUSDT": 17,
+  "SNXUSDT": 39,
+  "STMXUSDT": 18,
+  "STORJUSDT": 28,
+  "SUSHIUSDT": 35,
+  "SXPUSDT": 44,
+  "THETAUSDT": 46,
+  "TOMOUSDT": 28,
+  "TRXUSDT": 55,
+  "UNFIUSDT": 30,
+  "UNIUSDT": 51,
+  "VETUSDT": 47,
+  "WAVESUSDT": 27,
+  "XEMUSDT": 25,
+  "XLMUSDT": 43,
+  "XMRUSDT": 52,
+  "XTZUSDT": 56,
+  "YFIUSDT": 45,
+  "ZECUSDT": 54,
+  "ZILUSDT": 38,
+  "ZRXUSDT": 30
+ }
+}

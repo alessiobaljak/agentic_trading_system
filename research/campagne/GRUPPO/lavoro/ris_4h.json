@@ -1,0 +1,6 @@
+[
+{"id": "GRUPPO-037", "esame": "GRUPPO-037_costruzione_esame.json", "previsione_corretta": false,
+ "commento": "Non è un candidato: R medio 0,085 su 2.545 trade (80 monete), t contro la (b) 1,44 e contro la (a) 1,33, con soglia 2,28 perché i blocchi interi sono solo 11 (blocco di 229 trade: effetto grappolo 23, fino a 86 uscite in un giorno, cioè i residui molto negativi arrivano insieme nei crolli generali). È la variante con il t più alto finora. Regge le tre prove degli estremi (senza i 30 trade migliori 0,044; senza i 3 giorni migliori 0,043; senza le 3 monete migliori 0,069) e la stabilità (3 anni su 4 sopra la (b); 2022 a -0,052); 56 monete su 77 con almeno 10 trade sopra la propria b_j. Previsione sbagliata di poco per l'R (atteso fino a 0,08): l'inversione del residuo a 24 ore è più forte del previsto, ma l'esame non la distingue dal caso per i grappoli."},
+{"id": "GRUPPO-038", "esame": "GRUPPO-038_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio -0,019 su 4.328 trade, t contro la (b) 0,70, contro la (a) 0,58, percentile 98,5. Lo short dopo un residuo molto positivo perde meno degli short a caso (-0,040) ma non guadagna; positivo solo nel 2022. Previsione corretta."}
+]
