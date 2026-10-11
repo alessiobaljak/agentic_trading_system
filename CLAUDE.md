@@ -33,6 +33,14 @@ non si usa mai come training set. Ogni mattina il controllo giornaliero, oltre a
 soliti numeri, **propone la voce del backlog più importante da attivare**, con il
 perché e cosa si aspetta prima di farla (`docs/backlog.md`).
 
+**I report della mattina sono FERMI dall'11 ott 2026, fino a nuovo ordine del proprietario**
+(«ferma del tutto i report della mattina fino a nuovo ordine»). Le routine «Paper: controllo
+giornaliero + proposta dal backlog» e «Paper: referto settimanale» sono spente: non si
+riaccendono, non si eseguono a mano e non si sostituiscono con altro finché il proprietario non lo
+chiede esplicitamente. Un «non farlo domattina» vale per TUTTI i report del mattino, non solo per
+quello nominato (l'11 ott il referto settimanale è partito lo stesso: errore). Resta acceso il
+controllo orario della campagna di gruppo.
+
 **La stella polare e il passo di ogni giorno (aggiunto dal proprietario il 1 ott
 2026).** L'obiettivo qui sopra è la stella polare: ci si punta con tutte le forze. Ma
 non basta puntarla: **ogni giorno il sistema deve essere un passo più vicino**, e

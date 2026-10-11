@@ -3457,3 +3457,12 @@ dentro il caso.
 La routine del controllo giornaliero è di nuovo accesa, con lo stesso testo e lo stesso orario (05:45 ora italiana):
 il prossimo controllo è domani, 12 ottobre. Quello di oggi è stato saltato, come chiesto dal proprietario il 10 ottobre
 alle 21:12.
+
+### 11 ottobre, 07:35 ora italiana: report della mattina fermi fino a nuovo ordine
+
+Il proprietario: «ferma del tutto i report della mattina fino a nuovo ordine, anche ieri ti avevo scritto di non farlo
+oggi ma lo hai eseguito lo stesso». Errore del coordinamento: il 10 ottobre «non eseguire il report giornaliero» è stato
+letto alla lettera, spegnendo solo il controllo giornaliero, e stamattina alle 05:45 è partito il referto settimanale
+della domenica. Spente entrambe le routine del mattino («Paper: controllo giornaliero + proposta dal backlog» e
+«Paper: referto settimanale»); la regola è scritta in CLAUDE.md. Resta acceso solo il controllo orario della campagna
+di gruppo.
