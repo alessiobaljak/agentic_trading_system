@@ -1,0 +1,2 @@
+{"id": "GRUPPO-052", "esame": "GRUPPO-052_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: t contro la (b) 1,71 (soglia 2,05, 49 blocchi), contro la (a) 1,16; R medio dopo i costi 0,017 su 10.463 trade (prima dei costi circa +0,036, costo 0,019); le uscite allo stop scendono dal 17,6% al 7,2% ma le uscite a tempo valgono solo +0,097 R: lo stop più largo riduce l'R di ogni trade più di quanto risparmi. Regge le tre prove degli estremi; R per anno 0,02 / 0,04 / -0,03 / 0,41. Previsione corretta. Lo stop a 2 ATR era migliore."}
