@@ -1,0 +1,701 @@
+{
+ "k_presenti": [
+  0,
+  1,
+  2,
+  3
+ ],
+ "righe_lette": 192,
+ "righe_illeggibili": 0,
+ "soglie": {
+  "trade_minimi": {
+   "costruzione": 700,
+   "validazione": 300
+  },
+  "quota_massima_moneta": 0.1,
+  "campione_minimo": 80,
+  "quota_costruzione": 0.03,
+  "quota_validazione": 0.13
+ },
+ "commit_principale": [
+  "18b3f39aa7038f5338d63c2ffb85451fc544bc82",
+  "2a88046a7abed7e2e2bbdc0bef5448eb70b09f4b",
+  "626a2970b347991c9e6d20fd81ec66a70227f429",
+  "ad227319cce22cac062c1b2751794f177a0c3608",
+  "ad3439a88357b97ffd4a9e75bfd179d0f2939dbd",
+  "b0119758bc53e2868ac3aa945d03455445ae8a0f"
+ ],
+ "commit_prova": [
+  "12b3b52ffad13ceea4e3d7c02450a81c8dd264f4",
+  "39d095877452dfd85eac2e6201c4fe5a3816d75f",
+  "8ff80d4ded97b633875827d5f86476b03f85f298",
+  "95f876d23cd059e2141c0e6eddb41507fae13331"
+ ],
+ "identita_diverse": 1,
+ "identita": {
+  "codice": {
+   "esegui.py": "18f77926f6bae43408aa395f59b94967b719e9bc720f5ab2b664883f9c30db09",
+   "placebo_gruppo.py": "02d3bb089408b985431c985bcd10d7451a4c23edfb6bd32ad9cf2a1397e97d5c"
+  },
+  "dati": "80dcca875953cc3eb9e4c811c5f2c0c8c84519c0365a56dd866502010fd6d50a",
+  "formato": 2,
+  "funzionamento": false,
+  "monete": {
+   "monete.csv": "0cf217c3c7c4c23934fa1e37dc908618741cd8082514623b281abcbcdf99d8e2",
+   "posizioni": "9b12880a11b00c1d4fd4de36c6e1861920c2450d549f8e9e9a1e39c6a739189f"
+  },
+  "regole.md": "115cf065079948ada3def6f83372d9140cd99c3ad9c6bffdba3754d6c296be96",
+  "schede": "e41d79d2e05a38b7cad882c5f9fdbd1d7793b9bebeb334cfa9f73780412f3276",
+  "strumenti": {
+   "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7",
+   "research/src/dati.py": "4b9ed237125ede9fc6d5103cdf93f6a382309649e34d5b07686f58be59ab8a6d",
+   "research/src/gruppo.py": "1f3fe8c8218cd32711b153b05872ac1042e417b2d7fe3b142a2a1972794c81cb",
+   "research/src/motore.py": "5a3998c5f0a1535d255b5bf6fc3a367a5805a7ff9766024d74df096816e89c42",
+   "research/src/statistica.py": "ca027d2687d9129a533077eb980c0517bd09c476331659d61eaf15dda45c9e5a"
+  }
+ },
+ "k": [
+  0,
+  1,
+  2,
+  3
+ ],
+ "copertura": {
+  "attese": 192,
+  "presenti": 192,
+  "mancanti": [],
+  "errori_senza_riga_buona": [],
+  "righe_con_errore": 0,
+  "errori": []
+ },
+ "campione": {
+  "valutabili": {
+   "costruzione": 85,
+   "validazione": 93
+  },
+  "minimo": 80,
+  "scarti_costruzione": {},
+  "sotto_il_minimo_di_trade_validazione": 0,
+  "non_valutabili_per_motivo": {
+   "costruzione: meno di 3 blocchi interi o candidato senza rumore stimabile": 11,
+   "validazione: gli ingressi casuali non entrano su: GTCUSDT": 1,
+   "validazione: meno di 3 blocchi interi o candidato senza rumore stimabile": 2
+  }
+ },
+ "k_ignorati": [],
+ "fase": "misure",
+ "misure": {
+  "costruzione": {
+   "n": 85,
+   "nome_conteggio": "M1",
+   "soglia_z": 2.0,
+   "conteggio": 0,
+   "limite": 2,
+   "quota": 0.0,
+   "regge_conteggio": true,
+   "mu": 0.05526737361367515,
+   "sigma": 0.6720261045414493,
+   "coda_m3": 0.001902840761075707,
+   "soglia_m3": 0.03,
+   "regge_m3": true,
+   "letture_diverse_da_netta_o_p": 0
+  },
+  "validazione": {
+   "n": 93,
+   "nome_conteggio": "M2",
+   "soglia_z": 1.2816,
+   "conteggio": 2,
+   "limite": 12,
+   "quota": 0.021505376344086023,
+   "regge_conteggio": true,
+   "mu": 0.06821619305785641,
+   "sigma": 0.6428683505211006,
+   "coda_m3": 0.02954971006893993,
+   "soglia_m3": 0.13,
+   "regge_m3": true,
+   "letture_diverse_da_netta_o_p": 0
+  }
+ },
+ "condizioni": {
+  "M1": true,
+  "M2": true,
+  "M3_costruzione": true,
+  "M3_validazione": true
+ },
+ "regge": true,
+ "senza_pavimento_sfasate": {
+  "costruzione": {
+   "n": 85,
+   "nome_conteggio": "M1",
+   "soglia_z": 2.0,
+   "conteggio": 0,
+   "limite": 2,
+   "quota": 0.0,
+   "regge_conteggio": true,
+   "mu": 0.05898583363288973,
+   "sigma": 0.6914219667524414,
+   "coda_m3": 0.002498099693168256,
+   "soglia_m3": 0.03,
+   "regge_m3": true,
+   "letture_diverse_da_netta_o_p": 0
+  },
+  "validazione": {
+   "n": 93,
+   "nome_conteggio": "M2",
+   "soglia_z": 1.2816,
+   "conteggio": 3,
+   "limite": 12,
+   "quota": 0.03225806451612903,
+   "regge_conteggio": true,
+   "mu": 0.0597867440857024,
+   "sigma": 0.7240611779702342,
+   "coda_m3": 0.04575892962575655,
+   "soglia_m3": 0.13,
+   "regge_m3": true,
+   "letture_diverse_da_netta_o_p": 0
+  }
+ },
+ "dove_decide_il_pavimento": {
+  "costruzione": {
+   "placebo": 19,
+   "deviazione_standard": 0.5780363105442529,
+   "oltre_soglia": false
+  },
+  "validazione": {
+   "placebo": 33,
+   "deviazione_standard": 0.8325097659165235,
+   "oltre_soglia": false
+  }
+ },
+ "sopra_p90_sfasate_validazione": {
+  "n": 93,
+  "sopra": 14,
+  "quota": 0.15053763440860216
+ },
+ "effetto_grappolo": {
+  "costruzione": {
+   "n": 85,
+   "mediana": 12.48449741952985,
+   "q25": 9.348035172577209,
+   "q75": 16.937734512441345,
+   "minimo": 4.371898033610984,
+   "massimo": 26.760624866979512
+  },
+  "validazione": {
+   "n": 93,
+   "mediana": 12.187204787838764,
+   "q25": 9.564943277263543,
+   "q75": 16.070635826710234,
+   "minimo": 3.238182352602667,
+   "massimo": 25.59527899271979
+  }
+ },
+ "quota_moneta_piu_presente": {
+  "costruzione": {
+   "n": 85,
+   "mediana": 0.031518817204301074,
+   "q25": 0.027147823208078133,
+   "q75": 0.03467666354264293,
+   "minimo": 0.021518987341772152,
+   "massimo": 0.04319793681495809
+  },
+  "validazione": {
+   "n": 93,
+   "mediana": 0.019395954558049322,
+   "q25": 0.018980275400074433,
+   "q75": 0.020539842993870308,
+   "minimo": 0.018064591078066915,
+   "massimo": 0.025039123630672927
+  }
+ },
+ "intervalli_95_per_combinazione": {
+  "costruzione": {
+   "quota": [
+    0.0,
+    0.0
+   ],
+   "mu": [
+    -0.059705831142317436,
+    0.1784270866518081
+   ],
+   "sigma": [
+    0.5622207845975127,
+    0.7652527795757397
+   ],
+   "coda_m3": [
+    0.0002789243400332963,
+    0.005898847422873705
+   ],
+   "ricampionamenti_validi": 2000
+  },
+  "validazione": {
+   "quota": [
+    0.0,
+    0.05377805049088351
+   ],
+   "mu": [
+    -0.06130951639879478,
+    0.20247520900829588
+   ],
+   "sigma": [
+    0.536332755973922,
+    0.7384026525016936
+   ],
+   "coda_m3": [
+    0.010438371700757686,
+    0.05490427499423307
+   ],
+   "ricampionamenti_validi": 2000
+  }
+ },
+ "per_timeframe": {
+  "1h": {
+   "costruzione": {
+    "n": 43,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 1,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": -0.08226127100474957,
+    "sigma": 0.7008805355206962,
+    "coda_m3": 0.0014845368005737053,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 47,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 1,
+    "limite": 6,
+    "quota": 0.02127659574468085,
+    "regge_conteggio": true,
+    "mu": 0.1353679425871379,
+    "sigma": 0.5495803673605542,
+    "coda_m3": 0.018505188778290257,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  },
+  "4h": {
+   "costruzione": {
+    "n": 42,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 1,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.19607050977063378,
+    "sigma": 0.6179868106232207,
+    "coda_m3": 0.001755544257139456,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 46,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 1,
+    "limite": 5,
+    "quota": 0.021739130434782608,
+    "regge_conteggio": true,
+    "mu": -0.0003953771133659892,
+    "sigma": 0.7257099543670268,
+    "coda_m3": 0.03865268148276964,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  }
+ },
+ "per_direzione": {
+  "long": {
+   "costruzione": {
+    "n": 46,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 1,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.04187120959951912,
+    "sigma": 0.7048867344851474,
+    "coda_m3": 0.0027352868644820675,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 47,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 1,
+    "limite": 6,
+    "quota": 0.02127659574468085,
+    "regge_conteggio": true,
+    "mu": 0.11913711818627432,
+    "sigma": 0.69300115276437,
+    "coda_m3": 0.046728937463794605,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  },
+  "short": {
+   "costruzione": {
+    "n": 39,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 1,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.07106797732267967,
+    "sigma": 0.6398822370985895,
+    "coda_m3": 0.0012869695168942852,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 46,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 1,
+    "limite": 5,
+    "quota": 0.021739130434782608,
+    "regge_conteggio": true,
+    "mu": 0.016188291296212035,
+    "sigma": 0.5903637420902098,
+    "coda_m3": 0.01603872562922373,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  }
+ },
+ "per_regola": {
+  "bollinger": {
+   "costruzione": {
+    "n": 16,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 0,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.03032663834490463,
+    "sigma": 0.6935341481374274,
+    "coda_m3": 0.002255305787938783,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 16,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 0,
+    "limite": 2,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": -0.21252290605675142,
+    "sigma": 0.7846201664251947,
+    "coda_m3": 0.02843799061195321,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  },
+  "incrocio_medie": {
+   "costruzione": {
+    "n": 14,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 0,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.12327734200145712,
+    "sigma": 0.8407117400632951,
+    "coda_m3": 0.012797498640603611,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 16,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 1,
+    "limite": 2,
+    "quota": 0.0625,
+    "regge_conteggio": true,
+    "mu": 0.2012258386380795,
+    "sigma": 0.6995409978982504,
+    "coda_m3": 0.06124520323794062,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  },
+  "macd": {
+   "costruzione": {
+    "n": 12,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 0,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": -0.037531701861310336,
+    "sigma": 0.4297014649252864,
+    "coda_m3": 1.0594634628569697e-06,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 15,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 0,
+    "limite": 1,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.11001652850964806,
+    "sigma": 0.6004042655610491,
+    "coda_m3": 0.025509236300781436,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  },
+  "momento_10": {
+   "costruzione": {
+    "n": 16,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 0,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.006456712289619002,
+    "sigma": 0.48403482045563573,
+    "coda_m3": 1.9059488635826996e-05,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 16,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 0,
+    "limite": 2,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.15445016049719648,
+    "sigma": 0.4764192177863675,
+    "coda_m3": 0.008993680584670618,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  },
+  "rottura_20": {
+   "costruzione": {
+    "n": 11,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 0,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": -0.07240108468925364,
+    "sigma": 0.6918342540866397,
+    "coda_m3": 0.0013699013426013342,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 14,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 0,
+    "limite": 1,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": -0.08275318976079996,
+    "sigma": 0.45193882968238114,
+    "coda_m3": 0.0012685170695710677,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  },
+  "rsi": {
+   "costruzione": {
+    "n": 16,
+    "nome_conteggio": "M1",
+    "soglia_z": 2.0,
+    "conteggio": 0,
+    "limite": 0,
+    "quota": 0.0,
+    "regge_conteggio": true,
+    "mu": 0.22688141955669514,
+    "sigma": 0.8300344623202551,
+    "coda_m3": 0.016331608672378907,
+    "soglia_m3": 0.03,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   },
+   "validazione": {
+    "n": 16,
+    "nome_conteggio": "M2",
+    "soglia_z": 1.2816,
+    "conteggio": 1,
+    "limite": 2,
+    "quota": 0.0625,
+    "regge_conteggio": true,
+    "mu": 0.22262207463317074,
+    "sigma": 0.7280316939491132,
+    "coda_m3": 0.07289324523780981,
+    "soglia_m3": 0.13,
+    "regge_m3": true,
+    "letture_diverse_da_netta_o_p": 0
+   }
+  }
+ },
+ "limiti": {
+  "finestra_diversa_dal_pavimento": [],
+  "durata_vicina_al_margine": [
+   "GRUPPO|1h|rottura_20|short|costruzione|0",
+   "GRUPPO|1h|macd|long|costruzione|0",
+   "GRUPPO|1h|macd|short|costruzione|0",
+   "GRUPPO|4h|incrocio_medie|long|costruzione|0",
+   "GRUPPO|4h|incrocio_medie|short|costruzione|0",
+   "GRUPPO|4h|rottura_20|long|costruzione|0",
+   "GRUPPO|4h|macd|long|costruzione|0",
+   "GRUPPO|1h|incrocio_medie|long|costruzione|1",
+   "GRUPPO|1h|rottura_20|long|costruzione|1",
+   "GRUPPO|1h|rottura_20|short|costruzione|1",
+   "GRUPPO|1h|macd|short|costruzione|1",
+   "GRUPPO|4h|incrocio_medie|long|costruzione|1",
+   "GRUPPO|4h|rottura_20|long|costruzione|1",
+   "GRUPPO|4h|macd|short|costruzione|1",
+   "GRUPPO|1h|incrocio_medie|short|costruzione|2",
+   "GRUPPO|1h|rottura_20|long|costruzione|2",
+   "GRUPPO|1h|macd|long|costruzione|2",
+   "GRUPPO|1h|macd|short|costruzione|2",
+   "GRUPPO|4h|incrocio_medie|long|costruzione|2",
+   "GRUPPO|4h|incrocio_medie|short|costruzione|2",
+   "GRUPPO|4h|rottura_20|long|costruzione|2",
+   "GRUPPO|4h|macd|long|costruzione|2",
+   "GRUPPO|4h|macd|short|costruzione|2",
+   "GRUPPO|1h|incrocio_medie|long|costruzione|3",
+   "GRUPPO|1h|incrocio_medie|short|costruzione|3",
+   "GRUPPO|1h|rottura_20|long|costruzione|3",
+   "GRUPPO|1h|macd|long|costruzione|3",
+   "GRUPPO|4h|incrocio_medie|long|costruzione|3",
+   "GRUPPO|4h|incrocio_medie|short|costruzione|3",
+   "GRUPPO|4h|rottura_20|long|costruzione|3",
+   "GRUPPO|4h|rottura_20|short|costruzione|3",
+   "GRUPPO|4h|macd|long|costruzione|3",
+   "GRUPPO|4h|macd|short|costruzione|3",
+   "GRUPPO|1h|rottura_20|long|validazione|0",
+   "GRUPPO|1h|rottura_20|short|validazione|0",
+   "GRUPPO|1h|macd|long|validazione|0",
+   "GRUPPO|4h|incrocio_medie|long|validazione|0",
+   "GRUPPO|4h|incrocio_medie|short|validazione|0",
+   "GRUPPO|4h|rottura_20|long|validazione|0",
+   "GRUPPO|4h|rottura_20|short|validazione|0",
+   "GRUPPO|4h|macd|long|validazione|0",
+   "GRUPPO|4h|macd|short|validazione|0",
+   "GRUPPO|1h|incrocio_medie|long|validazione|1",
+   "GRUPPO|1h|rottura_20|short|validazione|1",
+   "GRUPPO|1h|macd|long|validazione|1",
+   "GRUPPO|4h|incrocio_medie|long|validazione|1",
+   "GRUPPO|4h|incrocio_medie|short|validazione|1",
+   "GRUPPO|4h|rottura_20|long|validazione|1",
+   "GRUPPO|4h|rottura_20|short|validazione|1",
+   "GRUPPO|4h|macd|long|validazione|1",
+   "GRUPPO|4h|macd|short|validazione|1",
+   "GRUPPO|1h|incrocio_medie|short|validazione|2",
+   "GRUPPO|1h|rottura_20|long|validazione|2",
+   "GRUPPO|1h|rottura_20|short|validazione|2",
+   "GRUPPO|1h|macd|long|validazione|2",
+   "GRUPPO|4h|incrocio_medie|long|validazione|2",
+   "GRUPPO|4h|incrocio_medie|short|validazione|2",
+   "GRUPPO|4h|rottura_20|short|validazione|2",
+   "GRUPPO|4h|macd|long|validazione|2",
+   "GRUPPO|4h|macd|short|validazione|2",
+   "GRUPPO|1h|incrocio_medie|long|validazione|3",
+   "GRUPPO|1h|rottura_20|long|validazione|3",
+   "GRUPPO|1h|rottura_20|short|validazione|3",
+   "GRUPPO|1h|macd|long|validazione|3",
+   "GRUPPO|1h|macd|short|validazione|3",
+   "GRUPPO|4h|incrocio_medie|long|validazione|3",
+   "GRUPPO|4h|incrocio_medie|short|validazione|3",
+   "GRUPPO|4h|rottura_20|long|validazione|3",
+   "GRUPPO|4h|macd|long|validazione|3",
+   "GRUPPO|4h|macd|short|validazione|3"
+  ],
+  "senza_la_sfasata_piu_vicina": {
+   "costruzione": {
+    "con_la_misura": 85,
+    "cambiano_lettura": 0,
+    "distanza_esatta_0": 2,
+    "distanza_barre": {
+     "n": 85,
+     "mediana": 13.0,
+     "q25": 5.0,
+     "q75": 27.0,
+     "minimo": 0.0,
+     "massimo": 292.0
+    },
+    "scarto_in_sd": {
+     "n": 85,
+     "mediana": -0.1272941336282218,
+     "q25": -1.4284553929691686,
+     "q75": 0.6416668011364074,
+     "minimo": -12.102606355728298,
+     "massimo": 11.201514466279058
+    }
+   },
+   "validazione": {
+    "con_la_misura": 93,
+    "cambiano_lettura": 0,
+    "distanza_esatta_0": 6,
+    "distanza_barre": {
+     "n": 93,
+     "mediana": 3.0,
+     "q25": 2.0,
+     "q75": 8.0,
+     "minimo": 0.0,
+     "massimo": 160.0
+    },
+    "scarto_in_sd": {
+     "n": 93,
+     "mediana": 0.4224607675093006,
+     "q25": -2.3304223955535206,
+     "q75": 4.840279315294751,
+     "minimo": -11.799663916105679,
+     "massimo": 12.902902570157313
+    }
+   }
+  }
+ },
+ "riassunto_py": {
+  "sha256": "fa5e41a155bce8b899a6ee2e359c4c2ad6b6d90c26bcee4c62962277bfb8b167",
+  "commit": "e27b432286c89f89d11ebb2f9db6df31425b5459",
+  "non_committato": false
+ }
+}
