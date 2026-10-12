@@ -3590,3 +3590,20 @@ baseline molto negative e fa sembrare «netta» una regola senza direzione (BTC 
 un'ora estrema il prezzo continua, non torna indietro (osservato su 14 monete, non sfruttabile dopo i costi); il
 funding alto non anticipa cali; il lunedì e i numeri tondi non hanno nulla. STOP del Passo 7: decide il proprietario
 cosa fare della ricerca e del bot.
+
+### 12 ottobre, 22:00 ora italiana: analisi dei trade del paper dal 16 settembre (chiesta dal proprietario)
+
+`docs/analisi_trade_16set_12ott.md`, da 17 letture ops (0596-0612; quattro in timeout a 900 s). In breve: prima dei
+costi il trade medio rende −0,015 R (dal 27 set +0,003), i costi 0,095 R, dopo i costi −0,110 R (ops 0596); perdita
+lorda 58,62 USDT, costi 67,59, netta 126,21 (ops 0607). Ogni misura d'uscita coincide con un prezzo casuale con le
+nostre uscite; la curva del vantaggio è piatta a 1-24 ore (ops 0597); sugli stessi segnali il bot fa come il motore
+(+0,03 ±0,05, ops 0600); il motore stesso dopo la validazione fa −0,06 R su 396 segnali: è la scelta del gate. Il voto
+di affidabilità non separa (H1 chiusa), il selettore non batte «apri tutto» (0/3), il gate a 27.000 prove per giro
+passa lo 0,29% con t massimo 1,92 contro 3,96 richiesto (ops 0601, 0604). Le funzioni che «imparano» dal paper sono
+tutte dentro il margine con segno negativo; l'affollamento peggiora (−0,162 R con 6+ posizioni nello stesso verso).
+Verdetto sui dati: non servono a creare strategie (3 trade per strategia, regola del paper come non-training set);
+servono come diagnosi, già conclusiva, e danno tre ipotesi da provare sulla storia (costo per trade con ordini limite,
+tetto di esposizione per verso, orizzonte 4-12 ore). Per il gate chiedono cambiamenti strutturali (controllo con
+entrate casuali, correzione per i tentativi, fuori campione vero, costi per moneta, un solo regime, niente figlie dai
+quasi-passaggi): cioè il protocollo, che ha dato zero su 630. Letture di tre repository esterni in
+`docs/letture_esterne/`.

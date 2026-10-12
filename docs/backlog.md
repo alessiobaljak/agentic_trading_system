@@ -40,7 +40,7 @@ trade (ops 0584, 11 ott) e il gate non trova un vantaggio (lettura del 7 ott: «
 decisione; (b) spegnere il gate e il paper, che non hanno più una ricerca da alimentare; (c) una ricerca nuova solo
 se cambia qualcosa di strutturale (per esempio i costi: ordini limit invece che a mercato, perché gli effetti trovati
 sono tutti sotto il costo di un giro; tre campagne lo scrivono); (d) le 12 proposte di metodo non decise in
-`research/lezioni/metodo.md`. **Non cambia** niente finché il proprietario non risponde. **Ex P5 (chiusa il 12 ott):**
+`research/lezioni/metodo.md`. L'analisi dei trade del paper del 12 ott (`docs/analisi_trade_16set_12ott.md`) dice dove non cercare (uscite, trailing, size, referti) e dà tre ipotesi per la storia: costo per trade con ordini limite, tetto di esposizione per verso, orizzonte 4-12 ore. **Non cambia** niente finché il proprietario non risponde. **Ex P5 (chiusa il 12 ott):**
 il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
