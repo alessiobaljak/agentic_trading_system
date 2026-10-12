@@ -1,0 +1,142 @@
+{
+"BTC 24h <= 0": {
+"trade": 128,
+"r_medio": 0.0744
+},
+"BTC 24h > 0": {
+"trade": 78,
+"r_medio": 0.0261
+},
+"anno 2021": {
+"trade": 98,
+"r_medio": -0.0023
+},
+"anno 2022": {
+"trade": 106,
+"r_medio": 0.1128
+},
+"anno 2023": {
+"trade": 2,
+"r_medio": -0.0838
+},
+"esito segnale": {
+"trade": 175,
+"r_medio": 0.2506
+},
+"esito stop": {
+"trade": 31,
+"r_medio": -1.0417
+},
+"mese 2021-03": {
+"trade": 12,
+"r_medio": -0.1171
+},
+"mese 2021-04": {
+"trade": 8,
+"r_medio": -0.028
+},
+"mese 2021-06": {
+"trade": 9,
+"r_medio": -0.1056
+},
+"mese 2021-07": {
+"trade": 18,
+"r_medio": 0.1865
+},
+"mese 2021-08": {
+"trade": 13,
+"r_medio": -0.2012
+},
+"mese 2021-09": {
+"trade": 8,
+"r_medio": 0.261
+},
+"mese 2021-10": {
+"trade": 13,
+"r_medio": -0.1289
+},
+"mese 2021-11": {
+"trade": 13,
+"r_medio": 0.0941
+},
+"mese 2021-12": {
+"trade": 4,
+"r_medio": -0.0065
+},
+"mese 2022-01": {
+"trade": 15,
+"r_medio": 0.4763
+},
+"mese 2022-02": {
+"trade": 8,
+"r_medio": 0.2723
+},
+"mese 2022-03": {
+"trade": 14,
+"r_medio": -0.0759
+},
+"mese 2022-04": {
+"trade": 12,
+"r_medio": 0.0307
+},
+"mese 2022-05": {
+"trade": 1,
+"r_medio": -0.529
+},
+"mese 2022-06": {
+"trade": 8,
+"r_medio": 0.3209
+},
+"mese 2022-07": {
+"trade": 6,
+"r_medio": -0.2369
+},
+"mese 2022-08": {
+"trade": 8,
+"r_medio": -0.0244
+},
+"mese 2022-09": {
+"trade": 7,
+"r_medio": 0.0019
+},
+"mese 2022-10": {
+"trade": 6,
+"r_medio": 0.0798
+},
+"mese 2022-11": {
+"trade": 9,
+"r_medio": 0.1116
+},
+"mese 2022-12": {
+"trade": 12,
+"r_medio": 0.1177
+},
+"mese 2023-01": {
+"trade": 2,
+"r_medio": -0.0838
+},
+"ora 00-05": {
+"trade": 52,
+"r_medio": -0.0312
+},
+"ora 06-11": {
+"trade": 48,
+"r_medio": -0.0175
+},
+"ora 12-17": {
+"trade": 61,
+"r_medio": 0.2125
+},
+"ora 18-23": {
+"trade": 45,
+"r_medio": 0.0237
+},
+"sopra la media di 50 giorni": {
+"trade": 112,
+"r_medio": 0.0542
+},
+"sotto la media di 50 giorni": {
+"trade": 94,
+"r_medio": 0.0585
+}
+}

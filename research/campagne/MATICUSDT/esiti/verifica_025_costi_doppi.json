@@ -1,0 +1,33 @@
+{
+ "costi_doppi": {
+  "trade": 124,
+  "r_medio": 0.09377,
+  "r_medio_senza_3_migliori": 0.01578,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0171,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.1314,
+    "trade": 76
+   },
+   "2023": {
+    "r_medio": 0.8368,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.2281,
+  "drawdown_max": -0.0587,
+  "b_media": -0.09729,
+  "t_b": 2.03317,
+  "soglia_b": 2.06446,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 98.0
+ }
+}

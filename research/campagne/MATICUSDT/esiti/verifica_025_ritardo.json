@@ -1,0 +1,33 @@
+{
+ "ritardo_1": {
+  "trade": 122,
+  "r_medio": -0.00277,
+  "r_medio_senza_3_migliori": -0.10143,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": -0.0962,
+    "trade": 46
+   },
+   "2022": {
+    "r_medio": 0.0512,
+    "trade": 75
+   },
+   "2023": {
+    "r_medio": 0.2453,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 0.9788,
+  "drawdown_max": -0.0882,
+  "b_media": -0.05774,
+  "t_b": 0.52524,
+  "soglia_b": 2.06617,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 70.5
+ }
+}

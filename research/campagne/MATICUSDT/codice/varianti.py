@@ -1,0 +1,561 @@
+"""Le varianti di MATICUSDT, una funzione per variante (regole in ipotesi.md).
+
+Ogni funzione riceve la ``Serie`` del suo timeframe e restituisce le ``Regole``. Tutti gli
+array sono causali (all'indice i solo le barre 0..i). Stop comune: distanza = min(2 ATR(14),
+6% della chiusura).
+"""
+from __future__ import annotations
+
+import bisect
+import math
+
+import numpy as np
+
+import quadro
+from quadro import Regole, Serie
+
+TIMEFRAME = {}
+
+
+def tf(nome):
+    def dec(f):
+        TIMEFRAME[f.__name__] = nome
+        return f
+    return dec
+
+
+def distanza_stop(s: Serie) -> np.ndarray:
+    a = quadro.atr(s, 14)
+    return np.minimum(2 * a, 0.06 * s.c)
+
+
+def stop_long(s: Serie, pronto: np.ndarray) -> np.ndarray:
+    st = s.c - distanza_stop(s)
+    return np.where(pronto, st, np.nan)
+
+
+def stop_short(s: Serie, pronto: np.ndarray) -> np.ndarray:
+    st = s.c + distanza_stop(s)
+    return np.where(pronto, st, np.nan)
+
+
+def _ok(*arrays) -> np.ndarray:
+    m = np.ones(len(arrays[0]), dtype=bool)
+    for a in arrays:
+        m &= ~np.isnan(a)
+    return m
+
+
+# ------------------------------------------------------------------ I-01
+@tf("4h")
+def V01(s):
+    r = quadro.rendimento(s.c, 42)
+    pronto = _ok(r, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (r > 0), stop_long(s, pronto), tenuta=42)
+
+
+@tf("4h")
+def V02(s):
+    r = quadro.rendimento(s.c, 42)
+    pronto = _ok(r, quadro.atr(s, 14))
+    return Regole(s, "short", pronto & (r < 0), stop_short(s, pronto), tenuta=42)
+
+
+# ------------------------------------------------------------------ I-02
+@tf("4h")
+def V03(s):
+    hh = quadro.massimo_precedente(s.h, 120)
+    ll = quadro.minimo_precedente(s.l, 60)
+    pronto = _ok(hh, ll, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.c > hh), stop_long(s, pronto),
+                  uscita=np.nan_to_num(s.c < ll, nan=0).astype(bool) & pronto)
+
+
+@tf("4h")
+def V04(s):
+    ll = quadro.minimo_precedente(s.l, 120)
+    hh = quadro.massimo_precedente(s.h, 60)
+    pronto = _ok(hh, ll, quadro.atr(s, 14))
+    return Regole(s, "short", pronto & (s.c < ll), stop_short(s, pronto),
+                  uscita=(s.c > hh) & pronto)
+
+
+# ------------------------------------------------------------------ I-03
+def _anomalia_giornaliera(s: Serie, verso: int):
+    """Primo superamento nel giorno della soglia media +/- 1 dev. std. dei 30 rendimenti giornalieri precedenti."""
+    giorno = s.ts // 86_400_000
+    ora = quadro.ora_utc(s)
+    # chiusura di ogni giorno = close dell'ultima barra del giorno con ora 23
+    chiusure = {}
+    for i in range(s.n):
+        if ora[i] == 23:
+            chiusure[int(giorno[i])] = s.c[i]
+    giorni = sorted(chiusure)
+    rend = {}
+    for a, b in zip(giorni, giorni[1:]):
+        if b == a + 1:
+            rend[b] = chiusure[b] / chiusure[a] - 1
+    soglia = {}
+    for g in set(int(x) for x in giorno):
+        prec = [rend[d] for d in range(g - 30, g) if d in rend]
+        if len(prec) == 30:
+            m, sd = float(np.mean(prec)), float(np.std(prec, ddof=1))
+            soglia[g] = m + verso * sd
+    apertura = {}
+    for i in range(s.n):
+        g = int(giorno[i])
+        if g not in apertura:
+            apertura[g] = s.o[i]
+    ingresso = np.zeros(s.n, dtype=bool)
+    pronto = np.zeros(s.n, dtype=bool)
+    gia = set()
+    for i in range(s.n):
+        g = int(giorno[i])
+        if g not in soglia or ora[i] > 21:
+            continue
+        pronto[i] = True
+        r = s.c[i] / apertura[g] - 1
+        if g not in gia and verso * (r - soglia[g]) > 0:
+            ingresso[i] = True
+            gia.add(g)
+    pronto &= _ok(quadro.atr(s, 14))
+    return ingresso & pronto, pronto, ora == 23
+
+
+@tf("1h")
+def V05(s):
+    ing, pronto, fine = _anomalia_giornaliera(s, +1)
+    return Regole(s, "long", ing, stop_long(s, pronto), uscita=fine)
+
+
+@tf("1h")
+def V06(s):
+    ing, pronto, fine = _anomalia_giornaliera(s, -1)
+    return Regole(s, "short", ing, stop_short(s, pronto), uscita=fine)
+
+
+# ------------------------------------------------------------------ I-04
+def _prima_mezzora(s: Serie):
+    minuto = quadro.minuto_del_giorno(s)
+    giorno = s.ts // 86_400_000
+    prima = {}
+    for i in range(s.n):
+        if minuto[i] == 0:
+            prima[int(giorno[i])] = s.c[i] / s.o[i] - 1
+    segno = np.full(s.n, np.nan)
+    for i in range(s.n):
+        if minuto[i] == 1380 and int(giorno[i]) in prima:
+            segno[i] = prima[int(giorno[i])]
+    pronto = _ok(segno, quadro.atr(s, 14))
+    return segno, pronto
+
+
+@tf("30m")
+def V07(s):
+    segno, pronto = _prima_mezzora(s)
+    return Regole(s, "long", pronto & (np.nan_to_num(segno) > 0), stop_long(s, pronto), tenuta=1)
+
+
+@tf("30m")
+def V08(s):
+    segno, pronto = _prima_mezzora(s)
+    return Regole(s, "short", pronto & (np.nan_to_num(segno) < 0), stop_short(s, pronto), tenuta=1)
+
+
+# ------------------------------------------------------------------ I-05
+@tf("4h")
+def V09(s):
+    m200, m5, r2 = quadro.sma(s.c, 200), quadro.sma(s.c, 5), quadro.rsi(s.c, 2)
+    pronto = _ok(m200, m5, r2, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.c > m200) & (r2 < 5), stop_long(s, pronto),
+                  uscita=pronto & (s.c > m5))
+
+
+@tf("4h")
+def V10(s):
+    m200, m5, r2 = quadro.sma(s.c, 200), quadro.sma(s.c, 5), quadro.rsi(s.c, 2)
+    pronto = _ok(m200, m5, r2, quadro.atr(s, 14))
+    return Regole(s, "short", pronto & (s.c < m200) & (r2 > 95), stop_short(s, pronto),
+                  uscita=pronto & (s.c < m5))
+
+
+# ------------------------------------------------------------------ I-06
+@tf("1d")
+def V11(s):
+    pronto = _ok(quadro.atr(s, 14))
+    domenica = quadro.giorno_settimana(s) == 6
+    return Regole(s, "long", pronto & domenica, stop_long(s, pronto), tenuta=1)
+
+
+# ------------------------------------------------------------------ I-07
+def _ultimo_funding(s: Serie) -> np.ndarray:
+    tempi = [t for t, _ in s.funding]
+    tassi = [r for _, r in s.funding]
+    out = np.full(s.n, np.nan)
+    for i, c in enumerate(s.candele):
+        k = bisect.bisect_right(tempi, c.close_ts) - 1
+        if k >= 0:
+            out[i] = tassi[k]
+    return out
+
+
+@tf("8h")
+def V12(s):
+    f = _ultimo_funding(s)
+    pronto = _ok(f, quadro.atr(s, 14))
+    return Regole(s, "short", pronto & (np.nan_to_num(f) >= 0.0005), stop_short(s, pronto), tenuta=3)
+
+
+@tf("8h")
+def V13(s):
+    f = _ultimo_funding(s)
+    pronto = _ok(f, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (np.nan_to_num(f) <= -0.0001), stop_long(s, pronto), tenuta=3)
+
+
+# ------------------------------------------------------------------ I-08
+@tf("1d")
+def V14(s):
+    mx = quadro.massimo_precedente(s.qv, 49)
+    pronto = _ok(mx, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.qv > np.nan_to_num(mx, nan=np.inf)), stop_long(s, pronto), tenuta=10)
+
+
+@tf("1d")
+def V15(s):
+    media = np.full(s.n, np.nan)
+    for i in range(50, s.n):
+        media[i] = s.qv[i - 50:i].mean()
+    pronto = _ok(media, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.qv > 2 * np.nan_to_num(media, nan=np.inf)), stop_long(s, pronto), tenuta=5)
+
+
+# ------------------------------------------------------------------ I-09
+def _salto(s: Serie):
+    r = quadro.rendimento(s.c, 1)
+    sd = np.full(s.n, np.nan)
+    for i in range(169, s.n):
+        sd[i] = r[i - 168:i].std(ddof=1)
+    pronto = _ok(sd, r, quadro.atr(s, 14))
+    return r, sd, pronto
+
+
+@tf("1h")
+def V16(s):
+    r, sd, pronto = _salto(s)
+    return Regole(s, "long", pronto & (np.nan_to_num(r) < -3 * np.nan_to_num(sd, nan=np.inf)), stop_long(s, pronto), tenuta=6)
+
+
+@tf("1h")
+def V17(s):
+    r, sd, pronto = _salto(s)
+    return Regole(s, "short", pronto & (np.nan_to_num(r) > 3 * np.nan_to_num(sd, nan=np.inf)), stop_short(s, pronto), tenuta=6)
+
+
+# ------------------------------------------------------------------ I-10
+@tf("1d")
+def V18(s):
+    mx = quadro.massimo_precedente(s.h, 365)
+    pronto = _ok(mx, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.c >= 0.95 * np.nan_to_num(mx, nan=np.inf)), stop_long(s, pronto), tenuta=10)
+
+
+# ------------------------------------------------------------------ I-11
+def _media300(s):
+    m = quadro.sma(s.c, 300)
+    prima = np.concatenate([[np.nan], s.c[:-1] - m[:-1]])
+    pronto = _ok(m, prima, quadro.atr(s, 14))
+    return m, prima, pronto
+
+
+@tf("4h")
+def V19(s):
+    m, prima, pronto = _media300(s)
+    return Regole(s, "long", pronto & (s.c > m) & (np.nan_to_num(prima) <= 0), stop_long(s, pronto),
+                  uscita=pronto & (s.c < m))
+
+
+@tf("4h")
+def V20(s):
+    m, prima, pronto = _media300(s)
+    return Regole(s, "short", pronto & (s.c < m) & (np.nan_to_num(prima) >= 0), stop_short(s, pronto),
+                  uscita=pronto & (s.c > m))
+
+
+# ------------------------------------------------------------------ I-12
+def _stretta(s, finestra=1080, fattore=1.1):
+    m = quadro.sma(s.c, 20)
+    sd = quadro.dev_std_mobile(s.c, 20)
+    larg = 4 * sd / m
+    min20 = np.full(s.n, np.nan)
+    min1080 = np.full(s.n, np.nan)
+    for i in range(s.n):
+        if i >= 19 and not np.isnan(larg[i - 19:i + 1]).any():
+            min20[i] = larg[i - 19:i + 1].min()
+        if i >= finestra + 19 and not np.isnan(larg[i - finestra:i]).any():
+            min1080[i] = larg[i - finestra:i].min()
+    pronto = _ok(m, sd, min20, min1080, quadro.atr(s, 14))
+    stretta = pronto & (np.nan_to_num(min20, nan=np.inf) <= fattore * np.nan_to_num(min1080))
+    return m, sd, stretta, pronto
+
+
+@tf("4h")
+def V21(s):
+    m, sd, stretta, pronto = _stretta(s)
+    return Regole(s, "long", stretta & (s.c > m + 2 * sd), stop_long(s, pronto), tenuta=30,
+                  uscita=pronto & (s.c < m))
+
+
+@tf("4h")
+def V22(s):
+    m, sd, stretta, pronto = _stretta(s)
+    return Regole(s, "short", stretta & (s.c < m - 2 * sd), stop_short(s, pronto), tenuta=30,
+                  uscita=pronto & (s.c > m))
+
+
+# ------------------------------------------------------------------ varianti allentate (dopo i conteggi)
+@tf("4h")
+def V23(s):
+    hh = quadro.massimo_precedente(s.h, 30)
+    ll = quadro.minimo_precedente(s.l, 15)
+    pronto = _ok(hh, ll, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.c > hh), stop_long(s, pronto), uscita=pronto & (s.c < ll))
+
+
+@tf("4h")
+def V24(s):
+    ll = quadro.minimo_precedente(s.l, 30)
+    hh = quadro.massimo_precedente(s.h, 15)
+    pronto = _ok(hh, ll, quadro.atr(s, 14))
+    return Regole(s, "short", pronto & (s.c < ll), stop_short(s, pronto), uscita=pronto & (s.c > hh))
+
+
+@tf("4h")
+def V25(s):
+    m200, m5, r2 = quadro.sma(s.c, 200), quadro.sma(s.c, 5), quadro.rsi(s.c, 2)
+    pronto = _ok(m200, m5, r2, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.c > m200) & (r2 < 10), stop_long(s, pronto),
+                  uscita=pronto & (s.c > m5))
+
+
+@tf("4h")
+def V26(s):
+    m200, m5, r2 = quadro.sma(s.c, 200), quadro.sma(s.c, 5), quadro.rsi(s.c, 2)
+    pronto = _ok(m200, m5, r2, quadro.atr(s, 14))
+    return Regole(s, "short", pronto & (s.c < m200) & (r2 > 90), stop_short(s, pronto),
+                  uscita=pronto & (s.c < m5))
+
+
+def _media_n(s, n):
+    m = quadro.sma(s.c, n)
+    prima = np.concatenate([[np.nan], s.c[:-1] - m[:-1]])
+    pronto = _ok(m, prima, quadro.atr(s, 14))
+    return m, prima, pronto
+
+
+@tf("1h")
+def V27(s):
+    m, prima, pronto = _media_n(s, 1200)
+    return Regole(s, "long", pronto & (s.c > m) & (np.nan_to_num(prima) <= 0), stop_long(s, pronto),
+                  uscita=pronto & (s.c < m))
+
+
+@tf("1h")
+def V28(s):
+    m, prima, pronto = _media_n(s, 1200)
+    return Regole(s, "short", pronto & (s.c < m) & (np.nan_to_num(prima) >= 0), stop_short(s, pronto),
+                  uscita=pronto & (s.c > m))
+
+
+@tf("1d")
+def V29(s):
+    media = np.full(s.n, np.nan)
+    for i in range(50, s.n):
+        media[i] = s.qv[i - 50:i].mean()
+    pronto = _ok(media, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.qv > 1.5 * np.nan_to_num(media, nan=np.inf)), stop_long(s, pronto), tenuta=5)
+
+
+@tf("4h")
+def V30(s):
+    m, sd, stretta, pronto = _stretta(s, 360, 1.2)
+    return Regole(s, "long", stretta & (s.c > m + 2 * sd), stop_long(s, pronto), tenuta=30,
+                  uscita=pronto & (s.c < m))
+
+
+@tf("4h")
+def V31(s):
+    m, sd, stretta, pronto = _stretta(s, 360, 1.2)
+    return Regole(s, "short", stretta & (s.c < m - 2 * sd), stop_short(s, pronto), tenuta=30,
+                  uscita=pronto & (s.c > m))
+
+
+# ------------------------------------------------------------------ I-13
+def _taker_buy(s: Serie) -> np.ndarray:
+    """Volume taker buy (moneta base, colonna 9 dei file klines) sugli stessi ts della serie."""
+    from research.src import dati
+    fine = quadro.FINE_COSTRUZIONE if s.periodo == "costruzione" else quadro.FINE_VALIDAZIONE
+    per_ts = {}
+    for p in dati._percorsi_presenti(quadro.SIMBOLO, "klines", s.tf, quadro.INIZIO, fine, dati.RADICE_DEFAULT):
+        for riga in dati.righe_csv_da_zip(p):
+            ts = dati.normalizza_ts(riga[0])
+            if ts not in per_ts and len(riga) > 9 and riga[9].strip():
+                per_ts[ts] = float(riga[9])
+    return np.array([per_ts.get(int(t), np.nan) for t in s.ts])
+
+
+def _squilibrio(s: Serie):
+    tb = _taker_buy(s)
+    q = np.full(s.n, np.nan)
+    for i in range(5, s.n):
+        v = s.v[i - 5:i + 1].sum()
+        if v > 0:
+            q[i] = tb[i - 5:i + 1].sum() / v - 0.5
+    media = np.full(s.n, np.nan)
+    sd = np.full(s.n, np.nan)
+    for i in range(725, s.n):
+        w = q[i - 720:i]
+        if not np.isnan(w).any():
+            media[i], sd[i] = w.mean(), w.std(ddof=1)
+    pronto = _ok(q, media, sd, quadro.atr(s, 14))
+    return q, media, sd, pronto
+
+
+@tf("1h")
+def V32(s):
+    q, media, sd, pronto = _squilibrio(s)
+    return Regole(s, "long", pronto & (np.nan_to_num(q) > np.nan_to_num(media + 2 * sd, nan=np.inf)),
+                  stop_long(s, pronto), tenuta=6)
+
+
+@tf("1h")
+def V33(s):
+    q, media, sd, pronto = _squilibrio(s)
+    return Regole(s, "short", pronto & (np.nan_to_num(q) < np.nan_to_num(media - 2 * sd, nan=-np.inf)),
+                  stop_short(s, pronto), tenuta=6)
+
+
+# ------------------------------------------------------------------ I-14
+def _relativo(s: Serie):
+    rm = quadro.rendimento(s.c, 42)
+    rb = quadro.rendimento(s.btc_c, 42)
+    pronto = _ok(rm, rb, quadro.atr(s, 14))
+    return rm - rb, pronto
+
+
+@tf("4h")
+def V34(s):
+    d, pronto = _relativo(s)
+    return Regole(s, "long", pronto & (np.nan_to_num(d) > 0), stop_long(s, pronto), tenuta=42)
+
+
+@tf("4h")
+def V35(s):
+    d, pronto = _relativo(s)
+    return Regole(s, "short", pronto & (np.nan_to_num(d) < 0), stop_short(s, pronto), tenuta=42)
+
+
+# ------------------------------------------------------------------ ritocchi
+@tf("1h")
+def V38(s):
+    """Ritocco 1 di V33 (MATICUSDT-018): solo quando BTCUSDT ha rendimento <= 0 nelle 24 ore prima."""
+    q, media, sd, pronto = _squilibrio(s)
+    btc24 = quadro.rendimento(s.btc_c, 24)
+    pronto = pronto & ~np.isnan(btc24)
+    return Regole(s, "short", pronto & (np.nan_to_num(q) < np.nan_to_num(media - 2 * sd, nan=-np.inf))
+                  & (np.nan_to_num(btc24, nan=1.0) <= 0), stop_short(s, pronto), tenuta=6)
+
+
+@tf("1h")
+def V39(s):
+    """Ritocco 2 della famiglia MATICUSDT-018, da V38: uscita dopo 24 barre invece di 6."""
+    reg = V38(s)
+    return Regole(s, "short", reg.ingresso, reg.stop, tenuta=24)
+
+
+@tf("1h")
+def V40(s):
+    """Ritocco 3 della famiglia MATICUSDT-018, da V38: uscita dopo 12 barre invece di 6."""
+    reg = V38(s)
+    return Regole(s, "short", reg.ingresso, reg.stop, tenuta=12)
+
+
+@tf("1h")
+def V41(s):
+    """Ritocco 4 della famiglia MATICUSDT-018, da V38: stop a min(3 ATR14, 6%) invece di min(2 ATR14, 6%)."""
+    reg = V38(s)
+    a = quadro.atr(s, 14)
+    pronto = ~np.isnan(reg.stop)
+    st = np.where(pronto, s.c + np.minimum(3 * a, 0.06 * s.c), np.nan)
+    return Regole(s, "short", reg.ingresso, st, tenuta=6)
+
+
+@tf("1h")
+def V42(s):
+    """Ritocco 5 della famiglia MATICUSDT-018, da V41: uscita dopo 12 barre invece di 6."""
+    reg = V41(s)
+    return Regole(s, "short", reg.ingresso, reg.stop, tenuta=12)
+
+
+@tf("1d")
+def V43(s):
+    """Ritocco 1 della famiglia MATICUSDT-016, da V29: soglia del volume 1,3 volte la media invece di 1,5."""
+    media = np.full(s.n, np.nan)
+    for i in range(50, s.n):
+        media[i] = s.qv[i - 50:i].mean()
+    pronto = _ok(media, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.qv > 1.3 * np.nan_to_num(media, nan=np.inf)), stop_long(s, pronto), tenuta=5)
+
+
+@tf("1d")
+def V44(s):
+    """Ritocco 2 della famiglia MATICUSDT-016, da V29: uscita dopo 10 barre invece di 5."""
+    reg = V29(s)
+    return Regole(s, "long", reg.ingresso, reg.stop, tenuta=10)
+
+
+@tf("1d")
+def V45(s):
+    """Ritocco 3 della famiglia MATICUSDT-016, da V29: uscita dopo 3 barre invece di 5."""
+    reg = V29(s)
+    return Regole(s, "long", reg.ingresso, reg.stop, tenuta=3)
+
+
+@tf("1d")
+def V46(s):
+    """Ritocco 4 della famiglia MATICUSDT-016, da V29: soglia del volume 1,4 volte la media."""
+    media = np.full(s.n, np.nan)
+    for i in range(50, s.n):
+        media[i] = s.qv[i - 50:i].mean()
+    pronto = _ok(media, quadro.atr(s, 14))
+    return Regole(s, "long", pronto & (s.qv > 1.4 * np.nan_to_num(media, nan=np.inf)), stop_long(s, pronto), tenuta=5)
+
+
+# ------------------------------------------------------------------ I-15
+def _illiquidita(s: Serie):
+    r = np.abs(quadro.rendimento(s.c, 1))
+    x = r / s.qv
+    il = np.full(s.n, np.nan)
+    for i in range(42, s.n):
+        w = x[i - 41:i + 1]
+        if not np.isnan(w).any():
+            il[i] = w.mean()
+    med = np.full(s.n, np.nan)
+    for i in range(42 + 540, s.n):
+        w = il[i - 540:i]
+        if not np.isnan(w).any():
+            med[i] = np.median(w)
+    pronto = _ok(il, med, quadro.atr(s, 14))
+    return il, med, pronto
+
+
+@tf("4h")
+def V36(s):
+    il, med, pronto = _illiquidita(s)
+    return Regole(s, "long", pronto & (np.nan_to_num(il) > np.nan_to_num(med, nan=np.inf)), stop_long(s, pronto), tenuta=42)
+
+
+@tf("4h")
+def V37(s):
+    il, med, pronto = _illiquidita(s)
+    return Regole(s, "short", pronto & (np.nan_to_num(il, nan=np.inf) < np.nan_to_num(med)), stop_short(s, pronto), tenuta=42)

@@ -1,0 +1,27 @@
+{
+ "prima_voce": "2026-10-09T13:26:18Z",
+ "ultima_voce": "2026-10-09T13:56:26Z",
+ "durata_minuti": 30.1,
+ "durata_minuti_senza_pause": 30.1,
+ "minuti_per_idea": {
+  "I-01": 2.8,
+  "I-03": 2.8,
+  "I-04": 2.8,
+  "I-05": 2.0,
+  "I-06": 2.8,
+  "I-07": 2.8,
+  "I-08": 7.9,
+  "I-09": 2.8,
+  "I-11": 2.0,
+  "I-13": 6.2,
+  "I-14": 2.0,
+  "I-15": 0.6
+ },
+ "varianti_testate": 30,
+ "ritocchi": 8,
+ "candidati_fase2_idee_nuove": [],
+ "candidati_fase2_ritocchi": [
+  "MATICUSDT-025"
+ ],
+ "nette_a_e_b_con_r_non_positivo": []
+}

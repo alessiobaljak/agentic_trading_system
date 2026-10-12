@@ -1,0 +1,514 @@
+{
+ "finestra=5": {
+  "trade_stimati": 134,
+  "trade": 134,
+  "r_medio": 0.18265,
+  "r_medio_senza_3_migliori": 0.12061,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.1828,
+    "trade": 51
+   },
+   "2022": {
+    "r_medio": 0.1729,
+    "trade": 82
+   },
+   "2023": {
+    "r_medio": 0.9729,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.4989,
+  "drawdown_max": -0.0454,
+  "b_media": -0.05101,
+  "t_b": 2.76724,
+  "soglia_b": 2.05983,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 99.5
+ },
+ "finestra=7": {
+  "trade_stimati": 129,
+  "trade": 129,
+  "r_medio": 0.06346,
+  "r_medio_senza_3_migliori": -0.01547,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": -0.0493,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.1256,
+    "trade": 81
+   },
+   "2023": {
+    "r_medio": 0.3325,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.1516,
+  "drawdown_max": -0.0641,
+  "b_media": -0.05179,
+  "t_b": 1.25682,
+  "soglia_b": 2.0613,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 90.5
+ },
+ "k_sd=1.6": {
+  "trade_stimati": 207,
+  "trade": 207,
+  "r_medio": 0.10627,
+  "r_medio_senza_3_migliori": 0.05578,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0501,
+    "trade": 79
+   },
+   "2022": {
+    "r_medio": 0.1344,
+    "trade": 127
+   },
+   "2023": {
+    "r_medio": 0.9729,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.2945,
+  "drawdown_max": -0.0794,
+  "b_media": -0.051,
+  "t_b": 2.31884,
+  "soglia_b": 2.03744,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 100.0
+ },
+ "k_sd=2.4": {
+  "trade_stimati": 70,
+  "trade": 70,
+  "r_medio": 0.23714,
+  "r_medio_senza_3_migliori": 0.12606,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.1746,
+    "trade": 27
+   },
+   "2022": {
+    "r_medio": 0.2751,
+    "trade": 42
+   },
+   "2023": {
+    "r_medio": 0.3325,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.7219,
+  "drawdown_max": -0.0331,
+  "b_media": -0.04382,
+  "t_b": 2.48323,
+  "soglia_b": 2.07626,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 98.5
+ },
+ "media=576": {
+  "trade_stimati": 130,
+  "trade": 130,
+  "r_medio": 0.12288,
+  "r_medio_senza_3_migliori": 0.047,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": -0.0157,
+    "trade": 53
+   },
+   "2022": {
+    "r_medio": 0.2083,
+    "trade": 76
+   },
+   "2023": {
+    "r_medio": 0.9729,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.321,
+  "drawdown_max": -0.0606,
+  "b_media": -0.05209,
+  "t_b": 1.86332,
+  "soglia_b": 2.03982,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 97.5
+ },
+ "media=864": {
+  "trade_stimati": 124,
+  "trade": 124,
+  "r_medio": 0.17674,
+  "r_medio_senza_3_migliori": 0.09863,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0843,
+    "trade": 46
+   },
+   "2022": {
+    "r_medio": 0.2217,
+    "trade": 77
+   },
+   "2023": {
+    "r_medio": 0.9729,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.5164,
+  "drawdown_max": -0.0566,
+  "b_media": -0.05289,
+  "t_b": 2.46429,
+  "soglia_b": 2.06446,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 100.0
+ },
+ "btc=19": {
+  "trade_stimati": 132,
+  "trade": 132,
+  "r_medio": 0.1349,
+  "r_medio_senza_3_migliori": 0.0447,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.1125,
+    "trade": 51
+   },
+   "2022": {
+    "r_medio": 0.1461,
+    "trade": 79
+   },
+   "2023": {
+    "r_medio": 0.2621,
+    "trade": 2
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.3386,
+  "drawdown_max": -0.0756,
+  "b_media": -0.05139,
+  "t_b": 2.01799,
+  "soglia_b": 2.0392,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 97.5
+ },
+ "btc=29": {
+  "trade_stimati": 121,
+  "trade": 121,
+  "r_medio": 0.1261,
+  "r_medio_senza_3_migliori": 0.03444,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0851,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.1551,
+    "trade": 73
+   },
+   "2023": {
+    "r_medio": -0.0644,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.3182,
+  "drawdown_max": -0.0492,
+  "b_media": -0.0531,
+  "t_b": 1.85955,
+  "soglia_b": 2.04327,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 98.0
+ },
+ "tenuta=10": {
+  "trade_stimati": 127,
+  "trade": 127,
+  "r_medio": 0.16434,
+  "r_medio_senza_3_migliori": 0.09606,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0532,
+    "trade": 49
+   },
+   "2022": {
+    "r_medio": 0.2231,
+    "trade": 77
+   },
+   "2023": {
+    "r_medio": 1.0833,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.4979,
+  "drawdown_max": -0.0487,
+  "b_media": -0.05254,
+  "t_b": 2.34676,
+  "soglia_b": 2.06284,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 100.0
+ },
+ "tenuta=14": {
+  "trade_stimati": 122,
+  "trade": 122,
+  "r_medio": 0.10413,
+  "r_medio_senza_3_migliori": 0.00324,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0011,
+    "trade": 46
+   },
+   "2022": {
+    "r_medio": 0.1586,
+    "trade": 75
+   },
+   "2023": {
+    "r_medio": 0.7554,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.2227,
+  "drawdown_max": -0.0648,
+  "b_media": -0.04843,
+  "t_b": 1.52595,
+  "soglia_b": 2.06617,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 94.5
+ },
+ "atr_n=11": {
+  "trade_stimati": 124,
+  "trade": 124,
+  "r_medio": 0.14781,
+  "r_medio_senza_3_migliori": 0.06948,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0527,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.1954,
+    "trade": 76
+   },
+   "2023": {
+    "r_medio": 1.0015,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.3917,
+  "drawdown_max": -0.0608,
+  "b_media": -0.05209,
+  "t_b": 2.11005,
+  "soglia_b": 2.06446,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 99.5
+ },
+ "atr_n=17": {
+  "trade_stimati": 124,
+  "trade": 124,
+  "r_medio": 0.14253,
+  "r_medio_senza_3_migliori": 0.06269,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0433,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.1933,
+    "trade": 76
+   },
+   "2023": {
+    "r_medio": 0.9453,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.3736,
+  "drawdown_max": -0.0591,
+  "b_media": -0.05289,
+  "t_b": 2.03043,
+  "soglia_b": 2.06446,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 99.0
+ },
+ "atr_mult=1.6": {
+  "trade_stimati": 126,
+  "trade": 126,
+  "r_medio": 0.17247,
+  "r_medio_senza_3_migliori": 0.07526,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0854,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.2117,
+    "trade": 78
+   },
+   "2023": {
+    "r_medio": 1.2074,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.3712,
+  "drawdown_max": -0.0734,
+  "b_media": -0.04883,
+  "t_b": 1.95495,
+  "soglia_b": 2.06284,
+  "netta_b": false,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 99.0
+ },
+ "atr_mult=2.4": {
+  "trade_stimati": 123,
+  "trade": 123,
+  "r_medio": 0.13654,
+  "r_medio_senza_3_migliori": 0.06981,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0971,
+    "trade": 46
+   },
+   "2022": {
+    "r_medio": 0.1515,
+    "trade": 76
+   },
+   "2023": {
+    "r_medio": 0.8147,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.4295,
+  "drawdown_max": -0.0457,
+  "b_media": -0.0523,
+  "t_b": 2.25118,
+  "soglia_b": 2.04253,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 99.5
+ },
+ "tetto=0.048": {
+  "trade_stimati": 124,
+  "trade": 124,
+  "r_medio": 0.14906,
+  "r_medio_senza_3_migliori": 0.06849,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0569,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.1952,
+    "trade": 76
+   },
+   "2023": {
+    "r_medio": 0.9729,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.3903,
+  "drawdown_max": -0.0525,
+  "b_media": -0.06112,
+  "t_b": 2.19137,
+  "soglia_b": 2.06446,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 99.5
+ },
+ "tetto=0.072": {
+  "trade_stimati": 124,
+  "trade": 124,
+  "r_medio": 0.15504,
+  "r_medio_senza_3_migliori": 0.0762,
+  "r_medio_per_anno": {
+   "2021": {
+    "r_medio": 0.0734,
+    "trade": 47
+   },
+   "2022": {
+    "r_medio": 0.1948,
+    "trade": 76
+   },
+   "2023": {
+    "r_medio": 0.9729,
+    "trade": 1
+   }
+  },
+  "violazioni_liquidazione": 0,
+  "trade_ridotti_tetto_leva": 0,
+  "profit_factor": 1.4179,
+  "drawdown_max": -0.0525,
+  "b_media": -0.04997,
+  "t_b": 2.16288,
+  "soglia_b": 2.06446,
+  "netta_b": true,
+  "valutabile_b": true,
+  "t_a": null,
+  "netta_a": null,
+  "percentile_caso": 99.0
+ }
+}
