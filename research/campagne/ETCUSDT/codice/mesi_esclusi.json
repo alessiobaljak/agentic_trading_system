@@ -1,0 +1,9 @@
+{
+ "soglia_usdt_giorno": 20000000,
+ "fonte": "file 1d del last, colonna quote_volume (volume_usdt_da_zip), media su tutti i giorni del mese",
+ "mesi_esclusi": [
+  "2020-06",
+  "2020-09",
+  "2020-10"
+ ]
+}
