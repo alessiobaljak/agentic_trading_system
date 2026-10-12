@@ -1,0 +1,4 @@
+ok i07_ritardo_btc.py {"direzione": "long", "finestra": 168, "soglia_dev": 2.0, "frazione": 0.5, "tenuta": 4, "atr": 14, "stop_atr": 2.0} {'trade_variante': 20, 'casuale_uguale': True, 'trade_a': 245, 'intervalli_vietati': 2}
+ok i07_ritardo_btc.py {"direzione": "short", "finestra": 168, "soglia_dev": 2.0, "frazione": 0.5, "tenuta": 4, "atr": 14, "stop_atr": 2.0} {'trade_variante': 22, 'casuale_uguale': True, 'trade_a': 247, 'intervalli_vietati': 2}
+ok i19_residuo.py {"direzione": "long", "orizzonte": 6, "finestra_beta": 180, "soglia_z": 2.0, "tenuta": 6, "atr": 14, "stop_atr": 2.0} {'trade_variante': 12, 'casuale_uguale': True, 'trade_a': 155, 'intervalli_vietati': 2}
+ok i19_residuo.py {"direzione": "short", "orizzonte": 6, "finestra_beta": 180, "soglia_z": 2.0, "tenuta": 6, "atr": 14, "stop_atr": 2.0} {'trade_variante': 17, 'casuale_uguale': True, 'trade_a': 156, 'intervalli_vietati': 2}

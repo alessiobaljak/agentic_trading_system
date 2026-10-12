@@ -1,0 +1,11 @@
+[
+{"tipo_test": "variante", "idea": "I-07", "variante_nome": "I-07-L-r3", "famiglia": "GRUPPO-040", "ritocco_di": "GRUPPO-040",
+ "fonte": "Koutmos, «Return and volatility spillovers among cryptocurrencies», Economics Letters 173, dicembre 2018 (ritocco)",
+ "meccanismo": "lo stesso di GRUPPO-040: diffusione lenta da BTC alle alt",
+ "cosa_cambia": "rispetto a GRUPPO-040: soglia_dev da 2 a 2,5 e frazione da 0,5 a 0,25 (a metà fra GRUPPO-040 e GRUPPO-044); tenuta 4 come GRUPPO-040; stop, timeframe e direzione uguali",
+ "perche": "ordine della regola 6 dopo GRUPPO-045: in testa resta GRUPPO-040 (t 1,55; poi 044 1,49, 037 1,44, 030 1,23, 045 1,13); terzo ritocco della famiglia. GRUPPO-040 ha molti trade ma recupero sotto i costi; GRUPPO-044 recupero sopra i costi ma pochi trade (12 blocchi, soglia 2,25); GRUPPO-045 ha mostrato che la tenuta più lunga non aiuta. Condizioni intermedie cercano più trade con il recupero ancora sopra il costo.",
+ "timeframe": "1h", "direzione": "long",
+ "modulo": "i07_ritardo_btc.py", "p_file": "p_r3_i07_L.json", "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra -0,03 e +0,03; t contro la (b) fra +0,5 e +2; trade fra 2.000 e 4.500",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo e R medio dopo i costi positivo"}
+]

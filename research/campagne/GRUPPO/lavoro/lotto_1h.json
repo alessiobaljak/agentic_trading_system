@@ -1,0 +1,14 @@
+[
+{"tipo_test": "variante", "idea": "I-07", "variante_nome": "I-07-L", "famiglia": null, "ritocco_di": null,
+ "fonte": "Koutmos, «Return and volatility spillovers among cryptocurrencies», Economics Letters 173, dicembre 2018",
+ "meccanismo": "diffusione lenta da BTC alle alt: la moneta indietro rispetto a un'ora forte di BTC in su recupera", "timeframe": "1h", "direzione": "long",
+ "modulo": "i07_ritardo_btc.py", "p_file": "p_i07_L.json", "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra -0,12 e +0,05; t contro la (b) fra -1 e +1,5",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo e R medio dopo i costi positivo"},
+{"tipo_test": "variante", "idea": "I-07", "variante_nome": "I-07-S", "famiglia": null, "ritocco_di": null,
+ "fonte": "Koutmos, «Return and volatility spillovers among cryptocurrencies», Economics Letters 173, dicembre 2018",
+ "meccanismo": "diffusione lenta da BTC alle alt: la moneta indietro rispetto a un'ora forte di BTC in giù la segue", "timeframe": "1h", "direzione": "short",
+ "modulo": "i07_ritardo_btc.py", "p_file": "p_i07_S.json", "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra -0,12 e +0,05; t contro la (b) fra -1 e +1,5",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo e R medio dopo i costi positivo"}
+]

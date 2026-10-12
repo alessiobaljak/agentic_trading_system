@@ -1,0 +1,2 @@
+{"id": "GRUPPO-047", "esame": "GRUPPO-047_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio dopo i costi 0,0002 su 1.558 trade, t contro la (b) 1,61 (soglia 2,14, 20 blocchi), contro la (a) 1,52; R per anno 0,00 / -0,04 / 0,04 / 0,58; senza i 30 migliori -0,043. Prima dei costi circa +0,059 R, costo 0,059 (lavoro/fase3_047.out): la moneta ferma con soglia 2,5 non dà più recupero della moneta salita meno di un quarto (GRUPPO-046, +0,076): la mia ipotesi del ritocco era sbagliata, il resto della previsione (R, t, trade) giusto."}

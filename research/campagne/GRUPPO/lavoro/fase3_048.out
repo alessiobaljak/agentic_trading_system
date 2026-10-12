@@ -1,0 +1,1 @@
+{"id": "GRUPPO-048", "trade": 2806, "r_medio": 0.0078, "costo_giro_r_medio_stimato": 0.049, "r_medio_lordo_stimato": 0.0568, "per_esito": {"segnale": {"quota": 0.976, "r_medio": 0.0338}, "stop": {"quota": 0.024, "r_medio": -1.0375}}, "giorni_con_almeno_10_uscite": {"trade": 2288, "r_medio": 0.0186}, "altri_giorni": {"trade": 518, "r_medio": -0.0398}}

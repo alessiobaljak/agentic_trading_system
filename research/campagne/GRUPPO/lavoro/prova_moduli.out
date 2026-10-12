@@ -1,0 +1,13 @@
+ok i01_momento.py {"direzione": "long", "ritorno_barre": 21, "tenuta": 7, "atr": 14, "stop_atr": 3.0} {'trade_variante': 78, 'casuale_uguale': True, 'trade_a': 150, 'intervalli_vietati': 2}
+ok i01_momento.py {"direzione": "short", "ritorno_barre": 21, "tenuta": 7, "atr": 14, "stop_atr": 3.0} {'trade_variante': 102, 'casuale_uguale': True, 'trade_a': 153, 'intervalli_vietati': 2}
+ok i02_rottura.py {"direzione": "long", "finestra": 50, "tenuta": 10, "atr": 14, "stop_atr": 3.0} {'trade_variante': 14, 'casuale_uguale': True, 'trade_a': 109, 'intervalli_vietati': 2}
+ok i02_rottura.py {"direzione": "short", "finestra": 50, "tenuta": 10, "atr": 14, "stop_atr": 3.0} {'trade_variante': 42, 'casuale_uguale': True, 'trade_a': 110, 'intervalli_vietati': 2}
+ok i03_giorno_anomalo.py {"direzione": "long", "finestra": 30, "soglia_dev": 2.0, "tenuta": 1, "atr": 14, "stop_atr": 3.0} {'trade_variante': 33, 'casuale_uguale': True, 'trade_a': 584, 'intervalli_vietati': 2}
+ok i04_inversione_volume.py {"direzione": "long", "finestra": 30, "soglia_dev": 2.0, "finestra_volume": 20, "volume_multiplo": 2.0, "tenuta": 3, "atr": 14, "stop_atr": 3.0} {'trade_variante': 2, 'casuale_uguale': True, 'trade_a': 293, 'intervalli_vietati': 2}
+ok i05_funding.py {"direzione": "short", "finestra_ore": 24, "soglia": 0.0015, "tenuta": 3, "atr": 14, "stop_atr": 3.0} {'trade_variante': 149, 'casuale_uguale': True, 'trade_a': 298, 'intervalli_vietati': 2}
+ok i06_compressione.py {"direzione": "long", "periodo_bb": 20, "k_bb": 2.0, "finestra_compressione": 120, "recenti": 5, "atr": 14, "stop_atr": 3.0} {'trade_variante': 3, 'casuale_uguale': True, 'trade_a': 357, 'intervalli_vietati': 2}
+ok i08_lunedi.py {"direzione": "long", "giorno_ingresso": 0, "tenuta": 1, "atr": 14, "stop_atr": 3.0} {'trade_variante': 169, 'casuale_uguale': True, 'trade_a': 593, 'intervalli_vietati': 2}
+ok i10_massimo_annuo.py {"direzione": "long", "finestra": 365, "quota": 0.95, "tenuta": 20, "atr": 14, "stop_atr": 3.0} {'trade_variante': 0, 'casuale_uguale': True, 'trade_a': 45, 'intervalli_vietati': 2}
+ok i11_massimo_lotteria.py {"direzione": "short", "finestra": 30, "finestra_rif": 90, "multiplo": 5.0, "tenuta": 30, "atr": 14, "stop_atr": 3.0} {'trade_variante': 0, 'casuale_uguale': True, 'trade_a': 46, 'intervalli_vietati': 2}
+ok i12_rsi2.py {"direzione": "long", "periodo_rsi": 2, "rsi_soglia": 10, "media_lunga": 200, "media_corta": 5, "atr": 14, "stop_atr": 3.0} {'trade_variante': 2, 'casuale_uguale': True, 'trade_a': 275, 'intervalli_vietati': 2}
+ok i17_inizio_mese.py {"direzione": "long", "tenuta": 4, "atr": 14, "stop_atr": 3.0} {'trade_variante': 39, 'casuale_uguale': True, 'trade_a': 239, 'intervalli_vietati': 2}

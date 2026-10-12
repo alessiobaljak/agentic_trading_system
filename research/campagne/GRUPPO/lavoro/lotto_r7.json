@@ -1,0 +1,11 @@
+[
+{"tipo_test": "variante", "idea": "I-19", "variante_nome": "I-19-L-r2", "famiglia": "GRUPPO-037", "ritocco_di": "GRUPPO-037",
+ "fonte": "Da, Liu, Schaumburg, «A Closer Look at the Short-Term Return Reversal», Management Science 60(3), marzo 2014 (ritocco)",
+ "meccanismo": "lo stesso di GRUPPO-037: rientro della pressione di liquidità propria della moneta, al netto di BTC",
+ "cosa_cambia": "soglia_z da 2 a 1,5 (residuo di 24 ore meno estremo); orizzonte, beta, tenuta, stop, timeframe e direzione uguali",
+ "perche": "ordine della regola 6 dopo GRUPPO-049: in testa GRUPPO-037 (t 1,44; la famiglia GRUPPO-040 è chiusa); secondo ritocco della famiglia. GRUPPO-049 (soglia 2,5) ha tenuto il rientro per trade ma è sceso a 5 blocchi; GRUPPO-037 ha 11 blocchi. Una soglia più bassa porta più trade e più giorni con trade, quindi più blocchi interi e una soglia di «nettamente» più bassa, al prezzo di un rientro per trade più piccolo (nella Fase 3 di GRUPPO-037 i trade fuori dai giorni di grappolo valevano +0,022).",
+ "timeframe": "4h", "direzione": "long",
+ "modulo": "i19_residuo.py", "p_file": "p_r2_i19_L.json", "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra +0,02 e +0,08; t contro la (b) fra +0,5 e +2; trade fra 3.500 e 6.000",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo e R medio dopo i costi positivo"}
+]

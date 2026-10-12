@@ -1,0 +1,22 @@
+[
+{"id": "GRUPPO-015", "esame": "GRUPPO-015_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio 0,036 su 3.756 trade, t contro la (b) 0,39 (soglia 2,11), contro la (a) 0,20. Percentile fra le simulazioni casuali 99,5, ma il pavimento delle sfasate (0,033) è molto più grande dell'errore della (b): i long di momento cadono negli stessi periodi su tutte le monete, e una strategia senza vantaggio con gli stessi grappoli ha questa dispersione. R negativo nel 2022 (-0,125), positivo 2020-2021; senza i 30 trade migliori -0,001. Previsione corretta."},
+{"id": "GRUPPO-016", "esame": "GRUPPO-016_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio -0,022 su 4.320 trade, t contro la (b) 0,20, contro la (a) 0,19. Positivo solo nel 2022. Previsione corretta."},
+{"id": "GRUPPO-017", "esame": "GRUPPO-017_costruzione_esame.json", "previsione_corretta": false,
+ "commento": "Non è un candidato: R medio 0,110 su 871 trade, t contro la (b) 0,71 (soglia 2,32, 15 blocchi), contro la (a) 0,55; percentile 100 fra le simulazioni casuali ma pavimento delle sfasate 0,071: le rotture in su cadono insieme su molte monete (rialzi generali 2020-2021). R per anno 0,30 / 0,21 / -0,30 / 0,48: dipende dagli anni di rialzo; senza i 30 trade migliori -0,033. Previsione sbagliata per l'R medio (atteso fra -0,03 e +0,08, uscito 0,110): non avevo messo in conto quanto pochi trade estremi di 2020-2021 pesano su 871 trade."},
+{"id": "GRUPPO-018", "esame": "GRUPPO-018_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio -0,008 su 1.115 trade, t contro la (b) 0,28, contro la (a) 0,29. Positivo solo nel 2022. Previsione corretta."},
+{"id": "GRUPPO-020", "esame": "GRUPPO-020_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio -0,055 su 877 trade, t contro la (b) -0,96, percentile 0. Lo short dopo un rialzo anomalo con volume anomalo perde più del caso: il rialzo forzato non rientra in 3 giorni. Previsione corretta."},
+{"id": "GRUPPO-021", "esame": "GRUPPO-021_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio -0,034 su 2.096 trade, t contro la (b) -0,27, contro la (a) -0,18. Positivo nel 2022 (0,168), negativo negli altri anni: il funding alto non anticipa lo scarico in 3 giorni. Previsione corretta."},
+{"id": "GRUPPO-025", "esame": "GRUPPO-025_costruzione_esame.json", "previsione_corretta": false,
+ "commento": "Non è un candidato: R medio -0,024 su 7.116 trade, t contro la (b) -1,37, percentile 0: il long del lunedì fa peggio dei long in giorni a caso. Previsione sbagliata per il t (atteso fra -1 e +1): l'effetto del lunedì non c'è e il lunedì risulta un giorno peggiore della media nelle monete del gruppo 2020-2023."},
+{"id": "GRUPPO-027", "esame": "GRUPPO-027_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio -0,038 su 798 trade, t contro la (b) -0,02, contro la (a) 0,22. Positivo solo nel 2022. Previsione corretta."},
+{"id": "GRUPPO-029", "esame": "GRUPPO-029_costruzione_esame.json", "previsione_corretta": true,
+ "commento": "Non è un candidato: R medio -0,072 su 1.437 trade, t contro la (b) -0,82, percentile 0. Previsione corretta."},
+{"id": "GRUPPO-030", "esame": "GRUPPO-030_costruzione_esame.json", "previsione_corretta": false,
+ "commento": "Non è un candidato: R medio 0,081 su 1.630 trade, t contro la (b) 1,23 (soglia 2,14, 9 blocchi), contro la (a) 0,98; percentile 100, ma pavimento delle sfasate 0,063: tutte le monete entrano lo stesso giorno, circa 36 scommesse vere. R per anno -0,18 / 0,20 / -0,00 / 0,16; senza i 30 migliori 0,051. Previsione sbagliata (R atteso fino a 0,08, t fino a 1): è la variante con il t più alto finora, da ricordare per l'ordine dei ritocchi."}
+]

@@ -1,0 +1,11 @@
+[
+{"tipo_test": "variante", "idea": "I-19", "variante_nome": "I-19-L-r1", "famiglia": "GRUPPO-037", "ritocco_di": "GRUPPO-037",
+ "fonte": "Da, Liu, Schaumburg, «A Closer Look at the Short-Term Return Reversal», Management Science 60(3), marzo 2014 (ritocco)",
+ "meccanismo": "lo stesso di GRUPPO-037: rientro della pressione di liquidità propria della moneta, al netto di BTC",
+ "cosa_cambia": "soglia_z da 2 a 2,5 (residuo di 24 ore più estremo); orizzonte, beta, tenuta, stop, timeframe e direzione uguali",
+ "perche": "ordine della regola 6 dopo GRUPPO-048: le prime cinque sono della famiglia GRUPPO-040, chiusa con 5 ritocchi; la prima con famiglia aperta è GRUPPO-037 (t 1,44). Fase 3 di GRUPPO-037 (nota GRUPPO-043): costo per giro 0,026 R, prima dei costi circa +0,11 R; il rientro è più forte dove la pressione è più forte. Un residuo più estremo dovrebbe dare più rientro per trade; il rischio è avere ancora meno blocchi (oggi 11).",
+ "timeframe": "4h", "direzione": "long",
+ "modulo": "i19_residuo.py", "p_file": "p_r1_i19_L.json", "periodo": "costruzione",
+ "previsione": "R medio dopo i costi fra +0,03 e +0,15; t contro la (b) fra +0,5 e +2; trade fra 1.000 e 1.800",
+ "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo e R medio dopo i costi positivo"}
+]

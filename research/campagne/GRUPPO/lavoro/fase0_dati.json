@@ -1,0 +1,9451 @@
+{
+ "monete": {
+  "1000XECUSDT": {
+   "primo_mese": "2021-09-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-09-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 836,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-09-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 833,
+    "giorni_mancanti": 3,
+    "intervalli_mancanti": [
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 833,
+     "tolte_last": 3,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-09-17"
+    },
+    "4h": {
+     "barre": 4998,
+     "tolte_last": 18,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-09-17"
+    },
+    "1h": {
+     "barre": 19989,
+     "tolte_last": 72,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-09-17"
+     ],
+     "primo_giorno_in_comune": "2021-09-17"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2507,
+    "primo": "2021-09-17",
+    "intervalli_ore": [
+     [
+      "2021-09-17",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 40.9,
+    "2022": 22.0,
+    "2023": 26.5
+   },
+   "mesi_sotto_liquidita": [
+    "2022-01",
+    "2022-02",
+    "2022-06",
+    "2022-07",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-02",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.722,
+    "giorno": "2023-06-30"
+   }
+  },
+  "1INCHUSDT": {
+   "primo_mese": "2020-12-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-12-25",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1102,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-12-25",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1100,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1100,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-12-25"
+    },
+    "4h": {
+     "barre": 6598,
+     "tolte_last": 12,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-12-25"
+    },
+    "1h": {
+     "barre": 26390,
+     "tolte_last": 48,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-12-25"
+     ],
+     "primo_giorno_in_comune": "2020-12-25"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3304,
+    "primo": "2020-12-25",
+    "intervalli_ore": [
+     [
+      "2020-12-25",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 115.7,
+    "2021": 129.2,
+    "2022": 46.2,
+    "2023": 39.0
+   },
+   "mesi_sotto_liquidita": [
+    "2023-05",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.644,
+    "giorno": "2021-05-19"
+   }
+  },
+  "AAVEUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-10-16",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1172,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-10-16",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1170,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1170,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-10-16"
+    },
+    "4h": {
+     "barre": 7019,
+     "tolte_last": 12,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-16"
+     ],
+     "primo_giorno_in_comune": "2020-10-16"
+    },
+    "1h": {
+     "barre": 28073,
+     "tolte_last": 48,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-16"
+     ],
+     "primo_giorno_in_comune": "2020-10-16"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3515,
+    "primo": "2020-10-16",
+    "intervalli_ore": [
+     [
+      "2020-10-16",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 56.2,
+    "2021": 224.7,
+    "2022": 127.7,
+    "2023": 68.8
+   },
+   "mesi_sotto_liquidita": [],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.525,
+    "giorno": "2021-05-19"
+   }
+  },
+  "ALGOUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-06-16",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1294,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-06-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1307,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1292,
+     "tolte_last": 2,
+     "tolte_mark": 15,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-01..2020-06-15"
+     ],
+     "primo_giorno_in_comune": "2020-06-16"
+    },
+    "4h": {
+     "barre": 7750,
+     "tolte_last": 12,
+     "tolte_mark": 92,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-01..2020-06-16"
+     ],
+     "primo_giorno_in_comune": "2020-06-16"
+    },
+    "1h": {
+     "barre": 30999,
+     "tolte_last": 48,
+     "tolte_mark": 369,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-01..2020-06-16"
+     ],
+     "primo_giorno_in_comune": "2020-06-16"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3927,
+    "primo": "2020-06-01",
+    "intervalli_ore": [
+     [
+      "2020-06-01",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 23.2,
+    "2021": 154.5,
+    "2022": 100.4,
+    "2023": 43.6
+   },
+   "mesi_sotto_liquidita": [
+    "2020-06",
+    "2020-09",
+    "2020-10",
+    "2020-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.502,
+    "giorno": "2021-09-08"
+   }
+  },
+  "ALPHAUSDT": {
+   "primo_mese": "2020-11-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-11-23",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1134,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-11-23",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1132,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1132,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-11-23"
+    },
+    "4h": {
+     "barre": 6791,
+     "tolte_last": 12,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-23"
+     ],
+     "primo_giorno_in_comune": "2020-11-23"
+    },
+    "1h": {
+     "barre": 27161,
+     "tolte_last": 48,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-23"
+     ],
+     "primo_giorno_in_comune": "2020-11-23"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3401,
+    "primo": "2020-11-23",
+    "intervalli_ore": [
+     [
+      "2020-11-23",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 8.9,
+    "2021": 77.5,
+    "2022": 31.9,
+    "2023": 49.4
+   },
+   "mesi_sotto_liquidita": [
+    "2020-11",
+    "2020-12",
+    "2022-07",
+    "2022-08",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.653,
+    "giorno": "2021-05-19"
+   }
+  },
+  "ANKRUSDT": {
+   "primo_mese": "2021-01-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-01-26",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1070,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-01-25",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1063,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1062,
+     "tolte_last": 8,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-25"
+     ],
+     "primo_giorno_in_comune": "2021-01-26"
+    },
+    "4h": {
+     "barre": 6371,
+     "tolte_last": 48,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-25..2021-01-26"
+     ],
+     "primo_giorno_in_comune": "2021-01-26"
+    },
+    "1h": {
+     "barre": 25481,
+     "tolte_last": 192,
+     "tolte_mark": 17,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-25..2021-01-26"
+     ],
+     "primo_giorno_in_comune": "2021-01-26"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3211,
+    "primo": "2021-01-25",
+    "intervalli_ore": [
+     [
+      "2021-01-25",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 72.0,
+    "2022": 36.7,
+    "2023": 43.5
+   },
+   "mesi_sotto_liquidita": [
+    "2021-01",
+    "2022-06",
+    "2022-07",
+    "2022-12",
+    "2023-05",
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.467,
+    "giorno": "2021-03-23"
+   }
+  },
+  "ARPAUSDT": {
+   "primo_mese": "2021-10-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-10-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 804,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-10-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 802,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 802,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-10-19"
+    },
+    "4h": {
+     "barre": 4812,
+     "tolte_last": 12,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-10-19"
+    },
+    "1h": {
+     "barre": 19245,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-10-19"
+     ],
+     "primo_giorno_in_comune": "2021-10-19"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2411,
+    "primo": "2021-10-19",
+    "intervalli_ore": [
+     [
+      "2021-10-19",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 85.5,
+    "2022": 25.3,
+    "2023": 70.6
+   },
+   "mesi_sotto_liquidita": [
+    "2022-07",
+    "2022-08",
+    "2022-09",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-04",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.609,
+    "giorno": "2023-05-24"
+   }
+  },
+  "ARUSDT": {
+   "primo_mese": "2021-09-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-09-28",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 825,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-09-27",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 823,
+    "giorni_mancanti": 3,
+    "intervalli_mancanti": [
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 822,
+     "tolte_last": 3,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-09-27"
+     ],
+     "primo_giorno_in_comune": "2021-09-28"
+    },
+    "4h": {
+     "barre": 4932,
+     "tolte_last": 18,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-09-27"
+     ],
+     "primo_giorno_in_comune": "2021-09-28"
+    },
+    "1h": {
+     "barre": 19725,
+     "tolte_last": 72,
+     "tolte_mark": 25,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-09-27..2021-09-28"
+     ],
+     "primo_giorno_in_comune": "2021-09-28"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2477,
+    "primo": "2021-09-27",
+    "intervalli_ore": [
+     [
+      "2021-09-27",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 79.3,
+    "2022": 45.3,
+    "2023": 21.2
+   },
+   "mesi_sotto_liquidita": [
+    "2021-09",
+    "2022-12",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.407,
+    "giorno": "2021-11-02"
+   }
+  },
+  "ATOMUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-07",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1424,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-06",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1422,
+    "giorni_mancanti": 3,
+    "intervalli_mancanti": [
+     "2022-02-08",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1421,
+     "tolte_last": 3,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-02-08",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-06"
+     ],
+     "primo_giorno_in_comune": "2020-02-07"
+    },
+    "4h": {
+     "barre": 8529,
+     "tolte_last": 12,
+     "tolte_mark": 7,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-06..2020-02-07"
+     ],
+     "primo_giorno_in_comune": "2020-02-07"
+    },
+    "1h": {
+     "barre": 34116,
+     "tolte_last": 48,
+     "tolte_mark": 28,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-06..2020-02-07"
+     ],
+     "primo_giorno_in_comune": "2020-02-07"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4273,
+    "primo": "2020-02-06",
+    "intervalli_ore": [
+     [
+      "2020-02-06",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 18.3,
+    "2021": 228.1,
+    "2022": 332.2,
+    "2023": 119.9
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.874,
+    "giorno": "2020-03-12"
+   }
+  },
+  "AUDIOUSDT": {
+   "primo_mese": "2021-08-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 29,
+    "presenti": 29,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 29,
+    "presenti": 29,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 29,
+    "presenti": 29,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-08-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 865,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-08-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 862,
+    "giorni_mancanti": 3,
+    "intervalli_mancanti": [
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 862,
+     "tolte_last": 3,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-08-19"
+    },
+    "4h": {
+     "barre": 5172,
+     "tolte_last": 18,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-08-19"
+    },
+    "1h": {
+     "barre": 20685,
+     "tolte_last": 72,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-08-19"
+     ],
+     "primo_giorno_in_comune": "2021-08-19"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2594,
+    "primo": "2021-08-19",
+    "intervalli_ore": [
+     [
+      "2021-08-19",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 74.3,
+    "2022": 41.1,
+    "2023": 33.7
+   },
+   "mesi_sotto_liquidita": [
+    "2022-09",
+    "2022-10",
+    "2022-12",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.52,
+    "giorno": "2022-05-11"
+   }
+  },
+  "AXSUSDT": {
+   "primo_mese": "2020-11-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-11-20",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1137,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-11-20",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1129,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1129,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-11-20"
+    },
+    "4h": {
+     "barre": 6773,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-20"
+     ],
+     "primo_giorno_in_comune": "2020-11-20"
+    },
+    "1h": {
+     "barre": 27089,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-20"
+     ],
+     "primo_giorno_in_comune": "2020-11-20"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3410,
+    "primo": "2020-11-20",
+    "intervalli_ore": [
+     [
+      "2020-11-20",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 12.7,
+    "2021": 583.6,
+    "2022": 238.6,
+    "2023": 105.3
+   },
+   "mesi_sotto_liquidita": [
+    "2020-11",
+    "2020-12",
+    "2021-01"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.714,
+    "giorno": "2021-07-23"
+   }
+  },
+  "BAKEUSDT": {
+   "primo_mese": "2021-05-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 32,
+    "presenti": 32,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 32,
+    "presenti": 32,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 32,
+    "presenti": 32,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-05-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 957,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-05-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 955,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 955,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-05-19"
+    },
+    "4h": {
+     "barre": 5729,
+     "tolte_last": 12,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-05-19"
+    },
+    "1h": {
+     "barre": 22913,
+     "tolte_last": 48,
+     "tolte_mark": 3,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-05-19"
+     ],
+     "primo_giorno_in_comune": "2021-05-19"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2870,
+    "primo": "2021-05-19",
+    "intervalli_ore": [
+     [
+      "2021-05-19",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 82.3,
+    "2022": 36.3,
+    "2023": 68.9
+   },
+   "mesi_sotto_liquidita": [
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.866,
+    "giorno": "2022-03-31"
+   }
+  },
+  "BANDUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-07-29",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1251,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-07-29",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1243,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1243,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-07-29"
+    },
+    "4h": {
+     "barre": 7457,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-29"
+     ],
+     "primo_giorno_in_comune": "2020-07-29"
+    },
+    "1h": {
+     "barre": 29825,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-29"
+     ],
+     "primo_giorno_in_comune": "2020-07-29"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3752,
+    "primo": "2020-07-29",
+    "intervalli_ore": [
+     [
+      "2020-07-29",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 53.8,
+    "2021": 52.1,
+    "2022": 68.3,
+    "2023": 28.8
+   },
+   "mesi_sotto_liquidita": [
+    "2020-10",
+    "2022-09",
+    "2022-10",
+    "2023-05",
+    "2023-08",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 2.13,
+    "giorno": "2022-11-03"
+   }
+  },
+  "BELUSDT": {
+   "primo_mese": "2020-11-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-11-18",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1139,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-11-18",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1137,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1137,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-11-18"
+    },
+    "4h": {
+     "barre": 6821,
+     "tolte_last": 12,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-18"
+     ],
+     "primo_giorno_in_comune": "2020-11-18"
+    },
+    "1h": {
+     "barre": 27281,
+     "tolte_last": 48,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-18"
+     ],
+     "primo_giorno_in_comune": "2020-11-18"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3416,
+    "primo": "2020-11-18",
+    "intervalli_ore": [
+     [
+      "2020-11-18",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 10.5,
+    "2021": 48.5,
+    "2022": 69.2,
+    "2023": 38.3
+   },
+   "mesi_sotto_liquidita": [
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2022-01",
+    "2022-03",
+    "2022-04",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-08",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 2.413,
+    "giorno": "2022-05-29"
+   }
+  },
+  "BLZUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1201,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-16",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1194,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1193,
+     "tolte_last": 8,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-16"
+     ],
+     "primo_giorno_in_comune": "2020-09-17"
+    },
+    "4h": {
+     "barre": 7157,
+     "tolte_last": 48,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-16..2020-09-17"
+     ],
+     "primo_giorno_in_comune": "2020-09-17"
+    },
+    "1h": {
+     "barre": 28625,
+     "tolte_last": 192,
+     "tolte_mark": 19,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-16..2020-09-17"
+     ],
+     "primo_giorno_in_comune": "2020-09-17"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3920,
+    "primo": "2020-09-16",
+    "intervalli_ore": [
+     [
+      "2020-09-16",
+      8.0
+     ],
+     [
+      "2023-08-14",
+      4.0
+     ],
+     [
+      "2023-08-31",
+      8.0
+     ],
+     [
+      "2023-09-05",
+      4.0
+     ],
+     [
+      "2023-09-13",
+      8.0
+     ],
+     [
+      "2023-10-12",
+      4.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 3.7,
+    "2021": 48.1,
+    "2022": 43.1,
+    "2023": 94.9
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2022-04",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.689,
+    "giorno": "2021-05-19"
+   }
+  },
+  "C98USDT": {
+   "primo_mese": "2021-08-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 29,
+    "presenti": 29,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 29,
+    "presenti": 29,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 29,
+    "presenti": 29,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-08-24",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 860,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-08-24",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 858,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 858,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-08-24"
+    },
+    "4h": {
+     "barre": 5148,
+     "tolte_last": 12,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-08-24"
+    },
+    "1h": {
+     "barre": 20589,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-08-24"
+     ],
+     "primo_giorno_in_comune": "2021-08-24"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2579,
+    "primo": "2021-08-24",
+    "intervalli_ore": [
+     [
+      "2021-08-24",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 191.5,
+    "2022": 39.6,
+    "2023": 36.7
+   },
+   "mesi_sotto_liquidita": [
+    "2022-12",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.585,
+    "giorno": "2022-05-11"
+   }
+  },
+  "CELOUSDT": {
+   "primo_mese": "2021-09-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 28,
+    "presenti": 28,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-09-27",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 826,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-09-27",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 824,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 824,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-09-27"
+    },
+    "4h": {
+     "barre": 4944,
+     "tolte_last": 12,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-09-27"
+    },
+    "1h": {
+     "barre": 19773,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-09-27"
+     ],
+     "primo_giorno_in_comune": "2021-09-27"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2477,
+    "primo": "2021-09-27",
+    "intervalli_ore": [
+     [
+      "2021-09-27",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 34.0,
+    "2022": 42.6,
+    "2023": 46.3
+   },
+   "mesi_sotto_liquidita": [
+    "2021-09",
+    "2022-07",
+    "2022-08",
+    "2022-09",
+    "2022-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.336,
+    "giorno": "2022-11-09"
+   }
+  },
+  "CELRUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-03-29",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1008,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-03-29",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1006,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1006,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-03-29"
+    },
+    "4h": {
+     "barre": 6035,
+     "tolte_last": 12,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-03-29"
+    },
+    "1h": {
+     "barre": 24137,
+     "tolte_last": 48,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-29"
+     ],
+     "primo_giorno_in_comune": "2021-03-29"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3023,
+    "primo": "2021-03-29",
+    "intervalli_ore": [
+     [
+      "2021-03-29",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 111.6,
+    "2022": 45.2,
+    "2023": 24.6
+   },
+   "mesi_sotto_liquidita": [
+    "2021-06",
+    "2021-07",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.483,
+    "giorno": "2022-05-11"
+   }
+  },
+  "CHZUSDT": {
+   "primo_mese": "2021-01-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-01-21",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1075,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-01-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1093,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1073,
+     "tolte_last": 2,
+     "tolte_mark": 20,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-01..2021-01-20"
+     ],
+     "primo_giorno_in_comune": "2021-01-21"
+    },
+    "4h": {
+     "barre": 6437,
+     "tolte_last": 12,
+     "tolte_mark": 121,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-01..2021-01-21"
+     ],
+     "primo_giorno_in_comune": "2021-01-21"
+    },
+    "1h": {
+     "barre": 25745,
+     "tolte_last": 48,
+     "tolte_mark": 487,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-01..2021-01-21"
+     ],
+     "primo_giorno_in_comune": "2021-01-21"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3285,
+    "primo": "2021-01-01",
+    "intervalli_ore": [
+     [
+      "2021-01-01",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 251.9,
+    "2022": 226.2,
+    "2023": 54.5
+   },
+   "mesi_sotto_liquidita": [
+    "2021-01",
+    "2023-08",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 2.036,
+    "giorno": "2021-03-12"
+   }
+  },
+  "COMPUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-06-30",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1280,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-06-30",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1272,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1272,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-06-30"
+    },
+    "4h": {
+     "barre": 7630,
+     "tolte_last": 48,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-30"
+     ],
+     "primo_giorno_in_comune": "2020-06-30"
+    },
+    "1h": {
+     "barre": 30519,
+     "tolte_last": 192,
+     "tolte_mark": 7,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-30"
+     ],
+     "primo_giorno_in_comune": "2020-06-30"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3839,
+    "primo": "2020-06-30",
+    "intervalli_ore": [
+     [
+      "2020-06-30",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 29.4,
+    "2021": 74.0,
+    "2022": 42.5,
+    "2023": 94.6
+   },
+   "mesi_sotto_liquidita": [
+    "2020-06",
+    "2020-07",
+    "2020-10",
+    "2022-12",
+    "2023-04",
+    "2023-05"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.414,
+    "giorno": "2021-05-19"
+   }
+  },
+  "CRVUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1217,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1209,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1209,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-09-01"
+    },
+    "4h": {
+     "barre": 7253,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-01"
+     ],
+     "primo_giorno_in_comune": "2020-09-01"
+    },
+    "1h": {
+     "barre": 29009,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-01"
+     ],
+     "primo_giorno_in_comune": "2020-09-01"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3650,
+    "primo": "2020-09-01",
+    "intervalli_ore": [
+     [
+      "2020-09-01",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 44.5,
+    "2021": 156.6,
+    "2022": 167.1,
+    "2023": 131.3
+   },
+   "mesi_sotto_liquidita": [],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.796,
+    "giorno": "2021-05-19"
+   }
+  },
+  "CTSIUSDT": {
+   "primo_mese": "2021-10-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-10-26",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 797,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-10-26",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 794,
+    "giorni_mancanti": 3,
+    "intervalli_mancanti": [
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 794,
+     "tolte_last": 3,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-10-26"
+    },
+    "4h": {
+     "barre": 4764,
+     "tolte_last": 18,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-10-26"
+    },
+    "1h": {
+     "barre": 19053,
+     "tolte_last": 72,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-10-26"
+     ],
+     "primo_giorno_in_comune": "2021-10-26"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2390,
+    "primo": "2021-10-26",
+    "intervalli_ore": [
+     [
+      "2021-10-26",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 77.0,
+    "2022": 18.1,
+    "2023": 47.0
+   },
+   "mesi_sotto_liquidita": [
+    "2021-10",
+    "2022-02",
+    "2022-04",
+    "2022-05",
+    "2022-07",
+    "2022-08",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2023-01",
+    "2023-02",
+    "2023-03",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.432,
+    "giorno": "2023-04-16"
+   }
+  },
+  "DASHUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-04",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1427,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-04",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1425,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1425,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-02-04"
+    },
+    "4h": {
+     "barre": 8548,
+     "tolte_last": 12,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04"
+     ],
+     "primo_giorno_in_comune": "2020-02-04"
+    },
+    "1h": {
+     "barre": 34192,
+     "tolte_last": 48,
+     "tolte_mark": 3,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04"
+     ],
+     "primo_giorno_in_comune": "2020-02-04"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4280,
+    "primo": "2020-02-04",
+    "intervalli_ore": [
+     [
+      "2020-02-04",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 11.1,
+    "2021": 73.3,
+    "2022": 34.7,
+    "2023": 23.8
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-07",
+    "2020-08",
+    "2020-09",
+    "2020-10",
+    "2020-12",
+    "2022-09",
+    "2022-10",
+    "2023-05",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.638,
+    "giorno": "2020-03-12"
+   }
+  },
+  "DOTUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-08-22",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1227,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-08-20",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1221,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1219,
+     "tolte_last": 8,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-20..2020-08-21"
+     ],
+     "primo_giorno_in_comune": "2020-08-22"
+    },
+    "4h": {
+     "barre": 7313,
+     "tolte_last": 48,
+     "tolte_mark": 13,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-20..2020-08-22"
+     ],
+     "primo_giorno_in_comune": "2020-08-22"
+    },
+    "1h": {
+     "barre": 29249,
+     "tolte_last": 192,
+     "tolte_mark": 53,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-20..2020-08-22"
+     ],
+     "primo_giorno_in_comune": "2020-08-22"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3686,
+    "primo": "2020-08-20",
+    "intervalli_ore": [
+     [
+      "2020-08-20",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 85.9,
+    "2021": 750.4,
+    "2022": 302.9,
+    "2023": 158.2
+   },
+   "mesi_sotto_liquidita": [],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.621,
+    "giorno": "2021-05-19"
+   }
+  },
+  "EGLDUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1204,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-13",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1203,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1202,
+     "tolte_last": 2,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-13"
+     ],
+     "primo_giorno_in_comune": "2020-09-14"
+    },
+    "4h": {
+     "barre": 7211,
+     "tolte_last": 12,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-13..2020-09-14"
+     ],
+     "primo_giorno_in_comune": "2020-09-14"
+    },
+    "1h": {
+     "barre": 28841,
+     "tolte_last": 48,
+     "tolte_mark": 20,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-13..2020-09-14"
+     ],
+     "primo_giorno_in_comune": "2020-09-14"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3613,
+    "primo": "2020-09-13",
+    "intervalli_ore": [
+     [
+      "2020-09-13",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 17.8,
+    "2021": 111.0,
+    "2022": 68.2,
+    "2023": 39.6
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2023-07",
+    "2023-08",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.507,
+    "giorno": "2021-05-19"
+   }
+  },
+  "ENJUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-29",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1189,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-29",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1181,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1181,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-09-29"
+    },
+    "4h": {
+     "barre": 7085,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-29"
+     ],
+     "primo_giorno_in_comune": "2020-09-29"
+    },
+    "1h": {
+     "barre": 28337,
+     "tolte_last": 192,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-29"
+     ],
+     "primo_giorno_in_comune": "2020-09-29"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3566,
+    "primo": "2020-09-29",
+    "intervalli_ore": [
+     [
+      "2020-09-29",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 2.4,
+    "2021": 144.4,
+    "2022": 52.8,
+    "2023": 35.0
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2022-12",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.589,
+    "giorno": "2021-05-19"
+   }
+  },
+  "EOSUSDT": {
+   "primo_mese": "2020-01-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-01-08",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1454,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-01-08",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1452,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1452,
+     "tolte_last": 2,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-01-08"
+    },
+    "4h": {
+     "barre": 8710,
+     "tolte_last": 12,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-08"
+     ],
+     "primo_giorno_in_comune": "2020-01-08"
+    },
+    "1h": {
+     "barre": 34840,
+     "tolte_last": 48,
+     "tolte_mark": 3,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-08"
+     ],
+     "primo_giorno_in_comune": "2020-01-08"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4361,
+    "primo": "2020-01-08",
+    "intervalli_ore": [
+     [
+      "2020-01-08",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 60.1,
+    "2021": 556.8,
+    "2022": 205.3,
+    "2023": 137.8
+   },
+   "mesi_sotto_liquidita": [],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.742,
+    "giorno": "2020-03-12"
+   }
+  },
+  "FLMUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-29",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1184,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-29",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1187,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1182,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-29"
+    },
+    "4h": {
+     "barre": 7091,
+     "tolte_last": 12,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-29",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-29"
+    },
+    "1h": {
+     "barre": 28361,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-29",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-29"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3834,
+    "primo": "2020-09-29",
+    "intervalli_ore": [
+     [
+      "2020-09-29",
+      8.0
+     ],
+     [
+      "2023-09-05",
+      2.0
+     ],
+     [
+      "2023-09-09",
+      8.0
+     ],
+     [
+      "2023-10-12",
+      4.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 11.9,
+    "2021": 35.6,
+    "2022": 54.2,
+    "2023": 37.1
+   },
+   "mesi_sotto_liquidita": [
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2022-01",
+    "2022-03",
+    "2022-04",
+    "2022-05",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-08"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.658,
+    "giorno": "2021-05-19"
+   }
+  },
+  "GRTUSDT": {
+   "primo_mese": "2020-12-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-12-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1103,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-12-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1106,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1101,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-12-19"
+    },
+    "4h": {
+     "barre": 6605,
+     "tolte_last": 12,
+     "tolte_mark": 30,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-12-19"
+    },
+    "1h": {
+     "barre": 26417,
+     "tolte_last": 48,
+     "tolte_mark": 122,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-12-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-12-19"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3323,
+    "primo": "2020-12-19",
+    "intervalli_ore": [
+     [
+      "2020-12-19",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 253.6,
+    "2021": 111.2,
+    "2022": 54.0,
+    "2023": 75.2
+   },
+   "mesi_sotto_liquidita": [
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.649,
+    "giorno": "2021-05-19"
+   }
+  },
+  "GTCUSDT": {
+   "primo_mese": "2021-06-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 31,
+    "presenti": 31,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 31,
+    "presenti": 31,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 31,
+    "presenti": 31,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-06-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 929,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-06-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 932,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 927,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-06-11"
+    },
+    "4h": {
+     "barre": 5562,
+     "tolte_last": 12,
+     "tolte_mark": 30,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-06-11"
+    },
+    "1h": {
+     "barre": 22245,
+     "tolte_last": 48,
+     "tolte_mark": 121,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-06-11",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-06-11"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2801,
+    "primo": "2021-06-11",
+    "intervalli_ore": [
+     [
+      "2021-06-11",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 84.4,
+    "2022": 34.6,
+    "2023": 27.2
+   },
+   "mesi_sotto_liquidita": [
+    "2022-09",
+    "2022-10",
+    "2022-12",
+    "2023-01",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 2.513,
+    "giorno": "2021-11-26"
+   }
+  },
+  "HBARUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-03-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1015,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-03-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1018,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1013,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-17"
+    },
+    "4h": {
+     "barre": 6077,
+     "tolte_last": 12,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-17",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-17"
+    },
+    "1h": {
+     "barre": 24305,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-17",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-17"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3059,
+    "primo": "2021-03-17",
+    "intervalli_ore": [
+     [
+      "2021-03-17",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 64.3,
+    "2022": 26.7,
+    "2023": 46.1
+   },
+   "mesi_sotto_liquidita": [
+    "2022-06",
+    "2022-07",
+    "2022-08",
+    "2022-12",
+    "2023-05"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.574,
+    "giorno": "2021-05-19"
+   }
+  },
+  "ICPUSDT": {
+   "primo_mese": "2021-05-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 32,
+    "presenti": 32,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 32,
+    "presenti": 32,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 32,
+    "presenti": 16,
+    "mancanti": [
+     "2021-05",
+     "2021-06",
+     "2021-07",
+     "2021-08",
+     "2021-09",
+     "2021-10",
+     "2021-11",
+     "2021-12",
+     "2022-01",
+     "2022-02",
+     "2022-03",
+     "2022-04",
+     "2022-05",
+     "2022-06",
+     "2022-07",
+     "2022-08"
+    ]
+   },
+   "last_1d": {
+    "primo_giorno": "2021-05-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 939,
+    "giorni_mancanti": 26,
+    "intervalli_mancanti": [
+     "2022-09-01..2022-09-26"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-05-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 962,
+    "giorni_mancanti": 3,
+    "intervalli_mancanti": [
+     "2022-06-19",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 936,
+     "tolte_last": 3,
+     "tolte_mark": 26,
+     "intervalli_tolte_last": [
+      "2022-06-19",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-09-01..2022-09-26"
+     ],
+     "primo_giorno_in_comune": "2021-05-11"
+    },
+    "4h": {
+     "barre": 5616,
+     "tolte_last": 18,
+     "tolte_mark": 156,
+     "intervalli_tolte_last": [
+      "2022-06-19",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-09-01..2022-09-26"
+     ],
+     "primo_giorno_in_comune": "2021-05-11"
+    },
+    "1h": {
+     "barre": 22459,
+     "tolte_last": 72,
+     "tolte_mark": 627,
+     "intervalli_tolte_last": [
+      "2022-06-19",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-05-11",
+      "2022-09-01..2022-09-27"
+     ],
+     "primo_giorno_in_comune": "2021-05-11"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 1461,
+    "primo": "2022-09-01",
+    "intervalli_ore": [
+     [
+      "2022-09-01",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 284.6,
+    "2022": 83.2,
+    "2023": 53.1
+   },
+   "mesi_sotto_liquidita": [
+    "2022-07",
+    "2022-08",
+    "2022-09",
+    "2022-10",
+    "2023-08",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.419,
+    "giorno": "2021-06-27"
+   }
+  },
+  "ICXUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-15",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1203,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1196,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1195,
+     "tolte_last": 8,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-14"
+     ],
+     "primo_giorno_in_comune": "2020-09-15"
+    },
+    "4h": {
+     "barre": 7169,
+     "tolte_last": 48,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-14..2020-09-15"
+     ],
+     "primo_giorno_in_comune": "2020-09-15"
+    },
+    "1h": {
+     "barre": 28674,
+     "tolte_last": 192,
+     "tolte_mark": 19,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-14..2020-09-15"
+     ],
+     "primo_giorno_in_comune": "2020-09-15"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3610,
+    "primo": "2020-09-14",
+    "intervalli_ore": [
+     [
+      "2020-09-14",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 4.3,
+    "2021": 50.6,
+    "2022": 24.6,
+    "2023": 29.8
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2022-06",
+    "2022-07",
+    "2022-08",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-03",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.624,
+    "giorno": "2021-05-19"
+   }
+  },
+  "IOTAUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-12",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1414,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-12",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1417,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1412,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-12"
+    },
+    "4h": {
+     "barre": 8470,
+     "tolte_last": 12,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-12",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-12"
+    },
+    "1h": {
+     "barre": 33880,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-12",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-12"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4256,
+    "primo": "2020-02-12",
+    "intervalli_ore": [
+     [
+      "2020-02-12",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 5.4,
+    "2021": 78.5,
+    "2022": 22.6,
+    "2023": 28.9
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-07",
+    "2020-08",
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2022-06",
+    "2022-07",
+    "2022-08",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-02",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.796,
+    "giorno": "2020-03-12"
+   }
+  },
+  "KAVAUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-07-28",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1252,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-07-28",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1244,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1244,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-07-28"
+    },
+    "4h": {
+     "barre": 7463,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-28"
+     ],
+     "primo_giorno_in_comune": "2020-07-28"
+    },
+    "1h": {
+     "barre": 29849,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-28"
+     ],
+     "primo_giorno_in_comune": "2020-07-28"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3755,
+    "primo": "2020-07-28",
+    "intervalli_ore": [
+     [
+      "2020-07-28",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 24.6,
+    "2021": 68.4,
+    "2022": 57.1,
+    "2023": 57.3
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10",
+    "2020-12",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.611,
+    "giorno": "2021-05-19"
+   }
+  },
+  "KLAYUSDT": {
+   "primo_mese": "2021-10-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 27,
+    "presenti": 27,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-10-12",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 811,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-10-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 809,
+    "giorni_mancanti": 3,
+    "intervalli_mancanti": [
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 808,
+     "tolte_last": 3,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-10-11"
+     ],
+     "primo_giorno_in_comune": "2021-10-12"
+    },
+    "4h": {
+     "barre": 4848,
+     "tolte_last": 18,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-10-11"
+     ],
+     "primo_giorno_in_comune": "2021-10-12"
+    },
+    "1h": {
+     "barre": 19389,
+     "tolte_last": 72,
+     "tolte_mark": 17,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-10-11..2021-10-12"
+     ],
+     "primo_giorno_in_comune": "2021-10-12"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2434,
+    "primo": "2021-10-11",
+    "intervalli_ore": [
+     [
+      "2021-10-11",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 20.1,
+    "2022": 35.1,
+    "2023": 25.7
+   },
+   "mesi_sotto_liquidita": [
+    "2021-10",
+    "2021-12",
+    "2022-03",
+    "2022-04",
+    "2022-06",
+    "2022-07",
+    "2022-08",
+    "2022-09",
+    "2022-12",
+    "2023-01",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.366,
+    "giorno": "2022-05-11"
+   }
+  },
+  "KNCUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-06-22",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1283,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-06-22",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1286,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1281,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-06-22"
+    },
+    "4h": {
+     "barre": 7684,
+     "tolte_last": 12,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-22",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-06-22"
+    },
+    "1h": {
+     "barre": 30736,
+     "tolte_last": 48,
+     "tolte_mark": 122,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-22",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-06-22"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3863,
+    "primo": "2020-06-22",
+    "intervalli_ore": [
+     [
+      "2020-06-22",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 11.3,
+    "2021": 36.2,
+    "2022": 136.7,
+    "2023": 43.7
+   },
+   "mesi_sotto_liquidita": [
+    "2020-06",
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-07",
+    "2023-04",
+    "2023-05",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.489,
+    "giorno": "2021-05-19"
+   }
+  },
+  "KSMUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-10-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1169,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-10-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1172,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1167,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-14"
+    },
+    "4h": {
+     "barre": 7001,
+     "tolte_last": 12,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-14",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-14"
+    },
+    "1h": {
+     "barre": 28001,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-14",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-14"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3521,
+    "primo": "2020-10-14",
+    "intervalli_ore": [
+     [
+      "2020-10-14",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 13.5,
+    "2021": 104.4,
+    "2022": 32.4,
+    "2023": 20.4
+   },
+   "mesi_sotto_liquidita": [
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2022-12",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.757,
+    "giorno": "2021-05-19"
+   }
+  },
+  "LINAUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-03-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1013,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-03-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1016,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1011,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-19"
+    },
+    "4h": {
+     "barre": 6065,
+     "tolte_last": 12,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-19"
+    },
+    "1h": {
+     "barre": 24257,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-19"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3053,
+    "primo": "2021-03-19",
+    "intervalli_ore": [
+     [
+      "2021-03-19",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 73.2,
+    "2022": 41.6,
+    "2023": 163.5
+   },
+   "mesi_sotto_liquidita": [
+    "2022-07",
+    "2022-09",
+    "2022-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.752,
+    "giorno": "2021-05-19"
+   }
+  },
+  "LPTUSDT": {
+   "primo_mese": "2021-11-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 26,
+    "presenti": 26,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 26,
+    "presenti": 26,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 26,
+    "presenti": 26,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-11-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 781,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-11-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 778,
+    "giorni_mancanti": 3,
+    "intervalli_mancanti": [
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 778,
+     "tolte_last": 3,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-11-11"
+    },
+    "4h": {
+     "barre": 4668,
+     "tolte_last": 18,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-11-11"
+    },
+    "1h": {
+     "barre": 18669,
+     "tolte_last": 72,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-11-11"
+     ],
+     "primo_giorno_in_comune": "2021-11-11"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2608,
+    "primo": "2021-11-11",
+    "intervalli_ore": [
+     [
+      "2021-11-11",
+      8.0
+     ],
+     [
+      "2023-08-13",
+      4.0
+     ],
+     [
+      "2023-08-21",
+      8.0
+     ],
+     [
+      "2023-10-12",
+      4.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 47.1,
+    "2022": 17.2,
+    "2023": 58.1
+   },
+   "mesi_sotto_liquidita": [
+    "2022-03",
+    "2022-04",
+    "2022-05",
+    "2022-06",
+    "2022-08",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.365,
+    "giorno": "2022-07-28"
+   }
+  },
+  "LRCUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-10-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1164,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-10-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1167,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1162,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-19"
+    },
+    "4h": {
+     "barre": 6971,
+     "tolte_last": 12,
+     "tolte_mark": 30,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-19"
+    },
+    "1h": {
+     "barre": 27881,
+     "tolte_last": 48,
+     "tolte_mark": 122,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-19"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3506,
+    "primo": "2020-10-19",
+    "intervalli_ore": [
+     [
+      "2020-10-19",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 4.7,
+    "2021": 190.6,
+    "2022": 104.9,
+    "2023": 24.9
+   },
+   "mesi_sotto_liquidita": [
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-07",
+    "2022-09",
+    "2022-10",
+    "2022-12",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.611,
+    "giorno": "2021-11-01"
+   }
+  },
+  "MANAUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-03-15",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1017,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-03-15",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1020,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1015,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-15"
+    },
+    "4h": {
+     "barre": 6089,
+     "tolte_last": 12,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-15"
+    },
+    "1h": {
+     "barre": 24353,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-15"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3065,
+    "primo": "2021-03-15",
+    "intervalli_ore": [
+     [
+      "2021-03-15",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 425.2,
+    "2022": 201.0,
+    "2023": 95.6
+   },
+   "mesi_sotto_liquidita": [
+    "2021-06"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 2.57,
+    "giorno": "2021-10-30"
+   }
+  },
+  "MKRUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-08-13",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1231,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-08-13",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1234,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1229,
+     "tolte_last": 2,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-13"
+    },
+    "4h": {
+     "barre": 7373,
+     "tolte_last": 12,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-13",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-13"
+    },
+    "1h": {
+     "barre": 29489,
+     "tolte_last": 48,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-13",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-13"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3707,
+    "primo": "2020-08-13",
+    "intervalli_ore": [
+     [
+      "2020-08-13",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 18.3,
+    "2021": 98.4,
+    "2022": 34.8,
+    "2023": 96.2
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2022-07",
+    "2022-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.546,
+    "giorno": "2021-05-24"
+   }
+  },
+  "MTLUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-03-31",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1006,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-03-30",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 999,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 998,
+     "tolte_last": 8,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-30"
+     ],
+     "primo_giorno_in_comune": "2021-03-31"
+    },
+    "4h": {
+     "barre": 5987,
+     "tolte_last": 48,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-30..2021-03-31"
+     ],
+     "primo_giorno_in_comune": "2021-03-31"
+    },
+    "1h": {
+     "barre": 23945,
+     "tolte_last": 192,
+     "tolte_mark": 19,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-30..2021-03-31"
+     ],
+     "primo_giorno_in_comune": "2021-03-31"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3022,
+    "primo": "2021-03-30",
+    "intervalli_ore": [
+     [
+      "2021-03-30",
+      8.0
+     ],
+     [
+      "2023-06-07",
+      4.0
+     ],
+     [
+      "2023-06-09",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 50.3,
+    "2022": 72.3,
+    "2023": 78.1
+   },
+   "mesi_sotto_liquidita": [
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.785,
+    "giorno": "2021-08-31"
+   }
+  },
+  "NEARUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-10-15",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1168,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-10-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1167,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1161,
+     "tolte_last": 7,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-14",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-15"
+    },
+    "4h": {
+     "barre": 6964,
+     "tolte_last": 42,
+     "tolte_mark": 36,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-14..2020-10-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-15"
+    },
+    "1h": {
+     "barre": 27856,
+     "tolte_last": 168,
+     "tolte_mark": 143,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-14..2020-10-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-10-15"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3520,
+    "primo": "2020-10-14",
+    "intervalli_ore": [
+     [
+      "2020-10-14",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 13.3,
+    "2021": 158.3,
+    "2022": 465.4,
+    "2023": 139.8
+   },
+   "mesi_sotto_liquidita": [
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.576,
+    "giorno": "2021-05-19"
+   }
+  },
+  "NEOUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1414,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1406,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1406,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-02-17"
+    },
+    "4h": {
+     "barre": 8434,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-17"
+     ],
+     "primo_giorno_in_comune": "2020-02-17"
+    },
+    "1h": {
+     "barre": 33736,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-17"
+     ],
+     "primo_giorno_in_comune": "2020-02-17"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4241,
+    "primo": "2020-02-17",
+    "intervalli_ore": [
+     [
+      "2020-02-17",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 15.9,
+    "2021": 101.9,
+    "2022": 35.1,
+    "2023": 55.6
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-07",
+    "2020-10",
+    "2020-12",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-08",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.672,
+    "giorno": "2020-03-12"
+   }
+  },
+  "NKNUSDT": {
+   "primo_mese": "2021-04-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 33,
+    "presenti": 33,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 33,
+    "presenti": 33,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 33,
+    "presenti": 33,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-04-09",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 997,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-04-09",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 989,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 989,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-04-09"
+    },
+    "4h": {
+     "barre": 5933,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-04-09"
+     ],
+     "primo_giorno_in_comune": "2021-04-09"
+    },
+    "1h": {
+     "barre": 23729,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-04-09"
+     ],
+     "primo_giorno_in_comune": "2021-04-09"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2990,
+    "primo": "2021-04-09",
+    "intervalli_ore": [
+     [
+      "2021-04-09",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 58.5,
+    "2022": 26.4,
+    "2023": 20.7
+   },
+   "mesi_sotto_liquidita": [
+    "2021-06",
+    "2022-03",
+    "2022-05",
+    "2022-09",
+    "2022-10",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.629,
+    "giorno": "2021-05-19"
+   }
+  },
+  "OCEANUSDT": {
+   "primo_mese": "2020-11-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 38,
+    "presenti": 38,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-11-03",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1149,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-11-02",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1148,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1142,
+     "tolte_last": 7,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-02",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-11-03"
+    },
+    "4h": {
+     "barre": 6851,
+     "tolte_last": 42,
+     "tolte_mark": 35,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-02..2020-11-03",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-11-03"
+    },
+    "1h": {
+     "barre": 27401,
+     "tolte_last": 168,
+     "tolte_mark": 143,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-11-02..2020-11-03",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-11-03"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3463,
+    "primo": "2020-11-02",
+    "intervalli_ore": [
+     [
+      "2020-11-02",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 7.5,
+    "2021": 45.1,
+    "2022": 44.0,
+    "2023": 65.3
+   },
+   "mesi_sotto_liquidita": [
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2021-07",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.465,
+    "giorno": "2022-11-08"
+   }
+  },
+  "OGNUSDT": {
+   "primo_mese": "2021-04-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 33,
+    "presenti": 33,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 33,
+    "presenti": 33,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 33,
+    "presenti": 33,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-04-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1000,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-04-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 998,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 993,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-04-01"
+    },
+    "4h": {
+     "barre": 5957,
+     "tolte_last": 42,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-04-01",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-04-01"
+    },
+    "1h": {
+     "barre": 23825,
+     "tolte_last": 168,
+     "tolte_mark": 125,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-04-01",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-04-01"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3014,
+    "primo": "2021-04-01",
+    "intervalli_ore": [
+     [
+      "2021-04-01",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 52.7,
+    "2022": 80.6,
+    "2023": 50.2
+   },
+   "mesi_sotto_liquidita": [
+    "2022-01",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.631,
+    "giorno": "2023-07-23"
+   }
+  },
+  "OMGUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-07-02",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1273,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-07-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1272,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1266,
+     "tolte_last": 7,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-01",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-07-02"
+    },
+    "4h": {
+     "barre": 7594,
+     "tolte_last": 42,
+     "tolte_mark": 38,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-01..2020-07-02",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-07-02"
+    },
+    "1h": {
+     "barre": 30375,
+     "tolte_last": 168,
+     "tolte_mark": 153,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-01..2020-07-02",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-07-02"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3841,
+    "primo": "2020-07-01",
+    "intervalli_ore": [
+     [
+      "2020-07-01",
+      8.0
+     ],
+     [
+      "2021-11-11",
+      2.0
+     ],
+     [
+      "2021-11-12",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 35.4,
+    "2021": 139.1,
+    "2022": 29.7,
+    "2023": 35.1
+   },
+   "mesi_sotto_liquidita": [
+    "2020-07",
+    "2020-12",
+    "2022-08",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.676,
+    "giorno": "2020-08-20"
+   }
+  },
+  "ONTUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1420,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-11",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1412,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1412,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-02-11"
+    },
+    "4h": {
+     "barre": 8470,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-11"
+     ],
+     "primo_giorno_in_comune": "2020-02-11"
+    },
+    "1h": {
+     "barre": 33880,
+     "tolte_last": 192,
+     "tolte_mark": 3,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-11"
+     ],
+     "primo_giorno_in_comune": "2020-02-11"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4259,
+    "primo": "2020-02-11",
+    "intervalli_ore": [
+     [
+      "2020-02-11",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 10.9,
+    "2021": 70.4,
+    "2022": 21.3,
+    "2023": 30.5
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-07",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2022-07",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.893,
+    "giorno": "2020-03-12"
+   }
+  },
+  "PEOPLEUSDT": {
+   "primo_mese": "2021-12-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 25,
+    "presenti": 25,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 25,
+    "presenti": 25,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 25,
+    "presenti": 25,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-12-24",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 733,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-12-23",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 737,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 731,
+     "tolte_last": 2,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-12-23",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-12-24"
+    },
+    "4h": {
+     "barre": 4385,
+     "tolte_last": 12,
+     "tolte_mark": 35,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-12-23..2021-12-24",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-12-24"
+    },
+    "1h": {
+     "barre": 17540,
+     "tolte_last": 48,
+     "tolte_mark": 137,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-12-23..2021-12-24",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-12-24"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2215,
+    "primo": "2021-12-23",
+    "intervalli_ore": [
+     [
+      "2021-12-23",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 101.4,
+    "2022": 179.4,
+    "2023": 28.4
+   },
+   "mesi_sotto_liquidita": [
+    "2023-07",
+    "2023-08"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.921,
+    "giorno": "2022-05-11"
+   }
+  },
+  "QTUMUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 46,
+    "mancanti": [
+     "2020-02"
+    ]
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-20",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1411,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1404,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1403,
+     "tolte_last": 8,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-19"
+     ],
+     "primo_giorno_in_comune": "2020-02-20"
+    },
+    "4h": {
+     "barre": 8416,
+     "tolte_last": 48,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-19..2020-02-20"
+     ],
+     "primo_giorno_in_comune": "2020-02-20"
+    },
+    "1h": {
+     "barre": 33664,
+     "tolte_last": 192,
+     "tolte_mark": 21,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-19..2020-02-20"
+     ],
+     "primo_giorno_in_comune": "2020-02-20"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4203,
+    "primo": "2020-03-01",
+    "intervalli_ore": [
+     [
+      "2020-03-01",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 7.6,
+    "2021": 103.4,
+    "2022": 29.8,
+    "2023": 23.4
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-07",
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2022-06",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.881,
+    "giorno": "2020-03-12"
+   }
+  },
+  "RENUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-10-13",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1175,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-10-13",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1167,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1167,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-10-13"
+    },
+    "4h": {
+     "barre": 7001,
+     "tolte_last": 48,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-13"
+     ],
+     "primo_giorno_in_comune": "2020-10-13"
+    },
+    "1h": {
+     "barre": 28001,
+     "tolte_last": 192,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-13"
+     ],
+     "primo_giorno_in_comune": "2020-10-13"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3524,
+    "primo": "2020-10-13",
+    "intervalli_ore": [
+     [
+      "2020-10-13",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 9.1,
+    "2021": 55.6,
+    "2022": 43.5,
+    "2023": 35.7
+   },
+   "mesi_sotto_liquidita": [
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-07",
+    "2022-09",
+    "2023-05",
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.631,
+    "giorno": "2023-11-03"
+   }
+  },
+  "RLCUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-07-31",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1244,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-07-31",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1242,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1237,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-07-31"
+    },
+    "4h": {
+     "barre": 7421,
+     "tolte_last": 42,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-31",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-07-31"
+    },
+    "1h": {
+     "barre": 29681,
+     "tolte_last": 168,
+     "tolte_mark": 125,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-31",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-07-31"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3746,
+    "primo": "2020-07-31",
+    "intervalli_ore": [
+     [
+      "2020-07-31",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 16.9,
+    "2021": 75.5,
+    "2022": 54.7,
+    "2023": 38.4
+   },
+   "mesi_sotto_liquidita": [
+    "2020-07",
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2022-03",
+    "2022-10",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 2.034,
+    "giorno": "2021-05-09"
+   }
+  },
+  "ROSEUSDT": {
+   "primo_mese": "2021-12-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 25,
+    "presenti": 25,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 25,
+    "presenti": 25,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 25,
+    "presenti": 25,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-12-31",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 726,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-12-30",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 730,
+    "giorni_mancanti": 2,
+    "intervalli_mancanti": [
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 724,
+     "tolte_last": 2,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-12-30",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-12-31"
+    },
+    "4h": {
+     "barre": 4344,
+     "tolte_last": 12,
+     "tolte_mark": 36,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-12-30",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-12-31"
+    },
+    "1h": {
+     "barre": 17373,
+     "tolte_last": 48,
+     "tolte_mark": 145,
+     "intervalli_tolte_last": [
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-12-30..2021-12-31",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-12-31"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 2195,
+    "primo": "2021-12-30",
+    "intervalli_ore": [
+     [
+      "2021-12-30",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 54.8,
+    "2022": 69.1,
+    "2023": 30.2
+   },
+   "mesi_sotto_liquidita": [
+    "2022-10",
+    "2022-12",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.629,
+    "giorno": "2022-05-11"
+   }
+  },
+  "RUNEUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-04",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1214,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-04",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1206,
+    "giorni_mancanti": 8,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-07-31",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1206,
+     "tolte_last": 8,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-09-04"
+    },
+    "4h": {
+     "barre": 7241,
+     "tolte_last": 42,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-04"
+     ],
+     "primo_giorno_in_comune": "2020-09-04"
+    },
+    "1h": {
+     "barre": 28937,
+     "tolte_last": 192,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-07-31",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-04"
+     ],
+     "primo_giorno_in_comune": "2020-09-04"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3641,
+    "primo": "2020-09-04",
+    "intervalli_ore": [
+     [
+      "2020-09-04",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 10.4,
+    "2021": 126.5,
+    "2022": 123.1,
+    "2023": 91.6
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2023-05",
+    "2023-07"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.761,
+    "giorno": "2021-05-19"
+   }
+  },
+  "SANDUSDT": {
+   "primo_mese": "2021-01-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 36,
+    "presenti": 36,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-01-25",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1066,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-01-25",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1064,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1059,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-01-25"
+    },
+    "4h": {
+     "barre": 6353,
+     "tolte_last": 42,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-25",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-01-25"
+    },
+    "1h": {
+     "barre": 25409,
+     "tolte_last": 168,
+     "tolte_mark": 125,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-01-25",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-01-25"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3212,
+    "primo": "2021-01-25",
+    "intervalli_ore": [
+     [
+      "2021-01-25",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 532.2,
+    "2022": 314.0,
+    "2023": 125.5
+   },
+   "mesi_sotto_liquidita": [
+    "2021-01"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.59,
+    "giorno": "2021-05-19"
+   }
+  },
+  "SFPUSDT": {
+   "primo_mese": "2021-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 35,
+    "presenti": 35,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 35,
+    "presenti": 35,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 35,
+    "presenti": 35,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-02-24",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1041,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-02-24",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1034,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1034,
+     "tolte_last": 7,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-02-24"
+    },
+    "4h": {
+     "barre": 6203,
+     "tolte_last": 42,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-02-24"
+     ],
+     "primo_giorno_in_comune": "2021-02-24"
+    },
+    "1h": {
+     "barre": 24809,
+     "tolte_last": 168,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-02-24"
+     ],
+     "primo_giorno_in_comune": "2021-02-24"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3122,
+    "primo": "2021-02-24",
+    "intervalli_ore": [
+     [
+      "2021-02-24",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 83.6,
+    "2022": 37.5,
+    "2023": 32.3
+   },
+   "mesi_sotto_liquidita": [
+    "2021-02",
+    "2022-06",
+    "2022-07",
+    "2022-09",
+    "2022-10",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-07",
+    "2023-10",
+    "2023-11",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 2.752,
+    "giorno": "2021-10-13"
+   }
+  },
+  "SKLUSDT": {
+   "primo_mese": "2020-12-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 37,
+    "presenti": 37,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-12-08",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1114,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-12-08",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1112,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1107,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-12-08"
+    },
+    "4h": {
+     "barre": 6641,
+     "tolte_last": 42,
+     "tolte_mark": 30,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-12-08"
+    },
+    "1h": {
+     "barre": 26561,
+     "tolte_last": 168,
+     "tolte_mark": 123,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-12-08",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-12-08"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3356,
+    "primo": "2020-12-08",
+    "intervalli_ore": [
+     [
+      "2020-12-08",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 10.9,
+    "2021": 53.7,
+    "2022": 30.9,
+    "2023": 27.5
+   },
+   "mesi_sotto_liquidita": [
+    "2020-12",
+    "2021-01",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.692,
+    "giorno": "2021-05-19"
+   }
+  },
+  "SNXUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-08-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1235,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-08-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1228,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1228,
+     "tolte_last": 7,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-08-14"
+    },
+    "4h": {
+     "barre": 7367,
+     "tolte_last": 42,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-14"
+     ],
+     "primo_giorno_in_comune": "2020-08-14"
+    },
+    "1h": {
+     "barre": 29465,
+     "tolte_last": 168,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-14"
+     ],
+     "primo_giorno_in_comune": "2020-08-14"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3704,
+    "primo": "2020-08-14",
+    "intervalli_ore": [
+     [
+      "2020-08-14",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 19.4,
+    "2021": 62.6,
+    "2022": 69.7,
+    "2023": 69.6
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.629,
+    "giorno": "2021-05-19"
+   }
+  },
+  "STMXUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-03-22",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1015,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-03-22",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1008,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1008,
+     "tolte_last": 7,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2021-03-22"
+    },
+    "4h": {
+     "barre": 6047,
+     "tolte_last": 42,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-22"
+     ],
+     "primo_giorno_in_comune": "2021-03-22"
+    },
+    "1h": {
+     "barre": 24185,
+     "tolte_last": 168,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-22"
+     ],
+     "primo_giorno_in_comune": "2021-03-22"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3306,
+    "primo": "2021-03-22",
+    "intervalli_ore": [
+     [
+      "2021-03-22",
+      8.0
+     ],
+     [
+      "2023-07-23",
+      2.0
+     ],
+     [
+      "2023-07-25",
+      8.0
+     ],
+     [
+      "2023-10-12",
+      4.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 39.6,
+    "2022": 18.8,
+    "2023": 67.8
+   },
+   "mesi_sotto_liquidita": [
+    "2022-01",
+    "2022-02",
+    "2022-05",
+    "2022-07",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-03",
+    "2023-06"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.552,
+    "giorno": "2021-09-04"
+   }
+  },
+  "STORJUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-16",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1197,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-15",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1196,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1190,
+     "tolte_last": 7,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-16"
+    },
+    "4h": {
+     "barre": 7139,
+     "tolte_last": 42,
+     "tolte_mark": 35,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-15..2020-09-16",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-16"
+    },
+    "1h": {
+     "barre": 28553,
+     "tolte_last": 168,
+     "tolte_mark": 140,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-15..2020-09-16",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-16"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3607,
+    "primo": "2020-09-15",
+    "intervalli_ore": [
+     [
+      "2020-09-15",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 6.1,
+    "2021": 88.6,
+    "2022": 47.0,
+    "2023": 96.5
+   },
+   "mesi_sotto_liquidita": [
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2022-09",
+    "2022-12",
+    "2023-03",
+    "2023-05",
+    "2023-08"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.999,
+    "giorno": "2021-03-27"
+   }
+  },
+  "SUSHIUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-04",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1209,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-04",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1207,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1202,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-04"
+    },
+    "4h": {
+     "barre": 7211,
+     "tolte_last": 42,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-04",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-04"
+    },
+    "1h": {
+     "barre": 28841,
+     "tolte_last": 168,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-04",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-09-04"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3641,
+    "primo": "2020-09-04",
+    "intervalli_ore": [
+     [
+      "2020-09-04",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 104.6,
+    "2021": 229.5,
+    "2022": 120.1,
+    "2023": 61.6
+   },
+   "mesi_sotto_liquidita": [
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 2.413,
+    "giorno": "2020-09-05"
+   }
+  },
+  "SXPUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 42,
+    "presenti": 42,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-07-21",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1259,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-07-21",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1252,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1252,
+     "tolte_last": 7,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-07-21"
+    },
+    "4h": {
+     "barre": 7510,
+     "tolte_last": 42,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-21"
+     ],
+     "primo_giorno_in_comune": "2020-07-21"
+    },
+    "1h": {
+     "barre": 30039,
+     "tolte_last": 168,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-07-21"
+     ],
+     "primo_giorno_in_comune": "2020-07-21"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3776,
+    "primo": "2020-07-21",
+    "intervalli_ore": [
+     [
+      "2020-07-21",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 60.1,
+    "2021": 166.6,
+    "2022": 37.9,
+    "2023": 88.9
+   },
+   "mesi_sotto_liquidita": [
+    "2022-07",
+    "2022-09",
+    "2022-10",
+    "2022-12",
+    "2023-01",
+    "2023-08",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.945,
+    "giorno": "2021-05-19"
+   }
+  },
+  "THETAUSDT": {
+   "primo_mese": "2020-05-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 44,
+    "presenti": 44,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 44,
+    "presenti": 44,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 44,
+    "presenti": 44,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-05-27",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1314,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-05-26",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1308,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1307,
+     "tolte_last": 7,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-05-26"
+     ],
+     "primo_giorno_in_comune": "2020-05-27"
+    },
+    "4h": {
+     "barre": 7840,
+     "tolte_last": 42,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-05-26..2020-05-27"
+     ],
+     "primo_giorno_in_comune": "2020-05-27"
+    },
+    "1h": {
+     "barre": 31360,
+     "tolte_last": 168,
+     "tolte_mark": 21,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-05-26..2020-05-27"
+     ],
+     "primo_giorno_in_comune": "2020-05-27"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3943,
+    "primo": "2020-05-26",
+    "intervalli_ore": [
+     [
+      "2020-05-26",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 23.4,
+    "2021": 198.0,
+    "2022": 97.4,
+    "2023": 33.1
+   },
+   "mesi_sotto_liquidita": [
+    "2020-06",
+    "2020-07",
+    "2020-11",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.673,
+    "giorno": "2021-05-19"
+   }
+  },
+  "TOMOUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 39,
+    "presenti": 39,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-10-12",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1176,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-10-12",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1169,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1169,
+     "tolte_last": 7,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-10-12"
+    },
+    "4h": {
+     "barre": 7013,
+     "tolte_last": 42,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-12"
+     ],
+     "primo_giorno_in_comune": "2020-10-12"
+    },
+    "1h": {
+     "barre": 28049,
+     "tolte_last": 168,
+     "tolte_mark": 4,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-10-12"
+     ],
+     "primo_giorno_in_comune": "2020-10-12"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3527,
+    "primo": "2020-10-12",
+    "intervalli_ore": [
+     [
+      "2020-10-12",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 5.5,
+    "2021": 39.5,
+    "2022": 19.5,
+    "2023": 116.8
+   },
+   "mesi_sotto_liquidita": [
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2022-01",
+    "2022-02",
+    "2022-07",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-02",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.53,
+    "giorno": "2021-05-19"
+   }
+  },
+  "TRXUSDT": {
+   "primo_mese": "2020-01-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-01-15",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1442,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-01-15",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1440,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1435,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-01-15"
+    },
+    "4h": {
+     "barre": 8608,
+     "tolte_last": 42,
+     "tolte_mark": 32,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-01-15"
+    },
+    "1h": {
+     "barre": 34432,
+     "tolte_last": 168,
+     "tolte_mark": 125,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-15",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-01-15"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4340,
+    "primo": "2020-01-15",
+    "intervalli_ore": [
+     [
+      "2020-01-15",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 39.2,
+    "2021": 283.3,
+    "2022": 170.6,
+    "2023": 71.8
+   },
+   "mesi_sotto_liquidita": [
+    "2020-01",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.78,
+    "giorno": "2020-03-12"
+   }
+  },
+  "UNFIUSDT": {
+   "primo_mese": "2021-02-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 35,
+    "presenti": 35,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 35,
+    "presenti": 35,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 35,
+    "presenti": 35,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-02-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1041,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-02-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1057,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1034,
+     "tolte_last": 7,
+     "tolte_mark": 23,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-02-01..2021-02-18",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-02-19"
+    },
+    "4h": {
+     "barre": 6203,
+     "tolte_last": 42,
+     "tolte_mark": 139,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-02-01..2021-02-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-02-19"
+    },
+    "1h": {
+     "barre": 24809,
+     "tolte_last": 168,
+     "tolte_mark": 559,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-02-01..2021-02-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-02-19"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3434,
+    "primo": "2021-02-01",
+    "intervalli_ore": [
+     [
+      "2021-02-01",
+      8.0
+     ],
+     [
+      "2023-10-12",
+      4.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 39.4,
+    "2022": 127.3,
+    "2023": 71.0
+   },
+   "mesi_sotto_liquidita": [
+    "2021-03",
+    "2022-04",
+    "2023-05",
+    "2023-06"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 5.5,
+    "giorno": "2022-06-07"
+   }
+  },
+  "UNIUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 40,
+    "presenti": 40,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-09-18",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1200,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-09-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1194,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1193,
+     "tolte_last": 7,
+     "tolte_mark": 1,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-17"
+     ],
+     "primo_giorno_in_comune": "2020-09-18"
+    },
+    "4h": {
+     "barre": 7157,
+     "tolte_last": 42,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-17..2020-09-18"
+     ],
+     "primo_giorno_in_comune": "2020-09-18"
+    },
+    "1h": {
+     "barre": 28625,
+     "tolte_last": 168,
+     "tolte_mark": 24,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-09-17..2020-09-18"
+     ],
+     "primo_giorno_in_comune": "2020-09-18"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3602,
+    "primo": "2020-09-17",
+    "intervalli_ore": [
+     [
+      "2020-09-17",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 133.1,
+    "2021": 248.8,
+    "2022": 85.3,
+    "2023": 69.3
+   },
+   "mesi_sotto_liquidita": [],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.51,
+    "giorno": "2021-05-19"
+   }
+  },
+  "VETUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1412,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-14",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1410,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1405,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-14"
+    },
+    "4h": {
+     "barre": 8428,
+     "tolte_last": 42,
+     "tolte_mark": 32,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-14",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-14"
+    },
+    "1h": {
+     "barre": 33712,
+     "tolte_last": 168,
+     "tolte_mark": 125,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-14",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-14"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4250,
+    "primo": "2020-02-14",
+    "intervalli_ore": [
+     [
+      "2020-02-14",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 25.8,
+    "2021": 207.5,
+    "2022": 66.8,
+    "2023": 29.0
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-10",
+    "2022-12",
+    "2023-08",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.977,
+    "giorno": "2020-03-12"
+   }
+  },
+  "WAVESUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-08-12",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1232,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-08-12",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1230,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1225,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-12"
+    },
+    "4h": {
+     "barre": 7349,
+     "tolte_last": 42,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-12",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-12"
+    },
+    "1h": {
+     "barre": 29393,
+     "tolte_last": 168,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-12",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-12"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3710,
+    "primo": "2020-08-12",
+    "intervalli_ore": [
+     [
+      "2020-08-12",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 39.5,
+    "2021": 75.8,
+    "2022": 298.4,
+    "2023": 91.4
+   },
+   "mesi_sotto_liquidita": [],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.707,
+    "giorno": "2022-05-30"
+   }
+  },
+  "XEMUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 34,
+    "presenti": 34,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2021-03-03",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1029,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2021-03-03",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1027,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1022,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-03"
+    },
+    "4h": {
+     "barre": 6131,
+     "tolte_last": 42,
+     "tolte_mark": 31,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-03",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-03"
+    },
+    "1h": {
+     "barre": 24521,
+     "tolte_last": 168,
+     "tolte_mark": 124,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2021-03-03",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2021-03-03"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3101,
+    "primo": "2021-03-03",
+    "intervalli_ore": [
+     [
+      "2021-03-03",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2021": 46.3,
+    "2022": 22.0,
+    "2023": 29.1
+   },
+   "mesi_sotto_liquidita": [
+    "2021-06",
+    "2022-03",
+    "2022-04",
+    "2022-06",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-09",
+    "2023-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.512,
+    "giorno": "2021-05-19"
+   }
+  },
+  "XLMUSDT": {
+   "primo_mese": "2020-01-01",
+   "slippage_per_lato": 0.0005,
+   "mesi_last_1d": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 48,
+    "presenti": 48,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-01-20",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1437,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-01-19",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1436,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1430,
+     "tolte_last": 7,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-19",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-01-20"
+    },
+    "4h": {
+     "barre": 8578,
+     "tolte_last": 42,
+     "tolte_mark": 36,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-19..2020-01-20",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-01-20"
+    },
+    "1h": {
+     "barre": 34312,
+     "tolte_last": 168,
+     "tolte_mark": 143,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-01-19..2020-01-20",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-01-20"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4327,
+    "primo": "2020-01-19",
+    "intervalli_ore": [
+     [
+      "2020-01-19",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 38.6,
+    "2021": 238.5,
+    "2022": 53.7,
+    "2023": 77.8
+   },
+   "mesi_sotto_liquidita": [
+    "2020-01",
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-09",
+    "2020-10",
+    "2022-12"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.775,
+    "giorno": "2021-01-06"
+   }
+  },
+  "XMRUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-03",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1428,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-01",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1423,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1421,
+     "tolte_last": 7,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-01..2020-02-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-03"
+    },
+    "4h": {
+     "barre": 8524,
+     "tolte_last": 42,
+     "tolte_mark": 14,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-01..2020-02-03"
+     ],
+     "primo_giorno_in_comune": "2020-02-03"
+    },
+    "1h": {
+     "barre": 34096,
+     "tolte_last": 168,
+     "tolte_mark": 56,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-01..2020-02-03"
+     ],
+     "primo_giorno_in_comune": "2020-02-03"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4290,
+    "primo": "2020-02-01",
+    "intervalli_ore": [
+     [
+      "2020-02-01",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 15.3,
+    "2021": 69.0,
+    "2022": 67.0,
+    "2023": 30.6
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-07",
+    "2020-08",
+    "2020-09",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.724,
+    "giorno": "2021-05-19"
+   }
+  },
+  "XTZUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-06",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1425,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-04",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1420,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1418,
+     "tolte_last": 7,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04..2020-02-05"
+     ],
+     "primo_giorno_in_comune": "2020-02-06"
+    },
+    "4h": {
+     "barre": 8506,
+     "tolte_last": 42,
+     "tolte_mark": 13,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04..2020-02-06"
+     ],
+     "primo_giorno_in_comune": "2020-02-06"
+    },
+    "1h": {
+     "barre": 34024,
+     "tolte_last": 168,
+     "tolte_mark": 51,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04..2020-02-06"
+     ],
+     "primo_giorno_in_comune": "2020-02-06"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4280,
+    "primo": "2020-02-04",
+    "intervalli_ore": [
+     [
+      "2020-02-04",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 48.1,
+    "2021": 187.2,
+    "2022": 68.5,
+    "2023": 25.7
+   },
+   "mesi_sotto_liquidita": [
+    "2020-10",
+    "2022-12",
+    "2023-05",
+    "2023-08",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.889,
+    "giorno": "2020-03-12"
+   }
+  },
+  "YFIUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 41,
+    "presenti": 41,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-08-31",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1213,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-08-31",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1211,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1206,
+     "tolte_last": 7,
+     "tolte_mark": 5,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-31"
+    },
+    "4h": {
+     "barre": 7235,
+     "tolte_last": 42,
+     "tolte_mark": 30,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-31"
+    },
+    "1h": {
+     "barre": 28937,
+     "tolte_last": 168,
+     "tolte_mark": 122,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-08-31",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-08-31"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3653,
+    "primo": "2020-08-31",
+    "intervalli_ore": [
+     [
+      "2020-08-31",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 190.8,
+    "2021": 112.9,
+    "2022": 56.8,
+    "2023": 46.0
+   },
+   "mesi_sotto_liquidita": [
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.591,
+    "giorno": "2021-05-19"
+   }
+  },
+  "ZECUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 47,
+    "presenti": 47,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-02-05",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1421,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-02-04",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1420,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1414,
+     "tolte_last": 7,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-05"
+    },
+    "4h": {
+     "barre": 8482,
+     "tolte_last": 42,
+     "tolte_mark": 37,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04..2020-02-05",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-05"
+    },
+    "1h": {
+     "barre": 33928,
+     "tolte_last": 168,
+     "tolte_mark": 147,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-02-04..2020-02-05",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-02-05"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 4280,
+    "primo": "2020-02-04",
+    "intervalli_ore": [
+     [
+      "2020-02-04",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 18.0,
+    "2021": 95.3,
+    "2022": 73.8,
+    "2023": 26.0
+   },
+   "mesi_sotto_liquidita": [
+    "2020-02",
+    "2020-03",
+    "2020-04",
+    "2020-05",
+    "2020-06",
+    "2020-07",
+    "2020-09",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.74,
+    "giorno": "2021-05-19"
+   }
+  },
+  "ZILUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-06-18",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1287,
+    "giorni_mancanti": 5,
+    "intervalli_mancanti": [
+     "2022-02-26..2022-02-28",
+     "2022-04-01..2022-04-02"
+    ]
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-06-17",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1286,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1280,
+     "tolte_last": 7,
+     "tolte_mark": 6,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-17",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-06-18"
+    },
+    "4h": {
+     "barre": 7678,
+     "tolte_last": 42,
+     "tolte_mark": 37,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-17..2020-06-18",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-06-18"
+    },
+    "1h": {
+     "barre": 30711,
+     "tolte_last": 168,
+     "tolte_mark": 146,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-17..2020-06-18",
+      "2022-02-26..2022-02-28",
+      "2022-04-01..2022-04-02"
+     ],
+     "primo_giorno_in_comune": "2020-06-18"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3878,
+    "primo": "2020-06-17",
+    "intervalli_ore": [
+     [
+      "2020-06-17",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 19.6,
+    "2021": 55.0,
+    "2022": 194.7,
+    "2023": 37.0
+   },
+   "mesi_sotto_liquidita": [
+    "2020-06",
+    "2020-07",
+    "2020-08",
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2022-12",
+    "2023-08",
+    "2023-09",
+    "2023-10"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.886,
+    "giorno": "2022-03-26"
+   }
+  },
+  "ZRXUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.001,
+   "mesi_last_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_mark_1d": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "mesi_funding": {
+    "attesi": 43,
+    "presenti": 43,
+    "mancanti": []
+   },
+   "last_1d": {
+    "primo_giorno": "2020-06-24",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1286,
+    "giorni_mancanti": 0,
+    "intervalli_mancanti": []
+   },
+   "mark_1d": {
+    "primo_giorno": "2020-06-24",
+    "ultimo_giorno": "2023-12-31",
+    "giorni": 1279,
+    "giorni_mancanti": 7,
+    "intervalli_mancanti": [
+     "2021-07-01",
+     "2021-07-24..2021-07-27",
+     "2022-10-02",
+     "2023-02-24"
+    ]
+   },
+   "allineamento": {
+    "1d": {
+     "barre": 1279,
+     "tolte_last": 7,
+     "tolte_mark": 0,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [],
+     "primo_giorno_in_comune": "2020-06-24"
+    },
+    "4h": {
+     "barre": 7672,
+     "tolte_last": 42,
+     "tolte_mark": 2,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-24"
+     ],
+     "primo_giorno_in_comune": "2020-06-24"
+    },
+    "1h": {
+     "barre": 30687,
+     "tolte_last": 168,
+     "tolte_mark": 7,
+     "intervalli_tolte_last": [
+      "2021-07-01",
+      "2021-07-24..2021-07-27",
+      "2022-10-02",
+      "2023-02-24"
+     ],
+     "intervalli_tolte_mark": [
+      "2020-06-24"
+     ],
+     "primo_giorno_in_comune": "2020-06-24"
+    }
+   },
+   "storia_ok": true,
+   "funding": {
+    "regolamenti": 3857,
+    "primo": "2020-06-24",
+    "intervalli_ore": [
+     [
+      "2020-06-24",
+      8.0
+     ]
+    ]
+   },
+   "volume_medio_per_anno_musdt": {
+    "2020": 11.2,
+    "2021": 40.8,
+    "2022": 38.6,
+    "2023": 45.1
+   },
+   "mesi_sotto_liquidita": [
+    "2020-06",
+    "2020-07",
+    "2020-09",
+    "2020-10",
+    "2020-11",
+    "2020-12",
+    "2021-01",
+    "2022-08",
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-05",
+    "2023-06",
+    "2023-08",
+    "2023-09"
+   ],
+   "salto_giornaliero_massimo": {
+    "rapporto": 1.619,
+    "giorno": "2021-05-19"
+   }
+  }
+ },
+ "btc": {
+  "15m": {
+   "barre": 140256,
+   "attese": 140256,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  },
+  "30m": {
+   "barre": 70128,
+   "attese": 70128,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  },
+  "1h": {
+   "barre": 35064,
+   "attese": 35064,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  },
+  "2h": {
+   "barre": 17532,
+   "attese": 17532,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  },
+  "4h": {
+   "barre": 8766,
+   "attese": 8766,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  },
+  "6h": {
+   "barre": 5844,
+   "attese": 5844,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  },
+  "8h": {
+   "barre": 4383,
+   "attese": 4383,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  },
+  "12h": {
+   "barre": 2922,
+   "attese": 2922,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  },
+  "1d": {
+   "barre": 1461,
+   "attese": 1461,
+   "mancanti": 0,
+   "buchi": 0,
+   "prima": "2020-01-01",
+   "ultima": "2023-12-31"
+  }
+ }
+}
