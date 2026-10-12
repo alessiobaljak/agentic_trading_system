@@ -3565,3 +3565,28 @@ Risposta alla domanda dello STOP del Passo 5: «Sì, salta e passa alla conclusi
 candidati bocciati sulle altre monete) non si fa; si passa al Passo 7: giudizio d'insieme, confronto fra monete, unione
 dei branch di ricerca nel principale e delle lezioni (`research/vault/risultati.md` sul branch di coordinamento,
 commit 6a0806ba). Da questa sessione in poi il modello è Fable 5.1 (scelta del proprietario, comando /model).
+
+### 12 ottobre, 21:00 ora italiana: Passo 7 fatto, la ricerca 4.5 è chiusa
+
+Giudizio d'insieme (`research/confronto/risultati.md`, ora sul branch principale): 630 varianti su 20 monete e sul
+gruppo di 80 → 45 candidati di Fase 2 → 7 in validazione → 3 al vault → **0 passati**, contro 0,02 attesi per puro caso
+(probabilità di 0 passaggi senza alcun vantaggio: circa 98%). Nessuna «idea di gruppo». Le famiglie più ripetute non
+hanno mai dato un candidato (momento 52 varianti su 21 campagne, canale 33, funding 33, media mobile 20, volume 18); la
+più produttiva, l'ultima mezz'ora del giorno UTC (69 varianti, 25 candidati di Fase 2), è caduta tutta ai costi doppi
+o al ritardo: l'effetto lordo (0,04-0,08 R a trade) è più piccolo del costo di un giro. Sotto l'ora i t sono alti e i
+candidati molti (22 su 45) ma nessuno regge i costi; a 1 ora stanno 6 dei 7 candidati validati e 2 dei 3 del vault, in
+una distribuzione che somiglia al caso (18 nette su 242). I ritocchi sono il 18% delle varianti e il 76% dei candidati.
+Le campagne avevano scritto prima le riserve poi confermate dal vault.
+
+Fatto il Passo 7, punto 3: la copia del repository era parziale (shallow) e non permetteva le unioni; scaricata la
+storia completa, uniti i 21 branch di campagna e quello di coordinamento nel principale (22 commit di unione, file
+condivisi sempre dal principale; 114 MB di file di lavoro del gruppo tolti, restano nel branch), 4661 test passati
+prima della pubblicazione. `lezioni/metodo.md` esteso (sette temi, 12 proposte che toccano una regola, non decise);
+nuovi `confronto/lezioni_comuni.md` e `confronto/risultati.md`.
+
+Cosa abbiamo capito: la trappola più ripetuta (6 campagne) è lo stop agganciato a un livello di prezzo, che rende le
+baseline molto negative e fa sembrare «netta» una regola senza direzione (BTC V11 t 3,01 → 1,01 con stop fisso; LTC 027
+1,95 → 0,01); la seconda è il test del ritardo che boccia per costruzione le regole legate a un'ora del giorno. Dopo
+un'ora estrema il prezzo continua, non torna indietro (osservato su 14 monete, non sfruttabile dopo i costi); il
+funding alto non anticipa cali; il lunedì e i numeri tondi non hanno nulla. STOP del Passo 7: decide il proprietario
+cosa fare della ricerca e del bot.
