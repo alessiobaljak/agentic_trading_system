@@ -1,0 +1,32 @@
+{
+ "15m": {
+  "atr_mediano_pct": 1.099,
+  "costo_giro_in_R_stop_1atr": 0.127,
+  "costo_giro_in_R_stop_2atr": 0.064
+ },
+ "30m": {
+  "atr_mediano_pct": 1.596,
+  "costo_giro_in_R_stop_1atr": 0.088,
+  "costo_giro_in_R_stop_2atr": 0.044
+ },
+ "1h": {
+  "atr_mediano_pct": 2.315,
+  "costo_giro_in_R_stop_1atr": 0.06,
+  "costo_giro_in_R_stop_2atr": 0.03
+ },
+ "4h": {
+  "atr_mediano_pct": 4.94,
+  "costo_giro_in_R_stop_1atr": 0.028,
+  "costo_giro_in_R_stop_2atr": 0.014
+ },
+ "8h": {
+  "atr_mediano_pct": 7.353,
+  "costo_giro_in_R_stop_1atr": 0.019,
+  "costo_giro_in_R_stop_2atr": 0.01
+ },
+ "1d": {
+  "atr_mediano_pct": 13.415,
+  "costo_giro_in_R_stop_1atr": 0.01,
+  "costo_giro_in_R_stop_2atr": 0.005
+ }
+}
