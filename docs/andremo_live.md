@@ -3558,3 +3558,10 @@ risultati. STOP del Passo 5: il proprietario decide se fare il trasferimento (Pa
 Cosa abbiamo capito: i tre migliori risultati di 20 campagne per moneta (600 varianti) non reggono sugli anni successivi;
 il più solido, BTCUSDT-V10, conserva un vantaggio rispetto alle entrate casuali ma più piccolo dei costi, e calante anno
 dopo anno; gli altri due vivevano di pochi trade, come le loro campagne avevano scritto.
+
+### 12 ottobre, 18:05 ora italiana: il proprietario salta il trasferimento e chiede la conclusione
+
+Risposta alla domanda dello STOP del Passo 5: «Sì, salta e passa alla conclusione». Il Passo 6 (trasferimento dei tre
+candidati bocciati sulle altre monete) non si fa; si passa al Passo 7: giudizio d'insieme, confronto fra monete, unione
+dei branch di ricerca nel principale e delle lezioni (`research/vault/risultati.md` sul branch di coordinamento,
+commit 6a0806ba). Da questa sessione in poi il modello è Fable 5.1 (scelta del proprietario, comando /model).
