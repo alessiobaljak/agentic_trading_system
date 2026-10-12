@@ -42,7 +42,13 @@ loro era +0,014, come la campagna stessa aveva scritto. Nel vault la coda dei gr
 trade), poi −0,329 e −0,326, negli anni in cui ADA scende (buy and hold −61% nel 2025 e −26% nel 2026). Non batte le
 entrate casuali (baseline (b): p 0,24; percentile 82).
 
-## Cosa resta da fare (STOP del Passo 5)
+## Decisione del proprietario (12 ottobre 2026)
+
+«Sì, salta e passa alla conclusione»: il Passo 6 (trasferimento dei candidati sulle altre monete) **non si fa**, con i
+tre candidati bocciati nel loro vault; si passa al Passo 7 (giudizio d'insieme, confronto fra monete, unione dei branch e
+delle lezioni). Il Passo 5, punto 2 (dati del vault delle altre 17 monete) resta non fatto per lo stesso motivo.
+
+## Cosa restava da fare allo STOP del Passo 5 (scritto l'11 ottobre)
 
 * **Passo 5, punto 2** (dati del vault delle altre 17 monete di campagna) e **Passo 6** (trasferimento dei candidati sulle
   altre monete): non fatti. Il protocollo li prevede per «ogni candidato consegnato»; con tre candidati bocciati nel loro
