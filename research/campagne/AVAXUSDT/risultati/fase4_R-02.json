@@ -1,0 +1,146 @@
+{
+ "candidato": "AVAXUSDT-R02",
+ "t_b_costruzione": 3.113513,
+ "media_b": -0.055251,
+ "robustezza": {
+  "casi": [
+   {
+    "caso": "barre=0",
+    "esito": "non costruibile: una posizione di 0 barre non esiste; dichiarato, non conta"
+   },
+   {
+    "caso": "barre=2",
+    "trade": 287,
+    "r_medio": 0.0254,
+    "t_b": 2.634079,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "mult_atr=1.6",
+    "trade": 287,
+    "r_medio": 0.013,
+    "t_b": 2.911431,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "mult_atr=2.4",
+    "trade": 287,
+    "r_medio": 0.012,
+    "t_b": 3.109749,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "atr_n=11",
+    "trade": 287,
+    "r_medio": 0.0141,
+    "t_b": 3.107302,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "atr_n=17",
+    "trade": 287,
+    "r_medio": 0.0115,
+    "t_b": 2.966184,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "max_barra=0.0064",
+    "trade": 269,
+    "r_medio": 0.0127,
+    "t_b": 2.726239,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "caso": "max_barra=0.0096",
+    "trade": 304,
+    "r_medio": 0.0119,
+    "t_b": 2.981356,
+    "netta_b": true,
+    "valutabile": true
+   }
+  ],
+  "previsti": 8,
+  "contano": 7,
+  "nette": 7,
+  "superata": true
+ },
+ "timeframe_adiacenti": {
+  "casi": [
+   {
+    "timeframe": "15m",
+    "parametri": {
+     "minuto_segnale": 1395,
+     "barre": 2,
+     "atr_n": 28
+    },
+    "trade": 336,
+    "r_medio": 0.0027,
+    "t_b": 2.861979,
+    "netta_b": true,
+    "valutabile": true
+   },
+   {
+    "timeframe": "1h",
+    "parametri": {
+     "minuto_segnale": 1320,
+     "barre": 1,
+     "atr_n": 7
+    },
+    "trade": 252,
+    "r_medio": 0.0271,
+    "t_b": 3.300815,
+    "netta_b": true,
+    "valutabile": true
+   }
+  ],
+  "superata": true
+ },
+ "ritardo": {
+  "trade": 287,
+  "r_medio": -0.035,
+  "t_b": 1.012087,
+  "media_b": -0.063604,
+  "superata": false
+ },
+ "costi_doppi": {
+  "trade": 287,
+  "r_medio": -0.0509,
+  "t_b": 2.640439,
+  "media_b": -0.110013,
+  "netta_b": true,
+  "superata": false
+ },
+ "intrabarra_opposta": {
+  "r_medio": 0.0144,
+  "differenza_r": 0.0,
+  "t_b": 3.113513
+ },
+ "stabilita": {
+  "anni_con_10_trade": [
+   "2020",
+   "2021",
+   "2022"
+  ],
+  "anni_sopra_b": [
+   "2021",
+   "2022"
+  ],
+  "superata": true
+ },
+ "trade_estremi": {
+  "r_senza_3_migliori": -0.008,
+  "media_b": -0.055251,
+  "superata": true
+ },
+ "liquidazione": {
+  "violazioni": 0,
+  "superata": true
+ },
+ "tutte_superate": false
+}
