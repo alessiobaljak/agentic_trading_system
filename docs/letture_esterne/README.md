@@ -1,0 +1,15 @@
+# Letture di repository esterni (12 ottobre 2026)
+
+Chieste dal proprietario il 12 ottobre, dopo la chiusura della ricerca 4.5 (zero strategie trovate, `research/confronto/
+risultati.md`). Tre repository pubblici letti in sola lettura (nessuno script eseguito, nessuna installazione), un
+file per ciascuno con i percorsi dei file letti come fonte. Il giudizio in una riga per ciascuno:
+
+| Repository | Cos'è | Prova di rendimento | Cosa prendere | Cosa no |
+|---|---|---|---|---|
+| `freqtrade/freqtrade` (GPLv3, dal 2017, 55.307 stelle) | bot crypto open source maturo: strategie come classi Python, backtest per candela, hyperopt, FreqAI, protezioni | nessuna: la documentazione dice che le strategie di esempio «non saranno redditizie» e che «la maggior parte delle strategie pubbliche non rende»; il loro esempio di report ha p-value 0,48 | la regola di fill degli ordini limite con contabilità maker/taker e timeout; lo slippage stimato sul book; il test «taglia i dati e rifai» contro il lookahead; la checklist delle assunzioni del backtest; le tre protezioni; lo spaccato per motivo di uscita | hyperopt e FreqAI come fonte di rendimento (overfitting per costruzione, lo dicono loro); il backtest senza slippage; copiare codice (GPLv3, repo pubblico) |
+| `HKUDS/Vibe-Trading` (MIT, Università di Hong Kong) | banco di lavoro: un agente LLM scrive il codice di una strategia da una richiesta in linguaggio naturale, la prova con un motore deterministico, produce report | nessun rendimento dichiarato (a loro favore); i loro studi dicono che le strategie da manuale non battono il mercato; alpha zoo crypto vuoto; perpetui Binance in sola lettura | cutoff del modello obbligatorio per le strategie generate da un LLM; commissione di pareggio in punti base; scadenza dell'evidenza (90/180 giorni); test a sentinella contro il lookahead | l'LLM come fonte di vantaggio; niente di pronto per futures a 15 min-1 h; progetto pesante e in cambiamento continuo |
+| `NoFxAiOS/nofx` (AGPL, Cryonic Holdings BVI) | terminale Go+React dove un LLM decide gli ordini ogni 15 minuti e il codice li manda a un exchange vero; nel modo predefinito copia un segnale esterno a pagamento | nessuna: niente backtest, niente registro; numeri nei commenti senza fonte; modello non deterministico | tre regole di uscita da provare nel gate come ipotesi (tenuta minima 90 min, niente chiusure piatte prima di 3 ore, 4 ore prima di rientrare); la protezione dal picco armata solo dopo un movimento; il replay delle decisioni come diagnosi | il motore a LLM (già scartato qui perché non riproducibile); affiliazioni a nove exchange e dati a pagamento; telemetria accesa di default; nessun limite di perdita giornaliera applicato; nessuna modalità carta |
+
+Nessuno dei tre risponde alla domanda che la ricerca ha lasciato aperta: dove sta un vantaggio dopo i costi su futures a
+15 minuti-1 ora. Due dei tre lo dicono da soli. Quello che vale la pena portare nel gate è una manciata di regole di
+realismo (fill dei limiti, slippage dal book, lookahead) e qualche ipotesi di uscita, tutte da provare sulla storia.
