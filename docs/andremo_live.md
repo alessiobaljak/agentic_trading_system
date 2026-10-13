@@ -3607,3 +3607,19 @@ tetto di esposizione per verso, orizzonte 4-12 ore). Per il gate chiedono cambia
 entrate casuali, correzione per i tentativi, fuori campione vero, costi per moneta, un solo regime, niente figlie dai
 quasi-passaggi): cioè il protocollo, che ha dato zero su 630. Letture di tre repository esterni in
 `docs/letture_esterne/`.
+
+### 13 ottobre, 10:45 ora italiana: la prova degli ordini limite è fatta — «conviene poco»
+
+Regole scritte prima e approvate dal proprietario alle 09:13 («Procedi»), corse dalle 10:02 alle 10:26, esito in
+`research/esperimenti/ordini_limite/risultati.md`. Prima dei numeri una correzione alle regole (sezione 1 del
+file): un ordine in attesa nel libro si riempie al suo prezzo anche se la barra apre oltre, non all'apertura.
+Strumenti: il motore di ricerca accetta l'ingresso a limite (test di parità: a mercato i trade sono identici bit per
+bit a prima; 34 test nuovi, 2.408 passati) e uno script che per nove strategie delle campagne rifà la corsa a mercato
+e la confronta con il log (parità passata 13 volte su 13), poi la corsa a limite, le entrate casuali nei due modi e
+tre varianti. Numeri (mediane sulle nove, periodo 2020-2023, sezione 7 del file): l'ordine alla chiusura si esegue
+nel 98% dei casi; il costo scende da 0,062 a 0,039 R a trade (−0,0225 R, un terzo: cambia solo il lato d'ingresso), ma
+la soglia scritta prima chiedeva −0,04; il lordo cala di 0,007 R, entro il limite. I trade saltati sono il 2,4% ma
+sono i migliori: R medio in M +0,68 contro +0,06 di tutti; in validazione BTCUSDT-V10 ne perde 3 da +2,63 R. Le
+entrate casuali risparmiano lo stesso (+0,016 R): i costi scendono, un vantaggio non nasce. Le uscite a limite
+(variante c) non convengono: costo 0,022 R ma lordo da 0,086 a 0,048 R. Esito secondo le soglie: «conviene poco»;
+decide il proprietario (proposta nel file, sezione 2.2). GRUPPO-048 non eseguita (servono i dati di 80 monete).
