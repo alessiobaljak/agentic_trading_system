@@ -81,3 +81,21 @@ placebo (incrocio di medie 885/897, RSI 1.211/823, rottura 802/714, Bollinger 1.
 
 **Perché non si abbassa il minimo.** L'esame della campagna giudica solo varianti con almeno 700 trade sommati in
 costruzione; la placebo deve avere la stessa taglia, altrimenti prova un esame che la campagna non usa.
+
+### Correzione 2 — durata massima di 60 barre anche per le uscite in ATR (13 ott 2026, 21:15 UTC, prima di qualunque esito)
+
+**Cosa è successo.** Con stop e target in ATR giornalieri e nessun limite di tempo, una posizione delle regole
+«incrocio di medie», «rottura» e «MACD» può durare centinaia di giorni (le prime righe: durata massima 279 e 598
+barre). Il blocco del bootstrap dell'esame è la posizione più lunga fra tutte le monete: con 885-897 trade sommati
+il blocco era di 525-768 trade, un solo blocco intero, e l'esame diceva «non valutabile» (meno di 3 blocchi) per
+quelle regole; lo stesso per il controllo positivo lanciato con la regola «rottura» (2.696 trade, non valutabile).
+Le regole con l'uscita a tempo (RSI: 16-18 blocchi) erano valutabili.
+
+**Cosa cambia.** In `placebo_paniere.py` ogni posizione esce comunque dopo **60 barre** (`BARRE_MASSIME`), anche
+quelle con stop e target in ATR: è la durata massima delle idee della seconda edizione (PROTOCOLLO_2, sezione 3.1),
+quindi la placebo ha la stessa forma delle varianti che l'esame giudicherà. Le 10 righe scritte prima della
+correzione (3 non valutabili, 2 scarti, 5 valutabili) sono state cancellate con la loro identità; il lancio
+riparte da capo. Il controllo positivo si rifà con lo stesso modulo.
+
+**Nota sull'orario della correzione 1.** L'ora scritta nella correzione 1 (21:55 UTC) è sbagliata: era circa
+20:45 UTC (l'ora del commit 5632f874). Il resto della correzione vale.

@@ -40,6 +40,10 @@ PARAMETRI = {
 }
 #: uscita a tempo: barre tenute (5 giorni)
 BARRE_USCITA_TEMPO = {"1d": 5}
+#: durata massima di OGNI posizione, anche con l'uscita ATR (correzione 2 di regole.md): le 60 barre dell'uscita a
+#: tempo delle idee della seconda edizione (PROTOCOLLO_2, sezione 3.1). Senza, una posizione a stop/target in ATR
+#: giornalieri dura centinaia di giorni, il blocco del bootstrap diventa l'intera serie e l'esame non e' valutabile.
+BARRE_MASSIME = 60
 #: barre dell'ATR (media semplice dei true range)
 BARRE_ATR = 14
 #: stop e target in ATR per tipo di uscita: (stop, target o None)
@@ -194,11 +198,12 @@ def _leggi_p(ctx, p):
 
 
 def _strategia(direzione: str, uscita: str, barre: int, entra):
-    esci = _uscita_a_tempo(barre) if uscita == "tempo" else None
+    # «tempo»: le barre della regola; «atr»: stop e target in ATR, ma mai oltre BARRE_MASSIME (correzione 2)
+    esci = _uscita_a_tempo(barre if uscita == "tempo" else BARRE_MASSIME)
 
     def strategia(storia, posizione):
         if posizione is not None:
-            return esci(storia, posizione) if esci is not None else None
+            return esci(storia, posizione)
         if entra(storia):
             return _segnale_alla_barra(storia, direzione, uscita)
         return None
