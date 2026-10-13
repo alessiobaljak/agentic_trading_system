@@ -48,3 +48,14 @@ a barre giornaliere?**
 riusa il lanciatore della prova a 1 ora (`research/taratura/placebo_gruppo/esegui.py`) con i file di questa cartella,
 le serie 1d, l'elenco e le schede del paniere; stesse impronte e stessi controlli di identità, ramo remoto quello
 principale. Gli esiti vanno in `esiti_k<k>.jsonl` di questa cartella; il riassunto in `risultati.md`.
+
+## 6. Le impronte degli strumenti al lancio (scritte dal coordinamento, 13 ottobre 2026)
+
+I cinque file dell'esame, come li vede `gruppo.impronte_degli_strumenti()` al momento del lancio vero; il
+lanciatore rifiuta di partire se un file sul disco non ha questa impronta.
+
+* `7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7`  `research/config/parametri.yaml`
+* `4f0d47790d23801d0d5f66ec01f4f901558179051bc4d632a6825eccaa877af4`  `research/src/dati.py`
+* `6875b12f5dfbeb6fc505fbb5302befe0ad652e0a96330e85e69b46ff772efd3a`  `research/src/gruppo.py`
+* `2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6`  `research/src/motore.py`
+* `ca027d2687d9129a533077eb980c0517bd09c476331659d61eaf15dda45c9e5a`  `research/src/statistica.py`
