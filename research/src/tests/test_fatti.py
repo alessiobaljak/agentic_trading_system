@@ -35,15 +35,15 @@ SEZIONI_ATTESE = [
 #: documento: numeri di default, tipi di ordine, serie dei prezzi, orizzonte.
 ANCORE = {
     # serie dello stop
-    "bot/main.py:1353": "get_mark_price",
+    "bot/main.py:1438": "get_mark_price",
     "bot/agents/price_agent.py:132": "markPrice",
     "bot/agents/price_stream.py:258": "/ 2.0",
-    "bot/execution/executor.py:605": "lo <= eff_stop",
-    "bot/execution/executor.py:664": "lo <= eff_stop",
-    "bot/execution/executor.py:364": 'type="LIMIT"',
-    "bot/execution/executor.py:462": 'type="STOP_MARKET"',
-    "bot/execution/executor.py:480": "TAKE_PROFIT_MARKET",
-    "bot/execution/executor.py:799": 'type="MARKET"',
+    "bot/execution/executor.py:864": "lo <= eff_stop",
+    "bot/execution/executor.py:923": "lo <= eff_stop",
+    "bot/execution/executor.py:623": 'type="LIMIT"',
+    "bot/execution/executor.py:721": 'type="STOP_MARKET"',
+    "bot/execution/executor.py:739": "TAKE_PROFIT_MARKET",
+    "bot/execution/executor.py:1058": 'type="MARKET"',
     "backtesting/engine.py:942": "c.low <= eff_stop",
     "backtesting/engine.py:953": "c.high >= eff_stop",
     # dimensione, leva, limiti
@@ -58,13 +58,13 @@ ANCORE = {
     "bot/config.py:176": "MAX_OPEN_POSITIONS",
     "bot/config.py:181": "MAX_POSITION_EQUITY_FRACTION",
     "bot/config.py:237": "MAX_DIRECTIONAL_RISK_PCT",
-    "bot/config.py:686": "RISK_PER_COIN_DAY",
-    "bot/config.py:693": "MAX_STOP_PCT",
-    "bot/config.py:603": "MIN_COINS_PER_STRATEGY",
-    "bot/main.py:1639": "MAX_OPEN_POSITIONS",
+    "bot/config.py:700": "RISK_PER_COIN_DAY",
+    "bot/config.py:707": "MAX_STOP_PCT",
+    "bot/config.py:617": "MIN_COINS_PER_STRATEGY",
+    "bot/main.py:1724": "MAX_OPEN_POSITIONS",
     # costi
-    "bot/execution/executor.py:178": "BACKTEST_COST_PER_TRADE",
-    "bot/execution/executor.py:179": "BACKTEST_FUNDING_PER_8H",
+    "bot/execution/executor.py:205": "BACKTEST_COST_PER_TRADE",
+    "bot/execution/executor.py:206": "BACKTEST_FUNDING_PER_8H",
     "backtesting/engine.py:616": "BACKTEST_COST_PER_TRADE",
     "bot/core/costs.py:39": "held_hours / 8.0",
     "backtesting/data_loader.py:29": "fapi/v1/fundingRate",
@@ -77,7 +77,7 @@ ANCORE = {
     "bot/learning/adaptation.py:401": "def load_generated",
     "bot/orchestrator/orchestrator.py:304": "get_all_strategies(params_by_strat)",
     "backtesting/optimizer.py:229": "STRATEGY_REGISTRY.items()",
-    "bot/config.py:281": '("1m", "5m", "15m", "1h")',
+    "bot/config.py:295": '("1m", "5m", "15m", "1h")',
     "bot/config.py:195": "REQUIRE_VALIDATED_PAIRS",
     # backtest interno
     "backtesting/engine.py:43": "HORIZON_BARS = 96",
@@ -94,8 +94,8 @@ ANCORE = {
     "backtesting/metrics_loader.py:45": "data.binance.vision",
     # timeframe e orizzonte
     "bot/config.py:169": "ORCHESTRATOR_TIMEFRAME",
-    "bot/execution/executor.py:185": "EXEC_MAX_HOLD_HOURS",
-    "bot/main.py:2397": "sleep_s: float = 30.0",
+    "bot/execution/executor.py:212": "EXEC_MAX_HOLD_HOURS",
+    "bot/main.py:2497": "sleep_s: float = 30.0",
 }
 
 

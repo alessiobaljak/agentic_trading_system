@@ -26,57 +26,57 @@ mark price di Binance.
 ### Nel paper (nessun ordine)
 
 Lo stop si valuta in `ExecutionEngine.update_position(symbol, mark_price, high, low)`
-(`bot/execution/executor.py:541-684`). La regola è: per un long lo stop scatta se
+(`bot/execution/executor.py:800-943`). La regola è: per un long lo stop scatta se
 `lo <= stop_effettivo`, per uno short se `hi >= stop_effettivo`
-(`bot/execution/executor.py:605` con scale-out, `bot/execution/executor.py:664` senza);
+(`bot/execution/executor.py:864` con scale-out, `bot/execution/executor.py:923` senza);
 `hi`/`lo` sono il range del tick, sempre allargato al `mark_price` passato
-(`bot/execution/executor.py:570-571`). Il prezzo di uscita è esattamente il livello
-dello stop, senza slippage (`bot/execution/executor.py:618`, `bot/execution/executor.py:667`).
+(`bot/execution/executor.py:829-830`). Il prezzo di uscita è esattamente il livello
+dello stop, senza slippage (`bot/execution/executor.py:877`, `bot/execution/executor.py:926`).
 
-Da dove vengono i tre numeri, nel ciclo di gestione delle posizioni (`bot/main.py:1352-1372`):
+Da dove vengono i tre numeri, nel ciclo di gestione delle posizioni (`bot/main.py:1437-1457`):
 
 * `mark_price` = il **mark price vero di Binance**, letto a ogni tick da
-  `/fapi/v1/premiumIndex` campo `markPrice` (`bot/main.py:1353`;
+  `/fapi/v1/premiumIndex` campo `markPrice` (`bot/main.py:1438`;
   `bot/agents/price_agent.py:127-136`, riga `bot/agents/price_agent.py:132`). Se manca,
-  ripiego sull'ultimo prezzo dello snapshot (`bot/main.py:1354-1356`).
+  ripiego sull'ultimo prezzo dello snapshot (`bot/main.py:1439-1441`).
 * `high`/`low` = il **percorso del prezzo dall'ultimo tick**, da una di due fonti:
   1. lo stream WebSocket `bookTicker` di Binance Futures, di cui si usa il **mid fra
      miglior bid e miglior ask** (`bot/agents/price_stream.py:16-23`,
      `bot/agents/price_stream.py:253-258`, riga `bot/agents/price_stream.py:258`); i punti
-     vengono rigiocati uno per uno nell'ordine di arrivo (`bot/main.py:1362-1364`;
-     `bot/execution/executor.py:686-704`) e poi il range aggregato fa da rete
-     (`bot/main.py:1367-1369`);
+     vengono rigiocati uno per uno nell'ordine di arrivo (`bot/main.py:1447-1449`;
+     `bot/execution/executor.py:945-963`) e poi il range aggregato fa da rete
+     (`bot/main.py:1452-1454`);
   2. se lo stream non è sano, le **candele 1m REST** (`/fapi/v1/klines`), high e low
-     delle ultime 3 (`bot/main.py:728-737`; `bot/config.py:337`): sono candele del
+     delle ultime 3 (`bot/main.py:741-750`; `bot/config.py:351`): sono candele del
      last price.
 
 Quindi nel paper lo stop scatta su un **misto**: il percorso del mid bid/ask (≈ last)
 oppure le ombre delle candele 1m (last), **più** il punto del mark price di quel tick.
 Non esiste una serie unica. Il take profit si valuta sullo stesso range
-(`bot/execution/executor.py:670-672`); l'uscita a fine orizzonte usa il `mark_price`
-(`bot/execution/executor.py:643`, `bot/execution/executor.py:678`).
+(`bot/execution/executor.py:929-931`); l'uscita a fine orizzonte usa il `mark_price`
+(`bot/execution/executor.py:902`, `bot/execution/executor.py:937`).
 
-Prezzo d'ingresso nel paper: `asset.price` (`bot/execution/executor.py:273`), cioè la
+Prezzo d'ingresso nel paper: `asset.price` (`bot/execution/executor.py:306`), cioè la
 chiusura della candela **in formazione** all'ultima lettura delle klines
 (`bot/agents/price_agent.py:160`): un last price, non il mark. La regola della
 strategia invece decide sulla chiusura dell'ultima candela chiusa
 (`bot/core/models.py:99-104`; `bot/strategies/generated.py:625-640`;
-`bot/config.py:290`).
+`bot/config.py:304`).
 
 ### Nel percorso live (ordini veri, mai usato)
 
 * Ingresso: ordine **LIMIT GTC** al prezzo `entry_price`
-  (`bot/execution/executor.py:363-366`, riga `bot/execution/executor.py:364`), con attesa
+  (`bot/execution/executor.py:622-625`, riga `bot/execution/executor.py:623`), con attesa
   del fill per `EXEC_FILL_TIMEOUT_S` (default 20 s, `bot/config.py:244`) e rinuncia
   sotto `EXEC_MIN_FILL_FRACTION` (default 0,5, `bot/config.py:248`).
-* Stop: ordine **STOP_MARKET** reduce-only (`bot/execution/executor.py:461-464`, riga
-  `bot/execution/executor.py:462`), ripiazzato quando lo stop si muove
-  (`bot/execution/executor.py:503-507`).
+* Stop: ordine **STOP_MARKET** reduce-only (`bot/execution/executor.py:720-723`, riga
+  `bot/execution/executor.py:721`), ripiazzato quando lo stop si muove
+  (`bot/execution/executor.py:762-766`).
 * Take profit: **TAKE_PROFIT_MARKET** reduce-only, uno per gradino della scala
-  (`bot/execution/executor.py:479-482`, riga `bot/execution/executor.py:480`).
+  (`bot/execution/executor.py:738-741`, riga `bot/execution/executor.py:739`).
 * Chiusure decise dal software (fette dello scale-out, fine orizzonte, kill switch):
-  **MARKET** reduce-only (`bot/execution/executor.py:786-788`,
-  `bot/execution/executor.py:798-800`, `bot/execution/executor.py:440-442`).
+  **MARKET** reduce-only (`bot/execution/executor.py:1045-1047`,
+  `bot/execution/executor.py:1057-1059`, `bot/execution/executor.py:699-701`).
 * `workingType`: **non trovato**. Nessuna chiamata passa `workingType` (cercato in
   `bot/`, `backtesting/`, `scripts/`: zero occorrenze). Vale quindi il default di
   Binance, che la documentazione indica come `CONTRACT_PRICE` = last price (da
@@ -123,10 +123,10 @@ price al range: va dichiarato nel confronto del Passo 9.
   è esposto come `risk_effective_pct` (`bot/risk/risk_manager.py:155-168`).
 * Stop più largo di `MAX_STOP_PCT` (default **0,06 = 6 %** del prezzo) = setup non
   tradabile, sia nel gate sia nel bot, dalla stessa funzione
-  (`bot/config.py:693`; `bot/risk/setup_check.py:37-59`; `bot/risk/risk_manager.py:112-123`;
+  (`bot/config.py:707`; `bot/risk/setup_check.py:37-59`; `bot/risk/risk_manager.py:112-123`;
   `backtesting/engine.py:855`).
 * Equity del paper: letta da Firebase, default 1.000 (`bot/main.py:604-607`;
-  `bot/main.py:758`).
+  `bot/main.py:771`).
 
 ### Leva
 
@@ -141,10 +141,10 @@ price al range: va dichiarato nel confronto del Passo 9.
   **intero** con `floor(x + 0,5)`, mai sotto 1 (`bot/risk/risk_manager.py:84-93`).
   Con base 2 le leve ottenibili sono 1x, 2x, 3x.
 * Nel live la leva viene impostata per simbolo con `futures_change_leverage`
-  (`bot/execution/executor.py:362`).
-* Il margine usato = nozionale residuo / leva (`bot/main.py:609-614`); un'apertura che
+  (`bot/execution/executor.py:621`).
+* Il margine usato = nozionale residuo / leva (`bot/main.py:609-613`); un'apertura che
   porterebbe il margine oltre l'equity viene rifiutata, come farebbe Binance
-  (`bot/main.py:1775-1788`).
+  (`bot/main.py:1860-1873`).
 
 ### Modalità di margine (isolated / cross)
 
@@ -157,28 +157,28 @@ entra in nessun calcolo: non esiste un prezzo di liquidazione (vedi punto 5).
 ### Numero massimo di posizioni e limiti per moneta / direzione
 
 * `MAX_OPEN_POSITIONS` default **5** (`bot/config.py:176`), applicato in
-  `bot/main.py:1639-1644` ma **disattivato sotto `BACKTEST_PARITY`** (stessa riga; il
-  flag è a `bot/config.py:658`, default falso); in parità il limite diventa il margine
-  esaurito (`bot/main.py:1648-1650`).
+  `bot/main.py:1724-1729` ma **disattivato sotto `BACKTEST_PARITY`** (stessa riga; il
+  flag è a `bot/config.py:672`, default falso); in parità il limite diventa il margine
+  esaurito (`bot/main.py:1733-1735`).
 * **Una posizione per moneta**: le posizioni sono indicizzate per simbolo
-  (`bot/execution/executor.py:309`) e un segnale su una moneta già aperta è rifiutato
-  (`bot/main.py:1605-1609`); l'orchestratore emette al massimo una decisione per moneta
+  (`bot/execution/executor.py:353`) e un segnale su una moneta già aperta è rifiutato
+  (`bot/main.py:1690-1694`); l'orchestratore emette al massimo una decisione per moneta
   (`bot/orchestrator/orchestrator.py:450-453`).
 * **Rischio direzionale**: la somma del rischio (distanza dallo stop × quantità
   residua) delle posizioni nello stesso verso, più il nuovo trade, non oltre
   `MAX_DIRECTIONAL_RISK_PCT` = **0,03** dell'equity (`bot/config.py:237`;
-  `bot/main.py:650-669`; `bot/main.py:1763-1773`).
+  `bot/main.py:655-679`; `bot/main.py:1848-1858`).
 * **Tetto di perdita per moneta al giorno**: `RISK_PER_COIN_DAY` = **0,015** dell'equity;
-  superato, la moneta non si riapre fino a mezzanotte UTC (`bot/config.py:686`;
-  `bot/main.py:1624-1637`; `bot/risk/daily_cap.py:30-40`).
+  superato, la moneta non si riapre fino a mezzanotte UTC (`bot/config.py:700`;
+  `bot/main.py:1709-1722`; `bot/risk/daily_cap.py:30-40`).
 * **Correlazione**: massimo 3 posizioni con correlazione > 0,85 sui rendimenti orari
-  delle ultime 24 candele (`bot/config.py:222-230`; `bot/main.py:1691-1698`;
+  delle ultime 24 candele (`bot/config.py:222-230`; `bot/main.py:1776-1783`;
   `bot/risk/correlation_guard.py:1-7`).
 * **Cooldown dopo uno stop in perdita**: 4 barre del timeframe sulla moneta
-  (`bot/config.py:207-212`; `bot/main.py:1610-1623`), stessa regola nel gate
+  (`bot/config.py:207-212`; `bot/main.py:1695-1708`), stessa regola nel gate
   (`backtesting/engine.py:1006-1008`); panchina di strategia dopo 3 stop di fila per
   8 barre (`bot/config.py:213-217`).
-* Posizioni esplorative aperte insieme: massimo 3 (`bot/config.py:485`).
+* Posizioni esplorative aperte insieme: massimo 3 (`bot/config.py:499`).
 * Interruttori generali: perdita giornaliera oltre il 5 % ferma tutto, 6 stop di fila
   = pausa di 2 ore (`bot/risk/hard_limits.py:21-26`; `bot/risk/circuit_breakers.py:1-6`);
   kill switch a tre livelli letto da Firebase (`bot/risk/kill_switch.py:1-21`).
@@ -189,23 +189,23 @@ Tutti i fattori sotto possono solo ridurre; nessuno supera i tetti sopra.
 
 1. Allocazione «convinzione × apprendimento»: `risk_mult` fra 0,5 e 1,5, `lev_mult`
    fra 0,7 e 1,3 (`bot/learning/adaptation.py:184-222`), calibrazione della
-   confidenza verso il neutro (`bot/config.py:555-558`).
+   confidenza verso il neutro (`bot/config.py:569-572`).
 2. Freno di deriva paper→gate: × `DRIFT_WEIGHT_FACTOR` 0,5 per coppia, per strategia
-   e globale, pavimento `DRIFT_WEIGHT_FLOOR` 0,25 (`bot/config.py:440-441`;
+   e globale, pavimento `DRIFT_WEIGHT_FLOOR` 0,25 (`bot/config.py:454-455`;
    `bot/learning/drift.py:586-623`; applicato in `bot/learning/adaptation.py:228-237`).
 3. Freno di serie (4 perdite di fila → × 0,5): **spento** per default
-   (`bot/config.py:462-464`).
-4. Freno per gruppo (CUSUM sui pool): **spento** per default (`bot/config.py:529-534`).
+   (`bot/config.py:476-478`).
+4. Freno per gruppo (CUSUM sui pool): **spento** per default (`bot/config.py:543-548`).
 5. Coppie esplorative (quasi-passaggi del gate): size × `ESPLORATIVA_SIZE_MULT` 0,25
-   (`bot/config.py:483`; `bot/main.py:1731-1745`).
+   (`bot/config.py:497`; `bot/main.py:1816-1830`).
 6. Coppie declassate dal gate: size × `DECLASSATA_SIZE_MULT` 0,25
-   (`bot/config.py:501`; `bot/main.py:315-332`).
+   (`bot/config.py:515`; `bot/main.py:315-332`).
 7. Pavimento della panchina: peso strategia×regime sotto soglia → size × max(0,25,
-   peso) invece del rifiuto (`bot/config.py:545`; `bot/main.py:1746-1752`).
-8. Tilt di trend: controtrend × fino a 0,5 (`bot/config.py:674-678`;
+   peso) invece del rifiuto (`bot/config.py:559`; `bot/main.py:1831-1837`).
+8. Tilt di trend: controtrend × fino a 0,5 (`bot/config.py:688-692`;
    `bot/orchestrator/orchestrator.py:514-522`).
-9. Tilt di sentiment: contro il verso × fino a 0,5 (`bot/config.py:702-704`;
-   `bot/main.py:1708-1716`).
+9. Tilt di sentiment: contro il verso × fino a 0,5 (`bot/config.py:716-718`;
+   `bot/main.py:1793-1801`).
 10. Cap di volatilità su leva e rischio (`bot/risk/hard_limits.py:27-56`).
 11. Cap di nozionale per posizione (`bot/risk/risk_manager.py:140-153`).
 
@@ -218,18 +218,18 @@ Nessuna di queste riduzioni esiste nel gate (vedi punto 5): sono solo del bot vi
 ### Commissione per trade
 
 * Un solo numero per andata e ritorno: `BACKTEST_COST_PER_TRADE`, default
-  **0,0008 = 0,08 % del nozionale, round-trip** (`bot/execution/executor.py:178`;
+  **0,0008 = 0,08 % del nozionale, round-trip** (`bot/execution/executor.py:205`;
   `backtesting/engine.py:613-616`). Il commento del motore lo descrive come «taker
   ~0,04 %/lato + slippage» (`backtesting/engine.py:614`).
 * Più uno **spread stimato per fascia di volume 24h**, anch'esso round-trip:
   0,012 % sopra 200 M USDT, 0,025 % sopra 50 M, 0,045 % sopra 10 M, 0,08 % sotto
   (`bot/core/costs.py:13-24`). Nel bot la fascia si fissa all'apertura dal volume 24h
-  del ticker (`bot/execution/executor.py:280`); nel gate dal volume medio in USDT delle
+  del ticker (`bot/execution/executor.py:313`); nel gate dal volume medio in USDT delle
   ultime 720 candele (`backtesting/engine.py:644-657`).
 * Nel bot i costi sono scomposti in commissione, spread e funding e sottratti al PnL
-  (`bot/execution/executor.py:857-871`); nel gate sottratti dal rendimento del trade
+  (`bot/execution/executor.py:1118-1132`); nel gate sottratti dal rendimento del trade
   (`backtesting/engine.py:972-977`). In paper sono dichiarati «stimati», non misurati
-  (`bot/execution/executor.py:928`).
+  (`bot/execution/executor.py:1189`).
 
 ### Funding
 
@@ -237,8 +237,8 @@ Nessuna di queste riduzioni esiste nel gate (vedi punto 5): sono solo del bot vi
   segno (long paga a tasso positivo, short incassa) — **continuo e proporzionale alle
   ore**, non ai settlement (`bot/core/costs.py:27-39`, riga `bot/core/costs.py:39`).
 * Nel bot il tasso è quello della moneta **all'ingresso** (`lastFundingRate` da
-  `premiumIndex`, `bot/agents/price_agent.py:195`; `bot/execution/executor.py:861-864`);
-  se manca, `BACKTEST_FUNDING_PER_8H` default 0,0001 (`bot/execution/executor.py:179`).
+  `premiumIndex`, `bot/agents/price_agent.py:195`; `bot/execution/executor.py:1122-1125`);
+  se manca, `BACKTEST_FUNDING_PER_8H` default 0,0001 (`bot/execution/executor.py:206`).
 * Nel gate il tasso è la **media degli ultimi 1.000 settlement storici** della moneta
   da `/fapi/v1/fundingRate` (`backtesting/data_loader.py:37-55`), fissa per tutta la
   storia simulata (`backtesting/engine.py:631-642`, `backtesting/engine.py:974-977`);
@@ -252,10 +252,10 @@ Nessuna di queste riduzioni esiste nel gate (vedi punto 5): sono solo del bot vi
 * Non modellato come voce separata: è dentro lo 0,08 % e nello spread per fascia
   (`backtesting/engine.py:644-650`; `bot/core/costs.py:1-9`).
 * Nel paper gli stop e i take profit si riempiono esattamente al livello
-  (`bot/execution/executor.py:618`, `bot/execution/executor.py:667`,
-  `bot/execution/executor.py:672`); l'ingresso avviene al prezzo vivo dello snapshot.
+  (`bot/execution/executor.py:877`, `bot/execution/executor.py:926`,
+  `bot/execution/executor.py:931`); l'ingresso avviene al prezzo vivo dello snapshot.
   Lo slippage d'ingresso misurato è la differenza fra prezzo eseguito e chiusura della
-  candela del segnale (`bot/execution/executor.py:917-921`; `bot/execution/executor.py:321-337`).
+  candela del segnale (`bot/execution/executor.py:1178-1182`; `bot/execution/executor.py:365-381`).
 
 ---
 
@@ -309,9 +309,9 @@ Nessuna di queste riduzioni esiste nel gate (vedi punto 5): sono solo del bot vi
   (`backtesting/optimizer.py:233-235`).
 * Filtro di robustezza: una strategia in codice è operabile solo se validata su
   almeno `MIN_COINS_PER_STRATEGY` = **3 monete** distinte; le `gen_*` sono esentate
-  (`bot/config.py:603`; `bot/learning/adaptation.py:255-272`).
+  (`bot/config.py:617`; `bot/learning/adaptation.py:255-272`).
 * Il bot scarica indicatori solo per i timeframe `1m, 5m, 15m, 1h`
-  (`bot/config.py:281`; `bot/agents/price_agent.py:151-165`); `timeframe_hours` conosce
+  (`bot/config.py:295`; `bot/agents/price_agent.py:151-165`); `timeframe_hours` conosce
   solo `1m…4h` (`bot/config.py:38-42`); l'orchestratore filtra le strategie sul loro
   orologio con una mappa che arriva a `1d` (`bot/orchestrator/orchestrator.py:35`,
   `bot/orchestrator/orchestrator.py:322-326`). Una strategia a 4h o 1d oggi non
@@ -335,19 +335,19 @@ Stima di cosa toccare (solo elenco, nessuna modifica fatta):
    protocollo» letto in `bot/learning/adaptation.py:498-510` (`is_enabled`) e nel
    filtro di robustezza `bot/learning/adaptation.py:255-272`, con i suoi test; oppure,
    più semplice ma più grezzo, `MIN_COINS_PER_STRATEGY=1` nell'ambiente
-   (`bot/config.py:603`) e un record del registro scritto con `pass_count` sopra
+   (`bot/config.py:617`) e un record del registro scritto con `pass_count` sopra
    soglia — che però il giro del gate riscriverebbe ogni 3 ore
    (`scripts/install_optimizer_timer.sh:64`, `scripts/optimize.py:1549`).
 3. Se il timeframe della strategia non è fra `1m, 5m, 15m, 1h`, due casi:
    * **30m o 4h**: `timeframe_hours` e `_TF_SECS` li conoscono già
      (`bot/config.py:42`, `bot/orchestrator/orchestrator.py:35`); mancano solo
-     `bot/config.py:281` (`TIMEFRAMES`), `bot/agents/price_agent.py:151-165`
+     `bot/config.py:295` (`TIMEFRAMES`), `bot/agents/price_agent.py:151-165`
      (snapshot) e `bot/main.py:534` (intervallo di decisione).
    * **2h, 6h, 8h, 12h o 1d**: oltre ai tre file qui sopra, `bot/config.py:42`
      (`timeframe_hours`, che si ferma a 4h) e, tranne che per 1d, `_TF_SECS`
      (`bot/orchestrator/orchestrator.py:35`, che il 1d lo ha già).
    In entrambi i casi va rivisto l'orizzonte di 96 barre
-   (`bot/execution/executor.py:180-188`).
+   (`bot/execution/executor.py:207-215`).
 4. Se le regole usano dati che il bot non ha (mark price storico, funding a
    settlement, candele oltre le 200 per chiamata `bot/agents/price_agent.py:152`):
    lavoro ulteriore, da stimare sul candidato.
@@ -381,15 +381,15 @@ Cosa fa, con i riferimenti:
   `bot/agents/price_agent.py:155-165`).
 * **Ingresso alla chiusura della barra del segnale** per default
   (`backtesting/engine.py:833`); con `BACKTEST_ENTRY_NEXT_OPEN` (default falso,
-  `bot/config.py:667-668`) all'apertura della barra successiva, con stop e target
+  `bot/config.py:681-682`) all'apertura della barra successiva, con stop e target
   traslati (`backtesting/engine.py:846-849`).
 * **Stop prima del take profit nella stessa barra** (`backtesting/engine.py:942-952`).
 * **Profit-lock** (stop che sale a metà strada verso il target, tiene metà del
-  miglior guadagno): `bot/execution/exit_logic.py:21-49`, `bot/config.py:301-303`,
+  miglior guadagno): `bot/execution/exit_logic.py:21-49`, `bot/config.py:315-317`,
   usato in `backtesting/engine.py:937`.
 * **Scale-out** su multipli di R con break-even dopo il primo gradino: percorso
   `backtesting/engine.py:878-930`, ma `SCALE_OUT_ENABLED` è **falso** per default
-  (`bot/config.py:314`).
+  (`bot/config.py:328`).
 * **Orizzonte**: `HORIZON_BARS = 96` (`backtesting/engine.py:43`, `backtesting/engine.py:873`),
   chiusura forzata alla chiusura della barra.
 * **Cooldown** dopo uno stop in perdita, come il bot (`backtesting/engine.py:1006-1008`).
@@ -403,7 +403,7 @@ Cosa fa, con i riferimenti:
   (`backtesting/engine.py:35`, `backtesting/engine.py:485`, `backtesting/engine.py:597-603`).
 * **Walk-forward e holdout** (nel gate, sopra il motore): 3 finestre, holdout di 45
   giorni mai visto dalla selezione (`backtesting/optimizer.py:100-131`;
-  `bot/config.py:392-396`), soglie del gate (`bot/config.py:379-382`,
+  `bot/config.py:406-410`), soglie del gate (`bot/config.py:393-396`,
   `backtesting/engine.py:377-445`).
 
 **Si può usare per il test di parità del Passo 9?** Sì, per **segnali e trade**
@@ -413,7 +413,7 @@ la strategia tradotta e chiamare `run_strategy` sulle stesse candele
 risultati in R o in denaro: il motore del bot non ha dimensione, leva, liquidazione,
 settlement del funding né slippage per fascia, e per default entra alla chiusura
 della barra del segnale invece che all'apertura della successiva. Per il confronto
-si userà `BACKTEST_ENTRY_NEXT_OPEN=true` (`bot/config.py:667`) e si confronteranno
+si userà `BACKTEST_ENTRY_NEXT_OPEN=true` (`bot/config.py:681`) e si confronteranno
 solo le liste dei trade.
 
 ---
@@ -426,7 +426,7 @@ solo le liste dei trade.
   default **vero** nel codice, `bot/config.py:69`; `bot/agents/price_agent.py:29`; il
   valore sulla macchina è nell'ambiente, non letto).
 * Candele: `/fapi/v1/klines`, 200 per chiamata, timeframe `1m, 5m, 15m, 1h`
-  (`bot/agents/price_agent.py:96-116`, `bot/agents/price_agent.py:152`; `bot/config.py:281`);
+  (`bot/agents/price_agent.py:96-116`, `bot/agents/price_agent.py:152`; `bot/config.py:295`);
   l'ultima candela (in formazione) esclusa dagli indicatori (`bot/agents/price_agent.py:160-165`).
 * Mark price e funding: `/fapi/v1/premiumIndex` (`markPrice`, `lastFundingRate`)
   (`bot/agents/price_agent.py:119-121`, `bot/agents/price_agent.py:194-195`).
@@ -435,9 +435,9 @@ solo le liste dei trade.
   (`bot/agents/price_agent.py:138-142`); universo `/fapi/v1/exchangeInfo`
   (`bot/agents/price_agent.py:60-71`).
 * Stream WebSocket `wss://fstream.binance.com`, `bookTicker` (`bot/agents/price_stream.py:46-47`,
-  `bot/config.py:369`).
-* Snapshot rinfrescato ogni ciclo (`bot/main.py:1330-1344`); ciclo ogni 30 s
-  (`bot/main.py:2397`).
+  `bot/config.py:383`).
+* Snapshot rinfrescato ogni ciclo (`bot/main.py:1343-1357`); ciclo ogni 30 s
+  (`bot/main.py:2497`).
 
 ### Il gate (storico)
 
@@ -467,14 +467,14 @@ solo le liste dei trade.
   le strategie generate possono dichiarare il proprio (`bot/strategies/generated.py:566-571`),
   dal 22 set 2026 anche 1h.
 * La decisione avviene una volta per candela chiusa, al confine dell'orologio, almeno
-  5 s dopo (`bot/main.py:1500-1508`; intervallo `bot/main.py:534`); l'orchestratore
+  5 s dopo (`bot/main.py:1585-1593`; intervallo `bot/main.py:534`); l'orchestratore
   valuta ogni strategia solo sulle chiusure del suo timeframe
   (`bot/orchestrator/orchestrator.py:313-326`).
 * Orizzonte massimo: `EXEC_MAX_HOLD_HOURS` se impostato nell'ambiente, altrimenti
   **96 barre del timeframe della posizione** (24 h a 15m, 96 h a 1h)
-  (`bot/execution/executor.py:180-188`, riga `bot/execution/executor.py:185`;
-  `bot/execution/executor.py:521-532`); la chiusura d'ufficio è a `bot/execution/executor.py:640-643`
-  e `bot/execution/executor.py:674-678`. Stesso numero nel gate (`backtesting/engine.py:43`).
+  (`bot/execution/executor.py:207-215`, riga `bot/execution/executor.py:212`;
+  `bot/execution/executor.py:780-791`); la chiusura d'ufficio è a `bot/execution/executor.py:899-902`
+  e `bot/execution/executor.py:933-937`. Stesso numero nel gate (`backtesting/engine.py:43`).
 * Cooldown: 4 barre dopo uno stop sulla moneta, 8 barre di panchina per la strategia
   (`bot/config.py:211-217`).
 
@@ -484,12 +484,12 @@ solo le liste dei trade.
 
 1. **Commissione.** Il bot usa 0,08 % round-trip tutto compreso (≈0,04 %/lato, con
    lo slippage dentro) più uno spread per fascia (0,012–0,08 % round-trip)
-   (`bot/execution/executor.py:178`; `bot/core/costs.py:13-24`). Il protocollo parte da
+   (`bot/execution/executor.py:205`; `bot/core/costs.py:13-24`). Il protocollo parte da
    0,05 %/lato taker (0,10 % round-trip) più slippage per fascia 0,01–0,10 %/lato: è
    più prudente del bot. Il percorso live entra con un ordine **limit**
-   (`bot/execution/executor.py:364`) ma esce sempre a mercato
-   (`bot/execution/executor.py:462`, `bot/execution/executor.py:480`,
-   `bot/execution/executor.py:798-800`): contare tutto come taker è prudente ma non
+   (`bot/execution/executor.py:623`) ma esce sempre a mercato
+   (`bot/execution/executor.py:721`, `bot/execution/executor.py:739`,
+   `bot/execution/executor.py:1057-1059`): contare tutto come taker è prudente ma non
    troppo, perché metà degli ordini lo sono davvero e il paper non modella il maker.
    Da verificare la tabella attuale di Binance.
 2. **Funding.** Bot e gate usano un tasso fisso per moneta (all'ingresso nel paper,
@@ -520,21 +520,21 @@ solo le liste dei trade.
    timeframe fra quelli che scarica (1m–1h). Per il Passo 9 serve un'aggiunta
    (punto 4): va decisa al Passo 0, come chiede il protocollo.
 7. **Timeframe ammessi.** Il protocollo ammette 15m…1d; il bot dal vivo ha
-   indicatori solo per 1m, 5m, 15m, 1h (`bot/config.py:281`) e `timeframe_hours`
+   indicatori solo per 1m, 5m, 15m, 1h (`bot/config.py:295`) e `timeframe_hours`
    arriva a 4h (`bot/config.py:42`). Un candidato a 2h, 4h, 6h, 8h, 12h o 1d richiede
    le modifiche del punto 4.3 prima del paper.
 8. **Durata delle posizioni.** Il protocollo la lascia libera; il bot chiude d'ufficio
-   dopo 96 barre (`bot/execution/executor.py:185`). Un candidato con posizioni più
+   dopo 96 barre (`bot/execution/executor.py:212`). Un candidato con posizioni più
    lunghe non si può portare in paper così com'è: o si dichiara l'orizzonte nelle sue
    regole, o si rivede `EXEC_MAX_HOLD_HOURS` (configurazione live: non si tocca senza
    il sì dell'utente).
 9. **Momento d'ingresso.** Il gate del bot entra alla chiusura della barra del segnale
    (`backtesting/engine.py:833`); il protocollo all'apertura della successiva. Il paper
-   invece entra al prezzo vivo dopo il confine di candela (`bot/main.py:1500-1508`,
-   `bot/execution/executor.py:273`), cioè come il protocollo. Per il test di parità si
+   invece entra al prezzo vivo dopo il confine di candela (`bot/main.py:1585-1593`,
+   `bot/execution/executor.py:306`), cioè come il protocollo. Per il test di parità si
    userà `BACKTEST_ENTRY_NEXT_OPEN=true`.
 10. **Numero massimo di posizioni.** Il tetto di 5 è spento in parità
-    (`bot/main.py:1639`), dove conta solo il margine (10 % dell'equity per posizione →
+    (`bot/main.py:1724`), dove conta solo il margine (10 % dell'equity per posizione →
     circa 10 posizioni). Il motore di ricerca prova una moneta alla volta: i limiti di
     portafoglio (direzione, perdita per moneta, correlazione) non entrano nelle
     campagne e vanno dichiarati nei limiti noti (sezione 11).
@@ -544,5 +544,5 @@ solo le liste dei trade.
     diretto, l'origine S3 è la prima alternativa da provare; se bloccata anche quella,
     STOP come da appendice 2 del protocollo.
 12. **Riempimento intra-barra.** Coerente: stop prima del target nel gate
-    (`backtesting/engine.py:942-952`) e nel paper (`bot/execution/executor.py:602-605`).
+    (`backtesting/engine.py:942-952`) e nel paper (`bot/execution/executor.py:861-864`).
     Nessuna incoerenza.
