@@ -1,0 +1,129 @@
+# Parametri della SECONDA EDIZIONE del protocollo di ricerca (research/PROTOCOLLO_2.md, versione 5.0,
+# approvata dal proprietario il 13 ottobre 2026 alle 19:34 UTC con tre idee e 18 varianti).
+#
+# STATO: BOZZA del Passo 0 (13 ottobre 2026, sera). Il Passo 0 finisce con uno STOP: questo file lo approva
+# il proprietario in chat, poi diventa «congelato» e nessun valore cambia piu'. Nessun numero qui e' stato
+# scelto guardando risultati di strategie: i numeri misurati vengono dal Passo 0 (research/passo0_2/) e sono
+# fatti sui dati 2020-2023, non scelte. I numeri dell'ESAME (trade minimi, simulazioni, semi, bootstrap,
+# asticella, pavimenti) restano quelli del blocco `gruppo` di research/config/parametri.yaml, letti dagli
+# strumenti di gruppo cosi' come sono: qui non si ricopiano, per non avere due fonti.
+
+stato: bozza_passo_0
+versione_protocollo: "5.0"
+testo: research/PROTOCOLLO_2.md
+approvazione_testo: 2026-10-13T19:34Z   # «approvo la seconda edizione, 3 idee e anche piu' varianti, dal 16 gennaio 2023 va bene»
+approvazione_parametri: null             # la scrive il coordinamento quando il proprietario approva questo file
+
+# --------------------------------------------------------------------------- #
+# Il terreno (PROTOCOLLO_2, sezione 3)
+# --------------------------------------------------------------------------- #
+terreno:
+  timeframe_segnali: "1d"                # candele giornaliere UTC, chiuse; e basta
+  durata_massima_barre: 60               # uscita a tempo (sezione 3.1)
+  ingresso:
+    tipo: limite                         # motore.Parametri(ingresso="limite")
+    prezzo: "chiusura della candela di segnale"
+    validita_barre: 1
+    condizione: attraversato             # long: minimo < P; short: massimo > P (correzione 1 della prova del 13 ott)
+    commissione_maker_per_lato: 0.0002
+    scarto_per_lato: 0.0
+  uscite:
+    tipo: mercato                        # stop, segnale, tempo; mai a limite (prova del 13 ott, variante c)
+    commissione_taker_per_lato: 0.0005
+    scarto_per_lato: "fascia della scheda della moneta (campagne/PANIERE/schede/<S>.md)"
+  stop_iniziale: {multiplo_atr: 2.5, barre_atr: 20, atr: "media semplice dei true range"}
+  rischio_per_trade: 0.01
+  leva_max: 2.0
+  modalita_margine: isolated
+  riempimento_intrabarra: stop_prima
+  tetto_esposizione_per_verso: {nella_ricerca: "si misura e si riporta", nel_bot: 0.03}
+
+# --------------------------------------------------------------------------- #
+# I fatti misurati al Passo 0 (research/passo0_2/misure_motore_1d.md, commit 2f136a14)
+# --------------------------------------------------------------------------- #
+misure_passo_0:
+  funding_1d_contro_8h:
+    strategia: "A1-20 su BTCUSDT 2020-2023, long e short, ingresso a limite"
+    trade: {long: 24, short: 16}         # identici a 1 giorno e a 8 ore (stessi giorni di segnale, stesse uscite)
+    differenza_funding_media_r: {long: -0.00031, short: +0.00072}
+    differenza_funding_massima_r: 0.0163
+    decisione: "barre di 1 giorno (differenza media sotto 0,005 R: sezione 3.4)"
+  distanza_stop_2_5_atr_20:
+    monete: 80
+    mediana_delle_mediane_pct: 22.2
+    minimo_pct: 13.3
+    massimo_pct: 27.8
+    nota: "molto piu' larga della stima del testo (6-12%): le monete del paniere sono piu' volatili di Bitcoin (11,8%)"
+  costo_atteso_per_trade_r:
+    formula: "(maker 0,02% + taker 0,05% + scarto d'uscita della fascia) / distanza dello stop"
+    mediana: 0.0068
+    minimo: 0.0043
+    massimo: 0.0113
+    nota: "contro 0,05-0,14 R della prima edizione; il funding a giorni pesa di piu' (BTC long 2020-2023: +0,23 R a trade in media)"
+
+# --------------------------------------------------------------------------- #
+# Il paniere, i dati, i periodi (sezioni 4 e 6)
+# --------------------------------------------------------------------------- #
+paniere:
+  monete: research/campagne/PANIERE/monete.csv       # le 80 del gruppo, stessa impronta approvata nel guardiano
+  schede: research/campagne/PANIERE/schede
+  riferimento: BTCUSDT
+  dati: {serie: ["klines/1d", "markPriceKlines/1d", "fundingRate"], impronte: research/campagne/PANIERE/impronte_1d.json, file: 9406}
+  liquidita_minima_usdt_giorno: 20000000             # scelte_dati di parametri.yaml, mese per mese sui file 1d
+periodi:
+  in_sample: {inizio: "primo mese della scheda, mai prima del 2020-01-01", fine: 2023-12-31}
+  taglio_costruzione: 2023-01-16                     # come il gruppo (dati.periodi_gruppo)
+  inizio_validazione: 2023-01-17
+  vault: {inizio: 2024-01-01, fine: 2026-09-30, apertura: "una volta, per tutte le candidate insieme, frase «APRI IL VAULT 2», file vault/APERTURA_2.md"}
+  paper: {durata_massima_mesi: 6, trade_sommati_massimi: 150}
+
+# --------------------------------------------------------------------------- #
+# Le idee e il budget (sezione 5, con le modifiche del proprietario)
+# --------------------------------------------------------------------------- #
+idee:
+  budget_varianti: 18
+  ritocchi_massimi_per_famiglia: 3
+  ritocchi_massimi_in_tutto: 12
+  test_massimi: 30
+  A_tendenza:
+    A1_rottura: {n_giorni: [20, 55], uscita_segnale: "minimo/massimo degli ultimi N/2 giorni", direzioni: [long, short]}
+    A2_segno_rendimento: {n_giorni_rendimento: 60, media_semplice_giorni: 100, direzioni: [long, short]}
+  B_momentum_trasversale:
+    ribilanciamento: "lunedi 00:00 UTC"
+    settimane_rendimento: {B1: 4, B2: 2, B3: 4}
+    monete_per_lato: {B1: 10, B2: 10, B3: 20}
+    storia_minima_giorni: 90
+    direzioni: [long, short]
+  C_ritardo_dopo_bitcoin:
+    k_deviazioni: [1.5, 2.0]
+    giorni_deviazione: 60
+    giorni_minimi_deviazione: 40
+    monete: {C1: "tutte quelle in ritardo", C2: "le 20 piu' in ritardo (solo k 1,5)"}
+    uscita_a_segnale_giorni: 5
+    direzioni: [long, short]
+
+# --------------------------------------------------------------------------- #
+# L'esame (sezione 7): numeri del gruppo, piu' la prova a placebo a 1 giorno
+# --------------------------------------------------------------------------- #
+esame:
+  strumenti: research/src/gruppo.py                  # con timeframe "1d"; numeri dal blocco `gruppo` di parametri.yaml
+  trade_minimi: {costruzione: 700, validazione: 300, vault: 300}   # = parametri.yaml, gruppo.trade_minimi (correzione 1 del testo)
+  placebo_1d:
+    cartella: research/taratura/placebo_paniere
+    placebo_per_periodo: 48                          # 6 regole x 2 direzioni x 4 sfasamenti, solo 1d
+    soglie: {netta_costruzione_max: 0.03, p_sotto_010_validazione_max: 0.13, placebo_valutabili_minime_per_periodo: 40}
+    esito: null                                      # lo scrive il coordinamento a prova finita
+  controllo_positivo_1d: null                        # idem
+
+# --------------------------------------------------------------------------- #
+# Il paper come esame finale (sezione 9)
+# --------------------------------------------------------------------------- #
+paper_esame_finale:
+  chi: "ogni candidata che passa il vault, al massimo una per idea (la migliore per t contro la (b) in validazione)"
+  durata: "6 mesi o 150 trade sommati, quello che arriva prima; nessun ritocco"
+  passa_se_tutte:
+    - "R medio netto > 0 sui trade del paper"
+    - "batte nettamente la (b) calcolata sullo stesso periodo con le candele vere (esame di gruppo)"
+    - "tasso di esecuzione degli ordini limite >= 0,70 e costo medio per trade <= 1,5 volte quello del vault"
+    - "drawdown mai oltre 1,5 volte il massimo del vault"
+  dopo: "decide il proprietario; DRY_RUN resta true"

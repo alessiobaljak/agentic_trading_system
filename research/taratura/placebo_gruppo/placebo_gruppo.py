@@ -52,10 +52,11 @@ USCITA_DELLA_REGOLA = {
 }
 USCITE = ("atr", "tempo")
 DIREZIONI = ("long", "short")
-TIMEFRAME = ("1h", "4h")
-MS_BARRA = {"1h": 3_600_000, "4h": 14_400_000}
-#: uscita a tempo: barre tenute (un giorno a 1 ora, due giorni a 4 ore)
-BARRE_USCITA_TEMPO = {"1h": 24, "4h": 12}
+TIMEFRAME = ("1h", "4h", "1d")
+MS_BARRA = {"1h": 3_600_000, "4h": 14_400_000, "1d": 86_400_000}
+#: uscita a tempo: barre tenute (un giorno a 1 ora, due giorni a 4 ore; dieci giorni a 1 giorno, la prova
+#: a placebo della seconda edizione, research/taratura/placebo_paniere/, 13 ott 2026)
+BARRE_USCITA_TEMPO = {"1h": 24, "4h": 12, "1d": 10}
 #: barre dell'ATR (media semplice dei true range)
 BARRE_ATR = 14
 #: stop e target in ATR per tipo di uscita: (stop, target o None)

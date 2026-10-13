@@ -302,7 +302,7 @@ from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Seque
 
 import numpy as np
 
-from research.src import dati, motore, statistica
+from research.src import dati, guardiano, motore, statistica
 from research.src.guardiano import MONETA_RIFERIMENTO, leggi_monete_gruppo
 from research.src.motore import Candela, Parametri, Segnale, StoriaChiusa
 
@@ -317,6 +317,16 @@ RADICE_PROGETTO = Path(__file__).resolve().parents[2]
 PERIODI = ("costruzione", "validazione")
 #: Il file del via libera (regole.md, sezione 7, punto 2), relativo alla radice del progetto.
 VIA_LIBERA = Path("research") / "campagne" / "GRUPPO" / "via_libera_validazione.md"
+
+
+def simbolo_gruppo_corrente() -> str:
+    """La campagna di gruppo di questa sessione: il simbolo del marcatore se e' uno di
+    ``guardiano.SIMBOLI_GRUPPO`` (GRUPPO o PANIERE), altrimenti GRUPPO (prima edizione).
+    Decide la cartella predefinita della campagna e il file del via libera."""
+    marcatore = dati.marcatore_di_campagna()
+    if marcatore is not None and marcatore.get("simbolo") in guardiano.SIMBOLI_GRUPPO:
+        return str(marcatore["simbolo"])
+    return guardiano.SIMBOLO_GRUPPO
 #: Le candele di BTCUSDT per ``ctx.btc_chiuse_entro`` partono da qui: l'archivio mensile
 #: dei futures comincia a gennaio 2020 (``parametri.yaml``, ``periodi.in_sample.nota``).
 INIZIO_ARCHIVIO = date(2020, 1, 1)
@@ -617,7 +627,8 @@ def controlla_via_libera(percorso: Optional[Union[str, Path]] = None) -> Dict[st
     il file manca, se un file non e' nominato (meno di cinque impronte), se e'
     nominato due volte con impronte diverse o se un'impronta non torna.
     """
-    file = Path(percorso) if percorso is not None else Path(dati.RADICE_PROGETTO) / VIA_LIBERA
+    file = (Path(percorso) if percorso is not None else
+            Path(dati.RADICE_PROGETTO) / "research" / "campagne" / simbolo_gruppo_corrente() / "via_libera_validazione.md")
     if not file.is_file():
         raise ViaLiberaNonValida(
             f"manca {file}: la validazione non parte senza il via libera del coordinamento "
@@ -2302,7 +2313,8 @@ def _esame(modulo, p, timeframe: str, periodo: str, id: str, *, moltiplicatore_c
     if sorgente["tipo"] == "placebo":
         cartella = _controlla_cartella_del_placebo(cartella_campagna, radice)
     else:
-        cartella = Path(cartella_campagna) if cartella_campagna is not None else Path(radice) / "campagne" / "GRUPPO"
+        cartella = (Path(cartella_campagna) if cartella_campagna is not None
+                    else Path(radice) / "campagne" / simbolo_gruppo_corrente())
     base = _compito_base(modulo, p, timeframe, regole, opzioni, caricatore)
     periodi = _periodi(caricatore, posizioni, ufficiali, regole)
     ms = base["ms_per_barra"]

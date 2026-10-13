@@ -56,7 +56,7 @@ PROPRIO = "research/campagna/GRUPPO"
 MONETE = tuple(MONETE_REPO.read_text(encoding="utf-8").splitlines()[1:])
 #: le monete di campagna: le cartelle di research/campagne/ del repo, tranne GRUPPO
 CAMPAGNA = tuple(sorted(p.name for p in (RADICE_REPO / "research" / "campagne").iterdir()
-                        if p.is_dir() and p.name != "GRUPPO"))
+                        if p.is_dir() and p.name not in g.SIMBOLI_GRUPPO))
 CAMPAGNA_SENZA_BTC = tuple(m for m in CAMPAGNA if m != "BTCUSDT")
 #: i file della campagna di gruppo in sola lettura
 PROTETTI = (

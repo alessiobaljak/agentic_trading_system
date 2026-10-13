@@ -398,13 +398,13 @@ def simboli_ammessi_in_campagna() -> Optional[FrozenSet[str]]:
         return None
     simbolo = marcatore["simbolo"]
     monete_gruppo: FrozenSet[str] = frozenset()
-    if simbolo == guardiano.SIMBOLO_GRUPPO:
+    if simbolo in guardiano.SIMBOLI_GRUPPO:
         try:
-            monete_gruppo = frozenset(guardiano.leggi_monete_gruppo(str(RADICE_PROGETTO)))
+            monete_gruppo = frozenset(guardiano.leggi_monete_gruppo(str(RADICE_PROGETTO), simbolo=simbolo))
         except (ValueError, OSError) as errore:
             raise VietatoInCampagna(
-                f"sessione di campagna GRUPPO con un elenco delle monete che non e' quello approvato ({errore}): "
-                "il caricatore rifiuta ogni simbolo (campagne/GRUPPO/regole.md, sezione 12, punto 4)"
+                f"sessione di campagna {simbolo} con un elenco delle monete che non e' quello approvato ({errore}): "
+                f"il caricatore rifiuta ogni simbolo (campagne/{simbolo}/regole.md, sezione 12, punto 4)"
             ) from errore
     return frozenset(guardiano.monete_dati_ammesse(simbolo, monete_gruppo))
 
@@ -424,9 +424,9 @@ def controlla_simbolo_in_campagna(simbolo: str, chi: str = "dati") -> None:
         return
     marcatore = marcatore_di_campagna() or {}
     proprio = marcatore.get("simbolo", "?")
-    if proprio == guardiano.SIMBOLO_GRUPPO:
-        motivo = (f"{simbolo!r} non e' fra le monete di {guardiano.MONETE_GRUPPO} ne' "
-                  f"{guardiano.MONETA_RIFERIMENTO} (campagne/GRUPPO/regole.md, sezione 12, punto 4)")
+    if proprio in guardiano.SIMBOLI_GRUPPO:
+        motivo = (f"{simbolo!r} non e' fra le monete di {guardiano.percorso_monete_gruppo(proprio)} ne' "
+                  f"{guardiano.MONETA_RIFERIMENTO} (campagne/{proprio}/regole.md, sezione 12, punto 4)")
     else:
         motivo = (f"{simbolo!r} non e' {proprio} ne' {guardiano.MONETA_RIFERIMENTO} "
                   "(PROTOCOLLO.md, Passo 3, percorsi ammessi)")

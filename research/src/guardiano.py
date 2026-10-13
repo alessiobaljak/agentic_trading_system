@@ -230,6 +230,11 @@ MONETA_RIFERIMENTO = "BTCUSDT"
 
 #: la campagna di gruppo (Passo 4bis; testo completo in `research/campagne/GRUPPO/regole.md`)
 SIMBOLO_GRUPPO = "GRUPPO"
+#: le campagne «di gruppo», molte monete insieme: GRUPPO (prima edizione, Passo 4bis) e
+#: PANIERE (seconda edizione, `research/PROTOCOLLO_2.md`, dal 13 ott 2026). Stesse
+#: regole; ognuna ha la sua cartella `research/campagne/<S>/` con il SUO elenco
+#: `monete.csv`, che vale solo se ha la stessa impronta approvata qui sotto.
+SIMBOLI_GRUPPO = ("GRUPPO", "PANIERE")
 #: l'elenco delle monete del gruppo: intestazione `simbolo`, una moneta per riga,
 #: in ordine alfabetico, a capo LF. Vale SOLO se i suoi byte hanno l'impronta
 #: `_IMPRONTA_MONETE_GRUPPO`: la sessione di gruppo puo' scrivere nella propria
@@ -237,6 +242,13 @@ SIMBOLO_GRUPPO = "GRUPPO"
 #: libero si allargherebbe i permessi ai dati delle monete di campagna.
 #: Elenco e impronta li cambia solo il coordinamento, nello stesso commit.
 MONETE_GRUPPO = "research/campagne/GRUPPO/monete.csv"
+
+
+def percorso_monete_gruppo(simbolo: str) -> str:
+    """L'elenco delle monete della campagna di gruppo `simbolo` (GRUPPO o PANIERE), dalla radice."""
+    return f"research/campagne/{simbolo}/monete.csv"
+
+
 _IMPRONTA_MONETE_GRUPPO = "0cf217c3c7c4c23934fa1e37dc908618741cd8082514623b281abcbcdf99d8e2"
 _NUMERO_MONETE_GRUPPO = 80
 #: oltre questa dimensione l'elenco non si legge nemmeno (quello vero e' ~1 KB)
@@ -259,8 +271,13 @@ _PROTETTI_FILE = (
     MONETE_GRUPPO,
     "research/campagne/GRUPPO/regole.md",
     "research/campagne/GRUPPO/via_libera_validazione.md",
+    # la campagna del paniere (seconda edizione): stessi file, stessa sola lettura
+    "research/campagne/PANIERE/monete.csv",
+    "research/campagne/PANIERE/regole.md",
+    "research/campagne/PANIERE/via_libera_validazione.md",
 )
-_PROTETTI_CARTELLE = (".claude", "research/campagne/GRUPPO/schede", "research/config")
+_PROTETTI_CARTELLE = (".claude", "research/campagne/GRUPPO/schede", "research/campagne/PANIERE/schede",
+                      "research/config")
 
 #: riferimento a un branch del protocollo dentro un comando
 _BRANCH = re.compile(r"research/(?:coordinamento|archivio|campagna)(?:/[A-Za-z0-9_.-]+)?")
@@ -635,7 +652,7 @@ class Contesto:
 
     @property
     def gruppo(self) -> bool:
-        return self.campagna and self.simbolo == SIMBOLO_GRUPPO
+        return self.campagna and self.simbolo in SIMBOLI_GRUPPO
 
     @property
     def proprio_branch(self) -> str:
@@ -718,10 +735,11 @@ class ElencoGruppoNonApprovato(ValueError):
     """L'elenco delle monete del gruppo non e' quello approvato: si blocca tutto."""
 
 
-def leggi_monete_gruppo(radice: str, impronta: str = _IMPRONTA_MONETE_GRUPPO) -> tuple[str, ...]:
-    """Le monete della campagna di gruppo, da `research/campagne/GRUPPO/monete.csv`, in ordine.
+def leggi_monete_gruppo(radice: str, impronta: str = _IMPRONTA_MONETE_GRUPPO,
+                        simbolo: str = SIMBOLO_GRUPPO) -> tuple[str, ...]:
+    """Le monete della campagna di gruppo `simbolo`, da `research/campagne/<S>/monete.csv`, in ordine.
 
-    Si legge solo con il marcatore GRUPPO. Prima i BYTE: il file deve essere un
+    Si legge solo con un marcatore di gruppo (GRUPPO o PANIERE). Prima i BYTE: il file deve essere un
     file regolare, raggiunto senza link simbolici, e il suo SHA-256 deve essere
     `impronta` (di norma quella approvata, scritta in questo file, che la
     sessione non puo' riscrivere). Poi, come seconda difesa, il contenuto:
@@ -733,50 +751,53 @@ def leggi_monete_gruppo(radice: str, impronta: str = _IMPRONTA_MONETE_GRUPPO) ->
 
     Qualunque cosa non torni solleva `ElencoGruppoNonApprovato` (un ValueError).
     """
+    if simbolo not in SIMBOLI_GRUPPO:
+        raise ElencoGruppoNonApprovato(f"{simbolo!r} non e' una campagna di gruppo ({', '.join(SIMBOLI_GRUPPO)})")
+    elenco = percorso_monete_gruppo(simbolo)
     radice = os.path.realpath(radice)
-    percorso = os.path.join(radice, *MONETE_GRUPPO.split("/"))
+    percorso = os.path.join(radice, *elenco.split("/"))
     try:
         info = os.lstat(percorso)
         if not stat.S_ISREG(info.st_mode):
-            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} non e' un file regolare (un link o una cartella)")
+            raise ElencoGruppoNonApprovato(f"{elenco} non e' un file regolare (un link o una cartella)")
         if os.path.realpath(percorso) != percorso:
-            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} si raggiunge attraverso un link simbolico")
+            raise ElencoGruppoNonApprovato(f"{elenco} si raggiunge attraverso un link simbolico")
         if info.st_size > _MAX_BYTE_MONETE_GRUPPO:
-            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} e' troppo grande ({info.st_size} byte)")
+            raise ElencoGruppoNonApprovato(f"{elenco} e' troppo grande ({info.st_size} byte)")
         with open(percorso, "rb") as f:
             dati = f.read(_MAX_BYTE_MONETE_GRUPPO + 1)
     except OSError as e:
-        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} non si legge: {e.strerror or e}") from None
+        raise ElencoGruppoNonApprovato(f"{elenco} non si legge: {e.strerror or e}") from None
     if len(dati) > _MAX_BYTE_MONETE_GRUPPO:
-        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} e' troppo grande")
+        raise ElencoGruppoNonApprovato(f"{elenco} e' troppo grande")
     trovata = hashlib.sha256(dati).hexdigest()
     if trovata != impronta:
-        raise ElencoGruppoNonApprovato(f"impronta SHA-256 di {MONETE_GRUPPO} {trovata[:16]}..., "
+        raise ElencoGruppoNonApprovato(f"impronta SHA-256 di {elenco} {trovata[:16]}..., "
                                        f"approvata {impronta[:16]}...")
     try:
         testo = dati.decode("utf-8")
     except UnicodeDecodeError:
-        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO} non e' testo UTF-8") from None
+        raise ElencoGruppoNonApprovato(f"{elenco} non e' testo UTF-8") from None
     righe = testo.split("\n")
     if righe and righe[-1] == "":
         righe.pop()  # l'a capo dell'ultima riga
     if not righe or righe[0] != "simbolo":
-        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: la prima riga deve essere 'simbolo'")
+        raise ElencoGruppoNonApprovato(f"{elenco}: la prima riga deve essere 'simbolo'")
     monete = righe[1:]
     for n, moneta in enumerate(monete, start=2):
         if not re.fullmatch(r"[A-Z0-9]+", moneta):
-            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}, riga {n}: {moneta!r} non e' un simbolo [A-Z0-9]+")
+            raise ElencoGruppoNonApprovato(f"{elenco}, riga {n}: {moneta!r} non e' un simbolo [A-Z0-9]+")
     if len(set(monete)) != len(monete):
-        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: una moneta compare due volte")
-    for vietata in (SIMBOLO_GRUPPO, MONETA_RIFERIMENTO):
+        raise ElencoGruppoNonApprovato(f"{elenco}: una moneta compare due volte")
+    for vietata in (*SIMBOLI_GRUPPO, MONETA_RIFERIMENTO):
         if vietata in monete:
-            raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: {vietata} non puo' essere una moneta del gruppo")
+            raise ElencoGruppoNonApprovato(f"{elenco}: {vietata} non puo' essere una moneta del gruppo")
     di_campagna = [m for m in monete if os.path.lexists(os.path.join(radice, "research", "campagne", m))]
     if di_campagna:
-        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: {', '.join(di_campagna[:3])} ha una cartella "
+        raise ElencoGruppoNonApprovato(f"{elenco}: {', '.join(di_campagna[:3])} ha una cartella "
                                        "research/campagne/<S> (moneta di campagna)")
     if len(monete) != _NUMERO_MONETE_GRUPPO:
-        raise ElencoGruppoNonApprovato(f"{MONETE_GRUPPO}: {len(monete)} monete invece di {_NUMERO_MONETE_GRUPPO}")
+        raise ElencoGruppoNonApprovato(f"{elenco}: {len(monete)} monete invece di {_NUMERO_MONETE_GRUPPO}")
     return tuple(monete)
 
 
@@ -793,8 +814,8 @@ def costruisci_contesto(radice: str, marcatore: dict) -> Contesto:
     tipo = marcatore["tipo"]
     simbolo = marcatore.get("simbolo", "")
     monete_gruppo: frozenset[str] = frozenset()
-    if tipo == "campagna" and simbolo == SIMBOLO_GRUPPO:
-        monete_gruppo = frozenset(leggi_monete_gruppo(radice))
+    if tipo == "campagna" and simbolo in SIMBOLI_GRUPPO:
+        monete_gruppo = frozenset(leggi_monete_gruppo(radice, simbolo=simbolo))
     return Contesto(
         radice=radice,
         tipo=tipo,
@@ -878,7 +899,7 @@ def monete_dati_ammesse(simbolo: str, monete_gruppo: frozenset[str] = frozenset(
     Una moneta: la propria e BTCUSDT. Il gruppo: le monete di `monete.csv` (gia'
     verificate da `leggi_monete_gruppo`) e BTCUSDT; mai `GRUPPO` stesso.
     """
-    if simbolo == SIMBOLO_GRUPPO:
+    if simbolo in SIMBOLI_GRUPPO:
         return frozenset(monete_gruppo) | {MONETA_RIFERIMENTO}
     return frozenset({simbolo, MONETA_RIFERIMENTO})
 
@@ -2484,7 +2505,7 @@ def _e_uscita_dello_strumento(percorso: str) -> bool:
 
 def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:
     oggetto = " ".join(oggetto.splitlines())  # una riga sola, sempre
-    regola = ("Passo 4bis, research/campagne/GRUPPO/regole.md sezione 12" if ctx.gruppo else "Passo 3")
+    regola = (f"Passo 4bis, research/campagne/{ctx.simbolo}/regole.md sezione 12" if ctx.gruppo else "Passo 3")
     nota = ""
     # quando il guardiano ha gia' indicato la forma giusta (la storia dei cloni limitati, o
     # dove scrivere il messaggio di commit del gruppo) non ha senso chiedere all'utente: la
@@ -2496,16 +2517,16 @@ def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:
     # avversaria del 10 ottobre 2026).
     motivo = _motivo_del_rifiuto(oggetto)
     autonomo = _STORIA_LIMITATA in motivo or _FORMA_SILENZIOSA in motivo or _FORMA_SCRIPT in motivo
-    if ctx.gruppo and f"{_DATI_INSAMPLE}/{SIMBOLO_GRUPPO}" in motivo:
+    if ctx.gruppo and f"{_DATI_INSAMPLE}/{ctx.simbolo}" in motivo:
         # `lezioni/metodo.md` consiglia `data/insample/<SIMBOLO>/` per i file fuori da git
         # (il messaggio di commit da passare con `git commit -F`): per il gruppo non esiste
-        nota = (f" Per il gruppo {_DATI_INSAMPLE}/{SIMBOLO_GRUPPO}/ non esiste: i file fuori da git "
+        nota = (f" Per il gruppo {_DATI_INSAMPLE}/{ctx.simbolo}/ non esiste: i file fuori da git "
                 f"(per esempio il messaggio di commit) vanno in {_DATI_INSAMPLE}/{MONETA_RIFERIMENTO}/.")
         autonomo = True
     if ctx.gruppo and _uscita_dello_strumento(oggetto):
         # il file d'uscita dello strumento e Monitor restano vietati: la forma giusta e' la
         # redirezione nella cartella della campagna, che il guardiano ammette
-        cartella = f"research/campagne/{SIMBOLO_GRUPPO}"
+        cartella = f"research/campagne/{ctx.simbolo}"
         nota += (f" L'uscita di un comando si legge dai file {cartella}/lavoro/<nome>.out e .err della "
                  f"redirezione (regole.md, sezione 12, punto 6): lancia `python3 -u {cartella}/codice/<nome>.py > "
                  f"{cartella}/lavoro/<nome>.out 2> {cartella}/lavoro/<nome>.err` (mai `2>&1`), aspetta la "
@@ -2526,9 +2547,9 @@ def messaggio_elenco_gruppo(errore: Exception) -> str:
     motivo = " ".join(str(errore).splitlines())
     return (
         f"[guardiano] l'elenco delle monete del gruppo non e' quello approvato ({motivo}): avvisa l'utente. "
-        f"Finche' {MONETE_GRUPPO} non torna quello scritto dal coordinamento (Passo 4bis, "
-        "research/campagne/GRUPPO/regole.md sezione 12, punto 4) ogni azione della sessione campagna GRUPPO "
-        "e' rifiutata; non correggerlo da solo."
+        "Finche' research/campagne/<S>/monete.csv (S = GRUPPO o PANIERE) non torna quello scritto dal "
+        "coordinamento (Passo 4bis, research/campagne/<S>/regole.md sezione 12, punto 4) ogni azione della "
+        "sessione di campagna di gruppo e' rifiutata; non correggerlo da solo."
     )
 
 
