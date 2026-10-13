@@ -3653,3 +3653,14 @@ barre giornaliere). Alle 19:50 «ok procedi con tutto». Fatto, in ordine:
    esecuzione ≥ 70% con costi entro 1,5 volte il modello, drawdown entro 1,5 volte il vault), Passo 0 degli strumenti
    (dati 1d, motore a 1d con la misura del funding, serie di paniere, placebo a 1d, marcatore «APRI IL VAULT 2»).
    Cinque domande aperte al proprietario nella sezione 13. Niente parte senza il suo sì.
+
+### 13 ottobre, 21:34 ora italiana: il proprietario approva la seconda edizione
+
+«Approvo la seconda edizione, 3 idee e anche più varianti, dal 16 gennaio 2023 va bene», più due domande (il paper
+viene dopo il vault? sessione unica = una moneta o tutte?). Il testo (`research/PROTOCOLLO_2.md`) è ora IN VIGORE
+con le due modifiche chieste: terza idea (il ritardo delle monete dopo un giorno forte di Bitcoin, fonte Ciaian,
+Rajcaniova e Kancs 2018 più il risultato del gruppo), 18 varianti e 3 ritocchi per famiglia; le risposte alle due
+domande sono scritte nelle sezioni 9 e 11 (sì, il paper viene dopo il vault; sì, una sessione sola su tutte e 80
+le monete). Parte il Passo 0 sul branch principale: dati 1d delle 81 monete, motore a barre giornaliere e misura
+del funding, serie di paniere, strumenti di gruppo e placebo a 1d, richiusura del vault con `APERTURA_2.md`,
+`parametri_2.yaml`. STOP prima della campagna, per l'approvazione dei parametri.

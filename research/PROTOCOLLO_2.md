@@ -1,11 +1,14 @@
 # Protocollo di ricerca, seconda edizione (versione 5.0) — BOZZA per il proprietario
 
-> **Stato: BOZZA del 13 ottobre 2026, scritta dopo il sì del proprietario «procedi con tutto».** Nessuna
-> campagna, nessun dato e nessun calcolo parte finché il proprietario non approva questo testo in chat. Quando
-> lo approva, questo file diventa il testo in vigore (con data e ora dell'approvazione qui sotto) e non cambia
-> più: le correzioni seguono la regola della prima edizione (una voce nuova nel log, mai una riga cancellata).
->
-> Approvazione: _(in attesa)_.
+> **Stato: TESTO IN VIGORE.** Bozza del 13 ottobre 2026 scritta dopo il sì del proprietario «procedi con tutto»;
+> **approvata dal proprietario il 13 ottobre 2026 alle 19:34 UTC** (messaggio in chat: «approvo la seconda edizione,
+> 3 idee e anche più varianti, dal 16 gennaio 2023 va bene»), con due modifiche chieste da lui e scritte qui
+> prima di qualunque dato: **tre idee** invece di due (la terza è l'idea C della sezione 5) e **più varianti**
+> (18 invece di 10, con 3 ritocchi per famiglia). Le sue due domande (il paper viene dopo il vault? la sessione
+> unica è una moneta o tutte?) hanno la risposta nelle sezioni 9 e 11. Da qui il testo non cambia più: le
+> correzioni seguono la regola della prima edizione (una voce nuova nel log, mai una riga cancellata). Il
+> Passo 0 (sezione 10) parte dal 13 ottobre sera e finisce con uno STOP: la campagna non inizia senza
+> l'approvazione di `parametri_2.yaml`.
 
 ## 0. Come usare questo file
 
@@ -56,13 +59,13 @@ l'esame.
 | Candela dei segnali | da 15 minuti a 1 giorno, in pratica 15m-1h | **1 giorno (UTC)**, e basta | i costi a ore valgono quanto gli effetti; a giorni il costo per trade scende a circa 0,01 R (sezione 3.2) |
 | Durata delle posizioni | ore | **da 2 giorni a 60 giorni** (uscita a tempo a 60 barre) | è l'orizzonte in cui tendenza e momentum sono documentati (sezione 5) |
 | Unità di prova | una moneta per campagna, 20 campagne | **il paniere delle 80 monete del gruppo**, una campagna sola | una moneta a barre giornaliere dà 20-40 trade l'anno: non bastano (sezione 4) |
-| Idee | 30 varianti per moneta, idee e ritocchi | **2 idee con fonte, al massimo 10 varianti, 2 ritocchi per famiglia** | con 630 prove passa solo il rumore fortunato; con poche idee la soglia resta onesta |
+| Idee | 30 varianti per moneta, idee e ritocchi | **3 idee con fonte, al massimo 18 varianti, 3 ritocchi per famiglia e 12 in tutto** (numeri chiesti dal proprietario il 13 ott) | con 630 prove passa solo il rumore fortunato; con poche idee la soglia resta onesta |
 | Ingresso | a mercato all'apertura della barra dopo | **ordine limite** alla chiusura della candela di segnale, valido un giorno, con la correzione 1 della prova | prova del 13 ottobre: regola misurata, costi −36% |
 | Uscite | a mercato | a mercato (stop, segnale, tempo) | le uscite a limite non convengono (prova del 13 ottobre, variante c) |
 | Costruzione / validazione | 70/30 per moneta | **taglio comune al 2023-01-16** (come il gruppo) | un taglio per data vale per tutte le monete insieme |
 | Vault | 2024-01-01 → 2026-09-30, una apertura | **lo stesso periodo, una apertura per tutte le candidate insieme, con tre condizioni** (sezione 8) | il vault è stato aperto l'11 ottobre per tre strategie: va dichiarato, non rifatto |
-| Esame finale | il paper «solo se l'utente lo chiede» | **il paper è l'esame finale, obbligatorio, con la regola scritta prima** (sezione 9) | l'unico dato mai visto è il futuro |
-| Sessioni | una per moneta, con guardiano | **una sola sessione di campagna**, branch `research/campagna/PANIERE`, guardiano come il gruppo | come la campagna di gruppo |
+| Esame finale | il paper «solo se l'utente lo chiede» | **il paper è l'esame finale, obbligatorio, con la regola scritta prima** (sezione 9); viene DOPO il vault, come ultimo passo | l'unico dato mai visto è il futuro |
+| Sessioni | una per moneta, con guardiano | **una sola sessione di campagna che lavora su TUTTE le 80 monete insieme** (il paniere), branch `research/campagna/PANIERE`, guardiano come il gruppo | come la campagna di gruppo del 10-11 ottobre |
 
 ## 3. Il terreno: orizzonte, costi, esecuzione
 
@@ -117,10 +120,11 @@ sulle chiusure giornaliere. Decisione al Passo 0, prima di qualunque variante.
 
 ## 5. Le idee (scritte prima, con fonte, con il perché dovrebbero durare)
 
-Due idee. Non se ne aggiungono durante la campagna: una terza idea richiede una fonte pubblica a questo orizzonte
-e un sì del proprietario PRIMA di iniziare. Ogni variante qui sotto è una riga del budget (regola 6 della 4.5);
-le varianti si registrano in `ipotesi.md` prima del primo test, con la previsione. Il budget è di **10
-varianti** più al massimo **2 ritocchi per famiglia** (non 5), decisi solo guardando la costruzione.
+Tre idee (il proprietario ne ha chieste tre il 13 ottobre). Non se ne aggiungono durante la campagna: una quarta
+idea richiede una fonte pubblica a questo orizzonte e un sì del proprietario PRIMA di iniziare. Ogni variante
+qui sotto è una riga del budget (regola 6 della 4.5); le varianti si registrano in `ipotesi.md` prima del primo
+test, con la previsione. Il budget è di **18 varianti** (6 per idea) più al massimo **3 ritocchi per famiglia e
+12 in tutto**, decisi solo guardando la costruzione: al massimo 30 test.
 
 ### Idea A — Tendenza (time-series momentum, trend following)
 * **Fonte.** Moskowitz, Ooi e Pedersen, «Time Series Momentum», Journal of Financial Economics 2012; Hurst, Ooi e
@@ -150,17 +154,38 @@ varianti** più al massimo **2 ritocchi per famiglia** (non 5), decisi solo guar
 * **Perché dovrebbe durare.** Sottoreazione alle notizie e flussi che inseguono i vincitori della settimana. È
   una scommessa RELATIVA: compra le forti e vende le deboli, quindi la direzione del mercato (il 2024 in salita,
   il 2025 in discesa) pesa meno sul risultato, e l'effetto grappolo fra le monete è più piccolo.
-* **Varianti (4).** Ogni lunedì alle 00:00 UTC si ordinano le monete del paniere con dati (almeno 90 giorni di
+* **Varianti (6).** Ogni lunedì alle 00:00 UTC si ordinano le monete del paniere con dati (almeno 90 giorni di
   storia e mese liquido) per il rendimento delle ultime 4 settimane (B1) o 2 settimane (B2). Long le prime 10,
   short le ultime 10; si tiene fino al lunedì dopo, quando si riordina: una posizione resta aperta se la moneta
-  è ancora nelle sue 10, altrimenti esce a segnale. Stop iniziale 2,5 ATR(20); uscita a tempo 60 barre;
-  ingresso a limite. → B1 long, B1 short, B2 long, B2 short. Per il motore (una moneta alla volta) la classifica
-  è una serie esterna per moneta, calcolata dal paniere con sole chiusure fino al giorno `t`
-  (`dati.serie_paniere`, Passo 0).
+  è ancora nelle sue 10, altrimenti esce a segnale. B3 come B1 ma con le prime e le ultime 20 (metà del paniere
+  in posizione: dice se l'effetto sta nelle code o è diffuso). Stop iniziale 2,5 ATR(20); uscita a tempo 60
+  barre; ingresso a limite. → B1 long, B1 short, B2 long, B2 short, B3 long, B3 short. Per il motore (una
+  moneta alla volta) la classifica è una serie esterna per moneta, calcolata dal paniere con sole chiusure fino
+  al giorno `t` (`dati.serie_paniere`, Passo 0).
 * **Previsione di famiglia (scritta prima).** Stessa regola dell'idea A.
 
+### Idea C — Il ritardo delle monete dopo un giorno forte di Bitcoin (la terza, chiesta dal proprietario)
+* **Fonte.** Ciaian, Rajcaniova e Kancs, «Virtual relationships: Short- and long-run evidence from BitCoin and
+  altcoin markets», Journal of International Financial Markets, Institutions and Money 2018 (nel breve periodo
+  Bitcoin guida le altre monete); e il risultato della campagna di gruppo del 10-11 ottobre: il ritardo delle
+  monete dopo un'ora forte di Bitcoin rende +0,04-0,09 R lordi a 1 ora, t 2,06 contro soglia 2,16
+  (`research/confronto/risultati.md`). A barre giornaliere non è mai stato provato.
+* **Perché dovrebbe durare.** Bitcoin è dove arrivano prima i flussi e le notizie; le altre monete seguono con
+  ritardo perché meno liquide e meno seguite. Rischio dichiarato: a un giorno il ritardo può essere già stato
+  assorbito (a 1 ora c'era e non pagava i costi; a 1 giorno i costi sono dieci volte più piccoli, ma l'effetto
+  può essere sparito).
+* **Varianti (6).** Un «giorno forte» di Bitcoin è un giorno UTC con rendimento oltre `k` deviazioni standard dei
+  suoi rendimenti giornalieri degli ultimi 60 giorni, `k` ∈ {1,5; 2}. Alla chiusura di quel giorno: long le
+  monete del paniere con rendimento del giorno inferiore a quello di Bitcoin (C1: tutte le monete in ritardo;
+  C2: solo le 20 più in ritardo); short simmetrico dopo un giorno forte negativo. Uscita a segnale dopo 5
+  giorni (è la regola dell'idea: il ritardo si recupera in pochi giorni o non si recupera); stop 2,5 ATR(20);
+  ingresso a limite. → C1-1,5 long, C1-1,5 short, C1-2 long, C1-2 short, C2-1,5 long, C2-1,5 short. La
+  deviazione standard e il rendimento di Bitcoin vengono dalla serie di riferimento BTCUSDT (chiusure fino al
+  giorno `t`).
+* **Previsione di famiglia (scritta prima).** Stessa regola delle idee A e B.
+
 Non sono idee, e non entrano nel budget: la pesatura per la volatilità (è lo stop ATR, sezione 3.3) e il tetto per
-verso (sezione 3.3, si misura). «Due idee sono poche» è una scelta: con 630 varianti la prima edizione ha dovuto
+verso (sezione 3.3, si misura). «Tre idee sono poche» è una scelta: con 630 varianti la prima edizione ha dovuto
 alzare la soglia a t 3,96 e ha passato solo rumore fortunato.
 
 ## 6. Dati e periodi
@@ -223,6 +248,12 @@ protocollo chiude l'USO del dato, non il dato. L'unico dato vergine è il futuro
 
 ## 9. Il paper come esame finale (regola scritta prima)
 
+**La sequenza, per rispondere alla domanda del proprietario del 13 ottobre:** costruzione (fino al 2023-01-16) →
+validazione (2023-01-17 → 2023-12-31) → vault (2024-01-01 → 2026-09-30, aperto una volta per tutte le candidate
+insieme) → **paper**, che viene DOPO il vault ed è l'ultimo esame: ci arrivano solo le candidate che hanno
+passato il vault. Sei mesi o 150 trade sommati, quello che arriva prima, con la regola qui sotto; poi decide il
+proprietario.
+
 1. **Chi va in paper.** Ogni candidata che passa il vault (al massimo una per idea: la migliore per t contro la
    (b) in validazione), eseguita dal bot sul paniere con le regole di questo protocollo: candele giornaliere,
    ordine limite d'ingresso, stop a 2,5 ATR(20), uscita a segnale e a tempo, rischio 1%, leva 2, tetto per
@@ -247,8 +278,10 @@ protocollo chiude l'USO del dato, non il dato. L'unico dato vergine è il futuro
 
 ## 10. Il Passo 0 della seconda edizione (strumenti e fatti, prima della sessione)
 
-Lo fa il coordinamento, nel branch `research/coordinamento`, e finisce con una tabella e uno STOP: niente parte
-senza l'approvazione di `research/config/parametri_2.yaml`.
+Lo fa il coordinamento (la sessione che ha scritto questo testo), **sul branch principale**: con una campagna
+sola non c'è niente da tenere nascosto fra campagne, e il principale è ciò che la macchina e la dashboard
+leggono; la sessione di campagna lavorerà nel suo branch `research/campagna/PANIERE`. Finisce con una tabella e
+uno STOP: niente parte senza l'approvazione di `research/config/parametri_2.yaml`. Dal 13 ottobre sera.
 
 1. **Dati 1d**: scarico e impronte per le 80 monete e BTCUSDT (klines 1d, markPriceKlines 1d, fundingRate),
    2020-2023; verifica delle impronte; nessuna data oltre il 2023-12-31.
@@ -259,8 +292,12 @@ senza l'approvazione di `research/config/parametri_2.yaml`.
    con il controllo di causalità (solo chiusure fino al giorno `t`) e i suoi test.
 4. **Strumenti di gruppo a 1d**: `gruppo.py` con timeframe «1d»; la prova a placebo a 1d e il controllo
    positivo (sezione 7), con i loro risultati scritti PRIMA della prima variante.
-5. **Il caricatore e il vault**: il marcatore `vault/APERTURA_2.md` e la frase «APRI IL VAULT 2»; il guardiano
-   della sessione `PANIERE` ammette i dati delle 80 monete e di BTCUSDT a 1d, come per il gruppo.
+5. **Il caricatore e il vault**: sul branch principale esiste `research/vault/APERTURA.md` (il vault della prima
+   edizione, aperto l'11 ottobre), quindi oggi il caricatore accetterebbe date oltre il 2023-12-31. Il Passo 0 lo
+   richiude per la seconda edizione: il caricatore accetta date oltre il 2023-12-31 SOLO se esiste
+   `research/vault/APERTURA_2.md`, che si crea solo dopo la frase «APRI IL VAULT 2»; il marcatore della prima
+   edizione non vale più. Il guardiano della sessione `PANIERE` ammette i dati delle 80 monete e di BTCUSDT a 1d,
+   come per il gruppo.
 6. **I parametri** in `research/config/parametri_2.yaml`: tutto ciò che qui è un numero (ATR, N, decili, 60
    barre, minimi di trade, costi, fasce), più la distanza media dello stop misurata al punto 2 e il costo
    atteso per trade che ne deriva. Approvati dal proprietario, poi congelati.
@@ -269,6 +306,12 @@ senza l'approvazione di `research/config/parametri_2.yaml`.
    qui cosa costruire; si costruisce solo se una candidata passa il vault (sezione 9, punto 1).
 
 ## 11. La sessione di campagna
+
+«Sessione unica» vuol dire UNA sessione di lavoro che studia TUTTE le 80 monete insieme, come paniere: non una
+moneta sola. Nella prima edizione c'erano 20 sessioni, una per moneta, ognuna cieca alle altre; qui l'unità di
+prova è il paniere (sezione 4), i trade di tutte le monete si sommano nell'esame (sezione 7), e quindi serve una
+sessione sola, come la campagna di gruppo del 10-11 ottobre. Risposta alla domanda del proprietario del 13
+ottobre: monete multiple, tutte e 80, in una sessione.
 
 Una sessione sola, `research/campagna/PANIERE`, aperta dal coordinamento con il messaggio di apertura approvato,
 modello `claude-opus-5-5` e ultracode attivo (regola del proprietario dell'8 ottobre), guardiano con marcatore
@@ -280,27 +323,31 @@ della 4.5.
 ## 12. Tempi (stime, servono solo ad annunciare i calcoli lunghi) e limiti
 
 * Passo 0: uno o due giorni di lavoro di sessione (lo scarico dei dati 1d è leggero: 81 monete × 48 mesi × 3
-  serie). Campagna: uno o due giorni (10 varianti più i ritocchi, con 80 monete ciascuna; la (b) e le sfasate a
+  serie). Campagna: uno o due giorni (18 varianti più i ritocchi, con 80 monete ciascuna; la (b) e le sfasate a
   1d sono veloci). Vault: minuti. Paper: 3-6 mesi.
 * Limiti dichiarati, oltre a quelli della sezione 11 della 4.5 e della sezione 15 delle regole del gruppo: il
-  vault non è vergine (sezione 8); le idee sono due per scelta; a un giorno i trade per moneta sono pochi e la
+  vault non è vergine (sezione 8); le idee sono tre per scelta; a un giorno i trade per moneta sono pochi e la
   potenza viene dal paniere e dalla correzione per grappolo; tendenza e momentum sono documentati fino al
   2021-2022 e possono essersi consumati; il funding a barre giornaliere è un'approssimazione misurata; le 80
   monete sono quelle liquide nel 2023 (le regole del gruppo trattano quelle che muoiono); i costi del vault sono
   stime per fascia, i costi del paper sono stime del simulatore del bot, non riempimenti veri.
 
-## 13. Le domande aperte al proprietario (si risponde in chat, prima dell'approvazione)
+## 13. Le domande al proprietario e le sue risposte (13 ottobre 2026, 19:34 UTC)
 
-1. Approvi il testo così com'è? Se sì, scrivi «approvo la seconda edizione» e la data e l'ora entrano in testa al
-   file.
-2. Due idee e dieci varianti bastano, o vuoi una terza idea (con fonte) prima di partire?
-3. Il taglio costruzione/validazione al 2023-01-16 (come il gruppo) va bene?
-4. Sei mesi (o 150 trade) di paper come esame finale: va bene?
-5. La sessione unica con `claude-opus-5-5` e ultracode, come per le campagne: confermi?
+1. Approvi il testo? → **«approvo la seconda edizione»**.
+2. Due idee e dieci varianti bastano? → **«3 idee e anche più varianti»**: aggiunta l'idea C (sezione 5), budget a
+   18 varianti e 3 ritocchi per famiglia (12 in tutto).
+3. Il taglio costruzione/validazione al 2023-01-16? → **«va bene»**.
+4. Sei mesi (o 150 trade) di paper come esame finale? → domanda: «è sempre dopo il vault?». Sì: il paper è l'ultimo
+   passo, dopo il vault (sezione 9, in testa). Se la risposta cambia la sua decisione, lo dice prima della fine
+   del Passo 0.
+5. La sessione unica? → domanda: «moneta unica o multiple?». Multiple: una sessione sola che lavora su tutte le
+   80 monete insieme (sezione 11). Modello e ultracode come per le campagne precedenti, salvo diversa indicazione
+   prima dell'apertura.
 
 ## Appendice — differenze dalla 4.5 in una riga ciascuna
 
-Candela 1d invece di 15m-1h; posizioni da giorni a settimane; il paniere invece della moneta; due idee invece di
-30 varianti per moneta; ingresso a limite; vault dichiarato e aperto una volta per tutte le candidate; il paper
+Candela 1d invece di 15m-1h; posizioni da giorni a settimane; il paniere invece della moneta; tre idee e 18
+varianti invece di 30 varianti per moneta; ingresso a limite; vault dichiarato e aperto una volta per tutte le candidate; il paper
 come esame finale obbligatorio con la regola scritta prima; una sola sessione di campagna; il Passo 0 misura il
 costo per trade e il funding a 1d prima di qualunque variante.
