@@ -59,3 +59,25 @@ lanciatore rifiuta di partire se un file sul disco non ha questa impronta.
 * `6875b12f5dfbeb6fc505fbb5302befe0ad652e0a96330e85e69b46ff772efd3a`  `research/src/gruppo.py`
 * `2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6`  `research/src/motore.py`
 * `ca027d2687d9129a533077eb980c0517bd09c476331659d61eaf15dda45c9e5a`  `research/src/statistica.py`
+
+## 7. Correzioni (solo in aggiunta)
+
+### Correzione 1 — i parametri delle regole da manuale per il giorno (13 ott 2026, 21:55 UTC, prima di qualunque esito)
+
+**Cosa è successo.** Con le sei regole e i parametri della prova a 1 ora (`placebo_gruppo.py`: medie 20/50, RSI 14,
+rottura 20, Bollinger 20 con 2 deviazioni, MACD 12/26/9, momento 10, uscita a tempo 10 barre) le prime 11 placebo
+a barre giornaliere davano 227-420 trade sommati in costruzione sulle 80 monete (`conta_trade_di_gruppo`), sotto
+il minimo di 700: tutte «scarto», nessun giudizio. Il lancio è stato fermato all'undicesima; le 11 righe (solo
+scarti, nessun esame) sono state cancellate con la loro identità, perché una prova fatta di soli scarti non prova
+niente.
+
+**Cosa cambia.** Le sei regole restano le stesse, con parametri da manuale più corti per il giorno, scritti in
+`placebo_paniere.py` (il modulo di QUESTA prova, con la sua impronta nell'identità): medie 5/20, RSI 7 (30/70),
+rottura 10, Bollinger 10 con 1,5 deviazioni, MACD 5/13/4, momento 5; uscita a tempo 5 barre; ATR(14) e multipli
+come prima; riscaldamento 60 barre. Scelti **contando i trade e basta** (mai guardando un rendimento): in un
+lancio di funzionamento (righe segnate, mai un esito) con k = 0 in costruzione danno 714-3.742 trade sommati per
+placebo (incrocio di medie 885/897, RSI 1.211/823, rottura 802/714, Bollinger 1.474/2.421, MACD 1.831/1.344, momento
+3.097/3.742, long/short), tutte sopra 700.
+
+**Perché non si abbassa il minimo.** L'esame della campagna giudica solo varianti con almeno 700 trade sommati in
+costruzione; la placebo deve avere la stessa taglia, altrimenti prova un esame che la campagna non usa.

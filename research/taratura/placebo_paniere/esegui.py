@@ -27,6 +27,7 @@ sys.path.insert(0, str(RADICE_REPO))
 sys.path.insert(0, str(QUI.parent / "placebo_gruppo"))
 
 import esegui as E  # noqa: E402  (il lanciatore della prova a 1 ora)
+import placebo_paniere as PP  # noqa: E402  (le sei regole con i parametri per il giorno)
 from research.src import dati, gruppo  # noqa: E402
 
 #: i sei cambiamenti dichiarati
@@ -39,29 +40,42 @@ E.SCHEDE_DEL_PRINCIPALE = E.PRINCIPALE / "research" / "campagne" / "PANIERE" / "
 E.MONETE_DEL_PRINCIPALE = E.PRINCIPALE / "research" / "campagne" / "PANIERE" / "monete.csv"
 E.RAMO_REMOTO = "origin/claude/brave-albattani-1b12fv"
 TIMEFRAME = ("1d",)
-#: anche il modulo delle regole, per il controllo di copertura (PG.TIMEFRAME) e le combinazioni: in questo
-#: processo solo «1d». Il modulo che gruppo.py esegue per ogni moneta viene dal FILE, con le sue costanti
-E.PG.TIMEFRAME = TIMEFRAME
-FILE_DELLA_PROVA = ("esegui.py", "regole.md")
-CODICE_DELLA_PROVA = ("esegui.py",)
-E.CODICE_DELLA_PROVA = ("placebo_gruppo.py", "esegui.py")   # l'identita' nomina anche il modulo delle regole
+#: il modulo delle regole di QUESTA prova (parametri per il giorno, correzione 1 di regole.md): lo usa il
+#: lanciatore per gli istanti di segnale e lo esegue gruppo.py dal file, per ogni moneta
+E.PG = PP
+E.MODULO = QUI / "placebo_paniere.py"
+E.REGOLA_DELL_USCITA = {u: next(r for r in PP.REGOLE if PP.USCITA_DELLA_REGOLA[r] == u) for u in PP.USCITE}
+FILE_DELLA_PROVA = ("placebo_paniere.py", "esegui.py", "regole.md")
 
 
 def identita_corrente(radice: Path, posizioni, funzionamento: bool):
     """L'identita' della prova a 1 ora piu' i file di QUESTA cartella (il lanciatore e le regole del paniere)."""
     identita = E.identita_corrente(radice, posizioni, funzionamento, regole=E.REGOLE_DELLA_PROVA)
-    identita["codice"] = {"placebo_gruppo.py": E.sha256_file(E.MODULO),
+    identita["codice"] = {"placebo_paniere.py": E.sha256_file(QUI / "placebo_paniere.py"),
                           "esegui_gruppo.py": E.sha256_file(E.QUI / "esegui.py"),
                           "esegui.py": E.sha256_file(QUI / "esegui.py")}
     identita["formato"] = 3
     return identita
 
 
+def controlla_esame_contro_identita(riga, identita):
+    """L'esame della riga ha usato il modulo di QUESTA prova e gli strumenti dell'identita'."""
+    esame = riga.get("esame")
+    if not esame:
+        return []
+    diverse = []
+    if esame.get("impronta_variante") != identita["codice"]["placebo_paniere.py"]:
+        diverse.append("placebo_paniere.py (impronta della variante dell'esame)")
+    if esame.get("impronte_strumenti") != identita["strumenti"]:
+        diverse.append("strumenti (impronte dell'esame)")
+    return diverse
+
+
 def controlla_prova():
     """I file di questa cartella committati e sul ramo principale remoto (come ``E.controlla_prova`` per i suoi)."""
     # `ramo` esplicito: il predefinito di E.controlla_prova e' legato alla definizione (origin/research/coordinamento)
     codice = E.controlla_prova(cartella=QUI, file=FILE_DELLA_PROVA, ramo=E.RAMO_REMOTO)
-    codice.update(E.controlla_prova(cartella=E.QUI, file=("placebo_gruppo.py", "esegui.py"), ramo=E.RAMO_REMOTO))
+    codice.update(E.controlla_prova(cartella=E.QUI, file=("esegui.py",), ramo=E.RAMO_REMOTO))
     return codice
 
 
@@ -132,7 +146,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     "errore": f"{type(errore).__name__}: {errore}\n{traceback.format_exc()}"[:4000]}
             errori_di_fila += 1
         cambiati = E.differenze_di_identita(identita, identita_corrente(radice, posizioni, funzionamento))
-        cambiati += E.controlla_esame_contro_identita(riga, identita)
+        cambiati += controlla_esame_contro_identita(riga, identita)
         if cambiati:
             print(f"FERMO: durante {riga['etichetta']} e' cambiato {', '.join(cambiati)}; la riga non e' scritta.", flush=True)
             return 4
