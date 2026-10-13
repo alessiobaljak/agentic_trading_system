@@ -247,6 +247,20 @@ class Settings:
     # resto e si rinuncia (una posizione simbolica costa in fee quanto rende)
     EXEC_MIN_FILL_FRACTION: float = float(os.getenv("EXEC_MIN_FILL_FRACTION", "0.5"))
 
+    # ---- INGRESSO A LIMITE NEL PAPER (13 ott 2026, si' del proprietario) ----
+    # In DRY_RUN l'ingresso non e' piu' «a mercato al prezzo vivo»: alla decisione
+    # si mette un ordine limite VIRTUALE al prezzo della chiusura della candela di
+    # segnale, valido per la candela successiva; si riempie al SUO prezzo se il
+    # prezzo lo attraversa (long: minimo sotto; short: massimo sopra), altrimenti
+    # scade e il segnale conta come saltato (RTDB /paper/ordini_limite). Costo del
+    # lato d'ingresso: commissione maker, scarto zero; le uscite restano a mercato.
+    # E' la regola della prova research/esperimenti/ordini_limite/ (esito «conviene
+    # poco», 13 ott 2026): qui si misura sul libro vero cio' che le candele non
+    # dicono. PAPER_INGRESSO_LIMITE=0 rimette l'ingresso a mercato di prima.
+    PAPER_INGRESSO_LIMITE: bool = _get_bool("PAPER_INGRESSO_LIMITE", True)
+    PAPER_LIMITE_VALIDITA_BARRE: int = int(os.getenv("PAPER_LIMITE_VALIDITA_BARRE", "1"))
+    PAPER_MAKER_FEE: float = float(os.getenv("PAPER_MAKER_FEE", "0.0002"))
+
     # ---- Anti-overfitting ----
     # Frazione di capitale SEMPRE su configurazione baseline non adattata.
     BASELINE_CAPITAL_FRACTION: float = 0.20

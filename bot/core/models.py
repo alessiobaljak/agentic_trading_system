@@ -340,6 +340,14 @@ class ClosedTrade(BaseModel):
     total_cost_usdt: Optional[float] = None
     gross_pnl_usdt: Optional[float] = None         # PRIMA di qualunque costo
     costs_are_estimated: bool = True
+    # --- INGRESSO A LIMITE NEL PAPER (13 ott 2026) ------------------------- #
+    # "limite" se l'ingresso e' stato un ordine limite virtuale riempito al suo
+    # prezzo (`limite_prezzo` = chiusura della candela di segnale), "mercato"
+    # altrimenti; `attesa_ingresso_s` = secondi fra l'ordine e il riempimento.
+    # I segnali SALTATI non hanno un trade: stanno in RTDB /paper/ordini_limite.
+    ingresso_tipo: str = "mercato"
+    limite_prezzo: Optional[float] = None
+    attesa_ingresso_s: Optional[float] = None
 
     # --- LE MISURE MANCANTI (26 set 2026, audit della memoria del trade) ----- #
     # Tutti campi di SOLA MISURA: nessuno decide niente. Servono a rispondere,

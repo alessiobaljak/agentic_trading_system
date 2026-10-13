@@ -610,8 +610,13 @@ class TradingBot:
         """Margine bloccato dalle posizioni aperte = somma(notional_RESIDUO/leva).
         Usa la quantita' RESIDUA: come Binance, quando una fetta (TP parziale) si
         chiude il suo margine si LIBERA subito e torna disponibile per nuovi trade."""
-        return sum(p.remaining_qty * p.entry_price / max(p.leverage, 1.0)
-                   for p in self.executor.open_positions.values())
+        usato = sum(p.remaining_qty * p.entry_price / max(p.leverage, 1.0)
+                    for p in self.executor.open_positions.values())
+        # e il margine che un ordine limite in attesa riserva (13 ott 2026),
+        # come su Binance per un ordine appoggiato sul libro
+        usato += sum(o.pos.quantity * o.prezzo / max(o.pos.leverage, 1.0)
+                     for o in getattr(self.executor, "ordini_limite", {}).values())
+        return usato
 
     def _price_series(self, symbol: str, max_age_s: float = 1800.0) -> list:
         """Chiusure orarie recenti per la correlazione, con cache breve.
@@ -662,6 +667,11 @@ class TradingBot:
         same = sum(abs(p.entry_price - (p.orig_stop or p.stop_price)) * p.remaining_qty
                    for p in self.executor.open_positions.values()
                    if p.direction == direction)
+        # e gli ordini limite in attesa nello stesso verso (13 ott 2026): se si
+        # riempiono diventano rischio, quindi contano gia' adesso
+        same += sum(abs(o.prezzo - (o.pos.orig_stop or o.pos.stop_price)) * o.pos.quantity
+                    for o in getattr(self.executor, "ordini_limite", {}).values()
+                    if o.pos.direction == direction)
         total = (same + max(0.0, add_risk)) / eq
         if total > cap:
             return (f"rischio direzionale {total*100:.1f}% > tetto {cap*100:.1f}% "
@@ -673,7 +683,10 @@ class TradingBot:
         if self.stream is None:
             return
         try:
-            self.stream.set_symbols(self.executor.open_positions.keys())
+            # anche i simboli con un ordine limite in attesa (13 ott 2026): il
+            # riempimento si giudica sul range dello stream
+            self.stream.set_symbols(set(self.executor.open_positions)
+                                    | set(getattr(self.executor, "ordini_limite", {})))
         except Exception as exc:  # noqa: BLE001
             print(f"[main] sync stream simboli fallito: {exc}")
 
@@ -1344,8 +1357,80 @@ class TradingBot:
                 self.selected[sym] = snap
 
     # ------------------------------------------------------------------ #
+    def _range_ordine(self, symbol: str, ordine) -> tuple[float | None, float | None]:
+        """Gli estremi del prezzo da quando l'ordine limite e' in attesa (13 ott
+        2026): come `_wick_range`, ma la finestra parte da `ordine.messo_at`.
+        (None, None) senza dati -> l'executor usa il solo prezzo vivo."""
+        if not settings.EXEC_WICK_FILLS_ENABLED:
+            return None, None
+        if self.stream is not None and self.stream.is_healthy():
+            hi, lo = self.stream.take_range(symbol)
+            if hi is not None:
+                return hi, lo
+        try:
+            candles = self.price.get_candles(
+                symbol, "1m", limit=max(2, settings.EXEC_WICK_LOOKBACK_1M))
+        except Exception:  # noqa: BLE001
+            return None, None
+        da = datetime.fromtimestamp(float(ordine.messo_at), tz=timezone.utc)
+        fresh = [c for c in candles if c.open_time >= da]
+        if not fresh:
+            return None, None
+        return max(c.high for c in fresh), min(c.low for c in fresh)
+
+    def _gestisci_ordini_limite(self, now: float) -> None:
+        """Un tick per ogni ordine limite in attesa (13 ott 2026): riempito se il
+        prezzo attraversa il limite, scaduto alla fine della candela."""
+        ordini = getattr(self.executor, "ordini_limite", None)
+        if not ordini:
+            return
+        for sym, ordine in list(ordini.items()):
+            price = self.price.get_mark_price(sym)
+            if price is None:
+                snap = self.selected.get(sym) or self.price.build_snapshot(sym)
+                price = snap.price if snap else None
+            if price is None:
+                continue
+            hi, lo = self._range_ordine(sym, ordine)
+            try:
+                pos = self.executor.update_ordini_limite(sym, price, high=hi, low=lo, now=now)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[limite] {sym}: errore nell'aggiornamento dell'ordine: {exc}")
+                continue
+            if pos is not None:
+                self._dopo_riempimento_limite(pos)
+            elif sym not in ordini:
+                self._sync_stream_symbols()   # scaduto -> disiscrivi il simbolo
+
+    def _dopo_riempimento_limite(self, pos) -> None:
+        """Quello che `_try_open` fa subito dopo un'apertura a mercato, fatto al
+        riempimento dell'ordine limite (13 ott 2026)."""
+        print(f"[limite] {pos.symbol} {pos.strategy} {pos.direction.value}: "
+              f"riempito a {pos.entry_price}")
+        if getattr(pos, "esplorativa", False):
+            print(f"[esplorativa] {pos.symbol} {pos.strategy} {pos.direction.value} (ordine limite)")
+        if getattr(pos, "declassata", False):
+            print(f"[declassata] {pos.symbol} {pos.strategy} {pos.direction.value} (ordine limite)")
+        self._sync_stream_symbols()
+        if self.stream is not None:
+            self.stream.reset(pos.symbol)
+        self._publish_decision_status(
+            {"outcome": "opened",
+             "reason": f"aperta {pos.symbol} {pos.direction.value} ({pos.strategy}), "
+                       f"ordine limite riempito a {pos.entry_price}"})
+        try:
+            self.notifier.trade_opened(
+                pos.symbol, pos.strategy, pos.direction.value,
+                pos.entry_price, pos.quantity, pos.leverage,
+                pos.stop_price, pos.take_profit_price, dry_run=settings.DRY_RUN)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[limite] notifica non inviata: {exc}")
+
     def trading_cycle(self, now: float) -> None:
         self._closed_this_cycle = False   # reset: settato se chiude un trade di strategia
+        # 0) ORDINI LIMITE IN ATTESA (13 ott 2026): si riempiono se il prezzo
+        # attraversa il limite entro la candela, altrimenti scadono (saltati)
+        self._gestisci_ordini_limite(now)
         # 1) gestione posizioni aperte (trailing/scale-out/SL/TP)
         # Usa il MARK PRICE FRESCO a ogni tick (1 richiesta): le posizioni vanno
         # gestite sul prezzo vivo, non sullo snapshot che si aggiorna ogni 15m.
@@ -1836,6 +1921,21 @@ class TradingBot:
                                           promessa_gate=promessa_della_decisione(
                                               getattr(self, "adaptation", None), decision),
                                           regime_globale=getattr(self, "regime", None))
+        if pos is None and decision.asset in getattr(self.executor, "ordini_limite", {}):
+            # INGRESSO A LIMITE NEL PAPER (13 ott 2026): l'ordine e' messo, la
+            # posizione nascera' (o no) nei prossimi tick; qui solo stream e stato
+            ordine = self.executor.ordini_limite[decision.asset]
+            print(f"[limite] {decision.asset} {decision.strategy} {decision.direction.value}: "
+                  f"ordine a {ordine.prezzo} valido fino a "
+                  f"{datetime.fromtimestamp(ordine.scadenza, tz=timezone.utc).strftime('%H:%M:%S')} UTC")
+            self._sync_stream_symbols()
+            if self.stream is not None:
+                self.stream.reset(decision.asset)
+            self._publish_decision_status(
+                {"outcome": "ordine_limite",
+                 "reason": (f"ordine limite {decision.asset} {decision.direction.value} "
+                            f"a {ordine.prezzo} ({decision.strategy})")})
+            return None
         if pos is not None:
             if getattr(decision, "esplorativa", False):
                 # la riga che distingue nel log un trade esplorativo da uno delle

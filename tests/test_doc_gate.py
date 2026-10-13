@@ -287,6 +287,9 @@ def test_optimize_scrive_in_corso_all_avvio_e_il_tetto_nel_registro():
 # 3. Un giro caduto scrive errore e rilancia                                   #
 # --------------------------------------------------------------------------- #
 def test_un_giro_caduto_scrive_errore_e_rilancia(monkeypatch):
+    # dal 13 ott 2026 il file ops/gate_fermo ferma il giro prima di tutto: qui si
+    # prova il giro che CADE, quindi l'interruttore si ignora (bot/core/gate_fermo.py)
+    monkeypatch.setenv("GATE_FERMO_IGNORA", "1")
     prima = {"meta": {"stato": "finito"}, "registro": {"validate": 7}}
     fb = _FB({("dashboard", "gate"): prima})
     monkeypatch.setattr(d, "get_firebase", lambda: fb)

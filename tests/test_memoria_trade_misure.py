@@ -47,7 +47,11 @@ def _params(qty=1.0, stop=98.0, tp=110.0, risk_eff=0.0123):
 
 
 def _engine(fb=None):
-    return ExecutionEngine(firebase=fb or FirebaseClient(), dry_run=True)
+    eng = ExecutionEngine(firebase=fb or FirebaseClient(), dry_run=True)
+    # questi test misurano la memoria del trade sull'ingresso A MERCATO: dal 13 ott
+    # 2026 il paper entra con un ordine limite (tests/test_ingresso_limite.py)
+    eng.ingresso_limite = False
+    return eng
 
 
 @pytest.fixture
@@ -502,6 +506,7 @@ def _bot_ciclo(monkeypatch, closed: ClosedTrade):
     b._persist_risk_state = lambda: None
     b.fb = types.SimpleNamespace(get_rtdb=lambda p: None)
     b._stream_recovery_guard = lambda now: True           # ferma il ciclo dopo il punto (1)
+    b._gestisci_ordini_limite = lambda now: None          # punto (0): nessun ordine limite in attesa
     b._publish_decision_status = lambda *a, **k: None
     b.trading_cycle = types.MethodType(TradingBot.trading_cycle, b)
     return b

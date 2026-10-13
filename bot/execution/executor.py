@@ -158,12 +158,39 @@ class Position:
     # epoch dell'ultimo peggioramento di low_water, e low_water al primo gradino
     t_mae: Optional[float] = None
     low_water_tp1: Optional[float] = None
+    # --- INGRESSO A LIMITE NEL PAPER (13 ott 2026) --------------------------- #
+    # "limite": la posizione e' nata da un ordine limite virtuale riempito al suo
+    # prezzo (`limite_prezzo` = chiusura della candela di segnale), messo
+    # all'epoch `ordine_messo_at`. `entry_fee_frac`: la commissione del SOLO lato
+    # d'ingresso (maker) che prende il posto di meta' del costo round-trip del
+    # modello; None = modello di costo di sempre (fee+scarto round-trip + spread).
+    ingresso_tipo: str = "mercato"
+    limite_prezzo: Optional[float] = None
+    ordine_messo_at: Optional[float] = None
+    entry_fee_frac: Optional[float] = None
 
     def __post_init__(self):
         self.remaining_qty = self.quantity
         self.high_water = self.entry_price
         self.low_water = self.entry_price
         self.orig_stop = self.stop_price
+
+
+@dataclass
+class OrdineLimite:
+    """Un ordine limite VIRTUALE d'ingresso in attesa (solo DRY_RUN, 13 ott 2026).
+
+    `pos` e' la posizione gia' preparata (size, stop, TP, annotazioni) che nasce
+    SOLO se il prezzo attraversa `prezzo` prima di `scadenza` (epoch: fine della
+    candela dopo quella del segnale). `hi_visto`/`lo_visto`: gli estremi visti
+    mentre l'ordine era in attesa (misura: di quanto ha mancato)."""
+    pos: Position
+    prezzo: float
+    scadenza: float
+    messo_at: float
+    bar_s: float
+    hi_visto: Optional[float] = None
+    lo_visto: Optional[float] = None
 
 
 class ExecutionEngine:
@@ -199,7 +226,13 @@ class ExecutionEngine:
         # il loop principale accredita all'equity: come Binance, ogni fill realizza
         # subito sul saldo. Svuotata da TradingBot dopo ogni update.
         self.realized_events: list[float] = []
+        # INGRESSI A LIMITE NEL PAPER (13 ott 2026): gli ordini virtuali in
+        # attesa, per simbolo, e la commissione maker del lato d'ingresso
+        self.ingresso_limite = bool(settings.PAPER_INGRESSO_LIMITE)
+        self.maker_fee = float(settings.PAPER_MAKER_FEE)
+        self.ordini_limite: dict[str, OrdineLimite] = {}
         self.restore_open_positions()
+        self.restore_ordini_limite()
 
     def pop_realized(self) -> list[float]:
         """Restituisce e AZZERA gli eventi di realizzo (da accreditare all'equity)."""
@@ -295,6 +328,17 @@ class ExecutionEngine:
             signal_candle_ts=(float(signal_candle_ts) if signal_candle_ts is not None else None),
         )
 
+        if self.dry_run and self.ingresso_limite and signal_candle_ts is not None:
+            # INGRESSO A LIMITE NEL PAPER (13 ott 2026): nessuna posizione adesso.
+            # Si mette un ordine limite virtuale; la posizione nasce in
+            # `update_ordini_limite` se il prezzo attraversa il limite entro la
+            # candela, altrimenti il segnale conta come saltato. None qui vuol
+            # dire «ordine messo»: il chiamante lo trova in `ordini_limite`.
+            if self._metti_ordine_limite(pos, asset, float(signal_candle_ts),
+                                         versione, promessa_gate, regime_globale) is not None:
+                return None
+            # ordine non ammesso (stop oltre il limite, candela gia' finita):
+            # a mercato come prima, e lo dice il contatore
         if self.dry_run:
             print(f"[DRY_RUN] OPEN {direction.value} {pos.symbol} qty={pos.quantity:.4f} "
                   f"@ {pos.entry_price} lev={pos.leverage}x SL={pos.stop_price:.4f} "
@@ -337,6 +381,221 @@ class ExecutionEngine:
                 pos.expected_entry_price = float(q["close_segnale"])
         except Exception as exc:  # noqa: BLE001
             print(f"[cattura] ingresso {getattr(pos, 'symbol', '?')} non annotato ({str(exc)[:80]})")
+
+    # ------------------------------------------------------------------ #
+    # Ingressi a limite nel paper (13 ott 2026, si' del proprietario)      #
+    # ------------------------------------------------------------------ #
+    def _metti_ordine_limite(self, pos: Position, asset: AssetSnapshot, boundary: float,
+                             versione, promessa_gate, regime_globale) -> Optional[OrdineLimite]:
+        """Mette l'ordine limite virtuale con la regola della prova del 13 ott
+        (research/esperimenti/ordini_limite/regole.md, sezione 4, correzione 1):
+        prezzo P = chiusura della candela di segnale (`close_chiusa`, altrimenti il
+        prezzo vivo), valido per PAPER_LIMITE_VALIDITA_BARRE candele del timeframe
+        della strategia dal confine `boundary` (l'apertura della candela dopo
+        quella del segnale). Un ordine gia' in attesa sullo stesso simbolo viene
+        SOSTITUITO, come nel motore di ricerca. Ritorna None se l'ordine non si
+        puo' mettere (stop dalla parte sbagliata di P, candela di validita' gia'
+        finita, prezzo o timeframe assenti): allora si entra a mercato come prima,
+        e il contatore `a_mercato_*` lo dice."""
+        long = pos.direction == Direction.LONG
+        try:
+            prezzo = float(asset.close_chiusa) if asset.close_chiusa else float(asset.price)
+        except (TypeError, ValueError):
+            prezzo = float(asset.price or 0.0)
+        if prezzo <= 0:
+            self._conta_limite("a_mercato_senza_prezzo")
+            return None
+        tf_h = timeframe_hours(pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME) or 0.0
+        if tf_h <= 0:
+            self._conta_limite("a_mercato_senza_timeframe")
+            return None
+        bar_s = tf_h * 3600.0
+        validita = max(1, int(settings.PAPER_LIMITE_VALIDITA_BARRE))
+        scadenza = boundary + bar_s * validita
+        now = time.time()
+        if (long and pos.stop_price >= prezzo) or ((not long) and pos.stop_price <= prezzo):
+            self._conta_limite("a_mercato_stop_oltre_il_limite")
+            return None
+        if scadenza <= now:
+            self._conta_limite("a_mercato_candela_finita")
+            return None
+        self._annota_ingresso(pos, asset, versione, promessa_gate, regime_globale)
+        pos.ingresso_tipo = "limite"
+        pos.limite_prezzo = prezzo
+        pos.ordine_messo_at = now
+        pos.entry_fee_frac = self.maker_fee
+        pos.expected_entry_price = prezzo
+        vecchio = self.ordini_limite.get(pos.symbol)
+        if vecchio is not None:
+            self._annulla_ordine_limite(vecchio, "sostituito")
+        ordine = OrdineLimite(pos=pos, prezzo=prezzo, scadenza=scadenza, messo_at=now, bar_s=bar_s)
+        self.ordini_limite[pos.symbol] = ordine
+        self._write_ordine_limite_state(ordine)
+        self._conta_limite("messi")
+        print(f"[DRY_RUN] ORDINE LIMITE {pos.direction.value} {pos.symbol} qty={pos.quantity:.4f} "
+              f"@ {prezzo} valido fino a "
+              f"{datetime.fromtimestamp(scadenza, tz=timezone.utc).strftime('%H:%M:%S')} UTC "
+              f"lev={pos.leverage}x SL={pos.stop_price:.4f} TP={pos.take_profit_price:.4f}")
+        return ordine
+
+    def update_ordini_limite(self, symbol: str, mark_price: float,
+                             high: float | None = None, low: float | None = None,
+                             now: float | None = None) -> Optional[Position]:
+        """Un tick per l'ordine limite in attesa su `symbol`. Riempito, AL SUO
+        prezzo (anche se il tick e' tutto oltre: un ordine nel libro esegue al
+        suo prezzo, correzione 1 della prova), se il range del tick attraversa
+        STRETTAMENTE il limite: long minimo < P, short massimo > P. Altrimenti,
+        passata la scadenza, l'ordine scade e il segnale conta come saltato.
+        Ritorna la Position appena nata, o None. Il range del tick che riempie
+        non si rigioca sulla posizione nuova (al massimo ~30 s di percorso): lo
+        stop si valuta dal tick dopo."""
+        ordine = self.ordini_limite.get(symbol)
+        if ordine is None:
+            return None
+        now = time.time() if now is None else float(now)
+        hi = mark_price if high is None else max(high, mark_price)
+        lo = mark_price if low is None else min(low, mark_price)
+        ordine.hi_visto = hi if ordine.hi_visto is None else max(ordine.hi_visto, hi)
+        ordine.lo_visto = lo if ordine.lo_visto is None else min(ordine.lo_visto, lo)
+        long = ordine.pos.direction == Direction.LONG
+        riempito = (lo < ordine.prezzo) if long else (hi > ordine.prezzo)
+        if riempito:
+            return self._esegui_ordine_limite(ordine, now)
+        if now >= ordine.scadenza:
+            self._annulla_ordine_limite(ordine, "scaduto")
+            return None
+        self._write_ordine_limite_state(ordine)
+        return None
+
+    def _esegui_ordine_limite(self, ordine: OrdineLimite, now: float) -> Position:
+        pos = ordine.pos
+        pos.entry_price = ordine.prezzo
+        pos.high_water = ordine.prezzo
+        pos.low_water = ordine.prezzo
+        pos.entry_time = datetime.fromtimestamp(now, tz=timezone.utc)
+        pos.ingresso_tipo = "limite"
+        pos.limite_prezzo = ordine.prezzo
+        self.ordini_limite.pop(pos.symbol, None)
+        self._rimuovi_nodo(f"/ordini_limite/{pos.symbol}")
+        self.open_positions[pos.symbol] = pos
+        self._write_position_state(pos, mark_price=pos.entry_price)
+        self._conta_limite("eseguiti")
+        print(f"[DRY_RUN] OPEN {pos.direction.value} {pos.symbol} qty={pos.quantity:.4f} "
+              f"@ {pos.entry_price} (ordine limite riempito dopo {now - ordine.messo_at:.0f}s) "
+              f"lev={pos.leverage}x SL={pos.stop_price:.4f} TP={pos.take_profit_price:.4f}")
+        return pos
+
+    def _annulla_ordine_limite(self, ordine: OrdineLimite, motivo: str) -> None:
+        """L'ordine non si riempie: «scaduto» (il segnale e' SALTATO), «sostituito»
+        (un segnale nuovo sullo stesso simbolo), «scaduto_al_riavvio», «annullato»
+        (kill switch). Il record va in RTDB /paper/ordini_limite/saltati, cosi'
+        si potra' misurare dopo cosa avrebbero fatto i segnali saltati."""
+        pos = ordine.pos
+        self.ordini_limite.pop(pos.symbol, None)
+        self._rimuovi_nodo(f"/ordini_limite/{pos.symbol}")
+        chiave = {"scaduto": "saltati", "sostituito": "sostituiti",
+                  "scaduto_al_riavvio": "scaduti_al_riavvio"}.get(motivo, "annullati")
+        self._conta_limite(chiave)
+        record = {
+            "position_id": pos.position_id, "symbol": pos.symbol, "strategy": pos.strategy,
+            "direction": pos.direction.value, "timeframe": pos.timeframe,
+            "limite_prezzo": ordine.prezzo, "stop_price": pos.stop_price,
+            "take_profit_price": pos.take_profit_price, "quantity": pos.quantity,
+            "leverage": pos.leverage, "signal_candle_ts": pos.signal_candle_ts,
+            "messo_at": ordine.messo_at, "scadenza": ordine.scadenza,
+            "annullato_at": time.time(), "motivo": motivo,
+            "hi_visto": ordine.hi_visto, "lo_visto": ordine.lo_visto,
+            "esplorativa": bool(pos.esplorativa), "declassata": bool(pos.declassata),
+            "regola": pos.regola, "risk_effective_pct": pos.risk_effective_pct,
+            "dry_run": self.dry_run,
+        }
+        try:
+            self.fb.set_rtdb(f"/paper/ordini_limite/saltati/{pos.position_id}", record)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] ordine saltato {pos.symbol} non registrato: {exc}")
+        print(f"[DRY_RUN] ORDINE LIMITE {motivo.upper()} {pos.direction.value} {pos.symbol} "
+              f"@ {ordine.prezzo} (visto {ordine.lo_visto}-{ordine.hi_visto})")
+
+    def _conta_limite(self, chiave: str) -> None:
+        """I contatori della misura (RTDB /paper/ordini_limite/contatori): messi,
+        eseguiti, saltati, sostituiti, scaduti_al_riavvio, annullati e gli
+        ingressi andati a mercato per un motivo (a_mercato_*). Best-effort."""
+        try:
+            c = self.fb.get_rtdb("/paper/ordini_limite/contatori") or {}
+            if not isinstance(c, dict):
+                c = {}
+            c[chiave] = int(c.get(chiave, 0) or 0) + 1
+            c["aggiornato_at"] = time.time()
+            self.fb.set_rtdb("/paper/ordini_limite/contatori", c)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] contatore ordini limite «{chiave}» non aggiornato: {exc}")
+
+    def _rimuovi_nodo(self, path: str) -> None:
+        try:
+            self.fb.set_rtdb(path, None)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] pulizia nodo {path} fallita: {exc}")
+
+    def _write_ordine_limite_state(self, ordine: OrdineLimite) -> None:
+        stato = self._stato_posizione(ordine.pos, ordine.prezzo)
+        stato["ordine"] = {"prezzo": ordine.prezzo, "scadenza": ordine.scadenza,
+                           "messo_at": ordine.messo_at, "bar_s": ordine.bar_s,
+                           "hi_visto": ordine.hi_visto, "lo_visto": ordine.lo_visto}
+        try:
+            self.fb.set_rtdb(f"/ordini_limite/{ordine.pos.symbol}", stato)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] stato ordine limite {ordine.pos.symbol} non scritto: {exc}")
+
+    def restore_ordini_limite(self) -> int:
+        """Ricarica gli ordini limite in attesa da Firebase (/ordini_limite) dopo
+        un riavvio; quelli gia' scaduti contano come saltati con motivo
+        «scaduto_al_riavvio». Ritorna quanti ne ha ripristinati vivi."""
+        data = self.fb.get_rtdb("/ordini_limite")
+        if not isinstance(data, dict) or not data:
+            return 0
+        vivi = 0
+        now = time.time()
+        for sym, p in data.items():
+            if not isinstance(p, dict) or sym in self.ordini_limite or sym in self.open_positions:
+                continue
+            try:
+                pos = self._position_from_state(p)
+                o = p.get("ordine") or {}
+                ordine = OrdineLimite(
+                    pos=pos, prezzo=float(o["prezzo"]), scadenza=float(o["scadenza"]),
+                    messo_at=float(o.get("messo_at") or now), bar_s=float(o.get("bar_s") or 0.0),
+                    hi_visto=(float(o["hi_visto"]) if o.get("hi_visto") is not None else None),
+                    lo_visto=(float(o["lo_visto"]) if o.get("lo_visto") is not None else None))
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] impossibile ricaricare l'ordine limite {sym}: {exc}")
+                continue
+            if ordine.scadenza <= now:
+                self._annulla_ordine_limite(ordine, "scaduto_al_riavvio")
+            else:
+                self.ordini_limite[sym] = ordine
+                vivi += 1
+        if vivi:
+            print(f"[execution] ricaricati {vivi} ordini limite in attesa da Firebase: "
+                  f"{list(self.ordini_limite.keys())}")
+        return vivi
+
+    def _fee_giro(self, pos: Position) -> float:
+        """Commissione+scarto del giro (frazione del notional): quella di sempre
+        (`cost_per_trade`, i due lati) oppure, per una posizione nata da un
+        ordine limite, meta' di quella (il solo lato d'uscita, a mercato) piu' la
+        commissione maker del lato d'ingresso, senza scarto (13 ott 2026)."""
+        if pos.entry_fee_frac is None:
+            return self.cost_per_trade
+        return self.cost_per_trade / 2.0 + float(pos.entry_fee_frac)
+
+    def _spread_giro(self, pos: Position) -> float:
+        """Lo spread del giro: intero come sempre, oppure la sola meta' d'uscita."""
+        if pos.entry_fee_frac is None:
+            return pos.spread_cost
+        return pos.spread_cost / 2.0
+
+    def _costo_giro(self, pos: Position) -> float:
+        return self._fee_giro(pos) + self._spread_giro(pos)
 
     @staticmethod
     def _opposite(pos: Position) -> str:
@@ -757,7 +1016,7 @@ class ExecutionEngine:
         # il funding e' regolato in blocco alla chiusura finale in _build_closed_trade,
         # cosi' il PnL LOGGATO resta col modello di costo del backtest -> parita' GATE 1).
         # Come Binance: questo netto viene ACCREDITATO SUBITO all'equity.
-        net = gross_unit * qty - (self.cost_per_trade + pos.spread_cost) * (pos.entry_price * qty)
+        net = gross_unit * qty - self._costo_giro(pos) * (pos.entry_price * qty)
         pos.realized_net += net
         self.realized_events.append(net)
         pos.remaining_qty -= qty
@@ -841,6 +1100,8 @@ class ExecutionEngine:
 
     def force_close_all(self, prices: dict[str, float], reason: ExitReason) -> list[ClosedTrade]:
         """Usato dal KILL SWITCH e dai circuit breaker per andare flat."""
+        for sym in list(self.ordini_limite.keys()):
+            self._annulla_ordine_limite(self.ordini_limite[sym], "annullato")
         closed = []
         for sym in list(self.open_positions.keys()):
             price = prices.get(sym, self.open_positions[sym].entry_price)
@@ -864,8 +1125,8 @@ class ExecutionEngine:
                                    default_rate=self.funding_per_8h)
         # scomposizione: le tre voci separate, non solo il totale. Il PnL netto da
         # solo non dice se un trade e' andato male o se e' costato troppo tenerlo.
-        commission = self.cost_per_trade * notional
-        spread = pos.spread_cost * notional
+        commission = self._fee_giro(pos) * notional
+        spread = self._spread_giro(pos) * notional
         funding_usdt = funding * notional
         cost = commission + spread + funding_usdt
         pnl = gross_pnl - cost                       # PnL NETTO in USDT
@@ -941,6 +1202,11 @@ class ExecutionEngine:
             signal_candle_ts=pos.signal_candle_ts,
             latenza_s=(round(pos.entry_time.timestamp() - float(pos.signal_candle_ts), 3)
                        if pos.signal_candle_ts is not None else None),
+            # ingresso a limite nel paper (13 ott 2026)
+            ingresso_tipo=pos.ingresso_tipo,
+            limite_prezzo=pos.limite_prezzo,
+            attesa_ingresso_s=(round(pos.entry_time.timestamp() - float(pos.ordine_messo_at), 3)
+                               if pos.ordine_messo_at is not None else None),
         )
         # LA CATTURA DEI DATI MANCANTI (1 ott 2026): assegnati DOPO la
         # costruzione e in un try loro, cosi' un valore strano non puo' mai
@@ -1004,6 +1270,13 @@ class ExecutionEngine:
 
     def _write_position_state(self, pos: Position, mark_price: float,
                               eff_stop: float | None = None) -> None:
+        self.fb.set_rtdb(f"/positions/{pos.symbol}", self._stato_posizione(pos, mark_price, eff_stop))
+
+    def _stato_posizione(self, pos: Position, mark_price: float,
+                         eff_stop: float | None = None) -> dict:
+        """Il documento di stato della posizione (RTDB /positions/<simbolo>), lo
+        stesso che `_position_from_state` rilegge dopo un riavvio. Dal 13 ott 2026
+        lo usa anche l'ordine limite in attesa (/ordini_limite/<simbolo>)."""
         long = pos.direction == Direction.LONG
         gross = (mark_price - pos.entry_price) if long else (pos.entry_price - mark_price)
         # UPNL NETTO = quanto incasseresti chiudendo ORA. Sottrae fee round-trip +
@@ -1015,7 +1288,7 @@ class ExecutionEngine:
         funding = funding_fraction(pos.funding_at_entry, held_hours, long,
                                    default_rate=self.funding_per_8h)
         accrued_funding = funding * notional
-        costs = (self.cost_per_trade + pos.spread_cost) * notional + accrued_funding
+        costs = self._costo_giro(pos) * notional + accrued_funding
         unreal = gross * pos.remaining_qty - costs
         # TP scaglionati (scale-out): livelli, quota, R e quali gia' raggiunti (per la
         # dashboard). Solo osservabilita'. Vuoto se scale-out disattivo (TP unico).
@@ -1035,7 +1308,7 @@ class ExecutionEngine:
                  "hit": i < pos.scale_stage}
                 for i, (pr, fr) in enumerate(scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults))
             ]
-        self.fb.set_rtdb(f"/positions/{pos.symbol}", {
+        return {
             "position_id": pos.position_id, "symbol": pos.symbol,
             "strategy": pos.strategy, "direction": pos.direction.value,
             "entry_price": pos.entry_price, "mark_price": mark_price,
@@ -1115,7 +1388,13 @@ class ExecutionEngine:
             "stop_moves": [dict(m) for m in (pos.stop_moves or []) if isinstance(m, dict)],
             "t_mae": pos.t_mae,
             "low_water_tp1": pos.low_water_tp1,
-        })
+            # ingresso a limite nel paper (13 ott 2026): senza queste chiavi un
+            # riavvio farebbe tornare la posizione «a mercato» e il costo pieno
+            "ingresso_tipo": pos.ingresso_tipo,
+            "limite_prezzo": pos.limite_prezzo,
+            "ordine_messo_at": pos.ordine_messo_at,
+            "entry_fee_frac": pos.entry_fee_frac,
+        }
 
     # ------------------------------------------------------------------ #
     # Ripristino stato dopo un riavvio                                   #
@@ -1230,6 +1509,14 @@ class ExecutionEngine:
             self._ripristina_cattura(pos, p)
         except Exception as exc:  # noqa: BLE001
             print(f"[cattura] misure di {pos.symbol} non ripristinate ({str(exc)[:80]})")
+        # ingresso a limite nel paper (13 ott 2026): chiavi assenti -> «mercato»
+        pos.ingresso_tipo = str(p.get("ingresso_tipo") or "mercato")
+        _lp = p.get("limite_prezzo")
+        pos.limite_prezzo = float(_lp) if _lp is not None else None
+        _om = p.get("ordine_messo_at")
+        pos.ordine_messo_at = float(_om) if _om is not None else None
+        _ef = p.get("entry_fee_frac")
+        pos.entry_fee_frac = float(_ef) if _ef is not None else None
         return pos
 
     @staticmethod

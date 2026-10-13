@@ -20,10 +20,13 @@ import inspect
 
 from bot.execution.executor import ExecutionEngine
 
+# Dal 13 ott 2026 il documento di stato lo costruisce `_stato_posizione` (lo usa
+# anche l'ordine limite in attesa); `_write_position_state` lo scrive e basta.
+
 
 def test_le_etichette_dei_gradini_vengono_dalla_scala_della_coppia():
     """Il caso PROMUSDT: scala validata 2/4/6, etichette mostrate 1.5/3/5."""
-    src = inspect.getsource(ExecutionEngine._write_position_state)
+    src = inspect.getsource(ExecutionEngine._stato_posizione)
     assert "_mults = pos.scale_r_mults or settings.SCALE_OUT_R_MULTIPLES" in src
     assert "_mults = settings.SCALE_OUT_R_MULTIPLES\n" not in src
 
@@ -31,7 +34,7 @@ def test_le_etichette_dei_gradini_vengono_dalla_scala_della_coppia():
 def test_prezzi_ed_etichette_escono_dalla_stessa_scala():
     """La garanzia vera: qualunque sia la scala, i due usano la STESSA fonte. Erano
     gia' due righe vicine e divergevano lo stesso — la vicinanza non basta."""
-    src = inspect.getsource(ExecutionEngine._write_position_state)
+    src = inspect.getsource(ExecutionEngine._stato_posizione)
     i_mults = src.index("_mults = ")
     blocco = src[i_mults:i_mults + 600]
     assert "r_mults=pos.scale_r_mults" in blocco, (
@@ -43,7 +46,7 @@ def test_lo_stop_effettivo_viene_pubblicato():
     """Include la protezione del profitto. `stop_price` resta la base perche' serve
     a ricostruire la posizione dopo un riavvio: cambiarne il significato di nascosto
     romperebbe quel percorso."""
-    src = inspect.getsource(ExecutionEngine._write_position_state)
+    src = inspect.getsource(ExecutionEngine._stato_posizione)
     assert '"effective_stop"' in src
     assert '"stop_price": pos.stop_price' in src, "la base non va toccata"
 
@@ -55,7 +58,7 @@ def test_lo_stop_effettivo_arriva_da_chi_lo_ha_calcolato():
     src = inspect.getsource(ExecutionEngine.update_position)
     assert src.count("eff_stop=") == 2, (
         "entrambi i rami (scale-out e TP unico) devono passare lo stop effettivo")
-    scrittura = inspect.getsource(ExecutionEngine._write_position_state)
+    scrittura = inspect.getsource(ExecutionEngine._stato_posizione)
     assert "locked_stop(" not in scrittura, "non ricalcolare: ricevilo"
 
 
