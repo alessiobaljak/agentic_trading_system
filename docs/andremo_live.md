@@ -3664,3 +3664,20 @@ domande sono scritte nelle sezioni 9 e 11 (sì, il paper viene dopo il vault; s�
 le monete). Parte il Passo 0 sul branch principale: dati 1d delle 81 monete, motore a barre giornaliere e misura
 del funding, serie di paniere, strumenti di gruppo e placebo a 1d, richiusura del vault con `APERTURA_2.md`,
 `parametri_2.yaml`. STOP prima della campagna, per l'approvazione dei parametri.
+
+### 14 ottobre, 00:10 ora italiana: Passo 0 della seconda edizione finito, STOP per il proprietario
+
+Fatto in una sera (`research/passo0_2/rapporto.md`): dati giornalieri 2020-2023 delle 80 monete e di Bitcoin (245
+serie, 0 errori, 9.406 file con impronta); motore a barre giornaliere misurato (stessa strategia a 1 giorno e a 8 ore:
+stessi trade, funding diverso di meno di un millesimo di R; stop a 2,5 ATR(20) mediano 22,2% del prezzo; costo per
+trade 0,0068 R mediano); serie di paniere con test di causalità; vault richiuso con `APERTURA_2.md`; guardiano,
+caricatore e strumenti di gruppo estesi alla campagna PANIERE (1.348 test); parametri in bozza; prova a placebo a un
+giorno: **l'esame regge** (0 «nette» su 47 in costruzione, 0 p sotto 0,10 su 47 in validazione), dopo due correzioni
+scritte prima degli esiti (parametri da manuale più corti per il giorno; tetto di 60 barre, senza il quale le
+posizioni in ATR duravano centinaia di giorni e l'esame non era valutabile). Il controllo positivo a un giorno invece
+non passa nella forma del gruppo e insegna due cose: la (b) può non costruirsi sulle monete dalla storia corta
+quando una variante è in posizione quasi sempre (13-16 monete su 80), e con pochi blocchi (7) anche un vantaggio di
++0,3 R a trade non è «netto» (t 2,42 contro soglia 2,6). Capito oggi: a barre giornaliere l'esame è severo per
+costruzione, e la potenza dipende dalla durata delle posizioni; il funding è il costo che conta a questo orizzonte.
+Lo STOP chiede al proprietario quattro cose (rapporto, sezione «Lo STOP»); nessuna sessione di campagna si apre
+prima.

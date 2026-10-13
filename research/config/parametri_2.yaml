@@ -112,8 +112,11 @@ esame:
     cartella: research/taratura/placebo_paniere
     placebo_per_periodo: 48                          # 6 regole x 2 direzioni x 4 sfasamenti, solo 1d
     soglie: {netta_costruzione_max: 0.03, p_sotto_010_validazione_max: 0.13, placebo_valutabili_minime_per_periodo: 40}
-    esito: null                                      # lo scrive il coordinamento a prova finita
-  controllo_positivo_1d: null                        # idem
+    esito: "regge (13 ott 2026, commit e98d0fec): valutabili 47/47 per periodo, nette in costruzione 0/47, p<0,10 in validazione 0/47, code M3 0,35% e 0,58%"
+  controllo_positivo_1d:
+    esito: "non passa nella forma del gruppo: (b) non costruibile su 13-16 monete dalla storia corta (strategia sempre in posizione); sul sottoinsieme short t 2,42 (non netto con 7 blocchi), con ritardo -0,67; long (b) non entra su ROSEUSDT"
+    file: [research/passo0_2/controllo_positivo_1d.json, research/passo0_2/controllo_positivo_1d_sottoinsieme.json]
+    decisione: null                                  # la prende il proprietario allo STOP (rapporto del Passo 0, sezione «Lo STOP»)
 
 # --------------------------------------------------------------------------- #
 # Il paper come esame finale (sezione 9)

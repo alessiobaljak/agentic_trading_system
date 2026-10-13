@@ -61,4 +61,28 @@ proprietario il 13 ottobre 2026). In sola lettura per la sessione di campagna, c
 
 ## 6. Esiti scritti dal coordinamento prima dell'apertura
 
-_(da compilare al termine del Passo 0: prova a placebo a 1d, controllo positivo, impronte degli strumenti.)_
+Scritti il 13 ottobre 2026 (22:10 UTC) dal coordinamento, a Passo 0 finito.
+
+* **Prova a placebo a barre giornaliere** (`research/taratura/placebo_paniere/risultati.md`, 96 esami, commit
+  e98d0fec): **l'esame di gruppo regge**. 47 placebo valutabili per periodo (minimo 40); «nette» in costruzione 0 su
+  47 (soglia 3%); p sotto 0,10 in validazione 0 su 47 (soglia 13%); code M3 0,35% e 0,58%; 1 scarto, 1 non
+  valutabile. In validazione 3 placebo su 47 (6,4%) hanno l'R medio sopra il 90° percentile delle proprie sfasate
+  (atteso circa 10%): l'esame a un giorno è, se mai, severo. Due correzioni scritte prima di qualunque esito
+  (regole della prova, sezione 7): parametri da manuale più corti per il giorno e durata massima di 60 barre.
+* **Controllo positivo a 1d** (`research/passo0_2/controllo_positivo_1d.json` e `..._sottoinsieme.json`, regola
+  «rottura» con uscita ATR e tetto di 60 barre, ingressi che guardano avanti): **non passa nella forma delle regole
+  del gruppo**, per due motivi che la sessione deve sapere. (1) Sulle 80 monete la baseline (b) non si costruisce:
+  la strategia che guarda avanti è in posizione quasi sempre e su 13 monete (long) e 16 (short) con la serie
+  giornaliera più corta «gli ingressi casuali non entrano» (serve lo stesso numero di ingressi distanziati della
+  durata media, e le barre non bastano). (2) Sulle monete restanti (67 long, 64 short): short, senza ritardo R medio
+  +0,29, t 2,42 contro la (b) con 7 blocchi (non «netto»: la soglia con 6 gradi è 2,6), con il ritardo t −0,67 (il
+  ritardo cancella il vantaggio: condizione passata); long, la (b) non entra ancora su una moneta (ROSEUSDT), con
+  il ritardo t −0,35. **Lezione per la campagna:** a barre giornaliere una variante che resta in posizione a lungo
+  ha pochi blocchi (il blocco è la posizione più lunga: 60 barre = 5% della costruzione) e un pavimento alto; con
+  pochi blocchi anche un vantaggio di +0,3 R a trade non è «netto». E una variante con molti trade su una moneta
+  dalla storia corta può non essere valutabile perché la (b) non entra. La sessione lo riporta variante per
+  variante; il proprietario ha deciso allo STOP cosa fare di queste due cose (vedi `research/passo0_2/rapporto.md`).
+* **Impronte degli strumenti al termine del Passo 0** (quelle della prova a placebo, `regole.md` della prova,
+  sezione 6): `research/src/motore.py` 2adb94e1…, `research/src/dati.py` 4f0d4779…, `research/src/statistica.py`
+  ca027d26…, `research/src/gruppo.py` 6875b12f…, `research/config/parametri.yaml` 7f530082…. Il via libera alla
+  validazione (`via_libera_validazione.md`) lo scrive il coordinamento con le impronte complete al momento giusto.
