@@ -59,8 +59,9 @@ def identita_corrente(radice: Path, posizioni, funzionamento: bool):
 
 def controlla_prova():
     """I file di questa cartella committati e sul ramo principale remoto (come ``E.controlla_prova`` per i suoi)."""
-    codice = E.controlla_prova(cartella=QUI, file=FILE_DELLA_PROVA)
-    codice.update(E.controlla_prova(cartella=E.QUI, file=("placebo_gruppo.py", "esegui.py")))
+    # `ramo` esplicito: il predefinito di E.controlla_prova e' legato alla definizione (origin/research/coordinamento)
+    codice = E.controlla_prova(cartella=QUI, file=FILE_DELLA_PROVA, ramo=E.RAMO_REMOTO)
+    codice.update(E.controlla_prova(cartella=E.QUI, file=("placebo_gruppo.py", "esegui.py"), ramo=E.RAMO_REMOTO))
     return codice
 
 
