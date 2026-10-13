@@ -1,0 +1,6 @@
+Ricerca automatica del gate FERMA dal 13 ottobre 2026 (sì del proprietario: «procedi con tutto»).
+Il giro ogni 3 ore faceva 27.000 prove, ne passava lo 0,29% e le passate facevano -0,06 R a trade
+in paper (ops 0601 e 0604): rumore, non informazione. Il paper resta acceso come banco di misura
+(ingressi a limite dal 13 ott). La ricerca riparte con la seconda edizione del protocollo
+(research/PROTOCOLLO_2.md), quando il proprietario la approva. Per riaccendere il gate: togliere
+questo file con un commit.

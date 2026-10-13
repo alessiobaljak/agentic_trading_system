@@ -3773,6 +3773,13 @@ def main() -> int:
     if _salto:
         print(_salto, flush=True)
         return 0
+    # L'INTERRUTTORE (13 ott 2026): con il file ops/gate_fermo la ricerca
+    # automatica non parte (bot/core/gate_fermo.py). Prima di tutto, come sopra.
+    from bot.core.gate_fermo import ricerca_ferma
+    _fermo = ricerca_ferma()
+    if _fermo:
+        print(_fermo, flush=True)
+        return 0
     # IL TEMPO DEL GIRO SI MISURA QUI, e si salva su Firebase. Il 22 set 2026 per
     # sapere quanto durava un giro servivano `servizi` + `processi` + il journal,
     # e il journal tiene 80 righe di cache che spingono via la fine del giro. Da

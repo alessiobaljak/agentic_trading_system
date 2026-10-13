@@ -310,6 +310,13 @@ def main() -> int:
     if _salto:
         print(_salto, flush=True)
         return 0
+    # L'INTERRUTTORE (13 ott 2026): con il file ops/gate_fermo la ricerca
+    # automatica non parte (bot/core/gate_fermo.py). Prima di tutto, come sopra.
+    from bot.core.gate_fermo import ricerca_ferma
+    _fermo = ricerca_ferma()
+    if _fermo:
+        print(_fermo, flush=True)
+        return 0
     p = argparse.ArgumentParser(description="Ottimizzazione walk-forward autonoma")
     p.add_argument("--symbols", default="BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT,XRPUSDT")
     p.add_argument("--top", type=int, default=0,
