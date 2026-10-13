@@ -1,8 +1,8 @@
 # Prova degli ordini limite — regole scritte PRIMA dei numeri
 
-> **BOZZA per il proprietario (13 ottobre 2026).** Diventa «in vigore» con il suo sì, con data e ora; da lì non cambia.
-> Un errore trovato dopo il lancio si corregge con una voce nuova in `risultati.md`, che dice cosa è cambiato e
-> perché, e si rilancia tutto. Nessun numero viene calcolato prima del sì.
+> **In vigore dal 2026-10-13 07:13 UTC**: regole scritte il 13 ottobre 2026 e approvate dal proprietario («Procedi») prima di
+> qualunque numero. Da qui non cambiano. Un errore trovato dopo il lancio si corregge con una voce nuova in
+> `risultati.md`, che dice cosa è cambiato e perché, e si rilancia tutto.
 
 ## 1. La domanda
 
