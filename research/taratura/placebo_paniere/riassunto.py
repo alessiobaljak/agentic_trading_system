@@ -49,6 +49,28 @@ def soglie_da_parametri(percorso: Path):
 
 
 R.soglie_da_parametri = soglie_da_parametri
+_fedelta_gruppo = R.controllo_fedelta
+
+
+def controllo_fedelta(righe):
+    """Come nella prova a 1 ora, ma il modulo delle regole di questa prova e' `placebo_paniere.py`."""
+    trovati = _fedelta_gruppo(righe)
+    trovati.pop("esame_con_altro_codice", None)
+    altro = []
+    for r in righe:
+        e = r.get("esame")
+        if not e:
+            continue
+        identita = r.get("identita") or {}
+        if "impronta_variante" in e and (e["impronta_variante"] != (identita.get("codice") or {}).get("placebo_paniere.py")
+                                         or e.get("impronte_strumenti") != identita.get("strumenti")):
+            altro.append(r["etichetta"])
+    if altro:
+        trovati["esame_con_altro_codice"] = altro
+    return trovati
+
+
+R.controllo_fedelta = controllo_fedelta
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:

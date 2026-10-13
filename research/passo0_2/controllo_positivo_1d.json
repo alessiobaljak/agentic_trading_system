@@ -1,0 +1,174 @@
+{
+ "long": {
+  "passa": false,
+  "condizioni": {
+   "batte_nettamente_a_e_b_senza_ritardo": false,
+   "t_con_ritardo_sotto_meta_di_quello_senza": false
+  },
+  "direzione": "long",
+  "timeframe": "1d",
+  "t_senza_ritardo": -Infinity,
+  "t_con_ritardo": -Infinity,
+  "senza_ritardo": {
+   "t": -Infinity,
+   "p_value": 1.0,
+   "valutabile": false,
+   "motivi_non_valutabile": [
+    "confronto con la (b) non valutabile: gli ingressi casuali non entrano su: BLZUSDT, CELRUSDT, CTSIUSDT, HBARUSDT, IOTAUSDT, KLAYUSDT, LPTUSDT, LRCUSDT, NKNUSDT, RLCUSDT, STMXUSDT, SXPUSDT, XEMUSDT"
+   ],
+   "trade": 3535,
+   "blocco": 483,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": 1.4699499468712172,
+    "media": 0.03610543295719058,
+    "motivo": null,
+    "errore": null
+   },
+   "baseline_b": {
+    "valutabile": false,
+    "netta": false,
+    "t": -Infinity,
+    "media": 0.029277175087199597,
+    "motivo": "gli ingressi casuali non entrano su: BLZUSDT, CELRUSDT, CTSIUSDT, HBARUSDT, IOTAUSDT, KLAYUSDT, LPTUSDT, LRCUSDT, NKNUSDT, RLCUSDT, STMXUSDT, SXPUSDT, XEMUSDT",
+    "errore": null
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.05357474912462003,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 38.932805983756026,
+   "r_medio": 0.3705508852605449
+  },
+  "con_ritardo": {
+   "t": -Infinity,
+   "p_value": 1.0,
+   "valutabile": false,
+   "motivi_non_valutabile": [
+    "confronto con la (b) non valutabile: gli ingressi casuali non entrano su: CTSIUSDT, KLAYUSDT, LPTUSDT"
+   ],
+   "trade": 3386,
+   "blocco": 471,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.17900680001793443,
+    "media": 0.02069788737436247,
+    "motivo": null,
+    "errore": null
+   },
+   "baseline_b": {
+    "valutabile": false,
+    "netta": false,
+    "t": -Infinity,
+    "media": 0.0035007548547787717,
+    "motivo": "gli ingressi casuali non entrano su: CTSIUSDT, KLAYUSDT, LPTUSDT",
+    "errore": null
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.053728414376656534,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 33.44834374113663,
+   "r_medio": -0.024351056309145663
+  },
+  "secondi": 51.7
+ },
+ "short": {
+  "passa": false,
+  "condizioni": {
+   "batte_nettamente_a_e_b_senza_ritardo": false,
+   "t_con_ritardo_sotto_meta_di_quello_senza": false
+  },
+  "direzione": "short",
+  "timeframe": "1d",
+  "t_senza_ritardo": -Infinity,
+  "t_con_ritardo": -Infinity,
+  "senza_ritardo": {
+   "t": -Infinity,
+   "p_value": 1.0,
+   "valutabile": false,
+   "motivi_non_valutabile": [
+    "confronto con la (b) non valutabile: gli ingressi casuali non entrano su: 1000XECUSDT, BANDUSDT, BELUSDT, CELRUSDT, CTSIUSDT, GTCUSDT, KLAYUSDT, LINAUSDT, LPTUSDT, NKNUSDT, ONTUSDT, ROSEUSDT, SFPUSDT, STMXUSDT, TOMOUSDT, XEMUSDT"
+   ],
+   "trade": 3427,
+   "blocco": 469,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": 1.4560320899346901,
+    "media": -0.08421527821784656,
+    "motivo": null,
+    "errore": null
+   },
+   "baseline_b": {
+    "valutabile": false,
+    "netta": false,
+    "t": -Infinity,
+    "media": -0.03206124672520639,
+    "motivo": "gli ingressi casuali non entrano su: 1000XECUSDT, BANDUSDT, BELUSDT, CELRUSDT, CTSIUSDT, GTCUSDT, KLAYUSDT, LINAUSDT, LPTUSDT, NKNUSDT, ONTUSDT, ROSEUSDT, SFPUSDT, STMXUSDT, TOMOUSDT, XEMUSDT",
+    "errore": null
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.056661133688769946,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 29.561887309970633,
+   "r_medio": 0.27436058290228504
+  },
+  "con_ritardo": {
+   "t": -Infinity,
+   "p_value": 1.0,
+   "valutabile": false,
+   "motivi_non_valutabile": [
+    "confronto con la (b) non valutabile: gli ingressi casuali non entrano su: CTSIUSDT, GTCUSDT, KLAYUSDT, LPTUSDT, NKNUSDT, XEMUSDT"
+   ],
+   "trade": 3291,
+   "blocco": 454,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.09016406822016562,
+    "media": -0.048164447748312036,
+    "motivo": null,
+    "errore": null
+   },
+   "baseline_b": {
+    "valutabile": false,
+    "netta": false,
+    "t": -Infinity,
+    "media": -0.02443261056325706,
+    "motivo": "gli ingressi casuali non entrano su: CTSIUSDT, GTCUSDT, KLAYUSDT, LPTUSDT, NKNUSDT, XEMUSDT",
+    "errore": null
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.05926808864173876,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 27.931789694784516,
+   "r_medio": -0.07433219834726419
+  },
+  "secondi": 52.3
+ }
+}
