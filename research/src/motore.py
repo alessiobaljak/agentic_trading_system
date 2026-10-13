@@ -106,6 +106,87 @@ Costi
   arriva dopo), settlement nello stesso istante dell'uscita per "chiudi", e
   settlement nella stessa barra di un'uscita per stop/target/liquidazione.
 
+Ordini limite (esperimenti/ordini_limite/regole.md, sezioni 4, 4.6 e 10)
+------------------------------------------------------------------------
+Con i valori predefiniti di ``Parametri`` (``ingresso="mercato"``,
+``uscita_segnale="mercato"``) il motore fa ESATTAMENTE quello che faceva prima:
+stessi trade, stessi numeri (test di parita' in ``tests/test_motore_ordini_limite.py``).
+Le regole qui sotto valgono solo con ``ingresso="limite"`` o ``uscita_segnale="limite"``.
+Dove le regole della prova tacciono vale la convenzione del motore, la peggiore
+per il trade; le scelte fatte qui sono dichiarate una per una.
+
+* Ingresso ``"limite"`` (sezione 4). Il segnale emesso alla chiusura della barra
+  ``k`` si vede alla barra ``k + ritardo_barre`` (il ritardo vale come oggi): li'
+  si mette un ordine al prezzo P = CHIUSURA di quella barra, valido per le
+  ``limite_validita_barre`` barre successive. In ogni barra della validita', in
+  ordine: se l'apertura e' gia' oltre P (long: open < P; short: open > P) si
+  riempie all'apertura, A P (un ordine in attesa nel libro esegue al suo prezzo:
+  correzione 1 di ``esperimenti/ordini_limite/risultati.md``, scritta prima di
+  qualunque numero); altrimenti si riempie a P se la barra attraversa P
+  (``limite_condizione="attraversato"``: long low < P, short high > P) o lo
+  tocca (``"toccato"``: low <= P, high >= P). Se nessuna barra riempie, l'ordine
+  scade: il trade non esiste e si conta in ``n_saltati`` (anche se i dati
+  finiscono durante la validita'); un elenco ``saltati`` (ts_segnale, direzione,
+  limite_prezzo, stop) permette di ritrovare quei trade nella corsa a mercato.
+  Un segnale nuovo della strategia mentre l'ordine e' in attesa lo SOSTITUISCE
+  (``n_sostituiti``): la strategia vede ``None`` come posizione finche' l'ordine
+  non e' riempito, quindi una strategia che ripete il segnale ogni barra
+  rinnova l'ordine ogni barra. Un segnale arrivato mentre si aspetta il ritardo
+  (``ritardo_barre`` > 0, ordine non ancora messo) si ignora come oggi.
+* Quantita' = capitale * rischio_per_trade / |P - stop| (lo stop e' quello del
+  segnale, come oggi); il rischio iniziale vero e' quantita' * |riempimento - stop|
+  e divide il pnl per dare R. Niente slippage sull'ingresso (anche se riempito
+  all'apertura oltre P: regola 4.5, «il limite e' il prezzo»), commissione
+  ``commissione_maker_per_lato`` sull'ingresso (per il moltiplicatore dei costi
+  come le altre). L'uscita resta a mercato: taker e slippage come oggi.
+* Validita' del segnale: all'ordine, stop dalla parte giusta di P (e target
+  dalla parte giusta), altrimenti ``n_segnali_non_validi`` e nessun ordine; al
+  riempimento, stop dalla parte giusta del riempimento, altrimenti
+  ``n_segnali_non_validi`` e l'ordine e' consumato (e' la regola del percorso a
+  mercato: un'apertura gia' oltre lo stop non apre). Il capitale esaurito si
+  controlla quando l'ordine si mette (fra ordine e riempimento nessun trade si
+  chiude, quindi il capitale non cambia).
+* Barra del riempimento. Riempito all'apertura: e' l'ingresso di oggi (la
+  posizione esiste dal primo prezzo della barra, gap compresi). Riempito a P
+  DENTRO la barra: non si sa quando, quindi (1) ``ts_entrata`` = apertura della
+  barra (il primo istante possibile: un settlement all'apertura e' ambiguo e si
+  conta solo se costo, il trade non risulta mai aperto e chiuso nello stesso
+  istante, le durate in barre si contano come per gli ingressi a mercato); (2)
+  tutti i settlement della barra sono ambigui (solo se costo); (3) stop, target
+  e liquidazione possono scattare nella stessa barra con le regole di oggi
+  (``riempimento_intrabarra``, liquidazione contro stop per vicinanza), ma SENZA
+  le regole dei gap in apertura (``apertura_nota=False`` in
+  ``valuta_uscita_in_barra``): l'apertura e' venuta PRIMA dell'ingresso, e
+  un'uscita a un prezzo fatto prima dell'ingresso non esiste. Se la barra ha
+  toccato lo stop non si sa se prima o dopo il riempimento: lo stop scatta.
+* ``Trade``: ``ingresso_tipo`` ("mercato"/"limite"), ``limite_prezzo`` (P, o
+  None), ``barre_attesa`` (barre fra l'ordine e il riempimento: 1 = riempito
+  nella prima barra di validita'; per un ingresso a mercato 1, l'apertura della
+  barra dopo; il ritardo NON si conta), ``ts_segnale`` (apertura della barra
+  alla cui chiusura la strategia ha emesso il segnale, prima del ritardo),
+  ``uscita_tipo`` ("mercato"/"limite").
+* Uscita ``uscita_segnale="limite"`` (variante (c) della sezione 4.6): SOLO le
+  uscite "chiudi" della strategia (non stop, target, liquidazione, fine_dati).
+  Ordine al prezzo P = chiusura della barra del "chiudi", valido una barra. Nella
+  barra dopo: se l'apertura e' gia' oltre P (long: open > P; short: open < P) si
+  esce all'apertura, a P (certa, prima di qualunque altro evento; correzione 1:
+  l'ordine in attesa esegue al suo prezzo, non all'apertura); altrimenti la
+  posizione resta aperta nella barra con l'ordine in attesa: se nella barra
+  scattano stop o liquidazione, valgono loro (regola peggiore); altrimenti se la
+  barra attraversa (o tocca) P si esce a P con ``ts_uscita`` = chiusura della
+  barra, come le altre uscite dentro la barra; altrimenti il target di oggi, se
+  toccato (non puo' succedere: il target sta oltre P, che non e' stato
+  raggiunto); altrimenti l'ordine e' mancato (``n_uscite_limite_mancate``) e si
+  esce a mercato all'apertura della barra dopo, con slippage e taker come oggi
+  (un nuovo "chiudi" nel frattempo non rinnova il limite). Con "target_prima" e
+  stop e target toccati insieme, ``valuta_uscita_in_barra`` dice target e il
+  limite, piu' vicino del target, esce a P. Un'uscita a limite eseguita ha
+  commissione maker, slippage zero, ``esito="segnale"`` e ``uscita_tipo="limite"``
+  (``n_uscite_limite_eseguite``). Se i dati finiscono nella barra di validita'
+  la chiusura e' "fine_dati" come oggi e l'ordine conta fra i mancati.
+* ``n_ordini_limite`` conta gli ordini messi (anche quelli poi sostituiti):
+  riempiti = ordini - saltati - sostituiti - non validi al riempimento.
+
 Campagna di gruppo (campagne/GRUPPO/regole.md, sezione 13)
 ---------------------------------------------------------
 * ``simula_baseline_casuale`` ha la chiave ``r_medio_per_seme`` (l'R medio di
@@ -131,7 +212,7 @@ from collections.abc import Mapping as MappingABC
 from collections.abc import Sequence as SequenceABC
 from itertools import islice
 import operator
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timezone
 from typing import Callable, Dict, Iterable, List, Literal, Mapping, NamedTuple, Optional, Sequence, Tuple, Union
 
@@ -184,6 +265,12 @@ class Posizione:
     violazione_liquidazione: bool
     funding_pagato: float = 0.0
     capitale_ingresso: float = 0.0  # capitale al momento dell'ingresso: base del pnl in percentuale
+    # Ordini limite (docstring del modulo): come e' entrata la posizione e a che tasso di commissione.
+    ts_segnale: Optional[int] = None  # apertura della barra alla cui chiusura la strategia ha emesso il segnale
+    ingresso_tipo: str = "mercato"  # "mercato" o "limite"
+    limite_prezzo: Optional[float] = None  # il prezzo P dell'ordine limite, None a mercato
+    barre_attesa: int = 1  # barre fra l'ordine e il riempimento (1 = la prima barra)
+    commissione_ingresso_per_lato: Optional[float] = None  # None = commissione_per_lato (taker) dei parametri
 
 
 @dataclass
@@ -193,6 +280,16 @@ class Parametri:
     I parametri di una campagna si prendono da ``config/parametri.yaml`` (rischio,
     leva, commissione, margine di mantenimento 0,025, ...) e dalla fascia di
     slippage di ``campagne/<SIMBOLO>/scheda_moneta.md`` (sezione 7).
+
+    Ordini limite (``esperimenti/ordini_limite/regole.md``, docstring del modulo):
+    ``ingresso`` "mercato" (oggi: apertura della barra dopo, con slippage e
+    commissione taker ``commissione_per_lato``) o "limite" (ordine alla chiusura
+    della barra del segnale, valido ``limite_validita_barre`` barre, riempito se
+    la barra attraversa il prezzo o, con ``limite_condizione="toccato"``, se lo
+    tocca; commissione ``commissione_maker_per_lato``, slippage zero).
+    ``uscita_segnale`` "mercato" (oggi) o "limite" (variante (c): le uscite
+    "chiudi" con un ordine alla chiusura della barra, valido una barra, poi a
+    mercato). Con i valori predefiniti il motore non cambia in nulla.
     """
 
     commissione_per_lato: float = 0.0005
@@ -206,6 +303,11 @@ class Parametri:
     riempimento_intrabarra: Literal["stop_prima", "target_prima"] = "stop_prima"
     moltiplicatore_costi: float = 1.0
     ritardo_barre: int = 0
+    ingresso: Literal["mercato", "limite"] = "mercato"
+    limite_validita_barre: int = 1
+    limite_condizione: Literal["attraversato", "toccato"] = "attraversato"
+    commissione_maker_per_lato: float = 0.0002
+    uscita_segnale: Literal["mercato", "limite"] = "mercato"
 
 
 @dataclass
@@ -233,6 +335,12 @@ class Trade:
     leva_effettiva: float
     prezzo_liquidazione: float
     pnl_pct: float = 0.0  # pnl netto / capitale al momento dell'ingresso (frazione)
+    # Ordini limite (docstring del modulo). Con l'ingresso a mercato: "mercato", None, 1, ts del segnale, "mercato".
+    ingresso_tipo: str = "mercato"  # "mercato" o "limite"
+    limite_prezzo: Optional[float] = None  # il prezzo P dell'ordine limite d'ingresso, None a mercato
+    barre_attesa: int = 1  # barre fra l'ordine e il riempimento: 1 = riempito nella prima barra
+    ts_segnale: Optional[int] = None  # apertura della barra alla cui chiusura la strategia ha emesso il segnale
+    uscita_tipo: str = "mercato"  # "limite" solo per un'uscita "chiudi" eseguita con l'ordine limite (variante (c))
 
 
 @dataclass
@@ -244,6 +352,14 @@ class Risultato:
     dopo il segnale (``n_segnali_senza_barra``), capitale esaurito
     (``n_segnali_capitale_esaurito``). ``n_buchi_dati`` e ``n_funding_in_buco``
     dichiarano le barre mancanti nella serie e i settlement caduti dentro un buco.
+
+    Ordini limite (docstring del modulo; tutti a 0 e vuoti con l'ingresso e
+    l'uscita a mercato): ``n_ordini_limite`` ordini d'ingresso messi,
+    ``n_saltati`` scaduti senza riempimento, ``n_sostituiti`` annullati da un
+    segnale nuovo, ``saltati`` l'elenco degli scaduti ({ts_segnale, direzione,
+    limite_prezzo, stop}, nell'ordine) per ritrovarli nella corsa a mercato;
+    ``n_uscite_limite_eseguite`` e ``n_uscite_limite_mancate`` per le uscite
+    "chiudi" a limite della variante (c).
     """
 
     trades: List[Trade]
@@ -255,6 +371,12 @@ class Risultato:
     n_segnali_capitale_esaurito: int = 0  # segnali validi scartati perche' il capitale e' <= 0
     n_buchi_dati: int = 0  # coppie di barre consecutive non contigue nella serie
     n_funding_in_buco: int = 0  # settlement caduti in un buco e addebitati sull'ultimo mark
+    n_ordini_limite: int = 0  # ordini limite d'ingresso messi (compresi quelli poi sostituiti)
+    n_saltati: int = 0  # ordini limite scaduti senza riempimento: il trade non esiste
+    n_sostituiti: int = 0  # ordini limite annullati perche' un segnale nuovo li ha sostituiti
+    n_uscite_limite_eseguite: int = 0  # uscite "chiudi" eseguite con l'ordine limite (variante (c))
+    n_uscite_limite_mancate: int = 0  # uscite "chiudi" a limite non eseguite nella barra di validita'
+    saltati: List[Dict[str, object]] = field(default_factory=list)  # gli ordini scaduti, per ritrovarli a mercato
 
     def metriche(self) -> Dict[str, object]:
         return calcola_metriche(self)
@@ -332,6 +454,37 @@ def prezzo_riempimento_uscita(prezzo: float, direzione: Direzione, parametri: Pa
     """Prezzo di uscita peggiorato dallo slippage: long vende piu' basso, short ricompra piu' caro."""
     s = parametri.slippage_per_lato * parametri.moltiplicatore_costi
     return prezzo * (1 - s) if direzione == "long" else prezzo * (1 + s)
+
+
+def riempimento_limite(prezzo: float, lato_ordine: int, barra: Candela, condizione: str) -> Optional[Tuple[float, bool]]:
+    """Se e a che prezzo un ordine limite si riempie nella barra: (prezzo, all'apertura) o None.
+
+    ``lato_ordine`` +1 e' un ordine che COMPRA (ingresso long, uscita di uno
+    short), -1 uno che VENDE (ingresso short, uscita di un long). Regole della
+    prova (``esperimenti/ordini_limite/regole.md``, 4.3 e 4.6):
+    * se l'apertura e' gia' oltre il prezzo (compra: open < prezzo; vende:
+      open > prezzo) l'ordine si riempie ALL'APERTURA ma AL PREZZO DEL LIMITE:
+      un ordine in attesa nel libro esegue al suo prezzo, non a quello del
+      primo scambio della barra (correzione 1 di ``risultati.md``, scritta
+      prima di qualunque numero: la regola 4.3 diceva «all'apertura, meglio
+      del limite», che vale per un ordine a mercato, non per uno in attesa);
+    * altrimenti si riempie al prezzo del limite se la barra lo ATTRAVERSA
+      (``condizione="attraversato"``: compra low < prezzo, vende high > prezzo)
+      o, con ``condizione="toccato"``, se lo tocca (low <= prezzo, high >= prezzo);
+    * altrimenti None: non si riempie in questa barra.
+    Il momento del riempimento dentro la barra non si conosce.
+    """
+    if condizione == "attraversato":
+        attraversa = (barra.low < prezzo) if lato_ordine == 1 else (barra.high > prezzo)
+    elif condizione == "toccato":
+        attraversa = (barra.low <= prezzo) if lato_ordine == 1 else (barra.high >= prezzo)
+    else:
+        raise ValueError(f"limite_condizione sconosciuta: {condizione!r}")
+    if (barra.open < prezzo) if lato_ordine == 1 else (barra.open > prezzo):
+        return prezzo, True
+    if attraversa:
+        return prezzo, False
+    return None
 
 
 def calcola_quantita(
@@ -510,6 +663,7 @@ def valuta_uscita_in_barra(
     barra_stop: Candela,
     barra_mark: Candela,
     parametri: Parametri,
+    apertura_nota: bool = True,
 ) -> Optional[Tuple[Esito, float]]:
     """Dice se e come la posizione si chiude dentro la barra: (esito, prezzo di riferimento).
 
@@ -526,6 +680,12 @@ def valuta_uscita_in_barra(
       all'entrata (il prezzo deve passare prima da li');
     * stop e target toccati dentro la barra: decide ``riempimento_intrabarra``.
 
+    ``apertura_nota`` (True, il caso di oggi) dice che la posizione era aperta
+    all'apertura della barra. Con False (ordine limite riempito DENTRO la barra:
+    docstring del modulo) l'apertura e' venuta prima dell'ingresso e le regole
+    dei gap non si applicano: lo stop si riempie allo stop (dentro low-high del
+    last), il target al target, e restano solo le regole di dentro la barra.
+
     Esempi a mano (long entrato a 100, stop 95, target 110, liquidazione 51):
     * barra open 90 / high 112: stop a 90 anche con "target_prima" (a 90 la
       posizione e' gia' chiusa quando il prezzo arriva a 110);
@@ -536,7 +696,7 @@ def valuta_uscita_in_barra(
 
     # Stop: per un long scatta se il low della serie stop scende a stop; per uno short se l'high sale a stop.
     stop_toccato = (barra_stop.low <= pos.stop) if lato == 1 else (barra_stop.high >= pos.stop)
-    stop_gap = (barra_stop.open <= pos.stop) if lato == 1 else (barra_stop.open >= pos.stop)
+    stop_gap = apertura_nota and ((barra_stop.open <= pos.stop) if lato == 1 else (barra_stop.open >= pos.stop))
     prezzo_stop = prezzo_riempimento_stop(pos.stop, lato, stop_gap, barra_segnali)
 
     target_toccato = False
@@ -544,12 +704,12 @@ def valuta_uscita_in_barra(
     prezzo_target = 0.0
     if pos.target is not None:
         target_toccato = (barra_segnali.high >= pos.target) if lato == 1 else (barra_segnali.low <= pos.target)
-        target_gap = (barra_segnali.open >= pos.target) if lato == 1 else (barra_segnali.open <= pos.target)
+        target_gap = apertura_nota and ((barra_segnali.open >= pos.target) if lato == 1 else (barra_segnali.open <= pos.target))
         prezzo_target = barra_segnali.open if target_gap else pos.target
 
     liq = pos.prezzo_liquidazione
     liq_toccata = (liq > 0 and barra_mark.low <= liq) if lato == 1 else (barra_mark.high >= liq)
-    liq_gap = (liq > 0 and barra_mark.open <= liq) if lato == 1 else (barra_mark.open >= liq)
+    liq_gap = apertura_nota and ((liq > 0 and barra_mark.open <= liq) if lato == 1 else (barra_mark.open >= liq))
 
     # Eventi gia' veri all'apertura: ordine noto, niente ambiguita' da risolvere.
     if liq_gap:
@@ -583,13 +743,14 @@ def valuta_uscita_in_barra(
 
 
 def _apri_posizione(
-    segnale: Segnale, barra: Candela, capitale: float, parametri: Parametri
+    segnale: Segnale, barra: Candela, capitale: float, parametri: Parametri, ts_segnale: Optional[int] = None
 ) -> Optional[Posizione]:
     """Apre la posizione all'apertura della barra; None se il segnale non e' valido.
 
     Non valido: stop dalla parte sbagliata rispetto all'entrata vera (o uguale),
     target dalla parte sbagliata, prezzi non positivi. Il capitale esaurito
     NON e' un segnale non valido: lo decide il chiamante, con il suo contatore.
+    ``ts_segnale`` e' l'apertura della barra del segnale, solo per riportarla nel trade.
     """
     if segnale.stop <= 0 or barra.open <= 0:
         return None
@@ -619,15 +780,107 @@ def _apri_posizione(
         ridotto=ridotto,
         violazione_liquidazione=violazione_margine(entrata, segnale.stop, liq, parametri),
         capitale_ingresso=capitale,
+        ts_segnale=ts_segnale,
+        ingresso_tipo="mercato",
+        limite_prezzo=None,
+        barre_attesa=1,
+        commissione_ingresso_per_lato=parametri.commissione_per_lato,
     )
 
 
-def _chiudi_posizione(pos: Posizione, prezzo_riferimento: float, ts_uscita: int, esito: Esito, parametri: Parametri) -> Trade:
-    """Chiude la posizione al prezzo di riferimento (peggiorato dallo slippage) e fa i conti."""
+def _ordine_limite_valido(segnale: Segnale, prezzo: float) -> bool:
+    """Un ordine limite al prezzo ``prezzo`` ha senso: prezzi positivi, stop e target dalla parte giusta di P.
+
+    E' il controllo che il percorso a mercato fa sull'apertura, fatto sul prezzo
+    del limite quando l'ordine si mette (docstring del modulo, «Validita' del segnale»).
+    """
+    if segnale.stop <= 0 or prezzo <= 0:
+        return False
+    lato = segno(segnale.direzione)
+    if lato * (prezzo - segnale.stop) <= 0:
+        return False
+    if segnale.target is not None and lato * (segnale.target - prezzo) <= 0:
+        return False
+    return True
+
+
+def _apri_posizione_limite(
+    segnale: Segnale,
+    prezzo_limite: float,
+    riempimento: float,
+    barra: Candela,
+    capitale: float,
+    parametri: Parametri,
+    ts_segnale: Optional[int],
+    barre_attesa: int,
+) -> Optional[Posizione]:
+    """Apre la posizione di un ordine limite riempito a ``riempimento`` nella barra; None se non valida.
+
+    Regole della prova (docstring del modulo): quantita' sul prezzo del limite
+    (capitale * rischio / |P - stop|), rischio iniziale vero sul riempimento,
+    nessuno slippage (entrata = riempimento = riferimento), commissione maker.
+    Non valida se il riempimento e' dalla parte sbagliata dello stop (o del
+    target): un'apertura con gap oltre lo stop, come nel percorso a mercato.
+    ``ts_entrata`` e' l'apertura della barra anche per un riempimento dentro la
+    barra (il primo istante possibile: docstring del modulo).
+    """
+    lato = segno(segnale.direzione)
+    if riempimento <= 0 or lato * (riempimento - segnale.stop) <= 0:
+        return None
+    if segnale.target is not None and lato * (segnale.target - riempimento) <= 0:
+        return None
+    quantita, ridotto = calcola_quantita(capitale, prezzo_limite, riempimento, segnale.stop, parametri)
+    notional = quantita * riempimento
+    leva = leva_effettiva(notional, capitale, parametri)
+    leva_liq = leva_per_liquidazione(notional, capitale, parametri)
+    liq = prezzo_liquidazione(riempimento, segnale.direzione, leva_liq, parametri)
+    return Posizione(
+        direzione=segnale.direzione,
+        entrata=riempimento,
+        stop=segnale.stop,
+        target=segnale.target,
+        quantita=quantita,
+        ts_entrata=barra.ts,
+        entrata_riferimento=riempimento,
+        rischio_iniziale=quantita * abs(riempimento - segnale.stop),
+        leva_effettiva=leva,
+        prezzo_liquidazione=liq,
+        ridotto=ridotto,
+        violazione_liquidazione=violazione_margine(riempimento, segnale.stop, liq, parametri),
+        capitale_ingresso=capitale,
+        ts_segnale=ts_segnale,
+        ingresso_tipo="limite",
+        limite_prezzo=prezzo_limite,
+        barre_attesa=barre_attesa,
+        commissione_ingresso_per_lato=parametri.commissione_maker_per_lato,
+    )
+
+
+def _chiudi_posizione(
+    pos: Posizione, prezzo_riferimento: float, ts_uscita: int, esito: Esito, parametri: Parametri, a_limite: bool = False
+) -> Trade:
+    """Chiude la posizione al prezzo di riferimento (peggiorato dallo slippage) e fa i conti.
+
+    Con ``a_limite`` (uscita "chiudi" eseguita con l'ordine limite, variante (c))
+    l'uscita e' il prezzo di riferimento senza slippage e la commissione del lato
+    d'uscita e' quella maker. La commissione d'ingresso e' quella registrata
+    nella posizione (taker a mercato, maker a limite). Quando i due lati hanno lo
+    stesso tasso il conto e' quello di sempre, nella stessa forma (parita' bit per
+    bit con il motore di prima); altrimenti si sommano i due lati.
+    """
     lato = segno(pos.direzione)
-    uscita = prezzo_riempimento_uscita(prezzo_riferimento, pos.direzione, parametri)
+    if a_limite:
+        uscita = prezzo_riferimento
+        tasso_uscita = parametri.commissione_maker_per_lato
+    else:
+        uscita = prezzo_riempimento_uscita(prezzo_riferimento, pos.direzione, parametri)
+        tasso_uscita = parametri.commissione_per_lato
+    tasso_ingresso = parametri.commissione_per_lato if pos.commissione_ingresso_per_lato is None else pos.commissione_ingresso_per_lato
     pnl_lordo = lato * pos.quantita * (prezzo_riferimento - pos.entrata_riferimento)
-    commissioni = parametri.commissione_per_lato * parametri.moltiplicatore_costi * pos.quantita * (pos.entrata + uscita)
+    if tasso_ingresso == tasso_uscita:
+        commissioni = tasso_uscita * parametri.moltiplicatore_costi * pos.quantita * (pos.entrata + uscita)
+    else:
+        commissioni = parametri.moltiplicatore_costi * pos.quantita * (tasso_ingresso * pos.entrata + tasso_uscita * uscita)
     slippage_costo = pos.quantita * (abs(pos.entrata - pos.entrata_riferimento) + abs(uscita - prezzo_riferimento))
     pnl = pnl_lordo - commissioni - slippage_costo - pos.funding_pagato
     return Trade(
@@ -652,6 +905,11 @@ def _chiudi_posizione(pos: Posizione, prezzo_riferimento: float, ts_uscita: int,
         leva_effettiva=pos.leva_effettiva,
         prezzo_liquidazione=pos.prezzo_liquidazione,
         pnl_pct=pnl / pos.capitale_ingresso if pos.capitale_ingresso > 0 else 0.0,
+        ingresso_tipo=pos.ingresso_tipo,
+        limite_prezzo=pos.limite_prezzo,
+        barre_attesa=pos.barre_attesa,
+        ts_segnale=pos.ts_segnale,
+        uscita_tipo="limite" if a_limite else "mercato",
     )
 
 
@@ -707,6 +965,23 @@ def esegui(
     4. alla chiusura: la strategia vede ``candele[:i+1]`` e decide;
     5. all'ultima barra: la posizione ancora aperta si chiude al close ("fine_dati").
 
+    Ordini limite (docstring del modulo; solo con ``parametri.ingresso="limite"``
+    o ``parametri.uscita_segnale="limite"``, altrimenti niente cambia):
+    * al passo 1, l'uscita "chiudi" a limite in attesa si esegue all'apertura se
+      l'apertura e' gia' oltre il suo prezzo; poi, alla barra in cui oggi si
+      entrerebbe, invece dell'ingresso si mette l'ordine limite (prezzo =
+      chiusura della barra prima) e si prova a riempirlo in questa barra e in
+      quelle della validita'; un ordine scaduto si conta fra i saltati;
+    * al passo 2, un riempimento DENTRO la barra valuta stop, target e
+      liquidazione senza le regole dei gap (``apertura_nota=False``); l'uscita a
+      limite in attesa esce al suo prezzo se la barra lo raggiunge e lo stop o la
+      liquidazione non scattano, altrimenti si esce a mercato alla barra dopo;
+    * al passo 3, i settlement della barra di un riempimento dentro la barra
+      sono ambigui (contati solo se costo);
+    * al passo 4, un segnale nuovo mentre l'ordine e' in attesa lo sostituisce;
+      un "chiudi" con ``uscita_segnale="limite"`` mette l'ordine d'uscita alla
+      chiusura della barra, valido per la barra dopo.
+
     ValueError se i ts non sono strettamente crescenti o se una serie stop/mark
     non e' allineata; i buchi si accettano e si contano.
     """
@@ -714,6 +989,16 @@ def esegui(
         return Risultato([], [], parametri.capitale_iniziale, parametri.capitale_iniziale)
     if parametri.ritardo_barre < 0:
         raise ValueError("ritardo_barre deve essere >= 0")
+    if parametri.ingresso not in ("mercato", "limite"):
+        raise ValueError(f"ingresso sconosciuto: {parametri.ingresso!r}")
+    if parametri.uscita_segnale not in ("mercato", "limite"):
+        raise ValueError(f"uscita_segnale sconosciuta: {parametri.uscita_segnale!r}")
+    if parametri.limite_condizione not in ("attraversato", "toccato"):
+        raise ValueError(f"limite_condizione sconosciuta: {parametri.limite_condizione!r}")
+    if parametri.ingresso == "limite" and parametri.limite_validita_barre < 1:
+        raise ValueError("limite_validita_barre deve essere >= 1")
+    ingresso_a_limite = parametri.ingresso == "limite"
+    uscita_a_limite = parametri.uscita_segnale == "limite"
 
     n_buchi = _verifica_serie(candele)
     serie_stop = allinea_serie(candele, candele_stop, "stop")
@@ -724,12 +1009,22 @@ def esegui(
     trades: List[Trade] = []
     curva: List[Tuple[int, float]] = [(candele[0].ts, capitale)]
     pos: Optional[Posizione] = None
-    ingresso_pendente: Optional[Tuple[Segnale, int]] = None  # (segnale, indice barra di ingresso)
-    chiusura_pendente = False
+    # (segnale, indice della barra di ingresso o del primo tentativo del limite, ts della barra del segnale)
+    ingresso_pendente: Optional[Tuple[Segnale, int, int]] = None
+    # ordine limite d'ingresso in attesa: (segnale, prezzo P, prima barra di validita', ultima, ts del segnale)
+    ordine: Optional[Tuple[Segnale, float, int, int, int]] = None
+    chiusura_pendente = False  # "chiudi" a mercato all'apertura della barra
+    uscita_limite: Optional[float] = None  # prezzo dell'ordine limite d'uscita (variante (c)), valido per questa barra
     n_non_validi = 0
     n_senza_barra = 0
     n_capitale_esaurito = 0
     n_funding_in_buco = 0
+    n_ordini_limite = 0
+    n_saltati = 0
+    n_sostituiti = 0
+    n_uscite_eseguite = 0
+    n_uscite_mancate = 0
+    saltati: List[Dict[str, object]] = []
     n = len(candele)
     visibili: List[Candela] = []  # le barre chiuse fin qui: la sola cosa che la strategia puo' raggiungere
 
@@ -739,8 +1034,14 @@ def esegui(
         trades.append(trade)
         curva.append((trade.ts_uscita, capitale))
 
-    def applica_funding(posizione: Posizione, i: int, settlement: Sequence[Tuple[int, float]], chiusa_in_barra: bool) -> None:
-        """Addebita alla posizione i settlement secondo le regole del passo 3."""
+    def applica_funding(
+        posizione: Posizione, i: int, settlement: Sequence[Tuple[int, float]], chiusa_in_barra: bool, ingresso_in_barra: bool = False
+    ) -> None:
+        """Addebita alla posizione i settlement secondo le regole del passo 3.
+
+        ``ingresso_in_barra``: la posizione e' entrata DENTRO questa barra (ordine
+        limite riempito a P): tutti i settlement della barra sono ambigui.
+        """
         nonlocal n_funding_in_buco
         barra = candele[i]
         for t, tasso in settlement:
@@ -750,12 +1051,19 @@ def esegui(
             # Nel buco l'ultimo mark disponibile e' il close della barra precedente.
             mark = serie_mark[i - 1].close if in_buco else serie_mark[i].open
             f = funding_di_un_settlement(posizione.direzione, posizione.quantita, mark, tasso, parametri)
-            ambiguo = (t == posizione.ts_entrata) or (chiusa_in_barra and not in_buco)
+            ambiguo = (t == posizione.ts_entrata) or ((chiusa_in_barra or ingresso_in_barra) and not in_buco)
             if ambiguo and f <= 0:
                 continue
             if in_buco:
                 n_funding_in_buco += 1
             posizione.funding_pagato += f
+
+    def scaduto(ordine_scaduto: Tuple[Segnale, float, int, int, int]) -> None:
+        nonlocal n_saltati
+        segnale_scaduto, prezzo, _, _, ts_segnale = ordine_scaduto
+        n_saltati += 1
+        saltati.append({"ts_segnale": ts_segnale, "direzione": segnale_scaduto.direzione,
+                        "limite_prezzo": prezzo, "stop": segnale_scaduto.stop})
 
     for i in range(n):
         barra = candele[i]
@@ -771,26 +1079,85 @@ def esegui(
             pos = None
         chiusura_pendente = False
 
+        # Uscita "chiudi" a limite (variante (c)) in attesa per questa barra: all'apertura, se gia' oltre
+        # il prezzo, si esce subito A P (l'apertura e' certa e viene prima di tutto; l'ordine in attesa
+        # esegue al suo prezzo, correzione 1 di risultati.md); altrimenti resta in
+        # attesa dentro la barra, dove lo stop e la liquidazione hanno la precedenza (passo 2).
+        limite_uscita_in_barra: Optional[Tuple[float, bool]] = None  # (prezzo, la barra lo raggiunge)
+        if pos is not None and uscita_limite is not None:
+            riempimento = riempimento_limite(uscita_limite, -segno(pos.direzione), barra, parametri.limite_condizione)
+            if riempimento is not None and riempimento[1]:
+                applica_funding(pos, i, [(t, r) for t, r in settlement if t <= barra.ts], chiusa_in_barra=True)
+                registra(_chiudi_posizione(pos, uscita_limite, barra.ts, "segnale", parametri, a_limite=True))
+                pos = None
+                n_uscite_eseguite += 1
+            else:
+                limite_uscita_in_barra = (uscita_limite, riempimento is not None)
+        uscita_limite = None
+
         if pos is None and ingresso_pendente is not None and ingresso_pendente[1] == i:
-            segnale, _ = ingresso_pendente
+            segnale, _, ts_segnale = ingresso_pendente
             ingresso_pendente = None
             if capitale <= 0:
                 n_capitale_esaurito += 1
-            else:
-                pos = _apri_posizione(segnale, barra, capitale, parametri)
+            elif not ingresso_a_limite:
+                pos = _apri_posizione(segnale, barra, capitale, parametri, ts_segnale=ts_segnale)
                 if pos is None:
                     n_non_validi += 1
+            else:
+                # L'ordine limite: prezzo = chiusura della barra prima (quella in cui il segnale si vede,
+                # ritardo compreso), valido da questa barra per limite_validita_barre barre.
+                prezzo_limite = candele[i - 1].close
+                if _ordine_limite_valido(segnale, prezzo_limite):
+                    ordine = (segnale, prezzo_limite, i, i + parametri.limite_validita_barre - 1, ts_segnale)
+                    n_ordini_limite += 1
+                else:
+                    n_non_validi += 1
+
+        # Riempimento dell'ordine limite d'ingresso in attesa (nella stessa barra in cui e' stato messo o in
+        # una delle seguenti della validita').
+        riempito_in_barra = False
+        if pos is None and ordine is not None and ordine[2] <= i <= ordine[3]:
+            segnale, prezzo_limite, primo, ultimo, ts_segnale = ordine
+            riempimento = riempimento_limite(prezzo_limite, segno(segnale.direzione), barra, parametri.limite_condizione)
+            if riempimento is not None:
+                prezzo_riempito, all_apertura = riempimento
+                pos = _apri_posizione_limite(segnale, prezzo_limite, prezzo_riempito, barra, capitale, parametri,
+                                             ts_segnale, barre_attesa=i - primo + 1)
+                if pos is None:
+                    n_non_validi += 1
+                riempito_in_barra = pos is not None and not all_apertura
+                ordine = None
+            elif i == ultimo:
+                scaduto(ordine)
+                ordine = None
 
         # 2. durante la barra: stop, target, liquidazione
         if pos is not None:
-            esito_prezzo = valuta_uscita_in_barra(pos, barra, serie_stop[i], serie_mark[i], parametri)
+            esito_prezzo = valuta_uscita_in_barra(pos, barra, serie_stop[i], serie_mark[i], parametri,
+                                                  apertura_nota=not riempito_in_barra)
+            uscita_eseguita_a_limite = False
+            if limite_uscita_in_barra is not None:
+                prezzo_uscita_limite, raggiunto = limite_uscita_in_barra
+                if esito_prezzo is not None and esito_prezzo[0] in ("stop", "liquidazione"):
+                    pass  # regola peggiore: lo stop (o la liquidazione) vale anche se la barra raggiunge il limite
+                elif raggiunto:
+                    esito_prezzo = ("segnale", prezzo_uscita_limite)
+                    uscita_eseguita_a_limite = True
             # 3. funding dei settlement caduti nel buco prima della barra o nella barra
-            applica_funding(pos, i, settlement, chiusa_in_barra=esito_prezzo is not None)
+            applica_funding(pos, i, settlement, chiusa_in_barra=esito_prezzo is not None, ingresso_in_barra=riempito_in_barra)
             if esito_prezzo is not None:
                 esito, prezzo = esito_prezzo
                 # Si sa solo che e' successo entro la chiusura della barra: ts_uscita = close_ts.
-                registra(_chiudi_posizione(pos, prezzo, barra.close_ts, esito, parametri))
+                registra(_chiudi_posizione(pos, prezzo, barra.close_ts, esito, parametri, a_limite=uscita_eseguita_a_limite))
                 pos = None
+            if limite_uscita_in_barra is not None:
+                if uscita_eseguita_a_limite:
+                    n_uscite_eseguite += 1
+                else:
+                    n_uscite_mancate += 1
+                    if pos is not None:
+                        chiusura_pendente = True  # non eseguito: a mercato all'apertura della barra dopo
 
         # 5. fine dei dati: chiusura forzata all'ultimo close
         if i == n - 1 and pos is not None:
@@ -803,17 +1170,26 @@ def esegui(
         decisione = strategia(StoriaChiusa(visibili, i + 1), pos)
         if isinstance(decisione, Segnale):
             if pos is None and ingresso_pendente is None:
+                if ordine is not None:
+                    # un segnale nuovo mentre l'ordine limite e' in attesa: il nuovo sostituisce il vecchio
+                    n_sostituiti += 1
+                    ordine = None
                 indice = i + 1 + parametri.ritardo_barre
                 if indice < n:
-                    ingresso_pendente = (decisione, indice)
+                    ingresso_pendente = (decisione, indice, barra.ts)
                 else:
                     n_senza_barra += 1
         elif decisione == "chiudi":
-            if pos is not None:
-                chiusura_pendente = True
+            if pos is not None and not chiusura_pendente:
+                if uscita_a_limite:
+                    uscita_limite = barra.close
+                else:
+                    chiusura_pendente = True
         elif decisione is not None:
             raise ValueError(f"la strategia ha restituito un valore sconosciuto: {decisione!r}")
 
+    if ordine is not None:
+        scaduto(ordine)  # i dati sono finiti durante la validita': l'ordine non si e' riempito
     if curva[-1][0] != candele[-1].close_ts:
         curva.append((candele[-1].close_ts, capitale))
     return Risultato(
@@ -826,6 +1202,12 @@ def esegui(
         n_segnali_capitale_esaurito=n_capitale_esaurito,
         n_buchi_dati=n_buchi,
         n_funding_in_buco=n_funding_in_buco,
+        n_ordini_limite=n_ordini_limite,
+        n_saltati=n_saltati,
+        n_sostituiti=n_sostituiti,
+        n_uscite_limite_eseguite=n_uscite_eseguite,
+        n_uscite_limite_mancate=n_uscite_mancate,
+        saltati=saltati,
     )
 
 
