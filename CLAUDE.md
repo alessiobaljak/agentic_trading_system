@@ -11,7 +11,11 @@ autosufficiente.
 Bot di trading crypto autonomo, in **paper trading**. Gira su una VPS Hetzner, tiene
 lo stato su Firebase, e la dashboard Next.js (Vercel) lo mostra. La ricerca delle
 strategie e' un job separato (`scripts/optimize.py`, `scripts/discover_strategies.py`)
-che gira ogni 3 ore e alimenta il registro `strategy_registry/validated`.
+che girava ogni 3 ore e alimentava il registro `strategy_registry/validated`. **Dal 13 ott 2026 la ricerca
+automatica del gate è FERMA** (file `ops/gate_fermo`, sì del proprietario): il paper resta acceso come banco di
+misura, con gli ingressi a ordine limite (`bot/execution/executor.py`, misure in RTDB `/paper/ordini_limite`).
+La ricerca riparte solo con la seconda edizione del protocollo (`research/PROTOCOLLO_2.md`, bozza del 13 ott),
+quando il proprietario la approva.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
