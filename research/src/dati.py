@@ -9,10 +9,14 @@ cosi' le candele caricate entrano nel motore senza conversioni.
 Il blocco del vault
 -------------------
 Il vault e' il periodo dal 2024-01-01 al 2026-09-30. Finche' non esiste il file
-``<radice>/vault/APERTURA.md`` (creato solo dopo che l'utente ha scritto in chat
-"APRI IL VAULT"), qualunque richiesta di dati con una data oltre il 2023-12-31
-viene rifiutata con ``VaultChiuso`` PRIMA di qualunque accesso alla rete o al
-disco. Anche un solo giorno oltre il limite basta a far scattare il rifiuto:
+``<radice>/vault/APERTURA_2.md`` (il marcatore della SECONDA edizione del
+protocollo, ``research/PROTOCOLLO_2.md``, creato solo dopo che l'utente ha
+scritto in chat "APRI IL VAULT 2"), qualunque richiesta di dati con una data
+oltre il 2023-12-31 viene rifiutata con ``VaultChiuso`` PRIMA di qualunque
+accesso alla rete o al disco. Il marcatore della prima edizione,
+``vault/APERTURA.md`` (vault aperto l'11 ottobre 2026 per tre candidati), NON
+apre piu' il vault dal 13 ottobre 2026: resta nel repository come documento,
+non come chiave. Anche un solo giorno oltre il limite basta a far scattare il rifiuto:
 il controllo si fa sull'intero periodo richiesto, non mese per mese, cosi' un
 periodo a cavallo del limite non scarica nemmeno la parte lecita (chi lo
 chiede ha sbagliato qualcosa e deve accorgersene). Il file deve avere un
@@ -250,7 +254,7 @@ Fetch = Callable[[str], Optional[bytes]]
 
 
 class VaultChiuso(Exception):
-    """Richiesta di dati oltre il 2023-12-31 senza il file vault/APERTURA.md."""
+    """Richiesta di dati oltre il 2023-12-31 senza il file vault/APERTURA_2.md (seconda edizione)."""
 
 
 class OltreIlVault(ValueError):
@@ -292,15 +296,22 @@ class IntegritaFallita(ValueError):
 # ---------------------------------------------------------------------------
 
 
+#: il marcatore che apre il vault (seconda edizione, dal 13 ottobre 2026); quello
+#: della prima edizione, ``APERTURA.md``, non apre piu' niente
+MARCATORE_VAULT = "APERTURA_2.md"
+MARCATORE_VAULT_PRIMA_EDIZIONE = "APERTURA.md"
+
+
 def vault_aperto(radice: Path = RADICE_DEFAULT) -> bool:
-    """True se ``<radice>/vault/APERTURA.md`` esiste ed ha un contenuto: il vault e' aperto.
+    """True se ``<radice>/vault/APERTURA_2.md`` esiste ed ha un contenuto: il vault e' aperto.
 
     Il Passo 5 del protocollo crea il file con data, ora ed elenco dei
     candidati congelati: un file da 0 byte (o di soli spazi) e' un incidente,
     non un'apertura, e viene trattato come assente. Una cartella con quel
-    nome non conta.
+    nome non conta. ``APERTURA.md`` (prima edizione) non conta: dal 13 ottobre
+    2026 il vault si riapre solo con il marcatore della seconda edizione.
     """
-    percorso = Path(radice) / "vault" / "APERTURA.md"
+    percorso = Path(radice) / "vault" / MARCATORE_VAULT
     if not percorso.is_file():
         return False
     try:
@@ -319,7 +330,7 @@ def controlla_vault(fine: date, radice: Path = RADICE_DEFAULT) -> None:
       anche a vault aperto: da li' in poi e' il periodo del paper trading,
       che il protocollo vieta di usare come dato di ricerca;
     * oltre ``FINE_IN_SAMPLE`` (2023-12-31) si solleva ``VaultChiuso`` finche'
-      non esiste (con un contenuto) ``vault/APERTURA.md``.
+      non esiste (con un contenuto) ``vault/APERTURA_2.md``.
     """
     if fine > FINE_VAULT:
         raise OltreIlVault(
@@ -329,7 +340,7 @@ def controlla_vault(fine: date, radice: Path = RADICE_DEFAULT) -> None:
     if fine > FINE_IN_SAMPLE and not vault_aperto(radice):
         raise VaultChiuso(
             f"richiesti dati fino al {fine.isoformat()}, oltre il {FINE_IN_SAMPLE.isoformat()}: "
-            f"il vault e' chiuso (manca {Path(radice) / 'vault' / 'APERTURA.md'})"
+            f"il vault e' chiuso (manca {Path(radice) / 'vault' / MARCATORE_VAULT})"
         )
 
 

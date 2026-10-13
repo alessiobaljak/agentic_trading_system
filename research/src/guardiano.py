@@ -28,7 +28,8 @@ Come decide:
     ogni azione e' rifiutata;
   * `{"tipo": "coordinamento"}` -> lista NERA: tutto ammesso tranne i
     `percorsi_vietati`, i segreti e `research/data/vault/` finche' il vault e'
-    chiuso (manca `research/vault/APERTURA.md`); gli strumenti diversi da
+    chiuso (manca `research/vault/APERTURA_2.md`, il marcatore della seconda
+    edizione: dal 13 ott 2026 `APERTURA.md` non apre piu'); gli strumenti diversi da
     file, ricerche e Bash non li guarda;
   * in modalita' attiva qualunque errore imprevisto blocca (fail-closed): un
     guardiano che si rompe non deve aprire la porta.
@@ -799,7 +800,7 @@ def costruisci_contesto(radice: str, marcatore: dict) -> Contesto:
         tipo=tipo,
         simbolo=simbolo,
         vietati=leggi_vietati(radice),
-        vault_aperto=os.path.isfile(os.path.join(radice, "research", "vault", "APERTURA.md")),
+        vault_aperto=os.path.isfile(os.path.join(radice, "research", "vault", "APERTURA_2.md")),
         primo_livello=primo_livello,
         monete_gruppo=monete_gruppo,
     )

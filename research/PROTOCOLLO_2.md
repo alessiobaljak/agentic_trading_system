@@ -351,3 +351,15 @@ Candela 1d invece di 15m-1h; posizioni da giorni a settimane; il paniere invece 
 varianti invece di 30 varianti per moneta; ingresso a limite; vault dichiarato e aperto una volta per tutte le candidate; il paper
 come esame finale obbligatorio con la regola scritta prima; una sola sessione di campagna; il Passo 0 misura il
 costo per trade e il funding a 1d prima di qualunque variante.
+
+## Correzioni al testo dopo l'approvazione (solo in aggiunta, mai una riga cancellata)
+
+1. **13 ott 2026, 20:40 UTC — minimi di trade sommati (sezione 7, punto 1).** Il testo cita «costruzione 300,
+   validazione 100, vault 300» come se fossero quelli delle regole del gruppo: non lo sono. Le regole del gruppo
+   (`parametri.yaml`, blocco `gruppo.trade_minimi`) dicono **costruzione 700, validazione 300, vault 300**, e
+   sono questi che valgono anche per la seconda edizione: nessun motivo per abbassarli (a barre giornaliere il
+   paniere dà 1.500-2.500 trade sommati in costruzione per le idee A e B, stima da verificare al Passo 0). Trovata
+   rileggendo il testo prima del Passo 0, prima di qualunque dato.
+2. **13 ott 2026, 20:45 UTC — il vault è richiuso (sezione 10, punto 5): fatto.** `research/src/dati.py` accetta
+   date oltre il 2023-12-31 solo con `research/vault/APERTURA_2.md`; `APERTURA.md` dell'11 ottobre non apre più;
+   il guardiano guarda lo stesso marcatore. Test in `research/src/tests/test_dati.py`.

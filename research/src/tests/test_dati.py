@@ -60,7 +60,20 @@ class FetchFinto:
 
 def apri_vault(radice: Path) -> None:
     (radice / "vault").mkdir(parents=True, exist_ok=True)
-    (radice / "vault" / "APERTURA.md").write_text("aperto nel test\n")
+    (radice / "vault" / "APERTURA_2.md").write_text("aperto nel test\n")
+
+
+def test_il_marcatore_della_prima_edizione_non_apre_piu_il_vault(tmp_path):
+    """Dal 13 ott 2026 (seconda edizione) apre solo APERTURA_2.md: il file
+    dell'11 ott, APERTURA.md, e' un documento, non una chiave."""
+    (tmp_path / "vault").mkdir(parents=True)
+    (tmp_path / "vault" / "APERTURA.md").write_text("vault aperto l'11 ottobre 2026\n")
+    assert dati.vault_aperto(tmp_path) is False
+    with pytest.raises(dati.VaultChiuso):
+        dati.controlla_vault(date(2024, 1, 31), tmp_path)
+    (tmp_path / "vault" / "APERTURA_2.md").write_text("APRI IL VAULT 2, 2026-xx-xx\n")
+    assert dati.vault_aperto(tmp_path) is True
+    dati.controlla_vault(date(2024, 1, 31), tmp_path)
 
 
 # ---------------------------------------------------------------------------
