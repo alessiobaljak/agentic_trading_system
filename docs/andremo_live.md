@@ -3623,3 +3623,33 @@ sono i migliori: R medio in M +0,68 contro +0,06 di tutti; in validazione BTCUSD
 entrate casuali risparmiano lo stesso (+0,016 R): i costi scendono, un vantaggio non nasce. Le uscite a limite
 (variante c) non convengono: costo 0,022 R ma lordo da 0,086 a 0,048 R. Esito secondo le soglie: «conviene poco»;
 decide il proprietario (proposta nel file, sezione 2.2). GRUPPO-048 non eseguita (servono i dati di 80 monete).
+
+### 13 ottobre, 20:10 ora italiana: «procedi con tutto» — gate fermo, ingressi a limite nel paper, seconda edizione in bozza
+
+Alle 19:20 il proprietario ha chiesto cosa fare del gate; la risposta (e la proposta nel backlog) è stata: fermare la
+ricerca automatica, cambiare terreno (giorni invece di ore, il paniere invece della moneta, poche idee con fonte),
+tenere il vault con tre condizioni e usare il paper come esame finale. Alla domanda «il vault 2024-2026 resta
+corretto?» la risposta è sì, con la contaminazione dichiarata, nessuna idea nata dal vault, una apertura per tutte le
+candidate; e una correzione a quanto scritto prima (niente validazione sul 2024-2025: nove mesi di 2026 non bastano a
+barre giornaliere). Alle 19:50 «ok procedi con tutto». Fatto, in ordine:
+
+1. **Ricerca automatica del gate FERMA** (commit 4c315e80, pushato alle 19:54, prima del giro delle 20:00): il file
+   `ops/gate_fermo` fa uscire subito `scripts/optimize.py` e `scripts/discover_strategies.py` (`bot/core/gate_fermo.py`);
+   per riaccenderla si toglie il file con un commit. Il paper resta acceso; il registro non si tocca. Richieste ops
+   0613 e 0614 per vedere il log del giro e i timer.
+2. **Ingressi a ordine limite nel paper** (commit 6d50adfa): in `DRY_RUN` la decisione mette un ordine limite virtuale
+   alla chiusura della candela di segnale, valido una candela, riempito al suo prezzo se il prezzo lo attraversa
+   (correzione 1 della prova), altrimenti il segnale è saltato; maker 0,02% e scarto zero all'ingresso, uscite a
+   mercato come prima; ordini in attesa in RTDB `/ordini_limite` (ripristino al riavvio), contatori e segnali saltati
+   in `/paper/ordini_limite`, campi `ingresso_tipo`, `limite_prezzo`, `attesa_ingresso_s` sul trade chiuso. 13 test
+   nuovi; suite del bot 2.305 passati (un test del gate ora dichiara di ignorare l'interruttore). Richieste ops 0615
+   (riavvio del bot) e 0616 (log dopo il riavvio). La dashboard non è stata toccata: gli ordini in attesa non si
+   vedono lì, solo in RTDB. Fra 3-4 settimane si misurano tasso di esecuzione, costo per trade e R dei segnali
+   saltati.
+3. **Seconda edizione del protocollo, BOZZA** (`research/PROTOCOLLO_2.md`, commit 7262d0df): candele giornaliere,
+   paniere delle 80 monete del gruppo, due idee con fonte (tendenza; momentum fra monete), 10 varianti e 2 ritocchi
+   per famiglia, ingresso a limite, vault 2024-2026 con le tre condizioni, il paper come esame finale con la regola
+   scritta prima (6 mesi o 150 trade; passa se R netto > 0, nettamente sopra le entrate casuali dello stesso periodo,
+   esecuzione ≥ 70% con costi entro 1,5 volte il modello, drawdown entro 1,5 volte il vault), Passo 0 degli strumenti
+   (dati 1d, motore a 1d con la misura del funding, serie di paniere, placebo a 1d, marcatore «APRI IL VAULT 2»).
+   Cinque domande aperte al proprietario nella sezione 13. Niente parte senza il suo sì.
