@@ -1,5 +1,9 @@
 # Campagna del paniere (seconda edizione del protocollo) — regole della sessione
 
+> **In vigore dal 2026-10-14 06:56 UTC** (preso con `date -u` subito prima del commit che apre la campagna; è l'istante che
+> il controllo della sezione 9 del protocollo usa per `research/campagna/PANIERE`). Testo scritto dal coordinamento al
+> Passo 0 della seconda edizione e completato il 14 ottobre 2026 dopo il «procedi» del proprietario (05:00 UTC circa).
+
 Testo scritto dal coordinamento al Passo 0 della seconda edizione (`research/PROTOCOLLO_2.md`, approvata dal
 proprietario il 13 ottobre 2026). In sola lettura per la sessione di campagna, come `monete.csv`, le `schede/` e
 `via_libera_validazione.md` (guardiano, `_PROTETTI_FILE`).
@@ -135,6 +139,18 @@ Scritti il 13 ottobre 2026 (22:10 UTC) dal coordinamento, a Passo 0 finito.
     questi due motivi, non per un errore degli strumenti; riportalo com'è (t, blocchi, monete senza ingressi e
     loro quota) e scrivilo all'utente senza fermarti, salvo un errore vero (eccezione, numeri assurdi, con il
     ritardo un `t` che non scende).
+  * **Prova a placebo a 1d rifatta con gli strumenti nuovi** (`research/taratura/placebo_paniere/risultati.md`, 14
+    ottobre, 06:56 UTC, commit c9bb86ad; i 96 esiti del 13 ottobre sono in `lancio_13ott/`): **regge**, con i 96
+    esami identici bit per bit a quelli del 13 ottobre (nessuna placebo aveva monete senza ingressi, come atteso):
+    47 valutabili per periodo, 0 «nette» su 47 in costruzione, 0 su 47 con p sotto 0,10 in validazione, code M3
+    0,35% e 0,58%.
+  * **Impronte degli strumenti buone per questa campagna** (sezione 6 delle regole della prova a placebo, rilancio
+    del 14 ottobre; sono quelle che il via libera alla validazione dovrà ritrovare):
+    * `7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7`  `research/config/parametri.yaml`
+    * `1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5`  `research/src/dati.py`
+    * `1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990`  `research/src/gruppo.py`
+    * `2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6`  `research/src/motore.py`
+    * `e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1`  `research/src/statistica.py`
 
 ## 7. Copia parola per parola delle sezioni 3, 4, 5 e 7 di `research/PROTOCOLLO_2.md` e delle sue correzioni
 

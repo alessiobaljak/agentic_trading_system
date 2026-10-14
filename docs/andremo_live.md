@@ -3681,3 +3681,38 @@ quando una variante è in posizione quasi sempre (13-16 monete su 80), e con poc
 costruzione, e la potenza dipende dalla durata delle posizioni; il funding è il costo che conta a questo orizzonte.
 Lo STOP chiede al proprietario quattro cose (rapporto, sezione «Lo STOP»); nessuna sessione di campagna si apre
 prima.
+
+### 14 ottobre, 07:00-09:00 ora italiana: «procedi» del proprietario, la regola delle monete senza entrate casuali, i ricontrolli, la campagna del paniere si apre
+
+Alle 07:00 il proprietario ha risposto «procedi» alle quattro domande dello STOP del Passo 0: sì a tutte come
+proposte (`research/PROTOCOLLO_2.md`, correzioni 3 e 4; `research/passo0_2/rapporto.md`, ultima sezione). Fatto, in
+ordine, con la regola scritta prima del codice:
+
+1. **Parametri congelati** (`research/config/parametri_2.yaml`, `approvazione_parametri` 2026-10-14T05:00Z).
+2. **La regola delle monete su cui le entrate casuali non entrano** (commit c9bb86ad): nella baseline con entrate
+   casuali di gruppo una moneta su cui gli ingressi non entrano resta fuori dal confronto, come già una moneta senza
+   trade della baseline a uscita fissa; la variante è non valutabile solo se quelle monete portano più del 10% dei
+   suoi trade. Le monete lasciate fuori restano fuori anche dalla «B ripesata» di stabilità ed estremi. Senza monete
+   lasciate fuori i numeri sono identici a prima, bit per bit (test). In più il lettore delle schede segue il
+   marcatore della campagna (la sessione del paniere legge le sue schede). Test: 2.425 della ricerca e 2.305 del bot
+   passati; due test della prova a placebo a 1 ora, fermi dal 13 ottobre per il «1d» aggiunto al modulo, aggiornati.
+3. **Controllo positivo a un giorno rifatto con la regola** (`research/passo0_2/controllo_positivo_1d_regola3.json`):
+   non passa, e si capisce perché: senza ritardo le monete escluse portano il 12,0% (long) e il 13,3% (short) dei
+   trade della strategia che guarda avanti, oltre il 10%; con il ritardo il confronto si costruisce (1,1% e 3,7%) e il
+   vantaggio sparisce (t −0,28 e −0,55). Contro la baseline a uscita fissa t 1,47 e 1,46 con 7 blocchi: +0,3 R a
+   trade non è «netto» a questo orizzonte, come già detto il 13. Scritto nelle regole della campagna, sezione 6,
+   perché la sessione non lo scambi per un guasto.
+4. **Prova a placebo a un giorno rifatta con gli strumenti nuovi** (06:56 UTC, `research/taratura/placebo_paniere/
+   risultati.md`; i 96 esiti del 13 in `lancio_13ott/`): regge, 96 esami identici bit per bit a quelli del 13
+   ottobre (confronto riga per riga). Impronte degli strumenti del rilancio nelle regole della prova (sezione 6) e
+   della campagna (sezione 6).
+5. **Regole della campagna PANIERE completate** (`research/campagne/PANIERE/regole.md`, in vigore dal 2026-10-14
+   06:56 UTC): la sessione riscarica i dati giornalieri e li confronta con `impronte_1d.json`; la regola del 10%;
+   la frase di contaminazione da scrivere in testa a `ipotesi.md` (senza i numeri del vault: la sessione non legge
+   `PROTOCOLLO_2.md`, che nella sezione 8 li contiene); le decisioni del 14 ottobre; la copia parola per parola delle
+   sezioni 3, 4, 5 e 7 della seconda edizione e delle correzioni. Messaggio di apertura in
+   `research/apertura/paniere.md`.
+
+Cosa abbiamo capito oggi: `docs/capito.md`, sezione del 14 ottobre. La sessione di campagna del paniere si apre
+subito dopo questo commit (modello Opus 5.5 con ultracode, da controllare dopo l'apertura), con il controllo orario
+del coordinamento.

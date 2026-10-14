@@ -116,6 +116,8 @@ il controllo positivo a 1d si rifanno; gli esiti vanno in `research/taratura/pla
   −0,28 (long) e −0,55 (short): il vantaggio sparisce come deve. Contro la (a) senza ritardo t 1,47 e 1,46 con 7
   blocchi (R medio +0,37 e +0,27 a trade contro +0,04 e −0,08 della (a), effetto grappolo 39 e 30): non «netto».
   Conferma della lezione 2: con posizioni fino a 60 barre i blocchi sono 7 e anche +0,3 R a trade non risulta netto.
-* **Prova a placebo a 1d con la regola nuova**: in corso (lancio delle 05:37 UTC, commit c9bb86ad); atteso identico al
-  13 ottobre (nessuna delle 96 placebo aveva monete senza ingressi). Esito in
-  `research/taratura/placebo_paniere/risultati.md`.
+* **Prova a placebo a 1d con la regola nuova** (lancio delle 05:37 UTC, finita alle 06:56 UTC, commit c9bb86ad):
+  **regge**, 96 esami identici bit per bit a quelli del 13 ottobre (confronto riga per riga: 96 uguali, 0 diverse;
+  nessuna placebo aveva monete senza ingressi, come atteso). Esito in `research/taratura/placebo_paniere/risultati.md`,
+  esiti del 13 ottobre in `lancio_13ott/`. Impronte degli strumenti del rilancio nella sezione 6 delle regole della
+  prova e nella sezione 6 delle regole della campagna PANIERE. **La campagna si apre.**
