@@ -3725,3 +3725,18 @@ ultracode non risulta nei dati della sessione subito dopo l'apertura (`external_
 già successo l'8 e il 10 ottobre: lo decide il proprietario, non si riapre a ripetizione. Routine «Controllo orario
 della campagna PANIERE» (trig_01Uts2o19mJZbZQsGZRauho9, ogni ora al minuto 59) in questa sessione di coordinamento.
 Dal branch della campagna si leggono solo titoli e orari dei commit.
+
+### 14 ottobre, 09:30 ora italiana: la sessione del paniere si è fermata a una domanda (il guardiano le negava le regole del gruppo); correzione nel branch
+
+Il proprietario alle 09:30 ha segnalato che la campagna aveva chiesto qualcosa. `get_session`: ferma dalle 09:13 con
+«guardiano blocca regole.md del gruppo; serve scelta 1 o 2» (1: copia delle regole del gruppo nella sua cartella;
+2: correzione del guardiano). Errore mio di apertura: le regole della campagna PANIERE ereditano quelle del gruppo e il
+messaggio di apertura dice di leggerle, ma il guardiano ammette alla campagna solo la propria cartella. Scelta 2, la
+più pulita: `guardiano.py` ammette in sola lettura `research/campagne/GRUPPO/regole.md` alle campagne di gruppo
+diverse da GRUPPO (`_FILE_EREDITATI_DAL_GRUPPO`); il resto della cartella del gruppo resta vietato; test in
+`test_guardiano_paniere.py` (803 test dei due guardiani di gruppo passati, gli altri in coda). Portata nel branch
+della campagna con un solo commit sopra la punta «PANIERE: log aperto, rifiuto del guardiano registrato», senza
+estrarre il branch (regole del gruppo, sezione 11, punto 6), e mandata nella sessione la frase di correzione con la
+risposta alla sua domanda. Due commit della sessione prima dello STOP (09:13): apertura con la frase di contaminazione
+in testa a `ipotesi.md`, log aperto con il rifiuto registrato. Primo push entro i 35 minuti: sì (09:13 per un'apertura
+alle 09:09).
