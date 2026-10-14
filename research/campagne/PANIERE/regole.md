@@ -143,12 +143,30 @@ Scritti il 13 ottobre 2026 (22:10 UTC) dal coordinamento, a Passo 0 finito.
     ottobre, 06:56 UTC, commit c9bb86ad; i 96 esiti del 13 ottobre sono in `lancio_13ott/`): **regge**, con i 96
     esami identici bit per bit a quelli del 13 ottobre (nessuna placebo aveva monete senza ingressi, come atteso):
     47 valutabili per periodo, 0 «nette» su 47 in costruzione, 0 su 47 con p sotto 0,10 in validazione, code M3
-    0,35% e 0,58%.
-  * **Impronte degli strumenti buone per questa campagna** (sezione 6 delle regole della prova a placebo, rilancio
-    del 14 ottobre; sono quelle che il via libera alla validazione dovrà ritrovare):
+    0,35% e 0,58%. (Esiti poi spostati in `lancio_14ott_mattina/`: la prova è stata rifatta una terza volta con il
+    terreno della seconda edizione, voce qui sotto.)
+  * **Controllo positivo a 1d con gli strumenti della correzione 5 e il terreno della seconda edizione (ordine limite)**
+    (`research/passo0_2/controllo_positivo_1d_seconda_edizione.json`, 14 ottobre, 09:50 UTC, stessa regola «rottura»
+    con uscita ATR e tetto di 60 barre, 80 monete): **non passa nella forma del gruppo, ma la (b) adesso si
+    costruisce per il long**. Long senza ritardo: valutabile (le monete su cui la (b) non entra sono 11 e portano il
+    9,6% dei trade, 339 su 3.519: sotto il 10%), R medio +0,38 a trade, contro la (b) t 2,54 e p 0,022: **«netto»**;
+    contro la (a) t 1,48 con 7 blocchi: non netto (è la (a) che manca al controllo, non la (b)); con il ritardo t
+    −0,28: il vantaggio sparisce come deve. Short senza ritardo: ancora non valutabile (16 monete senza (b), 13,3%
+    dei trade, 453 su 3.414); con il ritardo t −0,50. **Per la sessione:** la lezione è la stessa delle voci sopra
+    (pochi blocchi, monete dalla storia corta), e il controllo positivo che farai con il tuo modulo va riportato
+    com'è, senza fermarti, salvo un errore vero.
+  * **Prova a placebo a 1d rifatta una terza volta, con gli strumenti della correzione 5 e il terreno della seconda
+    edizione (ordine limite)** (`research/taratura/placebo_paniere/risultati.md`, 14 ottobre, 11:40 UTC, commit
+    08e2c95a; gli esiti dei due lanci precedenti in `lancio_13ott/` e `lancio_14ott_mattina/`): **regge**. 96 esami;
+    valutabili 46 in costruzione (2 scarti sotto i 700 trade: con l'ordine limite qualche segnale non si riempie) e 47
+    in validazione; «nette» in costruzione 0 su 46 (soglia 3%); p sotto 0,10 in validazione 0 su 47 (soglia 13%);
+    code M3 0,35% e 0,65%. I numeri sono diversi da quelli dei lanci a mercato, come scritto prima nella correzione 4
+    delle regole della prova. È la prova che vale per questa campagna: stesso terreno, stessi strumenti.
+  * **Impronte degli strumenti buone per questa campagna** (sezione 6 delle regole della prova a placebo, terzo
+    lancio del 14 ottobre, con la correzione 5; sono quelle che il via libera alla validazione dovrà ritrovare):
     * `7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7`  `research/config/parametri.yaml`
     * `1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5`  `research/src/dati.py`
-    * `1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990`  `research/src/gruppo.py`
+    * `f3c196258e7f8bec38e7cc3f2069a7a2fe9ef69ab398f8b8beaeb01e320cb326`  `research/src/gruppo.py`
     * `2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6`  `research/src/motore.py`
     * `e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1`  `research/src/statistica.py`
 
@@ -346,3 +364,78 @@ alzare la soglia a t 3,96 e ha passato solo rumore fortunato.
    che dichiara la contaminazione senza ricopiare i numeri: così resta dichiarata senza passare alla sessione che
    sceglie i ritocchi. Le idee, le varianti e il terreno che la sessione deve conoscere (sezioni 3, 5 e 7) sono
    ricopiati nelle regole della campagna, in sola lettura, parola per parola.
+
+5. **14 ott 2026, 09:15 UTC — la serie di paniere arriva alla variante (sezione 5, idea B e variante C2; sezione 10,
+   punto 3): scelta (a) del proprietario.** Alla fine della Fase 0 la sessione di campagna ha fatto notare che le
+   funzioni della variante ricevono da `gruppo.py` solo le candele della propria moneta e di BTCUSDT: la classifica
+   del paniere (idea B) e «le 20 monete più in ritardo» (C2) non si possono calcolare. Il Passo 0, punto 3, aveva
+   costruito la serie (`paniere.py`) senza il passaggio alla variante. Domanda girata al proprietario alle 09:00 UTC
+   («(a) estendere gruppo.py e rifare il placebo, oppure (b) lavorare solo su A e C1»); risposta «a» alle 09:05 UTC.
+   Cosa cambia, scritto prima del rilancio della prova: (1) il contesto della variante ha `ctx.paniere_chiuse_entro(ts)`,
+   le righe GIORNALIERE del paniere (un giorno UTC per riga: `ts`, `close_ts`, `chiusure` = {simbolo: chiusura last 1d}
+   di tutte le monete dell'esame e di BTCUSDT con la candela quel giorno, `sotto_liquidita` = le monete il cui mese è
+   sotto la soglia), limitate alla chiusura dell'ultima barra ricevuta come le candele di BTCUSDT (mai una riga del
+   futuro), costruite una volta per esame nel processo principale dalle stesse serie 1d della Fase 0 e incluse
+   nell'impronta dei dati di ogni pezzo; (2) il contesto ha `ctx.simbolo`, il simbolo della moneta del pezzo, che
+   serve SOLO a trovare la propria moneta nel paniere: resta vietata una regola che tratta una moneta diversamente
+   dalle altre per nome (la regola della sezione 3, punto 3, delle regole del gruppo, «niente strategie fra monete»,
+   è superata per la seconda edizione dalla sezione 5 di questo testo, che le idee B e C sono); (3) il modulo della
+   variante può importare `research.src.paniere`, che ha tre funzioni «dell'ultimo giorno» sulle righe
+   (`rendimenti_ultimo_giorno`, `classifica_ultimo_giorno` con la stessa regola di parità di `classifica`,
+   `giorno_forte_ultimo` con la deviazione dei 60 giorni precedenti), con i test che le confrontano con le funzioni
+   sulle matrici intere; (4) **il terreno d'ingresso negli strumenti** (seconda nota della sessione, 09:14 UTC: gli
+   strumenti costruivano i parametri del motore con l'ingresso a mercato della prima edizione): `gruppo.py` costruisce
+   da solo i `Parametri` del motore con l'ordine limite della sezione 3.1 (alla chiusura della candela di segnale,
+   valido una candela, condizione «attraversato», maker 0,02%, scarto zero all'ingresso; uscite a mercato con lo
+   scarto della scheda), letti da `research/config/parametri_2.yaml` congelato (`terreno_seconda_edizione`), e li
+   riporta nelle opzioni dell'esame (quindi nella sua impronta). In una sessione di campagna il terreno lo decide il
+   marcatore (PANIERE: seconda edizione) e la sessione non può chiederne un altro; fuori campagna lo sceglie chi
+   chiama (la prova a placebo del paniere e il vault passano «seconda_edizione»). Per una variante che non usa il
+   paniere e con il terreno della prima edizione i numeri dell'esame non cambiano (test). **La prova a placebo a 1d si
+   rifà con gli strumenti nuovi e con il terreno della seconda edizione** prima che la sessione registri la prima
+   variante: con l'ordine limite i riempimenti cambiano, quindi i numeri NON saranno quelli del 13 ottobre (atteso,
+   scritto prima: cambiano i trade, deve reggere lo stesso l'esame, con le soglie delle regole della prova); e il
+   controllo positivo si rifà con lo stesso terreno. La correzione entra nel branch della campagna al suo STOP
+   (regole del gruppo, sezione 11, punto 6). Nessuna variante è stata esaminata prima della correzione: la sessione
+   si è fermata alla Fase 0 per questo.
+
+## 8. Correzioni (solo in aggiunta, scritte dal coordinamento; dove dicono cose diverse dalle sezioni sopra, valgono loro)
+
+### Correzione 1 — come la variante riceve la serie di paniere (14 ottobre 2026, dopo la scelta (a) del proprietario)
+
+La sezione 4 dice che la serie di paniere per le idee B e C «va calcolata nel modulo dalle candele che `gruppo.py`
+passa». Alla Fase 0 la sessione ha fatto notare che `gruppo.py` passava solo le candele della propria moneta e di
+BTCUSDT: non bastano. Il proprietario ha scelto di estendere lo strumento (correzione 5 di PROTOCOLLO_2, copiata
+qui sotto nella sezione 7 alla voce «Correzioni al testo»). Da questa correzione in poi, in `research/src/gruppo.py`
+(contratto nella docstring, punto 3):
+
+* `ctx.paniere_chiuse_entro(ts)` dà le righe giornaliere del paniere viste fino a `ts` e mai oltre la chiusura
+  dell'ultima barra ricevuta: ogni riga ha `ts` (apertura del giorno UTC), `close_ts`, `chiusure` (il dizionario
+  {simbolo: chiusura last 1d} delle 80 monete e di BTCUSDT che hanno la candela quel giorno, in sola lettura) e
+  `sotto_liquidita` (le monete il cui mese è sotto la soglia di liquidità quel giorno). Un giorno per riga, tutti i
+  giorni del calendario dal primo giorno di dati della moneta più antica alla fine del periodo. A barre giornaliere
+  la riga del giorno `t` ha lo stesso `close_ts` della candela di `t`: alla chiusura di `t` la variante la vede.
+* `ctx.simbolo` è il simbolo della moneta del pezzo. Serve SOLO a trovare la propria moneta nella classifica: una
+  regola che tratta una moneta diversamente dalle altre per nome resta vietata (regole del gruppo, sezione 3, punto
+  3, che per il resto è superata dalle idee B e C della seconda edizione).
+* Il modulo della variante può importare `research.src.paniere`, che ha tre funzioni per le righe del paniere, da
+  chiamare alla chiusura di ogni barra: `classifica_ultimo_giorno(righe, n_giorni, storia_minima=0)` → ({simbolo:
+  rango}, n_monete), rango 1 = rendimento a `n_giorni` più alto, parità alfabetica, BTCUSDT escluso, fuori le monete
+  sotto la liquidità nel giorno e, con `storia_minima`, quelle senza una chiusura `storia_minima` giorni prima;
+  `rendimenti_ultimo_giorno` (lo stesso senza la classifica); `giorno_forte_ultimo(chiusure, k, n=60, minimo=40)`
+  → +1, −1 o 0 per l'ultimo giorno di una sequenza di chiusure (per esempio quelle di BTCUSDT da
+  `ctx.btc_chiuse_entro`), con la deviazione standard dei `n` rendimenti precedenti. I loro test le confrontano con
+  le funzioni sulle matrici intere (`research/src/tests/test_paniere.py`).
+* Per l'idea B «ogni lunedì alle 00:00 UTC» è la chiusura della candela di domenica: la classifica si legge alla
+  chiusura della barra della domenica (riga del paniere di quel giorno) e l'ordine limite vale per il lunedì.
+* Le righe del paniere stanno nell'impronta dei dati di ogni pezzo e si riportano nel risultato (`paniere`: giorni,
+  monete, estremi, impronta).
+* **Il terreno d'ingresso lo costruisce `gruppo.py`** (seconda nota della sessione, 09:14 UTC): con il marcatore
+  PANIERE ogni esame (`conta_trade_di_gruppo`, `esame_di_gruppo`, `controllo_positivo`) usa da solo i `Parametri` del
+  motore con l'ordine limite della sezione 3 (letti da `research/config/parametri_2.yaml`: ingresso a limite alla
+  chiusura della candela di segnale, valido una candela, condizione «attraversato», maker 0,02%, scarto zero
+  all'ingresso; uscite a mercato con lo scarto della scheda; stop, uscita a segnale e a tempo restano nel modulo
+  della variante) e li riporta in `opzioni.terreno`; l'argomento `terreno` delle funzioni non va passato (se diverso
+  da quello del marcatore è rifiutato). La sessione non costruisce mai `Parametri` da sola. La prova a placebo a
+  barre giornaliere e il controllo positivo sono stati rifatti con gli strumenti nuovi e con questo terreno prima
+  dell'apertura della Fase 2: esito e impronte nella sezione 6.
