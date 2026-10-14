@@ -3821,3 +3821,20 @@ del guardiano, poi commit alle 14:01 (moduli delle idee B e C, prova del codice 
 script del controllo positivo), 14:03 (ordine e previsioni delle 18 varianti scritti prima dei conteggi, controllo
 positivo in corso), 14:08 («calcolo in corso fino alle 13:10 UTC circa») e 14:09 (variante 1 registrata, lotto in
 corso). Dal branch solo i titoli. Controllo orario attivo.
+
+### 14 ottobre, 16:17 ora italiana: la campagna del paniere ha consegnato: nessuna strategia valida
+
+Consegna alle 16:12 (commit 70d17c85 sul branch `research/campagna/PANIERE`, `consegna.md`), letta a campagna chiusa.
+Verdetto: **«nessuna strategia valida trovata per il paniere»**, dopo tutto il budget (18 varianti e 12 ritocchi; log
+di 151 voci: 61 registrazioni, 60 risultati, 8 scarti, 21 note, 1 correzione; 91 id). Due varianti dell'idea C (le
+monete rimaste indietro dopo un giorno forte al rialzo di Bitcoin, soglia 1,25 deviazioni, uscita dopo 3 giorni)
+sono diventate candidate in costruzione (R medio +0,130 e +0,135 a trade, t 3,24 e 3,20 contro le entrate casuali,
+25 e 16 blocchi) e sono cadute tutte e due nelle verifiche della Fase 4: con il ritardo di una barra il t scende a
+0,49 e 0,34 volte (parte del recupero arriva il giorno stesso dell'ingresso) e lo stop a 2,5 ATR giornalieri dopo i
+crolli vale fino al 79-95% del prezzo, oltre 0,8 volte la distanza di liquidazione (6 e 8 violazioni: un limite del
+terreno, non della condizione d'ingresso). Tendenza (A) e momentum fra monete (B) non battono il caso; 7 varianti su
+18 non arrivano a 700 trade con l'ordine limite. Nessuna validazione, nessun vault. Misure di processo: 6,97 ore
+dalla prima all'ultima voce, 4,69 di pause (gli STOP per gli strumenti), 2,28 di lavoro; 5 rifiuti del guardiano
+(2 risolti dalle correzioni del coordinamento, 3 errori di forma della sessione). Routine oraria spenta. Decide il
+proprietario cosa fare dopo (le lezioni della campagna sono in `lezioni_metodo_proposte.md` e `lezioni_moneta.md`
+del branch, da unire al Passo 7 come per la prima edizione).
