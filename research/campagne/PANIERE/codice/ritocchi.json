@@ -8,5 +8,15 @@
   "cosa_cambia": "aggiunge il filtro di regime: Bitcoin chiude il giorno forte sopra la media semplice delle sue ultime 100 chiusure; riporta k da 2 a 1,5",
   "perche": "Fase 3 (lavoro/fase3_ritardo.json, lavoro/fase3_regime.json): i fallimenti di PANIERE-030 stanno nel 2022 (R -0,02 su 261 trade) e nei giorni forti con Bitcoin sotto la media a 100 giorni (R +0,074 su 232 e -0,292 su 97, contro +0,45 su 540 sopra la media). Il filtro da solo lascerebbe circa 540 trade (sotto 700, scarto): k torna a 1,5 per restare sopra il minimo (sui trade di PANIERE-028 sopra la media: 845). Lo stesso filtro c'era già nell'idea A (media a 100), qui su Bitcoin. Rischio dichiarato prima: il vantaggio può essere «long quando Bitcoin è in tendenza» più che il ritardo delle monete; la (b) entra anche fuori dal regime e non lo sa (lezioni/metodo.md: la (b) ristretta alle barre del filtro è la verifica da fare in Fase 4).",
   "previsione": "trade stimati fra 750 e 900; R medio netto fra +0,15 e +0,30; t contro la (b) fra 1,5 e 3,0 (netta con probabilità 50%); t contro la (a) fra 1,3 e 2,6 (netta con probabilità 35%); candidata con probabilità 30%"
+ },
+ {
+  "nome": "C1-2 long, ritocco 2 (uscita dopo 10 giorni)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-030",
+  "famiglia": "PANIERE-030",
+  "parametri": {"direzione": "long", "k": 2.0, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 10, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+  "cosa_cambia": "uscita a segnale dopo 10 barre in posizione invece di 5; il resto come PANIERE-030 (k 2, nessun filtro)",
+  "perche": "Ordine dei ritocchi dopo PANIERE-036 (t contro la (b)): PANIERE-030 2,48 resta prima, famiglia con 1 ritocco su 3. Fase 3 (lavoro/fase3_percorso.json): il guadagno medio non realizzato dei trade di PANIERE-030 cresce per tutta la tenuta, +0,089 R alla chiusura del giorno d'ingresso, +0,134, +0,201, +0,197, +0,246 alla quinta chiusura, quando l'uscita lo taglia: il recupero non sembra finito. Il ritocco 1 (filtro di regime) ha abbassato il t (1,94), quindi questo torna alle regole di partenza e cambia solo l'uscita. Rischio dichiarato prima: posizioni più lunghe fanno blocchi più lunghi (meno blocchi indipendenti, soglia più alta) e più esposizione a quello che fa Bitcoin dopo (Fase 3: +0,393 con Bitcoin in salita nei 5 giorni dopo, -0,095 in discesa).",
+  "previsione": "trade stimati fra 780 e 880; R medio netto fra +0,20 e +0,45; blocchi fra 8 e 12; t contro la (b) fra 1,5 e 3,0 (netta con probabilità 40%); t contro la (a) fra 1,3 e 2,8 (netta con probabilità 35%); candidata con probabilità 30%"
  }
 ]

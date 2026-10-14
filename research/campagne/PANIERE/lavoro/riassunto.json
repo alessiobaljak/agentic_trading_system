@@ -424,5 +424,71 @@
   "motivi": [
    "trade stimati 534 sotto 700"
   ]
+ },
+ {
+  "id": "PANIERE-036",
+  "variante": "C1-2 long, ritocco 1 (regime di Bitcoin, k 1,5)",
+  "esito": "risultato",
+  "trade": 845,
+  "r_medio": 0.23759979060796785,
+  "r_medio_senza_migliori": 0.12302971717311681,
+  "r_medio_per_anno": {
+   "2020": 0.258647952652571,
+   "2021": 0.14137289746794116,
+   "2022": -1.0112877331328085,
+   "2023": 1.454972154394891
+  },
+  "t_b": 1.9359792321306364,
+  "soglia_b": 2.254866003713122,
+  "netta_b": false,
+  "media_b": 0.015495244447797008,
+  "valutabile_b": true,
+  "t_a": 1.776370897839091,
+  "soglia_a": 2.254866003713122,
+  "netta_a": false,
+  "media_a": 0.00651827507632825,
+  "valutabile_a": true,
+  "n_blocchi": 12,
+  "blocco": 69,
+  "effetto_grappolo": 12.880996091187175,
+  "monete_senza_ingressi_b": [],
+  "quota_trade_senza_ingressi_b": 0.0,
+  "percentile_caso": 100.0,
+  "candidato": false,
+  "valutabile": true,
+  "motivi_non_valutabile": []
+ },
+ {
+  "id": "PANIERE-037",
+  "variante": "C1-2 long, ritocco 2 (uscita dopo 10 giorni)",
+  "esito": "risultato",
+  "trade": 793,
+  "r_medio": 0.23364960273193605,
+  "r_medio_senza_migliori": 0.08788431556264686,
+  "r_medio_per_anno": {
+   "2020": 0.24769145823525354,
+   "2021": 0.32544500465806103,
+   "2022": -0.1420470822939287,
+   "2023": 1.119205025929878
+  },
+  "t_b": 1.6900309499019381,
+  "soglia_b": 2.28368161329964,
+  "netta_b": false,
+  "media_b": 0.031569003313696116,
+  "valutabile_b": true,
+  "t_a": 1.1523402584109117,
+  "soglia_a": 2.28368161329964,
+  "netta_a": false,
+  "media_a": 0.03925797615523669,
+  "valutabile_a": true,
+  "n_blocchi": 11,
+  "blocco": 71,
+  "effetto_grappolo": 9.144082658541114,
+  "monete_senza_ingressi_b": [],
+  "quota_trade_senza_ingressi_b": 0.0,
+  "percentile_caso": 100.0,
+  "candidato": false,
+  "valutabile": true,
+  "motivi_non_valutabile": []
  }
 ]
