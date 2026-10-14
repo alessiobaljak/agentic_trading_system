@@ -18,5 +18,25 @@
   "cosa_cambia": "uscita a segnale dopo 10 barre in posizione invece di 5; il resto come PANIERE-030 (k 2, nessun filtro)",
   "perche": "Ordine dei ritocchi dopo PANIERE-036 (t contro la (b)): PANIERE-030 2,48 resta prima, famiglia con 1 ritocco su 3. Fase 3 (lavoro/fase3_percorso.json): il guadagno medio non realizzato dei trade di PANIERE-030 cresce per tutta la tenuta, +0,089 R alla chiusura del giorno d'ingresso, +0,134, +0,201, +0,197, +0,246 alla quinta chiusura, quando l'uscita lo taglia: il recupero non sembra finito. Il ritocco 1 (filtro di regime) ha abbassato il t (1,94), quindi questo torna alle regole di partenza e cambia solo l'uscita. Rischio dichiarato prima: posizioni più lunghe fanno blocchi più lunghi (meno blocchi indipendenti, soglia più alta) e più esposizione a quello che fa Bitcoin dopo (Fase 3: +0,393 con Bitcoin in salita nei 5 giorni dopo, -0,095 in discesa).",
   "previsione": "trade stimati fra 780 e 880; R medio netto fra +0,20 e +0,45; blocchi fra 8 e 12; t contro la (b) fra 1,5 e 3,0 (netta con probabilità 40%); t contro la (a) fra 1,3 e 2,8 (netta con probabilità 35%); candidata con probabilità 30%"
+ },
+ {
+  "nome": "C1-2 long, ritocco 3 (uscita dopo 3 giorni)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-030",
+  "famiglia": "PANIERE-030",
+  "parametri": {"direzione": "long", "k": 2.0, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 3, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+  "cosa_cambia": "uscita a segnale dopo 3 barre in posizione invece di 5; il resto come PANIERE-030",
+  "perche": "Ordine dei ritocchi dopo PANIERE-037: PANIERE-030 (t 2,48) resta prima, famiglia con 2 ritocchi su 3 (ultimo). L'uscita più lunga (PANIERE-037) ha abbassato il t a 1,69 con lo stesso R medio (+0,234): la tenuta in più aggiunge varianza più che guadagno. Fase 3: il fallimento principale è l'esposizione a quello che Bitcoin fa dopo (-0,095 R con Bitcoin in discesa nei 5 giorni dopo, +0,393 in salita); il percorso medio arriva a +0,201 R alla terza chiusura e resta quasi fermo alla quarta (+0,197). Un'uscita più corta riduce l'esposizione e la durata massima, quindi il blocco, a prezzo di una parte del guadagno. Ultimo ritocco di questa famiglia.",
+  "previsione": "trade stimati fra 830 e 950; R medio netto fra +0,10 e +0,25; blocchi fra 12 e 20; t contro la (b) fra 1,5 e 3,0 (netta con probabilità 40%); t contro la (a) fra 1,3 e 2,8 (netta con probabilità 35%); candidata con probabilità 30%"
+ },
+ {
+  "nome": "C2-1,5 long, ritocco 1 (uscita dopo 3 giorni)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-032",
+  "famiglia": "PANIERE-032",
+  "parametri": {"direzione": "long", "k": 1.5, "monete_in_ritardo": 20, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 3, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+  "cosa_cambia": "uscita a segnale dopo 3 barre in posizione invece di 5; il resto come PANIERE-032",
+  "perche": "Ordine dei ritocchi dopo PANIERE-038: PANIERE-030 2,48 ha la famiglia piena (3 ritocchi); prima con famiglia libera è PANIERE-032 (C2-1,5 long, t 2,14, 0 ritocchi). Fase 3 di PANIERE-032 (lavoro/fase3_ritardo.json, fase3_regime.json, fase3_percorso.json): stesso disegno di PANIERE-030, fallimenti nel regime di Bitcoin sotto la media a 100 (+0,040 su 212 e -0,320 su 44, contro +0,258 su 546 sopra) e con Bitcoin in discesa dopo (-0,226 contro +0,436). Il filtro di regime lascerebbe circa 546 trade (scarto sicuro), quindi non lo applico; l'uscita a 3 giorni riduce l'esposizione a quello che Bitcoin fa dopo e la durata (percorso medio +0,179 R alla terza chiusura, +0,156 alla quarta). Nella famiglia di PANIERE-030 la stessa modifica ha dato t 2,13 contro 2,48: lo dichiaro, non è una scelta fatta per alzare il t.",
+  "previsione": "trade stimati fra 830 e 950; R medio netto fra +0,08 e +0,20; t contro la (b) fra 1,3 e 2,8 (netta con probabilità 30%); t contro la (a) fra 1,0 e 2,5 (netta con probabilità 25%); candidata con probabilità 20%"
  }
 ]
