@@ -3740,3 +3740,14 @@ estrarre il branch (regole del gruppo, sezione 11, punto 6), e mandata nella ses
 risposta alla sua domanda. Due commit della sessione prima dello STOP (09:13): apertura con la frase di contaminazione
 in testa a `ipotesi.md`, log aperto con il rifiuto registrato. Primo push entro i 35 minuti: sì (09:13 per un'apertura
 alle 09:09).
+
+### 14 ottobre, 09:57 ora italiana: la sessione del paniere ha registrato un secondo rifiuto; seconda frase
+
+Al promemoria delle 09:54: la sessione ha fatto il pull (il suo commit a0dc4f57 delle 09:52, «secondo rifiuto del
+guardiano registrato nel log», sta sopra la correzione 298b1a7f, e il guardiano nel suo branch è quello corretto, stesso
+blob del principale) ma è tornata allo STOP con la stessa richiesta. Sul principale la lettura passa: riprodotto su una
+copia del repository con il marcatore PANIERE (Read con percorso assoluto e relativo, e `cat`: ammessi; `ipotesi.md` del
+gruppo: rifiutato). Ipotesi: ha ritentato la lettura prima del pull, o ha seguito alla lettera «torna allo STOP in cui
+eri». Mandata alle 09:59 una seconda frase: verifica che 298b1a7f sia nella sua storia, rilegge il file con Read, e se il
+guardiano rifiuta ancora copia all'utente il messaggio di rifiuto e si ferma senza registrare un terzo rifiuto.
+Promemoria alle 10:13.
