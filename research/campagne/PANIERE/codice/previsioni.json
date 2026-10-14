@@ -1,0 +1,27 @@
+{
+ "scritto": "prima di qualunque conta_trade e di qualunque esame delle varianti; costo di un giro circa 0,007 R in mediana (parametri_2.yaml, misure_passo_0), quindi R netto e lordo quasi uguali; con uscite fino a 60 barre i blocchi in costruzione saranno pochi (6-8) e la soglia di «nettamente» circa 2,4-2,6, con l'uscita a 5 giorni (idea C) molti di più",
+ "criterio_successo": "candidato in costruzione: batte nettamente la (a) e la (b) di gruppo (contro_baseline con il pavimento delle sfasate) e ha R medio dopo i costi > 0 sui trade sommati; trade sommati >= 700 e nessuna moneta oltre il 10% dei trade stimati",
+ "ordine": ["A1-20 long", "A1-20 short", "A1-55 long", "A1-55 short", "A2 long", "A2 short",
+            "B1 long", "B1 short", "B2 long", "B2 short", "B3 long", "B3 short",
+            "C1-1,5 long", "C1-1,5 short", "C1-2 long", "C1-2 short", "C2-1,5 long", "C2-1,5 short"],
+ "previsioni": {
+  "A1-20 long": "R medio netto fra -0,05 e +0,15; t contro la (b) fra -1 e +1,5; non netta contro la (b) (probabilità di netta 10%); R per anno migliore nel 2020-2021 che nel 2022",
+  "A1-20 short": "R medio netto fra -0,10 e +0,10; t contro la (b) fra -1 e +1,5; non netta (probabilità di netta 10%); R migliore nel 2022",
+  "A1-55 long": "R medio netto fra 0 e +0,25; t contro la (b) fra -0,5 e +1,5; non netta (probabilità 10%); rischio di scarto sotto i 700 trade",
+  "A1-55 short": "R medio netto fra -0,10 e +0,15; t contro la (b) fra -1 e +1,5; non netta (probabilità 10%); rischio di scarto sotto i 700 trade",
+  "A2 long": "R medio netto fra 0 e +0,20; t contro la (b) fra -1 e +1,5; non netta (probabilità 10%)",
+  "A2 short": "R medio netto fra -0,10 e +0,15; t contro la (b) fra -1 e +1,5; non netta (probabilità 10%)",
+  "B1 long": "R medio netto fra -0,10 e +0,10; t contro la (b) fra -1,5 e +1; non netta (probabilità 5%)",
+  "B1 short": "R medio netto fra -0,15 e +0,05; t contro la (b) fra -1,5 e +1; non netta (probabilità 5%)",
+  "B2 long": "R medio netto fra -0,10 e +0,10; t contro la (b) più basso di B1 long, fra -2 e +0,5; non netta (probabilità 5%)",
+  "B2 short": "R medio netto fra -0,15 e +0,05; t contro la (b) fra -2 e +0,5; non netta (probabilità 5%)",
+  "B3 long": "R medio netto fra -0,05 e +0,05; t contro la (b) più vicino a 0 di B1, fra -1 e +1; non netta (probabilità 5%)",
+  "B3 short": "R medio netto fra -0,10 e +0,05; t contro la (b) fra -1 e +1; non netta (probabilità 5%)",
+  "C1-1,5 long": "R medio netto fra -0,05 e +0,05; t contro la (b) fra -1 e +1,5; non netta (probabilità 10%); effetto grappolo molto alto",
+  "C1-1,5 short": "R medio netto fra -0,05 e +0,05; t contro la (b) fra -1,5 e +1; non netta (probabilità 10%)",
+  "C1-2 long": "R medio netto fra -0,05 e +0,08; t contro la (b) fra -1 e +1,5; non netta (probabilità 10%); rischio di scarto sotto i 700 trade",
+  "C1-2 short": "R medio netto fra -0,08 e +0,05; t contro la (b) fra -1,5 e +1; non netta (probabilità 10%); rischio di scarto sotto i 700 trade",
+  "C2-1,5 long": "R medio netto fra -0,08 e +0,05; t contro la (b) fra -1,5 e +1; non netta (probabilità 5%); le più in ritardo non recuperano meglio di tutte le in ritardo",
+  "C2-1,5 short": "R medio netto fra -0,08 e +0,05; t contro la (b) fra -1,5 e +1; non netta (probabilità 5%)"
+ }
+}
