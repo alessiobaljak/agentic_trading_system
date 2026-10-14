@@ -3751,3 +3751,16 @@ gruppo: rifiutato). Ipotesi: ha ritentato la lettura prima del pull, o ha seguit
 eri». Mandata alle 09:59 una seconda frase: verifica che 298b1a7f sia nella sua storia, rilegge il file con Read, e se il
 guardiano rifiuta ancora copia all'utente il messaggio di rifiuto e si ferma senza registrare un terzo rifiuto.
 Promemoria alle 10:13.
+
+### 14 ottobre, 10:15 ora italiana: la causa vera, lo strumento delle notifiche; terza correzione nel branch
+
+Al secondo promemoria (10:14) la sessione era di nuovo ferma, con un riassunto diverso: «group rules unreadable:
+notification tool blocked by guard». Le frasi del coordinamento arrivano alla sessione come notifiche in coda, e per
+leggerle serve lo strumento `ReadNotifications`, che la lista bianca del guardiano in campagna non ammetteva: la
+sessione non ha potuto leggere la seconda frase (quella delle 09:59) e ha ripetuto la richiesta (sua voce di log
+PANIERE-003). Correzione: `ReadNotifications` ammesso in campagna (`guardiano.py`, test in `test_guardiano_4_4.py`,
+545 test dei due file passati), portata nel branch della campagna con un terzo commit sopra a0dc4f57. Poiché la
+sessione non legge le notifiche finché non ha fatto il pull, la frase stavolta la scrive il proprietario nella
+sessione (regole del gruppo, sezione 12, punto 1: «può scrivere lui la frase»). Lezione: il canale delle frasi era
+stato provato l'11 ottobre su una sessione di prova SENZA marcatore, dove il guardiano non c'è; con il marcatore lo
+strumento era vietato.

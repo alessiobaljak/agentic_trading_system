@@ -160,10 +160,15 @@ _STRUMENTI_RICERCA = {"Glob", "Grep"}
 #: WebSearch si giudicano a parte, per indirizzo e per testo. Tutto il resto, in
 #: particolare ogni `mcp__*` (GitHub legge qualunque branch, i prompt delle
 #: sessioni remote possono parlare di altre campagne) e gli Artifact, e' vietato.
+#: `ReadNotifications` (dal 14 ott 2026): le frasi del coordinamento (via libera,
+#: correzione nel branch, risposte del proprietario) arrivano alla sessione come
+#: notifiche in coda, e senza questo strumento la sessione non le legge (la prima
+#: sessione PANIERE si e' fermata cosi'). Lo strumento legge solo cio' che e' stato
+#: mandato a QUESTA sessione; non apre branch, storia o altre sessioni.
 _STRUMENTI_AMMESSI_CAMPAGNA = frozenset({
     "TodoWrite", "TaskCreate", "TaskGet", "TaskList", "TaskUpdate", "TaskStop", "TaskOutput",
     "BashOutput", "KillShell", "KillBash", "ToolSearch", "Agent", "Task",
-    "AskUserQuestion", "Skill", "EnterPlanMode", "ExitPlanMode",
+    "AskUserQuestion", "Skill", "EnterPlanMode", "ExitPlanMode", "ReadNotifications",
 })
 #: i soli siti che WebFetch apre in campagna (anche i sottodomini): articoli
 #: scientifici e loro indici. Una lista NERA non bastava: ogni CDN o specchio di

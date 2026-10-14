@@ -742,6 +742,7 @@ def test_coordinamento_e_senza_marcatore_strumenti_non_toccati(coordinamento: Pa
         ("KillShell", {"shell_id": "1"}),
         ("ExitPlanMode", {}),
         ("Skill", {"skill": "x"}),
+        ("ReadNotifications", {}),  # le frasi del coordinamento arrivano come notifiche (14 ott 2026)
     ],
 )
 def test_campagna_strumenti_in_lista_ammessi(campagna: Path, tool_name: str, tool_input: dict):
