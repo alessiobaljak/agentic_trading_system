@@ -1,0 +1,182 @@
+{
+ "PANIERE-040": {
+  "stabilita": {
+   "anni": {
+    "2020": {
+     "trade": 265,
+     "r_medio": 0.08117158857014177,
+     "b_ripesata": 0.0031883600029541793,
+     "sopra": true
+    },
+    "2021": {
+     "trade": 688,
+     "r_medio": 0.13809674981081735,
+     "b_ripesata": 0.004215449855153627,
+     "sopra": true
+    },
+    "2022": {
+     "trade": 362,
+     "r_medio": 0.01601188131399383,
+     "b_ripesata": -0.002132738839696772,
+     "sopra": true
+    }
+   },
+   "anni_che_contano": 3,
+   "anni_sopra": 3,
+   "trade_minimi_per_anno": 100,
+   "superata": true
+  },
+  "estremi": {
+   "senza_trade_migliori": {
+    "superata": true,
+    "trade_tolti": 30,
+    "trade_rimasti": 1333,
+    "r_medio": 0.0795170181638645,
+    "b": 0.0023472013615492325
+   },
+   "senza_giorni_migliori": {
+    "superata": true,
+    "giorni_tolti": [
+     "2023-01-15",
+     "2023-01-16",
+     "2021-02-06"
+    ],
+    "somme_r_giorni_tolti": [
+     28.94363279832106,
+     26.55557351577065,
+     14.420418874844637
+    ],
+    "trade_tolti": 68,
+    "trade_rimasti": 1295,
+    "r_medio": 0.08331808262683478,
+    "b_ripesata": 0.002172525713700132
+   },
+   "senza_monete_migliori": {
+    "superata": true,
+    "monete_tolte": [
+     "COMPUSDT",
+     "OMGUSDT",
+     "WAVESUSDT"
+    ],
+    "somme_r_monete_tolte": [
+     11.268397034726926,
+     9.611545536711915,
+     8.410120972840788
+    ],
+    "trade_tolti": 94,
+    "trade_rimasti": 1269,
+    "r_medio": 0.11704214235335518,
+    "b_ripesata": 0.0011598542782331792
+   },
+   "tutte_superate": true
+  },
+  "liquidazione": {
+   "violazioni": 6,
+   "trade_ridotti": 0
+  },
+  "quota_moneta_piu_presente": 0.03374908290535583,
+  "moneta_piu_presente": "TRXUSDT",
+  "quota_monete_sopra_b_j": {
+   "monete_con_almeno_10_trade": 60,
+   "sopra_b_j": 55,
+   "quota": 0.9166666666666666
+  },
+  "posizioni_aperte_insieme": {
+   "long": 43,
+   "short": 0,
+   "totale": 43
+  },
+  "uscite_massime_in_un_giorno": 28,
+  "effetto_grappolo": 6.78007647338176
+ },
+ "PANIERE-043": {
+  "stabilita": {
+   "anni": {
+    "2020": {
+     "trade": 271,
+     "r_medio": 0.09017870181241362,
+     "b_ripesata": 0.00388571740357587,
+     "sopra": true
+    },
+    "2021": {
+     "trade": 1360,
+     "r_medio": 0.1327949443647603,
+     "b_ripesata": 0.0034951520577783113,
+     "sopra": true
+    },
+    "2022": {
+     "trade": 639,
+     "r_medio": 0.04569856697006097,
+     "b_ripesata": 0.0006940658037999134,
+     "sopra": true
+    }
+   },
+   "anni_che_contano": 3,
+   "anni_sopra": 3,
+   "trade_minimi_per_anno": 100,
+   "superata": true
+  },
+  "estremi": {
+   "senza_trade_migliori": {
+    "superata": true,
+    "trade_tolti": 30,
+    "trade_rimasti": 2297,
+    "r_medio": 0.09856752210615399,
+    "b": 0.0027908564192338212
+   },
+   "senza_giorni_migliori": {
+    "superata": true,
+    "giorni_tolti": [
+     "2023-01-15",
+     "2021-02-12",
+     "2021-02-06"
+    ],
+    "somme_r_giorni_tolti": [
+     60.1712285925236,
+     38.77057930102273,
+     31.626006016693147
+    ],
+    "trade_tolti": 135,
+    "trade_rimasti": 2192,
+    "r_medio": 0.08346912882578077,
+    "b_ripesata": 0.0026172691126083616
+   },
+   "senza_monete_migliori": {
+    "superata": true,
+    "monete_tolte": [
+     "WAVESUSDT",
+     "LRCUSDT",
+     "OMGUSDT"
+    ],
+    "somme_r_monete_tolte": [
+     14.03055228682164,
+     12.86637060444179,
+     12.13782819585948
+    ],
+    "trade_tolti": 114,
+    "trade_rimasti": 2213,
+    "r_medio": 0.12403858708053682,
+    "b_ripesata": 0.0013925040116124217
+   },
+   "tutte_superate": true
+  },
+  "liquidazione": {
+   "violazioni": 8,
+   "trade_ridotti": 0
+  },
+  "quota_moneta_piu_presente": 0.02578427159432746,
+  "moneta_piu_presente": "EOSUSDT",
+  "quota_monete_sopra_b_j": {
+   "monete_con_almeno_10_trade": 76,
+   "sopra_b_j": 72,
+   "quota": 0.9473684210526315
+  },
+  "posizioni_aperte_insieme": {
+   "long": 70,
+   "short": 0,
+   "totale": 70
+  },
+  "uscite_massime_in_un_giorno": 70,
+  "effetto_grappolo": 12.819327926469148
+ }
+}
