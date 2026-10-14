@@ -3771,3 +3771,17 @@ Il proprietario ha incollato la frase nella sessione; alle 10:38 il pull e i tes
 riassunto della sessione), poi la Fase 0: commit «PANIERE Fase 0: 0 monete scaricate su 80, periodi e script di scarico
 pronti» (10:38) e «calcolo in corso fino alle 09:10 UTC circa» (10:39, lo scarico dei dati giornalieri). Da qui le frasi
 del coordinamento le legge da sola (strumento delle notifiche ammesso). Controllo orario attivo.
+
+### 14 ottobre, 11:00 ora italiana: Fase 0 della campagna del paniere finita; la sessione fa una domanda sugli strumenti
+
+Controllo orario delle 10:59: la sessione ha finito la Fase 0 (commit 78898703 delle 10:54: «80 monete su 80 scaricate e
+confrontate con le impronte, fase0_dati.md scritto»; dal suo riassunto 9.310 file verificati su 81 simboli) e si è
+fermata con una domanda, registrata nel suo log (commit e5290e4c, «domanda sugli strumenti nel log»): dal riassunto,
+«scegli (a) estendere gruppo.py e rifare il placebo, oppure (b) lavorare solo su A e C1». Letta e girata al proprietario
+così com'è (il testo intero resta nel branch, che il coordinamento non legge). Il senso, dal lato degli strumenti: le
+funzioni della variante ricevono da `gruppo.py` solo le candele della moneta e di BTCUSDT, non quelle delle altre 79
+monete; le idee B (classifica del paniere) e C2 (le 20 monete più in ritardo) hanno bisogno della serie di paniere, che
+`paniere.py` sa calcolare ma che `gruppo.py` non passa alla variante. Mancanza del Passo 0 (punto 3 fatto a metà: la
+serie c'è, il passaggio no). Proposta del coordinamento al proprietario: (a), estendendo `gruppo.py` con una vista
+causale del paniere per la variante e rifacendo la prova a placebo (attesa identica: le placebo non usano il paniere),
+mentre la sessione intanto lavora sulle idee A e C1.
