@@ -38,5 +38,15 @@
   "cosa_cambia": "uscita a segnale dopo 3 barre in posizione invece di 5; il resto come PANIERE-032",
   "perche": "Ordine dei ritocchi dopo PANIERE-038: PANIERE-030 2,48 ha la famiglia piena (3 ritocchi); prima con famiglia libera è PANIERE-032 (C2-1,5 long, t 2,14, 0 ritocchi). Fase 3 di PANIERE-032 (lavoro/fase3_ritardo.json, fase3_regime.json, fase3_percorso.json): stesso disegno di PANIERE-030, fallimenti nel regime di Bitcoin sotto la media a 100 (+0,040 su 212 e -0,320 su 44, contro +0,258 su 546 sopra) e con Bitcoin in discesa dopo (-0,226 contro +0,436). Il filtro di regime lascerebbe circa 546 trade (scarto sicuro), quindi non lo applico; l'uscita a 3 giorni riduce l'esposizione a quello che Bitcoin fa dopo e la durata (percorso medio +0,179 R alla terza chiusura, +0,156 alla quarta). Nella famiglia di PANIERE-030 la stessa modifica ha dato t 2,13 contro 2,48: lo dichiaro, non è una scelta fatta per alzare il t.",
   "previsione": "trade stimati fra 830 e 950; R medio netto fra +0,08 e +0,20; t contro la (b) fra 1,3 e 2,8 (netta con probabilità 30%); t contro la (a) fra 1,0 e 2,5 (netta con probabilità 25%); candidata con probabilità 20%"
+ },
+ {
+  "nome": "C2-1,5 long, ritocco 2 (k 1,25, uscita dopo 3 giorni)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-039",
+  "famiglia": "PANIERE-032",
+  "parametri": {"direzione": "long", "k": 1.25, "monete_in_ritardo": 20, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 3, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+  "cosa_cambia": "soglia del giorno forte da 1,5 a 1,25 deviazioni standard; il resto come PANIERE-039 (le 20 più in ritardo, uscita dopo 3 barre)",
+  "perche": "Ordine dei ritocchi dopo PANIERE-039: PANIERE-030 2,48 (famiglia piena), poi PANIERE-039 2,38 (famiglia PANIERE-032, 1 ritocco su 3). PANIERE-039 batte nettamente la (b) e non la (a) (t 1,84). Il fallimento che pesa di più su tutte le varianti C long è la concentrazione in pochi giorni (Fase 3: PANIERE-032 ha 63 giorni di segnale, PANIERE-030 36; senza i 3 giorni migliori l'R medio scende a 0,089): pochi giorni indipendenti fanno l'errore grande. Una soglia più bassa aggiunge giorni di segnale, quindi scommesse più indipendenti, al prezzo di giorni forti meno forti; la Fase 3 non mostra un R che cresce con l'ampiezza del giorno forte (quartili +0,411 / +0,082 / +0,103 / +0,102 in PANIERE-032), quindi abbassarla non dovrebbe togliere il vantaggio, se c'è. È un'interpolazione di un parametro: lo dichiaro.",
+  "previsione": "trade stimati fra 1.000 e 1.300; R medio netto fra +0,05 e +0,15; t contro la (b) fra 1,0 e 2,8 (netta con probabilità 30%); t contro la (a) fra 0,8 e 2,4 (netta con probabilità 20%); candidata con probabilità 15%"
  }
 ]

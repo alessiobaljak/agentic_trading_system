@@ -556,5 +556,38 @@
   "candidato": false,
   "valutabile": true,
   "motivi_non_valutabile": []
+ },
+ {
+  "id": "PANIERE-040",
+  "variante": "C2-1,5 long, ritocco 2 (k 1,25, uscita dopo 3 giorni)",
+  "esito": "risultato",
+  "trade": 1363,
+  "r_medio": 0.1304596787899394,
+  "r_medio_senza_migliori": 0.0795170181638645,
+  "r_medio_per_anno": {
+   "2020": 0.08117158857014177,
+   "2021": 0.13809674981081735,
+   "2022": 0.01601188131399383,
+   "2023": 1.1562334648769106
+  },
+  "t_b": 3.2402064286123284,
+  "soglia_b": 2.109698822116719,
+  "netta_b": true,
+  "media_b": 0.0023472013615492325,
+  "valutabile_b": true,
+  "t_a": 2.1906215309265122,
+  "soglia_a": 2.109698822116719,
+  "netta_a": true,
+  "media_a": 0.00866662997391163,
+  "valutabile_a": true,
+  "n_blocchi": 25,
+  "blocco": 53,
+  "effetto_grappolo": 6.78007647338176,
+  "monete_senza_ingressi_b": [],
+  "quota_trade_senza_ingressi_b": 0.0,
+  "percentile_caso": 100.0,
+  "candidato": true,
+  "valutabile": true,
+  "motivi_non_valutabile": []
  }
 ]
