@@ -1,0 +1,56 @@
+{
+ "PANIERE-030": {
+  "btc sopra la media 100, rendimento 60 positivo": {
+   "n": 540,
+   "r_medio": 0.45
+  },
+  "btc sotto la media 100, rendimento 60 non positivo": {
+   "n": 232,
+   "r_medio": 0.074
+  },
+  "btc sotto la media 100, rendimento 60 positivo": {
+   "n": 97,
+   "r_medio": -0.292
+  },
+  "non calcolabile": {
+   "n": 1,
+   "r_medio": 0.067
+  }
+ },
+ "PANIERE-032": {
+  "btc sopra la media 100, rendimento 60 positivo": {
+   "n": 546,
+   "r_medio": 0.258
+  },
+  "btc sotto la media 100, rendimento 60 non positivo": {
+   "n": 212,
+   "r_medio": 0.04
+  },
+  "btc sotto la media 100, rendimento 60 positivo": {
+   "n": 44,
+   "r_medio": -0.32
+  },
+  "non calcolabile": {
+   "n": 1,
+   "r_medio": 0.067
+  }
+ },
+ "PANIERE-028": {
+  "btc sopra la media 100, rendimento 60 positivo": {
+   "n": 845,
+   "r_medio": 0.238
+  },
+  "btc sotto la media 100, rendimento 60 non positivo": {
+   "n": 350,
+   "r_medio": 0.099
+  },
+  "btc sotto la media 100, rendimento 60 positivo": {
+   "n": 101,
+   "r_medio": -0.32
+  },
+  "non calcolabile": {
+   "n": 1,
+   "r_medio": 0.067
+  }
+ }
+}

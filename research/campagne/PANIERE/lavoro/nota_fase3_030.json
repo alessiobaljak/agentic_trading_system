@@ -1,0 +1,14 @@
+{
+ "testo": "Fase 3, studio dei fallimenti di PANIERE-030 (C1-2 long), con PANIERE-032 e PANIERE-028 a confronto, solo sui trade di costruzione salvati (codice/fase3_ritardo.py, codice/fase3_regime.py; numeri in lavoro/fase3_ritardo.json e lavoro/fase3_regime.json).",
+ "fallimenti_sistematici": [
+  "Regime di Bitcoin: con Bitcoin sopra la media a 100 giorni e rendimento a 60 giorni positivo PANIERE-030 fa +0,450 R su 540 trade; sotto la media +0,074 su 232 (rendimento 60 non positivo) e -0,292 su 97 (rendimento 60 positivo). Stessa forma in PANIERE-032 (+0,258 / +0,040 / -0,320) e PANIERE-028 (+0,238 / +0,099 / -0,320).",
+  "Anno 2022 (uscita): -0,020 su 261 trade (030), -0,107 su 216 (032), -0,037 su 380 (028)."
+ ],
+  "altre_osservazioni": [
+  "Concentrazione: 870 trade in 36 giorni di segnale (mediana 19,5 monete per giorno); senza i 3 giorni migliori l'R medio scende da 0,267 a 0,089.",
+  "Il ritardo non ordina l'esito: R per quartile della distanza dal rendimento di Bitcoin 0,247 / 0,185 / 0,154 / 0,481 (030), 0,131 / 0,270 / 0,092 / 0,180 (032). Nemmeno l'ampiezza del giorno forte (0,475 / 0,000 / 0,229 / 0,348).",
+  "Conta quello che fa Bitcoin DOPO (non prevedibile all'ingresso): +0,393 con Bitcoin in salita nei 5 giorni dopo, -0,095 in discesa (030). È la forma 1 di «è solo il mercato».",
+  "56 trade di 030 (48 di 032, 57 di 028) escono a «fine dati», cioè alla fine della serie di costruzione (2023-01-16), dai segnali dell'11-12 gennaio 2023, con R medio +1,12 / +1,12 / +1,46: gli R per anno «2023» sono questi. Pochi stop: 6 su 870 in 030."
+ ],
+ "conseguenza": "Il filtro nato dai fallimenti è il regime di Bitcoin (chiusura sopra la media a 100 giorni). Ritocco 1 della famiglia PANIERE-030 in codice/ritocchi.json, con il perché e la previsione, registrato prima del test."
+}

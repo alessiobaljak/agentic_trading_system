@@ -46,7 +46,23 @@ IDEE = {
 }
 
 
+RITOCCHI = CODICE / "ritocchi.json"
+
+
+def ritocco_di(nome):
+    """La voce di ritocchi.json per un ritocco (None per una variante dell'idea nuova)."""
+    if not RITOCCHI.exists():
+        return None
+    for r in json.loads(RITOCCHI.read_text(encoding="utf-8")):
+        if r["nome"] == nome:
+            return r
+    return None
+
+
 def parametri_di(nome):
+    r = ritocco_di(nome)
+    if r is not None:
+        return IDEE[r["idea"]], dict(r["parametri"])
     idea = IDEE[nome[0]]
     for p in json.loads((CODICE / idea["parametri"]).read_text(encoding="utf-8")):
         if p["nome"] == nome:
@@ -94,15 +110,21 @@ def lavora(nome):
             "quota_moneta_piu_presente": conta["quota_moneta_piu_presente"],
             "moneta_piu_presente": conta["moneta_piu_presente"],
         }
+        r = ritocco_di(nome)
+        if r is not None:
+            comuni.update({"ritocco_di": r["ritocco_di"], "famiglia": r["famiglia"], "cosa_cambia": r["cosa_cambia"],
+                           "perche": r["perche"]})
         if conta["esito"] == "scarto":
-            voce = registro.aggiungi(dict({"tipo": "scarto", "motivi": conta["motivi"],
-                                           "testo": "scarto di conta_trade_di_gruppo: non consuma budget"}, **comuni))
+            testo = ("scarto di conta_trade_di_gruppo: non consuma budget" if r is None else
+                     "scarto di conta_trade_di_gruppo: non consuma budget, ma conta fra i ritocchi della famiglia")
+            voce = registro.aggiungi(dict({"tipo": "scarto", "motivi": conta["motivi"], "testo": testo}, **comuni))
             print(nome, "scarto", voce["id"], conta["trade_stimati"], conta["motivi"])
             return
         id_variante = registro.prossimo_id()
         registro.aggiungi(dict({
             "tipo": "registrazione", "famiglia": id_variante, "ritocco_di": None, "fonte": idea["fonte"],
-            "meccanismo": idea["meccanismo"], "previsione": PREVISIONI["previsioni"][nome],
+            "meccanismo": idea["meccanismo"],
+            "previsione": r["previsione"] if r is not None else PREVISIONI["previsioni"][nome],
             "criterio_successo": PREVISIONI["criterio_successo"],
             "stima_trade_validazione": conta["stima_trade_validazione"], "variante_n": variante_n(),
         }, **comuni), id_voce=id_variante)

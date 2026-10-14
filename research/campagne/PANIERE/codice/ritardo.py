@@ -8,7 +8,9 @@ Parametri ``p``:
 * ``k``: 1,5 o 2 (deviazioni standard dei 60 rendimenti precedenti di Bitcoin, almeno 40 finiti);
 * ``monete_in_ritardo``: 0 per C1 (tutte le monete in ritardo), 20 per C2 (solo le 20 più in ritardo);
 * ``giorni_deviazione`` (60), ``giorni_minimi_deviazione`` (40), ``barre_uscita`` (5);
-* ``multiplo_atr`` (2,5), ``barre_atr`` (20), ``barre_massime`` (60).
+* ``multiplo_atr`` (2,5), ``barre_atr`` (20), ``barre_massime`` (60);
+* solo nei ritocchi, facoltativo: ``btc_media_giorni`` (filtro di regime nato dalla Fase 3: Bitcoin chiude sopra la
+  sua media semplice di quei giorni, sotto per lo short). Senza la chiave le varianti sono quelle registrate prima.
 
 Scelte scritte prima di ogni dato:
 * tutto si legge dalle righe del paniere (``ctx.paniere_chiuse_entro``), che seguono il calendario UTC: il giorno
@@ -67,6 +69,17 @@ def _in_ritardo(ctx, storia, p):
     verso = 1 if p["direzione"] == "long" else -1
     if forte != verso:
         return False
+    m = p.get("btc_media_giorni")
+    if m:
+        # filtro dei ritocchi (Fase 3): chiusura di Bitcoin del giorno sopra (long) o sotto (short) la media
+        # semplice delle sue ultime m chiusure, giorno compreso; senza m chiusure, nessun segnale
+        if len(righe) < m:
+            return False
+        ultime = [r.chiusure.get(RIFERIMENTO) for r in righe[len(righe) - m:]]
+        if any(c is None for c in ultime):
+            return False
+        if verso * (ultime[-1] - sum(ultime) / m) <= 0:
+            return False
     r_btc = chiusure_btc[-1] / chiusure_btc[-2] - 1.0
     rendimenti = paniere.rendimenti_ultimo_giorno(righe, 1)
     if ctx.simbolo not in rendimenti:

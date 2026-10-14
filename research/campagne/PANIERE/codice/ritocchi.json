@@ -1,0 +1,12 @@
+[
+ {
+  "nome": "C1-2 long, ritocco 1 (regime di Bitcoin, k 1,5)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-030",
+  "famiglia": "PANIERE-030",
+  "parametri": {"direzione": "long", "k": 1.5, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60, "btc_media_giorni": 100},
+  "cosa_cambia": "aggiunge il filtro di regime: Bitcoin chiude il giorno forte sopra la media semplice delle sue ultime 100 chiusure; riporta k da 2 a 1,5",
+  "perche": "Fase 3 (lavoro/fase3_ritardo.json, lavoro/fase3_regime.json): i fallimenti di PANIERE-030 stanno nel 2022 (R -0,02 su 261 trade) e nei giorni forti con Bitcoin sotto la media a 100 giorni (R +0,074 su 232 e -0,292 su 97, contro +0,45 su 540 sopra la media). Il filtro da solo lascerebbe circa 540 trade (sotto 700, scarto): k torna a 1,5 per restare sopra il minimo (sui trade di PANIERE-028 sopra la media: 845). Lo stesso filtro c'era già nell'idea A (media a 100), qui su Bitcoin. Rischio dichiarato prima: il vantaggio può essere «long quando Bitcoin è in tendenza» più che il ritardo delle monete; la (b) entra anche fuori dal regime e non lo sa (lezioni/metodo.md: la (b) ristretta alle barre del filtro è la verifica da fare in Fase 4).",
+  "previsione": "trade stimati fra 750 e 900; R medio netto fra +0,15 e +0,30; t contro la (b) fra 1,5 e 3,0 (netta con probabilità 50%); t contro la (a) fra 1,3 e 2,6 (netta con probabilità 35%); candidata con probabilità 30%"
+ }
+]

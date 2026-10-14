@@ -1,0 +1,419 @@
+{
+ "PANIERE-030": {
+  "trade": 870,
+  "r_medio": 0.267,
+  "per_anno_uscita": {
+   "2020": {
+    "n": 119,
+    "r_medio": 0.296
+   },
+   "2021": {
+    "n": 434,
+    "r_medio": 0.321
+   },
+   "2022": {
+    "n": 261,
+    "r_medio": -0.02
+   },
+   "2023": {
+    "n": 56,
+    "r_medio": 1.119
+   }
+  },
+  "per_esito": {
+   "fine_dati": {
+    "n": 56,
+    "r_medio": 1.119
+   },
+   "segnale": {
+    "n": 808,
+    "r_medio": 0.217
+   },
+   "stop": {
+    "n": 6,
+    "r_medio": -1.027
+   }
+  },
+  "giorni_di_segnale": 36,
+  "giorni_migliori": [
+   {
+    "giorno": "2021-02-08",
+    "trade": 47,
+    "somma_r": 66.65
+   },
+   {
+    "giorno": "2023-01-12",
+    "trade": 49,
+    "somma_r": 58.48
+   },
+   {
+    "giorno": "2021-01-02",
+    "trade": 35,
+    "somma_r": 41.33
+   },
+   {
+    "giorno": "2022-02-04",
+    "trade": 62,
+    "somma_r": 23.2
+   },
+   {
+    "giorno": "2022-06-19",
+    "trade": 41,
+    "somma_r": 17.55
+   }
+  ],
+  "giorni_peggiori": [
+   {
+    "giorno": "2020-12-16",
+    "trade": 19,
+    "somma_r": -5.84
+   },
+   {
+    "giorno": "2021-08-13",
+    "trade": 29,
+    "somma_r": -7.47
+   },
+   {
+    "giorno": "2022-03-09",
+    "trade": 55,
+    "somma_r": -11.01
+   },
+   {
+    "giorno": "2022-02-28",
+    "trade": 38,
+    "somma_r": -11.61
+   },
+   {
+    "giorno": "2022-09-09",
+    "trade": 42,
+    "somma_r": -17.29
+   }
+  ],
+  "r_medio_senza_i_3_giorni_migliori": 0.089,
+  "per_quartile_del_ritardo": {
+   "Q1": {
+    "n": 217,
+    "r_medio": 0.247
+   },
+   "Q2": {
+    "n": 218,
+    "r_medio": 0.185
+   },
+   "Q3": {
+    "n": 217,
+    "r_medio": 0.154
+   },
+   "Q4": {
+    "n": 218,
+    "r_medio": 0.481
+   }
+  },
+  "per_quartile_del_giorno_forte": {
+   "Q1": {
+    "n": 214,
+    "r_medio": 0.475
+   },
+   "Q2": {
+    "n": 200,
+    "r_medio": -0.0
+   },
+   "Q3": {
+    "n": 236,
+    "r_medio": 0.229
+   },
+   "Q4": {
+    "n": 220,
+    "r_medio": 0.348
+   }
+  },
+  "per_segno_di_btc_nei_5_giorni_dopo": {
+   "btc giu": {
+    "n": 308,
+    "r_medio": -0.095
+   },
+   "btc su": {
+    "n": 506,
+    "r_medio": 0.393
+   }
+  },
+  "trade_per_giorno_di_segnale_mediana": 19.5
+ },
+ "PANIERE-032": {
+  "trade": 803,
+  "r_medio": 0.168,
+  "per_anno_uscita": {
+   "2020": {
+    "n": 161,
+    "r_medio": 0.25
+   },
+   "2021": {
+    "n": 378,
+    "r_medio": 0.17
+   },
+   "2022": {
+    "n": 216,
+    "r_medio": -0.107
+   },
+   "2023": {
+    "n": 48,
+    "r_medio": 1.121
+   }
+  },
+  "per_esito": {
+   "fine_dati": {
+    "n": 48,
+    "r_medio": 1.121
+   },
+   "segnale": {
+    "n": 699,
+    "r_medio": 0.2
+   },
+   "stop": {
+    "n": 56,
+    "r_medio": -1.042
+   }
+  },
+  "giorni_di_segnale": 63,
+  "giorni_migliori": [
+   {
+    "giorno": "2023-01-11",
+    "trade": 20,
+    "somma_r": 29.7
+   },
+   {
+    "giorno": "2021-02-08",
+    "trade": 19,
+    "somma_r": 20.3
+   },
+   {
+    "giorno": "2023-01-12",
+    "trade": 17,
+    "somma_r": 18.85
+   },
+   {
+    "giorno": "2021-01-02",
+    "trade": 16,
+    "somma_r": 17.26
+   },
+   {
+    "giorno": "2020-11-12",
+    "trade": 20,
+    "somma_r": 15.86
+   }
+  ],
+  "giorni_peggiori": [
+   {
+    "giorno": "2022-02-28",
+    "trade": 20,
+    "somma_r": -7.26
+   },
+   {
+    "giorno": "2022-09-09",
+    "trade": 20,
+    "somma_r": -8.12
+   },
+   {
+    "giorno": "2022-11-04",
+    "trade": 11,
+    "somma_r": -11.12
+   },
+   {
+    "giorno": "2021-02-19",
+    "trade": 20,
+    "somma_r": -11.34
+   },
+   {
+    "giorno": "2021-04-13",
+    "trade": 18,
+    "somma_r": -11.89
+   }
+  ],
+  "r_medio_senza_i_3_giorni_migliori": 0.089,
+  "per_quartile_del_ritardo": {
+   "Q1": {
+    "n": 200,
+    "r_medio": 0.131
+   },
+   "Q2": {
+    "n": 201,
+    "r_medio": 0.27
+   },
+   "Q3": {
+    "n": 201,
+    "r_medio": 0.092
+   },
+   "Q4": {
+    "n": 201,
+    "r_medio": 0.18
+   }
+  },
+  "per_quartile_del_giorno_forte": {
+   "Q1": {
+    "n": 185,
+    "r_medio": 0.411
+   },
+   "Q2": {
+    "n": 201,
+    "r_medio": 0.082
+   },
+   "Q3": {
+    "n": 203,
+    "r_medio": 0.103
+   },
+   "Q4": {
+    "n": 214,
+    "r_medio": 0.102
+   }
+  },
+  "per_segno_di_btc_nei_5_giorni_dopo": {
+   "btc giu": {
+    "n": 343,
+    "r_medio": -0.226
+   },
+   "btc su": {
+    "n": 432,
+    "r_medio": 0.436
+   }
+  },
+  "trade_per_giorno_di_segnale_mediana": 14
+ },
+ "PANIERE-028": {
+  "trade": 1297,
+  "r_medio": 0.157,
+  "per_anno_uscita": {
+   "2020": {
+    "n": 164,
+    "r_medio": 0.257
+   },
+   "2021": {
+    "n": 696,
+    "r_medio": 0.132
+   },
+   "2022": {
+    "n": 380,
+    "r_medio": -0.037
+   },
+   "2023": {
+    "n": 57,
+    "r_medio": 1.455
+   }
+  },
+  "per_esito": {
+   "fine_dati": {
+    "n": 57,
+    "r_medio": 1.455
+   },
+   "segnale": {
+    "n": 1141,
+    "r_medio": 0.197
+   },
+   "stop": {
+    "n": 99,
+    "r_medio": -1.055
+   }
+  },
+  "giorni_di_segnale": 61,
+  "giorni_migliori": [
+   {
+    "giorno": "2021-02-08",
+    "trade": 47,
+    "somma_r": 66.65
+   },
+   {
+    "giorno": "2023-01-11",
+    "trade": 43,
+    "somma_r": 65.74
+   },
+   {
+    "giorno": "2021-01-02",
+    "trade": 32,
+    "somma_r": 38.46
+   },
+   {
+    "giorno": "2022-02-04",
+    "trade": 62,
+    "somma_r": 23.2
+   },
+   {
+    "giorno": "2021-09-30",
+    "trade": 36,
+    "somma_r": 18.64
+   }
+  ],
+  "giorni_peggiori": [
+   {
+    "giorno": "2022-02-28",
+    "trade": 38,
+    "somma_r": -11.61
+   },
+   {
+    "giorno": "2021-11-08",
+    "trade": 69,
+    "somma_r": -14.04
+   },
+   {
+    "giorno": "2022-09-09",
+    "trade": 42,
+    "somma_r": -17.29
+   },
+   {
+    "giorno": "2021-04-13",
+    "trade": 51,
+    "somma_r": -29.17
+   },
+   {
+    "giorno": "2021-02-19",
+    "trade": 47,
+    "somma_r": -37.44
+   }
+  ],
+  "r_medio_senza_i_3_giorni_migliori": 0.027,
+  "per_quartile_del_ritardo": {
+   "Q1": {
+    "n": 324,
+    "r_medio": 0.2
+   },
+   "Q2": {
+    "n": 324,
+    "r_medio": 0.186
+   },
+   "Q3": {
+    "n": 324,
+    "r_medio": -0.013
+   },
+   "Q4": {
+    "n": 325,
+    "r_medio": 0.254
+   }
+  },
+  "per_quartile_del_giorno_forte": {
+   "Q1": {
+    "n": 306,
+    "r_medio": 0.319
+   },
+   "Q2": {
+    "n": 329,
+    "r_medio": -0.0
+   },
+   "Q3": {
+    "n": 323,
+    "r_medio": 0.131
+   },
+   "Q4": {
+    "n": 339,
+    "r_medio": 0.186
+   }
+  },
+  "per_segno_di_btc_nei_5_giorni_dopo": {
+   "btc giu": {
+    "n": 555,
+    "r_medio": -0.264
+   },
+   "btc su": {
+    "n": 728,
+    "r_medio": 0.457
+   }
+  },
+  "trade_per_giorno_di_segnale_mediana": 15
+ }
+}
