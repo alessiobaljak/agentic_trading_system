@@ -1,0 +1,20 @@
+{
+ "testo": "Fine delle 18 varianti dell'idea nuova (lotto in serie, PANIERE-016 .. PANIERE-033). Esaminate 11, scartate 7 sotto i 700 trade stimati (non consumano budget): A1-55 long 385, A1-55 short 382, B1 long 527, B1 short 592, B2 long 692, C1-2 short 350, C2-1,5 short 534. Nessun candidato. Confronto con le previsioni di codice/previsioni.json (riassunto in lavoro/riassunto.out).",
+ "previsioni_a_confronto": {
+  "PANIERE-016 A1-20 long": "R 0,477 FUORI dall'intervallo previsto (-0,05..+0,15), t contro la (b) 1,00 dentro, non netta come previsto. Cosa mi sono perso: pochi trade enormi del 2021 (R senza i 30 migliori -0,069): la media la fanno le code, come la spiegazione concorrente 6.",
+  "PANIERE-017 A1-20 short": "R 0,006 e t 0,01 dentro gli intervalli: previsione corretta.",
+  "PANIERE-020 A2 long": "R 0,096 e t 0,21 dentro: corretta (soglia 3,31 con 4 blocchi).",
+  "PANIERE-021 A2 short": "R -0,056 e t -0,51 dentro: corretta. La (b) non entra su KLAYUSDT e LPTUSDT (0,7% dei trade, sotto il 10%).",
+  "PANIERE-025 B2 short": "R -0,045 e t 0,12 dentro: corretta.",
+  "PANIERE-026 B3 long": "R -0,045 dentro, t -1,44 sotto l'intervallo previsto (-1..+1): sbagliata di poco, verso il basso; la (b) long (+0,149) è alta.",
+  "PANIERE-027 B3 short": "R -0,020 e t 0,46 dentro: corretta.",
+  "PANIERE-028 C1-1,5 long": "R 0,157 e t 1,69 FUORI (previsti -0,05..+0,05 e -1..+1,5): sbagliata verso l'alto. Il vantaggio regge senza i 30 migliori (+0,080).",
+  "PANIERE-029 C1-1,5 short": "R -0,033 e t -0,07 dentro: corretta.",
+  "PANIERE-030 C1-2 long": "R 0,267 e t 2,48 FUORI (previsti -0,05..+0,08 e -1..+1,5); netta contro la (b) (soglia 2,25, 12 blocchi), data al 10%: sbagliata verso l'alto. Contro la (a) t 2,17 con soglia 2,25: non netta, quindi non è candidata.",
+  "PANIERE-032 C2-1,5 long": "R 0,168 e t 2,14 FUORI (previsti -0,08..+0,05 e -1,5..+1): sbagliata verso l'alto; corretta la parte «le più in ritardo non recuperano meglio di tutte le in ritardo» (R 0,168 contro 0,157 di C1-1,5 long, quasi uguale).",
+  "scarti": "previsto il rischio di scarto per A1-55 e C1-2 (presi); non previsto per B1, B2 long e C2-1,5 short."
+ },
+ "previsioni_di_famiglia": "Idea A: nessuna variante netta contro la (b) con R netto > 0 (t massimo 1,00): morta a questo orizzonte, non si ritocca. Idea B: nessuna netta (t massimo 0,46): morta, non si ritocca. Idea C: C1-2 long batte nettamente la (b) con R netto +0,267: l'idea resta viva. Le previsioni mie di famiglia: A corretta (nessuna netta); B corretta; C sbagliata (avevo detto effetto piccolo).",
+ "cosa_abbiamo_capito": "Le varianti long dell'idea C (dopo un giorno forte al rialzo di Bitcoin) hanno R medio +0,16..+0,27 a trade e reggono senza i 30 migliori trade (+0,08..+0,17), contro (b) e (a) intorno a +0,01. Le short dell'idea C non mostrano nulla. Da controllare prima di crederci (Fase 3 e Fase 5): se conta il ritardo della moneta o solo il giorno forte di Bitcoin (spiegazione concorrente 2), il peso dei pochi giorni forti (spiegazione 8) e l'anno 2022 (R per anno appena negativo). Nota: gli R per anno «2023» in costruzione sono i trade usciti fra il 1° e il 16 gennaio 2023, pochi.",
+ "ordine_dei_ritocchi": "Regola 6, vicinanza = t contro la (b) di gruppo, solo varianti valutabili, non candidate, con famiglia sotto i 3 ritocchi: C1-2 long 2,48 (PANIERE-030), C2-1,5 long 2,14 (PANIERE-032), C1-1,5 long 1,69 (PANIERE-028), A1-20 long 1,00, B3 short 0,46, A2 long 0,21, B2 short 0,12, A1-20 short 0,01, C1-1,5 short -0,07, A2 short -0,51, B3 long -1,44. Le varianti delle idee A e B non si ritoccano (previsione di famiglia). Il primo ritocco va alla famiglia di PANIERE-030, dopo lo studio dei fallimenti (Fase 3)."
+}
