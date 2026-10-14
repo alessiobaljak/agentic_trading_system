@@ -122,6 +122,19 @@ Scritti il 13 ottobre 2026 (22:10 UTC) dal coordinamento, a Passo 0 finito.
   ricontrolli qui sotto, non più quelle del punto precedente.
 * **Ricontrolli con gli strumenti nuovi** (prova a placebo a 1d e controllo positivo a 1d rifatti dopo la
   correzione 3): esito e impronte li scrive il coordinamento qui sotto prima dell'apertura della sessione.
+  * **Controllo positivo a 1d con la regola nuova** (`research/passo0_2/controllo_positivo_1d_regola3.json`, 14
+    ottobre, stessa regola «rottura» con uscita ATR e tetto di 60 barre, ingressi che guardano avanti, 80 monete):
+    **non passa**, e la sessione deve sapere perché. Senza ritardo le monete su cui la (b) non entra portano il
+    12,0% dei trade (long: 13 monete, 424 su 3.535) e il 13,3% (short: 16 monete, 457 su 3.427), oltre il 10%:
+    confronto con la (b) non valutabile. Con il ritardo di una barra la (b) si costruisce (3 e 6 monete fuori, 1,1% e
+    3,7% dei trade) e il `t` è −0,28 (long) e −0,55 (short): il vantaggio sparisce come deve. Contro la (a), senza
+    ritardo, `t` 1,47 e 1,46 con 7 blocchi (R medio +0,37 e +0,27 a trade contro +0,04 e −0,08 della (a), effetto
+    grappolo 39 e 30): non «netto», ed è la stessa lezione del 13 ottobre: con posizioni fino a 60 barre i blocchi
+    sono 7 e un vantaggio anche di +0,3 R a trade non risulta netto. **Per la sessione:** il controllo positivo
+    che farai con il tuo modulo (regole del gruppo, sezione 5, punto 10) a barre giornaliere può non passare per
+    questi due motivi, non per un errore degli strumenti; riportalo com'è (t, blocchi, monete senza ingressi e
+    loro quota) e scrivilo all'utente senza fermarti, salvo un errore vero (eccezione, numeri assurdi, con il
+    ritardo un `t` che non scende).
 
 ## 7. Copia parola per parola delle sezioni 3, 4, 5 e 7 di `research/PROTOCOLLO_2.md` e delle sue correzioni
 

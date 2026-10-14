@@ -121,7 +121,7 @@ esame:
     esito: "non passa nella forma del gruppo: (b) non costruibile su 13-16 monete dalla storia corta (strategia sempre in posizione); sul sottoinsieme short t 2,42 (non netto con 7 blocchi), con ritardo -0,67; long (b) non entra su ROSEUSDT"
     file: [research/passo0_2/controllo_positivo_1d.json, research/passo0_2/controllo_positivo_1d_sottoinsieme.json]
     decisione: "14 ott 2026, «procedi»: (2) l'esame resta com'e' (strada a), ogni variante non netta per pochi blocchi si riporta con t e numero di blocchi; (3) una moneta su cui gli ingressi casuali non entrano resta fuori dalla combinazione della (b) come per la (a), la variante e' non valutabile contro la (b) se quelle monete portano piu' del 10% dei trade del candidato (PROTOCOLLO_2, correzione 3; statistica.QUOTA_MASSIMA_FUORI_DALLA_A); (4) il funding a giorni resta dentro motore ed esame, nessuna decisione"
-    ricontrollo_con_la_regola_nuova: null            # esito del controllo positivo rifatto dopo la correzione 3 (lo scrive il coordinamento)
+    ricontrollo_con_la_regola_nuova: "14 ott 2026 (research/passo0_2/controllo_positivo_1d_regola3.json): senza ritardo ancora non valutabile, le monete senza ingressi portano il 12,0% (long, 13 monete, 424 trade su 3.535) e il 13,3% (short, 16 monete, 457 su 3.427) dei trade, oltre il 10%; con il ritardo valutabile (1,1% e 3,7% dei trade fuori), t -0,28 e -0,55: il vantaggio sparisce come deve. Contro la (a) senza ritardo t 1,47 e 1,46 con 7 blocchi (R medio +0,37 e +0,27 contro +0,04 e -0,08): non netto, la lezione dei pochi blocchi"
 
 # --------------------------------------------------------------------------- #
 # Il paper come esame finale (sezione 9)

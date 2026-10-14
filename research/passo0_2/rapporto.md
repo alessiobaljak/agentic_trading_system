@@ -106,4 +106,16 @@ toccare gli strumenti):
 **Ricontrolli con gli strumenti nuovi** (richiesti dalla correzione 3, prima dell'apertura): la prova a placebo a 1d e
 il controllo positivo a 1d si rifanno; gli esiti vanno in `research/taratura/placebo_paniere/risultati.md`, in
 `research/campagne/PANIERE/regole.md` (sezione 6) e nelle voci `ricontrollo_con_la_regola_nuova` di
-`parametri_2.yaml`. Stato: in corso al momento di questa riga (14 ottobre, mattina).
+`parametri_2.yaml`.
+
+* **Controllo positivo a 1d con la regola nuova** (`controllo_positivo_1d_regola3.json`, 14 ottobre, 05:36 UTC, 80
+  monete, stesso modulo del 13 ottobre): senza ritardo ancora **non valutabile**, perché le monete su cui la (b) non
+  entra portano il 12,0% dei trade (long: 13 monete, 424 su 3.535) e il 13,3% (short: 16 monete, 457 su 3.427), oltre
+  il 10%: la regola fa quello che dice, e la strategia che guarda avanti resta un caso estremo (in posizione quasi
+  sempre). Con il ritardo di una barra la (b) si costruisce (3 e 6 monete fuori, 1,1% e 3,7% dei trade) e il t è
+  −0,28 (long) e −0,55 (short): il vantaggio sparisce come deve. Contro la (a) senza ritardo t 1,47 e 1,46 con 7
+  blocchi (R medio +0,37 e +0,27 a trade contro +0,04 e −0,08 della (a), effetto grappolo 39 e 30): non «netto».
+  Conferma della lezione 2: con posizioni fino a 60 barre i blocchi sono 7 e anche +0,3 R a trade non risulta netto.
+* **Prova a placebo a 1d con la regola nuova**: in corso (lancio delle 05:37 UTC, commit c9bb86ad); atteso identico al
+  13 ottobre (nessuna delle 96 placebo aveva monete senza ingressi). Esito in
+  `research/taratura/placebo_paniere/risultati.md`.

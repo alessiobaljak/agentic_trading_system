@@ -1,0 +1,292 @@
+{
+ "regola": "PROTOCOLLO_2, correzione 3 (14 ott 2026): monete senza ingressi fuori dalla (b), 10%",
+ "impronte_strumenti": {
+  "research/src/gruppo.py": "1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990",
+  "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+  "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+  "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+  "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+ },
+ "long": {
+  "passa": false,
+  "condizioni": {
+   "batte_nettamente_a_e_b_senza_ritardo": false,
+   "t_con_ritardo_sotto_meta_di_quello_senza": false
+  },
+  "direzione": "long",
+  "timeframe": "1d",
+  "t_senza_ritardo": -Infinity,
+  "t_con_ritardo": -0.28108711658358393,
+  "senza_ritardo": {
+   "t": -Infinity,
+   "p_value": 1.0,
+   "valutabile": false,
+   "motivi_non_valutabile": [
+    "confronto con la (b) non valutabile: gli ingressi casuali non entrano su BLZUSDT, CELRUSDT, CTSIUSDT, HBARUSDT, IOTAUSDT, KLAYUSDT, LPTUSDT, LRCUSDT, NKNUSDT, RLCUSDT, STMXUSDT, SXPUSDT, XEMUSDT: portano 424 trade del candidato su 3535, piu' del 10%"
+   ],
+   "trade": 3535,
+   "r_medio": 0.3705508852605449,
+   "blocco": 483,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": 1.4699499468712172,
+    "media": 0.03610543295719058,
+    "motivo": null,
+    "errore_differenza": 0.22752166018660677,
+    "monete_lasciate_fuori": [],
+    "quota_trade_candidato_lasciati_fuori": 0.0
+   },
+   "baseline_b": {
+    "valutabile": false,
+    "netta": false,
+    "t": -Infinity,
+    "media": 0.029277175087199597,
+    "motivo": "gli ingressi casuali non entrano su BLZUSDT, CELRUSDT, CTSIUSDT, HBARUSDT, IOTAUSDT, KLAYUSDT, LPTUSDT, LRCUSDT, NKNUSDT, RLCUSDT, STMXUSDT, SXPUSDT, XEMUSDT: portano 424 trade del candidato su 3535, piu' del 10%",
+    "errore_differenza": Infinity,
+    "monete_senza_ingressi": [
+     "BLZUSDT",
+     "CELRUSDT",
+     "CTSIUSDT",
+     "HBARUSDT",
+     "IOTAUSDT",
+     "KLAYUSDT",
+     "LPTUSDT",
+     "LRCUSDT",
+     "NKNUSDT",
+     "RLCUSDT",
+     "STMXUSDT",
+     "SXPUSDT",
+     "XEMUSDT"
+    ],
+    "trade_candidato_senza_ingressi": 424,
+    "quota_trade_candidato_senza_ingressi": 0.11994342291371994,
+    "n_monete": 80,
+    "n_monete_combinazione": 67,
+    "m_parziali": 0,
+    "n_simulazioni": 200
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.05357474912462003,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 38.932805983756026,
+   "stabilita_superata": null,
+   "estremi_tutte_superate": null,
+   "impronte_strumenti": {
+    "research/src/gruppo.py": "1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990",
+    "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+    "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+    "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+    "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+   }
+  },
+  "con_ritardo": {
+   "t": -0.28108711658358393,
+   "p_value": 0.6059573587693263,
+   "valutabile": true,
+   "motivi_non_valutabile": [],
+   "trade": 3386,
+   "r_medio": -0.024351056309145663,
+   "blocco": 471,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.17900680001793443,
+    "media": 0.02069788737436247,
+    "motivo": null,
+    "errore_differenza": 0.2516605161311999,
+    "monete_lasciate_fuori": [],
+    "quota_trade_candidato_lasciati_fuori": 0.0
+   },
+   "baseline_b": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.28108711658358393,
+    "media": 0.0035007548547787717,
+    "motivo": null,
+    "errore_differenza": 0.09908604671193515,
+    "monete_senza_ingressi": [
+     "CTSIUSDT",
+     "KLAYUSDT",
+     "LPTUSDT"
+    ],
+    "trade_candidato_senza_ingressi": 36,
+    "quota_trade_candidato_senza_ingressi": 0.010632014176018901,
+    "n_monete": 80,
+    "n_monete_combinazione": 77,
+    "m_parziali": 0,
+    "n_simulazioni": 200
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.053728414376656534,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 33.44834374113663,
+   "stabilita_superata": true,
+   "estremi_tutte_superate": false,
+   "impronte_strumenti": {
+    "research/src/gruppo.py": "1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990",
+    "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+    "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+    "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+    "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+   }
+  },
+  "secondi": 90.8
+ },
+ "short": {
+  "passa": false,
+  "condizioni": {
+   "batte_nettamente_a_e_b_senza_ritardo": false,
+   "t_con_ritardo_sotto_meta_di_quello_senza": false
+  },
+  "direzione": "short",
+  "timeframe": "1d",
+  "t_senza_ritardo": -Infinity,
+  "t_con_ritardo": -0.5515113141363072,
+  "senza_ritardo": {
+   "t": -Infinity,
+   "p_value": 1.0,
+   "valutabile": false,
+   "motivi_non_valutabile": [
+    "confronto con la (b) non valutabile: gli ingressi casuali non entrano su 1000XECUSDT, BANDUSDT, BELUSDT, CELRUSDT, CTSIUSDT, GTCUSDT, KLAYUSDT, LINAUSDT, LPTUSDT, NKNUSDT, ONTUSDT, ROSEUSDT, SFPUSDT, STMXUSDT, TOMOUSDT, XEMUSDT: portano 457 trade del candidato su 3427, piu' del 10%"
+   ],
+   "trade": 3427,
+   "r_medio": 0.27436058290228504,
+   "blocco": 469,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": 1.4560320899346901,
+    "media": -0.08421527821784656,
+    "motivo": null,
+    "errore_differenza": 0.24626920216862488,
+    "monete_lasciate_fuori": [],
+    "quota_trade_candidato_lasciati_fuori": 0.0
+   },
+   "baseline_b": {
+    "valutabile": false,
+    "netta": false,
+    "t": -Infinity,
+    "media": -0.03206124672520639,
+    "motivo": "gli ingressi casuali non entrano su 1000XECUSDT, BANDUSDT, BELUSDT, CELRUSDT, CTSIUSDT, GTCUSDT, KLAYUSDT, LINAUSDT, LPTUSDT, NKNUSDT, ONTUSDT, ROSEUSDT, SFPUSDT, STMXUSDT, TOMOUSDT, XEMUSDT: portano 457 trade del candidato su 3427, piu' del 10%",
+    "errore_differenza": Infinity,
+    "monete_senza_ingressi": [
+     "1000XECUSDT",
+     "BANDUSDT",
+     "BELUSDT",
+     "CELRUSDT",
+     "CTSIUSDT",
+     "GTCUSDT",
+     "KLAYUSDT",
+     "LINAUSDT",
+     "LPTUSDT",
+     "NKNUSDT",
+     "ONTUSDT",
+     "ROSEUSDT",
+     "SFPUSDT",
+     "STMXUSDT",
+     "TOMOUSDT",
+     "XEMUSDT"
+    ],
+    "trade_candidato_senza_ingressi": 457,
+    "quota_trade_candidato_senza_ingressi": 0.13335278669390138,
+    "n_monete": 80,
+    "n_monete_combinazione": 64,
+    "m_parziali": 0,
+    "n_simulazioni": 200
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.056661133688769946,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 29.561887309970633,
+   "stabilita_superata": null,
+   "estremi_tutte_superate": null,
+   "impronte_strumenti": {
+    "research/src/gruppo.py": "1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990",
+    "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+    "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+    "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+    "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+   }
+  },
+  "con_ritardo": {
+   "t": -0.5515113141363072,
+   "p_value": 0.6993985069239654,
+   "valutabile": true,
+   "motivi_non_valutabile": [],
+   "trade": 3291,
+   "r_medio": -0.07433219834726419,
+   "blocco": 454,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.09016406822016562,
+    "media": -0.048164447748312036,
+    "motivo": null,
+    "errore_differenza": 0.29022371234464667,
+    "monete_lasciate_fuori": [],
+    "quota_trade_candidato_lasciati_fuori": 0.0
+   },
+   "baseline_b": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.5515113141363072,
+    "media": -0.02443261056325706,
+    "motivo": null,
+    "errore_differenza": 0.0904779040882462,
+    "monete_senza_ingressi": [
+     "CTSIUSDT",
+     "GTCUSDT",
+     "KLAYUSDT",
+     "LPTUSDT",
+     "NKNUSDT",
+     "XEMUSDT"
+    ],
+    "trade_candidato_senza_ingressi": 120,
+    "quota_trade_candidato_senza_ingressi": 0.03646308113035551,
+    "n_monete": 80,
+    "n_monete_combinazione": 74,
+    "m_parziali": 0,
+    "n_simulazioni": 200
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.05926808864173876,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 27.931789694784516,
+   "stabilita_superata": false,
+   "estremi_tutte_superate": false,
+   "impronte_strumenti": {
+    "research/src/gruppo.py": "1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990",
+    "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+    "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+    "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+    "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+   }
+  },
+  "secondi": 85.2
+ }
+}
