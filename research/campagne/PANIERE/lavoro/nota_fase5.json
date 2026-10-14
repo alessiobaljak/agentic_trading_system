@@ -1,0 +1,15 @@
+{
+ "testo": "Fase 5, sfida alla conclusione (Passo 3 del protocollo e regole del gruppo, sezione 3, punto 6), sui dati di costruzione.",
+ "correzione_di_PANIERE-088": "Nella voce PANIERE-088 l'elenco delle violazioni di PANIERE-043 è scritto male («tranne la coppia BEL/BLZ già contata»): le 8 violazioni di PANIERE-043 sono le 6 di PANIERE-040 (UNFIUSDT x2, PEOPLEUSDT, WAVESUSDT, BELUSDT, BLZUSDT) più GTCUSDT 2021-12-12 e KNCUSDT 2022-05-16 (lavoro/violazioni.out). L'esito non cambia.",
+ "prova_dello_scettico": "PANIERE-089: la regola dei candidati (k 1,25, uscita dopo 3 barre) senza la condizione di ritardo, cioè tutte le monete liquide dopo un giorno forte di Bitcoin: R medio +0,075, t contro la (b) 1,97 (non netta), contro il candidato PANIERE-043 R +0,135 e t 3,20. Previsione (R fra +0,08 e +0,15, t fra 2 e 3,5) sbagliata di poco verso il basso. Cosa vuol dire: il ritardo aggiunge circa +0,06 R a trade, metà del vantaggio; l'altra metà è «comprare il paniere dopo un giorno forte di Bitcoin» (la forma 1 di «è solo il mercato»). La Fase 3 non lo aveva visto (i quartili del ritardo non erano ordinati).",
+ "domande": {
+  "budget_usato_per_intero": "sì: 18 varianti (11 esaminate, 7 scarti) e 12 ritocchi su 12 (11 esaminati, 1 scarto); nessun ritocco prima di aver finito le 18 varianti.",
+  "concentrazione_su_poche_famiglie": "sì, e lo dico: i 12 ritocchi stanno tutti nell'idea C (le idee A e B morte per la loro previsione di famiglia) e nelle 4 famiglie con t più alto; ogni famiglia è rimasta entro 3 ritocchi.",
+  "cosa_e_piu_probabilmente_fortuna": "i due candidati sono il migliore di 5 e di 8 tentativi nell'idea C, con la stessa coppia di modifiche (soglia 1,25 e uscita a 3 barre) portata da una famiglia all'altra; battono la (a) per un soffio (2,19 contro 2,11 e 2,20 contro 2,18); col ritardo di un giorno il t scende sotto la metà; fra i giorni migliori ci sono il 15 e il 16 gennaio 2023, le uscite «fine dati» dell'ultimo giorno di costruzione (rialzo di gennaio 2023).",
+  "conoscenza_del_2024_2026": "nessuna scelta consapevole: le idee, le fonti e le varianti sono quelle del testo approvato; le monete non sono mai nominate in una regola; i ritocchi vengono solo dalla Fase 3 sui dati di costruzione.",
+  "monete_note_dopo_il_2023": "nessuna regola, filtro o timeframe nomina monete; il filtro di liquidità lo applica gruppo.py.",
+  "peso_delle_monete_piu_presenti": "basso: la moneta più presente porta il 3,4% dei trade (TRXUSDT, PANIERE-040) e il 2,6% (EOSUSDT, PANIERE-043); senza le 3 monete migliori l'R resta +0,117 e +0,124.",
+  "meccanismo_scelto_dove_l_esame_sbaglia": "no: idee e timeframe sono quelli del testo; la sezione 11 del protocollo non ha guidato nessuna scelta."
+ },
+ "esito": "Nessun candidato sopravvive (Fase 4: liquidazione per tutti e due, e ritardo di una barra sotto la metà). Nessuna validazione. Esito della campagna: nessuna strategia valida trovata per il paniere, dopo aver usato tutto il budget."
+}
