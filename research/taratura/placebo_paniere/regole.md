@@ -49,16 +49,17 @@ riusa il lanciatore della prova a 1 ora (`research/taratura/placebo_gruppo/esegu
 le serie 1d, l'elenco e le schede del paniere; stesse impronte e stessi controlli di identità, ramo remoto quello
 principale. Gli esiti vanno in `esiti_k<k>.jsonl` di questa cartella; il riassunto in `risultati.md`.
 
-## 6. Le impronte degli strumenti al lancio (scritte dal coordinamento, 13 ottobre 2026; rilancio del 14 ottobre)
+## 6. Le impronte degli strumenti al lancio (scritte dal coordinamento, 13 ottobre 2026; rilanci del 14 ottobre)
 
 I cinque file dell'esame, come li vede `gruppo.impronte_degli_strumenti()` al momento del lancio vero; il
 lanciatore rifiuta di partire se un file sul disco non ha questa impronta. Queste sono le impronte del **rilancio del
 14 ottobre 2026** (correzione 3 qui sotto: `statistica.py`, `gruppo.py` e `dati.py` sono cambiati); quelle del
-lancio del 13 ottobre sono scritte nella correzione 3, abbreviate, con il commit che le porta.
+lancio del 13 ottobre sono scritte nella correzione 3, abbreviate, con il commit che le porta; quelle del primo
+rilancio del 14 ottobre (mattina, `gruppo.py` 1072203c…) nella correzione 4.
 
 * `7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7`  `research/config/parametri.yaml`
 * `1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5`  `research/src/dati.py`
-* `1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990`  `research/src/gruppo.py`
+* `f3c196258e7f8bec38e7cc3f2069a7a2fe9ef69ab398f8b8beaeb01e320cb326`  `research/src/gruppo.py`
 * `2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6`  `research/src/motore.py`
 * `e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1`  `research/src/statistica.py`
 
@@ -120,3 +121,25 @@ tetto di 60 barre (correzione 2), stessi sfasamenti e semi. Cambiano solo le imp
 qui e `risultati.md` nuovo. Atteso, scritto prima: nessuna placebo del 13 ottobre aveva monete senza ingressi (la
 regola non scatta), quindi gli esiti del rilancio dovrebbero essere identici bit per bit a quelli del 13 ottobre; una
 differenza sarebbe un errore degli strumenti, da capire prima dell'apertura della campagna.
+
+### Correzione 4 — secondo rilancio: il paniere nel contesto e il terreno della seconda edizione (14 ott 2026, 09:35 UTC, prima di qualunque esito del rilancio)
+
+**Cosa è successo.** Alla fine della Fase 0 la sessione di campagna ha fatto notare due mancanze degli strumenti
+(PROTOCOLLO_2, correzione 5, scelta (a) del proprietario alle 09:05 UTC): la variante non riceveva la serie del
+paniere (idee B e C2) e l'esame costruiva i parametri del motore con l'ingresso a mercato della prima edizione, non
+con l'ordine limite della seconda. `gruppo.py` è cambiato in entrambe le cose (`gruppo.py` del primo rilancio
+1072203c…, ora {H[:8]}…; gli altri quattro file sono quelli del primo rilancio); il lanciatore della prova a 1 ora ha una
+voce `OPZIONI_ESAME` (vuota: la prova a 1 ora non cambia) e quello del paniere la riempie con `terreno =
+«seconda_edizione»`: la settima differenza dichiarata.
+
+**Cosa cambia nella prova.** Le sei regole, i parametri per il giorno, il tetto di 60 barre, gli sfasamenti e i semi
+restano. Cambia il terreno: **gli ingressi sono ordini limite** alla chiusura della barra di segnale, validi una barra,
+condizione «attraversato», commissione maker 0,02% e scarto zero, come la campagna; le uscite a mercato con lo scarto
+della scheda. Le placebo non usano il paniere (le righe arrivano alla variante e stanno nell'impronta dei dati, ma le
+regole da manuale non le leggono).
+
+**Atteso, scritto prima.** I numeri NON saranno quelli del 13 ottobre e del primo rilancio: con l'ordine limite
+alcuni segnali non si riempiono (nella prova degli ordini limite del 13 ottobre, a 1 ora, il 2% dei segnali) e i
+prezzi d'ingresso cambiano. Deve reggere lo stesso l'esame, con le stesse soglie della sezione 5: al massimo il 3%
+di «nette» in costruzione, al massimo il 13% con p sotto 0,10 in validazione, almeno 40 placebo valutabili per
+periodo. Gli esiti del primo rilancio (96 righe, identiche al 13 ottobre) restano in `lancio_14ott_mattina/`.

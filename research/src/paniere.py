@@ -23,10 +23,20 @@ insieme: ``t`` e' forte se ``|r[t]| > k * dev[t]`` (``dev[t]`` dai giorni ``t - 
 t - 1``, almeno ``minimo`` finiti).
 
 Tutto vive nel calendario dei giorni UTC: ``ts`` e' l'apertura del giorno in ms.
+
+Dal 14 ottobre 2026 (seconda edizione, PROTOCOLLO_2 correzione 5) le funzioni
+della variante ricevono da ``gruppo.py`` le righe giornaliere del paniere
+(``ctx.paniere_chiuse_entro(ts)``: ``GiornoPaniere`` con ``ts``, ``close_ts``,
+``chiusure`` = {simbolo: chiusura} e ``sotto_liquidita``), e le tre funzioni
+«dell'ultimo giorno» qui sotto (``rendimenti_ultimo_giorno``,
+``classifica_ultimo_giorno``, ``giorno_forte_ultimo``) danno, per l'ultima riga
+vista, lo stesso risultato delle funzioni sulle matrici intere: sono fatte per
+essere chiamate alla chiusura di ogni barra, con un costo che non cresce con la
+storia.
 """
 from __future__ import annotations
 
-from typing import Dict, Mapping, Sequence, Tuple
+from typing import Collection, Dict, Mapping, Sequence, Tuple
 
 import numpy as np
 
@@ -169,3 +179,72 @@ def serie_paniere(candele: Mapping[str, Sequence[Candela]], n_giorni: int, stori
         "n_monete": n_monete,
         "indice": {int(ts): i for i, ts in enumerate(giorni)},
     }
+
+
+#: la moneta di riferimento, fuori dalla classifica del paniere (PROTOCOLLO_2, sezione 4)
+MONETA_RIFERIMENTO = "BTCUSDT"
+
+
+def rendimenti_ultimo_giorno(righe: Sequence, n_giorni: int, storia_minima: int = 0,
+                             escludi: Collection[str] = (MONETA_RIFERIMENTO,)) -> Dict[str, float]:
+    """{simbolo: close[t] / close[t - n] - 1} per l'ultima riga ``t`` di ``righe`` (le righe del paniere di ``gruppo.py``).
+
+    Entrano le monete con la chiusura in ``t`` e in ``t - n_giorni`` (righe del
+    calendario: un giorno senza candela e' un buco), non in ``escludi`` e non in
+    ``sotto_liquidita`` di ``t``; con ``storia_minima`` > 0 anche con una
+    chiusura nella riga ``t - storia_minima`` (presente almeno da tanti giorni).
+    Vuoto se le righe non bastano. Stesso numero di ``rendimento_n_giorni`` sulla
+    matrice intera, moneta per moneta, con l'aritmetica in virgola mobile nello
+    stesso ordine.
+    """
+    if n_giorni < 1:
+        raise ValueError("n_giorni deve essere almeno 1")
+    if storia_minima < 0:
+        raise ValueError("storia_minima non puo' essere negativa")
+    n_righe = len(righe)
+    if n_righe <= n_giorni or n_righe <= storia_minima:
+        return {}
+    oggi = righe[-1]
+    prima = righe[-1 - n_giorni]
+    antica = righe[-1 - storia_minima] if storia_minima > 0 else None
+    vietate = set(escludi) | set(oggi.sotto_liquidita)
+    out: Dict[str, float] = {}
+    for simbolo, chiusura in oggi.chiusure.items():
+        if simbolo in vietate:
+            continue
+        base = prima.chiusure.get(simbolo)
+        if base is None:
+            continue
+        if antica is not None and simbolo not in antica.chiusure:
+            continue
+        out[simbolo] = float(chiusura) / float(base) - 1.0
+    return out
+
+
+def classifica_ultimo_giorno(righe: Sequence, n_giorni: int, storia_minima: int = 0,
+                             escludi: Collection[str] = (MONETA_RIFERIMENTO,)) -> Tuple[Dict[str, int], int]:
+    """({simbolo: rango}, n_monete) dell'ultima riga: rango 1 = rendimento a ``n_giorni`` piu' alto, parita' alfabetica.
+
+    Le monete sono quelle di ``rendimenti_ultimo_giorno``; la regola del rango e'
+    quella di ``classifica`` (ordine stabile per rendimento decrescente, poi
+    simbolo). ``n_monete`` e' il numero delle monete classificate.
+    """
+    rendimenti = rendimenti_ultimo_giorno(righe, n_giorni, storia_minima, escludi)
+    ordine = sorted(rendimenti, key=lambda s: (-rendimenti[s], s))
+    return {s: r for r, s in enumerate(ordine, start=1)}, len(ordine)
+
+
+def giorno_forte_ultimo(chiusure: Sequence[float], k: float, n: int = 60, minimo: int = 40) -> int:
+    """+1, -1 o 0 per l'ultimo giorno di una sequenza di chiusure giornaliere (es. BTCUSDT), come ``giorni_forti``.
+
+    Il rendimento dell'ultimo giorno si confronta con ``k`` volte la deviazione
+    standard dei ``n`` rendimenti PRECEDENTI (``deviazione_mobile``, almeno
+    ``minimo`` finiti); con meno di ``n + 2`` chiusure vale 0. Stesso valore di
+    ``giorni_forti`` sulla serie intera, all'ultimo giorno.
+    """
+    valori = np.asarray([float(c) for c in list(chiusure)[-(n + 2):]], dtype=float)
+    if valori.size < n + 2:
+        return 0
+    rendimenti = valori[1:] / valori[:-1] - 1.0
+    return int(giorni_forti(rendimenti, k, n, minimo)[-1])
+

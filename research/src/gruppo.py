@@ -37,8 +37,9 @@ sola differenza di ``ingressi_placebo`` (punto 5).
    ``research/campagne/GRUPPO/codice/``). ``gruppo.py`` lo esegue per percorso
    dai byte di cui ha calcolato l'impronta SHA-256, DA CAPO PER OGNI PEZZO DI
    LAVORO (una moneta): se il file cambia durante un esame, l'esame si ferma con
-   un errore. Puo' importare solo la libreria standard, numpy e
-   ``research.src.motore`` (per ``Segnale``): gli import si controllano sul testo
+   un errore. Puo' importare solo la libreria standard, numpy,
+   ``research.src.motore`` (per ``Segnale``) e, dal 14 ottobre 2026,
+   ``research.src.paniere`` (la classifica del paniere): gli import si controllano sul testo
    (``controlla_import_della_variante``), perche' un altro file di ``codice/``
    non sarebbe nell'impronta. Non legge file e non usa la rete. Un dizionario o
    una cache al livello del modulo nascono vuoti per ogni moneta (il modulo e'
@@ -77,9 +78,8 @@ sola differenza di ``ingressi_placebo`` (punto 5).
    rifare gli stessi trade, campo per campo: se no ``ContrattoNonRispettato``
    (la (b) e le sfasate userebbero un'altra uscita senza avviso).
 3. **Il contesto** ``ctx`` (``Contesto``) lo costruisce SOLO ``gruppo.py``, uno
-   per moneta e per pezzo. Non contiene il simbolo, ne' la posizione j, ne'
-   dati di altre monete del gruppo (regole.md, sezione 3, punto 3: niente
-   strategie fra monete). Contiene, in sola lettura:
+   per moneta e per pezzo. Non contiene la posizione j. Contiene, in sola
+   lettura:
 
    * ``ctx.timeframe`` (es. ``"1h"``) e ``ctx.ms_per_barra``;
    * ``ctx.btc_chiuse_entro(ts)``: le candele LAST di BTCUSDT dello stesso
@@ -87,9 +87,26 @@ sola differenza di ``ingressi_placebo`` (punto 5).
    * ``ctx.funding_regolato_entro(ts)``: i regolamenti del funding della moneta
      (coppie ``(ts, tasso)``, gli stessi che il motore applica: in un mese
      senza file di funding non ce ne sono, sezione 2, punto 9) con istante
-     ``<= ts``.
+     ``<= ts``;
+   * dal 14 ottobre 2026 (seconda edizione, PROTOCOLLO_2 correzione 5; fino ad
+     allora il contesto non aveva ne' il simbolo ne' dati di altre monete,
+     regole.md, sezione 3, punto 3): ``ctx.simbolo``, il simbolo della moneta
+     del pezzo, che serve SOLO a trovare la propria moneta nel paniere (una
+     regola che tratta una moneta diversamente dalle altre per nome resta
+     vietata), e ``ctx.paniere_chiuse_entro(ts)``: le righe GIORNALIERE del
+     paniere (``GiornoPaniere``: ``ts`` apertura del giorno UTC, ``close_ts``,
+     ``chiusure`` = {simbolo: chiusura last 1d} delle monete dell'esame e di
+     BTCUSDT che hanno la candela quel giorno, in sola lettura, e
+     ``sotto_liquidita`` = le monete il cui mese e' sotto la soglia di
+     liquidita' quel giorno) con ``close_ts <= ts``: un giorno per riga, tutti
+     i giorni del calendario dal primo giorno di dati della moneta piu' antica
+     alla fine del periodo, buchi compresi (una moneta senza candela quel
+     giorno manca da ``chiusure``). Le funzioni di ``research.src.paniere``
+     (``classifica_ultimo_giorno``, ``rendimenti_ultimo_giorno``,
+     ``giorno_forte_ultimo``) leggono queste righe. Le righe sono le stesse per
+     ogni moneta dell'esame e stanno nell'impronta dei dati di ogni pezzo.
 
-   Niente sguardo avanti: le due funzioni non vanno mai oltre la chiusura
+   Niente sguardo avanti: le tre funzioni non vanno mai oltre la chiusura
    dell'ultima barra che la strategia (o la funzione del segnale) ha ricevuto
    dal motore, che ``gruppo.py`` registra a ogni chiamata; un ``ts`` futuro
    restituisce solo cio' che e' gia' chiuso o regolato adesso, e durante la
@@ -98,7 +115,10 @@ sola differenza di ``ingressi_placebo`` (punto 5).
    Restituiscono una vista in sola lettura (``motore.StoriaChiusa``) su una
    lista che contiene solo cio' che e' gia' chiuso, mai la serie intera; ``ts``
    e' un intero in ms. La strategia riceve dal motore, come sempre, le sole
-   barre chiuse della moneta (il last allineato al mark).
+   barre chiuse della moneta (il last allineato al mark). A barre giornaliere
+   la riga del paniere del giorno ``t`` ha lo stesso ``close_ts`` della candela
+   della moneta: alla chiusura della barra ``t`` la variante vede la riga di
+   ``t`` (le chiusure di tutte le monete di quel giorno) e non quella di ``t + 1``.
 4. **Cosa fa gruppo.py intorno alle funzioni della sessione**, per ogni moneta:
 
    * i ``Parametri`` del motore (``parametri_moneta``): commissione, rischio,
@@ -108,7 +128,16 @@ sola differenza di ``ingressi_placebo`` (punto 5).
      (``capitale_per_moneta_usdt``), lo slippage dalla fascia della scheda
      (``dati.leggi_scheda_gruppo``), piu' ``moltiplicatore_costi``,
      ``ritardo_barre`` e ``riempimento_intrabarra`` della chiamata, uguali su
-     tutte le monete e per test, (a), (b) e sfasate;
+     tutte le monete e per test, (a), (b) e sfasate; e il TERRENO d'ingresso
+     (dal 14 ottobre 2026, PROTOCOLLO_2 correzione 5): «prima_edizione», a
+     mercato all'apertura della barra dopo, oppure «seconda_edizione», l'ordine
+     limite alla chiusura della candela di segnale letto da
+     ``research/config/parametri_2.yaml`` congelato (``terreno_seconda_edizione``:
+     validita', condizione, commissione maker; lo scarto della scheda resta sulle
+     uscite a mercato). In campagna lo decide il marcatore (PANIERE: seconda
+     edizione) e l'argomento ``terreno`` delle funzioni pubbliche, se diverso, e'
+     rifiutato; fuori campagna lo sceglie chi chiama (``terreno=None`` = prima
+     edizione). Il terreno sta nelle ``opzioni`` dell'esame (impronta e risultato);
    * i dati (``CaricatoreDisco``): last e mark con ``dati.carica_serie_allineate``,
      funding con ``dati.carica_funding``, BTCUSDT con ``dati.carica_candele`` e i
      mesi sotto la liquidita' con ``dati.mesi_sotto_liquidita``;
@@ -306,7 +335,7 @@ from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from concurrent.futures.process import BrokenProcessPool
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Callable, Dict, Iterator, List, Mapping, NamedTuple, Optional, Sequence, Tuple, Union
 
 import numpy as np
 
@@ -347,7 +376,7 @@ FUNZIONI_DEL_CONTRATTO = ("crea_variante", "crea_a", "crea_casuale", "crea_segna
 #: 2 (10 ottobre 2026): ogni riga ha l'impronta dei dati della moneta (``impronta_dati``).
 FORMATO_AVANZAMENTO = 2
 #: Gli import che il modulo della variante puo' fare oltre alla libreria standard (contratto, punto 1).
-IMPORT_AMMESSI = ("numpy", "research.src.motore")
+IMPORT_AMMESSI = ("numpy", "research.src.motore", "research.src.paniere")
 #: I campi di un trade del motore che l'esame conserva (file dei trade e avanzamento).
 CAMPI_TRADE = ("direzione", "ts_entrata", "ts_uscita", "entrata", "uscita", "stop", "target", "quantita",
                "esito", "r", "pnl", "funding_pagato", "ridotto", "violazione_liquidazione")
@@ -518,9 +547,80 @@ def regole_del_gruppo(percorso: Optional[Union[str, Path]] = None) -> Dict[str, 
     }
 
 
+#: I terreni d'ingresso (PROTOCOLLO_2, sezione 3.1, e correzione 5 del 14 ott 2026): «prima_edizione» entra a
+#: mercato all'apertura della barra dopo (parametri.yaml); «seconda_edizione» con l'ordine limite alla chiusura
+#: della candela di segnale (parametri_2.yaml, congelato). In campagna lo decide il marcatore
+#: (``TERRENO_DELLA_CAMPAGNA``); fuori campagna lo sceglie chi chiama (prova a placebo, vault, test).
+TERRENI = ("prima_edizione", "seconda_edizione")
+TERRENO_DELLA_CAMPAGNA = {"PANIERE": "seconda_edizione"}
+TERRENO_PRIMA_EDIZIONE: Dict[str, object] = {"edizione": 1, "ingresso": "mercato"}
+PERCORSO_PARAMETRI_2 = dati.PERCORSO_PARAMETRI.with_name("parametri_2.yaml")
+
+
+def terreno_seconda_edizione(percorso: Optional[Union[str, Path]] = None) -> Dict[str, object]:
+    """Il terreno d'ingresso della seconda edizione da ``research/config/parametri_2.yaml`` (PROTOCOLLO_2, sezione 3.1).
+
+    Il file deve avere ``stato: congelato`` (approvato dal proprietario) e
+    ``terreno.ingresso`` con ``tipo: limite``, ``validita_barre``, ``condizione``
+    («attraversato» o «toccato»), ``commissione_maker_per_lato`` e
+    ``scarto_per_lato`` 0 (il motore non applica scarto a un ordine limite
+    riempito al suo prezzo; lo scarto della scheda resta sulle uscite a mercato).
+    Ritorna ``edizione`` 2, ``ingresso`` «limite», i tre numeri e
+    ``impronta_parametri_2`` (SHA-256 del file), che entra nelle opzioni
+    dell'esame e quindi nella sua impronta. ValueError se il file non e' cosi'.
+    """
+    import yaml  # come in regole_del_gruppo: pyyaml serve solo qui e la'
+
+    p = Path(percorso) if percorso is not None else PERCORSO_PARAMETRI_2
+    contenuto = p.read_bytes()
+    albero = yaml.safe_load(contenuto.decode("utf-8"))
+    if not isinstance(albero, Mapping) or albero.get("stato") != "congelato":
+        raise ValueError(f"{p}: il terreno della seconda edizione vale solo con «stato: congelato» "
+                         f"(trovato {albero.get('stato') if isinstance(albero, Mapping) else albero!r})")
+    ingresso = _voce(albero, "terreno", "ingresso")
+    if _voce(ingresso, "tipo") != "limite":
+        raise ValueError(f"{p}: terreno.ingresso.tipo deve essere «limite», non {_voce(ingresso, 'tipo')!r}")
+    condizione = _voce(ingresso, "condizione")
+    if condizione not in ("attraversato", "toccato"):
+        raise ValueError(f"{p}: terreno.ingresso.condizione sconosciuta: {condizione!r}")
+    validita = _numero(_voce(ingresso, "validita_barre"), "terreno.ingresso.validita_barre", intero=True)
+    if validita < 1:
+        raise ValueError(f"{p}: terreno.ingresso.validita_barre deve essere almeno 1")
+    maker = _numero(_voce(ingresso, "commissione_maker_per_lato"), "terreno.ingresso.commissione_maker_per_lato")
+    scarto = _voce(ingresso, "scarto_per_lato")
+    if isinstance(scarto, bool) or not isinstance(scarto, (int, float)) or maker < 0 or scarto != 0:
+        raise ValueError(f"{p}: commissione maker {maker} o scarto d'ingresso {scarto} non validi (lo scarto deve "
+                         "essere 0: il motore non ne applica a un ordine limite)")
+    return {"edizione": 2, "ingresso": "limite", "limite_validita_barre": int(validita),
+            "limite_condizione": str(condizione), "commissione_maker_per_lato": float(maker),
+            "impronta_parametri_2": hashlib.sha256(contenuto).hexdigest()}
+
+
+def _terreno(richiesto: Optional[str], chi: str) -> Dict[str, object]:
+    """Il terreno dell'esame: in campagna lo decide il marcatore, fuori campagna chi chiama (predefinito la prima edizione).
+
+    Con un marcatore di campagna il terreno e' ``TERRENO_DELLA_CAMPAGNA`` del
+    simbolo del marcatore (PANIERE: seconda edizione; GRUPPO e le monete: prima)
+    e un ``richiesto`` diverso alza ``dati.VietatoInCampagna``: la sessione non
+    sceglie il terreno. Senza marcatore ``richiesto`` vale (None = prima
+    edizione): la prova a placebo del paniere e il vault di una candidata della
+    seconda edizione passano «seconda_edizione».
+    """
+    if richiesto is not None and richiesto not in TERRENI:
+        raise ValueError(f"terreno sconosciuto: {richiesto!r} (uno di {TERRENI})")
+    if _in_campagna():
+        della_sessione = TERRENO_DELLA_CAMPAGNA.get(simbolo_gruppo_corrente(), "prima_edizione")
+        if richiesto is not None and richiesto != della_sessione:
+            raise dati.VietatoInCampagna(f"{chi}: terreno {richiesto!r} in una sessione di campagna: il terreno lo "
+                                         f"decide il marcatore ({della_sessione})")
+        richiesto = della_sessione
+    scelto = richiesto or "prima_edizione"
+    return terreno_seconda_edizione() if scelto == "seconda_edizione" else dict(TERRENO_PRIMA_EDIZIONE)
+
+
 def _opzioni_del_motore(regole: Mapping, moltiplicatore_costi: float, ritardo_barre: int,
-                        riempimento_intrabarra: Optional[str]) -> Dict[str, object]:
-    """Le tre opzioni della chiamata che cambiano i ``Parametri`` (regole.md, sezione 6, punto 2, e sezione 13: costi doppi, ritardo, regola intra-barra)."""
+                        riempimento_intrabarra: Optional[str], terreno: Optional[Mapping] = None) -> Dict[str, object]:
+    """Le tre opzioni della chiamata che cambiano i ``Parametri`` (regole.md, sezione 6, punto 2, e sezione 13: costi doppi, ritardo, regola intra-barra), piu' il terreno d'ingresso (``_terreno``; None = prima edizione)."""
     if isinstance(moltiplicatore_costi, bool) or not isinstance(moltiplicatore_costi, (int, float)) \
             or not math.isfinite(moltiplicatore_costi) or moltiplicatore_costi <= 0:
         raise ValueError(f"moltiplicatore_costi deve essere un numero positivo, non {moltiplicatore_costi!r}")
@@ -530,11 +630,24 @@ def _opzioni_del_motore(regole: Mapping, moltiplicatore_costi: float, ritardo_ba
     if riempimento not in ("stop_prima", "target_prima"):
         raise ValueError(f"riempimento_intrabarra sconosciuto: {riempimento!r}")
     return {"moltiplicatore_costi": float(moltiplicatore_costi), "ritardo_barre": operator.index(ritardo_barre),
-            "riempimento_intrabarra": riempimento}
+            "riempimento_intrabarra": riempimento,
+            "terreno": dict(terreno) if terreno is not None else dict(TERRENO_PRIMA_EDIZIONE)}
+
+
+def _parametri_del_terreno(opzioni: Mapping) -> Dict[str, object]:
+    """Gli argomenti di ``Parametri`` che vengono dal terreno (``opzioni["terreno"]``): niente per la prima edizione, l'ordine limite per la seconda."""
+    terreno = opzioni.get("terreno") or TERRENO_PRIMA_EDIZIONE
+    if terreno["ingresso"] == "mercato":
+        return {}
+    if terreno["ingresso"] != "limite":
+        raise ValueError(f"terreno con ingresso sconosciuto: {terreno['ingresso']!r}")
+    return {"ingresso": "limite", "limite_validita_barre": int(terreno["limite_validita_barre"]),
+            "limite_condizione": str(terreno["limite_condizione"]),
+            "commissione_maker_per_lato": float(terreno["commissione_maker_per_lato"])}
 
 
 def _parametri(regole: Mapping, slippage_per_lato: float, opzioni: Mapping) -> Parametri:
-    """I ``Parametri`` di una moneta (regole.md, sezione 2, punto 8, e sezione 13; sezione 7 del protocollo)."""
+    """I ``Parametri`` di una moneta (regole.md, sezione 2, punto 8, e sezione 13; sezione 7 del protocollo), con il terreno d'ingresso delle opzioni."""
     slippage = float(slippage_per_lato)
     if not math.isfinite(slippage) or slippage < 0:
         raise ValueError(f"slippage per lato non valido: {slippage_per_lato!r}")
@@ -550,11 +663,12 @@ def _parametri(regole: Mapping, slippage_per_lato: float, opzioni: Mapping) -> P
         riempimento_intrabarra=opzioni["riempimento_intrabarra"],
         moltiplicatore_costi=opzioni["moltiplicatore_costi"],
         ritardo_barre=opzioni["ritardo_barre"],
+        **_parametri_del_terreno(opzioni),
     )
 
 
 def parametri_moneta(slippage_per_lato: float, *, moltiplicatore_costi: float = 1.0, ritardo_barre: int = 0,
-                     riempimento_intrabarra: Optional[str] = None) -> Parametri:
+                     riempimento_intrabarra: Optional[str] = None, terreno: Optional[str] = None) -> Parametri:
     """I ``Parametri`` del motore per una moneta del gruppo (regole.md, sezione 2, punto 8, e sezione 13).
 
     Parte comune di ``parametri.yaml`` (commissione, rischio, leva, modalita' di
@@ -562,11 +676,14 @@ def parametri_moneta(slippage_per_lato: float, *, moltiplicatore_costi: float = 
     riempimento intra-barra), capitale della sezione ``gruppo`` (1.000 USDT per
     moneta), ``slippage_per_lato`` dalla fascia della scheda
     (``dati.leggi_scheda_gruppo``), piu' le tre opzioni delle verifiche della Fase 4
-    (costi doppi, ritardo di una barra, regola intra-barra opposta).
+    (costi doppi, ritardo di una barra, regola intra-barra opposta) e il terreno
+    d'ingresso (``terreno``: «prima_edizione», «seconda_edizione» o None = quello
+    della sessione, ``_terreno``).
     """
     regole = regole_del_gruppo()
     return _parametri(regole, slippage_per_lato,
-                      _opzioni_del_motore(regole, moltiplicatore_costi, ritardo_barre, riempimento_intrabarra))
+                      _opzioni_del_motore(regole, moltiplicatore_costi, ritardo_barre, riempimento_intrabarra,
+                                          _terreno(terreno, "parametri_moneta")))
 
 
 # ---------------------------------------------------------------------------
@@ -694,7 +811,7 @@ _MODULI_VARIANTE: Dict[Tuple[str, str], types.ModuleType] = {}
 
 
 def _import_ammesso(nome: str) -> bool:
-    """True per un modulo della libreria standard, di numpy o ``research.src.motore`` (contratto, punto 1)."""
+    """True per un modulo della libreria standard, di numpy, ``research.src.motore`` o ``research.src.paniere`` (contratto, punto 1)."""
     if nome.split(".", 1)[0] in sys.stdlib_module_names:
         return True
     return any(nome == ammesso or nome.startswith(ammesso + ".") for ammesso in IMPORT_AMMESSI)
@@ -817,19 +934,26 @@ class _Orologio:
 class Contesto:
     """Il contesto che ``gruppo.py`` passa alle funzioni della variante (regole.md, sezione 3, punto 3, e sezione 13).
 
-    In sola lettura: ``timeframe``, ``ms_per_barra``, ``btc_chiuse_entro(ts)`` e
-    ``funding_regolato_entro(ts)`` (docstring del modulo, punto 3). Non c'e' il
-    simbolo, non c'e' la posizione j, non ci sono dati di altre monete.
+    In sola lettura: ``timeframe``, ``ms_per_barra``, ``btc_chiuse_entro(ts)``,
+    ``funding_regolato_entro(ts)`` e, dal 14 ottobre 2026, ``simbolo`` e
+    ``paniere_chiuse_entro(ts)`` (docstring del modulo, punto 3). Non c'e' la
+    posizione j.
     """
 
-    __slots__ = ("timeframe", "ms_per_barra", "btc_chiuse_entro", "funding_regolato_entro")
+    __slots__ = ("timeframe", "ms_per_barra", "btc_chiuse_entro", "funding_regolato_entro", "simbolo",
+                 "paniere_chiuse_entro")
 
     def __init__(self, timeframe: str, ms_per_barra: int, btc_chiuse_entro: Callable[[int], Sequence[Candela]],
-                 funding_regolato_entro: Callable[[int], Sequence[Tuple[int, float]]]) -> None:
+                 funding_regolato_entro: Callable[[int], Sequence[Tuple[int, float]]],
+                 simbolo: Optional[str] = None,
+                 paniere_chiuse_entro: Optional[Callable[[int], Sequence[GiornoPaniere]]] = None) -> None:
         object.__setattr__(self, "timeframe", timeframe)
         object.__setattr__(self, "ms_per_barra", ms_per_barra)
         object.__setattr__(self, "btc_chiuse_entro", btc_chiuse_entro)
         object.__setattr__(self, "funding_regolato_entro", funding_regolato_entro)
+        object.__setattr__(self, "simbolo", simbolo)
+        object.__setattr__(self, "paniere_chiuse_entro",
+                           paniere_chiuse_entro if paniere_chiuse_entro is not None else (lambda ts: StoriaChiusa([], 0)))
 
     def __setattr__(self, nome: str, valore: object) -> None:
         raise AttributeError("il contesto della variante e' in sola lettura")
@@ -838,7 +962,7 @@ class Contesto:
         raise AttributeError("il contesto della variante e' in sola lettura")
 
     def __repr__(self) -> str:
-        return f"Contesto(timeframe={self.timeframe!r}, ms_per_barra={self.ms_per_barra})"
+        return f"Contesto(timeframe={self.timeframe!r}, ms_per_barra={self.ms_per_barra}, simbolo={self.simbolo!r})"
 
 
 def _accesso_entro(elementi: Sequence, istanti: Sequence[int], orologio: _Orologio) -> Callable[[int], StoriaChiusa]:
@@ -866,16 +990,21 @@ def _accesso_entro(elementi: Sequence, istanti: Sequence[int], orologio: _Orolog
 
 
 def _crea_contesto(timeframe: str, ms_per_barra: int, btc: Sequence[Candela], funding: Sequence[Tuple[int, float]],
-                   orologio: _Orologio) -> Contesto:
+                   orologio: _Orologio, paniere: Sequence[GiornoPaniere] = (), simbolo: Optional[str] = None) -> Contesto:
     """Il ``Contesto`` di una moneta, con l'orologio che le strategie avvolte aggiornano (regole.md, sezione 13)."""
     btc = list(btc)
     chiusure = [c.close_ts for c in btc]
     if any(b <= a for a, b in zip(chiusure, chiusure[1:])):
         raise ValueError("candele di BTCUSDT non in ordine strettamente crescente")
     funding = sorted((int(t), float(tasso)) for t, tasso in funding)
+    righe = list(paniere)
+    giorni = [r.close_ts for r in righe]
+    if any(b <= a for a, b in zip(giorni, giorni[1:])):
+        raise ValueError("righe del paniere non in ordine strettamente crescente")
     return Contesto(timeframe, ms_per_barra,
                     _accesso_entro(btc, chiusure, orologio),
-                    _accesso_entro(funding, [t for t, _ in funding], orologio))
+                    _accesso_entro(funding, [t for t, _ in funding], orologio),
+                    simbolo, _accesso_entro(righe, giorni, orologio))
 
 
 def _strategia_avvolta(strategia: Callable, orologio: _Orologio, vietata: Optional[bytearray]) -> Callable:
@@ -1052,6 +1181,97 @@ def _byte_delle_candele(candele: Sequence[Candela]) -> bytes:
     return interi.tobytes() + reali.tobytes()
 
 
+class ChiusureDelGiorno(dict):
+    """Le chiusure di un giorno del paniere, {simbolo: chiusura last 1d}, in sola lettura (contratto, punto 3)."""
+
+    __slots__ = ()
+
+    def _vietato(self, *argomenti, **altri):
+        raise TypeError("le chiusure del paniere sono in sola lettura")
+
+    __setitem__ = __delitem__ = clear = pop = popitem = setdefault = update = _vietato  # type: ignore[assignment]
+
+    def __reduce__(self):
+        return (ChiusureDelGiorno, (dict(self),))
+
+
+class GiornoPaniere(NamedTuple):
+    """Una riga del paniere: il giorno UTC (``ts`` apertura, ``close_ts``), le chiusure e le monete sotto la liquidita' (contratto, punto 3)."""
+
+    ts: int
+    close_ts: int
+    chiusure: ChiusureDelGiorno
+    sotto_liquidita: frozenset
+
+
+def _righe_paniere(caricatore, inizio_per_simbolo: Mapping[str, date], fine: date,
+                   in_campagna: bool) -> Tuple[List[GiornoPaniere], Dict[str, object]]:
+    """Le righe giornaliere del paniere per un esame, una volta nel processo principale (contratto, punto 3).
+
+    Per ogni moneta dell'esame le candele 1d del last dal suo primo giorno
+    (``inizio_per_simbolo``) a ``fine`` e i suoi mesi sotto la liquidita'
+    (``_carica_moneta``, le stesse serie della Fase 0), piu' BTCUSDT 1d dal
+    2020-01-01 (``_btc``). Una riga per ogni giorno del calendario UTC dal primo
+    giorno presente all'ultimo, buchi compresi; le chiusure in ordine dei
+    simboli. In campagna una moneta senza candele 1d ferma l'esame (ValueError).
+    Ritorna le righe e le informazioni da riportare (``giorni``, ``monete``,
+    ``primo_ts``, ``ultimo_close_ts`` e l'``impronta`` SHA-256 delle righe, che
+    entra nell'impronta dei dati di ogni pezzo). Un errore del caricatore su una
+    moneta diventa ``ErroreDiMoneta`` con il suo nome, come nei pezzi.
+    """
+    chiusure_per_simbolo: Dict[str, Dict[int, float]] = {}
+    sotto_per_simbolo: Dict[str, set] = {}
+    for simbolo in sorted(inizio_per_simbolo):
+        try:
+            serie = _carica_moneta(caricatore, simbolo, "1d", inizio_per_simbolo[simbolo], fine)
+        except (Exception, SystemExit) as errore:
+            # lo stesso errore che darebbe il pezzo della moneta (``_lavora``): chi chiama ne vede uno solo
+            raise ErroreDiMoneta(f"paniere di {simbolo}: {type(errore).__name__}: {errore}") from errore
+        candele = serie["candele"]
+        if in_campagna and not candele:
+            raise ValueError(f"{simbolo}: nessuna candela 1d del last per il paniere nel periodo "
+                             f"{inizio_per_simbolo[simbolo]}-{fine} (regole.md, sezione 2, punti 2 e 5)")
+        per_giorno: Dict[int, float] = {}
+        for c in candele:
+            if c.ts % GIORNO_MS:
+                raise ValueError(f"{simbolo}: candela 1d non allineata al giorno UTC (ts {c.ts})")
+            per_giorno[c.ts] = float(c.close)
+        chiusure_per_simbolo[simbolo] = per_giorno
+        sotto_per_simbolo[simbolo] = {(int(a), int(m)) for a, m in serie["mesi_sotto_liquidita"]}
+    btc, _ = _btc(caricatore, "1d", fine)
+    if MONETA_RIFERIMENTO not in chiusure_per_simbolo:
+        per_giorno = {}
+        for c in btc:
+            if c.ts % GIORNO_MS:
+                raise ValueError(f"{MONETA_RIFERIMENTO}: candela 1d non allineata al giorno UTC (ts {c.ts})")
+            per_giorno[c.ts] = float(c.close)
+        chiusure_per_simbolo[MONETA_RIFERIMENTO] = per_giorno
+        sotto_per_simbolo[MONETA_RIFERIMENTO] = set()
+    giorni = [g for per_giorno in chiusure_per_simbolo.values() for g in per_giorno]
+    righe: List[GiornoPaniere] = []
+    sha = hashlib.sha256()
+    if giorni:
+        simboli = sorted(chiusure_per_simbolo)
+        for g in range(min(giorni), max(giorni) + GIORNO_MS, GIORNO_MS):
+            coppie = [(s, chiusure_per_simbolo[s][g]) for s in simboli if g in chiusure_per_simbolo[s]]
+            anno_mese = dati.mese_utc(g)
+            sotto = frozenset(s for s, _ in coppie if anno_mese in sotto_per_simbolo[s])
+            righe.append(GiornoPaniere(g, g + GIORNO_MS - 1, ChiusureDelGiorno(coppie), sotto))
+            sha.update(_canonico([g, coppie, sorted(sotto)]).encode("utf-8"))
+    info = {"giorni": len(righe), "monete": len(chiusure_per_simbolo),
+            "primo_ts": righe[0].ts if righe else None, "ultimo_close_ts": righe[-1].close_ts if righe else None,
+            "impronta": sha.hexdigest()}
+    return righe, info
+
+
+def _paniere_dai_pezzi(pezzi1: Mapping[str, Mapping]) -> Optional[Dict[str, object]]:
+    """Le righe del paniere passate alle funzioni della variante (contratto, punto 3): le stesse per ogni moneta dell'esame."""
+    viste = {_canonico_libero(pezzi1[s].get("paniere")) for s in pezzi1}
+    if len(viste) > 1:
+        raise RuntimeError("i pezzi hanno visto righe del paniere diverse: i dati sono cambiati durante l'esame")
+    return dict(pezzi1[sorted(pezzi1)[0]].get("paniere") or {}) if pezzi1 else None
+
+
 def _btc(caricatore, timeframe: str, fine: date) -> Tuple[List[Candela], str]:
     """Le candele di BTCUSDT dal 2020-01-01 alla fine del periodo e la loro impronta, una volta per processo (regole.md, sezione 3, punto 3)."""
     chiave = (pickle.dumps(caricatore), timeframe, fine.isoformat())
@@ -1091,7 +1311,7 @@ def _impronta_dei_dati(compito: Mapping, slippage: float, serie: Mapping, impron
     """L'impronta di tutto cio' che un pezzo legge dal caricatore per la sua moneta (regole.md, sezione 13: ripresa automatica).
 
     SHA-256 di simbolo, periodo, slippage della scheda, last, mark, funding, mesi
-    sotto la liquidita', barre tolte e candele di BTCUSDT. Va nella riga di
+    sotto la liquidita', barre tolte, candele di BTCUSDT e righe del paniere. Va nella riga di
     avanzamento del pezzo: alla ripresa il pezzo si riusa solo se i dati di
     adesso hanno la stessa impronta (altrimenti si ricalcola), cosi' una ripresa
     con lo stesso id non tiene in silenzio pezzi calcolati su dati diversi.
@@ -1103,6 +1323,7 @@ def _impronta_dei_dati(compito: Mapping, slippage: float, serie: Mapping, impron
         "slippage_per_lato": float(slippage), "mesi_sotto_liquidita": [list(m) for m in serie["mesi_sotto_liquidita"]],
         "barre_tolte": serie["barre_tolte"], "n": [len(serie["candele"]), len(serie["candele_mark"]),
                                                   len(serie["funding"])], "btc": impronta_btc,
+        "paniere": compito.get("impronta_paniere"),
     }).encode("utf-8"))
     sha.update(_byte_delle_candele(serie["candele"]))
     sha.update(_byte_delle_candele(serie["candele_mark"]))
@@ -1162,6 +1383,7 @@ class _Preparato:
         self.barre_tolte = barre_tolte
         self.ingressi_variante: Optional[Dict[str, int]] = None
         self.btc: Dict[str, object] = {}
+        self.paniere: Dict[str, object] = {}
         self.impronta_dati: str = ""
         self._vietate: Optional[Dict[str, object]] = None
 
@@ -1251,7 +1473,8 @@ def _prepara(compito: Mapping) -> _Preparato:
     btc, impronta_btc = _btc(caricatore, compito["timeframe"], fine)
     info_btc = _controlla_btc(btc, candele, simbolo, bool(compito.get("in_campagna")))
     orologio = _Orologio()
-    ctx = _crea_contesto(compito["timeframe"], compito["ms_per_barra"], btc, serie["funding"], orologio)
+    ctx = _crea_contesto(compito["timeframe"], compito["ms_per_barra"], btc, serie["funding"], orologio,
+                         compito.get("paniere") or (), simbolo)
     intervalli = [tuple(x) for x in dati.barre_vietate_liquidita(candele, serie["mesi_sotto_liquidita"])]
     fabbriche = _Fabbriche(modulo, ctx, orologio, compito["p_json"], _bandierine(len(candele), intervalli))
     conteggio = compito.get("inizio_conteggio_ts")
@@ -1259,6 +1482,7 @@ def _prepara(compito: Mapping) -> _Preparato:
     prep = _Preparato(candele, serie["candele_mark"], serie["funding"], serie["mesi_sotto_liquidita"], intervalli,
                       parametri, fabbriche, indice, serie["barre_tolte"])
     prep.btc = info_btc
+    prep.paniere = dict(compito.get("info_paniere") or {})
     prep.impronta_dati = _impronta_dei_dati(compito, parametri.slippage_per_lato, serie, impronta_btc)
 
     sorgente = compito["sorgente"]
@@ -1289,6 +1513,7 @@ def _pezzo_conta(compito: Mapping, prep: _Preparato) -> Tuple[Dict[str, object],
     conta["mesi_sotto_liquidita"] = len(prep.mesi_sotto)
     conta["barre_vietate_liquidita"] = sum(b - a for a, b in prep.intervalli_liquidita)
     conta["btc"] = prep.btc
+    conta["paniere"] = prep.paniere
     if prep.ingressi_variante is not None:
         conta["ingressi_dati"] = prep.ingressi_variante
     return conta, {}
@@ -1366,6 +1591,7 @@ def _pezzo_fase1(compito: Mapping, prep: _Preparato) -> Tuple[Dict[str, object],
         "mesi_sotto_liquidita": [list(m) for m in prep.mesi_sotto],
         "ingressi_dati": prep.ingressi_variante,
         "btc": prep.btc,
+        "paniere": prep.paniere,
         "controllo_casuale": coerenza,
         "trade": {"campi": list(CAMPI_TRADE), "righe": [_riga(t) for t in trade]},
         "ts_segnali": ts_segnali,
@@ -1835,6 +2061,7 @@ def conta_trade_di_gruppo(
     monete: Optional[Union[Sequence[str], Mapping[str, int]]] = None,
     caricatore=None,
     ingressi_placebo: Optional[Mapping[str, Sequence[int]]] = None,
+    terreno: Optional[str] = None,
 ) -> Dict[str, object]:
     """La stima dei trade di gruppo prima di registrare una variante (regole.md, sezione 4, punti 2-4).
 
@@ -1861,16 +2088,20 @@ def conta_trade_di_gruppo(
     _controlla_argomenti_in_campagna("conta_trade_di_gruppo", monete, caricatore, radice)
     processi = _controlla_processi(processi)
     regole = regole_del_gruppo()
-    opzioni = _opzioni_del_motore(regole, moltiplicatore_costi, ritardo_barre, riempimento_intrabarra)
+    opzioni = _opzioni_del_motore(regole, moltiplicatore_costi, ritardo_barre, riempimento_intrabarra,
+                                  _terreno(terreno, "conta_trade_di_gruppo"))
     caricatore = CaricatoreDisco(str(radice)) if caricatore is None else caricatore
     base = _compito_base(modulo, p, timeframe, regole, opzioni, caricatore)
     posizioni, ufficiali = _monete_con_posizione(monete)
     sorgente = _sorgente(ingressi_placebo, posizioni)
     periodi = _periodi(caricatore, posizioni, ufficiali, regole)
     date_monete = periodi["monete"]
+    righe_paniere, info_paniere = _righe_paniere(caricatore, {s: date_monete[s]["inizio"] for s in posizioni},
+                                                 periodi["fine_costruzione"], bool(base["in_campagna"]))
     compiti = [dict(base, tipo="conta", simbolo=s, j=posizioni[s], sorgente=_sorgente_della_moneta(sorgente, s),
                     inizio=date_monete[s]["inizio"].isoformat(), fine=periodi["fine_costruzione"].isoformat(),
-                    inizio_conteggio_ts=None, fine_costruzione_ts=periodi["fine_costruzione_ts"])
+                    inizio_conteggio_ts=None, fine_costruzione_ts=periodi["fine_costruzione_ts"],
+                    paniere=righe_paniere, info_paniere=info_paniere, impronta_paniere=info_paniere["impronta"])
                for s in sorted(posizioni, key=lambda s: (-date_monete[s]["giorni"], s))]
     per_moneta: Dict[str, Dict[str, object]] = {}
     for risultato in _esegui_compiti(compiti, processi):
@@ -2093,6 +2324,7 @@ def _combina_esame(pezzi1: Mapping[str, Mapping], pezzi2: Mapping[str, Mapping],
         }
     ris["per_moneta"] = per_moneta
     ris["btc"] = _btc_dai_pezzi(pezzi1)
+    ris["paniere"] = _paniere_dai_pezzi(pezzi1)
     ris["liquidazione"] = {"violazioni": sum(v["violazioni_liquidazione"] for v in per_moneta.values()),
                            "trade_ridotti": sum(v["ridotti"] for v in per_moneta.values())}
 
@@ -2295,7 +2527,8 @@ def _controlla_cartella_del_placebo(cartella_campagna, radice) -> Path:
 
 def _esame(modulo, p, timeframe: str, periodo: str, id: str, *, moltiplicatore_costi, ritardo_barre,
            riempimento_intrabarra, con_baseline_a: bool, processi: int, radice, cartella_campagna, monete,
-           caricatore, sorgente_richiesta, chi: str = "esame_di_gruppo") -> Dict[str, object]:
+           caricatore, sorgente_richiesta, chi: str = "esame_di_gruppo",
+           terreno: Optional[str] = None) -> Dict[str, object]:
     """Il corpo di ``esame_di_gruppo`` e di ``controllo_positivo`` (regole.md, sezioni 5, 6.2, 7, 8.1 e 5.10).
 
     I controlli della sessione di campagna stanno QUI, prima di toccare i dati,
@@ -2314,7 +2547,8 @@ def _esame(modulo, p, timeframe: str, periodo: str, id: str, *, moltiplicatore_c
         raise ValueError(f"id non valido: {id!r}")
     processi = _controlla_processi(processi)
     regole = regole_del_gruppo()
-    opzioni = _opzioni_del_motore(regole, moltiplicatore_costi, ritardo_barre, riempimento_intrabarra)
+    opzioni = _opzioni_del_motore(regole, moltiplicatore_costi, ritardo_barre, riempimento_intrabarra,
+                                  _terreno(terreno, chi))
     caricatore = CaricatoreDisco(str(radice)) if caricatore is None else caricatore
     posizioni, ufficiali = _monete_con_posizione(monete)
     sorgente = sorgente_richiesta(posizioni)
@@ -2337,12 +2571,16 @@ def _esame(modulo, p, timeframe: str, periodo: str, id: str, *, moltiplicatore_c
     in_ordine = sorted(posizioni, key=lambda s: (-date_monete[s]["giorni"], s))
     fine = periodi["fine_costruzione"] if periodo == "costruzione" else periodi["fine_validazione"]
     conteggio = None if periodo == "costruzione" else periodi["inizio_validazione_ts"]
+    righe_paniere, info_paniere = _righe_paniere(caricatore, {s: date_monete[s]["inizio"] for s in posizioni}, fine,
+                                                 bool(base["in_campagna"]))
 
     def compito_moneta(simbolo: str, tipo: str, **altro) -> Dict[str, object]:
         return dict(base, tipo=tipo, simbolo=simbolo, j=posizioni[simbolo], periodo=periodo,
                     sorgente=_sorgente_della_moneta(sorgente, simbolo),
                     inizio=date_monete[simbolo]["inizio"].isoformat(), fine=fine.isoformat(),
-                    inizio_conteggio_ts=conteggio, con_a=bool(con_baseline_a), **altro)
+                    inizio_conteggio_ts=conteggio, con_a=bool(con_baseline_a),
+                    paniere=righe_paniere, info_paniere=info_paniere, impronta_paniere=info_paniere["impronta"],
+                    **altro)
 
     # fase 1: test, (a), (b) di ogni moneta. Ogni moneta va comunque a un processo, che ricarica i suoi dati: se
     # hanno l'impronta di una riga salvata il pezzo si riprende da li', se no si ricalcola (sezione 13).
@@ -2415,6 +2653,7 @@ def esame_di_gruppo(
     monete: Optional[Union[Sequence[str], Mapping[str, int]]] = None,
     caricatore=None,
     ingressi_placebo: Optional[Mapping[str, Sequence[int]]] = None,
+    terreno: Optional[str] = None,
 ) -> Dict[str, object]:
     """L'esame di una variante sui trade sommati di tutte le monete (regole.md, sezioni 5, 6.2, 7 e 8.1).
 
@@ -2461,13 +2700,15 @@ def esame_di_gruppo(
     ``quota_monete_sopra_b_j``, ``posizioni_aperte_insieme``,
     ``buy_and_hold_per_anno`` (con ``peso_presente``), ``liquidazione`` (violazioni
     e trade ridotti), ``monete_con_trade``, ``quota_moneta_piu_presente``, ``btc``
-    (le candele di BTCUSDT passate alla variante), le impronte, i file e
-    ``ripresa`` (pezzi ripresi dall'avanzamento e pezzi calcolati).
+    (le candele di BTCUSDT passate alla variante), ``paniere`` (le righe
+    giornaliere del paniere passate alla variante: giorni, monete, estremi,
+    impronta), le impronte, i file e ``ripresa`` (pezzi ripresi dall'avanzamento
+    e pezzi calcolati).
     """
     return _esame(modulo, p, timeframe, periodo, id, moltiplicatore_costi=moltiplicatore_costi,
                   ritardo_barre=ritardo_barre, riempimento_intrabarra=riempimento_intrabarra,
                   con_baseline_a=con_baseline_a, processi=processi, radice=radice,
-                  cartella_campagna=cartella_campagna, monete=monete, caricatore=caricatore,
+                  cartella_campagna=cartella_campagna, monete=monete, caricatore=caricatore, terreno=terreno,
                   sorgente_richiesta=lambda posizioni: _sorgente(ingressi_placebo, posizioni), chi="esame_di_gruppo")
 
 
@@ -2488,6 +2729,7 @@ def controllo_positivo(
     cartella_campagna: Optional[Union[str, Path]] = None,
     monete: Optional[Union[Sequence[str], Mapping[str, int]]] = None,
     caricatore=None,
+    terreno: Optional[str] = None,
 ) -> Dict[str, object]:
     """Il controllo positivo degli strumenti, prima della prima variante (regole.md, sezione 5, punto 10; ``lezioni/metodo.md``).
 
@@ -2520,7 +2762,7 @@ def controllo_positivo(
                              ritardo_barre=ritardo, riempimento_intrabarra=None, con_baseline_a=True,
                              processi=processi, radice=radice, cartella_campagna=cartella_campagna, monete=monete,
                              caricatore=caricatore, sorgente_richiesta=lambda posizioni: dict(sorgente),
-                             chi="controllo_positivo")
+                             chi="controllo_positivo", terreno=terreno)
         contrari = sum(v["short" if direzione == "long" else "long"] for v in esami[nome]["per_moneta"].values())
         if contrari:
             raise ValueError(f"controllo positivo {direzione}: {contrari} trade nell'altra direzione: il modulo non "
@@ -2611,6 +2853,7 @@ def esame_vault(
     monete: Optional[Union[Sequence[str], Mapping[str, int]]] = None,
     caricatore=None,
     file_trade: Optional[Union[str, Path]] = None,
+    terreno: Optional[str] = None,
 ) -> Dict[str, object]:
     """Il candidato di gruppo sul vault, una volta sola (regole.md, sezione 9; sezione 10, punto 2; Passo 5 del protocollo). Solo per il coordinamento.
 
@@ -2675,7 +2918,7 @@ def esame_vault(
         file_trade = _controlla_cartella_del_vault(file_trade, radice, "file_trade")
     processi = _controlla_processi(processi)
     regole = regole_del_gruppo()
-    opzioni = _opzioni_del_motore(regole, 1.0, 0, None)
+    opzioni = _opzioni_del_motore(regole, 1.0, 0, None, _terreno(terreno, "esame_vault"))
     caricatore = CaricatoreDisco(str(radice)) if caricatore is None else caricatore
     base = _compito_base(modulo, p, timeframe, regole, opzioni, caricatore)
     posizioni, _ufficiali = _monete_con_posizione(monete)
@@ -2691,10 +2934,14 @@ def esame_vault(
     file_avanzamento = cartella / "avanzamento" / f"vault_{timeframe}.jsonl"
     avanzamento = _Avanzamento(file_avanzamento, impronte)
 
+    righe_paniere, info_paniere = _righe_paniere(caricatore, primi, dati.FINE_VAULT, bool(base["in_campagna"]))
+
     def compito_moneta(simbolo: str, tipo: str, **altro) -> Dict[str, object]:
         return dict(base, tipo=tipo, simbolo=simbolo, j=posizioni[simbolo], periodo="vault",
                     sorgente={"tipo": "modulo"}, inizio=primi[simbolo].isoformat(),
-                    fine=dati.FINE_VAULT.isoformat(), inizio_conteggio_ts=inizio_vault_ts, con_a=False, **altro)
+                    fine=dati.FINE_VAULT.isoformat(), inizio_conteggio_ts=inizio_vault_ts, con_a=False,
+                    paniere=righe_paniere, info_paniere=info_paniere, impronta_paniere=info_paniere["impronta"],
+                    **altro)
 
     def ripresa() -> Dict[str, int]:
         return {"pezzi_ripresi": avanzamento.pezzi_ripresi, "pezzi_calcolati": avanzamento.pezzi_calcolati,
@@ -2738,6 +2985,7 @@ def esame_vault(
         "quota_moneta_piu_presente": None,
         "moneta_piu_presente": None,
         "btc": _btc_dai_pezzi(pezzi1),
+        "paniere": _paniere_dai_pezzi(pezzi1),
         "per_moneta": {s: {"j": posizioni[s], "trade": n_j[s],
                            "r_medio": metriche["per_moneta"][s]["r_medio"] if n_j[s] else None,
                            "pnl": math.fsum(float(t["pnl"]) for t in _trade_della_moneta(pezzi1[s])),

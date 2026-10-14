@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """La prova a placebo dell'esame di gruppo a BARRE GIORNALIERE (seconda edizione; regole in ``regole.md`` qui).
 
-E' il lanciatore della prova a 1 ora (``research/taratura/placebo_gruppo/esegui.py``) con sei cose diverse, tutte
+E' il lanciatore della prova a 1 ora (``research/taratura/placebo_gruppo/esegui.py``) con sette cose diverse, tutte
 dichiarate qui e niente altro: il timeframe (solo «1d»), le serie di file controllate (1d), i mesi dichiarati, l'elenco
-e le schede del paniere (``research/campagne/PANIERE/``), i file della prova (questa cartella) e il ramo remoto su cui
-devono stare (il principale). Tutto il resto (sfasamento comune, ingressi placebo, esame, identita', ripresa) e' lo
+e le schede del paniere (``research/campagne/PANIERE/``), i file della prova (questa cartella), il ramo remoto su cui
+devono stare (il principale) e, dal 14 ottobre, il terreno d'ingresso della seconda edizione (ordine limite). Tutto il resto (sfasamento comune, ingressi placebo, esame, identita', ripresa) e' lo
 stesso codice, importato: cambiarlo qui sarebbe una seconda implementazione da tenere uguale a mano.
 
 Uso: ``python research/taratura/placebo_paniere/esegui.py --radice-dati research --lavoro <fuori da git>``.
@@ -45,6 +45,9 @@ TIMEFRAME = ("1d",)
 E.PG = PP
 E.MODULO = QUI / "placebo_paniere.py"
 E.REGOLA_DELL_USCITA = {u: next(r for r in PP.REGOLE if PP.USCITA_DELLA_REGOLA[r] == u) for u in PP.USCITE}
+#: la settima differenza (correzione 4 di regole.md, 14 ott 2026): il terreno d'ingresso della seconda edizione,
+#: l'ordine limite di parametri_2.yaml, che in campagna PANIERE gruppo.py sceglie da solo dal marcatore
+E.OPZIONI_ESAME = {"terreno": "seconda_edizione"}
 FILE_DELLA_PROVA = ("placebo_paniere.py", "esegui.py", "regole.md")
 
 

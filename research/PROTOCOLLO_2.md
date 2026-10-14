@@ -398,3 +398,36 @@ costo per trade e il funding a 1d prima di qualunque variante.
    che dichiara la contaminazione senza ricopiare i numeri: così resta dichiarata senza passare alla sessione che
    sceglie i ritocchi. Le idee, le varianti e il terreno che la sessione deve conoscere (sezioni 3, 5 e 7) sono
    ricopiati nelle regole della campagna, in sola lettura, parola per parola.
+5. **14 ott 2026, 09:15 UTC — la serie di paniere arriva alla variante (sezione 5, idea B e variante C2; sezione 10,
+   punto 3): scelta (a) del proprietario.** Alla fine della Fase 0 la sessione di campagna ha fatto notare che le
+   funzioni della variante ricevono da `gruppo.py` solo le candele della propria moneta e di BTCUSDT: la classifica
+   del paniere (idea B) e «le 20 monete più in ritardo» (C2) non si possono calcolare. Il Passo 0, punto 3, aveva
+   costruito la serie (`paniere.py`) senza il passaggio alla variante. Domanda girata al proprietario alle 09:00 UTC
+   («(a) estendere gruppo.py e rifare il placebo, oppure (b) lavorare solo su A e C1»); risposta «a» alle 09:05 UTC.
+   Cosa cambia, scritto prima del rilancio della prova: (1) il contesto della variante ha `ctx.paniere_chiuse_entro(ts)`,
+   le righe GIORNALIERE del paniere (un giorno UTC per riga: `ts`, `close_ts`, `chiusure` = {simbolo: chiusura last 1d}
+   di tutte le monete dell'esame e di BTCUSDT con la candela quel giorno, `sotto_liquidita` = le monete il cui mese è
+   sotto la soglia), limitate alla chiusura dell'ultima barra ricevuta come le candele di BTCUSDT (mai una riga del
+   futuro), costruite una volta per esame nel processo principale dalle stesse serie 1d della Fase 0 e incluse
+   nell'impronta dei dati di ogni pezzo; (2) il contesto ha `ctx.simbolo`, il simbolo della moneta del pezzo, che
+   serve SOLO a trovare la propria moneta nel paniere: resta vietata una regola che tratta una moneta diversamente
+   dalle altre per nome (la regola della sezione 3, punto 3, delle regole del gruppo, «niente strategie fra monete»,
+   è superata per la seconda edizione dalla sezione 5 di questo testo, che le idee B e C sono); (3) il modulo della
+   variante può importare `research.src.paniere`, che ha tre funzioni «dell'ultimo giorno» sulle righe
+   (`rendimenti_ultimo_giorno`, `classifica_ultimo_giorno` con la stessa regola di parità di `classifica`,
+   `giorno_forte_ultimo` con la deviazione dei 60 giorni precedenti), con i test che le confrontano con le funzioni
+   sulle matrici intere; (4) **il terreno d'ingresso negli strumenti** (seconda nota della sessione, 09:14 UTC: gli
+   strumenti costruivano i parametri del motore con l'ingresso a mercato della prima edizione): `gruppo.py` costruisce
+   da solo i `Parametri` del motore con l'ordine limite della sezione 3.1 (alla chiusura della candela di segnale,
+   valido una candela, condizione «attraversato», maker 0,02%, scarto zero all'ingresso; uscite a mercato con lo
+   scarto della scheda), letti da `research/config/parametri_2.yaml` congelato (`terreno_seconda_edizione`), e li
+   riporta nelle opzioni dell'esame (quindi nella sua impronta). In una sessione di campagna il terreno lo decide il
+   marcatore (PANIERE: seconda edizione) e la sessione non può chiederne un altro; fuori campagna lo sceglie chi
+   chiama (la prova a placebo del paniere e il vault passano «seconda_edizione»). Per una variante che non usa il
+   paniere e con il terreno della prima edizione i numeri dell'esame non cambiano (test). **La prova a placebo a 1d si
+   rifà con gli strumenti nuovi e con il terreno della seconda edizione** prima che la sessione registri la prima
+   variante: con l'ordine limite i riempimenti cambiano, quindi i numeri NON saranno quelli del 13 ottobre (atteso,
+   scritto prima: cambiano i trade, deve reggere lo stesso l'esame, con le soglie delle regole della prova); e il
+   controllo positivo si rifà con lo stesso terreno. La correzione entra nel branch della campagna al suo STOP
+   (regole del gruppo, sezione 11, punto 6). Nessuna variante è stata esaminata prima della correzione: la sessione
+   si è fermata alla Fase 0 per questo.

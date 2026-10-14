@@ -3785,3 +3785,21 @@ monete; le idee B (classifica del paniere) e C2 (le 20 monete più in ritardo) h
 serie c'è, il passaggio no). Proposta del coordinamento al proprietario: (a), estendendo `gruppo.py` con una vista
 causale del paniere per la variante e rifacendo la prova a placebo (attesa identica: le placebo non usano il paniere),
 mentre la sessione intanto lavora sulle idee A e C1.
+
+### 14 ottobre, 11:05-11:40 ora italiana: scelta (a) del proprietario; due mancanze degli strumenti corrette insieme
+
+Alle 11:05 il proprietario ha scelto la (a): estendere lo strumento dell'esame. Alle 11:14 la sessione, invece di
+procedere con A e C1 come le avevo detto, si è fermata di nuovo con una seconda nota, giusta: gli strumenti
+costruivano i parametri del motore con l'ingresso a mercato della prima edizione, non con l'ordine limite della seconda
+(`parametri_2.yaml`). Due mancanze del Passo 0, non della sessione; le ho detto di aspettare la correzione senza toccare
+`src/` e senza eseguire esami (sarebbero stati esami a mercato, non validi), preparando intanto il codice delle 18
+varianti. Correzione in un pezzo solo (PROTOCOLLO_2, correzione 5): (1) `ctx.paniere_chiuse_entro(ts)` e
+`ctx.simbolo` nel contesto della variante, righe giornaliere del paniere costruite una volta per esame, limitate
+dall'orologio come Bitcoin, nell'impronta dei dati; `research.src.paniere` importabile, con le tre funzioni
+«dell'ultimo giorno» uguali a quelle sulle matrici (test); (2) il terreno: con il marcatore PANIERE l'esame costruisce da
+solo i parametri con l'ordine limite letti dal file congelato e li riporta nelle opzioni; fuori campagna lo sceglie chi
+chiama. Test: la variante di classifica a mano, la causalità, l'ingresso al prezzo della candela di segnale, i numeri
+di prima invariati senza paniere e con il terreno della prima edizione; tre test vecchi adattati alla lettura in più del
+paniere. La prova a placebo a un giorno si rifà con il terreno della seconda edizione (atteso: numeri diversi, esame che
+regge; regole della prova, correzione 4), e il controllo positivo con lei; poi la correzione va nel branch della
+campagna, ferma allo STOP.

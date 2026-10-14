@@ -20,14 +20,20 @@ Solo per i test, in ``p``:
 * ``registra_ingressi``: ``crea_casuale`` aggiunge a ``REGISTRO["ingressi"]`` gli ingressi che riceve;
 * ``a_ingressi_massimi``: la (a) entra al piu' tante volte (una (a) di pochi trade).
 * ``a_ingressi_per_apertura``: {"<apertura della prima barra, intera>": massimo}: sulle monete la cui prima barra
-  apre a quel prezzo la (a) entra al piu' ``massimo`` volte (una (a) di 0 o 1 trade su UNA moneta: la variante non
-  vede il simbolo, ma nel caricatore finto dei test la prima barra di ogni moneta apre a un prezzo intero suo).
+  apre a quel prezzo la (a) entra al piu' ``massimo`` volte (una (a) di 0 o 1 trade su UNA moneta: nel caricatore
+  finto dei test la prima barra di ogni moneta apre a un prezzo intero suo).
+* ``classifica``: {"n_giorni": N, "prime": K}: la variante entra solo se la propria moneta (``ctx.simbolo``) e' fra
+  le prime K del paniere per rendimento a N giorni (``paniere.classifica_ultimo_giorno`` sulle righe di
+  ``ctx.paniere_chiuse_entro``), oltre alla rottura; la (a), la casuale e il segnale restano come sono.
+
+La sonda controlla anche il paniere: vuoto alla creazione, mai una riga oltre la chiusura dell'ultima barra ricevuta.
 """
 
 import sys
 import types
 from collections import deque
 
+from research.src import paniere
 from research.src.motore import Segnale
 
 
@@ -74,13 +80,14 @@ def _sonda(ctx, p, adesso):
     sonde = REGISTRO["sonde"]
     btc = ctx.btc_chiuse_entro(LONTANO)
     funding = ctx.funding_regolato_entro(LONTANO)
+    righe = ctx.paniere_chiuse_entro(LONTANO)
     if adesso is None:
         sonde["creazioni"] += 1
-        if len(btc) or len(funding) or len(btc._base) or len(funding._base):
+        if len(btc) or len(funding) or len(btc._base) or len(funding._base) or len(righe) or len(righe._base):
             sonde["creazioni_non_vuote"] += 1
         return
     sonde["chiamate"] += 1
-    for vista, istante in ((btc, lambda c: c.close_ts), (funding, lambda f: f[0])):
+    for vista, istante in ((btc, lambda c: c.close_ts), (funding, lambda f: f[0]), (righe, lambda r: r.close_ts)):
         ultimi = []
         if len(vista):
             ultimi.append(istante(vista[-1]))
@@ -126,6 +133,16 @@ def barre_di_rottura(candele, p):
     return indici
 
 
+def _in_classifica(ctx, p, close_ts):
+    """True se la propria moneta e' fra le prime ``prime`` del paniere a ``n_giorni`` (``p["classifica"]``), o se non c'e' la regola."""
+    regola = p.get("classifica")
+    if not regola:
+        return True
+    rango, _ = paniere.classifica_ultimo_giorno(ctx.paniere_chiuse_entro(close_ts), int(regola["n_giorni"]))
+    posto = rango.get(ctx.simbolo)
+    return posto is not None and posto <= int(regola["prime"])
+
+
 def crea_variante(ctx, p):
     n, durata, lungo = int(p["n"]), int(p["durata"]), p.get("direzione", "long") == "long"
     _sonda(ctx, p, None)
@@ -148,7 +165,8 @@ def crea_variante(ctx, p):
             estremi.append((i, valore))
             if posizione is None:
                 stato["entrata"] = None
-                if riferimento is not None and (barra.close > riferimento if lungo else barra.close < riferimento):
+                if riferimento is not None and (barra.close > riferimento if lungo else barra.close < riferimento) \
+                        and _in_classifica(ctx, p, barra.close_ts):
                     return _segnale(barra.close, p)
                 return None
             return _uscita(stato, i, posizione, durata)

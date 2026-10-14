@@ -763,7 +763,7 @@ def esegui_placebo(prep: Mapping, regola: str, direzione: str, k: int, *, carica
     }
     p = {"regola": regola, "direzione": direzione}
     comuni = dict(processi=processi, radice=radice, monete=prep["argomento_monete"], caricatore=caricatore,
-                  ingressi_placebo=ingressi)
+                  ingressi_placebo=ingressi, **OPZIONI_ESAME)
     if periodo == "costruzione":
         conta = gruppo.conta_trade_di_gruppo(MODULO, p, timeframe, **comuni)
         riga["conta"] = {k2: conta[k2] for k2 in ("trade_stimati", "esito", "motivi", "minimo", "quota_massima",
@@ -784,6 +784,11 @@ def esegui_placebo(prep: Mapping, regola: str, direzione: str, k: int, *, carica
 # ---------------------------------------------------------------------------
 # Impronte, git, identita', ripresa
 # ---------------------------------------------------------------------------
+
+
+#: argomenti in piu' per ``conta_trade_di_gruppo`` ed ``esame_di_gruppo`` (per esempio il terreno d'ingresso della
+#: seconda edizione): vuoto per la prova a 1 ora, lo riempie il lanciatore della prova del paniere
+OPZIONI_ESAME: Dict[str, object] = {}
 
 
 def leggi_impronte(testo: str) -> Dict[str, str]:
