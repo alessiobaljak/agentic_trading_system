@@ -665,3 +665,39 @@ def test_il_rifiuto_non_e_un_errore_di_rete_ne_di_dati():
     # _scarica_exchange_info passa all'URL successivo su OSError: un rifiuto non deve essere inghiottito
     assert not issubclass(VietatoInCampagna, OSError)
     assert not issubclass(VietatoInCampagna, ValueError)
+
+
+# ---------------------------------------------------------------------------
+# (5) le schede della campagna di gruppo in corso (PANIERE, seconda edizione, 14 ottobre 2026)
+# ---------------------------------------------------------------------------
+
+
+def _scheda(simbolo: str, primo_mese: str, fascia: str) -> str:
+    return (f"# {simbolo}\n\n| Campo | Valore |\n|---|---|\n"
+            f"| Simbolo (Binance USDS-M, perpetuo in USDT) | `{simbolo}` |\n"
+            f"| Primo mese di dati (inizio dell'in-sample) | {primo_mese} |\n"
+            f"| Fascia di slippage per lato (volume medio 2023) | {fascia} |\n"
+            f"| Fine dell'in-sample | 2023-12-31 |\n")
+
+
+def test_le_schede_seguono_il_marcatore_della_campagna_di_gruppo(progetto):
+    """``cartella_schede_gruppo``: senza marcatore e con GRUPPO le schede del gruppo; con PANIERE le sue; una
+    campagna di una moneta sola legge quelle del gruppo (come prima)."""
+    radice = progetto / "research"
+    for campagna, primo, fascia in (("GRUPPO", "2020-10-01", "0.0500%"), ("PANIERE", "2021-02-01", "0.1000%")):
+        cartella = radice / "campagne" / campagna / "schede"
+        cartella.mkdir(parents=True)
+        (cartella / "AAVEUSDT.md").write_text(_scheda("AAVEUSDT", primo, fascia), encoding="utf-8")
+    assert dati.cartella_schede_gruppo() == Path("campagne") / "GRUPPO" / "schede" == dati.CARTELLA_SCHEDE_GRUPPO
+    assert dati.cartella_schede_gruppo("PANIERE") == Path("campagne") / "PANIERE" / "schede"
+    assert dati.cartella_schede_gruppo("ETHUSDT") == dati.CARTELLA_SCHEDE_GRUPPO
+    assert dati.leggi_scheda_gruppo("AAVEUSDT", radice)["primo_mese"] == date(2020, 10, 1)
+    metti_marcatore(progetto, {"tipo": "campagna", "simbolo": "PANIERE"})
+    assert dati.cartella_schede_gruppo() == Path("campagne") / "PANIERE" / "schede"
+    scheda = dati.leggi_scheda_gruppo("AAVEUSDT", radice)
+    assert scheda["primo_mese"] == date(2021, 2, 1) and scheda["slippage_per_lato"] == 0.001
+    metti_marcatore(progetto, {"tipo": "campagna", "simbolo": "GRUPPO"})
+    assert dati.leggi_scheda_gruppo("AAVEUSDT", radice)["slippage_per_lato"] == 0.0005
+    metti_marcatore(progetto, {"tipo": "coordinamento"})
+    assert dati.cartella_schede_gruppo() == dati.CARTELLA_SCHEDE_GRUPPO
+

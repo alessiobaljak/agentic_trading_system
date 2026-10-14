@@ -251,8 +251,16 @@ Scelte documentate
   ``btc`` (numero, prima e ultima).
 * La (b) di una moneta su cui gli ingressi casuali non entrano si riconosce
   dal messaggio di ``statistica.entrate_casuali_per_semi`` («impossibile
-  piazzare»): la moneta entra nella (b) di gruppo come «ingressi che non
-  entrano» e la variante e' non valutabile (sezione 5, punto 4).
+  piazzare»): la moneta arriva alla (b) di gruppo come «ingressi che non
+  entrano» (None al posto delle m_j(s)) e resta FUORI dalla combinazione della
+  (b), come una moneta con 0 trade della (a) resta fuori dalla (a); la variante
+  e' non valutabile contro la (b) solo se quelle monete portano piu' del 10% dei
+  trade del candidato (PROTOCOLLO_2, correzione 3 del 14 ottobre 2026, che per
+  la seconda edizione sostituisce la sezione 5, punto 4, delle regole del
+  gruppo; prima bastava una moneta per rendere non valutabile la variante). Lo
+  decide solo ``statistica.baseline_casuale_di_gruppo``; ``baseline_b`` riporta
+  le monete lasciate fuori e la quota dei trade del candidato che portano, e la
+  tabella per moneta ``b_ingressi_entrano``.
 * La (a) di ogni moneta con trade del candidato arriva sempre a
   ``statistica.baseline_da_trade_di_gruppo``: con un trade solo come il
   dizionario di ``baseline_da_trade`` (da sola non valutabile), senza trade
@@ -1997,8 +2005,10 @@ def _stabilita(ordinati: Sequence[statistica.TradeDiGruppo], metriche: Mapping, 
     ``r_medio_per_anno`` di ``motore.metriche_di_gruppo``) deve superare la B
     ripesata sui trade di quell'anno, Σ r_j · b_j / Σ r_j con r_j i trade
     dell'anno della moneta j (la stessa funzione degli estremi,
-    ``statistica.b_ripesata``). Superata se gli anni sopra sono piu' della meta'
-    degli anni che contano (e ce n'e' almeno uno).
+    ``statistica.b_ripesata``; le monete lasciate fuori dalla (b) restano fuori
+    anche da qui, e un anno con la B ripesata inesistente non e' «sopra»).
+    Superata se gli anni sopra sono piu' della meta' degli anni che contano (e ce
+    n'e' almeno uno).
     """
     per_anno: Dict[int, List[statistica.TradeDiGruppo]] = {}
     for t in ordinati:
@@ -2009,8 +2019,9 @@ def _stabilita(ordinati: Sequence[statistica.TradeDiGruppo], metriche: Mapping, 
             continue
         b_ripesata = statistica.b_ripesata(trade, b_per_moneta)
         r_medio = metriche["r_medio_per_anno"][anno]
+        # b_ripesata None: nell'anno solo trade di monete lasciate fuori dalla (b) (correzione 3): non sopra
         anni[str(anno)] = {"trade": len(trade), "r_medio": r_medio, "b_ripesata": b_ripesata,
-                           "sopra": bool(r_medio > b_ripesata)}
+                           "sopra": bool(b_ripesata is not None and r_medio > b_ripesata)}
     sopra = sum(1 for v in anni.values() if v["sopra"])
     return {"anni": anni, "anni_che_contano": len(anni), "anni_sopra": sopra,
             "trade_minimi_per_anno": regole["anni_trade_minimi"],

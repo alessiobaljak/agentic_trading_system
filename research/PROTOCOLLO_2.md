@@ -363,3 +363,38 @@ costo per trade e il funding a 1d prima di qualunque variante.
 2. **13 ott 2026, 20:45 UTC — il vault è richiuso (sezione 10, punto 5): fatto.** `research/src/dati.py` accetta
    date oltre il 2023-12-31 solo con `research/vault/APERTURA_2.md`; `APERTURA.md` dell'11 ottobre non apre più;
    il guardiano guarda lo stesso marcatore. Test in `research/src/tests/test_dati.py`.
+3. **14 ott 2026, 05:05 UTC — lo STOP del Passo 0 è sciolto: le quattro decisioni del proprietario («procedi»).**
+   Il rapporto del Passo 0 (`research/passo0_2/rapporto.md`, sezione «Lo STOP») chiedeva quattro cose; il
+   proprietario ha risposto «procedi» il 14 ottobre alle 05:00 UTC circa (le 07:00 in Italia), cioè sì a tutte come proposte:
+   1. `research/config/parametri_2.yaml` è approvato così com'era (stato `congelato`, `approvazione_parametri`
+      scritta nel file).
+   2. **La potenza dell'esame a un giorno: strada (a), l'esame resta com'è** (sezione 7, punto 1). A barre
+      giornaliere passano solo vantaggi grandi o idee con posizioni brevi (più blocchi): è il prezzo di non farsi
+      ingannare (la prova a placebo dà 0 falsi positivi su 47). In più: una variante «non netta» per pochi blocchi
+      si riporta sempre con il suo `t` contro la (b) e il numero di blocchi, così si vede.
+   3. **Le monete su cui gli ingressi casuali della (b) non entrano** (sezione 7, punto 1, che eredita la sezione 5,
+      punto 4, delle regole del gruppo: «la variante è non valutabile se su una moneta gli ingressi non entrano»).
+      Nella seconda edizione vale questa regola, scritta qui PRIMA della modifica agli strumenti e prima di
+      qualunque variante: una moneta j con n_j > 0 su cui `simula_baseline_casuale` non riesce a piazzare gli
+      n_j ingressi casuali («impossibile piazzare», `statistica.entrate_casuali_per_semi`) **resta fuori dalla
+      combinazione della (b) di gruppo**, esattamente come una moneta con 0 trade della (a) resta fuori dalla
+      (a): le M(s) si calcolano sulle altre monete con i pesi n_j del candidato (come già succede nelle
+      simulazioni in cui una moneta non ha trade), la sua b_j non esiste. L'R medio del candidato, il blocco, la
+      (a) e le strategie sfasate restano su TUTTI i trade. L'esame riporta le monete lasciate fuori (quante e
+      quali) e la quota dei trade del candidato che portano; **la variante è non valutabile contro la (b) se
+      quelle monete portano più del 10% dei trade del candidato** (la stessa frazione della (a),
+      `statistica.QUOTA_MASSIMA_FUORI_DALLA_A`, confronto esatto sugli interi: 10 · trade lasciati fuori > N),
+      oltre ai motivi di prima (una moneta con meno di 2 simulazioni con trade, meno di 2 M(s)). Lo calcola solo
+      `statistica.baseline_casuale_di_gruppo`. Senza monete lasciate fuori i numeri sono quelli di prima, bit per
+      bit: la prova a placebo a 1 ora e i risultati della campagna di gruppo non cambiano. Dopo la modifica la
+      prova a placebo a 1d e il controllo positivo si rifanno con gli strumenti nuovi, e l'esito si scrive nelle
+      regole della campagna PANIERE prima dell'apertura.
+   4. **Il funding a giorni** (long su Bitcoin: +0,23 R a trade nel 2020-2023): nessuna decisione; resta dentro il
+      motore e dentro l'esame, da ricordare quando si leggono i risultati.
+4. **14 ott 2026, 05:05 UTC — la dichiarazione di contaminazione (sezione 8, condizione 1) senza trasmetterla.** La
+   sessione di campagna non legge `research/PROTOCOLLO_2.md` (il guardiano glielo nega: la sezione 8 contiene i
+   risultati del vault della prima edizione e l'andamento del 2024-2026). In testa a `ipotesi.md` la sessione
+   scrive quindi una frase di rimando, dettata dalle regole della campagna (`research/campagne/PANIERE/regole.md`),
+   che dichiara la contaminazione senza ricopiare i numeri: così resta dichiarata senza passare alla sessione che
+   sceglie i ritocchi. Le idee, le varianti e il terreno che la sessione deve conoscere (sezioni 3, 5 e 7) sono
+   ricopiati nelle regole della campagna, in sola lettura, parola per parola.

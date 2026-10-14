@@ -879,10 +879,13 @@ def test_b_di_gruppo_non_valutabile_senza_eccezioni():
     assert g["valutabile"] is False and math.isinf(g["errore_standard"])
     assert g["monete_con_meno_di_2_simulazioni"] == ["AAAUSDT"]
     assert st.contro_baseline(r, 1, g)["valutabile"] is False
-    # gli ingressi non entrano su una moneta (None al posto della lista)
+    # gli ingressi non entrano su una moneta (None al posto della lista) che porta 2 trade su 7, piu' del 10%
+    # (PROTOCOLLO_2, correzione 3: sotto il 10% la moneta resta fuori e la variante e' valutabile, test sotto)
     g = st.baseline_casuale_di_gruppo({"AAAUSDT": None, "BBBUSDT": [0.2, 0.1, 0.0]}, n)
     assert g["valutabile"] is False and g["monete_senza_ingressi"] == ["AAAUSDT"]
-    assert g["b_per_moneta"]["AAAUSDT"] is None
+    assert g["trade_candidato_senza_ingressi"] == 2 and g["quota_trade_candidato_senza_ingressi"] == 2 / 7
+    assert "AAAUSDT" in g["motivo"] and "10%" in g["motivo"]
+    assert g["b_per_moneta"]["AAAUSDT"] is None and g["n_monete_combinazione"] == 1
     assert st.contro_baseline(r, 1, g)["valutabile"] is False
     # una sola M(s): numero c'e', pavimento no
     g = st.baseline_casuale_di_gruppo({"AAAUSDT": [0.1, None, None], "BBBUSDT": [0.2, None, None]},
@@ -899,6 +902,49 @@ def test_b_di_gruppo_non_valutabile_senza_eccezioni():
     assert g["valutabile"] is False and math.isnan(g["media"]) and g["m_mancanti"] == 2
     ris = st.contro_baseline(r, 1, g, pavimento_minimo=0.1)
     assert ris["valutabile"] is False and ris["netta"] is False and math.isnan(ris["differenza"])
+
+
+def test_b_di_gruppo_una_moneta_senza_ingressi_sotto_il_10_per_cento_resta_fuori():
+    """PROTOCOLLO_2, correzione 3 (14 ott 2026): la moneta su cui gli ingressi casuali non entrano resta fuori dalla
+    combinazione della (b), come per la (a); la variante e' valutabile se porta al massimo il 10% dei trade."""
+    rng = np.random.default_rng(37)
+    liste = {s: _con_vuote(rng.normal(0, 0.2, 200), 0.1, rng) for s in ("AAAUSDT", "BBBUSDT", "CCCUSDT")}
+    n = {"AAAUSDT": 60, "BBBUSDT": 30, "CCCUSDT": 20}
+    tutte = st.baseline_casuale_di_gruppo(liste, n)
+    # con CCCUSDT senza ingressi e 20 trade su 110 (18%): non valutabile
+    g = st.baseline_casuale_di_gruppo(dict(liste, CCCUSDT=None), n)
+    assert g["valutabile"] is False and g["monete_senza_ingressi"] == ["CCCUSDT"]
+    assert g["trade_candidato_senza_ingressi"] == 20 and g["quota_trade_candidato_senza_ingressi"] == 20 / 110
+    assert math.isinf(g["errore_standard"]) and "CCCUSDT" in g["motivo"] and "20 trade" in g["motivo"]
+    # con 10 trade su 100 (esattamente il 10%): valutabile, e le M(s) sono quelle della (b) sulle altre due monete
+    n10 = dict(n, CCCUSDT=10)
+    g = st.baseline_casuale_di_gruppo(dict(liste, CCCUSDT=None), n10)
+    senza = st.baseline_casuale_di_gruppo({s: liste[s] for s in ("AAAUSDT", "BBBUSDT")},
+                                          {s: n10[s] for s in ("AAAUSDT", "BBBUSDT")})
+    assert g["valutabile"] is True and g["motivo"] is None
+    assert np.array_equal(g["valori"], senza["valori"])
+    for chiave in ("media", "errore_standard", "errore_minimo_candidato", "n_simulazioni", "percentile_90",
+                   "m_mancanti", "m_parziali"):
+        assert _stesso_valore(g[chiave], senza[chiave]), chiave
+    assert g["monete_senza_ingressi"] == ["CCCUSDT"] and g["b_per_moneta"]["CCCUSDT"] is None
+    assert g["b_per_moneta"]["AAAUSDT"] == senza["b_per_moneta"]["AAAUSDT"]
+    assert g["trade_candidato_senza_ingressi"] == 10 and g["quota_trade_candidato_senza_ingressi"] == 0.1
+    assert g["n_trade_candidato"] == 100 and g["n_monete"] == 3 and g["n_monete_combinazione"] == 2
+    assert g["pesi"] == {"AAAUSDT": 0.6, "BBBUSDT": 0.3, "CCCUSDT": 0.1}
+    assert g["simulazioni_con_trade_per_moneta"]["CCCUSDT"] == 0
+    r = list(rng.normal(0.05, 1.0, 100))
+    assert st.contro_baseline(r, 3, g)["valutabile"] is True
+    assert st.contro_baseline(r, 3, g) == st.contro_baseline(r, 3, senza)
+    # con 11 trade su 101 (appena sopra il 10%): non valutabile; il confronto e' esatto sugli interi
+    g = st.baseline_casuale_di_gruppo(dict(liste, CCCUSDT=None), dict(n, CCCUSDT=11))
+    assert g["valutabile"] is False and "11 trade" in g["motivo"]
+    # senza monete senza ingressi i numeri sono quelli di prima, chiave per chiave
+    assert tutte["monete_senza_ingressi"] == [] and tutte["trade_candidato_senza_ingressi"] == 0
+    assert tutte["quota_trade_candidato_senza_ingressi"] == 0.0 and tutte["n_monete_combinazione"] == 3
+    # tutte le monete senza ingressi: niente M(s), non valutabile, numero NaN
+    g = st.baseline_casuale_di_gruppo({"AAAUSDT": None, "BBBUSDT": None}, {"AAAUSDT": 1, "BBBUSDT": 1})
+    assert g["valutabile"] is False and math.isnan(g["media"]) and g["n_simulazioni"] == 0
+    assert g["n_monete_combinazione"] == 0 and g["quota_trade_candidato_senza_ingressi"] == 1.0
 
 
 def test_b_di_gruppo_errori_nei_dati():
@@ -1027,8 +1073,15 @@ def test_b_ripesata_e_pubblica_e_a_mano():
     trade = [_t("AAAUSDT", 1, 2, 0.1), _t("AAAUSDT", 3, 4, 0.2), _t("BBBUSDT", 1, 2, 0.3)]
     assert st.b_ripesata(trade, {"AAAUSDT": 0.3, "BBBUSDT": -0.3}) == pytest.approx((2 * 0.3 - 0.3) / 3)
     assert st.b_ripesata([], {}) is None
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # manca la chiave di una moneta con trade
         st.b_ripesata(trade, {"AAAUSDT": 0.3})
+    # chiave presente con None: la moneta e' lasciata fuori dalla (b) (PROTOCOLLO_2, correzione 3): i suoi trade
+    # restano fuori anche dalla B ripesata e i pesi si ricalcolano sulle altre
+    assert st.b_ripesata(trade, {"AAAUSDT": 0.3, "BBBUSDT": None}) == pytest.approx(0.3)
+    assert st.b_ripesata(trade, {"AAAUSDT": None, "BBBUSDT": -0.3}) == pytest.approx(-0.3)
+    assert st.b_ripesata(trade, {"AAAUSDT": None, "BBBUSDT": None}) is None
+    with pytest.raises(ValueError):  # una b_j non finita
+        st.b_ripesata(trade, {"AAAUSDT": 0.3, "BBBUSDT": math.nan})
 
 
 # ---------------------------------------------------------------------------
@@ -1221,8 +1274,13 @@ def test_estremi_errori():
         st.estremi_di_gruppo([], 0.0, {})
     with pytest.raises(ValueError):  # manca la b_j di una moneta con trade rimasti
         st.estremi_di_gruppo(_trade_estremi(), 0.0, {"AAAUSDT": 0.1, "BBBUSDT": 0.2}, 1, 1, 1)
-    with pytest.raises(ValueError):  # b_j None (la (b) di quella moneta non aveva simulazioni con trade)
-        st.estremi_di_gruppo(_trade_estremi(), 0.0, dict(B_MONETE, CCCUSDT=None), 1, 1, 1)
+    # b_j None: la moneta e' lasciata fuori dalla (b) (PROTOCOLLO_2, correzione 3): niente errore, i suoi trade
+    # restano fuori dalle B ripesate (che restano numeri finiti o None), le tre prove si calcolano
+    con_none = st.estremi_di_gruppo(_trade_estremi(), 0.0, dict(B_MONETE, CCCUSDT=None), 1, 1, 1)
+    assert isinstance(con_none["tutte_superate"], bool)
+    for prova in ("senza_giorni_migliori", "senza_monete_migliori"):
+        soglia = con_none[prova]["b_ripesata"]
+        assert soglia is None or math.isfinite(soglia)
     with pytest.raises(ValueError):
         st.estremi_di_gruppo(_trade_estremi(), math.nan, B_MONETE)
     with pytest.raises(ValueError):

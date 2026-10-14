@@ -199,6 +199,25 @@ PERCORSO_PARAMETRI = RADICE_DEFAULT / "config" / "parametri.yaml"
 #: Dove stanno le schede delle monete del gruppo, relativo a ``radice`` (regole.md, sezione 1, punto 2).
 CARTELLA_SCHEDE_GRUPPO = Path("campagne") / "GRUPPO" / "schede"
 
+
+def cartella_schede_gruppo(simbolo_campagna: Optional[str] = None) -> Path:
+    """La cartella delle schede della campagna di gruppo in corso, relativa alla radice: ``campagne/<S>/schede``.
+
+    ``S`` e' il simbolo del marcatore della sessione se e' una campagna di gruppo
+    (``guardiano.SIMBOLI_GRUPPO``: GRUPPO, PANIERE), altrimenti GRUPPO
+    (coordinamento, prova a placebo, test: ``CARTELLA_SCHEDE_GRUPPO``). Con
+    ``simbolo_campagna`` si sceglie senza leggere il marcatore. Dal 14 ottobre
+    2026 (seconda edizione): la sessione PANIERE legge le SUE schede,
+    ``campagne/PANIERE/schede/``, non quelle del gruppo della prima edizione.
+    """
+    simbolo = simbolo_campagna
+    if simbolo is None:
+        marcatore = marcatore_di_campagna()
+        simbolo = marcatore["simbolo"] if marcatore else None
+    if simbolo not in guardiano.SIMBOLI_GRUPPO:
+        return CARTELLA_SCHEDE_GRUPPO
+    return Path("campagne") / simbolo / "schede"
+
 BASE_URL = "https://data.binance.vision/data/futures/um/monthly"
 URL_EXCHANGE_INFO = "https://fapi.binance.com/fapi/v1/exchangeInfo"
 #: Stesso JSON sullo stesso percorso, ma servito dal sito: l'host delle API risponde
@@ -1081,8 +1100,10 @@ _PERCENTUALE = re.compile(r"(\d+(?:\.\d+)?)%")
 def leggi_scheda_gruppo(simbolo: str, radice: Path = RADICE_DEFAULT) -> Dict[str, object]:
     """Primo mese di dati e fascia di slippage di una moneta del gruppo, dalla sua scheda (``campagne/GRUPPO/regole.md``, sezione 1, punto 2, e sezione 2, punto 8).
 
-    Legge ``<radice>/campagne/GRUPPO/schede/<SIMBOLO>.md``, la tabella con una
-    riga per campo (``| Campo | Valore |``). Ogni campo deve comparire in UNA
+    Legge ``<radice>/campagne/<S>/schede/<SIMBOLO>.md`` con ``S`` la campagna di
+    gruppo in corso (``cartella_schede_gruppo``: GRUPPO, o PANIERE con il suo
+    marcatore), la tabella con una riga per campo (``| Campo | Valore |``). Ogni
+    campo deve comparire in UNA
     sola riga, riconosciuta dall'inizio del nome:
 
     * «Simbolo»: il valore (tra apici inversi) deve essere ``simbolo``;
@@ -1105,7 +1126,7 @@ def leggi_scheda_gruppo(simbolo: str, radice: Path = RADICE_DEFAULT) -> Dict[str
     """
     if not isinstance(simbolo, str) or not re.fullmatch(r"[A-Z0-9]+", simbolo):
         raise ValueError(f"leggi_scheda_gruppo: simbolo non valido {simbolo!r}")
-    percorso = Path(radice) / CARTELLA_SCHEDE_GRUPPO / f"{simbolo}.md"
+    percorso = Path(radice) / cartella_schede_gruppo() / f"{simbolo}.md"
     testo = percorso.read_text(encoding="utf-8")
     trovati: Dict[str, List[str]] = {chiave: [] for chiave, _ in _CAMPI_SCHEDA_GRUPPO}
     for riga in testo.splitlines():

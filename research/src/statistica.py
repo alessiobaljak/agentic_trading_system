@@ -1476,17 +1476,35 @@ def baseline_casuale_di_gruppo(
     * b_j = media delle m_j(s) con trade (``b_per_moneta``, per gli estremi della
       Fase 4: ``estremi_di_gruppo``).
 
+    Una moneta con n_j > 0 su cui gli ingressi casuali NON entrano (None al
+    posto della lista) resta FUORI dalla combinazione della (b), come una moneta
+    con 0 trade della (a) resta fuori dalla (a) (``baseline_da_trade_di_gruppo``;
+    PROTOCOLLO_2, correzione 3 del 14 ottobre 2026, che per la seconda edizione
+    sostituisce «la variante e' non valutabile se su una moneta gli ingressi non
+    entrano» della sezione 5, punto 4, delle regole del gruppo): le M(s) si
+    calcolano sulle altre monete con i pesi n_j del candidato, la sua b_j e'
+    None, e ``m_parziali`` conta le M(s) fatte su una parte delle monete DELLA
+    COMBINAZIONE. Si riportano ``monete_senza_ingressi``,
+    ``trade_candidato_senza_ingressi`` e ``quota_trade_candidato_senza_ingressi``
+    (sul totale N: l'R medio del candidato resta su tutti i trade).
+
     Non valutabile (``valutabile`` False, ``errore_standard`` infinito, e i numeri
-    che non esistono NaN) se su una moneta con n_j > 0 gli ingressi non entrano,
-    se una moneta con n_j > 0 ha meno di 2 simulazioni con trade, o se restano
-    meno di 2 M(s). ``contro_baseline`` lo legge come un confronto non valutabile.
+    che non esistono NaN) se le monete senza ingressi portano piu' del 10% dei
+    trade del candidato (``QUOTA_MASSIMA_FUORI_DALLA_A``, la stessa frazione della
+    (a), confronto esatto sugli interi: 10 · trade senza ingressi > N), se una
+    moneta con n_j > 0 ha meno di 2 simulazioni con trade, o se restano meno di 2
+    M(s). ``contro_baseline`` lo legge come un confronto non valutabile. Senza
+    monete senza ingressi i numeri sono quelli di prima della correzione, bit per
+    bit (stesse M(s), stessi conteggi).
 
     Ritorna il dizionario di tipo "b" di ``baseline_casuale`` (da passare cosi'
     com'e' a ``contro_baseline``) piu' ``valutabile``, ``motivo``,
-    ``n_trade_candidato`` (N), ``n_monete``, ``pesi`` ({simbolo: n_j / N}),
-    ``b_per_moneta`` ({simbolo: b_j o None}), ``simulazioni_per_moneta`` (S),
-    ``simulazioni_con_trade_per_moneta``, ``m_mancanti``, ``m_parziali``,
-    ``monete_senza_ingressi`` e ``monete_con_meno_di_2_simulazioni``.
+    ``n_trade_candidato`` (N), ``n_monete``, ``n_monete_combinazione``, ``pesi``
+    ({simbolo: n_j / N}), ``b_per_moneta`` ({simbolo: b_j o None}),
+    ``simulazioni_per_moneta`` (S), ``simulazioni_con_trade_per_moneta``,
+    ``m_mancanti``, ``m_parziali``, ``monete_senza_ingressi``,
+    ``trade_candidato_senza_ingressi``, ``quota_trade_candidato_senza_ingressi`` e
+    ``monete_con_meno_di_2_simulazioni``.
 
     Con una moneta sola M(s) = m(s) bit per bit (peso 1) e tutti i numeri sono
     quelli di ``baseline_casuale`` sulle simulazioni con trade, cioe' della (b)
@@ -1534,14 +1552,20 @@ def baseline_casuale_di_gruppo(
         if not presenti_s:
             mancanti += 1
             continue
-        if len(presenti_s) < len(positivi):
+        if len(presenti_s) < len(liste):
             parziali += 1
         totale_s = sum(positivi[simbolo] for simbolo, _ in presenti_s)
         valori_m.append(_somma_in_ordine([(positivi[simbolo] / totale_s) * m for simbolo, m in presenti_s]))
 
+    # le monete senza ingressi restano fuori dalla combinazione (correzione 3 di PROTOCOLLO_2): la variante e'
+    # non valutabile contro la (b) solo se portano piu' del 10% dei trade del candidato, come per la (a)
+    trade_senza_ingressi = sum(positivi[s] for s in senza_ingressi)
+    numeratore, denominatore = QUOTA_MASSIMA_FUORI_DALLA_A
     motivi: List[str] = []
-    if senza_ingressi:
-        motivi.append(f"gli ingressi casuali non entrano su: {', '.join(senza_ingressi)}")
+    if denominatore * trade_senza_ingressi > numeratore * n_totale:
+        motivi.append(f"gli ingressi casuali non entrano su {', '.join(senza_ingressi)}: portano "
+                      f"{trade_senza_ingressi} trade del candidato su {n_totale}, piu' del "
+                      f"{100 * numeratore // denominatore}%")
     if poche:
         motivi.append(f"meno di 2 simulazioni con trade su: {', '.join(poche)}")
     if len(valori_m) < 2:
@@ -1568,6 +1592,7 @@ def baseline_casuale_di_gruppo(
         "motivo": "; ".join(motivi) if motivi else None,
         "n_trade_candidato": n_totale,
         "n_monete": len(positivi),
+        "n_monete_combinazione": len(liste),
         "pesi": {s: n_j / n_totale for s, n_j in positivi.items()},
         "b_per_moneta": b_per_moneta,
         "simulazioni_per_moneta": n_semi,
@@ -1575,6 +1600,8 @@ def baseline_casuale_di_gruppo(
         "m_mancanti": mancanti,
         "m_parziali": parziali,
         "monete_senza_ingressi": senza_ingressi,
+        "trade_candidato_senza_ingressi": trade_senza_ingressi,
+        "quota_trade_candidato_senza_ingressi": trade_senza_ingressi / n_totale,
         "monete_con_meno_di_2_simulazioni": poche,
     })
     return risultato
@@ -1827,24 +1854,36 @@ def b_ripesata(trade: Sequence[object], b_per_moneta: Mapping[str, Optional[floa
     chiave ``b_per_moneta``), gia' calcolate. La usano gli estremi
     (``estremi_di_gruppo``) e la stabilita' della Fase 4 (``gruppo.py``): una sola
     lettura. Le somme vanno in ordine dei caratteri dei simboli, con i pesi
-    calcolati prima. None senza trade; ValueError se manca la b_j di una moneta
-    con trade o se non e' finita.
+    calcolati prima. None senza trade; ValueError se manca la chiave di una
+    moneta con trade o se la sua b_j non e' finita.
+
+    Una moneta con la chiave presente e b_j None e' una moneta lasciata fuori
+    dalla combinazione della (b) (gli ingressi casuali non entrano: PROTOCOLLO_2,
+    correzione 3): i suoi trade restano fuori anche da qui, e i pesi si
+    ricalcolano sui trade delle monete con la b_j (``Σ r_j`` su quelle). None se
+    nessun trade ha la b_j. Senza monete lasciate fuori il numero e' quello di
+    prima, bit per bit.
     """
     if not trade:
         return None
     conteggi: Dict[str, int] = {}
     for t in trade:
         conteggi[t.simbolo] = conteggi.get(t.simbolo, 0) + 1
-    totale = len(trade)
-    termini: List[float] = []
+    valori: Dict[str, float] = {}
     for simbolo in sorted(conteggi):
-        b_j = b_per_moneta.get(simbolo)
-        if b_j is None:
+        if simbolo not in b_per_moneta:
             raise ValueError(f"b_per_moneta: manca la b_j di {simbolo}, che ha trade")
+        b_j = b_per_moneta[simbolo]
+        if b_j is None:
+            continue  # lasciata fuori dalla (b): fuori anche dalla B ripesata
         valore = float(b_j)
         if not math.isfinite(valore):
             raise ValueError(f"b_per_moneta: b_j di {simbolo} non finita ({b_j!r})")
-        termini.append((conteggi[simbolo] / totale) * valore)
+        valori[simbolo] = valore
+    totale = sum(conteggi[s] for s in valori)
+    if not totale:
+        return None
+    termini = [(conteggi[simbolo] / totale) * valori[simbolo] for simbolo in sorted(valori)]
     return _somma_in_ordine(termini)
 
 
@@ -1883,8 +1922,10 @@ def estremi_di_gruppo(
     * ``senza_monete_migliori``: senza tutti i trade delle 3 monete con la somma di
       R piu' alta, l'R medio dei rimasti supera la B ripesata sulle monete rimaste.
 
-    La B ripesata e' Σ r_j · b_j / Σ r_j, con r_j i trade rimasti della moneta j.
-    Se non resta nessun trade la prova non e' superata. Le somme di R per giorno e
+    La B ripesata e' Σ r_j · b_j / Σ r_j, con r_j i trade rimasti della moneta j
+    (``b_ripesata``: i trade delle monete lasciate fuori dalla (b), b_j None,
+    restano fuori anche da qui). Se non resta nessun trade, o nessun trade con
+    la b_j, la prova non e' superata. Le somme di R per giorno e
     per moneta sono esatte (``math.fsum``). A pari somma si toglie prima il giorno
     piu' vecchio e la moneta che viene prima in ordine dei caratteri (scelta
     documentata: il testo non lo dice; con R reali le parita' esatte sono rare).

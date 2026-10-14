@@ -1474,6 +1474,63 @@ def test_le_monete_con_0_o_1_trade_della_a_arrivano_alla_a_di_gruppo(tmp_path):
     assert ris["baseline_b"]["valutabile"] is True and math.isfinite(ris["baseline_b"]["t"])
 
 
+def test_la_moneta_su_cui_la_b_non_entra_resta_fuori_dalla_b_di_gruppo(tmp_path, monkeypatch):
+    """PROTOCOLLO_2, correzione 3 (14 ott 2026): la moneta su cui gli ingressi casuali non entrano resta fuori dalla
+    combinazione della (b) e la variante e' valutabile se porta al massimo il 10% dei trade; oltre, non valutabile.
+    Il «non entrano» si simula qui facendo alzare a ``simula_baseline_casuale`` l'errore di
+    ``entrate_casuali_per_semi`` sulla moneta scelta (``processi=1``: i pezzi girano in questo processo)."""
+    aperture = {s: _apertura_della_prima_barra(s) for s, _, _ in QUATTRO}
+    car = CaricatoreFinto(monete=QUATTRO, mesi_sotto=(), buchi=())
+    p = dict(P, registra_ingressi=False)
+    vera = motore.simula_baseline_casuale
+
+    def non_entra_su(simbolo):
+        def finta(candele, *argomenti, **altro):
+            if str(round(candele[0].open)) == aperture[simbolo]:
+                raise ValueError(f"impossibile piazzare {len(candele)} ingressi a distanza 5 su {len(candele)} "
+                                 "barre con 1 ammesse: ne entrano al massimo 1")
+            return vera(candele, *argomenti, **altro)
+        return finta
+
+    riferimento = esame(tmp_path / "tutte", caricatore=car, p=p)
+    n = {s: riferimento["per_moneta"][s]["trade"] for s, _, _ in QUATTRO}
+    tot = riferimento["metriche"]["trade"]
+    assert all(n[s] > 0 for s in n) and 10 * n["DDDUSDT"] <= tot < 10 * n["CCCUSDT"]
+
+    # DDDUSDT (meno del 10% dei trade): fuori dalla (b), variante valutabile, (b) uguale a quella delle altre tre
+    monkeypatch.setattr(motore, "simula_baseline_casuale", non_entra_su("DDDUSDT"))
+    ris = esame(tmp_path / "ddd", caricatore=car, p=p, nome="GRUPPO-002")
+    b = ris["baseline_b"]
+    assert b["valutabile"] is True and b["monete_senza_ingressi"] == ["DDDUSDT"]
+    assert b["trade_candidato_senza_ingressi"] == n["DDDUSDT"]
+    assert b["quota_trade_candidato_senza_ingressi"] == n["DDDUSDT"] / tot
+    assert b["n_monete"] == 4 and b["n_monete_combinazione"] == 3
+    assert ris["per_moneta"]["DDDUSDT"]["b_ingressi_entrano"] is False and ris["per_moneta"]["DDDUSDT"]["b_j"] is None
+    assert ris["per_moneta"]["AAAUSDT"]["b_ingressi_entrano"] is True
+    assert ris["valutabile"] is True and math.isfinite(ris["t"]) and not ris["motivi_non_valutabile"]
+    # l'R medio del candidato, il blocco, la (a) e le sfasate restano su tutti i trade
+    assert ris["metriche"]["trade"] == tot and ris["metriche"]["r_medio"] == riferimento["metriche"]["r_medio"]
+    assert ris["blocco"] == riferimento["blocco"] and ris["baseline_a"] == riferimento["baseline_a"]
+    assert ris["pavimento_sfasate"] == riferimento["pavimento_sfasate"]
+    # le M(s) sono quelle delle altre tre monete con i pesi del candidato: la (b) rifatta a mano dai pezzi
+    p1 = pezzi(ris, "fase1")
+    per_seme = {s: p1[s]["dati"]["b"]["r_medio_per_seme"] for s in ("AAAUSDT", "BBBUSDT", "CCCUSDT")}
+    a_mano = statistica.baseline_casuale_di_gruppo(per_seme, {s: n[s] for s in per_seme})
+    assert b["media"] == a_mano["media"] and b["errore_minimo_candidato"] == a_mano["errore_minimo_candidato"]
+    assert b["n_simulazioni"] == a_mano["n_simulazioni"] and b["m_parziali"] == a_mano["m_parziali"]
+    assert b["media"] != riferimento["baseline_b"]["media"]
+
+    # CCCUSDT (piu' del 10% dei trade): la variante non e' valutabile contro la (b), t = -inf, candidato False
+    monkeypatch.setattr(motore, "simula_baseline_casuale", non_entra_su("CCCUSDT"))
+    ris = esame(tmp_path / "ccc", caricatore=car, p=p, nome="GRUPPO-003")
+    b = ris["baseline_b"]
+    assert b["valutabile"] is False and b["monete_senza_ingressi"] == ["CCCUSDT"]
+    assert "CCCUSDT" in b["motivo"] and "10%" in b["motivo"]
+    assert any("(b)" in m and "CCCUSDT" in m for m in ris["motivi_non_valutabile"])
+    assert ris["valutabile"] is False and ris["t"] == -math.inf and ris["candidato"] is False
+    assert ris["baseline_a"]["valutabile"] is True
+
+
 def test_buy_and_hold_con_gli_stessi_pesi_anche_con_una_moneta_assente(tmp_path):
     """La (c) con gli stessi w_j (regole.md, sezione 5, punto 8): una moneta senza candele in un anno non ripesa le altre."""
     car = CaricatoreFinto(monete=(("AAAUSDT", "2021-07-01", 0.0005), ("BBBUSDT", "2022-03-01", 0.001)), mesi_sotto=(),

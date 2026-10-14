@@ -261,7 +261,10 @@ def test_i_segnali_da_manuale_coincidono_con_quelli_della_prova_del_9_ottobre(se
                 barra_per_barra = np.array([calcolo.aggiungi(x) for x in c])
                 assert (barra_per_barra == in_blocco).all(), (regola, direzione)
     assert PG.REGOLE == P9.REGOLE and PG.USCITA_DELLA_REGOLA == P9.USCITA_DELLA_REGOLA
-    assert PG.BARRE_USCITA_TEMPO == P9.BARRE_USCITA_TEMPO and PG.RISCALDAMENTO == P9.RISCALDAMENTO
+    # il 13 ott 2026 il modulo ha preso anche «1d» (seconda edizione: TIMEFRAME, MS_BARRA, BARRE_USCITA_TEMPO);
+    # a 1 ora e a 4 ore le uscite a tempo restano quelle della prova del 9 ottobre
+    assert {k: v for k, v in PG.BARRE_USCITA_TEMPO.items() if k in P9.BARRE_USCITA_TEMPO} == P9.BARRE_USCITA_TEMPO
+    assert PG.BARRE_USCITA_TEMPO["1d"] == 10 and PG.RISCALDAMENTO == P9.RISCALDAMENTO
 
 
 def test_segnali_causali():
@@ -321,9 +324,12 @@ def test_il_modulo_rispetta_il_contratto_di_gruppo():
     for nome in gruppo.FUNZIONI_DEL_CONTRATTO:
         assert callable(getattr(modulo, nome))
     gruppo.controlla_import_della_variante(E.MODULO.read_bytes(), E.MODULO)
-    ctx = type("Ctx", (), {"timeframe": "1d", "ms_per_barra": GIORNO})()
+    # «1d» e' ammesso dal 13 ott 2026 (seconda edizione); un timeframe fuori dalla prova no
+    ctx = type("Ctx", (), {"timeframe": "15m", "ms_per_barra": 900_000})()
     with pytest.raises(ValueError):
         PG.crea_a(ctx, {"regola": "rsi", "direzione": "long"})
+    assert callable(PG.crea_a(type("Ctx", (), {"timeframe": "1d", "ms_per_barra": GIORNO})(),
+                              {"regola": "rsi", "direzione": "long"}))
     with pytest.raises(ValueError):
         PG.crea_a(type("Ctx", (), {"timeframe": "1h"})(), {"regola": "nessuna", "direzione": "long"})
 

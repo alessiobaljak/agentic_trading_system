@@ -1,18 +1,21 @@
 # Parametri della SECONDA EDIZIONE del protocollo di ricerca (research/PROTOCOLLO_2.md, versione 5.0,
 # approvata dal proprietario il 13 ottobre 2026 alle 19:34 UTC con tre idee e 18 varianti).
 #
-# STATO: BOZZA del Passo 0 (13 ottobre 2026, sera). Il Passo 0 finisce con uno STOP: questo file lo approva
-# il proprietario in chat, poi diventa «congelato» e nessun valore cambia piu'. Nessun numero qui e' stato
+# STATO: CONGELATO. Bozza del Passo 0 (13 ottobre 2026, sera); il Passo 0 e' finito con uno STOP e il
+# proprietario ha approvato questo file cosi' com'era il 14 ottobre 2026 alle 05:00 UTC circa («procedi», sì alle
+# quattro decisioni dello STOP: research/passo0_2/rapporto.md e research/PROTOCOLLO_2.md, correzione 3). Da qui
+# nessun valore cambia piu'; le sole aggiunte ammesse sono gli esiti dei ricontrolli (placebo e controllo positivo
+# con la regola della correzione 3), scritti in coda alle voci `esito`. Nessun numero qui e' stato
 # scelto guardando risultati di strategie: i numeri misurati vengono dal Passo 0 (research/passo0_2/) e sono
 # fatti sui dati 2020-2023, non scelte. I numeri dell'ESAME (trade minimi, simulazioni, semi, bootstrap,
 # asticella, pavimenti) restano quelli del blocco `gruppo` di research/config/parametri.yaml, letti dagli
 # strumenti di gruppo cosi' come sono: qui non si ricopiano, per non avere due fonti.
 
-stato: bozza_passo_0
+stato: congelato
 versione_protocollo: "5.0"
 testo: research/PROTOCOLLO_2.md
 approvazione_testo: 2026-10-13T19:34Z   # «approvo la seconda edizione, 3 idee e anche piu' varianti, dal 16 gennaio 2023 va bene»
-approvazione_parametri: null             # la scrive il coordinamento quando il proprietario approva questo file
+approvazione_parametri: 2026-10-14T05:00Z   # «procedi» (sì alle quattro decisioni dello STOP del Passo 0)
 
 # --------------------------------------------------------------------------- #
 # Il terreno (PROTOCOLLO_2, sezione 3)
@@ -113,10 +116,12 @@ esame:
     placebo_per_periodo: 48                          # 6 regole x 2 direzioni x 4 sfasamenti, solo 1d
     soglie: {netta_costruzione_max: 0.03, p_sotto_010_validazione_max: 0.13, placebo_valutabili_minime_per_periodo: 40}
     esito: "regge (13 ott 2026, commit e98d0fec): valutabili 47/47 per periodo, nette in costruzione 0/47, p<0,10 in validazione 0/47, code M3 0,35% e 0,58%"
+    ricontrollo_con_la_regola_nuova: null            # esito della prova rifatta dopo la correzione 3 (lo scrive il coordinamento)
   controllo_positivo_1d:
     esito: "non passa nella forma del gruppo: (b) non costruibile su 13-16 monete dalla storia corta (strategia sempre in posizione); sul sottoinsieme short t 2,42 (non netto con 7 blocchi), con ritardo -0,67; long (b) non entra su ROSEUSDT"
     file: [research/passo0_2/controllo_positivo_1d.json, research/passo0_2/controllo_positivo_1d_sottoinsieme.json]
-    decisione: null                                  # la prende il proprietario allo STOP (rapporto del Passo 0, sezione «Lo STOP»)
+    decisione: "14 ott 2026, «procedi»: (2) l'esame resta com'e' (strada a), ogni variante non netta per pochi blocchi si riporta con t e numero di blocchi; (3) una moneta su cui gli ingressi casuali non entrano resta fuori dalla combinazione della (b) come per la (a), la variante e' non valutabile contro la (b) se quelle monete portano piu' del 10% dei trade del candidato (PROTOCOLLO_2, correzione 3; statistica.QUOTA_MASSIMA_FUORI_DALLA_A); (4) il funding a giorni resta dentro motore ed esame, nessuna decisione"
+    ricontrollo_con_la_regola_nuova: null            # esito del controllo positivo rifatto dopo la correzione 3 (lo scrive il coordinamento)
 
 # --------------------------------------------------------------------------- #
 # Il paper come esame finale (sezione 9)

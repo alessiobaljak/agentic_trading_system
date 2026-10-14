@@ -1,8 +1,9 @@
 # Passo 0 della seconda edizione — rapporto del coordinamento (13 ottobre 2026, sera)
 
-> Stato: **finito, in STOP** (13 ottobre 2026, 22:10 UTC). Il Passo 0 finisce con uno STOP: il proprietario approva `research/config/parametri_2.yaml`
+> Stato: **finito, STOP sciolto dal proprietario il 14 ottobre 2026 alle 05:00 UTC circa («procedi»)**; prima: finito, in STOP
+> (13 ottobre 2026, 22:10 UTC). Il Passo 0 finisce con uno STOP: il proprietario approva `research/config/parametri_2.yaml`
 > e solo dopo si apre la sessione di campagna `PANIERE` (`research/PROTOCOLLO_2.md`, sezione 10). Questo file dice
-> cosa è fatto, con i numeri e le fonti, e cosa manca.
+> cosa è fatto, con i numeri e le fonti, e cosa manca; le risposte sono nell'ultima sezione.
 
 ## La tabella del Passo 0 (sezione 10 di PROTOCOLLO_2)
 
@@ -82,3 +83,27 @@ barre giornaliere (`research/passo0_2/controllo_positivo_1d*.json`):
    l'esame; nessuna decisione, solo da sapere quando si leggeranno i risultati.
 
 Finché non arrivano le risposte, nessuna sessione di campagna si apre.
+
+## Le risposte del proprietario (14 ottobre 2026, 05:00 UTC circa, le 07:00 in Italia): «procedi»
+
+Sì a tutte e quattro, come proposte (`research/PROTOCOLLO_2.md`, correzione 3, scritta alle 05:05 UTC prima di
+toccare gli strumenti):
+
+1. `research/config/parametri_2.yaml` approvato così com'era: stato `congelato`, `approvazione_parametri`
+   2026-10-14T05:00Z.
+2. L'esame resta com'è (strada a); ogni variante «non netta» per pochi blocchi si riporta con il suo t e il numero
+   di blocchi.
+3. La regola per le monete su cui gli ingressi casuali della (b) non entrano: restano fuori dalla combinazione
+   della (b) come per la (a); non valutabile contro la (b) se portano più del 10% dei trade del candidato.
+   Strumenti: `statistica.baseline_casuale_di_gruppo` (la regola), `statistica.b_ripesata` (le monete lasciate fuori
+   restano fuori anche dalla B ripesata di stabilità ed estremi), `gruppo.py` (docstring e stabilità); test nuovi in
+   `test_gruppo_statistica.py` e `test_gruppo_esecutore.py` (la moneta sotto il 10% resta fuori e la variante è
+   valutabile con la (b) delle altre, bit per bit; sopra il 10% non valutabile; senza monete fuori i numeri di
+   prima). Senza monete lasciate fuori i numeri sono identici a prima: la prova a placebo a 1 ora e i risultati della
+   campagna di gruppo non cambiano.
+4. Il funding a giorni: nessuna decisione, resta dentro motore ed esame.
+
+**Ricontrolli con gli strumenti nuovi** (richiesti dalla correzione 3, prima dell'apertura): la prova a placebo a 1d e
+il controllo positivo a 1d si rifanno; gli esiti vanno in `research/taratura/placebo_paniere/risultati.md`, in
+`research/campagne/PANIERE/regole.md` (sezione 6) e nelle voci `ricontrollo_con_la_regola_nuova` di
+`parametri_2.yaml`. Stato: in corso al momento di questa riga (14 ottobre, mattina).

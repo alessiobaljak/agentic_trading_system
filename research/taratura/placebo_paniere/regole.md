@@ -49,16 +49,18 @@ riusa il lanciatore della prova a 1 ora (`research/taratura/placebo_gruppo/esegu
 le serie 1d, l'elenco e le schede del paniere; stesse impronte e stessi controlli di identità, ramo remoto quello
 principale. Gli esiti vanno in `esiti_k<k>.jsonl` di questa cartella; il riassunto in `risultati.md`.
 
-## 6. Le impronte degli strumenti al lancio (scritte dal coordinamento, 13 ottobre 2026)
+## 6. Le impronte degli strumenti al lancio (scritte dal coordinamento, 13 ottobre 2026; rilancio del 14 ottobre)
 
 I cinque file dell'esame, come li vede `gruppo.impronte_degli_strumenti()` al momento del lancio vero; il
-lanciatore rifiuta di partire se un file sul disco non ha questa impronta.
+lanciatore rifiuta di partire se un file sul disco non ha questa impronta. Queste sono le impronte del **rilancio del
+14 ottobre 2026** (correzione 3 qui sotto: `statistica.py`, `gruppo.py` e `dati.py` sono cambiati); quelle del
+lancio del 13 ottobre sono scritte nella correzione 3, abbreviate, con il commit che le porta.
 
 * `7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7`  `research/config/parametri.yaml`
-* `4f0d47790d23801d0d5f66ec01f4f901558179051bc4d632a6825eccaa877af4`  `research/src/dati.py`
-* `6875b12f5dfbeb6fc505fbb5302befe0ad652e0a96330e85e69b46ff772efd3a`  `research/src/gruppo.py`
+* `1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5`  `research/src/dati.py`
+* `1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990`  `research/src/gruppo.py`
 * `2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6`  `research/src/motore.py`
-* `ca027d2687d9129a533077eb980c0517bd09c476331659d61eaf15dda45c9e5a`  `research/src/statistica.py`
+* `e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1`  `research/src/statistica.py`
 
 ## 7. Correzioni (solo in aggiunta)
 
@@ -99,3 +101,22 @@ riparte da capo. Il controllo positivo si rifà con lo stesso modulo.
 
 **Nota sull'orario della correzione 1.** L'ora scritta nella correzione 1 (21:55 UTC) è sbagliata: era circa
 20:45 UTC (l'ora del commit 5632f874). Il resto della correzione vale.
+
+### Correzione 3 — rilancio della prova con la regola delle monete senza ingressi della (b) (14 ott 2026, 05:40 UTC, prima di qualunque esito del rilancio)
+
+**Cosa è successo.** Il lancio del 13 ottobre (96 esami, commit e98d0fec, esiti in `lancio_13ott/`) ha detto che l'esame
+regge a barre giornaliere. Allo STOP del Passo 0 il proprietario ha deciso (14 ottobre, «procedi»; `research/PROTOCOLLO_2.md`,
+correzione 3) che una moneta su cui gli ingressi casuali della (b) non entrano resta fuori dalla combinazione della (b)
+come una moneta senza trade della (a) resta fuori dalla (a), e che la variante è non valutabile contro la (b) solo se
+quelle monete portano più del 10% dei trade del candidato. È un cambiamento all'esame (`statistica.baseline_casuale_di_gruppo`,
+`statistica.b_ripesata`, `gruppo.py`; inoltre `dati.leggi_scheda_gruppo` legge le schede della campagna di gruppo in
+corso): le regole del gruppo (sezione 11) vogliono la prova rifatta con gli strumenti nuovi.
+
+**Cosa cambia.** Niente nelle regole della prova: stesse sei regole, stessi parametri per il giorno (correzione 1), stesso
+tetto di 60 barre (correzione 2), stessi sfasamenti e semi. Cambiano solo le impronte degli strumenti nella sezione 6
+(quelle del 13 ottobre erano `dati.py` 4f0d4779…, `gruppo.py` 6875b12f…, `statistica.py` ca027d26…, con `motore.py` e
+`parametri.yaml` uguali a oggi). Le 96 righe del 13 ottobre, il loro riassunto e i loro risultati restano, spostati in
+`lancio_13ott/` (il lanciatore rifiuta un file di esiti con righe di un'altra identità); il rilancio scrive file nuovi
+qui e `risultati.md` nuovo. Atteso, scritto prima: nessuna placebo del 13 ottobre aveva monete senza ingressi (la
+regola non scatta), quindi gli esiti del rilancio dovrebbero essere identici bit per bit a quelli del 13 ottobre; una
+differenza sarebbe un errore degli strumenti, da capire prima dell'apertura della campagna.
