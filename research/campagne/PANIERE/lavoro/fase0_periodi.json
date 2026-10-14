@@ -1,0 +1,2040 @@
+{
+ "n_monete": 80,
+ "fine_costruzione": "2023-01-16",
+ "inizio_validazione": "2023-01-17",
+ "fine_validazione": "2023-12-31",
+ "giorni_validazione": 349,
+ "giorni_moneta": 93167,
+ "giorni_moneta_obiettivo": 65216,
+ "giorni_moneta_costruzione": 65247,
+ "giorni_moneta_validazione": 27920,
+ "monete": {
+  "1000XECUSDT": {
+   "primo_mese": "2021-09-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 503
+  },
+  "1INCHUSDT": {
+   "primo_mese": "2020-12-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-12-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 777
+  },
+  "AAVEUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 838
+  },
+  "ALGOUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-06-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 960
+  },
+  "ALPHAUSDT": {
+   "primo_mese": "2020-11-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-11-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 807
+  },
+  "ANKRUSDT": {
+   "primo_mese": "2021-01-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-01-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 746
+  },
+  "ARPAUSDT": {
+   "primo_mese": "2021-10-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 473
+  },
+  "ARUSDT": {
+   "primo_mese": "2021-09-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 503
+  },
+  "ATOMUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "AUDIOUSDT": {
+   "primo_mese": "2021-08-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-08-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 534
+  },
+  "AXSUSDT": {
+   "primo_mese": "2020-11-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-11-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 807
+  },
+  "BAKEUSDT": {
+   "primo_mese": "2021-05-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-05-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 626
+  },
+  "BANDUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-07-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 930
+  },
+  "BELUSDT": {
+   "primo_mese": "2020-11-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-11-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 807
+  },
+  "BLZUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "C98USDT": {
+   "primo_mese": "2021-08-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-08-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 534
+  },
+  "CELOUSDT": {
+   "primo_mese": "2021-09-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 503
+  },
+  "CELRUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-03-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 687
+  },
+  "CHZUSDT": {
+   "primo_mese": "2021-01-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-01-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 746
+  },
+  "COMPUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-06-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 960
+  },
+  "CRVUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "CTSIUSDT": {
+   "primo_mese": "2021-10-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 473
+  },
+  "DASHUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "DOTUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-08-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 899
+  },
+  "EGLDUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "ENJUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "EOSUSDT": {
+   "primo_mese": "2020-01-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-01-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1112
+  },
+  "FLMUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "GRTUSDT": {
+   "primo_mese": "2020-12-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-12-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 777
+  },
+  "GTCUSDT": {
+   "primo_mese": "2021-06-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-06-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 595
+  },
+  "HBARUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-03-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 687
+  },
+  "ICPUSDT": {
+   "primo_mese": "2021-05-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-05-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 626
+  },
+  "ICXUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "IOTAUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "KAVAUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-07-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 930
+  },
+  "KLAYUSDT": {
+   "primo_mese": "2021-10-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 473
+  },
+  "KNCUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-06-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 960
+  },
+  "KSMUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 838
+  },
+  "LINAUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-03-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 687
+  },
+  "LPTUSDT": {
+   "primo_mese": "2021-11-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-11-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 442
+  },
+  "LRCUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 838
+  },
+  "MANAUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-03-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 687
+  },
+  "MKRUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-08-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 899
+  },
+  "MTLUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-03-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 687
+  },
+  "NEARUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 838
+  },
+  "NEOUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "NKNUSDT": {
+   "primo_mese": "2021-04-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-04-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 656
+  },
+  "OCEANUSDT": {
+   "primo_mese": "2020-11-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-11-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 807
+  },
+  "OGNUSDT": {
+   "primo_mese": "2021-04-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-04-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 656
+  },
+  "OMGUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-07-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 930
+  },
+  "ONTUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "PEOPLEUSDT": {
+   "primo_mese": "2021-12-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-12-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 412
+  },
+  "QTUMUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "RENUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 838
+  },
+  "RLCUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-07-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 930
+  },
+  "ROSEUSDT": {
+   "primo_mese": "2021-12-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-12-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 412
+  },
+  "RUNEUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "SANDUSDT": {
+   "primo_mese": "2021-01-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-01-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 746
+  },
+  "SFPUSDT": {
+   "primo_mese": "2021-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 715
+  },
+  "SKLUSDT": {
+   "primo_mese": "2020-12-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-12-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 777
+  },
+  "SNXUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-08-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 899
+  },
+  "STMXUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-03-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 687
+  },
+  "STORJUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "SUSHIUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "SXPUSDT": {
+   "primo_mese": "2020-07-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-07-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 930
+  },
+  "THETAUSDT": {
+   "primo_mese": "2020-05-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-05-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 991
+  },
+  "TOMOUSDT": {
+   "primo_mese": "2020-10-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-10-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 838
+  },
+  "TRXUSDT": {
+   "primo_mese": "2020-01-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-01-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1112
+  },
+  "UNFIUSDT": {
+   "primo_mese": "2021-02-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2021-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 715
+  },
+  "UNIUSDT": {
+   "primo_mese": "2020-09-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-09-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 868
+  },
+  "VETUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "WAVESUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-08-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 899
+  },
+  "XEMUSDT": {
+   "primo_mese": "2021-03-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2021-03-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 687
+  },
+  "XLMUSDT": {
+   "primo_mese": "2020-01-01",
+   "slippage_per_lato": 0.0005,
+   "inizio_costruzione": "2020-01-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1112
+  },
+  "XMRUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "XTZUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "YFIUSDT": {
+   "primo_mese": "2020-08-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-08-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 899
+  },
+  "ZECUSDT": {
+   "primo_mese": "2020-02-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-02-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 1081
+  },
+  "ZILUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-06-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 960
+  },
+  "ZRXUSDT": {
+   "primo_mese": "2020-06-01",
+   "slippage_per_lato": 0.001,
+   "inizio_costruzione": "2020-06-01",
+   "fine_costruzione": "2023-01-16",
+   "inizio_validazione": "2023-01-17",
+   "giorni_costruzione": 960
+  }
+ },
+ "impronte": {
+  "n_simboli": 81,
+  "n_file": 9406,
+  "simboli_fuori_elenco": [
+   "BTCUSDT"
+  ],
+  "monete_senza_impronte": [],
+  "per_simbolo": {
+   "1000XECUSDT": {
+    "fundingRate": {
+     "n": 28,
+     "primo": "fundingRate/1000XECUSDT-fundingRate-2021-09.zip",
+     "ultimo": "fundingRate/1000XECUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 28,
+     "primo": "klines/1d/1000XECUSDT-1d-2021-09.zip",
+     "ultimo": "klines/1d/1000XECUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 28,
+     "primo": "markPriceKlines/1d/1000XECUSDT-1d-2021-09.zip",
+     "ultimo": "markPriceKlines/1d/1000XECUSDT-1d-2023-12.zip"
+    }
+   },
+   "1INCHUSDT": {
+    "fundingRate": {
+     "n": 37,
+     "primo": "fundingRate/1INCHUSDT-fundingRate-2020-12.zip",
+     "ultimo": "fundingRate/1INCHUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 37,
+     "primo": "klines/1d/1INCHUSDT-1d-2020-12.zip",
+     "ultimo": "klines/1d/1INCHUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 37,
+     "primo": "markPriceKlines/1d/1INCHUSDT-1d-2020-12.zip",
+     "ultimo": "markPriceKlines/1d/1INCHUSDT-1d-2023-12.zip"
+    }
+   },
+   "AAVEUSDT": {
+    "fundingRate": {
+     "n": 39,
+     "primo": "fundingRate/AAVEUSDT-fundingRate-2020-10.zip",
+     "ultimo": "fundingRate/AAVEUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 39,
+     "primo": "klines/1d/AAVEUSDT-1d-2020-10.zip",
+     "ultimo": "klines/1d/AAVEUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 39,
+     "primo": "markPriceKlines/1d/AAVEUSDT-1d-2020-10.zip",
+     "ultimo": "markPriceKlines/1d/AAVEUSDT-1d-2023-12.zip"
+    }
+   },
+   "ALGOUSDT": {
+    "fundingRate": {
+     "n": 43,
+     "primo": "fundingRate/ALGOUSDT-fundingRate-2020-06.zip",
+     "ultimo": "fundingRate/ALGOUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 43,
+     "primo": "klines/1d/ALGOUSDT-1d-2020-06.zip",
+     "ultimo": "klines/1d/ALGOUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 43,
+     "primo": "markPriceKlines/1d/ALGOUSDT-1d-2020-06.zip",
+     "ultimo": "markPriceKlines/1d/ALGOUSDT-1d-2023-12.zip"
+    }
+   },
+   "ALPHAUSDT": {
+    "fundingRate": {
+     "n": 38,
+     "primo": "fundingRate/ALPHAUSDT-fundingRate-2020-11.zip",
+     "ultimo": "fundingRate/ALPHAUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 38,
+     "primo": "klines/1d/ALPHAUSDT-1d-2020-11.zip",
+     "ultimo": "klines/1d/ALPHAUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 38,
+     "primo": "markPriceKlines/1d/ALPHAUSDT-1d-2020-11.zip",
+     "ultimo": "markPriceKlines/1d/ALPHAUSDT-1d-2023-12.zip"
+    }
+   },
+   "ANKRUSDT": {
+    "fundingRate": {
+     "n": 36,
+     "primo": "fundingRate/ANKRUSDT-fundingRate-2021-01.zip",
+     "ultimo": "fundingRate/ANKRUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 36,
+     "primo": "klines/1d/ANKRUSDT-1d-2021-01.zip",
+     "ultimo": "klines/1d/ANKRUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 36,
+     "primo": "markPriceKlines/1d/ANKRUSDT-1d-2021-01.zip",
+     "ultimo": "markPriceKlines/1d/ANKRUSDT-1d-2023-12.zip"
+    }
+   },
+   "ARPAUSDT": {
+    "fundingRate": {
+     "n": 27,
+     "primo": "fundingRate/ARPAUSDT-fundingRate-2021-10.zip",
+     "ultimo": "fundingRate/ARPAUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 27,
+     "primo": "klines/1d/ARPAUSDT-1d-2021-10.zip",
+     "ultimo": "klines/1d/ARPAUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 27,
+     "primo": "markPriceKlines/1d/ARPAUSDT-1d-2021-10.zip",
+     "ultimo": "markPriceKlines/1d/ARPAUSDT-1d-2023-12.zip"
+    }
+   },
+   "ARUSDT": {
+    "fundingRate": {
+     "n": 28,
+     "primo": "fundingRate/ARUSDT-fundingRate-2021-09.zip",
+     "ultimo": "fundingRate/ARUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 28,
+     "primo": "klines/1d/ARUSDT-1d-2021-09.zip",
+     "ultimo": "klines/1d/ARUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 28,
+     "primo": "markPriceKlines/1d/ARUSDT-1d-2021-09.zip",
+     "ultimo": "markPriceKlines/1d/ARUSDT-1d-2023-12.zip"
+    }
+   },
+   "ATOMUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/ATOMUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/ATOMUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/ATOMUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/ATOMUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/ATOMUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/ATOMUSDT-1d-2023-12.zip"
+    }
+   },
+   "AUDIOUSDT": {
+    "fundingRate": {
+     "n": 29,
+     "primo": "fundingRate/AUDIOUSDT-fundingRate-2021-08.zip",
+     "ultimo": "fundingRate/AUDIOUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 29,
+     "primo": "klines/1d/AUDIOUSDT-1d-2021-08.zip",
+     "ultimo": "klines/1d/AUDIOUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 29,
+     "primo": "markPriceKlines/1d/AUDIOUSDT-1d-2021-08.zip",
+     "ultimo": "markPriceKlines/1d/AUDIOUSDT-1d-2023-12.zip"
+    }
+   },
+   "AXSUSDT": {
+    "fundingRate": {
+     "n": 38,
+     "primo": "fundingRate/AXSUSDT-fundingRate-2020-11.zip",
+     "ultimo": "fundingRate/AXSUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 38,
+     "primo": "klines/1d/AXSUSDT-1d-2020-11.zip",
+     "ultimo": "klines/1d/AXSUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 38,
+     "primo": "markPriceKlines/1d/AXSUSDT-1d-2020-11.zip",
+     "ultimo": "markPriceKlines/1d/AXSUSDT-1d-2023-12.zip"
+    }
+   },
+   "BAKEUSDT": {
+    "fundingRate": {
+     "n": 32,
+     "primo": "fundingRate/BAKEUSDT-fundingRate-2021-05.zip",
+     "ultimo": "fundingRate/BAKEUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 32,
+     "primo": "klines/1d/BAKEUSDT-1d-2021-05.zip",
+     "ultimo": "klines/1d/BAKEUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 32,
+     "primo": "markPriceKlines/1d/BAKEUSDT-1d-2021-05.zip",
+     "ultimo": "markPriceKlines/1d/BAKEUSDT-1d-2023-12.zip"
+    }
+   },
+   "BANDUSDT": {
+    "fundingRate": {
+     "n": 42,
+     "primo": "fundingRate/BANDUSDT-fundingRate-2020-07.zip",
+     "ultimo": "fundingRate/BANDUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 42,
+     "primo": "klines/1d/BANDUSDT-1d-2020-07.zip",
+     "ultimo": "klines/1d/BANDUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 42,
+     "primo": "markPriceKlines/1d/BANDUSDT-1d-2020-07.zip",
+     "ultimo": "markPriceKlines/1d/BANDUSDT-1d-2023-12.zip"
+    }
+   },
+   "BELUSDT": {
+    "fundingRate": {
+     "n": 38,
+     "primo": "fundingRate/BELUSDT-fundingRate-2020-11.zip",
+     "ultimo": "fundingRate/BELUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 38,
+     "primo": "klines/1d/BELUSDT-1d-2020-11.zip",
+     "ultimo": "klines/1d/BELUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 38,
+     "primo": "markPriceKlines/1d/BELUSDT-1d-2020-11.zip",
+     "ultimo": "markPriceKlines/1d/BELUSDT-1d-2023-12.zip"
+    }
+   },
+   "BLZUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/BLZUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/BLZUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/BLZUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/BLZUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/BLZUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/BLZUSDT-1d-2023-12.zip"
+    }
+   },
+   "BTCUSDT": {
+    "fundingRate": {
+     "n": 48,
+     "primo": "fundingRate/BTCUSDT-fundingRate-2020-01.zip",
+     "ultimo": "fundingRate/BTCUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 96,
+     "primo": "klines/1d/BTCUSDT-1d-2020-01.zip",
+     "ultimo": "klines/8h/BTCUSDT-8h-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 96,
+     "primo": "markPriceKlines/1d/BTCUSDT-1d-2020-01.zip",
+     "ultimo": "markPriceKlines/8h/BTCUSDT-8h-2023-12.zip"
+    }
+   },
+   "C98USDT": {
+    "fundingRate": {
+     "n": 29,
+     "primo": "fundingRate/C98USDT-fundingRate-2021-08.zip",
+     "ultimo": "fundingRate/C98USDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 29,
+     "primo": "klines/1d/C98USDT-1d-2021-08.zip",
+     "ultimo": "klines/1d/C98USDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 29,
+     "primo": "markPriceKlines/1d/C98USDT-1d-2021-08.zip",
+     "ultimo": "markPriceKlines/1d/C98USDT-1d-2023-12.zip"
+    }
+   },
+   "CELOUSDT": {
+    "fundingRate": {
+     "n": 28,
+     "primo": "fundingRate/CELOUSDT-fundingRate-2021-09.zip",
+     "ultimo": "fundingRate/CELOUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 28,
+     "primo": "klines/1d/CELOUSDT-1d-2021-09.zip",
+     "ultimo": "klines/1d/CELOUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 28,
+     "primo": "markPriceKlines/1d/CELOUSDT-1d-2021-09.zip",
+     "ultimo": "markPriceKlines/1d/CELOUSDT-1d-2023-12.zip"
+    }
+   },
+   "CELRUSDT": {
+    "fundingRate": {
+     "n": 34,
+     "primo": "fundingRate/CELRUSDT-fundingRate-2021-03.zip",
+     "ultimo": "fundingRate/CELRUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 34,
+     "primo": "klines/1d/CELRUSDT-1d-2021-03.zip",
+     "ultimo": "klines/1d/CELRUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 34,
+     "primo": "markPriceKlines/1d/CELRUSDT-1d-2021-03.zip",
+     "ultimo": "markPriceKlines/1d/CELRUSDT-1d-2023-12.zip"
+    }
+   },
+   "CHZUSDT": {
+    "fundingRate": {
+     "n": 36,
+     "primo": "fundingRate/CHZUSDT-fundingRate-2021-01.zip",
+     "ultimo": "fundingRate/CHZUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 36,
+     "primo": "klines/1d/CHZUSDT-1d-2021-01.zip",
+     "ultimo": "klines/1d/CHZUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 36,
+     "primo": "markPriceKlines/1d/CHZUSDT-1d-2021-01.zip",
+     "ultimo": "markPriceKlines/1d/CHZUSDT-1d-2023-12.zip"
+    }
+   },
+   "COMPUSDT": {
+    "fundingRate": {
+     "n": 43,
+     "primo": "fundingRate/COMPUSDT-fundingRate-2020-06.zip",
+     "ultimo": "fundingRate/COMPUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 43,
+     "primo": "klines/1d/COMPUSDT-1d-2020-06.zip",
+     "ultimo": "klines/1d/COMPUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 43,
+     "primo": "markPriceKlines/1d/COMPUSDT-1d-2020-06.zip",
+     "ultimo": "markPriceKlines/1d/COMPUSDT-1d-2023-12.zip"
+    }
+   },
+   "CRVUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/CRVUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/CRVUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/CRVUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/CRVUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/CRVUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/CRVUSDT-1d-2023-12.zip"
+    }
+   },
+   "CTSIUSDT": {
+    "fundingRate": {
+     "n": 27,
+     "primo": "fundingRate/CTSIUSDT-fundingRate-2021-10.zip",
+     "ultimo": "fundingRate/CTSIUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 27,
+     "primo": "klines/1d/CTSIUSDT-1d-2021-10.zip",
+     "ultimo": "klines/1d/CTSIUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 27,
+     "primo": "markPriceKlines/1d/CTSIUSDT-1d-2021-10.zip",
+     "ultimo": "markPriceKlines/1d/CTSIUSDT-1d-2023-12.zip"
+    }
+   },
+   "DASHUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/DASHUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/DASHUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/DASHUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/DASHUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/DASHUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/DASHUSDT-1d-2023-12.zip"
+    }
+   },
+   "DOTUSDT": {
+    "fundingRate": {
+     "n": 41,
+     "primo": "fundingRate/DOTUSDT-fundingRate-2020-08.zip",
+     "ultimo": "fundingRate/DOTUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 41,
+     "primo": "klines/1d/DOTUSDT-1d-2020-08.zip",
+     "ultimo": "klines/1d/DOTUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 41,
+     "primo": "markPriceKlines/1d/DOTUSDT-1d-2020-08.zip",
+     "ultimo": "markPriceKlines/1d/DOTUSDT-1d-2023-12.zip"
+    }
+   },
+   "EGLDUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/EGLDUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/EGLDUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/EGLDUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/EGLDUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/EGLDUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/EGLDUSDT-1d-2023-12.zip"
+    }
+   },
+   "ENJUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/ENJUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/ENJUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/ENJUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/ENJUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/ENJUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/ENJUSDT-1d-2023-12.zip"
+    }
+   },
+   "EOSUSDT": {
+    "fundingRate": {
+     "n": 48,
+     "primo": "fundingRate/EOSUSDT-fundingRate-2020-01.zip",
+     "ultimo": "fundingRate/EOSUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 48,
+     "primo": "klines/1d/EOSUSDT-1d-2020-01.zip",
+     "ultimo": "klines/1d/EOSUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 48,
+     "primo": "markPriceKlines/1d/EOSUSDT-1d-2020-01.zip",
+     "ultimo": "markPriceKlines/1d/EOSUSDT-1d-2023-12.zip"
+    }
+   },
+   "FLMUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/FLMUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/FLMUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/FLMUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/FLMUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/FLMUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/FLMUSDT-1d-2023-12.zip"
+    }
+   },
+   "GRTUSDT": {
+    "fundingRate": {
+     "n": 37,
+     "primo": "fundingRate/GRTUSDT-fundingRate-2020-12.zip",
+     "ultimo": "fundingRate/GRTUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 37,
+     "primo": "klines/1d/GRTUSDT-1d-2020-12.zip",
+     "ultimo": "klines/1d/GRTUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 37,
+     "primo": "markPriceKlines/1d/GRTUSDT-1d-2020-12.zip",
+     "ultimo": "markPriceKlines/1d/GRTUSDT-1d-2023-12.zip"
+    }
+   },
+   "GTCUSDT": {
+    "fundingRate": {
+     "n": 31,
+     "primo": "fundingRate/GTCUSDT-fundingRate-2021-06.zip",
+     "ultimo": "fundingRate/GTCUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 31,
+     "primo": "klines/1d/GTCUSDT-1d-2021-06.zip",
+     "ultimo": "klines/1d/GTCUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 31,
+     "primo": "markPriceKlines/1d/GTCUSDT-1d-2021-06.zip",
+     "ultimo": "markPriceKlines/1d/GTCUSDT-1d-2023-12.zip"
+    }
+   },
+   "HBARUSDT": {
+    "fundingRate": {
+     "n": 34,
+     "primo": "fundingRate/HBARUSDT-fundingRate-2021-03.zip",
+     "ultimo": "fundingRate/HBARUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 34,
+     "primo": "klines/1d/HBARUSDT-1d-2021-03.zip",
+     "ultimo": "klines/1d/HBARUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 34,
+     "primo": "markPriceKlines/1d/HBARUSDT-1d-2021-03.zip",
+     "ultimo": "markPriceKlines/1d/HBARUSDT-1d-2023-12.zip"
+    }
+   },
+   "ICPUSDT": {
+    "fundingRate": {
+     "n": 16,
+     "primo": "fundingRate/ICPUSDT-fundingRate-2022-09.zip",
+     "ultimo": "fundingRate/ICPUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 32,
+     "primo": "klines/1d/ICPUSDT-1d-2021-05.zip",
+     "ultimo": "klines/1d/ICPUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 32,
+     "primo": "markPriceKlines/1d/ICPUSDT-1d-2021-05.zip",
+     "ultimo": "markPriceKlines/1d/ICPUSDT-1d-2023-12.zip"
+    }
+   },
+   "ICXUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/ICXUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/ICXUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/ICXUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/ICXUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/ICXUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/ICXUSDT-1d-2023-12.zip"
+    }
+   },
+   "IOTAUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/IOTAUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/IOTAUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/IOTAUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/IOTAUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/IOTAUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/IOTAUSDT-1d-2023-12.zip"
+    }
+   },
+   "KAVAUSDT": {
+    "fundingRate": {
+     "n": 42,
+     "primo": "fundingRate/KAVAUSDT-fundingRate-2020-07.zip",
+     "ultimo": "fundingRate/KAVAUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 42,
+     "primo": "klines/1d/KAVAUSDT-1d-2020-07.zip",
+     "ultimo": "klines/1d/KAVAUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 42,
+     "primo": "markPriceKlines/1d/KAVAUSDT-1d-2020-07.zip",
+     "ultimo": "markPriceKlines/1d/KAVAUSDT-1d-2023-12.zip"
+    }
+   },
+   "KLAYUSDT": {
+    "fundingRate": {
+     "n": 27,
+     "primo": "fundingRate/KLAYUSDT-fundingRate-2021-10.zip",
+     "ultimo": "fundingRate/KLAYUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 27,
+     "primo": "klines/1d/KLAYUSDT-1d-2021-10.zip",
+     "ultimo": "klines/1d/KLAYUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 27,
+     "primo": "markPriceKlines/1d/KLAYUSDT-1d-2021-10.zip",
+     "ultimo": "markPriceKlines/1d/KLAYUSDT-1d-2023-12.zip"
+    }
+   },
+   "KNCUSDT": {
+    "fundingRate": {
+     "n": 43,
+     "primo": "fundingRate/KNCUSDT-fundingRate-2020-06.zip",
+     "ultimo": "fundingRate/KNCUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 43,
+     "primo": "klines/1d/KNCUSDT-1d-2020-06.zip",
+     "ultimo": "klines/1d/KNCUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 43,
+     "primo": "markPriceKlines/1d/KNCUSDT-1d-2020-06.zip",
+     "ultimo": "markPriceKlines/1d/KNCUSDT-1d-2023-12.zip"
+    }
+   },
+   "KSMUSDT": {
+    "fundingRate": {
+     "n": 39,
+     "primo": "fundingRate/KSMUSDT-fundingRate-2020-10.zip",
+     "ultimo": "fundingRate/KSMUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 39,
+     "primo": "klines/1d/KSMUSDT-1d-2020-10.zip",
+     "ultimo": "klines/1d/KSMUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 39,
+     "primo": "markPriceKlines/1d/KSMUSDT-1d-2020-10.zip",
+     "ultimo": "markPriceKlines/1d/KSMUSDT-1d-2023-12.zip"
+    }
+   },
+   "LINAUSDT": {
+    "fundingRate": {
+     "n": 34,
+     "primo": "fundingRate/LINAUSDT-fundingRate-2021-03.zip",
+     "ultimo": "fundingRate/LINAUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 34,
+     "primo": "klines/1d/LINAUSDT-1d-2021-03.zip",
+     "ultimo": "klines/1d/LINAUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 34,
+     "primo": "markPriceKlines/1d/LINAUSDT-1d-2021-03.zip",
+     "ultimo": "markPriceKlines/1d/LINAUSDT-1d-2023-12.zip"
+    }
+   },
+   "LPTUSDT": {
+    "fundingRate": {
+     "n": 26,
+     "primo": "fundingRate/LPTUSDT-fundingRate-2021-11.zip",
+     "ultimo": "fundingRate/LPTUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 26,
+     "primo": "klines/1d/LPTUSDT-1d-2021-11.zip",
+     "ultimo": "klines/1d/LPTUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 26,
+     "primo": "markPriceKlines/1d/LPTUSDT-1d-2021-11.zip",
+     "ultimo": "markPriceKlines/1d/LPTUSDT-1d-2023-12.zip"
+    }
+   },
+   "LRCUSDT": {
+    "fundingRate": {
+     "n": 39,
+     "primo": "fundingRate/LRCUSDT-fundingRate-2020-10.zip",
+     "ultimo": "fundingRate/LRCUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 39,
+     "primo": "klines/1d/LRCUSDT-1d-2020-10.zip",
+     "ultimo": "klines/1d/LRCUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 39,
+     "primo": "markPriceKlines/1d/LRCUSDT-1d-2020-10.zip",
+     "ultimo": "markPriceKlines/1d/LRCUSDT-1d-2023-12.zip"
+    }
+   },
+   "MANAUSDT": {
+    "fundingRate": {
+     "n": 34,
+     "primo": "fundingRate/MANAUSDT-fundingRate-2021-03.zip",
+     "ultimo": "fundingRate/MANAUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 34,
+     "primo": "klines/1d/MANAUSDT-1d-2021-03.zip",
+     "ultimo": "klines/1d/MANAUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 34,
+     "primo": "markPriceKlines/1d/MANAUSDT-1d-2021-03.zip",
+     "ultimo": "markPriceKlines/1d/MANAUSDT-1d-2023-12.zip"
+    }
+   },
+   "MKRUSDT": {
+    "fundingRate": {
+     "n": 41,
+     "primo": "fundingRate/MKRUSDT-fundingRate-2020-08.zip",
+     "ultimo": "fundingRate/MKRUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 41,
+     "primo": "klines/1d/MKRUSDT-1d-2020-08.zip",
+     "ultimo": "klines/1d/MKRUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 41,
+     "primo": "markPriceKlines/1d/MKRUSDT-1d-2020-08.zip",
+     "ultimo": "markPriceKlines/1d/MKRUSDT-1d-2023-12.zip"
+    }
+   },
+   "MTLUSDT": {
+    "fundingRate": {
+     "n": 34,
+     "primo": "fundingRate/MTLUSDT-fundingRate-2021-03.zip",
+     "ultimo": "fundingRate/MTLUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 34,
+     "primo": "klines/1d/MTLUSDT-1d-2021-03.zip",
+     "ultimo": "klines/1d/MTLUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 34,
+     "primo": "markPriceKlines/1d/MTLUSDT-1d-2021-03.zip",
+     "ultimo": "markPriceKlines/1d/MTLUSDT-1d-2023-12.zip"
+    }
+   },
+   "NEARUSDT": {
+    "fundingRate": {
+     "n": 39,
+     "primo": "fundingRate/NEARUSDT-fundingRate-2020-10.zip",
+     "ultimo": "fundingRate/NEARUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 39,
+     "primo": "klines/1d/NEARUSDT-1d-2020-10.zip",
+     "ultimo": "klines/1d/NEARUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 39,
+     "primo": "markPriceKlines/1d/NEARUSDT-1d-2020-10.zip",
+     "ultimo": "markPriceKlines/1d/NEARUSDT-1d-2023-12.zip"
+    }
+   },
+   "NEOUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/NEOUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/NEOUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/NEOUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/NEOUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/NEOUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/NEOUSDT-1d-2023-12.zip"
+    }
+   },
+   "NKNUSDT": {
+    "fundingRate": {
+     "n": 33,
+     "primo": "fundingRate/NKNUSDT-fundingRate-2021-04.zip",
+     "ultimo": "fundingRate/NKNUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 33,
+     "primo": "klines/1d/NKNUSDT-1d-2021-04.zip",
+     "ultimo": "klines/1d/NKNUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 33,
+     "primo": "markPriceKlines/1d/NKNUSDT-1d-2021-04.zip",
+     "ultimo": "markPriceKlines/1d/NKNUSDT-1d-2023-12.zip"
+    }
+   },
+   "OCEANUSDT": {
+    "fundingRate": {
+     "n": 38,
+     "primo": "fundingRate/OCEANUSDT-fundingRate-2020-11.zip",
+     "ultimo": "fundingRate/OCEANUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 38,
+     "primo": "klines/1d/OCEANUSDT-1d-2020-11.zip",
+     "ultimo": "klines/1d/OCEANUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 38,
+     "primo": "markPriceKlines/1d/OCEANUSDT-1d-2020-11.zip",
+     "ultimo": "markPriceKlines/1d/OCEANUSDT-1d-2023-12.zip"
+    }
+   },
+   "OGNUSDT": {
+    "fundingRate": {
+     "n": 33,
+     "primo": "fundingRate/OGNUSDT-fundingRate-2021-04.zip",
+     "ultimo": "fundingRate/OGNUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 33,
+     "primo": "klines/1d/OGNUSDT-1d-2021-04.zip",
+     "ultimo": "klines/1d/OGNUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 33,
+     "primo": "markPriceKlines/1d/OGNUSDT-1d-2021-04.zip",
+     "ultimo": "markPriceKlines/1d/OGNUSDT-1d-2023-12.zip"
+    }
+   },
+   "OMGUSDT": {
+    "fundingRate": {
+     "n": 42,
+     "primo": "fundingRate/OMGUSDT-fundingRate-2020-07.zip",
+     "ultimo": "fundingRate/OMGUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 42,
+     "primo": "klines/1d/OMGUSDT-1d-2020-07.zip",
+     "ultimo": "klines/1d/OMGUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 42,
+     "primo": "markPriceKlines/1d/OMGUSDT-1d-2020-07.zip",
+     "ultimo": "markPriceKlines/1d/OMGUSDT-1d-2023-12.zip"
+    }
+   },
+   "ONTUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/ONTUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/ONTUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/ONTUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/ONTUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/ONTUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/ONTUSDT-1d-2023-12.zip"
+    }
+   },
+   "PEOPLEUSDT": {
+    "fundingRate": {
+     "n": 25,
+     "primo": "fundingRate/PEOPLEUSDT-fundingRate-2021-12.zip",
+     "ultimo": "fundingRate/PEOPLEUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 25,
+     "primo": "klines/1d/PEOPLEUSDT-1d-2021-12.zip",
+     "ultimo": "klines/1d/PEOPLEUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 25,
+     "primo": "markPriceKlines/1d/PEOPLEUSDT-1d-2021-12.zip",
+     "ultimo": "markPriceKlines/1d/PEOPLEUSDT-1d-2023-12.zip"
+    }
+   },
+   "QTUMUSDT": {
+    "fundingRate": {
+     "n": 46,
+     "primo": "fundingRate/QTUMUSDT-fundingRate-2020-03.zip",
+     "ultimo": "fundingRate/QTUMUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/QTUMUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/QTUMUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/QTUMUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/QTUMUSDT-1d-2023-12.zip"
+    }
+   },
+   "RENUSDT": {
+    "fundingRate": {
+     "n": 39,
+     "primo": "fundingRate/RENUSDT-fundingRate-2020-10.zip",
+     "ultimo": "fundingRate/RENUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 39,
+     "primo": "klines/1d/RENUSDT-1d-2020-10.zip",
+     "ultimo": "klines/1d/RENUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 39,
+     "primo": "markPriceKlines/1d/RENUSDT-1d-2020-10.zip",
+     "ultimo": "markPriceKlines/1d/RENUSDT-1d-2023-12.zip"
+    }
+   },
+   "RLCUSDT": {
+    "fundingRate": {
+     "n": 42,
+     "primo": "fundingRate/RLCUSDT-fundingRate-2020-07.zip",
+     "ultimo": "fundingRate/RLCUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 42,
+     "primo": "klines/1d/RLCUSDT-1d-2020-07.zip",
+     "ultimo": "klines/1d/RLCUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 42,
+     "primo": "markPriceKlines/1d/RLCUSDT-1d-2020-07.zip",
+     "ultimo": "markPriceKlines/1d/RLCUSDT-1d-2023-12.zip"
+    }
+   },
+   "ROSEUSDT": {
+    "fundingRate": {
+     "n": 25,
+     "primo": "fundingRate/ROSEUSDT-fundingRate-2021-12.zip",
+     "ultimo": "fundingRate/ROSEUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 25,
+     "primo": "klines/1d/ROSEUSDT-1d-2021-12.zip",
+     "ultimo": "klines/1d/ROSEUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 25,
+     "primo": "markPriceKlines/1d/ROSEUSDT-1d-2021-12.zip",
+     "ultimo": "markPriceKlines/1d/ROSEUSDT-1d-2023-12.zip"
+    }
+   },
+   "RUNEUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/RUNEUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/RUNEUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/RUNEUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/RUNEUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/RUNEUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/RUNEUSDT-1d-2023-12.zip"
+    }
+   },
+   "SANDUSDT": {
+    "fundingRate": {
+     "n": 36,
+     "primo": "fundingRate/SANDUSDT-fundingRate-2021-01.zip",
+     "ultimo": "fundingRate/SANDUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 36,
+     "primo": "klines/1d/SANDUSDT-1d-2021-01.zip",
+     "ultimo": "klines/1d/SANDUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 36,
+     "primo": "markPriceKlines/1d/SANDUSDT-1d-2021-01.zip",
+     "ultimo": "markPriceKlines/1d/SANDUSDT-1d-2023-12.zip"
+    }
+   },
+   "SFPUSDT": {
+    "fundingRate": {
+     "n": 35,
+     "primo": "fundingRate/SFPUSDT-fundingRate-2021-02.zip",
+     "ultimo": "fundingRate/SFPUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 35,
+     "primo": "klines/1d/SFPUSDT-1d-2021-02.zip",
+     "ultimo": "klines/1d/SFPUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 35,
+     "primo": "markPriceKlines/1d/SFPUSDT-1d-2021-02.zip",
+     "ultimo": "markPriceKlines/1d/SFPUSDT-1d-2023-12.zip"
+    }
+   },
+   "SKLUSDT": {
+    "fundingRate": {
+     "n": 37,
+     "primo": "fundingRate/SKLUSDT-fundingRate-2020-12.zip",
+     "ultimo": "fundingRate/SKLUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 37,
+     "primo": "klines/1d/SKLUSDT-1d-2020-12.zip",
+     "ultimo": "klines/1d/SKLUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 37,
+     "primo": "markPriceKlines/1d/SKLUSDT-1d-2020-12.zip",
+     "ultimo": "markPriceKlines/1d/SKLUSDT-1d-2023-12.zip"
+    }
+   },
+   "SNXUSDT": {
+    "fundingRate": {
+     "n": 41,
+     "primo": "fundingRate/SNXUSDT-fundingRate-2020-08.zip",
+     "ultimo": "fundingRate/SNXUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 41,
+     "primo": "klines/1d/SNXUSDT-1d-2020-08.zip",
+     "ultimo": "klines/1d/SNXUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 41,
+     "primo": "markPriceKlines/1d/SNXUSDT-1d-2020-08.zip",
+     "ultimo": "markPriceKlines/1d/SNXUSDT-1d-2023-12.zip"
+    }
+   },
+   "STMXUSDT": {
+    "fundingRate": {
+     "n": 34,
+     "primo": "fundingRate/STMXUSDT-fundingRate-2021-03.zip",
+     "ultimo": "fundingRate/STMXUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 34,
+     "primo": "klines/1d/STMXUSDT-1d-2021-03.zip",
+     "ultimo": "klines/1d/STMXUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 34,
+     "primo": "markPriceKlines/1d/STMXUSDT-1d-2021-03.zip",
+     "ultimo": "markPriceKlines/1d/STMXUSDT-1d-2023-12.zip"
+    }
+   },
+   "STORJUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/STORJUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/STORJUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/STORJUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/STORJUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/STORJUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/STORJUSDT-1d-2023-12.zip"
+    }
+   },
+   "SUSHIUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/SUSHIUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/SUSHIUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/SUSHIUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/SUSHIUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/SUSHIUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/SUSHIUSDT-1d-2023-12.zip"
+    }
+   },
+   "SXPUSDT": {
+    "fundingRate": {
+     "n": 42,
+     "primo": "fundingRate/SXPUSDT-fundingRate-2020-07.zip",
+     "ultimo": "fundingRate/SXPUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 42,
+     "primo": "klines/1d/SXPUSDT-1d-2020-07.zip",
+     "ultimo": "klines/1d/SXPUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 42,
+     "primo": "markPriceKlines/1d/SXPUSDT-1d-2020-07.zip",
+     "ultimo": "markPriceKlines/1d/SXPUSDT-1d-2023-12.zip"
+    }
+   },
+   "THETAUSDT": {
+    "fundingRate": {
+     "n": 44,
+     "primo": "fundingRate/THETAUSDT-fundingRate-2020-05.zip",
+     "ultimo": "fundingRate/THETAUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 44,
+     "primo": "klines/1d/THETAUSDT-1d-2020-05.zip",
+     "ultimo": "klines/1d/THETAUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 44,
+     "primo": "markPriceKlines/1d/THETAUSDT-1d-2020-05.zip",
+     "ultimo": "markPriceKlines/1d/THETAUSDT-1d-2023-12.zip"
+    }
+   },
+   "TOMOUSDT": {
+    "fundingRate": {
+     "n": 39,
+     "primo": "fundingRate/TOMOUSDT-fundingRate-2020-10.zip",
+     "ultimo": "fundingRate/TOMOUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 39,
+     "primo": "klines/1d/TOMOUSDT-1d-2020-10.zip",
+     "ultimo": "klines/1d/TOMOUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 39,
+     "primo": "markPriceKlines/1d/TOMOUSDT-1d-2020-10.zip",
+     "ultimo": "markPriceKlines/1d/TOMOUSDT-1d-2023-12.zip"
+    }
+   },
+   "TRXUSDT": {
+    "fundingRate": {
+     "n": 48,
+     "primo": "fundingRate/TRXUSDT-fundingRate-2020-01.zip",
+     "ultimo": "fundingRate/TRXUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 48,
+     "primo": "klines/1d/TRXUSDT-1d-2020-01.zip",
+     "ultimo": "klines/1d/TRXUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 48,
+     "primo": "markPriceKlines/1d/TRXUSDT-1d-2020-01.zip",
+     "ultimo": "markPriceKlines/1d/TRXUSDT-1d-2023-12.zip"
+    }
+   },
+   "UNFIUSDT": {
+    "fundingRate": {
+     "n": 35,
+     "primo": "fundingRate/UNFIUSDT-fundingRate-2021-02.zip",
+     "ultimo": "fundingRate/UNFIUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 35,
+     "primo": "klines/1d/UNFIUSDT-1d-2021-02.zip",
+     "ultimo": "klines/1d/UNFIUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 35,
+     "primo": "markPriceKlines/1d/UNFIUSDT-1d-2021-02.zip",
+     "ultimo": "markPriceKlines/1d/UNFIUSDT-1d-2023-12.zip"
+    }
+   },
+   "UNIUSDT": {
+    "fundingRate": {
+     "n": 40,
+     "primo": "fundingRate/UNIUSDT-fundingRate-2020-09.zip",
+     "ultimo": "fundingRate/UNIUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 40,
+     "primo": "klines/1d/UNIUSDT-1d-2020-09.zip",
+     "ultimo": "klines/1d/UNIUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 40,
+     "primo": "markPriceKlines/1d/UNIUSDT-1d-2020-09.zip",
+     "ultimo": "markPriceKlines/1d/UNIUSDT-1d-2023-12.zip"
+    }
+   },
+   "VETUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/VETUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/VETUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/VETUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/VETUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/VETUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/VETUSDT-1d-2023-12.zip"
+    }
+   },
+   "WAVESUSDT": {
+    "fundingRate": {
+     "n": 41,
+     "primo": "fundingRate/WAVESUSDT-fundingRate-2020-08.zip",
+     "ultimo": "fundingRate/WAVESUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 41,
+     "primo": "klines/1d/WAVESUSDT-1d-2020-08.zip",
+     "ultimo": "klines/1d/WAVESUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 41,
+     "primo": "markPriceKlines/1d/WAVESUSDT-1d-2020-08.zip",
+     "ultimo": "markPriceKlines/1d/WAVESUSDT-1d-2023-12.zip"
+    }
+   },
+   "XEMUSDT": {
+    "fundingRate": {
+     "n": 34,
+     "primo": "fundingRate/XEMUSDT-fundingRate-2021-03.zip",
+     "ultimo": "fundingRate/XEMUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 34,
+     "primo": "klines/1d/XEMUSDT-1d-2021-03.zip",
+     "ultimo": "klines/1d/XEMUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 34,
+     "primo": "markPriceKlines/1d/XEMUSDT-1d-2021-03.zip",
+     "ultimo": "markPriceKlines/1d/XEMUSDT-1d-2023-12.zip"
+    }
+   },
+   "XLMUSDT": {
+    "fundingRate": {
+     "n": 48,
+     "primo": "fundingRate/XLMUSDT-fundingRate-2020-01.zip",
+     "ultimo": "fundingRate/XLMUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 48,
+     "primo": "klines/1d/XLMUSDT-1d-2020-01.zip",
+     "ultimo": "klines/1d/XLMUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 48,
+     "primo": "markPriceKlines/1d/XLMUSDT-1d-2020-01.zip",
+     "ultimo": "markPriceKlines/1d/XLMUSDT-1d-2023-12.zip"
+    }
+   },
+   "XMRUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/XMRUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/XMRUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/XMRUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/XMRUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/XMRUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/XMRUSDT-1d-2023-12.zip"
+    }
+   },
+   "XTZUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/XTZUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/XTZUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/XTZUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/XTZUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/XTZUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/XTZUSDT-1d-2023-12.zip"
+    }
+   },
+   "YFIUSDT": {
+    "fundingRate": {
+     "n": 41,
+     "primo": "fundingRate/YFIUSDT-fundingRate-2020-08.zip",
+     "ultimo": "fundingRate/YFIUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 41,
+     "primo": "klines/1d/YFIUSDT-1d-2020-08.zip",
+     "ultimo": "klines/1d/YFIUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 41,
+     "primo": "markPriceKlines/1d/YFIUSDT-1d-2020-08.zip",
+     "ultimo": "markPriceKlines/1d/YFIUSDT-1d-2023-12.zip"
+    }
+   },
+   "ZECUSDT": {
+    "fundingRate": {
+     "n": 47,
+     "primo": "fundingRate/ZECUSDT-fundingRate-2020-02.zip",
+     "ultimo": "fundingRate/ZECUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 47,
+     "primo": "klines/1d/ZECUSDT-1d-2020-02.zip",
+     "ultimo": "klines/1d/ZECUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 47,
+     "primo": "markPriceKlines/1d/ZECUSDT-1d-2020-02.zip",
+     "ultimo": "markPriceKlines/1d/ZECUSDT-1d-2023-12.zip"
+    }
+   },
+   "ZILUSDT": {
+    "fundingRate": {
+     "n": 43,
+     "primo": "fundingRate/ZILUSDT-fundingRate-2020-06.zip",
+     "ultimo": "fundingRate/ZILUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 43,
+     "primo": "klines/1d/ZILUSDT-1d-2020-06.zip",
+     "ultimo": "klines/1d/ZILUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 43,
+     "primo": "markPriceKlines/1d/ZILUSDT-1d-2020-06.zip",
+     "ultimo": "markPriceKlines/1d/ZILUSDT-1d-2023-12.zip"
+    }
+   },
+   "ZRXUSDT": {
+    "fundingRate": {
+     "n": 43,
+     "primo": "fundingRate/ZRXUSDT-fundingRate-2020-06.zip",
+     "ultimo": "fundingRate/ZRXUSDT-fundingRate-2023-12.zip"
+    },
+    "klines": {
+     "n": 43,
+     "primo": "klines/1d/ZRXUSDT-1d-2020-06.zip",
+     "ultimo": "klines/1d/ZRXUSDT-1d-2023-12.zip"
+    },
+    "markPriceKlines": {
+     "n": 43,
+     "primo": "markPriceKlines/1d/ZRXUSDT-1d-2020-06.zip",
+     "ultimo": "markPriceKlines/1d/ZRXUSDT-1d-2023-12.zip"
+    }
+   }
+  }
+ }
+}

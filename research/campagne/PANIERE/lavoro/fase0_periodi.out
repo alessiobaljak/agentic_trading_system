@@ -1,0 +1,6 @@
+fine costruzione 2023-01-16 giorni validazione 349
+giorni-moneta 93167 obiettivo 65216 costruzione 65247
+giorni di costruzione per moneta: da 412 a 1112
+impronte: simboli 81 file 9406 fuori elenco ['BTCUSDT'] monete senza impronte []
+BTCUSDT {'fundingRate': {'n': 48, 'primo': 'fundingRate/BTCUSDT-fundingRate-2020-01.zip', 'ultimo': 'fundingRate/BTCUSDT-fundingRate-2023-12.zip'}, 'klines': {'n': 96, 'primo': 'klines/1d/BTCUSDT-1d-2020-01.zip', 'ultimo': 'klines/8h/BTCUSDT-8h-2023-12.zip'}, 'markPriceKlines': {'n': 96, 'primo': 'markPriceKlines/1d/BTCUSDT-1d-2020-01.zip', 'ultimo': 'markPriceKlines/8h/BTCUSDT-8h-2023-12.zip'}}
+fatto
