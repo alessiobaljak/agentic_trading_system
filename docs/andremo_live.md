@@ -3716,3 +3716,12 @@ ordine, con la regola scritta prima del codice:
 Cosa abbiamo capito oggi: `docs/capito.md`, sezione del 14 ottobre. La sessione di campagna del paniere si apre
 subito dopo questo commit (modello Opus 5.5 con ultracode, da controllare dopo l'apertura), con il controllo orario
 del coordinamento.
+
+### 14 ottobre, 09:00 ora italiana: aperta la sessione di campagna PANIERE
+
+Sessione session_01R2mwB6hCHhcKeRgNM7Zuad, aperta alle 06:58 UTC con il messaggio di `research/apertura/paniere.md`
+così com'è, sorgente il repository e il branch principale, modello `claude-opus-5-5` (confermato da `get_session`);
+ultracode non risulta nei dati della sessione subito dopo l'apertura (`external_metadata.flag_settings` assente), come
+già successo l'8 e il 10 ottobre: lo decide il proprietario, non si riapre a ripetizione. Routine «Controllo orario
+della campagna PANIERE» (trig_01Uts2o19mJZbZQsGZRauho9, ogni ora al minuto 59) in questa sessione di coordinamento.
+Dal branch della campagna si leggono solo titoli e orari dei commit.
