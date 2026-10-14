@@ -48,5 +48,35 @@
   "cosa_cambia": "soglia del giorno forte da 1,5 a 1,25 deviazioni standard; il resto come PANIERE-039 (le 20 più in ritardo, uscita dopo 3 barre)",
   "perche": "Ordine dei ritocchi dopo PANIERE-039: PANIERE-030 2,48 (famiglia piena), poi PANIERE-039 2,38 (famiglia PANIERE-032, 1 ritocco su 3). PANIERE-039 batte nettamente la (b) e non la (a) (t 1,84). Il fallimento che pesa di più su tutte le varianti C long è la concentrazione in pochi giorni (Fase 3: PANIERE-032 ha 63 giorni di segnale, PANIERE-030 36; senza i 3 giorni migliori l'R medio scende a 0,089): pochi giorni indipendenti fanno l'errore grande. Una soglia più bassa aggiunge giorni di segnale, quindi scommesse più indipendenti, al prezzo di giorni forti meno forti; la Fase 3 non mostra un R che cresce con l'ampiezza del giorno forte (quartili +0,411 / +0,082 / +0,103 / +0,102 in PANIERE-032), quindi abbassarla non dovrebbe togliere il vantaggio, se c'è. È un'interpolazione di un parametro: lo dichiaro.",
   "previsione": "trade stimati fra 1.000 e 1.300; R medio netto fra +0,05 e +0,15; t contro la (b) fra 1,0 e 2,8 (netta con probabilità 30%); t contro la (a) fra 0,8 e 2,4 (netta con probabilità 20%); candidata con probabilità 15%"
+ },
+ {
+  "nome": "C2-1,5 long, ritocco 3 (k 1,25, uscita dopo 5 giorni)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-032",
+  "famiglia": "PANIERE-032",
+  "parametri": {"direzione": "long", "k": 1.25, "monete_in_ritardo": 20, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+  "cosa_cambia": "soglia del giorno forte da 1,5 a 1,25 deviazioni standard; il resto come PANIERE-032 (le 20 più in ritardo, uscita dopo 5 barre)",
+  "perche": "Ordine dei ritocchi dopo PANIERE-040 (candidato, fuori dalla lista): PANIERE-030 2,48 (famiglia piena), poi PANIERE-039 2,38 (famiglia PANIERE-032, 2 ritocchi su 3: questo è l'ultimo). PANIERE-040 ha cambiato due cose rispetto a PANIERE-032 (uscita a 3 barre in PANIERE-039, poi k 1,25): questo ritocco tiene la soglia 1,25 e torna all'uscita di partenza a 5 barre, per vedere se il passaggio a candidato viene dai giorni di segnale in più (concentrazione, Fase 3) o dall'uscita corta. Non cambia il candidato PANIERE-040, che va avanti così com'è; di una famiglia va in validazione un solo candidato, quello con il t più alto contro la (b).",
+  "previsione": "trade stimati fra 1.100 e 1.350; R medio netto fra +0,08 e +0,20; t contro la (b) fra 1,5 e 3,2 (netta con probabilità 50%); t contro la (a) fra 1,2 e 2,6 (netta con probabilità 35%); candidata con probabilità 30%"
+ },
+ {
+  "nome": "C1-1,5 long, ritocco 1 (k 1,25)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-028",
+  "famiglia": "PANIERE-028",
+  "parametri": {"direzione": "long", "k": 1.25, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+  "cosa_cambia": "soglia del giorno forte da 1,5 a 1,25 deviazioni standard; il resto come PANIERE-028 (tutte le monete in ritardo, uscita dopo 5 barre)",
+  "perche": "Ordine dei ritocchi dopo PANIERE-041: famiglie PANIERE-030 e PANIERE-032 piene; prima con famiglia libera è PANIERE-028 (C1-1,5 long, t 1,69, 0 ritocchi). Fase 3 di PANIERE-028 (lavoro/fase3_ritardo.json): 1.297 trade in 61 giorni di segnale, senza i 3 giorni migliori l'R medio scende da 0,157 a 0,027: la concentrazione in pochi giorni è il fallimento più forte, e l'ampiezza del giorno forte non ordina l'esito (quartili +0,319 / 0,000 / +0,131 / +0,186). Una soglia più bassa aggiunge giorni di segnale. Una modifica sola (k), per sapere che cosa fa. Dichiaro che nella famiglia PANIERE-032 la stessa modifica, da sola con l'uscita a 5 barre, non ha battuto la (a) (PANIERE-041, t 1,92).",
+  "previsione": "trade stimati fra 1.700 e 2.300; R medio netto fra +0,05 e +0,18; t contro la (b) fra 1,0 e 3,0 (netta con probabilità 40%); t contro la (a) fra 0,8 e 2,4 (netta con probabilità 25%); candidata con probabilità 20%"
+ },
+ {
+  "nome": "C1-1,5 long, ritocco 2 (k 1,25, uscita dopo 3 giorni)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-042",
+  "famiglia": "PANIERE-028",
+  "parametri": {"direzione": "long", "k": 1.25, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 3, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+  "cosa_cambia": "uscita a segnale dopo 3 barre invece di 5; il resto come PANIERE-042 (tutte le monete in ritardo, k 1,25)",
+  "perche": "Ordine dei ritocchi dopo PANIERE-042: prima con famiglia libera è PANIERE-042 (t 2,05, famiglia PANIERE-028, 1 ritocco su 3). Fase 3 di PANIERE-028: il fallimento principale dopo la concentrazione è l'esposizione a quello che Bitcoin fa dopo (-0,264 R con Bitcoin in discesa nei 5 giorni dopo, +0,457 in salita); il percorso medio arriva a +0,175 R alla terza chiusura, scende a +0,145 alla quarta. L'uscita a 3 barre accorcia l'esposizione e la durata. Dichiaro che è la stessa coppia di modifiche (k 1,25 e uscita a 3) che ha fatto passare a candidato PANIERE-040 nella famiglia di C2: è la scelta di chi ha visto quel risultato, e la validazione deve saperlo.",
+  "previsione": "trade stimati fra 2.000 e 2.500; R medio netto fra +0,05 e +0,15; t contro la (b) fra 1,5 e 3,2 (netta con probabilità 50%); t contro la (a) fra 1,0 e 2,6 (netta con probabilità 35%); candidata con probabilità 30%"
  }
 ]
