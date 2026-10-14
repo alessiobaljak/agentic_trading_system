@@ -1,0 +1,16 @@
+{
+ "PANIERE-029": {
+  "btc sopra la media 100, rendimento 60 positivo": {
+   "n": 174,
+   "r_medio": -0.245
+  },
+  "btc sotto la media 100, rendimento 60 non positivo": {
+   "n": 453,
+   "r_medio": 0.038
+  },
+  "btc sotto la media 100, rendimento 60 positivo": {
+   "n": 116,
+   "r_medio": 0.007
+  }
+ }
+}

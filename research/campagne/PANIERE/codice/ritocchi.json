@@ -78,5 +78,45 @@
   "cosa_cambia": "uscita a segnale dopo 3 barre invece di 5; il resto come PANIERE-042 (tutte le monete in ritardo, k 1,25)",
   "perche": "Ordine dei ritocchi dopo PANIERE-042: prima con famiglia libera è PANIERE-042 (t 2,05, famiglia PANIERE-028, 1 ritocco su 3). Fase 3 di PANIERE-028: il fallimento principale dopo la concentrazione è l'esposizione a quello che Bitcoin fa dopo (-0,264 R con Bitcoin in discesa nei 5 giorni dopo, +0,457 in salita); il percorso medio arriva a +0,175 R alla terza chiusura, scende a +0,145 alla quarta. L'uscita a 3 barre accorcia l'esposizione e la durata. Dichiaro che è la stessa coppia di modifiche (k 1,25 e uscita a 3) che ha fatto passare a candidato PANIERE-040 nella famiglia di C2: è la scelta di chi ha visto quel risultato, e la validazione deve saperlo.",
   "previsione": "trade stimati fra 2.000 e 2.500; R medio netto fra +0,05 e +0,15; t contro la (b) fra 1,5 e 3,2 (netta con probabilità 50%); t contro la (a) fra 1,0 e 2,6 (netta con probabilità 35%); candidata con probabilità 30%"
+ },
+ {
+  "nome": "C1-1,5 long, ritocco 3 (k 1,25, regime di Bitcoin)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-042",
+  "famiglia": "PANIERE-028",
+  "parametri": {"direzione": "long", "k": 1.25, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60, "btc_media_giorni": 100},
+  "cosa_cambia": "aggiunge il filtro di regime (Bitcoin chiude il giorno forte sopra la media semplice delle sue ultime 100 chiusure); il resto come PANIERE-042 (k 1,25, uscita dopo 5 barre)",
+  "perche": "Ordine dei ritocchi dopo PANIERE-043 (candidato, fuori dalla lista): prima con famiglia libera è PANIERE-042 (t 2,05, famiglia PANIERE-028, 2 ritocchi su 3: questo è l'ultimo). Fase 3 di PANIERE-028 (lavoro/fase3_regime.json): +0,238 R su 845 trade con Bitcoin sopra la media a 100 e rendimento a 60 positivo, +0,099 su 350 e -0,320 su 101 sotto. Con k 1,25 i trade sono 1.963, quindi il filtro dovrebbe lasciarne sopra i 700 (stima dalle quote di PANIERE-028: circa 1.300). Nella famiglia di PANIERE-030 lo stesso filtro (con k 1,5) aveva abbassato il t (PANIERE-036, 1,94): lo dichiaro. Stesso rischio scritto allora: il filtro può trasformare l'idea in «long quando Bitcoin è in tendenza».",
+  "previsione": "trade stimati fra 1.100 e 1.500; R medio netto fra +0,10 e +0,25; t contro la (b) fra 1,2 e 2,8 (netta con probabilità 40%); t contro la (a) fra 1,0 e 2,5 (netta con probabilità 25%); candidata con probabilità 20%"
+ },
+ {
+  "nome": "C1-1,5 short, ritocco 1 (k 1,25)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-029",
+  "famiglia": "PANIERE-029",
+  "parametri": {"direzione": "short", "k": 1.25, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+  "cosa_cambia": "soglia del giorno forte (al ribasso) da 1,5 a 1,25 deviazioni standard; il resto come PANIERE-029",
+  "perche": "Ordine dei ritocchi dopo PANIERE-044: le famiglie PANIERE-030, PANIERE-032 e PANIERE-028 sono piene; le varianti delle idee A e B non si ritoccano (previsione di famiglia, PANIERE-034); resta PANIERE-029 (C1-1,5 short, t -0,07, 0 ritocchi). Fase 3 (lavoro/fase3_regime_029.out): i fallimenti stanno con Bitcoin sopra la media a 100 (-0,245 R su 174 trade) contro +0,038 su 453 e +0,007 su 116 sotto; il filtro da solo lascerebbe circa 570 trade, sotto i 700. Prima si aggiungono giorni di segnale con una soglia più bassa (743 trade oggi). Previsione onesta: il lato short non ha mostrato nulla e questo ritocco serve a usare il budget come chiede la regola 6, non perché mi aspetti un vantaggio.",
+  "previsione": "trade stimati fra 1.000 e 1.400; R medio netto fra -0,08 e +0,04; t contro la (b) fra -1,5 e +1 (netta con probabilità 5%); candidata con probabilità 3%"
+ },
+ {
+  "nome": "C1-1,5 short, ritocco 2 (k 1,25, regime di Bitcoin)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-045",
+  "famiglia": "PANIERE-029",
+  "parametri": {"direzione": "short", "k": 1.25, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60, "btc_media_giorni": 100},
+  "cosa_cambia": "aggiunge il filtro di regime per lo short: Bitcoin chiude il giorno forte al ribasso sotto la media semplice delle sue ultime 100 chiusure; il resto come PANIERE-045",
+  "perche": "Ordine dei ritocchi dopo PANIERE-045: resta solo la famiglia PANIERE-029, prima PANIERE-045 (t 0,44). Fase 3 di PANIERE-029: -0,245 R su 174 trade con Bitcoin sopra la media a 100, contro +0,038 e +0,007 sotto; è il filtro nato dai fallimenti. Con 915 trade di PANIERE-045 e la quota di PANIERE-029 (569 su 743 sotto la media) il conto potrebbe stare intorno a 700: rischio di scarto dichiarato prima.",
+  "previsione": "trade stimati fra 600 e 800 (scarto con probabilità 50%); se registrata: R medio netto fra -0,03 e +0,08; t contro la (b) fra -0,5 e +1,8 (netta con probabilità 8%); candidata con probabilità 5%"
+ },
+ {
+  "nome": "C1-1,5 short, ritocco 3 (k 1,0, regime di Bitcoin)",
+  "idea": "C",
+  "ritocco_di": "PANIERE-045",
+  "famiglia": "PANIERE-029",
+  "parametri": {"direzione": "short", "k": 1.0, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60, "btc_media_giorni": 100},
+  "cosa_cambia": "soglia del giorno forte da 1,25 a 1,0 deviazioni standard e filtro di regime per lo short (Bitcoin sotto la media a 100); due modifiche rispetto a PANIERE-045",
+  "perche": "Ordine dei ritocchi dopo lo scarto PANIERE-046 (641 trade): resta la famiglia PANIERE-029 con 1 ritocco su 3, prima PANIERE-045 (t 0,44). Il filtro di regime è il solo nato dai fallimenti (Fase 3 di PANIERE-029); da solo non arriva a 700 trade, quindi la soglia scende a 1,0 per avere più giorni di segnale. Ultimo ritocco della campagna (12 su 12).",
+  "previsione": "trade stimati fra 800 e 1.100; R medio netto fra -0,04 e +0,08; t contro la (b) fra -0,5 e +1,8 (netta con probabilità 8%); candidata con probabilità 5%"
  }
 ]

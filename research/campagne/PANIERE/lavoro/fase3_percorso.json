@@ -1,83 +1,29 @@
 {
- "PANIERE-030": {
+ "PANIERE-029": {
   "chiusura del giorno 0": {
-   "n": 870,
-   "media_r": 0.089,
-   "mediana_r": 0.035
+   "n": 743,
+   "media_r": -0.004,
+   "mediana_r": -0.026
   },
   "chiusura del giorno 1": {
-   "n": 869,
-   "media_r": 0.134,
-   "mediana_r": 0.033
+   "n": 727,
+   "media_r": 0.005,
+   "mediana_r": -0.007
   },
   "chiusura del giorno 2": {
-   "n": 866,
-   "media_r": 0.201,
-   "mediana_r": 0.05
+   "n": 713,
+   "media_r": 0.054,
+   "mediana_r": 0.053
   },
   "chiusura del giorno 3": {
-   "n": 860,
-   "media_r": 0.197,
-   "mediana_r": 0.011
+   "n": 699,
+   "media_r": 0.051,
+   "mediana_r": 0.012
   },
   "chiusura del giorno 4": {
-   "n": 810,
-   "media_r": 0.246,
-   "mediana_r": 0.085
-  }
- },
- "PANIERE-032": {
-  "chiusura del giorno 0": {
-   "n": 803,
-   "media_r": 0.084,
-   "mediana_r": 0.032
-  },
-  "chiusura del giorno 1": {
-   "n": 802,
-   "media_r": 0.105,
-   "mediana_r": 0.035
-  },
-  "chiusura del giorno 2": {
-   "n": 790,
-   "media_r": 0.179,
-   "mediana_r": 0.05
-  },
-  "chiusura del giorno 3": {
-   "n": 780,
-   "media_r": 0.156,
-   "mediana_r": 0.021
-  },
-  "chiusura del giorno 4": {
-   "n": 740,
-   "media_r": 0.23,
-   "mediana_r": 0.07
-  }
- },
- "PANIERE-028": {
-  "chiusura del giorno 0": {
-   "n": 1297,
-   "media_r": 0.07,
-   "mediana_r": 0.03
-  },
-  "chiusura del giorno 1": {
-   "n": 1296,
-   "media_r": 0.091,
-   "mediana_r": 0.032
-  },
-  "chiusura del giorno 2": {
-   "n": 1285,
-   "media_r": 0.175,
-   "mediana_r": 0.045
-  },
-  "chiusura del giorno 3": {
-   "n": 1271,
-   "media_r": 0.145,
-   "mediana_r": 0.003
-  },
-  "chiusura del giorno 4": {
-   "n": 1220,
-   "media_r": 0.249,
-   "mediana_r": 0.083
+   "n": 680,
+   "media_r": 0.056,
+   "mediana_r": 0.029
   }
  }
 }

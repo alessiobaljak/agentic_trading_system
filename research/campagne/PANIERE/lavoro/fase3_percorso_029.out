@@ -1,0 +1,29 @@
+{
+ "PANIERE-029": {
+  "chiusura del giorno 0": {
+   "n": 743,
+   "media_r": -0.004,
+   "mediana_r": -0.026
+  },
+  "chiusura del giorno 1": {
+   "n": 727,
+   "media_r": 0.005,
+   "mediana_r": -0.007
+  },
+  "chiusura del giorno 2": {
+   "n": 713,
+   "media_r": 0.054,
+   "mediana_r": 0.053
+  },
+  "chiusura del giorno 3": {
+   "n": 699,
+   "media_r": 0.051,
+   "mediana_r": 0.012
+  },
+  "chiusura del giorno 4": {
+   "n": 680,
+   "media_r": 0.056,
+   "mediana_r": 0.029
+  }
+ }
+}
