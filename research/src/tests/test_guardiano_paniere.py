@@ -125,6 +125,8 @@ def test_il_paniere_vede_solo_la_propria_cartella(paniere):
     assert _write(paniere, "research/campagne/PANIERE/ipotesi.md")[0] == 0
     assert _read(paniere, "research/campagne/GRUPPO/log.jsonl")[0] == 2
     assert _read(paniere, "research/campagne/GRUPPO/ipotesi.md")[0] == 2
+    assert _read(paniere, "research/campagne/GRUPPO/schede/AAVEUSDT.md")[0] == 2
+    assert _read(paniere, "research/campagne/GRUPPO/codice/strategia.py")[0] == 2
     assert _read(paniere, "research/campagne/ETHUSDT/scheda_moneta.md")[0] == 2
     assert _read(paniere, "docs/state.md")[0] == 2
     assert _read(paniere, "research/PROTOCOLLO_2.md")[0] == 2   # non e' fra i file ammessi: lo cita regole.md
@@ -136,6 +138,23 @@ def test_i_file_del_paniere_scritti_dal_coordinamento_sono_in_sola_lettura(panie
         assert _read(paniere, percorso)[0] == 0, percorso
         codice, errore = _write(paniere, percorso)
         assert codice == 2 and errore.startswith(RIFIUTO), percorso
+
+
+def test_il_paniere_legge_le_regole_del_gruppo_che_eredita_ma_non_le_scrive(paniere):
+    """Correzione del 14 ott 2026: le regole della campagna PANIERE ereditano quelle del gruppo
+    (`research/campagne/GRUPPO/regole.md`), che la sessione deve poter leggere; resta in sola lettura, e il
+    resto della cartella del gruppo resta vietato. Una campagna di una moneta sola non le legge."""
+    assert g.ammesso_in_campagna("research/campagne/GRUPPO/regole.md", "PANIERE")
+    assert g.ammesso_in_campagna("research/campagne/GRUPPO/regole.md", "GRUPPO")
+    assert not g.ammesso_in_campagna("research/campagne/GRUPPO/regole.md", "ETHUSDT")
+    assert not g.ammesso_in_campagna("research/campagne/GRUPPO/via_libera_validazione.md", "PANIERE")
+    assert not g.ammesso_in_campagna("research/campagne/GRUPPO/ipotesi.md", "PANIERE")
+    assert g.e_protetto("research/campagne/GRUPPO/regole.md")
+    assert _read(paniere, "research/campagne/GRUPPO/regole.md")[0] == 0
+    codice, errore = _write(paniere, "research/campagne/GRUPPO/regole.md")
+    assert codice == 2 and errore.startswith(RIFIUTO)
+    assert _esegui(paniere, "Bash", {"command": "cat research/campagne/GRUPPO/regole.md"})[0] == 0
+    assert _esegui(paniere, "Bash", {"command": "cat research/campagne/GRUPPO/ipotesi.md"})[0] == 2
 
 
 def test_un_elenco_del_paniere_cambiato_rifiuta_ogni_azione(tmp_path):
@@ -151,4 +170,7 @@ def test_il_gruppo_resta_come_prima(tmp_path):
     assert _read(radice, "research/data/insample/AAVEUSDT/x.zip")[0] == 0
     assert _read(radice, "research/campagne/GRUPPO/ipotesi.md")[0] == 0
     assert _read(radice, "research/campagne/PANIERE/ipotesi.md")[0] == 2
+    assert _read(radice, "research/campagne/PANIERE/regole.md")[0] == 2   # l'eredita' va in un verso solo
     assert _write(radice, "research/campagne/GRUPPO/monete.csv")[0] == 2
+    moneta = _radice(tmp_path / "repo_eth", simbolo="ETHUSDT")
+    assert _read(moneta, "research/campagne/GRUPPO/regole.md")[0] == 2

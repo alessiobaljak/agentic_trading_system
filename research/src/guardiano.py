@@ -249,6 +249,13 @@ def percorso_monete_gruppo(simbolo: str) -> str:
     return f"research/campagne/{simbolo}/monete.csv"
 
 
+#: file della campagna GRUPPO che le ALTRE campagne di gruppo (PANIERE, seconda edizione)
+#: leggono, perche' le loro regole ereditano quelle del gruppo (`research/PROTOCOLLO_2.md`,
+#: sezione 0; `research/campagne/PANIERE/regole.md`, sezione 1). Solo in lettura: sono gia'
+#: in `_PROTETTI_FILE`. Il resto di `research/campagne/GRUPPO/` (log, ipotesi, schede,
+#: codice, consegna) resta vietato. Correzione del 14 ott 2026: alla prima sessione PANIERE
+#: il guardiano negava il file e la sessione si e' fermata a chiederlo.
+_FILE_EREDITATI_DAL_GRUPPO = ("research/campagne/GRUPPO/regole.md",)
 _IMPRONTA_MONETE_GRUPPO = "0cf217c3c7c4c23934fa1e37dc908618741cd8082514623b281abcbcdf99d8e2"
 _NUMERO_MONETE_GRUPPO = 80
 #: oltre questa dimensione l'elenco non si legge nemmeno (quello vero e' ~1 KB)
@@ -907,7 +914,9 @@ def monete_dati_ammesse(simbolo: str, monete_gruppo: frozenset[str] = frozenset(
 def ammesso_in_campagna(rel: str, simbolo: str, monete_gruppo: frozenset[str] = frozenset()) -> bool:
     """Lista bianca del Passo 3 (e, per GRUPPO, della sezione 12 di `campagne/GRUPPO/regole.md`).
 
-    `research/campagne/BTCUSDT` solo se il simbolo e' BTCUSDT. In
+    Una campagna di gruppo diversa da GRUPPO (PANIERE) legge anche
+    `_FILE_EREDITATI_DAL_GRUPPO` (le regole del gruppo, che eredita), in sola
+    lettura. `research/campagne/BTCUSDT` solo se il simbolo e' BTCUSDT. In
     `research/data/insample/` il primo nome dopo la cartella madre deve stare,
     tale e quale, in `monete_dati_ammesse`: niente prefissi (`ETH` non apre
     `ETHUSDT`), niente maiuscole/minuscole diverse, e la cartella madre da sola
@@ -917,6 +926,8 @@ def ammesso_in_campagna(rel: str, simbolo: str, monete_gruppo: frozenset[str] = 
         return True
     if any(_sotto(rel, c.format(S=simbolo)) for c in _CAMPAGNA_CARTELLE):
         return True
+    if simbolo in SIMBOLI_GRUPPO and simbolo != SIMBOLO_GRUPPO and rel in _FILE_EREDITATI_DAL_GRUPPO:
+        return True  # le regole del gruppo, ereditate dalla seconda edizione (sola lettura)
     pezzi = rel.split("/")
     if pezzi[:3] == _DATI_INSAMPLE.split("/") and len(pezzi) >= 4:
         return pezzi[3] in monete_dati_ammesse(simbolo, monete_gruppo)
