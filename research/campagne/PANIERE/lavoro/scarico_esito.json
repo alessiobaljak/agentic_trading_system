@@ -1,9 +1,443 @@
 {
  "compiti": 9327,
- "fatti": 2000,
- "ok": 2000,
- "buchi": [],
+ "fatti": 9327,
+ "ok": 9310,
+ "buchi": [
+  "ICPUSDT fundingRate  2021-05",
+  "ICPUSDT fundingRate  2021-06",
+  "ICPUSDT fundingRate  2021-07",
+  "ICPUSDT fundingRate  2021-08",
+  "ICPUSDT fundingRate  2021-09",
+  "ICPUSDT fundingRate  2021-10",
+  "ICPUSDT fundingRate  2021-11",
+  "ICPUSDT fundingRate  2021-12",
+  "ICPUSDT fundingRate  2022-01",
+  "ICPUSDT fundingRate  2022-02",
+  "ICPUSDT fundingRate  2022-03",
+  "ICPUSDT fundingRate  2022-04",
+  "ICPUSDT fundingRate  2022-05",
+  "ICPUSDT fundingRate  2022-06",
+  "ICPUSDT fundingRate  2022-07",
+  "ICPUSDT fundingRate  2022-08",
+  "QTUMUSDT fundingRate  2020-02"
+ ],
  "errori": [],
- "finito": false,
- "checksum_mancanti": []
+ "finito": true,
+ "checksum_mancanti": [],
+ "confronto_impronte": {
+  "1000XECUSDT": {
+   "attese": 84,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "1INCHUSDT": {
+   "attese": 111,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "AAVEUSDT": {
+   "attese": 117,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ALGOUSDT": {
+   "attese": 129,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ALPHAUSDT": {
+   "attese": 114,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ANKRUSDT": {
+   "attese": 108,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ARPAUSDT": {
+   "attese": 81,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ARUSDT": {
+   "attese": 84,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ATOMUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "AUDIOUSDT": {
+   "attese": 87,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "AXSUSDT": {
+   "attese": 114,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "BAKEUSDT": {
+   "attese": 96,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "BANDUSDT": {
+   "attese": 126,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "BELUSDT": {
+   "attese": 114,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "BLZUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "C98USDT": {
+   "attese": 87,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "CELOUSDT": {
+   "attese": 84,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "CELRUSDT": {
+   "attese": 102,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "CHZUSDT": {
+   "attese": 108,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "COMPUSDT": {
+   "attese": 129,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "CRVUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "CTSIUSDT": {
+   "attese": 81,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "DASHUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "DOTUSDT": {
+   "attese": 123,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "EGLDUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ENJUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "EOSUSDT": {
+   "attese": 144,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "FLMUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "GRTUSDT": {
+   "attese": 111,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "GTCUSDT": {
+   "attese": 93,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "HBARUSDT": {
+   "attese": 102,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ICPUSDT": {
+   "attese": 80,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ICXUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "IOTAUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "KAVAUSDT": {
+   "attese": 126,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "KLAYUSDT": {
+   "attese": 81,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "KNCUSDT": {
+   "attese": 129,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "KSMUSDT": {
+   "attese": 117,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "LINAUSDT": {
+   "attese": 102,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "LPTUSDT": {
+   "attese": 78,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "LRCUSDT": {
+   "attese": 117,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "MANAUSDT": {
+   "attese": 102,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "MKRUSDT": {
+   "attese": 123,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "MTLUSDT": {
+   "attese": 102,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "NEARUSDT": {
+   "attese": 117,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "NEOUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "NKNUSDT": {
+   "attese": 99,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "OCEANUSDT": {
+   "attese": 114,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "OGNUSDT": {
+   "attese": 99,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "OMGUSDT": {
+   "attese": 126,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ONTUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "PEOPLEUSDT": {
+   "attese": 75,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "QTUMUSDT": {
+   "attese": 140,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "RENUSDT": {
+   "attese": 117,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "RLCUSDT": {
+   "attese": 126,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ROSEUSDT": {
+   "attese": 75,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "RUNEUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "SANDUSDT": {
+   "attese": 108,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "SFPUSDT": {
+   "attese": 105,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "SKLUSDT": {
+   "attese": 111,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "SNXUSDT": {
+   "attese": 123,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "STMXUSDT": {
+   "attese": 102,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "STORJUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "SUSHIUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "SXPUSDT": {
+   "attese": 126,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "THETAUSDT": {
+   "attese": 132,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "TOMOUSDT": {
+   "attese": 117,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "TRXUSDT": {
+   "attese": 144,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "UNFIUSDT": {
+   "attese": 105,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "UNIUSDT": {
+   "attese": 120,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "VETUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "WAVESUSDT": {
+   "attese": 123,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "XEMUSDT": {
+   "attese": 102,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "XLMUSDT": {
+   "attese": 144,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "XMRUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "XTZUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "YFIUSDT": {
+   "attese": 123,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ZECUSDT": {
+   "attese": 141,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ZILUSDT": {
+   "attese": 129,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "ZRXUSDT": {
+   "attese": 129,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  },
+  "BTCUSDT": {
+   "attese": 144,
+   "differenze": [],
+   "file_in_piu_su_disco": []
+  }
+ },
+ "registrati_non_scaricati": {
+  "BTCUSDT": {
+   "n": 96,
+   "primo": "klines/8h/BTCUSDT-8h-2020-01.zip",
+   "ultimo": "markPriceKlines/8h/BTCUSDT-8h-2023-12.zip"
+  }
+ },
+ "simboli_con_differenze": [],
+ "simboli_con_file_in_piu": []
 }

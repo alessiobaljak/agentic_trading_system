@@ -1,0 +1,5387 @@
+{
+ "1000XECUSDT": {
+  "inizio_scheda": "2021-09-01",
+  "mesi_last": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "barre_last": 836,
+  "barre_allineate": 833,
+  "tolte_last": [
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 3,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-09-17",
+  "prima_barra_allineata": "2021-09-17",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2507,
+  "funding_primo": "2021-09-17",
+  "funding_intervalli": [
+   [
+    "2021-09-17",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 40880728,
+   "2022": 21981319,
+   "2023": 26545434
+  },
+  "mesi_sotto_liquidita": [
+   "2022-01",
+   "2022-02",
+   "2022-06",
+   "2022-07",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-02",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11"
+  ],
+  "mesi_sotto_liquidita_costruzione": 8,
+  "mesi_sotto_liquidita_validazione": 9,
+  "mesi_totali": 28,
+  "slippage_per_lato": 0.001
+ },
+ "1INCHUSDT": {
+  "inizio_scheda": "2020-12-01",
+  "mesi_last": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "barre_last": 1102,
+  "barre_allineate": 1100,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-12-25",
+  "prima_barra_allineata": "2020-12-25",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3304,
+  "funding_primo": "2020-12-25",
+  "funding_intervalli": [
+   [
+    "2020-12-25",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 115652599,
+   "2021": 129162045,
+   "2022": 46206241,
+   "2023": 38990044
+  },
+  "mesi_sotto_liquidita": [
+   "2023-05",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 37,
+  "slippage_per_lato": 0.001
+ },
+ "AAVEUSDT": {
+  "inizio_scheda": "2020-10-01",
+  "mesi_last": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "barre_last": 1172,
+  "barre_allineate": 1170,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-10-16",
+  "prima_barra_allineata": "2020-10-16",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3515,
+  "funding_primo": "2020-10-16",
+  "funding_intervalli": [
+   [
+    "2020-10-16",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 56228528,
+   "2021": 224653525,
+   "2022": 127741357,
+   "2023": 68807542
+  },
+  "mesi_sotto_liquidita": [],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 39,
+  "slippage_per_lato": 0.0005
+ },
+ "ALGOUSDT": {
+  "inizio_scheda": "2020-06-01",
+  "mesi_last": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "barre_last": 1294,
+  "barre_allineate": 1292,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-06-01..2020-06-15"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 15,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-06-16",
+  "prima_barra_allineata": "2020-06-16",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3927,
+  "funding_primo": "2020-06-01",
+  "funding_intervalli": [
+   [
+    "2020-06-01",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 23175867,
+   "2021": 154518633,
+   "2022": 100420480,
+   "2023": 43601124
+  },
+  "mesi_sotto_liquidita": [
+   "2020-06",
+   "2020-09",
+   "2020-10",
+   "2020-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 43,
+  "slippage_per_lato": 0.001
+ },
+ "ALPHAUSDT": {
+  "inizio_scheda": "2020-11-01",
+  "mesi_last": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "barre_last": 1134,
+  "barre_allineate": 1132,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-11-23",
+  "prima_barra_allineata": "2020-11-23",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3401,
+  "funding_primo": "2020-11-23",
+  "funding_intervalli": [
+   [
+    "2020-11-23",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 8868269,
+   "2021": 77487932,
+   "2022": 31880637,
+   "2023": 49403319
+  },
+  "mesi_sotto_liquidita": [
+   "2020-11",
+   "2020-12",
+   "2022-07",
+   "2022-08",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11"
+  ],
+  "mesi_sotto_liquidita_costruzione": 8,
+  "mesi_sotto_liquidita_validazione": 4,
+  "mesi_totali": 38,
+  "slippage_per_lato": 0.001
+ },
+ "ANKRUSDT": {
+  "inizio_scheda": "2021-01-01",
+  "mesi_last": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "barre_last": 1070,
+  "barre_allineate": 1062,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2021-01-25"
+  ],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-01-26",
+  "prima_barra_allineata": "2021-01-26",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3211,
+  "funding_primo": "2021-01-25",
+  "funding_intervalli": [
+   [
+    "2021-01-25",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 72013488,
+   "2022": 36735831,
+   "2023": 43484742
+  },
+  "mesi_sotto_liquidita": [
+   "2021-01",
+   "2022-06",
+   "2022-07",
+   "2022-12",
+   "2023-05",
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 4,
+  "mesi_totali": 36,
+  "slippage_per_lato": 0.001
+ },
+ "ARPAUSDT": {
+  "inizio_scheda": "2021-10-01",
+  "mesi_last": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "barre_last": 804,
+  "barre_allineate": 802,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-10-19",
+  "prima_barra_allineata": "2021-10-19",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2411,
+  "funding_primo": "2021-10-19",
+  "funding_intervalli": [
+   [
+    "2021-10-19",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 85497520,
+   "2022": 25349393,
+   "2023": 70636971
+  },
+  "mesi_sotto_liquidita": [
+   "2022-07",
+   "2022-08",
+   "2022-09",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-04",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 6,
+  "mesi_sotto_liquidita_validazione": 5,
+  "mesi_totali": 27,
+  "slippage_per_lato": 0.0005
+ },
+ "ARUSDT": {
+  "inizio_scheda": "2021-09-01",
+  "mesi_last": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "barre_last": 825,
+  "barre_allineate": 822,
+  "tolte_last": [
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2021-09-27"
+  ],
+  "n_tolte_last": 3,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-09-28",
+  "prima_barra_allineata": "2021-09-28",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2477,
+  "funding_primo": "2021-09-27",
+  "funding_intervalli": [
+   [
+    "2021-09-27",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 79283311,
+   "2022": 45334194,
+   "2023": 21220381
+  },
+  "mesi_sotto_liquidita": [
+   "2021-09",
+   "2022-12",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 2,
+  "mesi_sotto_liquidita_validazione": 7,
+  "mesi_totali": 28,
+  "slippage_per_lato": 0.001
+ },
+ "ATOMUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1424,
+  "barre_allineate": 1421,
+  "tolte_last": [
+   "2022-02-08",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-02-06"
+  ],
+  "n_tolte_last": 3,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-07",
+  "prima_barra_allineata": "2020-02-07",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4273,
+  "funding_primo": "2020-02-06",
+  "funding_intervalli": [
+   [
+    "2020-02-06",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 18274340,
+   "2021": 228127231,
+   "2022": 332205630,
+   "2023": 119936012
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 6,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.0005
+ },
+ "AUDIOUSDT": {
+  "inizio_scheda": "2021-08-01",
+  "mesi_last": {
+   "attesi": 29,
+   "presenti": 29,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 29,
+   "presenti": 29,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 29,
+   "presenti": 29,
+   "mancanti": []
+  },
+  "barre_last": 865,
+  "barre_allineate": 862,
+  "tolte_last": [
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 3,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-08-19",
+  "prima_barra_allineata": "2021-08-19",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2594,
+  "funding_primo": "2021-08-19",
+  "funding_intervalli": [
+   [
+    "2021-08-19",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 74301361,
+   "2022": 41067483,
+   "2023": 33657117
+  },
+  "mesi_sotto_liquidita": [
+   "2022-09",
+   "2022-10",
+   "2022-12",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-09",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 3,
+  "mesi_sotto_liquidita_validazione": 7,
+  "mesi_totali": 29,
+  "slippage_per_lato": 0.001
+ },
+ "AXSUSDT": {
+  "inizio_scheda": "2020-11-01",
+  "mesi_last": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "barre_last": 1137,
+  "barre_allineate": 1129,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-11-20",
+  "prima_barra_allineata": "2020-11-20",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3410,
+  "funding_primo": "2020-11-20",
+  "funding_intervalli": [
+   [
+    "2020-11-20",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 12729468,
+   "2021": 583618639,
+   "2022": 238619794,
+   "2023": 105288157
+  },
+  "mesi_sotto_liquidita": [
+   "2020-11",
+   "2020-12",
+   "2021-01"
+  ],
+  "mesi_sotto_liquidita_costruzione": 3,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 38,
+  "slippage_per_lato": 0.0005
+ },
+ "BAKEUSDT": {
+  "inizio_scheda": "2021-05-01",
+  "mesi_last": {
+   "attesi": 32,
+   "presenti": 32,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 32,
+   "presenti": 32,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 32,
+   "presenti": 32,
+   "mancanti": []
+  },
+  "barre_last": 957,
+  "barre_allineate": 955,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-05-19",
+  "prima_barra_allineata": "2021-05-19",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2870,
+  "funding_primo": "2021-05-19",
+  "funding_intervalli": [
+   [
+    "2021-05-19",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 82331782,
+   "2022": 36303526,
+   "2023": 68921657
+  },
+  "mesi_sotto_liquidita": [
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-07"
+  ],
+  "mesi_sotto_liquidita_costruzione": 5,
+  "mesi_sotto_liquidita_validazione": 6,
+  "mesi_totali": 32,
+  "slippage_per_lato": 0.0005
+ },
+ "BANDUSDT": {
+  "inizio_scheda": "2020-07-01",
+  "mesi_last": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "barre_last": 1251,
+  "barre_allineate": 1243,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-07-29",
+  "prima_barra_allineata": "2020-07-29",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3752,
+  "funding_primo": "2020-07-29",
+  "funding_intervalli": [
+   [
+    "2020-07-29",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 53762104,
+   "2021": 52139743,
+   "2022": 68326861,
+   "2023": 28848033
+  },
+  "mesi_sotto_liquidita": [
+   "2020-10",
+   "2022-09",
+   "2022-10",
+   "2023-05",
+   "2023-08",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 3,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 42,
+  "slippage_per_lato": 0.001
+ },
+ "BELUSDT": {
+  "inizio_scheda": "2020-11-01",
+  "mesi_last": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "barre_last": 1139,
+  "barre_allineate": 1137,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-11-18",
+  "prima_barra_allineata": "2020-11-18",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3416,
+  "funding_primo": "2020-11-18",
+  "funding_intervalli": [
+   [
+    "2020-11-18",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 10474946,
+   "2021": 48492388,
+   "2022": 69215115,
+   "2023": 38259497
+  },
+  "mesi_sotto_liquidita": [
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2022-01",
+   "2022-03",
+   "2022-04",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-08",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 8,
+  "mesi_sotto_liquidita_validazione": 6,
+  "mesi_totali": 38,
+  "slippage_per_lato": 0.001
+ },
+ "BLZUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1201,
+  "barre_allineate": 1193,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-09-16"
+  ],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-17",
+  "prima_barra_allineata": "2020-09-17",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3920,
+  "funding_primo": "2020-09-16",
+  "funding_intervalli": [
+   [
+    "2020-09-16",
+    8.0
+   ],
+   [
+    "2023-08-14",
+    4.0
+   ],
+   [
+    "2023-08-31",
+    8.0
+   ],
+   [
+    "2023-09-05",
+    4.0
+   ],
+   [
+    "2023-09-13",
+    8.0
+   ],
+   [
+    "2023-10-12",
+    4.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 3661054,
+   "2021": 48149146,
+   "2022": 43104393,
+   "2023": 94910928
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2022-04",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-07"
+  ],
+  "mesi_sotto_liquidita_costruzione": 11,
+  "mesi_sotto_liquidita_validazione": 6,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.0005
+ },
+ "C98USDT": {
+  "inizio_scheda": "2021-08-01",
+  "mesi_last": {
+   "attesi": 29,
+   "presenti": 29,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 29,
+   "presenti": 29,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 29,
+   "presenti": 29,
+   "mancanti": []
+  },
+  "barre_last": 860,
+  "barre_allineate": 858,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-08-24",
+  "prima_barra_allineata": "2021-08-24",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2579,
+  "funding_primo": "2021-08-24",
+  "funding_intervalli": [
+   [
+    "2021-08-24",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 191544142,
+   "2022": 39596270,
+   "2023": 36714907
+  },
+  "mesi_sotto_liquidita": [
+   "2022-12",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 1,
+  "mesi_sotto_liquidita_validazione": 4,
+  "mesi_totali": 29,
+  "slippage_per_lato": 0.001
+ },
+ "CELOUSDT": {
+  "inizio_scheda": "2021-09-01",
+  "mesi_last": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 28,
+   "presenti": 28,
+   "mancanti": []
+  },
+  "barre_last": 826,
+  "barre_allineate": 824,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-09-27",
+  "prima_barra_allineata": "2021-09-27",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2477,
+  "funding_primo": "2021-09-27",
+  "funding_intervalli": [
+   [
+    "2021-09-27",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 34013196,
+   "2022": 42574260,
+   "2023": 46343285
+  },
+  "mesi_sotto_liquidita": [
+   "2021-09",
+   "2022-07",
+   "2022-08",
+   "2022-09",
+   "2022-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 5,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 28,
+  "slippage_per_lato": 0.001
+ },
+ "CELRUSDT": {
+  "inizio_scheda": "2021-03-01",
+  "mesi_last": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "barre_last": 1008,
+  "barre_allineate": 1006,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-03-29",
+  "prima_barra_allineata": "2021-03-29",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3023,
+  "funding_primo": "2021-03-29",
+  "funding_intervalli": [
+   [
+    "2021-03-29",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 111625310,
+   "2022": 45152796,
+   "2023": 24631594
+  },
+  "mesi_sotto_liquidita": [
+   "2021-06",
+   "2021-07",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-06",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 7,
+  "mesi_sotto_liquidita_validazione": 8,
+  "mesi_totali": 34,
+  "slippage_per_lato": 0.001
+ },
+ "CHZUSDT": {
+  "inizio_scheda": "2021-01-01",
+  "mesi_last": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "barre_last": 1075,
+  "barre_allineate": 1073,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2021-01-01..2021-01-20"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 20,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-01-21",
+  "prima_barra_allineata": "2021-01-21",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3285,
+  "funding_primo": "2021-01-01",
+  "funding_intervalli": [
+   [
+    "2021-01-01",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 251918429,
+   "2022": 226181223,
+   "2023": 54504700
+  },
+  "mesi_sotto_liquidita": [
+   "2021-01",
+   "2023-08",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 1,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 36,
+  "slippage_per_lato": 0.0005
+ },
+ "COMPUSDT": {
+  "inizio_scheda": "2020-06-01",
+  "mesi_last": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "barre_last": 1280,
+  "barre_allineate": 1272,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-06-30",
+  "prima_barra_allineata": "2020-06-30",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3839,
+  "funding_primo": "2020-06-30",
+  "funding_intervalli": [
+   [
+    "2020-06-30",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 29421328,
+   "2021": 74012813,
+   "2022": 42465277,
+   "2023": 94557194
+  },
+  "mesi_sotto_liquidita": [
+   "2020-06",
+   "2020-07",
+   "2020-10",
+   "2022-12",
+   "2023-04",
+   "2023-05"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 43,
+  "slippage_per_lato": 0.0005
+ },
+ "CRVUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1217,
+  "barre_allineate": 1209,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-01",
+  "prima_barra_allineata": "2020-09-01",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3650,
+  "funding_primo": "2020-09-01",
+  "funding_intervalli": [
+   [
+    "2020-09-01",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 44482019,
+   "2021": 156570137,
+   "2022": 167093370,
+   "2023": 131277797
+  },
+  "mesi_sotto_liquidita": [],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.0005
+ },
+ "CTSIUSDT": {
+  "inizio_scheda": "2021-10-01",
+  "mesi_last": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "barre_last": 797,
+  "barre_allineate": 794,
+  "tolte_last": [
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 3,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-10-26",
+  "prima_barra_allineata": "2021-10-26",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2390,
+  "funding_primo": "2021-10-26",
+  "funding_intervalli": [
+   [
+    "2021-10-26",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 76964996,
+   "2022": 18069753,
+   "2023": 47010046
+  },
+  "mesi_sotto_liquidita": [
+   "2021-10",
+   "2022-02",
+   "2022-04",
+   "2022-05",
+   "2022-07",
+   "2022-08",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2023-01",
+   "2023-02",
+   "2023-03",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 10,
+  "mesi_sotto_liquidita_validazione": 8,
+  "mesi_totali": 27,
+  "slippage_per_lato": 0.001
+ },
+ "DASHUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1427,
+  "barre_allineate": 1425,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-04",
+  "prima_barra_allineata": "2020-02-04",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4280,
+  "funding_primo": "2020-02-04",
+  "funding_intervalli": [
+   [
+    "2020-02-04",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 11110360,
+   "2021": 73318893,
+   "2022": 34740243,
+   "2023": 23760452
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-07",
+   "2020-08",
+   "2020-09",
+   "2020-10",
+   "2020-12",
+   "2022-09",
+   "2022-10",
+   "2023-05",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 12,
+  "mesi_sotto_liquidita_validazione": 7,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.001
+ },
+ "DOTUSDT": {
+  "inizio_scheda": "2020-08-01",
+  "mesi_last": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "barre_last": 1227,
+  "barre_allineate": 1219,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-08-20..2020-08-21"
+  ],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 2,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-08-22",
+  "prima_barra_allineata": "2020-08-22",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3686,
+  "funding_primo": "2020-08-20",
+  "funding_intervalli": [
+   [
+    "2020-08-20",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 85949052,
+   "2021": 750386650,
+   "2022": 302883654,
+   "2023": 158172543
+  },
+  "mesi_sotto_liquidita": [],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 41,
+  "slippage_per_lato": 0.0005
+ },
+ "EGLDUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1204,
+  "barre_allineate": 1202,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-09-13"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-14",
+  "prima_barra_allineata": "2020-09-14",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3613,
+  "funding_primo": "2020-09-13",
+  "funding_intervalli": [
+   [
+    "2020-09-13",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 17783237,
+   "2021": 110969222,
+   "2022": 68156201,
+   "2023": 39554920
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2023-07",
+   "2023-08",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 3,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.001
+ },
+ "ENJUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1189,
+  "barre_allineate": 1181,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-29",
+  "prima_barra_allineata": "2020-09-29",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3566,
+  "funding_primo": "2020-09-29",
+  "funding_intervalli": [
+   [
+    "2020-09-29",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 2351958,
+   "2021": 144449106,
+   "2022": 52804000,
+   "2023": 35019253
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2022-12",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-08"
+  ],
+  "mesi_sotto_liquidita_costruzione": 5,
+  "mesi_sotto_liquidita_validazione": 4,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.001
+ },
+ "EOSUSDT": {
+  "inizio_scheda": "2020-01-01",
+  "mesi_last": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "barre_last": 1454,
+  "barre_allineate": 1452,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-01-08",
+  "prima_barra_allineata": "2020-01-08",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4361,
+  "funding_primo": "2020-01-08",
+  "funding_intervalli": [
+   [
+    "2020-01-08",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 60124297,
+   "2021": 556803851,
+   "2022": 205276532,
+   "2023": 137780867
+  },
+  "mesi_sotto_liquidita": [],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 48,
+  "slippage_per_lato": 0.0005
+ },
+ "FLMUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1184,
+  "barre_allineate": 1182,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-29",
+  "prima_barra_allineata": "2020-09-29",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3834,
+  "funding_primo": "2020-09-29",
+  "funding_intervalli": [
+   [
+    "2020-09-29",
+    8.0
+   ],
+   [
+    "2023-09-05",
+    2.0
+   ],
+   [
+    "2023-09-09",
+    8.0
+   ],
+   [
+    "2023-10-12",
+    4.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 11947101,
+   "2021": 35611443,
+   "2022": 54243191,
+   "2023": 37147183
+  },
+  "mesi_sotto_liquidita": [
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2022-01",
+   "2022-03",
+   "2022-04",
+   "2022-05",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-08"
+  ],
+  "mesi_sotto_liquidita_costruzione": 11,
+  "mesi_sotto_liquidita_validazione": 5,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.001
+ },
+ "GRTUSDT": {
+  "inizio_scheda": "2020-12-01",
+  "mesi_last": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "barre_last": 1103,
+  "barre_allineate": 1101,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-12-19",
+  "prima_barra_allineata": "2020-12-19",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3323,
+  "funding_primo": "2020-12-19",
+  "funding_intervalli": [
+   [
+    "2020-12-19",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 253584285,
+   "2021": 111202117,
+   "2022": 54032418,
+   "2023": 75230332
+  },
+  "mesi_sotto_liquidita": [
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 1,
+  "mesi_totali": 37,
+  "slippage_per_lato": 0.0005
+ },
+ "GTCUSDT": {
+  "inizio_scheda": "2021-06-01",
+  "mesi_last": {
+   "attesi": 31,
+   "presenti": 31,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 31,
+   "presenti": 31,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 31,
+   "presenti": 31,
+   "mancanti": []
+  },
+  "barre_last": 929,
+  "barre_allineate": 927,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-06-11",
+  "prima_barra_allineata": "2021-06-11",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 2801,
+  "funding_primo": "2021-06-11",
+  "funding_intervalli": [
+   [
+    "2021-06-11",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 84379799,
+   "2022": 34551953,
+   "2023": 27244262
+  },
+  "mesi_sotto_liquidita": [
+   "2022-09",
+   "2022-10",
+   "2022-12",
+   "2023-01",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 8,
+  "mesi_totali": 31,
+  "slippage_per_lato": 0.001
+ },
+ "HBARUSDT": {
+  "inizio_scheda": "2021-03-01",
+  "mesi_last": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "barre_last": 1015,
+  "barre_allineate": 1013,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-03-17",
+  "prima_barra_allineata": "2021-03-17",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3059,
+  "funding_primo": "2021-03-17",
+  "funding_intervalli": [
+   [
+    "2021-03-17",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 64348063,
+   "2022": 26740097,
+   "2023": 46117231
+  },
+  "mesi_sotto_liquidita": [
+   "2022-06",
+   "2022-07",
+   "2022-08",
+   "2022-12",
+   "2023-05"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 1,
+  "mesi_totali": 34,
+  "slippage_per_lato": 0.001
+ },
+ "ICPUSDT": {
+  "inizio_scheda": "2021-05-01",
+  "mesi_last": {
+   "attesi": 32,
+   "presenti": 32,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 32,
+   "presenti": 32,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 32,
+   "presenti": 16,
+   "mancanti": [
+    "2021-05",
+    "2021-06",
+    "2021-07",
+    "2021-08",
+    "2021-09",
+    "2021-10",
+    "2021-11",
+    "2021-12",
+    "2022-01",
+    "2022-02",
+    "2022-03",
+    "2022-04",
+    "2022-05",
+    "2022-06",
+    "2022-07",
+    "2022-08"
+   ]
+  },
+  "barre_last": 939,
+  "barre_allineate": 936,
+  "tolte_last": [
+   "2022-06-19",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-09-01..2022-09-26"
+  ],
+  "n_tolte_last": 3,
+  "n_tolte_mark": 26,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-05-11",
+  "prima_barra_allineata": "2021-05-11",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-09-01..2022-09-26"
+  ],
+  "funding_settlement": 1461,
+  "funding_primo": "2022-09-01",
+  "funding_intervalli": [
+   [
+    "2022-09-01",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 284559738,
+   "2022": 83228425,
+   "2023": 53148421
+  },
+  "mesi_sotto_liquidita": [
+   "2022-07",
+   "2022-08",
+   "2022-09",
+   "2022-10",
+   "2023-08",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 32,
+  "slippage_per_lato": 0.0005
+ },
+ "ICXUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1203,
+  "barre_allineate": 1195,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-09-14"
+  ],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-15",
+  "prima_barra_allineata": "2020-09-15",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3610,
+  "funding_primo": "2020-09-14",
+  "funding_intervalli": [
+   [
+    "2020-09-14",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 4253238,
+   "2021": 50630000,
+   "2022": 24607166,
+   "2023": 29846373
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2022-06",
+   "2022-07",
+   "2022-08",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-03",
+   "2023-06",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 12,
+  "mesi_sotto_liquidita_validazione": 7,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.001
+ },
+ "IOTAUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1414,
+  "barre_allineate": 1412,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-12",
+  "prima_barra_allineata": "2020-02-12",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 4256,
+  "funding_primo": "2020-02-12",
+  "funding_intervalli": [
+   [
+    "2020-02-12",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 5418628,
+   "2021": 78483982,
+   "2022": 22576615,
+   "2023": 28902408
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-07",
+   "2020-08",
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2022-06",
+   "2022-07",
+   "2022-08",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-02",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 18,
+  "mesi_sotto_liquidita_validazione": 10,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.001
+ },
+ "KAVAUSDT": {
+  "inizio_scheda": "2020-07-01",
+  "mesi_last": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "barre_last": 1252,
+  "barre_allineate": 1244,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-07-28",
+  "prima_barra_allineata": "2020-07-28",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3755,
+  "funding_primo": "2020-07-28",
+  "funding_intervalli": [
+   [
+    "2020-07-28",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 24623865,
+   "2021": 68398442,
+   "2022": 57119274,
+   "2023": 57344474
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10",
+   "2020-12",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 3,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 42,
+  "slippage_per_lato": 0.0005
+ },
+ "KLAYUSDT": {
+  "inizio_scheda": "2021-10-01",
+  "mesi_last": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 27,
+   "presenti": 27,
+   "mancanti": []
+  },
+  "barre_last": 811,
+  "barre_allineate": 808,
+  "tolte_last": [
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2021-10-11"
+  ],
+  "n_tolte_last": 3,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-10-12",
+  "prima_barra_allineata": "2021-10-12",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2434,
+  "funding_primo": "2021-10-11",
+  "funding_intervalli": [
+   [
+    "2021-10-11",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 20078488,
+   "2022": 35051304,
+   "2023": 25727877
+  },
+  "mesi_sotto_liquidita": [
+   "2021-10",
+   "2021-12",
+   "2022-03",
+   "2022-04",
+   "2022-06",
+   "2022-07",
+   "2022-08",
+   "2022-09",
+   "2022-12",
+   "2023-01",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 10,
+  "mesi_sotto_liquidita_validazione": 7,
+  "mesi_totali": 27,
+  "slippage_per_lato": 0.001
+ },
+ "KNCUSDT": {
+  "inizio_scheda": "2020-06-01",
+  "mesi_last": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "barre_last": 1283,
+  "barre_allineate": 1281,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-06-22",
+  "prima_barra_allineata": "2020-06-22",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3863,
+  "funding_primo": "2020-06-22",
+  "funding_intervalli": [
+   [
+    "2020-06-22",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 11296021,
+   "2021": 36154458,
+   "2022": 136686932,
+   "2023": 43663749
+  },
+  "mesi_sotto_liquidita": [
+   "2020-06",
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-07",
+   "2023-04",
+   "2023-05",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 6,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 43,
+  "slippage_per_lato": 0.001
+ },
+ "KSMUSDT": {
+  "inizio_scheda": "2020-10-01",
+  "mesi_last": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "barre_last": 1169,
+  "barre_allineate": 1167,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-10-14",
+  "prima_barra_allineata": "2020-10-14",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3521,
+  "funding_primo": "2020-10-14",
+  "funding_intervalli": [
+   [
+    "2020-10-14",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 13452584,
+   "2021": 104380798,
+   "2022": 32424653,
+   "2023": 20377576
+  },
+  "mesi_sotto_liquidita": [
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2022-12",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 9,
+  "mesi_totali": 39,
+  "slippage_per_lato": 0.001
+ },
+ "LINAUSDT": {
+  "inizio_scheda": "2021-03-01",
+  "mesi_last": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "barre_last": 1013,
+  "barre_allineate": 1011,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-03-19",
+  "prima_barra_allineata": "2021-03-19",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3053,
+  "funding_primo": "2021-03-19",
+  "funding_intervalli": [
+   [
+    "2021-03-19",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 73224246,
+   "2022": 41622526,
+   "2023": 163472965
+  },
+  "mesi_sotto_liquidita": [
+   "2022-07",
+   "2022-09",
+   "2022-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 3,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 34,
+  "slippage_per_lato": 0.0005
+ },
+ "LPTUSDT": {
+  "inizio_scheda": "2021-11-01",
+  "mesi_last": {
+   "attesi": 26,
+   "presenti": 26,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 26,
+   "presenti": 26,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 26,
+   "presenti": 26,
+   "mancanti": []
+  },
+  "barre_last": 781,
+  "barre_allineate": 778,
+  "tolte_last": [
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 3,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-11-11",
+  "prima_barra_allineata": "2021-11-11",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2608,
+  "funding_primo": "2021-11-11",
+  "funding_intervalli": [
+   [
+    "2021-11-11",
+    8.0
+   ],
+   [
+    "2023-08-13",
+    4.0
+   ],
+   [
+    "2023-08-21",
+    8.0
+   ],
+   [
+    "2023-10-12",
+    4.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 47051555,
+   "2022": 17187902,
+   "2023": 58142592
+  },
+  "mesi_sotto_liquidita": [
+   "2022-03",
+   "2022-04",
+   "2022-05",
+   "2022-06",
+   "2022-08",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-07"
+  ],
+  "mesi_sotto_liquidita_costruzione": 10,
+  "mesi_sotto_liquidita_validazione": 6,
+  "mesi_totali": 26,
+  "slippage_per_lato": 0.0005
+ },
+ "LRCUSDT": {
+  "inizio_scheda": "2020-10-01",
+  "mesi_last": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "barre_last": 1164,
+  "barre_allineate": 1162,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-10-19",
+  "prima_barra_allineata": "2020-10-19",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3506,
+  "funding_primo": "2020-10-19",
+  "funding_intervalli": [
+   [
+    "2020-10-19",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 4687056,
+   "2021": 190577990,
+   "2022": 104872874,
+   "2023": 24862937
+  },
+  "mesi_sotto_liquidita": [
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-07",
+   "2022-09",
+   "2022-10",
+   "2022-12",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11"
+  ],
+  "mesi_sotto_liquidita_costruzione": 7,
+  "mesi_sotto_liquidita_validazione": 7,
+  "mesi_totali": 39,
+  "slippage_per_lato": 0.001
+ },
+ "MANAUSDT": {
+  "inizio_scheda": "2021-03-01",
+  "mesi_last": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "barre_last": 1017,
+  "barre_allineate": 1015,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-03-15",
+  "prima_barra_allineata": "2021-03-15",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3065,
+  "funding_primo": "2021-03-15",
+  "funding_intervalli": [
+   [
+    "2021-03-15",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 425197040,
+   "2022": 201013235,
+   "2023": 95599651
+  },
+  "mesi_sotto_liquidita": [
+   "2021-06"
+  ],
+  "mesi_sotto_liquidita_costruzione": 1,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 34,
+  "slippage_per_lato": 0.0005
+ },
+ "MKRUSDT": {
+  "inizio_scheda": "2020-08-01",
+  "mesi_last": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "barre_last": 1231,
+  "barre_allineate": 1229,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-08-13",
+  "prima_barra_allineata": "2020-08-13",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3707,
+  "funding_primo": "2020-08-13",
+  "funding_intervalli": [
+   [
+    "2020-08-13",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 18349272,
+   "2021": 98422011,
+   "2022": 34800182,
+   "2023": 96188677
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2022-07",
+   "2022-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 5,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 41,
+  "slippage_per_lato": 0.0005
+ },
+ "MTLUSDT": {
+  "inizio_scheda": "2021-03-01",
+  "mesi_last": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "barre_last": 1006,
+  "barre_allineate": 998,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2021-03-30"
+  ],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-03-31",
+  "prima_barra_allineata": "2021-03-31",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3022,
+  "funding_primo": "2021-03-30",
+  "funding_intervalli": [
+   [
+    "2021-03-30",
+    8.0
+   ],
+   [
+    "2023-06-07",
+    4.0
+   ],
+   [
+    "2023-06-09",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 50278763,
+   "2022": 72257482,
+   "2023": 78122997
+  },
+  "mesi_sotto_liquidita": [
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 3,
+  "mesi_sotto_liquidita_validazione": 1,
+  "mesi_totali": 34,
+  "slippage_per_lato": 0.0005
+ },
+ "NEARUSDT": {
+  "inizio_scheda": "2020-10-01",
+  "mesi_last": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "barre_last": 1168,
+  "barre_allineate": 1161,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-10-14",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-10-15",
+  "prima_barra_allineata": "2020-10-15",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3520,
+  "funding_primo": "2020-10-14",
+  "funding_intervalli": [
+   [
+    "2020-10-14",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 13252789,
+   "2021": 158318325,
+   "2022": 465375621,
+   "2023": 139764614
+  },
+  "mesi_sotto_liquidita": [
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-01"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 39,
+  "slippage_per_lato": 0.0005
+ },
+ "NEOUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1414,
+  "barre_allineate": 1406,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-17",
+  "prima_barra_allineata": "2020-02-17",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4241,
+  "funding_primo": "2020-02-17",
+  "funding_intervalli": [
+   [
+    "2020-02-17",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 15879850,
+   "2021": 101856136,
+   "2022": 35134034,
+   "2023": 55562665
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-07",
+   "2020-10",
+   "2020-12",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-08",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 11,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.0005
+ },
+ "NKNUSDT": {
+  "inizio_scheda": "2021-04-01",
+  "mesi_last": {
+   "attesi": 33,
+   "presenti": 33,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 33,
+   "presenti": 33,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 33,
+   "presenti": 33,
+   "mancanti": []
+  },
+  "barre_last": 997,
+  "barre_allineate": 989,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-04-09",
+  "prima_barra_allineata": "2021-04-09",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 2990,
+  "funding_primo": "2021-04-09",
+  "funding_intervalli": [
+   [
+    "2021-04-09",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 58549613,
+   "2022": 26388428,
+   "2023": 20703954
+  },
+  "mesi_sotto_liquidita": [
+   "2021-06",
+   "2022-03",
+   "2022-05",
+   "2022-09",
+   "2022-10",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 7,
+  "mesi_sotto_liquidita_validazione": 8,
+  "mesi_totali": 33,
+  "slippage_per_lato": 0.001
+ },
+ "OCEANUSDT": {
+  "inizio_scheda": "2020-11-01",
+  "mesi_last": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 38,
+   "presenti": 38,
+   "mancanti": []
+  },
+  "barre_last": 1149,
+  "barre_allineate": 1142,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-11-02",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-11-03",
+  "prima_barra_allineata": "2020-11-03",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3463,
+  "funding_primo": "2020-11-02",
+  "funding_intervalli": [
+   [
+    "2020-11-02",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 7481922,
+   "2021": 45088714,
+   "2022": 44025466,
+   "2023": 65283664
+  },
+  "mesi_sotto_liquidita": [
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2021-07",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 1,
+  "mesi_totali": 38,
+  "slippage_per_lato": 0.0005
+ },
+ "OGNUSDT": {
+  "inizio_scheda": "2021-04-01",
+  "mesi_last": {
+   "attesi": 33,
+   "presenti": 33,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 33,
+   "presenti": 33,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 33,
+   "presenti": 33,
+   "mancanti": []
+  },
+  "barre_last": 1000,
+  "barre_allineate": 993,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-04-01",
+  "prima_barra_allineata": "2021-04-01",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3014,
+  "funding_primo": "2021-04-01",
+  "funding_intervalli": [
+   [
+    "2021-04-01",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 52704359,
+   "2022": 80637422,
+   "2023": 50158420
+  },
+  "mesi_sotto_liquidita": [
+   "2022-01",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-06"
+  ],
+  "mesi_sotto_liquidita_costruzione": 6,
+  "mesi_sotto_liquidita_validazione": 5,
+  "mesi_totali": 33,
+  "slippage_per_lato": 0.0005
+ },
+ "OMGUSDT": {
+  "inizio_scheda": "2020-07-01",
+  "mesi_last": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "barre_last": 1273,
+  "barre_allineate": 1266,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-07-01",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-07-02",
+  "prima_barra_allineata": "2020-07-02",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3841,
+  "funding_primo": "2020-07-01",
+  "funding_intervalli": [
+   [
+    "2020-07-01",
+    8.0
+   ],
+   [
+    "2021-11-11",
+    2.0
+   ],
+   [
+    "2021-11-12",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 35445578,
+   "2021": 139098449,
+   "2022": 29668407,
+   "2023": 35053919
+  },
+  "mesi_sotto_liquidita": [
+   "2020-07",
+   "2020-12",
+   "2022-08",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11"
+  ],
+  "mesi_sotto_liquidita_costruzione": 8,
+  "mesi_sotto_liquidita_validazione": 6,
+  "mesi_totali": 42,
+  "slippage_per_lato": 0.001
+ },
+ "ONTUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1420,
+  "barre_allineate": 1412,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-11",
+  "prima_barra_allineata": "2020-02-11",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4259,
+  "funding_primo": "2020-02-11",
+  "funding_intervalli": [
+   [
+    "2020-02-11",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 10927883,
+   "2021": 70443035,
+   "2022": 21273575,
+   "2023": 30472191
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-07",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2022-07",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11"
+  ],
+  "mesi_sotto_liquidita_costruzione": 15,
+  "mesi_sotto_liquidita_validazione": 5,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.001
+ },
+ "PEOPLEUSDT": {
+  "inizio_scheda": "2021-12-01",
+  "mesi_last": {
+   "attesi": 25,
+   "presenti": 25,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 25,
+   "presenti": 25,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 25,
+   "presenti": 25,
+   "mancanti": []
+  },
+  "barre_last": 733,
+  "barre_allineate": 731,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2021-12-23",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-12-24",
+  "prima_barra_allineata": "2021-12-24",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 2215,
+  "funding_primo": "2021-12-23",
+  "funding_intervalli": [
+   [
+    "2021-12-23",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 101400513,
+   "2022": 179350253,
+   "2023": 28368096
+  },
+  "mesi_sotto_liquidita": [
+   "2023-07",
+   "2023-08"
+  ],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 25,
+  "slippage_per_lato": 0.001
+ },
+ "QTUMUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 46,
+   "mancanti": [
+    "2020-02"
+   ]
+  },
+  "barre_last": 1411,
+  "barre_allineate": 1403,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-02-19"
+  ],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-20",
+  "prima_barra_allineata": "2020-02-20",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4203,
+  "funding_primo": "2020-03-01",
+  "funding_intervalli": [
+   [
+    "2020-03-01",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 7643374,
+   "2021": 103382306,
+   "2022": 29839593,
+   "2023": 23431388
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-07",
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2022-06",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 16,
+  "mesi_sotto_liquidita_validazione": 5,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.001
+ },
+ "RENUSDT": {
+  "inizio_scheda": "2020-10-01",
+  "mesi_last": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "barre_last": 1175,
+  "barre_allineate": 1167,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-10-13",
+  "prima_barra_allineata": "2020-10-13",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3524,
+  "funding_primo": "2020-10-13",
+  "funding_intervalli": [
+   [
+    "2020-10-13",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 9145648,
+   "2021": 55606613,
+   "2022": 43508574,
+   "2023": 35713223
+  },
+  "mesi_sotto_liquidita": [
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-07",
+   "2022-09",
+   "2023-05",
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 5,
+  "mesi_sotto_liquidita_validazione": 4,
+  "mesi_totali": 39,
+  "slippage_per_lato": 0.001
+ },
+ "RLCUSDT": {
+  "inizio_scheda": "2020-07-01",
+  "mesi_last": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "barre_last": 1244,
+  "barre_allineate": 1237,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-07-31",
+  "prima_barra_allineata": "2020-07-31",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3746,
+  "funding_primo": "2020-07-31",
+  "funding_intervalli": [
+   [
+    "2020-07-31",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 16858398,
+   "2021": 75514903,
+   "2022": 54749737,
+   "2023": 38373577
+  },
+  "mesi_sotto_liquidita": [
+   "2020-07",
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2022-03",
+   "2022-10",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 8,
+  "mesi_sotto_liquidita_validazione": 6,
+  "mesi_totali": 42,
+  "slippage_per_lato": 0.001
+ },
+ "ROSEUSDT": {
+  "inizio_scheda": "2021-12-01",
+  "mesi_last": {
+   "attesi": 25,
+   "presenti": 25,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 25,
+   "presenti": 25,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 25,
+   "presenti": 25,
+   "mancanti": []
+  },
+  "barre_last": 726,
+  "barre_allineate": 724,
+  "tolte_last": [
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2021-12-30",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 2,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-12-31",
+  "prima_barra_allineata": "2021-12-31",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 2195,
+  "funding_primo": "2021-12-30",
+  "funding_intervalli": [
+   [
+    "2021-12-30",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 54772673,
+   "2022": 69143384,
+   "2023": 30191039
+  },
+  "mesi_sotto_liquidita": [
+   "2022-10",
+   "2022-12",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 2,
+  "mesi_sotto_liquidita_validazione": 4,
+  "mesi_totali": 25,
+  "slippage_per_lato": 0.001
+ },
+ "RUNEUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1214,
+  "barre_allineate": 1206,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-04",
+  "prima_barra_allineata": "2020-09-04",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3641,
+  "funding_primo": "2020-09-04",
+  "funding_intervalli": [
+   [
+    "2020-09-04",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 10387367,
+   "2021": 126523815,
+   "2022": 123138229,
+   "2023": 91631918
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2023-05",
+   "2023-07"
+  ],
+  "mesi_sotto_liquidita_costruzione": 4,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.0005
+ },
+ "SANDUSDT": {
+  "inizio_scheda": "2021-01-01",
+  "mesi_last": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 36,
+   "presenti": 36,
+   "mancanti": []
+  },
+  "barre_last": 1066,
+  "barre_allineate": 1059,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-01-25",
+  "prima_barra_allineata": "2021-01-25",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3212,
+  "funding_primo": "2021-01-25",
+  "funding_intervalli": [
+   [
+    "2021-01-25",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 532220518,
+   "2022": 313970962,
+   "2023": 125488655
+  },
+  "mesi_sotto_liquidita": [
+   "2021-01"
+  ],
+  "mesi_sotto_liquidita_costruzione": 1,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 36,
+  "slippage_per_lato": 0.0005
+ },
+ "SFPUSDT": {
+  "inizio_scheda": "2021-02-01",
+  "mesi_last": {
+   "attesi": 35,
+   "presenti": 35,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 35,
+   "presenti": 35,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 35,
+   "presenti": 35,
+   "mancanti": []
+  },
+  "barre_last": 1041,
+  "barre_allineate": 1034,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-02-24",
+  "prima_barra_allineata": "2021-02-24",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3122,
+  "funding_primo": "2021-02-24",
+  "funding_intervalli": [
+   [
+    "2021-02-24",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 83559560,
+   "2022": 37469311,
+   "2023": 32342701
+  },
+  "mesi_sotto_liquidita": [
+   "2021-02",
+   "2022-06",
+   "2022-07",
+   "2022-09",
+   "2022-10",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-07",
+   "2023-10",
+   "2023-11",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 5,
+  "mesi_sotto_liquidita_validazione": 7,
+  "mesi_totali": 35,
+  "slippage_per_lato": 0.001
+ },
+ "SKLUSDT": {
+  "inizio_scheda": "2020-12-01",
+  "mesi_last": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 37,
+   "presenti": 37,
+   "mancanti": []
+  },
+  "barre_last": 1114,
+  "barre_allineate": 1107,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-12-08",
+  "prima_barra_allineata": "2020-12-08",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3356,
+  "funding_primo": "2020-12-08",
+  "funding_intervalli": [
+   [
+    "2020-12-08",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 10943246,
+   "2021": 53726350,
+   "2022": 30935685,
+   "2023": 27525643
+  },
+  "mesi_sotto_liquidita": [
+   "2020-12",
+   "2021-01",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-04",
+   "2023-05",
+   "2023-06",
+   "2023-07",
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 7,
+  "mesi_sotto_liquidita_validazione": 9,
+  "mesi_totali": 37,
+  "slippage_per_lato": 0.001
+ },
+ "SNXUSDT": {
+  "inizio_scheda": "2020-08-01",
+  "mesi_last": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "barre_last": 1235,
+  "barre_allineate": 1228,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-08-14",
+  "prima_barra_allineata": "2020-08-14",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3704,
+  "funding_primo": "2020-08-14",
+  "funding_intervalli": [
+   [
+    "2020-08-14",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 19400193,
+   "2021": 62597985,
+   "2022": 69667812,
+   "2023": 69605757
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 2,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 41,
+  "slippage_per_lato": 0.0005
+ },
+ "STMXUSDT": {
+  "inizio_scheda": "2021-03-01",
+  "mesi_last": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "barre_last": 1015,
+  "barre_allineate": 1008,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-03-22",
+  "prima_barra_allineata": "2021-03-22",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3306,
+  "funding_primo": "2021-03-22",
+  "funding_intervalli": [
+   [
+    "2021-03-22",
+    8.0
+   ],
+   [
+    "2023-07-23",
+    2.0
+   ],
+   [
+    "2023-07-25",
+    8.0
+   ],
+   [
+    "2023-10-12",
+    4.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 39577640,
+   "2022": 18788082,
+   "2023": 67762141
+  },
+  "mesi_sotto_liquidita": [
+   "2022-01",
+   "2022-02",
+   "2022-05",
+   "2022-07",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-03",
+   "2023-06"
+  ],
+  "mesi_sotto_liquidita_costruzione": 9,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 34,
+  "slippage_per_lato": 0.0005
+ },
+ "STORJUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1197,
+  "barre_allineate": 1190,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-09-15",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-16",
+  "prima_barra_allineata": "2020-09-16",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3607,
+  "funding_primo": "2020-09-15",
+  "funding_intervalli": [
+   [
+    "2020-09-15",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 6088710,
+   "2021": 88633932,
+   "2022": 47015023,
+   "2023": 96525022
+  },
+  "mesi_sotto_liquidita": [
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2022-09",
+   "2022-12",
+   "2023-03",
+   "2023-05",
+   "2023-08"
+  ],
+  "mesi_sotto_liquidita_costruzione": 7,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.0005
+ },
+ "SUSHIUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1209,
+  "barre_allineate": 1202,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-04",
+  "prima_barra_allineata": "2020-09-04",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3641,
+  "funding_primo": "2020-09-04",
+  "funding_intervalli": [
+   [
+    "2020-09-04",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 104626317,
+   "2021": 229477252,
+   "2022": 120072520,
+   "2023": 61648621
+  },
+  "mesi_sotto_liquidita": [
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 1,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.0005
+ },
+ "SXPUSDT": {
+  "inizio_scheda": "2020-07-01",
+  "mesi_last": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 42,
+   "presenti": 42,
+   "mancanti": []
+  },
+  "barre_last": 1259,
+  "barre_allineate": 1252,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-07-21",
+  "prima_barra_allineata": "2020-07-21",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3776,
+  "funding_primo": "2020-07-21",
+  "funding_intervalli": [
+   [
+    "2020-07-21",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 60069433,
+   "2021": 166601675,
+   "2022": 37903531,
+   "2023": 88874868
+  },
+  "mesi_sotto_liquidita": [
+   "2022-07",
+   "2022-09",
+   "2022-10",
+   "2022-12",
+   "2023-01",
+   "2023-08",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 5,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 42,
+  "slippage_per_lato": 0.0005
+ },
+ "THETAUSDT": {
+  "inizio_scheda": "2020-05-01",
+  "mesi_last": {
+   "attesi": 44,
+   "presenti": 44,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 44,
+   "presenti": 44,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 44,
+   "presenti": 44,
+   "mancanti": []
+  },
+  "barre_last": 1314,
+  "barre_allineate": 1307,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-05-26"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-05-27",
+  "prima_barra_allineata": "2020-05-27",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3943,
+  "funding_primo": "2020-05-26",
+  "funding_intervalli": [
+   [
+    "2020-05-26",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 23437580,
+   "2021": 197981140,
+   "2022": 97350684,
+   "2023": 33087188
+  },
+  "mesi_sotto_liquidita": [
+   "2020-06",
+   "2020-07",
+   "2020-11",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 3,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 44,
+  "slippage_per_lato": 0.001
+ },
+ "TOMOUSDT": {
+  "inizio_scheda": "2020-10-01",
+  "mesi_last": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 39,
+   "presenti": 39,
+   "mancanti": []
+  },
+  "barre_last": 1176,
+  "barre_allineate": 1169,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-10-12",
+  "prima_barra_allineata": "2020-10-12",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3527,
+  "funding_primo": "2020-10-12",
+  "funding_intervalli": [
+   [
+    "2020-10-12",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 5473546,
+   "2021": 39481563,
+   "2022": 19507053,
+   "2023": 116844408
+  },
+  "mesi_sotto_liquidita": [
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2022-01",
+   "2022-02",
+   "2022-07",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-02",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 12,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 39,
+  "slippage_per_lato": 0.0005
+ },
+ "TRXUSDT": {
+  "inizio_scheda": "2020-01-01",
+  "mesi_last": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "barre_last": 1442,
+  "barre_allineate": 1435,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-01-15",
+  "prima_barra_allineata": "2020-01-15",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 4340,
+  "funding_primo": "2020-01-15",
+  "funding_intervalli": [
+   [
+    "2020-01-15",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 39239516,
+   "2021": 283344528,
+   "2022": 170630341,
+   "2023": 71814420
+  },
+  "mesi_sotto_liquidita": [
+   "2020-01",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06"
+  ],
+  "mesi_sotto_liquidita_costruzione": 5,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 48,
+  "slippage_per_lato": 0.0005
+ },
+ "UNFIUSDT": {
+  "inizio_scheda": "2021-02-01",
+  "mesi_last": {
+   "attesi": 35,
+   "presenti": 35,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 35,
+   "presenti": 35,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 35,
+   "presenti": 35,
+   "mancanti": []
+  },
+  "barre_last": 1041,
+  "barre_allineate": 1034,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2021-02-01..2021-02-18",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 23,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-02-19",
+  "prima_barra_allineata": "2021-02-19",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3434,
+  "funding_primo": "2021-02-01",
+  "funding_intervalli": [
+   [
+    "2021-02-01",
+    8.0
+   ],
+   [
+    "2023-10-12",
+    4.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 39368804,
+   "2022": 127286047,
+   "2023": 71026318
+  },
+  "mesi_sotto_liquidita": [
+   "2021-03",
+   "2022-04",
+   "2023-05",
+   "2023-06"
+  ],
+  "mesi_sotto_liquidita_costruzione": 2,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 35,
+  "slippage_per_lato": 0.0005
+ },
+ "UNIUSDT": {
+  "inizio_scheda": "2020-09-01",
+  "mesi_last": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 40,
+   "presenti": 40,
+   "mancanti": []
+  },
+  "barre_last": 1200,
+  "barre_allineate": 1193,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-09-17"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 1,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-09-18",
+  "prima_barra_allineata": "2020-09-18",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3602,
+  "funding_primo": "2020-09-17",
+  "funding_intervalli": [
+   [
+    "2020-09-17",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 133105601,
+   "2021": 248815382,
+   "2022": 85312855,
+   "2023": 69250215
+  },
+  "mesi_sotto_liquidita": [],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 40,
+  "slippage_per_lato": 0.0005
+ },
+ "VETUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1412,
+  "barre_allineate": 1405,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-14",
+  "prima_barra_allineata": "2020-02-14",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 4250,
+  "funding_primo": "2020-02-14",
+  "funding_intervalli": [
+   [
+    "2020-02-14",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 25823906,
+   "2021": 207516444,
+   "2022": 66764144,
+   "2023": 28960330
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-10",
+   "2022-12",
+   "2023-08",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 6,
+  "mesi_sotto_liquidita_validazione": 2,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.001
+ },
+ "WAVESUSDT": {
+  "inizio_scheda": "2020-08-01",
+  "mesi_last": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "barre_last": 1232,
+  "barre_allineate": 1225,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-08-12",
+  "prima_barra_allineata": "2020-08-12",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3710,
+  "funding_primo": "2020-08-12",
+  "funding_intervalli": [
+   [
+    "2020-08-12",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 39492759,
+   "2021": 75818438,
+   "2022": 298389448,
+   "2023": 91362323
+  },
+  "mesi_sotto_liquidita": [],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 41,
+  "slippage_per_lato": 0.0005
+ },
+ "XEMUSDT": {
+  "inizio_scheda": "2021-03-01",
+  "mesi_last": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 34,
+   "presenti": 34,
+   "mancanti": []
+  },
+  "barre_last": 1029,
+  "barre_allineate": 1022,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2021-03-03",
+  "prima_barra_allineata": "2021-03-03",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3101,
+  "funding_primo": "2021-03-03",
+  "funding_intervalli": [
+   [
+    "2021-03-03",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2021": 46318820,
+   "2022": 21999211,
+   "2023": 29145539
+  },
+  "mesi_sotto_liquidita": [
+   "2021-06",
+   "2022-03",
+   "2022-04",
+   "2022-06",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-09",
+   "2023-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 8,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 34,
+  "slippage_per_lato": 0.001
+ },
+ "XLMUSDT": {
+  "inizio_scheda": "2020-01-01",
+  "mesi_last": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "barre_last": 1437,
+  "barre_allineate": 1430,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-01-19",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-01-20",
+  "prima_barra_allineata": "2020-01-20",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 4327,
+  "funding_primo": "2020-01-19",
+  "funding_intervalli": [
+   [
+    "2020-01-19",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 38566167,
+   "2021": 238505335,
+   "2022": 53739093,
+   "2023": 77752320
+  },
+  "mesi_sotto_liquidita": [
+   "2020-01",
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-09",
+   "2020-10",
+   "2022-12"
+  ],
+  "mesi_sotto_liquidita_costruzione": 9,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 48,
+  "slippage_per_lato": 0.0005
+ },
+ "XMRUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1428,
+  "barre_allineate": 1421,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-02-01..2020-02-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 2,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-03",
+  "prima_barra_allineata": "2020-02-03",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4290,
+  "funding_primo": "2020-02-01",
+  "funding_intervalli": [
+   [
+    "2020-02-01",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 15331051,
+   "2021": 68970341,
+   "2022": 66984368,
+   "2023": 30610430
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-07",
+   "2020-08",
+   "2020-09",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 8,
+  "mesi_sotto_liquidita_validazione": 1,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.001
+ },
+ "XTZUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1425,
+  "barre_allineate": 1418,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-02-04..2020-02-05"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 2,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-06",
+  "prima_barra_allineata": "2020-02-06",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4280,
+  "funding_primo": "2020-02-04",
+  "funding_intervalli": [
+   [
+    "2020-02-04",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 48059587,
+   "2021": 187210446,
+   "2022": 68538928,
+   "2023": 25732316
+  },
+  "mesi_sotto_liquidita": [
+   "2020-10",
+   "2022-12",
+   "2023-05",
+   "2023-08",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 2,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.001
+ },
+ "YFIUSDT": {
+  "inizio_scheda": "2020-08-01",
+  "mesi_last": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 41,
+   "presenti": 41,
+   "mancanti": []
+  },
+  "barre_last": 1213,
+  "barre_allineate": 1206,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 5,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-08-31",
+  "prima_barra_allineata": "2020-08-31",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3653,
+  "funding_primo": "2020-08-31",
+  "funding_intervalli": [
+   [
+    "2020-08-31",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 190790550,
+   "2021": 112912112,
+   "2022": 56756204,
+   "2023": 45985650
+  },
+  "mesi_sotto_liquidita": [
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 41,
+  "slippage_per_lato": 0.001
+ },
+ "ZECUSDT": {
+  "inizio_scheda": "2020-02-01",
+  "mesi_last": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 47,
+   "presenti": 47,
+   "mancanti": []
+  },
+  "barre_last": 1421,
+  "barre_allineate": 1414,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-02-04",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-02-05",
+  "prima_barra_allineata": "2020-02-05",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 4280,
+  "funding_primo": "2020-02-04",
+  "funding_intervalli": [
+   [
+    "2020-02-04",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 17992520,
+   "2021": 95318955,
+   "2022": 73805932,
+   "2023": 26028808
+  },
+  "mesi_sotto_liquidita": [
+   "2020-02",
+   "2020-03",
+   "2020-04",
+   "2020-05",
+   "2020-06",
+   "2020-07",
+   "2020-09",
+   "2023-08",
+   "2023-09",
+   "2023-10",
+   "2023-11"
+  ],
+  "mesi_sotto_liquidita_costruzione": 7,
+  "mesi_sotto_liquidita_validazione": 4,
+  "mesi_totali": 47,
+  "slippage_per_lato": 0.001
+ },
+ "ZILUSDT": {
+  "inizio_scheda": "2020-06-01",
+  "mesi_last": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "barre_last": 1287,
+  "barre_allineate": 1280,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [
+   "2020-06-17",
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 6,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-06-18",
+  "prima_barra_allineata": "2020-06-18",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [
+   "2022-02-26..2022-02-28",
+   "2022-04-01..2022-04-02"
+  ],
+  "funding_settlement": 3878,
+  "funding_primo": "2020-06-17",
+  "funding_intervalli": [
+   [
+    "2020-06-17",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 19622786,
+   "2021": 54985816,
+   "2022": 194669946,
+   "2023": 37015970
+  },
+  "mesi_sotto_liquidita": [
+   "2020-06",
+   "2020-07",
+   "2020-08",
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2022-12",
+   "2023-08",
+   "2023-09",
+   "2023-10"
+  ],
+  "mesi_sotto_liquidita_costruzione": 7,
+  "mesi_sotto_liquidita_validazione": 3,
+  "mesi_totali": 43,
+  "slippage_per_lato": 0.001
+ },
+ "ZRXUSDT": {
+  "inizio_scheda": "2020-06-01",
+  "mesi_last": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 43,
+   "presenti": 43,
+   "mancanti": []
+  },
+  "barre_last": 1286,
+  "barre_allineate": 1279,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 7,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-06-24",
+  "prima_barra_allineata": "2020-06-24",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 3857,
+  "funding_primo": "2020-06-24",
+  "funding_intervalli": [
+   [
+    "2020-06-24",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 11156213,
+   "2021": 40800124,
+   "2022": 38633975,
+   "2023": 45126493
+  },
+  "mesi_sotto_liquidita": [
+   "2020-06",
+   "2020-07",
+   "2020-09",
+   "2020-10",
+   "2020-11",
+   "2020-12",
+   "2021-01",
+   "2022-08",
+   "2022-09",
+   "2022-10",
+   "2022-11",
+   "2022-12",
+   "2023-01",
+   "2023-05",
+   "2023-06",
+   "2023-08",
+   "2023-09"
+  ],
+  "mesi_sotto_liquidita_costruzione": 13,
+  "mesi_sotto_liquidita_validazione": 5,
+  "mesi_totali": 43,
+  "slippage_per_lato": 0.001
+ },
+ "BTCUSDT": {
+  "inizio_scheda": "2020-01-01",
+  "mesi_last": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "mesi_mark": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "mesi_funding": {
+   "attesi": 48,
+   "presenti": 48,
+   "mancanti": []
+  },
+  "barre_last": 1461,
+  "barre_allineate": 1453,
+  "tolte_last": [
+   "2021-07-01",
+   "2021-07-24..2021-07-27",
+   "2022-07-31",
+   "2022-10-02",
+   "2023-02-24"
+  ],
+  "tolte_mark": [],
+  "n_tolte_last": 8,
+  "n_tolte_mark": 0,
+  "tolte_last_in_validazione": 1,
+  "prima_barra_last": "2020-01-01",
+  "prima_barra_allineata": "2020-01-01",
+  "ultima_barra_allineata": "2023-12-31",
+  "storia_ok": true,
+  "giorni_mancanti_last": [],
+  "funding_settlement": 4383,
+  "funding_primo": "2020-01-01",
+  "funding_intervalli": [
+   [
+    "2020-01-01",
+    8.0
+   ]
+  ],
+  "volume_medio_usdt_per_anno": {
+   "2020": 3114132583,
+   "2021": 17545110818,
+   "2022": 12826292276,
+   "2023": 11505048821
+  },
+  "mesi_sotto_liquidita": [],
+  "mesi_sotto_liquidita_costruzione": 0,
+  "mesi_sotto_liquidita_validazione": 0,
+  "mesi_totali": 48
+ }
+}

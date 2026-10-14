@@ -3,3 +3,22 @@ fatti 500 errori 0
 fatti 1000 errori 0
 fatti 1500 errori 0
 fatti 2000 errori 0
+fatti 2500 errori 0
+fatti 3000 errori 0
+fatti 3500 errori 0
+fatti 4000 errori 0
+fatti 4500 errori 0
+fatti 5000 errori 0
+fatti 5500 errori 0
+fatti 6000 errori 0
+fatti 6500 errori 0
+fatti 7000 errori 0
+fatti 7500 errori 0
+fatti 8000 errori 0
+fatti 8500 errori 0
+fatti 9000 errori 0
+ok 9310 buchi 17 errori 0 checksum mancanti 0
+simboli con differenze []
+simboli con file in piu []
+registrati e non scaricati {'BTCUSDT': {'n': 96, 'primo': 'klines/8h/BTCUSDT-8h-2020-01.zip', 'ultimo': 'markPriceKlines/8h/BTCUSDT-8h-2023-12.zip'}}
+fatto
