@@ -13,6 +13,7 @@ import json
 import random
 import sys
 from pathlib import Path
+from typing import NamedTuple
 
 RADICE = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(RADICE))
@@ -23,18 +24,37 @@ from research.src.motore import Candela, Parametri  # noqa: E402
 GIORNO = 86_400_000
 
 
+class Riga(NamedTuple):
+    ts: int
+    close_ts: int
+    chiusure: dict
+    sotto_liquidita: frozenset
+
+
 class ContestoFinto:
+    """Come il Contesto di gruppo.py, con prezzi inventati: BTCUSDT, il paniere (45 monete finte) e il simbolo."""
+
     timeframe = "1d"
     ms_per_barra = GIORNO
 
-    def __init__(self, btc):
+    def __init__(self, btc, monete, simbolo):
         self._btc = btc
+        self.simbolo = simbolo
+        giorni = sorted({c.ts for serie in monete.values() for c in serie} | {c.ts for c in btc})
+        per_giorno = {g: {} for g in giorni}
+        for s, serie in list(monete.items()) + [("BTCUSDT", btc)]:
+            for c in serie:
+                per_giorno[c.ts][s] = c.close
+        self._righe = [Riga(g, g + GIORNO - 1, per_giorno[g], frozenset()) for g in giorni]
 
     def btc_chiuse_entro(self, ts):
         return [c for c in self._btc if c.close_ts <= ts]
 
     def funding_regolato_entro(self, ts):
         return []
+
+    def paniere_chiuse_entro(self, ts):
+        return [r for r in self._righe if r.close_ts <= ts]
 
 
 def candele_finte(seme, n=900, inizio=1_577_836_800_000):
@@ -57,8 +77,9 @@ def main():
     spec = importlib.util.spec_from_file_location("variante_in_prova", percorso)
     modulo = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(modulo)
-    candele = candele_finte(1)
-    ctx = ContestoFinto(candele_finte(2))
+    monete = {f"M{i:02d}": candele_finte(10 + i) for i in range(45)}
+    candele = monete["M00"]
+    ctx = ContestoFinto(candele_finte(2), monete, "M00")
     par = Parametri(ingresso="limite", limite_validita_barre=1, commissione_maker_per_lato=0.0002)
     for p in lista_p:
         nome = p.get("nome", str(p))
