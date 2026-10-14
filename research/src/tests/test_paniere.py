@@ -79,3 +79,79 @@ def test_giorni_forti_usa_solo_i_giorni_precedenti():
     assert paniere.deviazione_mobile(r2, 60, 40)[95] == dev[95]
     r3 = r.copy(); r3[95] = -0.5
     assert paniere.giorni_forti(r3, 2.0, 60, 40)[95] == -1
+
+
+# ---------------------------------------------------------------------------
+# le funzioni «dell'ultimo giorno» sulle righe del paniere di gruppo.py (14 ottobre 2026)
+# ---------------------------------------------------------------------------
+
+
+def _righe_da_candele(candele):
+    """Le righe del paniere (``gruppo.GiornoPaniere``) come le costruisce ``gruppo._righe_paniere``, senza liquidita'."""
+    from research.src import gruppo
+    giorni, simboli, chiusure = paniere.allinea_giorni(candele)
+    righe = []
+    for i, ts in enumerate(giorni):
+        coppie = [(s, float(chiusure[i, j])) for j, s in enumerate(simboli) if np.isfinite(chiusure[i, j])]
+        righe.append(gruppo.GiornoPaniere(int(ts), int(ts) + paniere.GIORNO_MS - 1, gruppo.ChiusureDelGiorno(coppie),
+                                          frozenset()))
+    return righe, giorni, simboli, chiusure
+
+
+def test_classifica_ultimo_giorno_coincide_con_la_classifica_sulla_matrice():
+    rng = np.random.default_rng(7)
+    candele = {}
+    for s, primo, n in (("AAAUSDT", 0, 40), ("BBBUSDT", 5, 35), ("CCCUSDT", 0, 40), ("BTCUSDT", 0, 40)):
+        prezzo = 100.0
+        lista = []
+        for g in range(primo, primo + n):
+            if s == "BBBUSDT" and g == 20:
+                continue  # un buco
+            prezzo *= float(np.exp(rng.normal(0, 0.02)))
+            lista.append(Candela(g * paniere.GIORNO_MS, prezzo, prezzo, prezzo, prezzo, 1.0, g * paniere.GIORNO_MS + paniere.GIORNO_MS - 1))
+        candele[s] = lista
+    righe, giorni, simboli, chiusure = _righe_da_candele(candele)
+    n = 5
+    rend = paniere.rendimento_n_giorni(chiusure, n)
+    senza_btc = [j for j, s in enumerate(simboli) if s != "BTCUSDT"]
+    rango, _ = paniere.classifica(rend[:, senza_btc], [simboli[j] for j in senza_btc])
+    for t in range(len(righe)):
+        vista = righe[: t + 1]
+        r = paniere.rendimenti_ultimo_giorno(vista, n)
+        attesi = {simboli[j]: rend[t, j] for j in senza_btc if np.isfinite(rend[t, j])}
+        assert set(r) == set(attesi)
+        for s in r:
+            assert r[s] == attesi[s]  # stesso float
+        classifica, n_monete = paniere.classifica_ultimo_giorno(vista, n)
+        assert n_monete == len(attesi)
+        for k, j in enumerate(senza_btc):
+            if np.isfinite(rango[t, k]):
+                assert classifica[simboli[j]] == int(rango[t, k])
+        assert "BTCUSDT" not in classifica
+    # storia minima: BBBUSDT comincia al giorno 5, quindi al giorno 12 con storia_minima 8 e' fuori, con 7 e' dentro
+    assert "BBBUSDT" not in paniere.rendimenti_ultimo_giorno(righe[:13], 2, storia_minima=8)
+    assert "BBBUSDT" in paniere.rendimenti_ultimo_giorno(righe[:13], 2, storia_minima=7)
+    # una moneta sotto la liquidita' nel giorno t non entra
+    from research.src import gruppo
+    ultima = righe[12]
+    con_sotto = righe[:12] + [gruppo.GiornoPaniere(ultima.ts, ultima.close_ts, ultima.chiusure, frozenset({"AAAUSDT"}))]
+    assert "AAAUSDT" not in paniere.classifica_ultimo_giorno(con_sotto, 2)[0]
+    # righe che non bastano
+    assert paniere.rendimenti_ultimo_giorno(righe[:n], n) == {}
+    with pytest.raises(ValueError):
+        paniere.rendimenti_ultimo_giorno(righe, 0)
+
+
+def test_giorno_forte_ultimo_coincide_con_giorni_forti():
+    rng = np.random.default_rng(11)
+    chiusure = 100.0 * np.exp(np.cumsum(rng.normal(0, 0.03, 300)))
+    chiusure[200] = chiusure[199] * 1.25  # un giorno molto forte
+    chiusure[250] = chiusure[249] * 0.80  # e uno molto debole
+    rendimenti = chiusure[1:] / chiusure[:-1] - 1.0
+    tutti = paniere.giorni_forti(rendimenti, 2.0, 60, 40)
+    for t in range(len(chiusure)):
+        atteso = 0 if t == 0 else int(tutti[t - 1])
+        assert paniere.giorno_forte_ultimo(chiusure[: t + 1], 2.0, 60, 40) == atteso, t
+    assert paniere.giorno_forte_ultimo(chiusure[:201], 2.0) == 1 and paniere.giorno_forte_ultimo(chiusure[:251], 2.0) == -1
+    assert paniere.giorno_forte_ultimo(chiusure[:61], 2.0) == 0  # 61 chiusure: ne servono 62
+

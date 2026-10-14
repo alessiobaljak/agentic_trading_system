@@ -225,7 +225,8 @@ def parametri_dal_yaml(slippage: float, **altro) -> Parametri:
 
 def ctx_vuoto():
     return SimpleNamespace(timeframe="1d", ms_per_barra=GIORNO, btc_chiuse_entro=lambda ts: [],
-                           funding_regolato_entro=lambda ts: [])
+                           funding_regolato_entro=lambda ts: [], simbolo="XXXUSDT",
+                           paniere_chiuse_entro=lambda ts: motore.StoriaChiusa([], 0))
 
 
 def con_filtro(fabbrica, mesi):
@@ -293,15 +294,32 @@ def test_parametri_moneta_dal_yaml_e_dalla_scheda():
 
 
 def test_contesto_senza_simbolo_e_senza_futuro():
+    """Dal 14 ott 2026 il contesto ha anche ``simbolo`` e ``paniere_chiuse_entro`` (contratto, punto 3): senza paniere
+    la vista e' vuota e il simbolo None; con il paniere la vista segue l'orologio come quella di BTCUSDT."""
     btc = [Candela(k * GIORNO, 1, 2, 0.5, 1.5, 1, k * GIORNO + GIORNO - 1) for k in range(10)]
     funding = [(k * GIORNO // 3, 0.0001) for k in range(30)]
     orologio = gruppo._Orologio()
     ctx = gruppo._crea_contesto("1d", GIORNO, btc, funding, orologio)
-    assert set(gruppo.Contesto.__slots__) == {"timeframe", "ms_per_barra", "btc_chiuse_entro", "funding_regolato_entro"}
+    assert set(gruppo.Contesto.__slots__) == {"timeframe", "ms_per_barra", "btc_chiuse_entro", "funding_regolato_entro",
+                                              "simbolo", "paniere_chiuse_entro"}
+    assert ctx.simbolo is None and len(ctx.paniere_chiuse_entro(10 ** 15)) == 0
     with pytest.raises(AttributeError):
         ctx.simbolo = "AAAUSDT"
     with pytest.raises(AttributeError):
         ctx.timeframe = "1h"
+    righe = [gruppo.GiornoPaniere(k * GIORNO, k * GIORNO + GIORNO - 1,
+                                  gruppo.ChiusureDelGiorno([("AAAUSDT", 1.0 + k), ("BTCUSDT", 100.0 + k)]), frozenset())
+             for k in range(10)]
+    con_paniere = gruppo._crea_contesto("1d", GIORNO, btc, funding, orologio, righe, "AAAUSDT")
+    assert con_paniere.simbolo == "AAAUSDT" and len(con_paniere.paniere_chiuse_entro(10 ** 15)) == 0
+    orologio.adesso = btc[4].close_ts
+    vista = con_paniere.paniere_chiuse_entro(10 ** 15)
+    assert len(vista) == 5 and vista[-1] is righe[4] and len(vista._base) == 5
+    assert len(con_paniere.paniere_chiuse_entro(righe[2].close_ts)) == 3
+    assert len(con_paniere.paniere_chiuse_entro(righe[2].close_ts - 1)) == 2
+    with pytest.raises(TypeError):
+        vista[-1].chiusure["AAAUSDT"] = 0.0
+    orologio.adesso = None
     # prima di ogni barra: niente, nemmeno sotto la vista
     assert len(ctx.btc_chiuse_entro(10 ** 15)) == 0 and len(ctx.funding_regolato_entro(10 ** 15)._base) == 0
     orologio.adesso = btc[4].close_ts
@@ -863,9 +881,12 @@ def test_senza_marcatore_la_validazione_parte_senza_via_libera(tmp_path, progett
 def test_ripresa_da_un_avanzamento_interrotto(tmp_path):
     q = dict(P, registra_ingressi=False)
     intero = esame(tmp_path / "intero", p=q)
-    # l'esame si ferma sulla terza moneta (CCCUSDT, l'ultima: le piu' lunghe per prime)
+    # l'esame si ferma sulla terza moneta (CCCUSDT, l'ultima: le piu' lunghe per prime), nel suo pezzo della fase 1:
+    # la prima lettura di ogni moneta e' quella delle righe del paniere, nel processo principale (14 ott 2026)
+    CHIAMATE.clear()
     with pytest.raises(gruppo.ErroreDiMoneta, match="guasto simulato"):
-        esame(tmp_path / "ripreso", p=q, caricatore=CaricatoreFinto(guasto="CCCUSDT"))
+        esame(tmp_path / "ripreso", p=q,
+              caricatore=CaricatoreGuastoAlleSfasate(guasto_alle_sfasate="CCCUSDT", letture_prima_del_guasto=1))
     file = tmp_path / "ripreso" / "campagna" / "avanzamento" / "GRUPPO-001_costruzione.jsonl"
     assert [json.loads(r)["simbolo"] for r in file.read_text("utf-8").splitlines()] == ["AAAUSDT", "BBBUSDT"]
     # una riga interrotta a meta' si ignora
@@ -875,8 +896,8 @@ def test_ripresa_da_un_avanzamento_interrotto(tmp_path):
     ripreso = esame(tmp_path / "ripreso", p=q)
     assert senza_file(ripreso) == senza_file(intero)
     # i pezzi gia' fatti non si rifanno: ogni moneta ricarica i suoi dati (per controllarne l'impronta), ma si
-    # calcolano solo la fase 1 di CCCUSDT e le sfasate di tutte
-    assert sorted(c[0] for c in CHIAMATE) == ["AAAUSDT", "AAAUSDT", "BBBUSDT", "BBBUSDT", "CCCUSDT", "CCCUSDT"]
+    # calcolano solo la fase 1 di CCCUSDT e le sfasate di tutte; la terza lettura per moneta e' quella del paniere
+    assert sorted(c[0] for c in CHIAMATE) == ["AAAUSDT"] * 3 + ["BBBUSDT"] * 3 + ["CCCUSDT"] * 3
     assert ripreso["ripresa"] == {"pezzi_ripresi": 2, "pezzi_calcolati": 4, "righe_di_altre_impronte": 0,
                                   "righe_illeggibili": 1}
     assert intero["ripresa"]["pezzi_ripresi"] == 0 and intero["ripresa"]["pezzi_calcolati"] == 6
@@ -891,7 +912,7 @@ def test_ripresa_da_un_avanzamento_interrotto(tmp_path):
     # un'altra versione (p diversi) non riusa nessun pezzo, e non cancella le righe di prima
     CHIAMATE.clear()
     altra = esame(tmp_path / "ripreso", p=dict(q, durata=6))
-    assert len(CHIAMATE) == 6 and len(file.read_text("utf-8").splitlines()) == prima + 6
+    assert len(CHIAMATE) == 9 and len(file.read_text("utf-8").splitlines()) == prima + 6
     assert altra["ripresa"]["pezzi_ripresi"] == 0 and altra["ripresa"]["righe_di_altre_impronte"] == 6
 
 
@@ -938,7 +959,7 @@ def test_costi_doppi_su_test_b_e_sfasate(tmp_path):
     normale = esame(tmp_path / "1", caricatore=car, p=q)
     doppi = esame(tmp_path / "2", caricatore=car, p=q, moltiplicatore_costi=2, con_baseline_a=False)
     assert doppi["opzioni"] == {"moltiplicatore_costi": 2.0, "ritardo_barre": 0, "riempimento_intrabarra": "stop_prima",
-                                "con_baseline_a": False}
+                                "con_baseline_a": False, "terreno": {"edizione": 1, "ingresso": "mercato"}}
     t1 = [json.loads(r) for r in Path(normale["file"]["trade"]).read_text("utf-8").splitlines()]
     t2 = [json.loads(r) for r in Path(doppi["file"]["trade"]).read_text("utf-8").splitlines()]
     assert [(t["ts_entrata"], t["simbolo"]) for t in t1] == [(t["ts_entrata"], t["simbolo"]) for t in t2]
@@ -1145,16 +1166,18 @@ class CaricatoreSenzaBtc(CaricatoreFinto):
 
 @dataclasses.dataclass(frozen=True)
 class CaricatoreGuastoAlleSfasate(CaricatoreFinto):
-    """Il caricatore finto, ma la seconda lettura di ``guasto_alle_sfasate`` (il pezzo delle sfasate) fallisce.
+    """Il caricatore finto, ma la terza lettura di ``guasto_alle_sfasate`` (il pezzo delle sfasate) fallisce.
 
-    Conta le letture in ``CHIAMATE``: vale solo con ``processi=1``.
+    Le letture di una moneta sono, nell'ordine: le righe del paniere (nel processo principale, dal 14 ott 2026), il
+    pezzo della fase 1, il pezzo delle sfasate. Conta le letture in ``CHIAMATE``: vale solo con ``processi=1``.
     """
 
     guasto_alle_sfasate: str = ""
+    letture_prima_del_guasto: int = 2  # 2: fallisce la terza lettura (le sfasate); 1: la seconda (la fase 1)
 
     def serie(self, simbolo, timeframe, inizio, fine):
-        if simbolo == self.guasto_alle_sfasate and any(c[0] == simbolo for c in CHIAMATE):
-            raise RuntimeError("guasto simulato nelle sfasate")
+        if simbolo == self.guasto_alle_sfasate and sum(1 for c in CHIAMATE if c[0] == simbolo) >= self.letture_prima_del_guasto:
+            raise RuntimeError("guasto simulato nelle sfasate" if self.letture_prima_del_guasto >= 2 else "guasto simulato")
         return super().serie(simbolo, timeframe, inizio, fine)
 
 
@@ -1529,6 +1552,152 @@ def test_la_moneta_su_cui_la_b_non_entra_resta_fuori_dalla_b_di_gruppo(tmp_path,
     assert any("(b)" in m and "CCCUSDT" in m for m in ris["motivi_non_valutabile"])
     assert ris["valutabile"] is False and ris["t"] == -math.inf and ris["candidato"] is False
     assert ris["baseline_a"]["valutabile"] is True
+
+
+def test_il_paniere_arriva_alla_variante_con_il_simbolo_e_senza_futuro(tmp_path):
+    """Contratto, punto 3 (14 ott 2026): le righe giornaliere del paniere (monete dell'esame + BTCUSDT) e il simbolo
+    arrivano alla variante; la vista non va oltre la chiusura dell'ultima barra; le righe sono le stesse per ogni
+    moneta e stanno nell'impronta dei dati; i numeri di una variante che non le usa non cambiano."""
+    car = CaricatoreFinto()
+    modulo = gruppo.carica_modulo_variante(VARIANTE)
+    modulo.azzera_registro()
+    ris = esame(tmp_path, p=dict(P, sonda=True, registra_ingressi=False))
+    sonde = modulo.REGISTRO["sonde"]
+    assert sonde["chiamate"] > 1000 and sonde["violazioni"] == 0 and sonde["creazioni_non_vuote"] == 0
+    # le righe: dal primo giorno di BTCUSDT del caricatore finto (2021-01-01) alla fine della costruzione, un giorno
+    # per riga; le monete sono le tre piu' BTCUSDT
+    pan = ris["paniere"]
+    fine = _data(ris["date"]["fine_costruzione"])  # il taglio delle tre monete finte, non quello delle 80 vere
+    assert pan["monete"] == 4 and pan["primo_ts"] == ms(date(2021, 1, 1))
+    assert pan["ultimo_close_ts"] == ms(fine + timedelta(days=1)) - 1
+    assert pan["giorni"] == (fine + timedelta(days=1) - date(2021, 1, 1)).days
+    assert len(pan["impronta"]) == 64
+    for s in ("AAAUSDT", "BBBUSDT", "CCCUSDT"):
+        assert ris["per_moneta"][s]["trade"] >= 0
+    p1 = pezzi(ris, "fase1")
+    assert {p1[s]["dati"]["paniere"]["impronta"] for s in p1} == {pan["impronta"]}
+    # le righe rifatte qui dal caricatore: le stesse (impronta) e con le chiusure della moneta giorno per giorno
+    righe, info = gruppo._righe_paniere(car, {s: date.fromisoformat(primo) for s, primo, _ in TRE}, fine, False)
+    assert info["impronta"] == pan["impronta"] and len(righe) == pan["giorni"]
+    serie = car.serie("CCCUSDT", "1d", date(2022, 7, 1), fine)
+    per_giorno = {r.ts: r for r in righe}
+    for c in serie["candele"]:
+        assert per_giorno[c.ts].chiusure["CCCUSDT"] == c.close
+    manca = ms(date(2022, 8, 10))  # un buco di CCCUSDT: la riga c'e', la chiusura no
+    assert "CCCUSDT" not in per_giorno[manca].chiusure and "AAAUSDT" in per_giorno[manca].chiusure
+    assert "AAAUSDT" in per_giorno[ms(date(2022, 9, 10))].sotto_liquidita  # settembre 2022 sotto la liquidita'
+    assert "AAAUSDT" not in per_giorno[ms(date(2022, 10, 1))].sotto_liquidita
+    with pytest.raises(TypeError):
+        per_giorno[manca].chiusure["CCCUSDT"] = 1.0
+    # i numeri di prima: l'esame senza sonda sulle stesse monete da' lo stesso risultato della fixture
+    # (la variante d'esempio non usa il paniere)
+    senza = esame(tmp_path / "senza", p=dict(P, registra_ingressi=False), nome="GRUPPO-002")
+    assert senza["metriche"] == ris["metriche"] and senza["baseline_b"]["media"] == ris["baseline_b"]["media"]
+
+
+def test_una_variante_di_classifica_usa_il_paniere_e_il_simbolo(tmp_path):
+    """Una variante che entra solo quando la propria moneta e' prima nel paniere per rendimento a 5 giorni: gli
+    ingressi sono quelli che si calcolano a mano dalle righe del paniere, e la stessa regola vale per le tre monete."""
+    car = CaricatoreFinto(mesi_sotto=(), buchi=())
+    p = dict(P, registra_ingressi=False, classifica={"n_giorni": 5, "prime": 1})
+    ris = esame(tmp_path, caricatore=car, p=p)
+    fine = _data(ris["date"]["fine_costruzione"])
+    righe, _ = gruppo._righe_paniere(car, {s: date.fromisoformat(primo) for s, primo, _ in TRE}, fine, False)
+    indice = {r.ts: i for i, r in enumerate(righe)}
+    libera = esame(tmp_path / "libera", caricatore=car, p=dict(P, registra_ingressi=False), nome="GRUPPO-002")
+    n_trade = 0
+    for s in ("AAAUSDT", "BBBUSDT", "CCCUSDT"):
+        trade = righe_trade(pezzi(ris, "fase1")[s]["dati"])
+        n_trade += len(trade)
+        for t in trade:
+            giorno_segnale = t["ts_entrata"] - GIORNO  # ingresso a mercato all'apertura della barra dopo il segnale
+            rango, _ = statistica_paniere().classifica_ultimo_giorno(righe[: indice[giorno_segnale] + 1], 5)
+            assert rango[s] == 1, (s, giorno_segnale, rango)
+        assert len(trade) <= libera["per_moneta"][s]["trade"]
+    assert 0 < n_trade < libera["metriche"]["trade"]
+
+
+def statistica_paniere():
+    from research.src import paniere
+    return paniere
+
+
+def _data(valore) -> date:
+    return date.fromisoformat(valore) if isinstance(valore, str) else valore
+
+
+def test_terreno_seconda_edizione_dal_file_congelato(tmp_path):
+    """PROTOCOLLO_2, correzione 5: il terreno d'ingresso della seconda edizione viene da parametri_2.yaml congelato."""
+    terreno = gruppo.terreno_seconda_edizione()
+    assert terreno["edizione"] == 2 and terreno["ingresso"] == "limite" and terreno["limite_validita_barre"] == 1
+    assert terreno["limite_condizione"] == "attraversato" and terreno["commissione_maker_per_lato"] == 0.0002
+    assert terreno["impronta_parametri_2"] == hashlib.sha256(gruppo.PERCORSO_PARAMETRI_2.read_bytes()).hexdigest()
+    par = gruppo.parametri_moneta(0.001, terreno="seconda_edizione")
+    assert (par.ingresso, par.limite_validita_barre, par.limite_condizione, par.commissione_maker_per_lato) == \
+        ("limite", 1, "attraversato", 0.0002)
+    assert par.slippage_per_lato == 0.001 and par.uscita_segnale == "mercato"  # lo scarto della scheda resta sulle uscite
+    assert gruppo.parametri_moneta(0.001).ingresso == "mercato" == gruppo.parametri_moneta(0.001, terreno="prima_edizione").ingresso
+    # un file non congelato, o con un altro ingresso, non vale
+    bozza = tmp_path / "parametri_2.yaml"
+    testo = gruppo.PERCORSO_PARAMETRI_2.read_text("utf-8")
+    bozza.write_text(testo.replace("stato: congelato", "stato: bozza_passo_0"), "utf-8")
+    with pytest.raises(ValueError, match="congelato"):
+        gruppo.terreno_seconda_edizione(bozza)
+    bozza.write_text(testo.replace("tipo: limite", "tipo: mercato"), "utf-8")
+    with pytest.raises(ValueError, match="limite"):
+        gruppo.terreno_seconda_edizione(bozza)
+    with pytest.raises(ValueError, match="terreno sconosciuto"):
+        gruppo.parametri_moneta(0.001, terreno="terza_edizione")
+
+
+def test_il_terreno_della_seconda_edizione_entra_a_limite(tmp_path):
+    """Con ``terreno="seconda_edizione"`` l'esame entra con l'ordine limite alla chiusura della candela di segnale (prezzo
+    d'ingresso = quella chiusura, commissione maker), lo riporta nelle opzioni e cambia l'impronta dell'esame; con il
+    terreno predefinito entra a mercato all'apertura della barra dopo, come prima."""
+    car = CaricatoreFinto(mesi_sotto=(), buchi=())
+    p = dict(P, registra_ingressi=False)
+    mercato = esame(tmp_path / "m", caricatore=car, p=p)
+    limite = esame(tmp_path / "l", caricatore=car, p=p, nome="GRUPPO-002", terreno="seconda_edizione")
+    assert mercato["opzioni"]["terreno"] == {"edizione": 1, "ingresso": "mercato"}
+    assert limite["opzioni"]["terreno"]["ingresso"] == "limite" and limite["opzioni"]["terreno"]["edizione"] == 2
+    assert limite["impronte"]["esame"] != mercato["impronte"]["esame"]
+    assert limite["metriche"]["trade"] > 0
+    fine = _data(limite["date"]["fine_costruzione"])
+    for s, primo, scarto in TRE:
+        candele = car.serie(s, "1d", date.fromisoformat(primo), fine)["candele"]
+        per_ts = {c.ts: i for i, c in enumerate(candele)}
+        for tr in righe_trade(pezzi(limite, "fase1")[s]["dati"]):
+            segnale = candele[per_ts[tr["ts_entrata"]] - 1]
+            assert tr["entrata"] == segnale.close  # riempito al prezzo dell'ordine, senza scarto
+        for tr in righe_trade(pezzi(mercato, "fase1")[s]["dati"]):
+            barra = candele[per_ts[tr["ts_entrata"]]]
+            assert tr["entrata"] == pytest.approx(barra.open * (1 + scarto if tr["direzione"] == "long" else 1 - scarto))
+    # la stima dei trade e il controllo positivo accettano lo stesso argomento
+    conta = gruppo.conta_trade_di_gruppo(VARIANTE, p, "1d", processi=1, monete=monete_di(car), caricatore=car,
+                                         terreno="seconda_edizione")
+    assert conta["opzioni"]["terreno"]["ingresso"] == "limite"
+    with pytest.raises(ValueError, match="terreno sconosciuto"):
+        esame(tmp_path / "x", caricatore=car, p=p, nome="GRUPPO-003", terreno="x")
+
+
+def test_in_campagna_il_terreno_lo_decide_il_marcatore(progetto):
+    """Con il marcatore PANIERE il terreno e' la seconda edizione e la sessione non puo' chiederne un altro; con GRUPPO o
+    una moneta resta la prima; senza marcatore sceglie chi chiama."""
+    assert gruppo._terreno(None, "x")["ingresso"] == "mercato"
+    assert gruppo._terreno("seconda_edizione", "x")["ingresso"] == "limite"
+    (progetto / "research" / "campagne" / "PANIERE").mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(MONETE_CSV_VERO, progetto / "research" / "campagne" / "PANIERE" / "monete.csv")
+    metti_marcatore(progetto, "PANIERE")
+    assert gruppo._terreno(None, "x")["ingresso"] == "limite"
+    assert gruppo._terreno("seconda_edizione", "x")["ingresso"] == "limite"
+    with pytest.raises(dati.VietatoInCampagna, match="terreno"):
+        gruppo._terreno("prima_edizione", "esame_di_gruppo")
+    metti_marcatore(progetto, "GRUPPO")
+    assert gruppo._terreno(None, "x")["ingresso"] == "mercato"
+    with pytest.raises(dati.VietatoInCampagna):
+        gruppo._terreno("seconda_edizione", "esame_di_gruppo")
+    metti_marcatore(progetto, "ETHUSDT")
+    assert gruppo._terreno(None, "x")["ingresso"] == "mercato"
 
 
 def test_buy_and_hold_con_gli_stessi_pesi_anche_con_una_moneta_assente(tmp_path):
