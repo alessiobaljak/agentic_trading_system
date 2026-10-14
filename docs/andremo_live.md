@@ -3764,3 +3764,10 @@ sessione non legge le notifiche finché non ha fatto il pull, la frase stavolta 
 sessione (regole del gruppo, sezione 12, punto 1: «può scrivere lui la frase»). Lezione: il canale delle frasi era
 stato provato l'11 ottobre su una sessione di prova SENZA marcatore, dove il guardiano non c'è; con il marcatore lo
 strumento era vietato.
+
+### 14 ottobre, 10:41 ora italiana: la campagna del paniere è ripartita
+
+Il proprietario ha incollato la frase nella sessione; alle 10:38 il pull e i test del guardiano (1.823 verdi, dal
+riassunto della sessione), poi la Fase 0: commit «PANIERE Fase 0: 0 monete scaricate su 80, periodi e script di scarico
+pronti» (10:38) e «calcolo in corso fino alle 09:10 UTC circa» (10:39, lo scarico dei dati giornalieri). Da qui le frasi
+del coordinamento le legge da sola (strumento delle notifiche ammesso). Controllo orario attivo.
