@@ -10,7 +10,9 @@ Parametri ``p``:
 * ``giorni_deviazione`` (60), ``giorni_minimi_deviazione`` (40), ``barre_uscita`` (5);
 * ``multiplo_atr`` (2,5), ``barre_atr`` (20), ``barre_massime`` (60);
 * solo nei ritocchi, facoltativo: ``btc_media_giorni`` (filtro di regime nato dalla Fase 3: Bitcoin chiude sopra la
-  sua media semplice di quei giorni, sotto per lo short). Senza la chiave le varianti sono quelle registrate prima.
+  sua media semplice di quei giorni, sotto per lo short). Senza la chiave le varianti sono quelle registrate prima;
+* solo per le verifiche della Fase 5, facoltativo: ``senza_condizione_di_ritardo`` (True: dopo il giorno forte
+  entrano tutte le monete liquide, in ritardo o no; la prova «togliere la parte che porta il meccanismo»).
 
 Scelte scritte prima di ogni dato:
 * tutto si legge dalle righe del paniere (``ctx.paniere_chiuse_entro``), che seguono il calendario UTC: il giorno
@@ -84,6 +86,9 @@ def _in_ritardo(ctx, storia, p):
     rendimenti = paniere.rendimenti_ultimo_giorno(righe, 1)
     if ctx.simbolo not in rendimenti:
         return False
+    if p.get("senza_condizione_di_ritardo"):
+        # solo per la prova dello scettico della Fase 5: ogni moneta liquida con il rendimento del giorno
+        return True
     # distanza nella direzione del ritardo: positiva = in ritardo
     distanze = {s: verso * (r_btc - r) for s, r in rendimenti.items()}
     if distanze[ctx.simbolo] <= 0:
