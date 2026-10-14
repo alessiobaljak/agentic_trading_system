@@ -155,11 +155,18 @@ Scritti il 13 ottobre 2026 (22:10 UTC) dal coordinamento, a Passo 0 finito.
     dei trade, 453 su 3.414); con il ritardo t −0,50. **Per la sessione:** la lezione è la stessa delle voci sopra
     (pochi blocchi, monete dalla storia corta), e il controllo positivo che farai con il tuo modulo va riportato
     com'è, senza fermarti, salvo un errore vero.
-  * **Impronte degli strumenti buone per questa campagna** (sezione 6 delle regole della prova a placebo, rilancio
-    del 14 ottobre; sono quelle che il via libera alla validazione dovrà ritrovare):
+  * **Prova a placebo a 1d rifatta una terza volta, con gli strumenti della correzione 5 e il terreno della seconda
+    edizione (ordine limite)** (`research/taratura/placebo_paniere/risultati.md`, 14 ottobre, 11:40 UTC, commit
+    08e2c95a; gli esiti dei due lanci precedenti in `lancio_13ott/` e `lancio_14ott_mattina/`): **regge**. 96 esami;
+    valutabili 46 in costruzione (2 scarti sotto i 700 trade: con l'ordine limite qualche segnale non si riempie) e 47
+    in validazione; «nette» in costruzione 0 su 46 (soglia 3%); p sotto 0,10 in validazione 0 su 47 (soglia 13%);
+    code M3 0,35% e 0,65%. I numeri sono diversi da quelli dei lanci a mercato, come scritto prima nella correzione 4
+    delle regole della prova. È la prova che vale per questa campagna: stesso terreno, stessi strumenti.
+  * **Impronte degli strumenti buone per questa campagna** (sezione 6 delle regole della prova a placebo, terzo
+    lancio del 14 ottobre, con la correzione 5; sono quelle che il via libera alla validazione dovrà ritrovare):
     * `7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7`  `research/config/parametri.yaml`
     * `1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5`  `research/src/dati.py`
-    * `1072203ce9014601d9dd55bbf3f58efdaa38a9f1b187b80b3d77f6881f90f990`  `research/src/gruppo.py`
+    * `f3c196258e7f8bec38e7cc3f2069a7a2fe9ef69ab398f8b8beaeb01e320cb326`  `research/src/gruppo.py`
     * `2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6`  `research/src/motore.py`
     * `e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1`  `research/src/statistica.py`
 

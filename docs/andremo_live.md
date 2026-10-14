@@ -3803,3 +3803,13 @@ di prima invariati senza paniere e con il terreno della prima edizione; tre test
 paniere. La prova a placebo a un giorno si rifà con il terreno della seconda edizione (atteso: numeri diversi, esame che
 regge; regole della prova, correzione 4), e il controllo positivo con lei; poi la correzione va nel branch della
 campagna, ferma allo STOP.
+
+### 14 ottobre, 13:45 ora italiana: prova a placebo rifatta con l'ordine limite, regge; la correzione va nel branch
+
+Terzo lancio della prova sui prezzi mescolati a un giorno (11:54-13:40, commit 08e2c95a, con gli strumenti della
+correzione 5 e il terreno della seconda edizione): regge. 96 esami, 46 valutabili in costruzione (2 scarti sotto i 700
+trade: con l'ordine limite qualche segnale non si riempie) e 47 in validazione; 0 «nette» su 46, 0 con p sotto 0,10 su
+47, code 0,35% e 0,65% (`research/taratura/placebo_paniere/risultati.md`; i lanci precedenti in `lancio_13ott/` e
+`lancio_14ott_mattina/`). Impronte buone scritte nelle regole della prova e della campagna. Correzione portata nel
+branch della campagna con due commit sopra a7210926 (strumenti e test; regole della campagna) e frase di correzione
+alla sessione, che riparte dalla Fase 2 con tutte le 18 varianti.

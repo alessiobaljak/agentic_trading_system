@@ -134,5 +134,8 @@ correzione 5; `research/CHANGELOG.md`). Ricontrolli con gli strumenti nuovi e il
   con 7 blocchi (non netto), con il ritardo t −0,28; short senza ritardo non valutabile (16 monete, 13,3% dei trade),
   con il ritardo t −0,50. Con l'ordine limite i trade cambiano poco (3.519 contro 3.535 long): a barre giornaliere
   quasi ogni ordine alla chiusura si riempie.
-* **Prova a placebo a 1d** con il terreno della seconda edizione: in corso (lancio delle 09:50 UTC); atteso scritto
-  prima nelle regole della prova (correzione 4): numeri diversi dal 13 ottobre, esame che deve reggere.
+* **Prova a placebo a 1d** con il terreno della seconda edizione (lancio delle 09:54 UTC, finita alle 11:40 UTC,
+  commit 08e2c95a): **regge**. 96 esami; valutabili 46 in costruzione (2 scarti sotto i 700 trade: con l'ordine
+  limite qualche segnale non si riempie) e 47 in validazione; «nette» 0 su 46; p sotto 0,10 0 su 47; code M3 0,35% e
+  0,65%; numeri diversi dai lanci a mercato, come atteso. Impronte buone nelle regole della prova (sezione 6) e della
+  campagna (sezione 6). **La campagna riparte** con la correzione nel suo branch.
