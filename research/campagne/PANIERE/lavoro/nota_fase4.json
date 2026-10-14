@@ -1,0 +1,5 @@
+{
+ "tipo": "correzione",
+ "corregge": ["PANIERE-073", "PANIERE-074"],
+ "testo": "Errore mio in codice/fase4.py: per PANIERE-043 (C1, «tutte le monete in ritardo») il parametro monete_in_ritardo vale 0 come SCELTA (nessun taglio), non come numero; la robustezza lo ha spostato a -1 (PANIERE-073: tiene tutte le in ritardo tranne l'ultima) e a 1 (PANIERE-074: solo la più in ritardo, 87 trade, fuori dai minimi). Sono casi che la Fase 4 non prevede (un parametro di scelta non si sposta): non contano. I casi validi della robustezza di PANIERE-043 sono 12 (k, giorni_deviazione, giorni_minimi_deviazione, barre_uscita, multiplo_atr, barre_atr, barre_massime, due per parametro)."
+}

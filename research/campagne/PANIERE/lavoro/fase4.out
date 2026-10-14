@@ -1,0 +1,39 @@
+PANIERE-040 costi doppi risultato PANIERE-049 t contro (b) 3.1700565410386083 netta True R 0.10943884091524766
+PANIERE-040 ritardo di una barra risultato PANIERE-050 t contro (b) 1.58378333522156 netta False R 0.061542604990365214
+PANIERE-040 regola intra-barra opposta risultato PANIERE-051 t contro (b) 3.2402064286123284 netta True R 0.1304596787899394
+PANIERE-040 robustezza k 1.0 risultato PANIERE-052 t contro (b) 2.4111423590919028 netta True R 0.08610986665852782
+PANIERE-040 robustezza k 1.5 risultato PANIERE-053 t contro (b) 2.381459039219447 netta True R 0.13193376263933854
+PANIERE-040 robustezza monete_in_ritardo 16 risultato PANIERE-054 t contro (b) 2.983762084092302 netta True R 0.12122297074144274
+PANIERE-040 robustezza monete_in_ritardo 24 risultato PANIERE-055 t contro (b) 3.2511998307554393 netta True R 0.1372764619936675
+PANIERE-040 robustezza giorni_deviazione 48 risultato PANIERE-056 t contro (b) 2.913309174023367 netta True R 0.11462661435933266
+PANIERE-040 robustezza giorni_deviazione 72 risultato PANIERE-057 t contro (b) 3.6206259032435106 netta True R 0.12324814230205776
+PANIERE-040 robustezza giorni_minimi_deviazione 32 risultato PANIERE-058 t contro (b) 3.2402064286123284 netta True R 0.1304596787899394
+PANIERE-040 robustezza giorni_minimi_deviazione 48 risultato PANIERE-059 t contro (b) 3.2402064286123284 netta True R 0.1304596787899394
+PANIERE-040 robustezza barre_uscita 2 risultato PANIERE-060 t contro (b) 2.683743327287875 netta True R 0.09023864572964083
+PANIERE-040 robustezza barre_uscita 4 risultato PANIERE-061 t contro (b) 2.45892030079006 netta True R 0.12022836168663305
+PANIERE-040 robustezza multiplo_atr 2.0 risultato PANIERE-062 t contro (b) 3.08155568762235 netta True R 0.15566967973594184
+PANIERE-040 robustezza multiplo_atr 3.0 risultato PANIERE-063 t contro (b) 3.350995069137089 netta True R 0.11241989754396699
+PANIERE-040 robustezza barre_atr 16 risultato PANIERE-064 t contro (b) 3.2373747459819318 netta True R 0.12499237233424187
+PANIERE-040 robustezza barre_atr 24 risultato PANIERE-065 t contro (b) 3.3217613335376583 netta True R 0.13223010237921098
+PANIERE-040 robustezza barre_massime 48 risultato PANIERE-066 t contro (b) 3.2402064286123284 netta True R 0.1304596787899394
+PANIERE-040 robustezza barre_massime 72 risultato PANIERE-067 t contro (b) 3.2402064286123284 netta True R 0.1304596787899394
+PANIERE-043 costi doppi risultato PANIERE-068 t contro (b) 3.1825937644369238 netta True R 0.11381361254885164
+PANIERE-043 ritardo di una barra risultato PANIERE-069 t contro (b) 1.0755044780446803 netta False R 0.05276245910342825
+PANIERE-043 regola intra-barra opposta risultato PANIERE-070 t contro (b) 3.195282229599532 netta True R 0.13473663270148298
+PANIERE-043 robustezza k 1.0 risultato PANIERE-071 t contro (b) 2.461622903949149 netta True R 0.09248712624516574
+PANIERE-043 robustezza k 1.5 risultato PANIERE-072 t contro (b) 2.088323757051464 netta False R 0.1254774810309755
+PANIERE-043 robustezza monete_in_ritardo -1 risultato PANIERE-073 t contro (b) 3.121374524972533 netta True R 0.13597642133193333
+PANIERE-043 robustezza monete_in_ritardo 1 non conta PANIERE-074 ['trade stimati 87 sotto 700']
+PANIERE-043 robustezza giorni_deviazione 48 risultato PANIERE-075 t contro (b) 2.5829877058224673 netta True R 0.11295096448991429
+PANIERE-043 robustezza giorni_deviazione 72 risultato PANIERE-076 t contro (b) 3.081626648372596 netta True R 0.13360009049549296
+PANIERE-043 robustezza giorni_minimi_deviazione 32 risultato PANIERE-077 t contro (b) 3.195282229599532 netta True R 0.13473663270148298
+PANIERE-043 robustezza giorni_minimi_deviazione 48 risultato PANIERE-078 t contro (b) 3.195282229599532 netta True R 0.13473663270148298
+PANIERE-043 robustezza barre_uscita 2 risultato PANIERE-079 t contro (b) 2.7404511183464733 netta True R 0.08842439747152853
+PANIERE-043 robustezza barre_uscita 4 risultato PANIERE-080 t contro (b) 2.200362489168538 netta True R 0.11701689142479414
+PANIERE-043 robustezza multiplo_atr 2.0 risultato PANIERE-081 t contro (b) 2.9802334512341684 netta True R 0.15991141042375367
+PANIERE-043 robustezza multiplo_atr 3.0 risultato PANIERE-082 t contro (b) 3.2861042525917887 netta True R 0.11599878535835785
+PANIERE-043 robustezza barre_atr 16 risultato PANIERE-083 t contro (b) 3.2553508960496123 netta True R 0.13325560903272834
+PANIERE-043 robustezza barre_atr 24 risultato PANIERE-084 t contro (b) 3.245962446010511 netta True R 0.1343048747000107
+PANIERE-043 robustezza barre_massime 48 risultato PANIERE-085 t contro (b) 3.195282229599532 netta True R 0.13473663270148298
+PANIERE-043 robustezza barre_massime 72 risultato PANIERE-086 t contro (b) 3.195282229599532 netta True R 0.13473663270148298
+fatto

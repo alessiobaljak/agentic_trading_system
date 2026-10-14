@@ -1,0 +1,25 @@
+{
+ "testo": "Esito della Fase 4 (regole del gruppo, sezione 6, punto 2) per i due candidati, sui trade sommati di costruzione. Tutti e due SCARTATI: non vanno in validazione.",
+ "PANIERE-040": {
+  "costi_doppi": "superata: PANIERE-049, t contro la (b) a costi doppi 3,17 (netta), R medio +0,109 > 0",
+  "ritardo_di_una_barra": "NON superata: PANIERE-050, t 1,58 contro 3,24 senza ritardo = 0,49 volte, sotto la metà (R +0,062)",
+  "regola_intrabarra_opposta": "nessuna differenza (PANIERE-051, stessi numeri: le varianti non hanno target)",
+  "robustezza": "superata: 16 casi su 16 contano e sono netti contro la (b) (t da 2,38 a 3,62); i 4 casi di giorni_minimi_deviazione e barre_massime non toccano la regola e reggono per costruzione (stessi numeri del candidato)",
+  "timeframe_adiacenti": "non applicabile: il terreno della seconda edizione è solo 1d (regole.md, sezione 2) e i dati a 12 ore non si scaricano; dichiarato",
+  "stabilita": "superata: R medio sopra la b ripesata nei 3 anni con almeno 100 trade (2020 +0,081, 2021 +0,138, 2022 +0,016)",
+  "estremi": "superati: senza i 30 trade migliori +0,080, senza i 3 giorni migliori +0,083, senza le 3 monete migliori +0,117, contro b intorno a +0,002",
+  "liquidazione": "NON superata: 6 violazioni (UNFIUSDT 2021-05-21 e 2021-05-25, PEOPLEUSDT 2022-05-16, WAVESUSDT 2022-05-20, BELUSDT e BLZUSDT 2022-06-20): stop a 2,5 ATR(20) fra il 79% e il 95% del prezzo dopo crolli, oltre 0,8 volte la distanza della liquidazione"
+ },
+ "PANIERE-043": {
+  "costi_doppi": "superata: PANIERE-068, t 3,18 (netta), R +0,114",
+  "ritardo_di_una_barra": "NON superata: PANIERE-069, t 1,08 contro 3,20 = 0,34 volte (R +0,053)",
+  "regola_intrabarra_opposta": "nessuna differenza (PANIERE-070)",
+  "robustezza": "superata: 12 casi validi (PANIERE-073 e 074 non contano, correzione sopra), 11 netti; k 1,5 non netto (t 2,09, positivo)",
+  "timeframe_adiacenti": "non applicabile, come sopra",
+  "stabilita": "superata: 2020 +0,090, 2021 +0,133, 2022 +0,046, sempre sopra la b ripesata",
+  "estremi": "superati: +0,099, +0,083, +0,124",
+  "liquidazione": "NON superata: 8 violazioni (le 6 di PANIERE-040 tranne la coppia BEL/BLZ già contata, più GTCUSDT 2021-12-12 e KNCUSDT 2022-05-16; in tutto UNFI x2, GTC, KNC, PEOPLE, WAVES, BEL, BLZ), stesse cause"
+ },
+ "il_crollo_col_ritardo": "Prima di parlare di errore si guarda se il lookahead è possibile (lezioni/metodo.md, «Il test del ritardo»): le funzioni della variante leggono solo la storia chiusa della moneta e le righe del paniere e di BTCUSDT da ctx, che gruppo.py limita alla chiusura dell'ultima barra ricevuta (contratto, punto 3, con i suoi test); il controllo positivo dello stesso modulo ha avuto il crollo atteso col ritardo (PANIERE-012 e 014). Inferito: un effetto breve. La Fase 3 mostra che una parte del recupero arriva già il giorno dell'ingresso (+0,08 R alla prima chiusura): col ritardo di un giorno quella parte si perde. Il protocollo dice che un candidato col crollo non va avanti finché l'errore non è trovato; qui non serve decidere, perché la liquidazione lo esclude comunque.",
+ "esito": "Nessun candidato sopravvive alla Fase 4. Nessuna validazione da fare."
+}
