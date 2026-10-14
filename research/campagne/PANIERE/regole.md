@@ -143,7 +143,18 @@ Scritti il 13 ottobre 2026 (22:10 UTC) dal coordinamento, a Passo 0 finito.
     ottobre, 06:56 UTC, commit c9bb86ad; i 96 esiti del 13 ottobre sono in `lancio_13ott/`): **regge**, con i 96
     esami identici bit per bit a quelli del 13 ottobre (nessuna placebo aveva monete senza ingressi, come atteso):
     47 valutabili per periodo, 0 «nette» su 47 in costruzione, 0 su 47 con p sotto 0,10 in validazione, code M3
-    0,35% e 0,58%.
+    0,35% e 0,58%. (Esiti poi spostati in `lancio_14ott_mattina/`: la prova è stata rifatta una terza volta con il
+    terreno della seconda edizione, voce qui sotto.)
+  * **Controllo positivo a 1d con gli strumenti della correzione 5 e il terreno della seconda edizione (ordine limite)**
+    (`research/passo0_2/controllo_positivo_1d_seconda_edizione.json`, 14 ottobre, 09:50 UTC, stessa regola «rottura»
+    con uscita ATR e tetto di 60 barre, 80 monete): **non passa nella forma del gruppo, ma la (b) adesso si
+    costruisce per il long**. Long senza ritardo: valutabile (le monete su cui la (b) non entra sono 11 e portano il
+    9,6% dei trade, 339 su 3.519: sotto il 10%), R medio +0,38 a trade, contro la (b) t 2,54 e p 0,022: **«netto»**;
+    contro la (a) t 1,48 con 7 blocchi: non netto (è la (a) che manca al controllo, non la (b)); con il ritardo t
+    −0,28: il vantaggio sparisce come deve. Short senza ritardo: ancora non valutabile (16 monete senza (b), 13,3%
+    dei trade, 453 su 3.414); con il ritardo t −0,50. **Per la sessione:** la lezione è la stessa delle voci sopra
+    (pochi blocchi, monete dalla storia corta), e il controllo positivo che farai con il tuo modulo va riportato
+    com'è, senza fermarti, salvo un errore vero.
   * **Impronte degli strumenti buone per questa campagna** (sezione 6 delle regole della prova a placebo, rilancio
     del 14 ottobre; sono quelle che il via libera alla validazione dovrà ritrovare):
     * `7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7`  `research/config/parametri.yaml`

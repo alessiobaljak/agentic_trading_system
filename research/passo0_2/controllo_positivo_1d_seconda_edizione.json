@@ -1,0 +1,288 @@
+{
+ "regola": "PROTOCOLLO_2, correzioni 3 e 5 (14 ott 2026): monete senza ingressi fuori dalla (b) al 10%; terreno della seconda edizione (ordine limite) e paniere nel contesto",
+ "impronte_strumenti": {
+  "research/src/gruppo.py": "f3c196258e7f8bec38e7cc3f2069a7a2fe9ef69ab398f8b8beaeb01e320cb326",
+  "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+  "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+  "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+  "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+ },
+ "long": {
+  "passa": false,
+  "condizioni": {
+   "batte_nettamente_a_e_b_senza_ritardo": false,
+   "t_con_ritardo_sotto_meta_di_quello_senza": true
+  },
+  "direzione": "long",
+  "timeframe": "1d",
+  "t_senza_ritardo": 2.5385150176658473,
+  "t_con_ritardo": -0.28365852484977655,
+  "senza_ritardo": {
+   "t": 2.5385150176658473,
+   "p_value": 0.022084645046506597,
+   "valutabile": true,
+   "motivi_non_valutabile": [],
+   "trade": 3519,
+   "r_medio": 0.3792692183694561,
+   "blocco": 477,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": 1.4797342016952473,
+    "media": 0.04139927834996721,
+    "motivo": null,
+    "errore_differenza": 0.22833150685603576,
+    "monete_lasciate_fuori": [],
+    "quota_trade_candidato_lasciati_fuori": 0.0
+   },
+   "baseline_b": {
+    "valutabile": true,
+    "netta": true,
+    "t": 2.5385150176658473,
+    "media": 0.033624759778850495,
+    "motivo": null,
+    "errore_differenza": 0.13616009997389109,
+    "monete_senza_ingressi": [
+     "BLZUSDT",
+     "CELRUSDT",
+     "CTSIUSDT",
+     "KLAYUSDT",
+     "LPTUSDT",
+     "LRCUSDT",
+     "NKNUSDT",
+     "RLCUSDT",
+     "STMXUSDT",
+     "SXPUSDT",
+     "XEMUSDT"
+    ],
+    "trade_candidato_senza_ingressi": 339,
+    "quota_trade_candidato_senza_ingressi": 0.09633418584825235,
+    "n_monete": 80,
+    "n_monete_combinazione": 69,
+    "m_parziali": 0,
+    "n_simulazioni": 200
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.05392764600458825,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 38.378957785714746,
+   "stabilita_superata": true,
+   "estremi_tutte_superate": true,
+   "impronte_strumenti": {
+    "research/src/gruppo.py": "f3c196258e7f8bec38e7cc3f2069a7a2fe9ef69ab398f8b8beaeb01e320cb326",
+    "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+    "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+    "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+    "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+   }
+  },
+  "con_ritardo": {
+   "t": -0.28365852484977655,
+   "p_value": 0.6068970816787094,
+   "valutabile": true,
+   "motivi_non_valutabile": [],
+   "trade": 3384,
+   "r_medio": -0.018826421624164473,
+   "blocco": 470,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.16222436290058853,
+    "media": 0.02284580354467471,
+    "motivo": null,
+    "errore_differenza": 0.2568801900265498,
+    "monete_lasciate_fuori": [],
+    "quota_trade_candidato_lasciati_fuori": 0.0
+   },
+   "baseline_b": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.28365852484977655,
+    "media": 0.00939592677211661,
+    "motivo": null,
+    "errore_differenza": 0.09949409562510914,
+    "monete_senza_ingressi": [
+     "CTSIUSDT",
+     "KLAYUSDT",
+     "LPTUSDT"
+    ],
+    "trade_candidato_senza_ingressi": 36,
+    "quota_trade_candidato_senza_ingressi": 0.010638297872340425,
+    "n_monete": 80,
+    "n_monete_combinazione": 77,
+    "m_parziali": 0,
+    "n_simulazioni": 200
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.053471478908247695,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 33.27307659306971,
+   "stabilita_superata": true,
+   "estremi_tutte_superate": false,
+   "impronte_strumenti": {
+    "research/src/gruppo.py": "f3c196258e7f8bec38e7cc3f2069a7a2fe9ef69ab398f8b8beaeb01e320cb326",
+    "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+    "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+    "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+    "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+   }
+  },
+  "secondi": 130.8
+ },
+ "short": {
+  "passa": false,
+  "condizioni": {
+   "batte_nettamente_a_e_b_senza_ritardo": false,
+   "t_con_ritardo_sotto_meta_di_quello_senza": false
+  },
+  "direzione": "short",
+  "timeframe": "1d",
+  "t_senza_ritardo": -Infinity,
+  "t_con_ritardo": -0.49985343236386276,
+  "senza_ritardo": {
+   "t": -Infinity,
+   "p_value": 1.0,
+   "valutabile": false,
+   "motivi_non_valutabile": [
+    "confronto con la (b) non valutabile: gli ingressi casuali non entrano su 1000XECUSDT, BANDUSDT, BELUSDT, CELRUSDT, CTSIUSDT, GTCUSDT, KLAYUSDT, LINAUSDT, LPTUSDT, NKNUSDT, ONTUSDT, ROSEUSDT, SFPUSDT, STMXUSDT, TOMOUSDT, XEMUSDT: portano 453 trade del candidato su 3414, piu' del 10%"
+   ],
+   "trade": 3414,
+   "r_medio": 0.28357708990543634,
+   "blocco": 468,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": 1.525306126341895,
+    "media": -0.08663399200619415,
+    "motivo": null,
+    "errore_differenza": 0.2427126433953943,
+    "monete_lasciate_fuori": [],
+    "quota_trade_candidato_lasciati_fuori": 0.0
+   },
+   "baseline_b": {
+    "valutabile": false,
+    "netta": false,
+    "t": -Infinity,
+    "media": -0.029431376130149043,
+    "motivo": "gli ingressi casuali non entrano su 1000XECUSDT, BANDUSDT, BELUSDT, CELRUSDT, CTSIUSDT, GTCUSDT, KLAYUSDT, LINAUSDT, LPTUSDT, NKNUSDT, ONTUSDT, ROSEUSDT, SFPUSDT, STMXUSDT, TOMOUSDT, XEMUSDT: portano 453 trade del candidato su 3414, piu' del 10%",
+    "errore_differenza": Infinity,
+    "monete_senza_ingressi": [
+     "1000XECUSDT",
+     "BANDUSDT",
+     "BELUSDT",
+     "CELRUSDT",
+     "CTSIUSDT",
+     "GTCUSDT",
+     "KLAYUSDT",
+     "LINAUSDT",
+     "LPTUSDT",
+     "NKNUSDT",
+     "ONTUSDT",
+     "ROSEUSDT",
+     "SFPUSDT",
+     "STMXUSDT",
+     "TOMOUSDT",
+     "XEMUSDT"
+    ],
+    "trade_candidato_senza_ingressi": 453,
+    "quota_trade_candidato_senza_ingressi": 0.13268892794376097,
+    "n_monete": 80,
+    "n_monete_combinazione": 64,
+    "m_parziali": 0,
+    "n_simulazioni": 200
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.056894576185519435,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 29.938800991701864,
+   "stabilita_superata": null,
+   "estremi_tutte_superate": null,
+   "impronte_strumenti": {
+    "research/src/gruppo.py": "f3c196258e7f8bec38e7cc3f2069a7a2fe9ef69ab398f8b8beaeb01e320cb326",
+    "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+    "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+    "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+    "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+   }
+  },
+  "con_ritardo": {
+   "t": -0.49985343236386276,
+   "p_value": 0.6825113703804517,
+   "valutabile": true,
+   "motivi_non_valutabile": [],
+   "trade": 3291,
+   "r_medio": -0.07271169152732604,
+   "blocco": 455,
+   "n_blocchi": 7,
+   "baseline_a": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.06293738925133517,
+    "media": -0.05448596814086047,
+    "motivo": null,
+    "errore_differenza": 0.2895849923752412,
+    "monete_lasciate_fuori": [],
+    "quota_trade_candidato_lasciati_fuori": 0.0
+   },
+   "baseline_b": {
+    "valutabile": true,
+    "netta": false,
+    "t": -0.49985343236386276,
+    "media": -0.027616587518629224,
+    "motivo": null,
+    "errore_differenza": 0.09021665370073972,
+    "monete_senza_ingressi": [
+     "CTSIUSDT",
+     "GTCUSDT",
+     "KLAYUSDT",
+     "LPTUSDT",
+     "NKNUSDT",
+     "XEMUSDT"
+    ],
+    "trade_candidato_senza_ingressi": 120,
+    "quota_trade_candidato_senza_ingressi": 0.03646308113035551,
+    "n_monete": 80,
+    "n_monete_combinazione": 74,
+    "m_parziali": 0,
+    "n_simulazioni": 200
+   },
+   "pavimento": {
+    "valutabile": true,
+    "pavimento": 0.05925701801264596,
+    "sfasate_con_trade": 200,
+    "durata_massima_barre": 65,
+    "margine": 65,
+    "margine_richiesto": 65
+   },
+   "effetto_grappolo": 27.794458884308014,
+   "stabilita_superata": false,
+   "estremi_tutte_superate": false,
+   "impronte_strumenti": {
+    "research/src/gruppo.py": "f3c196258e7f8bec38e7cc3f2069a7a2fe9ef69ab398f8b8beaeb01e320cb326",
+    "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+    "research/src/motore.py": "2adb94e11196e9af4dcc9f2b07ac42ad6a8cfda1399b5171f019585c8f5f78f6",
+    "research/src/dati.py": "1a5c36e48386b3705b462da9cd402c772e8521863d6230e105e9c4d79c0d5ad5",
+    "research/config/parametri.yaml": "7f530082d7d5119d9e12e99a0bbe44548f9671c9b28aa70f77f97d6c2b4edfa7"
+   }
+  },
+  "secondi": 122.2
+ }
+}

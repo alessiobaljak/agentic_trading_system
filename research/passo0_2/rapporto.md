@@ -121,3 +121,18 @@ il controllo positivo a 1d si rifanno; gli esiti vanno in `research/taratura/pla
   nessuna placebo aveva monete senza ingressi, come atteso). Esito in `research/taratura/placebo_paniere/risultati.md`,
   esiti del 13 ottobre in `lancio_13ott/`. Impronte degli strumenti del rilancio nella sezione 6 delle regole della
   prova e nella sezione 6 delle regole della campagna PANIERE. **La campagna si apre.**
+
+## La correzione 5 (14 ottobre, mattina): il paniere nel contesto e il terreno della seconda edizione
+
+Alla fine della Fase 0 la sessione di campagna ha trovato due mancanze del Passo 0 (punti 3 e 2 della tabella): la
+serie di paniere c'era ma non arrivava alla variante, e gli strumenti costruivano i parametri del motore con l'ingresso
+a mercato della prima edizione. Scelta (a) del proprietario (09:05 UTC): strumenti estesi (`research/PROTOCOLLO_2.md`,
+correzione 5; `research/CHANGELOG.md`). Ricontrolli con gli strumenti nuovi e il terreno della seconda edizione:
+
+* **Controllo positivo** (`controllo_positivo_1d_seconda_edizione.json`, 09:50 UTC): long senza ritardo valutabile
+  (11 monete senza (b), 9,6% dei trade), R medio +0,38, contro la (b) t 2,54 e p 0,022 (netto), contro la (a) t 1,48
+  con 7 blocchi (non netto), con il ritardo t −0,28; short senza ritardo non valutabile (16 monete, 13,3% dei trade),
+  con il ritardo t −0,50. Con l'ordine limite i trade cambiano poco (3.519 contro 3.535 long): a barre giornaliere
+  quasi ogni ordine alla chiusura si riempie.
+* **Prova a placebo a 1d** con il terreno della seconda edizione: in corso (lancio delle 09:50 UTC); atteso scritto
+  prima nelle regole della prova (correzione 4): numeri diversi dal 13 ottobre, esame che deve reggere.
