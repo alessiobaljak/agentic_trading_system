@@ -3813,3 +3813,11 @@ trade: con l'ordine limite qualche segnale non si riempie) e 47 in validazione; 
 `lancio_14ott_mattina/`). Impronte buone scritte nelle regole della prova e della campagna. Correzione portata nel
 branch della campagna con due commit sopra a7210926 (strumenti e test; regole della campagna) e frase di correzione
 alla sessione, che riparte dalla Fase 2 con tutte le 18 varianti.
+
+### 14 ottobre, 14:10 ora italiana: la campagna del paniere è ripartita con tutte le 18 varianti
+
+Frase di correzione ricevuta alle 14:00 (la macchina della sessione ci ha messo 16 minuti a riaccendersi): pull, test
+del guardiano, poi commit alle 14:01 (moduli delle idee B e C, prova del codice delle 18 varianti su prezzi inventati,
+script del controllo positivo), 14:03 (ordine e previsioni delle 18 varianti scritti prima dei conteggi, controllo
+positivo in corso), 14:08 («calcolo in corso fino alle 13:10 UTC circa») e 14:09 (variante 1 registrata, lotto in
+corso). Dal branch solo i titoli. Controllo orario attivo.
