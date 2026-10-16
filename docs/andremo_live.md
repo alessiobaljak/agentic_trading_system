@@ -3864,3 +3864,14 @@ atteso: la ricerca del gate è ferma dal 13 ott per decisione del proprietario (
 senza il proprietario; C5 (costi veri di Binance nel bot e nel gate, sì del 2 ott) era rimandata «a dopo le letture del
 14 ott». Cosa abbiamo capito: il paper perde −0,12R a trade, e circa metà è la selezione (il motore stesso, sugli stessi
 segnali, fa −0,06R) e metà l'esecuzione (−0,06R in più del motore sugli stessi ingressi).
+
+### 16 ottobre, mattina: archiviate le sessioni delle campagne vecchie; il proprietario propone il protocollo 5.1 su BTC
+
+Su richiesta del proprietario archiviate le 22 sessioni di campagna ancora aperte (tutte finite: PANIERE, le 17
+monete della 4.5, BTCUSDT, ETHUSDT con il ricalcolo e SOLUSDT della 4.4); restano fuori questa sessione e due sessioni
+di altri progetti. Branch e file delle campagne restano com'erano (niente cancellato: il proprietario ha chiesto
+l'archiviazione delle sessioni, e sui dati la regola resta «log solo in aggiunta»). Il proprietario ha caricato un
+protocollo nuovo («Protocollo di ricerca strategie su BTC, versione 5.1», bozza del 16 ottobre: una sola moneta,
+catalogo chiuso di indicatori, 40 varianti, ingressi a mercato o limit sotto la chiusura) e chiarito l'obiettivo:
+rifare il gate per avere prima di tutto un METODO efficace, valido e senza buchi di processo, provato su BTC, e poi
+replicarlo sulle altre monete. Il testo non è ancora nel repository: aspetta l'approvazione delle aggiunte proposte.
