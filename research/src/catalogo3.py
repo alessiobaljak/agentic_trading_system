@@ -321,12 +321,19 @@ def _ingresso(e: dict, sc: bool) -> dict:
         _chiavi(e, ("codice",), dove)
         return {"codice": "E10"}
     if cod == "E11":
-        _chiavi(e, ("codice", "soglia"), dove)
+        _chiavi(e, ("codice", "soglia", "lato"), dove)
         s = _numero(e, "soglia", dove)
         if sc and not (_in(s, VALORI["funding_soglie_alte"]) or _in(s, VALORI["funding_soglie_basse"])):
             raise VarianteNonValida("E11: soglia non del catalogo")
-        # SCELTA: una soglia >= +0,03% e' "alta" (funding sopra), le altre "basse" (sotto)
-        lato = "sopra" if s >= 0.0003 - 1e-12 else "sotto"
+        # SCELTA: una soglia del catalogo >= +0,03% e' "alta" (funding sopra), le altre "basse"
+        # (sotto). Il lato, una volta scritto, resta: spostando la soglia nella verifica di
+        # robustezza (+0,03% -> +0,025%) la strategia non diventa un'altra.
+        derivato = "sopra" if s >= 0.0003 - 1e-12 else "sotto"
+        lato = e.get("lato", derivato)
+        if lato not in ("sopra", "sotto"):
+            raise VarianteNonValida("E11: 'lato' deve essere 'sopra' o 'sotto'")
+        if sc and lato != derivato:
+            raise VarianteNonValida(f"E11: con la soglia {s} il lato e' '{derivato}'")
         return {"codice": "E11", "soglia": s, "lato": lato}
     if cod == "E12":
         _chiavi(e, ("codice", "soglia", "n"), dove)
@@ -1174,7 +1181,8 @@ def sposta_periodi(variante: dict, fattore: float) -> dict:
     all'intero (Fase 4, verifica 2: timeframe adiacenti). Orari, soglie e multipli non
     cambiano. La variante restituita va compilata con ``solo_catalogo=False``."""
     v = normalizza(variante, solo_catalogo=False)
-    r = lambda n: max(1, int(round(n * fattore)))  # noqa: E731
+    # SCELTA: arrotondamento all'intero piu' vicino, con le meta' per eccesso (EMA 9 da 1h a 2h -> 5)
+    r = lambda n: max(1, int(math.floor(n * fattore + 0.5)))  # noqa: E731
 
     def periodi(el: Optional[dict]) -> Optional[dict]:
         if not el:

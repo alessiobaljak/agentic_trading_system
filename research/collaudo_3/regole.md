@@ -79,13 +79,21 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
 
 ### Statistiche (sezione 10 e Fase 4)
 
-20. **Entrate casuali**: un solo generatore con seme 2026 per tutte le 1.000 simulazioni, in fila. In ogni
-    simulazione le candele ammesse del periodo si prendono in un ordine a caso; si apre il trade che la
-    variante aprirebbe con un segnale li'; si tiene se non si sovrappone ai trade gia' presi; ci si ferma
-    quando sono tanti quanti quelli del candidato. Un trade occupa le candele dalla decisione all'uscita;
-    un ordine limit non eseguito, o un trade che non si apre perche' lo stop e' troppo vicino, si scarta e
-    non occupa tempo. Se le candele non bastano, la prova si ferma (STOP).
-21. **Robustezza (verifica 1)**: si spostano anche i parametri fissi del catalogo usati dalla variante
+20. **Entrate casuali**: ogni simulazione e' una strategia che entra a caso. Quando e' senza posizione e
+    senza ordine in attesa, a ogni candela ammessa del periodo entra con la stessa probabilita' q, senza
+    guardare i prezzi ne' il candidato; il trade va come lo farebbe la variante con un segnale li' e la
+    strategia torna libera alla sua uscita, come il candidato (un ordine limit non eseguito la tiene ferma
+    per la sua validita'; un trade con lo stop troppo vicino non si apre). q si tara perche' la strategia
+    faccia in media tanti trade quanti il candidato; si tengono le simulazioni che ne fanno esattamente
+    tanti, finche' sono 1.000. Un solo generatore con seme 2026 per la taratura e per le simulazioni, in fila.
+    Se nemmeno una strategia che entra appena e' libera arriva ai trade del candidato, la prova si ferma
+    (STOP). **Correzione prima di qualunque prova:** la prima versione prendeva le candele in un ordine a caso e
+    teneva un trade solo se ci stava fra quelli gia' presi; cosi' teneva piu' spesso i trade brevi (quasi
+    sempre stop) e faceva sembrare il caso peggiore di quanto e'. L'ha trovato il verificatore indipendente
+    delle statistiche: con il candidato in posizione per meta' del tempo il caso perdeva 0,07 R in piu' del
+    dovuto, e su 12 candidati senza vantaggio 6 avevano un p-value sotto 0,10 (se ne attende circa 1).
+21. **Robustezza (verifica 1)**: per E11 il lato (funding sopra o sotto) resta quello della variante anche
+    quando la soglia si sposta. Si spostano anche i parametri fissi del catalogo usati dalla variante
     (per esempio l'ATR 14 dello stop, i periodi del MACD, la finestra di 500 candele); i multipli di
     Bollinger e le soglie di volume si arrotondano a 0,1; le soglie di ADX e dell'ATR percentile all'intero;
     la percentuale dello stop S3 allo 0,1%. Una mossa che non cambia il valore dopo l'arrotondamento non si
@@ -94,7 +102,11 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
     ha R medio positivo.
 23. **Trade estremi (verifica 4)**: il 5% si arrotonda per eccesso (150 trade → 8).
 24. **Timeframe adiacenti (verifica 2)**: si riscalano anche validita' del limit e numero di candele di S2 e
-    U2.
+    U2. Gli arrotondamenti all'intero (qui e nella robustezza) portano le meta' per eccesso (EMA 9 da 1h a 2h
+    diventa 5). Il timeframe piu' lungo si salta solo se un elemento della variante non e' ammesso su di
+    esso (una variante a 30m con E10 si prova anche a 1h).
+24bis. **Robustezza delle soglie di E6 ed E8**: si sposta la soglia della direzione della variante; l'altra
+    solo se la variante esce con il segnale opposto (U4), che la usa.
 25. **Ritardo (9.9)** per un ingresso limit: stesso prezzo limit, ordine attivo una candela dopo.
 
 ## Parte 2 — Le tre prove

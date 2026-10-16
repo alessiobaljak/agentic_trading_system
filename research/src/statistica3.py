@@ -36,6 +36,11 @@ SOGLIE_VAULT = {"trade": 100, "profit_factor": 1.10, "q": 0.10}
 SOGLIE_ALTRE_MONETE = {"trade": 100, "profit_factor": 1.10, "p_value": 0.10}
 
 
+#: solo per i test: se e' una funzione, riceve la lista [(candela della decisione, trade)] di ogni
+#: simulazione TENUTA dalle entrate casuali, nell'ordine
+_OSSERVATORE = None
+
+
 class SimulazioneImpossibile(RuntimeError):
     """Le candele ammesse non bastano per mettere il numero di trade del candidato senza
     sovrapposizioni: STOP, la situazione non e' prevista dal protocollo."""
@@ -48,63 +53,121 @@ class SimulazioneImpossibile(RuntimeError):
 
 def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: Regole = Regole(),
                     costi: Costi = COSTI_NORMALI, n_simulazioni: int = N_SIMULAZIONI,
-                    seme: int = SEME, cache: Optional[dict] = None) -> Dict[str, object]:
-    """Le entrate casuali della sezione 10.1.
+                    seme: int = SEME, cache: Optional[dict] = None, giri_taratura: int = 256,
+                    passi_taratura: int = 24, giri_massimi: int = 4_000_000) -> Dict[str, object]:
+    """Le entrate casuali della sezione 10.1: una strategia che entra a caso.
 
-    Per ogni simulazione le candele ammesse del periodo si prendono in un ordine a caso
-    (un solo generatore, seme fisso 2026, per tutte le simulazioni in fila). Per ogni
-    candela si apre il trade che la variante aprirebbe con un segnale li': stesso tipo di
-    ingresso (a mercato, oppure ordine limit con gli stessi k e validita'), stesso stop,
-    stesse uscite, stessi costi. Il trade si tiene se non si sovrappone a quelli gia'
-    presi; un ordine limit non eseguito, o un trade che non si apre perche' lo stop e'
-    troppo vicino, si scarta e si passa alla candela successiva. Ci si ferma quando i
-    trade sono tanti quanti quelli del candidato.
+    Ogni simulazione e' una strategia che, quando e' senza posizione e senza ordine in attesa,
+    a ogni candela ammessa del periodo entra con la stessa probabilita' q, indipendentemente
+    dai prezzi e da quando il candidato e' in posizione; poi il trade va come lo farebbe la
+    variante con un segnale li' (stesso tipo di ingresso, stesso stop, stesse uscite, stessi
+    costi) e la strategia torna libera alla sua uscita, come il candidato. Cosi' i trade non
+    si sovrappongono e la scelta di un ingresso non dipende mai da come finira' il trade.
 
-    SCELTA: un trade occupa le candele dalla decisione all'uscita (la candela di uscita
-    resta libera per una nuova decisione alla sua chiusura, come per il candidato);
-    gli ordini limit non eseguiti non occupano tempo.
+    q si tara perche' la strategia faccia in media tanti trade quanti il candidato; si tengono
+    solo le simulazioni che ne fanno esattamente tanti (10.1: «stesso numero di trade»), finche'
+    sono 1.000. Un solo generatore, seme fisso 2026, per la taratura e le simulazioni, in fila.
+
+    Correzione del 16 ottobre 2026, prima di qualunque prova del collaudo: la prima versione
+    prendeva le candele in un ordine a caso e teneva un trade solo se ci stava fra quelli gia'
+    presi; cosi' teneva piu' spesso i trade brevi (soprattutto stop) e faceva sembrare il caso
+    peggiore di quanto e' (verificatore indipendente: -0,07 R con il candidato in posizione per
+    meta' del tempo, p-value troppo piccoli). ``SimulazioneImpossibile`` vuol dire ora che
+    nemmeno una strategia che entra appena e' libera arriva al numero di trade del candidato.
     """
+    import bisect
+
     if n_trade <= 0:
         raise ValueError("servono almeno un trade del candidato")
-    ammesse = np.flatnonzero(c.ammessa[inizio:fine + 1]) + inizio
+    ammesse = [int(x) for x in np.flatnonzero(c.ammessa[inizio:fine + 1]) + inizio]
+    if not ammesse:
+        raise SimulazioneImpossibile("nessuna candela ammessa nel periodo")
     if cache is None:
         cache = {}
-
-    def esito(j: int):
+    n_amm = len(ammesse)
+    # per ogni candela ammessa (posizione p): l'esito di un ingresso li', e la posizione della prima
+    # candela ammessa alla cui chiusura la strategia e' di nuovo libera
+    e_trade = np.zeros(n_amm, dtype=bool)
+    e_r = np.zeros(n_amm)
+    succ = np.zeros(n_amm, dtype=np.int64)
+    esiti = []
+    for p, j in enumerate(ammesse):
         e = cache.get(j)
         if e is None:
             e = simula_da(c, j, regole, costi, fine, forzato=True)
             cache[j] = e
-        return e
+        esiti.append(e)
+        if e.tipo == "trade":
+            e_trade[p] = True
+            e_r[p] = e.trade.r
+        succ[p] = bisect.bisect_left(ammesse, max(e.libero_da, j + 1))
 
     rng = np.random.default_rng(seme)
-    medie: List[float] = []
-    occupato = np.zeros(len(c.serie) + 1, dtype=bool)
-    for _ in range(n_simulazioni):
-        ordine = rng.permutation(ammesse)
-        occupato[:] = False
-        presi: List[float] = []
-        for j in ordine:
-            j = int(j)
-            if occupato[j]:
-                continue
-            e = esito(j)
-            if e.tipo != "trade":
-                continue
-            a, b = j, max(e.libero_da, j + 1)
-            if occupato[a:b].any():
-                continue
-            occupato[a:b] = True
-            presi.append(e.trade.r)
-            if len(presi) == n_trade:
+    registra = _OSSERVATORE is not None
+
+    def giri(q: float, quanti: int):
+        """``quanti`` strategie che entrano a caso, fatte avanzare insieme: trade e somma degli R
+        di ognuna (e, solo per i test, le posizioni dei trade)."""
+        pos = np.zeros(quanti, dtype=np.int64)
+        conta = np.zeros(quanti, dtype=np.int64)
+        somma = np.zeros(quanti)
+        vive = np.arange(quanti)
+        tracce = [[] for _ in range(quanti)] if registra else None
+        while len(vive):
+            if q < 1.0:
+                pos[vive] += rng.geometric(q, size=len(vive)) - 1
+            dentro = pos[vive] < n_amm
+            vive = vive[dentro]
+            if not len(vive):
                 break
-        if len(presi) < n_trade:
+            pv = pos[vive]
+            t = e_trade[pv]
+            conta[vive] += t
+            somma[vive] += np.where(t, e_r[pv], 0.0)
+            if registra:
+                for k, pp, tt in zip(vive.tolist(), pv.tolist(), t.tolist()):
+                    if tt:
+                        tracce[k].append(pp)
+            pos[vive] = succ[pv]
+        return conta, somma, tracce
+
+    massimo = int(giri(1.0, 1)[0][0])
+    if massimo < n_trade:
+        raise SimulazioneImpossibile(
+            f"una strategia che entra appena e' libera fa {massimo} trade nel periodo, meno dei "
+            f"{n_trade} del candidato")
+    # taratura di q: la media dei trade per giro deve essere n_trade (bisezione su log q)
+    if massimo == n_trade:
+        q = 1.0
+    else:
+        basso, alto = math.log(1e-7), 0.0
+        for _ in range(passi_taratura):
+            medio = 0.5 * (basso + alto)
+            conta, _, _ = giri(math.exp(medio), giri_taratura)
+            if conta.mean() < n_trade:
+                basso = medio
+            else:
+                alto = medio
+        q = math.exp(0.5 * (basso + alto))
+    medie: List[float] = []
+    fatti = 0
+    lotto = 4096
+    while len(medie) < n_simulazioni:
+        if fatti >= giri_massimi:
             raise SimulazioneImpossibile(
-                f"una simulazione ha trovato solo {len(presi)} trade su {n_trade}")
-        medie.append(sum(presi) / n_trade)
+                f"dopo {fatti} giri solo {len(medie)} simulazioni con esattamente {n_trade} trade")
+        conta, somma, tracce = giri(q, lotto)
+        fatti += lotto
+        for k in np.flatnonzero(conta == n_trade):
+            if len(medie) == n_simulazioni:
+                break
+            medie.append(float(somma[k]) / n_trade)
+            if registra:
+                _OSSERVATORE([(ammesse[pp], esiti[pp].trade) for pp in tracce[k]])
     valori = np.asarray(medie)
     return {"valori": valori, "media": float(valori.mean()), "percentile_95": float(np.percentile(valori, 95)),
-            "candele_ammesse": int(len(ammesse)), "n_simulazioni": n_simulazioni, "seme": seme}
+            "candele_ammesse": n_amm, "n_simulazioni": n_simulazioni, "seme": seme,
+            "probabilita_ingresso": q, "giri": fatti, "trade_massimi": massimo}
 
 
 def p_value(r_candidato: float, valori: Sequence[float], n_simulazioni: int = N_SIMULAZIONI) -> float:
@@ -237,7 +300,10 @@ def senza_i_migliori(ris: Risultato, quota: float = 0.05) -> Dict[str, object]:
 
 
 def _arrotonda(valore: float, passo: float) -> float:
-    return round(round(valore / passo) * passo, 10)
+    """Al multiplo di ``passo`` piu' vicino, con le meta' lontano da zero."""
+    x = valore / passo
+    n = math.floor(abs(x) + 0.5 + 1e-9) * (1 if x >= 0 else -1)
+    return round(n * passo, 10)
 
 
 def mosse_robustezza(variante: dict) -> List[Tuple[str, dict]]:
@@ -260,7 +326,7 @@ def mosse_robustezza(variante: dict) -> List[Tuple[str, dict]]:
         valore = base[chiave] if sotto is None else base[chiave][sotto]
         for segno, nome in ((-1, "-20%"), (1, "+20%")):
             if tipo == "periodo":
-                nuovo = max(1, int(round(valore * (1 + 0.2 * segno))))
+                nuovo = max(1, int(math.floor(valore * (1 + 0.2 * segno) + 0.5)))
             elif tipo == "multiplo":
                 nuovo = _arrotonda(valore * (1 + 0.2 * segno), 0.1)
             elif tipo == "da_50":
@@ -268,7 +334,7 @@ def mosse_robustezza(variante: dict) -> List[Tuple[str, dict]]:
             elif tipo == "funding":
                 nuovo = _arrotonda(valore * (1 + 0.2 * segno), 0.00005)
             elif tipo == "intero":
-                nuovo = int(round(valore * (1 + 0.2 * segno)))
+                nuovo = int(math.floor(valore * (1 + 0.2 * segno) + 0.5))
             elif tipo == "percento":
                 nuovo = _arrotonda(valore * (1 + 0.2 * segno), 0.001)
             else:
@@ -299,12 +365,14 @@ def mosse_robustezza(variante: dict) -> List[Tuple[str, dict]]:
                 prova(sezione, None, "parametri", j, "periodo")
         if cod in ("E4", "E5", "S1", "L"):
             prova(sezione, None, "k", None, "multiplo")
-        if cod == "E6":
-            prova(sezione, None, "soglie", 0, "da_50")
-            prova(sezione, None, "soglie", 1, "da_50")
-        if cod == "E8":
-            prova(sezione, None, "soglie", 0, "da_50")
-            prova(sezione, None, "soglie", 1, "da_50")
+        if cod in ("E6", "E8"):
+            # la soglia della direzione della variante; l'altra solo se la usa l'uscita U4
+            # (il segnale opposto e' l'ingresso nell'altra direzione)
+            usa_opposto = any(u["codice"] == "U4" for u in v["uscite"])
+            if v["direzione"] == "long" or usa_opposto:
+                prova(sezione, None, "soglie", 0, "da_50")
+            if v["direzione"] == "short" or usa_opposto:
+                prova(sezione, None, "soglie", 1, "da_50")
         if cod in ("E12", "C1"):
             prova(sezione, None, "soglia", None, "multiplo")
         if cod in ("E11", "F4"):
