@@ -27,7 +27,10 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
 7. **Sessioni** e **giorno della settimana**: si guarda l'ora di apertura della candela (UTC).
 8. **E10**: candele che aprono fra le 08:00 e le 16:00 UTC; un solo segnale al giorno, la prima chiusura
    oltre il range. **VWAP, range asiatico ed E10** valgono solo se dall'inizio del giorno non manca nessuna
-   candela.
+   candela: una sola candela mancante blocca E10 e F7 per il resto di quel giorno.
+8bis. **E5**: "dentro le bande" comprende i bordi. **E8**: la condizione «%K sotto 20» (o sopra 80) si guarda
+   sulla candela del segnale. **ATR percentile**: con valori tutti uguali la posizione vale 0 (conta come
+   "bassa", mai come "alta").
 
 ### Riscaldamento e buchi (7.8, 9.6)
 
