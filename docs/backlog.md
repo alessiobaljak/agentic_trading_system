@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
+| **0. Aspettano il tuo sì** | P7 (il bot che esegue le strategie del protocollo 3: subito o dopo il vault), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: CHIUSO il 12 ott al Passo 7, zero strategie trovate), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -31,6 +31,15 @@ la dashboard mostra le voci senza una seconda copia da aggiornare. Quindi: un gr
 le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
+
+### P7. Protocollo 3: il bot che esegue le strategie del catalogo (prova di parità del collaudo)
+**Perché:** al Passo 0 del protocollo 3 (16 ott) e' risultato che il bot oggi non sa eseguire nessuna variante del
+catalogo come la scrive il protocollo (`research/config/bot_3.md`, punto 3): mancano gli incroci, le uscite a tempo,
+a fine giornata, trailing e segnale opposto per strategia, l'ingresso a mercato per strategia, il limit con k × ATR,
+lo stop minimo dello 0,3%, e il bot applica a tutte le strategie profit-lock, uscita dopo 96 candele e pausa dopo uno
+stop. Senza questo la prova C del collaudo (parita' fra motore della ricerca e bot) non si puo' fare. **Cosa decidere:**
+farlo subito (aggiunta al bot spenta per le strategie di oggi, piu' un rigioco storico del codice del paper), oppure
+solo se un candidato supera il vault, prima del paper (come il testo prevede gia' per gli ingressi limit).
 
 ### P6. Dopo la ricerca: cosa fare del bot e della ricerca
 **Perché:** la ricerca 4.5 è chiusa (`research/confronto/risultati.md`): 630 varianti, 0 passate nel vault contro 0,02
