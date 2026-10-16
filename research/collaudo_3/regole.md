@@ -54,13 +54,25 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
     anche se la candela era gia' aperta oltre (l'ingresso al prezzo limit, in quel caso, e' gia' un'ipotesi
     sfavorevole). Il massimo per il trailing comprende anche la candela di esecuzione.
 16. **Uscita a fine giornata (U2s)**: all'apertura della prima candela, dopo quella d'ingresso, che inizia
-    alle 21:00 UTC o dopo.
+    alle 21:00 UTC o dopo, guardando l'ora del giorno: un ingresso alle 22:00 o alle 23:00 esce quindi alle
+    21:00 del giorno dopo (la mezzanotte non e' "21:00 o dopo").
 17. **Funding**: valore della posizione = quantita' × mark price all'istante del regolamento (l'apertura
     della candela mark che lo contiene; su 12h e 1d, dove il regolamento puo' cadere dentro la candela, si
-    usa la sua apertura).
+    usa la sua apertura). Un regolamento che cade **esattamente all'apertura** della candela di un'uscita per
+    stop o target si conta pieno (la posizione era aperta da prima, l'ordine dei due momenti si conosce); uno
+    che cade all'apertura della candela in cui si esegue un ordine limit non si conta (l'ingresso viene dopo).
+    La regola «solo se e' un costo» vale per i regolamenti che cadono **dentro** quelle candele, dove l'ordine
+    non si conosce (la ragione scritta nella 9.5).
 18. **Fine dei dati con una posizione aperta**: chiusura al prezzo di chiusura dell'ultima candela, con
     slippage e commissione taker.
-19. **Metriche**: profit factor e drawdown sugli R; somma degli R per anno sull'anno dell'uscita.
+19. **Metriche**: profit factor e drawdown sugli R; somma degli R per anno sull'anno dell'uscita; un trade
+    con R esattamente zero sta fra i perdenti nella media dei perdenti. L'R di un trade ridotto dalla leva si
+    calcola sul suo rischio iniziale vero (9.7: «÷ rischio iniziale in USDT»), quindi non dipende dalla
+    riduzione; le percentuali sul capitale non si usano.
+19bis. **Buchi dentro un trade**: la validita' di un ordine limit si misura in tempo, quindi le candele
+    mancanti la consumano; l'uscita a tempo (U2) conta solo le candele che esistono.
+19ter. **Riempimento severo** (verifica 8 della Fase 4): eseguito se il minimo scende fino a limit × (1 −
+    0,0005) compreso («di almeno lo 0,05%»); senza scarto il confronto resta stretto (7.7, regola 2).
 
 ### Statistiche (sezione 10 e Fase 4)
 

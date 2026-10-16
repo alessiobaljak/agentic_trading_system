@@ -288,7 +288,13 @@ def simula_da(c: Compilata, i: int, regole: Regole, costi: Costi, fine: int,
         while j <= fine and s.ts[j] < fine_ts:
             if s.ts[j] >= inizio_ts:
                 ultimo_attivo = j
-                if (long and s.low[j] < soglia) or (not long and s.high[j] > soglia):
+                # regola 2 della 7.7: toccare il prezzo limit non basta (confronto stretto); con lo
+                # scarto della verifica 8 della Fase 4 basta superarlo "di almeno" lo 0,05%
+                if regole.scarto_riempimento > 0:
+                    passa = (s.low[j] <= soglia) if long else (s.high[j] >= soglia)
+                else:
+                    passa = (s.low[j] < soglia) if long else (s.high[j] > soglia)
+                if passa:
                     eseguito = j
                     break
             j += 1
