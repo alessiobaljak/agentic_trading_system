@@ -7,6 +7,11 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-16 (la seconda lettura ufficiale del fuori campione, quella del 14 ottobre)
+* **Le coppie scelte dal gate non reggono dopo la scelta, confermato:** il motore, rigiocato solo dopo la validazione di ogni coppia, fa −0,03R a trade su 566 segnali (margine ±0,09R), dopo il −0,05R su 230 del 7 ottobre. Per la regola del 30 settembre la prossima modifica va nel gate, che però è fermo dal 13 ottobre (ops 0619).
+* **E il bot esegue peggio del motore sugli stessi segnali:** 451 trade accoppiati, motore −0,06R, paper −0,12R, differenza +0,06R oltre il margine ±0,05R per giornata; per la prima volta, al limite, con circa 80 trade del paper già entrati a ordine limite dal 13 ottobre (ops 0619). Il paper perde −0,12R a trade: metà selezione, metà esecuzione.
+* **Declassate e attive restano indistinguibili:** −0,098R su 283 contro −0,119R su 194, differenza +0,021R ±0,174R (ops 0620).
+
 ## 2026-10-14 (pomeriggio: la campagna del paniere ha consegnato)
 * **A barre giornaliere, sul paniere, nessuna delle tre idee supera l'esame:** 18 varianti e 12 ritocchi, due candidate in costruzione (le monete rimaste indietro dopo un giorno forte al rialzo di Bitcoin, +0,130 e +0,135 R a trade, t 3,24 e 3,20 contro le entrate casuali), tutte e due cadute nelle verifiche: con un giorno di ritardo il vantaggio scende a metà o meno, e lo stop in ATR giornalieri dopo i crolli finisce oltre la distanza di liquidazione (6 e 8 violazioni). Fonte: `consegna.md` del branch `research/campagna/PANIERE` (commit 70d17c85).
 * **L'effetto «ritardo dopo Bitcoin» esiste anche a un giorno, ma per metà è il mercato che continua e si consuma in un giorno:** comprare tutte le monete dopo un giorno forte dà +0,075 R (t 1,97), solo quelle in ritardo +0,135 R; con il ritardo di una barra il t cade a 0,34-0,49 volte. Il vantaggio sta in 36-63 giorni di segnale in tre anni e dipende da cosa fa Bitcoin dopo (+0,39 R se sale nei 5 giorni, −0,10 se scende).

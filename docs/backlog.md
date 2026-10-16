@@ -211,9 +211,9 @@ BTC (salita / discesa) sulla sua storia, e una coppia opera una direzione solo n
 regola e soglie scritte prima dei numeri. **Non cambia:** il paper non si ritocca da solo (sarebbe usarlo come
 training set); uscite, size e freni. **Metro:** il fuori campione delle coppie dopo la porta contro quelle di
 oggi, con la regola del 30 set. **Quando:** dopo la seconda lettura del 14 ott, se conferma «la prossima
-modifica va nel gate»; serve il sì del proprietario.
+modifica va nel gate»; serve il sì del proprietario. **Seconda lettura fatta il 16 ott (ops 0619): la selezione è CONFERMATA** (motore −0,03R su 566 segnali ±0,09R); ma la ricerca del gate è ferma dal 13 ott (`ops/gate_fermo`): G8 ha senso solo se il proprietario decide di riaccenderla.
 
-### C5. Costi allineati a quelli veri di Binance — SÌ del proprietario il 2 ott, da fare DOPO le letture del 14 ott
+### C5. Costi allineati a quelli veri di Binance — SÌ del proprietario il 2 ott, da fare DOPO le letture del 14 ott (letture fatte il 16 ott: SBLOCCATA, da confermare col proprietario perché il gate è fermo e il paper misura gli ordini limite dal 13 ott)
 Verifica sul codice e sulle tariffe ufficiali (FAQ Binance Futures, ricontrollata da un secondo
 revisore). (1) **Commissioni troppo basse:** il modello usa 0,08% andata e ritorno
 (`BACKTEST_COST_PER_TRADE`, `executor.py:178`, `engine.py:616`, `discover_strategies.py:3617`); Binance

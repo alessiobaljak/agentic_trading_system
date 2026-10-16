@@ -3838,3 +3838,29 @@ dalla prima all'ultima voce, 4,69 di pause (gli STOP per gli strumenti), 2,28 di
 (2 risolti dalle correzioni del coordinamento, 3 errori di forma della sessione). Routine oraria spenta. Decide il
 proprietario cosa fare dopo (le lezioni della campagna sono in `lezioni_metodo_proposte.md` e `lezioni_moneta.md`
 del branch, da unire al Passo 7 come per la prima edizione).
+
+### 16 ottobre, 07:45 ora italiana: seconda lettura ufficiale del fuori campione (quella del 14 ottobre)
+
+Chiesta dal proprietario («oggi è il 14, che era l'altra data del controllo»); fatta con i dati fino al 16 ott 05:40 UTC
+(ops 0619 portafoglio, 0620 trades, 0621 controllo). Regole scritte il 30 settembre, prima dei numeri (diario del 30 set
+pomeriggio), applicate come stampate dal `portafoglio`:
+* **Selezione: «la prossima modifica va nel gate», confermata.** Motore dopo la validazione su tutte le coppie operate
+  −0,03R su 566 segnali (margine ±0,09R per giornata): ≤ 0 con più di 80 segnali. Il 7 ott −0,05R su 230. Le coppie
+  ancora validate fanno +0,001R su 329 segnali, quelle uscite dal registro trascinano giù.
+* **Esecuzione: «è esecuzione: la prossima modifica va su ingressi e uscite del bot», per la prima volta.** Stessi
+  segnali, 451 trade: motore −0,06R, paper −0,12R, differenza +0,06R, margine ±0,05R per giornata (±0,05R trade per
+  trade). Il 7 ott la differenza era +0,05R dentro il margine ±0,07R. Due avvertenze: il verdetto supera il margine di
+  poco e nessuna lettura successiva lo conferma (la regola: «un verdetto isolato si conferma il 14», e qui arriva
+  proprio il 14); circa 80 dei 481 trade del paper (14-16 ott e la sera del 13) sono entrati con l'ordine limite, che il
+  motore non simula: il confronto mescola i due modi d'ingresso.
+* **Declassate contro attive** (regola del 3 ott, riletta): dal 27 set declassate −0,098R su 283, attive −0,119R su 194,
+  differenza +0,021R ±0,174R: non si decide, come il 3 ott.
+* **H1** (la t dell'ultimo esame separa le coppie buone?): chiusa, differenza −0,09R ±0,21R (si leggeva a metà
+  novembre, ma la regola la chiude già: anche nel caso migliore non separa oltre 0,25R).
+Contesto (ops 0621): paper 647 trade in 29 giorni, −164,47 USDT (−16,4%), BTC +8,5% nello stesso periodo; R medio netto
+−0,116 su 573 trade con R, lordo −0,028, costi stimati 0,089R a trade (ops 0620). Il semaforo rosso «gate in ritardo» è
+atteso: la ricerca del gate è ferma dal 13 ott per decisione del proprietario (`ops/gate_fermo`). Cosa si sblocca: G8
+(porta per direzione e mercato nel gate) aspettava questa conferma, ma il gate è fermo e la sua ricerca non riparte
+senza il proprietario; C5 (costi veri di Binance nel bot e nel gate, sì del 2 ott) era rimandata «a dopo le letture del
+14 ott». Cosa abbiamo capito: il paper perde −0,12R a trade, e circa metà è la selezione (il motore stesso, sugli stessi
+segnali, fa −0,06R) e metà l'esecuzione (−0,06R in più del motore sugli stessi ingressi).
