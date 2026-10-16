@@ -7,6 +7,11 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-16 (sera: il collaudo del metodo del protocollo 3)
+* **Il confronto con le entrate casuali premiava anche cio' che non e' previsione.** Su prezzi senza nessun vantaggio possibile, 100 strategie finte battono le proprie entrate casuali in media di 0,027 R a trade e 21 hanno un p-value sotto 0,10 invece di circa 10 (collaudo_3/esiti.md). Il motivo: entrano quando lo stop e' largo e pagano meno costi e meno regole prudenti per ogni R. Nessuna e' passata (0 su 100): a fermarle e' la soglia di 0,2 R dopo i costi, non il p-value.
+* **Il primo modo di scegliere le entrate casuali era sbagliato** e l'ha trovato un verificatore indipendente prima del collaudo: teneva piu' spesso i trade brevi (stop), il caso sembrava peggiore di 0,07 R con il candidato in posizione per meta' del tempo.
+* **Quando il vantaggio c'e', la Fase 2 lo trova:** 86 prove su 86 con un vantaggio inserito da 0,2 R netti in su l'hanno superata; senza vantaggio 0 su 90 (collaudo_3/esiti.md).
+
 ## 2026-10-16 (la seconda lettura ufficiale del fuori campione, quella del 14 ottobre)
 * **Le coppie scelte dal gate non reggono dopo la scelta, confermato:** il motore, rigiocato solo dopo la validazione di ogni coppia, fa −0,03R a trade su 566 segnali (margine ±0,09R), dopo il −0,05R su 230 del 7 ottobre. Per la regola del 30 settembre la prossima modifica va nel gate, che però è fermo dal 13 ottobre (ops 0619).
 * **E il bot esegue peggio del motore sugli stessi segnali:** 451 trade accoppiati, motore −0,06R, paper −0,12R, differenza +0,06R oltre il margine ±0,05R per giornata; per la prima volta, al limite, con circa 80 trade del paper già entrati a ordine limite dal 13 ottobre (ops 0619). Il paper perde −0,12R a trade: metà selezione, metà esecuzione.

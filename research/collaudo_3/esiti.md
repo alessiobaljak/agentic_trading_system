@@ -62,14 +62,17 @@ punto 3). Si chiede all'utente allo STOP (regole.md, Prova C).
 
 ## La causa del difetto della prova A (diagnosi, non prove ufficiali)
 
-Prove di diagnosi sulle stesse 100 varianti (gli script sono fuori dal repository, i numeri qui):
+Prove di diagnosi sulle stesse 100 varianti (script e dettagli in `diagnosi/`):
 
-| Diagnosi | p-value sotto 0,10 |
-|---|---|
-| Prova ufficiale | 21 |
-| Serie senza la tendenza di fondo (rendimento medio per candela portato a zero) | 21 |
-| Costi a zero | 15 |
-| Senza tendenza e costi a zero | 17 |
+| Diagnosi | p-value sotto 0,10 | sotto 0,023 |
+|---|---|---|
+| Prova ufficiale | 21 | 7 |
+| Serie senza la tendenza di fondo (rendimento medio per candela portato a zero) | 21 | — |
+| Costi a zero | 15 | — |
+| Senza tendenza e costi a zero | 17 | — |
+| Entrate casuali con la stessa larghezza di stop del candidato (5 fasce) | 17 | 4 |
+| Serie con la direzione di ogni candela girata a caso (volatilita' al suo posto) | 22 | 6 |
+| Tutte e due le ultime | **12** | 4 |
 
 - La tendenza di fondo (BTC quasi triplicato nella costruzione) **non** e' la causa.
 - La causa e' la **larghezza dello stop**. Le varianti entrano in momenti in cui lo stop e' piu' largo del solito
@@ -78,3 +81,26 @@ Prove di diagnosi sulle stesse 100 varianti (gli script sono fuori dal repositor
   salta lo stop, stop prima del target nella stessa candela). Le entrate casuali entrano in momenti qualsiasi,
   con stop di larghezza media, e perdono di piu'. Sulle serie rimescolate l'effetto e' piu' forte che sui prezzi
   veri, perche' il rimescolamento toglie il legame fra volatilita' passata e futura.
+
+- Il difetto si concentra nelle varianti che usano il volume (segnale E12: 8 su 21 sotto 0,10; conferma C1: 7 su
+  16): scelgono le candele anomale, dopo le quali lo stop e' largo.
+- Non c'e' informazione dal passato al futuro sulle serie rimescolate (`diagnosi/avanti.py`): il difetto non
+  viene da un errore che faccia guardare il futuro, ma da come si confronta il candidato con il caso.
+
+## Le correzioni proposte (da approvare: cambiano il testo approvato)
+
+1. **Sezione 10.1 — entrate casuali con la stessa larghezza di stop.** La strategia che entra a caso entra piu'
+   o meno spesso secondo la larghezza dello stop di quel momento, cosi' che i suoi trade abbiano la stessa
+   distribuzione di larghezze del candidato (5 fasce, ai quinti delle larghezze dei trade del candidato). Il
+   confronto giudica allora il momento d'ingresso, non i costi piu' bassi di uno stop largo. La soglia di 0,2 R
+   dopo i costi resta quella, sull'R vero.
+2. **Sezione 13bis.1 — serie senza vantaggio piu' vicine al mercato vero.** Invece di mescolare l'ordine delle
+   candele, si gira a caso la direzione di ogni candela (salto, corpo, massimo e minimo, mark compreso), con il
+   seme della serie: la volatilita' resta dove era (periodi calmi e periodi agitati), la direzione diventa
+   imprevedibile e la tendenza sparisce.
+3. **Sezione 13bis.3 — vantaggio inserito piu' grande.** Il vantaggio inserito rende circa un terzo di P: con
+   P = 0 / 0,3 / 0,6 (riserva 0,9) quasi nessuna prova arriva a 0,35 R. Ampiezze nuove: 0 / 0,6 / 1,2, riserva
+   1,8.
+
+Con le correzioni 1 e 2 la diagnosi della prova A da' 12 p-value sotto 0,10 su 100 (soglia 15). Dopo
+l'approvazione si correggono gli strumenti e si rifanno le prove A e B ufficiali da capo.

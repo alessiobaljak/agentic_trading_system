@@ -3875,3 +3875,26 @@ protocollo nuovo («Protocollo di ricerca strategie su BTC, versione 5.1», bozz
 catalogo chiuso di indicatori, 40 varianti, ingressi a mercato o limit sotto la chiusura) e chiarito l'obiettivo:
 rifare il gate per avere prima di tutto un METODO efficace, valido e senza buchi di processo, provato su BTC, e poi
 replicarlo sulle altre monete. Il testo non è ancora nel repository: aspetta l'approvazione delle aggiunte proposte.
+
+### 16 ottobre, sera: protocollo 3 approvato, Passo 0 fatto fino al collaudo, e il collaudo trova un difetto del metodo
+
+Il proprietario ha approvato il protocollo 3 alle 19:26 UTC («ok approvato, procedi con il Passo 0»). Fatto il
+Passo 0 fino al collaudo:
+* **Fatti** (`research/config/bot_3.md`, `parametri_3.yaml`): l'archivio pubblico di Binance ha BTCUSDT solo dal
+  1° gennaio 2020, non da settembre 2019 (la costruzione dura 33 mesi, non 36,5); il bot in paper chiude lo stop
+  quando lo tocca il last o il mark, leva di base 2, rischio 1%; il bot oggi non sa eseguire nessuna variante del
+  catalogo come la scrive il protocollo; Binance: maker 0,02%, taker 0,05%, margine di mantenimento di BTCUSDT
+  0,40% fino a 300.000 USDT.
+* **Strumenti nuovi** del protocollo 3 (`research/src/catalogo3.py`, `motore3.py`, `statistica3.py`), quelli
+  vecchi intatti; guardiano e caricatore per la campagna BTC51. Tre verificatori indipendenti hanno scritto 551
+  test dal testo del protocollo e trovato 4 difetti, corretti prima del collaudo; il piu' serio: le entrate
+  casuali favorivano i trade brevi e facevano sembrare il caso peggiore (6 p-value su 12 sotto 0,10 senza
+  vantaggio). Test: 3052 della ricerca e 2305 del bot, tutti verdi.
+* **Collaudo, primo giro** (21:01-21:10 UTC, `research/collaudo_3/esiti.md`): prova A **non passa** (0 varianti
+  finte su 100 superano la Fase 2, ma 21 p-value sotto 0,10 contro un massimo di 15); prova B passa per le
+  regole long, quella short non si puo' valutare (il vantaggio inserito e' venuto troppo debole); prova C non
+  eseguibile. Diagnosi: le varianti battono le entrate casuali entrando quando lo stop e' largo (meno costi e
+  meno regole prudenti per ogni R), non prevedendo i prezzi. Con due correzioni (entrate casuali con la stessa
+  larghezza di stop; serie senza vantaggio con la direzione delle candele girata a caso invece dell'ordine
+  mescolato) la diagnosi da' 12 su 100. Le correzioni cambiano il testo approvato: aspettano il proprietario.
+  La ricerca non comincia finche' il metodo non passa il collaudo.
