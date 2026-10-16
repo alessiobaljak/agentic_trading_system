@@ -570,3 +570,8 @@ def test_troncamento(variante: dict, serie, inizio: int, fine: int, n_istanti: i
                                          if a.dtype.kind == "f" else a != b)
                 differenze.append(f"istante {t}: '{nome}' diverso in {len(diverse)} candele (prima: {int(diverse[0])})")
     return differenze
+
+
+# pytest raccoglie le funzioni che si chiamano test_*: questa e' una funzione del motore (9.8),
+# non un test, anche quando un file di test la importa con il suo nome
+test_troncamento.__test__ = False

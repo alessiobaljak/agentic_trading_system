@@ -1,0 +1,101 @@
+# Parametri del protocollo 3 (research/PROTOCOLLO_3.md), Passo 0 punto 7.
+# I fatti trovati al Passo 0 e tutti i numeri del documento, con la sezione da cui vengono.
+# Si congela dopo l'approvazione del Passo 0: da li' in poi nessuno lo cambia (sezione 13bis.5).
+versione_protocollo: "5.1 (protocollo 3)"
+approvazione_testo: "2026-10-16T19:26:00Z"
+stato: "bozza del Passo 0, da approvare allo STOP"
+
+moneta: BTCUSDT
+fonte_dati:
+  archivio: "https://data.binance.vision/data/futures/um/monthly"
+  tipi: [klines, markPriceKlines, fundingRate]
+  timeframe: ["15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"]
+  # verificato il 16 ott 2026 (indice del bucket): file mensili di BTCUSDT dal 2020-01 per candele last,
+  # candele mark e funding, tutti i 9 timeframe, nessun mese mancante fino al 2023-12. I file giornalieri
+  # partono dal 2019-12-31 (last) e dal 2019-12-23 (mark). Le API REST rispondono 451 da qui.
+  primo_mese_disponibile: "2020-01"
+  nota_inizio: "il protocollo stimava settembre 2019; la prima candela disponibile dalla fonte e' il 2020-01-01 00:00 UTC (da confermare al Passo 1)"
+
+periodi:  # sezione 4
+  costruzione: {da: "prima candela disponibile", a: "2022-09-30T23:59:59Z"}
+  validazione: {da: "2022-10-01T00:00:00Z", a: "2023-12-31T23:59:59Z"}
+  vault: {da: "2024-01-01T00:00:00Z", a: "2026-09-30T23:59:59Z"}
+  marcatore_vault: "research/vault/APERTURA_3.md"
+  frase_vault: "APRI IL VAULT 3"
+  via_libera_validazione: "research/campagne/BTC51/via_libera_validazione.md"
+
+vantaggio_e_trade:  # sezione 5
+  vantaggio_minimo_r: 0.2
+  dispersione_r: 1.2
+  minimo_trade: {costruzione: 150, validazione: 60, vault: 100}
+
+costi:  # sezione 6
+  commissione_taker: 0.0005
+  commissione_maker: 0.0002
+  slippage_per_lato: 0.0001
+  costi_doppi: {commissione_taker: 0.0010, commissione_maker: 0.0004, slippage_per_lato: 0.0002, funding: "invariato"}
+  fonte_commissioni: "pagina di supporto Binance USDⓈ-M futures trading fees (aggiornata il 2026-05-01): utente normale maker 0,02%, taker 0,05%"
+  volume_minimo_giornaliero_2023_usdt: 1000000000  # da verificare al Passo 1
+
+motore:  # sezioni 7.6-7.8 e 9
+  stop_minimo: 0.003
+  serie_stop: "last_e_mark"  # fatto serie_stop (config/bot_3.md, punto 1)
+  serie_liquidazione: mark
+  intrabarra: "stop_prima"
+  riscaldamento_ricorsivi: 3  # volte il periodo piu' lungo
+  finestra_atr_percentile: 500
+  capitale_usdt: 10000
+  rischio_per_trade: 0.01
+  leva_massima: 2  # fatto regole_dimensione_bot (config/bot_3.md, punto 2): leva di base del bot
+  margine: isolato
+  margine_mantenimento: 0.004  # BTCUSDT, primo livello 0-300.000 USDT (tabella Binance del 2025-08-19, letta il 2026-10-16)
+  importo_mantenimento_usdt: 0
+  fattore_liquidazione: 0.8
+  istanti_troncamento: 200
+  seme: 2026
+
+catalogo:  # sezione 7 (i valori ammessi sono anche in research/src/catalogo3.py)
+  varianti_massime: 40
+  condizioni_massime: 3
+  limit: {k: [0.25, 0.5], validita_candele: [1, 3], riempimento_severo: 0.0005}
+
+statistica:  # sezione 10
+  simulazioni_casuali: 1000
+  seme: 2026
+  costruzione: {trade_minimi: 150, r_medio_minimo: 0.2, p_value_massimo: 0.023}
+  validazione: {trade_minimi: 60, r_medio_positivo: true, frazione_minima_di_costruzione: 0.5, profit_factor_minimo: 1.05, positivo_a_costi_doppi: true}
+  vault: {trade_minimi: 100, r_medio_positivo: true, positivo_a_costi_doppi: true, profit_factor_minimo: 1.10, benjamini_hochberg: 0.10}
+
+fase4:  # sezione 13, Passo 2
+  robustezza_spostamento: 0.20
+  blocchi: [["inizio", "2020-06-30"], ["2020-07-01", "2021-03-31"], ["2021-04-01", "2021-12-31"], ["2022-01-01", "2022-09-30"]]
+  blocchi_positivi_minimi: 3
+  quota_massima_di_un_blocco: 0.5
+  trade_migliori_tolti: 0.05
+
+altre_monete:  # Passo 6
+  monete: 9
+  trade_minimi: 100
+  profit_factor_minimo: 1.10
+  p_value_massimo: 0.10
+  correlazione_massima: 0.5
+  monete_minime: 3
+  slippage_per_fascia_di_volume_2023:  # USDT al giorno -> slippage per lato
+    - {oltre: 1000000000, slippage: 0.0001}
+    - {da: 200000000, a: 1000000000, slippage: 0.0002}
+    - {da: 50000000, a: 200000000, slippage: 0.0005}
+    - {sotto: 50000000, slippage: 0.0010}
+
+paper:  # Passo 8
+  trade_necessari: 40
+  durata_massima_mesi: 12
+  trade_diversi_massimi: 0.10
+  bocciatura_drawdown_volte_vault: 1.5
+
+collaudo:  # sezione 13bis
+  serie_rimescolate_per_timeframe: 30
+  prova_a: {varianti_finte: 100, seme: 2026, trade_stimati_minimi: 150, massimo_che_superano: 5, massimo_p_sotto_0_10: 15}
+  prova_b: {serie: 30, ampiezze: [0.0, 0.3, 0.6], ampiezza_di_riserva: 0.9, candele_del_vantaggio: 12, candele_del_ritorno: 240,
+            massimo_che_superano_senza_vantaggio: 3, soglia_r_netto: 0.35, quota_minima_che_supera: 0.80, serie_minime_alla_soglia: 20}
+  prova_c: {da: "2021-10-01", a: "2022-09-30", segnali_identici: 1.0, trade_identici_minimi: 0.98, differenza_r_massima: 0.01}
+  ore_massime_di_calcolo: 24

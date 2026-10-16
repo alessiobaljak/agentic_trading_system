@@ -244,6 +244,7 @@ _CAMPAGNA_3_FILE = (
     "research/.sessione",
     "research/config/parametri_3.yaml",
     "research/config/bot_3.md",
+    "research/config/guida_pratica_3.md",
     "research/config/percorsi_vietati.txt",
     "CLAUDE.md",
     ".gitignore",
