@@ -1,10 +1,11 @@
 # Protocollo di ricerca strategie su BTC — versione 5.1
 
-> **BOZZA per il proprietario** (16 ottobre 2026). Testo del proprietario (versione 5.1) con le aggiunte del
-> coordinamento dello stesso giorno, elencate nell'appendice 2 in fondo: il collaudo del metodo al Passo 0 (sezione
-> 13bis), il paper come esame finale (Passo 8), chi esegue i passi, le entrate casuali corrette (sezione 10.1) e i nomi
-> di file, cartelle e branch del repository. Nessuna prova è stata avviata. Entra in vigore con l'approvazione del
-> proprietario, scritta qui con data e ora.
+> **Approvato dal proprietario il 16 ottobre 2026 alle 19:26 UTC** («ok approvato, procedi con il Passo 0»). Testo
+> del proprietario (versione 5.1) con le aggiunte del coordinamento dello stesso giorno, elencate nell'appendice 2 in
+> fondo: il collaudo del metodo al Passo 0 (sezione 13bis), il paper come esame finale (Passo 8), chi esegue i passi,
+> le entrate casuali corrette (sezione 10.1) e i nomi di file, cartelle e branch del repository. Dopo l'approvazione
+> sono stati corretti solo due nomi rimasti vecchi nel Passo 0 (`config/bot_3.md` e `vault/APERTURA_3.md`, come
+> nell'appendice 2, punto 5).
 > Una sola moneta: il contratto perpetuo BTCUSDT di Binance Futures (USDS-M). Rispetto alla versione 5 aggiunge gli ingressi con ordine limit.
 > Nel repository è `research/PROTOCOLLO_3.md`, accanto ai protocolli precedenti, che non cambiano. Le modifiche rispetto alla versione 5 sono nell'appendice 1, quelle del coordinamento nell'appendice 2.
 
@@ -526,7 +527,7 @@ Esempio, qui su più righe per leggibilità (nel file ogni voce sta su una sola 
 
 1. Crea le cartelle della sezione 12 e `STATO.md`; controlla che `research/data/` sia in `.gitignore`.
 2. Controlla l'elenco `research/config/percorsi_vietati.txt` con la regola della sezione 3 e prepara il guardiano per il marcatore `BTC51` (sezione 12), con i suoi test. Nel dubbio, un percorso è vietato.
-3. Trova i fatti e scrivili in `config/bot.md`, con i riferimenti al codice e mai con valori di segreti:
+3. Trova i fatti e scrivili in `config/bot_3.md`, con i riferimenti al codice e mai con valori di segreti:
    - **serie_stop**: quale prezzo il bot confronta con lo stop (last, mark o altro) e quale tipo di prezzo userebbe con ordini veri;
    - **regole_dimensione_bot**: rischio per trade, leva massima, modalità di margine; se mancano, valgono quelle della sezione 9.4;
    - **esecuzione_strategie_bot**: in che forma il bot esegue una strategia; per ogni elemento del catalogo (sezione 7), se è eseguibile o richiede un'aggiunta, compresi gli ordini limit in paper (inserimento, validità, cancellazione e regola di esecuzione);
@@ -535,7 +536,7 @@ Esempio, qui su più righe per leggibilità (nel file ogni voce sta su una sola 
 4. Verifica la fonte dei dati (es. data.binance.vision: candele last price, candele mark price e funding di BTCUSDT): accesso, copertura dalla prima candela al 2023-12-31, formato.
 5. Adatta in `src/` gli strumenti esistenti (motore, statistiche, caricatore) alle sezioni 9 e 10 e ai blocchi delle regole 1 e 2, con il controllo delle impronte: ogni regola delle sezioni 7.7, 9 e 10 ha almeno un test.
 6. Scrivi ed esegui i test di controllo:
-   - il caricatore rifiuta date dal 2022-10-01 senza autorizzazione e dal 2024-01-01 senza `vault/APERTURA.md`;
+   - il caricatore rifiuta date dal 2022-10-01 senza autorizzazione e dal 2024-01-01 senza `vault/APERTURA_3.md`;
    - EMA, SMA, RSI, ATR, ADX, MACD, stocastico, Bollinger e Donchian coincidono con un'implementazione di riferimento (o con un calcolo a mano) su almeno 50 candele;
    - buy and hold su tutto il 2021 restituisce il rendimento atteso;
    - stop, target, stop e target nella stessa candela, salto di prezzo, funding e prezzo di liquidazione danno il risultato di esempi calcolati a mano;

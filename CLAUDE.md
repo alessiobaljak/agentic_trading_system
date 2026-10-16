@@ -14,8 +14,11 @@ strategie e' un job separato (`scripts/optimize.py`, `scripts/discover_strategie
 che girava ogni 3 ore e alimentava il registro `strategy_registry/validated`. **Dal 13 ott 2026 la ricerca
 automatica del gate è FERMA** (file `ops/gate_fermo`, sì del proprietario): il paper resta acceso come banco di
 misura, con gli ingressi a ordine limite (`bot/execution/executor.py`, misure in RTDB `/paper/ordini_limite`).
-La ricerca riparte solo con la seconda edizione del protocollo (`research/PROTOCOLLO_2.md`, bozza del 13 ott),
-quando il proprietario la approva.
+La ricerca riparte con il **protocollo 3** (`research/PROTOCOLLO_3.md`: la versione 5.1 su BTC scritta dal
+proprietario, con il collaudo del metodo; approvato il 16 ott 2026 alle 19:26 UTC). Prima si collauda il metodo
+(Passo 0, sezione 13bis: tre prove), poi una sessione di ricerca sul branch `research/campagna/BTC51` cerca le
+strategie su BTCUSDT; il paper è l'esame finale. La seconda edizione (`research/PROTOCOLLO_2.md`) ha chiuso con la
+campagna PANIERE (14 ott, nessuna strategia valida).
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e
@@ -98,6 +101,11 @@ delega, al massimo tre campagne in corso, con il messaggio di apertura approvato
 sul branch di coordinamento), un controllo ogni ora e le domande delle campagne girate subito al proprietario
 (Passo 4 del protocollo). La prova a placebo dell'esame (`research/taratura/placebo/`, branch di coordinamento)
 dice che l'esame regge sui prezzi veri.
+**Dal 16 ott 2026 vale il protocollo 3** (`research/PROTOCOLLO_3.md`): una sola campagna, `BTC51`, su BTCUSDT.
+Il Passo 0 (strumenti e collaudo del metodo) e i Passi 5-8 li fa il coordinamento sul branch principale; i Passi 1-4
+una sessione di ricerca sul branch `research/campagna/BTC51`, con il marcatore `{"tipo": "campagna", "simbolo":
+"BTC51"}`, aperta solo dopo il sì del proprietario agli esiti del Passo 0. Il vault si apre solo con la frase
+esatta «APRI IL VAULT 3». Il branch `research/campagna/BTC51` rientra nell'eccezione dei branch di ricerca.
 
 **Ogni sessione di campagna si apre con il modello `claude-opus-5-5` e con ultracode attivo** (richiesta
 del proprietario, 8 ott 2026). Nella creazione si passano la sorgente del repository e il branch principale;
