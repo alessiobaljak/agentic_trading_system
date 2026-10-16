@@ -58,7 +58,7 @@ class FetchFinto:
 
 def _apri_vault(radice: Path, testo: str = "aperto il 2026-10-06 12:00 UTC\ncandidati: ...\n") -> None:
     (radice / "vault").mkdir(parents=True, exist_ok=True)
-    (radice / "vault" / "APERTURA_2.md").write_text(testo)
+    (radice / "vault" / "APERTURA_3.md").write_text(testo)
 
 
 def _candela(ts: int, durata_ms: int, volume: float = 1.0) -> Candela:
@@ -126,8 +126,8 @@ def test_guardia_carica_candele_e_funding_con_fine_nel_2024_su_file_gia_su_disco
 
 
 def test_guardia_cartella_al_posto_del_file_non_apre(tmp_path):
-    """Una cartella chiamata APERTURA_2.md non e' il file di apertura."""
-    (tmp_path / "vault" / "APERTURA_2.md").mkdir(parents=True)
+    """Una cartella chiamata APERTURA_3.md non e' il file di apertura."""
+    (tmp_path / "vault" / "APERTURA_3.md").mkdir(parents=True)
     assert dati.vault_aperto(tmp_path) is False
     with pytest.raises(dati.VaultChiuso):
         dati.scarica_mese("BTCUSDT", "klines", "1h", 2024, 1, tmp_path, FetchFinto(b""))
@@ -246,7 +246,7 @@ def test_difetto_apertura_md_vuoto_apre_il_vault(tmp_path):
     un'apertura. Il caricatore guarda solo l'esistenza del file.
     """
     (tmp_path / "vault").mkdir()
-    (tmp_path / "vault" / "APERTURA_2.md").touch()
+    (tmp_path / "vault" / "APERTURA_3.md").touch()
     assert dati.vault_aperto(tmp_path) is False, "un file vuoto non e' un'apertura del vault"
     fetch = FetchFinto(_zip_con_csv(""))
     with pytest.raises(dati.VaultChiuso):

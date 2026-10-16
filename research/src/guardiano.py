@@ -26,11 +26,17 @@ Come decide:
     `research/campagne/GRUPPO/monete.csv` (e di BTCUSDT), e solo se quel file ha
     l'impronta SHA-256 scritta qui (`_IMPRONTA_MONETE_GRUPPO`); se non ce l'ha,
     ogni azione e' rifiutata;
+  * `{"tipo": "campagna", "simbolo": "BTC51"}` -> la campagna del protocollo 3
+    (`research/PROTOCOLLO_3.md`, sezioni 0, 3 e 12): una lista BIANCA piu' stretta,
+    `_CAMPAGNA_3_FILE` e `_CAMPAGNA_3_CARTELLE` (il testo del protocollo 3, gli strumenti
+    in sola lettura, i due file di configurazione del protocollo 3, la propria cartella e
+    i soli dati di BTCUSDT); niente protocolli, lezioni o changelog delle edizioni
+    precedenti;
   * `{"tipo": "coordinamento"}` -> lista NERA: tutto ammesso tranne i
     `percorsi_vietati`, i segreti e `research/data/vault/` finche' il vault e'
-    chiuso (manca `research/vault/APERTURA_2.md`, il marcatore della seconda
-    edizione: dal 13 ott 2026 `APERTURA.md` non apre piu'); gli strumenti diversi da
-    file, ricerche e Bash non li guarda;
+    chiuso (manca `research/vault/APERTURA_3.md`, il marcatore del protocollo 3:
+    dal 16 ott 2026 `APERTURA.md` e `APERTURA_2.md` non aprono piu'); gli strumenti
+    diversi da file, ricerche e Bash non li guarda;
   * in modalita' attiva qualunque errore imprevisto blocca (fail-closed): un
     guardiano che si rompe non deve aprire la porta.
 
@@ -226,6 +232,39 @@ _CAMPAGNA_CARTELLE = (
     "research/campagne/{S}",
     ".claude",
 )
+#: le campagne del protocollo 3 (`research/PROTOCOLLO_3.md`): simbolo della campagna ->
+#: la sola moneta di cui usa i dati. Il simbolo NON e' un contratto di Binance.
+SIMBOLI_PROTOCOLLO_3 = {"BTC51": "BTCUSDT"}
+#: protocollo 3, sezione 0 («chi cerca le strategie vede solo questo testo, gli strumenti,
+#: i parametri, la propria cartella e i dati di BTCUSDT fino al 2023-12-31») e sezione 3:
+#: file singoli ammessi. Niente PROTOCOLLO.md, CHANGELOG.md, lezioni/metodo.md, ne' il
+#: resto di research/config: contengono risultati delle edizioni precedenti.
+_CAMPAGNA_3_FILE = (
+    "research/PROTOCOLLO_3.md",
+    "research/.sessione",
+    "research/config/parametri_3.yaml",
+    "research/config/bot_3.md",
+    "research/config/percorsi_vietati.txt",
+    "CLAUDE.md",
+    ".gitignore",
+)
+#: protocollo 3: cartelle ammesse (gli strumenti si leggono soltanto: `_PROTETTI_3_CARTELLE`)
+_CAMPAGNA_3_CARTELLE = (
+    "research/src",
+    "research/campagne/{S}",
+    ".claude",
+)
+#: protocollo 3: in sola lettura per la sessione di ricerca, oltre a `_PROTETTI_FILE`. Gli
+#: strumenti sono congelati dal collaudo (sezione 13bis.5): un errore si segnala e lo
+#: corregge il coordinamento, che rifa' le prove. Il via libera alla validazione lo
+#: scrive il coordinamento dopo il si' dell'utente (regola 2).
+_PROTETTI_3_FILE = (
+    "research/PROTOCOLLO_3.md",
+    "CLAUDE.md",
+    ".gitignore",
+    "research/campagne/{S}/via_libera_validazione.md",
+)
+_PROTETTI_3_CARTELLE = ("research/src",)
 #: la cartella madre dei dati in-sample: da sola non e' mai ammessa in campagna
 #: (una ricerca o un elenco li' vedrebbe le cartelle di tutte le monete)
 _DATI_INSAMPLE = "research/data/insample"
@@ -833,7 +872,7 @@ def costruisci_contesto(radice: str, marcatore: dict) -> Contesto:
         tipo=tipo,
         simbolo=simbolo,
         vietati=leggi_vietati(radice),
-        vault_aperto=os.path.isfile(os.path.join(radice, "research", "vault", "APERTURA_2.md")),
+        vault_aperto=os.path.isfile(os.path.join(radice, "research", "vault", "APERTURA_3.md")),
         primo_livello=primo_livello,
         monete_gruppo=monete_gruppo,
     )
@@ -913,6 +952,8 @@ def monete_dati_ammesse(simbolo: str, monete_gruppo: frozenset[str] = frozenset(
     """
     if simbolo in SIMBOLI_GRUPPO:
         return frozenset(monete_gruppo) | {MONETA_RIFERIMENTO}
+    if simbolo in SIMBOLI_PROTOCOLLO_3:
+        return frozenset({SIMBOLI_PROTOCOLLO_3[simbolo]})
     return frozenset({simbolo, MONETA_RIFERIMENTO})
 
 
@@ -927,6 +968,15 @@ def ammesso_in_campagna(rel: str, simbolo: str, monete_gruppo: frozenset[str] = 
     `ETHUSDT`), niente maiuscole/minuscole diverse, e la cartella madre da sola
     non e' ammessa.
     """
+    if simbolo in SIMBOLI_PROTOCOLLO_3:
+        if rel in _CAMPAGNA_3_FILE:
+            return True
+        if any(_sotto(rel, c.format(S=simbolo)) for c in _CAMPAGNA_3_CARTELLE):
+            return True
+        pezzi = rel.split("/")
+        if pezzi[:3] == _DATI_INSAMPLE.split("/") and len(pezzi) >= 4:
+            return pezzi[3] in monete_dati_ammesse(simbolo, monete_gruppo)
+        return False
     if rel in _CAMPAGNA_FILE:
         return True
     if any(_sotto(rel, c.format(S=simbolo)) for c in _CAMPAGNA_CARTELLE):
@@ -939,20 +989,33 @@ def ammesso_in_campagna(rel: str, simbolo: str, monete_gruppo: frozenset[str] = 
     return False
 
 
-def e_protetto(rel: str) -> bool:
+def _protetti(simbolo: str = "") -> tuple:
+    """File e cartelle protetti per la campagna `simbolo` (quelli del protocollo 3 si
+    aggiungono solo per le sue campagne)."""
+    file_, cartelle = _PROTETTI_FILE, _PROTETTI_CARTELLE
+    if simbolo in SIMBOLI_PROTOCOLLO_3:
+        file_ = file_ + tuple(f.format(S=simbolo) for f in _PROTETTI_3_FILE)
+        cartelle = cartelle + _PROTETTI_3_CARTELLE
+    return file_, cartelle
+
+
+def e_protetto(rel: str, simbolo: str = "") -> bool:
     """I file che in campagna si leggono ma non si scrivono (il guardiano e i suoi,
-    e i file approvati della campagna di gruppo)."""
-    return rel in _PROTETTI_FILE or any(_sotto(rel, c) for c in _PROTETTI_CARTELLE)
+    i file approvati della campagna di gruppo e, per il protocollo 3, il testo, gli
+    strumenti e il via libera alla validazione)."""
+    file_, cartelle = _protetti(simbolo)
+    return rel in file_ or any(_sotto(rel, c) for c in cartelle)
 
 
-def _contiene_protetto(rel: str) -> bool:
+def _contiene_protetto(rel: str, simbolo: str = "") -> bool:
     """True se `rel` E' o CONTIENE un file/una cartella protetti.
 
     Serve ai comandi che cancellano o spostano (`rm -r`, `git rm --cached`,
     `find -delete`...): colpire la cartella madre di un protetto lo toglierebbe
     dal disco o dal branch, aggirando la protezione in sola lettura.
     """
-    return any(_sotto(p, rel) for p in _PROTETTI_FILE + _PROTETTI_CARTELLE)
+    file_, cartelle = _protetti(simbolo)
+    return any(_sotto(p, rel) for p in file_ + cartelle)
 
 
 def giudica_percorso(percorso: str, ctx: Contesto, *, radice_ok: bool = False, scrittura: bool = False) -> Verdetto:
@@ -976,7 +1039,7 @@ def giudica_percorso(percorso: str, ctx: Contesto, *, radice_ok: bool = False, s
             return OK if radice_ok else rifiuto
         if rel.startswith(".."):
             return rifiuto
-        if scrittura and e_protetto(rel):
+        if scrittura and e_protetto(rel, ctx.simbolo):
             return rifiuto
         if not ammesso_in_campagna(rel, ctx.simbolo, ctx.monete_gruppo):
             return rifiuto
@@ -2229,7 +2292,7 @@ def giudica_comando(comando: str, ctx: Contesto, profondita: int = 0) -> Verdett
                 )
                 if not v.consentito:
                     return Verdetto(False, f"{comando!r} (percorso {cand})")
-                if distrugge and _contiene_protetto(normalizza(base, ctx.radice)):
+                if distrugge and _contiene_protetto(normalizza(base, ctx.radice), ctx.simbolo):
                     return Verdetto(False, f"{comando!r} (cancella o sposta {cand}, che contiene un file protetto)")
         if ctx.campagna and prog in ("cd", "pushd", "popd"):
             cwd_rel = None if prog == "popd" else _nuova_cwd(argomenti, cwd_rel, ctx)
@@ -2252,9 +2315,17 @@ def _decodifica_ripetuta(testo: str) -> str | None:
     return None
 
 
-def _host_ammesso_web(host: str) -> bool:
+#: protocollo 3 (regola 7: niente conoscenza del 2024-2026): le pagine di Wikipedia sono
+#: aggiornate a oggi (prezzi e fatti di BTC dopo il 2023), quindi non si aprono
+_HOST_NON_AMMESSI_3 = ("wikipedia.org",)
+
+
+def _host_ammesso_web(host: str, simbolo: str = "") -> bool:
     """L'host (gia' in minuscolo) e' uno dei siti ammessi o un loro sottodominio."""
-    return any(host == dominio or host.endswith("." + dominio) for dominio in _HOST_AMMESSI_WEB)
+    ammessi = _HOST_AMMESSI_WEB
+    if simbolo in SIMBOLI_PROTOCOLLO_3:
+        ammessi = tuple(d for d in ammessi if d not in _HOST_NON_AMMESSI_3)
+    return any(host == dominio or host.endswith("." + dominio) for dominio in ammessi)
 
 
 def _host_di(testo: str) -> str | None:
@@ -2303,9 +2374,9 @@ def giudica_url(url, ctx: Contesto) -> Verdetto:
     if host is None or _host_di(decodificato) != host:
         return rifiuta("indirizzo illeggibile, non http(s), con credenziali o con un host che non e' un nome "
                        "di dominio semplice")
-    if not _host_ammesso_web(host):
+    if not _host_ammesso_web(host, ctx.simbolo):
         return rifiuta(f"in campagna WebFetch apre solo siti di articoli scientifici "
-                       f"({', '.join(_HOST_AMMESSI_WEB)}), non {host}")
+                       f"({', '.join(d for d in _HOST_AMMESSI_WEB if ctx.simbolo not in SIMBOLI_PROTOCOLLO_3 or d not in _HOST_NON_AMMESSI_3)}), non {host}")
     for m in _BRANCH.finditer(decodificato):
         if m.group(0) != ctx.proprio_branch:
             return rifiuta(f"branch {m.group(0)}")
@@ -2374,7 +2445,7 @@ def giudica_ricerca_web(ingresso: dict, ctx: Contesto) -> Verdetto:
             return rifiuta(f"contiene {parola!r}: porta a questo repository o ai suoi branch")
     for m in re.finditer(r"\bsite\s*:\s*(\S*)", testo):
         host = _host_di_dominio(m.group(1))
-        if not host or not _host_ammesso_web(host):
+        if not host or not _host_ammesso_web(host, ctx.simbolo):
             return rifiuta(f"site:{m.group(1)} non e' fra i siti ammessi in campagna")
     domini = ingresso.get("allowed_domains")
     if domini is not None:
@@ -2382,7 +2453,7 @@ def giudica_ricerca_web(ingresso: dict, ctx: Contesto) -> Verdetto:
             return rifiuta("allowed_domains non e' un elenco di domini")
         for dominio in domini:
             host = _host_di_dominio(_decodifica_ripetuta(dominio) or "")
-            if not host or not _host_ammesso_web(host):
+            if not host or not _host_ammesso_web(host, ctx.simbolo):
                 return rifiuta(f"allowed_domains contiene {dominio!r}, che non e' fra i siti ammessi in campagna")
     return OK
 
@@ -2521,7 +2592,9 @@ def _e_uscita_dello_strumento(percorso: str) -> bool:
 
 def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:
     oggetto = " ".join(oggetto.splitlines())  # una riga sola, sempre
-    regola = (f"Passo 4bis, research/campagne/{ctx.simbolo}/regole.md sezione 12" if ctx.gruppo else "Passo 3")
+    regola = (f"Passo 4bis, research/campagne/{ctx.simbolo}/regole.md sezione 12" if ctx.gruppo
+              else "research/PROTOCOLLO_3.md, sezioni 0, 3 e 12" if ctx.simbolo in SIMBOLI_PROTOCOLLO_3
+              else "Passo 3")
     nota = ""
     # quando il guardiano ha gia' indicato la forma giusta (la storia dei cloni limitati, o
     # dove scrivere il messaggio di commit del gruppo) non ha senso chiedere all'utente: la

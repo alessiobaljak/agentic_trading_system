@@ -430,6 +430,8 @@ def test_coordinamento_read(coordinamento, percorso, atteso):
 def test_coordinamento_vault_si_apre_con_apertura(coordinamento):
     assert _read(coordinamento, "research/data/vault/BTCUSDT/x.zip")[0] == 2
     (coordinamento / "research" / "vault" / "APERTURA_2.md").write_text("aperto\n")
+    assert _read(coordinamento, "research/data/vault/BTCUSDT/x.zip")[0] == 2  # dal 16 ott non apre piu'
+    (coordinamento / "research" / "vault" / "APERTURA_3.md").write_text("aperto\n")
     assert _read(coordinamento, "research/data/vault/BTCUSDT/x.zip")[0] == 0
 
 

@@ -9,14 +9,25 @@ cosi' le candele caricate entrano nel motore senza conversioni.
 Il blocco del vault
 -------------------
 Il vault e' il periodo dal 2024-01-01 al 2026-09-30. Finche' non esiste il file
-``<radice>/vault/APERTURA_2.md`` (il marcatore della SECONDA edizione del
-protocollo, ``research/PROTOCOLLO_2.md``, creato solo dopo che l'utente ha
-scritto in chat "APRI IL VAULT 2"), qualunque richiesta di dati con una data
-oltre il 2023-12-31 viene rifiutata con ``VaultChiuso`` PRIMA di qualunque
-accesso alla rete o al disco. Il marcatore della prima edizione,
-``vault/APERTURA.md`` (vault aperto l'11 ottobre 2026 per tre candidati), NON
-apre piu' il vault dal 13 ottobre 2026: resta nel repository come documento,
-non come chiave. Anche un solo giorno oltre il limite basta a far scattare il rifiuto:
+``<radice>/vault/APERTURA_3.md`` (il marcatore del protocollo 3,
+``research/PROTOCOLLO_3.md``, creato solo dopo che l'utente ha scritto in chat
+"APRI IL VAULT 3"), qualunque richiesta di dati con una data oltre il
+2023-12-31 viene rifiutata con ``VaultChiuso`` PRIMA di qualunque accesso alla
+rete o al disco. I marcatori delle edizioni precedenti, ``vault/APERTURA.md``
+(vault aperto l'11 ottobre 2026 per tre candidati) e ``vault/APERTURA_2.md``,
+NON aprono piu' il vault dal 16 ottobre 2026: restano nel repository come
+documenti, non come chiavi.
+
+Il blocco della validazione (protocollo 3, regola 2)
+----------------------------------------------------
+In una sessione di campagna del protocollo 3 (marcatore con simbolo ``BTC51``)
+il caricamento di candele e funding con date dal 2022-10-01 in poi e' rifiutato
+con ``ValidazioneChiusa`` finche' non esiste, con un contenuto,
+``<radice>/campagne/BTC51/via_libera_validazione.md`` (lo crea il coordinamento
+dopo il si' dell'utente alla fine del Passo 2; il guardiano lo protegge dalla
+sessione di ricerca). Scaricare i file e calcolarne le impronte resta permesso
+fino al 2023-12-31: servono al Passo 1, che legge della validazione solo i
+conteggi (``fatti_passo1_3``). Anche un solo giorno oltre il limite basta a far scattare il rifiuto:
 il controllo si fa sull'intero periodo richiesto, non mese per mese, cosi' un
 periodo a cavallo del limite non scarica nemmeno la parte lecita (chi lo
 chiede ha sbagliato qualcosa e deve accorgersene). Il file deve avere un
@@ -184,6 +195,13 @@ FINE_IN_SAMPLE = date(2023, 12, 31)
 #: Periodo del vault (sezione 3.1): uguale per tutte le monete.
 INIZIO_VAULT = date(2024, 1, 1)
 FINE_VAULT = date(2026, 9, 30)
+#: Protocollo 3 (sezione 4): fine della costruzione e inizio della validazione, uguali in calendario.
+FINE_COSTRUZIONE_3 = date(2022, 9, 30)
+INIZIO_VALIDAZIONE_3 = date(2022, 10, 1)
+#: Le campagne del protocollo 3 (marcatore ``{"tipo": "campagna", "simbolo": "BTC51"}``) e la moneta.
+SIMBOLI_PROTOCOLLO_3 = {"BTC51": "BTCUSDT"}
+#: Il file che toglie il blocco della validazione (regola 2), relativo a ``radice``.
+AUTORIZZAZIONE_VALIDAZIONE_3 = Path("campagne") / "BTC51" / "via_libera_validazione.md"
 
 #: La cartella research/ del repo, calcolata da questo file (research/src/dati.py).
 RADICE_DEFAULT = Path(__file__).resolve().parent.parent
@@ -273,11 +291,16 @@ Fetch = Callable[[str], Optional[bytes]]
 
 
 class VaultChiuso(Exception):
-    """Richiesta di dati oltre il 2023-12-31 senza il file vault/APERTURA_2.md (seconda edizione)."""
+    """Richiesta di dati oltre il 2023-12-31 senza il file vault/APERTURA_3.md (protocollo 3)."""
 
 
 class OltreIlVault(ValueError):
     """Richiesta di dati oltre il 2026-09-30: e' il periodo del paper, mai dato di ricerca."""
+
+
+class ValidazioneChiusa(Exception):
+    """Protocollo 3, regola 2: in una sessione di campagna BTC51 il caricamento di dati dal
+    2022-10-01 in poi e' rifiutato finche' non esiste ``campagne/BTC51/via_libera_validazione.md``."""
 
 
 class VietatoInCampagna(Exception):
@@ -315,20 +338,22 @@ class IntegritaFallita(ValueError):
 # ---------------------------------------------------------------------------
 
 
-#: il marcatore che apre il vault (seconda edizione, dal 13 ottobre 2026); quello
-#: della prima edizione, ``APERTURA.md``, non apre piu' niente
-MARCATORE_VAULT = "APERTURA_2.md"
+#: il marcatore che apre il vault (protocollo 3, dal 16 ottobre 2026); quelli delle
+#: edizioni precedenti, ``APERTURA.md`` e ``APERTURA_2.md``, non aprono piu' niente
+MARCATORE_VAULT = "APERTURA_3.md"
 MARCATORE_VAULT_PRIMA_EDIZIONE = "APERTURA.md"
+MARCATORE_VAULT_SECONDA_EDIZIONE = "APERTURA_2.md"
 
 
 def vault_aperto(radice: Path = RADICE_DEFAULT) -> bool:
-    """True se ``<radice>/vault/APERTURA_2.md`` esiste ed ha un contenuto: il vault e' aperto.
+    """True se ``<radice>/vault/APERTURA_3.md`` esiste ed ha un contenuto: il vault e' aperto.
 
     Il Passo 5 del protocollo crea il file con data, ora ed elenco dei
     candidati congelati: un file da 0 byte (o di soli spazi) e' un incidente,
     non un'apertura, e viene trattato come assente. Una cartella con quel
-    nome non conta. ``APERTURA.md`` (prima edizione) non conta: dal 13 ottobre
-    2026 il vault si riapre solo con il marcatore della seconda edizione.
+    nome non conta. ``APERTURA.md`` e ``APERTURA_2.md`` (edizioni precedenti)
+    non contano: dal 16 ottobre 2026 il vault si apre solo con il marcatore del
+    protocollo 3.
     """
     percorso = Path(radice) / "vault" / MARCATORE_VAULT
     if not percorso.is_file():
@@ -349,7 +374,7 @@ def controlla_vault(fine: date, radice: Path = RADICE_DEFAULT) -> None:
       anche a vault aperto: da li' in poi e' il periodo del paper trading,
       che il protocollo vieta di usare come dato di ricerca;
     * oltre ``FINE_IN_SAMPLE`` (2023-12-31) si solleva ``VaultChiuso`` finche'
-      non esiste (con un contenuto) ``vault/APERTURA_2.md``.
+      non esiste (con un contenuto) ``vault/APERTURA_3.md``.
     """
     if fine > FINE_VAULT:
         raise OltreIlVault(
@@ -360,6 +385,31 @@ def controlla_vault(fine: date, radice: Path = RADICE_DEFAULT) -> None:
         raise VaultChiuso(
             f"richiesti dati fino al {fine.isoformat()}, oltre il {FINE_IN_SAMPLE.isoformat()}: "
             f"il vault e' chiuso (manca {Path(radice) / 'vault' / MARCATORE_VAULT})"
+        )
+
+
+def validazione_autorizzata(radice: Path = RADICE_DEFAULT) -> bool:
+    """True se ``<radice>/campagne/BTC51/via_libera_validazione.md`` esiste ed ha un contenuto."""
+    percorso = Path(radice) / AUTORIZZAZIONE_VALIDAZIONE_3
+    if not percorso.is_file():
+        return False
+    try:
+        return bool(percorso.read_text(encoding="utf-8", errors="replace").strip())
+    except OSError:
+        return False
+
+
+def controlla_validazione(fine: date, radice: Path = RADICE_DEFAULT) -> None:
+    """Protocollo 3, regola 2: in una sessione di campagna BTC51 rifiuta le date dal
+    2022-10-01 senza l'autorizzazione, PRIMA di ogni accesso al disco. Fuori da una
+    campagna del protocollo 3 non fa nulla (il coordinamento lavora sul principale)."""
+    marcatore = marcatore_di_campagna()
+    if marcatore is None or marcatore["simbolo"] not in SIMBOLI_PROTOCOLLO_3:
+        return
+    if fine >= INIZIO_VALIDAZIONE_3 and not validazione_autorizzata(radice):
+        raise ValidazioneChiusa(
+            f"richiesti dati fino al {fine.isoformat()}: la validazione e' chiusa fino al Passo 3 "
+            f"(PROTOCOLLO_3.md, regola 2; manca {Path(radice) / AUTORIZZAZIONE_VALIDAZIONE_3})"
         )
 
 
@@ -447,8 +497,12 @@ def controlla_simbolo_in_campagna(simbolo: str, chi: str = "dati") -> None:
         motivo = (f"{simbolo!r} non e' fra le monete di {guardiano.percorso_monete_gruppo(proprio)} ne' "
                   f"{guardiano.MONETA_RIFERIMENTO} (campagne/{proprio}/regole.md, sezione 12, punto 4)")
     else:
-        motivo = (f"{simbolo!r} non e' {proprio} ne' {guardiano.MONETA_RIFERIMENTO} "
-                  "(PROTOCOLLO.md, Passo 3, percorsi ammessi)")
+        if proprio in SIMBOLI_PROTOCOLLO_3:
+            motivo = (f"{simbolo!r} non e' {SIMBOLI_PROTOCOLLO_3[proprio]} "
+                      "(PROTOCOLLO_3.md, sezioni 0, 3 e 12)")
+        else:
+            motivo = (f"{simbolo!r} non e' {proprio} ne' {guardiano.MONETA_RIFERIMENTO} "
+                      "(PROTOCOLLO.md, Passo 3, percorsi ammessi)")
     raise VietatoInCampagna(f"{chi}: in una sessione di campagna {proprio} il caricatore rifiuta i dati di {motivo}")
 
 
@@ -1177,6 +1231,7 @@ def _percorsi_presenti(
     """I file del periodo che esistono su disco. Il controllo del vault viene prima, poi quello della campagna."""
     mesi = list(mesi_del_periodo(inizio, fine))
     controlla_vault(fine, radice)
+    controlla_validazione(fine, radice)
     controlla_simbolo_in_campagna(simbolo, f"caricamento di {tipo}")
     percorsi = [percorso_mese(simbolo, tipo, intervallo, anno, mese, radice) for anno, mese in mesi]
     return [p for p in percorsi if p.is_file()]
@@ -1429,6 +1484,7 @@ def carica_serie_allineate(
       (0 senza ``aggrega_da``).
     """
     controlla_vault(fine, radice)
+    controlla_validazione(fine, radice)
     controlla_simbolo_in_campagna(simbolo, "carica_serie_allineate")
     sorgente = aggrega_da or intervallo
     last_sorgente = carica_candele(simbolo, sorgente, inizio, fine, radice, tipo="klines")
@@ -1538,6 +1594,7 @@ def liquidita_mensile(
     primo_giorno = date(mesi[0][0], mesi[0][1], 1)
     ultimo_giorno = _ultimo_giorno_del_mese(*mesi[-1])
     controlla_vault(ultimo_giorno, radice)
+    controlla_validazione(ultimo_giorno, radice)
     controlla_simbolo_in_campagna(simbolo, "liquidita_mensile")
     soglia = liquidita_minima_usdt_giorno()
 
@@ -1873,3 +1930,94 @@ def elenca_simboli_archivio(fetch: Optional[Fetch] = None, prefisso: str = PREFI
             raise RuntimeError(f"{url}: pagina troncata ma senza un marker che avanzi (marker {marker!r})")
         marker = prossimo
     raise RuntimeError(f"indice dell'archivio ancora troncato dopo {MAX_PAGINE_INDICE} pagine: {url}")
+
+
+# ---------------------------------------------------------------------------
+# Protocollo 3: la serie per il motore e i fatti del Passo 1
+# ---------------------------------------------------------------------------
+
+
+def serie_3(simbolo: str, intervallo: str, inizio: date, fine: date, radice: Path = RADICE_DEFAULT):
+    """La serie del protocollo 3 (``research.src.catalogo3.Serie``): candele last e mark
+    sugli stessi ``ts`` (intersezione, come ``carica_serie_allineate``) e funding del
+    periodo. I blocchi del vault e della validazione valgono come per ogni caricamento."""
+    from research.src.catalogo3 import Serie
+
+    al = carica_serie_allineate(simbolo, intervallo, inizio, fine, radice)
+    funding = carica_funding(simbolo, inizio, fine, radice)
+    last, mark = al["candele"], al["candele_mark"]
+    return Serie(
+        timeframe=intervallo,
+        ts=[c.ts for c in last], open=[c.open for c in last], high=[c.high for c in last],
+        low=[c.low for c in last], close=[c.close for c in last], volume=[c.volume for c in last],
+        mark_open=[c.open for c in mark], mark_high=[c.high for c in mark],
+        mark_low=[c.low for c in mark], mark_close=[c.close for c in mark],
+        funding_ts=[ts for ts, _ in funding], funding_tasso=[t for _, t in funding],
+    )
+
+
+def fatti_passo1_3(simbolo: str = "BTCUSDT", radice: Path = RADICE_DEFAULT,
+                   timeframe: Sequence[str] = ("15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"),
+                   ) -> Dict[str, object]:
+    """I fatti del Passo 1 del protocollo 3 che riguardano anche la validazione, SOLO come
+    conteggi: candele per timeframe in costruzione e in validazione, buchi (data, ora,
+    durata) di last e mark, volume medio giornaliero 2023 in USDT, intervalli di funding.
+    Nessun prezzo della validazione esce da qui. Legge i file gia' scaricati fino al
+    2023-12-31 senza passare dal blocco della validazione (regola 2): e' l'unica
+    eccezione, prevista dal Passo 1."""
+    controlla_vault(FINE_IN_SAMPLE, radice)
+    controlla_simbolo_in_campagna(simbolo, "fatti_passo1_3")
+    fine_costr = ms_da_data(INIZIO_VALIDAZIONE_3)
+    fine_val = ms_da_data(FINE_IN_SAMPLE + timedelta(days=1))
+    out: Dict[str, object] = {"timeframe": {}}
+
+    def leggi(tipo: str, intervallo: str) -> List[Candela]:
+        per_ts: Dict[int, Candela] = {}
+        for anno, mese in mesi_del_periodo(date(2019, 1, 1), FINE_IN_SAMPLE):
+            p = percorso_mese(simbolo, tipo, intervallo, anno, mese, radice)
+            if p.is_file():
+                for c in candele_da_zip(p):
+                    if c.close_ts < fine_val and c.ts not in per_ts:
+                        per_ts[c.ts] = c
+        return [per_ts[t] for t in sorted(per_ts)]
+
+    prima = None
+    for intervallo in timeframe:
+        dur = durata_intervallo(intervallo)
+        voce: Dict[str, object] = {}
+        for tipo in ("klines", "markPriceKlines"):
+            cc = leggi(tipo, intervallo)
+            ts = [c.ts for c in cc]
+            buchi = []
+            for a, b in zip(ts[:-1], ts[1:]):
+                if b - a != dur:
+                    buchi.append({"da": datetime.fromtimestamp((a + dur) / 1000, tz=timezone.utc).isoformat(),
+                                  "candele_mancanti": (b - a) // dur - 1})
+            voce[tipo] = {"costruzione": sum(1 for t in ts if t < fine_costr),
+                          "validazione": sum(1 for t in ts if fine_costr <= t),
+                          "prima_candela": (datetime.fromtimestamp(ts[0] / 1000, tz=timezone.utc).isoformat()
+                                            if ts else None),
+                          "buchi": buchi}
+            if tipo == "klines" and ts:
+                prima = ts[0] if prima is None else min(prima, ts[0])
+        out["timeframe"][intervallo] = voce
+    out["prima_candela"] = datetime.fromtimestamp(prima / 1000, tz=timezone.utc).isoformat() if prima else None
+    volumi: List[float] = []
+    for mese in range(1, 13):
+        p = percorso_mese(simbolo, "klines", "1d", 2023, mese, radice)
+        if p.is_file():
+            volumi.extend(v for v in volume_usdt_da_zip(p).values() if v is not None)
+    out["volume_medio_giornaliero_2023_usdt"] = (sum(volumi) / len(volumi)) if volumi else None
+    out["giorni_volume_2023"] = len(volumi)
+    righe: List[Tuple[int, int, float]] = []
+    for anno, mese in mesi_del_periodo(date(2019, 1, 1), FINE_IN_SAMPLE):
+        p = percorso_mese(simbolo, "fundingRate", None, anno, mese, radice)
+        if p.is_file():
+            righe.extend(funding_da_zip(p))
+    righe.sort()
+    out["intervalli_funding"] = [
+        {"da": datetime.fromtimestamp(t / 1000, tz=timezone.utc).isoformat(), "ore": ore}
+        for t, ore in intervallo_funding(righe)
+    ]
+    out["regolamenti_funding"] = len(righe)
+    return out
