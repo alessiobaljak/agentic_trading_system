@@ -13,7 +13,7 @@ import math
 import sys
 from pathlib import Path
 
-GIRO = int(sys.argv[1]) if len(sys.argv) > 1 else 3
+GIRO = int(sys.argv[1]) if len(sys.argv) > 1 else 4
 ESITI = Path(__file__).resolve().parent / "esiti" / f"giro{GIRO}"
 #: l'ampiezza dopo la quale si guarda se servono le riserve, e la riserva
 AMPIEZZA_GUIDA, RISERVA = (0.6, 0.9) if GIRO == 1 else (1.2, 1.8)

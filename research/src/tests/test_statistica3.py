@@ -206,7 +206,8 @@ def test_10_1_ogni_simulazione_ha_esattamente_i_trade_del_candidato(serie, spia)
     for k, prese in enumerate(_simulazioni(registro, n, 50)):
         assert len({j for j, _ in prese}) == n
         # il valore restituito e' l'R medio proprio di quei trade
-        assert out["valori_casuali"][k] == sum(t.r for _, t in prese) / n
+        # stessi trade, somme fatte in due modi: uguali a meno dell'ultima cifra (numpy 2.5)
+        assert out["valori_casuali"][k] == pytest.approx(sum(t.r for _, t in prese) / n, rel=0, abs=1e-12)
 
 
 @pytest.mark.parametrize("variante", [V_MERCATO, V_LIMIT], ids=["mercato", "limit"])
@@ -491,7 +492,8 @@ def test_10_2_pareggi_esatti_anche_nella_fase2():
     assert len({t.r for t in ris.trade}) == 1
     valori = out["valori_casuali"]
     assert len(valori) == 1000
-    assert np.sum(valori == out["metriche"]["r_medio"]) > 0  # ci sono pareggi esatti
+    # ci sono pareggi (uguali bit per bit con numpy 1.26, all'ultima cifra con numpy 2.5)
+    assert np.sum(np.abs(valori - out["metriche"]["r_medio"]) < 1e-12) > 0
     assert out["p_value"] == 1.0
 
 
@@ -1079,3 +1081,14 @@ def test_10_1_le_larghezze_si_prendono_dal_candidato_se_non_si_passano(serie):
     a = st.entrate_casuali(c, len(ris.trade), 0, len(serie) - 1, n_simulazioni=50)
     b = st.entrate_casuali(c, len(ris.trade), 0, len(serie) - 1, n_simulazioni=50, larghezze_candidato=larg)
     assert np.array_equal(a["valori"], b["valori"])
+
+
+def test_10_2_un_pareggio_all_ultima_cifra_conta_come_pareggio():
+    """Correzione del 17 ottobre 2026: una simulazione con R medio piu' basso del candidato di 5,6e-17 (stessi
+    trade sommati in un altro ordine) conta come «maggiore o uguale»; una piu' bassa di un millesimo di R no."""
+    c = -0.2699730026997294
+    valori = np.full(1000, -1.0)
+    valori[:3] = c - 5.6e-17
+    valori[3:5] = c - 1e-3
+    assert st.p_value(c, valori) == pytest.approx(4 / 1001)
+

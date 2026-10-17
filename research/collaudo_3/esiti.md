@@ -4,13 +4,42 @@ Sezione 13bis del protocollo. Le regole di dettaglio sono in `regole.md`, commit
 aggiornate prima del secondo giro con le correzioni approvate. Gli esiti grezzi di ogni giro sono in `esiti/giro<N>/`
 (una riga JSON per prova), il riepilogo calcolato da `riepilogo.py <N>`.
 
-## Esito: il metodo passa il collaudo (terzo giro, 17 ottobre 2026)
+## Esito: il metodo passa il collaudo (quarto giro, 17 ottobre 2026)
 
-| Prova | Primo giro (16 ott) | Secondo giro (17 ott, con le correzioni) | Terzo giro (17 ott, caricatore corretto) |
-|---|---|---|---|
-| A — prezzi senza vantaggio | non passa (21 p-value sotto 0,10 su 100) | **passa** (13 su 100, soglia 15; 0 varianti oltre la Fase 2, soglia 5) | **passa** (11 su 100; 0 oltre la Fase 2) |
-| B — vantaggio inserito apposta | passa per due regole su tre | **passa** per tutte e tre | **passa** per tutte e tre |
-| C — parita' con il bot | non eseguibile | dopo il vault, prima del paper (scelta del proprietario del 17 ott) | idem |
+| Prova | Primo giro (16 ott) | Secondo giro (17 ott) | Terzo giro (17 ott, caricatore corretto) | Quarto giro (17 ott, pareggi corretti, versioni della ricerca) |
+|---|---|---|---|---|
+| A — prezzi senza vantaggio | non passa (21 p-value sotto 0,10) | **passa** (13) | **passa** (11) | **passa** (11; 0 varianti oltre la Fase 2) |
+| B — vantaggio inserito apposta | passa per 2 regole su 3 | **passa** | **passa** | **passa** (104 su 104 con almeno 0,2 R; 0 su 90 senza) |
+| C — parita' con il bot | non eseguibile | dopo il vault, prima del paper (scelta del proprietario del 17 ott) | idem | idem |
+
+## Quarto giro: 17 ottobre 2026, dalle 09:13:32 alle 09:39:29 UTC
+
+Dopo la correzione dei pareggi nel p-value (10.2; trovata dalla sessione di ricerca: con numpy 2.5 un pareggio esatto
+differiva all'ultima cifra e non contava). `statistica3.py` e' cambiato, quindi si rifanno A e B (13bis.5); questa volta
+con **Python 3.13.16, numpy 2.5.3 e scipy 1.18.1**, le versioni della macchina della sessione di ricerca
+(`esiti/giro4/ambiente.txt`). Strumenti al commit `7b189254`, impronte SHA-256 (`esiti/giro4/impronte.json`), **che
+da qui valgono per la ricerca**:
+
+| File | SHA-256 |
+|---|---|
+| `research/src/catalogo3.py` | `a9c7e99613d159db92833822716c06e4913d8cc6db80c88421527269b4dc5b06` |
+| `research/src/motore3.py` | `84d3700cb1633711bb11db31ae9555f938897a4fd3fce1a3a56452281d9cf6c3` |
+| `research/src/statistica3.py` | `1e5bbd750df11ca0c1f790edcc607fc9eea492e5a5ee34746190571fc391811a` |
+| `research/src/statistica.py` | `e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1` |
+| `research/src/dati.py` | `440e6ef0a2e00c85d5329b2b9f09d03fb424d7f43d1cef0bd911c31dae43080c` |
+| `research/src/guardiano.py` | `b83825094acc41f5ede7cf2af9d30cc35ef2bd03108b25447df6fe8e1cec993b` |
+| `research/config/parametri_3.yaml` | `85b0e7bb443b123edbc4a9618c8475dd031e73e88d8b92f4d7e7c7734c31a2f8` |
+| `research/collaudo_3/collaudo.py` | `425f08c69bdcf4a9ae933ce279571779bcecf73a2d4b51ef8f3b7de5e02307a4` |
+| `research/collaudo_3/regole.md` | `40b32de1f8a4431a63cc00393d8a02e2d619125f4b9e3a3dadf0caa5a630723f` |
+
+- **Prova A: passa.** 100 varianti finte (473 estratte; la 309 sostituita come nel terzo giro, perche' le entrate
+  casuali alla stessa larghezza di stop non trovano posto); 0 superano la Fase 2 (soglia 5); 11 p-value sotto 0,10
+  (soglia 15); per decimi 11, 10, 15, 12, 5, 9, 9, 15, 7, 7; R medio delle varianti −0,071, delle entrate casuali −0,081.
+- **Prova B: passa** per le tre regole: senza vantaggio 0 su 30 per ognuna; ad almeno 0,35 R superano 24 su 24, 28
+  su 28, 30 su 30; con almeno 0,2 R netti 104 su 104; la riserva non e' servita; segnali inseriti uguali a quelli
+  trovati in tutte le prove.
+- Rispetto al terzo giro (numpy 1.26) cambiano solo alcune cifre dopo la quindicesima: le estrazioni e i trade sono gli
+  stessi.
 
 ## Terzo giro: 17 ottobre 2026, dalle 07:49:26 alle 08:16:09 UTC
 
