@@ -44,8 +44,10 @@ Il guardiano legge la **forma** dei comandi, non le intenzioni. Forme che vengon
 2. Solo quando `git branch --show-current` stampa `research/campagna/LINK6`, scrivi il marcatore
    `research/.sessione` (non e' in git) con lo strumento di scrittura dei file.
 3. Se mancano, installa le librerie: `python3 -m pip install numpy scipy pyyaml pytest`.
-4. Controlla le versioni (regola 11): `python3 --version` e `python3 -c "import numpy; print(numpy.__version__)"` devono
-   dare esattamente quelle di `parametri_4.yaml` (`versioni`). Se no, STOP.
+4. Controlla le versioni (regola 11) con un piccolo script nella tua cartella `codice/` che stampa
+   `sys.version` e `numpy.__version__` (il guardiano rifiuta `python3 -c`): devono dare esattamente quelle di
+   `parametri_4.yaml` (`versioni`). Se no, STOP. (Corretto dal coordinamento il 17 ottobre 2026: la prima versione
+   di questa guida indicava `python3 -c`, che il guardiano rifiuta; lo ha segnalato la sessione di ricerca.)
 5. Lancia i test: `python3 -m pytest research/src/tests/test_guardiano_link6.py research/src/tests/test_dati_link6.py research/src/tests/test_statistica4.py -q -p no:cacheprovider`.
 6. Fai il primo commit e `git push -u origin research/campagna/LINK6` nei primi minuti: la macchina della
    sessione e' temporanea. Se il push fallisce, STOP e avvisa l'utente.
