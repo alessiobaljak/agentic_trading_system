@@ -44,8 +44,9 @@ from research.src.statistica3 import SimulazioneImpossibile, fase2, fase4  # noq
 CARTELLA = Path(__file__).resolve().parent
 #: il giro del collaudo: il primo (16 ott) usava le candele rimescolate e le ampiezze 0 / 0,3 / 0,6;
 #: dal secondo valgono le correzioni approvate il 17 ottobre 2026 (PROTOCOLLO_3.md, appendice 3); il terzo
-#: rifa' A e B dopo la correzione del caricatore per i buchi del solo mark (appendice 3, punto 6)
-GIRO = 3
+#: rifa' A e B dopo la correzione del caricatore per i buchi del solo mark (appendice 3, punto 6); il quarto
+#: dopo la correzione dei pareggi nel p-value (10.2), con Python 3.13 e numpy 2.5.3 come la sessione di ricerca
+GIRO = 4
 ESITI = CARTELLA / "esiti" / f"giro{GIRO}"
 INIZIO = date(2020, 1, 1)
 FINE = date(2022, 9, 30)

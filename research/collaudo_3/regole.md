@@ -103,6 +103,10 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
     versione prendeva le candele in un ordine a caso e teneva un trade solo se ci stava fra quelli gia' presi;
     cosi' teneva piu' spesso i trade brevi (quasi sempre stop). L'ha trovato il verificatore indipendente
     delle statistiche.
+20bis. **Pareggi nel p-value** (dal quarto giro, correzione del 17 ottobre trovata dalla sessione di ricerca): una
+    simulazione con un R medio piu' basso del candidato di meno di un miliardesimo di R conta come pareggio, cioe'
+    «maggiore o uguale» (10.2). Senza, con numpy 2.5 i pareggi esatti si perdevano all'ultima cifra. Dal quarto
+    giro il collaudo gira con Python 3.13 e numpy 2.5.3, le versioni della macchina della sessione di ricerca.
 21. **Robustezza (verifica 1)**: per E11 il lato (funding sopra o sotto) resta quello della variante anche
     quando la soglia si sposta. Si spostano anche i parametri fissi del catalogo usati dalla variante
     (per esempio l'ATR 14 dello stop, i periodi del MACD, la finestra di 500 candele); i multipli di

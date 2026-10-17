@@ -246,12 +246,22 @@ def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: 
             "quote_larghezza": quote}
 
 
+#: due R medi che differiscono meno di cosi' sono un pareggio (10.2: «maggiore o uguale»)
+TOLLERANZA_PAREGGIO = 1e-9
+
+
 def p_value(r_candidato: float, valori: Sequence[float], n_simulazioni: int = N_SIMULAZIONI) -> float:
-    """10.2: p = (1 + simulazioni con R medio >= candidato) / (n + 1), con n = 1.000."""
+    """10.2: p = (1 + simulazioni con R medio >= candidato) / (n + 1), con n = 1.000.
+
+    Correzione del 17 ottobre 2026 (trovata dalla sessione di ricerca BTC51): l'R medio del candidato
+    e quello delle simulazioni si sommano in due modi diversi, e con numpy 2.5 un pareggio esatto puo'
+    differire all'ultima cifra (5,6e-17) e non contare, a favore del candidato. Ora una simulazione
+    con un R medio piu' basso di meno di ``TOLLERANZA_PAREGGIO`` (un miliardesimo di R) conta come
+    pareggio, cioe' come «maggiore o uguale»."""
     valori = np.asarray(valori, dtype=np.float64)
     if len(valori) != n_simulazioni:
         raise ValueError(f"servono esattamente {n_simulazioni} simulazioni, non {len(valori)}")
-    return float((1 + int(np.sum(valori >= r_candidato))) / (n_simulazioni + 1))
+    return float((1 + int(np.sum(valori >= r_candidato - TOLLERANZA_PAREGGIO))) / (n_simulazioni + 1))
 
 
 # ---------------------------------------------------------------------------
