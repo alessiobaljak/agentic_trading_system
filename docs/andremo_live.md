@@ -3932,3 +3932,13 @@ proprietario alle 09:38 ora italiana: «ok correggi». Ora quei giorni restano, 
 (40%, 70%, 90%, 98%: il resto e' il riscaldamento). Collaudo rifatto (terzo giro, 09:49-10:16): prova A passa (11
 p-value sotto 0,10 su 100, nessuna variante finta oltre la Fase 2), prova B passa per le tre regole. Correzione
 portata sul branch della ricerca (015f9ba9); la sessione riparte dal Passo 1 aggiornato.
+
+### 17 ottobre, tarda mattina: secondo difetto trovato dalla ricerca BTC51, i pareggi del p-value
+
+Aggiornando il Passo 1 la sessione di ricerca ha visto fallire due test delle statistiche sulla sua macchina
+(Python 3.13, numpy 2.5.3): un pareggio esatto fra il candidato e una simulazione differiva all'ultima cifra
+(5,6e-17) e non contava, a favore del candidato. Riprodotto dal coordinamento con le stesse versioni e corretto (un
+miliardesimo di R di tolleranza nei pareggi, come vuole la 10.2: «maggiore o uguale»). Collaudo rifatto con le
+versioni della ricerca (quarto giro, 11:13-11:39 ora italiana): prova A e B passano. Due difetti degli strumenti in
+una mattina, trovati entrambi dalla sessione di ricerca prima di qualunque variante: la regola che gli strumenti
+siano in sola lettura e che la sessione si fermi e chieda ha funzionato.
