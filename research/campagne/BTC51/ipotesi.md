@@ -481,6 +481,27 @@ non bastare (previsione di questa spiegazione: R medio ancora sotto zero).
 - **V-036** · la stessa, short (stima 268).
 Previsione: long fra −0,05 e +0,15 R, short fra −0,2 e 0; non superano.
 
+**Esito (17 ottobre).** V-035 +0,012 R (p 0,067), V-036 −0,098 R (p 0,485): non superano, come previsto. Togliere il
+fine settimana non salva la rottura del range asiatico.
+
+### I-19 — Un eccesso con volume alto che rientra subito è liquidità, non informazione: torna indietro
+
+**Fonti.** Campbell, Grossman, Wang, «Trading Volume and Serial Correlation in Stock Returns», Quarterly Journal of
+Economics 108(4), 1993: i movimenti accompagnati da volume alto (domanda di liquidità, non informazione) tendono a
+tornare indietro, e chi fornisce liquidità è pagato da questo ritorno; Caporale, Plastun, CESifo WP 7917, 2019: per BTC
+gli eccessi verso l'alto sono seguiti da un ritorno indietro. **Affermazione:** quando una candela oraria torna dentro le
+bande di Bollinger dopo una chiusura fuori, **con volume oltre 1,5 volte la media**, il prezzo nelle 12 ore seguenti
+continua a tornare verso la media più del caso. La differenza con I-06 (V-015, V-016) è il volume alto, che secondo la
+fonte separa la liquidità dall'informazione; qui l'ingresso è a mercato e senza filtro. Per lo short le due fonti
+dicono la stessa cosa; per il long si contraddicono (Caporale e Plastun: dopo gli eccessi verso il basso BTC continua a
+scendere). **Concorrenti specifiche:** 19-1 il ritorno verso la media è già andato male due volte (I-06): previsione di
+questa spiegazione, R negativo; 19-2 il volume alto al rientro misura la fine di una cascata di liquidazioni, che è
+proprio il caso della fonte.
+- **V-037** · 1h · short · E5 ritorno da Bollinger k 2,0 · C1 volume relativo 1,5 · M · S1 1,5 × ATR · U1 1,5 R e U2
+  12 candele (stima 150).
+- **V-038** · la stessa, long (stima 233).
+Previsione: short fra −0,1 e +0,15 R; long fra −0,2 e +0,05 R; non superano.
+
 ## Piano dei tentativi
 
 Primo lotto: 19 varianti (V-001 … V-019), una per riga, in quest'ordine. Restano 21 tentativi per la Fase 3 (filtri
