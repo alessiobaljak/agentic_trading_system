@@ -1,0 +1,4 @@
+[
+ {"nome": "stocastico-30m-long-laterale-limit", "specifica": {"timeframe": "30m", "direzione": "long", "filtro": {"codice": "F2", "regime": "laterale"}, "ingresso": {"codice": "E8"}, "conferma": null, "tipo_ingresso": {"codice": "L", "k": 0.25, "validita": 3}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 12}]}},
+ {"nome": "stocastico-30m-short-laterale-limit", "specifica": {"timeframe": "30m", "direzione": "short", "filtro": {"codice": "F2", "regime": "laterale"}, "ingresso": {"codice": "E8"}, "conferma": null, "tipo_ingresso": {"codice": "L", "k": 0.25, "validita": 3}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 12}]}}
+]

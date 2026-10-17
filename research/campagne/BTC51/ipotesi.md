@@ -292,6 +292,38 @@ più che un giorno cattivo: si vede dalla stabilità per blocchi.
 Previsione: R medio fra +0,15 e +0,30 R, p-value sotto 0,05; per l'origine dell'idea mi aspetto che in validazione
 perda gran parte del vantaggio.
 
+**Esito di V-020 (17 ottobre).** Supera la Fase 2 e la Fase 4 (log). Un indizio contro I-09 c'era già prima del
+test, e lo scrivo qui: in V-011 (short sul funding alto) il fine settimana era migliore dei feriali (+0,314 contro
++0,072 R). L'effetto del giorno, se c'è, non vale per tutti i segnali del funding.
+
+## Fase 5, prima parte: famiglie non ancora provate
+
+Restano 20 tentativi. Per non fissarmi sul funding provo tre famiglie diverse, scelte prima di qualunque risultato su
+di esse (stime in `codice/stime_4.json` e `stime_5.json`). Le altre famiglie hanno troppo pochi trade con regole
+sensate (stocastico in laterale su 1h: 47 e 91 trade; RSI a metà su 4h: 80) oppure sono già state provate in forma
+simile e con esito chiaramente negativo (ritorno verso la media su 30 minuti, V-015 e V-016). Le scarto senza testarle.
+
+### I-10 — Il MACD nella direzione della tendenza lunga
+
+**Fonti.** G. Appel, «Technical Analysis: Power Tools for Active Investors», FT Press, 2005 (il MACD, ideato da
+Appel negli anni '70); Brock, Lakonishok, LeBaron, 1992 (filtrare con la tendenza lunga). **Affermazione:** con la
+chiusura da 2 ore sopra la EMA 200, un incrocio verso l'alto del MACD sulla sua linea di segnale è seguito da un rialzo
+che, lasciato correre con il trailing, supera il caso; simmetrico sotto la EMA 200 per lo short. **Concorrenti
+specifiche:** 10-1 è la stessa cosa di I-01 e I-02 (tendenza) con un altro ingresso: se I-01 e I-02 non hanno
+superato, anche questa probabilmente no; 10-2 il filtro EMA 200 sceglie solo i periodi di tendenza (A2).
+- **V-021** · 2h · long · F1 sopra EMA 200 · E9 MACD (12, 26, 9) · M · S1 2 × ATR · U3 3 × ATR (stima 157).
+- **V-022** · la stessa, short, F1 sotto EMA 200 (stima 165).
+Previsione: R medio fra −0,05 e +0,2; non superano.
+
+### I-11 — In tendenza ribassista i rimbalzi brevi si vendono (specchio di I-07)
+
+**Fonte.** Connors, Alvarez, 2009 (la regola è simmetrica). **Affermazione:** con la chiusura oraria sotto la EMA 200,
+quando l'RSI(7) riscende sotto 70 il prezzo nelle 24 ore seguenti scende più del caso; ordine limit a 0,25 ATR sopra
+la chiusura. **Concorrenti:** come I-07.
+- **V-023** · 1h · short · F1 sotto EMA 200 · E6 RSI 7, soglia 70 · L k 0,25 validità 3 · S1 2 × ATR · U1 1,5 R e U2
+  24 candele (stima 152).
+Previsione: R medio fra −0,15 e +0,1; non supera (V-017, la versione long su 30 minuti, ha dato +0,025).
+
 ## Piano dei tentativi
 
 Primo lotto: 19 varianti (V-001 … V-019), una per riga, in quest'ordine. Restano 21 tentativi per la Fase 3 (filtri
