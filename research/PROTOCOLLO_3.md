@@ -5,7 +5,9 @@
 > fondo: il collaudo del metodo al Passo 0 (sezione 13bis), il paper come esame finale (Passo 8), chi esegue i passi,
 > le entrate casuali corrette (sezione 10.1) e i nomi di file, cartelle e branch del repository. Dopo l'approvazione
 > sono stati corretti solo due nomi rimasti vecchi nel Passo 0 (`config/bot_3.md` e `vault/APERTURA_3.md`, come
-> nell'appendice 2, punto 5).
+> nell'appendice 2, punto 5). **Correzioni del collaudo approvate dal proprietario il 17 ottobre 2026 alle 06:11 UTC**
+> («ok sì a tutto, procedi con le correzioni»): sezioni 4, 7.10, 10.1, 13bis.1-13bis.4 e 14, elencate
+> nell'appendice 3.
 > Una sola moneta: il contratto perpetuo BTCUSDT di Binance Futures (USDS-M). Rispetto alla versione 5 aggiunge gli ingressi con ordine limit.
 > Nel repository è `research/PROTOCOLLO_3.md`, accanto ai protocolli precedenti, che non cambiano. Le modifiche rispetto alla versione 5 sono nell'appendice 1, quelle del coordinamento nell'appendice 2.
 
@@ -113,7 +115,7 @@ della tabella si scrivono nella sessione che esegue il passo.
 
 | Periodo | Date (UTC) | A cosa serve | Cosa si può fare |
 |---|---|---|---|
-| Costruzione | dalla prima candela disponibile di BTCUSDT (settembre 2019; data esatta al Passo 1) al 2022-09-30 23:59 | Studiare, provare, scartare | Tutti i test, entro il limite di 40 varianti (sezione 8) |
+| Costruzione | dalla prima candela disponibile di BTCUSDT al 2022-09-30 23:59: nell'archivio pubblico di Binance il 2020-01-01 00:00 (Passo 0; scelta dell'utente del 17 ottobre 2026), circa 33 mesi | Studiare, provare, scartare | Tutti i test, entro il limite di 40 varianti (sezione 8) |
 | Validazione | dal 2022-10-01 00:00 al 2023-12-31 23:59 | Primo esame dei candidati | Una sola esecuzione per candidato, tutti insieme, senza ritocchi |
 | Vault | dal 2024-01-01 00:00 al 2026-09-30 23:59 | Esame finale | Una sola esecuzione, dopo il comando "APRI IL VAULT 3" |
 
@@ -309,6 +311,9 @@ Al Passo 0 confronti ogni elemento del catalogo (indicatori, segnali, filtri, co
 - (a) ricerca solo con gli elementi eseguibili, così ogni candidato può andare in paper senza modifiche al bot;
 - (b) tutto il catalogo, con le aggiunte al bot da fare prima del paper.
 
+**Scelta dell'utente al Passo 0 (17 ottobre 2026): (b).** Oggi il bot non esegue nessuna variante del catalogo così
+come la scrive il protocollo (`config/bot_3.md`, punto 3).
+
 ## 8. Varianti, limite di tentativi e candidati
 
 ### 8.1 Cosa conta come variante
@@ -418,9 +423,19 @@ Ogni candidato si riprova con l'ingresso ritardato di una candela. Il risultato 
 Per ogni test si generano 1.000 strategie fittizie (seme casuale fisso: 2026):
 
 - stesso periodo, stessa direzione, stesso numero di trade del candidato;
-- ingressi scelti a caso fra tutte le candele ammesse del periodo (dopo il riscaldamento della variante e fuori dai buchi nei dati, 7.8 e 9.6), indipendentemente da quando il candidato è in posizione, senza sovrapposizioni fra trade della stessa simulazione, con lo stesso tipo di ingresso del candidato: a mercato all'apertura successiva, oppure con un ordine limit inserito alla chiusura della candela scelta, con gli stessi k e validità e le stesse regole di esecuzione (7.7). Per i candidati limit si generano ordini finché quelli eseguiti sono tanti quanti i trade del candidato. (Escludere le candele in cui il candidato è in posizione spingerebbe le entrate casuali proprio fuori dai periodi che il candidato sceglie, e il confronto premierebbe il candidato senza merito: appendice 2, punto 4.);
+- ingressi scelti a caso fra tutte le candele ammesse del periodo (dopo il riscaldamento della variante e fuori dai buchi nei dati, 7.8 e 9.6), indipendentemente da quando il candidato è in posizione, con la stessa distribuzione di larghezza dello stop del candidato (sotto), senza sovrapposizioni fra trade della stessa simulazione, con lo stesso tipo di ingresso del candidato: a mercato all'apertura successiva, oppure con un ordine limit inserito alla chiusura della candela scelta, con gli stessi k e validità e le stesse regole di esecuzione (7.7). Per i candidati limit si generano ordini finché quelli eseguiti sono tanti quanti i trade del candidato. (Escludere le candele in cui il candidato è in posizione spingerebbe le entrate casuali proprio fuori dai periodi che il candidato sceglie, e il confronto premierebbe il candidato senza merito: appendice 2, punto 4.);
 - uscite con le stesse regole del candidato: stesso tipo di stop calcolato nello stesso modo al momento dell'ingresso, stessi target, uscite a tempo, trailing e segnale opposto;
 - stessi costi.
+
+**Stessa larghezza dello stop** (correzione 1 del collaudo, appendice 3). Ogni simulazione è una strategia che entra a
+caso: quando è libera, a ogni candela ammessa entra con una probabilità fissa, più alta o più bassa secondo la larghezza
+dello stop che avrebbe in quel momento (distanza dello stop ÷ prezzo d'ingresso), così che i suoi trade abbiano la
+stessa distribuzione di larghezze dei trade del candidato, divisa in 5 fasce ai quinti delle larghezze del candidato.
+La probabilità si tara perché la strategia faccia in media tanti trade quanti il candidato, e si tengono solo le
+simulazioni che ne fanno esattamente tanti. Perché: un trade con lo stop largo paga meno costi e meno regole prudenti
+(9.2, 9.3) per ogni R; senza questa regola un candidato che entra solo quando lo stop è largo sembrerebbe migliore del
+caso senza prevedere niente (collaudo del 16 ottobre: 21 p-value sotto 0,10 su 100 su prezzi senza vantaggio). La
+soglia di 0,2 R dopo i costi (10.3) resta sull'R vero.
 
 Per ogni simulazione si calcola l'R medio.
 
@@ -545,7 +560,7 @@ Esempio, qui su più righe per leggibilità (nel file ogni voce sta su una sola 
 7. Crea `config/parametri_3.yaml` con i fatti trovati e tutti i numeri di questo documento.
 8. **Collaudo del metodo** (sezione 13bis): le tre prove, con le regole scritte prima e gli esiti in `collaudo_3/`.
 
-**STOP:** mostra all'utente: la tabella dei fatti trovati e dove; la tabella del catalogo con gli elementi eseguibili e quelli che richiedono un'aggiunta al bot; l'esito dei test di controllo; l'elenco dei percorsi vietati; **l'esito delle tre prove del collaudo**. L'utente approva i fatti e sceglie fra (a) e (b) della sezione 7.10. Se una prova del collaudo non passa, la ricerca non comincia: si corregge il metodo e si rifanno tutte e tre. Dopo l'approvazione tutto è congelato e il coordinamento apre la sessione di ricerca.
+**STOP:** mostra all'utente: la tabella dei fatti trovati e dove; la tabella del catalogo con gli elementi eseguibili e quelli che richiedono un'aggiunta al bot; l'esito dei test di controllo; l'elenco dei percorsi vietati; **l'esito delle prove del collaudo** (A e B; la C si fa prima del paper, 13bis.4). L'utente approva i fatti e sceglie fra (a) e (b) della sezione 7.10. Se una prova del collaudo non passa, la ricerca non comincia: si corregge il metodo e si rifanno le prove. Dopo l'approvazione tutto è congelato e il coordinamento apre la sessione di ricerca.
 
 ### Passo 1 — Dati di BTCUSDT (Fase 0)
 
@@ -701,7 +716,7 @@ Le tre prove di questa sezione provano il **metodo** (stima dei trade, motore, e
 verifiche, esecuzione del bot), non BTC. Valgono queste regole:
 
 - non consumano varianti e non usano dati di validazione o del vault: solo le candele del periodo di costruzione,
-  rimescolate (13bis.1), e per la prova C le candele vere degli ultimi 12 mesi della costruzione;
+  senza direzione (13bis.1), e per la prova C le candele vere degli ultimi 12 mesi della costruzione;
 - le regole sono scritte qui prima di qualunque esito; i dettagli che il testo lascia aperti si scrivono in
   `collaudo_3/regole.md` e si committano prima del primo calcolo; se un dettaglio non si può decidere con queste
   regole, STOP e si chiede all'utente;
@@ -711,25 +726,28 @@ verifiche, esecuzione del bot), non BTC. Valgono queste regole:
 
 ### 13bis.1 Le serie senza vantaggio
 
-Per ogni timeframe del catalogo si costruiscono 30 serie rimescolate (semi da 1 a 30) dalle candele last di BTCUSDT del
-periodo di costruzione:
+Per ogni timeframe del catalogo si costruiscono 30 serie senza direzione (semi da 1 a 30) dalle candele last di BTCUSDT
+del periodo di costruzione (correzione 2 del collaudo, appendice 3):
 
-1. ogni candela si scompone nei suoi movimenti relativi: salto dalla chiusura precedente all'apertura, chiusura
-   sull'apertura, massimo e minimo sull'apertura, volume;
-2. le candele si rimescolano a caso fra loro con il seme della serie; gli orari restano quelli veri, in ordine, e il
-   prezzo si ricostruisce partendo dal primo prezzo vero;
-3. il mark price segue lo stesso rimescolamento (mark e last restano coerenti); il funding resta quello vero,
-   nell'ordine vero del tempo.
+1. ogni candela si scompone nei suoi movimenti relativi, in logaritmo: salto dalla chiusura precedente all'apertura,
+   chiusura sull'apertura, massimo e minimo sull'apertura;
+2. con il seme della serie, ogni candela si gira o no a caso, alla pari: girarla vuol dire cambiare segno al salto e
+   alla chiusura e scambiare massimo e minimo cambiati di segno; le candele restano al loro posto e nel loro ordine,
+   con il loro volume, e il prezzo si ricostruisce partendo dal primo prezzo vero;
+3. il mark price si gira con la sua candela (mark e last restano coerenti); il funding resta quello vero, nell'ordine
+   vero del tempo.
 
-Su queste serie quello che è successo prima non dice niente su quello che succede dopo: nessuna regola del catalogo può
-avere un vantaggio vero. Restano la volatilità media, i salti di prezzo e i costi. Non resta il raggrupparsi della
-volatilità (settimane calme e settimane agitate): il collaudo prova il metodo su prezzi senza memoria, e va detto quando
-se ne leggono gli esiti.
+Su queste serie la direzione di ogni candela è un lancio di moneta: quello che è successo prima non dice niente sulla
+direzione di quello che succede dopo, e nessuna regola del catalogo può avere un vantaggio vero. Restano la grandezza
+dei movimenti, il raggrupparsi della volatilità (periodi calmi e periodi agitati, come nel mercato vero), i salti di
+prezzo, il volume e i costi; la tendenza di fondo sparisce. (Il primo giro del collaudo usava l'ordine delle candele
+mescolato: toglieva anche il legame fra volatilità passata e futura, e uno stop calcolato dopo una candela grande
+risultava largo per un futuro tranquillo.)
 
-### 13bis.2 Prova A — i prezzi rimescolati (la bilancia vuota deve segnare zero)
+### 13bis.2 Prova A — le direzioni a caso (la bilancia vuota deve segnare zero)
 
 1. Si estraggono a caso dal catalogo (seme 2026) varianti finte complete, con tutti gli elementi della sezione 7.1 e
-   solo valori del catalogo. La variante finta numero i gira sulla serie rimescolata (i mod 30) + 1 del suo timeframe.
+   solo valori del catalogo. La variante finta numero i gira sulla serie senza direzione (i mod 30) + 1 del suo timeframe.
 2. Per ognuna si fa la stima dei trade (8.4): sotto 150 si scarta e si estrae la successiva, finché **100 varianti
    finte** arrivano alla Fase 2. Si riporta quante ne sono state estratte in tutto.
 3. Ognuna passa per la Fase 2 completa (entrate casuali e p-value della sezione 10, soglie di costruzione della sezione
@@ -741,7 +759,7 @@ se ne leggono gli esiti.
 5. Si riportano anche, come informazione: la distribuzione dei p-value (deve essere circa uniforme), l'R medio delle
    100 (atteso negativo, per i costi) e, per le varianti finte che superano la Fase 2, le verifiche della Fase 4.
 
-Perché: un errore che fa guardare il futuro al motore, o entrate casuali costruite male, su prezzi rimescolati producono
+Perché: un errore che fa guardare il futuro al motore, o entrate casuali costruite male, su prezzi senza direzione producono
 troppi p-value piccoli. Questa prova li vede.
 
 ### 13bis.3 Prova B — il vantaggio inserito apposta (il peso noto deve essere pesato)
@@ -751,12 +769,13 @@ troppi p-value piccoli. Questa prova li vede.
      1,5 × ATR(14) · uscite U1 2 R e U2 12 candele;
    - **B2**: la stessa, short;
    - **B3**: la stessa di B1 con ingresso limit: tipo L, k 0,25, validità 1 candela.
-2. Per ogni regola e per ognuna delle 30 serie rimescolate a 1h si inserisce un vantaggio di ampiezza P, costruendo la
+2. Per ogni regola e per ognuna delle 30 serie senza direzione a 1h si inserisce un vantaggio di ampiezza P, costruendo la
    serie nuova una candela dopo l'altra, in ordine di tempo. Quando la regola dà un segnale sulla serie già costruita
    (chiamata t la candela del segnale), il prezzo delle candele da t+1 a t+12 (apertura, massimo, minimo e chiusura)
    si sposta nella direzione della regola, in parti uguali, fino a P × la distanza dello stop di quel segnale alla
    candela t+12; poi lo spostamento torna indietro, in parti uguali, nelle 240 candele successive. I segnali vicini
-   sommano i loro spostamenti. P vale 0; 0,3; 0,6.
+   sommano i loro spostamenti. P vale 0; 0,6; 1,2 (correzione 3 del collaudo, appendice 3: il vantaggio inserito
+   rende circa un terzo di P, perché molti trade escono per stop prima che lo spostamento si accumuli).
    - Costruire in ordine di tempo fa sì che i segnali della serie finale siano proprio quelli a cui è stato dato il
      vantaggio: un segnale alla candela t dipende solo dalle candele fino a t, che sono già definitive.
    - Il ritorno lento fa sì che su tutta la serie gli spostamenti inseriti si compensino: chi entra in un momento a
@@ -767,8 +786,8 @@ troppi p-value piccoli. Questa prova li vede.
    il suo R medio netto (motore della ricerca, costi della sezione 6).
 4. **Passa se, per ognuna delle tre regole:** con P = 0 al massimo **3** serie su 30 superano la Fase 2 (se ne
    attende meno di una; 4 o più capiterebbero per caso meno di una volta su 100); e fra le serie in cui la regola con
-   il vantaggio ha un R medio netto di almeno **0,35 R**, almeno l'**80%** supera la Fase 2. Se con P = 0,6 meno di 20
-   serie su 30 arrivano a 0,35 R, la prova di quella regola si rifà una volta sola con P = 0,9.
+   il vantaggio ha un R medio netto di almeno **0,35 R**, almeno l'**80%** supera la Fase 2. Se con P = 1,2 meno di 20
+   serie su 30 arrivano a 0,35 R, la prova di quella regola si rifà una volta sola con P = 1,8.
 5. Si riportano anche, come informazione: quante serie con un R medio netto fra 0,2 e 0,35 R superano la Fase 2,
    accanto a quante se ne aspetterebbero con la regola della sezione 5.2 e il numero di trade vero; per B3, la
    percentuale di ordini eseguiti con e senza vantaggio; l'R medio delle entrate casuali con e senza vantaggio, che
@@ -781,9 +800,10 @@ P = 0 non lo inventa sulla regola stessa.
 ### 13bis.4 Prova C — la parità con il bot (laboratorio e negozio devono dare lo stesso peso)
 
 1. Due strategie d'esempio, che non contano fra le 40: **C1** è la regola B1 (a mercato); **C2** è la regola B3 (con
-   ingresso limit), solo se al punto 3 del Passo 0 il bot risulta saper eseguire l'ingresso limit del catalogo;
-   altrimenti la parità dell'ingresso limit si fa dopo l'aggiunta al bot (scelta (b) della sezione 7.10) e prima del
-   Passo 8.
+   ingresso limit). **Quando** (scelta dell'utente del 17 ottobre 2026): al Passo 0 il bot non sapeva eseguire
+   nessuna variante del catalogo, nemmeno C1 (`config/bot_3.md`, punto 3). La prova C si fa quindi solo se un
+   candidato supera il vault: dopo l'aggiunta al bot (scelta (b) della sezione 7.10) e prima del Passo 8, con C1, C2
+   e il candidato stesso. Le prove A e B, al Passo 0, bastano per cominciare la ricerca.
 2. Dati: le candele vere di BTCUSDT dal 2021-10-01 al 2022-09-30 (gli ultimi 12 mesi della costruzione), le stesse
    per il motore e per il bot.
 3. La strategia si esegue nel motore della ricerca e nel codice con cui il bot esegue le strategie in paper,
@@ -835,7 +855,8 @@ tocca il motore o il bot.
 | Riempimento severo 0,05% | Circa 5 volte lo slippage degli ordini a mercato: a un prezzo di 50.000 USDT sono 25 USDT oltre il limit | 0,2% toglierebbe quasi tutte le esecuzioni con k piccolo | Sotto 0,02% non metterebbe davvero alla prova l'ipotesi di esecuzione |
 | Commissione maker 0,02% | Tariffa base di Binance, da verificare al Passo 0 | — | — |
 | 100 varianti finte, al massimo 5 che superano (prova A) | Con il 2,3% dichiarato in 8.3 se ne attendono 2,3; 6 o più capiterebbero per caso 2,8 volte su 100 | Più varianti allungherebbero il calcolo senza cambiare la decisione | Con 50 la soglia diventerebbe troppo larga per vedere un raddoppio dei falsi candidati |
-| 30 serie per regola, P = 0 / 0,3 / 0,6, soglia 0,35 R e 80% (prova B) | Con almeno 0,35 R netti e almeno 150 trade, e con entrate casuali che dal vantaggio inserito non guadagnano niente, la regola batte il caso di almeno 0,35 R più i costi: più di 3 errori standard (1,2 ÷ √150 ≈ 0,1 R). Un p-value sopra 0,023 sarebbe quasi impossibile: sotto l'80% c'è un errore | Soglie più alte non proverebbero niente di più | Con meno di 30 serie l'80% sarebbe deciso da 2-3 serie |
+| 30 serie per regola, P = 0 / 0,6 / 1,2 (riserva 1,8), soglia 0,35 R e 80% (prova B) | Con almeno 0,35 R netti e almeno 150 trade, e con entrate casuali che dal vantaggio inserito non guadagnano niente, la regola batte il caso di almeno 0,35 R più i costi: più di 3 errori standard (1,2 ÷ √150 ≈ 0,1 R). Un p-value sopra 0,023 sarebbe quasi impossibile: sotto l'80% c'è un errore | Soglie più alte non proverebbero niente di più | Con meno di 30 serie l'80% sarebbe deciso da 2-3 serie |
+| 5 fasce di larghezza dello stop (10.1) | Con almeno 150 trade ogni fascia ha almeno 30 trade del candidato: abbastanza per stimarne la quota | Più fasce: quote stimate su pochi trade | Meno fasce: resta una parte dell'effetto dei costi (con 1 fascia, cioè senza la regola, il collaudo del 16 ottobre ha dato 21 p-value sotto 0,10 su 100) |
 | Ritorno del vantaggio inserito in 240 candele (prova B) | Lento rispetto alle 12 candele del trade: su un trade il ritorno di un segnale precedente pesa al massimo 12 ÷ 240 = 5% del suo spostamento | Più lento: la compensazione arriverebbe tardi e la serie avrebbe tendenze di settimane, di cui guadagnerebbero anche le entrate casuali | Più veloce: il ritorno toglierebbe ai trade una parte troppo grande del vantaggio inserito |
 | 12 mesi, 98% e 0,01 R (prova C) | I trade possono differire solo per casi limite documentati | Il 100% non si può garantire nei casi limite dentro la stessa candela | Sotto il 98% una differenza sistematica passerebbe |
 | Leva massima 5 (se il bot non la definisce) | Con stop di almeno 0,3% e rischio 1%, la leva non supera circa 3,3 | — | Più bassa ridurrebbe la dimensione di trade validi |
@@ -849,7 +870,7 @@ tocca il motore o il bot.
 - **Strategie lente.** Sotto circa 4 trade al mese non si arriva ai minimi: le strategie su candele giornaliere passano solo se entrano spesso.
 - **Costi a orizzonte corto.** A 15 e 30 minuti i costi sono dello stesso ordine del movimento tipico: lì il test a costi doppi pesa di più.
 - **Esecuzione dei limit.** Anche con regole severe, un backtest a candele non conosce la coda degli ordini: i risultati dei candidati limit sono meno certi di quelli a mercato, e la loro prova vera è il paper. Anche il paper, con `DRY_RUN`, riempie gli ordini con una regola simulata: misura l'esecuzione del bot, non la coda vera di Binance.
-- **Il collaudo prova il metodo su prezzi rimescolati e con vantaggi inseriti apposta**: dice che la bilancia funziona con pesi noti, non che su BTC ci sia un vantaggio.
+- **Il collaudo prova il metodo su prezzi senza direzione e con vantaggi inseriti apposta**: dice che la bilancia funziona con pesi noti, non che su BTC ci sia un vantaggio.
 - **Storia breve.** I futures su BTCUSDT esistono da settembre 2019: short e funding non hanno storia più lunga.
 
 ## 16. Stile dei report
@@ -884,3 +905,16 @@ Sii diretto sui limiti. Distingui sempre tra "osservato", "inferito" e "ipotizza
 | 5 | Intestazione, 0, 11, 12, Passi 0, 4, 5, 6, 8 | I nomi nel repository: `research/PROTOCOLLO_3.md`, `config/parametri_3.yaml` e `bot_3.md`, cartella `campagne/BTC51/`, branch `research/campagna/BTC51`, marcatore `BTC51`, `collaudo_3/`, `vault/APERTURA_3.md` con la frase «APRI IL VAULT 3», `altre_monete_3/`, `paper_3/` | I protocolli precedenti e i loro file restano come sono (log solo in aggiunta); `vault/APERTURA.md` esiste già, e la frase nuova evita di confonderlo; il nome del branch rispetta le regole del repository |
 | 6 | 15 | Due limiti in più: anche il paper simula il riempimento degli ordini; il collaudo prova il metodo, non che su BTC esista un vantaggio | Da sapere quando si leggono i risultati |
 
+## Appendice 3 — correzioni del collaudo (approvate dal proprietario il 17 ottobre 2026 alle 06:11 UTC)
+
+Il primo giro del collaudo (16 ottobre, `research/collaudo_3/esiti.md`) ha trovato un difetto del metodo: sulle serie
+senza vantaggio la prova A ha dato 21 p-value sotto 0,10 su 100 (soglia 15) e nessuna variante finta ha superato la
+Fase 2. La diagnosi (`research/collaudo_3/diagnosi/`) ha trovato la causa nella larghezza dello stop.
+
+| # | Dove | Cosa | Perché |
+|---|---|---|---|
+| 1 | 10.1, 14 | Le entrate casuali hanno la stessa distribuzione di larghezza dello stop del candidato (5 fasce) | Uno stop largo paga meno costi e meno regole prudenti per ogni R: senza la regola il confronto premiava anche cio' che non e' previsione |
+| 2 | 13bis.1, 13bis.2, 13bis.3 | Le serie senza vantaggio girano a caso la direzione di ogni candela invece di mescolarne l'ordine | Il mescolamento toglieva il legame fra volatilità passata e futura e rendeva il difetto 1 piu' forte che sui prezzi veri; con le correzioni 1 e 2 la diagnosi ha dato 12 su 100 |
+| 3 | 13bis.3, 14 | Ampiezze del vantaggio inserito 0 / 0,6 / 1,2, riserva 1,8 | Il vantaggio inserito rende circa un terzo di P: con 0 / 0,3 / 0,6 (riserva 0,9) per la regola short nessuna prova arrivava a 0,35 R |
+| 4 | 13bis.4 | La prova C si fa solo se un candidato supera il vault, prima del paper | Il bot non esegue nessuna variante del catalogo (`config/bot_3.md`); se nessun candidato arriva al vault l'aggiunta al bot non serve |
+| 5 | 4, 7.10 | La costruzione comincia il 2020-01-01; si usa tutto il catalogo, scelta (b) | L'archivio pubblico di Binance non ha BTCUSDT prima del 2020; con la scelta (a) non resterebbe quasi niente |

@@ -50,6 +50,7 @@ def entrate_stratificate(c, cand_trades, inizio, fine, n_sim=1000, seme=2026):
 
 def lavoro(riga):
     import research.collaudo_3.collaudo as co
+    co.GIRO = 1  # diagnosi del primo giro: candele rimescolate
     from research.src import catalogo3 as cat
     from research.src.motore3 import esegui, metriche
     v = riga["variante"]; s = co.serie_rimescolata(v["timeframe"], riga["serie"])
@@ -60,7 +61,7 @@ def lavoro(riga):
     return {"numero": riga["numero"], "p": p, "r": m["r_medio"], "caso": float(val.mean()), "dir": v["direzione"], "stop": v["stop"]["codice"]}
 
 if __name__ == "__main__":
-    righe = [json.loads(x) for x in open("research/collaudo_3/esiti/prova_a.jsonl")]
+    righe = [json.loads(x) for x in open("research/collaudo_3/esiti/giro1/prova_a.jsonl")]
     with ProcessPoolExecutor(3) as ex: out = list(ex.map(lavoro, righe))
     ok = [r for r in out if "p" in r]
     print("bin", N_BIN, "varianti", len(ok), "p<0.10:", sum(r["p"] < 0.10 for r in ok), "p<0.023:", sum(r["p"] <= 0.023 for r in ok),

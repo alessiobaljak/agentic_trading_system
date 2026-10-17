@@ -7,6 +7,7 @@ MODO = sys.argv[1]  # "senza_tendenza", "senza_costi", "entrambi"
 
 def prepara():
     import research.collaudo_3.collaudo as co
+    co.GIRO = 1  # diagnosi del primo giro: candele rimescolate
     import research.src.statistica3 as st
     from research.src.motore3 import Costi
     if MODO in ("senza_costi", "entrambi"):
@@ -39,7 +40,7 @@ def lavoro(riga):
             "supera": es["supera"], "dir": v["direzione"], "stop": v["stop"]["codice"]}
 
 if __name__ == "__main__":
-    righe = [json.loads(x) for x in open("research/collaudo_3/esiti/prova_a.jsonl")]
+    righe = [json.loads(x) for x in open("research/collaudo_3/esiti/giro1/prova_a.jsonl")]
     out = []
     with ProcessPoolExecutor(3) as ex:
         for r in ex.map(lavoro, righe):

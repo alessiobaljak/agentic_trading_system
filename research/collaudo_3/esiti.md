@@ -1,11 +1,11 @@
 # Collaudo del metodo, protocollo 3 — esiti
 
 Sezione 13bis del protocollo. Le regole di dettaglio sono in `regole.md`, committate prima del primo calcolo.
-Gli esiti grezzi sono in `esiti/` (una riga JSON per prova), il riepilogo calcolato da `riepilogo.py`.
+Gli esiti grezzi sono in `esiti/giro<N>/` (una riga JSON per prova), il riepilogo calcolato da `riepilogo.py`.
 
 ## Primo giro: 16 ottobre 2026, dalle 21:01:39 alle 21:10:39 UTC
 
-Strumenti al commit `dd2ef133` (`esiti/commit.txt`), impronte SHA-256 in `esiti/impronte.json`:
+Strumenti al commit `dd2ef133` (`esiti/giro1/commit.txt`), impronte SHA-256 in `esiti/giro1/impronte.json`:
 
 | File | SHA-256 |
 |---|---|

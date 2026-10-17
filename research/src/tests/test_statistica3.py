@@ -1033,3 +1033,49 @@ def test_timeframe_adiacenti_arrotondano_le_meta_per_eccesso():
          "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U2", "n": 12}]}
     w = sposta_periodi(v, 0.5)
     assert w["ingresso"]["veloce"] == 5 and w["ingresso"]["lenta"] == 10 and w["uscite"][0]["n"] == 6
+
+
+# ---------------------------------------------------------------------------
+# 10.1, correzione 1 del collaudo (17 ott 2026): stessa larghezza dello stop del candidato
+# ---------------------------------------------------------------------------
+
+V_STOP_VARIABILE = _v(ingresso={"codice": "E3", "n": 20}, stop={"codice": "S2", "n": 10},
+                      uscite=[{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 12}])
+
+
+def test_10_1_le_entrate_casuali_hanno_la_larghezza_di_stop_del_candidato(spia):
+    """Con uno stop che cambia larghezza (minimo delle ultime 10 candele) e un ingresso dopo una rottura
+    del massimo di 20 candele (stop piu' larghi del solito), le larghezze dei trade casuali si
+    distribuiscono nelle 5 fasce come quelle del candidato, non come quelle di tutte le candele."""
+    registro, _ = spia
+    s = serie_casuale(3000, seme=11, sigma=0.006)
+    c = compila(V_STOP_VARIABILE, s)
+    ris = esegui(c, Regole(), COSTI_NORMALI, 0, len(s) - 1)
+    n = len(ris.trade)
+    assert n >= 40
+    out = st.entrate_casuali(c, n, 0, len(s) - 1, n_simulazioni=200)
+    q = out["quote_larghezza"]
+    tagli = np.asarray(q["tagli"])
+    fasce_casuali = np.searchsorted(tagli, [st.larghezza_stop(t) for _, t in registro], side="right")
+    quota_casuali = np.bincount(fasce_casuali, minlength=5) / len(fasce_casuali)
+    assert np.allclose(quota_casuali, q["candidato"], atol=0.03), (quota_casuali, q)
+    # e senza la regola la distribuzione sarebbe un'altra (quella di tutte le candele ammesse)
+    assert np.abs(np.asarray(q["candele_ammesse"]) - np.asarray(q["candidato"])).max() > 0.05
+
+
+def test_10_1_con_lo_stop_fisso_in_percentuale_nessun_peso(serie):
+    """Con lo stop S3 tutte le larghezze sono uguali: una sola fascia piena, nessuna candela pesa diversamente."""
+    c = compila(V_MERCATO, serie)
+    ris = esegui(c, Regole(), COSTI_NORMALI, 0, len(serie) - 1)
+    out = st.entrate_casuali(c, len(ris.trade), 0, len(serie) - 1, n_simulazioni=50)
+    q = out["quote_larghezza"]
+    assert max(q["candidato"]) == pytest.approx(1.0) and max(q["candele_ammesse"]) == pytest.approx(1.0)
+
+
+def test_10_1_le_larghezze_si_prendono_dal_candidato_se_non_si_passano(serie):
+    c = compila(V_SHORT, serie)
+    ris = esegui(c, Regole(), COSTI_NORMALI, 0, len(serie) - 1)
+    larg = [st.larghezza_stop(t) for t in ris.trade]
+    a = st.entrate_casuali(c, len(ris.trade), 0, len(serie) - 1, n_simulazioni=50)
+    b = st.entrate_casuali(c, len(ris.trade), 0, len(serie) - 1, n_simulazioni=50, larghezze_candidato=larg)
+    assert np.array_equal(a["valori"], b["valori"])

@@ -1,17 +1,22 @@
-"""Riepilogo del collaudo del protocollo 3: legge gli esiti grezzi delle prove A e B
-(``research/collaudo_3/esiti/*.jsonl``) e applica le soglie della sezione 13bis e di ``regole.md``.
+"""Riepilogo del collaudo del protocollo 3: legge gli esiti grezzi delle prove A e B di un giro
+(``research/collaudo_3/esiti/giro<N>/*.jsonl``) e applica le soglie della sezione 13bis e di ``regole.md``.
 
-Uso: ``python3 research/collaudo_3/riepilogo.py`` (stampa un JSON con i numeri e «passa»/«non passa»).
-Non ricalcola niente: solo conteggi sugli esiti gia' scritti.
+Uso: ``python3 research/collaudo_3/riepilogo.py <N>`` (stampa un JSON con i numeri e «passa»/«non passa»).
+Non ricalcola niente: solo conteggi sugli esiti gia' scritti. Le ampiezze della prova B sono quelle del giro:
+0 / 0,3 / 0,6 con riserva 0,9 nel primo, 0 / 0,6 / 1,2 con riserva 1,8 dal secondo (correzione 3).
 """
 
 from __future__ import annotations
 
 import json
 import math
+import sys
 from pathlib import Path
 
-ESITI = Path(__file__).resolve().parent / "esiti"
+GIRO = int(sys.argv[1]) if len(sys.argv) > 1 else 2
+ESITI = Path(__file__).resolve().parent / "esiti" / f"giro{GIRO}"
+#: l'ampiezza dopo la quale si guarda se servono le riserve, e la riserva
+AMPIEZZA_GUIDA, RISERVA = (0.6, 0.9) if GIRO == 1 else (1.2, 1.8)
 
 
 def _righe(nome: str):
@@ -65,8 +70,8 @@ def prova_b() -> dict:
         alla_soglia = [r for r in con if r["r_medio"] >= 0.35]
         superano_soglia = sum(1 for r in alla_soglia if r["supera_fase2"])
         quota = superano_soglia / len(alla_soglia) if alla_soglia else None
-        a06 = sum(1 for r in rr if r["ampiezza"] == 0.6 and r["r_medio"] >= 0.35)
-        riserva = any(r["ampiezza"] == 0.9 for r in rr)
+        a06 = sum(1 for r in rr if r["ampiezza"] == AMPIEZZA_GUIDA and r["r_medio"] >= 0.35)
+        riserva = any(r["ampiezza"] == RISERVA for r in rr)
         zona = [r for r in con if 0.2 <= r["r_medio"] < 0.35]
         attese_zona = sum(1 for r in zona if r["r_medio"] * math.sqrt(max(r["trade"], 1)) / 1.2 >= 2)
         casuali = {}
@@ -90,7 +95,8 @@ def prova_b() -> dict:
             "soglia_senza_vantaggio": 3,
             "prove_con_vantaggio_ad_almeno_0_35_r": len(alla_soglia), "di_queste_superano": superano_soglia,
             "quota": quota, "soglia_quota": 0.80,
-            "serie_a_0_35_r_con_p_0_6": a06, "riserva_p_0_9_fatta": riserva,
+            "serie_a_0_35_r_con_l_ampiezza_guida": a06, "ampiezza_guida": AMPIEZZA_GUIDA,
+            "riserva_fatta": riserva, "riserva": RISERVA,
             "r_medio_per_ampiezza": r_medi,
             "zona_0_2_0_35": {"prove": len(zona), "superano": sum(1 for r in zona if r["supera_fase2"]),
                               "attese_con_la_5_2": attese_zona},

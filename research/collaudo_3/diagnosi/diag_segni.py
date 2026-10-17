@@ -42,7 +42,7 @@ def lavoro(riga):
             "vol": v2["ingresso"]["codice"] == "E12" or (v2["conferma"] or {}).get("codice") == "C1"}
 
 if __name__ == "__main__":
-    righe = [json.loads(x) for x in open("research/collaudo_3/esiti/prova_a.jsonl")]
+    righe = [json.loads(x) for x in open("research/collaudo_3/esiti/giro1/prova_a.jsonl")]
     with ProcessPoolExecutor(3) as ex: out = list(ex.map(lavoro, righe))
     ok = [r for r in out if "p" in r]
     print("strato" if STRATO else "normale", "varianti", len(ok), "p<0.10:", sum(r["p"] < 0.10 for r in ok), "p<=0.023:", sum(r["p"] <= 0.023 for r in ok),

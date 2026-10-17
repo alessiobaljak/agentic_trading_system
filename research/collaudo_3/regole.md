@@ -1,6 +1,8 @@
 # Collaudo del metodo, protocollo 3: le regole di dettaglio
 
-Scritto dal coordinamento il 16 ottobre 2026, **prima di qualunque calcolo delle prove** (sezione 13bis del
+Scritto dal coordinamento il 16 ottobre 2026, **prima di qualunque calcolo delle prove**; aggiornato il 17 ottobre
+2026, prima del secondo giro, con le correzioni approvate dal proprietario alle 06:11 UTC (`PROTOCOLLO_3.md`,
+appendice 3; le parti che valevano solo per il primo giro sono segnate) (sezione 13bis del
 protocollo: «i dettagli che il testo lascia aperti si scrivono in `collaudo_3/regole.md` e si committano prima
 del primo calcolo»). Il testo che decide e' `research/PROTOCOLLO_3.md`; qui ci sono solo i dettagli che il
 testo non fissa. Si approvano insieme agli esiti allo STOP del Passo 0.
@@ -80,18 +82,23 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
 ### Statistiche (sezione 10 e Fase 4)
 
 20. **Entrate casuali**: ogni simulazione e' una strategia che entra a caso. Quando e' senza posizione e
-    senza ordine in attesa, a ogni candela ammessa del periodo entra con la stessa probabilita' q, senza
-    guardare i prezzi ne' il candidato; il trade va come lo farebbe la variante con un segnale li' e la
+    senza ordine in attesa, a ogni candela ammessa del periodo entra con probabilita' q × peso, senza
+    guardare i prezzi futuri ne' il candidato; il trade va come lo farebbe la variante con un segnale li' e la
     strategia torna libera alla sua uscita, come il candidato (un ordine limit non eseguito la tiene ferma
-    per la sua validita'; un trade con lo stop troppo vicino non si apre). q si tara perche' la strategia
-    faccia in media tanti trade quanti il candidato; si tengono le simulazioni che ne fanno esattamente
-    tanti, finche' sono 1.000. Un solo generatore con seme 2026 per la taratura e per le simulazioni, in fila.
-    Se nemmeno una strategia che entra appena e' libera arriva ai trade del candidato, la prova si ferma
-    (STOP). **Correzione prima di qualunque prova:** la prima versione prendeva le candele in un ordine a caso e
-    teneva un trade solo se ci stava fra quelli gia' presi; cosi' teneva piu' spesso i trade brevi (quasi
-    sempre stop) e faceva sembrare il caso peggiore di quanto e'. L'ha trovato il verificatore indipendente
-    delle statistiche: con il candidato in posizione per meta' del tempo il caso perdeva 0,07 R in piu' del
-    dovuto, e su 12 candidati senza vantaggio 6 avevano un p-value sotto 0,10 (se ne attende circa 1).
+    per la sua validita'; un trade con lo stop troppo vicino non si apre). **Il peso** (correzione 1, dal
+    secondo giro) da' ai trade della strategia la stessa distribuzione di larghezza dello stop (distanza dello
+    stop ÷ prezzo d'ingresso, arrotondata a 12 decimali) dei trade del candidato: 5 fasce ai quinti delle
+    larghezze del candidato; peso = quota del candidato nella fascia ÷ quota della fascia fra i trade di tutte
+    le candele ammesse, riportato a un massimo di 1; poi tre giri di prova da 1.024 simulazioni misurano le
+    quote ottenute e correggono i pesi (i trade lunghi stanno meno spesso nel periodo senza sovrapporsi). Le
+    candele in cui non si apre un trade hanno peso 1. q si tara perche' la strategia faccia in media tanti trade
+    quanti il candidato; si tengono le simulazioni che ne fanno esattamente tanti, finche' sono 1.000. Un solo
+    generatore con seme 2026 per la taratura, i giri di prova e le simulazioni, in fila. Se nemmeno una
+    strategia che entra appena e' libera arriva ai trade del candidato, o in 4 milioni di giri non se ne trovano
+    1.000 con esattamente quei trade, la prova si ferma (STOP). **Correzione prima del primo giro:** la prima
+    versione prendeva le candele in un ordine a caso e teneva un trade solo se ci stava fra quelli gia' presi;
+    cosi' teneva piu' spesso i trade brevi (quasi sempre stop). L'ha trovato il verificatore indipendente
+    delle statistiche.
 21. **Robustezza (verifica 1)**: per E11 il lato (funding sopra o sotto) resta quello della variante anche
     quando la soglia si sposta. Si spostano anche i parametri fissi del catalogo usati dalla variante
     (per esempio l'ATR 14 dello stop, i periodi del MACD, la finestra di 500 candele); i multipli di
@@ -117,14 +124,17 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
   di data.binance.vision con il CHECKSUM verificato. La fonte non ha BTCUSDT prima del 2020-01
   (`config/parametri_3.yaml`, `fonte_dati`).
 
-### Le serie rimescolate (13bis.1)
+### Le serie senza vantaggio (13bis.1)
 
-- Per ogni timeframe 30 serie, semi da 1 a 30 (`numpy.random.default_rng(seme).permutation`).
-- La prima candela resta quella vera; per le altre si prendono i movimenti relativi: apertura ÷ chiusura
-  precedente, chiusura ÷ apertura, massimo ÷ apertura, minimo ÷ apertura, volume, e le quattro quote del
-  mark ÷ apertura del last. Si rimescolano insieme, candela per candela; il prezzo si ricostruisce dalla
-  prima chiusura vera. Gli orari restano quelli veri (anche i buchi restano dove sono); il funding resta
-  quello vero.
+- Per ogni timeframe 30 serie, semi da 1 a 30.
+- **Dal secondo giro (correzione 2): la direzione a caso.** La prima candela resta quella vera; per le altre
+  si prendono i movimenti relativi in logaritmo: apertura ÷ chiusura precedente, chiusura ÷ apertura,
+  massimo ÷ apertura, minimo ÷ apertura, e le quattro quote del mark ÷ apertura del last. Con
+  `numpy.random.default_rng(seme).random() < 0,5` ogni candela si gira o no: cambiano segno salto e
+  chiusura, massimo e minimo si scambiano cambiati di segno (cosi' per il mark). Le candele restano al loro
+  posto e nel loro ordine, con il loro volume; il prezzo si ricostruisce dalla prima chiusura vera; orari,
+  buchi e funding restano quelli veri (`collaudo.py`, `senza_direzione`).
+- Primo giro: l'ordine delle candele mescolato (`numpy.random.default_rng(seme).permutation`, `rimescola`).
 
 ### Prova A (13bis.2)
 
@@ -159,26 +169,25 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
 - **B.3 Controllo:** i segnali che il catalogo trova sulla serie finale devono essere proprio quelli a cui e'
   stato dato il vantaggio (`segnali_uguali`). Se non lo sono, la prova non vale e si cerca la causa.
 - **B.4 Passa se, per ognuna delle tre regole:** con P = 0 al massimo 3 serie su 30 superano la Fase 2; e,
-  mettendo insieme le prove con P = 0,3 e P = 0,6 (e 0,9 se fatta), fra quelle con un R medio netto di almeno
-  0,35 R almeno l'80% supera la Fase 2. Se con P = 0,6 meno di 20 serie su 30 arrivano a 0,35 R, la prova
-  di quella regola si rifa' una volta sola aggiungendo P = 0,9 su tutte le 30 serie.
+  mettendo insieme le prove con P = 0,6 e P = 1,2 (e 1,8 se fatta), fra quelle con un R medio netto di almeno
+  0,35 R almeno l'80% supera la Fase 2. Se con P = 1,2 meno di 20 serie su 30 arrivano a 0,35 R, la prova
+  di quella regola si rifa' una volta sola aggiungendo P = 1,8 su tutte le 30 serie (correzione 3; nel
+  primo giro le ampiezze erano 0 / 0,3 / 0,6 con riserva 0,9). Se nessuna prova arriva a 0,35 R la regola non
+  si puo' valutare: STOP.
 - **B.5 Informazioni:** quante prove con R fra 0,2 e 0,35 superano la Fase 2, accanto a quante "dovrebbero"
   con la regola della 5.2 (R × √trade ÷ 1,2 ≥ 2); per B3 la percentuale di ordini eseguiti; l'R medio delle
   entrate casuali con e senza vantaggio. Se con il vantaggio quella media sale in media di piu' di 0,05 R,
   STOP e decide l'utente.
 
-### Prova C (13bis.4): non eseguibile oggi
+### Prova C (13bis.4): dopo il vault
 
-La prova C confronta il motore con il codice del bot. Dal Passo 0, punto 3 (`config/bot_3.md`, punto 3)
-risulta che oggi il bot **non sa eseguire nessuna variante del catalogo** come la scrive il protocollo, nemmeno
-la regola C1 a mercato: mancano gli incroci, le uscite U2, l'ingresso a mercato per strategia, e il bot
-applica a tutte le strategie profit-lock, uscita dopo 96 candele e pausa dopo uno stop. Il testo prevede questo
-caso solo per l'ingresso limit (C2: «la parita' si fa dopo l'aggiunta al bot e prima del Passo 8»). Per C1 il
-caso non e' previsto: si chiede all'utente allo STOP (sezione 0, punto 4).
+Al Passo 0 il bot non sapeva eseguire nessuna variante del catalogo (`config/bot_3.md`, punto 3). Scelta del
+proprietario del 17 ottobre 2026: la prova C si fa solo se un candidato supera il vault, dopo l'aggiunta al bot e
+prima del paper (`PROTOCOLLO_3.md`, 13bis.4).
 
 ### Tempo e impronte
 
 - Prima del lancio si stima il tempo (`collaudo.py stima`); oltre 24 ore, STOP.
-- In `esiti.md`: per ogni prova i numeri, «passa» o «non passa», e le impronte SHA-256 degli strumenti con
+- Gli esiti grezzi di ogni giro in `esiti/giro<N>/`; in `esiti.md`: per ogni prova i numeri, «passa» o «non passa», e le impronte SHA-256 degli strumenti con
   cui e' girata (`collaudo.py impronte`: catalogo3, motore3, statistica3, statistica, dati, guardiano,
   parametri_3.yaml, collaudo.py e questo file).

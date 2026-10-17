@@ -3,7 +3,8 @@ import numpy as np
 sys.path.insert(0, ".")
 from research.src import catalogo3 as cat
 import research.collaudo_3.collaudo as co
-righe = {json.loads(x)["numero"]: json.loads(x) for x in open("research/collaudo_3/esiti/prova_a.jsonl")}
+co.GIRO = 1  # diagnosi del primo giro: candele rimescolate
+righe = {json.loads(x)["numero"]: json.loads(x) for x in open("research/collaudo_3/esiti/giro1/prova_a.jsonl")}
 d = json.load(open("research/collaudo_3/diagnosi/diagnosi_a.json"))
 for o in sorted(d, key=lambda o: o["p"])[:6]:
     r = righe[o["numero"]]; v = r["variante"]; s = co.serie_rimescolata(v["timeframe"], r["serie"])

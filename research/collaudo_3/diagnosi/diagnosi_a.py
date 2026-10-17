@@ -4,8 +4,9 @@ sys.path.insert(0, ".")
 from research.src import catalogo3 as cat
 from research.src.motore3 import esegui, simula_da, Regole, COSTI_NORMALI
 import research.collaudo_3.collaudo as co
+co.GIRO = 1  # diagnosi del primo giro: candele rimescolate
 
-righe = [json.loads(x) for x in open("research/collaudo_3/esiti/prova_a.jsonl")]
+righe = [json.loads(x) for x in open("research/collaudo_3/esiti/giro1/prova_a.jsonl")]
 out = []
 for r in righe:
     v = r["variante"]; s = co.serie_rimescolata(v["timeframe"], r["serie"])

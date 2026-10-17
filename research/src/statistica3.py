@@ -51,18 +51,43 @@ class SimulazioneImpossibile(RuntimeError):
 # ---------------------------------------------------------------------------
 
 
+#: le fasce di larghezza dello stop della 10.1 (correzione 1 del collaudo, 17 ottobre 2026)
+FASCE_LARGHEZZA = 5
+
+
+def larghezza_stop(t) -> float:
+    """La larghezza dello stop di un trade: distanza fra prezzo d'ingresso e stop ÷ prezzo d'ingresso,
+    arrotondata a 12 decimali (con lo stop S3 tutte le larghezze sono la stessa percentuale, e senza
+    arrotondamento le differenze dell'ultima cifra dividerebbero trade uguali in fasce diverse)."""
+    return round(abs(t.prezzo_ingresso - t.stop_iniziale) / t.prezzo_ingresso, 12)
+
+
 def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: Regole = Regole(),
                     costi: Costi = COSTI_NORMALI, n_simulazioni: int = N_SIMULAZIONI,
                     seme: int = SEME, cache: Optional[dict] = None, giri_taratura: int = 256,
-                    passi_taratura: int = 24, giri_massimi: int = 4_000_000) -> Dict[str, object]:
-    """Le entrate casuali della sezione 10.1: una strategia che entra a caso.
+                    passi_taratura: int = 24, giri_massimi: int = 4_000_000,
+                    larghezze_candidato: Optional[Sequence[float]] = None,
+                    fasce: int = FASCE_LARGHEZZA) -> Dict[str, object]:
+    """Le entrate casuali della sezione 10.1: una strategia che entra a caso, con la stessa
+    larghezza di stop del candidato.
 
     Ogni simulazione e' una strategia che, quando e' senza posizione e senza ordine in attesa,
-    a ogni candela ammessa del periodo entra con la stessa probabilita' q, indipendentemente
-    dai prezzi e da quando il candidato e' in posizione; poi il trade va come lo farebbe la
+    a ogni candela ammessa del periodo entra con probabilita' q x peso, indipendentemente dai
+    prezzi futuri e da quando il candidato e' in posizione; poi il trade va come lo farebbe la
     variante con un segnale li' (stesso tipo di ingresso, stesso stop, stesse uscite, stessi
     costi) e la strategia torna libera alla sua uscita, come il candidato. Cosi' i trade non
     si sovrappongono e la scelta di un ingresso non dipende mai da come finira' il trade.
+
+    Il peso (correzione 1 del collaudo, approvata il 17 ottobre 2026) fa si' che i trade della
+    strategia abbiano la stessa distribuzione di larghezza dello stop (``larghezza_stop``) dei
+    trade del candidato: le larghezze del candidato si dividono in ``fasce`` (5) ai loro quantili;
+    il peso di una candela e' la quota del candidato nella fascia del trade che si aprirebbe li'
+    diviso la quota di quella fascia fra i trade di tutte le candele ammesse, riportato a un
+    massimo di 1; una candela in cui non si apre un trade (ordine non eseguito, stop troppo
+    vicino) ha peso 1. Le larghezze del candidato, se non si passano, vengono dal candidato stesso
+    (``esegui`` con le stesse regole e gli stessi costi sul periodo). Senza il peso un trade con lo
+    stop largo, che paga meno costi e meno regole prudenti per ogni R, faceva sembrare migliore
+    del caso un candidato che non prevede niente (collaudo del 16 ottobre).
 
     q si tara perche' la strategia faccia in media tanti trade quanti il candidato; si tengono
     solo le simulazioni che ne fanno esattamente tanti (10.1: «stesso numero di trade»), finche'
@@ -71,14 +96,16 @@ def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: 
     Correzione del 16 ottobre 2026, prima di qualunque prova del collaudo: la prima versione
     prendeva le candele in un ordine a caso e teneva un trade solo se ci stava fra quelli gia'
     presi; cosi' teneva piu' spesso i trade brevi (soprattutto stop) e faceva sembrare il caso
-    peggiore di quanto e' (verificatore indipendente: -0,07 R con il candidato in posizione per
-    meta' del tempo, p-value troppo piccoli). ``SimulazioneImpossibile`` vuol dire ora che
-    nemmeno una strategia che entra appena e' libera arriva al numero di trade del candidato.
+    peggiore di quanto e'. ``SimulazioneImpossibile`` vuol dire che nemmeno una strategia che
+    entra appena e' libera arriva al numero di trade del candidato, oppure che in ``giri_massimi``
+    giri nessuna simulazione ne ha fatti esattamente tanti.
     """
     import bisect
 
     if n_trade <= 0:
         raise ValueError("servono almeno un trade del candidato")
+    if fasce < 1:
+        raise ValueError("servono almeno una fascia")
     ammesse = [int(x) for x in np.flatnonzero(c.ammessa[inizio:fine + 1]) + inizio]
     if not ammesse:
         raise SimulazioneImpossibile("nessuna candela ammessa nel periodo")
@@ -89,6 +116,7 @@ def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: 
     # candela ammessa alla cui chiusura la strategia e' di nuovo libera
     e_trade = np.zeros(n_amm, dtype=bool)
     e_r = np.zeros(n_amm)
+    e_larg = np.zeros(n_amm)
     succ = np.zeros(n_amm, dtype=np.int64)
     esiti = []
     for p, j in enumerate(ammesse):
@@ -100,14 +128,38 @@ def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: 
         if e.tipo == "trade":
             e_trade[p] = True
             e_r[p] = e.trade.r
+            e_larg[p] = larghezza_stop(e.trade)
         succ[p] = bisect.bisect_left(ammesse, max(e.libero_da, j + 1))
+
+    # il peso di ogni candela: stessa distribuzione di larghezza dello stop del candidato
+    if larghezze_candidato is None:
+        larghezze_candidato = [larghezza_stop(t) for t in esegui(c, regole, costi, inizio, fine).trade]
+    larg_c = np.asarray(larghezze_candidato, dtype=np.float64)
+    peso = np.ones(n_amm)
+    quote = None
+    fascia_p = np.full(n_amm, -1, dtype=np.int64)  # la fascia del trade di ogni candela (-1: nessun trade)
+    quota_c = w = None
+    if len(larg_c) and fasce > 1 and e_trade.any():
+        tagli = np.quantile(larg_c, np.arange(1, fasce) / fasce)
+        fascia_c = np.searchsorted(tagli, larg_c, side="right")
+        fascia_p[e_trade] = np.searchsorted(tagli, e_larg[e_trade], side="right")
+        quota_c = np.bincount(fascia_c, minlength=fasce) / len(larg_c)
+        quota_a = np.bincount(fascia_p[e_trade], minlength=fasce) / int(e_trade.sum())
+        if np.any((quota_c > 0) & (quota_a == 0)):
+            raise SimulazioneImpossibile("una fascia di larghezza dello stop del candidato non ha nessuna candela ammessa")
+        w = np.where(quota_a > 0, quota_c / np.where(quota_a > 0, quota_a, 1.0), 0.0)
+        w = w / w.max()
+        peso[e_trade] = w[fascia_p[e_trade]]
+        quote = {"candidato": quota_c.tolist(), "candele_ammesse": quota_a.tolist(), "tagli": tagli.tolist()}
 
     rng = np.random.default_rng(seme)
     registra = _OSSERVATORE is not None
+    per_fascia = np.zeros(max(fasce, 1))
 
-    def giri(q: float, quanti: int):
-        """``quanti`` strategie che entrano a caso, fatte avanzare insieme: trade e somma degli R
-        di ognuna (e, solo per i test, le posizioni dei trade)."""
+    def giri(q: float, quanti: int, con_peso: bool = True):
+        """``quanti`` strategie che entrano a caso, fatte avanzare insieme (per diradamento: un salto
+        geometrico con probabilita' q, poi l'ingresso con probabilita' ``peso``): trade e somma degli
+        R di ognuna (e, solo per i test, le posizioni dei trade)."""
         pos = np.zeros(quanti, dtype=np.int64)
         conta = np.zeros(quanti, dtype=np.int64)
         somma = np.zeros(quanti)
@@ -121,25 +173,32 @@ def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: 
             if not len(vive):
                 break
             pv = pos[vive]
+            if con_peso:
+                entra = rng.random(len(vive)) < peso[pv]
+                fermi = vive[~entra]
+                pos[fermi] += 1
+                vive_e, pv = vive[entra], pv[entra]
+            else:
+                vive_e = vive
             t = e_trade[pv]
-            conta[vive] += t
-            somma[vive] += np.where(t, e_r[pv], 0.0)
+            conta[vive_e] += t
+            somma[vive_e] += np.where(t, e_r[pv], 0.0)
+            if w is not None:
+                per_fascia[:] += np.bincount(fascia_p[pv[t]], minlength=fasce)
             if registra:
-                for k, pp, tt in zip(vive.tolist(), pv.tolist(), t.tolist()):
+                for k, pp, tt in zip(vive_e.tolist(), pv.tolist(), t.tolist()):
                     if tt:
                         tracce[k].append(pp)
-            pos[vive] = succ[pv]
+            pos[vive_e] = succ[pv]
         return conta, somma, tracce
 
-    massimo = int(giri(1.0, 1)[0][0])
+    massimo = int(giri(1.0, 1, con_peso=False)[0][0])
     if massimo < n_trade:
         raise SimulazioneImpossibile(
             f"una strategia che entra appena e' libera fa {massimo} trade nel periodo, meno dei "
             f"{n_trade} del candidato")
-    # taratura di q: la media dei trade per giro deve essere n_trade (bisezione su log q)
-    if massimo == n_trade:
-        q = 1.0
-    else:
+    def tara_q() -> float:
+        """Taratura di q: la media dei trade per giro deve essere n_trade (bisezione su log q)."""
         basso, alto = math.log(1e-7), 0.0
         for _ in range(passi_taratura):
             medio = 0.5 * (basso + alto)
@@ -148,7 +207,23 @@ def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: 
                 basso = medio
             else:
                 alto = medio
-        q = math.exp(0.5 * (basso + alto))
+        return math.exp(0.5 * (basso + alto))
+
+    q = tara_q()
+    if w is not None:
+        # i trade che stanno nel periodo senza sovrapporsi non sono un campione neutro delle candele (i
+        # trade lunghi ci stanno meno spesso): tre giri di prova misurano le quote ottenute per fascia
+        # e correggono i pesi, poi si ritara q
+        for _ in range(3):
+            per_fascia[:] = 0.0
+            conta, _, _ = giri(q, 1024)
+            ottenute = per_fascia / max(per_fascia.sum(), 1.0)
+            correzione = np.where((ottenute > 0) & (quota_c > 0), quota_c / np.where(ottenute > 0, ottenute, 1.0), 1.0)
+            w = w * correzione
+            w = w / w.max()
+            peso[e_trade] = w[fascia_p[e_trade]]
+            q = tara_q()
+        quote["pesi"] = w.tolist()
     medie: List[float] = []
     fatti = 0
     lotto = 4096
@@ -167,7 +242,8 @@ def entrate_casuali(c: Compilata, n_trade: int, inizio: int, fine: int, regole: 
     valori = np.asarray(medie)
     return {"valori": valori, "media": float(valori.mean()), "percentile_95": float(np.percentile(valori, 95)),
             "candele_ammesse": n_amm, "n_simulazioni": n_simulazioni, "seme": seme,
-            "probabilita_ingresso": q, "giri": fatti, "trade_massimi": massimo}
+            "probabilita_ingresso": q, "giri": fatti, "trade_massimi": massimo, "fasce": fasce,
+            "quote_larghezza": quote}
 
 
 def p_value(r_candidato: float, valori: Sequence[float], n_simulazioni: int = N_SIMULAZIONI) -> float:
@@ -245,7 +321,8 @@ def fase2(variante: dict, serie: Serie, inizio: int, fine: int, regole: Regole =
     p = None
     casuali = None
     if m["trade"] > 0:
-        casuali = entrate_casuali(c, m["trade"], inizio, fine, regole, COSTI_NORMALI, n_simulazioni, seme)
+        casuali = entrate_casuali(c, m["trade"], inizio, fine, regole, COSTI_NORMALI, n_simulazioni, seme,
+                                  larghezze_candidato=[larghezza_stop(t) for t in ris.trade])
         p = p_value(m["r_medio"], casuali["valori"], n_simulazioni)
     esiti = supera_costruzione(m, p)
     return {"metriche": m, "p_value": p,

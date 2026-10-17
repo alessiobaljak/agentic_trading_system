@@ -8,11 +8,12 @@ Uso (dalla radice del repository)::
     python3 research/collaudo_3/collaudo.py impronte     # impronte SHA-256 degli strumenti
 
 Le regole che il testo lascia aperte sono in ``research/collaudo_3/regole.md``, committato prima
-del primo calcolo. Gli esiti grezzi vanno in ``research/collaudo_3/esiti/`` (una riga JSON per
-prova), il riepilogo in ``research/collaudo_3/esiti.md``.
+del primo calcolo. Gli esiti grezzi vanno in ``research/collaudo_3/esiti/giro<N>/`` (una riga JSON
+per prova), il riepilogo in ``research/collaudo_3/esiti.md``.
 
-Il collaudo usa solo le candele del periodo di costruzione (fino al 2022-09-30), rimescolate:
-nessun dato di validazione o del vault, nessuna variante consumata.
+Il collaudo usa solo le candele del periodo di costruzione (fino al 2022-09-30), con la direzione
+di ogni candela girata a caso (dal secondo giro, correzione 2): nessun dato di validazione o del
+vault, nessuna variante consumata.
 """
 
 from __future__ import annotations
@@ -41,15 +42,20 @@ from research.src.motore3 import Regole, esegui, metriche, stima_trade  # noqa: 
 from research.src.statistica3 import SimulazioneImpossibile, fase2, fase4  # noqa: E402
 
 CARTELLA = Path(__file__).resolve().parent
-ESITI = CARTELLA / "esiti"
+#: il giro del collaudo: il primo (16 ott) usava le candele rimescolate e le ampiezze 0 / 0,3 / 0,6;
+#: dal secondo valgono le correzioni approvate il 17 ottobre 2026 (PROTOCOLLO_3.md, appendice 3)
+GIRO = 2
+ESITI = CARTELLA / "esiti" / f"giro{GIRO}"
 INIZIO = date(2020, 1, 1)
 FINE = date(2022, 9, 30)
 N_SERIE = 30
 SEME_A = 2026
 N_VARIANTI_A = 100
 TRADE_MINIMI = 150
-AMPIEZZE_B = (0.0, 0.3, 0.6)
-AMPIEZZA_RISERVA_B = 0.9
+AMPIEZZE_B = (0.0, 0.6, 1.2)
+AMPIEZZA_RISERVA_B = 1.8
+#: con questa ampiezza almeno 20 serie su 30 devono arrivare a 0,35 R, altrimenti si fa la riserva
+AMPIEZZA_GUIDA_B = 1.2
 CANDELE_VANTAGGIO = 12
 CANDELE_RITORNO = 240
 
@@ -73,11 +79,41 @@ def serie_vera(tf: str) -> cat.Serie:
     return _CACHE_VERE[tf]
 
 
+def senza_direzione(s: cat.Serie, seme: int) -> cat.Serie:
+    """13bis.1 (correzione 2 del collaudo): ogni candela dalla seconda si scompone nei suoi movimenti
+    relativi, in logaritmo (salto dalla chiusura precedente all'apertura, chiusura, massimo e minimo
+    sull'apertura, e le quattro candele mark sull'apertura del last); con il seme, ogni candela si
+    gira o no, alla pari: cambiano segno salto e chiusura, e massimo e minimo si scambiano cambiati
+    di segno (mark compreso). Le candele restano al loro posto, con il loro volume; il prezzo riparte
+    dal primo prezzo vero; funding vero."""
+    o, h, l, c = s.open, s.high, s.low, s.close
+    g = np.log(o[1:] / c[:-1])
+    b = np.log(c[1:] / o[1:])
+    u = np.log(h[1:] / o[1:])
+    d = np.log(l[1:] / o[1:])
+    mo, mh, ml, mc = (np.log(x[1:] / o[1:]) for x in (s.mark_open, s.mark_high, s.mark_low, s.mark_close))
+    gira = np.random.default_rng(seme).random(len(g)) < 0.5
+    g2, b2 = np.where(gira, -g, g), np.where(gira, -b, b)
+    u2, d2 = np.where(gira, -d, u), np.where(gira, -u, d)
+    mo2, mc2 = np.where(gira, -mo, mo), np.where(gira, -mc, mc)
+    mh2, ml2 = np.where(gira, -ml, mh), np.where(gira, -mh, ml)
+    log_c = np.log(c[0]) + np.cumsum(g2 + b2)
+    log_o = np.concatenate([[np.log(c[0])], log_c[:-1]]) + g2
+    n_o = np.concatenate([[o[0]], np.exp(log_o)])
+    n_c = np.concatenate([[c[0]], np.exp(log_c)])
+    n_h = np.concatenate([[h[0]], np.exp(log_o + u2)])
+    n_l = np.concatenate([[l[0]], np.exp(log_o + d2)])
+    m_o = np.concatenate([[s.mark_open[0]], np.exp(log_o + mo2)])
+    m_h = np.concatenate([[s.mark_high[0]], np.exp(log_o + mh2)])
+    m_l = np.concatenate([[s.mark_low[0]], np.exp(log_o + ml2)])
+    m_c = np.concatenate([[s.mark_close[0]], np.exp(log_o + mc2)])
+    return cat.Serie(s.timeframe, s.ts.copy(), n_o, n_h, n_l, n_c, s.volume.copy(), m_o, m_h, m_l, m_c,
+                     s.funding_ts.copy(), s.funding_tasso.copy())
+
+
 def rimescola(s: cat.Serie, seme: int) -> cat.Serie:
-    """13bis.1: ogni candela (dalla seconda) si scompone nei suoi movimenti relativi (salto
-    dalla chiusura precedente all'apertura, chiusura, massimo e minimo sull'apertura, volume,
-    e le quattro candele mark sull'apertura del last); le candele si rimescolano con il seme;
-    orari veri, in ordine; il prezzo riparte dal primo prezzo vero; funding vero."""
+    """Il primo giro del collaudo (16 ott): l'ordine delle candele mescolato. Resta per rileggere quel
+    giro; dal secondo giro le serie sono ``senza_direzione``."""
     o, h, l, c = s.open, s.high, s.low, s.close
     salto = o[1:] / c[:-1]
     corpo = c[1:] / o[1:]
@@ -90,24 +126,22 @@ def rimescola(s: cat.Serie, seme: int) -> cat.Serie:
     mo, mh, ml, mc = mo[perm], mh[perm], ml[perm], mc[perm]
     chiusure = c[0] * np.cumprod(salto * corpo)
     aperture = np.concatenate([[c[0]], chiusure[:-1]]) * salto
-    n_o = np.concatenate([[o[0]], aperture])
-    n_c = np.concatenate([[c[0]], chiusure])
-    n_h = np.concatenate([[h[0]], aperture * su])
-    n_l = np.concatenate([[l[0]], aperture * giu])
-    n_v = np.concatenate([[s.volume[0]], vol])
-    m_o = np.concatenate([[s.mark_open[0]], aperture * mo])
-    m_h = np.concatenate([[s.mark_high[0]], aperture * mh])
-    m_l = np.concatenate([[s.mark_low[0]], aperture * ml])
-    m_c = np.concatenate([[s.mark_close[0]], aperture * mc])
-    return cat.Serie(s.timeframe, s.ts.copy(), n_o, n_h, n_l, n_c, n_v, m_o, m_h, m_l, m_c,
+    return cat.Serie(s.timeframe, s.ts.copy(), np.concatenate([[o[0]], aperture]),
+                     np.concatenate([[h[0]], aperture * su]), np.concatenate([[l[0]], aperture * giu]),
+                     np.concatenate([[c[0]], chiusure]), np.concatenate([[s.volume[0]], vol]),
+                     np.concatenate([[s.mark_open[0]], aperture * mo]), np.concatenate([[s.mark_high[0]], aperture * mh]),
+                     np.concatenate([[s.mark_low[0]], aperture * ml]), np.concatenate([[s.mark_close[0]], aperture * mc]),
                      s.funding_ts.copy(), s.funding_tasso.copy())
 
 
 def serie_rimescolata(tf: str, numero: int) -> cat.Serie:
-    """La serie rimescolata ``numero`` (da 1 a 30) del timeframe: seme = numero."""
+    """La serie senza vantaggio ``numero`` (da 1 a 30) del timeframe: seme = numero. Dal secondo giro
+    e' la serie con la direzione girata a caso (13bis.1, correzione 2); nel primo era l'ordine mescolato."""
     if not 1 <= numero <= N_SERIE:
         raise ValueError(numero)
-    return rimescola(serie_vera(tf), numero)
+    if GIRO == 1:
+        return rimescola(serie_vera(tf), numero)
+    return senza_direzione(serie_vera(tf), numero)
 
 
 # ---------------------------------------------------------------------------
@@ -400,10 +434,11 @@ def prova_b(processi: int) -> None:
             fu.flush()
             print(f"B {riga['regola']} serie {riga['serie']} P {riga['ampiezza']}: R {riga['r_medio']:.3f} "
                   f"p {riga['p_value']} supera {riga['supera_fase2']} ({riga['secondi']} s)", flush=True)
-        # P = 0,9 una volta sola, per le regole in cui con P = 0,6 meno di 20 serie arrivano a 0,35 R
+        # la riserva una volta sola, per le regole in cui con l'ampiezza guida meno di 20 serie arrivano a 0,35 R
         riserva = []
         for nome in REGOLE_B:
-            arrivate = sum(1 for r in righe if r["regola"] == nome and r["ampiezza"] == 0.6 and r["r_medio"] >= 0.35)
+            arrivate = sum(1 for r in righe if r["regola"] == nome and r["ampiezza"] == AMPIEZZA_GUIDA_B
+                           and r["r_medio"] >= 0.35)
             if arrivate < 20:
                 riserva += [(nome, n, AMPIEZZA_RISERVA_B) for n in range(1, N_SERIE + 1)]
         for riga in ex.map(_fase2_b, riserva):
@@ -460,6 +495,7 @@ def impronte() -> Dict[str, str]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("azione", choices=["stima", "a", "b", "impronte"])
+    ESITI.mkdir(parents=True, exist_ok=True)
     ap.add_argument("--processi", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     a = ap.parse_args()
     if a.azione == "stima":

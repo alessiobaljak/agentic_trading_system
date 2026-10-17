@@ -1,7 +1,7 @@
 # Diagnosi del primo giro della prova A (16 ottobre 2026)
 
 Non sono prove ufficiali del collaudo: servono a trovare la causa per cui la prova A non e' passata. Girano
-sulle stesse 100 varianti finte della prova ufficiale (`../esiti/prova_a.jsonl`). Si lanciano dalla radice del
+sulle stesse 100 varianti finte della prova ufficiale (`../esiti/giro1/prova_a.jsonl`). Si lanciano dalla radice del
 repository, per esempio `python3 research/collaudo_3/diagnosi/diag_a.py senza_costi`.
 
 | Script | Cosa cambia rispetto alla prova ufficiale | p-value sotto 0,10 (su 100) | sotto 0,023 |

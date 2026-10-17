@@ -3,7 +3,7 @@
 # Si congela dopo l'approvazione del Passo 0: da li' in poi nessuno lo cambia (sezione 13bis.5).
 versione_protocollo: "5.1 (protocollo 3)"
 approvazione_testo: "2026-10-16T19:26:00Z"
-stato: "bozza del Passo 0, da approvare allo STOP"
+stato: "bozza del Passo 0; correzioni del collaudo approvate il 2026-10-17T06:11:00Z; si congela all'approvazione degli esiti"
 
 moneta: BTCUSDT
 fonte_dati:
@@ -14,10 +14,10 @@ fonte_dati:
   # candele mark e funding, tutti i 9 timeframe, nessun mese mancante fino al 2023-12. I file giornalieri
   # partono dal 2019-12-31 (last) e dal 2019-12-23 (mark). Le API REST rispondono 451 da qui.
   primo_mese_disponibile: "2020-01"
-  nota_inizio: "il protocollo stimava settembre 2019; la prima candela disponibile dalla fonte e' il 2020-01-01 00:00 UTC (da confermare al Passo 1)"
+  nota_inizio: "il protocollo stimava settembre 2019; la prima candela disponibile dalla fonte e' il 2020-01-01 00:00 UTC; inizio della costruzione approvato dall'utente il 2026-10-17"
 
 periodi:  # sezione 4
-  costruzione: {da: "prima candela disponibile", a: "2022-09-30T23:59:59Z"}
+  costruzione: {da: "2020-01-01T00:00:00Z", a: "2022-09-30T23:59:59Z"}
   validazione: {da: "2022-10-01T00:00:00Z", a: "2023-12-31T23:59:59Z"}
   vault: {da: "2024-01-01T00:00:00Z", a: "2026-09-30T23:59:59Z"}
   marcatore_vault: "research/vault/APERTURA_3.md"
@@ -55,6 +55,7 @@ motore:  # sezioni 7.6-7.8 e 9
   seme: 2026
 
 catalogo:  # sezione 7 (i valori ammessi sono anche in research/src/catalogo3.py)
+  scelta_7_10: "b"  # tutto il catalogo, aggiunte al bot prima del paper (utente, 2026-10-17)
   varianti_massime: 40
   condizioni_massime: 3
   limit: {k: [0.25, 0.5], validita_candele: [1, 3], riempimento_severo: 0.0005}
@@ -62,6 +63,7 @@ catalogo:  # sezione 7 (i valori ammessi sono anche in research/src/catalogo3.py
 statistica:  # sezione 10
   simulazioni_casuali: 1000
   seme: 2026
+  fasce_larghezza_stop: 5  # correzione 1 del collaudo (10.1)
   costruzione: {trade_minimi: 150, r_medio_minimo: 0.2, p_value_massimo: 0.023}
   validazione: {trade_minimi: 60, r_medio_positivo: true, frazione_minima_di_costruzione: 0.5, profit_factor_minimo: 1.05, positivo_a_costi_doppi: true}
   vault: {trade_minimi: 100, r_medio_positivo: true, positivo_a_costi_doppi: true, profit_factor_minimo: 1.10, benjamini_hochberg: 0.10}
@@ -93,9 +95,9 @@ paper:  # Passo 8
   bocciatura_drawdown_volte_vault: 1.5
 
 collaudo:  # sezione 13bis
-  serie_rimescolate_per_timeframe: 30
+  serie_senza_direzione_per_timeframe: 30  # correzione 2: direzione di ogni candela girata a caso
   prova_a: {varianti_finte: 100, seme: 2026, trade_stimati_minimi: 150, massimo_che_superano: 5, massimo_p_sotto_0_10: 15}
-  prova_b: {serie: 30, ampiezze: [0.0, 0.3, 0.6], ampiezza_di_riserva: 0.9, candele_del_vantaggio: 12, candele_del_ritorno: 240,
+  prova_b: {serie: 30, ampiezze: [0.0, 0.6, 1.2], ampiezza_di_riserva: 1.8,  # correzione 3 candele_del_vantaggio: 12, candele_del_ritorno: 240,
             massimo_che_superano_senza_vantaggio: 3, soglia_r_netto: 0.35, quota_minima_che_supera: 0.80, serie_minime_alla_soglia: 20}
-  prova_c: {da: "2021-10-01", a: "2022-09-30", segnali_identici: 1.0, trade_identici_minimi: 0.98, differenza_r_massima: 0.01}
+  prova_c: {quando: "dopo il vault, prima del paper (utente, 2026-10-17)", da: "2021-10-01", a: "2022-09-30", segnali_identici: 1.0, trade_identici_minimi: 0.98, differenza_r_massima: 0.01}
   ore_massime_di_calcolo: 24
