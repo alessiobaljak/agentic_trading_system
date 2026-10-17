@@ -4038,3 +4038,6 @@ almeno 7 monete di controllo su 9 (soglia di stop 17). Con un vantaggio inserito
 seguito («procedi in autonimia con gli altri passi»): strumenti congelati, si apre la sessione di ricerca. Capito oggi:
 su LINK, con 32,5 mesi di costruzione, 4 varianti finte su 5 non arrivano a 150 trade (400 su 501), quasi tutte su
 candele da 2 ore in su; le strategie possibili stanno su candele brevi, dove i costi pesano di più.
+Branch della ricerca pubblicato con una storia propria e senza i file delle ricerche passate (commit 8e9147ef; sul
+branch i test del protocollo 4 passano, 644 su 644); sessione di ricerca `session_01U9dN6txp5poepfrCk4btAp` aperta alle
+23:58 ora italiana direttamente su quel branch, così all'avvio non vede le istruzioni né i commit del branch principale.
