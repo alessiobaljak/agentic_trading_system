@@ -1,0 +1,600 @@
+"""GATE CONTRO PAPER, TUTTO QUELLO CHE SI PUO' CONFRONTARE.
+
+Domande del proprietario, 21 settembre 2026, dopo aver visto tre strategie
+validate chiudere in perdita ogni singolo trade:
+
+  1. i trade del paper sono gli STESSI che avrebbe fatto il gate — le soglie
+     d'ingresso combaciano, o c'e' un errore da qualche parte?
+  2. nel gate una serie di perdite cosi' lunga era mai successa?
+  3. «voglio confrontare TUTTI i dati, non solo il win rate»: quante uscite al
+     primo gradino, al secondo, al terzo; vincite e perdite consecutive; quanto
+     lontano arriva il prezzo; quanto rende un trade.
+
+IL WIN RATE DA SOLO MENTE, e il 21 settembre lo ha fatto davvero: la dashboard
+mostrava «57%» (del backtest) accanto a quattro trade tutti persi (del paper), e
+i due numeri sembravano lo stesso numero. Sotto scale-out e' per giunta la
+statistica meno informativa che esista — un trade che tocca il primo gradino e
+torna a pareggio e' una «vittoria» che vale 0,45R lordi, uno che corre fino
+all'ultimo ne vale 3,35R, e il conto lo fa la CODA. Per questo qui si
+confrontano i GRADINI raggiunti, non i vinti/persi.
+
+COSA NON SI PUO' CONFRONTARE, e va detto invece di inventarlo:
+  * il MOTIVO dell'uscita: il paper lo registra (`exit_reason`), il backtest no.
+    Al suo posto si contano i gradini, ricavati da `mfe_r` con la STESSA
+    funzione da entrambe le parti;
+  * i COSTI: nel paper sono stimati col modello del gate, non misurati dai fill.
+    Confrontarli direbbe solo che il modello e' uguale a se stesso;
+  * il PnL in valore assoluto: il backtest somma variazioni di prezzo, il paper
+    USDT. Si confrontano rapporti (PF) e medie per trade, mai due somme.
+
+LA SECONDA HA UNA RISPOSTA NUMERICA e nessuno l'aveva mai cercata. Finora la
+divergenza si misurava col profit factor, che e' una media: dice che il vissuto
+e' peggiore della promessa, non se e' FUORI da cio' che la promessa prevede. Una
+strategia che vince il 57% delle volte perde comunque, prima o poi, otto volte
+di fila — e se le ha gia' fatte nella sua storia validata, vederle adesso non e'
+la prova di un guasto.
+
+E LA DOMANDA GIUSTA NON E' PER-STRATEGIA. I trade persi stanno su strategie e
+coin diverse: quello che il proprietario ha vissuto e' la serie del PORTAFOGLIO,
+non quella di una spec. Quindi i trade del gate di tutte le coppie che hanno
+operato vengono messi in ordine di tempo — come li vivrebbe un conto solo — e la
+serie si misura li' dentro.
+
+Una cosa che questo script NON fa: dire che il campione basta. Se il paper ha
+chiuso 11 trade, 11 e' un numero da cui non si conclude quasi niente; il senso
+qui e' avere il METRO, cioe' sapere quale serie di perdite il gate considera
+normale, prima di decidere se quella in corso lo e'.
+
+LA DOMANDA H5 (24 settembre 2026, backlog): il paper apre ~4,9 trade al giorno
+contro 8,6 simulati e perde (PF 0,63) dove il gate prometteva 1,88. Due
+spiegazioni opposte danno lo stesso sintomo: «il mercato e' cambiato» e «il
+paper esegue male». La misura che le separa e' nei segnali del gate che cadono
+NEL PERIODO DEL PAPER: quelli che il paper ha aperto e quelli che NON ha aperto
+(posizioni piene, cooldown, tetto per coin, veto dell'AI, bot fermo...). Se i
+segnali non aperti rendono e quelli aperti no, il difetto e' nel percorso live;
+se perdono tutti e due, il gate ha promesso su un regime che non c'e' piu'. I
+trade del gate qui sono simulati sulla storia INTERA, senza holdout: sono una
+promessa, non una prova. `PAPER_START` (env, default 2026-09-16) dice da quando.
+
+SOLA LETTURA. Rigira il motore di backtest e legge i trade del paper: non
+scrive su Firebase, non tocca il registro, non cambia niente di cio' che il bot
+sta facendo adesso.
+
+Uso:
+    .venv/bin/python -m scripts.confronto_gate_paper
+    .venv/bin/python -m scripts.confronto_gate_paper --coppie 4 --start 2024-01-01
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import os
+from collections import defaultdict
+from datetime import date
+
+from backtesting.data_loader import load_candles
+from backtesting.optimizer import WalkForwardOptimizer
+from bot.config import settings, timeframe_hours
+from bot.core.firebase_client import decode_pairs, get_firebase
+from bot.core.indicators import compute_indicator_frame
+from bot.execution.exit_logic import ladder_multiples
+from bot.learning.trade_logger import TradeLogger
+from bot.strategies.base import get_all_strategies
+from bot.strategies.generated import GeneratedStrategy
+# I MATTONI CONDIVISI con `gate_vs_paper`, e il motivo per cui si importano
+# invece di riscriverli. La prima versione di questo file aveva un `_ts` suo,
+# `float(v)` e basta: `entry_time` nel paper e' una stringa ISO, quindi ogni
+# trade diventava 0 e veniva saltato. Il report ha stampato «0/21 ingressi
+# combaciano», che si legge come «il paper non sta operando le strategie del
+# gate» — un allarme grave, e falso, generato dallo strumento che doveva
+# scoprirlo. Stessa famiglia delle tre copie di `judge_window`.
+from scripts.gate_vs_paper import _bucket_of, _ts
+
+
+# --------------------------------------------------------------------------- #
+# LA MISURA: quanto dura la peggiore sfortuna che il gate ha gia' attraversato  #
+# --------------------------------------------------------------------------- #
+def serie_perdenti(esiti: list[bool]) -> list[int]:
+    """Le lunghezze delle serie di perdite consecutive, in ordine di tempo.
+
+    `esiti[i]` e' True se il trade i-esimo ha vinto. Una sola passata: contare
+    le serie con due conteggi separati e' il modo classico di farli divergere
+    sul caso di confine (la serie che arriva fino all'ultimo trade)."""
+    fuori: list[int] = []
+    corrente = 0
+    for vinto in esiti:
+        if vinto:
+            if corrente:
+                fuori.append(corrente)
+            corrente = 0
+        else:
+            corrente += 1
+    if corrente:
+        fuori.append(corrente)
+    return fuori
+
+
+def quante_volte_almeno(esiti: list[bool], n: int) -> int:
+    """Quante FINESTRE di `n` trade consecutivi sono state tutte perdenti.
+
+    Non e' la stessa cosa del conteggio delle serie: una serie da 12 contiene
+    due finestre da 11, e chi guarda il proprio conto le vive entrambe. E'
+    questa la frequenza che risponde a «quanto spesso capita», perche' e' la
+    stessa cosa che sta vivendo il paper adesso."""
+    if n <= 0 or len(esiti) < n:
+        return 0
+    return sum(1 for i in range(len(esiti) - n + 1)
+               if not any(esiti[i:i + n]))
+
+
+def _finestre(nome: str, esiti: list[bool], paper_n: int) -> None:
+    """Quanto spesso il gate ha attraversato una striscia lunga come quella in
+    corso. E' il METRO: senza, ogni serie di perdite sembra un guasto.
+
+    Si contano le FINESTRE, non le serie. Una serie da 12 contiene due finestre
+    da 11 e chi guarda il proprio conto le vive entrambe: contare le serie
+    darebbe 1 e farebbe sembrare l'evento piu' raro di quanto e'."""
+    if not esiti or paper_n <= 0:
+        return
+    possibili = max(len(esiti) - paper_n + 1, 0)
+    if not possibili:
+        print(f"  {nome}: storia piu' corta di {paper_n} trade, non confrontabile")
+        return
+    q = quante_volte_almeno(esiti, paper_n)
+    print(f"  {nome}: finestre di {paper_n} trade consecutivi TUTTI persi: "
+          f"{q} su {possibili} ({q / possibili * 100:.1f}%)")
+
+
+# --------------------------------------------------------------------------- #
+# IL CONFRONTO COMPLETO: le stesse grandezze, calcolate allo stesso modo       #
+# --------------------------------------------------------------------------- #
+def gradini_raggiunti(mfes: list[float], mults: tuple) -> list[int]:
+    """Quanti trade hanno toccato 0, 1, 2, 3 gradini.
+
+    E' LA STATISTICA CHE SOSTITUISCE IL WIN RATE. Sotto scale-out «vinto» non
+    dice quasi niente: chi tocca il primo gradino e torna a pareggio incassa
+    0,45R lordi, chi arriva in fondo 3,35R, e sono entrambi «vittorie». Il
+    numero di gradini invece si confronta davvero fra backtest e vissuto,
+    perche' si ricava da `mfe_r`, che esiste da tutte e due le parti.
+
+    L'indice della fascia E' il numero di gradini raggiunti: sotto il primo
+    gradino -> 0, fra il primo e il secondo -> 1, e cosi' via."""
+    conte = [0] * (len(mults) + 1)
+    for m in mfes:
+        conte[_bucket_of(m, mults)] += 1
+    return conte
+
+
+def _riga_gradini(nome: str, conte: list[int]) -> None:
+    tot = sum(conte)
+    if not tot:
+        print(f"  {nome:<10}  nessun trade")
+        return
+    celle = "".join(f"{c / tot * 100:>8.0f}%" for c in conte)
+    print(f"  {nome:<10}{tot:>6}{celle}")
+
+
+def profilo(nome: str, mfes: list[float], pnls: list[float],
+            esiti: list[bool], mults: tuple) -> dict:
+    """Tutte le grandezze confrontabili di una delle due parti.
+
+    `pnls` NON ha la stessa unita' fra gate e paper (il backtest somma
+    variazioni di prezzo, il paper USDT). Per questo esce il PF, che e' un
+    rapporto e quindi confrontabile, e il PnL MEDIO per trade nella sua unita'
+    — mai due somme affiancate come se fossero la stessa cosa."""
+    n = len(esiti)
+    guadagni = sum(p for p in pnls if p > 0)
+    perdite = -sum(p for p in pnls if p < 0)
+    serie_p = serie_perdenti(esiti)
+    serie_v = serie_perdenti([not e for e in esiti])
+    return {
+        "nome": nome, "n": n,
+        "win": (sum(esiti) / n) if n else 0.0,
+        "pf": (guadagni / perdite) if perdite > 0 else 0.0,
+        "per_trade": (sum(pnls) / n) if n else 0.0,
+        "mfe_med": sorted(mfes)[len(mfes) // 2] if mfes else 0.0,
+        "perdite_max": max(serie_p) if serie_p else 0,
+        "vincite_max": max(serie_v) if serie_v else 0,
+        "gradini": gradini_raggiunti(mfes, mults),
+    }
+
+
+def stampa_confronto(gate: dict, paper: dict, mults: tuple) -> None:
+    """Le due parti affiancate.
+
+    Col paper a pochi trade il PF puo' essere 0 (nessun guadagno) o non
+    calcolabile: si stampa un trattino invece di un numero che sembra una
+    misura e non lo e'."""
+    def _pf(d):
+        return f"{d['pf']:.2f}" if d["n"] and d["pf"] > 0 else "—"
+
+    hdr = f"  {'':<10}{'n':>6}{'win':>7}{'PF':>8}{'PnL/trade':>12}{'mfe med':>10}"
+    print(hdr)
+    print("  " + "-" * (len(hdr) - 2))
+    for d in (gate, paper):
+        if not d["n"]:
+            print(f"  {d['nome']:<10}  nessun trade")
+            continue
+        print(f"  {d['nome']:<10}{d['n']:>6}{d['win'] * 100:>6.0f}%{_pf(d):>8}"
+              f"{d['per_trade']:>11.3f}{d['mfe_med']:>10.2f}R")
+
+    etichette = "".join(f"{str(i) + ' TP':>9}" for i in range(len(mults) + 1))
+    print()
+    print(f"  gradini raggiunti (scala {'/'.join(f'{m:g}' for m in mults)})")
+    print(f"  {'':<10}{'n':>6}{etichette}")
+    _riga_gradini(gate["nome"], gate["gradini"])
+    _riga_gradini(paper["nome"], paper["gradini"])
+
+    print()
+    print(f"  serie consecutive{'':<6}{'perdite':>10}{'vincite':>10}")
+    for d in (gate, paper):
+        print(f"  {d['nome']:<23}{d['perdite_max']:>10}{d['vincite_max']:>10}")
+
+
+# --------------------------------------------------------------------------- #
+# I TRADE DEL GATE, sulla stessa spec e la stessa scala che il bot opera        #
+# --------------------------------------------------------------------------- #
+def _costruisci(spec, strategy: str, ladder):
+    if spec is not None:
+        g = GeneratedStrategy(spec)
+        if ladder:
+            g.params = {**(getattr(g, "params", {}) or {}), "scale_r_mults": list(ladder)}
+        return g
+    for s in get_all_strategies():
+        if s.name == strategy:
+            return s
+    return None
+
+
+def trade_del_gate(symbol: str, strategy: str, spec, ladder, args):
+    """Una passata sola su TUTTA la storia, non le finestre OOS.
+
+    Le finestre OOS sono l'oggetto giusto per promuovere una coppia (pezzi di
+    storia non usati per sceglierla). Per contare le serie di perdite servono
+    invece i trade IN ORDINE, senza buchi: una serie spezzata dal confine fra
+    due finestre verrebbe contata come due serie corte, e la risposta sarebbe
+    sistematicamente ottimista."""
+    make = lambda: _costruisci(spec, strategy, ladder)  # noqa: E731
+    if make() is None:
+        return None, "definizione della strategia non piu' nel registro"
+    # MAI dati sintetici: una serie di perdite misurata su prezzi inventati
+    # avrebbe l'aria di una risposta ed e' rumore.
+    candles = load_candles(symbol, args.interval, args.start,
+                           args.end or date.today().isoformat(),
+                           prefer=args.source, allow_synthetic=False)
+    if len(candles) < 300:
+        return None, f"solo {len(candles)} candele"
+    frame = compute_indicator_frame(candles)
+    opt = WalkForwardOptimizer(n_windows=1, interval=args.interval)
+    st = opt.bt.run_strategy(make(), symbol, candles, frame=frame)
+    trades = sorted(st.trades, key=lambda t: float(getattr(t, "entry_ts", 0) or 0))
+    return trades, None
+
+
+# --------------------------------------------------------------------------- #
+# PARITA': il paper entra dove entra il gate?                                  #
+# --------------------------------------------------------------------------- #
+def parita_ingressi(ptrades: list[dict], gtrades, tf_h: float) -> dict:
+    """Quanti ingressi del paper trovano un ingresso del gate vicino nel tempo.
+
+    Una corrispondenza non e' un timestamp identico: il segnale nasce a barra
+    chiusa e il bot esegue dopo, quindi la tolleranza e' di due barre. Se un
+    trade del paper non ha NESSUN ingresso del gate entro due barre, le due
+    soglie non stanno vedendo la stessa cosa — ed e' il difetto che il
+    proprietario sta cercando."""
+    tol = 2 * tf_h * 3600
+    coppie = _accoppia(ptrades, gtrades, tol)
+    return {"paper": len(ptrades), "trovati": len(coppie),
+            "scarti_t": [d for _, d in coppie]}
+
+
+def _accoppia(ptrades: list[dict], gtrades, tol: float) -> list[tuple[int, float]]:
+    """Il cuore condiviso di `parita_ingressi` e `abbina` (24 set 2026): per
+    ogni trade del paper il trade del gate NON ancora usato piu' vicino nel
+    tempo, entro `tol` secondi. Ritorna (indice in `gtrades`, scarto in s).
+
+    Un trade del gate si usa una volta sola: senza, tre trade del paper vicini
+    fra loro si appoggerebbero tutti allo stesso segnale e la parita' sembrerebbe
+    perfetta mentre non lo e'. L'indice e' quello della lista COME ARRIVA, non
+    di una copia ordinata: chi chiama deve poter risalire al trade."""
+    t_gate = [float(getattr(t, "entry_ts", 0) or 0) for t in gtrades]
+    usati: set[int] = set()
+    fuori: list[tuple[int, float]] = []
+    for p in ptrades:
+        tp = _ts(p.get("entry_time"))
+        if tp <= 0:
+            continue
+        migliore, delta = None, None
+        for i, tg in enumerate(t_gate):
+            if i in usati or tg <= 0:
+                continue
+            d = abs(tg - tp)
+            if d <= tol and (delta is None or d < delta):
+                migliore, delta = i, d
+        if migliore is not None:
+            usati.add(migliore)
+            fuori.append((migliore, delta))
+    return fuori
+
+
+# --------------------------------------------------------------------------- #
+# H5: i segnali del gate nel periodo del paper, aperti e non aperti            #
+# --------------------------------------------------------------------------- #
+#: da quando esiste il paper. Env per poterlo spostare senza toccare il codice;
+#: il default e' il giorno in cui il bot ha iniziato a operare (16 set 2026).
+PAPER_START = os.environ.get("PAPER_START", "2026-09-16")
+
+#: sotto questo PF un gruppo «perde»; sopra questo «rende». Le due soglie sono
+#: distanti apposta: fra 0,8 e 1,2 il PF di un campione piccolo e' rumore.
+PF_PERDE = 0.8
+PF_RENDE = 1.2
+
+
+def inizio_paper(ptrades: list[dict], paper_start: str = PAPER_START) -> float:
+    """Epoch da cui contare i segnali del gate: la mezzanotte UTC di
+    `paper_start`, oppure il trade del paper piu' vecchio se e' PRIMA. Cosi' un
+    paper partito in anticipo rispetto alla data scritta non perde i suoi primi
+    trade, e una data scritta male non li nasconde. Con una data illeggibile si
+    ricade sui trade (fail-open)."""
+    try:
+        base = dt.datetime.combine(date.fromisoformat(paper_start), dt.time(),
+                                   dt.timezone.utc).timestamp()
+    except (TypeError, ValueError):
+        base = 0.0
+    primi = [ts for ts in (_ts(t.get("entry_time")) for t in ptrades) if ts > 0]
+    if primi and (base <= 0 or min(primi) < base):
+        return min(primi)
+    return base
+
+
+def abbina(ptrades: list[dict], gtrades, tf_h: float) -> tuple[set[int], set[int]]:
+    """Divide i trade del gate in APERTI dal paper e NON APERTI.
+
+    Un trade del gate e' «aperto» se un trade del paper della stessa coppia
+    entra entro due barre da lui (la stessa tolleranza di `parita_ingressi`,
+    perche' il segnale nasce a barra chiusa e il bot esegue dopo), e ogni trade
+    del gate si abbina a un solo trade del paper. Tutti gli altri sono «non
+    aperti»: e' il gruppo che dice cosa avrebbe reso il gate SENZA il percorso
+    live in mezzo. Ritorna due insiemi di indici in `gtrades`, disgiunti e
+    complementari. Funzione pura: nessuna lettura, nessuna stampa."""
+    tol = 2 * tf_h * 3600
+    aperti = {i for i, _ in _accoppia(ptrades, gtrades, tol)}
+    non_aperti = set(range(len(gtrades))) - aperti
+    return aperti, non_aperti
+
+
+def _campo(t, nome: str, default=None):
+    """Legge un campo da un SimTrade o da un dict: i test costruiscono trade
+    sintetici come dict, il motore produce oggetti."""
+    if isinstance(t, dict):
+        return t.get(nome, default)
+    return getattr(t, nome, default)
+
+
+def metriche_gruppo(trades) -> dict:
+    """n, PF, win rate, pnl_pct medio e direzioni di un gruppo di trade del gate.
+
+    Il PF e' somma dei guadagni / somma delle perdite su `pnl_pct`: e' un
+    rapporto, quindi confrontabile fra i due gruppi anche se hanno numeri di
+    trade diversi. Con guadagni e nessuna perdita vale infinito (e non 0, che
+    farebbe sembrare «perdente» un gruppo di soli vinti); senza trade vale 0.
+    «Vinto» qui e' pnl_pct > 0: `is_win` del motore puo' mancare sui dict."""
+    pnls = [float(_campo(t, "pnl_pct", 0.0) or 0.0) for t in trades]
+    n = len(pnls)
+    guadagni = sum(p for p in pnls if p > 0)
+    perdite = -sum(p for p in pnls if p < 0)
+    if perdite > 0:
+        pf = guadagni / perdite
+    else:
+        pf = float("inf") if guadagni > 0 else 0.0
+    direzioni = [str(_campo(t, "direction", "long") or "long").lower() for t in trades]
+    return {
+        "n": n,
+        "pf": pf,
+        "wr": (sum(1 for p in pnls if p > 0) / n) if n else 0.0,
+        "pnl_medio": (sum(pnls) / n) if n else 0.0,
+        "long": sum(1 for d in direzioni if d == "long"),
+        "short": sum(1 for d in direzioni if d == "short"),
+    }
+
+
+def lettura_h5(aperti: dict, non_aperti: dict) -> str:
+    """La frase che separa mercato da esecuzione, dalle metriche dei due gruppi.
+
+    Tre esiti e basta, con le soglie PF_RENDE / PF_PERDE:
+      * non aperti rendono (>= 1,2) e aperti perdono (< 0,8): il gate aveva
+        ragione, e' il PERCORSO LIVE (cosa apre, quando, come) a sbagliare;
+      * perdono tutti e due (< 0,8): il gate ha promesso su un regime che non
+        c'e' piu', e il paper non poteva fare meglio;
+      * tutto il resto, e anche un gruppo vuoto: non distinguibile.
+    Non dice mai «e' sicuro»: e' un campione di giorni, non di mesi."""
+    if not aperti.get("n") or not non_aperti.get("n"):
+        return "non distinguibile con questo campione (uno dei due gruppi e' vuoto)"
+    pa, pn = aperti["pf"], non_aperti["pf"]
+    if pn >= PF_RENDE and pa < PF_PERDE:
+        return "il difetto e' nel percorso live, non nel mercato"
+    if pa < PF_PERDE and pn < PF_PERDE:
+        return "il gate ha promesso su un regime che non c'e' piu'"
+    return "non distinguibile con questo campione"
+
+
+def _pf_txt(pf: float) -> str:
+    if pf == float("inf"):
+        return "inf"
+    return f"{pf:.2f}"
+
+
+def _riga_gruppo(m: dict) -> str:
+    return (f"n {m['n']}, PF {_pf_txt(m['pf'])}, WR {m['wr'] * 100:.0f}%, "
+            f"pnl medio {m['pnl_medio']:+.3f}, L/S {m['long']}/{m['short']}")
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--interval", default=settings.ORCHESTRATOR_TIMEFRAME)
+    ap.add_argument("--start", default="2022-01-01")
+    ap.add_argument("--end", default=None)
+    ap.add_argument("--source", default="binance")
+    ap.add_argument("--coppie", type=int, default=8,
+                    help="quante coppie rigirare, dalle piu' vissute in giu'")
+    args = ap.parse_args()
+
+    fb = get_firebase()
+    tutti = [t for t in TradeLogger(fb).all_since(0.0)
+             if t.get("symbol") and t.get("strategy")]
+    per_coppia: dict[str, list[dict]] = defaultdict(list)
+    for t in tutti:
+        per_coppia[f"{t['symbol']}|{t['strategy']}"].append(t)
+    if not per_coppia:
+        print("[serie] il paper non ha ancora chiuso trade: niente da confrontare.")
+        return 1
+
+    n_paper = len(tutti)
+    persi_paper = sum(1 for t in tutti if float(t.get("pnl", 0) or 0) <= 0)
+    ordinati = sorted(tutti, key=lambda t: _ts(t.get("entry_time")))
+    esiti_paper = [float(t.get("pnl", 0) or 0) > 0 for t in ordinati]
+    serie_paper = serie_perdenti(esiti_paper)
+    peggiore_paper = max(serie_paper) if serie_paper else 0
+
+    print("=" * 74)
+    print("SERIE DI PERDITE: quella in corso e' dentro il carattere del gate?")
+    print("=" * 74)
+    print(f"PAPER: {n_paper} trade chiusi · persi {persi_paper} · "
+          f"serie di perdite piu' lunga finora: {peggiore_paper}")
+    print(f"       coppie che hanno operato: {len(per_coppia)}\n")
+
+    specs = decode_pairs((fb.get_doc("discovered_strategies", "specs") or {}).get("specs"))
+    pairs = decode_pairs((fb.get_doc("strategy_registry", "validated") or {}).get("pairs"))
+    tf_h = timeframe_hours(args.interval)
+
+    scelte = sorted(per_coppia.items(), key=lambda kv: -len(kv[1]))[: args.coppie]
+    tutti_gate: list = []
+    saltate: list[tuple[str, str]] = []
+    # H5: i trade del gate nel periodo del paper, divisi in aperti e non aperti
+    t0_paper = inizio_paper(tutti)
+    h5_aperti: list = []
+    h5_non_aperti: list = []
+
+    for key, ptr in scelte:
+        symbol, strategy = key.split("|", 1)
+        ladder = ladder_multiples((pairs.get(key) or {}).get("last_params") or {})
+        mults = tuple(ladder) if ladder else tuple(settings.SCALE_OUT_R_MULTIPLES)
+        scala = "/".join(f"{m:g}" for m in mults)
+        print(f"── {key} · scala TP {scala}")
+
+        gtrades, errore = trade_del_gate(symbol, strategy, specs.get(strategy),
+                                         ladder, args)
+        if errore:
+            print(f"  GATE: non rigirabile ({errore})\n")
+            saltate.append((key, errore))
+            continue
+
+        # I trade del paper IN ORDINE DI TEMPO: le serie consecutive non hanno
+        # senso su una lista in ordine arbitrario, e Firestore non lo garantisce.
+        ptr_ord = sorted(ptr, key=lambda t: _ts(t.get("entry_time")))
+        p_mfe = [float(t["mfe_r"]) for t in ptr_ord if t.get("mfe_r") is not None]
+        p_pnl = [float(t.get("pnl", 0) or 0) for t in ptr_ord]
+        p_esiti = [p > 0 for p in p_pnl]
+
+        prof_gate = profilo("GATE", [float(t.mfe_r) for t in gtrades],
+                            [float(t.pnl_pct) for t in gtrades],
+                            [bool(getattr(t, "is_win", False)) for t in gtrades],
+                            mults)
+        prof_paper = profilo("PAPER", p_mfe, p_pnl, p_esiti, mults)
+        stampa_confronto(prof_gate, prof_paper, mults)
+
+        # La serie in corso contro il metro del gate: quante volte il gate ha
+        # attraversato una striscia lunga quanto questa.
+        print()
+        _finestre("GATE", [bool(getattr(t, "is_win", False)) for t in gtrades],
+                  len(ptr_ord))
+
+        par = parita_ingressi(ptr_ord, gtrades, tf_h)
+        mancati = par["paper"] - par["trovati"]
+        if par["scarti_t"]:
+            med = sorted(par["scarti_t"])[len(par["scarti_t"]) // 2]
+            dettaglio = f" · scarto mediano {med / 60:.0f} min"
+        else:
+            dettaglio = ""
+        print(f"  INGRESSI: {par['trovati']}/{par['paper']} trade del paper hanno "
+              f"un ingresso del gate entro 2 barre{dettaglio}")
+        if mancati:
+            print(f"     {mancati} SENZA riscontro: qui il paper e il gate non "
+                  f"stanno guardando la stessa soglia")
+        if len(p_mfe) < len(ptr_ord):
+            print(f"     NB {len(ptr_ord) - len(p_mfe)} trade del paper senza "
+                  f"`mfe_r`: esclusi dalle fasce, contati nel resto")
+
+        # H5: solo i trade del gate entrati DA QUANDO il paper esiste. Gli
+        # «aperti» hanno un trade del paper entro due barre, gli altri no.
+        g_periodo = [t for t in gtrades
+                     if float(getattr(t, "entry_ts", 0) or 0) >= t0_paper]
+        idx_ap, idx_no = abbina(ptr_ord, g_periodo, tf_h)
+        ap = [g_periodo[i] for i in sorted(idx_ap)]
+        no = [g_periodo[i] for i in sorted(idx_no)]
+        h5_aperti.extend(ap)
+        h5_non_aperti.extend(no)
+        print(f"  H5 dal {dt.datetime.fromtimestamp(t0_paper, dt.timezone.utc):%Y-%m-%d}: "
+              f"gate {len(g_periodo)} segnali · aperti dal paper: "
+              f"{_riga_gruppo(metriche_gruppo(ap))} · non aperti: "
+              f"{_riga_gruppo(metriche_gruppo(no))}")
+        tutti_gate.extend(gtrades)
+        print()
+
+    # ---- IL PORTAFOGLIO: e' la serie che il proprietario ha davvero vissuto --
+    if tutti_gate:
+        tutti_gate.sort(key=lambda t: float(getattr(t, "entry_ts", 0) or 0))
+        esiti = [bool(getattr(t, "is_win", False)) for t in tutti_gate]
+        primo = min(float(getattr(t, "entry_ts", 0) or 0) for t in tutti_gate)
+        ultimo = max(float(getattr(t, "entry_ts", 0) or 0) for t in tutti_gate)
+        print("=" * 74)
+        print("TUTTE LE COPPIE INSIEME, IN ORDINE DI TEMPO")
+        print("  e' il confronto giusto: i trade persi del paper stanno su "
+              "strategie diverse,\n  e un conto solo li vive uno dopo l'altro, "
+              "non separati per spec.")
+        print("=" * 74)
+        if primo > 0:
+            print(f"  periodo: {dt.datetime.fromtimestamp(primo, dt.timezone.utc):%Y-%m-%d}"
+                  f" → {dt.datetime.fromtimestamp(ultimo, dt.timezone.utc):%Y-%m-%d}")
+        serie_g = serie_perdenti(esiti)
+        print(f"  GATE: {len(esiti)} trade · vinti {sum(esiti)} "
+              f"({sum(esiti) / len(esiti) * 100:.0f}%) · serie di perdite piu' "
+              f"lunga: {max(serie_g) if serie_g else 0} · vincite di fila piu' "
+              f"lunga: {max(serie_perdenti([not e for e in esiti]), default=0)}")
+        _finestre("GATE", esiti, n_paper)
+        _finestre("GATE", esiti, peggiore_paper)
+        print(f"  PAPER: {n_paper} trade · persi {persi_paper} · serie di "
+              f"perdite piu' lunga: {peggiore_paper}")
+
+    # ---- H5: mercato o esecuzione? I segnali del gate da quando c'e' il paper -
+    if tutti_gate:
+        m_ap = metriche_gruppo(h5_aperti)
+        m_no = metriche_gruppo(h5_non_aperti)
+        print("\n" + "=" * 74)
+        print("H5 — I SEGNALI DEL GATE NEL PERIODO DEL PAPER")
+        print(f"  dal {dt.datetime.fromtimestamp(t0_paper, dt.timezone.utc):%Y-%m-%d} "
+              f"(PAPER_START={PAPER_START}), sulle {len(scelte) - len(saltate)} coppie rigirate")
+        print("=" * 74)
+        print(f"  aperti dal paper: {_riga_gruppo(m_ap)}")
+        print(f"  non aperti:       {_riga_gruppo(m_no)}")
+        print(f"  Lettura: {lettura_h5(m_ap, m_no)}.")
+        print("  NB: i trade del gate sono simulati sulla storia INTERA, senza holdout:")
+        print("      sono una promessa, non una prova. E «aperto» e' un abbinamento nel")
+        print("      tempo, non la certezza che il paper abbia seguito quel segnale.")
+
+    if saltate:
+        print(f"\n[serie] non rigirate: {len(saltate)}")
+        for key, err in saltate:
+            print(f"    {key}: {err}")
+
+    print("\n" + "=" * 74)
+    print("Come si legge. Se il gate ha GIA' attraversato serie lunghe quanto")
+    print("quella in corso, quello che vediamo e' dentro il suo carattere e il")
+    print("campione non basta per dire altro. Se non ci e' mai andato vicino,")
+    print("allora la differenza non e' sfortuna e va cercata nel come operiamo.")
+    print("Questo comando MISURA e basta: non scrive niente.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,611 @@
+"""
+Metriche di performance SEGMENTATE + calcolo dei PESI DINAMICI.
+
+Tutto opera su liste di dict (trade serializzati da Firestore) per evitare
+dipendenze forti dai modelli durante il job notturno.
+"""
+from __future__ import annotations
+
+from collections import defaultdict
+from statistics import mean
+from typing import Iterable
+
+from bot.config import settings
+from bot.core.models import Regime, StrategyRegimeWeight
+
+# Mappa win_rate -> peso: <=LOW => 0 (disattivata), >=HIGH => 1 (piena).
+WEIGHT_WINRATE_LOW = 0.35
+WEIGHT_WINRATE_HIGH = 0.60
+# Prior del win-rate per lo shrinkage, SOPRA il bordo alto della rampa (0.60).
+# Se il prior fosse ESATTAMENTE sul bordo, qualunque evidenza penalizzerebbe subito
+# (1 sola perdita: -40% di peso) e le vittorie non compenserebbero mai. A 0.65 le
+# vittorie contano davvero: 1 perdita -> peso ~0.77 (non 0.60); 4 perdite senza
+# vittorie -> comunque ~0 (i perdenti veri muoiono lo stesso, solo meno isterico).
+PRIOR_WINRATE = 0.65
+
+
+def esplorativo(t: dict) -> bool:
+    """True se il trade e' del PAPER ESPLORATIVO (25 set 2026, backlog F1bis): aperto
+    da un quasi-passaggio del gate a size ridotta, non da una validata. Pesi,
+    keep del trailing, deriva e calibrazione lo IGNORANO: non e' una promessa
+    del gate, e i suoi esiti non devono muovere size e leva delle validate.
+    Referti, scala e keep del gate lo INCLUDONO (piu' dati e' il punto)."""
+    return bool(isinstance(t, dict) and t.get("esplorativa"))
+
+
+def _is_win(t: dict) -> bool:
+    return bool(t.get("is_win", t.get("pnl", 0) > 0))
+
+
+# Uscite NON decise dalla strategia: interventi ESTERNI (utente / sistema). Il loro
+# esito non descrive l'edge della strategia -> escluse dal learning che ne giudica
+# la performance (restano comunque nell'equity e nello storico).
+_EXTERNAL_EXITS = {"manual", "kill_switch", "circuit_breaker"}
+
+
+def _strategy_determined(t: dict) -> bool:
+    """True se l'uscita e' stata decisa dalla LOGICA (TP/SL/trailing/time-exit) e non
+    da un intervento esterno (chiusura manuale, kill switch, circuit breaker)."""
+    return t.get("exit_reason") not in _EXTERNAL_EXITS
+
+
+def filter_anomalous_trades(trades: list[dict]) -> tuple[list[dict], dict]:
+    """Toglie dal learning i trade che NON descrivono l'edge della strategia.
+
+    Ritorna (trade_tenuti, {motivo: quanti}). Il conteggio va sempre loggato: un
+    filtro troppo aggressivo si riconosce solo vedendo quanto scarta.
+
+    Cosa si esclude e perche':
+      * `external_exit` — chiusura decisa da fuori (manuale, kill switch, circuit
+        breaker): l'esito misura l'intervento, non la strategia;
+      * `wrong_timeframe` — l'esperienza fatta a 1h non descrive le stesse
+        strategie a 15m (SL/TP e durate diversi). Senza campo timeframe il trade
+        e' anteriore alla tracciatura: escluso, cosi' al cambio di timeframe il
+        learning riparte dal prior invece che avvelenato;
+      * `short_duration` — trade chiusi in pochi secondi sono quasi sempre
+        artefatti (fill anomalo, dato sporco), non decisioni;
+      * `slippage_outlier` — esecuzioni molto peggiori della norma misurano la
+        liquidita' di quel momento, non la bonta' del segnale.
+
+    NON implementati per mancanza di sorgente, e vanno detti invece che simulati:
+      * finestra ±2h attorno agli eventi macro — manca un calendario economico;
+      * giorni con volatilita' BTC oltre il 95esimo percentile — il job gira dove
+        Binance non e' raggiungibile;
+      * trade con WebSocket disconnesso — la salute dello stream e' pubblicata
+        come stato istantaneo, non come storico consultabile a posteriori.
+    """
+    from statistics import median as _median
+
+    reasons: dict[str, int] = defaultdict(int)
+    tf = settings.ORCHESTRATOR_TIMEFRAME
+    step1: list[dict] = []
+    for t in trades:
+        if not _strategy_determined(t):
+            reasons["external_exit"] += 1
+            continue
+        if t.get("timeframe") != tf:
+            reasons["wrong_timeframe"] += 1
+            continue
+        dur = t.get("duration_seconds")
+        if dur is not None and float(dur) < settings.LEARNING_MIN_TRADE_SECONDS:
+            reasons["short_duration"] += 1
+            continue
+        step1.append(t)
+
+    # slippage: la soglia si calcola sui trade GIA' filtrati e solo se il dato
+    # esiste davvero. In DRY_RUN lo slippage e' spesso 0 -> mediana 0 -> qualunque
+    # valore positivo sarebbe "anomalo": in quel caso il filtro si disattiva da se'.
+    slips = [abs(float(t.get("slippage") or 0)) for t in step1]
+    positive = [s for s in slips if s > 0]
+    kept = step1
+    if len(positive) >= 10:
+        limit = _median(positive) * settings.LEARNING_SLIPPAGE_OUTLIER_MULT
+        if limit > 0:
+            kept = []
+            for t, s in zip(step1, slips):
+                if s > limit:
+                    reasons["slippage_outlier"] += 1
+                else:
+                    kept.append(t)
+    return kept, dict(reasons)
+
+
+def cost_report(trades: list[dict], equity: float | None = None) -> dict:
+    """Quanto e' costato operare, voce per voce, e quanto serve solo per pareggiare.
+
+    Il PnL netto e' un numero solo e nasconde il conto: due sistemi con lo stesso
+    risultato possono avere costi molto diversi, e quello con i costi alti e'
+    molto piu' fragile — basta un edge leggermente peggiore e va sotto.
+
+    `break_even_pct` e' la domanda operativa: "quanto deve rendere il sistema, in
+    percentuale sull'equity, solo per coprire cio' che spende". Se e' alto, il
+    problema non e' la strategia, e' il numero di trade o le coin scelte.
+    """
+    rows = [t for t in trades if t.get("total_cost_usdt") is not None]
+    if not rows:
+        return {}
+    comm = sum(float(t.get("commission_usdt") or 0) for t in rows)
+    spread = sum(float(t.get("spread_usdt") or 0) for t in rows)
+    fund = sum(float(t.get("funding_paid_usdt") or 0) for t in rows)
+    total = sum(float(t.get("total_cost_usdt") or 0) for t in rows)
+    gross = sum(float(t.get("gross_pnl_usdt") or 0) for t in rows)
+    net = sum(float(t.get("pnl") or 0) for t in rows)
+    per_symbol: dict[str, float] = defaultdict(float)
+    for t in rows:
+        per_symbol[t.get("symbol", "?")] += float(t.get("total_cost_usdt") or 0)
+    return {
+        "trades": len(rows),
+        "commission_usdt": round(comm, 2), "spread_usdt": round(spread, 2),
+        "funding_usdt": round(fund, 2), "total_cost_usdt": round(total, 2),
+        "gross_pnl_usdt": round(gross, 2), "net_pnl_usdt": round(net, 2),
+        "cost_per_trade_usdt": round(total / len(rows), 3),
+        "break_even_pct": round(total / equity * 100, 2) if equity else None,
+        # dove si spende di piu': serve a capire QUALI coin costano, non solo quanto
+        "cost_by_symbol": dict(sorted(per_symbol.items(), key=lambda kv: -kv[1])[:10]),
+        # in DRY_RUN sono stime dal modello del gate, non misure dai fill di Binance
+        "estimated": all(t.get("costs_are_estimated", True) for t in rows),
+    }
+
+
+def cost_alerts(report: dict, equity: float | None = None) -> list[str]:
+    """Avvisi quando i costi diventano il problema, non un dettaglio."""
+    out: list[str] = []
+    if not report:
+        return out
+    be = report.get("break_even_pct")
+    if be is not None and be > settings.COST_ALERT_BREAKEVEN_PCT:
+        out.append(f"Costi operativi elevati: servono {be:.2f}% solo per pareggiare "
+                   f"(soglia {settings.COST_ALERT_BREAKEVEN_PCT:g}%)")
+    gross, net = report.get("gross_pnl_usdt", 0.0), report.get("net_pnl_usdt", 0.0)
+    if gross > 0 and net <= 0:
+        out.append(f"Il lordo e' positivo ({gross:+.2f}) ma il netto no ({net:+.2f}): "
+                   f"il risultato lo mangiano i costi, non il mercato")
+    return out
+
+
+def win_rate(trades: Iterable[dict]) -> float:
+    trades = list(trades)
+    if not trades:
+        return 0.0
+    return sum(_is_win(t) for t in trades) / len(trades)
+
+
+def win_rate_by_strategy(trades: list[dict]) -> dict[str, float]:
+    groups = defaultdict(list)
+    for t in trades:
+        groups[t.get("strategy", "?")].append(t)
+    return {k: win_rate(v) for k, v in groups.items()}
+
+
+def win_rate_by_strategy_regime(trades: list[dict]) -> dict[str, float]:
+    groups = defaultdict(list)
+    for t in trades:
+        key = f"{t.get('strategy','?')}|{t.get('regime_at_entry','?')}"
+        groups[key].append(t)
+    return {k: win_rate(v) for k, v in groups.items()}
+
+
+def avg_rr_by_strategy(trades: list[dict]) -> dict[str, float]:
+    """R:R realizzato medio = |avg win pnl_pct| / |avg loss pnl_pct| per strategia."""
+    groups = defaultdict(list)
+    for t in trades:
+        groups[t.get("strategy", "?")].append(t)
+    out = {}
+    for strat, ts in groups.items():
+        wins = [abs(t.get("pnl_pct", 0)) for t in ts if _is_win(t)]
+        losses = [abs(t.get("pnl_pct", 0)) for t in ts if not _is_win(t)]
+        if wins and losses and mean(losses) > 0:
+            out[strat] = mean(wins) / mean(losses)
+        elif wins and not losses:
+            out[strat] = float(len(wins))  # nessuna perdita
+    return out
+
+
+def pnl_by_asset(trades: list[dict]) -> dict[str, float]:
+    out = defaultdict(float)
+    for t in trades:
+        out[t.get("symbol", "?")] += float(t.get("pnl", 0))
+    return dict(out)
+
+
+def win_rate_by_hour(trades: list[dict]) -> dict[str, float]:
+    groups = defaultdict(list)
+    for t in trades:
+        groups[str(t.get("hour_bucket", -1))].append(t)
+    return {k: win_rate(v) for k, v in groups.items()}
+
+
+def worst_drawdown_conditions(trades: list[dict], n: int = 10) -> list[str]:
+    """Cosa avevano in comune i trade più perdenti (insight testuali)."""
+    losers = sorted([t for t in trades if t.get("pnl", 0) < 0],
+                    key=lambda t: t.get("pnl", 0))[:n]
+    if not losers:
+        return []
+    insights = []
+    # regime più frequente tra i peggiori
+    regimes = defaultdict(int)
+    strategies = defaultdict(int)
+    hours = defaultdict(int)
+    for t in losers:
+        regimes[t.get("regime_at_entry", "?")] += 1
+        strategies[t.get("strategy", "?")] += 1
+        hours[t.get("hour_bucket", -1)] += 1
+    top_regime = max(regimes, key=regimes.get)
+    top_strat = max(strategies, key=strategies.get)
+    top_hour = max(hours, key=hours.get)
+    insights.append(f"{regimes[top_regime]}/{len(losers)} dei peggiori trade in regime '{top_regime}'")
+    insights.append(f"{strategies[top_strat]}/{len(losers)} dalla strategia '{top_strat}'")
+    insights.append(f"fascia oraria UTC {top_hour} ricorrente tra i peggiori")
+    return insights
+
+
+def confidence_outcome_correlation(trades: list[dict]) -> float | None:
+    """Pearson tra confidenza dichiarata all'entrata e PnL% reale."""
+    pairs = [(t.get("confidence_at_entry"), t.get("pnl_pct"))
+             for t in trades
+             if t.get("confidence_at_entry") is not None and t.get("pnl_pct") is not None]
+    if len(pairs) < 5:
+        return None
+    xs = [p[0] for p in pairs]
+    ys = [p[1] for p in pairs]
+    mx, my = mean(xs), mean(ys)
+    num = sum((x - mx) * (y - my) for x, y in pairs)
+    dx = sum((x - mx) ** 2 for x in xs) ** 0.5
+    dy = sum((y - my) ** 2 for y in ys) ** 0.5
+    if dx == 0 or dy == 0:
+        return None
+    return num / (dx * dy)
+
+
+# limiti dell'adattamento trailing: il lock resta VICINO al 0.5 validato dal gate
+# (deviazione deliberata, guidata dai verdetti B1, mai oltre questi bordi).
+TRAILING_KEEP_MIN = 0.35
+TRAILING_KEEP_MAX = 0.65
+TRAILING_MIN_SAMPLE = 8      # sotto questo campione: NESSUN adattamento (niente dati, niente decisioni)
+
+
+#: la REGOLA con cui il paper propone un keep del profit-lock al gate (25 set
+#: 2026, backlog I3): condivisa da `keep_dal_paper` nella discovery e dal
+#: controllo orario, cosi' i due non possono divergere. Servono almeno
+#: KEEP_PAPER_MIN_VERDETTI verdetti (tutte le coppie insieme); se almeno il 60%
+#: sono «prematuri» il lock e' troppo stretto -> 0.25; se almeno il 60% sono
+#: «protetti» sta lavorando -> 0.75. Fuori dai tre candidati fissi di proposito:
+#: un candidato che il gate ha gia' sarebbe una proposta vuota.
+KEEP_PAPER_MIN_VERDETTI = 8
+KEEP_PAPER_QUOTA = 0.6
+KEEP_PAPER_LARGO, KEEP_PAPER_STRETTO = 0.25, 0.75
+
+
+def proposta_keep(n_verdetti: int, prematuri: int, protetti: int,
+                  min_verdetti: int = KEEP_PAPER_MIN_VERDETTI,
+                  quota: float = KEEP_PAPER_QUOTA):
+    """Il keep che il paper PROPONE (0.25, 0.75) o None. Pura: solo conteggi.
+    `n_verdetti` e' prematuri + protetti (i «neutral» non contano)."""
+    n = int(n_verdetti or 0)
+    if n < min_verdetti or n <= 0:
+        return None
+    if prematuri / n >= quota:
+        return KEEP_PAPER_LARGO
+    if protetti / n >= quota:
+        return KEEP_PAPER_STRETTO
+    return None
+
+
+#: LA REGOLA PER STRATEGIA (27 set 2026, backlog I3): il paper propone un keep
+#: anche per la SINGOLA strategia, dai suoi verdetti trailing, e usa in piu' il
+#: segnale del rumore (`trailing_knockout_atr` < KEEP_STRATEGIA_RUMORE_ATR: il
+#: ritracciamento che ci ha buttato fuori era sotto un ATR). Servono almeno
+#: KEEP_STRATEGIA_MIN_VERDETTI verdetti (5: pochi per un esito, non per una
+#: proposta che il gate giudica sulla storia); «prematuri» al KEEP_PAPER_QUOTA e
+#: almeno KEEP_STRATEGIA_QUOTA_RUMORE di quei prematuri da rumore -> 0.25 (il
+#: lock e' troppo stretto e il rumore ci butta fuori: allargarlo aiuta); se i
+#: prematuri sono da inversioni vere, allargare aiuterebbe poco e NON si propone;
+#: «protetti» al KEEP_PAPER_QUOTA -> 0.75. Costanti dichiarate PRIMA di ogni
+#: misura, mai tarate sui trade del paper.
+KEEP_STRATEGIA_MIN_VERDETTI = 5
+KEEP_STRATEGIA_QUOTA_RUMORE = 0.5
+KEEP_STRATEGIA_RUMORE_ATR = 1.0
+
+
+def conta_verdetti_strategia(verdetti: list[dict], tf: str | None = None) -> dict:
+    """I conteggi dei verdetti trailing di UNA strategia (27 set 2026): fra i
+    trade con `exit_reason == "trailing_stop"` e il timeframe del bot (`tf`,
+    default `settings.ORCHESTRATOR_TIMEFRAME`), quanti «premature», quanti di
+    questi da RUMORE (`trailing_knockout_atr` < KEEP_STRATEGIA_RUMORE_ATR) e
+    quanti «protected»; `n` = prematuri + protetti (i «neutral» non contano).
+    Pura: la usano la proposta per strategia, la discovery e `trade_stats`, con
+    gli stessi numeri. I trade esplorativi (F1bis) contano come gli altri: un
+    lock che taglia un vincitore lo fa a qualunque size."""
+    tf = settings.ORCHESTRATOR_TIMEFRAME if tf is None else tf
+    prem = prem_rumore = prot = 0
+    for t in verdetti or []:
+        if not isinstance(t, dict):
+            continue
+        if t.get("exit_reason") != "trailing_stop" or t.get("timeframe") != tf:
+            continue
+        v = t.get("trailing_verdict")
+        if v == "premature":
+            prem += 1
+            ko = t.get("trailing_knockout_atr")
+            try:
+                if ko is not None and float(ko) < KEEP_STRATEGIA_RUMORE_ATR:
+                    prem_rumore += 1
+            except (TypeError, ValueError):
+                pass
+        elif v == "protected":
+            prot += 1
+    return {"n": prem + prot, "prematuri": prem, "prematuri_rumore": prem_rumore,
+            "protetti": prot}
+
+
+def proposta_keep_strategia(verdetti: list[dict],
+                            min_verdetti: int = KEEP_STRATEGIA_MIN_VERDETTI,
+                            quota: float = KEEP_PAPER_QUOTA):
+    """Il keep che il paper PROPONE per UNA strategia (0.25, 0.75) o None (27 set
+    2026, backlog I3). `verdetti`: i trade chiusi di quella strategia (il filtro
+    su uscita trailing e timeframe e' qui dentro, `conta_verdetti_strategia`).
+
+    Diversa dalla regola globale (`proposta_keep`) in una cosa: per allargare il
+    lock (0.25) non basta che i prematuri siano tanti, devono essere in
+    maggioranza DA RUMORE (KEEP_STRATEGIA_QUOTA_RUMORE): un lock piu' largo
+    salva dal rumore, non da un'inversione vera. E' un candidato in piu' per il
+    gate, che lo giudica sulla storia come gli altri: il paper propone, non decide."""
+    c = conta_verdetti_strategia(verdetti)
+    n = c["n"]
+    if n < max(1, int(min_verdetti)):
+        return None
+    prem, prot = c["prematuri"], c["protetti"]
+    if prem / n >= quota and prem > 0 and c["prematuri_rumore"] / prem >= KEEP_STRATEGIA_QUOTA_RUMORE:
+        return KEEP_PAPER_LARGO
+    if prot / n >= quota:
+        return KEEP_PAPER_STRETTO
+    return None
+
+
+def soldi_sul_tavolo(verdetti: list[dict], tf: str | None = None) -> dict:
+    """Quanto tragitto verso il TP le uscite trailing hanno lasciato sul tavolo
+    (27 set 2026): media di `trailing_miss_to_tp` sulle uscite `trailing_stop`
+    del timeframe del bot che lo portano. E' una FRAZIONE del tragitto
+    entry->TP (0 = usciti al TP, 1 = usciti all'entrata: `exit_logic.trailing_reason`),
+    NON un multiplo di R: per convertirla servirebbe la distanza del TP in R di
+    ogni trade, che il trade chiuso non porta. Solo misurato e stampato: non
+    entra in nessuna regola. {n, miss_medio}; `miss_medio` None senza campione."""
+    tf = settings.ORCHESTRATOR_TIMEFRAME if tf is None else tf
+    xs: list[float] = []
+    for t in verdetti or []:
+        if not isinstance(t, dict):
+            continue
+        if t.get("exit_reason") != "trailing_stop" or t.get("timeframe") != tf:
+            continue
+        m = t.get("trailing_miss_to_tp")
+        if m is None:
+            continue
+        try:
+            xs.append(float(m))
+        except (TypeError, ValueError):
+            continue
+    return {"n": len(xs), "miss_medio": round(mean(xs), 3) if xs else None}
+
+
+def compute_trailing_keep(trades: list[dict]) -> dict[str, float]:
+    """PROFIT_LOCK_KEEP per-strategia imparato dai VERDETTI trailing del paper (B1).
+
+    Il verdetto dice se il trailing ha tagliato un vincitore ('premature') o evitato
+    una perdita ('protected'); knockout_atr dice se il ritracciamento che ci ha
+    buttato fuori era RUMORE (<1 ATR) o inversione vera.
+      * tanti premature DA RUMORE  -> keep piu' BASSO (lock piu' largo: il rumore
+        non ci butta fuori, i protected veri scattano comunque);
+      * tanti protected            -> keep piu' ALTO (il lock sta lavorando: stringi).
+    Gradualita' col campione (piena forza a ~24 verdetti), bordi [0.35, 0.65]
+    attorno al 0.5 validato, solo trade del timeframe corrente. Nessun campione
+    sufficiente -> strategia ASSENTE dalla mappa -> si usa il default globale."""
+    tf = settings.ORCHESTRATOR_TIMEFRAME
+    by: dict[str, list[int]] = defaultdict(lambda: [0, 0, 0])   # prem, prot, prem_da_rumore
+    for t in trades:
+        if t.get("timeframe") != tf or t.get("exit_reason") != "trailing_stop":
+            continue
+        if esplorativo(t):
+            continue    # F1bis: il keep del bot si impara solo dalle validate
+        s = t.get("strategy", "?")
+        v = t.get("trailing_verdict")
+        if v == "premature":
+            by[s][0] += 1
+            ko = t.get("trailing_knockout_atr")
+            if ko is not None and ko < 1.0:
+                by[s][2] += 1
+        elif v == "protected":
+            by[s][1] += 1
+    base = settings.PROFIT_LOCK_KEEP
+    out: dict[str, float] = {}
+    for s, (prem, prot, noise) in by.items():
+        n = prem + prot
+        if n < TRAILING_MIN_SAMPLE:
+            continue
+        prem_ratio = prem / n
+        strength = min(1.0, n / 24.0)
+        delta = (0.5 - prem_ratio) * 0.3 * strength   # prem>50% -> allenta; prot>50% -> stringe
+        if delta < 0 and prem and (noise / prem) < 0.5:
+            delta *= 0.5   # prematuri NON da rumore: allentare aiuterebbe poco -> mezzo passo
+        out[s] = round(max(TRAILING_KEEP_MIN, min(TRAILING_KEEP_MAX, base + delta)), 3)
+    return out
+
+
+def _winrate_to_weight(wr: float) -> float:
+    if wr <= WEIGHT_WINRATE_LOW:
+        return 0.0
+    if wr >= WEIGHT_WINRATE_HIGH:
+        return 1.0
+    return (wr - WEIGHT_WINRATE_LOW) / (WEIGHT_WINRATE_HIGH - WEIGHT_WINRATE_LOW)
+
+
+def compute_weights(trades: list[dict]) -> list[StrategyRegimeWeight]:
+    """
+    Pesi dinamici per strategia × regime, con SHRINKAGE graduale (niente cliff).
+
+    Il win-rate stimato parte dal PRIOR ottimista (0.65 -> peso 1.0, "tradala") e si
+    muove verso l'osservato in proporzione al campione: pochi trade -> resta vicino
+    al prior; molti -> si avvicina all'osservato. Cosi' il learning inizia SUBITO
+    (anche con 1-2 trade sposta un po') senza reagire al rumore di un campione
+    minuscolo. MIN_TRADES_PER_WEIGHT ora e' la FORZA dello shrinkage (pseudo-conteggio),
+    non piu' una soglia netta.
+    """
+    prior_wr = PRIOR_WINRATE
+    k = max(1, settings.MIN_TRADES_PER_WEIGHT)   # forza dello shrinkage
+
+    # ANOMALIE: timeframe sbagliato, uscite esterne, durate impossibili, slippage
+    # fuori scala. Il conteggio si stampa sempre — un filtro troppo aggressivo si
+    # riconosce solo vedendo quanto scarta.
+    n_in = len(trades)
+    # PAPER ESPLORATIVO (25 set 2026, F1bis): fuori dai pesi. Contati a parte
+    # nella riga di log, cosi' si vede quanti erano.
+    n_esp = sum(1 for t in trades if esplorativo(t))
+    trades = [t for t in trades if not esplorativo(t)]
+    trades, reasons = filter_anomalous_trades(trades)
+    if n_esp:
+        reasons = dict(reasons)
+        reasons["esplorativi"] = n_esp
+    if reasons:
+        detail = " · ".join(f"{k}: {v}" for k, v in sorted(reasons.items()))
+        print(f"[learning] filtrati {n_in - len(trades)}/{n_in} trade ({detail})")
+
+    groups: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    for t in trades:
+        groups[(t.get("strategy", "?"), t.get("regime_at_entry", "?"))].append(t)
+
+    weights: list[StrategyRegimeWeight] = []
+    rr_map = avg_rr_by_strategy(trades)
+    for (strat, regime), ts in groups.items():
+        try:
+            regime_enum = Regime(regime)
+        except ValueError:
+            continue
+        n = len(ts)
+        wr = win_rate(ts)
+        # win-rate "regolarizzato": media pesata tra osservato (n) e prior (k)
+        shrunk = (n * wr + k * prior_wr) / (n + k)
+        weight = _winrate_to_weight(shrunk)
+        # bonus/malus lieve dal R:R realizzato (solo con un minimo di campione)
+        rr = rr_map.get(strat)
+        if rr is not None and n >= 3:
+            weight = max(0.0, min(1.0, weight * (0.75 + min(rr, 3.0) / 6.0)))
+        weights.append(StrategyRegimeWeight(
+            strategy=strat, regime=regime_enum, weight=round(weight, 4),
+            win_rate=round(wr, 4), avg_rr=rr_map.get(strat), sample_size=n,
+        ))
+    return weights
+
+
+# --------------------------------------------------------------------------- #
+# GLI STOP DIVISI PER COME SONO MORTI (25 set 2026, dal rapporto mfe)          #
+# --------------------------------------------------------------------------- #
+# Domanda del proprietario (21 set 2026): «posizioni in positivo per ore, mai
+# al primo take profit, poi stop: siamo entrati sbagliati o il TP andava tarato
+# piu' basso?». Sono due morti diverse e si curano in modo diverso: la prima e'
+# un problema di INGRESSO (la strategia sbaglia direzione), la seconda di USCITA
+# (il primo gradino e' troppo lontano). `mfe_r` le distingue senza altri dati:
+# sotto SOGLIA_INGRESSO_SBAGLIATO il prezzo non e' mai andato davvero a favore;
+# fra quella soglia e il primo gradino ci e' andato e non e' bastato; oltre il
+# primo gradino e poi stop e' un problema di protezione del profitto.
+#
+# Viveva dentro `scripts/mfe_report.py`; qui e' pura (liste di dict) perche' la
+# usano sia il rapporto sia il controllo orario (`bot/learning/controllo.py`), e
+# due copie della stessa soglia divergerebbero prima o poi.
+SOGLIA_INGRESSO_SBAGLIATO = 0.25
+
+_ESITI_STOP = ("stop_loss", "ExitReason.STOP_LOSS")
+
+
+def _gradino_globale() -> float:
+    return float(min(settings.SCALE_OUT_R_MULTIPLES))
+
+
+def _gradino_per(t: dict, first_rung) -> tuple[float, bool]:
+    """(primo gradino in R per QUESTO trade, era per coppia?).
+
+    `first_rung` puo' essere: None (globale), un numero (uguale per tutti), un
+    dict «SYMBOL|strategia» -> gradino (dal registro), o una funzione(trade) ->
+    gradino|None. Un valore mancante o non leggibile ricade sul globale."""
+    v = None
+    if callable(first_rung):
+        try:
+            v = first_rung(t)
+        except Exception:  # noqa: BLE001
+            v = None
+    elif isinstance(first_rung, dict):
+        v = first_rung.get(f"{t.get('symbol')}|{t.get('strategy')}")
+    elif first_rung is not None:
+        v = first_rung
+    try:
+        if v is not None and float(v) > 0:
+            return float(v), isinstance(first_rung, dict) or callable(first_rung)
+    except (TypeError, ValueError):
+        pass
+    return _gradino_globale(), False
+
+
+def classi_stop_liste(trades: list[dict], first_rung=None) -> tuple[list, list, list, list]:
+    """(sbagliati, quasi, oltre, gradini_usati): gli stop con `mfe_r` divisi
+    nelle tre classi, piu' il primo gradino usato per ciascuno (stesso ordine
+    degli stop). Le liste servono al rapporto, che stampa anche le mediane."""
+    stop = [t for t in trades
+            if str(t.get("exit_reason", "")) in _ESITI_STOP and t.get("mfe_r") is not None]
+    sbagliati: list[dict] = []
+    quasi: list[dict] = []
+    oltre: list[dict] = []
+    gradini: list[float] = []
+    for t in stop:
+        try:
+            mfe = float(t["mfe_r"])
+        except (TypeError, ValueError):
+            continue
+        r1, _ = _gradino_per(t, first_rung)
+        gradini.append(r1)
+        if mfe < SOGLIA_INGRESSO_SBAGLIATO:
+            sbagliati.append(t)
+        elif mfe < r1:
+            quasi.append(t)
+        else:
+            oltre.append(t)
+    return sbagliati, quasi, oltre, gradini
+
+
+def classi_stop(trades: list[dict], first_rung=None) -> dict:
+    """Gli stop loss divisi per come sono morti, in numeri.
+
+    Ritorna {totale, sbagliati, quasi, oltre_primo_tp, quasi_durata_mediana_h,
+    primo_gradino_r, nota}. `primo_gradino_r` e' il gradino usato (mediana se per
+    coppia); `nota` dice da dove viene, perche' la classe «quasi» dipende da
+    dove sta il gradino e un lettore deve poterlo sapere. Pura: niente
+    Firebase, niente candele."""
+    from statistics import median as _median
+
+    sbagliati, quasi, oltre, gradini = classi_stop_liste(trades, first_rung)
+    per_coppia = isinstance(first_rung, dict) or callable(first_rung)
+    durate = []
+    for t in quasi:
+        d = t.get("duration_seconds")
+        try:
+            if d is not None:
+                durate.append(float(d) / 3600.0)
+        except (TypeError, ValueError):
+            continue
+    if gradini:
+        r1 = float(_median(gradini))
+    else:
+        r1 = _gradino_globale()
+    if per_coppia:
+        nota = ("primo gradino per coppia dal registro (mediana "
+                f"{r1:.2f}R); coppie senza scala nel registro: gradino globale "
+                f"{_gradino_globale():g}R")
+    else:
+        nota = (f"primo gradino GLOBALE {_gradino_globale():g}R: per coppia vale "
+                "la sua scala (registro non in mano)")
+    return {
+        "totale": len(sbagliati) + len(quasi) + len(oltre),
+        "sbagliati": len(sbagliati),
+        "quasi": len(quasi),
+        "oltre_primo_tp": len(oltre),
+        "quasi_durata_mediana_h": round(float(_median(durate)), 2) if durate else None,
+        "primo_gradino_r": round(r1, 3),
+        "nota": nota,
+    }

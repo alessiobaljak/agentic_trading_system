@@ -1,0 +1,347 @@
+"""UN VERDETTO PER FINESTRA — il difetto che rendeva la validazione impossibile.
+
+Due regole giuste prese singolarmente, su orologi incompatibili: un pass contava
+solo dopo una settimana di dati nuovi, ma il purge scattava dopo due bocciature
+CONSECUTIVE, contate a ogni run. Col timer ogni tre ore, fra una conferma e la
+successiva passano 56 run: per sopravvivere una coppia avrebbe dovuto passare il
+gate ~28 volte in sette giorni, con un tasso di passaggio misurato dello 0.027%.
+
+Nessuna ce la faceva. Il registro non poteva accumulare tre conferme PER
+COSTRUZIONE — e infatti in tre settimane le validate sono sempre state zero, con la
+popolazione a 1 pass che si rinnovava completamente ogni pochi giorni invece di
+crescere. Il difetto non era in una soglia: era nell'incompatibilita' fra due
+contatori.
+
+Il test che conta e' `test_a_pair_survives_the_gap_between_confirmations`: riproduce
+i 56 run reali e verifica che ora si arrivi in fondo.
+"""
+from scripts.optimize import judge_window
+
+SETTIMANA = 168 * 3600.0
+T0 = 1_700_000_000.0
+
+
+def _run(rec, giorni, passed):
+    """Un run dell'optimizer con dati che finiscono a `giorni` da T0."""
+    return judge_window(rec, T0 + giorni * 86400.0, passed, SETTIMANA)
+
+
+# ---- il primo avvistamento ------------------------------------------------ #
+def test_the_first_pass_counts_immediately():
+    """Far aspettare una settimana per il PRIMO pass ritarderebbe tutto senza
+    aggiungere evidenza: non c'e' nessuna conferma precedente da cui distanziarsi."""
+    rec = {}
+    _run(rec, 0, True)
+    assert rec["pass_count"] == 1
+
+
+def test_a_first_sighting_that_fails_opens_the_window_without_a_verdict():
+    """Non e' un fallimento: e' l'inizio del periodo di osservazione."""
+    rec = {}
+    _run(rec, 0, False)
+    assert rec.get("fail_count", 0) == 0 and rec["window_start"] > 0
+
+
+# ---- dentro la finestra non succede niente -------------------------------- #
+def test_failures_inside_the_window_do_not_count():
+    """E' IL DIFETTO CORRETTO. Rivalutare gli stessi dati tre ore dopo non e' una
+    prova nuova: contarla come fallimento cancellava la coppia molto prima che la
+    conferma successiva potesse arrivare."""
+    rec = {}
+    _run(rec, 0, True)
+    for ora in range(1, 50):                 # ~6 giorni di run ogni 3h
+        _run(rec, ora * 0.125, False)
+    assert rec["fail_count"] == 0
+    assert rec["pass_count"] == 1
+
+
+def test_passing_again_inside_the_window_does_not_add_a_confirmation():
+    """La simmetria conta: se le bocciature interne non pesano, nemmeno i passaggi
+    interni devono. Altrimenti tre pass in un giorno varrebbero una settimana."""
+    rec = {}
+    _run(rec, 0, True)
+    for ora in range(1, 20):
+        _run(rec, ora * 0.125, True)
+    assert rec["pass_count"] == 1
+
+
+# ---- il verdetto arriva a fine finestra ----------------------------------- #
+def test_passing_once_in_the_window_is_no_longer_enough():
+    """27 set 2026: «almeno un pass nella finestra» era la porta da cui entravano
+    le coppie al limite (autopsia delle validate, ops 0290: valutate una volta,
+    ne passava una su otto). Un pass su cinque valutazioni e' un fallimento."""
+    rec = {}
+    _run(rec, 0, True)
+    _run(rec, 3, True)                       # dentro la finestra
+    for g in (4, 5, 6):
+        _run(rec, g, False)
+    _run(rec, 7.1, False)                    # chiusura: 1 pass su 5
+    assert rec["pass_count"] == 1 and rec["fail_count"] == 1
+
+
+def test_passing_the_majority_of_the_window_earns_a_confirmation():
+    rec = {}
+    _run(rec, 0, True)
+    for g, ok in ((2, True), (3, True), (4, False), (5, True), (6, False)):
+        _run(rec, g, ok)
+    _run(rec, 7.1, True)                     # chiusura: 4 pass su 6
+    assert rec["pass_count"] == 2 and rec.get("fail_count", 0) == 0
+    assert rec["window_evals"] == 0 and rec["window_passes"] == 0   # nuova finestra
+
+
+def test_exactly_half_is_not_a_majority():
+    rec = {}
+    _run(rec, 0, True)
+    _run(rec, 3, True)
+    _run(rec, 7.1, False)                    # 1 su 2
+    assert rec["pass_count"] == 1 and rec["fail_count"] == 1
+
+
+def test_a_window_opened_before_the_rule_keeps_the_old_rule_once():
+    """Le finestre aperte prima del 27 set non hanno i contatori dall'inizio:
+    per l'ultima volta vale la regola con cui sono nate."""
+    rec = {"pass_count": 1, "window_start": T0, "passed_in_window": True}
+    _run(rec, 7.1, False)
+    assert rec["pass_count"] == 2
+    assert rec["window_contata"] is True     # dalla prossima, la maggioranza
+
+
+def test_never_passing_in_the_window_is_one_failure():
+    rec = {}
+    _run(rec, 0, True)
+    for g in (1, 2, 3, 4, 5, 6):
+        _run(rec, g, False)
+    _run(rec, 7.1, False)
+    assert rec["fail_count"] == 1 and rec["pass_count"] == 1
+
+
+def test_a_failed_window_does_not_keep_failing_every_run():
+    """Se la finestra non ripartisse dopo un verdetto, il run successivo
+    aggiungerebbe subito il secondo fallimento e si tornerebbe al difetto di prima."""
+    rec = {}
+    _run(rec, 0, True)
+    _run(rec, 7.1, False)                    # primo fallimento
+    for ora in range(1, 30):
+        _run(rec, 7.1 + ora * 0.125, False)
+    assert rec["fail_count"] == 1
+
+
+def test_two_empty_windows_are_two_failures():
+    """Il purge deve restare possibile: una coppia che non passa piu' per due
+    settimane intere esce dal registro, ed e' corretto."""
+    rec = {}
+    _run(rec, 0, True)
+    _run(rec, 7.1, False)
+    _run(rec, 14.2, False)
+    assert rec["fail_count"] == 2
+
+
+def test_a_confirmation_resets_the_failures():
+    rec = {}
+    _run(rec, 0, True)
+    _run(rec, 7.1, False)                    # 1 fallimento
+    _run(rec, 14.2, True)                    # ripassa: azzerati
+    assert rec["fail_count"] == 0 and rec["pass_count"] == 2
+
+
+# ---- IL TEST CHE CONTA ---------------------------------------------------- #
+def test_a_pair_that_passes_rarely_is_not_confirmed():
+    """Il caso reale che la regola vecchia lasciava passare: timer ogni 3 ore,
+    una coppia che passa UNA volta su 57 valutazioni a settimana. Con «almeno un
+    pass» arrivava a tre conferme; con la maggioranza no. Resta vero il resto:
+    un verdetto per finestra, quindi due finestre sono due fallimenti, non 112."""
+    rec = {}
+    _run(rec, 0, True)                       # scoperta e prima conferma
+    ora = 0.0
+    for settimana in range(1, 3):
+        for i in range(56):
+            ora += 0.125
+            _run(rec, ora, i == 30)
+        _run(rec, settimana * 7 + 0.2, False)   # chiusura finestra
+    assert rec["pass_count"] == 1
+    assert rec["fail_count"] == 2
+
+
+def test_a_pair_that_passes_consistently_survives_the_gap():
+    """E una coppia che passa quasi sempre arriva a tre conferme in tre
+    settimane, come il criterio chiede."""
+    rec = {}
+    _run(rec, 0, True)
+    ora = 0.0
+    for settimana in range(1, 3):
+        for i in range(56):
+            ora += 0.125
+            _run(rec, ora, i % 5 != 0)       # 4 su 5
+        _run(rec, settimana * 7 + 0.2, True)
+    assert rec["pass_count"] == 3, f"pass={rec['pass_count']} fail={rec.get('fail_count')}"
+    assert rec.get("fail_count", 0) == 0
+
+
+# ---- fail-closed ---------------------------------------------------------- #
+def test_without_a_data_end_nothing_is_judged():
+    """Nessun percorso deve poter incrementare un contatore 'gratis' dimenticando
+    un campo."""
+    rec = {"pass_count": 1, "window_start": T0}
+    judge_window(rec, 0.0, True, SETTIMANA)
+    assert rec["pass_count"] == 1 and rec.get("fail_count", 0) == 0
+
+
+def test_the_majority_counters_survive_the_registry_slimming_and_codec():
+    from bot.core.firebase_client import decode_pairs, encode_pairs
+    from scripts.optimize import REGISTRY_CORE_FIELDS
+    assert {"window_evals", "window_passes", "window_contata"} <= REGISTRY_CORE_FIELDS
+    p = {"A|gen_x": {"pass_count": 2, "window_start": T0, "window_evals": 3,
+                     "window_passes": 2, "window_contata": True, "generated": True}}
+    assert decode_pairs(encode_pairs(p)) == p
+
+
+def test_the_window_fields_survive_the_registry_slimming():
+    """Se l'alleggerimento del documento li togliesse, la finestra ripartirebbe da
+    capo a ogni run e i verdetti non arriverebbero mai."""
+    from scripts.optimize import REGISTRY_CORE_FIELDS
+    assert {"window_start", "passed_in_window"} <= REGISTRY_CORE_FIELDS
+
+
+# ---- la migrazione: la conferma regalata che stava rientrando ------------ #
+def test_a_pre_existing_pair_does_not_get_a_free_confirmation():
+    """Il caso della migrazione, trovato il 19 agosto. Una coppia che aveva gia' un
+    passaggio ma non la finestra (perche' esisteva PRIMA che la regola entrasse in
+    vigore) veniva trattata come un primo avvistamento: passando in quel momento si
+    prendeva la seconda conferma senza un solo dato nuovo. E' esattamente il difetto
+    che la finestra esiste per impedire, rientrato dalla porta della migrazione."""
+    rec = {"pass_count": 1, "last_pass_data_end": T0}
+    _run(rec, 0, True)
+    assert rec["pass_count"] == 1, "nessuna conferma regalata"
+    assert rec["window_start"] > 0, "ma la finestra si apre e il conto parte"
+
+
+def test_a_pre_existing_pair_confirms_after_a_full_window():
+    """Aspetta come tutte le altre, e poi la conferma arriva."""
+    rec = {"pass_count": 1, "last_pass_data_end": T0}
+    _run(rec, 0, False)
+    _run(rec, 3, True)
+    _run(rec, 7.1, True)                     # 2 su 2 dopo l'apertura (27 set: maggioranza)
+    assert rec["pass_count"] == 2
+
+
+def test_a_genuinely_new_pair_still_confirms_immediately():
+    """La distinzione e' fra 'mai vista' e 'gia' vista prima della regola': senza
+    zero passaggi non e' un primo avvistamento."""
+    rec = {}
+    _run(rec, 0, True)
+    assert rec["pass_count"] == 1
+
+
+# ---- le coppie CONGELATE: uscite dall'universo, ferme nel registro --------- #
+def test_a_pair_whose_coin_left_the_universe_is_excluded_from_the_counts():
+    """Trovato il 21 agosto leggendo il registro vero.
+
+    Alzando la storia minima a 365 giorni sono uscite 57 coin in un colpo solo. Le
+    loro coppie restano nel registro CONGELATE: l'optimizer non le valuta piu',
+    quindi non prendono conferme, non prendono fallimenti e non vengono purgate.
+
+    Il danno non era teorico. `gate_progress` costruiva il calendario sulle coppie
+    piu' vicine al traguardo, che erano proprio quelle ferme dal 13 agosto: ne
+    usciva "il bot riparte il 27 agosto", una data calcolata su coppie che nessuno
+    stava piu' valutando e che quindi non sarebbe mai arrivata. Tredici delle
+    quindici in cima alla lista erano di coin uscite dall'universo.
+    """
+    import time as _t
+    from scripts.optimize import publish_timeline
+
+    ora = _t.time()
+    pairs = {
+        "VIVAUSDT|s": {"pass_count": 1, "last_seen_at": ora - 3600},
+        "MORTAUSDT|s": {"pass_count": 1, "last_seen_at": ora - 10 * 86400},
+        "MORTA2USDT|s": {"pass_count": 2, "last_seen_at": ora - 10 * 86400},
+    }
+
+    class FB:
+        def __init__(self):
+            self.doc = {}
+        def get_doc(self, c, d):
+            return self.doc
+        def set_doc(self, c, d, data):
+            self.doc = data
+
+    fb = FB()
+    publish_timeline(fb, pairs, "test")
+    p = fb.doc["points"][-1]
+    assert p["tracked"] == 1, "solo la coppia ancora valutata entra nei conti"
+    assert p["frozen"] == 2, "le altre si contano a parte, non si nascondono"
+    assert p["dist"] == {"1": 1}
+
+
+def test_gate_progress_does_not_build_a_date_on_frozen_pairs():
+    """La difesa deve stare anche nello strumento che stampa la data: e' quello che
+    il proprietario legge."""
+    import inspect
+    from scripts import gate_progress
+    src = inspect.getsource(gate_progress.main)
+    assert "fresche" in src and "congelate" in src
+    assert "eta_ready(r, now), k) for k, r in fresche.items()" in src
+
+
+def test_last_seen_at_means_one_thing_for_generated_pairs_too():
+    """Un campo, due significati — trovato il 21 agosto inseguendo un numero strano.
+
+    `optimize.py` scrive `last_seen_at` su TUTTO cio' che valuta; la discovery lo
+    scriveva solo sulle coppie che PASSANO. Quindi per le generate il campo voleva
+    dire "ultima volta che ha passato", per le base "ultima volta che e' stata
+    guardata". Chi ci costruisce sopra un filtro — per escludere le coppie di coin
+    uscite dall'universo — scambia "non passa piu'" con "non esiste piu'". Sono due
+    diagnosi opposte: una strategia che ha smesso di funzionare, contro un pezzo di
+    mercato che non guardiamo piu'.
+    """
+    import time as _t
+    from scripts.discover_strategies import merge_into_registry
+    from bot.core.firebase_client import decode_pairs, encode_pairs
+
+    vecchio = _t.time() - 5 * 86400
+    class FB:
+        def __init__(self):
+            self.docs = {("strategy_registry", "validated"): {
+                "pairs": encode_pairs({
+                    # valutata questo giro ma non ha passato: e' VIVA
+                    "AUSDT|gen_x": {"pass_count": 1, "generated": True,
+                                    "symbol": "AUSDT", "last_seen_at": vecchio},
+                    # la sua coin non e' piu' nell'universo: resta ferma
+                    "ZUSDT|gen_y": {"pass_count": 1, "generated": True,
+                                    "symbol": "ZUSDT", "last_seen_at": vecchio},
+                })}}
+        def get_doc(self, c, d):
+            return self.docs.get((c, d), {})
+        def set_doc(self, c, d, data):
+            self.docs[(c, d)] = data
+
+    fb = FB()
+    merge_into_registry(fb, {}, [], evaluated_symbols={"AUSDT"})
+    pairs = decode_pairs(fb.get_doc("strategy_registry", "validated")["pairs"])
+    # i tempi nel registro sono arrotondati al secondo dal 19 settembre (spazio:
+    # il documento era all'86% del limite di 1 MiB). Le finestre del gate durano
+    # una settimana, quindi il secondo e' abbondante — ma il confronto qui va
+    # fatto sull'intero, altrimenti misura l'arrotondamento e non il significato.
+    assert pairs["AUSDT|gen_x"]["last_seen_at"] > vecchio, "valutata = vista"
+    assert pairs["ZUSDT|gen_y"]["last_seen_at"] == int(vecchio), "non valutata = non vista"
+
+
+def test_a_pair_without_an_open_window_has_no_date():
+    """La terza volta che il calendario mentiva, e ogni volta da una porta diversa.
+
+    Una coppia con un passaggio ma senza finestra aperta e' ferma: la finestra si
+    apre solo quando RIPASSA il gate, quindi la prossima conferma non e' fra N
+    giorni — dipende da un evento che potrebbe non succedere. Ripiegare su
+    `last_pass_data_end` scambia "l'ultima volta che ha funzionato" per "quando
+    tornera' a funzionare".
+
+    E il costo non era solo una data sbagliata: quelle coppie hanno la data piu'
+    VECCHIA, quindi finivano in cima all'elenco e nascondevano le uniche che
+    stavano davvero maturando.
+    """
+    from scripts.gate_progress import eta_ready
+
+    ferma = {"pass_count": 1, "last_pass_data_end": T0, "window_start": 0}
+    assert eta_ready(ferma, T0) == float("inf"), "senza finestra non c'e' una data"
+
+    matura = {"pass_count": 1, "last_pass_data_end": T0, "window_start": T0}
+    assert eta_ready(matura, T0) == T0 + 2 * SETTIMANA

@@ -1,0 +1,37 @@
+name: connectivity-check
+
+# Verifica che GitHub Actions riesca a comunicare con Firebase usando i GitHub
+# Secrets (senza mai esporne i valori). Esito success => GitHub <-> Firebase OK.
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+    paths: [".github/workflows/connectivity.yml", "scripts/connectivity_check.py", "bot/config.py"]
+
+jobs:
+  connectivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Firebase + services connectivity
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+          # serve solo se la chiave e' a livello di ORGANIZZAZIONE (400 'not
+          # scoped to a workspace'). Segreto assente -> stringa vuota -> nessuna
+          # intestazione, comportamento identico a prima.
+          ANTHROPIC_WORKSPACE_ID: ${{ secrets.ANTHROPIC_WORKSPACE_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          LUNARCRUSH_API_KEY: ${{ secrets.LUNARCRUSH_API_KEY }}
+          COINGLASS_API_KEY: ${{ secrets.COINGLASS_API_KEY }}
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+        run: python -m scripts.connectivity_check

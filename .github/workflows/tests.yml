@@ -1,0 +1,23 @@
+name: tests
+
+on:
+  # Solo il branch principale (11 ott 2026, richiesta del proprietario: troppe e-mail di GitHub). I branch della
+  # ricerca (research/...) non li legge il bot: le sessioni lanciano i test da sole, e ogni loro push faceva partire
+  # la suite e mandava un'e-mail a ogni fallimento.
+  push:
+    branches: ["claude/brave-albattani-1b12fv"]
+  pull_request: {}
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run test suite (incl. risk-gate safety tests and the research protocol tools)
+        run: python -m pytest tests/ research/src/tests -q

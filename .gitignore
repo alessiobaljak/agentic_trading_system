@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Env / secrets
+.env
+*.env
+!.env.example
+firebase-service-account.json
+*service-account*.json
+
+# Backtesting / runtime output
+# export dei trade prima di un reset del paper: sono dati operativi, si tengono
+# sulla VPS (o fuori dal repo), non nella storia di git
+trades_backup_*.json
+# backup del registro/spec prese PRIMA di un azzeramento: senza, le strategie
+# generate spariscono con le coppie purgate e i loro trade non sono piu' rigiocabili
+# (successo: 30 coppie su 31 non replayabili dopo un reset)
+gate_backup_*.json
+backtesting/output/
+*.log
+data_cache/
+# il dataset del selettore (un file JSONL per giro del gate, con le condizioni
+# all'ingresso di ogni trade simulato): sono dati di ogni giro, vivono sulla VPS.
+# Il riepilogo sta su Firestore (selector/dataset).
+data/selettore/
+# il gruppo di controllo del fuori campione (30 set 2026, backlog K3): bocciate a
+# caso e foto giornaliera delle conferme, scritte dalla discovery. Dati della
+# macchina, vivono sulla VPS (scripts/gruppo_controllo.py).
+data/gruppo_controllo/
+# il referto dell'analisi degli ingressi lanciata in sfondo (`ingressi_report
+# --sfondo`, 27 set 2026) e il pid del processo: dati della macchina, si leggono
+# con `ingressi-esito`, non si committano.
+data/ingressi_*
+# il voto t delle validate (30 set 2026, H1-misura: `scripts/t_validate.py`): il
+# file che il `portafoglio` legge, il referto, il pid e il lucchetto. Dati della
+# macchina, vivono sulla VPS.
+data/voto_t/
+# R1, il gate rigiocato nel passato (1 ott 2026: `scripts/replay_gate.py`): il
+# piano, un file per coin x data, il referto, il pid e il lucchetto. Dati della
+# macchina, vivono sulla VPS.
+data/replay_gate/
+# la storia del gate (1 ott 2026: `scripts/gate_storia.py`): una riga per giro e
+# una per coppia del registro, un file JSONL al mese. Dati della macchina, vivono
+# sulla VPS.
+data/gate_storia/
+
+# Node / Next.js
+dashboard/node_modules/
+dashboard/.next/
+dashboard/out/
+dashboard/.vercel/
+node_modules/
+
+# OS
+.DS_Store
+.cache/
+
+# La lista bianca dell'agente ops vive SULLA MACCHINA, non nel repo: se fosse
+# versionata, chiunque possa committare potrebbe ampliarla e il controllo su cosa
+# viene eseguito sarebbe finto. Vedi ops/README.md.
+ops/allowlist
+
+# Protocollo di ricerca (6 ott 2026): dati di mercato e marcatore di sessione, mai in git
+research/data/
+research/.sessione
+
+# copie di lavoro temporanee degli agenti
+.claude/worktrees/

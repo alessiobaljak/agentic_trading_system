@@ -1,0 +1,1548 @@
+"""
+Execution Engine — Binance Futures.
+
+Caratteristiche:
+  * limit order per minimizzare slippage
+  * TP + SL piazzati immediatamente come ordini separati appena il fill è confermato
+  * trailing stop attivato a +1 ATR di profitto
+  * scale-out parziale: 50% al primo target, resto con trailing
+  * scrive lo stato posizione su Firebase Realtime DB immediatamente
+
+DRY_RUN:
+  Lo STESSO codice gira in modalità simulata (settings.DRY_RUN=True): non invia
+  ordini reali a Binance ma simula fill/PnL su dati live, e scrive comunque lo
+  stato su Firebase. È il GATE 2 (paper trading). Per andare live: DRY_RUN=False.
+
+NB: l'ExecutionEngine NON decide la size/leva — riceve EffectiveRiskParams già
+passati dal RiskManager (final gate). Non c'è percorso che bypassi il gate.
+"""
+from __future__ import annotations
+
+import os
+import time
+import uuid
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from typing import Optional
+
+from bot.config import settings, timeframe_hours
+from bot.core.costs import funding_fraction, liquidity_spread
+from bot.core.firebase_client import get_firebase
+from bot.core.models import (
+    AssetSnapshot, ClosedTrade, Direction, EffectiveRiskParams, ExitReason, Regime,
+)
+from bot.execution.exit_logic import (
+    locked_stop, lock_anchor, scale_ladder, scale_fills, mfe_in_r, breakeven_after_tp1,
+)
+
+
+@dataclass
+class Position:
+    position_id: str
+    symbol: str
+    strategy: str
+    direction: Direction
+    entry_price: float
+    quantity: float
+    leverage: float
+    stop_price: float
+    take_profit_price: float
+    entry_time: datetime
+    regime_at_entry: Regime
+    # contesto per il trade logger
+    indicators_at_entry: dict = field(default_factory=dict)
+    sentiment_at_entry: Optional[float] = None
+    fear_greed_at_entry: Optional[int] = None
+    funding_at_entry: Optional[float] = None
+    confidence_at_entry: Optional[float] = None
+    # spread liquidità-dipendente (== backtest): fissato all'apertura dal volume 24h
+    spread_cost: float = 0.0
+    # gestione trailing / scale-out
+    scaled_out: bool = False
+    trailing_active: bool = False
+    high_water: float = 0.0          # miglior prezzo a favore visto
+    atr: float = 0.0
+    remaining_qty: float = 0.0
+    # scale-out (TP scaglionati su R): livello raggiunto, PnL lordo gia' realizzato
+    # dalle fette chiuse, e stop base ORIGINALE (per calcolare R anche dopo il BE)
+    scale_stage: int = 0
+    realized_gross: float = 0.0
+    realized_net: float = 0.0    # PnL NETTO gia' realizzato dalle fette (fee/spread dedotti), gia' accreditato all'equity
+    orig_stop: float = 0.0
+    # --- solo LIVE (DRY_RUN=False): ordini di protezione REALI sull'exchange ---
+    # id dello STOP appoggiato sul book e prezzo a cui e' appoggiato: servono per
+    # SOSTITUIRLO quando lo stop si muove (break-even dopo TP1, profit-lock).
+    sl_order_id: Optional[int] = None
+    exchange_stop: Optional[float] = None
+    # scala di TP CONGELATA all'ingresso (multipli di R validati per questa coppia).
+    # Congelarla e' essenziale: se venisse riletta dal registro a ogni tick, una
+    # passata dell'ottimizzatore cambierebbe i TP di un trade GIA' APERTO — si
+    # eseguirebbe un piano diverso da quello di ingresso, la dashboard mostrerebbe
+    # altri numeri e in live gli ordini sul book non corrisponderebbero piu'.
+    # None -> default globale (SCALE_OUT_R_MULTIPLES).
+    scale_r_mults: Optional[tuple] = None
+    # BE dopo TP1 VALIDATO per questa coppia, congelato all'ingresso come la scala:
+    # non e' una scelta ovvia (protegge, ma taglia i runner) e ora la decide il gate
+    sl_to_breakeven: Optional[bool] = None
+    # keep del profit-lock SCELTO DAL GATE per questa coppia (25 set 2026), congelato
+    # all'ingresso come la scala e il BE: il trade si chiude col piano con cui e'
+    # stato aperto. None -> il gate non l'ha ancora scelto: si usa quello imparato
+    # per strategia se c'e', altrimenti il default globale (comportamento di prima).
+    profit_lock_keep: Optional[float] = None
+    # RISCHIO EFFETTIVO all'ingresso, in frazione dell'equity: quanto si perde
+    # davvero se lo stop viene toccato. Diverge dall'impostazione utente quando il
+    # cap per-posizione limita il nozionale — che e' il caso normale, non
+    # l'eccezione. Serve a rendere visibile un numero che finora nessuno vedeva.
+    risk_effective_pct: float = 0.0
+    # confidenza della classificazione di regime all'ingresso (0..1), congelata
+    regime_confidence: Optional[float] = None
+    # timeframe della STRATEGIA che ha aperto (None = quello del bot): dal 22 set
+    # 2026 esistono strategie native a 1 ora, e il learning filtra per questo campo
+    timeframe: Optional[str] = None
+    # prezzo ATTESO all'ingresso (quello su cui l'orchestratore ha deciso): il
+    # confronto con quello eseguito e' lo slippage d'ingresso. In DRY_RUN i due
+    # coincidono, in live no — ed e' li' che il numero inizia a dire qualcosa.
+    expected_entry_price: Optional[float] = None
+    # il selettore in OMBRA (25 set 2026): p e soglia annotate all'apertura, mai
+    # usate per decidere. Congelate qui e persistite, cosi' sopravvivono al
+    # riavvio e arrivano sul ClosedTrade (`selector_p`, `selector_soglia`).
+    selector_p: Optional[float] = None
+    feats_at_entry: Optional[dict] = None     # le 10 variabili d'ingresso (memoria del trade)
+    regola: Optional[str] = None              # la regola della strategia in chiaro
+    selector_soglia: Optional[float] = None
+    # PAPER ESPLORATIVO (25 set 2026, backlog F1bis): la posizione e' di una
+    # coppia esplorativa (quasi-passaggio, size a un quarto). Persistita e
+    # ripristinata come `selector_p`: dopo un riavvio il trade chiuso deve
+    # uscire ancora marcato, altrimenti finirebbe nei pesi delle validate.
+    esplorativa: bool = False
+    # LE DECLASSATE (26 set 2026, passo 2): la posizione e' di una validata che
+    # il gate ha declassato (size a DECLASSATA_SIZE_MULT). Persistita e
+    # ripristinata come `esplorativa`: dopo un riavvio il trade chiuso deve
+    # uscire ancora marcato, altrimenti il confronto declassate/attive si sporca.
+    declassata: bool = False
+    # --- LE MISURE MANCANTI (26 set 2026, audit della memoria del trade) ----- #
+    # Solo misura, nessuna decisione. Tutte persistite in _write_position_state e
+    # ripristinate in _position_from_state (documenti vecchi -> None/[]).
+    # peggior prezzo CONTRO visto (specchio di high_water): aggiornato a fine
+    # tick nello stesso punto, dall'ombra avversa del range. Da qui il MAE.
+    low_water: float = 0.0
+    # epoch del primo gradino riempito e dell'ultimo miglioramento di high_water
+    t_tp1: Optional[float] = None
+    t_mfe: Optional[float] = None
+    # le fette chiuse dallo scale-out: {stage, price, qty, ts, net}
+    partial_fills: list = field(default_factory=list)
+    # epoch in cui lo stop e' andato a pareggio (None = mai)
+    be_at: Optional[float] = None
+    # i fattori di size decisi in main._try_open (rmult/lmult/nota/tilt/...)
+    size_factors: Optional[dict] = None
+    # il portafoglio all'ingresso (posizioni aperte, rischio aperto, ...)
+    portafoglio_at_entry: Optional[dict] = None
+    # confine (epoch) della candela chiusa che ha prodotto la decisione
+    signal_candle_ts: Optional[float] = None
+    # --- LA CATTURA DEI DATI MANCANTI (1 ott 2026, bot/learning/cattura.py) --- #
+    # Solo misura, come il blocco sopra: persistite in _write_position_state e
+    # ripristinate in _position_from_state (documenti vecchi -> None/[]).
+    # versione del codice e impronta delle impostazioni con cui si e' aperto
+    versione: Optional[dict] = None
+    # la promessa del registro per la coppia, congelata all'ingresso
+    promessa_gate: Optional[dict] = None
+    # il regime GLOBALE (di BTC) all'ingresso; `regime_at_entry` e' quello della coin
+    regime_globale: Optional[str] = None
+    # la qualita' dell'ingresso dallo snapshot (snapshot_ts, close_segnale, ...)
+    ingresso: Optional[dict] = None
+    # il percorso dello stop: quando il lock si e' armato (epoch) e a quanti R
+    # era lo stop in quel momento; i passi {t_s: secondi dall'ingresso, r: stop in R}
+    lock_armed_at: Optional[float] = None
+    lock_stop_first_r: Optional[float] = None
+    stop_moves: list = field(default_factory=list)
+    # epoch dell'ultimo peggioramento di low_water, e low_water al primo gradino
+    t_mae: Optional[float] = None
+    low_water_tp1: Optional[float] = None
+    # --- INGRESSO A LIMITE NEL PAPER (13 ott 2026) --------------------------- #
+    # "limite": la posizione e' nata da un ordine limite virtuale riempito al suo
+    # prezzo (`limite_prezzo` = chiusura della candela di segnale), messo
+    # all'epoch `ordine_messo_at`. `entry_fee_frac`: la commissione del SOLO lato
+    # d'ingresso (maker) che prende il posto di meta' del costo round-trip del
+    # modello; None = modello di costo di sempre (fee+scarto round-trip + spread).
+    ingresso_tipo: str = "mercato"
+    limite_prezzo: Optional[float] = None
+    ordine_messo_at: Optional[float] = None
+    entry_fee_frac: Optional[float] = None
+
+    def __post_init__(self):
+        self.remaining_qty = self.quantity
+        self.high_water = self.entry_price
+        self.low_water = self.entry_price
+        self.orig_stop = self.stop_price
+
+
+@dataclass
+class OrdineLimite:
+    """Un ordine limite VIRTUALE d'ingresso in attesa (solo DRY_RUN, 13 ott 2026).
+
+    `pos` e' la posizione gia' preparata (size, stop, TP, annotazioni) che nasce
+    SOLO se il prezzo attraversa `prezzo` prima di `scadenza` (epoch: fine della
+    candela dopo quella del segnale). `hi_visto`/`lo_visto`: gli estremi visti
+    mentre l'ordine era in attesa (misura: di quanto ha mancato)."""
+    pos: Position
+    prezzo: float
+    scadenza: float
+    messo_at: float
+    bar_s: float
+    hi_visto: Optional[float] = None
+    lo_visto: Optional[float] = None
+
+
+class ExecutionEngine:
+    def __init__(self, firebase=None, dry_run: Optional[bool] = None) -> None:
+        self.fb = firebase or get_firebase()
+        self.dry_run = settings.DRY_RUN if dry_run is None else dry_run
+        self.open_positions: dict[str, Position] = {}
+        self._client = None
+        # STESSI costi del backtester (GATE 1): fee+slippage round-trip come
+        # frazione del notional + funding sui perpetual proporzionale alle ore.
+        # Così il PnL del paper è NETTO e coerente con la validazione.
+        self.cost_per_trade = float(os.getenv("BACKTEST_COST_PER_TRADE", "0.0008"))
+        self.funding_per_8h = float(os.getenv("BACKTEST_FUNDING_PER_8H", "0.0001"))
+        # max holding: come l'orizzonte del backtest = 96 BARRE del timeframe
+        # (24h a 15m, 96h a 1h). In ORE fisse divergerebbe dal gate al cambio
+        # timeframe. EXEC_MAX_HOLD_HOURS (in ore) vince se impostato.
+        from bot.config import timeframe_hours
+        _tf_h = timeframe_hours(settings.ORCHESTRATOR_TIMEFRAME)
+        self.max_hold_hours = float(os.getenv("EXEC_MAX_HOLD_HOURS", str(96 * _tf_h)))
+        # se l'env fissa le ore, vale per TUTTE le posizioni; altrimenti le 96
+        # barre sono del timeframe della POSIZIONE (vedi _max_hold_for)
+        self._max_hold_from_env = os.getenv("EXEC_MAX_HOLD_HOURS") is not None
+        if not self.dry_run:
+            self._init_binance()
+        # CRITICO: ricarica le posizioni aperte da Firebase. Senza questo, ogni
+        # riavvio del processo (anche un auto-restart di systemd dopo un crash)
+        # parte con open_positions VUOTO -> le posizioni aperte prima diventano
+        # orfane: ri-aperte con un nuovo entry e mai chiuse/loggate.
+        # keep del profit-lock IMPARATO per-strategia (B2): aggiornato ogni ora dal
+        # refresh del learning in main; vuoto = default globale per tutte.
+        self.trailing_keep: dict[str, float] = {}
+        # coda dei PnL NETTI realizzati (fette scale-out + residuo alla chiusura) che
+        # il loop principale accredita all'equity: come Binance, ogni fill realizza
+        # subito sul saldo. Svuotata da TradingBot dopo ogni update.
+        self.realized_events: list[float] = []
+        # INGRESSI A LIMITE NEL PAPER (13 ott 2026): gli ordini virtuali in
+        # attesa, per simbolo, e la commissione maker del lato d'ingresso
+        self.ingresso_limite = bool(settings.PAPER_INGRESSO_LIMITE)
+        self.maker_fee = float(settings.PAPER_MAKER_FEE)
+        self.ordini_limite: dict[str, OrdineLimite] = {}
+        self.restore_open_positions()
+        self.restore_ordini_limite()
+
+    def pop_realized(self) -> list[float]:
+        """Restituisce e AZZERA gli eventi di realizzo (da accreditare all'equity)."""
+        ev = self.realized_events
+        self.realized_events = []
+        return ev
+
+    def _init_binance(self) -> None:
+        try:
+            from binance.client import Client
+
+            self._client = Client(
+                settings.BINANCE_API_KEY, settings.BINANCE_API_SECRET,
+                testnet=settings.BINANCE_TESTNET,
+            )
+            print("[execution] Binance client LIVE inizializzato"
+                  f" ({'testnet' if settings.BINANCE_TESTNET else 'mainnet'})")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] init Binance fallito: {exc} -> forzo DRY_RUN")
+            self.dry_run = True
+
+    # ------------------------------------------------------------------ #
+    # Apertura                                                           #
+    # ------------------------------------------------------------------ #
+    def open_position(
+        self,
+        asset: AssetSnapshot,
+        strategy: str,
+        direction: Direction,
+        params: EffectiveRiskParams,
+        confidence: Optional[float] = None,
+        regime_confidence: Optional[float] = None,
+        scale_r_mults: Optional[tuple] = None,
+        sl_to_breakeven: Optional[bool] = None,
+        timeframe: Optional[str] = None,
+        profit_lock_keep: Optional[float] = None,
+        selector_p: Optional[float] = None,
+        selector_soglia: Optional[float] = None,
+        esplorativa: bool = False,
+        feats_at_entry: Optional[dict] = None,
+        regola: Optional[str] = None,
+        size_factors: Optional[dict] = None,
+        portafoglio_at_entry: Optional[dict] = None,
+        signal_candle_ts: Optional[float] = None,
+        declassata: bool = False,
+        versione: Optional[dict] = None,
+        promessa_gate: Optional[dict] = None,
+        regime_globale: Optional[str] = None,
+    ) -> Optional[Position]:
+        """Apre una posizione. `params` DEVE provenire dal final gate (approved).
+        `selector_p`/`selector_soglia`: l'ombra del selettore (25 set 2026), solo
+        annotate sulla posizione — non cambiano niente di cio' che si apre.
+        `esplorativa`: la coppia e' un quasi-passaggio del gate operato a size
+        ridotta (25 set 2026, F1bis); la size e' gia' dentro `params`, qui si
+        annota soltanto, e l'annotazione segue il trade fino a Firestore.
+        `size_factors`/`portafoglio_at_entry`/`signal_candle_ts` (26 set 2026):
+        misure d'ingresso decise dal chiamante, solo annotate e persistite.
+        `declassata` (26 set 2026, passo 2): la validata e' stata declassata dal
+        gate; come `esplorativa`, la size e' gia' dentro `params`, qui si annota.
+        `versione`/`promessa_gate`/`regime_globale` (1 ott 2026, la cattura dei
+        dati mancanti): solo annotati e persistiti, come i tre sopra."""
+        if not params.approved or params.quantity <= 0:
+            print(f"[execution] ordine rifiutato dal gate: {params.reject_reason}")
+            return None
+
+        tf = timeframe or settings.ORCHESTRATOR_TIMEFRAME
+        ind15 = asset.ind(tf) or asset.ind(settings.ORCHESTRATOR_TIMEFRAME)
+        pos = Position(
+            position_id=str(uuid.uuid4()),
+            symbol=asset.symbol, strategy=strategy, direction=direction,
+            entry_price=asset.price, quantity=params.quantity, leverage=params.leverage,
+            stop_price=params.stop_price, take_profit_price=params.take_profit_price,
+            entry_time=datetime.now(timezone.utc), regime_at_entry=asset.regime or Regime.SIDEWAYS,
+            indicators_at_entry={k: v.model_dump() for k, v in asset.indicators.items()},
+            sentiment_at_entry=asset.sentiment_score, fear_greed_at_entry=asset.fear_greed,
+            funding_at_entry=asset.funding_rate, confidence_at_entry=confidence,
+            atr=(ind15.atr if ind15 and ind15.atr else 0.0),
+            spread_cost=liquidity_spread(asset.volume_24h),   # == costo backtest
+            scale_r_mults=tuple(scale_r_mults) if scale_r_mults else None,
+            sl_to_breakeven=sl_to_breakeven,
+            profit_lock_keep=float(profit_lock_keep) if profit_lock_keep is not None else None,
+            risk_effective_pct=params.risk_effective_pct,
+            regime_confidence=regime_confidence,
+            timeframe=tf,
+            selector_p=(float(selector_p) if selector_p is not None else None),
+            selector_soglia=(float(selector_soglia) if selector_soglia is not None else None),
+            esplorativa=bool(esplorativa),
+            declassata=bool(declassata),
+            feats_at_entry=dict(feats_at_entry) if feats_at_entry else None,
+            regola=(str(regola)[:300] if regola else None),
+            size_factors=dict(size_factors) if size_factors else None,
+            portafoglio_at_entry=dict(portafoglio_at_entry) if portafoglio_at_entry else None,
+            signal_candle_ts=(float(signal_candle_ts) if signal_candle_ts is not None else None),
+        )
+
+        if self.dry_run and self.ingresso_limite and signal_candle_ts is not None:
+            # INGRESSO A LIMITE NEL PAPER (13 ott 2026): nessuna posizione adesso.
+            # Si mette un ordine limite virtuale; la posizione nasce in
+            # `update_ordini_limite` se il prezzo attraversa il limite entro la
+            # candela, altrimenti il segnale conta come saltato. None qui vuol
+            # dire «ordine messo»: il chiamante lo trova in `ordini_limite`.
+            if self._metti_ordine_limite(pos, asset, float(signal_candle_ts),
+                                         versione, promessa_gate, regime_globale) is not None:
+                return None
+            # ordine non ammesso (stop oltre il limite, candela gia' finita):
+            # a mercato come prima, e lo dice il contatore
+        if self.dry_run:
+            print(f"[DRY_RUN] OPEN {direction.value} {pos.symbol} qty={pos.quantity:.4f} "
+                  f"@ {pos.entry_price} lev={pos.leverage}x SL={pos.stop_price:.4f} "
+                  f"TP={pos.take_profit_price:.4f}")
+        elif not self._submit_live_entry(pos):
+            # nessun fill (o troppo piccolo): la posizione NON deve nascere, altrimenti
+            # il bot gestirebbe qualcosa che sull'exchange non esiste
+            return None
+        # DOPO il fill (in live l'entry e' quello eseguito): solo annotazione
+        self._annota_ingresso(pos, asset, versione, promessa_gate, regime_globale)
+
+        self.open_positions[pos.symbol] = pos
+        self._write_position_state(pos, mark_price=pos.entry_price)
+        return pos
+
+    @staticmethod
+    def _annota_ingresso(pos: Position, asset: AssetSnapshot, versione, promessa_gate,
+                         regime_globale) -> None:
+        """LA CATTURA ALL'INGRESSO (1 ott 2026): versione, promessa del gate,
+        regime globale e qualita' dell'ingresso sulla posizione. Solo misura e
+        FAIL-OPEN: un errore qui lascia i campi a None e la posizione si apre
+        identica (stesso prezzo, stessa size, stessi livelli).
+
+        `expected_entry_price` = la chiusura della candela su cui la regola ha
+        deciso (`close_chiusa`): e' il prezzo «atteso» del commento della
+        Position («quello su cui l'orchestratore ha deciso»). Fino al 1 ott non
+        veniva mai impostato, quindi `entry_slippage_pct` usciva sempre 0. Il
+        prezzo eseguito NON cambia: cambia solo cio' con cui lo si confronta.
+        Senza `close_chiusa` (snapshot vecchi) resta None, come prima."""
+        try:
+            from bot.learning.cattura import qualita_ingresso
+            pos.versione = dict(versione) if isinstance(versione, dict) else None
+            pos.promessa_gate = dict(promessa_gate) if isinstance(promessa_gate, dict) else None
+            pos.regime_globale = (str(getattr(regime_globale, "value", regime_globale))
+                                  if regime_globale is not None else None)
+            q = qualita_ingresso(asset, pos.entry_price, pos.orig_stop,
+                                 pos.direction == Direction.LONG)
+            pos.ingresso = q
+            if q.get("close_segnale"):
+                pos.expected_entry_price = float(q["close_segnale"])
+        except Exception as exc:  # noqa: BLE001
+            print(f"[cattura] ingresso {getattr(pos, 'symbol', '?')} non annotato ({str(exc)[:80]})")
+
+    # ------------------------------------------------------------------ #
+    # Ingressi a limite nel paper (13 ott 2026, si' del proprietario)      #
+    # ------------------------------------------------------------------ #
+    def _metti_ordine_limite(self, pos: Position, asset: AssetSnapshot, boundary: float,
+                             versione, promessa_gate, regime_globale) -> Optional[OrdineLimite]:
+        """Mette l'ordine limite virtuale con la regola della prova del 13 ott
+        (research/esperimenti/ordini_limite/regole.md, sezione 4, correzione 1):
+        prezzo P = chiusura della candela di segnale (`close_chiusa`, altrimenti il
+        prezzo vivo), valido per PAPER_LIMITE_VALIDITA_BARRE candele del timeframe
+        della strategia dal confine `boundary` (l'apertura della candela dopo
+        quella del segnale). Un ordine gia' in attesa sullo stesso simbolo viene
+        SOSTITUITO, come nel motore di ricerca. Ritorna None se l'ordine non si
+        puo' mettere (stop dalla parte sbagliata di P, candela di validita' gia'
+        finita, prezzo o timeframe assenti): allora si entra a mercato come prima,
+        e il contatore `a_mercato_*` lo dice."""
+        long = pos.direction == Direction.LONG
+        try:
+            prezzo = float(asset.close_chiusa) if asset.close_chiusa else float(asset.price)
+        except (TypeError, ValueError):
+            prezzo = float(asset.price or 0.0)
+        if prezzo <= 0:
+            self._conta_limite("a_mercato_senza_prezzo")
+            return None
+        tf_h = timeframe_hours(pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME) or 0.0
+        if tf_h <= 0:
+            self._conta_limite("a_mercato_senza_timeframe")
+            return None
+        bar_s = tf_h * 3600.0
+        validita = max(1, int(settings.PAPER_LIMITE_VALIDITA_BARRE))
+        scadenza = boundary + bar_s * validita
+        now = time.time()
+        if (long and pos.stop_price >= prezzo) or ((not long) and pos.stop_price <= prezzo):
+            self._conta_limite("a_mercato_stop_oltre_il_limite")
+            return None
+        if scadenza <= now:
+            self._conta_limite("a_mercato_candela_finita")
+            return None
+        self._annota_ingresso(pos, asset, versione, promessa_gate, regime_globale)
+        pos.ingresso_tipo = "limite"
+        pos.limite_prezzo = prezzo
+        pos.ordine_messo_at = now
+        pos.entry_fee_frac = self.maker_fee
+        pos.expected_entry_price = prezzo
+        vecchio = self.ordini_limite.get(pos.symbol)
+        if vecchio is not None:
+            self._annulla_ordine_limite(vecchio, "sostituito")
+        ordine = OrdineLimite(pos=pos, prezzo=prezzo, scadenza=scadenza, messo_at=now, bar_s=bar_s)
+        self.ordini_limite[pos.symbol] = ordine
+        self._write_ordine_limite_state(ordine)
+        self._conta_limite("messi")
+        print(f"[DRY_RUN] ORDINE LIMITE {pos.direction.value} {pos.symbol} qty={pos.quantity:.4f} "
+              f"@ {prezzo} valido fino a "
+              f"{datetime.fromtimestamp(scadenza, tz=timezone.utc).strftime('%H:%M:%S')} UTC "
+              f"lev={pos.leverage}x SL={pos.stop_price:.4f} TP={pos.take_profit_price:.4f}")
+        return ordine
+
+    def update_ordini_limite(self, symbol: str, mark_price: float,
+                             high: float | None = None, low: float | None = None,
+                             now: float | None = None) -> Optional[Position]:
+        """Un tick per l'ordine limite in attesa su `symbol`. Riempito, AL SUO
+        prezzo (anche se il tick e' tutto oltre: un ordine nel libro esegue al
+        suo prezzo, correzione 1 della prova), se il range del tick attraversa
+        STRETTAMENTE il limite: long minimo < P, short massimo > P. Altrimenti,
+        passata la scadenza, l'ordine scade e il segnale conta come saltato.
+        Ritorna la Position appena nata, o None. Il range del tick che riempie
+        non si rigioca sulla posizione nuova (al massimo ~30 s di percorso): lo
+        stop si valuta dal tick dopo."""
+        ordine = self.ordini_limite.get(symbol)
+        if ordine is None:
+            return None
+        now = time.time() if now is None else float(now)
+        hi = mark_price if high is None else max(high, mark_price)
+        lo = mark_price if low is None else min(low, mark_price)
+        ordine.hi_visto = hi if ordine.hi_visto is None else max(ordine.hi_visto, hi)
+        ordine.lo_visto = lo if ordine.lo_visto is None else min(ordine.lo_visto, lo)
+        long = ordine.pos.direction == Direction.LONG
+        riempito = (lo < ordine.prezzo) if long else (hi > ordine.prezzo)
+        if riempito:
+            return self._esegui_ordine_limite(ordine, now)
+        if now >= ordine.scadenza:
+            self._annulla_ordine_limite(ordine, "scaduto")
+            return None
+        self._write_ordine_limite_state(ordine)
+        return None
+
+    def _esegui_ordine_limite(self, ordine: OrdineLimite, now: float) -> Position:
+        pos = ordine.pos
+        pos.entry_price = ordine.prezzo
+        pos.high_water = ordine.prezzo
+        pos.low_water = ordine.prezzo
+        pos.entry_time = datetime.fromtimestamp(now, tz=timezone.utc)
+        pos.ingresso_tipo = "limite"
+        pos.limite_prezzo = ordine.prezzo
+        self.ordini_limite.pop(pos.symbol, None)
+        self._rimuovi_nodo(f"/ordini_limite/{pos.symbol}")
+        self.open_positions[pos.symbol] = pos
+        self._write_position_state(pos, mark_price=pos.entry_price)
+        self._conta_limite("eseguiti")
+        print(f"[DRY_RUN] OPEN {pos.direction.value} {pos.symbol} qty={pos.quantity:.4f} "
+              f"@ {pos.entry_price} (ordine limite riempito dopo {now - ordine.messo_at:.0f}s) "
+              f"lev={pos.leverage}x SL={pos.stop_price:.4f} TP={pos.take_profit_price:.4f}")
+        return pos
+
+    def _annulla_ordine_limite(self, ordine: OrdineLimite, motivo: str) -> None:
+        """L'ordine non si riempie: «scaduto» (il segnale e' SALTATO), «sostituito»
+        (un segnale nuovo sullo stesso simbolo), «scaduto_al_riavvio», «annullato»
+        (kill switch). Il record va in RTDB /paper/ordini_limite/saltati, cosi'
+        si potra' misurare dopo cosa avrebbero fatto i segnali saltati."""
+        pos = ordine.pos
+        self.ordini_limite.pop(pos.symbol, None)
+        self._rimuovi_nodo(f"/ordini_limite/{pos.symbol}")
+        chiave = {"scaduto": "saltati", "sostituito": "sostituiti",
+                  "scaduto_al_riavvio": "scaduti_al_riavvio"}.get(motivo, "annullati")
+        self._conta_limite(chiave)
+        record = {
+            "position_id": pos.position_id, "symbol": pos.symbol, "strategy": pos.strategy,
+            "direction": pos.direction.value, "timeframe": pos.timeframe,
+            "limite_prezzo": ordine.prezzo, "stop_price": pos.stop_price,
+            "take_profit_price": pos.take_profit_price, "quantity": pos.quantity,
+            "leverage": pos.leverage, "signal_candle_ts": pos.signal_candle_ts,
+            "messo_at": ordine.messo_at, "scadenza": ordine.scadenza,
+            "annullato_at": time.time(), "motivo": motivo,
+            "hi_visto": ordine.hi_visto, "lo_visto": ordine.lo_visto,
+            "esplorativa": bool(pos.esplorativa), "declassata": bool(pos.declassata),
+            "regola": pos.regola, "risk_effective_pct": pos.risk_effective_pct,
+            "dry_run": self.dry_run,
+        }
+        try:
+            self.fb.set_rtdb(f"/paper/ordini_limite/saltati/{pos.position_id}", record)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] ordine saltato {pos.symbol} non registrato: {exc}")
+        print(f"[DRY_RUN] ORDINE LIMITE {motivo.upper()} {pos.direction.value} {pos.symbol} "
+              f"@ {ordine.prezzo} (visto {ordine.lo_visto}-{ordine.hi_visto})")
+
+    def _conta_limite(self, chiave: str) -> None:
+        """I contatori della misura (RTDB /paper/ordini_limite/contatori): messi,
+        eseguiti, saltati, sostituiti, scaduti_al_riavvio, annullati e gli
+        ingressi andati a mercato per un motivo (a_mercato_*). Best-effort."""
+        try:
+            c = self.fb.get_rtdb("/paper/ordini_limite/contatori") or {}
+            if not isinstance(c, dict):
+                c = {}
+            c[chiave] = int(c.get(chiave, 0) or 0) + 1
+            c["aggiornato_at"] = time.time()
+            self.fb.set_rtdb("/paper/ordini_limite/contatori", c)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] contatore ordini limite «{chiave}» non aggiornato: {exc}")
+
+    def _rimuovi_nodo(self, path: str) -> None:
+        try:
+            self.fb.set_rtdb(path, None)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] pulizia nodo {path} fallita: {exc}")
+
+    def _write_ordine_limite_state(self, ordine: OrdineLimite) -> None:
+        stato = self._stato_posizione(ordine.pos, ordine.prezzo)
+        stato["ordine"] = {"prezzo": ordine.prezzo, "scadenza": ordine.scadenza,
+                           "messo_at": ordine.messo_at, "bar_s": ordine.bar_s,
+                           "hi_visto": ordine.hi_visto, "lo_visto": ordine.lo_visto}
+        try:
+            self.fb.set_rtdb(f"/ordini_limite/{ordine.pos.symbol}", stato)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] stato ordine limite {ordine.pos.symbol} non scritto: {exc}")
+
+    def restore_ordini_limite(self) -> int:
+        """Ricarica gli ordini limite in attesa da Firebase (/ordini_limite) dopo
+        un riavvio; quelli gia' scaduti contano come saltati con motivo
+        «scaduto_al_riavvio». Ritorna quanti ne ha ripristinati vivi."""
+        data = self.fb.get_rtdb("/ordini_limite")
+        if not isinstance(data, dict) or not data:
+            return 0
+        vivi = 0
+        now = time.time()
+        for sym, p in data.items():
+            if not isinstance(p, dict) or sym in self.ordini_limite or sym in self.open_positions:
+                continue
+            try:
+                pos = self._position_from_state(p)
+                o = p.get("ordine") or {}
+                ordine = OrdineLimite(
+                    pos=pos, prezzo=float(o["prezzo"]), scadenza=float(o["scadenza"]),
+                    messo_at=float(o.get("messo_at") or now), bar_s=float(o.get("bar_s") or 0.0),
+                    hi_visto=(float(o["hi_visto"]) if o.get("hi_visto") is not None else None),
+                    lo_visto=(float(o["lo_visto"]) if o.get("lo_visto") is not None else None))
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] impossibile ricaricare l'ordine limite {sym}: {exc}")
+                continue
+            if ordine.scadenza <= now:
+                self._annulla_ordine_limite(ordine, "scaduto_al_riavvio")
+            else:
+                self.ordini_limite[sym] = ordine
+                vivi += 1
+        if vivi:
+            print(f"[execution] ricaricati {vivi} ordini limite in attesa da Firebase: "
+                  f"{list(self.ordini_limite.keys())}")
+        return vivi
+
+    def _fee_giro(self, pos: Position) -> float:
+        """Commissione+scarto del giro (frazione del notional): quella di sempre
+        (`cost_per_trade`, i due lati) oppure, per una posizione nata da un
+        ordine limite, meta' di quella (il solo lato d'uscita, a mercato) piu' la
+        commissione maker del lato d'ingresso, senza scarto (13 ott 2026)."""
+        if pos.entry_fee_frac is None:
+            return self.cost_per_trade
+        return self.cost_per_trade / 2.0 + float(pos.entry_fee_frac)
+
+    def _spread_giro(self, pos: Position) -> float:
+        """Lo spread del giro: intero come sempre, oppure la sola meta' d'uscita."""
+        if pos.entry_fee_frac is None:
+            return pos.spread_cost
+        return pos.spread_cost / 2.0
+
+    def _costo_giro(self, pos: Position) -> float:
+        return self._fee_giro(pos) + self._spread_giro(pos)
+
+    @staticmethod
+    def _opposite(pos: Position) -> str:
+        """Lato che CHIUDE la posizione (per gli ordini reduce-only SL/TP)."""
+        return "SELL" if pos.direction == Direction.LONG else "BUY"
+
+    def _submit_live_entry(self, pos: Position) -> bool:
+        """Ordine reale di ingresso CON CONFERMA DEL FILL.
+
+        Prima si piazzava un LIMIT e si dava per scontato che fosse riempito: se il
+        prezzo scappava, il bot gestiva una posizione INESISTENTE — stop e TP su
+        quantita' mai comprata, PnL immaginario, e in chiusura un reduce-only che
+        non riduce nulla. Ora:
+          1. si piazza il LIMIT e si ATTENDE l'esito (EXEC_FILL_TIMEOUT_S);
+          2. si RICONCILIA la posizione con quantita' e prezzo medio REALI (un fill
+             parziale sopra la soglia e' una posizione valida, ma piu' piccola);
+          3. sotto EXEC_MIN_FILL_FRACTION si cancella e si rinuncia: una posizione
+             simbolica paga le fee quanto una vera senza il potenziale;
+          4. gli ordini di protezione si piazzano SOLO DOPO, sulla quantita' vera.
+        Ritorna True se la posizione esiste davvero."""
+        side = "BUY" if pos.direction == Direction.LONG else "SELL"
+        try:
+            self._client.futures_change_leverage(symbol=pos.symbol, leverage=int(pos.leverage))
+            resp = self._client.futures_create_order(
+                symbol=pos.symbol, side=side, type="LIMIT", timeInForce="GTC",
+                quantity=round(pos.quantity, 6), price=round(pos.entry_price, 6),
+            ) or {}
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] errore ordine live {pos.symbol}: {exc}")
+            return False
+
+        order_id = resp.get("orderId") if isinstance(resp, dict) else None
+        filled_qty, avg_price = self._await_fill(pos, order_id)
+
+        if filled_qty <= 0:
+            print(f"[execution] {pos.symbol}: nessun fill entro "
+                  f"{settings.EXEC_FILL_TIMEOUT_S:.0f}s -> ordine cancellato, niente posizione")
+            self._cancel_order(pos.symbol, order_id)
+            return False
+
+        frac = filled_qty / pos.quantity if pos.quantity > 0 else 0.0
+        if frac < settings.EXEC_MIN_FILL_FRACTION:
+            print(f"[execution] {pos.symbol}: fill solo {frac*100:.0f}% "
+                  f"(< {settings.EXEC_MIN_FILL_FRACTION*100:.0f}%) -> chiudo e rinuncio")
+            self._cancel_order(pos.symbol, order_id)
+            self._flatten_residual(pos, filled_qty)
+            return False
+
+        # RICONCILIAZIONE: da qui in poi la posizione e' quella VERA, non quella
+        # richiesta. Anche i TP scaglionati si ricalcolano su questa quantita'.
+        if frac < 1.0:
+            print(f"[execution] {pos.symbol}: fill PARZIALE {frac*100:.0f}% "
+                  f"({filled_qty:.6f}/{pos.quantity:.6f}) -> posizione riconciliata")
+            self._cancel_order(pos.symbol, order_id)
+        pos.quantity = filled_qty
+        pos.remaining_qty = filled_qty
+        if avg_price > 0:
+            # lo stop e' un LIVELLO deciso dalla strategia: non si sposta col prezzo
+            # medio reale, ma R e la scala TP si ricalcolano da entry+stop, quindi
+            # l'entry vero DEVE essere quello eseguito.
+            pos.entry_price = avg_price
+            pos.high_water = avg_price
+            pos.low_water = avg_price
+        self._place_protective_orders(pos)
+        return True
+
+    def _await_fill(self, pos: Position, order_id) -> tuple[float, float]:
+        """(quantita' riempita, prezzo medio) interrogando l'ordine finche' e' vivo."""
+        if order_id is None:
+            return 0.0, 0.0
+        deadline = time.time() + settings.EXEC_FILL_TIMEOUT_S
+        filled, avg = 0.0, 0.0
+        while time.time() < deadline:
+            try:
+                o = self._client.futures_get_order(symbol=pos.symbol, orderId=order_id) or {}
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] stato ordine {pos.symbol} non leggibile: {exc}")
+                break
+            filled = float(o.get("executedQty", 0) or 0)
+            avg = float(o.get("avgPrice", 0) or 0)
+            status = str(o.get("status", ""))
+            if status in ("FILLED", "CANCELED", "REJECTED", "EXPIRED"):
+                break
+            time.sleep(settings.EXEC_FILL_POLL_S)
+        return filled, avg
+
+    def _cancel_order(self, symbol: str, order_id) -> None:
+        if order_id is None:
+            return
+        try:
+            self._client.futures_cancel_order(symbol=symbol, orderId=order_id)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] cancel ordine {symbol} fallito: {exc}")
+
+    def _flatten_residual(self, pos: Position, qty: float) -> None:
+        """Chiude a mercato un fill troppo piccolo per essere tenuto: lasciarlo
+        aperto senza stop sarebbe la cosa peggiore."""
+        if qty <= 0:
+            return
+        try:
+            self._client.futures_create_order(
+                symbol=pos.symbol, side=self._opposite(pos), type="MARKET",
+                reduceOnly=True, quantity=round(qty, 6))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] ATTENZIONE: residuo {pos.symbol} non chiuso: {exc}")
+
+    def _place_protective_orders(self, pos: Position) -> None:
+        """Appoggia sul book TUTTO il piano di uscita, non solo un TP unico.
+
+        Con lo SCALE-OUT attivo il piano e' una SCALA (30% a 1.5R, 30% a 3R, 40% a 5R):
+        se piazzassimo un solo TP, gli ordini reali sull'exchange direbbero una cosa e la
+        logica del bot un'altra. Ogni livello diventa quindi un TAKE_PROFIT_MARKET
+        reduce-only con la SUA frazione di quantita'; l'ultima fetta prende il RESTO
+        (evita che gli arrotondamenti lascino polvere non protetta).
+
+        Lo STOP copre la quantita' piena: essendo reduce-only, Binance lo limita da solo
+        alla size effettivamente aperta man mano che le fette si chiudono."""
+        opp = self._opposite(pos)
+        long = pos.direction == Direction.LONG
+        ladder = scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults) if settings.SCALE_OUT_ENABLED else []
+        try:
+            resp = self._client.futures_create_order(
+                symbol=pos.symbol, side=opp, type="STOP_MARKET", reduceOnly=True,
+                stopPrice=round(pos.stop_price, 6), quantity=round(pos.quantity, 6),
+            )
+            pos.sl_order_id = (resp or {}).get("orderId") if isinstance(resp, dict) else None
+            pos.exchange_stop = pos.stop_price
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] errore STOP live {pos.symbol}: {exc}")
+
+        targets = ladder or [(pos.take_profit_price, 1.0)]
+        qty_left = pos.quantity
+        for i, (price, frac) in enumerate(targets):
+            last = i == len(targets) - 1
+            qty = qty_left if last else round(pos.quantity * frac, 6)
+            qty = min(qty, qty_left)
+            if qty <= 0:
+                continue
+            try:
+                self._client.futures_create_order(
+                    symbol=pos.symbol, side=opp, type="TAKE_PROFIT_MARKET", reduceOnly=True,
+                    stopPrice=round(price, 6), quantity=round(qty, 6),
+                )
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] errore TP live {pos.symbol} @ {price}: {exc}")
+            qty_left -= qty
+
+    def _sync_exchange_stop(self, pos: Position, new_stop: float) -> None:
+        """Allinea lo STOP appoggiato sul book al nuovo stop deciso dalla logica
+        (break-even dopo il primo TP, o profit-lock che lo alza). Senza questo
+        l'exchange terrebbe lo stop ORIGINALE: la protezione esisterebbe solo nella
+        memoria del bot, e un suo crash lascerebbe la posizione scoperta.
+        Cancella-e-ripiazza (Binance non modifica in place gli stop)."""
+        if self.dry_run or self._client is None:
+            return
+        if pos.exchange_stop is not None and abs(new_stop - pos.exchange_stop) < 1e-12:
+            return
+        if pos.sl_order_id is not None:
+            try:
+                self._client.futures_cancel_order(symbol=pos.symbol, orderId=pos.sl_order_id)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] cancel STOP {pos.symbol} fallito: {exc}")
+        try:
+            resp = self._client.futures_create_order(
+                symbol=pos.symbol, side=self._opposite(pos), type="STOP_MARKET",
+                reduceOnly=True, stopPrice=round(new_stop, 6),
+                quantity=round(pos.remaining_qty, 6),
+            )
+            pos.sl_order_id = (resp or {}).get("orderId") if isinstance(resp, dict) else None
+            pos.exchange_stop = new_stop
+        except Exception as exc:  # noqa: BLE001
+            # lo stop vecchio e' stato cancellato ma il nuovo non e' passato: la
+            # posizione e' SCOPERTA sull'exchange -> segnalalo forte, il bot continua
+            # a proteggerla via update_position (stop "software") fino al prossimo giro.
+            pos.sl_order_id = None
+            pos.exchange_stop = None
+            print(f"[execution] ATTENZIONE: STOP non ripiazzato su {pos.symbol}: {exc}")
+
+    # ------------------------------------------------------------------ #
+    # Gestione posizione — ALLINEATA AL BACKTEST (GATE 1)                 #
+    # ------------------------------------------------------------------ #
+    def _max_hold_for(self, pos: Position) -> float:
+        """Orizzonte massimo in ORE per QUESTA posizione: 96 barre del SUO
+        timeframe (24h a 15m, 96h a 1h), non di quello del bot. Fino al 26 set
+        2026 `max_hold_hours` era unico e derivato da ORCHESTRATOR_TIMEFRAME: una
+        strategia a 1h dentro un bot a 15m sarebbe stata chiusa d'ufficio dopo 24
+        barre invece delle 96 con cui il gate l'ha validata. Per le posizioni del
+        timeframe del bot il numero e' identico a prima (moltiplicatore 1), e
+        EXEC_MAX_HOLD_HOURS, se impostato, vince ancora su tutte."""
+        if self._max_hold_from_env:
+            return self.max_hold_hours
+        base = timeframe_hours(settings.ORCHESTRATOR_TIMEFRAME) or 1.0
+        return self.max_hold_hours * timeframe_hours(pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME) / base
+
+    def _keep_per(self, pos: Position) -> Optional[float]:
+        """Il keep del profit-lock che governa QUESTA posizione (vedi la nota di
+        precedenza in update_position). None = default globale."""
+        if pos.profit_lock_keep is not None:
+            return pos.profit_lock_keep
+        return self.trailing_keep.get(pos.strategy)
+
+    def update_position(self, symbol: str, mark_price: float,
+                        high: float | None = None,
+                        low: float | None = None,
+                        publish: bool = True) -> Optional[ClosedTrade]:
+        """
+        Esce TUTTA la posizione allo stop o al take-profit PIENO, esattamente come
+        il backtest che valida le strategie. Lo stop può essere ALZATO dal
+        profit-lock (stessa logica del backtest, bot/execution/exit_logic.py): se la
+        posizione è andata in profitto blocca parte del guadagno invece di restituirlo.
+        Uscita anche a fine orizzonte (max holding), come le 96 barre del backtester.
+
+        `high`/`low`: estremi (OMBRE) del prezzo dall'ultima lettura. Il gate valuta i
+        trigger sul range high/low della candela; il live campiona ogni ~30s e senza
+        questi si perderebbe i movimenti tra due letture. Passandoli si ottiene la
+        PARITA' col gate — e col Binance reale, dove gli ordini TP/SL sul book vengono
+        eseguiti dall'ombra. Omessi -> si ricade sul solo `mark_price` (vecchio
+        comportamento). Vengono sempre ALLARGATI al mark osservato, così nessun
+        trigger che scattava prima puo' sparire.
+
+        `publish=False`: non scrive lo stato su Firebase e non tocca gli ordini reali.
+        Usato durante il REPLAY del percorso (update_position_path), dove i passi
+        intermedi sono valutazioni, non fotografie da pubblicare.
+        """
+        pos = self.open_positions.get(symbol)
+        if pos is None:
+            return None
+        long = pos.direction == Direction.LONG
+
+        # range effettivo del tick: le ombre, mai piu' strette del mark osservato
+        hi = mark_price if high is None else max(high, mark_price)
+        lo = mark_price if low is None else min(low, mark_price)
+
+        # `keep` del profit-lock, in ordine di precedenza (25 set 2026):
+        #   1. quello SCELTO DAL GATE per la coppia, congelato nella posizione;
+        #   2. altrimenti quello IMPARATO per strategia dai verdetti trailing del paper;
+        #   3. altrimenti None -> default globale (PROFIT_LOCK_KEEP).
+        # Il gate decide, il paper propone: i verdetti del paper entrano nel gate come
+        # candidata, e il gate li mette alla prova sui propri dati con le proprie
+        # conferme. L'adattamento diretto per strategia (2) resta solo per le coppie
+        # che il gate non ha ancora rivalutato col nuovo parametro; per tutte le
+        # altre motore e bot usano lo stesso numero, e la parita' regge.
+        keep = self._keep_per(pos)
+        # ORDINE (identico al motore del gate): lo stop effettivo si calcola sul
+        # high_water dei tick PRECEDENTI; i trigger si valutano su questo range; il
+        # high_water si aggiorna SOLO a fine tick (come best_fav a fine barra).
+        # Perche': il range di un tick e' un insieme NON ORDINATO. Se l'estremo
+        # favorevole armasse il profit-lock e l'estremo avverso dello stesso range lo
+        # facesse scattare, ci regaleremmo un'uscita in profitto senza sapere quale dei
+        # due sia arrivato prima. Il costo e' che il lock si arma un tick dopo (~30s).
+
+        # SCALE-OUT su multipli di R (se attivo): scala di TP + break-even dopo il
+        # primo TP. Vuota -> percorso classico a TP unico (sotto). R usa lo stop
+        # ORIGINALE (orig_stop), non quello spostato a break-even.
+        ladder = scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults) if settings.SCALE_OUT_ENABLED else []
+        if ladder:
+            # ancorato al PRIMO gradino (lock_anchor): stessa scelta del motore
+            eff_stop = locked_stop(pos.entry_price, lock_anchor(ladder), long, pos.high_water,
+                                   pos.stop_price, keep=keep)
+            pos.trailing_active = eff_stop != pos.orig_stop
+            self._registra_stop(pos, eff_stop, long)   # solo misura (1 ott 2026)
+
+            # 1) stop del RESIDUO (dopo il primo TP pos.stop_price = entry = break-even).
+            #    PRIMA dei TP: se nello stesso range si toccano entrambi, l'ordine
+            #    intra-candela e' ignoto -> si assume il caso PEGGIORE (come il gate).
+            hit_sl = (lo <= eff_stop) if long else (hi >= eff_stop)
+            if hit_sl:
+                # tre esiti distinti (l'etichetta descrive COSA e' successo davvero):
+                #  - SCALE_OUT: ha gia' bancato >=1 fetta (TP1/TP2) e il residuo esce
+                #    sullo stop rialzato a break-even/profit-lock -> esito NETTO positivo
+                #  - TRAILING_STOP: profit-lock armato senza aver bancato fette (raro)
+                #  - STOP_LOSS: stoppato prima di qualsiasi TP -> perdita piena
+                if pos.scaled_out:
+                    reason = ExitReason.SCALE_OUT
+                elif pos.trailing_active:
+                    reason = ExitReason.TRAILING_STOP
+                else:
+                    reason = ExitReason.STOP_LOSS
+                return self._close(pos, eff_stop, reason)
+
+            # 2) fette di TP raggiunte (idempotente: `scale_stage` avanza e non torna,
+            #    quindi rileggere la stessa ombra non riempie due volte lo stesso livello)
+            new_stage, fills = scale_fills(ladder, pos.scale_stage, long, hi, lo)
+            if fills:
+                reached_final = new_stage >= len(ladder)
+                partials = fills[:-1] if reached_final else fills
+                for k, (price, frac) in enumerate(partials):
+                    self._partial_close(pos, price, pos.quantity * frac,
+                                        stage=pos.scale_stage + k + 1)
+                pos.scale_stage = new_stage
+                _be = (pos.sl_to_breakeven if pos.sl_to_breakeven is not None
+                       else settings.SCALE_OUT_SL_TO_BREAKEVEN)
+                if _be:
+                    if pos.be_at is None and pos.stop_price != pos.entry_price:
+                        pos.be_at = time.time()        # misura: quando e' andato a pareggio
+                    pos.stop_price = pos.entry_price   # break-even sul residuo
+                if reached_final:
+                    last_price = fills[-1][0]
+                    return self._close(pos, last_price, ExitReason.TAKE_PROFIT)
+
+            # 3) uscita a fine orizzonte (96 barre del timeframe della POSIZIONE)
+            held_h = (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0
+            if held_h >= self._max_hold_for(pos):
+                return self._close(pos, mark_price, ExitReason.TIME_EXIT)
+
+            # ombre nel high_water solo ORA (dopo i trigger): valgono per i tick
+            # FUTURI, come il gate che aggiorna best_fav a fine barra
+            self._update_water_marks(pos, hi, lo, long)
+            # LIVE: lo stop sul book deve seguire quello deciso qui (break-even/profit-lock)
+            if publish:
+                intended = max(eff_stop, pos.stop_price) if long else min(eff_stop, pos.stop_price)
+                self._sync_exchange_stop(pos, intended)
+                self._write_position_state(pos, mark_price, eff_stop=intended)
+            return None
+
+        # --- percorso classico: TP unico pieno (identico al backtest) ---
+        eff_stop = locked_stop(pos.entry_price, pos.take_profit_price, long,
+                               pos.high_water, pos.stop_price, keep=keep)
+        pos.trailing_active = eff_stop != pos.stop_price
+        self._registra_stop(pos, eff_stop, long)       # solo misura (1 ott 2026)
+
+        # stop (base o alzato dal profit-lock). Se è stato alzato, l'uscita è in
+        # profitto -> TRAILING_STOP; altrimenti è lo stop-loss vero e proprio.
+        # Anche qui lo stop viene PRIMA del TP: caso peggiore se il range tocca entrambi.
+        hit_sl = (lo <= eff_stop) if long else (hi >= eff_stop)
+        if hit_sl:
+            reason = ExitReason.TRAILING_STOP if pos.trailing_active else ExitReason.STOP_LOSS
+            return self._close(pos, eff_stop, reason)
+
+        # take profit PIENO (tutta la posizione al target, RR pieno)
+        hit_tp = (hi >= pos.take_profit_price) if long else (lo <= pos.take_profit_price)
+        if hit_tp:
+            return self._close(pos, pos.take_profit_price, ExitReason.TAKE_PROFIT)
+
+        # uscita a fine orizzonte (come l'orizzonte del backtester, in barre del
+        # timeframe della POSIZIONE)
+        held_h = (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0
+        if held_h >= self._max_hold_for(pos):
+            return self._close(pos, mark_price, ExitReason.TIME_EXIT)
+
+        self._update_water_marks(pos, hi, lo, long)
+        if publish:
+            self._sync_exchange_stop(pos, eff_stop)   # LIVE: stop sul book = stop deciso qui
+            self._write_position_state(pos, mark_price, eff_stop=eff_stop)
+        return None
+
+    def update_position_path(self, symbol: str, path: list[float],
+                             mark_price: float) -> Optional[ClosedTrade]:
+        """Rigioca il percorso dei prezzi UNO PER UNO, nell'ordine reale.
+
+        E' la differenza tra "so che il prezzo e' passato da 103 e da 97" e "so che
+        e' passato PRIMA da 103 e POI da 97": nel primo caso bisogna assumere il
+        peggio, nel secondo si sa che il TP1 e' stato incassato prima dello stop.
+        Ogni punto viene valutato con high=low=punto, quindi non c'e' nessun range
+        ambiguo: e' la stessa cosa che farebbe la matching engine di Binance.
+
+        La prima uscita interrompe il replay (il resto del percorso e' successo quando
+        la posizione era gia' chiusa). Se nessun punto la chiude, si valuta il mark
+        finale — che pubblica lo stato e allinea gli ordini reali."""
+        for point in path:
+            closed = self.update_position(symbol, point, high=point, low=point,
+                                          publish=False)
+            if closed is not None:
+                return closed
+        return self.update_position(symbol, mark_price)
+
+    @staticmethod
+    def _registra_stop(pos: Position, eff_stop: float, long: bool) -> None:
+        """IL PERCORSO DELLO STOP (1 ott 2026): solo misura, FAIL-OPEN.
+          * la prima volta che il profit-lock si arma (lo stop effettivo diventa
+            diverso dallo stop base `stop_price`): l'istante e lo stop in R;
+          * un passo {t_s: secondi dall'ingresso, r: stop in R} quando lo stop
+            effettivo si sposta di almeno 0,05 R (al massimo 20 passi).
+        Con questi numeri «il trailing esce presto» si legge: quando si e'
+        armato, quanto ha bloccato subito, quante volte e' salito.
+        Lo stop in R ha il segno del trade: -1 = stop originale, 0 = pareggio."""
+        try:
+            from bot.learning.cattura import passo_stop, stop_in_r
+            now = time.time()
+            r = stop_in_r(eff_stop, pos.entry_price, pos.orig_stop, long)
+            if pos.lock_armed_at is None and eff_stop != pos.stop_price:
+                pos.lock_armed_at = now
+                pos.lock_stop_first_r = r
+            if pos.stop_moves is None:
+                pos.stop_moves = []
+            passo_stop(pos.stop_moves, r, now - pos.entry_time.timestamp())
+        except Exception:  # noqa: BLE001
+            pass
+
+    @staticmethod
+    def _update_water_marks(pos: Position, hi: float, lo: float, long: bool) -> None:
+        """Aggiorna a FINE TICK il miglior prezzo a favore (high_water, che decide
+        il profit-lock) e, dal 26 set 2026, il peggior prezzo contro (low_water,
+        solo misura: da qui il MAE) e l'istante dell'ultimo miglioramento
+        (t_mfe). Un solo punto per entrambi i percorsi, cosi' non divergono."""
+        new_hw = max(pos.high_water, hi) if long else min(pos.high_water, lo)
+        if new_hw != pos.high_water:
+            pos.high_water = new_hw
+            pos.t_mfe = time.time()
+        new_lw = min(pos.low_water, lo) if long else max(pos.low_water, hi)
+        if new_lw != pos.low_water:
+            pos.t_mae = time.time()            # misura: ultimo peggioramento (1 ott 2026)
+        pos.low_water = new_lw
+
+    def _partial_close(self, pos: Position, price: float, qty: float,
+                       stage: Optional[int] = None) -> None:
+        """Chiude una FETTA (qty assoluta) della posizione al prezzo dato e accumula
+        il PnL lordo realizzato. Il residuo continua a correre. La contabilita' del
+        PnL finale (fette + residuo, netto costi) e' in _build_closed_trade.
+        `stage`: numero del gradino (1 = TP1), solo per la memoria della fetta."""
+        qty = min(qty, pos.remaining_qty)
+        if qty <= 0:
+            return
+        long = pos.direction == Direction.LONG
+        gross_unit = (price - pos.entry_price) if long else (pos.entry_price - price)
+        pos.realized_gross += gross_unit * qty
+        # PnL NETTO della fetta (fee+slippage round-trip sulla sua quota di notional;
+        # il funding e' regolato in blocco alla chiusura finale in _build_closed_trade,
+        # cosi' il PnL LOGGATO resta col modello di costo del backtest -> parita' GATE 1).
+        # Come Binance: questo netto viene ACCREDITATO SUBITO all'equity.
+        net = gross_unit * qty - self._costo_giro(pos) * (pos.entry_price * qty)
+        pos.realized_net += net
+        self.realized_events.append(net)
+        pos.remaining_qty -= qty
+        pos.scaled_out = True
+        # la memoria della fetta (26 set 2026): quale gradino, a che prezzo, quanto,
+        # quando e con che netto. E l'istante del PRIMO gradino (t_tp1).
+        _ts = time.time()
+        pos.partial_fills.append({
+            "stage": int(stage) if stage is not None else len(pos.partial_fills) + 1,
+            "price": float(price), "qty": round(float(qty), 8),
+            "ts": _ts, "net": round(float(net), 6),
+        })
+        if pos.t_tp1 is None:
+            pos.t_tp1 = _ts
+            # il peggior prezzo CONTRO visto fino al primo gradino (1 ott 2026):
+            # da qui `mae_before_tp1_r`. Il range del tick che riempie il TP1
+            # non c'e' ancora (low_water si aggiorna a fine tick): senza ordine
+            # nel range, meglio non attribuirgli un minimo forse successivo.
+            pos.low_water_tp1 = pos.low_water
+        if self.dry_run:
+            print(f"[DRY_RUN] SCALE-OUT {qty:.4f} {pos.symbol} @ {price} "
+                  f"(netto {net:+.4f}, residuo {pos.remaining_qty:.4f})")
+        elif self._client:
+            side = "SELL" if long else "BUY"
+            try:
+                self._client.futures_create_order(
+                    symbol=pos.symbol, side=side, type="MARKET",
+                    reduceOnly=True, quantity=round(qty, 6))
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] scale-out errore: {exc}")
+
+    def _close(self, pos: Position, price: float, reason: ExitReason) -> ClosedTrade:
+        if self.dry_run:
+            print(f"[DRY_RUN] CLOSE {pos.symbol} @ {price} ({reason.value})")
+        elif self._client:
+            side = "SELL" if pos.direction == Direction.LONG else "BUY"
+            try:
+                self._client.futures_create_order(
+                    symbol=pos.symbol, side=side, type="MARKET",
+                    reduceOnly=True, quantity=round(pos.remaining_qty, 6))
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] close errore: {exc}")
+            # CANCELLA gli ordini condizionali rimasti (SL/TP piazzati all'apertura):
+            # senza, restano ORFANI su Binance e possono chiudere a prezzi arbitrari
+            # una posizione FUTURA sullo stesso simbolo. Il bot tiene al massimo una
+            # posizione per simbolo, quindi cancel-all sul simbolo e' sicuro.
+            try:
+                self._client.futures_cancel_all_open_orders(symbol=pos.symbol)
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] cancel ordini {pos.symbol} fallita: {exc} "
+                      f"(POSSIBILI ORDINI ORFANI: verificare su Binance)")
+
+        trade = self._build_closed_trade(pos, price, reason)
+        # IL REFERTO, subito e per ogni trade: la stessa analisi che il proprietario
+        # ha chiesto «a posteriori» il 23 set, fatta dal sistema alla chiusura e
+        # scritta nel documento del trade. Best-effort: non deve fermare la chiusura.
+        try:
+            from bot.risk.setup_check import post_mortem
+            trade.post_mortem = post_mortem({
+                "entry_price": pos.entry_price, "orig_stop": pos.orig_stop,
+                "stop_price": pos.stop_price, "scale_r_mults": pos.scale_r_mults,
+                "mfe_r": trade.mfe_r, "pnl": trade.pnl, "direction": pos.direction.value,
+                "regime_at_entry": pos.regime_at_entry.value if pos.regime_at_entry else None,
+            })
+            if trade.pnl < 0:
+                print(f"[referto] {pos.symbol} {pos.strategy}: {trade.post_mortem.get('verdetto')}")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[referto] non scritto ({exc})")
+        # Accredita all'equity SOLO la parte non ancora realizzata dalle fette:
+        # trade.pnl e' il TOTALE (fette + residuo, netto costi pieni); realized_net
+        # e' gia' stato accreditato ai TP parziali. Cosi' la somma degli eventi ==
+        # trade.pnl loggato (nessun doppio conteggio) e reconcile resta coerente.
+        self.realized_events.append(trade.pnl - pos.realized_net)
+        self.open_positions.pop(pos.symbol, None)
+        # la rimozione del nodo non deve MAI impedire il logging del trade
+        try:
+            self.fb.set_rtdb(f"/positions/{pos.symbol}", None)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[execution] pulizia nodo posizione {pos.symbol} fallita: {exc}")
+        return trade
+
+    def force_close_all(self, prices: dict[str, float], reason: ExitReason) -> list[ClosedTrade]:
+        """Usato dal KILL SWITCH e dai circuit breaker per andare flat."""
+        for sym in list(self.ordini_limite.keys()):
+            self._annulla_ordine_limite(self.ordini_limite[sym], "annullato")
+        closed = []
+        for sym in list(self.open_positions.keys()):
+            price = prices.get(sym, self.open_positions[sym].entry_price)
+            closed.append(self._close(self.open_positions[sym], price, reason))
+        return closed
+
+    # ------------------------------------------------------------------ #
+    def _build_closed_trade(self, pos: Position, exit_price: float, reason: ExitReason) -> ClosedTrade:
+        long = pos.direction == Direction.LONG
+        # PnL lordo = fette gia' realizzate (scale-out) + residuo al prezzo d'uscita.
+        # Senza scale-out realized_gross=0 e remaining_qty=quantity -> identico a prima.
+        gross_final = (exit_price - pos.entry_price) if long else (pos.entry_price - exit_price)
+        gross_pnl = pos.realized_gross + gross_final * pos.remaining_qty
+        # --- costi reali (come il backtester): fee+slippage round-trip + funding ---
+        # sul notional PIENO (entry una volta + uscite che sommano all'intera size)
+        notional = pos.entry_price * pos.quantity
+        held_hours = max(0.0, (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0)
+        # funding REALE con segno: usa il tasso della coin all'entrata; long paga /
+        # short incassa quando il tasso e' positivo (viceversa se negativo).
+        funding = funding_fraction(pos.funding_at_entry, held_hours, long,
+                                   default_rate=self.funding_per_8h)
+        # scomposizione: le tre voci separate, non solo il totale. Il PnL netto da
+        # solo non dice se un trade e' andato male o se e' costato troppo tenerlo.
+        commission = self._fee_giro(pos) * notional
+        spread = self._spread_giro(pos) * notional
+        funding_usdt = funding * notional
+        cost = commission + spread + funding_usdt
+        pnl = gross_pnl - cost                       # PnL NETTO in USDT
+        # PnL% sul margine impegnato (notional/leverage)
+        margin = notional / max(pos.leverage, 1)
+        pnl_pct = pnl / margin if margin else 0.0
+        from bot.core.models import IndicatorSnapshot
+        ind = {k: IndicatorSnapshot(**v) for k, v in pos.indicators_at_entry.items()}
+        trade = ClosedTrade(
+            trade_id=pos.position_id, symbol=pos.symbol, strategy=pos.strategy,
+            direction=pos.direction, timeframe=pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME,
+            entry_time=pos.entry_time,
+            exit_time=datetime.now(timezone.utc), entry_price=pos.entry_price,
+            exit_price=exit_price, size=pos.quantity,
+            notional=pos.entry_price * pos.quantity, leverage=pos.leverage,
+            pnl=pnl, pnl_pct=pnl_pct, exit_reason=reason,
+            take_profit_price=pos.take_profit_price, stop_price=pos.stop_price,
+            regime_at_entry=pos.regime_at_entry, indicators_at_entry=ind,
+            sentiment_at_entry=pos.sentiment_at_entry,
+            fear_greed_at_entry=pos.fear_greed_at_entry,
+            funding_at_entry=pos.funding_at_entry,
+            confidence_at_entry=pos.confidence_at_entry,
+            regime_confidence_at_entry=pos.regime_confidence,
+            # l'ombra del selettore segue il trade fino a Firestore: e' li' che
+            # trade_stats e la calibrazione la leggono (25 set 2026)
+            selector_p=pos.selector_p,
+            selector_soglia=pos.selector_soglia,
+            orig_stop=pos.orig_stop,
+            scale_r_mults=[float(x) for x in pos.scale_r_mults] if pos.scale_r_mults else None,
+            sl_to_breakeven=pos.sl_to_breakeven,
+            tp_prices=([round(float(pr), 8) for pr, _fr in
+                        scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults)]
+                       if (settings.SCALE_OUT_ENABLED and pos.orig_stop) else None),
+            feats_at_entry=pos.feats_at_entry,
+            regola=pos.regola,
+            # e la marca del paper esplorativo (25 set 2026, F1bis): e' qui che
+            # pesi/deriva/calibrazione la leggono per escludere il trade
+            esplorativa=bool(pos.esplorativa),
+            # e quella delle declassate (26 set 2026): stessa strada
+            declassata=bool(getattr(pos, "declassata", False)),
+            scale_stage_reached=pos.scale_stage,
+            realized_partial=round(pos.realized_net, 6),
+            mfe_r=round(mfe_in_r(pos.entry_price, pos.high_water, pos.orig_stop), 3),
+            # il keep EFFETTIVO (gate, imparato o globale): il verdetto trailing
+            # di questo trade si legge solo insieme a questo numero
+            profit_lock_keep=(self._keep_per(pos) if self._keep_per(pos) is not None
+                              else float(settings.PROFIT_LOCK_KEEP)),
+            # --- costi scomposti (Fase 2.5) ---
+            expected_entry_price=pos.expected_entry_price or pos.entry_price,
+            expected_exit_price=pos.stop_price if reason is ExitReason.STOP_LOSS else None,
+            entry_slippage_pct=(
+                (pos.entry_price - pos.expected_entry_price) / pos.expected_entry_price
+                if pos.expected_entry_price else 0.0),
+            commission_usdt=round(commission, 6),
+            spread_usdt=round(spread, 6),
+            funding_paid_usdt=round(funding_usdt, 6),
+            total_cost_usdt=round(cost, 6),
+            gross_pnl_usdt=round(gross_pnl, 6),
+            # in DRY_RUN sono stime dal modello del gate, non misure dai fill
+            costs_are_estimated=self.dry_run,
+            # --- le misure mancanti (26 set 2026): solo memoria, nessuna decisione ---
+            mae_r=self._mae_r(pos),
+            t_tp1_s=self._secondi_da_ingresso(pos, pos.t_tp1),
+            t_mfe_s=self._secondi_da_ingresso(pos, pos.t_mfe),
+            bars_held=round(held_hours / (timeframe_hours(
+                pos.timeframe or settings.ORCHESTRATOR_TIMEFRAME) or 1.0), 2),
+            partial_fills=[dict(f) for f in (pos.partial_fills or [])],
+            be_at_s=self._secondi_da_ingresso(pos, pos.be_at),
+            size_factors_at_entry=(dict(pos.size_factors) if pos.size_factors else None),
+            risk_effective_pct=float(pos.risk_effective_pct),
+            portafoglio_at_entry=(dict(pos.portafoglio_at_entry)
+                                  if pos.portafoglio_at_entry else None),
+            signal_candle_ts=pos.signal_candle_ts,
+            latenza_s=(round(pos.entry_time.timestamp() - float(pos.signal_candle_ts), 3)
+                       if pos.signal_candle_ts is not None else None),
+            # ingresso a limite nel paper (13 ott 2026)
+            ingresso_tipo=pos.ingresso_tipo,
+            limite_prezzo=pos.limite_prezzo,
+            attesa_ingresso_s=(round(pos.entry_time.timestamp() - float(pos.ordine_messo_at), 3)
+                               if pos.ordine_messo_at is not None else None),
+        )
+        # LA CATTURA DEI DATI MANCANTI (1 ott 2026): assegnati DOPO la
+        # costruzione e in un try loro, cosi' un valore strano non puo' mai
+        # impedire la chiusura (pnl, uscita e costi qui sopra non cambiano)
+        try:
+            for k, v in self._misure_cattura(pos).items():
+                setattr(trade, k, v)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[cattura] misure di chiusura {pos.symbol} non annotate ({str(exc)[:80]})")
+        return trade
+
+    def _misure_cattura(self, pos: Position) -> dict:
+        """I campi nuovi del ClosedTrade (1 ott 2026), dalla posizione. Solo
+        misura; chi chiama li assegna in un try."""
+        out: dict = {}
+        out["versione"] = dict(pos.versione) if isinstance(pos.versione, dict) else None
+        out["promessa_gate"] = (dict(pos.promessa_gate)
+                                if isinstance(pos.promessa_gate, dict) else None)
+        try:
+            out["regime_globale_at_entry"] = (Regime(pos.regime_globale)
+                                              if pos.regime_globale else None)
+        except ValueError:
+            out["regime_globale_at_entry"] = None
+        ing = pos.ingresso if isinstance(pos.ingresso, dict) else {}
+        for k in ("snapshot_ts", "close_segnale", "ingresso_vs_segnale_r",
+                  "open_interest_at_entry", "volume_24h_at_entry", "mark_price_at_entry"):
+            out[k] = ing.get(k)
+        out["lock_armed_at_s"] = self._secondi_da_ingresso(pos, pos.lock_armed_at)
+        out["lock_stop_first_r"] = pos.lock_stop_first_r
+        out["stop_moves"] = [dict(m) for m in (pos.stop_moves or []) if isinstance(m, dict)][:20]
+        out["t_mae_s"] = self._secondi_da_ingresso(pos, pos.t_mae)
+        # MAE prima del primo gradino: dal low_water fotografato al TP1; se il
+        # TP1 non e' mai arrivato tutto il MAE e' «prima del TP1» (= mae_r).
+        # None per una posizione ripristinata che aveva gia' il TP1 senza foto.
+        R = abs(pos.entry_price - (pos.orig_stop or 0.0))
+        if not pos.orig_stop or R <= 0:
+            out["mae_before_tp1_r"] = None
+        elif pos.t_tp1 is None:
+            out["mae_before_tp1_r"] = self._mae_r(pos)
+        elif pos.low_water_tp1 is not None:
+            out["mae_before_tp1_r"] = round(abs(pos.entry_price - pos.low_water_tp1) / R, 3)
+        else:
+            out["mae_before_tp1_r"] = None
+        return out
+
+    @staticmethod
+    def _mae_r(pos: Position) -> Optional[float]:
+        """Massima escursione AVVERSA in R: |entry - low_water| / |entry - orig_stop|.
+        None se lo stop originale manca (R non calcolabile). Specchio di mfe_r."""
+        R = abs(pos.entry_price - (pos.orig_stop or 0.0))
+        if not pos.orig_stop or R <= 0:
+            return None
+        return round(abs(pos.entry_price - pos.low_water) / R, 3)
+
+    @staticmethod
+    def _secondi_da_ingresso(pos: Position, ts: Optional[float]) -> Optional[float]:
+        """Secondi tra l'ingresso e l'epoch dato (None se l'evento non c'e' stato)."""
+        if ts is None:
+            return None
+        return round(max(0.0, float(ts) - pos.entry_time.timestamp()), 3)
+
+    def _write_position_state(self, pos: Position, mark_price: float,
+                              eff_stop: float | None = None) -> None:
+        self.fb.set_rtdb(f"/positions/{pos.symbol}", self._stato_posizione(pos, mark_price, eff_stop))
+
+    def _stato_posizione(self, pos: Position, mark_price: float,
+                         eff_stop: float | None = None) -> dict:
+        """Il documento di stato della posizione (RTDB /positions/<simbolo>), lo
+        stesso che `_position_from_state` rilegge dopo un riavvio. Dal 13 ott 2026
+        lo usa anche l'ordine limite in attesa (/ordini_limite/<simbolo>)."""
+        long = pos.direction == Direction.LONG
+        gross = (mark_price - pos.entry_price) if long else (pos.entry_price - mark_price)
+        # UPNL NETTO = quanto incasseresti chiudendo ORA. Sottrae fee round-trip +
+        # spread + funding MATURATO finora (i "mini charge" di Binance sulle perpetual,
+        # proporzionali alle ore aperte). Stessa formula di _build_closed_trade, cosi'
+        # l'UPNL mostrato coincide col PnL reale se chiudi adesso.
+        notional = pos.entry_price * pos.remaining_qty
+        held_hours = max(0.0, (datetime.now(timezone.utc) - pos.entry_time).total_seconds() / 3600.0)
+        funding = funding_fraction(pos.funding_at_entry, held_hours, long,
+                                   default_rate=self.funding_per_8h)
+        accrued_funding = funding * notional
+        costs = self._costo_giro(pos) * notional + accrued_funding
+        unreal = gross * pos.remaining_qty - costs
+        # TP scaglionati (scale-out): livelli, quota, R e quali gia' raggiunti (per la
+        # dashboard). Solo osservabilita'. Vuoto se scale-out disattivo (TP unico).
+        tp_ladder = []
+        if settings.SCALE_OUT_ENABLED:
+            # I MULTIPLI DELLA COPPIA, non il default globale. I PREZZI qui sotto
+            # sono sempre stati calcolati da `pos.scale_r_mults` (la scala validata
+            # per questa coppia); l'ETICHETTA veniva dal default globale 1.5/3/5.
+            # Su PROMUSDT, validata con 2/4/6, la dashboard mostrava «✓ 3R» accanto
+            # a un prezzo che era 4R: il proprietario ha letto 3R e ragionato su 3R.
+            # Un'etichetta sbagliata accanto a un prezzo giusto e' peggio di nessuna
+            # etichetta — sembra un'informazione e invece e' una bugia.
+            _mults = pos.scale_r_mults or settings.SCALE_OUT_R_MULTIPLES
+            tp_ladder = [
+                {"price": round(pr, 6), "fraction": fr,
+                 "r": (_mults[i] if i < len(_mults) else None),
+                 "hit": i < pos.scale_stage}
+                for i, (pr, fr) in enumerate(scale_ladder(pos.entry_price, pos.orig_stop, long, r_mults=pos.scale_r_mults))
+            ]
+        return {
+            "position_id": pos.position_id, "symbol": pos.symbol,
+            "strategy": pos.strategy, "direction": pos.direction.value,
+            "entry_price": pos.entry_price, "mark_price": mark_price,
+            "quantity": pos.remaining_qty, "leverage": pos.leverage,
+            "stop_price": pos.stop_price, "take_profit_price": pos.take_profit_price,
+            # LO STOP CHE VERREBBE DAVVERO ESEGUITO ADESSO. `stop_price` e' la
+            # base (spostata a pareggio dopo il primo TP) e serve a ricostruire
+            # la posizione dopo un riavvio: NON va cambiata. Ma la protezione
+            # del profitto alza lo stop a ogni tick senza persisterlo, quindi la
+            # dashboard mostrava «pareggio» mentre il bot proteggeva molto piu'
+            # in alto. Sottostimare la protezione porta a chiudere a mano una
+            # posizione che era gia' al sicuro — il modo piu' silenzioso di
+            # perdere una vincita.
+            "effective_stop": round(eff_stop, 6) if eff_stop is not None else None,
+            "tp_ladder": tp_ladder,
+            # PnL gia' incassato dalle fette (TP parziali), gia' accreditato in equity
+            "realized_partial": round(pos.realized_net, 4),
+            "unrealized_pnl": unreal, "trailing_active": pos.trailing_active,
+            "scaled_out": pos.scaled_out, "dry_run": self.dry_run,
+            "updated_at": time.time(),
+            # trasparenza costi sulla posizione aperta (funding maturato + ore)
+            "accrued_funding": round(accrued_funding, 4), "held_hours": round(held_hours, 2),
+            # senza questo, dopo un RESTART lo spread sparirebbe dai costi di
+            # chiusura (PnL sovrastimato che avvelena il learning)
+            "spread_cost": pos.spread_cost,
+            # --- campi extra per ricostruire la posizione dopo un restart ---
+            "original_quantity": pos.quantity, "remaining_qty": pos.remaining_qty,
+            # stato scale-out (per non perdere fette/BE dopo un riavvio)
+            "risk_effective_pct": pos.risk_effective_pct,
+            "regime_confidence": pos.regime_confidence,
+            "sl_order_id": pos.sl_order_id, "exchange_stop": pos.exchange_stop,
+            "scale_r_mults": list(pos.scale_r_mults) if pos.scale_r_mults else None,
+            "sl_to_breakeven": pos.sl_to_breakeven,
+            "profit_lock_keep": pos.profit_lock_keep,
+            "timeframe": pos.timeframe,
+            "scale_stage": pos.scale_stage, "realized_gross": pos.realized_gross,
+            "realized_net": pos.realized_net,
+            "orig_stop": pos.orig_stop,
+            "entry_time": pos.entry_time.isoformat(),
+            "regime_at_entry": pos.regime_at_entry.value,
+            "atr": pos.atr, "high_water": pos.high_water,
+            "indicators_at_entry": pos.indicators_at_entry,
+            "sentiment_at_entry": pos.sentiment_at_entry,
+            "fear_greed_at_entry": pos.fear_greed_at_entry,
+            "funding_at_entry": pos.funding_at_entry,
+            "confidence_at_entry": pos.confidence_at_entry,
+            # l'ombra del selettore (25 set 2026): senza queste due chiavi un
+            # riavvio la cancellerebbe e il trade chiuso uscirebbe senza p
+            "selector_p": pos.selector_p,
+            "selector_soglia": pos.selector_soglia,
+            "feats_at_entry": pos.feats_at_entry,
+            "regola": pos.regola,
+            # il paper esplorativo (25 set 2026, F1bis): senza questa chiave un
+            # riavvio smarcherebbe la posizione e il trade chiuso entrerebbe
+            # nei pesi delle validate
+            "esplorativa": bool(pos.esplorativa),
+            # le declassate (26 set 2026, passo 2): stessa ragione della riga sopra
+            "declassata": bool(getattr(pos, "declassata", False)),
+            # le misure mancanti (26 set 2026): senza queste chiavi un riavvio
+            # azzererebbe MAE, tempi e fette, e il trade chiuso uscirebbe monco
+            "low_water": pos.low_water,
+            "t_tp1": pos.t_tp1, "t_mfe": pos.t_mfe,
+            "partial_fills": [dict(f) for f in (pos.partial_fills or [])],
+            "be_at": pos.be_at,
+            "size_factors": pos.size_factors,
+            "portafoglio_at_entry": pos.portafoglio_at_entry,
+            "signal_candle_ts": pos.signal_candle_ts,
+            # la cattura dei dati mancanti (1 ott 2026): stessa ragione delle
+            # misure sopra, un riavvio non deve cancellarle
+            "expected_entry_price": pos.expected_entry_price,
+            "versione": pos.versione,
+            "promessa_gate": pos.promessa_gate,
+            "regime_globale": pos.regime_globale,
+            "ingresso": pos.ingresso,
+            "lock_armed_at": pos.lock_armed_at,
+            "lock_stop_first_r": pos.lock_stop_first_r,
+            "stop_moves": [dict(m) for m in (pos.stop_moves or []) if isinstance(m, dict)],
+            "t_mae": pos.t_mae,
+            "low_water_tp1": pos.low_water_tp1,
+            # ingresso a limite nel paper (13 ott 2026): senza queste chiavi un
+            # riavvio farebbe tornare la posizione «a mercato» e il costo pieno
+            "ingresso_tipo": pos.ingresso_tipo,
+            "limite_prezzo": pos.limite_prezzo,
+            "ordine_messo_at": pos.ordine_messo_at,
+            "entry_fee_frac": pos.entry_fee_frac,
+        }
+
+    # ------------------------------------------------------------------ #
+    # Ripristino stato dopo un riavvio                                   #
+    # ------------------------------------------------------------------ #
+    def restore_open_positions(self) -> int:
+        """Ricarica le posizioni aperte da Firebase (/positions) in memoria.
+        Idempotente: salta i simboli già presenti. Ritorna quante ne ha caricate."""
+        data = self.fb.get_rtdb("/positions")
+        if not isinstance(data, dict) or not data:
+            return 0
+        restored = 0
+        for sym, p in data.items():
+            if not isinstance(p, dict) or sym in self.open_positions:
+                continue
+            try:
+                self.open_positions[sym] = self._position_from_state(p)
+                restored += 1
+            except Exception as exc:  # noqa: BLE001
+                print(f"[execution] impossibile ricaricare la posizione {sym}: {exc}")
+        if restored:
+            print(f"[execution] ricaricate {restored} posizioni aperte da Firebase "
+                  f"(no orfani al riavvio): {list(self.open_positions.keys())}")
+        return restored
+
+    def _position_from_state(self, p: dict) -> Position:
+        original_qty = float(p.get("original_quantity", p.get("quantity", 0.0)))
+        pos = Position(
+            position_id=p.get("position_id") or str(uuid.uuid4()),
+            symbol=p["symbol"], strategy=p.get("strategy", "unknown"),
+            direction=Direction(p["direction"]),
+            entry_price=float(p["entry_price"]), quantity=original_qty,
+            leverage=float(p.get("leverage", 1) or 1),
+            stop_price=float(p.get("stop_price", 0.0) or 0.0),
+            take_profit_price=float(p.get("take_profit_price", 0.0) or 0.0),
+            entry_time=self._parse_dt(p.get("entry_time")),
+            regime_at_entry=Regime(p.get("regime_at_entry", Regime.SIDEWAYS.value)),
+            indicators_at_entry=p.get("indicators_at_entry") or {},
+            sentiment_at_entry=p.get("sentiment_at_entry"),
+            fear_greed_at_entry=p.get("fear_greed_at_entry"),
+            funding_at_entry=p.get("funding_at_entry"),
+            confidence_at_entry=p.get("confidence_at_entry"),
+            regime_confidence=p.get("regime_confidence"),
+            atr=float(p.get("atr", 0.0) or 0.0),
+            spread_cost=float(p.get("spread_cost", 0.0) or 0.0),
+        )
+        # __post_init__ azzera remaining_qty/high_water: ripristino lo stato vivo
+        pos.remaining_qty = float(p.get("remaining_qty", original_qty))
+        pos.high_water = float(p.get("high_water", pos.entry_price) or pos.entry_price)
+        pos.scaled_out = bool(p.get("scaled_out", False))
+        pos.trailing_active = bool(p.get("trailing_active", False))
+        pos.scale_stage = int(p.get("scale_stage", 0) or 0)
+        pos.realized_gross = float(p.get("realized_gross", 0.0) or 0.0)
+        pos.realized_net = float(p.get("realized_net", 0.0) or 0.0)
+        # ordini di protezione LIVE: senza questi, dopo un restart il bot non saprebbe
+        # QUALE stop cancellare e ne accumulerebbe uno nuovo a ogni spostamento
+        _sid = p.get("sl_order_id")
+        pos.sl_order_id = int(_sid) if _sid is not None else None
+        _xs = p.get("exchange_stop")
+        pos.exchange_stop = float(_xs) if _xs is not None else None
+        # la scala congelata deve sopravvivere al restart, altrimenti la posizione
+        # ripartirebbe con TP diversi da quelli con cui e' stata aperta
+        _sm = p.get("scale_r_mults")
+        pos.scale_r_mults = tuple(float(x) for x in _sm) if _sm else None
+        _be = p.get("sl_to_breakeven")
+        pos.sl_to_breakeven = bool(_be) if _be is not None else None
+        # il keep scelto dal gate segue la posizione oltre il riavvio; i documenti
+        # scritti prima del 25 set 2026 non hanno la chiave -> None (come prima)
+        _pk = p.get("profit_lock_keep")
+        pos.profit_lock_keep = float(_pk) if _pk is not None else None
+        pos.orig_stop = float(p.get("orig_stop", pos.stop_price) or pos.stop_price)
+        pos.timeframe = p.get("timeframe") or None
+        # il rischio EFFETTIVO (quanto costa lo stop, in frazione dell'equity) non
+        # veniva ripristinato: dopo ogni riavvio tornava 0.0 e alla prima scrittura
+        # dello stato sovrascriveva su RTDB il valore vero. Il primo controllo
+        # orario (25 set 2026, ops 0245) lo ha mostrato: «4 posizioni, 0,0% a
+        # rischio». Ora si rilegge (un documento senza la chiave resta a 0.0: le
+        # posizioni aperte prima della correzione lo perdono fino alla chiusura).
+        _re = p.get("risk_effective_pct")
+        pos.risk_effective_pct = float(_re) if _re is not None else 0.0
+        # l'ombra del selettore (25 set 2026): documenti piu' vecchi non hanno le
+        # chiavi -> None, cioe' «trade senza p», non un errore
+        _sp = p.get("selector_p")
+        pos.selector_p = float(_sp) if _sp is not None else None
+        _ss = p.get("selector_soglia")
+        pos.selector_soglia = float(_ss) if _ss is not None else None
+        pos.feats_at_entry = dict(p["feats_at_entry"]) if isinstance(p.get("feats_at_entry"), dict) else None
+        pos.regola = p.get("regola") or None
+        # il paper esplorativo (25 set 2026, F1bis): documenti piu' vecchi non
+        # hanno la chiave -> False, cioe' «posizione di una validata»
+        pos.esplorativa = bool(p.get("esplorativa", False))
+        # le declassate (26 set 2026): chiave assente -> False, «validata attiva»
+        pos.declassata = bool(p.get("declassata", False))
+        # le misure mancanti (26 set 2026): documenti piu' vecchi non hanno le
+        # chiavi -> low_water all'entry (MAE parte da zero), tempi None, fette []
+        _lw = p.get("low_water")
+        pos.low_water = float(_lw) if _lw is not None else pos.entry_price
+        _t1, _tm, _ba = p.get("t_tp1"), p.get("t_mfe"), p.get("be_at")
+        pos.t_tp1 = float(_t1) if _t1 is not None else None
+        pos.t_mfe = float(_tm) if _tm is not None else None
+        pos.be_at = float(_ba) if _ba is not None else None
+        _pf = p.get("partial_fills")
+        pos.partial_fills = [dict(f) for f in _pf if isinstance(f, dict)] if isinstance(_pf, list) else []
+        pos.size_factors = dict(p["size_factors"]) if isinstance(p.get("size_factors"), dict) else None
+        pos.portafoglio_at_entry = (dict(p["portafoglio_at_entry"])
+                                    if isinstance(p.get("portafoglio_at_entry"), dict) else None)
+        _sc = p.get("signal_candle_ts")
+        pos.signal_candle_ts = float(_sc) if _sc is not None else None
+        # la cattura dei dati mancanti (1 ott 2026): chiavi assenti -> None/[].
+        # In un try suo: un valore rotto lascia la misura vuota, non la posizione
+        # orfana (che e' cio' che il ripristino esiste per evitare)
+        try:
+            self._ripristina_cattura(pos, p)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[cattura] misure di {pos.symbol} non ripristinate ({str(exc)[:80]})")
+        # ingresso a limite nel paper (13 ott 2026): chiavi assenti -> «mercato»
+        pos.ingresso_tipo = str(p.get("ingresso_tipo") or "mercato")
+        _lp = p.get("limite_prezzo")
+        pos.limite_prezzo = float(_lp) if _lp is not None else None
+        _om = p.get("ordine_messo_at")
+        pos.ordine_messo_at = float(_om) if _om is not None else None
+        _ef = p.get("entry_fee_frac")
+        pos.entry_fee_frac = float(_ef) if _ef is not None else None
+        return pos
+
+    @staticmethod
+    def _ripristina_cattura(pos: Position, p: dict) -> None:
+        def _f(v):
+            return float(v) if v is not None else None
+        pos.expected_entry_price = _f(p.get("expected_entry_price"))
+        pos.versione = dict(p["versione"]) if isinstance(p.get("versione"), dict) else None
+        pos.promessa_gate = (dict(p["promessa_gate"])
+                             if isinstance(p.get("promessa_gate"), dict) else None)
+        pos.regime_globale = p.get("regime_globale") or None
+        pos.ingresso = dict(p["ingresso"]) if isinstance(p.get("ingresso"), dict) else None
+        pos.lock_armed_at = _f(p.get("lock_armed_at"))
+        pos.lock_stop_first_r = _f(p.get("lock_stop_first_r"))
+        _sm = p.get("stop_moves")
+        pos.stop_moves = ([{"t_s": float(m["t_s"]), "r": float(m["r"])} for m in _sm
+                           if isinstance(m, dict) and "t_s" in m and "r" in m]
+                          if isinstance(_sm, list) else [])
+        pos.t_mae = _f(p.get("t_mae"))
+        pos.low_water_tp1 = _f(p.get("low_water_tp1"))
+
+    @staticmethod
+    def _parse_dt(v) -> datetime:
+        if isinstance(v, str):
+            try:
+                return datetime.fromisoformat(v)
+            except ValueError:
+                pass
+        return datetime.now(timezone.utc)

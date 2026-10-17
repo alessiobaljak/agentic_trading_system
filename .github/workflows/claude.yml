@@ -1,0 +1,65 @@
+name: claude
+
+# CHIEDERE A CLAUDE DA DENTRO IL REPO.
+#
+# Un commento su una issue che contiene "@claude" fa partire una sessione di Claude
+# Code con accesso a questo repo: legge il codice, risponde nel thread, e se serve
+# committa. E' il motore dietro la tab "Claude" della dashboard, che scrive proprio
+# qui (vedi dashboard/app/api/claude/route.ts e docs/claude_da_vercel.md).
+#
+# ATTENZIONE: QUESTO REPO E' PUBBLICO. Senza il filtro qui sotto, chiunque su
+# internet potrebbe scrivere un commento e far partire una sessione con i nostri
+# crediti e con accesso in scrittura al repo. Il filtro non e' una precauzione
+# ridondante: e' l'unica cosa che separa "il proprietario chiede" da "chiunque
+# comanda". L'azione ha una sua difesa (risponde solo a chi ha permessi di
+# scrittura), ma quella difesa scatta DOPO l'avvio del job — e il job usa gia' il
+# segreto. Qui si ferma prima.
+
+on:
+  issue_comment:
+    types: [created]
+
+# Il segreto non si puo' leggere in un `if` di job, ma si puo' proiettare qui: cosi'
+# finche' ANTHROPIC_API_KEY non e' configurata il workflow non fallisce in rosso a
+# ogni messaggio — risponde nel thread che manca la chiave e si ferma. Una raffica di
+# mail di fallimento e' il modo piu' rapido per far ignorare le notifiche vere.
+env:
+  HA_CHIAVE: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+
+jobs:
+  rispondi:
+    # tre condizioni insieme: e' il proprietario, e' una issue (non una PR), e la
+    # frase di attivazione c'e' davvero.
+    if: >
+      github.event.comment.user.login == github.repository_owner &&
+      !github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Dire che manca la chiave (invece di fallire in silenzio)
+        if: env.HA_CHIAVE != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -sS -X POST \
+            -H "authorization: Bearer $GH_TOKEN" \
+            -H "accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments" \
+            -d '{"body":"Non posso rispondere: manca il segreto **ANTHROPIC_API_KEY** nelle impostazioni del repo (Settings -> Secrets and variables -> Actions). I passi sono in `docs/claude_da_vercel.md`."}'
+
+      - uses: actions/checkout@v4
+        if: env.HA_CHIAVE == 'true'
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        if: env.HA_CHIAVE == 'true'
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          trigger_phrase: "@claude"

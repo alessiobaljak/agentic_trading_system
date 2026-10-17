@@ -1,0 +1,540 @@
+"""
+AdaptationEngine — applica i pesi appresi alle decisioni dell'orchestratore.
+
+Meccanismo concreto (come da specifica):
+  * I pesi strategia×regime sono su Firebase (strategy_weights/current),
+    aggiornati ogni notte dal learning loop.
+  * L'orchestratore moltiplica la propria confidenza per il peso della strategia
+    nel regime corrente.
+  * Strategie che performano male -> peso -> 0 (progressivamente disattivate).
+  * Strategie che performano bene -> peso alto -> più capitale.
+
+ANTI-OVERFITTING (baseline non adattata):
+  * Una frazione fissa del capitale (config.BASELINE_CAPITAL_FRACTION, 20%) usa
+    SEMPRE peso 1.0 per ogni strategia (configurazione baseline). Questo evita il
+    collasso su pattern passati. Il metodo `is_baseline_cycle()` indica quando un
+    ciclo va trattato come baseline.
+"""
+from __future__ import annotations
+
+import random
+import time
+from typing import Optional
+
+from bot.config import settings
+from bot.core.firebase_client import decode_pairs, get_firebase, kw_chi
+from bot.core.models import Regime, StrategyRegimeWeight
+
+
+class AdaptationEngine:
+    def __init__(self, firebase=None) -> None:
+        self.fb = firebase or get_firebase()
+        self._weights: dict[str, float] = {}   # chiave "strategy|regime" -> peso
+        self._params: dict[str, dict] = {}     # chiave "SYMBOL|strategy" -> params ottimizzati
+        self._passed: set[str] = set()         # coppie "SYMBOL|strategy" che hanno passato OOS
+        # PF per-regime dal gate: "SYMBOL|strategy" -> {regime: {"pf", "trades"}}.
+        # Alimenta il filtro di regime (non operare dove il gate ha visto perdere).
+        self._regime_pf: dict[str, dict] = {}
+        # verdetti di deriva (paper vs promessa del gate): frenano size/leva SUBITO,
+        # senza aspettare che il gate rivaluti. Ricaricato col registro.
+        self._drift: dict = {}
+        # calibrazione: quanto la confidenza dei segnali predica davvero l'esito
+        self._calibration: dict = {}
+        self._has_opt_data: bool = False
+        self._generated_specs: dict[str, dict] = {}  # gen_id -> spec (strategie scoperte)
+        # IL PAPER ESPLORATIVO (25 set 2026, backlog F1bis): le coppie che il gate
+        # ha selezionato fra i quasi-passaggi (`strategy_registry/esplorative`),
+        # "SYMBOL|gen_id" -> record, e le loro spec. Si operano a size ridotta e
+        # marcate; ricaricate ogni ora con le spec generate (`load_generated`).
+        self._esplorative: dict[str, dict] = {}
+        self._esplorative_specs: dict[str, dict] = {}
+        # LE DECLASSATE (26 set 2026, passo 2): le coppie validate su cui il gate
+        # ha scritto `declassata: true` (bocciate DECLASSATA_NOTTI giri completi
+        # di fila). Si operano ancora, a DECLASSATA_SIZE_MULT della size; il
+        # bot LEGGE il flag dal registro (ogni ora, con `load_params`), non lo
+        # calcola. Fail-open: registro illeggibile -> nessuna declassata.
+        self._declassate: set[str] = set()
+        # `updated_at` del registro all'ultimo `load_params` (26 set 2026): e' il
+        # confronto di `registro_cambiato`, che il loop del bot chiama ogni
+        # minuto per ricaricare APPENA il gate scrive, non un'ora dopo
+        self._registro_updated_at = None
+        # LA PROMESSA DEL GATE (1 ott 2026, la cattura dei dati mancanti): per
+        # ogni coppia validata, i pochi numeri del suo record (pass_count, PF,
+        # win rate, t, declassata...) presi dal registro GIA' letto in
+        # `load_params`: nessuna lettura in piu'. `promessa_per` li congela sul
+        # trade all'apertura. Solo misura: nessuna decisione li legge.
+        self._promesse: dict[str, dict] = {}
+        self.load_weights()
+        self.load_params()
+        self.load_generated()
+
+    # ------------------------------------------------------------------ #
+    def load_weights(self) -> None:
+        doc = self.fb.get_doc("strategy_weights", "current", **kw_chi(self.fb, "pesi")) or {}
+        self._weights = {}
+        for w in doc.get("weights", []):
+            key = f"{w['strategy']}|{w['regime']}"
+            self._weights[key] = float(w.get("weight", 1.0))
+
+    def save_weights(self, weights: list[StrategyRegimeWeight]) -> None:
+        """Salva i pesi ricalcolati + RIENTRO IN PROVA (probation) dei gruppi senza
+        trade recenti.
+
+        Senza questo, un gruppo strategia×regime ucciso (peso 0) smette di tradare,
+        i suoi trade escono dalla finestra 30g, il gruppo sparisce dal documento e
+        weight_for torna al default 1.0: resurrezione DI COLPO a fiducia piena
+        ("kill con amnesia"), che costa ~4 perdite piene a ogni giro. Qui invece il
+        peso di un gruppo assente dal ricalcolo viene TRASCINATO e recupera
+        gradualmente verso 1.0 (WEIGHT_RECOVERY_DAYS): la strategia rientra prima
+        coi soli segnali FORTI (peso 0.5 passa la soglia solo a confidence alta),
+        e si riabilita del tutto solo col tempo o vincendo. A 1.0 il gruppo viene
+        potato (equivale al default). Il merge sta QUI cosi' copre entrambi gli
+        scrittori (refresh orario del bot e job notturno)."""
+        now = time.time()
+        doc = self.fb.get_doc("strategy_weights", "current", **kw_chi(self.fb, "pesi")) or {}
+        prev_ts = float(doc.get("updated_at", 0) or 0)
+        elapsed_days = max(0.0, (now - prev_ts) / 86400.0) if prev_ts else 0.0
+        recovery = max(1e-9, settings.WEIGHT_RECOVERY_DAYS)
+        fresh = {(w.strategy, w.regime.value) for w in weights}
+        carried: list[StrategyRegimeWeight] = []
+        for e in doc.get("weights", []) or []:
+            key = (e.get("strategy"), e.get("regime"))
+            if key in fresh or not key[0] or not key[1]:
+                continue
+            w_new = min(1.0, float(e.get("weight", 1.0) or 0.0) + elapsed_days / recovery)
+            if w_new >= 1.0:
+                continue   # riabilitata: indistinguibile dal default -> pota
+            try:
+                carried.append(StrategyRegimeWeight(
+                    strategy=key[0], regime=Regime(key[1]), weight=round(w_new, 4),
+                    win_rate=None, avg_rr=None, sample_size=0))   # 0 = "in prova"
+            except ValueError:
+                continue   # regime non piu' valido
+        # SOGLIA DI CAMPIONE: e' una decisione di PUBBLICAZIONE, non di calcolo —
+        # compute_weights resta una funzione pura dei trade e qui si decide se
+        # quei numeri meritano di guidare size e leva. sample_size somma i trade
+        # effettivamente usati, quindi non serve ripassare la lista.
+        used = sum(w.sample_size or 0 for w in weights)
+        if weights and used < settings.LEARNING_MIN_TRADES_TOTAL:
+            print(f"[learning] solo {used} trade validi (servono "
+                  f"{settings.LEARNING_MIN_TRADES_TOTAL}): pesi INVARIATI")
+            return
+        if not weights and not carried:
+            return          # niente da pubblicare
+
+        prev = {(e.get("strategy"), e.get("regime")): float(e.get("weight", 1.0) or 0.0)
+                for e in (doc.get("weights") or []) if e.get("strategy")}
+
+        # SMOOTHING ESPONENZIALE verso il peso precedente. Lo shrinkage bayesiano
+        # gia' presente stabilizza rispetto alla NUMEROSITA' del campione; questo
+        # stabilizza rispetto al TEMPO, cioe' evita che due ricalcoli consecutivi
+        # (ogni ora) facciano saltare un peso da 0.9 a 0.2 per una manciata di
+        # esiti nuovi. Sono due cose diverse e si sommano bene. Alla prima
+        # comparsa di un gruppo non c'e' nulla da smorzare: si prende il valore
+        # nuovo, altrimenti ogni strategia nascerebbe a meta' strada dal default.
+        a = max(0.0, min(1.0, settings.LEARNING_SMOOTHING_ALPHA))
+        smoothed: list[StrategyRegimeWeight] = []
+        for w in weights:
+            old = prev.get((w.strategy, w.regime.value))
+            if old is not None and a < 1.0:
+                w = w.model_copy(update={"weight": round(a * w.weight + (1 - a) * old, 4)})
+            smoothed.append(w)
+
+        # SAFETY CHECK: un salto aggregato oltre soglia e' quasi sempre un difetto
+        # (dati sporchi, finestra vuota, campo mancante) e non un apprendimento.
+        # Pubblicarlo cambierebbe size e leva di ogni trade successivo, quindi in
+        # caso di dubbio si tengono i pesi vecchi e si chiede di guardare.
+        if prev and smoothed:
+            common = [(w, prev[(w.strategy, w.regime.value)]) for w in smoothed
+                      if (w.strategy, w.regime.value) in prev]
+            base = sum(o for _w, o in common)
+            if common and base > 0:
+                delta = sum(abs(w.weight - o) for w, o in common) / base
+                if delta > settings.LEARNING_MAX_TOTAL_CHANGE:
+                    print(f"[learning] ANOMALIA: i pesi cambierebbero del "
+                          f"{delta * 100:.0f}% (limite "
+                          f"{settings.LEARNING_MAX_TOTAL_CHANGE * 100:.0f}%). "
+                          f"NON pubblicati, restano i precedenti.")
+                    try:
+                        from bot.execution.notifier import TelegramNotifier
+                        TelegramNotifier().send(
+                            f"⚠️ Learning loop: variazione pesi {delta * 100:.0f}% "
+                            f"oltre soglia → aggiornamento SOSPESO")
+                    except Exception:  # noqa: BLE001
+                        pass
+                    return
+
+        payload = [w.model_dump(mode="json") for w in smoothed + carried]
+        version = int(doc.get("version", 0) or 0) + 1
+        self.fb.set_doc("strategy_weights", "current", {
+            "weights": payload, "updated_at": now, "version": version,
+            "trade_count_used": sum(w.sample_size or 0 for w in weights),
+        })
+        # STORICO ad anello: l'id del documento e' la versione modulo N, cosi' si
+        # tengono le ultime N senza dover elencare la collection per potarla.
+        try:
+            keep = max(1, settings.LEARNING_HISTORY_VERSIONS)
+            self.fb.set_doc("strategy_weights", f"v{version % keep:03d}", {
+                "version": version, "updated_at": now, "weights": payload})
+        except Exception as exc:  # noqa: BLE001
+            print(f"[learning] storico pesi non salvato: {exc}")
+        self.load_weights()
+
+    # ------------------------------------------------------------------ #
+    def allocation(self, strategy: str, regime: Regime, confidence: float,
+                   drift_key: tuple[str, str] | None = None,
+                   contesto=None, direzione=None) -> tuple[float, float, str]:
+        """(risk_mult, lev_mult, nota): quanto CAPITALE e quanta LEVA merita questo
+        trade, guidato SOLO dai dati — mai oltre i cap di sicurezza (applicati poi
+        dal risk manager, che puo' solo ridurre).
+
+        `contesto` (market_up del BTC adesso: 1/0/None) e `direzione` (long/
+        short) servono al FRENO PER GRUPPO (26 set 2026): con `regime` individuano
+        i pool della decisione in `drift/current.pool`. Senza, quel freno resta
+        muto (fail-open), gli altri no.
+
+          * CONVINZIONE: la confidence del segnale (forza degli indicatori, scala
+            0-100 validata dal gate). 30 (soglia minima) -> x0.75; 85+ -> x1.25.
+          * APPRENDIMENTO: il peso strategia×regime imparato dai trade REALI.
+            Nessun peso nel documento (= nessun dato) -> x1.0 NEUTRO: senza dati
+            non si devia dal comportamento base, ne' in su ne' in giu'. Col peso:
+            0 -> x0.5 (il kill avviene comunque a monte), 1 -> x1.25.
+
+        La leva scala con la RADICE del fattore (piu' cauta della size): amplifica
+        sia i guadagni sia le perdite, quindi si muove meno."""
+        key = f"{strategy}|{regime.value}"
+        w = self._weights.get(key)
+        conf = max(0.0, min(1.0, (float(confidence or 0) - 30.0) / 55.0))
+        conf_mult = 0.75 + 0.5 * conf
+        # CALIBRAZIONE: se la confidenza non predice l'esito, la sua influenza si
+        # restringe verso il neutro (1.0). Con trust=0 la size smette di dipendere
+        # da un numero che non significa nulla.
+        from bot.learning.calibration import confidence_trust
+        _trust = confidence_trust(self._calibration)
+        if _trust < 1.0:
+            conf_mult = 1.0 + (conf_mult - 1.0) * _trust
+        learn_mult = 1.0 if w is None else 0.5 + 0.75 * float(w)
+        raw = conf_mult * learn_mult
+        risk_mult = max(0.5, min(1.5, raw))
+        lev_mult = max(0.7, min(1.3, raw ** 0.5))
+        note = (f"alloc: convinzione x{conf_mult:.2f}"
+                f"{' (calibr. x%.2f)' % _trust if _trust < 1.0 else ''} · learning "
+                f"{'x%.2f' % learn_mult if w is not None else 'neutro (nessun dato)'}")
+        # FRENO: se il vissuto contraddice la promessa del gate (deriva) o la
+        # strategia sta perdendo di fila (serie) si frena SUBITO, senza attendere
+        # la rivalidazione. Applicato DOPO i cap: e' una riduzione, non puo' mai
+        # aumentare l'esposizione. La nota elenca i motivi, cosi' dal trade si
+        # legge PERCHE' la size era ridotta.
+        if drift_key is not None:
+            from bot.learning.drift import motivi_freno, weight_factor
+            f = weight_factor(self._drift, drift_key[0], drift_key[1],
+                              regime=regime, contesto=contesto, direzione=direzione)
+            if f < 1.0:
+                risk_mult *= f
+                lev_mult = max(0.5, lev_mult * (f ** 0.5))
+                motivi = motivi_freno(self._drift, drift_key[0], drift_key[1],
+                                      regime=regime, contesto=contesto, direzione=direzione)
+                note += f" · FRENO x{f:.2f} ({', '.join(motivi)})"
+        return risk_mult, lev_mult, note
+
+    # ------------------------------------------------------------------ #
+    def weight_for(self, strategy: str, regime: Regime, baseline: bool = False) -> float:
+        """
+        Peso della strategia nel regime. Se `baseline` True (sleeve baseline),
+        ritorna sempre 1.0 (configurazione non adattata).
+        Default 1.0 quando non ci sono ancora dati di apprendimento.
+        """
+        if baseline:
+            return 1.0
+        return self._weights.get(f"{strategy}|{regime.value}", 1.0)
+
+    # ------------------------------------------------------------------ #
+    # Parametri ottimizzati per-asset (walk-forward, job autonomo)        #
+    # ------------------------------------------------------------------ #
+    @staticmethod
+    def _robust_only(keys) -> set:
+        """Tiene le coppie 'SYMBOL|strategia' robuste. Le strategie BASE devono essere
+        passate su >= MIN_COINS_PER_STRATEGY coin distinte (anti-fluke a coin singola).
+        Le strategie GENERATE (gen_*) sono coin-specifiche BY DESIGN — scoperte su una
+        coin e validate dai loro passaggi OOS — quindi ESENTATE dalla regola cross-coin
+        (altrimenti verrebbero scartate tutte). Soglia <= 1 -> nessun filtro."""
+        keys = [k for k in keys if "|" in k]
+        n = settings.MIN_COINS_PER_STRATEGY
+        if n <= 1:
+            return set(keys)
+        generated = {k for k in keys if k.split("|", 1)[1].startswith("gen_")}
+        coins_per_strat: dict[str, set] = {}
+        for k in keys:
+            sym, strat = k.split("|", 1)
+            if not strat.startswith("gen_"):
+                coins_per_strat.setdefault(strat, set()).add(sym)
+        robust = {s for s, c in coins_per_strat.items() if len(c) >= n}
+        return generated | {k for k in keys if k.split("|", 1)[1] in robust}
+
+    def load_params(self) -> None:
+        # deriva: si carica sempre, anche quando il registro non e' pronto
+        try:
+            self._drift = self.fb.get_doc("drift", "current", **kw_chi(self.fb, "registro")) or {}
+        except Exception:  # noqa: BLE001
+            self._drift = {}
+        try:
+            self._calibration = self.fb.get_doc("calibration", "current", **kw_chi(self.fb, "registro")) or {}
+        except Exception:  # noqa: BLE001
+            self._calibration = {}
+        reg = self.fb.get_doc("strategy_registry", "validated", **kw_chi(self.fb, "registro")) or {}
+        # l'istante di scrittura del registro appena letto: `registro_cambiato`
+        # lo confronta con quello vivo per ricaricare appena il gate scrive
+        self._registro_updated_at = reg.get("updated_at")
+        validated = reg.get("validated") or []
+        pairs = decode_pairs(reg.get("pairs"))
+        # le DECLASSATE (26 set 2026): il flag lo scrive il gate sul record della
+        # coppia; qui si legge e basta, a ogni ricarica oraria. Un record rotto
+        # non ferma il caricamento del registro (fail-open: nessuna declassata).
+        try:
+            self._declassate = {str(k) for k, r in pairs.items()
+                                if isinstance(r, dict) and bool(r.get("declassata"))}
+        except Exception:  # noqa: BLE001
+            self._declassate = set()
+        # la promessa del gate per le validate (1 ott 2026): fail-open, un
+        # record rotto lascia il trade senza promessa, non ferma il caricamento
+        try:
+            from bot.learning.cattura import CAMPI_RECORD_PROMESSA
+            self._promesse = {str(k): {c: pairs[k].get(c) for c in CAMPI_RECORD_PROMESSA
+                                       if pairs[k].get(c) is not None}
+                              for k in validated
+                              if isinstance(k, str) and isinstance(pairs.get(k), dict)}
+        except Exception:  # noqa: BLE001
+            self._promesse = {}
+        # GATE 0) il bot NON va in paper finche' il GATE 1 non e' "ready" (copertura
+        # dell'universo >= soglia). Resta FLAT anche se qualche coppia e' gia'
+        # validata: e' cio' che promette il Telegram ("GATE 1 SUPERATO -> paper").
+        if settings.REQUIRE_GATE1_READY and not reg.get("ready"):
+            self._passed = set()
+            self._params = {}
+            self._has_opt_data = True
+            return
+        # 1) REGISTRO validato: coppie a >= MIN_PASSES passaggi OOS (le piu' robuste).
+        if validated:
+            self._passed = self._robust_only(validated)
+            self._params = {k: (pairs.get(k, {}).get("last_params", {}) or {}) for k in self._passed}
+            self._regime_pf = {k: (pairs.get(k, {}).get("regime_pf", {}) or {}) for k in self._passed}
+            self._has_opt_data = True
+            return
+        # Nessuna coppia a MIN_PASSES passaggi. DEFAULT: il bot resta FLAT — NON si
+        # trada su strategie non validate (e' il senso stesso del GATE 1). Solo se
+        # BOOTSTRAP_TRADE_UNVALIDATED e' attivo si opera il paper sulle coppie a
+        # >= 1 passaggio, per accumulare dati prima della validazione completa.
+        if not settings.BOOTSTRAP_TRADE_UNVALIDATED:
+            self._passed = set()
+            self._params = {}
+            self._has_opt_data = True    # dati presenti: solo, nulla e' ancora validato
+            return
+        # 2) BOOTSTRAP (opt-in): coppie con >= 1 passaggio nel registro (base +
+        # generate del run recente). `pairs` e' gia' decodificato.
+        recent = {k: r for k, r in pairs.items() if r.get("pass_count", 0) >= 1}
+        if recent:
+            self._passed = self._robust_only(recent.keys())
+            self._params = {k: (recent.get(k, {}).get("last_params", {}) or {}) for k in self._passed}
+            self._has_opt_data = True
+            return
+        # 3) ultima spiaggia: l'ultimo run (strategy_params/current). entries/passed
+        # sono CODIFICATI (stringa JSON) -> decode_pairs (retro-compatibile col dict).
+        doc = self.fb.get_doc("strategy_params", "current", **kw_chi(self.fb, "registro")) or {}
+        entries = decode_pairs(doc.get("entries"))
+        self._passed = self._robust_only(decode_pairs(doc.get("passed")) or [])
+        self._params = {k: (entries.get(k, {}).get("params", {}) or {}) for k in self._passed}
+        self._has_opt_data = bool(entries)
+
+    def registro_cambiato(self) -> bool:
+        """True se `strategy_registry/validated.updated_at` e' diverso da quello
+        letto dall'ultimo `load_params` (26 set 2026, piano del 26 set 15:xx).
+
+        PERCHE'. Il bot ricaricava il registro ogni ora (ADAPT_RELOAD_SECONDS):
+        una coppia validata, declassata o sostituita dal giro delle 03:30 poteva
+        essere operata «alla vecchia» fino a 59 minuti. Il gate scrive
+        `updated_at` a ogni scrittura del registro (`update_registry` in
+        optimize, `merge_into_registry` nella discovery, anche a 1 ora): basta
+        confrontarlo.
+
+        COSTO. Il registro e' un documento da ~1 MB: leggerlo intero ogni
+        minuto sono 1.400 letture e ~1,3 GB al giorno. Sul Firestore vero si
+        chiede al server SOLO il campo (`get_doc_field`, dal 28 set 2026 nel
+        client: una proiezione, il documento resta a casa, viaggia un numero;
+        prima si passava dal client interno `_fs`). Resta UNA lettura al
+        minuto (1.440 al giorno), contata sotto «registro». Un client senza
+        `get_doc_field` (i finti dei test) ricade sulla lettura intera.
+
+        FAIL-OPEN: qualunque errore -> False (si resta sulla ricarica oraria);
+        registro senza `updated_at` (formato vecchio) -> False."""
+        try:
+            campo = getattr(self.fb, "get_doc_field", None)
+            if callable(campo):
+                doc = campo("strategy_registry", "validated", ["updated_at"], **kw_chi(self.fb, "registro")) or {}
+            else:
+                doc = self.fb.get_doc("strategy_registry", "validated") or {}
+            nuovo = doc.get("updated_at")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[adapt] registro non controllato ({str(exc)[:80]}): ricarica oraria")
+            return False
+        if nuovo is None:
+            return False
+        return nuovo != self._registro_updated_at
+
+    def params_for(self, symbol: str) -> dict[str, dict]:
+        """{strategy: params} per l'asset (solo coppie ottimizzate)."""
+        out: dict[str, dict] = {}
+        prefix = f"{symbol}|"
+        for key, params in self._params.items():
+            if key.startswith(prefix):
+                out[key[len(prefix):]] = params
+        return out
+
+    def validated_coins(self) -> set[str]:
+        """Coin distinte con almeno una coppia validata robusta (GATE 1). È l'universo
+        che il bot DEVE valutare a ogni ciclo: sono le uniche coin tradabili, quindi
+        lo scan live va allineato a queste (non a un top-N per volume)."""
+        return {k.split("|", 1)[0] for k in self._passed}
+
+    # ------------------------------------------------------------------ #
+    # Strategie GENERATE (scoperte dal motore di discovery)              #
+    # ------------------------------------------------------------------ #
+    def load_generated(self) -> None:
+        doc = self.fb.get_doc("discovered_strategies", "specs", **kw_chi(self.fb, "registro")) or {}
+        # specs codificate come stringa JSON (limite indici Firestore) -> decode.
+        self._generated_specs = decode_pairs(doc.get("specs"))
+        # e le ESPLORATIVE (25 set 2026, F1bis), nello stesso giro orario. Fail-open:
+        # un documento assente o illeggibile lascia il paper esplorativo vuoto e
+        # non tocca le validate, che sono in `load_params`.
+        try:
+            esp = self.fb.get_doc("strategy_registry", "esplorative", **kw_chi(self.fb, "registro")) or {}
+            self._esplorative = decode_pairs(esp.get("pairs"))
+            self._esplorative_specs = decode_pairs(esp.get("specs"))
+        except Exception as exc:  # noqa: BLE001
+            print(f"[esplorativa] registro esplorative non letto ({str(exc)[:80]}): vuoto")
+            self._esplorative, self._esplorative_specs = {}, {}
+
+    def esplorative_for(self, symbol: str) -> list:
+        """Le strategie ESPLORATIVE di questo asset (25 set 2026, F1bis): i
+        quasi-passaggi scelti dal gate, istanziati come le generate e marcati
+        `esplorativa = True` sull'oggetto, cosi' l'orchestratore li riconosce.
+
+        Vuoto quando: il paper esplorativo e' spento (`ESPLORATIVE_ENABLED`),
+        NON si e' in DRY_RUN (fuori dal paper non si opera mai una coppia che il
+        gate non ha validato: e' la regola, qualunque sia il flag), il registro
+        non e' pronto (il bot resta flat anche per le validate), o la coppia e'
+        nel frattempo diventata validata (la opera gia' `generated_strategies_for`
+        a size piena: non si apre due volte)."""
+        if not settings.DRY_RUN or not settings.ESPLORATIVE_ENABLED:
+            return []
+        if not self._has_opt_data or (settings.REQUIRE_GATE1_READY and not self._passed):
+            return []
+        from bot.strategies.generated import GeneratedStrategy
+        out = []
+        prefix = f"{symbol}|"
+        for key in self._esplorative:
+            if not key.startswith(prefix) or key in self._passed:
+                continue
+            gen_id = key[len(prefix):]
+            spec = self._esplorative_specs.get(gen_id) or self._generated_specs.get(gen_id)
+            if not isinstance(spec, dict):
+                continue
+            try:
+                strat = GeneratedStrategy(spec)
+            except Exception:  # noqa: BLE001
+                continue
+            strat.esplorativa = True
+            out.append(strat)
+        return out
+
+    def is_declassata(self, symbol: str, strategy: str) -> bool:
+        """True se il gate ha DECLASSATO questa coppia validata (26 set 2026,
+        passo 2: `declassata: true` sul record del registro, letto ogni ora).
+        Chi la legge (`main._try_open`) la opera a DECLASSATA_SIZE_MULT della
+        size, senza mai rifiutarla. Fail-open: interruttore spento, coppia non
+        nel registro o flag assente -> False, cioe' size piena come prima."""
+        if not settings.DECLASSATE_ENABLED:
+            return False
+        return f"{symbol}|{strategy}" in self._declassate
+
+    def promessa_per(self, symbol: str, strategy: str) -> Optional[dict]:
+        """La promessa del gate per la coppia, compatta (1 ott 2026, vedi
+        `bot.learning.cattura.promessa_gate`): dal record del registro validato
+        o, per un'esplorativa, dal registro esplorativo, con l'origine della
+        spec. None se la coppia non c'e'. Mai un'eccezione: e' solo misura."""
+        try:
+            from bot.learning.cattura import promessa_gate
+            key = f"{symbol}|{strategy}"
+            rec = (getattr(self, "_promesse", None) or {}).get(key)
+            esp = (self._esplorative or {}).get(key)
+            spec = (self._generated_specs or {}).get(strategy) \
+                or (self._esplorative_specs or {}).get(strategy)
+            generata = str(strategy).startswith("gen_") or bool((rec or {}).get("generated"))
+            return promessa_gate(rec, spec=spec, generata=generata,
+                                 esplorativa_rec=esp if isinstance(esp, dict) else None)
+        except Exception:  # noqa: BLE001
+            return None
+
+    def is_esplorativa(self, symbol: str, strategy: str) -> bool:
+        """True se la coppia e' nel registro esplorativo E non e' validata: una
+        coppia validata nel frattempo e' una validata, non piu' esplorativa."""
+        key = f"{symbol}|{strategy}"
+        return key in self._esplorative and key not in self._passed
+
+    def generated_strategies_for(self, symbol: str) -> list:
+        """Istanzia le strategie GENERATE che sono validate e abilitate per questo
+        asset. Vengono trattate come tutte le altre (gate + pesi del learning)."""
+        from bot.strategies.generated import GeneratedStrategy
+        out = []
+        for gen_id, spec in self._generated_specs.items():
+            if self.is_enabled(symbol, gen_id):
+                out.append(GeneratedStrategy(spec))
+        return out
+
+    def timeframe_for(self, strategy: str) -> Optional[str]:
+        """Il timeframe di una strategia generata (None = quello del bot)."""
+        spec = self._generated_specs.get(strategy) or self._esplorative_specs.get(strategy)
+        return (spec or {}).get("timeframe") or None
+
+    def is_enabled(self, symbol: str, strategy: str) -> bool:
+        """
+        True se la coppia (asset, strategia) è abilitata a operare.
+        Quando l'ottimizzazione ha girato, opera SOLO le coppie che hanno passato
+        la validazione out-of-sample.
+        FAIL-SAFE: se NON ci sono dati di ottimizzazione (registro non caricato:
+        errore transitorio, reset, churn) e REQUIRE_VALIDATED_PAIRS è True, il bot
+        resta FLAT invece di tradare tutto senza validazione. Solo in bootstrap
+        (flag False) si opera coi default in attesa del primo run di ottimizzazione.
+        """
+        if not self._has_opt_data:
+            return not settings.REQUIRE_VALIDATED_PAIRS
+        return f"{symbol}|{strategy}" in self._passed
+
+    def regime_ok(self, symbol: str, strategy: str, regime) -> bool:
+        """False se il GATE ha visto questa coppia PERDERE nel regime corrente
+        (PF < 1 con un campione minimo). FAIL-OPEN: senza dati per-regime (coppia
+        non ancora ri-validata, regime mai visto in OOS) non blocca nulla.
+
+        E' il prior che mancava: il gate conosceva il PF per-regime dai suoi trade
+        OOS ma non lo esportava, cosi' il bot tradava in sideways coppie che il
+        gate stesso sapeva perdere in sideways — e il learning doveva riscoprirlo
+        da zero, a spese del paper."""
+        if not settings.REGIME_FILTER_ENABLED or regime is None:
+            return True
+        info = self._regime_pf.get(f"{symbol}|{strategy}", {})
+        rk = regime.value if hasattr(regime, "value") else str(regime)
+        rec = info.get(rk)
+        if not isinstance(rec, dict):
+            return True
+        try:
+            pf, n = float(rec.get("pf", 99)), int(rec.get("trades", 0))
+        except (TypeError, ValueError):
+            return True
+        return not (n >= settings.GATE_REGIME_MIN_TRADES and pf < 1.0)
+
+    def is_baseline_cycle(self, rng: Optional[random.Random] = None) -> bool:
+        """
+        True con probabilità pari a BASELINE_CAPITAL_FRACTION: in tal caso il ciclo
+        usa la configurazione baseline non adattata (riferimento anti-overfitting).
+        """
+        r = rng or random
+        return r.random() < settings.BASELINE_CAPITAL_FRACTION
