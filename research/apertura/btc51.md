@@ -1,8 +1,8 @@
-# Messaggio di apertura della sessione di ricerca BTC51 (protocollo 3) — BOZZA
+# Messaggio di apertura della sessione di ricerca BTC51 (protocollo 3)
 
-Scritto dal coordinamento il 16 ottobre 2026, da approvare dal proprietario insieme agli esiti del Passo 0. Il
-coordinamento lo manda così com'è alla sessione nuova, aperta con il modello `claude-opus-5-5` e ultracode
-(controllati con `get_session` dopo la creazione).
+Scritto dal coordinamento il 16 ottobre 2026, approvato dal proprietario con gli esiti del Passo 0 il 17 ottobre 2026
+alle 07:15 UTC («Sì apri la sessione»). Il coordinamento lo manda così com'è alla sessione nuova, aperta con il
+modello `claude-opus-5-5` e ultracode (controllati con `get_session` dopo la creazione).
 
 ---
 
