@@ -39,8 +39,8 @@ V-020, ha superato la validazione con +0,167 R su 80 trade (circa 1,2 errori sta
 `research/campagne/BTC51/lezioni.md`, sezione 5. La prima: provare l'idea sulle altre monete sul periodo già usato,
 prima di spendere l'unica apertura del vault. Le soglie a zero e la scelta delle monete sono già qui sotto (P8, P9).
 **Bozza scritta il 17 ott 2026** (sì del proprietario «ok sì, scrivi la bozza del prossimo protocollo»):
-`research/PROTOCOLLO_4.md`, versione 6, ricerca su LINKUSDT con 9 monete di controllo. **Aspetta:** le quattro
-decisioni della sezione 0bis e l'approvazione del testo.
+`research/PROTOCOLLO_4.md`, versione 6, ricerca su LINKUSDT con 9 monete di controllo. **Approvato** dal
+proprietario il 17 ott 2026 alle 20:12 UTC («sì, approvato»): Passo 0 in corso.
 
 ### P9. Protocollo 3, per replicare su altre monete: la scelta delle monete e i contratti morti
 **Perché:** preparando la prova su altre monete (17 ott, `research/altre_monete_3/risultati.md`) sono emerse due

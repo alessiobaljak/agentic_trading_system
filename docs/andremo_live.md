@@ -4020,3 +4020,10 @@ dal protocollo 1 (30 varianti, nessun candidato, vault mai aperto). Corretti tut
 può passare da file che nessuno pensa di aprire, come il CLAUDE.md caricato all'avvio e i titoli dei commit. Inoltre
 le verifiche su più monete vanno misurate contro il caso di ogni moneta, non con l'R semplice: le monete salgono e
 scendono insieme.
+
+### 17 ottobre, 22:12 ora italiana: protocollo 4 approvato
+
+Il proprietario: «sì, approvato», con tutte le proposte (LINKUSDT; le 9 monete di controllo con il vault già aperto;
+niente idee di BTC51 alla ricerca; catalogo intero; le verifiche sulle monete di controllo le fa il coordinamento).
+Comincia il Passo 0: strumenti, dati delle monete di controllo, versioni della macchina di ricerca, collaudo, branch
+pulito. Poi lo STOP con gli esiti.

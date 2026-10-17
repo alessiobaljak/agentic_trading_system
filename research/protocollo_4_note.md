@@ -4,7 +4,14 @@ Solo per il proprietario e il coordinamento: la sessione di ricerca non legge qu
 12), perché contiene fatti del periodo del vault. Scritto il 17 ottobre 2026, dopo il sì del proprietario («ok sì,
 scrivi la bozza del prossimo protocollo»).
 
-## 1. Decisioni del proprietario prima dell'approvazione
+## 0. Approvazione
+
+Il proprietario ha approvato il testo il 17 ottobre 2026 alle 20:12 UTC («sì, approvato»), con tutte le proposte della
+tabella qui sotto: D1 LINKUSDT; D2 BTC, ETH, SOL, XRP, DOGE, BNB, LTC, MATIC, BCH; D3 no (le idee di BTC51 non vanno
+alla ricerca); D4 (b); D5 la prova di parità solo se un candidato supera il vault; D6 le verifiche sulle monete di
+controllo le esegue il coordinamento. Da qui il Passo 0.
+
+## 1. Decisioni del proprietario (prese il 17 ottobre 2026 alle 20:12 UTC, tutte come proposto)
 
 | # | Decisione | Proposta | Alternative e cose da sapere |
 |---|---|---|---|

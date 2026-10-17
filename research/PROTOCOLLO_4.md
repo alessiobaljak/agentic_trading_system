@@ -1,9 +1,8 @@
-# Protocollo di ricerca strategie su LINK — versione 6 (BOZZA)
+# Protocollo di ricerca strategie su LINK — versione 6
 
-> **BOZZA del coordinamento, 17 ottobre 2026, da approvare.** Deriva dalla versione 5.1 (`research/PROTOCOLLO_3.md`,
-> approvata il 16 ottobre 2026), di cui incorpora le correzioni. Finché questa intestazione dice BOZZA, nessuna
-> sessione la esegue. Le decisioni ancora aperte e le motivazioni delle modifiche sono in un file del coordinamento che
-> la sessione di ricerca non legge.
+> **Approvato dal proprietario il 17 ottobre 2026 alle 20:12 UTC** («sì, approvato»). Deriva dalla versione 5.1
+> (`research/PROTOCOLLO_3.md`, approvata il 16 ottobre 2026), di cui incorpora le correzioni. Le motivazioni delle
+> modifiche sono in un file del coordinamento che la sessione di ricerca non legge.
 > Una sola moneta per la ricerca: il contratto perpetuo LINKUSDT di Binance Futures (USDS-M). Nove monete di controllo
 > servono solo alle verifiche scritte qui, che esegue il coordinamento. Nel repository è `research/PROTOCOLLO_4.md`,
 > accanto ai protocolli precedenti, che non cambiano.
