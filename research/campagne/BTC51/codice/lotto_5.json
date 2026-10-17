@@ -1,0 +1,4 @@
+[
+ {"id": "V-030", "specifica": {"timeframe": "30m", "direzione": "long", "filtro": {"codice": "F3", "regime": "bassa"}, "ingresso": {"codice": "E3", "n": 55}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U3", "k": 3.0}]},
+  "previsione_fase4": "Prevedo che fallisca la verifica 3 (blocchi): V-018, idea vicina, aveva tre quarti della somma nel primo semestre 2020 e il 2022 negativo; possibile anche la 2 (timeframe 1h ha pochi trade) o la 4 (trailing: pochi grandi vincenti)"}
+]

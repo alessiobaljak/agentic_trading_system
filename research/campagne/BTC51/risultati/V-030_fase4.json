@@ -1,0 +1,168 @@
+{
+ "1_robustezza": {
+  "prove": [
+   {
+    "mossa": "filtro.atr -20% (14 -> 11)",
+    "trade": 159,
+    "r_medio": 0.18510458999620424
+   },
+   {
+    "mossa": "filtro.atr +20% (14 -> 17)",
+    "trade": 186,
+    "r_medio": 0.21016602949928243
+   },
+   {
+    "mossa": "filtro.finestra -20% (500 -> 400)",
+    "trade": 175,
+    "r_medio": 0.23895634683820446
+   },
+   {
+    "mossa": "filtro.finestra +20% (500 -> 600)",
+    "trade": 172,
+    "r_medio": 0.25244836169734114
+   },
+   {
+    "mossa": "filtro.soglia -20% (30 -> 24)",
+    "trade": 141,
+    "r_medio": 0.15749753156261959
+   },
+   {
+    "mossa": "filtro.soglia +20% (30 -> 36)",
+    "trade": 208,
+    "r_medio": 0.19057825700261077
+   },
+   {
+    "mossa": "ingresso.n -20% (55 -> 44)",
+    "trade": 202,
+    "r_medio": 0.2753470281649066
+   },
+   {
+    "mossa": "ingresso.n +20% (55 -> 66)",
+    "trade": 158,
+    "r_medio": 0.2639658882559424
+   },
+   {
+    "mossa": "stop.atr -20% (14 -> 11)",
+    "trade": 179,
+    "r_medio": 0.24224269454916753
+   },
+   {
+    "mossa": "stop.atr +20% (14 -> 17)",
+    "trade": 180,
+    "r_medio": 0.22762003574917472
+   },
+   {
+    "mossa": "stop.k -20% (2.0 -> 1.6)",
+    "trade": 187,
+    "r_medio": 0.28233748815110815
+   },
+   {
+    "mossa": "stop.k +20% (2.0 -> 2.4)",
+    "trade": 178,
+    "r_medio": 0.17513155371151756
+   },
+   {
+    "mossa": "uscite[0].atr -20% (14 -> 11)",
+    "trade": 181,
+    "r_medio": 0.20691716842675398
+   },
+   {
+    "mossa": "uscite[0].atr +20% (14 -> 17)",
+    "trade": 180,
+    "r_medio": 0.22664497427118724
+   },
+   {
+    "mossa": "uscite[0].k -20% (3.0 -> 2.4)",
+    "trade": 198,
+    "r_medio": 0.12954923229215623
+   },
+   {
+    "mossa": "uscite[0].k +20% (3.0 -> 3.6)",
+    "trade": 174,
+    "r_medio": 0.17689026251774753
+   }
+  ],
+  "supera": true
+ },
+ "2_timeframe_adiacenti": {
+  "prove": [
+   {
+    "timeframe": "15m",
+    "trade": 240,
+    "r_medio": -0.0004555675725639098
+   },
+   {
+    "timeframe": "1h",
+    "trade": 124,
+    "r_medio": -0.053316158833741044
+   }
+  ],
+  "supera": false
+ },
+ "3_blocchi": {
+  "blocchi": [
+   {
+    "da": "inizio",
+    "a": "2020-06-30",
+    "trade": 33,
+    "r_medio": 0.27351502684618745,
+    "somma_r": 9.025995885924186,
+    "quota": 0.2180695470430801
+   },
+   {
+    "da": "2020-07-01",
+    "a": "2021-03-31",
+    "trade": 62,
+    "r_medio": 0.464357734449685,
+    "somma_r": 28.79017953588047,
+    "quota": 0.6955754788753227
+   },
+   {
+    "da": "2021-04-01",
+    "a": "2021-12-31",
+    "trade": 51,
+    "r_medio": 0.0653197044785157,
+    "somma_r": 3.3313049284043013,
+    "quota": 0.08048487568362361
+   },
+   {
+    "da": "2022-01-01",
+    "a": "2022-09-30",
+    "trade": 34,
+    "r_medio": 0.007146058610862723,
+    "somma_r": 0.24296599276933256,
+    "quota": 0.005870098397973684
+   }
+  ],
+  "positivi": 4,
+  "quota_massima": 0.6955754788753227,
+  "supera": false
+ },
+ "4_senza_i_migliori": {
+  "tolti": 9,
+  "r_medio": -0.11693342776733293,
+  "supera": false
+ },
+ "5_costi_doppi": {
+  "r_medio": 0.12201268622190321,
+  "supera": true
+ },
+ "6_troncamento": {
+  "differenze": [],
+  "supera": true
+ },
+ "7_liquidazione": {
+  "violazioni": 0,
+  "supera": true
+ },
+ "9_intrabarra_opposta": {
+  "r_medio": 0.22994692412765716,
+  "differenza": 0.0
+ },
+ "10_ritardo": {
+  "trade": 178,
+  "r_medio": 0.14377618069966536,
+  "differenza": -0.0861707434279918
+ },
+ "candidato": false
+}

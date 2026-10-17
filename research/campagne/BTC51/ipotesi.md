@@ -455,6 +455,32 @@ Previsione: R medio fra −0,15 e +0,1; non superano.
 
 Totale della tornata: 11 varianti (V-024 … V-034), 34 su 40. Restano 6 tentativi per la Fase 3.
 
+### Esito della seconda tornata e Fase 3 (17 ottobre)
+
+Supera la Fase 2 solo **V-030** (tendenza nella calma, 30 minuti, long: 180 trade, +0,230 R, p 0,015), ma **fallisce
+la Fase 4** (verifiche 2, 3 e 4: timeframe vicini −0,000 e −0,053 R; il 70% della somma in un blocco; senza i trade
+migliori −0,117 R). Non è un candidato. La mia previsione era giusta.
+
+Vicine: **V-024** (spremuta long con funding negativo, 30 minuti): +0,193 R con p 0,002, sotto la soglia di 0,2 R per i
+costi (0,073 R di commissioni a trade); **V-032** (VWAP short): +0,016 R, p 0,034.
+
+Osservato nell'analisi dei trade (`risultati/fase3_V-024.json`, `fase3_V-032.json`): lo schema «feriali meglio del fine
+settimana» ricompare in V-024 (+0,285 contro −0,102 R) e V-032 (+0,098 contro −0,172 R), come in V-012 e V-018 (ma
+non in V-011). È un'osservazione sugli stessi dati: **non** ne ricavo ritocchi delle varianti che l'hanno mostrata.
+
+### I-18 — La rottura del range asiatico ha senso solo quando arriva l'Europa (riprende I-05)
+
+**Fonti.** Crabel, 1990; Eross, McGroarty, Urquhart, Wolfe, RIBAF 49, 2019; Baur, Cahill, Godfrey, Liu, FRL 31, 2019. Il
+meccanismo di I-05 è l'arrivo degli operatori europei alle 08:00 UTC con volumi e informazioni nuove: **nel fine
+settimana le borse e le banche europee sono chiuse**, quindi il meccanismo non c'è e la rottura del sabato e della
+domenica è rumore. Il ragionamento è di I-05 (scritto prima dei test del primo lotto); **lo spaccato per giorno di V-013
+e V-014 non l'ho mai guardato**. È però una scelta fatta dopo aver visto lo schema in altre varianti: lo dichiaro.
+**Concorrenti specifiche:** 18-1 V-013 (+−0,025 R) e V-014 (−0,156 R) erano negativi: togliere il fine settimana può
+non bastare (previsione di questa spiegazione: R medio ancora sotto zero).
+- **V-035** · 1h · long · F6 solo feriali · E10 · M · S1 1,5 × ATR · U1 2 R e U2s (stima 296).
+- **V-036** · la stessa, short (stima 268).
+Previsione: long fra −0,05 e +0,15 R, short fra −0,2 e 0; non superano.
+
 ## Piano dei tentativi
 
 Primo lotto: 19 varianti (V-001 … V-019), una per riga, in quest'ordine. Restano 21 tentativi per la Fase 3 (filtri
