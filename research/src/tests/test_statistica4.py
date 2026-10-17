@@ -149,3 +149,40 @@ def test_entrate_casuali_con_trade_danno_le_stesse_simulazioni():
     assert len(trade) == 50 and all(len(x) == n for x in trade)
     assert np.allclose([np.mean(x) for x in trade], con["valori"])
     assert st3._OSSERVATORE is None
+
+
+# --------------------------------------------------------------------------- Fase 2 e Fase 4 complete
+
+
+def test_fase2_4_con_i_costi_di_btc_e_la_fase2_del_protocollo_3():
+    from research.src.motore3 import Costi
+    from research.src.tests.test_statistica3 import V_VANTAGGIO, serie_con_vantaggio
+    s = serie_con_vantaggio("4h")
+    fine = len(s.ts) - 1
+    vecchia = st3.fase2(V_VANTAGGIO, s, 0, fine, n_simulazioni=100)
+    nuova = st4.fase2_4(V_VANTAGGIO, s, 0, fine, regole=Regole(), costi=Costi(), n_simulazioni=100)
+    assert nuova["metriche"]["r_medio"] == vecchia["metriche"]["r_medio"]
+    assert nuova["p_value"] == vecchia["p_value"]
+    link = st4.fase2_4(V_VANTAGGIO, s, 0, fine, n_simulazioni=100)
+    assert link["metriche"]["trade"] == vecchia["metriche"]["trade"]
+    assert link["metriche"]["r_medio"] < vecchia["metriche"]["r_medio"]  # slippage 0,02% invece di 0,01%
+
+
+def test_fase4_4_ha_le_verifiche_del_protocollo_4():
+    from research.src.tests.test_statistica3 import V_VANTAGGIO, serie_con_vantaggio
+    s = serie_con_vantaggio("4h")
+    fine = len(s.ts) - 1
+
+    def serie_di(tf):
+        x = serie_con_vantaggio(tf)
+        return x, 0, len(x.ts) - 1
+
+    giornaliera = serie_con_vantaggio("1d")
+    esito = st4.fase4_4(V_VANTAGGIO, s, 0, fine, serie_di, giornaliera)
+    for chiave in ("1_robustezza", "2_timeframe_adiacenti", "3_blocchi", "3bis_mercati_forti",
+                   "4_senza_i_migliori", "5_costi_doppi", "6_troncamento", "7_liquidazione",
+                   "9_intrabarra_opposta", "10_ritardo"):
+        assert chiave in esito
+    assert esito["3_blocchi"]["blocchi"][1]["da"] == "2020-10-01"
+    assert "casuali_r_medio_senza_migliori" in esito["4_senza_i_migliori"]
+    assert "12" in esito["manca"]

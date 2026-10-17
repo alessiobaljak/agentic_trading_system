@@ -1,0 +1,197 @@
+{
+ "fonte": "https://www.binance.com/bapi/futures/v1/friendly/future/common/brackets (pubblica, senza chiave)",
+ "letta": "2026-10-17T20:36Z",
+ "monete": {
+  "LINKUSDT": {
+   "primo_livello_fino_a_usdt": 10000,
+   "margine_mantenimento": 0.005,
+   "importo_mantenimento": 0,
+   "leva_massima": 75,
+   "aggiornata": "2025-08-21",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     10000,
+     0.005,
+     0
+    ],
+    [
+     10000,
+     200000,
+     0.01,
+     50
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.01
+  },
+  "BTCUSDT": {
+   "primo_livello_fino_a_usdt": 300000,
+   "margine_mantenimento": 0.004,
+   "importo_mantenimento": 0,
+   "leva_massima": 150,
+   "aggiornata": "2025-08-19",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     300000,
+     0.004,
+     0
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.004
+  },
+  "ETHUSDT": {
+   "primo_livello_fino_a_usdt": 300000,
+   "margine_mantenimento": 0.004,
+   "importo_mantenimento": 0,
+   "leva_massima": 150,
+   "aggiornata": "2025-08-19",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     300000,
+     0.004,
+     0
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.004
+  },
+  "SOLUSDT": {
+   "primo_livello_fino_a_usdt": 50000,
+   "margine_mantenimento": 0.005,
+   "importo_mantenimento": 0,
+   "leva_massima": 100,
+   "aggiornata": "2025-06-23",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     50000,
+     0.005,
+     0
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.005
+  },
+  "XRPUSDT": {
+   "primo_livello_fino_a_usdt": 40000,
+   "margine_mantenimento": 0.005,
+   "importo_mantenimento": 0,
+   "leva_massima": 100,
+   "aggiornata": "2025-07-17",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     40000,
+     0.005,
+     0
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.005
+  },
+  "DOGEUSDT": {
+   "primo_livello_fino_a_usdt": 80000,
+   "margine_mantenimento": 0.0065,
+   "importo_mantenimento": 0,
+   "leva_massima": 75,
+   "aggiornata": "2025-06-24",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     80000,
+     0.0065,
+     0
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.0065
+  },
+  "BNBUSDT": {
+   "primo_livello_fino_a_usdt": 10000,
+   "margine_mantenimento": 0.005,
+   "importo_mantenimento": 0,
+   "leva_massima": 75,
+   "aggiornata": "2025-08-21",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     10000,
+     0.005,
+     0
+    ],
+    [
+     10000,
+     200000,
+     0.006,
+     10
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.006
+  },
+  "LTCUSDT": {
+   "primo_livello_fino_a_usdt": 10000,
+   "margine_mantenimento": 0.005,
+   "importo_mantenimento": 0,
+   "leva_massima": 75,
+   "aggiornata": "2024-12-12",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     10000,
+     0.005,
+     0
+    ],
+    [
+     10000,
+     50000,
+     0.01,
+     50
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.01
+  },
+  "MATICUSDT": {
+   "primo_livello_fino_a_usdt": 10000,
+   "margine_mantenimento": 0.006,
+   "importo_mantenimento": 0,
+   "leva_massima": 51,
+   "aggiornata": "2024-08-27",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     10000,
+     0.006,
+     0
+    ],
+    [
+     10000,
+     25000,
+     0.007,
+     10
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.007
+  },
+  "BCHUSDT": {
+   "primo_livello_fino_a_usdt": 10000,
+   "margine_mantenimento": 0.005,
+   "importo_mantenimento": 0,
+   "leva_massima": 75,
+   "aggiornata": "2024-12-12",
+   "livelli_fino_a_20000_usdt": [
+    [
+     0,
+     10000,
+     0.005,
+     0
+    ],
+    [
+     10000,
+     100000,
+     0.01,
+     50
+    ]
+   ],
+   "margine_mantenimento_massimo_fino_a_20000_usdt": 0.01
+  }
+ },
+ "nota": "Con capitale 10.000 USDT e leva 2 (sezione 9.4) una posizione vale al massimo 20.000 USDT: contano i livelli fino a 20.000. Tabella di oggi, non quella storica (come nel protocollo 3)."
+}

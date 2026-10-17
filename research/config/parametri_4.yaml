@@ -1,0 +1,125 @@
+# Parametri del protocollo 4 (research/PROTOCOLLO_4.md), Passo 0 punto 7.
+# I fatti trovati al Passo 0 e tutti i numeri del documento, con la sezione da cui vengono.
+# Si congela all'approvazione degli esiti del Passo 0: da li' in poi nessuno lo cambia (sezione 13bis.5).
+versione_protocollo: "6 (protocollo 4)"
+approvazione_testo: "2026-10-17T20:12:00Z"
+stato: "bozza del Passo 0; si congela all'approvazione degli esiti"
+
+versioni:  # regola 11 e Passo 0 punto 8: quelle della macchina delle sessioni di ricerca, uguali in tutte le cifre
+  python: "DA_LEGGERE"
+  numpy: "DA_LEGGERE"
+  scipy: "DA_LEGGERE"
+
+moneta: LINKUSDT
+fonte_dati:
+  archivio: "https://data.binance.vision/data/futures/um/monthly"
+  tipi: [klines, markPriceKlines, fundingRate]
+  timeframe: ["15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d"]
+  prima_candela_linkusdt_1h: "2020-01-17T08:00:00Z"  # fatti_monete.json; la candela giornaliera del 2020-01-17 apre alle 00:00
+  file_insample_linkusdt: 912
+  impronta_d_insieme_linkusdt: "10c01049a6242a5badcea13cdd3dbfc27e5fa2cdb238195cea1a914a3c5149eb"  # sha256 dell'elenco "nome impronta" in ordine; impronte una per una in research/passo0_4/fatti_monete.json
+
+periodi:  # sezione 4
+  costruzione: {da: "2020-01-17T08:00:00Z", a: "2022-09-30T23:59:59Z"}
+  validazione: {da: "2022-10-01T00:00:00Z", a: "2023-12-31T23:59:59Z"}
+  vault: {da: "2024-01-01T00:00:00Z", a: "2026-09-30T23:59:59Z"}
+  marcatore_vault: "research/vault/APERTURA_4.md"
+  frase_vault: "APRI IL VAULT 4"  # scritta al coordinamento, dopo lo STOP del Passo 4 (sezione 0)
+  via_libera_validazione: "research/campagne/LINK6/via_libera_validazione.md"
+
+vantaggio_e_trade:  # sezione 5
+  vantaggio_minimo_r: 0.2
+  dispersione_r: 1.2
+  minimo_trade: {costruzione: 150, validazione: 60, vault: 100}
+  frequenza_minima_trade_al_mese: 4.6
+
+costi:  # sezione 6 (research/src/statistica4.py: COSTI_LINK, COSTI_DOPPI_LINK)
+  commissione_taker: 0.0005
+  commissione_maker: 0.0002
+  slippage_per_lato: 0.0002  # LINKUSDT, volume 2023 319 milioni di USDT al giorno (365 giorni): fascia 200 milioni - 1 miliardo
+  costi_doppi: {commissione_taker: 0.0010, commissione_maker: 0.0004, slippage_per_lato: 0.0004, funding: "invariato"}
+  fonte_commissioni: "pagina di supporto Binance USDⓈ-M futures trading fees (aggiornata il 2026-05-01): utente normale maker 0,02%, taker 0,05%"
+
+motore:  # sezioni 7.6-7.8 e 9 (research/src/statistica4.py: REGOLE_LINK)
+  stop_minimo: 0.003
+  serie_stop: "last_e_mark"  # fatto serie_stop (config/bot_4.md, punto 1)
+  serie_liquidazione: mark
+  intrabarra: "stop_prima"
+  riscaldamento_ricorsivi: 3
+  finestra_atr_percentile: 500
+  capitale_usdt: 10000
+  rischio_per_trade: 0.01
+  leva_massima: 2  # fatto regole_dimensione_bot (config/bot_4.md, punto 2)
+  margine: isolato
+  margine_mantenimento: 0.01  # LINKUSDT: 0,5% fino a 10.000 USDT, 1% oltre; si usa il piu' alto fino a 20.000 (config/bot_4.md, punto 5)
+  importo_mantenimento_usdt: 0
+  fattore_liquidazione: 0.8
+  istanti_troncamento: 200
+  seme: 2026
+  funding_per_i_segnali: "riportato a 8 ore: tasso x 8 / ore dell'intervallo (sezione 7.2)"
+  intervalli_funding_linkusdt: {"8": 4334}  # regolamenti per ore di intervallo, 2020-2023
+
+catalogo:  # sezione 7
+  scelta_7_10: "b"  # proprietario, 2026-10-17 (D4)
+  varianti_massime: 40
+  condizioni_massime: 3
+  limit: {k: [0.25, 0.5], validita_candele: [1, 3], riempimento_severo: 0.0005}
+
+statistica:  # sezione 10
+  simulazioni_casuali: 1000
+  seme: 2026
+  fasce_larghezza_stop: 5
+  costruzione: {trade_minimi: 150, r_medio_minimo: 0.2, p_value_massimo: 0.023}
+  validazione: {trade_minimi: 60, r_medio_positivo: true, frazione_minima_di_costruzione: 0.5, profit_factor_minimo: 1.05, positivo_a_costi_doppi: true}
+  validazione_monete_di_controllo: {trade_minimi_per_moneta: 20, monete_minime: 5, vantaggio_medio_minimo_r: 0.1, r_medio_medio_positivo: true}
+  vault: {trade_minimi: 100, r_medio_positivo: true, positivo_a_costi_doppi: true, profit_factor_minimo: 1.10, benjamini_hochberg: 0.10}
+
+fase3:  # Passo 2, Fase 3, punti 3 e 4
+  miglioramento_minimo_sulle_monete_di_controllo_r: 0.05
+  trade_minimi_per_moneta: 30
+  monete_minime: 5
+
+fase4:  # Passo 2, Fase 4
+  robustezza_spostamento: 0.20
+  robustezza_passo_fisso: {funding: 0.00005, periodi_e_candele: 1, multipli: 0.1, soglie_rsi_stocastico: 0.1, percentuale_stop: 0.001}
+  blocchi: [["inizio", "2020-09-30"], ["2020-10-01", "2021-05-31"], ["2021-06-01", "2022-01-31"], ["2022-02-01", "2022-09-30"]]
+  blocchi_positivi_minimi: 3
+  quota_massima_di_un_blocco: 0.5
+  mercati_forti: {variazione_semestrale: 0.30, trade_minimi_per_gruppo: 30, candele: "1d"}
+  trade_migliori_tolti: 0.05
+  senza_i_migliori_frazione_minima_del_vantaggio_sul_caso: 0.5
+  verifica_12: {monete_che_battono_il_caso_minime: 7, trade_minimi_per_moneta: 30, media_r_positiva: true}
+
+monete_di_controllo:  # sezione 4bis; i dati e i risultati li tiene il coordinamento (regola 10)
+  BTCUSDT: {prima_candela: "2020-01-01", volume_2023_milioni_usdt_al_giorno: 11505, slippage_per_lato: 0.0001, margine_mantenimento: 0.004, intervalli_funding_1h: {"8": 4383}, buchi_last_1h: 0, mark_sostituite_1h: 192, file: 912, impronta_d_insieme: "4d5792ffda021090ee83c5f05e8cca9d09867a1e2ac436af2715d3f83cef7fcd"}
+  ETHUSDT: {prima_candela: "2020-01-01", volume_2023_milioni_usdt_al_giorno: 5513, slippage_per_lato: 0.0001, margine_mantenimento: 0.004, intervalli_funding_1h: {"8": 4383}, buchi_last_1h: 0, mark_sostituite_1h: 48, file: 912, impronta_d_insieme: "dd7e2bde2e94c72fecd58cc27112c27660d3fecf4cf6a813e15b467d5614d496"}
+  SOLUSDT: {prima_candela: "2020-09-14", volume_2023_milioni_usdt_al_giorno: 1104, slippage_per_lato: 0.0001, margine_mantenimento: 0.005, intervalli_funding_1h: {"2": 99, "4": 2, "8": 3587}, buchi_last_1h: 2, mark_sostituite_1h: 168, file: 760, impronta_d_insieme: "3d1df00be9d306f55f3682cf327770b441550125bafc415b7585e13a24bbe2f9"}
+  XRPUSDT: {prima_candela: "2020-01-06", volume_2023_milioni_usdt_al_giorno: 811, slippage_per_lato: 0.0002, margine_mantenimento: 0.005, intervalli_funding_1h: {"8": 4367}, buchi_last_1h: 2, mark_sostituite_1h: 168, file: 912, impronta_d_insieme: "9dbe4dbc4436493e830c538637d083fc4155cf391d9d1b62fe7e9f19e845714a"}
+  DOGEUSDT: {prima_candela: "2020-07-10", volume_2023_milioni_usdt_al_giorno: 519, slippage_per_lato: 0.0002, margine_mantenimento: 0.0065, intervalli_funding_1h: {"8": 3809}, buchi_last_1h: 0, mark_sostituite_1h: 48, file: 798, impronta_d_insieme: "a74f16b579be2f2fc3ca9e56ea3d6b396109c01c2ca717d99fa88944ef9173ae"}
+  BNBUSDT: {prima_candela: "2020-02-10", volume_2023_milioni_usdt_al_giorno: 401, slippage_per_lato: 0.0002, margine_mantenimento: 0.006, intervalli_funding_1h: {"8": 4262}, buchi_last_1h: 0, mark_sostituite_1h: 192, file: 893, impronta_d_insieme: "6b2a0020949d7fb424fb87b38d6dfe9936d0d0e3d24836852644452e2b0b07cb"}
+  LTCUSDT: {prima_candela: "2020-01-09", volume_2023_milioni_usdt_al_giorno: 382, slippage_per_lato: 0.0002, margine_mantenimento: 0.01, intervalli_funding_1h: {"8": 4358}, buchi_last_1h: 2, mark_sostituite_1h: 48, file: 912, impronta_d_insieme: "5b7f35f0e9e6ddd570dc7319983865d4b673ffe2a6ab2fde02b5fd6258666678"}
+  MATICUSDT: {prima_candela: "2020-10-22", volume_2023_milioni_usdt_al_giorno: 374, slippage_per_lato: 0.0002, margine_mantenimento: 0.007, intervalli_funding_1h: {"8": 3497}, buchi_last_1h: 0, mark_sostituite_1h: 192, file: 741, impronta_d_insieme: "90164af94bbcfbadc224fb5ff6aa7aeab89a12831b3034b41cb7ecd85e4e4a9a"}
+  BCHUSDT: {prima_candela: "2020-01-01", volume_2023_milioni_usdt_al_giorno: 339, slippage_per_lato: 0.0002, margine_mantenimento: 0.01, intervalli_funding_1h: {"8": 4383}, buchi_last_1h: 0, mark_sostituite_1h: 48, file: 912, impronta_d_insieme: "d2f65e9c8a7a633ea439663224a43785990c7b039a9353fb20ccd02bd800c257"}
+
+altre_monete:  # Passo 6: le monete di controllo, sul vault (seconda lettura, informativa)
+  trade_minimi: 100
+  profit_factor_minimo: 1.10
+  p_value_massimo: 0.10
+  correlazione_massima: 0.5
+  monete_minime: 3
+
+paper:  # Passo 8
+  trade_necessari: 40
+  durata_massima_mesi: 12
+  trade_diversi_massimi: 0.10
+  bocciatura_drawdown_volte_vault: 1.5
+
+collaudo:  # sezione 13bis
+  serie_senza_direzione_per_timeframe: 30
+  lancio_di_ogni_candela: "dipende dal seme, dalla moneta e dall'ora della candela"
+  prova_a: {varianti_finte: 100, seme: 2026, trade_stimati_minimi: 150, massimo_che_superano: 5, massimo_p_sotto_0_10: 15, verifica_12_massimo_che_battono_7_su_9: 17}
+  prova_b: {serie: 30, ampiezze: [0.0, 0.6, 1.2], ampiezza_di_riserva: 1.8, candele_del_vantaggio: 12, candele_del_ritorno: 240,
+            massimo_che_superano_senza_vantaggio: 3, soglia_r_netto: 0.35, quota_minima_che_supera: 0.80, serie_minime_alla_soglia: 20,
+            verifica_12_con_vantaggio: {regole: [B1, B2], ampiezze: [0.6, 1.2], semi: 10, minimo_che_passano_con_1_2: 8}}
+  prova_c: {quando: "dopo il vault, prima del paper (D5)", da: "2021-10-01", a: "2022-09-30", segnali_identici: 1.0, trade_identici_minimi: 0.98, differenza_r_massima: 0.01}
+  ore_massime_di_calcolo: 24

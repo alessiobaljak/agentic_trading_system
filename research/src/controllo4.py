@@ -34,6 +34,13 @@ MONETE_CONTROLLO: Dict[str, float] = {
     "BTCUSDT": 0.0001, "ETHUSDT": 0.0001, "SOLUSDT": 0.0001, "XRPUSDT": 0.0002, "DOGEUSDT": 0.0002,
     "BNBUSDT": 0.0002, "LTCUSDT": 0.0002, "MATICUSDT": 0.0002, "BCHUSDT": 0.0002,
 }
+#: margine di mantenimento di ogni moneta: il piu' alto dei livelli di Binance fino a 20.000 USDT di
+#: valore della posizione (capitale 10.000 x leva 2; tabella pubblica letta il 17 ottobre 2026,
+#: ``research/passo0_4/livelli_margine.json``)
+MARGINE_CONTROLLO: Dict[str, float] = {
+    "BTCUSDT": 0.004, "ETHUSDT": 0.004, "SOLUSDT": 0.005, "XRPUSDT": 0.005, "DOGEUSDT": 0.0065,
+    "BNBUSDT": 0.006, "LTCUSDT": 0.01, "MATICUSDT": 0.007, "BCHUSDT": 0.01,
+}
 TRADE_MINIMI_12 = 30
 MONETE_CHE_BATTONO_12 = 7
 MIGLIORAMENTO_FASE3 = 0.05
@@ -49,6 +56,10 @@ def costi_moneta(simbolo: str, doppi: bool = False) -> Costi:
     if doppi:
         return Costi(taker=COSTI_DOPPI.taker, maker=COSTI_DOPPI.maker, slippage=2 * s)
     return Costi(slippage=s)
+
+
+def regole_moneta(simbolo: str) -> Regole:
+    return Regole(mmr=MARGINE_CONTROLLO[simbolo])
 
 
 def _intervallo(serie: Serie, da_ms: Optional[int], a_ms: int):
@@ -69,16 +80,18 @@ def _una_moneta(variante: dict, serie: Serie, simbolo: str, da_ms: Optional[int]
         return out
     a, b = rng
     c = compila(variante, serie, solo_catalogo=False)
-    ris = esegui(c, Regole(), costi_moneta(simbolo), a, b)
+    regole = regole_moneta(simbolo)
+    ris = esegui(c, regole, costi_moneta(simbolo), a, b)
     m = metriche(ris, serie)
     out.update(trade=m["trade"], r_medio=m["r_medio"] if m["trade"] else None,
-               profit_factor=m["profit_factor"] if m["trade"] else None)
+               profit_factor=m["profit_factor"] if m["trade"] else None,
+               violazioni_liquidazione=m.get("violazioni_liquidazione"))
     if doppi and m["trade"]:
-        md = metriche(esegui(c, Regole(), costi_moneta(simbolo, doppi=True), a, b), serie)
+        md = metriche(esegui(c, regole, costi_moneta(simbolo, doppi=True), a, b), serie)
         out["r_medio_costi_doppi"] = md["r_medio"]
     if con_casuali and m["trade"]:
         try:
-            cas = st3.entrate_casuali(c, m["trade"], a, b, Regole(), costi_moneta(simbolo), n_simulazioni, seme,
+            cas = st3.entrate_casuali(c, m["trade"], a, b, regole, costi_moneta(simbolo), n_simulazioni, seme,
                                       larghezze_candidato=[st3.larghezza_stop(t) for t in ris.trade])
             out["media_casuali"] = float(np.mean(cas["valori"]))
             out["p_value"] = st3.p_value(m["r_medio"], cas["valori"], n_simulazioni)

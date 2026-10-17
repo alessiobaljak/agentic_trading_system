@@ -23,6 +23,13 @@ from research.src import statistica3 as st3
 from research.src.catalogo3 import Compilata, Serie, normalizza
 from research.src.motore3 import COSTI_NORMALI, Costi, Regole, Risultato
 
+#: regole e costi della ricerca su LINKUSDT (sezioni 6 e 9.4): slippage 0,02% a lato; margine di
+#: mantenimento 1%, il piu' alto dei livelli di Binance fino a 20.000 USDT di valore della posizione
+#: (tabella pubblica letta il 17 ottobre 2026: 0,5% fino a 10.000, 1% oltre)
+REGOLE_LINK = Regole(mmr=0.01)
+COSTI_LINK = Costi(slippage=0.0002)
+COSTI_DOPPI_LINK = Costi(taker=0.0010, maker=0.0004, slippage=0.0004)
+
 # ---------------------------------------------------------------------------
 # Verifica 1 — robustezza dei parametri, con il passo fisso
 # ---------------------------------------------------------------------------
@@ -256,3 +263,126 @@ def senza_i_migliori_4(ris: Risultato, trade_casuali: Sequence[Sequence[float]],
     return {"trade_tolti": len(rr) - len(tolti), "r_medio": intero, "r_medio_senza_migliori": r_tolti,
             "casuali_r_medio": casuali_intere, "casuali_r_medio_senza_migliori": casuali_tolte,
             "vantaggio": vantaggio, "vantaggio_senza_migliori": vantaggio_tolti, "supera": supera}
+
+
+# ---------------------------------------------------------------------------
+# Fase 2 e Fase 4 complete per LINKUSDT (costi e margine della moneta)
+# ---------------------------------------------------------------------------
+
+def fase2_4(variante: dict, serie: Serie, inizio: int, fine: int, regole: Regole = REGOLE_LINK,
+            costi: Costi = COSTI_LINK, n_simulazioni: int = st3.N_SIMULAZIONI, seme: int = st3.SEME,
+            solo_catalogo: bool = True, compilata: Optional[Compilata] = None) -> Dict[str, object]:
+    """La Fase 2 completa (``statistica3.fase2``) con i costi e il margine di LINKUSDT. Stesse chiavi
+    nel risultato."""
+    from research.src.catalogo3 import compila
+    from research.src.motore3 import esegui, metriche
+    c = compilata if compilata is not None else compila(variante, serie, solo_catalogo=solo_catalogo)
+    ris = esegui(c, regole, costi, inizio, fine)
+    m = metriche(ris, serie)
+    p = None
+    casuali = None
+    if m["trade"] > 0:
+        casuali = st3.entrate_casuali(c, m["trade"], inizio, fine, regole, costi, n_simulazioni, seme,
+                                      larghezze_candidato=[st3.larghezza_stop(t) for t in ris.trade])
+        p = st3.p_value(m["r_medio"], casuali["valori"], n_simulazioni)
+    esiti = st3.supera_costruzione(m, p)
+    return {"metriche": m, "p_value": p,
+            "casuali": None if casuali is None else {k: v for k, v in casuali.items() if k != "valori"},
+            "valori_casuali": None if casuali is None else casuali["valori"],
+            "esiti": esiti, "supera": esiti["supera"],
+            "buy_and_hold": st3.buy_and_hold(serie, inizio, fine),
+            "somma_r_strategia": sum(t.r for t in ris.trade), "risultato": ris, "compilata": c}
+
+
+def fase4_4(variante: dict, serie: Serie, inizio: int, fine: int, serie_di, serie_giornaliera: Serie,
+            regole: Regole = REGOLE_LINK, costi: Costi = COSTI_LINK, costi_doppi: Costi = COSTI_DOPPI_LINK,
+            base: Optional[Dict[str, object]] = None) -> Dict[str, object]:
+    """Le verifiche della Fase 4 del protocollo 4 fatte dalla sessione di ricerca (tutte tranne la 12,
+    che esegue il coordinamento): 1, 3, 3bis e 4 nella forma nuova, le altre come nel protocollo 3,
+    con i costi e il margine di LINKUSDT. ``serie_di(timeframe)`` da' la serie di un altro timeframe
+    con gli indici del periodo (verifica 2); ``serie_giornaliera`` le candele giornaliere di LINKUSDT
+    della costruzione (verifica 3bis)."""
+    from dataclasses import replace
+
+    from research.src.catalogo3 import TIMEFRAME_MS, VarianteNonValida, compila, sposta_periodi
+    from research.src.motore3 import esegui, metriche, test_troncamento
+    v = normalizza(variante)
+    if base is None:
+        base = fase2_4(variante, serie, inizio, fine, regole, costi)
+    ris0: Risultato = base["risultato"]
+    c0: Compilata = base["compilata"]
+    r0 = base["metriche"]["r_medio"]
+    out: Dict[str, object] = {}
+
+    # 1. robustezza dei parametri (con il passo fisso)
+    mosse, non_provate = mosse_robustezza_4(v)
+    prove = [{"mossa": e, "non_provata": "valore non valido"} for e in non_provate]
+    for etichetta, w in mosse:
+        try:
+            cw = compila(w, serie, solo_catalogo=False)
+        except VarianteNonValida as e:
+            prove.append({"mossa": etichetta, "non_provata": str(e)})
+            continue
+        m = metriche(esegui(cw, regole, costi, inizio, fine), serie)
+        prove.append({"mossa": etichetta, "trade": m["trade"], "r_medio": m["r_medio"]})
+    provate = [p for p in prove if "r_medio" in p]
+    out["1_robustezza"] = {"prove": prove, "supera": bool(provate) and all(p["r_medio"] > 0 for p in provate)}
+
+    # 2. timeframe adiacenti
+    prove = []
+    for tf in st3.timeframe_adiacenti(v["timeframe"], v):
+        s2, a2, b2 = serie_di(tf)
+        fattore = TIMEFRAME_MS[v["timeframe"]] / TIMEFRAME_MS[tf]
+        try:
+            w = sposta_periodi(v, fattore)
+            w["timeframe"] = tf
+            cw = compila(w, s2, solo_catalogo=False)
+        except VarianteNonValida as e:
+            prove.append({"timeframe": tf, "non_provata": str(e)})
+            continue
+        m = metriche(esegui(cw, regole, costi, a2, b2), s2)
+        prove.append({"timeframe": tf, "trade": m["trade"], "r_medio": m["r_medio"]})
+    provate = [p for p in prove if "r_medio" in p]
+    out["2_timeframe_adiacenti"] = {"prove": prove,
+                                    "supera": bool(provate) and all(p["r_medio"] > 0 for p in provate)}
+
+    # 3. stabilita' nel tempo (blocchi di circa 8 mesi) e 3bis. mercati forti
+    out["3_blocchi"] = stabilita_blocchi_4(ris0)
+    out["3bis_mercati_forti"] = mercati_forti(ris0, serie_giornaliera)
+    # 4. pochi trade estremi, contro il caso tolto allo stesso modo
+    _, trade_casuali = entrate_casuali_con_trade(
+        c0, len(ris0.trade), inizio, fine, regole, costi,
+        larghezze_candidato=[st3.larghezza_stop(t) for t in ris0.trade])
+    out["4_senza_i_migliori"] = senza_i_migliori_4(ris0, trade_casuali)
+    # 5. costi doppi
+    md = metriche(esegui(c0, regole, costi_doppi, inizio, fine), serie)
+    out["5_costi_doppi"] = {"r_medio": md["r_medio"], "supera": md["r_medio"] > 0}
+    # 6. troncamento
+    diff = test_troncamento(v, serie, inizio, fine)
+    out["6_troncamento"] = {"differenze": diff, "supera": not diff}
+    # 7. liquidazione
+    viol = base["metriche"]["violazioni_liquidazione"]
+    out["7_liquidazione"] = {"violazioni": viol, "supera": viol == 0}
+    limit = v["tipo_ingresso"]["codice"] == "L"
+    # 8. riempimento severo (solo limit)
+    if limit:
+        ms = metriche(esegui(c0, replace(regole, scarto_riempimento=0.0005), costi, inizio, fine), serie)
+        out["8_riempimento_severo"] = {"trade": ms["trade"], "r_medio": ms["r_medio"], "supera": ms["r_medio"] > 0}
+    # 9. regola intra-barra opposta (informativa)
+    mi = metriche(esegui(c0, replace(regole, intrabarra="target_prima"), costi, inizio, fine), serie)
+    out["9_intrabarra_opposta"] = {"r_medio": mi["r_medio"], "differenza": mi["r_medio"] - r0}
+    # 10. ritardo di una candela (informativa)
+    mr = metriche(esegui(c0, replace(regole, ritardo=1), costi, inizio, fine), serie)
+    out["10_ritardo"] = {"trade": mr["trade"], "r_medio": mr["r_medio"], "differenza": mr["r_medio"] - r0}
+    # 11. versione a mercato (solo limit, informativa)
+    if limit:
+        w = normalizza(v)
+        w["tipo_ingresso"] = {"codice": "M"}
+        cm = compila(w, serie)
+        mm = metriche(esegui(cm, regole, costi, inizio, fine), serie)
+        out["11_versione_a_mercato"] = {"trade": mm["trade"], "r_medio": mm["r_medio"], "differenza": r0 - mm["r_medio"]}
+    decisive = ["1_robustezza", "2_timeframe_adiacenti", "3_blocchi", "3bis_mercati_forti", "4_senza_i_migliori",
+                "5_costi_doppi", "6_troncamento", "7_liquidazione"] + (["8_riempimento_severo"] if limit else [])
+    out["decisive_superate"] = all(out[k]["supera"] for k in decisive)
+    out["manca"] = "12_monete_di_controllo (la esegue il coordinamento, regola 10)"
+    return out
