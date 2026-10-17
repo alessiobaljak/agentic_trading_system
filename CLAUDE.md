@@ -24,7 +24,9 @@ strategie su BTCUSDT; il paper è l'esame finale. La seconda edizione (`research
 in `research/campagne/BTC51/lezioni.md`. **Dal 17 ott 2026 vale il protocollo 4** (`research/PROTOCOLLO_4.md`, versione 6,
 approvato alle 20:12 UTC): ricerca su LINKUSDT con 9 monete di controllo, campagna `LINK6` sul branch
 `research/campagna/LINK6` (rientra nell'eccezione dei branch di ricerca), vault con la frase esatta «APRI IL VAULT 4»
-scritta al coordinamento. Decisioni e motivazioni in `research/protocollo_4_note.md`. Passo 0 in corso.
+scritta al coordinamento. Decisioni e motivazioni in `research/protocollo_4_note.md`. Passo 0 in corso. **Delega del
+proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
+della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e

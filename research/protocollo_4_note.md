@@ -11,6 +11,12 @@ tabella qui sotto: D1 LINKUSDT; D2 BTC, ETH, SOL, XRP, DOGE, BNB, LTC, MATIC, BC
 alla ricerca); D4 (b); D5 la prova di parità solo se un candidato supera il vault; D6 le verifiche sulle monete di
 controllo le esegue il coordinamento. Da qui il Passo 0.
 
+**Delega del 17 ottobre 2026, verso le 21:10 UTC:** «ok, dimmi quando il collaudo è finito, se quando è finito serve
+qualche modifica procedi in autonimia con gli altri passi non mi chiedere il permesso». Il coordinamento corregge e
+rifà il collaudo se serve, apre la sessione di ricerca, risponde ai suoi STOP e scrive il via libera alla validazione
+senza aspettare il proprietario, dicendogli ogni volta cosa ha fatto. Resta al proprietario il vault: si apre solo con
+la sua frase esatta «APRI IL VAULT 4» scritta al coordinamento (regola 1, sezione 0).
+
 ## 1. Decisioni del proprietario (prese il 17 ottobre 2026 alle 20:12 UTC, tutte come proposto)
 
 | # | Decisione | Proposta | Alternative e cose da sapere |

@@ -6,9 +6,9 @@ approvazione_testo: "2026-10-17T20:12:00Z"
 stato: "bozza del Passo 0; si congela all'approvazione degli esiti"
 
 versioni:  # regola 11 e Passo 0 punto 8: quelle della macchina delle sessioni di ricerca, uguali in tutte le cifre
-  python: "DA_LEGGERE"
-  numpy: "DA_LEGGERE"
-  scipy: "DA_LEGGERE"
+  python: "3.13.16"  # sessione di prova session_01WAjzJ2qP6vT3KsYghVfYbf, 17 ottobre 2026 20:51 UTC
+  numpy: "2.5.3"
+  scipy: "1.18.1"
 
 moneta: LINKUSDT
 fonte_dati:

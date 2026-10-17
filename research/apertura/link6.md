@@ -1,8 +1,12 @@
 # Messaggio di apertura della sessione di ricerca LINK6 (protocollo 4)
 
-Scritto dal coordinamento il 17 ottobre 2026; si approva con gli esiti del Passo 0. Il coordinamento lo manda così com'è
-alla sessione nuova, aperta con il modello `claude-opus-5-5` (controllato con `get_session` dopo la creazione). Non
-contiene fatti dal 2024-01-01 né risultati di campagne precedenti (`PROTOCOLLO_4.md`, sezione 3).
+Scritto dal coordinamento il 17 ottobre 2026; si approva con gli esiti del Passo 0 (il proprietario ha delegato
+l'approvazione al coordinamento il 17 ottobre verso le 21:10 UTC). Il coordinamento lo manda così com'è alla sessione
+nuova, aperta con il modello `claude-opus-5-5` (controllato con `get_session` dopo la creazione) e **direttamente sul
+branch `research/campagna/LINK6`**: così all'avvio la sessione carica il `CLAUDE.md` pulito di quel branch e vede solo i
+suoi commit, non quelli del branch principale (sezione 12). Il branch ha una storia propria, senza i commit del
+principale. Il messaggio non contiene fatti dal 2024-01-01 né risultati di campagne precedenti (`PROTOCOLLO_4.md`,
+sezione 3).
 
 ---
 
@@ -12,9 +16,9 @@ Sei la sessione di ricerca del protocollo 4 su LINKUSDT (campagna LINK6): esegui
 collaudo del metodo sono già fatti e approvati dal proprietario; le verifiche sulle monete di controllo e i Passi 5-9
 li fa il coordinamento.
 
-1. Il branch principale del repository è `claude/brave-albattani-1b12fv`: non lo tocchi e non apri pull request.
-   Lavori solo sul branch `research/campagna/LINK6`, già creato: `git fetch origin research/campagna/LINK6` e
-   `git checkout -b research/campagna/LINK6 origin/research/campagna/LINK6`. Controlla che l'intestazione di
+1. Il branch principale del repository è `claude/brave-albattani-1b12fv`: non lo tocchi, non lo scarichi e non apri
+   pull request. Lavori solo sul branch `research/campagna/LINK6`, su cui la sessione è già aperta: controlla con
+   `git branch --show-current` (se stampa un altro nome, fermati e avvisa l'utente). Controlla che l'intestazione di
    PROTOCOLLO_4.md dica «Approvato dal proprietario»: se no, fermati e avvisa l'utente.
 2. Solo quando `git branch --show-current` stampa `research/campagna/LINK6`, scrivi il marcatore
    `research/.sessione` con `{"tipo": "campagna", "simbolo": "LINK6"}` (non è in git). Da lì il guardiano ti lascia
