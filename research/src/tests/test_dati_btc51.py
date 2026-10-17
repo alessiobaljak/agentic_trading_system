@@ -173,3 +173,31 @@ def test_serie_3(tmp_path):
     assert np.all(s.close == 100.0) and np.all(s.mark_close == 100.5)
     assert list(s.funding_ts) == [dati.ms_da_data(date(2021, 1, 1)) + k * 8 * 3_600_000 for k in range(3)]
     assert len(s.inizi_dei_tratti()) == 1
+
+
+def test_serie_3_un_buco_solo_nel_mark_non_e_un_buco(tmp_path):
+    """Correzione del 17 ottobre 2026: dove manca solo il mark si tiene la candela last, e al posto del
+    mark si usa il last della stessa candela; nessun buco nella serie, quindi il riscaldamento non riparte."""
+    radice = tmp_path / "research"
+    _mese_1h(radice, "BTCUSDT", "klines", 2021, 1, prezzo=100.0)
+    _mese_1h(radice, "BTCUSDT", "markPriceKlines", 2021, 1, prezzo=100.5)
+    _funding_mese(radice, "BTCUSDT", 2021, 1)
+    # nel mark si tolgono le 24 ore del 10 gennaio
+    p = dati.percorso_mese("BTCUSDT", "markPriceKlines", "1h", 2021, 1, radice)
+    da, a = dati.ms_da_data(date(2021, 1, 10)), dati.ms_da_data(date(2021, 1, 11))
+    righe = []
+    ts = dati.ms_da_data(date(2021, 1, 1))
+    while ts < dati.ms_da_data(date(2021, 2, 1)):
+        if not da <= ts < a:
+            righe.append([ts, 100.5, 101.5, 99.5, 100.5, 10, ts + 3_599_999, 1000, 5, 0, 0, 0])
+        ts += 3_600_000
+    _zip(p, righe)
+    s, conteggi = dati.serie_3_con_conteggi("BTCUSDT", "1h", date(2021, 1, 1), date(2021, 1, 31), radice)
+    assert len(s) == 744 and len(s.inizi_dei_tratti()) == 1
+    assert conteggi["mark_sostituite"] == 24 and conteggi["giorni_mark_sostituiti"] == ["2021-01-10"]
+    dentro = (s.ts >= da) & (s.ts < a)
+    assert np.all(s.mark_close[dentro] == s.close[dentro]) and np.all(s.mark_high[dentro] == s.high[dentro])
+    assert np.all(s.mark_close[~dentro] == 100.5)
+    # serie_3 da' la stessa serie
+    assert np.array_equal(dati.serie_3("BTCUSDT", "1h", date(2021, 1, 1), date(2021, 1, 31), radice).mark_close, s.mark_close)
+

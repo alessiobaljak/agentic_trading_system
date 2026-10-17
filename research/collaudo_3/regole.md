@@ -54,6 +54,10 @@ Ogni scelta e' scritta nel codice con l'etichetta `SCELTA` o nei commenti della 
 13. **Dimensione**: capitale fisso 10.000 USDT, rischio 1% del capitale iniziale, leva massima 2 (la leva di
     base del bot). Un trade oltre la leva massima si riduce e si conta. Gli R non dipendono dalla dimensione.
 14. Se manca la candela subito dopo il segnale (buco nei dati), il trade non si apre.
+14bis. **Buchi solo nel mark** (dal terzo giro, correzione del 17 ottobre alle 07:38 UTC, `PROTOCOLLO_3.md` 9.6):
+    la candela last si tiene e al posto del mark mancante si usa il last della stessa candela
+    (`dati.serie_3_con_conteggi`). Nella costruzione sono 6 giorni (1 luglio 2021, 24-27 luglio 2021, 31 luglio
+    2022); prima diventavano buchi, dopo i quali il riscaldamento ripartiva.
 15. **Ordine limit**: la validita' si misura in tempo (1 o 3 durate di candela dopo la candela del segnale).
     Nella candela di esecuzione conta solo lo stop: se il prezzo lo tocca si esce **al prezzo dello stop**,
     anche se la candela era gia' aperta oltre (l'ingresso al prezzo limit, in quel caso, e' gia' un'ipotesi

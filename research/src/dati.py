@@ -1937,23 +1937,53 @@ def elenca_simboli_archivio(fetch: Optional[Fetch] = None, prefisso: str = PREFI
 # ---------------------------------------------------------------------------
 
 
-def serie_3(simbolo: str, intervallo: str, inizio: date, fine: date, radice: Path = RADICE_DEFAULT):
-    """La serie del protocollo 3 (``research.src.catalogo3.Serie``): candele last e mark
-    sugli stessi ``ts`` (intersezione, come ``carica_serie_allineate``) e funding del
-    periodo. I blocchi del vault e della validazione valgono come per ogni caricamento."""
+def serie_3_con_conteggi(simbolo: str, intervallo: str, inizio: date, fine: date,
+                         radice: Path = RADICE_DEFAULT) -> Tuple[object, Dict[str, object]]:
+    """La serie del protocollo 3 (``research.src.catalogo3.Serie``) e i suoi conteggi.
+
+    Si tengono TUTTE le candele last del periodo: segnali e indicatori si calcolano sul last
+    (sezione 9.1), e un buco solo nel mark non e' una candela mancante (9.6). Dove manca la
+    candela mark, al suo posto si usa la candela last dello stesso ``ts`` (apertura, massimo,
+    minimo e chiusura): la liquidazione e il valore della posizione per il funding, in quelle
+    candele, si calcolano sul last. Le candele mark senza la candela last si tolgono.
+
+    Correzione del 17 ottobre 2026 (si' del proprietario alle 07:38 UTC, ``PROTOCOLLO_3.md``,
+    appendice 3, punto 6): prima si tenevano solo le candele presenti in tutte e due le serie
+    (come ``carica_serie_allineate``), e i 6 giorni senza mark della costruzione (1 luglio 2021,
+    dal 24 al 27 luglio 2021, 31 luglio 2022) diventavano buchi finti dopo i quali il
+    riscaldamento ripartiva: a 1d una media a 200 candele non dava nessun segnale.
+
+    I conteggi: ``candele``, ``mark_sostituite`` (candele last con il mark preso dal last) e i
+    loro ``giorni_mark_sostituiti``, ``mark_senza_last`` (candele mark tolte). I blocchi del
+    vault e della validazione valgono come per ogni caricamento."""
     from research.src.catalogo3 import Serie
 
-    al = carica_serie_allineate(simbolo, intervallo, inizio, fine, radice)
+    last = carica_candele(simbolo, intervallo, inizio, fine, radice, tipo="klines")
+    mark = carica_candele(simbolo, intervallo, inizio, fine, radice, tipo="markPriceKlines")
     funding = carica_funding(simbolo, inizio, fine, radice)
-    last, mark = al["candele"], al["candele_mark"]
-    return Serie(
+    mark_per_ts = {c.ts: c for c in mark}
+    ts_last = {c.ts for c in last}
+    marche = [mark_per_ts.get(c.ts, c) for c in last]
+    sostituite = [c.ts for c in last if c.ts not in mark_per_ts]
+    serie = Serie(
         timeframe=intervallo,
         ts=[c.ts for c in last], open=[c.open for c in last], high=[c.high for c in last],
         low=[c.low for c in last], close=[c.close for c in last], volume=[c.volume for c in last],
-        mark_open=[c.open for c in mark], mark_high=[c.high for c in mark],
-        mark_low=[c.low for c in mark], mark_close=[c.close for c in mark],
+        mark_open=[c.open for c in marche], mark_high=[c.high for c in marche],
+        mark_low=[c.low for c in marche], mark_close=[c.close for c in marche],
         funding_ts=[ts for ts, _ in funding], funding_tasso=[t for _, t in funding],
     )
+    giorni = sorted({datetime.fromtimestamp(t / 1000, tz=timezone.utc).date().isoformat() for t in sostituite})
+    conteggi = {"candele": len(last), "mark_sostituite": len(sostituite), "giorni_mark_sostituiti": giorni,
+                "mark_senza_last": sum(1 for c in mark if c.ts not in ts_last)}
+    return serie, conteggi
+
+
+def serie_3(simbolo: str, intervallo: str, inizio: date, fine: date, radice: Path = RADICE_DEFAULT):
+    """La serie del protocollo 3 (``research.src.catalogo3.Serie``): tutte le candele last del
+    periodo, il mark sugli stessi ``ts`` (dove manca, il last al suo posto) e il funding.
+    Vedi ``serie_3_con_conteggi``, che restituisce anche quante candele mark si sono sostituite."""
+    return serie_3_con_conteggi(simbolo, intervallo, inizio, fine, radice)[0]
 
 
 def fatti_passo1_3(simbolo: str = "BTCUSDT", radice: Path = RADICE_DEFAULT,
