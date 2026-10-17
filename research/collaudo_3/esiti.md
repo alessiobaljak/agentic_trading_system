@@ -12,6 +12,9 @@ aggiornate prima del secondo giro con le correzioni approvate. Gli esiti grezzi 
 | B — vantaggio inserito apposta | passa per due regole su tre | **passa** per tutte e tre |
 | C — parita' con il bot | non eseguibile | dopo il vault, prima del paper (scelta del proprietario del 17 ott) |
 
+**Esiti del Passo 0 approvati dal proprietario il 17 ottobre 2026 alle 07:15 UTC** («Sì apri la sessione»): da qui
+strumenti e parametri sono congelati con le impronte del secondo giro (sotto).
+
 ## Secondo giro: 17 ottobre 2026, dalle 06:28:38 alle 06:49:23 UTC
 
 Con le correzioni approvate dal proprietario il 17 ottobre alle 06:11 UTC (`PROTOCOLLO_3.md`, appendice 3): entrate
