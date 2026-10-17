@@ -3921,3 +3921,14 @@ protocollo 3 passano (624, 2 saltati perche' vogliono i dati). Sessione di ricer
 (`research/apertura/btc51.md`). Al controllo dopo otto minuti: ultracode non risulta attivo e la sessione non ha
 ancora cominciato a lavorare (nessun turno servito, nessun commit): detto al proprietario, che decide. Il paper con
 le strategie del vecchio gate resta acceso.
+
+### 17 ottobre, mattina: la ricerca BTC51 trova un difetto del caricatore al Passo 1; corretto, collaudo rifatto
+
+La sessione di ricerca, ripartita dopo l'apertura, ha finito il Passo 1 e si e' fermata a segnalare che i 6 giorni
+senza prezzo mark nei file di Binance (1 luglio 2021, 24-27 luglio 2021, 31 luglio 2022) venivano tolti anche dal
+prezzo di scambio, con il riscaldamento degli indicatori che ripartiva dopo ogni buco finto (a 1d con una media a
+200 candele restava lo 0% della costruzione; verificato dal coordinamento: 0%, 32% a 12h, 72% a 4h, 90% a 1h). Il
+proprietario alle 09:38 ora italiana: «ok correggi». Ora quei giorni restano, con il mark preso dal prezzo di scambio
+(40%, 70%, 90%, 98%: il resto e' il riscaldamento). Collaudo rifatto (terzo giro, 09:49-10:16): prova A passa (11
+p-value sotto 0,10 su 100, nessuna variante finta oltre la Fase 2), prova B passa per le tre regole. Correzione
+portata sul branch della ricerca (015f9ba9); la sessione riparte dal Passo 1 aggiornato.
