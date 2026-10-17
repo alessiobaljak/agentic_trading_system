@@ -3954,3 +3954,16 @@ collaudo, 40 varianti registrate prima dei risultati, tutte sulla costruzione. I
 italiana: «sì procedi con la validazione»; via libera scritto sul branch della ricerca (29c2ca6a). Con 40 varianti il
 caso da solo darebbe circa una variante oltre la Fase 2: V-020 e' compatibile con il caso, e la validazione lo dira'.
 Capito oggi: il funding e' l'unica famiglia del catalogo che ha dato p-value piccoli in tutte e due le direzioni.
+
+### 17 ottobre, sera: V-020 passa la validazione, consegna scritta, vault ancora chiuso
+
+Il proprietario alle 15:39 ora italiana ha dato il via alla validazione. V-020 l'ha superata con una sola esecuzione
+(commit 56a33ede): 80 trade, +0,167 R a trade, profit factor 1,29, +0,064 R a costi doppi; ma il vantaggio cala
+(costruzione +0,223, ultimo trimestre 2022 +0,268, 2023 +0,112) e +0,167 su 80 trade e' a circa 1,2 errori standard da
+zero. Il proprietario: «procedi con la consegna». La sessione ha scritto `consegna.md` (commit 1b222fb5, 17:44 ora
+italiana) con la previsione fissata prima del vault: circa 175 trade, +0,08 R, probabilita' di superarlo circa 1 su 4.
+Il bot non sa ancora eseguire V-020 (mancano il funding regolato come segnale, il filtro sui giorni, l'uscita a tempo
+per strategia, l'orologio da 1 ora). Verifica del coordinamento: strumenti uguali al collaudo (9 impronte su 9).
+Capito oggi: con il metodo collaudato, 40 idee ragionate su BTC hanno dato un solo candidato che regge fuori dalla
+costruzione, e debole; il vault dira' se e' piu' del caso. Da oggi il coordinamento parla da solo con la sessione di
+ricerca (routine a un colpo sulla sessione), senza copia e incolla del proprietario.
