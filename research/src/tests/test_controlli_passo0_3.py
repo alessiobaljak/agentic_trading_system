@@ -34,9 +34,12 @@ MESI_COSTRUZIONE = list(dati.mesi_del_periodo(date(2020, 1, 1), date(2022, 9, 30
                     reason="mancano i file 1d del 2021 di BTCUSDT")
 def test_buy_and_hold_2021():
     s = dati.serie_3("BTCUSDT", "1d", date(2021, 1, 1), date(2021, 12, 31))
-    # 360 giorni su 365: nei file del mark di BTCUSDT mancano 2021-07-01 e dal 24 al 27 luglio 2021,
-    # e il caricatore tiene solo i giorni presenti in tutte e due le serie (fatto da riportare al Passo 1)
+    # tutti i 365 giorni: nei file del mark di BTCUSDT mancano 2021-07-01 e dal 24 al 27 luglio 2021,
+    # e dal 17 ottobre 2026 il caricatore tiene quei giorni del last con il mark preso dal last
+    assert len(s) == 365
     assert s.ts[0] == dati.ms_da_data(date(2021, 1, 1)) and s.ts[-1] == dati.ms_da_data(date(2021, 12, 31))
+    _, conteggi = dati.serie_3_con_conteggi("BTCUSDT", "1d", date(2021, 1, 1), date(2021, 12, 31))
+    assert conteggi["giorni_mark_sostituiti"] == ["2021-07-01", "2021-07-24", "2021-07-25", "2021-07-26", "2021-07-27"]
     # il calcolo indipendente: apertura del 1 gennaio e chiusura del 31 dicembre lette dai file
     def riga(anno, mese, giorno):
         p = dati.percorso_mese("BTCUSDT", "klines", "1d", anno, mese, RADICE)

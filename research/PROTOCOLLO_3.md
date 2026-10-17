@@ -7,7 +7,8 @@
 > sono stati corretti solo due nomi rimasti vecchi nel Passo 0 (`config/bot_3.md` e `vault/APERTURA_3.md`, come
 > nell'appendice 2, punto 5). **Correzioni del collaudo approvate dal proprietario il 17 ottobre 2026 alle 06:11 UTC**
 > («ok sì a tutto, procedi con le correzioni»): sezioni 4, 7.10, 10.1, 13bis.1-13bis.4 e 14, elencate
-> nell'appendice 3.
+> nell'appendice 3; il 17 ottobre alle 07:38 UTC («ok correggi») la sezione 9.6, per i buchi del solo mark
+> trovati al Passo 1 (appendice 3, punto 6).
 > Una sola moneta: il contratto perpetuo BTCUSDT di Binance Futures (USDS-M). Rispetto alla versione 5 aggiunge gli ingressi con ordine limit.
 > Nel repository è `research/PROTOCOLLO_3.md`, accanto ai protocolli precedenti, che non cambiano. Le modifiche rispetto alla versione 5 sono nell'appendice 1, quelle del coordinamento nell'appendice 2.
 
@@ -398,6 +399,8 @@ Commissione: 0,05% (taker) del valore della posizione all'ingresso a mercato e a
 ### 9.6 Buchi nei dati
 
 Se mancano una o più candele: nessun nuovo segnale finché il riscaldamento non è di nuovo completo (7.8). Una posizione aperta attraversa il buco; alla prima candela disponibile si applica il controllo del salto di prezzo (9.2).
+
+Un buco solo nelle candele mark non è una candela mancante: la candela last si tiene e, al posto del mark mancante, si usa il last della stessa candela (liquidazione e valore della posizione per il funding, in quelle candele, si calcolano sul last); le candele sostituite si contano e si dichiarano in `fase0_dati.md` (appendice 3, punto 6).
 
 ### 9.7 Metriche (per ogni test)
 
@@ -918,3 +921,4 @@ Fase 2. La diagnosi (`research/collaudo_3/diagnosi/`) ha trovato la causa nella 
 | 3 | 13bis.3, 14 | Ampiezze del vantaggio inserito 0 / 0,6 / 1,2, riserva 1,8 | Il vantaggio inserito rende circa un terzo di P: con 0 / 0,3 / 0,6 (riserva 0,9) per la regola short nessuna prova arrivava a 0,35 R |
 | 4 | 13bis.4 | La prova C si fa solo se un candidato supera il vault, prima del paper | Il bot non esegue nessuna variante del catalogo (`config/bot_3.md`); se nessun candidato arriva al vault l'aggiunta al bot non serve |
 | 5 | 4, 7.10 | La costruzione comincia il 2020-01-01; si usa tutto il catalogo, scelta (b) | L'archivio pubblico di Binance non ha BTCUSDT prima del 2020; con la scelta (a) non resterebbe quasi niente |
+| 6 | 9.6 (approvata il 17 ottobre 2026 alle 07:38 UTC, «ok correggi») | Un buco solo nel mark non toglie la candela last: al posto del mark mancante si usa il last | Al Passo 1 la sessione di ricerca ha trovato 6 giorni senza mark nella costruzione (1 luglio 2021, 24-27 luglio 2021, 31 luglio 2022); il caricatore li toglieva anche dal last, e dopo ogni buco finto il riscaldamento ripartiva: con una media a 200 candele restava usabile lo 0% della costruzione a 1d, il 32% a 12h, il 72% a 4h. Con la correzione: 40%, 70%, 90% (il resto e' il riscaldamento di 3 x 200 candele). In quei giorni la liquidazione si calcola sul last; con la leva 2 e' a circa il 50% dall'ingresso, e il movimento piu' forte di quei giorni (31,4% in un'ora il 26 luglio 2021) non ci arriva |

@@ -4,16 +4,64 @@ Sezione 13bis del protocollo. Le regole di dettaglio sono in `regole.md`, commit
 aggiornate prima del secondo giro con le correzioni approvate. Gli esiti grezzi di ogni giro sono in `esiti/giro<N>/`
 (una riga JSON per prova), il riepilogo calcolato da `riepilogo.py <N>`.
 
-## Esito: il metodo passa il collaudo (secondo giro, 17 ottobre 2026)
+## Esito: il metodo passa il collaudo (terzo giro, 17 ottobre 2026)
 
-| Prova | Primo giro (16 ott) | Secondo giro (17 ott, con le correzioni) |
+| Prova | Primo giro (16 ott) | Secondo giro (17 ott, con le correzioni) | Terzo giro (17 ott, caricatore corretto) |
+|---|---|---|---|
+| A — prezzi senza vantaggio | non passa (21 p-value sotto 0,10 su 100) | **passa** (13 su 100, soglia 15; 0 varianti oltre la Fase 2, soglia 5) | **passa** (11 su 100; 0 oltre la Fase 2) |
+| B — vantaggio inserito apposta | passa per due regole su tre | **passa** per tutte e tre | **passa** per tutte e tre |
+| C — parita' con il bot | non eseguibile | dopo il vault, prima del paper (scelta del proprietario del 17 ott) | idem |
+
+## Terzo giro: 17 ottobre 2026, dalle 07:49:26 alle 08:16:09 UTC
+
+Dopo la correzione del caricatore per i buchi del solo mark (`PROTOCOLLO_3.md`, 9.6 e appendice 3, punto 6; si' del
+proprietario alle 07:38 UTC): `dati.py` e' cambiato, quindi si rifanno A e B (13bis.5). Strumenti al commit `0bbf0389`
+(`esiti/giro3/commit.txt`), impronte SHA-256 (`esiti/giro3/impronte.json`), **che da qui valgono per la ricerca**:
+
+| File | SHA-256 |
+|---|---|
+| `research/src/catalogo3.py` | `a9c7e99613d159db92833822716c06e4913d8cc6db80c88421527269b4dc5b06` |
+| `research/src/motore3.py` | `84d3700cb1633711bb11db31ae9555f938897a4fd3fce1a3a56452281d9cf6c3` |
+| `research/src/statistica3.py` | `f6921986cf9da18330047e46b09919b125c545adc3ba87c39ee9c88dfc7c1c7a` |
+| `research/src/statistica.py` | `e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1` |
+| `research/src/dati.py` | `440e6ef0a2e00c85d5329b2b9f09d03fb424d7f43d1cef0bd911c31dae43080c` |
+| `research/src/guardiano.py` | `b83825094acc41f5ede7cf2af9d30cc35ef2bd03108b25447df6fe8e1cec993b` |
+| `research/config/parametri_3.yaml` | `85b0e7bb443b123edbc4a9618c8475dd031e73e88d8b92f4d7e7c7734c31a2f8` |
+| `research/collaudo_3/collaudo.py` | `cc4056ef92a85b6c61e0bcecb1d4c62479bae4cba53289d30f18fe261754b7cb` |
+| `research/collaudo_3/regole.md` | `3e623b78765f01ee476dfa12641511ba710d14d1b0d42d432881b0735c0de93c` |
+
+### Prova A: **passa**
+
+| Misura | Valore | Soglia |
 |---|---|---|
-| A — prezzi senza vantaggio | non passa (21 p-value sotto 0,10 su 100) | **passa** (13 su 100, soglia 15; 0 varianti oltre la Fase 2, soglia 5) |
-| B — vantaggio inserito apposta | passa per due regole su tre | **passa** per tutte e tre |
-| C — parita' con il bot | non eseguibile | dopo il vault, prima del paper (scelta del proprietario del 17 ott) |
+| Varianti finte con la Fase 2 completa | 100 (473 estratte; una, la numero 309, sostituita perche' le entrate casuali non trovano posto, sotto) | 100 |
+| Superano la Fase 2 | **0** | al massimo 5 |
+| p-value sotto 0,10 | **11** | al massimo 15 (attese circa 10) |
+| p-value per decimi | 11, 10, 13, 13, 6, 9, 9, 16, 6, 7 | circa 10 ciascuno |
+| R medio delle varianti / delle loro entrate casuali | −0,071 / −0,081 | — |
 
-**Esiti del Passo 0 approvati dal proprietario il 17 ottobre 2026 alle 07:15 UTC** («Sì apri la sessione»): da qui
-strumenti e parametri sono congelati con le impronte del secondo giro (sotto).
+La variante 309 (15m, rottura della banda di Bollinger, stop al minimo delle ultime 5 candele, target a 3 R, 602 trade):
+con la regola della stessa larghezza di stop, in 4 milioni di giri nessuna strategia a caso ha fatto 602 trade senza
+sovrapporli, perche' i suoi stop larghi cadono in momenti rari e i trade durano a lungo. Per le regole della prova A
+(punto A.2) e' riportata a parte e sostituita; nella ricerca lo stesso caso e' uno STOP con domanda all'utente
+(`regole.md`, punto 20).
+
+### Prova B: **passa** per tutte e tre le regole
+
+| Regola | Senza vantaggio: superano (soglia ≤ 3 su 30) | Prove ad almeno 0,35 R: superano (soglia 80%) | Prove con R fra 0,2 e 0,35: superano | R medio netto per P = 0 / 0,6 / 1,2 |
+|---|---|---|---|---|
+| B1 (long, a mercato) | 0 | 24 su 24 | 7 su 7 | −0,087 / +0,134 / +0,395 |
+| B2 (short, a mercato) | 0 | 28 su 28 | 4 su 4 | −0,080 / +0,149 / +0,418 |
+| B3 (long, limit) | 0 | 30 su 30 | 11 su 11 | −0,036 / +0,190 / +0,458 |
+
+Con un vantaggio inserito di almeno 0,2 R netti superano 104 prove su 104; senza vantaggio 0 su 90 (p-value sotto 0,10:
+13 su 90). La riserva P = 1,8 non e' servita; i segnali inseriti sono quelli trovati in tutte le 270 prove; le entrate
+casuali con il vantaggio salgono di −0,004 / +0,003 / −0,032 R (STOP oltre +0,05).
+
+
+**Esiti del Passo 0 approvati dal proprietario il 17 ottobre 2026 alle 07:15 UTC** («Sì apri la sessione»): strumenti e
+parametri congelati con le impronte del secondo giro (sotto), sostituite da quelle del terzo giro dopo la correzione del
+caricatore (sopra).
 
 ## Secondo giro: 17 ottobre 2026, dalle 06:28:38 alle 06:49:23 UTC
 
