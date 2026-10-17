@@ -19,8 +19,9 @@ proprietario, con il collaudo del metodo; approvato il 16 ott 2026 alle 19:26 UT
 (Passo 0, sezione 13bis: tre prove), poi una sessione di ricerca sul branch `research/campagna/BTC51` cerca le
 strategie su BTCUSDT; il paper è l'esame finale. La seconda edizione (`research/PROTOCOLLO_2.md`) è chiusa.
 **Il vault 3 è stato aperto il 17 ott 2026** (frase del proprietario): l'unico candidato, V-020, non lo supera
-(`research/vault/BTC51_risultati.md`), e sulle altre monete regge solo su 1 di 9 (`research/altre_monete_3/risultati.md`):
-resta la chiusura (Passo 9), su richiesta del proprietario.
+(`research/vault/BTC51_risultati.md`), e sulle altre monete regge solo su 1 di 9 (`research/altre_monete_3/risultati.md`).
+**La campagna BTC51 è chiusa** (17 ott 2026, nessuna strategia valida): lezioni e proposte per il prossimo protocollo
+in `research/campagne/BTC51/lezioni.md`; cosa fare dopo lo decide il proprietario.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e

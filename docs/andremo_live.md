@@ -3994,3 +3994,14 @@ R a trade), e su MATIC −0,333 su 35 trade. Servivano 3 monete: **non si trasfe
 non vale ne' su BTC ne' sulle grandi monete nel 2024-2026; quasi ovunque il 2024 e' positivo e il 2026 negativo, con
 correlazioni basse fra le monete, quindi e' il mercato che e' cambiato, non una moneta sfortunata. Resta la chiusura
 della campagna (lezioni), quando il proprietario la chiede. Il paper del vecchio gate resta acceso.
+
+### 17 ottobre, notte: campagna BTC51 chiusa, le lezioni
+
+Il proprietario: «ok sì, chiudi la campagna e scrivi le lezioni». Scritto `research/campagne/BTC51/lezioni.md`: le 20
+idee e cosa ne è stato, nove errori di metodo (tre corretti prima di toccare i dati che riguardavano, sei rimasti nel
+testo e visti all'opera su V-020), cinque trappole dei dati, cosa tenere e otto proposte per il prossimo protocollo
+(la prima: provare un'idea sulle altre monete già sul periodo usato, prima del vault). Capito oggi: il metodo è
+tarato e ha fatto il suo lavoro, ma a cedere sono state le maglie larghe fra la costruzione e il vault. Un filtro
+nato guardando i trade, una verifica dei trade estremi superata per +0,012 R e una validazione a 1,2 errori standard
+hanno portato al vault un candidato debole, e il vault si apre una volta sola. Nessuna strategia valida su BTC con il
+protocollo 3. Il paper del vecchio gate resta acceso; cosa fare dopo lo decide il proprietario.

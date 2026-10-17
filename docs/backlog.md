@@ -32,6 +32,14 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
+### P10. Il prossimo protocollo: le proposte delle lezioni di BTC51
+**Perché:** la campagna BTC51 (protocollo 3) si è chiusa il 17 ott 2026 senza strategie valide: l'unico candidato,
+V-020, ha superato la validazione con +0,167 R su 80 trade (circa 1,2 errori standard) ed è caduto nel vault
+(−0,007 R su 180 trade) e sulle altre monete (1 su 9). Le otto proposte, in ordine di importanza, sono in
+`research/campagne/BTC51/lezioni.md`, sezione 5. La prima: provare l'idea sulle altre monete sul periodo già usato,
+prima di spendere l'unica apertura del vault. Le soglie a zero e la scelta delle monete sono già qui sotto (P8, P9).
+**Aspetta:** il sì del proprietario a una nuova versione del protocollo.
+
 ### P9. Protocollo 3, per replicare su altre monete: la scelta delle monete e i contratti morti
 **Perché:** preparando la prova su altre monete (17 ott, `research/altre_monete_3/risultati.md`) sono emerse due
 trappole dei dati. (1) La tabella dei volumi del 7 ottobre (`research/universo/candidate.csv`) ha il volume 2023

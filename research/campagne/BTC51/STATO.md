@@ -3,11 +3,12 @@
 Protocollo: `research/PROTOCOLLO_3.md` (versione 5.1 su BTC, approvata dal proprietario il 16 ottobre 2026 alle
 19:26 UTC).
 
-- **Passo corrente:** STOP del Passo 6 (prova su altre monete). Resta il Passo 9 (chiusura, `lezioni.md`), quando
-  il proprietario lo chiede.
+- **Passo corrente:** nessuno: **campagna chiusa** il 17 ottobre 2026 (Passo 9, sì del proprietario «ok sì, chiudi
+  la campagna e scrivi le lezioni»). Esito: nessuna strategia valida trovata. Lezioni in `lezioni.md`.
 - **Passi completati:** Passo 0 (coordinamento; impronte degli strumenti in
   `research/collaudo_3/esiti/giro4/impronte.json`); Passi 1-4 (sessione di ricerca sul branch
-  `research/campagna/BTC51`, consegna nel commit 1b222fb5); Passi 5 e 6 (coordinamento, sul branch principale).
+  `research/campagna/BTC51`, consegna nel commit 1b222fb5); Passi 5, 6 e 9 (coordinamento, sul branch principale).
+  Passi 7 e 8 non applicabili (nessun candidato oltre il vault).
 - **Varianti usate:** 40 su 40.
 - **Candidati:** uno, V-020 (1h, long nei giorni feriali quando il funding regolato e' sotto zero, stop a 2 ATR,
   uscita dopo 24 candele). Validazione superata (80 trade, +0,167 R).
@@ -17,5 +18,6 @@ Protocollo: `research/PROTOCOLLO_3.md` (versione 5.1 su BTC, approvata dal propr
   Un candidato che fallisce resta fallito: niente paper per il protocollo 3 su BTC.
 - **Altre monete (Passo 6, sì del proprietario «ok sì, fai la prova sulle altre monete»):** V-020 regge su 1 moneta
   su 9 (LTCUSDT), ne servivano 3: **non si trasferisce** (`research/altre_monete_3/risultati.md`).
-- **Prossima azione:** Passo 9 (chiusura), su richiesta del proprietario.
+- **Prossima azione:** decide il proprietario (le proposte per il prossimo protocollo sono in `lezioni.md`,
+  sezione 5).
 - **Problemi aperti:** nessuno.
