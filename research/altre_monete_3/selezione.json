@@ -1,0 +1,524 @@
+{
+ "fonte": "contratti di research/universo/candidate.csv (indice dell'archivio del 7 ottobre 2026) con dati nel 2023; volume dalla tabella o calcolato dalle candele 1d del 2023 con il CHECKSUM; prime 12 ricalcolate",
+ "contratti_con_dati_nel_2023": 252,
+ "con_volume": 252,
+ "calcolati_ora": 127,
+ "monete": [
+  {
+   "simbolo": "ETHUSDT",
+   "volume_giornaliero_sull_anno": 5512655913.298805,
+   "volume_medio_2023_usdt": 5512655913.298805,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0001
+  },
+  {
+   "simbolo": "SOLUSDT",
+   "volume_giornaliero_sull_anno": 1104309418.3222,
+   "volume_medio_2023_usdt": 1104309418.3222,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0001
+  },
+  {
+   "simbolo": "XRPUSDT",
+   "volume_giornaliero_sull_anno": 811396618.5191649,
+   "volume_medio_2023_usdt": 811396618.5191649,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0002
+  },
+  {
+   "simbolo": "DOGEUSDT",
+   "volume_giornaliero_sull_anno": 519135731.35055184,
+   "volume_medio_2023_usdt": 519135731.35055184,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0002
+  },
+  {
+   "simbolo": "APTUSDT",
+   "volume_giornaliero_sull_anno": 410180072.43966734,
+   "volume_medio_2023_usdt": 410180072.43966734,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0002
+  },
+  {
+   "simbolo": "BNBUSDT",
+   "volume_giornaliero_sull_anno": 400787170.82502717,
+   "volume_medio_2023_usdt": 400787170.82502717,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0002
+  },
+  {
+   "simbolo": "LTCUSDT",
+   "volume_giornaliero_sull_anno": 382494032.12539214,
+   "volume_medio_2023_usdt": 382494032.12539214,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0002
+  },
+  {
+   "simbolo": "MATICUSDT",
+   "volume_giornaliero_sull_anno": 374246088.1027228,
+   "volume_medio_2023_usdt": 374246088.1027228,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0002
+  },
+  {
+   "simbolo": "BCHUSDT",
+   "volume_giornaliero_sull_anno": 339158092.8599536,
+   "volume_medio_2023_usdt": 339158092.8599536,
+   "giorni_2023": 365,
+   "slippage_per_lato": 0.0002
+  }
+ ],
+ "controllo_prime_12": {
+  "ETHUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 5512655913.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 5512655913.0
+   },
+   "volume_medio_2023_usdt": 5512655913.298805,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 5512655913.298805
+  },
+  "SOLUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 1104309418.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 1104309418.0
+   },
+   "volume_medio_2023_usdt": 1104309418.3222,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 1104309418.3222
+  },
+  "XRPUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 811396619.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 811396619.0
+   },
+   "volume_medio_2023_usdt": 811396618.5191649,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 811396618.5191649
+  },
+  "DOGEUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 519135731.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 519135731.0
+   },
+   "volume_medio_2023_usdt": 519135731.35055184,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 519135731.35055184
+  },
+  "APTUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 410180072.43966734,
+    "giorni_2023": 365,
+    "fonte": "calcolato",
+    "volume_giornaliero_sull_anno": 410180072.43966734
+   },
+   "volume_medio_2023_usdt": 410180072.43966734,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 410180072.43966734
+  },
+  "BNBUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 400787171.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 400787171.0
+   },
+   "volume_medio_2023_usdt": 400787170.82502717,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 400787170.82502717
+  },
+  "LTCUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 382494032.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 382494032.0
+   },
+   "volume_medio_2023_usdt": 382494032.12539214,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 382494032.12539214
+  },
+  "MATICUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 374246088.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 374246088.0
+   },
+   "volume_medio_2023_usdt": 374246088.1027228,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 374246088.1027228
+  },
+  "BCHUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 339158093.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 339158093.0
+   },
+   "volume_medio_2023_usdt": 339158092.8599536,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 339158092.8599536
+  },
+  "OPUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 330481234.9576828,
+    "giorni_2023": 365,
+    "fonte": "calcolato",
+    "volume_giornaliero_sull_anno": 330481234.9576828
+   },
+   "volume_medio_2023_usdt": 330481234.9576828,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 330481234.9576828
+  },
+  "ARBUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 416141466.6575965,
+    "giorni_2023": 284,
+    "fonte": "calcolato",
+    "volume_giornaliero_sull_anno": 323792264.4678285
+   },
+   "volume_medio_2023_usdt": 416141466.6575965,
+   "giorni_2023": 284,
+   "volume_giornaliero_sull_anno": 323792264.4678285
+  },
+  "LINKUSDT": {
+   "prima": {
+    "volume_medio_2023_usdt": 319144463.0,
+    "giorni_2023": 365,
+    "fonte": "tabella",
+    "volume_giornaliero_sull_anno": 319144463.0
+   },
+   "volume_medio_2023_usdt": 319144462.7178571,
+   "giorni_2023": 365,
+   "volume_giornaliero_sull_anno": 319144462.7178571
+  }
+ },
+ "classifica_prime_30": [
+  {
+   "simbolo": "ETHUSDT",
+   "volume_medio_2023_usdt": 5512655913.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 5512655913.0
+  },
+  {
+   "simbolo": "SOLUSDT",
+   "volume_medio_2023_usdt": 1104309418.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 1104309418.0
+  },
+  {
+   "simbolo": "XRPUSDT",
+   "volume_medio_2023_usdt": 811396619.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 811396619.0
+  },
+  {
+   "simbolo": "DOGEUSDT",
+   "volume_medio_2023_usdt": 519135731.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 519135731.0
+  },
+  {
+   "simbolo": "APTUSDT",
+   "volume_medio_2023_usdt": 410180072.43966734,
+   "giorni_2023": 365,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 410180072.43966734
+  },
+  {
+   "simbolo": "BNBUSDT",
+   "volume_medio_2023_usdt": 400787171.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 400787171.0
+  },
+  {
+   "simbolo": "LTCUSDT",
+   "volume_medio_2023_usdt": 382494032.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 382494032.0
+  },
+  {
+   "simbolo": "MATICUSDT",
+   "volume_medio_2023_usdt": 374246088.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 374246088.0
+  },
+  {
+   "simbolo": "BCHUSDT",
+   "volume_medio_2023_usdt": 339158093.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 339158093.0
+  },
+  {
+   "simbolo": "OPUSDT",
+   "volume_medio_2023_usdt": 330481234.9576828,
+   "giorni_2023": 365,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 330481234.9576828
+  },
+  {
+   "simbolo": "ARBUSDT",
+   "volume_medio_2023_usdt": 416141466.6575965,
+   "giorni_2023": 284,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 323792264.4678285
+  },
+  {
+   "simbolo": "LINKUSDT",
+   "volume_medio_2023_usdt": 319144463.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 319144463.0
+  },
+  {
+   "simbolo": "1000PEPEUSDT",
+   "volume_medio_2023_usdt": 456463852.5131865,
+   "giorni_2023": 241,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 301391201.24843276
+  },
+  {
+   "simbolo": "AVAXUSDT",
+   "volume_medio_2023_usdt": 288917257.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 288917257.0
+  },
+  {
+   "simbolo": "ADAUSDT",
+   "volume_medio_2023_usdt": 272066956.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 272066956.0
+  },
+  {
+   "simbolo": "CFXUSDT",
+   "volume_medio_2023_usdt": 303512148.31431407,
+   "giorni_2023": 315,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 261935141.69591486
+  },
+  {
+   "simbolo": "TRBUSDT",
+   "volume_medio_2023_usdt": 257589634.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 257589634.0
+  },
+  {
+   "simbolo": "FILUSDT",
+   "volume_medio_2023_usdt": 221291836.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 221291836.0
+  },
+  {
+   "simbolo": "1000SHIBUSDT",
+   "volume_medio_2023_usdt": 212317419.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 212317419.0
+  },
+  {
+   "simbolo": "DYDXUSDT",
+   "volume_medio_2023_usdt": 201005594.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 201005594.0
+  },
+  {
+   "simbolo": "MASKUSDT",
+   "volume_medio_2023_usdt": 199286500.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 199286500.0
+  },
+  {
+   "simbolo": "FTMUSDT",
+   "volume_medio_2023_usdt": 199244001.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 199244001.0
+  },
+  {
+   "simbolo": "GALAUSDT",
+   "volume_medio_2023_usdt": 198085006.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 198085006.0
+  },
+  {
+   "simbolo": "ETCUSDT",
+   "volume_medio_2023_usdt": 197492757.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 197492757.0
+  },
+  {
+   "simbolo": "INJUSDT",
+   "volume_medio_2023_usdt": 180042389.11038363,
+   "giorni_2023": 365,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 180042389.11038363
+  },
+  {
+   "simbolo": "ORDIUSDT",
+   "volume_medio_2023_usdt": 1105080885.0341382,
+   "giorni_2023": 55,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 166519037.47089753
+  },
+  {
+   "simbolo": "LINAUSDT",
+   "volume_medio_2023_usdt": 163472965.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 163472965.0
+  },
+  {
+   "simbolo": "DOTUSDT",
+   "volume_medio_2023_usdt": 158172543.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 158172543.0
+  },
+  {
+   "simbolo": "APEUSDT",
+   "volume_medio_2023_usdt": 157961596.29461098,
+   "giorni_2023": 365,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 157961596.29461098
+  },
+  {
+   "simbolo": "SUIUSDT",
+   "volume_medio_2023_usdt": 235041819.09572107,
+   "giorni_2023": 243,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 156479896.00071293
+  }
+ ],
+ "scartata_media_sui_soli_giorni_presenti_prime_15": [
+  {
+   "simbolo": "ETHUSDT",
+   "volume_medio_2023_usdt": 5512655913.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 5512655913.0
+  },
+  {
+   "simbolo": "ORDIUSDT",
+   "volume_medio_2023_usdt": 1105080885.0341382,
+   "giorni_2023": 55,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 166519037.47089753
+  },
+  {
+   "simbolo": "SOLUSDT",
+   "volume_medio_2023_usdt": 1104309418.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 1104309418.0
+  },
+  {
+   "simbolo": "XRPUSDT",
+   "volume_medio_2023_usdt": 811396619.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 811396619.0
+  },
+  {
+   "simbolo": "1000SATSUSDT",
+   "volume_medio_2023_usdt": 557601766.1532633,
+   "giorni_2023": 20,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 30553521.433055524
+  },
+  {
+   "simbolo": "GASUSDT",
+   "volume_medio_2023_usdt": 555122987.9544222,
+   "giorni_2023": 68,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 103420173.09835811
+  },
+  {
+   "simbolo": "TIAUSDT",
+   "volume_medio_2023_usdt": 521909312.7976534,
+   "giorni_2023": 62,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 88653088.74919043
+  },
+  {
+   "simbolo": "DOGEUSDT",
+   "volume_medio_2023_usdt": 519135731.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 519135731.0
+  },
+  {
+   "simbolo": "1000BONKUSDT",
+   "volume_medio_2023_usdt": 503158507.5103281,
+   "giorni_2023": 40,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 55140658.35729623
+  },
+  {
+   "simbolo": "1000PEPEUSDT",
+   "volume_medio_2023_usdt": 456463852.5131865,
+   "giorni_2023": 241,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 301391201.24843276
+  },
+  {
+   "simbolo": "ARBUSDT",
+   "volume_medio_2023_usdt": 416141466.6575965,
+   "giorni_2023": 284,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 323792264.4678285
+  },
+  {
+   "simbolo": "APTUSDT",
+   "volume_medio_2023_usdt": 410180072.43966734,
+   "giorni_2023": 365,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 410180072.43966734
+  },
+  {
+   "simbolo": "JTOUSDT",
+   "volume_medio_2023_usdt": 402793329.44753355,
+   "giorni_2023": 24,
+   "fonte": "calcolato",
+   "volume_giornaliero_sull_anno": 26485040.840385765
+  },
+  {
+   "simbolo": "BNBUSDT",
+   "volume_medio_2023_usdt": 400787171.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 400787171.0
+  },
+  {
+   "simbolo": "LTCUSDT",
+   "volume_medio_2023_usdt": 382494032.0,
+   "giorni_2023": 365,
+   "fonte": "tabella",
+   "volume_giornaliero_sull_anno": 382494032.0
+  }
+ ]
+}
