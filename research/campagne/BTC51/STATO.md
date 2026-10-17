@@ -3,8 +3,10 @@
 Protocollo: `research/PROTOCOLLO_3.md` (versione 5.1 su BTC, approvata dal proprietario il 16 ottobre 2026 alle
 19:26 UTC; correzioni del 17 ottobre nell'appendice 3).
 
-- **Passo corrente:** Passo 3 (validazione) eseguito il 17 ottobre 2026; **STOP del Passo 3**: in attesa dell'utente.
-  Poi Passo 4 (consegna, `consegna.md`); il vault si apre solo con «APRI IL VAULT 3».
+- **Passo corrente:** Passo 4 (consegna, `consegna.md`) eseguito il 17 ottobre 2026; **STOP del Passo 4**: il vault
+  si apre solo con la frase dell'utente «APRI IL VAULT 3» (Passo 5, coordinamento sul branch principale).
+- **Previsione per il vault** (scritta prima, `consegna.md`, sezione 6): circa 175 trade in 33 mesi; R medio +0,08
+  (da −0,10 a +0,20); probabilità di superarlo circa 1 su 4.
 - **Passi completati:** Passo 0 (coordinamento; impronte del quarto giro del collaudo in
   `research/collaudo_3/esiti/giro4/impronte.json`, non su questo branch); Passo 1 (`fase0_dati.md`); Passo 2;
   Passo 3 (`validazione.md`): **V-020 supera la validazione** (80 trade, R medio +0,167, profit factor 1,29, costi
@@ -17,8 +19,8 @@ Protocollo: `research/PROTOCOLLO_3.md` (versione 5.1 su BTC, approvata dal propr
   Debole: senza i 9 trade migliori +0,012; la scelta dei feriali nasce dai dati di V-012; con 40 varianti il caso da
   solo darebbe circa 0,9 candidati.
 - **Superano la Fase 2 ma non la Fase 4:** V-030 (verifiche 2, 3 e 4).
-- **Prossima azione:** Passo 4, scrivere `consegna.md` per V-020 (specifica, metriche affiancate, verifiche, previsione
-  per il vault, trade al mese attesi in paper). Nessun nuovo candidato (regola 9).
+- **Prossima azione:** nessuna per la sessione di ricerca: i Passi 5-8 li fa il coordinamento. Nessun nuovo candidato
+  (regola 9).
 - **Problemi aperti:** nessuno. Da riportare: la verifica di robustezza non può spostare una soglia del funding pari
   a 0,00% (±20% di zero è zero), quindi su V-020 non ha messo alla prova il segnale d'ingresso.
 - **Strumenti della campagna:** `codice/lotto.py` (stime, Fase 2, Fase 4, tutto registrato nel log),
