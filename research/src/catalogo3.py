@@ -810,6 +810,11 @@ class Serie:
     ``ts`` e' l'ora di apertura in millisecondi UTC (9.1). Le candele mark hanno gli stessi
     ``ts`` (il caricatore le allinea). ``funding_ts`` e ``funding_tasso`` sono i
     regolamenti, in ordine di tempo.
+
+    ``funding_segnale`` (protocollo 4, sezione 7.2): il tasso di ogni regolamento riportato a
+    8 ore (tasso × 8 ÷ ore dell'intervallo), per i segnali E11 e F4. Se manca (``None``, come
+    nel protocollo 3) i segnali usano ``funding_tasso``. Il risultato dei trade usa sempre il
+    tasso vero, ``funding_tasso``.
     """
 
     timeframe: str
@@ -825,6 +830,7 @@ class Serie:
     mark_close: np.ndarray
     funding_ts: np.ndarray
     funding_tasso: np.ndarray
+    funding_segnale: Optional[np.ndarray] = None
 
     def __post_init__(self) -> None:
         if self.timeframe not in TIMEFRAME_MS:
@@ -838,6 +844,10 @@ class Serie:
             setattr(self, nome, arr)
         self.funding_ts = np.asarray(self.funding_ts, dtype=np.int64)
         self.funding_tasso = np.asarray(self.funding_tasso, dtype=np.float64)
+        if self.funding_segnale is not None:
+            self.funding_segnale = np.asarray(self.funding_segnale, dtype=np.float64)
+            if self.funding_segnale.shape != self.funding_ts.shape:
+                raise ValueError("funding_segnale: lunghezza diversa da funding_ts")
         if len(self.ts) > 1 and np.any(np.diff(self.ts) <= 0):
             raise ValueError("ts deve essere strettamente crescente")
         if len(self.funding_ts) > 1 and np.any(np.diff(self.funding_ts) <= 0):
@@ -861,7 +871,8 @@ class Serie:
         return Serie(self.timeframe, self.ts[:k], self.open[:k], self.high[:k], self.low[:k],
                      self.close[:k], self.volume[:k], self.mark_open[:k], self.mark_high[:k],
                      self.mark_low[:k], self.mark_close[:k], self.funding_ts[:nf],
-                     self.funding_tasso[:nf])
+                     self.funding_tasso[:nf],
+                     None if self.funding_segnale is None else self.funding_segnale[:nf])
 
     def inizi_dei_tratti(self) -> np.ndarray:
         """Indici delle candele che iniziano un tratto senza buchi: la prima, e ogni
@@ -998,8 +1009,9 @@ class _Cache:
         return self.get(("volrel", n), lambda: volume_relativo(self.s.volume, n))
 
     def funding(self):
+        tassi = self.s.funding_tasso if self.s.funding_segnale is None else self.s.funding_segnale
         return self.get(("funding",), lambda: funding_regolato(self.s.ts, self.s.durata,
-                                                                self.s.funding_ts, self.s.funding_tasso))
+                                                                self.s.funding_ts, tassi))
 
     def giorno_completo(self):
         return self.get(("giorno_completo",), lambda: giorno_completo(self.s.ts, self.s.durata))

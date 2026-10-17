@@ -26,6 +26,12 @@ Come decide:
     `research/campagne/GRUPPO/monete.csv` (e di BTCUSDT), e solo se quel file ha
     l'impronta SHA-256 scritta qui (`_IMPRONTA_MONETE_GRUPPO`); se non ce l'ha,
     ogni azione e' rifiutata;
+  * `{"tipo": "campagna", "simbolo": "LINK6"}` -> la campagna del protocollo 4
+    (`research/PROTOCOLLO_4.md`, sezioni 0, 3 e 12): come quella del protocollo 3 qui sotto, con
+    `_CAMPAGNA_4_FILE` (testo e configurazione del protocollo 4), i dati della sola LINKUSDT, la
+    cartella `risposte/` in sola lettura e il vault che si apre con `research/vault/APERTURA_4.md`
+    (`marcatore_vault`); le campagne precedenti, `vault/`, `CHANGELOG.md`, `docs/` e i dati delle
+    monete di controllo restano fuori dalla lista bianca.
   * `{"tipo": "campagna", "simbolo": "BTC51"}` -> la campagna del protocollo 3
     (`research/PROTOCOLLO_3.md`, sezioni 0, 3 e 12): una lista BIANCA piu' stretta,
     `_CAMPAGNA_3_FILE` e `_CAMPAGNA_3_CARTELLE` (il testo del protocollo 3, gli strumenti
@@ -266,6 +272,38 @@ _PROTETTI_3_FILE = (
     "research/campagne/{S}/via_libera_validazione.md",
 )
 _PROTETTI_3_CARTELLE = ("research/src",)
+#: le campagne del protocollo 4 (`research/PROTOCOLLO_4.md`): simbolo della campagna -> la sola
+#: moneta di cui usa i dati. Le monete di controllo NON ci sono: i loro dati e i loro risultati
+#: li tiene il coordinamento (regola 10), la sessione di ricerca non li vede.
+SIMBOLI_PROTOCOLLO_4 = {"LINK6": "LINKUSDT"}
+#: protocollo 4, sezione 12 («Cosa legge la sessione di ricerca, e niente altro»): file singoli
+_CAMPAGNA_4_FILE = (
+    "research/PROTOCOLLO_4.md",
+    "research/.sessione",
+    "research/config/parametri_4.yaml",
+    "research/config/bot_4.md",
+    "research/config/guida_pratica_4.md",
+    "research/config/percorsi_vietati.txt",
+    "CLAUDE.md",
+    ".gitignore",
+)
+#: protocollo 4: in sola lettura per la sessione di ricerca (gli strumenti, il via libera e le
+#: risposte del coordinamento alle richieste sulle monete di controllo)
+_PROTETTI_4_FILE = (
+    "research/PROTOCOLLO_4.md",
+    "CLAUDE.md",
+    ".gitignore",
+    "research/campagne/{S}/via_libera_validazione.md",
+)
+_PROTETTI_4_CARTELLE = ("research/src", "research/campagne/{S}/risposte")
+#: i protocolli con la lista bianca stretta (3 e 4): simbolo della campagna -> la sua moneta
+SIMBOLI_PROTOCOLLI_STRETTI = {**SIMBOLI_PROTOCOLLO_3, **SIMBOLI_PROTOCOLLO_4}
+
+
+def marcatore_vault(simbolo: str = "") -> str:
+    """Il nome del file che apre il vault per la campagna `simbolo`: `APERTURA_4.md` per il
+    protocollo 4, `APERTURA_3.md` altrimenti (come prima del protocollo 4)."""
+    return "APERTURA_4.md" if simbolo in SIMBOLI_PROTOCOLLO_4 else "APERTURA_3.md"
 #: la cartella madre dei dati in-sample: da sola non e' mai ammessa in campagna
 #: (una ricerca o un elenco li' vedrebbe le cartelle di tutte le monete)
 _DATI_INSAMPLE = "research/data/insample"
@@ -873,7 +911,7 @@ def costruisci_contesto(radice: str, marcatore: dict) -> Contesto:
         tipo=tipo,
         simbolo=simbolo,
         vietati=leggi_vietati(radice),
-        vault_aperto=os.path.isfile(os.path.join(radice, "research", "vault", "APERTURA_3.md")),
+        vault_aperto=os.path.isfile(os.path.join(radice, "research", "vault", marcatore_vault(simbolo))),
         primo_livello=primo_livello,
         monete_gruppo=monete_gruppo,
     )
@@ -953,8 +991,8 @@ def monete_dati_ammesse(simbolo: str, monete_gruppo: frozenset[str] = frozenset(
     """
     if simbolo in SIMBOLI_GRUPPO:
         return frozenset(monete_gruppo) | {MONETA_RIFERIMENTO}
-    if simbolo in SIMBOLI_PROTOCOLLO_3:
-        return frozenset({SIMBOLI_PROTOCOLLO_3[simbolo]})
+    if simbolo in SIMBOLI_PROTOCOLLI_STRETTI:
+        return frozenset({SIMBOLI_PROTOCOLLI_STRETTI[simbolo]})
     return frozenset({simbolo, MONETA_RIFERIMENTO})
 
 
@@ -969,8 +1007,8 @@ def ammesso_in_campagna(rel: str, simbolo: str, monete_gruppo: frozenset[str] = 
     `ETHUSDT`), niente maiuscole/minuscole diverse, e la cartella madre da sola
     non e' ammessa.
     """
-    if simbolo in SIMBOLI_PROTOCOLLO_3:
-        if rel in _CAMPAGNA_3_FILE:
+    if simbolo in SIMBOLI_PROTOCOLLI_STRETTI:
+        if rel in (_CAMPAGNA_4_FILE if simbolo in SIMBOLI_PROTOCOLLO_4 else _CAMPAGNA_3_FILE):
             return True
         if any(_sotto(rel, c.format(S=simbolo)) for c in _CAMPAGNA_3_CARTELLE):
             return True
@@ -997,6 +1035,9 @@ def _protetti(simbolo: str = "") -> tuple:
     if simbolo in SIMBOLI_PROTOCOLLO_3:
         file_ = file_ + tuple(f.format(S=simbolo) for f in _PROTETTI_3_FILE)
         cartelle = cartelle + _PROTETTI_3_CARTELLE
+    if simbolo in SIMBOLI_PROTOCOLLO_4:
+        file_ = file_ + tuple(f.format(S=simbolo) for f in _PROTETTI_4_FILE)
+        cartelle = cartelle + tuple(c.format(S=simbolo) for c in _PROTETTI_4_CARTELLE)
     return file_, cartelle
 
 
@@ -2324,7 +2365,7 @@ _HOST_NON_AMMESSI_3 = ("wikipedia.org",)
 def _host_ammesso_web(host: str, simbolo: str = "") -> bool:
     """L'host (gia' in minuscolo) e' uno dei siti ammessi o un loro sottodominio."""
     ammessi = _HOST_AMMESSI_WEB
-    if simbolo in SIMBOLI_PROTOCOLLO_3:
+    if simbolo in SIMBOLI_PROTOCOLLI_STRETTI:
         ammessi = tuple(d for d in ammessi if d not in _HOST_NON_AMMESSI_3)
     return any(host == dominio or host.endswith("." + dominio) for dominio in ammessi)
 
@@ -2377,7 +2418,7 @@ def giudica_url(url, ctx: Contesto) -> Verdetto:
                        "di dominio semplice")
     if not _host_ammesso_web(host, ctx.simbolo):
         return rifiuta(f"in campagna WebFetch apre solo siti di articoli scientifici "
-                       f"({', '.join(d for d in _HOST_AMMESSI_WEB if ctx.simbolo not in SIMBOLI_PROTOCOLLO_3 or d not in _HOST_NON_AMMESSI_3)}), non {host}")
+                       f"({', '.join(d for d in _HOST_AMMESSI_WEB if ctx.simbolo not in SIMBOLI_PROTOCOLLI_STRETTI or d not in _HOST_NON_AMMESSI_3)}), non {host}")
     for m in _BRANCH.finditer(decodificato):
         if m.group(0) != ctx.proprio_branch:
             return rifiuta(f"branch {m.group(0)}")
@@ -2594,6 +2635,7 @@ def _e_uscita_dello_strumento(percorso: str) -> bool:
 def messaggio_rifiuto(ctx: Contesto, oggetto: str) -> str:
     oggetto = " ".join(oggetto.splitlines())  # una riga sola, sempre
     regola = (f"Passo 4bis, research/campagne/{ctx.simbolo}/regole.md sezione 12" if ctx.gruppo
+              else "research/PROTOCOLLO_4.md, sezioni 0, 3 e 12" if ctx.simbolo in SIMBOLI_PROTOCOLLO_4
               else "research/PROTOCOLLO_3.md, sezioni 0, 3 e 12" if ctx.simbolo in SIMBOLI_PROTOCOLLO_3
               else "Passo 3")
     nota = ""

@@ -9,14 +9,14 @@ cosi' le candele caricate entrano nel motore senza conversioni.
 Il blocco del vault
 -------------------
 Il vault e' il periodo dal 2024-01-01 al 2026-09-30. Finche' non esiste il file
-``<radice>/vault/APERTURA_3.md`` (il marcatore del protocollo 3,
-``research/PROTOCOLLO_3.md``, creato solo dopo che l'utente ha scritto in chat
-"APRI IL VAULT 3"), qualunque richiesta di dati con una data oltre il
+``<radice>/vault/APERTURA_4.md`` (il marcatore del protocollo 4,
+``research/PROTOCOLLO_4.md``, creato solo dopo che l'utente ha scritto al
+coordinamento "APRI IL VAULT 4"), qualunque richiesta di dati con una data oltre il
 2023-12-31 viene rifiutata con ``VaultChiuso`` PRIMA di qualunque accesso alla
 rete o al disco. I marcatori delle edizioni precedenti, ``vault/APERTURA.md``
-(vault aperto l'11 ottobre 2026 per tre candidati) e ``vault/APERTURA_2.md``,
-NON aprono piu' il vault dal 16 ottobre 2026: restano nel repository come
-documenti, non come chiavi.
+(vault aperto l'11 ottobre 2026 per tre candidati), ``vault/APERTURA_2.md`` e
+``vault/APERTURA_3.md`` (vault del protocollo 3, aperto il 17 ottobre 2026), NON
+aprono piu' il vault: restano nel repository come documenti, non come chiavi.
 
 Il blocco della validazione (protocollo 3, regola 2)
 ----------------------------------------------------
@@ -202,6 +202,16 @@ INIZIO_VALIDAZIONE_3 = date(2022, 10, 1)
 SIMBOLI_PROTOCOLLO_3 = {"BTC51": "BTCUSDT"}
 #: Il file che toglie il blocco della validazione (regola 2), relativo a ``radice``.
 AUTORIZZAZIONE_VALIDAZIONE_3 = Path("campagne") / "BTC51" / "via_libera_validazione.md"
+#: Protocollo 4 (``research/PROTOCOLLO_4.md``): la campagna LINK6 usa i dati della sola LINKUSDT;
+#: stesse date di costruzione, validazione e vault del protocollo 3.
+SIMBOLI_PROTOCOLLO_4 = {"LINK6": "LINKUSDT"}
+#: le campagne con la lista stretta (protocolli 3 e 4): simbolo della campagna -> la sua moneta
+SIMBOLI_PROTOCOLLI_STRETTI = {**SIMBOLI_PROTOCOLLO_3, **SIMBOLI_PROTOCOLLO_4}
+
+
+def autorizzazione_validazione(simbolo_campagna: str) -> Path:
+    """Il file che toglie il blocco della validazione per la campagna, relativo a ``radice``."""
+    return Path("campagne") / simbolo_campagna / "via_libera_validazione.md"
 
 #: La cartella research/ del repo, calcolata da questo file (research/src/dati.py).
 RADICE_DEFAULT = Path(__file__).resolve().parent.parent
@@ -291,7 +301,7 @@ Fetch = Callable[[str], Optional[bytes]]
 
 
 class VaultChiuso(Exception):
-    """Richiesta di dati oltre il 2023-12-31 senza il file vault/APERTURA_3.md (protocollo 3)."""
+    """Richiesta di dati oltre il 2023-12-31 senza il file vault/APERTURA_4.md (protocollo 4)."""
 
 
 class OltreIlVault(ValueError):
@@ -340,20 +350,22 @@ class IntegritaFallita(ValueError):
 
 #: il marcatore che apre il vault (protocollo 3, dal 16 ottobre 2026); quelli delle
 #: edizioni precedenti, ``APERTURA.md`` e ``APERTURA_2.md``, non aprono piu' niente
-MARCATORE_VAULT = "APERTURA_3.md"
+MARCATORE_VAULT = "APERTURA_4.md"
+#: il marcatore del protocollo 3: dal 17 ottobre 2026 (protocollo 4) non apre piu' niente
+MARCATORE_VAULT_TERZA_EDIZIONE = "APERTURA_3.md"
 MARCATORE_VAULT_PRIMA_EDIZIONE = "APERTURA.md"
 MARCATORE_VAULT_SECONDA_EDIZIONE = "APERTURA_2.md"
 
 
 def vault_aperto(radice: Path = RADICE_DEFAULT) -> bool:
-    """True se ``<radice>/vault/APERTURA_3.md`` esiste ed ha un contenuto: il vault e' aperto.
+    """True se ``<radice>/vault/APERTURA_4.md`` esiste ed ha un contenuto: il vault e' aperto.
 
     Il Passo 5 del protocollo crea il file con data, ora ed elenco dei
     candidati congelati: un file da 0 byte (o di soli spazi) e' un incidente,
     non un'apertura, e viene trattato come assente. Una cartella con quel
-    nome non conta. ``APERTURA.md`` e ``APERTURA_2.md`` (edizioni precedenti)
-    non contano: dal 16 ottobre 2026 il vault si apre solo con il marcatore del
-    protocollo 3.
+    nome non conta. ``APERTURA.md``, ``APERTURA_2.md`` e ``APERTURA_3.md``
+    (edizioni precedenti) non contano: dal 17 ottobre 2026 il vault si apre solo
+    con il marcatore del protocollo 4 (``PROTOCOLLO_4.md``, regola 1).
     """
     percorso = Path(radice) / "vault" / MARCATORE_VAULT
     if not percorso.is_file():
@@ -374,7 +386,7 @@ def controlla_vault(fine: date, radice: Path = RADICE_DEFAULT) -> None:
       anche a vault aperto: da li' in poi e' il periodo del paper trading,
       che il protocollo vieta di usare come dato di ricerca;
     * oltre ``FINE_IN_SAMPLE`` (2023-12-31) si solleva ``VaultChiuso`` finche'
-      non esiste (con un contenuto) ``vault/APERTURA_3.md``.
+      non esiste (con un contenuto) ``vault/APERTURA_4.md``.
     """
     if fine > FINE_VAULT:
         raise OltreIlVault(
@@ -388,9 +400,9 @@ def controlla_vault(fine: date, radice: Path = RADICE_DEFAULT) -> None:
         )
 
 
-def validazione_autorizzata(radice: Path = RADICE_DEFAULT) -> bool:
-    """True se ``<radice>/campagne/BTC51/via_libera_validazione.md`` esiste ed ha un contenuto."""
-    percorso = Path(radice) / AUTORIZZAZIONE_VALIDAZIONE_3
+def validazione_autorizzata(radice: Path = RADICE_DEFAULT, simbolo_campagna: str = "BTC51") -> bool:
+    """True se ``<radice>/campagne/<simbolo_campagna>/via_libera_validazione.md`` esiste ed ha un contenuto."""
+    percorso = Path(radice) / autorizzazione_validazione(simbolo_campagna)
     if not percorso.is_file():
         return False
     try:
@@ -400,16 +412,18 @@ def validazione_autorizzata(radice: Path = RADICE_DEFAULT) -> bool:
 
 
 def controlla_validazione(fine: date, radice: Path = RADICE_DEFAULT) -> None:
-    """Protocollo 3, regola 2: in una sessione di campagna BTC51 rifiuta le date dal
-    2022-10-01 senza l'autorizzazione, PRIMA di ogni accesso al disco. Fuori da una
-    campagna del protocollo 3 non fa nulla (il coordinamento lavora sul principale)."""
+    """Protocolli 3 e 4, regola 2: in una sessione di campagna BTC51 o LINK6 rifiuta le date dal
+    2022-10-01 senza l'autorizzazione della propria campagna, PRIMA di ogni accesso al disco.
+    Fuori da quelle campagne non fa nulla (il coordinamento lavora sul principale)."""
     marcatore = marcatore_di_campagna()
-    if marcatore is None or marcatore["simbolo"] not in SIMBOLI_PROTOCOLLO_3:
+    if marcatore is None or marcatore["simbolo"] not in SIMBOLI_PROTOCOLLI_STRETTI:
         return
-    if fine >= INIZIO_VALIDAZIONE_3 and not validazione_autorizzata(radice):
+    simbolo = marcatore["simbolo"]
+    if fine >= INIZIO_VALIDAZIONE_3 and not validazione_autorizzata(radice, simbolo):
+        testo = "PROTOCOLLO_4.md" if simbolo in SIMBOLI_PROTOCOLLO_4 else "PROTOCOLLO_3.md"
         raise ValidazioneChiusa(
             f"richiesti dati fino al {fine.isoformat()}: la validazione e' chiusa fino al Passo 3 "
-            f"(PROTOCOLLO_3.md, regola 2; manca {Path(radice) / AUTORIZZAZIONE_VALIDAZIONE_3})"
+            f"({testo}, regola 2; manca {Path(radice) / autorizzazione_validazione(simbolo)})"
         )
 
 
@@ -497,7 +511,10 @@ def controlla_simbolo_in_campagna(simbolo: str, chi: str = "dati") -> None:
         motivo = (f"{simbolo!r} non e' fra le monete di {guardiano.percorso_monete_gruppo(proprio)} ne' "
                   f"{guardiano.MONETA_RIFERIMENTO} (campagne/{proprio}/regole.md, sezione 12, punto 4)")
     else:
-        if proprio in SIMBOLI_PROTOCOLLO_3:
+        if proprio in SIMBOLI_PROTOCOLLO_4:
+            motivo = (f"{simbolo!r} non e' {SIMBOLI_PROTOCOLLO_4[proprio]}: le monete di controllo le usa solo "
+                      "il coordinamento (PROTOCOLLO_4.md, regola 10 e sezione 12)")
+        elif proprio in SIMBOLI_PROTOCOLLO_3:
             motivo = (f"{simbolo!r} non e' {SIMBOLI_PROTOCOLLO_3[proprio]} "
                       "(PROTOCOLLO_3.md, sezioni 0, 3 e 12)")
         else:
@@ -1984,6 +2001,53 @@ def serie_3(simbolo: str, intervallo: str, inizio: date, fine: date, radice: Pat
     periodo, il mark sugli stessi ``ts`` (dove manca, il last al suo posto) e il funding.
     Vedi ``serie_3_con_conteggi``, che restituisce anche quante candele mark si sono sostituite."""
     return serie_3_con_conteggi(simbolo, intervallo, inizio, fine, radice)[0]
+
+
+def serie_4_con_conteggi(simbolo: str, intervallo: str, inizio: date, fine: date,
+                         radice: Path = RADICE_DEFAULT) -> Tuple[object, Dict[str, object]]:
+    """La serie del protocollo 4 (``research/PROTOCOLLO_4.md``): quella di ``serie_3_con_conteggi``
+    con due regole in piu', uguali per tutte le monete.
+
+    * Sezione 9.6: la serie finisce all'ultima candela con volume sopra zero. Le candele in coda
+      senza scambi (prezzo fermo, volume zero), che l'archivio puo' avere dopo che un contratto
+      smette di scambiare, si tolgono con ``Serie.fino_a``, che toglie anche il funding regolato
+      dopo la chiusura dell'ultima candela tenuta. Una candela a volume zero in mezzo alla serie
+      resta (e' un'ora di manutenzione, non la fine del contratto).
+    * Sezione 7.2: ``funding_segnale`` e' il tasso di ogni regolamento riportato a 8 ore
+      (tasso x 8 / ore dell'intervallo, l'intervallo letto dal file di Binance), per i segnali;
+      il risultato dei trade usa il tasso vero.
+
+    I conteggi in piu': ``candele_ferme_in_coda_tolte`` e ``intervalli_funding_ore`` (le ore di
+    intervallo trovate, con quanti regolamenti ciascuna)."""
+    import numpy as np
+
+    from research.src.catalogo3 import Serie
+
+    serie, conteggi = serie_3_con_conteggi(simbolo, intervallo, inizio, fine, radice)
+    dettaglio = carica_funding_dettaglio(simbolo, inizio, fine, radice)
+    ore_per_ts = {ts: ore for ts, ore, _ in dettaglio}
+    ore = np.array([ore_per_ts.get(int(ts), 8) for ts in serie.funding_ts], dtype=np.float64)
+    if np.any(ore <= 0):
+        raise ValueError(f"{simbolo}: intervallo di funding non positivo nei file")
+    serie = Serie(serie.timeframe, serie.ts, serie.open, serie.high, serie.low, serie.close, serie.volume,
+                  serie.mark_open, serie.mark_high, serie.mark_low, serie.mark_close, serie.funding_ts,
+                  serie.funding_tasso, serie.funding_tasso * 8.0 / ore)
+    con_scambi = np.flatnonzero(serie.volume > 0)
+    tolte = 0
+    if len(serie.ts) and len(con_scambi) and int(con_scambi[-1]) < len(serie.ts) - 1:
+        tolte = len(serie.ts) - 1 - int(con_scambi[-1])
+        serie = serie.fino_a(int(con_scambi[-1]))
+    intervalli: Dict[int, int] = {}
+    for x in ore[:len(serie.funding_ts)]:  # solo i regolamenti rimasti nella serie
+        intervalli[int(x)] = intervalli.get(int(x), 0) + 1
+    conteggi = {**conteggi, "candele": len(serie.ts), "candele_ferme_in_coda_tolte": tolte,
+                "intervalli_funding_ore": dict(sorted(intervalli.items()))}
+    return serie, conteggi
+
+
+def serie_4(simbolo: str, intervallo: str, inizio: date, fine: date, radice: Path = RADICE_DEFAULT):
+    """La serie del protocollo 4 (vedi ``serie_4_con_conteggi``), senza i conteggi."""
+    return serie_4_con_conteggi(simbolo, intervallo, inizio, fine, radice)[0]
 
 
 def fatti_passo1_3(simbolo: str = "BTCUSDT", radice: Path = RADICE_DEFAULT,

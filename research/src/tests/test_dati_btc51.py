@@ -1,7 +1,7 @@
 """Test del caricatore per il protocollo 3 (``research/PROTOCOLLO_3.md``, regole 1 e 2, sezione 12,
 Passo 0 punto 6):
 
-* il vault si apre solo con ``vault/APERTURA_3.md`` (con un contenuto); ``APERTURA.md`` e
+* il vault si apre solo con ``vault/APERTURA_4.md`` (con un contenuto); ``APERTURA.md`` e
   ``APERTURA_2.md`` non aprono piu';
 * in una sessione di campagna BTC51 il caricamento di dati dal 2022-10-01 e' rifiutato senza
   ``campagne/BTC51/via_libera_validazione.md`` (regola 2), PRIMA di leggere un file;
@@ -66,10 +66,10 @@ def test_vault_si_apre_solo_con_apertura_3(tmp_path):
         (tmp_path / "vault" / vecchio).write_text("aperto\n")
     with pytest.raises(dati.VaultChiuso):
         dati.controlla_vault(date(2024, 1, 1), tmp_path)
-    (tmp_path / "vault" / "APERTURA_3.md").write_text("   \n")
+    (tmp_path / "vault" / "APERTURA_4.md").write_text("   \n")
     with pytest.raises(dati.VaultChiuso):
         dati.controlla_vault(date(2024, 1, 1), tmp_path)
-    (tmp_path / "vault" / "APERTURA_3.md").write_text("APRI IL VAULT 3, 2026-xx-xx\n")
+    (tmp_path / "vault" / "APERTURA_4.md").write_text("APRI IL VAULT 4, 2026-xx-xx\n")
     dati.controlla_vault(date(2024, 1, 1), tmp_path)
 
 
