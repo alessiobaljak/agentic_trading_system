@@ -1,0 +1,114 @@
+{
+ "id": "V-011",
+ "trade": 224,
+ "funding_in_r_medio": 0.0466,
+ "commissioni_in_r_medio": 0.0458,
+ "per_anno": {
+  "2020": {
+   "n": 82,
+   "r_medio": 0.288,
+   "somma": 23.61
+  },
+  "2021": {
+   "n": 142,
+   "r_medio": 0.053,
+   "somma": 7.51
+  }
+ },
+ "per_semestre": {
+  "2020-1": {
+   "n": 42,
+   "r_medio": 0.448,
+   "somma": 18.8
+  },
+  "2020-2": {
+   "n": 40,
+   "r_medio": 0.12,
+   "somma": 4.81
+  },
+  "2021-1": {
+   "n": 110,
+   "r_medio": 0.035,
+   "somma": 3.86
+  },
+  "2021-2": {
+   "n": 32,
+   "r_medio": 0.114,
+   "somma": 3.65
+  }
+ },
+ "per_motivo": {
+  "stop": {
+   "n": 104,
+   "r_medio": -1.028,
+   "somma": -106.91
+  },
+  "tempo": {
+   "n": 120,
+   "r_medio": 1.15,
+   "somma": 138.03
+  }
+ },
+ "per_quinto_larghezza_stop": {
+  "0": {
+   "n": 44,
+   "r_medio": 0.226,
+   "somma": 9.95
+  },
+  "1": {
+   "n": 45,
+   "r_medio": 0.12,
+   "somma": 5.4
+  },
+  "2": {
+   "n": 45,
+   "r_medio": 0.257,
+   "somma": 11.56
+  },
+  "3": {
+   "n": 45,
+   "r_medio": -0.174,
+   "somma": -7.84
+  },
+  "4": {
+   "n": 45,
+   "r_medio": 0.268,
+   "somma": 12.05
+  }
+ },
+ "quinti_larghezza": [
+  0.0169,
+  0.01986,
+  0.02518,
+  0.03139
+ ],
+ "per_ora_utc": {
+  "0": {
+   "n": 64,
+   "r_medio": 0.333,
+   "somma": 21.28
+  },
+  "16": {
+   "n": 85,
+   "r_medio": 0.123,
+   "somma": 10.48
+  },
+  "8": {
+   "n": 75,
+   "r_medio": -0.009,
+   "somma": -0.65
+  }
+ },
+ "per_giorno": {
+  "feriale": {
+   "n": 162,
+   "r_medio": 0.072,
+   "somma": 11.62
+  },
+  "fine_settimana": {
+   "n": 62,
+   "r_medio": 0.314,
+   "somma": 19.5
+  }
+ }
+}

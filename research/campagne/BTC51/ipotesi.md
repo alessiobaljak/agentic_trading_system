@@ -256,6 +256,42 @@ Previsione: R medio fra −0,1 e +0,2 R; prevedo che non superino. Conoscenza de
 
 ---
 
+## Fase 3 dopo il primo lotto (17 ottobre 2026)
+
+Nessuna delle 19 varianti supera la Fase 2 (log, voci `risultato` da V-001 a V-019). Analisi dei trade delle tre più
+vicine (`codice/fase3_analisi.py`, dettagli in `risultati/fase3_<id>.json`), osservato:
+
+- **V-011** (funding sopra +0,03%, short): nessun trade nel 2022 (il funding non ha mai superato la soglia); metà della
+  somma degli R viene dal primo semestre 2020. Il funding incassato vale +0,047 R a trade. Non si corregge con un
+  filtro: manca un intero blocco di tempo.
+- **V-012** (funding sotto 0, long): R medio positivo in 5 semestri su 6 (negativo solo nel primo semestre 2022);
+  funding quasi nullo. **Feriali: 169 trade, +0,278 R; fine settimana: 59 trade, −0,134 R.**
+- **V-018** (rottura dopo la calma, long): tre quarti della somma nel primo semestre 2020, negativa nel 2022; anche qui
+  feriali +0,461 R contro fine settimana −0,175 R. Ha già un filtro (volatilità bassa) e il catalogo ne ammette uno:
+  il giorno della settimana non si può aggiungere.
+
+## I-09 — Nel fine settimana i segnali valgono meno (nata dalla Fase 3)
+
+**Fonte.** Baur, Cahill, Godfrey, Liu, «Bitcoin time-of-day, day-of-week and month-of-year effects in returns and
+trading volume», Finance Research Letters 31, 2019: il volume di BTC è stabilmente più basso nel fine settimana (le
+anomalie di rendimento per giorno invece non persistono). Inferenza mia: con meno operatori (in particolare
+istituzionali) il funding negativo del fine settimana misura meno una vera folla di short a leva, e il segnale vale meno.
+
+**Attenzione: l'idea nasce dall'analisi dei trade di V-012, cioè dagli stessi dati.** È il caso tipico di adattamento
+al passato (A8): 59 trade del fine settimana sono pochi e la differenza può essere caso. Per il protocollo è una
+variante nuova, consuma un tentativo e passa la Fase 2 da capo; la validazione la giudica su dati non visti.
+
+**Concorrenti specifiche.** 9-1 Caso: la differenza feriali/fine settimana sparisce in validazione. 9-2 Nel fine
+settimana il funding negativo è più frequente nel primo semestre 2022 (ribasso), e il filtro toglie un periodo cattivo
+più che un giorno cattivo: si vede dalla stabilità per blocchi.
+
+**Variante.**
+- **V-020** · 1h · long · F6 solo giorni feriali · E11 funding sotto 0,00% · M · S1 2 × ATR · U2 24 candele (stima
+  180). Tutto il resto come V-012.
+
+Previsione: R medio fra +0,15 e +0,30 R, p-value sotto 0,05; per l'origine dell'idea mi aspetto che in validazione
+perda gran parte del vantaggio.
+
 ## Piano dei tentativi
 
 Primo lotto: 19 varianti (V-001 … V-019), una per riga, in quest'ordine. Restano 21 tentativi per la Fase 3 (filtri

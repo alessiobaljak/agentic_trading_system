@@ -1,0 +1,3 @@
+[
+ {"id": "V-020", "specifica": {"timeframe": "1h", "direzione": "long", "filtro": {"codice": "F6", "giorni": "feriali"}, "ingresso": {"codice": "E11", "soglia": 0.0}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U2", "n": 24}]}}
+]
