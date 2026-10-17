@@ -18,8 +18,12 @@ SCELTE dichiarate (prima di eseguire):
 1. La serie di ogni moneta si carica dal 2023-12-01: l'ATR(14) dello stop arriva calcolato al 2024-01-01 (744
    candele prima, l'effetto dell'inizio e' sotto 1e-20). Le decisioni si prendono solo alle chiusure delle candele
    dal 2024-01-01 00:00; nessun dato oltre il 2026-09-30.
-2. Moneta delistata = l'ultima candela della serie e' prima del 2026-09-30 23:00. La posizione aperta all'ultima
-   candela si chiude al suo prezzo di chiusura (motivo «fine_dati» del motore) e il test finisce li'.
+2. La serie di ogni moneta finisce all'ultima candela con volume sopra zero: le candele in coda senza scambi
+   (MATICUSDT: 169 ore dal 2024-09-04 09:00 al 2024-09-11 09:00, prezzo fermo e volume zero, viste nei file prima
+   di eseguire) non sono mercato e si tolgono (``Serie.fino_a``). Moneta delistata = quell'ultima candela e' prima
+   del 2026-09-30 23:00. La posizione aperta all'ultima candela si chiude al suo prezzo di chiusura (motivo
+   «fine_dati» del motore) e il test finisce li'. Le candele mark e il funding che l'archivio pubblica dopo (MATICUSDT
+   fino al 2026-09, senza scambi) non entrano: la serie segue il last.
 3. Regole del motore come nel vault di BTC (``Regole()``: leva 2, rischio 1%, margine di mantenimento 0,004). Con
    la leva a 2 la liquidazione e' a circa il 40% dal prezzo: il margine di ogni moneta non cambia i trade (le
    violazioni di liquidazione si contano lo stesso).
@@ -150,6 +154,9 @@ def _giorno(ms: int) -> int:
 
 def _una_moneta(spec: dict, moneta: dict) -> dict:
     s, conteggi = dati.serie_3_con_conteggi(moneta["simbolo"], "1h", INIZIO_SERIE, dati.FINE_VAULT)
+    con_scambi = np.flatnonzero(np.asarray(s.volume) > 0)
+    candele_ferme_in_coda = len(s.ts) - 1 - int(con_scambi[-1])
+    s = s.fino_a(int(con_scambi[-1]))
     ts = np.asarray(s.ts)
     a = int(np.searchsorted(ts, dati.ms_da_data(dati.INIZIO_VAULT)))
     b = len(ts) - 1
@@ -172,7 +179,7 @@ def _una_moneta(spec: dict, moneta: dict) -> dict:
         giornaliero[_giorno(t.ts_uscita) - primo] += t.r
     return {"simbolo": moneta["simbolo"], "slippage_per_lato": moneta["slippage_per_lato"],
             "periodo_candele": [p5._ora(ts[a]), p5._ora(ultima)], "candele": b - a + 1, "delistata": delistata,
-            "conteggi_serie": conteggi, "metriche": m, "p_value": p,
+            "conteggi_serie": conteggi, "candele_ferme_in_coda_tolte": candele_ferme_in_coda, "metriche": m, "p_value": p,
             "media_casuali": None if cas is None else float(np.mean(cas["valori"])),
             "casuali": None if cas is None else {k: v for k, v in cas.items() if k != "valori"},
             "esiti": esiti, "primo_giorno": primo, "rendimenti_giornalieri": giornaliero,
