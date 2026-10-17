@@ -4041,3 +4041,8 @@ candele da 2 ore in su; le strategie possibili stanno su candele brevi, dove i c
 Branch della ricerca pubblicato con una storia propria e senza i file delle ricerche passate (commit 8e9147ef; sul
 branch i test del protocollo 4 passano, 644 su 644); sessione di ricerca `session_01U9dN6txp5poepfrCk4btAp` aperta alle
 23:58 ora italiana direttamente su quel branch, così all'avvio non vede le istruzioni né i commit del branch principale.
+Passo 1 della ricerca LINK6 finito alle 00:24 ora italiana (commit 44fcfba3): 912 file con il CHECKSUM, impronte e
+fatti uguali a quelli del Passo 0. Confermato dal coordinamento per delega del proprietario, con due cose: le prime
+candele native a 6h, 12h e 1d del 17 gennaio 2020 aprono prima delle 08:00 (inizio degli scambi) e si tengono (le esclude
+comunque il riscaldamento); la guida pratica diceva di leggere le versioni con `python3 -c`, che il guardiano rifiuta,
+corretta sul principale e sul branch della ricerca (a0f5b8ad).
