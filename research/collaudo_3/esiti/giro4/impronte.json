@@ -1,0 +1,11 @@
+{
+  "research/src/catalogo3.py": "a9c7e99613d159db92833822716c06e4913d8cc6db80c88421527269b4dc5b06",
+  "research/src/motore3.py": "84d3700cb1633711bb11db31ae9555f938897a4fd3fce1a3a56452281d9cf6c3",
+  "research/src/statistica3.py": "1e5bbd750df11ca0c1f790edcc607fc9eea492e5a5ee34746190571fc391811a",
+  "research/src/statistica.py": "e42edc0082ff0e52b8d1e1a65493f912c98fd7fbf083bf53dbe0d742ef95b7a1",
+  "research/src/dati.py": "440e6ef0a2e00c85d5329b2b9f09d03fb424d7f43d1cef0bd911c31dae43080c",
+  "research/src/guardiano.py": "b83825094acc41f5ede7cf2af9d30cc35ef2bd03108b25447df6fe8e1cec993b",
+  "research/config/parametri_3.yaml": "85b0e7bb443b123edbc4a9618c8475dd031e73e88d8b92f4d7e7c7734c31a2f8",
+  "research/collaudo_3/collaudo.py": "425f08c69bdcf4a9ae933ce279571779bcecf73a2d4b51ef8f3b7de5e02307a4",
+  "research/collaudo_3/regole.md": "40b32de1f8a4431a63cc00393d8a02e2d619125f4b9e3a3dadf0caa5a630723f"
+}
