@@ -3,7 +3,7 @@
 # Si congela all'approvazione degli esiti del Passo 0: da li' in poi nessuno lo cambia (sezione 13bis.5).
 versione_protocollo: "6 (protocollo 4)"
 approvazione_testo: "2026-10-17T20:12:00Z"
-stato: "bozza del Passo 0; si congela all'approvazione degli esiti"
+stato: "congelato il 2026-10-17 dopo il collaudo (giro 1 superato), con la delega del proprietario delle 21:10 UTC: da qui nessuno lo cambia"
 
 versioni:  # regola 11 e Passo 0 punto 8: quelle della macchina delle sessioni di ricerca, uguali in tutte le cifre
   python: "3.13.16"  # sessione di prova session_01WAjzJ2qP6vT3KsYghVfYbf, 17 ottobre 2026 20:51 UTC

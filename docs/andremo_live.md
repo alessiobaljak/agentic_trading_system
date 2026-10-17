@@ -4027,3 +4027,14 @@ Il proprietario: «sì, approvato», con tutte le proposte (LINKUSDT; le 9 monet
 niente idee di BTC51 alla ricerca; catalogo intero; le verifiche sulle monete di controllo le fa il coordinamento).
 Comincia il Passo 0: strumenti, dati delle monete di controllo, versioni della macchina di ricerca, collaudo, branch
 pulito. Poi lo STOP con gli esiti.
+
+### 17 ottobre, notte: collaudo del protocollo 4 superato
+
+Il collaudo del metodo su LINKUSDT è passato al primo giro, senza correzioni (`research/collaudo_4/esiti.md`, dalle
+22:49 alle 23:54 ora italiana, con le versioni della macchina di ricerca: Python 3.13.16, numpy 2.5.3). Su prezzi senza
+vantaggio: 0 varianti finte su 100 oltre la Fase 2, 14 p-value sotto 0,10 (soglia 15), 12 che battono il caso su
+almeno 7 monete di controllo su 9 (soglia di stop 17). Con un vantaggio inserito: 88 prove su 88 trovate sopra 0,35 R,
+0 su 90 senza vantaggio, e la verifica sulle monete di controllo passa 40 prove su 40. Il proprietario ha delegato il
+seguito («procedi in autonimia con gli altri passi»): strumenti congelati, si apre la sessione di ricerca. Capito oggi:
+su LINK, con 32,5 mesi di costruzione, 4 varianti finte su 5 non arrivano a 150 trade (400 su 501), quasi tutte su
+candele da 2 ore in su; le strategie possibili stanno su candele brevi, dove i costi pesano di più.

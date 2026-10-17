@@ -1,0 +1,193 @@
+{
+  "prova_a": {
+    "verifica_12": {
+      "varianti": 100,
+      "battono_almeno_7_su_9": 12,
+      "soglia_stop": 17,
+      "superano_la_verifica_12": 1,
+      "distribuzione_di_battono": {
+        "0": 0,
+        "1": 2,
+        "2": 7,
+        "3": 15,
+        "4": 24,
+        "5": 24,
+        "6": 16,
+        "7": 9,
+        "8": 3,
+        "9": 0
+      },
+      "stop": false
+    },
+    "varianti_con_fase2": 100,
+    "estratte_in_tutto": 501,
+    "scartate_sotto_150_trade": 400,
+    "entrate_casuali_impossibili": 1,
+    "superano_fase2": 0,
+    "soglia_superano": 5,
+    "p_sotto_0_10": 14,
+    "soglia_p_sotto_0_10": 15,
+    "p_value_per_decimi": [
+      14,
+      9,
+      8,
+      10,
+      17,
+      8,
+      7,
+      7,
+      8,
+      12
+    ],
+    "p_minimo": 0.001998001998001998,
+    "r_medio_delle_varianti": -0.06746590747420259,
+    "r_medio_delle_entrate_casuali": -0.07433705389906727,
+    "varianti_per_timeframe": {
+      "15m": 42,
+      "1h": 22,
+      "2h": 10,
+      "30m": 23,
+      "4h": 1,
+      "8h": 2
+    },
+    "che_superano": [],
+    "passa": true
+  },
+  "prova_b": {
+    "regole": {
+      "B1": {
+        "prove": 90,
+        "superano_senza_vantaggio": 0,
+        "soglia_senza_vantaggio": 3,
+        "prove_con_vantaggio_ad_almeno_0_35_r": 29,
+        "di_queste_superano": 29,
+        "quota": 1.0,
+        "soglia_quota": 0.8,
+        "serie_a_0_35_r_con_l_ampiezza_guida": 29,
+        "ampiezza_guida": 1.2,
+        "riserva_fatta": false,
+        "riserva": 1.8,
+        "r_medio_per_ampiezza": {
+          "0.0": -0.03545335069093213,
+          "0.6": 0.17853339065752657,
+          "1.2": 0.43028314796922373
+        },
+        "zona_0_2_0_35": {
+          "prove": 10,
+          "superano": 10,
+          "attese_con_la_5_2": 10
+        },
+        "esecuzione_media_limit": null,
+        "r_medio_entrate_casuali_per_ampiezza": {
+          "0.0": -0.04024332988112151,
+          "0.6": -0.04599096807145929,
+          "1.2": -0.04363594157190828
+        },
+        "salita_media_entrate_casuali": -0.004570124940562276,
+        "stop_salita_oltre_0_05": false,
+        "segnali_uguali_in_tutte": true,
+        "passa": true
+      },
+      "B2": {
+        "prove": 90,
+        "superano_senza_vantaggio": 0,
+        "soglia_senza_vantaggio": 3,
+        "prove_con_vantaggio_ad_almeno_0_35_r": 29,
+        "di_queste_superano": 29,
+        "quota": 1.0,
+        "soglia_quota": 0.8,
+        "serie_a_0_35_r_con_l_ampiezza_guida": 29,
+        "ampiezza_guida": 1.2,
+        "riserva_fatta": false,
+        "riserva": 1.8,
+        "r_medio_per_ampiezza": {
+          "0.0": -0.0647631191379525,
+          "0.6": 0.16700382658560825,
+          "1.2": 0.4287373449631339
+        },
+        "zona_0_2_0_35": {
+          "prove": 10,
+          "superano": 10,
+          "attese_con_la_5_2": 10
+        },
+        "esecuzione_media_limit": null,
+        "r_medio_entrate_casuali_per_ampiezza": {
+          "0.0": -0.0741101948766111,
+          "0.6": -0.07157810445625117,
+          "1.2": -0.06449399018121384
+        },
+        "salita_media_entrate_casuali": 0.0060741475578785925,
+        "stop_salita_oltre_0_05": false,
+        "segnali_uguali_in_tutte": true,
+        "passa": true
+      },
+      "B3": {
+        "prove": 90,
+        "superano_senza_vantaggio": 0,
+        "soglia_senza_vantaggio": 3,
+        "prove_con_vantaggio_ad_almeno_0_35_r": 30,
+        "di_queste_superano": 30,
+        "quota": 1.0,
+        "soglia_quota": 0.8,
+        "serie_a_0_35_r_con_l_ampiezza_guida": 29,
+        "ampiezza_guida": 1.2,
+        "riserva_fatta": false,
+        "riserva": 1.8,
+        "r_medio_per_ampiezza": {
+          "0.0": -0.007696050678472927,
+          "0.6": 0.23138736780681998,
+          "1.2": 0.4767318166943701
+        },
+        "zona_0_2_0_35": {
+          "prove": 22,
+          "superano": 22,
+          "attese_con_la_5_2": 22
+        },
+        "esecuzione_media_limit": 0.6278741718944357,
+        "r_medio_entrate_casuali_per_ampiezza": {
+          "0.0": -0.01123496235743548,
+          "0.6": -0.030184618482420603,
+          "1.2": -0.05291584045052914
+        },
+        "salita_media_entrate_casuali": -0.030315267109039392,
+        "stop_salita_oltre_0_05": false,
+        "segnali_uguali_in_tutte": true,
+        "passa": true
+      }
+    },
+    "passa": true
+  },
+  "prova_b12": {
+    "regole": {
+      "B1": {
+        "0.6": {
+          "prove": 10,
+          "superano": 10,
+          "battono_medio": 9.0
+        },
+        "1.2": {
+          "prove": 10,
+          "superano": 10,
+          "battono_medio": 9.0
+        },
+        "soglia_con_1_2": 8,
+        "passa": true
+      },
+      "B2": {
+        "0.6": {
+          "prove": 10,
+          "superano": 10,
+          "battono_medio": 9.0
+        },
+        "1.2": {
+          "prove": 10,
+          "superano": 10,
+          "battono_medio": 9.0
+        },
+        "soglia_con_1_2": 8,
+        "passa": true
+      }
+    },
+    "passa": true
+  }
+}

@@ -7,6 +7,10 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-17 (notte: il collaudo del protocollo 4)
+* **Il metodo regge anche su LINK e con le monete di controllo:** su prezzi senza vantaggio 0 varianti finte su 100 oltre la Fase 2 e 14 p-value sotto 0,10; con un vantaggio inserito 88 prove su 88 trovate; la verifica sulle 9 monete di controllo passa 40 prove su 40 con il vantaggio e la superano 1 variante finta su 100 senza (`research/collaudo_4/esiti.md`).
+* **Su LINK le strategie lente non arrivano ai trade minimi:** 400 varianti finte su 501 sotto 150 trade in costruzione, e fra le 100 rimaste 87 sono a 15 minuti, 30 minuti o 1 ora (stessa fonte). La ricerca su LINK si giocherà soprattutto su candele brevi, dove i costi (0,14 R a trade con lo stop all'1%) pesano di più.
+
 ## 2026-10-17 (sera: il vault del protocollo 3)
 * **L'unica strategia trovata su BTC dal protocollo 3 non regge nel vault:** V-020 (long a 1h nei giorni feriali quando il funding regolato e' sotto zero, uscita dopo 24 ore) fa 180 trade a −0,007 R, profit factor 0,99, −0,104 R a costi doppi, p 0,337 contro le entrate casuali, dopo +0,223 R in costruzione e +0,167 in validazione (`research/vault/BTC51_risultati.md`, esecuzione unica).
 * **Il vantaggio e' sparito con il mercato, non di colpo:** 2024 +10,9 R su 33 trade (come la costruzione), 2025 +0,3 R, primo semestre 2026 −13,3 R su 80 trade, il semestre con il funding piu' spesso sotto zero di tutto il 2020-2026 (38% dei regolamenti) e BTC a −33%. Gia' in costruzione il semestre peggiore era un mercato in forte discesa (2022H1, +0,040 R su 65 trade, BTC −57%): nei ribassi lunghi il funding negativo sembra misurare la tendenza, non una folla di short da spremere (inferito).
