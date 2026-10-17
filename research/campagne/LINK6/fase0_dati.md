@@ -18,6 +18,12 @@ Scritto da `codice/passo1_fatti.py` il 2026-10-17 22:24 UTC, sui file scaricati 
 
 Valore in `parametri_4.yaml` (inizio della costruzione): 2020-01-17T08:00:00Z.
 
+**Scelta del coordinamento (17 ottobre 2026, messaggio arrivato alle 22:38 UTC, per delega del proprietario):** le
+prime candele native di Binance a 6h (06:00), 12h e 1d (00:00) del 2020-01-17 si tengono come sono. Sono costruite con
+gli scambi dalle 08:00 in poi; per ogni timeframe la costruzione parte dalla sua prima candela (sezione 4: «dalla prima
+candela disponibile»), e il riscaldamento (7.8) le tiene comunque fuori dai segnali. (Paragrafo aggiunto a mano dopo
+la generazione del file: se si rilancia `codice/passo1_fatti.py`, va rimesso.)
+
 ## 2. Buchi nei dati
 
 Un buco e' una o piu' candele mancanti fra due candele presenti (dalla prima candela al 2023-12-31).
