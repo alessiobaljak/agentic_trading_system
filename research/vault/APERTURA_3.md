@@ -37,3 +37,10 @@ programma ha rifatto costruzione e validazione di V-020 e ha dato i numeri della
 
 Una sola esecuzione (`esegui`), che si rifiuta se `BTC51_giro_iniziato.json` esiste già; condizioni della sezione
 10.3 e asticella di Benjamini-Hochberg al 10% della sezione 10.4. Risultati in `research/vault/BTC51_risultati.md`.
+
+## Aggiunta del 17 ottobre, 16:36 UTC
+
+Il proprietario ha scritto la frase esatta «APRI IL VAULT 3» anche al coordinamento, alle 18:36 ora italiana (dopo
+che la sessione di ricerca gli aveva detto di scriverla qui). A quel punto il vault era già aperto (16:23 UTC) ed
+eseguito una volta (16:24 UTC, `BTC51_giro_iniziato.json`): la frase conferma l'apertura, non apre un secondo giro.
+Il vault si apre una volta sola e V-020 non si riesegue.
