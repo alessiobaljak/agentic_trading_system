@@ -3909,3 +3909,15 @@ collaudo dalle 08:28 alle 08:49 ora italiana (`research/collaudo_3/esiti.md`): *
 100 oltre la Fase 2, 13 p-value sotto 0,10 contro un massimo di 15; distanza media fra varianti ed entrate casuali da
 0,027 R a 0,008 R); **prova B passa** per tutte e tre le regole (senza vantaggio 0 su 90, con un vantaggio di almeno
 0,2 R netti 114 su 114). Prossimo passo, con il si' del proprietario: aprire la sessione di ricerca su BTC.
+
+### 17 ottobre, mattina: aperta la sessione di ricerca BTC51
+
+Il proprietario alle 09:15 ora italiana: «Sì apri la sessione.. lascia il paper acceso per ora». Esiti del Passo 0
+approvati, strumenti e parametri congelati con le impronte del secondo giro (controllate: invariate). Creato il
+branch `research/campagna/BTC51` (commit fc24e7e9) senza i file delle ricerche passate (altre campagne, vault,
+lezioni, documenti, canale ops: 460 file invece di circa 3.000) e con un CLAUDE.md pulito; sul branch i test del
+protocollo 3 passano (624, 2 saltati perche' vogliono i dati). Sessione di ricerca creata alle 09:19 ora italiana
+(`session_01M5hqfZnxRHH4mdN89emaQU`, modello `claude-opus-5-5`) con il messaggio approvato
+(`research/apertura/btc51.md`). Al controllo dopo otto minuti: ultracode non risulta attivo e la sessione non ha
+ancora cominciato a lavorare (nessun turno servito, nessun commit): detto al proprietario, che decide. Il paper con
+le strategie del vecchio gate resta acceso.
