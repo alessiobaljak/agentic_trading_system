@@ -522,6 +522,39 @@ ribassi con volume sono la tendenza di fondo (A2).
 - **V-040** · la stessa, long (stima 419).
 Previsione: short fra −0,05 e +0,15 R, long fra −0,2 e 0 R; non superano.
 
+**Esito (17 ottobre).** V-039 (short) +0,074 R, p 0,001; V-040 (long) +0,106 R, p 0,001. Non superano: il p-value è
+il più piccolo della ricerca, ma l'R medio è sotto 0,2. L'asimmetria della fonte non c'è: le rotture delle bande con
+volume doppio continuano **in entrambe le direzioni**, più del caso, ma di poco dopo i costi.
+
+## Fase 5, seconda volta — le 40 varianti sono finite (17 ottobre 2026)
+
+**Varianti usate: 40 su 40.** Candidati: **uno solo, V-020** (invariato). Superano la Fase 2 due varianti: V-020
+(candidato) e V-030 (bocciata dalla Fase 4).
+
+1. **Mi sono fissato?** No sulla seconda tornata: 17 varianti su 9 idee nuove (spremuta, liquidità del fine
+   settimana, ADX, tendenza nella calma, VWAP, volume nelle ore americane, range asiatico nei feriali, volume e ritorno,
+   asimmetria degli eccessi). Un solo ritocco indiretto del funding (V-024, meccanismo diverso).
+2. **Lo scettico, con i numeri.** Con 40 varianti il protocollo si aspetta circa **0,9 candidati falsi** anche se
+   nessuna strategia avesse un vantaggio (sezione 8.3). **Avere un solo candidato è esattamente quello che darebbe il
+   caso.** V-020 non si distingue da un falso candidato per i numeri di costruzione: p 0,017 con la soglia a 0,023.
+   Quello che lo rende un po' più credibile non è V-020 da solo ma la famiglia: tre varianti diverse che comprano dopo
+   un funding negativo (V-012 p 0,023, V-020 p 0,017, V-024 p 0,002) sono tutte sopra il caso. Ma sono costruite sugli
+   stessi episodi di funding negativo, quindi non sono tre prove indipendenti.
+3. **Cosa è più probabilmente fortuna.** La scelta dei giorni feriali in V-020 (vedi sopra); il blocco del primo
+   semestre 2020, che pesa in quasi tutte le varianti positive (V-011, V-018, V-020, V-030).
+4. **Conoscenza del 2024-2026.** Nessuna idea della seconda tornata nasce da lì; la dichiarazione della prima Fase 5
+   resta valida.
+
+**Cosa abbiamo capito** (osservato, sul periodo di costruzione):
+- **Il funding negativo seguito da un acquisto** è l'unica famiglia con più varianti sopra il caso e vicine alla soglia.
+- **Le rotture delle bande di Bollinger con volume doppio continuano** in entrambe le direzioni (p 0,001), ma valgono
+  solo +0,07/+0,11 R a trade: un'informazione vera, troppo piccola per i costi su 1h.
+- **Il ritorno verso la media perde sempre** (V-015, V-016, V-037, V-038): su BTC fra 30 minuti e 12 ore, comprare
+  la debolezza e vendere la forza è stato sotto il caso.
+- **Seguire la tendenza con rotture e medie mobili** non ha battuto entrate casuali con le stesse uscite.
+- Lo schema «feriali meglio del fine settimana» è comparso in 4 delle 5 varianti analizzate; non è stato provato su
+  dati nuovi, quindi resta un'osservazione.
+
 ## Piano dei tentativi
 
 Primo lotto: 19 varianti (V-001 … V-019), una per riga, in quest'ordine. Restano 21 tentativi per la Fase 3 (filtri
