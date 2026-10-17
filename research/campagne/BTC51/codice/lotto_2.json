@@ -1,5 +1,6 @@
 [
  {"id": "V-020", "ipotesi": "I-09", "fonte": "Baur, Cahill, Godfrey, Liu, Finance Research Letters 31, 2019 (volume piu' basso nel fine settimana); Schmeling, Schrimpf, Todorov, Crypto carry, BIS WP 1087, 2023",
   "specifica": {"timeframe": "1h", "direzione": "long", "filtro": {"codice": "F6", "giorni": "feriali"}, "ingresso": {"codice": "E11", "soglia": 0.0}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U2", "n": 24}]},
-  "previsione": "R medio fra +0,15 e +0,30; p-value sotto 0,05; idea nata dai dati di V-012, attesa forte perdita in validazione"}
+  "previsione": "R medio fra +0,15 e +0,30; p-value sotto 0,05; idea nata dai dati di V-012, attesa forte perdita in validazione",
+  "previsione_fase4": "Prevedo che fallisca almeno una verifica decisiva: la piu' a rischio e' la 3 (blocchi: primo semestre 2022 negativo in V-012) o la 1 (stop 1,6 ATR e uscita a 19 candele); costi doppi probabilmente ancora positivi (commissioni circa 0,05 R a trade)"}
 ]

@@ -1,0 +1,118 @@
+{
+ "1_robustezza": {
+  "prove": [
+   {
+    "mossa": "stop.atr -20% (14 -> 11)",
+    "trade": 181,
+    "r_medio": 0.19586376821758897
+   },
+   {
+    "mossa": "stop.atr +20% (14 -> 17)",
+    "trade": 180,
+    "r_medio": 0.2430806340669656
+   },
+   {
+    "mossa": "stop.k -20% (2.0 -> 1.6)",
+    "trade": 191,
+    "r_medio": 0.24256119061488193
+   },
+   {
+    "mossa": "stop.k +20% (2.0 -> 2.4)",
+    "trade": 171,
+    "r_medio": 0.22772783755501563
+   },
+   {
+    "mossa": "uscite[0].n -20% (24 -> 19)",
+    "trade": 189,
+    "r_medio": 0.21020966071538538
+   },
+   {
+    "mossa": "uscite[0].n +20% (24 -> 29)",
+    "trade": 180,
+    "r_medio": 0.27846608756527536
+   }
+  ],
+  "supera": true
+ },
+ "2_timeframe_adiacenti": {
+  "prove": [
+   {
+    "timeframe": "30m",
+    "trade": 202,
+    "r_medio": 0.27289174941335703
+   },
+   {
+    "timeframe": "2h",
+    "trade": 164,
+    "r_medio": 0.26684549082928
+   }
+  ],
+  "supera": true
+ },
+ "3_blocchi": {
+  "blocchi": [
+   {
+    "da": "inizio",
+    "a": "2020-06-30",
+    "trade": 42,
+    "r_medio": 0.40188413725357863,
+    "somma_r": 16.8791337646503,
+    "quota": 0.42103281313629876
+   },
+   {
+    "da": "2020-07-01",
+    "a": "2021-03-31",
+    "trade": 17,
+    "r_medio": -0.022032410402003745,
+    "somma_r": -0.3745509768340637,
+    "quota": -0.009342792920431699
+   },
+   {
+    "da": "2021-04-01",
+    "a": "2021-12-31",
+    "trade": 30,
+    "r_medio": 0.43278289351989213,
+    "somma_r": 12.983486805596764,
+    "quota": 0.32385986451074705
+   },
+   {
+    "da": "2022-01-01",
+    "a": "2022-09-30",
+    "trade": 91,
+    "r_medio": 0.11650285799843994,
+    "somma_r": 10.601760077858035,
+    "quota": 0.264450115273386
+   }
+  ],
+  "positivi": 3,
+  "quota_massima": 0.42103281313629876,
+  "supera": true
+ },
+ "4_senza_i_migliori": {
+  "tolti": 9,
+  "r_medio": 0.01249924162398959,
+  "supera": true
+ },
+ "5_costi_doppi": {
+  "r_medio": 0.14746076023629265,
+  "supera": true
+ },
+ "6_troncamento": {
+  "differenze": [],
+  "supera": true
+ },
+ "7_liquidazione": {
+  "violazioni": 0,
+  "supera": true
+ },
+ "9_intrabarra_opposta": {
+  "r_medio": 0.22272127595150573,
+  "differenza": 0.0
+ },
+ "10_ritardo": {
+  "trade": 175,
+  "r_medio": 0.23660801453062455,
+  "differenza": 0.013886738579118818
+ },
+ "candidato": true
+}
