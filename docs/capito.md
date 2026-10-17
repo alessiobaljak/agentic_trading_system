@@ -7,6 +7,10 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-17 (il secondo giro del collaudo)
+* **Con il confronto alla stessa larghezza di stop, il p-value e' tarato:** su prezzi senza vantaggio 13 strategie finte su 100 hanno un p-value sotto 0,10 (attese circa 10, soglia 15), e la distanza media dal caso scende da 0,027 R a 0,008 R a trade (collaudo_3/esiti.md, secondo giro).
+* **E il metodo trova ogni vantaggio vero di almeno 0,2 R:** 114 prove su 114, senza nessun falso positivo sulle stesse regole senza vantaggio (0 su 90).
+
 ## 2026-10-16 (sera: il collaudo del metodo del protocollo 3)
 * **Il confronto con le entrate casuali premiava anche cio' che non e' previsione.** Su prezzi senza nessun vantaggio possibile, 100 strategie finte battono le proprie entrate casuali in media di 0,027 R a trade e 21 hanno un p-value sotto 0,10 invece di circa 10 (collaudo_3/esiti.md). Il motivo: entrano quando lo stop e' largo e pagano meno costi e meno regole prudenti per ogni R. Nessuna e' passata (0 su 100): a fermarle e' la soglia di 0,2 R dopo i costi, non il p-value.
 * **Il primo modo di scegliere le entrate casuali era sbagliato** e l'ha trovato un verificatore indipendente prima del collaudo: teneva piu' spesso i trade brevi (stop), il caso sembrava peggiore di 0,07 R con il candidato in posizione per meta' del tempo.

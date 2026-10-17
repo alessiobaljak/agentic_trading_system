@@ -1,0 +1,141 @@
+{
+  "prova_a": {
+    "varianti_con_fase2": 100,
+    "estratte_in_tutto": 486,
+    "scartate_sotto_150_trade": 386,
+    "entrate_casuali_impossibili": 0,
+    "superano_fase2": 0,
+    "soglia_superano": 5,
+    "p_sotto_0_10": 13,
+    "soglia_p_sotto_0_10": 15,
+    "p_value_per_decimi": [
+      13,
+      13,
+      9,
+      9,
+      13,
+      11,
+      8,
+      8,
+      9,
+      7
+    ],
+    "p_minimo": 0.003996003996003996,
+    "r_medio_delle_varianti": -0.07620701751347156,
+    "r_medio_delle_entrate_casuali": -0.08383609989849078,
+    "varianti_per_timeframe": {
+      "15m": 42,
+      "1h": 23,
+      "2h": 10,
+      "30m": 23,
+      "4h": 1,
+      "8h": 1
+    },
+    "che_superano": [],
+    "passa": true
+  },
+  "prova_b": {
+    "regole": {
+      "B1": {
+        "prove": 90,
+        "superano_senza_vantaggio": 0,
+        "soglia_senza_vantaggio": 3,
+        "prove_con_vantaggio_ad_almeno_0_35_r": 27,
+        "di_queste_superano": 27,
+        "quota": 1.0,
+        "soglia_quota": 0.8,
+        "serie_a_0_35_r_con_l_ampiezza_guida": 27,
+        "ampiezza_guida": 1.2,
+        "riserva_fatta": false,
+        "riserva": 1.8,
+        "r_medio_per_ampiezza": {
+          "0.0": -0.07961980643336329,
+          "0.6": 0.14007278086452565,
+          "1.2": 0.40800844282729365
+        },
+        "zona_0_2_0_35": {
+          "prove": 6,
+          "superano": 6,
+          "attese_con_la_5_2": 6
+        },
+        "esecuzione_media_limit": null,
+        "r_medio_entrate_casuali_per_ampiezza": {
+          "0.0": -0.08460704399988356,
+          "0.6": -0.08715605114328265,
+          "1.2": -0.08522488005243535
+        },
+        "salita_media_entrate_casuali": -0.0015834215979754415,
+        "stop_salita_oltre_0_05": false,
+        "segnali_uguali_in_tutte": true,
+        "passa": true
+      },
+      "B2": {
+        "prove": 90,
+        "superano_senza_vantaggio": 0,
+        "soglia_senza_vantaggio": 3,
+        "prove_con_vantaggio_ad_almeno_0_35_r": 27,
+        "di_queste_superano": 27,
+        "quota": 1.0,
+        "soglia_quota": 0.8,
+        "serie_a_0_35_r_con_l_ampiezza_guida": 27,
+        "ampiezza_guida": 1.2,
+        "riserva_fatta": false,
+        "riserva": 1.8,
+        "r_medio_per_ampiezza": {
+          "0.0": -0.08114014596923738,
+          "0.6": 0.15203516005093612,
+          "1.2": 0.4185751441752203
+        },
+        "zona_0_2_0_35": {
+          "prove": 8,
+          "superano": 8,
+          "attese_con_la_5_2": 8
+        },
+        "esecuzione_media_limit": null,
+        "r_medio_entrate_casuali_per_ampiezza": {
+          "0.0": -0.09350400495346857,
+          "0.6": -0.08965166928966911,
+          "1.2": -0.08470448075156174
+        },
+        "salita_media_entrate_casuali": 0.006325929932853143,
+        "stop_salita_oltre_0_05": false,
+        "segnali_uguali_in_tutte": true,
+        "passa": true
+      },
+      "B3": {
+        "prove": 90,
+        "superano_senza_vantaggio": 0,
+        "soglia_senza_vantaggio": 3,
+        "prove_con_vantaggio_ad_almeno_0_35_r": 29,
+        "di_queste_superano": 29,
+        "quota": 1.0,
+        "soglia_quota": 0.8,
+        "serie_a_0_35_r_con_l_ampiezza_guida": 29,
+        "ampiezza_guida": 1.2,
+        "riserva_fatta": false,
+        "riserva": 1.8,
+        "r_medio_per_ampiezza": {
+          "0.0": -0.034891045764052414,
+          "0.6": 0.19183804549432484,
+          "1.2": 0.46779450568101216
+        },
+        "zona_0_2_0_35": {
+          "prove": 17,
+          "superano": 17,
+          "attese_con_la_5_2": 17
+        },
+        "esecuzione_media_limit": 0.625348936502102,
+        "r_medio_entrate_casuali_per_ampiezza": {
+          "0.0": -0.03887240545431778,
+          "0.6": -0.05630298846665373,
+          "1.2": -0.0819228851693176
+        },
+        "salita_media_entrate_casuali": -0.03024053136366789,
+        "stop_salita_oltre_0_05": false,
+        "segnali_uguali_in_tutte": true,
+        "passa": true
+      }
+    },
+    "passa": true
+  }
+}

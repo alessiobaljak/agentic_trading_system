@@ -4,12 +4,13 @@ Protocollo: `research/PROTOCOLLO_3.md` (versione 5.1 su BTC, approvata dal propr
 19:26 UTC).
 
 - **Passo corrente:** Passo 0 (preparazione e collaudo del metodo), eseguito dal coordinamento sul branch principale:
-  STOP dal 16 ottobre 2026, sera, in attesa del proprietario.
-- **Passi completati:** nessuno.
+  finito il 17 ottobre 2026; STOP in attesa del si' del proprietario agli esiti per aprire la sessione di ricerca.
+- **Passi completati:** nessuno (il Passo 0 si chiude con l'approvazione degli esiti).
 - **Varianti usate:** 0 su 40.
 - **Candidati:** nessuno.
-- **Prossima azione:** il proprietario decide sulle correzioni del metodo proposte in `research/collaudo_3/esiti.md`,
-  sulla prova C (parita' con il bot), sulla scelta (a) o (b) della sezione 7.10 e sui fatti del Passo 0. Poi si
-  correggono gli strumenti e si rifanno le prove del collaudo. La sessione di ricerca (Passi 1-4) si apre solo dopo.
-- **Problemi aperti:** la prova A del collaudo non passa (21 p-value sotto 0,10, soglia 15); la prova B non si puo'
-  valutare per la regola short; la prova C non e' eseguibile perche' il bot non esegue le varianti del catalogo.
+- **Collaudo del metodo:** passato al secondo giro (17 ottobre, `research/collaudo_3/esiti.md`): prova A 13 p-value
+  sotto 0,10 su 100 e nessuna variante finta oltre la Fase 2; prova B passata per tutte e tre le regole. La prova di
+  parita' con il bot si fa dopo il vault, prima del paper (scelta del proprietario del 17 ottobre).
+- **Prossima azione:** con il si' del proprietario, il coordinamento crea il branch `research/campagna/BTC51` e apre la
+  sessione di ricerca (Passi 1-4) con il messaggio `research/apertura/btc51.md`.
+- **Problemi aperti:** nessuno.

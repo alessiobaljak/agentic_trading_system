@@ -3898,3 +3898,14 @@ Passo 0 fino al collaudo:
   larghezza di stop; serie senza vantaggio con la direzione delle candele girata a caso invece dell'ordine
   mescolato) la diagnosi da' 12 su 100. Le correzioni cambiano il testo approvato: aspettano il proprietario.
   La ricerca non comincia finche' il metodo non passa il collaudo.
+
+### 17 ottobre, mattina: correzioni approvate, il metodo passa il collaudo al secondo giro
+
+Il proprietario alle 08:11 ora italiana: «ok sì a tutto, procedi con le correzioni». Approvate le tre correzioni del
+metodo (entrate casuali con la stessa larghezza di stop del candidato; serie senza vantaggio con la direzione di ogni
+candela girata a caso; vantaggio inserito piu' grande nella prova B), la prova di parita' con il bot dopo il vault,
+tutto il catalogo e l'inizio dei dati al 1° gennaio 2020; scritte nel protocollo (appendice 3). Secondo giro del
+collaudo dalle 08:28 alle 08:49 ora italiana (`research/collaudo_3/esiti.md`): **prova A passa** (0 varianti finte su
+100 oltre la Fase 2, 13 p-value sotto 0,10 contro un massimo di 15; distanza media fra varianti ed entrate casuali da
+0,027 R a 0,008 R); **prova B passa** per tutte e tre le regole (senza vantaggio 0 su 90, con un vantaggio di almeno
+0,2 R netti 114 su 114). Prossimo passo, con il si' del proprietario: aprire la sessione di ricerca su BTC.
