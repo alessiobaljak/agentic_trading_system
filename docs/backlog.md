@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | P7 (il bot che esegue le strategie del protocollo 3: subito o dopo il vault), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
+| **0. Aspettano il tuo sì** | P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: CHIUSO il 12 ott al Passo 7, zero strategie trovate), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -31,6 +31,14 @@ la dashboard mostra le voci senza una seconda copia da aggiornare. Quindi: un gr
 le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
+
+### P8. Protocollo 3: la robustezza non sposta le soglie che valgono zero
+**Perché:** nella ricerca BTC51 (17 ott) il candidato V-020 usa «funding sotto lo 0,00%»; la verifica di
+robustezza della Fase 4 sposta ogni parametro del ±20%, e il 20% di zero e' zero, quindi su quella soglia non ha
+messo alla prova niente (segnalato dalla sessione di ricerca, `research/campagne/BTC51/STATO.md` sul suo branch).
+Non e' un errore degli strumenti: e' la regola del protocollo. **Proposta per la prossima versione:** per le soglie
+a zero (funding 0,00%) uno spostamento di un passo fisso, per esempio ±0,005% come l'arrotondamento del funding.
+Non si cambia adesso: la ricerca BTC51 ha finito il Passo 2 con le regole approvate.
 
 ### P7. Protocollo 3: il bot che esegue le strategie del catalogo (prova di parità del collaudo)
 **Perché:** al Passo 0 del protocollo 3 (16 ott) e' risultato che il bot oggi non sa eseguire nessuna variante del

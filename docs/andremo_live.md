@@ -3942,3 +3942,15 @@ miliardesimo di R di tolleranza nei pareggi, come vuole la 10.2: «maggiore o ug
 versioni della ricerca (quarto giro, 11:13-11:39 ora italiana): prova A e B passano. Due difetti degli strumenti in
 una mattina, trovati entrambi dalla sessione di ricerca prima di qualunque variante: la regola che gli strumenti
 siano in sola lettura e che la sessione si fermi e chieda ha funzionato.
+
+### 17 ottobre, pomeriggio: Passo 2 della ricerca BTC51 finito, 40 varianti su 40, via libera alla validazione
+
+La sessione di ricerca ha finito il Passo 2 con 23 varianti e un candidato debole (V-020: 1h, acquisto nei giorni
+feriali quando il funding regolato e' sotto zero, stop a 2 ATR, uscita dopo 24 ore; costruzione 180 trade, +0,223 R,
+p 0,017; senza i 9 trade migliori +0,012). Il proprietario ha chiesto di usare anche le 17 varianti rimaste: seconda
+tornata da V-024 a V-040 su 9 idee nuove; una sola (V-030) ha superato la Fase 2 ed e' caduta nella Fase 4 (timeframe
+vicini, blocchi di tempo, trade estremi). Verifica del coordinamento sul branch (commit be5c28e0): strumenti uguali al
+collaudo, 40 varianti registrate prima dei risultati, tutte sulla costruzione. Il proprietario alle 15:39 ora
+italiana: «sì procedi con la validazione»; via libera scritto sul branch della ricerca (29c2ca6a). Con 40 varianti il
+caso da solo darebbe circa una variante oltre la Fase 2: V-020 e' compatibile con il caso, e la validazione lo dira'.
+Capito oggi: il funding e' l'unica famiglia del catalogo che ha dato p-value piccoli in tutte e due le direzioni.
