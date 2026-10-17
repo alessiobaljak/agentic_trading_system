@@ -1,3 +1,0 @@
-# uscite dei processi e log di corsa: restano fuori da git (gli esiti sono nei .json)
-*.out
-*.log

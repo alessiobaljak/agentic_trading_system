@@ -1,4 +1,0 @@
-ok i24_candela_inversione.py {"direzione": "long", "tendenza": 5, "ombra": 0.6, "chiusura_quota": 0.67, "tenuta": 2, "atr": 14, "stop_atr": 3.0} {'trade_variante': 35, 'casuale_uguale': True, 'trade_a': 396, 'intervalli_vietati': 2}
-ok i24_candela_inversione.py {"direzione": "short", "tendenza": 5, "ombra": 0.6, "chiusura_quota": 0.67, "tenuta": 2, "atr": 14, "stop_atr": 3.0} {'trade_variante': 16, 'casuale_uguale': True, 'trade_a': 396, 'intervalli_vietati': 2}
-ok i26_residuo_momento.py {"direzione": "long", "orizzonte": 21, "finestra_beta": 90, "soglia_z": 1.0, "tenuta": 7, "atr": 14, "stop_atr": 3.0} {'trade_variante': 37, 'casuale_uguale': True, 'trade_a': 138, 'intervalli_vietati': 2}
-ok i26_residuo_momento.py {"direzione": "short", "orizzonte": 21, "finestra_beta": 90, "soglia_z": 1.0, "tenuta": 7, "atr": 14, "stop_atr": 3.0} {'trade_variante': 41, 'casuale_uguale': True, 'trade_a': 141, 'intervalli_vietati': 2}

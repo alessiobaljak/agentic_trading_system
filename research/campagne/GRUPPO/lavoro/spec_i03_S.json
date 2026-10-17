@@ -1,9 +1,0 @@
-{"tipo_test": "variante", "idea": "I-03", "variante_nome": "I-03-S", "famiglia": null, "ritocco_di": null,
- "fonte": "Caporale, Plastun, «Momentum effects in the cryptocurrency market after one-day abnormal returns», Financial Markets and Portfolio Management 34, 2020",
- "meccanismo": "reazione ritardata a un rendimento giornaliero anomalo in giù: continuazione il giorno dopo",
- "timeframe": "1d", "direzione": "short", "modulo": "i03_giorno_anomalo.py",
- "parametri": {"direzione": "short", "finestra": 30, "soglia_dev": 2.0, "tenuta": 1, "atr": 14, "stop_atr": 3.0},
- "periodo": "costruzione",
- "previsione": "R medio dopo i costi fra -0,05 e +0,03; t contro la (b) di gruppo fra -1,5 e +1; costo di un giro circa 0,008 R",
- "criterio_successo": "candidato: batte nettamente la (a) e la (b) di gruppo (contro_baseline con il pavimento delle sfasate) e R medio dopo i costi sui trade sommati positivo",
- "conta": "I-03-S_conta.json"}

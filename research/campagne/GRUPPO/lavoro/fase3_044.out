@@ -1,1 +1,0 @@
-{"id": "GRUPPO-044", "trade": 841, "r_medio": 0.0239, "costo_giro_r_medio_stimato": 0.0594, "r_medio_lordo_stimato": 0.0833, "per_esito": {"segnale": {"quota": 0.913, "r_medio": 0.1251}, "stop": {"quota": 0.087, "r_medio": -1.0417}}, "giorni_con_almeno_10_uscite": {"trade": 591, "r_medio": 0.0089}, "altri_giorni": {"trade": 250, "r_medio": 0.0592}}

@@ -1,1 +1,0 @@
-{"id": "GRUPPO-047", "trade": 1558, "r_medio": 0.0002, "costo_giro_r_medio_stimato": 0.0589, "r_medio_lordo_stimato": 0.0591, "per_esito": {"segnale": {"quota": 0.922, "r_medio": 0.0882}, "stop": {"quota": 0.078, "r_medio": -1.0446}}, "giorni_con_almeno_10_uscite": {"trade": 1077, "r_medio": 0.0054}, "altri_giorni": {"trade": 481, "r_medio": -0.0114}}
