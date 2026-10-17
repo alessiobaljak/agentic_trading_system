@@ -1,6 +1,6 @@
 # Apertura del vault del protocollo 3 (Passo 5)
 
-Scritto dal coordinamento il 17 ottobre 2026 alle 16:25 UTC (18:25 ora italiana), sul branch principale.
+Scritto dal coordinamento il 17 ottobre 2026 alle 16:23 UTC (18:23 ora italiana), sul branch principale.
 
 - **Comando del proprietario:** «APRI IL VAULT 3», scritto dal proprietario nella sessione di ricerca BTC51 e
   registrato da quella sessione nel suo log, copiato esatto (`research/campagne/BTC51/log.jsonl` sul branch

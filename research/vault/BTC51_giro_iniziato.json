@@ -1,0 +1,75 @@
+{
+ "iniziato": "2026-10-17T16:24:53Z",
+ "verifica": {
+  "commit_consegna": "1b222fb5dbf10b002b06f5101ac55716a4cdfc33",
+  "strumenti_uguali_al_collaudo": {
+   "research/src/catalogo3.py": true,
+   "research/src/motore3.py": true,
+   "research/src/statistica3.py": true,
+   "research/src/statistica.py": true,
+   "research/src/dati.py": true,
+   "research/src/guardiano.py": true,
+   "research/config/parametri_3.yaml": true,
+   "research/collaudo_3/collaudo.py": true,
+   "research/collaudo_3/regole.md": true
+  },
+  "strumenti_uguali_sul_branch_della_ricerca": {
+   "research/src/catalogo3.py": true,
+   "research/src/motore3.py": true,
+   "research/src/statistica3.py": true,
+   "research/src/statistica.py": true,
+   "research/src/dati.py": true,
+   "research/src/guardiano.py": true,
+   "research/config/parametri_3.yaml": true,
+   "research/collaudo_3/collaudo.py": true,
+   "research/collaudo_3/regole.md": true
+  },
+  "candidato": {
+   "candidati/V-020/regole.md": {
+    "attesa": "7eb2cc234a8dc6a64d09bb310c46968309e3b6b0532559cb95a0f28b39d129f7",
+    "trovata": "7eb2cc234a8dc6a64d09bb310c46968309e3b6b0532559cb95a0f28b39d129f7"
+   },
+   "codice/lotto_2.json": {
+    "attesa": "dfb3695b8b2d0aebe3236beab610f07f7bc394df00a2c86fed49f5e4fdfa8232",
+    "trovata": "dfb3695b8b2d0aebe3236beab610f07f7bc394df00a2c86fed49f5e4fdfa8232"
+   },
+   "codice/lotto.py": {
+    "attesa": "455b5ca3a16e9c308b0de5625ea1943cf31abb342de3f063f1c5bf13d714a91f",
+    "trovata": "455b5ca3a16e9c308b0de5625ea1943cf31abb342de3f063f1c5bf13d714a91f"
+   },
+   "codice/registro.py": {
+    "attesa": "fe3d7a140092fc887e0abd8042c40896c4402cc1ead5c15606f5bd72dc08b1ab",
+    "trovata": "fe3d7a140092fc887e0abd8042c40896c4402cc1ead5c15606f5bd72dc08b1ab"
+   }
+  },
+  "specifica": {
+   "timeframe": "1h",
+   "direzione": "long",
+   "filtro": {
+    "codice": "F6",
+    "giorni": "feriali"
+   },
+   "ingresso": {
+    "codice": "E11",
+    "soglia": 0.0,
+    "lato": "sotto"
+   },
+   "conferma": null,
+   "tipo_ingresso": {
+    "codice": "M"
+   },
+   "stop": {
+    "codice": "S1",
+    "k": 2.0,
+    "atr": 14
+   },
+   "uscite": [
+    {
+     "codice": "U2",
+     "n": 24
+    }
+   ]
+  },
+  "tutto_uguale": true
+ }
+}

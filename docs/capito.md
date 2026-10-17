@@ -7,6 +7,11 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-17 (sera: il vault del protocollo 3)
+* **L'unica strategia trovata su BTC dal protocollo 3 non regge nel vault:** V-020 (long a 1h nei giorni feriali quando il funding regolato e' sotto zero, uscita dopo 24 ore) fa 180 trade a −0,007 R, profit factor 0,99, −0,104 R a costi doppi, p 0,337 contro le entrate casuali, dopo +0,223 R in costruzione e +0,167 in validazione (`research/vault/BTC51_risultati.md`, esecuzione unica).
+* **Il vantaggio e' sparito con il mercato, non di colpo:** 2024 +10,9 R su 33 trade (come la costruzione), 2025 +0,3 R, primo semestre 2026 −13,3 R su 80 trade, il semestre con il funding piu' spesso sotto zero di tutto il 2020-2026 (38% dei regolamenti) e BTC a −33%. Gia' in costruzione il semestre peggiore era un mercato in forte discesa (2022H1, +0,040 R su 65 trade, BTC −57%): nei ribassi lunghi il funding negativo sembra misurare la tendenza, non una folla di short da spremere (inferito).
+* **Il metodo ha fatto quello per cui e' stato costruito:** un candidato debole, a circa 1,2 errori standard in validazione, e' stato fermato prima del paper; la previsione scritta prima del vault (circa 175 trade, +0,08 R, una probabilita' su quattro di superarlo) aveva i trade giusti (180) e l'R dentro l'intervallo dichiarato.
+
 ## 2026-10-17 (il secondo giro del collaudo)
 * **Con il confronto alla stessa larghezza di stop, il p-value e' tarato:** su prezzi senza vantaggio 13 strategie finte su 100 hanno un p-value sotto 0,10 (attese circa 10, soglia 15), e la distanza media dal caso scende da 0,027 R a 0,008 R a trade (collaudo_3/esiti.md, secondo giro).
 * **E il metodo trova ogni vantaggio vero di almeno 0,2 R:** 114 prove su 114, senza nessun falso positivo sulle stesse regole senza vantaggio (0 su 90).

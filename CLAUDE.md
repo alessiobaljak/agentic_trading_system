@@ -18,6 +18,8 @@ La ricerca riparte con il **protocollo 3** (`research/PROTOCOLLO_3.md`: la versi
 proprietario, con il collaudo del metodo; approvato il 16 ott 2026 alle 19:26 UTC). Prima si collauda il metodo
 (Passo 0, sezione 13bis: tre prove), poi una sessione di ricerca sul branch `research/campagna/BTC51` cerca le
 strategie su BTCUSDT; il paper è l'esame finale. La seconda edizione (`research/PROTOCOLLO_2.md`) è chiusa.
+**Il vault 3 è stato aperto il 17 ott 2026** (frase del proprietario): l'unico candidato, V-020, non lo supera
+(`research/vault/BTC51_risultati.md`); il passo dopo (prova su altre monete o chiusura) lo decide il proprietario.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e

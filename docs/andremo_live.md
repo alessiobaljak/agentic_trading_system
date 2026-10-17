@@ -3967,3 +3967,17 @@ per strategia, l'orologio da 1 ora). Verifica del coordinamento: strumenti ugual
 Capito oggi: con il metodo collaudato, 40 idee ragionate su BTC hanno dato un solo candidato che regge fuori dalla
 costruzione, e debole; il vault dira' se e' piu' del caso. Da oggi il coordinamento parla da solo con la sessione di
 ricerca (routine a un colpo sulla sessione), senza copia e incolla del proprietario.
+
+### 17 ottobre, sera: vault del protocollo 3 aperto, V-020 non lo supera
+
+Il proprietario ha scritto «APRI IL VAULT 3» nella sessione di ricerca, che l'ha registrato nel suo log senza toccare
+il vault (commit 946ccadb e 739a1853) e gli ha detto che il Passo 5 spetta al coordinamento. Il coordinamento ha
+controllato le impronte (candidato 4 su 4, strumenti 9 su 9), ha rifatto costruzione e validazione con lo stesso
+programma (stessi numeri della ricerca), ha aperto il vault alle 18:23 ora italiana (`research/vault/APERTURA_3.md`),
+scaricato 33 mesi su 33 di dati con il CHECKSUM di Binance ed eseguito V-020 una volta sola alle 18:24. Esito: 180
+trade, −0,007 R a trade, profit factor 0,99, −0,104 R a costi doppi, p 0,337 contro le entrate casuali: **non supera**
+(`research/vault/BTC51_risultati.md`). Il 2024 era ancora buono (+10,9 R su 33 trade); il primo semestre 2026, con il
+funding sotto zero nel 38% dei regolamenti e BTC a −33%, ha dato 80 trade a −0,166 R. Capito oggi: la sola idea del
+protocollo 3 che aveva superato costruzione e validazione su BTC era il funding negativo come segnale d'acquisto, e
+nei mercati in discesa lunga quel segnale scatta spesso e perde; il metodo l'ha fermata prima del paper, come doveva.
+Prossimo passo: decide il proprietario (prova su altre monete o chiusura). Il paper del vecchio gate resta acceso.
