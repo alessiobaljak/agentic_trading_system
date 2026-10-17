@@ -1,0 +1,8 @@
+[
+ {"id": "V-039", "ipotesi": "I-20", "fonte": "Caporale, Plastun, Momentum effects in the cryptocurrency market after one-day abnormal returns, CESifo WP 7917, 2019",
+  "specifica": {"timeframe": "1h", "direzione": "short", "filtro": null, "ingresso": {"codice": "E4", "k": 2.0}, "conferma": {"codice": "C1", "soglia": 2.0}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 24}]},
+  "previsione": "R medio fra -0,05 e +0,15; non supera"},
+ {"id": "V-040", "ipotesi": "I-20", "fonte": "come V-039",
+  "specifica": {"timeframe": "1h", "direzione": "long", "filtro": null, "ingresso": {"codice": "E4", "k": 2.0}, "conferma": {"codice": "C1", "soglia": 2.0}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 24}]},
+  "previsione": "R medio fra -0,2 e 0; non supera"}
+]

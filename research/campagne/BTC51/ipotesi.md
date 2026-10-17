@@ -502,6 +502,26 @@ proprio il caso della fonte.
 - **V-038** · la stessa, long (stima 233).
 Previsione: short fra −0,1 e +0,15 R; long fra −0,2 e +0,05 R; non superano.
 
+**Esito (17 ottobre).** V-037 −0,141 R (p 0,696), V-038 −0,229 R (p 0,990): non superano. V-038 fa peggio del caso
+con chiarezza: dopo un eccesso al ribasso con volume alto, anche se la candela rientra nelle bande, BTC ha continuato a
+scendere. È coerente con Caporale e Plastun (momento dopo gli eccessi al ribasso) e contro Campbell, Grossman e Wang.
+
+### I-20 — Asimmetria degli eccessi in BTC: al ribasso continuano, al rialzo no (gli ultimi due tentativi)
+
+**Fonte.** Caporale, Plastun, «Momentum effects in the cryptocurrency market after one-day abnormal returns», CESifo
+Working Paper 7917, 2019 (Financial Markets and Portfolio Management, 2020): dopo un movimento anomalo i prezzi di BTC
+continuano nella stessa direzione, **tranne dopo gli eccessi al rialzo**, che tornano indietro. La previsione era già
+scritta in I-03 prima di qualunque test; V-038 la rende più interessante, e lo dichiaro: è anche un'idea nata vedendo un
+risultato. **Affermazione:** una chiusura oraria sotto la banda di Bollinger inferiore (k 2,0) con volume oltre 2 volte
+la media è seguita, nelle 24 ore, da un ribasso maggiore del caso (short); la stessa regola al rialzo **non** dà un
+vantaggio. Le due varianti mettono alla prova insieme la continuazione e l'asimmetria. **Concorrenti:** 20-1 è I-08 senza
+il filtro della calma e con il volume: le rotture delle bande senza filtro potrebbero non valere niente; 20-2 nel 2022 i
+ribassi con volume sono la tendenza di fondo (A2).
+- **V-039** · 1h · short · E4 rottura di Bollinger k 2,0 · C1 volume relativo 2,0 · M · S1 1,5 × ATR · U1 2 R e U2 24
+  candele (stima 433).
+- **V-040** · la stessa, long (stima 419).
+Previsione: short fra −0,05 e +0,15 R, long fra −0,2 e 0 R; non superano.
+
 ## Piano dei tentativi
 
 Primo lotto: 19 varianti (V-001 … V-019), una per riga, in quest'ordine. Restano 21 tentativi per la Fase 3 (filtri
