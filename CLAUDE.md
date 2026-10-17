@@ -21,7 +21,8 @@ strategie su BTCUSDT; il paper è l'esame finale. La seconda edizione (`research
 **Il vault 3 è stato aperto il 17 ott 2026** (frase del proprietario): l'unico candidato, V-020, non lo supera
 (`research/vault/BTC51_risultati.md`), e sulle altre monete regge solo su 1 di 9 (`research/altre_monete_3/risultati.md`).
 **La campagna BTC51 è chiusa** (17 ott 2026, nessuna strategia valida): lezioni e proposte per il prossimo protocollo
-in `research/campagne/BTC51/lezioni.md`; cosa fare dopo lo decide il proprietario.
+in `research/campagne/BTC51/lezioni.md`. **Bozza del protocollo 4** (17 ott 2026, da approvare): `research/PROTOCOLLO_4.md`,
+ricerca su LINKUSDT con 9 monete di controllo; decisioni aperte e motivazioni in `research/protocollo_4_note.md`.
 
 Il documento da leggere per primo e' **`docs/state.md`**: e' lo stato aggiornato, con
 cosa e' fatto e cosa e' aperto. Poi `docs/architecture.md` per la mappa, e

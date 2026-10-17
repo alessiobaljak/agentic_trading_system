@@ -4005,3 +4005,18 @@ tarato e ha fatto il suo lavoro, ma a cedere sono state le maglie larghe fra la 
 nato guardando i trade, una verifica dei trade estremi superata per +0,012 R e una validazione a 1,2 errori standard
 hanno portato al vault un candidato debole, e il vault si apre una volta sola. Nessuna strategia valida su BTC con il
 protocollo 3. Il paper del vecchio gate resta acceso; cosa fare dopo lo decide il proprietario.
+
+### 17 ottobre, notte: la bozza del protocollo 4
+
+Il proprietario: «ok sì, scrivi la bozza del prossimo protocollo». Scritta `research/PROTOCOLLO_4.md` (versione 6):
+ricerca su LINKUSDT, la moneta più scambiata nel 2023 fra quelle con dati dal 2020 e il vault mai aperto, con 9
+monete di controllo (quelle con il vault già aperto) su cui ogni candidato deve battere il caso prima del vault e in
+validazione. Le verifiche sulle monete di controllo le fa il coordinamento: alla sessione di ricerca torna solo
+«supera» o «non supera». Un revisore indipendente ha letto la prima versione e ha trovato 25 punti, tre bloccanti per
+fughe di informazione sul vault (il CLAUDE.md e i messaggi di commit che la sessione vede all'avvio, le motivazioni
+che descrivevano V-020, il delisting di MATIC scritto nel testo) e uno che non avevo visto: LINK è già stato esplorato
+dal protocollo 1 (30 varianti, nessun candidato, vault mai aperto). Corretti tutti; decisioni aperte e motivazioni in
+`research/protocollo_4_note.md`, che la sessione di ricerca non legge. Capito oggi: una fuga di informazione sul vault
+può passare da file che nessuno pensa di aprire, come il CLAUDE.md caricato all'avvio e i titoli dei commit. Inoltre
+le verifiche su più monete vanno misurate contro il caso di ogni moneta, non con l'R semplice: le monete salgono e
+scendono insieme.

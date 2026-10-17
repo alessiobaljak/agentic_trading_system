@@ -1,14 +1,12 @@
 # Protocollo di ricerca strategie su LINK — versione 6 (BOZZA)
 
-> **BOZZA del coordinamento, 17 ottobre 2026, da approvare.** Il proprietario ha chiesto la bozza del prossimo
-> protocollo dopo la chiusura della campagna BTC51 («ok sì, scrivi la bozza del prossimo protocollo»). È la versione
-> 5.1 (`research/PROTOCOLLO_3.md`, approvata il 16 ottobre 2026) con le modifiche dell'appendice 1, che vengono dalle
-> lezioni della campagna BTC51. Finché questa intestazione dice BOZZA, nessuna sessione la esegue.
-> **Decisioni del proprietario prima dell'approvazione** (sezione 0bis): la moneta della ricerca (proposta LINKUSDT),
-> le monete di controllo, se dare alla ricerca le idee già provate su BTC nella costruzione.
-> Una sola moneta per la ricerca: il contratto perpetuo LINKUSDT di Binance Futures (USDS-M), con 9 monete di
-> controllo usate solo per le verifiche scritte qui. Nel repository è `research/PROTOCOLLO_4.md`, accanto ai
-> protocolli precedenti, che non cambiano.
+> **BOZZA del coordinamento, 17 ottobre 2026, da approvare.** Deriva dalla versione 5.1 (`research/PROTOCOLLO_3.md`,
+> approvata il 16 ottobre 2026), di cui incorpora le correzioni. Finché questa intestazione dice BOZZA, nessuna
+> sessione la esegue. Le decisioni ancora aperte e le motivazioni delle modifiche sono in un file del coordinamento che
+> la sessione di ricerca non legge.
+> Una sola moneta per la ricerca: il contratto perpetuo LINKUSDT di Binance Futures (USDS-M). Nove monete di controllo
+> servono solo alle verifiche scritte qui, che esegue il coordinamento. Nel repository è `research/PROTOCOLLO_4.md`,
+> accanto ai protocolli precedenti, che non cambiano.
 
 ## 0. Come usare questo documento (istruzioni per Claude Code)
 
@@ -29,27 +27,19 @@ Comandi dell'utente:
 | `STATO` | Riassumi a che punto è la ricerca, leggendo `STATO.md` e il log |
 | `APRI IL VAULT 4` | È l'unica frase che autorizza il Passo 5 |
 
-**Chi esegue i passi.** Il Passo 0 (preparazione e collaudo del metodo) e i Passi 5, 6, 7 e 8 li esegue il
+**Chi esegue i passi.** Il Passo 0 (preparazione e collaudo del metodo) e i Passi 5, 6, 7, 8 e 9 li esegue il
 coordinamento, la sessione di lavoro che prepara gli strumenti, sul branch principale del repository. I Passi 1, 2, 3 e
 4 li esegue una sessione di ricerca nuova, aperta dal coordinamento dopo l'approvazione del Passo 0, sul branch
 `research/campagna/LINK6`, con il guardiano attivo (sezione 12): chi cerca le strategie vede solo questo testo, gli
-strumenti, i parametri, la propria cartella e i dati di LINKUSDT e delle monete di controllo fino al 2023-12-31
-(sezione 3 e regola 7). I comandi della tabella si scrivono nella sessione che esegue il passo.
+strumenti, i parametri, la propria cartella e i dati di LINKUSDT fino al 2023-12-31 (sezione 3 e regola 7). Le
+verifiche sulle monete di controllo le esegue il coordinamento, su richiesta della sessione di ricerca (regola 10). I
+comandi della tabella si scrivono nella sessione che esegue il passo.
 
-**La frase del vault in un'altra sessione.** Se il proprietario scrive «APRI IL VAULT 4» nella sessione di ricerca, la
-sessione la copia esatta, con l'ora, in una voce `nota` del log, la committa, gli dice in una riga che il vault lo
-apre ed esegue il coordinamento e non fa altro: non crea `APERTURA_4.md` e non tocca dati del vault. Il coordinamento
-controlla la nota e procede con il Passo 5 come se la frase l'avesse ricevuta lui.
-
-## 0bis. Decisioni del proprietario prima dell'approvazione (da togliere quando sono prese)
-
-| # | Decisione | Proposta del coordinamento | Alternative |
-|---|---|---|---|
-| D1 | Moneta della ricerca | **LINKUSDT**: la moneta con il volume 2023 più alto (319 milioni di USDT al giorno, 365 giorni) fra quelle con dati dal 2020-01 il cui vault non è mai stato aperto da nessun protocollo | AVAXUSDT (289 milioni, dati solo dal 2020-09: costruzione di 25 mesi, servirebbero 6 trade al mese); di nuovo BTCUSDT con una seconda lettura del vault (sconsigliata: il vault si apre una volta sola) |
-| D2 | Monete di controllo (sezione 4bis) | BTCUSDT, ETHUSDT, SOLUSDT, XRPUSDT, DOGEUSDT, BNBUSDT, LTCUSDT, MATICUSDT, BCHUSDT: i 9 contratti con il volume 2023 più alto fra quelli con dati nella costruzione e con il vault già aperto da un protocollo precedente, così le verifiche non toccano monete ancora libere e il Passo 6 non consuma vault nuovi | Le 9 più scambiate in assoluto (comprese OPUSDT e AVAXUSDT, che hanno il vault ancora chiuso); oppure ADAUSDT al posto di MATICUSDT, che smette di scambiare a settembre 2024 e nel Passo 6 avrebbe un vault corto |
-| D3 | Idee già provate su BTC | Dare alla ricerca l'elenco delle 40 varianti di BTC51 con i soli risultati della costruzione (`config/idee_btc51_costruzione.md`, senza niente di validazione, vault e altre monete) | Non darlo: la ricerca riparte da zero, e può riprovare idee che su BTC non battevano il caso |
-| D4 | Catalogo e bot (7.10) | (b), come nel protocollo 3 | (a) solo elementi eseguibili dal bot: oggi nessuno |
-
+**La frase del vault vale solo nella sessione del coordinamento**, e solo dopo lo STOP del Passo 4. Se il
+proprietario la scrive in un'altra sessione (anche quella di ricerca), quella sessione la copia esatta, con l'ora, in
+una voce `nota` del suo log se ne ha uno, gli dice in una riga di scriverla al coordinamento, e resta dove era: non
+crea `APERTURA_4.md`, non tocca dati del vault, non passa al passo successivo. Il coordinamento procede solo quando il
+proprietario gliela scrive.
 
 ## 1. Cosa fa questo protocollo
 
@@ -58,9 +48,9 @@ controlla la nota e procede con il Passo 5 come se la frase l'avesse ricevuta lu
 **Il percorso:**
 
 1. Preparazione: fatti sul bot e sui dati, motore di backtest, test di controllo e **collaudo del metodo** con tre prove (Passo 0, sezione 13bis).
-2. Dati di LINKUSDT e delle monete di controllo fino al 2023 (Passo 1).
-3. Ricerca sul periodo di costruzione: idee, varianti, verifiche, compresa la stessa variante sulle monete di controllo (Passo 2).
-4. Validazione dei candidati, una sola volta, su LINKUSDT e sulle monete di controllo insieme, e consegna (Passi 3 e 4).
+2. Dati di LINKUSDT fino al 2023 (Passo 1); quelli delle monete di controllo li prepara il coordinamento al Passo 0.
+3. Ricerca sul periodo di costruzione: idee, varianti, verifiche, compresa quella sulle monete di controllo, che esegue il coordinamento (Passo 2).
+4. Validazione dei candidati, una sola volta, su LINKUSDT e sulle monete di controllo, e consegna (Passi 3 e 4).
 5. Esame finale sul vault 2024–2026 e prova su altre monete (Passi 5 e 6).
 6. Paper trading come **esame finale**, per ogni candidato che supera il vault (Passo 8).
 
@@ -95,7 +85,7 @@ controlla la nota e procede con il Passo 5 come se la frase l'avesse ricevuta lu
 | Ordine limit | Ordine con un prezzo massimo (acquisto) o minimo (vendita): si esegue solo se il mercato arriva a quel prezzo, e può non essere eseguito. Paga la commissione maker, più bassa |
 | Slippage | Differenza sfavorevole fra il prezzo atteso e quello ottenuto |
 | Funding | Pagamento periodico fra chi è long e chi è short nei contratti perpetui; l'intervallo di LINKUSDT si verifica al Passo 1 |
-| Monete di controllo | Le 9 monete della sezione 4bis: servono solo a vedere se una variante vale anche fuori da LINKUSDT (verifica 12, validazione) |
+| Monete di controllo | Le 9 monete della sezione 4bis: servono solo a vedere se una variante vale anche fuori da LINKUSDT. Le verifiche su di esse le esegue il coordinamento |
 | Last price | Ultimo prezzo scambiato |
 | Mark price | Prezzo di riferimento calcolato da Binance, usato per le liquidazioni |
 | Liquidazione | Chiusura forzata della posizione quando il margine non basta più |
@@ -135,17 +125,13 @@ controlla la nota e procede con il Passo 5 come se la frase l'avesse ricevuta lu
 
 | Periodo | Date (UTC) | A cosa serve | Cosa si può fare |
 |---|---|---|---|
-| Costruzione | dalla prima candela disponibile di LINKUSDT al 2022-09-30 23:59: nell'archivio pubblico di Binance il primo mese è il 2020-01 (da confermare al Passo 1), circa 33 mesi | Studiare, provare, scartare | Tutti i test, entro il limite di 40 varianti (sezione 8) |
+| Costruzione | dalla prima candela disponibile di LINKUSDT al 2022-09-30 23:59: nell'archivio pubblico di Binance il 2020-01-17 08:00 (da confermare al Passo 1), circa 32,5 mesi | Studiare, provare, scartare | Tutti i test, entro il limite di 40 varianti (sezione 8) |
 | Validazione | dal 2022-10-01 00:00 al 2023-12-31 23:59 | Primo esame dei candidati | Una sola esecuzione per candidato, tutti insieme, senza ritocchi |
 | Vault | dal 2024-01-01 00:00 al 2026-09-30 23:59 | Esame finale | Una sola esecuzione, dopo il comando "APRI IL VAULT 4" |
 
-**Cosa vuol dire "70% costruzione, 30% validazione".** I dati fino al 2023 (circa 52 mesi) sono divisi in due parti. Nella prima, circa il 70% (36 mesi e mezzo), l'agente studia e prova. La seconda, circa il 30% (15 mesi), resta chiusa durante la ricerca e serve a controllare i candidati su dati che non hanno mai visto. Le date sono fissate in calendario: non c'è nessuna percentuale da calcolare.
+**Cosa vuol dire "70% costruzione, 30% validazione".** I dati fino al 2023 (circa 47,5 mesi per LINKUSDT) sono divisi in due parti. Nella prima, circa il 70% (32,5 mesi), l'agente studia e prova. La seconda, circa il 30% (15 mesi), resta chiusa durante la ricerca e serve a controllare i candidati su dati che non hanno mai visto. Le date sono fissate in calendario: non c'è nessuna percentuale da calcolare.
 
-**Perché proprio questa divisione.** È l'unica che rispetta entrambi i minimi di trade (sezione 5) alla frequenza minima di circa 4,2 trade al mese:
-
-- 70/30: costruzione circa 36,5 mesi, circa 154 trade (minimo 150); validazione 15 mesi, circa 63 trade (minimo 60). Entrambi rispettati.
-- 60/40: costruzione circa 31 mesi, circa 130 trade, sotto i 150.
-- 80/20: validazione circa 10 mesi, circa 44 trade, sotto i 60.
+**Perché proprio questa divisione.** Rispetta i due minimi di trade (sezione 5) alla stessa frequenza minima, circa 4,6 trade al mese (150 ÷ 32,5): costruzione circa 150 trade (minimo 150), validazione circa 69 (minimo 60). Spostare la data di fine della costruzione di 6 mesi in avanti o indietro ne violerebbe uno: 26,5 mesi di costruzione darebbero circa 122 trade; 9 mesi di validazione circa 41.
 
 **Fasi di mercato in ogni periodo.** La costruzione comprende il crollo di marzo 2020, il rialzo 2020–2021, il ribasso di maggio 2021 e il ribasso del 2022. La validazione comprende il fallimento di FTX (novembre 2022) e la ripresa del 2023. Il documento non descrive il vault, di proposito (sezione 3).
 
@@ -153,21 +139,38 @@ controlla la nota e procede con il Passo 5 come se la frase l'avesse ricevuta lu
 
 **A cosa servono.** Un vantaggio che esiste solo su una moneta, in un periodo, è più spesso un caso che un
 comportamento del mercato. Le monete di controllo dicono se una variante vale anche fuori da LINKUSDT, prima di
-spendere l'unica apertura del vault. Non sono monete di ricerca: su di esse non si studia, non si cercano idee e non si
-calcola niente fuori dalle verifiche scritte qui (regola 10).
+spendere l'unica apertura del vault. Non sono monete di ricerca: la sessione di ricerca non ne carica i dati e non ne
+vede i risultati (regola 10).
 
-**Quali** (decisione D2): BTCUSDT, ETHUSDT, SOLUSDT, XRPUSDT, DOGEUSDT, BNBUSDT, LTCUSDT, MATICUSDT, BCHUSDT. Sono i
-9 contratti perpetui in USDT di Binance con il volume 2023 più alto fra quelli che hanno dati nel periodo di
-costruzione e il cui vault è già stato aperto da un protocollo precedente (gli altri restano liberi per ricerche
-future). DOGEUSDT, SOLUSDT e MATICUSDT hanno dati dal 2020-07, 2020-09 e 2020-10: la loro costruzione è più corta.
+**Quali:** i 9 contratti perpetui in USDT di Binance con il volume 2023 più alto fra quelli che hanno dati nel periodo
+di costruzione e il cui vault è già stato aperto da un protocollo precedente (gli altri restano liberi per ricerche
+future), con lo slippage della loro fascia di volume 2023 (sezione 6):
 
-**Come si usano**, sempre con la variante senza nessuna modifica e con lo slippage della fascia di volume 2023 di ogni
-moneta (sezione 6):
+| Moneta | Slippage per lato | Dati dal |
+|---|---|---|
+| BTCUSDT | 0,01% | 2020-01 |
+| ETHUSDT | 0,01% | 2020-01 |
+| SOLUSDT | 0,01% | 2020-09 |
+| XRPUSDT | 0,02% | 2020-01 |
+| DOGEUSDT | 0,02% | 2020-07 |
+| BNBUSDT | 0,02% | 2020-02 |
+| LTCUSDT | 0,02% | 2020-01 |
+| MATICUSDT | 0,02% | 2020-10 |
+| BCHUSDT | 0,02% | 2020-01 |
+
+Il Passo 0 conferma volumi, fasce, prima candela, buchi e intervallo del funding di ogni moneta e li scrive in
+`config/parametri_4.yaml`; se una fascia è diversa da questa tabella, STOP.
+
+**Come si usano**, sempre con la variante senza nessuna modifica e sempre dal coordinamento, su richiesta della sessione
+di ricerca (sezione 12):
 
 - verifica 12 della Fase 4, sul periodo di costruzione;
-- controllo di un filtro nato in Fase 3 (Fase 3, punto 3), sul periodo di costruzione;
-- validazione (Passo 3), sul periodo di validazione, nella stessa esecuzione di LINKUSDT;
+- controllo di una variante nata dalla Fase 3 (Fase 3, punto 3), sul periodo di costruzione;
+- validazione (Passo 3), sul periodo di validazione, subito dopo l'esecuzione su LINKUSDT;
 - prova sul vault delle altre monete (Passo 6), dopo il vault di LINKUSDT.
+
+Nelle prime due la sessione di ricerca riceve solo «supera» o «non supera»; i numeri restano al coordinamento fino
+alla fine della validazione.
 
 **Regole dei dati, uguali per tutte le monete:** la serie di una moneta finisce all'ultima candela con volume sopra
 zero (le candele in coda senza scambi non sono mercato, 9.6); il volume medio giornaliero di un anno è il volume
@@ -191,7 +194,7 @@ Regola pratica: il numero di errori standard di un R medio è circa (R medio ÷ 
 
 ### 5.3 Cosa vuol dire in pratica
 
-Le tre soglie corrispondono alla stessa frequenza minima: circa 4,2 trade al mese, più o meno uno a settimana (154 trade in 36,5 mesi, 63 in 15 mesi, 138 in 33 mesi). Una variante più lenta non arriva ai minimi. Su candele giornaliere ci arrivano solo le strategie che entrano spesso. Lo si scopre con la stima dei trade (sezione 8), prima del test, senza consumare tentativi.
+Le tre soglie corrispondono a una frequenza minima simile: circa 4,6 trade al mese, più o meno uno a settimana (150 trade in 32,5 mesi, 69 in 15 mesi, 152 in 33 mesi). Una variante più lenta non arriva ai minimi. Su candele giornaliere ci arrivano solo le strategie che entrano spesso. Lo si scopre con la stima dei trade (sezione 8), prima del test, senza consumare tentativi.
 
 ## 6. Costi
 
@@ -199,7 +202,7 @@ Le tre soglie corrispondono alla stessa frequenza minima: circa 4,2 trade al mes
 |---|---|---|---|
 | Commissione taker | 0,05% del valore della posizione, livello base senza sconto BNB | Ingressi a mercato, stop, target e ogni altra uscita | Tabella commissioni attuale di Binance, al Passo 0 |
 | Commissione maker | 0,02% del valore della posizione, livello base senza sconto BNB | Solo l'ingresso con ordine limit (7.7) | Tabella commissioni attuale di Binance, al Passo 0 |
-| Slippage | 0,02% a ogni lato per LINKUSDT; per le monete di controllo quello della loro fascia di volume 2023: oltre 1 miliardo di USDT al giorno 0,01%, da 200 milioni a 1 miliardo 0,02%, da 50 a 200 milioni 0,05%, sotto 50 milioni 0,10% | Prezzo peggiorato dello slippage a ogni ingresso a mercato e a ogni uscita, compresi stop e target; nessuno slippage sull'ingresso limit (sezione 9) | Il volume medio giornaliero 2023 di ogni moneta (sezione 4bis), al Passo 1: per LINKUSDT 319 milioni nella tabella del coordinamento |
+| Slippage | 0,02% a ogni lato per LINKUSDT; per le monete di controllo quello della loro fascia di volume 2023 (sezione 4bis): oltre 1 miliardo di USDT al giorno 0,01%, da 200 milioni a 1 miliardo 0,02%, da 50 a 200 milioni 0,05%, sotto 50 milioni 0,10% | Prezzo peggiorato dello slippage a ogni ingresso a mercato e a ogni uscita, compresi stop e target; nessuno slippage sull'ingresso limit (sezione 9) | Il volume medio giornaliero 2023 di LINKUSDT, calcolato al Passo 0 dalle candele giornaliere del 2023 (`parametri_4.yaml`) e confermato al Passo 1 |
 | Funding | Tasso storico vero, a ogni regolamento, all'istante vero di ogni regolamento | Sezione 9.5 | Intervallo di regolamento di ogni moneta su tutto il periodo, al Passo 1 |
 
 **Esempio su LINKUSDT.** Posizione da 10.000 USDT, stop all'1% (rischio 100 USDT, cioè 1 R). Commissioni 5 + 5 USDT, slippage 2 + 2 USDT: totale 14 USDT, cioè 0,14 R per trade, funding escluso. Con ingresso limit: commissione d'ingresso 2 USDT e nessuno slippage d'ingresso, totale 9 USDT, cioè 0,09 R.
@@ -241,7 +244,7 @@ Si calcolano tutti sulle candele last price del timeframe della variante.
 | Canale di Donchian(n) | Massimo dei massimi e minimo dei minimi delle n candele precedenti, esclusa quella corrente | n = 20 e 55 |
 | Volume relativo | Volume della candela ÷ media dei volumi delle 20 candele precedenti | Soglie: 1,5 e 2,0 |
 | VWAP giornaliero | Dall'inizio del giorno UTC: somma di (prezzo tipico × volume) ÷ somma dei volumi, con prezzo tipico = (massimo + minimo + chiusura) ÷ 3 | Solo timeframe fino a 1h |
-| Funding | Ultimo tasso di funding regolato, per periodo di 8 ore. Il tasso normale senza squilibri è 0,01% | Soglie: +0,03%, +0,05%, 0,00%, −0,01% |
+| Funding | Ultimo tasso di funding regolato, per periodo di 8 ore: se l'intervallo di regolamento della moneta non è di 8 ore, il tasso si riporta a 8 ore (tasso × 8 ÷ ore dell'intervallo). Il tasso normale senza squilibri è 0,01% | Soglie: +0,03%, +0,05%, 0,00%, −0,01% |
 | Sessioni (UTC) | Asia 00:00–08:00; Europa 07:00–16:00; Stati Uniti 13:00–21:00 | Solo timeframe fino a 1h |
 | Range asiatico | Massimo e minimo delle candele fra 00:00 e 08:00 UTC dello stesso giorno | Solo timeframe fino a 1h |
 | Giorno della settimana | Feriale (lunedì–venerdì UTC) oppure fine settimana (sabato e domenica UTC) | — |
@@ -355,8 +358,8 @@ Al Passo 0 confronti ogni elemento del catalogo (indicatori, segnali, filtri, co
 - (a) ricerca solo con gli elementi eseguibili, così ogni candidato può andare in paper senza modifiche al bot;
 - (b) tutto il catalogo, con le aggiunte al bot da fare prima del paper.
 
-Proposta (decisione D4): (b), come nel protocollo 3. Al 17 ottobre 2026 il bot non esegue nessuna variante del
-catalogo così come la scrive il protocollo (`config/bot_3.md`, punto 3); il Passo 0 lo riverifica in `config/bot_4.md`.
+Al 17 ottobre 2026 il bot non esegue nessuna variante del catalogo così come la scrive il protocollo; il Passo 0 lo
+riverifica in `config/bot_4.md`.
 
 ## 8. Varianti, limite di tentativi e candidati
 
@@ -386,7 +389,7 @@ Contano come varianti anche le analisi esplorative che misurano cosa fa il prezz
 
 I falsi candidati non sono gratuiti: vanno in validazione e nel vault, rendono più severa l'asticella per i candidati veri (sezione 10) e consumano l'unica apertura del vault. 40 è il numero più alto per cui ci si aspetta meno di un falso candidato.
 
-La tabella conta solo la Fase 2. Le verifiche della Fase 4, e soprattutto la verifica sulle monete di controllo (verifica 12), fermano una parte dei falsi candidati prima della validazione: quanti, lo misura il collaudo (13bis.2, punto 5). Il limite resta 40.
+La tabella conta solo la Fase 2. Le verifiche della Fase 4, e soprattutto la verifica sulle monete di controllo (verifica 12), fermano una parte dei falsi candidati prima della validazione: quanti, lo misura il collaudo (13bis.2, punto 6). Il limite resta 40.
 
 Il limite non si aggira: niente test fuori dal log, niente prove "informali". Ogni calcolo di risultato su dati di prezzo si registra.
 
@@ -473,11 +476,11 @@ Ogni candidato si riprova con l'ingresso ritardato di una candela. Il risultato 
 Per ogni test si generano 1.000 strategie fittizie (seme casuale fisso: 2026):
 
 - stesso periodo, stessa direzione, stesso numero di trade del candidato;
-- ingressi scelti a caso fra tutte le candele ammesse del periodo (dopo il riscaldamento della variante e fuori dai buchi nei dati, 7.8 e 9.6), indipendentemente da quando il candidato è in posizione, con la stessa distribuzione di larghezza dello stop del candidato (sotto), senza sovrapposizioni fra trade della stessa simulazione, con lo stesso tipo di ingresso del candidato: a mercato all'apertura successiva, oppure con un ordine limit inserito alla chiusura della candela scelta, con gli stessi k e validità e le stesse regole di esecuzione (7.7). Per i candidati limit si generano ordini finché quelli eseguiti sono tanti quanti i trade del candidato. (Escludere le candele in cui il candidato è in posizione spingerebbe le entrate casuali proprio fuori dai periodi che il candidato sceglie, e il confronto premierebbe il candidato senza merito: `PROTOCOLLO_3.md`, appendice 2, punto 4.);
+- ingressi scelti a caso fra tutte le candele ammesse del periodo (dopo il riscaldamento della variante e fuori dai buchi nei dati, 7.8 e 9.6), indipendentemente da quando il candidato è in posizione, con la stessa distribuzione di larghezza dello stop del candidato (sotto), senza sovrapposizioni fra trade della stessa simulazione, con lo stesso tipo di ingresso del candidato: a mercato all'apertura successiva, oppure con un ordine limit inserito alla chiusura della candela scelta, con gli stessi k e validità e le stesse regole di esecuzione (7.7). Per i candidati limit si generano ordini finché quelli eseguiti sono tanti quanti i trade del candidato. (Escludere le candele in cui il candidato è in posizione spingerebbe le entrate casuali proprio fuori dai periodi che il candidato sceglie, e il confronto premierebbe il candidato senza merito.);
 - uscite con le stesse regole del candidato: stesso tipo di stop calcolato nello stesso modo al momento dell'ingresso, stessi target, uscite a tempo, trailing e segnale opposto;
 - stessi costi.
 
-**Stessa larghezza dello stop** (correzione 1 del collaudo del protocollo 3, `PROTOCOLLO_3.md`, appendice 3). Ogni simulazione è una strategia che entra a
+**Stessa larghezza dello stop.** Ogni simulazione è una strategia che entra a
 caso: quando è libera, a ogni candela ammessa entra con una probabilità fissa, più alta o più bassa secondo la larghezza
 dello stop che avrebbe in quel momento (distanza dello stop ÷ prezzo d'ingresso), così che i suoi trade abbiano la
 stessa distribuzione di larghezze dei trade del candidato, divisa in 5 fasce ai quinti delle larghezze del candidato.
@@ -498,10 +501,10 @@ p = (1 + numero di simulazioni con R medio maggiore o uguale a quello del candid
 | Periodo | Condizioni (tutte) |
 |---|---|
 | Costruzione ("nettamente", Fase 2) | almeno 150 trade; R medio di almeno 0,2 R dopo i costi; p-value di 0,023 o meno (equivale a 2 errori standard) |
-| Validazione (filtro) | su LINKUSDT: almeno 60 trade; R medio positivo dopo i costi; R medio almeno la metà di quello di costruzione; profit factor di almeno 1,05; R medio positivo anche a costi doppi. Sulle monete di controllo, nella stessa esecuzione: R medio di tutti i loro trade insieme positivo dopo i costi |
+| Validazione (filtro) | su LINKUSDT: almeno 60 trade; R medio positivo dopo i costi; R medio almeno la metà di quello di costruzione; profit factor di almeno 1,05; R medio positivo anche a costi doppi. Sulle monete di controllo (le esegue il coordinamento, Passo 3): contano le monete con almeno 20 trade, e devono essere almeno 5; la media fra queste monete del vantaggio sulle entrate casuali (R medio della moneta meno l'R medio delle sue entrate casuali) è di almeno 0,1 R, e la media fra le monete dell'R medio è positiva dopo i costi. A costi doppi si riporta, non decide |
 | Vault (esame finale) | almeno 100 trade; R medio positivo dopo i costi e anche a costi doppi; profit factor di almeno 1,10; superamento dell'asticella di Benjamini-Hochberg al 10% (10.4) |
 
-In validazione non c'è un p-value da superare: la validazione toglie i candidati che crollano, e la significatività si giudica una volta sola, nel vault. Su LINKUSDT da sola 60-80 trade non distinguono un vantaggio di 0,2 R dal caso (circa 1,3 errori standard, sezione 5.2): la condizione sulle monete di controllo, con alcune centinaia di trade, è quella che separa un vantaggio generale da un caso.
+In validazione non c'è un p-value da superare: la validazione toglie i candidati che crollano, e la significatività si giudica una volta sola, nel vault. Su LINKUSDT da sola 60-80 trade non distinguono un vantaggio di 0,2 R dal caso (circa 1,3 errori standard, sezione 5.2): la condizione sulle monete di controllo, con alcune centinaia di trade, è quella che separa un vantaggio generale da un caso. Si misura come vantaggio sulle entrate casuali di ogni moneta, e non come R medio semplice, perché nello stesso periodo le monete salgono o scendono insieme: un long senza nessun vantaggio sembrerebbe buono su tutte in un anno di rialzo. Ogni moneta pesa uguale, perché una moneta che dà molti più segnali non decida da sola.
 
 ### 10.4 Asticella di Benjamini-Hochberg (solo nel vault)
 
@@ -524,27 +527,26 @@ Esempio con m = 3 e p-value 0,02, 0,04 e 0,30: le soglie sono 0,033, 0,067 e 0,1
 7. **Niente conoscenza del vault.** Conosci la storia del mercato crypto 2024–2026, anche se di LINK meno che di BTC. Non usare quello che sai su prezzi ed eventi dal 2024 in poi, né su LINKUSDT né sul mercato. Se un'idea ti viene in mente "perché so che ha funzionato", lo scrivi nel log e la scarti. Valgono solo fonti pubblicate prima del 2024-01-01.
 8. **Backtest uguale al bot.** Dimensione, leva e serie dello stop come il bot; regole del motore della sezione 9, fissate prima del primo test.
 9. **Una sola validazione.** Tutti i candidati si validano insieme, una volta, su LINKUSDT e sulle monete di controllo nella stessa esecuzione. Dopo la validazione non si costruiscono nuovi candidati.
-10. **Monete di controllo solo per le verifiche.** Sulle monete di controllo si calcola soltanto quello che chiedono la verifica 12, il controllo dei filtri della Fase 3 e la validazione, sempre registrato nel log prima di eseguirlo, con lo strumento apposito del Passo 0. Niente analisi dei loro trade, niente idee nate dai loro risultati, niente stime o prove fuori da queste tre.
-11. **Stesse versioni del collaudo.** La sessione di ricerca controlla all'inizio che Python e numpy abbiano le versioni con cui è stato fatto il collaudo (`collaudo_4/esiti.md`). Se sono diverse, STOP: il coordinamento rifà le prove A e B con le versioni nuove prima di continuare.
+10. **Le monete di controllo non si toccano.** La sessione di ricerca non carica, non scarica e non legge i dati delle monete di controllo: il caricatore glieli rifiuta. Le tre verifiche che le usano (verifica 12, controllo di una variante nata dalla Fase 3, validazione) le chiede al coordinamento con il canale della sezione 12 e le esegue il coordinamento, sulla variante registrata nel log, senza modifiche. Alla sessione torna solo «supera» o «non supera»; i numeri restano al coordinamento fino alla fine della validazione (Passo 3).
+11. **Stesse versioni del collaudo.** La sessione di ricerca controlla all'inizio che Python e numpy abbiano esattamente le versioni scritte in `config/parametri_4.yaml` (quelle del collaudo, in tutte le cifre). Se sono diverse, STOP: il coordinamento rifà le prove A e B con le versioni nuove prima di continuare.
 
 ## 12. Cartelle, file e log
 
 ```text
 research/
   PROTOCOLLO_4.md              questo file
-  CHANGELOG.md                 correzioni a codice e dati: data, motivo, test rifatti (file esistente, solo in aggiunta)
   config/                      in sola lettura per la sessione di ricerca
-    parametri_4.yaml           fatti del Passo 0 e numeri di questo documento
+    parametri_4.yaml           fatti del Passo 0 (anche delle monete di controllo), versioni di Python e numpy,
+                               numeri di questo documento
     bot_4.md                   dimensione, leva, margine, serie dello stop, esecuzione,
                                elementi del catalogo eseguibili dal bot
-    idee_btc51_costruzione.md  solo se il proprietario lo decide (D3): le varianti provate su BTC,
-                               con i soli risultati della costruzione
+    guida_pratica_4.md         come lavorare con il guardiano e con il canale delle richieste
+    percorsi_vietati.txt
   src/                         motore, caricatore dei dati, statistiche, guardiano, test
                                (gli strumenti del protocollo 3, adattati a questo testo al Passo 0)
-  collaudo_4/                  il collaudo del metodo (sezione 13bis): regole, codice, esiti
   data/                        NON in git
-    insample/<MONETA>/         LINKUSDT e le 9 monete di controllo fino al 2023-12-31
-    vault/<MONETA>/            LINKUSDT: vuota fino al Passo 5
+    insample/LINKUSDT/         fino al 2023-12-31
+    vault/LINKUSDT/            vuota fino al Passo 5
   campagne/LINK6/              la cartella della ricerca (Passi 1-4)
     STATO.md                   a che punto è la ricerca (aggiornato a fine sessione)
     log.jsonl                  solo in aggiunta
@@ -552,19 +554,40 @@ research/
     ipotesi.md
     codice/                    codice delle varianti
     candidati/<ID>/regole.md
+    richieste/<ID>.json        richieste di verifica sulle monete di controllo (sessione di ricerca)
+    risposte/<ID>.json         risposte del coordinamento: solo «supera» o «non supera»
     validazione.md
     consegna.md
-    lezioni.md
+
+  Solo per il coordinamento (la sessione di ricerca non li legge):
+  collaudo_4/                  il collaudo del metodo (sezione 13bis): regole, codice, esiti
+  data/insample/<MONETA>/      le monete di controllo fino al 2023-12-31
+  monete_di_controllo_4/       esiti delle verifiche sulle monete di controllo
   vault/
     APERTURA_4.md              creato solo dopo "APRI IL VAULT 4"
     LINK6_risultati.md
   altre_monete_4/risultati.md
   paper_4/regola.md            Passo 8
+  campagne/LINK6/lezioni.md    Passo 9
 ```
 
-**Dati.** `research/data/` sta in `.gitignore`. Le sessioni girano su macchine temporanee: all'inizio di ogni sessione il caricatore riscarica i dati dalla fonte e ne verifica l'impronta (hash SHA-256 di ogni file, registrata in `fase0_dati.md` al Passo 1). Se un'impronta cambia, STOP e segnalalo. I blocchi delle regole 1 e 2 valgono a ogni riscaricamento, per tutte le monete.
+**Cosa legge la sessione di ricerca, e niente altro:** questo file; `config/parametri_4.yaml`, `config/bot_4.md`,
+`config/guida_pratica_4.md`, `config/percorsi_vietati.txt`; `src/` in sola lettura; la propria cartella
+`campagne/LINK6/` (in scrittura, tranne `risposte/` e `via_libera_validazione.md`, che scrive il coordinamento); i dati
+di LINKUSDT fino al 2023-12-31. Tutto il resto del repository è vietato, in particolare: le cartelle delle campagne
+precedenti (anche `campagne/LINKUSDT/`), `PROTOCOLLO_3.md` e i protocolli precedenti, `CHANGELOG.md`, `universo/`,
+`collaudo_3/` e `collaudo_4/`, `vault/`, `altre_monete_3/` e `altre_monete_4/`, `monete_di_controllo_4/`, `docs/`, e
+i dati di qualunque altra moneta.
 
-**Branch.** Il lavoro della ricerca (Passi 1-4) sta sul branch `research/campagna/LINK6`; il Passo 0 e i Passi 5-9 sul branch principale. La sessione di ricerca scrive il marcatore `research/.sessione` con `{"tipo": "campagna", "simbolo": "LINK6"}` (non è in git): il guardiano (`research/src/guardiano.py`) le ammette solo i percorsi della sezione 3 e di questa sezione (non i file delle campagne precedenti, né `vault/`, `altre_monete_3/`, `docs/`), e il caricatore accetta solo LINKUSDT e le monete di controllo e rifiuta le date dal 2022-10-01 (regola 2) e dal 2024-01-01 (regola 1).
+**Il canale delle richieste.** Per una verifica sulle monete di controllo la sessione di ricerca registra la verifica
+nel log (`tipo_test` `verifica`, con `verifica_di`), scrive `richieste/<ID>.json` con l'identificativo della variante
+e il tipo di verifica (12, Fase 3 o validazione), committa, fa il push e aspetta. Il coordinamento esegue la verifica
+sulla specifica registrata nel log a quel commit, scrive `risposte/<ID>.json` con il solo esito, lo committa sul branch
+della ricerca e avvisa la sessione. I numeri li tiene in `monete_di_controllo_4/` sul branch principale.
+
+**Dati.** `research/data/` sta in `.gitignore`. Le sessioni girano su macchine temporanee: all'inizio di ogni sessione il caricatore riscarica i dati dalla fonte e ne verifica l'impronta (hash SHA-256 di ogni file, registrata in `fase0_dati.md` al Passo 1; per le monete di controllo in `parametri_4.yaml` al Passo 0). Se un'impronta cambia, STOP e segnalalo. I blocchi delle regole 1 e 2 valgono a ogni riscaricamento, per tutte le monete.
+
+**Branch.** Il lavoro della ricerca (Passi 1-4) sta sul branch `research/campagna/LINK6`; il Passo 0 e i Passi 5-9 sul branch principale. Il coordinamento prepara il branch prima di aprire la sessione: toglie i file vietati, mette un `CLAUDE.md` senza fatti dal 2024 e senza esiti di campagne precedenti, e controlla che gli ultimi messaggi di commit che la sessione vede all'avvio non dicano niente del vault né dell'esito di campagne precedenti (se servono, commit neutri in cima). La sessione di ricerca scrive il marcatore `research/.sessione` con `{"tipo": "campagna", "simbolo": "LINK6"}` (non è in git): il guardiano (`research/src/guardiano.py`) le ammette solo i percorsi elencati sopra, e il caricatore accetta solo LINKUSDT e rifiuta le date dal 2022-10-01 (regola 2) e dal 2024-01-01 (regola 1).
 
 **STATO.md** contiene sempre: passo corrente e passi completati; varianti usate su 40; elenco dei candidati; prossima azione; problemi aperti.
 
@@ -594,42 +617,42 @@ Esempio, qui su più righe per leggibilità (nel file ogni voce sta su una sola 
 ### Passo 0 — Preparazione
 
 1. Crea le cartelle della sezione 12 e `STATO.md`; controlla che `research/data/` sia in `.gitignore`.
-2. Controlla l'elenco `research/config/percorsi_vietati.txt` con la regola della sezione 3 e prepara il guardiano per il marcatore `LINK6` (sezione 12), con i suoi test: la sessione di ricerca non deve poter leggere i file delle campagne precedenti, `vault/`, `altre_monete_3/`, `docs/` né altro che contenga fatti dal 2024-01-01. Nel dubbio, un percorso è vietato.
+2. Controlla l'elenco `research/config/percorsi_vietati.txt` con la regola della sezione 3 e prepara il guardiano per il marcatore `LINK6` con l'elenco esatto della sezione 12 (ammessi e vietati), con i suoi test: fra questi, che `campagne/LINKUSDT/` e i dati delle monete di controllo siano rifiutati. Nel dubbio, un percorso è vietato. Scrivi `config/guida_pratica_4.md`: come lavorare con il guardiano e come usare il canale delle richieste.
 3. Trova i fatti e scrivili in `config/bot_4.md`, con i riferimenti al codice e mai con valori di segreti:
    - **serie_stop**: quale prezzo il bot confronta con lo stop (last, mark o altro) e quale tipo di prezzo userebbe con ordini veri;
    - **regole_dimensione_bot**: rischio per trade, leva massima, modalità di margine; se mancano, valgono quelle della sezione 9.4;
    - **esecuzione_strategie_bot**: in che forma il bot esegue una strategia; per ogni elemento del catalogo (sezione 7), se è eseguibile o richiede un'aggiunta, compresi gli ordini limit in paper (inserimento, validità, cancellazione e regola di esecuzione);
    - **backtest_bot**: se il bot ha un backtest proprio, utile per il test di parità del Passo 8;
    - **commissioni taker e maker** e **margine di mantenimento** di LINKUSDT e delle monete di controllo, dalla documentazione attuale di Binance.
-4. Verifica la fonte dei dati (es. data.binance.vision: candele last price, candele mark price e funding di LINKUSDT e delle monete di controllo): accesso, copertura dalla prima candela al 2023-12-31, formato.
-5. Adatta in `src/` gli strumenti del protocollo 3 a questo testo, con il controllo delle impronte: il caricatore riconosce solo `vault/APERTURA_4.md` (il marcatore del protocollo 3 esiste già e oggi aprirebbe il vault a qualunque moneta), accetta in campagna solo LINKUSDT e le monete di controllo e rifiuta le date della regola 2 senza `campagne/LINK6/via_libera_validazione.md`; le verifiche nuove o cambiate della Fase 4 (1, 3bis, 4, 12) e il controllo dei filtri della Fase 3; uno strumento unico per le monete di controllo, che registra da solo nel log ogni sua esecuzione e fa solo le tre cose della regola 10. Ogni regola delle sezioni 4bis, 7.7, 9 e 10 ha almeno un test.
+4. Verifica la fonte dei dati (es. data.binance.vision: candele last price, candele mark price e funding di LINKUSDT e delle monete di controllo): accesso, copertura dalla prima candela al 2023-12-31, formato. Scarica i dati delle monete di controllo fino al 2023-12-31 e scrivi in `parametri_4.yaml`, per ognuna: prima candela, buchi, candele mark sostituite dal last, intervallo del funding nel tempo, volume medio giornaliero 2023 e fascia di slippage, impronte dei file. Niente prezzi, rendimenti o altre misure sul loro andamento. Per LINKUSDT: volume medio giornaliero 2023 e fascia.
+5. Adatta in `src/` gli strumenti del protocollo 3 a questo testo, con il controllo delle impronte: il caricatore riconosce solo `vault/APERTURA_4.md` (il marcatore del protocollo 3 esiste già e oggi aprirebbe il vault a qualunque moneta), in campagna accetta solo LINKUSDT e rifiuta le date della regola 2 senza `campagne/LINK6/via_libera_validazione.md`; le verifiche nuove o cambiate della Fase 4 (1, 3, 3bis, 4, 12) e il controllo delle varianti nate dalla Fase 3; lo strumento del coordinamento per le monete di controllo, che esegue una richiesta del canale (sezione 12) e scrive l'esito. Ogni regola delle sezioni 4bis, 7.7, 9 e 10 ha almeno un test.
 6. Scrivi ed esegui i test di controllo:
-   - il caricatore rifiuta date dal 2022-10-01 senza autorizzazione e dal 2024-01-01 senza `vault/APERTURA_4.md`, per ogni moneta, anche se `vault/APERTURA_3.md` esiste;
+   - il caricatore rifiuta date dal 2022-10-01 senza autorizzazione e dal 2024-01-01 senza `vault/APERTURA_4.md`, per ogni moneta, anche se `vault/APERTURA_3.md` esiste; in campagna rifiuta ogni moneta diversa da LINKUSDT;
    - EMA, SMA, RSI, ATR, ADX, MACD, stocastico, Bollinger e Donchian coincidono con un'implementazione di riferimento (o con un calcolo a mano) su almeno 50 candele;
    - buy and hold su tutto il 2021 restituisce il rendimento atteso;
-   - stop, target, stop e target nella stessa candela, salto di prezzo, funding e prezzo di liquidazione danno il risultato di esempi calcolati a mano;
+   - stop, target, stop e target nella stessa candela, salto di prezzo, funding (anche con un intervallo diverso da 8 ore) e prezzo di liquidazione danno il risultato di esempi calcolati a mano;
    - un ordine limit di esempio è eseguito solo se il prezzo supera il limit, al prezzo limit, e nella candela di esecuzione conta solo lo stop;
    - una serie con candele in coda a volume zero finisce all'ultima candela con scambi (9.6);
    - il test di troncamento (9.8) passa su una variante di prova (es. incrocio EMA 20/50 su 4h, solo per il test, senza registrarne il risultato).
 7. Crea `config/parametri_4.yaml` con i fatti trovati e tutti i numeri di questo documento.
-8. Scrivi in `collaudo_4/regole.md` le versioni di Python e numpy della macchina delle sessioni di ricerca, e fai il collaudo con quelle versioni.
+8. Le versioni di Python e numpy della macchina delle sessioni di ricerca: il coordinamento le legge aprendo nello stesso ambiente una sessione di prova, che stampa solo le versioni e si chiude, e le scrive in `parametri_4.yaml` e in `collaudo_4/regole.md`. Il collaudo gira con quelle versioni.
 9. **Collaudo del metodo** (sezione 13bis): le tre prove, con le regole scritte prima e gli esiti in `collaudo_4/`.
-10. Solo se il proprietario lo ha deciso (D3): scrivi `config/idee_btc51_costruzione.md` con le 40 varianti della campagna BTC51, la loro idea e i soli risultati della costruzione (trade, R medio, p-value, esito della Fase 2). Niente di validazione, vault o altre monete.
+10. Prepara il branch della ricerca come dice la sezione 12 (file vietati tolti, `CLAUDE.md` pulito, ultimi messaggi di commit controllati).
 
 **STOP:** mostra all'utente: la tabella dei fatti trovati e dove; la tabella del catalogo con gli elementi eseguibili e quelli che richiedono un'aggiunta al bot; l'esito dei test di controllo; l'elenco dei percorsi vietati; **l'esito delle prove del collaudo** (A e B; la C si fa prima del paper, 13bis.4). L'utente approva i fatti e sceglie fra (a) e (b) della sezione 7.10. Se una prova del collaudo non passa, la ricerca non comincia: si corregge il metodo e si rifanno le prove. Dopo l'approvazione tutto è congelato e il coordinamento apre la sessione di ricerca.
 
-### Passo 1 — Dati (Fase 0)
+### Passo 1 — Dati di LINKUSDT (Fase 0)
 
-1. Trova la prima candela disponibile di LINKUSDT: la sua ora di apertura è l'inizio della costruzione.
-2. Scarica in `data/insample/`, solo fino al 2023-12-31, per LINKUSDT e per le monete di controllo: candele last price e mark price di tutti i timeframe ammessi e lo storico del funding. Registra le impronte.
-3. Scrivi in `fase0_dati.md`, per LINKUSDT:
+1. Controlla le versioni di Python e numpy (regola 11).
+2. Trova la prima candela disponibile di LINKUSDT: la sua ora di apertura è l'inizio della costruzione.
+3. Scarica in `data/insample/`, solo fino al 2023-12-31: candele last price e mark price di LINKUSDT di tutti i timeframe ammessi e lo storico del funding. Registra le impronte.
+4. Scrivi in `fase0_dati.md`:
    - data e ora della prima candela;
    - buchi nei dati, con data, ora e durata; candele mark sostituite dal last (9.6);
    - intervallo di regolamento del funding nel tempo;
-   - volume medio giornaliero 2023 (per confermare la fascia di slippage);
+   - volume medio giornaliero 2023 (deve confermare la fascia di `parametri_4.yaml`; se no, STOP);
    - numero di candele per timeframe in costruzione e in validazione;
    - candele anomale (per esempio il crollo del 12–13 marzo 2020), da tenere e segnalare, non da togliere.
-4. Per le monete di controllo, in una tabella: prima candela, buchi, candele mark sostituite, intervallo del funding, volume medio giornaliero 2023 e fascia di slippage. Niente prezzi, rendimenti o altre misure sul loro andamento.
 
 **STOP:** riepiloga e aspetta conferma.
 
@@ -641,7 +664,7 @@ Si lavora solo sul periodo di costruzione. Una ricerca completa richiede più se
 
 Per ogni idea, registrata in `ipotesi.md` prima di qualsiasi test:
 
-1. Fonte: titolo, autore, data di pubblicazione, prima del 2024-01-01. Non sono fonti valide i risultati del gate, del registro delle strategie, del paper del bot o delle campagne precedenti (tranne, se il proprietario lo ha deciso, l'elenco `config/idee_btc51_costruzione.md`, che vale come idea già provata su un'altra moneta, non come prova).
+1. Fonte: titolo, autore, data di pubblicazione, prima del 2024-01-01. Non sono fonti valide i risultati del gate, del registro delle strategie, del paper del bot o delle campagne precedenti.
 2. Riformula l'affermazione in modo verificabile e falsificabile.
 3. Sotto-domande: in quali condizioni vale (dimensione del movimento, volatilità, giorno, ora, funding)? Chi sta operando in quel momento e perché dovrebbe muovere il prezzo in quella direzione? Quando si manifesta l'effetto e in quanto tempo?
 4. Almeno 10 spiegazioni concorrenti, incluse quelle noiose: caso, volatilità, tendenza di fondo, artefatto dei dati, costi.
@@ -659,7 +682,8 @@ Per ogni idea, registrata in `ipotesi.md` prima di qualsiasi test:
 
 1. Per le varianti che non superano, e per i trade perdenti di quelle che superano, analizza quando succede, con quali caratteristiche, se era prevedibile in anticipo. Solo su LINKUSDT (regola 10).
 2. Un filtro nato da questa analisi crea una nuova variante: consuma un tentativo e segue la Fase 2 da capo.
-3. **Il filtro deve valere anche dove non è nato.** Prima della Fase 2 della variante con il filtro, si registra e si esegue il controllo sulle monete di controllo, sul periodo di costruzione: la variante con il filtro e quella senza, senza altre modifiche. Il filtro passa se l'R medio di tutti i trade delle 9 monete insieme è più alto con il filtro che senza. Se non passa, la variante con il filtro è uno `scarto` registrato con il motivo e consuma comunque il tentativo. Il controllo dice solo se il filtro è generale: il suo risultato non si usa per scegliere altri filtri (regola 10).
+3. **Quando una variante è nata dalla Fase 3.** Lo è, qualunque sia l'ipotesi scritta, ogni variante che differisce da una variante già provata per un solo elemento fra filtro, conferma, tipo d'ingresso, stop, uscite e timeframe, e che non era già scritta in `ipotesi.md` (in un commit) prima del risultato di quella variante. La direzione non conta: long e short della stessa regola sono varianti distinte per natura.
+4. **Una variante nata dalla Fase 3 deve valere anche dove non è nata.** Prima della sua Fase 2 si chiede al coordinamento il controllo sulle monete di controllo, sul periodo di costruzione: la variante nuova e quella già provata da cui differisce (se sono più d'una, la più recente nel log), tutte e due senza altre modifiche. Il controllo passa se la media fra le monete dell'R medio è più alta con la variante nuova di almeno 0,05 R. Se non passa, la variante è uno `scarto` registrato con il motivo e consuma comunque il tentativo. L'esito dice solo se la modifica è generale: non si usa per scegliere altre modifiche (regola 10).
 
 #### Fase 4 — Verifiche sui candidati
 
@@ -667,11 +691,11 @@ Per ogni variante che supera la Fase 2. Ogni verifica si registra prima di esegu
 
 | # | Verifica | Come si fa | Supera se |
 |---|---|---|---|
-| 1 | Robustezza dei parametri | Ogni parametro numerico si sposta del 20% in meno e del 20% in più, uno alla volta, tenendo fermi gli altri. Arrotondamenti: interi per periodi e numero di candele; 0,1 per multipli di ATR e di R; per le soglie di RSI e stocastico si sposta del 20% la distanza da 50; per il funding si arrotonda a 0,005%. **Se dopo l'arrotondamento il valore non cambia** (per esempio una soglia del funding a 0,00% o a −0,01%), si sposta del più piccolo passo dell'arrotondamento, in meno e in più (per il funding ±0,005%) | L'R medio resta positivo in tutte le prove |
+| 1 | Robustezza dei parametri | Ogni parametro numerico si sposta del 20% in meno e del 20% in più, uno alla volta, tenendo fermi gli altri. Arrotondamenti: interi per periodi, numero di candele e soglie di ADX e dell'ATR percentile; 0,1 per multipli di ATR e di R, multipli di Bollinger e soglie del volume relativo; 0,1% per la percentuale dello stop S3; per le soglie di RSI e stocastico si sposta del 20% la distanza da 50; per il funding si arrotonda a 0,005%. **Se dopo l'arrotondamento il valore non cambia** (per esempio una soglia del funding a 0,00% o a −0,01%, o una validità di 1 candela), si sposta di un passo dell'arrotondamento nella stessa direzione (per il funding 0,005%, per le candele 1). Uno spostamento che dà un valore non valido (per esempio 0 candele) si riporta e non si prova | L'R medio resta positivo in tutte le prove fatte |
 | 2 | Timeframe adiacenti | Stessa variante sul timeframe precedente e successivo dell'elenco, con tutti i periodi riscalati per coprire lo stesso tempo (es. EMA 50 su 1h diventa EMA 100 su 30m e EMA 25 su 2h), arrotondati all'intero. Orari, soglie e multipli non cambiano. Se un elemento è ammesso solo fino a 1h, il timeframe più lungo non si prova | L'R medio è positivo su ogni timeframe provato |
-| 3 | Stabilità nel tempo | Quattro blocchi: dall'inizio al 2020-06-30; dal 2020-07-01 al 2021-03-31; dal 2021-04-01 al 2021-12-31; dal 2022-01-01 al 2022-09-30 | R medio positivo in almeno 3 blocchi su 4, e nessun blocco fa più del 50% della somma degli R |
-| 3bis | Mercati in forte rialzo e in forte ribasso | I semestri solari della costruzione (il primo e l'ultimo anche se parziali) si dividono secondo la variazione del prezzo di LINKUSDT nel semestre (chiusura dell'ultima candela ÷ apertura della prima − 1): forte rialzo se +30% o più, forte ribasso se −30% o meno. Un trade sta nel semestre della sua candela d'ingresso | In ciascuno dei due gruppi che ha almeno 30 trade, l'R medio è positivo |
-| 4 | Pochi trade estremi | Si tolgono i trade migliori, il 5% del totale (arrotondato per eccesso) | L'R medio resta positivo **e almeno la metà** dell'R medio con tutti i trade |
+| 3 | Stabilità nel tempo | Quattro blocchi di circa 8 mesi: dall'inizio al 2020-09-30; dal 2020-10-01 al 2021-05-31; dal 2021-06-01 al 2022-01-31; dal 2022-02-01 al 2022-09-30 | R medio positivo in almeno 3 blocchi su 4, e nessun blocco fa più del 50% della somma degli R |
+| 3bis | Mercati in forte rialzo e in forte ribasso | I semestri solari della costruzione (il primo e l'ultimo anche se parziali) si dividono secondo la variazione del prezzo di LINKUSDT nel semestre, sulle candele giornaliere (chiusura dell'ultima ÷ apertura della prima − 1): forte rialzo se +30% o più, forte ribasso se −30% o meno. Un trade sta nel semestre della sua candela d'ingresso | In ciascuno dei due gruppi che ha almeno 30 trade, l'R medio è positivo. Un gruppo con meno di 30 trade non decide; se nessuno dei due ne ha 30, la verifica è superata e lo si scrive |
+| 4 | Pochi trade estremi | Si tolgono i trade migliori, il 5% del totale (arrotondato per eccesso), dal candidato e, allo stesso modo, da ognuna delle sue 1.000 entrate casuali | L'R medio del candidato resta positivo, **e** il suo vantaggio sulla media delle entrate casuali, tolti i migliori da tutte e due, è almeno la metà di quello con tutti i trade. Così una strategia che per le sue uscite vive di pochi grandi guadagni (target lontano, trailing) si confronta con entrate casuali che hanno le stesse uscite |
 | 5 | Costi doppi | Sezione 6 | L'R medio resta positivo |
 | 6 | Troncamento | Sezione 9.8 | Segnali identici |
 | 7 | Liquidazione | Sezione 9.4 | Nessuna violazione |
@@ -679,9 +703,9 @@ Per ogni variante che supera la Fase 2. Ogni verifica si registra prima di esegu
 | 9 | Regola intra-barra opposta | Target prima dello stop quando cadono nella stessa candela | Informativa: si riporta la differenza |
 | 10 | Ritardo di una candela | Sezione 9.9 | Informativa |
 | 11 | Versione a mercato (solo ingressi limit) | Stessa variante con ingresso a mercato | Informativa: se la versione limit è molto migliore, il vantaggio dipende soprattutto dal prezzo di ingresso, e la verifica 8 pesa di più |
-| 12 | Monete di controllo | La stessa variante, senza modifiche, su ognuna delle 9 monete di controllo, sul periodo di costruzione, con lo slippage della sua fascia (sezione 4bis). Una moneta con meno di 30 trade conta come non positiva | R medio positivo su almeno 5 monete su 9 **e** R medio di tutti i trade delle 9 insieme positivo |
+| 12 | Monete di controllo (la esegue il coordinamento, regola 10) | La stessa variante, senza modifiche, su ognuna delle 9 monete di controllo, sul periodo di costruzione, con lo slippage della sua fascia (sezione 4bis), con le sue 1.000 entrate casuali su ogni moneta (10.1). Una moneta con meno di 30 trade conta come non superata | L'R medio batte la media delle proprie entrate casuali su almeno 7 monete su 9, **e** la media fra le monete dell'R medio è positiva dopo i costi |
 
-Chi supera le verifiche da 1 a 8, la 3bis e la 12 è un **candidato** (per gli ingressi a mercato la verifica 8 non si applica). La verifica 12 si fa per ultima, solo se le altre decisive sono superate: così le monete di controllo si guardano il meno possibile.
+Chi supera le verifiche da 1 a 8, la 3bis e la 12 è un **candidato** (per gli ingressi a mercato la verifica 8 non si applica). La verifica 12 si chiede per ultima, solo se le altre decisive sono superate: così le monete di controllo si usano il meno possibile.
 
 #### Fase 5 — Sfida alla tua stessa conclusione
 
@@ -698,9 +722,9 @@ Quando le varianti sono finite, o le idee sono esaurite, fermati e verifica, sem
 ### Passo 3 — Validazione
 
 1. Congela i candidati: calcola l'hash SHA-256 dei file `regole.md` e del loro codice e scrivilo in `validazione.md`.
-2. Togli il blocco della regola 2 (il coordinamento scrive `campagne/LINK6/via_libera_validazione.md` dopo il sì dell'utente) e carica i dati dal 2022-10-01 al 2023-12-31 di LINKUSDT e delle monete di controllo.
-3. Esegui ogni candidato una sola volta su quel periodo, tutti insieme, senza ritocchi, su LINKUSDT e sulle monete di controllo nella stessa esecuzione.
-4. Applica le condizioni di validazione della sezione 10.3.
+2. Togli il blocco della regola 2 (il coordinamento scrive `campagne/LINK6/via_libera_validazione.md` dopo il sì dell'utente) e carica i dati di LINKUSDT dal 2022-10-01 al 2023-12-31.
+3. Esegui ogni candidato una sola volta su quel periodo, tutti insieme, senza ritocchi. Subito dopo, con il canale della sezione 12, chiedi al coordinamento la validazione sulle monete di controllo: la esegue una sola volta, con gli stessi candidati congelati, e risponde con l'esito e i numeri.
+4. Applica le condizioni di validazione della sezione 10.3 (su LINKUSDT e sulle monete di controllo).
 5. Scrivi gli esiti in `validazione.md`. Da qui non si costruiscono nuovi candidati.
 
 **STOP:** riepiloga gli esiti.
@@ -711,10 +735,10 @@ Scrivi `consegna.md`. Per ogni candidato che ha superato la validazione:
 
 - specifica completa, ipotesi e meccanismo economico;
 - metriche di costruzione e di validazione affiancate (9.7);
-- esito di tutte le verifiche della Fase 4, compresa la 12 moneta per moneta;
-- in validazione, l'R medio delle monete di controllo, insieme e moneta per moneta;
+- esito di tutte le verifiche della Fase 4 (della 12 solo «supera»: i numeri li aggiunge il coordinamento al Passo 5);
+- in validazione, i numeri delle monete di controllo ricevuti dal coordinamento;
 - per gli ingressi limit, percentuale di ordini eseguiti in costruzione e in validazione;
-- varianti usate su 40, e quante varianti con un filtro della Fase 3 sono state scartate dal controllo sulle monete di controllo;
+- varianti usate su 40, e quante varianti nate dalla Fase 3 sono state scartate dal controllo sulle monete di controllo;
 - previsione per il vault: R medio atteso e trade attesi in 33 mesi;
 - se è eseguibile dal bot così com'è o richiede un'aggiunta;
 - trade al mese attesi in paper.
@@ -725,13 +749,13 @@ Se nessun candidato ha superato la validazione, scrivi "nessuna strategia valida
 
 ### Passo 5 — Vault
 
-Prerequisiti: consegna completa e comando "APRI IL VAULT 4" scritto dall'utente (in questa sessione, o registrato dalla sessione di ricerca come dice la sezione 0).
+Prerequisiti: consegna completa e comando "APRI IL VAULT 4" scritto dall'utente in questa sessione, dopo lo STOP del Passo 4 (sezione 0).
 
 1. Crea `research/vault/APERTURA_4.md` con data, ora, frase dell'utente e dove è stata scritta, elenco dei candidati e i loro hash (devono coincidere con quelli del Passo 3). Il programma del vault si committa prima di scaricare i dati; prima di caricarli scrive un file di giro iniziato, e si rifiuta se esiste già.
 2. Scarica in `data/vault/` i dati di LINKUSDT dal 2024-01-01 al 2026-09-30.
 3. Esegui ogni candidato una sola volta, senza modifiche, con entrate casuali e p-value sul periodo del vault.
 4. Applica le condizioni del vault della sezione 10.3 e l'asticella della sezione 10.4.
-5. Scrivi in `vault/LINK6_risultati.md` metriche, p-value, esito dell'asticella, il confronto con la previsione della consegna e, per ogni candidato che fallisce, cosa è cambiato rispetto a costruzione e validazione. Un candidato che fallisce resta fallito.
+5. Scrivi in `vault/LINK6_risultati.md` metriche, p-value, esito dell'asticella, il confronto con la previsione della consegna, i numeri delle verifiche sulle monete di controllo e, per ogni candidato che fallisce, cosa è cambiato rispetto a costruzione e validazione. Un candidato che fallisce resta fallito.
 
 **STOP:** riepiloga.
 
@@ -772,7 +796,7 @@ Per ogni candidato che ha superato il vault: è obbligatorio, e decide. Il vault
 
 Scrivi `lezioni.md`: errori di metodo, trappole dei dati, idee provate e cosa ne è stato, cosa cambiare nella prossima versione del protocollo. Aggiorna `STATO.md`. Le lezioni contengono fatti del vault: restano fuori da ciò che legge una sessione di ricerca futura (sezione 3).
 
-## 13bis. Il collaudo del metodo (Passo 0, punto 8)
+## 13bis. Il collaudo del metodo (Passo 0, punto 9)
 
 Le tre prove di questa sezione provano il **metodo** (stima dei trade, motore, entrate casuali, p-value, soglie,
 verifiche, esecuzione del bot), non LINK. Valgono queste regole:
@@ -784,6 +808,7 @@ verifiche, esecuzione del bot), non LINK. Valgono queste regole:
   regole, STOP e si chiede all'utente;
 - il collaudo gira con le stesse versioni di Python e numpy della macchina delle sessioni di ricerca (Passo 0,
   punto 8; regola 11);
+- le prove le esegue il coordinamento, che ne vede tutti i numeri; la sessione di ricerca non li legge (sezione 12);
 - una prova che non passa è un errore del metodo: si cerca la causa, si corregge (con una riga in `CHANGELOG.md`) e si
   rifanno tutte e tre le prove;
 - prima del lancio si stima il tempo di calcolo; se supera 24 ore, STOP e decide l'utente.
@@ -791,7 +816,7 @@ verifiche, esecuzione del bot), non LINK. Valgono queste regole:
 ### 13bis.1 Le serie senza vantaggio
 
 Per ogni timeframe del catalogo si costruiscono 30 serie senza direzione (semi da 1 a 30) dalle candele last di LINKUSDT
-del periodo di costruzione, e allo stesso modo, con gli stessi semi, quelle delle 9 monete di controllo:
+del periodo di costruzione, e allo stesso modo quelle delle 9 monete di controllo (per la verifica 12):
 
 1. ogni candela si scompone nei suoi movimenti relativi, in logaritmo: salto dalla chiusura precedente all'apertura,
    chiusura sull'apertura, massimo e minimo sull'apertura;
@@ -806,8 +831,9 @@ direzione di quello che succede dopo, e nessuna regola del catalogo può avere u
 dei movimenti, il raggrupparsi della volatilità (periodi calmi e periodi agitati, come nel mercato vero), i salti di
 prezzo, il volume e i costi; la tendenza di fondo sparisce. (Il primo giro del collaudo del protocollo 3 usava l'ordine
 delle candele mescolato: toglieva anche il legame fra volatilità passata e futura, e uno stop calcolato dopo una candela
-grande risultava largo per un futuro tranquillo.) Le serie di monete diverse si girano con semi indipendenti per moneta:
-il legame fra le monete nello stesso istante si perde, e il collaudo lo dichiara (sezione 15).
+grande risultava largo per un futuro tranquillo.) Il lancio di ogni candela dipende dal seme della serie, dalla moneta e
+dall'ora della candela: con lo stesso seme, monete diverse si girano in modo indipendente. Il legame fra le monete nello
+stesso istante si perde, e il collaudo lo dichiara (sezione 15).
 
 ### 13bis.2 Prova A — le direzioni a caso (la bilancia vuota deve segnare zero)
 
@@ -824,9 +850,11 @@ il legame fra le monete nello stesso istante si perde, e il collaudo lo dichiara
 5. Si riportano anche, come informazione: la distribuzione dei p-value (deve essere circa uniforme), l'R medio delle
    100 (atteso negativo, per i costi) e, per le varianti finte che superano la Fase 2, le verifiche della Fase 4.
 6. **La verifica 12 senza vantaggio.** Tutte le 100 varianti finte, anche quelle che non superano la Fase 2, fanno la
-   verifica 12 sulle serie senza direzione delle 9 monete di controllo, con lo stesso numero di serie. Si riporta quante la
-   superano: con monete indipendenti se ne attendono fra 4 e 10 su 100 (una variante senza vantaggio chiude positiva
-   circa una volta su quattro, per i costi). Se sono più di 25 su 100, STOP e decide l'utente: la verifica filtrerebbe poco.
+   verifica 12 sulle serie senza direzione delle 9 monete di controllo, con lo stesso seme della loro serie di LINKUSDT.
+   Si riporta quante battono le proprie entrate casuali su almeno 7 monete su 9: con monete indipendenti la
+   probabilità è circa 9 su 100 (ogni moneta, senza vantaggio, batte il caso circa una volta su due). Se sono più di
+   **17** su 100 (per caso capiterebbe meno di una volta su 100), STOP e decide l'utente. Si riporta anche quante
+   superano la verifica 12 intera.
 
 Perché: un errore che fa guardare il futuro al motore, o entrate casuali costruite male, su prezzi senza direzione producono
 troppi p-value piccoli. Questa prova li vede.
@@ -863,9 +891,9 @@ troppi p-value piccoli. Questa prova li vede.
    deve restare circa lo stesso (le entrate casuali non sanno dove sono i segnali). Se con il vantaggio sale in media
    di più di 0,05 R, STOP e decide l'utente.
 
-6. **La verifica 12 con il vantaggio.** Per la regola B1, con P = 1,2 inserito sulla serie di LINKUSDT e su quelle
-   delle 9 monete di controllo (semi da 1 a 10, lo stesso seme per tutte le monete di una prova), la verifica 12 passa
-   in almeno **8 prove su 10**.
+6. **La verifica 12 con il vantaggio.** Per le regole B1 e B2, con P = 0,6 e P = 1,2 inserito sulle serie delle 9
+   monete di controllo (semi da 1 a 10), si esegue la verifica 12. Con P = 1,2 deve passare in almeno **8 prove su 10**
+   per ciascuna regola; con P = 0,6 si riporta, come misura della sua potenza.
 
 Perché: dimostra che il metodo trova un vantaggio quando c'è, a mercato, sullo short e con l'ordine limit, che con
 P = 0 non lo inventa sulla regola stessa, e che la verifica sulle monete di controllo non ferma un vantaggio vero e
@@ -897,7 +925,7 @@ rispetto alla ricerca, e nessuno saprebbe se per colpa della strategia o dell'es
 
 In `collaudo_4/esiti.md`, per ogni prova: i numeri, «passa» o «non passa», le versioni di Python e numpy e le impronte
 SHA-256 degli strumenti con cui è girata (motore, statistiche, caricatore, guardiano, strumento delle monete di
-controllo, `parametri_4.yaml`). Quelle impronte valgono per tutta la ricerca:
+controllo, `parametri_4.yaml`, `bot_4.md`). Quelle impronte valgono per tutta la ricerca:
 se uno strumento cambia dopo il collaudo, prima di usarlo si rifanno le prove A e B, e anche la C se il cambiamento
 tocca il motore o il bot.
 
@@ -905,34 +933,34 @@ tocca il motore o il bot.
 
 | Numero | Da dove viene | Perché non di più | Perché non di meno |
 |---|---|---|---|
-| Costruzione fino al 2022-09-30, validazione fino al 2023-12-31 | Circa 70/30: l'unica divisione che rispetta i minimi di 150 e 60 trade alla frequenza minima | 80/20: validazione con circa 44 trade | 60/40: costruzione con circa 130 trade |
+| Costruzione fino al 2022-09-30, validazione fino al 2023-12-31 | Circa 70/30: con LINKUSDT dal 2020-01-17 rispetta i minimi di 150 e 60 trade alla stessa frequenza minima di circa 4,6 trade al mese (sezione 4) | 6 mesi in meno di validazione: circa 41 trade | 6 mesi in meno di costruzione: circa 122 trade |
 | Vantaggio minimo 0,2 R | Margine sui costi di circa 0,14 R per trade su LINKUSDT | Scarterebbe strategie valide | Un vantaggio sotto 0,14 R sparisce con i costi doppi |
 | Dispersione 1,2 R | Valore tipico con stop a −1 R (fra 1 e 1,5 R) | Con 1,5 R servirebbero circa 225 trade in costruzione | Con 1 R si sottostimerebbero i trade necessari |
-| 150 / 60 / 100 trade | Sezione 5.2 | 300 in costruzione vorrebbe dire più di 8 trade al mese: quasi nessuna strategia oltre le 4 ore | 100 in costruzione: un vantaggio di 0,2 R arriva solo a 1,7 errori standard |
+| 150 / 60 / 100 trade | Sezione 5.2 | 300 in costruzione vorrebbe dire circa 9 trade al mese: quasi nessuna strategia oltre le 4 ore | 100 in costruzione: un vantaggio di 0,2 R arriva solo a 1,7 errori standard |
 | 40 varianti | Il numero più alto con meno di un falso candidato atteso (40 × 2,3% ≈ 0,9) | 60: 1,4 falsi attesi; 100: 2,3 | 20: solo 7–10 idee, troppo poche per esplorare il catalogo |
 | Massimo 3 condizioni | Ogni condizione moltiplica le combinazioni | 4 o più: adattamento al passato quasi garantito | 2: escluderebbe filtro + ingresso + conferma, la struttura più comune |
 | Stop minimo 0,3% | Sotto, i costi superano 0,4 R per trade | — | Il risultato dipenderebbe più dai costi che dal segnale |
-| Costi doppi | Commissione 0,10% e slippage 0,02% a lato | Il triplo: quasi nessuna strategia sotto le 4 ore sopravvivrebbe | Una volta e mezza: margine troppo stretto |
+| Costi doppi | Commissione 0,10% e il doppio dello slippage della moneta (LINKUSDT 0,04% a lato) | Il triplo: quasi nessuna strategia sotto le 4 ore sopravvivrebbe | Una volta e mezza: margine troppo stretto |
 | p-value 0,023 in costruzione | Equivale a 2 errori standard | Più severo: con 150 trade si perderebbero quasi tutti i vantaggi veri di 0,2 R | Più largo: più falsi candidati, oltre 1 ogni 40 varianti |
 | Metà dell'R di costruzione in validazione | Una parte del vantaggio si perde sempre fuori dal periodo di studio | Chiedere tutto scarterebbe strategie sane | Senza limite passerebbero strategie crollate |
 | Profit factor 1,05 / 1,10 | Controllo di coerenza; la soglia vera è l'R medio | 1,20 scarterebbe strategie con molte piccole vincite e R medio buono | Sotto 1,05 la strategia guadagna poco più di quanto perde |
 | Asticella al 10% | Fra i candidati dichiarati validi, in media non più di 1 su 10 è un falso | 20%: un falso su 5, troppo per soldi veri | 5%: con 100 trade e due candidati, un vantaggio vero di 0,2 R passerebbe meno di una volta su due |
 | 1.000 entrate casuali | Un p-value di 0,023 si stima con un errore di circa ±0,005 | 10.000: dieci volte più lento, decisioni quasi uguali | 100: errore di circa ±0,015, troppo vicino alla soglia |
 | Robustezza ±20% | Abbastanza da scoprire un picco isolato, abbastanza poco da restare la stessa strategia | ±50% è un'altra strategia | ±10% spesso non cambia nulla (es. EMA 50 diventa 45 o 55) |
-| 4 blocchi, 3 su 4, massimo 50% | Circa 9 mesi e circa 38 trade per blocco | Più blocchi: troppi pochi trade per blocco | 2 blocchi non distinguono "regge nel tempo" da "dipende da metà periodo" |
-| Togliere il 5% dei trade migliori, e restare ad almeno metà dell'R | Con 150 trade sono 8 trade. Se senza di loro resta meno della metà del vantaggio, il vantaggio sta in una manciata di trade, che il caso sposta facilmente | Il 10%, o chiedere tutto l'R, punirebbe le strategie che vivono di pochi grandi guadagni per costruzione | Chiedere solo «positivo» lascia passare una strategia che senza 8 trade vale quasi zero |
+| 4 blocchi, 3 su 4, massimo 50% | Circa 8 mesi e circa 37 trade per blocco alla frequenza minima | Più blocchi: troppi pochi trade per blocco | 2 blocchi non distinguono "regge nel tempo" da "dipende da metà periodo" |
+| Togliere il 5% dei trade migliori, dal candidato e dalle entrate casuali, e tenere almeno metà del vantaggio sul caso | Con 150 trade sono 8 trade. Il confronto con le entrate casuali tolte allo stesso modo tiene conto delle uscite: con un target lontano o un trailing anche il caso vive di pochi grandi guadagni. Se tolti i migliori resta meno della metà del vantaggio sul caso, il vantaggio sta in una manciata di trade, che il caso sposta facilmente | Il 10%, o chiedere tutto il vantaggio, punirebbe i vantaggi veri ma irregolari | Chiedere solo «positivo» lascia passare una strategia che senza 8 trade vale quasi zero, e punisce senza motivo quelle con il target lontano |
 | Riscaldamento 3 volte il periodo | Dopo 3 periodi i dati iniziali pesano meno del 5% negli indicatori ricorsivi | Più lungo toglierebbe troppi dati su candele lunghe | Più corto: indicatori diversi da quelli del bot all'avvio |
 | 9 altre monete, 3 su 9, correlazione 0,5 (Passo 6) | Con p-value 0,10, per caso si attende meno di 1 moneta su 9 | Più monete: si scenderebbe a contratti poco liquidi | Meno monete: un risultato su 2–3 monete può essere caso |
-| 9 monete di controllo, verifica 12: 5 su 9 positive e tutte insieme positive | Senza vantaggio una variante chiude positiva circa una volta su quattro, perché i costi spingono l'R sotto zero (24 varianti finte su 100 nel collaudo del protocollo 3, `collaudo_3/esiti/giro4/prova_a.jsonl`): 5 su 9 per caso capita fra 4 e 10 volte su 100 con monete indipendenti (il collaudo misura il valore vero, 13bis.2, punto 6). Con un vantaggio vero e generale di 0,2 R ogni moneta con 150 trade chiude positiva circa 98 volte su 100 | 7 o più su 9 fermerebbe vantaggi veri che su una o due monete grandi non valgono | 4 su 9 capiterebbe per caso fra 15 e 27 volte su 100: il controllo filtrerebbe poco |
-| Validazione delle monete di controllo insieme | Con 9 monete e circa 60 trade ciascuna, alcune centinaia di trade: un vantaggio generale di 0,2 R sta a circa 4 errori standard dallo zero, mentre senza vantaggio l'R medio è negativo per i costi | Chiedere ogni moneta positiva fermerebbe vantaggi veri per il caso di una moneta | Senza questa condizione la validazione su una moneta sola non distingue un vantaggio di 0,2 R dal caso (circa 1,3 errori standard con 60 trade) |
-| Mercati in forte rialzo e ribasso: ±30% a semestre, almeno 30 trade (verifica 3bis) | Un semestre del ±30% è un mercato chiaramente orientato per le monete del catalogo; 30 trade bastano per vedere il segno di un vantaggio di qualche decimo di R | ±50%: gruppi quasi vuoti | ±15%: quasi tutti i semestri, e la verifica ripeterebbe quella dei blocchi |
-| Passo fisso di robustezza quando il ±20% non sposta il valore (verifica 1) | Il più piccolo passo dell'arrotondamento: per il funding 0,005% | Un passo più grande cambierebbe la soglia in un'altra del catalogo | Senza, una soglia a zero non si mette mai alla prova |
-| Controllo dei filtri della Fase 3 sulle monete di controllo | Un filtro scelto guardando i trade di una moneta può descrivere solo quei trade: se vale davvero, migliora il risultato anche altrove | Chiedere che il filtro renda positiva ogni moneta fermerebbe filtri utili | Senza, il filtro più esposto all'adattamento al passato passa come idea nuova |
-| Paper: 40 trade, 12 mesi | Alla frequenza minima, 40 trade sono circa 9–10 mesi | 60 trade: circa 14 mesi | 20 trade: troppo pochi per confrontare esecuzione e backtest |
+| 9 monete di controllo, verifica 12: battere il caso su 7 monete su 9, e media positiva dopo i costi | Senza vantaggio una variante batte le proprie entrate casuali circa una volta su due su ogni moneta: 7 su 9 per caso capita circa 9 volte su 100 con monete indipendenti (il collaudo lo misura, 13bis.2, punto 6), di più con monete correlate. Con un vantaggio vero e generale di 0,2 R sul caso, con 150 trade, ogni moneta lo batte circa 98 volte su 100 e 7 su 9 passa quasi sempre. La media positiva dopo i costi chiede che il vantaggio paghi i costi anche fuori da LINKUSDT. Si guarda il vantaggio sul caso, non l'R semplice, perché le monete salgono e scendono insieme | 8 o 9 su 9 fermerebbero vantaggi veri per il caso di una o due monete | 6 su 9 capiterebbe per caso circa 25 volte su 100: il controllo filtrerebbe poco |
+| Validazione delle monete di controllo: vantaggio medio sul caso di almeno 0,1 R | Con circa 60 trade per moneta l'errore standard di una moneta è circa 0,15 R; sulla media di 9 monete circa 0,05 R se fossero indipendenti e circa 0,1 R con una correlazione di 0,3. Senza vantaggio la media supera 0,1 R fra 3 e 15 volte su 100; con un vantaggio generale di 0,2 R fra 85 e 97 volte su 100 | 0,2 R: fermerebbe metà dei vantaggi veri di 0,2 R | 0: passerebbe metà delle strategie senza vantaggio |
+| Mercati in forte rialzo e ribasso: ±30% a semestre, almeno 30 trade (verifica 3bis) | Un semestre del ±30% è un mercato chiaramente orientato per LINKUSDT; 30 trade bastano per vedere il segno di un vantaggio di qualche decimo di R | ±50%: gruppi quasi vuoti | ±15%: quasi tutti i semestri, e la verifica ripeterebbe quella dei blocchi |
+| Passo fisso di robustezza quando il ±20% non sposta il valore (verifica 1) | Un passo dell'arrotondamento: per il funding 0,005%, per le candele 1 | Un passo più grande cambierebbe la soglia in un'altra del catalogo | Senza, una soglia a zero o una validità di 1 candela non si mettono mai alla prova |
+| Varianti nate dalla Fase 3: definizione meccanica e almeno 0,05 R in più sulle monete di controllo | Una modifica scelta guardando i trade di una moneta può descrivere solo quei trade; si riconosce dal log e da `ipotesi.md`, non da come la si chiama. Con circa 9 × 150 trade la differenza fra due varianti quasi uguali ha un errore standard di qualche centesimo di R: 0,05 R è circa un errore standard e mezzo con monete indipendenti, circa uno con monete correlate, se le due varianti hanno la metà dei trade in comune | Chiedere che la modifica renda positiva ogni moneta fermerebbe modifiche utili | «Più alto» e basta passerebbe metà delle modifiche inutili |
+| Paper: 40 trade, 12 mesi | Alla frequenza minima, 40 trade sono circa 9 mesi | 60 trade: circa 14 mesi | 20 trade: troppo pochi per confrontare esecuzione e backtest |
 | Bocciatura a 1,5 volte il drawdown del vault | Un peggioramento del 50% oltre il peggio già visto indica che qualcosa è cambiato | 2 volte lascerebbe perdere troppo | 1 volta bloccherebbe strategie sane per oscillazioni normali |
 | Limit a 0,25 o 0,5 × ATR | Prezzo di ingresso migliore in modo misurabile: con uno stop a 1,5 × ATR, 0,25 × ATR vale circa 0,17 R | 1 × ATR: l'ordine verrebbe eseguito soprattutto quando il prezzo crolla | 0,1 × ATR: guadagno di prezzo trascurabile, esecuzione decisa quasi solo dalla coda |
 | Validità 1 o 3 candele | 1: l'ordine segue subito il segnale; 3: lascia al prezzo il tempo di tornare indietro | Oltre 3 candele il segnale è ormai vecchio | Meno di una candela non esiste |
-| Riempimento severo 0,05% | Circa 5 volte lo slippage degli ordini a mercato: a un prezzo di 50.000 USDT sono 25 USDT oltre il limit | 0,2% toglierebbe quasi tutte le esecuzioni con k piccolo | Sotto 0,02% non metterebbe davvero alla prova l'ipotesi di esecuzione |
+| Riempimento severo 0,05% | Circa 2,5 volte lo slippage degli ordini a mercato su LINKUSDT: a un prezzo di 10 USDT sono 0,005 USDT oltre il limit | 0,2% toglierebbe quasi tutte le esecuzioni con k piccolo | Sotto lo slippage della moneta non metterebbe davvero alla prova l'ipotesi di esecuzione |
 | Commissione maker 0,02% | Tariffa base di Binance, da verificare al Passo 0 | — | — |
 | 100 varianti finte, al massimo 5 che superano (prova A) | Con il 2,3% dichiarato in 8.3 se ne attendono 2,3; 6 o più capiterebbero per caso 2,8 volte su 100 | Più varianti allungherebbero il calcolo senza cambiare la decisione | Con 50 la soglia diventerebbe troppo larga per vedere un raddoppio dei falsi candidati |
 | 30 serie per regola, P = 0 / 0,6 / 1,2 (riserva 1,8), soglia 0,35 R e 80% (prova B) | Con almeno 0,35 R netti e almeno 150 trade, e con entrate casuali che dal vantaggio inserito non guadagnano niente, la regola batte il caso di almeno 0,35 R più i costi: più di 3 errori standard (1,2 ÷ √150 ≈ 0,1 R). Un p-value sopra 0,023 sarebbe quasi impossibile: sotto l'80% c'è un errore | Soglie più alte non proverebbero niente di più | Con meno di 30 serie l'80% sarebbe deciso da 2-3 serie |
@@ -940,20 +968,20 @@ tocca il motore o il bot.
 | Ritorno del vantaggio inserito in 240 candele (prova B) | Lento rispetto alle 12 candele del trade: su un trade il ritorno di un segnale precedente pesa al massimo 12 ÷ 240 = 5% del suo spostamento | Più lento: la compensazione arriverebbe tardi e la serie avrebbe tendenze di settimane, di cui guadagnerebbero anche le entrate casuali | Più veloce: il ritorno toglierebbe ai trade una parte troppo grande del vantaggio inserito |
 | 12 mesi, 98% e 0,01 R (prova C) | I trade possono differire solo per casi limite documentati | Il 100% non si può garantire nei casi limite dentro la stessa candela | Sotto il 98% una differenza sistematica passerebbe |
 | Leva massima 5 (se il bot non la definisce) | Con stop di almeno 0,3% e rischio 1%, la leva non supera circa 3,3 | — | Più bassa ridurrebbe la dimensione di trade validi |
-| Prova A: al massimo 25 su 100 oltre la verifica 12 senza vantaggio; prova B: almeno 8 su 10 con il vantaggio | Attese fra 4 e 10 su 100 senza vantaggio e quasi 10 su 10 con un vantaggio di P = 1,2 su tutte le monete | — | Soglie più strette scambierebbero per errore la correlazione fra le serie |
+| Prova A: al massimo 17 su 100 che battono il caso su 7 monete su 9; prova B: almeno 8 su 10 con il vantaggio | Attese circa 9 su 100 senza vantaggio (18 o più capitano per caso meno di 4 volte su 1.000) e quasi 10 su 10 con P = 1,2 | — | — |
 
 ## 15. Limiti noti (da riportare nei report finali)
 
 - **Il modello conosce il mercato crypto del 2024–2026.** Di LINK meno che di BTC, ma l'andamento generale del mercato sì. La regola 7, le fonti precedenti al 2024, la sezione 3, le monete di controllo e il paper riducono il rischio, non lo azzerano.
-- **Il coordinamento conosce i risultati delle campagne precedenti nel loro vault.** Per questo non scrive il messaggio di apertura con fatti dal 2024 e il guardiano tiene quei file fuori dalla sessione di ricerca (sezione 3). La scelta di LINKUSDT e delle monete di controllo è stata fatta solo con i volumi 2023 e con l'elenco dei vault già aperti.
-- **Una sola moneta per la ricerca.** Le monete di controllo dicono se una variante vale anche altrove, ma sono correlate con LINKUSDT: «vale fra le grandi monete» non vuol dire «indipendente dal mercato crypto».
+- **La costruzione di LINKUSDT è già stata esplorata** da un protocollo precedente (30 varianti, nessun candidato, nessuna validazione e nessun vault). La sessione di ricerca non ne legge i risultati; le idee provate allora contano come idee già provate su questi dati, e il vault resta mai aperto.
+- **Una sola moneta per la ricerca.** Le monete di controllo dicono se una variante vale anche altrove, ma sono correlate con LINKUSDT: «vale fra le grandi monete» non vuol dire «indipendente dal mercato crypto». I numeri della sezione 14 sulle monete di controllo valgono per monete indipendenti; con monete correlate le verifiche filtrano un po' meno.
 - **Il vault delle monete di controllo è già stato aperto** da protocolli precedenti, per altre strategie: il Passo 6 su di esse è una seconda lettura, informativa.
-- **Potenza.** Con questi minimi, un vero vantaggio di 0,2 R supera il vault circa una volta su due; uno di 0,3 R circa 8–9 volte su 10 (con uno o due candidati nel vault). La verifica 12 abbassa ancora un poco la potenza per i vantaggi veri ma specifici di LINKUSDT. Il protocollo preferisce perdere un vantaggio vero piuttosto che accettarne uno falso.
+- **Potenza.** Con questi minimi, un vero vantaggio di 0,2 R supera il vault circa una volta su due; uno di 0,3 R circa 8–9 volte su 10 (con uno o due candidati nel vault). La verifica 12 e la validazione sulle monete di controllo abbassano la potenza per i vantaggi veri ma specifici di LINKUSDT: il protocollo cerca vantaggi che valgano fra le grandi monete. Il protocollo preferisce perdere un vantaggio vero piuttosto che accettarne uno falso.
 - **Catalogo chiuso.** Strategie fuori catalogo non si provano.
-- **Strategie lente.** Sotto circa 4 trade al mese non si arriva ai minimi: le strategie su candele giornaliere passano solo se entrano spesso.
-- **Costi a orizzonte corto.** A 15 e 30 minuti i costi sono dello stesso ordine del movimento tipico, e su LINKUSDT sono più alti che su BTC: lì il test a costi doppi pesa di più.
+- **Strategie lente.** Sotto circa 4,6 trade al mese non si arriva ai minimi: le strategie su candele giornaliere passano solo se entrano spesso.
+- **Costi a orizzonte corto.** A 15 e 30 minuti i costi sono dello stesso ordine del movimento tipico, e su LINKUSDT sono più alti che sulle monete con slippage 0,01%: lì il test a costi doppi pesa di più.
 - **Esecuzione dei limit.** Anche con regole severe, un backtest a candele non conosce la coda degli ordini: i risultati dei candidati limit sono meno certi di quelli a mercato, e la loro prova vera è il paper. Anche il paper, con `DRY_RUN`, riempie gli ordini con una regola simulata: misura l'esecuzione del bot, non la coda vera di Binance.
-- **Il collaudo prova il metodo su prezzi senza direzione e con vantaggi inseriti apposta**: dice che la bilancia funziona con pesi noti, non che su LINK ci sia un vantaggio. Le serie senza direzione di monete diverse non hanno il legame che le monete vere hanno nello stesso istante: il collaudo misura la verifica 12 con monete più indipendenti di quelle vere.
+- **Il collaudo prova il metodo su prezzi senza direzione e con vantaggi inseriti apposta**: dice che la bilancia funziona con pesi noti, non che su LINK ci sia un vantaggio. Le serie senza direzione di monete diverse non hanno il legame che le monete vere hanno nello stesso istante.
 - **Storia breve.** I futures su LINKUSDT esistono dal 2020: short e funding non hanno storia più lunga.
 
 ## 16. Stile dei report
@@ -962,25 +990,10 @@ Sii diretto sui limiti. Distingui sempre tra "osservato", "inferito" e "ipotizza
 
 ---
 
-## Appendice 1 — modifiche rispetto alla versione 5.1 (`PROTOCOLLO_3.md`)
+## Appendice — da dove viene questo testo
 
-Le motivazioni sono di metodo. I fatti che le hanno fatte nascere (la campagna BTC51) sono in
-`research/campagne/BTC51/lezioni.md`, che la sessione di ricerca non legge (sezione 3).
-
-| # | Dove | Cosa | Perché |
-|---|---|---|---|
-| 1 | Intestazione, 0bis, 1, 4, 6, 9, 12, 13, 15 | La ricerca si fa su LINKUSDT (D1), con slippage 0,02% e i nomi `PROTOCOLLO_4.md`, `parametri_4.yaml`, `bot_4.md`, `collaudo_4/`, `campagne/LINK6/`, branch `research/campagna/LINK6`, marcatore `LINK6`, `vault/APERTURA_4.md` con la frase «APRI IL VAULT 4», `altre_monete_4/`, `paper_4/` | Il vault di BTCUSDT si è aperto una volta; LINKUSDT è la moneta più scambiata nel 2023 con dati dal 2020 e il vault mai aperto |
-| 2 | 4bis, 2, 11 (regola 10), Fase 4 (verifica 12), 10.3, Passi 3, 4, 6 | Le monete di controllo (D2): la variante deve valere anche su di loro, nella costruzione (verifica 12) e in validazione (tutte insieme) | Un vantaggio di una sola moneta è più spesso un caso; e una validazione su una moneta sola, con 60-80 trade, non distingue un vantaggio di 0,2 R dal caso |
-| 3 | Fase 3, punto 3 | Un filtro nato dall'analisi dei trade deve migliorare il risultato anche sulle monete di controllo | È la scelta più esposta all'adattamento al passato: descrive i trade da cui è nata |
-| 4 | Fase 4, verifica 4 | Senza il 5% dei trade migliori l'R medio deve restare almeno a metà | «Positivo» lasciava passare un vantaggio che stava quasi tutto in 8 trade |
-| 5 | Fase 4, verifica 1 | Se il ±20% arrotondato non sposta un valore (soglie a zero), si sposta di un passo fisso | Una soglia del funding a 0,00% o −0,01% non veniva mai messa alla prova |
-| 6 | Fase 4, verifica 3bis | Il risultato nei semestri di forte rialzo e di forte ribasso | Una strategia che perde in tutto un tipo di mercato vive dell'andamento del mercato, non del suo segnale; i 4 blocchi di tempo non lo vedono |
-| 7 | 9.6, 4bis, Passo 6 | La serie finisce all'ultima candela con scambi; il volume di un anno è diviso i giorni dell'anno; le monete di controllo sono un elenco fisso | Contratti che smettono di scambiare hanno candele finte in coda; la media sui soli giorni presenti premia i contratti appena quotati |
-| 8 | 11 (regola 11), Passo 0, 13bis | Collaudo con le stesse versioni di Python e numpy della ricerca, controllo all'avvio | Un pareggio del p-value cambiava con la versione di numpy |
-| 9 | 0 | La frase del vault vale anche se scritta nella sessione di ricerca, che la registra e non fa altro | Il proprietario scrive dove sta lavorando; il testo deve dire cosa succede |
-| 10 | 3, 12, Passo 0 | Niente fatti dal 2024 nei file della ricerca; il caricatore riconosce solo `APERTURA_4.md` | Il coordinamento conosce i vault precedenti, e il marcatore del protocollo 3 esiste già e aprirebbe il vault di qualunque moneta |
-| 11 | Fase 5 | Una domanda in più: i candidati sono idee diverse o ritagli della stessa idea | Ritagli della stessa idea, sugli stessi episodi, non sono prove indipendenti |
-| 12 | Passo 0, 13bis | Il collaudo misura anche la verifica 12, senza e con vantaggio | Una verifica nuova si collauda come le altre |
-
-Le appendici della versione 5.1 (modifiche rispetto alla 5, aggiunte del coordinamento del 16 ottobre, correzioni del
-collaudo del 17 ottobre) restano in `research/PROTOCOLLO_3.md` e valgono anche qui.
+È la versione 5.1 (`research/PROTOCOLLO_3.md`) con le correzioni del suo collaudo già incorporate, adattata a
+LINKUSDT, con le monete di controllo e con le modifiche alle verifiche della Fase 3 e della Fase 4. L'elenco delle
+modifiche e le loro motivazioni sono nel file del coordinamento `research/protocollo_4_note.md`, che la sessione di
+ricerca non legge. Le appendici della versione 5.1 restano in quel file solo come storia: non servono per eseguire
+questo testo.
