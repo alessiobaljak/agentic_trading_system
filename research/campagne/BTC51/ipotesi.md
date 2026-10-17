@@ -324,6 +324,39 @@ la chiusura. **Concorrenti:** come I-07.
   24 candele (stima 152).
 Previsione: R medio fra −0,15 e +0,1; non supera (V-017, la versione long su 30 minuti, ha dato +0,025).
 
+**Esito (17 ottobre).** V-021 +0,050 R (p 0,606), V-022 −0,081 R (p 0,678), V-023 +0,023 R (p 0,201): nessuna
+supera, come previsto.
+
+## Fase 5 — sfida alla conclusione (17 ottobre 2026)
+
+Varianti usate: 23 su 40. Candidati: uno, **V-020**. Le domande del protocollo, con i fatti:
+
+1. **Mi sono fissato sulla prima idea decente?** In parte sì: V-020 è un ritaglio di V-012, la variante che ci era
+   andata più vicino. Ma prima e dopo ho provato 11 famiglie diverse (tendenza, medie, volume, funding nei due sensi,
+   range asiatico, ritorno verso la media, ritracciamenti nei due sensi, compressione, MACD), 22 varianti in tutto
+   oltre a V-020. Le famiglie non provate (stocastico, RSI a metà, sessioni, VWAP) avevano troppo pochi trade con
+   regole sensate oppure fonti deboli: le lascio. I 17 tentativi che restano non li uso: ogni variante in più aggiunge
+   circa il 2,3% di probabilità di un falso candidato, e non ho idee con una fonte solida che non siano già state
+   provate.
+2. **Cosa direbbe uno scettico, con i test.**
+   - «È solo il ribasso o il rialzo di fondo»: nel 2022 (BTC in forte ribasso) V-020, che è long, fa +0,117 R a trade
+     su 91 trade, e le entrate casuali long nello stesso periodo fanno −0,004 R in media (Fase 2). Non è la tendenza.
+   - «È la larghezza dello stop»: l'R medio è positivo in tutti e cinque i quinti di larghezza (da +0,107 a +0,402;
+     `risultati/fase3_V-020.json`), e le entrate casuali hanno la stessa distribuzione.
+   - «È il funding incassato»: il funding pesa −0,0003 R a trade, cioè niente.
+   - «È un'ora del giorno»: positivo dopo tutti e tre i regolamenti (00, 08, 16 UTC).
+   - «Sono pochi trade fortunati»: **qui lo scettico ha ragione a metà.** Togliendo i 9 trade migliori l'R medio
+     scende da +0,223 a +0,012: la verifica 4 passa per poco. Il vantaggio vive di guadagni grandi e rari (le uscite a
+     tempo fanno in media +1,24 R, gli stop −1,05 R).
+3. **Cosa è più probabilmente fortuna.** (a) La scelta dei soli giorni feriali, nata guardando i 59 trade del fine
+   settimana di V-012; V-011 mostra l'effetto opposto. (b) Il primo semestre 2020 (crollo di marzo e ripresa), che dà
+   da solo il 42% della somma. (c) Il p-value 0,017 è vicino alla soglia 0,023, e viene dopo 19 varianti già provate.
+4. **Conoscenza del 2024-2026.** Non so dire con certezza come sia andato il funding negativo dopo il 2023, e non ho
+   scelto l'idea per quello; ma non posso escludere un'influenza inconsapevole. Lo dichiaro.
+
+Conclusione onesta: c'è **un candidato debole**, statisticamente al limite e con un'origine (la scelta dei feriali)
+che aumenta il rischio di adattamento al passato. La validazione su 15 mesi mai visti è la prova giusta.
+
 ## Piano dei tentativi
 
 Primo lotto: 19 varianti (V-001 … V-019), una per riga, in quest'ordine. Restano 21 tentativi per la Fase 3 (filtri
