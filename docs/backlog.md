@@ -32,6 +32,18 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
+### P9. Protocollo 3, per replicare su altre monete: la scelta delle monete e i contratti morti
+**Perché:** preparando la prova su altre monete (17 ott, `research/altre_monete_3/risultati.md`) sono emerse due
+trappole dei dati. (1) La tabella dei volumi del 7 ottobre (`research/universo/candidate.csv`) ha il volume 2023
+solo per i 125 contratti quotati prima del 2022: gli altri 127 con dati nel 2023 (APT, ARB, OP, PEPE...) non hanno
+volume, e APT stava fra le prime 9. Calcolati ora in `research/altre_monete_3/selezione.json`. (2) Un contratto
+delistato continua ad avere candele finte nell'archivio: MATICUSDT 169 ore a prezzo fermo e volume zero dopo l'ultimo
+scambio (2024-09-04 08:00 UTC), e mark e funding fino al 2026-09 senza scambi. **Proposta per il prossimo
+protocollo:** scrivere prima (a) il volume «nell'anno» come totale diviso i giorni dell'anno, o una copertura minima,
+perché la media sui soli giorni presenti premia i contratti appena quotati (ORDI 55 giorni, 1000SATS 20); (b) che una
+serie finisce all'ultima candela con volume sopra zero. Non si cambia adesso: le due scelte sono già dichiarate nel
+programma del Passo 6, prima dell'esecuzione.
+
 ### P8. Protocollo 3: la robustezza non sposta le soglie che valgono zero
 **Perché:** nella ricerca BTC51 (17 ott) il candidato V-020 usa «funding sotto lo 0,00%»; la verifica di
 robustezza della Fase 4 sposta ogni parametro del ±20%, e il 20% di zero e' zero, quindi su quella soglia non ha

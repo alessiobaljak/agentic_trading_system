@@ -3981,3 +3981,16 @@ funding sotto zero nel 38% dei regolamenti e BTC a −33%, ha dato 80 trade a �
 protocollo 3 che aveva superato costruzione e validazione su BTC era il funding negativo come segnale d'acquisto, e
 nei mercati in discesa lunga quel segnale scatta spesso e perde; il metodo l'ha fermata prima del paper, come doveva.
 Prossimo passo: decide il proprietario (prova su altre monete o chiusura). Il paper del vecchio gate resta acceso.
+
+### 17 ottobre, sera tardi: la prova di V-020 su altre 9 monete, non si trasferisce
+
+Il proprietario: «ok sì, fai la prova sulle altre monete». Prima di scaricare i dati del vault il coordinamento ha
+trovato e risolto due trappole: la tabella dei volumi del 7 ottobre non aveva il volume 2023 dei contratti quotati
+dal 2022 (127, fra cui APT, che entra fra le 9), e MATIC dopo il delisting ha 169 ore di candele finte a volume zero.
+Le 9 monete: ETH, SOL, XRP, DOGE, APT, BNB, LTC, MATIC (delistata il 4 settembre 2024), BCH. Una sola esecuzione:
+V-020 regge solo su LTC (242 trade, +0,062 R, p 0,020); sulle altre 7 con il periodo intero perde (da −0,018 a −0,120
+R a trade), e su MATIC −0,333 su 35 trade. Servivano 3 monete: **non si trasferisce**
+(`research/altre_monete_3/risultati.md`). Capito oggi: l'idea del funding negativo come segnale d'acquisto a 24 ore
+non vale ne' su BTC ne' sulle grandi monete nel 2024-2026; quasi ovunque il 2024 e' positivo e il 2026 negativo, con
+correlazioni basse fra le monete, quindi e' il mercato che e' cambiato, non una moneta sfortunata. Resta la chiusura
+della campagna (lezioni), quando il proprietario la chiede. Il paper del vecchio gate resta acceso.
