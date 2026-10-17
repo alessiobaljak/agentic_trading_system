@@ -1,7 +1,8 @@
 """Passo 1: quanta parte della costruzione resta ammessa ai segnali, per timeframe e riscaldamento.
 
-Le barre tolte dall'allineamento last/mark sono buchi per il motore (9.6): dopo ognuno il riscaldamento
-riparte. Si contano solo candele (nessun prezzo, nessun risultato): quante candele della costruzione hanno
+Dalla correzione della sezione 9.6 (17 ottobre 2026, appendice 3, punto 6) un buco solo nel mark non toglie
+la candela last: il mark mancante si sostituisce con il last (dati.serie_3_con_conteggi, che conta le
+candele sostituite). Restano buchi del motore solo le candele last mancanti. Si contano solo candele (nessun prezzo, nessun risultato): quante candele della costruzione hanno
 almeno w candele dall'inizio del loro tratto senza buchi, per alcuni riscaldamenti tipici del catalogo
 (42 = ATR 14; 60 = EMA 20; 150 = EMA 50; 300 = EMA 100; 600 = EMA 200; 542 = ATR percentile).
 Esito in data/insample/BTCUSDT/passo1_tratti.json.
@@ -29,12 +30,15 @@ USCITA = dati.RADICE_DEFAULT / "data" / "insample" / "BTCUSDT" / "passo1_tratti.
 def main() -> None:
     out = {}
     for tf in TIMEFRAME:
-        s = dati.serie_3("BTCUSDT", tf, date(2020, 1, 1), date(2022, 9, 30))
+        s, conteggi = dati.serie_3_con_conteggi("BTCUSDT", tf, date(2020, 1, 1), date(2022, 9, 30))
         ts = np.asarray(s.ts)
         inizi = s.inizi_dei_tratti()
         pos = np.arange(len(ts)) - inizi[np.searchsorted(inizi, np.arange(len(ts)), side="right") - 1]
         out[tf] = {
             "candele": int(len(ts)),
+            "mark_sostituite": conteggi["mark_sostituite"],
+            "giorni_mark_sostituiti": conteggi["giorni_mark_sostituiti"],
+            "mark_senza_last": conteggi["mark_senza_last"],
             "tratti": [datetime.fromtimestamp(int(ts[i]) / 1000, tz=timezone.utc).strftime("%Y-%m-%d %H:%M")
                        for i in inizi],
             "quota_ammessa_pct": {str(w): round(100 * float(np.mean(pos >= w)), 1) for w in RISCALDAMENTI},

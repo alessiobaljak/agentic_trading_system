@@ -13,6 +13,9 @@ Protocollo: `research/PROTOCOLLO_3.md` (versione 5.1 su BTC, approvata dal propr
   dei 912 file). A ogni nuova sessione: `python3 research/campagne/BTC51/codice/passo1_impronte.py verifica`.
 - **Varianti usate:** 0 su 40.
 - **Candidati:** nessuno.
-- **Prossima azione:** dopo la conferma dell'utente, Passo 2 (ipotesi in `ipotesi.md`, poi stime e test).
-- **Problemi aperti:** nessuno. Da sapere: i buchi del mark in costruzione fanno ripartire il riscaldamento e
-  tolgono gran parte della costruzione agli indicatori lenti sulle candele lunghe (`fase0_dati.md`, sezione 3).
+- **Prossima azione:** Passo 2 (ipotesi in `ipotesi.md`, poi stime e test), appena è risolto il problema aperto.
+- **Problemi aperti:** due test di `research/src/tests/test_statistica3.py` falliscono su questa macchina
+  (python 3.13.16, numpy 2.5.3): i pareggi esatti fra candidato ed entrate casuali non si contano per un errore di
+  arrotondamento di 5,6e-17, a favore del candidato (log del 17 ottobre, `codice/diagnosi_test_statistica3.py`).
+  STOP: decide il coordinamento. Risolto invece il problema dei buchi del mark (sezione 9.6 corretta,
+  `fase0_dati.md`, sezione 3).

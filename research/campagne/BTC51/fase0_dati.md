@@ -37,28 +37,36 @@ l'archivio pubblico non ha i mesi del 2019.
 | 2023-02-24 00:00 | 1 giorno | validazione |
 | 2023-11-10 03:45 | 1 candela da 15 minuti (solo 15m) | validazione |
 
-Il caricatore tiene solo le candele presenti in tutte e due le serie (intersezione, `carica_serie_allineate`): le
-candele last di quei giorni escono dalla serie del motore e diventano buchi (sezione 9.6). In costruzione sono 577
-candele da 15 minuti, 288 da 30 minuti, 144 da 1 ora, 72 da 2 ore, 36 da 4 ore, 24 da 6 ore, 18 da 8 ore, 12 da 12 ore
-e 6 giornaliere. Nessuna candela mark senza il last; nessun volume mancante.
+**Mark sostituito dal prezzo normale, non buchi** (sezione 9.6 corretta il 17 ottobre 2026, sì del proprietario alle
+07:38 UTC, appendice 3, punto 6; `dati.serie_3_con_conteggi`). Nei giorni senza mark la candela last resta nella
+serie del motore e, al posto del mark mancante, si usa il last della stessa candela: liquidazione e valore della
+posizione per il funding, in quelle candele, si calcolano sul last. Candele con il mark sostituito in costruzione: 577
+da 15 minuti (i 6 giorni più la candela del 2020-01-19 13:15), 288 da 30 minuti, 144 da 1 ora, 72 da 2 ore, 36 da 4
+ore, 24 da 6 ore, 18 da 8 ore, 12 da 12 ore e 6 giornaliere (giorni: 1 luglio 2021, dal 24 al 27 luglio 2021, 31
+luglio 2022). Nessuna candela mark senza il last; nessun volume mancante. La serie del motore in costruzione è quindi
+**un solo tratto senza buchi**, dal 2020-01-01 00:00, su tutti i timeframe.
 
-**Conseguenza da sapere (osservato, solo conteggi):** dopo ogni buco il riscaldamento riparte (7.8). Quota delle
-candele della costruzione che restano ammesse ai segnali, per riscaldamento:
+(Prima stesura di questa sezione, superata dalla correzione: il caricatore teneva solo le candele presenti in tutte
+e due le serie, i 6 giorni diventavano buchi del motore e il riscaldamento ripartiva dopo ciascuno; a 1d con una
+media a 200 candele non restava nessuna candela ammessa.)
+
+**Quota delle candele della costruzione ammesse ai segnali, per riscaldamento** (osservato, solo conteggi,
+`codice/passo1_tratti.py`): ora il resto è solo il riscaldamento iniziale (7.8).
 
 | Timeframe | 42 candele (ATR 14) | 60 (EMA 20) | 150 (EMA 50) | 300 (EMA 100) | 542 (ATR percentile) | 600 (EMA 200) |
 |---|---|---|---|---|---|---|
-| 15m | 99,8% | 99,7% | 99,2% | 98,4% | 97,2% | 96,9% |
-| 30m | 99,6% | 99,5% | 98,7% | 97,5% | 95,5% | 95,0% |
-| 1h | 99,3% | 99,0% | 97,5% | 95,0% | 91,0% | 90,3% |
-| 2h | 98,6% | 98,0% | 95,0% | 90,3% | 84,2% | 82,8% |
-| 4h | 97,2% | 96,0% | 90,3% | 82,8% | 73,6% | 71,6% |
-| 6h | 95,8% | 94,0% | 86,5% | 76,7% | 64,5% | 61,6% |
-| 8h | 94,4% | 92,0% | 82,8% | 71,6% | 55,5% | 51,6% |
-| 12h | 91,6% | 88,8% | 76,7% | 61,6% | 37,4% | 31,6% |
-| 1d | 85,2% | 79,8% | 61,6% | 31,6% | 0,5% | 0,0% |
+| 15m | 100,0% | 99,9% | 99,8% | 99,7% | 99,4% | 99,4% |
+| 30m | 99,9% | 99,9% | 99,7% | 99,4% | 98,9% | 98,8% |
+| 1h | 99,8% | 99,8% | 99,4% | 98,8% | 97,8% | 97,5% |
+| 2h | 99,7% | 99,5% | 98,8% | 97,5% | 95,5% | 95,0% |
+| 4h | 99,3% | 99,0% | 97,5% | 95,0% | 91,0% | 90,0% |
+| 6h | 99,0% | 98,5% | 96,3% | 92,5% | 86,5% | 85,1% |
+| 8h | 98,6% | 98,0% | 95,0% | 90,0% | 82,0% | 80,1% |
+| 12h | 97,9% | 97,0% | 92,5% | 85,1% | 73,0% | 70,1% |
+| 1d | 95,8% | 94,0% | 85,1% | 70,1% | 46,0% | 40,2% |
 
-Sulle candele lunghe gli indicatori lenti perdono gran parte della costruzione: su 1d una variante con EMA 200 o con
-l'ATR percentile non dà segnali; su 12h e 8h ne resta meno della metà. La stima dei trade (8.4) lo conta da sola.
+Su 1d gli indicatori lenti restano costosi (EMA 200: 40% della costruzione, circa 13 mesi): la stima dei trade (8.4)
+lo conta da sola.
 
 ## 4. Funding
 
@@ -90,7 +98,8 @@ Candele last (mark fra parentesi quando diverso). Costruzione: dal 2020-01-01 al
 | 12h | 2.008 (mark 1.996) | 914 (mark 910) |
 | 1d | 1.004 (mark 998) | 457 (mark 455) |
 
-La serie del motore (intersezione) ha in costruzione le candele del mark.
+Dopo la correzione della sezione 9.6 la serie del motore ha tutte le candele last (il mark mancante è sostituito dal
+last; sezione 3).
 
 ## 7. Candele anomale (costruzione; si tengono, non si tolgono)
 
@@ -101,8 +110,8 @@ Escursione = (massimo − minimo) ÷ apertura; variazione = chiusura su chiusura
   (−10,57%), 13 marzo 02:00 (+16,27%, escursione 39,54%, la candela oraria più ampia della costruzione), 13 marzo
   03:00 (+9,12%). Il 15 marzo 21:00 (+13,89%) e 22:00 (−9,14%).
 - **26 luglio 2021, 01:00.** Escursione oraria del 31,33% con variazione di solo +4,31%: una punta verso l'alto
-  dentro la candela, tipica di questo contratto. **Cade nel buco del mark dal 24 al 27 luglio 2021**: la serie del
-  motore non la contiene.
+  dentro la candela, tipica di questo contratto. Cade nei giorni senza mark (dal 24 al 27 luglio 2021): dopo la
+  correzione della sezione 9.6 è nella serie del motore, con il mark sostituito dal last.
 - **19 maggio 2021.** Giornaliera −14,44%, escursione 34,81%; orarie delle 12:00 (−9,43%, escursione 19,11%) e
   delle 13:00 (escursione 22,51%).
 - Altre giornate oltre il 13% di variazione: 8 febbraio 2021 (+19,57%), 13 giugno 2022 (−15,41%), 28 febbraio 2022
