@@ -1,0 +1,8 @@
+Ricerca LINK6 (protocollo 4): branch della ricerca
+
+Branch con una storia propria, preparato dal coordinamento al Passo 0 del protocollo 4 (sezione 12): solo il testo
+del protocollo, gli strumenti, la configurazione del protocollo 4 e la cartella della campagna; CLAUDE.md pulito.
+Il branch non si unisce mai al principale.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01Cp2h5z2VoCmU6nnMGp1yEh
