@@ -357,6 +357,104 @@ Varianti usate: 23 su 40. Candidati: uno, **V-020**. Le domande del protocollo, 
 Conclusione onesta: c'è **un candidato debole**, statisticamente al limite e con un'origine (la scelta dei feriali)
 che aumenta il rischio di adattamento al passato. La validazione su 15 mesi mai visti è la prova giusta.
 
+## Seconda tornata (17 ottobre 2026, richiesta del proprietario: usare le 17 varianti restanti)
+
+Il proprietario ha chiesto di usare anche i 17 tentativi rimasti, su idee nuove, prima della validazione. Il rischio
+resta quello della sezione 8.3: con 40 varianti ci si attende circa 0,9 candidati falsi in tutto. Le idee qui sotto
+sono scritte prima di qualunque risultato su di esse; le stime dei trade sono in `codice/stime_6.json` e
+`stime_7.json` (log, voci `nota`). Idee scartate senza test perché sotto 150 trade con regole sensate: la «spremuta»
+su 1h (71-82 trade), la tendenza nella calma su 1h e 2h (45-92), il ritorno da Bollinger nel fine settimana (129-134),
+il funding negativo su 8h (131), la media a 20 su candele giornaliere (56). Il VWAP su 30 minuti (1.345 trade) lo
+scarto per i costi: con lo stop a 2 ATR da 30 minuti i costi superano probabilmente il movimento atteso.
+
+Regola 7 per tutta la tornata: nessuna di queste idee viene da quello che so del 2024-2026. Durante la verifica delle
+fonti una ricerca ha mostrato il titolo di un articolo del 2026 sul funding: non l'ho aperto e non lo uso.
+
+Elenco A delle spiegazioni concorrenti: vale come sopra per tutte.
+
+### I-12 — Spremuta: la rottura contro la folla a leva
+
+**Fonti.** Brunnermeier, Pedersen, «Market Liquidity and Funding Liquidity», Review of Financial Studies 22(6), 2009:
+le perdite di chi è a leva fanno salire i margini e costringono a vendere (o ricomprare), e il movimento si alimenta da
+solo; Schmeling, Schrimpf, Todorov, «Crypto carry», BIS Working Paper 1087, 2023: il funding misura la domanda di leva.
+**Affermazione (inferenza mia):** quando il funding è negativo (folla di short a leva), una rottura del massimo delle 20
+candele precedenti costringe gli short a ricomprare, e il rialzo prosegue più del caso; simmetrico con funding sopra
++0,03% (folla di long) e rottura del minimo. È un meccanismo diverso da I-04: lì si compra la folla affollata in
+qualunque momento, qui si aspetta che il prezzo inizi a muoversi contro di lei. **Concorrenti specifiche:** 12-1 è I-01
+(tendenza) con un filtro qualunque, e I-01 non ha superato; 12-2 il funding negativo cade nei ribassi del 2022 e le
+rotture lì falliscono.
+- **V-024** · 30m · long · F4 funding sotto 0,00% · E3 Donchian 20 · M · S1 2 × ATR · U1 2 R e U2 24 candele (stima
+  160). Perché 30m: su 1h la stima è 82; 24 candele sono 12 ore, il tempo di una ricopertura forzata.
+- **V-025** · la stessa, short, F4 funding sopra +0,03% (stima 184).
+Previsione: R medio fra −0,1 e +0,2; non superano (costi su 30 minuti).
+
+### I-13 — Nel fine settimana chi fornisce liquidità è pagato di più: i ribassi e i rialzi brevi tornano indietro
+
+**Fonti.** Nagel, «Evaporating Liquidity», Review of Financial Studies 25(7), 2012: i guadagni delle strategie di
+ritorno di breve periodo sono il compenso di chi fornisce liquidità, e crescono quando la liquidità scarseggia; Baur,
+Cahill, Godfrey, Liu, Finance Research Letters 31, 2019: volume di BTC più basso nel fine settimana. **Affermazione:** nel
+fine settimana, quando l'RSI(7) orario esce dalla zona di ipervenduto (risale sopra 30), il prezzo nelle 12 ore
+seguenti risale più del caso; simmetrico per l'ipercomprato e lo short. È il rovescio di I-09: lì il fine settimana
+toglieva valore a un segnale di folla, qui dà valore a un segnale di liquidità. **Concorrenti specifiche:** 13-1 il
+ritorno verso la media su 30 minuti nei giorni qualsiasi (V-015, V-016) è andato male: se il fine settimana non è
+diverso, andrà male anche questo; 13-2 selezione avversa del limit.
+- **V-026** · 1h · long · F6 fine settimana · E6 RSI 7, soglia 30 · L k 0,25 validità 3 · S1 1,5 × ATR · U1 1,5 R e U2
+  12 candele (stima 155).
+- **V-027** · la stessa, short, soglia 70 (stima 164).
+Previsione: R medio fra −0,15 e +0,15; non superano.
+
+### I-14 — Le rotture valgono solo quando c'è già una tendenza forte
+
+**Fonte.** J. W. Wilder, «New Concepts in Technical Trading Systems», Trend Research, 1978: l'ADX sopra 25 indica una
+tendenza in atto, e i sistemi di tendenza si usano solo allora. **Affermazione:** con ADX(14) orario sopra 25, una
+chiusura sopra il massimo delle 20 candele precedenti è seguita da un rialzo, lasciato correre con il trailing, maggiore
+del caso; simmetrico per lo short. **Concorrenti:** 14-1 come 12-1 (I-01 con un filtro); 14-2 l'ADX alto arriva tardi,
+a fine movimento.
+- **V-028** · 1h · long · F2 ADX sopra 25 · E3 Donchian 20 · M · S1 2 × ATR · U3 3 × ATR (stima 230).
+- **V-029** · la stessa, short (stima 214).
+Previsione: R medio fra −0,1 e +0,15; non superano.
+
+### I-15 — La tendenza funziona meglio nella calma
+
+**Fonti.** Barroso, Santa-Clara, «Momentum has its moments», Journal of Financial Economics 116(1), 2015; Daniel,
+Moskowitz, «Momentum crashes», Journal of Financial Economics 122(2), 2016: le strategie di momento crollano nei periodi
+di volatilità alta e rendono di più in quelli calmi. **Affermazione:** con l'ATR percentile sotto il 30°, una rottura
+del massimo delle 55 candele da 30 minuti precedenti, lasciata correre con il trailing, rende più del caso. Diversa da
+I-08 (V-018): lì la rottura delle bande di Bollinger, qui il canale di Donchian, più lento. **Concorrenti:** 15-1 è I-08
+con un altro ingresso. Short: 82 trade, sotto il minimo, non si prova.
+- **V-030** · 30m · long · F3 volatilità bassa · E3 Donchian 55 · M · S1 2 × ATR · U3 3 × ATR (stima 180).
+Previsione: R medio fra −0,05 e +0,25; non supera.
+
+### I-16 — Sopra il VWAP comandano i compratori della giornata
+
+**Fonte.** Zarattini, Aziz, «Volume Weighted Average Price (VWAP) The Holy Grail for Day Trading Systems», SSRN
+4631351, 13 novembre 2023 (sul QQQ: long sopra il VWAP, short sotto). **Affermazione:** con la chiusura oraria sopra il
+VWAP del giorno UTC, un incrocio verso l'alto della EMA 20 con volume relativo sopra 1,5 è seguito da un rialzo fino
+alle 21:00 UTC maggiore del caso; simmetrico sotto il VWAP. **Concorrenti specifiche:** 16-1 un mercato che non chiude
+mai non ha una «giornata» con un senso economico come la borsa: il VWAP dalla mezzanotte UTC è arbitrario (previsione:
+niente); 16-2 la fonte è su un'azione statunitense, non su BTC.
+- **V-031** · 1h · long · F7 sopra il VWAP · E2 chiusura incrocia EMA 20 · C1 volume relativo 1,5 · M · S1 2 × ATR ·
+  U2s alle 21:00 UTC (stima 246).
+- **V-032** · la stessa, short, sotto il VWAP (stima 331).
+Previsione: R medio fra −0,2 e +0,1; non superano.
+
+### I-17 — Il volume anomalo nelle ore americane porta informazione
+
+**Fonti.** Eross, McGroarty, Urquhart, Wolfe, «The intraday dynamics of bitcoin», Research in International Business
+and Finance 49, 2019: volumi e volatilità di BTC sono più alti quando sono aperte le borse americane; Gervais, Kaniel,
+Mingelgrin, Journal of Finance 56(3), 2001. **Affermazione:** nella sessione americana (13:00-21:00 UTC) una candela
+oraria con volume oltre il doppio della media e chiusura nella sua direzione è seguita da un movimento nella stessa
+direzione fino a sera maggiore del caso. Differisce da I-03 (V-010) per la sessione: l'ipotesi è che il volume
+americano sia più informato (istituzionale). **Concorrenti specifiche:** 17-1 V-010 (volume su 1h a tutte le ore) ha
+dato −0,023 R: se la sessione non conta, andrà uguale; 17-2 nelle ore americane escono dati macro: movimenti grandi che
+si ritirano.
+- **V-033** · 1h · long · F5 sessione Stati Uniti · E12 volume relativo 2,0 · M · S1 1,5 × ATR · U1 2 R e U2s (stima
+  451).
+- **V-034** · la stessa, short (stima 460).
+Previsione: R medio fra −0,15 e +0,1; non superano.
+
+Totale della tornata: 11 varianti (V-024 … V-034), 34 su 40. Restano 6 tentativi per la Fase 3.
+
 ## Piano dei tentativi
 
 Primo lotto: 19 varianti (V-001 … V-019), una per riga, in quest'ordine. Restano 21 tentativi per la Fase 3 (filtri
