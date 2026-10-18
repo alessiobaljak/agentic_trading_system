@@ -231,3 +231,16 @@ def test_libro_squilibrio_e_liquidita_a_ore():
     assert h.loc[ora0, "imb1_media"] == pytest.approx(((0 / 20) + (10 / 30)) / 2)
     assert h.loc[ora0, "imb2_fine"] == pytest.approx((20 - 30) / 50)
     assert h.loc[ora0, "liq5_fine"] == pytest.approx(100) and h.loc[ora0, "n"] == 2
+
+
+def test_modello_in_scala_e_ridge():
+    from research.programma5.strumenti import modello as mo
+    X = np.array([[[1.0, np.nan], [2.0, 5.0], [3.0, 7.0]]])
+    Z = mo.in_scala(X)
+    assert Z[0, :, 0] == pytest.approx([-1.2247, 0.0, 1.2247], abs=1e-3)
+    assert Z[0, 0, 1] == 0.0 and Z[0, 1, 1] == pytest.approx(-1.0)
+    rng = np.random.default_rng(0)
+    Zr = rng.normal(size=(200, 10, 3))
+    Y = 0.5 * Zr[..., 0] - 0.2 * Zr[..., 2] + rng.normal(scale=0.01, size=(200, 10))
+    b = mo.ridge(Zr.reshape(-1, 3), Y.reshape(-1), 1.0)
+    assert b == pytest.approx([0.5, 0.0, -0.2], abs=0.01)
