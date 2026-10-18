@@ -19,6 +19,6 @@ Scheda scritta il 18 ottobre 2026 **prima di qualunque calcolo** (REGOLE.md, sez
 ## L'esame
 
 REGOLE.md, sezione 8: sul periodo dal 2021-01 al 2026-09 (i mesi del 2020 servono solo da storia), p ≤ 0,005 / 3, costi
-doppi, giorno migliore tolto, almeno 4 anni su 6 positivi, V2 positivo, 60% delle monete, e la prova a placebo (ogni
-candidata con i trade spostati di un numero di mesi a caso, in cerchio, 20 ripetizioni: la media dei netti deve essere
-vicina a zero, intervallo che contiene lo zero).
+doppi, giorno migliore tolto, almeno 4 anni su 6 positivi, V2 positivo, 60% delle monete, e la prova a placebo (il
+segno del lordo di ogni trade tirato a caso, 20 ripetizioni: la media dei netti dei trade scelti deve essere non sopra
+meno i costi medi, cioè nessun guadagno).

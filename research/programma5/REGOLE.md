@@ -209,9 +209,11 @@ la procedura guarda **solo i trade già chiusi** prima di quel momento, e scegli
 2. positivo a costi doppi e togliendo il giorno migliore;
 3. positivo in almeno **4 anni su 6** (2021-2026) e **positivo su V2** (2025-07 → 2026-09) da solo;
 4. positivo su almeno il 60% delle monete con almeno 20 trade;
-5. **la prova a placebo**: la stessa procedura sulle celle con i rendimenti spostati nel tempo a caso (ogni cella di un
-   numero di mesi a caso, in cerchio) deve dare in media zero; se il placebo dà un risultato positivo la procedura ha un
-   difetto e l'esame è nullo finché non è corretto.
+5. **la prova a placebo**: la stessa procedura con il segno del rendimento lordo di ogni trade tirato a caso (così
+   nessuna candidata ha un vantaggio e niente si ripete da un mese all'altro) deve dare in media **meno i costi**, cioè
+   nessun guadagno: se il placebo guadagna, la procedura guarda avanti per un difetto e l'esame è nullo finché non è
+   corretto. (Corretto il 18 ottobre alle 20:50 UTC, prima di ogni calcolo: la prima stesura spostava i rendimenti di ogni
+   cella nel tempo, ma così la persistenza di una cella resta, e il placebo non dice niente.)
 Dichiarato: questi anni il modello li conosce in parte e conosce gli esiti delle fasi 1 e 2; la procedura però non sceglie
 mai con dati del mese in cui opera, e le sue scelte (finestra, numero di celle) sono quelle comuni, fissate qui prima.
 Il periodo A (dal 2026-10-01) si riporta sempre e diventa la prova nel paper.
