@@ -25,6 +25,12 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   **bruciata**. Il fenomeno è positivo in C, V e R, ma è raro (circa 75 trade l'anno su 12 monete, e i crolli arrivano
   insieme su tutte): con la storia che c'è non si può dimostrare alla soglia scelta. Lo dice il calcolo, non un'opinione.
 * I-018: numero non usato (era la salita senza premio, rinviata).
+* **E-005 e I-020** (scalping con ordini limite in entrata e in uscita: acquisto a 3σ sotto il prezzo, rivendita a 0,5-1σ
+  sopra): su C netto +0,19-0,32% a trade su oltre 6.000 trade, 12 monete, t fino a 7; su V (costruzione) già sceso a
+  +0,02-0,15%; su R (una volta) **zero**: −0,01% / +0,01% / +0,05%, intervalli intorno allo zero. **Bruciata.** Lezione:
+  il vantaggio di chi fornisce liquidità nelle code delle candele era grande nel 2020-2021 e si è chiuso anno dopo anno
+  (2022 piccolo, 2023 più piccolo, 2024-2026 niente): il mercato è diventato più efficiente nelle microstrutture. Le
+  inefficienze di questo tipo vanno cercate sui dati recenti, non sul 2020-2021.
 
 ## Coda delle idee (in ordine)
 
@@ -60,5 +66,6 @@ Numeri da `idee/I-NNN/C.md` e `V.md`: netto medio a trade dopo i costi (trade, p
 | I-014 | bruciata in V | +3,28% (658) | +1,32% (231, p 0,09), caso +1,36% | le altre monete dopo lo strappo di BTC fanno quanto il caso |
 | I-015 | bruciata in V | a +0,31%; b +0,65%; c +0,62% | a −0,31%; b −0,58%; c −0,38% | la discesa propria coperta con BTC nel 2023 continua invece di tornare |
 | I-017 | **bruciata in R di poco** | 7 candidate tutte positive (`C.md`) | costruzione: 7 su 7 positive (`V.md`) | R: c4 +2,20% (211, p **0,0037**, soglia 0,0017), positivo nei 3 anni, a costi doppi, senza il giorno migliore e su 12 monete su 12; c1 +0,44% (778, intervallo −0,12; +1,02); c2 +0,06% |
+| I-020 | bruciata in R | a +0,19% (6.821); b +0,21% (6.649); c +0,32% (6.121), t fino a 7 | costruzione: +0,02% / +0,06% / +0,15% | R: −0,01% / +0,01% / +0,05% (intervalli intorno allo zero): lo scalping a limite nelle code non rende più dal 2024 |
 | I-019 | bruciata in V | a +2,48%; b +0,84%; c +1,53% | a +0,12% (p 0,43); b −0,27%; c +0,16% | la salita propria coperta con BTC nel 2023 non continua |
 | I-016 | **bruciata in V** | a +1,69% (916); b +0,81% (2.509); c +0,17% (6.713) | a +0,60% (435, p 0,047); b +0,28% (1.086, p 0,044); c +0,10% (2.619, p 0,040) | le reti d'acquisto sotto il prezzo guadagnano anche nel 2023 su 11 monete su 12, ma senza la forza richiesta |
