@@ -27,6 +27,10 @@ def impronta(p: Path) -> str:
 def _soglie(cartella: Path, n: int) -> str:
     from research.programma5.strumenti.rapporto import esame_idea
     cfg = esame_idea(cartella)
+    if cfg.get("fase") == 2:
+        return (f"Prova su V2, una volta (REGOLE.md, sezioni 7 e 7bis): p ≤ 0,005 / {n} = {0.005 / n:.5f}, costi doppi, "
+                "senza il giorno migliore, tutte e due le metà, 60% delle monete con almeno 20 trade, almeno 200 trade"
+                + ("; solo sulle monete fuori dalla fase 1" if cfg.get("parente_R") else "") + ".")
     if cfg.get("solo_r"):
         return (f"Prova solo su R (REGOLE.md, 6ter, punto 3): V è costruzione; su R p ≤ {cfg['soglia_r']} / numero "
                 "delle varianti portate su R, con tutte le condizioni di R e il giorno migliore tolto.")
@@ -41,7 +45,8 @@ def congela(idea: str) -> str:
     spec = importlib.util.spec_from_file_location("calcolo", cartella / "calcolo.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    c = json.loads((cartella / "C.json").read_text(encoding="utf-8"))
+    costruzione = "C" if (cartella / "C.json").exists() else "C2"      # fase 2: la costruzione e' C2
+    c = json.loads((cartella / f"{costruzione}.json").read_text(encoding="utf-8"))
     commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=RADICE, capture_output=True, text=True).stdout.strip()
     righe = [f"# {idea} — regola congelata", "",
              f"Congelata prima di aprire V (REGOLE.md, sezione 4), sul commit `{commit}`. Le varianti, i valori e il codice "
@@ -49,7 +54,7 @@ def congela(idea: str) -> str:
              "un'impronta diversa vuol dire un'idea nuova.", "",
              _soglie(cartella, len(mod.VARIANTI)), "",
              "## Le varianti", "", "```json", json.dumps(mod.VARIANTI, ensure_ascii=False, indent=1), "```", "",
-             "## Su C (da `C.json`)", "", "| Variante | Trade | Netto | Intervallo al 95% | Caso (netto) |",
+             f"## Su {costruzione} (da `{costruzione}.json`)", "", "| Variante | Trade | Netto | Intervallo al 95% | Caso (netto) |",
              "|---|---|---|---|---|"]
     for n, e in c.items():
         if e.get("trade"):
