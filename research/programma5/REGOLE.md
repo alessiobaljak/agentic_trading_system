@@ -261,3 +261,18 @@ sezione 7 per le idee nuove (K-NNN): C2 con l'intervallo sopra zero e meglio del
 varianti, costi doppi, senza il giorno migliore, tutte e due le metà, 60% delle monete, 200 trade. Dichiarato: il modello
 conosce i mesi di V2 per altri segnali (per esempio che il 2026 è salito); per questo l'esame di V2 di queste idee chiede in
 più di **battere il caso** (ingressi a caso nello stesso mese e nella stessa direzione).
+
+## 9bis. La seconda tornata della prova in avanti (aggiunta il 18 ottobre 2026, ore 22:50 UTC)
+
+Le idee che sono andate più vicino all'esame sul passato, prese **tali e quali** (stessa cella, stesso verso, stesse
+monete: le 100), si provano sui dati che arrivano **dal 2026-10-19 00:00 UTC** (periodo **A2**): i dati di ottobre fino
+al 18 li ho già visti per altre procedure (prima tornata), quindi per questa tornata non contano. Le regole sono quelle
+della sezione 9 (al massimo 3 insieme, verdetto a 400 trade chiusi o al 2027-03-31, p ≤ 0,05 / 3, costi doppi, giorno
+migliore tolto, 60% delle monete, e il caso riportato). Rifare la prova su dati nuovi di un'idea bruciata non è
+scegliere col senno di poi: il dato nuovo non c'entra con la scelta.
+
+| Idea | Cella e verso | Perché è qui |
+|---|---|---|
+| N-001 | `F9 k10 su h24`, segue (un'ora in salita con volume 10 volte il solito, long 24 ore) | J-005b su V2: +0,93% netto, p 0,0030 contro 0,0025 |
+| N-002 | `P3 w1 giu sconto h4`, contro (crollo di un'ora con il perpetuo sotto lo spot, long 4 ore) | E-004 su C +1,36% lordo; I-017c6 su V (costruzione) +0,74%, p 0,0006 |
+| N-003 | `G1 w24 k3 su h72`, segue (salita propria di un giorno, coperta con BTC, 72 ore) | J-001c su V2: +1,57% netto, p 0,011 |

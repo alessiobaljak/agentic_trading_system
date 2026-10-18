@@ -12,3 +12,4 @@ for t in klines metrics premium funding; do
 done
 python3 -m research.programma5.strumenti.scarico unisci "$TMP"
 PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti.py
+PYTHONPATH=. python3 -W ignore research/programma5/avanti/avanti2.py
