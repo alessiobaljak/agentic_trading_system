@@ -1,0 +1,1 @@
+trade W di M-001c: prima 18435, oggi 18435; uguali: True
