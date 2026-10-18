@@ -29,6 +29,7 @@ def _asof(indice_minuti: np.ndarray, serie: pd.Series) -> np.ndarray:
 
 
 def barre(simbolo: str, periodo: str = "C", idea=None, storia_giorni: int = 100) -> pd.DataFrame:
+    m5.controlla_periodo(periodo, idea)          # anche quando le barre sono gia' nella cache
     CACHE.mkdir(parents=True, exist_ok=True)
     file = CACHE / f"{simbolo}_{periodo}.pkl"
     if file.exists():

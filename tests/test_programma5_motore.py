@@ -98,3 +98,9 @@ def test_ordine_limite_di_vendita_e_niente_ordini_nuovi_col_trade_aperto():
     # il primo si esegue al minuto 1 ed esce al 4; il secondo parte al 2 (trade aperto): saltato; il terzo al 7
     assert list(t["decisione"]) == [1, 7]
     assert t.iloc[0]["lordo"] == pytest.approx(-(100 / 101 - 1))
+
+
+def test_le_barre_orarie_passano_dal_guardiano_anche_dalla_cache():
+    from research.programma5.strumenti import ore
+    with pytest.raises(m5.PeriodoChiuso):
+        ore.barre("BTCUSDT", "V", "I-999")
