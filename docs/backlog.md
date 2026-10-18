@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | P11 (si continua finché non si trovano strategie valide: prima la storia del progetto, poi la proposta), P12 (cose trovate scrivendo la storia: l'esportazione di Firebase aspetta una riga nella lista bianca), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
+| **0. Aspettano il tuo sì** | P13 (il rimbalzo dopo i crolli estremi: prova sul 2023 e dati sulle posizioni aperte), P11 (si continua finché non si trovano strategie valide: prima la storia del progetto, poi la proposta), P12 (cose trovate scrivendo la storia: l'esportazione di Firebase aspetta una riga nella lista bianca), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: CHIUSO il 12 ott al Passo 7, zero strategie trovate), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -31,6 +31,16 @@ la dashboard mostra le voci senza una seconda copia da aggiornare. Quindi: un gr
 le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
+
+### P13. Il rimbalzo dopo i crolli estremi (scalping sulla volatilità)
+**Perché:** l'analisi dello scalping del 18 ott (`research/scalping/risultati.md`, regole scritte prima) dice che dopo
+un'esplosione il prezzo non sa dove va, tranne dopo i crolli estremi (movimento di 5 minuti oltre 16 volte il tipico):
+1.327 crolli su sei monete nel 2020-2022, rimbalzo medio +0,48% in 60 minuti, +0,35% al netto di un giro a mercato
+(intervallo +0,09; +0,62); ma 2020 +0,43%, 2021 +1,18%, 2022 +0,10%. **Proposte (decide il proprietario):** (a) scrivere
+adesso la regola esatta e provarla una volta sola sul 2023, che nessuno ha usato per questa domanda; (b) capire quali
+crolli rimbalzano con i dati sulle posizioni aperte (interesse aperto che crolla durante il crollo = liquidazioni
+forzate): servono i dati `metrics` di Binance, cioè la voce B6 parcheggiata il 23 set; (c) misurare lo scarto di prezzo
+vero nei crolli, quando il libro degli ordini si svuota: i costi del 2023 sono ottimisti proprio lì.
 
 ### P12. Trovate scrivendo la storia del progetto (18 ott 2026)
 **Perché:** i sette lettori della storia (`docs/storia/`) hanno trovato cose che nessun documento scriveva. Da

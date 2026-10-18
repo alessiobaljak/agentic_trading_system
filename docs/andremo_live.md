@@ -4144,3 +4144,13 @@ hanno un piccolo vantaggio di direzione (+0,039 R a trade); entrano in ritardo m
 volatilità taglia i costi di tre volte, ma le strategie vecchie il vantaggio lo hanno nella calma e lo perdono proprio
 nei momenti agitati. La proposta di ripartenza va riscritta intorno a questo (scalping sui momenti di forte volatilità,
 ingressi fatti apposta).
+
+### 18 ottobre, sera: lo scalping sulla volatilità
+
+Il proprietario: «ok procedi con l'analisi sullo scalping». Regole scritte e committate alle 16:19 ora italiana prima di
+scaricare i dati (`research/scalping/regole.md`); candele da 1 minuto di BTC, ETH, SOL, XRP, BNB e DOGE dal 2020 al 2022, 201
+file con il CHECKSUM. Capito oggi: dopo un'esplosione di prezzo, nei minuti dopo il prezzo si muove molto (più di un giro di
+costi nell'80% dei casi) ma in media non sa dove; nei momenti agitati la parte prevedibile dei movimenti brevi vale da 5 a 60
+volte meno del costo di un giro. L'unica eccezione sono i crolli estremi: il prezzo rimbalza in media dello 0,48% in 60
+minuti (+0,35% al netto), ma soprattutto nel 2021 e quasi niente nel 2022. È l'ipotesi più concreta trovata finora per lo
+scalping: va confermata sul 2023 e capita con i dati sulle posizioni aperte (`docs/backlog.md`, P13).

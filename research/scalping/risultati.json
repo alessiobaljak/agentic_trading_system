@@ -1,0 +1,6439 @@
+{
+ "versioni": {
+  "python": "3.11.17",
+  "numpy": "1.26.4",
+  "pandas": "2.2.2"
+ },
+ "costi": {
+  "BTCUSDT": {
+   "mercato": 0.12000000000000001,
+   "limite_mercato": 0.08,
+   "limite_limite": 0.04
+  },
+  "ETHUSDT": {
+   "mercato": 0.12000000000000001,
+   "limite_mercato": 0.08,
+   "limite_limite": 0.04
+  },
+  "SOLUSDT": {
+   "mercato": 0.12000000000000001,
+   "limite_mercato": 0.08,
+   "limite_limite": 0.04
+  },
+  "XRPUSDT": {
+   "mercato": 0.13999999999999999,
+   "limite_mercato": 0.09,
+   "limite_limite": 0.04
+  },
+  "BNBUSDT": {
+   "mercato": 0.13999999999999999,
+   "limite_mercato": 0.09,
+   "limite_limite": 0.04
+  },
+  "DOGEUSDT": {
+   "mercato": 0.13999999999999999,
+   "limite_mercato": 0.09,
+   "limite_limite": 0.04
+  }
+ },
+ "monete": {
+  "BTCUSDT": {
+   "esplosioni": {
+    "minuti": 1578240,
+    "livelli": {
+     "4": {
+      "eventi": 10885,
+      "per_anno": {
+       "2020": 3451,
+       "2021": 3607,
+       "2022": 3827
+      },
+      "orizzonti": {
+       "1": {
+        "n": 10885,
+        "giorni": 1096,
+        "media": -0.0045699137005358525,
+        "basso": -0.008289177346543533,
+        "alto": -0.0007621415772361068,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.3163987138263666,
+        "per_anno": {
+         "2020": -0.010461841255273076,
+         "2021": -0.0075275265977234026,
+         "2022": 0.0035307269348322278
+        },
+        "salita": {
+         "n": 5401,
+         "giorni": 1090,
+         "media": -0.0038778391609767446,
+         "basso": -0.00868363254207125,
+         "alto": 0.000847857480332598
+        },
+        "discesa": {
+         "n": 5484,
+         "giorni": 1082,
+         "media": -0.005251513734846346,
+         "basso": -0.011263246957695055,
+         "alto": 0.0007766474130807169
+        }
+       },
+       "3": {
+        "n": 10885,
+        "giorni": 1096,
+        "media": -0.006937463678794103,
+        "basso": -0.01256144504821758,
+        "alto": -0.0011550755656945801,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.4703720716582453,
+        "per_anno": {
+         "2020": -0.012960972029325994,
+         "2021": -0.014305601977898909,
+         "2022": 0.005438810730026539
+        },
+        "salita": {
+         "n": 5401,
+         "giorni": 1090,
+         "media": -0.00508361331393409,
+         "basso": -0.01227649544508393,
+         "alto": 0.0022281919391200673
+        },
+        "discesa": {
+         "n": 5484,
+         "giorni": 1082,
+         "media": -0.008763256133317977,
+         "basso": -0.017675487766659535,
+         "alto": -6.159996564255216e-05
+        }
+       },
+       "5": {
+        "n": 10885,
+        "giorni": 1096,
+        "media": -0.010606953803998046,
+        "basso": -0.017248701151088393,
+        "alto": -0.003337249564782887,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.5476343592099219,
+        "per_anno": {
+         "2020": -0.017488024246108787,
+         "2021": -0.020060538811481926,
+         "2022": 0.004508189968596293
+        },
+        "salita": {
+         "n": 5401,
+         "giorni": 1090,
+         "media": -0.008193786396914713,
+         "basso": -0.01702213519253688,
+         "alto": 0.00023174931457090845
+        },
+        "discesa": {
+         "n": 5484,
+         "giorni": 1082,
+         "media": -0.012983598071988033,
+         "basso": -0.02423641230261744,
+         "alto": -0.0018878084269929373
+        }
+       },
+       "15": {
+        "n": 10885,
+        "giorni": 1096,
+        "media": -0.012582738618337915,
+        "basso": -0.02333627773258929,
+        "alto": -0.0013482082217018462,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.6717501148369316,
+        "per_anno": {
+         "2020": -0.024569820773380314,
+         "2021": -0.022400937703329796,
+         "2022": 0.0074804086554057575
+        },
+        "salita": {
+         "n": 5401,
+         "giorni": 1090,
+         "media": -0.008114330552247235,
+         "basso": -0.02158849264314846,
+         "alto": 0.005301456348191338
+        },
+        "discesa": {
+         "n": 5484,
+         "giorni": 1082,
+         "media": -0.016983517605383098,
+         "basso": -0.03576002768130746,
+         "alto": 0.0005905534546186524
+        }
+       },
+       "30": {
+        "n": 10885,
+        "giorni": 1096,
+        "media": -0.02804116203128946,
+        "basso": -0.04437460501900832,
+        "alto": -0.013057540190356941,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.7491961414790996,
+        "per_anno": {
+         "2020": -0.04622752351051033,
+         "2021": -0.04644384917763401,
+         "2022": 0.005703187590256385
+        },
+        "salita": {
+         "n": 5401,
+         "giorni": 1090,
+         "media": -0.031186692597477302,
+         "basso": -0.04933173059806136,
+         "alto": -0.012931274157446533
+        },
+        "discesa": {
+         "n": 5484,
+         "giorni": 1082,
+         "media": -0.024943238875202573,
+         "basso": -0.05138568919575049,
+         "alto": 0.0014722174941610546
+        }
+       },
+       "60": {
+        "n": 10884,
+        "giorni": 1096,
+        "media": -0.01519286080154947,
+        "basso": -0.03480766846635801,
+        "alto": 0.002917003719297452,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.804042259990813,
+        "per_anno": {
+         "2020": -0.029647046911791358,
+         "2021": -0.030278401079060147,
+         "2022": 0.012066663518216813
+        },
+        "salita": {
+         "n": 5401,
+         "giorni": 1090,
+         "media": 0.005148998917131024,
+         "basso": -0.018885826833728254,
+         "alto": 0.02865404126398206
+        },
+        "discesa": {
+         "n": 5483,
+         "giorni": 1081,
+         "media": -0.03523050157130933,
+         "basso": -0.06394830773074536,
+         "alto": -0.005414166306836144
+        }
+       }
+      },
+      "mfe15_mediana": 0.2240354568913916,
+      "mae15_mediana": 0.23625093558929944
+     },
+     "8": {
+      "eventi": 2628,
+      "per_anno": {
+       "2020": 856,
+       "2021": 711,
+       "2022": 1061
+      },
+      "orizzonti": {
+       "1": {
+        "n": 2628,
+        "giorni": 931,
+        "media": -0.00576350644643013,
+        "basso": -0.019843301404143997,
+        "alto": 0.00846165268689433,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.5365296803652968,
+        "per_anno": {
+         "2020": -0.019773707902412438,
+         "2021": 0.0031777307474727817,
+         "2022": -0.0004519957947280692
+        },
+        "salita": {
+         "n": 1293,
+         "giorni": 723,
+         "media": -0.007788349345157611,
+         "basso": -0.026868247661708936,
+         "alto": 0.009530493815319365
+        },
+        "discesa": {
+         "n": 1335,
+         "giorni": 713,
+         "media": -0.0038023664703592443,
+         "basso": -0.0238639705837723,
+         "alto": 0.018148564382139687
+        }
+       },
+       "3": {
+        "n": 2628,
+        "giorni": 931,
+        "media": -0.01905596826896528,
+        "basso": -0.03691284474901621,
+        "alto": 0.00022562963917675135,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.6377473363774734,
+        "per_anno": {
+         "2020": -0.03978646506565595,
+         "2021": -0.025406614408828923,
+         "2022": 0.0019248184071989818
+        },
+        "salita": {
+         "n": 1293,
+         "giorni": 723,
+         "media": -0.014514924011714806,
+         "basso": -0.03572354613451729,
+         "alto": 0.007307182785107882
+        },
+        "discesa": {
+         "n": 1335,
+         "giorni": 713,
+         "media": -0.023454148212504494,
+         "basso": -0.052130868612498486,
+         "alto": 0.004787676093042229
+        }
+       },
+       "5": {
+        "n": 2628,
+        "giorni": 931,
+        "media": -0.014984888844254939,
+        "basso": -0.03854947979629656,
+        "alto": 0.008650309982303506,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.6967275494672754,
+        "per_anno": {
+         "2020": -0.018745703679126636,
+         "2021": -0.016844210612107415,
+         "2022": -0.010704742495910653
+        },
+        "salita": {
+         "n": 1293,
+         "giorni": 723,
+         "media": -0.009742655644392896,
+         "basso": -0.04028507409306193,
+         "alto": 0.01976587357247001
+        },
+        "discesa": {
+         "n": 1335,
+         "giorni": 713,
+         "media": -0.020062197853559526,
+         "basso": -0.051760447610659524,
+         "alto": 0.011991186698188163
+        }
+       },
+       "15": {
+        "n": 2628,
+        "giorni": 931,
+        "media": 0.02791078090068414,
+        "basso": -0.007878753671359479,
+        "alto": 0.06594124020068608,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.775875190258752,
+        "per_anno": {
+         "2020": 0.06167095283948802,
+         "2021": 0.0461036530117905,
+         "2022": -0.01151790830818744
+        },
+        "salita": {
+         "n": 1293,
+         "giorni": 723,
+         "media": 0.016078038708863568,
+         "basso": -0.026222337958969565,
+         "alto": 0.056403610575855564
+        },
+        "discesa": {
+         "n": 1335,
+         "giorni": 713,
+         "media": 0.03937125704602048,
+         "basso": -0.015502294572959619,
+         "alto": 0.10364042285286355
+        }
+       },
+       "30": {
+        "n": 2627,
+        "giorni": 931,
+        "media": 0.025340047212689995,
+        "basso": -0.016729798795504288,
+        "alto": 0.06935454430286427,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8280060882800608,
+        "per_anno": {
+         "2020": 0.04929936416315372,
+         "2021": 0.05030568513754274,
+         "2022": -0.010754050781807384
+        },
+        "salita": {
+         "n": 1292,
+         "giorni": 722,
+         "media": 0.009452438764266269,
+         "basso": -0.047125874830126376,
+         "alto": 0.06355436362081993
+        },
+        "discesa": {
+         "n": 1335,
+         "giorni": 713,
+         "media": 0.0407159199582806,
+         "basso": -0.019598120889426016,
+         "alto": 0.11496598936863825
+        }
+       },
+       "60": {
+        "n": 2627,
+        "giorni": 931,
+        "media": 0.01325598833158565,
+        "basso": -0.03887886784192129,
+        "alto": 0.06213399703858861,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8599695585996956,
+        "per_anno": {
+         "2020": 0.04594812978884065,
+         "2021": 0.018570800430087072,
+         "2022": -0.016709393262230175
+        },
+        "salita": {
+         "n": 1292,
+         "giorni": 722,
+         "media": 0.028653357023459038,
+         "basso": -0.033890455391935616,
+         "alto": 0.09334814385119594
+        },
+        "discesa": {
+         "n": 1335,
+         "giorni": 713,
+         "media": -0.0016454351514858326,
+         "basso": -0.07221568058570606,
+         "alto": 0.07006236720394272
+        }
+       }
+      },
+      "mfe15_mediana": 0.3712849289667308,
+      "mae15_mediana": 0.34333042479066656
+     },
+     "16": {
+      "eventi": 508,
+      "per_anno": {
+       "2020": 203,
+       "2021": 101,
+       "2022": 204
+      },
+      "orizzonti": {
+       "1": {
+        "n": 508,
+        "giorni": 360,
+        "media": 0.014079151230637113,
+        "basso": -0.050450191393425235,
+        "alto": 0.08331739963970294,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7244094488188977,
+        "per_anno": {
+         "2020": -0.0470167052606442,
+         "2021": 0.16684696815548247,
+         "2022": -0.000759528385437763
+        },
+        "salita": {
+         "n": 216,
+         "giorni": 175,
+         "media": 0.042026210956543276,
+         "basso": -0.0549062135029393,
+         "alto": 0.1481191877203161
+        },
+        "discesa": {
+         "n": 292,
+         "giorni": 241,
+         "media": -0.006594016237841428,
+         "basso": -0.08648804272436234,
+         "alto": 0.08024488792059783
+        }
+       },
+       "3": {
+        "n": 508,
+        "giorni": 360,
+        "media": -0.007053737801275343,
+        "basso": -0.0786893034576639,
+        "alto": 0.07146134860100914,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7775590551181102,
+        "per_anno": {
+         "2020": -0.03970133741928722,
+         "2021": 0.07514736115225917,
+         "2022": -0.01526377834956247
+        },
+        "salita": {
+         "n": 216,
+         "giorni": 175,
+         "media": -0.007978808754661742,
+         "basso": -0.10219731003727389,
+         "alto": 0.08523929463089819
+        },
+        "discesa": {
+         "n": 292,
+         "giorni": 241,
+         "media": -0.006369438739866214,
+         "basso": -0.11050052460762334,
+         "alto": 0.10478009989736306
+        }
+       },
+       "5": {
+        "n": 508,
+        "giorni": 360,
+        "media": -0.030001288596513232,
+        "basso": -0.1263706731983764,
+        "alto": 0.08279293106914341,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7874015748031497,
+        "per_anno": {
+         "2020": -0.05977790362836483,
+         "2021": 0.05944158960238597,
+         "2022": -0.044653630981919816
+        },
+        "salita": {
+         "n": 216,
+         "giorni": 175,
+         "media": -0.06171681445867178,
+         "basso": -0.17461037260039391,
+         "alto": 0.04939690241457478
+        },
+        "discesa": {
+         "n": 292,
+         "giorni": 241,
+         "media": -0.006540488643683646,
+         "basso": -0.15234297562631127,
+         "alto": 0.15979526399405364
+        }
+       },
+       "15": {
+        "n": 508,
+        "giorni": 360,
+        "media": -0.006835045774438462,
+        "basso": -0.13149142830539354,
+        "alto": 0.13844502665625769,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.84251968503937,
+        "per_anno": {
+         "2020": -0.02994651669891484,
+         "2021": 0.13992361803977446,
+         "2022": -0.056496793066432564
+        },
+        "salita": {
+         "n": 216,
+         "giorni": 175,
+         "media": -0.082228133652551,
+         "basso": -0.23200432714168437,
+         "alto": 0.09268850261010703
+        },
+        "discesa": {
+         "n": 292,
+         "giorni": 241,
+         "media": 0.04893518361485027,
+         "basso": -0.1310329079127525,
+         "alto": 0.2723666655659967
+        }
+       },
+       "30": {
+        "n": 508,
+        "giorni": 360,
+        "media": 0.001979615091239442,
+        "basso": -0.1472051918859283,
+        "alto": 0.16410393195146256,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8562992125984252,
+        "per_anno": {
+         "2020": -0.02366050415725951,
+         "2021": 0.06530784605424023,
+         "2022": -0.003859635496102713
+        },
+        "salita": {
+         "n": 216,
+         "giorni": 175,
+         "media": -0.05081961965729259,
+         "basso": -0.23718615018437023,
+         "alto": 0.1288659046956313
+        },
+        "discesa": {
+         "n": 292,
+         "giorni": 241,
+         "media": 0.04103658326138642,
+         "basso": -0.1718586272001295,
+         "alto": 0.28829523837929005
+        }
+       },
+       "60": {
+        "n": 508,
+        "giorni": 360,
+        "media": -0.01835949852855631,
+        "basso": -0.18826957644349185,
+        "alto": 0.15489032788944865,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8838582677165354,
+        "per_anno": {
+         "2020": -0.18640170642687426,
+         "2021": 0.03644137728877375,
+         "2022": 0.12172716689207218
+        },
+        "salita": {
+         "n": 216,
+         "giorni": 175,
+         "media": 0.09056552386887541,
+         "basso": -0.11717568274753555,
+         "alto": 0.2857423184814268
+        },
+        "discesa": {
+         "n": 292,
+         "giorni": 241,
+         "media": -0.09893417263076609,
+         "basso": -0.34048771799334543,
+         "alto": 0.1465199502640921
+        }
+       }
+      },
+      "mfe15_mediana": 0.5801144123357083,
+      "mae15_mediana": 0.5222530021434024
+     }
+    },
+    "caso": {
+     "1": {
+      "n": 10885,
+      "giorni": 1096,
+      "media": 0.0004898297528986318,
+      "basso": -0.0011112260772410797,
+      "alto": 0.0020915860175550237
+     },
+     "3": {
+      "n": 10885,
+      "giorni": 1096,
+      "media": 0.0012981421940425916,
+      "basso": -0.001395112386582272,
+      "alto": 0.003930648574603832
+     },
+     "5": {
+      "n": 10885,
+      "giorni": 1096,
+      "media": 0.00017760621732440662,
+      "basso": -0.003450044038996971,
+      "alto": 0.003771218809619215
+     },
+     "15": {
+      "n": 10885,
+      "giorni": 1096,
+      "media": 0.0013084323257352521,
+      "basso": -0.005100254352242334,
+      "alto": 0.00822679924145136
+     },
+     "30": {
+      "n": 10885,
+      "giorni": 1096,
+      "media": -0.003247895561563314,
+      "basso": -0.012436117245111636,
+      "alto": 0.0063624180825539636
+     },
+     "60": {
+      "n": 10885,
+      "giorni": 1096,
+      "media": -0.0101338533828378,
+      "basso": -0.02458371803495963,
+      "alto": 0.0035727919565078678
+     }
+    }
+   },
+   "fondo": {
+    "D1": {
+     "n": 41304,
+     "giorni": 622,
+     "media": -0.0014352956370384255,
+     "basso": -0.002842144736998762,
+     "alto": -6.483332064545997e-06,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.0858321587561686
+    },
+    "D2": {
+     "n": 33216,
+     "giorni": 757,
+     "media": -0.0031175029643687427,
+     "basso": -0.004842771320668814,
+     "alto": -0.00151238078977699,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.09968515805238813
+    },
+    "D3": {
+     "n": 30612,
+     "giorni": 831,
+     "media": -0.003461365932069997,
+     "basso": -0.0053176217048916665,
+     "alto": -0.0013902015076501363,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.1098952977462845
+    },
+    "D4": {
+     "n": 29724,
+     "giorni": 866,
+     "media": -0.004105220352484472,
+     "basso": -0.006201813288247795,
+     "alto": -0.0019905928982011257,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.11815066170666928
+    },
+    "D5": {
+     "n": 29124,
+     "giorni": 868,
+     "media": -0.0036809920769738332,
+     "basso": -0.005926529016455144,
+     "alto": -0.0015193730489065419,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.12923948672537253
+    },
+    "D6": {
+     "n": 27648,
+     "giorni": 873,
+     "media": -0.007375326392514614,
+     "basso": -0.009976880260924116,
+     "alto": -0.004679790130050025,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.13888056879000038
+    },
+    "D7": {
+     "n": 28536,
+     "giorni": 870,
+     "media": -0.00507190309322285,
+     "basso": -0.00754923809550238,
+     "alto": -0.0025204877432507787,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.14890142151756147
+    },
+    "D8": {
+     "n": 29616,
+     "giorni": 863,
+     "media": -0.009037294935054362,
+     "basso": -0.012022749499632921,
+     "alto": -0.005968159755296854,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.167914775541393
+    },
+    "D9": {
+     "n": 29916,
+     "giorni": 777,
+     "media": -0.012118585702120583,
+     "basso": -0.01543713282869661,
+     "alto": -0.008649941198662251,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.19688228576445888
+    },
+    "D10": {
+     "n": 33071,
+     "giorni": 685,
+     "media": -0.015457219630843705,
+     "basso": -0.02028264351433147,
+     "alto": -0.010632922699146546,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.27539914272124344
+    }
+   }
+  },
+  "ETHUSDT": {
+   "esplosioni": {
+    "minuti": 1578240,
+    "livelli": {
+     "4": {
+      "eventi": 10748,
+      "per_anno": {
+       "2020": 3539,
+       "2021": 3402,
+       "2022": 3807
+      },
+      "orizzonti": {
+       "1": {
+        "n": 10748,
+        "giorni": 1096,
+        "media": -0.001058066366304079,
+        "basso": -0.005586699135363993,
+        "alto": 0.00354666880642772,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.4111462597692594,
+        "per_anno": {
+         "2020": -0.013721448877559229,
+         "2021": 0.006337281516279925,
+         "2022": 0.004105247847192426
+        },
+        "salita": {
+         "n": 5392,
+         "giorni": 1083,
+         "media": 0.006181625090596244,
+         "basso": -6.568649691547125e-05,
+         "alto": 0.012407214066597658
+        },
+        "discesa": {
+         "n": 5356,
+         "giorni": 1083,
+         "media": -0.008346418930831068,
+         "basso": -0.015326530780338889,
+         "alto": -0.0018167155647200147
+        }
+       },
+       "3": {
+        "n": 10748,
+        "giorni": 1096,
+        "media": 0.0030035191663701512,
+        "basso": -0.004222052983697103,
+        "alto": 0.010740565111454919,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.5667100855973204,
+        "per_anno": {
+         "2020": -0.004414234358492741,
+         "2021": 0.003794179211982105,
+         "2022": 0.009192540508455237
+        },
+        "salita": {
+         "n": 5392,
+         "giorni": 1083,
+         "media": 0.013597228329811145,
+         "basso": 0.0042871171774187455,
+         "alto": 0.02329185904730258
+        },
+        "discesa": {
+         "n": 5356,
+         "giorni": 1083,
+         "media": -0.007661394913031235,
+         "basso": -0.019474825650069583,
+         "alto": 0.0038153323381731894
+        }
+       },
+       "5": {
+        "n": 10748,
+        "giorni": 1096,
+        "media": 0.0010101437500429087,
+        "basso": -0.008547844547553451,
+        "alto": 0.010372633590577286,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.6464458503907704,
+        "per_anno": {
+         "2020": -0.012742719572575972,
+         "2021": 0.0053855459461932,
+         "2022": 0.009884917857593453
+        },
+        "salita": {
+         "n": 5392,
+         "giorni": 1083,
+         "media": 0.009616747523285098,
+         "basso": -0.0026663122716276766,
+         "alto": 0.02172477295063077
+        },
+        "discesa": {
+         "n": 5356,
+         "giorni": 1083,
+         "media": -0.007654308741615398,
+         "basso": -0.023067178329674125,
+         "alto": 0.00641848251617476
+        }
+       },
+       "15": {
+        "n": 10748,
+        "giorni": 1096,
+        "media": 0.008787458750900116,
+        "basso": -0.005154557405452471,
+        "alto": 0.02333068655985205,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7654447339039822,
+        "per_anno": {
+         "2020": -0.007286144982291362,
+         "2021": 0.015407874067648292,
+         "2022": 0.01781341900942057
+        },
+        "salita": {
+         "n": 5392,
+         "giorni": 1083,
+         "media": 0.018759324208772594,
+         "basso": 0.0007915223433603545,
+         "alto": 0.03496604146307824
+        },
+        "discesa": {
+         "n": 5356,
+         "giorni": 1083,
+         "media": -0.0012514319415659794,
+         "basso": -0.024119203935572476,
+         "alto": 0.023538596575184687
+        }
+       },
+       "30": {
+        "n": 10747,
+        "giorni": 1096,
+        "media": 0.001115955915318105,
+        "basso": -0.015841218474195545,
+        "alto": 0.017246813139316162,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8164309639002605,
+        "per_anno": {
+         "2020": -0.03224203930135655,
+         "2021": 0.015828381781010717,
+         "2022": 0.01898307947725329
+        },
+        "salita": {
+         "n": 5391,
+         "giorni": 1083,
+         "media": 0.008935213426509632,
+         "basso": -0.01370320393520679,
+         "alto": 0.030626730341349787
+        },
+        "discesa": {
+         "n": 5356,
+         "giorni": 1083,
+         "media": -0.0067543983122460355,
+         "basso": -0.033734885170679456,
+         "alto": 0.0228373803909037
+        }
+       },
+       "60": {
+        "n": 10747,
+        "giorni": 1096,
+        "media": -0.008468716299356825,
+        "basso": -0.02939319397298002,
+        "alto": 0.0122737923420343,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8583922590249349,
+        "per_anno": {
+         "2020": -0.053461568967148244,
+         "2021": 0.010035771357614269,
+         "2022": 0.016827510338136127
+        },
+        "salita": {
+         "n": 5391,
+         "giorni": 1083,
+         "media": 0.01778857199648908,
+         "basso": -0.014616396258161088,
+         "alto": 0.0484419716857529
+        },
+        "discesa": {
+         "n": 5356,
+         "giorni": 1083,
+         "media": -0.034897588816702844,
+         "basso": -0.06763673352747368,
+         "alto": -0.0033833734809754945
+        }
+       }
+      },
+      "mfe15_mediana": 0.3122352309915144,
+      "mae15_mediana": 0.2992471626690807
+     },
+     "8": {
+      "eventi": 2429,
+      "per_anno": {
+       "2020": 845,
+       "2021": 584,
+       "2022": 1000
+      },
+      "orizzonti": {
+       "1": {
+        "n": 2429,
+        "giorni": 914,
+        "media": -0.021513870764372747,
+        "basso": -0.03612216299656613,
+        "alto": -0.0073168823522709045,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.5953067105804858,
+        "per_anno": {
+         "2020": -0.028713897020935138,
+         "2021": -0.03947176874852923,
+         "2022": -0.004942436154830144
+        },
+        "salita": {
+         "n": 1141,
+         "giorni": 664,
+         "media": -0.0025450056076239524,
+         "basso": -0.020181515861114663,
+         "alto": 0.016142790563337516
+        },
+        "discesa": {
+         "n": 1288,
+         "giorni": 714,
+         "media": -0.03831781109344913,
+         "basso": -0.060956373804151254,
+         "alto": -0.016566663335450392
+        }
+       },
+       "3": {
+        "n": 2429,
+        "giorni": 914,
+        "media": -0.023838815152590905,
+        "basso": -0.044547458335181464,
+        "alto": -0.00163018355092007,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.7204610951008645,
+        "per_anno": {
+         "2020": -0.0470431206965524,
+         "2021": -0.03029304806475923,
+         "2022": -0.00046190494723714746
+        },
+        "salita": {
+         "n": 1141,
+         "giorni": 664,
+         "media": 0.014523949406423335,
+         "basso": -0.013324424752702005,
+         "alto": 0.04113908455369758
+        },
+        "discesa": {
+         "n": 1288,
+         "giorni": 714,
+         "media": -0.057823220713022,
+         "basso": -0.08999790668240118,
+         "alto": -0.02453423126793251
+        }
+       },
+       "5": {
+        "n": 2429,
+        "giorni": 914,
+        "media": -0.01909877870961121,
+        "basso": -0.04658635899820477,
+        "alto": 0.008871395039322067,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7768629065459036,
+        "per_anno": {
+         "2020": -0.039971171434406684,
+         "2021": -0.02856291177627151,
+         "2022": 0.004065446853770574
+        },
+        "salita": {
+         "n": 1141,
+         "giorni": 664,
+         "media": 0.024828199885195915,
+         "basso": -0.009018774788147702,
+         "alto": 0.06008969259906059
+        },
+        "discesa": {
+         "n": 1288,
+         "giorni": 714,
+         "media": -0.05801235213870666,
+         "basso": -0.10089128480270008,
+         "alto": -0.014348629331663055
+        }
+       },
+       "15": {
+        "n": 2429,
+        "giorni": 914,
+        "media": 0.00408501453170864,
+        "basso": -0.034282687910292604,
+        "alto": 0.0450881571071504,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8344997941539728,
+        "per_anno": {
+         "2020": -0.012833228585872858,
+         "2021": 0.021342030609267006,
+         "2022": 0.008302832576770905
+        },
+        "salita": {
+         "n": 1141,
+         "giorni": 664,
+         "media": 0.07075438307239502,
+         "basso": 0.022174033274014203,
+         "alto": 0.11868486504554639
+        },
+        "discesa": {
+         "n": 1288,
+         "giorni": 714,
+         "media": -0.05497534999074723,
+         "basso": -0.11647175440100639,
+         "alto": 0.013259140492148672
+        }
+       },
+       "30": {
+        "n": 2429,
+        "giorni": 914,
+        "media": 0.0004362894680515655,
+        "basso": -0.05297240354984929,
+        "alto": 0.05100595801981123,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8723754631535612,
+        "per_anno": {
+         "2020": -0.028576258197846937,
+         "2021": 0.011839248623381027,
+         "2022": 0.0182925640990234
+        },
+        "salita": {
+         "n": 1141,
+         "giorni": 664,
+         "media": 0.06527162015286814,
+         "basso": -0.003065503746168135,
+         "alto": 0.1284621953724932
+        },
+        "discesa": {
+         "n": 1288,
+         "giorni": 714,
+         "media": -0.05699935673643268,
+         "basso": -0.13167358793395004,
+         "alto": 0.018419076565899178
+        }
+       },
+       "60": {
+        "n": 2429,
+        "giorni": 914,
+        "media": 0.005354051129159367,
+        "basso": -0.051252413774397446,
+        "alto": 0.06309311733204934,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8822560724578016,
+        "per_anno": {
+         "2020": -0.013459581544082768,
+         "2021": -0.03584124100248293,
+         "2022": 0.045309621342928076
+        },
+        "salita": {
+         "n": 1141,
+         "giorni": 664,
+         "media": 0.11015724648579678,
+         "basso": 0.0334479487796636,
+         "alto": 0.18303960490110743
+        },
+        "discesa": {
+         "n": 1288,
+         "giorni": 714,
+         "media": -0.08748790997481834,
+         "basso": -0.172789214015309,
+         "alto": -0.006895252574127742
+        }
+       }
+      },
+      "mfe15_mediana": 0.48805783485343923,
+      "mae15_mediana": 0.43093000080798305
+     },
+     "16": {
+      "eventi": 369,
+      "per_anno": {
+       "2020": 131,
+       "2021": 65,
+       "2022": 173
+      },
+      "orizzonti": {
+       "1": {
+        "n": 369,
+        "giorni": 277,
+        "media": -0.11849874335681601,
+        "basso": -0.20784892899175958,
+        "alto": -0.03160822862629744,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.7994579945799458,
+        "per_anno": {
+         "2020": -0.09443418918339107,
+         "2021": -0.10077595542521738,
+         "2022": -0.14337988678035696
+        },
+        "salita": {
+         "n": 141,
+         "giorni": 122,
+         "media": -0.03145565214465288,
+         "basso": -0.1571535254895602,
+         "alto": 0.09269312628087911
+        },
+        "discesa": {
+         "n": 228,
+         "giorni": 187,
+         "media": -0.17232802344854853,
+         "basso": -0.296446672225345,
+         "alto": -0.046608831714394894
+        }
+       },
+       "3": {
+        "n": 369,
+        "giorni": 277,
+        "media": -0.17618668134018964,
+        "basso": -0.31233050558760983,
+        "alto": -0.027662773675814496,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.8211382113821138,
+        "per_anno": {
+         "2020": -0.15438555351392208,
+         "2021": -0.26654030491608477,
+         "2022": -0.1587471565587322
+        },
+        "salita": {
+         "n": 141,
+         "giorni": 122,
+         "media": -0.10128039711272031,
+         "basso": -0.2439455928726121,
+         "alto": 0.047715013370367786
+        },
+        "discesa": {
+         "n": 228,
+         "giorni": 187,
+         "media": -0.2225103044808614,
+         "basso": -0.42245341568196826,
+         "alto": 0.0064328018010875
+        }
+       },
+       "5": {
+        "n": 369,
+        "giorni": 277,
+        "media": -0.22469468602985776,
+        "basso": -0.3626035247530483,
+        "alto": -0.084118173800971,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.8509485094850948,
+        "per_anno": {
+         "2020": -0.18466398723994848,
+         "2021": -0.42270584501305436,
+         "2022": -0.18060969301003307
+        },
+        "salita": {
+         "n": 141,
+         "giorni": 122,
+         "media": -0.12255701398419014,
+         "basso": -0.2964769437993164,
+         "alto": 0.05606637326842832
+        },
+        "discesa": {
+         "n": 228,
+         "giorni": 187,
+         "media": -0.2878587726896785,
+         "basso": -0.495907832410848,
+         "alto": -0.08113376607002833
+        }
+       },
+       "15": {
+        "n": 369,
+        "giorni": 277,
+        "media": -0.34196162558699195,
+        "basso": -0.5422469010448998,
+        "alto": -0.148223201997075,
+        "verdetto_mercato": "torna indietro più del costo",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.9024390243902439,
+        "per_anno": {
+         "2020": -0.3728717062154416,
+         "2021": -0.49347714570654944,
+         "2022": -0.2616279298060778
+        },
+        "salita": {
+         "n": 141,
+         "giorni": 122,
+         "media": -0.2050894812737817,
+         "basso": -0.4487781890215839,
+         "alto": 0.03794119216520199
+        },
+        "discesa": {
+         "n": 228,
+         "giorni": 187,
+         "media": -0.4266062411491088,
+         "basso": -0.7148916415232168,
+         "alto": -0.16438925526459278
+        }
+       },
+       "30": {
+        "n": 369,
+        "giorni": 277,
+        "media": -0.365553333587087,
+        "basso": -0.6351191624631236,
+        "alto": -0.12328514372908185,
+        "verdetto_mercato": "torna indietro più del costo",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.9295392953929539,
+        "per_anno": {
+         "2020": -0.4322503130128623,
+         "2021": -0.642157604909258,
+         "2022": -0.2111222241031698
+        },
+        "salita": {
+         "n": 141,
+         "giorni": 122,
+         "media": -0.08721530602603067,
+         "basso": -0.3574427902447329,
+         "alto": 0.17848100397926708
+        },
+        "discesa": {
+         "n": 228,
+         "giorni": 187,
+         "media": -0.5376834295787929,
+         "basso": -0.9592665073804248,
+         "alto": -0.1891161360163246
+        }
+       },
+       "60": {
+        "n": 369,
+        "giorni": 277,
+        "media": -0.30781322039548603,
+        "basso": -0.6285567184704263,
+        "alto": -0.0444861864850387,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.9349593495934959,
+        "per_anno": {
+         "2020": -0.47485754321591744,
+         "2021": -0.5308298344360288,
+         "2022": -0.0975306411925277
+        },
+        "salita": {
+         "n": 141,
+         "giorni": 122,
+         "media": 0.021324855728643337,
+         "basso": -0.26620706426827495,
+         "alto": 0.30150370380019803
+        },
+        "discesa": {
+         "n": 228,
+         "giorni": 187,
+         "media": -0.5113591358933028,
+         "basso": -1.0037055330873914,
+         "alto": -0.12092443253105396
+        }
+       }
+      },
+      "mfe15_mediana": 0.7104328377845137,
+      "mae15_mediana": 0.8041530944625341
+     }
+    },
+    "caso": {
+     "1": {
+      "n": 10748,
+      "giorni": 1096,
+      "media": 0.002549077822308819,
+      "basso": 0.0005038690032341364,
+      "alto": 0.004621323408027902
+     },
+     "3": {
+      "n": 10748,
+      "giorni": 1096,
+      "media": 0.003046147696593261,
+      "basso": -0.0004684591785043537,
+      "alto": 0.0068161188571363475
+     },
+     "5": {
+      "n": 10748,
+      "giorni": 1096,
+      "media": 0.0010839872182906067,
+      "basso": -0.003450185934005228,
+      "alto": 0.0056521018302562
+     },
+     "15": {
+      "n": 10748,
+      "giorni": 1096,
+      "media": -0.0009479037060995801,
+      "basso": -0.0101316266620445,
+      "alto": 0.007779651003532852
+     },
+     "30": {
+      "n": 10748,
+      "giorni": 1096,
+      "media": 0.0008595276820015024,
+      "basso": -0.011876171938537879,
+      "alto": 0.01357138413825031
+     },
+     "60": {
+      "n": 10748,
+      "giorni": 1096,
+      "media": 0.009825292108481896,
+      "basso": -0.007723789721355768,
+      "alto": 0.028312404174846297
+     }
+    }
+   },
+   "fondo": {
+    "D1": {
+     "n": 39948,
+     "giorni": 603,
+     "media": -0.0006995972215144999,
+     "basso": -0.0024304811118419077,
+     "alto": 0.0011162747534787874,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.11656995411158635
+    },
+    "D2": {
+     "n": 32748,
+     "giorni": 745,
+     "media": -0.003977805930468236,
+     "basso": -0.006084099689891817,
+     "alto": -0.001969774574078489,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.1326558353101051
+    },
+    "D3": {
+     "n": 29676,
+     "giorni": 805,
+     "media": -0.0011964974538309714,
+     "basso": -0.003837473786751644,
+     "alto": 0.0015223225562918945,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.1502990374436383
+    },
+    "D4": {
+     "n": 30780,
+     "giorni": 863,
+     "media": -0.004941758181719738,
+     "basso": -0.007561893186480163,
+     "alto": -0.0024219877073892336,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.1581965147368028
+    },
+    "D5": {
+     "n": 28884,
+     "giorni": 878,
+     "media": -0.00397892174549653,
+     "basso": -0.006800684241164339,
+     "alto": -0.0010656178025881247,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.1699663228257743
+    },
+    "D6": {
+     "n": 29039,
+     "giorni": 887,
+     "media": -0.004336431570417251,
+     "basso": -0.007139710529219856,
+     "alto": -0.001484670241806358,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.182935237068043
+    },
+    "D7": {
+     "n": 28140,
+     "giorni": 851,
+     "media": -0.007548821440717429,
+     "basso": -0.011225469135579058,
+     "alto": -0.004055813146689128,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.19625187850408807
+    },
+    "D8": {
+     "n": 29940,
+     "giorni": 845,
+     "media": -0.011977281817953399,
+     "basso": -0.01559189104252434,
+     "alto": -0.008585955358455601,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.21919313438433194
+    },
+    "D9": {
+     "n": 30012,
+     "giorni": 773,
+     "media": -0.012154245788771535,
+     "basso": -0.01640199581029342,
+     "alto": -0.007832968466950684,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.2547412526163237
+    },
+    "D10": {
+     "n": 33600,
+     "giorni": 652,
+     "media": -0.012937276413833833,
+     "basso": -0.018743544222460645,
+     "alto": -0.006701325224779354,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.36702602299121695
+    }
+   }
+  },
+  "SOLUSDT": {
+   "esplosioni": {
+    "minuti": 1200540,
+    "livelli": {
+     "4": {
+      "eventi": 8301,
+      "per_anno": {
+       "2020": 1361,
+       "2021": 3385,
+       "2022": 3555
+      },
+      "orizzonti": {
+       "1": {
+        "n": 8301,
+        "giorni": 833,
+        "media": 0.009298284618144815,
+        "basso": 0.0019824721072975032,
+        "alto": 0.017025191609722563,
+        "verdetto_mercato": "continua, ma non paga un giro",
+        "verdetto_costi_doppi": "continua, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.5376460667389471,
+        "per_anno": {
+         "2020": 0.013848366969121562,
+         "2021": 0.009682532175517572,
+         "2022": 0.007190453377248578
+        },
+        "salita": {
+         "n": 3968,
+         "giorni": 818,
+         "media": 0.019731079554827908,
+         "basso": 0.00790647699572058,
+         "alto": 0.03259162650490596
+        },
+        "discesa": {
+         "n": 4333,
+         "giorni": 826,
+         "media": -0.0002556803734911219,
+         "basso": -0.010068457009360812,
+         "alto": 0.009299809397485582
+        }
+       },
+       "3": {
+        "n": 8301,
+        "giorni": 833,
+        "media": 0.015394296965873095,
+        "basso": 0.002996763189280679,
+        "alto": 0.0274958765679439,
+        "verdetto_mercato": "continua, ma non paga un giro",
+        "verdetto_costi_doppi": "continua, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.6943741717865317,
+        "per_anno": {
+         "2020": 0.035584858953671215,
+         "2021": 0.0023373207467363025,
+         "2022": 0.02009711261605167
+        },
+        "salita": {
+         "n": 3968,
+         "giorni": 818,
+         "media": 0.04243879326780621,
+         "basso": 0.02355523866816805,
+         "alto": 0.06302858303719512
+        },
+        "discesa": {
+         "n": 4333,
+         "giorni": 826,
+         "media": -0.009372045366476452,
+         "basso": -0.025797462344265318,
+         "alto": 0.0055311458544817765
+        }
+       },
+       "5": {
+        "n": 8301,
+        "giorni": 833,
+        "media": 0.01343511175292954,
+        "basso": -0.0013498300921664437,
+        "alto": 0.02828932673071175,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7396699192868329,
+        "per_anno": {
+         "2020": 0.045354953661481394,
+         "2021": 0.0005256024491125641,
+         "2022": 0.013507062289042448
+        },
+        "salita": {
+         "n": 3968,
+         "giorni": 818,
+         "media": 0.03411577080018448,
+         "basso": 0.011872933959858693,
+         "alto": 0.05731134257976159
+        },
+        "discesa": {
+         "n": 4333,
+         "giorni": 826,
+         "media": -0.005503465468281543,
+         "basso": -0.024515802187149816,
+         "alto": 0.013338217410191085
+        }
+       },
+       "15": {
+        "n": 8300,
+        "giorni": 833,
+        "media": 0.01942119745464012,
+        "basso": -0.006746146133623193,
+        "alto": 0.04689211729746532,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8455607758101433,
+        "per_anno": {
+         "2020": 0.06741027295261526,
+         "2021": 0.0027488364801228848,
+         "2022": 0.01692339501963638
+        },
+        "salita": {
+         "n": 3968,
+         "giorni": 818,
+         "media": 0.04728426916936033,
+         "basso": 0.012420192086017834,
+         "alto": 0.08382869687131755
+        },
+        "discesa": {
+         "n": 4332,
+         "giorni": 826,
+         "media": -0.006100655861151616,
+         "basso": -0.03922385230023843,
+         "alto": 0.03005222731738953
+        }
+       },
+       "30": {
+        "n": 8300,
+        "giorni": 833,
+        "media": 0.018675641716433992,
+        "basso": -0.014612032350407743,
+        "alto": 0.053589374969272165,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8832670762558728,
+        "per_anno": {
+         "2020": 0.05192268159320469,
+         "2021": -0.006962889439536386,
+         "2022": 0.030363094358717296
+        },
+        "salita": {
+         "n": 3968,
+         "giorni": 818,
+         "media": 0.06252866321055646,
+         "basso": 0.015929938083724397,
+         "alto": 0.11062384834002327
+        },
+        "discesa": {
+         "n": 4332,
+         "giorni": 826,
+         "media": -0.021492592191386384,
+         "basso": -0.06390268383150104,
+         "alto": 0.02165852895517128
+        }
+       },
+       "60": {
+        "n": 8300,
+        "giorni": 833,
+        "media": 0.0008013927355325435,
+        "basso": -0.039094080116754464,
+        "alto": 0.040256233156828455,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9122997229249488,
+        "per_anno": {
+         "2020": 0.0689410510804997,
+         "2021": -0.0514822840999337,
+         "2022": 0.024504873624827138
+        },
+        "salita": {
+         "n": 3968,
+         "giorni": 818,
+         "media": 0.07643417117002031,
+         "basso": 0.02188616831515271,
+         "alto": 0.13442974724383752
+        },
+        "discesa": {
+         "n": 4332,
+         "giorni": 826,
+         "media": -0.0684762768923639,
+         "basso": -0.12044028980488827,
+         "alto": -0.012288652723836129
+        }
+       }
+      },
+      "mfe15_mediana": 0.4536616979909258,
+      "mae15_mediana": 0.45391434369326245
+     },
+     "8": {
+      "eventi": 1733,
+      "per_anno": {
+       "2020": 430,
+       "2021": 577,
+       "2022": 726
+      },
+      "orizzonti": {
+       "1": {
+        "n": 1733,
+        "giorni": 636,
+        "media": -0.025266711987553835,
+        "basso": -0.05291980699945278,
+        "alto": 0.0025214517785803634,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.6930178880553952,
+        "per_anno": {
+         "2020": 0.0063131771589334295,
+         "2021": -0.05878605245664883,
+         "2022": -0.01733102725245976
+        },
+        "salita": {
+         "n": 847,
+         "giorni": 462,
+         "media": -0.01269607610356494,
+         "basso": -0.06036942310799879,
+         "alto": 0.03481025807624519
+        },
+        "discesa": {
+         "n": 886,
+         "giorni": 473,
+         "media": -0.037284012883421314,
+         "basso": -0.07781380959964897,
+         "alto": 0.006094853953864058
+        }
+       },
+       "3": {
+        "n": 1733,
+        "giorni": 636,
+        "media": 0.0008382888089247469,
+        "basso": -0.04412251124477117,
+        "alto": 0.05061046584854549,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7911136757068667,
+        "per_anno": {
+         "2020": 0.033414327811462675,
+         "2021": 0.0050071497137568295,
+         "2022": -0.02176932760041329
+        },
+        "salita": {
+         "n": 847,
+         "giorni": 462,
+         "media": 0.020657146584007514,
+         "basso": -0.06716620805260876,
+         "alto": 0.11166351009640058
+        },
+        "discesa": {
+         "n": 886,
+         "giorni": 473,
+         "media": -0.01810818132143088,
+         "basso": -0.07986362245632017,
+         "alto": 0.04647272730612701
+        }
+       },
+       "5": {
+        "n": 1733,
+        "giorni": 636,
+        "media": -0.010987149209376866,
+        "basso": -0.07141163554989315,
+        "alto": 0.041636452268607516,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8349682631275245,
+        "per_anno": {
+         "2020": 0.029618410061699622,
+         "2021": -0.006585839604708257,
+         "2022": -0.03853528437254033
+        },
+        "salita": {
+         "n": 847,
+         "giorni": 462,
+         "media": 0.020255238432733146,
+         "basso": -0.06829831385124827,
+         "alto": 0.11438507725669408
+        },
+        "discesa": {
+         "n": 886,
+         "giorni": 473,
+         "media": -0.04085430759861746,
+         "basso": -0.10872282205871955,
+         "alto": 0.025753059197705323
+        }
+       },
+       "15": {
+        "n": 1733,
+        "giorni": 636,
+        "media": -0.01940115644319859,
+        "basso": -0.10066385167670967,
+        "alto": 0.07001063023652081,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8932487016733988,
+        "per_anno": {
+         "2020": 0.04032962470362846,
+         "2021": -0.011366001696199045,
+         "2022": -0.06116495834699251
+        },
+        "salita": {
+         "n": 847,
+         "giorni": 462,
+         "media": 0.05253985165026157,
+         "basso": -0.07930432810813312,
+         "alto": 0.17957901460696485
+        },
+        "discesa": {
+         "n": 886,
+         "giorni": 473,
+         "media": -0.08817546102012948,
+         "basso": -0.1971652606397778,
+         "alto": 0.024413351723230677
+        }
+       },
+       "30": {
+        "n": 1733,
+        "giorni": 636,
+        "media": -0.03664870081943786,
+        "basso": -0.13393881518568013,
+        "alto": 0.056643535940647874,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9140219272937103,
+        "per_anno": {
+         "2020": -0.005020386435687683,
+         "2021": -0.04118345522279839,
+         "2022": -0.05177765659667413
+        },
+        "salita": {
+         "n": 847,
+         "giorni": 462,
+         "media": 0.07721075992373362,
+         "basso": -0.054980612212929124,
+         "alto": 0.2103239312639913
+        },
+        "discesa": {
+         "n": 886,
+         "giorni": 473,
+         "media": -0.1454962891371198,
+         "basso": -0.28478602275068926,
+         "alto": -0.011530408924745916
+        }
+       },
+       "60": {
+        "n": 1733,
+        "giorni": 636,
+        "media": -0.01915905507314606,
+        "basso": -0.12133435415517534,
+        "alto": 0.08500457021806532,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9359492210040392,
+        "per_anno": {
+         "2020": -0.022107694077284617,
+         "2021": 0.09992605474191242,
+         "2022": -0.11205739335346168
+        },
+        "salita": {
+         "n": 847,
+         "giorni": 462,
+         "media": 0.16475689384471906,
+         "basso": 0.0001673420390807846,
+         "alto": 0.3202167458753955
+        },
+        "discesa": {
+         "n": 886,
+         "giorni": 473,
+         "media": -0.1949793809573805,
+         "basso": -0.3393128813313302,
+         "alto": -0.05286878189914824
+        }
+       }
+      },
+      "mfe15_mediana": 0.6453564586064386,
+      "mae15_mediana": 0.6514079294110742
+     },
+     "16": {
+      "eventi": 216,
+      "per_anno": {
+       "2020": 58,
+       "2021": 59,
+       "2022": 99
+      },
+      "orizzonti": {
+       "1": {
+        "n": 216,
+        "giorni": 165,
+        "media": -0.05898962906237269,
+        "basso": -0.24796326953974376,
+        "alto": 0.14762105883655674,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8009259259259259,
+        "per_anno": {
+         "2020": 0.03614931332709996,
+         "2021": -0.09881899930772639,
+         "2022": -0.09099089991200447
+        },
+        "salita": {
+         "n": 96,
+         "giorni": 78,
+         "media": -0.14111312963197928,
+         "basso": -0.5317882609117716,
+         "alto": 0.3104176796192715
+        },
+        "discesa": {
+         "n": 120,
+         "giorni": 103,
+         "media": 0.0067091713933125074,
+         "basso": -0.1934077586268313,
+         "alto": 0.20640202708423783
+        }
+       },
+       "3": {
+        "n": 216,
+        "giorni": 165,
+        "media": -0.17463115049941408,
+        "basso": -0.41700076938881936,
+        "alto": 0.06629377475234882,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8657407407407407,
+        "per_anno": {
+         "2020": -0.03925546550075031,
+         "2021": -0.24738888517449978,
+         "2022": -0.21058148771246912
+        },
+        "salita": {
+         "n": 96,
+         "giorni": 78,
+         "media": -0.11884184425384968,
+         "basso": -0.4967768960296482,
+         "alto": 0.3045869115614506
+        },
+        "discesa": {
+         "n": 120,
+         "giorni": 103,
+         "media": -0.2192625954958657,
+         "basso": -0.5078308791056363,
+         "alto": 0.0757817180006764
+        }
+       },
+       "5": {
+        "n": 216,
+        "giorni": 165,
+        "media": -0.3149723176433146,
+        "basso": -0.5626669118582291,
+        "alto": -0.07407072823169547,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.8796296296296297,
+        "per_anno": {
+         "2020": -0.12476626876193446,
+         "2021": -0.4519413227615253,
+         "2022": -0.34477817151347256
+        },
+        "salita": {
+         "n": 96,
+         "giorni": 78,
+         "media": -0.31641402151407816,
+         "basso": -0.7107659883896501,
+         "alto": 0.061039614461028305
+        },
+        "discesa": {
+         "n": 120,
+         "giorni": 103,
+         "media": -0.313818954546704,
+         "basso": -0.6269975389937558,
+         "alto": 0.00038305198303460795
+        }
+       },
+       "15": {
+        "n": 216,
+        "giorni": 165,
+        "media": -0.26233262815726577,
+        "basso": -0.5755098174642728,
+        "alto": 0.0770320035584006,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9212962962962963,
+        "per_anno": {
+         "2020": -0.2469155831501127,
+         "2021": -0.2442909719418524,
+         "2022": -0.28211693449185427
+        },
+        "salita": {
+         "n": 96,
+         "giorni": 78,
+         "media": -0.1184938188991755,
+         "basso": -0.569049662913223,
+         "alto": 0.36050602154424355
+        },
+        "discesa": {
+         "n": 120,
+         "giorni": 103,
+         "media": -0.3774036755637378,
+         "basso": -0.7878618415376137,
+         "alto": 0.10585860471884996
+        }
+       },
+       "30": {
+        "n": 216,
+        "giorni": 165,
+        "media": -0.4614153246843375,
+        "basso": -0.8166233073158099,
+        "alto": -0.11293696570987026,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.9537037037037037,
+        "per_anno": {
+         "2020": -0.20605872044926188,
+         "2021": -1.1647582112452968,
+         "2022": -0.19185424123522413
+        },
+        "salita": {
+         "n": 96,
+         "giorni": 78,
+         "media": -0.21899260282122524,
+         "basso": -0.7107179220797569,
+         "alto": 0.282641239757217
+        },
+        "discesa": {
+         "n": 120,
+         "giorni": 103,
+         "media": -0.6553535021748272,
+         "basso": -1.1424859515471983,
+         "alto": -0.12227620693753916
+        }
+       },
+       "60": {
+        "n": 216,
+        "giorni": 165,
+        "media": -0.6829578026605893,
+        "basso": -1.1093934968723782,
+        "alto": -0.26698196236164273,
+        "verdetto_mercato": "torna indietro più del costo",
+        "verdetto_costi_doppi": "torna indietro più del costo",
+        "quota_oltre_costo_mercato": 0.9537037037037037,
+        "per_anno": {
+         "2020": -0.3542169760075594,
+         "2021": -1.8222768330792258,
+         "2022": -0.19656532944014662
+        },
+        "salita": {
+         "n": 96,
+         "giorni": 78,
+         "media": -0.13459406749450262,
+         "basso": -0.688366719668016,
+         "alto": 0.4402073590088478
+        },
+        "discesa": {
+         "n": 120,
+         "giorni": 103,
+         "media": -1.1216487907934587,
+         "basso": -1.737847883865146,
+         "alto": -0.5570931766973947
+        }
+       }
+      },
+      "mfe15_mediana": 0.904008547538615,
+      "mae15_mediana": 1.338721346051297
+     }
+    },
+    "caso": {
+     "1": {
+      "n": 8301,
+      "giorni": 831,
+      "media": -0.001556346588394901,
+      "basso": -0.005618699091338594,
+      "alto": 0.002448690556138662
+     },
+     "3": {
+      "n": 8301,
+      "giorni": 831,
+      "media": 4.190283379164452e-05,
+      "basso": -0.007080769255506653,
+      "alto": 0.006881042480080061
+     },
+     "5": {
+      "n": 8301,
+      "giorni": 831,
+      "media": -0.0010172217421699887,
+      "basso": -0.009366267113978708,
+      "alto": 0.007254087476670977
+     },
+     "15": {
+      "n": 8300,
+      "giorni": 831,
+      "media": -0.00014851980623453842,
+      "basso": -0.015189291478082635,
+      "alto": 0.015423271874359113
+     },
+     "30": {
+      "n": 8300,
+      "giorni": 831,
+      "media": 0.005146618955021732,
+      "basso": -0.01783778769559446,
+      "alto": 0.028139366309384878
+     },
+     "60": {
+      "n": 8299,
+      "giorni": 831,
+      "media": -0.017432709914420436,
+      "basso": -0.05053505837009563,
+      "alto": 0.01621232948920665
+     }
+    }
+   },
+   "fondo": {
+    "D1": {
+     "n": 30718,
+     "giorni": 457,
+     "media": 0.0031086819224109053,
+     "basso": 6.460224961871828e-06,
+     "alto": 0.006303975171953296,
+     "verdetto_mercato": "continua, ma non paga un giro",
+     "verdetto_limite_limite": "continua, ma non paga un giro",
+     "movimento_assoluto_medio": 0.1705148120258354
+    },
+    "D2": {
+     "n": 24924,
+     "giorni": 578,
+     "media": -0.0035876833284607342,
+     "basso": -0.007295280701317918,
+     "alto": 0.00012380032618024655,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.20229042562158084
+    },
+    "D3": {
+     "n": 24876,
+     "giorni": 630,
+     "media": 0.0015534535994017455,
+     "basso": -0.0028616727780730426,
+     "alto": 0.006244756229024582,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.22152622889916485
+    },
+    "D4": {
+     "n": 23544,
+     "giorni": 647,
+     "media": -0.001440699969707286,
+     "basso": -0.006000825157052484,
+     "alto": 0.003195268524829215,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.24339037931637816
+    },
+    "D5": {
+     "n": 22440,
+     "giorni": 656,
+     "media": -5.738401792416965e-05,
+     "basso": -0.004644672888159937,
+     "alto": 0.004892766540560676,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.2604346499063628
+    },
+    "D6": {
+     "n": 22056,
+     "giorni": 642,
+     "media": -0.004063221147681209,
+     "basso": -0.009494053384769269,
+     "alto": 0.0012937236597900675,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.28145652676361455
+    },
+    "D7": {
+     "n": 21348,
+     "giorni": 615,
+     "media": 3.100745437873698e-05,
+     "basso": -0.0062749570143872755,
+     "alto": 0.006661137827994991,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.31301222543886115
+    },
+    "D8": {
+     "n": 21311,
+     "giorni": 610,
+     "media": -0.006768479407351025,
+     "basso": -0.01373640549035633,
+     "alto": 0.00015232148766623494,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.34774196826426007
+    },
+    "D9": {
+     "n": 22366,
+     "giorni": 537,
+     "media": -0.008281910037652874,
+     "basso": -0.01605389209322934,
+     "alto": -0.0007082494277427866,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.4023697871156117
+    },
+    "D10": {
+     "n": 23640,
+     "giorni": 410,
+     "media": -0.014514710055889982,
+     "basso": -0.027383607476576366,
+     "alto": -0.0012264919641547265,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.6188100240400334
+    }
+   }
+  },
+  "XRPUSDT": {
+   "esplosioni": {
+    "minuti": 1563339,
+    "livelli": {
+     "4": {
+      "eventi": 10635,
+      "per_anno": {
+       "2020": 3665,
+       "2021": 3504,
+       "2022": 3466
+      },
+      "orizzonti": {
+       "1": {
+        "n": 10635,
+        "giorni": 1085,
+        "media": 0.0022314222393271417,
+        "basso": -0.0033876600949463904,
+        "alto": 0.00833796403062709,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.3834508697696286,
+        "per_anno": {
+         "2020": -0.0052266850434517466,
+         "2021": 0.009039456067050377,
+         "2022": 0.0032350612061599194
+        },
+        "salita": {
+         "n": 5101,
+         "giorni": 1075,
+         "media": 0.010159552076128528,
+         "basso": 0.0019815721134971665,
+         "alto": 0.018109046729668777
+        },
+        "discesa": {
+         "n": 5534,
+         "giorni": 1075,
+         "media": -0.00507638229582354,
+         "basso": -0.013763633415846199,
+         "alto": 0.0033514082220722254
+        }
+       },
+       "3": {
+        "n": 10635,
+        "giorni": 1085,
+        "media": -0.002462929690268637,
+        "basso": -0.010554904222083184,
+        "alto": 0.005834270414383295,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.5416078984485191,
+        "per_anno": {
+         "2020": -0.002126138208087627,
+         "2021": -0.002571935039533625,
+         "2022": -0.0027088575720830843
+        },
+        "salita": {
+         "n": 5101,
+         "giorni": 1075,
+         "media": 0.005839417566884146,
+         "basso": -0.005568955516789968,
+         "alto": 0.017116480870928003
+        },
+        "discesa": {
+         "n": 5534,
+         "giorni": 1075,
+         "media": -0.01011567153319172,
+         "basso": -0.0227853706209674,
+         "alto": 0.0022098060338185074
+        }
+       },
+       "5": {
+        "n": 10635,
+        "giorni": 1085,
+        "media": -0.010729940475162384,
+        "basso": -0.020359878389068102,
+        "alto": -6.229531692692614e-05,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.6172073342736248,
+        "per_anno": {
+         "2020": -0.005026776808358234,
+         "2021": -0.016027771968531272,
+         "2022": -0.011404635595206417
+        },
+        "salita": {
+         "n": 5101,
+         "giorni": 1075,
+         "media": 0.0011143154632933148,
+         "basso": -0.012306656481137759,
+         "alto": 0.0160004984921533
+        },
+        "discesa": {
+         "n": 5534,
+         "giorni": 1075,
+         "media": -0.021647459366030204,
+         "basso": -0.03761738119843212,
+         "alto": -0.005187544019455968
+        }
+       },
+       "15": {
+        "n": 10633,
+        "giorni": 1085,
+        "media": -0.01650260033593327,
+        "basso": -0.03290909849531722,
+        "alto": -0.0009189813307646028,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.73737658674189,
+        "per_anno": {
+         "2020": 0.0010122231197123481,
+         "2021": -0.02379445254240416,
+         "2022": -0.027657674768227496
+        },
+        "salita": {
+         "n": 5099,
+         "giorni": 1075,
+         "media": -0.0015572052130186022,
+         "basso": -0.023953964231574237,
+         "alto": 0.022349036863767425
+        },
+        "discesa": {
+         "n": 5534,
+         "giorni": 1075,
+         "media": -0.0302732128642567,
+         "basso": -0.05517698924251251,
+         "alto": -0.005704666538410351
+        }
+       },
+       "30": {
+        "n": 10633,
+        "giorni": 1085,
+        "media": -0.021250317980838887,
+        "basso": -0.043438080373457214,
+        "alto": 0.001784554460687294,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7992477668077104,
+        "per_anno": {
+         "2020": -0.010682429130271023,
+         "2021": -0.031944852591005206,
+         "2022": -0.021613384771632313
+        },
+        "salita": {
+         "n": 5099,
+         "giorni": 1075,
+         "media": -0.012903506252252624,
+         "basso": -0.044398348922013844,
+         "alto": 0.01643900071849543
+        },
+        "discesa": {
+         "n": 5534,
+         "giorni": 1075,
+         "media": -0.028941028679079103,
+         "basso": -0.06065909252064592,
+         "alto": 0.0032964090794147397
+        }
+       },
+       "60": {
+        "n": 10633,
+        "giorni": 1085,
+        "media": -0.02490748221248123,
+        "basso": -0.054037119388080694,
+        "alto": 0.004050815693140324,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8498354489891866,
+        "per_anno": {
+         "2020": -0.021802576351250904,
+         "2021": -0.040634840401579726,
+         "2022": -0.012283584085116338
+        },
+        "salita": {
+         "n": 5099,
+         "giorni": 1075,
+         "media": 0.00498194390737618,
+         "basso": -0.037295765288811115,
+         "alto": 0.04936090607827751
+        },
+        "discesa": {
+         "n": 5534,
+         "giorni": 1075,
+         "media": -0.05244745037026094,
+         "basso": -0.09092196950972532,
+         "alto": -0.014807863194235231
+        }
+       }
+      },
+      "mfe15_mediana": 0.3042777877215075,
+      "mae15_mediana": 0.3465092402464065
+     },
+     "8": {
+      "eventi": 2433,
+      "per_anno": {
+       "2020": 884,
+       "2021": 763,
+       "2022": 786
+      },
+      "orizzonti": {
+       "1": {
+        "n": 2433,
+        "giorni": 898,
+        "media": -0.016422826351172128,
+        "basso": -0.043490162025687264,
+        "alto": 0.008688135169045728,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.6140567200986436,
+        "per_anno": {
+         "2020": -0.0071908719882692665,
+         "2021": -0.02504512166271613,
+         "2022": -0.018435849676996626
+        },
+        "salita": {
+         "n": 1107,
+         "giorni": 624,
+         "media": 0.01279808680863017,
+         "basso": -0.028547709358670445,
+         "alto": 0.048975413601857275
+        },
+        "discesa": {
+         "n": 1326,
+         "giorni": 711,
+         "media": -0.04081766109317903,
+         "basso": -0.0711096421410575,
+         "alto": -0.011174184308034346
+        }
+       },
+       "3": {
+        "n": 2433,
+        "giorni": 898,
+        "media": -0.001577376643578058,
+        "basso": -0.03696615091589333,
+        "alto": 0.034590343962050685,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7262638717632552,
+        "per_anno": {
+         "2020": 0.019461147076320545,
+         "2021": 0.005706179338066471,
+         "2022": -0.03230944812243957
+        },
+        "salita": {
+         "n": 1107,
+         "giorni": 624,
+         "media": 0.035015692262891036,
+         "basso": -0.017141469430125053,
+         "alto": 0.08086156167622874
+        },
+        "discesa": {
+         "n": 1326,
+         "giorni": 711,
+         "media": -0.032126793898073755,
+         "basso": -0.08259342672551996,
+         "alto": 0.018796864700343065
+        }
+       },
+       "5": {
+        "n": 2433,
+        "giorni": 898,
+        "media": 0.017705008501230773,
+        "basso": -0.020403026396412404,
+        "alto": 0.06086549983434965,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7731196054254007,
+        "per_anno": {
+         "2020": 0.04043799462937841,
+         "2021": 0.02570822756810785,
+         "2022": -0.015631398477534773
+        },
+        "salita": {
+         "n": 1107,
+         "giorni": 624,
+         "media": 0.061589891066825164,
+         "basso": 0.0037670127991447687,
+         "alto": 0.11920039159104563
+        },
+        "discesa": {
+         "n": 1326,
+         "giorni": 711,
+         "media": -0.018931918346516596,
+         "basso": -0.074635002109263,
+         "alto": 0.04008185268602197
+        }
+       },
+       "15": {
+        "n": 2431,
+        "giorni": 898,
+        "media": 0.06099138853863948,
+        "basso": 0.0022785539293105703,
+        "alto": 0.11818752213931066,
+        "verdetto_mercato": "continua, ma non paga un giro",
+        "verdetto_costi_doppi": "continua, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.8294286888614879,
+        "per_anno": {
+         "2020": 0.09379711327559241,
+         "2021": 0.12085263898702907,
+         "2022": -0.034256563960834534
+        },
+        "salita": {
+         "n": 1106,
+         "giorni": 624,
+         "media": 0.14215033661542725,
+         "basso": 0.04413229597796399,
+         "alto": 0.23303417251520167
+        },
+        "discesa": {
+         "n": 1325,
+         "giorni": 711,
+         "media": -0.006753363591871645,
+         "basso": -0.08047395639728565,
+         "alto": 0.06836791119472309
+        }
+       },
+       "30": {
+        "n": 2431,
+        "giorni": 898,
+        "media": 0.04419945524864204,
+        "basso": -0.02738392974792593,
+        "alto": 0.11268373680625215,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.865187011919441,
+        "per_anno": {
+         "2020": 0.07446476902936475,
+         "2021": 0.08429739406951645,
+         "2022": -0.028950117075957522
+        },
+        "salita": {
+         "n": 1106,
+         "giorni": 624,
+         "media": 0.1479106626842625,
+         "basso": 0.034975844086515544,
+         "alto": 0.2667270883730425
+        },
+        "discesa": {
+         "n": 1325,
+         "giorni": 711,
+         "media": -0.042370050731581566,
+         "basso": -0.12726929132657167,
+         "alto": 0.05253592698398667
+        }
+       },
+       "60": {
+        "n": 2431,
+        "giorni": 898,
+        "media": 0.01313304932926923,
+        "basso": -0.06897052299972832,
+        "alto": 0.0946837498544147,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8910809699958898,
+        "per_anno": {
+         "2020": 0.03797965634489191,
+         "2021": 0.04700043885295204,
+         "2022": -0.04784299506917521
+        },
+        "salita": {
+         "n": 1106,
+         "giorni": 624,
+         "media": 0.13422409672648078,
+         "basso": 0.023065053127098292,
+         "alto": 0.24799082498886266
+        },
+        "discesa": {
+         "n": 1325,
+         "giorni": 711,
+         "media": -0.08794370419625225,
+         "basso": -0.20199380175447984,
+         "alto": 0.024917589161844726
+        }
+       }
+      },
+      "mfe15_mediana": 0.5383580080753791,
+      "mae15_mediana": 0.5161290322580614
+     },
+     "16": {
+      "eventi": 415,
+      "per_anno": {
+       "2020": 142,
+       "2021": 143,
+       "2022": 130
+      },
+      "orizzonti": {
+       "1": {
+        "n": 415,
+        "giorni": 323,
+        "media": 0.006274174162840837,
+        "basso": -0.09879678683289585,
+        "alto": 0.11687487518036274,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8048192771084337,
+        "per_anno": {
+         "2020": 0.0682262443804874,
+         "2021": 0.0036145239652312167,
+         "2022": -0.058470933472910214
+        },
+        "salita": {
+         "n": 156,
+         "giorni": 141,
+         "media": -0.013075971057800185,
+         "basso": -0.12814403114550318,
+         "alto": 0.09465942666659286
+        },
+        "discesa": {
+         "n": 259,
+         "giorni": 216,
+         "media": 0.01792908788647018,
+         "basso": -0.14156027997875026,
+         "alto": 0.17728093794788008
+        }
+       },
+       "3": {
+        "n": 415,
+        "giorni": 323,
+        "media": -0.012599416472985034,
+        "basso": -0.17879398788903045,
+        "alto": 0.16465192606517168,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8795180722891566,
+        "per_anno": {
+         "2020": 0.04070452222978106,
+         "2021": -0.14244211571530377,
+         "2022": 0.07200325041823646
+        },
+        "salita": {
+         "n": 156,
+         "giorni": 141,
+         "media": 0.07397735831195212,
+         "basso": -0.10406243844982452,
+         "alto": 0.25553403232330596
+        },
+        "discesa": {
+         "n": 259,
+         "giorni": 216,
+         "media": -0.064746045300978,
+         "basso": -0.30878849344459636,
+         "alto": 0.21741643789993859
+        }
+       },
+       "5": {
+        "n": 415,
+        "giorni": 323,
+        "media": -0.07936364099579153,
+        "basso": -0.2394003895104324,
+        "alto": 0.08657075507495095,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8843373493975903,
+        "per_anno": {
+         "2020": -0.07081777907154138,
+         "2021": -0.17662900611300772,
+         "2022": 0.01829354991588845
+        },
+        "salita": {
+         "n": 156,
+         "giorni": 141,
+         "media": -0.019844097360159144,
+         "basso": -0.2651309449434175,
+         "alto": 0.20468046302699092
+        },
+        "discesa": {
+         "n": 259,
+         "giorni": 216,
+         "media": -0.11521325028984038,
+         "basso": -0.3518306055975516,
+         "alto": 0.11966854239237448
+        }
+       },
+       "15": {
+        "n": 415,
+        "giorni": 323,
+        "media": -0.07318262805018629,
+        "basso": -0.30567446517909963,
+        "alto": 0.17311233923529976,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8963855421686747,
+        "per_anno": {
+         "2020": -0.04503063026158054,
+         "2021": -0.07224237328453643,
+         "2022": -0.10496755203072429
+        },
+        "salita": {
+         "n": 156,
+         "giorni": 141,
+         "media": 0.08144351445095954,
+         "basso": -0.23273661975143795,
+         "alto": 0.40183508827913234
+        },
+        "discesa": {
+         "n": 259,
+         "giorni": 216,
+         "media": -0.16631652083079923,
+         "basso": -0.47862462894196695,
+         "alto": 0.1863856236011247
+        }
+       },
+       "30": {
+        "n": 415,
+        "giorni": 323,
+        "media": -0.12559663890441458,
+        "basso": -0.40505965140029077,
+        "alto": 0.1429920740731233,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.927710843373494,
+        "per_anno": {
+         "2020": -0.08700513778109766,
+         "2021": -0.1374890917884269,
+         "2022": -0.15466873426670105
+        },
+        "salita": {
+         "n": 156,
+         "giorni": 141,
+         "media": 0.1320409876423143,
+         "basso": -0.289148542585541,
+         "alto": 0.5744442912299935
+        },
+        "discesa": {
+         "n": 259,
+         "giorni": 216,
+         "media": -0.2807760587549539,
+         "basso": -0.6293676734405669,
+         "alto": 0.0858929820294334
+        }
+       },
+       "60": {
+        "n": 415,
+        "giorni": 323,
+        "media": -0.35790612565367325,
+        "basso": -0.6471898793930735,
+        "alto": -0.06379124735808701,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.9421686746987952,
+        "per_anno": {
+         "2020": -0.21907543871223367,
+         "2021": -0.5307674448187331,
+         "2022": -0.3194045018466028
+        },
+        "salita": {
+         "n": 156,
+         "giorni": 141,
+         "media": -0.07076343583560285,
+         "basso": -0.47182810981701295,
+         "alto": 0.37377670694594556
+        },
+        "discesa": {
+         "n": 259,
+         "giorni": 216,
+         "media": -0.5308569349649435,
+         "basso": -0.9276107278834288,
+         "alto": -0.12461369352345984
+        }
+       }
+      },
+      "mfe15_mediana": 0.9386446886446853,
+      "mae15_mediana": 0.9142857142857341
+     }
+    },
+    "caso": {
+     "1": {
+      "n": 10635,
+      "giorni": 1085,
+      "media": -5.744413137640015e-05,
+      "basso": -0.002463561763754307,
+      "alto": 0.002544962990224058
+     },
+     "3": {
+      "n": 10635,
+      "giorni": 1085,
+      "media": 0.0007272202845115803,
+      "basso": -0.0038145942840446265,
+      "alto": 0.005230688540865068
+     },
+     "5": {
+      "n": 10635,
+      "giorni": 1085,
+      "media": -0.0030348028856341655,
+      "basso": -0.009234368989736202,
+      "alto": 0.002812149090255749
+     },
+     "15": {
+      "n": 10635,
+      "giorni": 1085,
+      "media": -0.014243698978144615,
+      "basso": -0.024438300030261862,
+      "alto": -0.003585686705813706
+     },
+     "30": {
+      "n": 10635,
+      "giorni": 1085,
+      "media": -0.017282938623088193,
+      "basso": -0.03250144555566199,
+      "alto": -0.002085559497717223
+     },
+     "60": {
+      "n": 10635,
+      "giorni": 1085,
+      "media": -0.018291314213982068,
+      "basso": -0.040160060575760825,
+      "alto": 0.00441143684522235
+     }
+    }
+   },
+   "fondo": {
+    "D1": {
+     "n": 38350,
+     "giorni": 584,
+     "media": -0.0045225829908139914,
+     "basso": -0.0063986820526703,
+     "alto": -0.0025602707199860577,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.12298002954411019
+    },
+    "D2": {
+     "n": 32616,
+     "giorni": 739,
+     "media": -0.0038072309408319137,
+     "basso": -0.006327148836608481,
+     "alto": -0.0013158152474913218,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.14495958801286038
+    },
+    "D3": {
+     "n": 31128,
+     "giorni": 798,
+     "media": -0.0029055227229048946,
+     "basso": -0.005720573919325738,
+     "alto": 1.229091861156156e-05,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.16226141096504915
+    },
+    "D4": {
+     "n": 29147,
+     "giorni": 827,
+     "media": -0.004733424861817675,
+     "basso": -0.007696803218839006,
+     "alto": -0.0017580834462613106,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.17115222008776437
+    },
+    "D5": {
+     "n": 28992,
+     "giorni": 831,
+     "media": -0.003679509365248327,
+     "basso": -0.006964534674054585,
+     "alto": -0.0004281950878247277,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.18922895708508736
+    },
+    "D6": {
+     "n": 29063,
+     "giorni": 847,
+     "media": -0.00551308909834758,
+     "basso": -0.009136950764161022,
+     "alto": -0.00198857085898129,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.20564137853661332
+    },
+    "D7": {
+     "n": 29112,
+     "giorni": 839,
+     "media": -0.006377815992838479,
+     "basso": -0.010623372573659782,
+     "alto": -0.0017417947985630825,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.22863605790836677
+    },
+    "D8": {
+     "n": 30288,
+     "giorni": 803,
+     "media": -0.005033142015006237,
+     "basso": -0.009890912615049261,
+     "alto": -0.00048060476360764335,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.26555253053224653
+    },
+    "D9": {
+     "n": 29208,
+     "giorni": 733,
+     "media": -0.0077145457075923655,
+     "basso": -0.013037497871181719,
+     "alto": -0.002203314987407526,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.31667289600949844
+    },
+    "D10": {
+     "n": 31871,
+     "giorni": 595,
+     "media": -0.009265198560123854,
+     "basso": -0.018791161194106645,
+     "alto": 0.0001220240093423389,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.4538392811121767
+    }
+   }
+  },
+  "BNBUSDT": {
+   "esplosioni": {
+    "minuti": 1520159,
+    "livelli": {
+     "4": {
+      "eventi": 10249,
+      "per_anno": {
+       "2020": 3360,
+       "2021": 3226,
+       "2022": 3663
+      },
+      "orizzonti": {
+       "1": {
+        "n": 10249,
+        "giorni": 1054,
+        "media": 0.0001388574517470292,
+        "basso": -0.004092909676388521,
+        "alto": 0.004033579413832558,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.31632354376036687,
+        "per_anno": {
+         "2020": 0.0032695698285705693,
+         "2021": -0.004466121102038986,
+         "2022": 0.0013227141889533046
+        },
+        "salita": {
+         "n": 4754,
+         "giorni": 1043,
+         "media": 0.009709530457381725,
+         "basso": 0.004596991957331656,
+         "alto": 0.015013095533397847
+        },
+        "discesa": {
+         "n": 5495,
+         "giorni": 1043,
+         "media": -0.008141211605357131,
+         "basso": -0.014335912189376524,
+         "alto": -0.0019524172862445325
+        }
+       },
+       "3": {
+        "n": 10249,
+        "giorni": 1054,
+        "media": -0.005117821167507827,
+        "basso": -0.01213349815894237,
+        "alto": 0.0018372494419785482,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.4990730803005171,
+        "per_anno": {
+         "2020": -0.006118501302250649,
+         "2021": -0.01203222825731974,
+         "2022": 0.0018895942090876195
+        },
+        "salita": {
+         "n": 4754,
+         "giorni": 1043,
+         "media": 0.012851144440781474,
+         "basso": 0.004146244109835702,
+         "alto": 0.021943751699458613
+        },
+        "discesa": {
+         "n": 5495,
+         "giorni": 1043,
+         "media": -0.020663674216062397,
+         "basso": -0.03331631842777053,
+         "alto": -0.008618438074814634
+        }
+       },
+       "5": {
+        "n": 10249,
+        "giorni": 1054,
+        "media": -0.010987542782753688,
+        "basso": -0.02120665127529182,
+        "alto": -0.0016298603270158345,
+        "verdetto_mercato": "torna indietro, ma non paga un giro",
+        "verdetto_costi_doppi": "torna indietro, ma non paga un giro",
+        "quota_oltre_costo_mercato": 0.5636647477802712,
+        "per_anno": {
+         "2020": -0.012269926903408656,
+         "2021": -0.02127594987699684,
+         "2022": -0.0007502476881784464
+        },
+        "salita": {
+         "n": 4754,
+         "giorni": 1043,
+         "media": 0.01369419913353702,
+         "basso": 0.002666930194116595,
+         "alto": 0.025745567173166457
+        },
+        "discesa": {
+         "n": 5495,
+         "giorni": 1043,
+         "media": -0.03234095517038718,
+         "basso": -0.04823296846043517,
+         "alto": -0.01721593602192891
+        }
+       },
+       "15": {
+        "n": 10249,
+        "giorni": 1054,
+        "media": -0.004291780996110702,
+        "basso": -0.017958130976945926,
+        "alto": 0.009800222964254621,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.705629817543175,
+        "per_anno": {
+         "2020": -0.017631249627987556,
+         "2021": 0.004710671430662103,
+         "2022": 1.58092507735973e-05
+        },
+        "salita": {
+         "n": 4754,
+         "giorni": 1043,
+         "media": 0.023369080223303834,
+         "basso": 0.004872884840537776,
+         "alto": 0.042820491033630774
+        },
+        "discesa": {
+         "n": 5495,
+         "giorni": 1043,
+         "media": -0.02822257885545496,
+         "basso": -0.05156672725834699,
+         "alto": -0.00798778921548829
+        }
+       },
+       "30": {
+        "n": 10249,
+        "giorni": 1054,
+        "media": -0.01769273581662308,
+        "basso": -0.039971858535121876,
+        "alto": 0.005181523755137316,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7815396624060884,
+        "per_anno": {
+         "2020": -0.04915107183486909,
+         "2021": -0.023388406328430728,
+         "2022": 0.01617956614690355
+        },
+        "salita": {
+         "n": 4754,
+         "giorni": 1043,
+         "media": 0.015753587266138257,
+         "basso": -0.012219461668311147,
+         "alto": 0.04379475462287657
+        },
+        "discesa": {
+         "n": 5495,
+         "giorni": 1043,
+         "media": -0.04662882679668629,
+         "basso": -0.08204499491067144,
+         "alto": -0.014633676658098477
+        }
+       },
+       "60": {
+        "n": 10248,
+        "giorni": 1054,
+        "media": -0.020874505515115813,
+        "basso": -0.04283623285112513,
+        "alto": 0.002041519303893019,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8282759293589619,
+        "per_anno": {
+         "2020": -0.0354078951642637,
+         "2021": -0.043984496422165946,
+         "2022": 0.012818836889930789
+        },
+        "salita": {
+         "n": 4753,
+         "giorni": 1043,
+         "media": 0.019713943592460093,
+         "basso": -0.014280796007228473,
+         "alto": 0.05610644411011097
+        },
+        "discesa": {
+         "n": 5495,
+         "giorni": 1043,
+         "media": -0.055982221367401205,
+         "basso": -0.0883887423087139,
+         "alto": -0.022891521639059897
+        }
+       }
+      },
+      "mfe15_mediana": 0.2803738317757154,
+      "mae15_mediana": 0.2994307525254314
+     },
+     "8": {
+      "eventi": 2078,
+      "per_anno": {
+       "2020": 756,
+       "2021": 503,
+       "2022": 819
+      },
+      "orizzonti": {
+       "1": {
+        "n": 2078,
+        "giorni": 820,
+        "media": -0.018337660790112332,
+        "basso": -0.04071191970015305,
+        "alto": 0.006801842703958429,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.5322425409047161,
+        "per_anno": {
+         "2020": -0.03590605046735766,
+         "2021": -0.020821333860319324,
+         "2022": -0.0005953040742251736
+        },
+        "salita": {
+         "n": 852,
+         "giorni": 521,
+         "media": 0.006704109472111669,
+         "basso": -0.024555310234050363,
+         "alto": 0.04299734421954983
+        },
+        "discesa": {
+         "n": 1226,
+         "giorni": 645,
+         "media": -0.03574026133123374,
+         "basso": -0.06284655316286307,
+         "alto": -0.008862749919187281
+        }
+       },
+       "3": {
+        "n": 2078,
+        "giorni": 820,
+        "media": -0.01929800024368942,
+        "basso": -0.04659852310977209,
+        "alto": 0.010210911635305223,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.6847930702598652,
+        "per_anno": {
+         "2020": -0.060198191474547844,
+         "2021": 0.007073204042036571,
+         "2022": 0.0022597882969806627
+        },
+        "salita": {
+         "n": 852,
+         "giorni": 521,
+         "media": 0.014368526418733731,
+         "basso": -0.02651485430848055,
+         "alto": 0.055874828821960404
+        },
+        "discesa": {
+         "n": 1226,
+         "giorni": 645,
+         "media": -0.042694314041719215,
+         "basso": -0.08346495028709004,
+         "alto": -0.0027632444979324776
+        }
+       },
+       "5": {
+        "n": 2078,
+        "giorni": 820,
+        "media": 9.482882850834595e-06,
+        "basso": -0.03509217629395144,
+        "alto": 0.038119201143517585,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7256977863330125,
+        "per_anno": {
+         "2020": -0.026699983269068403,
+         "2021": 0.05460875294238703,
+         "2022": -0.00886851031506828
+        },
+        "salita": {
+         "n": 852,
+         "giorni": 521,
+         "media": 0.05285433704254424,
+         "basso": -0.0017393215436437403,
+         "alto": 0.10790579437981271
+        },
+        "discesa": {
+         "n": 1226,
+         "giorni": 645,
+         "media": -0.03671467351523952,
+         "basso": -0.087879375454285,
+         "alto": 0.018318255620764032
+        }
+       },
+       "15": {
+        "n": 2078,
+        "giorni": 820,
+        "media": 0.024268687602948858,
+        "basso": -0.028726005075925674,
+        "alto": 0.08208546188350728,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8070259865255053,
+        "per_anno": {
+         "2020": 0.03938900578652924,
+         "2021": 0.04053386396296579,
+         "2022": 0.00032199131982884796
+        },
+        "salita": {
+         "n": 852,
+         "giorni": 521,
+         "media": 0.10920133060495478,
+         "basso": 0.042403655065032936,
+         "alto": 0.17894024140115664
+        },
+        "discesa": {
+         "n": 1226,
+         "giorni": 645,
+         "media": -0.03475464994820045,
+         "basso": -0.11281500017832666,
+         "alto": 0.05624415112309484
+        }
+       },
+       "30": {
+        "n": 2078,
+        "giorni": 820,
+        "media": 0.020006683915594632,
+        "basso": -0.046486403098670956,
+        "alto": 0.08642582505020552,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8378248315688162,
+        "per_anno": {
+         "2020": -0.0035616021820323827,
+         "2021": 0.023599532427292888,
+         "2022": 0.03955542810170181
+        },
+        "salita": {
+         "n": 852,
+         "giorni": 521,
+         "media": 0.08607244626918113,
+         "basso": -0.0032299998995376183,
+         "alto": 0.17604427140936657
+        },
+        "discesa": {
+         "n": 1226,
+         "giorni": 645,
+         "media": -0.025905248812998934,
+         "basso": -0.10694957890058686,
+         "alto": 0.05594853267621607
+        }
+       },
+       "60": {
+        "n": 2078,
+        "giorni": 820,
+        "media": -0.012157680564716241,
+        "basso": -0.08353374903906575,
+        "alto": 0.06663095333956746,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.870548604427334,
+        "per_anno": {
+         "2020": -0.06268296093606168,
+         "2021": -0.003963239843449125,
+         "2022": 0.02944831244864127
+        },
+        "salita": {
+         "n": 852,
+         "giorni": 521,
+         "media": 0.07922387250088225,
+         "basso": -0.018204763279933436,
+         "alto": 0.18307978113138795
+        },
+        "discesa": {
+         "n": 1226,
+         "giorni": 645,
+         "media": -0.0756626424014943,
+         "basso": -0.16732362153549096,
+         "alto": 0.02538158312529128
+        }
+       }
+      },
+      "mfe15_mediana": 0.4202628058367852,
+      "mae15_mediana": 0.4552566425120752
+     },
+     "16": {
+      "eventi": 291,
+      "per_anno": {
+       "2020": 102,
+       "2021": 65,
+       "2022": 124
+      },
+      "orizzonti": {
+       "1": {
+        "n": 291,
+        "giorni": 225,
+        "media": -0.04518110349268405,
+        "basso": -0.13200161577021688,
+        "alto": 0.04096832117595814,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7766323024054983,
+        "per_anno": {
+         "2020": -0.0678038043087779,
+         "2021": -0.10280624399300911,
+         "2022": 0.0036346192150796893
+        },
+        "salita": {
+         "n": 85,
+         "giorni": 81,
+         "media": -0.010351956622823648,
+         "basso": -0.13186101191197244,
+         "alto": 0.10871193155796403
+        },
+        "discesa": {
+         "n": 206,
+         "giorni": 167,
+         "media": -0.05955235341471382,
+         "basso": -0.16933390010006394,
+         "alto": 0.05710828618461052
+        }
+       },
+       "3": {
+        "n": 291,
+        "giorni": 225,
+        "media": -0.008724986257751642,
+        "basso": -0.14827167157036505,
+        "alto": 0.1476105133539861,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8384879725085911,
+        "per_anno": {
+         "2020": 0.053727869454176146,
+         "2021": -0.11854692176885188,
+         "2022": -0.0025295465351316136
+        },
+        "salita": {
+         "n": 85,
+         "giorni": 81,
+         "media": -0.013371075493698276,
+         "basso": -0.18989050327741788,
+         "alto": 0.20869656957147498
+        },
+        "discesa": {
+         "n": 206,
+         "giorni": 167,
+         "media": -0.0068079106021425966,
+         "basso": -0.20372289360055965,
+         "alto": 0.22269291174996658
+        }
+       },
+       "5": {
+        "n": 291,
+        "giorni": 225,
+        "media": -0.014468351383279152,
+        "basso": -0.17765415124824646,
+        "alto": 0.1548584130392475,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8831615120274914,
+        "per_anno": {
+         "2020": 0.00015815928972777205,
+         "2021": -0.10175646865884337,
+         "2022": 0.019256031957567348
+        },
+        "salita": {
+         "n": 85,
+         "giorni": 81,
+         "media": -0.015201630418621475,
+         "basso": -0.24261874032328,
+         "alto": 0.2654468752506346
+        },
+        "discesa": {
+         "n": 206,
+         "giorni": 167,
+         "media": -0.014165784791026243,
+         "basso": -0.23511149250134333,
+         "alto": 0.2299801435824773
+        }
+       },
+       "15": {
+        "n": 291,
+        "giorni": 225,
+        "media": -0.0010540185558575315,
+        "basso": -0.2100841722236489,
+        "alto": 0.21291930835024364,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9037800687285223,
+        "per_anno": {
+         "2020": -0.07730725215447626,
+         "2021": 0.12240822963930134,
+         "2022": -0.003047698439939859
+        },
+        "salita": {
+         "n": 85,
+         "giorni": 81,
+         "media": -0.052015815793511215,
+         "basso": -0.33406510881818735,
+         "alto": 0.2691882927730051
+        },
+        "discesa": {
+         "n": 206,
+         "giorni": 167,
+         "media": 0.019973907488805433,
+         "basso": -0.2176946640810022,
+         "alto": 0.28425899611710176
+        }
+       },
+       "30": {
+        "n": 291,
+        "giorni": 225,
+        "media": -0.018254828089537174,
+        "basso": -0.30672017331343693,
+        "alto": 0.26638277878449296,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9003436426116839,
+        "per_anno": {
+         "2020": -0.3084937277402368,
+         "2021": 0.4201152453515855,
+         "2022": -0.009300691067775936
+        },
+        "salita": {
+         "n": 85,
+         "giorni": 81,
+         "media": 0.11385667369349903,
+         "basso": -0.31814426610288526,
+         "alto": 0.6041887152957099
+        },
+        "discesa": {
+         "n": 206,
+         "giorni": 167,
+         "media": -0.07276685552428515,
+         "basso": -0.4482817679704971,
+         "alto": 0.2940511781352596
+        }
+       },
+       "60": {
+        "n": 291,
+        "giorni": 225,
+        "media": -0.113910818146955,
+        "basso": -0.5006081228489062,
+        "alto": 0.22974044143721978,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9175257731958762,
+        "per_anno": {
+         "2020": -0.2504556232204883,
+         "2021": -0.07222105290979244,
+         "2022": -0.02344521026723864
+        },
+        "salita": {
+         "n": 85,
+         "giorni": 81,
+         "media": 0.2409674013088257,
+         "basso": -0.2537527736755319,
+         "alto": 0.8035576901916046
+        },
+        "discesa": {
+         "n": 206,
+         "giorni": 167,
+         "media": -0.260341151417544,
+         "basso": -0.6962892250033926,
+         "alto": 0.16996339237366662
+        }
+       }
+      },
+      "mfe15_mediana": 0.6735876388218376,
+      "mae15_mediana": 0.7385914006858174
+     }
+    },
+    "caso": {
+     "1": {
+      "n": 10249,
+      "giorni": 1055,
+      "media": 0.0009173630254040669,
+      "basso": -0.0011926609975842501,
+      "alto": 0.0030646964106825114
+     },
+     "3": {
+      "n": 10249,
+      "giorni": 1055,
+      "media": 0.001297627727592049,
+      "basso": -0.0027044646429428276,
+      "alto": 0.005101849837158318
+     },
+     "5": {
+      "n": 10249,
+      "giorni": 1055,
+      "media": 0.0031107259494665834,
+      "basso": -0.0020743855930348623,
+      "alto": 0.008357400046249002
+     },
+     "15": {
+      "n": 10249,
+      "giorni": 1055,
+      "media": 0.005447541215670907,
+      "basso": -0.003932757135677489,
+      "alto": 0.01506424897363608
+     },
+     "30": {
+      "n": 10249,
+      "giorni": 1055,
+      "media": 0.006735398120891603,
+      "basso": -0.006063158752767823,
+      "alto": 0.020066022116817055
+     },
+     "60": {
+      "n": 10249,
+      "giorni": 1055,
+      "media": 0.009886854020101895,
+      "basso": -0.0085618459016841,
+      "alto": 0.029939452981102354
+     }
+    }
+   },
+   "fondo": {
+    "D1": {
+     "n": 39828,
+     "giorni": 591,
+     "media": -0.0005639843110453399,
+     "basso": -0.002176351388838069,
+     "alto": 0.0010323432223955612,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.11221979173674347
+    },
+    "D2": {
+     "n": 32712,
+     "giorni": 738,
+     "media": -0.00045643147582552724,
+     "basso": -0.002531130497225307,
+     "alto": 0.0015349781080819624,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.13138216175185422
+    },
+    "D3": {
+     "n": 29856,
+     "giorni": 801,
+     "media": -0.0037817853319029823,
+     "basso": -0.006412103417519564,
+     "alto": -0.0010664771131714695,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.14444373735134472
+    },
+    "D4": {
+     "n": 28296,
+     "giorni": 827,
+     "media": -0.0034101520942477017,
+     "basso": -0.006090534727442592,
+     "alto": -0.0008656427666567905,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.15397680805055597
+    },
+    "D5": {
+     "n": 26760,
+     "giorni": 824,
+     "media": -0.0019523079892099686,
+     "basso": -0.0047501746142526195,
+     "alto": 0.001279980108177001,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.1711760910335106
+    },
+    "D6": {
+     "n": 27060,
+     "giorni": 841,
+     "media": 0.000388440979523644,
+     "basso": -0.002808283401794906,
+     "alto": 0.003427703580351585,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.1840673669051811
+    },
+    "D7": {
+     "n": 26543,
+     "giorni": 835,
+     "media": -0.001749290823072332,
+     "basso": -0.005259830377172296,
+     "alto": 0.0018113423592054116,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.19885987239618833
+    },
+    "D8": {
+     "n": 28044,
+     "giorni": 787,
+     "media": -0.004748363980013319,
+     "basso": -0.008259754861534723,
+     "alto": -0.0012708713661790788,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.2233987070906413
+    },
+    "D9": {
+     "n": 29568,
+     "giorni": 730,
+     "media": -0.0064950189650270825,
+     "basso": -0.010818868337045592,
+     "alto": -0.0020868795072378496,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.2599806777731649
+    },
+    "D10": {
+     "n": 32484,
+     "giorni": 595,
+     "media": -0.002150711579257414,
+     "basso": -0.009174224973215078,
+     "alto": 0.005881854582301325,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.383163875093357
+    }
+   }
+  },
+  "DOGEUSDT": {
+   "esplosioni": {
+    "minuti": 1302660,
+    "livelli": {
+     "4": {
+      "eventi": 9149,
+      "per_anno": {
+       "2020": 2022,
+       "2021": 3330,
+       "2022": 3797
+      },
+      "orizzonti": {
+       "1": {
+        "n": 9149,
+        "giorni": 904,
+        "media": 0.003185305999296584,
+        "basso": -0.0045718343156769415,
+        "alto": 0.01096234526335309,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.4121761941195759,
+        "per_anno": {
+         "2020": 0.003409614306248965,
+         "2021": -0.0010128258032728148,
+         "2022": 0.006747651931848175
+        },
+        "salita": {
+         "n": 4312,
+         "giorni": 896,
+         "media": 0.016051069914715554,
+         "basso": 0.0030725261115616058,
+         "alto": 0.028494030800046373
+        },
+        "discesa": {
+         "n": 4837,
+         "giorni": 897,
+         "media": -0.008284029126460415,
+         "basso": -0.018832152795472564,
+         "alto": 0.001625294370711543
+        }
+       },
+       "3": {
+        "n": 9149,
+        "giorni": 904,
+        "media": -0.0031376853115947395,
+        "basso": -0.015721930103689257,
+        "alto": 0.009198475978812142,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.5775494589572631,
+        "per_anno": {
+         "2020": 0.007669061234433961,
+         "2021": -0.015016032465330861,
+         "2022": 0.0015248520878972977
+        },
+        "salita": {
+         "n": 4312,
+         "giorni": 896,
+         "media": 0.017874259089060117,
+         "basso": -0.0024545252408118496,
+         "alto": 0.038459806261470636
+        },
+        "discesa": {
+         "n": 4837,
+         "giorni": 897,
+         "media": -0.021869027932149575,
+         "basso": -0.03869035754029954,
+         "alto": -0.006620796824869511
+        }
+       },
+       "5": {
+        "n": 9149,
+        "giorni": 904,
+        "media": -0.003336601213720753,
+        "basso": -0.019612378244477875,
+        "alto": 0.012091568395232191,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.648814078041316,
+        "per_anno": {
+         "2020": -0.00139696625699172,
+         "2021": -0.009405666067179434,
+         "2022": 0.0009531127919445927
+        },
+        "salita": {
+         "n": 4312,
+         "giorni": 896,
+         "media": 0.022263871944872362,
+         "basso": -0.007229912410225742,
+         "alto": 0.050413108646073304
+        },
+        "discesa": {
+         "n": 4837,
+         "giorni": 897,
+         "media": -0.026158441250903615,
+         "basso": -0.04873147930625329,
+         "alto": -0.0038084784818295586
+        }
+       },
+       "15": {
+        "n": 9149,
+        "giorni": 904,
+        "media": -0.006243535932850615,
+        "basso": -0.029140335383807482,
+        "alto": 0.020051327938510347,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7663132582795934,
+        "per_anno": {
+         "2020": -0.04158874799411502,
+         "2021": 0.018384301643264527,
+         "2022": -0.009020117534269326
+        },
+        "salita": {
+         "n": 4312,
+         "giorni": 896,
+         "media": 0.036559377282410606,
+         "basso": -0.0022151472505539246,
+         "alto": 0.07774638447013398
+        },
+        "discesa": {
+         "n": 4837,
+         "giorni": 897,
+         "media": -0.04440069156324268,
+         "basso": -0.07684269831384248,
+         "alto": -0.010504688115095221
+        }
+       },
+       "30": {
+        "n": 9149,
+        "giorni": 904,
+        "media": -0.023130893372293994,
+        "basso": -0.055864390924402645,
+        "alto": 0.009959418903202184,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.811017597551645,
+        "per_anno": {
+         "2020": -0.07471459090369038,
+         "2021": -0.014556146304409724,
+         "2022": -0.003181373047714356
+        },
+        "salita": {
+         "n": 4312,
+         "giorni": 896,
+         "media": 0.01688595389508892,
+         "basso": -0.034180612012448285,
+         "alto": 0.06757472714343864
+        },
+        "discesa": {
+         "n": 4837,
+         "giorni": 897,
+         "media": -0.05880437805638644,
+         "basso": -0.1002883854626773,
+         "alto": -0.016499913344723408
+        }
+       },
+       "60": {
+        "n": 9149,
+        "giorni": 904,
+        "media": -0.025252830074208272,
+        "basso": -0.07292232588585074,
+        "alto": 0.027467060734999715,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8582358727729806,
+        "per_anno": {
+         "2020": -0.09940232517429068,
+         "2021": 0.021524805371313013,
+         "2022": -0.02679068810455307
+        },
+        "salita": {
+         "n": 4312,
+         "giorni": 896,
+         "media": 0.051579551122659675,
+         "basso": -0.03892680233487998,
+         "alto": 0.16112349480040114
+        },
+        "discesa": {
+         "n": 4837,
+         "giorni": 897,
+         "media": -0.09374595137271864,
+         "basso": -0.14824378154915904,
+         "alto": -0.03754227005496449
+        }
+       }
+      },
+      "mfe15_mediana": 0.3500583430571691,
+      "mae15_mediana": 0.38331253342841487
+     },
+     "8": {
+      "eventi": 2329,
+      "per_anno": {
+       "2020": 529,
+       "2021": 809,
+       "2022": 991
+      },
+      "orizzonti": {
+       "1": {
+        "n": 2329,
+        "giorni": 773,
+        "media": 0.034439482466014804,
+        "basso": -0.0006714952270261093,
+        "alto": 0.07481768173467512,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.6118505796479176,
+        "per_anno": {
+         "2020": 0.02489960781159839,
+         "2021": 0.076689277369463,
+         "2022": 0.0050414094239327675
+        },
+        "salita": {
+         "n": 1110,
+         "giorni": 586,
+         "media": 0.09920544078506699,
+         "basso": 0.04910880866547098,
+         "alto": 0.15980847424898914
+        },
+        "discesa": {
+         "n": 1219,
+         "giorni": 592,
+         "media": -0.024535262188741493,
+         "basso": -0.06771111420204842,
+         "alto": 0.020844483623147052
+        }
+       },
+       "3": {
+        "n": 2329,
+        "giorni": 773,
+        "media": 0.033373463292042355,
+        "basso": -0.012843434440434443,
+        "alto": 0.08127674113248103,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7286389008158007,
+        "per_anno": {
+         "2020": -0.021573349295204425,
+         "2021": 0.08254729683552052,
+         "2022": 0.022561387128550613
+        },
+        "salita": {
+         "n": 1110,
+         "giorni": 586,
+         "media": 0.1145497532488036,
+         "basso": 0.04726377885514674,
+         "alto": 0.1804140134357269
+        },
+        "discesa": {
+         "n": 1219,
+         "giorni": 592,
+         "media": -0.04054424126251466,
+         "basso": -0.10194027496304309,
+         "alto": 0.02390643833402811
+        }
+       },
+       "5": {
+        "n": 2329,
+        "giorni": 773,
+        "media": 0.032191365776695804,
+        "basso": -0.016739689727944294,
+        "alto": 0.08190369851088188,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.7874624302275655,
+        "per_anno": {
+         "2020": -0.008281158105955576,
+         "2021": 0.05946652413772477,
+         "2022": 0.03152977346574744
+        },
+        "salita": {
+         "n": 1110,
+         "giorni": 586,
+         "media": 0.13148419042535722,
+         "basso": 0.06530632447847985,
+         "alto": 0.20856227637161867
+        },
+        "discesa": {
+         "n": 1219,
+         "giorni": 592,
+         "media": -0.05822293722577682,
+         "basso": -0.12432333326646829,
+         "alto": 0.007370611688385353
+        }
+       },
+       "15": {
+        "n": 2329,
+        "giorni": 773,
+        "media": 0.016381338194315562,
+        "basso": -0.052368777961452985,
+        "alto": 0.08572146750478656,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8402747960498068,
+        "per_anno": {
+         "2020": -0.021977747427073792,
+         "2021": 0.06125761367359613,
+         "2022": 0.0002229622417191926
+        },
+        "salita": {
+         "n": 1110,
+         "giorni": 586,
+         "media": 0.18878458445623467,
+         "basso": 0.06827601008981825,
+         "alto": 0.3262885554036219
+        },
+        "discesa": {
+         "n": 1219,
+         "giorni": 592,
+         "media": -0.14060603124844911,
+         "basso": -0.2350720004275122,
+         "alto": -0.051733704099304105
+        }
+       },
+       "30": {
+        "n": 2329,
+        "giorni": 773,
+        "media": -0.009337941561668022,
+        "basso": -0.10407149738167375,
+        "alto": 0.09115625499423055,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8793473593817089,
+        "per_anno": {
+         "2020": -0.06103938344803241,
+         "2021": 0.029448361428112562,
+         "2022": -0.013402579665447794
+        },
+        "salita": {
+         "n": 1110,
+         "giorni": 586,
+         "media": 0.17950475771016594,
+         "basso": 0.001833077842314269,
+         "alto": 0.37190105758025976
+        },
+        "discesa": {
+         "n": 1219,
+         "giorni": 592,
+         "media": -0.1812947883145275,
+         "basso": -0.3171600780656487,
+         "alto": -0.04991289690092356
+        }
+       },
+       "60": {
+        "n": 2329,
+        "giorni": 773,
+        "media": -0.046828888018999086,
+        "basso": -0.18247897507679306,
+        "alto": 0.10036772542809297,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8948046371833405,
+        "per_anno": {
+         "2020": -0.09948696772108997,
+         "2021": -0.04193193256199029,
+         "2022": -0.022717397405794277
+        },
+        "salita": {
+         "n": 1110,
+         "giorni": 586,
+         "media": 0.19371162304885836,
+         "basso": -0.0431663706483567,
+         "alto": 0.49856826607583626
+        },
+        "discesa": {
+         "n": 1219,
+         "giorni": 592,
+         "media": -0.2658608546189349,
+         "basso": -0.4118187008600041,
+         "alto": -0.13431821268138347
+        }
+       }
+      },
+      "mfe15_mediana": 0.5701389713742677,
+      "mae15_mediana": 0.5616224648985924
+     },
+     "16": {
+      "eventi": 440,
+      "per_anno": {
+       "2020": 90,
+       "2021": 155,
+       "2022": 195
+      },
+      "orizzonti": {
+       "1": {
+        "n": 440,
+        "giorni": 308,
+        "media": 0.01571545170131733,
+        "basso": -0.09352302060980217,
+        "alto": 0.12077076435700279,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8090909090909091,
+        "per_anno": {
+         "2020": -0.0748430104734964,
+         "2021": 0.1287185693770753,
+         "2022": -0.032311325960268554
+        },
+        "salita": {
+         "n": 218,
+         "giorni": 175,
+         "media": 0.0747111350900016,
+         "basso": -0.05639813465369585,
+         "alto": 0.20418871937041
+        },
+        "discesa": {
+         "n": 222,
+         "giorni": 173,
+         "media": -0.04221724640108433,
+         "basso": -0.21475196767504065,
+         "alto": 0.12951659021182443
+        }
+       },
+       "3": {
+        "n": 440,
+        "giorni": 308,
+        "media": 0.02656581311131865,
+        "basso": -0.11475027525041391,
+        "alto": 0.1643644476893948,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8568181818181818,
+        "per_anno": {
+         "2020": -0.07602132806204157,
+         "2021": 0.11845785324902984,
+         "2022": 0.0008713335434067974
+        },
+        "salita": {
+         "n": 218,
+         "giorni": 175,
+         "media": 0.16497539419332966,
+         "basso": -0.042405620706117815,
+         "alto": 0.36713716892243325
+        },
+        "discesa": {
+         "n": 222,
+         "giorni": 173,
+         "media": -0.10934990164489035,
+         "basso": -0.3041863806096267,
+         "alto": 0.09202864020418708
+        }
+       },
+       "5": {
+        "n": 440,
+        "giorni": 308,
+        "media": 0.03243179539102005,
+        "basso": -0.16811482016677892,
+        "alto": 0.2393169722010925,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.8795454545454545,
+        "per_anno": {
+         "2020": -0.17433315135331726,
+         "2021": 0.15140921310831762,
+         "2022": 0.03328997724132377
+        },
+        "salita": {
+         "n": 218,
+         "giorni": 175,
+         "media": 0.30022477252203933,
+         "basso": 0.021003553803108935,
+         "alto": 0.6007330025661642
+        },
+        "discesa": {
+         "n": 222,
+         "giorni": 173,
+         "media": -0.23053608305295387,
+         "basso": -0.5159729833098063,
+         "alto": 0.06324566171032273
+        }
+       },
+       "15": {
+        "n": 440,
+        "giorni": 308,
+        "media": -0.055558287794255486,
+        "basso": -0.3014235268023564,
+        "alto": 0.20135932671213122,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9204545454545454,
+        "per_anno": {
+         "2020": -0.10824220248558261,
+         "2021": -0.10741516886356091,
+         "2022": 0.009976937272215112
+        },
+        "salita": {
+         "n": 218,
+         "giorni": 175,
+         "media": 0.2601810484210467,
+         "basso": -0.1795505738000439,
+         "alto": 0.7443197411258413
+        },
+        "discesa": {
+         "n": 222,
+         "giorni": 173,
+         "media": -0.3656086269606334,
+         "basso": -0.7274701699329391,
+         "alto": -0.0288578749161722
+        }
+       },
+       "30": {
+        "n": 440,
+        "giorni": 308,
+        "media": -0.2689030043305349,
+        "basso": -0.6385432774878846,
+        "alto": 0.09118046629759556,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9386363636363636,
+        "per_anno": {
+         "2020": 0.007872154917870673,
+         "2021": -0.6417365019071711,
+         "2022": -0.10029055411503686
+        },
+        "salita": {
+         "n": 218,
+         "giorni": 175,
+         "media": 0.08466496696874554,
+         "basso": -0.36530346210786246,
+         "alto": 0.5866325663532996
+        },
+        "discesa": {
+         "n": 222,
+         "giorni": 173,
+         "media": -0.6161003815523507,
+         "basso": -1.2287838302599359,
+         "alto": -0.08810775543506572
+        }
+       },
+       "60": {
+        "n": 440,
+        "giorni": 308,
+        "media": -0.25048717664074843,
+        "basso": -0.6060075285080478,
+        "alto": 0.09411570974177724,
+        "verdetto_mercato": "nessuna direzione",
+        "verdetto_costi_doppi": "nessuna direzione",
+        "quota_oltre_costo_mercato": 0.9204545454545454,
+        "per_anno": {
+         "2020": -0.07787565800690553,
+         "2021": -0.6199621970390857,
+         "2022": -0.03646875877051033
+        },
+        "salita": {
+         "n": 218,
+         "giorni": 175,
+         "media": 0.2707545623105408,
+         "basso": -0.4055892588342896,
+         "alto": 1.0939229857502228
+        },
+        "discesa": {
+         "n": 222,
+         "giorni": 173,
+         "media": -0.7623371725478704,
+         "basso": -1.278552573875837,
+         "alto": -0.2940782847695792
+        }
+       }
+      },
+      "mfe15_mediana": 1.0608614282015816,
+      "mae15_mediana": 0.988016923619961
+     }
+    },
+    "caso": {
+     "1": {
+      "n": 9149,
+      "giorni": 902,
+      "media": 0.00036633436241595294,
+      "basso": -0.0030637928167018946,
+      "alto": 0.003798446136954755
+     },
+     "3": {
+      "n": 9149,
+      "giorni": 902,
+      "media": -0.0021704772032985573,
+      "basso": -0.008283398910104336,
+      "alto": 0.003889981270319705
+     },
+     "5": {
+      "n": 9149,
+      "giorni": 902,
+      "media": -0.0007408535667859219,
+      "basso": -0.008752530420495794,
+      "alto": 0.007088053343570167
+     },
+     "15": {
+      "n": 9149,
+      "giorni": 902,
+      "media": -0.006890832674011434,
+      "basso": -0.021166431673208377,
+      "alto": 0.00671578252799233
+     },
+     "30": {
+      "n": 9149,
+      "giorni": 902,
+      "media": -0.011820657399702639,
+      "basso": -0.03317945315673852,
+      "alto": 0.008564937715693598
+     },
+     "60": {
+      "n": 9149,
+      "giorni": 902,
+      "media": -0.014889020695270467,
+      "basso": -0.04422172078214326,
+      "alto": 0.014712134592884719
+     }
+    }
+   },
+   "fondo": {
+    "D1": {
+     "n": 33012,
+     "giorni": 495,
+     "media": -0.005302298054807183,
+     "basso": -0.007612116962748834,
+     "alto": -0.002870906544100942,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.12906414239963276
+    },
+    "D2": {
+     "n": 29136,
+     "giorni": 617,
+     "media": -0.00683897188151966,
+     "basso": -0.009539566149551423,
+     "alto": -0.004148175112706772,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.15431021200652392
+    },
+    "D3": {
+     "n": 27036,
+     "giorni": 669,
+     "media": -0.004037903692892024,
+     "basso": -0.007782991475338461,
+     "alto": 7.658095559919819e-05,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.17699933188468459
+    },
+    "D4": {
+     "n": 24804,
+     "giorni": 697,
+     "media": -0.00413211648058272,
+     "basso": -0.008518748004386905,
+     "alto": 0.0005409568513758447,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.20467584925039023
+    },
+    "D5": {
+     "n": 24048,
+     "giorni": 693,
+     "media": -0.007584253392740457,
+     "basso": -0.012545636206597231,
+     "alto": -0.0026824410720203765,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.2250304838674222
+    },
+    "D6": {
+     "n": 23580,
+     "giorni": 687,
+     "media": -0.007213183402713778,
+     "basso": -0.012015107650438853,
+     "alto": -0.0024917596176043887,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.24942635449467784
+    },
+    "D7": {
+     "n": 22895,
+     "giorni": 666,
+     "media": -0.0032670012656590033,
+     "basso": -0.009042365869572232,
+     "alto": 0.0018749188947602441,
+     "verdetto_mercato": "nessuna direzione",
+     "verdetto_limite_limite": "nessuna direzione",
+     "movimento_assoluto_medio": 0.27979142127840967
+    },
+    "D8": {
+     "n": 22836,
+     "giorni": 642,
+     "media": -0.00986209706818185,
+     "basso": -0.018357345888469066,
+     "alto": -0.0012089492871381674,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.3290023626192292
+    },
+    "D9": {
+     "n": 22956,
+     "giorni": 587,
+     "media": -0.013810171212635036,
+     "basso": -0.022628635258432516,
+     "alto": -0.005221092226130837,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.39278307053879685
+    },
+    "D10": {
+     "n": 27348,
+     "giorni": 490,
+     "media": -0.025873517139460626,
+     "basso": -0.038801012785024847,
+     "alto": -0.013574255396348689,
+     "verdetto_mercato": "torna indietro, ma non paga un giro",
+     "verdetto_limite_limite": "torna indietro, ma non paga un giro",
+     "movimento_assoluto_medio": 0.6317042177060649
+    }
+   }
+  }
+ },
+ "tutte_le_monete": {
+  "4": {
+   "1": {
+    "movimento": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": 0.0011734144246938318,
+     "basso": -0.001608805731540704,
+     "alto": 0.0036618557330014164
+    },
+    "continuazione_dopo_costo": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": -0.1288430946553002,
+     "basso": -0.13150579940499624,
+     "alto": -0.1262099294421062
+    },
+    "ritorno_dopo_costo": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": -0.13118992350468783,
+     "basso": -0.13387261303879436,
+     "alto": -0.12864572726057852
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": 0.00891438168074511,
+       "basso": 0.005327957853741943,
+       "alto": 0.012579970125409186
+      },
+      "per_anno": {
+       "2020": {
+        "n": 8363,
+        "giorni": 366,
+        "media": 0.004365202280647913,
+        "basso": -0.0007318907879517807,
+        "alto": 0.009346776184093098
+       },
+       "2021": {
+        "n": 10150,
+        "giorni": 365,
+        "media": 0.017220803337489935,
+        "basso": 0.00981772324014026,
+        "alto": 0.024459924401886237
+       },
+       "2022": {
+        "n": 10415,
+        "giorni": 365,
+        "media": 0.004472193251273473,
+        "basso": -0.0009419274831133944,
+        "alto": 0.00981546563982983
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": -0.1387090442913646,
+       "basso": -0.1423625545625887,
+       "alto": -0.13500249512892148
+      },
+      "continuazione_dopo_costo": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": -0.12088028092987436,
+       "basso": -0.1244647520135169,
+       "alto": -0.11708619175218314
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.006041080268532476,
+       "basso": -0.010042651622749088,
+       "alto": -0.0020058625944696356
+      },
+      "per_anno": {
+       "2020": {
+        "n": 9035,
+        "giorni": 366,
+        "media": -0.01146634055459122,
+        "basso": -0.018975571038104887,
+        "alto": -0.003924969410327069
+       },
+       "2021": {
+        "n": 10304,
+        "giorni": 365,
+        "media": -0.012976931455952214,
+        "basso": -0.020749358536629986,
+        "alto": -0.005108378742997194
+       },
+       "2022": {
+        "n": 11700,
+        "giorni": 365,
+        "media": 0.004256717792981517,
+        "basso": -0.0008180702454801278,
+        "alto": 0.009630043052321034
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.12418218723364222,
+       "basso": -0.12819837284964045,
+       "alto": -0.12035968402391706
+      },
+      "continuazione_dopo_costo": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.1362643477707072,
+       "basso": -0.14008261298555993,
+       "alto": -0.13208607482487494
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "3": {
+    "movimento": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": -0.0003801573923556252,
+     "basso": -0.004963370713977823,
+     "alto": 0.003990567094209948
+    },
+    "continuazione_dopo_costo": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": -0.13039666647234965,
+     "basso": -0.13509720733552888,
+     "alto": -0.1258958516241352
+    },
+    "ritorno_dopo_costo": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": -0.1296363516876384,
+     "basso": -0.13384101201986956,
+     "alto": -0.1249574719684801
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": 0.013212520955635269,
+       "basso": 0.007318454122517676,
+       "alto": 0.01921346626205953
+      },
+      "per_anno": {
+       "2020": {
+        "n": 8363,
+        "giorni": 366,
+        "media": 0.012170307703438165,
+        "basso": 0.004594517608162516,
+        "alto": 0.01969550872364242
+       },
+       "2021": {
+        "n": 10150,
+        "giorni": 365,
+        "media": 0.022371881032822432,
+        "basso": 0.00868851789413854,
+        "alto": 0.03449318221487755
+       },
+       "2022": {
+        "n": 10415,
+        "giorni": 365,
+        "media": 0.005123085011773023,
+        "basso": -0.004399911346508907,
+        "alto": 0.01486469929279747
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": -0.14300718356625475,
+       "basso": -0.14938109507530944,
+       "alto": -0.13718189448435622
+      },
+      "continuazione_dopo_costo": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": -0.1165821416549842,
+       "basso": -0.12275403742899817,
+       "alto": -0.11033707213719438
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.013048381215632171,
+       "basso": -0.019837469191539257,
+       "alto": -0.006318737232328727
+      },
+      "per_anno": {
+       "2020": {
+        "n": 9035,
+        "giorni": 366,
+        "media": -0.014005888129274438,
+        "basso": -0.026256581616526088,
+        "alto": -0.0019052929479501362
+       },
+       "2021": {
+        "n": 10304,
+        "giorni": 365,
+        "media": -0.03451928253656392,
+        "basso": -0.04903092777194803,
+        "alto": -0.01980511024375276
+       },
+       "2022": {
+        "n": 11700,
+        "giorni": 365,
+        "media": 0.0066001010216019075,
+        "basso": -0.002815107667438126,
+        "alto": 0.01605212213357851
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.11717488628654253,
+       "basso": -0.12449531311028411,
+       "alto": -0.1098876580725469
+      },
+      "continuazione_dopo_costo": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.14327164871780684,
+       "basso": -0.15014742607432308,
+       "alto": -0.136817790249945
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "5": {
+    "movimento": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": -0.004174389445997217,
+     "basso": -0.009588040946125063,
+     "alto": 0.001200342490699421
+    },
+    "continuazione_dopo_costo": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": -0.13419089852599125,
+     "basso": -0.14006401662286824,
+     "alto": -0.12893267879116593
+    },
+    "ritorno_dopo_costo": {
+     "n": 59967,
+     "giorni": 1096,
+     "media": -0.1258421196339968,
+     "basso": -0.13158240259723203,
+     "alto": -0.1202799983879776
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": 0.010707909379712829,
+       "basso": 0.002951000339235873,
+       "alto": 0.018562484553386962
+      },
+      "per_anno": {
+       "2020": {
+        "n": 8363,
+        "giorni": 366,
+        "media": 0.013110353531346665,
+        "basso": 0.0024279096213286147,
+        "alto": 0.023536230007268434
+       },
+       "2021": {
+        "n": 10150,
+        "giorni": 365,
+        "media": 0.023311741970977216,
+        "basso": 0.006354643587950318,
+        "alto": 0.03885571579061602
+       },
+       "2022": {
+        "n": 10415,
+        "giorni": 365,
+        "media": -0.003504336538813071,
+        "basso": -0.015109325300082445,
+        "alto": 0.008512025362911072
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": -0.1405025719903323,
+       "basso": -0.14784549995789623,
+       "alto": -0.1323892425404493
+      },
+      "continuazione_dopo_costo": {
+       "n": 28928,
+       "giorni": 1096,
+       "media": -0.11908675323090667,
+       "basso": -0.1270800311443257,
+       "alto": -0.11154175999990829
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.018044525095668285,
+       "basso": -0.026727747223479512,
+       "alto": -0.008779947331108314
+      },
+      "per_anno": {
+       "2020": {
+        "n": 9035,
+        "giorni": 366,
+        "media": -0.02388889961923266,
+        "basso": -0.04048192847028251,
+        "alto": -0.0075218918866505925
+       },
+       "2021": {
+        "n": 10304,
+        "giorni": 365,
+        "media": -0.04318615568554655,
+        "basso": -0.06146581198909595,
+        "alto": -0.02370072004864085
+       },
+       "2022": {
+        "n": 11700,
+        "giorni": 365,
+        "media": 0.008610456564033406,
+        "basso": -0.0032583836253280347,
+        "alto": 0.020995709689504132
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.11217874240650641,
+       "basso": -0.12110863669388366,
+       "alto": -0.1041141562052893
+      },
+      "continuazione_dopo_costo": {
+       "n": 31039,
+       "giorni": 1096,
+       "media": -0.14826779259784298,
+       "basso": -0.15760101005748342,
+       "alto": -0.13960373788150057
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "15": {
+    "movimento": {
+     "n": 59964,
+     "giorni": 1096,
+     "media": -0.002633251407230807,
+     "basso": -0.01266913501884069,
+     "alto": 0.007189552006278031
+    },
+    "continuazione_dopo_costo": {
+     "n": 59964,
+     "giorni": 1096,
+     "media": -0.1326495945464477,
+     "basso": -0.14188633220280128,
+     "alto": -0.12262230862470384
+    },
+    "ritorno_dopo_costo": {
+     "n": 59964,
+     "giorni": 1096,
+     "media": -0.1273830917319861,
+     "basso": -0.13768597784607758,
+     "alto": -0.11766081832601102
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 28926,
+       "giorni": 1096,
+       "media": 0.01748424288623368,
+       "basso": 0.005790424947152568,
+       "alto": 0.02983706684052951
+      },
+      "per_anno": {
+       "2020": {
+        "n": 8363,
+        "giorni": 366,
+        "media": 0.014502042971188987,
+        "basso": -0.001057563270279181,
+        "alto": 0.029615132511180496
+       },
+       "2021": {
+        "n": 10150,
+        "giorni": 365,
+        "media": 0.042843746172877006,
+        "basso": 0.018052813370095417,
+        "alto": 0.06810385718741784
+       },
+       "2022": {
+        "n": 10413,
+        "giorni": 365,
+        "media": -0.004839661893360198,
+        "basso": -0.023178501982934935,
+        "alto": 0.013548041347989774
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 28926,
+       "giorni": 1096,
+       "media": -0.14727819987994176,
+       "basso": -0.15933467986327726,
+       "alto": -0.1350588502129129
+      },
+      "continuazione_dopo_costo": {
+       "n": 28926,
+       "giorni": 1096,
+       "media": -0.11230971410747441,
+       "basso": -0.12425975186228418,
+       "alto": -0.10041324439112558
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 31038,
+       "giorni": 1096,
+       "media": -0.02138183829854963,
+       "basso": -0.03569388217981184,
+       "alto": -0.006129946832655007
+      },
+      "per_anno": {
+       "2020": {
+        "n": 9035,
+        "giorni": 366,
+        "media": -0.030961258652042245,
+        "basso": -0.05786177216314777,
+        "alto": -0.0035847767178396888
+       },
+       "2021": {
+        "n": 10304,
+        "giorni": 365,
+        "media": -0.04473032007846022,
+        "basso": -0.07308598726053685,
+        "alto": -0.014557338841996451
+       },
+       "2022": {
+        "n": 11699,
+        "giorni": 365,
+        "media": 0.006580621668456482,
+        "basso": -0.01384842156138875,
+        "alto": 0.028798228855067304
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 31038,
+       "giorni": 1096,
+       "media": -0.10884175858269274,
+       "basso": -0.12359835712020749,
+       "alto": -0.09308359910261252
+      },
+      "continuazione_dopo_costo": {
+       "n": 31038,
+       "giorni": 1096,
+       "media": -0.15160543517979203,
+       "basso": -0.16692058162980644,
+       "alto": -0.13608477060752452
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "30": {
+    "movimento": {
+     "n": 59963,
+     "giorni": 1096,
+     "media": -0.012626770978440163,
+     "basso": -0.026226784222685384,
+     "alto": 0.0003611976188540026
+    },
+    "continuazione_dopo_costo": {
+     "n": 59963,
+     "giorni": 1096,
+     "media": -0.14264328115971867,
+     "basso": -0.15595056873906454,
+     "alto": -0.12998043381439386
+    },
+    "ritorno_dopo_costo": {
+     "n": 59963,
+     "giorni": 1096,
+     "media": -0.11738973920283831,
+     "basso": -0.1304368848828798,
+     "alto": -0.10494593345036063
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 28925,
+       "giorni": 1096,
+       "media": 0.007251649201778223,
+       "basso": -0.0097569613633914,
+       "alto": 0.02426491564285123
+      },
+      "per_anno": {
+       "2020": {
+        "n": 8363,
+        "giorni": 366,
+        "media": -0.011324050864187888,
+        "basso": -0.0369654895386616,
+        "alto": 0.013315881619754508
+       },
+       "2021": {
+        "n": 10150,
+        "giorni": 365,
+        "media": 0.040036245633919935,
+        "basso": 0.004896708421664593,
+        "alto": 0.0759756258151053
+       },
+       "2022": {
+        "n": 10412,
+        "giorni": 365,
+        "media": -0.009787831602540232,
+        "basso": -0.03469161526855698,
+        "alto": 0.016693852235437286
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 28925,
+       "giorni": 1096,
+       "media": -0.13704594479382665,
+       "basso": -0.15456524616662737,
+       "alto": -0.1188561078629551
+      },
+      "continuazione_dopo_costo": {
+       "n": 28925,
+       "giorni": 1096,
+       "media": -0.1225426463902702,
+       "basso": -0.13928240429057354,
+       "alto": -0.1054130594809155
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 31038,
+       "giorni": 1096,
+       "media": -0.031151911248844727,
+       "basso": -0.051859330293887784,
+       "alto": -0.008361783071230885
+      },
+      "per_anno": {
+       "2020": {
+        "n": 9035,
+        "giorni": 366,
+        "media": -0.05131572336818843,
+        "basso": -0.09218144774879675,
+        "alto": -0.004708034817805338
+       },
+       "2021": {
+        "n": 10304,
+        "giorni": 365,
+        "media": -0.0756473032404823,
+        "basso": -0.12087267002724343,
+        "alto": -0.029601833559291323
+       },
+       "2022": {
+        "n": 11699,
+        "giorni": 365,
+        "media": 0.023610082218981913,
+        "basso": -0.003953597704737595,
+        "alto": 0.05060805430496846
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 31038,
+       "giorni": 1096,
+       "media": -0.09907168563239763,
+       "basso": -0.12214387670031637,
+       "alto": -0.07761653712261075
+      },
+      "continuazione_dopo_costo": {
+       "n": 31038,
+       "giorni": 1096,
+       "media": -0.1613755081300871,
+       "basso": -0.1835459388816171,
+       "alto": -0.13893372541576393
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "60": {
+    "movimento": {
+     "n": 59961,
+     "giorni": 1096,
+     "media": -0.016002437660504045,
+     "basso": -0.03107538267306919,
+     "alto": -7.502244356690752e-05
+    },
+    "continuazione_dopo_costo": {
+     "n": 59961,
+     "giorni": 1096,
+     "media": -0.14601894839247984,
+     "basso": -0.1611190231683051,
+     "alto": -0.13128710354331055
+    },
+    "ritorno_dopo_costo": {
+     "n": 59961,
+     "giorni": 1096,
+     "media": -0.11401407307147175,
+     "basso": -0.1282626766422255,
+     "alto": -0.09954166559016231
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 28924,
+       "giorni": 1096,
+       "media": 0.026570082156918837,
+       "basso": 0.0015465336901881626,
+       "alto": 0.0520776950951771
+      },
+      "per_anno": {
+       "2020": {
+        "n": 8363,
+        "giorni": 366,
+        "media": 0.0013367849265637768,
+        "basso": -0.03495220711321501,
+        "alto": 0.03539523368382187
+       },
+       "2021": {
+        "n": 10150,
+        "giorni": 365,
+        "media": 0.08267476493446699,
+        "basso": 0.030748191803413854,
+        "alto": 0.13889776305812307
+       },
+       "2022": {
+        "n": 10411,
+        "giorni": 365,
+        "media": -0.007858547701370901,
+        "basso": -0.04009945482354744,
+        "alto": 0.024714637434481913
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 28924,
+       "giorni": 1096,
+       "media": -0.15636402490342693,
+       "basso": -0.1825033039804605,
+       "alto": -0.1328946513128609
+      },
+      "continuazione_dopo_costo": {
+       "n": 28924,
+       "giorni": 1096,
+       "media": -0.10322386058958928,
+       "basso": -0.12827191973379679,
+       "alto": -0.07645803465099604
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 31037,
+       "giorni": 1096,
+       "media": -0.05567661890222005,
+       "basso": -0.08129002990838896,
+       "alto": -0.031515926410255905
+      },
+      "per_anno": {
+       "2020": {
+        "n": 9035,
+        "giorni": 366,
+        "media": -0.06737484060534574,
+        "basso": -0.11549089029464725,
+        "alto": -0.019498754636968176
+       },
+       "2021": {
+        "n": 10304,
+        "giorni": 365,
+        "media": -0.12627035701040878,
+        "basso": -0.17213031816843774,
+        "alto": -0.08081816565595909
+       },
+       "2022": {
+        "n": 11698,
+        "giorni": 365,
+        "media": 0.01553994038607858,
+        "basso": -0.02077167309256501,
+        "alto": 0.0520573077513093
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 31037,
+       "giorni": 1096,
+       "media": -0.0745473073793149,
+       "basso": -0.09939854414419948,
+       "alto": -0.049861199590405345
+      },
+      "continuazione_dopo_costo": {
+       "n": 31037,
+       "giorni": 1096,
+       "media": -0.185900545183755,
+       "basso": -0.2105489193023318,
+       "alto": -0.16144078521705094
+      }
+     }
+    },
+    "verdetto": "torna indietro, ma non paga un giro"
+   }
+  },
+  "8": {
+   "1": {
+    "movimento": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": -0.008000274385415798,
+     "basso": -0.018979411954264114,
+     "alto": 0.0037466509802343384
+    },
+    "continuazione_dopo_costo": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": -0.1380369581711825,
+     "basso": -0.14979207095475233,
+     "alto": -0.1270304877131122
+    },
+    "ritorno_dopo_costo": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": -0.1220364094003509,
+     "basso": -0.13353710222931878,
+     "alto": -0.11068547886258968
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": 0.016735379382285018,
+       "basso": 0.0010032103954455552,
+       "alto": 0.03273633834391005
+      },
+      "per_anno": {
+       "2020": {
+        "n": 1905,
+        "giorni": 338,
+        "media": 0.011765207472340522,
+        "basso": -0.0057721078740628545,
+        "alto": 0.02868748387577562
+       },
+       "2021": {
+        "n": 2024,
+        "giorni": 347,
+        "media": 0.04741947439930298,
+        "basso": 0.010225155777093778,
+        "alto": 0.0843114277634568
+       },
+       "2022": {
+        "n": 2421,
+        "giorni": 352,
+        "media": -0.005006227732956647,
+        "basso": -0.028738227800977914,
+        "alto": 0.02052040012630863
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": -0.1464015211145685,
+       "basso": -0.16293912296811403,
+       "alto": -0.13046043849048158
+      },
+      "continuazione_dopo_costo": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": -0.11293076234999845,
+       "basso": -0.12854485874936064,
+       "alto": -0.09674758849327435
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.029576016339385607,
+       "basso": -0.044808606081847724,
+       "alto": -0.014451239236362877
+      },
+      "per_anno": {
+       "2020": {
+        "n": 2395,
+        "giorni": 335,
+        "media": -0.03391123317838807,
+        "basso": -0.05957738679432651,
+        "alto": -0.00673284446463814
+       },
+       "2021": {
+        "n": 1923,
+        "giorni": 309,
+        "media": -0.06148187634314145,
+        "basso": -0.09885787503111727,
+        "alto": -0.025584821466113922
+       },
+       "2022": {
+        "n": 2962,
+        "giorni": 341,
+        "media": -0.0053566331129732475,
+        "basso": -0.022525616286957862,
+        "alto": 0.011779193964088205
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.10078387377050453,
+       "basso": -0.11495311948796169,
+       "alto": -0.08620162888924032
+      },
+      "continuazione_dopo_costo": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.15993590644927572,
+       "basso": -0.1746185646522323,
+       "alto": -0.14475953967151872
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "3": {
+    "movimento": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": -0.005336978575470493,
+     "basso": -0.02146275938524575,
+     "alto": 0.011993547137503833
+    },
+    "continuazione_dopo_costo": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": -0.13537366236123718,
+     "basso": -0.15246684420181095,
+     "alto": -0.11886467158346592
+    },
+    "ritorno_dopo_costo": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": -0.12469970521029622,
+     "basso": -0.14229663239668244,
+     "alto": -0.10940137961700956
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": 0.03046538813105349,
+       "basso": 0.0063550899912610094,
+       "alto": 0.0535608402718798
+      },
+      "per_anno": {
+       "2020": {
+        "n": 1905,
+        "giorni": 338,
+        "media": 0.01717010570353811,
+        "basso": -0.007234968730594204,
+        "alto": 0.04257201182982178
+       },
+       "2021": {
+        "n": 2024,
+        "giorni": 347,
+        "media": 0.09287941389019606,
+        "basso": 0.037904935174898124,
+        "alto": 0.14676901598481532
+       },
+       "2022": {
+        "n": 2421,
+        "giorni": 352,
+        "media": -0.011252280234121122,
+        "basso": -0.0460472937717795,
+        "alto": 0.023244522547253264
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": -0.16013152986333698,
+       "basso": -0.18325740912435678,
+       "alto": -0.13794936488515866
+      },
+      "continuazione_dopo_costo": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": -0.09920075360123,
+       "basso": -0.12284371439390394,
+       "alto": -0.07525640522307016
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.036565691293386327,
+       "basso": -0.05942760192455567,
+       "alto": -0.01169108811044988
+      },
+      "per_anno": {
+       "2020": {
+        "n": 2395,
+        "giorni": 335,
+        "media": -0.05505971691338345,
+        "basso": -0.09881984266967435,
+        "alto": -0.008328624060625468
+       },
+       "2021": {
+        "n": 1923,
+        "giorni": 309,
+        "media": -0.0760070991343685,
+        "basso": -0.13290019472978679,
+        "alto": -0.014872102496415119
+       },
+       "2022": {
+        "n": 2962,
+        "giorni": 341,
+        "media": 0.003994409529740541,
+        "basso": -0.022654039633522745,
+        "alto": 0.03062620221684069
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.09379419881650379,
+       "basso": -0.11823116120347416,
+       "alto": -0.07036756388918222
+      },
+      "continuazione_dopo_costo": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.16692558140327646,
+       "basso": -0.1909118419566639,
+       "alto": -0.14137729430630744
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "5": {
+    "movimento": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": 0.0009726875318991426,
+     "basso": -0.017904171790700175,
+     "alto": 0.019810133298245207
+    },
+    "continuazione_dopo_costo": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": -0.12906399625386758,
+     "basso": -0.14854286295384478,
+     "alto": -0.10944709052524003
+    },
+    "ritorno_dopo_costo": {
+     "n": 13630,
+     "giorni": 1075,
+     "media": -0.13100937131766585,
+     "basso": -0.1505758486719674,
+     "alto": -0.11077478818858644
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": 0.045991695309717036,
+       "basso": 0.018836430923965197,
+       "alto": 0.07265540548835925
+      },
+      "per_anno": {
+       "2020": {
+        "n": 1905,
+        "giorni": 338,
+        "media": 0.045411446831087186,
+        "basso": 0.009823054791301538,
+        "alto": 0.08346191280294162
+       },
+       "2021": {
+        "n": 2024,
+        "giorni": 347,
+        "media": 0.11203833914683009,
+        "basso": 0.05606483684800995,
+        "alto": 0.16571929656523968
+       },
+       "2022": {
+        "n": 2421,
+        "giorni": 352,
+        "media": -0.008767922110574979,
+        "basso": -0.05615750852979241,
+        "alto": 0.03663832919706604
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": -0.17565783704200053,
+       "basso": -0.20339199442719968,
+       "alto": -0.14841149878373947
+      },
+      "continuazione_dopo_costo": {
+       "n": 6350,
+       "giorni": 1037,
+       "media": -0.08367444642256644,
+       "basso": -0.10948359438284952,
+       "alto": -0.05636888450171934
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.03829526568089531,
+       "basso": -0.06830903459175147,
+       "alto": -0.00934374310103665
+      },
+      "per_anno": {
+       "2020": {
+        "n": 2395,
+        "giorni": 335,
+        "media": -0.046936778636823384,
+        "basso": -0.10007566148905941,
+        "alto": 0.010186863227942142
+       },
+       "2021": {
+        "n": 1923,
+        "giorni": 309,
+        "media": -0.08529932590522382,
+        "basso": -0.15937109990252976,
+        "alto": -0.016093027307655345
+       },
+       "2022": {
+        "n": 2962,
+        "giorni": 341,
+        "media": -0.0007918114807496437,
+        "basso": -0.0336046729219614,
+        "alto": 0.03269070086704771
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.09206462442899482,
+       "basso": -0.1227248652724277,
+       "alto": -0.06299650449619895
+      },
+      "continuazione_dopo_costo": {
+       "n": 7280,
+       "giorni": 985,
+       "media": -0.16865515579078544,
+       "basso": -0.19791474220396832,
+       "alto": -0.13746556885490896
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "15": {
+    "movimento": {
+     "n": 13628,
+     "giorni": 1075,
+     "media": 0.02102306746546641,
+     "basso": -0.010535028354655404,
+     "alto": 0.05242294598851541
+    },
+    "continuazione_dopo_costo": {
+     "n": 13628,
+     "giorni": 1075,
+     "media": -0.10901215413711651,
+     "basso": -0.13962678982157573,
+     "alto": -0.07482890618014919
+    },
+    "ritorno_dopo_costo": {
+     "n": 13628,
+     "giorni": 1075,
+     "media": -0.15105828906804936,
+     "basso": -0.18465427458077074,
+     "alto": -0.11853243886158664
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 6349,
+       "giorni": 1037,
+       "media": 0.09542126385295942,
+       "basso": 0.05389944971959064,
+       "alto": 0.13783125650573852
+      },
+      "per_anno": {
+       "2020": {
+        "n": 1905,
+        "giorni": 338,
+        "media": 0.09104677311393117,
+        "basso": 0.04157831669817128,
+        "alto": 0.14425179683326259
+       },
+       "2021": {
+        "n": 2024,
+        "giorni": 347,
+        "media": 0.24781589969256143,
+        "basso": 0.1579693159755098,
+        "alto": 0.33230644379548985
+       },
+       "2022": {
+        "n": 2420,
+        "giorni": 352,
+        "media": -0.02859251221377846,
+        "basso": -0.09376011325625891,
+        "alto": 0.03361224422556482
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 6349,
+       "giorni": 1037,
+       "media": -0.22508577794966758,
+       "basso": -0.26602083130466153,
+       "alto": -0.18407694730326296
+      },
+      "continuazione_dopo_costo": {
+       "n": 6349,
+       "giorni": 1037,
+       "media": -0.034243250243748746,
+       "basso": -0.07731642113247096,
+       "alto": 0.008077549208380476
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.04386965802762235,
+       "basso": -0.09138270483926246,
+       "alto": 0.004793359089052347
+      },
+      "per_anno": {
+       "2020": {
+        "n": 2395,
+        "giorni": 335,
+        "media": -0.0054645505480675005,
+        "basso": -0.09947746196423635,
+        "alto": 0.10734094517364233
+       },
+       "2021": {
+        "n": 1923,
+        "giorni": 309,
+        "media": -0.15638981498015703,
+        "basso": -0.2592214538590636,
+        "alto": -0.05198974001853173
+       },
+       "2022": {
+        "n": 2961,
+        "giorni": 341,
+        "media": -0.0018581654892264124,
+        "basso": -0.05824284862644403,
+        "alto": 0.054650723294654965
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.08648890770942948,
+       "basso": -0.1403551220018022,
+       "alto": -0.03700653252223929
+      },
+      "continuazione_dopo_costo": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.17422822376467417,
+       "basso": -0.2236218510033114,
+       "alto": -0.12259753517288799
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "30": {
+    "movimento": {
+     "n": 13627,
+     "giorni": 1075,
+     "media": 0.009641927908892468,
+     "basso": -0.028982838204036868,
+     "alto": 0.049703082979048886
+    },
+    "continuazione_dopo_costo": {
+     "n": 13627,
+     "giorni": 1075,
+     "media": -0.12039403011561772,
+     "basso": -0.15937541521411053,
+     "alto": -0.08224492232525855
+    },
+    "ritorno_dopo_costo": {
+     "n": 13627,
+     "giorni": 1075,
+     "media": -0.13967788593340263,
+     "basso": -0.17937913173851178,
+     "alto": -0.10149390425524113
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 6348,
+       "giorni": 1037,
+       "media": 0.09266827053271547,
+       "basso": 0.03749776273611699,
+       "alto": 0.14798565314394255
+      },
+      "per_anno": {
+       "2020": {
+        "n": 1905,
+        "giorni": 338,
+        "media": 0.07409369266397821,
+        "basso": -0.006448401305935319,
+        "alto": 0.14972732667559888
+       },
+       "2021": {
+        "n": 2024,
+        "giorni": 347,
+        "media": 0.2327794477718371,
+        "basso": 0.10874553293911583,
+        "alto": 0.35383524796093296
+       },
+       "2022": {
+        "n": 2419,
+        "giorni": 352,
+        "media": -0.009936298252748638,
+        "basso": -0.08362028366653973,
+        "alto": 0.0699620456138692
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 6348,
+       "giorni": 1037,
+       "media": -0.2223343070796594,
+       "basso": -0.27685624568933725,
+       "alto": -0.1692638940223004
+      },
+      "continuazione_dopo_costo": {
+       "n": 6348,
+       "giorni": 1037,
+       "media": -0.03699776601422847,
+       "basso": -0.08869999519065519,
+       "alto": 0.017290288597074776
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.06276516413342494,
+       "basso": -0.12251639457293619,
+       "alto": -0.002883965770297519
+      },
+      "per_anno": {
+       "2020": {
+        "n": 2395,
+        "giorni": 335,
+        "media": -0.03941940810747911,
+        "basso": -0.13128282733934832,
+        "alto": 0.06460295465278901
+       },
+       "2021": {
+        "n": 1923,
+        "giorni": 309,
+        "media": -0.1831584980465903,
+        "basso": -0.349629473446251,
+        "alto": -0.01851024683439209
+       },
+       "2022": {
+        "n": 2961,
+        "giorni": 341,
+        "media": -0.0034597620959792444,
+        "basso": -0.06912949715168346,
+        "alto": 0.060383993613693614
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.06759340160362687,
+       "basso": -0.13363802906293532,
+       "alto": -0.008151680252429983
+      },
+      "continuazione_dopo_costo": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.19312372987047674,
+       "basso": -0.2536260968931368,
+       "alto": -0.13180940231994587
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "60": {
+    "movimento": {
+     "n": 13627,
+     "giorni": 1075,
+     "media": -0.006441320055201751,
+     "basso": -0.05435537624042619,
+     "alto": 0.041780905600636624
+    },
+    "continuazione_dopo_costo": {
+     "n": 13627,
+     "giorni": 1075,
+     "media": -0.1364772780797119,
+     "basso": -0.1836901084461701,
+     "alto": -0.08875264372057375
+    },
+    "ritorno_dopo_costo": {
+     "n": 13627,
+     "giorni": 1075,
+     "media": -0.12359463796930842,
+     "basso": -0.17098965440961542,
+     "alto": -0.0754967189253816
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 6348,
+       "giorni": 1037,
+       "media": 0.11550553505601016,
+       "basso": 0.04702308026816924,
+       "alto": 0.19380634530552024
+      },
+      "per_anno": {
+       "2020": {
+        "n": 1905,
+        "giorni": 338,
+        "media": 0.0976042003426094,
+        "basso": 0.018708072166005958,
+        "alto": 0.1784838923720278
+       },
+       "2021": {
+        "n": 2024,
+        "giorni": 347,
+        "media": 0.2933501508428226,
+        "basso": 0.13923064599107646,
+        "alto": 0.474117212323635
+       },
+       "2022": {
+        "n": 2419,
+        "giorni": 352,
+        "media": -0.0192011452761437,
+        "basso": -0.11697977128125482,
+        "alto": 0.07011457355696506
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 6348,
+       "giorni": 1037,
+       "media": -0.24517157160295408,
+       "basso": -0.3163282498100774,
+       "alto": -0.17641448620605554
+      },
+      "continuazione_dopo_costo": {
+       "n": 6348,
+       "giorni": 1037,
+       "media": -0.014160501490933793,
+       "basso": -0.0804439891398019,
+       "alto": 0.06224485656437684
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.11279090602112746,
+       "basso": -0.18231172224847714,
+       "alto": -0.04546292638504019
+      },
+      "per_anno": {
+       "2020": {
+        "n": 2395,
+        "giorni": 335,
+        "media": -0.09767305452803358,
+        "basso": -0.2096687063796925,
+        "alto": 0.0206793154992138
+       },
+       "2021": {
+        "n": 1923,
+        "giorni": 309,
+        "media": -0.28282159417501324,
+        "basso": -0.44636678907153643,
+        "alto": -0.12262735449298257
+       },
+       "2022": {
+        "n": 2961,
+        "giorni": 341,
+        "media": -0.014593756749272466,
+        "basso": -0.0995665151690117,
+        "alto": 0.07654698967842202
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.017567659715924368,
+       "basso": -0.08527960174347486,
+       "alto": 0.05079325235430542
+      },
+      "continuazione_dopo_costo": {
+       "n": 7279,
+       "giorni": 985,
+       "media": -0.24314947175817928,
+       "basso": -0.3124456167507864,
+       "alto": -0.17404440071565566
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   }
+  },
+  "16": {
+   "1": {
+    "movimento": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.023646586619556254,
+     "basso": -0.07468129240389083,
+     "alto": 0.024719841817614795
+    },
+    "continuazione_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.15388329943777868,
+     "basso": -0.20597342231270938,
+     "alto": -0.10306796629485114
+    },
+    "ritorno_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.10659012619866619,
+     "basso": -0.16081415566645277,
+     "alto": -0.053362871037876014
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 912,
+       "giorni": 455,
+       "media": 0.004893436207467976,
+       "basso": -0.06485477254556633,
+       "alto": 0.07707445517705061
+      },
+      "per_anno": {
+       "2020": {
+        "n": 253,
+        "giorni": 130,
+        "media": 0.02144250655354428,
+        "basso": -0.06316012888814704,
+        "alto": 0.10954569048897998
+       },
+       "2021": {
+        "n": 262,
+        "giorni": 156,
+        "media": 0.1026985452328208,
+        "basso": -0.03574067449077137,
+        "alto": 0.24945473375584995
+       },
+       "2022": {
+        "n": 397,
+        "giorni": 169,
+        "media": -0.07019939342023918,
+        "basso": -0.1939727172348013,
+        "alto": 0.04889790445505028
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.1349592256811522,
+       "basso": -0.2072773068787311,
+       "alto": -0.0621295570052991
+      },
+      "continuazione_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.12517235326621626,
+       "basso": -0.19530746081230846,
+       "alto": -0.053925334629325576
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.04326113132057064,
+       "basso": -0.12019100780069093,
+       "alto": 0.034240563695419494
+      },
+      "per_anno": {
+       "2020": {
+        "n": 473,
+        "giorni": 164,
+        "media": -0.061749040625984596,
+        "basso": -0.17523996115708979,
+        "alto": 0.05809480242727682
+       },
+       "2021": {
+        "n": 326,
+        "giorni": 119,
+        "media": -0.026534919656936093,
+        "basso": -0.21951817737196594,
+        "alto": 0.18441625496902497
+       },
+       "2022": {
+        "n": 528,
+        "giorni": 133,
+        "media": -0.0370262144661844,
+        "basso": -0.1207093412838748,
+        "alto": 0.0527016195521586
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.087093051045669,
+       "basso": -0.159602706510154,
+       "alto": -0.011716498208722514
+      },
+      "continuazione_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.17361531368681027,
+       "basso": -0.2479756011198919,
+       "alto": -0.10055913980156997
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "3": {
+    "movimento": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.04573259660284305,
+     "basso": -0.12024339798639022,
+     "alto": 0.040718196071057776
+    },
+    "continuazione_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.17596930942106548,
+     "basso": -0.256988009392317,
+     "alto": -0.09623549191949658
+    },
+    "ritorno_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.08450411621537936,
+     "basso": -0.16820312941615756,
+     "alto": -0.007424192266224738
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 912,
+       "giorni": 455,
+       "media": 0.020784853817517514,
+       "basso": -0.06868259292620668,
+       "alto": 0.11142184629166622
+      },
+      "per_anno": {
+       "2020": {
+        "n": 253,
+        "giorni": 130,
+        "media": -0.08228310674469125,
+        "basso": -0.19126847209012163,
+        "alto": 0.02981642950465651
+       },
+       "2021": {
+        "n": 262,
+        "giorni": 156,
+        "media": 0.23035022977227748,
+        "basso": 0.03069357788564899,
+        "alto": 0.4301205688705197
+       },
+       "2022": {
+        "n": 397,
+        "giorni": 169,
+        "media": -0.05183462849459407,
+        "basso": -0.19129284486297304,
+        "alto": 0.09315828384110206
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.15085064329120174,
+       "basso": -0.24114467504021245,
+       "alto": -0.060102099382304604
+      },
+      "continuazione_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.1092809356561667,
+       "basso": -0.20071291545497996,
+       "alto": -0.01956605900400699
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.09144767933333954,
+       "basso": -0.20604764051359978,
+       "alto": 0.03732831395232661
+      },
+      "per_anno": {
+       "2020": {
+        "n": 473,
+        "giorni": 164,
+        "media": -0.011257303771045642,
+        "basso": -0.23900601548391268,
+        "alto": 0.2648406133843286
+       },
+       "2021": {
+        "n": 326,
+        "giorni": 119,
+        "media": -0.28956057048301753,
+        "basso": -0.5242455178120966,
+        "alto": -0.03060221429810889
+       },
+       "2022": {
+        "n": 528,
+        "giorni": 133,
+        "media": -0.040965189041994796,
+        "basso": -0.14446866493808763,
+        "alto": 0.06814536133890069
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.03890650303290011,
+       "basso": -0.16365121290687637,
+       "alto": 0.07495051015472262
+      },
+      "continuazione_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.22180186169957916,
+       "basso": -0.3387032695190891,
+       "alto": -0.09266789967964781
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "5": {
+    "movimento": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.08444092258005408,
+     "basso": -0.18226176081957784,
+     "alto": 0.013678791230059112
+    },
+    "continuazione_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.21467763539827653,
+     "basso": -0.30156246183297675,
+     "alto": -0.11672888070749086
+    },
+    "ritorno_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.04579579023816835,
+     "basso": -0.14516679123753373,
+     "alto": 0.0446673480457086
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 912,
+       "giorni": 455,
+       "media": 8.121236386128914e-05,
+       "basso": -0.11239946878046103,
+       "alto": 0.12170268541948943
+      },
+      "per_anno": {
+       "2020": {
+        "n": 253,
+        "giorni": 130,
+        "media": -0.15093617876255513,
+        "basso": -0.28900515012366235,
+        "alto": -0.02113462481459742
+       },
+       "2021": {
+        "n": 262,
+        "giorni": 156,
+        "media": 0.2998580099326673,
+        "basso": 0.07158923094192708,
+        "alto": 0.5493681725876052
+       },
+       "2022": {
+        "n": 397,
+        "giorni": 169,
+        "media": -0.10151606977226925,
+        "basso": -0.27776722436474816,
+        "alto": 0.10184988307217656
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.13014700183754555,
+       "basso": -0.25318366846163326,
+       "alto": -0.018621652226586845
+      },
+      "continuazione_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.12998457710982292,
+       "basso": -0.24669396832751223,
+       "alto": -0.011343274851714298
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.1425299859326169,
+       "basso": -0.28531244944751316,
+       "alto": 0.006143948688844293
+      },
+      "per_anno": {
+       "2020": {
+        "n": 473,
+        "giorni": 164,
+        "media": -0.06576207849611472,
+        "basso": -0.3312468598093536,
+        "alto": 0.2863344254373791
+       },
+       "2021": {
+        "n": 326,
+        "giorni": 119,
+        "media": -0.4144273200199144,
+        "basso": -0.7633327587537984,
+        "alto": -0.11315201373997177
+       },
+       "2022": {
+        "n": 528,
+        "giorni": 133,
+        "media": -0.04342523082846264,
+        "basso": -0.16542269346869265,
+        "alto": 0.0698098065876284
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": 0.012175803566377244,
+       "basso": -0.12420698069092168,
+       "alto": 0.15168234832795288
+      },
+      "continuazione_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.2728841682988566,
+       "basso": -0.406752268980623,
+       "alto": -0.12697983643562066
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "15": {
+    "movimento": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.10783521547433604,
+     "basso": -0.223819860669334,
+     "alto": 0.007152111178562363
+    },
+    "continuazione_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.23807192829255844,
+     "basso": -0.3584256624385008,
+     "alto": -0.12154910370249397
+    },
+    "ritorno_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.022401497343886377,
+     "basso": -0.13462802777304453,
+     "alto": 0.08469117069610554
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 912,
+       "giorni": 455,
+       "media": 0.007619530838612205,
+       "basso": -0.15149167473712505,
+       "alto": 0.1669714764868486
+      },
+      "per_anno": {
+       "2020": {
+        "n": 253,
+        "giorni": 130,
+        "media": -0.06571594127504168,
+        "basso": -0.25481714648664333,
+        "alto": 0.11331025728985383
+       },
+       "2021": {
+        "n": 262,
+        "giorni": 156,
+        "media": 0.3596581785992968,
+        "basso": -0.025711291970037565,
+        "alto": 0.7524099350878525
+       },
+       "2022": {
+        "n": 397,
+        "giorni": 169,
+        "media": -0.1779730416262365,
+        "basso": -0.3824396054660636,
+        "alto": 0.019910222004510078
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.13768532031229644,
+       "basso": -0.2894762410584622,
+       "alto": 0.018216442491825705
+      },
+      "continuazione_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.122446258635072,
+       "basso": -0.2758536654027884,
+       "alto": 0.032066062505793164
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.18718316471126809,
+       "basso": -0.3674483781736577,
+       "alto": -0.018620072400936757
+      },
+      "per_anno": {
+       "2020": {
+        "n": 473,
+        "giorni": 164,
+        "media": -0.16203339223007826,
+        "basso": -0.423862668632759,
+        "alto": 0.12753188983152397
+       },
+       "2021": {
+        "n": 326,
+        "giorni": 119,
+        "media": -0.446658941145643,
+        "basso": -0.9651472594633473,
+        "alto": 0.08112664699288899
+       },
+       "2022": {
+        "n": 528,
+        "giorni": 133,
+        "media": -0.04950653453323133,
+        "basso": -0.22085641159356278,
+        "alto": 0.1161479464784372
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": 0.05682898234502843,
+       "basso": -0.12820803611378745,
+       "alto": 0.23089327812264393
+      },
+      "continuazione_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.31753734707750775,
+       "basso": -0.5079528652698889,
+       "alto": -0.1342737923886768
+      }
+     }
+    },
+    "verdetto": "nessuna direzione"
+   },
+   "30": {
+    "movimento": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.18280541660738056,
+     "basso": -0.33082493364150817,
+     "alto": -0.036050681790738115
+    },
+    "continuazione_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.313042129425603,
+     "basso": -0.4596335554369826,
+     "alto": -0.16568932526525196
+    },
+    "ritorno_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": 0.05256870378915812,
+     "basso": -0.08668903245395776,
+     "alto": 0.20232354631500415
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 912,
+       "giorni": 455,
+       "media": 0.004863473979004181,
+       "basso": -0.17270986360937815,
+       "alto": 0.19132597251438782
+      },
+      "per_anno": {
+       "2020": {
+        "n": 253,
+        "giorni": 130,
+        "media": 0.028016339344276386,
+        "basso": -0.19737375743191773,
+        "alto": 0.25684403813534595
+       },
+       "2021": {
+        "n": 262,
+        "giorni": 156,
+        "media": 0.17385513292038798,
+        "basso": -0.2695122897618559,
+        "alto": 0.6284148785229156
+       },
+       "2022": {
+        "n": 397,
+        "giorni": 169,
+        "media": -0.12141735619746037,
+        "basso": -0.36257203744547284,
+        "alto": 0.16183863062457868
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.13492926345268844,
+       "basso": -0.32038305992571287,
+       "alto": 0.05140175486760595
+      },
+      "continuazione_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.12520231549468006,
+       "basso": -0.31318592559040836,
+       "alto": 0.06716130376897508
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.3117835840638861,
+       "basso": -0.5353321236413525,
+       "alto": -0.09328885524648627
+      },
+      "per_anno": {
+       "2020": {
+        "n": 473,
+        "giorni": 164,
+        "media": -0.2612685176333603,
+        "basso": -0.5833061395184918,
+        "alto": 0.10730283268827107
+       },
+       "2021": {
+        "n": 326,
+        "giorni": 119,
+        "media": -0.7399924482507397,
+        "basso": -1.4121804557257698,
+        "alto": -0.09039172873178188
+       },
+       "2022": {
+        "n": 528,
+        "giorni": 133,
+        "media": -0.09265013083798543,
+        "basso": -0.28549217528803417,
+        "alto": 0.10441033457993129
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": 0.18142940169764646,
+       "basso": -0.025154825993581223,
+       "alto": 0.40062226526426475
+      },
+      "continuazione_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.4421377664301258,
+       "basso": -0.6639027826680298,
+       "alto": -0.22815314754801838
+      }
+     }
+    },
+    "verdetto": "torna indietro, ma non paga un giro"
+   },
+   "60": {
+    "movimento": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.2511487435918248,
+     "basso": -0.4325227840408327,
+     "alto": -0.08204539422077108
+    },
+    "continuazione_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": -0.3813854564100473,
+     "basso": -0.5614248864537054,
+     "alto": -0.20894534967442985
+    },
+    "ritorno_dopo_costo": {
+     "n": 2239,
+     "giorni": 676,
+     "media": 0.12091203077360241,
+     "basso": -0.04807442180062051,
+     "alto": 0.309941880540273
+    },
+    "per_direzione": {
+     "salita": {
+      "movimento": {
+       "n": 912,
+       "giorni": 455,
+       "media": 0.08565302087558943,
+       "basso": -0.14848485596819486,
+       "alto": 0.3411886012588305
+      },
+      "per_anno": {
+       "2020": {
+        "n": 253,
+        "giorni": 130,
+        "media": 0.07567711992019857,
+        "basso": -0.17403560346097122,
+        "alto": 0.3273945334878398
+       },
+       "2021": {
+        "n": 262,
+        "giorni": 156,
+        "media": 0.26540087198720524,
+        "basso": -0.3437143099769879,
+        "alto": 0.9418250965725093
+       },
+       "2022": {
+        "n": 397,
+        "giorni": 169,
+        "media": -0.026614067410378917,
+        "basso": -0.28402176615983266,
+        "alto": 0.26488174263119507
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.21571881034927368,
+       "basso": -0.4732954384572072,
+       "alto": 0.007176585179913597
+      },
+      "continuazione_dopo_costo": {
+       "n": 912,
+       "giorni": 455,
+       "media": -0.04441276859809478,
+       "basso": -0.2735057209082423,
+       "alto": 0.20487350001093513
+      }
+     },
+     "discesa": {
+      "movimento": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.4826206420049988,
+       "basso": -0.7523849487180689,
+       "alto": -0.23134726086802204
+      },
+      "per_anno": {
+       "2020": {
+        "n": 473,
+        "giorni": 164,
+        "media": -0.4300227813962745,
+        "basso": -0.9366648085258428,
+        "alto": 0.02083347738964081
+       },
+       "2021": {
+        "n": 326,
+        "giorni": 119,
+        "media": -1.1796348936618757,
+        "basso": -1.8339710425979363,
+        "alto": -0.54797099371092
+       },
+       "2022": {
+        "n": 528,
+        "giorni": 133,
+        "media": -0.0993860625121669,
+        "basso": -0.34580486921203135,
+        "alto": 0.13447583415052033
+       }
+      },
+      "ritorno_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": 0.35226645963875913,
+       "basso": 0.0945170091834629,
+       "alto": 0.620748841820654
+      },
+      "continuazione_dopo_costo": {
+       "n": 1327,
+       "giorni": 416,
+       "media": -0.6129748243712384,
+       "basso": -0.8739686475261217,
+       "alto": -0.3649278949829925
+      }
+     }
+    },
+    "verdetto": "torna indietro, ma non paga un giro"
+   }
+  }
+ }
+}

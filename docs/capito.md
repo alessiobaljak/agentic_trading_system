@@ -7,6 +7,11 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-18 (sera: lo scalping sulla volatilità, `research/scalping/`)
+* **Dopo un'esplosione il prezzo si muove molto ma non sa dove**: 13.630 esplosioni di livello 8 su sei monete (2020-2022, candele da 1 minuto), nei 15 minuti dopo il prezzo supera il costo di un giro nel 78-89% dei casi, ma la direzione media è +0,021% (intervallo −0,011; +0,052) contro un costo di 0,12-0,14% (`research/scalping/risultati.md`).
+* **Nei momenti agitati la parte prevedibile dei movimenti di 5 minuti vale da 5 a 60 volte meno del costo** (0,002-0,026% contro 0,12-0,14%): con le sole candele lo scalping sulla volatilità non paga.
+* **L'unica eccezione sono i crolli estremi**: 1.327 crolli di livello 16, rimbalzo medio dello 0,48% in 60 minuti, +0,35% al netto di un giro (intervallo +0,09; +0,62); ma 1,18% nel 2021 e solo 0,10% nel 2022. Un'ipotesi da confermare sul 2023, e da capire con i dati sulle posizioni aperte (quali crolli rimbalzano).
+
 ## 2026-10-18 (sera: l'autopsia delle strategie vecchie, `research/autopsia/`)
 * **Uscite, stop e trailing non sono il problema**: su 19.429 trade di 73 varianti restituiscono il guadagno (61%) e prendono stop poi smentiti (13,7% contro 13,4%) come trade a caso con le stesse uscite (`research/autopsia/risultati.md`).
 * **Le strategie hanno un po' di direzione, troppo poca**: +0,039 R a trade sul caso (intervallo +0,018; +0,060), meno dei costi più il margine richiesto. Entrano dopo un movimento (+0,38 R in 4 candele), ma il ritardo non fa perdere: nel 2020-2022 i movimenti brevi continuavano, anche per il caso.
