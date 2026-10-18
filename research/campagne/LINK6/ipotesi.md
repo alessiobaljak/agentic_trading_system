@@ -496,3 +496,101 @@ Stima: 157 trade.
 
 **Previsione.** Controllo sulle monete di controllo: piu' probabilmente non passa (spiegazione 1). Se passa: R medio fra
 0,0 e +0,2 R, p-value sopra 0,023 (non supera la Fase 2).
+
+---
+
+# Quarto lotto (scritto il 18 ottobre 2026, dopo i lotti 1 e 2, mentre V-019 aspetta il coordinamento)
+
+Dichiarazione (Fase 3, punto 3). I-10 differisce da ogni variante provata per ingresso, stop e uscite; I-11 da V-009,
+V-010, V-013 e V-014 (le altre idee di ritorno alla media) per timeframe o tipo d'ingresso, segnale, filtro, stop e
+uscite. Nessuna scelta viene dai risultati dei lotti precedenti. I-11 e' la terza idea di ritorno alla media dopo
+I-05 e I-07, entrambe fallite: lo scrivo qui perche' la Fase 5 lo chiede (idee diverse o ritagli della stessa?). Il
+segnale e' diverso (l'RSI, non le bande) e non ha ne' filtro ne' ordine limit.
+
+## I-10 — Il prezzo che incrocia la sua media mobile
+
+**Fonte.** W. Brock, J. Lakonishok, B. LeBaron, «Simple Technical Trading Rules and the Stochastic Properties of Stock
+Returns», *Journal of Finance*, 1992: sull'indice Dow Jones dal 1897 al 1986 i segnali di acquisto dati dal prezzo
+che supera la sua media mobile (50, 150 e 200 giorni) erano seguiti da rendimenti piu' alti di quelli di vendita, oltre
+quanto spiegano i modelli casuali di riferimento.
+
+**Affermazione verificabile.** Su LINKUSDT a 4 ore, quando la chiusura incrocia verso l'alto la SMA a 50 candele (circa
+8 giorni), stare long fino all'incrocio opposto, con uno stop a 3 ATR, da' almeno 0,2 R dopo i costi per trade, piu'
+delle casuali. Simmetrico per lo short.
+
+**Sotto-domande.** Condizioni: tendenze di settimane. Chi opera: chi segue la tendenza; chi guarda le medie come
+livelli. Perche' il prezzo proseguirebbe: aggiustamento lento all'informazione, comportamento gregario. Quando: giorni
+o settimane.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Effetto pubblicato nel 1992 su azioni: sparito dopo la pubblicazione e assente nelle crypto | nessun vantaggio | vantaggio |
+| 3 | Mercato laterale: molti incroci consecutivi in perdita (frusta) | tanti trade brevi negativi, R medio negativo | R positivo |
+| 4 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 5 | Pochi trade enormi (le grandi tendenze) | verifica 4 fallisce | superata |
+| 6 | Costi | R lordo positivo, netto negativo | positivo a costi doppi |
+| 7 | Stop a 3 ATR troppo largo: R piccoli per trade | R medio vicino a zero | — |
+| 8 | Volatilita' | casuali con stessa larghezza simili | il segnale le batte |
+| 9 | Stessa famiglia di I-01, I-08, I-09 (tendenza), gia' fallite | risultati simili | diversi |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | L'uscita al segnale opposto arriva tardi e restituisce i guadagni | uscite al segnale opposto in media negative | positive |
+
+**Varianti.**
+
+> **V-020** · 4h · long · nessun filtro · ingresso E2: chiusura incrocia verso l'alto la SMA(50) · conferma nessuna ·
+> tipo M · stop S1: 3 × ATR(14) · uscita U4: segnale opposto (chiusura incrocia verso il basso la SMA(50)).
+>
+> **V-021** · stessa, short.
+
+Motivi: 4h e SMA a 50 candele (circa 8 giorni) perche' la regola e' di medio periodo e a 4h i costi pesano poco; la
+SMA come nell'articolo; uscita al segnale opposto come nella regola originale (si sta dalla parte della media); stop a
+3 ATR, il piu' largo, perche' la regola non ha uno stop e serve solo come protezione dai crolli. Nessun filtro. Stima:
+V-020 199 trade, V-021 199 trade.
+
+**Previsione.** R medio fra −0,15 e +0,1 R, p-value sopra 0,05 per entrambe (spiegazioni 2 e 9).
+
+---
+
+## I-11 — RSI agli estremi: ritorno di breve periodo
+
+**Fonte.** N. Jegadeesh, «Evidence of Predictable Behavior of Security Returns», *Journal of Finance*, 1990:
+inversione dei rendimenti di breve periodo. J. W. Wilder, 1978: livelli 30 e 70 dell'RSI.
+
+**Affermazione verificabile.** Su LINKUSDT a 1 ora, quando l'RSI(14) risale sopra 30 dopo esserci stato sotto, il
+prezzo nelle 24 ore successive sale abbastanza da dare, con stop a 2 ATR, target a 2 R e uscita dopo 24 candele,
+almeno 0,2 R dopo i costi, piu' delle casuali. Simmetrico per lo short quando l'RSI scende sotto 70.
+
+**Sotto-domande.** Condizioni: ribassi rapidi senza notizie. Chi opera: venditori in fretta e chi compra gli eccessi.
+Perche' il prezzo tornerebbe: pressione temporanea. Quando: ore.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Nelle crypto a 1 ora domina la prosecuzione, non l'inversione | R negativo | positivo |
+| 3 | Tendenza di fondo: in ribasso il long che compra l'ipervenduto perde | long perde nel 2022 | long buono nel 2022 |
+| 4 | Costi | R lordo positivo, netto negativo | positivo a costi doppi |
+| 5 | Volatilita' | casuali con stessa larghezza simili | il segnale le batte |
+| 6 | Pochi rimbalzi enormi | verifica 4 fallisce | superata |
+| 7 | Raggruppamento: segnali ripetuti nello stesso ribasso | trade concentrati | distribuiti |
+| 8 | Stessa famiglia di I-05 e I-07, gia' fallite | risultati simili (negativi) | positivi |
+| 9 | Il ritorno avviene gia' nella candela del segnale (l'RSI che risale) | R vicino a zero meno i costi | positivo |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | Target a 2 R troppo lontano per un rimbalzo | molte uscite a tempo con R piccolo | target frequenti |
+
+**Varianti.**
+
+> **V-022** · 1h · long · nessun filtro · ingresso E6: RSI(14) incrocia verso l'alto 30 · conferma nessuna · tipo M ·
+> stop S1: 2 × ATR(14) · uscite U1: target 2 R, U2: dopo 24 candele.
+>
+> **V-023** · stessa, short: RSI(14) incrocia verso il basso 70.
+
+Motivi: RSI a 14 e livelli 30/70, i valori di Wilder (con RSI a 7 i trade sarebbero il doppio, bozze B-26 e B-27, ma
+con piu' rumore); 1h e uscita dopo un giorno, l'orizzonte dell'inversione di breve; stop a 2 ATR e target a 2 R come
+I-02, per uscite gia' scritte prima. Stima: V-022 273 trade, V-023 301 trade.
+
+**Previsione.** R medio fra −0,2 e +0,05 R, p-value sopra 0,05 per entrambe (spiegazioni 2 e 8).
