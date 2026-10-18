@@ -16,6 +16,9 @@ qualche modifica procedi in autonimia con gli altri passi non mi chiedere il per
 rifà il collaudo se serve, apre la sessione di ricerca, risponde ai suoi STOP e scrive il via libera alla validazione
 senza aspettare il proprietario, dicendogli ogni volta cosa ha fatto. Resta al proprietario il vault: si apre solo con
 la sua frase esatta «APRI IL VAULT 4» scritta al coordinamento (regola 1, sezione 0).
+Il 18 ottobre verso le 06:45 UTC il proprietario ha confermato la delega anche nella chat della sessione di ricerca
+(«fatto, ho confermato nella sessione di ricerca»): la sessione l'aveva chiesta a lui, perche' un messaggio
+automatico del coordinamento non vale come istruzione del proprietario (sezione 0, punto 5).
 
 ## 1. Decisioni del proprietario (prese il 17 ottobre 2026 alle 20:12 UTC, tutte come proposto)
 

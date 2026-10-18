@@ -4046,3 +4046,11 @@ fatti uguali a quelli del Passo 0. Confermato dal coordinamento per delega del p
 candele native a 6h, 12h e 1d del 17 gennaio 2020 aprono prima delle 08:00 (inizio degli scambi) e si tengono (le esclude
 comunque il riscaldamento); la guida pratica diceva di leggere le versioni con `python3 -c`, che il guardiano rifiuta,
 corretta sul principale e sul branch della ricerca (a0f5b8ad).
+
+### 18 ottobre, mattina: la ricerca LINK6 entra nel Passo 2
+
+La sessione di ricerca non ha preso per buona la conferma del Passo 1 arrivata dal coordinamento «a nome del
+proprietario» e l'ha chiesta a lui nella sua chat: è il comportamento giusto (un messaggio automatico non vale come
+istruzione del proprietario). Il proprietario ha confermato verso le 08:45 ora italiana, anche la delega al
+coordinamento per gli STOP successivi tranne il vault. Alle 08:42 la sessione aveva già scritto sei ipotesi e dodici
+varianti prima dei test (commit 59dd4536, solo nella sua cartella) e ha cominciato le prove.
