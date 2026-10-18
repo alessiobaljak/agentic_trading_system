@@ -81,6 +81,19 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
 * 18 ott, 20:40 UTC: regole scritte prima; **M-001** (ogni mese le 10 celle migliori dei 3, 6 o 12 mesi prima, solo con i
   trade già chiusi), congelata con le impronte (commit `3b173fc0`); calcolo sul periodo W (2020-2026/09) in corso.
 
+* **Esito di M-001 su W (una volta)**: M-001c (finestra di 12 mesi) **+1,32% netto a trade** su 18.435 trade, intervallo
+  +0,82; +1,82, p 0,0001, positivo nel 2021, 2024, 2025, 2026, a costi doppi, senza il giorno migliore e su V2 (+1,04%);
+  **non passa** per la prova a placebo (−0,164% contro la soglia −0,170%). M-001a (6 mesi): positivo in 3 anni su 6;
+  M-001b (3 mesi): p 0,0021. **Diagnosi dopo l'esame** (`idee/M-001/diagnosi.json`): il placebo con 200 ripetizioni dà
+  −0,207% contro costi 0,187% (nessun difetto: era rumore); ingressi a caso nello stesso mese con la stessa direzione
+  +0,91% contro +1,35%: **due terzi del guadagno sono il mercato** (la procedura è long nei mesi che salgono), un terzo
+  il momento d'ingresso. **Cosa abbiamo capito**: scegliere ogni mese le celle migliori dell'anno prima funziona sul
+  passato soprattutto come una tendenza di lungo periodo; il vantaggio di tempismo puro è piccolo.
+* **Prova in avanti (REGOLE.md, sezione 9)**, registrata prima di guardare i dati da ottobre: M-001c (24 monete), M-002
+  (scelta per il vantaggio sul caso, 100 monete), M-003 (M-001c sulle 100 monete); soglia 0,05/3. **Primo conteggio
+  (dati fino al 17 ottobre)**: M-001c −0,78% a trade (134 trade, in corso); M-003 −1,15% (347, in corso); **M-002
+  +0,29% su 834 trade: verdetto, non passa** (p 0,33). `avanti/A.md`.
+
 ## Coda delle idee della fase 1 (in ordine)
 
 | N. | Idea | Perché dovrebbe funzionare | Stato |
