@@ -159,3 +159,39 @@ def test_portafoglio_long_le_prime_short_le_ultime_con_i_costi_di_ogni_gamba():
     assert contro["lordo"].sum() == pytest.approx(-0.015)
     e = pf.esame_portafoglio(t, t.assign(ripetizione=0), n_boot=50)
     assert e["portafogli"] == 1 and e["per_moneta"]["AUSDT"]["netto"] == pytest.approx(0.02 - 0.005)
+
+
+def test_meta_sceglie_solo_con_i_trade_gia_chiusi():
+    from research.programma5.strumenti import meta
+    gennaio, febbraio, marzo = meta.minuto_mese(0), meta.minuto_mese(1), meta.minuto_mese(2)
+    giorni = np.arange(40)
+    # candidata «buona» in gennaio (chiusa in gennaio) e una «tardiva» che entra in gennaio ma esce in febbraio
+    buona = pd.DataFrame({"moneta": "AUSDT", "entrata": gennaio + giorni[:25] * 1440, "uscita": gennaio + giorni[:25] * 1440 + 60,
+                          "lordo": 0.01 + 0.001 * (giorni[:25] % 3), "costo": 0.001, "famiglia": "F1"})
+    tardiva = pd.DataFrame({"moneta": "BUSDT", "entrata": gennaio + giorni[:25] * 1440,
+                            "uscita": febbraio + 5 * 1440 + giorni[:25], "lordo": 0.05 + 0.001 * (giorni[:25] % 3),
+                            "costo": 0.001, "famiglia": "F5"})
+    # in febbraio tutte e due operano
+    buona = pd.concat([buona, buona.assign(entrata=buona["entrata"] + 31 * 1440, uscita=buona["uscita"] + 31 * 1440)])
+    tardiva = pd.concat([tardiva, tardiva.assign(entrata=tardiva["entrata"] + 31 * 1440)])
+    cand = {("A", "segue"): buona, ("B", "segue"): tardiva}
+    scelti, scelte = meta.scegli_e_tieni(cand, L=1, K=5, primo=1, ultimo=1, n_mesi=4, min_trade=10, t_min=1.0)
+    # a inizio febbraio la «tardiva» non ha trade chiusi: si sceglie solo la «buona»
+    assert scelte[1] == [("A", "segue")]
+    assert set(scelti["cella"]) == {"A"}
+
+
+def test_meta_t_da_aggregati_come_t_per_giorni():
+    from research.programma5.strumenti import meta
+    from research.programma5.strumenti.esplorazione import t_giorni
+    rng = np.random.default_rng(5)
+    uscita = meta.minuto_mese(0) + rng.integers(0, 80 * 1440, 300)
+    netto = rng.normal(0.002, 0.01, 300)
+    a = meta.aggregati(netto, uscita, 4).sum(axis=0)
+    n, m, t = meta.t_da_aggregati(a)
+    assert n == 300 and m == pytest.approx(netto.mean()) and t == pytest.approx(t_giorni(netto, uscita // 1440))
+
+
+def test_fase_3_periodo_intero_solo_con_la_regola_congelata():
+    with pytest.raises(m5.PeriodoChiuso):
+        m5.controlla_periodo("W", "M-999")

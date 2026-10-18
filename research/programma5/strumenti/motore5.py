@@ -34,10 +34,12 @@ PERIODI = {
     # fase 2 (REGOLE.md, sezione 7)
     "C2": (date(2024, 1, 1), date(2025, 6, 30)),
     "V2": (date(2025, 7, 1), date(2026, 9, 30)),
+    # fase 3 (REGOLE.md, sezione 8): tutto il periodo, per le procedure che scelgono solo con il passato
+    "W": (date(2020, 1, 1), date(2026, 9, 30)),
 }
 #: cosa deve essere nel repository prima di caricare un periodo (oltre a C)
 PREREQUISITI = {"V": ("congelata.md",), "R": ("congelata.md", "V.md"), "A": ("congelata.md", "V.md", "R.md"),
-                "C2": (), "V2": ("congelata.md",)}
+                "C2": (), "V2": ("congelata.md",), "W": ("congelata.md",)}
 SCARTO = {"BTCUSDT": 0.0001, "ETHUSDT": 0.0001, "SOLUSDT": 0.0001}
 SCARTO_ALTRE = 0.0002
 TAKER, MAKER = 0.0005, 0.0002

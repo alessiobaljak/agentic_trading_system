@@ -16,7 +16,7 @@ from pathlib import Path
 RADICE = Path(__file__).resolve().parents[3]
 IDEE = RADICE / "research" / "programma5" / "idee"
 STRUMENTI = RADICE / "research" / "programma5" / "strumenti"
-COMUNI = ["motore5.py", "ore.py", "eventi.py", "idee_minuti.py", "idee_ore.py", "idee_ore2.py", "scalping.py", "idee_fase2.py", "esplora_fase2.py", "esplora_calendario.py", "esplora_limiti.py", "fase2.py", "idee_giorno.py", "esplosioni_oi.py",
+COMUNI = ["motore5.py", "ore.py", "eventi.py", "idee_minuti.py", "idee_ore.py", "idee_ore2.py", "scalping.py", "idee_fase2.py", "esplora_fase2.py", "esplora_calendario.py", "esplora_limiti.py", "fase2.py", "meta.py", "portafoglio.py", "idee_giorno.py", "esplosioni_oi.py",
           "rapporto.py", "esplorazione.py"]
 
 
@@ -27,6 +27,10 @@ def impronta(p: Path) -> str:
 def _soglie(cartella: Path, n: int) -> str:
     from research.programma5.strumenti.rapporto import esame_idea
     cfg = esame_idea(cartella)
+    if cfg.get("fase") == 3:
+        return ("Prova sul periodo W, una volta (REGOLE.md, sezione 8): la procedura sceglie ogni mese solo con i trade "
+                f"già chiusi; p ≤ 0,005 / {n} = {0.005 / n:.5f}, costi doppi, senza il giorno migliore, 4 anni su 6, V2 "
+                "positivo, 60% delle monete, prova a placebo.")
     if cfg.get("fase") == 2:
         return (f"Prova su V2, una volta (REGOLE.md, sezioni 7 e 7bis): p ≤ 0,005 / {n} = {0.005 / n:.5f}, costi doppi, "
                 "senza il giorno migliore, tutte e due le metà, 60% delle monete con almeno 20 trade, almeno 200 trade"
@@ -46,7 +50,9 @@ def congela(idea: str) -> str:
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     costruzione = "C" if (cartella / "C.json").exists() else "C2"      # fase 2: la costruzione e' C2
-    c = json.loads((cartella / f"{costruzione}.json").read_text(encoding="utf-8"))
+    # fase 3: nessun periodo di costruzione (la procedura sceglie da sola con il passato)
+    c = json.loads((cartella / f"{costruzione}.json").read_text(encoding="utf-8")) \
+        if (cartella / f"{costruzione}.json").exists() else {}
     commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=RADICE, capture_output=True, text=True).stdout.strip()
     righe = [f"# {idea} — regola congelata", "",
              f"Congelata prima di aprire V (REGOLE.md, sezione 4), sul commit `{commit}`. Le varianti, i valori e il codice "
