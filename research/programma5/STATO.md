@@ -4,20 +4,30 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
 
 ## Dove siamo
 
-* 18 ott 2026, sera: regole scritte; candele da 1 minuto e funding delle 12 monete scaricati e verificati; file `metrics`
-  in corso (BTC, ETH, SOL, XRP, BNB finiti alle 15:36 UTC).
-* I-005, I-006, I-007 (idee a 1 minuto senza interesse aperto) cadute in C: guadagno lordo fra −0,07% e +0,02% a trade,
-  contro costi di circa 0,13-0,17%. Lezione: i segnali di pochi minuti sulle candele non pagano i costi; servono
-  movimenti più grandi o tenute più lunghe.
+* 18 ott 2026, sera: regole scritte; dati delle 12 monete scaricati e verificati (candele da 1 minuto, `metrics`, funding,
+  premio sullo spot a 1 ora).
+* Le idee a 1 minuto (I-001 ... I-007) cadono tutte in C: a pochi minuti il lordo è vicino a zero contro costi di
+  0,12-0,17%.
+* Quattro esplorazioni a ore su C (REGOLE.md, 6bis): E-001 (13 celle promosse su 353), E-002 (11 su 96), E-003 (26 su
+  185), E-004 (4 su 70). Le idee promosse I-010 ... I-016 passano C, ma **nessuna** supera V.
+* **Cosa abbiamo capito**: (1) il fenomeno più forte e costante è il **rimbalzo dopo i crolli**: su C in tutti e tre gli
+  anni e su 12 monete su 12, e anche su V (2023) **positivo dopo i costi in tutte e sei le varianti** di I-010 e I-016, ma
+  senza la forza statistica richiesta (nel 2023 i crolli sono pochi); (2) E-004 dice **quali** crolli rimbalzano: quelli
+  in cui il perpetuo scende sotto lo spot (premio nel 10% più basso): +1,36-1,43% in 4 ore, contro +0,12-0,55% dei crolli
+  senza sconto, che nel 2022 continuano a scendere; (3) le idee di tendenza e di continuazione (I-011, I-013c, I-014) su V
+  fanno quanto il caso: era il rialzo del mercato, non il segnale; (4) la scossa propria coperta con BTC (I-015) regge su C
+  e cade su V.
+* La soglia di V era troppo severa per idee a eventi rari dopo cui c'è anche R: corretta **per le idee nuove**
+  (REGOLE.md, 6ter), con le idee parenti di un V positivo provate solo su R con la soglia severa.
 
 ## Coda delle idee (in ordine)
 
 | N. | Idea | Perché dovrebbe funzionare | Stato |
 |---|---|---|---|
-| I-001 | Rimbalzo dopo i crolli fatti di liquidazioni: crollo estremo a 5 minuti con l'interesse aperto che cala | le vendite forzate spingono il prezzo sotto il valore che i compratori pagano; la prima analisi ha visto il rimbalzo (`research/scalping/risultati.md`) | da fare |
-| I-002 | Il contrario dopo le salite estreme fatte di short liquidati (interesse aperto che cala) | come I-001, dalla parte opposta | da fare |
-| I-003 | Continuazione quando l'esplosione arriva con interesse aperto che cresce (posizioni nuove, non chiusure) | denaro nuovo che entra con una direzione | da fare |
-| I-004 | Rapporto long/short dei conti grandi agli estremi, orizzonte 1 giorno | la folla in un verso estremo paga chi sta dall'altra parte | da fare |
+| I-001 | Rimbalzo dopo i crolli fatti di liquidazioni: crollo estremo a 5 minuti con l'interesse aperto che cala | le vendite forzate spingono il prezzo sotto il valore che i compratori pagano; la prima analisi ha visto il rimbalzo (`research/scalping/risultati.md`) | bruciata in C |
+| I-002 | Il contrario dopo le salite estreme fatte di short liquidati (interesse aperto che cala) | come I-001, dalla parte opposta | bruciata in C |
+| I-003 | Continuazione quando l'esplosione arriva con interesse aperto che cresce (posizioni nuove, non chiusure) | denaro nuovo che entra con una direzione | bruciata in C |
+| I-004 | Rapporto long/short dei conti grandi agli estremi, orizzonte 1 giorno | la folla in un verso estremo paga chi sta dall'altra parte | bruciata in C |
 | I-005 | Squilibrio degli acquisti aggressivi a 5 minuti durante un'esplosione | chi aggredisce ha informazione o fretta | bruciata in C |
 | I-006 | Il prezzo intorno al regolamento del funding quando il funding è estremo | chi chiude prima di pagare il funding sposta il prezzo | bruciata in C |
 | I-007 | Le monete dopo BTC al minuto: BTC esplode, le altre seguono in 1-5 minuti | il prezzo di BTC arriva prima nelle altre | bruciata in C |
@@ -26,8 +36,21 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
 
 ## Registro delle idee concluse
 
-| N. | Esito | Numeri (da `idee/I-NNN/C.md`) | Motivo e lezione |
-|---|---|---|---|
-| I-005 | bruciata in C | netto −0,159% / −0,244% / −0,159% a trade (7.595, 7.595, 1.891 trade); lordo +0,012% / −0,073% / +0,016% | l'intervallo del netto è tutto sotto zero; lo squilibrio degli acquisti aggressivi nell'esplosione non dice la direzione dei minuti dopo più del caso (caso −0,14%) |
-| I-006 | bruciata in C | netto −0,182% / −0,165% / −0,169% (5.173, 7.821, 5.090 trade); lordo −0,144% / −0,107% / −0,129% | andare contro il funding estremo prima del regolamento perde sul prezzo quanto un ingresso a caso nella stessa direzione (caso −0,18% / −0,18% / −0,22%): il prezzo segue la tendenza del mese, non il regolamento |
-| I-007 | bruciata in C | netto −0,167% / −0,157% / −0,160% (8.445, 8.443, 14.349 trade); lordo +0,007% / +0,017% / +0,013% | le altre monete non restano indietro a BTC in modo sfruttabile: al minuto dopo il ritardo è già recuperato; nessuna moneta positiva |
+Numeri da `idee/I-NNN/C.md` e `V.md`: netto medio a trade dopo i costi (trade, p a una coda).
+
+| N. | Esito | C | V | Motivo e lezione |
+|---|---|---|---|---|
+| I-001 | bruciata in C | a +0,11% (567, p 0,30); b −0,10% (2.887); c −0,02% (1.123) | — | il rimbalzo al minuto dopo i crolli con l'interesse aperto che cala non c'è nel periodo con il dato (quasi solo 2022) |
+| I-002 | bruciata in C | a −0,29%; b −0,18%; c −0,25% | — | dopo le salite estreme al minuto il prezzo non torna indietro |
+| I-003 | bruciata in C | a −0,18%; b −0,27%; c −0,64% | — | l'esplosione con interesse aperto che cresce non continua |
+| I-004 | bruciata in C | a +0,35% (1.385, p 0,05); b −0,44%; c −0,10% | — | i rapporti long/short agli estremi a un giorno: intervallo che passa lo zero |
+| I-005 | bruciata in C | a −0,16%; b −0,24%; c −0,16% | — | lo squilibrio degli acquisti aggressivi nell'esplosione non dice la direzione |
+| I-006 | bruciata in C | a −0,18%; b −0,17%; c −0,17% | — | il regolamento del funding estremo non muove il prezzo più del caso |
+| I-007 | bruciata in C | a −0,17%; b −0,16%; c −0,16% | — | le altre monete non restano indietro a BTC al minuto |
+| I-010 | **bruciata in V di poco** | a +2,51% (283); b +1,56% (522); c +2,32% (327) | a +0,70% (97, p 0,12); b +0,53% (188, p 0,14); c +0,82% (74, p **0,0018**, soglia 0,0017) | il rimbalzo dopo i crolli di qualche ora c'è anche nel 2023, a costi doppi e su 9-11 monete su 12, ma con pochi eventi |
+| I-011 | bruciata in V | +5,56% (327) | +1,47% (145, p 0,04), caso +2,55% | la rottura del massimo di 60 giorni fa meno del caso nel 2023: era il rialzo |
+| I-012 | bruciata in V | a +0,31%; b +0,98% | a +0,04% (p 0,34); b +0,18% (p 0,19) | il volume enorme in discesa non basta a dire quali crolli rimbalzano |
+| I-013 | bruciata in V | a +0,34%; b +0,80%; c +1,58% | a +0,00%; b −0,08%; c −0,00% | la scossa propria senza copertura nel 2023 non dà niente |
+| I-014 | bruciata in V | +3,28% (658) | +1,32% (231, p 0,09), caso +1,36% | le altre monete dopo lo strappo di BTC fanno quanto il caso |
+| I-015 | bruciata in V | a +0,31%; b +0,65%; c +0,62% | a −0,31%; b −0,58%; c −0,38% | la discesa propria coperta con BTC nel 2023 continua invece di tornare |
+| I-016 | **bruciata in V** | a +1,69% (916); b +0,81% (2.509); c +0,17% (6.713) | a +0,60% (435, p 0,047); b +0,28% (1.086, p 0,044); c +0,10% (2.619, p 0,040) | le reti d'acquisto sotto il prezzo guadagnano anche nel 2023 su 11 monete su 12, ma senza la forza richiesta |

@@ -104,3 +104,28 @@ alla volta è lento e spreca il periodo C, che serve proprio a cercare. Da qui:
   motore a minuti del programma (costi, caso, bootstrap), e poi l'esame di sempre: congelata, V una volta con la soglia
   divisa per le varianti, R una volta. La soglia di V **non cambia**: è V, non C, a dire se un segnale trovato
   cercando è vero.
+
+## 6ter. La soglia di V e le idee parenti di un V positivo (aggiunta il 18 ottobre 2026, ore 16:20 UTC)
+
+**Cosa è successo.** Dopo le prime 16 idee: I-010 (rimbalzo dopo i crolli di qualche ora) e I-016 (reti d'acquisto
+sotto il prezzo) hanno su V un netto positivo in **tutte e sei** le varianti, dopo i costi e a costi doppi, su 9-11 monete
+su 12; ma p è 0,0018 (I-010c, soglia 0,0017) e 0,040-0,047 (I-016). **Restano bruciate**: la regola valeva quando le ho
+calcolate. Il numero però mostra un difetto del disegno: nel 2023 i crolli sono pochi (I-010c: 74 trade in 27 giorni) e un
+guadagno vero di +0,5-0,8% a trade non può arrivare a p 0,0017 in un anno solo; e dopo V c'è comunque R, che è un'altra
+prova indipendente. Con V a 0,005 e R insieme, la probabilità che un'idea falsa passi tutto è dell'ordine di 0,005 × 0,02
+= 0,0001: su 50 idee, 0,005 false attese, a prezzo di scartare quasi tutte le vere.
+
+**Da qui, per le idee con la scheda scritta da adesso in poi** (le idee fino a I-016 tengono il loro esito):
+
+1. **V**: netto positivo con p a una coda ≤ **0,05 diviso il numero di varianti**, e positivo a costi doppi. Con R dopo
+   (intervallo sopra zero, 2 anni su 3, 60% delle monete, costi doppi), la probabilità che un'idea falsa passi tutte e due
+   è circa 0,017 × 0,02 ≈ 0,0003: su 50 idee, meno di 0,02 false attese.
+2. **R**, in più: il netto resta positivo **togliendo il giorno migliore** (il giorno di calendario con la somma dei netti
+   più alta). Il motivo: il periodo R il modello lo conosce in parte (per esempio i grandi crolli del 2024 e del 2025), e
+   un'idea non deve reggersi su un giorno solo.
+3. **Le idee parenti di un V positivo.** Se un'idea entra sugli stessi eventi (stesso fenomeno, stesso lato) di un'idea che
+   su V ha già dato un netto positivo, V per lei non è più una prova: lo conosco. Allora V è **costruzione** e la prova è
+   **R da solo**, con la soglia severa: p a una coda ≤ **0,005 diviso il numero di varianti** su R, più tutte le condizioni
+   di R (punto 2 compreso). Prima di aprire V si congela tutto: le varianti candidate, la regola meccanica che sceglie le 3
+   da portare su R, e la prova su R.
+4. Un'idea parente di un V **non positivo** può usare V come prova: saperlo va contro di lei, non a favore.

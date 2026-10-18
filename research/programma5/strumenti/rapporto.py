@@ -10,13 +10,32 @@ import sys
 from pathlib import Path
 
 IDEE = Path(__file__).resolve().parents[1] / "idee"
+#: l'esame delle idee fino a I-016 (REGOLE.md, sezione 5); le idee dopo hanno ``esame.json`` (sezione 6ter)
+ESAME_VECCHIO = {"soglia_v": 0.005, "soglia_r": None, "senza_giorno_migliore": False, "solo_r": False}
 
 
-def esito(periodo: str, e: dict, n_varianti: int) -> tuple:
+def esame_idea(cartella: Path) -> dict:
+    f = cartella / "esame.json"
+    return {**ESAME_VECCHIO, **(json.loads(f.read_text(encoding="utf-8")) if f.exists() else {})}
+
+
+def senza_giorno_migliore(trade_csv: Path) -> float:
+    """Il netto medio a trade togliendo il giorno di calendario con la somma dei netti piu' alta."""
+    import pandas as pd
+    t = pd.read_csv(trade_csv)
+    giorno = t["minuto"] // 1440
+    somme = t.groupby(giorno)["netto"].sum()
+    resto = t[giorno != somme.idxmax()]
+    return float(resto["netto"].mean()) if len(resto) else float("nan")
+
+
+def esito(periodo: str, e: dict, n_varianti: int, cfg: dict = ESAME_VECCHIO, senza_migliore: float = None) -> tuple:
     """(supera, motivo) del passo dell'esame per una variante."""
     if not e.get("trade"):
         return False, "nessun trade"
     nt, nd = e["netto"], e["netto_doppio"]
+    if periodo == "V" and cfg.get("solo_r"):
+        return True, "V e' costruzione per questa idea (REGOLE.md, 6ter, punto 3)"
     if periodo == "C":
         if not (nt["basso"] > 0):
             return False, "netto dopo i costi con l'intervallo non sopra zero"
@@ -24,7 +43,7 @@ def esito(periodo: str, e: dict, n_varianti: int) -> tuple:
             return False, "non meglio del caso"
         return True, "passa C"
     if periodo == "V":
-        soglia = 0.005 / n_varianti
+        soglia = cfg["soglia_v"] / n_varianti
         if not (nt["media"] > 0 and nt["p"] <= soglia):
             return False, f"p {nt['p']:.4f} oltre la soglia {soglia:.4f} o netto non positivo"
         if not nd["media"] > 0:
@@ -33,6 +52,10 @@ def esito(periodo: str, e: dict, n_varianti: int) -> tuple:
     if periodo == "R":
         if not nt["basso"] > 0:
             return False, "netto con l'intervallo non sopra zero"
+        if cfg.get("soglia_r") and not nt["p"] <= cfg["soglia_r"] / n_varianti:
+            return False, f"p {nt['p']:.4f} oltre la soglia {cfg['soglia_r'] / n_varianti:.4f}"
+        if cfg.get("senza_giorno_migliore") and not (senza_migliore is not None and senza_migliore > 0):
+            return False, "non positivo togliendo il giorno migliore"
         anni = [a for a in e["per_anno"].values() if a["trade"] > 0]
         if sum(1 for a in anni if a["netto"] > 0) < 2:
             return False, "positivo in meno di 2 anni su 3"
@@ -51,13 +74,16 @@ def esito(periodo: str, e: dict, n_varianti: int) -> tuple:
 def scrivi(idea: str, periodo: str) -> str:
     cartella = IDEE / idea
     dati = json.loads((cartella / f"{periodo}.json").read_text(encoding="utf-8"))
+    cfg = esame_idea(cartella)
+    senza = {n: senza_giorno_migliore(cartella / f"trade_{periodo}_{n}.csv.gz")
+             for n in dati if dati[n].get("trade") and (cartella / f"trade_{periodo}_{n}.csv.gz").exists()}
     righe = [f"# {idea} — periodo {periodo}", "",
              f"Numeri da `{periodo}.json` (calcolo `calcolo.py {periodo}`); esame di `research/programma5/REGOLE.md`, "
              "sezione 5. Rendimenti in % del valore della posizione, a trade.", "",
              "| Variante | Trade | Netto | Intervallo al 95% | p | A costi doppi | Lordo | Caso (netto) | Esito |",
              "|---|---|---|---|---|---|---|---|---|"]
     for n, e in dati.items():
-        ok, motivo = esito(periodo, e, len(dati))
+        ok, motivo = esito(periodo, e, len(dati), cfg, senza.get(n))
         if not e.get("trade"):
             righe.append(f"| {n} | 0 | | | | | | | {motivo} |")
             continue
@@ -65,6 +91,8 @@ def scrivi(idea: str, periodo: str) -> str:
         righe.append(f"| {n} | {e['trade']} | {100 * nt['media']:+.3f}% | {100 * nt['basso']:+.3f}; "
                      f"{100 * nt['alto']:+.3f} | {nt['p']:.4f} | {100 * nd['media']:+.3f}% | {100 * e['lordo']:+.3f}% | "
                      f"{100 * e.get('caso_netto', float('nan')):+.3f}% | {'**' + motivo + '**' if ok else motivo} |")
+    righe += ["", "Senza il giorno migliore (netto medio a trade): " + ", ".join(
+        f"{n} {100 * v:+.3f}%" for n, v in senza.items()), ""]
     righe += ["", "Per anno e per moneta (netto medio a trade):", ""]
     for n, e in dati.items():
         if not e.get("trade"):
