@@ -108,6 +108,16 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   V2 −0,09% al giorno** (intervallo −0,24; +0,06): **bruciata**. Cosa abbiamo capito: anche messi insieme, i segnali di
   2024-2025 non dicono quali monete faranno meglio delle altre il giorno dopo.
 
+## A che punto siamo (18 ottobre 2026, 23:00 UTC)
+
+* **Strategie valide: 0.** Dopo circa 60 idee e procedure in 4 fasi, sul passato non regge niente all'esame scritto prima;
+  le più vicine (il rimbalzo dopo i crolli su R, il volume enorme in salita su V2, la scelta mensile M-001c su W) non
+  passano per poco, e tutti i periodi passati sono ormai usati.
+* **L'unica prova pulita rimasta è il futuro.** In corso: prima tornata (M-001c, M-003; M-002 già bocciata) sui dati dal
+  2026-10-01, seconda tornata (N-001, N-002, N-003) sui dati dal 2026-10-19. Aggiornamento automatico ogni mattina alle
+  06:13 UTC (`avanti/aggiorna.sh`); verdetto a 400 trade chiusi o al 2027-03-31.
+* Al proprietario si scrive quando una procedura passa (delega del 18 ottobre).
+
 ## Coda delle idee della fase 1 (in ordine)
 
 | N. | Idea | Perché dovrebbe funzionare | Stato |
