@@ -143,3 +143,19 @@ def test_fase_2_costruzione_aperta_e_prova_solo_con_la_regola_congelata():
         m5.controlla_periodo("V2", "J-999")
     with pytest.raises(m5.PeriodoChiuso):
         m5.controlla_periodo("V2", None)
+
+
+def test_portafoglio_long_le_prime_short_le_ultime_con_i_costi_di_ogni_gamba():
+    from research.programma5.strumenti import portafoglio as pf
+    ore = np.arange(10)
+    punti = {"AUSDT": np.full(10, 3.0), "BUSDT": np.full(10, 2.0), "CUSDT": np.full(10, 1.0), "DUSDT": np.full(10, 0.0)}
+    A = {"AUSDT": np.full(10, 0.02), "BUSDT": np.full(10, 0.01), "CUSDT": np.full(10, 0.0), "DUSDT": np.full(10, -0.01)}
+    t = pf.gambe(ore, punti, A, np.array([2]), quanti=1, minimo=4, verso=1)
+    assert set(t["simbolo"]) == {"AUSDT", "DUSDT"}
+    # portafoglio: (0,02 - (-0,01)) / 2 = 0,015 lordo; costi: meta' capitale per gamba, un giro a mercato ciascuna
+    assert t["lordo"].sum() == pytest.approx(0.015)
+    assert t["costo"].sum() == pytest.approx(0.5 * 2 * (0.0005 + 0.0002) * 2)
+    contro = pf.gambe(ore, punti, A, np.array([2]), quanti=1, minimo=4, verso=-1)
+    assert contro["lordo"].sum() == pytest.approx(-0.015)
+    e = pf.esame_portafoglio(t, t.assign(ripetizione=0), n_boot=50)
+    assert e["portafogli"] == 1 and e["per_moneta"]["AUSDT"]["netto"] == pytest.approx(0.02 - 0.005)
