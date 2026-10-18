@@ -692,3 +692,157 @@ soglia piu' bassa) per non avere troppo pochi trade; stop e uscite come I-03, l'
 V-026 222 trade, V-027 197 trade.
 
 **Previsione.** R medio fra −0,15 e +0,1 R, p-value sopra 0,05 per entrambe (spiegazione 8).
+
+---
+
+# Sesto lotto (scritto il 18 ottobre 2026, dopo la risposta del coordinamento allo STOP del Passo 2)
+
+Il coordinamento, con la delega del proprietario, ha chiesto di usare i tentativi rimasti per le famiglie e le
+combinazioni non ancora provate, solo con idee che abbiano un perche' e una fonte (messaggio delle 07:38 UTC, voce
+N-010 del log). Qui le combinazioni non provate che hanno un perche': l'incrocio di due medie (E1), il VWAP giornaliero
+(F7), il fine settimana (F6) e la conferma della direzione della candela (C2). Scartata prima di scriverla: funding
+sopra +0,03% in tendenza al ribasso (E11 con F1), solo 58 trade stimati (bozza B-64); senza il filtro sarebbe V-003 con
+un'altra soglia, cioe' una variante nata dalla Fase 3, senza un motivo nuovo.
+
+Dichiarazione (Fase 3, punto 3). I-14 differisce da V-020 e V-021 (prezzo e media a 4h) per timeframe e ingresso; I-15
+da V-015 e V-016 (RSI a 50 con ADX) per filtro, stop e uscite; I-16 da V-013 e V-014 (ritorno nelle bande con limit)
+per filtro, k, conferma e tipo d'ingresso. Nessuna e' nata dalla Fase 3. Come in fase5.md: I-14 e' ancora un'idea di
+tendenza, I-16 ancora di ritorno alla media (le famiglie gia' fallite); lo scrivo per la Fase 5 finale.
+
+## I-14 — Incrocio di due medie mobili esponenziali
+
+**Fonte.** W. Brock, J. Lakonishok, B. LeBaron, 1992 (come I-10): fra le regole provate ci sono anche quelle a due
+medie (per esempio la media a 5 giorni che incrocia quella a 150), con segnali di acquisto seguiti da rendimenti
+migliori di quelli di vendita.
+
+**Affermazione verificabile.** Su LINKUSDT a 1 ora, quando la EMA a 20 ore incrocia verso l'alto quella a 50 ore,
+stare long fino all'incrocio opposto, con stop a 3 ATR, da' almeno 0,2 R dopo i costi per trade, piu' delle casuali.
+Simmetrico per lo short. Differisce da I-10: due medie invece di prezzo e media (meno incroci falsi per il rumore della
+singola candela), e un orizzonte piu' breve (ore e giorni invece di settimane).
+
+**Sotto-domande.** Come I-10: tendenze, chi le segue, aggiustamento lento; qui su un orizzonte di giorni.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Effetto pubblicato su azioni, assente nelle crypto | nessun vantaggio | vantaggio |
+| 3 | Frusta nei mercati laterali | tanti trade negativi brevi | R positivo |
+| 4 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 5 | Pochi trade enormi | verifica 4 fallisce | superata |
+| 6 | Costi | R lordo positivo, netto negativo | positivo a costi doppi |
+| 7 | Stop largo: R piccoli | R medio vicino a zero | — |
+| 8 | Volatilita' | casuali con stessa larghezza simili | il segnale le batte |
+| 9 | Stessa famiglia di I-01, I-08, I-09, I-10 (tutte vicine a zero) | risultati simili | diversi |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | Uscita all'incrocio opposto in ritardo | uscite al segnale opposto negative | positive |
+
+**Varianti.**
+
+> **V-028** · 1h · long · nessun filtro · ingresso E1: EMA(20) incrocia verso l'alto EMA(50) · conferma nessuna ·
+> tipo M · stop S1: 3 × ATR(14) · uscita U4: segnale opposto (EMA(20) incrocia verso il basso EMA(50)).
+>
+> **V-029** · stessa, short.
+
+Motivi: EMA 20/50 (coppia del catalogo) a 1h, circa 1 e 2 giorni, per avere abbastanza trade (a 4h la coppia 9/20 ne
+dava 121-122, bozze B-44 e B-45); stop e uscita come I-10, cosi' le due regole sulle medie si confrontano a parita' di
+uscite. Stima: V-028 220 trade, V-029 220 trade.
+
+**Previsione.** R medio fra −0,15 e +0,1 R, p-value sopra 0,05 per entrambe (spiegazione 9).
+
+---
+
+## I-15 — Ripresa del momento dalla parte giusta del VWAP
+
+**Fonte.** S. A. Berkowitz, D. E. Logue, E. A. Noser, «The Total Cost of Transactions on the NYSE», *Journal of
+Finance*, 1988: il prezzo medio ponderato per il volume della giornata come prezzo di riferimento con cui si giudica
+l'esecuzione dei grandi ordini. Gao, Han, Li, Zhou, 2018 (come I-03): momento intragiornaliero. L'uso come filtro di
+direzione e' una mia inferenza: se la chiusura e' sopra il VWAP del giorno, chi ha comprato oggi e' in media in
+guadagno e chi deve comprare entro il VWAP insegue il prezzo.
+
+**Affermazione verificabile.** Su LINKUSDT a 1 ora, con la chiusura sopra il VWAP del giorno, quando l'RSI(14) passa
+sopra 50 il prezzo sale fino alla sera abbastanza da dare, con stop al minimo delle ultime 5 candele, target a 2 R e
+uscita alle 21:00 UTC, almeno 0,2 R dopo i costi, piu' delle casuali. Simmetrico per lo short sotto il VWAP.
+
+**Sotto-domande.** Condizioni: giornate con una direzione, flussi di grandi operatori. Chi opera: chi esegue ordini
+grandi durante la giornata. Perche' il prezzo proseguirebbe: ordini da eseguire che restano. Quando: entro la sera.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Nelle crypto il VWAP del giorno UTC non e' un riferimento usato (mercato senza apertura e chiusura) | nessun vantaggio | vantaggio |
+| 3 | L'RSI che passa 50 e' rumore a 1 ora | molti stop | R positivo |
+| 4 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 5 | Costi: stop stretti | costi doppi molto peggio | positivo a costi doppi |
+| 6 | Volatilita' | casuali con stessa larghezza simili | il segnale le batte |
+| 7 | Pochi giorni estremi | verifica 4 fallisce | superata |
+| 8 | Stessa famiglia di I-03 e I-13 (intragiornaliere, fallite) | risultati simili | diversi |
+| 9 | All'inizio del giorno il VWAP e' fatto di poche candele: filtro instabile | risultati peggiori nelle prime ore | — (informativo) |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | Uscita alle 21:00 troppo presto | uscite a fine giornata positive ma piccole | — |
+
+**Varianti.**
+
+> **V-030** · 1h · long · filtro F7: chiusura sopra il VWAP giornaliero · ingresso E7: RSI(14) passa sopra 50 ·
+> conferma nessuna · tipo M · stop S2: minimo delle ultime 5 candele · uscite U1: target 2 R, U2s: uscita alle 21:00
+> UTC.
+>
+> **V-031** · stessa, short: chiusura sotto il VWAP, RSI(14) passa sotto 50, stop al massimo delle ultime 5 candele.
+
+Motivi: 1h, il timeframe piu' lungo ammesso per il VWAP; RSI a 14 come I-08; stop e uscite come le altre idee
+intragiornaliere (I-03, I-13), perche' l'idea riguarda la giornata. Stima: V-030 777 trade, V-031 769 trade (molti:
+nessun limite di un segnale al giorno).
+
+**Previsione.** R medio fra −0,15 e +0,05 R, p-value sopra 0,05 per entrambe (spiegazioni 2 e 8).
+
+---
+
+## I-16 — Ritorno dopo un eccesso nel fine settimana, con la candela di rifiuto
+
+**Fonte.** G. M. Caporale, A. Plastun, «The day of the week effect in the cryptocurrency market», *Finance Research
+Letters*, 2019: i rendimenti delle criptovalute hanno anomalie legate al giorno della settimana. S. Nagel, 2012 (come
+I-07): il compenso di chi fornisce liquidita' e' piu' alto quando la liquidita' scarseggia. Il fine settimana ha meno
+volume (mercati tradizionali chiusi): un eccesso di prezzo nel fine settimana e' piu' spesso pressione di pochi che
+informazione. La conferma C2 chiede che la candela del rientro chiuda nella direzione del trade (il rifiuto
+dell'eccesso).
+
+**Affermazione verificabile.** Su LINKUSDT a 1 ora, il sabato e la domenica UTC, quando una candela chiude di nuovo
+dentro le bande di Bollinger (20, 2,0) dopo una chiusura sotto la banda inferiore, e chiude sopra la sua apertura, il
+prezzo risale abbastanza da dare, con stop a 1,5 ATR, target a 1,5 R e uscita dopo 12 candele, almeno 0,2 R dopo i
+costi, piu' delle casuali. Simmetrico per lo short.
+
+**Sotto-domande.** Condizioni: fine settimana con poco volume. Chi opera: pochi operatori, spesso al dettaglio. Perche'
+il prezzo tornerebbe: senza informazione nuova la pressione di pochi si riassorbe. Quando: in ore.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Nel fine settimana i movimenti sono piu' piccoli, non piu' reversibili | R vicino a zero | positivo |
+| 3 | Stessa famiglia di I-05, I-07, I-11, I-12 (ritorno alla media, tutte negative) | R negativo | positivo |
+| 4 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 5 | Costi | R lordo positivo, netto negativo | positivo a costi doppi |
+| 6 | Volatilita': stop stretti in fine settimana calmi | casuali con stessa larghezza simili | il segnale le batte |
+| 7 | Pochi episodi | verifica 4 fallisce | superata |
+| 8 | Raggruppamento: piu' segnali nello stesso fine settimana | trade concentrati | distribuiti |
+| 9 | Il lunedi' (ripresa dei mercati tradizionali) cancella i movimenti del fine settimana | uscite a tempo la domenica sera migliori | — |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | La conferma C2 arriva quando il rimbalzo e' gia' avvenuto | R vicino a zero | positivo |
+
+**Varianti.**
+
+> **V-032** · 1h · long · filtro F6: solo fine settimana · ingresso E5: ritorno da Bollinger (20, 2,0) dalla banda
+> inferiore · conferma C2: chiusura sopra l'apertura · tipo M · stop S1: 1,5 × ATR(14) · uscite U1: target 1,5 R, U2:
+> dopo 12 candele.
+>
+> **V-033** · stessa, short: ritorno dalla banda superiore, chiusura sotto l'apertura.
+
+Motivi: 1h perche' nel fine settimana a 30 minuti i trade sarebbero di piu' ma con costi doppi in R; k = 2,0 (con 2,5
+i segnali in fine settimana sarebbero troppo pochi); stop e uscite come I-05, l'altra idea sulle bande. Stima: V-032
+159 trade, V-033 167 trade.
+
+**Previsione.** R medio fra −0,2 e +0,05 R, p-value sopra 0,05 per entrambe (spiegazione 3).

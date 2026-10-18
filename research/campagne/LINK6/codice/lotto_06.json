@@ -1,0 +1,20 @@
+[
+{"id": "V-028", "ipotesi": "I-14", "fonte": "Brock, Lakonishok, LeBaron, Simple Technical Trading Rules and the Stochastic Properties of Stock Returns, Journal of Finance, 1992",
+ "specifica": {"timeframe": "1h", "direzione": "long", "filtro": null, "ingresso": {"codice": "E1", "media": "EMA", "veloce": 20, "lenta": 50}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 3.0}, "uscite": [{"codice": "U4"}]},
+ "previsione": "R medio fra -0,15 e +0,1 R; p-value sopra 0,05"},
+{"id": "V-029", "ipotesi": "I-14", "fonte": "Brock, Lakonishok, LeBaron, Simple Technical Trading Rules and the Stochastic Properties of Stock Returns, Journal of Finance, 1992",
+ "specifica": {"timeframe": "1h", "direzione": "short", "filtro": null, "ingresso": {"codice": "E1", "media": "EMA", "veloce": 20, "lenta": 50}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 3.0}, "uscite": [{"codice": "U4"}]},
+ "previsione": "R medio fra -0,15 e +0,1 R; p-value sopra 0,05"},
+{"id": "V-030", "ipotesi": "I-15", "fonte": "Berkowitz, Logue, Noser, The Total Cost of Transactions on the NYSE, Journal of Finance, 1988; Gao, Han, Li, Zhou, Market intraday momentum, Journal of Financial Economics, 2018 (uso come filtro: inferenza della sessione)",
+ "specifica": {"timeframe": "1h", "direzione": "long", "filtro": {"codice": "F7", "lato": "sopra"}, "ingresso": {"codice": "E7", "n": 14}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S2", "n": 5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2s"}]},
+ "previsione": "R medio fra -0,15 e +0,05 R; p-value sopra 0,05"},
+{"id": "V-031", "ipotesi": "I-15", "fonte": "Berkowitz, Logue, Noser, The Total Cost of Transactions on the NYSE, Journal of Finance, 1988; Gao, Han, Li, Zhou, Market intraday momentum, Journal of Financial Economics, 2018 (uso come filtro: inferenza della sessione)",
+ "specifica": {"timeframe": "1h", "direzione": "short", "filtro": {"codice": "F7", "lato": "sotto"}, "ingresso": {"codice": "E7", "n": 14}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S2", "n": 5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2s"}]},
+ "previsione": "R medio fra -0,15 e +0,05 R; p-value sopra 0,05"},
+{"id": "V-032", "ipotesi": "I-16", "fonte": "Caporale, Plastun, The day of the week effect in the cryptocurrency market, Finance Research Letters, 2019; Nagel, Evaporating Liquidity, Review of Financial Studies, 2012",
+ "specifica": {"timeframe": "1h", "direzione": "long", "filtro": {"codice": "F6", "giorni": "fine_settimana"}, "ingresso": {"codice": "E5", "k": 2.0}, "conferma": {"codice": "C2"}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 12}]},
+ "previsione": "R medio fra -0,2 e +0,05 R; p-value sopra 0,05"},
+{"id": "V-033", "ipotesi": "I-16", "fonte": "Caporale, Plastun, The day of the week effect in the cryptocurrency market, Finance Research Letters, 2019; Nagel, Evaporating Liquidity, Review of Financial Studies, 2012",
+ "specifica": {"timeframe": "1h", "direzione": "short", "filtro": {"codice": "F6", "giorni": "fine_settimana"}, "ingresso": {"codice": "E5", "k": 2.0}, "conferma": {"codice": "C2"}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 12}]},
+ "previsione": "R medio fra -0,2 e +0,05 R; p-value sopra 0,05"}
+]
