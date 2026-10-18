@@ -78,3 +78,23 @@ def test_i_file_giornalieri_e_mensili_si_riconoscono_per_data():
     assert m5._dentro("BTCUSDT-1m-2022-12.zip", date(2020, 1, 1), date(2022, 12, 31))
     assert not m5._dentro("BTCUSDT-1m-2023-01.zip", date(2020, 1, 1), date(2022, 12, 31))
     assert m5._dentro("BTCUSDT-1m-2026-10-05.zip", date(2026, 10, 1), date(2099, 12, 31))
+
+
+def test_ordine_limite_si_esegue_solo_attraversando_il_livello():
+    # minimo che tocca il livello senza attraversarlo: niente; minimo sotto: eseguito al livello
+    df = _df([100, 100, 100, 100, 100, 100], bassi=[100, 99, 100, 98.5, 100, 100])
+    nulla = m5.simula_limite(df, "BTCUSDT", np.array([0]), np.array([99.0]), np.array([1]), validita=3, tenuta=1)
+    assert nulla.empty
+    t = m5.simula_limite(df, "BTCUSDT", np.array([0]), np.array([99.0]), np.array([1]), validita=4, tenuta=1)
+    assert len(t) == 1 and t.iloc[0]["decisione"] == 3
+    assert t.iloc[0]["lordo"] == pytest.approx(100 / 99 - 1)
+    assert t.iloc[0]["costo"] == pytest.approx(0.0002 + 0.0005 + 2 * 0.0001)
+
+
+def test_ordine_limite_di_vendita_e_niente_ordini_nuovi_col_trade_aperto():
+    df = _df([100] * 12, alti=[100, 102, 100, 100, 100, 100, 100, 102, 100, 100, 100, 100])
+    t = m5.simula_limite(df, "DOGEUSDT", np.array([0, 2, 6]), np.array([101.0, 101.0, 101.0]),
+                         np.array([-1, -1, -1]), validita=2, tenuta=3)
+    # il primo si esegue al minuto 1 ed esce al 4; il secondo parte al 2 (trade aperto): saltato; il terzo al 7
+    assert list(t["decisione"]) == [1, 7]
+    assert t.iloc[0]["lordo"] == pytest.approx(-(100 / 101 - 1))

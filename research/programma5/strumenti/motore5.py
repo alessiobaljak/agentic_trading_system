@@ -237,6 +237,86 @@ def simula(df: pd.DataFrame, simbolo: str, decisioni: np.ndarray, direzioni: np.
     return pd.DataFrame(righe)
 
 
+def simula_limite(df: pd.DataFrame, simbolo: str, inizi: np.ndarray, livelli: np.ndarray, direzioni: np.ndarray,
+                  validita: int, tenuta: int, fund: Optional[pd.DataFrame] = None) -> pd.DataFrame:
+    """Ordini limite con esecuzione prudente. L'ordine k vale dai minuti ``inizi[k]`` (posizione) per ``validita``
+    minuti, al prezzo ``livelli[k]``, long se ``direzioni[k]`` > 0. Si esegue solo se il prezzo **attraversa** il
+    livello (minimo strettamente sotto per l'acquisto, massimo strettamente sopra per la vendita), al livello, con la
+    commissione da ordine limite e senza scarto. Si esce a mercato alla chiusura del minuto ``tenuta`` dopo il minuto
+    dell'esecuzione (commissione a mercato e scarto doppio: si esce di solito in momenti agitati). Gli ordini si
+    guardano in ordine; uno che parte prima dell'uscita del trade aperto si salta. Il funding come in ``simula``."""
+    h, l, c = (df[k].to_numpy(float) for k in ("high", "low", "close"))
+    minuto = df.index.to_numpy()
+    n = len(c)
+    s = scarto(simbolo)
+    f_min = fund.index.to_numpy() if fund is not None and len(fund) else np.array([], dtype=np.int64)
+    f_tasso = fund["tasso"].to_numpy(float) if fund is not None and len(fund) else np.array([])
+    costo = MAKER + TAKER + 2 * s
+    righe, libero_da = [], -1
+    for t0, livello, d in zip(inizi, livelli, direzioni):
+        t0 = int(t0)
+        if t0 < libero_da or not np.isfinite(livello) or t0 + validita > n:
+            continue
+        fin = slice(t0, t0 + validita)
+        tocca = (l[fin] < livello) if d > 0 else (h[fin] > livello)
+        if not tocca.any():
+            continue
+        j = t0 + int(np.argmax(tocca))
+        e = j + tenuta
+        if e >= n or not np.isfinite(c[e]):
+            continue
+        lordo = d * (c[e] / livello - 1)
+        fund_costo = 0.0
+        if len(f_min):
+            a, b = np.searchsorted(f_min, minuto[j], "right"), np.searchsorted(f_min, minuto[e], "right")
+            fund_costo = d * float(np.sum(f_tasso[a:b]))
+        righe.append({"simbolo": simbolo, "decisione": j, "minuto": int(minuto[j]), "direzione": int(d),
+                      "lordo": lordo, "costo": costo, "funding": fund_costo,
+                      "netto": lordo - costo - fund_costo, "netto_doppio": lordo - 2 * costo - fund_costo,
+                      "motivo": "tempo"})
+        libero_da = e + 1
+    return pd.DataFrame(righe)
+
+
+def caso_limite(df: pd.DataFrame, simbolo: str, trade: pd.DataFrame, tenuta: int, fund=None, ripetizioni: int = 20,
+                seme: int = 2026) -> pd.DataFrame:
+    """Il caso per gli ordini limite: ingresso all'apertura di un minuto qualunque della stessa moneta e dello stesso
+    mese, stessa direzione, stessa tenuta e stessi costi del trade (cosi' il confronto misura solo il momento)."""
+    if trade.empty:
+        return trade
+    rng = np.random.default_rng(seme)
+    o, c = df["open"].to_numpy(float), df["close"].to_numpy(float)
+    minuto = df.index.to_numpy()
+    n = len(c)
+    mese = pd.to_datetime(minuto * 60, unit="s").to_period("M").astype(str).to_numpy()
+    validi = df["periodo"].to_numpy() & np.isfinite(o)
+    validi[max(0, n - tenuta - 1):] = False
+    per_mese = {m: np.flatnonzero(validi & (mese == m)) for m in np.unique(mese[validi])}
+    f_min = fund.index.to_numpy() if fund is not None and len(fund) else np.array([], dtype=np.int64)
+    f_tasso = fund["tasso"].to_numpy(float) if fund is not None and len(fund) else np.array([])
+    mesi_t = mese[trade["decisione"].to_numpy()]
+    d = trade["direzione"].to_numpy()
+    costo = trade["costo"].to_numpy(float)
+    out = []
+    for r in range(ripetizioni):
+        for k, m in enumerate(mesi_t):
+            if m not in per_mese or not len(per_mese[m]):
+                continue
+            j = int(rng.choice(per_mese[m]))
+            e = j + tenuta
+            if not np.isfinite(c[e]):
+                continue
+            lordo = d[k] * (c[e] / o[j] - 1)
+            fc = 0.0
+            if len(f_min):
+                a, b = np.searchsorted(f_min, minuto[j], "right"), np.searchsorted(f_min, minuto[e], "right")
+                fc = d[k] * float(np.sum(f_tasso[a:b]))
+            out.append({"simbolo": simbolo, "decisione": j, "minuto": int(minuto[j]), "direzione": int(d[k]),
+                        "lordo": lordo, "costo": costo[k], "funding": fc, "netto": lordo - costo[k] - fc,
+                        "netto_doppio": lordo - 2 * costo[k] - fc, "motivo": "tempo", "ripetizione": r})
+    return pd.DataFrame(out)
+
+
 def caso(df: pd.DataFrame, simbolo: str, trade: pd.DataFrame, uscita: Uscita, fund=None, ripetizioni: int = 20,
          seme: int = 2026, commissione: float = TAKER) -> pd.DataFrame:
     """Gli stessi trade a minuti presi a caso della stessa moneta e dello stesso mese, con la stessa direzione."""
