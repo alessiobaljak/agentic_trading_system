@@ -228,7 +228,7 @@ def classifica(ore, punteggio: dict, A_h: dict, dec: np.ndarray, minimo: int = 1
     return pd.DataFrame(righe, columns=["s", "minuto", "v", "x"]), contributi
 
 
-def portafogli(ore, P, A, monete):
+def portafogli(ore, P, A, monete, minimo: int = 12, quanti: int = 5):
     nel = P[BTC]["periodo"].to_numpy()
     btc = P[BTC]
     altre = [s for s in monete if s != BTC]
@@ -238,24 +238,25 @@ def portafogli(ore, P, A, monete):
                        (btc["lc"] - btc["lc"].shift(w))).to_numpy() for s in altre}
         for h in (1, 4, 24, 72, 168):
             dec = decisioni(ore, nel, h)
-            yield (f"G2 rendimento w{w} h{h}", "G2") + classifica(ore, grezzo, A[h], dec)
-            yield (f"G2 residuo w{w} h{h}", "G2") + classifica(ore, residuo, {s: A[h][s] for s in altre}, dec)
+            yield (f"G2 rendimento w{w} h{h}", "G2") + classifica(ore, grezzo, A[h], dec, minimo, quanti)
+            yield (f"G2 residuo w{w} h{h}", "G2") + classifica(ore, residuo, {s: A[h][s] for s in altre}, dec,
+                                                                    minimo, quanti)
     for h in (24, 72, 168):
         f8 = {s: P[s]["funding_8h"].to_numpy(float) for s in monete}
-        yield (f"G3 funding h{h}", "G3") + classifica(ore, f8, A[h], decisioni(ore, nel, h))
+        yield (f"G3 funding h{h}", "G3") + classifica(ore, f8, A[h], decisioni(ore, nel, h), minimo, quanti)
     for w in (24, 72):
         doi = {}
         for s in monete:
             lo = np.log(P[s]["oi"].where(P[s]["oi"] > 0))
             doi[s] = (lo - lo.shift(w)).to_numpy()
         for h in (24, 72):
-            yield (f"G4 oi w{w} h{h}", "G4") + classifica(ore, doi, A[h], decisioni(ore, nel, h))
+            yield (f"G4 oi w{w} h{h}", "G4") + classifica(ore, doi, A[h], decisioni(ore, nel, h), minimo, quanti)
     vol = {}
     for s in monete:
         v24 = P[s]["volume"].rolling(24).sum()
         vol[s] = (v24 / v24.rolling(720, min_periods=500).median().shift(24)).to_numpy()
     for h in (24, 72):
-        yield (f"G5 volume h{h}", "G5") + classifica(ore, vol, A[h], decisioni(ore, nel, h))
+        yield (f"G5 volume h{h}", "G5") + classifica(ore, vol, A[h], decisioni(ore, nel, h), minimo, quanti)
     # G6 paniere contro BTC
     r1 = pd.DataFrame({s: P[s]["r1"] for s in altre})
     sig = (r1.mean(axis=1) - btc["r1"]).rolling(720, min_periods=500).std()
@@ -323,7 +324,7 @@ def parente_r(nome: str, r: dict) -> bool:
     return r.get("lordo", 0) < 0 and any(nome.startswith(p) for p in PARENTI_R) and (" giu" in nome or "basso" in nome)
 
 
-def esplora(monete, periodo: str, log=print) -> dict:
+def esplora(monete, periodo: str, log=print, minimo: int = 12, quanti: int = 5, monete_min: int = 10) -> dict:
     ore, P, A = pannello(monete, periodo)
     btc = P[BTC]
     raccolte: dict = {}
@@ -347,7 +348,7 @@ def esplora(monete, periodo: str, log=print) -> dict:
                 {"s": s, "minuto": b.index.to_numpy()[ev] * 60, "v": d[ev] * a[ev], "x": d[ev] * (a[ev] - base[ev])}))
             conta += len(ev)
         log(f"[fase 2 {periodo}] {s}: {conta} eventi")
-    for nome, fam, righe, contributi in portafogli(ore, P, A, monete):
+    for nome, fam, righe, contributi in portafogli(ore, P, A, monete, minimo, quanti):
         raccolte[nome] = [fam, [righe], contributi]
     risultati = {}
     for nome, (fam, parti, contributi) in raccolte.items():
@@ -355,7 +356,7 @@ def esplora(monete, periodo: str, log=print) -> dict:
         righe = pd.concat(parti, ignore_index=True) if parti else pd.DataFrame(columns=["s", "minuto", "v", "x"])
         r = riassumi_fase2(righe, contributi)
         r["famiglia"] = fam
-        r["promossa"] = bool(r["trade"]) and fam != "L0" and promossa(fam, r)
+        r["promossa"] = bool(r["trade"]) and fam != "L0" and promossa(fam, r, monete_min=monete_min)
         r["parente_R"] = parente_r(nome, r)
         risultati[nome] = r
     return risultati

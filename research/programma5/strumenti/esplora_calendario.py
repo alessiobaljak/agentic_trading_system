@@ -56,7 +56,7 @@ def celle(b: pd.DataFrame):
     yield "W5 giorno 15", "W5", 96, 96, (fine == 0) & (giorno.day.to_numpy() == 15), uno
 
 
-def esplora(monete, periodo: str, log=print) -> dict:
+def esplora(monete, periodo: str, log=print, monete_min: int = 10) -> dict:
     ore, P, A = pannello(monete, periodo)
     raccolte: dict = {}
     for s in monete:
@@ -82,6 +82,6 @@ def esplora(monete, periodo: str, log=print) -> dict:
         righe = pd.concat(parti, ignore_index=True) if parti else pd.DataFrame(columns=["s", "minuto", "v", "x"])
         r = riassumi_fase2(righe)
         r["famiglia"] = fam
-        r["promossa"] = bool(r["trade"]) and promossa(fam, r)
+        r["promossa"] = bool(r["trade"]) and promossa(fam, r, monete_min=monete_min)
         out[nome] = r
     return out
