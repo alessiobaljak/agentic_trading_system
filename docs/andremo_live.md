@@ -4125,3 +4125,10 @@ dove si ferma) sono arrivati in `ops/results/archivio_20261018/` 58 file, 191,6 
 (707 trade, registro e specifiche del gate), i 21 nodi del Realtime DB, le misure della macchina e i backup dei reset.
 Restano sulla macchina 504 file del selettore (7-13 ottobre), oltre il tetto di 200 MB dell'archivio. Controllo dei
 segreti su tutto l'archivio: nessuno.
+Proposta di ripartenza (sera): `docs/proposta_ripartenza.md`. Prima bozza letta da due revisori indipendenti, uno di
+metodo e uno di trading e di codice: 32 rilievi, quasi tutti accolti nella seconda bozza. I cambiamenti principali: il
+periodo 2024-2026 diventa un filtro aperto una volta sola per tutte le famiglie, e la conferma vera è sui dati in
+avanti; il primo passo è la misura del carry semplice al netto di tutto, che non consuma tentativi; il posizionamento
+resta parcheggiato; il paper dei portafogli in un servizio separato, senza chiavi. Capito oggi: il bot calcola il funding
+come se l'intervallo fosse sempre di 8 ore (sulle monete a 4 ore conta metà del vero; `docs/backlog.md`, P12 punto 13); e
+per confermare in avanti una strategia con Sharpe 2 servono circa 1,6 anni di dati nuovi (proposta, sezione 3.6).

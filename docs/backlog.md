@@ -53,14 +53,20 @@ ma nel gruppo «in lavorazione», G3 chiusa dalla regola H1 (`docs/storia/04_bac
 della ricerca rosso su GitHub dal 17 ott sera: **corretto** (573d084d). (11) Il proxy git della sessione rifiuta il
 push delle etichette (403): gli elenchi dei trade e dell'avanzamento del paniere (~133 MiB) restano solo sul suo
 branch (quelli del gruppo sono già nella storia del principale). (12) Il testo di `ops/gate_fermo` scrive «−0,06 R a
-trade in paper», ma è il motore dopo la validazione (`ops` 0600).
+trade in paper», ma è il motore dopo la validazione (`ops` 0600). (13) **Il bot calcola il funding in modo continuo, come se l'intervallo fosse
+sempre di 8 ore, e con il tasso letto all'ingresso** (`bot/core/costs.py` righe 27-39, `bot/execution/executor.py` righe
+1121-1125): sulle monete a 4 ore conta metà del vero, su quelle a 1 ora un ottavo, e lo accredita anche senza
+attraversare una regolazione; il motore della ricerca lo conta per regolazione. Sul paper di oggi pesa poco (funding
++0,31 USDT su 707 trade, `ops` 0623); per il carry è la voce di guadagno (trovato dal revisore della proposta di
+ripartenza).
 
 ### P11. Dopo LINK6: continuare la ricerca, e come
 **Deciso dal proprietario il 18 ott 2026 (~08:40 UTC):** «la domanda non è se vuoi continuare e dobbiamo continuare
 fino a quando non trovi delle strategie valide... se serve riscriviamo totalmente il gate non mi interessa (prima però
 voglio che tu storicizzi tutti i dati raccolti, quello che abbiamo imparato, cosa abbiamo cambiato, insomma tutto
 dall'inizio di questo progetto ad oggi)». Primo passo: la storia in `docs/storia/` (fatta il 18 ott, con l'esportazione
-dei dati); poi la proposta di come ripartire: bozza in `docs/proposta_ripartenza.md` (18 ott), in revisione indipendente.
+dei dati); poi la proposta di come ripartire: `docs/proposta_ripartenza.md`, seconda bozza dopo due revisioni indipendenti (32
+rilievi), **aspetta il tuo sì** sulle dieci decisioni della sezione 7.
 **Perché:** la campagna LINK6 (protocollo 4) si è chiusa il 18 ott 2026 senza candidati: 16 idee, 33 varianti su 40,
 R medio delle varianti −0,030 contro −0,032 delle loro entrate casuali (`research/campagne/LINK6/lezioni.md`). Con
 BTC51 (un candidato caduto nel vault), la ricerca 4.5 (630 varianti, nessuna oltre il vault) e il paniere a barre
