@@ -129,3 +129,41 @@ prova indipendente. Con V a 0,005 e R insieme, la probabilità che un'idea falsa
    di R (punto 2 compreso). Prima di aprire V si congela tutto: le varianti candidate, la regola meccanica che sceglie le 3
    da portare su R, e la prova su R.
 4. Un'idea parente di un V **non positivo** può usare V come prova: saperlo va contro di lei, non a favore.
+
+## 7. La fase 2: cercare sui dati recenti (aggiunta il 18 ottobre 2026, ore 16:45 UTC, prima di ogni calcolo della fase)
+
+**Perché.** I-020 (lo scalping a limite nelle code delle candele) su C rendeva +0,19-0,32% a trade con t fino a 7, nel
+2023 +0,02-0,15%, nel 2024-2026 zero: il vantaggio si è chiuso anno dopo anno. Lo stesso dicono l'autopsia delle strategie
+vecchie (il vantaggio cala quando il mercato cambia) e le idee di tendenza, che su V facevano quanto il mercato. Cercare
+sul 2020-2022 trova cose vere allora; il proprietario chiede strategie che **valgano oggi**. Da qui una seconda fase,
+con le stesse regole di metodo (scheda prima del calcolo, regola congelata con le impronte, un periodo di prova aperto una
+volta, tutto registrato), ma con i periodi spostati sul recente.
+
+**I periodi della fase 2**
+
+| Periodo | Date | Uso |
+|---|---|---|
+| **C2** costruzione | 2024-01-01 → 2025-06-30 | esplorazioni (6bis) e disegno delle idee |
+| **V2** prova | 2025-07-01 → 2026-09-30 | una volta per idea, con la regola congelata |
+| **A** in avanti | dal 2026-10-01 | si riporta; poi la prova nel paper |
+
+Dichiarato: questi anni il modello li conosce in parte (i grandi movimenti del 2024 e del 2025); per questo la prova chiede
+anche il risultato **senza il giorno migliore** e in tutte e due le metà di V2. I fenomeni già provati su R (il rimbalzo
+dopo i crolli di I-017 e lo scalping a limite di I-020, sulle 12 monete) su V2 si provano **solo sulle monete nuove**.
+
+**Le monete della fase 2**: le 12 del programma più **12 nuove**, scelte con una regola meccanica scritta qui prima di
+guardare: fra i perpetui USDT-M dell'archivio di Binance con candele da 1 minuto mensili dal settembre 2023 o prima (100
+giorni di storia prima di C2) e un file giornaliero di ottobre 2026 (cioè ancora quotati oggi), esclusi le 12 già usate e
+i perpetui di monete stabili (USDC, FDUSD, TUSD, BUSD, USDP, DAI), le 12 con il **volume in USDT più alto nel settembre
+2026** (dalle candele giornaliere). La lista e i volumi in `universo_fase2.json`.
+
+**L'esame della fase 2** (idee J-NNN, al massimo 3 varianti, giudicate insieme):
+1. **C2**: netto dopo i costi con l'intervallo al 95% sopra zero e maggiore del caso;
+2. **V2**, una volta: netto con l'intervallo al 95% sopra zero e **p a una coda ≤ 0,005 / numero delle varianti**
+   (bootstrap a blocchi di giorni, 10.000 ricampionamenti); positivo a costi doppi; positivo togliendo il giorno migliore;
+   positivo in **tutte e due le metà** (2025-07-01 → 2025-12-31 e 2026-01-01 → 2026-09-30); positivo su almeno il **60%**
+   delle monete con almeno 20 trade (almeno 5 monete); almeno **200** trade.
+3. **A** si riporta sempre; una strategia che supera V2 entra nella prova del paper solo con il servizio separato, dopo.
+
+Con fino a 30 idee nella fase 2, la soglia di V2 dà in media meno di 0,05 idee false oltre l'esame. Le idee della fase 1
+restano col loro esito.

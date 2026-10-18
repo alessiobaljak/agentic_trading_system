@@ -31,9 +31,13 @@ PERIODI = {
     "V": (date(2023, 1, 1), date(2023, 12, 31)),
     "R": (date(2024, 1, 1), date(2026, 9, 30)),
     "A": (date(2026, 10, 1), date(2099, 12, 31)),
+    # fase 2 (REGOLE.md, sezione 7)
+    "C2": (date(2024, 1, 1), date(2025, 6, 30)),
+    "V2": (date(2025, 7, 1), date(2026, 9, 30)),
 }
 #: cosa deve essere nel repository prima di caricare un periodo (oltre a C)
-PREREQUISITI = {"V": ("congelata.md",), "R": ("congelata.md", "V.md"), "A": ("congelata.md", "V.md", "R.md")}
+PREREQUISITI = {"V": ("congelata.md",), "R": ("congelata.md", "V.md"), "A": ("congelata.md", "V.md", "R.md"),
+                "C2": (), "V2": ("congelata.md",)}
 SCARTO = {"BTCUSDT": 0.0001, "ETHUSDT": 0.0001, "SOLUSDT": 0.0001}
 SCARTO_ALTRE = 0.0002
 TAKER, MAKER = 0.0005, 0.0002
@@ -62,7 +66,7 @@ def controlla_periodo(periodo: str, idea: Optional[str]) -> None:
     """Il guardiano dei periodi: V, R e A solo con la regola congelata e i passi prima committati."""
     if periodo not in PERIODI:
         raise ValueError(f"periodo sconosciuto: {periodo}")
-    if periodo == "C":
+    if periodo == "C" or not PREREQUISITI.get(periodo, ("?",)):
         return
     if not idea:
         raise PeriodoChiuso(f"il periodo {periodo} si apre solo per un'idea con la regola congelata")

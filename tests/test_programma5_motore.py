@@ -135,3 +135,11 @@ def test_scalping_uscita_a_limite_solo_dal_minuto_dopo_e_ad_attraversamento():
                                 m=1.0, validita=3, tenuta=1)
     assert t2.iloc[0]["motivo"] == "tempo" and t2.iloc[0]["lordo"] == pytest.approx(99.5 / 99 - 1)
     assert t2.iloc[0]["costo"] == pytest.approx(0.0002 + 0.0005 + 2 * 0.0001)
+
+
+def test_fase_2_costruzione_aperta_e_prova_solo_con_la_regola_congelata():
+    m5.controlla_periodo("C2", None)
+    with pytest.raises(m5.PeriodoChiuso):
+        m5.controlla_periodo("V2", "J-999")
+    with pytest.raises(m5.PeriodoChiuso):
+        m5.controlla_periodo("V2", None)
