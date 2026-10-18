@@ -1,0 +1,384 @@
+{
+ "creato": "2026-10-18 10:53 UTC",
+ "completo": false,
+ "letture_firestore": 0,
+ "tetto_letture": 20000,
+ "byte_totali": 98101059,
+ "file": [
+  {
+   "file": "macchina/gate_storia.tar.gz",
+   "tipo": "macchina",
+   "voci": null,
+   "byte": 4075337,
+   "sha256": "352ec19c730ccab7c507163a3f417f3e3e9eafb5f4766c519c2b0752ad2880b7"
+  },
+  {
+   "file": "macchina/gruppo_controllo.tar.gz",
+   "tipo": "macchina",
+   "voci": null,
+   "byte": 13079156,
+   "sha256": "88fc16a9ea1ddb20c96c4c267347e5402d0ceef312ff92fa3d3d43c5c85e907e"
+  },
+  {
+   "file": "macchina/replay_gate.tar.gz",
+   "tipo": "macchina",
+   "voci": null,
+   "byte": 65158,
+   "sha256": "bda4b9827adf0d07c016dd2eaca3f72f91693b6ef3ad79b0bd4e95db09f15d36"
+  },
+  {
+   "file": "firestore/_healthcheck.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 72,
+   "sha256": "d0ef7d84b054bf72b79af46b5c7fa4f66c4f1ef77cecd289853c0bca2c6627f8"
+  },
+  {
+   "file": "firestore/ai_hypotheses.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 1040,
+   "sha256": "56ab73fba67b87d473f776ada6448ea7f2402862bbccc852bc2df14bcb738850"
+  },
+  {
+   "file": "firestore/ai_shadow.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 69810,
+   "sha256": "58d31f07c2915d463e63251cc79af4d43ff8bcdda8636ff83456eace54bfa0ae"
+  },
+  {
+   "file": "firestore/ai_spesa.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 708,
+   "sha256": "c18a2055ad616966273c1eaeba4e0d6183b06988ae0991f92f8982206661f008"
+  },
+  {
+   "file": "firestore/asset_scores.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 1891,
+   "sha256": "fdaa74415639e703f0e78037fe533632179a93559c3a541b249bf670291de0b5"
+  },
+  {
+   "file": "firestore/calibration.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 498,
+   "sha256": "10a8f502906fb1a7a836b1264776866da9942120d338fbec5423ac193c388887"
+  },
+  {
+   "file": "firestore/dashboard.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 35921,
+   "sha256": "0ce36cd0e6281cb22b052a19812f8980ed73f240cc45845d1becf9381b968c92"
+  },
+  {
+   "file": "firestore/discover_shards.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 1708,
+   "sha256": "1f0ba8f18fe5c4584fd841e1155425ead3cc0fa5c61a478cfab50522b1d3acb8"
+  },
+  {
+   "file": "firestore/discovered_strategies.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 39866,
+   "sha256": "1b5769622c0ba5e037f7a424c07ffde17ef99359afef4359e4d7f319053c7d49"
+  },
+  {
+   "file": "firestore/drift.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 19942,
+   "sha256": "7fe42830b1c4fa98c0c9ac26d42be807bee056284f9626c3afc222f56d05b72b"
+  },
+  {
+   "file": "firestore/gate_autopsy.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 2373,
+   "sha256": "93c66f9a9c6289f916cdb6a6e50305d4cd9ecaf00b652f8a421ca5a6da6a76c4"
+  },
+  {
+   "file": "firestore/gate_history.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 8870,
+   "sha256": "cc2631c31515501eb168b991eb3d088234d583d9c74c9fbb515152748f4b1a38"
+  },
+  {
+   "file": "firestore/giorni.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 1873,
+   "sha256": "3260bab0a93ea35571da0f47ab7628476c71f035b099b08d3249656b0bc9a403"
+  },
+  {
+   "file": "firestore/insights.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 2294,
+   "sha256": "c19a03cbf0723889b1f2e9c0b88dd9667276839e30f7b3589623eca0be919319"
+  },
+  {
+   "file": "firestore/learning.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 19621,
+   "sha256": "7f197be6fb48a373dc70052351b3464490d21f4922dec2591e285c23f49105b8"
+  },
+  {
+   "file": "firestore/memory.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 34248,
+   "sha256": "4faff00f68725b3fd38324f97fe127cfc7f393e6a945d60c7699e143b33389ab"
+  },
+  {
+   "file": "firestore/optimize_shards.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 1065,
+   "sha256": "a3cf703596439268406eecc1f0e8f39cea0962b298499e19d07262cc1ecff18d"
+  },
+  {
+   "file": "firestore/portfolio.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 3622,
+   "sha256": "ce061a220e9407af47cb867233269a9c1243c1c029a5e0526f863ba2167d5c77"
+  },
+  {
+   "file": "firestore/report_giornaliero.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 35042,
+   "sha256": "d36c2ecbbb7dd21a9ed8e9759b3c8da360a48f54f891fad7990c7b35d9a60fa2"
+  },
+  {
+   "file": "firestore/segnali_rifiutati.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 48115,
+   "sha256": "033eec7a3dbbccdfdee5549d1d1fb293eae226aee10e676e54216e415f3c0882"
+  },
+  {
+   "file": "firestore/selector.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 1411,
+   "sha256": "d629868df9ac2b107896a8d9f20553f29caba0569d0ce60d787c2c1f8bdeb0bf"
+  },
+  {
+   "file": "firestore/strategy_params.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 83061,
+   "sha256": "b505e18a967137b301be0ead85cfb6bcf5f5883aeaa9728421c902f0c932480d"
+  },
+  {
+   "file": "firestore/strategy_registry.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 92505,
+   "sha256": "45c73838e160a5da7ae51aaebeaf4c85fba6251f9f95db11ec1a2ef94446ad31"
+  },
+  {
+   "file": "firestore/strategy_weights.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 389327,
+   "sha256": "7c0b0a032051b5081967d772f22f15721ccdf6c8ab2b6173a9c00089d1ca9767"
+  },
+  {
+   "file": "firestore/supervisor.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 487,
+   "sha256": "b9252975b474ffdbdc972ed3eef0dce6fa1cd5097ecc5cb0060903f598d0568a"
+  },
+  {
+   "file": "firestore/trades.json.gz",
+   "tipo": "firestore",
+   "voci": null,
+   "byte": 938023,
+   "sha256": "96dc297c2942bee49b9c0859ca7fd9d4bd89707bf24ac2c791baa93800de9835"
+  },
+  {
+   "file": "rtdb/_healthcheck.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 45,
+   "sha256": "f753aa988ce1a987f76dd97a612e3fc9160be9848d054a34467413d3e303f34d"
+  },
+  {
+   "file": "rtdb/account.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 135,
+   "sha256": "27c73dbbcad0f789bb56aa5c0e0bc8b3dc99e6acf14061d9b39d9b16bf266fdb"
+  },
+  {
+   "file": "rtdb/adapt_state.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 1445,
+   "sha256": "8953596ca413278ab23c6834c21d4fbaf2f3a5612888ba0d61b7300e0a0aa31d"
+  },
+  {
+   "file": "rtdb/avvii.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 203,
+   "sha256": "b775de7f754b9c38985413b60b420387a51c778d6c30ba61bc13615d2722efc8"
+  },
+  {
+   "file": "rtdb/avvii_config.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 988,
+   "sha256": "67ffa15b6fb7727d5665715d9f771d1f3c0f7289d599b1136043c80661d489ef"
+  },
+  {
+   "file": "rtdb/backlog.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 9578,
+   "sha256": "1ae05f3b184d618b6375cfb1b71075c873f468a4f1db68abf6f00888cc4e322c"
+  },
+  {
+   "file": "rtdb/bot_status.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 329,
+   "sha256": "82048cfd73755122eb2a9e3f6ad05302952342b434abe10d59c4cc2c30c0ac9b"
+  },
+  {
+   "file": "rtdb/btc_history.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 2527,
+   "sha256": "b1a7ad92919c628e8afba87c040fc6139e2c3480df7a42fe3de896ed7370a674"
+  },
+  {
+   "file": "rtdb/commands.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 452,
+   "sha256": "293e4e0488924d3ab84b4d18e886f52b3b626a9cdf4c36a997154dc80cc05d1d"
+  },
+  {
+   "file": "rtdb/controllo.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 5662,
+   "sha256": "4b8469cfb212546a3c94911d5860db397a954099d3b6dc7a63ac79517fa63fa1"
+  },
+  {
+   "file": "rtdb/decision_status.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 300,
+   "sha256": "fb1bff6376d8b8a7ed500889005cc4e6f883f35c8c99362e79c8ed3a36abba40"
+  },
+  {
+   "file": "rtdb/gate.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 14644,
+   "sha256": "c9a82085c2fe8c99a55fbf08fc71604b7cd77bc584bc7a146932fdb852a31c52"
+  },
+  {
+   "file": "rtdb/giorni_fatti.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 247,
+   "sha256": "2dfc3d37e4a86a0b38bc162c4a584ae1778651bfc77647a71e8b9a828200809a"
+  },
+  {
+   "file": "rtdb/learning_giorni.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 40134,
+   "sha256": "7df3f7c11dc035eac2f6b021c648fdd2fc2fbe461a4af5dc15ad3521179097d3"
+  },
+  {
+   "file": "rtdb/learning_indice.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 269,
+   "sha256": "a1ca4d87dbade50046d5561dadedaab5077a0990812ef53beacd0cc0e6b06fa2"
+  },
+  {
+   "file": "rtdb/ops.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 105,
+   "sha256": "9a391b59d6f9fba25a8a1919aec27b1640de9ae6b445acdf5beac5c6a026a740"
+  },
+  {
+   "file": "rtdb/paper.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 3378,
+   "sha256": "3b277cc27ba30ac78b91798b2b08ea6f28c8d582eeb1be239fba36d2155ca265"
+  },
+  {
+   "file": "rtdb/positions.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 7217,
+   "sha256": "dfb1486a81961985cdaa5a935335a9f83704a388308d21273c727ffe9acf134c"
+  },
+  {
+   "file": "rtdb/regime_history.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 634,
+   "sha256": "67cb4d38cf0a1ce8718b3f47a57a0e82d09513ab63a7e4de33f453cfb51391d4"
+  },
+  {
+   "file": "rtdb/report_giornaliero.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 6031,
+   "sha256": "42eb8c4eecb10d774969c5ad4d990d9df427d621bda8b7b45ca9d84eaf808926"
+  },
+  {
+   "file": "rtdb/risk_state.json.gz",
+   "tipo": "rtdb",
+   "voci": null,
+   "byte": 192,
+   "sha256": "65e9816a27d52e8248bd8884b7facbdfe0690683ae0c07ee57c47485b5783a42"
+  },
+  {
+   "file": "macchina/selettore_parte1.tar.gz",
+   "tipo": "macchina",
+   "voci": 282,
+   "byte": 39176291,
+   "sha256": "937f8c8d15f0e648d6f91921bee76cb2f46e5ee031e2b0679b9a22375dad7ae2"
+  },
+  {
+   "file": "macchina/selettore_parte2.tar.gz",
+   "tipo": "macchina",
+   "voci": 175,
+   "byte": 39777209,
+   "sha256": "8a1dc76dbb62af283e9f69893870f2abcab8a3473580789725127f4b720df64f"
+  }
+ ],
+ "cartelle_finite": [
+  "gate_storia",
+  "gruppo_controllo",
+  "replay_gate"
+ ],
+ "fuori": [
+  {
+   "file": "(il resto)",
+   "motivo": "tempo del giro finito (780 s): rilanciare esporta-storia, riprende da qui"
+  }
+ ]
+}
