@@ -1,0 +1,254 @@
+{
+ "id": "R-001",
+ "tipo": "fase3",
+ "variante": "V-019",
+ "confronto_con": "V-004",
+ "eseguito": "2026-10-18T07:10:17Z",
+ "commit_della_richiesta": "fbf5ee2e",
+ "nota": "registrazione R-001 nel log nello stesso commit della richiesta (guida pratica 3bis); regole.md punto 11 chiede un commit precedente: la registrazione e' comunque prima dell'esecuzione",
+ "specifica_nuova": {
+  "timeframe": "1h",
+  "direzione": "long",
+  "filtro": null,
+  "ingresso": {
+   "codice": "E11",
+   "soglia": 0.0,
+   "lato": "sotto"
+  },
+  "conferma": null,
+  "tipo_ingresso": {
+   "codice": "M"
+  },
+  "stop": {
+   "codice": "S1",
+   "k": 2.0,
+   "atr": 14
+  },
+  "uscite": [
+   {
+    "codice": "U1",
+    "k": 2.0
+   },
+   {
+    "codice": "U2",
+    "n": 48
+   }
+  ]
+ },
+ "specifica_vecchia": {
+  "timeframe": "1h",
+  "direzione": "long",
+  "filtro": null,
+  "ingresso": {
+   "codice": "E11",
+   "soglia": 0.0,
+   "lato": "sotto"
+  },
+  "conferma": null,
+  "tipo_ingresso": {
+   "codice": "M"
+  },
+  "stop": {
+   "codice": "S1",
+   "k": 2.0,
+   "atr": 14
+  },
+  "uscite": [
+   {
+    "codice": "U1",
+    "k": 2.0
+   },
+   {
+    "codice": "U2",
+    "n": 24
+   }
+  ]
+ },
+ "differenze": {
+  "uscite": [
+   [
+    {
+     "codice": "U1",
+     "k": 2.0
+    },
+    {
+     "codice": "U2",
+     "n": 24
+    }
+   ],
+   [
+    {
+     "codice": "U1",
+     "k": 2.0
+    },
+    {
+     "codice": "U2",
+     "n": 48
+    }
+   ]
+  ]
+ },
+ "esito": {
+  "monete": {
+   "BTCUSDT": {
+    "nuova": {
+     "simbolo": "BTCUSDT",
+     "trade": 212,
+     "r_medio": 0.16817679385136297,
+     "profit_factor": 1.3123358937832321,
+     "violazioni_liquidazione": 0
+    },
+    "vecchia": {
+     "simbolo": "BTCUSDT",
+     "trade": 245,
+     "r_medio": 0.14168640913003644,
+     "profit_factor": 1.304378347046179,
+     "violazioni_liquidazione": 0
+    }
+   },
+   "ETHUSDT": {
+    "nuova": {
+     "simbolo": "ETHUSDT",
+     "trade": 198,
+     "r_medio": 0.0776359824211092,
+     "profit_factor": 1.1312679009775823,
+     "violazioni_liquidazione": 0
+    },
+    "vecchia": {
+     "simbolo": "ETHUSDT",
+     "trade": 215,
+     "r_medio": 0.08168586561638659,
+     "profit_factor": 1.1575661766291885,
+     "violazioni_liquidazione": 0
+    }
+   },
+   "SOLUSDT": {
+    "nuova": {
+     "simbolo": "SOLUSDT",
+     "trade": 196,
+     "r_medio": -0.003064452661192302,
+     "profit_factor": 0.9950221352406277,
+     "violazioni_liquidazione": 0
+    },
+    "vecchia": {
+     "simbolo": "SOLUSDT",
+     "trade": 226,
+     "r_medio": -0.03621426419520596,
+     "profit_factor": 0.9338021065122045,
+     "violazioni_liquidazione": 0
+    }
+   },
+   "XRPUSDT": {
+    "nuova": {
+     "simbolo": "XRPUSDT",
+     "trade": 204,
+     "r_medio": 0.011703308582604743,
+     "profit_factor": 1.0200058494961548,
+     "violazioni_liquidazione": 0
+    },
+    "vecchia": {
+     "simbolo": "XRPUSDT",
+     "trade": 233,
+     "r_medio": -0.003889883593266795,
+     "profit_factor": 0.9924549847375097,
+     "violazioni_liquidazione": 0
+    }
+   },
+   "DOGEUSDT": {
+    "nuova": {
+     "simbolo": "DOGEUSDT",
+     "trade": 196,
+     "r_medio": -0.11296455957546984,
+     "profit_factor": 0.811140015402376,
+     "violazioni_liquidazione": 1
+    },
+    "vecchia": {
+     "simbolo": "DOGEUSDT",
+     "trade": 225,
+     "r_medio": -0.075450587239978,
+     "profit_factor": 0.8496202774980675,
+     "violazioni_liquidazione": 2
+    }
+   },
+   "BNBUSDT": {
+    "nuova": {
+     "simbolo": "BNBUSDT",
+     "trade": 359,
+     "r_medio": 0.052206033608960714,
+     "profit_factor": 1.086142378413372,
+     "violazioni_liquidazione": 0
+    },
+    "vecchia": {
+     "simbolo": "BNBUSDT",
+     "trade": 415,
+     "r_medio": 0.02370991890585903,
+     "profit_factor": 1.044958308778246,
+     "violazioni_liquidazione": 0
+    }
+   },
+   "LTCUSDT": {
+    "nuova": {
+     "simbolo": "LTCUSDT",
+     "trade": 169,
+     "r_medio": 0.06627253645055717,
+     "profit_factor": 1.1147069659924396,
+     "violazioni_liquidazione": 0
+    },
+    "vecchia": {
+     "simbolo": "LTCUSDT",
+     "trade": 197,
+     "r_medio": 0.0047671225613793704,
+     "profit_factor": 1.0089803493149683,
+     "violazioni_liquidazione": 0
+    }
+   },
+   "MATICUSDT": {
+    "nuova": {
+     "simbolo": "MATICUSDT",
+     "trade": 223,
+     "r_medio": 0.043497745538615275,
+     "profit_factor": 1.0731924225439482,
+     "violazioni_liquidazione": 1
+    },
+    "vecchia": {
+     "simbolo": "MATICUSDT",
+     "trade": 258,
+     "r_medio": 0.06381890332813117,
+     "profit_factor": 1.1229534749774102,
+     "violazioni_liquidazione": 1
+    }
+   },
+   "BCHUSDT": {
+    "nuova": {
+     "simbolo": "BCHUSDT",
+     "trade": 172,
+     "r_medio": -0.079186976061518,
+     "profit_factor": 0.8725903593808207,
+     "violazioni_liquidazione": 0
+    },
+    "vecchia": {
+     "simbolo": "BCHUSDT",
+     "trade": 197,
+     "r_medio": -0.06658441962613815,
+     "profit_factor": 0.8741886550592759,
+     "violazioni_liquidazione": 0
+    }
+   }
+  },
+  "monete_che_contano": [
+   "BTCUSDT",
+   "ETHUSDT",
+   "SOLUSDT",
+   "XRPUSDT",
+   "DOGEUSDT",
+   "BNBUSDT",
+   "LTCUSDT",
+   "MATICUSDT",
+   "BCHUSDT"
+  ],
+  "media_nuova": 0.024919601350558884,
+  "media_vecchia": 0.014836562765244853,
+  "differenza": 0.01008303858531403,
+  "supera": false
+ }
+}
