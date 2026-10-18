@@ -37,7 +37,10 @@ anche se ci volessero dei giorni». È il **programma 5** (`research/programma5/
 idee in `STATO.md`): il coordinamento lavora da solo, non chiede permessi e non scrive al proprietario finché non ci sono
 più strategie valide su più monete; restano ferme le regole che non si negoziano (`DRY_RUN` vero, niente soldi veri, niente
 segreti, paper mai usato come training set) e il metodo (regole scritte prima, confronto con il caso, periodi usati una
-volta, conferma sui dati recenti). **Delega del
+volta, conferma sui dati recenti). Il proprietario, 18 ott 2026 ~17:15 UTC: «non chiedermi ogni volta di continuare, procedi in
+autonomia fino a quando non mi presenterai delle strategie validate e in profitto ... devi analizzare l'intero universo o
+almeno le top 100 su binance future ... se ci vogliono giorni va bene» (`research/programma5/REGOLE.md`, sezioni 7 e 7bis:
+fase 2 sui dati recenti, universo delle 100 monete più scambiate). **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
 della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 

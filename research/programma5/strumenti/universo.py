@@ -4,7 +4,7 @@ Fra i perpetui USDT-M dell'archivio di Binance con le candele da 1 minuto mensil
 giornaliero di ottobre 2026, esclusi le 12 del programma e le monete stabili, le 12 con il volume in USDT piu' alto nel
 settembre 2026 (somma della colonna quote_volume delle candele giornaliere del mese). Scrive ``universo_fase2.json``.
 
-Uso: python3 -m research.programma5.strumenti.universo
+Uso: python3 -m research.programma5.strumenti.universo [top100]
 """
 from __future__ import annotations
 
@@ -36,14 +36,14 @@ def simboli() -> list:
         marker = marker[0] if marker else f"data/futures/um/monthly/klines/{trovati[-1]}/"
 
 
-def esame(s: str):
-    if not s.endswith("USDT") or s in MONETE or any(s.startswith(x) for x in STABILI):
+def esame(s: str, ultimo_primo_mese: str = "2023-09", escludi=MONETE):
+    if not s.endswith("USDT") or s in escludi or any(s.startswith(x) for x in STABILI):
         return None
     if not re.fullmatch(r"[A-Z0-9]+USDT", s):
         return None
     mensili = elenca(f"data/futures/um/monthly/klines/{s}/1m/")
     mesi = sorted(re.search(r"-(\d{4}-\d{2})\.zip$", k).group(1) for k in mensili)
-    if not mesi or mesi[0] > "2023-09":
+    if not mesi or mesi[0] > ultimo_primo_mese:
         return None
     if not elenca(f"data/futures/um/daily/klines/{s}/1d/{s}-1d-2026-10-"):
         return None
@@ -60,6 +60,20 @@ def esame(s: str):
     return {"simbolo": s, "primo_mese": mesi[0], "volume_settembre_2026": volume}
 
 
+def main_top100() -> int:
+    """REGOLE.md, sezione 7bis: le 100 con il volume piu' alto del settembre 2026, quotate entro febbraio 2025."""
+    tutti = simboli()
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        esiti = [e for e in ex.map(lambda s: esame(s, "2025-02", ()), tutti) if e]
+    esiti.sort(key=lambda e: -e["volume_settembre_2026"])
+    scelte = [e["simbolo"] for e in esiti[:100]]
+    (QUI / "universo_top100.json").write_text(json.dumps({"simboli_guardati": len(tutti), "ammessi": esiti,
+                                                          "scelte": scelte}, indent=1), encoding="utf-8")
+    print(len(tutti), "simboli;", len(esiti), "ammessi; le 12 del programma dentro:",
+          sum(1 for s in MONETE if s in scelte))
+    return 0
+
+
 def main() -> int:
     tutti = simboli()
     with ThreadPoolExecutor(max_workers=8) as ex:
@@ -73,4 +87,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    import sys
+    raise SystemExit(main_top100() if sys.argv[1:] == ["top100"] else main())

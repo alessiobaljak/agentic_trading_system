@@ -167,3 +167,23 @@ i perpetui di monete stabili (USDC, FDUSD, TUSD, BUSD, USDP, DAI), le 12 con il 
 
 Con fino a 30 idee nella fase 2, la soglia di V2 dà in media meno di 0,05 idee false oltre l'esame. Le idee della fase 1
 restano col loro esito.
+
+## 7bis. L'universo esteso: le 100 monete più scambiate (aggiunta il 18 ottobre 2026, ore 17:20 UTC, prima di guardare)
+
+Il proprietario, il 18 ottobre 2026 alle 17:15 UTC circa: «va bene che hai iniziato con le 12 più scambiate oggi ma poi
+devi analizzare l'intero universo o almeno le top 100 su binance future... scrivimi solo quando avrei le strategie come ti
+dicevo questo non è un lavoro di velocità, se ci vogliono giorni va bene».
+
+**La regola** (meccanica, scritta prima di calcolare la classifica): fra i perpetui USDT-M dell'archivio di Binance con le
+candele da 1 minuto mensili da **febbraio 2025 o prima** (almeno 100 giorni di storia prima di V2) e un file giornaliero di
+ottobre 2026 (ancora quotati), escluse le monete stabili, le **100 con il volume in USDT più alto nel settembre 2026**
+(le 12 del programma comprese nella classifica). Lista e volumi in `universo_top100.json` (`strumenti/universo.py`).
+
+* Una moneta quotata dopo gennaio 2024 entra in C2 dal momento in cui ha la storia che le misure chiedono (σ delle 720
+  ore, almeno 500): conta meno, non è esclusa.
+* Le esplorazioni della fase 2 sull'universo esteso hanno i loro piani (E-111 e seguenti); quelle già scritte sulle 24
+  monete (E-101, E-102, E-103) restano com'erano.
+* **V2 si fa sull'universo esteso** anche per le idee nate su 24 monete: le monete in più non sono state viste su C2, e
+  danno alla prova più potenza. I fenomeni già provati su R (6ter; sezione 7) restano provati solo sulle monete diverse
+  dalle 12 della fase 1.
+* Per scaricare meno, le monete nuove si scaricano dal settembre 2023 (`scarico.py`, opzione `--dal 2023-09`).

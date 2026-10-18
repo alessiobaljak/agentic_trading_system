@@ -9,6 +9,7 @@ Uso:
     python3 -m research.programma5.strumenti.scarico metrics     # giornalieri
     python3 -m research.programma5.strumenti.scarico funding     # mensili
     python3 -m research.programma5.strumenti.scarico premium     # indice del premio sullo spot, 1 ora, mensili
+    python3 -m research.programma5.strumenti.scarico --dal 2023-09 klines SIMBOLO ...   # solo dal mese indicato
 """
 from __future__ import annotations
 
@@ -109,17 +110,27 @@ def _scarica(chiave: str, s: str, tipo: str):
     return nome, impronta
 
 
+def _mese(chiave: str) -> str:
+    m = re.search(r"-(\d{4}-\d{2})(?:-\d{2})?\.zip$", chiave)
+    return m.group(1) if m else ""
+
+
 def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
+    dal = ""
+    if "--dal" in argv:
+        i = argv.index("--dal")
+        dal = argv[i + 1]
+        del argv[i: i + 2]
     tipo = argv[0] if argv else "klines"
     monete = argv[1:] or list(MONETE)
     impronte_file = QUI / f"scarico_{tipo}.json"
     impronte = json.loads(impronte_file.read_text()) if impronte_file.exists() else {}
     for s in monete:
-        chiavi = _scelte(tipo, s)
+        chiavi = [k for k in _scelte(tipo, s) if _mese(k) >= dal]
         with ThreadPoolExecutor(max_workers=8) as ex:
             esiti = list(ex.map(lambda k: _scarica(k, s, tipo), chiavi))
-        impronte[s] = {n: h for n, h in esiti if h}
+        impronte[s] = {**impronte.get(s, {}), **{n: h for n, h in esiti if h}}
         impronte_file.write_text(json.dumps(impronte, indent=0, sort_keys=True))
         print(f"[scarico] {tipo} {s}: {len(impronte[s])} file (fino a {max(impronte[s]) if impronte[s] else '-'})",
               flush=True)

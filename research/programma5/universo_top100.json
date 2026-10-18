@@ -1,0 +1,2077 @@
+{
+ "simboli_guardati": 1056,
+ "ammessi": [
+  {
+   "simbolo": "BTCUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 343507350451.06616
+  },
+  {
+   "simbolo": "ETHUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 270277701585.3655
+  },
+  {
+   "simbolo": "ZECUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 72270193395.85626
+  },
+  {
+   "simbolo": "SOLUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 62882822592.21445
+  },
+  {
+   "simbolo": "XRPUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 38175582114.971375
+  },
+  {
+   "simbolo": "NEARUSDT",
+   "primo_mese": "2020-10",
+   "volume_settembre_2026": 17266140428.047
+  },
+  {
+   "simbolo": "DOGEUSDT",
+   "primo_mese": "2020-07",
+   "volume_settembre_2026": 17032481234.872398
+  },
+  {
+   "simbolo": "UNIUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 13445599073.762001
+  },
+  {
+   "simbolo": "BNBUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 12302051282.376898
+  },
+  {
+   "simbolo": "SUIUSDT",
+   "primo_mese": "2023-05",
+   "volume_settembre_2026": 12145366195.432331
+  },
+  {
+   "simbolo": "LSKUSDT",
+   "primo_mese": "2024-01",
+   "volume_settembre_2026": 10063086540.839357
+  },
+  {
+   "simbolo": "ENAUSDT",
+   "primo_mese": "2024-04",
+   "volume_settembre_2026": 9640344895.632841
+  },
+  {
+   "simbolo": "1000PEPEUSDT",
+   "primo_mese": "2023-05",
+   "volume_settembre_2026": 9140553526.740976
+  },
+  {
+   "simbolo": "QNTUSDT",
+   "primo_mese": "2022-10",
+   "volume_settembre_2026": 8256520065.893999
+  },
+  {
+   "simbolo": "ARBUSDT",
+   "primo_mese": "2023-03",
+   "volume_settembre_2026": 7828973085.247332
+  },
+  {
+   "simbolo": "WLDUSDT",
+   "primo_mese": "2023-07",
+   "volume_settembre_2026": 7125560910.353
+  },
+  {
+   "simbolo": "LINKUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 6520926670.860661
+  },
+  {
+   "simbolo": "ADAUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 6471100783.180402
+  },
+  {
+   "simbolo": "TAOUSDT",
+   "primo_mese": "2024-04",
+   "volume_settembre_2026": 5989444222.688499
+  },
+  {
+   "simbolo": "AVAXUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 5769066481.761002
+  },
+  {
+   "simbolo": "BCHUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 5105094657.819429
+  },
+  {
+   "simbolo": "ONDOUSDT",
+   "primo_mese": "2024-01",
+   "volume_settembre_2026": 5088824313.47352
+  },
+  {
+   "simbolo": "FILUSDT",
+   "primo_mese": "2020-10",
+   "volume_settembre_2026": 4714628452.346816
+  },
+  {
+   "simbolo": "TRUMPUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 4393124491.4167185
+  },
+  {
+   "simbolo": "LTCUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 4205495789.25025
+  },
+  {
+   "simbolo": "DASHUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 3860523766.2898397
+  },
+  {
+   "simbolo": "ONEUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 3858620163.6884494
+  },
+  {
+   "simbolo": "AAVEUSDT",
+   "primo_mese": "2020-10",
+   "volume_settembre_2026": 3828860844.9490004
+  },
+  {
+   "simbolo": "LITUSDT",
+   "primo_mese": "2021-02",
+   "volume_settembre_2026": 2985239588.4253607
+  },
+  {
+   "simbolo": "XLMUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 2901533984.8570604
+  },
+  {
+   "simbolo": "HBARUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 2690953118.12948
+  },
+  {
+   "simbolo": "PENGUUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 2615574197.2494316
+  },
+  {
+   "simbolo": "RAYSOLUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 2586647838.91943
+  },
+  {
+   "simbolo": "IOSTUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 2539195919.8416815
+  },
+  {
+   "simbolo": "DOTUSDT",
+   "primo_mese": "2020-08",
+   "volume_settembre_2026": 2420697781.6587844
+  },
+  {
+   "simbolo": "VVVUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 2383371808.6457496
+  },
+  {
+   "simbolo": "INJUSDT",
+   "primo_mese": "2022-08",
+   "volume_settembre_2026": 2256158644.3893
+  },
+  {
+   "simbolo": "GUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 1952764804.7167451
+  },
+  {
+   "simbolo": "VTHOUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 1924789230.6646175
+  },
+  {
+   "simbolo": "XMRUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 1872409498.7587104
+  },
+  {
+   "simbolo": "APTUSDT",
+   "primo_mese": "2022-10",
+   "volume_settembre_2026": 1760943627.2036104
+  },
+  {
+   "simbolo": "SAGAUSDT",
+   "primo_mese": "2024-04",
+   "volume_settembre_2026": 1723547691.2689269
+  },
+  {
+   "simbolo": "FETUSDT",
+   "primo_mese": "2023-01",
+   "volume_settembre_2026": 1562713278.9231
+  },
+  {
+   "simbolo": "OPUSDT",
+   "primo_mese": "2022-06",
+   "volume_settembre_2026": 1434049378.0814898
+  },
+  {
+   "simbolo": "PHAUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 1427896591.4061098
+  },
+  {
+   "simbolo": "ETCUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 1425374143.1055002
+  },
+  {
+   "simbolo": "CRVUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 1379351571.4680903
+  },
+  {
+   "simbolo": "TRXUSDT",
+   "primo_mese": "2020-01",
+   "volume_settembre_2026": 1366120754.9337904
+  },
+  {
+   "simbolo": "1000SHIBUSDT",
+   "primo_mese": "2021-05",
+   "volume_settembre_2026": 1333024857.7118416
+  },
+  {
+   "simbolo": "ETHFIUSDT",
+   "primo_mese": "2024-03",
+   "volume_settembre_2026": 1233284181.2395499
+  },
+  {
+   "simbolo": "ICPUSDT",
+   "primo_mese": "2021-05",
+   "volume_settembre_2026": 1218413502.431
+  },
+  {
+   "simbolo": "TIAUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 1162014990.7603
+  },
+  {
+   "simbolo": "FARTCOINUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 1155230424.56354
+  },
+  {
+   "simbolo": "ZROUSDT",
+   "primo_mese": "2024-06",
+   "volume_settembre_2026": 1117730922.4496999
+  },
+  {
+   "simbolo": "1000BONKUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 1095036496.6888201
+  },
+  {
+   "simbolo": "SEIUSDT",
+   "primo_mese": "2023-08",
+   "volume_settembre_2026": 1076957927.07041
+  },
+  {
+   "simbolo": "SYNUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 1034466490.2421299
+  },
+  {
+   "simbolo": "ARKUSDT",
+   "primo_mese": "2023-09",
+   "volume_settembre_2026": 1030969497.1828
+  },
+  {
+   "simbolo": "ZENUSDT",
+   "primo_mese": "2020-11",
+   "volume_settembre_2026": 1026747951.3395001
+  },
+  {
+   "simbolo": "VIRTUALUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 1004859099.96934
+  },
+  {
+   "simbolo": "JUPUSDT",
+   "primo_mese": "2024-01",
+   "volume_settembre_2026": 1001483923.3145
+  },
+  {
+   "simbolo": "MOVRUSDT",
+   "primo_mese": "2023-12",
+   "volume_settembre_2026": 983156807.2691089
+  },
+  {
+   "simbolo": "COTIUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 957506071.9957232
+  },
+  {
+   "simbolo": "WIFUSDT",
+   "primo_mese": "2024-01",
+   "volume_settembre_2026": 954594425.0575101
+  },
+  {
+   "simbolo": "ARUSDT",
+   "primo_mese": "2021-09",
+   "volume_settembre_2026": 875372595.4802
+  },
+  {
+   "simbolo": "AEROUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 862123291.2308598
+  },
+  {
+   "simbolo": "PROMUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 826834379.1027
+  },
+  {
+   "simbolo": "ACEUSDT",
+   "primo_mese": "2023-12",
+   "volume_settembre_2026": 825370882.233632
+  },
+  {
+   "simbolo": "ATOMUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 824349229.2895501
+  },
+  {
+   "simbolo": "LDOUSDT",
+   "primo_mese": "2022-09",
+   "volume_settembre_2026": 822273931.3054999
+  },
+  {
+   "simbolo": "PENDLEUSDT",
+   "primo_mese": "2023-07",
+   "volume_settembre_2026": 795281387.0615001
+  },
+  {
+   "simbolo": "STRKUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 768860126.7127229
+  },
+  {
+   "simbolo": "POLUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 714354439.6289599
+  },
+  {
+   "simbolo": "CAKEUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 710224410.3106
+  },
+  {
+   "simbolo": "ONGUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 702286907.2079302
+  },
+  {
+   "simbolo": "JTOUSDT",
+   "primo_mese": "2023-12",
+   "volume_settembre_2026": 691976097.0565
+  },
+  {
+   "simbolo": "RAREUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 684108376.6190499
+  },
+  {
+   "simbolo": "ALGOUSDT",
+   "primo_mese": "2020-06",
+   "volume_settembre_2026": 667380990.0665221
+  },
+  {
+   "simbolo": "GRASSUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 654305491.6259398
+  },
+  {
+   "simbolo": "CVCUSDT",
+   "primo_mese": "2020-11",
+   "volume_settembre_2026": 644786625.24018
+  },
+  {
+   "simbolo": "AVAUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 642242687.67445
+  },
+  {
+   "simbolo": "RENDERUSDT",
+   "primo_mese": "2024-07",
+   "volume_settembre_2026": 613809889.4275
+  },
+  {
+   "simbolo": "PYTHUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 530938831.27141994
+  },
+  {
+   "simbolo": "REZUSDT",
+   "primo_mese": "2024-04",
+   "volume_settembre_2026": 526362971.9687409
+  },
+  {
+   "simbolo": "ZETAUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 516312171.67748
+  },
+  {
+   "simbolo": "CELRUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 494639060.268838
+  },
+  {
+   "simbolo": "BOMEUSDT",
+   "primo_mese": "2024-03",
+   "volume_settembre_2026": 491231340.3302778
+  },
+  {
+   "simbolo": "EGLDUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 491034107.4624001
+  },
+  {
+   "simbolo": "MORPHOUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 485711479.43962
+  },
+  {
+   "simbolo": "NMRUSDT",
+   "primo_mese": "2023-06",
+   "volume_settembre_2026": 469701189.61590004
+  },
+  {
+   "simbolo": "EIGENUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 464364546.1383
+  },
+  {
+   "simbolo": "MINAUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 444619194.08177996
+  },
+  {
+   "simbolo": "SUSHIUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 434616854.9498
+  },
+  {
+   "simbolo": "ORDIUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 423268892.82009995
+  },
+  {
+   "simbolo": "STXUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 419559932.28110003
+  },
+  {
+   "simbolo": "STEEMUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 413340502.6282799
+  },
+  {
+   "simbolo": "GALAUSDT",
+   "primo_mese": "2021-09",
+   "volume_settembre_2026": 399911990.058816
+  },
+  {
+   "simbolo": "SPXUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 363173933.1682
+  },
+  {
+   "simbolo": "SANDUSDT",
+   "primo_mese": "2021-01",
+   "volume_settembre_2026": 362336371.1814
+  },
+  {
+   "simbolo": "VETUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 360897203.14716995
+  },
+  {
+   "simbolo": "KAITOUSDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 342108816.51877
+  },
+  {
+   "simbolo": "GRTUSDT",
+   "primo_mese": "2020-12",
+   "volume_settembre_2026": 328279656.95397
+  },
+  {
+   "simbolo": "RUNEUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 304423557.0893
+  },
+  {
+   "simbolo": "ENSUSDT",
+   "primo_mese": "2021-11",
+   "volume_settembre_2026": 293578221.24189997
+  },
+  {
+   "simbolo": "ORCAUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 280016283.28080004
+  },
+  {
+   "simbolo": "KASUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 273233486.02448004
+  },
+  {
+   "simbolo": "XTZUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 268591194.06614
+  },
+  {
+   "simbolo": "AXSUSDT",
+   "primo_mese": "2020-11",
+   "volume_settembre_2026": 266281077.49270007
+  },
+  {
+   "simbolo": "MTLUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 264396802.11709997
+  },
+  {
+   "simbolo": "1000FLOKIUSDT",
+   "primo_mese": "2023-05",
+   "volume_settembre_2026": 255148991.91948
+  },
+  {
+   "simbolo": "HEIUSDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 251365991.09939697
+  },
+  {
+   "simbolo": "KAVAUSDT",
+   "primo_mese": "2020-07",
+   "volume_settembre_2026": 251194867.78285497
+  },
+  {
+   "simbolo": "CHZUSDT",
+   "primo_mese": "2021-01",
+   "volume_settembre_2026": 249196544.90406
+  },
+  {
+   "simbolo": "ZKUSDT",
+   "primo_mese": "2024-06",
+   "volume_settembre_2026": 248889837.303261
+  },
+  {
+   "simbolo": "PEOPLEUSDT",
+   "primo_mese": "2021-12",
+   "volume_settembre_2026": 244629849.834112
+  },
+  {
+   "simbolo": "BERAUSDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 243150800.60096997
+  },
+  {
+   "simbolo": "WUSDT",
+   "primo_mese": "2024-04",
+   "volume_settembre_2026": 241789608.61761847
+  },
+  {
+   "simbolo": "GPSUSDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 240552050.82159194
+  },
+  {
+   "simbolo": "XAIUSDT",
+   "primo_mese": "2024-01",
+   "volume_settembre_2026": 235619263.17806703
+  },
+  {
+   "simbolo": "SUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 227321916.46704
+  },
+  {
+   "simbolo": "POWRUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 225833212.75188
+  },
+  {
+   "simbolo": "SOLVUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 223548858.653839
+  },
+  {
+   "simbolo": "KMNOUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 222253943.67406002
+  },
+  {
+   "simbolo": "JASMYUSDT",
+   "primo_mese": "2022-04",
+   "volume_settembre_2026": 222211471.240443
+  },
+  {
+   "simbolo": "NEIROUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 219620871.63903412
+  },
+  {
+   "simbolo": "DEXEUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 217418752.63714004
+  },
+  {
+   "simbolo": "TRBUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 217128142.12359998
+  },
+  {
+   "simbolo": "ZILUSDT",
+   "primo_mese": "2020-06",
+   "volume_settembre_2026": 216727089.37155598
+  },
+  {
+   "simbolo": "CATIUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 211315931.53217
+  },
+  {
+   "simbolo": "IOTAUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 210323677.07322603
+  },
+  {
+   "simbolo": "BICOUSDT",
+   "primo_mese": "2023-09",
+   "volume_settembre_2026": 209832033.71420997
+  },
+  {
+   "simbolo": "KOMAUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 199533930.351557
+  },
+  {
+   "simbolo": "LUNA2USDT",
+   "primo_mese": "2022-09",
+   "volume_settembre_2026": 199036848.90391
+  },
+  {
+   "simbolo": "APEUSDT",
+   "primo_mese": "2022-03",
+   "volume_settembre_2026": 192999801.6412
+  },
+  {
+   "simbolo": "DRIFTUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 190825738.91226998
+  },
+  {
+   "simbolo": "BIOUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 183659568.04259
+  },
+  {
+   "simbolo": "MOODENGUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 183652490.98784
+  },
+  {
+   "simbolo": "COMPUSDT",
+   "primo_mese": "2020-06",
+   "volume_settembre_2026": 175436176.6751
+  },
+  {
+   "simbolo": "GRIFFAINUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 173624350.63756207
+  },
+  {
+   "simbolo": "TSTUSDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 172905958.84489697
+  },
+  {
+   "simbolo": "DYDXUSDT",
+   "primo_mese": "2021-09",
+   "volume_settembre_2026": 170184373.92071998
+  },
+  {
+   "simbolo": "THETAUSDT",
+   "primo_mese": "2020-05",
+   "volume_settembre_2026": 165200841.82778996
+  },
+  {
+   "simbolo": "SUPERUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 162688758.99266002
+  },
+  {
+   "simbolo": "CELOUSDT",
+   "primo_mese": "2021-09",
+   "volume_settembre_2026": 159123131.321942
+  },
+  {
+   "simbolo": "PORTALUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 158291733.78057298
+  },
+  {
+   "simbolo": "ASTRUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 158224931.03940398
+  },
+  {
+   "simbolo": "DOGSUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 157415318.98734894
+  },
+  {
+   "simbolo": "1000LUNCUSDT",
+   "primo_mese": "2022-09",
+   "volume_settembre_2026": 156141017.62954998
+  },
+  {
+   "simbolo": "XVGUSDT",
+   "primo_mese": "2023-07",
+   "volume_settembre_2026": 154026659.965677
+  },
+  {
+   "simbolo": "BBUSDT",
+   "primo_mese": "2024-05",
+   "volume_settembre_2026": 153270804.164484
+  },
+  {
+   "simbolo": "HIVEUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 149789641.65783998
+  },
+  {
+   "simbolo": "PNUTUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 147943006.91287002
+  },
+  {
+   "simbolo": "LPTUSDT",
+   "primo_mese": "2021-11",
+   "volume_settembre_2026": 143426204.8923
+  },
+  {
+   "simbolo": "CFXUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 142570891.26202998
+  },
+  {
+   "simbolo": "SKLUSDT",
+   "primo_mese": "2020-12",
+   "volume_settembre_2026": 140304278.982957
+  },
+  {
+   "simbolo": "AVAAIUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 136799067.285844
+  },
+  {
+   "simbolo": "KSMUSDT",
+   "primo_mese": "2020-10",
+   "volume_settembre_2026": 134373538.77609998
+  },
+  {
+   "simbolo": "BLURUSDT",
+   "primo_mese": "2023-04",
+   "volume_settembre_2026": 132865256.6471
+  },
+  {
+   "simbolo": "RVNUSDT",
+   "primo_mese": "2021-02",
+   "volume_settembre_2026": 131172105.81409901
+  },
+  {
+   "simbolo": "CHRUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 129687438.30918999
+  },
+  {
+   "simbolo": "ANKRUSDT",
+   "primo_mese": "2021-01",
+   "volume_settembre_2026": 129457860.223436
+  },
+  {
+   "simbolo": "ROSEUSDT",
+   "primo_mese": "2021-12",
+   "volume_settembre_2026": 129001297.44222598
+  },
+  {
+   "simbolo": "MOVEUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 126401461.284843
+  },
+  {
+   "simbolo": "MANAUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 125573714.06597999
+  },
+  {
+   "simbolo": "IOUSDT",
+   "primo_mese": "2024-06",
+   "volume_settembre_2026": 120243818.04264
+  },
+  {
+   "simbolo": "TWTUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 114549263.8499
+  },
+  {
+   "simbolo": "IMXUSDT",
+   "primo_mese": "2022-02",
+   "volume_settembre_2026": 112266173.67890002
+  },
+  {
+   "simbolo": "ALICEUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 112237122.41886002
+  },
+  {
+   "simbolo": "STGUSDT",
+   "primo_mese": "2022-08",
+   "volume_settembre_2026": 112236166.55780001
+  },
+  {
+   "simbolo": "ENJUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 109696277.22241998
+  },
+  {
+   "simbolo": "DUSKUSDT",
+   "primo_mese": "2022-01",
+   "volume_settembre_2026": 108442345.78992
+  },
+  {
+   "simbolo": "NOTUSDT",
+   "primo_mese": "2024-05",
+   "volume_settembre_2026": 107933928.1380778
+  },
+  {
+   "simbolo": "ARKMUSDT",
+   "primo_mese": "2023-07",
+   "volume_settembre_2026": 107269642.2819
+  },
+  {
+   "simbolo": "METISUSDT",
+   "primo_mese": "2024-03",
+   "volume_settembre_2026": 106933391.51237002
+  },
+  {
+   "simbolo": "BSVUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 104308890.95
+  },
+  {
+   "simbolo": "NEOUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 104022948.05912
+  },
+  {
+   "simbolo": "1000CATUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 103748280.61790001
+  },
+  {
+   "simbolo": "SNXUSDT",
+   "primo_mese": "2020-08",
+   "volume_settembre_2026": 101386159.66017002
+  },
+  {
+   "simbolo": "ALCHUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 100541335.95131001
+  },
+  {
+   "simbolo": "COWUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 99687222.9759
+  },
+  {
+   "simbolo": "PIPPINUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 99539712.18641
+  },
+  {
+   "simbolo": "TURBOUSDT",
+   "primo_mese": "2024-05",
+   "volume_settembre_2026": 98310140.36049221
+  },
+  {
+   "simbolo": "POLYXUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 98279176.6056
+  },
+  {
+   "simbolo": "API3USDT",
+   "primo_mese": "2022-02",
+   "volume_settembre_2026": 97291928.49831
+  },
+  {
+   "simbolo": "ONTUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 97058858.77553098
+  },
+  {
+   "simbolo": "LAYERUSDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 96495832.80810201
+  },
+  {
+   "simbolo": "MEWUSDT",
+   "primo_mese": "2024-06",
+   "volume_settembre_2026": 94956119.70150182
+  },
+  {
+   "simbolo": "ANIMEUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 93511205.15430203
+  },
+  {
+   "simbolo": "ILVUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 91707475.56269999
+  },
+  {
+   "simbolo": "ARCUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 91557588.42682001
+  },
+  {
+   "simbolo": "FLOWUSDT",
+   "primo_mese": "2022-02",
+   "volume_settembre_2026": 91363857.982997
+  },
+  {
+   "simbolo": "WAXPUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 91256584.211252
+  },
+  {
+   "simbolo": "TLMUSDT",
+   "primo_mese": "2021-07",
+   "volume_settembre_2026": 90577119.30607902
+  },
+  {
+   "simbolo": "IDUSDT",
+   "primo_mese": "2023-03",
+   "volume_settembre_2026": 90531878.36352998
+  },
+  {
+   "simbolo": "DYMUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 89103215.48592599
+  },
+  {
+   "simbolo": "AKTUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 88893058.25731
+  },
+  {
+   "simbolo": "BIGTIMEUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 88516754.556193
+  },
+  {
+   "simbolo": "MAGICUSDT",
+   "primo_mese": "2023-01",
+   "volume_settembre_2026": 88189252.34579599
+  },
+  {
+   "simbolo": "CVXUSDT",
+   "primo_mese": "2022-09",
+   "volume_settembre_2026": 87462618.79470001
+  },
+  {
+   "simbolo": "AIXBTUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 86754215.84166998
+  },
+  {
+   "simbolo": "CHILLGUYUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 85904399.40788099
+  },
+  {
+   "simbolo": "IOTXUSDT",
+   "primo_mese": "2021-08",
+   "volume_settembre_2026": 85639896.06779201
+  },
+  {
+   "simbolo": "FIDAUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 84108369.87636
+  },
+  {
+   "simbolo": "TNSRUSDT",
+   "primo_mese": "2024-04",
+   "volume_settembre_2026": 83422176.21845102
+  },
+  {
+   "simbolo": "1INCHUSDT",
+   "primo_mese": "2020-12",
+   "volume_settembre_2026": 81946045.90337999
+  },
+  {
+   "simbolo": "BEAMXUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 80641067.087335
+  },
+  {
+   "simbolo": "ALTUSDT",
+   "primo_mese": "2024-01",
+   "volume_settembre_2026": 80602318.29168999
+  },
+  {
+   "simbolo": "POPCATUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 80455108.86429
+  },
+  {
+   "simbolo": "CTSIUSDT",
+   "primo_mese": "2021-10",
+   "volume_settembre_2026": 79485686.29235998
+  },
+  {
+   "simbolo": "RIFUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 79481697.25893998
+  },
+  {
+   "simbolo": "AXLUSDT",
+   "primo_mese": "2024-03",
+   "volume_settembre_2026": 79461117.25297101
+  },
+  {
+   "simbolo": "MEMEUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 78299362.97223748
+  },
+  {
+   "simbolo": "BTCDOMUSDT",
+   "primo_mese": "2021-06",
+   "volume_settembre_2026": 77732517.16669998
+  },
+  {
+   "simbolo": "WOOUSDT",
+   "primo_mese": "2022-04",
+   "volume_settembre_2026": 76422437.01914997
+  },
+  {
+   "simbolo": "MELANIAUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 75759770.05841859
+  },
+  {
+   "simbolo": "DODOXUSDT",
+   "primo_mese": "2023-08",
+   "volume_settembre_2026": 74768785.90566
+  },
+  {
+   "simbolo": "THEUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 74220497.56752
+  },
+  {
+   "simbolo": "VANAUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 73608781.8441
+  },
+  {
+   "simbolo": "SCRUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 73595865.71133
+  },
+  {
+   "simbolo": "RSRUSDT",
+   "primo_mese": "2020-10",
+   "volume_settembre_2026": 73368505.614771
+  },
+  {
+   "simbolo": "SPELLUSDT",
+   "primo_mese": "2022-09",
+   "volume_settembre_2026": 73159893.9554262
+  },
+  {
+   "simbolo": "BATUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 73047307.7061685
+  },
+  {
+   "simbolo": "VELODROMEUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 71971553.99553001
+  },
+  {
+   "simbolo": "GTCUSDT",
+   "primo_mese": "2021-06",
+   "volume_settembre_2026": 71934940.25495699
+  },
+  {
+   "simbolo": "GMTUSDT",
+   "primo_mese": "2022-03",
+   "volume_settembre_2026": 71745827.32443802
+  },
+  {
+   "simbolo": "GLMUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 71182245.34405
+  },
+  {
+   "simbolo": "PIXELUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 71068258.616484
+  },
+  {
+   "simbolo": "CYBERUSDT",
+   "primo_mese": "2023-08",
+   "volume_settembre_2026": 70195012.38876
+  },
+  {
+   "simbolo": "KNCUSDT",
+   "primo_mese": "2020-06",
+   "volume_settembre_2026": 69256251.196
+  },
+  {
+   "simbolo": "ACHUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 69138928.850545
+  },
+  {
+   "simbolo": "LISTAUSDT",
+   "primo_mese": "2024-06",
+   "volume_settembre_2026": 68008871.1754
+  },
+  {
+   "simbolo": "QTUMUSDT",
+   "primo_mese": "2020-02",
+   "volume_settembre_2026": 67982867.88276
+  },
+  {
+   "simbolo": "YFIUSDT",
+   "primo_mese": "2020-08",
+   "volume_settembre_2026": 67556663.507
+  },
+  {
+   "simbolo": "1000XECUSDT",
+   "primo_mese": "2021-09",
+   "volume_settembre_2026": 67014420.61940999
+  },
+  {
+   "simbolo": "YGGUSDT",
+   "primo_mese": "2023-08",
+   "volume_settembre_2026": 66872548.55553001
+  },
+  {
+   "simbolo": "GASUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 65744548.02120001
+  },
+  {
+   "simbolo": "COOKIEUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 65426756.54024
+  },
+  {
+   "simbolo": "MASKUSDT",
+   "primo_mese": "2021-08",
+   "volume_settembre_2026": 64080486.583399996
+  },
+  {
+   "simbolo": "USUALUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 60881750.816714
+  },
+  {
+   "simbolo": "MEUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 60738629.315749995
+  },
+  {
+   "simbolo": "KAIAUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 60707186.521299995
+  },
+  {
+   "simbolo": "MANTAUSDT",
+   "primo_mese": "2024-01",
+   "volume_settembre_2026": 60360873.157414004
+  },
+  {
+   "simbolo": "ARPAUSDT",
+   "primo_mese": "2021-10",
+   "volume_settembre_2026": 60345034.12063099
+  },
+  {
+   "simbolo": "1000SATSUSDT",
+   "primo_mese": "2023-12",
+   "volume_settembre_2026": 60171465.72641897
+  },
+  {
+   "simbolo": "SSVUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 59797083.06121998
+  },
+  {
+   "simbolo": "HOTUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 59792081.2091703
+  },
+  {
+   "simbolo": "AGLDUSDT",
+   "primo_mese": "2023-07",
+   "volume_settembre_2026": 59548894.39420001
+  },
+  {
+   "simbolo": "RONINUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 59380492.143692
+  },
+  {
+   "simbolo": "1000RATSUSDT",
+   "primo_mese": "2023-12",
+   "volume_settembre_2026": 59252255.3572
+  },
+  {
+   "simbolo": "BRETTUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 58656768.824582994
+  },
+  {
+   "simbolo": "CETUSUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 58623089.967760004
+  },
+  {
+   "simbolo": "AUCTIONUSDT",
+   "primo_mese": "2023-12",
+   "volume_settembre_2026": 57658473.82977002
+  },
+  {
+   "simbolo": "GOATUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 57064697.337359995
+  },
+  {
+   "simbolo": "EDUUSDT",
+   "primo_mese": "2023-04",
+   "volume_settembre_2026": 56900667.51485001
+  },
+  {
+   "simbolo": "JOEUSDT",
+   "primo_mese": "2023-03",
+   "volume_settembre_2026": 56067435.258420005
+  },
+  {
+   "simbolo": "ZRXUSDT",
+   "primo_mese": "2020-06",
+   "volume_settembre_2026": 53858311.09353
+  },
+  {
+   "simbolo": "GMXUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 52871137.14031
+  },
+  {
+   "simbolo": "SWARMSUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 52239660.40528
+  },
+  {
+   "simbolo": "CKBUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 52050223.30099852
+  },
+  {
+   "simbolo": "1MBABYDOGEUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 52035118.5267415
+  },
+  {
+   "simbolo": "RLCUSDT",
+   "primo_mese": "2020-07",
+   "volume_settembre_2026": 50532049.06020001
+  },
+  {
+   "simbolo": "C98USDT",
+   "primo_mese": "2021-08",
+   "volume_settembre_2026": 49670631.084350005
+  },
+  {
+   "simbolo": "HMSTRUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 48093622.7763988
+  },
+  {
+   "simbolo": "ACTUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 45867423.86130799
+  },
+  {
+   "simbolo": "SHELLUSDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 45757045.81807999
+  },
+  {
+   "simbolo": "AEVOUSDT",
+   "primo_mese": "2024-03",
+   "volume_settembre_2026": 44437362.40381901
+  },
+  {
+   "simbolo": "UMAUSDT",
+   "primo_mese": "2023-05",
+   "volume_settembre_2026": 41790024.3561
+  },
+  {
+   "simbolo": "ZEREBROUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 40941859.989532
+  },
+  {
+   "simbolo": "SAFEUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 40618005.78902
+  },
+  {
+   "simbolo": "FLUXUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 39952317.57024998
+  },
+  {
+   "simbolo": "USTCUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 39324447.72514601
+  },
+  {
+   "simbolo": "BELUSDT",
+   "primo_mese": "2020-11",
+   "volume_settembre_2026": 38478110.842250004
+  },
+  {
+   "simbolo": "DIAUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 38388985.426
+  },
+  {
+   "simbolo": "BANUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 36990168.74798999
+  },
+  {
+   "simbolo": "LUMIAUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 36818433.37685701
+  },
+  {
+   "simbolo": "SONICUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 36426425.709442995
+  },
+  {
+   "simbolo": "CGPTUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 35750652.447239995
+  },
+  {
+   "simbolo": "1000000MOGUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 34078257.02634
+  },
+  {
+   "simbolo": "SUNUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 33706331.215694
+  },
+  {
+   "simbolo": "BANDUSDT",
+   "primo_mese": "2020-07",
+   "volume_settembre_2026": 32531982.277949996
+  },
+  {
+   "simbolo": "BANANAUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 32507167.315300006
+  },
+  {
+   "simbolo": "RPLUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 32120900.090400003
+  },
+  {
+   "simbolo": "XVSUSDT",
+   "primo_mese": "2023-04",
+   "volume_settembre_2026": 30918039.9515
+  },
+  {
+   "simbolo": "OGNUSDT",
+   "primo_mese": "2021-04",
+   "volume_settembre_2026": 30757348.016510002
+  },
+  {
+   "simbolo": "MAVIAUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 30310632.399329998
+  },
+  {
+   "simbolo": "LQTYUSDT",
+   "primo_mese": "2023-03",
+   "volume_settembre_2026": 29851822.093319997
+  },
+  {
+   "simbolo": "MOCAUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 28403603.949434
+  },
+  {
+   "simbolo": "ETHWUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 28363739.055199996
+  },
+  {
+   "simbolo": "SFPUSDT",
+   "primo_mese": "2021-02",
+   "volume_settembre_2026": 26292556.3304
+  },
+  {
+   "simbolo": "MAVUSDT",
+   "primo_mese": "2023-06",
+   "volume_settembre_2026": 22962282.592452
+  },
+  {
+   "simbolo": "SANTOSUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 21833337.428389996
+  },
+  {
+   "simbolo": "SLPUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 21720960.0464225
+  },
+  {
+   "simbolo": "BNTUSDT",
+   "primo_mese": "2023-08",
+   "volume_settembre_2026": 20957263.860899996
+  },
+  {
+   "simbolo": "1000CHEEMSUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 20795518.517022192
+  },
+  {
+   "simbolo": "CTKUSDT",
+   "primo_mese": "2020-11",
+   "volume_settembre_2026": 15307627.476599999
+  },
+  {
+   "simbolo": "1000WHYUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "1000XUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "ACXUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "AGIXUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "AI16ZUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "AIUSDT",
+   "primo_mese": "2024-01",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "ALPACAUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "ALPHAUSDT",
+   "primo_mese": "2020-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "AMBUSDT",
+   "primo_mese": "2023-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "ATAUSDT",
+   "primo_mese": "2021-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "B3USDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "BADGERUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "BAKEUSDT",
+   "primo_mese": "2021-05",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "BALUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "BLZUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "BNXUSDT",
+   "primo_mese": "2022-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "BONDUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "BSWUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "CHESSUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "COMBOUSDT",
+   "primo_mese": "2023-06",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "COSUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "DARUSDT",
+   "primo_mese": "2022-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "DEFIUSDT",
+   "primo_mese": "2020-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "DEGENUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "DEGOUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "DENTUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "DFUSDT",
+   "primo_mese": "2024-12",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "DGBUSDT",
+   "primo_mese": "2021-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "DUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "FIOUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "FLMUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "FTMUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "FTTUSDT",
+   "primo_mese": "2022-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "FXSUSDT",
+   "primo_mese": "2023-01",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "GHSTUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "GLMRUSDT",
+   "primo_mese": "2023-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "HFTUSDT",
+   "primo_mese": "2023-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "HIFIUSDT",
+   "primo_mese": "2023-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "HIGHUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "HIPPOUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "HOOKUSDT",
+   "primo_mese": "2023-01",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "ICXUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "IDEXUSDT",
+   "primo_mese": "2023-05",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "IPUSDT",
+   "primo_mese": "2025-02",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "KDAUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "KEYUSDT",
+   "primo_mese": "2023-05",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "KLAYUSDT",
+   "primo_mese": "2021-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "LEVERUSDT",
+   "primo_mese": "2023-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "LINAUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "LOKAUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "LOOMUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "LRCUSDT",
+   "primo_mese": "2020-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "MBOXUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "MDTUSDT",
+   "primo_mese": "2023-06",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "MKRUSDT",
+   "primo_mese": "2020-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "MYROUSDT",
+   "primo_mese": "2024-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "NEIROETHUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "NFPUSDT",
+   "primo_mese": "2023-12",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "NKNUSDT",
+   "primo_mese": "2021-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "NTRNUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "NULSUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "OCEANUSDT",
+   "primo_mese": "2020-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "OMGUSDT",
+   "primo_mese": "2020-07",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "OMNIUSDT",
+   "primo_mese": "2024-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "OMUSDT",
+   "primo_mese": "2024-02",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "ORBSUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "OXTUSDT",
+   "primo_mese": "2023-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "PERPUSDT",
+   "primo_mese": "2023-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "PHBUSDT",
+   "primo_mese": "2023-02",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "PONKEUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "QUICKUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "RADUSDT",
+   "primo_mese": "2023-05",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "RAYUSDT",
+   "primo_mese": "2021-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "RDNTUSDT",
+   "primo_mese": "2023-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "REEFUSDT",
+   "primo_mese": "2021-02",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "REIUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "RENUSDT",
+   "primo_mese": "2020-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "SCRTUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "SCUSDT",
+   "primo_mese": "2021-04",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "SLERFUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "SNTUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "STMXUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "STORJUSDT",
+   "primo_mese": "2020-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "STPTUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "STRAXUSDT",
+   "primo_mese": "2023-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "SWELLUSDT",
+   "primo_mese": "2024-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "SYSUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "TOKENUSDT",
+   "primo_mese": "2023-11",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "TONUSDT",
+   "primo_mese": "2024-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "TROYUSDT",
+   "primo_mese": "2024-10",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "TRUUSDT",
+   "primo_mese": "2023-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "UNFIUSDT",
+   "primo_mese": "2021-02",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "UXLINKUSDT",
+   "primo_mese": "2024-09",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "VANRYUSDT",
+   "primo_mese": "2024-03",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "VIDTUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "VINEUSDT",
+   "primo_mese": "2025-01",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "VOXELUSDT",
+   "primo_mese": "2024-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "WAVESUSDT",
+   "primo_mese": "2020-08",
+   "volume_settembre_2026": 0.0
+  },
+  {
+   "simbolo": "XEMUSDT",
+   "primo_mese": "2021-03",
+   "volume_settembre_2026": 0.0
+  }
+ ],
+ "scelte": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "ZECUSDT",
+  "SOLUSDT",
+  "XRPUSDT",
+  "NEARUSDT",
+  "DOGEUSDT",
+  "UNIUSDT",
+  "BNBUSDT",
+  "SUIUSDT",
+  "LSKUSDT",
+  "ENAUSDT",
+  "1000PEPEUSDT",
+  "QNTUSDT",
+  "ARBUSDT",
+  "WLDUSDT",
+  "LINKUSDT",
+  "ADAUSDT",
+  "TAOUSDT",
+  "AVAXUSDT",
+  "BCHUSDT",
+  "ONDOUSDT",
+  "FILUSDT",
+  "TRUMPUSDT",
+  "LTCUSDT",
+  "DASHUSDT",
+  "ONEUSDT",
+  "AAVEUSDT",
+  "LITUSDT",
+  "XLMUSDT",
+  "HBARUSDT",
+  "PENGUUSDT",
+  "RAYSOLUSDT",
+  "IOSTUSDT",
+  "DOTUSDT",
+  "VVVUSDT",
+  "INJUSDT",
+  "GUSDT",
+  "VTHOUSDT",
+  "XMRUSDT",
+  "APTUSDT",
+  "SAGAUSDT",
+  "FETUSDT",
+  "OPUSDT",
+  "PHAUSDT",
+  "ETCUSDT",
+  "CRVUSDT",
+  "TRXUSDT",
+  "1000SHIBUSDT",
+  "ETHFIUSDT",
+  "ICPUSDT",
+  "TIAUSDT",
+  "FARTCOINUSDT",
+  "ZROUSDT",
+  "1000BONKUSDT",
+  "SEIUSDT",
+  "SYNUSDT",
+  "ARKUSDT",
+  "ZENUSDT",
+  "VIRTUALUSDT",
+  "JUPUSDT",
+  "MOVRUSDT",
+  "COTIUSDT",
+  "WIFUSDT",
+  "ARUSDT",
+  "AEROUSDT",
+  "PROMUSDT",
+  "ACEUSDT",
+  "ATOMUSDT",
+  "LDOUSDT",
+  "PENDLEUSDT",
+  "STRKUSDT",
+  "POLUSDT",
+  "CAKEUSDT",
+  "ONGUSDT",
+  "JTOUSDT",
+  "RAREUSDT",
+  "ALGOUSDT",
+  "GRASSUSDT",
+  "CVCUSDT",
+  "AVAUSDT",
+  "RENDERUSDT",
+  "PYTHUSDT",
+  "REZUSDT",
+  "ZETAUSDT",
+  "CELRUSDT",
+  "BOMEUSDT",
+  "EGLDUSDT",
+  "MORPHOUSDT",
+  "NMRUSDT",
+  "EIGENUSDT",
+  "MINAUSDT",
+  "SUSHIUSDT",
+  "ORDIUSDT",
+  "STXUSDT",
+  "STEEMUSDT",
+  "GALAUSDT",
+  "SPXUSDT",
+  "SANDUSDT",
+  "VETUSDT"
+ ]
+}
