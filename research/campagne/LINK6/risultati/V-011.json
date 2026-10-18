@@ -1,0 +1,1489 @@
+{
+"id": "V-011",
+"trade": [
+{
+"ingresso": "2020-03-02T10:00:00Z",
+"uscita": "2020-03-03T00:00:00Z",
+"r": 0.339,
+"motivo": "trailing",
+"larghezza_stop": 0.04333
+},
+{
+"ingresso": "2020-03-03T12:00:00Z",
+"uscita": "2020-03-03T16:00:00Z",
+"r": -0.407,
+"motivo": "trailing",
+"larghezza_stop": 0.03543
+},
+{
+"ingresso": "2020-03-03T21:00:00Z",
+"uscita": "2020-03-04T08:00:00Z",
+"r": 0.836,
+"motivo": "trailing",
+"larghezza_stop": 0.03926
+},
+{
+"ingresso": "2020-03-05T10:00:00Z",
+"uscita": "2020-03-05T20:00:00Z",
+"r": -0.866,
+"motivo": "trailing",
+"larghezza_stop": 0.04282
+},
+{
+"ingresso": "2020-03-27T00:00:00Z",
+"uscita": "2020-03-27T05:00:00Z",
+"r": -0.258,
+"motivo": "trailing",
+"larghezza_stop": 0.02905
+},
+{
+"ingresso": "2020-03-31T18:00:00Z",
+"uscita": "2020-03-31T23:00:00Z",
+"r": 1.191,
+"motivo": "trailing",
+"larghezza_stop": 0.02298
+},
+{
+"ingresso": "2020-04-02T17:00:00Z",
+"uscita": "2020-04-02T18:00:00Z",
+"r": -0.046,
+"motivo": "trailing_salto",
+"larghezza_stop": 0.03035
+},
+{
+"ingresso": "2020-04-06T05:00:00Z",
+"uscita": "2020-04-06T20:00:00Z",
+"r": 3.661,
+"motivo": "trailing",
+"larghezza_stop": 0.01641
+},
+{
+"ingresso": "2020-04-18T03:00:00Z",
+"uscita": "2020-04-19T01:00:00Z",
+"r": 2.21,
+"motivo": "trailing",
+"larghezza_stop": 0.02646
+},
+{
+"ingresso": "2020-04-22T07:00:00Z",
+"uscita": "2020-04-23T03:00:00Z",
+"r": 0.873,
+"motivo": "trailing",
+"larghezza_stop": 0.02917
+},
+{
+"ingresso": "2020-04-23T13:00:00Z",
+"uscita": "2020-04-23T15:00:00Z",
+"r": 1.245,
+"motivo": "trailing",
+"larghezza_stop": 0.02397
+},
+{
+"ingresso": "2020-04-28T12:00:00Z",
+"uscita": "2020-04-28T19:00:00Z",
+"r": -0.511,
+"motivo": "trailing",
+"larghezza_stop": 0.02693
+},
+{
+"ingresso": "2020-04-29T10:00:00Z",
+"uscita": "2020-04-29T17:00:00Z",
+"r": 0.664,
+"motivo": "trailing",
+"larghezza_stop": 0.02155
+},
+{
+"ingresso": "2020-05-02T11:00:00Z",
+"uscita": "2020-05-02T22:00:00Z",
+"r": -0.24,
+"motivo": "trailing",
+"larghezza_stop": 0.0211
+},
+{
+"ingresso": "2020-05-06T07:00:00Z",
+"uscita": "2020-05-06T13:00:00Z",
+"r": -0.927,
+"motivo": "trailing",
+"larghezza_stop": 0.02202
+},
+{
+"ingresso": "2020-05-07T18:00:00Z",
+"uscita": "2020-05-07T20:00:00Z",
+"r": 0.958,
+"motivo": "trailing",
+"larghezza_stop": 0.02317
+},
+{
+"ingresso": "2020-05-16T18:00:00Z",
+"uscita": "2020-05-17T16:00:00Z",
+"r": 0.457,
+"motivo": "trailing",
+"larghezza_stop": 0.02025
+},
+{
+"ingresso": "2020-05-18T03:00:00Z",
+"uscita": "2020-05-18T06:00:00Z",
+"r": -0.557,
+"motivo": "trailing",
+"larghezza_stop": 0.01798
+},
+{
+"ingresso": "2020-05-20T00:00:00Z",
+"uscita": "2020-05-20T06:00:00Z",
+"r": 0.767,
+"motivo": "trailing",
+"larghezza_stop": 0.01739
+},
+{
+"ingresso": "2020-05-27T10:00:00Z",
+"uscita": "2020-05-27T19:00:00Z",
+"r": -0.532,
+"motivo": "trailing",
+"larghezza_stop": 0.01634
+},
+{
+"ingresso": "2020-05-28T13:00:00Z",
+"uscita": "2020-05-28T18:00:00Z",
+"r": 0.03,
+"motivo": "trailing",
+"larghezza_stop": 0.01284
+},
+{
+"ingresso": "2020-05-28T23:00:00Z",
+"uscita": "2020-05-29T01:00:00Z",
+"r": 1.165,
+"motivo": "trailing_salto",
+"larghezza_stop": 0.01411
+},
+{
+"ingresso": "2020-05-29T02:00:00Z",
+"uscita": "2020-05-29T08:00:00Z",
+"r": -0.505,
+"motivo": "trailing",
+"larghezza_stop": 0.01873
+},
+{
+"ingresso": "2020-05-30T05:00:00Z",
+"uscita": "2020-05-30T20:00:00Z",
+"r": 0.623,
+"motivo": "trailing",
+"larghezza_stop": 0.01644
+},
+{
+"ingresso": "2020-05-31T00:00:00Z",
+"uscita": "2020-05-31T02:00:00Z",
+"r": -1.064,
+"motivo": "stop",
+"larghezza_stop": 0.01863
+},
+{
+"ingresso": "2020-06-07T04:00:00Z",
+"uscita": "2020-06-07T08:00:00Z",
+"r": -0.93,
+"motivo": "trailing",
+"larghezza_stop": 0.01213
+},
+{
+"ingresso": "2020-06-08T18:00:00Z",
+"uscita": "2020-06-09T00:00:00Z",
+"r": 0.257,
+"motivo": "trailing",
+"larghezza_stop": 0.01223
+},
+{
+"ingresso": "2020-06-10T23:00:00Z",
+"uscita": "2020-06-11T05:00:00Z",
+"r": -0.622,
+"motivo": "trailing",
+"larghezza_stop": 0.01241
+},
+{
+"ingresso": "2020-06-20T12:00:00Z",
+"uscita": "2020-06-20T14:00:00Z",
+"r": -0.377,
+"motivo": "trailing",
+"larghezza_stop": 0.01519
+},
+{
+"ingresso": "2020-06-22T02:00:00Z",
+"uscita": "2020-06-22T22:00:00Z",
+"r": 1.865,
+"motivo": "trailing",
+"larghezza_stop": 0.0132
+},
+{
+"ingresso": "2020-07-01T15:00:00Z",
+"uscita": "2020-07-02T05:00:00Z",
+"r": 1.369,
+"motivo": "trailing",
+"larghezza_stop": 0.0167
+},
+{
+"ingresso": "2020-07-06T06:00:00Z",
+"uscita": "2020-07-06T15:00:00Z",
+"r": -0.42,
+"motivo": "trailing",
+"larghezza_stop": 0.0177
+},
+{
+"ingresso": "2020-07-26T05:00:00Z",
+"uscita": "2020-07-26T10:00:00Z",
+"r": -0.862,
+"motivo": "trailing",
+"larghezza_stop": 0.02561
+},
+{
+"ingresso": "2020-07-30T11:00:00Z",
+"uscita": "2020-07-30T22:00:00Z",
+"r": 0.324,
+"motivo": "trailing",
+"larghezza_stop": 0.02769
+},
+{
+"ingresso": "2020-08-01T00:00:00Z",
+"uscita": "2020-08-01T13:00:00Z",
+"r": -0.539,
+"motivo": "trailing",
+"larghezza_stop": 0.03022
+},
+{
+"ingresso": "2020-08-01T21:00:00Z",
+"uscita": "2020-08-02T04:00:00Z",
+"r": 0.403,
+"motivo": "trailing",
+"larghezza_stop": 0.03051
+},
+{
+"ingresso": "2020-08-24T07:00:00Z",
+"uscita": "2020-08-24T14:00:00Z",
+"r": -0.831,
+"motivo": "trailing",
+"larghezza_stop": 0.0443
+},
+{
+"ingresso": "2020-08-28T12:00:00Z",
+"uscita": "2020-08-28T21:00:00Z",
+"r": -0.301,
+"motivo": "trailing",
+"larghezza_stop": 0.03718
+},
+{
+"ingresso": "2020-08-29T05:00:00Z",
+"uscita": "2020-08-29T10:00:00Z",
+"r": -0.326,
+"motivo": "trailing",
+"larghezza_stop": 0.03232
+},
+{
+"ingresso": "2020-08-29T15:00:00Z",
+"uscita": "2020-08-29T23:00:00Z",
+"r": 0.021,
+"motivo": "trailing",
+"larghezza_stop": 0.03551
+},
+{
+"ingresso": "2020-08-30T13:00:00Z",
+"uscita": "2020-08-30T15:00:00Z",
+"r": -0.681,
+"motivo": "trailing",
+"larghezza_stop": 0.03879
+},
+{
+"ingresso": "2020-09-12T19:00:00Z",
+"uscita": "2020-09-13T10:00:00Z",
+"r": 0.514,
+"motivo": "trailing",
+"larghezza_stop": 0.02856
+},
+{
+"ingresso": "2020-09-14T16:00:00Z",
+"uscita": "2020-09-15T04:00:00Z",
+"r": -0.808,
+"motivo": "trailing",
+"larghezza_stop": 0.03797
+},
+{
+"ingresso": "2020-09-19T12:00:00Z",
+"uscita": "2020-09-19T15:00:00Z",
+"r": -0.939,
+"motivo": "trailing",
+"larghezza_stop": 0.03519
+},
+{
+"ingresso": "2020-10-01T02:00:00Z",
+"uscita": "2020-10-01T13:00:00Z",
+"r": 0.117,
+"motivo": "trailing",
+"larghezza_stop": 0.03076
+},
+{
+"ingresso": "2020-10-03T19:00:00Z",
+"uscita": "2020-10-03T22:00:00Z",
+"r": -0.613,
+"motivo": "trailing",
+"larghezza_stop": 0.02809
+},
+{
+"ingresso": "2020-10-04T20:00:00Z",
+"uscita": "2020-10-05T06:00:00Z",
+"r": 0.016,
+"motivo": "trailing",
+"larghezza_stop": 0.02195
+},
+{
+"ingresso": "2020-10-05T17:00:00Z",
+"uscita": "2020-10-05T18:00:00Z",
+"r": -1.051,
+"motivo": "stop",
+"larghezza_stop": 0.02331
+},
+{
+"ingresso": "2020-10-07T16:00:00Z",
+"uscita": "2020-10-08T03:00:00Z",
+"r": -0.519,
+"motivo": "trailing",
+"larghezza_stop": 0.03458
+},
+{
+"ingresso": "2020-10-11T18:00:00Z",
+"uscita": "2020-10-11T21:00:00Z",
+"r": -0.995,
+"motivo": "trailing",
+"larghezza_stop": 0.03354
+},
+{
+"ingresso": "2020-10-18T02:00:00Z",
+"uscita": "2020-10-19T00:00:00Z",
+"r": 0.128,
+"motivo": "trailing",
+"larghezza_stop": 0.01931
+},
+{
+"ingresso": "2020-10-19T16:00:00Z",
+"uscita": "2020-10-19T18:00:00Z",
+"r": -0.138,
+"motivo": "trailing",
+"larghezza_stop": 0.02005
+},
+{
+"ingresso": "2020-11-01T21:00:00Z",
+"uscita": "2020-11-02T04:00:00Z",
+"r": 0.636,
+"motivo": "trailing",
+"larghezza_stop": 0.01828
+},
+{
+"ingresso": "2020-11-13T10:00:00Z",
+"uscita": "2020-11-13T16:00:00Z",
+"r": -0.719,
+"motivo": "trailing",
+"larghezza_stop": 0.03184
+},
+{
+"ingresso": "2020-11-16T15:00:00Z",
+"uscita": "2020-11-16T21:00:00Z",
+"r": -0.737,
+"motivo": "trailing",
+"larghezza_stop": 0.02382
+},
+{
+"ingresso": "2020-11-17T01:00:00Z",
+"uscita": "2020-11-17T09:00:00Z",
+"r": -0.667,
+"motivo": "trailing",
+"larghezza_stop": 0.02604
+},
+{
+"ingresso": "2020-11-17T20:00:00Z",
+"uscita": "2020-11-17T22:00:00Z",
+"r": -0.506,
+"motivo": "trailing",
+"larghezza_stop": 0.02942
+},
+{
+"ingresso": "2020-11-28T14:00:00Z",
+"uscita": "2020-11-29T00:00:00Z",
+"r": 0.048,
+"motivo": "trailing",
+"larghezza_stop": 0.03506
+},
+{
+"ingresso": "2020-12-01T11:00:00Z",
+"uscita": "2020-12-01T12:00:00Z",
+"r": -0.785,
+"motivo": "trailing_salto",
+"larghezza_stop": 0.03368
+},
+{
+"ingresso": "2020-12-06T01:00:00Z",
+"uscita": "2020-12-06T08:00:00Z",
+"r": -0.873,
+"motivo": "trailing",
+"larghezza_stop": 0.02505
+},
+{
+"ingresso": "2020-12-07T00:00:00Z",
+"uscita": "2020-12-07T06:00:00Z",
+"r": -0.743,
+"motivo": "trailing",
+"larghezza_stop": 0.02621
+},
+{
+"ingresso": "2020-12-12T02:00:00Z",
+"uscita": "2020-12-12T13:00:00Z",
+"r": -0.266,
+"motivo": "trailing",
+"larghezza_stop": 0.02986
+},
+{
+"ingresso": "2020-12-12T22:00:00Z",
+"uscita": "2020-12-13T01:00:00Z",
+"r": -0.523,
+"motivo": "trailing",
+"larghezza_stop": 0.02258
+},
+{
+"ingresso": "2020-12-13T08:00:00Z",
+"uscita": "2020-12-13T18:00:00Z",
+"r": 2.016,
+"motivo": "trailing",
+"larghezza_stop": 0.02137
+},
+{
+"ingresso": "2020-12-16T14:00:00Z",
+"uscita": "2020-12-17T03:00:00Z",
+"r": 1.244,
+"motivo": "trailing",
+"larghezza_stop": 0.0254
+},
+{
+"ingresso": "2021-01-14T15:00:00Z",
+"uscita": "2021-01-14T21:00:00Z",
+"r": 0.319,
+"motivo": "trailing",
+"larghezza_stop": 0.04695
+},
+{
+"ingresso": "2021-01-19T09:00:00Z",
+"uscita": "2021-01-19T12:00:00Z",
+"r": -0.725,
+"motivo": "trailing",
+"larghezza_stop": 0.04542
+},
+{
+"ingresso": "2021-01-25T02:00:00Z",
+"uscita": "2021-01-25T09:00:00Z",
+"r": -0.685,
+"motivo": "trailing",
+"larghezza_stop": 0.05219
+},
+{
+"ingresso": "2021-01-28T07:00:00Z",
+"uscita": "2021-01-28T18:00:00Z",
+"r": -0.056,
+"motivo": "trailing",
+"larghezza_stop": 0.05346
+},
+{
+"ingresso": "2021-01-30T15:00:00Z",
+"uscita": "2021-01-31T01:00:00Z",
+"r": 0.866,
+"motivo": "trailing",
+"larghezza_stop": 0.03354
+},
+{
+"ingresso": "2021-02-01T22:00:00Z",
+"uscita": "2021-02-02T11:00:00Z",
+"r": 0.451,
+"motivo": "trailing",
+"larghezza_stop": 0.02985
+},
+{
+"ingresso": "2021-02-02T23:00:00Z",
+"uscita": "2021-02-03T08:00:00Z",
+"r": -0.384,
+"motivo": "trailing",
+"larghezza_stop": 0.02854
+},
+{
+"ingresso": "2021-02-03T11:00:00Z",
+"uscita": "2021-02-03T19:00:00Z",
+"r": -0.171,
+"motivo": "trailing",
+"larghezza_stop": 0.03185
+},
+{
+"ingresso": "2021-02-08T11:00:00Z",
+"uscita": "2021-02-08T13:00:00Z",
+"r": -0.375,
+"motivo": "trailing",
+"larghezza_stop": 0.03617
+},
+{
+"ingresso": "2021-02-09T09:00:00Z",
+"uscita": "2021-02-09T10:00:00Z",
+"r": -0.542,
+"motivo": "trailing",
+"larghezza_stop": 0.03422
+},
+{
+"ingresso": "2021-02-09T18:00:00Z",
+"uscita": "2021-02-10T04:00:00Z",
+"r": 0.344,
+"motivo": "trailing",
+"larghezza_stop": 0.03797
+},
+{
+"ingresso": "2021-02-12T14:00:00Z",
+"uscita": "2021-02-12T14:00:00Z",
+"r": -1.035,
+"motivo": "stop",
+"larghezza_stop": 0.03359
+},
+{
+"ingresso": "2021-02-18T02:00:00Z",
+"uscita": "2021-02-18T07:00:00Z",
+"r": -0.554,
+"motivo": "trailing",
+"larghezza_stop": 0.03699
+},
+{
+"ingresso": "2021-02-19T10:00:00Z",
+"uscita": "2021-02-19T19:00:00Z",
+"r": 0.281,
+"motivo": "trailing",
+"larghezza_stop": 0.03402
+},
+{
+"ingresso": "2021-03-03T09:00:00Z",
+"uscita": "2021-03-03T14:00:00Z",
+"r": -0.806,
+"motivo": "trailing",
+"larghezza_stop": 0.04313
+},
+{
+"ingresso": "2021-03-05T20:00:00Z",
+"uscita": "2021-03-06T04:00:00Z",
+"r": -0.621,
+"motivo": "trailing",
+"larghezza_stop": 0.04471
+},
+{
+"ingresso": "2021-03-08T06:00:00Z",
+"uscita": "2021-03-08T07:00:00Z",
+"r": -0.822,
+"motivo": "trailing",
+"larghezza_stop": 0.02927
+},
+{
+"ingresso": "2021-03-08T14:00:00Z",
+"uscita": "2021-03-09T06:00:00Z",
+"r": 0.99,
+"motivo": "trailing",
+"larghezza_stop": 0.0347
+},
+{
+"ingresso": "2021-03-11T22:00:00Z",
+"uscita": "2021-03-12T07:00:00Z",
+"r": -0.856,
+"motivo": "trailing",
+"larghezza_stop": 0.03338
+},
+{
+"ingresso": "2021-03-13T11:00:00Z",
+"uscita": "2021-03-13T22:00:00Z",
+"r": 0.095,
+"motivo": "trailing",
+"larghezza_stop": 0.03253
+},
+{
+"ingresso": "2021-03-17T07:00:00Z",
+"uscita": "2021-03-17T09:00:00Z",
+"r": -0.861,
+"motivo": "trailing",
+"larghezza_stop": 0.02853
+},
+{
+"ingresso": "2021-03-19T12:00:00Z",
+"uscita": "2021-03-19T23:00:00Z",
+"r": -0.835,
+"motivo": "trailing",
+"larghezza_stop": 0.02692
+},
+{
+"ingresso": "2021-03-20T03:00:00Z",
+"uscita": "2021-03-20T13:00:00Z",
+"r": -0.049,
+"motivo": "trailing",
+"larghezza_stop": 0.02556
+},
+{
+"ingresso": "2021-03-28T03:00:00Z",
+"uscita": "2021-03-28T10:00:00Z",
+"r": -0.54,
+"motivo": "trailing",
+"larghezza_stop": 0.0209
+},
+{
+"ingresso": "2021-03-29T09:00:00Z",
+"uscita": "2021-03-29T15:00:00Z",
+"r": -0.144,
+"motivo": "trailing",
+"larghezza_stop": 0.02055
+},
+{
+"ingresso": "2021-03-30T12:00:00Z",
+"uscita": "2021-03-30T20:00:00Z",
+"r": -1.025,
+"motivo": "trailing",
+"larghezza_stop": 0.01976
+},
+{
+"ingresso": "2021-04-02T12:00:00Z",
+"uscita": "2021-04-02T13:00:00Z",
+"r": -0.959,
+"motivo": "trailing",
+"larghezza_stop": 0.02525
+},
+{
+"ingresso": "2021-04-10T05:00:00Z",
+"uscita": "2021-04-10T12:00:00Z",
+"r": -0.775,
+"motivo": "trailing",
+"larghezza_stop": 0.02537
+},
+{
+"ingresso": "2021-04-27T06:00:00Z",
+"uscita": "2021-04-27T13:00:00Z",
+"r": -0.043,
+"motivo": "trailing",
+"larghezza_stop": 0.04004
+},
+{
+"ingresso": "2021-04-28T02:00:00Z",
+"uscita": "2021-04-28T03:00:00Z",
+"r": -0.896,
+"motivo": "trailing",
+"larghezza_stop": 0.03889
+},
+{
+"ingresso": "2021-04-29T12:00:00Z",
+"uscita": "2021-04-29T15:00:00Z",
+"r": -0.57,
+"motivo": "trailing",
+"larghezza_stop": 0.03403
+},
+{
+"ingresso": "2021-04-30T07:00:00Z",
+"uscita": "2021-04-30T21:00:00Z",
+"r": 0.07,
+"motivo": "trailing",
+"larghezza_stop": 0.03227
+},
+{
+"ingresso": "2021-05-01T12:00:00Z",
+"uscita": "2021-05-02T03:00:00Z",
+"r": 1.184,
+"motivo": "trailing",
+"larghezza_stop": 0.02845
+},
+{
+"ingresso": "2021-05-03T06:00:00Z",
+"uscita": "2021-05-03T12:00:00Z",
+"r": -0.419,
+"motivo": "trailing",
+"larghezza_stop": 0.02876
+},
+{
+"ingresso": "2021-05-03T18:00:00Z",
+"uscita": "2021-05-04T00:00:00Z",
+"r": -0.132,
+"motivo": "trailing",
+"larghezza_stop": 0.03218
+},
+{
+"ingresso": "2021-05-09T10:00:00Z",
+"uscita": "2021-05-09T12:00:00Z",
+"r": -0.727,
+"motivo": "trailing",
+"larghezza_stop": 0.03961
+},
+{
+"ingresso": "2021-05-31T16:00:00Z",
+"uscita": "2021-06-01T01:00:00Z",
+"r": 0.323,
+"motivo": "trailing",
+"larghezza_stop": 0.06029
+},
+{
+"ingresso": "2021-06-02T15:00:00Z",
+"uscita": "2021-06-02T20:00:00Z",
+"r": -0.288,
+"motivo": "trailing",
+"larghezza_stop": 0.04274
+},
+{
+"ingresso": "2021-06-03T11:00:00Z",
+"uscita": "2021-06-03T13:00:00Z",
+"r": -0.892,
+"motivo": "trailing",
+"larghezza_stop": 0.03755
+},
+{
+"ingresso": "2021-06-05T01:00:00Z",
+"uscita": "2021-06-05T09:00:00Z",
+"r": -0.477,
+"motivo": "trailing",
+"larghezza_stop": 0.04991
+},
+{
+"ingresso": "2021-06-13T19:00:00Z",
+"uscita": "2021-06-14T08:00:00Z",
+"r": 0.807,
+"motivo": "trailing",
+"larghezza_stop": 0.04068
+},
+{
+"ingresso": "2021-06-14T14:00:00Z",
+"uscita": "2021-06-14T18:00:00Z",
+"r": 0.127,
+"motivo": "trailing",
+"larghezza_stop": 0.03828
+},
+{
+"ingresso": "2021-06-15T05:00:00Z",
+"uscita": "2021-06-15T08:00:00Z",
+"r": -0.688,
+"motivo": "trailing",
+"larghezza_stop": 0.04004
+},
+{
+"ingresso": "2021-06-17T07:00:00Z",
+"uscita": "2021-06-17T12:00:00Z",
+"r": -0.674,
+"motivo": "trailing",
+"larghezza_stop": 0.03514
+},
+{
+"ingresso": "2021-06-28T16:00:00Z",
+"uscita": "2021-06-28T23:00:00Z",
+"r": -0.816,
+"motivo": "trailing",
+"larghezza_stop": 0.03969
+},
+{
+"ingresso": "2021-06-29T10:00:00Z",
+"uscita": "2021-06-29T20:00:00Z",
+"r": 0.02,
+"motivo": "trailing",
+"larghezza_stop": 0.03913
+},
+{
+"ingresso": "2021-07-02T23:00:00Z",
+"uscita": "2021-07-03T22:00:00Z",
+"r": 0.43,
+"motivo": "trailing",
+"larghezza_stop": 0.03335
+},
+{
+"ingresso": "2021-07-04T22:00:00Z",
+"uscita": "2021-07-04T23:00:00Z",
+"r": -1.041,
+"motivo": "stop",
+"larghezza_stop": 0.02851
+},
+{
+"ingresso": "2021-07-06T05:00:00Z",
+"uscita": "2021-07-06T09:00:00Z",
+"r": -0.285,
+"motivo": "trailing",
+"larghezza_stop": 0.03314
+},
+{
+"ingresso": "2021-07-11T15:00:00Z",
+"uscita": "2021-07-11T21:00:00Z",
+"r": -0.767,
+"motivo": "trailing",
+"larghezza_stop": 0.02459
+},
+{
+"ingresso": "2021-07-18T01:00:00Z",
+"uscita": "2021-07-18T10:00:00Z",
+"r": -0.331,
+"motivo": "trailing",
+"larghezza_stop": 0.03117
+},
+{
+"ingresso": "2021-07-30T00:00:00Z",
+"uscita": "2021-07-30T08:00:00Z",
+"r": 0.488,
+"motivo": "trailing",
+"larghezza_stop": 0.03045
+},
+{
+"ingresso": "2021-08-06T18:00:00Z",
+"uscita": "2021-08-07T00:00:00Z",
+"r": -0.928,
+"motivo": "trailing",
+"larghezza_stop": 0.03258
+},
+{
+"ingresso": "2021-08-07T12:00:00Z",
+"uscita": "2021-08-07T13:00:00Z",
+"r": -0.732,
+"motivo": "trailing",
+"larghezza_stop": 0.0293
+},
+{
+"ingresso": "2021-08-08T07:00:00Z",
+"uscita": "2021-08-08T14:00:00Z",
+"r": -0.953,
+"motivo": "trailing",
+"larghezza_stop": 0.03396
+},
+{
+"ingresso": "2021-08-13T08:00:00Z",
+"uscita": "2021-08-13T15:00:00Z",
+"r": -0.313,
+"motivo": "trailing",
+"larghezza_stop": 0.03447
+},
+{
+"ingresso": "2021-08-14T00:00:00Z",
+"uscita": "2021-08-14T09:00:00Z",
+"r": -0.797,
+"motivo": "trailing",
+"larghezza_stop": 0.03128
+},
+{
+"ingresso": "2021-08-15T23:00:00Z",
+"uscita": "2021-08-16T13:00:00Z",
+"r": 1.816,
+"motivo": "trailing",
+"larghezza_stop": 0.03307
+},
+{
+"ingresso": "2021-08-27T12:00:00Z",
+"uscita": "2021-08-28T06:00:00Z",
+"r": 0.453,
+"motivo": "trailing",
+"larghezza_stop": 0.03457
+},
+{
+"ingresso": "2021-08-29T01:00:00Z",
+"uscita": "2021-08-29T03:00:00Z",
+"r": -0.54,
+"motivo": "trailing",
+"larghezza_stop": 0.02407
+},
+{
+"ingresso": "2021-08-30T20:00:00Z",
+"uscita": "2021-08-30T22:00:00Z",
+"r": -0.621,
+"motivo": "trailing",
+"larghezza_stop": 0.02805
+},
+{
+"ingresso": "2021-09-02T13:00:00Z",
+"uscita": "2021-09-02T14:00:00Z",
+"r": -0.397,
+"motivo": "trailing",
+"larghezza_stop": 0.03242
+},
+{
+"ingresso": "2021-09-05T13:00:00Z",
+"uscita": "2021-09-06T11:00:00Z",
+"r": 3.652,
+"motivo": "trailing",
+"larghezza_stop": 0.02727
+},
+{
+"ingresso": "2021-09-18T07:00:00Z",
+"uscita": "2021-09-18T16:00:00Z",
+"r": -0.543,
+"motivo": "trailing",
+"larghezza_stop": 0.03358
+},
+{
+"ingresso": "2021-10-01T08:00:00Z",
+"uscita": "2021-10-02T03:00:00Z",
+"r": 1.963,
+"motivo": "trailing",
+"larghezza_stop": 0.02934
+},
+{
+"ingresso": "2021-10-02T14:00:00Z",
+"uscita": "2021-10-02T23:00:00Z",
+"r": 0.551,
+"motivo": "trailing",
+"larghezza_stop": 0.02795
+},
+{
+"ingresso": "2021-10-03T19:00:00Z",
+"uscita": "2021-10-03T21:00:00Z",
+"r": -0.622,
+"motivo": "trailing",
+"larghezza_stop": 0.03008
+},
+{
+"ingresso": "2021-10-05T21:00:00Z",
+"uscita": "2021-10-06T01:00:00Z",
+"r": -0.555,
+"motivo": "trailing",
+"larghezza_stop": 0.02873
+},
+{
+"ingresso": "2021-10-09T11:00:00Z",
+"uscita": "2021-10-10T00:00:00Z",
+"r": -0.146,
+"motivo": "trailing",
+"larghezza_stop": 0.02878
+},
+{
+"ingresso": "2021-10-14T07:00:00Z",
+"uscita": "2021-10-14T15:00:00Z",
+"r": 0.062,
+"motivo": "trailing",
+"larghezza_stop": 0.02993
+},
+{
+"ingresso": "2021-10-15T21:00:00Z",
+"uscita": "2021-10-16T12:00:00Z",
+"r": 0.12,
+"motivo": "trailing",
+"larghezza_stop": 0.02965
+},
+{
+"ingresso": "2021-10-20T13:00:00Z",
+"uscita": "2021-10-21T02:00:00Z",
+"r": 1.899,
+"motivo": "trailing",
+"larghezza_stop": 0.01887
+},
+{
+"ingresso": "2021-10-21T09:00:00Z",
+"uscita": "2021-10-21T11:00:00Z",
+"r": -0.161,
+"motivo": "trailing",
+"larghezza_stop": 0.02605
+},
+{
+"ingresso": "2021-10-25T05:00:00Z",
+"uscita": "2021-10-25T18:00:00Z",
+"r": 1.267,
+"motivo": "trailing",
+"larghezza_stop": 0.02674
+},
+{
+"ingresso": "2021-10-26T19:00:00Z",
+"uscita": "2021-10-26T21:00:00Z",
+"r": 0.101,
+"motivo": "trailing",
+"larghezza_stop": 0.02765
+},
+{
+"ingresso": "2021-11-01T01:00:00Z",
+"uscita": "2021-11-01T02:00:00Z",
+"r": -0.913,
+"motivo": "trailing",
+"larghezza_stop": 0.02554
+},
+{
+"ingresso": "2021-11-02T10:00:00Z",
+"uscita": "2021-11-03T04:00:00Z",
+"r": 0.202,
+"motivo": "trailing",
+"larghezza_stop": 0.02732
+},
+{
+"ingresso": "2021-11-08T01:00:00Z",
+"uscita": "2021-11-08T08:00:00Z",
+"r": 0.226,
+"motivo": "trailing",
+"larghezza_stop": 0.01933
+},
+{
+"ingresso": "2021-11-08T11:00:00Z",
+"uscita": "2021-11-09T11:00:00Z",
+"r": 0.76,
+"motivo": "trailing",
+"larghezza_stop": 0.02363
+},
+{
+"ingresso": "2021-12-03T07:00:00Z",
+"uscita": "2021-12-03T15:00:00Z",
+"r": -0.091,
+"motivo": "trailing",
+"larghezza_stop": 0.02397
+},
+{
+"ingresso": "2021-12-12T18:00:00Z",
+"uscita": "2021-12-13T00:00:00Z",
+"r": 0.059,
+"motivo": "trailing",
+"larghezza_stop": 0.0296
+},
+{
+"ingresso": "2021-12-19T05:00:00Z",
+"uscita": "2021-12-19T09:00:00Z",
+"r": -0.852,
+"motivo": "trailing",
+"larghezza_stop": 0.03306
+},
+{
+"ingresso": "2021-12-21T06:00:00Z",
+"uscita": "2021-12-21T15:00:00Z",
+"r": -0.336,
+"motivo": "trailing",
+"larghezza_stop": 0.03146
+},
+{
+"ingresso": "2021-12-21T23:00:00Z",
+"uscita": "2021-12-22T12:00:00Z",
+"r": 0.478,
+"motivo": "trailing",
+"larghezza_stop": 0.02507
+},
+{
+"ingresso": "2021-12-26T18:00:00Z",
+"uscita": "2021-12-26T21:00:00Z",
+"r": -0.228,
+"motivo": "trailing",
+"larghezza_stop": 0.02913
+},
+{
+"ingresso": "2021-12-27T14:00:00Z",
+"uscita": "2021-12-27T21:00:00Z",
+"r": -0.271,
+"motivo": "trailing",
+"larghezza_stop": 0.03042
+},
+{
+"ingresso": "2021-12-31T09:00:00Z",
+"uscita": "2021-12-31T16:00:00Z",
+"r": -0.737,
+"motivo": "trailing",
+"larghezza_stop": 0.03137
+},
+{
+"ingresso": "2022-01-01T17:00:00Z",
+"uscita": "2022-01-02T04:00:00Z",
+"r": 1.134,
+"motivo": "trailing",
+"larghezza_stop": 0.02665
+},
+{
+"ingresso": "2022-01-02T17:00:00Z",
+"uscita": "2022-01-03T01:00:00Z",
+"r": -0.59,
+"motivo": "trailing",
+"larghezza_stop": 0.02677
+},
+{
+"ingresso": "2022-01-03T11:00:00Z",
+"uscita": "2022-01-03T15:00:00Z",
+"r": 0.003,
+"motivo": "trailing",
+"larghezza_stop": 0.02669
+},
+{
+"ingresso": "2022-01-15T00:00:00Z",
+"uscita": "2022-01-15T08:00:00Z",
+"r": -0.397,
+"motivo": "trailing",
+"larghezza_stop": 0.03066
+},
+{
+"ingresso": "2022-01-29T14:00:00Z",
+"uscita": "2022-01-29T15:00:00Z",
+"r": -1.036,
+"motivo": "stop",
+"larghezza_stop": 0.03291
+},
+{
+"ingresso": "2022-01-30T05:00:00Z",
+"uscita": "2022-01-30T14:00:00Z",
+"r": 1.113,
+"motivo": "trailing",
+"larghezza_stop": 0.0326
+},
+{
+"ingresso": "2022-02-04T16:00:00Z",
+"uscita": "2022-02-05T14:00:00Z",
+"r": 2.009,
+"motivo": "trailing",
+"larghezza_stop": 0.03263
+},
+{
+"ingresso": "2022-02-07T00:00:00Z",
+"uscita": "2022-02-07T09:00:00Z",
+"r": 0.613,
+"motivo": "trailing",
+"larghezza_stop": 0.02684
+},
+{
+"ingresso": "2022-02-16T00:00:00Z",
+"uscita": "2022-02-16T02:00:00Z",
+"r": -0.927,
+"motivo": "trailing",
+"larghezza_stop": 0.02636
+},
+{
+"ingresso": "2022-03-11T12:00:00Z",
+"uscita": "2022-03-11T14:00:00Z",
+"r": -0.709,
+"motivo": "trailing",
+"larghezza_stop": 0.02885
+},
+{
+"ingresso": "2022-03-15T01:00:00Z",
+"uscita": "2022-03-15T04:00:00Z",
+"r": -0.996,
+"motivo": "trailing",
+"larghezza_stop": 0.02621
+},
+{
+"ingresso": "2022-03-16T03:00:00Z",
+"uscita": "2022-03-16T18:00:00Z",
+"r": -0.497,
+"motivo": "trailing",
+"larghezza_stop": 0.02788
+},
+{
+"ingresso": "2022-03-18T15:00:00Z",
+"uscita": "2022-03-18T22:00:00Z",
+"r": -0.103,
+"motivo": "trailing",
+"larghezza_stop": 0.0255
+},
+{
+"ingresso": "2022-03-19T13:00:00Z",
+"uscita": "2022-03-19T20:00:00Z",
+"r": -0.588,
+"motivo": "trailing",
+"larghezza_stop": 0.02109
+},
+{
+"ingresso": "2022-03-21T08:00:00Z",
+"uscita": "2022-03-21T16:00:00Z",
+"r": -0.135,
+"motivo": "trailing",
+"larghezza_stop": 0.0225
+},
+{
+"ingresso": "2022-03-22T03:00:00Z",
+"uscita": "2022-03-22T18:00:00Z",
+"r": 0.194,
+"motivo": "trailing",
+"larghezza_stop": 0.02254
+},
+{
+"ingresso": "2022-03-23T15:00:00Z",
+"uscita": "2022-03-23T18:00:00Z",
+"r": -0.315,
+"motivo": "trailing",
+"larghezza_stop": 0.02302
+},
+{
+"ingresso": "2022-03-25T13:00:00Z",
+"uscita": "2022-03-25T15:00:00Z",
+"r": -0.977,
+"motivo": "trailing",
+"larghezza_stop": 0.02293
+},
+{
+"ingresso": "2022-03-27T02:00:00Z",
+"uscita": "2022-03-27T11:00:00Z",
+"r": -0.385,
+"motivo": "trailing",
+"larghezza_stop": 0.01819
+},
+{
+"ingresso": "2022-03-27T21:00:00Z",
+"uscita": "2022-03-28T16:00:00Z",
+"r": 1.014,
+"motivo": "trailing",
+"larghezza_stop": 0.02113
+},
+{
+"ingresso": "2022-04-10T03:00:00Z",
+"uscita": "2022-04-10T09:00:00Z",
+"r": -0.542,
+"motivo": "trailing",
+"larghezza_stop": 0.01834
+},
+{
+"ingresso": "2022-04-10T17:00:00Z",
+"uscita": "2022-04-10T22:00:00Z",
+"r": -0.01,
+"motivo": "trailing",
+"larghezza_stop": 0.01677
+},
+{
+"ingresso": "2022-04-15T22:00:00Z",
+"uscita": "2022-04-16T05:00:00Z",
+"r": -0.433,
+"motivo": "trailing",
+"larghezza_stop": 0.01933
+},
+{
+"ingresso": "2022-04-17T04:00:00Z",
+"uscita": "2022-04-17T16:00:00Z",
+"r": 0.287,
+"motivo": "trailing",
+"larghezza_stop": 0.0192
+},
+{
+"ingresso": "2022-04-19T13:00:00Z",
+"uscita": "2022-04-19T18:00:00Z",
+"r": -0.203,
+"motivo": "trailing",
+"larghezza_stop": 0.01958
+},
+{
+"ingresso": "2022-04-20T07:00:00Z",
+"uscita": "2022-04-20T13:00:00Z",
+"r": -0.648,
+"motivo": "trailing",
+"larghezza_stop": 0.01889
+},
+{
+"ingresso": "2022-05-21T15:00:00Z",
+"uscita": "2022-05-22T04:00:00Z",
+"r": -0.525,
+"motivo": "trailing",
+"larghezza_stop": 0.02956
+},
+{
+"ingresso": "2022-05-22T10:00:00Z",
+"uscita": "2022-05-22T15:00:00Z",
+"r": -0.688,
+"motivo": "trailing",
+"larghezza_stop": 0.02605
+},
+{
+"ingresso": "2022-05-23T07:00:00Z",
+"uscita": "2022-05-23T18:00:00Z",
+"r": -0.184,
+"motivo": "trailing",
+"larghezza_stop": 0.02771
+},
+{
+"ingresso": "2022-05-28T16:00:00Z",
+"uscita": "2022-05-29T01:00:00Z",
+"r": -0.498,
+"motivo": "trailing",
+"larghezza_stop": 0.03454
+},
+{
+"ingresso": "2022-05-29T13:00:00Z",
+"uscita": "2022-05-30T12:00:00Z",
+"r": 2.273,
+"motivo": "trailing",
+"larghezza_stop": 0.02741
+},
+{
+"ingresso": "2022-05-30T21:00:00Z",
+"uscita": "2022-05-31T09:00:00Z",
+"r": 0.143,
+"motivo": "trailing",
+"larghezza_stop": 0.03085
+},
+{
+"ingresso": "2022-06-02T23:00:00Z",
+"uscita": "2022-06-03T04:00:00Z",
+"r": -0.615,
+"motivo": "trailing",
+"larghezza_stop": 0.03026
+},
+{
+"ingresso": "2022-06-04T09:00:00Z",
+"uscita": "2022-06-04T12:00:00Z",
+"r": -0.846,
+"motivo": "trailing",
+"larghezza_stop": 0.02696
+},
+{
+"ingresso": "2022-06-04T22:00:00Z",
+"uscita": "2022-06-05T08:00:00Z",
+"r": 0.119,
+"motivo": "trailing",
+"larghezza_stop": 0.02827
+},
+{
+"ingresso": "2022-06-05T16:00:00Z",
+"uscita": "2022-06-05T21:00:00Z",
+"r": 0.33,
+"motivo": "trailing",
+"larghezza_stop": 0.02802
+},
+{
+"ingresso": "2022-06-24T03:00:00Z",
+"uscita": "2022-06-24T15:00:00Z",
+"r": -0.507,
+"motivo": "trailing",
+"larghezza_stop": 0.04257
+},
+{
+"ingresso": "2022-06-24T22:00:00Z",
+"uscita": "2022-06-25T02:00:00Z",
+"r": -0.635,
+"motivo": "trailing",
+"larghezza_stop": 0.03884
+},
+{
+"ingresso": "2022-06-28T09:00:00Z",
+"uscita": "2022-06-28T13:00:00Z",
+"r": 0.83,
+"motivo": "trailing_salto",
+"larghezza_stop": 0.03639
+},
+{
+"ingresso": "2022-06-28T14:00:00Z",
+"uscita": "2022-06-28T14:00:00Z",
+"r": -1.025,
+"motivo": "stop",
+"larghezza_stop": 0.04678
+},
+{
+"ingresso": "2022-07-02T13:00:00Z",
+"uscita": "2022-07-03T01:00:00Z",
+"r": -0.473,
+"motivo": "trailing",
+"larghezza_stop": 0.03132
+},
+{
+"ingresso": "2022-07-03T20:00:00Z",
+"uscita": "2022-07-04T02:00:00Z",
+"r": -0.7,
+"motivo": "trailing",
+"larghezza_stop": 0.02309
+},
+{
+"ingresso": "2022-07-04T12:00:00Z",
+"uscita": "2022-07-04T13:00:00Z",
+"r": -0.686,
+"motivo": "trailing",
+"larghezza_stop": 0.02501
+},
+{
+"ingresso": "2022-07-05T05:00:00Z",
+"uscita": "2022-07-05T08:00:00Z",
+"r": -0.687,
+"motivo": "trailing",
+"larghezza_stop": 0.02761
+},
+{
+"ingresso": "2022-07-06T23:00:00Z",
+"uscita": "2022-07-07T22:00:00Z",
+"r": 1.023,
+"motivo": "trailing",
+"larghezza_stop": 0.02838
+},
+{
+"ingresso": "2022-07-09T09:00:00Z",
+"uscita": "2022-07-10T00:00:00Z",
+"r": -0.479,
+"motivo": "trailing",
+"larghezza_stop": 0.02546
+},
+{
+"ingresso": "2022-07-11T09:00:00Z",
+"uscita": "2022-07-11T13:00:00Z",
+"r": -0.813,
+"motivo": "trailing",
+"larghezza_stop": 0.02623
+},
+{
+"ingresso": "2022-07-16T17:00:00Z",
+"uscita": "2022-07-17T08:00:00Z",
+"r": 0.139,
+"motivo": "trailing",
+"larghezza_stop": 0.02616
+},
+{
+"ingresso": "2022-07-24T07:00:00Z",
+"uscita": "2022-07-24T13:00:00Z",
+"r": -0.443,
+"motivo": "trailing",
+"larghezza_stop": 0.02663
+},
+{
+"ingresso": "2022-08-05T02:00:00Z",
+"uscita": "2022-08-05T12:00:00Z",
+"r": 0.838,
+"motivo": "trailing",
+"larghezza_stop": 0.02672
+},
+{
+"ingresso": "2022-08-06T00:00:00Z",
+"uscita": "2022-08-06T11:00:00Z",
+"r": 0.196,
+"motivo": "trailing",
+"larghezza_stop": 0.02494
+},
+{
+"ingresso": "2022-08-07T17:00:00Z",
+"uscita": "2022-08-08T14:00:00Z",
+"r": 3.861,
+"motivo": "trailing",
+"larghezza_stop": 0.01874
+},
+{
+"ingresso": "2022-08-14T07:00:00Z",
+"uscita": "2022-08-14T11:00:00Z",
+"r": -0.54,
+"motivo": "trailing",
+"larghezza_stop": 0.02234
+},
+{
+"ingresso": "2022-08-17T06:00:00Z",
+"uscita": "2022-08-17T07:00:00Z",
+"r": -0.738,
+"motivo": "trailing",
+"larghezza_stop": 0.02369
+},
+{
+"ingresso": "2022-08-23T02:00:00Z",
+"uscita": "2022-08-23T05:00:00Z",
+"r": -0.919,
+"motivo": "trailing",
+"larghezza_stop": 0.02574
+},
+{
+"ingresso": "2022-08-28T16:00:00Z",
+"uscita": "2022-08-28T21:00:00Z",
+"r": -0.613,
+"motivo": "trailing",
+"larghezza_stop": 0.02309
+},
+{
+"ingresso": "2022-09-04T12:00:00Z",
+"uscita": "2022-09-04T21:00:00Z",
+"r": 0.479,
+"motivo": "trailing",
+"larghezza_stop": 0.01916
+},
+{
+"ingresso": "2022-09-06T00:00:00Z",
+"uscita": "2022-09-06T01:00:00Z",
+"r": 0.042,
+"motivo": "trailing",
+"larghezza_stop": 0.02352
+},
+{
+"ingresso": "2022-09-07T19:00:00Z",
+"uscita": "2022-09-09T13:00:00Z",
+"r": 5.689,
+"motivo": "trailing",
+"larghezza_stop": 0.02391
+},
+{
+"ingresso": "2022-09-24T19:00:00Z",
+"uscita": "2022-09-24T21:00:00Z",
+"r": -0.828,
+"motivo": "trailing",
+"larghezza_stop": 0.0266
+}
+]
+}
