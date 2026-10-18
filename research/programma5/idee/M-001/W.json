@@ -1,0 +1,2726 @@
+{
+ "M-001a": {
+  "trade": 21783,
+  "netto": {
+   "n": 21783,
+   "giorni": 1715,
+   "media": 0.006690824061982566,
+   "basso": 0.002615306351066335,
+   "alto": 0.010848316283214515,
+   "p": 0.00039996000399960006
+  },
+  "netto_doppio": {
+   "n": 21783,
+   "giorni": 1715,
+   "media": 0.00483727574601036,
+   "basso": 0.0007546480350378008,
+   "alto": 0.008995417647985875,
+   "p": 0.009999000099990002
+  },
+  "lordo": 0.008544372377954777,
+  "costo": 0.0018535483159722072,
+  "senza_migliore": 0.005999722372489686,
+  "per_anno": {
+   "2021": {
+    "trade": 4801,
+    "netto": 0.031928119747924984
+   },
+   "2022": {
+    "trade": 2280,
+    "netto": -0.007737639911077029
+   },
+   "2023": {
+    "trade": 3158,
+    "netto": -0.005485754678110308
+   },
+   "2024": {
+    "trade": 5631,
+    "netto": 0.006722994460840298
+   },
+   "2025": {
+    "trade": 3357,
+    "netto": 0.002351442118537283
+   },
+   "2026": {
+    "trade": 2556,
+    "netto": -0.007169727346562977
+   }
+  },
+  "V2": {
+   "n": 3877,
+   "giorni": 368,
+   "media": -0.003917916979526252,
+   "basso": -0.008934811353893518,
+   "alto": 0.0010730918969174357,
+   "p": 0.9363063693630637
+  },
+  "per_moneta": {
+   "1000PEPEUSDT": {
+    "trade": 619,
+    "netto": 0.022989637691083052
+   },
+   "ADAUSDT": {
+    "trade": 1000,
+    "netto": 0.00587646273556285
+   },
+   "ARBUSDT": {
+    "trade": 554,
+    "netto": -0.0030675293663284396
+   },
+   "AVAXUSDT": {
+    "trade": 983,
+    "netto": 0.008167562016115121
+   },
+   "BCHUSDT": {
+    "trade": 1070,
+    "netto": 0.0046647572862613665
+   },
+   "BNBUSDT": {
+    "trade": 1021,
+    "netto": 0.012375152580005877
+   },
+   "BTCUSDT": {
+    "trade": 1022,
+    "netto": 0.000938903684180745
+   },
+   "DASHUSDT": {
+    "trade": 974,
+    "netto": 0.003811040122394214
+   },
+   "DOGEUSDT": {
+    "trade": 1069,
+    "netto": 0.03986906053467525
+   },
+   "DOTUSDT": {
+    "trade": 969,
+    "netto": -0.000992513498108946
+   },
+   "ETHUSDT": {
+    "trade": 1082,
+    "netto": 0.0030752507845293736
+   },
+   "FILUSDT": {
+    "trade": 981,
+    "netto": 0.007974133096464088
+   },
+   "LINKUSDT": {
+    "trade": 942,
+    "netto": 0.004754750673812233
+   },
+   "LTCUSDT": {
+    "trade": 993,
+    "netto": -0.0038407121168951854
+   },
+   "NEARUSDT": {
+    "trade": 879,
+    "netto": 0.0003981753175938028
+   },
+   "ONEUSDT": {
+    "trade": 831,
+    "netto": 0.003258715003360416
+   },
+   "QNTUSDT": {
+    "trade": 599,
+    "netto": -0.000585232207705672
+   },
+   "SOLUSDT": {
+    "trade": 997,
+    "netto": 0.018006860743797322
+   },
+   "SUIUSDT": {
+    "trade": 588,
+    "netto": 0.0036290515476034685
+   },
+   "TRXUSDT": {
+    "trade": 1083,
+    "netto": 0.00417317053994043
+   },
+   "UNIUSDT": {
+    "trade": 948,
+    "netto": 0.004261321466691872
+   },
+   "WLDUSDT": {
+    "trade": 534,
+    "netto": -0.0021917288202360176
+   },
+   "XRPUSDT": {
+    "trade": 1071,
+    "netto": 0.005238310706371167
+   },
+   "ZECUSDT": {
+    "trade": 974,
+    "netto": 0.007952034326648354
+   }
+  },
+  "per_cella": {
+   "F1 w1 k3 giu h12 | contro": {
+    "trade": 217,
+    "netto": 0.010967535373601114
+   },
+   "F1 w1 k3 su h72 | segue": {
+    "trade": 235,
+    "netto": 0.052424149047827696
+   },
+   "F1 w1 k4 su h12 | segue": {
+    "trade": 44,
+    "netto": -0.0066296788440101334
+   },
+   "F1 w1 k5 giu h1 | contro": {
+    "trade": 43,
+    "netto": -0.001179422028964174
+   },
+   "F1 w1 k5 giu h24 | contro": {
+    "trade": 66,
+    "netto": 0.01620241258342571
+   },
+   "F1 w1 k5 giu h4 | contro": {
+    "trade": 52,
+    "netto": 0.0038597340240745953
+   },
+   "F1 w1 k5 giu h72 | contro": {
+    "trade": 17,
+    "netto": 0.02293813112771879
+   },
+   "F1 w24 k3 giu h24 | contro": {
+    "trade": 88,
+    "netto": 0.0014244761038812183
+   },
+   "F1 w24 k3 giu h4 | contro": {
+    "trade": 50,
+    "netto": 0.019028516755330595
+   },
+   "F1 w24 k3 giu h72 | contro": {
+    "trade": 141,
+    "netto": 0.032079879721894064
+   },
+   "F1 w24 k3 su h24 | contro": {
+    "trade": 63,
+    "netto": -0.04167722308101037
+   },
+   "F1 w24 k4 giu h1 | contro": {
+    "trade": 7,
+    "netto": 0.038798778320831444
+   },
+   "F1 w24 k4 giu h12 | contro": {
+    "trade": 89,
+    "netto": 0.013453806388170477
+   },
+   "F1 w24 k4 giu h24 | contro": {
+    "trade": 39,
+    "netto": 0.030845108788763103
+   },
+   "F1 w24 k4 giu h4 | contro": {
+    "trade": 120,
+    "netto": 0.008766901216424
+   },
+   "F1 w24 k4 giu h72 | contro": {
+    "trade": 19,
+    "netto": 0.14084427721791853
+   },
+   "F1 w24 k5 giu h12 | contro": {
+    "trade": 6,
+    "netto": 0.012610742329765855
+   },
+   "F1 w24 k5 giu h24 | contro": {
+    "trade": 2,
+    "netto": 0.061560491842412184
+   },
+   "F1 w4 k3 giu h1 | contro": {
+    "trade": 121,
+    "netto": 0.018487677743987074
+   },
+   "F1 w4 k3 giu h24 | contro": {
+    "trade": 54,
+    "netto": -0.029230353139839852
+   },
+   "F1 w4 k3 giu h4 | contro": {
+    "trade": 173,
+    "netto": 0.0031454742531672225
+   },
+   "F1 w4 k3 giu h72 | contro": {
+    "trade": 61,
+    "netto": -0.016679334660690597
+   },
+   "F1 w4 k3 su h12 | segue": {
+    "trade": 38,
+    "netto": -0.013909374055077127
+   },
+   "F1 w4 k3 su h72 | segue": {
+    "trade": 32,
+    "netto": 0.02932043112295058
+   },
+   "F1 w4 k4 giu h24 | contro": {
+    "trade": 80,
+    "netto": 0.03395975458982557
+   },
+   "F1 w4 k4 giu h4 | contro": {
+    "trade": 115,
+    "netto": -0.007043205821601832
+   },
+   "F1 w4 k4 giu h72 | contro": {
+    "trade": 47,
+    "netto": 3.4069904072110295e-05
+   },
+   "F1 w4 k4 su h12 | segue": {
+    "trade": 41,
+    "netto": 0.00019180968716569428
+   },
+   "F1 w4 k4 su h24 | segue": {
+    "trade": 33,
+    "netto": 0.04804944968901206
+   },
+   "F1 w4 k4 su h4 | segue": {
+    "trade": 91,
+    "netto": 0.017558882894214065
+   },
+   "F1 w4 k5 giu h1 | contro": {
+    "trade": 67,
+    "netto": -0.01283025682329863
+   },
+   "F1 w4 k5 giu h12 | contro": {
+    "trade": 21,
+    "netto": -0.006499056635275708
+   },
+   "F1 w4 k5 giu h24 | contro": {
+    "trade": 61,
+    "netto": 0.005439705117938823
+   },
+   "F1 w4 k5 giu h72 | contro": {
+    "trade": 23,
+    "netto": 0.04960062619708396
+   },
+   "F1 w4 k5 su h12 | segue": {
+    "trade": 22,
+    "netto": 0.015279129803010877
+   },
+   "F1 w4 k5 su h4 | segue": {
+    "trade": 17,
+    "netto": -0.0044318786817431925
+   },
+   "F10 giu h72 | segue": {
+    "trade": 36,
+    "netto": 0.0032203935391885022
+   },
+   "F11 dom | contro": {
+    "trade": 216,
+    "netto": -0.009245048861061275
+   },
+   "F11 dom | segue": {
+    "trade": 96,
+    "netto": -0.016200096308348132
+   },
+   "F11 gio | contro": {
+    "trade": 120,
+    "netto": -0.010028862332033418
+   },
+   "F11 lun | segue": {
+    "trade": 96,
+    "netto": -0.017037169070293675
+   },
+   "F11 mar | contro": {
+    "trade": 120,
+    "netto": -0.005416998021830672
+   },
+   "F11 mar | segue": {
+    "trade": 93,
+    "netto": -0.009984205754683622
+   },
+   "F11 mer | segue": {
+    "trade": 171,
+    "netto": 0.001232961159940659
+   },
+   "F11 ven | segue": {
+    "trade": 96,
+    "netto": 0.01405640531879449
+   },
+   "F12 N3 giu h168 | contro": {
+    "trade": 139,
+    "netto": 0.06446083237979451
+   },
+   "F12 N3 giu h168 | segue": {
+    "trade": 76,
+    "netto": 0.049340700966376654
+   },
+   "F12 N3 su h168 | segue": {
+    "trade": 129,
+    "netto": -0.003626045470376045
+   },
+   "F12 N30 giu h168 | segue": {
+    "trade": 131,
+    "netto": -0.04741179184608936
+   },
+   "F12 N30 su h168 | contro": {
+    "trade": 79,
+    "netto": -0.011360577740636554
+   },
+   "F12 N30 su h168 | segue": {
+    "trade": 745,
+    "netto": 0.051202646143365164
+   },
+   "F12 N7 giu h168 | contro": {
+    "trade": 31,
+    "netto": 0.0143051893182376
+   },
+   "F12 N7 giu h168 | segue": {
+    "trade": 122,
+    "netto": -0.027074530256103894
+   },
+   "F12 N7 su h168 | segue": {
+    "trade": 90,
+    "netto": -0.06306707882329922
+   },
+   "F13 prezzo giu oi giu h72 | segue": {
+    "trade": 157,
+    "netto": 0.013025032516257102
+   },
+   "F13 prezzo su oi giu h24 | contro": {
+    "trade": 26,
+    "netto": -0.016071891206364687
+   },
+   "F13 prezzo su oi giu h72 | contro": {
+    "trade": 150,
+    "netto": -0.009170610214776805
+   },
+   "F13 prezzo su oi su h24 | segue": {
+    "trade": 135,
+    "netto": 0.005154397961747645
+   },
+   "F13 prezzo su oi su h72 | segue": {
+    "trade": 99,
+    "netto": -0.012551928110094838
+   },
+   "F5 N20 giu h168 | segue": {
+    "trade": 67,
+    "netto": -0.015650118882207745
+   },
+   "F5 N20 su h168 | contro": {
+    "trade": 34,
+    "netto": 0.042070051143008595
+   },
+   "F5 N20 su h168 | segue": {
+    "trade": 175,
+    "netto": 0.06890336001886058
+   },
+   "F5 N20 su h72 | segue": {
+    "trade": 292,
+    "netto": 0.018182819636291266
+   },
+   "F5 N5 giu h24 | contro": {
+    "trade": 90,
+    "netto": 0.0014279660548398626
+   },
+   "F5 N5 su h168 | segue": {
+    "trade": 321,
+    "netto": 0.0022167262532474005
+   },
+   "F5 N5 su h24 | contro": {
+    "trade": 78,
+    "netto": -0.007581842397724379
+   },
+   "F5 N5 su h72 | segue": {
+    "trade": 44,
+    "netto": -0.040840339171874844
+   },
+   "F5 N60 giu h168 | contro": {
+    "trade": 26,
+    "netto": -0.10658314469524578
+   },
+   "F5 N60 giu h168 | segue": {
+    "trade": 13,
+    "netto": -0.06847528980884654
+   },
+   "F5 N60 giu h72 | contro": {
+    "trade": 56,
+    "netto": -0.018562390346753554
+   },
+   "F5 N60 su h168 | segue": {
+    "trade": 192,
+    "netto": 0.08226054778946693
+   },
+   "F6 alto h168 | contro": {
+    "trade": 197,
+    "netto": -0.02310218158787621
+   },
+   "F6 alto h168 | segue": {
+    "trade": 146,
+    "netto": 0.06880760888887864
+   },
+   "F6 basso h168 | contro": {
+    "trade": 80,
+    "netto": 0.009144745014464732
+   },
+   "F6 basso h168 | segue": {
+    "trade": 22,
+    "netto": -0.166869353674329
+   },
+   "F6 basso h72 | contro": {
+    "trade": 191,
+    "netto": 0.017309351656604893
+   },
+   "F7 ls_grandi_conti alto h72 | contro": {
+    "trade": 94,
+    "netto": -0.02410095889211891
+   },
+   "F7 ls_grandi_conti basso h24 | segue": {
+    "trade": 103,
+    "netto": -0.022630261302992553
+   },
+   "F7 ls_grandi_conti basso h72 | contro": {
+    "trade": 103,
+    "netto": 0.0027835628951497176
+   },
+   "F7 ls_grandi_pos alto h24 | contro": {
+    "trade": 263,
+    "netto": -0.0023146024666628813
+   },
+   "F7 ls_grandi_pos alto h72 | contro": {
+    "trade": 69,
+    "netto": -0.002415519644303536
+   },
+   "F7 ls_tutti alto h72 | contro": {
+    "trade": 213,
+    "netto": -0.00892990427039126
+   },
+   "F7 ls_tutti basso h72 | contro": {
+    "trade": 104,
+    "netto": -0.006939412305969357
+   },
+   "F9 k10 giu h1 | contro": {
+    "trade": 159,
+    "netto": 0.00014022294161037226
+   },
+   "F9 k10 giu h24 | contro": {
+    "trade": 209,
+    "netto": 0.0036448933906273085
+   },
+   "F9 k10 giu h4 | contro": {
+    "trade": 18,
+    "netto": -0.0052200816107079995
+   },
+   "F9 k10 su h24 | segue": {
+    "trade": 335,
+    "netto": 0.014235869065471725
+   },
+   "F9 k10 su h4 | segue": {
+    "trade": 280,
+    "netto": 0.0031541799690262312
+   },
+   "F9 k5 su h24 | segue": {
+    "trade": 168,
+    "netto": 0.00570328484184895
+   },
+   "G1 w1 k2 giu h72 | contro": {
+    "trade": 74,
+    "netto": -0.02749864576560589
+   },
+   "G1 w1 k2 su h72 | segue": {
+    "trade": 92,
+    "netto": -0.019263695715141468
+   },
+   "G1 w1 k3 giu h72 | contro": {
+    "trade": 101,
+    "netto": -0.0006159615734400121
+   },
+   "G1 w1 k3 su h72 | contro": {
+    "trade": 72,
+    "netto": -0.0005871199072651381
+   },
+   "G1 w1 k4 giu h4 | contro": {
+    "trade": 31,
+    "netto": 0.043878629069656186
+   },
+   "G1 w1 k4 su h24 | segue": {
+    "trade": 28,
+    "netto": -0.011511686865217169
+   },
+   "G1 w24 k2 su h72 | segue": {
+    "trade": 49,
+    "netto": -0.011667916235706606
+   },
+   "G1 w24 k3 giu h24 | contro": {
+    "trade": 96,
+    "netto": 0.014800393144538347
+   },
+   "G1 w24 k3 giu h72 | contro": {
+    "trade": 55,
+    "netto": 0.04310401073133458
+   },
+   "G1 w24 k3 su h72 | segue": {
+    "trade": 16,
+    "netto": 0.008784184092771296
+   },
+   "G1 w24 k4 giu h24 | contro": {
+    "trade": 7,
+    "netto": -0.015760610094363886
+   },
+   "G1 w24 k4 giu h72 | contro": {
+    "trade": 9,
+    "netto": 0.003109270051556565
+   },
+   "G1 w24 k4 su h4 | contro": {
+    "trade": 18,
+    "netto": -0.01959712004240697
+   },
+   "G1 w24 k4 su h72 | segue": {
+    "trade": 9,
+    "netto": -0.04319768678367254
+   },
+   "G1 w4 k2 giu h72 | contro": {
+    "trade": 61,
+    "netto": 0.00862973423896232
+   },
+   "G1 w4 k2 su h24 | segue": {
+    "trade": 155,
+    "netto": 0.015297663794238615
+   },
+   "G1 w4 k3 giu h1 | contro": {
+    "trade": 47,
+    "netto": 0.0008586683934886211
+   },
+   "G1 w4 k3 giu h12 | contro": {
+    "trade": 59,
+    "netto": -0.005794981698538701
+   },
+   "G1 w4 k3 giu h72 | segue": {
+    "trade": 63,
+    "netto": -0.020297506952134566
+   },
+   "G1 w4 k3 su h24 | contro": {
+    "trade": 62,
+    "netto": -0.0032901254189307166
+   },
+   "G1 w4 k3 su h72 | segue": {
+    "trade": 170,
+    "netto": 0.010275743142357333
+   },
+   "G1 w4 k4 giu h1 | contro": {
+    "trade": 32,
+    "netto": -0.01175551776576379
+   },
+   "G1 w4 k4 giu h12 | contro": {
+    "trade": 14,
+    "netto": 0.005181554435607186
+   },
+   "G1 w4 k4 giu h4 | contro": {
+    "trade": 18,
+    "netto": -0.004141234123137566
+   },
+   "G1 w4 k4 giu h72 | contro": {
+    "trade": 13,
+    "netto": -0.01407878902231088
+   },
+   "G1 w4 k4 giu h72 | segue": {
+    "trade": 38,
+    "netto": -0.03845627796654585
+   },
+   "G1 w4 k4 su h4 | segue": {
+    "trade": 20,
+    "netto": -0.011873696596489255
+   },
+   "L0 giu h24 | contro": {
+    "trade": 206,
+    "netto": 0.016841455550991515
+   },
+   "L0 su h12 | segue": {
+    "trade": 765,
+    "netto": -0.0008130732019120036
+   },
+   "L0 su h24 | segue": {
+    "trade": 1130,
+    "netto": 0.007846286524165406
+   },
+   "L1 giu h12 | contro": {
+    "trade": 507,
+    "netto": 0.007400759101110182
+   },
+   "L1 giu h24 | contro": {
+    "trade": 290,
+    "netto": 0.015615109741909456
+   },
+   "L1 giu h4 | contro": {
+    "trade": 200,
+    "netto": -0.0012990439904529832
+   },
+   "L1 su h12 | segue": {
+    "trade": 114,
+    "netto": 0.006782022560746259
+   },
+   "L1 su h24 | segue": {
+    "trade": 56,
+    "netto": -0.007360479846754304
+   },
+   "L1 su h4 | segue": {
+    "trade": 118,
+    "netto": 0.005790374195694934
+   },
+   "L2 giu h12 | contro": {
+    "trade": 100,
+    "netto": -0.007829545959542801
+   },
+   "L2 giu h4 | segue": {
+    "trade": 71,
+    "netto": 0.010851473611732092
+   },
+   "L2 su h12 | segue": {
+    "trade": 207,
+    "netto": 0.004431110911203978
+   },
+   "L2 su h4 | segue": {
+    "trade": 137,
+    "netto": -0.0005885883330699258
+   },
+   "P1 q1 alto h72 | segue": {
+    "trade": 167,
+    "netto": 0.0010251224093531437
+   },
+   "P1 q1 basso h72 | contro": {
+    "trade": 363,
+    "netto": 0.0318626923333837
+   },
+   "P1 q5 alto h72 | segue": {
+    "trade": 483,
+    "netto": -0.0005459290984724338
+   },
+   "P1 q5 basso h24 | contro": {
+    "trade": 153,
+    "netto": 0.007923881518826377
+   },
+   "P2 w1 scende h24 | contro": {
+    "trade": 182,
+    "netto": -0.0004893241152268882
+   },
+   "P3 w1 giu sconto h24 | contro": {
+    "trade": 24,
+    "netto": -0.015333749960459527
+   },
+   "P3 w1 giu sconto h4 | contro": {
+    "trade": 261,
+    "netto": 0.003896641474098107
+   },
+   "P3 w1 giu senza sconto h12 | contro": {
+    "trade": 165,
+    "netto": 0.009127669847228247
+   },
+   "P3 w1 giu senza sconto h24 | contro": {
+    "trade": 167,
+    "netto": 0.02406972117413664
+   },
+   "P3 w1 su premio h24 | segue": {
+    "trade": 26,
+    "netto": 0.016796733917284187
+   },
+   "P3 w1 su senza premio h12 | segue": {
+    "trade": 93,
+    "netto": -0.0007913145584774414
+   },
+   "P3 w1 su senza premio h24 | segue": {
+    "trade": 319,
+    "netto": 0.028446088665398783
+   },
+   "P3 w1 su senza premio h4 | segue": {
+    "trade": 261,
+    "netto": 0.0015987041760138702
+   },
+   "P3 w4 giu sconto h12 | contro": {
+    "trade": 88,
+    "netto": -0.0011634990638659352
+   },
+   "P3 w4 giu sconto h24 | contro": {
+    "trade": 104,
+    "netto": 0.007338854961204376
+   },
+   "P3 w4 giu sconto h4 | contro": {
+    "trade": 141,
+    "netto": 0.006066379597332892
+   },
+   "P3 w4 giu senza sconto h24 | contro": {
+    "trade": 98,
+    "netto": -0.023396371407415326
+   },
+   "P3 w4 giu senza sconto h4 | contro": {
+    "trade": 308,
+    "netto": -0.001465341351079524
+   },
+   "P3 w4 giu senza sconto h4 | segue": {
+    "trade": 79,
+    "netto": -0.014236719925204798
+   },
+   "P3 w4 su premio h12 | segue": {
+    "trade": 56,
+    "netto": 0.001345469948095538
+   },
+   "P3 w4 su premio h24 | contro": {
+    "trade": 64,
+    "netto": -0.03817411596425705
+   },
+   "P3 w4 su premio h24 | segue": {
+    "trade": 21,
+    "netto": -0.009294929002285901
+   },
+   "P3 w4 su premio h4 | contro": {
+    "trade": 92,
+    "netto": -0.002125101121318384
+   },
+   "P3 w4 su senza premio h12 | segue": {
+    "trade": 393,
+    "netto": 0.002023711467308708
+   },
+   "P3 w4 su senza premio h24 | segue": {
+    "trade": 134,
+    "netto": 0.04252500353060693
+   },
+   "P3 w4 su senza premio h4 | segue": {
+    "trade": 306,
+    "netto": 0.006554190994448652
+   },
+   "W1 k1 giu h24 | contro": {
+    "trade": 22,
+    "netto": 0.0036090956435149797
+   },
+   "W1 k1 giu h24 | segue": {
+    "trade": 14,
+    "netto": -0.022708079466003693
+   },
+   "W1 k1 giu h72 | contro": {
+    "trade": 3,
+    "netto": 0.0938916229269232
+   },
+   "W1 k1 giu h72 | segue": {
+    "trade": 5,
+    "netto": 0.029758870980210496
+   },
+   "W1 k1 su h24 | segue": {
+    "trade": 19,
+    "netto": -0.008996968596100463
+   },
+   "W1 k1 su h72 | contro": {
+    "trade": 56,
+    "netto": -0.047611187949686586
+   },
+   "W1 k1.5 giu h24 | contro": {
+    "trade": 3,
+    "netto": -0.030013502464920804
+   },
+   "W2 america->sera k1 giu | contro": {
+    "trade": 199,
+    "netto": -0.006501737044137461
+   },
+   "W2 america->sera k2 giu | contro": {
+    "trade": 61,
+    "netto": -0.0019983436101715163
+   },
+   "W2 america->sera k2 su | segue": {
+    "trade": 33,
+    "netto": -0.006222531464733178
+   },
+   "W2 asia->europa k2 giu | contro": {
+    "trade": 13,
+    "netto": -0.00718339134961722
+   },
+   "W2 asia->europa k2 su | contro": {
+    "trade": 87,
+    "netto": 0.004341576286630367
+   },
+   "W2 europa->america k1 su | contro": {
+    "trade": 166,
+    "netto": 0.001988156748890471
+   },
+   "W2 europa->america k2 giu | contro": {
+    "trade": 33,
+    "netto": -0.02340623466648098
+   },
+   "W2 europa->america k2 giu | segue": {
+    "trade": 4,
+    "netto": -0.050706914907679035
+   },
+   "W2 europa->america k2 su | segue": {
+    "trade": 41,
+    "netto": -0.004092993389663201
+   },
+   "W2 sera->asia k1 giu | contro": {
+    "trade": 51,
+    "netto": 0.009044361980560927
+   },
+   "W2 sera->asia k1 su | contro": {
+    "trade": 151,
+    "netto": 0.003294881530266473
+   },
+   "W2 sera->asia k2 giu | contro": {
+    "trade": 63,
+    "netto": -0.012025274226804522
+   },
+   "W2 sera->asia k2 su | contro": {
+    "trade": 25,
+    "netto": 0.006338523201236822
+   },
+   "W3 giornata k1 giu | contro": {
+    "trade": 236,
+    "netto": -0.0017632276763191069
+   },
+   "W3 giornata k2 giu | contro": {
+    "trade": 40,
+    "netto": -0.002453400450384747
+   },
+   "W4 k1.5 sopra h24 | segue": {
+    "trade": 116,
+    "netto": 0.02327267958907284
+   },
+   "W4 k1.5 sotto h24 | contro": {
+    "trade": 160,
+    "netto": 0.04148879129988026
+   },
+   "W4 k1.5 sotto h4 | contro": {
+    "trade": 459,
+    "netto": 0.0008280541392711142
+   },
+   "W4 k2.5 sotto h24 | contro": {
+    "trade": 1,
+    "netto": 0.09414545106482688
+   },
+   "W4 k2.5 sotto h4 | contro": {
+    "trade": 54,
+    "netto": 0.006415079247723797
+   },
+   "W5 fine mese | contro": {
+    "trade": 24,
+    "netto": -0.1365588522948681
+   },
+   "W5 fine mese | segue": {
+    "trade": 76,
+    "netto": -0.012073470557880992
+   },
+   "W5 giorno 15 | contro": {
+    "trade": 20,
+    "netto": -0.09912617268193533
+   }
+  },
+  "placebo": {
+   "netto_medio": -0.0019791136712859043,
+   "costo_medio": 0.001878887677572188,
+   "netto_min": -0.005159356590309062,
+   "netto_max": 0.0004501378509194564,
+   "trade_medi": 8631.45
+  },
+  "placebo_ok": true
+ },
+ "M-001b": {
+  "trade": 25516,
+  "netto": {
+   "n": 25516,
+   "giorni": 1825,
+   "media": 0.005071221573820566,
+   "basso": 0.0017366278273798403,
+   "alto": 0.008482183400191329,
+   "p": 0.0020997900209979003
+  },
+  "netto_doppio": {
+   "n": 25516,
+   "giorni": 1825,
+   "media": 0.003211442249515703,
+   "basso": -0.00011425109008630363,
+   "alto": 0.006615523660871708,
+   "p": 0.029597040295970403
+  },
+  "lordo": 0.006931000898125435,
+  "costo": 0.0018597793243048657,
+  "senza_migliore": 0.004696470915379397,
+  "per_anno": {
+   "2021": {
+    "trade": 5219,
+    "netto": 0.025902617614623678
+   },
+   "2022": {
+    "trade": 3885,
+    "netto": -0.009520470484275146
+   },
+   "2023": {
+    "trade": 4517,
+    "netto": 0.001624790274259967
+   },
+   "2024": {
+    "trade": 5077,
+    "netto": 0.007015920611864647
+   },
+   "2025": {
+    "trade": 4210,
+    "netto": -0.002428468769644134
+   },
+   "2026": {
+    "trade": 2608,
+    "netto": -0.0005891859343457404
+   }
+  },
+  "V2": {
+   "n": 4317,
+   "giorni": 384,
+   "media": 0.0009088144032798126,
+   "basso": -0.004398685467390052,
+   "alto": 0.005908475949939987,
+   "p": 0.36146385361463856
+  },
+  "per_moneta": {
+   "1000PEPEUSDT": {
+    "trade": 635,
+    "netto": 0.0118600970175455
+   },
+   "ADAUSDT": {
+    "trade": 1165,
+    "netto": 0.007350062208429135
+   },
+   "ARBUSDT": {
+    "trade": 622,
+    "netto": 0.0020267023553983345
+   },
+   "AVAXUSDT": {
+    "trade": 1178,
+    "netto": 0.004616273932339048
+   },
+   "BCHUSDT": {
+    "trade": 1230,
+    "netto": -4.113690633131322e-05
+   },
+   "BNBUSDT": {
+    "trade": 1202,
+    "netto": 0.010760487588710994
+   },
+   "BTCUSDT": {
+    "trade": 1158,
+    "netto": -0.0008838581718573416
+   },
+   "DASHUSDT": {
+    "trade": 1150,
+    "netto": -0.0011556016508329373
+   },
+   "DOGEUSDT": {
+    "trade": 1207,
+    "netto": 0.034993972383611585
+   },
+   "DOTUSDT": {
+    "trade": 1219,
+    "netto": 0.0005642226211756992
+   },
+   "ETHUSDT": {
+    "trade": 1235,
+    "netto": 0.0020616859824485988
+   },
+   "FILUSDT": {
+    "trade": 1164,
+    "netto": 0.009115304431995902
+   },
+   "LINKUSDT": {
+    "trade": 1144,
+    "netto": 0.0003716446108292593
+   },
+   "LTCUSDT": {
+    "trade": 1227,
+    "netto": -0.001048054059292433
+   },
+   "NEARUSDT": {
+    "trade": 1146,
+    "netto": 0.001503168443489801
+   },
+   "ONEUSDT": {
+    "trade": 1002,
+    "netto": 0.00022094744630448988
+   },
+   "QNTUSDT": {
+    "trade": 681,
+    "netto": 0.004084724903764113
+   },
+   "SOLUSDT": {
+    "trade": 1155,
+    "netto": 0.01274581040524536
+   },
+   "SUIUSDT": {
+    "trade": 633,
+    "netto": 0.0028734597478362054
+   },
+   "TRXUSDT": {
+    "trade": 1197,
+    "netto": 0.0035062906098096234
+   },
+   "UNIUSDT": {
+    "trade": 1176,
+    "netto": 0.002233051989092529
+   },
+   "WLDUSDT": {
+    "trade": 575,
+    "netto": 0.003044810663133224
+   },
+   "XRPUSDT": {
+    "trade": 1252,
+    "netto": 0.0050276595214270746
+   },
+   "ZECUSDT": {
+    "trade": 1163,
+    "netto": 0.004056781079878342
+   }
+  },
+  "per_cella": {
+   "F1 w1 k3 giu h72 | contro": {
+    "trade": 70,
+    "netto": 0.0480692914876719
+   },
+   "F1 w1 k3 su h72 | segue": {
+    "trade": 300,
+    "netto": 0.02813847987488461
+   },
+   "F1 w1 k4 giu h1 | contro": {
+    "trade": 42,
+    "netto": 0.005915289595828789
+   },
+   "F1 w1 k4 giu h12 | segue": {
+    "trade": 96,
+    "netto": -0.00174053925101192
+   },
+   "F1 w1 k4 giu h4 | contro": {
+    "trade": 93,
+    "netto": -0.004865372634770105
+   },
+   "F1 w1 k4 giu h4 | segue": {
+    "trade": 8,
+    "netto": -0.004792289454702557
+   },
+   "F1 w1 k4 giu h72 | contro": {
+    "trade": 63,
+    "netto": -0.07576397789589084
+   },
+   "F1 w1 k4 su h12 | segue": {
+    "trade": 31,
+    "netto": 0.027047235917470193
+   },
+   "F1 w1 k4 su h72 | segue": {
+    "trade": 68,
+    "netto": 0.01391986023776993
+   },
+   "F1 w1 k5 giu h1 | contro": {
+    "trade": 32,
+    "netto": -0.0012234039765764595
+   },
+   "F1 w1 k5 giu h12 | contro": {
+    "trade": 34,
+    "netto": 0.056070132831592616
+   },
+   "F1 w1 k5 giu h12 | segue": {
+    "trade": 11,
+    "netto": -0.021463574374478957
+   },
+   "F1 w1 k5 giu h24 | contro": {
+    "trade": 61,
+    "netto": -0.031194092614914546
+   },
+   "F1 w1 k5 giu h4 | contro": {
+    "trade": 50,
+    "netto": -0.010228653167430428
+   },
+   "F1 w1 k5 giu h4 | segue": {
+    "trade": 80,
+    "netto": -0.003322165751774657
+   },
+   "F1 w1 k5 giu h72 | contro": {
+    "trade": 73,
+    "netto": -0.016924496591011598
+   },
+   "F1 w1 k5 su h1 | contro": {
+    "trade": 39,
+    "netto": -0.00040901190284809363
+   },
+   "F1 w1 k5 su h12 | segue": {
+    "trade": 67,
+    "netto": 0.009034837082970435
+   },
+   "F1 w1 k5 su h24 | segue": {
+    "trade": 15,
+    "netto": -0.00327865584135112
+   },
+   "F1 w1 k5 su h72 | contro": {
+    "trade": 8,
+    "netto": -0.013961936367577532
+   },
+   "F1 w24 k3 giu h12 | contro": {
+    "trade": 11,
+    "netto": 0.02525477806422692
+   },
+   "F1 w24 k3 giu h24 | contro": {
+    "trade": 52,
+    "netto": 0.14728608921976682
+   },
+   "F1 w24 k3 giu h4 | contro": {
+    "trade": 131,
+    "netto": 0.044680088491824005
+   },
+   "F1 w24 k3 giu h4 | segue": {
+    "trade": 10,
+    "netto": -0.0008679747304923869
+   },
+   "F1 w24 k3 giu h72 | contro": {
+    "trade": 113,
+    "netto": 0.005148640417222343
+   },
+   "F1 w24 k3 giu h72 | segue": {
+    "trade": 3,
+    "netto": -0.11436805010965694
+   },
+   "F1 w24 k3 su h1 | contro": {
+    "trade": 8,
+    "netto": -0.02613026682959542
+   },
+   "F1 w24 k3 su h12 | segue": {
+    "trade": 22,
+    "netto": 0.004186159779856294
+   },
+   "F1 w24 k3 su h24 | contro": {
+    "trade": 10,
+    "netto": -0.08655316399573354
+   },
+   "F1 w24 k3 su h24 | segue": {
+    "trade": 76,
+    "netto": 0.02750264889271672
+   },
+   "F1 w24 k3 su h72 | contro": {
+    "trade": 9,
+    "netto": -0.05851840937456094
+   },
+   "F1 w24 k4 giu h12 | contro": {
+    "trade": 8,
+    "netto": 0.02417871584456833
+   },
+   "F1 w24 k4 giu h24 | contro": {
+    "trade": 23,
+    "netto": 0.07345191214211085
+   },
+   "F1 w24 k4 giu h4 | contro": {
+    "trade": 11,
+    "netto": 0.013072433149864025
+   },
+   "F1 w24 k5 giu h12 | contro": {
+    "trade": 1,
+    "netto": 0.01746033472249278
+   },
+   "F1 w4 k3 giu h1 | contro": {
+    "trade": 189,
+    "netto": 0.011302111724959126
+   },
+   "F1 w4 k3 giu h24 | contro": {
+    "trade": 52,
+    "netto": 0.035168444143585456
+   },
+   "F1 w4 k3 su h1 | contro": {
+    "trade": 29,
+    "netto": -0.006172583589914329
+   },
+   "F1 w4 k3 su h12 | segue": {
+    "trade": 133,
+    "netto": 0.01692751169650162
+   },
+   "F1 w4 k4 giu h1 | contro": {
+    "trade": 1,
+    "netto": -0.0004863945147487879
+   },
+   "F1 w4 k4 giu h24 | contro": {
+    "trade": 138,
+    "netto": 0.019336679296566732
+   },
+   "F1 w4 k4 giu h4 | contro": {
+    "trade": 200,
+    "netto": -0.006660424225563646
+   },
+   "F1 w4 k4 giu h72 | contro": {
+    "trade": 2,
+    "netto": 0.008864545343830257
+   },
+   "F1 w4 k4 su h12 | segue": {
+    "trade": 34,
+    "netto": 0.005725103370655134
+   },
+   "F1 w4 k4 su h24 | segue": {
+    "trade": 10,
+    "netto": -0.01483490950965092
+   },
+   "F1 w4 k4 su h4 | segue": {
+    "trade": 69,
+    "netto": 0.007263861564231261
+   },
+   "F1 w4 k5 giu h1 | contro": {
+    "trade": 20,
+    "netto": -0.004959566407452497
+   },
+   "F1 w4 k5 giu h12 | contro": {
+    "trade": 37,
+    "netto": 0.00025896592119918475
+   },
+   "F1 w4 k5 giu h24 | contro": {
+    "trade": 17,
+    "netto": 0.04687967036667068
+   },
+   "F1 w4 k5 giu h4 | contro": {
+    "trade": 88,
+    "netto": 0.006494694946673626
+   },
+   "F1 w4 k5 giu h4 | segue": {
+    "trade": 60,
+    "netto": -0.0033639693682076103
+   },
+   "F1 w4 k5 giu h72 | segue": {
+    "trade": 4,
+    "netto": -0.032423863981847455
+   },
+   "F1 w4 k5 su h12 | segue": {
+    "trade": 19,
+    "netto": -0.016840999742687417
+   },
+   "F1 w4 k5 su h4 | segue": {
+    "trade": 9,
+    "netto": 0.011026270029707241
+   },
+   "F1 w4 k5 su h72 | contro": {
+    "trade": 6,
+    "netto": -0.22618942279319665
+   },
+   "F1 w4 k5 su h72 | segue": {
+    "trade": 8,
+    "netto": -0.006270874395518624
+   },
+   "F10 giu h24 | segue": {
+    "trade": 38,
+    "netto": -0.013355077769553964
+   },
+   "F10 giu h72 | contro": {
+    "trade": 13,
+    "netto": -0.04117544542532835
+   },
+   "F10 giu h72 | segue": {
+    "trade": 88,
+    "netto": 0.009593249252294251
+   },
+   "F10 su h24 | contro": {
+    "trade": 36,
+    "netto": -0.0063470284555961695
+   },
+   "F10 su h72 | segue": {
+    "trade": 48,
+    "netto": -0.03262056712665967
+   },
+   "F11 dom | contro": {
+    "trade": 336,
+    "netto": 0.00486061219745859
+   },
+   "F11 lun | segue": {
+    "trade": 120,
+    "netto": 0.009709747857432364
+   },
+   "F11 mar | contro": {
+    "trade": 173,
+    "netto": -0.0021426039563781176
+   },
+   "F11 mar | segue": {
+    "trade": 374,
+    "netto": 0.00214315466744615
+   },
+   "F11 mer | segue": {
+    "trade": 171,
+    "netto": 0.02687460574853295
+   },
+   "F11 sab | segue": {
+    "trade": 148,
+    "netto": 0.01122215721319973
+   },
+   "F11 ven | segue": {
+    "trade": 96,
+    "netto": -0.005613819562454833
+   },
+   "F12 N3 giu h168 | contro": {
+    "trade": 182,
+    "netto": 0.06187678833457743
+   },
+   "F12 N3 su h168 | segue": {
+    "trade": 74,
+    "netto": 0.05835833815562529
+   },
+   "F12 N30 giu h168 | contro": {
+    "trade": 80,
+    "netto": -0.06882118137159106
+   },
+   "F12 N30 giu h168 | segue": {
+    "trade": 277,
+    "netto": 0.024408396354931635
+   },
+   "F12 N30 su h168 | contro": {
+    "trade": 365,
+    "netto": -0.022683076361041325
+   },
+   "F12 N30 su h168 | segue": {
+    "trade": 835,
+    "netto": 0.04958405679061811
+   },
+   "F12 N7 giu h168 | contro": {
+    "trade": 75,
+    "netto": 0.12647877938788518
+   },
+   "F12 N7 giu h168 | segue": {
+    "trade": 161,
+    "netto": -0.03281670996981561
+   },
+   "F12 N7 su h168 | contro": {
+    "trade": 76,
+    "netto": -0.034254986677045914
+   },
+   "F12 N7 su h168 | segue": {
+    "trade": 187,
+    "netto": -0.029781284306473366
+   },
+   "F13 prezzo giu oi giu h24 | contro": {
+    "trade": 124,
+    "netto": 0.01868577935397735
+   },
+   "F13 prezzo giu oi giu h72 | contro": {
+    "trade": 51,
+    "netto": -0.021513143740912948
+   },
+   "F13 prezzo giu oi giu h72 | segue": {
+    "trade": 106,
+    "netto": 0.004972119317615547
+   },
+   "F13 prezzo giu oi su h72 | segue": {
+    "trade": 56,
+    "netto": 0.015262287908963432
+   },
+   "F13 prezzo su oi giu h24 | contro": {
+    "trade": 86,
+    "netto": 0.01253086055902147
+   },
+   "F13 prezzo su oi giu h72 | contro": {
+    "trade": 80,
+    "netto": 0.006892466423667096
+   },
+   "F13 prezzo su oi su h24 | segue": {
+    "trade": 34,
+    "netto": -0.016253902619588905
+   },
+   "F13 prezzo su oi su h72 | contro": {
+    "trade": 56,
+    "netto": -0.02655173643523642
+   },
+   "F13 prezzo su oi su h72 | segue": {
+    "trade": 61,
+    "netto": -0.027668105877383217
+   },
+   "F5 N20 giu h168 | contro": {
+    "trade": 52,
+    "netto": -0.01702351301216463
+   },
+   "F5 N20 giu h168 | segue": {
+    "trade": 38,
+    "netto": -0.031648392762819035
+   },
+   "F5 N20 giu h24 | contro": {
+    "trade": 254,
+    "netto": 0.004262858656098685
+   },
+   "F5 N20 giu h72 | contro": {
+    "trade": 59,
+    "netto": -0.02309074044108233
+   },
+   "F5 N20 su h168 | segue": {
+    "trade": 67,
+    "netto": 0.05694266905904678
+   },
+   "F5 N20 su h24 | segue": {
+    "trade": 9,
+    "netto": -0.009204869833782483
+   },
+   "F5 N20 su h72 | segue": {
+    "trade": 117,
+    "netto": 0.008703963930738003
+   },
+   "F5 N5 giu h168 | contro": {
+    "trade": 33,
+    "netto": 0.05369390696920606
+   },
+   "F5 N5 giu h24 | contro": {
+    "trade": 119,
+    "netto": 0.006138600942884923
+   },
+   "F5 N5 giu h72 | contro": {
+    "trade": 72,
+    "netto": 0.0209286060118062
+   },
+   "F5 N5 su h168 | contro": {
+    "trade": 52,
+    "netto": -0.034993403399876076
+   },
+   "F5 N5 su h168 | segue": {
+    "trade": 272,
+    "netto": 0.05277957245408223
+   },
+   "F5 N5 su h72 | contro": {
+    "trade": 78,
+    "netto": -0.029741185877042515
+   },
+   "F5 N5 su h72 | segue": {
+    "trade": 69,
+    "netto": 0.023644574158893313
+   },
+   "F5 N60 giu h168 | contro": {
+    "trade": 3,
+    "netto": 0.08336602539066834
+   },
+   "F5 N60 giu h24 | contro": {
+    "trade": 30,
+    "netto": 0.03919958273361735
+   },
+   "F5 N60 giu h24 | segue": {
+    "trade": 57,
+    "netto": -0.011480583920685362
+   },
+   "F5 N60 giu h72 | contro": {
+    "trade": 72,
+    "netto": -0.013349706437173557
+   },
+   "F5 N60 su h168 | segue": {
+    "trade": 76,
+    "netto": 0.0607434444726325
+   },
+   "F6 alto h168 | contro": {
+    "trade": 157,
+    "netto": -0.0005653860803781589
+   },
+   "F6 alto h168 | segue": {
+    "trade": 135,
+    "netto": 0.024313963556244853
+   },
+   "F6 alto h72 | contro": {
+    "trade": 153,
+    "netto": -0.012782400974476285
+   },
+   "F6 basso h168 | contro": {
+    "trade": 78,
+    "netto": 0.020049823712058427
+   },
+   "F6 basso h168 | segue": {
+    "trade": 130,
+    "netto": 0.010154416809571257
+   },
+   "F6 basso h24 | contro": {
+    "trade": 328,
+    "netto": 0.002023627822928437
+   },
+   "F6 basso h72 | contro": {
+    "trade": 427,
+    "netto": -0.002831089022527814
+   },
+   "F7 ls_grandi_conti alto h72 | contro": {
+    "trade": 106,
+    "netto": -0.022650335946020568
+   },
+   "F7 ls_grandi_conti basso h24 | segue": {
+    "trade": 103,
+    "netto": -0.022630261302992553
+   },
+   "F7 ls_grandi_conti basso h72 | contro": {
+    "trade": 77,
+    "netto": -0.012621970295934483
+   },
+   "F7 ls_grandi_pos alto h24 | contro": {
+    "trade": 189,
+    "netto": 0.0034893855295485736
+   },
+   "F7 ls_grandi_pos alto h72 | contro": {
+    "trade": 300,
+    "netto": 0.001240359412732076
+   },
+   "F7 ls_grandi_pos alto h72 | segue": {
+    "trade": 106,
+    "netto": 0.026304276144701717
+   },
+   "F7 ls_tutti alto h72 | contro": {
+    "trade": 236,
+    "netto": -0.017367309114828686
+   },
+   "F7 ls_tutti alto h72 | segue": {
+    "trade": 58,
+    "netto": -0.04308603418029132
+   },
+   "F7 ls_tutti basso h24 | contro": {
+    "trade": 252,
+    "netto": 0.0040304589284151275
+   },
+   "F7 ls_tutti basso h72 | contro": {
+    "trade": 179,
+    "netto": 0.0049067355417516155
+   },
+   "F8 w1 bassa h24 | segue": {
+    "trade": 343,
+    "netto": -0.010290957367200607
+   },
+   "F8 w24 bassa h4 | segue": {
+    "trade": 134,
+    "netto": -0.0031089943239035428
+   },
+   "F9 k10 giu h24 | contro": {
+    "trade": 139,
+    "netto": 0.011978250902892328
+   },
+   "F9 k10 giu h4 | contro": {
+    "trade": 12,
+    "netto": -0.012536726672093832
+   },
+   "F9 k10 su h24 | segue": {
+    "trade": 190,
+    "netto": 0.00352450539694985
+   },
+   "F9 k10 su h4 | segue": {
+    "trade": 130,
+    "netto": 0.01142621874502483
+   },
+   "F9 k5 giu h4 | contro": {
+    "trade": 84,
+    "netto": -0.0026132493841728253
+   },
+   "F9 k5 su h24 | segue": {
+    "trade": 69,
+    "netto": -0.010083816075889082
+   },
+   "G1 w1 k2 giu h72 | contro": {
+    "trade": 115,
+    "netto": -0.0024521237709501423
+   },
+   "G1 w1 k2 su h72 | contro": {
+    "trade": 111,
+    "netto": -0.07909818968538476
+   },
+   "G1 w1 k3 giu h72 | contro": {
+    "trade": 114,
+    "netto": 0.037167200307583505
+   },
+   "G1 w1 k4 giu h1 | contro": {
+    "trade": 38,
+    "netto": -0.0037382459033113605
+   },
+   "G1 w1 k4 giu h4 | contro": {
+    "trade": 12,
+    "netto": 0.011455575095734992
+   },
+   "G1 w1 k4 giu h72 | contro": {
+    "trade": 74,
+    "netto": -0.04302017748795382
+   },
+   "G1 w1 k4 su h24 | segue": {
+    "trade": 57,
+    "netto": -0.0055599743151119535
+   },
+   "G1 w24 k2 giu h24 | contro": {
+    "trade": 41,
+    "netto": 0.0217986370936675
+   },
+   "G1 w24 k2 giu h4 | contro": {
+    "trade": 56,
+    "netto": -0.006225341130547893
+   },
+   "G1 w24 k2 giu h72 | segue": {
+    "trade": 63,
+    "netto": -0.026696203792976488
+   },
+   "G1 w24 k2 su h12 | segue": {
+    "trade": 78,
+    "netto": -0.003161375301256598
+   },
+   "G1 w24 k2 su h72 | segue": {
+    "trade": 101,
+    "netto": 0.03591217317770473
+   },
+   "G1 w24 k3 giu h24 | contro": {
+    "trade": 29,
+    "netto": 0.03243691405621023
+   },
+   "G1 w24 k3 giu h4 | contro": {
+    "trade": 3,
+    "netto": -0.0025113855475967545
+   },
+   "G1 w24 k3 giu h72 | contro": {
+    "trade": 50,
+    "netto": 0.03368365548396223
+   },
+   "G1 w24 k3 su h24 | segue": {
+    "trade": 33,
+    "netto": 0.014738949485067635
+   },
+   "G1 w24 k3 su h72 | segue": {
+    "trade": 9,
+    "netto": -0.045827241416336296
+   },
+   "G1 w4 k2 giu h72 | contro": {
+    "trade": 166,
+    "netto": 0.03181925184177691
+   },
+   "G1 w4 k3 giu h1 | contro": {
+    "trade": 54,
+    "netto": 0.0003228114099788654
+   },
+   "G1 w4 k3 giu h12 | contro": {
+    "trade": 59,
+    "netto": -0.005794981698538701
+   },
+   "G1 w4 k3 giu h24 | contro": {
+    "trade": 40,
+    "netto": -0.01036260049448067
+   },
+   "G1 w4 k3 giu h72 | contro": {
+    "trade": 33,
+    "netto": -0.014302717440362305
+   },
+   "G1 w4 k3 giu h72 | segue": {
+    "trade": 81,
+    "netto": 0.02482166216347331
+   },
+   "G1 w4 k3 su h24 | segue": {
+    "trade": 57,
+    "netto": 0.0020333889826982714
+   },
+   "G1 w4 k3 su h72 | segue": {
+    "trade": 56,
+    "netto": 0.03491859325906535
+   },
+   "G1 w4 k4 giu h1 | contro": {
+    "trade": 27,
+    "netto": 0.006410281436107479
+   },
+   "G1 w4 k4 giu h12 | contro": {
+    "trade": 43,
+    "netto": -0.0035353478615401538
+   },
+   "G1 w4 k4 giu h4 | contro": {
+    "trade": 38,
+    "netto": 0.005941933542812211
+   },
+   "G1 w4 k4 giu h72 | contro": {
+    "trade": 61,
+    "netto": 0.02534894608099334
+   },
+   "G1 w4 k4 giu h72 | segue": {
+    "trade": 73,
+    "netto": -0.06365413170957944
+   },
+   "G1 w4 k4 su h24 | contro": {
+    "trade": 25,
+    "netto": 0.008328656141415593
+   },
+   "G1 w4 k4 su h72 | contro": {
+    "trade": 21,
+    "netto": 0.01518086119957189
+   },
+   "G1 w4 k4 su h72 | segue": {
+    "trade": 18,
+    "netto": 0.034604018056928365
+   },
+   "L0 giu h12 | contro": {
+    "trade": 285,
+    "netto": 0.013744146174018968
+   },
+   "L0 giu h4 | contro": {
+    "trade": 258,
+    "netto": 0.0015588929949081893
+   },
+   "L0 su h12 | segue": {
+    "trade": 656,
+    "netto": 0.0037191084427902863
+   },
+   "L0 su h24 | segue": {
+    "trade": 557,
+    "netto": -6.396890840795919e-05
+   },
+   "L1 giu h12 | contro": {
+    "trade": 260,
+    "netto": 0.005209233379743031
+   },
+   "L1 giu h24 | contro": {
+    "trade": 53,
+    "netto": 0.0002053658182743912
+   },
+   "L1 giu h4 | contro": {
+    "trade": 57,
+    "netto": 1.3298217328171518e-05
+   },
+   "L1 su h12 | segue": {
+    "trade": 160,
+    "netto": 0.003818566349657086
+   },
+   "L1 su h24 | segue": {
+    "trade": 76,
+    "netto": 0.009475914778227443
+   },
+   "L1 su h4 | segue": {
+    "trade": 134,
+    "netto": 0.003440483414879093
+   },
+   "L2 giu h12 | contro": {
+    "trade": 93,
+    "netto": 0.005001915013661641
+   },
+   "L2 su h12 | segue": {
+    "trade": 185,
+    "netto": 0.0036743206140949385
+   },
+   "L2 su h24 | segue": {
+    "trade": 127,
+    "netto": 0.01720140813452394
+   },
+   "P1 q1 alto h72 | contro": {
+    "trade": 321,
+    "netto": -0.02238316361299441
+   },
+   "P1 q1 alto h72 | segue": {
+    "trade": 169,
+    "netto": -0.013824580118682978
+   },
+   "P1 q1 basso h72 | contro": {
+    "trade": 261,
+    "netto": 0.013616191436460283
+   },
+   "P1 q5 alto h72 | contro": {
+    "trade": 160,
+    "netto": -0.01578435389299564
+   },
+   "P1 q5 basso h24 | contro": {
+    "trade": 153,
+    "netto": 0.007923881518826377
+   },
+   "P2 w4 scende h4 | contro": {
+    "trade": 231,
+    "netto": -0.0029687822234304535
+   },
+   "P3 w1 giu sconto h12 | contro": {
+    "trade": 27,
+    "netto": -0.010744287513076168
+   },
+   "P3 w1 giu sconto h24 | contro": {
+    "trade": 99,
+    "netto": -0.009571172199166108
+   },
+   "P3 w1 giu sconto h4 | contro": {
+    "trade": 269,
+    "netto": 0.002235982323509895
+   },
+   "P3 w1 giu senza sconto h12 | contro": {
+    "trade": 250,
+    "netto": -0.010072754138430649
+   },
+   "P3 w1 giu senza sconto h24 | contro": {
+    "trade": 218,
+    "netto": -0.0070573768105720676
+   },
+   "P3 w1 su premio h4 | contro": {
+    "trade": 40,
+    "netto": 0.016865494745810942
+   },
+   "P3 w1 su senza premio h12 | segue": {
+    "trade": 99,
+    "netto": -0.006689562785676466
+   },
+   "P3 w1 su senza premio h24 | segue": {
+    "trade": 79,
+    "netto": -0.012649460117931308
+   },
+   "P3 w1 su senza premio h4 | segue": {
+    "trade": 74,
+    "netto": -0.00017694931662495515
+   },
+   "P3 w4 giu sconto h12 | contro": {
+    "trade": 68,
+    "netto": 0.006705034172567201
+   },
+   "P3 w4 giu sconto h24 | contro": {
+    "trade": 185,
+    "netto": 0.04187852722444356
+   },
+   "P3 w4 giu sconto h4 | contro": {
+    "trade": 169,
+    "netto": 0.0062676601152323146
+   },
+   "P3 w4 giu senza sconto h12 | contro": {
+    "trade": 84,
+    "netto": -0.016692723724276225
+   },
+   "P3 w4 giu senza sconto h24 | contro": {
+    "trade": 95,
+    "netto": 0.01679497775626993
+   },
+   "P3 w4 giu senza sconto h4 | contro": {
+    "trade": 421,
+    "netto": 0.00020931348116460377
+   },
+   "P3 w4 su premio h12 | contro": {
+    "trade": 5,
+    "netto": 0.0320528298246233
+   },
+   "P3 w4 su premio h12 | segue": {
+    "trade": 31,
+    "netto": 0.015354597825424128
+   },
+   "P3 w4 su premio h24 | contro": {
+    "trade": 85,
+    "netto": 0.007327164673174049
+   },
+   "P3 w4 su premio h24 | segue": {
+    "trade": 99,
+    "netto": 0.06851664061909475
+   },
+   "P3 w4 su premio h4 | contro": {
+    "trade": 35,
+    "netto": -0.0025450117481146625
+   },
+   "P3 w4 su premio h4 | segue": {
+    "trade": 30,
+    "netto": -0.004918269856975478
+   },
+   "P3 w4 su senza premio h12 | segue": {
+    "trade": 319,
+    "netto": 0.013880150129639628
+   },
+   "P3 w4 su senza premio h24 | segue": {
+    "trade": 133,
+    "netto": 0.0507636656282748
+   },
+   "P3 w4 su senza premio h4 | segue": {
+    "trade": 84,
+    "netto": 0.004278555201598184
+   },
+   "W1 k1 giu h24 | contro": {
+    "trade": 73,
+    "netto": -0.005138740953227128
+   },
+   "W1 k1 giu h24 | segue": {
+    "trade": 3,
+    "netto": -0.024976073094807125
+   },
+   "W1 k1 giu h72 | contro": {
+    "trade": 1,
+    "netto": -0.01699627989935346
+   },
+   "W1 k1 giu h72 | segue": {
+    "trade": 2,
+    "netto": -0.0018391511725122031
+   },
+   "W1 k1 su h24 | segue": {
+    "trade": 17,
+    "netto": 0.009192254945810125
+   },
+   "W1 k1 su h72 | contro": {
+    "trade": 4,
+    "netto": -0.04940543938296399
+   },
+   "W1 k1.5 giu h24 | contro": {
+    "trade": 3,
+    "netto": -0.030013502464920804
+   },
+   "W2 america->sera k1 giu | contro": {
+    "trade": 490,
+    "netto": 0.00019140771248142829
+   },
+   "W2 america->sera k2 giu | contro": {
+    "trade": 166,
+    "netto": 0.0024065222735766925
+   },
+   "W2 america->sera k2 su | contro": {
+    "trade": 46,
+    "netto": -0.013375242582358345
+   },
+   "W2 america->sera k2 su | segue": {
+    "trade": 19,
+    "netto": 0.003186112077380858
+   },
+   "W2 asia->europa k1 su | contro": {
+    "trade": 126,
+    "netto": -0.0006639465984894574
+   },
+   "W2 europa->america k1 su | contro": {
+    "trade": 91,
+    "netto": -0.0026800803610215387
+   },
+   "W2 europa->america k1 su | segue": {
+    "trade": 42,
+    "netto": -0.009754425519671402
+   },
+   "W2 europa->america k2 giu | contro": {
+    "trade": 24,
+    "netto": 0.1187299284717837
+   },
+   "W2 europa->america k2 giu | segue": {
+    "trade": 29,
+    "netto": 0.0001443341489745815
+   },
+   "W2 sera->asia k1 giu | contro": {
+    "trade": 115,
+    "netto": -0.001294089551618796
+   },
+   "W2 sera->asia k1 su | contro": {
+    "trade": 68,
+    "netto": -0.00047188113718988484
+   },
+   "W2 sera->asia k2 giu | contro": {
+    "trade": 122,
+    "netto": 0.010705732046246861
+   },
+   "W2 sera->asia k2 su | contro": {
+    "trade": 10,
+    "netto": 0.011179702846674317
+   },
+   "W2 sera->asia k2 su | segue": {
+    "trade": 18,
+    "netto": 0.0031693292455337568
+   },
+   "W3 giornata k1 giu | contro": {
+    "trade": 109,
+    "netto": 0.014951074967236124
+   },
+   "W3 giornata k1 giu | segue": {
+    "trade": 77,
+    "netto": 0.007759661862969063
+   },
+   "W3 giornata k2 giu | contro": {
+    "trade": 105,
+    "netto": 0.016166669931085856
+   },
+   "W3 prima ora americana k1 giu | segue": {
+    "trade": 103,
+    "netto": -0.005465245776803971
+   },
+   "W3 prima ora americana k2 giu | contro": {
+    "trade": 102,
+    "netto": -0.003430551891633609
+   },
+   "W3 prima ora americana k2 giu | segue": {
+    "trade": 37,
+    "netto": -0.01383148113307847
+   },
+   "W3 prima ora americana k2 su | contro": {
+    "trade": 100,
+    "netto": -0.011469014984827261
+   },
+   "W4 k1.5 sopra h24 | contro": {
+    "trade": 27,
+    "netto": -0.03204052558018582
+   },
+   "W4 k1.5 sopra h24 | segue": {
+    "trade": 114,
+    "netto": 0.03144194569159834
+   },
+   "W4 k1.5 sotto h24 | contro": {
+    "trade": 235,
+    "netto": -0.0062543327512781955
+   },
+   "W4 k1.5 sotto h4 | contro": {
+    "trade": 449,
+    "netto": 0.011946423114731966
+   },
+   "W4 k2.5 sotto h4 | contro": {
+    "trade": 5,
+    "netto": 0.010163057554757188
+   },
+   "W5 fine mese | contro": {
+    "trade": 158,
+    "netto": -0.04798234679768822
+   },
+   "W5 fine mese | segue": {
+    "trade": 140,
+    "netto": -0.0015682760465810155
+   },
+   "W5 giorno 15 | contro": {
+    "trade": 115,
+    "netto": -0.07511842180490605
+   },
+   "W5 giorno 15 | segue": {
+    "trade": 36,
+    "netto": 0.03365281776169406
+   }
+  },
+  "placebo": {
+   "netto_medio": -0.0022080602024558624,
+   "costo_medio": 0.0018955125053946003,
+   "netto_min": -0.0036748762975180012,
+   "netto_max": -0.0003507573131648603,
+   "trade_medi": 14395.6
+  },
+  "placebo_ok": true
+ },
+ "M-001c": {
+  "trade": 18435,
+  "netto": {
+   "n": 18435,
+   "giorni": 1741,
+   "media": 0.013182586867038779,
+   "basso": 0.008219914400942076,
+   "alto": 0.01821187697623227,
+   "p": 9.999000099990002e-05
+  },
+  "netto_doppio": {
+   "n": 18435,
+   "giorni": 1741,
+   "media": 0.01130096648654962,
+   "basso": 0.006352534976173114,
+   "alto": 0.016334495591789927,
+   "p": 9.999000099990002e-05
+  },
+  "lordo": 0.01506420724752794,
+  "costo": 0.0018816203804891604,
+  "senza_migliore": 0.012414744939003844,
+  "per_anno": {
+   "2021": {
+    "trade": 4878,
+    "netto": 0.03311694609905756
+   },
+   "2022": {
+    "trade": 2383,
+    "netto": -0.0010988426744960253
+   },
+   "2023": {
+    "trade": 1444,
+    "netto": -0.00594309719400241
+   },
+   "2024": {
+    "trade": 4805,
+    "netto": 0.009419138747708273
+   },
+   "2025": {
+    "trade": 2279,
+    "netto": 0.007193870702422134
+   },
+   "2026": {
+    "trade": 2646,
+    "netto": 0.011724530329010696
+   }
+  },
+  "V2": {
+   "n": 3995,
+   "giorni": 369,
+   "media": 0.010357957455667297,
+   "basso": 0.0027514991400838353,
+   "alto": 0.020158409908226774,
+   "p": 0.0017998200179982
+  },
+  "per_moneta": {
+   "1000PEPEUSDT": {
+    "trade": 433,
+    "netto": 0.026236747559883398
+   },
+   "ADAUSDT": {
+    "trade": 848,
+    "netto": 0.011061043111622435
+   },
+   "ARBUSDT": {
+    "trade": 438,
+    "netto": 0.005033585639965539
+   },
+   "AVAXUSDT": {
+    "trade": 857,
+    "netto": 0.023411979525683045
+   },
+   "BCHUSDT": {
+    "trade": 897,
+    "netto": 0.002328083855060401
+   },
+   "BNBUSDT": {
+    "trade": 867,
+    "netto": 0.021571612684859347
+   },
+   "BTCUSDT": {
+    "trade": 885,
+    "netto": 0.0008817156657748639
+   },
+   "DASHUSDT": {
+    "trade": 866,
+    "netto": 0.010348961305467664
+   },
+   "DOGEUSDT": {
+    "trade": 873,
+    "netto": 0.05323041442360908
+   },
+   "DOTUSDT": {
+    "trade": 806,
+    "netto": 0.0049921557955382905
+   },
+   "ETHUSDT": {
+    "trade": 912,
+    "netto": 0.007893385006402317
+   },
+   "FILUSDT": {
+    "trade": 826,
+    "netto": 0.007039748886521302
+   },
+   "LINKUSDT": {
+    "trade": 820,
+    "netto": 0.00321087963372232
+   },
+   "LTCUSDT": {
+    "trade": 817,
+    "netto": -0.005402598664786155
+   },
+   "NEARUSDT": {
+    "trade": 797,
+    "netto": 0.009375218666618614
+   },
+   "ONEUSDT": {
+    "trade": 748,
+    "netto": 0.03285538142282776
+   },
+   "QNTUSDT": {
+    "trade": 490,
+    "netto": 0.018809837547317926
+   },
+   "SOLUSDT": {
+    "trade": 833,
+    "netto": 0.023555712602875412
+   },
+   "SUIUSDT": {
+    "trade": 424,
+    "netto": 0.016386544073439632
+   },
+   "TRXUSDT": {
+    "trade": 895,
+    "netto": 0.006659813399973777
+   },
+   "UNIUSDT": {
+    "trade": 851,
+    "netto": 0.005143680126754309
+   },
+   "WLDUSDT": {
+    "trade": 451,
+    "netto": 0.01152924926334306
+   },
+   "XRPUSDT": {
+    "trade": 904,
+    "netto": 0.009489811148517829
+   },
+   "ZECUSDT": {
+    "trade": 897,
+    "netto": 0.017615748501501962
+   }
+  },
+  "per_cella": {
+   "F1 w1 k3 giu h24 | contro": {
+    "trade": 90,
+    "netto": -0.024875471215523234
+   },
+   "F1 w1 k3 su h72 | segue": {
+    "trade": 633,
+    "netto": 0.025703403593903513
+   },
+   "F1 w1 k4 giu h24 | contro": {
+    "trade": 126,
+    "netto": -0.010554491276864348
+   },
+   "F1 w1 k5 giu h24 | contro": {
+    "trade": 48,
+    "netto": 0.09108061435428139
+   },
+   "F1 w24 k3 giu h24 | contro": {
+    "trade": 11,
+    "netto": 0.10009362881123418
+   },
+   "F1 w24 k3 giu h4 | contro": {
+    "trade": 20,
+    "netto": 0.03262976320703166
+   },
+   "F1 w24 k3 giu h72 | contro": {
+    "trade": 29,
+    "netto": 0.11412964853184934
+   },
+   "F1 w24 k4 giu h12 | contro": {
+    "trade": 58,
+    "netto": 0.02445636579467799
+   },
+   "F1 w24 k4 giu h24 | contro": {
+    "trade": 47,
+    "netto": 0.1169218339166015
+   },
+   "F1 w24 k4 giu h4 | contro": {
+    "trade": 51,
+    "netto": 0.00257379247015841
+   },
+   "F1 w24 k4 giu h72 | contro": {
+    "trade": 52,
+    "netto": 0.07161420203545445
+   },
+   "F1 w24 k4 giu h72 | segue": {
+    "trade": 1,
+    "netto": -0.10486812110781404
+   },
+   "F1 w24 k5 giu h1 | segue": {
+    "trade": 7,
+    "netto": -0.0410389924774382
+   },
+   "F1 w24 k5 giu h12 | contro": {
+    "trade": 101,
+    "netto": 0.04353057455349483
+   },
+   "F1 w24 k5 giu h24 | contro": {
+    "trade": 1,
+    "netto": 0.10689353076369464
+   },
+   "F1 w24 k5 giu h72 | contro": {
+    "trade": 28,
+    "netto": 0.01693387597886506
+   },
+   "F1 w4 k3 giu h1 | contro": {
+    "trade": 75,
+    "netto": 0.010653524176679561
+   },
+   "F1 w4 k3 su h12 | segue": {
+    "trade": 38,
+    "netto": -0.013909374055077127
+   },
+   "F1 w4 k3 su h72 | segue": {
+    "trade": 164,
+    "netto": 0.040866801066439536
+   },
+   "F1 w4 k4 giu h24 | contro": {
+    "trade": 19,
+    "netto": 0.001130234624938405
+   },
+   "F1 w4 k4 giu h4 | contro": {
+    "trade": 79,
+    "netto": -0.003634136841541316
+   },
+   "F1 w4 k4 su h12 | segue": {
+    "trade": 144,
+    "netto": 0.003137342009401691
+   },
+   "F1 w4 k4 su h4 | segue": {
+    "trade": 19,
+    "netto": -0.001338429494898416
+   },
+   "F1 w4 k5 giu h12 | contro": {
+    "trade": 1,
+    "netto": -0.009331629013079688
+   },
+   "F1 w4 k5 giu h4 | contro": {
+    "trade": 72,
+    "netto": 0.005203285931377548
+   },
+   "F1 w4 k5 su h12 | segue": {
+    "trade": 3,
+    "netto": -0.03532833261579902
+   },
+   "F1 w4 k5 su h4 | contro": {
+    "trade": 34,
+    "netto": -0.010089579414721554
+   },
+   "F1 w4 k5 su h4 | segue": {
+    "trade": 65,
+    "netto": -0.007162573885210918
+   },
+   "F1 w4 k5 su h72 | segue": {
+    "trade": 25,
+    "netto": 0.28064303157118053
+   },
+   "F10 su h72 | contro": {
+    "trade": 42,
+    "netto": 0.0058203718867150655
+   },
+   "F12 N3 giu h168 | contro": {
+    "trade": 57,
+    "netto": 0.14378502432389287
+   },
+   "F12 N3 giu h168 | segue": {
+    "trade": 210,
+    "netto": -0.004553447419713611
+   },
+   "F12 N3 su h168 | segue": {
+    "trade": 244,
+    "netto": 0.024376454241095073
+   },
+   "F12 N30 su h168 | segue": {
+    "trade": 921,
+    "netto": 0.04240341082246242
+   },
+   "F12 N7 giu h168 | segue": {
+    "trade": 117,
+    "netto": -0.006225096066849
+   },
+   "F12 N7 su h168 | contro": {
+    "trade": 59,
+    "netto": 0.0170427905235849
+   },
+   "F13 prezzo giu oi giu h72 | segue": {
+    "trade": 183,
+    "netto": 0.0021195842200450055
+   },
+   "F13 prezzo su oi giu h72 | contro": {
+    "trade": 30,
+    "netto": -0.10594996814802901
+   },
+   "F13 prezzo su oi su h72 | segue": {
+    "trade": 61,
+    "netto": -0.027668105877383217
+   },
+   "F5 N20 su h168 | segue": {
+    "trade": 239,
+    "netto": 0.00891255586521507
+   },
+   "F5 N20 su h72 | segue": {
+    "trade": 487,
+    "netto": 0.01590714323100153
+   },
+   "F5 N5 su h168 | segue": {
+    "trade": 536,
+    "netto": 0.012222205092049455
+   },
+   "F5 N60 giu h168 | contro": {
+    "trade": 27,
+    "netto": 0.08828019317370686
+   },
+   "F5 N60 su h168 | segue": {
+    "trade": 150,
+    "netto": 0.0759364333120819
+   },
+   "F5 N60 su h72 | segue": {
+    "trade": 50,
+    "netto": 0.06714355277409198
+   },
+   "F6 alto h168 | contro": {
+    "trade": 45,
+    "netto": -0.055998955145233946
+   },
+   "F6 alto h168 | segue": {
+    "trade": 154,
+    "netto": 0.0002082533082945395
+   },
+   "F6 alto h72 | segue": {
+    "trade": 51,
+    "netto": 0.0057825595457905955
+   },
+   "F6 basso h168 | contro": {
+    "trade": 62,
+    "netto": 0.22234968874564637
+   },
+   "F6 basso h72 | contro": {
+    "trade": 287,
+    "netto": 0.010413538035170544
+   },
+   "F7 ls_grandi_conti alto h72 | contro": {
+    "trade": 91,
+    "netto": -0.015100660918496002
+   },
+   "F7 ls_grandi_conti basso h72 | contro": {
+    "trade": 51,
+    "netto": 0.005956091868743062
+   },
+   "F7 ls_tutti alto h24 | contro": {
+    "trade": 73,
+    "netto": -0.013411723139619013
+   },
+   "F7 ls_tutti alto h72 | contro": {
+    "trade": 422,
+    "netto": 0.00043217863711099826
+   },
+   "F7 ls_tutti basso h72 | contro": {
+    "trade": 181,
+    "netto": 0.02375162391695299
+   },
+   "F9 k10 giu h24 | contro": {
+    "trade": 223,
+    "netto": 0.02887507306625124
+   },
+   "F9 k10 giu h4 | contro": {
+    "trade": 133,
+    "netto": 0.010222450143372775
+   },
+   "F9 k10 su h24 | segue": {
+    "trade": 369,
+    "netto": 0.023097203545486594
+   },
+   "F9 k10 su h4 | segue": {
+    "trade": 337,
+    "netto": 0.00015956301979243876
+   },
+   "F9 k5 giu h24 | contro": {
+    "trade": 286,
+    "netto": 0.020277159780416075
+   },
+   "F9 k5 su h24 | segue": {
+    "trade": 46,
+    "netto": 0.01928269438098756
+   },
+   "G1 w1 k2 su h72 | segue": {
+    "trade": 100,
+    "netto": -0.00839270631366495
+   },
+   "G1 w1 k3 giu h12 | contro": {
+    "trade": 61,
+    "netto": -0.005136752613236636
+   },
+   "G1 w1 k3 giu h4 | contro": {
+    "trade": 82,
+    "netto": -0.0006034889633390729
+   },
+   "G1 w1 k3 giu h72 | contro": {
+    "trade": 14,
+    "netto": 0.0520510191936655
+   },
+   "G1 w1 k4 su h72 | segue": {
+    "trade": 34,
+    "netto": -0.017736146403483595
+   },
+   "G1 w24 k2 su h12 | segue": {
+    "trade": 62,
+    "netto": 0.010170313524422365
+   },
+   "G1 w24 k2 su h72 | segue": {
+    "trade": 257,
+    "netto": -0.006504217108187373
+   },
+   "G1 w24 k3 giu h24 | contro": {
+    "trade": 98,
+    "netto": -0.005806370529041393
+   },
+   "G1 w24 k4 giu h12 | contro": {
+    "trade": 47,
+    "netto": 0.024735393777011797
+   },
+   "G1 w24 k4 giu h24 | contro": {
+    "trade": 57,
+    "netto": 7.093041294882875e-05
+   },
+   "G1 w24 k4 giu h72 | contro": {
+    "trade": 34,
+    "netto": 0.07066030983208364
+   },
+   "G1 w24 k4 su h72 | segue": {
+    "trade": 4,
+    "netto": -0.004165824946029052
+   },
+   "G1 w4 k3 giu h1 | contro": {
+    "trade": 101,
+    "netto": 0.0005721706003249882
+   },
+   "G1 w4 k3 su h72 | segue": {
+    "trade": 430,
+    "netto": 0.0146659099987835
+   },
+   "G1 w4 k4 giu h1 | contro": {
+    "trade": 15,
+    "netto": -0.021553624079917295
+   },
+   "G1 w4 k4 giu h4 | contro": {
+    "trade": 17,
+    "netto": -0.00492843240142724
+   },
+   "G1 w4 k4 giu h72 | segue": {
+    "trade": 38,
+    "netto": -0.03845627796654585
+   },
+   "G1 w4 k4 su h72 | segue": {
+    "trade": 118,
+    "netto": 0.08955493451940624
+   },
+   "L0 giu h24 | contro": {
+    "trade": 434,
+    "netto": 0.012180419576807659
+   },
+   "L0 su h24 | segue": {
+    "trade": 292,
+    "netto": 0.00030664089795198345
+   },
+   "L1 giu h12 | contro": {
+    "trade": 657,
+    "netto": 0.008548072087708117
+   },
+   "L1 giu h24 | contro": {
+    "trade": 380,
+    "netto": 0.01016434259480387
+   },
+   "L1 su h12 | segue": {
+    "trade": 133,
+    "netto": -0.003634344401627272
+   },
+   "L1 su h24 | segue": {
+    "trade": 116,
+    "netto": 0.0012022248542607967
+   },
+   "L1 su h4 | segue": {
+    "trade": 33,
+    "netto": -0.012153288275920132
+   },
+   "L2 giu h12 | contro": {
+    "trade": 84,
+    "netto": -0.009827421274917893
+   },
+   "L2 su h12 | segue": {
+    "trade": 57,
+    "netto": -8.444859578060821e-05
+   },
+   "L2 su h4 | segue": {
+    "trade": 294,
+    "netto": 0.006623922896972421
+   },
+   "P1 q1 alto h72 | segue": {
+    "trade": 95,
+    "netto": -0.01286101701664407
+   },
+   "P1 q1 basso h72 | contro": {
+    "trade": 416,
+    "netto": 0.033131068725787645
+   },
+   "P1 q5 alto h72 | segue": {
+    "trade": 153,
+    "netto": -0.00819423178044683
+   },
+   "P1 q5 basso h24 | contro": {
+    "trade": 153,
+    "netto": 0.007923881518826377
+   },
+   "P3 w1 giu sconto h24 | contro": {
+    "trade": 27,
+    "netto": 0.03598727186890144
+   },
+   "P3 w1 giu sconto h4 | contro": {
+    "trade": 332,
+    "netto": 0.009157152454225173
+   },
+   "P3 w1 giu senza sconto h12 | contro": {
+    "trade": 188,
+    "netto": -0.0020631044976601636
+   },
+   "P3 w1 giu senza sconto h24 | contro": {
+    "trade": 113,
+    "netto": -0.013719461850457313
+   },
+   "P3 w1 su premio h24 | segue": {
+    "trade": 18,
+    "netto": -0.011525439601362092
+   },
+   "P3 w1 su senza premio h12 | segue": {
+    "trade": 202,
+    "netto": 0.0033600013021352084
+   },
+   "P3 w1 su senza premio h24 | segue": {
+    "trade": 928,
+    "netto": 0.001986053523538173
+   },
+   "P3 w1 su senza premio h4 | segue": {
+    "trade": 398,
+    "netto": 0.0036748467816192154
+   },
+   "P3 w4 giu sconto h24 | contro": {
+    "trade": 37,
+    "netto": 0.026135741465152258
+   },
+   "P3 w4 giu sconto h4 | contro": {
+    "trade": 51,
+    "netto": 0.006486005948818512
+   },
+   "P3 w4 giu senza sconto h12 | contro": {
+    "trade": 57,
+    "netto": 0.016516597196538734
+   },
+   "P3 w4 giu senza sconto h4 | contro": {
+    "trade": 91,
+    "netto": 0.007429152366751682
+   },
+   "P3 w4 su premio h12 | segue": {
+    "trade": 131,
+    "netto": 0.006429924083380224
+   },
+   "P3 w4 su premio h4 | contro": {
+    "trade": 47,
+    "netto": -0.0037362803358440325
+   },
+   "P3 w4 su senza premio h12 | segue": {
+    "trade": 658,
+    "netto": 0.008726540378920322
+   },
+   "P3 w4 su senza premio h24 | segue": {
+    "trade": 126,
+    "netto": 0.03133852669638626
+   },
+   "P3 w4 su senza premio h4 | segue": {
+    "trade": 910,
+    "netto": 0.00785306658807
+   },
+   "W1 k1 giu h24 | contro": {
+    "trade": 21,
+    "netto": 0.004812857688574533
+   },
+   "W1 k1 giu h72 | segue": {
+    "trade": 1,
+    "netto": -0.05093841195693308
+   },
+   "W1 k1.5 giu h24 | contro": {
+    "trade": 15,
+    "netto": 0.0163981105933118
+   },
+   "W2 america->sera k2 giu | contro": {
+    "trade": 24,
+    "netto": 0.048978435188917833
+   },
+   "W2 america->sera k2 su | segue": {
+    "trade": 33,
+    "netto": -0.006222531464733178
+   },
+   "W2 asia->europa k2 giu | contro": {
+    "trade": 34,
+    "netto": 0.0017610996159294187
+   },
+   "W2 europa->america k1 su | contro": {
+    "trade": 121,
+    "netto": 0.005234314507594367
+   },
+   "W2 europa->america k2 giu | contro": {
+    "trade": 17,
+    "netto": -0.004441100812356216
+   },
+   "W2 europa->america k2 giu | segue": {
+    "trade": 35,
+    "netto": -0.0052266055385093695
+   },
+   "W2 europa->america k2 su | segue": {
+    "trade": 41,
+    "netto": -0.004092993389663201
+   },
+   "W2 sera->asia k1 su | contro": {
+    "trade": 141,
+    "netto": -0.015502924354045865
+   },
+   "W2 sera->asia k2 giu | contro": {
+    "trade": 15,
+    "netto": -0.010859381641931069
+   },
+   "W2 sera->asia k2 su | contro": {
+    "trade": 60,
+    "netto": -0.013988676590626756
+   },
+   "W4 k1.5 sotto h24 | contro": {
+    "trade": 68,
+    "netto": -0.048101605685584296
+   },
+   "W4 k1.5 sotto h4 | contro": {
+    "trade": 165,
+    "netto": -0.00447450768044847
+   },
+   "W4 k2.5 sopra h4 | contro": {
+    "trade": 3,
+    "netto": 0.07216615159646818
+   },
+   "W4 k2.5 sotto h24 | contro": {
+    "trade": 30,
+    "netto": 0.168302460882616
+   },
+   "W4 k2.5 sotto h4 | contro": {
+    "trade": 90,
+    "netto": 0.02198467141193851
+   },
+   "W5 fine mese | segue": {
+    "trade": 76,
+    "netto": -0.019915299727755135
+   }
+  },
+  "placebo": {
+   "netto_medio": -0.001637888110130269,
+   "costo_medio": 0.001889819786664125,
+   "netto_min": -0.0059021900535160075,
+   "netto_max": 0.0013512000927884743,
+   "trade_medi": 5561.95
+  },
+  "placebo_ok": false
+ }
+}
