@@ -210,3 +210,24 @@ def test_meta2_sceglie_chi_batte_il_caso_non_chi_segue_il_mercato():
     cand = {("M", "segue"): pd.concat([mercato, feb(mercato)]), ("T", "segue"): pd.concat([tempismo, feb(tempismo)])}
     _, scelte = meta2.scegli_eccesso(cand, L=1, K=5, primo=1, ultimo=1, n_mesi=3, min_trade=10, t_min=1.0)
     assert scelte[1] == [("T", "segue")]
+
+
+def test_libro_squilibrio_e_liquidita_a_ore():
+    import io as _io
+    import zipfile as _zip
+    from research.programma5.strumenti import libro
+    righe = ["timestamp,percentage,depth,notional"]
+    for ts, base in (("2025-01-01 00:00:07", 1.0), ("2025-01-01 00:30:07", 2.0), ("2025-01-01 01:00:07", 3.0)):
+        for p, v in ((-5, 50), (-2, 20), (-1, 10 * base), (1, 10), (2, 30), (5, 50)):
+            righe.append(f"{ts},{p},1,{v}")
+    buf = _io.BytesIO()
+    with _zip.ZipFile(buf, "w") as z:
+        z.writestr("x.csv", "\n".join(righe))
+    h = libro.aggrega_giorno(buf.getvalue())
+    ora0 = 1735689600 // 3600
+    assert list(h.index) == [ora0, ora0 + 1]
+    # ultima rilevazione della prima ora: acquisti 20, vendite 10 entro l'1%
+    assert h.loc[ora0, "imb1_fine"] == pytest.approx((20 - 10) / 30)
+    assert h.loc[ora0, "imb1_media"] == pytest.approx(((0 / 20) + (10 / 30)) / 2)
+    assert h.loc[ora0, "imb2_fine"] == pytest.approx((20 - 30) / 50)
+    assert h.loc[ora0, "liq5_fine"] == pytest.approx(100) and h.loc[ora0, "n"] == 2
