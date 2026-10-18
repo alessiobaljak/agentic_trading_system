@@ -1,0 +1,1398 @@
+{
+"id": "V-020",
+"trade": [
+{
+"ingresso": "2020-01-27T04:00:00Z",
+"uscita": "2020-02-04T08:00:00Z",
+"r": 0.589,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.06788
+},
+{
+"ingresso": "2020-02-05T08:00:00Z",
+"uscita": "2020-02-20T12:00:00Z",
+"r": 6.573,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.06439
+},
+{
+"ingresso": "2020-02-21T04:00:00Z",
+"uscita": "2020-02-21T08:00:00Z",
+"r": -0.097,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.17254
+},
+{
+"ingresso": "2020-02-21T12:00:00Z",
+"uscita": "2020-02-21T20:00:00Z",
+"r": -0.152,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.16337
+},
+{
+"ingresso": "2020-02-27T20:00:00Z",
+"uscita": "2020-02-28T00:00:00Z",
+"r": -0.255,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14909
+},
+{
+"ingresso": "2020-02-28T04:00:00Z",
+"uscita": "2020-02-28T08:00:00Z",
+"r": -0.183,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15282
+},
+{
+"ingresso": "2020-02-28T16:00:00Z",
+"uscita": "2020-02-28T20:00:00Z",
+"r": -0.133,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15834
+},
+{
+"ingresso": "2020-02-29T00:00:00Z",
+"uscita": "2020-03-01T16:00:00Z",
+"r": -0.318,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15717
+},
+{
+"ingresso": "2020-03-02T08:00:00Z",
+"uscita": "2020-03-08T00:00:00Z",
+"r": 0.632,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14709
+},
+{
+"ingresso": "2020-03-19T20:00:00Z",
+"uscita": "2020-03-22T20:00:00Z",
+"r": -0.463,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.2361
+},
+{
+"ingresso": "2020-03-23T16:00:00Z",
+"uscita": "2020-03-28T00:00:00Z",
+"r": 0.008,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.22382
+},
+{
+"ingresso": "2020-03-31T20:00:00Z",
+"uscita": "2020-04-01T20:00:00Z",
+"r": -0.419,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08421
+},
+{
+"ingresso": "2020-04-02T00:00:00Z",
+"uscita": "2020-04-15T16:00:00Z",
+"r": 4.151,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09337
+},
+{
+"ingresso": "2020-04-15T20:00:00Z",
+"uscita": "2020-04-16T00:00:00Z",
+"r": -0.245,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12136
+},
+{
+"ingresso": "2020-04-16T12:00:00Z",
+"uscita": "2020-04-20T20:00:00Z",
+"r": 0.105,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12917
+},
+{
+"ingresso": "2020-04-21T04:00:00Z",
+"uscita": "2020-04-21T12:00:00Z",
+"r": -0.193,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12156
+},
+{
+"ingresso": "2020-04-21T16:00:00Z",
+"uscita": "2020-04-27T08:00:00Z",
+"r": 0.391,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.1191
+},
+{
+"ingresso": "2020-04-28T12:00:00Z",
+"uscita": "2020-04-28T16:00:00Z",
+"r": -0.099,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08292
+},
+{
+"ingresso": "2020-04-29T08:00:00Z",
+"uscita": "2020-04-30T12:00:00Z",
+"r": 0.007,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07507
+},
+{
+"ingresso": "2020-04-30T20:00:00Z",
+"uscita": "2020-05-01T00:00:00Z",
+"r": -0.167,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09629
+},
+{
+"ingresso": "2020-05-01T04:00:00Z",
+"uscita": "2020-05-03T16:00:00Z",
+"r": -0.418,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09308
+},
+{
+"ingresso": "2020-05-04T16:00:00Z",
+"uscita": "2020-05-05T12:00:00Z",
+"r": -0.282,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0834
+},
+{
+"ingresso": "2020-05-07T20:00:00Z",
+"uscita": "2020-05-10T00:00:00Z",
+"r": -1.066,
+"motivo": "stop",
+"larghezza_stop": 0.07693
+},
+{
+"ingresso": "2020-05-10T08:00:00Z",
+"uscita": "2020-05-10T20:00:00Z",
+"r": -0.257,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12505
+},
+{
+"ingresso": "2020-05-11T04:00:00Z",
+"uscita": "2020-05-11T08:00:00Z",
+"r": -0.09,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11833
+},
+{
+"ingresso": "2020-05-11T12:00:00Z",
+"uscita": "2020-05-11T16:00:00Z",
+"r": -0.203,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11346
+},
+{
+"ingresso": "2020-05-12T12:00:00Z",
+"uscita": "2020-05-12T20:00:00Z",
+"r": -0.143,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11927
+},
+{
+"ingresso": "2020-05-13T16:00:00Z",
+"uscita": "2020-05-13T20:00:00Z",
+"r": -0.143,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09872
+},
+{
+"ingresso": "2020-05-14T00:00:00Z",
+"uscita": "2020-05-14T04:00:00Z",
+"r": -0.078,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09623
+},
+{
+"ingresso": "2020-05-14T12:00:00Z",
+"uscita": "2020-05-15T12:00:00Z",
+"r": -0.128,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0913
+},
+{
+"ingresso": "2020-05-17T04:00:00Z",
+"uscita": "2020-05-22T00:00:00Z",
+"r": 0.155,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.06454
+},
+{
+"ingresso": "2020-05-22T08:00:00Z",
+"uscita": "2020-05-24T16:00:00Z",
+"r": -0.132,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08599
+},
+{
+"ingresso": "2020-05-24T20:00:00Z",
+"uscita": "2020-05-25T00:00:00Z",
+"r": -0.47,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07453
+},
+{
+"ingresso": "2020-05-28T16:00:00Z",
+"uscita": "2020-06-07T12:00:00Z",
+"r": 1.759,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.04892
+},
+{
+"ingresso": "2020-06-08T08:00:00Z",
+"uscita": "2020-06-08T16:00:00Z",
+"r": -0.061,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.04796
+},
+{
+"ingresso": "2020-06-08T20:00:00Z",
+"uscita": "2020-06-10T04:00:00Z",
+"r": -0.134,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.04649
+},
+{
+"ingresso": "2020-06-11T00:00:00Z",
+"uscita": "2020-06-11T08:00:00Z",
+"r": -0.268,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.04157
+},
+{
+"ingresso": "2020-06-18T00:00:00Z",
+"uscita": "2020-06-27T20:00:00Z",
+"r": 0.685,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.06946
+},
+{
+"ingresso": "2020-06-28T12:00:00Z",
+"uscita": "2020-06-29T08:00:00Z",
+"r": -0.031,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07977
+},
+{
+"ingresso": "2020-06-30T00:00:00Z",
+"uscita": "2020-06-30T08:00:00Z",
+"r": -0.151,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.06809
+},
+{
+"ingresso": "2020-06-30T12:00:00Z",
+"uscita": "2020-06-30T20:00:00Z",
+"r": -0.104,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.06353
+},
+{
+"ingresso": "2020-07-01T16:00:00Z",
+"uscita": "2020-07-20T16:00:00Z",
+"r": 11.673,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.05754
+},
+{
+"ingresso": "2020-07-23T12:00:00Z",
+"uscita": "2020-07-23T20:00:00Z",
+"r": -0.101,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10666
+},
+{
+"ingresso": "2020-07-24T00:00:00Z",
+"uscita": "2020-07-24T04:00:00Z",
+"r": -0.212,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10531
+},
+{
+"ingresso": "2020-07-26T04:00:00Z",
+"uscita": "2020-07-26T12:00:00Z",
+"r": -0.474,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08629
+},
+{
+"ingresso": "2020-07-30T20:00:00Z",
+"uscita": "2020-07-31T00:00:00Z",
+"r": -0.148,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09926
+},
+{
+"ingresso": "2020-07-31T04:00:00Z",
+"uscita": "2020-08-02T04:00:00Z",
+"r": -0.992,
+"motivo": "stop",
+"larghezza_stop": 0.10089
+},
+{
+"ingresso": "2020-08-27T08:00:00Z",
+"uscita": "2020-08-27T12:00:00Z",
+"r": -0.379,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.1389
+},
+{
+"ingresso": "2020-08-28T12:00:00Z",
+"uscita": "2020-09-02T12:00:00Z",
+"r": -0.181,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13271
+},
+{
+"ingresso": "2020-09-10T04:00:00Z",
+"uscita": "2020-09-10T20:00:00Z",
+"r": -0.253,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.17827
+},
+{
+"ingresso": "2020-09-11T00:00:00Z",
+"uscita": "2020-09-11T04:00:00Z",
+"r": -0.223,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.16725
+},
+{
+"ingresso": "2020-09-11T08:00:00Z",
+"uscita": "2020-09-13T16:00:00Z",
+"r": -0.145,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.16467
+},
+{
+"ingresso": "2020-09-24T20:00:00Z",
+"uscita": "2020-09-30T12:00:00Z",
+"r": -0.088,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15721
+},
+{
+"ingresso": "2020-09-30T16:00:00Z",
+"uscita": "2020-10-01T16:00:00Z",
+"r": -0.048,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12419
+},
+{
+"ingresso": "2020-10-08T20:00:00Z",
+"uscita": "2020-10-16T08:00:00Z",
+"r": 1.05,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10126
+},
+{
+"ingresso": "2020-10-16T12:00:00Z",
+"uscita": "2020-10-17T00:00:00Z",
+"r": -0.012,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10128
+},
+{
+"ingresso": "2020-10-18T08:00:00Z",
+"uscita": "2020-10-18T12:00:00Z",
+"r": -0.16,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07356
+},
+{
+"ingresso": "2020-10-18T16:00:00Z",
+"uscita": "2020-10-19T04:00:00Z",
+"r": -0.209,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07061
+},
+{
+"ingresso": "2020-10-19T16:00:00Z",
+"uscita": "2020-10-20T08:00:00Z",
+"r": -0.464,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.06513
+},
+{
+"ingresso": "2020-10-21T16:00:00Z",
+"uscita": "2020-10-28T12:00:00Z",
+"r": 0.589,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09062
+},
+{
+"ingresso": "2020-11-02T08:00:00Z",
+"uscita": "2020-11-02T12:00:00Z",
+"r": -0.636,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07387
+},
+{
+"ingresso": "2020-11-05T20:00:00Z",
+"uscita": "2020-11-14T12:00:00Z",
+"r": 1.155,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10643
+},
+{
+"ingresso": "2020-11-16T16:00:00Z",
+"uscita": "2020-11-16T20:00:00Z",
+"r": -0.095,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08137
+},
+{
+"ingresso": "2020-11-17T04:00:00Z",
+"uscita": "2020-11-26T00:00:00Z",
+"r": 1.183,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07937
+},
+{
+"ingresso": "2020-11-30T04:00:00Z",
+"uscita": "2020-11-30T12:00:00Z",
+"r": -0.143,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11596
+},
+{
+"ingresso": "2020-11-30T16:00:00Z",
+"uscita": "2020-12-01T20:00:00Z",
+"r": -0.143,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11328
+},
+{
+"ingresso": "2020-12-02T12:00:00Z",
+"uscita": "2020-12-04T12:00:00Z",
+"r": -0.336,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12084
+},
+{
+"ingresso": "2020-12-13T12:00:00Z",
+"uscita": "2020-12-21T00:00:00Z",
+"r": 0.28,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08025
+},
+{
+"ingresso": "2020-12-21T08:00:00Z",
+"uscita": "2020-12-21T12:00:00Z",
+"r": -0.681,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09864
+},
+{
+"ingresso": "2020-12-27T16:00:00Z",
+"uscita": "2020-12-29T16:00:00Z",
+"r": -0.782,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.1641
+},
+{
+"ingresso": "2020-12-30T00:00:00Z",
+"uscita": "2020-12-30T04:00:00Z",
+"r": -0.114,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.17168
+},
+{
+"ingresso": "2021-01-01T04:00:00Z",
+"uscita": "2021-01-01T08:00:00Z",
+"r": -0.095,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13265
+},
+{
+"ingresso": "2021-01-01T12:00:00Z",
+"uscita": "2021-01-02T08:00:00Z",
+"r": -0.085,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12595
+},
+{
+"ingresso": "2021-01-02T12:00:00Z",
+"uscita": "2021-01-11T04:00:00Z",
+"r": 1.817,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12409
+},
+{
+"ingresso": "2021-01-13T20:00:00Z",
+"uscita": "2021-01-14T04:00:00Z",
+"r": -0.086,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.19768
+},
+{
+"ingresso": "2021-01-14T08:00:00Z",
+"uscita": "2021-01-21T12:00:00Z",
+"r": 1.149,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.18622
+},
+{
+"ingresso": "2021-01-22T12:00:00Z",
+"uscita": "2021-01-27T04:00:00Z",
+"r": 0.35,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.20044
+},
+{
+"ingresso": "2021-01-28T04:00:00Z",
+"uscita": "2021-01-29T04:00:00Z",
+"r": -0.068,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.16248
+},
+{
+"ingresso": "2021-01-29T12:00:00Z",
+"uscita": "2021-01-29T20:00:00Z",
+"r": -0.238,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14922
+},
+{
+"ingresso": "2021-01-30T16:00:00Z",
+"uscita": "2021-01-31T08:00:00Z",
+"r": -0.069,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13294
+},
+{
+"ingresso": "2021-02-02T04:00:00Z",
+"uscita": "2021-02-02T16:00:00Z",
+"r": -0.118,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10698
+},
+{
+"ingresso": "2021-02-02T20:00:00Z",
+"uscita": "2021-02-07T16:00:00Z",
+"r": 0.008,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0988
+},
+{
+"ingresso": "2021-02-08T00:00:00Z",
+"uscita": "2021-02-08T04:00:00Z",
+"r": -0.184,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14017
+},
+{
+"ingresso": "2021-02-08T08:00:00Z",
+"uscita": "2021-02-22T04:00:00Z",
+"r": 1.642,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13512
+},
+{
+"ingresso": "2021-03-02T00:00:00Z",
+"uscita": "2021-03-05T04:00:00Z",
+"r": -0.281,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15939
+},
+{
+"ingresso": "2021-03-05T20:00:00Z",
+"uscita": "2021-03-06T16:00:00Z",
+"r": -0.297,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14716
+},
+{
+"ingresso": "2021-03-06T20:00:00Z",
+"uscita": "2021-03-12T12:00:00Z",
+"r": 0.163,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13298
+},
+{
+"ingresso": "2021-03-13T12:00:00Z",
+"uscita": "2021-03-14T08:00:00Z",
+"r": -0.264,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.1084
+},
+{
+"ingresso": "2021-03-17T16:00:00Z",
+"uscita": "2021-03-21T12:00:00Z",
+"r": -0.47,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10789
+},
+{
+"ingresso": "2021-03-21T16:00:00Z",
+"uscita": "2021-03-22T00:00:00Z",
+"r": -0.037,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08857
+},
+{
+"ingresso": "2021-03-22T12:00:00Z",
+"uscita": "2021-03-22T16:00:00Z",
+"r": -0.095,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07968
+},
+{
+"ingresso": "2021-03-29T08:00:00Z",
+"uscita": "2021-04-10T00:00:00Z",
+"r": 1.434,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07933
+},
+{
+"ingresso": "2021-04-10T04:00:00Z",
+"uscita": "2021-04-10T20:00:00Z",
+"r": -0.266,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10551
+},
+{
+"ingresso": "2021-04-11T00:00:00Z",
+"uscita": "2021-04-12T16:00:00Z",
+"r": -0.009,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09885
+},
+{
+"ingresso": "2021-04-12T20:00:00Z",
+"uscita": "2021-04-18T00:00:00Z",
+"r": -1.335,
+"motivo": "stop",
+"larghezza_stop": 0.09693
+},
+{
+"ingresso": "2021-04-18T16:00:00Z",
+"uscita": "2021-04-19T16:00:00Z",
+"r": -0.26,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.24768
+},
+{
+"ingresso": "2021-04-20T20:00:00Z",
+"uscita": "2021-04-21T04:00:00Z",
+"r": -0.173,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.22853
+},
+{
+"ingresso": "2021-04-22T16:00:00Z",
+"uscita": "2021-04-22T20:00:00Z",
+"r": -0.309,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.18116
+},
+{
+"ingresso": "2021-04-27T08:00:00Z",
+"uscita": "2021-05-10T20:00:00Z",
+"r": 1.674,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15071
+},
+{
+"ingresso": "2021-05-11T16:00:00Z",
+"uscita": "2021-05-12T16:00:00Z",
+"r": -0.095,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.17202
+},
+{
+"ingresso": "2021-05-26T04:00:00Z",
+"uscita": "2021-05-29T16:00:00Z",
+"r": -0.648,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.25897
+},
+{
+"ingresso": "2021-05-30T08:00:00Z",
+"uscita": "2021-05-31T00:00:00Z",
+"r": -0.198,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.26218
+},
+{
+"ingresso": "2021-05-31T08:00:00Z",
+"uscita": "2021-06-04T08:00:00Z",
+"r": 0.078,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.24483
+},
+{
+"ingresso": "2021-06-05T04:00:00Z",
+"uscita": "2021-06-05T12:00:00Z",
+"r": -0.381,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15991
+},
+{
+"ingresso": "2021-06-14T16:00:00Z",
+"uscita": "2021-06-16T16:00:00Z",
+"r": -0.483,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12587
+},
+{
+"ingresso": "2021-06-16T20:00:00Z",
+"uscita": "2021-06-17T00:00:00Z",
+"r": -0.195,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12319
+},
+{
+"ingresso": "2021-06-17T04:00:00Z",
+"uscita": "2021-06-17T20:00:00Z",
+"r": -0.346,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12278
+},
+{
+"ingresso": "2021-06-18T00:00:00Z",
+"uscita": "2021-06-18T04:00:00Z",
+"r": -0.222,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11662
+},
+{
+"ingresso": "2021-06-28T00:00:00Z",
+"uscita": "2021-06-28T04:00:00Z",
+"r": -0.1,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.1473
+},
+{
+"ingresso": "2021-06-28T08:00:00Z",
+"uscita": "2021-07-01T08:00:00Z",
+"r": -0.291,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.1377
+},
+{
+"ingresso": "2021-07-03T00:00:00Z",
+"uscita": "2021-07-03T04:00:00Z",
+"r": -0.143,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12139
+},
+{
+"ingresso": "2021-07-03T08:00:00Z",
+"uscita": "2021-07-04T04:00:00Z",
+"r": -0.168,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11724
+},
+{
+"ingresso": "2021-07-04T08:00:00Z",
+"uscita": "2021-07-05T12:00:00Z",
+"r": -0.549,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10292
+},
+{
+"ingresso": "2021-07-06T04:00:00Z",
+"uscita": "2021-07-08T08:00:00Z",
+"r": -0.217,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10054
+},
+{
+"ingresso": "2021-07-08T16:00:00Z",
+"uscita": "2021-07-09T00:00:00Z",
+"r": -0.295,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11133
+},
+{
+"ingresso": "2021-07-22T16:00:00Z",
+"uscita": "2021-08-08T20:00:00Z",
+"r": 4.051,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10766
+},
+{
+"ingresso": "2021-08-09T12:00:00Z",
+"uscita": "2021-08-18T00:00:00Z",
+"r": 0.653,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11289
+},
+{
+"ingresso": "2021-08-18T16:00:00Z",
+"uscita": "2021-08-18T20:00:00Z",
+"r": -0.294,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15564
+},
+{
+"ingresso": "2021-08-19T20:00:00Z",
+"uscita": "2021-08-22T16:00:00Z",
+"r": 0.087,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14584
+},
+{
+"ingresso": "2021-08-22T20:00:00Z",
+"uscita": "2021-08-24T16:00:00Z",
+"r": -0.316,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10855
+},
+{
+"ingresso": "2021-08-31T12:00:00Z",
+"uscita": "2021-09-07T12:00:00Z",
+"r": -1.144,
+"motivo": "stop",
+"larghezza_stop": 0.09693
+},
+{
+"ingresso": "2021-09-13T00:00:00Z",
+"uscita": "2021-09-13T04:00:00Z",
+"r": -0.484,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13514
+},
+{
+"ingresso": "2021-09-14T16:00:00Z",
+"uscita": "2021-09-17T12:00:00Z",
+"r": -0.195,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13979
+},
+{
+"ingresso": "2021-09-18T08:00:00Z",
+"uscita": "2021-09-18T20:00:00Z",
+"r": -0.145,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11673
+},
+{
+"ingresso": "2021-09-26T16:00:00Z",
+"uscita": "2021-09-26T20:00:00Z",
+"r": -0.169,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15028
+},
+{
+"ingresso": "2021-09-27T00:00:00Z",
+"uscita": "2021-09-27T16:00:00Z",
+"r": -0.197,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14954
+},
+{
+"ingresso": "2021-09-29T12:00:00Z",
+"uscita": "2021-09-29T16:00:00Z",
+"r": -0.186,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12029
+},
+{
+"ingresso": "2021-09-30T04:00:00Z",
+"uscita": "2021-09-30T20:00:00Z",
+"r": -0.272,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.121
+},
+{
+"ingresso": "2021-10-01T00:00:00Z",
+"uscita": "2021-10-09T00:00:00Z",
+"r": 0.888,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10757
+},
+{
+"ingresso": "2021-10-09T12:00:00Z",
+"uscita": "2021-10-10T16:00:00Z",
+"r": -0.132,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0909
+},
+{
+"ingresso": "2021-10-14T04:00:00Z",
+"uscita": "2021-10-18T08:00:00Z",
+"r": -0.081,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09016
+},
+{
+"ingresso": "2021-10-19T04:00:00Z",
+"uscita": "2021-10-19T08:00:00Z",
+"r": -0.138,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0817
+},
+{
+"ingresso": "2021-10-20T16:00:00Z",
+"uscita": "2021-10-27T16:00:00Z",
+"r": 1.025,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0705
+},
+{
+"ingresso": "2021-10-28T12:00:00Z",
+"uscita": "2021-10-30T04:00:00Z",
+"r": -0.003,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12879
+},
+{
+"ingresso": "2021-11-01T16:00:00Z",
+"uscita": "2021-11-04T16:00:00Z",
+"r": -0.427,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09203
+},
+{
+"ingresso": "2021-11-05T00:00:00Z",
+"uscita": "2021-11-12T16:00:00Z",
+"r": 0.878,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07862
+},
+{
+"ingresso": "2021-11-12T20:00:00Z",
+"uscita": "2021-11-13T12:00:00Z",
+"r": -0.17,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12624
+},
+{
+"ingresso": "2021-11-13T16:00:00Z",
+"uscita": "2021-11-14T04:00:00Z",
+"r": -0.05,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10985
+},
+{
+"ingresso": "2021-11-15T04:00:00Z",
+"uscita": "2021-11-15T12:00:00Z",
+"r": -0.076,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08516
+},
+{
+"ingresso": "2021-11-30T16:00:00Z",
+"uscita": "2021-12-01T00:00:00Z",
+"r": -0.244,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0964
+},
+{
+"ingresso": "2021-12-01T04:00:00Z",
+"uscita": "2021-12-02T04:00:00Z",
+"r": -0.614,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09618
+},
+{
+"ingresso": "2021-12-03T08:00:00Z",
+"uscita": "2021-12-03T16:00:00Z",
+"r": -0.104,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08645
+},
+{
+"ingresso": "2021-12-08T16:00:00Z",
+"uscita": "2021-12-09T04:00:00Z",
+"r": -0.362,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14549
+},
+{
+"ingresso": "2021-12-12T20:00:00Z",
+"uscita": "2021-12-13T04:00:00Z",
+"r": -0.342,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12105
+},
+{
+"ingresso": "2021-12-16T04:00:00Z",
+"uscita": "2021-12-16T20:00:00Z",
+"r": -0.369,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12407
+},
+{
+"ingresso": "2021-12-18T08:00:00Z",
+"uscita": "2021-12-19T20:00:00Z",
+"r": -0.228,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12338
+},
+{
+"ingresso": "2021-12-21T08:00:00Z",
+"uscita": "2021-12-28T20:00:00Z",
+"r": 1.04,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09711
+},
+{
+"ingresso": "2022-01-02T16:00:00Z",
+"uscita": "2022-01-13T12:00:00Z",
+"r": 2.303,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08722
+},
+{
+"ingresso": "2022-01-29T00:00:00Z",
+"uscita": "2022-02-03T00:00:00Z",
+"r": -0.173,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14249
+},
+{
+"ingresso": "2022-02-04T12:00:00Z",
+"uscita": "2022-02-11T00:00:00Z",
+"r": 0.599,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10459
+},
+{
+"ingresso": "2022-02-16T00:00:00Z",
+"uscita": "2022-02-16T04:00:00Z",
+"r": -0.24,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08806
+},
+{
+"ingresso": "2022-02-16T08:00:00Z",
+"uscita": "2022-02-16T16:00:00Z",
+"r": -0.361,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08799
+},
+{
+"ingresso": "2022-02-16T20:00:00Z",
+"uscita": "2022-02-17T12:00:00Z",
+"r": -0.476,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0906
+},
+{
+"ingresso": "2022-02-26T00:00:00Z",
+"uscita": "2022-02-27T04:00:00Z",
+"r": -0.135,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13277
+},
+{
+"ingresso": "2022-02-27T08:00:00Z",
+"uscita": "2022-02-27T20:00:00Z",
+"r": -0.336,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12598
+},
+{
+"ingresso": "2022-02-28T16:00:00Z",
+"uscita": "2022-03-04T04:00:00Z",
+"r": -0.215,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.1265
+},
+{
+"ingresso": "2022-03-04T08:00:00Z",
+"uscita": "2022-03-04T16:00:00Z",
+"r": -0.147,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10726
+},
+{
+"ingresso": "2022-03-09T16:00:00Z",
+"uscita": "2022-03-09T20:00:00Z",
+"r": -0.277,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09807
+},
+{
+"ingresso": "2022-03-15T00:00:00Z",
+"uscita": "2022-03-15T04:00:00Z",
+"r": -0.18,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08129
+},
+{
+"ingresso": "2022-03-15T16:00:00Z",
+"uscita": "2022-04-01T04:00:00Z",
+"r": 2.871,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08136
+},
+{
+"ingresso": "2022-04-01T08:00:00Z",
+"uscita": "2022-04-04T16:00:00Z",
+"r": 0.097,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09094
+},
+{
+"ingresso": "2022-04-04T20:00:00Z",
+"uscita": "2022-04-05T16:00:00Z",
+"r": -0.098,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08097
+},
+{
+"ingresso": "2022-04-17T08:00:00Z",
+"uscita": "2022-04-17T20:00:00Z",
+"r": -0.359,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.06237
+},
+{
+"ingresso": "2022-04-19T00:00:00Z",
+"uscita": "2022-04-19T04:00:00Z",
+"r": -0.171,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07347
+},
+{
+"ingresso": "2022-04-19T12:00:00Z",
+"uscita": "2022-04-20T16:00:00Z",
+"r": -0.167,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07162
+},
+{
+"ingresso": "2022-04-21T00:00:00Z",
+"uscita": "2022-04-21T20:00:00Z",
+"r": -0.283,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07052
+},
+{
+"ingresso": "2022-05-04T20:00:00Z",
+"uscita": "2022-05-05T12:00:00Z",
+"r": -1.014,
+"motivo": "stop",
+"larghezza_stop": 0.09406
+},
+{
+"ingresso": "2022-05-17T04:00:00Z",
+"uscita": "2022-05-17T20:00:00Z",
+"r": -0.166,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.15731
+},
+{
+"ingresso": "2022-05-18T00:00:00Z",
+"uscita": "2022-05-18T04:00:00Z",
+"r": -0.252,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14387
+},
+{
+"ingresso": "2022-05-18T08:00:00Z",
+"uscita": "2022-05-18T16:00:00Z",
+"r": -0.523,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.14282
+},
+{
+"ingresso": "2022-05-20T00:00:00Z",
+"uscita": "2022-05-20T04:00:00Z",
+"r": -0.125,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13189
+},
+{
+"ingresso": "2022-05-20T12:00:00Z",
+"uscita": "2022-05-20T16:00:00Z",
+"r": -0.48,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.12645
+},
+{
+"ingresso": "2022-05-22T12:00:00Z",
+"uscita": "2022-05-22T20:00:00Z",
+"r": -0.069,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0993
+},
+{
+"ingresso": "2022-05-23T00:00:00Z",
+"uscita": "2022-05-23T20:00:00Z",
+"r": -0.211,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09507
+},
+{
+"ingresso": "2022-05-25T00:00:00Z",
+"uscita": "2022-05-25T08:00:00Z",
+"r": -0.144,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10671
+},
+{
+"ingresso": "2022-05-30T04:00:00Z",
+"uscita": "2022-06-02T04:00:00Z",
+"r": -0.216,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09663
+},
+{
+"ingresso": "2022-06-02T08:00:00Z",
+"uscita": "2022-06-03T12:00:00Z",
+"r": -0.246,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11138
+},
+{
+"ingresso": "2022-06-04T16:00:00Z",
+"uscita": "2022-06-11T12:00:00Z",
+"r": 0.898,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09175
+},
+{
+"ingresso": "2022-06-19T16:00:00Z",
+"uscita": "2022-06-27T00:00:00Z",
+"r": 0.208,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.18669
+},
+{
+"ingresso": "2022-06-27T04:00:00Z",
+"uscita": "2022-06-27T12:00:00Z",
+"r": -0.083,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.13435
+},
+{
+"ingresso": "2022-07-05T00:00:00Z",
+"uscita": "2022-07-05T12:00:00Z",
+"r": -0.45,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08968
+},
+{
+"ingresso": "2022-07-05T20:00:00Z",
+"uscita": "2022-07-10T12:00:00Z",
+"r": -0.11,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09428
+},
+{
+"ingresso": "2022-07-14T20:00:00Z",
+"uscita": "2022-07-15T00:00:00Z",
+"r": -0.058,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08866
+},
+{
+"ingresso": "2022-07-15T04:00:00Z",
+"uscita": "2022-07-15T08:00:00Z",
+"r": -0.028,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08649
+},
+{
+"ingresso": "2022-07-15T20:00:00Z",
+"uscita": "2022-07-16T08:00:00Z",
+"r": -0.448,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.0854
+},
+{
+"ingresso": "2022-07-16T16:00:00Z",
+"uscita": "2022-07-23T12:00:00Z",
+"r": 0.691,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08146
+},
+{
+"ingresso": "2022-07-24T00:00:00Z",
+"uscita": "2022-07-25T04:00:00Z",
+"r": -0.218,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09552
+},
+{
+"ingresso": "2022-07-28T00:00:00Z",
+"uscita": "2022-08-02T04:00:00Z",
+"r": 0.367,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09573
+},
+{
+"ingresso": "2022-08-02T16:00:00Z",
+"uscita": "2022-08-03T00:00:00Z",
+"r": -0.149,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.11775
+},
+{
+"ingresso": "2022-08-03T08:00:00Z",
+"uscita": "2022-08-04T00:00:00Z",
+"r": -0.192,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10929
+},
+{
+"ingresso": "2022-08-04T04:00:00Z",
+"uscita": "2022-08-04T08:00:00Z",
+"r": -0.057,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10187
+},
+{
+"ingresso": "2022-08-05T04:00:00Z",
+"uscita": "2022-08-15T08:00:00Z",
+"r": 1.285,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09258
+},
+{
+"ingresso": "2022-08-25T08:00:00Z",
+"uscita": "2022-08-25T12:00:00Z",
+"r": -0.164,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.07809
+},
+{
+"ingresso": "2022-08-31T12:00:00Z",
+"uscita": "2022-08-31T16:00:00Z",
+"r": -0.222,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08202
+},
+{
+"ingresso": "2022-09-02T00:00:00Z",
+"uscita": "2022-09-06T20:00:00Z",
+"r": -0.405,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09129
+},
+{
+"ingresso": "2022-09-07T20:00:00Z",
+"uscita": "2022-09-13T16:00:00Z",
+"r": 0.452,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.08414
+},
+{
+"ingresso": "2022-09-16T12:00:00Z",
+"uscita": "2022-09-16T20:00:00Z",
+"r": -0.227,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.1009
+},
+{
+"ingresso": "2022-09-17T00:00:00Z",
+"uscita": "2022-09-19T00:00:00Z",
+"r": -0.2,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.09738
+},
+{
+"ingresso": "2022-09-24T00:00:00Z",
+"uscita": "2022-09-30T12:00:00Z",
+"r": 0.281,
+"motivo": "segnale_opposto",
+"larghezza_stop": 0.10081
+}
+]
+}
