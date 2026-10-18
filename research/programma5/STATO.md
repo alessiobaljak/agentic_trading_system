@@ -102,6 +102,12 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   acquisti per 24 ore porta a una **discesa** di −1,2% nelle 72 ore dopo (t −2,7, 18 monete su 24: sotto la soglia). Gli
   squilibri a un'ora valgono −0,02/−0,04% a trade: troppo poco per i costi.
 
+* **K-001** (modello ridge che mette insieme 21 segnali, compresi quelli del libro, portafoglio long-short delle 4 migliori
+  e 4 peggiori previsioni ogni giorno): su C2 +0,16% al giorno sugli stessi dati con cui i pesi sono stati stimati, ma la
+  scelta interna (costruito sul 2024, provato sul primo semestre 2025) era già negativa per tutti i λ (−0,13/−0,16%); **su
+  V2 −0,09% al giorno** (intervallo −0,24; +0,06): **bruciata**. Cosa abbiamo capito: anche messi insieme, i segnali di
+  2024-2025 non dicono quali monete faranno meglio delle altre il giorno dopo.
+
 ## Coda delle idee della fase 1 (in ordine)
 
 | N. | Idea | Perché dovrebbe funzionare | Stato |
