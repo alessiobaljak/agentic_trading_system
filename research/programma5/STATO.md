@@ -40,6 +40,26 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   `universo_top100.json` (regola scritta prima; le 24 della fase 2 tutte dentro); scarico dal settembre 2023 in corso.
 * Esplorazioni scritte prima del calcolo: E-101, E-102, E-103 (24 monete) ed E-111, E-112, E-113 (100 monete). Le idee
   della fase 2 si chiamano J-NNN e si provano su V2 sulle 100 monete.
+* Risultati sulle 24 monete (C2): E-101 31 celle promosse su 468, E-102 5 su 104, E-103 6 su 46. **Cosa abbiamo capito**:
+  nel 2024-2025 i due fenomeni più forti sono (1) la **continuazione dopo le salite forti** (1-4 ore oltre 3σ: il prezzo
+  continua a salire per 4-72 ore, su 22-24 monete su 24, in tutti e tre i semestri), che nel 2020-2022 non c'era; (2) il
+  **rimbalzo dopo i crolli**, ancora più forte (+4,4-4,8% a trade su 24 ore, concentrato in pochi giorni: 5 mar, 13 apr,
+  5 ago, 20 dic 2024; 3 feb, 7 apr 2025). Le reti d'acquisto a 6σ rendono ancora (+0,49-0,74% netto), quelle a 3σ meno.
+* Idee J-001 ... J-010: tutte passano C2 (`idee/J-NNN/C2.md`); regole congelate con le impronte (commit `bba987e4`).
+  V2 parte quando i dati delle 100 monete sono completi (scarico in corso: candele 55 su 76 alle 17:51 UTC, poi metrics).
+
+| Idea | Stato | C2: netto a trade (trade) |
+|---|---|---|
+| J-001 | passa C2, congelata, V2 da fare | a +1.74% (360); b +0.80% (360); c +2.67% (286) |
+| J-002 | passa C2, congelata, V2 da fare | a +3.87% (372); b +2.87% (772); c +1.27% (1628) |
+| J-003 | passa C2, congelata, V2 da fare | a +1.06% (1454); b +1.50% (496); c +1.12% (876) |
+| J-004 | passa C2, congelata, V2 da fare | a +4.67% (268); b +4.56% (252); c +4.36% (250) |
+| J-005 | passa C2, congelata, V2 da fare | a +1.01% (1749); b +1.87% (430) |
+| J-006 | passa C2, congelata, V2 da fare | a +4.79% (345); b +1.52% (527) |
+| J-007 | passa C2, congelata, V2 da fare | a +0.34% (1556); b +0.69% (364) |
+| J-008 | passa C2, congelata, V2 da fare | a +0.26% (1636); b +0.61% (393) |
+| J-009 | passa C2, congelata, V2 da fare | a +0.49% (965); b +0.74% (901) |
+| J-010 | passa C2, congelata, V2 da fare | a +2.58% (715); b +0.20% (5891); c +1.03% (3192) |
 
 ## Coda delle idee della fase 1 (in ordine)
 
