@@ -8,6 +8,7 @@ Uso:
     python3 -m research.programma5.strumenti.scarico klines      # 1 minuto, mensili + giornalieri del mese in corso
     python3 -m research.programma5.strumenti.scarico metrics     # giornalieri
     python3 -m research.programma5.strumenti.scarico funding     # mensili
+    python3 -m research.programma5.strumenti.scarico premium     # indice del premio sullo spot, 1 ora, mensili
 """
 from __future__ import annotations
 
@@ -33,6 +34,7 @@ PREFISSI = {
     "klines": ["data/futures/um/monthly/klines/{s}/1m/", "data/futures/um/daily/klines/{s}/1m/"],
     "metrics": ["data/futures/um/daily/metrics/{s}/"],
     "funding": ["data/futures/um/monthly/fundingRate/{s}/"],
+    "premium": ["data/futures/um/monthly/premiumIndexKlines/{s}/1h/"],
 }
 
 
