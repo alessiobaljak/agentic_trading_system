@@ -4084,3 +4084,18 @@ prezzo è già sotto una media, con R medio fra +0,010 e +0,084: battono le loro
 casuali perdono nel rialzo di fondo del periodo (LINK +184% dal 2020 a settembre 2022). Un p-value piccolo con R vicino
 a zero vuol dire «meglio di uno short a caso in un mercato che sale», non una strategia che paga (`fase5.md` del branch,
 commit 81f3aeb0). Sulle 32 varianti i p-value restano compatibili con il caso (medio 0,478; prova di uniformità p 0,416).
+
+### 18 ottobre, mattina: campagna LINK6 chiusa, nessuna strategia valida
+
+La sessione di ricerca ha consegnato alle 10:14 ora italiana (commit bb8b444d): Passo 3 senza niente da validare
+(nessun dato dopo settembre 2022 caricato, nessun via libera), Passo 4 con «nessuna strategia valida trovata» e la
+tabella delle 16 idee. Il coordinamento ha fatto il Passo 9 sul principale: copia dei file della campagna (i trade
+delle singole varianti restano sul branch), `research/campagne/LINK6/lezioni.md`, voce P11 del backlog per decidere il
+seguito. Il vault di LINK non è stato aperto. Capito oggi: le 32 varianti fanno in media quanto le loro entrate casuali
+(−0,030 R contro −0,032; 16 su 32 le battono), e il funding sotto zero seguito da un acquisto è di nuovo la famiglia
+migliore come su BTC, ma qui sotto la soglia e senza reggere sulle monete di controllo. Con BTC51, la ricerca 4.5 e il
+paniere, le regole tecniche classiche sulle grandi monete a 15 minuti-4 ore non hanno dato un vantaggio di 0,2 R dopo i
+costi; il metodo vede i vantaggi inseriti, quindi è un'informazione e non un difetto. Rifare la stessa ricerca su
+un'altra grande moneta, secondo me, darebbe lo stesso esito (stima): la proposta è cambiare qualcosa di strutturale, e
+decide il proprietario. Tempo: il Passo 2 ha richiesto circa 17 minuti di lavoro della sessione; il resto è stato
+attesa (8 ore di notte per la conferma del proprietario al Passo 1).

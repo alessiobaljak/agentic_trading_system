@@ -7,11 +7,12 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
-## 2026-10-18 (mattina: Passo 2 della ricerca su LINK)
+## 2026-10-18 (mattina: la ricerca su LINK, chiusa senza strategie)
 * **Su LINK, dal 2020 a settembre 2022, nessuna delle 26 varianti provate ha un vantaggio:** i loro p-value non si distinguono dal caso (medio 0,531 contro 0,500 atteso; prova di uniformità p 0,387), e 3 sotto 0,10 contro 2,6 attesi (`research/campagne/LINK6/fase5.md` del branch `research/campagna/LINK6`, commit e91db69c).
 * **Il ritorno alla media su LINK perde:** 8 varianti su 8 con R medio negativo e sotto le loro entrate casuali; le idee di tendenza stanno vicino a zero (stessa fonte).
 * **La migliore idea non si generalizza:** comprare LINK quando il funding è sotto zero dà +0,128 R a trade (p 0,047), ma allungarne l'uscita da 24 a 48 ore migliora le 9 monete di controllo di soli +0,010 R in media, sotto lo 0,05 richiesto (`research/monete_di_controllo_4/R-001.json`).
 * **Seconda tornata: 33 varianti su 40, ancora nessun candidato.** Sulle 32 con la Fase 2 i p-value restano compatibili con il caso (medio 0,478; prova di uniformità p 0,416). I tre più piccoli (0,001-0,003) sono short che entrano quando il prezzo è già sotto una media, con R medio fra +0,010 e +0,084: battono gli short casuali solo perché quelli perdono nel rialzo di fondo (LINK +184% nel periodo). Un p-value piccolo con R vicino a zero non è una strategia che paga (`fase5.md` del branch `research/campagna/LINK6`, commit 81f3aeb0).
+* **Chiusa senza strategie: le varianti fanno quanto il caso.** R medio delle 32 varianti −0,030 contro −0,032 delle loro entrate casuali, 16 su 32 le battono. Con BTC (un candidato caduto nel vault) e le ricerche precedenti, le regole tecniche classiche sulle grandi monete a 15 minuti-4 ore non danno 0,2 R a trade dopo i costi; il metodo invece trova i vantaggi inseriti (88 su 88 da 0,35 R) (`research/campagne/LINK6/lezioni.md`).
 
 ## 2026-10-17 (notte: il collaudo del protocollo 4)
 * **Il metodo regge anche su LINK e con le monete di controllo:** su prezzi senza vantaggio 0 varianti finte su 100 oltre la Fase 2 e 14 p-value sotto 0,10; con un vantaggio inserito 88 prove su 88 trovate; la verifica sulle 9 monete di controllo passa 40 prove su 40 con il vantaggio e la superano 1 variante finta su 100 senza (`research/collaudo_4/esiti.md`).

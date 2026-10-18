@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
+| **0. Aspettano il tuo sì** | P11 (dopo LINK6: continuare la ricerca, e come), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: CHIUSO il 12 ott al Passo 7, zero strategie trovate), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -32,6 +32,19 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
 
+### P11. Dopo LINK6: continuare la ricerca, e come
+**Perché:** la campagna LINK6 (protocollo 4) si è chiusa il 18 ott 2026 senza candidati: 16 idee, 33 varianti su 40,
+R medio delle varianti −0,030 contro −0,032 delle loro entrate casuali (`research/campagne/LINK6/lezioni.md`). Con
+BTC51 (un candidato caduto nel vault), la ricerca 4.5 (630 varianti, nessuna oltre il vault) e il paniere a barre
+giornaliere (nessuna valida), le regole tecniche classiche del catalogo, a 15 minuti-4 ore sulle grandi monete, non
+hanno dato un vantaggio di 0,2 R a trade dopo i costi. Il metodo invece vede i vantaggi inseriti (88 su 88 da 0,35 R,
+`research/collaudo_4/esiti.md`). **Proposte (sezione 6 delle lezioni), decide il proprietario:** (a) non ripetere la
+stessa ricerca su un'altra grande moneta (esito atteso uguale: stima, non misura); (b) se si continua, un cambio
+strutturale: idee fuori dal catalogo a una moneta, oppure la stessa regola su più monete insieme perché le strategie
+lente arrivino ai trade minimi; (c) le correzioni piccole del testo (delega nel messaggio di apertura, regola dei
+tentativi rimasti, un solo testo per il canale delle richieste, comandi della guida provati sotto il guardiano, test
+dello scettico per direzione, ultracode). Va decisa insieme a P6. Il paper resta acceso come banco di misura.
+
 ### P10. Il prossimo protocollo: le proposte delle lezioni di BTC51
 **Perché:** la campagna BTC51 (protocollo 3) si è chiusa il 17 ott 2026 senza strategie valide: l'unico candidato,
 V-020, ha superato la validazione con +0,167 R su 80 trade (circa 1,2 errori standard) ed è caduto nel vault
@@ -40,7 +53,9 @@ V-020, ha superato la validazione con +0,167 R su 80 trade (circa 1,2 errori sta
 prima di spendere l'unica apertura del vault. Le soglie a zero e la scelta delle monete sono già qui sotto (P8, P9).
 **Bozza scritta il 17 ott 2026** (sì del proprietario «ok sì, scrivi la bozza del prossimo protocollo»):
 `research/PROTOCOLLO_4.md`, versione 6, ricerca su LINKUSDT con 9 monete di controllo. **Approvato** dal
-proprietario il 17 ott 2026 alle 20:12 UTC («sì, approvato»): Passo 0 in corso.
+proprietario il 17 ott 2026 alle 20:12 UTC («sì, approvato»). **Campagna LINK6 chiusa il 18 ott 2026: nessuna
+strategia valida** (seguito in P11). Il protocollo 4 ha messo in pratica tutte e otto le proposte, l'ottava cambiata dopo la revisione
+(`research/protocollo_4_note.md`, sezione 2).
 
 ### P9. Protocollo 3, per replicare su altre monete: la scelta delle monete e i contratti morti
 **Perché:** preparando la prova su altre monete (17 ott, `research/altre_monete_3/risultati.md`) sono emerse due
