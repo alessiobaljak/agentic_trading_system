@@ -187,3 +187,31 @@ ottobre 2026 (ancora quotati), escluse le monete stabili, le **100 con il volume
   danno alla prova più potenza. I fenomeni già provati su R (6ter; sezione 7) restano provati solo sulle monete diverse
   dalle 12 della fase 1.
 * Per scaricare meno, le monete nuove si scaricano dal settembre 2023 (`scarico.py`, opzione `--dal 2023-09`).
+
+## 8. La fase 3: la scelta che si adatta (aggiunta il 18 ottobre 2026, ore 20:40 UTC, prima di ogni calcolo della fase)
+
+**Perché.** Dopo circa 40 idee, il quadro è chiaro e misurato: i fenomeni ci sono, ma cambiano col tempo. Il rimbalzo dopo
+i crolli c'era nel 2020-2025 e non nella seconda metà del 2025; la continuazione dopo le salite non c'era nel 2020-2022,
+c'era nel 2024-2025; lo scalping nelle code si è chiuso dal 2022. Una regola fissa scelta su un periodo cade nel periodo
+dopo. Un esperto non tiene una regola per sempre: guarda cosa funziona adesso e lo cambia quando smette. La fase 3 prova
+proprio questo, ma in modo meccanico e senza guardare avanti: **una procedura scelta prima** che ogni mese prende, fra
+tutte le celle delle esplorazioni, quelle che hanno reso nei mesi precedenti, e le usa nel mese dopo.
+
+**Cosa si prova** (idee M-NNN, al massimo 3 varianti): la procedura, non una regola. Le celle candidate sono tutte quelle a
+una moneta delle esplorazioni (`esplora_fase2.celle_moneta` ed `esplora_calendario.celle`), nei due versi, sulle 24 monete
+della fase 2, dal 2020 al 2026-09-30 (periodo **W**). Ogni trade di una cella ha il suo netto dopo i costi (commissione a
+mercato e scarto **doppio** su ogni lato, funding; per le celle coperte con BTC anche la gamba di BTC). A ogni inizio mese
+la procedura guarda **solo i trade già chiusi** prima di quel momento, e sceglie con una regola fissata prima.
+
+**L'esame** (una volta, sul periodo che va dal primo mese con abbastanza storia al 2026-09-30):
+1. netto medio a trade dei trade scelti con l'intervallo al 95% sopra zero e **p a una coda ≤ 0,005 / varianti**
+   (bootstrap a blocchi di giorni, 10.000 ricampionamenti);
+2. positivo a costi doppi e togliendo il giorno migliore;
+3. positivo in almeno **4 anni su 6** (2021-2026) e **positivo su V2** (2025-07 → 2026-09) da solo;
+4. positivo su almeno il 60% delle monete con almeno 20 trade;
+5. **la prova a placebo**: la stessa procedura sulle celle con i rendimenti spostati nel tempo a caso (ogni cella di un
+   numero di mesi a caso, in cerchio) deve dare in media zero; se il placebo dà un risultato positivo la procedura ha un
+   difetto e l'esame è nullo finché non è corretto.
+Dichiarato: questi anni il modello li conosce in parte e conosce gli esiti delle fasi 1 e 2; la procedura però non sceglie
+mai con dati del mese in cui opera, e le sue scelte (finestra, numero di celle) sono quelle comuni, fissate qui prima.
+Il periodo A (dal 2026-10-01) si riporta sempre e diventa la prova nel paper.
