@@ -124,8 +124,15 @@ def main(argv=None) -> int:
         del argv[i: i + 2]
     tipo = argv[0] if argv else "klines"
     monete = argv[1:] or list(MONETE)
-    impronte_file = QUI / f"scarico_{tipo}.json"
-    impronte = json.loads(impronte_file.read_text()) if impronte_file.exists() else {}
+    # P5_IMPRONTE: cartella dove scrivere le impronte mentre lo scarico gira (poi si uniscono con ``unisci``), cosi'
+    # il file nel repository non cambia a ogni moneta
+    import os
+    cartella = Path(os.environ["P5_IMPRONTE"]) if os.environ.get("P5_IMPRONTE") else QUI
+    impronte_file = cartella / f"scarico_{tipo}.json"
+    if not impronte_file.exists() and (QUI / f"scarico_{tipo}.json").exists():
+        impronte = json.loads((QUI / f"scarico_{tipo}.json").read_text())
+    else:
+        impronte = json.loads(impronte_file.read_text()) if impronte_file.exists() else {}
     for s in monete:
         chiavi = [k for k in _scelte(tipo, s) if _mese(k) >= dal]
         with ThreadPoolExecutor(max_workers=8) as ex:
@@ -137,5 +144,18 @@ def main(argv=None) -> int:
     return 0
 
 
+def unisci(cartella: str) -> None:
+    """Unisce nel repository le impronte scritte in ``cartella`` (P5_IMPRONTE)."""
+    for f in Path(cartella).glob("scarico_*.json"):
+        dest = QUI / f.name
+        tutte = json.loads(dest.read_text()) if dest.exists() else {}
+        for s, v in json.loads(f.read_text()).items():
+            tutte[s] = {**tutte.get(s, {}), **v}
+        dest.write_text(json.dumps(tutte, indent=0, sort_keys=True))
+
+
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["unisci"]:
+        unisci(sys.argv[2])
+        raise SystemExit(0)
     raise SystemExit(main())
