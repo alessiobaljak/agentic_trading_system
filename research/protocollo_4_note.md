@@ -94,3 +94,10 @@ Un revisore separato ha letto la prima bozza (commit 6c377aa6) e ha trovato 25 p
 Il Passo 0: strumenti (caricatore con `APERTURA_4.md`, verifiche 1, 3, 3bis, 4, 12, controllo della Fase 3, strumento
 del coordinamento per le monete di controllo, guardiano per `LINK6`), dati delle monete di controllo, sessione di
 prova per le versioni, collaudo con le prove nuove, branch pulito. Poi lo STOP del Passo 0 con gli esiti.
+
+## 5. Decisioni del coordinamento per delega
+
+| Quando (UTC) | Passo | Decisione | Perché |
+|---|---|---|---|
+| 17 ott, ~22:36 | STOP del Passo 1 | Confermato (il proprietario l'ha confermato anche nella sessione di ricerca il 18 ottobre verso le 06:45) | 912 file con il CHECKSUM, impronte e fatti uguali al Passo 0 (commit 44fcfba3 del branch della ricerca); correzione della guida pratica (a0f5b8ad) |
+| 18 ott, 07:36 | STOP del Passo 2 (27 varianti su 40, nessun candidato) | Non confermato come fine: la sessione usa i 13 tentativi rimasti su famiglie e combinazioni del catalogo non provate, ogni idea con il suo perché e una fonte precedente al 2024; se le idee con un perché finiscono prima di 40 si ferma e lo scrive; poi Fase 5 di nuovo e STOP | La Fase 5 dice «se restano tentativi, prova famiglie diverse del catalogo»; il limite di 40 è quello che il protocollo accetta per il rischio di falsi candidati (sezione 8.3), e il collaudo l'ha misurato basso (0 varianti finte su 100 oltre la Fase 2, `collaudo_4/esiti.md`, numero non passato alla ricerca); nella campagna BTC51 il proprietario ha scelto di usare tutti i 40 tentativi. Messaggio alla sessione con la routine `trig_01DSpQzsuUfFCBbwR8n7VhDm` |

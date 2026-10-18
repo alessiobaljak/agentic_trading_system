@@ -4054,3 +4054,18 @@ proprietario» e l'ha chiesta a lui nella sua chat: è il comportamento giusto (
 istruzione del proprietario). Il proprietario ha confermato verso le 08:45 ora italiana, anche la delega al
 coordinamento per gli STOP successivi tranne il vault. Alle 08:42 la sessione aveva già scritto sei ipotesi e dodici
 varianti prima dei test (commit 59dd4536, solo nella sua cartella) e ha cominciato le prove.
+
+### 18 ottobre, mattina: prima tornata del Passo 2 di LINK6 senza candidati, si usano i tentativi rimasti
+
+La sessione di ricerca si è fermata alle 09:25 ora italiana con 27 varianti su 40 (commit e91db69c del branch della
+ricerca): 13 idee da famiglie diverse del catalogo, 26 varianti con la Fase 2 e nessuna la supera; la migliore, V-004
+(LINK a 1 ora, acquisto quando il funding è sotto zero, uscita a 2 volte lo stop o dopo 24 ore), +0,128 R a trade con
+p 0,047. La sua modifica V-019 (uscita dopo 48 ore) è stata fermata dal controllo sulle monete di controllo: +0,010 R
+di media in più sulle 9 monete, sotto lo 0,05 richiesto (`research/monete_di_controllo_4/R-001.json`). Controllo del
+processo sul branch: 26 registrazioni prima dei 26 risultati, uno scarto con il motivo, strumenti e protocollo non
+toccati. La sessione proponeva di fermarsi; il coordinamento, per delega, alle 09:36 ora italiana le ha chiesto di usare
+i 13 tentativi rimasti su famiglie e combinazioni non provate, ogni idea con il suo perché e una fonte precedente al
+2024, e di fermarsi prima se le idee con un perché finiscono (motivi in `research/protocollo_4_note.md`, sezione 5).
+Capito oggi: sulla costruzione di LINK le 26 varianti non si distinguono dal caso (p-value medio 0,531, attesa 0,500;
+prova di uniformità p 0,387, `fase5.md` del branch); le 8 varianti di ritorno alla media perdono tutte e fanno peggio
+delle loro entrate casuali, quelle di tendenza stanno vicino a zero.

@@ -7,6 +7,11 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-18 (mattina: Passo 2 della ricerca su LINK, prima tornata)
+* **Su LINK, dal 2020 a settembre 2022, nessuna delle 26 varianti provate ha un vantaggio:** i loro p-value non si distinguono dal caso (medio 0,531 contro 0,500 atteso; prova di uniformità p 0,387), e 3 sotto 0,10 contro 2,6 attesi (`research/campagne/LINK6/fase5.md` del branch `research/campagna/LINK6`, commit e91db69c).
+* **Il ritorno alla media su LINK perde:** 8 varianti su 8 con R medio negativo e sotto le loro entrate casuali; le idee di tendenza stanno vicino a zero (stessa fonte).
+* **La migliore idea non si generalizza:** comprare LINK quando il funding è sotto zero dà +0,128 R a trade (p 0,047), ma allungarne l'uscita da 24 a 48 ore migliora le 9 monete di controllo di soli +0,010 R in media, sotto lo 0,05 richiesto (`research/monete_di_controllo_4/R-001.json`).
+
 ## 2026-10-17 (notte: il collaudo del protocollo 4)
 * **Il metodo regge anche su LINK e con le monete di controllo:** su prezzi senza vantaggio 0 varianti finte su 100 oltre la Fase 2 e 14 p-value sotto 0,10; con un vantaggio inserito 88 prove su 88 trovate; la verifica sulle 9 monete di controllo passa 40 prove su 40 con il vantaggio e la superano 1 variante finta su 100 senza (`research/collaudo_4/esiti.md`).
 * **Su LINK le strategie lente non arrivano ai trade minimi:** 400 varianti finte su 501 sotto 150 trade in costruzione, e fra le 100 rimaste 87 sono a 15 minuti, 30 minuti o 1 ora (stessa fonte). La ricerca su LINK si giocherà soprattutto su candele brevi, dove i costi (0,14 R a trade con lo stop all'1%) pesano di più.
