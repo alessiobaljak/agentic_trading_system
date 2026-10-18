@@ -68,9 +68,15 @@ def _giorno(chiave: str):
 
 
 def scarica(simbolo: str) -> int:
+    import os
     file = m5.DATI / simbolo / "libro_ore.pkl"
-    impronte_file = QUI / "libro_impronte.json"
-    impronte = json.loads(impronte_file.read_text()) if impronte_file.exists() else {}
+    # P5_IMPRONTE: cartella dove scrivere le impronte mentre lo scarico gira (come ``scarico.py``)
+    cartella = Path(os.environ["P5_IMPRONTE"]) if os.environ.get("P5_IMPRONTE") else QUI
+    impronte_file = cartella / "libro_impronte.json"
+    if not impronte_file.exists() and (QUI / "libro_impronte.json").exists():
+        impronte = json.loads((QUI / "libro_impronte.json").read_text())
+    else:
+        impronte = json.loads(impronte_file.read_text()) if impronte_file.exists() else {}
     fatte = impronte.get(simbolo, {})
     chiavi = [k for k in elenca(f"data/futures/um/daily/bookDepth/{simbolo}/")
               if DAL <= k.rsplit("-bookDepth-", 1)[1][:10] <= AL and k.rsplit("/", 1)[1] not in fatte]
