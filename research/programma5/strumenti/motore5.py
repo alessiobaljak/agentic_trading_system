@@ -156,6 +156,22 @@ def metrics(simbolo: str, periodo: str, idea: Optional[str] = None, storia_giorn
     return df[cols].apply(pd.to_numeric, errors="coerce")
 
 
+def premio(simbolo: str, periodo: str, idea: Optional[str] = None, storia_giorni: int = 100) -> pd.Series:
+    """L'indice del premio del perpetuo sullo spot, a 1 ora: indice = ora dall'epoca, valore = chiusura dell'ora
+    (noto alla fine dell'ora)."""
+    controlla_periodo(periodo, idea)
+    inizio, fine = PERIODI[periodo]
+    da = date.fromordinal(inizio.toordinal() - storia_giorni)
+    parti = [_csv_da_zip(p, KLINE) for p in _file(simbolo, "premium") if _dentro(p.name, da, fine)]
+    if not parti:
+        return pd.Series(dtype=float)
+    df = pd.concat(parti, ignore_index=True)
+    df["open_time"] = _ms(df["open_time"])
+    df = df[(df["open_time"] >= _ms_giorno(da)) & (df["open_time"] < _ms_giorno(fine) + 86_400_000)]
+    s = pd.Series(pd.to_numeric(df["close"], errors="coerce").to_numpy(), index=(df["open_time"] // 3_600_000).to_numpy())
+    return s[~s.index.duplicated()].sort_index()
+
+
 def funding(simbolo: str) -> pd.DataFrame:
     """Tutti i regolamenti del funding: minuto, intervallo in ore, tasso. Il tasso e' noto solo al regolamento."""
     righe = []
