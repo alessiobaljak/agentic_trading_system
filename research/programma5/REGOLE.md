@@ -242,3 +242,22 @@ arrivano un giorno alla volta.
    direzione): non decide, ma dice quanto del guadagno è il mercato.
 5. Una procedura che passa è una **strategia valida** del programma 5 (sezione 1); entra nel paper solo con il servizio
    separato, dopo, e con il sì del proprietario.
+
+## 10. La fase 4: il libro degli ordini (aggiunta il 18 ottobre 2026, ore 21:20 UTC, prima di scaricare e di calcolare)
+
+**Perché.** Tutti i segnali provati finora vengono da prezzi, volumi, funding, interesse aperto, rapporti long/short e
+premio. Il **libro degli ordini** (archivio `bookDepth` di Binance: ogni 30 secondi il valore in USDT degli ordini fermi
+entro l'1, 2, 3, 4 e 5% sopra e sotto il prezzo, dal 2023) dice un'altra cosa: dove aspettano i compratori e i venditori
+grandi, e quando il mercato è sottile. Per i fenomeni che vengono da qui **nessun periodo è stato guardato**: valgono
+le regole della fase 2 (sezione 7) con C2 per costruire e V2 per provare, una volta per idea.
+
+**I dati**: per ogni moneta e ogni giorno il file `bookDepth` con il suo CHECKSUM; dal file si tengono solo le misure a
+ore (`strumenti/libro.py`): per l'ultima rilevazione di ogni ora e per la media dell'ora, lo squilibrio
+`(acquisti − vendite) / (acquisti + vendite)` entro l'1, il 2 e il 5% e la liquidità entro l'1% e il 5%; i file grezzi non
+si tengono (le impronte sì, in `libro_impronte.json`). Le misure dell'ora t sono note alla fine dell'ora t.
+
+**Monete**: le 24 della fase 2. **Esplorazioni**: E-201 e seguenti, con il piano scritto prima. **Esame**: quello della
+sezione 7 per le idee nuove (K-NNN): C2 con l'intervallo sopra zero e meglio del caso; V2 una volta con p ≤ 0,005 /
+varianti, costi doppi, senza il giorno migliore, tutte e due le metà, 60% delle monete, 200 trade. Dichiarato: il modello
+conosce i mesi di V2 per altri segnali (per esempio che il 2026 è salito); per questo l'esame di V2 di queste idee chiede in
+più di **battere il caso** (ingressi a caso nello stesso mese e nella stessa direzione).
