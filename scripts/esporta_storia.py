@@ -346,35 +346,43 @@ def esporta(fb, uscita: str, cartella_dati: Optional[str],
             arch.scrivi(rel, _json_gz(dati), voci, "rtdb")
             arch._salva_indice(letture, tetto_letture, False)
 
-        # 3) la macchina: una cartella di data/ per archivio (diviso in parti se grande),
-        #    i file sciolti insieme
+        # 3) la macchina: prima i file sciolti (i backup dei reset), poi le cartelle dalla
+        #    piu' leggera alla piu' pesante, ognuna divisa in parti se grande. La piu'
+        #    pesante (il selettore: 457 file in due parti da ~39 MB al giro del 18 ott, ops
+        #    0625) va per ultima, cosi' il tetto dell'archivio non lascia fuori le piccole.
         if cartella_dati and os.path.isdir(cartella_dati):
-            sciolti = []
+            sciolti, cartelle = [], []
             for voce in sorted(os.listdir(cartella_dati)):
                 percorso = os.path.join(cartella_dati, voce)
                 if FILE_ESCLUSI.search(voce):
                     arch.fuori.append({"file": f"data/{voce}", "motivo": "nome da file "
                                        "riservato (.env, chiavi, credenziali): mai archiviato"})
-                    continue
-                if os.path.isfile(percorso):
+                elif os.path.isfile(percorso):
                     sciolti.append(voce)
-                    continue
-                if not os.path.isdir(percorso) or voce in arch.cartelle_finite:
-                    continue
-                parti = _parti(cartella_dati, _file_della_cartella(arch, cartella_dati, voce))
-                for i, nomi in enumerate(parti, 1):
-                    if not nomi:
-                        continue
-                    rel = (f"macchina/{voce}.tar.gz" if len(parti) == 1
-                           else f"macchina/{voce}_parte{i}.tar.gz")
-                    if arch.fatto(rel):
-                        continue
-                    arch.scrivi_tar(rel, cartella_dati, nomi)
-                    arch._salva_indice(letture, tetto_letture, False)
-                arch.cartelle_finite.append(voce)
-                arch._salva_indice(letture, tetto_letture, False)
+                elif os.path.isdir(percorso):
+                    nomi = _file_della_cartella(arch, cartella_dati, voce)
+                    mb = sum(os.path.getsize(os.path.join(cartella_dati, n)) for n in nomi) / 1e6
+                    cartelle.append((mb, voce, nomi))
+            cartelle.sort()
+            for mb, voce, nomi in cartelle:
+                stato = "fatta" if voce in arch.cartelle_finite else "da fare"
+                print(f"[esporta] piano: data/{voce}: {len(nomi)} file, {mb:.0f} MB non "
+                      f"compressi ({stato})", flush=True)
             if sciolti and not arch.fatto("macchina/file_sciolti.tar.gz"):
                 arch.scrivi_tar("macchina/file_sciolti.tar.gz", cartella_dati, sciolti)
+                arch._salva_indice(letture, tetto_letture, False)
+            for _, voce, nomi in cartelle:
+                if voce in arch.cartelle_finite or not nomi:
+                    continue
+                parti = _parti(cartella_dati, nomi)
+                for i, gruppo in enumerate(parti, 1):
+                    rel = (f"macchina/{voce}.tar.gz" if len(parti) == 1
+                           else f"macchina/{voce}_parte{i}.tar.gz")
+                    if gruppo and not arch.fatto(rel):
+                        arch.scrivi_tar(rel, cartella_dati, gruppo)
+                        arch._salva_indice(letture, tetto_letture, False)
+                arch.cartelle_finite.append(voce)
+                arch._salva_indice(letture, tetto_letture, False)
     except TempoFinito:
         arch.fuori.append({"file": "(il resto)", "motivo": f"tempo del giro finito "
                            f"({tempo_max_s:g} s): rilanciare esporta-storia, riprende da qui"})
