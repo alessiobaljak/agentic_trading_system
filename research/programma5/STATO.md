@@ -70,6 +70,17 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
 | J-009 | **bruciata in V2** | a +0.49% (965); b +0.74% (901) — V2: a -0.09% (p 0.5376, caso -0.11%); b +0.26% (p 0.2946, caso -0.10%) |
 | J-010 | **bruciata in V2** | a +2.58% (715); b +0.20% (5891); c +1.03% (3192) — V2: a +1.04% (p 0.1754, caso +0.06%); b +0.13% (p 0.1468, caso -0.09%); c +0.36% (p 0.1343, caso +0.07%) |
 
+* **Universo esteso (100 monete), 18 ott sera**: dati scaricati e verificati (impronte, commit `758413fb`); E-111 (468
+  celle), E-112 (104), E-113 (46), E-114 (12 fattori fra monete): **nessuna cella promossa** fuori dalle famiglie già
+  provate su V2. I fattori classici fra monete (volatilità, beta, salti, illiquidità, distanza dal massimo, asimmetria) nel
+  2024-2025 sulle 100 monete non danno niente (|t| sotto 0,8). La continuazione dopo le salite resta la più forte anche
+  sulle 100 monete su C2 (t 3,7), ma è già vista su V2.
+
+## Fase 3 (REGOLE.md, sezione 8): la scelta che si adatta
+
+* 18 ott, 20:40 UTC: regole scritte prima; **M-001** (ogni mese le 10 celle migliori dei 3, 6 o 12 mesi prima, solo con i
+  trade già chiusi), congelata con le impronte (commit `3b173fc0`); calcolo sul periodo W (2020-2026/09) in corso.
+
 ## Coda delle idee della fase 1 (in ordine)
 
 | N. | Idea | Perché dovrebbe funzionare | Stato |
