@@ -240,7 +240,8 @@ non si distingue dal caso).
 **Il gate stesso.**
 * La scelta del gate non regge fuori campione: −0,05 R su 230 segnali (7 ott, ops 0532), −0,03 R su 566 (16 ott, ops
   0619). La promessa del gate è un profit factor 2,03, il vissuto 0,71 (ops 0612).
-* Sui prezzi rimescolati il gate promuove il doppio che sui veri: 16 contro 8 su 7.200 (G7, ops 0506).
+* Sui prezzi rimescolati il gate promuove il doppio che sui veri: 16 contro 8 su 7.200 (G7, ops 0506). Per la regola
+  scritta prima l'esito è «non si sa» (sotto 10 passate sui prezzi veri): un indizio, non una prova.
 * Una candidata nuova a caso non passa quasi mai: 0 su 3.600 (R2, ops 0485); a 15 minuti 25 su 20.667 (ops 0470).
 * Con 27.000 prove a giro, a t = 2 ci si aspettano ~614 passaggi per caso; per lasciarne passare al massimo una
   servirebbe t = 3,96 e nessuna candidata ci arriva (ops 0601, `docs/analisi_trade_16set_12ott.md` sezione 2.6).

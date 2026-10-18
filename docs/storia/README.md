@@ -45,7 +45,7 @@ periodo chiuso (il «vault») aperto una volta sola (capitoli 05 e 06).
 | In R a trade (629 trade con lo stop noto) | **netto −0,113**, lordo prima dei costi −0,026, costi stimati 0,087 |
 | Promessa del gate contro paper | profit factor **2,02 promesso, 0,709 vissuto** (663 trade) |
 | Il motore sulle coppie del gate, dopo la scelta | **−0,05 R** su 230 segnali (7 ottobre, `ops` 0532), **−0,03 R** su 566 (16 ottobre, `ops` 0619) |
-| Il gate su prezzi rimescolati (dove nessun vantaggio può esistere) | promuove **16 strategie su 7.200**, contro **8 su 7.200** sui prezzi veri (`ops` 0506) |
+| Il gate su prezzi rimescolati (dove nessun vantaggio può esistere) | promuove **16 strategie su 7.200**, contro **8 su 7.200** sui prezzi veri: un indizio, non una prova (la regola scritta prima diceva «non si sa» sotto 10 passate sui prezzi veri, `ops` 0506) |
 | Ricerca a protocollo (6-18 ottobre) | circa **730 varianti** (630 + 30 + 40 + 33) in 24 campagne, **4 candidati** arrivati al vault, **0 superati** (capitoli 05 e 06) |
 | Il metodo della ricerca, provato con vantaggi inseriti apposta | li trova: **88 su 88** da 0,35 R, 0 falsi su 90 (`research/collaudo_4/esiti.md`) |
 
@@ -54,7 +54,8 @@ periodo chiuso (il «vault») aperto una volta sola (capitoli 05 e 06).
    d'uscita è uguale a quella di un prezzo casuale con le stesse regole d'uscita; il paper perde quasi esattamente i suoi
    costi (capitolo 03, sezione 7; `ops` 0622).
 2. **Il gate selezionava fortuna.** Con migliaia di prove a giro e soglie fisse, quello che passava era il massimo del
-   rumore: dopo la scelta le coppie fanno circa zero, e sui prezzi rimescolati ne passano il doppio (capitolo 03, sezione
+   rumore: dopo la scelta le coppie fanno circa zero (e sui prezzi rimescolati ne passano il doppio, un indizio che la sua
+   regola lasciava a «non si sa») (capitolo 03, sezione
    3; capitolo 04, sezione 2).
 3. **Il terreno cercato finora è povero.** Con le regole tecniche classiche, sulle grandi monete, a 15 minuti-4 ore e a
    barre giornaliere, nel 2020-2023, un vantaggio di 0,2 R a trade dopo i costi non c'era; il metodo che lo cerca invece
@@ -101,7 +102,7 @@ tabella completa delle idee del sistema è nel capitolo 04, quella delle idee di
 | Cosa | Il numero | Fonte |
 |---|---|---|
 | Un modello linguistico che decide i trade | mai usato: non riproducibile, romperebbe il confronto col gate; in ombra non ha cambiato niente | cap. 01, sez. 4.2; cap. 04, sez. 2 |
-| Il gate «walk-forward + 3 conferme + periodo finale» con migliaia di strategie generate a caso | dopo la scelta −0,05 R e −0,03 R a trade; sui prezzi rimescolati passa il doppio; una candidata nuova a caso non passa quasi mai (0 su 3.600) | cap. 03, sez. 3; cap. 04, sez. 2 |
+| Il gate «walk-forward + 3 conferme + periodo finale» con migliaia di strategie generate a caso | dopo la scelta −0,05 R e −0,03 R a trade; sui prezzi rimescolati passa il doppio (indizio: per la sua regola «non si sa»); una candidata nuova a caso non passa quasi mai (0 su 3.600) | cap. 03, sez. 3; cap. 04, sez. 2 |
 | Più conferme, soglie più severe, voto t | il voto t non separa le buone dalle fortunate (−0,21 ±0,24 e −0,09 ±0,21) | cap. 04, sez. 2 |
 | Uscite: trailing, scala dei take profit, break-even, take profit dal grafico | il prezzo non arriva al primo gradino (mediana 0,78 R contro 1,5 R); il trailing protegge quanto taglia (100 contro 98); su un prezzo senza direzione nessuna uscita crea un vantaggio | cap. 02, sez. 3.4; cap. 04, sez. 2 |
 | Dimensione e freni: freno di serie, per gruppo, stop giornaliero, pesi, leva, inclinazioni per trend e sentimento | segno contrario al voluto o dentro il margine; lo stop giornaliero sul portafoglio del gate peggiora (−11.615, caduta dall'11,7% al 20,3%) | cap. 04, sez. 2 |

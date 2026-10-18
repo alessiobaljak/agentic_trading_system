@@ -637,7 +637,8 @@ sarebbero 7,4 al giorno con 1 conferma, 0,26 con 2, **0,0094 con 3** («una ogni
 * Il gate rigiocato nel passato: 6 promosse su 25.631 giudizi, i loro 45 trade fanno −0,22R contro
   −0,14R delle bocciate (`ops` 0502, `docs/capito.md`). Sul **prezzo rimescolato** (dove nessun vantaggio
   è possibile) il gate a 1 ora ha promosso **16 strategie su 7.200, contro 8 su 7.200 sui prezzi veri**
-  (`ops` 0506, voce G7 in `docs/backlog.md`).
+  (`ops` 0506, voce G7 in `docs/backlog.md`); per la regola scritta prima l'esito è «non si sa» (sotto 10 passate sui
+  prezzi veri).
 * 13 ottobre, motivo del fermo: «il giro ogni 3 ore faceva 27.000 prove, ne passava lo 0,29% e le
   passate facevano −0,06 R a trade in paper (ops 0601 e 0604): rumore, non informazione»
   (`ops/gate_fermo`).
