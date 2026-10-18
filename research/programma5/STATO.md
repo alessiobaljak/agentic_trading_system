@@ -32,7 +32,16 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   (2022 piccolo, 2023 più piccolo, 2024-2026 niente): il mercato è diventato più efficiente nelle microstrutture. Le
   inefficienze di questo tipo vanno cercate sui dati recenti, non sul 2020-2021.
 
-## Coda delle idee (in ordine)
+## Fase 2 (REGOLE.md, sezioni 7 e 7bis)
+
+* 18 ott 2026, 16:45 UTC: periodi spostati sul recente (costruzione C2 = 2024-01 → 2025-06, prova V2 = 2025-07 →
+  2026-09, una volta per idea); 12 monete nuove scelte con la regola (`universo_fase2.json`).
+* 17:15 UTC, istruzione del proprietario: l'intero universo o almeno le 100 monete più scambiate. Universo esteso in
+  `universo_top100.json` (regola scritta prima; le 24 della fase 2 tutte dentro); scarico dal settembre 2023 in corso.
+* Esplorazioni scritte prima del calcolo: E-101, E-102, E-103 (24 monete) ed E-111, E-112, E-113 (100 monete). Le idee
+  della fase 2 si chiamano J-NNN e si provano su V2 sulle 100 monete.
+
+## Coda delle idee della fase 1 (in ordine)
 
 | N. | Idea | Perché dovrebbe funzionare | Stato |
 |---|---|---|---|
