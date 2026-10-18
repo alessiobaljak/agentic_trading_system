@@ -1,9 +1,9 @@
 {
- "creato": "2026-10-18 11:08 UTC",
- "completo": false,
+ "creato": "2026-10-18 11:16 UTC",
+ "completo": true,
  "letture_firestore": 0,
  "tetto_letture": 20000,
- "byte_totali": 177309752,
+ "byte_totali": 191610413,
  "file": [
   {
    "file": "macchina/gate_storia.tar.gz",
@@ -396,18 +396,49 @@
    "voci": 122,
    "byte": 39616431,
    "sha256": "09bd492a3057dc8ef16f45f76a45783c8fa267f2fd55f028d7769ac8dc2e352d"
+  },
+  {
+   "file": "macchina/backup_radice.tar.gz",
+   "tipo": "macchina",
+   "voci": 2,
+   "byte": 219127,
+   "sha256": "9f3f9f200dc661994d3163f69ccaa3b088202b15f88aa74cbdb90808160661e2"
+  },
+  {
+   "file": "macchina/selettore_parte10.tar.gz",
+   "tipo": "macchina",
+   "voci": 18,
+   "byte": 14081534,
+   "sha256": "14d8dcb1a0cd05bd4eb21fd7dc36be8978768d1905abe02bae42771f963390fc"
   }
  ],
  "cartelle_finite": [
   "gate_storia",
   "gruppo_controllo",
   "replay_gate",
-  "voto_t"
+  "voto_t",
+  "selettore"
  ],
  "fuori": [
   {
-   "file": "(il resto)",
-   "motivo": "tempo del giro finito (780 s): rilanciare esporta-storia, riprende da qui"
+   "file": "macchina/selettore_parte5.tar.gz",
+   "motivo": "121 file, 299 MB non compressi (circa 42 compressi, stima): oltre il tetto dell'archivio (200 MB); restano sulla macchina, in data/selettore"
+  },
+  {
+   "file": "macchina/selettore_parte6.tar.gz",
+   "motivo": "118 file, 294 MB non compressi (circa 41 compressi, stima): oltre il tetto dell'archivio (200 MB); restano sulla macchina, in data/selettore"
+  },
+  {
+   "file": "macchina/selettore_parte7.tar.gz",
+   "motivo": "97 file, 293 MB non compressi (circa 41 compressi, stima): oltre il tetto dell'archivio (200 MB); restano sulla macchina, in data/selettore"
+  },
+  {
+   "file": "macchina/selettore_parte8.tar.gz",
+   "motivo": "95 file, 300 MB non compressi (circa 42 compressi, stima): oltre il tetto dell'archivio (200 MB); restano sulla macchina, in data/selettore"
+  },
+  {
+   "file": "macchina/selettore_parte9.tar.gz",
+   "motivo": "73 file, 299 MB non compressi (circa 42 compressi, stima): oltre il tetto dell'archivio (200 MB); restano sulla macchina, in data/selettore"
   }
  ]
 }
