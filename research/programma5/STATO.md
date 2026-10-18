@@ -94,6 +94,14 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   (dati fino al 17 ottobre)**: M-001c −0,78% a trade (134 trade, in corso); M-003 −1,15% (347, in corso); **M-002
   +0,29% su 834 trade: verdetto, non passa** (p 0,33). `avanti/A.md`.
 
+## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
+
+* 18 ott sera: scaricato e riassunto a ore il libro degli ordini delle 24 monete (26.855 file giornalieri con il
+  CHECKSUM, 2023-09-23 → 2026-10-17; impronte in `libro_impronte.json`). **E-201** (72 celle su C2): **nessuna promossa**.
+  Il libro sottile durante una salita dà +10,9% in 12 ore ma su 24 casi in 18 mesi (troppo raro); un libro pieno di
+  acquisti per 24 ore porta a una **discesa** di −1,2% nelle 72 ore dopo (t −2,7, 18 monete su 24: sotto la soglia). Gli
+  squilibri a un'ora valgono −0,02/−0,04% a trade: troppo poco per i costi.
+
 ## Coda delle idee della fase 1 (in ordine)
 
 | N. | Idea | Perché dovrebbe funzionare | Stato |
