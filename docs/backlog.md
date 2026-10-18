@@ -51,7 +51,9 @@ ott (`edge`, `confidenza`, `costi`, `timeframe`; `ops` 0602, 0603, 0606, 0610) m
 Firestore su 26. (9) Stati vecchi in questo file: P8 e P9 già nel protocollo 4, J2, G7, R1, R2, T2 fatte o fermate
 ma nel gruppo «in lavorazione», G3 chiusa dalla regola H1 (`docs/storia/04_backlog.md`, sezione 6.10). (10) Il test
 della ricerca rosso su GitHub dal 17 ott sera: **corretto** (573d084d). (11) Il proxy git della sessione rifiuta il
-push delle etichette (403): gli elenchi dei trade del paniere e del gruppo (~256 MB) restano solo sui loro branch.
+push delle etichette (403): gli elenchi dei trade e dell'avanzamento del paniere (~133 MiB) restano solo sul suo
+branch (quelli del gruppo sono già nella storia del principale). (12) Il testo di `ops/gate_fermo` scrive «−0,06 R a
+trade in paper», ma è il motore dopo la validazione (`ops` 0600).
 
 ### P11. Dopo LINK6: continuare la ricerca, e come
 **Deciso dal proprietario il 18 ott 2026 (~08:40 UTC):** «la domanda non è se vuoi continuare e dobbiamo continuare

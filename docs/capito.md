@@ -7,6 +7,11 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-18 (la storia del progetto, `docs/storia/`)
+* **In quattro mesi il paper perde quasi esattamente i suoi costi:** 707 trade dal 16 settembre, −174,41 USDT; in R lordo −0,026, costi 0,087, netto −0,113 a trade (`ops/results/0622`, `0623`). Il gate prometteva un profit factor 2,02, il vissuto è 0,709 (stessa fonte).
+* **La ricerca a protocollo ha provato circa 730 varianti in 24 campagne: 4 al vault, 0 superati** (`docs/storia/README.md`, sezione 1), mentre lo stesso metodo trova 88 vantaggi inseriti su 88 (`research/collaudo_4/esiti.md`): il terreno cercato è povero, non lo strumento.
+* **Cambiare moneta non è cambiare idea:** la ricerca su LINK ha riscritto quasi le stesse varianti di quella su BTC senza averle viste (`docs/storia/06_ricerca_protocolli_2_4.md`, sezione 3.11).
+
 ## 2026-10-18 (mattina: la ricerca su LINK, chiusa senza strategie)
 * **Su LINK, dal 2020 a settembre 2022, nessuna delle 26 varianti provate ha un vantaggio:** i loro p-value non si distinguono dal caso (medio 0,531 contro 0,500 atteso; prova di uniformità p 0,387), e 3 sotto 0,10 contro 2,6 attesi (`research/campagne/LINK6/fase5.md` del branch `research/campagna/LINK6`, commit e91db69c).
 * **Il ritorno alla media su LINK perde:** 8 varianti su 8 con R medio negativo e sotto le loro entrate casuali; le idee di tendenza stanno vicino a zero (stessa fonte).

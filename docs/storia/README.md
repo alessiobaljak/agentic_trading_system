@@ -46,7 +46,7 @@ periodo chiuso (il «vault») aperto una volta sola (capitoli 05 e 06).
 | Promessa del gate contro paper | profit factor **2,02 promesso, 0,709 vissuto** (663 trade) |
 | Il motore sulle coppie del gate, dopo la scelta | **−0,05 R** su 230 segnali (7 ottobre, `ops` 0532), **−0,03 R** su 566 (16 ottobre, `ops` 0619) |
 | Il gate su prezzi rimescolati (dove nessun vantaggio può esistere) | promuove **16 strategie su 7.200**, contro **8 su 7.200** sui prezzi veri (`ops` 0506) |
-| Ricerca a protocollo (6-18 ottobre) | circa **750 varianti** in 24 campagne, **4 candidati** arrivati al vault, **0 superati** (capitoli 05 e 06) |
+| Ricerca a protocollo (6-18 ottobre) | circa **730 varianti** (630 + 30 + 40 + 33) in 24 campagne, **4 candidati** arrivati al vault, **0 superati** (capitoli 05 e 06) |
 | Il metodo della ricerca, provato con vantaggi inseriti apposta | li trova: **88 su 88** da 0,35 R, 0 falsi su 90 (`research/collaudo_4/esiti.md`) |
 
 **La conclusione, in tre frasi.**
@@ -143,7 +143,7 @@ tolto un difetto.
   settembre; il 16 ottobre una piccola perdita d'esecuzione propria (−0,06 R), appena fuori dal margine (capitolo 02,
   sezione 3.3; capitolo 03, sezione 3.13).
 * **Il canale ops** (comandi chiesti via git ed eseguiti sulla macchina da una lista bianca) e il battito orario: 620
-  risposte dal 14 agosto (capitolo 07, sezione 1.8).
+  risposte dal 14 agosto, 622 con quelle del 18 ottobre (capitolo 07, sezione 1.8).
 * **Le sessioni di ricerca che si fermano e chiedono**: due difetti degli strumenti trovati dalla ricerca su BTC prima di
   qualunque variante; la sessione su LINK che non si fida di un messaggio automatico «a nome del proprietario»
   (capitolo 06, sezione 6.8).
@@ -231,7 +231,7 @@ Inventario completo nel capitolo 07. In breve:
 | Trade del paper (707) e stato del conto | solo Firebase; `scripts/reset_paper.py` li cancella senza copia | **alto** |
 | Registro del gate (2.435 coppie) e specifiche delle strategie generate | solo Firebase | **alto**: senza le specifiche le coppie non si possono più rigiocare |
 | Misure che vivono solo sulla macchina (`data/gate_storia`, `data/selettore`, `data/voto_t`, backup dei reset) | solo VPS | **alto** |
-| Trade delle singole varianti delle ricerche (paniere 142 MB, gruppo 114 MB, BTC51, LINK6) | solo sui branch `research/campagna/...` | medio |
+| Elenchi dei trade e dell'avanzamento delle varianti del paniere (circa 133 MiB) e risultati delle varianti di LINK6 (1,2 MiB) | solo sui branch `research/campagna/PANIERE` e `.../LINK6` (quelli del gruppo, 114 MiB, sono nella storia del branch principale) | medio |
 | Candele usate dalla ricerca (470 MB) | fuori dal repository; si riscaricano da Binance e si verificano con le impronte che sono nel repository | basso |
 
 **Cosa è stato fatto il 18 ottobre per non perdere niente:**
@@ -240,8 +240,8 @@ Inventario completo nel capitolo 07. In breve:
 * questa storia.
 
 Non è stato possibile mettere un'etichetta git sulle punte dei branch di ricerca: il proxy git della sessione rifiuta
-il push delle etichette (errore 403). Gli elenchi dei trade delle singole varianti (paniere e gruppo, circa 256 MB)
-restano quindi solo sui loro branch.
+il push delle etichette (errore 403). Gli elenchi dei trade e dell'avanzamento delle varianti del paniere (circa 133 MiB)
+restano quindi solo sul suo branch; quelli del gruppo sono già nella storia del branch principale.
 
 **Cosa resta da fare (serve una riga del proprietario sulla macchina):** l'esportazione dei dati che stanno solo in
 Firebase e sulla VPS. Lo script è pronto nel repository (`scripts/esporta_storia.py`, capitolo 07, sezione 5); per
@@ -262,7 +262,9 @@ Nessun documento le scriveva; sono nel backlog (`docs/backlog.md`, voce P12) con
 3. **La misura degli ordini limite nel paper non è mai stata letta**: tasso di esecuzione, costo, R dei segnali saltati
    (capitolo 03, sezione 3.14).
 4. **Il supervisore conta 278 coppie validate, lo stato e il bot 249** (`ops` 0623): la differenza non è spiegata.
-5. **Il testo di `ops/gate_fermo` è superato** (rimanda alla seconda edizione, già chiusa); non cambia il funzionamento.
+5. **Il testo di `ops/gate_fermo` è superato e in un punto impreciso**: rimanda alla seconda edizione, già chiusa, e il suo
+   «−0,06 R a trade in paper» è il risultato del motore dopo la validazione (`ops` 0600), non del paper (capitolo 03,
+   sezione 2.1). Non cambia il funzionamento.
 6. **Alcuni stati del backlog sono vecchi** (voci date «in lavorazione» o «aspettano il sì» già fatte o già messe nel
    protocollo 4) (capitolo 04, sezione 6.10).
 7. **`docs/firebase_schema.md` elenca una piccola parte di ciò che il bot scrive in Firebase** (capitolo 07, sezione 5).

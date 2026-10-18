@@ -4099,3 +4099,23 @@ costi; il metodo vede i vantaggi inseriti, quindi è un'informazione e non un di
 un'altra grande moneta, secondo me, darebbe lo stesso esito (stima): la proposta è cambiare qualcosa di strutturale, e
 decide il proprietario. Tempo: il Passo 2 ha richiesto circa 17 minuti di lavoro della sessione; il resto è stato
 attesa (8 ore di notte per la conferma del proprietario al Passo 1).
+
+### 18 ottobre, mattina: la storia del progetto
+
+Il proprietario, verso le 10:40 ora italiana: «la domanda non è se vuoi continuare e dobbiamo continuare fino a quando
+non trovi delle strategie valide... se serve riscriviamo totalmente il gate», ma prima va scritta la storia di tutto il
+progetto. Fatta in `docs/storia/`: un riepilogo (`README.md`) e sette capitoli (origini e sistema, settembre, ottobre,
+backlog, ricerca per moneta e di gruppo, protocolli 2-4, dati e sistema di oggi), scritti da sette lettori in parallelo
+sui 3.956 commit, sul diario, sulle 143 versioni del backlog, sulle risposte della macchina e sui branch della ricerca,
+e ricontrollati da sette verificatori sulle fonti (circa 950 affermazioni controllate, una novantina corrette nel testo;
+in più le 326 idee della prima stagione rifatte da zero dai log, tutte uguali). Fatto anche: il test della ricerca rosso
+dal 17 ottobre corretto (573d084d); i testi delle campagne BTC51 e PANIERE copiati sul principale dai loro branch
+(896d5196); lo script `scripts/esporta_storia.py` per copiare Firebase e `data/` della macchina nel repo, che aspetta la
+voce `esporta-storia` nella lista bianca della macchina; le cose trovate nella voce P12 del backlog. Le etichette git
+sui branch non si sono potute mettere (il proxy rifiuta il push delle etichette, 403). Sessione di ricerca LINK6
+archiviata su richiesta del proprietario.
+Capito oggi: con lo stesso catalogo e lo stesso modello, la ricerca su LINK ha riscritto quasi le stesse varianti di
+quella su BTC senza averle viste (`docs/storia/06_ricerca_protocolli_2_4.md`, sezione 3.11): cambiare moneta non è
+cambiare idea. E fra il 12 agosto e il 16 settembre il «gate superato» dipendeva solo dalla copertura del 35% delle
+monete: la via delle 10 coppie validate era nel codice ma spenta fino al 16 settembre (`docs/storia/01_origini_e_sistema.md`,
+sezione 3.2).
