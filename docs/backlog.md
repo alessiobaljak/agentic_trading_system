@@ -34,11 +34,11 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ### P12. Trovate scrivendo la storia del progetto (18 ott 2026)
 **Perché:** i sette lettori della storia (`docs/storia/`) hanno trovato cose che nessun documento scriveva. Da
-decidere prima di riscrivere il gate. (1) **Esportare Firebase e `data/` della macchina**: trade del paper (707,
-`ops` 0623), registro del gate (2.435 coppie) e specifiche delle strategie generate esistono solo lì, e
-`scripts/reset_paper.py` cancella i trade senza copia. Fatto lo script `scripts/esporta_storia.py` (segreti oscurati,
-tetto di 20.000 letture, scrive in `ops/results/archivio_AAAAMMGG/`); **serve la voce `esporta-storia` nella lista
-bianca della macchina** (riga in `ops/allowlist.example`). (2) **Dopo 3 giorni di gate fermo i report vedono 0
+decidere prima di riscrivere il gate. (1) **Esportare Firebase e `data/` della macchina: FATTO il 18 ott** (voce `esporta-storia`
+aggiunta dal proprietario; `ops` 0624-0627): `ops/results/archivio_20261018/`, 58 file, 191,6 MB, con tutte le
+collection di Firestore (707 trade, registro, specifiche), il Realtime DB e le misure della macchina. Restano sulla
+macchina 504 file del selettore (7-13 ott, ~1,5 GB non compressi), oltre il tetto di 200 MB: da decidere se copiarli
+(alzando `ESPORTA_TETTO_TOTALE_MB`) o lasciarli. Da rifare prima di ogni reset del paper o del registro. (2) **Dopo 3 giorni di gate fermo i report vedono 0
 coppie validate** (`coppie_validate` in `bot/core/registry.py` tiene solo le coppie viste negli ultimi
 `OPTIMIZER_FRESH_DAYS`, 3 di default), mentre il bot ne opera 249: una lettura del fuori campione oggi uscirebbe vuota
 (sezione K10 di `ops` 0622: 0 coppie, contro 207 + 42 in `ops` 0620). (3) **Report giornaliero e backlog in

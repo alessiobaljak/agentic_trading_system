@@ -14,6 +14,14 @@
 >   nessuna voce esporta i dati (sezioni 3.5 e 5).
 > * Le etichette git sulle punte dei branch (proposta 4 della sezione 5) non si sono potute fare: il proxy git della
 >   sessione rifiuta il push delle etichette (errore 403).
+>
+> **E dopo ancora, lo stesso giorno: le proposte 1, 2, 3 e 6 della sezione 5 sono fatte.** Il proprietario ha aggiunto la
+> voce `esporta-storia` alla lista bianca; quattro giri (`ops/results/0624`-`0627`) hanno copiato in
+> `ops/results/archivio_20261018/` tutte le 26 collection di Firestore (con i 707 trade, il registro e le specifiche), i
+> 21 nodi del Realtime DB, le cartelle di misura della macchina e i due backup nella cartella del bot
+> (`trades_backup_20260811.json` e `gate_backup_20260813_042534.json`: quindi un backup del registro è stato fatto il 13
+> agosto). Del selettore (1.261 file, 2.785 MB) restano sulla macchina 504 file del 7-13 ottobre, oltre il tetto
+> dell'archivio. Riepilogo e controllo dei segreti in `README.md`, sezione 7.
 
 _Bozza scritta il 18 ottobre 2026 in sola lettura. Fotografia del repository al commit `672663b8` (18 ott 2026,
 09:02 UTC), branch `claude/brave-albattani-1b12fv`. Gli orari sono in UTC; l'ora italiana oggi è UTC+2._

@@ -181,3 +181,10 @@ def test_i_backup_della_cartella_del_bot_e_il_tetto_stimato(tmp_path, monkeypatc
     assert not (uscita / "macchina" / "selettore.tar.gz").exists()
     assert any(f["file"] == "macchina/selettore.tar.gz" and "data/selettore" in f["motivo"]
                for f in indice["fuori"])
+    # non e' «finita»: con un tetto piu' alto un giro dopo la riprende
+    assert "selettore" not in indice["cartelle_finite"]
+    assert "restano fuori" in es.riepilogo(indice, "a")
+    monkeypatch.setattr(es, "TETTO_TOTALE_MB", 200)
+    dopo = es.esporta(fb, str(uscita), str(dati), tetto_letture=1000, radice=str(radice))
+    assert (uscita / "macchina" / "selettore.tar.gz").exists()
+    assert "selettore" in dopo["cartelle_finite"] and "COMPLETO" in es.riepilogo(dopo, "a")

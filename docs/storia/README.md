@@ -228,9 +228,10 @@ Inventario completo nel capitolo 07. In breve:
 | Dati | Dove | Rischio |
 |---|---|---|
 | Diario, documenti, protocolli, risultati delle ricerche, risposte della macchina, fotografie dello stato ogni 2 ore | repository (branch principale) | basso |
-| Trade del paper (707) e stato del conto | solo Firebase; `scripts/reset_paper.py` li cancella senza copia | **alto** |
-| Registro del gate (2.435 coppie) e specifiche delle strategie generate | solo Firebase | **alto**: senza le specifiche le coppie non si possono più rigiocare |
-| Misure che vivono solo sulla macchina (`data/gate_storia`, `data/selettore`, `data/voto_t`, backup dei reset) | solo VPS | **alto** |
+| Trade del paper (707) e stato del conto | Firebase, e dal 18 ottobre una copia in `ops/results/archivio_20261018/` | basso per i trade fino al 18 ottobre; quelli dopo solo in Firebase |
+| Registro del gate (2.435 coppie) e specifiche delle strategie generate | Firebase, e la copia del 18 ottobre (il registro è fermo dal 13 ottobre) | basso |
+| Misure della macchina (`data/gate_storia`, `data/voto_t`, `data/gruppo_controllo`, backup dei reset) | VPS, e la copia del 18 ottobre | basso |
+| Parte del selettore (`data/selettore`, file dal 7 al 13 ottobre, circa 1,5 GB) | solo VPS | medio: misure di una funzione che non ha mai battuto «apri tutto» |
 | Elenchi dei trade e dell'avanzamento delle varianti del paniere (circa 133 MiB) e risultati delle varianti di LINK6 (1,2 MiB) | solo sui branch `research/campagna/PANIERE` e `.../LINK6` (quelli del gruppo, 114 MiB, sono nella storia del branch principale) | medio |
 | Candele usate dalla ricerca (470 MB) | fuori dal repository; si riscaricano da Binance e si verificano con le impronte che sono nel repository | basso |
 
@@ -243,10 +244,24 @@ Non è stato possibile mettere un'etichetta git sulle punte dei branch di ricerc
 il push delle etichette (errore 403). Gli elenchi dei trade e dell'avanzamento delle varianti del paniere (circa 133 MiB)
 restano quindi solo sul suo branch; quelli del gruppo sono già nella storia del branch principale.
 
-**Cosa resta da fare (serve una riga del proprietario sulla macchina):** l'esportazione dei dati che stanno solo in
-Firebase e sulla VPS. Lo script è pronto nel repository (`scripts/esporta_storia.py`, capitolo 07, sezione 5); per
-lanciarlo dal canale ops serve aggiungere la voce `esporta-storia` alla lista bianca della macchina, che per sicurezza
-vive solo lì (`ops/README.md`).
+**L'esportazione di Firebase e della macchina (18 ottobre, `ops/results/0624`-`0627`)**, dopo che il proprietario ha
+aggiunto la voce `esporta-storia` alla lista bianca della macchina. È in `ops/results/archivio_20261018/` (58 file, 191,6
+MB compressi; l'elenco con l'impronta SHA-256 di ogni file è in `INDICE.json`):
+* **Firestore, tutte le 26 collection**: fra queste i 707 trade del paper (`trades`), il registro del gate
+  (`strategy_registry`), le specifiche delle strategie generate (`discovered_strategies`), i parametri, i pesi, la
+  deriva, la storia e l'autopsia del gate;
+* **il Realtime DB, tutti i 21 nodi** (conto, posizioni, comandi, stato del bot, storia del BTC e del learning...);
+* **le cartelle di misura della macchina**: `gate_storia`, `gruppo_controllo`, `replay_gate`, `voto_t`, i file sciolti e
+  i due backup nella cartella del bot (`trades_backup_20260811.json`, i 144 trade cancellati ad agosto, e
+  `gate_backup_20260813_042534.json`, una foto del registro del 13 agosto);
+* **il selettore solo in parte**: la cartella pesa 2.785 MB non compressi in 1.261 file; sono copiati i file dal 29
+  settembre al 7 ottobre e quelli del 13 ottobre (757 file), restano sulla macchina, in `data/selettore`, quelli dal 7 al
+  13 ottobre (504 file, circa 1,5 GB, circa 210 MB compressi: stima), perché avrebbero superato il tetto di 200 MB
+  dell'archivio (`ops/results/0627`).
+
+Prima di pubblicarlo, ogni testo è passato da una pulizia che toglie chiavi, token, password, credenziali e indirizzi
+e-mail; dopo, il coordinamento ha ricontrollato tutto l'archivio (1.374 MB non compressi della macchina più Firestore e
+Realtime DB): nessun segreto e nessun indirizzo.
 
 ---
 

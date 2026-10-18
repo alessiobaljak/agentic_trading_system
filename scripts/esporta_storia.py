@@ -389,6 +389,7 @@ def esporta(fb, uscita: str, cartella_dati: Optional[str],
                 if voce in arch.cartelle_finite or not nomi:
                     continue
                 parti = _parti(cartella_dati, nomi)
+                saltate = 0
                 for i, gruppo in enumerate(parti, 1):
                     rel = (f"macchina/{voce}.tar.gz" if len(parti) == 1
                            else f"macchina/{voce}_parte{i}.tar.gz")
@@ -404,10 +405,15 @@ def esporta(fb, uscita: str, cartella_dati: Optional[str],
                                            f"compressi, stima): oltre il tetto dell'archivio "
                                            f"({TETTO_TOTALE_MB:g} MB); restano sulla macchina, "
                                            f"in data/{voce}"})
+                        saltate += 1
                         continue
-                    arch.scrivi_tar(rel, cartella_dati, gruppo)
+                    if not arch.scrivi_tar(rel, cartella_dati, gruppo):
+                        saltate += 1
                     arch._salva_indice(letture, tetto_letture, False)
-                arch.cartelle_finite.append(voce)
+                # una cartella con pezzi lasciati fuori dal tetto non e' finita: un giro con
+                # un tetto piu' alto (ESPORTA_TETTO_TOTALE_MB) li riprende
+                if not saltate:
+                    arch.cartelle_finite.append(voce)
                 arch._salva_indice(letture, tetto_letture, False)
     except TempoFinito:
         arch.fuori.append({"file": "(il resto)", "motivo": f"tempo del giro finito "
@@ -421,8 +427,13 @@ def esporta(fb, uscita: str, cartella_dati: Optional[str],
 
 
 def riepilogo(indice: dict, uscita_rel: str) -> str:
-    stato = ("COMPLETO" if indice["completo"]
-             else "DA CONTINUARE: rilanciare esporta-storia, riprende da dove si e' fermato")
+    if not indice["completo"]:
+        stato = "DA CONTINUARE: rilanciare esporta-storia, riprende da dove si e' fermato"
+    elif indice["fuori"]:
+        stato = (f"FINITO, ma {len(indice['fuori'])} voci restano fuori (sotto, con il motivo): "
+                 f"il giro e' arrivato in fondo, non tutto e' stato copiato")
+    else:
+        stato = "COMPLETO: tutto copiato"
     righe = [f"Archivio in {uscita_rel} ({indice['creato']}): {stato}",
              f"file: {len(indice['file'])} ({indice.get('nuovi', 0)} scritti in questo giro) · "
              f"{indice['byte_totali'] / 1e6:.1f} MB compressi · letture Firestore in questo "

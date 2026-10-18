@@ -4119,3 +4119,9 @@ quella su BTC senza averle viste (`docs/storia/06_ricerca_protocolli_2_4.md`, se
 cambiare idea. E fra il 12 agosto e il 16 settembre il «gate superato» dipendeva solo dalla copertura del 35% delle
 monete: la via delle 10 coppie validate era nel codice ma spenta fino al 16 settembre (`docs/storia/01_origini_e_sistema.md`,
 sezione 3.2).
+Esportazione dei dati (pomeriggio): il proprietario ha aggiunto la voce `esporta-storia` alla lista bianca; in quattro
+giri del canale (`ops/results/0624`-`0627`; il primo fermato a 900 secondi, poi lo script corretto per riprendere da
+dove si ferma) sono arrivati in `ops/results/archivio_20261018/` 58 file, 191,6 MB: tutte le 26 collection di Firestore
+(707 trade, registro e specifiche del gate), i 21 nodi del Realtime DB, le misure della macchina e i backup dei reset.
+Restano sulla macchina 504 file del selettore (7-13 ottobre), oltre il tetto di 200 MB dell'archivio. Controllo dei
+segreti su tutto l'archivio: nessuno.
