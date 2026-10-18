@@ -1,9 +1,9 @@
 {
- "creato": "2026-10-18 10:53 UTC",
+ "creato": "2026-10-18 11:08 UTC",
  "completo": false,
  "letture_firestore": 0,
  "tetto_letture": 20000,
- "byte_totali": 98101059,
+ "byte_totali": 177309752,
  "file": [
   {
    "file": "macchina/gate_storia.tar.gz",
@@ -368,12 +368,41 @@
    "voci": 175,
    "byte": 39777209,
    "sha256": "8a1dc76dbb62af283e9f69893870f2abcab8a3473580789725127f4b720df64f"
+  },
+  {
+   "file": "macchina/file_sciolti.tar.gz",
+   "tipo": "macchina",
+   "voci": 2,
+   "byte": 7441,
+   "sha256": "0d82ccc8a97581dc75b1bf7c7479361042b966241ca3ce65ba3f8f9b294728fb"
+  },
+  {
+   "file": "macchina/voto_t.tar.gz",
+   "tipo": "macchina",
+   "voci": 4,
+   "byte": 11228,
+   "sha256": "b5d244288454b81d39efe50cb30cfd30bf7c3983daacf215adabf8bd7e143940"
+  },
+  {
+   "file": "macchina/selettore_parte3.tar.gz",
+   "tipo": "macchina",
+   "voci": 160,
+   "byte": 39573593,
+   "sha256": "8a40253fd98948f498e94a30f0bc17ed6ab7d9dfae51d30aaeeb14a6bf8e1652"
+  },
+  {
+   "file": "macchina/selettore_parte4.tar.gz",
+   "tipo": "macchina",
+   "voci": 122,
+   "byte": 39616431,
+   "sha256": "09bd492a3057dc8ef16f45f76a45783c8fa267f2fd55f028d7769ac8dc2e352d"
   }
  ],
  "cartelle_finite": [
   "gate_storia",
   "gruppo_controllo",
-  "replay_gate"
+  "replay_gate",
+  "voto_t"
  ],
  "fuori": [
   {
