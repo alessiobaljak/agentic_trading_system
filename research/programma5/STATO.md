@@ -46,20 +46,29 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   **rimbalzo dopo i crolli**, ancora più forte (+4,4-4,8% a trade su 24 ore, concentrato in pochi giorni: 5 mar, 13 apr,
   5 ago, 20 dic 2024; 3 feb, 7 apr 2025). Le reti d'acquisto a 6σ rendono ancora (+0,49-0,74% netto), quelle a 3σ meno.
 * Idee J-001 ... J-010: tutte passano C2 (`idee/J-NNN/C2.md`); regole congelate con le impronte (commit `bba987e4`).
-  V2 parte quando i dati delle 100 monete sono completi (scarico in corso: candele 55 su 76 alle 17:51 UTC, poi metrics).
+* **V2 (18 ott, 18:00-18:45 UTC, una volta per idea, sulle 100 monete o sulle 88 fuori dalla fase 1): nessuna delle dieci
+  passa.** Il primo giro si è interrotto per un difetto tecnico (due calcoli in parallelo scrivevano lo stesso file di
+  appoggio delle barre orarie) prima di scrivere qualunque risultato; i file sono stati ricostruiti in ordine e il calcolo
+  rifatto identico (unica eccezione: una prova di un minuto su una moneta di J-002 prima del giro). **Cosa abbiamo
+  capito**: (1) nei 15 mesi recenti la seconda metà del 2025 è andata male per i rimbalzi (J-004 −7,9% a trade nella
+  variante b, J-006 −3,8%) e il 2026 bene per tutto ciò che è long; (2) le idee di continuazione restano positive (J-002
+  +0,4-1,4%, J-005 +0,4-0,9%, J-001 +0,1-1,6%) ma **quanto un ingresso a caso nello stesso mese** (caso +0,2-1,9%): era il
+  mercato, non il segnale; (3) la più vicina è J-005b (volume dieci volte il solito in un'ora in salita, long un giorno):
+  +0,93% netto, intervallo +0,24; +1,63, tutte e due le metà positive, ma p 0,0030 contro 0,0025 e solo +0,26% sopra il
+  caso; (4) le reti d'acquisto nelle code (J-009, J-010) e le idee di sessione (J-007, J-008) non reggono.
 
-| Idea | Stato | C2: netto a trade (trade) |
+| Idea | Stato | C2: netto a trade (trade) — V2: netto, p, caso |
 |---|---|---|
-| J-001 | passa C2, congelata, V2 da fare | a +1.74% (360); b +0.80% (360); c +2.67% (286) |
-| J-002 | passa C2, congelata, V2 da fare | a +3.87% (372); b +2.87% (772); c +1.27% (1628) |
-| J-003 | passa C2, congelata, V2 da fare | a +1.06% (1454); b +1.50% (496); c +1.12% (876) |
-| J-004 | passa C2, congelata, V2 da fare | a +4.67% (268); b +4.56% (252); c +4.36% (250) |
-| J-005 | passa C2, congelata, V2 da fare | a +1.01% (1749); b +1.87% (430) |
-| J-006 | passa C2, congelata, V2 da fare | a +4.79% (345); b +1.52% (527) |
-| J-007 | passa C2, congelata, V2 da fare | a +0.34% (1556); b +0.69% (364) |
-| J-008 | passa C2, congelata, V2 da fare | a +0.26% (1636); b +0.61% (393) |
-| J-009 | passa C2, congelata, V2 da fare | a +0.49% (965); b +0.74% (901) |
-| J-010 | passa C2, congelata, V2 da fare | a +2.58% (715); b +0.20% (5891); c +1.03% (3192) |
+| J-001 | **bruciata in V2** | a +1.74% (360); b +0.80% (360); c +2.67% (286) — V2: a +0.51% (p 0.1096, caso +0.45%); b +0.11% (p 0.3599, caso +0.04%); c +1.57% (p 0.0109, caso +1.89%) |
+| J-002 | **bruciata in V2** | a +3.87% (372); b +2.87% (772); c +1.27% (1628) — V2: a +1.40% (p 0.0957, caso +1.79%); b +0.78% (p 0.1553, caso +0.94%); c +0.43% (p 0.0747, caso +0.15%) |
+| J-003 | **bruciata in V2** | a +1.06% (1454); b +1.50% (496); c +1.12% (876) — V2: a +0.21% (p 0.1722, caso +0.05%); b +0.11% (p 0.4015, caso +0.20%); c +0.38% (p 0.0354, caso +0.11%) |
+| J-004 | **bruciata in V2** | a +4.67% (268); b +4.56% (252); c +4.36% (250) — V2: a +0.55% (p 0.3658, caso -0.35%); b -3.19% (p 0.9383, caso +0.34%); c +1.55% (p 0.0706, caso -0.33%) |
+| J-005 | **bruciata in V2** | a +1.01% (1749); b +1.87% (430) — V2: a +0.44% (p 0.0413, caso +0.32%); b +0.93% (p 0.0030, caso +0.67%) |
+| J-006 | **bruciata in V2** | a +4.79% (345); b +1.52% (527) — V2: a -0.66% (p 0.6105, caso +0.00%); b -0.45% (p 0.6694, caso -0.14%) |
+| J-007 | **bruciata in V2** | a +0.34% (1556); b +0.69% (364) — V2: a -0.17% (p 0.9125, caso -0.09%); b +0.00% (p 0.5020, caso -0.03%) |
+| J-008 | **bruciata in V2** | a +0.26% (1636); b +0.61% (393) — V2: a -0.24% (p 0.9792, caso -0.11%); b -0.32% (p 0.9553, caso -0.10%) |
+| J-009 | **bruciata in V2** | a +0.49% (965); b +0.74% (901) — V2: a -0.09% (p 0.5376, caso -0.11%); b +0.26% (p 0.2946, caso -0.10%) |
+| J-010 | **bruciata in V2** | a +2.58% (715); b +0.20% (5891); c +1.03% (3192) — V2: a +1.04% (p 0.1754, caso +0.06%); b +0.13% (p 0.1468, caso -0.09%); c +0.36% (p 0.1343, caso +0.07%) |
 
 ## Coda delle idee della fase 1 (in ordine)
 
