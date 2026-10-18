@@ -1,0 +1,20 @@
+[
+{"id": "V-013", "ipotesi": "I-07", "fonte": "Nagel, Evaporating Liquidity, Review of Financial Studies, 2012; Bollinger, Bollinger on Bollinger Bands, 2001",
+ "specifica": {"timeframe": "1h", "direzione": "long", "filtro": null, "ingresso": {"codice": "E5", "k": 2.5}, "conferma": null, "tipo_ingresso": {"codice": "L", "k": 0.5, "validita": 3}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 12}]},
+ "previsione": "R medio fra -0,15 e +0,15 R; p-value sopra 0,05"},
+{"id": "V-014", "ipotesi": "I-07", "fonte": "Nagel, Evaporating Liquidity, Review of Financial Studies, 2012; Bollinger, Bollinger on Bollinger Bands, 2001",
+ "specifica": {"timeframe": "1h", "direzione": "short", "filtro": null, "ingresso": {"codice": "E5", "k": 2.5}, "conferma": null, "tipo_ingresso": {"codice": "L", "k": 0.5, "validita": 3}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 12}]},
+ "previsione": "R medio fra -0,15 e +0,15 R; p-value sopra 0,05"},
+{"id": "V-015", "ipotesi": "I-08", "fonte": "Wilder, New Concepts in Technical Trading Systems, 1978; Liu, Tsyvinski, Risks and Returns of Cryptocurrency, Review of Financial Studies, 2021",
+ "specifica": {"timeframe": "1h", "direzione": "long", "filtro": {"codice": "F2", "regime": "tendenza"}, "ingresso": {"codice": "E7", "n": 14}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U3", "k": 3.0}]},
+ "previsione": "R medio fra -0,15 e +0,1 R; p-value sopra 0,05"},
+{"id": "V-016", "ipotesi": "I-08", "fonte": "Wilder, New Concepts in Technical Trading Systems, 1978; Liu, Tsyvinski, Risks and Returns of Cryptocurrency, Review of Financial Studies, 2021",
+ "specifica": {"timeframe": "1h", "direzione": "short", "filtro": {"codice": "F2", "regime": "tendenza"}, "ingresso": {"codice": "E7", "n": 14}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U3", "k": 3.0}]},
+ "previsione": "R medio fra -0,15 e +0,1 R; p-value sopra 0,05"},
+{"id": "V-017", "ipotesi": "I-09", "fonte": "Appel, Technical Analysis: Power Tools for Active Investors, 2005; Moskowitz, Ooi, Pedersen, Time Series Momentum, Journal of Financial Economics, 2012",
+ "specifica": {"timeframe": "2h", "direzione": "long", "filtro": {"codice": "F1", "n": 200, "lato": "sopra"}, "ingresso": {"codice": "E9"}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U3", "k": 3.0}, {"codice": "U4"}]},
+ "previsione": "R medio fra -0,15 e +0,1 R; p-value sopra 0,05"},
+{"id": "V-018", "ipotesi": "I-09", "fonte": "Appel, Technical Analysis: Power Tools for Active Investors, 2005; Moskowitz, Ooi, Pedersen, Time Series Momentum, Journal of Financial Economics, 2012",
+ "specifica": {"timeframe": "2h", "direzione": "short", "filtro": {"codice": "F1", "n": 200, "lato": "sotto"}, "ingresso": {"codice": "E9"}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U3", "k": 3.0}, {"codice": "U4"}]},
+ "previsione": "R medio fra -0,15 e +0,1 R; p-value sopra 0,05"}
+]

@@ -313,3 +313,152 @@ Motivi: 1h perche' la finestra di 500 candele dell'ATR percentile copre circa tr
 possono rientrare. Stima: V-011 212 trade, V-012 160 trade.
 
 **Previsione.** R medio fra −0,15 e +0,15 R per entrambe, p-value sopra 0,05.
+
+---
+
+# Secondo lotto (scritto il 18 ottobre 2026, dopo i risultati del lotto 1)
+
+Dichiarazione (Fase 3, punto 3, e regola 5). Queste idee sono scritte dopo i risultati di V-001 ... V-012. Nessuna
+differisce da una variante gia' provata per un solo elemento: I-07 differisce da V-009 e V-010 per timeframe, filtro,
+valore di k e tipo di ingresso; I-08 da V-001 e V-002 per filtro e ingresso; I-09 da V-001 e V-002 per timeframe,
+ingresso e uscite. Che cosa ho preso dal lotto 1: solo la conferma che a 30 minuti i costi pesano circa il doppio in R
+che a 1 ora (0,085 contro 0,04 R, `codice/fase3_analisi.py`), fatto gia' scritto nella sezione 15 del protocollo;
+nessuna scelta di ora, giorno o soglia viene dai risultati.
+
+## I-07 — Fornire liquidita' dopo un eccesso: ingresso con ordine limit
+
+**Fonte.** S. Nagel, «Evaporating Liquidity», *Review of Financial Studies*, 2012: i rendimenti dell'inversione di
+breve periodo sono in gran parte il compenso di chi fornisce liquidita' a chi ha fretta di vendere o comprare, e sono
+piu' alti quando la volatilita' e' alta. Bande di Bollinger: J. Bollinger, 2001 (come I-05).
+
+**Affermazione verificabile.** Su LINKUSDT a 1 ora, dopo una chiusura fuori dalla banda di Bollinger a 2,5 deviazioni
+e il ritorno dentro alla candela successiva, un ordine limit di acquisto 0,5 ATR sotto la chiusura (valido 3 candele)
+compra da chi vende in fretta a un prezzo migliore; con stop a 1,5 ATR, target a 1,5 R e uscita dopo 12 candele il
+risultato e' di almeno 0,2 R dopo i costi, piu' delle casuali con lo stesso ordine limit. Simmetrico per lo short.
+
+**Sotto-domande.** Condizioni: volatilita' alta, liquidazioni, venditori forzati. Chi opera: chi deve chiudere
+posizioni (margine, liquidazioni), chi fornisce liquidita'. Perche' il prezzo tornerebbe: la pressione di chi ha fretta
+e' temporanea. Quando: entro qualche ora.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Selezione avversa del limit: l'ordine si esegue soprattutto quando il prezzo continua a scendere (informazione vera) | trade eseguiti peggiori di quelli non eseguiti; R negativo | R positivo |
+| 3 | Il vantaggio e' solo il prezzo d'ingresso migliore, non il segnale | casuali con lo stesso limit simili | il segnale batte le casuali limit |
+| 4 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 5 | Pochi crolli e rimbalzi enormi (marzo 2020) | verifica 4 fallisce | superata |
+| 6 | Riempimento ottimistico del backtest | crolla con il riempimento severo (verifica 8) | regge |
+| 7 | Volatilita': stop larghi, costi bassi in R | casuali con stessa larghezza simili | il segnale le batte |
+| 8 | Raggruppamento in pochi episodi | trade concentrati | distribuiti |
+| 9 | Effetto generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 10 | Il ritorno avviene gia' dentro la candela del segnale | ordini spesso non eseguiti; R medio vicino a zero | — |
+| 11 | Costi | R lordo positivo, netto negativo | positivo a costi doppi |
+
+**Varianti.**
+
+> **V-013** · 1h · long · nessun filtro · ingresso E5: ritorno da Bollinger (20, 2,5) dalla banda inferiore ·
+> conferma nessuna · tipo L: limit a 0,5 × ATR(14) sotto la chiusura, validita' 3 candele · stop S1: 1,5 × ATR(14) ·
+> uscite U1: target 1,5 R, U2: dopo 12 candele.
+>
+> **V-014** · stessa, short: ritorno dalla banda superiore, limit 0,5 × ATR sopra la chiusura.
+
+Motivi: k = 2,5 per prendere solo eccessi veri (l'idea parla di chi ha fretta); 1h perche' un'ora e' un orizzonte
+in cui la fretta di chi vende si vede ma i costi pesano la meta' che a 30 minuti; ordine limit a 0,5 ATR (il piu'
+lontano) perche' l'idea e' comprare la fretta degli altri a sconto; validita' 3 candele per lasciare al prezzo il tempo
+di arrivarci. Nessun filtro: Nagel trova l'effetto in tutti i regimi, piu' forte con volatilita' alta. Stima: V-013
+217 trade (310 ordini, 217 eseguiti), V-014 226 trade (331 ordini, 226 eseguiti).
+
+**Previsione.** R medio fra −0,15 e +0,15 R, p-value sopra 0,05 per entrambe.
+
+---
+
+## I-08 — RSI che passa 50 in un mercato con tendenza forte
+
+**Fonte.** J. W. Wilder, *New Concepts in Technical Trading Systems*, Trend Research, 1978 (RSI e ADX). Momentum di
+serie temporale nelle criptovalute: Liu e Tsyvinski, 2021 (come I-01).
+
+**Affermazione verificabile.** Su LINKUSDT a 1 ora, con ADX(14) sopra 25, quando l'RSI(14) passa sopra 50 il prezzo
+riprende la tendenza abbastanza da dare, con stop a 2 ATR e trailing a 3 ATR, almeno 0,2 R dopo i costi, piu' delle
+casuali. Simmetrico per lo short sotto 50. Differisce da I-01: non si compra la rottura del massimo ma la ripresa del
+momento dopo una pausa, solo quando la tendenza e' forte.
+
+**Sotto-domande.** Condizioni: tendenze forti di ore o giorni. Chi opera: chi segue la tendenza e rientra dopo le
+pause. Perche' il prezzo proseguirebbe: l'ADX alto dice che la tendenza c'e'; l'RSI che passa 50 dice che la pausa e'
+finita. Quando: ore o giorni.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | L'ADX alto non ha direzione: con ADX alto in ribasso il long che passa 50 compra un rimbalzo | long perde nel 2022 | long buono anche nel 2022 |
+| 3 | L'RSI a 50 attraversa spesso: segnali di rumore | molti stop, R negativo | R positivo |
+| 4 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 5 | Pochi trade enormi | verifica 4 fallisce | superata |
+| 6 | Costi | R lordo positivo, netto negativo | positivo a costi doppi |
+| 7 | Volatilita': ADX alto viene con ATR alto e stop larghi | casuali con stessa larghezza simili | il segnale le batte |
+| 8 | Ritardo: ADX e RSI arrivano tardi, la tendenza e' gia' finita | R negativo, trailing presto | R positivo |
+| 9 | Raggruppamento | trade concentrati in poche tendenze | distribuiti |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | Stesso vantaggio (o assenza) di I-01: e' la stessa famiglia di tendenza | risultati simili a V-001 e V-002 | risultati diversi |
+
+**Varianti.**
+
+> **V-015** · 1h · long · filtro F2: ADX(14) sopra 25 · ingresso E7: RSI(14) passa sopra 50 · conferma nessuna ·
+> tipo M · stop S1: 2 × ATR(14) · uscita U3: trailing a 3 × ATR(14).
+>
+> **V-016** · stessa, short: RSI(14) passa sotto 50.
+
+Motivi: 1h perche' a 4h e 2h i trade erano troppo pochi (bozze B-32 ... B-35: 58-163); RSI a 14, il valore di Wilder;
+ADX a 25 (tendenza); stop e trailing come I-01, le uscite classiche di tendenza, cosi' le due idee si confrontano a
+parita' di uscite. Stima: V-015 316 trade, V-016 271 trade.
+
+**Previsione.** R medio fra −0,15 e +0,1 R, p-value sopra 0,05 per entrambe (spiegazione 11: mi aspetto risultati
+simili a I-01).
+
+---
+
+## I-09 — Incrocio del MACD nella direzione della tendenza di fondo
+
+**Fonte.** G. Appel, *Technical Analysis: Power Tools for Active Investors*, FT Prentice Hall, 2005 (il MACD e il suo
+uso nella direzione della tendenza). Momentum di serie temporale: Moskowitz, Ooi e Pedersen, 2012.
+
+**Affermazione verificabile.** Su LINKUSDT a 2 ore, con la chiusura sopra la EMA a 200 candele (circa 17 giorni), un
+incrocio al rialzo della linea del MACD sul suo segnale annuncia la ripresa della tendenza; con stop a 2 ATR, trailing
+a 3 ATR e uscita al segnale opposto (incrocio al ribasso) il risultato e' di almeno 0,2 R dopo i costi, piu' delle
+casuali. Simmetrico per lo short sotto la EMA a 200.
+
+**Sotto-domande.** Condizioni: tendenze di settimane con correzioni di giorni. Chi opera: chi segue la tendenza.
+Perche' il prezzo proseguirebbe: la correzione finisce e la tendenza riparte. Quando: giorni.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Il MACD incrocia spesso in mercati laterali: rumore | molte uscite al segnale opposto in piccola perdita | R positivo |
+| 3 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 4 | Pochi trade enormi | verifica 4 fallisce | superata |
+| 5 | Costi | R lordo positivo, netto negativo | positivo a costi doppi |
+| 6 | Ritardo: il MACD incrocia quando il movimento e' gia' fatto | R vicino a zero | R positivo |
+| 7 | Volatilita' | casuali con stessa larghezza simili | il segnale le batte |
+| 8 | Il filtro EMA200 da solo fa il lavoro | casuali senza filtro peggiori, ma blocco per blocco nessun vantaggio | vantaggio stabile nei blocchi |
+| 9 | Raggruppamento | trade concentrati | distribuiti |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | Stessa famiglia di I-01 e I-08 | risultati simili | diversi |
+
+**Varianti.**
+
+> **V-017** · 2h · long · filtro F1: chiusura sopra EMA(200) · ingresso E9: MACD (12, 26, 9) incrocia verso l'alto
+> il segnale · conferma nessuna · tipo M · stop S1: 2 × ATR(14) · uscite U3: trailing a 3 × ATR(14), U4: segnale
+> opposto.
+>
+> **V-018** · stessa, short: chiusura sotto EMA(200), incrocio verso il basso.
+
+Motivi: 2h perche' a 4h i trade erano troppo pochi (bozze B-40, B-41: 114 e 90); EMA(200) come direzione di fondo;
+uscita al segnale opposto perche' e' l'uso classico del MACD, piu' il trailing per proteggere i guadagni. Stima:
+V-017 232 trade, V-018 191 trade.
+
+**Previsione.** R medio fra −0,15 e +0,1 R, p-value sopra 0,05 per entrambe.
