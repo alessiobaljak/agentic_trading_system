@@ -100,3 +100,65 @@ def test_senza_firebase_non_scrive_niente(tmp_path, capsys):
     assert es.main(["--uscita", str(uscita)]) == 0
     assert not os.path.exists(uscita)
     assert "niente da esportare" in capsys.readouterr().out
+
+
+def test_un_secondo_giro_riprende_senza_rileggere_firestore(tmp_path, monkeypatch):
+    fb = _fb_con_dati()
+    uscita = tmp_path / "archivio"
+    primo = es.esporta(fb, str(uscita), None, tetto_letture=1000)
+    assert primo["completo"] is True
+    letture_prima = fb.letture()["totale"]
+
+    def mai(*a, **k):
+        raise AssertionError("un file gia' scritto non si rilegge")
+
+    monkeypatch.setattr(fb, "documenti", mai)
+    secondo = es.esporta(fb, str(uscita), None, tetto_letture=1000)
+    assert secondo["completo"] is True and secondo["nuovi"] == 0
+    assert fb.letture()["totale"] == letture_prima
+    assert {f["file"] for f in secondo["file"]} == {f["file"] for f in primo["file"]}
+
+
+def test_i_file_di_un_giro_fermato_senza_indice_si_ritrovano(tmp_path):
+    fb = _fb_con_dati()
+    uscita = tmp_path / "archivio"
+    es.esporta(fb, str(uscita), None, tetto_letture=1000)
+    os.remove(uscita / "INDICE.json")       # come il giro del 18 ott, fermato a 900 s
+    indice = es.esporta(fb, str(uscita), None, tetto_letture=1000)
+    assert indice["nuovi"] == 0
+    assert "firestore/trades.json.gz" in {f["file"] for f in indice["file"]}
+
+
+def test_a_tempo_finito_si_ferma_con_l_indice_salvato(tmp_path):
+    fb = _fb_con_dati()
+    uscita = tmp_path / "archivio"
+    indice = es.esporta(fb, str(uscita), None, tetto_letture=1000, tempo_max_s=0)
+    assert indice["completo"] is False
+    assert any(f["file"] == "(il resto)" for f in indice["fuori"])
+    assert json.loads((uscita / "INDICE.json").read_text(encoding="utf-8"))["completo"] is False
+    assert "DA CONTINUARE" in es.riepilogo(indice, "a")
+
+
+def test_una_cartella_grande_si_divide_in_parti_e_i_gz_interni_si_puliscono(tmp_path, monkeypatch):
+    fb = FirebaseClient()
+    dati = tmp_path / "data"
+    (dati / "selettore").mkdir(parents=True)
+    for i in range(3):
+        (dati / "selettore" / f"giro_{i}.jsonl").write_text("x" * 2000 + "\n", encoding="utf-8")
+    with gzip.open(dati / "selettore" / "vecchio.jsonl.gz", "wt", encoding="utf-8") as f:
+        f.write(json.dumps({"api_key": "abc123", "r": 0.5}) + "\n")
+    monkeypatch.setattr(es, "PARTE_MB_GREZZI", 0.003)   # circa un file per parte
+    uscita = tmp_path / "archivio"
+    indice = es.esporta(fb, str(uscita), str(dati), tetto_letture=1000)
+    parti = sorted(f["file"] for f in indice["file"] if f["file"].startswith("macchina/selettore_parte"))
+    assert len(parti) >= 3
+    trovato = False
+    for rel in parti:
+        with tarfile.open(uscita / rel) as tar:
+            for m in tar.getmembers():
+                if m.name.endswith("vecchio.jsonl.gz"):
+                    riga = gzip.decompress(tar.extractfile(m).read()).decode("utf-8")
+                    assert json.loads(riga) == {"api_key": "[OSCURATO]", "r": 0.5}
+                    trovato = True
+    assert trovato
+    assert "selettore" in indice["cartelle_finite"]

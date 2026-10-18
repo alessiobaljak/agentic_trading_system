@@ -30,6 +30,11 @@ poi si copiano in ordine di importanza finche' il totale resta sotto `TETTO_LETT
 Le collection lasciate fuori sono scritte nell'indice e nel riepilogo: si copiano un
 altro giorno.
 
+TEMPO. Il canale ops ferma un comando dopo 900 secondi: il primo giro (ops 0624) e' stato
+fermato a meta' delle cartelle della macchina. Ci si ferma da soli dopo `TEMPO_MAX_S`, con
+l'indice salvato; rilanciando, si riprende da dove ci si era fermati senza rileggere
+Firestore. Le cartelle grandi si dividono in parti.
+
 Senza Firebase collegato non scrive niente (cosi' i test e le macchine di sviluppo non
 lasciano archivi vuoti nel repo).
 
@@ -47,6 +52,7 @@ import os
 import re
 import sys
 import tarfile
+import time
 from datetime import datetime, timezone
 from typing import Any, Optional
 
@@ -58,8 +64,13 @@ TETTO_LETTURE = int(os.getenv("ESPORTA_TETTO_LETTURE", "20000"))
 #: un file oltre questa dimensione (compresso) non si scrive: GitHub rifiuta i file
 #: sopra i 100 MB
 TETTO_FILE_MB = float(os.getenv("ESPORTA_TETTO_FILE_MB", "90"))
-#: tutto l'archivio di un giro, compresso
+#: tutto l'archivio, compresso
 TETTO_TOTALE_MB = float(os.getenv("ESPORTA_TETTO_TOTALE_MB", "200"))
+#: il canale ops ferma un comando dopo 900 s (`OPS_TIMEOUT_S`): ci si ferma prima, con
+#: l'indice salvato, e il giro dopo riprende
+TEMPO_MAX_S = float(os.getenv("ESPORTA_TEMPO_MAX_S", "780"))
+#: una cartella della macchina oltre questo peso (non compresso) si divide in parti
+PARTE_MB_GREZZI = float(os.getenv("ESPORTA_PARTE_MB", "300"))
 
 #: prima le collection che non si possono rifare (i trade, il registro e le specifiche
 #: delle strategie), poi le misure; le altre in ordine alfabetico, dopo queste
@@ -103,47 +114,54 @@ def _json_gz(dati: Any) -> bytes:
     return gzip.compress(testo.encode("utf-8"), mtime=0)
 
 
-def _pulisci_testo(nome: str, grezzo: bytes) -> bytes:
-    """Un file di testo della macchina, con la stessa pulizia di Firebase."""
+#: «"chiave segreta": "valore"» dentro un testo JSON, trovato senza leggere il JSON: i file
+#: della macchina sono grandi, e leggerli riga per riga ha fatto scadere il primo giro
+#: (ops 0624, 900 secondi). I numeri restano (i conteggi dei token sono misure), tranne
+#: il numero della chat Telegram, che e' un indirizzo.
+COPPIA_SEGRETA = re.compile(
+    r'("[^"\n]*(?:api[_-]?key|secret|token|password|passwd|credential|private[_-]?key'
+    r'|service[_-]?account|chat[_-]?id|webhook)[^"\n]*"\s*:\s*)"(?:[^"\\\n]|\\.)*"', re.I)
+CHAT_NUMERO = re.compile(r'("[^"\n]*chat[_-]?id[^"\n]*"\s*:\s*)-?\d+', re.I)
+
+
+def _pulisci_testo(testo: str) -> str:
+    """Un testo della macchina, con la pulizia di `oscura` fatta sul testo."""
+    testo = COPPIA_SEGRETA.sub(r'\1"[OSCURATO]"', testo)
+    testo = CHAT_NUMERO.sub(r'\1"[OSCURATO]"', testo)
+    return EMAIL.sub("[EMAIL]", redact(testo))
+
+
+def _pulisci_file(nome: str, grezzo: bytes) -> bytes:
+    """Il contenuto di un file della macchina da mettere nell'archivio: i testi puliti,
+    i `.gz` aperti, puliti e richiusi, il resto com'e'."""
+    nome = nome.lower()
+    if nome.endswith(".gz"):
+        try:
+            dentro = gzip.decompress(grezzo).decode("utf-8")
+        except (OSError, EOFError, UnicodeDecodeError):
+            return grezzo
+        return gzip.compress(_pulisci_testo(dentro).encode("utf-8"), mtime=0)
+    if not nome.endswith(TESTO):
+        return grezzo
     try:
-        testo = grezzo.decode("utf-8")
+        return _pulisci_testo(grezzo.decode("utf-8")).encode("utf-8")
     except UnicodeDecodeError:
         return grezzo
-    if nome.endswith(".json"):
-        try:
-            return json.dumps(oscura(json.loads(testo)), ensure_ascii=False,
-                              default=str).encode("utf-8")
-        except ValueError:
-            pass
-    if nome.endswith(".jsonl"):
-        righe = []
-        for riga in testo.splitlines():
-            try:
-                righe.append(json.dumps(oscura(json.loads(riga)), ensure_ascii=False,
-                                        default=str))
-            except ValueError:
-                righe.append(EMAIL.sub("[EMAIL]", redact(riga)))
-        return ("\n".join(righe) + "\n").encode("utf-8")
-    return EMAIL.sub("[EMAIL]", redact(testo)).encode("utf-8")
 
 
-def _tar_gz(cartella: str, nomi: list[str]) -> tuple[bytes, int]:
-    """Un archivio dei file `nomi` (percorsi relativi a `cartella`), puliti."""
-    buf = io.BytesIO()
-    n = 0
-    with tarfile.open(fileobj=buf, mode="w:gz") as tar:
-        for rel in nomi:
-            percorso = os.path.join(cartella, rel)
-            with open(percorso, "rb") as f:
-                grezzo = f.read()
-            if rel.lower().endswith(TESTO):
-                grezzo = _pulisci_testo(rel.lower(), grezzo)
-            info = tarfile.TarInfo(rel)
-            info.size = len(grezzo)
-            info.mtime = int(os.path.getmtime(percorso))
-            tar.addfile(info, io.BytesIO(grezzo))
-            n += 1
-    return buf.getvalue(), n
+def _parti(cartella: str, nomi: list[str]) -> list[list[str]]:
+    """I file divisi in parti di al massimo PARTE_MB_GREZZI MB non compressi, cosi'
+    ogni archivio resta sotto il tetto di GitHub e un giro interrotto non perde tutto."""
+    parti: list[list[str]] = [[]]
+    peso = 0.0
+    for rel in nomi:
+        mb = os.path.getsize(os.path.join(cartella, rel)) / 1e6
+        if parti[-1] and peso + mb > PARTE_MB_GREZZI:
+            parti.append([])
+            peso = 0.0
+        parti[-1].append(rel)
+        peso += mb
+    return parti
 
 
 def _ordine(collezioni: list[str]) -> list[str]:
@@ -151,115 +169,236 @@ def _ordine(collezioni: list[str]) -> list[str]:
     return prima + sorted(c for c in collezioni if c not in PRIORITA)
 
 
-class Archivio:
-    """Scrive i file e tiene l'indice, con i tetti di dimensione."""
+def _sha(percorso: str) -> str:
+    h = hashlib.sha256()
+    with open(percorso, "rb") as f:
+        for blocco in iter(lambda: f.read(1 << 20), b""):
+            h.update(blocco)
+    return h.hexdigest()
 
-    def __init__(self, uscita: str) -> None:
+
+class TempoFinito(Exception):
+    """Il giro ha usato il suo tempo: si salva l'indice e si riprende al giro dopo."""
+
+
+class Archivio:
+    """Scrive i file e tiene l'indice, con i tetti di dimensione e di tempo.
+
+    RIPRENDE DA DOVE SI E' FERMATO (18 ott 2026). Il canale ops ferma un comando dopo 900
+    secondi (`OPS_TIMEOUT_S`): il primo giro e' stato fermato a meta' delle cartelle della
+    macchina. Ogni file si scrive per intero e poi si rinomina, l'indice si riscrive dopo
+    ogni file, e un file che c'e' gia' non si rifa': un secondo giro non rilegge Firestore
+    (la quota) e continua dalla cartella dove si era fermato."""
+
+    def __init__(self, uscita: str, tempo_max_s: float = TEMPO_MAX_S) -> None:
         self.uscita = uscita
         self.file: list[dict] = []
         self.fuori: list[dict] = []
         self.byte = 0
+        self.nuovi = 0
+        self.scadenza = time.monotonic() + tempo_max_s
+        self.cartelle_finite: list[str] = []
+        indice = os.path.join(uscita, "INDICE.json")
+        if os.path.exists(indice):
+            with open(indice, encoding="utf-8") as f:
+                vecchio = json.load(f)
+            self.file = vecchio.get("file", [])
+            self.cartelle_finite = vecchio.get("cartelle_finite", [])
+        noti = {f["file"] for f in self.file}
+        # i file scritti da un giro fermato prima di scrivere l'indice
+        for radice, _, files in os.walk(uscita):
+            for nome in sorted(files):
+                rel = os.path.relpath(os.path.join(radice, nome), uscita)
+                if rel == "INDICE.json" or rel.endswith(".tmp") or rel in noti:
+                    continue
+                percorso = os.path.join(radice, nome)
+                self.file.append({"file": rel, "tipo": rel.split(os.sep, 1)[0], "voci": None,
+                                  "byte": os.path.getsize(percorso), "sha256": _sha(percorso)})
+                if rel.startswith("macchina" + os.sep) and "_parte" not in rel:
+                    self.cartelle_finite.append(nome[:-len(".tar.gz")])
+        self.byte = sum(f["byte"] for f in self.file)
 
-    def scrivi(self, rel: str, dati: bytes, voci: int, tipo: str) -> bool:
-        mb = len(dati) / 1e6
+    def fatto(self, rel: str) -> bool:
+        return os.path.exists(os.path.join(self.uscita, rel))
+
+    def controlla_tempo(self) -> None:
+        if time.monotonic() > self.scadenza:
+            raise TempoFinito()
+
+    def _salva_indice(self, letture: int, tetto_letture: int, completo: bool) -> dict:
+        indice = {
+            "creato": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+            "completo": completo,
+            "letture_firestore": letture,
+            "tetto_letture": tetto_letture,
+            "byte_totali": self.byte,
+            "file": self.file,
+            "cartelle_finite": self.cartelle_finite,
+            "fuori": self.fuori,
+        }
+        os.makedirs(self.uscita, exist_ok=True)
+        tmp = os.path.join(self.uscita, "INDICE.json.tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(indice, f, ensure_ascii=False, indent=1)
+        os.replace(tmp, os.path.join(self.uscita, "INDICE.json"))
+        return indice
+
+    def _accetta(self, rel: str, byte: int) -> bool:
+        mb = byte / 1e6
         if mb > TETTO_FILE_MB:
             self.fuori.append({"file": rel, "motivo": f"{mb:.1f} MB compressi, oltre "
                                f"il tetto di {TETTO_FILE_MB:g} MB per file"})
             return False
-        if (self.byte + len(dati)) / 1e6 > TETTO_TOTALE_MB:
+        if (self.byte + byte) / 1e6 > TETTO_TOTALE_MB:
             self.fuori.append({"file": rel, "motivo": f"tetto dell'archivio "
                                f"({TETTO_TOTALE_MB:g} MB) raggiunto"})
             return False
+        return True
+
+    def _registra(self, rel: str, percorso: str, voci: int, tipo: str) -> None:
+        byte = os.path.getsize(percorso)
+        self.byte += byte
+        self.nuovi += 1
+        self.file.append({"file": rel, "tipo": tipo, "voci": voci, "byte": byte,
+                          "sha256": _sha(percorso)})
+        print(f"[esporta] {rel}: {voci} voci, {byte / 1e6:.1f} MB", flush=True)
+
+    def scrivi(self, rel: str, dati: bytes, voci: int, tipo: str) -> bool:
+        if not self._accetta(rel, len(dati)):
+            return False
         percorso = os.path.join(self.uscita, rel)
         os.makedirs(os.path.dirname(percorso), exist_ok=True)
-        with open(percorso, "wb") as f:
+        with open(percorso + ".tmp", "wb") as f:
             f.write(dati)
-        self.byte += len(dati)
-        self.file.append({"file": rel, "tipo": tipo, "voci": voci, "byte": len(dati),
-                          "sha256": hashlib.sha256(dati).hexdigest()})
+        os.replace(percorso + ".tmp", percorso)
+        self._registra(rel, percorso, voci, tipo)
+        return True
+
+    def scrivi_tar(self, rel: str, cartella: str, nomi: list[str]) -> bool:
+        """Un archivio dei file `nomi` (relativi a `cartella`), puliti, scritto su disco
+        man mano: niente archivi interi in memoria."""
+        percorso = os.path.join(self.uscita, rel)
+        os.makedirs(os.path.dirname(percorso), exist_ok=True)
+        with tarfile.open(percorso + ".tmp", mode="w:gz", compresslevel=6) as tar:
+            for nome in nomi:
+                self.controlla_tempo()
+                origine = os.path.join(cartella, nome)
+                with open(origine, "rb") as f:
+                    grezzo = _pulisci_file(nome, f.read())
+                info = tarfile.TarInfo(nome)
+                info.size = len(grezzo)
+                info.mtime = int(os.path.getmtime(origine))
+                tar.addfile(info, io.BytesIO(grezzo))
+        if not self._accetta(rel, os.path.getsize(percorso + ".tmp")):
+            os.remove(percorso + ".tmp")
+            return False
+        os.replace(percorso + ".tmp", percorso)
+        self._registra(rel, percorso, len(nomi), "macchina")
         return True
 
 
+def _file_della_cartella(arch: Archivio, cartella_dati: str, voce: str) -> list[str]:
+    nomi = []
+    for radice, _, files in os.walk(os.path.join(cartella_dati, voce)):
+        for f in sorted(files):
+            rel = os.path.relpath(os.path.join(radice, f), cartella_dati)
+            if FILE_ESCLUSI.search(f):
+                arch.fuori.append({"file": f"data/{rel}", "motivo": "nome da file "
+                                   "riservato: mai archiviato"})
+            else:
+                nomi.append(rel)
+    return sorted(nomi)
+
+
 def esporta(fb, uscita: str, cartella_dati: Optional[str],
-            tetto_letture: int = TETTO_LETTURE) -> dict:
-    """Esporta Firestore, RTDB e le cartelle di `cartella_dati` in `uscita`.
-    Ritorna l'indice (lo stesso che finisce in INDICE.json)."""
-    arch = Archivio(uscita)
+            tetto_letture: int = TETTO_LETTURE, tempo_max_s: float = TEMPO_MAX_S) -> dict:
+    """Esporta Firestore, RTDB e le cartelle di `cartella_dati` in `uscita`, riprendendo
+    da un giro precedente se c'e'. Ritorna l'indice (lo stesso di INDICE.json)."""
+    arch = Archivio(uscita, tempo_max_s)
     letture = 0
-
-    # 1) Firestore: conta, poi copia in ordine di importanza fino al tetto
-    for nome in _ordine(fb.elenca_collezioni()):
-        quanti = fb.count_collection(nome, chi="esporta_storia")
-        letture += max(1, (quanti + 999) // 1000)
-        if letture + quanti > tetto_letture:
-            arch.fuori.append({"file": f"firestore/{nome}.json.gz", "motivo":
-                               f"{quanti} documenti: oltre il tetto di {tetto_letture} "
-                               f"letture per giro (gia' usate {letture})"})
-            continue
-        docs = fb.documenti(nome, chi="esporta_storia")
-        letture += len(docs)
-        arch.scrivi(f"firestore/{nome}.json.gz", _json_gz(docs), len(docs), "firestore")
-
-    # 2) Realtime DB: un file per nodo di primo livello
-    for nodo in fb.figli_rtdb("/"):
-        dati = fb.get_rtdb(f"/{nodo}")
-        voci = len(dati) if isinstance(dati, (dict, list)) else 1
-        arch.scrivi(f"rtdb/{nodo}.json.gz", _json_gz(dati), voci, "rtdb")
-
-    # 3) la macchina: una cartella di data/ per archivio, i file sciolti insieme
-    if cartella_dati and os.path.isdir(cartella_dati):
-        sciolti = []
-        for voce in sorted(os.listdir(cartella_dati)):
-            percorso = os.path.join(cartella_dati, voce)
-            if FILE_ESCLUSI.search(voce):
-                arch.fuori.append({"file": f"data/{voce}", "motivo": "nome da file "
-                                   "riservato (.env, chiavi, credenziali): mai archiviato"})
+    try:
+        # 1) Firestore: conta, poi copia in ordine di importanza fino al tetto
+        for nome in _ordine(fb.elenca_collezioni()):
+            rel = f"firestore/{nome}.json.gz"
+            if arch.fatto(rel):
                 continue
-            if os.path.isfile(percorso):
-                sciolti.append(voce)
+            arch.controlla_tempo()
+            quanti = fb.count_collection(nome, chi="esporta_storia")
+            letture += max(1, (quanti + 999) // 1000)
+            if letture + quanti > tetto_letture:
+                arch.fuori.append({"file": rel, "motivo": f"{quanti} documenti: oltre il "
+                                   f"tetto di {tetto_letture} letture per giro (gia' usate "
+                                   f"{letture})"})
                 continue
-            if not os.path.isdir(percorso):
-                continue
-            nomi = []
-            for radice, _, files in os.walk(percorso):
-                for f in sorted(files):
-                    rel = os.path.relpath(os.path.join(radice, f), cartella_dati)
-                    if FILE_ESCLUSI.search(f):
-                        arch.fuori.append({"file": f"data/{rel}", "motivo": "nome da "
-                                           "file riservato: mai archiviato"})
-                    else:
-                        nomi.append(rel)
-            if nomi:
-                dati, n = _tar_gz(cartella_dati, nomi)
-                arch.scrivi(f"macchina/{voce}.tar.gz", dati, n, "macchina")
-        if sciolti:
-            dati, n = _tar_gz(cartella_dati, sciolti)
-            arch.scrivi("macchina/file_sciolti.tar.gz", dati, n, "macchina")
+            docs = fb.documenti(nome, chi="esporta_storia")
+            letture += len(docs)
+            arch.scrivi(rel, _json_gz(docs), len(docs), "firestore")
+            arch._salva_indice(letture, tetto_letture, False)
 
-    indice = {
-        "creato": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-        "letture_firestore": letture,
-        "tetto_letture": tetto_letture,
-        "byte_totali": arch.byte,
-        "file": arch.file,
-        "fuori": arch.fuori,
-    }
-    os.makedirs(uscita, exist_ok=True)
-    with open(os.path.join(uscita, "INDICE.json"), "w", encoding="utf-8") as f:
-        json.dump(indice, f, ensure_ascii=False, indent=1)
+        # 2) Realtime DB: un file per nodo di primo livello
+        for nodo in fb.figli_rtdb("/"):
+            rel = f"rtdb/{nodo}.json.gz"
+            if arch.fatto(rel):
+                continue
+            arch.controlla_tempo()
+            dati = fb.get_rtdb(f"/{nodo}")
+            voci = len(dati) if isinstance(dati, (dict, list)) else 1
+            arch.scrivi(rel, _json_gz(dati), voci, "rtdb")
+            arch._salva_indice(letture, tetto_letture, False)
+
+        # 3) la macchina: una cartella di data/ per archivio (diviso in parti se grande),
+        #    i file sciolti insieme
+        if cartella_dati and os.path.isdir(cartella_dati):
+            sciolti = []
+            for voce in sorted(os.listdir(cartella_dati)):
+                percorso = os.path.join(cartella_dati, voce)
+                if FILE_ESCLUSI.search(voce):
+                    arch.fuori.append({"file": f"data/{voce}", "motivo": "nome da file "
+                                       "riservato (.env, chiavi, credenziali): mai archiviato"})
+                    continue
+                if os.path.isfile(percorso):
+                    sciolti.append(voce)
+                    continue
+                if not os.path.isdir(percorso) or voce in arch.cartelle_finite:
+                    continue
+                parti = _parti(cartella_dati, _file_della_cartella(arch, cartella_dati, voce))
+                for i, nomi in enumerate(parti, 1):
+                    if not nomi:
+                        continue
+                    rel = (f"macchina/{voce}.tar.gz" if len(parti) == 1
+                           else f"macchina/{voce}_parte{i}.tar.gz")
+                    if arch.fatto(rel):
+                        continue
+                    arch.scrivi_tar(rel, cartella_dati, nomi)
+                    arch._salva_indice(letture, tetto_letture, False)
+                arch.cartelle_finite.append(voce)
+                arch._salva_indice(letture, tetto_letture, False)
+            if sciolti and not arch.fatto("macchina/file_sciolti.tar.gz"):
+                arch.scrivi_tar("macchina/file_sciolti.tar.gz", cartella_dati, sciolti)
+    except TempoFinito:
+        arch.fuori.append({"file": "(il resto)", "motivo": f"tempo del giro finito "
+                           f"({tempo_max_s:g} s): rilanciare esporta-storia, riprende da qui"})
+        indice = arch._salva_indice(letture, tetto_letture, False)
+        indice["nuovi"] = arch.nuovi
+        return indice
+    indice = arch._salva_indice(letture, tetto_letture, True)
+    indice["nuovi"] = arch.nuovi
     return indice
 
 
 def riepilogo(indice: dict, uscita_rel: str) -> str:
-    righe = [f"Archivio in {uscita_rel} ({indice['creato']})",
-             f"file scritti: {len(indice['file'])} · {indice['byte_totali'] / 1e6:.1f} MB "
-             f"compressi · letture Firestore: {indice['letture_firestore']} "
-             f"(tetto {indice['tetto_letture']})", ""]
+    stato = ("COMPLETO" if indice["completo"]
+             else "DA CONTINUARE: rilanciare esporta-storia, riprende da dove si e' fermato")
+    righe = [f"Archivio in {uscita_rel} ({indice['creato']}): {stato}",
+             f"file: {len(indice['file'])} ({indice.get('nuovi', 0)} scritti in questo giro) · "
+             f"{indice['byte_totali'] / 1e6:.1f} MB compressi · letture Firestore in questo "
+             f"giro: {indice['letture_firestore']} (tetto {indice['tetto_letture']})", ""]
     for f in indice["file"]:
-        righe.append(f"  {f['file']:<48} {f['voci']:>7} voci {f['byte'] / 1e3:>9.1f} kB  "
+        voci = "?" if f.get("voci") is None else f["voci"]
+        righe.append(f"  {f['file']:<48} {voci:>7} voci {f['byte'] / 1e3:>9.1f} kB  "
                      f"sha256 {f['sha256'][:12]}")
     if indice["fuori"]:
-        righe += ["", "RIMASTI FUORI (da copiare un altro giorno o a mano):"]
+        righe += ["", "RIMASTI FUORI (con il motivo):"]
         righe += [f"  {f['file']}: {f['motivo']}" for f in indice["fuori"]]
     return "\n".join(righe)
 
