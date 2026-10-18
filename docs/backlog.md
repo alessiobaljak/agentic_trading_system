@@ -40,7 +40,12 @@ un'esplosione il prezzo non sa dove va, tranne dopo i crolli estremi (movimento 
 adesso la regola esatta e provarla una volta sola sul 2023, che nessuno ha usato per questa domanda; (b) capire quali
 crolli rimbalzano con i dati sulle posizioni aperte (interesse aperto che crolla durante il crollo = liquidazioni
 forzate): servono i dati `metrics` di Binance, cioè la voce B6 parcheggiata il 23 set; (c) misurare lo scarto di prezzo
-vero nei crolli, quando il libro degli ordini si svuota: i costi del 2023 sono ottimisti proprio lì.
+vero nei crolli, quando il libro degli ordini si svuota: i costi del 2023 sono ottimisti proprio lì. **Esito (18 ott 2026, programma 5, senza chiedere: delega del proprietario):** provato con le regole scritte prima
+(`research/programma5/STATO.md`). Al minuto con l'interesse aperto (I-001) non regge; a qualche ora sì: il long dopo un
+crollo di 4 ore (z ≤ −5, tenuta 12 ore, scarto di prezzo doppio) fa +2,51% netto a trade su C (2020-2022), +0,70% su V
+(2023) e **+2,20% su R** (2024-2026/09, 211 trade, positivo in ogni anno e su 12 monete su 12, anche a costi doppi e
+togliendo il giorno migliore), ma la prova statistica su R è p 0,0037 contro la soglia 0,0017 (`idee/I-017/R.md`): non
+supera l'esame, per pochi eventi. I crolli che rimbalzano sono quelli con il perpetuo sotto lo spot (E-004).
 
 ### P12. Trovate scrivendo la storia del progetto (18 ott 2026)
 **Perché:** i sette lettori della storia (`docs/storia/`) hanno trovato cose che nessun documento scriveva. Da
