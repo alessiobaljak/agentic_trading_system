@@ -16,12 +16,24 @@ from pathlib import Path
 RADICE = Path(__file__).resolve().parents[3]
 IDEE = RADICE / "research" / "programma5" / "idee"
 STRUMENTI = RADICE / "research" / "programma5" / "strumenti"
-COMUNI = ["motore5.py", "ore.py", "eventi.py", "idee_minuti.py", "idee_ore.py", "idee_giorno.py", "esplosioni_oi.py",
-          "rapporto.py"]
+COMUNI = ["motore5.py", "ore.py", "eventi.py", "idee_minuti.py", "idee_ore.py", "idee_ore2.py", "idee_giorno.py", "esplosioni_oi.py",
+          "rapporto.py", "esplorazione.py"]
 
 
 def impronta(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+def _soglie(cartella: Path, n: int) -> str:
+    from research.programma5.strumenti.rapporto import esame_idea
+    cfg = esame_idea(cartella)
+    if cfg.get("solo_r"):
+        return (f"Prova solo su R (REGOLE.md, 6ter, punto 3): V è costruzione; su R p ≤ {cfg['soglia_r']} / numero "
+                "delle varianti portate su R, con tutte le condizioni di R e il giorno migliore tolto.")
+    testo = f"Soglia di V: p ≤ {cfg['soglia_v']} / {n} = {cfg['soglia_v'] / n:.5f}"
+    if cfg.get("senza_giorno_migliore"):
+        testo += "; su R anche positivo togliendo il giorno migliore (REGOLE.md, 6ter)"
+    return testo + "."
 
 
 def congela(idea: str) -> str:
@@ -35,7 +47,7 @@ def congela(idea: str) -> str:
              f"Congelata prima di aprire V (REGOLE.md, sezione 4), sul commit `{commit}`. Le varianti, i valori e il codice "
              "qui sotto non si cambiano più per questa idea: V e R si calcolano con questi file, e un file con "
              "un'impronta diversa vuol dire un'idea nuova.", "",
-             f"Soglia di V: p ≤ 0,005 / {len(mod.VARIANTI)} = {0.005 / len(mod.VARIANTI):.5f} (REGOLE.md, sezione 5).", "",
+             _soglie(cartella, len(mod.VARIANTI)), "",
              "## Le varianti", "", "```json", json.dumps(mod.VARIANTI, ensure_ascii=False, indent=1), "```", "",
              "## Su C (da `C.json`)", "", "| Variante | Trade | Netto | Intervallo al 95% | Caso (netto) |",
              "|---|---|---|---|---|"]
@@ -45,7 +57,7 @@ def congela(idea: str) -> str:
                          f"{100 * e['netto']['basso']:+.3f}; {100 * e['netto']['alto']:+.3f} | "
                          f"{100 * e.get('caso_netto', float('nan')):+.3f}% |")
     righe += ["", "## Impronte SHA-256 dei file del calcolo", "", "| File | SHA-256 |", "|---|---|"]
-    for p in [cartella / "scheda.md", cartella / "calcolo.py"] + [STRUMENTI / f for f in COMUNI]:
+    for p in [cartella / "scheda.md", cartella / "calcolo.py", cartella / "esame.json"] + [STRUMENTI / f for f in COMUNI]:
         if p.exists():
             righe.append(f"| `{p.relative_to(RADICE)}` | `{impronta(p)}` |")
     testo = "\n".join(righe) + "\n"
