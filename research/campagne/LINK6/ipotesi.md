@@ -594,3 +594,101 @@ con piu' rumore); 1h e uscita dopo un giorno, l'orizzonte dell'inversione di bre
 I-02, per uscite gia' scritte prima. Stima: V-022 273 trade, V-023 301 trade.
 
 **Previsione.** R medio fra −0,2 e +0,05 R, p-value sopra 0,05 per entrambe (spiegazioni 2 e 8).
+
+---
+
+# Quinto lotto (scritto il 18 ottobre 2026, dopo i lotti 1, 2 e 4; Fase 5: famiglie non ancora provate)
+
+Dichiarazione (Fase 3, punto 3). I-12 differisce da tutte le varianti provate per il segnale (E8, mai usato); I-13
+differisce da V-005 e V-006 (la rottura del range asiatico) per filtro, ingresso e conferma, e da V-001 e V-002 per
+filtro, ingresso, conferma, stop e uscite. Le ho scelte perche' la Fase 5 chiede di provare famiglie diverse del
+catalogo finche' restano tentativi: lo stocastico, il filtro di sessione e la conferma di volume non erano ancora
+stati usati. I-12 e' ancora un'idea di ritorno alla media (dopo I-05, I-07, I-11, tutte fallite); I-13 e' ancora
+un'idea di prosecuzione intragiornaliera (dopo I-03, fallita). Lo scrivo per la Fase 5: se una di queste supera, va
+letta con questo in mente.
+
+## I-12 — Stocastico: incrocio di %K su %D agli estremi
+
+**Fonte.** G. C. Lane, «Lane's Stochastics», *Technical Analysis of Stocks & Commodities*, 1984: l'incrocio di %K e
+%D nelle zone estreme (sotto 20, sopra 80) segnala la fine di un movimento di breve.
+
+**Affermazione verificabile.** Su LINKUSDT a 2 ore, quando %K incrocia verso l'alto %D con %K sotto 20, il prezzo
+nelle 24 ore successive sale abbastanza da dare, con stop a 1,5 ATR, target a 2 R e uscita dopo 12 candele, almeno
+0,2 R dopo i costi, piu' delle casuali. Simmetrico per lo short sopra 80.
+
+**Sotto-domande.** Come I-11: ribassi rapidi, chi vende in fretta, rimbalzi in ore. Diverso da I-11: lo stocastico
+guarda la posizione della chiusura nel range di 14 candele, non i rialzi e ribassi di chiusura.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Prosecuzione di breve nelle crypto (come I-11) | R negativo | positivo |
+| 3 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 4 | Costi | R lordo positivo, netto negativo | positivo a costi doppi |
+| 5 | Volatilita' | casuali con stessa larghezza simili | il segnale le batte |
+| 6 | Pochi rimbalzi enormi | verifica 4 fallisce | superata |
+| 7 | Raggruppamento | trade concentrati | distribuiti |
+| 8 | Stessa famiglia di I-05, I-07, I-11 | risultati simili (negativi) | positivi |
+| 9 | L'incrocio avviene a rimbalzo gia' iniziato | R vicino a zero meno i costi | positivo |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | Il target a 2 R e' lontano per un rimbalzo | molte uscite a tempo | target frequenti |
+
+**Varianti.**
+
+> **V-024** · 2h · long · nessun filtro · ingresso E8: stocastico (14, 3, 3), %K incrocia verso l'alto %D con %K sotto
+> 20 · conferma nessuna · tipo M · stop S1: 1,5 × ATR(14) · uscite U1: target 2 R, U2: dopo 12 candele.
+>
+> **V-025** · stessa, short: %K incrocia verso il basso %D con %K sopra 80.
+
+Motivi: a 4h il long dava 115 trade (bozza B-38), sotto i minimi; con il filtro di tendenza i trade erano 8-36 (bozze
+B-28 ... B-31): si usa 2h senza filtro. Uscita dopo 12 candele (un giorno). Stima: V-024 238 trade, V-025 366 trade.
+
+**Previsione.** R medio fra −0,2 e +0,05 R, p-value sopra 0,05 per entrambe (spiegazione 8).
+
+---
+
+## I-13 — Rottura nelle ore degli Stati Uniti, con volume
+
+**Fonte.** T. Eross, F. McGroarty, A. Urquhart, S. Wolfe, 2019 (come I-03: volume e volatilita' di bitcoin piu' alti
+nelle ore europee e statunitensi). Gervais, Kaniel, Mingelgrin, 2001 (come I-04: il volume alto annuncia
+prosecuzione).
+
+**Affermazione verificabile.** Su LINKUSDT a 1 ora, nelle ore degli Stati Uniti (13:00-21:00 UTC), una chiusura
+sopra il massimo delle 20 candele precedenti con volume almeno 1,5 volte la media delle 20 precedenti annuncia un
+rialzo che, con stop al minimo delle ultime 5 candele, target a 2 R e uscita alle 21:00 UTC, da' almeno 0,2 R dopo i
+costi, piu' delle casuali. Simmetrico per lo short.
+
+**Sotto-domande.** Condizioni: notizie e flussi nelle ore statunitensi. Chi opera: operatori statunitensi, fondi.
+Perche' il prezzo proseguirebbe: una rottura con volume e' piu' spesso informata. Quando: entro la sera UTC.
+
+**Spiegazioni concorrenti.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Caso | come le casuali | p-value piccolo |
+| 2 | Falsa rottura | molti stop | prosecuzione |
+| 3 | Le casuali entrano in tutte le ore: la differenza puo' essere l'ora, non la rottura | — (limite noto) | — |
+| 4 | Tendenza di fondo | long nel 2020-2021, short nel 2022 | buono nei blocchi opposti |
+| 5 | Costi: stop stretti | costi doppi molto peggio | positivo a costi doppi |
+| 6 | Volatilita' | casuali con stessa larghezza simili | il segnale le batte |
+| 7 | Pochi giorni estremi | verifica 4 fallisce | superata |
+| 8 | Stessa famiglia di I-03 (fallita) | risultati simili | diversi |
+| 9 | Il volume alto e' esaurimento, non informazione | R negativo | positivo |
+| 10 | Generale fra le monete grandi | vale sulle monete di controllo | non vale |
+| 11 | Uscita alle 21:00 troppo presto | uscite a fine giornata positive ma piccole | — |
+
+**Varianti.**
+
+> **V-026** · 1h · long · filtro F5: sessione Stati Uniti · ingresso E3: rottura di Donchian a 20 · conferma C1: volume
+> relativo sopra 1,5 · tipo M · stop S2: minimo delle ultime 5 candele · uscite U1: target 2 R, U2s: uscita alle 21:00
+> UTC.
+>
+> **V-027** · stessa, short: rottura del minimo delle 20 candele precedenti, stop al massimo delle ultime 5.
+
+Motivi: Donchian a 20 candele (circa un giorno) perche' l'idea e' intragiornaliera; conferma di volume a 1,5 (la
+soglia piu' bassa) per non avere troppo pochi trade; stop e uscite come I-03, l'altra idea intragiornaliera. Stima:
+V-026 222 trade, V-027 197 trade.
+
+**Previsione.** R medio fra −0,15 e +0,1 R, p-value sopra 0,05 per entrambe (spiegazione 8).

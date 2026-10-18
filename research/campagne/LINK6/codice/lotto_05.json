@@ -1,0 +1,14 @@
+[
+{"id": "V-024", "ipotesi": "I-12", "fonte": "Lane, Lane's Stochastics, Technical Analysis of Stocks & Commodities, 1984",
+ "specifica": {"timeframe": "2h", "direzione": "long", "filtro": null, "ingresso": {"codice": "E8"}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 12}]},
+ "previsione": "R medio fra -0,2 e +0,05 R; p-value sopra 0,05"},
+{"id": "V-025", "ipotesi": "I-12", "fonte": "Lane, Lane's Stochastics, Technical Analysis of Stocks & Commodities, 1984",
+ "specifica": {"timeframe": "2h", "direzione": "short", "filtro": null, "ingresso": {"codice": "E8"}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 12}]},
+ "previsione": "R medio fra -0,2 e +0,05 R; p-value sopra 0,05"},
+{"id": "V-026", "ipotesi": "I-13", "fonte": "Eross, McGroarty, Urquhart, Wolfe, The intraday dynamics of bitcoin, Research in International Business and Finance, 2019; Gervais, Kaniel, Mingelgrin, The High-Volume Return Premium, Journal of Finance, 2001",
+ "specifica": {"timeframe": "1h", "direzione": "long", "filtro": {"codice": "F5", "sessione": "usa"}, "ingresso": {"codice": "E3", "n": 20}, "conferma": {"codice": "C1", "soglia": 1.5}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S2", "n": 5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2s"}]},
+ "previsione": "R medio fra -0,15 e +0,1 R; p-value sopra 0,05"},
+{"id": "V-027", "ipotesi": "I-13", "fonte": "Eross, McGroarty, Urquhart, Wolfe, The intraday dynamics of bitcoin, Research in International Business and Finance, 2019; Gervais, Kaniel, Mingelgrin, The High-Volume Return Premium, Journal of Finance, 2001",
+ "specifica": {"timeframe": "1h", "direzione": "short", "filtro": {"codice": "F5", "sessione": "usa"}, "ingresso": {"codice": "E3", "n": 20}, "conferma": {"codice": "C1", "soglia": 1.5}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S2", "n": 5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2s"}]},
+ "previsione": "R medio fra -0,15 e +0,1 R; p-value sopra 0,05"}
+]
