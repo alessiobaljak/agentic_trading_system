@@ -7,6 +7,11 @@ controllo giornaliero aggiunge qui IN CIMA una sezione `## AAAA-MM-GG` con 2-5 p
 numero e la sua fonte; se non c'è niente di nuovo lo scrive. La macchina pubblica l'ultima sezione
 nel report giornaliero in dashboard (sezione «Cosa abbiamo capito»): non va copiata altrove.
 
+## 2026-10-18 (sera: l'autopsia delle strategie vecchie, `research/autopsia/`)
+* **Uscite, stop e trailing non sono il problema**: su 19.429 trade di 73 varianti restituiscono il guadagno (61%) e prendono stop poi smentiti (13,7% contro 13,4%) come trade a caso con le stesse uscite (`research/autopsia/risultati.md`).
+* **Le strategie hanno un po' di direzione, troppo poca**: +0,039 R a trade sul caso (intervallo +0,018; +0,060), meno dei costi più il margine richiesto. Entrano dopo un movimento (+0,38 R in 4 candele), ma il ritardo non fa perdere: nel 2020-2022 i movimenti brevi continuavano, anche per il caso.
+* **La volatilità taglia i costi di tre volte** (da 0,087 a 0,031 R a trade; nel paper da 0,155 a 0,038), **ma le strategie vecchie perdono il vantaggio proprio nei momenti agitati** (+0,088 R sul caso nella calma, −0,015 nella fascia più agitata): per lo scalping sulla volatilità servono ingressi pensati per quei momenti.
+
 ## 2026-10-18 (la storia del progetto, `docs/storia/`)
 * **In quattro mesi il paper perde quasi esattamente i suoi costi:** 707 trade dal 16 settembre, −174,41 USDT; in R lordo −0,026, costi 0,087, netto −0,113 a trade (`ops/results/0622`, `0623`). Il gate prometteva un profit factor 2,02, il vissuto è 0,709 (stessa fonte).
 * **La ricerca a protocollo ha provato circa 730 varianti in 24 campagne: 4 al vault, 0 superati** (`docs/storia/README.md`, sezione 1), mentre lo stesso metodo trova 88 vantaggi inseriti su 88 (`research/collaudo_4/esiti.md`): il terreno cercato è povero, non lo strumento.

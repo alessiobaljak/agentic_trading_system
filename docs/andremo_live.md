@@ -4132,3 +4132,15 @@ avanti; il primo passo è la misura del carry semplice al netto di tutto, che no
 resta parcheggiato; il paper dei portafogli in un servizio separato, senza chiavi. Capito oggi: il bot calcola il funding
 come se l'intervallo fosse sempre di 8 ore (sulle monete a 4 ore conta metà del vero; `docs/backlog.md`, P12 punto 13); e
 per confermare in avanti una strategia con Sharpe 2 servono circa 1,6 anni di dati nuovi (proposta, sezione 3.6).
+
+### 18 ottobre, sera: l'autopsia delle strategie vecchie
+
+Il proprietario non vuole il carry («voglio fare trading se non addirittura scalping»), per lui lo scalping è «sfruttare
+la volatilità», e chiede di capire cosa è andato storto nelle strategie vecchie prima di farne di nuove. Fatto:
+`research/autopsia/` (regole committate alle 16:05 ora italiana prima di qualunque calcolo, risultati alle 16:10). 73
+varianti delle ricerche su BTC e LINK rieseguite sul periodo di costruzione, 19.429 trade contro 388.580 trade a caso con
+le stesse uscite. Capito oggi: uscite, stop e trailing si comportano come sul caso (non sono il problema); le strategie
+hanno un piccolo vantaggio di direzione (+0,039 R a trade); entrano in ritardo ma il ritardo non fa perdere; la
+volatilità taglia i costi di tre volte, ma le strategie vecchie il vantaggio lo hanno nella calma e lo perdono proprio
+nei momenti agitati. La proposta di ripartenza va riscritta intorno a questo (scalping sui momenti di forte volatilità,
+ingressi fatti apposta).

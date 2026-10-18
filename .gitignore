@@ -72,3 +72,6 @@ research/.sessione
 
 # copie di lavoro temporanee degli agenti
 .claude/worktrees/
+
+# autopsia delle strategie vecchie: il file dei trade (110 MB) si rifà con lo script
+research/autopsia/varianti.jsonl
