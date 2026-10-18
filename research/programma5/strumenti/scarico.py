@@ -63,15 +63,27 @@ def _scelte(tipo: str, s: str) -> list:
     return sorted(chiavi)
 
 
+def _prendi(url: str, tentativi: int = 6):
+    """``fetch_http`` con nuovi tentativi sugli errori di rete (connessioni interrotte), attese crescenti."""
+    import time
+    for k in range(tentativi):
+        try:
+            return fetch_http(url)
+        except OSError:
+            if k == tentativi - 1:
+                raise
+            time.sleep(2 ** k)
+
+
 def _scarica(chiave: str, s: str, tipo: str):
     nome = chiave.rsplit("/", 1)[1]
     dest = DATI / s / tipo / nome
     if dest.exists() and dest.with_suffix(".zip.ok").exists():
         return nome, dest.with_suffix(".zip.ok").read_text().strip()
-    contenuto = fetch_http(BASE + chiave)
+    contenuto = _prendi(BASE + chiave)
     if contenuto is None:
         return nome, None
-    somma = fetch_http(BASE + chiave + ".CHECKSUM")
+    somma = _prendi(BASE + chiave + ".CHECKSUM")
     impronta = hashlib.sha256(contenuto).hexdigest()
     if somma is not None and leggi_checksum(somma, chiave) != impronta:
         raise RuntimeError(f"CHECKSUM diverso per {chiave}")
