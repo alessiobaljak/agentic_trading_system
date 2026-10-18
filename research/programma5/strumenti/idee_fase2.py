@@ -109,3 +109,32 @@ def per_moneta_cella(idea, varianti, s, periodo):
             casi.append(c)
         out[n] = (t, pd.concat(casi, ignore_index=True))
     return out
+
+
+def per_moneta_rete(idea, varianti, s, periodo):
+    """Le reti di ordini limite di E-102 nel motore a minuti. Variante: ``{"tipo": "R" | "S", "lato": "acquisto" |
+    "vendita", "k": ..., "H": ..., "m": ... (solo S)}``. R: uscita a mercato dopo H minuti (``motore5.simula_limite``);
+    S: uscita a limite a m·σ (``scalping.simula_doppio``)."""
+    from research.programma5.strumenti.scalping import caso_doppio, simula_doppio
+    df = m5.minuti(s, periodo, idea)
+    if df.empty:
+        return {}
+    b = barre(s, periodo, idea)
+    fund = m5.funding(s)
+    nel = b["periodo"].eq(True).to_numpy()
+    P = b["close"].shift(1).to_numpy()
+    S = np.log(b["close"]).diff().rolling(720, min_periods=500).std().shift(1).to_numpy()
+    inizi = b.index.to_numpy() * 60 - int(df.index[0])
+    ok = nel & (inizi >= 0) & (inizi + 60 <= len(df)) & np.isfinite(P) & np.isfinite(S)
+    out = {}
+    for n, v in varianti.items():
+        d = 1 if v["lato"] == "acquisto" else -1
+        livelli = P * np.exp(-d * v["k"] * S)
+        direz = np.full(int(ok.sum()), d, dtype=int)
+        if v["tipo"] == "R":
+            t = m5.simula_limite(df, s, inizi[ok], livelli[ok], direz, validita=60, tenuta=v["H"], fund=fund)
+            out[n] = (t, m5.caso_limite(df, s, t, v["H"], fund) if not t.empty else t)
+        else:
+            t = simula_doppio(df, s, inizi[ok], livelli[ok], S[ok], direz, v["m"], 60, v["H"], fund)
+            out[n] = (t, caso_doppio(df, s, t, v["m"], v["H"], fund) if not t.empty else t)
+    return out
