@@ -12,6 +12,7 @@ from research.programma5.strumenti.fase2 import MONETE_F2
 
 QUI = Path(__file__).parent
 LAMBDA = (1, 10, 100, 1000)
+VARIANTI = {"K-001a": {"long": 4, "short": 4, "h": 24, "lambda": "scelto su C2 fra 1, 10, 100, 1000"}}
 INIZIO_2025 = 29_453_760 - 525_600      # 2025-01-01 00:00 UTC in minuti dall'epoca
 
 

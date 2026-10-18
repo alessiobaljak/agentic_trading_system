@@ -16,7 +16,7 @@ from pathlib import Path
 RADICE = Path(__file__).resolve().parents[3]
 IDEE = RADICE / "research" / "programma5" / "idee"
 STRUMENTI = RADICE / "research" / "programma5" / "strumenti"
-COMUNI = ["motore5.py", "ore.py", "eventi.py", "idee_minuti.py", "idee_ore.py", "idee_ore2.py", "scalping.py", "idee_fase2.py", "esplora_fase2.py", "esplora_calendario.py", "esplora_limiti.py", "fase2.py", "meta.py", "portafoglio.py", "idee_giorno.py", "esplosioni_oi.py",
+COMUNI = ["motore5.py", "ore.py", "eventi.py", "idee_minuti.py", "idee_ore.py", "idee_ore2.py", "scalping.py", "idee_fase2.py", "esplora_fase2.py", "esplora_calendario.py", "esplora_limiti.py", "fase2.py", "meta.py", "meta2.py", "portafoglio.py", "modello.py", "libro.py", "idee_giorno.py", "esplosioni_oi.py",
           "rapporto.py", "esplorazione.py"]
 
 
@@ -53,6 +53,8 @@ def congela(idea: str) -> str:
     # fase 3: nessun periodo di costruzione (la procedura sceglie da sola con il passato)
     c = json.loads((cartella / f"{costruzione}.json").read_text(encoding="utf-8")) \
         if (cartella / f"{costruzione}.json").exists() else {}
+    if "trade" in c:                       # un risultato solo (idee di portafoglio): una variante
+        c = {next(iter(mod.VARIANTI)): c}
     commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=RADICE, capture_output=True, text=True).stdout.strip()
     righe = [f"# {idea} — regola congelata", "",
              f"Congelata prima di aprire V (REGOLE.md, sezione 4), sul commit `{commit}`. Le varianti, i valori e il codice "
@@ -68,7 +70,8 @@ def congela(idea: str) -> str:
                          f"{100 * e['netto']['basso']:+.3f}; {100 * e['netto']['alto']:+.3f} | "
                          f"{100 * e.get('caso_netto', float('nan')):+.3f}% |")
     righe += ["", "## Impronte SHA-256 dei file del calcolo", "", "| File | SHA-256 |", "|---|---|"]
-    for p in [cartella / "scheda.md", cartella / "calcolo.py", cartella / "esame.json"] + [STRUMENTI / f for f in COMUNI]:
+    for p in [cartella / "scheda.md", cartella / "calcolo.py", cartella / "esame.json", cartella / "pesi.json"] + \
+            [STRUMENTI / f for f in COMUNI]:
         if p.exists():
             righe.append(f"| `{p.relative_to(RADICE)}` | `{impronta(p)}` |")
     testo = "\n".join(righe) + "\n"
