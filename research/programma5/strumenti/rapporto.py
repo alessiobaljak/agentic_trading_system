@@ -36,12 +36,12 @@ def esito(periodo: str, e: dict, n_varianti: int, cfg: dict = ESAME_VECCHIO, sen
     nt, nd = e["netto"], e["netto_doppio"]
     if periodo == "V" and cfg.get("solo_r"):
         return True, "V e' costruzione per questa idea (REGOLE.md, 6ter, punto 3)"
-    if periodo == "C":
+    if periodo in ("C", "C2"):
         if not (nt["basso"] > 0):
             return False, "netto dopo i costi con l'intervallo non sopra zero"
         if not (nt["media"] > e.get("caso_netto", float("-inf"))):
             return False, "non meglio del caso"
-        return True, "passa C"
+        return True, f"passa {periodo}"
     if periodo == "V":
         soglia = cfg["soglia_v"] / n_varianti
         if not (nt["media"] > 0 and nt["p"] <= soglia):
@@ -68,6 +68,27 @@ def esito(periodo: str, e: dict, n_varianti: int, cfg: dict = ESAME_VECCHIO, sen
         if e["trade"] < 100:
             return False, "meno di 100 trade"
         return True, "passa R: strategia valida"
+    if periodo == "V2":
+        # REGOLE.md, sezione 7
+        if not nt["basso"] > 0:
+            return False, "netto con l'intervallo non sopra zero"
+        soglia = 0.005 / n_varianti
+        if not nt["p"] <= soglia:
+            return False, f"p {nt['p']:.4f} oltre la soglia {soglia:.4f}"
+        if not nd["media"] > 0:
+            return False, "non positivo a costi doppi"
+        if not (senza_migliore is not None and senza_migliore > 0):
+            return False, "non positivo togliendo il giorno migliore"
+        meta = e.get("per_meta", {})
+        if len(meta) < 2 or any(v["netto"] <= 0 for v in meta.values()):
+            return False, "non positivo in tutte e due le metà"
+        monete = [m for m in e["per_moneta"].values() if m["trade"] >= 20]
+        pos = sum(1 for m in monete if m["netto"] > 0)
+        if len(monete) < 5 or pos < 0.6 * len(monete):
+            return False, f"positivo su {pos} monete su {len(monete)} con almeno 20 trade"
+        if e["trade"] < 200:
+            return False, "meno di 200 trade"
+        return True, "passa V2: strategia valida"
     return True, "informativo"
 
 
@@ -75,6 +96,17 @@ def scrivi(idea: str, periodo: str) -> str:
     cartella = IDEE / idea
     dati = json.loads((cartella / f"{periodo}.json").read_text(encoding="utf-8"))
     cfg = esame_idea(cartella)
+    if periodo == "V2":
+        import pandas as pd
+        for n in dati:
+            f = cartella / f"trade_V2_{n}.csv.gz"
+            if dati[n].get("trade") and f.exists():
+                tt = pd.read_csv(f)
+                prima = tt["minuto"] < 29_453_760          # 2026-01-01 00:00 UTC in minuti dall'epoca
+                dati[n]["per_meta"] = {"2025-07 → 2025-12": {"trade": int(prima.sum()),
+                                                            "netto": float(tt["netto"][prima].mean())},
+                                       "2026-01 → 2026-09": {"trade": int((~prima).sum()),
+                                                            "netto": float(tt["netto"][~prima].mean())}}
     senza = {n: senza_giorno_migliore(cartella / f"trade_{periodo}_{n}.csv.gz")
              for n in dati if dati[n].get("trade") and (cartella / f"trade_{periodo}_{n}.csv.gz").exists()}
     righe = [f"# {idea} — periodo {periodo}", "",
@@ -93,6 +125,10 @@ def scrivi(idea: str, periodo: str) -> str:
                      f"{100 * e.get('caso_netto', float('nan')):+.3f}% | {'**' + motivo + '**' if ok else motivo} |")
     righe += ["", "Senza il giorno migliore (netto medio a trade): " + ", ".join(
         f"{n} {100 * v:+.3f}%" for n, v in senza.items()), ""]
+    if periodo == "V2":
+        righe += ["Per metà di V2: " + "; ".join(f"{n}: " + ", ".join(f"{k} {100 * v['netto']:+.3f}% ({v['trade']})"
+                                                               for k, v in e.get("per_meta", {}).items())
+                                                for n, e in dati.items() if e.get("trade")), ""]
     righe += ["", "Per anno e per moneta (netto medio a trade):", ""]
     for n, e in dati.items():
         if not e.get("trade"):
