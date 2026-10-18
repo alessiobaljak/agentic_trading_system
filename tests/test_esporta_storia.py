@@ -162,3 +162,22 @@ def test_una_cartella_grande_si_divide_in_parti_e_i_gz_interni_si_puliscono(tmp_
                     trovato = True
     assert trovato
     assert "selettore" in indice["cartelle_finite"]
+
+
+def test_i_backup_della_cartella_del_bot_e_il_tetto_stimato(tmp_path, monkeypatch):
+    fb = FirebaseClient()
+    radice = tmp_path / "bot"
+    dati = radice / "data"
+    (dati / "selettore").mkdir(parents=True)
+    (dati / "selettore" / "a.jsonl").write_text("y" * 50000, encoding="utf-8")
+    (radice / "trades_backup_20260811.json").write_text(json.dumps([{"pnl": -1}]), encoding="utf-8")
+    (radice / ".env").write_text("SEGRETO=1\n", encoding="utf-8")
+    # posto per il backup (qualche centinaio di byte), non per il selettore (stima ~7 kB)
+    monkeypatch.setattr(es, "TETTO_TOTALE_MB", 0.002)
+    uscita = tmp_path / "archivio"
+    indice = es.esporta(fb, str(uscita), str(dati), tetto_letture=1000, radice=str(radice))
+    with tarfile.open(uscita / "macchina" / "backup_radice.tar.gz") as tar:
+        assert tar.getnames() == ["trades_backup_20260811.json"]
+    assert not (uscita / "macchina" / "selettore.tar.gz").exists()
+    assert any(f["file"] == "macchina/selettore.tar.gz" and "data/selettore" in f["motivo"]
+               for f in indice["fuori"])

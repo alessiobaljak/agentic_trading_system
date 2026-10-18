@@ -71,6 +71,11 @@ TETTO_TOTALE_MB = float(os.getenv("ESPORTA_TETTO_TOTALE_MB", "200"))
 TEMPO_MAX_S = float(os.getenv("ESPORTA_TEMPO_MAX_S", "780"))
 #: una cartella della macchina oltre questo peso (non compresso) si divide in parti
 PARTE_MB_GREZZI = float(os.getenv("ESPORTA_PARTE_MB", "300"))
+#: quanto pesa compresso un MB del selettore (misurato: ~39,6 MB per parte da ~300 MB,
+#: ops 0625-0626); serve a non costruire un archivio che il tetto scarterebbe
+RAPPORTO_COMPRESSIONE = 0.14
+#: i backup dei reset, nella cartella del bot (non in data/)
+BACKUP_RADICE = re.compile(r"(trades|gate)_backup_[A-Za-z0-9_-]+\.json")
 
 #: prima le collection che non si possono rifare (i trade, il registro e le specifiche
 #: delle strategie), poi le misure; le altre in ordine alfabetico, dopo queste
@@ -311,7 +316,8 @@ def _file_della_cartella(arch: Archivio, cartella_dati: str, voce: str) -> list[
 
 
 def esporta(fb, uscita: str, cartella_dati: Optional[str],
-            tetto_letture: int = TETTO_LETTURE, tempo_max_s: float = TEMPO_MAX_S) -> dict:
+            tetto_letture: int = TETTO_LETTURE, tempo_max_s: float = TEMPO_MAX_S,
+            radice: Optional[str] = None) -> dict:
     """Esporta Firestore, RTDB e le cartelle di `cartella_dati` in `uscita`, riprendendo
     da un giro precedente se c'e'. Ritorna l'indice (lo stesso di INDICE.json)."""
     arch = Archivio(uscita, tempo_max_s)
@@ -371,6 +377,14 @@ def esporta(fb, uscita: str, cartella_dati: Optional[str],
             if sciolti and not arch.fatto("macchina/file_sciolti.tar.gz"):
                 arch.scrivi_tar("macchina/file_sciolti.tar.gz", cartella_dati, sciolti)
                 arch._salva_indice(letture, tetto_letture, False)
+            # i backup lasciati nella cartella del bot dai reset (i 144 trade del paper
+            # cancellati il 10 ago, `docs/audit_fase0.md`; le foto del registro di
+            # `scripts/fast_gate.sh`)
+            backup = sorted(f for f in os.listdir(radice) if BACKUP_RADICE.fullmatch(f)
+                            and os.path.isfile(os.path.join(radice, f))) if radice else []
+            if backup and not arch.fatto("macchina/backup_radice.tar.gz"):
+                arch.scrivi_tar("macchina/backup_radice.tar.gz", radice, backup)
+                arch._salva_indice(letture, tetto_letture, False)
             for _, voce, nomi in cartelle:
                 if voce in arch.cartelle_finite or not nomi:
                     continue
@@ -378,9 +392,21 @@ def esporta(fb, uscita: str, cartella_dati: Optional[str],
                 for i, gruppo in enumerate(parti, 1):
                     rel = (f"macchina/{voce}.tar.gz" if len(parti) == 1
                            else f"macchina/{voce}_parte{i}.tar.gz")
-                    if gruppo and not arch.fatto(rel):
-                        arch.scrivi_tar(rel, cartella_dati, gruppo)
-                        arch._salva_indice(letture, tetto_letture, False)
+                    if not gruppo or arch.fatto(rel):
+                        continue
+                    grezzi = sum(os.path.getsize(os.path.join(cartella_dati, n))
+                                 for n in gruppo) / 1e6
+                    stima = grezzi * RAPPORTO_COMPRESSIONE
+                    if (arch.byte / 1e6) + stima > TETTO_TOTALE_MB:
+                        # non si costruisce un archivio che il tetto butterebbe via
+                        arch.fuori.append({"file": rel, "motivo": f"{len(gruppo)} file, "
+                                           f"{grezzi:.0f} MB non compressi (circa {stima:.0f} "
+                                           f"compressi, stima): oltre il tetto dell'archivio "
+                                           f"({TETTO_TOTALE_MB:g} MB); restano sulla macchina, "
+                                           f"in data/{voce}"})
+                        continue
+                    arch.scrivi_tar(rel, cartella_dati, gruppo)
+                    arch._salva_indice(letture, tetto_letture, False)
                 arch.cartelle_finite.append(voce)
                 arch._salva_indice(letture, tetto_letture, False)
     except TempoFinito:
@@ -425,7 +451,7 @@ def main(argv=None) -> int:
         return 0
     giorno = datetime.now(timezone.utc).strftime("%Y%m%d")
     uscita = args.uscita or os.path.join(RES_DIR, f"archivio_{giorno}")
-    indice = esporta(fb, uscita, os.path.join(APP_DIR, "data"))
+    indice = esporta(fb, uscita, os.path.join(APP_DIR, "data"), radice=APP_DIR)
     print(riepilogo(indice, os.path.relpath(uscita, APP_DIR)))
     return 0
 
