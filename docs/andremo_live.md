@@ -4069,3 +4069,18 @@ i 13 tentativi rimasti su famiglie e combinazioni non provate, ogni idea con il 
 Capito oggi: sulla costruzione di LINK le 26 varianti non si distinguono dal caso (p-value medio 0,531, attesa 0,500;
 prova di uniformità p 0,387, `fase5.md` del branch); le 8 varianti di ritorno alla media perdono tutte e fanno peggio
 delle loro entrate casuali, quelle di tendenza stanno vicino a zero.
+
+### 18 ottobre, mattina: la ricerca LINK6 si ferma a 33 varianti su 40, nessun candidato
+
+La sessione ha ripreso dopo il secondo invio (i due invii delle 09:38 e 09:43 ora italiana registrati alle 09:51 come un
+solo messaggio, voce N-010 del suo log) e alle 09:54 ha finito la seconda tornata (commit 81f3aeb0): 3 idee nuove (incrocio di medie,
+VWAP, fine settimana), 6 varianti scritte prima dei test (f131ba37), nessuna oltre la Fase 2. Si è fermata a 33 su 40:
+le combinazioni rimaste sarebbero state ritagli di idee già provate o modifiche suggerite dai risultati, e la regola
+data dal coordinamento chiedeva di non inventare idee per riempire i tentativi. Il coordinamento, per delega, alle 10:01
+ha confermato lo STOP: il Passo 3 non ha niente da validare, il Passo 4 scriverà «nessuna strategia valida trovata», il
+Passo 9 (lezioni) tocca al coordinamento. Il vault di LINK resta chiuso e non consumato.
+Capito oggi: i tre p-value più piccoli delle 32 varianti (0,001, 0,003, 0,003) sono tutti short che entrano quando il
+prezzo è già sotto una media, con R medio fra +0,010 e +0,084: battono le loro entrate casuali solo perché gli short
+casuali perdono nel rialzo di fondo del periodo (LINK +184% dal 2020 a settembre 2022). Un p-value piccolo con R vicino
+a zero vuol dire «meglio di uno short a caso in un mercato che sale», non una strategia che paga (`fase5.md` del branch,
+commit 81f3aeb0). Sulle 32 varianti i p-value restano compatibili con il caso (medio 0,478; prova di uniformità p 0,416).
