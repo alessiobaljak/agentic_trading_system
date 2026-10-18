@@ -206,7 +206,7 @@ def simula(df: pd.DataFrame, simbolo: str, decisioni: np.ndarray, direzioni: np.
             continue
         p0 = o[e]
         prezzo, motivo, uscito = np.nan, "tempo", fine
-        for j in range(e, fine + 1):
+        for j in (range(e, fine + 1) if uscita.stop is not None or uscita.target is not None else ()):
             if not (np.isfinite(h[j]) and np.isfinite(l[j])):
                 continue
             if uscita.stop is not None:

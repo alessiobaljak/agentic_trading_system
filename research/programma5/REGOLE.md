@@ -89,3 +89,18 @@ di 100 trade.
   riparte da lì.
 * Il bot non si tocca durante la ricerca. Le strategie che superano l'esame entrano nel paper solo con il servizio
   separato (`docs/proposta_ripartenza.md`, sezione 4), dopo.
+
+## 6bis. L'esplorazione su C (aggiunta il 18 ottobre 2026, prima di calcolarla)
+
+Le prime tre idee calcolate (I-005, I-006, I-007) sono cadute in C con un guadagno lordo vicino a zero: provare un'idea
+alla volta è lento e spreca il periodo C, che serve proprio a cercare. Da qui:
+
+* Si può **esplorare il periodo C** con una griglia di segnali scritta e committata **prima** del calcolo
+  (`esplorazione/E-NNN/piano.md`): famiglie di segnali, valori, orizzonti, e i **criteri di promozione** a idea.
+* Si registra **tutto** quello che la griglia calcola (`esplorazione/E-NNN/risultati.md`), non solo i segnali promossi,
+  con il numero di celle provate.
+* L'esplorazione **non apre mai V, R o A**: lavora solo su C (il guardiano lo impone, `motore5.controlla_periodo`).
+* Un segnale promosso diventa un'idea con la sua scheda (al massimo 3 varianti, vicine al segnale), il calcolo su C con il
+  motore a minuti del programma (costi, caso, bootstrap), e poi l'esame di sempre: congelata, V una volta con la soglia
+  divisa per le varianti, R una volta. La soglia di V **non cambia**: è V, non C, a dire se un segnale trovato
+  cercando è vero.
