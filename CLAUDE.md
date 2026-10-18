@@ -26,7 +26,10 @@ approvato alle 20:12 UTC): ricerca su LINKUSDT con 9 monete di controllo, campag
 `research/campagna/LINK6` (rientra nell'eccezione dei branch di ricerca), vault con la frase esatta «APRI IL VAULT 4»
 scritta al coordinamento. Decisioni e motivazioni in `research/protocollo_4_note.md`. **La campagna LINK6 è chiusa** (18 ott
 2026, nessuna strategia valida: 33 varianti su 40, nessun candidato, vault 4 mai aperto): lezioni e proposte in
-`research/campagne/LINK6/lezioni.md`; cosa fare dopo lo decide il proprietario (`docs/backlog.md`, P11). **Delega del
+`research/campagne/LINK6/lezioni.md`. **Decisione del proprietario (18 ott 2026, ~08:40 UTC):** «dobbiamo continuare
+fino a quando non trovi delle strategie valide... se serve riscriviamo totalmente il gate», ma prima va scritta la storia
+completa del progetto (dati raccolti, cosa abbiamo imparato, cosa abbiamo cambiato, errori da evitare) in `docs/storia/`,
+da leggere prima di ripartire (`docs/backlog.md`, P11). **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
 della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 

@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | P11 (dopo LINK6: continuare la ricerca, e come), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
+| **0. Aspettano il tuo sì** | P11 (si continua finché non si trovano strategie valide: prima la storia del progetto, poi la proposta), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: CHIUSO il 12 ott al Passo 7, zero strategie trovate), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -33,6 +33,10 @@ le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 ## 0. Aspettano il tuo sì
 
 ### P11. Dopo LINK6: continuare la ricerca, e come
+**Deciso dal proprietario il 18 ott 2026 (~08:40 UTC):** «la domanda non è se vuoi continuare e dobbiamo continuare
+fino a quando non trovi delle strategie valide... se serve riscriviamo totalmente il gate non mi interessa (prima però
+voglio che tu storicizzi tutti i dati raccolti, quello che abbiamo imparato, cosa abbiamo cambiato, insomma tutto
+dall'inizio di questo progetto ad oggi)». Primo passo: la storia in `docs/storia/`; poi la proposta di come ripartire.
 **Perché:** la campagna LINK6 (protocollo 4) si è chiusa il 18 ott 2026 senza candidati: 16 idee, 33 varianti su 40,
 R medio delle varianti −0,030 contro −0,032 delle loro entrate casuali (`research/campagne/LINK6/lezioni.md`). Con
 BTC51 (un candidato caduto nel vault), la ricerca 4.5 (630 varianti, nessuna oltre il vault) e il paniere a barre
