@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | P11 (si continua finché non si trovano strategie valide: prima la storia del progetto, poi la proposta), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
+| **0. Aspettano il tuo sì** | P11 (si continua finché non si trovano strategie valide: prima la storia del progetto, poi la proposta), P12 (cose trovate scrivendo la storia: l'esportazione di Firebase aspetta una riga nella lista bianca), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: CHIUSO il 12 ott al Passo 7, zero strategie trovate), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -31,6 +31,27 @@ la dashboard mostra le voci senza una seconda copia da aggiornare. Quindi: un gr
 le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
+
+### P12. Trovate scrivendo la storia del progetto (18 ott 2026)
+**Perché:** i sette lettori della storia (`docs/storia/`) hanno trovato cose che nessun documento scriveva. Da
+decidere prima di riscrivere il gate. (1) **Esportare Firebase e `data/` della macchina**: trade del paper (707,
+`ops` 0623), registro del gate (2.435 coppie) e specifiche delle strategie generate esistono solo lì, e
+`scripts/reset_paper.py` cancella i trade senza copia. Fatto lo script `scripts/esporta_storia.py` (segreti oscurati,
+tetto di 20.000 letture, scrive in `ops/results/archivio_AAAAMMGG/`); **serve la voce `esporta-storia` nella lista
+bianca della macchina** (riga in `ops/allowlist.example`). (2) **Dopo 3 giorni di gate fermo i report vedono 0
+coppie validate** (`coppie_validate` in `bot/core/registry.py` tiene solo le coppie viste negli ultimi
+`OPTIMIZER_FRESH_DAYS`, 3 di default), mentre il bot ne opera 249: una lettura del fuori campione oggi uscirebbe vuota
+(sezione K10 di `ops` 0622: 0 coppie, contro 207 + 42 in `ops` 0620). (3) **Report giornaliero e backlog in
+dashboard fermi dal 13 ott**: si pubblicano alla fine di un giro della discovery (`scripts/discover_strategies.py`),
+che col gate fermo esce subito (dedotto dal codice, non verificato sulla macchina). (4) **La misura degli ordini limite
+nel paper non è mai stata letta** (tasso di esecuzione, costo, R dei saltati): manca lo strumento. (5) Il supervisore
+conta 278 validate, stato e bot 249 (`ops` 0623): non spiegato. (6) Quattro letture andate in tempo scaduto il 12
+ott (`edge`, `confidenza`, `costi`, `timeframe`; `ops` 0602, 0603, 0606, 0610) mai rifatte. (7) Il testo di
+`ops/gate_fermo` rimanda alla seconda edizione, già chiusa. (8) `docs/firebase_schema.md` elenca 7 collection di
+Firestore su 26. (9) Stati vecchi in questo file: P8 e P9 già nel protocollo 4, J2, G7, R1, R2, T2 fatte o fermate
+ma nel gruppo «in lavorazione», G3 chiusa dalla regola H1 (`docs/storia/04_backlog.md`, sezione 6.10). (10) Il test
+della ricerca rosso su GitHub dal 17 ott sera: **corretto** (573d084d). (11) Il proxy git della sessione rifiuta il
+push delle etichette (403): gli elenchi dei trade del paniere e del gruppo (~256 MB) restano solo sui loro branch.
 
 ### P11. Dopo LINK6: continuare la ricerca, e come
 **Deciso dal proprietario il 18 ott 2026 (~08:40 UTC):** «la domanda non è se vuoi continuare e dobbiamo continuare

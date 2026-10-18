@@ -552,6 +552,41 @@ class FirebaseClient:
             return int(res[0][0].value)
         return len(self._memory.query_collection(collection))
 
+    def elenca_collezioni(self) -> list[str]:
+        """I nomi delle collection di primo livello (18 ott 2026, per l'archivio:
+        `scripts/esporta_storia.py` deve copiare anche quelle che nessun modulo
+        nomina piu'). E' un elenco di nomi, non una lettura di documenti."""
+        if self._live:
+            return sorted(c.id for c in self._fs.collections())
+        return sorted({k.split("/", 1)[0] for k in self._memory._docs})
+
+    def documenti(self, collection: str, chi: Optional[str] = None) -> dict[str, dict]:
+        """Tutti i documenti di una collection, {id: dati}: una lettura a documento,
+        quindi chi chiama conta prima con `count_collection`."""
+        etichetta = chi or _chiamante()
+        if self._live:
+            out = {d.id: d.to_dict() for d in self._fs.collection(collection).stream()}
+        else:
+            prefix = f"{collection}/"
+            out = {k[len(prefix):]: v for k, v in self._memory._docs.items()
+                   if k.startswith(prefix)}
+        self._letture.conta(len(out), etichetta)
+        return out
+
+    def figli_rtdb(self, path: str = "/") -> list[str]:
+        """Le chiavi figlie di un nodo del RTDB senza scaricarne il contenuto
+        (`shallow`). Come le altre letture del RTDB NON solleva: in degrado
+        risponde con le chiavi dello specchio in memoria."""
+        if self._live and self._db is not None:
+            try:
+                val = self._db.reference(path).get(shallow=True)
+                self._note_rtdb(True)
+                return sorted(val) if isinstance(val, dict) else []
+            except Exception as exc:  # noqa: BLE001
+                self._note_rtdb(False, exc)
+        val = self._memory.get_rtdb(path)
+        return sorted(val) if isinstance(val, dict) else []
+
     def list_doc_ids(self, collection: str, chi: Optional[str] = None) -> list[str]:
         etichetta = chi or _chiamante()
         if self._live:

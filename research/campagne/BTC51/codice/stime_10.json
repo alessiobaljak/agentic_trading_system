@@ -1,0 +1,5 @@
+[
+ {"nome": "continuazione-1h-short-bollinger-rottura-c1-2", "specifica": {"timeframe": "1h", "direzione": "short", "filtro": null, "ingresso": {"codice": "E4", "k": 2.0}, "conferma": {"codice": "C1", "soglia": 2.0}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 24}]}},
+ {"nome": "continuazione-1h-long-bollinger-rottura-c1-2", "specifica": {"timeframe": "1h", "direzione": "long", "filtro": null, "ingresso": {"codice": "E4", "k": 2.0}, "conferma": {"codice": "C1", "soglia": 2.0}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 24}]}},
+ {"nome": "continuazione-2h-short-bollinger-rottura-c1-2", "specifica": {"timeframe": "2h", "direzione": "short", "filtro": null, "ingresso": {"codice": "E4", "k": 2.0}, "conferma": {"codice": "C1", "soglia": 2.0}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 12}]}}
+]

@@ -1,0 +1,8 @@
+[
+ {"nome": "B1 long", "direzione": "long", "giorni_rendimento": 28, "monete_per_lato": 10, "storia_minima": 90, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "B1 short", "direzione": "short", "giorni_rendimento": 28, "monete_per_lato": 10, "storia_minima": 90, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "B2 long", "direzione": "long", "giorni_rendimento": 14, "monete_per_lato": 10, "storia_minima": 90, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "B2 short", "direzione": "short", "giorni_rendimento": 14, "monete_per_lato": 10, "storia_minima": 90, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "B3 long", "direzione": "long", "giorni_rendimento": 28, "monete_per_lato": 20, "storia_minima": 90, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "B3 short", "direzione": "short", "giorni_rendimento": 28, "monete_per_lato": 20, "storia_minima": 90, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60}
+]

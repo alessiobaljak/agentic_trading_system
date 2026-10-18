@@ -155,6 +155,9 @@ replay-gate-esito: .venv/bin/python -m scripts.replay_gate --esito
 # docs/backlog.md (e i documenti del bot) e pubblica dashboard/backlog e /backlog.
 # Gira da solo dopo ogni giro del gate; questa riga serve per ripubblicare subito.
 report-giornaliero: .venv/bin/python -m scripts.report_giornaliero --pubblica
+# copia di Firebase e di data/ in ops/results/archivio_AAAAMMGG/ (18 ott 2026, docs/storia/README.md sez. 7):
+# solo lettura su Firebase, tetto di letture, segreti oscurati. Una volta prima di riscrivere il gate.
+esporta-storia: .venv/bin/python -m scripts.esporta_storia
 
 # ---- diagnosi del canale stesso (indispensabili se smette di rispondere) ---
 # la lista bianca stessa, per confrontarla con questo esempio quando si mette in

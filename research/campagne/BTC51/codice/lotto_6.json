@@ -1,0 +1,8 @@
+[
+ {"id": "V-035", "ipotesi": "I-18", "fonte": "Crabel, Opening Range Breakout, 1990; Eross, McGroarty, Urquhart, Wolfe, RIBAF 49, 2019; Baur, Cahill, Godfrey, Liu, FRL 31, 2019",
+  "specifica": {"timeframe": "1h", "direzione": "long", "filtro": {"codice": "F6", "giorni": "feriali"}, "ingresso": {"codice": "E10"}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2s"}]},
+  "previsione": "R medio fra -0,05 e +0,15; non supera"},
+ {"id": "V-036", "ipotesi": "I-18", "fonte": "come V-035",
+  "specifica": {"timeframe": "1h", "direzione": "short", "filtro": {"codice": "F6", "giorni": "feriali"}, "ingresso": {"codice": "E10"}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2s"}]},
+  "previsione": "R medio fra -0,2 e 0; non supera"}
+]

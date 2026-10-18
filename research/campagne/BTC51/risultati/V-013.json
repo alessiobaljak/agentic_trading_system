@@ -1,0 +1,2764 @@
+{
+ "id": "V-013",
+ "specifica": {
+  "timeframe": "1h",
+  "direzione": "long",
+  "filtro": null,
+  "ingresso": {
+   "codice": "E10"
+  },
+  "conferma": null,
+  "tipo_ingresso": {
+   "codice": "M"
+  },
+  "stop": {
+   "codice": "S1",
+   "k": 1.5,
+   "atr": 14
+  },
+  "uscite": [
+   {
+    "codice": "U1",
+    "k": 2.0
+   },
+   {
+    "codice": "U2s"
+   }
+  ]
+ },
+ "metriche": {
+  "trade": 380,
+  "trade_al_mese": 11.520169322709162,
+  "tempo_in_posizione": 0.09628154050464807,
+  "r_medio": -0.02536148768502858,
+  "profit_factor": 0.9483218264432222,
+  "vincenti": 0.42105263157894735,
+  "r_medio_vincenti": 1.1053172032841592,
+  "r_medio_perdenti": -0.8476732629353468,
+  "drawdown_max_r": -50.84173988249887,
+  "r_per_anno": {
+   "2020": 35.81634942192412,
+   "2021": -13.484976309975488,
+   "2022": -31.96873843225951
+  },
+  "ridotti": 2,
+  "violazioni_liquidazione": 0,
+  "liquidazioni": 0,
+  "motivi": {
+   "fine_giornata": 157,
+   "stop": 152,
+   "target": 71
+  }
+ },
+ "p_value": 0.13486513486513488,
+ "casuali": {
+  "media": -0.0811354134933076,
+  "percentile_95": -0.003868598170457114,
+  "candele_ammesse": 24054,
+  "n_simulazioni": 1000,
+  "seme": 2026,
+  "probabilita_ingresso": 0.01932017827994322,
+  "giri": 49152,
+  "trade_massimi": 3606,
+  "fasce": 5,
+  "quote_larghezza": {
+   "candidato": [
+    0.2,
+    0.2,
+    0.2,
+    0.2,
+    0.2
+   ],
+   "candele_ammesse": [
+    0.19623175144532712,
+    0.1910327330200058,
+    0.20771118412843656,
+    0.1826311192446866,
+    0.2223932121615439
+   ],
+   "tagli": [
+    0.010790358207999999,
+    0.0133783284228,
+    0.016287767733799998,
+    0.020466276955399997
+   ],
+   "pesi": [
+    0.9380256293670256,
+    0.9624321853954709,
+    0.8707451943368009,
+    1.0,
+    0.8001494522929767
+   ]
+  }
+ },
+ "esiti": {
+  "trade": true,
+  "r_medio": false,
+  "p_value": false,
+  "supera": false
+ },
+ "buy_and_hold": 1.7000332432473786,
+ "secondi": 3.2,
+ "trade": [
+  {
+   "ingresso": "2020-01-03 10:00",
+   "uscita": "2020-01-03 14:00",
+   "motivo": "stop",
+   "r": -1.0768,
+   "larghezza_stop": 0.01422
+  },
+  {
+   "ingresso": "2020-01-10 13:00",
+   "uscita": "2020-01-10 16:00",
+   "motivo": "target",
+   "r": 1.9144,
+   "larghezza_stop": 0.01425
+  },
+  {
+   "ingresso": "2020-01-12 14:00",
+   "uscita": "2020-01-12 17:00",
+   "motivo": "stop",
+   "r": -1.1062,
+   "larghezza_stop": 0.01124
+  },
+  {
+   "ingresso": "2020-01-14 15:00",
+   "uscita": "2020-01-14 16:00",
+   "motivo": "stop",
+   "r": -1.0859,
+   "larghezza_stop": 0.01387
+  },
+  {
+   "ingresso": "2020-01-24 13:00",
+   "uscita": "2020-01-24 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.3404,
+   "larghezza_stop": 0.0119
+  },
+  {
+   "ingresso": "2020-01-26 09:00",
+   "uscita": "2020-01-26 17:00",
+   "motivo": "target",
+   "r": 1.8617,
+   "larghezza_stop": 0.00875
+  },
+  {
+   "ingresso": "2020-01-27 12:00",
+   "uscita": "2020-01-27 19:00",
+   "motivo": "target",
+   "r": 1.8749,
+   "larghezza_stop": 0.00969
+  },
+  {
+   "ingresso": "2020-02-02 11:00",
+   "uscita": "2020-02-02 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0516,
+   "larghezza_stop": 0.0094
+  },
+  {
+   "ingresso": "2020-02-05 11:00",
+   "uscita": "2020-02-05 16:00",
+   "motivo": "target",
+   "r": 1.8205,
+   "larghezza_stop": 0.00915
+  },
+  {
+   "ingresso": "2020-02-06 12:00",
+   "uscita": "2020-02-06 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.663,
+   "larghezza_stop": 0.01032
+  },
+  {
+   "ingresso": "2020-02-08 15:00",
+   "uscita": "2020-02-08 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1376,
+   "larghezza_stop": 0.00873
+  },
+  {
+   "ingresso": "2020-02-11 14:00",
+   "uscita": "2020-02-11 15:00",
+   "motivo": "target",
+   "r": 1.8815,
+   "larghezza_stop": 0.00937
+  },
+  {
+   "ingresso": "2020-02-18 16:00",
+   "uscita": "2020-02-18 20:00",
+   "motivo": "target",
+   "r": 1.9147,
+   "larghezza_stop": 0.01308
+  },
+  {
+   "ingresso": "2020-02-19 12:00",
+   "uscita": "2020-02-19 12:00",
+   "motivo": "stop",
+   "r": -1.0864,
+   "larghezza_stop": 0.01265
+  },
+  {
+   "ingresso": "2020-02-21 13:00",
+   "uscita": "2020-02-21 20:00",
+   "motivo": "stop",
+   "r": -1.1066,
+   "larghezza_stop": 0.0112
+  },
+  {
+   "ingresso": "2020-02-27 15:00",
+   "uscita": "2020-02-27 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1099,
+   "larghezza_stop": 0.01825
+  },
+  {
+   "ingresso": "2020-03-02 11:00",
+   "uscita": "2020-03-02 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.4056,
+   "larghezza_stop": 0.0121
+  },
+  {
+   "ingresso": "2020-03-05 10:00",
+   "uscita": "2020-03-05 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.2008,
+   "larghezza_stop": 0.01061
+  },
+  {
+   "ingresso": "2020-03-06 11:00",
+   "uscita": "2020-03-06 13:00",
+   "motivo": "stop",
+   "r": -1.1215,
+   "larghezza_stop": 0.00901
+  },
+  {
+   "ingresso": "2020-03-10 11:00",
+   "uscita": "2020-03-10 15:00",
+   "motivo": "stop",
+   "r": -1.0661,
+   "larghezza_stop": 0.01649
+  },
+  {
+   "ingresso": "2020-03-13 10:00",
+   "uscita": "2020-03-13 18:00",
+   "motivo": "stop",
+   "r": -1.003,
+   "larghezza_stop": 0.13514
+  },
+  {
+   "ingresso": "2020-03-15 11:00",
+   "uscita": "2020-03-15 20:00",
+   "motivo": "stop",
+   "r": -1.0152,
+   "larghezza_stop": 0.03943
+  },
+  {
+   "ingresso": "2020-03-19 10:00",
+   "uscita": "2020-03-19 16:00",
+   "motivo": "target",
+   "r": 1.9719,
+   "larghezza_stop": 0.03026
+  },
+  {
+   "ingresso": "2020-03-20 09:00",
+   "uscita": "2020-03-20 16:00",
+   "motivo": "stop",
+   "r": -1.0328,
+   "larghezza_stop": 0.03596
+  },
+  {
+   "ingresso": "2020-03-23 13:00",
+   "uscita": "2020-03-23 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.2559,
+   "larghezza_stop": 0.03762
+  },
+  {
+   "ingresso": "2020-03-24 09:00",
+   "uscita": "2020-03-24 15:00",
+   "motivo": "stop",
+   "r": -1.0311,
+   "larghezza_stop": 0.03466
+  },
+  {
+   "ingresso": "2020-03-25 09:00",
+   "uscita": "2020-03-25 10:00",
+   "motivo": "stop",
+   "r": -1.0392,
+   "larghezza_stop": 0.02764
+  },
+  {
+   "ingresso": "2020-03-30 12:00",
+   "uscita": "2020-03-30 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.8056,
+   "larghezza_stop": 0.0196
+  },
+  {
+   "ingresso": "2020-04-02 15:00",
+   "uscita": "2020-04-02 17:00",
+   "motivo": "target",
+   "r": 1.9368,
+   "larghezza_stop": 0.01927
+  },
+  {
+   "ingresso": "2020-04-03 10:00",
+   "uscita": "2020-04-03 14:00",
+   "motivo": "stop",
+   "r": -1.0476,
+   "larghezza_stop": 0.02281
+  },
+  {
+   "ingresso": "2020-04-04 10:00",
+   "uscita": "2020-04-04 11:00",
+   "motivo": "stop",
+   "r": -1.0589,
+   "larghezza_stop": 0.01848
+  },
+  {
+   "ingresso": "2020-04-06 13:00",
+   "uscita": "2020-04-06 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.6333,
+   "larghezza_stop": 0.01629
+  },
+  {
+   "ingresso": "2020-04-12 14:00",
+   "uscita": "2020-04-12 16:00",
+   "motivo": "target",
+   "r": 1.8776,
+   "larghezza_stop": 0.00978
+  },
+  {
+   "ingresso": "2020-04-16 09:00",
+   "uscita": "2020-04-16 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0349,
+   "larghezza_stop": 0.02062
+  },
+  {
+   "ingresso": "2020-04-18 13:00",
+   "uscita": "2020-04-18 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.1058,
+   "larghezza_stop": 0.01008
+  },
+  {
+   "ingresso": "2020-04-22 14:00",
+   "uscita": "2020-04-22 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5146,
+   "larghezza_stop": 0.01129
+  },
+  {
+   "ingresso": "2020-04-23 14:00",
+   "uscita": "2020-04-23 14:00",
+   "motivo": "target",
+   "r": 1.906,
+   "larghezza_stop": 0.01185
+  },
+  {
+   "ingresso": "2020-04-25 14:00",
+   "uscita": "2020-04-25 15:00",
+   "motivo": "stop",
+   "r": -1.108,
+   "larghezza_stop": 0.01013
+  },
+  {
+   "ingresso": "2020-04-26 11:00",
+   "uscita": "2020-04-26 15:00",
+   "motivo": "stop",
+   "r": -1.1258,
+   "larghezza_stop": 0.0087
+  },
+  {
+   "ingresso": "2020-04-29 10:00",
+   "uscita": "2020-04-29 10:00",
+   "motivo": "target",
+   "r": 1.886,
+   "larghezza_stop": 0.00975
+  },
+  {
+   "ingresso": "2020-05-01 10:00",
+   "uscita": "2020-05-01 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.6408,
+   "larghezza_stop": 0.02335
+  },
+  {
+   "ingresso": "2020-05-02 13:00",
+   "uscita": "2020-05-02 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4576,
+   "larghezza_stop": 0.01408
+  },
+  {
+   "ingresso": "2020-05-06 10:00",
+   "uscita": "2020-05-06 11:00",
+   "motivo": "target",
+   "r": 1.916,
+   "larghezza_stop": 0.01328
+  },
+  {
+   "ingresso": "2020-05-07 14:00",
+   "uscita": "2020-05-07 17:00",
+   "motivo": "target",
+   "r": 1.9303,
+   "larghezza_stop": 0.01752
+  },
+  {
+   "ingresso": "2020-05-11 12:00",
+   "uscita": "2020-05-11 16:00",
+   "motivo": "stop",
+   "r": -1.0418,
+   "larghezza_stop": 0.02829
+  },
+  {
+   "ingresso": "2020-05-12 10:00",
+   "uscita": "2020-05-12 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0737,
+   "larghezza_stop": 0.02796
+  },
+  {
+   "ingresso": "2020-05-13 12:00",
+   "uscita": "2020-05-13 20:00",
+   "motivo": "target",
+   "r": 1.9253,
+   "larghezza_stop": 0.01633
+  },
+  {
+   "ingresso": "2020-05-14 09:00",
+   "uscita": "2020-05-14 10:00",
+   "motivo": "target",
+   "r": 1.9323,
+   "larghezza_stop": 0.01655
+  },
+  {
+   "ingresso": "2020-05-17 13:00",
+   "uscita": "2020-05-17 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2914,
+   "larghezza_stop": 0.01472
+  },
+  {
+   "ingresso": "2020-05-19 09:00",
+   "uscita": "2020-05-19 12:00",
+   "motivo": "stop",
+   "r": -1.0682,
+   "larghezza_stop": 0.01599
+  },
+  {
+   "ingresso": "2020-05-22 11:00",
+   "uscita": "2020-05-22 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0078,
+   "larghezza_stop": 0.01642
+  },
+  {
+   "ingresso": "2020-05-27 09:00",
+   "uscita": "2020-05-27 10:00",
+   "motivo": "target",
+   "r": 1.892,
+   "larghezza_stop": 0.0103
+  },
+  {
+   "ingresso": "2020-05-28 13:00",
+   "uscita": "2020-05-28 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.181,
+   "larghezza_stop": 0.01216
+  },
+  {
+   "ingresso": "2020-06-03 11:00",
+   "uscita": "2020-06-03 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1638,
+   "larghezza_stop": 0.01303
+  },
+  {
+   "ingresso": "2020-06-04 14:00",
+   "uscita": "2020-06-04 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0891,
+   "larghezza_stop": 0.01221
+  },
+  {
+   "ingresso": "2020-06-06 10:00",
+   "uscita": "2020-06-06 16:00",
+   "motivo": "stop",
+   "r": -1.1235,
+   "larghezza_stop": 0.00967
+  },
+  {
+   "ingresso": "2020-06-12 09:00",
+   "uscita": "2020-06-12 17:00",
+   "motivo": "stop",
+   "r": -1.0901,
+   "larghezza_stop": 0.01319
+  },
+  {
+   "ingresso": "2020-06-19 11:00",
+   "uscita": "2020-06-19 17:00",
+   "motivo": "stop",
+   "r": -1.1278,
+   "larghezza_stop": 0.00935
+  },
+  {
+   "ingresso": "2020-06-22 12:00",
+   "uscita": "2020-06-22 16:00",
+   "motivo": "target",
+   "r": 1.7906,
+   "larghezza_stop": 0.00577
+  },
+  {
+   "ingresso": "2020-06-28 09:00",
+   "uscita": "2020-06-28 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5076,
+   "larghezza_stop": 0.0109
+  },
+  {
+   "ingresso": "2020-07-01 09:00",
+   "uscita": "2020-07-01 16:00",
+   "motivo": "target",
+   "r": 1.7983,
+   "larghezza_stop": 0.00599
+  },
+  {
+   "ingresso": "2020-07-06 13:00",
+   "uscita": "2020-07-06 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1,
+   "larghezza_stop": 0.00696
+  },
+  {
+   "ingresso": "2020-07-08 14:00",
+   "uscita": "2020-07-08 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1666,
+   "larghezza_stop": 0.00716
+  },
+  {
+   "ingresso": "2020-07-10 16:00",
+   "uscita": "2020-07-10 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.4009,
+   "larghezza_stop": 0.00652
+  },
+  {
+   "ingresso": "2020-07-17 12:00",
+   "uscita": "2020-07-17 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0465,
+   "larghezza_stop": 0.00452
+  },
+  {
+   "ingresso": "2020-07-18 10:00",
+   "uscita": "2020-07-18 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.151,
+   "larghezza_stop": 0.00373
+  },
+  {
+   "ingresso": "2020-07-21 14:00",
+   "uscita": "2020-07-21 15:00",
+   "motivo": "stop",
+   "r": -1.178,
+   "larghezza_stop": 0.00616
+  },
+  {
+   "ingresso": "2020-07-26 09:00",
+   "uscita": "2020-07-26 10:00",
+   "motivo": "target",
+   "r": 1.8343,
+   "larghezza_stop": 0.00669
+  },
+  {
+   "ingresso": "2020-07-27 15:00",
+   "uscita": "2020-07-27 16:00",
+   "motivo": "target",
+   "r": 1.8952,
+   "larghezza_stop": 0.01557
+  },
+  {
+   "ingresso": "2020-07-29 09:00",
+   "uscita": "2020-07-29 09:00",
+   "motivo": "stop",
+   "r": -1.0614,
+   "larghezza_stop": 0.01774
+  },
+  {
+   "ingresso": "2020-07-31 11:00",
+   "uscita": "2020-07-31 16:00",
+   "motivo": "target",
+   "r": 1.8657,
+   "larghezza_stop": 0.01114
+  },
+  {
+   "ingresso": "2020-08-03 14:00",
+   "uscita": "2020-08-03 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5206,
+   "larghezza_stop": 0.01447
+  },
+  {
+   "ingresso": "2020-08-05 10:00",
+   "uscita": "2020-08-05 13:00",
+   "motivo": "target",
+   "r": 1.8894,
+   "larghezza_stop": 0.01006
+  },
+  {
+   "ingresso": "2020-08-06 14:00",
+   "uscita": "2020-08-06 14:00",
+   "motivo": "stop",
+   "r": -1.0938,
+   "larghezza_stop": 0.01166
+  },
+  {
+   "ingresso": "2020-08-08 10:00",
+   "uscita": "2020-08-08 16:00",
+   "motivo": "stop",
+   "r": -1.1045,
+   "larghezza_stop": 0.01142
+  },
+  {
+   "ingresso": "2020-08-12 11:00",
+   "uscita": "2020-08-12 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1636,
+   "larghezza_stop": 0.01601
+  },
+  {
+   "ingresso": "2020-08-17 14:00",
+   "uscita": "2020-08-17 15:00",
+   "motivo": "target",
+   "r": 1.9024,
+   "larghezza_stop": 0.01142
+  },
+  {
+   "ingresso": "2020-08-20 15:00",
+   "uscita": "2020-08-20 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0525,
+   "larghezza_stop": 0.01037
+  },
+  {
+   "ingresso": "2020-08-22 14:00",
+   "uscita": "2020-08-22 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0128,
+   "larghezza_stop": 0.00866
+  },
+  {
+   "ingresso": "2020-08-24 09:00",
+   "uscita": "2020-08-24 19:00",
+   "motivo": "stop",
+   "r": -1.19,
+   "larghezza_stop": 0.0063
+  },
+  {
+   "ingresso": "2020-08-26 15:00",
+   "uscita": "2020-08-26 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.3349,
+   "larghezza_stop": 0.01112
+  },
+  {
+   "ingresso": "2020-08-28 12:00",
+   "uscita": "2020-08-28 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.023,
+   "larghezza_stop": 0.00865
+  },
+  {
+   "ingresso": "2020-08-31 15:00",
+   "uscita": "2020-08-31 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.8502,
+   "larghezza_stop": 0.00727
+  },
+  {
+   "ingresso": "2020-09-01 16:00",
+   "uscita": "2020-09-01 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.4302,
+   "larghezza_stop": 0.00945
+  },
+  {
+   "ingresso": "2020-09-04 09:00",
+   "uscita": "2020-09-04 14:00",
+   "motivo": "stop",
+   "r": -1.0465,
+   "larghezza_stop": 0.02334
+  },
+  {
+   "ingresso": "2020-09-06 12:00",
+   "uscita": "2020-09-06 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2294,
+   "larghezza_stop": 0.02109
+  },
+  {
+   "ingresso": "2020-09-09 10:00",
+   "uscita": "2020-09-09 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.2513,
+   "larghezza_stop": 0.0148
+  },
+  {
+   "ingresso": "2020-09-10 14:00",
+   "uscita": "2020-09-10 16:00",
+   "motivo": "stop",
+   "r": -1.1063,
+   "larghezza_stop": 0.01122
+  },
+  {
+   "ingresso": "2020-09-14 11:00",
+   "uscita": "2020-09-14 13:00",
+   "motivo": "target",
+   "r": 1.8568,
+   "larghezza_stop": 0.00775
+  },
+  {
+   "ingresso": "2020-09-15 11:00",
+   "uscita": "2020-09-15 16:00",
+   "motivo": "stop",
+   "r": -1.0916,
+   "larghezza_stop": 0.01137
+  },
+  {
+   "ingresso": "2020-09-16 16:00",
+   "uscita": "2020-09-16 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1663,
+   "larghezza_stop": 0.01161
+  },
+  {
+   "ingresso": "2020-09-18 10:00",
+   "uscita": "2020-09-18 13:00",
+   "motivo": "stop",
+   "r": -1.1446,
+   "larghezza_stop": 0.00757
+  },
+  {
+   "ingresso": "2020-09-19 11:00",
+   "uscita": "2020-09-19 11:00",
+   "motivo": "target",
+   "r": 1.8269,
+   "larghezza_stop": 0.0064
+  },
+  {
+   "ingresso": "2020-09-24 11:00",
+   "uscita": "2020-09-24 15:00",
+   "motivo": "target",
+   "r": 1.8681,
+   "larghezza_stop": 0.00841
+  },
+  {
+   "ingresso": "2020-09-29 11:00",
+   "uscita": "2020-09-29 16:00",
+   "motivo": "stop",
+   "r": -1.1609,
+   "larghezza_stop": 0.00743
+  },
+  {
+   "ingresso": "2020-10-01 09:00",
+   "uscita": "2020-10-01 15:00",
+   "motivo": "stop",
+   "r": -1.155,
+   "larghezza_stop": 0.00707
+  },
+  {
+   "ingresso": "2020-10-07 15:00",
+   "uscita": "2020-10-07 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.2299,
+   "larghezza_stop": 0.00559
+  },
+  {
+   "ingresso": "2020-10-08 14:00",
+   "uscita": "2020-10-08 14:00",
+   "motivo": "target",
+   "r": 1.8238,
+   "larghezza_stop": 0.00629
+  },
+  {
+   "ingresso": "2020-10-09 11:00",
+   "uscita": "2020-10-09 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4627,
+   "larghezza_stop": 0.00724
+  },
+  {
+   "ingresso": "2020-10-11 16:00",
+   "uscita": "2020-10-11 19:00",
+   "motivo": "stop",
+   "r": -1.1516,
+   "larghezza_stop": 0.00723
+  },
+  {
+   "ingresso": "2020-10-12 14:00",
+   "uscita": "2020-10-12 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4771,
+   "larghezza_stop": 0.00985
+  },
+  {
+   "ingresso": "2020-10-14 14:00",
+   "uscita": "2020-10-14 14:00",
+   "motivo": "stop",
+   "r": -1.1299,
+   "larghezza_stop": 0.00843
+  },
+  {
+   "ingresso": "2020-10-19 14:00",
+   "uscita": "2020-10-19 15:00",
+   "motivo": "target",
+   "r": 1.8302,
+   "larghezza_stop": 0.00652
+  },
+  {
+   "ingresso": "2020-10-20 13:00",
+   "uscita": "2020-10-20 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0184,
+   "larghezza_stop": 0.01032
+  },
+  {
+   "ingresso": "2020-10-21 12:00",
+   "uscita": "2020-10-21 14:00",
+   "motivo": "target",
+   "r": 1.9039,
+   "larghezza_stop": 0.01159
+  },
+  {
+   "ingresso": "2020-10-22 11:00",
+   "uscita": "2020-10-22 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5597,
+   "larghezza_stop": 0.01741
+  },
+  {
+   "ingresso": "2020-10-23 11:00",
+   "uscita": "2020-10-23 16:00",
+   "motivo": "stop",
+   "r": -1.0935,
+   "larghezza_stop": 0.01274
+  },
+  {
+   "ingresso": "2020-10-24 15:00",
+   "uscita": "2020-10-24 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0734,
+   "larghezza_stop": 0.00845
+  },
+  {
+   "ingresso": "2020-10-26 14:00",
+   "uscita": "2020-10-26 15:00",
+   "motivo": "stop",
+   "r": -1.1182,
+   "larghezza_stop": 0.00926
+  },
+  {
+   "ingresso": "2020-10-27 11:00",
+   "uscita": "2020-10-27 11:00",
+   "motivo": "target",
+   "r": 1.8822,
+   "larghezza_stop": 0.00943
+  },
+  {
+   "ingresso": "2020-10-29 15:00",
+   "uscita": "2020-10-29 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1922,
+   "larghezza_stop": 0.01536
+  },
+  {
+   "ingresso": "2020-10-31 10:00",
+   "uscita": "2020-10-31 10:00",
+   "motivo": "stop",
+   "r": -1.0705,
+   "larghezza_stop": 0.01548
+  },
+  {
+   "ingresso": "2020-11-03 14:00",
+   "uscita": "2020-11-03 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0926,
+   "larghezza_stop": 0.01359
+  },
+  {
+   "ingresso": "2020-11-05 11:00",
+   "uscita": "2020-11-05 15:00",
+   "motivo": "target",
+   "r": 1.9267,
+   "larghezza_stop": 0.01525
+  },
+  {
+   "ingresso": "2020-11-08 11:00",
+   "uscita": "2020-11-08 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.6965,
+   "larghezza_stop": 0.01779
+  },
+  {
+   "ingresso": "2020-11-09 12:00",
+   "uscita": "2020-11-09 12:00",
+   "motivo": "stop",
+   "r": -1.0666,
+   "larghezza_stop": 0.01636
+  },
+  {
+   "ingresso": "2020-11-11 11:00",
+   "uscita": "2020-11-11 18:00",
+   "motivo": "target",
+   "r": 1.8935,
+   "larghezza_stop": 0.0114
+  },
+  {
+   "ingresso": "2020-11-12 10:00",
+   "uscita": "2020-11-12 10:00",
+   "motivo": "stop",
+   "r": -1.0751,
+   "larghezza_stop": 0.01452
+  },
+  {
+   "ingresso": "2020-11-15 09:00",
+   "uscita": "2020-11-15 11:00",
+   "motivo": "stop",
+   "r": -1.1019,
+   "larghezza_stop": 0.01073
+  },
+  {
+   "ingresso": "2020-11-16 11:00",
+   "uscita": "2020-11-16 17:00",
+   "motivo": "target",
+   "r": 1.8781,
+   "larghezza_stop": 0.00994
+  },
+  {
+   "ingresso": "2020-11-17 12:00",
+   "uscita": "2020-11-17 16:00",
+   "motivo": "target",
+   "r": 1.9006,
+   "larghezza_stop": 0.01223
+  },
+  {
+   "ingresso": "2020-11-19 15:00",
+   "uscita": "2020-11-19 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.3386,
+   "larghezza_stop": 0.02123
+  },
+  {
+   "ingresso": "2020-11-20 15:00",
+   "uscita": "2020-11-20 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1642,
+   "larghezza_stop": 0.01681
+  },
+  {
+   "ingresso": "2020-11-23 09:00",
+   "uscita": "2020-11-23 15:00",
+   "motivo": "stop",
+   "r": -1.0651,
+   "larghezza_stop": 0.01675
+  },
+  {
+   "ingresso": "2020-11-24 09:00",
+   "uscita": "2020-11-24 12:00",
+   "motivo": "target",
+   "r": 1.9284,
+   "larghezza_stop": 0.01562
+  },
+  {
+   "ingresso": "2020-11-25 11:00",
+   "uscita": "2020-11-25 16:00",
+   "motivo": "stop",
+   "r": -1.1128,
+   "larghezza_stop": 0.01628
+  },
+  {
+   "ingresso": "2020-11-28 11:00",
+   "uscita": "2020-11-28 19:00",
+   "motivo": "target",
+   "r": 1.9317,
+   "larghezza_stop": 0.01792
+  },
+  {
+   "ingresso": "2020-11-29 09:00",
+   "uscita": "2020-11-29 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1439,
+   "larghezza_stop": 0.01475
+  },
+  {
+   "ingresso": "2020-11-30 13:00",
+   "uscita": "2020-11-30 14:00",
+   "motivo": "target",
+   "r": 1.9195,
+   "larghezza_stop": 0.01387
+  },
+  {
+   "ingresso": "2020-12-01 11:00",
+   "uscita": "2020-12-01 11:00",
+   "motivo": "stop",
+   "r": -1.0582,
+   "larghezza_stop": 0.01872
+  },
+  {
+   "ingresso": "2020-12-02 09:00",
+   "uscita": "2020-12-02 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2968,
+   "larghezza_stop": 0.02646
+  },
+  {
+   "ingresso": "2020-12-03 09:00",
+   "uscita": "2020-12-03 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1554,
+   "larghezza_stop": 0.01805
+  },
+  {
+   "ingresso": "2020-12-05 09:00",
+   "uscita": "2020-12-05 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.4609,
+   "larghezza_stop": 0.01442
+  },
+  {
+   "ingresso": "2020-12-09 14:00",
+   "uscita": "2020-12-09 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.5067,
+   "larghezza_stop": 0.01781
+  },
+  {
+   "ingresso": "2020-12-12 10:00",
+   "uscita": "2020-12-12 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.4127,
+   "larghezza_stop": 0.01195
+  },
+  {
+   "ingresso": "2020-12-13 12:00",
+   "uscita": "2020-12-13 15:00",
+   "motivo": "stop",
+   "r": -1.0989,
+   "larghezza_stop": 0.01106
+  },
+  {
+   "ingresso": "2020-12-16 10:00",
+   "uscita": "2020-12-16 11:00",
+   "motivo": "target",
+   "r": 1.8753,
+   "larghezza_stop": 0.0089
+  },
+  {
+   "ingresso": "2020-12-17 09:00",
+   "uscita": "2020-12-17 09:00",
+   "motivo": "stop",
+   "r": -1.0491,
+   "larghezza_stop": 0.02214
+  },
+  {
+   "ingresso": "2020-12-19 15:00",
+   "uscita": "2020-12-19 16:00",
+   "motivo": "target",
+   "r": 1.8869,
+   "larghezza_stop": 0.01621
+  },
+  {
+   "ingresso": "2020-12-20 16:00",
+   "uscita": "2020-12-20 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.6831,
+   "larghezza_stop": 0.01731
+  },
+  {
+   "ingresso": "2020-12-22 12:00",
+   "uscita": "2020-12-22 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5208,
+   "larghezza_stop": 0.02261
+  },
+  {
+   "ingresso": "2020-12-24 09:00",
+   "uscita": "2020-12-24 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.098,
+   "larghezza_stop": 0.02275
+  },
+  {
+   "ingresso": "2020-12-25 10:00",
+   "uscita": "2020-12-25 11:00",
+   "motivo": "target",
+   "r": 1.9248,
+   "larghezza_stop": 0.01486
+  },
+  {
+   "ingresso": "2020-12-26 15:00",
+   "uscita": "2020-12-26 20:00",
+   "motivo": "target",
+   "r": 1.9256,
+   "larghezza_stop": 0.01641
+  },
+  {
+   "ingresso": "2020-12-27 10:00",
+   "uscita": "2020-12-27 11:00",
+   "motivo": "stop",
+   "r": -1.0479,
+   "larghezza_stop": 0.0227
+  },
+  {
+   "ingresso": "2021-01-02 13:00",
+   "uscita": "2021-01-02 15:00",
+   "motivo": "target",
+   "r": 1.9342,
+   "larghezza_stop": 0.01702
+  },
+  {
+   "ingresso": "2021-01-07 12:00",
+   "uscita": "2021-01-07 18:00",
+   "motivo": "stop",
+   "r": -1.0674,
+   "larghezza_stop": 0.03129
+  },
+  {
+   "ingresso": "2021-01-08 11:00",
+   "uscita": "2021-01-08 20:00",
+   "motivo": "stop",
+   "r": -1.0586,
+   "larghezza_stop": 0.04088
+  },
+  {
+   "ingresso": "2021-01-09 14:00",
+   "uscita": "2021-01-09 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.3966,
+   "larghezza_stop": 0.03343
+  },
+  {
+   "ingresso": "2021-01-14 14:00",
+   "uscita": "2021-01-14 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.2064,
+   "larghezza_stop": 0.0291
+  },
+  {
+   "ingresso": "2021-01-16 12:00",
+   "uscita": "2021-01-16 18:00",
+   "motivo": "stop",
+   "r": -1.0535,
+   "larghezza_stop": 0.03293
+  },
+  {
+   "ingresso": "2021-01-18 10:00",
+   "uscita": "2021-01-18 17:00",
+   "motivo": "stop",
+   "r": -1.0792,
+   "larghezza_stop": 0.0267
+  },
+  {
+   "ingresso": "2021-01-22 14:00",
+   "uscita": "2021-01-22 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.9869,
+   "larghezza_stop": 0.04159
+  },
+  {
+   "ingresso": "2021-01-25 13:00",
+   "uscita": "2021-01-25 19:00",
+   "motivo": "stop",
+   "r": -1.0634,
+   "larghezza_stop": 0.02387
+  },
+  {
+   "ingresso": "2021-01-28 16:00",
+   "uscita": "2021-01-28 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.6561,
+   "larghezza_stop": 0.02898
+  },
+  {
+   "ingresso": "2021-01-29 09:00",
+   "uscita": "2021-01-29 09:00",
+   "motivo": "stop",
+   "r": -1.0279,
+   "larghezza_stop": 0.03854
+  },
+  {
+   "ingresso": "2021-02-01 09:00",
+   "uscita": "2021-02-01 14:00",
+   "motivo": "stop",
+   "r": -1.0402,
+   "larghezza_stop": 0.02694
+  },
+  {
+   "ingresso": "2021-02-02 09:00",
+   "uscita": "2021-02-02 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.5389,
+   "larghezza_stop": 0.01937
+  },
+  {
+   "ingresso": "2021-02-05 13:00",
+   "uscita": "2021-02-05 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.3004,
+   "larghezza_stop": 0.02101
+  },
+  {
+   "ingresso": "2021-02-06 10:00",
+   "uscita": "2021-02-06 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1417,
+   "larghezza_stop": 0.01973
+  },
+  {
+   "ingresso": "2021-02-08 11:00",
+   "uscita": "2021-02-08 12:00",
+   "motivo": "target",
+   "r": 1.945,
+   "larghezza_stop": 0.02043
+  },
+  {
+   "ingresso": "2021-02-11 11:00",
+   "uscita": "2021-02-11 13:00",
+   "motivo": "target",
+   "r": 1.9555,
+   "larghezza_stop": 0.02542
+  },
+  {
+   "ingresso": "2021-02-17 10:00",
+   "uscita": "2021-02-17 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5881,
+   "larghezza_stop": 0.02183
+  },
+  {
+   "ingresso": "2021-02-19 09:00",
+   "uscita": "2021-02-19 15:00",
+   "motivo": "target",
+   "r": 1.9236,
+   "larghezza_stop": 0.01463
+  },
+  {
+   "ingresso": "2021-02-20 13:00",
+   "uscita": "2021-02-20 14:00",
+   "motivo": "stop",
+   "r": -1.0576,
+   "larghezza_stop": 0.0189
+  },
+  {
+   "ingresso": "2021-02-21 11:00",
+   "uscita": "2021-02-21 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0445,
+   "larghezza_stop": 0.01953
+  },
+  {
+   "ingresso": "2021-02-25 13:00",
+   "uscita": "2021-02-25 17:00",
+   "motivo": "stop",
+   "r": -1.0492,
+   "larghezza_stop": 0.02882
+  },
+  {
+   "ingresso": "2021-03-01 09:00",
+   "uscita": "2021-03-01 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.17,
+   "larghezza_stop": 0.02625
+  },
+  {
+   "ingresso": "2021-03-03 09:00",
+   "uscita": "2021-03-03 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.4518,
+   "larghezza_stop": 0.01977
+  },
+  {
+   "ingresso": "2021-03-07 09:00",
+   "uscita": "2021-03-07 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.4944,
+   "larghezza_stop": 0.01746
+  },
+  {
+   "ingresso": "2021-03-09 14:00",
+   "uscita": "2021-03-09 18:00",
+   "motivo": "stop",
+   "r": -1.088,
+   "larghezza_stop": 0.01876
+  },
+  {
+   "ingresso": "2021-03-10 14:00",
+   "uscita": "2021-03-10 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.086,
+   "larghezza_stop": 0.02015
+  },
+  {
+   "ingresso": "2021-03-11 14:00",
+   "uscita": "2021-03-11 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.3457,
+   "larghezza_stop": 0.02124
+  },
+  {
+   "ingresso": "2021-03-13 09:00",
+   "uscita": "2021-03-13 10:00",
+   "motivo": "target",
+   "r": 1.9374,
+   "larghezza_stop": 0.01792
+  },
+  {
+   "ingresso": "2021-03-19 11:00",
+   "uscita": "2021-03-19 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2613,
+   "larghezza_stop": 0.01967
+  },
+  {
+   "ingresso": "2021-03-20 12:00",
+   "uscita": "2021-03-20 20:00",
+   "motivo": "stop",
+   "r": -1.1176,
+   "larghezza_stop": 0.01344
+  },
+  {
+   "ingresso": "2021-03-22 11:00",
+   "uscita": "2021-03-22 12:00",
+   "motivo": "stop",
+   "r": -1.0712,
+   "larghezza_stop": 0.01531
+  },
+  {
+   "ingresso": "2021-03-24 09:00",
+   "uscita": "2021-03-24 19:00",
+   "motivo": "stop",
+   "r": -1.068,
+   "larghezza_stop": 0.01989
+  },
+  {
+   "ingresso": "2021-03-29 09:00",
+   "uscita": "2021-03-29 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1105,
+   "larghezza_stop": 0.01531
+  },
+  {
+   "ingresso": "2021-03-30 10:00",
+   "uscita": "2021-03-30 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.4311,
+   "larghezza_stop": 0.01433
+  },
+  {
+   "ingresso": "2021-04-04 10:00",
+   "uscita": "2021-04-04 12:00",
+   "motivo": "stop",
+   "r": -1.0886,
+   "larghezza_stop": 0.01233
+  },
+  {
+   "ingresso": "2021-04-05 15:00",
+   "uscita": "2021-04-05 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.6951,
+   "larghezza_stop": 0.01174
+  },
+  {
+   "ingresso": "2021-04-08 13:00",
+   "uscita": "2021-04-08 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1354,
+   "larghezza_stop": 0.01454
+  },
+  {
+   "ingresso": "2021-04-09 11:00",
+   "uscita": "2021-04-09 14:00",
+   "motivo": "stop",
+   "r": -1.1,
+   "larghezza_stop": 0.01094
+  },
+  {
+   "ingresso": "2021-04-13 09:00",
+   "uscita": "2021-04-13 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.3133,
+   "larghezza_stop": 0.01437
+  },
+  {
+   "ingresso": "2021-04-20 11:00",
+   "uscita": "2021-04-20 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4957,
+   "larghezza_stop": 0.0257
+  },
+  {
+   "ingresso": "2021-04-22 12:00",
+   "uscita": "2021-04-22 17:00",
+   "motivo": "stop",
+   "r": -1.0524,
+   "larghezza_stop": 0.02263
+  },
+  {
+   "ingresso": "2021-04-26 10:00",
+   "uscita": "2021-04-26 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2955,
+   "larghezza_stop": 0.0227
+  },
+  {
+   "ingresso": "2021-04-27 12:00",
+   "uscita": "2021-04-27 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0802,
+   "larghezza_stop": 0.01671
+  },
+  {
+   "ingresso": "2021-04-30 09:00",
+   "uscita": "2021-04-30 14:00",
+   "motivo": "target",
+   "r": 1.919,
+   "larghezza_stop": 0.01378
+  },
+  {
+   "ingresso": "2021-05-05 11:00",
+   "uscita": "2021-05-05 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.9945,
+   "larghezza_stop": 0.02106
+  },
+  {
+   "ingresso": "2021-05-06 11:00",
+   "uscita": "2021-05-06 14:00",
+   "motivo": "stop",
+   "r": -1.0612,
+   "larghezza_stop": 0.0178
+  },
+  {
+   "ingresso": "2021-05-07 13:00",
+   "uscita": "2021-05-07 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1105,
+   "larghezza_stop": 0.01791
+  },
+  {
+   "ingresso": "2021-05-08 09:00",
+   "uscita": "2021-05-08 15:00",
+   "motivo": "stop",
+   "r": -1.0642,
+   "larghezza_stop": 0.01698
+  },
+  {
+   "ingresso": "2021-05-14 09:00",
+   "uscita": "2021-05-14 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.8782,
+   "larghezza_stop": 0.02927
+  },
+  {
+   "ingresso": "2021-05-16 11:00",
+   "uscita": "2021-05-16 14:00",
+   "motivo": "stop",
+   "r": -1.0459,
+   "larghezza_stop": 0.02367
+  },
+  {
+   "ingresso": "2021-05-20 13:00",
+   "uscita": "2021-05-20 16:00",
+   "motivo": "stop",
+   "r": -1.0191,
+   "larghezza_stop": 0.06089
+  },
+  {
+   "ingresso": "2021-05-22 11:00",
+   "uscita": "2021-05-22 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1969,
+   "larghezza_stop": 0.05168
+  },
+  {
+   "ingresso": "2021-05-24 12:00",
+   "uscita": "2021-05-24 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.8374,
+   "larghezza_stop": 0.04264
+  },
+  {
+   "ingresso": "2021-05-27 10:00",
+   "uscita": "2021-05-27 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.7652,
+   "larghezza_stop": 0.02845
+  },
+  {
+   "ingresso": "2021-05-30 12:00",
+   "uscita": "2021-05-30 12:00",
+   "motivo": "stop",
+   "r": -1.0373,
+   "larghezza_stop": 0.02906
+  },
+  {
+   "ingresso": "2021-05-31 09:00",
+   "uscita": "2021-05-31 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5596,
+   "larghezza_stop": 0.02509
+  },
+  {
+   "ingresso": "2021-06-02 14:00",
+   "uscita": "2021-06-02 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1662,
+   "larghezza_stop": 0.01992
+  },
+  {
+   "ingresso": "2021-06-03 10:00",
+   "uscita": "2021-06-03 13:00",
+   "motivo": "stop",
+   "r": -1.0631,
+   "larghezza_stop": 0.01727
+  },
+  {
+   "ingresso": "2021-06-09 12:00",
+   "uscita": "2021-06-09 15:00",
+   "motivo": "target",
+   "r": 1.9587,
+   "larghezza_stop": 0.02745
+  },
+  {
+   "ingresso": "2021-06-10 11:00",
+   "uscita": "2021-06-10 14:00",
+   "motivo": "stop",
+   "r": -1.0379,
+   "larghezza_stop": 0.02854
+  },
+  {
+   "ingresso": "2021-06-11 11:00",
+   "uscita": "2021-06-11 16:00",
+   "motivo": "stop",
+   "r": -1.045,
+   "larghezza_stop": 0.02513
+  },
+  {
+   "ingresso": "2021-06-13 11:00",
+   "uscita": "2021-06-13 17:00",
+   "motivo": "target",
+   "r": 1.9447,
+   "larghezza_stop": 0.01912
+  },
+  {
+   "ingresso": "2021-06-14 14:00",
+   "uscita": "2021-06-14 18:00",
+   "motivo": "stop",
+   "r": -1.0494,
+   "larghezza_stop": 0.02137
+  },
+  {
+   "ingresso": "2021-06-17 10:00",
+   "uscita": "2021-06-17 12:00",
+   "motivo": "stop",
+   "r": -1.0653,
+   "larghezza_stop": 0.01669
+  },
+  {
+   "ingresso": "2021-06-24 13:00",
+   "uscita": "2021-06-24 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.8761,
+   "larghezza_stop": 0.02536
+  },
+  {
+   "ingresso": "2021-06-29 11:00",
+   "uscita": "2021-06-29 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5981,
+   "larghezza_stop": 0.0231
+  },
+  {
+   "ingresso": "2021-07-03 14:00",
+   "uscita": "2021-07-03 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0503,
+   "larghezza_stop": 0.01464
+  },
+  {
+   "ingresso": "2021-07-06 09:00",
+   "uscita": "2021-07-06 09:00",
+   "motivo": "stop",
+   "r": -1.0707,
+   "larghezza_stop": 0.01543
+  },
+  {
+   "ingresso": "2021-07-09 14:00",
+   "uscita": "2021-07-09 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1303,
+   "larghezza_stop": 0.01562
+  },
+  {
+   "ingresso": "2021-07-11 14:00",
+   "uscita": "2021-07-11 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.308,
+   "larghezza_stop": 0.0108
+  },
+  {
+   "ingresso": "2021-07-14 15:00",
+   "uscita": "2021-07-14 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1877,
+   "larghezza_stop": 0.01606
+  },
+  {
+   "ingresso": "2021-07-16 16:00",
+   "uscita": "2021-07-16 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.6989,
+   "larghezza_stop": 0.01471
+  },
+  {
+   "ingresso": "2021-07-17 09:00",
+   "uscita": "2021-07-17 10:00",
+   "motivo": "stop",
+   "r": -1.0793,
+   "larghezza_stop": 0.01377
+  },
+  {
+   "ingresso": "2021-07-21 10:00",
+   "uscita": "2021-07-21 16:00",
+   "motivo": "target",
+   "r": 1.9494,
+   "larghezza_stop": 0.0156
+  },
+  {
+   "ingresso": "2021-07-22 16:00",
+   "uscita": "2021-07-22 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.6047,
+   "larghezza_stop": 0.01541
+  },
+  {
+   "ingresso": "2021-07-27 11:00",
+   "uscita": "2021-07-27 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.3887,
+   "larghezza_stop": 0.02688
+  },
+  {
+   "ingresso": "2021-07-28 12:00",
+   "uscita": "2021-07-28 12:00",
+   "motivo": "stop",
+   "r": -1.043,
+   "larghezza_stop": 0.02526
+  },
+  {
+   "ingresso": "2021-07-29 10:00",
+   "uscita": "2021-07-29 12:00",
+   "motivo": "stop",
+   "r": -1.0474,
+   "larghezza_stop": 0.0229
+  },
+  {
+   "ingresso": "2021-08-04 13:00",
+   "uscita": "2021-08-04 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.4729,
+   "larghezza_stop": 0.01556
+  },
+  {
+   "ingresso": "2021-08-06 16:00",
+   "uscita": "2021-08-06 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4876,
+   "larghezza_stop": 0.02195
+  },
+  {
+   "ingresso": "2021-08-09 10:00",
+   "uscita": "2021-08-09 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.6304,
+   "larghezza_stop": 0.01994
+  },
+  {
+   "ingresso": "2021-08-11 15:00",
+   "uscita": "2021-08-11 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.3081,
+   "larghezza_stop": 0.01522
+  },
+  {
+   "ingresso": "2021-08-13 13:00",
+   "uscita": "2021-08-13 20:00",
+   "motivo": "target",
+   "r": 1.9136,
+   "larghezza_stop": 0.01408
+  },
+  {
+   "ingresso": "2021-08-17 10:00",
+   "uscita": "2021-08-17 14:00",
+   "motivo": "stop",
+   "r": -1.0737,
+   "larghezza_stop": 0.0148
+  },
+  {
+   "ingresso": "2021-08-18 16:00",
+   "uscita": "2021-08-18 19:00",
+   "motivo": "stop",
+   "r": -1.0681,
+   "larghezza_stop": 0.01602
+  },
+  {
+   "ingresso": "2021-08-19 15:00",
+   "uscita": "2021-08-19 20:00",
+   "motivo": "target",
+   "r": 1.9211,
+   "larghezza_stop": 0.01545
+  },
+  {
+   "ingresso": "2021-08-20 14:00",
+   "uscita": "2021-08-20 16:00",
+   "motivo": "target",
+   "r": 1.9024,
+   "larghezza_stop": 0.01292
+  },
+  {
+   "ingresso": "2021-08-25 16:00",
+   "uscita": "2021-08-25 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2314,
+   "larghezza_stop": 0.01492
+  },
+  {
+   "ingresso": "2021-08-27 15:00",
+   "uscita": "2021-08-27 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.983,
+   "larghezza_stop": 0.01506
+  },
+  {
+   "ingresso": "2021-08-31 12:00",
+   "uscita": "2021-08-31 14:00",
+   "motivo": "stop",
+   "r": -1.0774,
+   "larghezza_stop": 0.01409
+  },
+  {
+   "ingresso": "2021-09-01 10:00",
+   "uscita": "2021-09-01 17:00",
+   "motivo": "target",
+   "r": 1.8833,
+   "larghezza_stop": 0.01245
+  },
+  {
+   "ingresso": "2021-09-03 09:00",
+   "uscita": "2021-09-03 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0987,
+   "larghezza_stop": 0.01358
+  },
+  {
+   "ingresso": "2021-09-09 13:00",
+   "uscita": "2021-09-09 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.5539,
+   "larghezza_stop": 0.01822
+  },
+  {
+   "ingresso": "2021-09-11 11:00",
+   "uscita": "2021-09-11 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.6049,
+   "larghezza_stop": 0.01523
+  },
+  {
+   "ingresso": "2021-09-12 09:00",
+   "uscita": "2021-09-12 20:00",
+   "motivo": "stop",
+   "r": -1.097,
+   "larghezza_stop": 0.01228
+  },
+  {
+   "ingresso": "2021-09-14 09:00",
+   "uscita": "2021-09-14 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.0877,
+   "larghezza_stop": 0.01525
+  },
+  {
+   "ingresso": "2021-09-15 11:00",
+   "uscita": "2021-09-15 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4397,
+   "larghezza_stop": 0.01247
+  },
+  {
+   "ingresso": "2021-09-21 11:00",
+   "uscita": "2021-09-21 14:00",
+   "motivo": "stop",
+   "r": -1.0434,
+   "larghezza_stop": 0.02502
+  },
+  {
+   "ingresso": "2021-09-22 16:00",
+   "uscita": "2021-09-22 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1457,
+   "larghezza_stop": 0.02342
+  },
+  {
+   "ingresso": "2021-09-26 10:00",
+   "uscita": "2021-09-26 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.3632,
+   "larghezza_stop": 0.02157
+  },
+  {
+   "ingresso": "2021-10-01 09:00",
+   "uscita": "2021-10-01 10:00",
+   "motivo": "target",
+   "r": 1.9264,
+   "larghezza_stop": 0.01519
+  },
+  {
+   "ingresso": "2021-10-05 09:00",
+   "uscita": "2021-10-05 19:00",
+   "motivo": "target",
+   "r": 1.9238,
+   "larghezza_stop": 0.01469
+  },
+  {
+   "ingresso": "2021-10-06 13:00",
+   "uscita": "2021-10-06 13:00",
+   "motivo": "target",
+   "r": 1.9335,
+   "larghezza_stop": 0.01684
+  },
+  {
+   "ingresso": "2021-10-08 09:00",
+   "uscita": "2021-10-08 12:00",
+   "motivo": "stop",
+   "r": -1.0659,
+   "larghezza_stop": 0.01653
+  },
+  {
+   "ingresso": "2021-10-09 14:00",
+   "uscita": "2021-10-09 20:00",
+   "motivo": "stop",
+   "r": -1.089,
+   "larghezza_stop": 0.01402
+  },
+  {
+   "ingresso": "2021-10-11 14:00",
+   "uscita": "2021-10-11 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0543,
+   "larghezza_stop": 0.01546
+  },
+  {
+   "ingresso": "2021-10-20 13:00",
+   "uscita": "2021-10-20 13:00",
+   "motivo": "target",
+   "r": 1.9036,
+   "larghezza_stop": 0.01156
+  },
+  {
+   "ingresso": "2021-10-21 10:00",
+   "uscita": "2021-10-21 11:00",
+   "motivo": "stop",
+   "r": -1.0679,
+   "larghezza_stop": 0.01605
+  },
+  {
+   "ingresso": "2021-10-22 09:00",
+   "uscita": "2021-10-22 13:00",
+   "motivo": "stop",
+   "r": -1.0618,
+   "larghezza_stop": 0.01763
+  },
+  {
+   "ingresso": "2021-10-25 14:00",
+   "uscita": "2021-10-25 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.9369,
+   "larghezza_stop": 0.01213
+  },
+  {
+   "ingresso": "2021-10-28 09:00",
+   "uscita": "2021-10-28 18:00",
+   "motivo": "stop",
+   "r": -1.0753,
+   "larghezza_stop": 0.01632
+  },
+  {
+   "ingresso": "2021-10-29 16:00",
+   "uscita": "2021-10-29 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0064,
+   "larghezza_stop": 0.01817
+  },
+  {
+   "ingresso": "2021-11-02 10:00",
+   "uscita": "2021-11-02 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0679,
+   "larghezza_stop": 0.01505
+  },
+  {
+   "ingresso": "2021-11-10 14:00",
+   "uscita": "2021-11-10 19:00",
+   "motivo": "stop",
+   "r": -1.1166,
+   "larghezza_stop": 0.01432
+  },
+  {
+   "ingresso": "2021-11-11 10:00",
+   "uscita": "2021-11-11 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.5268,
+   "larghezza_stop": 0.0188
+  },
+  {
+   "ingresso": "2021-11-13 15:00",
+   "uscita": "2021-11-13 18:00",
+   "motivo": "stop",
+   "r": -1.1098,
+   "larghezza_stop": 0.01194
+  },
+  {
+   "ingresso": "2021-11-17 11:00",
+   "uscita": "2021-11-17 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.1258,
+   "larghezza_stop": 0.0223
+  },
+  {
+   "ingresso": "2021-11-19 14:00",
+   "uscita": "2021-11-19 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0727,
+   "larghezza_stop": 0.01934
+  },
+  {
+   "ingresso": "2021-11-22 14:00",
+   "uscita": "2021-11-22 16:00",
+   "motivo": "stop",
+   "r": -1.0635,
+   "larghezza_stop": 0.01871
+  },
+  {
+   "ingresso": "2021-11-23 15:00",
+   "uscita": "2021-11-23 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0851,
+   "larghezza_stop": 0.02004
+  },
+  {
+   "ingresso": "2021-11-25 13:00",
+   "uscita": "2021-11-25 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1959,
+   "larghezza_stop": 0.01316
+  },
+  {
+   "ingresso": "2021-11-27 09:00",
+   "uscita": "2021-11-27 20:00",
+   "motivo": "stop",
+   "r": -1.0808,
+   "larghezza_stop": 0.01474
+  },
+  {
+   "ingresso": "2021-11-30 14:00",
+   "uscita": "2021-11-30 15:00",
+   "motivo": "stop",
+   "r": -1.0657,
+   "larghezza_stop": 0.01658
+  },
+  {
+   "ingresso": "2021-12-01 15:00",
+   "uscita": "2021-12-01 18:00",
+   "motivo": "stop",
+   "r": -1.0679,
+   "larghezza_stop": 0.01753
+  },
+  {
+   "ingresso": "2021-12-07 16:00",
+   "uscita": "2021-12-07 17:00",
+   "motivo": "stop",
+   "r": -1.0658,
+   "larghezza_stop": 0.01656
+  },
+  {
+   "ingresso": "2021-12-10 13:00",
+   "uscita": "2021-12-10 14:00",
+   "motivo": "stop",
+   "r": -1.0615,
+   "larghezza_stop": 0.01771
+  },
+  {
+   "ingresso": "2021-12-12 14:00",
+   "uscita": "2021-12-12 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.6176,
+   "larghezza_stop": 0.01364
+  },
+  {
+   "ingresso": "2021-12-14 09:00",
+   "uscita": "2021-12-14 16:00",
+   "motivo": "stop",
+   "r": -1.0642,
+   "larghezza_stop": 0.01832
+  },
+  {
+   "ingresso": "2021-12-18 11:00",
+   "uscita": "2021-12-18 19:00",
+   "motivo": "stop",
+   "r": -1.0626,
+   "larghezza_stop": 0.01873
+  },
+  {
+   "ingresso": "2021-12-21 12:00",
+   "uscita": "2021-12-21 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.4695,
+   "larghezza_stop": 0.01379
+  },
+  {
+   "ingresso": "2021-12-23 16:00",
+   "uscita": "2021-12-23 17:00",
+   "motivo": "target",
+   "r": 1.8953,
+   "larghezza_stop": 0.01062
+  },
+  {
+   "ingresso": "2021-12-27 14:00",
+   "uscita": "2021-12-27 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2723,
+   "larghezza_stop": 0.01024
+  },
+  {
+   "ingresso": "2021-12-30 12:00",
+   "uscita": "2021-12-30 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.5441,
+   "larghezza_stop": 0.01436
+  },
+  {
+   "ingresso": "2021-12-31 09:00",
+   "uscita": "2021-12-31 16:00",
+   "motivo": "stop",
+   "r": -1.0756,
+   "larghezza_stop": 0.01574
+  },
+  {
+   "ingresso": "2022-01-03 12:00",
+   "uscita": "2022-01-03 14:00",
+   "motivo": "stop",
+   "r": -1.1092,
+   "larghezza_stop": 0.01001
+  },
+  {
+   "ingresso": "2022-01-04 11:00",
+   "uscita": "2022-01-04 18:00",
+   "motivo": "stop",
+   "r": -1.1013,
+   "larghezza_stop": 0.01179
+  },
+  {
+   "ingresso": "2022-01-05 09:00",
+   "uscita": "2022-01-05 12:00",
+   "motivo": "stop",
+   "r": -1.0908,
+   "larghezza_stop": 0.01203
+  },
+  {
+   "ingresso": "2022-01-12 13:00",
+   "uscita": "2022-01-12 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.8715,
+   "larghezza_stop": 0.01325
+  },
+  {
+   "ingresso": "2022-01-13 15:00",
+   "uscita": "2022-01-13 15:00",
+   "motivo": "stop",
+   "r": -1.1017,
+   "larghezza_stop": 0.01075
+  },
+  {
+   "ingresso": "2022-01-14 16:00",
+   "uscita": "2022-01-14 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0934,
+   "larghezza_stop": 0.01439
+  },
+  {
+   "ingresso": "2022-01-15 15:00",
+   "uscita": "2022-01-15 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5371,
+   "larghezza_stop": 0.01115
+  },
+  {
+   "ingresso": "2022-01-16 15:00",
+   "uscita": "2022-01-16 19:00",
+   "motivo": "stop",
+   "r": -1.1145,
+   "larghezza_stop": 0.00987
+  },
+  {
+   "ingresso": "2022-01-20 14:00",
+   "uscita": "2022-01-20 15:00",
+   "motivo": "target",
+   "r": 1.8897,
+   "larghezza_stop": 0.01008
+  },
+  {
+   "ingresso": "2022-01-23 09:00",
+   "uscita": "2022-01-23 18:00",
+   "motivo": "stop",
+   "r": -1.0427,
+   "larghezza_stop": 0.02503
+  },
+  {
+   "ingresso": "2022-01-26 12:00",
+   "uscita": "2022-01-26 20:00",
+   "motivo": "stop",
+   "r": -1.0533,
+   "larghezza_stop": 0.01964
+  },
+  {
+   "ingresso": "2022-01-29 14:00",
+   "uscita": "2022-01-29 14:00",
+   "motivo": "stop",
+   "r": -1.0822,
+   "larghezza_stop": 0.01328
+  },
+  {
+   "ingresso": "2022-02-01 14:00",
+   "uscita": "2022-02-01 14:00",
+   "motivo": "stop",
+   "r": -1.0809,
+   "larghezza_stop": 0.0135
+  },
+  {
+   "ingresso": "2022-02-04 16:00",
+   "uscita": "2022-02-04 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.3948,
+   "larghezza_stop": 0.01885
+  },
+  {
+   "ingresso": "2022-02-07 15:00",
+   "uscita": "2022-02-07 18:00",
+   "motivo": "target",
+   "r": 1.9229,
+   "larghezza_stop": 0.0132
+  },
+  {
+   "ingresso": "2022-02-10 11:00",
+   "uscita": "2022-02-10 13:00",
+   "motivo": "stop",
+   "r": -1.0837,
+   "larghezza_stop": 0.01305
+  },
+  {
+   "ingresso": "2022-02-13 11:00",
+   "uscita": "2022-02-13 17:00",
+   "motivo": "stop",
+   "r": -1.1031,
+   "larghezza_stop": 0.01126
+  },
+  {
+   "ingresso": "2022-02-14 13:00",
+   "uscita": "2022-02-14 19:00",
+   "motivo": "stop",
+   "r": -1.0945,
+   "larghezza_stop": 0.01225
+  },
+  {
+   "ingresso": "2022-02-15 09:00",
+   "uscita": "2022-02-15 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1912,
+   "larghezza_stop": 0.01238
+  },
+  {
+   "ingresso": "2022-02-22 11:00",
+   "uscita": "2022-02-22 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1821,
+   "larghezza_stop": 0.02311
+  },
+  {
+   "ingresso": "2022-02-23 09:00",
+   "uscita": "2022-02-23 18:00",
+   "motivo": "stop",
+   "r": -1.0603,
+   "larghezza_stop": 0.01752
+  },
+  {
+   "ingresso": "2022-02-25 13:00",
+   "uscita": "2022-02-25 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.3057,
+   "larghezza_stop": 0.02423
+  },
+  {
+   "ingresso": "2022-02-27 11:00",
+   "uscita": "2022-02-27 13:00",
+   "motivo": "stop",
+   "r": -1.0769,
+   "larghezza_stop": 0.0142
+  },
+  {
+   "ingresso": "2022-02-28 15:00",
+   "uscita": "2022-02-28 20:00",
+   "motivo": "target",
+   "r": 1.9533,
+   "larghezza_stop": 0.02296
+  },
+  {
+   "ingresso": "2022-03-01 13:00",
+   "uscita": "2022-03-01 14:00",
+   "motivo": "stop",
+   "r": -1.0517,
+   "larghezza_stop": 0.02103
+  },
+  {
+   "ingresso": "2022-03-02 15:00",
+   "uscita": "2022-03-02 15:00",
+   "motivo": "stop",
+   "r": -1.0552,
+   "larghezza_stop": 0.01972
+  },
+  {
+   "ingresso": "2022-03-07 13:00",
+   "uscita": "2022-03-07 18:00",
+   "motivo": "stop",
+   "r": -1.0656,
+   "larghezza_stop": 0.01613
+  },
+  {
+   "ingresso": "2022-03-08 10:00",
+   "uscita": "2022-03-08 16:00",
+   "motivo": "stop",
+   "r": -1.0596,
+   "larghezza_stop": 0.01992
+  },
+  {
+   "ingresso": "2022-03-09 09:00",
+   "uscita": "2022-03-09 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.3107,
+   "larghezza_stop": 0.01989
+  },
+  {
+   "ingresso": "2022-03-11 12:00",
+   "uscita": "2022-03-11 15:00",
+   "motivo": "stop",
+   "r": -1.0565,
+   "larghezza_stop": 0.01925
+  },
+  {
+   "ingresso": "2022-03-23 16:00",
+   "uscita": "2022-03-23 18:00",
+   "motivo": "stop",
+   "r": -1.0833,
+   "larghezza_stop": 0.01311
+  },
+  {
+   "ingresso": "2022-03-24 15:00",
+   "uscita": "2022-03-24 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4106,
+   "larghezza_stop": 0.01314
+  },
+  {
+   "ingresso": "2022-03-25 12:00",
+   "uscita": "2022-03-25 17:00",
+   "motivo": "stop",
+   "r": -1.1097,
+   "larghezza_stop": 0.01047
+  },
+  {
+   "ingresso": "2022-03-29 12:00",
+   "uscita": "2022-03-29 15:00",
+   "motivo": "stop",
+   "r": -1.1039,
+   "larghezza_stop": 0.01052
+  },
+  {
+   "ingresso": "2022-04-01 15:00",
+   "uscita": "2022-04-01 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0418,
+   "larghezza_stop": 0.01304
+  },
+  {
+   "ingresso": "2022-04-03 15:00",
+   "uscita": "2022-04-03 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.6797,
+   "larghezza_stop": 0.01037
+  },
+  {
+   "ingresso": "2022-04-07 12:00",
+   "uscita": "2022-04-07 15:00",
+   "motivo": "stop",
+   "r": -1.0853,
+   "larghezza_stop": 0.01281
+  },
+  {
+   "ingresso": "2022-04-12 10:00",
+   "uscita": "2022-04-12 19:00",
+   "motivo": "stop",
+   "r": -1.0682,
+   "larghezza_stop": 0.01496
+  },
+  {
+   "ingresso": "2022-04-13 14:00",
+   "uscita": "2022-04-13 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.1537,
+   "larghezza_stop": 0.0144
+  },
+  {
+   "ingresso": "2022-04-17 12:00",
+   "uscita": "2022-04-17 13:00",
+   "motivo": "stop",
+   "r": -1.1777,
+   "larghezza_stop": 0.00617
+  },
+  {
+   "ingresso": "2022-04-19 14:00",
+   "uscita": "2022-04-19 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.3642,
+   "larghezza_stop": 0.01208
+  },
+  {
+   "ingresso": "2022-04-20 11:00",
+   "uscita": "2022-04-20 13:00",
+   "motivo": "stop",
+   "r": -1.1186,
+   "larghezza_stop": 0.00923
+  },
+  {
+   "ingresso": "2022-04-21 11:00",
+   "uscita": "2022-04-21 17:00",
+   "motivo": "stop",
+   "r": -1.1005,
+   "larghezza_stop": 0.01141
+  },
+  {
+   "ingresso": "2022-04-27 11:00",
+   "uscita": "2022-04-27 14:00",
+   "motivo": "stop",
+   "r": -1.0768,
+   "larghezza_stop": 0.01421
+  },
+  {
+   "ingresso": "2022-04-28 10:00",
+   "uscita": "2022-04-28 13:00",
+   "motivo": "stop",
+   "r": -1.0849,
+   "larghezza_stop": 0.01286
+  },
+  {
+   "ingresso": "2022-05-01 16:00",
+   "uscita": "2022-05-01 18:00",
+   "motivo": "stop",
+   "r": -1.1109,
+   "larghezza_stop": 0.00986
+  },
+  {
+   "ingresso": "2022-05-04 09:00",
+   "uscita": "2022-05-04 18:00",
+   "motivo": "target",
+   "r": 1.8847,
+   "larghezza_stop": 0.01051
+  },
+  {
+   "ingresso": "2022-05-07 11:00",
+   "uscita": "2022-05-07 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.9008,
+   "larghezza_stop": 0.01057
+  },
+  {
+   "ingresso": "2022-05-15 13:00",
+   "uscita": "2022-05-15 21:00",
+   "motivo": "fine_giornata",
+   "r": 1.2127,
+   "larghezza_stop": 0.01951
+  },
+  {
+   "ingresso": "2022-05-17 10:00",
+   "uscita": "2022-05-17 14:00",
+   "motivo": "stop",
+   "r": -1.0614,
+   "larghezza_stop": 0.01774
+  },
+  {
+   "ingresso": "2022-05-19 12:00",
+   "uscita": "2022-05-19 15:00",
+   "motivo": "target",
+   "r": 1.9353,
+   "larghezza_stop": 0.01732
+  },
+  {
+   "ingresso": "2022-05-22 09:00",
+   "uscita": "2022-05-22 09:00",
+   "motivo": "target",
+   "r": 1.8657,
+   "larghezza_stop": 0.00826
+  },
+  {
+   "ingresso": "2022-05-28 13:00",
+   "uscita": "2022-05-28 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0247,
+   "larghezza_stop": 0.01188
+  },
+  {
+   "ingresso": "2022-05-29 11:00",
+   "uscita": "2022-05-29 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0402,
+   "larghezza_stop": 0.00786
+  },
+  {
+   "ingresso": "2022-05-31 16:00",
+   "uscita": "2022-05-31 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.5723,
+   "larghezza_stop": 0.01526
+  },
+  {
+   "ingresso": "2022-06-02 12:00",
+   "uscita": "2022-06-02 13:00",
+   "motivo": "stop",
+   "r": -1.0824,
+   "larghezza_stop": 0.01325
+  },
+  {
+   "ingresso": "2022-06-04 15:00",
+   "uscita": "2022-06-04 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2208,
+   "larghezza_stop": 0.00967
+  },
+  {
+   "ingresso": "2022-06-05 16:00",
+   "uscita": "2022-06-05 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.293,
+   "larghezza_stop": 0.00739
+  },
+  {
+   "ingresso": "2022-06-06 15:00",
+   "uscita": "2022-06-06 17:00",
+   "motivo": "stop",
+   "r": -1.1029,
+   "larghezza_stop": 0.0116
+  },
+  {
+   "ingresso": "2022-06-09 09:00",
+   "uscita": "2022-06-09 12:00",
+   "motivo": "stop",
+   "r": -1.0866,
+   "larghezza_stop": 0.01261
+  },
+  {
+   "ingresso": "2022-06-19 11:00",
+   "uscita": "2022-06-19 13:00",
+   "motivo": "stop",
+   "r": -1.0275,
+   "larghezza_stop": 0.03917
+  },
+  {
+   "ingresso": "2022-06-20 11:00",
+   "uscita": "2022-06-20 17:00",
+   "motivo": "stop",
+   "r": -1.0329,
+   "larghezza_stop": 0.03462
+  },
+  {
+   "ingresso": "2022-06-21 14:00",
+   "uscita": "2022-06-21 19:00",
+   "motivo": "stop",
+   "r": -1.0394,
+   "larghezza_stop": 0.02799
+  },
+  {
+   "ingresso": "2022-06-23 10:00",
+   "uscita": "2022-06-23 15:00",
+   "motivo": "stop",
+   "r": -1.0501,
+   "larghezza_stop": 0.02168
+  },
+  {
+   "ingresso": "2022-06-26 12:00",
+   "uscita": "2022-06-26 12:00",
+   "motivo": "stop",
+   "r": -1.0873,
+   "larghezza_stop": 0.01251
+  },
+  {
+   "ingresso": "2022-06-27 09:00",
+   "uscita": "2022-06-27 12:00",
+   "motivo": "stop",
+   "r": -1.0859,
+   "larghezza_stop": 0.01271
+  },
+  {
+   "ingresso": "2022-06-28 09:00",
+   "uscita": "2022-06-28 14:00",
+   "motivo": "stop",
+   "r": -1.0839,
+   "larghezza_stop": 0.01301
+  },
+  {
+   "ingresso": "2022-07-04 10:00",
+   "uscita": "2022-07-04 11:00",
+   "motivo": "target",
+   "r": 1.902,
+   "larghezza_stop": 0.01136
+  },
+  {
+   "ingresso": "2022-07-07 15:00",
+   "uscita": "2022-07-07 19:00",
+   "motivo": "target",
+   "r": 1.9115,
+   "larghezza_stop": 0.01375
+  },
+  {
+   "ingresso": "2022-07-15 13:00",
+   "uscita": "2022-07-15 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2139,
+   "larghezza_stop": 0.01733
+  },
+  {
+   "ingresso": "2022-07-16 16:00",
+   "uscita": "2022-07-16 16:00",
+   "motivo": "target",
+   "r": 1.9026,
+   "larghezza_stop": 0.01143
+  },
+  {
+   "ingresso": "2022-07-18 16:00",
+   "uscita": "2022-07-18 16:00",
+   "motivo": "stop",
+   "r": -1.0538,
+   "larghezza_stop": 0.0202
+  },
+  {
+   "ingresso": "2022-07-19 16:00",
+   "uscita": "2022-07-19 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.2627,
+   "larghezza_stop": 0.02479
+  },
+  {
+   "ingresso": "2022-07-20 15:00",
+   "uscita": "2022-07-20 16:00",
+   "motivo": "stop",
+   "r": -1.0521,
+   "larghezza_stop": 0.0224
+  },
+  {
+   "ingresso": "2022-07-22 10:00",
+   "uscita": "2022-07-22 16:00",
+   "motivo": "stop",
+   "r": -1.0674,
+   "larghezza_stop": 0.01693
+  },
+  {
+   "ingresso": "2022-07-24 16:00",
+   "uscita": "2022-07-24 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.459,
+   "larghezza_stop": 0.01441
+  },
+  {
+   "ingresso": "2022-07-27 14:00",
+   "uscita": "2022-07-27 18:00",
+   "motivo": "target",
+   "r": 1.9081,
+   "larghezza_stop": 0.01245
+  },
+  {
+   "ingresso": "2022-07-28 16:00",
+   "uscita": "2022-07-28 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4992,
+   "larghezza_stop": 0.02143
+  },
+  {
+   "ingresso": "2022-07-30 13:00",
+   "uscita": "2022-07-30 19:00",
+   "motivo": "stop",
+   "r": -1.0824,
+   "larghezza_stop": 0.01446
+  },
+  {
+   "ingresso": "2022-08-03 09:00",
+   "uscita": "2022-08-03 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.0165,
+   "larghezza_stop": 0.01293
+  },
+  {
+   "ingresso": "2022-08-07 13:00",
+   "uscita": "2022-08-07 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.8092,
+   "larghezza_stop": 0.00655
+  },
+  {
+   "ingresso": "2022-08-08 09:00",
+   "uscita": "2022-08-08 15:00",
+   "motivo": "stop",
+   "r": -1.1112,
+   "larghezza_stop": 0.00984
+  },
+  {
+   "ingresso": "2022-08-10 13:00",
+   "uscita": "2022-08-10 18:00",
+   "motivo": "stop",
+   "r": -1.0893,
+   "larghezza_stop": 0.01329
+  },
+  {
+   "ingresso": "2022-08-11 13:00",
+   "uscita": "2022-08-11 14:00",
+   "motivo": "stop",
+   "r": -1.0741,
+   "larghezza_stop": 0.01472
+  },
+  {
+   "ingresso": "2022-08-18 10:00",
+   "uscita": "2022-08-18 16:00",
+   "motivo": "stop",
+   "r": -1.126,
+   "larghezza_stop": 0.00926
+  },
+  {
+   "ingresso": "2022-08-21 09:00",
+   "uscita": "2022-08-21 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.3226,
+   "larghezza_stop": 0.01263
+  },
+  {
+   "ingresso": "2022-08-23 14:00",
+   "uscita": "2022-08-23 21:00",
+   "motivo": "fine_giornata",
+   "r": -0.2127,
+   "larghezza_stop": 0.01365
+  },
+  {
+   "ingresso": "2022-08-24 16:00",
+   "uscita": "2022-08-24 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.1825,
+   "larghezza_stop": 0.01129
+  },
+  {
+   "ingresso": "2022-08-26 13:00",
+   "uscita": "2022-08-26 14:00",
+   "motivo": "stop",
+   "r": -1.0917,
+   "larghezza_stop": 0.01192
+  },
+  {
+   "ingresso": "2022-08-29 14:00",
+   "uscita": "2022-08-29 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.3556,
+   "larghezza_stop": 0.01072
+  },
+  {
+   "ingresso": "2022-09-02 15:00",
+   "uscita": "2022-09-02 16:00",
+   "motivo": "stop",
+   "r": -1.0955,
+   "larghezza_stop": 0.01191
+  },
+  {
+   "ingresso": "2022-09-04 13:00",
+   "uscita": "2022-09-04 13:00",
+   "motivo": "stop",
+   "r": -1.1413,
+   "larghezza_stop": 0.00775
+  },
+  {
+   "ingresso": "2022-09-07 15:00",
+   "uscita": "2022-09-07 20:00",
+   "motivo": "target",
+   "r": 1.9074,
+   "larghezza_stop": 0.01165
+  },
+  {
+   "ingresso": "2022-09-09 11:00",
+   "uscita": "2022-09-09 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.5354,
+   "larghezza_stop": 0.01695
+  },
+  {
+   "ingresso": "2022-09-16 12:00",
+   "uscita": "2022-09-16 13:00",
+   "motivo": "stop",
+   "r": -1.0998,
+   "larghezza_stop": 0.01095
+  },
+  {
+   "ingresso": "2022-09-21 12:00",
+   "uscita": "2022-09-21 17:00",
+   "motivo": "target",
+   "r": 1.9189,
+   "larghezza_stop": 0.0141
+  },
+  {
+   "ingresso": "2022-09-22 09:00",
+   "uscita": "2022-09-22 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.0488,
+   "larghezza_stop": 0.02283
+  },
+  {
+   "ingresso": "2022-09-26 09:00",
+   "uscita": "2022-09-26 11:00",
+   "motivo": "stop",
+   "r": -1.0865,
+   "larghezza_stop": 0.01263
+  },
+  {
+   "ingresso": "2022-09-28 15:00",
+   "uscita": "2022-09-28 21:00",
+   "motivo": "fine_giornata",
+   "r": 0.4462,
+   "larghezza_stop": 0.01885
+  },
+  {
+   "ingresso": "2022-09-30 15:00",
+   "uscita": "2022-09-30 16:00",
+   "motivo": "stop",
+   "r": -1.0714,
+   "larghezza_stop": 0.01665
+  }
+ ]
+}

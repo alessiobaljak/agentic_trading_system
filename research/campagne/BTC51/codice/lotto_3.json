@@ -1,0 +1,11 @@
+[
+ {"id": "V-021", "ipotesi": "I-10", "fonte": "Appel, Technical Analysis: Power Tools for Active Investors, 2005; Brock, Lakonishok, LeBaron, JF 1992",
+  "specifica": {"timeframe": "2h", "direzione": "long", "filtro": {"codice": "F1", "n": 200, "lato": "sopra"}, "ingresso": {"codice": "E9"}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U3", "k": 3.0}]},
+  "previsione": "R medio fra -0,05 e +0,2; non supera"},
+ {"id": "V-022", "ipotesi": "I-10", "fonte": "come V-021",
+  "specifica": {"timeframe": "2h", "direzione": "short", "filtro": {"codice": "F1", "n": 200, "lato": "sotto"}, "ingresso": {"codice": "E9"}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U3", "k": 3.0}]},
+  "previsione": "R medio fra -0,05 e +0,2; non supera"},
+ {"id": "V-023", "ipotesi": "I-11", "fonte": "Connors, Alvarez, Short Term Trading Strategies That Work, 2009",
+  "specifica": {"timeframe": "1h", "direzione": "short", "filtro": {"codice": "F1", "n": 200, "lato": "sotto"}, "ingresso": {"codice": "E6", "n": 7, "soglie": [30, 70]}, "conferma": null, "tipo_ingresso": {"codice": "L", "k": 0.25, "validita": 3}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 24}]},
+  "previsione": "R medio fra -0,15 e +0,1; non supera"}
+]

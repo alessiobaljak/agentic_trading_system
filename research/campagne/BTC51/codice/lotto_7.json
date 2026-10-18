@@ -1,0 +1,8 @@
+[
+ {"id": "V-037", "ipotesi": "I-19", "fonte": "Campbell, Grossman, Wang, Trading Volume and Serial Correlation in Stock Returns, QJE 108(4), 1993; Caporale, Plastun, CESifo WP 7917, 2019",
+  "specifica": {"timeframe": "1h", "direzione": "short", "filtro": null, "ingresso": {"codice": "E5", "k": 2.0}, "conferma": {"codice": "C1", "soglia": 1.5}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 12}]},
+  "previsione": "R medio fra -0,1 e +0,15; non supera"},
+ {"id": "V-038", "ipotesi": "I-19", "fonte": "come V-037",
+  "specifica": {"timeframe": "1h", "direzione": "long", "filtro": null, "ingresso": {"codice": "E5", "k": 2.0}, "conferma": {"codice": "C1", "soglia": 1.5}, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 1.5}, "uscite": [{"codice": "U1", "k": 1.5}, {"codice": "U2", "n": 12}]},
+  "previsione": "R medio fra -0,2 e +0,05; non supera"}
+]

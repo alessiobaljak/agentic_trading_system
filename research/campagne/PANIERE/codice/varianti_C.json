@@ -1,0 +1,8 @@
+[
+ {"nome": "C1-1,5 long", "direzione": "long", "k": 1.5, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "C1-1,5 short", "direzione": "short", "k": 1.5, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "C1-2 long", "direzione": "long", "k": 2.0, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "C1-2 short", "direzione": "short", "k": 2.0, "monete_in_ritardo": 0, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "C2-1,5 long", "direzione": "long", "k": 1.5, "monete_in_ritardo": 20, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "C2-1,5 short", "direzione": "short", "k": 1.5, "monete_in_ritardo": 20, "giorni_deviazione": 60, "giorni_minimi_deviazione": 40, "barre_uscita": 5, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60}
+]

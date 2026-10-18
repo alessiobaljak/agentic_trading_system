@@ -1,0 +1,8 @@
+[
+ {"nome": "A1-20 long", "regola": "A1", "direzione": "long", "n": 20, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "A1-20 short", "regola": "A1", "direzione": "short", "n": 20, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "A1-55 long", "regola": "A1", "direzione": "long", "n": 55, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "A1-55 short", "regola": "A1", "direzione": "short", "n": 55, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "A2 long", "regola": "A2", "direzione": "long", "giorni_rendimento": 60, "giorni_media": 100, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60},
+ {"nome": "A2 short", "regola": "A2", "direzione": "short", "giorni_rendimento": 60, "giorni_media": 100, "multiplo_atr": 2.5, "barre_atr": 20, "barre_massime": 60}
+]
