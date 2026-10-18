@@ -1,0 +1,6 @@
+[
+{"id": "V-019", "ipotesi": "I-02", "nata_dalla_fase3": true, "confronto_con": "V-004",
+ "fonte": "He, Manela, Ross, von Wachter, Fundamentals of Perpetual Futures, documento di lavoro, dicembre 2022 (uso contrarian: inferenza della sessione); modifica nata dalla Fase 3 su V-004",
+ "specifica": {"timeframe": "1h", "direzione": "long", "filtro": null, "ingresso": {"codice": "E11", "soglia": 0.0}, "conferma": null, "tipo_ingresso": {"codice": "M"}, "stop": {"codice": "S1", "k": 2.0}, "uscite": [{"codice": "U1", "k": 2.0}, {"codice": "U2", "n": 48}]},
+ "previsione": "R medio fra 0,0 e +0,2 R; p-value sopra 0,023 (non supera la Fase 2); sulle monete di controllo il controllo della Fase 3 piu' probabilmente non passa"}
+]

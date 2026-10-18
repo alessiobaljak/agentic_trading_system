@@ -462,3 +462,37 @@ uscita al segnale opposto perche' e' l'uso classico del MACD, piu' il trailing p
 V-017 232 trade, V-018 191 trade.
 
 **Previsione.** R medio fra −0,15 e +0,1 R, p-value sopra 0,05 per entrambe.
+
+---
+
+# Varianti nate dalla Fase 3
+
+## V-019 — V-004 con l'uscita a tempo dopo 48 candele (nata dalla Fase 3)
+
+Scritta il 18 ottobre 2026, dopo il risultato di V-004. Differisce da V-004 per un solo elemento (l'uscita a tempo:
+48 candele invece di 24): e' una variante nata dalla Fase 3 (punto 3), qualunque sia la sua ipotesi. Prima della sua
+Fase 2 si chiede al coordinamento il controllo sulle monete di controllo, sul periodo di costruzione, fra V-019 e
+V-004 (Fase 3, punto 4); se non passa, V-019 e' uno scarto e consuma comunque il tentativo.
+
+**Da dove viene.** Dai trade di V-004 (`codice/fase3_analisi.py`): le 67 uscite a tempo, dopo 24 ore, avevano in media
++0,449 R; se il rialzo dopo un funding negativo continua oltre le 24 ore, tenere la posizione il doppio dovrebbe
+catturarne di piu'. Ipotesi (la stessa di I-02, con un orizzonte piu' lungo): la chiusura delle posizioni short con leva
+dopo un funding negativo richiede piu' di un giorno.
+
+**Spiegazioni concorrenti, in piu' di quelle di I-02.**
+
+| # | Spiegazione | Previsione | Cosa la smentirebbe |
+|---|---|---|---|
+| 1 | Le uscite a tempo positive di V-004 sono un caso, scelto guardando i trade | sulle monete di controllo la modifica non migliora (controllo non passato) | controllo passato |
+| 2 | Piu' tempo in posizione vuol dire piu' esposizione alla tendenza di fondo, non al segnale | il miglioramento c'e' anche per le entrate casuali | il p-value migliora rispetto a V-004 |
+| 3 | Con 48 candele piu' trade arrivano allo stop | R medio uguale o peggiore di V-004 | migliore |
+
+**Variante.**
+
+> **V-019** · 1h · long · nessun filtro · ingresso E11: funding sotto 0,00% · conferma nessuna · tipo M · stop S1:
+> 2 × ATR(14) · uscite U1: target 2 R, U2: dopo 48 candele.
+
+Stima: 157 trade.
+
+**Previsione.** Controllo sulle monete di controllo: piu' probabilmente non passa (spiegazione 1). Se passa: R medio fra
+0,0 e +0,2 R, p-value sopra 0,023 (non supera la Fase 2).

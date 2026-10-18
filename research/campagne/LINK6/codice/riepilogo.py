@@ -23,4 +23,5 @@ for vid, r in reg.items():
     anni = ", ".join(f"{a} {v:+.1f}" for a, v in m["r_per_anno"].items())
     print(f"{vid} | {r['variante_n']} | {s['timeframe']} | {s['direzione']} | {m['trade']} | {m['r_medio']:+.3f} | "
           f"{x['r_medio_entrate_casuali']:+.3f} | {m['p_value']} | {m['profit_factor']} | {anni} | {x['esito']}")
-print(f"varianti registrate: {len(reg)} su {comune.VARIANTI_MASSIME}; scarti: {len(scarti)}")
+print(f"varianti che consumano un tentativo: {len(comune.varianti_registrate())} su {comune.VARIANTI_MASSIME}; "
+      f"scarti: {len(scarti)}")

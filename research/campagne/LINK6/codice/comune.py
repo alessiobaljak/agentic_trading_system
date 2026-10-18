@@ -53,7 +53,10 @@ def aggiungi(voce):
 
 
 def varianti_registrate():
-    return [v for v in voci() if v.get("tipo") == "registrazione" and v.get("tipo_test") == "variante"]
+    """Le varianti che consumano un tentativo (8.3): quelle registrate per la Fase 2 e quelle nate dalla
+    Fase 3 scartate dal controllo sulle monete di controllo (Fase 3, punto 4: lo scarto consuma il tentativo)."""
+    return [v for v in voci() if (v.get("tipo") == "registrazione" and v.get("tipo_test") == "variante")
+            or (v.get("tipo") == "scarto" and v.get("consuma_tentativo"))]
 
 
 def leggi_lotto(percorso):
