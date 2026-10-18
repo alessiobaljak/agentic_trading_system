@@ -59,7 +59,8 @@ trade in paper», ma è il motore dopo la validazione (`ops` 0600).
 **Deciso dal proprietario il 18 ott 2026 (~08:40 UTC):** «la domanda non è se vuoi continuare e dobbiamo continuare
 fino a quando non trovi delle strategie valide... se serve riscriviamo totalmente il gate non mi interessa (prima però
 voglio che tu storicizzi tutti i dati raccolti, quello che abbiamo imparato, cosa abbiamo cambiato, insomma tutto
-dall'inizio di questo progetto ad oggi)». Primo passo: la storia in `docs/storia/`; poi la proposta di come ripartire.
+dall'inizio di questo progetto ad oggi)». Primo passo: la storia in `docs/storia/` (fatta il 18 ott, con l'esportazione
+dei dati); poi la proposta di come ripartire: bozza in `docs/proposta_ripartenza.md` (18 ott), in revisione indipendente.
 **Perché:** la campagna LINK6 (protocollo 4) si è chiusa il 18 ott 2026 senza candidati: 16 idee, 33 varianti su 40,
 R medio delle varianti −0,030 contro −0,032 delle loro entrate casuali (`research/campagne/LINK6/lezioni.md`). Con
 BTC51 (un candidato caduto nel vault), la ricerca 4.5 (630 varianti, nessuna oltre il vault) e il paniere a barre
