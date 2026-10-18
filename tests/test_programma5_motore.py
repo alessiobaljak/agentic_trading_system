@@ -104,3 +104,15 @@ def test_le_barre_orarie_passano_dal_guardiano_anche_dalla_cache():
     from research.programma5.strumenti import ore
     with pytest.raises(m5.PeriodoChiuso):
         ore.barre("BTCUSDT", "V", "I-999")
+
+
+def test_la_gamba_a_tempo_delle_idee_a_ore_e_uguale_al_simulatore():
+    from research.programma5.strumenti import idee_ore
+    rng = np.random.default_rng(3)
+    prezzi = 100 * np.exp(np.cumsum(rng.normal(0, 0.001, 400)))
+    df = _df(prezzi)
+    fund = pd.DataFrame({"ore": [8, 8], "tasso": [0.001, -0.0005]}, index=[df.index[50], df.index[200]])
+    pos = np.array([10, 40, 150, 300])
+    lordo, costo, fu = idee_ore._tempo(df, "DOGEUSDT", pos, -1, 60, fund)
+    t = m5.simula(df, "DOGEUSDT", pos, -np.ones(4, int), m5.Uscita(minuti=60), fund, esplosione=np.ones(4, bool))
+    assert np.allclose(lordo, t["lordo"]) and np.allclose(costo, t["costo"]) and np.allclose(fu, t["funding"])
