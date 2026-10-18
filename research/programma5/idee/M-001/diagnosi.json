@@ -1,0 +1,16 @@
+{
+ "caso_M-001c": {
+  "netto_caso_medio": 0.009143331542609948,
+  "netto_caso_min": 0.007357678505061774,
+  "netto_caso_max": 0.010623522391751752,
+  "netto_strategia": 0.01318258686703878,
+  "netto_strategia_senza_G1": 0.013464477090273836,
+  "trade_G1_esclusi": 1569
+ },
+ "placebo_200_M-001c": {
+  "netto_medio": -0.002070084795676558,
+  "errore_della_media": 0.00012661791155486697,
+  "costo_medio": 0.0018713582894712066,
+  "ripetizioni": 200
+ }
+}
