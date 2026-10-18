@@ -79,12 +79,14 @@ def _scelte(tipo: str, s: str) -> list:
 
 
 def _prendi(url: str, tentativi: int = 6):
-    """``fetch_http`` con nuovi tentativi sugli errori di rete (connessioni interrotte), attese crescenti."""
+    """``fetch_http`` con nuovi tentativi sugli errori di rete (connessioni interrotte, letture incomplete), attese
+    crescenti."""
+    import http.client
     import time
     for k in range(tentativi):
         try:
             return fetch_http(url)
-        except OSError:
+        except (OSError, http.client.HTTPException):
             if k == tentativi - 1:
                 raise
             time.sleep(2 ** k)
