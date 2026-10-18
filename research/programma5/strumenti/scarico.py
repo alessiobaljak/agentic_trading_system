@@ -38,14 +38,26 @@ PREFISSI = {
 }
 
 
+def _leggi(url: str, tentativi: int = 6) -> str:
+    """Una pagina dell'elenco S3, con nuovi tentativi sulle connessioni interrotte."""
+    import time
+    for k in range(tentativi):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return r.read().decode("utf-8")
+        except OSError:
+            if k == tentativi - 1:
+                raise
+            time.sleep(2 ** k)
+
+
 def elenca(prefisso: str) -> list:
     """Le chiavi .zip sotto un prefisso, con la paginazione dell'elenco S3."""
     chiavi, marker = [], ""
     while True:
         url = f"{ELENCO}?prefix={prefisso}&max-keys=1000" + (f"&marker={marker}" if marker else "")
-        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=60) as r:
-            testo = r.read().decode("utf-8")
+        testo = _leggi(url)
         trovate = re.findall(r"<Key>([^<]+)</Key>", testo)
         chiavi += [k for k in trovate if k.endswith(".zip")]
         if "<IsTruncated>true</IsTruncated>" not in testo or not trovate:

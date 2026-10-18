@@ -11,13 +11,11 @@ from __future__ import annotations
 import io
 import json
 import re
-import urllib.request
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from research.programma5.strumenti.scarico import ELENCO, MONETE, elenca
-from research.src.dati import USER_AGENT, fetch_http
+from research.programma5.strumenti.scarico import ELENCO, MONETE, _leggi, _prendi, elenca
 
 QUI = Path(__file__).resolve().parents[1]
 STABILI = ("USDC", "FDUSD", "TUSD", "BUSD", "USDP", "DAI")
@@ -29,9 +27,7 @@ def simboli() -> list:
     while True:
         url = (f"{ELENCO}?prefix=data/futures/um/monthly/klines/&delimiter=/&max-keys=1000"
                + (f"&marker={marker}" if marker else ""))
-        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=60) as r:
-            testo = r.read().decode("utf-8")
+        testo = _leggi(url)
         trovati = re.findall(r"<Prefix>data/futures/um/monthly/klines/([^<]+)/</Prefix>", testo)
         out += trovati
         if "<IsTruncated>true</IsTruncated>" not in testo or not trovati:
@@ -51,7 +47,7 @@ def esame(s: str):
         return None
     if not elenca(f"data/futures/um/daily/klines/{s}/1d/{s}-1d-2026-10-"):
         return None
-    contenuto = fetch_http(f"{BASE}data/futures/um/monthly/klines/{s}/1d/{s}-1d-2026-09.zip")
+    contenuto = _prendi(f"{BASE}data/futures/um/monthly/klines/{s}/1d/{s}-1d-2026-09.zip")
     if contenuto is None:
         return None
     with zipfile.ZipFile(io.BytesIO(contenuto)) as z:
@@ -66,7 +62,7 @@ def esame(s: str):
 
 def main() -> int:
     tutti = simboli()
-    with ThreadPoolExecutor(max_workers=16) as ex:
+    with ThreadPoolExecutor(max_workers=8) as ex:
         esiti = [e for e in ex.map(esame, tutti) if e]
     esiti.sort(key=lambda e: -e["volume_settembre_2026"])
     scelte = [e["simbolo"] for e in esiti[:12]]
