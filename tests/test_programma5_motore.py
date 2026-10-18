@@ -69,3 +69,12 @@ def test_il_guardiano_non_apre_la_validazione_senza_regola_congelata():
     with pytest.raises(m5.PeriodoChiuso):
         m5.controlla_periodo("R", None)
     m5.controlla_periodo("C", None)
+
+
+def test_i_file_giornalieri_e_mensili_si_riconoscono_per_data():
+    from datetime import date
+    assert m5._dentro("BTCUSDT-metrics-2020-09-01.zip", date(2020, 9, 1), date(2020, 9, 30))
+    assert not m5._dentro("BTCUSDT-metrics-2023-01-01.zip", date(2020, 1, 1), date(2022, 12, 31))
+    assert m5._dentro("BTCUSDT-1m-2022-12.zip", date(2020, 1, 1), date(2022, 12, 31))
+    assert not m5._dentro("BTCUSDT-1m-2023-01.zip", date(2020, 1, 1), date(2022, 12, 31))
+    assert m5._dentro("BTCUSDT-1m-2026-10-05.zip", date(2026, 10, 1), date(2099, 12, 31))

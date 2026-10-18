@@ -96,7 +96,7 @@ def _dentro(nome: str, inizio: date, fine: date) -> bool:
     """Il file (mensile o giornaliero) tocca il periodo?"""
     parti = nome.rsplit(".", 1)[0].split("-")
     try:
-        if len(parti[-1]) == 2 and len(parti[-2]) == 4 and len(parti[-3]) == 4:   # ...-AAAA-MM-GG
+        if len(parti) >= 3 and len(parti[-1]) == 2 and len(parti[-2]) == 2 and len(parti[-3]) == 4:   # ...-AAAA-MM-GG
             g = date(int(parti[-3]), int(parti[-2]), int(parti[-1]))
             return inizio <= g <= fine
         a, m = int(parti[-2]), int(parti[-1])
