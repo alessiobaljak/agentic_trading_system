@@ -116,3 +116,22 @@ def test_la_gamba_a_tempo_delle_idee_a_ore_e_uguale_al_simulatore():
     lordo, costo, fu = idee_ore._tempo(df, "DOGEUSDT", pos, -1, 60, fund)
     t = m5.simula(df, "DOGEUSDT", pos, -np.ones(4, int), m5.Uscita(minuti=60), fund, esplosione=np.ones(4, bool))
     assert np.allclose(lordo, t["lordo"]) and np.allclose(costo, t["costo"]) and np.allclose(fu, t["funding"])
+
+
+def test_scalping_uscita_a_limite_solo_dal_minuto_dopo_e_ad_attraversamento():
+    from research.programma5.strumenti import scalping
+    # minuto 1: minimo 98,5 (sotto 99: eseguito a 99) e massimo 101 nello stesso minuto: il target 100 non vale li'
+    # minuto 2: massimo 100 (tocca ma non attraversa); minuto 3: massimo 100,5 (attraversa): uscita a 100
+    df = _df([100, 100, 99.5, 99.8, 99.9, 99.9], alti=[100, 101, 100, 100.5, 100, 100],
+             bassi=[100, 98.5, 99.2, 99.5, 99.5, 99.5])
+    sg = np.log(100 / 99)
+    t = scalping.simula_doppio(df, "BTCUSDT", np.array([0]), np.array([99.0]), np.array([sg]), np.array([1]),
+                               m=1.0, validita=3, tenuta=4)
+    assert len(t) == 1 and t.iloc[0]["motivo"] == "target"
+    assert t.iloc[0]["lordo"] == pytest.approx(100 / 99 - 1)
+    assert t.iloc[0]["costo"] == pytest.approx(2 * 0.0002)
+    # senza attraversamento del target: uscita a mercato alla chiusura del minuto 1 + 2, con costi a mercato
+    t2 = scalping.simula_doppio(df, "BTCUSDT", np.array([0]), np.array([99.0]), np.array([sg]), np.array([1]),
+                                m=1.0, validita=3, tenuta=1)
+    assert t2.iloc[0]["motivo"] == "tempo" and t2.iloc[0]["lordo"] == pytest.approx(99.5 / 99 - 1)
+    assert t2.iloc[0]["costo"] == pytest.approx(0.0002 + 0.0005 + 2 * 0.0001)

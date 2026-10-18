@@ -16,7 +16,7 @@ from pathlib import Path
 RADICE = Path(__file__).resolve().parents[3]
 IDEE = RADICE / "research" / "programma5" / "idee"
 STRUMENTI = RADICE / "research" / "programma5" / "strumenti"
-COMUNI = ["motore5.py", "ore.py", "eventi.py", "idee_minuti.py", "idee_ore.py", "idee_ore2.py", "idee_giorno.py", "esplosioni_oi.py",
+COMUNI = ["motore5.py", "ore.py", "eventi.py", "idee_minuti.py", "idee_ore.py", "idee_ore2.py", "scalping.py", "idee_giorno.py", "esplosioni_oi.py",
           "rapporto.py", "esplorazione.py"]
 
 
