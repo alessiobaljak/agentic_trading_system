@@ -13,18 +13,27 @@ QUI = Path(__file__).parent
 CENTO = json.loads((QUI.parents[1] / "universo_top100.json").read_text())["scelte"]
 
 
+# piano.md, aggiunta prima del calcolo: le famiglie gia' provate su V2 dalle idee J non si promuovono
+def visto_v2(nome, r):
+    return nome.startswith(("W4", "W3 giornata", "W2 america->sera"))
+
+
 def riga(n, r):
     sem = " ".join(f"{a}:{100 * m:+.2f}({k})" for a, (k, m) in r.get("per_semestre", {}).items())
     monete = [m for k, m in r.get("per_moneta", {}).values() if k >= 10]
     segno = np.sign(r.get("lordo", 0))
     giuste = sum(1 for m in monete if segno * m > 0)
     return (f"| {n} | {r['trade']} | {100 * r['lordo']:+.3f}% | {100 * r['contro_caso']:+.3f}% | {r['t']:+.2f} | {sem} | "
-            f"{giuste}/{len(monete)} | {'**sì**' if r['promossa'] else ''}{' (parente R)' if r.get('parente_R') else ''} |")
+            f"{giuste}/{len(monete)} | {'**sì**' if r['promossa'] else ('visto V2' if r.get('visto_V2') else '')}{' (parente R)' if r.get('parente_R') else ''} |")
 
 
 def main():
     warnings.filterwarnings("ignore")
     ris = esplora(tuple(CENTO), "C2", monete_min=20)
+    for n, r in ris.items():
+        r["visto_V2"] = visto_v2(n, r)
+        if r["visto_V2"]:
+            r["promossa"] = False
     (QUI / "risultati.json").write_text(json.dumps(ris, ensure_ascii=False, indent=0), encoding="utf-8")
     validi = {n: r for n, r in ris.items() if r.get("trade", 0) > 0 and np.isfinite(r.get("t", np.nan))}
     promosse = {n: r for n, r in validi.items() if r["promossa"]}
