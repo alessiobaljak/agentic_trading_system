@@ -49,7 +49,59 @@ candidato (sezione 8.3: con 40 varianti il 61% di probabilita' di almeno uno). I
 vantaggio in quelle combinazioni; lo giudico basso (ipotizzato). Se il proprietario o il coordinamento allo STOP
 chiedono di continuare, si continua con il limite di 40.
 
-## Esito
+## Esito (prima versione)
 
 Passo 2 finito senza candidati. Se lo STOP lo conferma, la validazione (Passo 3) non ha candidati da eseguire, e la
 consegna (Passo 4) scrivera' «nessuna strategia valida trovata».
+
+---
+
+# Fase 5 rifatta dopo il lotto 6 (18 ottobre 2026)
+
+Il coordinamento, con la delega del proprietario, non ha confermato lo STOP e ha chiesto di usare i tentativi rimasti
+per le combinazioni non provate, con un perche' e una fonte (voce N-010). Lotto 6: I-14 (incrocio di medie), I-15
+(VWAP), I-16 (fine settimana con la candela di rifiuto), sei varianti V-028 ... V-033. Nessuna supera la Fase 2.
+
+**Totale.** Varianti che consumano un tentativo: 33 su 40 (32 con la Fase 2, piu' V-019 scartata dal controllo della
+Fase 3). Candidati: nessuno. 16 idee.
+
+**Il test dello scettico, su tutte le 32 varianti** (`codice/fase5_pvalue.py`): p-value medio 0,478; 5 sotto 0,10
+(attesi per caso 3,2; probabilita' di almeno 5 per caso 0,211); 3 a 0,023 o meno (attesi 0,74; probabilita' di almeno
+3 per caso 0,037); Kolmogorov-Smirnov contro l'uniforme: p 0,416. Nel complesso i p-value restano compatibili con il
+caso, ma i tre piu' piccoli meritano una spiegazione.
+
+**I tre p-value piu' piccoli sono la stessa idea, e non pagano** (osservato, con l'inferenza segnata):
+
+| Variante | Regola | R medio | Casuali | p-value |
+|---|---|---|---|---|
+| V-021 | short quando la chiusura scende sotto la SMA(50), 4h | +0,010 | −0,083 | 0,001 |
+| V-029 | short quando la EMA(20) scende sotto la EMA(50), 1h | +0,084 | −0,076 | 0,003 |
+| V-031 | short sotto il VWAP quando l'RSI scende sotto 50, 1h | +0,027 | −0,070 | 0,003 |
+
+Tutte e tre sono short che entrano solo quando il prezzo e' gia' in discesa rispetto a una media. Le loro entrate
+casuali (short in momenti qualunque) perdono nel rialzo di fondo della costruzione (buy and hold sul periodo +184%,
+voce `risultato` di V-001). Inferito: c'e' un vantaggio di tempismo (essere short solo nei ribassi) sul caso, ma di
+pochi centesimi di R, molto sotto 0,2 R e dei costi doppi; e le tre varianti sono tre ritagli della stessa idea di
+tendenza, non tre prove indipendenti. Non costruisco altre varianti su questo: una variante scelta per allargare quel
+vantaggio nascerebbe dai risultati (regola 5 e Fase 3, punto 3).
+
+**V-028** (long all'incrocio EMA 20/50, 1h) ha R medio +0,242, sopra 0,2 R, ma le sue entrate casuali hanno +0,165 e
+il p-value e' 0,13; 51,6 R su 53,2 vengono dal 2020 (osservato). Inferito: e' l'esposizione al rialzo del 2020, non il
+segnale (spiegazione 4 di I-14).
+
+**Previsioni del lotto 6 sbagliate:** l'R medio di V-028 (+0,242, previsto fino a +0,1) e i p-value di V-029 e V-031
+(0,003, previsti sopra 0,05).
+
+## Perche' mi fermo a 33 su 40 (condizione 2 del coordinamento)
+
+Le combinazioni del catalogo che restano senza un'idea con fonte sono: le conferme C3 (RSI sopra o sotto 50) e varianti
+di stop e uscite su idee gia' provate. Le prime sarebbero un ritaglio in piu' di idee di tendenza gia' vicine a zero; le
+seconde nascerebbero dalla Fase 3 (un solo elemento cambiato) senza un motivo che non venga dai risultati. L'unica
+direzione con un segnale nei dati, lo short di tendenza, e' gia' stata provata tre volte con regole diverse e paga
+troppo poco: provarla una quarta volta per avere un R piu' alto sarebbe adattarsi ai risultati. Non scrivo idee per
+riempire i 7 tentativi rimasti.
+
+## Esito
+
+Passo 2 finito senza candidati: 33 varianti su 40, 16 idee, nessuna supera la Fase 2. Se lo STOP lo conferma, il
+Passo 3 non ha candidati da validare e la consegna (Passo 4) scrivera' «nessuna strategia valida trovata».
