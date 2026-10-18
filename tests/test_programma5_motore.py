@@ -195,3 +195,18 @@ def test_meta_t_da_aggregati_come_t_per_giorni():
 def test_fase_3_periodo_intero_solo_con_la_regola_congelata():
     with pytest.raises(m5.PeriodoChiuso):
         m5.controlla_periodo("W", "M-999")
+
+
+def test_meta2_sceglie_chi_batte_il_caso_non_chi_segue_il_mercato():
+    from research.programma5.strumenti import meta, meta2
+    gennaio = meta.minuto_mese(0)
+    giorni = np.arange(25)
+    base = dict(moneta="AUSDT", entrata=gennaio + giorni * 1440, uscita=gennaio + giorni * 1440 + 60, costo=0.001)
+    rumore = 0.001 * (giorni % 3)
+    # «mercato»: guadagna quanto il mese (base uguale al lordo); «tempismo»: guadagna piu' del mese
+    mercato = pd.DataFrame({**base, "lordo": 0.02 + rumore, "base": 0.02 + rumore, "famiglia": "F12"})
+    tempismo = pd.DataFrame({**base, "lordo": 0.01 + rumore, "base": 0.002, "famiglia": "F1"})
+    feb = lambda t: t.assign(entrata=t["entrata"] + 31 * 1440, uscita=t["uscita"] + 31 * 1440)
+    cand = {("M", "segue"): pd.concat([mercato, feb(mercato)]), ("T", "segue"): pd.concat([tempismo, feb(tempismo)])}
+    _, scelte = meta2.scegli_eccesso(cand, L=1, K=5, primo=1, ultimo=1, n_mesi=3, min_trade=10, t_min=1.0)
+    assert scelte[1] == [("T", "segue")]

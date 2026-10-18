@@ -217,3 +217,28 @@ la procedura guarda **solo i trade già chiusi** prima di quel momento, e scegli
 Dichiarato: questi anni il modello li conosce in parte e conosce gli esiti delle fasi 1 e 2; la procedura però non sceglie
 mai con dati del mese in cui opera, e le sue scelte (finestra, numero di celle) sono quelle comuni, fissate qui prima.
 Il periodo A (dal 2026-10-01) si riporta sempre e diventa la prova nel paper.
+
+## 9. La prova in avanti delle procedure (aggiunta il 18 ottobre 2026, ore 21:00 UTC, prima di guardare i dati da ottobre)
+
+**Perché.** M-001c (REGOLE.md, sezione 8) sul periodo W ha fatto +1,32% netto a trade su 18.435 trade, p 0,0001,
+positivo in 4 anni su 6 e su V2; non ha passato l'esame per la prova a placebo (−0,164% contro la soglia −0,170%). La
+diagnosi dopo l'esame (`idee/M-001/diagnosi.json`) dice che il placebo era rumore (con 200 ripetizioni la media è meno i
+costi) e che circa due terzi del guadagno vengono dall'essere long nei mesi giusti (ingressi a caso nello stesso mese con
+la stessa direzione: +0,91%). M-001 **resta bocciata** su W. Ma tutti i periodi passati sono ormai usati: l'unica prova
+pulita che resta per una procedura così è **il futuro**: i dati da ottobre 2026 in poi, che nessuno ha guardato e che
+arrivano un giorno alla volta.
+
+**Le regole della prova in avanti** (periodo **A**, dal 2026-10-01):
+1. Si registrano prima, in `idee/M-NNN/avanti.md` (con le impronte dei file), le procedure da provare, **al massimo 3**
+   insieme. Una procedura non si cambia più; una modifica è una procedura nuova, che parte da zero.
+2. I dati di A si scaricano dall'archivio di Binance con le loro impronte, man mano che escono (i file del giorno escono il
+   giorno dopo; il funding mensile esce il mese dopo: fino ad allora il funding di quei trade vale zero, e il conto si
+   rifà quando il file esce).
+3. Si contano solo i trade **chiusi** in A. Il verdetto si dà quando una procedura ha almeno **400 trade chiusi** in A, o al
+   **2027-03-31** se prima non ci arriva; prima si riportano i numeri, senza decidere.
+4. **Passa** se: netto medio a trade > 0 con **p a una coda ≤ 0,05 / numero delle procedure registrate** (bootstrap a
+   blocchi di giorni); positivo a costi doppi; positivo togliendo il giorno migliore; positivo su almeno il 60% delle monete
+   con almeno 10 trade. Si riporta sempre anche il confronto con il caso (ingressi a caso nello stesso mese con la stessa
+   direzione): non decide, ma dice quanto del guadagno è il mercato.
+5. Una procedura che passa è una **strategia valida** del programma 5 (sezione 1); entra nel paper solo con il servizio
+   separato, dopo, e con il sì del proprietario.

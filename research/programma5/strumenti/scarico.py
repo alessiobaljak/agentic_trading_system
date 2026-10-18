@@ -35,7 +35,7 @@ PREFISSI = {
     "klines": ["data/futures/um/monthly/klines/{s}/1m/", "data/futures/um/daily/klines/{s}/1m/"],
     "metrics": ["data/futures/um/daily/metrics/{s}/"],
     "funding": ["data/futures/um/monthly/fundingRate/{s}/"],
-    "premium": ["data/futures/um/monthly/premiumIndexKlines/{s}/1h/"],
+    "premium": ["data/futures/um/monthly/premiumIndexKlines/{s}/1h/", "data/futures/um/daily/premiumIndexKlines/{s}/1h/"],
 }
 
 
@@ -70,7 +70,7 @@ def _scelte(tipo: str, s: str) -> list:
     chiavi = []
     for p in PREFISSI[tipo]:
         chiavi += elenca(p.format(s=s))
-    if tipo == "klines":
+    if tipo in ("klines", "premium"):
         # i giornalieri servono solo per i mesi che non hanno ancora il file mensile
         mesi = {re.search(r"-(\d{4}-\d{2})\.zip$", k).group(1) for k in chiavi if "/monthly/" in k}
         chiavi = [k for k in chiavi if "/monthly/" in k
