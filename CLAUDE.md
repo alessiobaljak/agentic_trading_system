@@ -29,7 +29,15 @@ scritta al coordinamento. Decisioni e motivazioni in `research/protocollo_4_note
 `research/campagne/LINK6/lezioni.md`. **Decisione del proprietario (18 ott 2026, ~08:40 UTC):** «dobbiamo continuare
 fino a quando non trovi delle strategie valide... se serve riscriviamo totalmente il gate», ma prima va scritta la storia
 completa del progetto (dati raccolti, cosa abbiamo imparato, cosa abbiamo cambiato, errori da evitare) in `docs/storia/`,
-da leggere prima di ripartire (`docs/backlog.md`, P11). **Delega del
+da leggere prima di ripartire (`docs/backlog.md`, P11). **Delega del proprietario (18 ott 2026, sera):** «non continuare a
+chiedermi le autorizzazioni, procedi ad oltranza fino a che non avrai trovate delle strategie profittevoli che devono valere
+le crypto ad oggi in corso, continua a lavorare in background se un job finisce e non ottieni risultati, registra e passa
+ad un'altra idea e così via.. scrivimi solo quando avrai trovate diverse strategie che si possono applicare a diverse crypto
+anche se ci volessero dei giorni». È il **programma 5** (`research/programma5/`: regole in `REGOLE.md`, stato e coda delle
+idee in `STATO.md`): il coordinamento lavora da solo, non chiede permessi e non scrive al proprietario finché non ci sono
+più strategie valide su più monete; restano ferme le regole che non si negoziano (`DRY_RUN` vero, niente soldi veri, niente
+segreti, paper mai usato come training set) e il metodo (regole scritte prima, confronto con il caso, periodi usati una
+volta, conferma sui dati recenti). **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
 della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 
