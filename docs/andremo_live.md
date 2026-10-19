@@ -4199,3 +4199,8 @@ doppi, senza legame col Bitcoin; non passa solo lo Sharpe corretto per le 26 pro
 stessa regola sulle monete dalla 101ª alla 200ª non si ripete (Sharpe 0,18, spese 18,8% l'anno). Capito oggi: il funding
 alto (long affollati) è il segnale più forte trovato fra monete, sia per il funding incassato sia per il prezzo, ma solo fra
 le monete grandi; resta una candidata, da misurare in paper sui dati nuovi.
+**Ottava prova** (`OTTAVA.md`): la stessa regola con i pesi secondo la volatilità (F3) fa +50,6% l'anno dal 2021,
+Sharpe 1,28, positiva in ogni anno dal 2021 al 2026 e anche nelle 18 settimane del 2020; non è valida per lo Sharpe corretto
+(0,76 con 27 prove) e perché sulle monete 101-200 non si ripete (spese 19% l'anno). Capito: il vantaggio del funding fra
+monete c'è fra le monete liquide e sparisce fra le piccole. F3 e F2 sono le candidate del paper dal 20 ottobre
+(`research/programma6/paper/REGOLE.md`).

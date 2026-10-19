@@ -16,6 +16,11 @@ Le candidate del programma 6, con le regole **già scritte e già calcolate sul 
 
 F2 è la candidata principale. C1 e A1 si misurano perché costano poco e la loro correlazione con F2 è bassa.
 
+**Aggiunta del 19 ottobre 2026, sera, ancora prima di qualunque dato nuovo** (i dati nell'archivio arrivano al 18 ottobre, il
+periodo P comincia il 20 per i giorni e il 26 per le settimane): **F3**, il funding fra monete con i pesi secondo la
+volatilità (`OTTAVA.md`, `ottava.py`; sul passato +50,6% l'anno, Sharpe 1,28 dal 2021, positiva in ogni anno), diventa la
+candidata principale insieme a F2. Il verdetto di F3 segue la sezione 3 come le altre.
+
 ## 2. Come
 
 * Ogni mattina (con l'aggiornamento della prova in avanti del programma 5) si scaricano le candele giornaliere nuove di

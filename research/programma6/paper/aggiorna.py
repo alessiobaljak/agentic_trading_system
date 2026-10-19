@@ -83,7 +83,7 @@ def _riassunto(x: pd.Series, per_anno: int) -> dict:
             "sharpe": float(v.mean() / sd * math.sqrt(per_anno)) if sd > 0 else 0.0}
 
 
-def posizioni_settimana(pan: dict, m: int, segnale: np.ndarray, peso_volume: bool) -> dict:
+def posizioni_settimana(pan: dict, m: int, segnale: np.ndarray, peso_volume: bool, peso=None) -> dict:
     """Le posizioni del lunedi' di indice ``m`` (universo e pesi come nella terza prova)."""
     C, O, V = pan["close"], pan["open"], pan["quote_volume"]
     ok = np.isfinite(C)
@@ -95,9 +95,10 @@ def posizioni_settimana(pan: dict, m: int, segnale: np.ndarray, peso_volume: boo
     cand = np.flatnonzero(amm)
     U = np.zeros((1, C.shape[1]), bool)
     U[0, cand[np.argsort(-med[cand], kind="stable")][:te.N_UNIVERSO]] = True
-    W = te.pesi_portafoglio(segnale[None, :], U, med[None, :], peso_volume)[0]
-    return {"long": sorted(pan["simboli"][j] for j in np.flatnonzero(W > 0)),
-            "short": sorted(pan["simboli"][j] for j in np.flatnonzero(W < 0))}
+    pesi = med if peso is None else peso
+    W = te.pesi_portafoglio(segnale[None, :], U, pesi[None, :], peso_volume)[0]
+    return {"long": {pan["simboli"][j]: round(float(W[j]), 4) for j in np.flatnonzero(W > 0)},
+            "short": {pan["simboli"][j]: round(float(W[j]), 4) for j in np.flatnonzero(W < 0)}}
 
 
 def f2_e_c1(pan: dict) -> dict:
@@ -110,6 +111,8 @@ def f2_e_c1(pan: dict) -> dict:
     df = te.conto(Wt, ps["R"], ps["F"], costo)
     df.index = ps["lunedi"]
     out["F2"] = df
+    from research.programma6 import ottava as ot
+    out["F3"] = ot.portafoglio_f3(pan, ps, costo)
     Zr = te.ranghi(ps["Z"], ps["U"])
     ct, _ = te.segnale("C1", Zr, ps["R"], ps["U"], ps["peso"])
     Wc = te.pesi_portafoglio(ct, ps["U"], ps["peso"], True)
@@ -122,6 +125,11 @@ def f2_e_c1(pan: dict) -> dict:
     m = int(lun[-1])
     s7 = (np.cumsum(pan["funding"], axis=0)[m - 1] - np.cumsum(pan["funding"], axis=0)[m - 8])
     out["F2_adesso"] = {"lunedi": sc.data(m + pan["t0"]), **posizioni_settimana(pan, m, -s7, False)}
+    from research.programma6 import ottava as ot
+    sig = ot.sigma_30(pan, np.array([m]))[0]
+    out["F3_adesso"] = {"lunedi": sc.data(m + pan["t0"]),
+                        **posizioni_settimana(pan, m, np.where(np.isfinite(sig), -s7, np.nan), True,
+                                              peso=np.nan_to_num(1.0 / sig))}
     # C1 adesso: il segnale dell'ultima settimana completa (quello della settimana in corso richiede la domenica)
     w = int(np.flatnonzero(np.isfinite(ct).any(axis=1))[-1])
     out["C1_ultima"] = {"lunedi": sc.data(int(ps["lunedi"][w])),
@@ -152,7 +160,7 @@ def esegui(log=print) -> dict:
     w = f2_e_c1(pan)
     da, a1_adesso = a1(pan)
     res = {"dati_fino_al": ultimo, "funding_stimato_dal": min(stimati.values()) if stimati else None, "candidate": {}}
-    for nome in ("F2", "C1"):
+    for nome in ("F3", "F2", "C1"):
         d = w[nome]
         d = d[d.index >= INIZIO_SETTIMANE]
         res["candidate"][nome] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
@@ -160,7 +168,7 @@ def esegui(log=print) -> dict:
     d = da[da.index >= INIZIO_GIORNI]
     res["candidate"]["A1"] = {"giorni": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
                               **_riassunto(d["netto"], 365)}
-    res["adesso"] = {"F2": w["F2_adesso"], "C1": w["C1_ultima"], "A1": a1_adesso}
+    res["adesso"] = {"F3": w["F3_adesso"], "F2": w["F2_adesso"], "C1": w["C1_ultima"], "A1": a1_adesso}
     (QUI / "paper.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     (QUI / "PAPER.md").write_text(rapporto(res), encoding="utf-8")
     return res
@@ -179,6 +187,8 @@ def rapporto(r: dict) -> str:
         righe.append(f"| {n} | {c['periodi']} | {100 * c['totale']:+.2f}% | {sh} |")
     a = r["adesso"]
     righe += ["", "## Le posizioni di adesso", "",
+              f"* **F3**, settimana dal {a['F3']['lunedi']}: long " + ", ".join(f"{k} {100 * v:.1f}%" for k, v in a['F3']['long'].items())
+              + "; short " + ", ".join(f"{k} {100 * v:.1f}%" for k, v in a['F3']['short'].items()) + ".",
               f"* **F2**, settimana dal {a['F2']['lunedi']}: long {', '.join(a['F2']['long'])}; short {', '.join(a['F2']['short'])}.",
               f"* **C1**, ultima settimana calcolata (dal {a['C1']['lunedi']}): long {', '.join(a['C1']['long'])}; short "
               f"{', '.join(a['C1']['short'])}.",
