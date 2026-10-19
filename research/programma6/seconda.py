@@ -90,7 +90,7 @@ def candele(simbolo: str) -> pd.DataFrame:
     df = pd.concat([m5._csv_da_zip(p, m5.KLINE) for p in file], ignore_index=True)
     df["giorno"] = m5._ms(df["open_time"]) // 86_400_000
     df = df.drop_duplicates("giorno", keep="last").set_index("giorno").sort_index()
-    return df[["open", "high", "low", "close", "volume", "quote_volume"]].astype(float)
+    return df[["open", "high", "low", "close", "volume", "quote_volume", "taker_buy_quote_volume"]].astype(float)
 
 
 def funding_giorni(simbolo: str) -> pd.Series:
@@ -131,7 +131,8 @@ def costruisci_pannello(simboli=None, log=print) -> dict:
     t0 = min(int(c.index.min()) for c in serie.values())
     t1 = max(int(c.index.max()) for c in serie.values())
     T, nomi = t1 - t0 + 1, sorted(serie)
-    P = {k: np.full((T, len(nomi)), np.nan) for k in ("open", "high", "low", "close", "quote_volume")}
+    P = {k: np.full((T, len(nomi)), np.nan)
+         for k in ("open", "high", "low", "close", "quote_volume", "taker_buy_quote_volume")}
     F = np.zeros((T, len(nomi)))
     for j, s in enumerate(nomi):
         c = serie[s]

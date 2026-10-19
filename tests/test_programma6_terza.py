@@ -134,3 +134,15 @@ def test_ottava_sigma_dei_trenta_giorni_prima():
     assert np.isnan(s[0, 0])                     # meno di 20 giorni
     r = C[1:, 0] / C[:-1, 0] - 1
     assert s[1, 0] == pytest.approx(np.std(r[9:39], ddof=1))
+
+
+def test_nona_segnali_g1_e_g2():
+    from research.programma6 import nona as no
+    T = 40
+    C = np.cumprod(np.r_[1.0, np.tile([1.02, 0.99], 20)])[:T, None] * 100
+    V = np.full((T, 1), 100.0)
+    B = np.full((T, 1), 60.0)
+    pan = {"close": C, "quote_volume": V, "taker_buy_quote_volume": B}
+    assert no.g1(pan, np.array([35]))[0, 0] == pytest.approx(0.6)
+    assert np.isnan(no.g1(pan, np.array([3]))[0, 0])
+    assert no.g2(pan, np.array([35]))[0, 0] == pytest.approx(0.02)
