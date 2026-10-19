@@ -11,7 +11,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 2A | La regola pubblicata di Zarattini, Pagani e Barbon (2025): 9 canali di Donchian, volatilità al 25%, 20 monete più liquide; universo mese per mese fra tutti i 892 perpetui | `SECONDA.md` | `RISULTATI_SECONDA.md` | 3 | nessuna valida; A1 Sharpe 0,53 dal 2021, 0,25 dopo l'articolo |
 | 2B | Le 9 famiglie della prova 1 a 1 giorno, prime 50 monete mese per mese | `SECONDA.md` | `RISULTATI_SECONDA.md` | 9 | nessuna valida; migliore l'incrocio delle medie (+0,097 R, 5 anni su 5) |
 | 3 | CTREND di Fieberg e altri (JFQA 2025): 28 indicatori, regressioni sulle 52 settimane prima, long-short fra le 100 monete più scambiate; dal giugno 2022 | `TERZA.md` | `RISULTATI_TERZA.md` | 3 | nessuna valida; C1 Sharpe 0,39 (−79% nel 2024, +69% nel 2025, +103% nel 2026) |
-| 4 | Conferma della regola congelata I-017c4 del programma 5 (long dopo un crollo di 4 ore) sulle 537 monete mai usate, a 1 ora | `QUARTA.md` | `RISULTATI_QUARTA.md` | conferma di una regola sola | in corso |
+| 4 | Conferma della regola congelata I-017c4 del programma 5 (long dopo un crollo di 4 ore) sulle 537 monete mai usate, a 1 ora | `QUARTA.md` | `RISULTATI_QUARTA.md` | conferma di una regola sola | non confermata: +1,77% a trade (p 0,007) ma −0,35% nell'ultimo anno e −2,0% sui crolli della sola moneta |
 
 ## Cosa abbiamo imparato (con la fonte)
 
@@ -26,7 +26,10 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
    migliore di 24 è circa 0,76; per lo Sharpe corretto al 95% con 4-6 anni serve circa **1,5**. Una strategia a indicatori
    da Sharpe 0,5-0,7 non lo raggiunge, e ogni prova in più sugli stessi anni alza la soglia. Per questo la prova 4 è una
    **conferma su monete mai usate**, non una ricerca nuova.
-5. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
+5. **Il rimbalzo dopo i crolli è del mercato, non della moneta** (prova 4): sulle monete mai usate i crolli della sola
+   moneta continuano a scendere (−2,0% a trade), quelli di tutto il mercato rimbalzano (+3,8%) ma in 84 giorni soltanto,
+   con il 56% del guadagno in 5 giorni e il crollo più grande (10 ottobre 2025) al contrario.
+6. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
    3.6: Sharpe 6,45 dal 2020, 4,06 dal 2024, negativo nel 2025), e il proprietario non lo vuole: non si prova.
 
 ## Dati (fuori da git, con le impronte nel repository)
