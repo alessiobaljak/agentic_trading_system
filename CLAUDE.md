@@ -44,7 +44,10 @@ fase 2 sui dati recenti, universo delle 100 monete più scambiate). Il proprieta
 [...] trovare delle strategie [...] partendo dagli indicatori tecnici [...] il passato è pubblico [...] riprovare con metodo e
 non a caso [...] non voglio aspettare dati nuovi [...] usa limit o margin, tutte le crypto del future binance»: è il
 **programma 6** (`research/programma6/METODO.md`): strategie a indicatori con stop, obiettivo e stop che segue il prezzo,
-provate con le finestre che avanzano (scelta su 12 mesi, prova sui 3 dopo, dal 2020 a oggi) e le correzioni per i tentativi. **Delega del
+provate con le finestre che avanzano (scelta su 12 mesi, prova sui 3 dopo, dal 2020 a oggi) e le correzioni per i tentativi. Il
+proprietario, 19 ott 2026 sera: «continua a cercare in autonomia, non fermarti se pensi serva misurare in paper procedi hai
+campo libero fino a che non trovi cosa funziona»: il coordinamento cerca da solo e può misurare in paper (`DRY_RUN` vero,
+niente soldi veri) le strategie candidate; registro delle prove in `research/programma6/STATO.md`. **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
 della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 
