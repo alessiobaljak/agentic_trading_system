@@ -4204,3 +4204,7 @@ Sharpe 1,28, positiva in ogni anno dal 2021 al 2026 e anche nelle 18 settimane d
 (0,76 con 27 prove) e perché sulle monete 101-200 non si ripete (spese 19% l'anno). Capito: il vantaggio del funding fra
 monete c'è fra le monete liquide e sparisce fra le piccole. F3 e F2 sono le candidate del paper dal 20 ottobre
 (`research/programma6/paper/REGOLE.md`).
+**Nona prova** (`NONA.md`): gli acquisti aggressivi e il «biglietto della lotteria» fra monete non funzionano nel verso
+scritto; capito che gli acquisti a mercato fra monete anticipano il prezzo (chi ne ha molti continua a salire), al contrario
+del funding alto che rientra; anche questo solo fra le monete liquide. Trovati e tolti il petrolio (BZUSDT, CLUSDT) e 14
+azioni nate dal 2026-04 che stavano per entrare nel paper: nelle prove sul passato non erano mai entrate.

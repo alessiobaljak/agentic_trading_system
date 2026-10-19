@@ -16,6 +16,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 6 | Il funding fra monete: long il quinto col funding dei 7 giorni più basso, short il più alto, fra le 100 più scambiate, ogni settimana dal 2021 | `SESTA.md` | `RISULTATI_SESTA.md` | 2 | **F2 (pesi uguali) la migliore di tutto il lavoro**: +47,5% l'anno, Sharpe 1,03, intervallo sopra zero, 6 anni su 6, a costi doppi, beta col Bitcoin −0,03; non passa solo lo Sharpe corretto (0,66 con 26 prove). F1 (pesi per volume) Sharpe 0,36 |
 | 7 | Conferma di F2, identica, sulle monete dalla 101ª alla 200ª per volume, scarto 0,10% | `SETTIMA.md` | `RISULTATI_SETTIMA.md` | conferma di una regola sola | non confermata: +8,3% l'anno, Sharpe 0,18, p 0,37; le spese (18,8% l'anno) si mangiano quasi tutto; −52,5% nell'ultimo anno |
 | 8 | F3: il funding fra monete con i pesi inversamente proporzionali alla volatilità dei 30 giorni prima; esame sulle 100 più scambiate e conferma sulle 101-200 | `OTTAVA.md` | `RISULTATI_OTTAVA.md` | 1 | **la più forte di tutto il lavoro sulle 100 monete**: +50,6% l'anno, Sharpe 1,28, positiva in tutti gli anni 2021-2026 e nelle 18 settimane del 2020, funding +31,6% e prezzo +26,7%; non valida: Sharpe corretto 0,76 (27 prove) e sulle 101-200 Sharpe 0,13 (spese 19% l'anno) |
+| 9 | G1 (quota di acquisti a mercato dei 7 giorni) e G2 (salto giornaliero più alto dei 30 giorni) fra monete, long il meno affollato | `NONA.md` | `RISULTATI_NONA.md` | 2 | non valide: G1 −47,8% l'anno (Sharpe −1,17, 0 anni su 6: il verso è il contrario, chi ha molti acquisti aggressivi continua a salire); G2 Sharpe 0,18. Il rovescio di G1, solo descrittivo: +30,3% sulle 100 grandi, −15,9% sulle 101-200 |
 
 ## Cosa abbiamo imparato (con la fonte)
 
@@ -41,7 +42,10 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
    (+15%), in ogni anno dal 2021; ma sulle monete più piccole non si ripete (costi più alti, prezzo contro). È la candidata
    principale da misurare in paper. Sulle 18 settimane del 2020 mai guardate (4-5 monete per lato) va al contrario: −0,375% a
    settimana, funding +0,60%, prezzo −0,81% (`F2_2020.md`).
-8. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
+8. **Gli acquisti aggressivi fra monete dicono il contrario del funding** (prova 9): le monete con molti acquisti a mercato
+   continuano a salire rispetto alle altre (il rovescio della regola scritta fa +30,3% l'anno sulle 100 grandi, descrittivo);
+   il funding alto invece rientra. Anche qui solo fra le monete liquide.
+9. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
    3.6: Sharpe 6,45 dal 2020, 4,06 dal 2024, negativo nel 2025), e il proprietario non lo vuole: non si prova.
 
 ## Dati (fuori da git, con le impronte nel repository)
