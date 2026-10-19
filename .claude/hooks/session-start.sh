@@ -60,6 +60,8 @@ for PY in python python3; do
     || echo "[session-start] ATTENZIONE: dipendenze della ricerca non installate per $ESEGUIBILE"
   "$PY" -c "import numpy, scipy, yaml, pytest, sys; print('[session-start] ricerca pronta per', sys.executable, sys.version.split()[0], 'numpy', numpy.__version__, 'scipy', scipy.__version__)" \
     || echo "[session-start] ATTENZIONE: manca una dipendenza della ricerca per $ESEGUIBILE (numpy, scipy, pyyaml o pytest)"
+  # programma 6 (research/programma6/): il motore dei backtest a indicatori usa numba; non bloccante
+  "$PY" -m pip install --quiet numba 2>/dev/null || echo "[session-start] numba non installato per $ESEGUIBILE (serve solo al programma 6)"
 done
 python -m pip install --quiet -r requirements.txt \
   || echo "[session-start] ATTENZIONE: alcune dipendenze del bot non installate (non bloccante per la ricerca)"
