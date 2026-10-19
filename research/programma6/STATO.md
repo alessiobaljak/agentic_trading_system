@@ -43,6 +43,8 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
    (+15%), in ogni anno dal 2021; ma sulle monete più piccole non si ripete (costi più alti, prezzo contro). È la candidata
    principale da misurare in paper. Sulle 18 settimane del 2020 mai guardate (4-5 monete per lato) va al contrario: −0,375% a
    settimana, funding +0,60%, prezzo −0,81% (`F2_2020.md`).
+   F3 contro il caso (`F3_caso.md`): con il segnale mescolato fra le monete lo stesso portafoglio fa Sharpe −0,37 in
+   media e al massimo 0,64 su 200 ripetizioni; F3 fa 1,30.
 8. **Gli acquisti aggressivi fra monete dicono il contrario del funding** (prova 9): le monete con molti acquisti a mercato
    continuano a salire rispetto alle altre (il rovescio della regola scritta fa +30,3% l'anno sulle 100 grandi, descrittivo);
    il funding alto invece rientra. Anche qui solo fra le monete liquide.
