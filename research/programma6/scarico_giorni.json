@@ -1,0 +1,2508 @@
+{
+"0GUSDT": {
+"funding": {
+"file": 13,
+"primo": "0GUSDT-fundingRate-2025-09.zip",
+"sha256": "6dd3bd9ce3931a767a695c6440b3c8cde25465681f0229186f6c972622cea148",
+"ultimo": "0GUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "0GUSDT-1d-2025-09.zip",
+"sha256": "a79105ece5bcf3255530396264ef372bb1dff71c192b8dc5e0ccbbc876fd6bd1",
+"ultimo": "0GUSDT-1d-2026-10-17.zip"
+}
+},
+"1000000BOBUSDT": {
+"funding": {
+"file": 16,
+"primo": "1000000BOBUSDT-fundingRate-2025-06.zip",
+"sha256": "3b4ed3e774951df58c9c3b1823da679cf6ff6c54fbee88ab077782a6b567c855",
+"ultimo": "1000000BOBUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 33,
+"primo": "1000000BOBUSDT-1d-2025-06.zip",
+"sha256": "6866a6267ac53134b488da3ff314de873088e2e03d0da83e6621652974189369",
+"ultimo": "1000000BOBUSDT-1d-2026-10-17.zip"
+}
+},
+"1000000MOGUSDT": {
+"funding": {
+"file": 23,
+"primo": "1000000MOGUSDT-fundingRate-2024-11.zip",
+"sha256": "7650bf8e6446fb68f4fc97cbab8719a54a0dfda0cac1ca4f8ba45d8dff31d6c4",
+"ultimo": "1000000MOGUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "1000000MOGUSDT-1d-2024-11.zip",
+"sha256": "813a707a01023394f2f831a2425ff766f325c6ae81c036fc1322be86b578eba0",
+"ultimo": "1000000MOGUSDT-1d-2026-10-17.zip"
+}
+},
+"1000BONKUSDT": {
+"funding": {
+"file": 35,
+"primo": "1000BONKUSDT-fundingRate-2023-11.zip",
+"sha256": "95636a07b90d629c05b41a87bb7dd740d9cacab2a01d2135bf3d064b2a394047",
+"ultimo": "1000BONKUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 52,
+"primo": "1000BONKUSDT-1d-2023-11.zip",
+"sha256": "6fae49ce017cbf5b66410e770d7e06c8e7bfe0ebba407ea2d62ba6797e3b2941",
+"ultimo": "1000BONKUSDT-1d-2026-10-17.zip"
+}
+},
+"1000BTTCUSDT": {
+"funding": {
+"file": 4,
+"primo": "1000BTTCUSDT-fundingRate-2022-01.zip",
+"sha256": "a8669264af0323e4163538d3f8b2171ae6918d4adee82cbc42a70e78d0970a17",
+"ultimo": "1000BTTCUSDT-fundingRate-2022-04.zip"
+},
+"giorni": {
+"file": 4,
+"primo": "1000BTTCUSDT-1d-2022-01.zip",
+"sha256": "0135502287917016ea7e3a4f5c7fe713f64883c7bdf3204909bcfd755d28efa2",
+"ultimo": "1000BTTCUSDT-1d-2022-04.zip"
+}
+},
+"1000CATUSDT": {
+"funding": {
+"file": 24,
+"primo": "1000CATUSDT-fundingRate-2024-10.zip",
+"sha256": "893115e63a777d5f6000f77c0d12345a505b627176826dfbe18a70248ffbf6f9",
+"ultimo": "1000CATUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 41,
+"primo": "1000CATUSDT-1d-2024-10.zip",
+"sha256": "e696ab8d9b2db9b9c1b26b7d87dad2ec44abe8c5ca4a957ac292e3cd5c5fd719",
+"ultimo": "1000CATUSDT-1d-2026-10-17.zip"
+}
+},
+"1000CHEEMSUSDT": {
+"funding": {
+"file": 23,
+"primo": "1000CHEEMSUSDT-fundingRate-2024-11.zip",
+"sha256": "5aeffc4c53224ceec402d8083e8850391e91d1ed45c0a57f05c0f64bd5e3d4f5",
+"ultimo": "1000CHEEMSUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "1000CHEEMSUSDT-1d-2024-11.zip",
+"sha256": "b4b42bc136bd5cedf2cdf4b2002eef8961a25e40ec2bbf71982c5342d53c218a",
+"ultimo": "1000CHEEMSUSDT-1d-2026-10-17.zip"
+}
+},
+"1000FLOKIUSDT": {
+"funding": {
+"file": 41,
+"primo": "1000FLOKIUSDT-fundingRate-2023-05.zip",
+"sha256": "05495dc08820201bc9a7ef734507795a36ddcb6d08cda8e2e24b16d0b5230c75",
+"ultimo": "1000FLOKIUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 58,
+"primo": "1000FLOKIUSDT-1d-2023-05.zip",
+"sha256": "bda66302eb3c5ce26177c35b172682ead4aaa08d52f8dd8cfa0a12f66feaca64",
+"ultimo": "1000FLOKIUSDT-1d-2026-10-17.zip"
+}
+},
+"1000LUNCUSDT": {
+"funding": {
+"file": 49,
+"primo": "1000LUNCUSDT-fundingRate-2022-09.zip",
+"sha256": "d5768720f50b0f0d24c48cf99211761acd2150ea49b207b32b5961e96fd40699",
+"ultimo": "1000LUNCUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 66,
+"primo": "1000LUNCUSDT-1d-2022-09.zip",
+"sha256": "6c070ce2f739f5a7b161e86d228cd2ce913ec6556ccf263be9ccb1929671dcfe",
+"ultimo": "1000LUNCUSDT-1d-2026-10-17.zip"
+}
+},
+"1000PEPEUSDT": {
+"funding": {
+"file": 41,
+"primo": "1000PEPEUSDT-fundingRate-2023-05.zip",
+"sha256": "f81b5c885c8614fb76d20a0ecd490f199f94353e7de73522b8af77520cd5d199",
+"ultimo": "1000PEPEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 58,
+"primo": "1000PEPEUSDT-1d-2023-05.zip",
+"sha256": "f9ae34295b5eb2310cb092bf2bf4061b62541e48c8f6affae277603018390053",
+"ultimo": "1000PEPEUSDT-1d-2026-10-17.zip"
+}
+},
+"1000RATSUSDT": {
+"funding": {
+"file": 34,
+"primo": "1000RATSUSDT-fundingRate-2023-12.zip",
+"sha256": "64e5b8cc29fb831982bd69fe2c3421bfdb94c27232b41018ec8a1698c9de760d",
+"ultimo": "1000RATSUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 51,
+"primo": "1000RATSUSDT-1d-2023-12.zip",
+"sha256": "90e9b3049f02bae04a3e2e059292e20d7c9c61918a4f6b238f9c9798b3f06b97",
+"ultimo": "1000RATSUSDT-1d-2026-10-17.zip"
+}
+},
+"1000SATSUSDT": {
+"funding": {
+"file": 34,
+"primo": "1000SATSUSDT-fundingRate-2023-12.zip",
+"sha256": "216ab5f8f35c4c31baa715b7ae1f5f89e33417244e0b8f64c2fddacf6490a10d",
+"ultimo": "1000SATSUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 51,
+"primo": "1000SATSUSDT-1d-2023-12.zip",
+"sha256": "f5acfb205c7b10331690908431deff46df209d90c1d9d71584f0c4b96f8dfed2",
+"ultimo": "1000SATSUSDT-1d-2026-10-17.zip"
+}
+},
+"1000SHIBUSDT": {
+"funding": {
+"file": 65,
+"primo": "1000SHIBUSDT-fundingRate-2021-05.zip",
+"sha256": "cdaf4d9af336b48c8e8794574dad2f3f7b4f7f1338945224ad1b6e3aaa5e936e",
+"ultimo": "1000SHIBUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 82,
+"primo": "1000SHIBUSDT-1d-2021-05.zip",
+"sha256": "d4edf23771dfe308cf91ce41b9975942835692dd76665f7fe8c32bc60aa29636",
+"ultimo": "1000SHIBUSDT-1d-2026-10-17.zip"
+}
+},
+"1000WHYUSDT": {
+"funding": {
+"file": 17,
+"primo": "1000WHYUSDT-fundingRate-2024-11.zip",
+"sha256": "d5f11d7535c6f357f333e1ec155adbc2edafcf7c9fb8bb5f479fe87344ad1f67",
+"ultimo": "1000WHYUSDT-fundingRate-2026-03.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "1000WHYUSDT-1d-2024-11.zip",
+"sha256": "7f95378062ed676c7d41350589c354e9bdc6bcd9912741be2502af9bfe9361c9",
+"ultimo": "1000WHYUSDT-1d-2026-10-17.zip"
+}
+},
+"1000XECUSDT": {
+"funding": {
+"file": 61,
+"primo": "1000XECUSDT-fundingRate-2021-09.zip",
+"sha256": "b6839f98d782797e15bdcf5e1dc4e8e96af400cfb8455d2d7dbe0f2e67beffa8",
+"ultimo": "1000XECUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 78,
+"primo": "1000XECUSDT-1d-2021-09.zip",
+"sha256": "10ddcfa98d9dee0c4a1a64fbaaa110855c0cfd5859a5a6ee2602a306756245ed",
+"ultimo": "1000XECUSDT-1d-2026-10-17.zip"
+}
+},
+"1000XUSDT": {
+"funding": {
+"file": 13,
+"primo": "1000XUSDT-fundingRate-2024-11.zip",
+"sha256": "070f6189eb7cf7529ca015765b0f03f07754bca2593f0d336750bd4203e15317",
+"ultimo": "1000XUSDT-fundingRate-2025-11.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "1000XUSDT-1d-2024-11.zip",
+"sha256": "03d31c448d1b6cf06e02007c8701379550e5d44d53b0cc20c3a356da4fb44f0f",
+"ultimo": "1000XUSDT-1d-2026-10-17.zip"
+}
+},
+"1INCHUSDT": {
+"funding": {
+"file": 70,
+"primo": "1INCHUSDT-fundingRate-2020-12.zip",
+"sha256": "e753d7f0915bd72e37e0dad09ac3a8da9a0d88ea4b12c7ce6108ac2b671ff2f1",
+"ultimo": "1INCHUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 87,
+"primo": "1INCHUSDT-1d-2020-12.zip",
+"sha256": "5cb3878bc4678ad08ba432b3bb9634e27df25ef670908f65665f7288395fada1",
+"ultimo": "1INCHUSDT-1d-2026-10-17.zip"
+}
+},
+"1MBABYDOGEUSDT": {
+"funding": {
+"file": 25,
+"primo": "1MBABYDOGEUSDT-fundingRate-2024-09.zip",
+"sha256": "e6a249d24b2c9a8d021e6bb5efbe08019b99f5a9b0b297e1b4d57beed18c9fac",
+"ultimo": "1MBABYDOGEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 42,
+"primo": "1MBABYDOGEUSDT-1d-2024-09.zip",
+"sha256": "8104be6c454edc332ea456328bd3d3d693e046ef5938cbed7b0b681d33f9ce31",
+"ultimo": "1MBABYDOGEUSDT-1d-2026-10-17.zip"
+}
+},
+"2ZUSDT": {
+"funding": {
+"file": 12,
+"primo": "2ZUSDT-fundingRate-2025-10.zip",
+"sha256": "8cade7fe9de34ec75a8102b85995534f22958f9880120b22cd122a2437c0eae3",
+"ultimo": "2ZUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 29,
+"primo": "2ZUSDT-1d-2025-10.zip",
+"sha256": "1f10a141ef1856ee9f2a4db9bf043188fbcbd2c0814a74175ff72276ddb3684b",
+"ultimo": "2ZUSDT-1d-2026-10-17.zip"
+}
+},
+"42USDT": {
+"funding": {
+"file": 4,
+"primo": "42USDT-fundingRate-2025-10.zip",
+"sha256": "3b781dda7b5e7231d9a84e0c5669d9baecab78d1d96dec873594c77868bc0a91",
+"ultimo": "42USDT-fundingRate-2026-01.zip"
+},
+"giorni": {
+"file": 29,
+"primo": "42USDT-1d-2025-10.zip",
+"sha256": "1873ad2bef1e776a52fe5d726554db441bc2874192ad927bc0cf19a84306f4b6",
+"ultimo": "42USDT-1d-2026-10-17.zip"
+}
+},
+"4USDT": {
+"funding": {
+"file": 12,
+"primo": "4USDT-fundingRate-2025-10.zip",
+"sha256": "206b60299ecc01be8002523698919998459370ef24ef4876eab15ae8ef1af1ac",
+"ultimo": "4USDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 29,
+"primo": "4USDT-1d-2025-10.zip",
+"sha256": "7c9227b4bb615b430eebb2f5519413051c23f44d6845c0af1274369437876fcc",
+"ultimo": "4USDT-1d-2026-10-17.zip"
+}
+},
+"A2ZUSDT": {
+"funding": {
+"file": 9,
+"primo": "A2ZUSDT-fundingRate-2025-07.zip",
+"sha256": "745ecced3e0fa86971e5af81a47c4ee0f53a97ea7c1177b2939fa4cab722b69d",
+"ultimo": "A2ZUSDT-fundingRate-2026-03.zip"
+},
+"giorni": {
+"file": 32,
+"primo": "A2ZUSDT-1d-2025-07.zip",
+"sha256": "2f9b3ab11ee57c3d41f0e4e2d269a23fcff21da4c265bd329202a1d8fb09f3e7",
+"ultimo": "A2ZUSDT-1d-2026-10-17.zip"
+}
+},
+"AAOIUSDT": {
+"funding": {
+"file": 4,
+"primo": "AAOIUSDT-fundingRate-2026-06.zip",
+"sha256": "2b74e4f646d21e17c288d756dd38ded6f3aeb5904a05b84af2d0febdb548aa6f",
+"ultimo": "AAOIUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "AAOIUSDT-1d-2026-06.zip",
+"sha256": "089bcef18ed1cdbe3ea803e04195d8cbba5def015aef45150756419c702acddf",
+"ultimo": "AAOIUSDT-1d-2026-10-17.zip"
+}
+},
+"AAPLUSDT": {
+"funding": {
+"file": 6,
+"primo": "AAPLUSDT-fundingRate-2026-04.zip",
+"sha256": "f1c05b5441a4ae6dfbe95316b37dd92a2525d38acf3fc8f252a370080a6c75ce",
+"ultimo": "AAPLUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 23,
+"primo": "AAPLUSDT-1d-2026-04.zip",
+"sha256": "6a1bc47bcc9346015e0bbb24589ab69b4749a8e8d0570721036e735a5ddf3ac0",
+"ultimo": "AAPLUSDT-1d-2026-10-17.zip"
+}
+},
+"AAVEUSDT": {
+"funding": {
+"file": 72,
+"primo": "AAVEUSDT-fundingRate-2020-10.zip",
+"sha256": "e9b1a17dd94b82a29d5591fa583f6068380276d2b12968bdbadc258e40480595",
+"ultimo": "AAVEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 89,
+"primo": "AAVEUSDT-1d-2020-10.zip",
+"sha256": "12cc11acdb2d27ae92aa351477bd5cf4a470de55b3c655770480c547bcf8bf40",
+"ultimo": "AAVEUSDT-1d-2026-10-17.zip"
+}
+},
+"ACEUSDT": {
+"funding": {
+"file": 34,
+"primo": "ACEUSDT-fundingRate-2023-12.zip",
+"sha256": "c9f304a1139d87e29a0a9f559f72bb9254f7ead01e4bc480eacd98bfc3c35ef5",
+"ultimo": "ACEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 51,
+"primo": "ACEUSDT-1d-2023-12.zip",
+"sha256": "c5a9f48c7a6503e1c29d87b387d2369bb31695ced937bcd625c3dbb6d68b0012",
+"ultimo": "ACEUSDT-1d-2026-10-17.zip"
+}
+},
+"ACHUSDT": {
+"funding": {
+"file": 44,
+"primo": "ACHUSDT-fundingRate-2023-02.zip",
+"sha256": "61bf82066d9f41a903596b277cedcfe02ebd3de26915a3934ee5196fad4e2797",
+"ultimo": "ACHUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 61,
+"primo": "ACHUSDT-1d-2023-02.zip",
+"sha256": "c630146d1de2a97e6012ed50f40bd5e1376593ca22699d5d2a47fe3676715e7c",
+"ultimo": "ACHUSDT-1d-2026-10-17.zip"
+}
+},
+"ACNUSDT": {
+"funding": {
+"file": 1,
+"primo": "ACNUSDT-fundingRate-2026-09.zip",
+"sha256": "eeea4c915b10c7db016170b5f215100ae43f8eccf2daade1f9f5418656beefec",
+"ultimo": "ACNUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 18,
+"primo": "ACNUSDT-1d-2026-09.zip",
+"sha256": "abddf19904d7167b99a222c51c294b40133bbc991285ded3d6e251c061197463",
+"ultimo": "ACNUSDT-1d-2026-10-17.zip"
+}
+},
+"ACTUSDT": {
+"funding": {
+"file": 23,
+"primo": "ACTUSDT-fundingRate-2024-11.zip",
+"sha256": "5b080ba7acb163d710a372654ee6714e81e0a4577833c7bfbca0573574aabd3f",
+"ultimo": "ACTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "ACTUSDT-1d-2024-11.zip",
+"sha256": "cf588feb274263cd9aebe2d582da02be74429027952ffbf1cbb508bc63d58daa",
+"ultimo": "ACTUSDT-1d-2026-10-17.zip"
+}
+},
+"ACUUSDT": {
+"funding": {
+"file": 9,
+"primo": "ACUUSDT-fundingRate-2026-01.zip",
+"sha256": "4fce247fa11c8d23b877727e2234a17ac476474777de7b1e60efa173f2de87fb",
+"ultimo": "ACUUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 26,
+"primo": "ACUUSDT-1d-2026-01.zip",
+"sha256": "dcf9251dbd6ad8c98753d41152e4ca7cc8f38d7f7a568ef09a9fddf3be54b9ac",
+"ultimo": "ACUUSDT-1d-2026-10-17.zip"
+}
+},
+"ACXUSDT": {
+"funding": {
+"file": 21,
+"primo": "ACXUSDT-fundingRate-2024-12.zip",
+"sha256": "fadeeb557642c7e0b266b2f03506875d5a18a1aa44ebcbc53da0dab44bc9993f",
+"ultimo": "ACXUSDT-fundingRate-2026-08.zip"
+},
+"giorni": {
+"file": 39,
+"primo": "ACXUSDT-1d-2024-12.zip",
+"sha256": "4442793e889e75a3e0a207c395df3a57d17f61da5c1a8507418c992a7cc496c1",
+"ultimo": "ACXUSDT-1d-2026-10-17.zip"
+}
+},
+"ADAUSDT": {
+"funding": {
+"file": 81,
+"primo": "ADAUSDT-fundingRate-2020-01.zip",
+"sha256": "825390edbed92aa331b69cde62337eb8f03ecefb568292282268a367f16d02d2",
+"ultimo": "ADAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 98,
+"primo": "ADAUSDT-1d-2020-01.zip",
+"sha256": "58898e1bcf36dc76fbb47b549e4474f90d547f2a225f97e3a577bc5000c8123e",
+"ultimo": "ADAUSDT-1d-2026-10-17.zip"
+}
+},
+"ADBEUSDT": {
+"funding": {
+"file": 4,
+"primo": "ADBEUSDT-fundingRate-2026-06.zip",
+"sha256": "c2969069156c83c2e63aa81c3966f9ba30a25f1a163d469e6e33eb524b59a2a0",
+"ultimo": "ADBEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "ADBEUSDT-1d-2026-06.zip",
+"sha256": "43ce60c9d5ad9218c509096965907eae43e889dbdb23ef2fe5f840c0eeaa04d3",
+"ultimo": "ADBEUSDT-1d-2026-10-17.zip"
+}
+},
+"AERGOUSDT": {
+"funding": {
+"file": 22,
+"primo": "AERGOUSDT-fundingRate-2024-09.zip",
+"sha256": "7172ea661945925f2d4bed8ae3e63b7cd050053cf714ce89afdf578e8eca3af7",
+"ultimo": "AERGOUSDT-fundingRate-2026-06.zip"
+},
+"giorni": {
+"file": 22,
+"primo": "AERGOUSDT-1d-2024-09.zip",
+"sha256": "40ae4bf2531a70ffbeac9c5e313125fbd0b672ac5b7f83ad4dedad1d1801193d",
+"ultimo": "AERGOUSDT-1d-2026-06.zip"
+}
+},
+"AEROUSDT": {
+"funding": {
+"file": 22,
+"primo": "AEROUSDT-fundingRate-2024-12.zip",
+"sha256": "c0f07356dbe2a2b4e813c5a80ace99f403c26843b5eae39cb235ed89c385e4a0",
+"ultimo": "AEROUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 39,
+"primo": "AEROUSDT-1d-2024-12.zip",
+"sha256": "cec42b29a312809cb1e5051bd0ba298bf5d85e4a36117172e430220492da274e",
+"ultimo": "AEROUSDT-1d-2026-10-17.zip"
+}
+},
+"AEVOUSDT": {
+"funding": {
+"file": 31,
+"primo": "AEVOUSDT-fundingRate-2024-03.zip",
+"sha256": "770ed378c8eed9cd37eb182ab609d2f2ccea899b6d890a5f3ac38573c267593d",
+"ultimo": "AEVOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 48,
+"primo": "AEVOUSDT-1d-2024-03.zip",
+"sha256": "f3bb9550b10af5c6be90959b837201fcf343487eead5848728e951ec06ddeadd",
+"ultimo": "AEVOUSDT-1d-2026-10-17.zip"
+}
+},
+"AGIXUSDT": {
+"funding": {
+"file": 29,
+"primo": "AGIXUSDT-fundingRate-2023-02.zip",
+"sha256": "d9933ebab3e8cbec02b4ee4921d4249cb55be8576d67dc7753247bbcd6ac2969",
+"ultimo": "AGIXUSDT-fundingRate-2025-06.zip"
+},
+"giorni": {
+"file": 61,
+"primo": "AGIXUSDT-1d-2023-02.zip",
+"sha256": "e79b8cfb7ea6b44322f59bc4991fbd63e116a6851890fd22a67f5e23211cdde2",
+"ultimo": "AGIXUSDT-1d-2026-10-17.zip"
+}
+},
+"AGLDUSDT": {
+"funding": {
+"file": 39,
+"primo": "AGLDUSDT-fundingRate-2023-07.zip",
+"sha256": "f8b3d317bb16292019e73c2a4fc67eddf0e8ff5b92d7d8eda695a4f6a11d1060",
+"ultimo": "AGLDUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 56,
+"primo": "AGLDUSDT-1d-2023-07.zip",
+"sha256": "c086cff79b2647ab1e3e87b8261459f966636bdf4320333f5dfd908e37c151cc",
+"ultimo": "AGLDUSDT-1d-2026-10-17.zip"
+}
+},
+"AGPUUSDT": {
+"funding": {
+"file": 1,
+"primo": "AGPUUSDT-fundingRate-2026-09.zip",
+"sha256": "7260731f2dfe2992e6b4c81ea472e28464acfab805fc9e5115d38f2355f43836",
+"ultimo": "AGPUUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 18,
+"primo": "AGPUUSDT-1d-2026-09.zip",
+"sha256": "f6d78ee7aec535595d363b3289ae4a9d400db048ab7a8231f49f3793bd77edc8",
+"ultimo": "AGPUUSDT-1d-2026-10-17.zip"
+}
+},
+"AGTUSDT": {
+"funding": {
+"file": 17,
+"primo": "AGTUSDT-fundingRate-2025-05.zip",
+"sha256": "c1a90b659ecdda49b291b04135e7b7bc56461df6e9630e7a84c6afe4006818eb",
+"ultimo": "AGTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 34,
+"primo": "AGTUSDT-1d-2025-05.zip",
+"sha256": "66346a121cb989e0b0351d0464877dca81453e9da67b317d11318f21398649cd",
+"ultimo": "AGTUSDT-1d-2026-10-17.zip"
+}
+},
+"AI16ZUSDT": {
+"funding": {
+"file": 11,
+"primo": "AI16ZUSDT-fundingRate-2025-01.zip",
+"sha256": "10e2b648b0bad6c7a48d64a5d4c0c011ccfe03e2be46d3ea22d4708371a792bf",
+"ultimo": "AI16ZUSDT-fundingRate-2025-11.zip"
+},
+"giorni": {
+"file": 38,
+"primo": "AI16ZUSDT-1d-2025-01.zip",
+"sha256": "f8b78d51b404b3c51afc649054d57b0159c3c617e0026136df2429a7022ded1a",
+"ultimo": "AI16ZUSDT-1d-2026-10-17.zip"
+}
+},
+"AIAUSDT": {
+"funding": {
+"file": 13,
+"primo": "AIAUSDT-fundingRate-2025-09.zip",
+"sha256": "4dbb14f22c492dfde41969b3f28778ecfa9105b75807814c2249a4de641e701d",
+"ultimo": "AIAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "AIAUSDT-1d-2025-09.zip",
+"sha256": "de2f2ba700c5c7c9ee1f922ca9f8e37506fe556a591fdcddb441284d532e8623",
+"ultimo": "AIAUSDT-1d-2026-10-17.zip"
+}
+},
+"AIGENSYNUSDT": {
+"funding": {
+"file": 6,
+"primo": "AIGENSYNUSDT-fundingRate-2026-04.zip",
+"sha256": "6f4c9adfa45349f7baf63290a2baf35b11206294b223f8da8c30d8b00b8f26de",
+"ultimo": "AIGENSYNUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 23,
+"primo": "AIGENSYNUSDT-1d-2026-04.zip",
+"sha256": "ea4d2d5b27a0568e124a9eee2a091ae97ef956c8bdfb498f20fb83fe2b3d1cb8",
+"ultimo": "AIGENSYNUSDT-1d-2026-10-17.zip"
+}
+},
+"AINUSDT": {
+"funding": {
+"file": 15,
+"primo": "AINUSDT-fundingRate-2025-07.zip",
+"sha256": "90537bc76489c82adf412224cf89eecd8b65254e2a574f1f4bea0aadf357cedc",
+"ultimo": "AINUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 32,
+"primo": "AINUSDT-1d-2025-07.zip",
+"sha256": "0b82da612870d3ce3a3d9cc4826997033fefbbdd92685b552ecb6a386ed4c29f",
+"ultimo": "AINUSDT-1d-2026-10-17.zip"
+}
+},
+"AIOTUSDT": {
+"funding": {
+"file": 18,
+"primo": "AIOTUSDT-fundingRate-2025-04.zip",
+"sha256": "b071f359c9ca1c63d81c41e0d1faf25b53d0e4ad6bb644d4bc2f225151c0f314",
+"ultimo": "AIOTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 35,
+"primo": "AIOTUSDT-1d-2025-04.zip",
+"sha256": "20bef8ddf106b8199108cc15201b4d1e72fedefe05614cfd4f5e328c08a7caab",
+"ultimo": "AIOTUSDT-1d-2026-10-17.zip"
+}
+},
+"AIOUSDT": {
+"funding": {
+"file": 14,
+"primo": "AIOUSDT-fundingRate-2025-08.zip",
+"sha256": "2e23a6a910241cbb1132d1465a8ebf69c7cea42e1693db594faa1c9c024880ff",
+"ultimo": "AIOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 31,
+"primo": "AIOUSDT-1d-2025-08.zip",
+"sha256": "fd25bfd7684c3c7ae26aacf4ec744ad7648d86afb9c3e500e457847dd36ab82a",
+"ultimo": "AIOUSDT-1d-2026-10-17.zip"
+}
+},
+"AIUSDT": {
+"funding": {
+"file": 28,
+"primo": "AIUSDT-fundingRate-2024-01.zip",
+"sha256": "14adc32294ccde45495e1b11fa5145f23809d2e6b4af3ef8437776704dda8293",
+"ultimo": "AIUSDT-fundingRate-2026-04.zip"
+},
+"giorni": {
+"file": 50,
+"primo": "AIUSDT-1d-2024-01.zip",
+"sha256": "9f9c9b51a1e9daebe0ea12015fed0ef1313a821651be5452241e9410b4494642",
+"ultimo": "AIUSDT-1d-2026-10-17.zip"
+}
+},
+"AIXBTUSDT": {
+"funding": {
+"file": 22,
+"primo": "AIXBTUSDT-fundingRate-2024-12.zip",
+"sha256": "f8610691eb1ff9b7e47f0870ec2b644c549bb0d53f327bb6bcd407ccbfa6aea3",
+"ultimo": "AIXBTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 39,
+"primo": "AIXBTUSDT-1d-2024-12.zip",
+"sha256": "f635a7dd38757c8e70be85026b355875069d93f4503623d67c670ffdb84a03d9",
+"ultimo": "AIXBTUSDT-1d-2026-10-17.zip"
+}
+},
+"AKEUSDT": {
+"funding": {
+"file": 13,
+"primo": "AKEUSDT-fundingRate-2025-09.zip",
+"sha256": "6dafb27ebf740089f4b66012725850fc235d9f5991617b257472ec5e94f52ce6",
+"ultimo": "AKEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "AKEUSDT-1d-2025-09.zip",
+"sha256": "96b51703657af57ea040b78745a3f1557f85180a478c57048ddaf199a207f655",
+"ultimo": "AKEUSDT-1d-2026-10-17.zip"
+}
+},
+"AKROUSDT": {
+"funding": {
+"file": 17,
+"primo": "AKROUSDT-fundingRate-2021-01.zip",
+"sha256": "3c3596ff02d5daa9b6982f019b2734f77fe6a2c0aa28204629284f1fc27e261a",
+"ultimo": "AKROUSDT-fundingRate-2022-05.zip"
+},
+"giorni": {
+"file": 17,
+"primo": "AKROUSDT-1d-2021-01.zip",
+"sha256": "656e91d88b494b69da51ce3e62711a533f46a36f4902782fc55e8bf3cf02f8c8",
+"ultimo": "AKROUSDT-1d-2022-05.zip"
+}
+},
+"AKTUSDT": {
+"funding": {
+"file": 23,
+"primo": "AKTUSDT-fundingRate-2024-11.zip",
+"sha256": "93fe3a75fc26b34c36a6a9685473243c6f204eb92025cadce00f0cf246ffa473",
+"ultimo": "AKTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "AKTUSDT-1d-2024-11.zip",
+"sha256": "44715effc531a0ec6c180888ebafe5e80be49cde3be61979d9d5cc5b1402fcb6",
+"ultimo": "AKTUSDT-1d-2026-10-17.zip"
+}
+},
+"ALABUSDT": {
+"funding": {
+"file": 4,
+"primo": "ALABUSDT-fundingRate-2026-06.zip",
+"sha256": "27d7b47c86f8ac5c1bf8ed80cd705e6bce04d92ade5f34d4c20f28fec3ea4d95",
+"ultimo": "ALABUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "ALABUSDT-1d-2026-06.zip",
+"sha256": "dc4d1bb54ae1b0f990d73d7c2044a4ac5bc4192b8ae952efd80e787e2c62077a",
+"ultimo": "ALABUSDT-1d-2026-10-17.zip"
+}
+},
+"ALCHUSDT": {
+"funding": {
+"file": 21,
+"primo": "ALCHUSDT-fundingRate-2025-01.zip",
+"sha256": "d49cbc4995ff19cbad2ae531495677af4c25161b057afa7706141c673f66e183",
+"ultimo": "ALCHUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 38,
+"primo": "ALCHUSDT-1d-2025-01.zip",
+"sha256": "835eef3a2135bd2ea4db89ed95328bfcd1f486e061b7cf4e13e6ac68eec7558c",
+"ultimo": "ALCHUSDT-1d-2026-10-17.zip"
+}
+},
+"ALGOUSDT": {
+"funding": {
+"file": 76,
+"primo": "ALGOUSDT-fundingRate-2020-06.zip",
+"sha256": "88566d8c3ce014e1221787dc98c5462ddc635639587568723e30ae0900f571d2",
+"ultimo": "ALGOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 93,
+"primo": "ALGOUSDT-1d-2020-06.zip",
+"sha256": "c3bf79bd5de7d350d072eaca6c8d13bc2c8b717bd7dcd0ba0240c667ef2c57e4",
+"ultimo": "ALGOUSDT-1d-2026-10-17.zip"
+}
+},
+"ALICEUSDT": {
+"funding": {
+"file": 67,
+"primo": "ALICEUSDT-fundingRate-2021-03.zip",
+"sha256": "def5a652fbb0966814e8156c65a8cbad461f11067a08d8c93829d511cf36e54b",
+"ultimo": "ALICEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 84,
+"primo": "ALICEUSDT-1d-2021-03.zip",
+"sha256": "5b574c260a97d140346658e5fbc60df933bcc112a88c867a231343cbd793a741",
+"ultimo": "ALICEUSDT-1d-2026-10-17.zip"
+}
+},
+"ALLOUSDT": {
+"funding": {
+"file": 11,
+"primo": "ALLOUSDT-fundingRate-2025-11.zip",
+"sha256": "3f1640a1e9938092d976755863d286d9c4c5275832b76cefdefadec4d0a32296",
+"ultimo": "ALLOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 28,
+"primo": "ALLOUSDT-1d-2025-11.zip",
+"sha256": "a8d2a6cfab259ddd08829f0a7dca60aa89dd51c07cfe2aa454c91814522762e0",
+"ultimo": "ALLOUSDT-1d-2026-10-17.zip"
+}
+},
+"ALLUSDT": {
+"funding": {
+"file": 14,
+"primo": "ALLUSDT-fundingRate-2025-08.zip",
+"sha256": "757376b302dbdc7eea54354f70d40827dd8030364fc723aea2c2033cc97da37d",
+"ultimo": "ALLUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 31,
+"primo": "ALLUSDT-1d-2025-08.zip",
+"sha256": "6bb7569d6a578e7ffed06cc262c2c6561ec6f95adf768f63929eb5f572d0460f",
+"ultimo": "ALLUSDT-1d-2026-10-17.zip"
+}
+},
+"ALPACAUSDT": {
+"funding": {
+"file": 11,
+"primo": "ALPACAUSDT-fundingRate-2024-08.zip",
+"sha256": "9cc116d1a454a64591c5fdfea48340b5a6b6a411732316f476d01feb0802f00e",
+"ultimo": "ALPACAUSDT-fundingRate-2025-06.zip"
+},
+"giorni": {
+"file": 43,
+"primo": "ALPACAUSDT-1d-2024-08.zip",
+"sha256": "aba9a51402aece530c0ad850a9836c17b098af1202894172fce7562b1c3bf141",
+"ultimo": "ALPACAUSDT-1d-2026-10-17.zip"
+}
+},
+"ALPHAUSDT": {
+"funding": {
+"file": 59,
+"primo": "ALPHAUSDT-fundingRate-2020-11.zip",
+"sha256": "3a433654ad52bc352218d7d4c25591ad8687730d6123b0b5dbed5f196d1775d4",
+"ultimo": "ALPHAUSDT-fundingRate-2025-09.zip"
+},
+"giorni": {
+"file": 88,
+"primo": "ALPHAUSDT-1d-2020-11.zip",
+"sha256": "b95d43060946f4f67ee3b8b29cc1a47b8bc03d0e2fef299611a56192b4a4c1d1",
+"ultimo": "ALPHAUSDT-1d-2026-10-17.zip"
+}
+},
+"ALPINEUSDT": {
+"funding": {
+"file": 17,
+"primo": "ALPINEUSDT-fundingRate-2025-05.zip",
+"sha256": "51d85d5fec6e9d84f3494e6d768b6871370cce07ded2a4c8d78fa6efdfede846",
+"ultimo": "ALPINEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 34,
+"primo": "ALPINEUSDT-1d-2025-05.zip",
+"sha256": "3e0f26f9eba51cd2b142d7f8537479dd5ec5133909124a399121053a20430d97",
+"ultimo": "ALPINEUSDT-1d-2026-10-17.zip"
+}
+},
+"ALTUSDT": {
+"funding": {
+"file": 33,
+"primo": "ALTUSDT-fundingRate-2024-01.zip",
+"sha256": "46bffa2939957edf4f74338956b6b6ae571557eb1356ecad090fc9e5a5cb6f35",
+"ultimo": "ALTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 50,
+"primo": "ALTUSDT-1d-2024-01.zip",
+"sha256": "b655596df31195944928c78545ba60358303b627dc43256df59226ab4c380d1e",
+"ultimo": "ALTUSDT-1d-2026-10-17.zip"
+}
+},
+"AMATUSDT": {
+"funding": {
+"file": 4,
+"primo": "AMATUSDT-fundingRate-2026-06.zip",
+"sha256": "67fab1ffd6afb7b22a56717f80629b7c344d94cda15a6c8e30225dd82c5844e0",
+"ultimo": "AMATUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "AMATUSDT-1d-2026-06.zip",
+"sha256": "43cb21f32112037a1162152a78cd42ebb14a441fc71cad937550d9226106714f",
+"ultimo": "AMATUSDT-1d-2026-10-17.zip"
+}
+},
+"AMBUSDT": {
+"funding": {
+"file": 28,
+"primo": "AMBUSDT-fundingRate-2023-03.zip",
+"sha256": "0fbd68fe0425d2bbee341f781a0d253640bd9a022d0e038dcde32c993e0150b3",
+"ultimo": "AMBUSDT-fundingRate-2025-06.zip"
+},
+"giorni": {
+"file": 60,
+"primo": "AMBUSDT-1d-2023-03.zip",
+"sha256": "84d34fdbca8278dd75b7c80981dc7eca7c0fe0e29e67762e8eca43c734733a4f",
+"ultimo": "AMBUSDT-1d-2026-10-17.zip"
+}
+},
+"AMCUSDT": {
+"funding": {
+"file": 1,
+"primo": "AMCUSDT-fundingRate-2026-09.zip",
+"sha256": "948ded7f7ab4bcb2abd48f7ec1e9cabf4c31d31caf89ac2450c4f2f3b65d34ab",
+"ultimo": "AMCUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 18,
+"primo": "AMCUSDT-1d-2026-09.zip",
+"sha256": "70053b6680ea6e493917d414925a944223e55146952d39d59adcb4666f9254d7",
+"ultimo": "AMCUSDT-1d-2026-10-17.zip"
+}
+},
+"AMDUSDT": {
+"funding": {
+"file": 5,
+"primo": "AMDUSDT-fundingRate-2026-05.zip",
+"sha256": "822fa673f868e28cfd9a0f7913e6db53c97b54eeb73f352c785306134a84e790",
+"ultimo": "AMDUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 22,
+"primo": "AMDUSDT-1d-2026-05.zip",
+"sha256": "8d4f3b7235f669c2ea7ffeb578dc8d1fab4c08ddfbd67f332e43790a9fc16b22",
+"ultimo": "AMDUSDT-1d-2026-10-17.zip"
+}
+},
+"AMZNUSDT": {
+"funding": {
+"file": 8,
+"primo": "AMZNUSDT-fundingRate-2026-02.zip",
+"sha256": "24c8c676e64209b5831232a79e3dd32349113b509cc6144ab3abfc62a7237984",
+"ultimo": "AMZNUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 25,
+"primo": "AMZNUSDT-1d-2026-02.zip",
+"sha256": "c46d902efca3c45ae6fe7bc6fd7ff3a48d5e73c6b37e5aa4518b2c4d5bf65a2d",
+"ultimo": "AMZNUSDT-1d-2026-10-17.zip"
+}
+},
+"ANCUSDT": {
+"funding": {
+"file": 3,
+"primo": "ANCUSDT-fundingRate-2022-03.zip",
+"sha256": "e615075981394c09d453e3b9f95a48e9e343f6f571483747448a6b88ec458ef3",
+"ultimo": "ANCUSDT-fundingRate-2022-05.zip"
+},
+"giorni": {
+"file": 3,
+"primo": "ANCUSDT-1d-2022-03.zip",
+"sha256": "a98287be6aef17f507a5bb3d54a76439eb2ee1b873e23181087c46266b04fb3b",
+"ultimo": "ANCUSDT-1d-2022-05.zip"
+}
+},
+"ANETUSDT": {
+"funding": {
+"file": 1,
+"primo": "ANETUSDT-fundingRate-2026-09.zip",
+"sha256": "72ea4c04315c5dc39298218550e0933526985b4454e4fa2585d46747e2982474",
+"ultimo": "ANETUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 18,
+"primo": "ANETUSDT-1d-2026-09.zip",
+"sha256": "76b0bf376f83362cdfc7f25150e8c6df68048f835bacee6a4615c533013b038a",
+"ultimo": "ANETUSDT-1d-2026-10-17.zip"
+}
+},
+"ANIMEUSDT": {
+"funding": {
+"file": 21,
+"primo": "ANIMEUSDT-fundingRate-2025-01.zip",
+"sha256": "b2c276354bcc4d96a9b2653cf8a9717cb31d4c4f85f52080bb0fcd0d3baf46a4",
+"ultimo": "ANIMEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 38,
+"primo": "ANIMEUSDT-1d-2025-01.zip",
+"sha256": "73008c3a9c0dd7f886131c0108a70378fa83dbff0685ff54324b5bf06851d2cd",
+"ultimo": "ANIMEUSDT-1d-2026-10-17.zip"
+}
+},
+"ANKRUSDT": {
+"funding": {
+"file": 69,
+"primo": "ANKRUSDT-fundingRate-2021-01.zip",
+"sha256": "9d9d23c993cc0e446315eb129853fb4c49846c64757068247d62d64eccd06769",
+"ultimo": "ANKRUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 86,
+"primo": "ANKRUSDT-1d-2021-01.zip",
+"sha256": "80fbb5ee228e1c04fe1aa34925ce91ea7e4fa84ecaeb520300504383dc58406e",
+"ultimo": "ANKRUSDT-1d-2026-10-17.zip"
+}
+},
+"ANTHROPICUSDT": {
+"funding": {
+"file": 4,
+"primo": "ANTHROPICUSDT-fundingRate-2026-06.zip",
+"sha256": "1a810175e74a72d5e54600d6a51f8316683a17197e74779d8db981f32f4c7870",
+"ultimo": "ANTHROPICUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "ANTHROPICUSDT-1d-2026-06.zip",
+"sha256": "f67c26672ede41d6d2de00d73e634504efa465b252d49ee5f7b7c66229e76c14",
+"ultimo": "ANTHROPICUSDT-1d-2026-10-17.zip"
+}
+},
+"ANTUSDT": {
+"funding": {
+"file": 32,
+"primo": "ANTUSDT-fundingRate-2021-12.zip",
+"sha256": "3302aa68766df886d964e892749b2a9fd3d36d8cdcff3025b0bb11daea4640a5",
+"ultimo": "ANTUSDT-fundingRate-2024-07.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "ANTUSDT-1d-2021-12.zip",
+"sha256": "6765daeec45f09c3ef8da06c6bfbdcbbd5cb622779c7050632ddd0f2b5292ee6",
+"ultimo": "ANTUSDT-1d-2024-05.zip"
+}
+},
+"APEUSDT": {
+"funding": {
+"file": 55,
+"primo": "APEUSDT-fundingRate-2022-03.zip",
+"sha256": "2296d1cb9cef123b99b7f455ea1c4f5e266c7902c8eeffb6e41c98e4153df42f",
+"ultimo": "APEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 72,
+"primo": "APEUSDT-1d-2022-03.zip",
+"sha256": "988c23b83ba30cb7838e8abb5a7416e637b04825642e02eb9c446a5e2f7e3a18",
+"ultimo": "APEUSDT-1d-2026-10-17.zip"
+}
+},
+"API3USDT": {
+"funding": {
+"file": 56,
+"primo": "API3USDT-fundingRate-2022-02.zip",
+"sha256": "b3d8345f9bc1eb5f7ae307e189ac31a5c1aaffca25967489626516faccef1b55",
+"ultimo": "API3USDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 73,
+"primo": "API3USDT-1d-2022-02.zip",
+"sha256": "d4b5c6fb32fc2ae65d9d0da3f015e979aaae8cb2a4e366ba4bed009bdcb56385",
+"ultimo": "API3USDT-1d-2026-10-17.zip"
+}
+},
+"APLDUSDT": {
+"funding": {
+"file": 1,
+"primo": "APLDUSDT-fundingRate-2026-09.zip",
+"sha256": "bf64a11690e1f6f3844f614078a173476d9eed619f1e6aed0f86a8a3e080ed2f",
+"ultimo": "APLDUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 18,
+"primo": "APLDUSDT-1d-2026-09.zip",
+"sha256": "1b98baf51a62cb2ed0e6693dc2d39b7b8e929abdd18ef499e869f8dbc80b8067",
+"ultimo": "APLDUSDT-1d-2026-10-17.zip"
+}
+},
+"APPUSDT": {
+"funding": {
+"file": 3,
+"primo": "APPUSDT-fundingRate-2026-07.zip",
+"sha256": "cd383f0bd75970fb7a83b743167aab5e3538e8db02ca941966132df9fe04922c",
+"ultimo": "APPUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 20,
+"primo": "APPUSDT-1d-2026-07.zip",
+"sha256": "8945ab0a11f666ad15f324988ab2bff55e1ce48d9f5267d7042a92ad83818869",
+"ultimo": "APPUSDT-1d-2026-10-17.zip"
+}
+},
+"APRUSDT": {
+"funding": {
+"file": 12,
+"primo": "APRUSDT-fundingRate-2025-10.zip",
+"sha256": "1e52e320caaa260e2cd9b33637acc19ab6a483679f00cfce388dbd252b79b54e",
+"ultimo": "APRUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 29,
+"primo": "APRUSDT-1d-2025-10.zip",
+"sha256": "eb14f4cbc1e71e13f5654755aa39887ff8eef214dc24d9e40cdc3b237ba765da",
+"ultimo": "APRUSDT-1d-2026-10-17.zip"
+}
+},
+"APTUSDT": {
+"funding": {
+"file": 48,
+"primo": "APTUSDT-fundingRate-2022-10.zip",
+"sha256": "1c11c4f763d0f3cf1d5867ba733eeea12367abbbbefc41490dcb46ccb8ced96a",
+"ultimo": "APTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 65,
+"primo": "APTUSDT-1d-2022-10.zip",
+"sha256": "5df20e892f0ce9f225c214ab46bc9470c0dd1ec87014a1e13d41fcf09c5588ba",
+"ultimo": "APTUSDT-1d-2026-10-17.zip"
+}
+},
+"ARBUSDT": {
+"funding": {
+"file": 43,
+"primo": "ARBUSDT-fundingRate-2023-03.zip",
+"sha256": "c7059c0b5d5a181fa75ad659a3b4da7d4a6d37dbae677512e00f40f5bbac43b0",
+"ultimo": "ARBUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 60,
+"primo": "ARBUSDT-1d-2023-03.zip",
+"sha256": "50387602f3fb7314e80a12d9b9c31a34a2b5a5479574659dc4b42e2af93b847d",
+"ultimo": "ARBUSDT-1d-2026-10-17.zip"
+}
+},
+"ARCUSDT": {
+"funding": {
+"file": 21,
+"primo": "ARCUSDT-fundingRate-2025-01.zip",
+"sha256": "8fe4f810c010387524acafe2c06d72a750804f6069ee5f334637a9eb41c29629",
+"ultimo": "ARCUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 38,
+"primo": "ARCUSDT-1d-2025-01.zip",
+"sha256": "c35bfc2a1a5672a0644872907f0a406a8bb3223c46b0e8208c5a7a9815dd16f1",
+"ultimo": "ARCUSDT-1d-2026-10-17.zip"
+}
+},
+"ARIAUSDT": {
+"funding": {
+"file": 13,
+"primo": "ARIAUSDT-fundingRate-2025-09.zip",
+"sha256": "8e796316dd4472666aa127d58dc14c4da63527a325fb8c5ccef284e3475255d3",
+"ultimo": "ARIAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "ARIAUSDT-1d-2025-09.zip",
+"sha256": "4f35deb61e3ca486037a0fc810ad6fe0f7b4a875106edd1d0029dec8f8bb8bdf",
+"ultimo": "ARIAUSDT-1d-2026-10-17.zip"
+}
+},
+"ARKMUSDT": {
+"funding": {
+"file": 39,
+"primo": "ARKMUSDT-fundingRate-2023-07.zip",
+"sha256": "c7d945440a21cbcc85b43e65aca6314fb6f8d9801a457d5d11449203de3c413b",
+"ultimo": "ARKMUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 56,
+"primo": "ARKMUSDT-1d-2023-07.zip",
+"sha256": "d4fe279033b0a222371f5a2c8a6d4ba8e9611b22d20395fa1e29c7ca77f204d4",
+"ultimo": "ARKMUSDT-1d-2026-10-17.zip"
+}
+},
+"ARKUSDT": {
+"funding": {
+"file": 37,
+"primo": "ARKUSDT-fundingRate-2023-09.zip",
+"sha256": "fd83200da605acfc54ab457d4a3cc98ec63cb32c98815bf346ec014f8e87ecc4",
+"ultimo": "ARKUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 54,
+"primo": "ARKUSDT-1d-2023-09.zip",
+"sha256": "fd8d2a9c97ca870303a2a77fd43dda92854a6bee6b132eab472ec5263d4f6a76",
+"ultimo": "ARKUSDT-1d-2026-10-17.zip"
+}
+},
+"ARMUSDT": {
+"funding": {
+"file": 5,
+"primo": "ARMUSDT-fundingRate-2026-05.zip",
+"sha256": "612801e7dbf89b5dc0c16e067604e07d753ecbbb73651ed5ef219d70606d5e9d",
+"ultimo": "ARMUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 22,
+"primo": "ARMUSDT-1d-2026-05.zip",
+"sha256": "099d55d854b42f9d3dad12163b29330c984dacc7663b3209cd3fb58342727803",
+"ultimo": "ARMUSDT-1d-2026-10-17.zip"
+}
+},
+"ARPAUSDT": {
+"funding": {
+"file": 60,
+"primo": "ARPAUSDT-fundingRate-2021-10.zip",
+"sha256": "6981429578c229575a82cc1f05f22c4097aa2c214992fa292842878dc1e8344e",
+"ultimo": "ARPAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 77,
+"primo": "ARPAUSDT-1d-2021-10.zip",
+"sha256": "7f4f2d9fa82b0e2143b798357252132ab15e5f7542aaad83cf93ee4f927a7f67",
+"ultimo": "ARPAUSDT-1d-2026-10-17.zip"
+}
+},
+"ARUSDT": {
+"funding": {
+"file": 61,
+"primo": "ARUSDT-fundingRate-2021-09.zip",
+"sha256": "36f78738ced6c15638d0d668e9e250fee8454c1f45db31c4b25d5b3c0f32da6a",
+"ultimo": "ARUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 78,
+"primo": "ARUSDT-1d-2021-09.zip",
+"sha256": "7e9fabe48c55b576de307f594a8bd8cb3c54565a0d6cc4e1080bbf63652ea4fc",
+"ultimo": "ARUSDT-1d-2026-10-17.zip"
+}
+},
+"ARXUSDT": {
+"funding": {
+"file": 4,
+"primo": "ARXUSDT-fundingRate-2026-06.zip",
+"sha256": "8520daba6df1869e0fea009c65e09e3d5bda0c5e59c6e1328fcb40ba9bd7a974",
+"ultimo": "ARXUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "ARXUSDT-1d-2026-06.zip",
+"sha256": "9bf277d7b10dbc545040b38edaa66060f5db312e60b0aa541a5a75cdc9cf05da",
+"ultimo": "ARXUSDT-1d-2026-10-17.zip"
+}
+},
+"ASMLUSDT": {
+"funding": {
+"file": 4,
+"primo": "ASMLUSDT-fundingRate-2026-06.zip",
+"sha256": "948a5342b1b8d15854ab036c590c6e9260815dd9dc49cfca932078832682753e",
+"ultimo": "ASMLUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "ASMLUSDT-1d-2026-06.zip",
+"sha256": "ec7e9f606bb46c0159da4c927315888e715351b4ce5c4626946f6c2e2486b05a",
+"ultimo": "ASMLUSDT-1d-2026-10-17.zip"
+}
+},
+"ASRUSDT": {
+"funding": {
+"file": 17,
+"primo": "ASRUSDT-fundingRate-2025-05.zip",
+"sha256": "a3fd20d222f9329b68b013abdb9cd35a9c0c01a7fee04a1ecff6fbc487c72eaf",
+"ultimo": "ASRUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 34,
+"primo": "ASRUSDT-1d-2025-05.zip",
+"sha256": "4da4934789c72e9cc7bb78fc8ee3d072de37b03263540c3506dac2a73cff859a",
+"ultimo": "ASRUSDT-1d-2026-10-17.zip"
+}
+},
+"ASTERUSDT": {
+"funding": {
+"file": 13,
+"primo": "ASTERUSDT-fundingRate-2025-09.zip",
+"sha256": "5506b233b77ad16e9018ff4ea1dec1d16c1c0458e7a5991e0b044b26999efe0a",
+"ultimo": "ASTERUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "ASTERUSDT-1d-2025-09.zip",
+"sha256": "5f0904e10d11435ca261fb8d995388f4bf6c8238a26a037f3caeb70cfe9903b5",
+"ultimo": "ASTERUSDT-1d-2026-10-17.zip"
+}
+},
+"ASTRUSDT": {
+"funding": {
+"file": 44,
+"primo": "ASTRUSDT-fundingRate-2023-02.zip",
+"sha256": "2458dce08efada29f04095b6b2f8c6f598ed5828441277d15b4323ea23b629ef",
+"ultimo": "ASTRUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 61,
+"primo": "ASTRUSDT-1d-2023-02.zip",
+"sha256": "c659ca15d417737fd42f843bf9ef53a2f68a486b77fe14b21fe187bc5181cbb8",
+"ultimo": "ASTRUSDT-1d-2026-10-17.zip"
+}
+},
+"ASTSUSDT": {
+"funding": {
+"file": 4,
+"primo": "ASTSUSDT-fundingRate-2026-06.zip",
+"sha256": "0b6429dba883a1f2365acd79bf50d76c2e089749630f10aab3039835040a107d",
+"ultimo": "ASTSUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "ASTSUSDT-1d-2026-06.zip",
+"sha256": "adb7d3163e63a974f86c06470163fe3c1d08e06ffddc3da027cbf0c48fee3669",
+"ultimo": "ASTSUSDT-1d-2026-10-17.zip"
+}
+},
+"ATAUSDT": {
+"funding": {
+"file": 58,
+"primo": "ATAUSDT-fundingRate-2021-08.zip",
+"sha256": "d3fa708bb377f45005b641cc5364a0315bd1e2c272f2655e6e6dadd616c3356c",
+"ultimo": "ATAUSDT-fundingRate-2026-05.zip"
+},
+"giorni": {
+"file": 79,
+"primo": "ATAUSDT-1d-2021-08.zip",
+"sha256": "8b5b5f006b2cac1257c570c8816ac7407803d33f11f26160e8f94402178e2949",
+"ultimo": "ATAUSDT-1d-2026-10-17.zip"
+}
+},
+"ATHUSDT": {
+"funding": {
+"file": 18,
+"primo": "ATHUSDT-fundingRate-2025-04.zip",
+"sha256": "cda1bd985ae1bc85cbb086216eb6cae78db545f4b281dadacaea7e450aa90db3",
+"ultimo": "ATHUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 35,
+"primo": "ATHUSDT-1d-2025-04.zip",
+"sha256": "628b36b9fcfe5dcf11af6991f768b09f4f000d70b1bd74de5706bc734f9a002f",
+"ultimo": "ATHUSDT-1d-2026-10-17.zip"
+}
+},
+"ATOMUSDT": {
+"funding": {
+"file": 80,
+"primo": "ATOMUSDT-fundingRate-2020-02.zip",
+"sha256": "892dee81c6cb46d8bcf7633b8e8a259c6ee1c64dad35e50234b3667842ed7382",
+"ultimo": "ATOMUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 97,
+"primo": "ATOMUSDT-1d-2020-02.zip",
+"sha256": "21ee2cf6e884d07d879cdfdeaf2c9a0d2c94dada020cf3450c429f236785ae70",
+"ultimo": "ATOMUSDT-1d-2026-10-17.zip"
+}
+},
+"ATUSDT": {
+"funding": {
+"file": 12,
+"primo": "ATUSDT-fundingRate-2025-10.zip",
+"sha256": "810159fdd5bf8d0d6916e1253b784c07cf3d0fb40f94fc97958b2dcf6ab2f4f6",
+"ultimo": "ATUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 29,
+"primo": "ATUSDT-1d-2025-10.zip",
+"sha256": "2932e14756432b189bf4315fe1942bba650ccbc3695cfd372e3183a06853c936",
+"ultimo": "ATUSDT-1d-2026-10-17.zip"
+}
+},
+"AUCTIONUSDT": {
+"funding": {
+"file": 34,
+"primo": "AUCTIONUSDT-fundingRate-2023-12.zip",
+"sha256": "8ec23bd462a7380f676e7f7cf1f52a1573080ba900d23780437ad222f82b41c1",
+"ultimo": "AUCTIONUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 51,
+"primo": "AUCTIONUSDT-1d-2023-12.zip",
+"sha256": "8529f520621c2cd4d6d928e24b6e7d6e73bcc65c53486b1afb99142afc18e21b",
+"ultimo": "AUCTIONUSDT-1d-2026-10-17.zip"
+}
+},
+"AUDIOUSDT": {
+"funding": {
+"file": 36,
+"primo": "AUDIOUSDT-fundingRate-2021-08.zip",
+"sha256": "46ee1c189270a23668602b553356b47e2cd016147e09eee1b048804a4d46f86f",
+"ultimo": "AUDIOUSDT-fundingRate-2024-07.zip"
+},
+"giorni": {
+"file": 34,
+"primo": "AUDIOUSDT-1d-2021-08.zip",
+"sha256": "098b63484aac47715589914c78fec838a8d5c46a617bf64f94d8d1d3bb2a7928",
+"ultimo": "AUDIOUSDT-1d-2024-05.zip"
+}
+},
+"AUSDT": {
+"funding": {
+"file": 17,
+"primo": "AUSDT-fundingRate-2025-05.zip",
+"sha256": "beaef37c3abd7d3ad828ba44f5829d4ffb5a47a8757f708837ba163eb0919110",
+"ultimo": "AUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 34,
+"primo": "AUSDT-1d-2025-05.zip",
+"sha256": "44393541b77ce8665850c0cce0292849c3998ca1141133cb006d2e9ab2a8c935",
+"ultimo": "AUSDT-1d-2026-10-17.zip"
+}
+},
+"AVAAIUSDT": {
+"funding": {
+"file": 21,
+"primo": "AVAAIUSDT-fundingRate-2025-01.zip",
+"sha256": "d82e404b8bb1fbf42abb92ad63ddf2fe30838af3eba25dc6287d211e3a3ad3f8",
+"ultimo": "AVAAIUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 38,
+"primo": "AVAAIUSDT-1d-2025-01.zip",
+"sha256": "a211235d89311b87b5bf752df0d7e4c64b6fbf928d3e99743ce7ab6116679b0f",
+"ultimo": "AVAAIUSDT-1d-2026-10-17.zip"
+}
+},
+"AVAUSDT": {
+"funding": {
+"file": 22,
+"primo": "AVAUSDT-fundingRate-2024-12.zip",
+"sha256": "8a38e5698c9a00c2233e55a0cf0a8e9e022ecc17ba330ec799dd16e1239720bb",
+"ultimo": "AVAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 39,
+"primo": "AVAUSDT-1d-2024-12.zip",
+"sha256": "85e8d8a2663c4a2a2a4247120c8cf1b3ddc3a713b55cbd87df16c26969293198",
+"ultimo": "AVAUSDT-1d-2026-10-17.zip"
+}
+},
+"AVAXUSDT": {
+"funding": {
+"file": 73,
+"primo": "AVAXUSDT-fundingRate-2020-09.zip",
+"sha256": "fc2e0c2c5e9a6696c6ddc8941c8f91fbb5b712df0797fc65fa32962e86e9b131",
+"ultimo": "AVAXUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 90,
+"primo": "AVAXUSDT-1d-2020-09.zip",
+"sha256": "98a8a47bf42a6128fa6500130c64a5f7308fec9c92b3fb0b1ea2e554049253c5",
+"ultimo": "AVAXUSDT-1d-2026-10-17.zip"
+}
+},
+"AVGOUSDT": {
+"funding": {
+"file": 6,
+"primo": "AVGOUSDT-fundingRate-2026-04.zip",
+"sha256": "fc952f61c8fb8f5dd8171fcd0eedb4c651e1d2c289207a427ddfb589e519af2a",
+"ultimo": "AVGOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 23,
+"primo": "AVGOUSDT-1d-2026-04.zip",
+"sha256": "c67606449ce4e8e6f65954c4ab034f8047f381121a1b69906ead0e36cddf5d15",
+"ultimo": "AVGOUSDT-1d-2026-10-17.zip"
+}
+},
+"AVNTUSDT": {
+"funding": {
+"file": 13,
+"primo": "AVNTUSDT-fundingRate-2025-09.zip",
+"sha256": "5726a0f903bc56939173f723de0475ac59875ce83ca2610afb36bf813b0a4e5e",
+"ultimo": "AVNTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "AVNTUSDT-1d-2025-09.zip",
+"sha256": "42ed017c8989dec64679775fe72103e5aa3aa52aab45058d04c3d83326cf887b",
+"ultimo": "AVNTUSDT-1d-2026-10-17.zip"
+}
+},
+"AWEUSDT": {
+"funding": {
+"file": 17,
+"primo": "AWEUSDT-fundingRate-2025-05.zip",
+"sha256": "51fcac0f815dfc4d971334b1f683a048613e2607ae2d86a18fe239c34f87f743",
+"ultimo": "AWEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 34,
+"primo": "AWEUSDT-1d-2025-05.zip",
+"sha256": "bb74ef8d92ea7a3c87525f863b7c3c7a02dca5a809d562bec9e8adc92fd05951",
+"ultimo": "AWEUSDT-1d-2026-10-17.zip"
+}
+},
+"AXLUSDT": {
+"funding": {
+"file": 31,
+"primo": "AXLUSDT-fundingRate-2024-03.zip",
+"sha256": "4a6bc2bfe92892378200fed0d9cf6b5c15408ed16544b46960852f5a4bbf65a8",
+"ultimo": "AXLUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 48,
+"primo": "AXLUSDT-1d-2024-03.zip",
+"sha256": "5d66aeb6a316bce93f61f2c208e52093f09e28ee5f2d1bf01fb79f286b86ccc4",
+"ultimo": "AXLUSDT-1d-2026-10-17.zip"
+}
+},
+"AXSUSDT": {
+"funding": {
+"file": 71,
+"primo": "AXSUSDT-fundingRate-2020-11.zip",
+"sha256": "c5260239a810c04ff9a1f745ffadb501e22af92488f00544296e97bc1271d696",
+"ultimo": "AXSUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 88,
+"primo": "AXSUSDT-1d-2020-11.zip",
+"sha256": "34454930b81c89360bd8f0598351b064cb8b6c85c6345c3b7a0a7fc98fddea64",
+"ultimo": "AXSUSDT-1d-2026-10-17.zip"
+}
+},
+"AXTIUSDT": {
+"funding": {
+"file": 4,
+"primo": "AXTIUSDT-fundingRate-2026-06.zip",
+"sha256": "282d78634d3011ce634da11e3fce18b565e363c8e646b89a5e02c52aa7032cfc",
+"ultimo": "AXTIUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "AXTIUSDT-1d-2026-06.zip",
+"sha256": "47cea8dfb19577d63728ef6abb2b1e51833cf30581acbd27875ff205818f0453",
+"ultimo": "AXTIUSDT-1d-2026-10-17.zip"
+}
+},
+"AZTECUSDT": {
+"funding": {
+"file": 8,
+"primo": "AZTECUSDT-fundingRate-2026-02.zip",
+"sha256": "a90fe2cbf34392112de4d20708187517b124179297845ab678d8e33d23818c2a",
+"ultimo": "AZTECUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 25,
+"primo": "AZTECUSDT-1d-2026-02.zip",
+"sha256": "d4818bc6171e90797b864231f6bec6546830e5ade2f58970e20ac01f0edf902d",
+"ultimo": "AZTECUSDT-1d-2026-10-17.zip"
+}
+},
+"B2USDT": {
+"funding": {
+"file": 17,
+"primo": "B2USDT-fundingRate-2025-05.zip",
+"sha256": "3ddd64736201674a324fa7c81441fe8df50d9106aeb4b8adc52f4d404c2d28ac",
+"ultimo": "B2USDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 34,
+"primo": "B2USDT-1d-2025-05.zip",
+"sha256": "2e1e059086c9f530ebde27d6d792d9fcd0fa962998b7e07231457311a7c2a78d",
+"ultimo": "B2USDT-1d-2026-10-17.zip"
+}
+},
+"B3USDT": {
+"funding": {
+"file": 15,
+"primo": "B3USDT-fundingRate-2025-02.zip",
+"sha256": "fd557e5c903905d023198d9aa3b7e48d82e07b385c142d12b1020565d7192406",
+"ultimo": "B3USDT-fundingRate-2026-04.zip"
+},
+"giorni": {
+"file": 37,
+"primo": "B3USDT-1d-2025-02.zip",
+"sha256": "a5bf32a64baa3b482f2469b591fa733f6e6554f6d2dc5701accfc8085e68a0fb",
+"ultimo": "B3USDT-1d-2026-10-17.zip"
+}
+},
+"BABAUSDT": {
+"funding": {
+"file": 6,
+"primo": "BABAUSDT-fundingRate-2026-04.zip",
+"sha256": "0c411a81137665a5f764341a857c12c03893fd24e4507e3eab985eeaafd7a9ea",
+"ultimo": "BABAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 23,
+"primo": "BABAUSDT-1d-2026-04.zip",
+"sha256": "7ab0f17716f18142a57a2460e4061393f3a2c7db3d6ea1624ed789462a0ac8c8",
+"ultimo": "BABAUSDT-1d-2026-10-17.zip"
+}
+},
+"BABYUSDT": {
+"funding": {
+"file": 18,
+"primo": "BABYUSDT-fundingRate-2025-04.zip",
+"sha256": "1f5bcb9e87dbe61060148fee6fc26b95c2cf4bebb9117ec3b1ed243f0caba870",
+"ultimo": "BABYUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 35,
+"primo": "BABYUSDT-1d-2025-04.zip",
+"sha256": "da1532b955b7ca734651ddb332eabaea636e4dee6a94b5fa84fbdd8da186e03d",
+"ultimo": "BABYUSDT-1d-2026-10-17.zip"
+}
+},
+"BADGERUSDT": {
+"funding": {
+"file": 20,
+"primo": "BADGERUSDT-fundingRate-2023-11.zip",
+"sha256": "bc793f1daa5f54e9ce3b274b8ebfe95982693e8120c7735cf5ce891e27fcb5f0",
+"ultimo": "BADGERUSDT-fundingRate-2025-06.zip"
+},
+"giorni": {
+"file": 52,
+"primo": "BADGERUSDT-1d-2023-11.zip",
+"sha256": "1a10e9342629c4303eb88c1b97fb9cc4b42f83f9e6b26f884f037ca73b90b332",
+"ultimo": "BADGERUSDT-1d-2026-10-17.zip"
+}
+},
+"BAKEUSDT": {
+"funding": {
+"file": 54,
+"primo": "BAKEUSDT-fundingRate-2021-05.zip",
+"sha256": "56e9e701308a34b5722aa5233ac0c7d72a71fabcf42ecde554ecd2b937b3a9c1",
+"ultimo": "BAKEUSDT-fundingRate-2025-10.zip"
+},
+"giorni": {
+"file": 82,
+"primo": "BAKEUSDT-1d-2021-05.zip",
+"sha256": "dacfc6eea21289f3a1c30b18216a0cb2486fd6ed4ffc7c38ff66d5471e6cf850",
+"ultimo": "BAKEUSDT-1d-2026-10-17.zip"
+}
+},
+"BALUSDT": {
+"funding": {
+"file": 58,
+"primo": "BALUSDT-fundingRate-2020-09.zip",
+"sha256": "ac459f391d8938fd883dd640f6c379025ba78921fb4981ad27043a1a3ae09e63",
+"ultimo": "BALUSDT-fundingRate-2025-06.zip"
+},
+"giorni": {
+"file": 90,
+"primo": "BALUSDT-1d-2020-09.zip",
+"sha256": "e1e382c27d5e28757c789dfc72acaf4000a859ef0c1ad0a00682970a30ab1a9a",
+"ultimo": "BALUSDT-1d-2026-10-17.zip"
+}
+},
+"BANANAS31USDT": {
+"funding": {
+"file": 19,
+"primo": "BANANAS31USDT-fundingRate-2025-03.zip",
+"sha256": "67f5da97c15885413fe399b36a417f6d083388f88cce11b9d9f1ef4536eee51c",
+"ultimo": "BANANAS31USDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 36,
+"primo": "BANANAS31USDT-1d-2025-03.zip",
+"sha256": "7dd807fd390c96c3fa7186839acc411acd6240e893776af6aabb6a4d7f856688",
+"ultimo": "BANANAS31USDT-1d-2026-10-17.zip"
+}
+},
+"BANANAUSDT": {
+"funding": {
+"file": 26,
+"primo": "BANANAUSDT-fundingRate-2024-08.zip",
+"sha256": "88072bf4eb93319e12f1491f9ab016a7308d151fc50c19ce06807b183108198e",
+"ultimo": "BANANAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 43,
+"primo": "BANANAUSDT-1d-2024-08.zip",
+"sha256": "ccb7ea8528d6fb0becfe78e23d0e2f31edfba1f462d5d0c3f46b87afe5131fb5",
+"ultimo": "BANANAUSDT-1d-2026-10-17.zip"
+}
+},
+"BANDUSDT": {
+"funding": {
+"file": 75,
+"primo": "BANDUSDT-fundingRate-2020-07.zip",
+"sha256": "f1a6cd559ea5a091294b8c3d8985b8ab57a2b88539c083cd5040145cfc2e0e2f",
+"ultimo": "BANDUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 92,
+"primo": "BANDUSDT-1d-2020-07.zip",
+"sha256": "7e793b805e40c3746e15c8fc11debea22b7eb12daabfc2e3dd5d5cef8c02fed9",
+"ultimo": "BANDUSDT-1d-2026-10-17.zip"
+}
+},
+"BANKUSDT": {
+"funding": {
+"file": 18,
+"primo": "BANKUSDT-fundingRate-2025-04.zip",
+"sha256": "edb1dee48483bd13fa40f776a27b0f0297aaba95014f6c7c9d29f9d29b925d11",
+"ultimo": "BANKUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 35,
+"primo": "BANKUSDT-1d-2025-04.zip",
+"sha256": "0d45af91aa3972f2bf535d0dd5a950b9ffa88f2c5677b6f6412eb029a1e7fe55",
+"ultimo": "BANKUSDT-1d-2026-10-17.zip"
+}
+},
+"BANUSDT": {
+"funding": {
+"file": 23,
+"primo": "BANUSDT-fundingRate-2024-11.zip",
+"sha256": "934934deaae1b9a36f5054537b2d840e2644a8ba0b7bc151051f7aaa82446c76",
+"ultimo": "BANUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "BANUSDT-1d-2024-11.zip",
+"sha256": "9aaaf0cf5089e16568d744d618146383345a0226e5348827c382876b64bb82b2",
+"ultimo": "BANUSDT-1d-2026-10-17.zip"
+}
+},
+"BARDUSDT": {
+"funding": {
+"file": 13,
+"primo": "BARDUSDT-fundingRate-2025-09.zip",
+"sha256": "36f8077d890f5686bc2e2d0efdac041de7be06dd224876f937d99fe966e28caf",
+"ultimo": "BARDUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "BARDUSDT-1d-2025-09.zip",
+"sha256": "4e20b086a78d392c1d4661f839964d12ba4894466fb79d761b27f2d24c1fa099",
+"ultimo": "BARDUSDT-1d-2026-10-17.zip"
+}
+},
+"BASEDUSDT": {
+"funding": {
+"file": 7,
+"primo": "BASEDUSDT-fundingRate-2026-03.zip",
+"sha256": "a2f37e4052212df464c8ba1208551eb43c8de2629277038e6da8a6b12bca2ccc",
+"ultimo": "BASEDUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 24,
+"primo": "BASEDUSDT-1d-2026-03.zip",
+"sha256": "625ffbb6b595b9b75949e007e5c95d85e1a52b84b2ab1468401dd107cd21bedf",
+"ultimo": "BASEDUSDT-1d-2026-10-17.zip"
+}
+},
+"BASUSDT": {
+"funding": {
+"file": 14,
+"primo": "BASUSDT-fundingRate-2025-08.zip",
+"sha256": "ffbb27c54e867876b9ad1aa3e199816961d20641e69788dbe22bdcb7af7540a7",
+"ultimo": "BASUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 31,
+"primo": "BASUSDT-1d-2025-08.zip",
+"sha256": "31fdbc60adf9bd144fb5acbbe632de16dc5f7f4c6d9c9a78e8c0c2b17267428a",
+"ultimo": "BASUSDT-1d-2026-10-17.zip"
+}
+},
+"BATUSDT": {
+"funding": {
+"file": 80,
+"primo": "BATUSDT-fundingRate-2020-02.zip",
+"sha256": "7e91d9864bc48580e8e3d7593eb305f79e3949f066d373721ecaeabcb2d5dc46",
+"ultimo": "BATUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 97,
+"primo": "BATUSDT-1d-2020-02.zip",
+"sha256": "23ef29575deb9708bb8f4097f397e2e4d0edb0bcb5d4e1d45f46f647de6f2399",
+"ultimo": "BATUSDT-1d-2026-10-17.zip"
+}
+},
+"BBUSDT": {
+"funding": {
+"file": 29,
+"primo": "BBUSDT-fundingRate-2024-05.zip",
+"sha256": "76f53e97ecb80d3d3f68baa5d7437da704a5b23b89187f76813bd8bef4bd59f2",
+"ultimo": "BBUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 46,
+"primo": "BBUSDT-1d-2024-05.zip",
+"sha256": "e18227fc777fad97e09dd73c6815ae112b01b1fd4e4d13ac9ff1b36ceb34a7cf",
+"ultimo": "BBUSDT-1d-2026-10-17.zip"
+}
+},
+"BBXUSDT": {
+"funding": {
+"file": 4,
+"primo": "BBXUSDT-fundingRate-2026-06.zip",
+"sha256": "c18385825026b192cd0f67b19410f2b5b8d42c34ee489b517297cfab149bf15b",
+"ultimo": "BBXUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "BBXUSDT-1d-2026-06.zip",
+"sha256": "0b53141fed50ad19841d0a32fdcc918c5940140476a9a2e177ac08467ef452b0",
+"ultimo": "BBXUSDT-1d-2026-10-17.zip"
+}
+},
+"BCHUSDT": {
+"funding": {
+"file": 81,
+"primo": "BCHUSDT-fundingRate-2020-01.zip",
+"sha256": "7f791a6006c9a0d1a588bc36fc7a88efcc62aef17cb6026b2b4fdd094e66333d",
+"ultimo": "BCHUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 98,
+"primo": "BCHUSDT-1d-2020-01.zip",
+"sha256": "9b4122a9796a52db520dfbec4092da3bddf66c6a0dcc3456a3a5725cb382affb",
+"ultimo": "BCHUSDT-1d-2026-10-17.zip"
+}
+},
+"BDXNUSDT": {
+"funding": {
+"file": 10,
+"primo": "BDXNUSDT-fundingRate-2025-06.zip",
+"sha256": "570b4276f531fc0cc75ff5ffd2f8b513dbbbcd706ea161d95271047dceaa13ac",
+"ultimo": "BDXNUSDT-fundingRate-2026-03.zip"
+},
+"giorni": {
+"file": 10,
+"primo": "BDXNUSDT-1d-2025-06.zip",
+"sha256": "39ac0c0c19a583bfa702d3461e4d571b04d286f7a3197b1a609666d0400789bf",
+"ultimo": "BDXNUSDT-1d-2026-03.zip"
+}
+},
+"BEAMXUSDT": {
+"funding": {
+"file": 35,
+"primo": "BEAMXUSDT-fundingRate-2023-11.zip",
+"sha256": "77e074e7b26610c10c958e0ce52099cc0f509f2b47139fe8f5c9f54ef282d36e",
+"ultimo": "BEAMXUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 52,
+"primo": "BEAMXUSDT-1d-2023-11.zip",
+"sha256": "16000b047207fceabbe8ac30bb101661e5488dbc49f2a9405468cc96238c27e4",
+"ultimo": "BEAMXUSDT-1d-2026-10-17.zip"
+}
+},
+"BEATUSDT": {
+"funding": {
+"file": 11,
+"primo": "BEATUSDT-fundingRate-2025-11.zip",
+"sha256": "46060ac9cfcb1332d57852562262db606c431872182acab10f4c485ba1a553e9",
+"ultimo": "BEATUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 28,
+"primo": "BEATUSDT-1d-2025-11.zip",
+"sha256": "8b6fe22e32cfe3cb83b267eff4f54490f89996831469084127a501df43956b8a",
+"ultimo": "BEATUSDT-1d-2026-10-17.zip"
+}
+},
+"BELUSDT": {
+"funding": {
+"file": 71,
+"primo": "BELUSDT-fundingRate-2020-11.zip",
+"sha256": "db932afaf3fc90a291deef1e40230cfda4525667acf0b745d6add964253fa4c7",
+"ultimo": "BELUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 88,
+"primo": "BELUSDT-1d-2020-11.zip",
+"sha256": "f0dc7f0edc9c6341ded2892d1993868e2e5d31993f1ac011c45e73027f7f8976",
+"ultimo": "BELUSDT-1d-2026-10-17.zip"
+}
+},
+"BERAUSDT": {
+"funding": {
+"file": 20,
+"primo": "BERAUSDT-fundingRate-2025-02.zip",
+"sha256": "3409abb2cbcb886378535aae41cc086af5061d52c5592ed762b4e768d2dec76e",
+"ultimo": "BERAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 37,
+"primo": "BERAUSDT-1d-2025-02.zip",
+"sha256": "79cc88aa626f4dfb80fa893a10ab24cd95336aedbe7c8103ff9a92bb3a66496d",
+"ultimo": "BERAUSDT-1d-2026-10-17.zip"
+}
+},
+"BEUSDT": {
+"funding": {
+"file": 5,
+"primo": "BEUSDT-fundingRate-2026-05.zip",
+"sha256": "dbeaf5b41ca8cd8d81daf21e35d7af22e3efdac4dc1a827336fbca51552e9982",
+"ultimo": "BEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 22,
+"primo": "BEUSDT-1d-2026-05.zip",
+"sha256": "a84f97c6cca9c5c5b7df0dfa83c7e271306715ed21ed05b502d60867140c2c09",
+"ultimo": "BEUSDT-1d-2026-10-17.zip"
+}
+},
+"BICOUSDT": {
+"funding": {
+"file": 37,
+"primo": "BICOUSDT-fundingRate-2023-09.zip",
+"sha256": "76677592bec3655ac0d9209e426927443e9ffe4041bb04861286b918381fcebc",
+"ultimo": "BICOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 54,
+"primo": "BICOUSDT-1d-2023-09.zip",
+"sha256": "e60aaabf880a627e87ac731d457b23991ab685172791eccf2134dd1a36a7a683",
+"ultimo": "BICOUSDT-1d-2026-10-17.zip"
+}
+},
+"BIDUSDT": {
+"funding": {
+"file": 11,
+"primo": "BIDUSDT-fundingRate-2025-03.zip",
+"sha256": "6b1afc001ca8c69f0e6344795ef88b11799ebe3dce1b178a7cf5e8f25c3e0ab7",
+"ultimo": "BIDUSDT-fundingRate-2026-01.zip"
+},
+"giorni": {
+"file": 36,
+"primo": "BIDUSDT-1d-2025-03.zip",
+"sha256": "13b85384e5480dcf7d550a2e6a233bf0848a6c1f0cd753e65f74723cd306fa2c",
+"ultimo": "BIDUSDT-1d-2026-10-17.zip"
+}
+},
+"BIGTIMEUSDT": {
+"funding": {
+"file": 36,
+"primo": "BIGTIMEUSDT-fundingRate-2023-10.zip",
+"sha256": "66f9dd5adc080eca7639b504aa34b4d0f572f127e9afd28edc32bec41dc28f72",
+"ultimo": "BIGTIMEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 53,
+"primo": "BIGTIMEUSDT-1d-2023-10.zip",
+"sha256": "05b399dfbb3872b3826b7f62ac5f524947787debb6e6c9a09c13cd40b798cc67",
+"ultimo": "BIGTIMEUSDT-1d-2026-10-17.zip"
+}
+},
+"BILLUSDT": {
+"funding": {
+"file": 5,
+"primo": "BILLUSDT-fundingRate-2026-05.zip",
+"sha256": "a4bf393ff6c814014146f290714afa29390e10500e60c5b72a404e792ce01ff6",
+"ultimo": "BILLUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 22,
+"primo": "BILLUSDT-1d-2026-05.zip",
+"sha256": "a1000071f4db46842d048cc2bdd44148ef7fc0a33b8c348984df6f534dc3d0fd",
+"ultimo": "BILLUSDT-1d-2026-10-17.zip"
+}
+},
+"BIOUSDT": {
+"funding": {
+"file": 21,
+"primo": "BIOUSDT-fundingRate-2025-01.zip",
+"sha256": "a65cc5cbea6e95e350f8f63e212e39c0238ed7170155e2ea06eff97e363f565c",
+"ultimo": "BIOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 38,
+"primo": "BIOUSDT-1d-2025-01.zip",
+"sha256": "fe7bae34a028c260d25cc3a0f61d82968d89feed4d45c5ea60c0f68b2862cb9f",
+"ultimo": "BIOUSDT-1d-2026-10-17.zip"
+}
+},
+"BIRBUSDT": {
+"funding": {
+"file": 9,
+"primo": "BIRBUSDT-fundingRate-2026-01.zip",
+"sha256": "f2d07d54be2b1056c527e22e4f202037cbd30fa6f3296fefe589973803169572",
+"ultimo": "BIRBUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 26,
+"primo": "BIRBUSDT-1d-2026-01.zip",
+"sha256": "3fba3d427a65ab63e03c4e93fb09c8bdf61ccaf4ad0ad74b7fb626fd81e041ad",
+"ultimo": "BIRBUSDT-1d-2026-10-17.zip"
+}
+},
+"BITOUSDT": {
+"funding": {
+"file": 3,
+"primo": "BITOUSDT-fundingRate-2026-07.zip",
+"sha256": "1441ab735cde2bb3634870a2d2e9aca4367e40c935a5471ff994b130de7eebc9",
+"ultimo": "BITOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 20,
+"primo": "BITOUSDT-1d-2026-07.zip",
+"sha256": "2882d3d1fbecbc6d110fb3dc4bb74ea32205cf1e6cc70b049be80ef2c6ce6620",
+"ultimo": "BITOUSDT-1d-2026-10-17.zip"
+}
+},
+"BLESSUSDT": {
+"funding": {
+"file": 13,
+"primo": "BLESSUSDT-fundingRate-2025-09.zip",
+"sha256": "387b3bb8eaab78d351af48238d3072239f2061504b52ce030c730ec66b2cb881",
+"ultimo": "BLESSUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 30,
+"primo": "BLESSUSDT-1d-2025-09.zip",
+"sha256": "ae750d57916b147efb6662836482fd41454dadf4c8b7d93d3cdd2b584962f24c",
+"ultimo": "BLESSUSDT-1d-2026-10-17.zip"
+}
+},
+"BLUAIUSDT": {
+"funding": {
+"file": 12,
+"primo": "BLUAIUSDT-fundingRate-2025-10.zip",
+"sha256": "eb2f674584ae06b8ef131c486b74e667f118c8e32c977b9ce9e9cdf72b4b524f",
+"ultimo": "BLUAIUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 29,
+"primo": "BLUAIUSDT-1d-2025-10.zip",
+"sha256": "23c2e4266adefc3b21c0658280f9a7c1926a14e46e88293e524b58d31c46bde2",
+"ultimo": "BLUAIUSDT-1d-2026-10-17.zip"
+}
+},
+"BLUEBIRDUSDT": {
+"funding": {
+"file": 21,
+"primo": "BLUEBIRDUSDT-fundingRate-2022-11.zip",
+"sha256": "9817b9fe2feec8b1740272a34e626be0a2610ee4ef770768d8d9aaffcd28faff",
+"ultimo": "BLUEBIRDUSDT-fundingRate-2024-07.zip"
+},
+"giorni": {
+"file": 19,
+"primo": "BLUEBIRDUSDT-1d-2022-11.zip",
+"sha256": "d558385cadd0f42c3d8914c4ffc323fae25a7ddf7265964b7718542251b52980",
+"ultimo": "BLUEBIRDUSDT-1d-2024-05.zip"
+}
+},
+"BLURUSDT": {
+"funding": {
+"file": 42,
+"primo": "BLURUSDT-fundingRate-2023-04.zip",
+"sha256": "76131eb331caf7b40c7c47f0b47d072a15be9140a0854c9b33ebf4c688aa1b8e",
+"ultimo": "BLURUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 59,
+"primo": "BLURUSDT-1d-2023-04.zip",
+"sha256": "c948f946d84995f8676c0ba1c4893ba346e0e8e20013756ac51ae03ec372a4e6",
+"ultimo": "BLURUSDT-1d-2026-10-17.zip"
+}
+},
+"BLZUSDT": {
+"funding": {
+"file": 58,
+"primo": "BLZUSDT-fundingRate-2020-09.zip",
+"sha256": "972c4b0bd0c02b1e96690d9441d02e885a5ff9262507dcf8f6dd73f322efee42",
+"ultimo": "BLZUSDT-fundingRate-2025-06.zip"
+},
+"giorni": {
+"file": 90,
+"primo": "BLZUSDT-1d-2020-09.zip",
+"sha256": "3902255652562d7bb73fa9ad304e90c00ea2434d5c95b29f3a263d8efd219892",
+"ultimo": "BLZUSDT-1d-2026-10-17.zip"
+}
+},
+"BMNRUSDT": {
+"funding": {
+"file": 4,
+"primo": "BMNRUSDT-fundingRate-2026-06.zip",
+"sha256": "f7f4d16db06101cfd6ae33c3b7aa11d9f326bd064185e984e3886a9c2b06222d",
+"ultimo": "BMNRUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "BMNRUSDT-1d-2026-06.zip",
+"sha256": "1ccbc954da70d365c9439ce765752241206afd32316a01cb45c8bd3b1f71d7c0",
+"ultimo": "BMNRUSDT-1d-2026-10-17.zip"
+}
+},
+"BMTUSDT": {
+"funding": {
+"file": 19,
+"primo": "BMTUSDT-fundingRate-2025-03.zip",
+"sha256": "c323d6d4c657c7bc21c7de2887cc56b60fd0a2fd5edc617cf052b0c49ee57eb0",
+"ultimo": "BMTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 36,
+"primo": "BMTUSDT-1d-2025-03.zip",
+"sha256": "1128703c385289d673ed9f9b75cd88eb2360e1403f7abfbafdecf0508518a5ef",
+"ultimo": "BMTUSDT-1d-2026-10-17.zip"
+}
+},
+"BNBUSDT": {
+"funding": {
+"file": 80,
+"primo": "BNBUSDT-fundingRate-2020-02.zip",
+"sha256": "d80c6844583f7aba06ad5ff2843f474e1fb3228135390ada1bc5e5c500eeb039",
+"ultimo": "BNBUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 97,
+"primo": "BNBUSDT-1d-2020-02.zip",
+"sha256": "c3179f5b7ad2b1ca91ab03a44a82d397aeb54bd96572d3e198fc6395045bf2eb",
+"ultimo": "BNBUSDT-1d-2026-10-17.zip"
+}
+},
+"BNCUSDT": {
+"funding": {
+"file": 3,
+"primo": "BNCUSDT-fundingRate-2026-07.zip",
+"sha256": "fecc0ee26c80b92ca69ffdf81604df5eca1949329449c51470a02f615c5ab61e",
+"ultimo": "BNCUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 20,
+"primo": "BNCUSDT-1d-2026-07.zip",
+"sha256": "91d476bdd190d69c59d95d54e728eb404d6ea3b6842d190a02ee8a7770f48fd7",
+"ultimo": "BNCUSDT-1d-2026-10-17.zip"
+}
+},
+"BNTUSDT": {
+"funding": {
+"file": 42,
+"primo": "BNTUSDT-fundingRate-2021-01.zip",
+"sha256": "65b98e803cd514aabfc43d87c49e6dc1eca1dd8001f939e1c8177b63fc48a766",
+"ultimo": "BNTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 55,
+"primo": "BNTUSDT-1d-2023-08.zip",
+"sha256": "2b58b68f0a2496d4db01f33b15a7f4d8d3c2e76f06bf4ee2a018331b46d6ff33",
+"ultimo": "BNTUSDT-1d-2026-10-17.zip"
+}
+},
+"BNXUSDT": {
+"funding": {
+"file": 29,
+"primo": "BNXUSDT-fundingRate-2023-02.zip",
+"sha256": "57d3894df6d438a415b720a146ad82d2ba14d1558eed05319a9bad849d6703c2",
+"ultimo": "BNXUSDT-fundingRate-2025-06.zip"
+},
+"giorni": {
+"file": 71,
+"primo": "BNXUSDT-1d-2022-04.zip",
+"sha256": "06c44095276606de0f892ec7b828cb6f892923041019344cb5571000a91e5da1",
+"ultimo": "BNXUSDT-1d-2026-10-17.zip"
+}
+},
+"BOBUSDT": {
+"funding": {
+"file": 6,
+"primo": "BOBUSDT-fundingRate-2025-11.zip",
+"sha256": "ebce43d408084eb279afa75817499a941d37d5393aca3b1b71df96f357194c8d",
+"ultimo": "BOBUSDT-fundingRate-2026-04.zip"
+},
+"giorni": {
+"file": 28,
+"primo": "BOBUSDT-1d-2025-11.zip",
+"sha256": "1dabc93461e2f695acaf9fb8070f20d234ea35135d8268f2b16e8c8e7044ef2a",
+"ultimo": "BOBUSDT-1d-2026-10-17.zip"
+}
+},
+"BOMEUSDT": {
+"funding": {
+"file": 31,
+"primo": "BOMEUSDT-fundingRate-2024-03.zip",
+"sha256": "85b4878fd574ed4fdfc5e003762b96552b69740766e550d4cd9c601f30d11e32",
+"ultimo": "BOMEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 48,
+"primo": "BOMEUSDT-1d-2024-03.zip",
+"sha256": "d5ae3c551574a0caea4c48d261649d40d30ad780b2fb1042ea9cffb0851b1174",
+"ultimo": "BOMEUSDT-1d-2026-10-17.zip"
+}
+},
+"BONDUSDT": {
+"funding": {
+"file": 21,
+"primo": "BONDUSDT-fundingRate-2023-10.zip",
+"sha256": "ebcc2ef1e7769f87fb986e505c64f16c96fd86d3581c90bbe262154757c30cb7",
+"ultimo": "BONDUSDT-fundingRate-2025-06.zip"
+},
+"giorni": {
+"file": 53,
+"primo": "BONDUSDT-1d-2023-10.zip",
+"sha256": "23487b2ee65dcd05c2c0b2286da93ff3455e2da9fd9f1d9ec028164bf0c376d8",
+"ultimo": "BONDUSDT-1d-2026-10-17.zip"
+}
+},
+"BOTUSDT": {
+"funding": {
+"file": 3,
+"primo": "BOTUSDT-fundingRate-2026-07.zip",
+"sha256": "a1aa97879092e0e1dadd34197f55df351a630e353d36dfe09b29c4b8f7c31d4e",
+"ultimo": "BOTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 20,
+"primo": "BOTUSDT-1d-2026-07.zip",
+"sha256": "73df1b1b5c02bf3c0d0877cd47933a3d31c24ee6fe7dbf8a746ea82781e6dec6",
+"ultimo": "BOTUSDT-1d-2026-10-17.zip"
+}
+},
+"BRETTUSDT": {
+"funding": {
+"file": 26,
+"primo": "BRETTUSDT-fundingRate-2024-08.zip",
+"sha256": "ad77d6b6c345782fa0a0b8689487d96566f289b084e972e9416ea781dc686bf8",
+"ultimo": "BRETTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 43,
+"primo": "BRETTUSDT-1d-2024-08.zip",
+"sha256": "5d483172e444fabbf460097499d676a5dc17305bb87bb4ff0b28242357ef2c4b",
+"ultimo": "BRETTUSDT-1d-2026-10-17.zip"
+}
+},
+"BREVUSDT": {
+"funding": {
+"file": 10,
+"primo": "BREVUSDT-fundingRate-2025-12.zip",
+"sha256": "56ab61a5c75738a1e946678f50d94b9ecdc20b78f2ac3fa5073346c755fabf66",
+"ultimo": "BREVUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 27,
+"primo": "BREVUSDT-1d-2025-12.zip",
+"sha256": "d7e4010951e5f78ce491fc2108cdb6c670619e4476e7e4627bd8606bf27198d4",
+"ultimo": "BREVUSDT-1d-2026-10-17.zip"
+}
+},
+"BRKBUSDT": {
+"funding": {
+"file": 5,
+"primo": "BRKBUSDT-fundingRate-2026-05.zip",
+"sha256": "e06f6b7b096c2494e620a8980df37af90edda22eec09c613bedac50ed5b6d10c",
+"ultimo": "BRKBUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 22,
+"primo": "BRKBUSDT-1d-2026-05.zip",
+"sha256": "1c90383708d03e1fca9a61f1edacbca47fa56a30babe6f58ca6d96194b9162b9",
+"ultimo": "BRKBUSDT-1d-2026-10-17.zip"
+}
+},
+"BROCCOLI714USDT": {
+"funding": {
+"file": 19,
+"primo": "BROCCOLI714USDT-fundingRate-2025-03.zip",
+"sha256": "bd8eeaf6b0f9d813f627f8f10f693cb07001611eb459ec6c1a6ae564ddba47fa",
+"ultimo": "BROCCOLI714USDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 36,
+"primo": "BROCCOLI714USDT-1d-2025-03.zip",
+"sha256": "b5a81404d8fe2af1b2ba67a694f4d0eaefa85cb0014e3623711451d7eebbf0c9",
+"ultimo": "BROCCOLI714USDT-1d-2026-10-17.zip"
+}
+},
+"BROCCOLIF3BUSDT": {
+"funding": {
+"file": 19,
+"primo": "BROCCOLIF3BUSDT-fundingRate-2025-03.zip",
+"sha256": "ded16f443671647a0525253a234ba5d7d43fbb5119a4792857429e5fe81e3e8c",
+"ultimo": "BROCCOLIF3BUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 36,
+"primo": "BROCCOLIF3BUSDT-1d-2025-03.zip",
+"sha256": "c659c6467f00206ecb6969f663f9af3d9dcb00c5f04deda7d65d9e330ce9b6e8",
+"ultimo": "BROCCOLIF3BUSDT-1d-2026-10-17.zip"
+}
+},
+"BRUSDT": {
+"funding": {
+"file": 19,
+"primo": "BRUSDT-fundingRate-2025-03.zip",
+"sha256": "838a95992cd97c33072da6e3b93c7ec1f385604ccf929702b4063927ea95969a",
+"ultimo": "BRUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 36,
+"primo": "BRUSDT-1d-2025-03.zip",
+"sha256": "8ff34fa0bda44f845f58f4d5139afcb511be4c10ea456b7e4d7590877f7de07d",
+"ultimo": "BRUSDT-1d-2026-10-17.zip"
+}
+},
+"BSBUSDT": {
+"funding": {
+"file": 7,
+"primo": "BSBUSDT-fundingRate-2026-03.zip",
+"sha256": "8f4f47ac14a5a0b607116831189088d235ed3d9dc0b5b848d5b232fd72f22784",
+"ultimo": "BSBUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 24,
+"primo": "BSBUSDT-1d-2026-03.zip",
+"sha256": "eb7df0d6bcb74853ba0f85e1541b4ffe2f2127793b7b7c2f10df3bad0e89319b",
+"ultimo": "BSBUSDT-1d-2026-10-17.zip"
+}
+},
+"BSPUSDT": {
+"funding": {
+"file": 3,
+"primo": "BSPUSDT-fundingRate-2026-07.zip",
+"sha256": "4fc5ce3e83b9c68b65aa5f9f6e6b9ac3862482cf720cb2dd4c5d7cafe0d500ca",
+"ultimo": "BSPUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 20,
+"primo": "BSPUSDT-1d-2026-07.zip",
+"sha256": "595397ba1dd9c6c1c5218c629f03c8516f88004425209dc0f7047bd62f6cdbc7",
+"ultimo": "BSPUSDT-1d-2026-10-17.zip"
+}
+},
+"BSVUSDT": {
+"funding": {
+"file": 36,
+"primo": "BSVUSDT-fundingRate-2023-10.zip",
+"sha256": "b73c573cd2dad7c7fa9d90aa3f85cc868c3f03441877e2094556a77f0e7a81dd",
+"ultimo": "BSVUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 53,
+"primo": "BSVUSDT-1d-2023-10.zip",
+"sha256": "d559544864744f1005b71fbb66e5dc51513eccc5839ef285d12ef8ecd68f480f",
+"ultimo": "BSVUSDT-1d-2026-10-17.zip"
+}
+},
+"BSWUSDT": {
+"funding": {
+"file": 13,
+"primo": "BSWUSDT-fundingRate-2024-09.zip",
+"sha256": "50f6389a0445b7b95d5c2cd6ff7eb33a2d223341b004ae756385b78d7eb7da8f",
+"ultimo": "BSWUSDT-fundingRate-2025-09.zip"
+},
+"giorni": {
+"file": 42,
+"primo": "BSWUSDT-1d-2024-09.zip",
+"sha256": "af69219990c52e82c4d11af3e764f23c95797b42bf4f6c58f9e3a4fdce1f4180",
+"ultimo": "BSWUSDT-1d-2026-10-17.zip"
+}
+},
+"BTCDOMUSDT": {
+"funding": {
+"file": 64,
+"primo": "BTCDOMUSDT-fundingRate-2021-06.zip",
+"sha256": "f41a4c32896eae4d844cf1092f90bc636614a14a642f39f9fbd6f3948b0823f8",
+"ultimo": "BTCDOMUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 81,
+"primo": "BTCDOMUSDT-1d-2021-06.zip",
+"sha256": "3f7817447c4d97aa862ee11ce7c7f6b50c0f86fe46b33ac0c723fa57923c6a28",
+"ultimo": "BTCDOMUSDT-1d-2026-10-17.zip"
+}
+},
+"BTCSTUSDT": {
+"funding": {
+"file": 63,
+"primo": "BTCSTUSDT-fundingRate-2021-03.zip",
+"sha256": "8f394a91b4f36ab9d39e13d284cfefb5f19dc14008390a6de778aabbe8f6bcd5",
+"ultimo": "BTCSTUSDT-fundingRate-2026-06.zip"
+},
+"giorni": {
+"file": 64,
+"primo": "BTCSTUSDT-1d-2021-03.zip",
+"sha256": "c3aab96da555a68ca3d3cda6a486b46a98d2d67e0f01585963cb30bb9c0e80ca",
+"ultimo": "BTCSTUSDT-1d-2026-06.zip"
+}
+},
+"BTCUSDT": {
+"funding": {
+"file": 81,
+"primo": "BTCUSDT-fundingRate-2020-01.zip",
+"sha256": "984017edd02f8db4f3282cc35467b2cf1834f2decc424c5a117cb8c63653ba2f",
+"ultimo": "BTCUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 98,
+"primo": "BTCUSDT-1d-2020-01.zip",
+"sha256": "646f66271358d20b46747235ab660b056001278a9b53c091ef07a41804f72c09",
+"ultimo": "BTCUSDT-1d-2026-10-17.zip"
+}
+},
+"BTRUSDT": {
+"funding": {
+"file": 14,
+"primo": "BTRUSDT-fundingRate-2025-08.zip",
+"sha256": "a79bfc12003be35b65149f9f935f548787c575c108c3e72a3e53cd07335d0b70",
+"ultimo": "BTRUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 31,
+"primo": "BTRUSDT-1d-2025-08.zip",
+"sha256": "3c4cc2344a9bab90de71c7768d24193227fb12b8aeadea9f03f7784245b52af0",
+"ultimo": "BTRUSDT-1d-2026-10-17.zip"
+}
+},
+"BTSUSDT": {
+"funding": {
+"file": 43,
+"primo": "BTSUSDT-fundingRate-2021-02.zip",
+"sha256": "0037de3b5115d5eb3b2121315e6169df9169fbd407fdf7e2663354c95718d7a2",
+"ultimo": "BTSUSDT-fundingRate-2024-08.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "BTSUSDT-1d-2021-02.zip",
+"sha256": "a4ddfb2463ed116c66d9fc55beffee2e2d6cc9ced3ba556d1d6a7297c41529a0",
+"ultimo": "BTSUSDT-1d-2024-05.zip"
+}
+},
+"BTTUSDT": {
+"funding": {
+"file": 10,
+"primo": "BTTUSDT-fundingRate-2021-04.zip",
+"sha256": "5b5662efca84b77ee4d6b1816d1b04c8865c3b419711246e370d840ffe5eb7ae",
+"ultimo": "BTTUSDT-fundingRate-2022-01.zip"
+},
+"giorni": {
+"file": 10,
+"primo": "BTTUSDT-1d-2021-04.zip",
+"sha256": "0d9882b01497660daeafb3e25c81ee502a1bfdd99c2a3b4ba93b733bc92e22a5",
+"ultimo": "BTTUSDT-1d-2022-01.zip"
+}
+},
+"BTWUSDT": {
+"funding": {
+"file": 4,
+"primo": "BTWUSDT-fundingRate-2026-06.zip",
+"sha256": "55f8e52a496bb78f325e0e20605438671ec0826a91424b5477708e8c72343813",
+"ultimo": "BTWUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "BTWUSDT-1d-2026-06.zip",
+"sha256": "81af7a9b1f0d4d026878e75bab1b801fe4c5f3fa6fa4629496269fb7cd9cc5c4",
+"ultimo": "BTWUSDT-1d-2026-10-17.zip"
+}
+},
+"BULLAUSDT": {
+"funding": {
+"file": 15,
+"primo": "BULLAUSDT-fundingRate-2025-07.zip",
+"sha256": "28c15f0a0f62b4f8a3f3f0a8c29502348fcb3a6c407928c0e8dbd02a5694ab37",
+"ultimo": "BULLAUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 32,
+"primo": "BULLAUSDT-1d-2025-07.zip",
+"sha256": "be00d7bb73e4d877709de277691385d3f70ce64c3fd84ac3e1e694fddc3b87a3",
+"ultimo": "BULLAUSDT-1d-2026-10-17.zip"
+}
+},
+"BWETUSDT": {
+"funding": {
+"file": 1,
+"primo": "BWETUSDT-fundingRate-2026-09.zip",
+"sha256": "3858789792b10e4f7d9676eee538ce530a66a3b3425a20c11d04b340787c3857",
+"ultimo": "BWETUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 18,
+"primo": "BWETUSDT-1d-2026-09.zip",
+"sha256": "7f4d9c1f8e14a54466db9714aa0921783887bb970e8573a57d6458aadd96a905",
+"ultimo": "BWETUSDT-1d-2026-10-17.zip"
+}
+},
+"BXUSDT": {
+"funding": {
+"file": 4,
+"primo": "BXUSDT-fundingRate-2026-06.zip",
+"sha256": "c06923a9f164cb13d3384fb7656e5134981a2f3eae959bb33ea2e5b4079bde67",
+"ultimo": "BXUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "BXUSDT-1d-2026-06.zip",
+"sha256": "552473547c5afaed2be8679217c40e1698875bb1edde9c6fc3e253f8aa0e4ad5",
+"ultimo": "BXUSDT-1d-2026-10-17.zip"
+}
+},
+"BYDUSDT": {
+"funding": {
+"file": 1,
+"primo": "BYDUSDT-fundingRate-2026-09.zip",
+"sha256": "0a52077c19b7d8c064d4cee2535c1001f38052d3cb48d45413101007d7fbce2a",
+"ultimo": "BYDUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 18,
+"primo": "BYDUSDT-1d-2026-09.zip",
+"sha256": "1dbc40694f8ed9106a5c79017dc184da5a9650c84728e02f2c5259bcd5540769",
+"ultimo": "BYDUSDT-1d-2026-10-17.zip"
+}
+},
+"BZRXUSDT": {
+"funding": {
+"file": 16,
+"primo": "BZRXUSDT-fundingRate-2020-09.zip",
+"sha256": "c165aff921188ea77382fc99ae616d455ae004ffd3040a8a1f51ab8adaaf0393",
+"ultimo": "BZRXUSDT-fundingRate-2021-12.zip"
+},
+"giorni": {
+"file": 16,
+"primo": "BZRXUSDT-1d-2020-09.zip",
+"sha256": "327760c90e9f8ab7da99c30c7df1fdf10bd764eb96b9a1f18406549ae03d25f0",
+"ultimo": "BZRXUSDT-1d-2021-12.zip"
+}
+},
+"BZUSDT": {
+"funding": {
+"file": 7,
+"primo": "BZUSDT-fundingRate-2026-03.zip",
+"sha256": "f34f705a16381e4215771d0cdcb8aca0f5268e4c12f9241deb14082970b6c2bb",
+"ultimo": "BZUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 23,
+"primo": "BZUSDT-1d-2026-04.zip",
+"sha256": "d00cd9f82a7437e313c9e5811707a436b9d03934441c30cf44dc4c826ffc822e",
+"ultimo": "BZUSDT-1d-2026-10-17.zip"
+}
+}
+}
