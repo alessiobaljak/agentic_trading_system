@@ -2504,5 +2504,243 @@
 "sha256": "d00cd9f82a7437e313c9e5811707a436b9d03934441c30cf44dc4c826ffc822e",
 "ultimo": "BZUSDT-1d-2026-10-17.zip"
 }
+},
+"C98USDT": {
+"funding": {
+"file": 62,
+"primo": "C98USDT-fundingRate-2021-08.zip",
+"sha256": "099df9b4efc4e96ad25d99bd71099f45d45855e6bb2db0e3bb1762d8da34b11f",
+"ultimo": "C98USDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 79,
+"primo": "C98USDT-1d-2021-08.zip",
+"sha256": "fc3c47f3041649e9132f9ce8b8b673115a33460511fc0801878d3156ed7eaeb1",
+"ultimo": "C98USDT-1d-2026-10-17.zip"
+}
+},
+"CAKEUSDT": {
+"funding": {
+"file": 35,
+"primo": "CAKEUSDT-fundingRate-2023-11.zip",
+"sha256": "cc48b4445e8ccfb8782d4e65ca859fb9f12118e428849a6a2d81b5c7ba316406",
+"ultimo": "CAKEUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 52,
+"primo": "CAKEUSDT-1d-2023-11.zip",
+"sha256": "2cc789e409c2ddd0a59d9d61e4fe491f8ca5e548ca44577510a2039d51cb537a",
+"ultimo": "CAKEUSDT-1d-2026-10-17.zip"
+}
+},
+"CAPUSDT": {
+"funding": {
+"file": 4,
+"primo": "CAPUSDT-fundingRate-2026-06.zip",
+"sha256": "f4843fdeb6bb0d35c1363c106fa2ac18ad86c71852fdbe617d650de434a9cc4c",
+"ultimo": "CAPUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 21,
+"primo": "CAPUSDT-1d-2026-06.zip",
+"sha256": "0e2f3effc4fd49edcdae4192bb04152f44aa4bed47a98014c8af1c891fcbd7f7",
+"ultimo": "CAPUSDT-1d-2026-10-17.zip"
+}
+},
+"CARVUSDT": {
+"funding": {
+"file": 14,
+"primo": "CARVUSDT-fundingRate-2025-08.zip",
+"sha256": "9c2e68b7e0b490e1289d7dff2c8713eb02af1808f7ca650d4044bc9d8996fe84",
+"ultimo": "CARVUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 31,
+"primo": "CARVUSDT-1d-2025-08.zip",
+"sha256": "c5ea1ae75edd15a10e1317fc61aebb02d87c8dc352a7ff3e2f32d3fdc5f98e5c",
+"ultimo": "CARVUSDT-1d-2026-10-17.zip"
+}
+},
+"CATIUSDT": {
+"funding": {
+"file": 25,
+"primo": "CATIUSDT-fundingRate-2024-09.zip",
+"sha256": "16703187011c3f6de341c770ff8ca6c89e1eec6dc5e79dc3427d381fa711f329",
+"ultimo": "CATIUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 42,
+"primo": "CATIUSDT-1d-2024-09.zip",
+"sha256": "3d1673c4def666fbf74d2e195966c8c530cf29dd5221524bed9b6050afc3cb7d",
+"ultimo": "CATIUSDT-1d-2026-10-17.zip"
+}
+},
+"CATUSDT": {
+"funding": {
+"file": 3,
+"primo": "CATUSDT-fundingRate-2026-07.zip",
+"sha256": "ad5ee244ee2ffbcf53144e5151d27c742b05750f3326d385a6b3630439647c85",
+"ultimo": "CATUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 20,
+"primo": "CATUSDT-1d-2026-07.zip",
+"sha256": "09aa954f531284e9bb29d3b0622b8b3358ca8563a0e7d2bd154134582a67ac5c",
+"ultimo": "CATUSDT-1d-2026-10-17.zip"
+}
+},
+"CBRSUSDT": {
+"funding": {
+"file": 5,
+"primo": "CBRSUSDT-fundingRate-2026-05.zip",
+"sha256": "dbeff3148cd559aff394fa234d78f6bf569353afa534b2c4c274773973dc2912",
+"ultimo": "CBRSUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 22,
+"primo": "CBRSUSDT-1d-2026-05.zip",
+"sha256": "b68408a5608280d0504d526cdb3c9c9772b073f420da5e8ec6870cdbbc3b7873",
+"ultimo": "CBRSUSDT-1d-2026-10-17.zip"
+}
+},
+"CCUSDT": {
+"funding": {
+"file": 12,
+"primo": "CCUSDT-fundingRate-2025-10.zip",
+"sha256": "bb7df244ac98898063b38c401997757080811f04737579af6d58f6bd0b5fc0c4",
+"ultimo": "CCUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 29,
+"primo": "CCUSDT-1d-2025-10.zip",
+"sha256": "8846b9eda59ca9a85a08c1b17bc029e0fa42d079dedd75dbda70dde4273c3427",
+"ultimo": "CCUSDT-1d-2026-10-17.zip"
+}
+},
+"CELOUSDT": {
+"funding": {
+"file": 61,
+"primo": "CELOUSDT-fundingRate-2021-09.zip",
+"sha256": "81444b53aa53d45de2c0f3e815c589e8cc88ad62b70a9c4167356e0aa2057746",
+"ultimo": "CELOUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 78,
+"primo": "CELOUSDT-1d-2021-09.zip",
+"sha256": "f732f47bd38e0ff621ecf36023f3b8e83773b4335952e71fc01db69f3e2063ac",
+"ultimo": "CELOUSDT-1d-2026-10-17.zip"
+}
+},
+"CELRUSDT": {
+"funding": {
+"file": 67,
+"primo": "CELRUSDT-fundingRate-2021-03.zip",
+"sha256": "1c897a1571d7914c26b3d4b736635428a82283fed559e6f91a46e1774ef0a5f8",
+"ultimo": "CELRUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 84,
+"primo": "CELRUSDT-1d-2021-03.zip",
+"sha256": "b54cee36e8dfee84dd10d367ad3fcdc3e357180fd1f526deb10ca4a4fab697f9",
+"ultimo": "CELRUSDT-1d-2026-10-17.zip"
+}
+},
+"CETUSUSDT": {
+"funding": {
+"file": 23,
+"primo": "CETUSUSDT-fundingRate-2024-11.zip",
+"sha256": "e91c40c8dd50544b6992cc407014fa410532466457bfb041ef7c8f148b4a1ebd",
+"ultimo": "CETUSUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "CETUSUSDT-1d-2024-11.zip",
+"sha256": "c9ef0b4c794c755510150b1576c41034383bfa919b80602471d576f2d1b0f40a",
+"ultimo": "CETUSUSDT-1d-2026-10-17.zip"
+}
+},
+"CFGUSDT": {
+"funding": {
+"file": 7,
+"primo": "CFGUSDT-fundingRate-2026-03.zip",
+"sha256": "8ef96092373f41c570e5d3a1b7682990775e13f6df5eb26b45d7b78c71ba190d",
+"ultimo": "CFGUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 24,
+"primo": "CFGUSDT-1d-2026-03.zip",
+"sha256": "62f491e18ea6c7363d2fd0cd014163d95351a77060841a9fa3a8bd2f058a895f",
+"ultimo": "CFGUSDT-1d-2026-10-17.zip"
+}
+},
+"CFXUSDT": {
+"funding": {
+"file": 44,
+"primo": "CFXUSDT-fundingRate-2023-02.zip",
+"sha256": "23f96474c665f63ad537465f04024f3175b75d25ec7477a8ac298396166422ad",
+"ultimo": "CFXUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 61,
+"primo": "CFXUSDT-1d-2023-02.zip",
+"sha256": "9bf9b91219144bf92c8395dda259979dc6c3bcb636c38bae3899cb9f68ffcb91",
+"ultimo": "CFXUSDT-1d-2026-10-17.zip"
+}
+},
+"CGPTUSDT": {
+"funding": {
+"file": 22,
+"primo": "CGPTUSDT-fundingRate-2024-12.zip",
+"sha256": "e4168fec6fa5da0c6f5e5bef6377b9697cdaf22b11fff6d639234d872fb21964",
+"ultimo": "CGPTUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 39,
+"primo": "CGPTUSDT-1d-2024-12.zip",
+"sha256": "fb42a72f50f9187c94960a87e4b6b9f5b8993820737b07b922d68f0cf2050ecc",
+"ultimo": "CGPTUSDT-1d-2026-10-17.zip"
+}
+},
+"CHESSUSDT": {
+"funding": {
+"file": 19,
+"primo": "CHESSUSDT-fundingRate-2024-08.zip",
+"sha256": "f07523a4ebd70d83ebd01632702f96999c053aeeca01dfc7f042957fc308ac93",
+"ultimo": "CHESSUSDT-fundingRate-2026-02.zip"
+},
+"giorni": {
+"file": 43,
+"primo": "CHESSUSDT-1d-2024-08.zip",
+"sha256": "92428ab921cb56788b01993849ae4839f04f24eb1f1384d534b87730c2c72d7e",
+"ultimo": "CHESSUSDT-1d-2026-10-17.zip"
+}
+},
+"CHILLGUYUSDT": {
+"funding": {
+"file": 23,
+"primo": "CHILLGUYUSDT-fundingRate-2024-11.zip",
+"sha256": "ba219e261697bb88e0cd8a2d043e399b795d605f53234d44ef947cbd2b4ff766",
+"ultimo": "CHILLGUYUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 40,
+"primo": "CHILLGUYUSDT-1d-2024-11.zip",
+"sha256": "4d04aecf46563cbf3151739585ced34ed3799c9628e37c7b8ab225827dfd5a82",
+"ultimo": "CHILLGUYUSDT-1d-2026-10-17.zip"
+}
+},
+"CHIPUSDT": {
+"funding": {
+"file": 6,
+"primo": "CHIPUSDT-fundingRate-2026-04.zip",
+"sha256": "bc5ee5605205df44ed65362403f17a3e7314c468c91e106112c1a704b6746975",
+"ultimo": "CHIPUSDT-fundingRate-2026-09.zip"
+},
+"giorni": {
+"file": 23,
+"primo": "CHIPUSDT-1d-2026-04.zip",
+"sha256": "3a8059ac6caf2ece963dbf45d0a50fa5dbce6f99335dbbf8cd58843958c9c295",
+"ultimo": "CHIPUSDT-1d-2026-10-17.zip"
+}
 }
 }
