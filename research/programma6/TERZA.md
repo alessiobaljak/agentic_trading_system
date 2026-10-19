@@ -50,7 +50,8 @@ settimane prima di ogni scelta): è già una finestra che avanza.
   chiusura; macd (EMA 12 − EMA 26) / EMA 12 e la sua differenza dalla EMA 9; volsma 3, 5, 10, 20, 50, 100, 200 giorni del
   volume in USDT divise per il volume del giorno; volmacd e la sua differenza dalla EMA 9; chaikin (21 giorni);
   boll_low, boll_mid, boll_high (20 giorni, 2 deviazioni) divise per la chiusura, boll_width. Le EMA con α = 1/(1+L)
-  come nell'appendice. Ogni settimana ogni indicatore si trasforma nel **rango fra le monete**, portato fra −0,5 e +0,5.
+  come nell'appendice. Ogni settimana ogni indicatore si trasforma nel **rango fra le monete**, portato fra −0,5 e +0,5 (un valore che manca,
+  per esempio il volume a zero, vale 0, il centro).
 * **Regressioni**: ogni settimana, per ogni indicatore, il rendimento della settimana sul rango della settimana prima,
   fra le monete dell'universo, **pesate** con la mediana del volume (al posto della capitalizzazione). Coefficienti
   **mediati sulle 52 settimane** prima; previsione di ogni indicatore = media dell'intercetta + media della pendenza ×
