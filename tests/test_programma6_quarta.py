@@ -81,3 +81,14 @@ def test_universo_esclude_le_monete_usate():
 def test_toccate_contiene_le_monete_del_programma_5():
     t = qa.toccate()
     assert {"BTCUSDT", "ETHUSDT", "SOLUSDT"} <= t and len(t) >= 100
+
+
+def test_quinta_short_rovescia_lordo_e_funding():
+    from research.programma6 import quinta as qi
+    t = pd.DataFrame({"ora": [1], "minuto": [60], "lordo": [-0.05], "funding": [0.001], "netto": [0.0], "netto_doppio": [0.0]})
+    s = qi.a_short(t)
+    costi = 2 * (qa.TAKER + qa.SCARTO)
+    assert s["lordo"].iloc[0] == pytest.approx(0.05)
+    assert s["funding"].iloc[0] == pytest.approx(-0.001)          # lo short incassa il funding positivo
+    assert s["netto"].iloc[0] == pytest.approx(0.05 - costi + 0.001)
+    assert s["netto_doppio"].iloc[0] == pytest.approx(0.05 - 2 * costi + 0.001)
