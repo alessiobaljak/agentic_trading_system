@@ -4181,4 +4181,8 @@ l'intervallo sopra zero); (3) la tendenza **fra** monete funziona molto nel 2025
 tutte e tre le varianti) ma ha perso tutto nel 2024: il vantaggio c'è a periodi, e non si può scegliere il periodo dopo
 averlo visto; (4) il carry (comprato a pronti, venduto il perpetuo) dal 2025 non rende più (Borri, Liu, Tsyvinski e Wu,
 2025: Sharpe negativo nel 2025), e il proprietario non lo vuole. Le prove fatte nel programma 6 sono 24: ogni idea nuova
-alza la soglia dello Sharpe corretto.
+alza la soglia dello Sharpe corretto (oggi serve circa 1,5, `research/programma6/STATO.md`). (5) **Quarta prova**: la
+strategia più vicina del programma 5 (long dopo un crollo di 4 ore, 12 ore) sulle 440 monete mai usate fa +1,77% a trade
+con p 0,007, ma −0,35% nell'ultimo anno e −2,0% quando crolla la moneta da sola: rimbalza il mercato, non la moneta, e il
+guadagno sta in pochi giorni (84 dal 2021, il 56% in 5; il crollo del 10 ottobre 2025 al contrario)
+(`research/programma6/RISULTATI_QUARTA.md`).

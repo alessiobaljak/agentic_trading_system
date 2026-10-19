@@ -45,7 +45,11 @@ vero nei crolli, quando il libro degli ordini si svuota: i costi del 2023 sono o
 crollo di 4 ore (z ≤ −5, tenuta 12 ore, scarto di prezzo doppio) fa +2,51% netto a trade su C (2020-2022), +0,70% su V
 (2023) e **+2,20% su R** (2024-2026/09, 211 trade, positivo in ogni anno e su 12 monete su 12, anche a costi doppi e
 togliendo il giorno migliore), ma la prova statistica su R è p 0,0037 contro la soglia 0,0017 (`idee/I-017/R.md`): non
-supera l'esame, per pochi eventi. I crolli che rimbalzano sono quelli con il perpetuo sotto lo spot (E-004).
+supera l'esame, per pochi eventi. I crolli che rimbalzano sono quelli con il perpetuo sotto lo spot (E-004). **Conferma sulle monete mai usate (19 ott 2026, programma 6, quarta prova, `research/programma6/RISULTATI_QUARTA.md`):**
+la stessa regola congelata su 440 monete che nessuna prova aveva usato fa +1,77% netto a trade (3.765 trade, p 0,007, batte
+il caso), ma −0,35% dall'ottobre 2025 e **−2,0% sui crolli della sola moneta**: rimbalza il mercato dopo i crolli di tutti
+(84 giorni dal 2021, il 56% del guadagno in 5 giorni; il 10 ottobre 2025 al contrario). Non confermata; resta solo la
+prova sui dati nuovi.
 
 ### P12. Trovate scrivendo la storia del progetto (18 ott 2026)
 **Perché:** i sette lettori della storia (`docs/storia/`) hanno trovato cose che nessun documento scriveva. Da
