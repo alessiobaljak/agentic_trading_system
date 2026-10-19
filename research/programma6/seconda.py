@@ -62,6 +62,10 @@ ESCLUSI = (
     "TENCENTUSDT", "TMFUSDT", "TQQQUSDT", "TSLAUSDT", "TSLLUSDT", "TSMUSDT", "TTWOUSDT", "TXNUSDT", "TZAUSDT",
     "UBERUSDT", "UNHUSDT", "UNITREEUSDT", "URNMUSDT", "UVXYUSDT", "WDCUSDT", "WMTUSDT", "XBIUSDT", "XLEUSDT",
     "XOMUSDT", "ZHIPUUSDT",
+    # aggiunti il 19 ottobre 2026 sera (SECONDA.md, sezione 9): materie prime e azioni nate dal 2026-04, mai entrate
+    # nell'universo delle prove; BZUSDT e CLUSDT (petrolio) sarebbero entrate nel paper dalla settimana del 2026-10-19
+    "BZUSDT", "CLUSDT", "SKHYUSDT", "NOKUSDT", "MUUSDT", "ARMUSDT", "LITEUSDT", "NETUSDT", "TERUSDT", "TWSTUSDT",
+    "KORUUSDT", "CRMLUSDT", "CBRSUSDT", "DRAMUSDT", "INTWUSDT", "AGPUUSDT",
 )
 
 

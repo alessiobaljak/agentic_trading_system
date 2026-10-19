@@ -127,3 +127,12 @@ aver calcolato niente sui prezzi. L'elenco è anche in `seconda.py` (`ESCLUSI`).
 Quasi tutti i contratti su azioni sono nati nel 2025-2026: con la regola dei 365 giorni non entrerebbero comunque. Se fra
 le monete scelte dall'universo comparisse un altro contratto che non è una moneta, si toglie e si scrive qui con la data,
 prima di guardare i risultati.
+
+**Aggiunta del 19 ottobre 2026, sera.** Il primo calcolo del paper (`paper/PAPER.md`) mostra fra le posizioni della
+settimana dal 2026-10-19 BZUSDT e CLUSDT, che sono il **petrolio** Brent e americano (prezzo intorno a 100 dollari): nati
+il 2026-04-01, hanno appena compiuto i 200 giorni di storia. Controllati tutti i contratti nati dopo il 2025 con prezzo e
+volatilità da azione o materia prima: oltre ai due, sono azioni o fondi SKHYUSDT, NOKUSDT, MUUSDT, ARMUSDT, LITEUSDT,
+NETUSDT, TERUSDT, TWSTUSDT, KORUUSDT, CRMLUSDT, CBRSUSDT, DRAMUSDT, INTWUSDT, AGPUUSDT. **Nessuno è mai entrato
+nell'universo delle prove sul passato** (verificato settimana per settimana sulle prime 100 e 200: zero settimane), quindi i
+risultati già scritti non cambiano; si tolgono da qui in avanti (`ESCLUSI` in `seconda.py`). Il paper elenca ogni settimana le
+monete nuove nell'universo, da controllare.
