@@ -7,6 +7,11 @@
    "periodi": 0,
    "totale": 0.0
   },
+  "K1": {
+   "settimane": {},
+   "periodi": 0,
+   "totale": 0.0
+  },
   "F2": {
    "settimane": {},
    "periodi": 0,
@@ -69,6 +74,53 @@
     "WLFIUSDT": -0.1127,
     "XMRUSDT": -0.0933,
     "ZECUSDT": -0.0463
+   }
+  },
+  "K1": {
+   "lunedi": "2026-10-19",
+   "long": {
+    "1000BONKUSDT": 0.0408,
+    "1000PEPEUSDT": 0.0332,
+    "BRUSDT": 0.0153,
+    "CAKEUSDT": 0.0555,
+    "DOTUSDT": 0.0412,
+    "GTCUSDT": 0.0098,
+    "INJUSDT": 0.0318,
+    "LINKUSDT": 0.0501,
+    "PROMUSDT": 0.0309,
+    "PYTHUSDT": 0.0344,
+    "QUSDT": 0.0079,
+    "SANDUSDT": 0.0166,
+    "SOLUSDT": 0.077,
+    "STXUSDT": 0.0348,
+    "SUSDT": 0.0222,
+    "TIAUSDT": 0.0227,
+    "TRXUSDT": 0.3079,
+    "WUSDT": 0.022,
+    "XMRUSDT": 0.0747,
+    "XRPUSDT": 0.0711
+   },
+   "short": {
+    "APTUSDT": -0.0669,
+    "BOMEUSDT": -0.0531,
+    "COTIUSDT": -0.0679,
+    "DASHUSDT": -0.0706,
+    "ENAUSDT": -0.0475,
+    "FETUSDT": -0.0516,
+    "GRASSUSDT": -0.0352,
+    "JTOUSDT": -0.0565,
+    "LABUSDT": -0.0684,
+    "LITUSDT": -0.0719,
+    "MINAUSDT": -0.0402,
+    "MONUSDT": -0.0534,
+    "ONDOUSDT": -0.0529,
+    "PUMPUSDT": -0.0473,
+    "SAGAUSDT": -0.0198,
+    "SEIUSDT": -0.0597,
+    "STRKUSDT": -0.025,
+    "SUIUSDT": -0.0588,
+    "USELESSUSDT": -0.0411,
+    "USUSDT": -0.0122
    }
   },
   "F2": {

@@ -21,6 +21,12 @@ periodo P comincia il 20 per i giorni e il 26 per le settimane): **F3**, il fund
 volatilità (`OTTAVA.md`, `ottava.py`; sul passato +50,6% l'anno, Sharpe 1,28 dal 2021, positiva in ogni anno), diventa la
 candidata principale insieme a F2. Il verdetto di F3 segue la sezione 3 come le altre.
 
+**Seconda aggiunta, stessa sera, ancora prima di qualunque dato nuovo**: **K1** (`DODICESIMA.md`, `dodicesima.py`): denaro
+che entra e leva che costa poco (la media dei ranghi di −funding, +acquisti a mercato e +crescita dell'interesse aperto
+dei 7 giorni prima). Sul passato è **costruzione** (due versi visti dopo il calcolo: +37,6% l'anno dal 2022, Sharpe 1,27):
+per K1 il paper è l'unica prova. Ogni mattina si scaricano anche i dati sulle posizioni dei giorni nuovi
+(`scarico_metrics.py`). Verdetto come le altre (sezione 3).
+
 ## 2. Come
 
 * Ogni mattina (con l'aggiornamento della prova in avanti del programma 5) si scaricano le candele giornaliere nuove di

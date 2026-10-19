@@ -19,6 +19,13 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 9 | G1 (quota di acquisti a mercato dei 7 giorni) e G2 (salto giornaliero più alto dei 30 giorni) fra monete, long il meno affollato | `NONA.md` | `RISULTATI_NONA.md` | 2 | non valide: G1 −47,8% l'anno (Sharpe −1,17, 0 anni su 6: il verso è il contrario, chi ha molti acquisti aggressivi continua a salire); G2 Sharpe 0,18. Il rovescio di G1, solo descrittivo: +30,3% sulle 100 grandi, −15,9% sulle 101-200 |
 | 10 | C4: CTREND con 30 indicatori (i 28 più il funding e gli acquisti a mercato dei 7 giorni), verso e peso stimati dalla regressione | `DECIMA.md` | `RISULTATI_DECIMA.md` | 1 | non valida: Sharpe 0,43 (C1 0,39), −68% nel 2024; la rete elastica tiene funding e acquisti in 119 e 183 settimane su 216 ma i 28 indicatori di tendenza dominano |
 | 11 | Le posizioni (dati metrics, dal 2022): P1 grandi contro piccoli (si seguono i conti grandi), P2 crescita dell'interesse aperto in 7 giorni (si va contro) | `UNDICESIMA.md` | `RISULTATI_UNDICESIMA.md` | 2 | non valide: P1 +1,5% l'anno, Sharpe 0,06; P2 −30,7% l'anno, Sharpe −0,94: la leva che entra **continua** (verso opposto a quello scritto) |
+| 12 | K1: denaro che entra e leva che costa poco (media dei ranghi di −funding, +acquisti a mercato, +crescita dell'interesse aperto) | `DODICESIMA.md` | `RISULTATI_DODICESIMA.md` | 1 | **costruzione, non prova** (due versi visti prima): dal 2022 +37,6% l'anno, Sharpe 1,27, discesa massima −31%, 2023 −0,3%; correlazione con F3 0,39. La prova è il paper |
+
+## Il paper (dal 20 ottobre 2026)
+
+`paper/REGOLE.md`, aggiornato ogni mattina da `paper/aggiorna.sh` (routine «Programmi 5 e 6»): **F3** e **K1** sono le
+candidate principali, con F2, C1 e A1; verdetto a 52 e 104 settimane. Le posizioni della settimana in corso sono in
+`paper/PAPER.md`.
 
 ## Cosa abbiamo imparato (con la fonte)
 

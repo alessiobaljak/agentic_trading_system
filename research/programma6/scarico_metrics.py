@@ -41,6 +41,11 @@ def giorni_che_servono(pan: dict) -> dict:
     for k in np.flatnonzero(ps["lunedi"] >= DAL + 30):
         for j in np.flatnonzero(ps["U"][k]):
             out.setdefault(ps["simboli"][j], set()).update(range(lun[k] - 30 + pan["t0"], lun[k] + pan["t0"]))
+    # anche gli ultimi 31 giorni delle monete dell'universo dell'ultima settimana (per le posizioni di adesso nel paper)
+    T = pan["close"].shape[0]
+    if len(ps["U"]):
+        for j in np.flatnonzero(ps["U"][-1]):
+            out.setdefault(ps["simboli"][j], set()).update(range(T - 31 + pan["t0"], T + pan["t0"]))
     return out
 
 
