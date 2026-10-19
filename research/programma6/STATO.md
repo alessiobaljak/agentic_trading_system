@@ -27,6 +27,9 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 candidate principali, con F2, C1 e A1; verdetto a 52 e 104 settimane. Le posizioni della settimana in corso sono in
 `paper/PAPER.md`.
 
+**Esecuzione** (`ESECUZIONE.md`, descrittivo): il cambio del lunedì di F3 con un ordine limite al prezzo d'apertura (poi a
+mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,3% l'anno.
+
 ## Cosa abbiamo imparato (con la fonte)
 
 1. **Le 100 monete di oggi sono le sopravvissute**: scegliere l'universo con il volume di settembre 2026 regala un
