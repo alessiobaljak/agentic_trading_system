@@ -4188,3 +4188,14 @@ guadagno sta in pochi giorni (84 dal 2021, il 56% in 5; il crollo del 10 ottobre
 (`research/programma6/RISULTATI_QUARTA.md`). (6) **Quinta prova**: lo short dopo il crollo della sola moneta, sulle 100
 monete grandi, fa −0,27% a trade (p 0,66): la moneta che crolla da sola scende ancora di poco (+0,18% lordo), meno dei
 costi (`research/programma6/RISULTATI_QUINTA.md`).
+
+### 19 ottobre, sera: il funding fra monete
+
+Il proprietario: «continua a cercare in autonomia, non fermarti se pensi serva misurare in paper procedi hai campo libero
+fino a che non trovi cosa funziona». **Sesta prova** (`research/programma6/SESTA.md`, regole committate prima): ogni lunedì,
+fra le 100 monete più scambiate, long il quinto col funding dei 7 giorni prima più basso e short il quinto col più alto. A pesi
+uguali (F2): +47,5% l'anno dal 2021, Sharpe 1,03, intervallo sopra zero, positiva in 6 anni su 6 e nell'ultimo anno, a costi
+doppi, senza legame col Bitcoin; non passa solo lo Sharpe corretto per le 26 prove (0,66). **Settima prova** (`SETTIMA.md`): la
+stessa regola sulle monete dalla 101ª alla 200ª non si ripete (Sharpe 0,18, spese 18,8% l'anno). Capito oggi: il funding
+alto (long affollati) è il segnale più forte trovato fra monete, sia per il funding incassato sia per il prezzo, ma solo fra
+le monete grandi; resta una candidata, da misurare in paper sui dati nuovi.

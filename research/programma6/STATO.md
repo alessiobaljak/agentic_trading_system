@@ -13,6 +13,8 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 3 | CTREND di Fieberg e altri (JFQA 2025): 28 indicatori, regressioni sulle 52 settimane prima, long-short fra le 100 monete più scambiate; dal giugno 2022 | `TERZA.md` | `RISULTATI_TERZA.md` | 3 | nessuna valida; C1 Sharpe 0,39 (−79% nel 2024, +69% nel 2025, +103% nel 2026) |
 | 4 | Conferma della regola congelata I-017c4 del programma 5 (long dopo un crollo di 4 ore) sulle 537 monete mai usate, a 1 ora | `QUARTA.md` | `RISULTATI_QUARTA.md` | conferma di una regola sola | non confermata: +1,77% a trade (p 0,007) ma −0,35% nell'ultimo anno e −2,0% sui crolli della sola moneta |
 | 5 | Short dopo il crollo della sola moneta (z4 ≤ −5 con il Bitcoin sopra −3), 12 ore, sulle 100 monete del programma 5 | `QUINTA.md` | `RISULTATI_QUINTA.md` | conferma di una regola sola | non confermata: −0,27% a trade (553 trade, p 0,66); il ribasso che continua vale +0,18% lordo, meno dei costi |
+| 6 | Il funding fra monete: long il quinto col funding dei 7 giorni più basso, short il più alto, fra le 100 più scambiate, ogni settimana dal 2021 | `SESTA.md` | `RISULTATI_SESTA.md` | 2 | **F2 (pesi uguali) la migliore di tutto il lavoro**: +47,5% l'anno, Sharpe 1,03, intervallo sopra zero, 6 anni su 6, a costi doppi, beta col Bitcoin −0,03; non passa solo lo Sharpe corretto (0,66 con 26 prove). F1 (pesi per volume) Sharpe 0,36 |
+| 7 | Conferma di F2, identica, sulle monete dalla 101ª alla 200ª per volume, scarto 0,10% | `SETTIMA.md` | `RISULTATI_SETTIMA.md` | conferma di una regola sola | non confermata: +8,3% l'anno, Sharpe 0,18, p 0,37; le spese (18,8% l'anno) si mangiano quasi tutto; −52,5% nell'ultimo anno |
 
 ## Cosa abbiamo imparato (con la fonte)
 
@@ -33,7 +35,11 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 6. **Il crollo della sola moneta non è un segnale nemmeno al contrario** (prova 5): sulle 100 monete grandi lo short
    dopo il crollo fa +0,18% lordo e −0,27% netto; il −2,0% del long sulle monete piccole veniva dai costi e dalle monete
    che crollano e spariscono.
-7. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
+7. **Il funding fra monete è la cosa più forte trovata** (prove 6 e 7): sulle 100 monete più scambiate, comprare quelle
+   col funding più basso e vendere quelle col più alto rende sia per il funding incassato (+40% l'anno) sia per il prezzo
+   (+15%), in ogni anno dal 2021; ma sulle monete più piccole non si ripete (costi più alti, prezzo contro). È la candidata
+   principale da misurare in paper.
+8. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
    3.6: Sharpe 6,45 dal 2020, 4,06 dal 2024, negativo nel 2025), e il proprietario non lo vuole: non si prova.
 
 ## Dati (fuori da git, con le impronte nel repository)
