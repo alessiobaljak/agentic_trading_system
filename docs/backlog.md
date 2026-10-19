@@ -14,7 +14,7 @@ size e freni non si toccano fino alle letture del 7-14 ott (revisione del 30 set
 
 | Gruppo | Voci | Cosa le sblocca |
 |---|---|---|
-| **0. Aspettano il tuo sì** | P13 (il rimbalzo dopo i crolli estremi: prova sul 2023 e dati sulle posizioni aperte), P11 (si continua finché non si trovano strategie valide: prima la storia del progetto, poi la proposta), P12 (cose trovate scrivendo la storia: l'esportazione di Firebase aspetta una riga nella lista bianca), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
+| **0. Aspettano il tuo sì** | P14 (il paper del funding fra monete sulla macchina, con la dashboard: serve installare un timer), P13 (il rimbalzo dopo i crolli estremi: prova sul 2023 e dati sulle posizioni aperte), P11 (si continua finché non si trovano strategie valide: prima la storia del progetto, poi la proposta), P12 (cose trovate scrivendo la storia: l'esportazione di Firebase aspetta una riga nella lista bianca), P8 (robustezza delle soglie a zero, per la prossima versione del protocollo), P7 (il bot che esegue le strategie del protocollo 3: dopo il vault, deciso il 17 ott), P6 (cosa fare dopo la ricerca: il bot resta così, o si cambia direzione) | una tua risposta |
 | **1. In lavorazione** | P0 (il protocollo di ricerca: CHIUSO il 12 ott al Passo 7, zero strategie trovate), G7 (fatta il 5 ott: non si sa, 8 contro 16), R1 (fermata il 5 ott), R2 (fatta il 4 ott), J2 (cosa aspetta il sì in dashboard, in automatico), D8 (dati mancanti: attiva dal 1 ott), T2 (curva del vantaggio: primo esito il 2 ott, si rilegge) | lo strumento, poi 2 righe nella lista bianca della VPS |
 | **2. Dopo le letture del 7-14 ott** | P1 (correzioni al protocollo dalle campagne 4.4), G8 (porta per direzione e mercato, 8 ott), C5 (sì del 2 ott), I6 (affollamento), K9, K10, G6, B8, E4, I5, D6, T1 | il numero delle letture, poi il tuo sì |
 | **3. A metà novembre** | G3 (voto t minimo nel gate) | la lettura H1 |
@@ -31,6 +31,18 @@ la dashboard mostra le voci senza una seconda copia da aggiornare. Quindi: un gr
 le proposte che aspettano il sì del proprietario vanno nel gruppo 0.
 
 ## 0. Aspettano il tuo sì
+
+### P14. Il paper del funding fra monete sulla macchina, con la dashboard (19 ott 2026)
+**Perché:** la strategia più forte trovata (programma 6, `research/programma6/RISULTATI_OTTAVA.md`: il funding fra monete
+con i pesi secondo la volatilità, +50,6% l'anno dal 2021, Sharpe 1,28, positiva in ogni anno sulle 100 monete più
+scambiate) non è valida per l'esame scritto prima (Sharpe corretto 0,76 con 27 prove; non si ripete sulle monete 101-200).
+Dal 20 ottobre la misura sui dati nuovi gira ogni mattina qui (`research/programma6/paper/`, file `PAPER.md`), dai dati
+pubblici del giorno prima. **Cosa manca:** vederla in dashboard con i prezzi dal vivo. Il bot non può tenerla (una moneta
+per volta, stop obbligatorio, chiusura dopo 24 ore: verificato il 19 ott nel codice, `bot/main.py`, `bot/execution/executor.py`,
+`bot/risk/risk_manager.py`): serve un servizio separato sulla macchina con un suo nodo Firebase (`/portfolio_weekly`) e un
+timer di sistema il lunedì alle 00:05 UTC, senza toccare il bot. **Serve il proprietario** per installare il timer (o una
+riga nella lista bianca). Da fare se nelle prime settimane del paper i numeri non smentiscono il passato.
+
 
 ### P13. Il rimbalzo dopo i crolli estremi (scalping sulla volatilità)
 **Perché:** l'analisi dello scalping del 18 ott (`research/scalping/risultati.md`, regole scritte prima) dice che dopo
