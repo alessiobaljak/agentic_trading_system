@@ -20,6 +20,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 10 | C4: CTREND con 30 indicatori (i 28 più il funding e gli acquisti a mercato dei 7 giorni), verso e peso stimati dalla regressione | `DECIMA.md` | `RISULTATI_DECIMA.md` | 1 | non valida: Sharpe 0,43 (C1 0,39), −68% nel 2024; la rete elastica tiene funding e acquisti in 119 e 183 settimane su 216 ma i 28 indicatori di tendenza dominano |
 | 11 | Le posizioni (dati metrics, dal 2022): P1 grandi contro piccoli (si seguono i conti grandi), P2 crescita dell'interesse aperto in 7 giorni (si va contro) | `UNDICESIMA.md` | `RISULTATI_UNDICESIMA.md` | 2 | non valide: P1 +1,5% l'anno, Sharpe 0,06; P2 −30,7% l'anno, Sharpe −0,94: la leva che entra **continua** (verso opposto a quello scritto) |
 | 12 | K1: denaro che entra e leva che costa poco (media dei ranghi di −funding, +acquisti a mercato, +crescita dell'interesse aperto) | `DODICESIMA.md` | `RISULTATI_DODICESIMA.md` | 1 | **costruzione, non prova** (due versi visti prima): dal 2022 +37,6% l'anno, Sharpe 1,27, discesa massima −31%, 2023 −0,3%; correlazione con F3 0,39. La prova è il paper |
+| 13 | Il funding medio del mercato (terzo più basso delle 52 settimane: long Bitcoin; più alto: short) | `TREDICESIMA.md` | `RISULTATI_TREDICESIMA.md` | 1 | non valida: Sharpe 0,47 contro 0,56 del Bitcoin sempre comprato; il funding conta fra le monete, non per il mercato intero |
 
 ## Il paper (dal 20 ottobre 2026)
 

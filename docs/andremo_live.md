@@ -4221,3 +4221,7 @@ mercato e interesse aperto che crescono): sul passato +37,6% l'anno dal 2022, Sh
 prima, quindi è costruzione e la sua prova è solo il paper. F3 e K1 si somigliano poco (correlazione 0,39): metà e metà
 avrebbe fatto Sharpe 1,55 dal 2022 (numero costruito col senno di poi, solo informazione). Il paper misura dal 26 ottobre
 F3, K1, F2, C1 e A1, con le posizioni della settimana in `research/programma6/paper/PAPER.md`.
+**Tredicesima prova** (`research/programma6/TREDICESIMA.md`): il funding medio di tutto il mercato per entrare e uscire dal
+Bitcoin non funziona (Sharpe 0,47 contro 0,56 del Bitcoin comprato e tenuto). Capito: il funding dice chi è affollato
+rispetto agli altri, non quando il mercato intero salirà. Esecuzione (`ESECUZIONE.md`): il cambio del lunedì di F3 con un
+ordine limite all'apertura è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,3% l'anno.
