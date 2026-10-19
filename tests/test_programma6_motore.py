@@ -61,3 +61,34 @@ def test_stop_che_segue_e_uscita_per_segnale():
     s["esci_long"] = np.array([False, False, True, False, False, False])
     t2 = mo.simula(b, np.ones(6), s, stop_k=3)
     assert t2["motivo"][0] == 4 and t2["uscita_i"][0] == 3 and t2["prezzo_out"][0] == 106
+
+
+def test_finestre_scelgono_solo_con_trade_chiusi_e_vicini():
+    from research.programma6 import finestre as fi
+    combo = [{"famiglia": "rottura", "segnali": {"N": 20, "filtro": "nessuno"}, "uscita": {}, "iu": 0, "tf": "1h",
+              "ingresso": {}, "ii": 0},
+             {"famiglia": "rottura", "segnali": {"N": 55, "filtro": "nessuno"}, "uscita": {}, "iu": 0, "tf": "1h",
+              "ingresso": {}, "ii": 0}]
+    vic = fi.vicini(combo)
+    assert vic == [[1], [0]]
+    da, a = fi._minuto(2020, 1), fi._minuto(2021, 1)
+    rng = np.random.default_rng(1)
+    righe = []
+    for k, media in ((0, 0.3), (1, 0.1)):
+        for i in range(150):
+            m = da + i * 2000
+            righe.append({"k": k, "simbolo": f"S{i % 5}USDT", "minuto": m, "uscita": m + 60, "R": media + rng.normal(0, 0.01)})
+    # un trade enorme della combinazione 1 che entra prima e chiude DOPO la fine della finestra: non conta
+    righe.append({"k": 1, "simbolo": "S0USDT", "minuto": a - 100, "uscita": a + 10, "R": 1000.0})
+    tr = pd.DataFrame(righe)
+    assert fi.scegli(tr, combo, vic, da, a) == 0
+
+
+def test_pbo_basso_quando_la_migliore_resta_migliore():
+    from research.programma6 import finestre as fi
+    righe = []
+    base = fi._minuto(2021, 1)
+    for mese in range(32):
+        for k in range(6):
+            righe.append({"k": k, "minuto": base + mese * 31 * 1440, "R": 0.1 * k + 0.01 * ((mese * 7 + k) % 3)})
+    assert fi.pbo(pd.DataFrame(righe), 6, blocchi=8) < 0.1
