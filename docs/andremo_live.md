@@ -4154,3 +4154,30 @@ costi nell'80% dei casi) ma in media non sa dove; nei momenti agitati la parte p
 volte meno del costo di un giro. L'unica eccezione sono i crolli estremi: il prezzo rimbalza in media dello 0,48% in 60
 minuti (+0,35% al netto), ma soprattutto nel 2021 e quasi niente nel 2022. È l'ipotesi più concreta trovata finora per lo
 scalping: va confermata sul 2023 e capita con i dati sulle posizioni aperte (`docs/backlog.md`, P13).
+
+### 19 ottobre: il programma 6, tre prove sulle strategie a indicatori
+
+Il proprietario: «trovare delle strategie [...] partendo dagli indicatori tecnici [...] riprovare con metodo e non a caso
+[...] non voglio aspettare dati nuovi», e la prova a finestre che avanzano si fa tutta sul passato (chiarito con lui). Tre
+prove, ognuna con le regole committate prima di calcolare (`research/programma6/METODO.md`, `SECONDA.md`, `TERZA.md`):
+
+* **Prima prova** (9 famiglie di indicatori, candele da 15 minuti a 4 ore, 100 monete, finestre di 12 mesi + 3, dal 2021):
+  nessuna passa; le migliori sono la rottura dopo la compressione delle bande di Bollinger (+0,093 R a trade, intervallo
+  −0,007; +0,201) e il Supertrend (+0,056) (`RISULTATI.md`).
+* **Seconda prova** (candele giornaliere di **tutti** i 892 perpetui dell'archivio, anche quelli tolti dal listino; universo
+  scelto mese per mese con i soli dati di allora): la regola pubblicata da Zarattini, Pagani e Barbon (nove canali di
+  Donchian, volatilità al 25%) fa Sharpe 0,53 dal 2021 e 0,25 dopo l'uscita dell'articolo, contro più di 1,5 dichiarato; le
+  nove famiglie a 1 giorno non passano (la migliore, l'incrocio delle medie, +0,097 R, positiva in 5 anni su 5)
+  (`RISULTATI_SECONDA.md`).
+* **Terza prova** (CTREND di Fieberg e altri, JFQA 2025: 28 indicatori combinati con regressioni sulle 52 settimane prima,
+  long il quinto più forte e short il più debole delle 100 monete più scambiate, dal giugno 2022 fuori dal loro campione):
+  Sharpe 0,39, con −79% nel 2024 e +69% nel 2025, +103% nel 2026 (`RISULTATI_TERZA.md`).
+
+Capito oggi: (1) le 100 monete scelte con il volume di settembre 2026 regalavano un vantaggio (sono quelle sopravvissute):
+la rottura del canale passa da −0,015 R a 4 ore a −0,128 R a 1 giorno con l'universo di allora; (2) seguire il prezzo di
+una moneta da sola dà al massimo Sharpe 0,5 nel 2021-2026, troppo poco per un esame con 6 anni (serve circa 0,85 solo per
+l'intervallo sopra zero); (3) la tendenza **fra** monete funziona molto nel 2025-2026 (Sharpe 1,5-2,0 dopo l'aprile 2025 in
+tutte e tre le varianti) ma ha perso tutto nel 2024: il vantaggio c'è a periodi, e non si può scegliere il periodo dopo
+averlo visto; (4) il carry (comprato a pronti, venduto il perpetuo) dal 2025 non rende più (Borri, Liu, Tsyvinski e Wu,
+2025: Sharpe negativo nel 2025), e il proprietario non lo vuole. Le prove fatte nel programma 6 sono 24: ogni idea nuova
+alza la soglia dello Sharpe corretto.
