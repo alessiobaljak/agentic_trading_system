@@ -24,3 +24,17 @@ Cosa dice:
   rientra), negativa con quello di un mese (chi paga funding alto da un mese è in una tendenza vera, e continua a salire);
 * regge a **costi tripli** e nelle due metà delle 100 monete, ma non sulle monete dalla 101ª alla 200ª (settima prova), dove
   costi e prezzo si mangiano il funding.
+
+## F3 (ottava prova): dipende da poche monete? (19 ottobre 2026, sera; descrittivo)
+
+Con i pesi secondo la volatilità le monete calme pesano di più (nella settimana dal 2026-10-19 TRX è il 37% del lato long,
+BNB il 14% di quello short). Stesso periodo e stessi costi di F3 (tabella aggiornata al 18 ottobre):
+
+| Variante | Rendimento/anno | Sharpe | Anni positivi | Peso massimo medio di una moneta |
+|---|---|---|---|---|
+| **F3 come da regole** | +51,3% | 1,30 | 6/6 | 13% |
+| tetto del 10% per moneta | +50,6% | 1,24 | 6/6 | 10% |
+| senza BTC, ETH, BNB, TRX, XMR | +46,9% | 1,12 | 6/6 | 11% |
+| senza le cinque e con il tetto | +47,5% | 1,10 | 6/6 | 10% |
+
+Non dipende da poche monete: il risultato resta quasi uguale. F3 resta quella delle regole (nessuna variante la sostituisce).
