@@ -79,7 +79,8 @@ def main(argv=None) -> int:
     tutti = argv or [s for s in simboli() if ammesso(s)]
     dest = QUI / "scarico_giorni.json"
     imp = json.loads(dest.read_text()) if dest.exists() else {}
-    with ThreadPoolExecutor(max_workers=4) as ex:
+    import os
+    with ThreadPoolExecutor(max_workers=int(os.environ.get("P6_FILI", "4"))) as ex:
         for s, r in zip(tutti, ex.map(uno, tutti)):
             imp[s] = r
             print(f"[giorni] {s}: {r['giorni']['file']} giorni/mesi, {r['funding']['file']} funding", flush=True)

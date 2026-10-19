@@ -193,14 +193,15 @@ TEMPI = ["15m", "1h", "4h"]
 INGRESSI = [{"limite_k": 0.0, "validita": 1}, {"limite_k": 0.5, "validita": 4}]
 
 
-def combinazioni(famiglia: str) -> list:
-    """Tutte le combinazioni di una famiglia: valori dei segnali × uscite × tempo × ingresso."""
+def combinazioni(famiglia: str, tempi=None) -> list:
+    """Tutte le combinazioni di una famiglia: valori dei segnali × uscite × tempo × ingresso (``tempi``: per la seconda
+    prova, solo ``["1d"]``)."""
     _, griglia, uscite = FAMIGLIE[famiglia]
     chiavi = list(griglia)
     out = []
     for valori in itertools.product(*(griglia[k] for k in chiavi)):
         for iu, usc in enumerate(uscite):
-            for tf in TEMPI:
+            for tf in (tempi or TEMPI):
                 for ii, ing in enumerate(INGRESSI):
                     out.append({"famiglia": famiglia, "segnali": dict(zip(chiavi, valori)), "uscita": usc,
                                 "iu": iu, "tf": tf, "ingresso": ing, "ii": ii})

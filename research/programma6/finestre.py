@@ -77,13 +77,15 @@ def trade_famiglia(famiglia: str, monete, log=print) -> tuple:
     return combo, tutti
 
 
-def vicini(combo: list) -> list:
+def vicini(combo: list, tempi=None) -> list:
     """Per ogni combinazione, gli indici delle combinazioni a un passo in una sola dimensione della griglia."""
+    tempi = tempi or TEMPI
+
     def pos(c):
         f = c["famiglia"]
         griglia = FAMIGLIE[f][1]
         p = tuple(griglia[k].index(c["segnali"][k]) for k in griglia)
-        return p + (c["iu"], TEMPI.index(c["tf"]), c["ii"])
+        return p + (c["iu"], tempi.index(c["tf"]), c["ii"])
     P = [pos(c) for c in combo]
     indice = {p: i for i, p in enumerate(P)}
     out = []
@@ -121,9 +123,9 @@ def scegli(tr: pd.DataFrame, combo: list, vic: list, da: int, a: int, min_trade:
     return migliore
 
 
-def avanza(tr: pd.DataFrame, combo: list, mesi_costruzione: int = 12) -> tuple:
+def avanza(tr: pd.DataFrame, combo: list, mesi_costruzione: int = 12, tempi=None) -> tuple:
     """(trade dei trimestri di prova, scelte)."""
-    vic = vicini(combo)
+    vic = vicini(combo, tempi)
     inizi = trimestri()
     fine = int(tr["uscita"].max()) + 1 if len(tr) else 0
     scelte, presi = [], []
