@@ -1,0 +1,1005 @@
+{
+ "trade": 6936,
+ "R": {
+  "n": 6936,
+  "giorni": 1111,
+  "media": 0.09275784445319948,
+  "basso": -0.007224549369525719,
+  "alto": 0.20100169077827895,
+  "p": 0.034996500349965
+ },
+ "netto": {
+  "n": 6936,
+  "giorni": 1111,
+  "media": 0.004386109989844487,
+  "basso": -0.0006938947594192798,
+  "alto": 0.009938990151148795,
+  "p": 0.048795120487951205
+ },
+ "netto_doppio": 0.0030960725042620194,
+ "per_anno": {
+  "2021": {
+   "trade": 457,
+   "R": 0.2091632567446725,
+   "netto": 0.010601381513897504
+  },
+  "2022": {
+   "trade": 504,
+   "R": -0.034670883004061154,
+   "netto": -5.1309848083305784e-05
+  },
+  "2023": {
+   "trade": 401,
+   "R": 0.019960891163341626,
+   "netto": -0.00041831617541200405
+  },
+  "2024": {
+   "trade": 1127,
+   "R": -0.02328753262875848,
+   "netto": -0.0007937108177796395
+  },
+  "2025": {
+   "trade": 2699,
+   "R": 0.13044881397895625,
+   "netto": 0.0067200016688930084
+  },
+  "2026": {
+   "trade": 1748,
+   "R": 0.13238804852175684,
+   "netto": 0.004878752903192119
+  }
+ },
+ "per_moneta": {
+  "1000BONKUSDT": {
+   "trade": 70,
+   "R": 0.30205018881857165
+  },
+  "1000PEPEUSDT": {
+   "trade": 62,
+   "R": 0.5050204590083296
+  },
+  "1000SHIBUSDT": {
+   "trade": 70,
+   "R": 0.01951096803279738
+  },
+  "AAVEUSDT": {
+   "trade": 63,
+   "R": -0.015872112410060663
+  },
+  "ACEUSDT": {
+   "trade": 54,
+   "R": 0.19566081319825077
+  },
+  "ADAUSDT": {
+   "trade": 122,
+   "R": 0.09382788054760294
+  },
+  "AEROUSDT": {
+   "trade": 40,
+   "R": 0.0820355000094318
+  },
+  "ALGOUSDT": {
+   "trade": 61,
+   "R": 0.019068207676231106
+  },
+  "APTUSDT": {
+   "trade": 58,
+   "R": -0.09047398496273201
+  },
+  "ARBUSDT": {
+   "trade": 70,
+   "R": 0.18667107616609502
+  },
+  "ARKUSDT": {
+   "trade": 66,
+   "R": -0.2567649907753989
+  },
+  "ARUSDT": {
+   "trade": 59,
+   "R": 0.3589947420575143
+  },
+  "ATOMUSDT": {
+   "trade": 63,
+   "R": 0.03419830097959171
+  },
+  "AVAUSDT": {
+   "trade": 51,
+   "R": 0.14398222787854098
+  },
+  "AVAXUSDT": {
+   "trade": 130,
+   "R": 0.17411702103803164
+  },
+  "BCHUSDT": {
+   "trade": 139,
+   "R": -0.20887230530528594
+  },
+  "BNBUSDT": {
+   "trade": 134,
+   "R": -0.041697912519324414
+  },
+  "BOMEUSDT": {
+   "trade": 52,
+   "R": 0.37154579970334406
+  },
+  "BTCUSDT": {
+   "trade": 149,
+   "R": 0.13151786382639014
+  },
+  "CAKEUSDT": {
+   "trade": 54,
+   "R": 0.29910712531919603
+  },
+  "CELRUSDT": {
+   "trade": 55,
+   "R": 0.18822272725701494
+  },
+  "COTIUSDT": {
+   "trade": 56,
+   "R": -0.047612301120226026
+  },
+  "CRVUSDT": {
+   "trade": 64,
+   "R": -0.2307281670739335
+  },
+  "CVCUSDT": {
+   "trade": 26,
+   "R": -0.15512855865516648
+  },
+  "DASHUSDT": {
+   "trade": 126,
+   "R": -0.05042952710719818
+  },
+  "DOGEUSDT": {
+   "trade": 134,
+   "R": 0.09091534495595817
+  },
+  "DOTUSDT": {
+   "trade": 128,
+   "R": 0.088751513265212
+  },
+  "EGLDUSDT": {
+   "trade": 60,
+   "R": 0.07816821074773475
+  },
+  "EIGENUSDT": {
+   "trade": 49,
+   "R": 0.150118527173049
+  },
+  "ENAUSDT": {
+   "trade": 51,
+   "R": 0.12124039979553161
+  },
+  "ETCUSDT": {
+   "trade": 55,
+   "R": -0.15516003065336129
+  },
+  "ETHFIUSDT": {
+   "trade": 49,
+   "R": 0.3516036594720546
+  },
+  "ETHUSDT": {
+   "trade": 131,
+   "R": 0.1868197907374482
+  },
+  "FARTCOINUSDT": {
+   "trade": 57,
+   "R": -0.08819188682369655
+  },
+  "FETUSDT": {
+   "trade": 53,
+   "R": 0.2290589512134977
+  },
+  "FILUSDT": {
+   "trade": 120,
+   "R": 0.322245477191459
+  },
+  "GALAUSDT": {
+   "trade": 68,
+   "R": 0.060055433234911325
+  },
+  "GRASSUSDT": {
+   "trade": 40,
+   "R": 0.24390512048443763
+  },
+  "GUSDT": {
+   "trade": 43,
+   "R": 0.1360678866316172
+  },
+  "HBARUSDT": {
+   "trade": 63,
+   "R": 0.05511581255205396
+  },
+  "ICPUSDT": {
+   "trade": 64,
+   "R": 0.01242696652726051
+  },
+  "INJUSDT": {
+   "trade": 66,
+   "R": -0.03167132972591766
+  },
+  "IOSTUSDT": {
+   "trade": 59,
+   "R": -0.24175712432352076
+  },
+  "JTOUSDT": {
+   "trade": 59,
+   "R": -0.042204195780670285
+  },
+  "JUPUSDT": {
+   "trade": 59,
+   "R": 0.13584725434006717
+  },
+  "LDOUSDT": {
+   "trade": 56,
+   "R": 0.24116350921831806
+  },
+  "LINKUSDT": {
+   "trade": 127,
+   "R": 0.15662592311365317
+  },
+  "LITUSDT": {
+   "trade": 29,
+   "R": 0.09264255755731889
+  },
+  "LSKUSDT": {
+   "trade": 60,
+   "R": 0.11919632587595853
+  },
+  "LTCUSDT": {
+   "trade": 128,
+   "R": -0.19944062319191616
+  },
+  "MINAUSDT": {
+   "trade": 57,
+   "R": 0.1050745273086531
+  },
+  "MORPHOUSDT": {
+   "trade": 48,
+   "R": -0.02198406635673078
+  },
+  "MOVRUSDT": {
+   "trade": 49,
+   "R": 0.569890821489058
+  },
+  "NEARUSDT": {
+   "trade": 138,
+   "R": 0.09708526178233876
+  },
+  "NMRUSDT": {
+   "trade": 56,
+   "R": -0.08648767849996931
+  },
+  "ONDOUSDT": {
+   "trade": 62,
+   "R": -0.025812225028007663
+  },
+  "ONEUSDT": {
+   "trade": 116,
+   "R": 0.13731756925531355
+  },
+  "ONGUSDT": {
+   "trade": 61,
+   "R": -0.14738514903323668
+  },
+  "OPUSDT": {
+   "trade": 61,
+   "R": 0.17602630595411978
+  },
+  "ORDIUSDT": {
+   "trade": 55,
+   "R": 0.3801348359114141
+  },
+  "PENDLEUSDT": {
+   "trade": 64,
+   "R": 0.06628312021747812
+  },
+  "PENGUUSDT": {
+   "trade": 50,
+   "R": 0.27990354741261625
+  },
+  "PHAUSDT": {
+   "trade": 47,
+   "R": -0.18037025828705702
+  },
+  "POLUSDT": {
+   "trade": 41,
+   "R": 0.36355312644827625
+  },
+  "PROMUSDT": {
+   "trade": 37,
+   "R": 0.7013422563542508
+  },
+  "PYTHUSDT": {
+   "trade": 68,
+   "R": 0.0888752271360002
+  },
+  "QNTUSDT": {
+   "trade": 77,
+   "R": -0.2556755550730369
+  },
+  "RAREUSDT": {
+   "trade": 45,
+   "R": 0.08826716338462452
+  },
+  "RAYSOLUSDT": {
+   "trade": 46,
+   "R": 0.02501389511789317
+  },
+  "RENDERUSDT": {
+   "trade": 48,
+   "R": 0.19371617429762103
+  },
+  "REZUSDT": {
+   "trade": 46,
+   "R": 0.6968522172744893
+  },
+  "SAGAUSDT": {
+   "trade": 53,
+   "R": 0.43714703309615255
+  },
+  "SANDUSDT": {
+   "trade": 62,
+   "R": -0.007864680347869255
+  },
+  "SEIUSDT": {
+   "trade": 63,
+   "R": 0.09908418694989397
+  },
+  "SOLUSDT": {
+   "trade": 133,
+   "R": 0.23629757401241008
+  },
+  "SPXUSDT": {
+   "trade": 47,
+   "R": 0.15138064846772373
+  },
+  "STEEMUSDT": {
+   "trade": 64,
+   "R": -0.1942271634959157
+  },
+  "STRKUSDT": {
+   "trade": 53,
+   "R": 0.386942636689606
+  },
+  "STXUSDT": {
+   "trade": 71,
+   "R": -0.014023148753867417
+  },
+  "SUIUSDT": {
+   "trade": 73,
+   "R": 0.10910966474966141
+  },
+  "SUSHIUSDT": {
+   "trade": 61,
+   "R": 0.04984831989788069
+  },
+  "SYNUSDT": {
+   "trade": 41,
+   "R": 0.14039670734021562
+  },
+  "TAOUSDT": {
+   "trade": 52,
+   "R": 0.34735568807945455
+  },
+  "TIAUSDT": {
+   "trade": 63,
+   "R": 0.1288906020672139
+  },
+  "TRUMPUSDT": {
+   "trade": 42,
+   "R": 0.400314476013119
+  },
+  "TRXUSDT": {
+   "trade": 121,
+   "R": 0.30220055750007074
+  },
+  "UNIUSDT": {
+   "trade": 127,
+   "R": -0.20379367544182314
+  },
+  "VETUSDT": {
+   "trade": 66,
+   "R": -0.04896794359492627
+  },
+  "VIRTUALUSDT": {
+   "trade": 43,
+   "R": -0.12487465875065426
+  },
+  "VTHOUSDT": {
+   "trade": 39,
+   "R": -0.07894246271002195
+  },
+  "VVVUSDT": {
+   "trade": 38,
+   "R": 0.2220710623916296
+  },
+  "WIFUSDT": {
+   "trade": 57,
+   "R": 0.1653146023088796
+  },
+  "WLDUSDT": {
+   "trade": 64,
+   "R": 0.3647203272404589
+  },
+  "XLMUSDT": {
+   "trade": 59,
+   "R": 0.21807862163989447
+  },
+  "XMRUSDT": {
+   "trade": 46,
+   "R": -0.1982174966035527
+  },
+  "XRPUSDT": {
+   "trade": 137,
+   "R": -0.11888930233757009
+  },
+  "ZECUSDT": {
+   "trade": 118,
+   "R": 0.3121103333178822
+  },
+  "ZENUSDT": {
+   "trade": 63,
+   "R": 0.16414206487796554
+  },
+  "ZETAUSDT": {
+   "trade": 55,
+   "R": 0.05306664864238454
+  },
+  "ZROUSDT": {
+   "trade": 51,
+   "R": -0.1674787359506761
+  }
+ },
+ "capitale": {
+  "rendimento_totale": 6.433684091273916,
+  "rendimento_annuo": 1.110304819534269,
+  "sharpe_annuo": 0.6887128978772042,
+  "peggior_discesa": -2.0784473477693766,
+  "giorni": 2115,
+  "asimmetria": 9.29083128972848,
+  "curtosi": 144.14470224032792,
+  "rendimento_totale_costi_doppi": 4.488060216889513
+ },
+ "ultimo_anno": {
+  "trade": 2321,
+  "R": 0.05932785935431586
+ },
+ "pbo": 0.13442113442113443,
+ "combinazioni": 36,
+ "scelte": [
+  {
+   "trimestre": "2021-01",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2021-04",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.2
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2021-07",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.2
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2021-10",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.2
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-01",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.2
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-04",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.2
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-07",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2022-10",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2023-01",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 2,
+     "max_barre": 0
+    },
+    "iu": 0,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2023-04",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2023-07",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2023-10",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2024-01",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 3,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 2,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2024-04",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2024-07",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2024-10",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2025-01",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 2,
+     "max_barre": 0
+    },
+    "iu": 0,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2025-04",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 2,
+     "max_barre": 0
+    },
+    "iu": 0,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2025-07",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 2,
+     "max_barre": 0
+    },
+    "iu": 0,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2025-10",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 2,
+     "max_barre": 0
+    },
+    "iu": 0,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2026-01",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 2,
+     "max_barre": 0
+    },
+    "iu": 0,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2026-04",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2026-07",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 3,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 2,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2026-10",
+   "combinazione": {
+    "famiglia": "compressione",
+    "segnali": {
+     "n": 20,
+     "quota": 0.1
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  }
+ ]
+}
