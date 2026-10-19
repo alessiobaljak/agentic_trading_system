@@ -35,3 +35,10 @@ Sulle settimane dal **3 gennaio 2022** all'ultima completa: le sei condizioni de
 lo Sharpe corretto sulle **32** prove, gli anni 2022-2026 (almeno 4 su 5) e i trimestri pieni del 2022, 2023, 2024 e 2025.
 Al posto della conferma sulle monete 101-200 (senza dati) si chiede che la variante sia **positiva sia nel 2022 sia
 nell'ultimo anno** (dal 2025-10-01). **Valida** solo con tutto.
+
+## Nota del 19 ottobre 2026, sera
+
+Alle 17:47 UTC la catena che doveva aspettare la fine dello scarico è partita subito per un errore nel trovare il processo
+(il numero del processo era vuoto): l'esame è girato con i dati di 11 monete su 448, cioè **2 monete con il dato** per
+settimana, sotto il minimo di 20; **nessuna settimana è stata operata** e i rendimenti sono tutti zero. Non ha mostrato
+niente sui due segnali. I file prodotti sono stati cancellati senza commit; l'esame si rifà a scarico finito.
