@@ -192,6 +192,12 @@ def esegui(log=print) -> dict:
         d = d[d.index >= INIZIO_SETTIMANE]
         res["candidate"][nome] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
                                   **_riassunto(d["netto"], 52)}
+    # riga derivata, solo informazione: meta' F3 e meta' K1 (stesso capitale diviso in due)
+    f3, k1 = w["F3"], w["K1"]
+    comb = (0.5 * f3["netto"] + 0.5 * k1["netto"].reindex(f3.index).fillna(0.0))
+    comb = comb[comb.index >= INIZIO_SETTIMANE]
+    res["candidate"]["metà F3 + metà K1 (derivata)"] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in comb.items()},
+                                                       **_riassunto(comb, 52)}
     d = da[da.index >= INIZIO_GIORNI]
     res["candidate"]["A1"] = {"giorni": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
                               **_riassunto(d["netto"], 365)}
