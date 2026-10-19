@@ -1,0 +1,1175 @@
+{
+ "trade": 1459,
+ "R": {
+  "n": 1459,
+  "giorni": 486,
+  "media": -0.0076880183898745385,
+  "basso": -0.10487178681875521,
+  "alto": 0.09173113440648381,
+  "p": 0.5614438556144385
+ },
+ "netto": {
+  "n": 1459,
+  "giorni": 486,
+  "media": 0.00827327986340866,
+  "basso": -0.006234606548728715,
+  "alto": 0.023219379928335896,
+  "p": 0.13638636136386362
+ },
+ "netto_doppio": 0.0075222860320173,
+ "per_anno": {
+  "2021": {
+   "trade": 135,
+   "R": 0.2782012733740071,
+   "netto": 0.03729984574009923
+  },
+  "2022": {
+   "trade": 281,
+   "R": 0.055706978132229294,
+   "netto": 0.011914890993472775
+  },
+  "2023": {
+   "trade": 258,
+   "R": -0.34818047656407136,
+   "netto": -0.028919674375901924
+  },
+  "2024": {
+   "trade": 49,
+   "R": -0.23261502564360928,
+   "netto": -0.02959854038455389
+  },
+  "2025": {
+   "trade": 366,
+   "R": 0.0758870589612757,
+   "netto": 0.02051425637317819
+  },
+  "2026": {
+   "trade": 370,
+   "R": 0.02439563253720554,
+   "netto": 0.013758211923990828
+  }
+ },
+ "per_moneta": {
+  "1000BONKUSDT": {
+   "trade": 15,
+   "R": 0.04831771223429445
+  },
+  "1000FLOKIUSDT": {
+   "trade": 3,
+   "R": 0.5245280343709439
+  },
+  "1000LUNCUSDT": {
+   "trade": 3,
+   "R": 0.0012173923814097765
+  },
+  "1000PEPEUSDT": {
+   "trade": 16,
+   "R": -0.3049625797033142
+  },
+  "1000SATSUSDT": {
+   "trade": 3,
+   "R": -0.3502809222347317
+  },
+  "1000SHIBUSDT": {
+   "trade": 30,
+   "R": 0.062086825915133266
+  },
+  "1000XECUSDT": {
+   "trade": 1,
+   "R": -1.0112792262827628
+  },
+  "1INCHUSDT": {
+   "trade": 4,
+   "R": 0.30890972788204046
+  },
+  "AAVEUSDT": {
+   "trade": 34,
+   "R": 0.04353438048578459
+  },
+  "ADAUSDT": {
+   "trade": 28,
+   "R": -0.2260512163918185
+  },
+  "AGIXUSDT": {
+   "trade": 2,
+   "R": -0.014408595045793726
+  },
+  "ALGOUSDT": {
+   "trade": 19,
+   "R": 0.27239523389190984
+  },
+  "ALICEUSDT": {
+   "trade": 4,
+   "R": 0.2283558005460567
+  },
+  "ALPHAUSDT": {
+   "trade": 3,
+   "R": -0.33628894631892625
+  },
+  "ANKRUSDT": {
+   "trade": 1,
+   "R": -0.9926874154429286
+  },
+  "APEUSDT": {
+   "trade": 2,
+   "R": 0.5652212300023429
+  },
+  "APTUSDT": {
+   "trade": 12,
+   "R": 0.250811675876073
+  },
+  "ARBUSDT": {
+   "trade": 16,
+   "R": 0.11144524116972312
+  },
+  "ARUSDT": {
+   "trade": 1,
+   "R": -1.010182076075891
+  },
+  "ATOMUSDT": {
+   "trade": 15,
+   "R": 0.11764776786318694
+  },
+  "AVAXUSDT": {
+   "trade": 26,
+   "R": -0.24748254415232887
+  },
+  "AXSUSDT": {
+   "trade": 16,
+   "R": 0.15563082859232405
+  },
+  "BAKEUSDT": {
+   "trade": 1,
+   "R": -1.0045117503339014
+  },
+  "BALUSDT": {
+   "trade": 1,
+   "R": 1.035122055038083
+  },
+  "BANDUSDT": {
+   "trade": 3,
+   "R": -0.9906952872739004
+  },
+  "BATUSDT": {
+   "trade": 2,
+   "R": -0.9695554374087321
+  },
+  "BBUSDT": {
+   "trade": 1,
+   "R": -0.2978911938807258
+  },
+  "BCHUSDT": {
+   "trade": 26,
+   "R": 0.031520577627155405
+  },
+  "BELUSDT": {
+   "trade": 1,
+   "R": -0.03422784096701108
+  },
+  "BERAUSDT": {
+   "trade": 1,
+   "R": 1.00093621645116
+  },
+  "BLZUSDT": {
+   "trade": 4,
+   "R": -0.20323341489015342
+  },
+  "BNBUSDT": {
+   "trade": 31,
+   "R": -0.3279988039140161
+  },
+  "BNXUSDT": {
+   "trade": 2,
+   "R": 0.014773039531185306
+  },
+  "BOMEUSDT": {
+   "trade": 1,
+   "R": -0.9996180245297375
+  },
+  "BTCUSDT": {
+   "trade": 40,
+   "R": -0.08659752488002395
+  },
+  "CAKEUSDT": {
+   "trade": 3,
+   "R": 0.4351266211445943
+  },
+  "CELOUSDT": {
+   "trade": 3,
+   "R": -1.0046105226385158
+  },
+  "CELRUSDT": {
+   "trade": 2,
+   "R": 0.0010409083784495565
+  },
+  "CFXUSDT": {
+   "trade": 1,
+   "R": -1.0293923186233784
+  },
+  "CHZUSDT": {
+   "trade": 11,
+   "R": 0.5238338245077223
+  },
+  "COMPUSDT": {
+   "trade": 5,
+   "R": 0.14182641584937486
+  },
+  "CRVUSDT": {
+   "trade": 29,
+   "R": -0.25637312976626564
+  },
+  "CTSIUSDT": {
+   "trade": 1,
+   "R": 1.3200230747465678
+  },
+  "DASHUSDT": {
+   "trade": 17,
+   "R": -0.15003351880420884
+  },
+  "DEGOUSDT": {
+   "trade": 1,
+   "R": -0.03108020717609389
+  },
+  "DOGEUSDT": {
+   "trade": 40,
+   "R": -0.18233439638666676
+  },
+  "DOTUSDT": {
+   "trade": 25,
+   "R": 0.11424989124981362
+  },
+  "DUSKUSDT": {
+   "trade": 2,
+   "R": -0.02601077898090315
+  },
+  "DYDXUSDT": {
+   "trade": 10,
+   "R": 0.16079888088107194
+  },
+  "EGLDUSDT": {
+   "trade": 7,
+   "R": -0.18635817517569422
+  },
+  "ENAUSDT": {
+   "trade": 16,
+   "R": -0.03003021213090945
+  },
+  "ENJUSDT": {
+   "trade": 5,
+   "R": 0.6325303830311195
+  },
+  "ENSUSDT": {
+   "trade": 2,
+   "R": -0.23622339735772568
+  },
+  "EOSUSDT": {
+   "trade": 20,
+   "R": 0.1270789441662536
+  },
+  "ETCUSDT": {
+   "trade": 26,
+   "R": 0.00030404778383705467
+  },
+  "ETHFIUSDT": {
+   "trade": 7,
+   "R": 0.5687162584186475
+  },
+  "ETHUSDT": {
+   "trade": 30,
+   "R": -0.2632316587807809
+  },
+  "FARTCOINUSDT": {
+   "trade": 5,
+   "R": 0.36338337008442856
+  },
+  "FETUSDT": {
+   "trade": 15,
+   "R": 0.42994388858391247
+  },
+  "FILUSDT": {
+   "trade": 24,
+   "R": 0.08716579406639498
+  },
+  "FLOWUSDT": {
+   "trade": 1,
+   "R": -1.0191057701442465
+  },
+  "FTMUSDT": {
+   "trade": 18,
+   "R": -0.3880288834222409
+  },
+  "GALAUSDT": {
+   "trade": 16,
+   "R": -0.29158169473688056
+  },
+  "GMTUSDT": {
+   "trade": 2,
+   "R": 0.31748489461796237
+  },
+  "GRTUSDT": {
+   "trade": 6,
+   "R": -0.6098042475321196
+  },
+  "HBARUSDT": {
+   "trade": 14,
+   "R": 0.11365338817689373
+  },
+  "HNTUSDT": {
+   "trade": 2,
+   "R": -0.005541405666713017
+  },
+  "ICPUSDT": {
+   "trade": 5,
+   "R": 0.29409728961009446
+  },
+  "ICXUSDT": {
+   "trade": 2,
+   "R": 0.008711134271721988
+  },
+  "IMXUSDT": {
+   "trade": 1,
+   "R": 1.004101086773095
+  },
+  "INJUSDT": {
+   "trade": 8,
+   "R": 0.2925397273376553
+  },
+  "IOSTUSDT": {
+   "trade": 3,
+   "R": 0.32494201902894804
+  },
+  "IOTAUSDT": {
+   "trade": 3,
+   "R": 0.259181776108886
+  },
+  "JASMYUSDT": {
+   "trade": 1,
+   "R": -1.0146799186567086
+  },
+  "JTOUSDT": {
+   "trade": 1,
+   "R": 0.257368167842586
+  },
+  "JUPUSDT": {
+   "trade": 5,
+   "R": 0.015083097882900454
+  },
+  "KAITOUSDT": {
+   "trade": 1,
+   "R": 0.16348804670205985
+  },
+  "KAVAUSDT": {
+   "trade": 8,
+   "R": -0.08698370743764519
+  },
+  "KNCUSDT": {
+   "trade": 3,
+   "R": 0.15488289681334008
+  },
+  "KSMUSDT": {
+   "trade": 3,
+   "R": 0.1782025965487436
+  },
+  "LDOUSDT": {
+   "trade": 11,
+   "R": -0.3319053762967759
+  },
+  "LINAUSDT": {
+   "trade": 3,
+   "R": 0.5773182915007485
+  },
+  "LINKUSDT": {
+   "trade": 30,
+   "R": -0.07856633071677845
+  },
+  "LITUSDT": {
+   "trade": 7,
+   "R": -0.4165485455473155
+  },
+  "LPTUSDT": {
+   "trade": 2,
+   "R": 1.0886120637028576
+  },
+  "LTCUSDT": {
+   "trade": 36,
+   "R": 0.14931574748654003
+  },
+  "LUNA2USDT": {
+   "trade": 1,
+   "R": -0.9659486783956234
+  },
+  "LUNAUSDT": {
+   "trade": 3,
+   "R": -1.2497741191084726
+  },
+  "MAGICUSDT": {
+   "trade": 1,
+   "R": -1.0130518250623046
+  },
+  "MANAUSDT": {
+   "trade": 10,
+   "R": -0.14101454470801197
+  },
+  "MASKUSDT": {
+   "trade": 7,
+   "R": -0.15029831656348183
+  },
+  "MATICUSDT": {
+   "trade": 13,
+   "R": -0.3240267359030238
+  },
+  "MEMEUSDT": {
+   "trade": 1,
+   "R": 0.8433813558963686
+  },
+  "MKRUSDT": {
+   "trade": 11,
+   "R": -0.3605649413808048
+  },
+  "MTLUSDT": {
+   "trade": 3,
+   "R": 0.3093059499497995
+  },
+  "NEARUSDT": {
+   "trade": 31,
+   "R": -0.0667801835218003
+  },
+  "NEOUSDT": {
+   "trade": 3,
+   "R": -0.35072953961450776
+  },
+  "OCEANUSDT": {
+   "trade": 4,
+   "R": -0.145069916696415
+  },
+  "OGNUSDT": {
+   "trade": 1,
+   "R": 0.06172157134632196
+  },
+  "OMGUSDT": {
+   "trade": 4,
+   "R": 0.5173469826492443
+  },
+  "OMUSDT": {
+   "trade": 3,
+   "R": -0.19995314332475747
+  },
+  "ONDOUSDT": {
+   "trade": 13,
+   "R": 0.1484923414593422
+  },
+  "ONEUSDT": {
+   "trade": 3,
+   "R": -0.9956934336438956
+  },
+  "ONTUSDT": {
+   "trade": 2,
+   "R": 0.01771048970352379
+  },
+  "OPUSDT": {
+   "trade": 16,
+   "R": 0.052540112849439574
+  },
+  "ORDIUSDT": {
+   "trade": 5,
+   "R": -0.2877109495580815
+  },
+  "PENDLEUSDT": {
+   "trade": 4,
+   "R": -0.49749713476448054
+  },
+  "PENGUUSDT": {
+   "trade": 10,
+   "R": -0.020978357044769302
+  },
+  "PEOPLEUSDT": {
+   "trade": 3,
+   "R": -0.9962676731888616
+  },
+  "PIPPINUSDT": {
+   "trade": 1,
+   "R": 0.980535908008334
+  },
+  "PUMPUSDT": {
+   "trade": 4,
+   "R": -0.08948164375049084
+  },
+  "QTUMUSDT": {
+   "trade": 8,
+   "R": 0.10672613587994595
+  },
+  "REEFUSDT": {
+   "trade": 2,
+   "R": 0.006478078033660517
+  },
+  "RENDERUSDT": {
+   "trade": 3,
+   "R": 0.8586925620384402
+  },
+  "RENUSDT": {
+   "trade": 3,
+   "R": 0.34258155371763727
+  },
+  "RLCUSDT": {
+   "trade": 2,
+   "R": 0.3175277898647598
+  },
+  "RNDRUSDT": {
+   "trade": 4,
+   "R": -0.2366198999864978
+  },
+  "RSRUSDT": {
+   "trade": 2,
+   "R": -0.06043532608152524
+  },
+  "RUNEUSDT": {
+   "trade": 8,
+   "R": 0.24585979908168715
+  },
+  "RVNUSDT": {
+   "trade": 1,
+   "R": 1.0038435874950937
+  },
+  "SANDUSDT": {
+   "trade": 9,
+   "R": -0.7120799124551183
+  },
+  "SEIUSDT": {
+   "trade": 8,
+   "R": 0.5128281041980592
+  },
+  "SFPUSDT": {
+   "trade": 1,
+   "R": 1.2226927051434695
+  },
+  "SIRENUSDT": {
+   "trade": 2,
+   "R": 0.2800385626644537
+  },
+  "SKYAIUSDT": {
+   "trade": 1,
+   "R": 0.8216695554851933
+  },
+  "SNXUSDT": {
+   "trade": 3,
+   "R": -0.33789132014290574
+  },
+  "SOLUSDT": {
+   "trade": 36,
+   "R": -0.016452640651803314
+  },
+  "SRMUSDT": {
+   "trade": 5,
+   "R": 0.5486984663284586
+  },
+  "STMXUSDT": {
+   "trade": 3,
+   "R": -0.36439417330504725
+  },
+  "STORJUSDT": {
+   "trade": 2,
+   "R": -0.26831298119554514
+  },
+  "STOUSDT": {
+   "trade": 1,
+   "R": 0.06566636035732178
+  },
+  "STXUSDT": {
+   "trade": 1,
+   "R": 0.9912308594794428
+  },
+  "SUIUSDT": {
+   "trade": 16,
+   "R": -0.24669701739040195
+  },
+  "SUSHIUSDT": {
+   "trade": 10,
+   "R": -0.0840284643244058
+  },
+  "SXPUSDT": {
+   "trade": 4,
+   "R": -0.5534735068391833
+  },
+  "TAOUSDT": {
+   "trade": 17,
+   "R": 0.15761766889399617
+  },
+  "THETAUSDT": {
+   "trade": 12,
+   "R": 0.1686717496286637
+  },
+  "TIAUSDT": {
+   "trade": 7,
+   "R": 0.4425914157677039
+  },
+  "TOMOUSDT": {
+   "trade": 3,
+   "R": 0.35382944018982315
+  },
+  "TONUSDT": {
+   "trade": 10,
+   "R": 0.04166618720766245
+  },
+  "TRBUSDT": {
+   "trade": 6,
+   "R": 0.37909807534360995
+  },
+  "TRUMPUSDT": {
+   "trade": 8,
+   "R": 0.03854109189203367
+  },
+  "TRXUSDT": {
+   "trade": 28,
+   "R": -0.2151503463012436
+  },
+  "UNFIUSDT": {
+   "trade": 5,
+   "R": 0.37064339641065863
+  },
+  "UNIUSDT": {
+   "trade": 27,
+   "R": 0.10007169512644533
+  },
+  "VETUSDT": {
+   "trade": 5,
+   "R": 0.6386078299488661
+  },
+  "VIRTUALUSDT": {
+   "trade": 7,
+   "R": 0.20755297722696642
+  },
+  "VVVUSDT": {
+   "trade": 6,
+   "R": -0.8256756995517122
+  },
+  "WAVESUSDT": {
+   "trade": 9,
+   "R": 0.008454794296373327
+  },
+  "WIFUSDT": {
+   "trade": 13,
+   "R": 0.15453623192413155
+  },
+  "WLDUSDT": {
+   "trade": 14,
+   "R": 0.07856124103710618
+  },
+  "WUSDT": {
+   "trade": 2,
+   "R": 0.7226524610366207
+  },
+  "XEMUSDT": {
+   "trade": 1,
+   "R": -1.0210244033211113
+  },
+  "XLMUSDT": {
+   "trade": 26,
+   "R": 0.3432899286475057
+  },
+  "XMRUSDT": {
+   "trade": 12,
+   "R": -0.17400105336291047
+  },
+  "XPLUSDT": {
+   "trade": 1,
+   "R": 1.0457461489558313
+  },
+  "XRPUSDT": {
+   "trade": 33,
+   "R": 0.1488214845046629
+  },
+  "XTZUSDT": {
+   "trade": 9,
+   "R": 0.19983509420610343
+  },
+  "YFIUSDT": {
+   "trade": 6,
+   "R": 0.12917443747385926
+  },
+  "ZECUSDT": {
+   "trade": 22,
+   "R": 0.15066019201076544
+  },
+  "ZENUSDT": {
+   "trade": 6,
+   "R": -0.007947703137839657
+  },
+  "ZILUSDT": {
+   "trade": 3,
+   "R": 0.7615708646253297
+  },
+  "ZROUSDT": {
+   "trade": 1,
+   "R": -0.03460101048786069
+  },
+  "ZRXUSDT": {
+   "trade": 1,
+   "R": 0.02047537877478642
+  }
+ },
+ "capitale": {
+  "rendimento_totale": -0.11216818830826958,
+  "rendimento_annuo": -0.021357010293436826,
+  "sharpe_annuo": -0.058147801536156694,
+  "peggior_discesa": -1.6234464981185002,
+  "giorni": 1917,
+  "asimmetria": -5.610276788158636,
+  "curtosi": 112.32335824592406,
+  "rendimento_totale_costi_doppi": -0.20462417370210234
+ },
+ "ultimo_anno": {
+  "trade": 484,
+  "R": 0.09302038893040368
+ },
+ "pbo": 0.33853923853923856,
+ "combinazioni": 24,
+ "scelte": [
+  {
+   "trimestre": "2021-01",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2021-04",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2021-07",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 1.5,
+     "tp_k": 1.5,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 0,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2021-10",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 1.5,
+     "tp_k": 1.5,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 0,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-01",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-04",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-07",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-10",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2023-01",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2023-04",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2023-07",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 1.5,
+     "tp_k": 1.5,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 0,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2023-10",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2024-01",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2024-04",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 1.5,
+     "tp_k": 1.5,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 0,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2024-07",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2024-10",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2025-01",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 1.5,
+     "tp_k": 1.5,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 0,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2025-04",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 3,
+     "trail_k": 0.0,
+     "max_barre": 96
+    },
+    "iu": 2,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2025-07",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2025-10",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2026-01",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2026-04",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 3,
+     "trail_k": 0.0,
+     "max_barre": 96
+    },
+    "iu": 2,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2026-07",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 3,
+     "trail_k": 0.0,
+     "max_barre": 96
+    },
+    "iu": 2,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2026-10",
+   "combinazione": {
+    "famiglia": "bollinger_ritorno",
+    "segnali": {
+     "n": 20,
+     "k": 2.5,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 2,
+     "trail_k": 0.0,
+     "max_barre": 48
+    },
+    "iu": 1,
+    "tf": "1d",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  }
+ ],
+ "capitale_tetto": {
+  "giorni": 1917,
+  "annuo": -0.021357010293436826,
+  "volatilita": 0.367288353630307,
+  "sharpe": -0.058147801536156694,
+  "discesa_max": -0.8449959324332961,
+  "totale": -0.3944833735960651,
+  "asimmetria": -5.614671069758007,
+  "curtosi": 112.61217286877438,
+  "trade_presi": 1459
+ }
+}
