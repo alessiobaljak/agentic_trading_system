@@ -4173,8 +4173,9 @@ prove, ognuna con le regole committate prima di calcolare (`research/programma6/
   long il quinto più forte e short il più debole delle 100 monete più scambiate, dal giugno 2022 fuori dal loro campione):
   Sharpe 0,39, con −79% nel 2024 e +69% nel 2025, +103% nel 2026 (`RISULTATI_TERZA.md`).
 
-Capito oggi: (1) le 100 monete scelte con il volume di settembre 2026 regalavano un vantaggio (sono quelle sopravvissute):
-la rottura del canale passa da −0,015 R a 4 ore a −0,128 R a 1 giorno con l'universo di allora; (2) seguire il prezzo di
+Capito oggi: (1) le 100 monete scelte con il volume di settembre 2026 sono quelle sopravvissute, un vantaggio che chi
+operava allora non aveva; da qui in avanti l'universo si sceglie con i soli dati di allora (quanto pesasse non si sa: fra
+la prima e la seconda prova sono cambiati insieme l'universo e la durata delle candele); (2) seguire il prezzo di
 una moneta da sola dà al massimo Sharpe 0,5 nel 2021-2026, troppo poco per un esame con 6 anni (serve circa 0,85 solo per
 l'intervallo sopra zero); (3) la tendenza **fra** monete funziona molto nel 2025-2026 (Sharpe 1,5-2,0 dopo l'aprile 2025 in
 tutte e tre le varianti) ma ha perso tutto nel 2024: il vantaggio c'è a periodi, e non si può scegliere il periodo dopo
