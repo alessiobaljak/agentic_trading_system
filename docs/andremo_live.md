@@ -4208,3 +4208,7 @@ monete c'è fra le monete liquide e sparisce fra le piccole. F3 e F2 sono le can
 scritto; capito che gli acquisti a mercato fra monete anticipano il prezzo (chi ne ha molti continua a salire), al contrario
 del funding alto che rientra; anche questo solo fra le monete liquide. Trovati e tolti il petrolio (BZUSDT, CLUSDT) e 14
 azioni nate dal 2026-04 che stavano per entrare nel paper: nelle prove sul passato non erano mai entrate.
+Prova a placebo di F3 (`research/programma6/F3_caso.md`, attesa scritta prima): con il segnale del funding mescolato a
+caso fra le monete, lo stesso portafoglio fa Sharpe −0,37 in media e al massimo 0,64 su 200 ripetizioni; F3 fa 1,30. Il
+risultato viene dal funding, non dalla costruzione. Decima prova (il funding dentro CTREND): non aiuta (Sharpe 0,43). Il
+paper (`research/programma6/paper/PAPER.md`) è pronto: posizioni della settimana dal 19 ottobre, la misura conta dal 26.
