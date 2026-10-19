@@ -37,3 +37,10 @@ F2 è la candidata principale. C1 e A1 si misurano perché costano poco e la lor
   sotto la metà di quello sul passato. Due sguardi (52 e 104 settimane) con 0,025 l'uno: la soglia d'insieme resta il 5%.
 * Prima del verdetto i numeri si leggono come informazione, non come prova: con uno Sharpe vero di 1, un anno di dati dà
   un intervallo che passa lo zero quasi sempre.
+
+## 4. Controllo della stima del funding (19 ottobre 2026, prima di usarla)
+
+Sui tre mesi luglio-settembre 2026, dove il funding vero è nell'archivio, la stima dall'indice del premio orario (programma
+5, `research/data/p5/<SIMBOLO>/premium`) dà la **stessa media** e una correlazione giorno per giorno di 0,775 (BTC), 0,683
+(ETH), 0,910 (SOL), 0,846 (DOGE), 0,908 (XRP), 0,719 (LINK), su 92 giorni ciascuna. Il segnale di F2 è la somma di 7 giorni:
+la stima basta fino all'arrivo del file vero.
