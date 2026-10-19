@@ -92,7 +92,9 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
 * **Prova in avanti (REGOLE.md, sezione 9)**, registrata prima di guardare i dati da ottobre: M-001c (24 monete), M-002
   (scelta per il vantaggio sul caso, 100 monete), M-003 (M-001c sulle 100 monete); soglia 0,05/3. **Primo conteggio
   (dati fino al 17 ottobre)**: M-001c −0,78% a trade (134 trade, in corso); M-003 −1,15% (347, in corso); **M-002
-  +0,29% su 834 trade: verdetto, non passa** (p 0,33). `avanti/A.md`.
+  +0,29% su 834 trade: verdetto, non passa** (p 0,33). `avanti/A.md`. Aggiornamento del 19 ottobre mattina: l'archivio
+  non ha ancora pubblicato giorni dopo il 17 ottobre, conteggi invariati; seconda tornata (N-001..N-003) senza trade chiusi
+  (`avanti/A2.md`).
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 

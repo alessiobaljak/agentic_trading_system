@@ -1,0 +1,17 @@
+{
+ "dati_fino_a": "BTCUSDT-1m-2026-10-17.zip",
+ "procedure": {
+  "N-001": {
+   "trade": 0,
+   "esito": "nessun trade chiuso"
+  },
+  "N-002": {
+   "trade": 0,
+   "esito": "nessun trade chiuso"
+  },
+  "N-003": {
+   "trade": 0,
+   "esito": "nessun trade chiuso"
+  }
+ }
+}
