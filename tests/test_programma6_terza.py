@@ -124,3 +124,13 @@ def test_sesta_funding_dei_sette_giorni_prima():
     s7 = se.funding_7(pan, np.array([10, 17]))
     assert s7[0, 0] == pytest.approx(sum(range(3, 10)))      # giorni 3..9, prima del lunedi' 10
     assert s7[1, 0] == pytest.approx(sum(range(10, 17)))
+
+
+def test_ottava_sigma_dei_trenta_giorni_prima():
+    from research.programma6 import ottava as ot
+    C = np.cumprod(np.r_[1.0, np.tile([1.01, 0.99], 30)])[:, None] * 100
+    pan = {"close": C}
+    s = ot.sigma_30(pan, np.array([10, 40]))
+    assert np.isnan(s[0, 0])                     # meno di 20 giorni
+    r = C[1:, 0] / C[:-1, 0] - 1
+    assert s[1, 0] == pytest.approx(np.std(r[9:39], ddof=1))
