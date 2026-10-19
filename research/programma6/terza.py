@@ -329,8 +329,8 @@ def numeri_settimana(x: pd.Series) -> dict:
             "curtosi": float(pd.Series(v).kurt() + 3)}
 
 
-def esame(df: pd.DataFrame, btc: pd.Series) -> dict:
-    d = df[df.index >= INIZIO_ESAME]
+def esame(df: pd.DataFrame, btc: pd.Series, inizio: int = INIZIO_ESAME, anni_pieni=(2023, 2024, 2025)) -> dict:
+    d = df[df.index >= inizio]
     date = pd.to_datetime(d.index.to_numpy() * 86400, unit="s")
     e = {"intero": numeri_settimana(d["netto"]),
          "boot": sc.bootstrap_blocchi(d["netto"].to_numpy(), blocco=4),
@@ -341,7 +341,7 @@ def esame(df: pd.DataFrame, btc: pd.Series) -> dict:
     e["per_anno"] = {int(a): float(d["netto"][date.year == a].mean() * 52) for a in sorted(set(date.year))}
     e["ultimo_anno"] = float(d["netto"][d.index >= sc.ULTIMO_ANNO].mean() * 52)
     e["per_trimestre"] = {f"{a}T{q}": float(d["netto"][(date.year == a) & (date.quarter == q)].mean() * 52)
-                          for a in (2023, 2024, 2025) for q in (1, 2, 3, 4)}
+                          for a in anni_pieni for q in (1, 2, 3, 4)}
     e["dopo_aprile_2025"] = numeri_settimana(d["netto"][d.index >= sc.PUBBLICAZIONE])
     tutto = df[df["monete"] > 0]
     e["dal_primo_segnale"] = {"da": sc.data(int(tutto.index.min())) if len(tutto) else "",
@@ -359,12 +359,12 @@ def esito(e: dict, dsr: float) -> str:
     if not dsr >= 0.95:
         return f"Sharpe corretto {dsr:.2f} sotto 0,95"
     if sum(1 for v in e["per_anno"].values() if v > 0) < 4:
-        return "positiva in meno di 4 anni su 5"
+        return f"positiva in meno di 4 anni su {len(e['per_anno'])}"
     if not e["ultimo_anno"] > 0:
         return "non positiva nell'ultimo anno"
     if not e["costi_doppi"] > 0:
         return "non positiva a costi doppi"
-    for a in (2023, 2024, 2025):
+    for a in sorted({k[:4] for k in e["per_trimestre"]}):
         if sum(1 for q in range(1, 5) if e["per_trimestre"][f"{a}T{q}"] > 0) < 2:
             return f"positiva in meno di 2 trimestri nel {a}"
     if not e["extra_btc_annuo"] > 0:

@@ -116,3 +116,11 @@ def test_settimane_sono_lunedi():
     lun = te.settimane(pan) + pan["t0"]
     assert all(pd.Timestamp(int(x) * 86400, unit="s").weekday() == 0 for x in lun)
     assert len(lun) == 3      # 8, 15, 22 gennaio (il 29 non ha la settimana intera; l'1 non ha la domenica prima)
+
+
+def test_sesta_funding_dei_sette_giorni_prima():
+    from research.programma6 import sesta as se
+    pan = {"funding": np.arange(20, dtype=float).reshape(20, 1)}
+    s7 = se.funding_7(pan, np.array([10, 17]))
+    assert s7[0, 0] == pytest.approx(sum(range(3, 10)))      # giorni 3..9, prima del lunedi' 10
+    assert s7[1, 0] == pytest.approx(sum(range(10, 17)))
