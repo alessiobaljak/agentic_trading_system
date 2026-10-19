@@ -38,7 +38,8 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 7. **Il funding fra monete è la cosa più forte trovata** (prove 6 e 7): sulle 100 monete più scambiate, comprare quelle
    col funding più basso e vendere quelle col più alto rende sia per il funding incassato (+40% l'anno) sia per il prezzo
    (+15%), in ogni anno dal 2021; ma sulle monete più piccole non si ripete (costi più alti, prezzo contro). È la candidata
-   principale da misurare in paper.
+   principale da misurare in paper. Sulle 18 settimane del 2020 mai guardate (4-5 monete per lato) va al contrario: −0,375% a
+   settimana, funding +0,60%, prezzo −0,81% (`F2_2020.md`).
 8. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
    3.6: Sharpe 6,45 dal 2020, 4,06 dal 2024, negativo nel 2025), e il proprietario non lo vuole: non si prova.
 
