@@ -1,0 +1,1008 @@
+{
+ "trade": 11882,
+ "R": {
+  "n": 11882,
+  "giorni": 1326,
+  "media": 0.010058783218773357,
+  "basso": -0.09210246492023676,
+  "alto": 0.12553964418539534,
+  "p": 0.4373562643735626
+ },
+ "netto": {
+  "n": 11882,
+  "giorni": 1326,
+  "media": -0.0005886774140563451,
+  "basso": -0.004441816026736624,
+  "alto": 0.0035714410233198576,
+  "p": 0.6142385761423858
+ },
+ "netto_doppio": -0.0015001990434116714,
+ "per_anno": {
+  "2021": {
+   "trade": 432,
+   "R": 0.20063807388702568,
+   "netto": 0.01588041593394151
+  },
+  "2022": {
+   "trade": 717,
+   "R": -0.08059997642249252,
+   "netto": -0.00161806140078477
+  },
+  "2023": {
+   "trade": 629,
+   "R": 0.2604268628251245,
+   "netto": 0.007879030408885882
+  },
+  "2024": {
+   "trade": 1420,
+   "R": 0.2210593203049204,
+   "netto": 0.00926354646805798
+  },
+  "2025": {
+   "trade": 5416,
+   "R": -0.0326249237015449,
+   "netto": -0.003987564708182136
+  },
+  "2026": {
+   "trade": 3268,
+   "R": -0.06437672809095048,
+   "netto": -0.0028177326637804892
+  }
+ },
+ "per_moneta": {
+  "1000BONKUSDT": {
+   "trade": 107,
+   "R": 0.1627130447263156
+  },
+  "1000PEPEUSDT": {
+   "trade": 115,
+   "R": 0.1001983511476151
+  },
+  "1000SHIBUSDT": {
+   "trade": 122,
+   "R": -0.10526469461172439
+  },
+  "AAVEUSDT": {
+   "trade": 112,
+   "R": -0.10056847478934973
+  },
+  "ACEUSDT": {
+   "trade": 93,
+   "R": 0.013267608006354901
+  },
+  "ADAUSDT": {
+   "trade": 196,
+   "R": 0.16502105742651618
+  },
+  "AEROUSDT": {
+   "trade": 108,
+   "R": 0.09810444235860111
+  },
+  "ALGOUSDT": {
+   "trade": 105,
+   "R": 0.061623568681510345
+  },
+  "APTUSDT": {
+   "trade": 102,
+   "R": -0.010035211016654047
+  },
+  "ARBUSDT": {
+   "trade": 112,
+   "R": -0.2017619128882052
+  },
+  "ARKUSDT": {
+   "trade": 112,
+   "R": -0.14611010081621156
+  },
+  "ARUSDT": {
+   "trade": 109,
+   "R": 0.1800432248703353
+  },
+  "ATOMUSDT": {
+   "trade": 104,
+   "R": -0.1903796919751343
+  },
+  "AVAUSDT": {
+   "trade": 97,
+   "R": -0.37190872634421984
+  },
+  "AVAXUSDT": {
+   "trade": 201,
+   "R": 0.06806421014526019
+  },
+  "BCHUSDT": {
+   "trade": 197,
+   "R": -0.041483061885051825
+  },
+  "BNBUSDT": {
+   "trade": 212,
+   "R": 0.0765083678483244
+  },
+  "BOMEUSDT": {
+   "trade": 109,
+   "R": -0.12782960412580713
+  },
+  "BTCUSDT": {
+   "trade": 206,
+   "R": 0.24094400033957758
+  },
+  "CAKEUSDT": {
+   "trade": 124,
+   "R": -0.00788593831008872
+  },
+  "CELRUSDT": {
+   "trade": 105,
+   "R": -0.30431869360776737
+  },
+  "COTIUSDT": {
+   "trade": 94,
+   "R": -0.13181722611404942
+  },
+  "CRVUSDT": {
+   "trade": 79,
+   "R": 0.15231969051124794
+  },
+  "CVCUSDT": {
+   "trade": 76,
+   "R": -0.24947901529020725
+  },
+  "DASHUSDT": {
+   "trade": 167,
+   "R": 0.10606190851199107
+  },
+  "DOGEUSDT": {
+   "trade": 212,
+   "R": 0.02877713372127706
+  },
+  "DOTUSDT": {
+   "trade": 178,
+   "R": -0.02389190609647482
+  },
+  "EGLDUSDT": {
+   "trade": 116,
+   "R": -0.16436935199388067
+  },
+  "EIGENUSDT": {
+   "trade": 82,
+   "R": 0.15744226291383015
+  },
+  "ENAUSDT": {
+   "trade": 94,
+   "R": 0.14981338534455674
+  },
+  "ETCUSDT": {
+   "trade": 110,
+   "R": -0.24114320370258713
+  },
+  "ETHFIUSDT": {
+   "trade": 100,
+   "R": -0.1497393292793308
+  },
+  "ETHUSDT": {
+   "trade": 203,
+   "R": 0.04522496451999441
+  },
+  "FARTCOINUSDT": {
+   "trade": 78,
+   "R": 0.006721757400217139
+  },
+  "FETUSDT": {
+   "trade": 106,
+   "R": 0.20250842628657117
+  },
+  "FILUSDT": {
+   "trade": 185,
+   "R": 0.20456480543367123
+  },
+  "GALAUSDT": {
+   "trade": 92,
+   "R": 0.11766281354466393
+  },
+  "GRASSUSDT": {
+   "trade": 92,
+   "R": -0.06060086387051483
+  },
+  "GUSDT": {
+   "trade": 99,
+   "R": -0.11354498025078627
+  },
+  "HBARUSDT": {
+   "trade": 116,
+   "R": 0.08009814487292052
+  },
+  "ICPUSDT": {
+   "trade": 94,
+   "R": -0.1388445380113391
+  },
+  "INJUSDT": {
+   "trade": 102,
+   "R": 0.3553761762972104
+  },
+  "IOSTUSDT": {
+   "trade": 114,
+   "R": -0.2342592885678132
+  },
+  "JTOUSDT": {
+   "trade": 109,
+   "R": -0.07197992970734189
+  },
+  "JUPUSDT": {
+   "trade": 104,
+   "R": 0.012082482245148869
+  },
+  "LDOUSDT": {
+   "trade": 110,
+   "R": -0.0669837931148479
+  },
+  "LINKUSDT": {
+   "trade": 187,
+   "R": -0.19774676211753475
+  },
+  "LITUSDT": {
+   "trade": 52,
+   "R": 0.04176231997597032
+  },
+  "LSKUSDT": {
+   "trade": 106,
+   "R": -0.21107462643530073
+  },
+  "LTCUSDT": {
+   "trade": 199,
+   "R": -0.1816633679077706
+  },
+  "MINAUSDT": {
+   "trade": 105,
+   "R": 0.10520007727748888
+  },
+  "MORPHOUSDT": {
+   "trade": 102,
+   "R": 0.15923841732752336
+  },
+  "MOVRUSDT": {
+   "trade": 104,
+   "R": 0.2895528106911813
+  },
+  "NEARUSDT": {
+   "trade": 163,
+   "R": 0.2853005095354262
+  },
+  "NMRUSDT": {
+   "trade": 102,
+   "R": -0.17894278677219158
+  },
+  "ONDOUSDT": {
+   "trade": 110,
+   "R": -0.12325995225483427
+  },
+  "ONEUSDT": {
+   "trade": 174,
+   "R": -0.04360372615606557
+  },
+  "ONGUSDT": {
+   "trade": 109,
+   "R": -0.12813795448022258
+  },
+  "OPUSDT": {
+   "trade": 108,
+   "R": -0.17403767693562
+  },
+  "ORDIUSDT": {
+   "trade": 105,
+   "R": 0.1690278679171822
+  },
+  "PENDLEUSDT": {
+   "trade": 120,
+   "R": -0.10729277621373218
+  },
+  "PENGUUSDT": {
+   "trade": 82,
+   "R": 0.38727135362010234
+  },
+  "PHAUSDT": {
+   "trade": 89,
+   "R": -0.3861971148811785
+  },
+  "POLUSDT": {
+   "trade": 88,
+   "R": 0.10043127644744389
+  },
+  "PROMUSDT": {
+   "trade": 83,
+   "R": 0.02572671268117003
+  },
+  "PYTHUSDT": {
+   "trade": 99,
+   "R": 0.017631408204573547
+  },
+  "QNTUSDT": {
+   "trade": 129,
+   "R": -0.2309024406684799
+  },
+  "RAREUSDT": {
+   "trade": 92,
+   "R": -0.10304801534809212
+  },
+  "RAYSOLUSDT": {
+   "trade": 96,
+   "R": 0.12658159285586398
+  },
+  "RENDERUSDT": {
+   "trade": 97,
+   "R": -0.09932945955453422
+  },
+  "REZUSDT": {
+   "trade": 105,
+   "R": -0.20857977500825625
+  },
+  "SAGAUSDT": {
+   "trade": 93,
+   "R": 0.10948305431407378
+  },
+  "SANDUSDT": {
+   "trade": 107,
+   "R": 0.11558453468116128
+  },
+  "SEIUSDT": {
+   "trade": 109,
+   "R": -0.07491231592839985
+  },
+  "SOLUSDT": {
+   "trade": 201,
+   "R": 0.07833025428675947
+  },
+  "SPXUSDT": {
+   "trade": 86,
+   "R": 0.00676917893602014
+  },
+  "STEEMUSDT": {
+   "trade": 116,
+   "R": -0.21232628539422055
+  },
+  "STRKUSDT": {
+   "trade": 91,
+   "R": 0.13730842279591027
+  },
+  "STXUSDT": {
+   "trade": 109,
+   "R": 0.05951266527683484
+  },
+  "SUIUSDT": {
+   "trade": 114,
+   "R": 0.0101836405725127
+  },
+  "SUSHIUSDT": {
+   "trade": 100,
+   "R": 0.2552189839965002
+  },
+  "SYNUSDT": {
+   "trade": 101,
+   "R": 0.08423236103578069
+  },
+  "TAOUSDT": {
+   "trade": 86,
+   "R": 0.020911936902429023
+  },
+  "TIAUSDT": {
+   "trade": 98,
+   "R": 0.07926685639060665
+  },
+  "TRUMPUSDT": {
+   "trade": 82,
+   "R": 0.250682424622668
+  },
+  "TRXUSDT": {
+   "trade": 223,
+   "R": -0.05895986748130424
+  },
+  "UNIUSDT": {
+   "trade": 190,
+   "R": -0.08591833444353517
+  },
+  "VETUSDT": {
+   "trade": 116,
+   "R": -0.21927257191079408
+  },
+  "VIRTUALUSDT": {
+   "trade": 93,
+   "R": 0.12451799050146878
+  },
+  "VTHOUSDT": {
+   "trade": 75,
+   "R": -0.24068783620253717
+  },
+  "VVVUSDT": {
+   "trade": 97,
+   "R": 0.17683140532544991
+  },
+  "WIFUSDT": {
+   "trade": 113,
+   "R": -0.10766940747233701
+  },
+  "WLDUSDT": {
+   "trade": 120,
+   "R": 0.28158560293653284
+  },
+  "XLMUSDT": {
+   "trade": 106,
+   "R": 1.5446442935412636
+  },
+  "XMRUSDT": {
+   "trade": 87,
+   "R": -0.19214436741650948
+  },
+  "XRPUSDT": {
+   "trade": 193,
+   "R": 0.08787569881830233
+  },
+  "ZECUSDT": {
+   "trade": 191,
+   "R": 0.07474281432169069
+  },
+  "ZENUSDT": {
+   "trade": 107,
+   "R": -0.059637197499150744
+  },
+  "ZETAUSDT": {
+   "trade": 119,
+   "R": -0.20870103000892504
+  },
+  "ZROUSDT": {
+   "trade": 93,
+   "R": -0.1642919099420293
+  }
+ },
+ "capitale": {
+  "rendimento_totale": 1.195184622054649,
+  "rendimento_annuo": 0.20616369898390682,
+  "sharpe_annuo": 0.07241770601490659,
+  "peggior_discesa": -5.539221526952877,
+  "giorni": 2116,
+  "asimmetria": 13.543418633258225,
+  "curtosi": 319.92026902568796,
+  "rendimento_totale_costi_doppi": -2.1837677008476275
+ },
+ "ultimo_anno": {
+  "trade": 4785,
+  "R": -0.06585602313550303
+ },
+ "pbo": 0.5,
+ "combinazioni": 144,
+ "scelte": [
+  {
+   "trimestre": "2021-01",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2021-04",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2021-07",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2021-10",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 50,
+     "k": 2.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-01",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 3,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 2,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-04",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 3,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 2,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-07",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 50,
+     "k": 2.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2022-10",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "1h",
+    "ingresso": {
+     "limite_k": 0.0,
+     "validita": 1
+    },
+    "ii": 0
+   }
+  },
+  {
+   "trimestre": "2023-01",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 50,
+     "k": 2.0,
+     "filtro": "nessuno"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 2,
+     "max_barre": 0
+    },
+    "iu": 0,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2023-04",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 50,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2023-07",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2023-10",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2024-01",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2024-04",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2024-07",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2024-10",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2025-01",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2025-04",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 2.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "4h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2025-07",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 50,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "1h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2025-10",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "1h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2026-01",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 2,
+     "max_barre": 0
+    },
+    "iu": 0,
+    "tf": "1h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2026-04",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "1h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  },
+  {
+   "trimestre": "2026-07",
+   "combinazione": null
+  },
+  {
+   "trimestre": "2026-10",
+   "combinazione": {
+    "famiglia": "keltner",
+    "segnali": {
+     "n": 20,
+     "k": 3.0,
+     "filtro": "ema200"
+    },
+    "uscita": {
+     "stop_k": 2,
+     "tp_k": 0.0,
+     "trail_k": 3,
+     "max_barre": 0
+    },
+    "iu": 1,
+    "tf": "1h",
+    "ingresso": {
+     "limite_k": 0.5,
+     "validita": 4
+    },
+    "ii": 1
+   }
+  }
+ ]
+}
