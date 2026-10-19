@@ -4185,4 +4185,6 @@ alza la soglia dello Sharpe corretto (oggi serve circa 1,5, `research/programma6
 strategia più vicina del programma 5 (long dopo un crollo di 4 ore, 12 ore) sulle 440 monete mai usate fa +1,77% a trade
 con p 0,007, ma −0,35% nell'ultimo anno e −2,0% quando crolla la moneta da sola: rimbalza il mercato, non la moneta, e il
 guadagno sta in pochi giorni (84 dal 2021, il 56% in 5; il crollo del 10 ottobre 2025 al contrario)
-(`research/programma6/RISULTATI_QUARTA.md`).
+(`research/programma6/RISULTATI_QUARTA.md`). (6) **Quinta prova**: lo short dopo il crollo della sola moneta, sulle 100
+monete grandi, fa −0,27% a trade (p 0,66): la moneta che crolla da sola scende ancora di poco (+0,18% lordo), meno dei
+costi (`research/programma6/RISULTATI_QUINTA.md`).
