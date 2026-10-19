@@ -4216,3 +4216,8 @@ paper (`research/programma6/paper/PAPER.md`) è pronto: posizioni della settiman
 contro tutti non dicono niente (Sharpe 0,06); la crescita dell'interesse aperto, che avevo scritto «contro», va al contrario
 (−30,7% l'anno): la leva nuova che entra in una moneta anticipa il prezzo, come gli acquisti a mercato. Capito: fra le
 monete liquide il denaro che entra spinge, la leva cara (funding alto) rientra.
+**Dodicesima prova** (`research/programma6/DODICESIMA.md`): K1 mette insieme le tre misure (funding basso, acquisti a
+mercato e interesse aperto che crescono): sul passato +37,6% l'anno dal 2022, Sharpe 1,27, ma due versi su tre li ho visti
+prima, quindi è costruzione e la sua prova è solo il paper. F3 e K1 si somigliano poco (correlazione 0,39): metà e metà
+avrebbe fatto Sharpe 1,55 dal 2022 (numero costruito col senno di poi, solo informazione). Il paper misura dal 26 ottobre
+F3, K1, F2, C1 e A1, con le posizioni della settimana in `research/programma6/paper/PAPER.md`.
