@@ -96,14 +96,15 @@ def settimane(pan: dict) -> np.ndarray:
     return lun[(lun >= 1) & (lun + 7 <= len(giorni))]
 
 
-def pannello_settimane(pan: dict, log=print) -> dict:
-    """Per ogni settimana: universo, pesi (mediana del volume), indicatori della domenica, rendimento e funding."""
+def pannello_settimane(pan: dict, log=print, da: int = 0, a: int = N_UNIVERSO, indicatori_si: bool = True) -> dict:
+    """Per ogni settimana: universo (le posizioni ``da``..``a`` per volume), pesi (mediana del volume), indicatori della
+    domenica (se ``indicatori_si``), rendimento e funding."""
     C, O, H, L, V = (pan[k] for k in ("close", "open", "high", "low", "quote_volume"))
     T, S = C.shape
     lun = settimane(pan)
     W = len(lun)
     Z = np.full((W, S, len(NOMI)), np.nan)
-    for j in range(S):
+    for j in range(S if indicatori_si else 0):
         ok = np.flatnonzero(np.isfinite(C[:, j]))
         if len(ok) < STORIA_MIN:
             continue
@@ -127,7 +128,7 @@ def pannello_settimane(pan: dict, log=print) -> dict:
             med = np.nan_to_num(np.nanmedian(fin, axis=0), nan=0.0)
         amm = ok[m - 1] & (m - primo >= STORIA_MIN) & (med >= sc.VOLUME_MIN) & np.isfinite(O[m])
         cand = np.flatnonzero(amm)
-        scelte = cand[np.argsort(-med[cand], kind="stable")][:N_UNIVERSO]
+        scelte = cand[np.argsort(-med[cand], kind="stable")][da:a]
         U[k, scelte] = True
         peso[k] = med
     log(f"[terza] settimane {W}, monete {S}")
