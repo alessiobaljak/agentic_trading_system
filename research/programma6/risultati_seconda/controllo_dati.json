@@ -1,0 +1,2404 @@
+{
+ "simboli": 737,
+ "giorni": 2482,
+ "primo": "2020-01-01",
+ "ultimo": "2026-10-17",
+ "buchi": {
+  "BNXUSDT": 26,
+  "FILUSDT": 5,
+  "FLMUSDT": 5,
+  "FLOWUSDT": 5,
+  "FTMUSDT": 5,
+  "GMTUSDT": 2,
+  "GRTUSDT": 6,
+  "GTCUSDT": 5,
+  "HBARUSDT": 5,
+  "HOTUSDT": 5,
+  "ICPUSDT": 26,
+  "IMXUSDT": 5,
+  "IOTAUSDT": 5,
+  "KNCUSDT": 5,
+  "KSMUSDT": 5,
+  "LINAUSDT": 5,
+  "LITUSDT": 5,
+  "LRCUSDT": 5,
+  "LTCUSDT": 5,
+  "LUNAUSDT": 5,
+  "MANAUSDT": 5,
+  "MASKUSDT": 5,
+  "MKRUSDT": 5,
+  "NEARUSDT": 5,
+  "OCEANUSDT": 5,
+  "OGNUSDT": 5,
+  "OMGUSDT": 5,
+  "ONEUSDT": 5,
+  "PEOPLEUSDT": 5,
+  "RLCUSDT": 5,
+  "ROSEUSDT": 5,
+  "RSRUSDT": 5,
+  "RVNUSDT": 5,
+  "SANDUSDT": 5,
+  "SKLUSDT": 5,
+  "SOLUSDT": 5,
+  "STORJUSDT": 5,
+  "SUSHIUSDT": 5,
+  "TLMUSDT": 29,
+  "TRBUSDT": 5,
+  "TRXUSDT": 5,
+  "UNFIUSDT": 5,
+  "VETUSDT": 5,
+  "WAVESUSDT": 5,
+  "XEMUSDT": 5,
+  "XLMUSDT": 5,
+  "XRPUSDT": 5,
+  "YFIIUSDT": 5,
+  "YFIUSDT": 5,
+  "ZECUSDT": 5,
+  "ZENUSDT": 5,
+  "ZILUSDT": 5
+ },
+ "confronto_con_1_minuto": {
+  "BTCUSDT": {
+   "giorni": 2482,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.13750223156398533,
+    "oltre_0,1%": 5
+   }
+  },
+  "ETHUSDT": {
+   "giorni": 2482,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.03124276523604297,
+    "oltre_0,1%": 4
+   }
+  },
+  "ZECUSDT": {
+   "giorni": 2441,
+   "open": {
+    "max": 0.00019413706076487625,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.03137271294265831,
+    "oltre_0,1%": 4
+   }
+  },
+  "SOLUSDT": {
+   "giorni": 2219,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.02799896576494143,
+    "oltre_0,1%": 4
+   }
+  },
+  "XRPUSDT": {
+   "giorni": 2471,
+   "open": {
+    "max": 0.02949978623343308,
+    "oltre_0,1%": 1
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.007070260715863919,
+    "oltre_0,1%": 1
+   },
+   "close": {
+    "max": 0.045549519431675844,
+    "oltre_0,1%": 2
+   },
+   "quote_volume": {
+    "max": 0.1539165054185785,
+    "oltre_0,1%": 6
+   }
+  },
+  "NEARUSDT": {
+   "giorni": 2188,
+   "open": {
+    "max": 0.00047147571900041374,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.03179777761700475,
+    "oltre_0,1%": 4
+   }
+  },
+  "DOGEUSDT": {
+   "giorni": 2290,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.02722462968454742,
+    "oltre_0,1%": 5
+   }
+  },
+  "UNIUSDT": {
+   "giorni": 2220,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.07115237802628915,
+    "oltre_0,1%": 4
+   }
+  },
+  "BNBUSDT": {
+   "giorni": 2441,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.03807809383873606,
+    "oltre_0,1%": 4
+   }
+  },
+  "SUIUSDT": {
+   "giorni": 1263,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.02521651488213239,
+    "oltre_0,1%": 4
+   }
+  },
+  "LSKUSDT": {
+   "giorni": 996,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.009733552768381282,
+    "oltre_0,1%": 2
+   }
+  },
+  "ENAUSDT": {
+   "giorni": 928,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.014503321009115444,
+    "oltre_0,1%": 2
+   }
+  },
+  "1000PEPEUSDT": {
+   "giorni": 1261,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.027396882040767512,
+    "oltre_0,1%": 4
+   }
+  },
+  "QNTUSDT": {
+   "giorni": 1458,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.5575419771407353,
+    "oltre_0,1%": 5
+   }
+  },
+  "ARBUSDT": {
+   "giorni": 1304,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.018567753451880442,
+    "oltre_0,1%": 4
+   }
+  },
+  "WLDUSDT": {
+   "giorni": 1181,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.06343802745744331,
+    "oltre_0,1%": 4
+   }
+  },
+  "LINKUSDT": {
+   "giorni": 2465,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.03591144570681393,
+    "oltre_0,1%": 4
+   }
+  },
+  "ADAUSDT": {
+   "giorni": 2451,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0252476780674894,
+    "oltre_0,1%": 4
+   }
+  },
+  "TAOUSDT": {
+   "giorni": 919,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.006964451822978113,
+    "oltre_0,1%": 2
+   }
+  },
+  "AVAXUSDT": {
+   "giorni": 2215,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0239719071419201,
+    "oltre_0,1%": 4
+   }
+  },
+  "BCHUSDT": {
+   "giorni": 2482,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.000611995104039087,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0420686865778509,
+    "oltre_0,1%": 4
+   }
+  },
+  "ONDOUSDT": {
+   "giorni": 1001,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0004920049200491938,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.011798438172256676,
+    "oltre_0,1%": 2
+   }
+  },
+  "FILUSDT": {
+   "giorni": 2187,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.01694548379670724,
+    "oltre_0,1%": 4
+   }
+  },
+  "TRUMPUSDT": {
+   "giorni": 637,
+   "open": {
+    "max": 0.00040248810830600945,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.09376306473428231,
+    "oltre_0,1%": 1
+   }
+  },
+  "LTCUSDT": {
+   "giorni": 2468,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.017514747936883457,
+    "oltre_0,1%": 4
+   }
+  },
+  "DASHUSDT": {
+   "giorni": 2447,
+   "open": {
+    "max": 0.000967741935483879,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.02653092413403224,
+    "oltre_0,1%": 3
+   }
+  },
+  "ONEUSDT": {
+   "giorni": 2034,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.031857031162497385,
+    "oltre_0,1%": 4
+   }
+  },
+  "AAVEUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.006584282821028298,
+    "oltre_0,1%": 3
+   }
+  },
+  "LITUSDT": {
+   "giorni": 1142,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008841479456799028,
+    "oltre_0,1%": 3
+   }
+  },
+  "XLMUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005825622032407329,
+    "oltre_0,1%": 3
+   }
+  },
+  "HBARUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.007077567174801569,
+    "oltre_0,1%": 2
+   }
+  },
+  "PENGUUSDT": {
+   "giorni": 669,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.013339022269088563,
+    "oltre_0,1%": 2
+   }
+  },
+  "RAYSOLUSDT": {
+   "giorni": 676,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005776011280143045,
+    "oltre_0,1%": 2
+   }
+  },
+  "IOSTUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.011547156072827969,
+    "oltre_0,1%": 2
+   }
+  },
+  "DOTUSDT": {
+   "giorni": 2247,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.019894074457758038,
+    "oltre_0,1%": 4
+   }
+  },
+  "VVVUSDT": {
+   "giorni": 626,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 2.220446049250313e-16,
+    "oltre_0,1%": 0
+   }
+  },
+  "INJUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.007318328408798758,
+    "oltre_0,1%": 3
+   }
+  },
+  "GUSDT": {
+   "giorni": 793,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.014258012976620549,
+    "oltre_0,1%": 2
+   }
+  },
+  "VTHOUSDT": {
+   "giorni": 633,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008375895125755983,
+    "oltre_0,1%": 1
+   }
+  },
+  "XMRUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005508105642930028,
+    "oltre_0,1%": 3
+   }
+  },
+  "APTUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.01402856758884341,
+    "oltre_0,1%": 3
+   }
+  },
+  "SAGAUSDT": {
+   "giorni": 921,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.00868292501445933,
+    "oltre_0,1%": 2
+   }
+  },
+  "FETUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.01656820012376281,
+    "oltre_0,1%": 3
+   }
+  },
+  "OPUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.006048005009078761,
+    "oltre_0,1%": 3
+   }
+  },
+  "PHAUSDT": {
+   "giorni": 656,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.01002704800931542,
+    "oltre_0,1%": 2
+   }
+  },
+  "ETCUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.05011414949291826,
+    "oltre_0,1%": 3
+   }
+  },
+  "CRVUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0073334008827141695,
+    "oltre_0,1%": 3
+   }
+  },
+  "TRXUSDT": {
+   "giorni": 2462,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.019414770226570233,
+    "oltre_0,1%": 4
+   }
+  },
+  "1000SHIBUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008507654360567107,
+    "oltre_0,1%": 3
+   }
+  },
+  "ETHFIUSDT": {
+   "giorni": 943,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.006529061771678224,
+    "oltre_0,1%": 2
+   }
+  },
+  "ICPUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008850550593344497,
+    "oltre_0,1%": 3
+   }
+  },
+  "TIAUSDT": {
+   "giorni": 1082,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008901442546666694,
+    "oltre_0,1%": 3
+   }
+  },
+  "FARTCOINUSDT": {
+   "giorni": 666,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005768563151981043,
+    "oltre_0,1%": 2
+   }
+  },
+  "ZROUSDT": {
+   "giorni": 849,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005898413502444244,
+    "oltre_0,1%": 2
+   }
+  },
+  "1000BONKUSDT": {
+   "giorni": 1060,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.01239416445096353,
+    "oltre_0,1%": 2
+   }
+  },
+  "SEIUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.00619179252890123,
+    "oltre_0,1%": 3
+   }
+  },
+  "SYNUSDT": {
+   "giorni": 792,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.025761137635471165,
+    "oltre_0,1%": 2
+   }
+  },
+  "ARKUSDT": {
+   "giorni": 1124,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.01065638260993751,
+    "oltre_0,1%": 3
+   }
+  },
+  "ZENUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.013457157984299029,
+    "oltre_0,1%": 3
+   }
+  },
+  "VIRTUALUSDT": {
+   "giorni": 676,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0076117410662066565,
+    "oltre_0,1%": 2
+   }
+  },
+  "JUPUSDT": {
+   "giorni": 990,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008022739081659847,
+    "oltre_0,1%": 2
+   }
+  },
+  "MOVRUSDT": {
+   "giorni": 1026,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.006429733552723471,
+    "oltre_0,1%": 2
+   }
+  },
+  "COTIUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.007515552116366786,
+    "oltre_0,1%": 3
+   }
+  },
+  "WIFUSDT": {
+   "giorni": 1003,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.012857884891600335,
+    "oltre_0,1%": 2
+   }
+  },
+  "ARUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.007975768053865462,
+    "oltre_0,1%": 3
+   }
+  },
+  "AEROUSDT": {
+   "giorni": 682,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005333856063555631,
+    "oltre_0,1%": 2
+   }
+  },
+  "PROMUSDT": {
+   "giorni": 640,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008981104482235436,
+    "oltre_0,1%": 1
+   }
+  },
+  "ACEUSDT": {
+   "giorni": 1034,
+   "open": {
+    "max": 0.007479431563201189,
+    "oltre_0,1%": 1
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.006955871353777177,
+    "oltre_0,1%": 1
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.002727613330462786,
+    "oltre_0,1%": 1
+   }
+  },
+  "ATOMUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005431889386224187,
+    "oltre_0,1%": 3
+   }
+  },
+  "LDOUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0067139877094148925,
+    "oltre_0,1%": 3
+   }
+  },
+  "PENDLEUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.015346960473285653,
+    "oltre_0,1%": 3
+   }
+  },
+  "STRKUSDT": {
+   "giorni": 970,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.007906147805011754,
+    "oltre_0,1%": 2
+   }
+  },
+  "POLUSDT": {
+   "giorni": 764,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.009954652418406873,
+    "oltre_0,1%": 2
+   }
+  },
+  "CAKEUSDT": {
+   "giorni": 1080,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.009946685357232976,
+    "oltre_0,1%": 3
+   }
+  },
+  "ONGUSDT": {
+   "giorni": 1055,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0061259258123795846,
+    "oltre_0,1%": 2
+   }
+  },
+  "JTOUSDT": {
+   "giorni": 1044,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.006211305636082631,
+    "oltre_0,1%": 2
+   }
+  },
+  "RAREUSDT": {
+   "giorni": 793,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.011365088446317229,
+    "oltre_0,1%": 2
+   }
+  },
+  "ALGOUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.01110726133368356,
+    "oltre_0,1%": 3
+   }
+  },
+  "GRASSUSDT": {
+   "giorni": 708,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005267599095215125,
+    "oltre_0,1%": 2
+   }
+  },
+  "CVCUSDT": {
+   "giorni": 1142,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 2.220446049250313e-16,
+    "oltre_0,1%": 0
+   }
+  },
+  "AVAUSDT": {
+   "giorni": 673,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0143428371036034,
+    "oltre_0,1%": 2
+   }
+  },
+  "RENDERUSDT": {
+   "giorni": 813,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0071973764439874355,
+    "oltre_0,1%": 2
+   }
+  },
+  "PYTHUSDT": {
+   "giorni": 1060,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.009295677044419692,
+    "oltre_0,1%": 2
+   }
+  },
+  "REZUSDT": {
+   "giorni": 900,
+   "open": {
+    "max": 0.002667852378835045,
+    "oltre_0,1%": 1
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.003673808606168505,
+    "oltre_0,1%": 1
+   }
+  },
+  "ZETAUSDT": {
+   "giorni": 988,
+   "open": {
+    "max": 0.0005750431282345314,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.010016625649705624,
+    "oltre_0,1%": 2
+   }
+  },
+  "CELRUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.006642066448036665,
+    "oltre_0,1%": 3
+   }
+  },
+  "BOMEUSDT": {
+   "giorni": 945,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.013710930455822057,
+    "oltre_0,1%": 2
+   }
+  },
+  "EGLDUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.007784709801188505,
+    "oltre_0,1%": 3
+   }
+  },
+  "MORPHOUSDT": {
+   "giorni": 689,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.019620896520628373,
+    "oltre_0,1%": 2
+   }
+  },
+  "NMRUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.010169306911600673,
+    "oltre_0,1%": 3
+   }
+  },
+  "EIGENUSDT": {
+   "giorni": 746,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.005860887942173987,
+    "oltre_0,1%": 2
+   }
+  },
+  "MINAUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.00978593901071223,
+    "oltre_0,1%": 3
+   }
+  },
+  "SUSHIUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.006628759078048052,
+    "oltre_0,1%": 3
+   }
+  },
+  "ORDIUSDT": {
+   "giorni": 1075,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.014275719703963796,
+    "oltre_0,1%": 3
+   }
+  },
+  "STXUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.016884788260870254,
+    "oltre_0,1%": 3
+   }
+  },
+  "STEEMUSDT": {
+   "giorni": 1074,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.029410811736989118,
+    "oltre_0,1%": 3
+   }
+  },
+  "GALAUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.010352159309185982,
+    "oltre_0,1%": 3
+   }
+  },
+  "SPXUSDT": {
+   "giorni": 676,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.0058317533990766,
+    "oltre_0,1%": 2
+   }
+  },
+  "SANDUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008298286705526348,
+    "oltre_0,1%": 3
+   }
+  },
+  "VETUSDT": {
+   "giorni": 1143,
+   "open": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "high": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "low": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "close": {
+    "max": 0.0,
+    "oltre_0,1%": 0
+   },
+   "quote_volume": {
+    "max": 0.008523142632153258,
+    "oltre_0,1%": 3
+   }
+  }
+ },
+ "peggiori_chiusure": [
+  [
+   0.045549519431675844,
+   "XRPUSDT"
+  ],
+  [
+   0.0,
+   "ZROUSDT"
+  ],
+  [
+   0.0,
+   "ZETAUSDT"
+  ],
+  [
+   0.0,
+   "ZENUSDT"
+  ],
+  [
+   0.0,
+   "ZECUSDT"
+  ],
+  [
+   0.0,
+   "XMRUSDT"
+  ],
+  [
+   0.0,
+   "XLMUSDT"
+  ],
+  [
+   0.0,
+   "WLDUSDT"
+  ],
+  [
+   0.0,
+   "WIFUSDT"
+  ],
+  [
+   0.0,
+   "VVVUSDT"
+  ]
+ ]
+}
