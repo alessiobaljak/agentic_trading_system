@@ -4212,3 +4212,7 @@ Prova a placebo di F3 (`research/programma6/F3_caso.md`, attesa scritta prima): 
 caso fra le monete, lo stesso portafoglio fa Sharpe −0,37 in media e al massimo 0,64 su 200 ripetizioni; F3 fa 1,30. Il
 risultato viene dal funding, non dalla costruzione. Decima prova (il funding dentro CTREND): non aiuta (Sharpe 0,43). Il
 paper (`research/programma6/paper/PAPER.md`) è pronto: posizioni della settimana dal 19 ottobre, la misura conta dal 26.
+**Undicesima prova** (`research/programma6/UNDICESIMA.md`, regole scritte prima dei dati): le posizioni dei conti grandi
+contro tutti non dicono niente (Sharpe 0,06); la crescita dell'interesse aperto, che avevo scritto «contro», va al contrario
+(−30,7% l'anno): la leva nuova che entra in una moneta anticipa il prezzo, come gli acquisti a mercato. Capito: fra le
+monete liquide il denaro che entra spinge, la leva cara (funding alto) rientra.

@@ -18,6 +18,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 8 | F3: il funding fra monete con i pesi inversamente proporzionali alla volatilità dei 30 giorni prima; esame sulle 100 più scambiate e conferma sulle 101-200 | `OTTAVA.md` | `RISULTATI_OTTAVA.md` | 1 | **la più forte di tutto il lavoro sulle 100 monete**: +50,6% l'anno, Sharpe 1,28, positiva in tutti gli anni 2021-2026 e nelle 18 settimane del 2020, funding +31,6% e prezzo +26,7%; non valida: Sharpe corretto 0,76 (27 prove) e sulle 101-200 Sharpe 0,13 (spese 19% l'anno) |
 | 9 | G1 (quota di acquisti a mercato dei 7 giorni) e G2 (salto giornaliero più alto dei 30 giorni) fra monete, long il meno affollato | `NONA.md` | `RISULTATI_NONA.md` | 2 | non valide: G1 −47,8% l'anno (Sharpe −1,17, 0 anni su 6: il verso è il contrario, chi ha molti acquisti aggressivi continua a salire); G2 Sharpe 0,18. Il rovescio di G1, solo descrittivo: +30,3% sulle 100 grandi, −15,9% sulle 101-200 |
 | 10 | C4: CTREND con 30 indicatori (i 28 più il funding e gli acquisti a mercato dei 7 giorni), verso e peso stimati dalla regressione | `DECIMA.md` | `RISULTATI_DECIMA.md` | 1 | non valida: Sharpe 0,43 (C1 0,39), −68% nel 2024; la rete elastica tiene funding e acquisti in 119 e 183 settimane su 216 ma i 28 indicatori di tendenza dominano |
+| 11 | Le posizioni (dati metrics, dal 2022): P1 grandi contro piccoli (si seguono i conti grandi), P2 crescita dell'interesse aperto in 7 giorni (si va contro) | `UNDICESIMA.md` | `RISULTATI_UNDICESIMA.md` | 2 | non valide: P1 +1,5% l'anno, Sharpe 0,06; P2 −30,7% l'anno, Sharpe −0,94: la leva che entra **continua** (verso opposto a quello scritto) |
 
 ## Cosa abbiamo imparato (con la fonte)
 
@@ -48,7 +49,10 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 8. **Gli acquisti aggressivi fra monete dicono il contrario del funding** (prova 9): le monete con molti acquisti a mercato
    continuano a salire rispetto alle altre (il rovescio della regola scritta fa +30,3% l'anno sulle 100 grandi, descrittivo);
    il funding alto invece rientra. Anche qui solo fra le monete liquide.
-9. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
+9. **Il denaro che entra anticipa, la leva cara rientra** (prove 9 e 11): gli acquisti a mercato e la crescita
+   dell'interesse aperto fra monete vanno nel verso della moneta (chi ne ha di più sale di più), il funding alto va contro.
+   I due versi «di continuazione» li ho visti dopo il calcolo: valgono solo come ipotesi da provare sui dati nuovi.
+10. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
    3.6: Sharpe 6,45 dal 2020, 4,06 dal 2024, negativo nel 2025), e il proprietario non lo vuole: non si prova.
 
 ## Dati (fuori da git, con le impronte nel repository)
