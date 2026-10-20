@@ -233,3 +233,22 @@ def test_diciannovesima_settimane_pari():
     S7 = np.array([np.arange(10, dtype=float), np.r_[np.zeros(9), 1.0]])
     U = np.ones((2, 10), bool)
     assert dn.settimane_pari(S7, U).tolist() == [False, True]
+
+
+def test_ventesima_quota_a_pronti():
+    from research.programma6 import ventesima as ve
+    T = 20
+    spot = np.full((T, 2), 1.0)
+    perp = np.full((T, 2), 3.0)
+    spot[:10, 1] = np.nan                         # coppia a pronti dal giorno 10
+    q = ve.quota(spot, perp, np.array([7, 14]), 7, 5)
+    assert q[0, 0] == pytest.approx(0.25) and q[1, 0] == pytest.approx(0.25)
+    assert np.isnan(q[0, 1])                      # nessun giorno con tutti e due
+    assert np.isnan(q[1, 1])                      # giorni 10-13: solo 4, meno di 5
+
+
+def test_scarico_spot_nomi():
+    from research.programma6 import scarico_spot as ss
+    assert ss.nomi_a_pronti("1000PEPEUSDT") == ["1000PEPEUSDT", "PEPEUSDT"]
+    assert ss.nomi_a_pronti("1MBABYDOGEUSDT") == ["1MBABYDOGEUSDT", "BABYDOGEUSDT"]
+    assert ss.nomi_a_pronti("BTCUSDT") == ["BTCUSDT"]
