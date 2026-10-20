@@ -118,3 +118,9 @@ più bassa e non passerebbe: per questo la prova vera è qui.
 **Nota del 20 ottobre, sera (prova 27, `VENTISETTESIMA.md`).** La conferma di E4 su Gate.io non c'è: come scritta −4,24% a
 evento (p 0,67), ma la prova era guastata dai cambi d'intervallo fatti da Gate.io in blocco; senza quelli (calcolo fatto
 dopo, descrittivo) +6,00% a evento, 75% vinti, p 0,096. E4 resta nel paper con le sue regole: è il paper che decide.
+
+## 10. K2 e F5 + M7 + K2 come informazione (20 ottobre 2026, sera, prima della prima settimana misurata)
+
+La ventottesima prova (`research/programma6/VENTOTTESIMA.md`) dà dal 2022: K2 (K1 con la banda, **costruzione** come K1)
+Sharpe 1,72 contro 1,25 di K1; F5 + M7 + K2 a rischio uguale Sharpe 2,11, volatilità 20,5%, ogni anno positivo; Sharpe
+corretti 0,47 e 0,76 con 52 prove. Come scritto nella sezione 4 di quelle regole, entrano nel paper **come informazione**.

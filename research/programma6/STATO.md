@@ -35,6 +35,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 25 | M7 (M6 con la banda) e F5 + M7 a rischio uguale | `VENTICINQUESIMA.md` | `RISULTATI_VENTICINQUESIMA.md` | 2 | non valide (corretti 0,20 e 0,65 con 50 prove): M7 Sharpe 1,25 (M6 1,08), F5 + M7 1,83, volatilità 24%, ogni anno 2022-2026 positivo. Nel paper come informazione |
 | 26 | Il funding che tocca il tetto (Binance accorcia l'intervallo del funding): E3 long con funding negativo, E4 short con funding positivo, 7 giorni contro il Bitcoin | `VENTISEIESIMA.md` | `RISULTATI_VENTISEIESIMA.md` | 2 a eventi | **E4 passa l'esame scritto**: +11,67% a evento (62 eventi su 61 monete), 79% vinti, senza i 5 migliori +7,5%, ogni anno positivo, p 0,0047 (soglia 0,005 per la coppia; 0,0025 contando le 4 prove a eventi: allora no). E3 no (p 0,0166, dipende dalle code). E4 nel paper |
 | 27 | Conferma di E4 su Gate.io (eventi senza un passaggio di Binance sulla stessa moneta nei 7 giorni) | `VENTISETTESIMA.md` | `RISULTATI_VENTISETTESIMA.md` | 1 di conferma | **non confermata**: come scritta −4,24% a evento su 456, p 0,67, ma 289 eventi sono cambi in blocco di Gate.io; senza quei giorni (descrittivo, dopo) 114 eventi, +6,00%, 75% vinti, p 0,096. Né conferma né smentita |
+| 28 | K2 (K1 con la banda, costruzione) e F5 + M7 + K2 a rischio uguale | `VENTOTTESIMA.md` | `RISULTATI_VENTOTTESIMA.md` | 2 | non valide (corretti 0,47 e 0,76 con 52 prove): K2 Sharpe 1,72 (K1 1,25), le tre insieme 2,11 con volatilità 20,5%, ogni anno 2022-2026 positivo. Nel paper come informazione |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -118,7 +119,8 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    40%) le posizioni restano finché il funding è ancora alto o basso: giro da 2,12 a 1,35 a settimana, spese dal 7,7% al
    4,9% l'anno, più monete per lato (25 invece di 20), volatilità dal 40% al 30%, e il prezzo rende di più (+37,6% invece
    di circa +27%). Sharpe da 1,28 a 1,93. Il segnale era buono; lo si eseguiva male. La banda aiuta anche il modello (prova 25: da
-   1,08 a 1,25) e insieme le due fanno 1,83 con volatilità del 24%.
+   1,08 a 1,25) e insieme le due fanno 1,83 con volatilità del 24%. Anche K1 (prova 28: da 1,25 a 1,72); le tre insieme fanno
+   2,11 con volatilità del 20,5%.
    Controlli su F5 (`robustezza_F2.md`, ultima sezione): costi tripli 1,60, prime 50 monete 1,28, dalla 51ª alla 100ª
    0,99, senza le cinque monete più pesanti 1,64, cambio il giovedì 1,71; i due lati da soli 0,54 e 0,19.
 20. **Quando i long sono così affollati che il funding tocca il tetto, la moneta scende** (prova 26, E4): dopo il

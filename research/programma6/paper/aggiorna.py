@@ -128,6 +128,11 @@ def f2_e_c1(pan: dict) -> dict:
     from research.programma6 import undicesima as un
     pm = un.pannello_metrics(pan)
     out["K1"] = do.portafoglio_k1(pan, ps, pm, costo)
+    # K2 (VENTOTTESIMA.md, costruzione, solo informazione): il segnale di K1 con la banda di F5
+    dk2 = te.conto(vq.pesi_banda(np.where(np.isfinite(sig5), do.segnale_k1(pan, ps, pm), np.nan), ps["U"], sig5),
+                   ps["R"], ps["F"], costo)
+    dk2.index = ps["lunedi"]
+    out["K2"] = dk2
     # M1: il modello ad alberi della quattordicesima prova, con la stessa cadenza di riallenamento
     from research.programma6 import quattordicesima as q
     X, _, Y = q.tabella_settimanale(pan, ps, ps["U"])
@@ -229,7 +234,7 @@ def esegui(log=print) -> dict:
     w = f2_e_c1(pan)
     da, a1_adesso = a1(pan)
     res = {"dati_fino_al": ultimo, "funding_stimato_dal": min(stimati.values()) if stimati else None, "candidate": {}}
-    for nome in ("F3", "F5", "K1", "M1", "M6", "M7", "F2", "C1"):
+    for nome in ("F3", "F5", "K1", "K2", "M1", "M6", "M7", "F2", "C1"):
         d = w[nome]
         d = d[d.index >= INIZIO_SETTIMANE]
         res["candidate"][nome] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
@@ -251,6 +256,11 @@ def esegui(log=print) -> dict:
     f57 = f57[f57.index >= INIZIO_SETTIMANE]
     res["candidate"]["F5 + M7 a rischio uguale (informazione)"] = {
         "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in f57.items()}, **_riassunto(f57, 52)}
+    # F5 + M7 + K2 a rischio uguale (VENTOTTESIMA.md, costruzione, solo informazione)
+    f572 = qd.combina({"F5": w["F5"], "M7": w["M7"], "K2": w["K2"]})["netto"]
+    f572 = f572[f572.index >= INIZIO_SETTIMANE]
+    res["candidate"]["F5 + M7 + K2 a rischio uguale (informazione)"] = {
+        "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in f572.items()}, **_riassunto(f572, 52)}
     # E4 (VENTISEIESIMA.md, REGOLE.md sezione 9): gli eventi del periodo P, dai file mensili del funding
     from research.programma6 import ventiseiesima as vs
     e4 = vs.tabella(pan, [x for x in vs.eventi(pan) if x[1] >= INIZIO_E4_MS], -1)

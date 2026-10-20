@@ -4298,3 +4298,7 @@ su centinaia di contratti in due giorni; senza quei giorni (calcolo fatto dopo, 
 mediana +7,9%, 75% vinti, p 0,096. Il primo calcolo aveva un errore di lettura (secondi di scarto nelle ore, cambio di
 scala di un contratto), trovato e corretto prima di registrare. Capito: E4 non è smentita ma nemmeno confermata; un evento
 «di mercato» va separato dalle decisioni amministrative dell'exchange; il paper resta l'unico giudice.
+**Ventottesima prova** (`VENTOTTESIMA.md`): la banda anche su K1 (K2: Sharpe 1,72 contro 1,25, spese dal 10% al 6,8%) e le
+tre strategie insieme a rischio uguale (F5 + M7 + K2): Sharpe 2,11 dal 2022, volatilità 20,5%, ogni anno positivo; Sharpe
+corretto 0,76 con 52 prove. K2 è una costruzione: nel paper come informazione. Capito: la banda migliora ogni segnale
+settimanale che abbiamo; tre vantaggi poco legati fra loro insieme oscillano molto meno di ognuno da solo.
