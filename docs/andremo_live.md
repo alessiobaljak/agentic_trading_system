@@ -4261,4 +4261,8 @@ grandi: −18,5% e −22,3% l'anno. Capito: la moneta nuova tipica scende (media
 settimane-moneta fa più del +50% (COAI +2627% in una settimana): la coda verso l'alto è il rischio vero dello short sulle
 nuove. **Controllo dei dati**: le monete tolte dal listino restano nei file con il prezzo fermo e il volume zero, e il
 funding di quei giorni era riempito con la media di prima (58.403 giorni-moneta); su F3 e K1 pesa poco (Sharpe 1,296 → 1,295
-e 1,269 → 1,262, `research/programma6/controllo_zombi.json`), da qui in avanti è corretto.
+e 1,269 → 1,262, `research/programma6/controllo_zombi.json`), **ma M1 scende da 1,35 a 0,79** cambiando appena 41
+settimane-moneta su 29.180. Capito: il modello ad alberi è fragile, il suo 1,35 non è un numero di cui fidarsi; F3 invece
+regge. **Diciannovesima prova** (`DICIANNOVESIMA.md`): il premio del perpetuo sullo spot al posto del funding fa Sharpe 1,25,
+positivo in tutti e 6 gli anni, correlazione 0,83 con F3: lo stesso vantaggio misurato in un altro modo, quindi una conferma
+che F3 viene dal prezzo pagato da chi sta long con la leva, non un dettaglio del calcolo.

@@ -1,0 +1,42 @@
+{
+ "giorni_fermi": 58403,
+ "giorni_fermi_con_funding": 57865,
+ "ultimo_giorno": "2026-10-18",
+ "celle_tolte": 41,
+ "F3": {
+  "prima": {
+   "sharpe": 1.295749721828251,
+   "annuo": 0.5126217346771669,
+   "settimane": 302
+  },
+  "dopo": {
+   "sharpe": 1.2954090653375177,
+   "annuo": 0.5138142335262573,
+   "settimane": 302
+  }
+ },
+ "K1": {
+  "prima": {
+   "sharpe": 1.268864137876437,
+   "annuo": 0.37562330676229283,
+   "settimane": 250
+  },
+  "dopo": {
+   "sharpe": 1.2622304488657035,
+   "annuo": 0.372901704163176,
+   "settimane": 250
+  }
+ },
+ "M1": {
+  "prima": {
+   "sharpe": 1.3478825160877186,
+   "annuo": 0.5088754705393755,
+   "settimane": 250
+  },
+  "dopo": {
+   "sharpe": 0.7939571404169212,
+   "annuo": 0.3261506449807313,
+   "settimane": 250
+  }
+ }
+}

@@ -55,7 +55,8 @@ allora (prova 2); petrolio e azioni nate dal 2026-04 quasi entrati nel paper (`S
 prima della fine dello scarico (`UNDICESIMA.md`, nota); la fuga di informazione dei dati sulle posizioni sulle monete
 101-200 (`RISULTATI_QUATTORDICESIMA.md`, correzione); le monete tolte dal listino restano nei file con il prezzo fermo e il volume zero, e
 il loro funding era riempito con la media dei 90 giorni prima (58.403 giorni-moneta; 42 settimane-moneta nell'universo
-delle 100): corretto dalla diciottesima prova, misura dell'effetto su F3, K1, M1 in `programma6/controllo_zombi.json`.
+delle 100): corretto dalla diciottesima prova; effetto (`programma6/controllo_zombi.json`): F3 1,296 → 1,295, K1 1,269 →
+1,262, **M1 1,35 → 0,79** (il modello ad alberi è fragile).
 
 ## 2. Il paper (dal 20 ottobre 2026 per i giorni, dal 26 ottobre per le settimane)
 

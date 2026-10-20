@@ -84,7 +84,9 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    verso l'alto è il rischio, non il caso raro.
 14. **Le monete tolte dal listino restano nei file dell'archivio con il prezzo fermo e il volume zero** (controllo del 20
    ottobre, `controllo_zombi.json`): 58.403 giorni-moneta, il funding riempito con la media di prima. Sulle candidate pesa
-   poco (F3 Sharpe 1,296 → 1,295, K1 1,269 → 1,262); da qui in avanti è corretto.
+   poco su F3 e K1 (Sharpe 1,296 → 1,295 e 1,269 → 1,262) ma **molto su M1: 1,35 → 0,79** con solo 41 settimane-moneta
+   tolte dall'universo su 29.180: il modello ad alberi è fragile (piccoli cambi nei dati, grandi cambi nel risultato).
+   Da qui in avanti i dati sono corretti; quanto M1 cambia con il seme è in `semi_M1.json`.
 15. **Il vantaggio del funding non dipende da come lo si misura** (prova 19): con il premio del perpetuo sullo spot, che
    non ha il blocco a 0,01%, lo stesso portafoglio fa Sharpe 1,25 e guadagna in tutti e 6 gli anni; correlazione 0,83 con F3.
    È una conferma che il vantaggio è il prezzo pagato da chi sta long con la leva, non un dettaglio del calcolo del funding;
