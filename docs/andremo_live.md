@@ -4225,3 +4225,12 @@ F3, K1, F2, C1 e A1, con le posizioni della settimana in `research/programma6/pa
 Bitcoin non funziona (Sharpe 0,47 contro 0,56 del Bitcoin comprato e tenuto). Capito: il funding dice chi è affollato
 rispetto agli altri, non quando il mercato intero salirà. Esecuzione (`ESECUZIONE.md`): il cambio del lunedì di F3 con un
 ordine limite all'apertura è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,3% l'anno.
+
+### 20 ottobre: il paper del programma 6 in dashboard, senza timer sulla macchina
+
+Il proprietario: «perché serve un timer sulla vps per la dashboard?». Non serve: la dashboard legge solo Firebase, e su
+GitHub gira già ogni 2 ore lo snapshot (`.github/workflows/snapshot.yml`) con le credenziali di Firebase. Gli ho aggiunto un
+passo, `scripts/pubblica_paper6.py`, che prende `research/programma6/paper/paper.json` (calcolato ogni mattina dalla
+ricerca) e lo scrive in RTDB `/paper6` e in Firestore `dashboard/paper6`; la dashboard lo mostra nella scheda Controllo
+(«Strategie nuove in paper», `dashboard/app/components/Paper6.tsx`). Il bot non cambia. Tolta dal backlog la voce sul
+servizio con il timer.

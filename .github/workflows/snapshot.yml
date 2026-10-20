@@ -9,7 +9,8 @@ on:
   workflow_dispatch: {}
   push:
     branches: ["claude/brave-albattani-1b12fv"]
-    paths: ["scripts/state_snapshot.py", ".github/workflows/snapshot.yml"]
+    paths: ["scripts/state_snapshot.py", ".github/workflows/snapshot.yml",
+            "scripts/pubblica_paper6.py", "research/programma6/paper/paper.json"]
 
 permissions:
   contents: write
@@ -35,6 +36,13 @@ jobs:
         # §3.8). Scrive dashboard/controllo con generato_da=github SOLO se quello
         # del bot manca o ha piu' di 90 minuti: il bot resta la fonte.
         run: python -m scripts.state_snapshot --publish-controllo
+      - name: Publish programma 6 paper
+        # il paper del programma 6 (research/programma6/paper/paper.json) su RTDB /paper6 e Firestore
+        # dashboard/paper6: lo calcola ogni mattina la ricerca, qui si pubblica soltanto (scripts/pubblica_paper6.py)
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_RTDB_URL: ${{ secrets.FIREBASE_RTDB_URL }}
+        run: python -m scripts.pubblica_paper6 || echo "[paper6] pubblicazione saltata"
       - name: Commit snapshot if changed
         run: |
           git config user.name "github-actions"

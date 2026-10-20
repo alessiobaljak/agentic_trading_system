@@ -8,6 +8,7 @@ import { useGateDoc } from '../lib/gate';
 import { durata } from '../lib/viz';
 
 import BacklogSi from './BacklogSi';
+import Paper6 from './Paper6';
 import ReportGiornaliero from './ReportGiornaliero';
 import BotStatus from './BotStatus';
 import ControlloAnomalie from './ControlloAnomalie';
@@ -176,6 +177,7 @@ function ControlloTab() {
       <BotStatus />
       <ControlloAnomalie />
       <BacklogSi />
+      <Paper6 />
       {stato !== 'assente' && doc && (
         <>
           <ControlloPaper />
