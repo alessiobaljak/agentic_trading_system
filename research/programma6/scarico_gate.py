@@ -59,7 +59,7 @@ def scarica(chiave: str) -> tuple:
     ok = f.with_name(f.name + ".sha256")
     if f.exists() and ok.exists():
         return f.name, ok.read_text().strip()
-    dati = _prendi(BASE + chiave)
+    dati = _prendi(BASE + urllib.parse.quote(chiave))      # alcuni nomi non sono ASCII
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_bytes(dati)
     h = hashlib.sha256(dati).hexdigest()
