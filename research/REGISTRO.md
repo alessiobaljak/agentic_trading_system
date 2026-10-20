@@ -109,8 +109,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    short le giovani ma con l'uscita se il prezzo sale del 30% dall'ingresso, con le candele a 1 ora. Sui dati del passato il
    risultato è già in parte noto (senza le code la media è −1,6% a settimana), quindi conta solo sui dati nuovi o su un
    altro exchange (le monete quotate solo su Bybit).
-8. **Un modello solo, ma provato su più semi e più modelli dello stesso tipo** (dalla prova 17): quanto del 1,35 di M1 è
-   fortuna della scelta? Descrittivo, non conta: gli alberi di M1 con 5 semi diversi.
+8. ~~M1 con più semi~~ → fatto (`programma6/semi_M1.json`, descrittivo): sei semi danno Sharpe da 0,79 a 1,43, media 1,10.
 9. **Il funding che tocca il tetto**: quando Binance accorcia l'intervallo del funding di una moneta (da 8 a 4 o 1 ora) è
    perché il funding ha toccato il limite. Nei file ci sono 436 passaggi su 314 monete, ma 362 sono del 2025-2026 (1 nel
    2021, 4 nel 2022, 45 nel 2023, 24 nel 2024): troppo pochi anni per una prova fra monete; forse come evento.

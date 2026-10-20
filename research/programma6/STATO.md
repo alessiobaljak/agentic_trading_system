@@ -105,8 +105,9 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    nuove, monete sotto etichetta, monete che stanno per essere tolte dal listino scendono quasi sempre (due terzi delle volte),
    ma poche esplodono verso l'alto (COAI +2627%, ALPACA +1796%, DEGO +295% in una settimana) e si mangiano tutto. Un'idea
    short sulle piccole va provata solo con un'uscita di protezione e con le candele a 1 ora.
-18. **M1 dipende dal seme** (`semi_M1.json`): stesso modello, stessi dati, seme diverso: Sharpe 1,35 (il seme della prova),
-   0,79, 0,93. Il numero della prova era il caso fortunato; il valore atteso è più basso.
+18. **M1 dipende dal seme** (`semi_M1.json`): stesso modello, stessi dati, sei semi: Sharpe 1,35 (il seme della prova),
+   0,79, 0,93, 1,12, 1,00, 1,43; media 1,10. Il numero della prova stava sopra la media: il valore atteso è circa 1,1 sui
+   dati di prima, e con i dati corretti il seme della prova fa 0,79.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
