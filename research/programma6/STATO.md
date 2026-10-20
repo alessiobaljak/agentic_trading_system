@@ -27,6 +27,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 17 | Sei modelli in gara (alberi, alberi bassi, foresta, alberi casuali, lineare, rete neurale), scelti ogni 4 settimane sulle 12 settimane tenute da parte (M4) o mediati (M5) | `DICIASSETTESIMA.md` | `RISULTATI_DICIASSETTESIMA.md` | 2 | non valide: M4 Sharpe 0,71 (+30,1% l'anno, 2024 −14,5%), M5 0,95 (+37,7%); scelti foresta 23 volte, alberi casuali 17, lineare 9, alberi bassi 8, gli alberi di M1 4, la rete 2 |
 | 18 | Le monete appena quotate: short quelle di 7-60 giorni (N1) o 7-180 (N2), long le 100 grandi | `DICIOTTESIMA.md` | `RISULTATI_DICIOTTESIMA.md` | 2 | non valide: N1 −18,5% l'anno, N2 −22,3%; la tipica scende (mediana −3,6% a settimana) ma poche esplodono (COAI +2627% in una settimana) |
 | 19 | Il premio del perpetuo sullo spot (media delle 168 ore prima) fra monete: P1 da solo, P2 con il funding | `DICIANNOVESIMA.md` | `RISULTATI_DICIANNOVESIMA.md` | 2 | non valide (corretto 0,33 e 0,31 con 44 prove): P1 Sharpe 1,25, +49,6% l'anno, 6 anni su 6; correlazione con F3 0,83: lo stesso vantaggio misurato con il premio invece del funding; non migliora F3 nemmeno nelle settimane dei pari |
+| 20 | La quota del volume a pronti sul totale: S1 il livello (long la più alta), S2 il cambio dei 7 giorni sui 90 (long la salita) | `VENTESIMA.md` | `RISULTATI_VENTESIMA.md` | 2 | non valide: S1 Sharpe 0,59, 3 anni su 6; S2 −0,82 (verso opposto: quando sale la quota del perpetuo la moneta continua) |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -91,6 +92,11 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    non ha il blocco a 0,01%, lo stesso portafoglio fa Sharpe 1,25 e guadagna in tutti e 6 gli anni; correlazione 0,83 con F3.
    È una conferma che il vantaggio è il prezzo pagato da chi sta long con la leva, non un dettaglio del calcolo del funding;
    non è una strategia in più.
+16. **La leva che entra in una moneta continua per una settimana: visto tre volte, in tre dati diversi** (prove 9, 11,
+   20): gli acquisti a mercato, la crescita dell'interesse aperto e la quota del perpetuo che sale (contro il volume a
+   pronti) vanno tutti nel verso della moneta, al contrario delle regole scritte. Visto dopo il calcolo ogni volta, quindi
+   non è una prova; K1 (nel paper) usa le prime due. Il funding alto invece va contro (F3): chi entra con la leva spinge il
+   prezzo, chi paga troppo per restarci perde.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
