@@ -1,12 +1,12 @@
 # Stato sistema (snapshot)
-_Generato: 2026-10-20 06:08 UTC_
+_Generato: 2026-10-20 06:09 UTC_
 
 ## Bot
 - stato: **running** (🟢 online)
 - regime: sideways
 - DRY_RUN: True
 - equity: **$815.54**
-- ultimo heartbeat: 2026-10-20 06:08 UTC
+- ultimo heartbeat: 2026-10-20 06:09 UTC
 - stream prezzi: 🟢 attivo
 
 ## Ultima decisione
@@ -15,10 +15,10 @@ _Generato: 2026-10-20 06:08 UTC_
 - asset valutati: 80 · segnali: 2 · miglior segnale QUSDT gen_f1e7ff62 (conf. 60.0/soglia 30)
 
 ## Posizioni aperte
-- AINUSDT: long qty=2270.6710109365413 @ 0.03588 uPnL=0.3648193979500989 · rischio 0.35% · leva 1.0x
-- EIGENUSDT: short qty=335.7235651014626 @ 0.2424 uPnL=1.2248627364928548 · rischio 0.22% · leva 1.0x
-- JTOUSDT: long qty=176.90666117335357 @ 0.4609 uPnL=-1.0236226513880842 · rischio 0.36% · leva 1.0x
-- TRUMPUSDT: short qty=48.278919320459295 @ 1.688 uPnL=-0.28485989193104577 · rischio 0.23% · leva 1.0x
+- AINUSDT: long qty=2270.6710109365413 @ 0.03588 uPnL=0.46360900936980026 · rischio 0.35% · leva 1.0x
+- EIGENUSDT: short qty=335.7235651014626 @ 0.2424 uPnL=1.2092653551856598 · rischio 0.22% · leva 1.0x
+- JTOUSDT: long qty=176.90666117335357 @ 0.4609 uPnL=-1.0590129120093157 · rischio 0.36% · leva 1.0x
+- TRUMPUSDT: short qty=48.278919320459295 @ 1.688 uPnL=-0.32571809885760417 · rischio 0.23% · leva 1.0x
 - **rischio aperto totale: 1.16%** dell'equity su 4 posizioni
 
 ## GATE 1 — Validazione strategie
@@ -297,13 +297,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| total_return | 1207 | 91.4% |
-| holdout | 1 | 0.1% |
-| trades | 6 | 0.5% |
-| pf_ex_top | 3 | 0.2% |
-| recovery | 64 | 4.8% |
 | regime | 22 | 1.7% |
 | consistency | 17 | 1.3% |
+| total_return | 1207 | 91.4% |
+| pf_ex_top | 3 | 0.2% |
+| trades | 6 | 0.5% |
+| holdout | 1 | 0.1% |
+| recovery | 64 | 4.8% |
 
 - quasi-passaggi (un solo criterio, di poco): **1** — sono i semi delle mutazioni del run successivo
 
@@ -311,13 +311,13 @@ _Nessuna coppia ha passato in questo run._
 
 | Criterio che ferma | Casi | Quota |
 |---|---|---|
-| consistency | 589 | 1.7% |
-| holdout | 153 | 0.5% |
-| trades | 936 | 2.8% |
-| pf_ex_top | 242 | 0.7% |
-| recovery | 2737 | 8.1% |
 | total_return | 26463 | 78.0% |
 | regime | 2815 | 8.3% |
+| consistency | 589 | 1.7% |
+| pf_ex_top | 242 | 0.7% |
+| trades | 936 | 2.8% |
+| holdout | 153 | 0.5% |
+| recovery | 2737 | 8.1% |
 
 - quasi-passaggi (un solo criterio, di poco): **40** — sono i semi delle mutazioni del run successivo
 
@@ -375,26 +375,26 @@ _il gate promette sulla storia, il paper misura il presente. `drift` = promessa 
 
 | Coppia | Verdetto | Trade | PF vissuto/atteso | Motivo |
 |---|---|---|---|---|
-| SYRUPUSDT|gen_4c6df481 | drift | 11 | 1.044 / 1.544 | mfe mediana 0.81R < primo TP 2.00R |
 | TAUSDT|gen_01fbe76f | drift | 11 | 0.436 / 1.711 | PF 0.44 vs 1.71 atteso · mfe mediana 0.80R < primo TP 1.50R |
+| SYRUPUSDT|gen_4c6df481 | drift | 11 | 1.044 / 1.544 | mfe mediana 0.81R < primo TP 2.00R |
 | PTBUSDT|gen_684d7623 | drift | 11 | 0.987 / 1.871 | PF 0.99 vs 1.87 atteso · mfe mediana 0.53R < primo TP 1.00R |
-| USELESSUSDT|gen_e09c5203 | drift | 9 | 0.628 / 1.636 | PF 0.63 vs 1.64 atteso · mfe mediana 0.48R < primo TP 2.00R |
 | MYXUSDT|gen_8931b93c | drift | 9 | 0.26 / 1.583 | PF 0.26 vs 1.58 atteso · mfe mediana 0.24R < primo TP 1.50R |
+| USELESSUSDT|gen_e09c5203 | drift | 9 | 0.628 / 1.636 | PF 0.63 vs 1.64 atteso · mfe mediana 0.48R < primo TP 2.00R |
 | QUSDT|gen_18c839a0 | drift | 8 | 0.421 / 2.883 | PF 0.42 vs 2.88 atteso · mfe mediana 0.90R < primo TP 1.50R |
-| QUSDT|gen_5905e08d | watch | 7 | 0.628 / 1.856 | PF 0.63 vs 1.86 atteso · mfe mediana 0.80R < primo TP 1.50R |
-| USELESSUSDT|gen_2031005e | watch | 7 | 0.304 / 1.54 | PF 0.30 vs 1.54 atteso · mfe mediana 0.80R < primo TP 2.00R |
 | TRUMPUSDT|gen_d16d1d02 | watch | 7 | 1.372 / 1.591 | mfe mediana 1.08R < primo TP 2.00R |
 | GPSUSDT|gen_871647b8 | watch | 7 | 2.443 / 1.555 | mfe mediana 1.20R < primo TP 2.00R |
+| USELESSUSDT|gen_2031005e | watch | 7 | 0.304 / 1.54 | PF 0.30 vs 1.54 atteso · mfe mediana 0.80R < primo TP 2.00R |
+| QUSDT|gen_5905e08d | watch | 7 | 0.628 / 1.856 | PF 0.63 vs 1.86 atteso · mfe mediana 0.80R < primo TP 1.50R |
 | SYRUPUSDT|gen_f3b97917 | watch | 6 | 0.998 / 2.064 | PF 1.00 vs 2.06 atteso · mfe mediana 1.06R < primo TP 2.00R |
 | BANKUSDT|gen_7100bb59 | watch | 6 | 0.475 / 1.938 | PF 0.47 vs 1.94 atteso · mfe mediana 0.45R < primo TP 0.75R |
-| HEMIUSDT|gen_acea368d | watch | 6 | 1.303 / 1.784 | mfe mediana 0.95R < primo TP 1.50R |
 | STXUSDT|gen_0aa0d29c | watch | 6 | 0.81 / 1.663 | PF 0.81 vs 1.66 atteso · mfe mediana 0.52R < primo TP 1.00R |
-| FORMUSDT|gen_c647ead7 | watch | 5 | 0.536 / 2.214 | PF 0.54 vs 2.21 atteso · mfe mediana 0.51R < primo TP 0.75R |
-| PNUTUSDT|gen_4810faab | watch | 5 | 2.677 / 2.591 | mfe mediana 1.13R < primo TP 2.00R |
+| HEMIUSDT|gen_acea368d | watch | 6 | 1.303 / 1.784 | mfe mediana 0.95R < primo TP 1.50R |
 | XPINUSDT|gen_f311acf9 | watch | 5 | 0.029 / 3.282 | PF 0.03 vs 3.28 atteso · mfe mediana 0.40R < primo TP 1.00R |
-| KERNELUSDT|gen_c647ead7 | watch | 4 | 0.416 / 2.131 | PF 0.42 vs 2.13 atteso · mfe mediana 1.04R < primo TP 2.00R |
+| PNUTUSDT|gen_4810faab | watch | 5 | 2.677 / 2.591 | mfe mediana 1.13R < primo TP 2.00R |
+| FORMUSDT|gen_c647ead7 | watch | 5 | 0.536 / 2.214 | PF 0.54 vs 2.21 atteso · mfe mediana 0.51R < primo TP 0.75R |
 | STXUSDT|gen_a5b0e4de | watch | 4 | 0.878 / 1.449 | mfe mediana 1.16R < primo TP 2.00R |
-| HUMAUSDT|gen_da39a23a | watch | 4 | 1.618 / 2.258 | mfe mediana 0.70R < primo TP 1.00R |
+| DEXEUSDT|gen_3d4be8c7 | watch | 4 | 1.299 / 1.545 | mfe mediana 0.89R < primo TP 1.50R |
+| HOMEUSDT|gen_467d9ee2 | watch | 4 | 0.206 / 1.617 | PF 0.21 vs 1.62 atteso · mfe mediana 0.58R < primo TP 1.00R |
 
 - serie di perdite (freno SPENTO dal 24 set, solo misura): **gen_fa304106** (9 perdite di fila), **gen_bb762669** (4 perdite di fila), **gen_f311acf9** (4 perdite di fila)
 
