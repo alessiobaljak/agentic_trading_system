@@ -28,6 +28,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 18 | Le monete appena quotate: short quelle di 7-60 giorni (N1) o 7-180 (N2), long le 100 grandi | `DICIOTTESIMA.md` | `RISULTATI_DICIOTTESIMA.md` | 2 | non valide: N1 −18,5% l'anno, N2 −22,3%; la tipica scende (mediana −3,6% a settimana) ma poche esplodono (COAI +2627% in una settimana) |
 | 19 | Il premio del perpetuo sullo spot (media delle 168 ore prima) fra monete: P1 da solo, P2 con il funding | `DICIANNOVESIMA.md` | `RISULTATI_DICIANNOVESIMA.md` | 2 | non valide (corretto 0,33 e 0,31 con 44 prove): P1 Sharpe 1,25, +49,6% l'anno, 6 anni su 6; correlazione con F3 0,83: lo stesso vantaggio misurato con il premio invece del funding; non migliora F3 nemmeno nelle settimane dei pari |
 | 20 | La quota del volume a pronti sul totale: S1 il livello (long la più alta), S2 il cambio dei 7 giorni sui 90 (long la salita) | `VENTESIMA.md` | `RISULTATI_VENTESIMA.md` | 2 | non valide: S1 Sharpe 0,59, 3 anni su 6; S2 −0,82 (verso opposto: quando sale la quota del perpetuo la moneta continua) |
+| 21 | Gli annunci di Binance (dati nuovi: titoli e ore dal sito): short il perpetuo e long il Bitcoin per 7 giorni dal giorno dopo l'etichetta di monitoraggio (E1) o la rimozione a pronti (E2) | `VENTUNESIMA.md` | `RISULTATI_VENTUNESIMA.md` | 2 a eventi | non valide: E1 −1,06% a evento, E2 −21,2%; due terzi degli eventi vinti, ma pochi esplodono (ALPACA +1796%) |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -97,6 +98,12 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    pronti) vanno tutti nel verso della moneta, al contrario delle regole scritte. Visto dopo il calcolo ogni volta, quindi
    non è una prova; K1 (nel paper) usa le prime due. Il funding alto invece va contro (F3): chi entra con la leva spinge il
    prezzo, chi paga troppo per restarci perde.
+17. **Andare short sulle monete piccole senza protezione perde, sempre per lo stesso motivo** (prove 18 e 21): monete
+   nuove, monete sotto etichetta, monete che stanno per essere tolte dal listino scendono quasi sempre (due terzi delle volte),
+   ma poche esplodono verso l'alto (COAI +2627%, ALPACA +1796%, DEGO +295% in una settimana) e si mangiano tutto. Un'idea
+   short sulle piccole va provata solo con un'uscita di protezione e con le candele a 1 ora.
+18. **M1 dipende dal seme** (`semi_M1.json`): stesso modello, stessi dati, seme diverso: Sharpe 1,35 (il seme della prova),
+   0,79, 0,93. Il numero della prova era il caso fortunato; il valore atteso è più basso.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
