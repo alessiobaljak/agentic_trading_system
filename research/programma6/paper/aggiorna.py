@@ -22,6 +22,7 @@ from research.programma6 import terza as te
 QUI = Path(__file__).parent
 INIZIO_GIORNI = sc.giorno(2026, 10, 20)
 INIZIO_SETTIMANE = sc.giorno(2026, 10, 26)
+INIZIO_E4_MS = sc.giorno(2026, 10, 21) * 86_400_000
 INTERESSE, TETTO = 0.0001, 0.0005
 
 
@@ -250,6 +251,10 @@ def esegui(log=print) -> dict:
     f57 = f57[f57.index >= INIZIO_SETTIMANE]
     res["candidate"]["F5 + M7 a rischio uguale (informazione)"] = {
         "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in f57.items()}, **_riassunto(f57, 52)}
+    # E4 (VENTISEIESIMA.md, REGOLE.md sezione 9): gli eventi del periodo P, dai file mensili del funding
+    from research.programma6 import ventiseiesima as vs
+    e4 = vs.tabella(pan, [x for x in vs.eventi(pan) if x[1] >= INIZIO_E4_MS], -1)
+    res["eventi_E4"] = e4.astype(object).where(e4.notna(), None).to_dict(orient="records") if len(e4) else []
     d = da[da.index >= INIZIO_GIORNI]
     res["candidate"]["A1"] = {"giorni": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
                               **_riassunto(d["netto"], 365)}
@@ -289,6 +294,10 @@ def rapporto(r: dict) -> str:
               f"{', '.join(a['C1']['short'])}.",
               f"* **A1**, pesi decisi alla chiusura del {a['A1']['giorno']} (frazione del capitale): "
               + (", ".join(f"{k} {100 * v:.1f}%" for k, v in a['A1']['pesi'].items()) or "nessuna posizione") + ".",
+              "", f"**E4** (a eventi, dal 21 ottobre; si vedono quando esce il file mensile del funding): "
+              + (f"{len(r.get('eventi_E4', []))} eventi, media a 7 giorni "
+                 f"{100 * sum(x['r7'] for x in r['eventi_E4'] if x['r7'] is not None) / max(1, sum(1 for x in r['eventi_E4'] if x['r7'] is not None)):+.2f}%"
+                 if r.get("eventi_E4") else "nessun evento ancora") + ".",
               "", "**Entrate nell'universo nelle ultime 4 settimane** (da controllare che siano monete): "
               + (", ".join(r.get("nuove_nell_universo", [])) or "nessuna") + "."]
     return "\n".join(righe) + "\n"

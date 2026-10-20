@@ -4283,3 +4283,12 @@ stesso segnale del funding (F3) ma con la banda (si entra nel 20%, si esce sotto
 sbagliate) media −0,11 e massimo 0,79 su 200 ripetizioni (`F5_caso.json`). Sharpe corretto 0,81 con 48 prove: la più vicina
 alla soglia di 0,95. Capito: il segnale del funding era buono, lo si eseguiva male (troppo giro, troppe spese, troppo poche
 monete per lato). F5 e M6 entrano nel paper come informazione dalla settimana del 26 ottobre.
+**Venticinquesima prova** (`VENTICINQUESIMA.md`): la banda aiuta anche il modello (M7: Sharpe 1,25 contro 1,08) e insieme a F5,
+a rischio uguale, fa 1,83 dal 2022 con volatilità del 24%, ogni anno positivo. **Controlli su F5** (`robustezza_F2.md`): costi
+tripli 1,60, prime 50 monete 1,28, dalla 51ª alla 100ª 0,99, cambio il giovedì 1,71. **Ventiseiesima prova**
+(`VENTISEIESIMA.md`, il funding che tocca il tetto): **E4 è la prima prova di tutto il lavoro che passa l'esame scritto prima**:
+quando Binance accorcia l'intervallo del funding di una moneta con funding positivo (long affollati), short la moneta contro il
+Bitcoin per 7 giorni fa +11,67% a evento netto, 62 eventi su 61 monete dal 2023, 79% vinti, mediana +15,4%, ogni anno
+positivo, p 0,0047. Onestà: contando tutte e quattro le prove a eventi del programma la soglia sarebbe 0,0025 e non la
+passerebbe; 62 eventi sono pochi. Nel paper dal 21 ottobre (`paper/REGOLE.md`, sezione 9). Capito: l'affollamento dei long
+che fa scattare il tetto del funding annuncia la discesa, sia sulle monete appena quotate sia su quelle vecchie.

@@ -98,3 +98,19 @@ La venticinquesima prova (`research/programma6/VENTICINQUESIMA.md`, regole scrit
 Sharpe 1,25 contro 1,08 di M6 sugli stessi anni; F5 + M7 a rischio uguale Sharpe 1,83 contro 1,69 di F5 da sola, volatilità
 24,2%, ogni anno positivo; Sharpe corretti 0,20 e 0,65 con 50 prove. Come scritto nella sezione 4 di quelle regole, entrano
 nel paper **come informazione** dalla settimana del 26 ottobre.
+
+## 9. E4 come candidata a eventi (20 ottobre 2026, regola fissata prima di ogni evento del periodo P)
+
+La ventiseiesima prova (`research/programma6/VENTISEIESIMA.md`) passa l'esame scritto con E4: dopo il passaggio a un
+intervallo del funding più corto con funding positivo, short la moneta e long il Bitcoin per 7 giorni dall'apertura del giorno
+dopo: +11,67% a evento netto, 62 eventi dal 2023, p 0,0047. Contando tutte le prove a eventi del programma la soglia sarebbe
+più bassa e non passerebbe: per questo la prova vera è qui.
+
+* **Periodo P**: gli eventi con il primo regolamento all'intervallo più corto dal **21 ottobre 2026 00:00 UTC**.
+* **Misura**: ogni evento come la prova (`ventiseiesima.tabella`, verso −1), con i file mensili del funding dell'archivio
+  (l'evento si vede quando esce il file del mese: la regola non cambia, si conta dopo).
+* **Verdetto** a 52 e 104 settimane (come le altre), mai prima: passa se la media degli eventi del periodo P è sopra zero con
+  **p ≤ 0,025** a una coda (bootstrap sulle settimane), se è positiva senza il migliore evento e se non è sotto la metà della
+  media sul passato (+5,8%). Con meno di 15 eventi a 52 settimane il verdetto si rimanda a 104.
+* Per usarla dal vivo servirebbe vedere il cambio dell'intervallo subito (l'interfaccia pubblica dei futures, che da questa
+  macchina non è raggiungibile; dalla VPS sì): è nel backlog, non serve per il paper.

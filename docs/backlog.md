@@ -152,6 +152,17 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P15. Vedere subito quando il funding tocca il tetto (per usare E4 dal vivo) — trovata il 20 ott 2026
+**Perché:** la ventiseiesima prova (`research/programma6/VENTISEIESIMA.md`) dà a E4 (short per 7 giorni la moneta quando
+Binance accorcia l'intervallo del funding con funding positivo) +11,67% a evento su 62 eventi dal 2023, p 0,0047; è nel paper
+(`research/programma6/paper/REGOLE.md`, sezione 9). Il paper conta gli eventi con i file mensili del funding dell'archivio,
+quindi li vede fino a un mese dopo: per misurarla bene non serve altro, per **usarla** sì. L'interfaccia pubblica dei futures
+di Binance (`/fapi/v1/fundingInfo`, che dice quali monete hanno l'intervallo accorciato) dalla macchina della ricerca non è
+raggiungibile (risposta «restricted location», 20 ott); dalla VPS sì.
+**Cosa:** un comando in lista bianca sulla VPS che legge `fundingInfo` una volta l'ora e scrive i cambi in `ops/results/`.
+**Quando:** solo se E4 regge nel paper (verdetto a 52 settimane) e il proprietario vuole usarla; prima non serve.
+
+
 ### P0. Il protocollo di ricerca per moneta — versione 4.5 (approvata il 9 ott). TUTTE E 20 LE MONETE HANNO CONSEGNATO il 9 ott: 3 candidati confermati per il vault (BTCUSDT, BNBUSDT, ADAUSDT; riepilogo in `research/passo4/riepilogo.md` sul branch di coordinamento). Il 10 ott il proprietario ha deciso: (1) SÌ alla campagna di gruppo prima del vault, (2) NO a rifare BTCUSDT. Il 12 ott il PASSO 7 è fatto: zero strategie trovate (630 varianti, 0 passate nel vault contro 0,02 attese per caso), branch uniti nel principale, lezioni in `research/lezioni/metodo.md` e `research/confronto/`. La ricerca 4.5 è chiusa; cosa fare dopo è la voce P6
 **Perché:** cinque misure indipendenti dicono la stessa cosa: il gate non trova un vantaggio. Entrate a caso rendono come i segnali (240 trade, ops 0471); dopo la scelta del gate le validate fanno −0,03R su 182 segnali ±0,17 (ops 0498, lettura stampata: «la prossima modifica va nel gate»); una candidata nuova a caso non passa quasi mai (0 su 3.600, ops 0485); i costi superano il lordo (−0,089R netti, +0,088R di costi su 241, ops 0489); il gate rigiocato nel passato, su 8 date, dà promosse peggiori delle bocciate (−0,22R contro −0,14R su 45 trade, non decide, ops 0502). Aspettare il 14 ott non cambia il verdetto.
 **Cosa:** salvare `research/PROTOCOLLO.md` (versione 4.2, rivista il 5 ott) ed eseguire il **Passo 0**: fatti (fonte dati e contratti delistati, commissioni, serie degli stop, regole di dimensione e forma di esecuzione del bot), motore con il blocco del periodo chiuso, test di controllo, tabella dei parametri da approvare. Non tocca dati di mercato né il bot. **Regola scritta prima:** il Passo 0 finisce con una tabella e uno STOP; nessuna campagna parte senza l'approvazione dei parametri. **Metro:** la tabella completa, i test di controllo passati, e la risposta alla domanda «il bot può eseguire una strategia scritta come codice?». **Non cambia:** bot, gate, paper, registro; le letture del 7 e 14 ott restano.
