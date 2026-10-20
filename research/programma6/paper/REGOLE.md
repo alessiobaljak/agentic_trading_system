@@ -77,3 +77,10 @@ settimana misurata (26 ottobre)**, per tutte le candidate: funding zero nei gior
 monete con volume zero la domenica. Effetto sul passato (`controllo_zombi.json`): F3 Sharpe 1,296 → 1,295, K1 1,269 →
 1,262, **M1 1,35 → 0,79**. Le regole del giudizio (sezione 3) non cambiano; per M1 e per F3 + M1 il confronto «Sharpe del
 periodo P non sotto la metà di quello sul passato» usa il numero sul passato con i dati corretti.
+
+## 6. M6 come informazione (20 ottobre 2026, prima della prima settimana misurata)
+
+La ventitreesima prova (`research/programma6/VENTITREESIMA.md`, regole scritte prima) dà a M6 (il modello di M1 con la media
+dei ranghi di cinque semi) Sharpe 1,02 dal 2022 sui dati corretti, positivo in tutti gli anni, ma Sharpe corretto 0,16. Come
+scritto nella sezione 3 di quelle regole, entra nel paper **come informazione accanto a M1** (non come candidata con il suo
+verdetto), dalla settimana del 26 ottobre.

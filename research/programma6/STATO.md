@@ -30,6 +30,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 20 | La quota del volume a pronti sul totale: S1 il livello (long la più alta), S2 il cambio dei 7 giorni sui 90 (long la salita) | `VENTESIMA.md` | `RISULTATI_VENTESIMA.md` | 2 | non valide: S1 Sharpe 0,59, 3 anni su 6; S2 −0,82 (verso opposto: quando sale la quota del perpetuo la moneta continua) |
 | 21 | Gli annunci di Binance (dati nuovi: titoli e ore dal sito): short il perpetuo e long il Bitcoin per 7 giorni dal giorno dopo l'etichetta di monitoraggio (E1) o la rimozione a pronti (E2) | `VENTUNESIMA.md` | `RISULTATI_VENTUNESIMA.md` | 2 a eventi | non valide: E1 −1,06% a evento, E2 −21,2%; due terzi degli eventi vinti, ma pochi esplodono (ALPACA +1796%) |
 | 22 | Conferma sulle monete 101-200 dell'ipotesi «la leva che entra continua»: L1 il cambio della quota a pronti, L2 con gli acquisti a mercato | `VENTIDUESIMA.md` | `RISULTATI_VENTIDUESIMA.md` | 2 di conferma | **non confermata, verso opposto**: L1 −47,5% l'anno (Sharpe −1,07), L2 −0,91 sulle 101-200; sulle 100 L1 0,44, L2 0,63 |
+| 23 | M6: il modello di M1 con la media dei ranghi di cinque semi (1-5), dati corretti | `VENTITREESIMA.md` | `RISULTATI_VENTITREESIMA.md` | 1 | non valida (corretto 0,16 con 47 prove): Sharpe 1,02, +40,0% l'anno, 5 anni su 5, discesa −47,9%; i semi da soli 1,02-1,16 sui dati corretti. Nel paper come informazione |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -107,7 +108,8 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    short sulle piccole va provata solo con un'uscita di protezione e con le candele a 1 ora.
 18. **M1 dipende dal seme** (`semi_M1.json`): stesso modello, stessi dati, sei semi: Sharpe 1,35 (il seme della prova),
    0,79, 0,93, 1,12, 1,00, 1,43; media 1,10. Il numero della prova stava sopra la media: il valore atteso è circa 1,1 sui
-   dati di prima, e con i dati corretti il seme della prova fa 0,79.
+   dati di prima, e con i dati corretti il seme della prova fa 0,79. Sui dati corretti i semi 1-5 fanno 1,02-1,16 e la loro media (M6) 1,02:
+   il valore onesto della famiglia del modello ad alberi è circa 1, non 1,35.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

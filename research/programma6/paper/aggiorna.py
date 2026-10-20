@@ -128,6 +128,11 @@ def f2_e_c1(pan: dict) -> dict:
     dm = te.conto(Wm, ps["R"], ps["F"], costo)
     dm.index = ps["lunedi"]
     out["M1"] = dm
+    # M6 (VENTITREESIMA.md, solo informazione): la media dei ranghi di cinque modelli come M1 con i semi 1-5
+    from research.programma6 import ventitreesima as vt
+    P6 = [vt.previsioni_seme(s, X, Y, ps["U"], ps["lunedi"]) for s in vt.SEMI]
+    with np.errstate(all="ignore"):
+        out["M6"] = vt.portafoglio(np.where(ps["U"], vt.media_ranghi(P6, ps["U"]), np.nan), ps, sigw)
     wm = int(np.flatnonzero(np.isfinite(P).any(axis=1))[-1])
     out["M1_ultima"] = {"lunedi": sc.data(int(ps["lunedi"][wm])),
                         "long": {ps["simboli"][j]: round(float(Wm[wm, j]), 4) for j in np.flatnonzero(Wm[wm] > 0)},
@@ -200,7 +205,7 @@ def esegui(log=print) -> dict:
     w = f2_e_c1(pan)
     da, a1_adesso = a1(pan)
     res = {"dati_fino_al": ultimo, "funding_stimato_dal": min(stimati.values()) if stimati else None, "candidate": {}}
-    for nome in ("F3", "K1", "M1", "F2", "C1"):
+    for nome in ("F3", "K1", "M1", "M6", "F2", "C1"):
         d = w[nome]
         d = d[d.index >= INIZIO_SETTIMANE]
         res["candidate"][nome] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
