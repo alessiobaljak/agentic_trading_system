@@ -290,3 +290,14 @@ def test_ventunesima_rendimento_short_contro_btc():
     pan = {"open": O, "close": O.copy(), "funding": F}
     r = vu.rendimento(pan, 0, 1, 2, 7)
     assert r == pytest.approx(0.20 - vu.COSTO_MONETA - vu.COSTO_BTC + 0.007)
+
+
+def test_ventitreesima_media_dei_ranghi():
+    from research.programma6 import ventitreesima as vt
+    U = np.ones((1, 4), bool)
+    P1 = np.array([[1.0, 2.0, 3.0, 4.0]])
+    P2 = np.array([[40.0, 30.0, 20.0, 10.0]])
+    m = vt.media_ranghi([P1, P2], U)
+    assert np.allclose(m, 0.0)                    # ranghi opposti: la media e' il centro
+    m1 = vt.media_ranghi([P1, P1 * 10], U)
+    assert m1[0, 3] == pytest.approx(0.5) and m1[0, 0] == pytest.approx(-0.5)

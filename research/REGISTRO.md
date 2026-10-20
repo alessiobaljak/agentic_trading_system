@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 46 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 47 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -47,8 +47,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 20 | Il volume a pronti contro quello del perpetuo: livello (S1) e cambio (S2) (`VENTESIMA.md`) | 2 | S1 0,59 (+24,6% l'anno, 3 anni su 6, ultimo anno −11%); S2 −0,82 (−33% l'anno): verso **opposto** a quello scritto — quando la quota del perpetuo sale (entra la leva) la moneta continua a salire, come per l'interesse aperto (prova 11) e gli acquisti a mercato (prova 9) | no |
 | 21 | Gli annunci di Binance: short dopo l'etichetta di monitoraggio (E1) e dopo la rimozione a pronti (E2), contro il Bitcoin (`VENTUNESIMA.md`) | 2 a eventi (fuori dallo Sharpe corretto) | E1 −1,06% a evento (88 eventi, 68% vinti, DEGO +295% contro); E2 −21,2% (62 eventi, 69% vinti, ALPACA +1796% in una settimana); la prima reazione (il giorno dell'annuncio) è grande, −11% e −18%, ma non si prende | no: le code verso l'alto |
 | 22 | La leva che entra continua: conferma sulle monete 101-200 con il cambio della quota a pronti (L1) e insieme agli acquisti a mercato (L2) (`VENTIDUESIMA.md`) | 2 di conferma | **sulle 101-200 il verso si rovescia**: L1 −47,5% l'anno (Sharpe −1,07), L2 −37,5% (−0,91); sulle 100 (confronto) L1 0,44, L2 0,63 | no: l'ipotesi vista tre volte sulle 100 non vale sulle altre |
+| 23 | M6: il modello ad alberi di M1 con la media di cinque semi, sui dati corretti (`VENTITREESIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 = **46** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 = **47** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
@@ -96,9 +97,9 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 
 ## 5. Idee in coda (da fare, in quest'ordine; si spostano in sezione 1 quando si provano)
 
-1. **Le monete meno liquide con ordini limite**: F3 e M1 sulle monete 101-200 falliscono per i costi; con l'ingresso a
-   limite (commissione da limite, niente scarto, se il prezzo attraversa il livello) i costi scendono molto (`ESECUZIONE.md`).
-   Serve: misurare con le candele a 1 ora quanti ordini si eseguono su quelle monete.
+1. ~~Le monete meno liquide con ordini limite~~ → non si fa (20 ottobre): F3 sulle 101-200 prende +31,0% l'anno dal
+   funding ma perde −6,6% dal prezzo, con spese del 19,1% e volatilità di circa il 40% (`RISULTATI_OTTAVA.md`); anche con le
+   spese ridotte a un terzo (stima) farebbe circa +18% l'anno, Sharpe circa 0,4: non vale una prova.
 2. **M1 su più orizzonti**: ogni giorno → prova 16 (no: i costi); ogni 2 settimane: da fare (meno costi, segnale forse più debole).
 3. **M1 con obiettivo diverso**: il rendimento in più della moneta invece del rango, e un modello che unisce M1 e M2.
 4. ~~Il premio del perpetuo sullo spot fra monete~~ → prova 19.
