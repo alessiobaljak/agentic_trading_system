@@ -301,3 +301,18 @@ def test_ventitreesima_media_dei_ranghi():
     assert np.allclose(m, 0.0)                    # ranghi opposti: la media e' il centro
     m1 = vt.media_ranghi([P1, P1 * 10], U)
     assert m1[0, 3] == pytest.approx(0.5) and m1[0, 0] == pytest.approx(-0.5)
+
+
+def test_ventiquattresima_banda():
+    from research.programma6 import ventiquattresima as vq
+    S = 25
+    U = np.ones((2, S), bool)
+    sig = np.full((2, S), 0.05)
+    ct = np.vstack([np.arange(S, dtype=float), np.arange(S, dtype=float)])
+    ct[1, 24] = 16.0          # la migliore scende al 66° percentile: resta (sopra il 60%)
+    ct[1, 23] = 5.0           # la seconda scende sotto il 40%: esce
+    W = vq.pesi_banda(ct, U, sig)
+    assert set(np.flatnonzero(W[0] > 0)) == {20, 21, 22, 23, 24}
+    assert set(np.flatnonzero(W[0] < 0)) == {0, 1, 2, 3, 4}
+    assert 24 in set(np.flatnonzero(W[1] > 0)) and 23 not in set(np.flatnonzero(W[1] > 0))
+    assert W[1][W[1] > 0].sum() == pytest.approx(1.0) and W[1][W[1] < 0].sum() == pytest.approx(-1.0)
