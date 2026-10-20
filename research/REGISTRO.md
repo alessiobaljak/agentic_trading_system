@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 48 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 50 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -49,8 +49,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 22 | La leva che entra continua: conferma sulle monete 101-200 con il cambio della quota a pronti (L1) e insieme agli acquisti a mercato (L2) (`VENTIDUESIMA.md`) | 2 di conferma | **sulle 101-200 il verso si rovescia**: L1 −47,5% l'anno (Sharpe −1,07), L2 −37,5% (−0,91); sulle 100 (confronto) L1 0,44, L2 0,63 | no: l'ipotesi vista tre volte sulle 100 non vale sulle altre |
 | 23 | M6: il modello ad alberi di M1 con la media di cinque semi, sui dati corretti (`VENTITREESIMA.md`) | 1 | **Sharpe 1,02**, +40,0% l'anno dal 2022, positivo in tutti e 5 gli anni, intervallo sopra zero, discesa −47,9%; i semi da soli 1,02-1,16; correlazione con F3 0,23 | non valida: corretto 0,16 con 47 prove; nel paper come informazione |
 | 24 | **F5: F3 che cambia meno**, entrata al 20% e uscita al 40% (`VENTIQUATTRESIMA.md`) | 1 | **Sharpe 1,93**, +57,4% l'anno dal 2021, volatilità 29,7%, discesa −31%, ogni anno positivo (2026 +24,9%), giro 1,35 invece di 2,12, spese 4,9% invece di 7,7%; F3 sugli stessi dati 1,28; contro il caso (`F5_caso.json`) media −0,11, massimo 0,79 su 200 | **quasi**: corretto 0,81 con 48 prove, la più vicina; nel paper |
+| 25 | M7: il modello M6 con la banda; F5 + M7 a rischio uguale (`VENTICINQUESIMA.md`) | 2 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 = **48** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 = **50** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
