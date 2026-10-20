@@ -42,12 +42,22 @@ def eventi_contratto(righe: list) -> list:
         return []
     d = pd.DataFrame([(int(r[0]), float(r[1])) for r in righe], columns=["ts", "tasso"]).drop_duplicates("ts").sort_values("ts")
     ts, tasso = d["ts"].to_numpy(), d["tasso"].to_numpy()
-    sp = np.diff(ts)
+    sp = np.round(np.diff(ts) / 3600)                       # in ore intere: le ore dei regolamenti hanno secondi di scarto
     out = []
     for k in range(2, len(ts)):
-        if sp[k - 1] < sp[k - 2] <= MAX_ORE * 3600:
+        if sp[k - 1] < sp[k - 2] <= MAX_ORE:
             out.append((int(ts[k]), float(tasso[k])))
     return out
+
+
+def salto(c: pd.DataFrame, da: int, a: int, fattore: float = 50.0) -> bool:
+    """Vero se fra i giorni ``da`` e ``a`` la chiusura cambia di piu' di ``fattore`` volte da un giorno all'altro."""
+    x = c["close"][(c.index >= da - 1) & (c.index <= a)].to_numpy()
+    if len(x) < 2:
+        return False
+    with np.errstate(all="ignore"):
+        q = x[1:] / x[:-1]
+    return bool(np.any((q > fattore) | (q < 1.0 / fattore)))
 
 
 def candele(righe: list) -> pd.DataFrame:
@@ -75,7 +85,7 @@ def esegui(log=print) -> dict:
     eb = {}
     for s, ms, _ in vs.eventi(pan):
         eb.setdefault(s, []).append(ms // 1000)
-    righe = []
+    righe, tolti_salto = [], 0
     for nome in nomi:
         if nome == "BTC_USDT":
             continue
@@ -89,6 +99,9 @@ def esegui(log=print) -> dict:
             g = t // 86400
             e = g + 1
             if g not in c.index or c.loc[g, "volume"] <= 0 or e not in c.index or e not in btc_c.index:
+                continue
+            if salto(c, g, e + 28):
+                tolti_salto += 1
                 continue
             r = {"data": sc.data(g), "annuncio": int((g + 3) // 7), "simbolo": nome,
                  "binance_vicino": bool(perp and any(abs(t - x) <= 7 * 86400 for x in eb.get(perp, [])))}
@@ -117,7 +130,7 @@ def esegui(log=print) -> dict:
         es = "non positiva in tutte e due le metà"
     elif not e["senza_5_migliori"] > 0:
         es = "non positiva senza i 5 eventi migliori"
-    out["decide"], out["esito"] = decide, es
+    out["decide"], out["esito"], out["tolti_per_salto"] = decide, es, tolti_salto
     (RIS / "esame.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     righe_t = ["# Programma 6 — risultati della ventisettesima prova (E4 su Gate.io)", "",
                "Regole in `VENTISETTESIMA.md` (scritte prima). Short la moneta e long il Bitcoin di Gate.io per 7 giorni "
@@ -134,7 +147,8 @@ def esegui(log=print) -> dict:
                        + ", ".join(f"{100 * v:+.2f}%" for v in x["altri_orizzonti"].values()) + " |")
     for nome in ("indipendenti", "tutti"):
         righe_t += ["", f"**{nome}, per anno (media a 7 giorni)**: " + ", ".join(f"{a} {100 * v:+.2f}%" for a, v in out[nome]["per_anno"].items())]
-    righe_t += ["", f"**Esito della conferma: {es}**"]
+    righe_t += ["", f"Eventi tolti per un cambio di scala del prezzo: {tolti_salto} (sezione 4 delle regole).",
+                "", f"**Esito della conferma: {es}**"]
     testo = "\n".join(righe_t) + "\n"
     (QUI / "RISULTATI_VENTISETTESIMA.md").write_text(testo, encoding="utf-8")
     log(testo)

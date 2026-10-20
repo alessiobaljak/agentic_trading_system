@@ -335,9 +335,15 @@ def test_ventiseiesima_long_contro_btc():
 def test_ventisettesima_eventi_e_buchi():
     from research.programma6 import ventisettesima as vt
     h = 3600
-    ts = [0, 8 * h, 16 * h, 20 * h, 24 * h, 72 * h, 76 * h]     # 8, 8, 4 (evento), 4, 48 (buco), 4 (non conta)
+    ts = [0, 8 * h, 16 * h - 3, 20 * h, 24 * h + 2, 72 * h, 76 * h]   # 8, 8 (scarto di secondi), 4 (evento), 4, 48 (buco), 4
     righe = [[str(t), "0.001"] for t in ts]
     ev = vt.eventi_contratto(righe)
     assert [t for t, _ in ev] == [20 * h]
     f = vt.funding_giorni([[str(86400 + 60), "0.002"], [str(86400 * 2), "0.003"]])
     assert f.loc[1] == pytest.approx(0.005)                  # il regolamento alle 00:00 del giorno 2 chiude il giorno 1
+
+
+def test_ventisettesima_salto_di_scala():
+    from research.programma6 import ventisettesima as vt
+    c = pd.DataFrame({"close": [1.0, 1.1, 0.9, 80.0, 81.0]}, index=[10, 11, 12, 13, 14])
+    assert vt.salto(c, 11, 14) and not vt.salto(c, 10, 12)

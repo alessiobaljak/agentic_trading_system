@@ -35,3 +35,18 @@ l'affollamento dei long che fa scattare il tetto del funding annuncia la discesa
 * Si riportano anche l'insieme intero, la media a 1, 3, 14, 28 giorni e per anno.
 * Una prova di conferma, nel registro. Se E4 è confermata, lo si scrive nel paper (`paper/REGOLE.md`) senza cambiare le sue
   regole; se non lo è, E4 resta nel paper ma con la nota.
+
+## 4. Correzioni dopo il primo calcolo (errore di lettura dei dati, 20 ottobre 2026, sera)
+
+Il primo calcolo ha dato 146.297 eventi (146.128 nel 2026) e rendimenti di milioni per cento: un errore di lettura, non un
+risultato. Due cause nei dati di Gate.io: (1) dal 2025-2026 l'ora dei regolamenti ha qualche secondo di scarto (28.797
+secondi invece di 28.800), e la regola leggeva ogni scarto come «intervallo più corto»; (2) alcuni contratti cambiano scala
+del prezzo a metà serie (CAT_USDT a giugno 2026 passa da 0,0000019 a cifre normali). Prima di correggere ho visto
+quell'uscita sbagliata, comprese le medie per anno del 2023-2025 (+7,5%, +9,9%, +5,9% sugli eventi indipendenti), che
+vanno lette come contaminate. Le correzioni dipendono solo dal formato dei dati:
+
+* le distanze fra regolamenti si confrontano **arrotondate all'ora**;
+* un evento non conta se fra il giorno dell'evento e 28 giorni dopo la moneta ha un salto di più di **50 volte** in un giorno
+  (in su o in giù, fra chiusure di giorni consecutivi): è un cambio di scala del contratto, non un prezzo vero.
+
+L'esame resta quello della sezione 3. Si riporta quanti eventi toglie ogni correzione.
