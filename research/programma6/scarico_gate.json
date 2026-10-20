@@ -1,0 +1,10 @@
+{
+ "funding_applies": {
+  "file": 30782,
+  "sha256": "4875b02dc82c0cc14ac4d0618c58f30b526fc136779ced7f9ba3d1a356b4c11e"
+ },
+ "candlesticks_1d": {
+  "file": 23134,
+  "sha256": "ff8f75a0d70a8f239d99a40f622cfbc822f1d72aa3c32a97a3ee8cab56339aac"
+ }
+}
