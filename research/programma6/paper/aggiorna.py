@@ -140,7 +140,12 @@ def f2_e_c1(pan: dict) -> dict:
     from research.programma6 import ventitreesima as vt
     P6 = [vt.previsioni_seme(s, X, Y, ps["U"], ps["lunedi"]) for s in vt.SEMI]
     with np.errstate(all="ignore"):
-        out["M6"] = vt.portafoglio(np.where(ps["U"], vt.media_ranghi(P6, ps["U"]), np.nan), ps, sigw)
+        Pm6 = np.where(ps["U"], vt.media_ranghi(P6, ps["U"]), np.nan)
+    out["M6"] = vt.portafoglio(Pm6, ps, sigw)
+    # M7 (VENTICINQUESIMA.md, solo informazione): la previsione di M6 con la banda di F5
+    d7 = te.conto(vq.pesi_banda(np.where(np.isfinite(sigw), Pm6, np.nan), ps["U"], sigw), ps["R"], ps["F"], costo)
+    d7.index = ps["lunedi"]
+    out["M7"] = d7
     wm = int(np.flatnonzero(np.isfinite(P).any(axis=1))[-1])
     out["M1_ultima"] = {"lunedi": sc.data(int(ps["lunedi"][wm])),
                         "long": {ps["simboli"][j]: round(float(Wm[wm, j]), 4) for j in np.flatnonzero(Wm[wm] > 0)},
@@ -223,7 +228,7 @@ def esegui(log=print) -> dict:
     w = f2_e_c1(pan)
     da, a1_adesso = a1(pan)
     res = {"dati_fino_al": ultimo, "funding_stimato_dal": min(stimati.values()) if stimati else None, "candidate": {}}
-    for nome in ("F3", "F5", "K1", "M1", "M6", "F2", "C1"):
+    for nome in ("F3", "F5", "K1", "M1", "M6", "M7", "F2", "C1"):
         d = w[nome]
         d = d[d.index >= INIZIO_SETTIMANE]
         res["candidate"][nome] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
@@ -240,6 +245,11 @@ def esegui(log=print) -> dict:
     fm = fm[fm.index >= INIZIO_SETTIMANE]
     res["candidate"]["F3 + M1 a rischio uguale"] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in fm.items()},
                                                    **_riassunto(fm, 52)}
+    # F5 + M7 a rischio uguale (VENTICINQUESIMA.md, solo informazione)
+    f57 = qd.combina({"F5": w["F5"], "M7": w["M7"]})["netto"]
+    f57 = f57[f57.index >= INIZIO_SETTIMANE]
+    res["candidate"]["F5 + M7 a rischio uguale (informazione)"] = {
+        "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in f57.items()}, **_riassunto(f57, 52)}
     d = da[da.index >= INIZIO_GIORNI]
     res["candidate"]["A1"] = {"giorni": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
                               **_riassunto(d["netto"], 365)}

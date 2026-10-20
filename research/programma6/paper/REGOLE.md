@@ -91,3 +91,10 @@ La ventiquattresima prova (`research/programma6/VENTIQUATTRESIMA.md`, regole scr
 banda: entrata nel 20%, uscita sotto il 40%) Sharpe 1,93 dal 2021, contro 1,28 di F3 sugli stessi dati, con spese del 4,9%
 invece del 7,7%; contro il caso media −0,11 e massimo 0,79 su 200 (`F5_caso.json`); Sharpe corretto 0,81 con 48 prove. Come
 scritto nella sezione 4 di quelle regole, entra nel paper **come informazione accanto a F3** dalla settimana del 26 ottobre.
+
+## 8. M7 e F5 + M7 come informazione (20 ottobre 2026, prima della prima settimana misurata)
+
+La venticinquesima prova (`research/programma6/VENTICINQUESIMA.md`, regole scritte prima) dà dal 2022: M7 (M6 con la banda)
+Sharpe 1,25 contro 1,08 di M6 sugli stessi anni; F5 + M7 a rischio uguale Sharpe 1,83 contro 1,69 di F5 da sola, volatilità
+24,2%, ogni anno positivo; Sharpe corretti 0,20 e 0,65 con 50 prove. Come scritto nella sezione 4 di quelle regole, entrano
+nel paper **come informazione** dalla settimana del 26 ottobre.

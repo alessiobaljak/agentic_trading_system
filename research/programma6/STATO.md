@@ -32,6 +32,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 22 | Conferma sulle monete 101-200 dell'ipotesi «la leva che entra continua»: L1 il cambio della quota a pronti, L2 con gli acquisti a mercato | `VENTIDUESIMA.md` | `RISULTATI_VENTIDUESIMA.md` | 2 di conferma | **non confermata, verso opposto**: L1 −47,5% l'anno (Sharpe −1,07), L2 −0,91 sulle 101-200; sulle 100 L1 0,44, L2 0,63 |
 | 23 | M6: il modello di M1 con la media dei ranghi di cinque semi (1-5), dati corretti | `VENTITREESIMA.md` | `RISULTATI_VENTITREESIMA.md` | 1 | non valida (corretto 0,16 con 47 prove): Sharpe 1,02, +40,0% l'anno, 5 anni su 5, discesa −47,9%; i semi da soli 1,02-1,16 sui dati corretti. Nel paper come informazione |
 | 24 | F5: il segnale di F3 con la banda (entrata nel 20%, uscita sotto il 40%) | `VENTIQUATTRESIMA.md` | `RISULTATI_VENTIQUATTRESIMA.md` | 1 | **la più forte di tutto il lavoro**: Sharpe 1,93, +57,4% l'anno dal 2021, volatilità 29,7%, discesa −31%, ogni anno positivo; spese 4,9% (F3 7,7%); 25 monete per lato; contro il caso media −0,11, massimo 0,79 su 200 (`F5_caso.json`); corretto 0,81 con 48 prove. Nel paper |
+| 25 | M7 (M6 con la banda) e F5 + M7 a rischio uguale | `VENTICINQUESIMA.md` | `RISULTATI_VENTICINQUESIMA.md` | 2 | non valide (corretti 0,20 e 0,65 con 50 prove): M7 Sharpe 1,25 (M6 1,08), F5 + M7 1,83, volatilità 24%, ogni anno 2022-2026 positivo. Nel paper come informazione |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -114,7 +115,8 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
 19. **Il segnale del funding vale di più se si cambia meno** (prova 24): con la banda (si entra nel 20%, si esce sotto il
    40%) le posizioni restano finché il funding è ancora alto o basso: giro da 2,12 a 1,35 a settimana, spese dal 7,7% al
    4,9% l'anno, più monete per lato (25 invece di 20), volatilità dal 40% al 30%, e il prezzo rende di più (+37,6% invece
-   di circa +27%). Sharpe da 1,28 a 1,93. Il segnale era buono; lo si eseguiva male.
+   di circa +27%). Sharpe da 1,28 a 1,93. Il segnale era buono; lo si eseguiva male. La banda aiuta anche il modello (prova 25: da
+   1,08 a 1,25) e insieme le due fanno 1,83 con volatilità del 24%.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
