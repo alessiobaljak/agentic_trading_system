@@ -38,3 +38,16 @@ BNB il 14% di quello short). Stesso periodo e stessi costi di F3 (tabella aggior
 | senza le cinque e con il tetto | +47,5% | 1,10 | 6/6 | 10% |
 
 Non dipende da poche monete: il risultato resta quasi uguale. F3 resta quella delle regole (nessuna variante la sostituisce).
+
+## M1 (quattordicesima prova): quanto è solido? (20 ottobre 2026; descrittivo)
+
+Stesso periodo (dal 3 gennaio 2022), stesse previsioni del modello, stessi costi salvo dove detto:
+
+| Variante | Rendimento/anno | Sharpe | Anni positivi | Quota delle 5 settimane migliori | Senza le 5 migliori (a settimana) |
+|---|---|---|---|---|---|
+| **M1 come da regole** | +50,9% | 1,35 | 4/5 | 34% | +0,662% |
+| tetto del 10% per moneta | +51,9% | 1,36 | 4/5 | 33% | +0,680% |
+| senza BTC, ETH, BNB, TRX, XMR | +43,4% | 1,11 | 4/5 | 42% | +0,492% |
+| costi tripli | +33,5% | 0,89 | 4/5 | 50% | +0,326% |
+
+Non dipende da poche monete né da poche settimane; a costi tripli resta positivo. M1 resta quello delle regole.
