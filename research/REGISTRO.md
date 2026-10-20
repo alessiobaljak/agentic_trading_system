@@ -117,3 +117,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    perché il funding ha toccato il limite. Nei file ci sono 436 passaggi su 314 monete, ma 362 sono del 2025-2026 (1 nel
    2021, 4 nel 2022, 45 nel 2023, 24 nel 2024): troppo pochi anni per una prova fra monete; forse come evento.
 10. ~~Il volume a pronti contro quello del perpetuo~~ → prova 20.
+11. **K1 con la banda** (dalla prova 24): la stessa banda che ha portato F3 da 1,28 a 1,93, sul segnale di K1 (funding,
+   acquisti a mercato, interesse aperto). K1 resta una costruzione: la prova vera sarebbe comunque il paper.
+12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
+   dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
