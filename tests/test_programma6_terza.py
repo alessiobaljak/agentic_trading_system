@@ -268,3 +268,25 @@ def test_universo_senza_le_monete_a_volume_zero_la_domenica():
     k_dopo = int(np.flatnonzero(lun == 252)[0])
     assert ps["U"][k_prima].tolist() == [True, True, True]
     assert ps["U"][k_dopo].tolist() == [True, True, False]
+
+
+def test_annunci_sigle_e_monitoraggio():
+    from research.programma6 import annunci as an
+    assert an._sigle("BICO & CVC") == ["BICO", "CVC"]
+    assert an._sigle("ACT, BLUR, PIVX & QKC") == ["ACT", "BLUR", "PIVX", "QKC"]
+    assert an._sigle("MTP, SLX (SLIMEX), CAI") == ["MTP", "SLX", "CAI"]
+    assert an.perpetuo("PEPE", ["1000PEPEUSDT", "BTCUSDT"]) == "1000PEPEUSDT"
+    assert an.perpetuo("XYZ", ["BTCUSDT"]) == ""
+
+
+def test_ventunesima_rendimento_short_contro_btc():
+    from research.programma6 import ventunesima as vu
+    T = 12
+    O = np.ones((T, 2))
+    O[:, 0] = np.r_[[100.0] * 3, [80.0] * (T - 3)]     # la moneta scende del 20% dal giorno 3
+    O[:, 1] = 50.0                                     # il Bitcoin fermo
+    F = np.zeros((T, 2))
+    F[:, 0] = 0.001                                    # funding positivo: lo short riceve
+    pan = {"open": O, "close": O.copy(), "funding": F}
+    r = vu.rendimento(pan, 0, 1, 2, 7)
+    assert r == pytest.approx(0.20 - vu.COSTO_MONETA - vu.COSTO_BTC + 0.007)
