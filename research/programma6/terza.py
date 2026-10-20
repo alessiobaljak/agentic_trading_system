@@ -126,7 +126,9 @@ def pannello_settimane(pan: dict, log=print, da: int = 0, a: int = N_UNIVERSO, i
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", RuntimeWarning)
             med = np.nan_to_num(np.nanmedian(fin, axis=0), nan=0.0)
-        amm = ok[m - 1] & (m - primo >= STORIA_MIN) & (med >= sc.VOLUME_MIN) & np.isfinite(O[m])
+        # fuori le monete con volume zero la domenica: tolte dal listino, prezzo fermo (controllo_zombi.py)
+        amm = ok[m - 1] & (m - primo >= STORIA_MIN) & (med >= sc.VOLUME_MIN) & np.isfinite(O[m]) \
+            & (np.nan_to_num(V[m - 1]) > 0)
         cand = np.flatnonzero(amm)
         scelte = cand[np.argsort(-med[cand], kind="stable")][da:a]
         U[k, scelte] = True

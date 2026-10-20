@@ -252,3 +252,19 @@ def test_scarico_spot_nomi():
     assert ss.nomi_a_pronti("1000PEPEUSDT") == ["1000PEPEUSDT", "PEPEUSDT"]
     assert ss.nomi_a_pronti("1MBABYDOGEUSDT") == ["1MBABYDOGEUSDT", "BABYDOGEUSDT"]
     assert ss.nomi_a_pronti("BTCUSDT") == ["BTCUSDT"]
+
+
+def test_universo_senza_le_monete_a_volume_zero_la_domenica():
+    T, S = 260, 3
+    t0 = sc.giorno(2021, 1, 4)                     # un lunedi'
+    C = np.full((T, S), 10.0)
+    V = np.full((T, S), 5e6)
+    V[250:, 2] = 0.0                               # la terza tolta dal listino dal giorno 250 (prezzo fermo)
+    pan = {"t0": t0, "simboli": ["A", "B", "C"], "close": C, "open": C.copy(), "high": C.copy(), "low": C.copy(),
+           "quote_volume": V, "taker_buy_quote_volume": V / 2, "funding": np.zeros((T, S))}
+    ps = te.pannello_settimane(pan, log=lambda x: None, indicatori_si=False)
+    lun = ps["lunedi"] - t0
+    k_prima = int(np.flatnonzero(lun == 245)[0])
+    k_dopo = int(np.flatnonzero(lun == 252)[0])
+    assert ps["U"][k_prima].tolist() == [True, True, True]
+    assert ps["U"][k_dopo].tolist() == [True, True, False]

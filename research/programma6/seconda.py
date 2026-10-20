@@ -154,6 +154,8 @@ def costruisci_pannello(simboli=None, log=print) -> dict:
             mesi_f = set(pd.to_datetime((f.index.to_numpy()) * 86400, unit="s").to_period("M"))
             coperti = np.array([m in mesi_f for m in mesi]) & (np.arange(T) <= f.index.max() - t0)
         F[:, j] = riempi_funding(col, np.isfinite(P["close"][:, j]), coperti)
+        # i giorni a volume zero sono di una moneta tolta dal listino (prezzo fermo): nessun funding (controllo_zombi.py)
+        F[:, j] = np.where(np.isfinite(P["close"][:, j]) & (np.nan_to_num(P["quote_volume"][:, j]) == 0), 0.0, F[:, j])
         log(f"[pannello] {s}")
     pan = {"t0": t0, "simboli": nomi, **P, "funding": F}
     pd.to_pickle(pan, PANNELLO)
@@ -187,7 +189,8 @@ def universo(pan: dict, n: int) -> np.ndarray:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", RuntimeWarning)
             med = np.nanmedian(finestra, axis=0)
-        ammesse = ok[ieri] & (r0 - primo >= STORIA_MIN) & (np.nan_to_num(med, nan=0.0) >= VOLUME_MIN)
+        ammesse = ok[ieri] & (r0 - primo >= STORIA_MIN) & (np.nan_to_num(med, nan=0.0) >= VOLUME_MIN) \
+            & (np.nan_to_num(V[ieri]) > 0)
         cand = np.flatnonzero(ammesse)
         scelte = cand[np.argsort(-med[cand], kind="stable")][:n]
         U[np.ix_(righe, scelte)] = True

@@ -68,3 +68,12 @@ Sui tre mesi luglio-settembre 2026, dove il funding vero è nell'archivio, la st
 5, `research/data/p5/<SIMBOLO>/premium`) dà la **stessa media** e una correlazione giorno per giorno di 0,775 (BTC), 0,683
 (ETH), 0,910 (SOL), 0,846 (DOGE), 0,908 (XRP), 0,719 (LINK), su 92 giorni ciascuna. Il segnale di F2 è la somma di 7 giorni:
 la stima basta fino all'arrivo del file vero.
+
+## 5. Correzione dei dati prima della prima settimana misurata (20 ottobre 2026)
+
+Le monete tolte dal listino restano nei file dell'archivio con il prezzo fermo e il volume zero, e il loro funding era
+riempito con la media dei 90 giorni prima (`research/programma6/controllo_zombi.py`). Da oggi, **prima della prima
+settimana misurata (26 ottobre)**, per tutte le candidate: funding zero nei giorni a volume zero e fuori dall'universo le
+monete con volume zero la domenica. Effetto sul passato (`controllo_zombi.json`): F3 Sharpe 1,296 → 1,295, K1 1,269 →
+1,262, **M1 1,35 → 0,79**. Le regole del giudizio (sezione 3) non cambiano; per M1 e per F3 + M1 il confronto «Sharpe del
+periodo P non sotto la metà di quello sul passato» usa il numero sul passato con i dati corretti.
