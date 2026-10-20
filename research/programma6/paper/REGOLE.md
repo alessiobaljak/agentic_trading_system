@@ -84,3 +84,10 @@ La ventitreesima prova (`research/programma6/VENTITREESIMA.md`, regole scritte p
 dei ranghi di cinque semi) Sharpe 1,02 dal 2022 sui dati corretti, positivo in tutti gli anni, ma Sharpe corretto 0,16. Come
 scritto nella sezione 3 di quelle regole, entra nel paper **come informazione accanto a M1** (non come candidata con il suo
 verdetto), dalla settimana del 26 ottobre.
+
+## 7. F5 come informazione (20 ottobre 2026, prima della prima settimana misurata)
+
+La ventiquattresima prova (`research/programma6/VENTIQUATTRESIMA.md`, regole scritte prima) dà a F5 (il segnale di F3 con la
+banda: entrata nel 20%, uscita sotto il 40%) Sharpe 1,93 dal 2021, contro 1,28 di F3 sugli stessi dati, con spese del 4,9%
+invece del 7,7%; contro il caso media −0,11 e massimo 0,79 su 200 (`F5_caso.json`); Sharpe corretto 0,81 con 48 prove. Come
+scritto nella sezione 4 di quelle regole, entra nel paper **come informazione accanto a F3** dalla settimana del 26 ottobre.
