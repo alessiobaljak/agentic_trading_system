@@ -211,6 +211,12 @@ def esegui(log=print) -> dict:
     comb = comb[comb.index >= INIZIO_SETTIMANE]
     res["candidate"]["metà F3 + metà K1 (derivata)"] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in comb.items()},
                                                        **_riassunto(comb, 52)}
+    # F3 e M1 a rischio uguale (QUINDICESIMA.md): i pesi dalle 26 settimane prima di ciascuna, anche di prima del periodo P
+    from research.programma6 import quindicesima as qd
+    fm = qd.combina({"F3": w["F3"], "M1": w["M1"]})["netto"]
+    fm = fm[fm.index >= INIZIO_SETTIMANE]
+    res["candidate"]["F3 + M1 a rischio uguale"] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in fm.items()},
+                                                   **_riassunto(fm, 52)}
     d = da[da.index >= INIZIO_GIORNI]
     res["candidate"]["A1"] = {"giorni": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
                               **_riassunto(d["netto"], 365)}

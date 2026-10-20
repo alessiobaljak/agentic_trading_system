@@ -25,6 +25,7 @@ DESCRIZIONI = {
     "F2": "funding fra monete, pesi uguali",
     "C1": "28 indicatori combinati (CTREND)",
     "A1": "tendenza pubblicata (9 canali di Donchian)",
+    "F3 + M1 a rischio uguale": "le due più forti insieme",
 }
 
 

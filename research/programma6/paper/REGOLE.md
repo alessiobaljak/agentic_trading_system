@@ -35,6 +35,11 @@ l'anno, Sharpe 1,35, sopra il caso (`caso_M1.json`); non passa lo Sharpe corrett
 0,17 e con K1 0,03: è quasi indipendente dalle altre. Nel paper il modello si riallena con la stessa cadenza (ogni 4
 settimane dal 3 gennaio 2022). Verdetto come le altre (sezione 3).
 
+**Quarta aggiunta, 20 ottobre 2026, ancora prima della prima settimana misurata**: **F3 + M1 a rischio uguale**
+(`QUINDICESIMA.md`): il capitale diviso fra le due in parti inversamente proporzionali alla volatilità delle 26 settimane
+prima. Sul passato dal 2022: +44,8% l'anno, Sharpe 1,69, positiva in ogni anno; non passa lo Sharpe corretto (0,76 con 37
+prove). Verdetto come le altre (sezione 3).
+
 ## 2. Come
 
 * Ogni mattina (con l'aggiornamento della prova in avanti del programma 5) si scaricano le candele giornaliere nuove di

@@ -4243,3 +4243,7 @@ trova un vantaggio diverso dal funding (età della moneta, volatilità, crollo p
 (2) un dato che esiste solo per alcune monete può portare il futuro dentro la prova: sulle monete 101-200 i dati sulle
 posizioni c'erano solo per chi stava per entrare fra le prime 100, e il modello sembrava fare +310% l'anno; trovato,
 spiegato e corretto (senza quei dati: circa zero). M1 entra nel paper prima della prima settimana misurata.
+**Quindicesima prova** (`research/programma6/QUINDICESIMA.md`): F3 e M1 insieme, a rischio uguale, dal 2022 +44,8% l'anno,
+Sharpe 1,69, discesa massima −33%, positiva in ogni anno; non passa lo Sharpe corretto (0,76 con 37 prove: la soglia sale
+anche perché ora molte prove sono buone). Capito: due vantaggi quasi indipendenti (funding fra monete e modello che unisce gli
+indicatori) insieme oscillano molto meno. Nel paper dalla settimana del 26 ottobre.
