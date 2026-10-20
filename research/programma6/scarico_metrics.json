@@ -1,2242 +1,2242 @@
 {
 "1000000MOGUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "e239d4794653df604f2ac5c685dfeab5a309d2f8f3dcfce93a93f49f6156d444"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1000BONKUSDT": {
-"file": 891,
+"file": 0,
 "giorni": 891,
-"sha256": "089688e3701bcc4b9d8588a39ce1ea7627430f91b519194aa294484b8d8647fc"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1000FLOKIUSDT": {
-"file": 830,
+"file": 0,
 "giorni": 830,
-"sha256": "15e653fc117e18cb0b952b845afc1cf0247938d6f1b9a4c82daf8f29037c74d4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1000LUNCUSDT": {
-"file": 841,
+"file": 0,
 "giorni": 841,
-"sha256": "75055a6aacbf9cb162a75b783eab492ed0f7ff4635d41788f93ddad99111ad64"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1000PEPEUSDT": {
-"file": 1087,
+"file": 0,
 "giorni": 1087,
-"sha256": "2b8c64f7742b3baea9b3f4a66008b70d2f6c49f2ffd8e9732413ac046a2b7d1b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1000RATSUSDT": {
-"file": 307,
+"file": 0,
 "giorni": 307,
-"sha256": "a0dd892eee7f470253fdb8549af70e87c83d3918bb6ccf51ac7379ade9022482"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1000SATSUSDT": {
-"file": 513,
+"file": 0,
 "giorni": 513,
-"sha256": "f932d46f6f16235ba3a2656fb4bce665efdedf051f91359d46a786cddabd9454"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1000SHIBUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "64c971ddb75648145e5ada8f282352fba5fbb8a24e2cb89e78f617f1aa3cf201"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1000XECUSDT": {
-"file": 211,
+"file": 0,
 "giorni": 211,
-"sha256": "45904a98f4447a61fea7ba0d466a63ea6f428652582b837dc365011f4cc3661c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "1INCHUSDT": {
-"file": 902,
+"file": 0,
 "giorni": 902,
-"sha256": "e17072689ef76686a68f45c7c65ee20c685eff6c706e8799ff3cd90d0fc3827d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "4USDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "5507a0d82fea0ba847048de457a4fe92e7f5341b6f638df63c62ec6522c3f3d8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AAVEUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "52382c91e2fb8b9d0dafd199299e5bc7cfc42f20aba290c186d5182eaf26997b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ACEUSDT": {
-"file": 165,
+"file": 0,
 "giorni": 165,
-"sha256": "bc0666ef529339d237ebf42f37bc31ccb98e47ce792a410f8545a20ad1cabe5a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ACHUSDT": {
-"file": 253,
+"file": 0,
 "giorni": 253,
-"sha256": "ff1092cddc993355215cf72f3104ce9ab9512450673544c15b426ebcac784512"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ACTUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "8e0927ec45e29563efbb97c9fe53394dcc687cd0b7dee762812fa5687cca2316"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ADAUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "b9e77bb9929e119dd77e63686db6d69035e7fb3936307850b041b1e2b191b604"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AERGOUSDT": {
-"file": 82,
+"file": 0,
 "giorni": 82,
-"sha256": "86162a852b6693f1883e2efd20d1818c8e577fa05d6a8c0f88a0920406e36439"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AEROUSDT": {
-"file": 335,
+"file": 0,
 "giorni": 335,
-"sha256": "fc8828edb133a5cf793e922a4a69e2b16c35cbdd6693f9f0ebb23a1e6949939d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AEVOUSDT": {
-"file": 132,
+"file": 0,
 "giorni": 132,
-"sha256": "a2ef1a606c086a5bc6c3caea0712184f7337578216602abf6582bf4e0ed01477"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AGIXUSDT": {
-"file": 327,
+"file": 0,
 "giorni": 327,
-"sha256": "cc02eea85c30c991b7ad221fb5d42e24d70c87184b028ce3c338b8e9a24b6c48"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AGLDUSDT": {
-"file": 181,
+"file": 0,
 "giorni": 181,
-"sha256": "7da185c90ac8436a12b18cb74bfc26621389035088eb6961ccc70efb0c38ac6a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AI16ZUSDT": {
-"file": 149,
+"file": 0,
 "giorni": 149,
-"sha256": "d62901387dab0a7efbd0f3da947d512b8979ec7674ea590e6f4b0a7d0bb7e831"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AIAUSDT": {
-"file": 67,
+"file": 0,
 "giorni": 67,
-"sha256": "ae9c1ecd227a16eb107fdb28d9e816b6a0557c15347ef5ff2fee78ef6334e41a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AINUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "48fa201bbae76d8812ffc6ff334febecb0c1d80dd860977f4648ff3a9f655127"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AIOTUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "f21ec2dc85946e6a0d82aa7276f92a2ced0734aebafd56af7c13d9e3d5772f48"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AIOUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "c68e30182da25d0d14c2b3e6a7435088ee1f817f3cfbc0151961b810116292b3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AIUSDT": {
-"file": 186,
+"file": 0,
 "giorni": 186,
-"sha256": "b7ee4efed695da0c723fbc03b67f52b051a5840c8dd85d47170acd906326db25"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AIXBTUSDT": {
-"file": 226,
+"file": 0,
 "giorni": 226,
-"sha256": "b95f0d8e70aa66b799a2db35f0df2ed267c4fad635c543098071cf1758f75ad9"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AKEUSDT": {
-"file": 114,
+"file": 0,
 "giorni": 114,
-"sha256": "bb3b9a92a353eaadc3989d9dc0445acce787b6d7355189d09dec49ce6e94a96a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AKROUSDT": {
-"file": 72,
+"file": 0,
 "giorni": 72,
-"sha256": "c31394fcafe92018176b38e2418192edacb2549c229c68eae809967859d26e9e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AKTUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "f1df81b3495883df9bbf7a2328bda3ab9121e197813155206fd178f5425ec1a0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ALCHUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "ab2c424e920ee9beebc3c7b1ee1e4d89d07919fa210b4db92507a5e1ac811b5c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ALGOUSDT": {
-"file": 1705,
+"file": 0,
 "giorni": 1705,
-"sha256": "089563c7ac6c159f3870775a5bdbcfbb012f38c54c5a6de89a8b78bcf6109a29"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ALICEUSDT": {
-"file": 603,
+"file": 0,
 "giorni": 603,
-"sha256": "e51a54afba3f7823318e1267091c3fb777c5ca7252cdfb346769468017c1debe"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ALLOUSDT": {
-"file": 114,
+"file": 0,
 "giorni": 114,
-"sha256": "21c45943d042499ab196bd84f6dae12f30b6a152bcab9d98328d0f7eeb118d6b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ALPHAUSDT": {
-"file": 637,
+"file": 0,
 "giorni": 637,
-"sha256": "a92a44a67b460ce1ae9f267d6ac81a68c34f705bb965367080232f5a1b36c5ce"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ALTUSDT": {
-"file": 221,
+"file": 0,
 "giorni": 221,
-"sha256": "300752ede067ca83152b3a7d03e73d57149e28f60070c1731b005f0448118ac6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AMBUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "198825ad145ba7a9c70fafb9dd789bd5ab9864565af94d417b7024920489a54e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ANIMEUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "6a0f5a733fe5906b068823a5b342e5398344b2d19c7d84663a9f5845a32320bd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ANKRUSDT": {
-"file": 759,
+"file": 0,
 "giorni": 759,
-"sha256": "54b84040c9765df0476a79fd333e9d011062e7a66caf480e16cba8428971167a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ANTUSDT": {
-"file": 270,
+"file": 0,
 "giorni": 270,
-"sha256": "4c351dec32eec9cef0019e00d93faeb3862b3e671e82719dc52929f8471ead88"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "APEUSDT": {
-"file": 1310,
+"file": 0,
 "giorni": 1310,
-"sha256": "a3d673ceaec352d0e8cd6e192ef410331d359355bb7914c2b4638be611f73bf6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "API3USDT": {
-"file": 427,
+"file": 0,
 "giorni": 427,
-"sha256": "4e1842ecf954525b665d08b8b292daad79ba12c8da5b9bca269cfc849a6423d4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "APRUSDT": {
-"file": 44,
+"file": 0,
 "giorni": 44,
-"sha256": "5c2579d6b6ad754227790ca11f8a771d2c3e6e582790e6021dbf183542843f99"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "APTUSDT": {
-"file": 1290,
+"file": 0,
 "giorni": 1290,
-"sha256": "658fe1b4de190ebb9cdcf367fdb57ce3bcf2c1f698af6077ec73f5092388889f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ARBUSDT": {
-"file": 1136,
+"file": 0,
 "giorni": 1136,
-"sha256": "833b5ae7b7c4bbfcf7770c58aa9461c275ead7df4268e89a1f6c9b42f45f7f6e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ARCUSDT": {
-"file": 156,
+"file": 0,
 "giorni": 156,
-"sha256": "050fc479e34e3a24804dedb0ce675dfde3eb13ef15705b7e557e1c097a42d70b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ARIAUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "e0442548d567782b157da86a9f0d8d35e4079dddb5af0aa3dd2fedadc83dffa0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ARKMUSDT": {
-"file": 688,
+"file": 0,
 "giorni": 688,
-"sha256": "922e3498387c9f4f829258d5681ee5e0064cc8758865db96fbf7c9271a19e8e8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ARKUSDT": {
-"file": 174,
+"file": 0,
 "giorni": 174,
-"sha256": "93487f31004d73650462207d9bda1e99b830db04681aba64fb9b3e862abc710f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ARPAUSDT": {
-"file": 355,
+"file": 0,
 "giorni": 355,
-"sha256": "5f25b5205da621721515ee6ba930a78e340efe4457f2fe15f6a98b9ee0943a29"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ARUSDT": {
-"file": 1236,
+"file": 0,
 "giorni": 1236,
-"sha256": "92f5f4e1ce246084547799845624165bc2b8e4d14d40e1db6fd35f24c34aeec0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ASTERUSDT": {
-"file": 219,
+"file": 0,
 "giorni": 219,
-"sha256": "9bdce722e767aa88b137c1bced393c053636cb18587cc41b4d12a4923b547281"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ASTRUSDT": {
-"file": 151,
+"file": 0,
 "giorni": 151,
-"sha256": "42fa2f77f4f95ab3606521ad42f4a0fd1e76f6ac1fb3eca49ff63ac24a8592cc"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ATAUSDT": {
-"file": 381,
+"file": 0,
 "giorni": 381,
-"sha256": "56287d5240a104d7489657389f1ab0e05aaa6bcde24ee2f85bfcd69faa6371dd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ATHUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "7d8114f6c2a0e1481729d2a0dedbb922b337f233065d450205652d7216557fb7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ATOMUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "feaa71fb8a5c9fa35c2947dcb3adbdf6c602803571b6c6ee90619a087f08b226"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AUCTIONUSDT": {
-"file": 320,
+"file": 0,
 "giorni": 320,
-"sha256": "8f9791995c563f09c2ea4582be16dc13d65a89ee2e16f766788ae82a0eeea1ca"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AUDIOUSDT": {
-"file": 466,
+"file": 0,
 "giorni": 466,
-"sha256": "9a528ce7ee50a92152a6fa4ab106203e4d8715d46d8e47468ef3abcde9d3711d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AVAXUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "891e062cef4e083a9722b13e1165a4de9ab716aaa46c1b2fc5fde77835b74ef9"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AXLUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "5b964a85167d6d8fd166ad78d777fac7cef369e145db389df49035095f26deb3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "AXSUSDT": {
-"file": 1443,
+"file": 0,
 "giorni": 1443,
-"sha256": "7ee553c40b51086a1dd07c711fa69905dd67052d8129a9ed98ab2760bdf74b5f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BAKEUSDT": {
-"file": 927,
+"file": 0,
 "giorni": 927,
-"sha256": "30906f7a654022c636b84171e8718a3c2e10b4b832c5dc29f8d26f5d7940a469"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BALUSDT": {
-"file": 342,
+"file": 0,
 "giorni": 342,
-"sha256": "92c2b30f30d94435f62e9aaa16a87280fa879fe710168398e30b2c774a97348c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BANANAS31USDT": {
-"file": 123,
+"file": 0,
 "giorni": 123,
-"sha256": "aabb5dd38556b4915f2d63aff46bec6f98041774d32759a187a16fdc02097f6e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BANANAUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "a63d1059751ccf22369e43c08927d3443b6f61a44bda842ee024bff9bc6bc123"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BANDUSDT": {
-"file": 708,
+"file": 0,
 "giorni": 708,
-"sha256": "350f3eb350546735fcbb7107bd99b2f256a7ef020e5b292fb7de32e54c3880f0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BANKUSDT": {
-"file": 116,
+"file": 0,
 "giorni": 116,
-"sha256": "a0a31628d5e7a45266c05dd1d55cc43802541f28e86c785bc1069ef3ae100c16"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BANUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "86a9086f3221a81ee4a123bf5b48839048011cf5ccad17f842b54c4f58b41d32"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BARDUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "f5bc9b416ab746e4cd75fe9d1364bec34d32a1f20ae5268ca70f95dbcdd66811"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BASUSDT": {
-"file": 121,
+"file": 0,
 "giorni": 121,
-"sha256": "88833bd1de3f241b1be46b9b5ee52060c4f309aef3caf9a0ef76522ae3cdf54e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BATUSDT": {
-"file": 570,
+"file": 0,
 "giorni": 570,
-"sha256": "620cee35bb359c34b4975b0057340d055452cf4ef27824ed837afe01d7d13909"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BBUSDT": {
-"file": 158,
+"file": 0,
 "giorni": 158,
-"sha256": "58e77ff538d24c34e45d1123e301af3f3aced20ddf536176c5dc7b94d2bde971"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BCHUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "335c59d7cd7cc80bb7fd664254f1a2a2638f88d2d569d4bbc3755715235f3f55"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BEAMXUSDT": {
-"file": 195,
+"file": 0,
 "giorni": 195,
-"sha256": "792dd9b4547a54bdff700fdf569ac5faabec46d9303695cbece464a32a83dacf"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BEATUSDT": {
-"file": 149,
+"file": 0,
 "giorni": 149,
-"sha256": "9aac67cb642ecac104dd99d698ddefa2d694b2927216564bd53b1ef11ea1a0b8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BELUSDT": {
-"file": 754,
+"file": 0,
 "giorni": 754,
-"sha256": "0f6ca8f6aacc98f4a823f98f400636ea1666088e40422c5aae1909f7f79a69dd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BERAUSDT": {
-"file": 314,
+"file": 0,
 "giorni": 314,
-"sha256": "ca8db9f2961004caae05cc82767db2a95250451d33c362a53deb869ce32f668b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BICOUSDT": {
-"file": 132,
+"file": 0,
 "giorni": 132,
-"sha256": "e8f7f48dc297fe526eaa82298813199bb1d3f3ddef77e871e8842ac15cd788bb"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BIGTIMEUSDT": {
-"file": 382,
+"file": 0,
 "giorni": 382,
-"sha256": "43d2046295cfbe82758101df1fb1a2fbb82a08d15e6d98f156778d6cb85456b0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BIOUSDT": {
-"file": 354,
+"file": 0,
 "giorni": 354,
-"sha256": "a421a0b68068535a21368b1f87a5b6475a07c790f10d1c8565518644ce930eb4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BLESSUSDT": {
-"file": 88,
+"file": 0,
 "giorni": 88,
-"sha256": "240a0736e443c4f39ca834c2de1c94130a5bcfb4943fb2ab6b3b37cc90c6b08b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BLURUSDT": {
-"file": 487,
+"file": 0,
 "giorni": 487,
-"sha256": "d743fd245a91fb2831260fecd28fe961410d90b4e987661d3f8565f33de01fd3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BLZUSDT": {
-"file": 712,
+"file": 0,
 "giorni": 712,
-"sha256": "fd077671c5389b3c552468c69911ed5a0053c4013c49d00154c8209b0535070b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BMTUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "101870bd13b993646ae84886217cdd93bd577ec604c04abb0a0381e7b20088c8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BNBUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "551bd596fb5a52f672b6600a01079079f83b1df063a38b5a9ce3e0bc2693d17f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BNXUSDT": {
-"file": 627,
+"file": 0,
 "giorni": 627,
-"sha256": "a3a93999935d20e43e36bbb20b46e151815acf0edbfc1a762547cfe9a179ebe1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BOMEUSDT": {
-"file": 552,
+"file": 0,
 "giorni": 552,
-"sha256": "2bb0732154e3fea6a368ff8f28e4d5542f5fdc0e29384ef1fecc102eb3fce6ff"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BONDUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "a20451f24bb516b462a3032675e0cb6ddabb3e5a7bdf5e4ed7c935341323d7a7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BRETTUSDT": {
-"file": 86,
+"file": 0,
 "giorni": 86,
-"sha256": "6697d8f87bc298f0c9329da8f7b6c56276c1e3694c40a8f9069a3ec284395260"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BROCCOLI714USDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "0a6bb404d1ea4fb019acd7ab26b3110c8da73616fb032091d17ba0c9c48ea61c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BRUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "6b43ca98f6a350331171cc38c52ee8aaa8d8a9fb2c0e8342e6cc852da44c1dd4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BSWUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "78a7ac1d1b2fd50eb5dada1f208b9ce136938f9df37954a6467cbcb5ffac730e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BTCUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "24c746ce7dcde49c4446d1852e0e011635a548321ba6b816257fc0b90960ec13"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BTRUSDT": {
-"file": 44,
+"file": 0,
 "giorni": 44,
-"sha256": "8afebeecbfeaf547f9d51652b3af25ecaf69d197ff38f6382a1ab41101133060"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BTSUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "8e446043d595b970a542c11c9c896f8f83260bb7b37ae2ddf7bc747fbe388460"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BTTUSDT": {
-"file": 42,
+"file": 0,
 "giorni": 42,
-"sha256": "e4628bc4a9d1456bbd8a00dc59c3f8c650daca066a51c05545025f5f7b357efa"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "BULLAUSDT": {
-"file": 183,
+"file": 0,
 "giorni": 183,
-"sha256": "d355870be0451df2da4986075c82856c0d104e946374073e2a4a4cf9a26370d4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "C98USDT": {
-"file": 776,
+"file": 0,
 "giorni": 776,
-"sha256": "350a9bb37244f37a18494006b508793c59296ace147e112c6d1bf378cb3b16c6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CAKEUSDT": {
-"file": 531,
+"file": 0,
 "giorni": 531,
-"sha256": "8e02b061c4193c2a28c2a6e64d5065d70809b654fcd2f92da128aac20b79d890"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CELOUSDT": {
-"file": 1044,
+"file": 0,
 "giorni": 1044,
-"sha256": "f77c0a3b96edaaf47942abcd1c58cb430c87bf875affac8c65fd271710288684"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CELRUSDT": {
-"file": 447,
+"file": 0,
 "giorni": 447,
-"sha256": "38a70869be04ef047bb53d03614231f8356b50f5f45760173312522d5852a963"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CETUSUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "dc9f9486fd1755f09666e6391a9862fccd754aac7b46aa49b944a2e912677e0f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CFXUSDT": {
-"file": 755,
+"file": 0,
 "giorni": 755,
-"sha256": "ec0ea7d1aeb9d595931200f4582b04a027d49d9027ad86f3286eb47d03660817"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CHESSUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "3bacb10ca3269fa71859eb5b2b82a6ea2d01352ad8c9c471e3050ec1eaf6290f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CHILLGUYUSDT": {
-"file": 79,
+"file": 0,
 "giorni": 79,
-"sha256": "1b4df6594d612eff6671ac6fba867dd3e3f00c592a62b50ab8f105c194c5c15c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CHRUSDT": {
-"file": 653,
+"file": 0,
 "giorni": 653,
-"sha256": "12494fbd3edd53e6124f3cf0c0e1e1ef76d3f4d48c93425086e323b4ad149c8b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CHZUSDT": {
-"file": 1420,
+"file": 0,
 "giorni": 1420,
-"sha256": "66fd9d60a775308555a81c770056aa3080d72403d0afaeffee3d3915085e1dcd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CKBUSDT": {
-"file": 305,
+"file": 0,
 "giorni": 305,
-"sha256": "0183949694878b846b715d602fe21cf749e038d00d06022ef9fc3866cced8472"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CLOUSDT": {
-"file": 72,
+"file": 0,
 "giorni": 72,
-"sha256": "51834a094b5ddad75aeab6a3f2735c5814689641d6ce390bb8c60698a11a99bb"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "COMPUSDT": {
-"file": 1092,
+"file": 0,
 "giorni": 1092,
-"sha256": "9c90ad0b350dc939283dde623686416cb1f49a82fc5d2fef8a8ba83936d53a05"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "COOKIEUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "15ee6ba5e27f6d191dd34567c09f78ef09b3359b1d460fa274cebf8b9cf67075"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "COSUSDT": {
-"file": 44,
+"file": 0,
 "giorni": 44,
-"sha256": "f3c4229d73b45d33e8cd7e23e09f6d9a293bb04d7afd8c5364797a111ce205a3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "COTIUSDT": {
-"file": 795,
+"file": 0,
 "giorni": 795,
-"sha256": "562ec5fe9bcb8aa4ce254db10278cfd021d2643d99d1dfee39d4ee2f2d91f564"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "COWUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "6b82f246ab2f51b11b465e1d545037f61d4735226448aad51eda57937e691afe"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CRVUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "00085c42e5cf7653be90fd56d1bf36c4e828b83182fd0a18e3a988ba0f0a74c3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CTKUSDT": {
-"file": 298,
+"file": 0,
 "giorni": 298,
-"sha256": "211e9f0b1464c8106ae3891f87bd4b28d4346eecbdc9f226cb0f47d4a412e6ad"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CTSIUSDT": {
-"file": 244,
+"file": 0,
 "giorni": 244,
-"sha256": "2926481dbf3a137e07c469dc5b7fdc45014d16129b14d5c8fc5de9ea04c5fef1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "a7051e7e958607ae1bbb9e1e3e1d1f02291eff501319bc535385ec7a2ce9ec04"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CVCUSDT": {
-"file": 170,
+"file": 0,
 "giorni": 170,
-"sha256": "74ff6bd3e0e1ff4453f17340b08a534e2830015d830abc40529627aea6bbca2f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CYBERUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "cc8c84c6e7b3798f7698fff0a942f55e9c05f6a19cb6047f86b15b3db4f5eccd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "CYSUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "bea6b357f149d9666d7d8cc1e5e92d3f616f5e01e88e9c6caa27f29df253275e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DARUSDT": {
-"file": 93,
+"file": 0,
 "giorni": 93,
-"sha256": "d287943eba85c2fc4a932ac4480214b316bed2bfecae957fcd4c15a10ec6dceb"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DASHUSDT": {
-"file": 1012,
+"file": 0,
 "giorni": 1012,
-"sha256": "e95baccc8946c2e706e5b7cdca1730d7e3d1c697431230613d2d54786ac563b3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DEGOUSDT": {
-"file": 88,
+"file": 0,
 "giorni": 88,
-"sha256": "caae7bbea66cf929ad0d0800b4f4bfdfba7437d72b0373f9078ef6cd0f442f13"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DENTUSDT": {
-"file": 458,
+"file": 0,
 "giorni": 458,
-"sha256": "d8b03cc4258a13139b7ba6e7497b523aa997572876a6df6b5cf8e8ed57829855"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DEXEUSDT": {
-"file": 186,
+"file": 0,
 "giorni": 186,
-"sha256": "b1f391ce23e02c0db7729b07de440d7cc302ec19252c2554d45fdb6ef3641338"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DGBUSDT": {
-"file": 74,
+"file": 0,
 "giorni": 74,
-"sha256": "a7c46cb29f2073613c55a2aa380ee782be091736202a3c0140c7e52da8212d35"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DODOUSDT": {
-"file": 170,
+"file": 0,
 "giorni": 170,
-"sha256": "8d7c5708c0aaa15c3640305b7cb40489206a166cd368041f247085dfe62f906d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DODOXUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "ed3be20facffb6faf2d28efae6aada40c33f23d19103c4ceade747352287cf2c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DOGEUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "4c63bb2e15241da399f2936f10fb9987f327d36df807295c9115fbb0cf34a992"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DOGSUSDT": {
-"file": 165,
+"file": 0,
 "giorni": 165,
-"sha256": "28afa67b22f2874b2cafaff7b418e5e11cdf8a6adc0344bbb6a41ac22124d23d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DOLOUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "e1190a9844c8f909aa907b522db55066e1c6ae279efe2c2316a11d69f0feeb19"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DOTUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "f18e944aa6ed8c5800f4630241e653caa5044031702e98fbd44dbfdfadb7355b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DRIFTUSDT": {
-"file": 74,
+"file": 0,
 "giorni": 74,
-"sha256": "52c71c52e4ba87337a8fb8189ee2cedcf062142f697fd4f7b44dd5ce3ba6d9cd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "3e37b0e20186bfc7c103f760cff1a6e18c10c4a3a71ddb79d19b12c07067ca9d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DUSKUSDT": {
-"file": 397,
+"file": 0,
 "giorni": 397,
-"sha256": "7a2cc6b9fdce9336aec8bae5d28653a082fd403f140bc3e2a21aa5e04de9fd38"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DYDXUSDT": {
-"file": 1579,
+"file": 0,
 "giorni": 1579,
-"sha256": "46cac48234fc5608efe36aa8a40f92e376c8bb0a70112a877cb4c50fca257f32"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "DYMUSDT": {
-"file": 174,
+"file": 0,
 "giorni": 174,
-"sha256": "e07c320de9d00f24ee52ee347d0ec09818bb78349c0a57dd44cd0bc1c5802056"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "EDENUSDT": {
-"file": 95,
+"file": 0,
 "giorni": 95,
-"sha256": "d88fc3e817e4b8593f158ee2dd5c58ba0a817e1ac7e236ad83e75d497beca7c7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "EDUUSDT": {
-"file": 108,
+"file": 0,
 "giorni": 108,
-"sha256": "21b7753507691f1af993d3c59d66b32f5a548b9fcc7f3c9ba0206e0962acf866"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "EGLDUSDT": {
-"file": 911,
+"file": 0,
 "giorni": 911,
-"sha256": "c0d6279a56a82726827496d4b74f79fb864f60e0ccb89f4ad63b39e119083008"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "EIGENUSDT": {
-"file": 557,
+"file": 0,
 "giorni": 557,
-"sha256": "58512d40d85a481a9f35337b065ac3997241c388ea0453b03883ef5bd839d84b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ENAUSDT": {
-"file": 758,
+"file": 0,
 "giorni": 758,
-"sha256": "6d457575474f10acb34dada9e5f139e44af67aca353d4bee07846fefa346c6f7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ENJUSDT": {
-"file": 922,
+"file": 0,
 "giorni": 922,
-"sha256": "28eab5b181b3ab6808ceec2ffb0f8a819796aca3e488bbe186535dc8e50a7bbe"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ENSUSDT": {
-"file": 1098,
+"file": 0,
 "giorni": 1098,
-"sha256": "b7c37a88a66151fda9b9a954d6e6e82b25989100b19efb8465aa79d663f3d0b8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "EOSUSDT": {
-"file": 1261,
+"file": 0,
 "giorni": 1261,
-"sha256": "2c94478293e09a40723725e7163cf60491a4f1466da4895ebcfa75689ecad604"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "EPICUSDT": {
-"file": 107,
+"file": 0,
 "giorni": 107,
-"sha256": "7b4ef4b5a636d35772892c9f57b19ceca455fd4083bf300cbb7bca1b33df85ce"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ERAUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "57187c9128d6f4e44bba7ef7d9d2e808eca5478e4248975a4c73725ade80049a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ESPORTSUSDT": {
-"file": 121,
+"file": 0,
 "giorni": 121,
-"sha256": "5798812045a1e174839a36d4771a118f0f8b06b5e60fb9be1e464e73b80e17dc"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ESPUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "96102ee1b1ca2cb1092a61ad6d6a1ef81787b6b12f862814f379487230af0430"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ETCUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "5ef7846ca9c74c196579e32aba8801d163a801d31579804470863470d7f8fc4d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ETHFIUSDT": {
-"file": 772,
+"file": 0,
 "giorni": 772,
-"sha256": "3fe3ab85a1a58ef94ed84b1cbeb790432a7f4bed066eecaa18a80643ef0e92e2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ETHUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "da77e89dd1c88a7e3adf6d2152303e05e985925906793b805ed1f1147cc8c86a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ETHWUSDT": {
-"file": 44,
+"file": 0,
 "giorni": 44,
-"sha256": "7dd56cfd6188ddc59a5cb912b82dd4e4b75874775f23da35890d180a2695499d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "EULUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "7d338668478589f85301ec1f5e01f3765d8d3a556c0a7c615a1957035a044700"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "EVAAUSDT": {
-"file": 72,
+"file": 0,
 "giorni": 72,
-"sha256": "0c7e783229ae97f44b18a04fc8147aa48e241c8ca85e59210745d3f658352113"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FARTCOINUSDT": {
-"file": 492,
+"file": 0,
 "giorni": 492,
-"sha256": "1ae1ad9269eb3c69799b92acb810160b81642b207e4a230209920e93b959307d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FETUSDT": {
-"file": 1199,
+"file": 0,
 "giorni": 1199,
-"sha256": "b80638e288cdc59a4ce5298b75f9054c6aa3d3ac97b3ec114c21caf96dee6fa9"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FFUSDT": {
-"file": 102,
+"file": 0,
 "giorni": 102,
-"sha256": "bd17756d534ba060aef760d909435218ce86479e9de3335e19684de14012902a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FHEUSDT": {
-"file": 107,
+"file": 0,
 "giorni": 107,
-"sha256": "580e40d651d22bb6fc005d7959b9872048c77cc028ef8daafb13cf4faa7c7ddb"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FIDAUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "dd5daf2ccd3bb62dad63005c3b165f53e196e9471d635d35d6adf4011f39c783"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FILUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "51e2b0e8f37ba1c8ed412854254af2cbbb3bea4e6ffa91b39d148115ca754d4f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FLMUSDT": {
-"file": 463,
+"file": 0,
 "giorni": 463,
-"sha256": "4a03bb30ecff500a91ebf7cb9157fcf178963f7fb7c658e48604377db6cea1d3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FLOCKUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "538b73e2bca7b3bd07d6478d1287f19b8dcfbce3f9f88757d48dc8fdf5c8bca4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FLOWUSDT": {
-"file": 957,
+"file": 0,
 "giorni": 957,
-"sha256": "96673c5e19ffa9d3a68c1c5a4aeb5dfedca9df7ac0a342d0d5f924f69c4c3168"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FOLKSUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "82c1485de3c42eedb3a94f4c50f4b7cc24df52b24c63a42646245e49bac96c2d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FORMUSDT": {
-"file": 86,
+"file": 0,
 "giorni": 86,
-"sha256": "074bbc7af1d7a08f3aa8ef3de836c95999e8d5245c79cdc8ec5eb99a19e7dfe6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FRONTUSDT": {
-"file": 114,
+"file": 0,
 "giorni": 114,
-"sha256": "064a426d6383ece6a14461161d2af992a5eb02508e063204d2787b2c49cbb9d3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FTMUSDT": {
-"file": 1143,
+"file": 0,
 "giorni": 1143,
-"sha256": "bbd055ca8a700817257263320c0be32007da89dae6693f643dcf16b8959cccb9"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FTTUSDT": {
-"file": 38,
+"file": 0,
 "giorni": 38,
-"sha256": "4fe8734637c566ffd251da30ac1407c414c18a64bb153cc57ad089cb86cd5fd6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "FXSUSDT": {
-"file": 139,
+"file": 0,
 "giorni": 139,
-"sha256": "d0be76f6f7f9cd678aa0c0e83ee31b705bb77fa3a357da5ec6e3e112e5bf5012"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GALAUSDT": {
-"file": 1677,
+"file": 0,
 "giorni": 1677,
-"sha256": "e2f03f42aec9ee3e14720881197afca42ce682f6e40f5f22f3700eb892447691"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GALUSDT": {
-"file": 468,
+"file": 0,
 "giorni": 468,
-"sha256": "8aa811054fbcc3251d23b2c302302a2690e81bd3d87868f120acefef545ffc00"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GASUSDT": {
-"file": 111,
+"file": 0,
 "giorni": 111,
-"sha256": "6c5156c717b492e4cbdf770fbac3c5cabcde700381fa072ef4f07215f128eae2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GIGGLEUSDT": {
-"file": 151,
+"file": 0,
 "giorni": 151,
-"sha256": "de9a1b4de63cdf6bd846013caba5edb00b559ccf682891184c2046afba89b687"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GLMUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "93cc01d37640215f6267286e221dc9ef540214ae9cb2fca4f7ea4f1030ec3bfa"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GMTUSDT": {
-"file": 1047,
+"file": 0,
 "giorni": 1047,
-"sha256": "028f4259c46184543e683cc5d697bb0bc2c7e7c88fa246a2a6d7aee13231aba1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GMXUSDT": {
-"file": 60,
+"file": 0,
 "giorni": 60,
-"sha256": "e868b1ef96741b8c7f71ec75c189c34abf521f15c69a1831c5911b8d3db2c074"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GOATUSDT": {
-"file": 135,
+"file": 0,
 "giorni": 135,
-"sha256": "58a8ec0bd888c0c9c7a44aa5581702ec404981d38e402b4194453e9c70ca5b39"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GPSUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "b9881a0f4ce91cfdb05e1a790928344afdbd0b1cdd2a06731a99c5b18c5953a5"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GRASSUSDT": {
-"file": 232,
+"file": 0,
 "giorni": 232,
-"sha256": "e9d276ebf2ea30ad6a08ad4c06275080759e7f5685ab70622a26b213f7f4f696"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GRIFFAINUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "e8d5788be4f9db29d03e8fa57a8377bb0e901f45a46475f4760b82dd8c0917f0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GRTUSDT": {
-"file": 1307,
+"file": 0,
 "giorni": 1307,
-"sha256": "d6479960573813c7f6ac3544a0dd806ba9034558dd862a4dc28eb07243aafc2d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GTCUSDT": {
-"file": 624,
+"file": 0,
 "giorni": 624,
-"sha256": "b337f7954918055c88bf21231dd1efdc6810b553a573a6b6ab0efdadf2d77cf3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GUAUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "f97cfa72e772b179177e0ddfb8f28c327b50b311fd5dc9af9d2d592e5d1225a8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GUNUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "887ea1c12f1ced4862d64ea3ef2af934c6bfb1a0baa55b1005c05fe27cc0b408"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "GWEIUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "a9686f770d1a1ac44db6c3caf4f57c0ebb08f66f6f998f97c004f8fa1028f8f3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HBARUSDT": {
-"file": 1728,
+"file": 0,
 "giorni": 1728,
-"sha256": "b7eec3407853968eefddee6b216b3911a9fbaf18257e3e3c1f6e5d689c6e782d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HEIUSDT": {
-"file": 107,
+"file": 0,
 "giorni": 107,
-"sha256": "257fa4c94e03fa746c15a7fdc64b46656e2052051b76265579ec4c78a693774c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HEMIUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "67e1e5ba35f623c787524dd44ad4b25d4cc96df4ddb608b89d469a9183412148"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HFTUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "87dfd71249673c71a39a04b2f7ec2e03e0441a7b20339f869bf5823c3232b1b6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HIFIUSDT": {
-"file": 241,
+"file": 0,
 "giorni": 241,
-"sha256": "5b22e1b4f8902377465c8d344c32e256dda964aacea444dc7b83419723e49d16"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HIGHUSDT": {
-"file": 272,
+"file": 0,
 "giorni": 272,
-"sha256": "8f629e00e6329dbe39ff99c804d04751155ce327fc1899b657c7807e99442fa2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HIPPOUSDT": {
-"file": 74,
+"file": 0,
 "giorni": 74,
-"sha256": "ffca7b86af4abfbbe8ef909cbe1fbe93ddd835a46400e7e4f3c807d516d02223"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HMSTRUSDT": {
-"file": 60,
+"file": 0,
 "giorni": 60,
-"sha256": "ccd1f7e99f62941a43b16dec5814428a1f2af6f5bc767676476eb53701e86aed"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HNTUSDT": {
-"file": 429,
+"file": 0,
 "giorni": 429,
-"sha256": "54a54995bca27b6c26e38cdd1b3ea5c69a5a452e19433c984ea0def061b18570"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HOMEUSDT": {
-"file": 121,
+"file": 0,
 "giorni": 121,
-"sha256": "fbca511e6999dfb5cc3a809808057d02e67d3b6d5d6ca5f2b093df04540bbdab"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HOOKUSDT": {
-"file": 242,
+"file": 0,
 "giorni": 242,
-"sha256": "fc9c937a4df2b29a6c1d2b1ef8d5c831f01ffe6ba41289c27c604bf3ee729816"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HOTUSDT": {
-"file": 570,
+"file": 0,
 "giorni": 570,
-"sha256": "ccc9b50639f56f1ea9f6449dfbeec8f12805a4ca7ca77aeecfeb388f1a46dd09"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HUMAUSDT": {
-"file": 72,
+"file": 0,
 "giorni": 72,
-"sha256": "a893b6d7e62de2e1b24292805d830b2d5aa15e18df91505d0dfb01baff05367a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HUSDT": {
-"file": 256,
+"file": 0,
 "giorni": 256,
-"sha256": "630f8267418391e7508b552a9d667de5fe1ee5391b7c2dd0e533c038e3141a8a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "HYPEUSDT": {
-"file": 331,
+"file": 0,
 "giorni": 331,
-"sha256": "deaf7a24890c812ec4c998c96d635a77e253e72e0a1ad1f34354a4adb572a4f7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ICNTUSDT": {
-"file": 44,
+"file": 0,
 "giorni": 44,
-"sha256": "234b7964b9ab7f51c78b098b920349da4f075e4ca06afe24134e0bef117c507a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ICPUSDT": {
-"file": 1482,
+"file": 0,
 "giorni": 1482,
-"sha256": "c3118298576e33634a2e2ce9344f9e99ff9f95d3d743af6b7784e813f96d3b41"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ICXUSDT": {
-"file": 377,
+"file": 0,
 "giorni": 377,
-"sha256": "d08eddec82c9e65fe4a6337dca7f874a0b867af0d727f888ff50441e57b4a1a0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "IDUSDT": {
-"file": 356,
+"file": 0,
 "giorni": 356,
-"sha256": "211d72ae588806fce72a74d222eca183deacaeaf547edb569e82fb71900bfee9"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "IMXUSDT": {
-"file": 1039,
+"file": 0,
 "giorni": 1039,
-"sha256": "91d42005153580abdbdcaabb98ea92bfea59ce6806a1dfb6c3a829185f652787"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "INITUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "e54be3d0ec7a179ba487da40b54c70aa82f39f79c72bdc531be28a1dcea41dfc"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "INJUSDT": {
-"file": 1353,
+"file": 0,
 "giorni": 1353,
-"sha256": "1a43a99113f9ca1676fcf1c500869746630e2c077a3f82ea4f48f365c4cb1a44"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "IOSTUSDT": {
-"file": 270,
+"file": 0,
 "giorni": 270,
-"sha256": "8ae00108add630310d8a3446e0688769ea6a8af64ab257ddf2fed878264b930c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "IOTAUSDT": {
-"file": 665,
+"file": 0,
 "giorni": 665,
-"sha256": "b47428e722f659d825912e31490ca377dd7eacd233afdf3990dfecd58aa88b31"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "IOTXUSDT": {
-"file": 254,
+"file": 0,
 "giorni": 254,
-"sha256": "19ccab5d3cb6260aeefb8522afd9b9eaffe995a0de6df5a65746f684e8f9bf6f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "IOUSDT": {
-"file": 237,
+"file": 0,
 "giorni": 237,
-"sha256": "0e357350637b3c36eb4dfe2ade465172fce7492344d96d4859cc8dca2413ad22"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "IPUSDT": {
-"file": 337,
+"file": 0,
 "giorni": 337,
-"sha256": "38a77926da08dc039b111f265d450c80862217d50b479f4fc28856c40e36c480"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "JASMYUSDT": {
-"file": 890,
+"file": 0,
 "giorni": 890,
-"sha256": "c9fb128ed1fd422f3bf31d78008604a47a9936200b03fbb74ae7590c2fc23144"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "JELLYJELLYUSDT": {
-"file": 158,
+"file": 0,
 "giorni": 158,
-"sha256": "aece4dd86409219e6915c0d381dc13f55351ab84de44af687bfb9fae5f0d97a4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "JOEUSDT": {
-"file": 111,
+"file": 0,
 "giorni": 111,
-"sha256": "b001b30a170546695bcff6f7e08fe49f04301d45d1d9a67a2bc3c0cf9e4b455b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "JTOUSDT": {
-"file": 804,
+"file": 0,
 "giorni": 804,
-"sha256": "84a1ac6eceffecfc5bbb7081989165c4b4fc7e3c56a62ca3c7c32cbbf84eec0c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "JUPUSDT": {
-"file": 816,
+"file": 0,
 "giorni": 816,
-"sha256": "f2d52a4be43edb588a9df3cd9ea67f002115739d25a02576f5aae344e779c3e8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KAIAUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "58755e932d69951ed47a8fbe71a49489d5390542fc6b26547db151677691f4e4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KAITOUSDT": {
-"file": 272,
+"file": 0,
 "giorni": 272,
-"sha256": "822e3cc07fb8063f68752c503e4c5c4ebb6ae7c2d34d091396fe2a222ee2252e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KASUSDT": {
-"file": 416,
+"file": 0,
 "giorni": 416,
-"sha256": "330c3a37d4ae1f4ecd7c4ba8ef91a432d0f12fffef7495f538256499c75788be"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KAVAUSDT": {
-"file": 928,
+"file": 0,
 "giorni": 928,
-"sha256": "37b3a2eb4d817ce67be343ff41899c847f79b874e436905bd9776635fc6125c7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KDAUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "50e8a145822c745b71a4315f0d8f07712587ed57b3fd8e25c42fcee14e3bab8d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KEEPUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "16afc499397481ee118a17cb26f783e108493335f6c7d313138662892f2fa680"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KERNELUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "2a52804b64f3232cb5a421853cc6f7e1631505e907d36f55c144fd2ef3f35da5"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KEYUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "a54193abf035e2be9c1bc2cbc33d0ddbcbbcfe64d79b1cabc7ab6c86cbe4bbec"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KITEUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "938ee73b0f3875762e5e9bc17c69ef1ff910334edc3d5ae1b3d3e3bb4ee14a81"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KLAYUSDT": {
-"file": 390,
+"file": 0,
 "giorni": 390,
-"sha256": "837132db25114a4702687da909d9f869fb8d846846f0616a35e9d5ea352652e6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KNCUSDT": {
-"file": 699,
+"file": 0,
 "giorni": 699,
-"sha256": "b81242bdd14b4a5620062f0b517977e7790c3f38a6b4c223faa60b8a541282f8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "KSMUSDT": {
-"file": 593,
+"file": 0,
 "giorni": 593,
-"sha256": "a58f41115895316016aed807bc73b3cbe8bc1be5a8a35f35d4b6c78732331aa6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LABUSDT": {
-"file": 191,
+"file": 0,
 "giorni": 191,
-"sha256": "9b058257bb65c697d6e529bb8ca8c909156f20396492809409a10c4dd85055ff"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LAUSDT": {
-"file": 88,
+"file": 0,
 "giorni": 88,
-"sha256": "64897b5853e7379805ede90ac0776469a44f7b83491d796ed09a19a3e6bf81f5"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LDOUSDT": {
-"file": 1318,
+"file": 0,
 "giorni": 1318,
-"sha256": "8a2896cf769739ef5e6a9248aadf0107477bc527eb812c0bad2e8a38b3225dc0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LEVERUSDT": {
-"file": 216,
+"file": 0,
 "giorni": 216,
-"sha256": "b9d2f50d177d196bcffcecb4faacf41b59599cbd549a9e4941e1e603367ff385"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LIGHTUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "504809987bd25137da3341822b47d9e47c17adfa38490552631c695747241fb3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LINAUSDT": {
-"file": 993,
+"file": 0,
 "giorni": 993,
-"sha256": "fdbc7609033bb3a3ab9e1c4e844dd402d50b3c465f2644eb62889241fdbe1959"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LINKUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "518e17a878fd07fe7fdb433513c7601eceb8b41e5da474524672bfc8f397d2a1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LISTAUSDT": {
-"file": 67,
+"file": 0,
 "giorni": 67,
-"sha256": "5b4063d050481bdc90a3860bceca30b729908bb2b080be68de077723deedbeaa"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LITUSDT": {
-"file": 985,
+"file": 0,
 "giorni": 985,
-"sha256": "ac46c4a20590a75be69bd882bfd2745c24f9c1d8161d967800f61b51be446b98"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LOOMUSDT": {
-"file": 67,
+"file": 0,
 "giorni": 67,
-"sha256": "3b454884f85fa30c828d809607d1cd873caa43690bc02cd9099424fce45a2805"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LPTUSDT": {
-"file": 637,
+"file": 0,
 "giorni": 637,
-"sha256": "4dce1afecd3ecb69ab8cf1ae73e838829577d6ec780c96815c187473047b077a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LQTYUSDT": {
-"file": 144,
+"file": 0,
 "giorni": 144,
-"sha256": "02e26ade03f273b64c38ced2e920b38bcb8713b3de2114eb358bb083017ccdb2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LRCUSDT": {
-"file": 580,
+"file": 0,
 "giorni": 580,
-"sha256": "6dba3f3d58f8ad794a35ba4d0e43c0e046d5e9f5de83966b8189f11b7b37e981"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LSKUSDT": {
-"file": 88,
+"file": 0,
 "giorni": 88,
-"sha256": "f9c4d73de1f7531aa4b6a90b1e3beb2121cbdf9a94b492bda106419b0c999f20"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LTCUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "eacc10fd45f1d88b5d2b09853f1b76dc71bf3085e5544b78066630fb13a5ba1e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LUNA2USDT": {
-"file": 577,
+"file": 0,
 "giorni": 577,
-"sha256": "aeffa5380ee9730e8be32caaf177ae1467b1c6a3be702023e52dc90fd7921a36"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "LUNAUSDT": {
-"file": 156,
+"file": 0,
 "giorni": 156,
-"sha256": "8b51b0b928840c20898e717881d0633973ffe6f7a62db2cbea7aaaba3df40e31"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MAGICUSDT": {
-"file": 419,
+"file": 0,
 "giorni": 419,
-"sha256": "2dae3af7ccb6cb9125cf7eefccc7e9233d3d32614ad6a9433044ca7ce1c2aa7b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MAGMAUSDT": {
-"file": 95,
+"file": 0,
 "giorni": 95,
-"sha256": "38b12003322793206de5dbc2a13b8db190f10a31def6c47f33b20a47f49c6cb8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MANAUSDT": {
-"file": 1324,
+"file": 0,
 "giorni": 1324,
-"sha256": "2fcd7930876184c95ac67dadb0fb9209b47725af0f0d458a5eeedd4f0ea00f0f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MANTAUSDT": {
-"file": 121,
+"file": 0,
 "giorni": 121,
-"sha256": "e85e12ff099882614fc967a68d5a1e6dae42ecb7172e724898172a00ece83c98"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MASKUSDT": {
-"file": 1212,
+"file": 0,
 "giorni": 1212,
-"sha256": "1576aedd7253f4461e82da38342370321263b58e5fdaa4778cd319690403ff34"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MATICUSDT": {
-"file": 1007,
+"file": 0,
 "giorni": 1007,
-"sha256": "303e5cfb56587e3b40c90d559cc13a8180953e58d1810da5907c96f10c9e6a79"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MAVUSDT": {
-"file": 158,
+"file": 0,
 "giorni": 158,
-"sha256": "d41fe249a1df2684589b25a84c14a9e3cc5d08a876766c9bea56e85f6e880cd8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MDTUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "5a75ae77d5f65068eaacb26d2f715af4d1a870f3c7ca4e9f75cc5651f6413e12"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MEMEUSDT": {
-"file": 519,
+"file": 0,
 "giorni": 519,
-"sha256": "c54f95ea52e124ebc2956c29c8f660d502eebf4d74634f79f1e2338f977765b4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MERLUSDT": {
-"file": 107,
+"file": 0,
 "giorni": 107,
-"sha256": "b3595e3ef1752c12498d5bb2097e253f319386c5c685b394b10fa815d4afcd5e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "METUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "9063ccddfd73b963368bbe006f50ddf855b59808b52af20f5583d199a9a28fb0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MEWUSDT": {
-"file": 130,
+"file": 0,
 "giorni": 130,
-"sha256": "0f750a1fd6429461ed5d16474b2bfe7b238c1762e612b38ca0a283e4c86caf9e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MINAUSDT": {
-"file": 444,
+"file": 0,
 "giorni": 444,
-"sha256": "df0e3ea066b833c33f27d43bd461fe44f8a5e360c1e570e3aaaf73b3cd58b950"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MKRUSDT": {
-"file": 1388,
+"file": 0,
 "giorni": 1388,
-"sha256": "d7848eb63abb9d525c935cdb78635670f4c47b604bd01f0862d5154332b8aaf4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MMTUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "7272f658173b3da5292f961790339571eef41e40d62da68d72d8d7de52272122"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MONUSDT": {
-"file": 144,
+"file": 0,
 "giorni": 144,
-"sha256": "61f31cdff287fcdef6fa0af2e5fb158acf30991ef2438f315a9231b764080225"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MOODENGUSDT": {
-"file": 338,
+"file": 0,
 "giorni": 338,
-"sha256": "238d2603cad93cebf305403b62b52ac0c13ba35139949c0e56894ab9b6bf383f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MORPHOUSDT": {
-"file": 218,
+"file": 0,
 "giorni": 218,
-"sha256": "7158f2ae593f443a26bd6b192379653b2fbab869d14b4e2e4704e95e92f6296a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MOVEUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "4ad4cc4f40c51ae880eb2794a4773fd3cd56897928679f200085316af5174156"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MOVRUSDT": {
-"file": 44,
+"file": 0,
 "giorni": 44,
-"sha256": "432f35446a980d894d545e5772f9158700aaafa8946b55566f9b37beb0e84bde"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MTLUSDT": {
-"file": 824,
+"file": 0,
 "giorni": 824,
-"sha256": "09fa04aa8c3b03ee0438bfe4748927c01775b17ac203a52d35ed4b7125512cfb"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MUBARAKUSDT": {
-"file": 86,
+"file": 0,
 "giorni": 86,
-"sha256": "fabaa59af7a5210abe921a459a5ce43c4322c6b77fe9f34a9d1afae97d3a7b73"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MUSDT": {
-"file": 123,
+"file": 0,
 "giorni": 123,
-"sha256": "52a4b6feb54442db2e540d7eba6d13db939566152c8a69bc77262a2e2855e702"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MYROUSDT": {
-"file": 86,
+"file": 0,
 "giorni": 86,
-"sha256": "675093a748b8932a65df630afa7d3a70ee327a1df50168a88492385014caf7b2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "MYXUSDT": {
-"file": 165,
+"file": 0,
 "giorni": 165,
-"sha256": "c7bb80b61bece5650e8f75da3e4a3fd1831773bd676af067682aec5c3473f625"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NAORISUSDT": {
-"file": 100,
+"file": 0,
 "giorni": 100,
-"sha256": "2d73378a09ba40c25fc217bac70c44aa73860cc7705e6cb9153a2815ddc2cf4c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NEARUSDT": {
-"file": 1779,
+"file": 0,
 "giorni": 1779,
-"sha256": "c9056e9673555f8a59bc808130a6a5ebd538e43a3c55b4e0a19ca512daa076fd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NEIROETHUSDT": {
-"file": 114,
+"file": 0,
 "giorni": 114,
-"sha256": "d6e82b156544e9bd5c753f430ed085d9b9f9d0ce2f67913149b26580f297cbc6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NEIROUSDT": {
-"file": 443,
+"file": 0,
 "giorni": 443,
-"sha256": "60b84a34d654f90ab15b4013187ac5854ce42ddafbff9fb6613c6f2274ea1fef"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NEOUSDT": {
-"file": 1226,
+"file": 0,
 "giorni": 1226,
-"sha256": "eb290bd401b1b12e57acb80c835ec7f2380203d59ec76b7ea59b7c5f2fb294b1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NFPUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "7b95d3385ea75e844fa002eb60fd0a7778266191a77b8ccaf91f27623eb08b95"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NILUSDT": {
-"file": 139,
+"file": 0,
 "giorni": 139,
-"sha256": "b86c6f30328136e37ff8c008e7060842bea86fd81288c62bbe064bd8f96f16f2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NKNUSDT": {
-"file": 464,
+"file": 0,
 "giorni": 464,
-"sha256": "b84394ddc1e51cf2505398236d08c6db3ee78a1c7a953fc8d650e121a01ce069"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NMRUSDT": {
-"file": 179,
+"file": 0,
 "giorni": 179,
-"sha256": "35a72663f61e19deb72831413b16e18e258471ee55498dcc335f6a9c8ee0c37f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NOMUSDT": {
-"file": 44,
+"file": 0,
 "giorni": 44,
-"sha256": "a0e0143a68921baa8396524cc521b1974ca088f94c07310368ea9666e25146f2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NOTUSDT": {
-"file": 263,
+"file": 0,
 "giorni": 263,
-"sha256": "32b8ea20bd0266db60515b63509edf65a368268c7c7db23e5fca090e1038b547"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "NTRNUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "fb102c3849b053b62ef518c6a375a58e3a55eff4983855573841e5946e0f7a04"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "OCEANUSDT": {
-"file": 880,
+"file": 0,
 "giorni": 880,
-"sha256": "50bf64964fc408179c4ac71180b0817dd634c01b87e302e8681f89e8058a7fd3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "OGNUSDT": {
-"file": 491,
+"file": 0,
 "giorni": 491,
-"sha256": "6ee5dbddee86265a7acf9840ff3f7aeb338cefb1fa1cd4e3efa0d2416adc9e0a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "OMGUSDT": {
-"file": 573,
+"file": 0,
 "giorni": 573,
-"sha256": "ff167619b5d2a84bf17624992fc3cf8a00c2d6a05c67132a843e0291bbd0711a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "OMNIUSDT": {
-"file": 100,
+"file": 0,
 "giorni": 100,
-"sha256": "b56ffa3448fd49c67b123303a241d45978edd0ce61a76726d82b84b9c77fcaac"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "OMUSDT": {
-"file": 576,
+"file": 0,
 "giorni": 576,
-"sha256": "5fcba0b87d20bac15090ef8726c2ff055d0f12ba462324920a4e1e72ab7bc5ae"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ONDOUSDT": {
-"file": 828,
+"file": 0,
 "giorni": 828,
-"sha256": "a34570030563531f1fa2fedefa7c88de5d67802e4138e928c7296543524a7478"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ONEUSDT": {
-"file": 547,
+"file": 0,
 "giorni": 547,
-"sha256": "2e648940148bed3418438990fa4cf1ffb1b58cdb3be2c19b46430379abd32996"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ONGUSDT": {
-"file": 139,
+"file": 0,
 "giorni": 139,
-"sha256": "0ff8825e53005fad3ed082b14d2bd8c94128c5df12a52bf43c6c49b6c5bf2211"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ONTUSDT": {
-"file": 574,
+"file": 0,
 "giorni": 574,
-"sha256": "bf807f71c84c87760de06cf50b8799a3972965b309982b08a536af31e3d6dae5"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ONUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "d498e5f3af97bcb86ff163300dc1923471fd2e34a7b87270bd8f76ede3349b61"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "OPENUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "136d2ab092b35692fa593086eb6ed3ad9e809026e6b0f92b74690d532e55594e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "OPUSDT": {
-"file": 1430,
+"file": 0,
 "giorni": 1430,
-"sha256": "6ac43553da7d3d82ec8444998c137ab39708263d883dc822b82c1d4dc6a52b4d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ORBSUSDT": {
-"file": 74,
+"file": 0,
 "giorni": 74,
-"sha256": "a21a49fda34221941cd72a4489924427e42cc5c2310180855bf70621652c996c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ORCAUSDT": {
-"file": 88,
+"file": 0,
 "giorni": 88,
-"sha256": "396dd1203d02cc424ee2b93c80ed07633b44842c90ec9c92cb62df1a1b3c3fe6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ORDIUSDT": {
-"file": 886,
+"file": 0,
 "giorni": 886,
-"sha256": "303f5b409a9b78751ecdbcaf59bba429fe2d260b21161ab49c8de73c6fb05871"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PARTIUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "22a65ba6f18be6c29b29b8cd55edee35631e598d3cadc44ba80ba1c9c875203c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PENDLEUSDT": {
-"file": 1003,
+"file": 0,
 "giorni": 1003,
-"sha256": "a0a5a581b8a7875064b18a144c0bcdb35850e834ef75d78d3fe6578a144b8dc9"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PENGUUSDT": {
-"file": 499,
+"file": 0,
 "giorni": 499,
-"sha256": "957372aeca295b2a3c7c5a7090936afdd6f1c76bef7a14a41b819234d28ce75a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PEOPLEUSDT": {
-"file": 1219,
+"file": 0,
 "giorni": 1219,
-"sha256": "d9540257a15008318462e610fe76f02086d8dd624ab0a57a158c68eefda545cf"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PERPUSDT": {
-"file": 130,
+"file": 0,
 "giorni": 130,
-"sha256": "364635bae81ae4fac3573e8ce4acb05a854ab649ae1bbabe6379df1d943764ef"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PHAUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "4574c5f2cc556b183cca6f48293c148f089c6c244fca71de6e16b1a6a3649664"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PHBUSDT": {
-"file": 246,
+"file": 0,
 "giorni": 246,
-"sha256": "59eb4aa8b710ead9dfac119bcc17f29afa89304f8880556f294591fbe2eaafa1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PIEVERSEUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "ab007077183d4632830f3f0c1c7de3c6575859530b5eb737ac009b818740be09"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PIPPINUSDT": {
-"file": 282,
+"file": 0,
 "giorni": 282,
-"sha256": "e63e061cc6371ede0afcab31b66a4233ef8b58139a54a6af80c5589d70002626"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PIXELUSDT": {
-"file": 179,
+"file": 0,
 "giorni": 179,
-"sha256": "3f46f6af1c7f64621d8e86aa540deaca62887160f4c5c555590f5f9e871209cd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PLAYUSDT": {
-"file": 114,
+"file": 0,
 "giorni": 114,
-"sha256": "a55b7d737a6c2ff60c6b3c7bf1bb9d850ef1c2353fd0e4510907b91607c81194"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PLUMEUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "34e37d85a2586fc9804f57f570dd79e1e99211821fba2102d02e87850a197999"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PNUTUSDT": {
-"file": 333,
+"file": 0,
 "giorni": 333,
-"sha256": "03a955bbafbf7c23ee2e9a1d8b6e4596b8c7af6db4ea62cbc8e99c2c654d7111"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "POLUSDT": {
-"file": 590,
+"file": 0,
 "giorni": 590,
-"sha256": "57aa1c152b960847eb36c3bf18c7986b5d80cf30376a945827a4d6ac3a247b4f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "POLYXUSDT": {
-"file": 151,
+"file": 0,
 "giorni": 151,
-"sha256": "a773b8a8f3dbe487b87a02c30b254d37b57da883632687fac307f10470f84474"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "POPCATUSDT": {
-"file": 310,
+"file": 0,
 "giorni": 310,
-"sha256": "ce8f39f000947d6c3f009c491ca836771432fca6dd3a5db3f2ef554256e01408"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PORTALUSDT": {
-"file": 104,
+"file": 0,
 "giorni": 104,
-"sha256": "a1221d0081c85daf62ecf75e72bbc2b85f6ddd83c7b021efe36afc7e1651e8ff"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "POWRUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "f6b26b641c0e717d8c10fd2b69ed1fff802249ad4234ab9d025fc8ca360adee7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PROMUSDT": {
-"file": 93,
+"file": 0,
 "giorni": 93,
-"sha256": "aebb063e8543453d89773b553a9e1669a6dbc8d7bf4f36a571bb132061aadac0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PTBUSDT": {
-"file": 44,
+"file": 0,
 "giorni": 44,
-"sha256": "18789defbbc9cb2f6497e7120cc4554cd24e12d976999718da6d7455aa293dcd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PUMPUSDT": {
-"file": 380,
+"file": 0,
 "giorni": 380,
-"sha256": "7a4726c3f667f93e4d054b3ee51c2dd71c16c80f90ebc95cb5d1810c0e6590f8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "PYTHUSDT": {
-"file": 665,
+"file": 0,
 "giorni": 665,
-"sha256": "b6489ff0e61803db4f9333b04e8b7c9d679081548321031c6c9d5901fe3e2c17"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "QNTUSDT": {
-"file": 67,
+"file": 0,
 "giorni": 67,
-"sha256": "ed7d7a6ea5e9fd215ecf889f70f311176ae4952d6938f2f1b132c9d5fa5b4d78"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "QTUMUSDT": {
-"file": 825,
+"file": 0,
 "giorni": 825,
-"sha256": "52ea3d74bd3c5900425fe04ab5bd6747f6b808f06b6491f757b7db319903dc45"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RADUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "984214dcb194c9fa19addc0eaec7da632b386395e09964e76dff409ebf145240"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RAREUSDT": {
-"file": 93,
+"file": 0,
 "giorni": 93,
-"sha256": "4d736adbbcdc088fcfacfa996285dc0e39c7a59901b1151310cc2a9f9e2272a7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RAVEUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "704e0584e6d0cc85688104484a0825b89a41cd07222489dc18ff733cea5291ec"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RAYSOLUSDT": {
-"file": 179,
+"file": 0,
 "giorni": 179,
-"sha256": "3925711936228488d0cbf4ed5f796f5f34b9c2dd54ec46246cdb8fb859a8984b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RAYUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "efeba0b96055e0ae6b78f86cf549f488fe0d9e4f51f6dab40312d53feea19496"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RDNTUSDT": {
-"file": 249,
+"file": 0,
 "giorni": 249,
-"sha256": "2e5936b3a57e7ab4d875a953e05e575e2d0eae2a7e26e5280ca1e9b3fd586428"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "REDUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "b83342508cd7c2188e3764e95f516da3e3bcfc9aa8ccc9665d74c116a9a5a722"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "REEFUSDT": {
-"file": 547,
+"file": 0,
 "giorni": 547,
-"sha256": "ac63ccdbb40c72b538c9ba8843a0cb7ac36067225adb6ccbe3a82facbd0c46ad"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RENDERUSDT": {
-"file": 639,
+"file": 0,
 "giorni": 639,
-"sha256": "46b5f45dd24d8680bd554fc0b8efc7d612dde70da50ecb5020a22fe1fe93129f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RENUSDT": {
-"file": 655,
+"file": 0,
 "giorni": 655,
-"sha256": "6057d1b504472c76b49028821e20d0c8722775668fcce28b9fa260ec9379e844"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RESOLVUSDT": {
-"file": 142,
+"file": 0,
 "giorni": 142,
-"sha256": "0dfdd50cd2064fa4e19486d11a0e57410c0dc2817c587f83756ebba8988dca83"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "REZUSDT": {
-"file": 144,
+"file": 0,
 "giorni": 144,
-"sha256": "26fc823912dc43f606b79512a3327b5c4ead9ef3ffc31779b833a9c0f4797716"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RIFUSDT": {
-"file": 130,
+"file": 0,
 "giorni": 130,
-"sha256": "4e7af495ab0ffec61bcd80517dbd987716591d896b5b630f9b5f39c0c3592cdc"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RIVERUSDT": {
-"file": 177,
+"file": 0,
 "giorni": 177,
-"sha256": "b2a226de3a2e887b7822a5d2a8f15c94fbb0967bf51937e31c187fef87a534c1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RLCUSDT": {
-"file": 587,
+"file": 0,
 "giorni": 587,
-"sha256": "ecbb311dd940b20bfbaaef968cdbfde2ef3c112f1cac2d169cb39bf8cceffa76"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RNDRUSDT": {
-"file": 352,
+"file": 0,
 "giorni": 352,
-"sha256": "145c9ee44af13d3abbdf02a6cc1ae1021349e2105d6f772c1d05fba6e8430090"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ROSEUSDT": {
-"file": 759,
+"file": 0,
 "giorni": 759,
-"sha256": "6c2712507acc7b5a38cbbebd1db467a10275249d154fb61baf104284adac058e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RPLUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "4a68650798516198aeebeb09ab6e7192891f264c2974e54350a866d8729f4658"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RSRUSDT": {
-"file": 964,
+"file": 0,
 "giorni": 964,
-"sha256": "d7148cb6a736643617c57105d7a0cef5475c226b559ef01abed1dd2a9b2d9091"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RUNEUSDT": {
-"file": 1317,
+"file": 0,
 "giorni": 1317,
-"sha256": "14523f85bd6ce441bc6f773b11fa23bf0941fb27ae2d1a9fea2fa914eb47c960"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "RVNUSDT": {
-"file": 437,
+"file": 0,
 "giorni": 437,
-"sha256": "01d80c237524b79aad0a2c7057db8191ef462fa34496fac9020f6e066c7b6e01"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SAGAUSDT": {
-"file": 330,
+"file": 0,
 "giorni": 330,
-"sha256": "79c053afdde71a184f0b5c9d307247ef8328522fbedeb00698545780c1b09a96"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SAHARAUSDT": {
-"file": 149,
+"file": 0,
 "giorni": 149,
-"sha256": "ac74ca7bcfd94340b050bd7540a66c73f05421b359eda5c51ea0741ab0207fcf"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SANDUSDT": {
-"file": 1698,
+"file": 0,
 "giorni": 1698,
-"sha256": "37109eec630405068ad034d57aca85b40d3ab20589b3d86ea2c351c560180d58"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SCUSDT": {
-"file": 30,
+"file": 0,
 "giorni": 30,
-"sha256": "4a4ec6c84022c6c7fc164d8eea8979fd5ccd3c4517a368df0951963d79f68a24"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SEIUSDT": {
-"file": 989,
+"file": 0,
 "giorni": 989,
-"sha256": "a93a35ca6ed1fa77564b0019ba11868bd678c32f2a735ccf5ff231020fe9ce0f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SFPUSDT": {
-"file": 463,
+"file": 0,
 "giorni": 463,
-"sha256": "2d298192396baf219248c2b04e39cc41f2ab9f76b468f67275dbec305be25890"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SIGNUSDT": {
-"file": 79,
+"file": 0,
 "giorni": 79,
-"sha256": "66e5fa7a7b78b3d16fcb11fc982b9fe9035d29d9cc813e2de01e23988673e496"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SIRENUSDT": {
-"file": 191,
+"file": 0,
 "giorni": 191,
-"sha256": "04068cf106080b1cc748e0079cf9df1e738765258761a020bd6a043ccbac61ff"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SKLUSDT": {
-"file": 507,
+"file": 0,
 "giorni": 507,
-"sha256": "6a0c70da8769ecc41b923f5a686954287930dc52c288eaa8f933b5bdc319adfc"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SKYAIUSDT": {
-"file": 163,
+"file": 0,
 "giorni": 163,
-"sha256": "3f3f18c0796e9d8284d55198caa357c6e38d579d64ed30104ab9404ca7c2cbd2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SKYUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "e209470dfcb3b392133398d36e6b85be311ae91db42e28814f281bc6c3bc1267"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SNXUSDT": {
-"file": 1162,
+"file": 0,
 "giorni": 1162,
-"sha256": "79691747a505a374d85b6ab338ab8c790241f004d100ceda932050f792106d93"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SOLUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "672ce2c84d8fe7a9a50cc3ffd3ebe1bfa5f7bbd993eba7db46347366a3aa95bd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SOONUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "d584b0a9ff930d2da788c6ad796905c2ddf1362a3859492cbc0d81c890ace893"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SPELLUSDT": {
-"file": 174,
+"file": 0,
 "giorni": 174,
-"sha256": "071559464061494783fa5e06bef70cfac6390c6a2ece84d5a0284f75327291a6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SPKUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "cc9c4a09c954efba1bc2362e702236279b0ffe49ede85df786d0ba81d01725cc"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SPXUSDT": {
-"file": 347,
+"file": 0,
 "giorni": 347,
-"sha256": "8c5c7937c978b2cf1ff77e5d52a3df2dcc2b6ba190c5b7b68908e3dfa404ff2e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SQDUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "15aa1dd92b3301f5307b371233e83012c6906103d92e052e3f9e3ab6f6688322"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SRMUSDT": {
-"file": 348,
+"file": 0,
 "giorni": 348,
-"sha256": "bc5e431323b56139ef8ed3bc93f5afe990a5cfb06a482d5f95e8aa96c1f00483"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SSVUSDT": {
-"file": 405,
+"file": 0,
 "giorni": 405,
-"sha256": "d1f2ff6febc75068580a6ffc7e5205aaa0fe3a8e2c67db1af5768a2b110dd8ea"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "STEEMUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "eee3409074c8184227756f4eb1ec04f874213557aefdb2444437c942709ab0bb"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "STGUSDT": {
-"file": 453,
+"file": 0,
 "giorni": 453,
-"sha256": "009e342dd9f36604288b9b66fd8c920af9a2270955311af1651d022c7bb093a4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "STMXUSDT": {
-"file": 553,
+"file": 0,
 "giorni": 553,
-"sha256": "66b5614f46b3e86d5ad6b877cdc204b1cad77c85c1429dc6205ab32110a680eb"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "STORJUSDT": {
-"file": 946,
+"file": 0,
 "giorni": 946,
-"sha256": "658312a033abf4e430acc8067d4b3d06b3bef9ab48954a48d01d99dcf4ab36ab"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "STOUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "b2867208971c85338ddfd6e66c3566bdb2f0c62cc866b95304dabad438cc1f32"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "STRKUSDT": {
-"file": 699,
+"file": 0,
 "giorni": 699,
-"sha256": "f3cc66b6dbdeb17170d2073961ce713b9237ded963dab2e3ac481707c1b539dd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "STXUSDT": {
-"file": 859,
+"file": 0,
 "giorni": 859,
-"sha256": "a5f806a9d61f6352d2a338f94d9fe88a3e6ae23f4fb4ffce1c3477fac3dc15b1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SUIUSDT": {
-"file": 1093,
+"file": 0,
 "giorni": 1093,
-"sha256": "356895fc1bf63c4c1c1b24b8f531efee603621eb2b01c4852908fbb74169d80d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SUPERUSDT": {
-"file": 144,
+"file": 0,
 "giorni": 144,
-"sha256": "ea2bc86bfd098559e0364bb4c3e64c1c59bb281aa24ddf0046f4532c1fdd5116"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SUSDT": {
-"file": 193,
+"file": 0,
 "giorni": 193,
-"sha256": "68427fc9dab519cee4f0583fb1f94b074953c98cccaae39fdd269e2604f76d0c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SUSHIUSDT": {
-"file": 1219,
+"file": 0,
 "giorni": 1219,
-"sha256": "3db1d4c824dd42a0296a56466f71cc357abc251bf77f9018917a1ee06148f35d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SWARMSUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "0bf0f078eaa9af0971be19bdad8f7f470d0ee439cb6e62123fc3bc2d4b544001"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SXPUSDT": {
-"file": 878,
+"file": 0,
 "giorni": 878,
-"sha256": "830c982b789b6cc81981b5861290a7347db00f679ef99ad9ed469a564f5efdf4"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SYNUSDT": {
-"file": 123,
+"file": 0,
 "giorni": 123,
-"sha256": "92fbd2af6b13bc239ac23822b7bb8c2dfda0a742641a8b25efc03cfbfa6db3e1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "SYRUPUSDT": {
-"file": 107,
+"file": 0,
 "giorni": 107,
-"sha256": "89ab0cdad5dab49aed613ae6b4a5a8f9a6b93022cfa572ac98d02fd2f7943f57"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TACUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "66493b5c8ed27509acb2e929e4fe5e38f58e208ecda0cbcdcf81cf447cefa47c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TAOUSDT": {
-"file": 751,
+"file": 0,
 "giorni": 751,
-"sha256": "c0499bb26b7e640ad78746109fac7fd8f930e8cfb75d3ee0fd7d01770a8dbc27"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "THETAUSDT": {
-"file": 1291,
+"file": 0,
 "giorni": 1291,
-"sha256": "f4be8d345e698668f30ba8b1aad1289df64865b9dcfead48babbe18ccf046c06"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "THEUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "e8fe00956a7e9e74118db18d223eb5e0a24189bb5ed89443cd20de85d9b34ae1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TIAUSDT": {
-"file": 912,
+"file": 0,
 "giorni": 912,
-"sha256": "5e66951469c29535000cf948309c44afc1bc8757ce7940cf6b5fcb3c6f20ee1f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TLMUSDT": {
-"file": 220,
+"file": 0,
 "giorni": 220,
-"sha256": "e8edcdb2e1fcbff1cd9c9be41afd5f5726733eec1e7aa853326906a4bd10cc70"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TNSRUSDT": {
-"file": 123,
+"file": 0,
 "giorni": 123,
-"sha256": "72f0cac8d58e4353860a93c844dcea165979de09fb5a29b59ec02478522412b7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TOKENUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "e5120bd06e394a26df1b833b35da58b2dd0c399cf862b6d4dcb91fba71f6a52a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TOMOUSDT": {
-"file": 471,
+"file": 0,
 "giorni": 471,
-"sha256": "481f261f5ca38b969e6101d256000f9e525ad96ff479575952e2488354c4e60a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TONUSDT": {
-"file": 681,
+"file": 0,
 "giorni": 681,
-"sha256": "c7bde43a1cc47ccfa6e8cf68443db6ebd043df1e9301fc1f9470db29f944b339"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TRADOORUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "4ae3cadd4f492ab584ffe1a29c52b39d4d209c55e6d892bd3cf8ade54416e2da"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TRBUSDT": {
-"file": 1289,
+"file": 0,
 "giorni": 1289,
-"sha256": "da9b552ffb46280ea21e2f3caa1d8dec1b94466c70ac1cdf0c775c7635fe5fae"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TRUMPUSDT": {
-"file": 464,
+"file": 0,
 "giorni": 464,
-"sha256": "cacbbc50315dc13fa3417a53e2206e53e4794e0882545e4c7e50c9dfcfed3a3b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TRUUSDT": {
-"file": 186,
+"file": 0,
 "giorni": 186,
-"sha256": "8048c4cacb7d822bd270e7793285e207e579b86b09f329fbbe4c84ca379effd0"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TRXUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "1421aa3ca5e8c16c24f6c0b0c6343eb01b35dd40b6f7d2d913366809728f1c78"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TSTUSDT": {
-"file": 37,
+"file": 0,
 "giorni": 37,
-"sha256": "c16b1f501854b51bf40ba1e657ffed146a62ea22689f291cdbbc7f5af97fb94b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TURBOUSDT": {
-"file": 417,
+"file": 0,
 "giorni": 417,
-"sha256": "8293c3ea7190246eb361f22cf02f429e159126abdd20f3c05e819b2291488976"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TUTUSDT": {
-"file": 123,
+"file": 0,
 "giorni": 123,
-"sha256": "efd944614cd045c39178fed8f0c42bd55532e543aae0f5649ce58577dd7efb17"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "TWTUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "2a63ab11e0622da62cf66825e39c1ee9154a7cb55e409b9233d081e2922c3f5a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "UAIUSDT": {
-"file": 86,
+"file": 0,
 "giorni": 86,
-"sha256": "0e951326964140aeb628329bbabb28e45fa255005283e3701acb0c27a3a0794d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "UBUSDT": {
-"file": 149,
+"file": 0,
 "giorni": 149,
-"sha256": "0bd726e1d234e1462472edf5da14234337f215bce768f79b043580af98f511ac"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "UMAUSDT": {
-"file": 232,
+"file": 0,
 "giorni": 232,
-"sha256": "c989512e47300a5b39b3a4c811a5fe26cf6ba262903cdc7c43eca106b0ff5ab7"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "UNFIUSDT": {
-"file": 904,
+"file": 0,
 "giorni": 904,
-"sha256": "2f3def1899ea7c9b825a5fd79b10e341b982bb142ba962ff80c3bce0debc106a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "UNIUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "2c84bb5c7313e42d69963ddeefa117af02a2fb057ff7262da12a4e3649fa3ec1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "USELESSUSDT": {
-"file": 155,
+"file": 0,
 "giorni": 155,
-"sha256": "807eec18beb93f7b15867e5f5644ce5befc062cc9ebd203cb7af40147570bc77"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "USTCUSDT": {
-"file": 81,
+"file": 0,
 "giorni": 81,
-"sha256": "7a05125bd8927113296811dd3a319f5722bd9b4623f9c28c6dde6a5f5427e827"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "USUALUSDT": {
-"file": 86,
+"file": 0,
 "giorni": 86,
-"sha256": "41fd7c6f407840d7a7238670a72067dc554ce7854c6e2604e9279dec7b1f99bd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "USUSDT": {
-"file": 109,
+"file": 0,
 "giorni": 109,
-"sha256": "a444658f6e18739ad7adabdd88ca403a694b5a9e097f16260fa8ee29e13c72fe"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "UXLINKUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "d9fb57b0cbd9381e600f31d37ec28d885d73eb6df60987399a298032f7a39186"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VANRYUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "a7ac784656ed762aa6c589f679f782dd322833129a782a78f64d6b31334eefbf"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VELVETUSDT": {
-"file": 114,
+"file": 0,
 "giorni": 114,
-"sha256": "6538b619fb2125f0f90d5d3564b5fb8737c884383758dac310ab678bd87d52c2"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VETUSDT": {
-"file": 1450,
+"file": 0,
 "giorni": 1450,
-"sha256": "3c323973b6554e8987f703800a0f201b51fcf8340208ea8ba54fd881d4f67da6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VIDTUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "fa5493664beeb135a5785068b92646e346ca83c35a7ac82cb823693a844794f1"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VINEUSDT": {
-"file": 79,
+"file": 0,
 "giorni": 79,
-"sha256": "49f0c67dd1ff81ac18ba7d3d8d90bc1dcb689f7eb6df0a2fcbe4a01133c670e8"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VIRTUALUSDT": {
-"file": 506,
+"file": 0,
 "giorni": 506,
-"sha256": "42c4765818c2887f65494f23349c574f9329599b7135ae6d288c9b95c9b9cb6a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VOXELUSDT": {
-"file": 58,
+"file": 0,
 "giorni": 58,
-"sha256": "80b23753b2aba038b1dba8db4964ac654089c101359c675f8191d39e6ab9f285"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VTHOUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "7434485c014c6285a49939b79dbd11eb5e11ad5e4c9b0e66b3fe2a40b810b45b"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "VVVUSDT": {
-"file": 261,
+"file": 0,
 "giorni": 261,
-"sha256": "6f49fe75875eaaa6e0268662b27a5cc4464872973673bc7d3473d3f47eea3514"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "WALUSDT": {
-"file": 51,
+"file": 0,
 "giorni": 51,
-"sha256": "277383f405689e9f8ab10ef7224af1e34fc72f7def260996e405ca4d3b8c585d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "WAVESUSDT": {
-"file": 919,
+"file": 0,
 "giorni": 919,
-"sha256": "d1abdec0d345da6911f97406b9c4fe62b8b0da1d97e4edef9b13b52f4d728b0d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "WIFUSDT": {
-"file": 835,
+"file": 0,
 "giorni": 835,
-"sha256": "951495ff2a3200ab1f7876b8e482898d5edb3b1e393a896bb79e2f4867915a1d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "WLDUSDT": {
-"file": 1010,
+"file": 0,
 "giorni": 1010,
-"sha256": "85f1d3d768a85278a2a5be09c1d51c8da7bc58aecb5fb20425bef85d27176583"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "WLFIUSDT": {
-"file": 247,
+"file": 0,
 "giorni": 247,
-"sha256": "fefdff9df596bc4756735a24b8ba214780a0e836e1710e05cc62698cbd8aca62"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "WOOUSDT": {
-"file": 508,
+"file": 0,
 "giorni": 508,
-"sha256": "4077642763f04d1b441070288170b85d0ab6a683595015494e8ce86a95345eee"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "WUSDT": {
-"file": 419,
+"file": 0,
 "giorni": 419,
-"sha256": "566f970a75b7538494b0550200d6d4ed41905b0991a272803fda1925914896f5"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XAIUSDT": {
-"file": 221,
+"file": 0,
 "giorni": 221,
-"sha256": "20caa8327857ea6a413d4c0f2cd14e770ecc4f615e84107014a068798284590c"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XEMUSDT": {
-"file": 660,
+"file": 0,
 "giorni": 660,
-"sha256": "832d206dd8e44f416e42707e9ef74270ac317b0061cf0dfa4d32fa4e2448d8f6"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XLMUSDT": {
-"file": 1767,
+"file": 0,
 "giorni": 1767,
-"sha256": "f7b84f1e97e114a1a7688cdac14ea1145ea80aaf1dd4cae73125b994db8f2539"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XMRUSDT": {
-"file": 1518,
+"file": 0,
 "giorni": 1518,
-"sha256": "09f2407ed2ceddfd7248a341b83a010d04fde542e99f982c5aa1382aa9661b06"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XPLUSDT": {
-"file": 247,
+"file": 0,
 "giorni": 247,
-"sha256": "dedb040d8af3362119283471b86073984bb7a0d06df02e9c11d42819fc83e30f"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XRPUSDT": {
-"file": 1780,
+"file": 0,
 "giorni": 1780,
-"sha256": "c247017c80842f2599bc855830f176d97fcdfe860118ccb3b3d1575eba6795fd"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XTZUSDT": {
-"file": 1043,
+"file": 0,
 "giorni": 1043,
-"sha256": "364226624970ee78523e6d2ef3ea373fce123e3a52dc9d8cc30b7ed79a17cbce"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XVGUSDT": {
-"file": 211,
+"file": 0,
 "giorni": 211,
-"sha256": "6f44ab4675f6035efa704b42e51d58e21e2153653f08447ab5d65ed34800341e"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "XVSUSDT": {
-"file": 92,
+"file": 0,
 "giorni": 92,
-"sha256": "4100f93f9f8d0aed2822e2d3a4e3240622bd6a342da7f063949d5ac7258578e3"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "YFIIUSDT": {
-"file": 65,
+"file": 0,
 "giorni": 65,
-"sha256": "b8b9ebd2f71612d2e7e64fa5d4faaa00523efa0cb110105da261fae257218a20"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "YFIUSDT": {
-"file": 718,
+"file": 0,
 "giorni": 718,
-"sha256": "16bb54a0652157f814666776697f75b70c4736bfad04aca6cf6f016789667f97"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "YGGUSDT": {
-"file": 319,
+"file": 0,
 "giorni": 319,
-"sha256": "b1c3383eb706cdc97210be543ad9887032755d925dab00d600e1ba66794ff739"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZAMAUSDT": {
-"file": 102,
+"file": 0,
 "giorni": 102,
-"sha256": "58ffc0c1812f17a0abbeed011714b568cf017c3f8eb4b4a19ebddb10dbce077a"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZBTUSDT": {
-"file": 102,
+"file": 0,
 "giorni": 102,
-"sha256": "b00a2db1d31d97609e9b11d8eb3b61b56801c102d0c4bcafc3f13ee2b0a35e16"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZECUSDT": {
-"file": 1298,
+"file": 0,
 "giorni": 1298,
-"sha256": "385550ef0b30881c82cbbb5bfd891ae7a7bb25238ebc67ed3ba0a4d9ea59e710"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZENUSDT": {
-"file": 942,
+"file": 0,
 "giorni": 942,
-"sha256": "3efebb32cc3f2244070c82e441dfeab0fbe9b53d1b16585a71e0f08091571441"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZEREBROUSDT": {
-"file": 88,
+"file": 0,
 "giorni": 88,
-"sha256": "579e11e0ab4d4ee55064c70e7314738fdb8866d4cecbec0a1d622c708b8b0d82"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZETAUSDT": {
-"file": 179,
+"file": 0,
 "giorni": 179,
-"sha256": "a6fc9526565cea6ecccb08ed6143ae48f13124ab4dffcd3feb1f97a03b1108cf"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZILUSDT": {
-"file": 871,
+"file": 0,
 "giorni": 871,
-"sha256": "f2fdb752cdd3143e05157dd80907dd8f780e5842390b2951434e381847d9a3ce"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZKUSDT": {
-"file": 293,
+"file": 0,
 "giorni": 293,
-"sha256": "679a8230a31b40a5dd40bc2cd6934c252e00bddf7c384e8e2ff8e54ea649885d"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZROUSDT": {
-"file": 622,
+"file": 0,
 "giorni": 622,
-"sha256": "83fa49c00710436dd8d8acaec892de58141a4b7e557e91ff495c2d72b4ef9faf"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 },
 "ZRXUSDT": {
-"file": 765,
+"file": 0,
 "giorni": 765,
-"sha256": "6467b4300881ec400f9e616eb5cf6a4f22f646b735dc3ad69de464dda00b7229"
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 }
 }

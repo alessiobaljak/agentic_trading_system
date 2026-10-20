@@ -12,12 +12,22 @@
    "periodi": 0,
    "totale": 0.0
   },
+  "M1": {
+   "settimane": {},
+   "periodi": 0,
+   "totale": 0.0
+  },
   "F2": {
    "settimane": {},
    "periodi": 0,
    "totale": 0.0
   },
   "C1": {
+   "settimane": {},
+   "periodi": 0,
+   "totale": 0.0
+  },
+  "metà F3 + metà K1 (derivata)": {
    "settimane": {},
    "periodi": 0,
    "totale": 0.0
@@ -121,6 +131,53 @@
     "SUIUSDT": -0.0588,
     "USELESSUSDT": -0.0411,
     "USUSDT": -0.0122
+   }
+  },
+  "M1": {
+   "lunedi": "2026-10-12",
+   "long": {
+    "1000SHIBUSDT": 0.0385,
+    "AAVEUSDT": 0.032,
+    "ADAUSDT": 0.0324,
+    "BCHUSDT": 0.0215,
+    "BNBUSDT": 0.0796,
+    "BTCUSDT": 0.0682,
+    "DOTUSDT": 0.0285,
+    "ETCUSDT": 0.037,
+    "ETHUSDT": 0.0601,
+    "HYPEUSDT": 0.0389,
+    "LINKUSDT": 0.0344,
+    "LTCUSDT": 0.0345,
+    "OPUSDT": 0.0212,
+    "POLUSDT": 0.035,
+    "SOLUSDT": 0.0414,
+    "TRXUSDT": 0.2213,
+    "WLFIUSDT": 0.0608,
+    "XLMUSDT": 0.0312,
+    "XMRUSDT": 0.0452,
+    "XRPUSDT": 0.0385
+   },
+   "short": {
+    "AINUSDT": -0.0211,
+    "ARBUSDT": -0.0861,
+    "ARUSDT": -0.0675,
+    "BRUSDT": -0.0169,
+    "FLOCKUSDT": -0.0635,
+    "GRASSUSDT": -0.0647,
+    "LABUSDT": -0.0928,
+    "LSKUSDT": -0.0161,
+    "MUBARAKUSDT": -0.0337,
+    "NEARUSDT": -0.0712,
+    "NILUSDT": -0.0448,
+    "ONEUSDT": -0.023,
+    "QNTUSDT": -0.0301,
+    "SAGAUSDT": -0.0316,
+    "SANDUSDT": -0.0547,
+    "STRKUSDT": -0.041,
+    "TIAUSDT": -0.0759,
+    "USELESSUSDT": -0.0635,
+    "USUSDT": -0.0212,
+    "VTHOUSDT": -0.0807
    }
   },
   "F2": {
