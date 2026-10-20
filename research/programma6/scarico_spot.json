@@ -1,0 +1,2881 @@
+{
+"1000000MOGUSDT": {
+"file": 0,
+"nome": ""
+},
+"1000BONKUSDT": {
+"file": 34,
+"nome": "BONKUSDT",
+"primo": "BONKUSDT-1d-2023-12.zip",
+"sha256": "4372e9ddfdbb7580d3758a7e0f5f02106a3de14809d2b5c218e4e72245b0cd77",
+"ultimo": "BONKUSDT-1d-2026-09.zip"
+},
+"1000FLOKIUSDT": {
+"file": 41,
+"nome": "FLOKIUSDT",
+"primo": "FLOKIUSDT-1d-2023-05.zip",
+"sha256": "6d9687802b523b63d7edda5b8a98a4407b28ae464c0f53a2a119f08e3ded9b3e",
+"ultimo": "FLOKIUSDT-1d-2026-09.zip"
+},
+"1000LUNCUSDT": {
+"file": 49,
+"nome": "LUNCUSDT",
+"primo": "LUNCUSDT-1d-2022-09.zip",
+"sha256": "d01fb785f00691f668f2c030c4b972520ad50a426182347d05336c34f72abeed",
+"ultimo": "LUNCUSDT-1d-2026-09.zip"
+},
+"1000PEPEUSDT": {
+"file": 41,
+"nome": "PEPEUSDT",
+"primo": "PEPEUSDT-1d-2023-05.zip",
+"sha256": "952bf7165116c848927defa917b7a856816d0c1cc0c46f95d38ab7ccb2996012",
+"ultimo": "PEPEUSDT-1d-2026-09.zip"
+},
+"1000RATSUSDT": {
+"file": 0,
+"nome": ""
+},
+"1000SATSUSDT": {
+"file": 34,
+"nome": "1000SATSUSDT",
+"primo": "1000SATSUSDT-1d-2023-12.zip",
+"sha256": "22e01144d908837bdd499147ba46e47f4aa3d0d4ca62817a3bd0adfa9d01023c",
+"ultimo": "1000SATSUSDT-1d-2026-09.zip"
+},
+"1000SHIBUSDT": {
+"file": 65,
+"nome": "SHIBUSDT",
+"primo": "SHIBUSDT-1d-2021-05.zip",
+"sha256": "48ef368dcebea4d5fa336cb034ff05b3f6b2d24736f0302c743aee74d3238790",
+"ultimo": "SHIBUSDT-1d-2026-09.zip"
+},
+"1000XECUSDT": {
+"file": 61,
+"nome": "XECUSDT",
+"primo": "XECUSDT-1d-2021-09.zip",
+"sha256": "70cb3dfb10e1067bca5237ec518d3d70a77d0a4551eadb28c288452aeb7ea695",
+"ultimo": "XECUSDT-1d-2026-09.zip"
+},
+"1INCHUSDT": {
+"file": 70,
+"nome": "1INCHUSDT",
+"primo": "1INCHUSDT-1d-2020-12.zip",
+"sha256": "5fed15dbbcec9c5134f3b03aad475b1db8ae9ef6ba9a7264b87dde8d4840a5d3",
+"ultimo": "1INCHUSDT-1d-2026-09.zip"
+},
+"4USDT": {
+"file": 0,
+"nome": ""
+},
+"AAVEUSDT": {
+"file": 72,
+"nome": "AAVEUSDT",
+"primo": "AAVEUSDT-1d-2020-10.zip",
+"sha256": "9b5918e892e2b54b7a600eb3a60fae7ebdfec94a09692ba446e8ac68a950d8d3",
+"ultimo": "AAVEUSDT-1d-2026-09.zip"
+},
+"ACEUSDT": {
+"file": 34,
+"nome": "ACEUSDT",
+"primo": "ACEUSDT-1d-2023-12.zip",
+"sha256": "b29067ced9c3b1be3fbe08a07ae7490f855fcbeda887742e16922539f47ab694",
+"ultimo": "ACEUSDT-1d-2026-09.zip"
+},
+"ACHUSDT": {
+"file": 57,
+"nome": "ACHUSDT",
+"primo": "ACHUSDT-1d-2022-01.zip",
+"sha256": "b846e7a68b11d42c85831cfaf7ad04165003d0374bb826d94c7d02c8314437a5",
+"ultimo": "ACHUSDT-1d-2026-09.zip"
+},
+"ACTUSDT": {
+"file": 23,
+"nome": "ACTUSDT",
+"primo": "ACTUSDT-1d-2024-11.zip",
+"sha256": "2d3d33758c024201f4d7fcb17e8faa5dfffe58ab53c8acdb9adf6c66e51c9341",
+"ultimo": "ACTUSDT-1d-2026-09.zip"
+},
+"ADAUSDT": {
+"file": 102,
+"nome": "ADAUSDT",
+"primo": "ADAUSDT-1d-2018-04.zip",
+"sha256": "27bd722a624646cb3086ed63fcf92c110ff106d077528f10613a127def5704f0",
+"ultimo": "ADAUSDT-1d-2026-09.zip"
+},
+"AERGOUSDT": {
+"file": 23,
+"nome": "AERGOUSDT",
+"primo": "AERGOUSDT-1d-2023-05.zip",
+"sha256": "ad1496d3da9870b5c270ab5950dc6cdf8fe9ac60d8407950c8271f3d9655ebb9",
+"ultimo": "AERGOUSDT-1d-2025-03.zip"
+},
+"AEROUSDT": {
+"file": 3,
+"nome": "AEROUSDT",
+"primo": "AEROUSDT-1d-2026-07.zip",
+"sha256": "6849d0bcf96da77e7485c5161eb29c9e14764e68066abf4d26feb204d3deef7d",
+"ultimo": "AEROUSDT-1d-2026-09.zip"
+},
+"AEVOUSDT": {
+"file": 31,
+"nome": "AEVOUSDT",
+"primo": "AEVOUSDT-1d-2024-03.zip",
+"sha256": "24c91817dd2c7f67d0338c630b0d8784b02aa0656dab485e15cf80a5e635d6ff",
+"ultimo": "AEVOUSDT-1d-2026-09.zip"
+},
+"AGIXUSDT": {
+"file": 18,
+"nome": "AGIXUSDT",
+"primo": "AGIXUSDT-1d-2023-02.zip",
+"sha256": "320b4578daa130b83ab424aba104617d0050881a16d9a9707ffe42355858ea15",
+"ultimo": "AGIXUSDT-1d-2024-07.zip"
+},
+"AGLDUSDT": {
+"file": 60,
+"nome": "AGLDUSDT",
+"primo": "AGLDUSDT-1d-2021-10.zip",
+"sha256": "3bb897771d37bebf768db74423eb9f9434751ef2ea54010c33e46c7ab7d421a0",
+"ultimo": "AGLDUSDT-1d-2026-09.zip"
+},
+"AI16ZUSDT": {
+"file": 0,
+"nome": ""
+},
+"AIAUSDT": {
+"file": 0,
+"nome": ""
+},
+"AINUSDT": {
+"file": 0,
+"nome": ""
+},
+"AIOTUSDT": {
+"file": 0,
+"nome": ""
+},
+"AIOUSDT": {
+"file": 0,
+"nome": ""
+},
+"AIUSDT": {
+"file": 33,
+"nome": "AIUSDT",
+"primo": "AIUSDT-1d-2024-01.zip",
+"sha256": "3cfee206f3f465b331cb2c28ca14f501bc258a61346e21f7e6b3098753325ad0",
+"ultimo": "AIUSDT-1d-2026-09.zip"
+},
+"AIXBTUSDT": {
+"file": 21,
+"nome": "AIXBTUSDT",
+"primo": "AIXBTUSDT-1d-2025-01.zip",
+"sha256": "b7fbacb863951310a07486332cf7df6f80d59b5f62693170b7cd2510844461a7",
+"ultimo": "AIXBTUSDT-1d-2026-09.zip"
+},
+"AKEUSDT": {
+"file": 0,
+"nome": ""
+},
+"AKROUSDT": {
+"file": 50,
+"nome": "AKROUSDT",
+"primo": "AKROUSDT-1d-2020-11.zip",
+"sha256": "1483a0acfc13bbe59f93966e33c91b423da6450eb817e46254a11333619c7e24",
+"ultimo": "AKROUSDT-1d-2024-12.zip"
+},
+"AKTUSDT": {
+"file": 0,
+"nome": ""
+},
+"ALCHUSDT": {
+"file": 0,
+"nome": ""
+},
+"ALGOUSDT": {
+"file": 88,
+"nome": "ALGOUSDT",
+"primo": "ALGOUSDT-1d-2019-06.zip",
+"sha256": "4d0262c0c47f2cb211d106ec2019093488c83899f48994b6bf4d2ddfbe2eed67",
+"ultimo": "ALGOUSDT-1d-2026-09.zip"
+},
+"ALICEUSDT": {
+"file": 67,
+"nome": "ALICEUSDT",
+"primo": "ALICEUSDT-1d-2021-03.zip",
+"sha256": "12b71982c5b67df3cd491028ccd41fd70d10a463b4139e96d80aeb87a5bda43e",
+"ultimo": "ALICEUSDT-1d-2026-09.zip"
+},
+"ALLOUSDT": {
+"file": 11,
+"nome": "ALLOUSDT",
+"primo": "ALLOUSDT-1d-2025-11.zip",
+"sha256": "516e9e342c375e4d72a172372c347f55d14bd2486b78e706d7ee769a9c0508d5",
+"ultimo": "ALLOUSDT-1d-2026-09.zip"
+},
+"ALPHAUSDT": {
+"file": 58,
+"nome": "ALPHAUSDT",
+"primo": "ALPHAUSDT-1d-2020-10.zip",
+"sha256": "26a58ba02323a87e7d6eec0398acd27dffce090f16a3ee85ce716ccb4d7d9d8a",
+"ultimo": "ALPHAUSDT-1d-2025-07.zip"
+},
+"ALTUSDT": {
+"file": 33,
+"nome": "ALTUSDT",
+"primo": "ALTUSDT-1d-2024-01.zip",
+"sha256": "79095c339baa95fbcff7060a78451b7f470a51455e024e6166863748208c2e2c",
+"ultimo": "ALTUSDT-1d-2026-09.zip"
+},
+"AMBUSDT": {
+"file": 24,
+"nome": "AMBUSDT",
+"primo": "AMBUSDT-1d-2023-03.zip",
+"sha256": "da2b7df262b6cbdf970cd98ff7e3dbe65d48c43593afa63d7a51a238605d6d4a",
+"ultimo": "AMBUSDT-1d-2025-02.zip"
+},
+"ANIMEUSDT": {
+"file": 21,
+"nome": "ANIMEUSDT",
+"primo": "ANIMEUSDT-1d-2025-01.zip",
+"sha256": "99e394806fdb37bd82a70ef55ed0a45626a22f2bbae7d4d87d5bbbdd08684069",
+"ultimo": "ANIMEUSDT-1d-2026-09.zip"
+},
+"ANKRUSDT": {
+"file": 87,
+"nome": "ANKRUSDT",
+"primo": "ANKRUSDT-1d-2019-07.zip",
+"sha256": "7f6c0a25a882be6502d00b875ead06a3075b72b2b21f77ea1548b014c79961ed",
+"ultimo": "ANKRUSDT-1d-2026-09.zip"
+},
+"ANTUSDT": {
+"file": 43,
+"nome": "ANTUSDT",
+"primo": "ANTUSDT-1d-2020-08.zip",
+"sha256": "9c779a5e1ff43763969ca05107652cd24ff8ae4e277f06c0e4f9dc3082d48c00",
+"ultimo": "ANTUSDT-1d-2024-02.zip"
+},
+"APEUSDT": {
+"file": 55,
+"nome": "APEUSDT",
+"primo": "APEUSDT-1d-2022-03.zip",
+"sha256": "491e57812a484d37ede5d87cc78f60b957653dc95f499f1b3b040f1ca44f56e3",
+"ultimo": "APEUSDT-1d-2026-09.zip"
+},
+"API3USDT": {
+"file": 57,
+"nome": "API3USDT",
+"primo": "API3USDT-1d-2022-01.zip",
+"sha256": "38ba0aa186c731a4061d0534605f848e5ef792f8a59d109bcf226b0e2ca0f356",
+"ultimo": "API3USDT-1d-2026-09.zip"
+},
+"APRUSDT": {
+"file": 0,
+"nome": ""
+},
+"APTUSDT": {
+"file": 48,
+"nome": "APTUSDT",
+"primo": "APTUSDT-1d-2022-10.zip",
+"sha256": "253d223d69ecc2146f618053218a86dddbb8cf2fe090d717e6207af47d12fb27",
+"ultimo": "APTUSDT-1d-2026-09.zip"
+},
+"ARBUSDT": {
+"file": 43,
+"nome": "ARBUSDT",
+"primo": "ARBUSDT-1d-2023-03.zip",
+"sha256": "bddc2a93fa1769dbae908355b4ddc027b1288c3c3581176b4f98ff3e7ce97f1d",
+"ultimo": "ARBUSDT-1d-2026-09.zip"
+},
+"ARCUSDT": {
+"file": 0,
+"nome": ""
+},
+"ARIAUSDT": {
+"file": 0,
+"nome": ""
+},
+"ARKMUSDT": {
+"file": 39,
+"nome": "ARKMUSDT",
+"primo": "ARKMUSDT-1d-2023-07.zip",
+"sha256": "be07c5f07c3fd12daae19b7c621c7cd42c7d7fa17ac2f462423a2c9225e55557",
+"ultimo": "ARKMUSDT-1d-2026-09.zip"
+},
+"ARKUSDT": {
+"file": 37,
+"nome": "ARKUSDT",
+"primo": "ARKUSDT-1d-2023-09.zip",
+"sha256": "5a206834032e4f58aefd11d38406f18cf1f94c436b5a699f4c656a52354b738e",
+"ultimo": "ARKUSDT-1d-2026-09.zip"
+},
+"ARPAUSDT": {
+"file": 83,
+"nome": "ARPAUSDT",
+"primo": "ARPAUSDT-1d-2019-11.zip",
+"sha256": "e0be9f81c939861edea10358af5f28ff33acf74807a94bbbc7a41f7515fd6dc9",
+"ultimo": "ARPAUSDT-1d-2026-09.zip"
+},
+"ARUSDT": {
+"file": 65,
+"nome": "ARUSDT",
+"primo": "ARUSDT-1d-2021-05.zip",
+"sha256": "86cc4b62d77493fd5fccebfb97b4b56dd18ea8317efe86db2774ac34a21ca901",
+"ultimo": "ARUSDT-1d-2026-09.zip"
+},
+"ASTERUSDT": {
+"file": 12,
+"nome": "ASTERUSDT",
+"primo": "ASTERUSDT-1d-2025-10.zip",
+"sha256": "0b670745c8d0911c42aa5f1086a167c2a285d96518215558d4a8f2d57593adac",
+"ultimo": "ASTERUSDT-1d-2026-09.zip"
+},
+"ASTRUSDT": {
+"file": 56,
+"nome": "ASTRUSDT",
+"primo": "ASTRUSDT-1d-2022-02.zip",
+"sha256": "05290ff2c2b3ea4780ca60385c737907e34542b412790a66fdae884e618a2687",
+"ultimo": "ASTRUSDT-1d-2026-09.zip"
+},
+"ATAUSDT": {
+"file": 60,
+"nome": "ATAUSDT",
+"primo": "ATAUSDT-1d-2021-06.zip",
+"sha256": "0fd8157e9a265553c47e9cb4da6c74e91ba4decf8e1e5079b236985acecfc9f8",
+"ultimo": "ATAUSDT-1d-2026-05.zip"
+},
+"ATHUSDT": {
+"file": 0,
+"nome": ""
+},
+"ATOMUSDT": {
+"file": 90,
+"nome": "ATOMUSDT",
+"primo": "ATOMUSDT-1d-2019-04.zip",
+"sha256": "74716b7f0db1701c6fe99a675a0ed12d94eacaad87b9af6b365f4570c1270cf1",
+"ultimo": "ATOMUSDT-1d-2026-09.zip"
+},
+"AUCTIONUSDT": {
+"file": 60,
+"nome": "AUCTIONUSDT",
+"primo": "AUCTIONUSDT-1d-2021-10.zip",
+"sha256": "36b6db63f0b4be437823301402967150c6537b82f8ecba4ec5579a43905421de",
+"ultimo": "AUCTIONUSDT-1d-2026-09.zip"
+},
+"AUDIOUSDT": {
+"file": 72,
+"nome": "AUDIOUSDT",
+"primo": "AUDIOUSDT-1d-2020-10.zip",
+"sha256": "bfc344354ba5c49013e3399e8766d93308b5bb46641154ce28b598c5247f4d36",
+"ultimo": "AUDIOUSDT-1d-2026-09.zip"
+},
+"AVAXUSDT": {
+"file": 73,
+"nome": "AVAXUSDT",
+"primo": "AVAXUSDT-1d-2020-09.zip",
+"sha256": "e29811595f56043a8263753de4e94828e1dd1d60157855cba9d95cc3f8e768a3",
+"ultimo": "AVAXUSDT-1d-2026-09.zip"
+},
+"AXLUSDT": {
+"file": 31,
+"nome": "AXLUSDT",
+"primo": "AXLUSDT-1d-2024-03.zip",
+"sha256": "9187e8a2f287b3b6c92c23bcb6c95af2182af21c6434b819e2176c8c5d68be39",
+"ultimo": "AXLUSDT-1d-2026-09.zip"
+},
+"AXSUSDT": {
+"file": 71,
+"nome": "AXSUSDT",
+"primo": "AXSUSDT-1d-2020-11.zip",
+"sha256": "48a3f5a9c355e7a3341e4f685d4c71d83c664dabe4d283631a5eef9179de3782",
+"ultimo": "AXSUSDT-1d-2026-09.zip"
+},
+"BAKEUSDT": {
+"file": 54,
+"nome": "BAKEUSDT",
+"primo": "BAKEUSDT-1d-2021-04.zip",
+"sha256": "9775e599ee93c2df9299d88455ac67f7e52f4d012ecbcd547c95abce05597d23",
+"ultimo": "BAKEUSDT-1d-2025-09.zip"
+},
+"BALUSDT": {
+"file": 57,
+"nome": "BALUSDT",
+"primo": "BALUSDT-1d-2020-08.zip",
+"sha256": "bf201fb1b31e2249abe64c8f4f0fd1746afb236dc6f5d91458e0c30ea194347a",
+"ultimo": "BALUSDT-1d-2025-04.zip"
+},
+"BANANAS31USDT": {
+"file": 19,
+"nome": "BANANAS31USDT",
+"primo": "BANANAS31USDT-1d-2025-03.zip",
+"sha256": "da5e397c9fa98b3bd8017bb4588847ad2c42fb3263510bcc63a84c0a23ec6360",
+"ultimo": "BANANAS31USDT-1d-2026-09.zip"
+},
+"BANANAUSDT": {
+"file": 27,
+"nome": "BANANAUSDT",
+"primo": "BANANAUSDT-1d-2024-07.zip",
+"sha256": "735d304859c25bf800af47739456f1206e7cc3f4e5463da42c4ad04295a20475",
+"ultimo": "BANANAUSDT-1d-2026-09.zip"
+},
+"BANDUSDT": {
+"file": 85,
+"nome": "BANDUSDT",
+"primo": "BANDUSDT-1d-2019-09.zip",
+"sha256": "85bfe076100e2901c8ec8a190e4c57e15e5110f6fb3aad5c762c2efa65214b54",
+"ultimo": "BANDUSDT-1d-2026-09.zip"
+},
+"BANKUSDT": {
+"file": 11,
+"nome": "BANKUSDT",
+"primo": "BANKUSDT-1d-2025-11.zip",
+"sha256": "f73f19d9d8b0a794abd7935e5d66fcafb02ca6c032f23fed24f932392ae5ea64",
+"ultimo": "BANKUSDT-1d-2026-09.zip"
+},
+"BANUSDT": {
+"file": 0,
+"nome": ""
+},
+"BARDUSDT": {
+"file": 13,
+"nome": "BARDUSDT",
+"primo": "BARDUSDT-1d-2025-09.zip",
+"sha256": "26bda06c1f520f0901580be40929a720183208218d030f823eac618fc09f2faa",
+"ultimo": "BARDUSDT-1d-2026-09.zip"
+},
+"BASUSDT": {
+"file": 0,
+"nome": ""
+},
+"BATUSDT": {
+"file": 91,
+"nome": "BATUSDT",
+"primo": "BATUSDT-1d-2019-03.zip",
+"sha256": "5a6819b0ef2be0e6874e3341999e72be0f3a4c5b0143f2c004a2eabed88281d1",
+"ultimo": "BATUSDT-1d-2026-09.zip"
+},
+"BBUSDT": {
+"file": 29,
+"nome": "BBUSDT",
+"primo": "BBUSDT-1d-2024-05.zip",
+"sha256": "563582539d6c3528fcbb4f037e93075d8262bb04c92993e69f368b17b8305806",
+"ultimo": "BBUSDT-1d-2026-09.zip"
+},
+"BCHUSDT": {
+"file": 83,
+"nome": "BCHUSDT",
+"primo": "BCHUSDT-1d-2019-11.zip",
+"sha256": "5e17a963173265e69a6abca7a73889291e45d126ed2ccb364e293b3bfbdc6227",
+"ultimo": "BCHUSDT-1d-2026-09.zip"
+},
+"BEAMXUSDT": {
+"file": 35,
+"nome": "BEAMXUSDT",
+"primo": "BEAMXUSDT-1d-2023-11.zip",
+"sha256": "2aaf5a048f459468bfe05db9735c6bd077ff4cad6ca39e5a4e9b5efb99212c57",
+"ultimo": "BEAMXUSDT-1d-2026-09.zip"
+},
+"BEATUSDT": {
+"file": 0,
+"nome": ""
+},
+"BELUSDT": {
+"file": 73,
+"nome": "BELUSDT",
+"primo": "BELUSDT-1d-2020-09.zip",
+"sha256": "4a7202c59ad793686a66c4cffb437cef1e719cfa98fe30d479da2252b84dac65",
+"ultimo": "BELUSDT-1d-2026-09.zip"
+},
+"BERAUSDT": {
+"file": 20,
+"nome": "BERAUSDT",
+"primo": "BERAUSDT-1d-2025-02.zip",
+"sha256": "e35b286600ae720b19e7725c1c366033ef8798ecb6a82a42e2d36a7bc1101a5d",
+"ultimo": "BERAUSDT-1d-2026-09.zip"
+},
+"BICOUSDT": {
+"file": 58,
+"nome": "BICOUSDT",
+"primo": "BICOUSDT-1d-2021-12.zip",
+"sha256": "4fe77c6816b8f3762c6f4c580a1c0a53d92608d3e61302c64279bb2841c6f488",
+"ultimo": "BICOUSDT-1d-2026-09.zip"
+},
+"BIGTIMEUSDT": {
+"file": 18,
+"nome": "BIGTIMEUSDT",
+"primo": "BIGTIMEUSDT-1d-2025-04.zip",
+"sha256": "d0c2eba9203c228bd4fc6aebe08d27972bfadc35331f9d7601ad639853546bf5",
+"ultimo": "BIGTIMEUSDT-1d-2026-09.zip"
+},
+"BIOUSDT": {
+"file": 21,
+"nome": "BIOUSDT",
+"primo": "BIOUSDT-1d-2025-01.zip",
+"sha256": "12bdb2175ca5e956bc90741f62ad4016db2dca74fa53bceea6342be1ff1f8e27",
+"ultimo": "BIOUSDT-1d-2026-09.zip"
+},
+"BLESSUSDT": {
+"file": 0,
+"nome": ""
+},
+"BLURUSDT": {
+"file": 35,
+"nome": "BLURUSDT",
+"primo": "BLURUSDT-1d-2023-11.zip",
+"sha256": "dd949a0d52eb4deb4237489925022cbe38885a0c664a800a9301b234f20174f2",
+"ultimo": "BLURUSDT-1d-2026-09.zip"
+},
+"BLZUSDT": {
+"file": 53,
+"nome": "BLZUSDT",
+"primo": "BLZUSDT-1d-2020-08.zip",
+"sha256": "81febaad44e59cfb2093355fbe9b8f2b105d850a5c753e2f4d440c4001364109",
+"ultimo": "BLZUSDT-1d-2024-12.zip"
+},
+"BMTUSDT": {
+"file": 19,
+"nome": "BMTUSDT",
+"primo": "BMTUSDT-1d-2025-03.zip",
+"sha256": "def5a3c8f0b3a748c3a6eed19eb1ab760f63d7e660a3899331e2324a4c30c87f",
+"ultimo": "BMTUSDT-1d-2026-09.zip"
+},
+"BNBUSDT": {
+"file": 107,
+"nome": "BNBUSDT",
+"primo": "BNBUSDT-1d-2017-11.zip",
+"sha256": "66ce27fc4f5e939fe5f7b0e04cc081606569492eaa57082a0e997ad7b98b112e",
+"ultimo": "BNBUSDT-1d-2026-09.zip"
+},
+"BNXUSDT": {
+"file": 41,
+"nome": "BNXUSDT",
+"primo": "BNXUSDT-1d-2021-11.zip",
+"sha256": "e1b8b2ad4a875aa4f32d2ce1c3ca0a9e5399c147cc445235165a2934d74bdf56",
+"ultimo": "BNXUSDT-1d-2025-03.zip"
+},
+"BOMEUSDT": {
+"file": 31,
+"nome": "BOMEUSDT",
+"primo": "BOMEUSDT-1d-2024-03.zip",
+"sha256": "e3658c5ee6ec7e1c7d4649348f3a8a474fd45783f372d7f53511afcaf2250b74",
+"ultimo": "BOMEUSDT-1d-2026-09.zip"
+},
+"BONDUSDT": {
+"file": 37,
+"nome": "BONDUSDT",
+"primo": "BONDUSDT-1d-2021-07.zip",
+"sha256": "eb40575cbe1cc59231c30431a8da8d01681d27c25e5ae553c6bdeefc1177e35b",
+"ultimo": "BONDUSDT-1d-2024-07.zip"
+},
+"BRETTUSDT": {
+"file": 0,
+"nome": ""
+},
+"BROCCOLI714USDT": {
+"file": 19,
+"nome": "BROCCOLI714USDT",
+"primo": "BROCCOLI714USDT-1d-2025-03.zip",
+"sha256": "d756093db7d5d9fe81e43e4a439b825c9b161fbd9dd35082307e51902cf1ec32",
+"ultimo": "BROCCOLI714USDT-1d-2026-09.zip"
+},
+"BRUSDT": {
+"file": 0,
+"nome": ""
+},
+"BSWUSDT": {
+"file": 41,
+"nome": "BSWUSDT",
+"primo": "BSWUSDT-1d-2022-03.zip",
+"sha256": "8c962ec494945a2c9022c3983ad3c82cb40dd7c705643202cddea248964f1ccd",
+"ultimo": "BSWUSDT-1d-2025-07.zip"
+},
+"BTCUSDT": {
+"file": 110,
+"nome": "BTCUSDT",
+"primo": "BTCUSDT-1d-2017-08.zip",
+"sha256": "6c1cecf229b19f6d4032ec1bd772022315cdf9ddb94c00d017c738d145eb803f",
+"ultimo": "BTCUSDT-1d-2026-09.zip"
+},
+"BTRUSDT": {
+"file": 0,
+"nome": ""
+},
+"BTSUSDT": {
+"file": 47,
+"nome": "BTSUSDT",
+"primo": "BTSUSDT-1d-2020-02.zip",
+"sha256": "91ad9eb5cf40cf066a0aedc6c39d421bd872d7a7ba940513993bc2f9be3eb87d",
+"ultimo": "BTSUSDT-1d-2023-12.zip"
+},
+"BTTUSDT": {
+"file": 37,
+"nome": "BTTUSDT",
+"primo": "BTTUSDT-1d-2019-01.zip",
+"sha256": "0ae8d64055ee18f9d176c3999a35f35154beeb42befd4e0463abe74ba4a7d943",
+"ultimo": "BTTUSDT-1d-2022-01.zip"
+},
+"BULLAUSDT": {
+"file": 0,
+"nome": ""
+},
+"BZRXUSDT": {
+"file": 17,
+"nome": "BZRXUSDT",
+"primo": "BZRXUSDT-1d-2020-08.zip",
+"sha256": "485b8c98fbc48f9f108953b69f3d7eb0013da2e42540afd2c8395b5d803a3575",
+"ultimo": "BZRXUSDT-1d-2021-12.zip"
+},
+"C98USDT": {
+"file": 63,
+"nome": "C98USDT",
+"primo": "C98USDT-1d-2021-07.zip",
+"sha256": "5e60df80c10df9aa09815114283d49762022ffbc3813dcd89b7c826db988065f",
+"ultimo": "C98USDT-1d-2026-09.zip"
+},
+"CAKEUSDT": {
+"file": 68,
+"nome": "CAKEUSDT",
+"primo": "CAKEUSDT-1d-2021-02.zip",
+"sha256": "9f7e0e8e8c66b6b958355c279b4acc292bb512e72b64605c5d616d89d6b1b557",
+"ultimo": "CAKEUSDT-1d-2026-09.zip"
+},
+"CELOUSDT": {
+"file": 69,
+"nome": "CELOUSDT",
+"primo": "CELOUSDT-1d-2021-01.zip",
+"sha256": "67b7d4be5771e983521d249aae18aec4cec98c64a0125cd8ac2fd90d738b999f",
+"ultimo": "CELOUSDT-1d-2026-09.zip"
+},
+"CELRUSDT": {
+"file": 91,
+"nome": "CELRUSDT",
+"primo": "CELRUSDT-1d-2019-03.zip",
+"sha256": "7c6a5ec8d1f89747aa981cb3840c1e71bf30a4d1193db3a7b9a8196e392daa02",
+"ultimo": "CELRUSDT-1d-2026-09.zip"
+},
+"CETUSUSDT": {
+"file": 23,
+"nome": "CETUSUSDT",
+"primo": "CETUSUSDT-1d-2024-11.zip",
+"sha256": "4fd7599b7e767cbad58d3828cfab7230eb791214887a1edd55e8f958a27be6ef",
+"ultimo": "CETUSUSDT-1d-2026-09.zip"
+},
+"CFXUSDT": {
+"file": 67,
+"nome": "CFXUSDT",
+"primo": "CFXUSDT-1d-2021-03.zip",
+"sha256": "ec39d9af6566edc498f230a26203818e91cdc3831248c58613956f65531cd1c2",
+"ultimo": "CFXUSDT-1d-2026-09.zip"
+},
+"CHESSUSDT": {
+"file": 53,
+"nome": "CHESSUSDT",
+"primo": "CHESSUSDT-1d-2021-10.zip",
+"sha256": "cabf77efbaae189f985fe11d34cd7d16e89b9db6617a879f5b011cea718c3dbc",
+"ultimo": "CHESSUSDT-1d-2026-02.zip"
+},
+"CHILLGUYUSDT": {
+"file": 0,
+"nome": ""
+},
+"CHRUSDT": {
+"file": 77,
+"nome": "CHRUSDT",
+"primo": "CHRUSDT-1d-2020-05.zip",
+"sha256": "4c7d11cac2733d041bb0f3930dcf5dbc3d1ec3652bdb0db12bfa14c0ce45120c",
+"ultimo": "CHRUSDT-1d-2026-09.zip"
+},
+"CHZUSDT": {
+"file": 85,
+"nome": "CHZUSDT",
+"primo": "CHZUSDT-1d-2019-09.zip",
+"sha256": "2a41d828d06f8ed2a6bd391927edc28392bfac7f11ef1627067106e463658897",
+"ultimo": "CHZUSDT-1d-2026-09.zip"
+},
+"CKBUSDT": {
+"file": 69,
+"nome": "CKBUSDT",
+"primo": "CKBUSDT-1d-2021-01.zip",
+"sha256": "ace0f3f529f3e0ba55f9b8e80c62444654a6821fe1cc71e69e4b12850bb33cbe",
+"ultimo": "CKBUSDT-1d-2026-09.zip"
+},
+"CLOUSDT": {
+"file": 0,
+"nome": ""
+},
+"COMPUSDT": {
+"file": 76,
+"nome": "COMPUSDT",
+"primo": "COMPUSDT-1d-2020-06.zip",
+"sha256": "be679fddee2349cbee0047960276e70480465e7fcdb655ffde6f1e0798c360b6",
+"ultimo": "COMPUSDT-1d-2026-09.zip"
+},
+"COOKIEUSDT": {
+"file": 21,
+"nome": "COOKIEUSDT",
+"primo": "COOKIEUSDT-1d-2025-01.zip",
+"sha256": "d24af360f6cb5c9709f36a264d40d7c6dad6b2c58f2f0840c560c38f86bc9bbf",
+"ultimo": "COOKIEUSDT-1d-2026-09.zip"
+},
+"COSUSDT": {
+"file": 83,
+"nome": "COSUSDT",
+"primo": "COSUSDT-1d-2019-08.zip",
+"sha256": "3b7f1a2bf3333716bad112ddb420a3b9b7505349d50ed00cefb704995cc7aa53",
+"ultimo": "COSUSDT-1d-2026-06.zip"
+},
+"COTIUSDT": {
+"file": 80,
+"nome": "COTIUSDT",
+"primo": "COTIUSDT-1d-2020-02.zip",
+"sha256": "20b86580f0166be9d0dfac364900255a028041856bdc1ac3d833a225339b3ef2",
+"ultimo": "COTIUSDT-1d-2026-09.zip"
+},
+"COWUSDT": {
+"file": 23,
+"nome": "COWUSDT",
+"primo": "COWUSDT-1d-2024-11.zip",
+"sha256": "6bd5c5eb8b35f0d5fea2edf1953dcafd4a79f5c07e0d83a405864301884879b1",
+"ultimo": "COWUSDT-1d-2026-09.zip"
+},
+"CRVUSDT": {
+"file": 74,
+"nome": "CRVUSDT",
+"primo": "CRVUSDT-1d-2020-08.zip",
+"sha256": "5a71b3ce889e75402802efce5571a788cc9b71e7df8cbc7f575c8acb7a15eee6",
+"ultimo": "CRVUSDT-1d-2026-09.zip"
+},
+"CTKUSDT": {
+"file": 72,
+"nome": "CTKUSDT",
+"primo": "CTKUSDT-1d-2020-10.zip",
+"sha256": "ab5a068a9e24452e370572329f73fb861fdac860345b5392b608e234df45f8fd",
+"ultimo": "CTKUSDT-1d-2026-09.zip"
+},
+"CTSIUSDT": {
+"file": 78,
+"nome": "CTSIUSDT",
+"primo": "CTSIUSDT-1d-2020-04.zip",
+"sha256": "59a5cc35d3b5765785d53241d393aa1b1d66fe9525d4009a4ca9f6d8537ee069",
+"ultimo": "CTSIUSDT-1d-2026-09.zip"
+},
+"CUSDT": {
+"file": 15,
+"nome": "CUSDT",
+"primo": "CUSDT-1d-2025-07.zip",
+"sha256": "abd97b391b45245803bc6e60b66a33e323e8915fdea3afe6e22a2fbc4e3a9236",
+"ultimo": "CUSDT-1d-2026-09.zip"
+},
+"CVCUSDT": {
+"file": 82,
+"nome": "CVCUSDT",
+"primo": "CVCUSDT-1d-2019-08.zip",
+"sha256": "fc08763ad650ca698cf9bb7e9cb21a0bab06b329747e3b3ffc8b2bf7b9eb3730",
+"ultimo": "CVCUSDT-1d-2026-09.zip"
+},
+"CYBERUSDT": {
+"file": 38,
+"nome": "CYBERUSDT",
+"primo": "CYBERUSDT-1d-2023-08.zip",
+"sha256": "225b1cd432b53093cb8f519ffcb167f6cb8f30ea3b89994e561569bfda3e1157",
+"ultimo": "CYBERUSDT-1d-2026-09.zip"
+},
+"CYSUSDT": {
+"file": 0,
+"nome": ""
+},
+"DARUSDT": {
+"file": 39,
+"nome": "DARUSDT",
+"primo": "DARUSDT-1d-2021-11.zip",
+"sha256": "212f43007feff2692de7c66421b2cd2970254152e660f9a65a71e7721ec7d11a",
+"ultimo": "DARUSDT-1d-2025-01.zip"
+},
+"DASHUSDT": {
+"file": 91,
+"nome": "DASHUSDT",
+"primo": "DASHUSDT-1d-2019-03.zip",
+"sha256": "268077b45cd0afa6f48ea98d4d02eecd1843f5ea2bf288d9d4fb70285968aa6a",
+"ultimo": "DASHUSDT-1d-2026-09.zip"
+},
+"DEGOUSDT": {
+"file": 62,
+"nome": "DEGOUSDT",
+"primo": "DEGOUSDT-1d-2021-03.zip",
+"sha256": "a6fd8911838095c335852ef99ab9f3c278d57d5042271c59a1942d9444000ee6",
+"ultimo": "DEGOUSDT-1d-2026-04.zip"
+},
+"DENTUSDT": {
+"file": 81,
+"nome": "DENTUSDT",
+"primo": "DENTUSDT-1d-2019-08.zip",
+"sha256": "940f8e79f47eef973cc7d8cb8bf5e973e58eca845a1b8c3628f21aa26e26f8ac",
+"ultimo": "DENTUSDT-1d-2026-04.zip"
+},
+"DEXEUSDT": {
+"file": 63,
+"nome": "DEXEUSDT",
+"primo": "DEXEUSDT-1d-2021-07.zip",
+"sha256": "baf4082dbd5f173514d9ac6f6eab905d40d7964fe6d3be98056f89b6be601a32",
+"ultimo": "DEXEUSDT-1d-2026-09.zip"
+},
+"DGBUSDT": {
+"file": 75,
+"nome": "DGBUSDT",
+"primo": "DGBUSDT-1d-2020-07.zip",
+"sha256": "ef21179e03960a7322f6c05a5b8bf7d923aa01c4ff4b966535973ec1eaf3f88f",
+"ultimo": "DGBUSDT-1d-2026-09.zip"
+},
+"DODOUSDT": {
+"file": 68,
+"nome": "DODOUSDT",
+"primo": "DODOUSDT-1d-2021-02.zip",
+"sha256": "ba38efe420b048fc6e6472978365f041143d7b24a7212b4060c696fbb3aee82a",
+"ultimo": "DODOUSDT-1d-2026-09.zip"
+},
+"DODOXUSDT": {
+"file": 0,
+"nome": ""
+},
+"DOGEUSDT": {
+"file": 87,
+"nome": "DOGEUSDT",
+"primo": "DOGEUSDT-1d-2019-07.zip",
+"sha256": "bfbce368524cf12ccefb122b3aeeec263859a883ec75431cff5756ce1b2b6e2a",
+"ultimo": "DOGEUSDT-1d-2026-09.zip"
+},
+"DOGSUSDT": {
+"file": 26,
+"nome": "DOGSUSDT",
+"primo": "DOGSUSDT-1d-2024-08.zip",
+"sha256": "faffc51dd34d9bb1995ed9f6189f50705ab37bbcf830981e712d369c37763bb5",
+"ultimo": "DOGSUSDT-1d-2026-09.zip"
+},
+"DOLOUSDT": {
+"file": 14,
+"nome": "DOLOUSDT",
+"primo": "DOLOUSDT-1d-2025-08.zip",
+"sha256": "e257590e91de3a8fb1a9b725c7adfe4d2edca299830cf8693ce861db9821f7e0",
+"ultimo": "DOLOUSDT-1d-2026-09.zip"
+},
+"DOTUSDT": {
+"file": 74,
+"nome": "DOTUSDT",
+"primo": "DOTUSDT-1d-2020-08.zip",
+"sha256": "88d7ec3dfb6090120e23a6a6cf503a4afe42cea9b9c13711874448f5f6ceea64",
+"ultimo": "DOTUSDT-1d-2026-09.zip"
+},
+"DRIFTUSDT": {
+"file": 0,
+"nome": ""
+},
+"DUSDT": {
+"file": 18,
+"nome": "DUSDT",
+"primo": "DUSDT-1d-2025-01.zip",
+"sha256": "5db68544e6e147efbecd2550702d7032899be51bc9139e6c7644f4ad2d76b6d0",
+"ultimo": "DUSDT-1d-2026-06.zip"
+},
+"DUSKUSDT": {
+"file": 87,
+"nome": "DUSKUSDT",
+"primo": "DUSKUSDT-1d-2019-07.zip",
+"sha256": "aaa3491dcdff1a8db7cdaf8ae6184db85f903ef91f7c924ea9d259b26d869b80",
+"ultimo": "DUSKUSDT-1d-2026-09.zip"
+},
+"DYDXUSDT": {
+"file": 61,
+"nome": "DYDXUSDT",
+"primo": "DYDXUSDT-1d-2021-09.zip",
+"sha256": "16d7e6bd1be4fef2d7b4a6d1b3056eed4fbb06277a2cccc830975120df44551e",
+"ultimo": "DYDXUSDT-1d-2026-09.zip"
+},
+"DYMUSDT": {
+"file": 32,
+"nome": "DYMUSDT",
+"primo": "DYMUSDT-1d-2024-02.zip",
+"sha256": "a74bca45f72b124557679b2a76f862166b8f39258fbc723a970691daf44e426c",
+"ultimo": "DYMUSDT-1d-2026-09.zip"
+},
+"EDENUSDT": {
+"file": 13,
+"nome": "EDENUSDT",
+"primo": "EDENUSDT-1d-2025-09.zip",
+"sha256": "63c45ef42cbee973e1b04be0f399746bc2cac5ffc769a0b837048c200df03003",
+"ultimo": "EDENUSDT-1d-2026-09.zip"
+},
+"EDUUSDT": {
+"file": 42,
+"nome": "EDUUSDT",
+"primo": "EDUUSDT-1d-2023-04.zip",
+"sha256": "e4d93d516e2725bff238d6fb2a17d6e761f754025e6de80b603656a126743738",
+"ultimo": "EDUUSDT-1d-2026-09.zip"
+},
+"EGLDUSDT": {
+"file": 73,
+"nome": "EGLDUSDT",
+"primo": "EGLDUSDT-1d-2020-09.zip",
+"sha256": "dc83b9d8dbaafe6429d3652d376f1cc21bd2383f1316bc4e24e74155d8d72291",
+"ultimo": "EGLDUSDT-1d-2026-09.zip"
+},
+"EIGENUSDT": {
+"file": 24,
+"nome": "EIGENUSDT",
+"primo": "EIGENUSDT-1d-2024-10.zip",
+"sha256": "32771c9c27cb3c3b8c0a2d7489a8756eb2c1333b0f65ac4339cd0bc9a0fbb741",
+"ultimo": "EIGENUSDT-1d-2026-09.zip"
+},
+"ENAUSDT": {
+"file": 30,
+"nome": "ENAUSDT",
+"primo": "ENAUSDT-1d-2024-04.zip",
+"sha256": "b9438c9a9e1012203dc972712840ab71189fdf3fcc5983298d489bcbb9398fe5",
+"ultimo": "ENAUSDT-1d-2026-09.zip"
+},
+"ENJUSDT": {
+"file": 90,
+"nome": "ENJUSDT",
+"primo": "ENJUSDT-1d-2019-04.zip",
+"sha256": "6cacd5353f1f01ba95284e287d21b474d9406b20d35c2e7dcdd6b2d296e69f49",
+"ultimo": "ENJUSDT-1d-2026-09.zip"
+},
+"ENSUSDT": {
+"file": 59,
+"nome": "ENSUSDT",
+"primo": "ENSUSDT-1d-2021-11.zip",
+"sha256": "9cc8fd05ec17cfa74a59303de98f0b4d76e45264ea7103ff1300c9d6f19f82ea",
+"ultimo": "ENSUSDT-1d-2026-09.zip"
+},
+"EOSUSDT": {
+"file": 85,
+"nome": "EOSUSDT",
+"primo": "EOSUSDT-1d-2018-05.zip",
+"sha256": "5786285b64469f2e4e01a28f3d74fcb6f9098f31ebc22a9fe62461d47d00b57e",
+"ultimo": "EOSUSDT-1d-2025-05.zip"
+},
+"EPICUSDT": {
+"file": 19,
+"nome": "EPICUSDT",
+"primo": "EPICUSDT-1d-2025-03.zip",
+"sha256": "557e446d7f3feb4f06e1fbfe57eeb34743c26c33cb5bff4e5bebfd8322256c4c",
+"ultimo": "EPICUSDT-1d-2026-09.zip"
+},
+"ERAUSDT": {
+"file": 15,
+"nome": "ERAUSDT",
+"primo": "ERAUSDT-1d-2025-07.zip",
+"sha256": "cfaaa2b6611daebe191223ec7849a08957d9c366f579d4ba079c0ffecf0fca5c",
+"ultimo": "ERAUSDT-1d-2026-09.zip"
+},
+"ESPORTSUSDT": {
+"file": 0,
+"nome": ""
+},
+"ESPUSDT": {
+"file": 8,
+"nome": "ESPUSDT",
+"primo": "ESPUSDT-1d-2026-02.zip",
+"sha256": "ff29ab7ae9ed89289a27d8b63e3ddfdf4f2eea7630732c31215e319685b2b273",
+"ultimo": "ESPUSDT-1d-2026-09.zip"
+},
+"ETCUSDT": {
+"file": 100,
+"nome": "ETCUSDT",
+"primo": "ETCUSDT-1d-2018-06.zip",
+"sha256": "73a931856847274c0b6d7fd30632197ffae62f0cadeeceaa23d68b5472b14100",
+"ultimo": "ETCUSDT-1d-2026-09.zip"
+},
+"ETHFIUSDT": {
+"file": 31,
+"nome": "ETHFIUSDT",
+"primo": "ETHFIUSDT-1d-2024-03.zip",
+"sha256": "d04ac5686668d6ab6ea147a0940f7c816a9fc012c4775415a8cb8049945b65e1",
+"ultimo": "ETHFIUSDT-1d-2026-09.zip"
+},
+"ETHUSDT": {
+"file": 110,
+"nome": "ETHUSDT",
+"primo": "ETHUSDT-1d-2017-08.zip",
+"sha256": "69d9dd998f98f8584e6c8b7019993ba380fa9786eba241e2b5fbd21929769c63",
+"ultimo": "ETHUSDT-1d-2026-09.zip"
+},
+"ETHWUSDT": {
+"file": 0,
+"nome": ""
+},
+"EULUSDT": {
+"file": 12,
+"nome": "EULUSDT",
+"primo": "EULUSDT-1d-2025-10.zip",
+"sha256": "6fafa6956467731023b6096bcdfdef7f3d5faf423ce21f45b8ef61ebed79fceb",
+"ultimo": "EULUSDT-1d-2026-09.zip"
+},
+"EVAAUSDT": {
+"file": 0,
+"nome": ""
+},
+"FARTCOINUSDT": {
+"file": 0,
+"nome": ""
+},
+"FETUSDT": {
+"file": 92,
+"nome": "FETUSDT",
+"primo": "FETUSDT-1d-2019-02.zip",
+"sha256": "c584ff8b9977826e7b34df982231970719ae6c641195040d4b3fb5582cede941",
+"ultimo": "FETUSDT-1d-2026-09.zip"
+},
+"FFUSDT": {
+"file": 13,
+"nome": "FFUSDT",
+"primo": "FFUSDT-1d-2025-09.zip",
+"sha256": "31b42b6650f2ab60c7541c93d62677e94f585eafca1b495152514aa9eec44767",
+"ultimo": "FFUSDT-1d-2026-09.zip"
+},
+"FHEUSDT": {
+"file": 0,
+"nome": ""
+},
+"FIDAUSDT": {
+"file": 61,
+"nome": "FIDAUSDT",
+"primo": "FIDAUSDT-1d-2021-09.zip",
+"sha256": "d028c65bba59d2048a006c9033045f7625fb4d0ce063dd4e6819a3a1c6ffa8bc",
+"ultimo": "FIDAUSDT-1d-2026-09.zip"
+},
+"FILUSDT": {
+"file": 72,
+"nome": "FILUSDT",
+"primo": "FILUSDT-1d-2020-10.zip",
+"sha256": "404e8bd62762e902b92553af7d50e90147cd9a4a5a862fa13b6293f1f5e59cc0",
+"ultimo": "FILUSDT-1d-2026-09.zip"
+},
+"FLMUSDT": {
+"file": 63,
+"nome": "FLMUSDT",
+"primo": "FLMUSDT-1d-2020-09.zip",
+"sha256": "9fb276e5c322c0e12ff5c2cdb9fc16fa32c3d85a75163c6c7abff6e77e58e46e",
+"ultimo": "FLMUSDT-1d-2025-11.zip"
+},
+"FLOCKUSDT": {
+"file": 0,
+"nome": ""
+},
+"FLOWUSDT": {
+"file": 63,
+"nome": "FLOWUSDT",
+"primo": "FLOWUSDT-1d-2021-07.zip",
+"sha256": "f1f65fb7088f981650a2e13c4819968f780ae11e8316869427d5a01e005274ce",
+"ultimo": "FLOWUSDT-1d-2026-09.zip"
+},
+"FOLKSUSDT": {
+"file": 0,
+"nome": ""
+},
+"FORMUSDT": {
+"file": 19,
+"nome": "FORMUSDT",
+"primo": "FORMUSDT-1d-2025-03.zip",
+"sha256": "6890503587d8a24573c92db1b71625c212ef785287e0f555137d38829f70daed",
+"ultimo": "FORMUSDT-1d-2026-09.zip"
+},
+"FRONTUSDT": {
+"file": 35,
+"nome": "FRONTUSDT",
+"primo": "FRONTUSDT-1d-2021-10.zip",
+"sha256": "3bf4bd2c1a3536fe201e6a03c3e55c1ff4f0e5763613dd9ef4018f2a27fb69a0",
+"ultimo": "FRONTUSDT-1d-2024-08.zip"
+},
+"FTMUSDT": {
+"file": 68,
+"nome": "FTMUSDT",
+"primo": "FTMUSDT-1d-2019-06.zip",
+"sha256": "3c82ce2168c8dd9e95cc52edc761866ae24c2f358aa58ba129d76edbf5da56ae",
+"ultimo": "FTMUSDT-1d-2025-01.zip"
+},
+"FTTUSDT": {
+"file": 73,
+"nome": "FTTUSDT",
+"primo": "FTTUSDT-1d-2019-12.zip",
+"sha256": "3cbbad63da2fbd4acad797f3c70b0b4307b2f2f2ce5c3623b7bfc9ee05071666",
+"ultimo": "FTTUSDT-1d-2026-09.zip"
+},
+"FXSUSDT": {
+"file": 50,
+"nome": "FXSUSDT",
+"primo": "FXSUSDT-1d-2021-12.zip",
+"sha256": "91bf531ebc1755b9d4cc845dc81178d3aef6870ac2cbce0f7f79de6b9fc6113c",
+"ultimo": "FXSUSDT-1d-2026-01.zip"
+},
+"GALAUSDT": {
+"file": 61,
+"nome": "GALAUSDT",
+"primo": "GALAUSDT-1d-2021-09.zip",
+"sha256": "d0b44d14907aec98941fd2fefa74ead448fad52d80160893e5d0005c4d356180",
+"ultimo": "GALAUSDT-1d-2026-09.zip"
+},
+"GALUSDT": {
+"file": 27,
+"nome": "GALUSDT",
+"primo": "GALUSDT-1d-2022-05.zip",
+"sha256": "30a1dd82a0e3d0aa219e074a7230d8da0e47e30d2f9fa54d434cd7a079ce1ee3",
+"ultimo": "GALUSDT-1d-2024-07.zip"
+},
+"GASUSDT": {
+"file": 43,
+"nome": "GASUSDT",
+"primo": "GASUSDT-1d-2023-03.zip",
+"sha256": "8b24da75445479408e753a16c87c053b9b6ffb875bb613f9266693adc640cd20",
+"ultimo": "GASUSDT-1d-2026-09.zip"
+},
+"GIGGLEUSDT": {
+"file": 12,
+"nome": "GIGGLEUSDT",
+"primo": "GIGGLEUSDT-1d-2025-10.zip",
+"sha256": "de66da597b9e7ee5e6958d150cc51fac4ec6ee99e4c23c2ee76d73384b2de5fb",
+"ultimo": "GIGGLEUSDT-1d-2026-09.zip"
+},
+"GLMUSDT": {
+"file": 43,
+"nome": "GLMUSDT",
+"primo": "GLMUSDT-1d-2023-03.zip",
+"sha256": "b899f3ee7d0ae8a0c4048b128ab6c4d9835ec0566dec2ed3ec911aef0e892e0b",
+"ultimo": "GLMUSDT-1d-2026-09.zip"
+},
+"GMTUSDT": {
+"file": 55,
+"nome": "GMTUSDT",
+"primo": "GMTUSDT-1d-2022-03.zip",
+"sha256": "eee1ec4c825309bf1a75d6bb16c9248bbc4117913a9e45a3720c0046472ff89f",
+"ultimo": "GMTUSDT-1d-2026-09.zip"
+},
+"GMXUSDT": {
+"file": 48,
+"nome": "GMXUSDT",
+"primo": "GMXUSDT-1d-2022-10.zip",
+"sha256": "a5a3a3c555393a97683070510db356f7c90012b434a280add7c21a6fa175dedb",
+"ultimo": "GMXUSDT-1d-2026-09.zip"
+},
+"GOATUSDT": {
+"file": 0,
+"nome": ""
+},
+"GPSUSDT": {
+"file": 19,
+"nome": "GPSUSDT",
+"primo": "GPSUSDT-1d-2025-03.zip",
+"sha256": "0068b4a192e9bb0ff113c0764d37e81f6e885d3eae9523deb7bac9216e9fd615",
+"ultimo": "GPSUSDT-1d-2026-09.zip"
+},
+"GRASSUSDT": {
+"file": 0,
+"nome": ""
+},
+"GRIFFAINUSDT": {
+"file": 0,
+"nome": ""
+},
+"GRTUSDT": {
+"file": 70,
+"nome": "GRTUSDT",
+"primo": "GRTUSDT-1d-2020-12.zip",
+"sha256": "389514f4d6f918a351946ff1e311ecaa0960b325b0672309f31c8ea2b9629d11",
+"ultimo": "GRTUSDT-1d-2026-09.zip"
+},
+"GTCUSDT": {
+"file": 64,
+"nome": "GTCUSDT",
+"primo": "GTCUSDT-1d-2021-06.zip",
+"sha256": "415a424772085212ca3119215d6f1e0ba43493d60d05995a3289e7f03d102c9c",
+"ultimo": "GTCUSDT-1d-2026-09.zip"
+},
+"GUAUSDT": {
+"file": 0,
+"nome": ""
+},
+"GUNUSDT": {
+"file": 19,
+"nome": "GUNUSDT",
+"primo": "GUNUSDT-1d-2025-03.zip",
+"sha256": "8b891e544c8948a3d4afa664b922f28b76c7b0b5f44e0509856fb7985e02580f",
+"ultimo": "GUNUSDT-1d-2026-09.zip"
+},
+"GWEIUSDT": {
+"file": 0,
+"nome": ""
+},
+"HBARUSDT": {
+"file": 85,
+"nome": "HBARUSDT",
+"primo": "HBARUSDT-1d-2019-09.zip",
+"sha256": "5033922f33917b2e8a19977e09d8273d22480e274998e420c9ed320568d46415",
+"ultimo": "HBARUSDT-1d-2026-09.zip"
+},
+"HEIUSDT": {
+"file": 20,
+"nome": "HEIUSDT",
+"primo": "HEIUSDT-1d-2025-02.zip",
+"sha256": "94105f11a2da9f47b991b5e88b9363d53dda45e14e6a63e8d066baada4c43516",
+"ultimo": "HEIUSDT-1d-2026-09.zip"
+},
+"HEMIUSDT": {
+"file": 13,
+"nome": "HEMIUSDT",
+"primo": "HEMIUSDT-1d-2025-09.zip",
+"sha256": "de81142f7b4b4df1848c245acd0fcd7bde2ca394dd7f88c8f14911251dbaddd2",
+"ultimo": "HEMIUSDT-1d-2026-09.zip"
+},
+"HFTUSDT": {
+"file": 46,
+"nome": "HFTUSDT",
+"primo": "HFTUSDT-1d-2022-11.zip",
+"sha256": "6278dd588dbf81e34cc355ebb59232a1f117c918fb215b58288df3be4ce4039e",
+"ultimo": "HFTUSDT-1d-2026-08.zip"
+},
+"HIFIUSDT": {
+"file": 33,
+"nome": "HIFIUSDT",
+"primo": "HIFIUSDT-1d-2023-01.zip",
+"sha256": "49d9466c13fb8735d6cd59c09d25d0ae74695d9c3d6edff3e088114dc10fe4fe",
+"ultimo": "HIFIUSDT-1d-2025-09.zip"
+},
+"HIGHUSDT": {
+"file": 55,
+"nome": "HIGHUSDT",
+"primo": "HIGHUSDT-1d-2021-12.zip",
+"sha256": "b036ebf9c37ae8f5cb9933648592175dc1396285018f89d6ca326f34a30491b9",
+"ultimo": "HIGHUSDT-1d-2026-06.zip"
+},
+"HIPPOUSDT": {
+"file": 0,
+"nome": ""
+},
+"HMSTRUSDT": {
+"file": 25,
+"nome": "HMSTRUSDT",
+"primo": "HMSTRUSDT-1d-2024-09.zip",
+"sha256": "b88422ec16d9240740bc43e34eeedd7dedee22f46b98837eba6934d2cb392ede",
+"ultimo": "HMSTRUSDT-1d-2026-09.zip"
+},
+"HNTUSDT": {
+"file": 26,
+"nome": "HNTUSDT",
+"primo": "HNTUSDT-1d-2020-09.zip",
+"sha256": "1947599ecf798f75710c10de53ad197b92a7f5b1474460d21a01b1e67fe91bc0",
+"ultimo": "HNTUSDT-1d-2022-10.zip"
+},
+"HOMEUSDT": {
+"file": 16,
+"nome": "HOMEUSDT",
+"primo": "HOMEUSDT-1d-2025-06.zip",
+"sha256": "7f5eaef20f70b670bce29469ebd48a0a378e2eb572f1157b46bef318ba41ab10",
+"ultimo": "HOMEUSDT-1d-2026-09.zip"
+},
+"HOOKUSDT": {
+"file": 41,
+"nome": "HOOKUSDT",
+"primo": "HOOKUSDT-1d-2022-12.zip",
+"sha256": "6f1ef51505b5b82f2c4731e1db85c81c3b6eb816614199e9ba7b224770ba5e52",
+"ultimo": "HOOKUSDT-1d-2026-04.zip"
+},
+"HOTUSDT": {
+"file": 92,
+"nome": "HOTUSDT",
+"primo": "HOTUSDT-1d-2019-02.zip",
+"sha256": "f5f1c2a311217a519944d438abf7346283b696a273b26a740e21600753423b10",
+"ultimo": "HOTUSDT-1d-2026-09.zip"
+},
+"HUMAUSDT": {
+"file": 17,
+"nome": "HUMAUSDT",
+"primo": "HUMAUSDT-1d-2025-05.zip",
+"sha256": "a482fe47d11e9ce4a1979929ab7b80f390d58949c801ff077f1c42a3ee33a8e9",
+"ultimo": "HUMAUSDT-1d-2026-09.zip"
+},
+"HUSDT": {
+"file": 0,
+"nome": ""
+},
+"HYPEUSDT": {
+"file": 1,
+"nome": "HYPEUSDT",
+"primo": "HYPEUSDT-1d-2026-09.zip",
+"sha256": "864bcbff155b6c78d9ffde27ca719d8eafd5498e8dab4f4a6e61ba61efbbc9f2",
+"ultimo": "HYPEUSDT-1d-2026-09.zip"
+},
+"ICNTUSDT": {
+"file": 0,
+"nome": ""
+},
+"ICPUSDT": {
+"file": 65,
+"nome": "ICPUSDT",
+"primo": "ICPUSDT-1d-2021-05.zip",
+"sha256": "1936fa616e887a6e00ed9b033dd05c5e37af704a3c2c343a80777df59ba91a46",
+"ultimo": "ICPUSDT-1d-2026-09.zip"
+},
+"ICXUSDT": {
+"file": 100,
+"nome": "ICXUSDT",
+"primo": "ICXUSDT-1d-2018-06.zip",
+"sha256": "313cb3ff66fab51930f9d68dedd08ded9887f4bb77ca0a04190e820e255d6908",
+"ultimo": "ICXUSDT-1d-2026-09.zip"
+},
+"IDUSDT": {
+"file": 43,
+"nome": "IDUSDT",
+"primo": "IDUSDT-1d-2023-03.zip",
+"sha256": "5c62bd9700c5a8ba6158682d0f12e786d99dcc687c4d1c13a45773e8b9e167bd",
+"ultimo": "IDUSDT-1d-2026-09.zip"
+},
+"IMXUSDT": {
+"file": 57,
+"nome": "IMXUSDT",
+"primo": "IMXUSDT-1d-2022-01.zip",
+"sha256": "a1452b217f001c4ff0721b0c0a97fa616a4742af1d9b805c7d0287c4772b4da4",
+"ultimo": "IMXUSDT-1d-2026-09.zip"
+},
+"INITUSDT": {
+"file": 18,
+"nome": "INITUSDT",
+"primo": "INITUSDT-1d-2025-04.zip",
+"sha256": "f399a0dee6ae89a9e0a5a36f50d7262b6db415b737bc8d54601ba51a32eea089",
+"ultimo": "INITUSDT-1d-2026-09.zip"
+},
+"INJUSDT": {
+"file": 72,
+"nome": "INJUSDT",
+"primo": "INJUSDT-1d-2020-10.zip",
+"sha256": "dbf4f1279782e57fb950bc35d11f25db6c87b24c53b8c941d66da688b9a74217",
+"ultimo": "INJUSDT-1d-2026-09.zip"
+},
+"IOSTUSDT": {
+"file": 91,
+"nome": "IOSTUSDT",
+"primo": "IOSTUSDT-1d-2019-03.zip",
+"sha256": "0628cf12656b0f8c386f5031b358647388626f7024f8b7109d3555f6fdaea144",
+"ultimo": "IOSTUSDT-1d-2026-09.zip"
+},
+"IOTAUSDT": {
+"file": 101,
+"nome": "IOTAUSDT",
+"primo": "IOTAUSDT-1d-2018-05.zip",
+"sha256": "ba57427b93044393f46e3fcdbaad269110af4eefe91c613091517817cfd0bc84",
+"ultimo": "IOTAUSDT-1d-2026-09.zip"
+},
+"IOTXUSDT": {
+"file": 83,
+"nome": "IOTXUSDT",
+"primo": "IOTXUSDT-1d-2019-11.zip",
+"sha256": "933ed2645f026032fb0abbcf3a44da9a9f3262093e3c80bf659085bee5ad19bf",
+"ultimo": "IOTXUSDT-1d-2026-09.zip"
+},
+"IOUSDT": {
+"file": 28,
+"nome": "IOUSDT",
+"primo": "IOUSDT-1d-2024-06.zip",
+"sha256": "36ce6d792bbe1811587e90aad1ce76e1cdd9eb2b8a4bc3e8ce8afd5abca259b8",
+"ultimo": "IOUSDT-1d-2026-09.zip"
+},
+"IPUSDT": {
+"file": 0,
+"nome": ""
+},
+"JASMYUSDT": {
+"file": 59,
+"nome": "JASMYUSDT",
+"primo": "JASMYUSDT-1d-2021-11.zip",
+"sha256": "67b9217e287ead5f231ba16cfa72c00f7811b92c896ab22616bc7e482b51b269",
+"ultimo": "JASMYUSDT-1d-2026-09.zip"
+},
+"JELLYJELLYUSDT": {
+"file": 0,
+"nome": ""
+},
+"JOEUSDT": {
+"file": 58,
+"nome": "JOEUSDT",
+"primo": "JOEUSDT-1d-2021-12.zip",
+"sha256": "a164ef765daf044bad629c4847744b6b448f07697c908e92c1bd06033ec416ad",
+"ultimo": "JOEUSDT-1d-2026-09.zip"
+},
+"JTOUSDT": {
+"file": 34,
+"nome": "JTOUSDT",
+"primo": "JTOUSDT-1d-2023-12.zip",
+"sha256": "68475d0715d741f97982f4fc570af3266c53969e6dc1bf1a583ccb20c2a97463",
+"ultimo": "JTOUSDT-1d-2026-09.zip"
+},
+"JUPUSDT": {
+"file": 33,
+"nome": "JUPUSDT",
+"primo": "JUPUSDT-1d-2024-01.zip",
+"sha256": "2ab5a37c6f79c8fad4e07aeca13071ebb655c07be48d9c3fd53273f4182175a2",
+"ultimo": "JUPUSDT-1d-2026-09.zip"
+},
+"KAIAUSDT": {
+"file": 24,
+"nome": "KAIAUSDT",
+"primo": "KAIAUSDT-1d-2024-10.zip",
+"sha256": "a2014a8c92851296d97c128aeef1fd73e7cc2d56e89d6fda5d676934a770a7ff",
+"ultimo": "KAIAUSDT-1d-2026-09.zip"
+},
+"KAITOUSDT": {
+"file": 20,
+"nome": "KAITOUSDT",
+"primo": "KAITOUSDT-1d-2025-02.zip",
+"sha256": "042b938257a0be9fa7bd402643af817022aa1572713468cda3b6366ff9aabf77",
+"ultimo": "KAITOUSDT-1d-2026-09.zip"
+},
+"KASUSDT": {
+"file": 0,
+"nome": ""
+},
+"KAVAUSDT": {
+"file": 84,
+"nome": "KAVAUSDT",
+"primo": "KAVAUSDT-1d-2019-10.zip",
+"sha256": "2d0cdf997db413319dde6db04b27d6f8e04bafc9648af013271ab71b7c46ebef",
+"ultimo": "KAVAUSDT-1d-2026-09.zip"
+},
+"KDAUSDT": {
+"file": 45,
+"nome": "KDAUSDT",
+"primo": "KDAUSDT-1d-2022-03.zip",
+"sha256": "953b2b0e1b10f8d9b90774eeb2f993ac3d8c9b3712ef6876993e85c5da5813ef",
+"ultimo": "KDAUSDT-1d-2025-11.zip"
+},
+"KEEPUSDT": {
+"file": 9,
+"nome": "KEEPUSDT",
+"primo": "KEEPUSDT-1d-2021-06.zip",
+"sha256": "be43425562dce1c4e10d3d8971e471fb436f478f6b7511cebefd54f47acf160a",
+"ultimo": "KEEPUSDT-1d-2022-02.zip"
+},
+"KERNELUSDT": {
+"file": 18,
+"nome": "KERNELUSDT",
+"primo": "KERNELUSDT-1d-2025-04.zip",
+"sha256": "945c8505da426a663fed1ee096e15bce05e62cd73a2e2ad81b561fafe69e757c",
+"ultimo": "KERNELUSDT-1d-2026-09.zip"
+},
+"KEYUSDT": {
+"file": 65,
+"nome": "KEYUSDT",
+"primo": "KEYUSDT-1d-2019-08.zip",
+"sha256": "93b492d2a7d2afd14b7b96ed2fc7f57b9c34fa141b4373210dcfd23384542572",
+"ultimo": "KEYUSDT-1d-2024-12.zip"
+},
+"KITEUSDT": {
+"file": 11,
+"nome": "KITEUSDT",
+"primo": "KITEUSDT-1d-2025-11.zip",
+"sha256": "43329552743a77900d243b455a96b5396947f1d2407d4d564afa17b422da110a",
+"ultimo": "KITEUSDT-1d-2026-09.zip"
+},
+"KLAYUSDT": {
+"file": 41,
+"nome": "KLAYUSDT",
+"primo": "KLAYUSDT-1d-2021-06.zip",
+"sha256": "fff12a85070bde02c5b553303f11e111527b1b0f2f3d3dc4a4474c6c614621dc",
+"ultimo": "KLAYUSDT-1d-2024-10.zip"
+},
+"KNCUSDT": {
+"file": 76,
+"nome": "KNCUSDT",
+"primo": "KNCUSDT-1d-2020-06.zip",
+"sha256": "9e747606125b5e34f0015a4b467d4bd3bb20fa6dd16fcd5f63eec1d377709ceb",
+"ultimo": "KNCUSDT-1d-2026-09.zip"
+},
+"KSMUSDT": {
+"file": 73,
+"nome": "KSMUSDT",
+"primo": "KSMUSDT-1d-2020-09.zip",
+"sha256": "8cf822611cbfd535ed4e08a6372fcf69dd6028576440f315d10b7ae132b8398b",
+"ultimo": "KSMUSDT-1d-2026-09.zip"
+},
+"LABUSDT": {
+"file": 0,
+"nome": ""
+},
+"LAUSDT": {
+"file": 15,
+"nome": "LAUSDT",
+"primo": "LAUSDT-1d-2025-07.zip",
+"sha256": "07b19cc7c4f4c25bd7716e6d272aa85b5b6fc0d7157c415d9dd159d9f46d2f1e",
+"ultimo": "LAUSDT-1d-2026-09.zip"
+},
+"LDOUSDT": {
+"file": 53,
+"nome": "LDOUSDT",
+"primo": "LDOUSDT-1d-2022-05.zip",
+"sha256": "cb3a8afbc03e58dc39e4bb703c3dc15498a4e104a610385443670c428e5ad960",
+"ultimo": "LDOUSDT-1d-2026-09.zip"
+},
+"LEVERUSDT": {
+"file": 37,
+"nome": "LEVERUSDT",
+"primo": "LEVERUSDT-1d-2022-07.zip",
+"sha256": "b22d6ddff5529e6b01596e6cca7114dc8fb5c89b7c36eab36371af03b97c6bfe",
+"ultimo": "LEVERUSDT-1d-2025-07.zip"
+},
+"LIGHTUSDT": {
+"file": 0,
+"nome": ""
+},
+"LINAUSDT": {
+"file": 49,
+"nome": "LINAUSDT",
+"primo": "LINAUSDT-1d-2021-03.zip",
+"sha256": "643d0c5d52fe6aabfdcf99a6fb7396f764f5c5afa38fe87ef26d0b23cd39c908",
+"ultimo": "LINAUSDT-1d-2025-03.zip"
+},
+"LINKUSDT": {
+"file": 93,
+"nome": "LINKUSDT",
+"primo": "LINKUSDT-1d-2019-01.zip",
+"sha256": "f4a6783568b42a77f3331018fb8995814c4dcc3dbcb685777cf694a0e9f89bd0",
+"ultimo": "LINKUSDT-1d-2026-09.zip"
+},
+"LISTAUSDT": {
+"file": 28,
+"nome": "LISTAUSDT",
+"primo": "LISTAUSDT-1d-2024-06.zip",
+"sha256": "b08728a3f235bc6a50c826cc96fcb3fa5490a9327829517225972618048635e1",
+"ultimo": "LISTAUSDT-1d-2026-09.zip"
+},
+"LITUSDT": {
+"file": 49,
+"nome": "LITUSDT",
+"primo": "LITUSDT-1d-2021-02.zip",
+"sha256": "1dba8d5cb6b7813aa8be0910eb59d5a08f8e80c767532b774664a0118a610f2f",
+"ultimo": "LITUSDT-1d-2025-02.zip"
+},
+"LOOMUSDT": {
+"file": 18,
+"nome": "LOOMUSDT",
+"primo": "LOOMUSDT-1d-2023-03.zip",
+"sha256": "7eeb87b0477950219fa63dbf0f91bb12a7c160c2a935e769b3c0dab180d2f12d",
+"ultimo": "LOOMUSDT-1d-2024-08.zip"
+},
+"LPTUSDT": {
+"file": 65,
+"nome": "LPTUSDT",
+"primo": "LPTUSDT-1d-2021-05.zip",
+"sha256": "3bd84deb65fa90deb6b8a9eeb99fed8d25a5699a7d2526c00c89f67f73253d01",
+"ultimo": "LPTUSDT-1d-2026-09.zip"
+},
+"LQTYUSDT": {
+"file": 44,
+"nome": "LQTYUSDT",
+"primo": "LQTYUSDT-1d-2023-02.zip",
+"sha256": "50c80c06280d33dcf911846575445155826241c11091e05061693f00f142089e",
+"ultimo": "LQTYUSDT-1d-2026-09.zip"
+},
+"LRCUSDT": {
+"file": 71,
+"nome": "LRCUSDT",
+"primo": "LRCUSDT-1d-2020-06.zip",
+"sha256": "7439d0ce461668d9588cdd9ec63e1dbea751e5b71f783d431cd695407aa8dfe0",
+"ultimo": "LRCUSDT-1d-2026-04.zip"
+},
+"LSKUSDT": {
+"file": 80,
+"nome": "LSKUSDT",
+"primo": "LSKUSDT-1d-2020-02.zip",
+"sha256": "7b7ab81134c300ac9c843b3054ccc647161524430e31d8e253e366cc781ee203",
+"ultimo": "LSKUSDT-1d-2026-09.zip"
+},
+"LTCUSDT": {
+"file": 106,
+"nome": "LTCUSDT",
+"primo": "LTCUSDT-1d-2017-12.zip",
+"sha256": "d5cad946a69a2fc3bd5ae4f8b2fba4b55cdf08625662164e28d9d26395b07e84",
+"ultimo": "LTCUSDT-1d-2026-09.zip"
+},
+"LUNA2USDT": {
+"file": 0,
+"nome": ""
+},
+"LUNAUSDT": {
+"file": 74,
+"nome": "LUNAUSDT",
+"primo": "LUNAUSDT-1d-2020-08.zip",
+"sha256": "8620cb7a276a49d950bc30bf47279efafb40aa7369c16dad595840eddde36c49",
+"ultimo": "LUNAUSDT-1d-2026-09.zip"
+},
+"MAGICUSDT": {
+"file": 46,
+"nome": "MAGICUSDT",
+"primo": "MAGICUSDT-1d-2022-12.zip",
+"sha256": "708efbb5fba2bedffe22a966c0c3243e74b5f2d1d11dc966a71b325f9e0f0873",
+"ultimo": "MAGICUSDT-1d-2026-09.zip"
+},
+"MAGMAUSDT": {
+"file": 0,
+"nome": ""
+},
+"MANAUSDT": {
+"file": 74,
+"nome": "MANAUSDT",
+"primo": "MANAUSDT-1d-2020-08.zip",
+"sha256": "c2db7cbe7a001d5b3dd19c591b4b7e57f7166c0b02e7bbe7af5c584b4f92f60b",
+"ultimo": "MANAUSDT-1d-2026-09.zip"
+},
+"MANTAUSDT": {
+"file": 33,
+"nome": "MANTAUSDT",
+"primo": "MANTAUSDT-1d-2024-01.zip",
+"sha256": "bd68de73a1cf6f57e27bd167448a27a8ca7a39b09dd5b410551826e7faa70095",
+"ultimo": "MANTAUSDT-1d-2026-09.zip"
+},
+"MASKUSDT": {
+"file": 65,
+"nome": "MASKUSDT",
+"primo": "MASKUSDT-1d-2021-05.zip",
+"sha256": "204f1e62fb888b0dfbd3b953bc7ee84e56bc547e26d720747137b6856035e6f7",
+"ultimo": "MASKUSDT-1d-2026-09.zip"
+},
+"MATICUSDT": {
+"file": 66,
+"nome": "MATICUSDT",
+"primo": "MATICUSDT-1d-2019-04.zip",
+"sha256": "003e19ead05f1bf229d5ab9869da887518c3c61b00b47853b8506b93fd559fcf",
+"ultimo": "MATICUSDT-1d-2024-09.zip"
+},
+"MAVUSDT": {
+"file": 40,
+"nome": "MAVUSDT",
+"primo": "MAVUSDT-1d-2023-06.zip",
+"sha256": "b4e4ef30c57fc3d0510dffc10066f313ba3b8404be68398649416696d1562bf5",
+"ultimo": "MAVUSDT-1d-2026-09.zip"
+},
+"MDTUSDT": {
+"file": 71,
+"nome": "MDTUSDT",
+"primo": "MDTUSDT-1d-2020-06.zip",
+"sha256": "594bab1048462c93e69d0a5fd7ff67b1ce21e16dfd78f2fdef8f81aa838233b6",
+"ultimo": "MDTUSDT-1d-2026-04.zip"
+},
+"MEMEUSDT": {
+"file": 35,
+"nome": "MEMEUSDT",
+"primo": "MEMEUSDT-1d-2023-11.zip",
+"sha256": "d68d78195f8667920784a38a99231ee7313c38a42e51567bf093d6c8f83c3374",
+"ultimo": "MEMEUSDT-1d-2026-09.zip"
+},
+"MERLUSDT": {
+"file": 0,
+"nome": ""
+},
+"METUSDT": {
+"file": 11,
+"nome": "METUSDT",
+"primo": "METUSDT-1d-2025-11.zip",
+"sha256": "ad40e111a4277b23dfc4035f02e7c0223a16f2292445c21d435ebb112b62c688",
+"ultimo": "METUSDT-1d-2026-09.zip"
+},
+"MEWUSDT": {
+"file": 0,
+"nome": ""
+},
+"MINAUSDT": {
+"file": 62,
+"nome": "MINAUSDT",
+"primo": "MINAUSDT-1d-2021-08.zip",
+"sha256": "2ec62728d0dc3ac57f3a3d51ed75c656be3706b880528c18b4ffa58c13ea748d",
+"ultimo": "MINAUSDT-1d-2026-09.zip"
+},
+"MKRUSDT": {
+"file": 63,
+"nome": "MKRUSDT",
+"primo": "MKRUSDT-1d-2020-07.zip",
+"sha256": "3ec15f525222ce05a971e4d5a8a9e35c484b5ca4af6339d1367e035f0346f091",
+"ultimo": "MKRUSDT-1d-2025-09.zip"
+},
+"MMTUSDT": {
+"file": 11,
+"nome": "MMTUSDT",
+"primo": "MMTUSDT-1d-2025-11.zip",
+"sha256": "2ab1bc87d7955ef90084cfeeb327751f4e3a194903ed1632adbd149182fa3b9d",
+"ultimo": "MMTUSDT-1d-2026-09.zip"
+},
+"MONUSDT": {
+"file": 0,
+"nome": ""
+},
+"MOODENGUSDT": {
+"file": 0,
+"nome": ""
+},
+"MORPHOUSDT": {
+"file": 12,
+"nome": "MORPHOUSDT",
+"primo": "MORPHOUSDT-1d-2025-10.zip",
+"sha256": "199a5700cc71e102cef87fee94bde6eb871dcbc1cb6a3bd07ef3995d793e787f",
+"ultimo": "MORPHOUSDT-1d-2026-09.zip"
+},
+"MOVEUSDT": {
+"file": 22,
+"nome": "MOVEUSDT",
+"primo": "MOVEUSDT-1d-2024-12.zip",
+"sha256": "5333e4ca881896eb1665ba6267000fea3e49bd8da42f6194571b0b21634051e9",
+"ultimo": "MOVEUSDT-1d-2026-09.zip"
+},
+"MOVRUSDT": {
+"file": 59,
+"nome": "MOVRUSDT",
+"primo": "MOVRUSDT-1d-2021-11.zip",
+"sha256": "4458be4131dc189c1179c1c99dbf17905ab6105f7ff460f53c563f181427e4af",
+"ultimo": "MOVRUSDT-1d-2026-09.zip"
+},
+"MTLUSDT": {
+"file": 86,
+"nome": "MTLUSDT",
+"primo": "MTLUSDT-1d-2019-08.zip",
+"sha256": "4660208290959d0abde30a6e7ac8647547f3d9189e9bdc0dc200ea70a8f2fd3d",
+"ultimo": "MTLUSDT-1d-2026-09.zip"
+},
+"MUBARAKUSDT": {
+"file": 19,
+"nome": "MUBARAKUSDT",
+"primo": "MUBARAKUSDT-1d-2025-03.zip",
+"sha256": "e3db2c20fe212c28cce0736f0bd244211932a2a5614ec7d16d51a79b66d1b9a8",
+"ultimo": "MUBARAKUSDT-1d-2026-09.zip"
+},
+"MUSDT": {
+"file": 0,
+"nome": ""
+},
+"MYROUSDT": {
+"file": 0,
+"nome": ""
+},
+"MYXUSDT": {
+"file": 0,
+"nome": ""
+},
+"NAORISUSDT": {
+"file": 0,
+"nome": ""
+},
+"NEARUSDT": {
+"file": 72,
+"nome": "NEARUSDT",
+"primo": "NEARUSDT-1d-2020-10.zip",
+"sha256": "f039f371bafee8f57e457356db7fd5a258eec2b6d67dcfb4ae0a91d06be0b6ce",
+"ultimo": "NEARUSDT-1d-2026-09.zip"
+},
+"NEIROETHUSDT": {
+"file": 0,
+"nome": ""
+},
+"NEIROUSDT": {
+"file": 25,
+"nome": "NEIROUSDT",
+"primo": "NEIROUSDT-1d-2024-09.zip",
+"sha256": "074a561e9ba4dfb5da5b6f56f29a24d3fb0af10ae799fb234026142cb78725b0",
+"ultimo": "NEIROUSDT-1d-2026-09.zip"
+},
+"NEOUSDT": {
+"file": 107,
+"nome": "NEOUSDT",
+"primo": "NEOUSDT-1d-2017-11.zip",
+"sha256": "ec1cf2822d8fd4cd6509c305798012f1137938c2ae69e2242ceef7063a954974",
+"ultimo": "NEOUSDT-1d-2026-09.zip"
+},
+"NFPUSDT": {
+"file": 32,
+"nome": "NFPUSDT",
+"primo": "NFPUSDT-1d-2023-12.zip",
+"sha256": "de395cdddebdd03515f94565c497050aa08cbf03f5c989431a06341907f51ce6",
+"ultimo": "NFPUSDT-1d-2026-07.zip"
+},
+"NILUSDT": {
+"file": 19,
+"nome": "NILUSDT",
+"primo": "NILUSDT-1d-2025-03.zip",
+"sha256": "45f60f83a2774256388a8c7abf3b3f4bb24f8a66baf66a523764dcf172c5d527",
+"ultimo": "NILUSDT-1d-2026-09.zip"
+},
+"NKNUSDT": {
+"file": 77,
+"nome": "NKNUSDT",
+"primo": "NKNUSDT-1d-2019-10.zip",
+"sha256": "c9be862d2956b757fd6bf7f9b3314bae8295d08c10d02ddb530d6da2c6509391",
+"ultimo": "NKNUSDT-1d-2026-02.zip"
+},
+"NMRUSDT": {
+"file": 74,
+"nome": "NMRUSDT",
+"primo": "NMRUSDT-1d-2020-08.zip",
+"sha256": "4227e2bd7bb7c6353c8cba449852c42744830c6c94070d0bbc33b36ca4f1d9df",
+"ultimo": "NMRUSDT-1d-2026-09.zip"
+},
+"NOMUSDT": {
+"file": 12,
+"nome": "NOMUSDT",
+"primo": "NOMUSDT-1d-2025-10.zip",
+"sha256": "c605ff4b9a50a5ee80974641aa01dad0e4256a0e3da5ad8a4309947c99286f55",
+"ultimo": "NOMUSDT-1d-2026-09.zip"
+},
+"NOTUSDT": {
+"file": 29,
+"nome": "NOTUSDT",
+"primo": "NOTUSDT-1d-2024-05.zip",
+"sha256": "5d92c68eb9c8d9f6d488a6ca499cdd3c69e86171f20db2d68a4b1b5f8bcd7690",
+"ultimo": "NOTUSDT-1d-2026-09.zip"
+},
+"NTRNUSDT": {
+"file": 31,
+"nome": "NTRNUSDT",
+"primo": "NTRNUSDT-1d-2023-10.zip",
+"sha256": "7471a895dea3017b113476683e82a56fa25e3c12a30f1c02a7e4f7c74d37d8a8",
+"ultimo": "NTRNUSDT-1d-2026-04.zip"
+},
+"OCEANUSDT": {
+"file": 48,
+"nome": "OCEANUSDT",
+"primo": "OCEANUSDT-1d-2020-08.zip",
+"sha256": "58b52c407f521d4a33cdf54b85affe5c0695cbdb3ba50ff3954d0d592294afca",
+"ultimo": "OCEANUSDT-1d-2024-07.zip"
+},
+"OGNUSDT": {
+"file": 81,
+"nome": "OGNUSDT",
+"primo": "OGNUSDT-1d-2020-01.zip",
+"sha256": "3377c7802a6fbe00deb0db3a580a1e5d6ea4c05cf5d7d0570a192ba4bf1cc49a",
+"ultimo": "OGNUSDT-1d-2026-09.zip"
+},
+"OMGUSDT": {
+"file": 63,
+"nome": "OMGUSDT",
+"primo": "OMGUSDT-1d-2019-04.zip",
+"sha256": "402f285cc5e44c16b93646e64832667bf5e312c65aa6ec9c17b020fa521b6dd4",
+"ultimo": "OMGUSDT-1d-2024-06.zip"
+},
+"OMNIUSDT": {
+"file": 18,
+"nome": "OMNIUSDT",
+"primo": "OMNIUSDT-1d-2024-04.zip",
+"sha256": "e8701143009096b207791e0aaf56d6ab37a15e136dfd1bc618d63efca04b5900",
+"ultimo": "OMNIUSDT-1d-2025-09.zip"
+},
+"OMUSDT": {
+"file": 61,
+"nome": "OMUSDT",
+"primo": "OMUSDT-1d-2021-03.zip",
+"sha256": "a6b48b44a78b233843ec476a98fe76e765aa0a693fea40647ab493a566b6fd00",
+"ultimo": "OMUSDT-1d-2026-03.zip"
+},
+"ONDOUSDT": {
+"file": 18,
+"nome": "ONDOUSDT",
+"primo": "ONDOUSDT-1d-2025-04.zip",
+"sha256": "7901804dc1801e89ee5e0859d40a1a01f3dc6c3e372a6461ca65b9ed4d0693ca",
+"ultimo": "ONDOUSDT-1d-2026-09.zip"
+},
+"ONEUSDT": {
+"file": 88,
+"nome": "ONEUSDT",
+"primo": "ONEUSDT-1d-2019-06.zip",
+"sha256": "3ba1626232554b125b9dc563e1256d9bd8d1d8b1c8e1dce5a527d6ddcab24769",
+"ultimo": "ONEUSDT-1d-2026-09.zip"
+},
+"ONGUSDT": {
+"file": 92,
+"nome": "ONGUSDT",
+"primo": "ONGUSDT-1d-2019-02.zip",
+"sha256": "7c543dc79a59e7486298d91efce041276b8ffa29da6782b495df83ccfe3bf156",
+"ultimo": "ONGUSDT-1d-2026-09.zip"
+},
+"ONTUSDT": {
+"file": 100,
+"nome": "ONTUSDT",
+"primo": "ONTUSDT-1d-2018-06.zip",
+"sha256": "eafb6637f92cb1d688078cf05dd240d3c77d78b3313541034dcc0a68fd3a0bbf",
+"ultimo": "ONTUSDT-1d-2026-09.zip"
+},
+"ONUSDT": {
+"file": 0,
+"nome": ""
+},
+"OPENUSDT": {
+"file": 13,
+"nome": "OPENUSDT",
+"primo": "OPENUSDT-1d-2025-09.zip",
+"sha256": "962d102a4acd0d48ebf73697dc675d474e7418af45b8acf15835579977978173",
+"ultimo": "OPENUSDT-1d-2026-09.zip"
+},
+"OPUSDT": {
+"file": 52,
+"nome": "OPUSDT",
+"primo": "OPUSDT-1d-2022-06.zip",
+"sha256": "6c19b3b53b5fe5aec98794ad8d209894cffbed3726137a0f84136d0feb5f78d9",
+"ultimo": "OPUSDT-1d-2026-09.zip"
+},
+"ORBSUSDT": {
+"file": 0,
+"nome": ""
+},
+"ORCAUSDT": {
+"file": 22,
+"nome": "ORCAUSDT",
+"primo": "ORCAUSDT-1d-2024-12.zip",
+"sha256": "2247974c5933b80d38c18cdf78bf0b03b85f19b2e374ed22f6b33694c9153070",
+"ultimo": "ORCAUSDT-1d-2026-09.zip"
+},
+"ORDIUSDT": {
+"file": 35,
+"nome": "ORDIUSDT",
+"primo": "ORDIUSDT-1d-2023-11.zip",
+"sha256": "2121ceca160f19576477e23eea197115796d4bbe916e54eb3361df8afb3d5ac1",
+"ultimo": "ORDIUSDT-1d-2026-09.zip"
+},
+"PARTIUSDT": {
+"file": 19,
+"nome": "PARTIUSDT",
+"primo": "PARTIUSDT-1d-2025-03.zip",
+"sha256": "651ca0df93aee1b6d22b080c61a10f3cb4d524d922a4ab65b60a6bd7a49ae2de",
+"ultimo": "PARTIUSDT-1d-2026-09.zip"
+},
+"PENDLEUSDT": {
+"file": 39,
+"nome": "PENDLEUSDT",
+"primo": "PENDLEUSDT-1d-2023-07.zip",
+"sha256": "e656c90cfa535e83c0074499fa83f292da28191d0d2e0844398c56bbd20c2738",
+"ultimo": "PENDLEUSDT-1d-2026-09.zip"
+},
+"PENGUUSDT": {
+"file": 22,
+"nome": "PENGUUSDT",
+"primo": "PENGUUSDT-1d-2024-12.zip",
+"sha256": "3e231d85c39ec717e5b85133dca43f360f25d4be2cc57ae7e9cfb749867f7eb6",
+"ultimo": "PENGUUSDT-1d-2026-09.zip"
+},
+"PEOPLEUSDT": {
+"file": 58,
+"nome": "PEOPLEUSDT",
+"primo": "PEOPLEUSDT-1d-2021-12.zip",
+"sha256": "cb3d39e50449984d8ea4d9a26ea1adcca4bf52a0bb2b11c0c628a38fe37b72ff",
+"ultimo": "PEOPLEUSDT-1d-2026-09.zip"
+},
+"PERPUSDT": {
+"file": 57,
+"nome": "PERPUSDT",
+"primo": "PERPUSDT-1d-2021-03.zip",
+"sha256": "14d7bdd64ed3ab35c292c2d14a2f95649499746bdbfec0ff4f95c13022590dc2",
+"ultimo": "PERPUSDT-1d-2025-11.zip"
+},
+"PHAUSDT": {
+"file": 64,
+"nome": "PHAUSDT",
+"primo": "PHAUSDT-1d-2021-06.zip",
+"sha256": "fff33e15cbadb2c4fdbec25d1794f41ffe3ce79d958851f56573cddeff9a288e",
+"ultimo": "PHAUSDT-1d-2026-09.zip"
+},
+"PHBUSDT": {
+"file": 43,
+"nome": "PHBUSDT",
+"primo": "PHBUSDT-1d-2022-11.zip",
+"sha256": "9ea80199f8bd21f1e602cef6b6300eced7361b50cff19de23320287bbd833b6a",
+"ultimo": "PHBUSDT-1d-2026-05.zip"
+},
+"PIEVERSEUSDT": {
+"file": 0,
+"nome": ""
+},
+"PIPPINUSDT": {
+"file": 0,
+"nome": ""
+},
+"PIXELUSDT": {
+"file": 32,
+"nome": "PIXELUSDT",
+"primo": "PIXELUSDT-1d-2024-02.zip",
+"sha256": "0e3dcf7892da5f392bdd3ecf9a05eef864c5f891a0d93437e566530b277afcf9",
+"ultimo": "PIXELUSDT-1d-2026-09.zip"
+},
+"PLAYUSDT": {
+"file": 0,
+"nome": ""
+},
+"PLUMEUSDT": {
+"file": 14,
+"nome": "PLUMEUSDT",
+"primo": "PLUMEUSDT-1d-2025-08.zip",
+"sha256": "538ca2c3ecab46c75229a8f565ee199e263ac0728a4843ea8651edcb8644c600",
+"ultimo": "PLUMEUSDT-1d-2026-09.zip"
+},
+"PNUTUSDT": {
+"file": 23,
+"nome": "PNUTUSDT",
+"primo": "PNUTUSDT-1d-2024-11.zip",
+"sha256": "d6e90a9e84f05d05f8ab18d5399dd4e997d01564240603748077522ac0ea6877",
+"ultimo": "PNUTUSDT-1d-2026-09.zip"
+},
+"POLUSDT": {
+"file": 25,
+"nome": "POLUSDT",
+"primo": "POLUSDT-1d-2024-09.zip",
+"sha256": "92f46d78417648c668129c9926d442c162427ba6294e9b4a5115b269198caf5e",
+"ultimo": "POLUSDT-1d-2026-09.zip"
+},
+"POLYXUSDT": {
+"file": 48,
+"nome": "POLYXUSDT",
+"primo": "POLYXUSDT-1d-2022-10.zip",
+"sha256": "26c183542f63b177031f44026b247c7691f83d3b26ae943392c3eda2bc4df6b8",
+"ultimo": "POLYXUSDT-1d-2026-09.zip"
+},
+"POPCATUSDT": {
+"file": 0,
+"nome": ""
+},
+"PORTALUSDT": {
+"file": 32,
+"nome": "PORTALUSDT",
+"primo": "PORTALUSDT-1d-2024-02.zip",
+"sha256": "09ad2395ccb17f7afc37ebe4b54c97fb2770ef6a6308e47e93120b0307e6591d",
+"ultimo": "PORTALUSDT-1d-2026-09.zip"
+},
+"POWRUSDT": {
+"file": 59,
+"nome": "POWRUSDT",
+"primo": "POWRUSDT-1d-2021-11.zip",
+"sha256": "c90c3956a503740caded05eddb25a09d34428564e561b0ff734434a2632cb932",
+"ultimo": "POWRUSDT-1d-2026-09.zip"
+},
+"PROMUSDT": {
+"file": 43,
+"nome": "PROMUSDT",
+"primo": "PROMUSDT-1d-2023-03.zip",
+"sha256": "374a771922e1d65bf01ab595afce1fb4cf0388f176ff0dbd920ca83794007bc1",
+"ultimo": "PROMUSDT-1d-2026-09.zip"
+},
+"PTBUSDT": {
+"file": 0,
+"nome": ""
+},
+"PUMPUSDT": {
+"file": 13,
+"nome": "PUMPUSDT",
+"primo": "PUMPUSDT-1d-2025-09.zip",
+"sha256": "ae928bc873f646692ac49b3b02107974f7392abd70093c6e78bd6f50312132f6",
+"ultimo": "PUMPUSDT-1d-2026-09.zip"
+},
+"PYTHUSDT": {
+"file": 32,
+"nome": "PYTHUSDT",
+"primo": "PYTHUSDT-1d-2024-02.zip",
+"sha256": "42b7eb7a48cbd3e17c970e0a34180d14a429c7ffe596b10afdeb177cc1af0ca9",
+"ultimo": "PYTHUSDT-1d-2026-09.zip"
+},
+"QNTUSDT": {
+"file": 63,
+"nome": "QNTUSDT",
+"primo": "QNTUSDT-1d-2021-07.zip",
+"sha256": "8aa02fd05ae5539598868608f23a7a09206e89d3a9b9dc8421bf4c52359f4304",
+"ultimo": "QNTUSDT-1d-2026-09.zip"
+},
+"QTUMUSDT": {
+"file": 103,
+"nome": "QTUMUSDT",
+"primo": "QTUMUSDT-1d-2018-03.zip",
+"sha256": "2aaac439211960181d5682840577e7ee4a62254fbb5c7a54ec7b290f09b72395",
+"ultimo": "QTUMUSDT-1d-2026-09.zip"
+},
+"RADUSDT": {
+"file": 60,
+"nome": "RADUSDT",
+"primo": "RADUSDT-1d-2021-10.zip",
+"sha256": "a8b7c2a40729cc0c0f3418b434a7eca3273c47f3cd1231874a5d058228f46d1c",
+"ultimo": "RADUSDT-1d-2026-09.zip"
+},
+"RAREUSDT": {
+"file": 60,
+"nome": "RAREUSDT",
+"primo": "RAREUSDT-1d-2021-10.zip",
+"sha256": "53700abc2eb6fccda1426b1c26cf0c1ea929b9cfed2458d6e199477b01932570",
+"ultimo": "RAREUSDT-1d-2026-09.zip"
+},
+"RAVEUSDT": {
+"file": 0,
+"nome": ""
+},
+"RAYSOLUSDT": {
+"file": 0,
+"nome": ""
+},
+"RAYUSDT": {
+"file": 62,
+"nome": "RAYUSDT",
+"primo": "RAYUSDT-1d-2021-08.zip",
+"sha256": "02c8769129f42536c0889a0bfc5d3998c426722be2397d3b4d9aae201b81c1c8",
+"ultimo": "RAYUSDT-1d-2026-09.zip"
+},
+"RDNTUSDT": {
+"file": 38,
+"nome": "RDNTUSDT",
+"primo": "RDNTUSDT-1d-2023-03.zip",
+"sha256": "84c66a87a99f40189745155eb53a68cd58f42d9ea085755d08c83a9ec67d89ca",
+"ultimo": "RDNTUSDT-1d-2026-04.zip"
+},
+"REDUSDT": {
+"file": 20,
+"nome": "REDUSDT",
+"primo": "REDUSDT-1d-2025-02.zip",
+"sha256": "649d6272a717523bf2ce91a33164389546e27e9774565fd876f97e3a01dc8a92",
+"ultimo": "REDUSDT-1d-2026-09.zip"
+},
+"REEFUSDT": {
+"file": 45,
+"nome": "REEFUSDT",
+"primo": "REEFUSDT-1d-2020-12.zip",
+"sha256": "373373e1590e65044810f7ce79385a2f01976d912e98baa5341a52d3e9fcf286",
+"ultimo": "REEFUSDT-1d-2024-08.zip"
+},
+"RENDERUSDT": {
+"file": 27,
+"nome": "RENDERUSDT",
+"primo": "RENDERUSDT-1d-2024-07.zip",
+"sha256": "62fb300175f68474066a367939266c428ad8b5f9dd72f8c439b43c4924ed0998",
+"ultimo": "RENDERUSDT-1d-2026-09.zip"
+},
+"RENUSDT": {
+"file": 64,
+"nome": "RENUSDT",
+"primo": "RENUSDT-1d-2019-09.zip",
+"sha256": "64b98d0a69c6140a502ee9991430d813349626f8939cb8049278353fa34a37dc",
+"ultimo": "RENUSDT-1d-2024-12.zip"
+},
+"RESOLVUSDT": {
+"file": 16,
+"nome": "RESOLVUSDT",
+"primo": "RESOLVUSDT-1d-2025-06.zip",
+"sha256": "a8648f144c9d4698733c78dad3514616f215a691d4d45db8e4222734e46ee799",
+"ultimo": "RESOLVUSDT-1d-2026-09.zip"
+},
+"REZUSDT": {
+"file": 30,
+"nome": "REZUSDT",
+"primo": "REZUSDT-1d-2024-04.zip",
+"sha256": "a11c881edc9824881a9d2c1a9b57b8faa0a723d8a01c22b06da51b985bf2dfb2",
+"ultimo": "REZUSDT-1d-2026-09.zip"
+},
+"RIFUSDT": {
+"file": 69,
+"nome": "RIFUSDT",
+"primo": "RIFUSDT-1d-2021-01.zip",
+"sha256": "08be5a722a650c2d0bb0f41d0129a8f39a33d18010f8655a70c130065d170d6e",
+"ultimo": "RIFUSDT-1d-2026-09.zip"
+},
+"RIVERUSDT": {
+"file": 0,
+"nome": ""
+},
+"RLCUSDT": {
+"file": 83,
+"nome": "RLCUSDT",
+"primo": "RLCUSDT-1d-2019-11.zip",
+"sha256": "b2def6da163da1eb6b8acb532e673083a936816f73518f58f19cc6db42d0dba1",
+"ultimo": "RLCUSDT-1d-2026-09.zip"
+},
+"RNDRUSDT": {
+"file": 33,
+"nome": "RNDRUSDT",
+"primo": "RNDRUSDT-1d-2021-11.zip",
+"sha256": "9789117e72c0b1f122dbc5c94faa44c11f281bf6329b95c9b6c9e701c367512b",
+"ultimo": "RNDRUSDT-1d-2024-07.zip"
+},
+"ROSEUSDT": {
+"file": 71,
+"nome": "ROSEUSDT",
+"primo": "ROSEUSDT-1d-2020-11.zip",
+"sha256": "f41c0891adf08b62478eb182d1c9da9f201d0730f4b1229c1c58d9e6f763d54c",
+"ultimo": "ROSEUSDT-1d-2026-09.zip"
+},
+"RPLUSDT": {
+"file": 45,
+"nome": "RPLUSDT",
+"primo": "RPLUSDT-1d-2023-01.zip",
+"sha256": "d9e74c3479ca687b473005c4f6b29eddbfc5544f93bf548db1fc73dc99aec1ef",
+"ultimo": "RPLUSDT-1d-2026-09.zip"
+},
+"RSRUSDT": {
+"file": 74,
+"nome": "RSRUSDT",
+"primo": "RSRUSDT-1d-2020-08.zip",
+"sha256": "a0a271d41b35411a3f7a1078776d1f1cf38a78c35421b10122ed9aeb7898bad8",
+"ultimo": "RSRUSDT-1d-2026-09.zip"
+},
+"RUNEUSDT": {
+"file": 73,
+"nome": "RUNEUSDT",
+"primo": "RUNEUSDT-1d-2020-09.zip",
+"sha256": "2ede1f437bfcadc74b4775412dbe460be1cbf357e38abaa91e996257ab301a77",
+"ultimo": "RUNEUSDT-1d-2026-09.zip"
+},
+"RVNUSDT": {
+"file": 85,
+"nome": "RVNUSDT",
+"primo": "RVNUSDT-1d-2019-09.zip",
+"sha256": "15ac5bf55d59befee645d186250089f0b2cc9325faf0b32695e06b3c4e612939",
+"ultimo": "RVNUSDT-1d-2026-09.zip"
+},
+"SAGAUSDT": {
+"file": 30,
+"nome": "SAGAUSDT",
+"primo": "SAGAUSDT-1d-2024-04.zip",
+"sha256": "86647a003957cec41f45425d1b88e654c276f270250f6032af72d3dacea1e1fb",
+"ultimo": "SAGAUSDT-1d-2026-09.zip"
+},
+"SAHARAUSDT": {
+"file": 16,
+"nome": "SAHARAUSDT",
+"primo": "SAHARAUSDT-1d-2025-06.zip",
+"sha256": "1ff1dd5c14f38f543663244c7b851b66f5b2b2bda2953efd90d6ec3acd6dad1d",
+"ultimo": "SAHARAUSDT-1d-2026-09.zip"
+},
+"SANDUSDT": {
+"file": 74,
+"nome": "SANDUSDT",
+"primo": "SANDUSDT-1d-2020-08.zip",
+"sha256": "a42f29be5b99f854974f0ffd6f50e7d0bafe5f89b8fd2b0ca51cd9004c2ec80a",
+"ultimo": "SANDUSDT-1d-2026-09.zip"
+},
+"SCUSDT": {
+"file": 75,
+"nome": "SCUSDT",
+"primo": "SCUSDT-1d-2020-07.zip",
+"sha256": "f3d7a84d5479ff21a674356e76c4798dec50e9711eb8e9573d5d1d3af2d9d3fd",
+"ultimo": "SCUSDT-1d-2026-09.zip"
+},
+"SEIUSDT": {
+"file": 38,
+"nome": "SEIUSDT",
+"primo": "SEIUSDT-1d-2023-08.zip",
+"sha256": "cb4d6ca1b702a9806c2f5944c809bc1af1a9a6be70b38e11357dbc4bd6e3b66c",
+"ultimo": "SEIUSDT-1d-2026-09.zip"
+},
+"SFPUSDT": {
+"file": 68,
+"nome": "SFPUSDT",
+"primo": "SFPUSDT-1d-2021-02.zip",
+"sha256": "91a960e549324bbc8f315c398c29f132816f2edeb3b674891499e7e373958987",
+"ultimo": "SFPUSDT-1d-2026-09.zip"
+},
+"SIGNUSDT": {
+"file": 18,
+"nome": "SIGNUSDT",
+"primo": "SIGNUSDT-1d-2025-04.zip",
+"sha256": "ba37a8539430dc528ef94360baac91b1f0da17074ea6dc05d43d366cd9f6bcea",
+"ultimo": "SIGNUSDT-1d-2026-09.zip"
+},
+"SIRENUSDT": {
+"file": 0,
+"nome": ""
+},
+"SKLUSDT": {
+"file": 70,
+"nome": "SKLUSDT",
+"primo": "SKLUSDT-1d-2020-12.zip",
+"sha256": "fde397174532c89c53a3821be7b0e8f1cb58a92f9228db4a8402e737a02671e3",
+"ultimo": "SKLUSDT-1d-2026-09.zip"
+},
+"SKYAIUSDT": {
+"file": 0,
+"nome": ""
+},
+"SKYUSDT": {
+"file": 13,
+"nome": "SKYUSDT",
+"primo": "SKYUSDT-1d-2025-09.zip",
+"sha256": "4f1c36f8677291e9494822db89b947874999b3065abaffae19a8d7c6546ebd09",
+"ultimo": "SKYUSDT-1d-2026-09.zip"
+},
+"SNXUSDT": {
+"file": 75,
+"nome": "SNXUSDT",
+"primo": "SNXUSDT-1d-2020-07.zip",
+"sha256": "dc3c3db306b47926e93e48c244520f35e458443bb24b67955895f403e4bcd967",
+"ultimo": "SNXUSDT-1d-2026-09.zip"
+},
+"SOLUSDT": {
+"file": 74,
+"nome": "SOLUSDT",
+"primo": "SOLUSDT-1d-2020-08.zip",
+"sha256": "b4f8b05a377067b82a909304852934e779daf224cd0cfd13438ca0fa4b398ad4",
+"ultimo": "SOLUSDT-1d-2026-09.zip"
+},
+"SOONUSDT": {
+"file": 0,
+"nome": ""
+},
+"SPELLUSDT": {
+"file": 58,
+"nome": "SPELLUSDT",
+"primo": "SPELLUSDT-1d-2021-12.zip",
+"sha256": "1c72a086a3a961fb18b21d6c16900dd72ba74dd81666e064c98aa83bbe775445",
+"ultimo": "SPELLUSDT-1d-2026-09.zip"
+},
+"SPKUSDT": {
+"file": 16,
+"nome": "SPKUSDT",
+"primo": "SPKUSDT-1d-2025-06.zip",
+"sha256": "1ef0f167affe290f818b82571bebefb3e59c75a49d2cdda4ca79f33388c1ff50",
+"ultimo": "SPKUSDT-1d-2026-09.zip"
+},
+"SPXUSDT": {
+"file": 0,
+"nome": ""
+},
+"SQDUSDT": {
+"file": 0,
+"nome": ""
+},
+"SRMUSDT": {
+"file": 28,
+"nome": "SRMUSDT",
+"primo": "SRMUSDT-1d-2020-08.zip",
+"sha256": "20d59dca7e4de270bfac900f0c39bb9eb9a82a5b4639e873d23ed3ce93b21ae9",
+"ultimo": "SRMUSDT-1d-2022-11.zip"
+},
+"SSVUSDT": {
+"file": 44,
+"nome": "SSVUSDT",
+"primo": "SSVUSDT-1d-2023-02.zip",
+"sha256": "08cfea9e679ebb3fe074fc113538cee9ca75bc294acc1a12aa1595623cc6c193",
+"ultimo": "SSVUSDT-1d-2026-09.zip"
+},
+"STEEMUSDT": {
+"file": 54,
+"nome": "STEEMUSDT",
+"primo": "STEEMUSDT-1d-2022-04.zip",
+"sha256": "d955f296a3b2f5562686ca52a8e84012467849dc30a0cb22b9d83a5bbf5ee20a",
+"ultimo": "STEEMUSDT-1d-2026-09.zip"
+},
+"STGUSDT": {
+"file": 50,
+"nome": "STGUSDT",
+"primo": "STGUSDT-1d-2022-08.zip",
+"sha256": "dd298ed487b2674d9e43187fe99a668d9904e4a1ae3f54338792ebb5e939fdef",
+"ultimo": "STGUSDT-1d-2026-09.zip"
+},
+"STMXUSDT": {
+"file": 57,
+"nome": "STMXUSDT",
+"primo": "STMXUSDT-1d-2020-06.zip",
+"sha256": "59af65217bc88b2f40c3fabd9dfdebf5c739896acb6e7e95219a6a0b2507eeb4",
+"ultimo": "STMXUSDT-1d-2025-02.zip"
+},
+"STORJUSDT": {
+"file": 75,
+"nome": "STORJUSDT",
+"primo": "STORJUSDT-1d-2020-07.zip",
+"sha256": "10d15ed15e54afb9740e5bec2ab1374d2d496309f3f68dc81059e6b86e40fa62",
+"ultimo": "STORJUSDT-1d-2026-09.zip"
+},
+"STOUSDT": {
+"file": 17,
+"nome": "STOUSDT",
+"primo": "STOUSDT-1d-2025-05.zip",
+"sha256": "bed14f3e010fdb357fb48de47a3a93df85738292052a388d5b36fa3252c52ad2",
+"ultimo": "STOUSDT-1d-2026-09.zip"
+},
+"STRKUSDT": {
+"file": 32,
+"nome": "STRKUSDT",
+"primo": "STRKUSDT-1d-2024-02.zip",
+"sha256": "b6d652c7515b9aae123519ed468821d9ed12a3e4ede46f28c5ef5d926a96b0b5",
+"ultimo": "STRKUSDT-1d-2026-09.zip"
+},
+"STXUSDT": {
+"file": 84,
+"nome": "STXUSDT",
+"primo": "STXUSDT-1d-2019-10.zip",
+"sha256": "e8809f710bdc4c4a8a186c961f29fa63a9e0d3b925f0b6e3a762419b22f761d9",
+"ultimo": "STXUSDT-1d-2026-09.zip"
+},
+"SUIUSDT": {
+"file": 41,
+"nome": "SUIUSDT",
+"primo": "SUIUSDT-1d-2023-05.zip",
+"sha256": "32250fad08892a3595fd16914caac3029d56eb52a55d7a66fe9673c23c5ce3bd",
+"ultimo": "SUIUSDT-1d-2026-09.zip"
+},
+"SUPERUSDT": {
+"file": 67,
+"nome": "SUPERUSDT",
+"primo": "SUPERUSDT-1d-2021-03.zip",
+"sha256": "b105109926d7224531a3a2a52acea4d75c0485c6731baa205f263ad014cd1d00",
+"ultimo": "SUPERUSDT-1d-2026-09.zip"
+},
+"SUSDT": {
+"file": 21,
+"nome": "SUSDT",
+"primo": "SUSDT-1d-2025-01.zip",
+"sha256": "0646e9084ac6f6a8216d67745ad243c02d589602535be18db4f6b20a399b1c9c",
+"ultimo": "SUSDT-1d-2026-09.zip"
+},
+"SUSHIUSDT": {
+"file": 73,
+"nome": "SUSHIUSDT",
+"primo": "SUSHIUSDT-1d-2020-09.zip",
+"sha256": "4ebc7c4f3de5f3beb2c1be8a59ff76296d9671db4485b3615a355df82d9862bc",
+"ultimo": "SUSHIUSDT-1d-2026-09.zip"
+},
+"SWARMSUSDT": {
+"file": 0,
+"nome": ""
+},
+"SXPUSDT": {
+"file": 70,
+"nome": "SXPUSDT",
+"primo": "SXPUSDT-1d-2020-07.zip",
+"sha256": "b13a0cbe1ceec410ac56c4dc79d787f5e4a57e5905369f810015f3e176875505",
+"ultimo": "SXPUSDT-1d-2026-04.zip"
+},
+"SYNUSDT": {
+"file": 44,
+"nome": "SYNUSDT",
+"primo": "SYNUSDT-1d-2023-02.zip",
+"sha256": "d09c01392392d71dac07739806ec0e5778c6dfe812a598f0d2d853c81ec8abcb",
+"ultimo": "SYNUSDT-1d-2026-09.zip"
+},
+"SYRUPUSDT": {
+"file": 17,
+"nome": "SYRUPUSDT",
+"primo": "SYRUPUSDT-1d-2025-05.zip",
+"sha256": "c1fa53374a1f0e1358976f45c83101460f4ab861e0f5b8a7d0bee84175d76ca6",
+"ultimo": "SYRUPUSDT-1d-2026-09.zip"
+},
+"TACUSDT": {
+"file": 0,
+"nome": ""
+},
+"TAOUSDT": {
+"file": 30,
+"nome": "TAOUSDT",
+"primo": "TAOUSDT-1d-2024-04.zip",
+"sha256": "904341c4a8a97ac9ee8f3cb93dd505e13b829e03c0160487f0d51b9816e557e5",
+"ultimo": "TAOUSDT-1d-2026-09.zip"
+},
+"THETAUSDT": {
+"file": 90,
+"nome": "THETAUSDT",
+"primo": "THETAUSDT-1d-2019-04.zip",
+"sha256": "d057c567f0fe54f4c176059ea4dffc97792fb78cd7e951a5a62d8fa64e170b1e",
+"ultimo": "THETAUSDT-1d-2026-09.zip"
+},
+"THEUSDT": {
+"file": 23,
+"nome": "THEUSDT",
+"primo": "THEUSDT-1d-2024-11.zip",
+"sha256": "2a079b41a89bd5286c17372662dee1c3b7921b3740b4c070a18be66893711114",
+"ultimo": "THEUSDT-1d-2026-09.zip"
+},
+"TIAUSDT": {
+"file": 36,
+"nome": "TIAUSDT",
+"primo": "TIAUSDT-1d-2023-10.zip",
+"sha256": "a9b57103ec61beb3fa6ac50c4ee1a66b36effde61266da9923ed04627133ebab",
+"ultimo": "TIAUSDT-1d-2026-09.zip"
+},
+"TLMUSDT": {
+"file": 66,
+"nome": "TLMUSDT",
+"primo": "TLMUSDT-1d-2021-04.zip",
+"sha256": "8782da5b09b8833ce430b53dcc083f06bc6311beb305212f9b813ecb0ce6852a",
+"ultimo": "TLMUSDT-1d-2026-09.zip"
+},
+"TNSRUSDT": {
+"file": 30,
+"nome": "TNSRUSDT",
+"primo": "TNSRUSDT-1d-2024-04.zip",
+"sha256": "ea0080807b137e62c6a169b8c1f5afce70bad42cefbc6fc49ce8fd4c6fd135b5",
+"ultimo": "TNSRUSDT-1d-2026-09.zip"
+},
+"TOKENUSDT": {
+"file": 0,
+"nome": ""
+},
+"TOMOUSDT": {
+"file": 52,
+"nome": "TOMOUSDT",
+"primo": "TOMOUSDT-1d-2019-08.zip",
+"sha256": "5f4eb266e3a3d5bb160c62d82b08c4d7ed135792122c91aa04ccf2c0bee3c851",
+"ultimo": "TOMOUSDT-1d-2023-11.zip"
+},
+"TONUSDT": {
+"file": 23,
+"nome": "TONUSDT",
+"primo": "TONUSDT-1d-2024-08.zip",
+"sha256": "f97abf8c02b089df8d87df37c4e4087df4c503a295ca775856960a3be2823c3c",
+"ultimo": "TONUSDT-1d-2026-06.zip"
+},
+"TRADOORUSDT": {
+"file": 0,
+"nome": ""
+},
+"TRBUSDT": {
+"file": 74,
+"nome": "TRBUSDT",
+"primo": "TRBUSDT-1d-2020-08.zip",
+"sha256": "5769ac19ba54466b2f62e85bad9e05066548246ed9574cb1dc24d1630cf565af",
+"ultimo": "TRBUSDT-1d-2026-09.zip"
+},
+"TRUMPUSDT": {
+"file": 21,
+"nome": "TRUMPUSDT",
+"primo": "TRUMPUSDT-1d-2025-01.zip",
+"sha256": "f535a3475ee8ebd1edadf12b54b7c646201bd93371dbac171ee696425339dc5f",
+"ultimo": "TRUMPUSDT-1d-2026-09.zip"
+},
+"TRUUSDT": {
+"file": 64,
+"nome": "TRUUSDT",
+"primo": "TRUUSDT-1d-2021-01.zip",
+"sha256": "4ca93e5d0b4e6d1e9299b25bd79eed46558caef9f7d644cb6ec6fe0cf55bfaa9",
+"ultimo": "TRUUSDT-1d-2026-04.zip"
+},
+"TRXUSDT": {
+"file": 100,
+"nome": "TRXUSDT",
+"primo": "TRXUSDT-1d-2018-06.zip",
+"sha256": "83ada0e92694bd595f3988c2e3f66cb449300222ca59dbd510fa971a9775a82b",
+"ultimo": "TRXUSDT-1d-2026-09.zip"
+},
+"TSTUSDT": {
+"file": 20,
+"nome": "TSTUSDT",
+"primo": "TSTUSDT-1d-2025-02.zip",
+"sha256": "7713fb34623f5a9ca6e176f9a193e695bac41027ac5910316c1a4a908af14b0b",
+"ultimo": "TSTUSDT-1d-2026-09.zip"
+},
+"TURBOUSDT": {
+"file": 25,
+"nome": "TURBOUSDT",
+"primo": "TURBOUSDT-1d-2024-09.zip",
+"sha256": "ea6d4304f28a984cf32fc10458fb72189d118931fae986560c67995144d977db",
+"ultimo": "TURBOUSDT-1d-2026-09.zip"
+},
+"TUTUSDT": {
+"file": 19,
+"nome": "TUTUSDT",
+"primo": "TUTUSDT-1d-2025-03.zip",
+"sha256": "8e1c6443e9790484c12efd55700116a45353ab6de1818dd903519752ba03638a",
+"ultimo": "TUTUSDT-1d-2026-09.zip"
+},
+"TWTUSDT": {
+"file": 69,
+"nome": "TWTUSDT",
+"primo": "TWTUSDT-1d-2021-01.zip",
+"sha256": "ecefa43b34f409954506c1060cf197abe2c59d9fa6aad44d8daf82c23dd17f29",
+"ultimo": "TWTUSDT-1d-2026-09.zip"
+},
+"UAIUSDT": {
+"file": 0,
+"nome": ""
+},
+"UBUSDT": {
+"file": 0,
+"nome": ""
+},
+"UMAUSDT": {
+"file": 73,
+"nome": "UMAUSDT",
+"primo": "UMAUSDT-1d-2020-09.zip",
+"sha256": "603757dfbeeb9c7da01a9c2c55504b43d5c3de39a4939d85d43468ecbb4bdf3b",
+"ultimo": "UMAUSDT-1d-2026-09.zip"
+},
+"UNFIUSDT": {
+"file": 49,
+"nome": "UNFIUSDT",
+"primo": "UNFIUSDT-1d-2020-11.zip",
+"sha256": "f664cfa78681beb6d838c2b52e4b61dfc08524333233faad4c7f00cc8533e0d2",
+"ultimo": "UNFIUSDT-1d-2024-11.zip"
+},
+"UNIUSDT": {
+"file": 73,
+"nome": "UNIUSDT",
+"primo": "UNIUSDT-1d-2020-09.zip",
+"sha256": "b3bf3ac6ecef1c12dce8a17caeb7bc877f6457eed7e99607bb8b2e870e0d0d63",
+"ultimo": "UNIUSDT-1d-2026-09.zip"
+},
+"USELESSUSDT": {
+"file": 0,
+"nome": ""
+},
+"USTCUSDT": {
+"file": 43,
+"nome": "USTCUSDT",
+"primo": "USTCUSDT-1d-2023-03.zip",
+"sha256": "24da5292fab90e314eb564731e28e59e3d3a446d977354ed22e5c2cd8ac24298",
+"ultimo": "USTCUSDT-1d-2026-09.zip"
+},
+"USUALUSDT": {
+"file": 23,
+"nome": "USUALUSDT",
+"primo": "USUALUSDT-1d-2024-11.zip",
+"sha256": "d9752e3e5ab43c54d8e4df56e603d6679484868a8f264c32887afc56f6637063",
+"ultimo": "USUALUSDT-1d-2026-09.zip"
+},
+"USUSDT": {
+"file": 0,
+"nome": ""
+},
+"UXLINKUSDT": {
+"file": 0,
+"nome": ""
+},
+"VANRYUSDT": {
+"file": 33,
+"nome": "VANRYUSDT",
+"primo": "VANRYUSDT-1d-2023-12.zip",
+"sha256": "5670b7f2e85322a81bd7c7bb22be1199644977b40483732051adac30ca645289",
+"ultimo": "VANRYUSDT-1d-2026-08.zip"
+},
+"VELVETUSDT": {
+"file": 0,
+"nome": ""
+},
+"VETUSDT": {
+"file": 99,
+"nome": "VETUSDT",
+"primo": "VETUSDT-1d-2018-07.zip",
+"sha256": "851ff8f59ec88aec7f324a83083883402dcfbd5693b1779ee062de1505522b00",
+"ultimo": "VETUSDT-1d-2026-09.zip"
+},
+"VIDTUSDT": {
+"file": 44,
+"nome": "VIDTUSDT",
+"primo": "VIDTUSDT-1d-2021-09.zip",
+"sha256": "4f3f54a6b2bbe140861b9306746236065f6d4c278e0a2e208fc8071909f5006a",
+"ultimo": "VIDTUSDT-1d-2025-04.zip"
+},
+"VINEUSDT": {
+"file": 0,
+"nome": ""
+},
+"VIRTUALUSDT": {
+"file": 18,
+"nome": "VIRTUALUSDT",
+"primo": "VIRTUALUSDT-1d-2025-04.zip",
+"sha256": "fd7a194b4f89763ca11b1e495baeef198b58a92d7b3598203ba7b5540ad6cba0",
+"ultimo": "VIRTUALUSDT-1d-2026-09.zip"
+},
+"VOXELUSDT": {
+"file": 49,
+"nome": "VOXELUSDT",
+"primo": "VOXELUSDT-1d-2021-12.zip",
+"sha256": "b2013c4061369259d51dbbd176032675b5368a71ce9dce00d79bb333671abcd2",
+"ultimo": "VOXELUSDT-1d-2025-12.zip"
+},
+"VTHOUSDT": {
+"file": 75,
+"nome": "VTHOUSDT",
+"primo": "VTHOUSDT-1d-2020-07.zip",
+"sha256": "86e1a1bf6174c1b3252128e1ff3543f93239feb457817c0209829794e73b95eb",
+"ultimo": "VTHOUSDT-1d-2026-09.zip"
+},
+"VVVUSDT": {
+"file": 0,
+"nome": ""
+},
+"WALUSDT": {
+"file": 12,
+"nome": "WALUSDT",
+"primo": "WALUSDT-1d-2025-10.zip",
+"sha256": "e81222181d5ed6855eb5bfe8ab9df1c4917bed03f5cd9d3d6c4a8c302ea8c12f",
+"ultimo": "WALUSDT-1d-2026-09.zip"
+},
+"WAVESUSDT": {
+"file": 66,
+"nome": "WAVESUSDT",
+"primo": "WAVESUSDT-1d-2019-01.zip",
+"sha256": "2d8cd282a8003a6e5aa8663364523be6df0e68614b1ccd371fa4d19116c639c8",
+"ultimo": "WAVESUSDT-1d-2024-06.zip"
+},
+"WIFUSDT": {
+"file": 31,
+"nome": "WIFUSDT",
+"primo": "WIFUSDT-1d-2024-03.zip",
+"sha256": "35fc1284d8ae88cdfbe9317962d80b13e48638ed2e94c52b7d20f216ae69db60",
+"ultimo": "WIFUSDT-1d-2026-09.zip"
+},
+"WLDUSDT": {
+"file": 39,
+"nome": "WLDUSDT",
+"primo": "WLDUSDT-1d-2023-07.zip",
+"sha256": "e15578c26822dfc2def5baa804ae74212feb08b25b1a5e7e810201c68cee7a69",
+"ultimo": "WLDUSDT-1d-2026-09.zip"
+},
+"WLFIUSDT": {
+"file": 13,
+"nome": "WLFIUSDT",
+"primo": "WLFIUSDT-1d-2025-09.zip",
+"sha256": "3e9f5df0e3cc44c61b7b9d4b30a8dd31b8cabbefdfdbf2a94f5575d7514e119f",
+"ultimo": "WLFIUSDT-1d-2026-09.zip"
+},
+"WOOUSDT": {
+"file": 56,
+"nome": "WOOUSDT",
+"primo": "WOOUSDT-1d-2022-02.zip",
+"sha256": "bf4864b6d42d1a0b7b17f12dfccfd42b1cd4491adb61e55512f5a5b4e1c0254b",
+"ultimo": "WOOUSDT-1d-2026-09.zip"
+},
+"WUSDT": {
+"file": 30,
+"nome": "WUSDT",
+"primo": "WUSDT-1d-2024-04.zip",
+"sha256": "20910ab0b069d3e3effb5f5ff3717d9cffad9b02654a8bc69e16bd649974b20e",
+"ultimo": "WUSDT-1d-2026-09.zip"
+},
+"XAIUSDT": {
+"file": 33,
+"nome": "XAIUSDT",
+"primo": "XAIUSDT-1d-2024-01.zip",
+"sha256": "ea726a37b15346bb74ce274189803e758db9d77e7c2300ee0f47981daa0ddb7e",
+"ultimo": "XAIUSDT-1d-2026-09.zip"
+},
+"XEMUSDT": {
+"file": 44,
+"nome": "XEMUSDT",
+"primo": "XEMUSDT-1d-2020-11.zip",
+"sha256": "f67d8ca23cc4ea510ccd724d1a2ee2a07cceec0bff5cda8967b076b3534d67af",
+"ultimo": "XEMUSDT-1d-2024-06.zip"
+},
+"XLMUSDT": {
+"file": 101,
+"nome": "XLMUSDT",
+"primo": "XLMUSDT-1d-2018-05.zip",
+"sha256": "de37cdbc7ba8288bc052e1c5d22663da54c3583ef2f7ccee83c29531ceb54990",
+"ultimo": "XLMUSDT-1d-2026-09.zip"
+},
+"XMRUSDT": {
+"file": 60,
+"nome": "XMRUSDT",
+"primo": "XMRUSDT-1d-2019-03.zip",
+"sha256": "0bfdfa444796545d9e136278b6c4a0f2149a0e289aac48e263e5602ac50b3884",
+"ultimo": "XMRUSDT-1d-2024-02.zip"
+},
+"XPLUSDT": {
+"file": 13,
+"nome": "XPLUSDT",
+"primo": "XPLUSDT-1d-2025-09.zip",
+"sha256": "53c941dec646db81e369fb1dec38d31b8db02a3cceec29d808e9bfaf75de8438",
+"ultimo": "XPLUSDT-1d-2026-09.zip"
+},
+"XRPUSDT": {
+"file": 101,
+"nome": "XRPUSDT",
+"primo": "XRPUSDT-1d-2018-05.zip",
+"sha256": "549673d65821b0db15aa59126b2349cd6647a8b0b0cadabd0e258ced39fb8d08",
+"ultimo": "XRPUSDT-1d-2026-09.zip"
+},
+"XTZUSDT": {
+"file": 85,
+"nome": "XTZUSDT",
+"primo": "XTZUSDT-1d-2019-09.zip",
+"sha256": "1ca1a20be7d14bc3b22a67ec7a45bb1a8de70967c3887c09dfe1d27fe5aec7ae",
+"ultimo": "XTZUSDT-1d-2026-09.zip"
+},
+"XVGUSDT": {
+"file": 64,
+"nome": "XVGUSDT",
+"primo": "XVGUSDT-1d-2021-06.zip",
+"sha256": "dd22b7ae15f4cd3a4d0c0d3b9cabd7238ca8986c051d7d3a35d03ecae23ceabd",
+"ultimo": "XVGUSDT-1d-2026-09.zip"
+},
+"XVSUSDT": {
+"file": 72,
+"nome": "XVSUSDT",
+"primo": "XVSUSDT-1d-2020-10.zip",
+"sha256": "a5e90affa4bc8e97bc90c4658546bae1cde4efcfec250fc1b1e51f0cfd4a2756",
+"ultimo": "XVSUSDT-1d-2026-09.zip"
+},
+"YFIIUSDT": {
+"file": 36,
+"nome": "YFIIUSDT",
+"primo": "YFIIUSDT-1d-2020-09.zip",
+"sha256": "d411a7ae02b1bda99e0bc81c2a2d420f4eb9b3b8dae782133f507373514f1315",
+"ultimo": "YFIIUSDT-1d-2023-08.zip"
+},
+"YFIUSDT": {
+"file": 74,
+"nome": "YFIUSDT",
+"primo": "YFIUSDT-1d-2020-08.zip",
+"sha256": "fcd0038c0965c02e831c802e3659094236938c93b4e63ba625363689eae0b5eb",
+"ultimo": "YFIUSDT-1d-2026-09.zip"
+},
+"YGGUSDT": {
+"file": 61,
+"nome": "YGGUSDT",
+"primo": "YGGUSDT-1d-2021-09.zip",
+"sha256": "9217d912f2802d4a34330c0926aa43e8b7ceee006e99450641b8db61df8abf6a",
+"ultimo": "YGGUSDT-1d-2026-09.zip"
+},
+"ZAMAUSDT": {
+"file": 8,
+"nome": "ZAMAUSDT",
+"primo": "ZAMAUSDT-1d-2026-02.zip",
+"sha256": "bb722d484b9a2ae2f2437570ddc6b9146540918298094540c2252fc2eb652000",
+"ultimo": "ZAMAUSDT-1d-2026-09.zip"
+},
+"ZBTUSDT": {
+"file": 12,
+"nome": "ZBTUSDT",
+"primo": "ZBTUSDT-1d-2025-10.zip",
+"sha256": "2970ab48d4c6b1f4a4912bb33e1526bf2fec68906e3ceea6f00c852c7cac81bd",
+"ultimo": "ZBTUSDT-1d-2026-09.zip"
+},
+"ZECUSDT": {
+"file": 91,
+"nome": "ZECUSDT",
+"primo": "ZECUSDT-1d-2019-03.zip",
+"sha256": "3dfaf793c73bc66507b39b11563cd5622e38f269c455fe26f3d1215d67d6d19f",
+"ultimo": "ZECUSDT-1d-2026-09.zip"
+},
+"ZENUSDT": {
+"file": 75,
+"nome": "ZENUSDT",
+"primo": "ZENUSDT-1d-2020-07.zip",
+"sha256": "94eae055d926d49e5dc3c620286cd3f3f65a35f60a39959c4f01e5a206eb40d2",
+"ultimo": "ZENUSDT-1d-2026-09.zip"
+},
+"ZEREBROUSDT": {
+"file": 0,
+"nome": ""
+},
+"ZETAUSDT": {
+"file": 0,
+"nome": ""
+},
+"ZILUSDT": {
+"file": 92,
+"nome": "ZILUSDT",
+"primo": "ZILUSDT-1d-2019-02.zip",
+"sha256": "2a24484a040dff9b798910c2633fbb3d36586ca6e02c181f2efaa49296bddee0",
+"ultimo": "ZILUSDT-1d-2026-09.zip"
+},
+"ZKUSDT": {
+"file": 28,
+"nome": "ZKUSDT",
+"primo": "ZKUSDT-1d-2024-06.zip",
+"sha256": "581930c8b517a31019add3e7c5923773240b073039a605ce4317bf90cca5aa08",
+"ultimo": "ZKUSDT-1d-2026-09.zip"
+},
+"ZROUSDT": {
+"file": 28,
+"nome": "ZROUSDT",
+"primo": "ZROUSDT-1d-2024-06.zip",
+"sha256": "e9616030dfbba5b5ed2cd6cd25be78db884f27e9f110cecfb1d9f52823998aa2",
+"ultimo": "ZROUSDT-1d-2026-09.zip"
+},
+"ZRXUSDT": {
+"file": 92,
+"nome": "ZRXUSDT",
+"primo": "ZRXUSDT-1d-2019-02.zip",
+"sha256": "3a8462111de86c79f36ab275e5c6071fe44e1a4e879ebc08712c13bc7886645b",
+"ultimo": "ZRXUSDT-1d-2026-09.zip"
+}
+}
