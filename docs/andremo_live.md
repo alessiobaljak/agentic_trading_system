@@ -4253,3 +4253,12 @@ stesso segnale di M1 (correlazione 0,64), solo più caro. Capito: con questi seg
 Il proprietario (20 ottobre): «traccia tutto [...] l'unico motivo per cui ti puoi fermare è se abbiamo strategie per tutte le
 crypto [...] con lo stesso riscontro nel paper»: creato il registro unico `research/REGISTRO.md` e un giro automatico della
 ricerca ogni 4 ore.
+**Diciassettesima prova** (`research/programma6/DICIASSETTESIMA.md`): sei modelli in gara, scelti ogni 4 settimane solo con
+il passato (M4) o mediati (M5): Sharpe 0,71 e 0,95, peggio di M1 da solo (1,35). Capito: scegliere il modello in base a come
+è andato di recente non aiuta, e il numero di M1 dipende anche dalla scelta del modello (la gara sceglie gli alberi di M1
+solo 4 volte su 63). **Diciottesima prova** (`DICIOTTESIMA.md`): short le monete appena quotate sui futures, long le 100
+grandi: −18,5% e −22,3% l'anno. Capito: la moneta nuova tipica scende (mediana −3,6% a settimana), ma il 3,25% delle
+settimane-moneta fa più del +50% (COAI +2627% in una settimana): la coda verso l'alto è il rischio vero dello short sulle
+nuove. **Controllo dei dati**: le monete tolte dal listino restano nei file con il prezzo fermo e il volume zero, e il
+funding di quei giorni era riempito con la media di prima (58.403 giorni-moneta); su F3 e K1 pesa poco (Sharpe 1,296 → 1,295
+e 1,269 → 1,262, `research/programma6/controllo_zombi.json`), da qui in avanti è corretto.

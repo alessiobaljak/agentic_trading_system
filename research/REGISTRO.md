@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 44 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 46 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -44,8 +44,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 17 | Sei modelli in gara, scelti ogni volta solo col passato (M4) e la loro media (M5) (`DICIASSETTESIMA.md`) | 2 | M4 0,71 (+30,1% l'anno, 2024 −14,5%), M5 0,95 (+37,7%); la gara sceglie quasi sempre foresta (23 volte) e alberi casuali (17), gli alberi di M1 solo 4 su 63; correlazione con M1 0,79 e 0,85 | no: M1 da solo era meglio, quindi il suo 1,35 dipende anche dalla scelta del modello |
 | 18 | Le monete appena quotate: short quelle con 7-60 giorni (N1) o 7-180 (N2), long le 100 grandi (`DICIOTTESIMA.md`) | 2 | N1 −18,5% l'anno (Sharpe −0,26), N2 −22,3% (−0,45), 2025 −66%; la moneta nuova tipica scende (mediana −3,6% a settimana) ma poche esplodono (COAI +2627% in una settimana, MYX +894%, AIA +573%): senza le 20 settimane-moneta migliori la media è −1,6% a settimana | no: la coda verso l'alto uccide lo short |
 | 19 | Il premio del perpetuo sullo spot fra monete (P1) e insieme al funding (P2) (`DICIANNOVESIMA.md`) | 2 | in calcolo | — |
+| 20 | Il volume a pronti contro quello del perpetuo: livello (S1) e cambio (S2) (`VENTESIMA.md`) | 2 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 = **44** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 = **46** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
@@ -107,3 +108,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    altro exchange (le monete quotate solo su Bybit).
 8. **Un modello solo, ma provato su più semi e più modelli dello stesso tipo** (dalla prova 17): quanto del 1,35 di M1 è
    fortuna della scelta? Descrittivo, non conta: gli alberi di M1 con 5 semi diversi.
+9. **Il funding che tocca il tetto**: quando Binance accorcia l'intervallo del funding di una moneta (da 8 a 4 o 1 ora) è
+   perché il funding ha toccato il limite. Nei file ci sono 436 passaggi su 314 monete, ma 362 sono del 2025-2026 (1 nel
+   2021, 4 nel 2022, 45 nel 2023, 24 nel 2024): troppo pochi anni per una prova fra monete; forse come evento.
+10. ~~Il volume a pronti contro quello del perpetuo~~ → prova 20.
