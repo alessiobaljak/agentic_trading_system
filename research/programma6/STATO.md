@@ -117,6 +117,8 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    4,9% l'anno, più monete per lato (25 invece di 20), volatilità dal 40% al 30%, e il prezzo rende di più (+37,6% invece
    di circa +27%). Sharpe da 1,28 a 1,93. Il segnale era buono; lo si eseguiva male. La banda aiuta anche il modello (prova 25: da
    1,08 a 1,25) e insieme le due fanno 1,83 con volatilità del 24%.
+   Controlli su F5 (`robustezza_F2.md`, ultima sezione): costi tripli 1,60, prime 50 monete 1,28, dalla 51ª alla 100ª
+   0,99, senza le cinque monete più pesanti 1,64, cambio il giovedì 1,71; i due lati da soli 0,54 e 0,19.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

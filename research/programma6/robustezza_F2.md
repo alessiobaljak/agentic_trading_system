@@ -51,3 +51,25 @@ Stesso periodo (dal 3 gennaio 2022), stesse previsioni del modello, stessi costi
 | costi tripli | +33,5% | 0,89 | 4/5 | 50% | +0,326% |
 
 Non dipende da poche monete né da poche settimane; a costi tripli resta positivo. M1 resta quello delle regole.
+
+## F5 (ventiquattresima prova): quanto è solida? (20 ottobre 2026; descrittivo)
+
+Calcolo di `robustezza_F5.py` (`robustezza_F5.json`), dati fino al 19 ottobre, settimane dal 4 gennaio 2021. F5 resta quella
+delle regole: nessuna variante la sostituisce.
+
+| Variante | Rendimento/anno | Sharpe | Anni positivi |
+|---|---|---|---|
+| **F5 come da regole** | +57,4% | 1,93 | 6/6 |
+| solo il lato long (netto) | +42,8% | 0,54 | 4/6 |
+| solo il lato short (netto) | +16,2% | 0,19 | 3/6 |
+| costi doppi | +52,5% | 1,77 | 6/6 |
+| costi tripli | +47,6% | 1,60 | 6/6 |
+| solo le prime 50 monete | +46,7% | 1,28 | 6/6 |
+| solo dalla 51ª alla 100ª | +40,6% | 0,99 | 5/6 |
+| tetto del 10% per moneta | +56,6% | 1,85 | 6/6 |
+| senza BTC, ETH, BNB, TRX, XMR | +54,6% | 1,64 | 6/6 |
+| cambio il giovedì invece del lunedì | +54,4% | 1,71 | 6/6 |
+
+Cosa dice: regge a costi tripli, nelle due metà delle 100 monete, senza le monete più pesanti e con un altro giorno della
+settimana. La forza è nei due lati insieme: da soli il long fa 0,54 e lo short 0,19 (ognuno porta il rischio del mercato
+intero; insieme si annulla).

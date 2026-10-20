@@ -1,0 +1,63 @@
+{
+ "F5 come da regole": {
+  "settimane": 302,
+  "annuo": 0.5738160301279315,
+  "sharpe": 1.932782000488452,
+  "anni_positivi": "6/6"
+ },
+ "solo il lato long (netto)": {
+  "settimane": 302,
+  "annuo": 0.4283429487371638,
+  "sharpe": 0.5377205912709945,
+  "anni_positivi": "4/6"
+ },
+ "solo il lato short (netto)": {
+  "settimane": 302,
+  "annuo": 0.16246313774261362,
+  "sharpe": 0.19363205167740558,
+  "anni_positivi": "3/6"
+ },
+ "costi doppi": {
+  "settimane": 302,
+  "annuo": 0.5248419990674777,
+  "sharpe": 1.7680566256947072,
+  "anni_positivi": "6/6"
+ },
+ "costi tripli": {
+  "settimane": 302,
+  "annuo": 0.4758679680070239,
+  "sharpe": 1.603237069987923,
+  "anni_positivi": "6/6"
+ },
+ "solo le prime 50 monete": {
+  "settimane": 302,
+  "annuo": 0.4673414288647814,
+  "sharpe": 1.2813766226156904,
+  "anni_positivi": "6/6"
+ },
+ "solo dalla 51ª alla 100ª": {
+  "settimane": 302,
+  "annuo": 0.40589755226857094,
+  "sharpe": 0.9878780615776055,
+  "anni_positivi": "5/6"
+ },
+ "tetto del 10% per moneta": {
+  "settimane": 302,
+  "annuo": 0.5663570904465771,
+  "sharpe": 1.8476563628745302,
+  "anni_positivi": "6/6"
+ },
+ "senza BTC, ETH, BNB, TRX, XMR": {
+  "settimane": 302,
+  "annuo": 0.5462145607771991,
+  "sharpe": 1.638296877308569,
+  "anni_positivi": "6/6"
+ },
+ "cambio il giovedì": {
+  "settimane": 301,
+  "annuo": 0.5435907265671964,
+  "sharpe": 1.7084994488662062,
+  "anni_positivi": "6/6"
+ },
+ "ultimo_giorno": "2026-10-19"
+}
