@@ -63,3 +63,8 @@ Il primo avvio si è fermato al primo allenamento di M1: il modello ad alberi di
 **tutta mancante** (le posizioni prima del dicembre 2021). Correzione: a ogni allenamento di M1 si tolgono le colonne tutte
 mancanti in quell'allenamento (e le stesse nella previsione). Da una colonna vuota il modello non impara niente, quindi la
 regola non cambia. Nessun numero era stato prodotto.
+
+## La prova col caso di M1 (scritta il 20 ottobre 2026, prima del calcolo)
+
+Come per F3 (`F3_caso.md`): le previsioni di M1 mescolate a caso fra le monete ogni settimana, 200 volte, stesso portafoglio,
+pesi e costi. **Attesa**: Sharpe di M1 sopra il 99° percentile delle ripetizioni.

@@ -12,3 +12,19 @@ Regole in `QUATTORDICESIMA.md` (scritte prima). Le 100 monete più scambiate, da
 
 **M2, per anno**: 2022 +70.3%, 2023 -15.8%, 2024 -20.5%, 2025 +30.9%, 2026 +73.1%
 **M2, gli ingredienti che contano di più nell'ultimo modello**: sma_10d (0.0810), boll_high (0.0728), rend_7 (0.0612), ls_differenza_7 (0.0592), boll_low (0.0565), ls_tutti_7 (0.0553), ampiezza_7 (0.0548), sma_200d (0.0516), rend_180 (0.0478), sma_50d (0.0399)
+
+## Correzione dopo la verifica (20 ottobre 2026)
+
+Il numero «101-200 (informazione)» della tabella (+309,9% l'anno, Sharpe 6,67 per M1) è **sbagliato**: è una fuga di
+informazione dal futuro. I dati sulle posizioni (`scarico_metrics.py`) li ho scaricati solo per le monete delle prime 100 e
+per i 30 giorni prima che ci entrassero: fra le monete 101-200 ha il dato proprio chi **sta per entrare** fra le prime 100
+(cioè chi sta per avere un'impennata di volume e spesso di prezzo). Lo mostra il legame medio di rango fra un ingrediente e il
+rendimento della settimana dopo: per il rapporto fra acquisti e vendite a mercato 0,370 sulle 101-200 contro 0,044 sulle
+prime 100; per il rapporto long/short dei conti 0,319 contro 0,018.
+
+* **Sulle prime 100 la fuga non c'è**: il dato esiste per tutte le monete dell'universo di quella settimana (i 30 giorni
+  prima di ogni settimana in cui la moneta è dentro), quindi la sua presenza non dice niente sul futuro. Il risultato
+  dell'esame (M1: Sharpe 1,35) resta.
+* **Rifatto sulle 101-200 senza i dati sulle posizioni** (`risultati_quattordicesima/monete_101_200_senza_posizioni.json`):
+  M1 −2,3% l'anno (Sharpe −0,05), M2 +0,4% (Sharpe 0,01) su 182 settimane. Come per F3: fra le monete piccole, con lo scarto
+  allo 0,10%, il vantaggio non c'è.
