@@ -316,3 +316,17 @@ def test_ventiquattresima_banda():
     assert set(np.flatnonzero(W[0] < 0)) == {0, 1, 2, 3, 4}
     assert 24 in set(np.flatnonzero(W[1] > 0)) and 23 not in set(np.flatnonzero(W[1] > 0))
     assert W[1][W[1] > 0].sum() == pytest.approx(1.0) and W[1][W[1] < 0].sum() == pytest.approx(-1.0)
+
+
+def test_ventiseiesima_long_contro_btc():
+    from research.programma6 import ventiseiesima as vs
+    from research.programma6 import ventunesima as vu
+    T = 12
+    O = np.ones((T, 2))
+    O[:, 0] = np.r_[[100.0] * 3, [120.0] * (T - 3)]     # la moneta sale del 20%
+    O[:, 1] = 50.0
+    F = np.zeros((T, 2))
+    F[:, 0] = -0.001                                   # funding negativo: il long riceve
+    pan = {"open": O, "close": O.copy(), "funding": F}
+    assert vs.rendimento(pan, 0, 1, 2, 7, 1) == pytest.approx(0.20 - vu.COSTO_MONETA - vu.COSTO_BTC + 0.007)
+    assert vs.rendimento(pan, 0, 1, 2, 7, -1) == pytest.approx(vu.rendimento(pan, 0, 1, 2, 7))
