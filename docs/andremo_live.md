@@ -4266,3 +4266,12 @@ settimane-moneta su 29.180. Capito: il modello ad alberi è fragile, il suo 1,35
 regge. **Diciannovesima prova** (`DICIANNOVESIMA.md`): il premio del perpetuo sullo spot al posto del funding fa Sharpe 1,25,
 positivo in tutti e 6 gli anni, correlazione 0,83 con F3: lo stesso vantaggio misurato in un altro modo, quindi una conferma
 che F3 viene dal prezzo pagato da chi sta long con la leva, non un dettaglio del calcolo.
+**Ventesima prova** (`VENTESIMA.md`): la quota del volume a pronti contro il perpetuo; S1 0,59, S2 −0,82 (verso opposto:
+quando entra la leva la moneta continua, per la terza volta dopo acquisti a mercato e interesse aperto). **Ventunesima**
+(`VENTUNESIMA.md`, dati nuovi: gli annunci di Binance): short dopo l'etichetta di monitoraggio −1,06% a evento, dopo la
+rimozione dal listino −21%; due terzi degli eventi vinti ma ALPACA +1796% in una settimana. **Ventiduesima**
+(`VENTIDUESIMA.md`): l'ipotesi «la leva che entra continua», scritta prima, sulle monete 101-200 si rovescia (−47,5% l'anno).
+**Semi di M1** (`semi_M1.json`): con lo stesso modello e gli stessi dati, cambiando solo il seme, Sharpe 1,35, 0,79, 0,93,
+1,12. Capito oggi: (1) il vantaggio del funding regge a ogni controllo (premio al posto del funding, dati corretti); (2) il
+modello ad alberi no: il suo 1,35 era il caso fortunato; (3) un andamento visto tre volte sulle stesse monete non si
+trasferisce alle altre; (4) gli short sulle monete piccole perdono per le poche che esplodono.

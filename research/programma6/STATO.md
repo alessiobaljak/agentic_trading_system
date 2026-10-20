@@ -29,6 +29,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 19 | Il premio del perpetuo sullo spot (media delle 168 ore prima) fra monete: P1 da solo, P2 con il funding | `DICIANNOVESIMA.md` | `RISULTATI_DICIANNOVESIMA.md` | 2 | non valide (corretto 0,33 e 0,31 con 44 prove): P1 Sharpe 1,25, +49,6% l'anno, 6 anni su 6; correlazione con F3 0,83: lo stesso vantaggio misurato con il premio invece del funding; non migliora F3 nemmeno nelle settimane dei pari |
 | 20 | La quota del volume a pronti sul totale: S1 il livello (long la più alta), S2 il cambio dei 7 giorni sui 90 (long la salita) | `VENTESIMA.md` | `RISULTATI_VENTESIMA.md` | 2 | non valide: S1 Sharpe 0,59, 3 anni su 6; S2 −0,82 (verso opposto: quando sale la quota del perpetuo la moneta continua) |
 | 21 | Gli annunci di Binance (dati nuovi: titoli e ore dal sito): short il perpetuo e long il Bitcoin per 7 giorni dal giorno dopo l'etichetta di monitoraggio (E1) o la rimozione a pronti (E2) | `VENTUNESIMA.md` | `RISULTATI_VENTUNESIMA.md` | 2 a eventi | non valide: E1 −1,06% a evento, E2 −21,2%; due terzi degli eventi vinti, ma pochi esplodono (ALPACA +1796%) |
+| 22 | Conferma sulle monete 101-200 dell'ipotesi «la leva che entra continua»: L1 il cambio della quota a pronti, L2 con gli acquisti a mercato | `VENTIDUESIMA.md` | `RISULTATI_VENTIDUESIMA.md` | 2 di conferma | **non confermata, verso opposto**: L1 −47,5% l'anno (Sharpe −1,07), L2 −0,91 sulle 101-200; sulle 100 L1 0,44, L2 0,63 |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -98,6 +99,8 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    pronti) vanno tutti nel verso della moneta, al contrario delle regole scritte. Visto dopo il calcolo ogni volta, quindi
    non è una prova; K1 (nel paper) usa le prime due. Il funding alto invece va contro (F3): chi entra con la leva spinge il
    prezzo, chi paga troppo per restarci perde.
+   **Provata sulle monete 101-200 (prova 22): non vale, anzi si rovescia** (−47,5% l'anno): sulle monete più piccole la
+   leva che entra annuncia la discesa (gonfia e sgonfia). Un andamento visto tre volte sulle stesse monete non è una legge.
 17. **Andare short sulle monete piccole senza protezione perde, sempre per lo stesso motivo** (prove 18 e 21): monete
    nuove, monete sotto etichetta, monete che stanno per essere tolte dal listino scendono quasi sempre (due terzi delle volte),
    ma poche esplodono verso l'alto (COAI +2627%, ALPACA +1796%, DEGO +295% in una settimana) e si mangiano tutto. Un'idea
