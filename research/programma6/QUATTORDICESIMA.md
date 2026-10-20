@@ -68,3 +68,6 @@ regola non cambia. Nessun numero era stato prodotto.
 
 Come per F3 (`F3_caso.md`): le previsioni di M1 mescolate a caso fra le monete ogni settimana, 200 volte, stesso portafoglio,
 pesi e costi. **Attesa**: Sharpe di M1 sopra il 99° percentile delle ripetizioni.
+
+**Risultato** (`risultati_quattordicesima/caso_M1.json`): M1 Sharpe 1,35; le 200 ripetizioni con le previsioni mescolate
+fanno in media −0,50, 99° percentile 0,55, massimo 0,70; nessuna arriva a M1. **Attesa rispettata.**

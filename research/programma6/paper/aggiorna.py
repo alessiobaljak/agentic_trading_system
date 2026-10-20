@@ -119,6 +119,19 @@ def f2_e_c1(pan: dict) -> dict:
     from research.programma6 import undicesima as un
     pm = un.pannello_metrics(pan)
     out["K1"] = do.portafoglio_k1(pan, ps, pm, costo)
+    # M1: il modello ad alberi della quattordicesima prova, con la stessa cadenza di riallenamento
+    from research.programma6 import quattordicesima as q
+    X, _, Y = q.tabella_settimanale(pan, ps, ps["U"])
+    P, _ = q.previsioni("M1", X, Y, ps["U"], ps["lunedi"], 6, lambda x: None)
+    sigw = ot.sigma_30(pan, ps["lunedi"] - pan["t0"])
+    Wm = te.pesi_portafoglio(np.where(np.isfinite(sigw), P, np.nan), ps["U"], np.nan_to_num(1.0 / sigw), True)
+    dm = te.conto(Wm, ps["R"], ps["F"], costo)
+    dm.index = ps["lunedi"]
+    out["M1"] = dm
+    wm = int(np.flatnonzero(np.isfinite(P).any(axis=1))[-1])
+    out["M1_ultima"] = {"lunedi": sc.data(int(ps["lunedi"][wm])),
+                        "long": {ps["simboli"][j]: round(float(Wm[wm, j]), 4) for j in np.flatnonzero(Wm[wm] > 0)},
+                        "short": {ps["simboli"][j]: round(float(Wm[wm, j]), 4) for j in np.flatnonzero(Wm[wm] < 0)}}
     Zr = te.ranghi(ps["Z"], ps["U"])
     ct, _ = te.segnale("C1", Zr, ps["R"], ps["U"], ps["peso"])
     Wc = te.pesi_portafoglio(ct, ps["U"], ps["peso"], True)
@@ -187,7 +200,7 @@ def esegui(log=print) -> dict:
     w = f2_e_c1(pan)
     da, a1_adesso = a1(pan)
     res = {"dati_fino_al": ultimo, "funding_stimato_dal": min(stimati.values()) if stimati else None, "candidate": {}}
-    for nome in ("F3", "K1", "F2", "C1"):
+    for nome in ("F3", "K1", "M1", "F2", "C1"):
         d = w[nome]
         d = d[d.index >= INIZIO_SETTIMANE]
         res["candidate"][nome] = {"settimane": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
@@ -201,7 +214,8 @@ def esegui(log=print) -> dict:
     d = da[da.index >= INIZIO_GIORNI]
     res["candidate"]["A1"] = {"giorni": {sc.data(int(k)): round(float(v), 6) for k, v in d["netto"].items()},
                               **_riassunto(d["netto"], 365)}
-    res["adesso"] = {"F3": w["F3_adesso"], "K1": w["K1_adesso"], "F2": w["F2_adesso"], "C1": w["C1_ultima"], "A1": a1_adesso}
+    res["adesso"] = {"F3": w["F3_adesso"], "K1": w["K1_adesso"], "M1": w["M1_ultima"], "F2": w["F2_adesso"],
+                     "C1": w["C1_ultima"], "A1": a1_adesso}
     res["nuove_nell_universo"] = w["nuove"]
     (QUI / "paper.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     (QUI / "PAPER.md").write_text(rapporto(res), encoding="utf-8")
@@ -225,6 +239,9 @@ def rapporto(r: dict) -> str:
               + "; short " + ", ".join(f"{k} {100 * v:.1f}%" for k, v in a['F3']['short'].items()) + ".",
               f"* **K1**, settimana dal {a['K1']['lunedi']}: long " + ", ".join(f"{k} {100 * v:.1f}%" for k, v in a['K1']['long'].items())
               + "; short " + ", ".join(f"{k} {100 * v:.1f}%" for k, v in a['K1']['short'].items()) + ".",
+              f"* **M1**, ultima settimana calcolata (dal {a['M1']['lunedi']}; quella in corso si calcola a settimana chiusa): long "
+              + ", ".join(f"{k} {100 * v:.1f}%" for k, v in a['M1']['long'].items()) + "; short "
+              + ", ".join(f"{k} {100 * v:.1f}%" for k, v in a['M1']['short'].items()) + ".",
               f"* **F2**, settimana dal {a['F2']['lunedi']}: long {', '.join(a['F2']['long'])}; short {', '.join(a['F2']['short'])}.",
               f"* **C1**, ultima settimana calcolata (dal {a['C1']['lunedi']}): long {', '.join(a['C1']['long'])}; short "
               f"{', '.join(a['C1']['short'])}.",

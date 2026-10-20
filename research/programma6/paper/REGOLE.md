@@ -27,6 +27,14 @@ dei 7 giorni prima). Sul passato è **costruzione** (due versi visti dopo il cal
 per K1 il paper è l'unica prova. Ogni mattina si scaricano anche i dati sulle posizioni dei giorni nuovi
 (`scarico_metrics.py`). Verdetto come le altre (sezione 3).
 
+**Terza aggiunta, 20 ottobre 2026, ancora prima di qualunque dato della prima settimana misurata** (quella dal 26
+ottobre): **M1** (`QUATTORDICESIMA.md`, `quattordicesima.py`), il modello ad alberi che impara ogni 4 settimane, solo dal
+passato, come unire tutti gli ingredienti (28 indicatori, rendimenti, volatilità, funding, acquisti a mercato, volume,
+legame col Bitcoin, posizioni, stato del mercato). Sul passato, dal 2022 e sempre fuori dal campione del modello: +50,9%
+l'anno, Sharpe 1,35, sopra il caso (`caso_M1.json`); non passa lo Sharpe corretto (0,59 con 36 prove). Correlazione con F3
+0,17 e con K1 0,03: è quasi indipendente dalle altre. Nel paper il modello si riallena con la stessa cadenza (ogni 4
+settimane dal 3 gennaio 2022). Verdetto come le altre (sezione 3).
+
 ## 2. Come
 
 * Ogni mattina (con l'aggiornamento della prova in avanti del programma 5) si scaricano le candele giornaliere nuove di

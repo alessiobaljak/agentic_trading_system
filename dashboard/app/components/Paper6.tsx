@@ -82,7 +82,7 @@ export default function Paper6({ aperta = false }: { aperta?: boolean }) {
               ))}
             </tbody>
           </table>
-          {(['F3', 'K1'] as const).map((n) => {
+          {(['F3', 'K1', 'M1'] as const).map((n) => {
             const p = doc.posizioni?.[n];
             if (!p) return null;
             return (

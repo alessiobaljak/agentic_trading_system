@@ -21,6 +21,7 @@ FONTE = RADICE / "research" / "programma6" / "paper" / "paper.json"
 DESCRIZIONI = {
     "F3": "funding fra monete, pesi secondo la volatilità",
     "K1": "denaro che entra, leva che costa poco",
+    "M1": "modello che unisce tutti gli indicatori (alberi)",
     "F2": "funding fra monete, pesi uguali",
     "C1": "28 indicatori combinati (CTREND)",
     "A1": "tendenza pubblicata (9 canali di Donchian)",
@@ -44,7 +45,7 @@ def documento(paper: dict, adesso: float | None = None) -> dict:
             "ultimo": {"data": ultima[0], "netto": ultima[1]} if ultima else None,
         })
     posizioni = {}
-    for nome in ("F3", "K1"):
+    for nome in ("F3", "K1", "M1"):
         a = (paper.get("adesso") or {}).get(nome) or {}
         posizioni[nome] = {"lunedi": a.get("lunedi"),
                            "long": [{"moneta": k, "peso": v} for k, v in sorted((a.get("long") or {}).items(), key=lambda x: -x[1])],

@@ -4234,3 +4234,12 @@ passo, `scripts/pubblica_paper6.py`, che prende `research/programma6/paper/paper
 ricerca) e lo scrive in RTDB `/paper6` e in Firestore `dashboard/paper6`; la dashboard lo mostra nella scheda Controllo
 («Strategie nuove in paper», `dashboard/app/components/Paper6.tsx`). Il bot non cambia. Tolta dal backlog la voce sul
 servizio con il timer.
+Il proprietario (20 ottobre): «non è che perché ora abbiamo aperto il paper devi smettere di trovare delle strategie [...]
+puoi fare qualcosa che anni fa era impossibile, capire come unirli [...] non vuol dire inventarle ed andare a caso [...]
+usando anche tutti i dati che abbiamo raccolto». **Quattordicesima prova** (`research/programma6/QUATTORDICESIMA.md`): un
+modello ad alberi che ogni 4 settimane impara, solo dal passato, come unire circa 70 ingredienti; dal 2022 +50,9% l'anno,
+Sharpe 1,35, sopra il caso, quasi indipendente da F3 e K1; non passa lo Sharpe corretto (0,59). Capito oggi: (1) il modello
+trova un vantaggio diverso dal funding (età della moneta, volatilità, crollo peggiore del mese, interesse aperto, Bitcoin);
+(2) un dato che esiste solo per alcune monete può portare il futuro dentro la prova: sulle monete 101-200 i dati sulle
+posizioni c'erano solo per chi stava per entrare fra le prime 100, e il modello sembrava fare +310% l'anno; trovato,
+spiegato e corretto (senza quei dati: circa zero). M1 entra nel paper prima della prima settimana misurata.

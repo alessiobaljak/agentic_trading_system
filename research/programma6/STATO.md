@@ -21,10 +21,11 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 11 | Le posizioni (dati metrics, dal 2022): P1 grandi contro piccoli (si seguono i conti grandi), P2 crescita dell'interesse aperto in 7 giorni (si va contro) | `UNDICESIMA.md` | `RISULTATI_UNDICESIMA.md` | 2 | non valide: P1 +1,5% l'anno, Sharpe 0,06; P2 −30,7% l'anno, Sharpe −0,94: la leva che entra **continua** (verso opposto a quello scritto) |
 | 12 | K1: denaro che entra e leva che costa poco (media dei ranghi di −funding, +acquisti a mercato, +crescita dell'interesse aperto) | `DODICESIMA.md` | `RISULTATI_DODICESIMA.md` | 1 | **costruzione, non prova** (due versi visti prima): dal 2022 +37,6% l'anno, Sharpe 1,27, discesa massima −31%, 2023 −0,3%; correlazione con F3 0,39. La prova è il paper |
 | 13 | Il funding medio del mercato (terzo più basso delle 52 settimane: long Bitcoin; più alto: short) | `TREDICESIMA.md` | `RISULTATI_TREDICESIMA.md` | 1 | non valida: Sharpe 0,47 contro 0,56 del Bitcoin sempre comprato; il funding conta fra le monete, non per il mercato intero |
+| 14 | Un modello che impara ogni 4 settimane, solo dal passato, come unire ~70 ingredienti (28 indicatori, rendimenti, volatilità, funding, acquisti a mercato, volume, legame col Bitcoin, posizioni, stato del mercato): M1 alberi, M2 lineare | `QUATTORDICESIMA.md` | `RISULTATI_QUATTORDICESIMA.md` | 2 | **M1: +50,9% l'anno dal 2022, Sharpe 1,35**, intervallo sopra zero, 4 anni su 5 (2024 −5%), sopra il caso (`caso_M1.json`), quasi indipendente da F3 (0,17) e K1 (0,03); non passa lo Sharpe corretto (0,59 con 36 prove). M2 Sharpe 0,62. Sulle 101-200 una fuga di informazione dai dati sulle posizioni (trovata e corretta: senza, Sharpe circa 0). M1 nel paper |
 
 ## Il paper (dal 20 ottobre 2026)
 
-`paper/REGOLE.md`, aggiornato ogni mattina da `paper/aggiorna.sh` (routine «Programmi 5 e 6»): **F3** e **K1** sono le
+`paper/REGOLE.md`, aggiornato ogni mattina da `paper/aggiorna.sh` (routine «Programmi 5 e 6»): **F3**, **K1** e **M1** sono le
 candidate principali, con F2, C1 e A1; verdetto a 52 e 104 settimane. Le posizioni della settimana in corso sono in
 `paper/PAPER.md`.
 
@@ -63,7 +64,12 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
 9. **Il denaro che entra anticipa, la leva cara rientra** (prove 9 e 11): gli acquisti a mercato e la crescita
    dell'interesse aperto fra monete vanno nel verso della moneta (chi ne ha di più sale di più), il funding alto va contro.
    I due versi «di continuazione» li ho visti dopo il calcolo: valgono solo come ipotesi da provare sui dati nuovi.
-10. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
+10. **Un modello che impara da solo come unire gli indicatori trova un vantaggio diverso dal funding** (prova 14): M1 ha
+   legame 0,17 con F3 e 0,03 con K1; gli ingredienti che pesano di più nell'ultimo modello sono l'età della moneta, la
+   volatilità di 30 giorni, il rendimento giornaliero peggiore del mese, la crescita dell'interesse aperto in un giorno, il
+   rendimento del Bitcoin di 30 giorni. **Attenzione ai dati che esistono solo per alcune monete**: la loro presenza può
+   raccontare il futuro (la fuga trovata sulle monete 101-200).
+11. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
    3.6: Sharpe 6,45 dal 2020, 4,06 dal 2024, negativo nel 2025), e il proprietario non lo vuole: non si prova.
 
 ## Dati (fuori da git, con le impronte nel repository)
