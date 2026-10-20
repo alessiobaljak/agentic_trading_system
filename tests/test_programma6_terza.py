@@ -146,3 +146,70 @@ def test_nona_segnali_g1_e_g2():
     assert no.g1(pan, np.array([35]))[0, 0] == pytest.approx(0.6)
     assert np.isnan(no.g1(pan, np.array([3]))[0, 0])
     assert no.g2(pan, np.array([35]))[0, 0] == pytest.approx(0.02)
+
+
+def _pan_giovani():
+    """Un pannello di 40 giorni (dal lunedi' 2021-01-04 meno 28) e 3 monete: una vecchia, una nata al giorno 10, una
+    nata al giorno 10 ma con volume zero dal giorno 30 (tolta dal listino)."""
+    T, S = 40, 3
+    t0 = sc.giorno(2020, 12, 7)                      # un lunedi'
+    C = np.full((T, S), np.nan)
+    C[:, 0] = 100.0
+    C[10:, 1] = 50.0
+    C[10:, 2] = 20.0
+    V = np.where(np.isfinite(C), 5e6, np.nan)
+    V[30:, 2] = 0.0
+    F = np.where(np.isfinite(C), 0.001, 0.0)
+    return {"t0": t0, "simboli": ["A", "B", "C"], "close": C, "open": C.copy(), "high": C.copy(), "low": C.copy(),
+            "quote_volume": V, "taker_buy_quote_volume": V / 2, "funding": F}
+
+
+def test_zombi_funding_zero_nei_giorni_a_volume_zero():
+    from research.programma6 import controllo_zombi as cz
+    pan = _pan_giovani()
+    z = cz.giorni_fermi(pan)
+    assert z[:, 2].sum() == 10 and not z[:, :2].any()
+    assert not z[:10, 1].any()                     # dove manca la candela non e' un giorno fermo
+
+
+def test_diciottesima_eta_e_giovani():
+    from research.programma6 import diciottesima as di
+    pan = _pan_giovani()
+    lun = np.array([14, 21, 28, 35])               # lunedi' (indici nel pannello)
+    eta = di.eta_lunedi(pan, lun)
+    assert eta[0].tolist() == [13, 3, 3]           # domenica 13: la vecchia 13 giorni, le nuove 3
+    assert eta[2].tolist() == [27, 17, 17]
+    G = di.giovani(pan, lun, 7, 60)
+    assert G[:, 0].sum() == 4                      # la "vecchia" qui ha meno di 60 giorni
+    assert G[:, 1].tolist() == [False, True, True, True]
+    assert G[:, 2].tolist() == [False, True, True, False]   # volume zero la domenica 34: fuori
+
+
+def test_diciottesima_pesi_con_tetto_e_lato_long_uguale():
+    from research.programma6 import diciottesima as di
+    W, S = 2, 30
+    G = np.zeros((W, S), bool)
+    G[0, :4] = True                                # 4 giovani: 10% ciascuna (tetto)
+    G[1, :2] = True                                # 2 giovani: meno di 3, niente
+    U = np.zeros((W, S), bool)
+    U[:, 5:] = True
+    sig = np.full((W, S), 0.05)
+    sig[:, 5] = 0.10
+    p = di.pesi(G, U, sig)
+    assert p[0, :4].tolist() == [-0.1] * 4
+    assert p[0, 5:].sum() == pytest.approx(0.4)
+    assert p[0, 5] == pytest.approx(p[0, 6] / 2)
+    assert not p[1].any()
+
+
+def test_diciottesima_conto_costo_per_settimana():
+    from research.programma6 import diciottesima as di
+    Wt = np.array([[-0.5, 0.5], [-0.5, 0.5]])
+    R = np.array([[-0.10, 0.0], [0.0, 0.0]])
+    F = np.array([[0.01, 0.0], [0.0, 0.0]])
+    costo = np.array([[0.002, 0.001], [0.002, 0.001]])
+    df = di.conto(Wt, R, F, costo)
+    assert df.loc[0, "lordo"] == pytest.approx(0.05)
+    assert df.loc[0, "spese"] == pytest.approx(0.5 * 0.002 + 0.5 * 0.001)
+    assert df.loc[0, "funding_short"] == pytest.approx(-0.005)    # lo short riceve
+    assert df.loc[0, "giovani"] == 1
