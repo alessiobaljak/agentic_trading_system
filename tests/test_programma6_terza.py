@@ -213,3 +213,23 @@ def test_diciottesima_conto_costo_per_settimana():
     assert df.loc[0, "spese"] == pytest.approx(0.5 * 0.002 + 0.5 * 0.001)
     assert df.loc[0, "funding_short"] == pytest.approx(-0.005)    # lo short riceve
     assert df.loc[0, "giovani"] == 1
+
+
+def test_diciannovesima_premio_delle_168_ore_prima():
+    from research.programma6 import diciannovesima as dn
+    H = 24 * 20
+    P = np.full((H, 2), np.nan, np.float32)
+    P[:, 0] = np.arange(H, dtype=np.float32)
+    P[24 * 7: 24 * 10, 1] = 1.0                  # solo 72 ore: meno di 120
+    lun = np.array([7, 14])
+    p7 = dn.premio_7(P, lun)
+    assert p7[0, 0] == pytest.approx(np.arange(0, 168).mean())       # le ore 0..167, non la 168 del lunedi'
+    assert p7[1, 0] == pytest.approx(np.arange(168, 336).mean())
+    assert np.isnan(p7[1, 1])
+
+
+def test_diciannovesima_settimane_pari():
+    from research.programma6 import diciannovesima as dn
+    S7 = np.array([np.arange(10, dtype=float), np.r_[np.zeros(9), 1.0]])
+    U = np.ones((2, 10), bool)
+    assert dn.settimane_pari(S7, U).tolist() == [False, True]
