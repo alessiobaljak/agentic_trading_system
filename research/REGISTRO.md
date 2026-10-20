@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 40 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 42 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -42,15 +42,18 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 15 | **F3 + M1 a rischio uguale** (`QUINDICESIMA.md`) | 1 | **1,69**, +44,8% l'anno, ogni anno 2022-2026 positivo, discesa −33% | quasi: corretto 0,76 |
 | 16 | M3: il modello di M1 ogni giorno, con entrata al 20% e uscita al 40% (`SEDICESIMA.md`) | 1 | 0,95 dal 2022, +31,2% l'anno, ma spese 23,8% l'anno (giro 342 volte), 2026 −29%, ultimo anno −4,6%; correlazione con M1 0,64 | no: ogni giorno costa troppo |
 | 17 | Sei modelli in gara, scelti ogni volta solo col passato (M4) e la loro media (M5) (`DICIASSETTESIMA.md`) | 2 | in calcolo | — |
+| 18 | Le monete appena quotate: short quelle con 7-60 giorni (N1) o 7-180 (N2), long le 100 grandi (`DICIOTTESIMA.md`) | 2 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 = **40** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 = **42** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
 **Errori trovati e corretti**: universo delle 100 monete di oggi (sopravvissute) → universo mese per mese con i dati di
 allora (prova 2); petrolio e azioni nate dal 2026-04 quasi entrati nel paper (`SECONDA.md`, sezione 9); una catena partita
 prima della fine dello scarico (`UNDICESIMA.md`, nota); la fuga di informazione dei dati sulle posizioni sulle monete
-101-200 (`RISULTATI_QUATTORDICESIMA.md`, correzione).
+101-200 (`RISULTATI_QUATTORDICESIMA.md`, correzione); le monete tolte dal listino restano nei file con il prezzo fermo e il volume zero, e
+il loro funding era riempito con la media dei 90 giorni prima (58.403 giorni-moneta; 42 settimane-moneta nell'universo
+delle 100): corretto dalla diciottesima prova, misura dell'effetto su F3, K1, M1 in `programma6/controllo_zombi.json`.
 
 ## 2. Il paper (dal 20 ottobre 2026 per i giorni, dal 26 ottobre per le settimane)
 
