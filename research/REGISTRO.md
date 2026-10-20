@@ -50,6 +50,7 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 23 | M6: il modello ad alberi di M1 con la media di cinque semi, sui dati corretti (`VENTITREESIMA.md`) | 1 | **Sharpe 1,02**, +40,0% l'anno dal 2022, positivo in tutti e 5 gli anni, intervallo sopra zero, discesa −47,9%; i semi da soli 1,02-1,16; correlazione con F3 0,23 | non valida: corretto 0,16 con 47 prove; nel paper come informazione |
 | 24 | **F5: F3 che cambia meno**, entrata al 20% e uscita al 40% (`VENTIQUATTRESIMA.md`) | 1 | **Sharpe 1,93**, +57,4% l'anno dal 2021, volatilità 29,7%, discesa −31%, ogni anno positivo (2026 +24,9%), giro 1,35 invece di 2,12, spese 4,9% invece di 7,7%; F3 sugli stessi dati 1,28; contro il caso (`F5_caso.json`) media −0,11, massimo 0,79 su 200 | **quasi**: corretto 0,81 con 48 prove, la più vicina; nel paper |
 | 25 | M7: il modello M6 con la banda; F5 + M7 a rischio uguale (`VENTICINQUESIMA.md`) | 2 | M7 **1,25** dal 2022 (M6 1,08), spese 5,8% invece di 8,5%, 5 anni su 5; **F5 + M7 1,83**, +44,2% l'anno, volatilità 24,2%, discesa −34,6%, 5 anni su 5 (F5 da sola dal 2022 1,69); correlazione F5-M7 0,31 | quasi: corretti 0,20 e 0,65 con 50 prove; nel paper come informazione |
+| 26 | Il funding che tocca il tetto: long dopo il passaggio a un intervallo più corto con funding negativo (E3), short con funding positivo (E4) (`VENTISEIESIMA.md`) | 2 a eventi | in calcolo | — |
 
 Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 = **50** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
@@ -113,9 +114,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    risultato è già in parte noto (senza le code la media è −1,6% a settimana), quindi conta solo sui dati nuovi o su un
    altro exchange (le monete quotate solo su Bybit).
 8. ~~M1 con più semi~~ → fatto (`programma6/semi_M1.json`, descrittivo): sei semi danno Sharpe da 0,79 a 1,43, media 1,10.
-9. **Il funding che tocca il tetto**: quando Binance accorcia l'intervallo del funding di una moneta (da 8 a 4 o 1 ora) è
-   perché il funding ha toccato il limite. Nei file ci sono 436 passaggi su 314 monete, ma 362 sono del 2025-2026 (1 nel
-   2021, 4 nel 2022, 45 nel 2023, 24 nel 2024): troppo pochi anni per una prova fra monete; forse come evento.
+9. ~~Il funding che tocca il tetto~~ → prova 26 (come evento).
 10. ~~Il volume a pronti contro quello del perpetuo~~ → prova 20.
 11. **K1 con la banda** (dalla prova 24): la stessa banda che ha portato F3 da 1,28 a 1,93, sul segnale di K1 (funding,
    acquisti a mercato, interesse aperto). K1 resta una costruzione: la prova vera sarebbe comunque il paper.
