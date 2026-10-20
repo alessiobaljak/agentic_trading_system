@@ -47,7 +47,12 @@ non a caso [...] non voglio aspettare dati nuovi [...] usa limit o margin, tutte
 provate con le finestre che avanzano (scelta su 12 mesi, prova sui 3 dopo, dal 2020 a oggi) e le correzioni per i tentativi. Il
 proprietario, 19 ott 2026 sera: «continua a cercare in autonomia, non fermarti se pensi serva misurare in paper procedi hai
 campo libero fino a che non trovi cosa funziona»: il coordinamento cerca da solo e può misurare in paper (`DRY_RUN` vero,
-niente soldi veri) le strategie candidate; registro delle prove in `research/programma6/STATO.md`. **Delega del
+niente soldi veri) le strategie candidate; registro delle prove in `research/programma6/STATO.md`. Il proprietario, 20 ott
+2026: «continua a cercare in autonomia ed in continuazione, fai girare modelli su modelli [...] traccia tutto quello che stai
+facendo e provando in un log o diario così da non ripetere le stesse cose ma soprattutto traccia anche i vari risultati [...]
+l'unico motivo per cui ti puoi fermare è se abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stesso
+riscontro nel paper»: **il registro unico è `research/REGISTRO.md`** (si guarda prima di ogni idea nuova, ogni prova ha la
+sua riga prima e il risultato dopo, con la coda delle idee). **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
 della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 
