@@ -4292,3 +4292,9 @@ Bitcoin per 7 giorni fa +11,67% a evento netto, 62 eventi su 61 monete dal 2023,
 positivo, p 0,0047. Onestà: contando tutte e quattro le prove a eventi del programma la soglia sarebbe 0,0025 e non la
 passerebbe; 62 eventi sono pochi. Nel paper dal 21 ottobre (`paper/REGOLE.md`, sezione 9). Capito: l'affollamento dei long
 che fa scattare il tetto del funding annuncia la discesa, sia sulle monete appena quotate sia su quelle vecchie.
+**Ventisettesima prova** (`VENTISETTESIMA.md`): la conferma di E4 su un altro exchange (Gate.io, archivio pubblico): non
+c'è. Come scritta −4,24% a evento su 456 eventi (p 0,67), ma 289 eventi erano cambi d'intervallo decisi da Gate in blocco
+su centinaia di contratti in due giorni; senza quei giorni (calcolo fatto dopo, solo informazione) 114 eventi, +6,00%,
+mediana +7,9%, 75% vinti, p 0,096. Il primo calcolo aveva un errore di lettura (secondi di scarto nelle ore, cambio di
+scala di un contratto), trovato e corretto prima di registrare. Capito: E4 non è smentita ma nemmeno confermata; un evento
+«di mercato» va separato dalle decisioni amministrative dell'exchange; il paper resta l'unico giudice.

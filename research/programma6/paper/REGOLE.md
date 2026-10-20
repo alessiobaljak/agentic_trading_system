@@ -114,3 +114,7 @@ più bassa e non passerebbe: per questo la prova vera è qui.
   media sul passato (+5,8%). Con meno di 15 eventi a 52 settimane il verdetto si rimanda a 104.
 * Per usarla dal vivo servirebbe vedere il cambio dell'intervallo subito (l'interfaccia pubblica dei futures, che da questa
   macchina non è raggiungibile; dalla VPS sì): è nel backlog, non serve per il paper.
+
+**Nota del 20 ottobre, sera (prova 27, `VENTISETTESIMA.md`).** La conferma di E4 su Gate.io non c'è: come scritta −4,24% a
+evento (p 0,67), ma la prova era guastata dai cambi d'intervallo fatti da Gate.io in blocco; senza quelli (calcolo fatto
+dopo, descrittivo) +6,00% a evento, 75% vinti, p 0,096. E4 resta nel paper con le sue regole: è il paper che decide.
