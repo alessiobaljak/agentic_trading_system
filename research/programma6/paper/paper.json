@@ -7,12 +7,22 @@
    "periodi": 0,
    "totale": 0.0
   },
+  "F5": {
+   "settimane": {},
+   "periodi": 0,
+   "totale": 0.0
+  },
   "K1": {
    "settimane": {},
    "periodi": 0,
    "totale": 0.0
   },
   "M1": {
+   "settimane": {},
+   "periodi": 0,
+   "totale": 0.0
+  },
+  "M6": {
    "settimane": {},
    "periodi": 0,
    "totale": 0.0
@@ -89,6 +99,63 @@
     "WLFIUSDT": -0.1127,
     "XMRUSDT": -0.0933,
     "ZECUSDT": -0.0463
+   }
+  },
+  "F5": {
+   "lunedi": "2026-10-19",
+   "long": {
+    "1000BONKUSDT": 0.0362,
+    "1000PEPEUSDT": 0.0294,
+    "ARBUSDT": 0.0323,
+    "ATOMUSDT": 0.0353,
+    "BRUSDT": 0.0136,
+    "DOTUSDT": 0.0365,
+    "GTCUSDT": 0.0087,
+    "JUPUSDT": 0.0303,
+    "LSKUSDT": 0.0233,
+    "METUSDT": 0.0185,
+    "MINAUSDT": 0.0188,
+    "MONUSDT": 0.025,
+    "ONEUSDT": 0.0085,
+    "OPUSDT": 0.0237,
+    "POLUSDT": 0.0451,
+    "PROMUSDT": 0.0274,
+    "QNTUSDT": 0.0082,
+    "QUSDT": 0.007,
+    "RAYSOLUSDT": 0.0297,
+    "SANDUSDT": 0.0147,
+    "STXUSDT": 0.0308,
+    "SUSDT": 0.0196,
+    "TRUMPUSDT": 0.044,
+    "TRXUSDT": 0.2726,
+    "VIRTUALUSDT": 0.0356,
+    "WUSDT": 0.0195,
+    "XLMUSDT": 0.0429,
+    "XRPUSDT": 0.0629
+   },
+   "short": {
+    "AEROUSDT": -0.0348,
+    "AKEUSDT": -0.0208,
+    "BNBUSDT": -0.1348,
+    "EIGENUSDT": -0.0439,
+    "ENAUSDT": -0.0296,
+    "FARTCOINUSDT": -0.0385,
+    "GRASSUSDT": -0.0219,
+    "HYPEUSDT": -0.0812,
+    "JTOUSDT": -0.0352,
+    "LABUSDT": -0.0426,
+    "LITUSDT": -0.0448,
+    "MORPHOUSDT": -0.0588,
+    "MUBARAKUSDT": -0.0122,
+    "RENDERUSDT": -0.0493,
+    "SAGAUSDT": -0.0123,
+    "STRKUSDT": -0.0155,
+    "USELESSUSDT": -0.0256,
+    "VVVUSDT": -0.0374,
+    "WLFIUSDT": -0.1061,
+    "XMRUSDT": -0.0878,
+    "ZAMAUSDT": -0.0233,
+    "ZECUSDT": -0.0436
    }
   },
   "K1": {
@@ -289,6 +356,7 @@
     "NEARUSDT": 0.0069,
     "UNIUSDT": 0.0064,
     "LINKUSDT": 0.0059,
+    "ZECUSDT": 0.0055,
     "1000PEPEUSDT": 0.0053,
     "ETHUSDT": 0.0051,
     "ARBUSDT": 0.0048,
@@ -298,6 +366,7 @@
     "PUMPUSDT": 0.0038,
     "WLDUSDT": 0.0038,
     "ENAUSDT": 0.0031,
+    "SUIUSDT": 0.0031,
     "ADAUSDT": 0.0018
    }
   }
