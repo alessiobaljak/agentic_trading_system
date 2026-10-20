@@ -41,8 +41,8 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 14 | **M1: modello ad alberi che unisce ~70 ingredienti**; M2 lineare (`QUATTORDICESIMA.md`) | 2 | **M1 1,35**, +50,9% l'anno dal 2022, sopra il caso; M2 0,62 | quasi: corretto 0,59 |
 | 15 | **F3 + M1 a rischio uguale** (`QUINDICESIMA.md`) | 1 | **1,69**, +44,8% l'anno, ogni anno 2022-2026 positivo, discesa −33% | quasi: corretto 0,76 |
 | 16 | M3: il modello di M1 ogni giorno, con entrata al 20% e uscita al 40% (`SEDICESIMA.md`) | 1 | 0,95 dal 2022, +31,2% l'anno, ma spese 23,8% l'anno (giro 342 volte), 2026 −29%, ultimo anno −4,6%; correlazione con M1 0,64 | no: ogni giorno costa troppo |
-| 17 | Sei modelli in gara, scelti ogni volta solo col passato (M4) e la loro media (M5) (`DICIASSETTESIMA.md`) | 2 | in calcolo | — |
-| 18 | Le monete appena quotate: short quelle con 7-60 giorni (N1) o 7-180 (N2), long le 100 grandi (`DICIOTTESIMA.md`) | 2 | in calcolo | — |
+| 17 | Sei modelli in gara, scelti ogni volta solo col passato (M4) e la loro media (M5) (`DICIASSETTESIMA.md`) | 2 | M4 0,71 (+30,1% l'anno, 2024 −14,5%), M5 0,95 (+37,7%); la gara sceglie quasi sempre foresta (23 volte) e alberi casuali (17), gli alberi di M1 solo 4 su 63; correlazione con M1 0,79 e 0,85 | no: M1 da solo era meglio, quindi il suo 1,35 dipende anche dalla scelta del modello |
+| 18 | Le monete appena quotate: short quelle con 7-60 giorni (N1) o 7-180 (N2), long le 100 grandi (`DICIOTTESIMA.md`) | 2 | N1 −18,5% l'anno (Sharpe −0,26), N2 −22,3% (−0,45), 2025 −66%; la moneta nuova tipica scende (mediana −3,6% a settimana) ma poche esplodono (COAI +2627% in una settimana, MYX +894%, AIA +573%): senza le 20 settimane-moneta migliori la media è −1,6% a settimana | no: la coda verso l'alto uccide lo short |
 | 19 | Il premio del perpetuo sullo spot fra monete (P1) e insieme al funding (P2) (`DICIANNOVESIMA.md`) | 2 | in calcolo | — |
 
 Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 = **44** (le conferme 4, 5, 7 non contano: sono una
@@ -101,3 +101,9 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 5. **Coppie di monete simili** (stessa famiglia, prezzi che si muovono insieme): quando si allontanano, scommettere che si
    riavvicinano, a ore.
 6. **Un regista**: un modello che ogni mese decide quanto capitale dare a F3, K1, M1 secondo come sono andate.
+7. **Le monete appena quotate con lo stop** (dalla prova 18, quindi **costruzione**: l'idea viene da quello che si è visto):
+   short le giovani ma con l'uscita se il prezzo sale del 30% dall'ingresso, con le candele a 1 ora. Sui dati del passato il
+   risultato è già in parte noto (senza le code la media è −1,6% a settimana), quindi conta solo sui dati nuovi o su un
+   altro exchange (le monete quotate solo su Bybit).
+8. **Un modello solo, ma provato su più semi e più modelli dello stesso tipo** (dalla prova 17): quanto del 1,35 di M1 è
+   fortuna della scelta? Descrittivo, non conta: gli alberi di M1 con 5 semi diversi.

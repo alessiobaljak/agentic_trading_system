@@ -24,6 +24,8 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 14 | Un modello che impara ogni 4 settimane, solo dal passato, come unire ~70 ingredienti (28 indicatori, rendimenti, volatilità, funding, acquisti a mercato, volume, legame col Bitcoin, posizioni, stato del mercato): M1 alberi, M2 lineare | `QUATTORDICESIMA.md` | `RISULTATI_QUATTORDICESIMA.md` | 2 | **M1: +50,9% l'anno dal 2022, Sharpe 1,35**, intervallo sopra zero, 4 anni su 5 (2024 −5%), sopra il caso (`caso_M1.json`), quasi indipendente da F3 (0,17) e K1 (0,03); non passa lo Sharpe corretto (0,59 con 36 prove). M2 Sharpe 0,62. Sulle 101-200 una fuga di informazione dai dati sulle posizioni (trovata e corretta: senza, Sharpe circa 0). M1 nel paper |
 | 15 | F3 e M1 insieme, il capitale diviso a rischio uguale (volatilità delle 26 settimane prima) | `QUINDICESIMA.md` | `RISULTATI_QUINDICESIMA.md` | 1 | **la più forte di tutto il lavoro**: dal 2022 +44,8% l'anno, volatilità 26,6%, Sharpe 1,69, discesa massima −33%, positiva in ogni anno 2022-2026 e in 13 trimestri su 16, a costi doppi; non passa lo Sharpe corretto (0,76 con 37 prove). Con K1 (solo informazione) Sharpe 1,87. Nel paper |
 | 16 | M3: il modello di M1 ogni giorno (entrata al 20%, uscita al 40%) | `SEDICESIMA.md` | `RISULTATI_SEDICESIMA.md` | 1 | non valida: Sharpe 0,95, +31,2% l'anno, ma spese 23,8% e funding 13,7% l'anno, 2026 −29%, ultimo anno −4,6%; correlazione con M1 0,64 |
+| 17 | Sei modelli in gara (alberi, alberi bassi, foresta, alberi casuali, lineare, rete neurale), scelti ogni 4 settimane sulle 12 settimane tenute da parte (M4) o mediati (M5) | `DICIASSETTESIMA.md` | `RISULTATI_DICIASSETTESIMA.md` | 2 | non valide: M4 Sharpe 0,71 (+30,1% l'anno, 2024 −14,5%), M5 0,95 (+37,7%); scelti foresta 23 volte, alberi casuali 17, lineare 9, alberi bassi 8, gli alberi di M1 4, la rete 2 |
+| 18 | Le monete appena quotate: short quelle di 7-60 giorni (N1) o 7-180 (N2), long le 100 grandi | `DICIOTTESIMA.md` | `RISULTATI_DICIOTTESIMA.md` | 2 | non valide: N1 −18,5% l'anno, N2 −22,3%; la tipica scende (mediana −3,6% a settimana) ma poche esplodono (COAI +2627% in una settimana) |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -73,6 +75,15 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    raccontare il futuro (la fuga trovata sulle monete 101-200).
 11. **Il carry** (comprato a pronti, venduto il perpetuo) dal 2025 non rende (Borri, Liu, Tsyvinski e Wu 2025, sezione
    3.6: Sharpe 6,45 dal 2020, 4,06 dal 2024, negativo nel 2025), e il proprietario non lo vuole: non si prova.
+12. **Scegliere il modello in base a come è andato di recente non aiuta** (prova 17): la gara fra sei modelli fa peggio
+   di M1 da solo (0,71 contro 1,35), e la media dei sei fa 0,95. Il 1,35 di M1 dipende anche dalla scelta del modello: è un
+   motivo in più per non fidarsi del numero prima del paper.
+13. **Le monete nuove: la tipica scende, ma la media sale** (prova 18): mediana −3,6% a settimana, ma il 3,25% delle
+   settimane-moneta fa più del +50% e lo 0,95% più del +100%. Andare short senza protezione perde (−18,5% l'anno); la coda
+   verso l'alto è il rischio, non il caso raro.
+14. **Le monete tolte dal listino restano nei file dell'archivio con il prezzo fermo e il volume zero** (controllo del 20
+   ottobre, `controllo_zombi.json`): 58.403 giorni-moneta, il funding riempito con la media di prima. Sulle candidate pesa
+   poco (F3 Sharpe 1,296 → 1,295, K1 1,269 → 1,262); da qui in avanti è corretto.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
