@@ -172,6 +172,10 @@ def previsioni(tipo: str, X, Y, U, lunedi, n_mercato: int, log=print) -> tuple:
         if len(allen) < MIN_SETT:
             continue
         Xa, Ya = _righe(X, Y, U, allen)
+        # le colonne tutte mancanti nell'allenamento (le posizioni prima del dicembre 2021) si tolgono: il modello ad
+        # alberi di scikit-learn 1.9 si ferma su una colonna vuota, e da una colonna vuota non si impara niente
+        cols = np.isfinite(Xa).any(axis=0) if tipo == "M1" else np.ones(Xa.shape[1], bool)
+        Xa = Xa[:, cols]
         m = _modello(tipo)
         if tipo == "M2":
             mu = np.nanmean(Xa[:, -n_mercato:], axis=0)
@@ -184,14 +188,15 @@ def previsioni(tipo: str, X, Y, U, lunedi, n_mercato: int, log=print) -> tuple:
         for w in range(w0, min(w0 + OGNI, W)):
             idx = np.flatnonzero(U[w])
             if len(idx) >= te.MIN_MONETE:
-                P[w, idx] = m.predict(prep(X[w, idx]))
-        ultimo = (m, prep, Xa, Ya)
+                P[w, idx] = m.predict(prep(X[w, idx][:, cols]))
+        ultimo = (m, prep, Xa, Ya, cols)
     log(f"[quattordicesima] {tipo} allenato")
     return P, ultimo
 
 
 def importanza(tipo: str, ultimo, nomi) -> dict:
-    m, prep, Xa, Ya = ultimo
+    m, prep, Xa, Ya, cols = ultimo
+    nomi = [n for n, c in zip(nomi, cols) if c]
     if tipo == "M2":
         return dict(sorted(((n, float(abs(c))) for n, c in zip(nomi, m.coef_)), key=lambda x: -x[1])[:15])
     from sklearn.inspection import permutation_importance

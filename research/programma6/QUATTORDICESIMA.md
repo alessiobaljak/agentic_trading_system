@@ -56,3 +56,10 @@ terza prova (`TERZA.md`, sezione 4) con lo Sharpe corretto sulle **36** prove, g
 trimestri pieni dal 2022 al 2025. Si riportano anche, solo come informazione: gli ingredienti che contano di più nell'ultimo
 modello (importanza per permutazione), la correlazione con F3 e K1, e il risultato sulle monete 101-200 con lo scarto 0,10%.
 Se una delle due passa l'esame, entra nel paper.
+
+## Nota tecnica (20 ottobre 2026, prima di qualunque risultato)
+
+Il primo avvio si è fermato al primo allenamento di M1: il modello ad alberi di scikit-learn 1.9.1 non accetta una colonna
+**tutta mancante** (le posizioni prima del dicembre 2021). Correzione: a ogni allenamento di M1 si tolgono le colonne tutte
+mancanti in quell'allenamento (e le stesse nella previsione). Da una colonna vuota il modello non impara niente, quindi la
+regola non cambia. Nessun numero era stato prodotto.
