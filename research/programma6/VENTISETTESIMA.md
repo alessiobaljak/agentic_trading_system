@@ -18,6 +18,8 @@ l'affollamento dei long che fa scattare il tetto del funding annuncia la discesa
   impronte SHA-256 dei file scaricati.
 * **Evento**: il primo regolamento dopo il quale la distanza fra due regolamenti si accorcia (la distanza fra questo e il
   precedente è minore di quella fra il precedente e quello prima), con il **tasso positivo** a quel regolamento.
+  Precisazione scritta prima del calcolo: la distanza di prima deve essere al massimo di 8 ore (l'intervallo più lungo di
+  Gate.io); una distanza più lunga è un buco nei dati, non un intervallo, e non conta.
 * **Operazione**: short la moneta e long il Bitcoin di Gate.io per lo stesso valore, dall'apertura del giorno dopo (UTC) a
   quella di 7 giorni dopo; costi come E4 (la moneta 0,05% + 0,10% di scarto all'entrata e all'uscita, il Bitcoin 0,05% +
   0,01%); funding di Gate.io dei giorni di tenuta per le due gambe, con il segno. Serve la candela con volume il giorno
