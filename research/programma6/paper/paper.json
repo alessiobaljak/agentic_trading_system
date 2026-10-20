@@ -27,6 +27,11 @@
    "periodi": 0,
    "totale": 0.0
   },
+  "M7": {
+   "settimane": {},
+   "periodi": 0,
+   "totale": 0.0
+  },
   "F2": {
    "settimane": {},
    "periodi": 0,
@@ -43,6 +48,11 @@
    "totale": 0.0
   },
   "F3 + M1 a rischio uguale": {
+   "settimane": {},
+   "periodi": 0,
+   "totale": 0.0
+  },
+  "F5 + M7 a rischio uguale (informazione)": {
    "settimane": {},
    "periodi": 0,
    "totale": 0.0

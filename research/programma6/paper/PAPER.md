@@ -10,10 +10,12 @@ Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C
 | K1 | 0 | +0.00% | — |
 | M1 | 0 | +0.00% | — |
 | M6 | 0 | +0.00% | — |
+| M7 | 0 | +0.00% | — |
 | F2 | 0 | +0.00% | — |
 | C1 | 0 | +0.00% | — |
 | metà F3 + metà K1 (derivata) | 0 | +0.00% | — |
 | F3 + M1 a rischio uguale | 0 | +0.00% | — |
+| F5 + M7 a rischio uguale (informazione) | 0 | +0.00% | — |
 | A1 | 0 | +0.00% | — |
 
 ## Le posizioni di adesso
