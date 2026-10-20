@@ -4275,3 +4275,11 @@ rimozione dal listino −21%; due terzi degli eventi vinti ma ALPACA +1796% in u
 1,12, 1,00, 1,43 (media 1,10). Capito oggi: (1) il vantaggio del funding regge a ogni controllo (premio al posto del funding, dati corretti); (2) il
 modello ad alberi no: il suo 1,35 era il caso fortunato; (3) un andamento visto tre volte sulle stesse monete non si
 trasferisce alle altre; (4) gli short sulle monete piccole perdono per le poche che esplodono.
+**Ventitreesima prova** (`research/programma6/VENTITREESIMA.md`): il modello ad alberi con la media di cinque semi (M6) fa
+Sharpe 1,02 dal 2022 sui dati corretti, positivo in tutti e 5 gli anni; i semi da soli 1,02-1,16. Capito: il valore onesto
+del modello è circa 1, non 1,35; mediare i semi lo rende stabile. **Ventiquattresima prova** (`VENTIQUATTRESIMA.md`): lo
+stesso segnale del funding (F3) ma con la banda (si entra nel 20%, si esce sotto il 40%): **Sharpe 1,93**, +57,4% l'anno dal
+2021, volatilità 29,7%, discesa −31%, ogni anno positivo, spese 4,9% invece di 7,7%; contro il caso (segnale dato alle monete
+sbagliate) media −0,11 e massimo 0,79 su 200 ripetizioni (`F5_caso.json`). Sharpe corretto 0,81 con 48 prove: la più vicina
+alla soglia di 0,95. Capito: il segnale del funding era buono, lo si eseguiva male (troppo giro, troppe spese, troppo poche
+monete per lato). F5 e M6 entrano nel paper come informazione dalla settimana del 26 ottobre.
