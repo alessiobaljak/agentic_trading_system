@@ -40,7 +40,7 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 13 | Funding medio del mercato per il Bitcoin (`TREDICESIMA.md`) | 1 | 0,47 contro 0,56 del Bitcoin comprato | no |
 | 14 | **M1: modello ad alberi che unisce ~70 ingredienti**; M2 lineare (`QUATTORDICESIMA.md`) | 2 | **M1 1,35**, +50,9% l'anno dal 2022, sopra il caso; M2 0,62 | quasi: corretto 0,59 |
 | 15 | **F3 + M1 a rischio uguale** (`QUINDICESIMA.md`) | 1 | **1,69**, +44,8% l'anno, ogni anno 2022-2026 positivo, discesa −33% | quasi: corretto 0,76 |
-| 16 | M3: il modello di M1 ogni giorno, con entrata al 20% e uscita al 40% (`SEDICESIMA.md`) | 1 | in calcolo | — |
+| 16 | M3: il modello di M1 ogni giorno, con entrata al 20% e uscita al 40% (`SEDICESIMA.md`) | 1 | 0,95 dal 2022, +31,2% l'anno, ma spese 23,8% l'anno (giro 342 volte), 2026 −29%, ultimo anno −4,6%; correlazione con M1 0,64 | no: ogni giorno costa troppo |
 
 Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 = **38** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
@@ -90,7 +90,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 1. **Le monete meno liquide con ordini limite**: F3 e M1 sulle monete 101-200 falliscono per i costi; con l'ingresso a
    limite (commissione da limite, niente scarto, se il prezzo attraversa il livello) i costi scendono molto (`ESECUZIONE.md`).
    Serve: misurare con le candele a 1 ora quanti ordini si eseguono su quelle monete.
-2. **M1 su più orizzonti**: ogni giorno → prova 16 (in calcolo); ogni 2 settimane: da fare.
+2. **M1 su più orizzonti**: ogni giorno → prova 16 (no: i costi); ogni 2 settimane: da fare (meno costi, segnale forse più debole).
 3. **M1 con obiettivo diverso**: il rendimento in più della moneta invece del rango, e un modello che unisce M1 e M2.
 4. **Il premio del perpetuo sullo spot fra monete** (I-008 del programma 5 mai fatta): l'indice del premio orario, ogni
    giorno.

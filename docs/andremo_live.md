@@ -4247,3 +4247,9 @@ spiegato e corretto (senza quei dati: circa zero). M1 entra nel paper prima dell
 Sharpe 1,69, discesa massima −33%, positiva in ogni anno; non passa lo Sharpe corretto (0,76 con 37 prove: la soglia sale
 anche perché ora molte prove sono buone). Capito: due vantaggi quasi indipendenti (funding fra monete e modello che unisce gli
 indicatori) insieme oscillano molto meno. Nel paper dalla settimana del 26 ottobre.
+**Sedicesima prova** (`research/programma6/SEDICESIMA.md`): il modello che unisce gli indicatori deciso **ogni giorno**
+(M3) fa Sharpe 0,95 dal 2022 ma paga il 23,8% l'anno di spese e il 13,7% di funding, ed è negativo nell'ultimo anno; è lo
+stesso segnale di M1 (correlazione 0,64), solo più caro. Capito: con questi segnali la settimana è il ritmo giusto.
+Il proprietario (20 ottobre): «traccia tutto [...] l'unico motivo per cui ti puoi fermare è se abbiamo strategie per tutte le
+crypto [...] con lo stesso riscontro nel paper»: creato il registro unico `research/REGISTRO.md` e un giro automatico della
+ricerca ogni 4 ore.
