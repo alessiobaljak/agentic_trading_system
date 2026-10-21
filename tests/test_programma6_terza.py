@@ -544,3 +544,28 @@ def test_quarantacinquesima_tendenza_e_rottura():
     assert qc.prima_rottura(pan, 0, 0) == 10
     pan = {"t0": 0, "close": np.linspace(10, 20, 60)[:, None], "low": np.linspace(10, 20, 60)[:, None] - 0.01}
     assert qc.prima_rottura(pan, 0, 0) == -1                  # sempre in salita: nessuna rottura
+
+
+def test_quarantaseiesima_tester_e_segnali():
+    import pandas as pd
+    from research.programma6 import quarantaseiesima as qt
+    n = 8
+    o = np.array([10, 10, 11, 12, 12, 11, 10, 10], float)
+    h, l, c = o + 0.5, o - 0.5, o.copy()
+    ml, ms = np.zeros(n, bool), np.zeros(n, bool)
+    sl, ss = np.full(n, np.nan), np.full(n, np.nan)
+    ml[1] = True                                               # long a mercato all'apertura della candela 2
+    ss[4] = 11.6                                               # poi short allo stop 11,6 nella candela 5 (apre a 11)
+    dentro = np.ones(n, bool)
+    lordo, giro, fu, chiuse = qt.simula(o, h, l, c, ml, ms, sl, ss, dentro, np.zeros(n))
+    assert giro[2] == 1.0 and giro[5] == 2.0                  # entrata e giro da long a short
+    assert chiuse[0] == pytest.approx(11.0 / 11.0 - 1)        # il long entrato a 11 esce all'apertura (11 ≤ 11,6)
+    assert lordo[3] == pytest.approx(12 / 11 - 1)
+    dentro[7] = False                                          # esce dall'universo: chiude all'apertura
+    lordo, giro, fu, chiuse = qt.simula(o, h, l, c, ml, ms, sl, ss, dentro, np.zeros(n))
+    assert giro[7] == 1.0 and len(chiuse) == 2
+    b = pd.DataFrame({"open": o, "high": h, "low": l, "close": c})
+    x = qt.segnali("Channel BreakOut", b)
+    assert np.isnan(x["sl"][4]) and x["sl"][5] == pytest.approx(12.5)     # dal 6° in poi: massimo delle 5 candele
+    p = qt._pivot(np.array([1, 2, 3, 4, 9, 3, 2, 1], float), 4, 2, alto=True)
+    assert p[6] == 9 and np.isnan(p[5])                       # il massimo della candela 4 si conferma 2 candele dopo
