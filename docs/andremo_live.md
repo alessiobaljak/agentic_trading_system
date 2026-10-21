@@ -4360,3 +4360,7 @@ minuti; per prenderle bisogna essere più veloci dei programmi professionali, e 
 **Il prezzo della ricerca** (21 ottobre, pomeriggio): lo Sharpe corretto di F5 è sceso da 0,815 (48 prove) a 0,517 (67
 prove): ogni prova in più sugli stessi anni alza l'asticella anche per le strategie già trovate. Capito: d'ora in avanti si
 scelgono idee molto probabili e conferme su dati non usati; la prova pulita di F5 sono le settimane nuove del paper.
+**Quarantaquattresima prova** (`QUARANTAQUATTRESIMA.md`): long il Bitcoin nelle settimane dopo una crescita dell'offerta
+delle stablecoin (dati DefiLlama): Sharpe 0,66 contro 0,38 del Bitcoin tenuto, discesa −58% invece di −77%, ma non distinguibile
+dal caso. Capito: il denaro nuovo in stablecoin dice qualcosa (nel 2022 calava), ma non abbastanza da farne una strategia. Nel
+conto: 68 prove.

@@ -51,6 +51,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 41 | U1: short dopo l'arrivo su Upbit delle monete che hanno già il perpetuo | `QUARANTUNESIMA.md` | `RISULTATI_QUARANTUNESIMA.md` | 1 a eventi + 1 | non valida: +2,96% a evento, p 0,070; 2025 +0,1% su 43 |
 | 42 | F6: F5 con l'esposizione secondo l'agitazione (Moreira e Muir) | `QUARANTADUESIMA.md` | `RISULTATI_QUARANTADUESIMA.md` | 1 | non valida: Sharpe 1,71 contro 1,93 di F5 |
 | 43 | Q1 long 5 minuti dopo la quotazione a pronti, Q2 short 5 minuti dopo monitoraggio o rimozione, per 24 ore | `QUARANTATREESIMA.md` | `RISULTATI_QUARANTATREESIMA.md` | 2 a eventi + 2 | non valide: Q1 +0,03% (p 0,51), Q2 +3,08% (p 0,024) |
+| 44 | S1: long il Bitcoin se l'offerta delle stablecoin è cresciuta nella settimana prima | `QUARANTAQUATTRESIMA.md` | `RISULTATI_QUARANTAQUATTRESIMA.md` | 1 | non valida: Sharpe 0,66 (Bitcoin tenuto 0,38), intervallo non sopra zero |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -188,6 +189,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    0,80: le prove a indicatori e a eventi negative allargano la forbice). Conseguenza: cercare ancora sugli stessi anni rende
    più difficile dimostrare F5 con il passato; la prova pulita di F5 sono i dati nuovi (il paper, dal 26 ottobre le
    settimane) o dati indipendenti. Non si cambia il metodo per far passare F5: sarebbe l'errore del primo gate.
+30. **Il denaro che entra in stablecoin aiuta a tenere il Bitcoin, ma poco** (prova 44): stare long solo nelle settimane dopo
+   una crescita dell'offerta porta lo Sharpe da 0,38 (Bitcoin tenuto sempre) a 0,66 e la discesa da −77% a −58%, soprattutto
+   perché nel 2022 l'offerta calava; ma il Bitcoin resta il Bitcoin (volatilità 45%) e il guadagno in più non è distinguibile
+   dal caso.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
