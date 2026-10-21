@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 68 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 70 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -69,8 +69,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 42 | F6: F5 con l'esposizione secondo l'agitazione delle 13 settimane prima (0,30/σ, al massimo 2; Moreira e Muir 2017) (`QUARANTADUESIMA.md`) | 1 | Sharpe **1,71** contro 1,93 di F5 sulle stesse settimane, +55,7% l'anno, volatilità 32,5%, discesa −35,6%; esposizione media 1,20; 2021 +65,9% (F5 +122,6%) | no: corretto 0,31 con 65 prove; tenere meno nelle settimane agitate toglie a F5 le sue settimane migliori |
 | 43 | Entrare 5 minuti dopo l'annuncio di Binance, per 24 ore contro il Bitcoin: Q1 long dopo la quotazione a pronti di una moneta che ha già il perpetuo (eventi mai guardati), Q2 short dopo l'etichetta di monitoraggio o la rimozione (eventi della prova 21, con la riserva) (`QUARANTATREESIMA.md`) | 2 a eventi + 2 portafogli | **Q1**: +0,03% a evento su 61, p 0,51, mediana −4,95%; nei primi 5 minuti la moneta era già salita del 13,1% (mediana 7,3%). **Q2**: +3,08% su 150 (49 annunci), p 0,024 contro 0,0011, 2026 +1,8% su 82; nei 5 minuti persi −8,75% già fatto; portafogli Sharpe 0,00 e 0,83 | no: le notizie si prezzano in pochi minuti |
 | 44 | S1: long il Bitcoin per la settimana se l'offerta totale delle stablecoin (DefiLlama) è cresciuta nella settimana prima, altrimenti niente (`QUARANTAQUATTRESIMA.md`) | 1 | Sharpe 0,66, +29,3% l'anno, discesa −57,9% (il Bitcoin tenuto sulle stesse settimane 0,38, discesa −77,4%); in posizione il 66% delle settimane; più del Bitcoin +8,4% l'anno; 2022 −17,5% | no: intervallo non sopra zero, corretto 0,00 con 68 prove |
+| 45 | Gli indicatori per decidere quando entrare (domanda del proprietario): I1 F5 con le entrate nuove solo se la tendenza dei 20 giorni è d'accordo; I2 N3 con l'entrata alla prima chiusura sotto il minimo dei 5 giorni (eventi di N3, con la riserva) (`QUARANTACINQUESIMA.md`) | 1 + 1 a eventi + 1 portafoglio | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 = **68** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 = **70** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 

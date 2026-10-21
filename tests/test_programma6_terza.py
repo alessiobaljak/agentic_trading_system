@@ -522,3 +522,25 @@ def test_quarantaquattresima_segnale_e_settimane(monkeypatch):
     df = qs.settimane(pan, offerta)
     assert df.loc[lun, "w"] == 1.0 and df.loc[lun, "netto"] == pytest.approx(0.10 - qs.COSTO)
     assert df.loc[lun + 7, "w"] == 0.0 and df.loc[lun + 7, "netto"] == pytest.approx(-qs.COSTO)   # esce: paga l'uscita
+
+
+def test_quarantacinquesima_tendenza_e_rottura():
+    from research.programma6 import quarantacinquesima as qc
+    T = 40
+    C = np.vstack([np.linspace(100, 140, T), np.linspace(140, 100, T)]).T          # una sale, l'altra scende
+    pan = {"t0": 0, "close": C, "low": C - 1}
+    t = qc.tendenza_domenica(pan, np.array([30]))
+    assert t[0, 0] == 1.0 and t[0, 1] == -1.0
+    # la banda: la moneta 0 ha il segnale per lo short ma la tendenza su → non entra; la 1 sì
+    S = 25
+    ct = np.tile(np.linspace(0, 1, S), (1, 1))
+    tend = np.ones((1, S))
+    tend[0, 1] = -1.0
+    w = qc.pesi_banda_tendenza(ct, np.ones((1, S), bool), np.ones((1, S)), tend)
+    assert w[0, 0] == 0.0 and w[0, 1] < 0 and w[0, -1] > 0
+    # la prima chiusura sotto il minimo dei 5 giorni prima, dal 7° giorno d'età
+    c = np.r_[np.full(10, 10.0), 9.0, np.full(30, 9.5)]
+    pan = {"t0": 0, "close": c[:, None], "low": c[:, None] - 0.01}
+    assert qc.prima_rottura(pan, 0, 0) == 10
+    pan = {"t0": 0, "close": np.linspace(10, 20, 60)[:, None], "low": np.linspace(10, 20, 60)[:, None] - 0.01}
+    assert qc.prima_rottura(pan, 0, 0) == -1                  # sempre in salita: nessuna rottura
