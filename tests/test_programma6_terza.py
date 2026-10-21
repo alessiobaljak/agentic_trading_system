@@ -347,3 +347,12 @@ def test_ventisettesima_salto_di_scala():
     from research.programma6 import ventisettesima as vt
     c = pd.DataFrame({"close": [1.0, 1.1, 0.9, 80.0, 81.0]}, index=[10, 11, 12, 13, 14])
     assert vt.salto(c, 11, 14) and not vt.salto(c, 10, 12)
+
+
+def test_ventinovesima_rendimento_in_piu():
+    from research.programma6 import ventinovesima as vn
+    R = np.array([[0.1, 0.0, -0.1, np.nan], [0.0] * 4])
+    U = np.array([[True, True, True, True], [True, False, False, False]])
+    out = vn.rendimento_in_piu(R, U)
+    assert np.nansum(out[0]) == pytest.approx(0.0) and np.isnan(out[0, 3])
+    assert np.isnan(out[1]).all()                  # una moneta sola: niente
