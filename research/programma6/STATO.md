@@ -39,6 +39,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 29 | M8: il modello di M7 allenato sul rendimento in più della media (tagliato all'1% e al 99%) invece del rango | `VENTINOVESIMA.md` | `RISULTATI_VENTINOVESIMA.md` | 1 | non valida (corretto 0,12 con 53 prove): Sharpe 1,21 contro 1,25 di M7; correlazione con M7 0,47 |
 | 30 | N3 su Gate.io: short a 7 giorni dalla quotazione contro il Bitcoin, uscita a +30% (candele a 1 ora) o dopo 30 giorni, monete nuove non ancora perpetuo su Binance | `TRENTESIMA.md` | `RISULTATI_TRENTESIMA.md` | 1 a eventi | **VALIDA**: +7,59% a evento su 449 monete, p 0,0001, ogni anno positivo (dopo aver tolto 182 contratti che non erano monete: azioni, fondi, indici, metalli). Nel paper (su Gate e, con la stessa regola, sulle nuove di Binance) |
 | 31 | M7 + M8 a rischio uguale (costruzione) | `TRENTUNESIMA.md` | `RISULTATI_TRENTUNESIMA.md` | 1 | non valida (corretto 0,20 con 54 prove): Sharpe 1,39 contro 1,25 di M7. Nel paper come informazione |
+| 32 | La regola N3, identica, sul passato di Binance (monete nuove dal 2021) | `TRENTADUESIMA.md` | `RISULTATI_TRENTADUESIMA.md` | 1 a eventi | **passa l'esame**: +4,29% a evento su 613 monete, p 0,0017; riserva: l'idea dell'uscita era nata su questi dati; 2021 e 2026 leggermente negativi |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -137,7 +138,8 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    guardate): short a 7 giorni dalla quotazione, uscita a +30%, fa +7,6% a evento su 449 monete (p 0,0001), ogni anno dal
    2023. Senza l'uscita la media è più alta (+11,2%) ma poche esplosioni rendono il rischio inaccettabile: l'uscita
    costa 3-4 punti di media e toglie le code. Attenzione: su Gate.io metà dei contratti nuovi non sono monete (azioni,
-   fondi, indici); vanno tolti con il tipo del contratto. È la lezione della prova 18 messa alla prova sui dati di un altro exchange.
+   fondi, indici); vanno tolti con il tipo del contratto. Sul passato di Binance la stessa regola, senza toccarla (prova 32),
+   fa +4,3% a evento su 613 monete (p 0,0017), più debole nel 2026 (−0,6%). È la lezione della prova 18 messa alla prova sui dati di un altro exchange.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

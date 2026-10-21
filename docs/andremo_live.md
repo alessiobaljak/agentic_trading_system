@@ -4312,3 +4312,8 @@ p 0,0001**, ogni anno positivo. Il primo calcolo (+6,23% su 631) aveva dentro az
 su Gate.io come perpetui: trovati preparando la misura in avanti, tolti con il tipo del contratto dall'interfaccia
 pubblica di Gate.io. Senza l'uscita la media sarebbe +11,2% ma con perdite enormi su poche monete. Capito: la lezione della prova 18 (le nuove scendono ma poche esplodono) regge su un altro exchange, e
 l'uscita di protezione è quello che la rende usabile. Nel paper in avanti su Gate.io e sulle nuove di Binance.
+Il proprietario (21 ottobre): «gate.io cosa è? io non farò trading su quella piattaforma, perché devo aspettare il 2
+novembre o fine novembre? non è quello che avevo chiesto». Ha ragione: il 19 ottobre aveva detto di non voler aspettare
+dati nuovi; il paper è una conferma, non una condizione. **Trentaduesima prova** (`TRENTADUESIMA.md`): la regola N3, identica,
+sul passato di Binance: +4,29% a evento su 613 monete nuove dal 2021, p 0,0017, passa l'esame scritto; riserva: l'idea
+dell'uscita era nata su questi dati; 2026 −0,6%. **Trentunesima** (`TRENTUNESIMA.md`): i due modelli insieme, Sharpe 1,39.
