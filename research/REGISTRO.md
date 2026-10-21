@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 62 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 63 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -64,8 +64,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 37 | T6: la rottura a 4 ore con il funding, entrando con l'ordine limite (`TRENTASETTESIMA.md`) | 1 | entrate eseguite 99%; +0,048% a operazione su 15.391 (T2 a mercato +0,014%), p 0,43; long −0,28%, short +0,36% | no: l'ordine limite risparmia poco |
 | 38 | T7: solo lo short delle rotture verso il basso dove i long pagano, conferma sulle monete 101-200 (`TRENTOTTESIMA.md`) | 1 di conferma | +0,136% a operazione su 5.499, p 0,40; metà +0,44% e −0,16%; 2026 −1,1%; portafoglio Sharpe −0,61 | **non confermata** |
 | 39 | T8: la tendenza del giorno (media dei 50 giorni) e il ritracciamento a 4 ore (RSI 35/65), con il funding, stop 2 ATR e uscita mobile 3 ATR (`TRENTANOVESIMA.md`) | 1 | +0,149% a operazione su 8.720, p 0,32; long −0,46%, short +0,53%; senza le 5 migliori +0,03%; portafoglio Sharpe −0,07 | no |
+| 40 | Le coppie di monete che si allontanano: z del rapporto a 1 giorno, entrata a 2, uscita a 0,5, rottura a 4, al massimo 20 giorni (`QUARANTESIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 = **62** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 = **63** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
@@ -121,8 +122,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 3. ~~M1 con obiettivo diverso~~ → prova 29 (il modello che unisce M1 e M2 non si fa: M2, lineare, fa 0,62 e la gara dei
    modelli della prova 17 lo sceglie solo 9 volte su 63).
 4. ~~Il premio del perpetuo sullo spot fra monete~~ → prova 19.
-5. **Coppie di monete simili** (stessa famiglia, prezzi che si muovono insieme): quando si allontanano, scommettere che si
-   riavvicinano, a ore.
+5. ~~Coppie di monete simili~~ → prova 40 (a 1 giorno: a ore i costi delle quattro operazioni sono troppi).
 6. **Un regista**: un modello che ogni mese decide quanto capitale dare a F3, K1, M1 secondo come sono andate.
 7. ~~Le monete appena quotate con lo stop~~ → prova 30, su Gate.io (Bybit non è raggiungibile da qui).
 8. ~~M1 con più semi~~ → fatto (`programma6/semi_M1.json`, descrittivo): sei semi danno Sharpe da 0,79 a 1,43, media 1,10.
