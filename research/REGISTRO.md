@@ -54,6 +54,7 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 27 | E4 su un altro exchange: la conferma su Gate.io, eventi indipendenti da quelli di Binance (`VENTISETTESIMA.md`) | 1 di conferma | come scritta: 456 eventi, −4,24% a evento, p 0,67; ma 289 eventi sono cambi d'intervallo fatti da Gate in blocco in due giorni. Senza i giorni in blocco (calcolo fatto dopo, descrittivo): 114 eventi, +6,00%, mediana +7,9%, 75% vinti, p 0,096. Primo calcolo con un errore di lettura (secondi di scarto, corretto) | **non confermata**: Gate non conferma e non smentisce; E4 resta nel paper con la nota |
 | 28 | K2: K1 con la banda (costruzione); F5 + M7 + K2 a rischio uguale (`VENTOTTESIMA.md`) | 2 | K2 **1,72** dal 2022 (K1 1,25), spese 6,8% invece di 10,0%, 5 anni su 5; **F5 + M7 + K2 2,11**, +43,2% l'anno, volatilità 20,5%, discesa −30,2%, 5 anni su 5 | quasi: corretti 0,47 e 0,76 con 52 prove; costruzioni, nel paper come informazione |
 | 29 | M8: il modello di M7 con l'obiettivo «di quanto la moneta fa meglio della media» invece del rango (`VENTINOVESIMA.md`) | 1 | Sharpe 1,21 dal 2022 (M7 1,25 sugli stessi anni), +31,3% l'anno, volatilità 25,9%, discesa −27%, 5 anni su 5; correlazione con M7 solo 0,47 | no: corretto 0,12 con 53 prove; non meglio di M7, non nel paper |
+| 30 | N3: short le monete appena quotate con l'uscita a +30%, per 30 giorni, sulle monete nuove di Gate.io non ancora su Binance (`TRENTESIMA.md`) | 1 a eventi | in calcolo | — |
 
 Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 = **53** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
@@ -114,10 +115,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 5. **Coppie di monete simili** (stessa famiglia, prezzi che si muovono insieme): quando si allontanano, scommettere che si
    riavvicinano, a ore.
 6. **Un regista**: un modello che ogni mese decide quanto capitale dare a F3, K1, M1 secondo come sono andate.
-7. **Le monete appena quotate con lo stop** (dalla prova 18, quindi **costruzione**: l'idea viene da quello che si è visto):
-   short le giovani ma con l'uscita se il prezzo sale del 30% dall'ingresso, con le candele a 1 ora. Sui dati del passato il
-   risultato è già in parte noto (senza le code la media è −1,6% a settimana), quindi conta solo sui dati nuovi o su un
-   altro exchange (le monete quotate solo su Bybit).
+7. ~~Le monete appena quotate con lo stop~~ → prova 30, su Gate.io (Bybit non è raggiungibile da qui).
 8. ~~M1 con più semi~~ → fatto (`programma6/semi_M1.json`, descrittivo): sei semi danno Sharpe da 0,79 a 1,43, media 1,10.
 9. ~~Il funding che tocca il tetto~~ → prova 26 (come evento).
 10. ~~Il volume a pronti contro quello del perpetuo~~ → prova 20.
