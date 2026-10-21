@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 58 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 59 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -59,8 +59,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 32 | La regola N3 sul passato di Binance, senza cambiare niente (riserva: l'idea dell'uscita era nata su questi dati) (`TRENTADUESIMA.md`) | 1 a eventi | **+4,29% a evento** su 613 monete nuove (207 settimane), p 0,0017, mediana +5,6%, 54% vinti, metà +6,9% e +1,7%, senza i 5 migliori +3,6%; per anno 2021 −1,5%, 2022 +2,3%, 2023 +6,7%, 2024 +7,7%, 2025 +4,6%, 2026 −0,6%; senza l'uscita +4,4% ma p 0,059 | **passa l'esame scritto**, con la riserva (dati non vergini per l'idea dell'uscita) e più debole nel 2026; nel paper in avanti |
 | 33 | Le due strategie di Binance in un portafoglio: N3 con il 5% a operazione (al massimo 20) e F5 + N3 a rischio uguale (`TRENTATREESIMA.md`) | 2 | **N3 a portafoglio: Sharpe 0,62**, +20,9% l'anno, volatilità 33,8%, discesa −47%, 2021 −10%, 2026 −12,5%; F5 + N3 1,45 (F5 da sola 1,93); correlazione 0,16 | no: positiva per operazione non vuol dire buona da tenere: le monete nuove arrivano a ondate e le perdite si sommano |
 | 34 | Indicatori tecnici con il contesto del funding: rottura di Donchian a 4 ore con stop e uscita mobile, senza filtro (T1) e con il filtro del funding (T2) (`TRENTAQUATTRESIMA.md`) | 2 | T1 −0,197% a operazione su 34.397 (long −0,57%, short +0,19%); T2 +0,014% su 15.406 (long −0,31%, short +0,32%), p 0,48; tenuta media 72 ore; portafogli negativi | no: il filtro del funding aggiunge +0,21% a operazione ma non basta; seguire le rotture verso l'alto perde |
+| 35 | Contro gli eccessi: RSI a 4 ore sopra 70 con funding alto → short, sotto 30 con funding basso → long, stop 2 ATR, obiettivo RSI a 50 (`TRENTACINQUESIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 = **58** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 = **59** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
