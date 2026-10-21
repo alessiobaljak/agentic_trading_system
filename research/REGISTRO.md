@@ -138,5 +138,6 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 13. ~~M7 e M8 insieme~~ → prova 31.
 14. ~~Gli indicatori a 1 giorno nel verso del funding~~ → prova 36 (no: Sharpe 0,40).
 15. ~~L'arrivo su Coinbase come conferma di U1~~ → non si fa: U1 non regge (prova 41). Le date di Coinbase sono scaricate (`scarico_coinbase.py`) se serviranno.
+16. **La paura nelle opzioni** (Deribit, indice di volatilità implicita DVOL dal 2021-04, raggiungibile da qui): quando la volatilità implicita è molto sopra quella realizzata chi vende protezione guadagna, e chi compra Bitcoin dopo i picchi di paura anche (premio per il rischio di varianza, studi pubblicati per le borse e per il Bitcoin). Solo Bitcoin ed Ether. Da fare dopo il regista, con le regole scritte prima.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
