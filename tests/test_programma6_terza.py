@@ -470,3 +470,19 @@ def test_quarantunesima_eventi_e_operazione():
     c.loc[1050, "high"] = 131.0
     o = qu.operazione(c, cb, zero, zero, 1010, 168, True)
     assert o["fermata"] and o["uscita_h"] == 1050 and o["r"] < -0.30
+
+
+def test_quarantaduesima_esposizione():
+    import pandas as pd
+    from research.programma6 import quarantaduesima as qd
+    netto = pd.Series(np.r_[np.tile([0.02, -0.02], 10), np.tile([0.08, -0.08], 10)], index=np.arange(40) * 7)
+    w = qd.esposizione(netto)
+    assert (w.iloc[:8] == 1.0).all()                          # meno di 8 settimane: esposizione piena
+    assert w.iloc[12] == pytest.approx(min(2.0, 0.30 / (netto.iloc[:12].std() * np.sqrt(52))))   # solo le settimane prima
+    assert w.iloc[-1] < 0.6                                   # settimane agitate: si tiene meno
+    f5 = pd.DataFrame({"netto": netto, "netto_doppio": netto - 0.001, "lordo": netto, "spese": 0.0, "funding": 0.0,
+                       "giro": 1.0, "long": 0.0, "short": 0.0, "monete": 40}, index=netto.index)
+    g = qd.gestita(f5)
+    k = 25
+    atteso = w.iloc[k] * netto.iloc[k] - abs(w.iloc[k] - w.iloc[k - 1]) * 2 * 0.0007
+    assert g["netto"].iloc[k] == pytest.approx(atteso)

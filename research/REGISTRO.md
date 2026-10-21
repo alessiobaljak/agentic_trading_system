@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 64 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 65 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -66,8 +66,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 39 | T8: la tendenza del giorno (media dei 50 giorni) e il ritracciamento a 4 ore (RSI 35/65), con il funding, stop 2 ATR e uscita mobile 3 ATR (`TRENTANOVESIMA.md`) | 1 | +0,149% a operazione su 8.720, p 0,32; long −0,46%, short +0,53%; senza le 5 migliori +0,03%; portafoglio Sharpe −0,07 | no |
 | 40 | Le coppie di monete che si allontanano: z del rapporto a 1 giorno, entrata a 2, uscita a 0,5, rottura a 4, al massimo 20 giorni (`QUARANTESIMA.md`) | 1 | +0,58% a operazione su 874, p 0,21; in calo ogni anno (2021 +3,9%, 2025 −1,1%); senza le 5 migliori −0,23%; portafoglio Sharpe 0,34, corretto 0,00 | no |
 | 41 | U1: lo short dopo l'arrivo su Upbit (mercato in won) delle monete che hanno già il perpetuo su Binance, 2 ore dopo la prima ora, per 7 giorni, contro il Bitcoin, uscita a +30% (`QUARANTUNESIMA.md`) | 1 a eventi + 1 portafoglio | in calcolo | — |
+| 42 | F6: F5 con l'esposizione secondo l'agitazione delle 13 settimane prima (0,30/σ, al massimo 2; Moreira e Muir 2017) (`QUARANTADUESIMA.md`) | 1 | in calcolo (dopo la 41) | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 = **64** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **65** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
