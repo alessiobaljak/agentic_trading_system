@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 54 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 56 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -57,8 +57,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 30 | **N3: short le monete appena quotate con l'uscita a +30%**, per 30 giorni, sulle monete nuove di Gate.io non ancora su Binance (`TRENTESIMA.md`) | 1 a eventi | **+7,59% a evento** (449 monete, 139 settimane), p 0,0001, mediana +6,5%, 53% vinti, positiva in ogni anno 2023-2026 e nelle due metà, senza i 5 migliori +6,5%; l'uscita scatta nel 44% dei casi; senza l'uscita +11,2% ma con perdite enormi su poche monete. Primo calcolo (+6,23% su 631) con dentro azioni, fondi, indici e metalli di Gate.io: corretto con il tipo dei contratti (`tipi_gate.py`) | **VALIDA**: passa l'esame scritto su dati mai guardati, anche contando tutte e 6 le prove a eventi; nel paper |
 | 31 | M7 + M8 a rischio uguale (costruzione) (`TRENTUNESIMA.md`) | 1 | Sharpe **1,39** dal 2022 (M7 da solo 1,25), +35,4% l'anno, volatilità 25,5%, discesa −31%, 5 anni su 5 | no: corretto 0,20 con 54 prove; costruzione, nel paper come informazione |
 | 32 | La regola N3 sul passato di Binance, senza cambiare niente (riserva: l'idea dell'uscita era nata su questi dati) (`TRENTADUESIMA.md`) | 1 a eventi | **+4,29% a evento** su 613 monete nuove (207 settimane), p 0,0017, mediana +5,6%, 54% vinti, metà +6,9% e +1,7%, senza i 5 migliori +3,6%; per anno 2021 −1,5%, 2022 +2,3%, 2023 +6,7%, 2024 +7,7%, 2025 +4,6%, 2026 −0,6%; senza l'uscita +4,4% ma p 0,059 | **passa l'esame scritto**, con la riserva (dati non vergini per l'idea dell'uscita) e più debole nel 2026; nel paper in avanti |
+| 33 | Le due strategie di Binance in un portafoglio: N3 con il 5% a operazione (al massimo 20) e F5 + N3 a rischio uguale (`TRENTATREESIMA.md`) | 2 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 = **54** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 = **56** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
