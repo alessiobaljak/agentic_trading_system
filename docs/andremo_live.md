@@ -4352,3 +4352,8 @@ poco. Come per gli annunci di Binance, il movimento è tutto nella prima reazion
 **Quarantaduesima prova** (`QUARANTADUESIMA.md`): F5 che tiene meno nelle settimane agitate (metodo pubblicato): Sharpe 1,71
 contro 1,93. Capito: per il funding fra monete le settimane agitate sono le migliori (2021: F5 +122,6%, la versione prudente
 +65,9%); F5 resta com'è. Nel conto: 65 prove.
+**Quarantatreesima prova** (`QUARANTATREESIMA.md`): entrare 5 minuti dopo l'annuncio di Binance, come farebbe il bot, per
+24 ore. Long dopo la quotazione a pronti di una moneta che ha già il perpetuo (61 annunci mai guardati): +0,03% a evento;
+la moneta era già salita del 13,1% nei primi 5 minuti. Short dopo monitoraggio o rimozione (150 eventi della prova 21, con
+la riserva): +3,08%, p 0,024 (serviva 0,0011); già fatto −8,75% nei 5 minuti. Capito: le notizie si prezzano in pochi
+minuti; per prenderle bisogna essere più veloci dei programmi professionali, e non lo siamo.

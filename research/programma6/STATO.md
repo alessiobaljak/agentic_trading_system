@@ -50,6 +50,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 40 | Coppie di monete che si allontanano (z del rapporto a 1 giorno, entrata a 2, uscita a 0,5) | `QUARANTESIMA.md` | `RISULTATI_QUARANTESIMA.md` | 1 | non valida: +0,58% a operazione, p 0,21; 2021 +3,9%, 2025 −1,1%; portafoglio Sharpe 0,34 |
 | 41 | U1: short dopo l'arrivo su Upbit delle monete che hanno già il perpetuo | `QUARANTUNESIMA.md` | `RISULTATI_QUARANTUNESIMA.md` | 1 a eventi + 1 | non valida: +2,96% a evento, p 0,070; 2025 +0,1% su 43 |
 | 42 | F6: F5 con l'esposizione secondo l'agitazione (Moreira e Muir) | `QUARANTADUESIMA.md` | `RISULTATI_QUARANTADUESIMA.md` | 1 | non valida: Sharpe 1,71 contro 1,93 di F5 |
+| 43 | Q1 long 5 minuti dopo la quotazione a pronti, Q2 short 5 minuti dopo monitoraggio o rimozione, per 24 ore | `QUARANTATREESIMA.md` | `RISULTATI_QUARANTATREESIMA.md` | 2 a eventi + 2 | non valide: Q1 +0,03% (p 0,51), Q2 +3,08% (p 0,024) |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -175,6 +176,12 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    Moreira e Muir, che funziona sui fattori di borsa) porta lo Sharpe da 1,93 a 1,71; nel 2021, l'anno più agitato, F5 fa
    +122,6% e la versione prudente +65,9%. Il funding fra monete guadagna di più quando le monete sono più diverse fra loro,
    cioè proprio nei periodi agitati: ridurre lì vuol dire tagliare il guadagno, non il rischio.
+28. **Le notizie di Binance si prezzano in pochi minuti** (prova 43, candele a 1 minuto): dopo l'annuncio di una quotazione
+   a pronti la moneta sale del 13,1% nei primi 5 minuti (mediana 7,3%), poi nelle 24 ore dopo non guadagna niente (mediana
+   −5%: torna un po' indietro); dopo un annuncio cattivo scende dell'8,75% nei primi 5 minuti e poi ancora del 3% circa, non
+   abbastanza per passare l'esame. Nell'ora prima dell'annuncio quasi niente (+1,0% e +0,2%): l'ora di pubblicazione è
+   giusta. Per prendere il movimento bisogna essere più veloci di 1 minuto, contro programmi professionali che leggono gli
+   annunci in millisecondi: non è un vantaggio che possiamo avere.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
