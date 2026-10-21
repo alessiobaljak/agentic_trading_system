@@ -4364,3 +4364,9 @@ scelgono idee molto probabili e conferme su dati non usati; la prova pulita di F
 delle stablecoin (dati DefiLlama): Sharpe 0,66 contro 0,38 del Bitcoin tenuto, discesa −58% invece di −77%, ma non distinguibile
 dal caso. Capito: il denaro nuovo in stablecoin dice qualcosa (nel 2022 calava), ma non abbastanza da farne una strategia. Nel
 conto: 68 prove.
+Il proprietario (21 ottobre, sera): «mi spieghi cosa è lo sharpe 0,95 [...] perché non provi ad usare diversi indicatori per
+capire quando entrare?». **Quarantacinquesima prova** (`QUARANTACINQUESIMA.md`): gli indicatori per il momento d'entrata
+delle strategie che funzionano. F5 con le entrate solo se la tendenza dei 20 giorni è d'accordo: Sharpe 1,02 invece di 1,93
+(meno monete, a volte una sola per lato). N3 con l'entrata alla prima rottura verso il basso: +3,79% a operazione (N3 +4,29%),
+portafoglio Sharpe 0,88 invece di 0,62, ma p 0,0064 contro 0,001. Capito: F5 guadagna andando contro la tendenza, quindi un
+filtro di tendenza le toglie il guadagno; per N3 l'attesa aiuta poco. Nel conto: 70 prove.
