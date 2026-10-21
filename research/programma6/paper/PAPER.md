@@ -32,4 +32,6 @@ Periodo P: giorni dal 20 ottobre 2026 (A1), settimane dal 26 ottobre 2026 (F2, C
 
 **E4** (a eventi, dal 21 ottobre; si vedono quando esce il file mensile del funding): nessun evento ancora.
 
+**N3** (a eventi, monete quotate dal 21 ottobre; short a 7 giorni, uscita a +30% o dopo 30 giorni): nessun evento ancora.
+
 **Entrate nell'universo nelle ultime 4 settimane** (da controllare che siano monete): ARUSDT, GRASSUSDT, GTCUSDT, LSKUSDT, METUSDT, MINAUSDT, MOVRUSDT, MUBARAKUSDT, NILUSDT, ONEUSDT, PHAUSDT, QNTUSDT, QUSDT, SAGAUSDT, SUSDT, USUSDT, WUSDT, ZAMAUSDT.
