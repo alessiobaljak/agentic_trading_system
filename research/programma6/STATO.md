@@ -38,6 +38,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 28 | K2 (K1 con la banda, costruzione) e F5 + M7 + K2 a rischio uguale | `VENTOTTESIMA.md` | `RISULTATI_VENTOTTESIMA.md` | 2 | non valide (corretti 0,47 e 0,76 con 52 prove): K2 Sharpe 1,72 (K1 1,25), le tre insieme 2,11 con volatilità 20,5%, ogni anno 2022-2026 positivo. Nel paper come informazione |
 | 29 | M8: il modello di M7 allenato sul rendimento in più della media (tagliato all'1% e al 99%) invece del rango | `VENTINOVESIMA.md` | `RISULTATI_VENTINOVESIMA.md` | 1 | non valida (corretto 0,12 con 53 prove): Sharpe 1,21 contro 1,25 di M7; correlazione con M7 0,47 |
 | 30 | N3 su Gate.io: short a 7 giorni dalla quotazione contro il Bitcoin, uscita a +30% (candele a 1 ora) o dopo 30 giorni, monete nuove non ancora perpetuo su Binance | `TRENTESIMA.md` | `RISULTATI_TRENTESIMA.md` | 1 a eventi | **VALIDA**: +7,59% a evento su 449 monete, p 0,0001, ogni anno positivo (dopo aver tolto 182 contratti che non erano monete: azioni, fondi, indici, metalli). Nel paper (su Gate e, con la stessa regola, sulle nuove di Binance) |
+| 31 | M7 + M8 a rischio uguale (costruzione) | `TRENTUNESIMA.md` | `RISULTATI_TRENTUNESIMA.md` | 1 | non valida (corretto 0,20 con 54 prove): Sharpe 1,39 contro 1,25 di M7. Nel paper come informazione |
 
 ## Il paper (dal 20 ottobre 2026)
 

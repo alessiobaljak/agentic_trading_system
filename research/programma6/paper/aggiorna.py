@@ -152,6 +152,15 @@ def f2_e_c1(pan: dict) -> dict:
     d7 = te.conto(vq.pesi_banda(np.where(np.isfinite(sigw), Pm6, np.nan), ps["U"], sigw), ps["R"], ps["F"], costo)
     d7.index = ps["lunedi"]
     out["M7"] = d7
+    # M8 (VENTINOVESIMA.md) per M7 + M8 (TRENTUNESIMA.md, costruzione, solo informazione): obiettivo il rendimento in piu'
+    from research.programma6 import ventinovesima as vn
+    Y8 = vn.rendimento_in_piu(ps["R"], ps["U"])
+    P8 = [vt.previsioni_seme(s, X, Y8, ps["U"], ps["lunedi"]) for s in vt.SEMI]
+    with np.errstate(all="ignore"):
+        Pm8 = np.where(ps["U"], vt.media_ranghi(P8, ps["U"]), np.nan)
+    d8 = te.conto(vq.pesi_banda(np.where(np.isfinite(sigw), Pm8, np.nan), ps["U"], sigw), ps["R"], ps["F"], costo)
+    d8.index = ps["lunedi"]
+    out["M8"] = d8
     wm = int(np.flatnonzero(np.isfinite(P).any(axis=1))[-1])
     out["M1_ultima"] = {"lunedi": sc.data(int(ps["lunedi"][wm])),
                         "long": {ps["simboli"][j]: round(float(Wm[wm, j]), 4) for j in np.flatnonzero(Wm[wm] > 0)},
@@ -256,6 +265,11 @@ def esegui(log=print) -> dict:
     f57 = f57[f57.index >= INIZIO_SETTIMANE]
     res["candidate"]["F5 + M7 a rischio uguale (informazione)"] = {
         "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in f57.items()}, **_riassunto(f57, 52)}
+    # M7 + M8 a rischio uguale (TRENTUNESIMA.md, costruzione, solo informazione)
+    m78 = qd.combina({"M7": w["M7"], "M8": w["M8"]})["netto"]
+    m78 = m78[m78.index >= INIZIO_SETTIMANE]
+    res["candidate"]["M7 + M8 a rischio uguale (informazione)"] = {
+        "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in m78.items()}, **_riassunto(m78, 52)}
     # F5 + M7 + K2 a rischio uguale (VENTOTTESIMA.md, costruzione, solo informazione)
     f572 = qd.combina({"F5": w["F5"], "M7": w["M7"], "K2": w["K2"]})["netto"]
     f572 = f572[f572.index >= INIZIO_SETTIMANE]

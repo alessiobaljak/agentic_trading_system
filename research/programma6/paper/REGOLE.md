@@ -143,3 +143,8 @@ moneta (titolo con il simbolo, senza «TradFi» né «Pre-IPO»). Due misure in 
   (+3,8%). Con meno di 30 eventi a 52 settimane il verdetto si rimanda a 104.
 * Il calcolo in avanti si aggiunge al paper prima del primo esito possibile (un evento del 21 ottobre si chiude al più tardi
   il 27 novembre).
+
+## 12. M7 + M8 come informazione (21 ottobre 2026, mattina, prima della prima settimana misurata)
+
+La trentunesima prova (`research/programma6/TRENTUNESIMA.md`, costruzione) dà a M7 + M8 a rischio uguale Sharpe 1,39 dal 2022
+contro 1,25 di M7 da solo; Sharpe corretto 0,20 con 54 prove. Entra nel paper **come informazione**.
