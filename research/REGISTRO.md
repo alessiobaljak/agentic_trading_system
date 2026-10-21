@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 52 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 53 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -53,8 +53,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 26 | Il funding che tocca il tetto: long dopo il passaggio a un intervallo più corto con funding negativo (E3), short con funding positivo (E4) (`VENTISEIESIMA.md`) | 2 a eventi | **E4: +11,67% a evento in 7 giorni** (62 eventi, 61 monete, 35 settimane), 79% vinti, mediana +15,4%, senza i 5 migliori +7,5%, ogni anno 2023-2026 positivo, quasi tutto dal prezzo (+11,9%, funding +0,2%); p 0,0047. E3: +13,9% ma 38% vinti, senza i 5 migliori +1,7%, p 0,0166 | **E4 passa l'esame scritto** (p ≤ 0,005 per la coppia); contando tutte e 4 le prove a eventi del programma la soglia sarebbe 0,0025 e non la passerebbe: promettente, non dimostrata; nel paper. E3 no |
 | 27 | E4 su un altro exchange: la conferma su Gate.io, eventi indipendenti da quelli di Binance (`VENTISETTESIMA.md`) | 1 di conferma | come scritta: 456 eventi, −4,24% a evento, p 0,67; ma 289 eventi sono cambi d'intervallo fatti da Gate in blocco in due giorni. Senza i giorni in blocco (calcolo fatto dopo, descrittivo): 114 eventi, +6,00%, mediana +7,9%, 75% vinti, p 0,096. Primo calcolo con un errore di lettura (secondi di scarto, corretto) | **non confermata**: Gate non conferma e non smentisce; E4 resta nel paper con la nota |
 | 28 | K2: K1 con la banda (costruzione); F5 + M7 + K2 a rischio uguale (`VENTOTTESIMA.md`) | 2 | K2 **1,72** dal 2022 (K1 1,25), spese 6,8% invece di 10,0%, 5 anni su 5; **F5 + M7 + K2 2,11**, +43,2% l'anno, volatilità 20,5%, discesa −30,2%, 5 anni su 5 | quasi: corretti 0,47 e 0,76 con 52 prove; costruzioni, nel paper come informazione |
+| 29 | M8: il modello di M7 con l'obiettivo «di quanto la moneta fa meglio della media» invece del rango (`VENTINOVESIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 = **52** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 = **53** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
@@ -107,7 +108,8 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    spese ridotte a un terzo (stima) farebbe circa +18% l'anno, Sharpe circa 0,4: non vale una prova.
 2. ~~M1 su più orizzonti~~: ogni giorno → prova 16 (no: i costi); ogni 2 settimane non serve più: la banda (prove 24-25)
    toglie il giro in modo migliore.
-3. **M1 con obiettivo diverso**: il rendimento in più della moneta invece del rango, e un modello che unisce M1 e M2.
+3. ~~M1 con obiettivo diverso~~ → prova 29 (il modello che unisce M1 e M2 non si fa: M2, lineare, fa 0,62 e la gara dei
+   modelli della prova 17 lo sceglie solo 9 volte su 63).
 4. ~~Il premio del perpetuo sullo spot fra monete~~ → prova 19.
 5. **Coppie di monete simili** (stessa famiglia, prezzi che si muovono insieme): quando si allontanano, scommettere che si
    riavvicinano, a ore.
