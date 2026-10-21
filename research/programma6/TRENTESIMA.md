@@ -33,3 +33,17 @@ Per evento, come le prove 21 e 26 (`ventunesima.esame`): media sopra zero con **
 dati nuovi), con il bootstrap che rimescola le settimane d'ingresso; positiva nelle due metà degli eventi e senza i 5 eventi
 migliori. Si riportano anche: quante volte scatta l'uscita di protezione, lo stesso senza l'uscita (solo per capire), e per
 anno. Una prova a eventi, nel registro.
+
+## 4. Correzione dopo il primo calcolo: i contratti che non sono monete (21 ottobre 2026, mattina)
+
+Il primo calcolo (+6,23% a evento su 631, p 0,0002) conteneva contratti di Gate.io che non sono monete: azioni (AAPLX, ABBV,
+ABNB, AMGN…), fondi (AGG, XLK, XLF, XLU, XLV), un indice (AUS200), metalli e materie prime (XCU, XAL, XTI…), azioni di Hong
+Kong (XIAOMIHKD, TENCENTHKD…) e una moneta stabile (USD1): la regola diceva «esclusi i contratti che non sono una moneta», ma
+li cercava con i nomi di Binance (`seconda.ESCLUSI`), che per Gate.io non bastano. Trovato preparando la misura in avanti, dopo
+aver visto il risultato. Correzione, secondo l'intenzione scritta nella sezione 2:
+
+* si tengono solo i contratti con il tipo vuoto nell'interfaccia pubblica di Gate.io (`contract_type`, `tipi_gate.py`): fuori
+  422 azioni, 18 indici, 13 metalli, 4 valute, 3 materie prime e 5 contratti non più trovati (vecchi nomi);
+* fuori le monete stabili (USDC, FDUSD, TUSD, BUSD, USDP, DAI, USD1, USDE, PYUSD, RLUSD, USDD, USDS, USDG, EURC, EURI, XUSD).
+
+L'esame resta quello della sezione 3. Il risultato del primo calcolo si legge come contaminato.

@@ -16,6 +16,7 @@ import pandas as pd
 from research.programma6 import annunci as an
 from research.programma6 import scarico_gate as sg
 from research.programma6 import seconda as sc
+from research.programma6 import tipi_gate as tg
 from research.programma6 import ventisettesima as vt
 from research.programma6 import ventunesima as vu
 
@@ -23,6 +24,9 @@ QUI = Path(__file__).parent
 RIS = QUI / "risultati_trentesima"
 ETA, GIORNI, STOP, SCARTO_STOP, P_SOGLIA = 7, 30, 0.30, 0.01, 0.01
 DA, A = sc.giorno(2023, 2, 1), sc.giorno(2026, 7, 31)
+# le monete stabili (TRENTESIMA.md, sezione 4)
+STABILI = ("USDC", "FDUSD", "TUSD", "BUSD", "USDP", "DAI", "USD1", "USDE", "PYUSD", "RLUSD", "USDD", "USDS", "USDG",
+           "EURC", "EURI", "XUSD")
 
 
 def _mese(g: int) -> str:
@@ -52,6 +56,7 @@ def candidati(pan: dict) -> list:
             primi[nome] = f
     ok = np.isfinite(pan["close"])
     primo_b = ok.argmax(axis=0) + pan["t0"]
+    tipi = tg.carica()
     out = []
     for nome, f in primi.items():
         if f.parent.name <= "202301" or nome == "BTC_USDT":
@@ -61,7 +66,7 @@ def candidati(pan: dict) -> list:
         if not (DA <= g0 <= A):
             continue
         sigla = nome.split("_")[0]
-        if f"{sigla}USDT" in sc.ESCLUSI:
+        if f"{sigla}USDT" in sc.ESCLUSI or not tg.moneta(nome, tipi) or sigla in STABILI:
             continue
         p = an.perpetuo(sigla, pan["simboli"])
         if p and primo_b[pan["simboli"].index(p)] <= g0 + ETA:
