@@ -46,6 +46,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 36 | T5: tendenza a 1 giorno (9 canali di Donchian, long e short) solo nel verso del funding | `TRENTASEIESIMA.md` | `RISULTATI_TRENTASEIESIMA.md` | 1 | non valida: Sharpe 0,40 (senza filtro 0,15), +3,7% l'anno |
 | 37 | T6: T2 con l'entrata a ordine limite | `TRENTASETTESIMA.md` | `RISULTATI_TRENTASETTESIMA.md` | 1 | non valida: +0,05% a operazione (99% eseguite); long −0,28%, short +0,36% |
 | 38 | T7: solo short delle rotture verso il basso con il funding alto, conferma sulle 101-200 | `TRENTOTTESIMA.md` | `RISULTATI_TRENTOTTESIMA.md` | 1 di conferma | non confermata: +0,14% a operazione, p 0,40, 2026 −1,1% |
+| 39 | T8: tendenza del giorno (media 50 giorni) e ritracciamento a 4 ore (RSI 35/65) con il funding | `TRENTANOVESIMA.md` | `RISULTATI_TRENTANOVESIMA.md` | 1 | non valida: +0,15% a operazione, p 0,32; long −0,46%, short +0,53% |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -154,6 +155,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    Il funding funziona sulle settimane e fra monete, non come segnale d'entrata a ore: chi paga troppo perde nel tempo, ma
    l'ora giusta per entrare non la dice né lui né l'indicatore. A 1 giorno (prova 36) la tendenza nel verso del funding fa 0,40 (senza
    filtro 0,15): il funding migliora sempre l'indicatore, ma l'indicatore porta poco.
+24. **In tutte le prove a 4 ore lo short guadagna e il long perde, qualunque sia l'indicatore** (prove 34, 37, 39:
+   short +0,19%, +0,36%, +0,53% a operazione; long −0,57%, −0,28%, −0,46%). Non è il segnale: dal 2021 la maggior parte delle
+   altcoin è scesa, e chi le vendeva guadagnava comunque (in più incassa il funding). È l'andamento del mercato di questi anni,
+   non un vantaggio su cui contare; sulle monete 101-200 (prova 38) non si conferma.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

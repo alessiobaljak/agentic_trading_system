@@ -4338,3 +4338,6 @@ contro; il vantaggio del funding vive sulle settimane. La prossima idea: gli ind
 rottura a 4 ore con l'entrata a limite +0,05% a operazione (99% eseguite); lo short delle rotture verso il basso dove i long
 pagano, visto in tre prove sulle 100, non si conferma sulle 101-200 (+0,14%, p 0,40). Capito: gli indicatori a ore e a giorni,
 anche con il funding e con ordini più economici, non battono il caso dopo i costi.
+**Trentanovesima prova** (`TRENTANOVESIMA.md`): tendenza del giorno e ritracciamento a 4 ore con il funding: +0,15% a
+operazione, p 0,32. Capito: in tutte le prove a 4 ore lo short guadagna e il long perde, con qualunque indicatore: è la
+discesa delle altcoin dal 2021 (più il funding incassato), non un segnale.

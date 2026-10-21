@@ -63,7 +63,7 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 36 | T5: la tendenza a 1 giorno (regola pubblicata, long e short) solo nel verso del funding, universo delle 100 (`TRENTASEIESIMA.md`) | 1 | Sharpe 0,40, +3,7% l'anno, volatilità 9,4%, 5 anni su 6; senza il filtro 0,15 | no: il filtro migliora (terza volta), l'indicatore porta poco |
 | 37 | T6: la rottura a 4 ore con il funding, entrando con l'ordine limite (`TRENTASETTESIMA.md`) | 1 | entrate eseguite 99%; +0,048% a operazione su 15.391 (T2 a mercato +0,014%), p 0,43; long −0,28%, short +0,36% | no: l'ordine limite risparmia poco |
 | 38 | T7: solo lo short delle rotture verso il basso dove i long pagano, conferma sulle monete 101-200 (`TRENTOTTESIMA.md`) | 1 di conferma | +0,136% a operazione su 5.499, p 0,40; metà +0,44% e −0,16%; 2026 −1,1%; portafoglio Sharpe −0,61 | **non confermata** |
-| 39 | T8: la tendenza del giorno (media dei 50 giorni) e il ritracciamento a 4 ore (RSI 35/65), con il funding, stop 2 ATR e uscita mobile 3 ATR (`TRENTANOVESIMA.md`) | 1 | in calcolo | — |
+| 39 | T8: la tendenza del giorno (media dei 50 giorni) e il ritracciamento a 4 ore (RSI 35/65), con il funding, stop 2 ATR e uscita mobile 3 ATR (`TRENTANOVESIMA.md`) | 1 | +0,149% a operazione su 8.720, p 0,32; long −0,46%, short +0,53%; senza le 5 migliori +0,03%; portafoglio Sharpe −0,07 | no |
 
 Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 = **62** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
