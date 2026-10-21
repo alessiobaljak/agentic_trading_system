@@ -4307,7 +4307,8 @@ media» invece che sull'ordine delle monete: Sharpe 1,21 contro 1,25, quindi non
 solo 0,47. Capito: l'obiettivo dell'allenamento cambia molto quali monete il modello sceglie, non quanto rende.
 **Trentesima prova** (`TRENTESIMA.md`, 21 ottobre): **la seconda prova che passa l'esame scritto, e la più netta**. Le
 monete appena quotate su Gate.io (non ancora su Binance, dati mai guardati): short a 7 giorni dalla quotazione contro il
-Bitcoin, uscita se salgono del 30% (candele a 1 ora), altrimenti dopo 30 giorni: +6,23% a evento su 631 monete dal 2023,
-p 0,0002, ogni anno positivo, a costi tripli +5,4%. Senza l'uscita la media sarebbe +9,3% ma con perdite fino a −549% su
-una sola moneta. Capito: la lezione della prova 18 (le nuove scendono ma poche esplodono) regge su un altro exchange, e
+Bitcoin, uscita se salgono del 30% (candele a 1 ora), altrimenti dopo 30 giorni: **+7,59% a evento su 449 monete dal 2023,
+p 0,0001**, ogni anno positivo. Il primo calcolo (+6,23% su 631) aveva dentro azioni, fondi, indici e metalli quotati
+su Gate.io come perpetui: trovati preparando la misura in avanti, tolti con il tipo del contratto dall'interfaccia
+pubblica di Gate.io. Senza l'uscita la media sarebbe +11,2% ma con perdite enormi su poche monete. Capito: la lezione della prova 18 (le nuove scendono ma poche esplodono) regge su un altro exchange, e
 l'uscita di protezione è quello che la rende usabile. Nel paper in avanti su Gate.io e sulle nuove di Binance.

@@ -4,9 +4,9 @@ Regole in `TRENTESIMA.md` (scritte prima). Short all'età di 7 giorni, long il B
 
 | Versione | Eventi (settimane) | Media a evento | Intervallo | p | Mediana | Vinti | Prima metà, seconda metà | Senza i 5 migliori | Esito |
 |---|---|---|---|---|---|---|---|---|---|
-| con l'uscita a +30% (la regola) | 631 (149) | +6.23% | +3.08%; +9.48% | 0.0002 | +3.97% | 54% | +7.33%, +5.14% | +5.46% | VALIDA |
-| senza l'uscita (per capire) | 631 (149) | +9.27% | +3.53%; +14.98% | 0.0011 | +16.07% | 71% | +10.24%, +8.30% | +8.51% | — |
+| con l'uscita a +30% (la regola) | 449 (139) | +7.59% | +3.58%; +11.66% | 0.0001 | +6.53% | 53% | +7.56%, +7.62% | +6.53% | VALIDA |
+| senza l'uscita (per capire) | 449 (139) | +11.20% | +3.22%; +18.58% | 0.0034 | +24.32% | 74% | +5.94%, +16.43% | +10.16% | — |
 
-L'uscita di protezione scatta nel 35% degli eventi.
+L'uscita di protezione scatta nel 44% degli eventi.
 
-**Per anno (con l'uscita)**: 2023 +13.64% (76), 2024 +5.34% (220), 2025 +7.67% (143), 2026 +3.25% (192)
+**Per anno (con l'uscita)**: 2023 +13.48% (74), 2024 +5.49% (216), 2025 +8.40% (125), 2026 +5.12% (34)

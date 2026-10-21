@@ -128,8 +128,10 @@ corretti 0,47 e 0,76 con 52 prove. Come scritto nella sezione 4 di quelle regole
 ## 11. N3 come candidata a eventi (21 ottobre 2026, regola fissata prima di ogni evento del periodo P)
 
 La trentesima prova (`research/programma6/TRENTESIMA.md`) passa l'esame scritto su dati mai guardati (Gate.io): short a 7
-giorni dalla quotazione, long il Bitcoin, uscita a +30% (candele a 1 ora, 1% di scarto) o dopo 30 giorni: +6,23% a evento su
-631 monete dal 2023, p 0,0002. Due misure in avanti, con la stessa regola:
+giorni dalla quotazione, long il Bitcoin, uscita a +30% (candele a 1 ora, 1% di scarto) o dopo 30 giorni: +7,59% a evento su
+449 monete dal 2023, p 0,0001 (con la correzione dei contratti che non sono monete, `TRENTESIMA.md` sezione 4). Solo
+monete: su Gate.io il tipo del contratto vuoto (`tipi_gate.py`), su Binance i contratti lanciati con un annuncio di
+moneta (titolo con il simbolo, senza «TradFi» né «Pre-IPO»). Due misure in avanti, con la stessa regola:
 
 * **N3-Gate**: le monete nuove di Gate.io non ancora perpetuo su Binance, con la **prima candela dal 21 ottobre 2026**, dai
   file mensili dell'archivio di Gate.io (si vedono quando esce il file del mese).
@@ -138,6 +140,6 @@ giorni dalla quotazione, long il Bitcoin, uscita a +30% (candele a 1 ora, 1% di 
   dell'uscita viene dalla prova 18 sugli stessi dati): per questo vale solo in avanti.
 * **Verdetto** a 52 e 104 settimane, mai prima, per ognuna: media degli eventi del periodo P sopra zero con **p ≤ 0,025** a
   una coda (bootstrap sulle settimane), positiva senza il migliore evento, e non sotto la metà della media sul passato
-  (+3,1%). Con meno di 30 eventi a 52 settimane il verdetto si rimanda a 104.
+  (+3,8%). Con meno di 30 eventi a 52 settimane il verdetto si rimanda a 104.
 * Il calcolo in avanti si aggiunge al paper prima del primo esito possibile (un evento del 21 ottobre si chiude al più tardi
   il 27 novembre).
