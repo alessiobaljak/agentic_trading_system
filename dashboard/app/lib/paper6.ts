@@ -36,6 +36,8 @@ export interface DocPaper6 {
   strategie?: StrategiaPaper6[] | null;
   eventi_n3?: EventoN3[] | null;
   eventi_e4?: { simbolo?: string | null; data?: string | null; r7?: number | null }[] | null;
+  settimana_in_corso?: Record<string, { lunedi?: string | null; fino_al?: string | null; netto_senza_costi?: number | null }> | null;
+  passato?: Record<string, { mese?: string | null; valore?: number | null }[]> | null;
 }
 
 export interface StrategiaPaper6 {

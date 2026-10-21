@@ -38,3 +38,11 @@ def test_documento_strategie_ed_eventi():
     assert d["eventi_n3"][0]["simbolo"] == "XYZUSDT" and d["eventi_n3"][0]["r"] is None
     assert d["eventi_e4"] == [{"simbolo": "ABCUSDT", "data": "2026-10-22", "r7": 0.05}]
     assert len(d["strategie"]) == 3 and "N3" in d["strategie"][0]["nome"]
+
+
+def test_documento_passato_e_settimana():
+    paper = {"passato": {"F5": [["2021-01", 104.2], ["2021-02", 110.0]]},
+             "settimana_in_corso": {"F5": {"lunedi": "2026-10-19", "fino_al": "2026-10-20", "netto_senza_costi": 0.004}}}
+    d = documento(paper, adesso=1.0)
+    assert d["passato"]["F5"] == [{"mese": "2021-01", "valore": 104.2}, {"mese": "2021-02", "valore": 110.0}]
+    assert d["settimana_in_corso"]["F5"]["netto_senza_costi"] == 0.004

@@ -193,6 +193,13 @@ def f2_e_c1(pan: dict) -> dict:
     prima = ps["lunedi"] - pan["t0"] < m
     ct_m = np.vstack([ct5[prima], np.where(np.isfinite(sig), -s7, np.nan)[None]])
     W5m = vq.pesi_banda(ct_m, np.vstack([ps["U"][prima], Um5]), np.vstack([sig5[prima], sig[None]]))[-1]
+    # la settimana in corso di F5 (solo informazione, senza costi): dall'apertura del lunedi' m all'ultima chiusura
+    ultimo_i = pan["close"].shape[0] - 1
+    with np.errstate(all="ignore"):
+        r_sett = np.nan_to_num(pan["close"][ultimo_i] / pan["open"][m] - 1) if m <= ultimo_i else np.zeros(len(W5m))
+    f_sett = pan["funding"][m: ultimo_i + 1].sum(axis=0) if m <= ultimo_i else np.zeros(len(W5m))
+    out["F5_settimana"] = {"lunedi": sc.data(m + pan["t0"]), "fino_al": sc.data(ultimo_i + pan["t0"]),
+                           "netto_senza_costi": float(W5m @ r_sett - W5m @ f_sett) if m <= ultimo_i else None}
     out["F5_adesso"] = {"lunedi": sc.data(m + pan["t0"]),
                         "long": {pan["simboli"][j]: round(float(W5m[j]), 4) for j in np.flatnonzero(W5m > 0)},
                         "short": {pan["simboli"][j]: round(float(W5m[j]), 4) for j in np.flatnonzero(W5m < 0)}}
@@ -294,6 +301,16 @@ def esegui(log=print) -> dict:
     res["adesso"] = {"F3": w["F3_adesso"], "F5": w["F5_adesso"], "K1": w["K1_adesso"], "M1": w["M1_ultima"], "F2": w["F2_adesso"],
                      "C1": w["C1_ultima"], "A1": a1_adesso}
     res["nuove_nell_universo"] = w["nuove"]
+    res["settimana_in_corso"] = {"F5": w["F5_settimana"]}
+    # come sarebbe andata sul passato (non e' il paper): 100 investiti, valore a fine mese
+    def _crescita(x: pd.Series, da: int) -> list:
+        x = x[x.index >= da]
+        v = 100 * (1 + x).cumprod()
+        mesi = pd.Series(v.to_numpy(), index=pd.to_datetime(v.index.to_numpy() * 86400, unit="s")).resample("ME").last().dropna()
+        return [[d.strftime("%Y-%m"), round(float(y), 2)] for d, y in mesi.items()]
+    f572p = qd.combina({"F5": w["F5"], "M7": w["M7"], "K2": w["K2"]})["netto"]
+    res["passato"] = {"F5": _crescita(w["F5"]["netto"], sc.giorno(2021, 1, 4)),
+                      "F5 + M7 + K2": _crescita(f572p, sc.giorno(2022, 1, 3))}
     (QUI / "paper.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     (QUI / "PAPER.md").write_text(rapporto(res), encoding="utf-8")
     return res

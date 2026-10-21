@@ -89,6 +89,8 @@ def documento(paper: dict, adesso: float | None = None) -> dict:
                       for x in (paper.get("eventi_N3") or [])],
         "eventi_e4": [{"simbolo": x.get("simbolo"), "data": x.get("data"), "r7": x.get("r7")}
                       for x in (paper.get("eventi_E4") or [])],
+        "settimana_in_corso": paper.get("settimana_in_corso") or {},
+        "passato": {k: [{"mese": m, "valore": v} for m, v in serie] for k, serie in (paper.get("passato") or {}).items()},
     }
 
 
