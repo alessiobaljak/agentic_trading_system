@@ -4302,3 +4302,6 @@ scala di un contratto), trovato e corretto prima di registrare. Capito: E4 non �
 tre strategie insieme a rischio uguale (F5 + M7 + K2): Sharpe 2,11 dal 2022, volatilità 20,5%, ogni anno positivo; Sharpe
 corretto 0,76 con 52 prove. K2 è una costruzione: nel paper come informazione. Capito: la banda migliora ogni segnale
 settimanale che abbiamo; tre vantaggi poco legati fra loro insieme oscillano molto meno di ognuno da solo.
+**Ventinovesima prova** (`VENTINOVESIMA.md`, 21 ottobre): il modello allenato su «di quanto la moneta fa meglio della
+media» invece che sull'ordine delle monete: Sharpe 1,21 contro 1,25, quindi non meglio; ma i due modelli hanno correlazione
+solo 0,47. Capito: l'obiettivo dell'allenamento cambia molto quali monete il modello sceglie, non quanto rende.
