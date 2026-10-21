@@ -4305,3 +4305,9 @@ settimanale che abbiamo; tre vantaggi poco legati fra loro insieme oscillano mol
 **Ventinovesima prova** (`VENTINOVESIMA.md`, 21 ottobre): il modello allenato su «di quanto la moneta fa meglio della
 media» invece che sull'ordine delle monete: Sharpe 1,21 contro 1,25, quindi non meglio; ma i due modelli hanno correlazione
 solo 0,47. Capito: l'obiettivo dell'allenamento cambia molto quali monete il modello sceglie, non quanto rende.
+**Trentesima prova** (`TRENTESIMA.md`, 21 ottobre): **la seconda prova che passa l'esame scritto, e la più netta**. Le
+monete appena quotate su Gate.io (non ancora su Binance, dati mai guardati): short a 7 giorni dalla quotazione contro il
+Bitcoin, uscita se salgono del 30% (candele a 1 ora), altrimenti dopo 30 giorni: +6,23% a evento su 631 monete dal 2023,
+p 0,0002, ogni anno positivo, a costi tripli +5,4%. Senza l'uscita la media sarebbe +9,3% ma con perdite fino a −549% su
+una sola moneta. Capito: la lezione della prova 18 (le nuove scendono ma poche esplodono) regge su un altro exchange, e
+l'uscita di protezione è quello che la rende usabile. Nel paper in avanti su Gate.io e sulle nuove di Binance.

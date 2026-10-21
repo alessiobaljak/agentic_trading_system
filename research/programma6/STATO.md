@@ -37,6 +37,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 27 | Conferma di E4 su Gate.io (eventi senza un passaggio di Binance sulla stessa moneta nei 7 giorni) | `VENTISETTESIMA.md` | `RISULTATI_VENTISETTESIMA.md` | 1 di conferma | **non confermata**: come scritta −4,24% a evento su 456, p 0,67, ma 289 eventi sono cambi in blocco di Gate.io; senza quei giorni (descrittivo, dopo) 114 eventi, +6,00%, 75% vinti, p 0,096. Né conferma né smentita |
 | 28 | K2 (K1 con la banda, costruzione) e F5 + M7 + K2 a rischio uguale | `VENTOTTESIMA.md` | `RISULTATI_VENTOTTESIMA.md` | 2 | non valide (corretti 0,47 e 0,76 con 52 prove): K2 Sharpe 1,72 (K1 1,25), le tre insieme 2,11 con volatilità 20,5%, ogni anno 2022-2026 positivo. Nel paper come informazione |
 | 29 | M8: il modello di M7 allenato sul rendimento in più della media (tagliato all'1% e al 99%) invece del rango | `VENTINOVESIMA.md` | `RISULTATI_VENTINOVESIMA.md` | 1 | non valida (corretto 0,12 con 53 prove): Sharpe 1,21 contro 1,25 di M7; correlazione con M7 0,47 |
+| 30 | N3 su Gate.io: short a 7 giorni dalla quotazione contro il Bitcoin, uscita a +30% (candele a 1 ora) o dopo 30 giorni, monete nuove non ancora perpetuo su Binance | `TRENTESIMA.md` | `RISULTATI_TRENTESIMA.md` | 1 a eventi | **VALIDA**: +6,23% a evento su 631 monete, p 0,0002, ogni anno positivo, a costi tripli +5,4%; regge anche contando tutte le prove a eventi. Nel paper (su Gate e, con la stessa regola, sulle nuove di Binance) |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -131,6 +132,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    F3 all'estremo, come evento. 62 eventi sono pochi: lo dirà il paper. Su Gate.io (prova 27) non si conferma: lì molti cambi
    d'intervallo sono decisioni in blocco dell'exchange; senza quelli, stesso verso (+6% a evento, 75% vinti) ma non
    abbastanza (p 0,096).
+21. **Le monete appena quotate scendono, e con l'uscita di protezione lo short regge** (prova 30, su Gate.io, su monete mai
+   guardate): short a 7 giorni dalla quotazione, uscita a +30%, fa +6,2% a evento su 631 monete (p 0,0002), ogni anno dal
+   2023. Senza l'uscita la media è più alta ma poche esplosioni (fino a −549%) rendono il rischio inaccettabile: l'uscita
+   costa 3 punti di media e toglie le code. È la lezione della prova 18 messa alla prova sui dati di un altro exchange.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

@@ -124,3 +124,20 @@ dopo, descrittivo) +6,00% a evento, 75% vinti, p 0,096. E4 resta nel paper con l
 La ventottesima prova (`research/programma6/VENTOTTESIMA.md`) dà dal 2022: K2 (K1 con la banda, **costruzione** come K1)
 Sharpe 1,72 contro 1,25 di K1; F5 + M7 + K2 a rischio uguale Sharpe 2,11, volatilità 20,5%, ogni anno positivo; Sharpe
 corretti 0,47 e 0,76 con 52 prove. Come scritto nella sezione 4 di quelle regole, entrano nel paper **come informazione**.
+
+## 11. N3 come candidata a eventi (21 ottobre 2026, regola fissata prima di ogni evento del periodo P)
+
+La trentesima prova (`research/programma6/TRENTESIMA.md`) passa l'esame scritto su dati mai guardati (Gate.io): short a 7
+giorni dalla quotazione, long il Bitcoin, uscita a +30% (candele a 1 ora, 1% di scarto) o dopo 30 giorni: +6,23% a evento su
+631 monete dal 2023, p 0,0002. Due misure in avanti, con la stessa regola:
+
+* **N3-Gate**: le monete nuove di Gate.io non ancora perpetuo su Binance, con la **prima candela dal 21 ottobre 2026**, dai
+  file mensili dell'archivio di Gate.io (si vedono quando esce il file del mese).
+* **N3-Binance**: le monete nuove dei perpetui di Binance (esclusi i contratti che non sono una moneta), prima candela dal 21
+  ottobre 2026, dall'archivio di Binance (candele a 1 ora). Su Binance la regola sul passato sarebbe una costruzione (l'idea
+  dell'uscita viene dalla prova 18 sugli stessi dati): per questo vale solo in avanti.
+* **Verdetto** a 52 e 104 settimane, mai prima, per ognuna: media degli eventi del periodo P sopra zero con **p ≤ 0,025** a
+  una coda (bootstrap sulle settimane), positiva senza il migliore evento, e non sotto la metà della media sul passato
+  (+3,1%). Con meno di 30 eventi a 52 settimane il verdetto si rimanda a 104.
+* Il calcolo in avanti si aggiunge al paper prima del primo esito possibile (un evento del 21 ottobre si chiude al più tardi
+  il 27 novembre).
