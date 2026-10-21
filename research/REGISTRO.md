@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 59 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 60 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -60,8 +60,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 33 | Le due strategie di Binance in un portafoglio: N3 con il 5% a operazione (al massimo 20) e F5 + N3 a rischio uguale (`TRENTATREESIMA.md`) | 2 | **N3 a portafoglio: Sharpe 0,62**, +20,9% l'anno, volatilità 33,8%, discesa −47%, 2021 −10%, 2026 −12,5%; F5 + N3 1,45 (F5 da sola 1,93); correlazione 0,16 | no: positiva per operazione non vuol dire buona da tenere: le monete nuove arrivano a ondate e le perdite si sommano |
 | 34 | Indicatori tecnici con il contesto del funding: rottura di Donchian a 4 ore con stop e uscita mobile, senza filtro (T1) e con il filtro del funding (T2) (`TRENTAQUATTRESIMA.md`) | 2 | T1 −0,197% a operazione su 34.397 (long −0,57%, short +0,19%); T2 +0,014% su 15.406 (long −0,31%, short +0,32%), p 0,48; tenuta media 72 ore; portafogli negativi | no: il filtro del funding aggiunge +0,21% a operazione ma non basta; seguire le rotture verso l'alto perde |
 | 35 | Contro gli eccessi: RSI a 4 ore sopra 70 con funding alto → short, sotto 30 con funding basso → long, stop 2 ATR, obiettivo RSI a 50 (`TRENTACINQUESIMA.md`) | 1 | −0,218% a operazione su 9.785 (long −0,41%, short −0,03%), 47% vinte, tenuta media 40 ore, 52% delle uscite allo stop; portafoglio Sharpe −0,47 | no |
+| 36 | T5: la tendenza a 1 giorno (regola pubblicata, long e short) solo nel verso del funding, universo delle 100 (`TRENTASEIESIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 = **59** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 = **60** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
