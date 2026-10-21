@@ -356,3 +356,18 @@ def test_ventinovesima_rendimento_in_piu():
     out = vn.rendimento_in_piu(R, U)
     assert np.nansum(out[0]) == pytest.approx(0.0) and np.isnan(out[0, 3])
     assert np.isnan(out[1]).all()                  # una moneta sola: niente
+
+
+def test_trentesima_uscita_di_protezione():
+    from research.programma6 import trentesima as tr
+    from research.programma6 import ventunesima as vu
+    e = 100
+    h = np.arange(e * 24, (e + 31) * 24)
+    c = pd.DataFrame({"open": 10.0, "high": 10.0, "close": 10.0}, index=h)
+    c.loc[e * 24 + 5, "high"] = 13.5                     # +35% alla sesta ora: scatta l'uscita a +30%
+    cb = pd.DataFrame({"open": 100.0, "high": 100.0, "close": 100.0}, index=h)
+    vuoto = pd.Series(dtype=float)
+    con = tr.operazione(c, cb, vuoto, vuoto, e, True)
+    assert con["fermata"] and con["r"] == pytest.approx(-(1.3 * 1.01 - 1) - vu.COSTO_MONETA - vu.COSTO_BTC)
+    senza = tr.operazione(c, cb, vuoto, vuoto, e, False)
+    assert not senza["fermata"] and senza["r"] == pytest.approx(-vu.COSTO_MONETA - vu.COSTO_BTC)
