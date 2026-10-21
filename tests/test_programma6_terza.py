@@ -505,3 +505,20 @@ def test_quarantatreesima_minuti_e_funding():
     c.loc[1600, "low"] = 6.9                                   # tocca il −30% dal prezzo d'entrata (10 → 7)
     o = qt.operazione(c, cb, (F, 0, 0, 1), 1445, 1440, 1)
     assert o["fermata"] and o["uscita"] == 1600 and o["r"] < -0.30
+
+
+def test_quarantaquattresima_segnale_e_settimane(monkeypatch):
+    import pandas as pd
+    from research.programma6 import quarantaquattresima as qs
+    lun = sc.giorno(2021, 1, 4)
+    offerta = pd.Series({lun - 9: 100.0, lun - 2: 101.0, lun + 7 - 9: 101.0, lun + 7 - 2: 100.0})
+    assert qs.segnale(offerta, lun) == pytest.approx(0.01)
+    assert qs.segnale(offerta, lun + 7) < 0
+    T, t0 = 40, lun - 10
+    O = np.full((T, 1), 100.0)
+    O[10 + 7:, 0] = 110.0                                     # la prima settimana il Bitcoin sale del 10%
+    pan = {"t0": t0, "simboli": ["BTCUSDT"], "open": O, "funding": np.zeros((T, 1))}
+    monkeypatch.setattr(qs, "A", lun + 7)
+    df = qs.settimane(pan, offerta)
+    assert df.loc[lun, "w"] == 1.0 and df.loc[lun, "netto"] == pytest.approx(0.10 - qs.COSTO)
+    assert df.loc[lun + 7, "w"] == 0.0 and df.loc[lun + 7, "netto"] == pytest.approx(-qs.COSTO)   # esce: paga l'uscita
