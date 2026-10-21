@@ -4322,3 +4322,6 @@ paper con il vecchio gate si fermi e la dashboard venga pulita [...] parti con i
 dalla scheda «Strategie nuove» (le strategie in parole semplici, le posizioni di adesso del funding con la banda, le
 operazioni sulle monete nuove, il paper completo); Report, Controllo, Gate e Learning sotto «Vecchio sistema (fermo)». Il
 vecchio paper si ferma con il pulsante STOP (kill switch): da qui non posso scrivere su Firebase.
+**Trentatreesima prova** (`TRENTATREESIMA.md`): le due strategie di Binance in un portafoglio. N3 (monete nuove) con il 5%
+a operazione: Sharpe 0,62, volatilità 34%, discesa −47%, 2026 −12,5%; F5 + N3 1,45, peggio di F5 da sola (1,93). Capito:
+una regola valida per operazione può essere cattiva da tenere; la strategia da usare è il funding con la banda.

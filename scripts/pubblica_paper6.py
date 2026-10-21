@@ -37,14 +37,15 @@ DESCRIZIONI = {
 
 #: le strategie in parole semplici, per la scheda «Strategie nuove» (stato al 21 ottobre 2026, fonte research/REGISTRO.md)
 STRATEGIE = [
-    {"nome": "Monete appena quotate, short con uscita (N3)", "stato": "validata sul passato",
-     "monete": "ogni moneta nuova dei futures di Binance (circa 100-240 l'anno)",
-     "regola": "short a 7 giorni dalla quotazione contro il Bitcoin; esce se la moneta sale del 30%, se no dopo 30 giorni",
-     "passato": "Binance dal 2021: +4,3% a operazione su 613 (p 0,0017); Gate.io dal 2023: +7,6% su 449 (p 0,0001)"},
-    {"nome": "Funding con la banda (F5)", "stato": "la più solida a portafoglio; non passa il voto corretto (0,81 su 0,95)",
+    {"nome": "Funding con la banda (F5)", "stato": "la più solida, quella da usare; non passa il voto corretto (0,81 su 0,95)",
      "monete": "le 100 più scambiate dei futures di Binance (circa 25 long e 25 short alla volta)",
      "regola": "long dove il funding è basso, short dove è alto; si entra nel 20% e si esce sotto il 40%; ogni lunedì",
      "passato": "dal 2021 Sharpe 1,93, +57% l'anno, ogni anno positiva; a costi tripli Sharpe 1,60"},
+    {"nome": "Monete appena quotate, short con uscita (N3)",
+     "stato": "valida per operazione, ma da tenere rende poco (Sharpe 0,62 come portafoglio, discesa −47%)",
+     "monete": "ogni moneta nuova dei futures di Binance (circa 100-240 l'anno)",
+     "regola": "short a 7 giorni dalla quotazione contro il Bitcoin; esce se la moneta sale del 30%, se no dopo 30 giorni",
+     "passato": "Binance dal 2021: +4,3% a operazione su 613 (p 0,0017); come portafoglio Sharpe 0,62, 2026 −12,5%"},
     {"nome": "Funding al tetto (E4)", "stato": "promettente, non confermata",
      "monete": "le monete dove Binance accorcia l'intervallo del funding con funding positivo (circa 20 l'anno)",
      "regola": "short la moneta contro il Bitcoin per 7 giorni",

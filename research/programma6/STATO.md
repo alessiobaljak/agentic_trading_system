@@ -40,6 +40,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 30 | N3 su Gate.io: short a 7 giorni dalla quotazione contro il Bitcoin, uscita a +30% (candele a 1 ora) o dopo 30 giorni, monete nuove non ancora perpetuo su Binance | `TRENTESIMA.md` | `RISULTATI_TRENTESIMA.md` | 1 a eventi | **VALIDA**: +7,59% a evento su 449 monete, p 0,0001, ogni anno positivo (dopo aver tolto 182 contratti che non erano monete: azioni, fondi, indici, metalli). Nel paper (su Gate e, con la stessa regola, sulle nuove di Binance) |
 | 31 | M7 + M8 a rischio uguale (costruzione) | `TRENTUNESIMA.md` | `RISULTATI_TRENTUNESIMA.md` | 1 | non valida (corretto 0,20 con 54 prove): Sharpe 1,39 contro 1,25 di M7. Nel paper come informazione |
 | 32 | La regola N3, identica, sul passato di Binance (monete nuove dal 2021) | `TRENTADUESIMA.md` | `RISULTATI_TRENTADUESIMA.md` | 1 a eventi | **passa l'esame**: +4,29% a evento su 613 monete, p 0,0017; riserva: l'idea dell'uscita era nata su questi dati; 2021 e 2026 leggermente negativi |
+| 33 | N3 a portafoglio (5% a operazione, al massimo 20 aperte) e F5 + N3 | `TRENTATREESIMA.md` | `RISULTATI_TRENTATREESIMA.md` | 2 | non valide: N3 a portafoglio Sharpe 0,62, volatilità 33,8%, discesa −47%; F5 + N3 1,45, peggio di F5 da sola (1,93) |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -140,6 +141,9 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    costa 3-4 punti di media e toglie le code. Attenzione: su Gate.io metà dei contratti nuovi non sono monete (azioni,
    fondi, indici); vanno tolti con il tipo del contratto. Sul passato di Binance la stessa regola, senza toccarla (prova 32),
    fa +4,3% a evento su 613 monete (p 0,0017), più debole nel 2026 (−0,6%). È la lezione della prova 18 messa alla prova sui dati di un altro exchange.
+22. **Una regola valida per operazione può essere cattiva da tenere** (prova 33): N3 su Binance fa +4,3% a operazione
+   (p 0,0017), ma come portafoglio (5% a operazione) fa Sharpe 0,62 con volatilità del 34% e discesa del 47%: le monete nuove
+   arrivano a ondate nei periodi di euforia e le perdite si sommano. Si giudica sempre anche il portafoglio, giorno per giorno.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

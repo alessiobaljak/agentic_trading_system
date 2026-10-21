@@ -37,7 +37,7 @@ def test_documento_strategie_ed_eventi():
     assert d["posizioni"]["F5"]["long"] == [{"moneta": "ATOMUSDT", "peso": 0.04}]
     assert d["eventi_n3"][0]["simbolo"] == "XYZUSDT" and d["eventi_n3"][0]["r"] is None
     assert d["eventi_e4"] == [{"simbolo": "ABCUSDT", "data": "2026-10-22", "r7": 0.05}]
-    assert len(d["strategie"]) == 3 and "N3" in d["strategie"][0]["nome"]
+    assert len(d["strategie"]) == 3 and "F5" in d["strategie"][0]["nome"]
 
 
 def test_documento_passato_e_settimana():
