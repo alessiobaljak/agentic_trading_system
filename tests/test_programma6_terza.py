@@ -410,3 +410,27 @@ def test_trentacinquesima_rsi_e_obiettivo():
     op = tc._simula(o, h, l, c, np.zeros(n, bool), corto, atr, r)
     i, e, u, verso, p0, p1, motivo = op[0]
     assert verso == -1 and motivo == 2 and p1 < p0           # esce all'obiettivo (RSI a 50) in guadagno
+
+
+def test_quarantesima_coppie(monkeypatch):
+    from research.programma6 import quarantesima as qa
+    from research.programma6.motore import TAKER
+    assert [sc.data(g) for g in qa.primi_lunedi(sc.giorno(2021, 1, 1), sc.giorno(2021, 3, 31))] == \
+        ["2021-01-04", "2021-02-01", "2021-03-01"]
+    T, t0, s = 330, qa.DA - 250, 255
+    rng = np.random.default_rng(1)
+    lb = np.cumsum(rng.normal(0, 0.03, T)) + 5
+    la = lb + 0.004 * np.sin(np.arange(T) * 1.3)
+    la[s: s + 4] += 0.012                                     # A si allontana per quattro giorni, poi torna
+    C = np.exp(np.vstack([la, lb]).T)
+    pan = {"t0": t0, "simboli": ["AAAUSDT", "BBBUSDT"], "open": np.vstack([C[:1], C[:-1]]), "close": C,
+           "quote_volume": np.tile([1.0, 10.0], (T, 1)), "funding": np.zeros((T, 2))}
+    monkeypatch.setattr(qa, "A", qa.DA + 60)
+    df, per_mese, lasciate = qa.operazioni(pan, np.ones((T, 2), bool))
+    assert per_mese == {"2021-01": 1, "2021-02": 1, "2021-03": 1} and lasciate == 0
+    assert df["simbolo"].iloc[0] == "AAAUSDT/BBBUSDT"         # A e' la meno scambiata
+    assert (df["verso"] == -1).all() and df["data"].iloc[0] == sc.data(t0 + s + 1)   # short la cara, all'apertura dopo
+    assert abs(df["b"].iloc[0] - 1) < 0.01 and df["correlazione"].iloc[0] > 0.9
+    ultima = df.iloc[-1]
+    assert ultima["motivo"] == "obiettivo" and ultima["r"] > 0.005
+    assert ultima["costo"] == pytest.approx(2 * (TAKER + 0.0002) * (1 + min(ultima["b"], 2)))

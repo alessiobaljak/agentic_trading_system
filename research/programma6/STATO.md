@@ -47,6 +47,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 37 | T6: T2 con l'entrata a ordine limite | `TRENTASETTESIMA.md` | `RISULTATI_TRENTASETTESIMA.md` | 1 | non valida: +0,05% a operazione (99% eseguite); long −0,28%, short +0,36% |
 | 38 | T7: solo short delle rotture verso il basso con il funding alto, conferma sulle 101-200 | `TRENTOTTESIMA.md` | `RISULTATI_TRENTOTTESIMA.md` | 1 di conferma | non confermata: +0,14% a operazione, p 0,40, 2026 −1,1% |
 | 39 | T8: tendenza del giorno (media 50 giorni) e ritracciamento a 4 ore (RSI 35/65) con il funding | `TRENTANOVESIMA.md` | `RISULTATI_TRENTANOVESIMA.md` | 1 | non valida: +0,15% a operazione, p 0,32; long −0,46%, short +0,53% |
+| 40 | Coppie di monete che si allontanano (z del rapporto a 1 giorno, entrata a 2, uscita a 0,5) | `QUARANTESIMA.md` | `RISULTATI_QUARANTESIMA.md` | 1 | non valida: +0,58% a operazione, p 0,21; 2021 +3,9%, 2025 −1,1%; portafoglio Sharpe 0,34 |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -159,6 +160,11 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    short +0,19%, +0,36%, +0,53% a operazione; long −0,57%, −0,28%, −0,46%). Non è il segnale: dal 2021 la maggior parte delle
    altcoin è scesa, e chi le vendeva guadagnava comunque (in più incassa il funding). È l'andamento del mercato di questi anni,
    non un vantaggio su cui contare; sulle monete 101-200 (prova 38) non si conferma.
+25. **Le coppie di monete che si allontanano e poi si riavvicinano funzionavano nel 2021 e non più** (prova 40): +3,9% a
+   operazione per le entrate del 2021, +1,0% nel 2022, +0,2% nel 2023, poi zero o sotto (2025 −1,1%); sull'intero periodo
+   +0,58% con p 0,21. Quando la distanza torna (un'operazione su tre) si guadagna il 10%, ma in un caso su quattro la coppia
+   si rompe (−6,4%) e in uno su tre il tempo scade in perdita (−4,8%). Le monete simili oggi si separano più spesso di quanto
+   si riavvicinino: il mercato delle altcoin si è diviso in storie diverse.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

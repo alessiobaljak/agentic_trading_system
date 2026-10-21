@@ -4341,3 +4341,7 @@ anche con il funding e con ordini più economici, non battono il caso dopo i cos
 **Trentanovesima prova** (`TRENTANOVESIMA.md`): tendenza del giorno e ritracciamento a 4 ore con il funding: +0,15% a
 operazione, p 0,32. Capito: in tutte le prove a 4 ore lo short guadagna e il long perde, con qualunque indicatore: è la
 discesa delle altcoin dal 2021 (più il funding incassato), non un segnale.
+**Quarantesima prova** (`QUARANTESIMA.md`): le coppie di monete che si muovono insieme, comprando quella rimasta indietro e
+vendendo quella andata avanti quando si allontanano (z a 2), fino al ritorno: +0,58% a operazione su 874, p 0,21; per anno
+d'entrata 2021 +3,9%, 2022 +1,0%, 2023 +0,2%, 2024 0,0%, 2025 −1,1%. Capito: l'idea funzionava nel 2021 e si è spenta; oggi
+una coppia su quattro si rompe invece di tornare. Le coppie entrano nel conto: 63 prove.
