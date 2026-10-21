@@ -42,6 +42,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 32 | La regola N3, identica, sul passato di Binance (monete nuove dal 2021) | `TRENTADUESIMA.md` | `RISULTATI_TRENTADUESIMA.md` | 1 a eventi | **passa l'esame**: +4,29% a evento su 613 monete, p 0,0017; riserva: l'idea dell'uscita era nata su questi dati; 2021 e 2026 leggermente negativi |
 | 33 | N3 a portafoglio (5% a operazione, al massimo 20 aperte) e F5 + N3 | `TRENTATREESIMA.md` | `RISULTATI_TRENTATREESIMA.md` | 2 | non valide: N3 a portafoglio Sharpe 0,62, volatilità 33,8%, discesa −47%; F5 + N3 1,45, peggio di F5 da sola (1,93) |
 | 34 | Trading con gli indicatori a 4 ore: rottura di Donchian a 20 candele, stop 2 ATR, uscita mobile 3 ATR, al massimo 7 giorni; T1 senza filtro, T2 con il filtro del funding | `TRENTAQUATTRESIMA.md` | `RISULTATI_TRENTAQUATTRESIMA.md` | 2 | non valide: T1 −0,20% a operazione (34.397), T2 +0,01% (15.406); il filtro aggiunge +0,2%, lo short va meglio del long |
+| 35 | Contro gli eccessi a 4 ore: RSI sopra 70 e funding alto → short, sotto 30 e funding basso → long, stop 2 ATR, obiettivo RSI 50 | `TRENTACINQUESIMA.md` | `RISULTATI_TRENTACINQUESIMA.md` | 1 | non valida: −0,22% a operazione su 9.785, 47% vinte, metà delle uscite allo stop |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -145,6 +146,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
 22. **Una regola valida per operazione può essere cattiva da tenere** (prova 33): N3 su Binance fa +4,3% a operazione
    (p 0,0017), ma come portafoglio (5% a operazione) fa Sharpe 0,62 con volatilità del 34% e discesa del 47%: le monete nuove
    arrivano a ondate nei periodi di euforia e le perdite si sommano. Si giudica sempre anche il portafoglio, giorno per giorno.
+23. **Gli indicatori tecnici a 4 ore non hanno vantaggio dopo i costi, nemmeno con il funding** (prove 34 e 35): la
+   rottura del prezzo fa +0,01% a operazione con il filtro del funding (−0,20% senza), il ritorno dagli eccessi −0,22%.
+   Il funding funziona sulle settimane e fra monete, non come segnale d'entrata a ore: chi paga troppo perde nel tempo, ma
+   l'ora giusta per entrare non la dice né lui né l'indicatore.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

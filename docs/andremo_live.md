@@ -4331,3 +4331,6 @@ strategie migliori finora tengono giorni o settimane e usano il funding, non il 
 (`TRENTAQUATTRESIMA.md`): trading vero a 4 ore, rottura di Donchian con stop e uscita mobile, tenuta media 72 ore: −0,20% a
 operazione su 34.397; con il filtro del funding +0,01% su 15.406. Capito: il funding aiuta anche gli indicatori (+0,2% a
 operazione), ma seguire la rottura verso l'alto (andare con la folla) perde; lo short va meglio del long.
+**Trentacinquesima prova** (`TRENTACINQUESIMA.md`): il verso contrario, contro gli eccessi (RSI a 4 ore con il funding): −0,22%
+a operazione su 9.785, metà delle uscite allo stop. Capito: a 4 ore gli indicatori non battono i costi né con la folla né
+contro; il vantaggio del funding vive sulle settimane. La prossima idea: gli indicatori a 1 giorno nel verso del funding.
