@@ -144,7 +144,7 @@ def portafoglio(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def esame_eventi(df: pd.DataFrame, col: str) -> dict:
+def esame_eventi(df: pd.DataFrame, col: str, soglia: float = P_SOGLIA) -> dict:
     d = df[np.isfinite(df[col])].sort_values("ora")
     e = {"boot": vu.bootstrap_annunci(d, col)}
     meta = len(d) // 2
@@ -152,7 +152,7 @@ def esame_eventi(df: pd.DataFrame, col: str) -> dict:
     e["senza_5_migliori"] = float(d[col].sort_values(ascending=False).iloc[5:].mean())
     e["vinti"], e["mediana"] = float((d[col] > 0).mean()), float(d[col].median())
     e["per_anno"] = {a: {"eventi": int(len(g)), "media": float(g[col].mean())} for a, g in d.groupby(d["data"].str[:4])}
-    e["passa"] = bool(e["boot"]["p"] <= P_SOGLIA and e["prima_meta"] > 0 and e["seconda_meta"] > 0 and e["senza_5_migliori"] > 0)
+    e["passa"] = bool(e["boot"]["p"] <= soglia and e["prima_meta"] > 0 and e["seconda_meta"] > 0 and e["senza_5_migliori"] > 0)
     return e
 
 

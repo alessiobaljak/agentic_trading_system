@@ -486,3 +486,22 @@ def test_quarantaduesima_esposizione():
     k = 25
     atteso = w.iloc[k] * netto.iloc[k] - abs(w.iloc[k] - w.iloc[k - 1]) * 2 * 0.0007
     assert g["netto"].iloc[k] == pytest.approx(atteso)
+
+
+def test_quarantatreesima_minuti_e_funding():
+    import pandas as pd
+    from research.programma6 import quarantatreesima as qt
+    F = np.zeros((3, 2))
+    F[1, 0] = 0.0024                                           # funding del giorno 1 della moneta
+    assert qt.funding_ore(F, 0, 0, 1440 + 720, 2 * 1440 + 720) == pytest.approx(0.0012)   # mezza giornata del giorno 1
+    m = np.arange(1440, 1440 + 3000)
+    c = pd.DataFrame({"open": 10.0, "high": 10.0, "low": 10.0, "close": 10.0}, index=m)
+    cb = pd.DataFrame({"open": 100.0, "high": 100.0, "low": 100.0, "close": 100.0}, index=m)
+    c.loc[1500:, ["open", "high", "low", "close"]] = 12.0
+    o = qt.operazione(c, cb, (F, 0, 0, 1), 1445, 1440, 1)     # long: la moneta sale del 20%
+    assert not o["fermata"] and o["uscita"] == 1445 + 1440
+    funding = 0.0024 * (2880 - 1445) / 1440                   # il long paga il funding delle ore del giorno 1
+    assert o["r"] == pytest.approx(0.20 - qt.COSTO_MONETA - qt.vu.COSTO_BTC - funding)
+    c.loc[1600, "low"] = 6.9                                   # tocca il −30% dal prezzo d'entrata (10 → 7)
+    o = qt.operazione(c, cb, (F, 0, 0, 1), 1445, 1440, 1)
+    assert o["fermata"] and o["uscita"] == 1600 and o["r"] < -0.30

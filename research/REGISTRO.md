@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 65 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 67 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -67,8 +67,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 40 | Le coppie di monete che si allontanano: z del rapporto a 1 giorno, entrata a 2, uscita a 0,5, rottura a 4, al massimo 20 giorni (`QUARANTESIMA.md`) | 1 | +0,58% a operazione su 874, p 0,21; in calo ogni anno (2021 +3,9%, 2025 −1,1%); senza le 5 migliori −0,23%; portafoglio Sharpe 0,34, corretto 0,00 | no |
 | 41 | U1: lo short dopo l'arrivo su Upbit (mercato in won) delle monete che hanno già il perpetuo su Binance, 2 ore dopo la prima ora, per 7 giorni, contro il Bitcoin, uscita a +30% (`QUARANTUNESIMA.md`) | 1 a eventi + 1 portafoglio | +2,96% a evento su 115 (85 settimane), p 0,070 contro la soglia 0,0014; mediana +6,9%, 70% vinti; metà +5,3% e +0,7%; per anno 2024 +5,3% (17), 2025 +0,1% (43), 2026 +1,3% (36); la fiammata prima dell'entrata +26,6% contro il Bitcoin; portafoglio Sharpe 0,58 | no |
 | 42 | F6: F5 con l'esposizione secondo l'agitazione delle 13 settimane prima (0,30/σ, al massimo 2; Moreira e Muir 2017) (`QUARANTADUESIMA.md`) | 1 | Sharpe **1,71** contro 1,93 di F5 sulle stesse settimane, +55,7% l'anno, volatilità 32,5%, discesa −35,6%; esposizione media 1,20; 2021 +65,9% (F5 +122,6%) | no: corretto 0,31 con 65 prove; tenere meno nelle settimane agitate toglie a F5 le sue settimane migliori |
+| 43 | Entrare 5 minuti dopo l'annuncio di Binance, per 24 ore contro il Bitcoin: Q1 long dopo la quotazione a pronti di una moneta che ha già il perpetuo (eventi mai guardati), Q2 short dopo l'etichetta di monitoraggio o la rimozione (eventi della prova 21, con la riserva) (`QUARANTATREESIMA.md`) | 2 a eventi + 2 portafogli | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **65** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 = **67** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
