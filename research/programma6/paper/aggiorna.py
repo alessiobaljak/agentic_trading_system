@@ -261,6 +261,15 @@ def esegui(log=print) -> dict:
     f572 = f572[f572.index >= INIZIO_SETTIMANE]
     res["candidate"]["F5 + M7 + K2 a rischio uguale (informazione)"] = {
         "settimane": {sc.data(int(k)): round(float(v), 6) for k, v in f572.items()}, **_riassunto(f572, 52)}
+    # N3 (TRENTESIMA.md, REGOLE.md sezione 11): gli eventi del periodo P su Binance e su Gate.io
+    from research.programma6 import scarico_annunci, tipi_gate
+    from research.programma6.paper import n3
+    for passo in (scarico_annunci.main, n3.aggiorna_gate_mesi, tipi_gate.main):
+        try:
+            passo()
+        except Exception as ex:                       # un archivio irraggiungibile non ferma il paper
+            log(f"[paper] N3: {passo.__module__} non aggiornato ({ex})")
+    res["eventi_N3"] = n3.binance(pan) + n3.gate(pan)
     # E4 (VENTISEIESIMA.md, REGOLE.md sezione 9): gli eventi del periodo P, dai file mensili del funding
     from research.programma6 import ventiseiesima as vs
     e4 = vs.tabella(pan, [x for x in vs.eventi(pan) if x[1] >= INIZIO_E4_MS], -1)
@@ -308,6 +317,10 @@ def rapporto(r: dict) -> str:
               + (f"{len(r.get('eventi_E4', []))} eventi, media a 7 giorni "
                  f"{100 * sum(x['r7'] for x in r['eventi_E4'] if x['r7'] is not None) / max(1, sum(1 for x in r['eventi_E4'] if x['r7'] is not None)):+.2f}%"
                  if r.get("eventi_E4") else "nessun evento ancora") + ".",
+              "", "**N3** (a eventi, monete quotate dal 21 ottobre; short a 7 giorni, uscita a +30% o dopo 30 giorni): "
+              + (", ".join(f"{x['mercato']} {x['simbolo']} dal {x['ingresso']} {x['stato']}"
+                           + (f" {100 * x['r']:+.1f}%" if x.get('r') is not None else "") for x in r.get("eventi_N3", []))
+                 or "nessun evento ancora") + ".",
               "", "**Entrate nell'universo nelle ultime 4 settimane** (da controllare che siano monete): "
               + (", ".join(r.get("nuove_nell_universo", [])) or "nessuna") + "."]
     return "\n".join(righe) + "\n"

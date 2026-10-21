@@ -23,3 +23,9 @@ non misura quello che voleva misurare. Togliendo i giorni con più di 5 cambi (2
 2025-10-30, 2026-05-27, 2026-06-15), i contratti dei metalli e gli eventi della stessa moneta a meno di 7 giorni: **114
 eventi, media +6,00% a evento, mediana +7,91%, vinti il 75%, p 0,096**; per anno 2023 +6,5% (2 eventi), 2024 +9,9% (14), 2025
 −6,9% (40), 2026 +13,9% (59). Stesso verso di E4 su Binance, ma non abbastanza per una conferma; ed è un calcolo fatto dopo.
+
+## Controllo del 21 ottobre: solo monete
+
+Su Gate.io metà dei contratti nuovi non sono monete (azioni, fondi, indici, metalli: `tipi_gate.py`, trovato con la trentesima
+prova). Tenendo solo le monete: 418 eventi indipendenti, **−4,42% a evento, p 0,67**, vinti 40%; i due giorni dei cambi in
+blocco restano (222 e 62 eventi, quasi tutti monete). La conclusione non cambia: non confermata.
