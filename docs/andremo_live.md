@@ -4370,3 +4370,8 @@ delle strategie che funzionano. F5 con le entrate solo se la tendenza dei 20 gio
 (meno monete, a volte una sola per lato). N3 con l'entrata alla prima rottura verso il basso: +3,79% a operazione (N3 +4,29%),
 portafoglio Sharpe 0,88 invece di 0,62, ma p 0,0064 contro 0,001. Capito: F5 guadagna andando contro la tendenza, quindi un
 filtro di tendenza le toglie il guadagno; per N3 l'attesa aiuta poco. Nel conto: 70 prove.
+Il proprietario (21 ottobre, sera): «fai tu l'elenco delle più usate e provale». **Quarantaseiesima prova**
+(`QUARANTASEIESIMA.md`): le 17 strategie già pronte di TradingView (sezione ufficiale «Built-in Strategies»), con i valori di serie,
+a 4 ore e a 1 giorno, sulle 100 monete: nessuna valida. Senza costi molte sembrano buone (Momentum 4 ore +24,6% l'anno), con i costi
+veri di Binance no (−3,0%). La migliore, Supertrend a 1 giorno, fa Sharpe 0,36, quanto tenere il Bitcoin. Capito: il guadagno che si
+vede nello Strategy Tester di serie è in gran parte la mancanza dei costi. Nel conto: 104 prove.
