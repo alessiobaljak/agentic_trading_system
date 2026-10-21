@@ -45,6 +45,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 35 | Contro gli eccessi a 4 ore: RSI sopra 70 e funding alto → short, sotto 30 e funding basso → long, stop 2 ATR, obiettivo RSI 50 | `TRENTACINQUESIMA.md` | `RISULTATI_TRENTACINQUESIMA.md` | 1 | non valida: −0,22% a operazione su 9.785, 47% vinte, metà delle uscite allo stop |
 | 36 | T5: tendenza a 1 giorno (9 canali di Donchian, long e short) solo nel verso del funding | `TRENTASEIESIMA.md` | `RISULTATI_TRENTASEIESIMA.md` | 1 | non valida: Sharpe 0,40 (senza filtro 0,15), +3,7% l'anno |
 | 37 | T6: T2 con l'entrata a ordine limite | `TRENTASETTESIMA.md` | `RISULTATI_TRENTASETTESIMA.md` | 1 | non valida: +0,05% a operazione (99% eseguite); long −0,28%, short +0,36% |
+| 38 | T7: solo short delle rotture verso il basso con il funding alto, conferma sulle 101-200 | `TRENTOTTESIMA.md` | `RISULTATI_TRENTOTTESIMA.md` | 1 di conferma | non confermata: +0,14% a operazione, p 0,40, 2026 −1,1% |
 
 ## Il paper (dal 20 ottobre 2026)
 
