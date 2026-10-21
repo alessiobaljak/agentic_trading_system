@@ -4345,3 +4345,10 @@ discesa delle altcoin dal 2021 (più il funding incassato), non un segnale.
 vendendo quella andata avanti quando si allontanano (z a 2), fino al ritorno: +0,58% a operazione su 874, p 0,21; per anno
 d'entrata 2021 +3,9%, 2022 +1,0%, 2023 +0,2%, 2024 0,0%, 2025 −1,1%. Capito: l'idea funzionava nel 2021 e si è spenta; oggi
 una coppia su quattro si rompe invece di tornare. Le coppie entrano nel conto: 63 prove.
+**Quarantunesima prova** (`QUARANTUNESIMA.md`): lo short su Binance delle monete che arrivano sul mercato in won di Upbit
+(la borsa coreana), 2 ore dopo l'arrivo, per 7 giorni: 115 eventi dal 2021, +2,96% a evento ma p 0,07 (serviva 0,0014),
+2025 +0,1% su 43 eventi. Capito: la moneta sale del 26,6% (più del Bitcoin) fra il giorno prima e l'entrata; dopo scende
+poco. Come per gli annunci di Binance, il movimento è tutto nella prima reazione.
+**Quarantaduesima prova** (`QUARANTADUESIMA.md`): F5 che tiene meno nelle settimane agitate (metodo pubblicato): Sharpe 1,71
+contro 1,93. Capito: per il funding fra monete le settimane agitate sono le migliori (2021: F5 +122,6%, la versione prudente
++65,9%); F5 resta com'è. Nel conto: 65 prove.

@@ -65,8 +65,8 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 38 | T7: solo lo short delle rotture verso il basso dove i long pagano, conferma sulle monete 101-200 (`TRENTOTTESIMA.md`) | 1 di conferma | +0,136% a operazione su 5.499, p 0,40; metà +0,44% e −0,16%; 2026 −1,1%; portafoglio Sharpe −0,61 | **non confermata** |
 | 39 | T8: la tendenza del giorno (media dei 50 giorni) e il ritracciamento a 4 ore (RSI 35/65), con il funding, stop 2 ATR e uscita mobile 3 ATR (`TRENTANOVESIMA.md`) | 1 | +0,149% a operazione su 8.720, p 0,32; long −0,46%, short +0,53%; senza le 5 migliori +0,03%; portafoglio Sharpe −0,07 | no |
 | 40 | Le coppie di monete che si allontanano: z del rapporto a 1 giorno, entrata a 2, uscita a 0,5, rottura a 4, al massimo 20 giorni (`QUARANTESIMA.md`) | 1 | +0,58% a operazione su 874, p 0,21; in calo ogni anno (2021 +3,9%, 2025 −1,1%); senza le 5 migliori −0,23%; portafoglio Sharpe 0,34, corretto 0,00 | no |
-| 41 | U1: lo short dopo l'arrivo su Upbit (mercato in won) delle monete che hanno già il perpetuo su Binance, 2 ore dopo la prima ora, per 7 giorni, contro il Bitcoin, uscita a +30% (`QUARANTUNESIMA.md`) | 1 a eventi + 1 portafoglio | in calcolo | — |
-| 42 | F6: F5 con l'esposizione secondo l'agitazione delle 13 settimane prima (0,30/σ, al massimo 2; Moreira e Muir 2017) (`QUARANTADUESIMA.md`) | 1 | in calcolo (dopo la 41) | — |
+| 41 | U1: lo short dopo l'arrivo su Upbit (mercato in won) delle monete che hanno già il perpetuo su Binance, 2 ore dopo la prima ora, per 7 giorni, contro il Bitcoin, uscita a +30% (`QUARANTUNESIMA.md`) | 1 a eventi + 1 portafoglio | +2,96% a evento su 115 (85 settimane), p 0,070 contro la soglia 0,0014; mediana +6,9%, 70% vinti; metà +5,3% e +0,7%; per anno 2024 +5,3% (17), 2025 +0,1% (43), 2026 +1,3% (36); la fiammata prima dell'entrata +26,6% contro il Bitcoin; portafoglio Sharpe 0,58 | no |
+| 42 | F6: F5 con l'esposizione secondo l'agitazione delle 13 settimane prima (0,30/σ, al massimo 2; Moreira e Muir 2017) (`QUARANTADUESIMA.md`) | 1 | Sharpe **1,71** contro 1,93 di F5 sulle stesse settimane, +55,7% l'anno, volatilità 32,5%, discesa −35,6%; esposizione media 1,20; 2021 +65,9% (F5 +122,6%) | no: corretto 0,31 con 65 prove; tenere meno nelle settimane agitate toglie a F5 le sue settimane migliori |
 
 Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **65** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
@@ -133,6 +133,6 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 11. ~~K1 con la banda~~ → prova 28.
 13. ~~M7 e M8 insieme~~ → prova 31.
 14. ~~Gli indicatori a 1 giorno nel verso del funding~~ → prova 36 (no: Sharpe 0,40).
-15. **L'arrivo su Coinbase** (borsa americana): se U1 regge, la stessa regola sugli arrivi su Coinbase come conferma (eventi indipendenti; le date dalle candele pubbliche di Coinbase, raggiungibili da qui).
+15. ~~L'arrivo su Coinbase come conferma di U1~~ → non si fa: U1 non regge (prova 41). Le date di Coinbase sono scaricate (`scarico_coinbase.py`) se serviranno.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.

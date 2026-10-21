@@ -48,6 +48,8 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 38 | T7: solo short delle rotture verso il basso con il funding alto, conferma sulle 101-200 | `TRENTOTTESIMA.md` | `RISULTATI_TRENTOTTESIMA.md` | 1 di conferma | non confermata: +0,14% a operazione, p 0,40, 2026 −1,1% |
 | 39 | T8: tendenza del giorno (media 50 giorni) e ritracciamento a 4 ore (RSI 35/65) con il funding | `TRENTANOVESIMA.md` | `RISULTATI_TRENTANOVESIMA.md` | 1 | non valida: +0,15% a operazione, p 0,32; long −0,46%, short +0,53% |
 | 40 | Coppie di monete che si allontanano (z del rapporto a 1 giorno, entrata a 2, uscita a 0,5) | `QUARANTESIMA.md` | `RISULTATI_QUARANTESIMA.md` | 1 | non valida: +0,58% a operazione, p 0,21; 2021 +3,9%, 2025 −1,1%; portafoglio Sharpe 0,34 |
+| 41 | U1: short dopo l'arrivo su Upbit delle monete che hanno già il perpetuo | `QUARANTUNESIMA.md` | `RISULTATI_QUARANTUNESIMA.md` | 1 a eventi + 1 | non valida: +2,96% a evento, p 0,070; 2025 +0,1% su 43 |
+| 42 | F6: F5 con l'esposizione secondo l'agitazione (Moreira e Muir) | `QUARANTADUESIMA.md` | `RISULTATI_QUARANTADUESIMA.md` | 1 | non valida: Sharpe 1,71 contro 1,93 di F5 |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -165,6 +167,14 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    +0,58% con p 0,21. Quando la distanza torna (un'operazione su tre) si guadagna il 10%, ma in un caso su quattro la coppia
    si rompe (−6,4%) e in uno su tre il tempo scade in perdita (−4,8%). Le monete simili oggi si separano più spesso di quanto
    si riavvicinino: il mercato delle altcoin si è diviso in storie diverse.
+26. **L'arrivo su Upbit fa salire la moneta prima che si possa vendere, e dopo scende poco e sempre meno** (prova 41): dalle
+   24 ore prima dell'arrivo all'entrata (2 ore dopo) la moneta sale in media del 26,6% più del Bitcoin (mediana 18,9%); nei
+   7 giorni dopo lo short fa +2,96% a evento (p 0,07), ma nel 2025, l'anno con più eventi (43), +0,1%. Come per gli annunci
+   di Binance (prova 21), il grosso del movimento è nella prima reazione, che non si prende.
+27. **Per F5 le settimane agitate sono le migliori** (prova 42): tenere meno quando il mercato oscilla (il metodo di
+   Moreira e Muir, che funziona sui fattori di borsa) porta lo Sharpe da 1,93 a 1,71; nel 2021, l'anno più agitato, F5 fa
+   +122,6% e la versione prudente +65,9%. Il funding fra monete guadagna di più quando le monete sono più diverse fra loro,
+   cioè proprio nei periodi agitati: ridurre lì vuol dire tagliare il guadagno, non il rischio.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
