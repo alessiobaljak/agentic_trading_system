@@ -152,6 +152,20 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P16. Il paper delle strategie nuove eseguito dal bot (F5 per prima) — trovata il 21 ott 2026
+**Perché:** il proprietario (21 ott): «dimmi quando possiamo accendere il paper con le nuove strategie». Il paper del programma 6
+oggi è un **calcolo** di ogni mattina con i prezzi veri (`research/programma6/paper/`, scheda «Strategie nuove»), non ordini
+simulati dal bot. Il bot (`bot/`) è fatto per **una posizione per moneta con stop e obiettivo** (`executor.py:200`, dimensione
+dallo stop in `risk_manager.py:124`, chiusura forzata dopo 96 candele in `executor.py:207`), decide solo a candele da 1 minuto a
+4 ore (`main.py:533`) e non legge la storia del funding: F5 (40-60 posizioni, pesi ogni lunedì) non ci entra così com'è.
+**Cosa:** un pezzo nuovo del bot, separato dall'esecutore vecchio: il lunedì alle 00:05 UTC calcola i pesi di F5 dai dati di
+Binance (candele giornaliere per la volatilità e il volume, `/fapi/v1/fundingRate` per il funding dei 7 giorni), simula le
+operazioni a mercato con commissione e scarto, tiene le posizioni una settimana incassando o pagando il funding vero di ogni 8
+ore, scrive il valore ogni giorno su Firebase in un ramo suo; rispetta il kill switch; acceso da un interruttore che di serie è
+spento. **Metro:** lo stesso calcolo del paper di ricerca sulle stesse settimane deve dare lo stesso rendimento a meno dei costi
+veri. **Prima:** il vecchio paper va fermato (il 21 ott alle 20:27 UTC risultava ancora acceso, `ops/results/0628-21ott-stato-bot.md`).
+
+
 ### P15. Vedere subito quando il funding tocca il tetto (per usare E4 dal vivo) — trovata il 20 ott 2026
 **Perché:** la ventiseiesima prova (`research/programma6/VENTISEIESIMA.md`) dà a E4 (short per 7 giorni la moneta quando
 Binance accorcia l'intervallo del funding con funding positivo) +11,67% a evento su 62 eventi dal 2023, p 0,0047; è nel paper
