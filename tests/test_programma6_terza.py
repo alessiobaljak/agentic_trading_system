@@ -395,3 +395,18 @@ def test_trentaquattresima_quattro_ore():
                       "close": np.arange(8.0) + 0.5}, index=np.arange(8))
     b = tq.quattro_ore(h)
     assert b["open"].tolist() == [0.0, 4.0] and b["close"].tolist() == [3.5, 7.5] and b["high"].tolist() == [4.0, 8.0]
+
+
+def test_trentacinquesima_rsi_e_obiettivo():
+    from research.programma6 import trentacinquesima as tc
+    c = np.r_[np.full(20, 100.0), np.linspace(100, 120, 10), np.linspace(119, 100, 15)]
+    r = tc.rsi(c)
+    assert np.nanmax(r) > 70 and r[-1] < 50
+    n = len(c)
+    o, h, l = c.copy(), c + 0.1, c - 0.1
+    atr = np.full(n, 5.0)
+    corto = np.zeros(n, bool)
+    corto[29] = True
+    op = tc._simula(o, h, l, c, np.zeros(n, bool), corto, atr, r)
+    i, e, u, verso, p0, p1, motivo = op[0]
+    assert verso == -1 and motivo == 2 and p1 < p0           # esce all'obiettivo (RSI a 50) in guadagno
