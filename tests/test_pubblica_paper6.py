@@ -27,3 +27,14 @@ def test_documento_riduce_paper_json():
 def test_documento_vuoto():
     d = documento({}, adesso=1.0)
     assert d["candidate"] == [] and d["posizioni"]["F3"]["long"] == []
+
+
+def test_documento_strategie_ed_eventi():
+    paper = {"adesso": {"F5": {"lunedi": "2026-10-19", "long": {"ATOMUSDT": 0.04}, "short": {"BNBUSDT": -0.1}}},
+             "eventi_N3": [{"mercato": "Binance", "simbolo": "XYZUSDT", "ingresso": "2026-10-28", "stato": "in corso"}],
+             "eventi_E4": [{"simbolo": "ABCUSDT", "data": "2026-10-22", "r7": 0.05, "annuncio": 1}]}
+    d = documento(paper, adesso=1.0)
+    assert d["posizioni"]["F5"]["long"] == [{"moneta": "ATOMUSDT", "peso": 0.04}]
+    assert d["eventi_n3"][0]["simbolo"] == "XYZUSDT" and d["eventi_n3"][0]["r"] is None
+    assert d["eventi_e4"] == [{"simbolo": "ABCUSDT", "data": "2026-10-22", "r7": 0.05}]
+    assert len(d["strategie"]) == 3 and "N3" in d["strategie"][0]["nome"]

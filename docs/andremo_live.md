@@ -4317,3 +4317,8 @@ novembre o fine novembre? non è quello che avevo chiesto». Ha ragione: il 19 o
 dati nuovi; il paper è una conferma, non una condizione. **Trentaduesima prova** (`TRENTADUESIMA.md`): la regola N3, identica,
 sul passato di Binance: +4,29% a evento su 613 monete nuove dal 2021, p 0,0017, passa l'esame scritto; riserva: l'idea
 dell'uscita era nata su questi dati; 2026 −0,6%. **Trentunesima** (`TRENTUNESIMA.md`): i due modelli insieme, Sharpe 1,39.
+Il proprietario (21 ottobre): «non capisco quante strategie hai ora validate e su quali crypto? [...] forse è meglio che il
+paper con il vecchio gate si fermi e la dashboard venga pulita [...] parti con il paper nuovo». Fatto: la dashboard parte
+dalla scheda «Strategie nuove» (le strategie in parole semplici, le posizioni di adesso del funding con la banda, le
+operazioni sulle monete nuove, il paper completo); Report, Controllo, Gate e Learning sotto «Vecchio sistema (fermo)». Il
+vecchio paper si ferma con il pulsante STOP (kill switch): da qui non posso scrivere su Firebase.

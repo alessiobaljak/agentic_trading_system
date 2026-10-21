@@ -26,12 +26,35 @@ DESCRIZIONI = {
     "C1": "28 indicatori combinati (CTREND)",
     "A1": "tendenza pubblicata (9 canali di Donchian)",
     "F3 + M1 a rischio uguale": "le due più forti insieme",
+    "F5": "funding fra monete con la banda: la più solida sul passato",
+    "K2": "K1 con la banda (costruzione)",
+    "M6": "il modello con la media di cinque semi",
+    "M7": "M6 con la banda",
+    "F5 + M7 a rischio uguale (informazione)": "funding con la banda e modello con la banda insieme",
+    "F5 + M7 + K2 a rischio uguale (informazione)": "le tre con la banda insieme",
+    "M7 + M8 a rischio uguale (informazione)": "i due modelli insieme",
 }
+
+#: le strategie in parole semplici, per la scheda «Strategie nuove» (stato al 21 ottobre 2026, fonte research/REGISTRO.md)
+STRATEGIE = [
+    {"nome": "Monete appena quotate, short con uscita (N3)", "stato": "validata sul passato",
+     "monete": "ogni moneta nuova dei futures di Binance (circa 100-240 l'anno)",
+     "regola": "short a 7 giorni dalla quotazione contro il Bitcoin; esce se la moneta sale del 30%, se no dopo 30 giorni",
+     "passato": "Binance dal 2021: +4,3% a operazione su 613 (p 0,0017); Gate.io dal 2023: +7,6% su 449 (p 0,0001)"},
+    {"nome": "Funding con la banda (F5)", "stato": "la più solida a portafoglio; non passa il voto corretto (0,81 su 0,95)",
+     "monete": "le 100 più scambiate dei futures di Binance (circa 25 long e 25 short alla volta)",
+     "regola": "long dove il funding è basso, short dove è alto; si entra nel 20% e si esce sotto il 40%; ogni lunedì",
+     "passato": "dal 2021 Sharpe 1,93, +57% l'anno, ogni anno positiva; a costi tripli Sharpe 1,60"},
+    {"nome": "Funding al tetto (E4)", "stato": "promettente, non confermata",
+     "monete": "le monete dove Binance accorcia l'intervallo del funding con funding positivo (circa 20 l'anno)",
+     "regola": "short la moneta contro il Bitcoin per 7 giorni",
+     "passato": "Binance dal 2023: +11,7% a operazione su 62 (p 0,0047); su Gate.io non confermata"},
+]
 
 
 def documento(paper: dict, adesso: float | None = None) -> dict:
     """Il documento per la dashboard: le candidate (periodi, rendimento, Sharpe, l'ultima settimana o l'ultimo giorno)
-    e le posizioni di adesso di F3 e K1."""
+    le posizioni di adesso (F5, F3, K1, M1), le strategie in parole semplici e gli eventi di N3 e E4."""
     candidate = []
     for nome, c in (paper.get("candidate") or {}).items():
         serie = c.get("settimane") or c.get("giorni") or {}
@@ -46,7 +69,7 @@ def documento(paper: dict, adesso: float | None = None) -> dict:
             "ultimo": {"data": ultima[0], "netto": ultima[1]} if ultima else None,
         })
     posizioni = {}
-    for nome in ("F3", "K1", "M1"):
+    for nome in ("F5", "F3", "K1", "M1"):
         a = (paper.get("adesso") or {}).get(nome) or {}
         posizioni[nome] = {"lunedi": a.get("lunedi"),
                            "long": [{"moneta": k, "peso": v} for k, v in sorted((a.get("long") or {}).items(), key=lambda x: -x[1])],
@@ -61,6 +84,11 @@ def documento(paper: dict, adesso: float | None = None) -> dict:
         "candidate": candidate,
         "posizioni": posizioni,
         "nuove_nell_universo": paper.get("nuove_nell_universo") or [],
+        "strategie": STRATEGIE,
+        "eventi_n3": [{k: x.get(k) for k in ("mercato", "simbolo", "ingresso", "stato", "r", "fermata")}
+                      for x in (paper.get("eventi_N3") or [])],
+        "eventi_e4": [{"simbolo": x.get("simbolo"), "data": x.get("data"), "r7": x.get("r7")}
+                      for x in (paper.get("eventi_E4") or [])],
     }
 
 

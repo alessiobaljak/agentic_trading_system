@@ -8,7 +8,7 @@ import { useGateDoc } from '../lib/gate';
 import { durata } from '../lib/viz';
 
 import BacklogSi from './BacklogSi';
-import Paper6 from './Paper6';
+import StrategieNuove from './StrategieNuove';
 import ReportGiornaliero from './ReportGiornaliero';
 import BotStatus from './BotStatus';
 import ControlloAnomalie from './ControlloAnomalie';
@@ -52,7 +52,7 @@ import LearningMisurato from './LearningMisurato';
  * dieci componenti ognuno a modo suo) o stanno nelle schede gate/learning. I
  * vecchi hash nei segnalibri vengono girati sulla scheda nuova.
  */
-type TabId = 'report' | 'controllo' | 'operativita' | 'gate' | 'learning' | 'impostazioni';
+type TabId = 'strategie' | 'report' | 'controllo' | 'operativita' | 'gate' | 'learning' | 'impostazioni';
 type NavId = Exclude<TabId, 'impostazioni'>;
 
 /** I vecchi hash (segnalibri, link nelle issue) → scheda nuova. */
@@ -67,6 +67,8 @@ const VECCHI_HASH: Record<string, TabId> = {
 /* --- icone (inline SVG, stroke = currentColor) ---------------------------- */
 function Icon({ id }: { id: TabId }) {
   const p: Record<TabId, ReactNode> = {
+    // strategie: una stella — le strategie nuove
+    strategie: <path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z" />,
     // report: un foglio con le righe — «cosa e' successo ieri»
     report: (
       <>
@@ -119,6 +121,13 @@ function Icon({ id }: { id: TabId }) {
 }
 
 const META: Record<TabId, { label: string; title: string; intro: string }> = {
+  strategie: {
+    label: 'Strategie nuove',
+    title: 'Strategie nuove',
+    intro:
+      'Le strategie trovate con le regole scritte prima e provate sul passato di Binance, nel paper senza soldi veri: '
+      + 'cosa sono, su quali monete, le posizioni di adesso.',
+  },
   report: {
     label: 'Report',
     title: 'Report giornaliero',
@@ -155,7 +164,9 @@ const META: Record<TabId, { label: string; title: string; intro: string }> = {
   },
 };
 
-const NAV: NavId[] = ['report', 'controllo', 'operativita', 'gate', 'learning'];
+const NAV: NavId[] = ['strategie', 'operativita'];
+/** Il vecchio sistema (il gate e il suo paper), fermo dal 21 ott 2026: le schede restano da consultare. */
+const ARCHIVIO: NavId[] = ['report', 'controllo', 'gate', 'learning'];
 
 function isTab(v: string): v is TabId {
   return v in META;
@@ -177,7 +188,6 @@ function ControlloTab() {
       <BotStatus />
       <ControlloAnomalie />
       <BacklogSi />
-      <Paper6 />
       {stato !== 'assente' && doc && (
         <>
           <ControlloPaper />
@@ -274,7 +284,7 @@ function ControlloTab() {
 }
 
 export default function DashboardShell() {
-  const [tab, setTab] = useState<TabId>('report');
+  const [tab, setTab] = useState<TabId>('strategie');
   const [user, setUser] = useState<User | null>(null);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -290,7 +300,7 @@ export default function DashboardShell() {
         setTab(nuovo);
         window.history.replaceState(null, '', `#${nuovo}`);
       } else if (!h) {
-        setTab('report');
+        setTab('strategie');
       }
     };
     sync();
@@ -374,6 +384,23 @@ export default function DashboardShell() {
           ))}
         </nav>
 
+        <div className="nav-section-label">Vecchio sistema (fermo)</div>
+        <nav className="sidebar-nav" role="tablist">
+          {ARCHIVIO.map((id) => (
+            <button
+              key={id}
+              role="tab"
+              aria-selected={tab === id}
+              title={META[id].label}
+              className={`nav-item ${tab === id ? 'active' : ''}`}
+              onClick={() => select(id)}
+            >
+              <Icon id={id} />
+              <span className="nav-label">{META[id].label}</span>
+            </button>
+          ))}
+        </nav>
+
         <div className="sidebar-footer">
           <button
             role="tab"
@@ -421,6 +448,8 @@ export default function DashboardShell() {
         </header>
 
         <div className="grid" key={tab} style={{ marginTop: 16 }}>
+          {tab === 'strategie' && <StrategieNuove />}
+
           {tab === 'report' && <ReportGiornaliero />}
 
           {tab === 'controllo' && <ControlloTab />}

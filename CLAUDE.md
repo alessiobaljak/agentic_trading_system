@@ -52,7 +52,7 @@ niente soldi veri) le strategie candidate; registro delle prove in `research/pro
 facendo e provando in un log o diario così da non ripetere le stesse cose ma soprattutto traccia anche i vari risultati [...]
 l'unico motivo per cui ti puoi fermare è se abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stesso
 riscontro nel paper»: **il registro unico è `research/REGISTRO.md`** (si guarda prima di ogni idea nuova, ogni prova ha la
-sua riga prima e il risultato dopo, con la coda delle idee). **Delega del
+sua riga prima e il risultato dopo, con la coda delle idee). Il proprietario, 21 ott 2026: «io non farò trading su [Gate.io] [...] perché devo aspettare il 2 novembre o fine novembre? non è quello che avevo chiesto» e «forse è meglio che il paper con il vecchio gate si fermi e la dashboard venga pulita [...] parti con il paper nuovo»: si giudica sul passato di Binance (il paper è una conferma, non una condizione); la dashboard parte dalla scheda «Strategie nuove» e le schede del vecchio sistema stanno sotto «Vecchio sistema (fermo)»; il vecchio paper si ferma con il pulsante STOP della dashboard (il kill switch). **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
 della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 

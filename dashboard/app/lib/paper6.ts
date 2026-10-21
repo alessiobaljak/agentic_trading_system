@@ -33,6 +33,26 @@ export interface DocPaper6 {
   candidate?: CandidataPaper6[] | null;
   posizioni?: Record<string, { lunedi?: string | null; long?: PosizionePaper6[] | null; short?: PosizionePaper6[] | null }> | null;
   nuove_nell_universo?: string[] | null;
+  strategie?: StrategiaPaper6[] | null;
+  eventi_n3?: EventoN3[] | null;
+  eventi_e4?: { simbolo?: string | null; data?: string | null; r7?: number | null }[] | null;
+}
+
+export interface StrategiaPaper6 {
+  nome?: string | null;
+  stato?: string | null;
+  monete?: string | null;
+  regola?: string | null;
+  passato?: string | null;
+}
+
+export interface EventoN3 {
+  mercato?: string | null;
+  simbolo?: string | null;
+  ingresso?: string | null;
+  stato?: string | null;
+  r?: number | null;
+  fermata?: boolean | null;
 }
 
 const storePaper6 = creaDocumentoVivo<DocPaper6>('/paper6', 'dashboard', 'paper6');
