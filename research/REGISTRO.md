@@ -73,6 +73,8 @@ Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
+**Il prezzo della ricerca** (21 ottobre): lo Sharpe corretto di F5 (Sharpe 1,93) era 0,815 con 48 prove ed è **0,517** con 67 (`programma6/STATO.md`, lezione 29). Ogni prova nuova sugli stessi anni alza l'asticella anche per le strategie già trovate: le idee nuove vanno scelte per quanto sono probabili, non per quante sono; le conferme su dati non usati non contano.
+
 **Errori trovati e corretti**: universo delle 100 monete di oggi (sopravvissute) → universo mese per mese con i dati di
 allora (prova 2); petrolio e azioni nate dal 2026-04 quasi entrati nel paper (`SECONDA.md`, sezione 9); una catena partita
 prima della fine dello scarico (`UNDICESIMA.md`, nota); la fuga di informazione dei dati sulle posizioni sulle monete

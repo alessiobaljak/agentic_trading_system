@@ -182,6 +182,12 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    abbastanza per passare l'esame. Nell'ora prima dell'annuncio quasi niente (+1,0% e +0,2%): l'ora di pubblicazione è
    giusta. Per prendere il movimento bisogna essere più veloci di 1 minuto, contro programmi professionali che leggono gli
    annunci in millisecondi: non è un vantaggio che possiamo avere.
+29. **Ogni prova in più allontana F5 dalla soglia** (calcolo del 21 ottobre, stesso metodo di sempre, `terza.sharpe_corretto`):
+   lo Sharpe di F5 resta 1,93 su 302 settimane, ma il suo Sharpe corretto scende da **0,815** con le 48 prove della ventiquattresima
+   a **0,517** con le 67 di oggi, perché il conto è più lungo e gli Sharpe delle prove sono più sparsi (deviazione da 0,69 a
+   0,80: le prove a indicatori e a eventi negative allargano la forbice). Conseguenza: cercare ancora sugli stessi anni rende
+   più difficile dimostrare F5 con il passato; la prova pulita di F5 sono i dati nuovi (il paper, dal 26 ottobre le
+   settimane) o dati indipendenti. Non si cambia il metodo per far passare F5: sarebbe l'errore del primo gate.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

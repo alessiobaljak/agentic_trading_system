@@ -4357,3 +4357,6 @@ contro 1,93. Capito: per il funding fra monete le settimane agitate sono le migl
 la moneta era già salita del 13,1% nei primi 5 minuti. Short dopo monitoraggio o rimozione (150 eventi della prova 21, con
 la riserva): +3,08%, p 0,024 (serviva 0,0011); già fatto −8,75% nei 5 minuti. Capito: le notizie si prezzano in pochi
 minuti; per prenderle bisogna essere più veloci dei programmi professionali, e non lo siamo.
+**Il prezzo della ricerca** (21 ottobre, pomeriggio): lo Sharpe corretto di F5 è sceso da 0,815 (48 prove) a 0,517 (67
+prove): ogni prova in più sugli stessi anni alza l'asticella anche per le strategie già trovate. Capito: d'ora in avanti si
+scelgono idee molto probabili e conferme su dati non usati; la prova pulita di F5 sono le settimane nuove del paper.
