@@ -434,3 +434,39 @@ def test_quarantesima_coppie(monkeypatch):
     ultima = df.iloc[-1]
     assert ultima["motivo"] == "obiettivo" and ultima["r"] > 0.005
     assert ultima["costo"] == pytest.approx(2 * (TAKER + 0.0002) * (1 + min(ultima["b"], 2)))
+
+
+def test_quarantunesima_eventi_e_operazione():
+    from research.programma6 import quarantunesima as qu
+    assert qu.multiplo("PEPEUSDT") == 1 and qu.multiplo("1000PEPEUSDT") == 1e3
+    assert qu.multiplo("1000000MOGUSDT") == 1e6 and qu.multiplo("1MBABYDOGEUSDT") == 1e6
+    t0 = sc.giorno(2022, 1, 1)
+    T = 60
+    close = np.full((T, 3), np.nan)
+    close[:, 0] = 2.0                                          # AAAUSDT dal primo giorno, 2 dollari
+    close[40:, 1] = 1.0                                        # BBBUSDT nato da poco
+    close[:, 2] = 0.002                                        # 1000CCCUSDT: 0,000002 dollari a moneta
+    pan = {"t0": t0, "simboli": ["AAAUSDT", "BBBUSDT", "1000CCCUSDT"], "close": close}
+    q = [{"mercato": "KRW-AAA", "primo_mese": "2022-02-01", "primo_giorno": "2022-02-10", "prima_ora": "2022-02-10T05:00:00",
+          "prezzo_primo_giorno": 2500.0},
+         {"mercato": "KRW-BBB", "primo_mese": "2022-02-01", "primo_giorno": "2022-02-12", "prima_ora": "2022-02-12T05:00:00",
+          "prezzo_primo_giorno": 1200.0},
+         {"mercato": "KRW-CCC", "primo_mese": "2022-02-01", "primo_giorno": "2022-02-10", "prima_ora": "2022-02-10T05:00:00",
+          "prezzo_primo_giorno": 2.5},                          # 1.250.000 won per dollaro: un omonimo
+         {"mercato": "KRW-DDD", "primo_mese": "2022-02-01", "primo_giorno": "2022-02-10", "prima_ora": None}]
+    ev, tolti = qu.eventi(pan, q)
+    assert [x["simbolo"] for x in ev] == ["AAAUSDT"] and ev[0]["cambio"] == pytest.approx(1250.0)
+    assert tolti["omonimo"] == 1 and tolti["perpetuo troppo giovane o dopo"] == 1 and tolti["senza ora d'arrivo"] == 1
+    import pandas as pd
+    ore = np.arange(1000, 1400)
+    c = pd.DataFrame({"open": 100.0, "high": 101.0, "close": 100.0}, index=ore)
+    cb = pd.DataFrame({"open": 50.0, "high": 50.0, "close": 50.0}, index=ore)
+    c.loc[1100:, ["open", "close"]] = 90.0
+    c.loc[1100:, "high"] = 91.0
+    zero = pd.Series(0.0, index=np.arange(0, 100))
+    o = qu.operazione(c, cb, zero, zero, 1010, 168, True)
+    assert not o["fermata"] and o["uscita_h"] == 1178
+    assert o["r"] == pytest.approx(0.10 - qu.vu.COSTO_MONETA - qu.vu.COSTO_BTC)     # short: la moneta scende del 10%
+    c.loc[1050, "high"] = 131.0
+    o = qu.operazione(c, cb, zero, zero, 1010, 168, True)
+    assert o["fermata"] and o["uscita_h"] == 1050 and o["r"] < -0.30
