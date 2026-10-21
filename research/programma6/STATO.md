@@ -44,6 +44,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 34 | Trading con gli indicatori a 4 ore: rottura di Donchian a 20 candele, stop 2 ATR, uscita mobile 3 ATR, al massimo 7 giorni; T1 senza filtro, T2 con il filtro del funding | `TRENTAQUATTRESIMA.md` | `RISULTATI_TRENTAQUATTRESIMA.md` | 2 | non valide: T1 −0,20% a operazione (34.397), T2 +0,01% (15.406); il filtro aggiunge +0,2%, lo short va meglio del long |
 | 35 | Contro gli eccessi a 4 ore: RSI sopra 70 e funding alto → short, sotto 30 e funding basso → long, stop 2 ATR, obiettivo RSI 50 | `TRENTACINQUESIMA.md` | `RISULTATI_TRENTACINQUESIMA.md` | 1 | non valida: −0,22% a operazione su 9.785, 47% vinte, metà delle uscite allo stop |
 | 36 | T5: tendenza a 1 giorno (9 canali di Donchian, long e short) solo nel verso del funding | `TRENTASEIESIMA.md` | `RISULTATI_TRENTASEIESIMA.md` | 1 | non valida: Sharpe 0,40 (senza filtro 0,15), +3,7% l'anno |
+| 37 | T6: T2 con l'entrata a ordine limite | `TRENTASETTESIMA.md` | `RISULTATI_TRENTASETTESIMA.md` | 1 | non valida: +0,05% a operazione (99% eseguite); long −0,28%, short +0,36% |
 
 ## Il paper (dal 20 ottobre 2026)
 
