@@ -41,6 +41,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 31 | M7 + M8 a rischio uguale (costruzione) | `TRENTUNESIMA.md` | `RISULTATI_TRENTUNESIMA.md` | 1 | non valida (corretto 0,20 con 54 prove): Sharpe 1,39 contro 1,25 di M7. Nel paper come informazione |
 | 32 | La regola N3, identica, sul passato di Binance (monete nuove dal 2021) | `TRENTADUESIMA.md` | `RISULTATI_TRENTADUESIMA.md` | 1 a eventi | **passa l'esame**: +4,29% a evento su 613 monete, p 0,0017; riserva: l'idea dell'uscita era nata su questi dati; 2021 e 2026 leggermente negativi |
 | 33 | N3 a portafoglio (5% a operazione, al massimo 20 aperte) e F5 + N3 | `TRENTATREESIMA.md` | `RISULTATI_TRENTATREESIMA.md` | 2 | non valide: N3 a portafoglio Sharpe 0,62, volatilità 33,8%, discesa −47%; F5 + N3 1,45, peggio di F5 da sola (1,93) |
+| 34 | Trading con gli indicatori a 4 ore: rottura di Donchian a 20 candele, stop 2 ATR, uscita mobile 3 ATR, al massimo 7 giorni; T1 senza filtro, T2 con il filtro del funding | `TRENTAQUATTRESIMA.md` | `RISULTATI_TRENTAQUATTRESIMA.md` | 2 | non valide: T1 −0,20% a operazione (34.397), T2 +0,01% (15.406); il filtro aggiunge +0,2%, lo short va meglio del long |
 
 ## Il paper (dal 20 ottobre 2026)
 

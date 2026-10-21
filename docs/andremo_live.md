@@ -4325,3 +4325,9 @@ vecchio paper si ferma con il pulsante STOP (kill switch): da qui non posso scri
 **Trentatreesima prova** (`TRENTATREESIMA.md`): le due strategie di Binance in un portafoglio. N3 (monete nuove) con il 5%
 a operazione: Sharpe 0,62, volatilità 34%, discesa −47%, 2026 −12,5%; F5 + N3 1,45, peggio di F5 da sola (1,93). Capito:
 una regola valida per operazione può essere cattiva da tenere; la strategia da usare è il funding con la banda.
+Il proprietario (21 ottobre): «continua a cercare vuol dire trovare anche altre strategie [...] non riesco a capire se stiamo
+facendo trading / scalping oppure comprando e tenendo [...] senza usare veramente degli indicatori tecnici». Ha ragione: le
+strategie migliori finora tengono giorni o settimane e usano il funding, non il grafico. **Trentaquattresima prova**
+(`TRENTAQUATTRESIMA.md`): trading vero a 4 ore, rottura di Donchian con stop e uscita mobile, tenuta media 72 ore: −0,20% a
+operazione su 34.397; con il filtro del funding +0,01% su 15.406. Capito: il funding aiuta anche gli indicatori (+0,2% a
+operazione), ma seguire la rottura verso l'alto (andare con la folla) perde; lo short va meglio del long.
