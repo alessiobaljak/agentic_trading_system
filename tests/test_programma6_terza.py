@@ -371,3 +371,27 @@ def test_trentesima_uscita_di_protezione():
     assert con["fermata"] and con["r"] == pytest.approx(-(1.3 * 1.01 - 1) - vu.COSTO_MONETA - vu.COSTO_BTC)
     senza = tr.operazione(c, cb, vuoto, vuoto, e, False)
     assert not senza["fermata"] and senza["r"] == pytest.approx(-vu.COSTO_MONETA - vu.COSTO_BTC)
+
+
+def test_trentaquattresima_simulazione_stop_e_uscita_mobile():
+    from research.programma6 import trentaquattresima as tq
+    n = 60
+    c = np.r_[np.full(30, 100.0), np.linspace(101, 130, 20), np.linspace(129, 100, 10)]
+    o, h, l = c.copy(), c + 0.5, c - 0.5
+    atr = np.full(n, 2.0)
+    lungo = np.zeros(n, bool)
+    lungo[30] = True
+    corto = np.zeros(n, bool)
+    op = tq._simula(o, h, l, c, lungo, corto, atr)
+    i, e, u, verso, p0, p1, motivo = op[0]
+    assert (i, e, verso) == (30, 31, 1) and motivo == 2          # esce con l'uscita mobile, non con lo stop
+    # il livello e' 3 ATR sotto la chiusura migliore (124); la candela dopo apre gia' sotto (122,56): si esce all'apertura
+    assert p1 == pytest.approx(np.linspace(129, 100, 10)[2]) and p1 < 130.0 - 3 * 2.0
+
+
+def test_trentaquattresima_quattro_ore():
+    from research.programma6 import trentaquattresima as tq
+    h = pd.DataFrame({"open": np.arange(8.0), "high": np.arange(8.0) + 1, "low": np.arange(8.0) - 1,
+                      "close": np.arange(8.0) + 0.5}, index=np.arange(8))
+    b = tq.quattro_ore(h)
+    assert b["open"].tolist() == [0.0, 4.0] and b["close"].tolist() == [3.5, 7.5] and b["high"].tolist() == [4.0, 8.0]
