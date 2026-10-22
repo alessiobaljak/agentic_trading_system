@@ -4402,3 +4402,14 @@ Il proprietario (22 ottobre, mattina): «il vecchio paper è spento da qualche g
 dashboard, leggo solo un alert grave ma non so cosa sia, accendi f5 ... la decisione di portare le strategie in paper anche
 questa falla in autonomia senza che io ti dica nulla nel momento in cui pensi sia giusto». **F5 acceso** (`ops/paper_f5_acceso`,
 riavvio del bot in coda: ops 0630): fino a lunedì 26 ottobre solo la prova a secco. L'allerta grave: in coda il controllo (ops 0631).
+**F5 acceso sulla macchina** (22 ottobre, 05:26 UTC, ops 0630): il bot riavviato con il codice nuovo; la prova a secco alle
+05:29-05:32 UTC ha letto i dati di Binance e calcolato i pesi della settimana del 19 ottobre (ops 0633, 0635): universo 100,
+20 long e 20 short (senza la banda delle settimane prima); pesi maggiori TRXUSDT +38,1%, WLFIUSDT −14,2%, XMRUSDT −11,7%,
+MORPHOUSDT −7,9%: le stesse monete e gli stessi versi del paper di ricerca per quella settimana (TRX +27,3%, WLFI −10,6%, XMR
+−8,8%, MORPHO −5,9%, con 28 e 22 monete per lato perché la ricerca porta la banda). Primo ribilancio vero lunedì 26 ottobre
+alle 00:05 UTC, con la banda di partenza dal paper di ricerca.
+**L'allerta grave** era il controllo orario (ops 0631): semaforo di sistema rosso per una sola anomalia, «ultimo giro del gate
+8 g 10 h fa», cioè il gate fermato di proposito il 13 ottobre. Corretto (commit a9af7647): con `ops/gate_fermo` diventa
+un'informazione; bot riavviato alle 05:34 UTC (ops 0634). Resta gialla l'anomalia del freno globale del vecchio paper (PF 0,72
+contro 2,02 atteso): è vera e spiega perché il vecchio paper non apre più. Il vecchio paper in 35 giorni: 784 operazioni, 55%
+vinte, −182,75 USDT (−18,3%), il Bitcoin +9,2% nello stesso tempo.
