@@ -660,3 +660,41 @@ def test_cinquantatreesima_zeta_e_pesi():
     sig = np.ones_like(S7)
     W = cz.pesi(Z, U, sig)
     assert (W[-1] < 0).all() and W[-1].sum() == pytest.approx(-2.0)          # tutte short, totale 2
+
+
+def _simula_uno(o, h, l, c, tipo, verso, livello, sl, tp1, tp2=np.nan, tp3=np.nan, f1=1.0, f2=0.0, f3=0.0, be=False,
+                valido=10, max_hold=100):
+    from research.programma6 import cinquantaquattresima as cq
+    n = len(o)
+    a = lambda x, t=float: np.array([x], dtype=t)  # noqa: E731
+    return cq.simula(np.asarray(o, float), np.asarray(h, float), np.asarray(l, float), np.asarray(c, float), np.zeros(n),
+                     a(0, np.int64), a(tipo, np.int64), a(verso, np.int64), a(livello), a(valido, np.int64), a(sl), a(tp1),
+                     a(tp2), a(tp3), a(f1), a(f2), a(f3), a(be, np.bool_), a(max_hold, np.int64), a(-1, np.int64),
+                     0.0006, 0.0002)
+
+
+def test_cinquantaquattresima_limite_che_non_passa_oltre():
+    # il minimo tocca il livello ma non lo passa: il limite non si esegue
+    o = [100.0] * 20
+    out = _simula_uno(o, [100.5] * 20, [99.0] * 20, o, tipo=1, verso=1, livello=99.0, sl=97.0, tp1=101.0)
+    assert out == []
+
+
+def test_cinquantaquattresima_stop_prima_dell_obiettivo():
+    o = [100.0, 100.0, 100.0, 100.0]
+    h = [100.2, 100.2, 102.0, 100.2]                            # nel minuto 2 si toccano obiettivo e stop
+    l = [99.8, 99.8, 97.0, 99.8]
+    out = _simula_uno(o, h, l, o, tipo=0, verso=1, livello=100.0, sl=98.0, tp1=101.0)
+    s, e, u, v, p0, r, rl, cr, tp1, motivo = out[0]
+    assert u == 2 and motivo == 1 and r < -1                   # vale lo stop: −1 R meno i costi
+
+
+def test_cinquantaquattresima_stop_all_entrata_dopo_il_tp1():
+    o = [100.0, 100.0, 100.5, 100.3, 100.0]
+    h = [100.1, 100.7, 100.6, 100.4, 100.1]                    # minuto 1: TP1 a 100,6 (un terzo)
+    l = [99.9, 99.9, 100.2, 99.9, 99.9]                        # minuto 3: torna all'entrata
+    out = _simula_uno(o, h, l, o, tipo=0, verso=1, livello=100.0, sl=98.5, tp1=100.6, tp2=101.2, tp3=102.0,
+                      f1=1 / 3, f2=1 / 3, f3=1 / 3, be=True)
+    s, e, u, v, p0, r, rl, cr, tp1, motivo = out[0]
+    assert tp1 == 1.0 and motivo == 2 and u == 3                # uscita al prezzo d'entrata, il resto in pareggio
+    assert rl == pytest.approx((0.006 / 3) / 0.015)            # lordo: solo il terzo del TP1
