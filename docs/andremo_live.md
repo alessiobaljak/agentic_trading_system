@@ -4419,3 +4419,7 @@ virtuali, il 5% a operazione, al massimo 20 aperte): N3 short a 7 giorni di vita
 per 7 giorni dopo il primo regolamento a un intervallo del funding più corto con il funding positivo (`fundingInfo` ogni ora,
 dalla macchina). Rendimenti con la formula della ricerca; test con risposte di Binance finte (`tests/test_paper_eventi.py`).
 Le chiamate vere a Binance non si provano da qui.
+**N3 ed E4 nel bot, accesi** (22 ottobre, 05:51 UTC, ops 0636; delega del proprietario sul paper): `bot/portafoglio/eventi.py`,
+interruttore `ops/paper_eventi_acceso`. Alle 05:57 UTC lo stato era «acceso», 10.000 dollari virtuali, nessuna posizione,
+la base degli intervalli del funding presa (ops 0639): le entrate di N3 partono dalle 00:05 UTC di domani (le monete al 7°
+giorno di vita), quelle di E4 al primo intervallo che si accorcia con funding positivo. F5 ribilancia lunedì 26 ottobre.
