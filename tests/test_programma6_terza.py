@@ -648,3 +648,15 @@ def test_cinquantaduesima_beta_e_neutro():
     W = np.array([[0.0, -1.0, 1.0]])
     Wn, leve = cb.neutro(W, B)
     assert Wn[0, 2] == pytest.approx(2.0) and Wn[0, 1] == pytest.approx(-0.5)   # long al tetto 2, short a 1/2
+
+
+def test_cinquantatreesima_zeta_e_pesi():
+    from research.programma6 import cinquantatreesima as cz
+    S7 = np.tile(np.r_[np.full(20, 0.001), 0.01][:, None], (1, 25))  # l'ultima settimana il funding sale molto
+    S7[:20] += np.random.default_rng(5).normal(0, 1e-4, (20, 25))
+    Z = cz.zeta(S7)
+    assert Z[-1, 0] > 1
+    U = np.ones_like(S7, dtype=bool)
+    sig = np.ones_like(S7)
+    W = cz.pesi(Z, U, sig)
+    assert (W[-1] < 0).all() and W[-1].sum() == pytest.approx(-2.0)          # tutte short, totale 2
