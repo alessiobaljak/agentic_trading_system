@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 112 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 116 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -78,8 +78,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 51 | F7: F5 sulle monete 101-150 con le variazioni del lunedì a ordine limite all'apertura per un'ora, poi a mercato (`CINQUANTUNESIMA.md`) | 1 | ordini eseguiti con il limite 95% (6.919 su 7.307); spese 5,5% l'anno invece di 11,8% a mercato sulle stesse settimane; Sharpe 0,42 (a mercato 0,26), +17,1% l'anno, volatilità 41%, discesa −50%; 2026 −0,8% | no: corretto rivisto 0,01 (59 gruppi) |
 | 52 | B1: scommettere contro il beta (Frazzini e Pedersen 2014) fra le 100 monete, beta dei 90 giorni sul Bitcoin, con la banda e i lati neutri al Bitcoin (`CINQUANTADUESIMA.md`) | 1 | Sharpe 0,53, +25,6% l'anno, volatilità 48,7%, discesa −58%; 2021 +145,4%, 2022 −20,7%, 2023 +25,0%, 2024 −4,1%, 2025 +13,1%, 2026 −12,6%; beta verso il Bitcoin 0,32; correlazione con F5 −0,06 | no: corretto rivisto 0,01 (60 gruppi) |
 | 53 | F8: il funding di ogni moneta rispetto alla sua storia (z sulle 26 settimane), short sopra 1, long sotto −1 (il carry nel tempo, Koijen e altri 2018) (`CINQUANTATREESIMA.md`) | 1 | Sharpe −0,28, −19,0% l'anno, volatilità 66,6%, discesa −97,6%; 2024 −80,2%; in media 12,6 long e 12,2 short; correlazione con F5 0,23; cade nel gruppo delle regole contro gli eccessi (Bollinger, RSI, Stocastico a 1 giorno) | no: corretto rivisto 0,00 (60 gruppi) |
+| 54 | Lo scalping sul serio, su richiesta del proprietario: Z1 lo stile del canale Telegram (15 minuti, tendenza + ritracciamento, TP1/TP2/TP3 a limite, stop all'entrata dopo il TP1, 5 al giorno), Z2 ritorno alla VWAP (5 minuti), Z3 rottura della prima ora americana, Z4 la spinta del volume (1 minuto); entrate e obiettivi a ordine limite, 30 monete, 2024-2026 (`CINQUANTAQUATTRESIMA.md`) | 4 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 = **112** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 4 = **116** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
