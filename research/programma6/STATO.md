@@ -57,6 +57,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 47 | La paura nelle opzioni (DVOL di Deribit): O1 Bitcoin, O2 Ether | `QUARANTASETTESIMA.md` | `RISULTATI_QUARANTASETTESIMA.md` | 2 | non valide: O1 0,29 (Bitcoin tenuto 0,37), O2 0,36 (Ether tenuto 0,15) |
 | 48 | R1, il regista: ogni mese solo le strategie con il mese prima positivo | `QUARANTOTTESIMA.md` | `RISULTATI_QUARANTOTTESIMA.md` | 1 | non valida: Sharpe 1,52 contro 1,93 sempre accese |
 | 49 | X1 momento delle 3 settimane, X2 dimensione (piccole contro grandi), con la banda | `QUARANTANOVESIMA.md` | `RISULTATI_QUARANTANOVESIMA.md` | 2 | non valide: X1 0,05, X2 0,47 (solo il 2021) |
+| 50 | F5 sulle monete 101-150 (conferma) | `CINQUANTESIMA.md` | `RISULTATI_CINQUANTESIMA.md` | conferma | non confermata: Sharpe 0,30; funding +27,7%, spese 15,1% |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -227,6 +228,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    3 settimane (Liu, Tsyvinski e Wu 2022, dati fino al 2020) perde tre anni e guadagna tre (Sharpe 0,05): dipende dalla fase
    del mercato; le piccole battono le grandi solo nel 2021, l'anno dell'euforia delle altcoin (+134,8%), poi perdono ogni anno.
    Il funding fra monete (F5) resta l'unica cosa che guadagna in tutti gli anni.
+37. **Oltre le 100 il funding fra monete c'è ancora, ma i costi lo mangiano** (prova 50): sulle monete 101-150 F5 incassa il
+   27,7% l'anno dal funding e il prezzo non lo toglie (+1,2%), ma con lo scarto dello 0,10% e il giro più alto (1,94 contro
+   1,35 fra le 100: la lista cambia di più) le spese sono il 15,1% l'anno e l'ultimo anno è negativo. Per usarlo su più monete
+   serve un'esecuzione più economica, non un segnale diverso.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

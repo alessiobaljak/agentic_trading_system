@@ -4436,3 +4436,6 @@ costi a due giorni; le entrate nell'universo delle ultime 4 settimane sono le st
 monete con la banda di F5: il momento delle 3 settimane Sharpe 0,05 (tre anni negativi, tre positivi), le piccole contro le grandi
 0,47 ma solo grazie al 2021. Prima prova giudicata con l'asticella rivista: 0,00 e 0,01. Capito: i fattori studiati fino al 2020
 non reggono sui perpetui dal 2021; F5 resta l'unica positiva ogni anno. Nel conto: 109 prove.
+**Cinquantesima prova** (`CINQUANTESIMA.md`, conferma): F5 identica sulle monete 101-150: Sharpe 0,30, non confermata. Capito:
+il vantaggio del funding c'è anche oltre le 100 (+27,7% l'anno dal funding, il prezzo non lo toglie), ma le spese (15,1% l'anno)
+se lo mangiano; per allargare F5 a più monete serve un'esecuzione più economica (in coda: gli ordini limite).
