@@ -4432,3 +4432,7 @@ Sharpe contro 3,0 (Harvey, Liu e Zhu 2016) F5 passa (4,66). Capito: finora conta
 avanti: **M-003 arriva a 416 trade chiusi, verdetto: non passa** (−1,96% a trade, p 0,93; `research/programma5/avanti/A.md`);
 M-001c 155 trade su 400 (−0,73%), M-002 già bocciata. Paper del programma 6: F5 nella settimana dal 19 ottobre +0,40% senza
 costi a due giorni; le entrate nell'universo delle ultime 4 settimane sono le stesse di ieri, tutte monete.
+**Quarantanovesima prova** (`QUARANTANOVESIMA.md`): i due fattori pubblicati per le cripto (Liu, Tsyvinski e Wu 2022) fra le 100
+monete con la banda di F5: il momento delle 3 settimane Sharpe 0,05 (tre anni negativi, tre positivi), le piccole contro le grandi
+0,47 ma solo grazie al 2021. Prima prova giudicata con l'asticella rivista: 0,00 e 0,01. Capito: i fattori studiati fino al 2020
+non reggono sui perpetui dal 2021; F5 resta l'unica positiva ogni anno. Nel conto: 109 prove.
