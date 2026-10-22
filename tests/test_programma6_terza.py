@@ -619,3 +619,15 @@ def test_quarantanovesima_momento_e_dimensione():
     assert m[0, 0] == pytest.approx(C[39, 0] / C[18, 0] - 1)
     d = qx.dimensione(pan, np.array([40]))
     assert d[0, 0] > d[0, 1]                                   # la piccola ha il punteggio più alto
+
+
+def test_cinquantunesima_costo_limite_e_variazioni():
+    from research.programma6 import cinquantunesima as cl
+    c, preso = cl.costo_limite(100.0, 101.0, 99.0, 100.5, compra=True)
+    assert preso and c == cl.MAKER
+    c, preso = cl.costo_limite(100.0, 101.0, 100.0, 100.5, compra=True)    # il minimo non va sotto: a mercato dopo un'ora
+    assert not preso and c == pytest.approx(cl.A_MERCATO + 0.005)
+    W = np.array([[0.5, -0.5], [0.5, -0.5]])
+    R = np.array([[0.1, 0.0], [0.0, 0.0]])
+    D = cl.variazioni(W, R)
+    assert D[0, 0] == 0.5 and D[1, 0] < 0                      # la seconda settimana si riporta il peso cresciuto
