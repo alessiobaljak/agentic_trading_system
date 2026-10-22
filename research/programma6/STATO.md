@@ -58,6 +58,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 48 | R1, il regista: ogni mese solo le strategie con il mese prima positivo | `QUARANTOTTESIMA.md` | `RISULTATI_QUARANTOTTESIMA.md` | 1 | non valida: Sharpe 1,52 contro 1,93 sempre accese |
 | 49 | X1 momento delle 3 settimane, X2 dimensione (piccole contro grandi), con la banda | `QUARANTANOVESIMA.md` | `RISULTATI_QUARANTANOVESIMA.md` | 2 | non valide: X1 0,05, X2 0,47 (solo il 2021) |
 | 50 | F5 sulle monete 101-150 (conferma) | `CINQUANTESIMA.md` | `RISULTATI_CINQUANTESIMA.md` | conferma | non confermata: Sharpe 0,30; funding +27,7%, spese 15,1% |
+| 51 | F7: F5 sulle 101-150 con gli ordini limite | `CINQUANTUNESIMA.md` | `RISULTATI_CINQUANTUNESIMA.md` | 1 | non valida: Sharpe 0,42 (a mercato 0,26), spese 5,5% invece di 11,8% |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -232,6 +233,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    27,7% l'anno dal funding e il prezzo non lo toglie (+1,2%), ma con lo scarto dello 0,10% e il giro più alto (1,94 contro
    1,35 fra le 100: la lista cambia di più) le spese sono il 15,1% l'anno e l'ultimo anno è negativo. Per usarlo su più monete
    serve un'esecuzione più economica, non un segnale diverso.
+38. **Gli ordini limite dimezzano le spese, ma sulle 101-150 non bastano** (prova 51): il 95% degli ordini all'apertura si
+   esegue entro un'ora e le spese scendono dall'11,8% al 5,5% l'anno; lo Sharpe sale da 0,26 a 0,42, ma con oscillazioni del 41%
+   l'anno e il 2026 negativo il risultato non si distingue dal caso. Fra le 100 più scambiate F5 resta la strada; per il bot
+   conviene comunque eseguirla a limite (lo stesso risparmio vale anche lì: da 7,7% a 5,3% l'anno per F3, `ESECUZIONE.md`).
 
 ## Dati (fuori da git, con le impronte nel repository)
 

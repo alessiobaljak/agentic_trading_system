@@ -4439,3 +4439,6 @@ non reggono sui perpetui dal 2021; F5 resta l'unica positiva ogni anno. Nel cont
 **Cinquantesima prova** (`CINQUANTESIMA.md`, conferma): F5 identica sulle monete 101-150: Sharpe 0,30, non confermata. Capito:
 il vantaggio del funding c'è anche oltre le 100 (+27,7% l'anno dal funding, il prezzo non lo toglie), ma le spese (15,1% l'anno)
 se lo mangiano; per allargare F5 a più monete serve un'esecuzione più economica (in coda: gli ordini limite).
+**Cinquantunesima prova** (`CINQUANTUNESIMA.md`): F5 sulle monete 101-150 con gli ordini limite: il 95% si esegue, le spese
+scendono dall'11,8% al 5,5% l'anno, lo Sharpe da 0,26 a 0,42, ma non valida (oscillazioni del 41%). Capito: l'esecuzione a limite
+conviene sempre (anche per F5 nel bot), ma da sola non porta F5 oltre le 100 monete. Nel conto: 110 prove.
