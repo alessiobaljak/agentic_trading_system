@@ -158,5 +158,8 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 19. ~~La dimensione~~ → prova 49 (X2).
 20. ~~Le liquidazioni forzate~~: l'archivio di Binance non ha i file delle liquidazioni dei perpetui USDT-M (controllato il
    22 ottobre: nessun file sotto `liquidationSnapshot`); non si fa.
+21. **F5 sulle monete dalla 101ª alla 150ª**, come conferma (non conta nel conto): la metà più liquida delle 101-200, dove F2 e
+   F3 perdevano per i costi; con la banda il giro scende di un terzo. Dice se F5 vale anche oltre le 100 più scambiate (il
+   proprietario vuole strategie per più monete possibili). Regola identica, scarto 0,10% come le prove sulle 101-200.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
