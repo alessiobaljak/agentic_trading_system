@@ -4398,3 +4398,7 @@ gira: serve il sì del proprietario. Senza riavvio il bot non legge il codice nu
 strategie fra F5, M7, K2 con il mese prima positivo: Sharpe 1,52 contro 1,93 sempre accese. Capito: le strategie buone si
 tengono accese; dopo un mese cattivo viene spesso il recupero. Nel conto: 107 prove. La coda delle idee è vuota: ne scrivo di
 nuove.
+Il proprietario (22 ottobre, mattina): «il vecchio paper è spento da qualche giorno non ci sono posizioni aperte almeno da
+dashboard, leggo solo un alert grave ma non so cosa sia, accendi f5 ... la decisione di portare le strategie in paper anche
+questa falla in autonomia senza che io ti dica nulla nel momento in cui pensi sia giusto». **F5 acceso** (`ops/paper_f5_acceso`,
+riavvio del bot in coda: ops 0630): fino a lunedì 26 ottobre solo la prova a secco. L'allerta grave: in coda il controllo (ops 0631).
