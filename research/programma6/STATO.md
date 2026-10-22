@@ -61,6 +61,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 51 | F7: F5 sulle 101-150 con gli ordini limite | `CINQUANTUNESIMA.md` | `RISULTATI_CINQUANTUNESIMA.md` | 1 | non valida: Sharpe 0,42 (a mercato 0,26), spese 5,5% invece di 11,8% |
 | 52 | B1: scommettere contro il beta, neutro al Bitcoin | `CINQUANTADUESIMA.md` | `RISULTATI_CINQUANTADUESIMA.md` | 1 | non valida: Sharpe 0,53, quasi tutto dal 2021 |
 | 53 | F8: il funding di ogni moneta rispetto alla sua storia | `CINQUANTATREESIMA.md` | `RISULTATI_CINQUANTATREESIMA.md` | 1 | non valida: Sharpe −0,28, discesa −97,6% |
+| 54 | Lo scalping sul serio: Z1 lo stile del canale (TP1/TP2/TP3, 5 al giorno), Z1b senza limite, Z2 VWAP, Z3 prima ora americana, Z4 volume | `CINQUANTAQUATTRESIMA.md` | `RISULTATI_CINQUANTAQUATTRESIMA.md` | 5 | non valide: Z1 71% al TP1 ma −0,053 R a operazione; tutti negativi |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -247,6 +248,13 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    le regole contro gli eccessi: un funding che sale è una salita in corso, e la salita continua (come «la leva che entra
    continua», prove 11 e 20). F5 guadagna perché confronta le monete nello stesso momento, non perché il funding alto annunci
    una discesa.
+41. **Vincere spesso non è guadagnare** (prova 54): lo stile del canale Telegram (tendenza a 15 minuti, entrata a limite sul
+   ritracciamento, tre obiettivi, stop all'entrata dopo il primo) prende almeno il TP1 nel 71% delle operazioni (5.095 in 2 anni e
+   9 mesi su 72 monete), ma perde 0,053 R a operazione: le vinte portano +0,36 R, le perse −1,05 R, perché il primo obiettivo
+   (+0,6%) è vicino e lo stop (−1,5%) lontano. Per stare in pari con questi numeri servirebbe vincere il 75% al netto. Anche
+   prima dei costi è −0,007 R: il vantaggio non c'è, i costi (0,046 R) lo rendono solo più negativo. Gli altri tre scalping
+   (VWAP, prima ora americana, volume) perdono di più; l'unico positivo prima dei costi (la prima ora americana, +0,013 R) paga
+   0,159 R di costi. Una percentuale di vittorie alta da sola non dice niente: conta la vincita media contro la perdita media.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

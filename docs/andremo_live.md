@@ -4448,3 +4448,10 @@ dimensione, beta) dipendono dalla fase del mercato; il funding fra monete no. Ne
 **Cinquantatreesima prova** (`CINQUANTATREESIMA.md`): il funding di ogni moneta rispetto alla sua storia (il carry nel tempo, per
 ogni moneta da sola): Sharpe −0,28, discesa −97,6%. Capito: il funding funziona confrontando le monete fra loro nello stesso
 momento (F5), non per una moneta da sola: un funding che sale è una salita in corso, che continua. Nel conto: 112 prove.
+**Cinquantaquattresima prova** (`CINQUANTAQUATTRESIMA.md`; il proprietario: «approfondisci davvero lo scalping [...] max 5
+posizioni al giorno [...] tutte almeno prendevo il tp1»): quattro scalping a ordine limite sulle 30 monete più scambiate di ogni
+mese, 2024-2026. Lo stile del canale (Z1) prende il TP1 nel 71% delle operazioni, ma perde 0,053 R a operazione (vinte +0,36 R,
+perse −1,05 R), ogni anno; senza il limite di 5 al giorno (Z1b, 42.824 operazioni) uguale, −0,052 R. VWAP −0,098 R, prima ora
+americana −0,146 R (prima dei costi +0,013), spinta del volume −0,338 R. Capito: una percentuale di vittorie alta si ottiene
+mettendo l'obiettivo vicino e lo stop lontano, e non dice niente sul guadagno; nello scalping i costi a operazione sono troppo
+grandi rispetto al movimento che si prende. Nel conto: 117 prove.
