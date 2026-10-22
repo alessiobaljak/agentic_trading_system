@@ -569,3 +569,21 @@ def test_quarantaseiesima_tester_e_segnali():
     assert np.isnan(x["sl"][4]) and x["sl"][5] == pytest.approx(12.5)     # dal 6° in poi: massimo delle 5 candele
     p = qt._pivot(np.array([1, 2, 3, 4, 9, 3, 2, 1], float), 4, 2, alto=True)
     assert p[6] == 9 and np.isnan(p[5])                       # il massimo della candela 4 si conferma 2 candele dopo
+
+
+def test_quarantasettesima_premio_e_settimane(monkeypatch):
+    import pandas as pd
+    from research.programma6 import quarantasettesima as qo
+    t0 = sc.giorno(2021, 1, 4)                                 # un lunedì
+    T = 7 * 70
+    C = np.full((T, 1), 100.0)
+    pan = {"t0": t0, "close": C, "open": C.copy(), "funding": np.zeros((T, 1))}
+    dvol = pd.Series(50.0, index=np.arange(T) + t0)
+    pr = qo.premio(pan, 0, dvol)
+    assert pr.iloc[-1] == pytest.approx(2500.0)                # prezzo fermo: volatilità realizzata zero
+    pr = pr.copy()
+    domeniche = pr.index[((pr.index + 3) % 7) == 6]
+    pr[domeniche[-3]] = 9999.0                                 # una domenica con il premio alto
+    monkeypatch.setattr(qo, "A", t0 + T)
+    df = qo.settimane(pan, 0, pr)
+    assert df.loc[int(domeniche[-3]) + 1, "w"] == 1.0 and df.loc[int(domeniche[-4]) + 1, "w"] == 0.0

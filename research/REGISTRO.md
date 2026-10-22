@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 104 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 106 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -71,8 +71,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 44 | S1: long il Bitcoin per la settimana se l'offerta totale delle stablecoin (DefiLlama) è cresciuta nella settimana prima, altrimenti niente (`QUARANTAQUATTRESIMA.md`) | 1 | Sharpe 0,66, +29,3% l'anno, discesa −57,9% (il Bitcoin tenuto sulle stesse settimane 0,38, discesa −77,4%); in posizione il 66% delle settimane; più del Bitcoin +8,4% l'anno; 2022 −17,5% | no: intervallo non sopra zero, corretto 0,00 con 68 prove |
 | 45 | Gli indicatori per decidere quando entrare (domanda del proprietario): I1 F5 con le entrate nuove solo se la tendenza dei 20 giorni è d'accordo; I2 N3 con l'entrata alla prima chiusura sotto il minimo dei 5 giorni (eventi di N3, con la riserva) (`QUARANTACINQUESIMA.md`) | 1 + 1 a eventi + 1 portafoglio | **I1**: Sharpe 1,02 contro 1,93 di F5, discesa −80,5% (F5 −31%): meno monete per lato (18 invece di 25) e 6 settimane con 0-2 monete short, che arrivano a pesare il 100%. **I2**: +3,79% a operazione su 579 (N3 +4,29%), p 0,0064 contro 0,001; 2026 −5,7%; portafoglio Sharpe 0,88 (N3 0,62), discesa −42,7% | no |
 | 46 | Le 17 strategie già pronte di TradingView (le «Built-in Strategies»: MACD, RSI, Supertrend, Bollinger, Parabolic SAR, Keltner, Stocastico, canali, pivot, candele…) con i valori di serie, a 4 ore e a 1 giorno, sulle 100 monete, con i costi veri e senza (`QUARANTASEIESIMA.md`) | 34 | nessuna valida. Le migliori: Supertrend a 1 giorno Sharpe 0,36 con i costi (0,49 senza), +17,8% l'anno, discesa −51%; Price Channel a 1 giorno 0,34. Senza costi molte sembrano buone (Momentum 4 ore +24,6% l'anno, MACD 4 ore +23,6%, Pivot Extension 4 ore +26,5%), con i costi veri diventano −3,0%, +0,9%, −11,2% (spese fino al 38% l'anno). RSI, Stocastico e Bollinger (contro gli eccessi) perdono anche senza costi (da −18% a −33% l'anno) | no: corretto 0,00 con 104 prove |
+| 47 | La paura nelle opzioni: long Bitcoin (O1) o Ether (O2) per la settimana se il premio delle opzioni (DVOL² − volatilità realizzata²) è sopra la sua mediana delle 52 settimane prima (`QUARANTASETTESIMA.md`) | 2 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 = **104** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 = **106** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
@@ -140,7 +141,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 13. ~~M7 e M8 insieme~~ → prova 31.
 14. ~~Gli indicatori a 1 giorno nel verso del funding~~ → prova 36 (no: Sharpe 0,40).
 15. ~~L'arrivo su Coinbase come conferma di U1~~ → non si fa: U1 non regge (prova 41). Le date di Coinbase sono scaricate (`scarico_coinbase.py`) se serviranno.
-16. **La paura nelle opzioni** (Deribit, indice di volatilità implicita DVOL dal 2021-04, raggiungibile da qui): quando la volatilità implicita è molto sopra quella realizzata chi vende protezione guadagna, e chi compra Bitcoin dopo i picchi di paura anche (premio per il rischio di varianza, studi pubblicati per le borse e per il Bitcoin). Solo Bitcoin ed Ether. Da fare dopo il regista, con le regole scritte prima.
+16. ~~La paura nelle opzioni~~ → prova 47.
 17. ~~Le strategie di TradingView così come sono pubblicate~~ → prova 46 (le 17 già pronte di TradingView); quelle che il proprietario indicherà si provano una per una.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
