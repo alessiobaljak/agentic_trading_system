@@ -79,3 +79,5 @@ research/autopsia/varianti.jsonl
 # lo stato del paper di F5 sulla macchina (bot/portafoglio/f5.py)
 data/paper_f5.json
 data/paper_f5.tmp
+data/paper_eventi.json
+data/paper_eventi.tmp

@@ -4413,3 +4413,9 @@ alle 00:05 UTC, con la banda di partenza dal paper di ricerca.
 un'informazione; bot riavviato alle 05:34 UTC (ops 0634). Resta gialla l'anomalia del freno globale del vecchio paper (PF 0,72
 contro 2,02 atteso): è vera e spiega perché il vecchio paper non apre più. Il vecchio paper in 35 giorni: 784 operazioni, 55%
 vinte, −182,75 USDT (−18,3%), il Bitcoin +9,2% nello stesso tempo.
+**N3 ed E4 nel bot** (22 ottobre, mattina; il proprietario: «non posso aspettare settimane o mesi prima di andare in paper»):
+`bot/portafoglio/eventi.py`, stesso schema di F5 (interruttore suo `ops/paper_eventi_acceso`, nessun ordine vero, 10.000 dollari
+virtuali, il 5% a operazione, al massimo 20 aperte): N3 short a 7 giorni di vita con l'uscita a +30% o dopo 30 giorni, E4 short
+per 7 giorni dopo il primo regolamento a un intervallo del funding più corto con il funding positivo (`fundingInfo` ogni ora,
+dalla macchina). Rendimenti con la formula della ricerca; test con risposte di Binance finte (`tests/test_paper_eventi.py`).
+Le chiamate vere a Binance non si provano da qui.

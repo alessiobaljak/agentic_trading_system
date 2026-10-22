@@ -106,6 +106,7 @@ def build() -> str:
 
     # --- il paper di F5 eseguito dal bot (bot/portafoglio/f5.py, backlog P16) ---
     lines += sezione_paper_f5(fb)
+    lines += sezione_paper_eventi(fb)
 
     # --- ultima decisione orchestratore (RTDB) ---
     dec = fb.get_rtdb("/decision_status") or {}
@@ -557,6 +558,25 @@ def sezione_paper_f5(fb) -> list:
         if isinstance(pos, dict) and pos:
             ordine = sorted(pos.items(), key=lambda kv: -abs(float(kv[1])))
             righe.append("- pesi maggiori: " + ", ".join(f"{s} {100 * float(w):+.1f}%" for s, w in ordine[:10]))
+    return righe + [""]
+
+
+def sezione_paper_eventi(fb) -> list:
+    """Le righe del paper di N3 ed E4 (RTDB /paper_eventi): acceso, equity, operazioni aperte e chiuse."""
+    titolo = "## Paper N3 ed E4 (eventi, eseguito dal bot)"
+    st = fb.get_rtdb("/paper_eventi/stato") or {}
+    if not isinstance(st, dict) or not st:
+        return [titolo, "- spento (manca `ops/paper_eventi_acceso`)", ""]
+    med = st.get("rendimento_medio")
+    righe = [titolo, f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})",
+             f"- equity: **${float(st.get('equity', 0)):,.2f}** su ${float(st.get('capitale', 0)):,.0f} "
+             f"({100 * float(st.get('rendimento', 0)):+.2f}%) · aperte N3 {st.get('aperte_n3', 0)}, E4 {st.get('aperte_e4', 0)} · "
+             f"chiuse {st.get('chiuse', 0)}" + (f", media {100 * float(med):+.2f}% a operazione" if med is not None else "")
+             + f" · E4 in attesa {st.get('e4_in_attesa', 0)}"]
+    aperte = fb.get_rtdb("/paper_eventi/aperte") or {}
+    if isinstance(aperte, dict) and aperte:
+        righe.append("- aperte: " + ", ".join(f"{p.get('tipo')} {p.get('simbolo')} {100 * float(p.get('rendimento_ora') or 0):+.1f}% "
+                                              f"(fino al {p.get('uscita_giorno')})" for p in aperte.values() if isinstance(p, dict)))
     return righe + [""]
 
 

@@ -159,3 +159,15 @@ scarto, poi il funding vero di ogni regolamento; capitale virtuale di 10.000 dol
 ordinate in modo diverso: in 26 settimane del passato 0,15 monete diverse a settimana in media, l'1,3% di peso); **non cambia
 il verdetto di F5**, che resta sul calcolo di questo paper a 52 e 104 settimane.
 
+## 14. N3 ed E4 eseguiti dal bot (aggiunto il 22 ottobre 2026, prima di ogni evento eseguito)
+
+Come F5 (sezione 13), anche N3 ed E4 girano **nel bot sulla macchina** (`bot/portafoglio/eventi.py`), con le regole delle
+sezioni 9 e 11 e i dati di Binance del momento: N3 short a 7 giorni di vita della moneta (alle 00:05 UTC al prezzo mark),
+uscita a +30% sulle candele a 1 ora o dopo 30 giorni; E4 al primo regolamento a un intervallo del funding più corto con il
+funding positivo (letto ogni ora da `fundingInfo`, che dalla macchina si raggiunge), short dal giorno UTC dopo per 7 giorni;
+sempre long il Bitcoin per lo stesso valore, il 5% del capitale a operazione, al massimo 20 aperte, costi e funding come la
+ricerca, 10.000 dollari virtuali, nessun ordine vero. Acceso dal file `ops/paper_eventi_acceso`, fuori dal kill switch del
+vecchio paper; lo stato in `docs/state.md` («Paper N3 ed E4») e su RTDB in `/paper_eventi`. Serve a misurare l'esecuzione
+vera e a vedere subito gli eventi (E4 qui si vede in giornata, nel calcolo solo quando esce il file del mese); **non cambia i
+verdetti di N3 ed E4**, che restano sul calcolo di questo paper a 52 e 104 settimane.
+

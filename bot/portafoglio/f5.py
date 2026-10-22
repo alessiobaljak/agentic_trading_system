@@ -158,6 +158,18 @@ def _chiedi_http(percorso: str, parametri: dict) -> Optional[object]:
     return None
 
 
+def contratti_monete(info: dict) -> dict:
+    """Dai dati di exchangeInfo: {simbolo: giorno di vita} dei perpetui USDT-M in scambio che sono monete (niente indici,
+    azioni, metalli: `underlyingType` COIN, niente TradFi, niente `ESCLUSI`)."""
+    out = {}
+    for x in (info or {}).get("symbols", []):
+        if (x.get("contractType") == "PERPETUAL" and x.get("quoteAsset") == "USDT" and x.get("status") == "TRADING"
+                and x.get("underlyingType", "COIN") == "COIN" and "TradFi" not in (x.get("underlyingSubType") or [])
+                and x["symbol"] not in ESCLUSI):
+            out[x["symbol"]] = int(x.get("onboardDate", 0)) // GIORNO_MS
+    return out
+
+
 class PaperF5:
     def __init__(self, fb, chiedi: Callable = _chiedi_http, file_stato: Path = FILE_STATO,
                  interruttore: Path = INTERRUTTORE, pausa_s: float = 0.1) -> None:
@@ -224,14 +236,7 @@ class PaperF5:
         return {x["symbol"]: float(x["markPrice"]) for x in dati if isinstance(x, dict) and float(x.get("markPrice") or 0) > 0}
 
     def _contratti(self) -> dict:
-        info = self.chiedi("/fapi/v1/exchangeInfo", {}) or {}
-        out = {}
-        for x in info.get("symbols", []):
-            if (x.get("contractType") == "PERPETUAL" and x.get("quoteAsset") == "USDT" and x.get("status") == "TRADING"
-                    and x.get("underlyingType", "COIN") == "COIN" and "TradFi" not in (x.get("underlyingSubType") or [])
-                    and x["symbol"] not in ESCLUSI):
-                out[x["symbol"]] = int(x.get("onboardDate", 0)) // GIORNO_MS
-        return out
+        return contratti_monete(self.chiedi("/fapi/v1/exchangeInfo", {}) or {})
 
     def _giornaliere(self, simbolo: str) -> dict:
         k = self.chiedi("/fapi/v1/klines", {"symbol": simbolo, "interval": "1d", "limit": 40}) or []
