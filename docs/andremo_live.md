@@ -4423,3 +4423,8 @@ Le chiamate vere a Binance non si provano da qui.
 interruttore `ops/paper_eventi_acceso`. Alle 05:57 UTC lo stato era «acceso», 10.000 dollari virtuali, nessuna posizione,
 la base degli intervalli del funding presa (ops 0639): le entrate di N3 partono dalle 00:05 UTC di domani (le monete al 7°
 giorno di vita), quelle di E4 al primo intervallo che si accorcia con funding positivo. F5 ribilancia lunedì 26 ottobre.
+Il proprietario (22 ottobre): «riguarda allora questa asticella [...] non sto dicendo di non avere un'asticella ma di essere
+sicuri che la stiamo usando nella maniera corretta». **L'asticella rivista** (`research/programma6/ASTICELLA.md`, procedura
+scritta prima del ricalcolo): gli autori del metodo contano i gruppi di prove simili, non le prove una per una. 107 prove
+fanno 56 gruppi; lo Sharpe corretto di F5 passa da 0,46 a 0,87, di F5 + M7 + K2 a 0,90; nessuna arriva a 0,95. Con il t dello
+Sharpe contro 3,0 (Harvey, Liu e Zhu 2016) F5 passa (4,66). Capito: finora contavamo troppo; da qui si usa il calcolo rivisto.

@@ -1,0 +1,475 @@
+{
+ "prove": 107,
+ "con_serie": 89,
+ "da_sole": 18,
+ "tagli": {
+  "0.5": {
+   "gruppi": 56,
+   "deviazione_sharpe_gruppi": 0.6310279181054189,
+   "candidate": {
+    "F5": {
+     "sharpe": 1.9327947810260113,
+     "settimane": 302,
+     "corretto_prima": 0.46497601639704844,
+     "corretto_rivisto": 0.867919806815862,
+     "t": 4.657871936921448
+    },
+    "M7": {
+     "sharpe": 1.2452508422212571,
+     "settimane": 250,
+     "corretto_prima": 0.06114826737090191,
+     "corretto_rivisto": 0.3207051686051301,
+     "t": 2.7303930930474642
+    },
+    "F5 + M7": {
+     "sharpe": 1.8263780322048813,
+     "settimane": 250,
+     "corretto_prima": 0.38821092924821965,
+     "corretto_rivisto": 0.7638210833752762,
+     "t": 4.004598748578706
+    },
+    "K2": {
+     "sharpe": 1.7203729992493397,
+     "settimane": 250,
+     "corretto_prima": 0.30374799530329955,
+     "corretto_rivisto": 0.7015635474489788,
+     "t": 3.7721673379772973
+    },
+    "F5 + M7 + K2": {
+     "sharpe": 2.106501631231712,
+     "settimane": 250,
+     "corretto_prima": 0.6096423556719173,
+     "corretto_rivisto": 0.9046586609029184,
+     "t": 4.618810370887778
+    },
+    "M7 + M8": {
+     "sharpe": 1.390521716505871,
+     "settimane": 250,
+     "corretto_prima": 0.10816160323880464,
+     "corretto_rivisto": 0.4380112278090627,
+     "t": 3.0489205562051236
+    },
+    "F6": {
+     "sharpe": 1.714424322159953,
+     "settimane": 302,
+     "corretto_prima": 0.2809865685479914,
+     "corretto_rivisto": 0.7155618403478301,
+     "t": 4.131617601908742
+    },
+    "R1": {
+     "sharpe": 1.521336824042928,
+     "settimane": 236,
+     "corretto_prima": 0.19190591502315374,
+     "corretto_rivisto": 0.5446354062775501,
+     "t": 3.2410050459120088
+    }
+   },
+   "composizione": [
+    {
+     "membri": [
+      "35 T3",
+      "46 Bollinger Bands 4h",
+      "46 RSI 4h",
+      "46 Stochastic Slow 4h"
+     ],
+     "sharpe": -0.35
+    },
+    {
+     "membri": [
+      "46 Bollinger Bands 1d",
+      "46 RSI 1d",
+      "46 Stochastic Slow 1d"
+     ],
+     "sharpe": -0.498
+    },
+    {
+     "membri": [
+      "13 BTC funding"
+     ],
+     "sharpe": 0.46
+    },
+    {
+     "membri": [
+      "46 Pivot Extension 1d"
+     ],
+     "sharpe": -0.178
+    },
+    {
+     "membri": [
+      "40 coppie"
+     ],
+     "sharpe": 0.339
+    },
+    {
+     "membri": [
+      "11 P2"
+     ],
+     "sharpe": -0.885
+    },
+    {
+     "membri": [
+      "20 S1"
+     ],
+     "sharpe": 0.587
+    },
+    {
+     "membri": [
+      "20 S2"
+     ],
+     "sharpe": -0.818
+    },
+    {
+     "membri": [
+      "43 Q1"
+     ],
+     "sharpe": 0.004
+    },
+    {
+     "membri": [
+      "46 Pivot Extension 4h"
+     ],
+     "sharpe": -0.223
+    },
+    {
+     "membri": [
+      "11 P1"
+     ],
+     "sharpe": 0.1
+    },
+    {
+     "membri": [
+      "47 O1",
+      "47 O2"
+     ],
+     "sharpe": 0.367
+    },
+    {
+     "membri": [
+      "2A A1",
+      "2A A3",
+      "44 S1"
+     ],
+     "sharpe": 0.634
+    },
+    {
+     "membri": [
+      "9 G1"
+     ],
+     "sharpe": -1.155
+    },
+    {
+     "membri": [
+      "39 T8"
+     ],
+     "sharpe": -0.072
+    },
+    {
+     "membri": [
+      "46 Keltner Channels 1d"
+     ],
+     "sharpe": 0.025
+    },
+    {
+     "membri": [
+      "46 InSide Bar 4h"
+     ],
+     "sharpe": -0.329
+    },
+    {
+     "membri": [
+      "46 InSide Bar 1d"
+     ],
+     "sharpe": -0.463
+    },
+    {
+     "membri": [
+      "2A A2",
+      "36 T5",
+      "46 Consecutive Up/Down 1d",
+      "46 Keltner Channels 4h",
+      "46 MACD 1d",
+      "46 Momentum 1d",
+      "46 Pivot Reversal 1d",
+      "46 Price Channel 1d",
+      "46 Supertrend 1d"
+     ],
+     "sharpe": 0.204
+    },
+    {
+     "membri": [
+      "46 BarUpDn 1d"
+     ],
+     "sharpe": -0.835
+    },
+    {
+     "membri": [
+      "34 T1",
+      "34 T2",
+      "37 T6",
+      "46 Channel BreakOut 1d",
+      "46 Momentum 4h",
+      "46 Parabolic SAR 1d",
+      "46 Pivot Reversal 4h",
+      "46 Price Channel 4h",
+      "46 Supertrend 4h",
+      "46 Volty Expan Close 1d"
+     ],
+     "sharpe": -0.416
+    },
+    {
+     "membri": [
+      "46 OutSide Bar 1d"
+     ],
+     "sharpe": 0.04
+    },
+    {
+     "membri": [
+      "46 BarUpDn 4h"
+     ],
+     "sharpe": -1.347
+    },
+    {
+     "membri": [
+      "46 Consecutive Up/Down 4h"
+     ],
+     "sharpe": -0.187
+    },
+    {
+     "membri": [
+      "46 Channel BreakOut 4h",
+      "46 MACD 4h",
+      "46 Parabolic SAR 4h"
+     ],
+     "sharpe": -0.706
+    },
+    {
+     "membri": [
+      "46 Volty Expan Close 4h"
+     ],
+     "sharpe": -1.696
+    },
+    {
+     "membri": [
+      "46 OutSide Bar 4h"
+     ],
+     "sharpe": -0.587
+    },
+    {
+     "membri": [
+      "9 G2",
+      "14 M1",
+      "14 M2",
+      "16 M3",
+      "17 M4",
+      "17 M5",
+      "23 M6",
+      "25 M7",
+      "29 M8",
+      "31 M7+M8"
+     ],
+     "sharpe": 0.572
+    },
+    {
+     "membri": [
+      "33 N3 portafoglio",
+      "33 F5+N3"
+     ],
+     "sharpe": 1.02
+    },
+    {
+     "membri": [
+      "6 F2",
+      "8 F3",
+      "12 K1",
+      "15 F3+M1",
+      "19 P1",
+      "19 P2",
+      "24 F5",
+      "25 F5+M7",
+      "28 K2",
+      "28 F5+M7+K2",
+      "42 F6",
+      "48 R1"
+     ],
+     "sharpe": 1.745
+    },
+    {
+     "membri": [
+      "45 I1"
+     ],
+     "sharpe": 1.019
+    },
+    {
+     "membri": [
+      "6 F1"
+     ],
+     "sharpe": 0.361
+    },
+    {
+     "membri": [
+      "18 N1",
+      "18 N2"
+     ],
+     "sharpe": -0.38
+    },
+    {
+     "membri": [
+      "45 I2"
+     ],
+     "sharpe": 0.896
+    },
+    {
+     "membri": [
+      "3 C1",
+      "3 C2",
+      "10 C4"
+     ],
+     "sharpe": -0.005
+    },
+    {
+     "membri": [
+      "3 C3"
+     ],
+     "sharpe": 0.031
+    },
+    {
+     "membri": [
+      "41 U1"
+     ],
+     "sharpe": 0.591
+    },
+    {
+     "membri": [
+      "43 Q2"
+     ],
+     "sharpe": 1.054
+    }
+   ]
+  },
+  "0.3": {
+   "gruppi": 43,
+   "deviazione_sharpe_gruppi": 0.5694919078220415,
+   "candidate": {
+    "F5": {
+     "sharpe": 1.9327947810260113,
+     "settimane": 302,
+     "corretto_prima": 0.46497601639704844,
+     "corretto_rivisto": 0.9445147789735872,
+     "t": 4.657871936921448
+    },
+    "M7": {
+     "sharpe": 1.2452508422212571,
+     "settimane": 250,
+     "corretto_prima": 0.06114826737090191,
+     "corretto_rivisto": 0.4848302325790342,
+     "t": 2.7303930930474642
+    },
+    "F5 + M7": {
+     "sharpe": 1.8263780322048813,
+     "settimane": 250,
+     "corretto_prima": 0.38821092924821965,
+     "corretto_rivisto": 0.8677665548308104,
+     "t": 4.004598748578706
+    },
+    "K2": {
+     "sharpe": 1.7203729992493397,
+     "settimane": 250,
+     "corretto_prima": 0.30374799530329955,
+     "corretto_rivisto": 0.8268952320243148,
+     "t": 3.7721673379772973
+    },
+    "F5 + M7 + K2": {
+     "sharpe": 2.106501631231712,
+     "settimane": 250,
+     "corretto_prima": 0.6096423556719173,
+     "corretto_rivisto": 0.9569850139939003,
+     "t": 4.618810370887778
+    },
+    "M7 + M8": {
+     "sharpe": 1.390521716505871,
+     "settimane": 250,
+     "corretto_prima": 0.10816160323880464,
+     "corretto_rivisto": 0.6071990527252475,
+     "t": 3.0489205562051236
+    },
+    "F6": {
+     "sharpe": 1.714424322159953,
+     "settimane": 302,
+     "corretto_prima": 0.2809865685479914,
+     "corretto_rivisto": 0.8473636184568096,
+     "t": 4.131617601908742
+    },
+    "R1": {
+     "sharpe": 1.521336824042928,
+     "settimane": 236,
+     "corretto_prima": 0.19190591502315374,
+     "corretto_rivisto": 0.6920230175114883,
+     "t": 3.2410050459120088
+    }
+   }
+  },
+  "0.7": {
+   "gruppi": 73,
+   "deviazione_sharpe_gruppi": 0.680406760119217,
+   "candidate": {
+    "F5": {
+     "sharpe": 1.9327947810260113,
+     "settimane": 302,
+     "corretto_prima": 0.46497601639704844,
+     "corretto_rivisto": 0.7532267226672466,
+     "t": 4.657871936921448
+    },
+    "M7": {
+     "sharpe": 1.2452508422212571,
+     "settimane": 250,
+     "corretto_prima": 0.06114826737090191,
+     "corretto_rivisto": 0.19687892521239325,
+     "t": 2.7303930930474642
+    },
+    "F5 + M7": {
+     "sharpe": 1.8263780322048813,
+     "settimane": 250,
+     "corretto_prima": 0.38821092924821965,
+     "corretto_rivisto": 0.6402434500844957,
+     "t": 4.004598748578706
+    },
+    "K2": {
+     "sharpe": 1.7203729992493397,
+     "settimane": 250,
+     "corretto_prima": 0.30374799530329955,
+     "corretto_rivisto": 0.5616086588540631,
+     "t": 3.7721673379772973
+    },
+    "F5 + M7 + K2": {
+     "sharpe": 2.106501631231712,
+     "settimane": 250,
+     "corretto_prima": 0.6096423556719173,
+     "corretto_rivisto": 0.826172456637283,
+     "t": 4.618810370887778
+    },
+    "M7 + M8": {
+     "sharpe": 1.390521716505871,
+     "settimane": 250,
+     "corretto_prima": 0.10816160323880464,
+     "corretto_rivisto": 0.293420000743755,
+     "t": 3.0489205562051236
+    },
+    "F6": {
+     "sharpe": 1.714424322159953,
+     "settimane": 302,
+     "corretto_prima": 0.2809865685479914,
+     "corretto_rivisto": 0.5625588190573262,
+     "t": 4.131617601908742
+    },
+    "R1": {
+     "sharpe": 1.521336824042928,
+     "settimane": 236,
+     "corretto_prima": 0.19190591502315374,
+     "corretto_rivisto": 0.4050162855460137,
+     "t": 3.2410050459120088
+    }
+   }
+  }
+ },
+ "deviazione_sharpe_prove": 0.7711382754469603
+}

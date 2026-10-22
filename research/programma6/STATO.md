@@ -217,6 +217,11 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    negativo porta F5 + M7 + K2 da Sharpe 1,93 a 1,52; i mesi negativi di queste strategie non annunciano altri mesi negativi
    (2023: −8,7% con il regista). Come per F5 nelle settimane agitate (lezione 27): togliere esposizione dopo una perdita taglia il
    recupero, non il rischio.
+35. **L'asticella si usava in modo troppo severo, e ora si usa come prescrivono gli autori** (`ASTICELLA.md`,
+   `RISULTATI_ASTICELLA.md`): contando le prove una per una (107), varianti quasi uguali pesavano come idee diverse e le regole
+   che perdono per costruzione allargavano la forbice. Contando i gruppi di prove simili (56) F5 sale da 0,46 a **0,87** e
+   F5 + M7 + K2 a **0,90**: molto probabilmente non sono fortuna, ma non al 95%. Con il t dello Sharpe contro 3,0 (l'altra
+   asticella pubblicata) passano. Il verdetto finale resta del paper, che è acceso nel bot.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

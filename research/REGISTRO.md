@@ -78,6 +78,15 @@ Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
+**L'asticella rivista** (22 ottobre, richiesta del proprietario; `programma6/ASTICELLA.md`, scritta prima del ricalcolo,
+risultati in `programma6/RISULTATI_ASTICELLA.md`). Lo Sharpe corretto si calcolava contando le 107 prove una per una; gli
+autori del metodo (López de Prado 2019, 2020) prescrivono di contare i **gruppi di prove simili** (correlazione dei rendimenti)
+e di usare la varianza degli Sharpe dei gruppi. Con il taglio fissato prima (correlazione media 0,5): **56 gruppi**, deviazione
+0,63 invece di 0,77. Sharpe corretto rivisto: **F5 0,87** (prima 0,46), **F5 + M7 + K2 0,90**, F5 + M7 0,76, K2 0,70, F6 0,72,
+M7 0,32; nessuna arriva a 0,95 al taglio scelto (al taglio 0,3, solo per capire: F5 + M7 + K2 0,96, F5 0,94). Con l'altra
+asticella pubblicata, il t dello Sharpe contro 3,0 (Harvey, Liu e Zhu 2016), passano F5 (4,66), F5 + M7 + K2 (4,62), F6, F5 + M7,
+K2, R1, M7 + M8; M7 no (2,73). **Da qui si usa il calcolo rivisto** (gruppi), con la soglia 0,95.
+
 **Il prezzo della ricerca** (21 ottobre): lo Sharpe corretto di F5 (Sharpe 1,93) era 0,815 con 48 prove ed è **0,517** con 67 (`programma6/STATO.md`, lezione 29). Ogni prova nuova sugli stessi anni alza l'asticella anche per le strategie già trovate: le idee nuove vanno scelte per quanto sono probabili, non per quante sono; le conferme su dati non usati non contano.
 
 **Errori trovati e corretti**: universo delle 100 monete di oggi (sopravvissute) → universo mese per mese con i dati di
