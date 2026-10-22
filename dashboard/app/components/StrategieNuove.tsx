@@ -5,6 +5,7 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import { lista } from '../lib/controllo';
 import { usePaper6, type EventoN3, type PosizionePaper6, type StrategiaPaper6 } from '../lib/paper6';
 import Paper6 from './Paper6';
+import PaperBot from './PaperBot';
 
 const pct = (x?: number | null, cifre = 1) =>
   x == null || !Number.isFinite(x) ? '—' : `${x >= 0 ? '+' : ''}${(100 * x).toFixed(cifre)}%`;
@@ -108,6 +109,8 @@ export default function StrategieNuove() {
           ))
         )}
       </div>
+
+      <PaperBot />
 
       {doc?.passato && <Passato passato={doc.passato} />}
 
