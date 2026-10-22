@@ -1,0 +1,15 @@
+{
+ "BTC": {
+  "giorni": 2039,
+  "primo": 18710,
+  "ultimo": 20748,
+  "sha256": "379416cbc4aaa1b84ddec02b0b8c9386b12b81dbfe63920eb1ea9c9d6c6188b7"
+ },
+ "ETH": {
+  "giorni": 2039,
+  "primo": 18710,
+  "ultimo": 20748,
+  "sha256": "de2500c0c3f39bc0ee42ff32352245422b100986037c57a068cb5056b4b2ae86"
+ },
+ "scaricato": "2026-10-22"
+}

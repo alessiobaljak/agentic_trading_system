@@ -4380,3 +4380,6 @@ equity $817,25, ultima apertura SYRUPUSDT long alle 07:02 UTC; nel log (`ops/res
 kill switch. Il proprietario aveva scritto «paper vecchio fermato»: il comando STOP non è arrivato al bot. Per il paper delle
 strategie nuove eseguito dal bot serve un pezzo nuovo (il bot sa tenere una posizione per moneta con stop, non un portafoglio
 di 40-60 monete): voce P16 del backlog.
+**Quarantasettesima prova** (`QUARANTASETTESIMA.md`, 22 ottobre, notte): la paura nelle opzioni di Deribit (DVOL) per tenere
+Bitcoin o Ether: Bitcoin Sharpe 0,29 contro 0,37 tenuto sempre, Ether 0,36 contro 0,15; discese dimezzate, nessuna valida.
+Capito: come le stablecoin, il premio delle opzioni riduce le perdite ma non dà un vantaggio dimostrabile. Nel conto: 106 prove.

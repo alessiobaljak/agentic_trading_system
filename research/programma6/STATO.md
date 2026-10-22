@@ -54,6 +54,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 44 | S1: long il Bitcoin se l'offerta delle stablecoin è cresciuta nella settimana prima | `QUARANTAQUATTRESIMA.md` | `RISULTATI_QUARANTAQUATTRESIMA.md` | 1 | non valida: Sharpe 0,66 (Bitcoin tenuto 0,38), intervallo non sopra zero |
 | 45 | Indicatori per il momento d'entrata: I1 F5 con la tendenza d'accordo, I2 N3 sulla prima rottura verso il basso | `QUARANTACINQUESIMA.md` | `RISULTATI_QUARANTACINQUESIMA.md` | 1 + 1 a eventi + 1 | non valide: I1 Sharpe 1,02 (F5 1,93); I2 +3,79% a operazione, p 0,0064, portafoglio 0,88 |
 | 46 | Le 17 strategie già pronte di TradingView, valori di serie, a 4 ore e a 1 giorno | `QUARANTASEIESIMA.md` | `RISULTATI_QUARANTASEIESIMA.md` | 34 | nessuna valida: la migliore Supertrend a 1 giorno, Sharpe 0,36 (il Bitcoin tenuto 0,38) |
+| 47 | La paura nelle opzioni (DVOL di Deribit): O1 Bitcoin, O2 Ether | `QUARANTASETTESIMA.md` | `RISULTATI_QUARANTASETTESIMA.md` | 2 | non valide: O1 0,29 (Bitcoin tenuto 0,37), O2 0,36 (Ether tenuto 0,15) |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -207,6 +208,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    migliori con i costi seguono la tendenza a 1 giorno (Supertrend 0,36, Price Channel 0,34): quanto tenere il Bitcoin (0,38),
    con discese oltre il 50%. Quelle contro gli eccessi (RSI, Stocastico, Bollinger) perdono anche senza costi: dal 2021 nel
    crypto andare contro i movimenti forti è costato caro.
+33. **Il premio delle opzioni non dice quando tenere Bitcoin o Ether** (prova 47): stare dentro solo nelle settimane con il
+   premio sopra la sua mediana dimezza la discesa peggiore (Bitcoin −37% invece di −66%), ma guadagna meno (Sharpe 0,29 contro
+   0,37 del Bitcoin tenuto); per l'Ether va meglio dell'Ether tenuto (0,36 contro 0,15), ma non abbastanza da distinguersi dal caso.
+   Come per le stablecoin (prova 44): i segnali sul mercato intero riducono le perdite, non danno un vantaggio dimostrabile.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
