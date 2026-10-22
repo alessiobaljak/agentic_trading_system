@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 107 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 109 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -73,8 +73,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 46 | Le 17 strategie già pronte di TradingView (le «Built-in Strategies»: MACD, RSI, Supertrend, Bollinger, Parabolic SAR, Keltner, Stocastico, canali, pivot, candele…) con i valori di serie, a 4 ore e a 1 giorno, sulle 100 monete, con i costi veri e senza (`QUARANTASEIESIMA.md`) | 34 | nessuna valida. Le migliori: Supertrend a 1 giorno Sharpe 0,36 con i costi (0,49 senza), +17,8% l'anno, discesa −51%; Price Channel a 1 giorno 0,34. Senza costi molte sembrano buone (Momentum 4 ore +24,6% l'anno, MACD 4 ore +23,6%, Pivot Extension 4 ore +26,5%), con i costi veri diventano −3,0%, +0,9%, −11,2% (spese fino al 38% l'anno). RSI, Stocastico e Bollinger (contro gli eccessi) perdono anche senza costi (da −18% a −33% l'anno) | no: corretto 0,00 con 104 prove |
 | 47 | La paura nelle opzioni: long Bitcoin (O1) o Ether (O2) per la settimana se il premio delle opzioni (DVOL² − volatilità realizzata²) è sopra la sua mediana delle 52 settimane prima (`QUARANTASETTESIMA.md`) | 2 | dal 2022-03-28: **O1** Sharpe 0,29 (il Bitcoin tenuto 0,37), in posizione il 37% delle settimane, discesa −36,6% invece di −65,7%; **O2** Sharpe 0,36 (l'Ether tenuto 0,15), discesa −48% invece di −69,5%, 2026 −26,6% | no: intervalli non sopra zero, corretto 0,00 con 106 prove |
 | 48 | R1, il regista: ogni mese solo le strategie fra F5, M7, K2 con le 4 settimane prima sopra zero, a rischio uguale (Gupta e Kelly 2019) (`QUARANTOTTESIMA.md`) | 1 | Sharpe 1,52, +33,2% l'anno, discesa −30,5% dal 2022-04 contro 1,93 (+39,9%) di F5 + M7 + K2 sempre accese sulle stesse settimane; spente F5 14 mesi, M7 20, K2 18; 6 mesi tutto fuori; 2023 −8,7% | no: corretto 0,19 con 107 prove; spegnere le strategie che hanno perso nel mese prima toglie i mesi buoni dopo |
+| 49 | Il momento delle 3 settimane (X1) e la dimensione, le piccole contro le grandi (X2), fra le 100 monete con la banda di F5 (Liu, Tsyvinski e Wu 2022) (`QUARANTANOVESIMA.md`); prima prova con lo Sharpe corretto rivisto | 2 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 = **107** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 = **109** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 
@@ -153,11 +154,8 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 15. ~~L'arrivo su Coinbase come conferma di U1~~ → non si fa: U1 non regge (prova 41). Le date di Coinbase sono scaricate (`scarico_coinbase.py`) se serviranno.
 16. ~~La paura nelle opzioni~~ → prova 47.
 17. ~~Le strategie di TradingView così come sono pubblicate~~ → prova 46 (le 17 già pronte di TradingView); quelle che il proprietario indicherà si provano una per una.
-18. **Il momento fra monete a 1-4 settimane** (Liu, Tsyvinski e Wu 2022, «Common Risk Factors in Cryptocurrency»: chi è salito
-   di più nelle settimane prima continua a salire), da solo e non dentro un modello, con la banda di F5 per i costi. Mai provato
-   da solo: c'è fra i 28 indicatori della prova 3 e fra gli ingredienti dei modelli.
-19. **La dimensione** (stesso articolo: le monete più piccole rendono di più), fra le 100 con il volume come misura della
-   dimensione, con la banda. Da guardare insieme a F5 (le piccole hanno spesso il funding alto).
+18. ~~Il momento fra monete a 1-4 settimane~~ → prova 49 (X1).
+19. ~~La dimensione~~ → prova 49 (X2).
 20. ~~Le liquidazioni forzate~~: l'archivio di Binance non ha i file delle liquidazioni dei perpetui USDT-M (controllato il
    22 ottobre: nessun file sotto `liquidationSnapshot`); non si fa.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui

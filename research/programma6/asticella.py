@@ -160,6 +160,24 @@ def gruppi(serie: dict, taglio: float) -> list:
     return out
 
 
+def corretto_rivisto(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> dict:
+    """Lo Sharpe corretto rivisto per prove nuove: ``nuove`` = {nome: serie settimanale netta} (gia' nel conto),
+    ``candidate`` = {nome: esame["intero"]}. Gruppi ricalcolati con le prove nuove dentro."""
+    prove = le_prove()
+    serie = {n: periodo(s) for n, s, _ in prove if s is not None}
+    serie.update({n: periodo(s) for n, s in nuove.items()})
+    soli = [sr for _, s, sr in prove if s is None]
+    gr = gruppi(serie, taglio)
+    sr_gruppi = [g["sharpe"] for g in gr] + soli
+    out = {"gruppi": len(sr_gruppi), "deviazione": float(np.std(sr_gruppi, ddof=1)), "candidate": {}}
+    for nome, i in candidate.items():
+        membri = next((g["membri"] for g in gr if nome in g["membri"]), [nome])
+        out["candidate"][nome] = {
+            "corretto": te.sharpe_corretto(i["sharpe"], i["settimane"], i["asimmetria"], i["curtosi"], sr_gruppi, 52),
+            "t": i["sharpe"] * math.sqrt(i["settimane"] / 52), "gruppo": membri}
+    return out
+
+
 def esegui(log=print) -> dict:
     prove = le_prove()
     assert len(prove) == 107, len(prove)

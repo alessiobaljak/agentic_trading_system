@@ -606,3 +606,16 @@ def test_quarantottesima_regista(monkeypatch):
     primo = r.index[0]
     assert r.loc[primo, "netto"] == pytest.approx(r.loc[primo, "peso_F5"] * serie["F5"].loc[primo, "netto"]
                                                   + r.loc[primo, "peso_K2"] * serie["K2"].loc[primo, "netto"] - 2 * qr.COSTO)
+
+
+def test_quarantanovesima_momento_e_dimensione():
+    from research.programma6 import quarantanovesima as qx
+    T = 60
+    C = np.vstack([np.linspace(100, 200, T), np.linspace(100, 50, T)]).T
+    V = np.vstack([np.full(T, 1e6), np.full(T, 9e6)]).T
+    pan = {"close": C, "quote_volume": V}
+    m = qx.momento(pan, np.array([40]))
+    assert m[0, 0] > 0 > m[0, 1]                               # la prima sale, la seconda scende
+    assert m[0, 0] == pytest.approx(C[39, 0] / C[18, 0] - 1)
+    d = qx.dimensione(pan, np.array([40]))
+    assert d[0, 0] > d[0, 1]                                   # la piccola ha il punteggio più alto
