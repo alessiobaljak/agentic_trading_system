@@ -543,6 +543,11 @@ def sezione_paper_f5(fb) -> list:
     if not isinstance(st, dict) or not st:
         return ["## Paper F5 (strategie nuove, eseguito dal bot)", "- spento (manca `ops/paper_f5_acceso`)", ""]
     righe = ["## Paper F5 (strategie nuove, eseguito dal bot)", f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
+    pr = fb.get_rtdb("/paper_f5/prova") or {}
+    if isinstance(pr, dict) and pr:
+        righe.append(f"- prova a secco ({_ts(pr.get('eseguita'))}, pesi del {pr.get('lunedi')}): universo {pr.get('universo')}, "
+                     f"{pr.get('long')} long, {pr.get('short')} short; pesi maggiori "
+                     + ", ".join(f"{s} {100 * float(w):+.1f}%" for s, w in (pr.get('pesi_maggiori') or {}).items()))
     if st.get("equity") is not None:
         righe += [f"- equity: **${float(st['equity']):,.2f}** su ${float(st.get('capitale', 0)):,.0f} "
                   f"({100 * float(st.get('rendimento', 0)):+.2f}%) · costi ${float(st.get('costi_totali', 0)):,.2f} · "

@@ -113,8 +113,12 @@ def test_paper_ribilancia_il_lunedi_e_conta_costi_e_funding(tmp_path):
     p.tick((m - 3) * 86400.0)                                   # spento: niente
     assert fb.get_rtdb("/paper_f5/stato") is None
     acceso.write_text("si")
-    p.tick((m - 3) * 86400.0 + 600)                             # giovedì: aspetta il lunedì
+    p.tick((m - 3) * 86400.0 + 600)                             # giovedì: aspetta il lunedì, ma fa la prova a secco
     assert fb.get_rtdb("/paper_f5/stato")["stato"].startswith("in attesa")
+    prova = fb.get_rtdb("/paper_f5/prova")
+    assert prova["universo"] == 30 and prova["long"] > 0 and prova["short"] > 0
+    assert not (tmp_path / "stato.json").exists()               # la prova non opera
+    p._ultimo_tentativo = 0.0
     now = m * 86400.0 + 400
     finto.adesso_ms = int(now * 1000)
     p.tick(now)
@@ -139,3 +143,17 @@ def test_paper_ribilancia_il_lunedi_e_conta_costi_e_funding(tmp_path):
     e = fb.get_rtdb("/paper_f5/stato")["equity"]
     atteso = st["equity_rif"] + sum(q * finto.prezzo[s] * (1 - 1 / 1.10) for s, q in st["quantita"].items()) - pagato
     assert e == pytest.approx(atteso, abs=0.01)
+
+
+def test_banda_di_partenza_dal_paper_di_ricerca(tmp_path):
+    import json
+    m = f5.lunedi_di(20750)
+    pr = tmp_path / "paper.json"
+    p = f5.PaperF5(None, chiedi=lambda *a: None, file_stato=tmp_path / "s.json", interruttore=tmp_path / "x", pausa_s=0.0)
+    p.paper_ricerca = pr
+    assert p.banda_di_partenza(m) == {}                         # il file non c'e'
+    import time
+    prima = time.strftime("%Y-%m-%d", time.gmtime((m - 7) * 86400))
+    pr.write_text(json.dumps({"adesso": {"F5": {"lunedi": prima, "long": {"AUSDT": 0.5, "BUSDT": 0.5}, "short": {"CUSDT": -1.0}}}}))
+    assert p.banda_di_partenza(m) == {"lunghi": ["AUSDT", "BUSDT"], "corti": ["CUSDT"]}
+    assert p.banda_di_partenza(m + 7) == {}                     # di un'altra settimana: non si usa

@@ -11,6 +11,8 @@ F5 e' il funding fra monete con la banda (research/programma6/VENTIQUATTRESIMA.m
 * le operazioni sono **simulate**: al prezzo mark del momento, con commissione 0,05% e scarto (0,01% BTC, ETH, SOL; 0,02%
   le altre) su ogni variazione; le posizioni restano per la settimana e pagano o incassano il **funding vero** di ogni
   regolamento. Nessun ordine vero: questo modulo non usa le chiavi e non chiama mai gli indirizzi degli ordini;
+* il primo lunedi' la banda parte dalle posizioni di F5 del paper di ricerca della settimana prima (`paper.json`), cosi'
+  il bot tiene da subito le stesse monete della ricerca;
 * acceso solo se esiste il file `ops/paper_f5_acceso` (un interruttore suo: lo STOP della dashboard ferma il vecchio paper,
   non questo); lo stato sta in `data/paper_f5.json` sulla macchina e su RTDB in `/paper_f5`.
 
@@ -36,6 +38,7 @@ from research.programma6.esclusi import ESCLUSI
 RADICE = Path(__file__).resolve().parents[2]
 INTERRUTTORE = RADICE / "ops" / "paper_f5_acceso"
 FILE_STATO = RADICE / "data" / "paper_f5.json"
+PAPER_RICERCA = RADICE / "research" / "programma6" / "paper" / "paper.json"
 FAPI = "https://fapi.binance.com"
 CAPITALE = 10_000.0
 N_UNIVERSO, STORIA_MIN, VOLUME_MIN, MIN_MONETE = 100, 200, 2e6, 20
@@ -44,6 +47,7 @@ TAKER = 0.0005
 SCARTO, SCARTO_ALTRE = {"BTCUSDT": 0.0001, "ETHUSDT": 0.0001, "SOLUSDT": 0.0001}, 0.0002
 ORA_RIBILANCIO_S = 300          # lunedi' 00:05 UTC
 OGNI_VALUTAZIONE_S = 3600
+ATTESA_DOPO_ERRORE_S = 1800     # un ribilancio o una prova non riusciti si riprovano dopo 30 minuti, non a ogni giro
 GIORNO_MS = 86_400_000
 
 
@@ -162,6 +166,9 @@ class PaperF5:
         self.file_stato = Path(file_stato)
         self.interruttore = Path(interruttore)
         self.pausa_s = pausa_s
+        self.paper_ricerca = PAPER_RICERCA
+        self._ultimo_tentativo = 0.0
+        self._prova_fatta = False
 
     # ---- stato ----
     def acceso(self) -> bool:
@@ -193,14 +200,20 @@ class PaperF5:
         giorno = int(now // 86400)
         m = lunedi_di(giorno)
         dopo_le_5 = now >= m * 86400 + ORA_RIBILANCIO_S
+        puo_provare = now - self._ultimo_tentativo >= ATTESA_DOPO_ERRORE_S
         if not st:
             # si parte solo di lunedi' (le settimane come il paper di ricerca)
-            if giorno == m and dopo_le_5:
+            if giorno == m and dopo_le_5 and puo_provare:
+                self._ultimo_tentativo = now
                 self.ribilancia(m, now, {})
             elif self.fb is not None:
                 self.fb.set_rtdb("/paper_f5/stato", {"stato": "in attesa del primo lunedi'", "aggiornato": now})
+                if not self._prova_fatta and puo_provare:
+                    self._ultimo_tentativo = now
+                    self.prova(m, now)
             return
-        if int(st.get("ultimo_lunedi", 0)) < m and dopo_le_5:
+        if int(st.get("ultimo_lunedi", 0)) < m and dopo_le_5 and puo_provare:
+            self._ultimo_tentativo = now
             self.ribilancia(m, now, st)
             st = self.carica()
         if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
@@ -241,20 +254,25 @@ class PaperF5:
             e += float(q) * (float(prezzi.get(s, p0)) - p0)
         return e
 
+    def banda_di_partenza(self, m: int) -> dict:
+        """Il primo lunedi' la banda parte dalle posizioni di F5 del paper di ricerca della settimana prima
+        (research/programma6/paper/paper.json), cosi' il bot tiene le stesse monete della ricerca da subito; {} se il file
+        non c'e' o non e' della settimana prima."""
+        try:
+            x = json.loads(self.paper_ricerca.read_text(encoding="utf-8"))["adesso"]["F5"]
+            if x.get("lunedi") != time.strftime("%Y-%m-%d", time.gmtime((m - 7) * 86400)):
+                return {}
+            return {"lunghi": sorted(x.get("long") or {}), "corti": sorted(x.get("short") or {})}
+        except Exception:  # noqa: BLE001
+            return {}
+
     def ribilancia(self, m: int, now: float, st: dict) -> dict:
-        contratti = self._contratti()
-        if not contratti:
-            print("[paper_f5] ribilancio rimandato: exchangeInfo non disponibile")
+        r = self.pesi_del_lunedi(m, st if st else self.banda_di_partenza(m))
+        prezzi = self._prezzi_mark() if r is not None else {}
+        if r is None or not prezzi:
+            print("[paper_f5] ribilancio rimandato di 30 minuti: dati di Binance non disponibili")
             return st
-        giornaliere = {s: self._giornaliere(s) for s in contratti}
-        uni = universo(giornaliere, contratti, m)
-        segnale, sigma = {}, {}
-        for s in uni:
-            sg = sigma_30({d: v[1] for d, v in giornaliere[s].items()}, m)
-            sigma[s] = sg
-            segnale[s] = -funding_7(self._funding_giorni(s, (m - 8) * GIORNO_MS), m) if np.isfinite(sg) else float("nan")
-        pesi, lunghi, corti = pesi_banda(segnale, sigma, set(st.get("lunghi") or []), set(st.get("corti") or []))
-        prezzi = self._prezzi_mark()
+        pesi, lunghi, corti, n_uni = r
         if st:
             self._funding_regolati(st, prezzi)
         equity = self._equity(st, prezzi) if st else CAPITALE
@@ -273,18 +291,48 @@ class PaperF5:
               "quantita": nuove, "pesi": pesi, "lunghi": sorted(lunghi), "corti": sorted(corti), "funding_dal_rif": 0.0,
               "funding_fino_ms": int(now * 1000), "costi_totali": float(st.get("costi_totali", 0.0)) + costo,
               "funding_totale": float(st.get("funding_totale", 0.0)), "ultima_valutazione": now,
-              "universo": len(uni)}
+              "universo": n_uni}
         self.salva(st)
         data = time.strftime("%Y-%m-%d", time.gmtime(m * 86400))
         if self.fb is not None:
             self.fb.set_rtdb(f"/paper_f5/ribilanciamenti/{data}", {
-                "lunedi": data, "universo": len(uni), "long": len(lunghi), "short": len(corti), "costo": costo,
+                "lunedi": data, "universo": n_uni, "long": len(lunghi), "short": len(corti), "costo": costo,
                 "equity_prima": equity, "equity_dopo": equity - costo, "eseguito": now})
             self.fb.set_rtdb("/paper_f5/posizioni", {s: round(w, 6) for s, w in pesi.items()})
-        print(f"[paper_f5] ribilancio del {data}: universo {len(uni)}, long {len(lunghi)}, short {len(corti)}, "
+        print(f"[paper_f5] ribilancio del {data}: universo {n_uni}, long {len(lunghi)}, short {len(corti)}, "
               f"costo {costo:.2f}, equity {equity - costo:.2f}")
         self._pubblica(st, prezzi, now)
         return st
+
+    def pesi_del_lunedi(self, m: int, st: dict) -> tuple:
+        """(pesi, lunghi, corti, numero di monete dell'universo) per il lunedi' m, con i dati di adesso; None se mancano."""
+        contratti = self._contratti()
+        if not contratti:
+            return None
+        giornaliere = {s: self._giornaliere(s) for s in contratti}
+        uni = universo(giornaliere, contratti, m)
+        segnale, sigma = {}, {}
+        for s in uni:
+            sg = sigma_30({d: v[1] for d, v in giornaliere[s].items()}, m)
+            sigma[s] = sg
+            segnale[s] = -funding_7(self._funding_giorni(s, (m - 8) * GIORNO_MS), m) if np.isfinite(sg) else float("nan")
+        pesi, lunghi, corti = pesi_banda(segnale, sigma, set(st.get("lunghi") or []), set(st.get("corti") or []))
+        return pesi, lunghi, corti, len(uni)
+
+    def prova(self, m: int, now: float) -> None:
+        """La prova a secco: i pesi del lunedi' di questa settimana con i dati di adesso, senza operare; serve a vedere
+        prima del primo ribilancio che i dati arrivano e che i numeri hanno senso (/paper_f5/prova)."""
+        r = self.pesi_del_lunedi(m, {})
+        self._prova_fatta = r is not None
+        if r is None or self.fb is None:
+            print("[paper_f5] prova a secco non riuscita: exchangeInfo non disponibile")
+            return
+        pesi, lunghi, corti, n = r
+        ordine = sorted(pesi.items(), key=lambda kv: -abs(kv[1]))
+        self.fb.set_rtdb("/paper_f5/prova", {
+            "lunedi": time.strftime("%Y-%m-%d", time.gmtime(m * 86400)), "universo": n, "long": len(lunghi),
+            "short": len(corti), "pesi_maggiori": {s: round(w, 4) for s, w in ordine[:10]}, "eseguita": now})
+        print(f"[paper_f5] prova a secco: universo {n}, long {len(lunghi)}, short {len(corti)}")
 
     def _funding_regolati(self, st: dict, prezzi: dict) -> None:
         """Il funding dei regolamenti dopo l'ultimo controllo, posizione per posizione (il long paga se e' positivo)."""
