@@ -34,6 +34,12 @@ NOW = datetime(2026, 9, 25, 12, 0, tzinfo=timezone.utc).timestamp()
 # --------------------------------------------------------------------------- #
 # attrezzi                                                                    #
 # --------------------------------------------------------------------------- #
+
+@pytest.fixture(autouse=True)
+def _gate_non_fermo(monkeypatch):
+    """Le prove del controllo non dipendono dal file ops/gate_fermo del repo (che esiste dal 13 ott 2026)."""
+    monkeypatch.setenv("GATE_FERMO_IGNORA", "1")
+
 def _iso(ts: float) -> str:
     return datetime.fromtimestamp(ts, tz=timezone.utc).isoformat()
 
@@ -1095,3 +1101,17 @@ def test_conto_e_stream_senza_posizioni_28_set():
     import inspect
     src = inspect.getsource(c.anomalie)
     assert 's.get("price_stream") is False and (s.get("posizioni_aperte") or 0) > 0' in src
+
+
+def test_gate_fermo_di_proposito_non_e_rosso():
+    """Con ops/gate_fermo il ritardo del gate e' un'informazione, non un'allerta (22 ott 2026: il semaforo era rosso da 8
+    giorni solo per questo)."""
+    d = _dati()
+    g = _gate()
+    g["meta"]["generato_at"] = NOW - 8 * 86400
+    d["gate_fermo"] = True
+    cod = _codici(_con(d, gate=g))
+    assert "GATE_IN_RITARDO" not in cod
+    assert cod["GATE_FERMO"]["gravita"] == "info"
+    d["gate_fermo"] = False
+    assert _codici(_con(d, gate=g))["GATE_IN_RITARDO"]["gravita"] == "rosso"

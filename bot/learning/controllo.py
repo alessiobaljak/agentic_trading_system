@@ -267,6 +267,12 @@ def carica_dati(fb, now: float, trades=None, registro=None, cache_trade=None) ->
     d["errori_ciclo_1h"] = _figlio(fb, "/bot_status", "errori_ciclo_1h")
     d["kill_switch"] = rt("/commands/kill_switch")
     d["maintenance"] = rt("/commands/maintenance")
+    # la ricerca del gate fermata di proposito (ops/gate_fermo, dal 13 ott 2026): il ritardo del gate allora non e' un'anomalia
+    try:
+        from bot.core.gate_fermo import ricerca_ferma
+        d["gate_fermo"] = ricerca_ferma() is not None
+    except Exception:  # noqa: BLE001
+        d["gate_fermo"] = False
     d["decision_status"] = rt("/decision_status") or {}
     d["risk_state"] = rt("/risk_state") or {}
     d["adapt_state"] = rt("/adapt_state") or {}
@@ -1151,7 +1157,11 @@ def anomalie(salute: dict, paper: dict, attivo: dict, dati: dict, now: float,
         gmeta = gate.get("meta") if isinstance(gate.get("meta"), dict) else {}
         durata = _f(gmeta.get("durata_s")) or 0.0
         geta = s.get("gate_ultimo_giro_eta_s")
-        if geta is not None:
+        if geta is not None and (dati or {}).get("gate_fermo"):
+            # fermo di proposito: si dice, ma non colora il semaforo (era rosso dal 13 ott 2026: «alert grave» del 22 ott)
+            add("GATE_FERMO", SISTEMA, INFO, f"ricerca del gate ferma di proposito (ops/gate_fermo), ultimo giro {_eta(geta)} fa",
+                geta, None)
+        elif geta is not None:
             if geta > 6 * 3600:
                 add("GATE_IN_RITARDO", SISTEMA, ROSSO, f"ultimo giro del gate {_eta(geta)} fa", geta, 6 * 3600)
             elif geta > 3 * 3600 + durata:
