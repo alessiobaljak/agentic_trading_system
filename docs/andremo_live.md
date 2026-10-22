@@ -4428,3 +4428,7 @@ sicuri che la stiamo usando nella maniera corretta». **L'asticella rivista** (`
 scritta prima del ricalcolo): gli autori del metodo contano i gruppi di prove simili, non le prove una per una. 107 prove
 fanno 56 gruppi; lo Sharpe corretto di F5 passa da 0,46 a 0,87, di F5 + M7 + K2 a 0,90; nessuna arriva a 0,95. Con il t dello
 Sharpe contro 3,0 (Harvey, Liu e Zhu 2016) F5 passa (4,66). Capito: finora contavamo troppo; da qui si usa il calcolo rivisto.
+**Aggiornamento del 22 ottobre, mattina** (dati fino al 20 ottobre: il file del 21 non è ancora uscito). Programma 5, prova in
+avanti: **M-003 arriva a 416 trade chiusi, verdetto: non passa** (−1,96% a trade, p 0,93; `research/programma5/avanti/A.md`);
+M-001c 155 trade su 400 (−0,73%), M-002 già bocciata. Paper del programma 6: F5 nella settimana dal 19 ottobre +0,40% senza
+costi a due giorni; le entrate nell'universo delle ultime 4 settimane sono le stesse di ieri, tutte monete.

@@ -1,13 +1,61 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-19.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-20.zip",
  "procedure": {
   "N-001": {
-   "trade": 0,
-   "esito": "nessun trade chiuso"
+   "trade": 2,
+   "netto": {
+    "n": 2,
+    "media": NaN,
+    "basso": NaN,
+    "alto": NaN,
+    "p": NaN
+   },
+   "netto_doppio": -0.0836204627618527,
+   "caso_netto": -0.005337585544349477,
+   "senza_migliore": NaN,
+   "per_moneta": {
+    "AVAUSDT": {
+     "trade": 1,
+     "netto": -0.16443787843229282
+    },
+    "PHAUSDT": {
+     "trade": 1,
+     "netto": 0.0007969529085874133
+    }
+   },
+   "esito": "in corso (2 trade chiusi su 400)"
   },
   "N-002": {
-   "trade": 0,
-   "esito": "nessun trade chiuso"
+   "trade": 4,
+   "netto": {
+    "n": 4,
+    "media": NaN,
+    "basso": NaN,
+    "alto": NaN,
+    "p": NaN
+   },
+   "netto_doppio": 0.006702864408317237,
+   "caso_netto": 0.00011084087216265034,
+   "senza_migliore": NaN,
+   "per_moneta": {
+    "AAVEUSDT": {
+     "trade": 1,
+     "netto": -0.004693975269665838
+    },
+    "LITUSDT": {
+     "trade": 1,
+     "netto": 0.030163615546084734
+    },
+    "MORPHOUSDT": {
+     "trade": 1,
+     "netto": -0.007326027166118274
+    },
+    "STXUSDT": {
+     "trade": 1,
+     "netto": 0.015867844522968324
+    }
+   },
+   "esito": "in corso (4 trade chiusi su 400)"
   },
   "N-003": {
    "trade": 0,

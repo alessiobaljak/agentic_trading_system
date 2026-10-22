@@ -74,10 +74,10 @@
   },
   "A1": {
    "giorni": {
-    "2026-10-20": 0.001163
+    "2026-10-20": 0.002901
    },
    "periodi": 1,
-   "totale": 0.0011632268843329019
+   "totale": 0.0029006984405475222
   }
  },
  "eventi_N3": [],
@@ -382,12 +382,20 @@
     "BTCUSDT": 0.0145,
     "1000PEPEUSDT": 0.0079,
     "ETHUSDT": 0.0077,
+    "UNIUSDT": 0.0077,
     "HYPEUSDT": 0.0076,
+    "SOLUSDT": 0.0073,
+    "ZECUSDT": 0.0065,
+    "XRPUSDT": 0.006,
     "LINKUSDT": 0.0059,
     "NEARUSDT": 0.0058,
+    "WLDUSDT": 0.005,
+    "PUMPUSDT": 0.0048,
+    "TAOUSDT": 0.0048,
     "FILUSDT": 0.0041,
     "ARBUSDT": 0.0038,
     "ENAUSDT": 0.0031,
+    "SUIUSDT": 0.0031,
     "DOGEUSDT": 0.002,
     "ADAUSDT": 0.0018
    }
@@ -417,7 +425,7 @@
   "F5": {
    "lunedi": "2026-10-19",
    "fino_al": "2026-10-20",
-   "netto_senza_costi": -0.0002603818205028749
+   "netto_senza_costi": 0.004014526917310494
   }
  },
  "passato": {
