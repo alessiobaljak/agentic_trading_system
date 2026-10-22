@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 110 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 111 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -76,8 +76,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 49 | Il momento delle 3 settimane (X1) e la dimensione, le piccole contro le grandi (X2), fra le 100 monete con la banda di F5 (Liu, Tsyvinski e Wu 2022) (`QUARANTANOVESIMA.md`); prima prova con lo Sharpe corretto rivisto | 2 | **X1** Sharpe 0,05 (2021 −28%, 2022 −36%, 2023 −19%, 2024 +16%, 2025 +57%, 2026 +29%); **X2** Sharpe 0,47, 2021 +134,8% poi 2024 −24,5%, 2025 −30,3%, 2026 −14,9%; correlazioni con F5 0,04 e 0,03 | no: corretto rivisto 0,00 e 0,01 (58 gruppi) |
 | 50 | F5 identica sulle monete dalla 101ª alla 150ª, scarto 0,10% (`CINQUANTESIMA.md`) | conferma | Sharpe 0,30, +13,8% l'anno dal 2022-04 (236 settimane), p 0,24; dal funding +27,7% l'anno, dal prezzo +1,2%, spese 15,1% (giro 1,94); ultimo anno −15,1%; correlazione con F5 sulle 100 0,17 | **non confermata**: il funding c'è anche qui, i costi se lo mangiano |
 | 51 | F7: F5 sulle monete 101-150 con le variazioni del lunedì a ordine limite all'apertura per un'ora, poi a mercato (`CINQUANTUNESIMA.md`) | 1 | ordini eseguiti con il limite 95% (6.919 su 7.307); spese 5,5% l'anno invece di 11,8% a mercato sulle stesse settimane; Sharpe 0,42 (a mercato 0,26), +17,1% l'anno, volatilità 41%, discesa −50%; 2026 −0,8% | no: corretto rivisto 0,01 (59 gruppi) |
+| 52 | B1: scommettere contro il beta (Frazzini e Pedersen 2014) fra le 100 monete, beta dei 90 giorni sul Bitcoin, con la banda e i lati neutri al Bitcoin (`CINQUANTADUESIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 = **110** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 = **111** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno).
 

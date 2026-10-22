@@ -631,3 +631,20 @@ def test_cinquantunesima_costo_limite_e_variazioni():
     R = np.array([[0.1, 0.0], [0.0, 0.0]])
     D = cl.variazioni(W, R)
     assert D[0, 0] == 0.5 and D[1, 0] < 0                      # la seconda settimana si riporta il peso cresciuto
+
+
+def test_cinquantaduesima_beta_e_neutro():
+    from research.programma6 import cinquantaduesima as cb
+    T = 120
+    rng = np.random.default_rng(4)
+    rb = rng.normal(0, 0.03, T)
+    C = np.ones((T, 3))
+    C[:, 0] = 100 * np.cumprod(1 + rb)                          # il Bitcoin
+    C[:, 1] = 100 * np.cumprod(1 + 2 * rb)                      # beta 2
+    C[:, 2] = 100 * np.cumprod(1 + 0.5 * rb)                    # beta 0,5
+    pan = {"close": C, "simboli": ["BTCUSDT", "AUSDT", "BUSDT"]}
+    B = cb.beta(pan, np.array([110]))
+    assert B[0, 1] == pytest.approx(2.0, abs=1e-6) and B[0, 2] == pytest.approx(0.5, abs=1e-6)
+    W = np.array([[0.0, -1.0, 1.0]])
+    Wn, leve = cb.neutro(W, B)
+    assert Wn[0, 2] == pytest.approx(2.0) and Wn[0, 1] == pytest.approx(-0.5)   # long al tetto 2, short a 1/2
