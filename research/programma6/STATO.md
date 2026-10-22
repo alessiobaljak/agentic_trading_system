@@ -60,6 +60,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 50 | F5 sulle monete 101-150 (conferma) | `CINQUANTESIMA.md` | `RISULTATI_CINQUANTESIMA.md` | conferma | non confermata: Sharpe 0,30; funding +27,7%, spese 15,1% |
 | 51 | F7: F5 sulle 101-150 con gli ordini limite | `CINQUANTUNESIMA.md` | `RISULTATI_CINQUANTUNESIMA.md` | 1 | non valida: Sharpe 0,42 (a mercato 0,26), spese 5,5% invece di 11,8% |
 | 52 | B1: scommettere contro il beta, neutro al Bitcoin | `CINQUANTADUESIMA.md` | `RISULTATI_CINQUANTADUESIMA.md` | 1 | non valida: Sharpe 0,53, quasi tutto dal 2021 |
+| 53 | F8: il funding di ogni moneta rispetto alla sua storia | `CINQUANTATREESIMA.md` | `RISULTATI_CINQUANTATREESIMA.md` | 1 | non valida: Sharpe −0,28, discesa −97,6% |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -241,6 +242,11 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
 39. **Anche «contro il beta» vive solo nel 2021** (prova 52): come il momento e la dimensione (prova 49), l'anomalia più
    robusta dei mercati tradizionali fra le cripto guadagna nell'anno dell'euforia (+145%) e poi alterna anni buoni e cattivi
    (Sharpe 0,53, oscillazioni del 49%). I fattori «di prezzo» fra le monete dipendono dalla fase del mercato; il funding no.
+40. **Il funding funziona fra le monete, non per una moneta da sola** (prova 53): vendere una moneta quando il suo funding
+   sale molto sopra il suo solito (e comprarla quando scende) perde (Sharpe −0,28, discesa −97,6%, 2024 −80%) e si comporta come
+   le regole contro gli eccessi: un funding che sale è una salita in corso, e la salita continua (come «la leva che entra
+   continua», prove 11 e 20). F5 guadagna perché confronta le monete nello stesso momento, non perché il funding alto annunci
+   una discesa.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

@@ -4445,3 +4445,6 @@ conviene sempre (anche per F5 nel bot), ma da sola non porta F5 oltre le 100 mon
 **Cinquantaduesima prova** (`CINQUANTADUESIMA.md`): scommettere contro il beta (Frazzini e Pedersen 2014) fra le 100 monete,
 neutro al Bitcoin: Sharpe 0,53, quasi tutto dal 2021 (+145%), poi anni alterni. Capito: i fattori di prezzo fra le monete (momento,
 dimensione, beta) dipendono dalla fase del mercato; il funding fra monete no. Nel conto: 111 prove.
+**Cinquantatreesima prova** (`CINQUANTATREESIMA.md`): il funding di ogni moneta rispetto alla sua storia (il carry nel tempo, per
+ogni moneta da sola): Sharpe −0,28, discesa −97,6%. Capito: il funding funziona confrontando le monete fra loro nello stesso
+momento (F5), non per una moneta da sola: un funding che sale è una salita in corso, che continua. Nel conto: 112 prove.
