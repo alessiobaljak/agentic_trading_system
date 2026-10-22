@@ -587,3 +587,22 @@ def test_quarantasettesima_premio_e_settimane(monkeypatch):
     monkeypatch.setattr(qo, "A", t0 + T)
     df = qo.settimane(pan, 0, pr)
     assert df.loc[int(domeniche[-3]) + 1, "w"] == 1.0 and df.loc[int(domeniche[-4]) + 1, "w"] == 0.0
+
+
+def test_quarantottesima_regista(monkeypatch):
+    import pandas as pd
+    from research.programma6 import quarantottesima as qr
+    lun = sc.giorno(2022, 1, 3) + 7 * np.arange(30)
+    rng = np.random.default_rng(3)
+    serie = {}
+    for n, segno in (("F5", 1.0), ("M7", -1.0), ("K2", 1.0)):
+        x = segno * 0.01 + rng.normal(0, 0.001, len(lun))
+        serie[n] = pd.DataFrame({"netto": x, "netto_doppio": x}, index=lun)
+    monkeypatch.setattr(qr, "DA", int(lun[20]))
+    monkeypatch.setattr(qr, "A", int(lun[-1]))
+    r = qr.regista(serie)
+    assert (r["peso_M7"] == 0).all()                           # M7 perde sempre: sempre spenta
+    assert (r["peso_F5"] + r["peso_K2"]).round(9).eq(1.0).all()
+    primo = r.index[0]
+    assert r.loc[primo, "netto"] == pytest.approx(r.loc[primo, "peso_F5"] * serie["F5"].loc[primo, "netto"]
+                                                  + r.loc[primo, "peso_K2"] * serie["K2"].loc[primo, "netto"] - 2 * qr.COSTO)
