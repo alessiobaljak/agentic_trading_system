@@ -1,0 +1,3 @@
+Il paper di N3 ed E4 eseguito dal bot e' acceso (bot/portafoglio/eventi.py, docs/backlog.md P16).
+Acceso il 22 ottobre 2026 dal coordinamento con la delega del proprietario («la decisione di portare le strategie in paper anche questa falla in autonomia», 22 ottobre). DRY_RUN vero, nessun ordine vero.
+Per spegnerlo: cancellare questo file e riavviare il bot (ops: riavvia-bot).
