@@ -4390,3 +4390,7 @@ vero. Le regole sono le stesse della ricerca: universo, volatilità e funding id
 (`tests/test_paper_f5.py`); alle parità del funding la ricerca ordina con un arrotondamento diverso: nelle ultime 26 settimane
 0,15 monete diverse a settimana, l'1,3% di peso. Primo ribilancio lunedì 26 ottobre. Le chiamate a Binance non si provano da
 qui (accesso bloccato): la prima verifica vera è sulla macchina, in `docs/state.md`. Suite 2407 test verdi.
+**F5 nel bot: pronto, non ancora acceso** (22 ottobre, notte). Codice, prova a secco, attesa dopo gli errori e banda di
+partenza dal paper di ricerca sono nel repo (suite 2408 test verdi). Accendere (il file `ops/paper_f5_acceso`) e riavviare il
+bot sulla macchina (`riavvia-bot`) è stato fermato dal controllo di sicurezza di questa sessione perché tocca la macchina che
+gira: serve il sì del proprietario. Senza riavvio il bot non legge il codice nuovo.
