@@ -148,3 +148,14 @@ moneta (titolo con il simbolo, senza «TradFi» né «Pre-IPO»). Due misure in 
 
 La trentunesima prova (`research/programma6/TRENTUNESIMA.md`, costruzione) dà a M7 + M8 a rischio uguale Sharpe 1,39 dal 2022
 contro 1,25 di M7 da solo; Sharpe corretto 0,20 con 54 prove. Entra nel paper **come informazione**.
+
+## 13. F5 eseguito dal bot (dal 26 ottobre 2026; aggiunto il 22 ottobre, prima dei dati)
+
+Oltre al calcolo di ogni mattina, F5 gira anche **nel bot sulla macchina** (`bot/portafoglio/f5.py`, backlog P16): stesse
+regole, con i dati di Binance del momento; ogni lunedì alle 00:05 UTC le operazioni simulate al prezzo mark con commissione e
+scarto, poi il funding vero di ogni regolamento; capitale virtuale di 10.000 dollari, nessun ordine vero. Acceso dal file
+`ops/paper_f5_acceso`, fuori dal kill switch del vecchio paper; lo stato in `docs/state.md` («Paper F5») e su RTDB in
+`/paper_f5`. Serve a misurare quanto l'esecuzione vera si allontana dal calcolo (prezzi del momento, funding vero, parità
+ordinate in modo diverso: in 26 settimane del passato 0,15 monete diverse a settimana in media, l'1,3% di peso); **non cambia
+il verdetto di F5**, che resta sul calcolo di questo paper a 52 e 104 settimane.
+

@@ -152,7 +152,7 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
-### P16. Il paper delle strategie nuove eseguito dal bot (F5 per prima) — trovata il 21 ott 2026
+### P16. Il paper delle strategie nuove eseguito dal bot (F5 per prima) — trovata il 21 ott 2026; F5 FATTA il 22 ott (`bot/portafoglio/f5.py`, acceso, primo ribilancio lunedì 26 ott 00:05 UTC); da fare: N3 ed E4
 **Perché:** il proprietario (21 ott): «dimmi quando possiamo accendere il paper con le nuove strategie». Il paper del programma 6
 oggi è un **calcolo** di ogni mattina con i prezzi veri (`research/programma6/paper/`, scheda «Strategie nuove»), non ordini
 simulati dal bot. Il bot (`bot/`) è fatto per **una posizione per moneta con stop e obiettivo** (`executor.py:200`, dimensione

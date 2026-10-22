@@ -104,6 +104,9 @@ def build() -> str:
         "",
     ]
 
+    # --- il paper di F5 eseguito dal bot (bot/portafoglio/f5.py, backlog P16) ---
+    lines += sezione_paper_f5(fb)
+
     # --- ultima decisione orchestratore (RTDB) ---
     dec = fb.get_rtdb("/decision_status") or {}
     if isinstance(dec, dict) and dec:
@@ -532,6 +535,24 @@ def _closed_trades_section(fb, pairs=None) -> list[str]:
         out += ["- escursione favorevole (mfe_r): _non ancora disponibile — si popola"
                 " sui trade chiusi dopo l'aggiornamento del bot._", ""]
     return out
+
+
+def sezione_paper_f5(fb) -> list:
+    """Le righe del paper di F5 (RTDB /paper_f5): acceso, equity, posizioni, ultimo ribilancio."""
+    st = fb.get_rtdb("/paper_f5/stato") or {}
+    if not isinstance(st, dict) or not st:
+        return ["## Paper F5 (strategie nuove, eseguito dal bot)", "- spento (manca `ops/paper_f5_acceso`)", ""]
+    righe = ["## Paper F5 (strategie nuove, eseguito dal bot)", f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
+    if st.get("equity") is not None:
+        righe += [f"- equity: **${float(st['equity']):,.2f}** su ${float(st.get('capitale', 0)):,.0f} "
+                  f"({100 * float(st.get('rendimento', 0)):+.2f}%) · costi ${float(st.get('costi_totali', 0)):,.2f} · "
+                  f"funding pagato ${float(st.get('funding_totale', 0)):,.2f}",
+                  f"- posizioni: {st.get('long', 0)} long, {st.get('short', 0)} short · ultimo ribilancio {st.get('ultimo_lunedi', '—')}"]
+        pos = fb.get_rtdb("/paper_f5/posizioni") or {}
+        if isinstance(pos, dict) and pos:
+            ordine = sorted(pos.items(), key=lambda kv: -abs(float(kv[1])))
+            righe.append("- pesi maggiori: " + ", ".join(f"{s} {100 * float(w):+.1f}%" for s, w in ordine[:10]))
+    return righe + [""]
 
 
 def main() -> int:

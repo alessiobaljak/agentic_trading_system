@@ -38,6 +38,7 @@ from bot.learning import selettore as sel
 from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
 from bot.orchestrator import Orchestrator
+from bot.portafoglio.f5 import PaperF5
 from bot.risk.circuit_breakers import CircuitBreakers
 from bot.risk import kill_switch
 from bot.risk.kill_switch import BotState
@@ -484,6 +485,9 @@ class TradingBot:
     def __init__(self) -> None:
         self.fb = get_firebase()
         self.price = PriceAgent()
+        # il paper di F5 (docs/backlog.md, P16): un portafoglio suo, acceso solo dal file ops/paper_f5_acceso,
+        # fuori dal kill switch del vecchio paper; non manda ordini veri
+        self.paper_f5 = PaperF5(self.fb)
         # stream dei trade in tempo reale: da' al paper la SEQUENZA dei prezzi, non
         # solo gli estremi aggregati di una candela. Degradazione automatica su REST.
         self.stream = PriceStream() if settings.EXEC_PRICE_STREAM_ENABLED else None
@@ -2604,6 +2608,12 @@ class TradingBot:
                 # ha lanciato un'eccezione o lo scan ha bloccato a lungo: indica
                 # "il loop è vivo", non "il ciclo è andato a buon fine".
                 self.fb.set_rtdb("/bot_status/heartbeat", time.time())
+            # il paper di F5 fuori dal ciclo di trading: un suo errore non lo tocca, e lo STOP del vecchio paper non lo
+            # ferma (ha l'interruttore suo)
+            try:
+                self.paper_f5.tick(time.time())
+            except Exception as exc:  # noqa: BLE001
+                print(f"[paper_f5] errore: {exc}")
             it += 1
             if max_iterations is not None and it >= max_iterations:
                 break

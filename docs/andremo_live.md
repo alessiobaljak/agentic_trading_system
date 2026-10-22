@@ -4383,3 +4383,10 @@ di 40-60 monete): voce P16 del backlog.
 **Quarantasettesima prova** (`QUARANTASETTESIMA.md`, 22 ottobre, notte): la paura nelle opzioni di Deribit (DVOL) per tenere
 Bitcoin o Ether: Bitcoin Sharpe 0,29 contro 0,37 tenuto sempre, Ether 0,36 contro 0,15; discese dimezzate, nessuna valida.
 Capito: come le stablecoin, il premio delle opzioni riduce le perdite ma non dà un vantaggio dimostrabile. Nel conto: 106 prove.
+**F5 nel bot** (22 ottobre, notte; backlog P16): il pezzo nuovo `bot/portafoglio/f5.py`, separato dall'esecutore vecchio,
+con un interruttore suo (`ops/paper_f5_acceso`) fuori dal kill switch; ogni lunedì alle 00:05 UTC calcola F5 con i dati di
+Binance del momento e simula le operazioni, poi il funding vero di ogni regolamento; 10.000 dollari virtuali, nessun ordine
+vero. Le regole sono le stesse della ricerca: universo, volatilità e funding identici sugli stessi dati
+(`tests/test_paper_f5.py`); alle parità del funding la ricerca ordina con un arrotondamento diverso: nelle ultime 26 settimane
+0,15 monete diverse a settimana, l'1,3% di peso. Primo ribilancio lunedì 26 ottobre. Le chiamate a Binance non si provano da
+qui (accesso bloccato): la prima verifica vera è sulla macchina, in `docs/state.md`. Suite 2407 test verdi.

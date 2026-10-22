@@ -75,3 +75,7 @@ research/.sessione
 
 # autopsia delle strategie vecchie: il file dei trade (110 MB) si rifà con lo script
 research/autopsia/varianti.jsonl
+
+# lo stato del paper di F5 sulla macchina (bot/portafoglio/f5.py)
+data/paper_f5.json
+data/paper_f5.tmp
