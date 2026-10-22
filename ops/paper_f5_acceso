@@ -1,0 +1,3 @@
+Il paper di F5 eseguito dal bot e' acceso (bot/portafoglio/f5.py, docs/backlog.md P16).
+Acceso il 22 ottobre 2026 con il si' del proprietario («accendi f5», 22 ottobre). DRY_RUN vero, nessun ordine vero.
+Per spegnerlo: cancellare questo file e riavviare il bot (ops: riavvia-bot).
