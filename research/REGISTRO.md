@@ -74,6 +74,7 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 47 | La paura nelle opzioni: long Bitcoin (O1) o Ether (O2) per la settimana se il premio delle opzioni (DVOL² − volatilità realizzata²) è sopra la sua mediana delle 52 settimane prima (`QUARANTASETTESIMA.md`) | 2 | dal 2022-03-28: **O1** Sharpe 0,29 (il Bitcoin tenuto 0,37), in posizione il 37% delle settimane, discesa −36,6% invece di −65,7%; **O2** Sharpe 0,36 (l'Ether tenuto 0,15), discesa −48% invece di −69,5%, 2026 −26,6% | no: intervalli non sopra zero, corretto 0,00 con 106 prove |
 | 48 | R1, il regista: ogni mese solo le strategie fra F5, M7, K2 con le 4 settimane prima sopra zero, a rischio uguale (Gupta e Kelly 2019) (`QUARANTOTTESIMA.md`) | 1 | Sharpe 1,52, +33,2% l'anno, discesa −30,5% dal 2022-04 contro 1,93 (+39,9%) di F5 + M7 + K2 sempre accese sulle stesse settimane; spente F5 14 mesi, M7 20, K2 18; 6 mesi tutto fuori; 2023 −8,7% | no: corretto 0,19 con 107 prove; spegnere le strategie che hanno perso nel mese prima toglie i mesi buoni dopo |
 | 49 | Il momento delle 3 settimane (X1) e la dimensione, le piccole contro le grandi (X2), fra le 100 monete con la banda di F5 (Liu, Tsyvinski e Wu 2022) (`QUARANTANOVESIMA.md`); prima prova con lo Sharpe corretto rivisto | 2 | **X1** Sharpe 0,05 (2021 −28%, 2022 −36%, 2023 −19%, 2024 +16%, 2025 +57%, 2026 +29%); **X2** Sharpe 0,47, 2021 +134,8% poi 2024 −24,5%, 2025 −30,3%, 2026 −14,9%; correlazioni con F5 0,04 e 0,03 | no: corretto rivisto 0,00 e 0,01 (58 gruppi) |
+| 50 | F5 identica sulle monete dalla 101ª alla 150ª, scarto 0,10% (`CINQUANTESIMA.md`) | conferma | in calcolo | — |
 
 Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 = **109** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
@@ -158,8 +159,6 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 19. ~~La dimensione~~ → prova 49 (X2).
 20. ~~Le liquidazioni forzate~~: l'archivio di Binance non ha i file delle liquidazioni dei perpetui USDT-M (controllato il
    22 ottobre: nessun file sotto `liquidationSnapshot`); non si fa.
-21. **F5 sulle monete dalla 101ª alla 150ª**, come conferma (non conta nel conto): la metà più liquida delle 101-200, dove F2 e
-   F3 perdevano per i costi; con la banda il giro scende di un terzo. Dice se F5 vale anche oltre le 100 più scambiate (il
-   proprietario vuole strategie per più monete possibili). Regola identica, scarto 0,10% come le prove sulle 101-200.
+21. ~~F5 sulle monete dalla 101ª alla 150ª~~ → prova 50 (conferma).
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
