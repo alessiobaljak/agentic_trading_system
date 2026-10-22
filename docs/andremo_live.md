@@ -4442,3 +4442,6 @@ se lo mangiano; per allargare F5 a più monete serve un'esecuzione più economic
 **Cinquantunesima prova** (`CINQUANTUNESIMA.md`): F5 sulle monete 101-150 con gli ordini limite: il 95% si esegue, le spese
 scendono dall'11,8% al 5,5% l'anno, lo Sharpe da 0,26 a 0,42, ma non valida (oscillazioni del 41%). Capito: l'esecuzione a limite
 conviene sempre (anche per F5 nel bot), ma da sola non porta F5 oltre le 100 monete. Nel conto: 110 prove.
+**Cinquantaduesima prova** (`CINQUANTADUESIMA.md`): scommettere contro il beta (Frazzini e Pedersen 2014) fra le 100 monete,
+neutro al Bitcoin: Sharpe 0,53, quasi tutto dal 2021 (+145%), poi anni alterni. Capito: i fattori di prezzo fra le monete (momento,
+dimensione, beta) dipendono dalla fase del mercato; il funding fra monete no. Nel conto: 111 prove.

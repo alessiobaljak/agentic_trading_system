@@ -59,6 +59,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 49 | X1 momento delle 3 settimane, X2 dimensione (piccole contro grandi), con la banda | `QUARANTANOVESIMA.md` | `RISULTATI_QUARANTANOVESIMA.md` | 2 | non valide: X1 0,05, X2 0,47 (solo il 2021) |
 | 50 | F5 sulle monete 101-150 (conferma) | `CINQUANTESIMA.md` | `RISULTATI_CINQUANTESIMA.md` | conferma | non confermata: Sharpe 0,30; funding +27,7%, spese 15,1% |
 | 51 | F7: F5 sulle 101-150 con gli ordini limite | `CINQUANTUNESIMA.md` | `RISULTATI_CINQUANTUNESIMA.md` | 1 | non valida: Sharpe 0,42 (a mercato 0,26), spese 5,5% invece di 11,8% |
+| 52 | B1: scommettere contro il beta, neutro al Bitcoin | `CINQUANTADUESIMA.md` | `RISULTATI_CINQUANTADUESIMA.md` | 1 | non valida: Sharpe 0,53, quasi tutto dal 2021 |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -237,6 +238,9 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    esegue entro un'ora e le spese scendono dall'11,8% al 5,5% l'anno; lo Sharpe sale da 0,26 a 0,42, ma con oscillazioni del 41%
    l'anno e il 2026 negativo il risultato non si distingue dal caso. Fra le 100 più scambiate F5 resta la strada; per il bot
    conviene comunque eseguirla a limite (lo stesso risparmio vale anche lì: da 7,7% a 5,3% l'anno per F3, `ESECUZIONE.md`).
+39. **Anche «contro il beta» vive solo nel 2021** (prova 52): come il momento e la dimensione (prova 49), l'anomalia più
+   robusta dei mercati tradizionali fra le cripto guadagna nell'anno dell'euforia (+145%) e poi alterna anni buoni e cattivi
+   (Sharpe 0,53, oscillazioni del 49%). I fattori «di prezzo» fra le monete dipendono dalla fase del mercato; il funding no.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
