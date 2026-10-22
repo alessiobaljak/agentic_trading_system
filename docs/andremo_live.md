@@ -4394,3 +4394,7 @@ qui (accesso bloccato): la prima verifica vera è sulla macchina, in `docs/state
 partenza dal paper di ricerca sono nel repo (suite 2408 test verdi). Accendere (il file `ops/paper_f5_acceso`) e riavviare il
 bot sulla macchina (`riavvia-bot`) è stato fermato dal controllo di sicurezza di questa sessione perché tocca la macchina che
 gira: serve il sì del proprietario. Senza riavvio il bot non legge il codice nuovo.
+**Quarantottesima prova** (`QUARANTOTTESIMA.md`, 22 ottobre, mattina presto): il regista, che ogni mese tiene solo le
+strategie fra F5, M7, K2 con il mese prima positivo: Sharpe 1,52 contro 1,93 sempre accese. Capito: le strategie buone si
+tengono accese; dopo un mese cattivo viene spesso il recupero. Nel conto: 107 prove. La coda delle idee è vuota: ne scrivo di
+nuove.

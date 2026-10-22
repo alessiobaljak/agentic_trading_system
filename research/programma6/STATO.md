@@ -55,6 +55,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 45 | Indicatori per il momento d'entrata: I1 F5 con la tendenza d'accordo, I2 N3 sulla prima rottura verso il basso | `QUARANTACINQUESIMA.md` | `RISULTATI_QUARANTACINQUESIMA.md` | 1 + 1 a eventi + 1 | non valide: I1 Sharpe 1,02 (F5 1,93); I2 +3,79% a operazione, p 0,0064, portafoglio 0,88 |
 | 46 | Le 17 strategie già pronte di TradingView, valori di serie, a 4 ore e a 1 giorno | `QUARANTASEIESIMA.md` | `RISULTATI_QUARANTASEIESIMA.md` | 34 | nessuna valida: la migliore Supertrend a 1 giorno, Sharpe 0,36 (il Bitcoin tenuto 0,38) |
 | 47 | La paura nelle opzioni (DVOL di Deribit): O1 Bitcoin, O2 Ether | `QUARANTASETTESIMA.md` | `RISULTATI_QUARANTASETTESIMA.md` | 2 | non valide: O1 0,29 (Bitcoin tenuto 0,37), O2 0,36 (Ether tenuto 0,15) |
+| 48 | R1, il regista: ogni mese solo le strategie con il mese prima positivo | `QUARANTOTTESIMA.md` | `RISULTATI_QUARANTOTTESIMA.md` | 1 | non valida: Sharpe 1,52 contro 1,93 sempre accese |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -212,6 +213,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    premio sopra la sua mediana dimezza la discesa peggiore (Bitcoin −37% invece di −66%), ma guadagna meno (Sharpe 0,29 contro
    0,37 del Bitcoin tenuto); per l'Ether va meglio dell'Ether tenuto (0,36 contro 0,15), ma non abbastanza da distinguersi dal caso.
    Come per le stablecoin (prova 44): i segnali sul mercato intero riducono le perdite, non danno un vantaggio dimostrabile.
+34. **Le strategie buone si tengono accese** (prova 48): il regista che spegne per un mese le strategie con il mese prima
+   negativo porta F5 + M7 + K2 da Sharpe 1,93 a 1,52; i mesi negativi di queste strategie non annunciano altri mesi negativi
+   (2023: −8,7% con il regista). Come per F5 nelle settimane agitate (lezione 27): togliere esposizione dopo una perdita taglia il
+   recupero, non il rischio.
 
 ## Dati (fuori da git, con le impronte nel repository)
 
