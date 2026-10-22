@@ -46,11 +46,16 @@ misura se, oltre a vincere spesso, **guadagna**.
   oltre **+0,5%** (sotto −0,5%) e acquisti a mercato oltre il **70%** del volume (sotto il 30%) → **a mercato** nel verso della
   spinta all'apertura del minuto dopo; obiettivo a limite **+1%**, stop **−0,5%**, al massimo 30 minuti.
 
+### 3bis. Aggiunta del 22 ottobre, sera, prima di qualunque risultato
+
+Il proprietario: «puoi anche farne più di 5, quello era solo un'idea». Si aggiunge **Z1b**: identico a Z1 **senza il limite
+di 5 operazioni al giorno** (restano al massimo 5 aperte insieme, una per moneta). Gli schemi diventano cinque.
+
 ## 4. L'esame (per ogni schema)
 
-* **Per operazione**: media netta in multipli del rischio sopra zero con **p ≤ 0,0025** (0,01 diviso i 4 schemi; bootstrap sui
+* **Per operazione**: media netta in multipli del rischio sopra zero con **p ≤ 0,002** (0,01 diviso i 5 schemi; bootstrap sui
   giorni), positiva nelle due metà e senza i 5 giorni migliori.
 * **Come portafoglio** (rendimento giornaliero con l'1% di rischio a operazione): `terza.esito` su settimane con lo Sharpe
-  corretto rivisto (`asticella.py`), soglia 0,95. Quattro prove: nel conto diventano **116**.
+  corretto rivisto (`asticella.py`), soglia 0,95. Cinque prove: nel conto diventano **117**.
 * Si riportano anche, per capire la differenza fra «vincere spesso» e «guadagnare»: la quota di operazioni vinte, la quota che
   arriva almeno al TP1, il guadagno medio delle vinte e la perdita media delle perse, i costi, per anno.
