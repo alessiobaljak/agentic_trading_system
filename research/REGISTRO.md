@@ -144,5 +144,12 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 15. ~~L'arrivo su Coinbase come conferma di U1~~ → non si fa: U1 non regge (prova 41). Le date di Coinbase sono scaricate (`scarico_coinbase.py`) se serviranno.
 16. ~~La paura nelle opzioni~~ → prova 47.
 17. ~~Le strategie di TradingView così come sono pubblicate~~ → prova 46 (le 17 già pronte di TradingView); quelle che il proprietario indicherà si provano una per una.
+18. **Il momento fra monete a 1-4 settimane** (Liu, Tsyvinski e Wu 2022, «Common Risk Factors in Cryptocurrency»: chi è salito
+   di più nelle settimane prima continua a salire), da solo e non dentro un modello, con la banda di F5 per i costi. Mai provato
+   da solo: c'è fra i 28 indicatori della prova 3 e fra gli ingredienti dei modelli.
+19. **La dimensione** (stesso articolo: le monete più piccole rendono di più), fra le 100 con il volume come misura della
+   dimensione, con la banda. Da guardare insieme a F5 (le piccole hanno spesso il funding alto).
+20. ~~Le liquidazioni forzate~~: l'archivio di Binance non ha i file delle liquidazioni dei perpetui USDT-M (controllato il
+   22 ottobre: nessun file sotto `liquidationSnapshot`); non si fa.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
