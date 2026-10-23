@@ -4455,3 +4455,8 @@ perse −1,05 R), ogni anno; senza il limite di 5 al giorno (Z1b, 42.824 operazi
 americana −0,146 R (prima dei costi +0,013), spinta del volume −0,338 R. Capito: una percentuale di vittorie alta si ottiene
 mettendo l'obiettivo vicino e lo stop lontano, e non dice niente sul guadagno; nello scalping i costi a operazione sono troppo
 grandi rispetto al movimento che si prende. Nel conto: 117 prove.
+**23 ottobre, notte.** Il paper nel bot alle 00:21 UTC (ops 0641): il giro giornaliero delle 00:05 è partito (N3 ed E4 «acceso»,
+aggiornato alle 00:05), nessuna moneta al 7° giorno di vita oggi, nessun evento E4; F5 aspetta lunedì. Nessuna prova nuova in
+questo giro: l'unica idea di scalping con un meccanismo (i minuti intorno al regolamento del funding) è già stata provata (I-006,
+programma 5: −0,14% a operazione già prima dei costi) e con gli ordini limite non cambierebbe segno. Per lo scalping vero servono
+dati che non abbiamo (il libro degli ordini al secondo): voce P18 del backlog.

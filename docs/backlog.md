@@ -152,6 +152,16 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P18. I dati per lo scalping vero (il libro degli ordini al secondo) — trovata il 23 ott 2026
+**Perché:** lo scalping con le candele al minuto e gli indicatori pubblici non ha vantaggio (prova 54: cinque schemi, il migliore
+−0,05 R a operazione; quello in stile canale Telegram arriva al primo obiettivo il 71% delle volte ma perde). Chi guadagna con lo
+scalping lavora sul libro degli ordini (chi compra e chi vende in quel momento, a che prezzi) e sulla velocità; noi abbiamo solo
+foto del libro a ore (programma 5, fase 4). **Cosa:** dati storici del libro degli ordini e dei singoli scambi dei perpetui di
+Binance, al secondo o meglio (esistono a pagamento, per esempio Tardis.dev); poi uno studio dei segnali del libro (squilibrio fra
+acquisti e vendite, ordini grandi) con l'esecuzione a limite. **Decide il proprietario** (è una spesa per i dati, non per le
+sessioni). Intanto: i segnali del canale Telegram del proprietario, se li esporta, si controllano gratis sui prezzi al minuto.
+
+
 ### P17. F5 nel bot con gli ordini limite — trovata il 22 ott 2026
 **Perché:** con l'entrata a limite all'apertura del lunedì il 95-98% degli ordini si esegue entro un'ora e il costo per unità
 scambiata scende da 0,070% a 0,048% (F3 fra le 100, `research/programma6/ESECUZIONE.md`), da 0,15% a circa 0,07% sulle 101-150
