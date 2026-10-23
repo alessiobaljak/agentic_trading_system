@@ -34,7 +34,9 @@ tenuta) resta un'alternativa accettata dal proprietario, non la risposta.
    durano in media 17,5 giorni: non è trading «in giornata».
 2. ~~**G2 — lo short del giorno sulle monete con la leva più cara**~~ → prova 58: −0,123 R a operazione, già negativo prima dei
    costi (−0,022 R): il vantaggio del funding è uno scivolamento di più giorni, dentro la giornata domina il rumore.
-3. **G3 — il long del giorno sulle monete con il funding più negativo**, lo specchio di G2: torna in coda (il 23 ottobre l'avevo
-   scartata con un numero sbagliato: in F5 il lato long è il più forte, +42,8% l'anno contro +16,2% dello short).
+3. ~~**G3 — il long del giorno sulle monete con il funding più negativo**~~ → prova 60: −0,164 R a operazione, negativo già prima
+   dei costi (−0,059 R). Con G2: **la rottura dell'apertura del giorno, nelle due direzioni, perde prima dei costi** (dopo la prima
+   ora che chiude oltre l'apertura il prezzo tende a tornare indietro, e lo stop al massimo o al minimo del giorno è troppo vicino:
+   scatta nel 58-59% dei casi).
 4b. ~~**G4 — le monete nuove dal 1° giorno**~~ → prova 59: +3,68% a evento (p 0,0093), meno di N3 dal 7° giorno sulle stesse monete.
 4. **G4 — le monete nuove al 7° giorno e il funding al tetto con l'entrata scelta dentro la giornata** (oggi entrano a un'ora fissa).

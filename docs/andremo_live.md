@@ -4521,3 +4521,8 @@ short +16,2% (`risultati_ventiquattresima/esame.json`). Il risultato di G2 non c
 7°, con le stesse regole di N3: 613 eventi, +3,68% a evento, p 0,0093, passa l'esame scritto; ma sulle stesse monete N3 dal 7° giorno
 fa +4,29%. Capito: entrare prima non prende più discesa, prende più rischio (l'uscita a +30% scatta nel 47% dei casi contro il 42%);
 il 7° giorno resta il migliore dei due. Non entra nel paper accanto a N3. Nel conto: 122 prove.
+**Quarta prova del programma 7, G3** (`programma7/QUARTA.md`): lo specchio long di G2 sulle monete con il funding più basso (il lato
+forte di F5): 31.338 operazioni, −0,164 R a operazione, già prima dei costi −0,059 R, ogni anno negativo. Capito: dentro la giornata,
+con le candele da 1 ora, la prima ora che chiude oltre l'apertura del giorno non annuncia una continuazione, né al rialzo né al
+ribasso; lo stop al massimo o al minimo del giorno scatta nel 58-59% dei casi. Il vantaggio del funding non si vede in giornata da
+nessuno dei due lati: vive su più giorni (G1). Nel conto: 123 prove.
