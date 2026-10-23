@@ -4610,3 +4610,8 @@ la sua soglia (0,005)**. Resta nel paper come informazione. Il bot ora non entra
 Capito: terza revisione, terzo errore trovato; e le monete tolte dal listino crollano nelle ultime ore (idea 35 in coda).
 Riavvio fatto alle 16:45 UTC (ops 0650): il bot gira con il blocco dei contratti in chiusura (commit d61e62fc), E4 entra ancora
 all'apertura del giorno dopo.
+**Quindicesima prova del programma 7, G13** (`programma7/QUINDICESIMA.md`): vendere i perpetui dall'annuncio di chiusura dei future
+fino a un'ora prima. Solo 7 eventi usabili (su 72 annunci: 32 non hanno le sigle nel titolo, e per 44 contratti le candele scaricate
+non mostrano la chiusura): −13,2% a evento con l'uscita a +30% (scatta nel 57% dei casi: le salite dopo l'annuncio ci sono), +0,8%
+senza. Troppo pochi per dire qualcosa; resta in coda con i dati completi (idea 36), a probabilità bassa. Capito: dopo l'annuncio di
+chiusura le monete spesso salgono prima di scendere, come dopo le rimozioni a pronti (prova 21). Nel conto: 136 prove.

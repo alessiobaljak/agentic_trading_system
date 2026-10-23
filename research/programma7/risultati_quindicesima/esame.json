@@ -1,0 +1,72 @@
+{
+ "con_uscita": {
+  "boot": {
+   "media": -0.13190501554803122,
+   "basso": -0.31061447731132646,
+   "alto": 0.04680444621526404,
+   "p": 0.9139086091390861,
+   "eventi": 7,
+   "annunci": 5
+  },
+  "prima_meta": 0.007607113011346298,
+  "seconda_meta": -0.23653911196756433,
+  "senza_5_migliori": -0.35607593947392957,
+  "vinti": 0.42857142857142855,
+  "mediana": -0.08207408328356672,
+  "per_anno": {
+   "2021": {
+    "eventi": 1,
+    "media": -0.08207408328356672
+   },
+   "2022": {
+    "eventi": 5,
+    "media": -0.18824364132605073
+   },
+   "2024": {
+    "eventi": 1,
+    "media": 0.0999571810776019
+   }
+  },
+  "esito": "media non sopra zero con p ≤ 0,01 (p 0.9139)"
+ },
+ "senza_uscita": {
+  "boot": {
+   "media": 0.00819655950536671,
+   "basso": -0.07467700208746579,
+   "alto": 0.05860811266340311,
+   "p": 0.37146285371462856,
+   "eventi": 7,
+   "annunci": 5
+  },
+  "prima_meta": 0.017506258529344714,
+  "seconda_meta": 0.0012142852373832058,
+  "senza_5_migliori": -0.1013346547815743,
+  "vinti": 0.7142857142857143,
+  "mediana": 0.03879579957483113,
+  "per_anno": {
+   "2021": {
+    "eventi": 1,
+    "media": -0.05237664672957147
+   },
+   "2022": {
+    "eventi": 5,
+    "media": 0.0019590764379073073
+   },
+   "2024": {
+    "eventi": 1,
+    "media": 0.0999571810776019
+   }
+  },
+  "esito": "media non sopra zero con p ≤ 0,01 (p 0.3715)"
+ },
+ "fermate": 0.5714285714285714,
+ "annunci": 72,
+ "annunci_senza_sigle": 32,
+ "contratti": 55,
+ "scartati": {
+  "senza_candele": 3,
+  "troppo_vicina": 1,
+  "chiusura_non_trovata": 44
+ },
+ "ore_medie_alla_chiusura": 231.57142857142858
+}
