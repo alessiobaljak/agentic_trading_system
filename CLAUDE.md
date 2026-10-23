@@ -58,9 +58,14 @@ pensi sia giusto»: F5 gira nel bot in paper (`bot/portafoglio/f5.py`, interrutt
 coordinamento decide da solo quali strategie portare in paper e quando (sempre `DRY_RUN` vero, niente soldi veri), e lo
 scrive nel diario. **Il proprietario, 23 ott 2026** (arrabbiato, e con ragione): «io voglio anche fare trading tutti i giorni non solo
 tenere una settimana (non te l'ho mai chiesto, anche se lo posso accettare come alternativa se è profittevole) [...] ti ho chiesto
-di fare trading tutti i giorni»: **l'obiettivo della ricerca è il trading di ogni giorno** (posizioni aperte e chiuse ogni giorno,
-con entrata, stop e obiettivo); F5 settimanale è un'alternativa accettata, non la risposta. È il **programma 7**
-(`research/programma7/`, metodo in `METODO.md`), con lo stesso registro unico. **Delega del
+di fare trading tutti i giorni»; e subito dopo: «l'obiettivo è fare soldi, un sistema che sia profittevole [...] non hai
+limitazioni su quali strategie adottare, scalping oppure settimana oppure nuovi listing [...] l'importante è che non ti perdi delle
+idee per strada, prova di tutto sempre con il criterio che ci siamo dati ma non lasciare nulla al caso [...] il trading giornaliero
+non può essere escluso». Quindi: **l'obiettivo è il profitto, con qualunque tipo di strategia** (in giornata, scalping, a
+settimana, eventi e nuove quotazioni), sempre con il metodo (regole prima, conto delle prove, asticella, revisore separato); il
+trading di ogni giorno ha il suo filone, il **programma 7** (`research/programma7/METODO.md`), e non va mai lasciato indietro.
+**Tutte le idee**, di ogni tipo e anche quelle del proprietario, stanno nella coda unica di `research/REGISTRO.md` (sezione 5):
+nessuna si perde, ognuna o si prova o si scrive perché no. **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
 della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 

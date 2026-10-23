@@ -152,7 +152,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 * **Autopsia delle strategie vecchie** e **scalping sulla volatilità** (18 ottobre): `research/autopsia/`,
   `research/scalping/`.
 
-## 5. Idee in coda (da fare, in quest'ordine; si spostano in sezione 1 quando si provano)
+## 5. Idee in coda: la coda unica di tutte le idee, di ogni tipo (in giornata, scalping, a settimana, eventi), anche quelle del proprietario; si spostano in sezione 1 quando si provano, o si scrive perché no
 
 1. ~~Le monete meno liquide con ordini limite~~ → non si fa (20 ottobre): F3 sulle 101-200 prende +31,0% l'anno dal
    funding ma perde −6,6% dal prezzo, con spese del 19,1% e volatilità di circa il 40% (`RISULTATI_OTTAVA.md`); anche con le
@@ -192,5 +192,11 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    monete con il giorno migliore più alto del mese prima rendono **di più** la settimana dopo, +3,03% a settimana fra i decili, al
    contrario delle azioni). Probabilità bassa: è un parente del momento, che fra i perpetui dal 2021 non regge (prova 49, X1
    Sharpe 0,05), e le monete appena salite di solito hanno il funding alto, che F5 vende. In coda, non subito.
+27. **In giornata (programma 7, `programma7/METODO.md`)**: G2 lo short in giornata sulla leva più cara → prova 58; G3 il long in
+   giornata sulle monete con il funding più negativo (lo specchio); G4 le monete nuove al 7° giorno e il funding al tetto con
+   l'entrata scelta dentro la giornata.
+28. **Il canale Telegram del proprietario** (scalping, al massimo 5 al giorno, «quasi tutte al TP1»): si verifica sui prezzi veri
+   appena il proprietario manda l'esportazione completa dei messaggi (anche i segnali persi).
+29. **Lo scalping con i dati del libro degli ordini** (voce P18 del backlog): serve lo storico al secondo, decide il proprietario.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
