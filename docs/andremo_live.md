@@ -4595,3 +4595,9 @@ della migliore fra varianti simili.
 `ops/paper_g11_acceso`, in dashboard accanto a G1 (voce P23 del backlog). Test: `tests/test_paper_f5.py`. Riavvio chiesto alla
 macchina; la prima decisione vera alle 00:05 UTC di sabato 24 ottobre, la stessa di G1.
 Riavvio fatto alle 15:52 UTC (ops 0649): il bot gira con il codice che contiene G11 (commit 92f83102).
+**Quattordicesima prova del programma 7, G12** (`programma7/QUATTORDICESIMA.md`, giro delle 16:18): E4 (le monete con il funding al
+tetto, vendute per 7 giorni) con l'entrata all'ora dopo l'evento invece che all'apertura del giorno dopo. +13,00% a evento sui 62
+eventi, p 0,0002, 82% vinti, ogni anno positivo; 1,33 punti più di E4 sugli stessi eventi (la differenza da sola non è sicura:
+intervallo −1,88; +4,59). Per la regola scritta prima il bot entrerà in E4 subito dopo l'evento, dopo il controllo del revisore.
+Capito: quando l'informazione è pubblica (Binance accorcia l'intervallo), aspettare il giorno dopo costa in media più di un punto.
+Nel conto: 135 prove.
