@@ -1,6 +1,8 @@
 """Il paper di F5 nel bot (bot/portafoglio/f5.py): le regole come la ricerca e il conto del portafoglio simulato."""
 from __future__ import annotations
 
+import time
+
 import numpy as np
 import pytest
 
@@ -99,6 +101,13 @@ class _Finto:
                     for t in tempi if t <= self.adesso_ms]
         if percorso == "/fapi/v1/premiumIndex":
             return [{"symbol": s, "markPrice": p_} for s, p_ in self.prezzo.items()]
+        if percorso == "/fapi/v1/markPriceKlines":
+            # le monete pari scendono sotto il prezzo (il limite di chi compra si esegue), le dispari restano ferme
+            s = p["symbol"]
+            c = self.prezzo[s]
+            basso = c * 0.99 if int(s[1:3]) % 2 == 0 else c
+            alto = c * 1.01 if int(s[1:3]) % 2 == 0 else c
+            return [[t, c, alto, basso, c, 0, t + 59_999] for t in range(int(p["startTime"]), int(p["endTime"]), 60_000)]
         raise AssertionError(percorso)
 
 
@@ -128,8 +137,22 @@ def test_paper_ribilancia_il_lunedi_e_conta_costi_e_funding(tmp_path):
     assert sum(w for w in pesi.values() if w > 0) == pytest.approx(1.0)
     assert sum(w for w in pesi.values() if w < 0) == pytest.approx(-1.0)
     assert all(pesi[s] < 0 for s in ("C29USDT", "C28USDT"))   # chi ha il funding più alto va short
-    costo = sum(abs(q) * finto.prezzo[s] * (f5.TAKER + f5.scarto(s)) for s, q in st["quantita"].items())
+    # fino al controllo dell'ora si conta lo 0,02% del limite; accanto il costo tutto a mercato
+    provvisorio = sum(abs(q) * finto.prezzo[s] * f5.MAKER for s, q in st["quantita"].items())
+    a_mercato = sum(abs(q) * finto.prezzo[s] * (f5.TAKER + f5.scarto(s)) for s, q in st["quantita"].items())
+    assert st["equity_rif"] == pytest.approx(f5.CAPITALE - provvisorio)
+    assert st["ordini"]["costo_a_mercato"] == pytest.approx(a_mercato) and len(st["ordini"]["variazioni"]) == len(st["quantita"])
+    p.tick(now + 1800)                                          # l'ora non e' passata: gli ordini restano
+    assert p.carica().get("ordini")
+    p.tick(now + 3700)                                          # passata: le pari eseguite a limite, le dispari a mercato
+    st = p.carica()
+    assert "ordini" not in st
+    pari = {s for s in st["quantita"] if int(s[1:3]) % 2 == 0}
+    costo = sum(abs(q) * finto.prezzo[s] * (f5.MAKER if s in pari else f5.TAKER + f5.scarto(s)) for s, q in st["quantita"].items())
     assert st["equity_rif"] == pytest.approx(f5.CAPITALE - costo)
+    assert st["limite_eseguite"] == len(pari) and st["limite_variazioni"] == len(st["quantita"])
+    assert st["costi_a_mercato_totali"] == pytest.approx(a_mercato) and costo < a_mercato
+    assert fb.get_rtdb("/paper_f5/ribilanciamenti/" + time.strftime("%Y-%m-%d", time.gmtime(m * 86400)) + "/limite")["eseguite"] == len(pari)
     # mercoledì: i prezzi salgono del 10% (neutro: long e short si compensano) e passano 6 regolamenti del funding
     for s in finto.prezzo:
         finto.prezzo[s] *= 1.10
@@ -157,3 +180,20 @@ def test_banda_di_partenza_dal_paper_di_ricerca(tmp_path):
     pr.write_text(json.dumps({"adesso": {"F5": {"lunedi": prima, "long": {"AUSDT": 0.5, "BUSDT": 0.5}, "short": {"CUSDT": -1.0}}}}))
     assert p.banda_di_partenza(m) == {"lunghi": ["AUSDT", "BUSDT"], "corti": ["CUSDT"]}
     assert p.banda_di_partenza(m + 7) == {}                     # di un'altra settimana: non si usa
+
+
+def test_esito_limite_come_la_ricerca():
+    from research.programma6 import cinquantaseiesima as cs
+    c = [[100.0, 100.5, 99.8, 100.2], [100.2, 100.4, 100.1, 101.0]]
+    # compra 2 unita' a 100: il minimo 99,8 va sotto -> eseguito a limite
+    assert f5.esito_limite(2.0, 100.0, c, 0.0007) == (pytest.approx(2 * 100 * f5.MAKER), True)
+    # vende 2 unita' a 101: il massimo 100,5 non va sopra -> a mercato alla chiusura 101,0 (nessun movimento contro)
+    costo, preso = f5.esito_limite(-2.0, 101.0, c, 0.0007)
+    assert not preso and costo == pytest.approx(2 * 101 * 0.0007)
+    # vende a 100,6: non eseguito, chiude a 101,0: si vende piu' in alto, il movimento e' a favore
+    costo, _ = f5.esito_limite(-2.0, 100.6, c, 0.0007)
+    assert costo == pytest.approx(2 * 100.6 * 0.0007 - 2 * 0.4)
+    # stesso conto della ricerca (per unita' di peso)
+    r, _ = cs.costo_limite(100.6, 100.5, 99.8, 101.0, False, 0.0007)
+    assert costo == pytest.approx(2 * 100.6 * r)
+    assert f5.esito_limite(1.0, 50.0, [], 0.0007) == (pytest.approx(50 * 0.0007), False)

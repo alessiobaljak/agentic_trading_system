@@ -8,9 +8,13 @@ F5 e' il funding fra monete con la banda (research/programma6/VENTIQUATTRESIMA.m
   che sono monete), il segnale −funding dei 7 giorni, la volatilita' dei 30 giorni; long fra il 20% con il segnale piu' alto,
   short fra il 20% piu' basso, e si resta finche' non si esce oltre il 40% (la banda); pesi secondo l'inverso della
   volatilita', ogni lato al 100% del capitale;
-* le operazioni sono **simulate**: al prezzo mark del momento, con commissione 0,05% e scarto (0,01% BTC, ETH, SOL; 0,02%
-  le altre) su ogni variazione; le posizioni restano per la settimana e pagano o incassano il **funding vero** di ogni
-  regolamento. Nessun ordine vero: questo modulo non usa le chiavi e non chiama mai gli indirizzi degli ordini;
+* le operazioni sono **simulate**: ogni variazione e' un **ordine limite al prezzo mark delle 00:05**, valido un'ora
+  (research/programma6/CINQUANTASEIESIMA.md, voce P17 del backlog): eseguito se in quell'ora il prezzo mark va oltre il
+  livello (minimo sotto per chi compra, massimo sopra per chi vende), commissione 0,02%; altrimenti a mercato alla fine
+  dell'ora, con commissione 0,05%, scarto (0,01% BTC, ETH, SOL; 0,02% le altre) e il movimento dell'ora contro. Fino al
+  controllo dell'ora si conta lo 0,02%; accanto si tiene il costo che si sarebbe pagato tutto a mercato alle 00:05, per il
+  confronto. Le posizioni restano per la settimana e pagano o incassano il **funding vero** di ogni regolamento. Nessun
+  ordine vero: questo modulo non usa le chiavi e non chiama mai gli indirizzi degli ordini;
 * il primo lunedi' la banda parte dalle posizioni di F5 del paper di ricerca della settimana prima (`paper.json`), cosi'
   il bot tiene da subito le stesse monete della ricerca;
 * acceso solo se esiste il file `ops/paper_f5_acceso` (un interruttore suo: lo STOP della dashboard ferma il vecchio paper,
@@ -43,7 +47,8 @@ FAPI = "https://fapi.binance.com"
 CAPITALE = 10_000.0
 N_UNIVERSO, STORIA_MIN, VOLUME_MIN, MIN_MONETE = 100, 200, 2e6, 20
 ENTRA, RESTA = 0.20, 0.40
-TAKER = 0.0005
+TAKER, MAKER = 0.0005, 0.0002
+VALIDITA_LIMITE_MS = 3_600_000  # un ordine limite vale un'ora, poi a mercato (prova 56)
 SCARTO, SCARTO_ALTRE = {"BTCUSDT": 0.0001, "ETHUSDT": 0.0001, "SOLUSDT": 0.0001}, 0.0002
 ORA_RIBILANCIO_S = 300          # lunedi' 00:05 UTC
 OGNI_VALUTAZIONE_S = 3600
@@ -53,6 +58,18 @@ GIORNO_MS = 86_400_000
 
 def scarto(simbolo: str) -> float:
     return SCARTO.get(simbolo, SCARTO_ALTRE)
+
+
+def esito_limite(dq: float, p0: float, candele: list, a_mercato: float) -> tuple:
+    """(costo, eseguito con il limite?) di una variazione di ``dq`` unita' piazzata a limite al prezzo ``p0``, dalle candele
+    mark a 1 minuto dell'ora di validita' ([apertura, massimo, minimo, chiusura]): eseguita se il prezzo va oltre ``p0``,
+    costo MAKER; altrimenti a mercato alla chiusura dell'ultima candela (``a_mercato`` piu' il movimento contro, come
+    `research/programma6/cinquantaseiesima.costo_limite`). Senza candele: a mercato a ``p0``."""
+    if not candele:
+        return abs(dq) * p0 * a_mercato, False
+    if (min(c[2] for c in candele) < p0) if dq > 0 else (max(c[1] for c in candele) > p0):
+        return abs(dq) * p0 * MAKER, True
+    return abs(dq) * p0 * a_mercato + dq * (candele[-1][3] - p0), False
 
 
 def lunedi_di(giorno: int) -> int:
@@ -180,6 +197,7 @@ class PaperF5:
         self.pausa_s = pausa_s
         self.paper_ricerca = PAPER_RICERCA
         self._ultimo_tentativo = 0.0
+        self._ultimo_controllo_limite = 0.0
         self._prova_fatta = False
 
     # ---- stato ----
@@ -228,6 +246,11 @@ class PaperF5:
             self._ultimo_tentativo = now
             self.ribilancia(m, now, st)
             st = self.carica()
+        if (st.get("ordini") and now * 1000 >= int(st["ordini"]["fino_ms"])
+                and now - self._ultimo_controllo_limite >= ATTESA_DOPO_ERRORE_S):
+            self._ultimo_controllo_limite = now
+            if self.chiudi_ordini(st, now):
+                st = self.carica()
         if now - float(st.get("ultima_valutazione", 0)) >= OGNI_VALUTAZIONE_S:
             self.valuta(now, st)
 
@@ -271,7 +294,51 @@ class PaperF5:
         except Exception:  # noqa: BLE001
             return {}
 
+    def _candele_mark(self, simbolo: str, da_ms: int, fino_ms: int) -> Optional[list]:
+        k = self.chiedi("/fapi/v1/markPriceKlines", {"symbol": simbolo, "interval": "1m", "startTime": da_ms,
+                                                       "endTime": fino_ms - 1, "limit": 61})
+        time.sleep(self.pausa_s)
+        if k is None:
+            return None
+        return [[float(r[1]), float(r[2]), float(r[3]), float(r[4])] for r in k if da_ms <= int(r[0]) < fino_ms]
+
+    def chiudi_ordini(self, st: dict, now: float) -> bool:
+        """Dopo l'ora di validita': per ogni ordine limite, eseguito o a mercato (`esito_limite`); la differenza con lo 0,02%
+        gia' contato va nei costi. False (si riprova dopo 30 minuti) se Binance non risponde per qualche moneta."""
+        o = st["ordini"]
+        costo = 0.0
+        eseguite = 0
+        for s, (dq, p0) in o["variazioni"].items():
+            c = self._candele_mark(s, int(o["da_ms"]), int(o["fino_ms"]))
+            if c is None:
+                print(f"[paper_f5] controllo degli ordini limite rimandato: candele di {s} non disponibili")
+                return False
+            x, preso = esito_limite(float(dq), float(p0), c, TAKER + scarto(s))
+            costo += x
+            eseguite += preso
+        extra = costo - float(o["costo_provvisorio"])
+        n = len(o["variazioni"])
+        st["equity_rif"] = float(st["equity_rif"]) - extra
+        st["costi_totali"] = float(st.get("costi_totali", 0.0)) + extra
+        st["limite_variazioni"] = int(st.get("limite_variazioni", 0)) + n
+        st["limite_eseguite"] = int(st.get("limite_eseguite", 0)) + eseguite
+        st["costi_a_mercato_totali"] = float(st.get("costi_a_mercato_totali", 0.0)) + float(o["costo_a_mercato"])
+        st.pop("ordini")
+        self.salva(st)
+        data = time.strftime("%Y-%m-%d", time.gmtime(int(o["da_ms"]) // 1000))
+        if self.fb is not None:
+            self.fb.set_rtdb(f"/paper_f5/ribilanciamenti/{data}/limite", {
+                "variazioni": n, "eseguite": eseguite, "costo": costo, "costo_a_mercato": float(o["costo_a_mercato"]),
+                "controllato": now})
+        print(f"[paper_f5] ordini limite del {data}: {eseguite} eseguiti su {n}, costo {costo:.2f} "
+              f"(tutto a mercato {float(o['costo_a_mercato']):.2f})")
+        return True
+
     def ribilancia(self, m: int, now: float, st: dict) -> dict:
+        if st.get("ordini"):
+            if not self.chiudi_ordini(st, now):
+                return st                                   # gli ordini della settimana prima prima di tutto: si riprova
+            st = self.carica()
         r = self.pesi_del_lunedi(m, st if st else self.banda_di_partenza(m))
         prezzi = self._prezzi_mark() if r is not None else {}
         if r is None or not prezzi:
@@ -282,13 +349,17 @@ class PaperF5:
             self._funding_regolati(st, prezzi)
         equity = self._equity(st, prezzi) if st else CAPITALE
         vecchie = {s: float(q) for s, q in (st.get("quantita") or {}).items()}
-        nuove, costo = {}, 0.0
+        nuove, costo, a_mercato, variazioni = {}, 0.0, 0.0, {}
         for s in set(vecchie) | set(pesi):
             p = prezzi.get(s) or float((st.get("prezzi_rif") or {}).get(s, 0.0))
             if not p:
                 continue
             q = pesi.get(s, 0.0) * equity / p
-            costo += abs(q - vecchie.get(s, 0.0)) * p * (TAKER + scarto(s))
+            dq = q - vecchie.get(s, 0.0)
+            if abs(dq) * p > 1e-9:
+                variazioni[s] = [dq, p]
+                costo += abs(dq) * p * MAKER
+                a_mercato += abs(dq) * p * (TAKER + scarto(s))
             if q:
                 nuove[s] = q
         st = {**st, "inizio": st.get("inizio", m), "ultimo_lunedi": m, "equity_rif": equity - costo,
@@ -296,12 +367,15 @@ class PaperF5:
               "quantita": nuove, "pesi": pesi, "lunghi": sorted(lunghi), "corti": sorted(corti), "funding_dal_rif": 0.0,
               "funding_fino_ms": int(now * 1000), "costi_totali": float(st.get("costi_totali", 0.0)) + costo,
               "funding_totale": float(st.get("funding_totale", 0.0)), "ultima_valutazione": now,
-              "universo": n_uni}
+              "universo": n_uni,
+              "ordini": {"da_ms": int(now * 1000), "fino_ms": int(now * 1000) + VALIDITA_LIMITE_MS,
+                         "variazioni": variazioni, "costo_provvisorio": costo, "costo_a_mercato": a_mercato}}
         self.salva(st)
         data = time.strftime("%Y-%m-%d", time.gmtime(m * 86400))
         if self.fb is not None:
             self.fb.set_rtdb(f"/paper_f5/ribilanciamenti/{data}", {
                 "lunedi": data, "universo": n_uni, "long": len(lunghi), "short": len(corti), "costo": costo,
+                "costo_a_mercato": a_mercato, "ordini_limite": len(variazioni),
                 "equity_prima": equity, "equity_dopo": equity - costo, "eseguito": now})
             self.fb.set_rtdb("/paper_f5/posizioni", {s: round(w, 6) for s, w in pesi.items()})
         print(f"[paper_f5] ribilancio del {data}: universo {n_uni}, long {len(lunghi)}, short {len(corti)}, "
@@ -375,5 +449,8 @@ class PaperF5:
             "long": sum(1 for w in pesi.values() if w > 0), "short": sum(1 for w in pesi.values() if w < 0),
             "ultimo_lunedi": time.strftime("%Y-%m-%d", time.gmtime(int(st.get("ultimo_lunedi", 0)) * 86400)),
             "costi_totali": round(float(st.get("costi_totali", 0.0)), 2),
+            "costi_a_mercato_totali": round(float(st.get("costi_a_mercato_totali", 0.0)), 2),
+            "limite_variazioni": int(st.get("limite_variazioni", 0)), "limite_eseguite": int(st.get("limite_eseguite", 0)),
+            "ordini_in_attesa": len((st.get("ordini") or {}).get("variazioni") or {}),
             "funding_totale": round(float(st.get("funding_totale", 0.0)), 2), "aggiornato": now})
         self.fb.set_rtdb(f"/paper_f5/giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(e, 2))

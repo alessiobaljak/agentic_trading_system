@@ -162,13 +162,16 @@ acquisti e vendite, ordini grandi) con l'esecuzione a limite. **Decide il propri
 sessioni). Intanto: i segnali del canale Telegram del proprietario, se li esporta, si controllano gratis sui prezzi al minuto.
 
 
-### P17. F5 nel bot con gli ordini limite — trovata il 22 ott 2026
+### P17. F5 nel bot con gli ordini limite — trovata il 22 ott 2026; FATTA il 23 ott 2026 (prova 56)
 **Perché:** con l'entrata a limite all'apertura del lunedì il 95-98% degli ordini si esegue entro un'ora e il costo per unità
 scambiata scende da 0,070% a 0,048% (F3 fra le 100, `research/programma6/ESECUZIONE.md`), da 0,15% a circa 0,07% sulle 101-150
 (prova 51): per F5 nel bot vorrebbe dire circa 1,5 punti di spese in meno l'anno (stima dal giro di F5, 1,35 a settimana).
 **Cosa:** in `bot/portafoglio/f5.py`, alle 00:05 del lunedì un ordine limite simulato al prezzo mark per ogni variazione, valido
-un'ora, poi a mercato; misura della quota eseguita. **Quando:** dopo le prime 4 settimane di F5 nel bot a mercato, per avere il
-confronto con lo stesso periodo.
+un'ora, poi a mercato; misura della quota eseguita. **Quando:** era «dopo le prime 4 settimane di F5 nel bot a mercato»; la
+prova 56 (`research/programma6/CINQUANTASEIESIMA.md`, regola scritta prima: Sharpe 1,99 contro 1,93, spese 3,4% contro 4,9%, 90%
+eseguite a limite) ha deciso di passare subito. **Fatto:** `bot/portafoglio/f5.py` (`esito_limite`, `chiudi_ordini`, candele mark
+a 1 minuto dell'ora), con il costo tutto a mercato tenuto accanto (`costi_a_mercato_totali`) per il confronto settimana per
+settimana; in dashboard nella scheda «Strategie nuove».
 
 
 ### P16. Il paper delle strategie nuove eseguito dal bot (F5 per prima) — trovata il 21 ott 2026; F5 ACCESA il 22 ott (`bot/portafoglio/f5.py`, `ops/paper_f5_acceso`, primo ribilancio lunedì 26 ott 00:05 UTC); N3 ed E4 PRONTE il 22 ott (`bot/portafoglio/eventi.py`, test con dati finti), da accendere con `ops/paper_eventi_acceso` e il riavvio del bot

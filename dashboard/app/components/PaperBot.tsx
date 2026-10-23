@@ -13,6 +13,7 @@ import { getRtdb } from '../lib/firebase';
 type StatoF5 = {
   stato?: string; equity?: number; capitale?: number; rendimento?: number; long?: number; short?: number;
   ultimo_lunedi?: string; costi_totali?: number; funding_totale?: number; aggiornato?: number;
+  costi_a_mercato_totali?: number; limite_variazioni?: number; limite_eseguite?: number; ordini_in_attesa?: number;
 };
 type ProvaF5 = { lunedi?: string; universo?: number; long?: number; short?: number; pesi_maggiori?: Record<string, number>; eseguita?: number };
 type StatoEventi = {
@@ -85,6 +86,18 @@ export default function PaperBot() {
                 funding pagato ${f5.funding_totale?.toFixed(2)}</>
             )}
           </p>
+          {(f5.limite_variazioni ?? 0) > 0 && (
+            <p className="muted" style={{ margin: '2px 0', fontSize: 12.5 }}>
+              Ordini limite: {f5.limite_eseguite} eseguiti su {f5.limite_variazioni}; costi ${f5.costi_totali?.toFixed(2)} invece
+              di ${f5.costi_a_mercato_totali?.toFixed(2)} tutto a mercato.
+            </p>
+          )}
+          {(f5.ordini_in_attesa ?? 0) > 0 && (
+            <p className="muted" style={{ margin: '2px 0', fontSize: 12.5 }}>
+              {f5.ordini_in_attesa} ordini limite in attesa del controllo dopo un'ora (eseguiti se il prezzo ci passa sopra o
+              sotto, altrimenti a mercato).
+            </p>
+          )}
           {f5.equity == null && prova && (
             <p className="muted" style={{ margin: '2px 0', fontSize: 12.5 }}>
               Prova a secco ({quando(prova.eseguita)}): {prova.universo} monete, {prova.long} long, {prova.short} short; il

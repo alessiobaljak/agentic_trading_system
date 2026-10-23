@@ -4477,3 +4477,8 @@ Sharpe sale da 1,93 a 1,99 (discesa −30,9%, ogni anno positivo). Sharpe corret
 è F5 vista prima della correzione dell'asticella). Capito: l'esecuzione a limite conviene anche fra le 100 monete e non porta con
 sé un costo nascosto (gli ordini non eseguiti costano di più ma sono uno su dieci). Per la regola scritta prima, F5 nel bot passa
 agli ordini limite simulati dal primo cambio di lunedì 26 ottobre. Nel conto: 119 prove.
+**F5 nel bot a ordini limite** (23 ottobre, mattina; voce P17): `bot/portafoglio/f5.py` mette ogni variazione del lunedì come
+ordine limite simulato al prezzo mark delle 00:05, valido un'ora; dopo l'ora guarda le candele mark a 1 minuto: eseguito (0,02%)
+se il prezzo è passato oltre, altrimenti a mercato alla fine dell'ora con il movimento contro. Accanto tiene quanto sarebbe
+costato tutto a mercato, così ogni settimana si misura il risparmio vero. Test: `tests/test_paper_f5.py` (anche lo stesso conto
+della ricerca). Riavvio del bot chiesto alla macchina, prima del primo cambio di lunedì 26 ottobre.

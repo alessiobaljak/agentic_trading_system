@@ -554,6 +554,10 @@ def sezione_paper_f5(fb) -> list:
                   f"({100 * float(st.get('rendimento', 0)):+.2f}%) · costi ${float(st.get('costi_totali', 0)):,.2f} · "
                   f"funding pagato ${float(st.get('funding_totale', 0)):,.2f}",
                   f"- posizioni: {st.get('long', 0)} long, {st.get('short', 0)} short · ultimo ribilancio {st.get('ultimo_lunedi', '—')}"]
+        if int(st.get("limite_variazioni") or 0) or int(st.get("ordini_in_attesa") or 0):
+            righe.append(f"- ordini limite: {st.get('limite_eseguite', 0)} eseguiti su {st.get('limite_variazioni', 0)} · "
+                         f"tutto a mercato sarebbe costato ${float(st.get('costi_a_mercato_totali', 0)):,.2f} · "
+                         f"in attesa del controllo dell'ora: {st.get('ordini_in_attesa', 0)}")
         pos = fb.get_rtdb("/paper_f5/posizioni") or {}
         if isinstance(pos, dict) and pos:
             ordine = sorted(pos.items(), key=lambda kv: -abs(float(kv[1])))
