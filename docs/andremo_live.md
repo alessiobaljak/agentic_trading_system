@@ -4548,3 +4548,7 @@ alle 00:05 UTC di sabato 24 ottobre.
 (−0,70%), M-002 +1,09% su 1.088 (non passa, p 0,09), M-003 già bocciata; seconda tornata ancora pochi trade (N-001 3, N-002 6).
 Paper di ricerca del programma 6: A1 +0,49% in due giorni; le settimane si misurano dal 26 ottobre; nessun evento N3 o E4; le
 monete entrate nell'universo sono le stesse di ieri, tutte monete.
+**Settima prova del programma 7, G6** (`programma7/SETTIMA.md`): K2 (funding, acquisti a mercato, interesse aperto) decisa ogni
+giorno: Sharpe 1,21 contro 1,75 della versione settimanale, spese 11,1% l'anno, 2023 −20,6%; G1 + G6 1,62, meno di G1 da sola
+(1,96). Capito: il funding è un segnale lento e regge le decisioni di ogni giorno; gli acquisti a mercato e l'interesse aperto
+cambiano molto da un giorno all'altro, e decidere ogni giorno su di loro fa solo girare il capitale. Nel conto: 128 prove.
