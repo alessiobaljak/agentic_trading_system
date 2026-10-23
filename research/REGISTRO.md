@@ -201,6 +201,9 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    dicendo che il lato long di F5 è il più debole: era sbagliato (avevo letto i lati di C3; in F5 il long fa +42,8% l'anno e lo short
    +16,2%), quindi torna in coda; resta il dubbio di G2 (in giornata il vantaggio del funding non c'era nemmeno prima dei costi).
    ~~G4 le monete nuove dal 1° giorno~~ → prova 59.
+30. **Dopo una salita enorme, il long** (ipotesi nata guardando G5, prova 62: metà delle monete salite del 30% in un giorno sale di
+   un altro 30%; senza uscita lo short perde il 6,6% a evento). È un'idea vista sui dati, quindi si prova **solo su dati non usati**
+   (le monete di Gate.io che non sono su Binance, o il 2020), con le regole scritte prima.
 28. **Il canale Telegram del proprietario** (scalping, al massimo 5 al giorno, «quasi tutte al TP1»): si verifica sui prezzi veri
    appena il proprietario manda l'esportazione completa dei messaggi (anche i segnali persi).
 29. **Lo scalping con i dati del libro degli ordini** (voce P18 del backlog): serve lo storico al secondo, decide il proprietario.
