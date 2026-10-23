@@ -4571,3 +4571,8 @@ più, ogni giorno, fra le monete 101-200, con gli ordini limite. L'inversione c'
 portafoglio ogni giorno fa girare 17,5 volte il capitale a settimana: spese 61% l'anno anche con il 97% degli ordini a limite (gli
 ordini che non si eseguono, sulle monete piccole, costano molto). Netto −38% l'anno. Capito: fra le monete meno scambiate chi fa da
 controparte viene davvero pagato, ma non abbastanza per i nostri costi; servirebbe molto meno giro. Nel conto: 132 prove.
+**Dodicesima prova del programma 7, G10** (`programma7/DODICESIMA.md`): il «buco» del CME sul Bitcoin, l'idea diffusa che il prezzo
+torni sempre alla chiusura del venerdì del CME. In 150 fine settimana con un buco di almeno l'1% (su 301 dal 2021), il prezzo torna
+alla chiusura del venerdì prima di andare altrettanto lontano dall'altra parte solo nel 39% dei casi: −0,27 volte il rischio a
+operazione, già prima dei costi −0,22. Capito: i buchi si chiudono «prima o poi» perché il prezzo vaga, ma chi ci scommette con uno
+stop perde; più spesso il movimento del fine settimana continua. Nel conto: 133 prove.
