@@ -32,7 +32,7 @@ tenuta) resta un'alternativa accettata dal proprietario, non la risposta.
 
 1. ~~**G1 — F5 ogni giorno**~~ → prova 57: opera ogni giorno (3 entrate e 3 uscite), Sharpe 1,96, corretto 0,94; ma le posizioni
    durano in media 17,5 giorni: non è trading «in giornata».
-2. **G2 — lo short del giorno sulle monete con la leva più cara**: entrata a limite su un rimbalzo dentro la giornata, stop e
-   obiettivo dalla volatilità, uscita entro la fine del giorno.
-3. **G3 — il long del giorno sulle monete con il funding più negativo**, lo specchio di G2.
+2. ~~**G2 — lo short del giorno sulle monete con la leva più cara**~~ → prova 58: −0,123 R a operazione, già negativo prima dei
+   costi (−0,022 R): il vantaggio del funding è uno scivolamento di più giorni, dentro la giornata domina il rumore.
+3. ~~**G3 — il long del giorno sulle monete con il funding più negativo**~~: non si fa (vedi G2; il lato long è il più debole).
 4. **G4 — le monete nuove al 7° giorno e il funding al tetto con l'entrata scelta dentro la giornata** (oggi entrano a un'ora fissa).

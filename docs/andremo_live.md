@@ -4508,3 +4508,9 @@ ogni giorno (in media 3 entrate e 3 uscite, operazioni in 2.048 giorni su 2.100)
 settimanale, +54% l'anno, ogni anno positivo, Sharpe corretto 0,94: non validata per un soffio. Capito: decidere ogni giorno non
 toglie il vantaggio (le spese salgono dal 4,9% al 6,7% ma il segnale fresco le ripaga), però le posizioni restano aperte in media
 17,5 giorni: è un portafoglio curato ogni giorno, non trading in giornata. Nel conto: 120 prove.
+**Seconda prova del programma 7, G2** (`programma7/SECONDA.md`): lo short in giornata delle monete con la leva più cara, entrata
+quando una candela da 1 ora chiude sotto l'apertura del giorno, stop al massimo del giorno, obiettivo a 2 volte lo stop, chiusura a
+mezzanotte. 31.363 operazioni (15 al giorno), −0,123 R a operazione, ogni anno negativo; già prima dei costi −0,022 R. Capito: il
+vantaggio del funding è uno scivolamento che si accumula in più giorni; dentro la giornata il prezzo si muove per caso e i costi
+(0,10 R a operazione) fanno il resto. Per il trading in giornata servono movimenti grandi a operazione (gli eventi: +4-12%) o
+costi da market maker. Il long specchio non si prova (il lato long è sempre stato il più debole). Nel conto: 121 prove.
