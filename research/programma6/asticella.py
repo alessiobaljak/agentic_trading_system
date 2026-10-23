@@ -197,7 +197,8 @@ def serie_nuove() -> dict:
     out = {}
     for n, f in (("49 X1", "risultati_quarantanovesima/settimane_X1.csv.gz"), ("49 X2", "risultati_quarantanovesima/settimane_X2.csv.gz"),
                  ("51 F7", "risultati_cinquantunesima/settimane_F7.csv.gz"), ("52 B1", "risultati_cinquantaduesima/settimane_B1.csv.gz"),
-                 ("53 F8", "risultati_cinquantatreesima/settimane_F8.csv.gz"), ("55 C3", "risultati_cinquantacinquesima/settimane_C3.csv.gz")):
+                 ("53 F8", "risultati_cinquantatreesima/settimane_F8.csv.gz"), ("55 C3", "risultati_cinquantacinquesima/settimane_C3.csv.gz"),
+                 ("56 F9", "risultati_cinquantaseiesima/settimane_F9.csv.gz")):
         if (QUI / f).exists():
             d = pd.read_csv(QUI / f, index_col=0)
             out[n] = d["netto"] if "netto" in d else d.iloc[:, 0]
