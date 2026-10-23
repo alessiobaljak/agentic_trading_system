@@ -4471,3 +4471,9 @@ certezza non è «senza vantaggio» e non può essere lei il colpo di fortuna. D
 delle prove ma non nella dispersione. Con la correzione F5 fa 0,92, F5 + M7 + K2 0,94: ancora sotto 0,95, e comunque, viste
 prima della regola, non diventano validate per questo. Capito: con l'asticella di prima, ogni prova di scalping chiesta avrebbe
 reso impossibile validare qualunque cosa; ora no, ma il verdetto sulle strategie trovate non cambia.
+**Cinquantaseiesima prova** (23 ottobre, mattina; `CINQUANTASEIESIMA.md`): F5 eseguita con ordini limite all'apertura del lunedì
+(validi un'ora, poi a mercato): il 90% delle 19.230 variazioni si esegue a limite, le spese scendono dal 4,9% al 3,4% l'anno, lo
+Sharpe sale da 1,93 a 1,99 (discesa −30,9%, ogni anno positivo). Sharpe corretto 0,94: non validata (e per regola non poteva:
+è F5 vista prima della correzione dell'asticella). Capito: l'esecuzione a limite conviene anche fra le 100 monete e non porta con
+sé un costo nascosto (gli ordini non eseguiti costano di più ma sono uno su dieci). Per la regola scritta prima, F5 nel bot passa
+agli ordini limite simulati dal primo cambio di lunedì 26 ottobre. Nel conto: 119 prove.

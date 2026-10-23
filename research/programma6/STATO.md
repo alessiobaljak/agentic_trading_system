@@ -63,6 +63,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 53 | F8: il funding di ogni moneta rispetto alla sua storia | `CINQUANTATREESIMA.md` | `RISULTATI_CINQUANTATREESIMA.md` | 1 | non valida: Sharpe −0,28, discesa −97,6% |
 | 54 | Lo scalping sul serio: Z1 lo stile del canale (TP1/TP2/TP3, 5 al giorno), Z1b senza limite, Z2 VWAP, Z3 prima ora americana, Z4 volume | `CINQUANTAQUATTRESIMA.md` | `RISULTATI_CINQUANTAQUATTRESIMA.md` | 5 | non valide: Z1 71% al TP1 ma −0,053 R a operazione; tutti negativi |
 | 55 | C3: un solo punteggio dalla media dei ranghi di F5, K2 e M7, con la banda | `CINQUANTACINQUESIMA.md` | `RISULTATI_CINQUANTACINQUESIMA.md` | 1 | non valida: Sharpe 1,88 (F5 1,93, i tre portafogli 2,11), discesa −41,9%; Sharpe corretto 0,00 come scritto, 0,86 con l'aggiunta del 23 ottobre all'asticella |
+| 56 | F9: F5 fra le 100 con gli ordini limite all'apertura del lunedì per un'ora, poi a mercato | `CINQUANTASEIESIMA.md` | `RISULTATI_CINQUANTASEIESIMA.md` | 1 | non validata per regola (F5 vista prima): Sharpe 1,99 contro 1,93, spese 3,4% contro 4,9%, 90% eseguite a limite; Sharpe corretto 0,94; il bot passa agli ordini limite |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -264,6 +265,10 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    scalping (Sharpe fino a −13,6) portavano la deviazione degli Sharpe dei gruppi da 0,62 a 2,56 e lo Sharpe corretto di ogni
    strategia a 0,00. Il calcolo misura il massimo che darebbero prove senza vantaggio; una prova che perde con t −22 non è senza
    vantaggio. Da qui contano in N ma non in V. Con l'aggiunta F5 0,92 e F5 + M7 + K2 0,94: ancora sotto 0,95.
+44. **Gli ordini limite non tolgono il vantaggio di F5, lo aumentano** (prova 56): il 90% delle variazioni del lunedì si esegue a
+   limite entro un'ora, il costo per unità scende da 0,070% a 0,049%, le spese da 4,9% a 3,4% l'anno e lo Sharpe sale da 1,93 a
+   1,99. Gli ordini non eseguiti (il prezzo scappa nel verso che volevamo) costano di più, ma sono pochi. Il bot passa F5 agli
+   ordini limite simulati dal primo lunedì (26 ottobre).
 
 ## Dati (fuori da git, con le impronte nel repository)
 
