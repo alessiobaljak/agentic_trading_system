@@ -183,3 +183,16 @@ def test_le_prove_del_programma7_entrano_nel_conto():
     for n in ("57 G1", "58 G2", "59 G4", "60 G3", "61 F5T", "61 G1T", "62 G5", "63 G6", "63 G1+G6", "64 G7", "65 G8", "66 MAX",
               "67 G9", "68 G10", "69 G11"):
         assert n in s and len(s[n]) > 50, n
+
+
+def test_g12_operazione():
+    import pandas as pd
+    from research.programma7 import quattordicesima as g12
+    ore = np.arange(1000, 1000 + 200)
+    c = pd.DataFrame({"open": 10.0}, index=ore)
+    cb = pd.DataFrame({"open": 100.0}, index=ore)
+    c.loc[1000 + 168, "open"] = 9.0                                # la moneta scende del 10% in 7 giorni
+    vuoto = pd.Series(dtype=float)
+    r = g12.operazione(c, cb, vuoto, vuoto, 1000)
+    assert abs(r - (0.10 - g12.vu.COSTO_MONETA - g12.vu.COSTO_BTC)) < 1e-12
+    assert g12.operazione(c, cb, vuoto, vuoto, 1100) is None      # manca l'ora d'uscita
