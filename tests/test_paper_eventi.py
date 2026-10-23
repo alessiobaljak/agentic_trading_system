@@ -132,19 +132,17 @@ def test_e4_solo_su_un_intervallo_che_scende_con_funding_positivo(tmp_path):
     for s in ("CALDAUSDT", "FREDDAUSDT"):
         b.passo_ore[s] = [(0, 8), (cambio, 4)]
     b.info += [{"symbol": "CALDAUSDT", "fundingIntervalHours": 4}, {"symbol": "FREDDAUSDT", "fundingIntervalHours": 4}]
-    entrata = (D - 2) * 86400.0 + 5 * 3600
-    _tick(p, b, entrata)                                     # il giro orario vede l'evento: entra subito (prova 70)
+    _tick(p, b, (D - 2) * 86400.0 + 5 * 3600)
     st = p.carica()
-    assert list(st["aperte"]) == [f"E4-CALDAUSDT-{_data(D - 2)}"]  # FREDDA ha il funding negativo: no
-    pos = st["aperte"][f"E4-CALDAUSDT-{_data(D - 2)}"]
-    assert pos["uscita_ms"] == int(entrata * 1000) + 7 * GIORNO_MS
+    assert [e["simbolo"] for e in st["e4_eventi"]] == ["CALDAUSDT"]  # FREDDA ha il funding negativo: no
+    assert st["e4_eventi"][0]["giorno_entrata"] == D - 1
+    _tick(p, b, (D - 1) * 86400.0 + 400)                     # 00:06 del giorno dopo: entra
+    assert list(p.carica()["aperte"]) == [f"E4-CALDAUSDT-{_data(D - 1)}"]
     b.mark["CALDAUSDT"] = 4.0
-    _tick(p, b, (D + 5) * 86400.0 + 400)                     # 00:06 di 7 giorni dopo il giorno dell'evento: non ancora
-    assert len(p.carica()["aperte"]) == 1
-    _tick(p, b, entrata + 7 * 86400 + 60)                    # 7 giorni dopo l'entrata: esce
+    _tick(p, b, (D + 6) * 86400.0 + 400)                     # 7 giorni dopo: esce
     st = p.carica()
     assert st["aperte"] == {} and st["chiuse_n"] == 1
-    assert fb.get_rtdb(f"/paper_eventi/chiuse/E4-CALDAUSDT-{_data(D - 2)}")["motivo"] == "tempo"
+    assert fb.get_rtdb(f"/paper_eventi/chiuse/E4-CALDAUSDT-{_data(D - 1)}")["motivo"] == "tempo"
 
 
 def test_al_massimo_20_aperte(tmp_path):

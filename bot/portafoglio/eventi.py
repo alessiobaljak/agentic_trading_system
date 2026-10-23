@@ -9,10 +9,9 @@
 * **E4** (VENTISEIESIMA.md; REGOLE.md sezione 9): ogni ora si legge `/fapi/v1/fundingInfo` (l'intervallo del funding dei
   simboli con i parametri cambiati; chi non c'e' ha 8 ore); quando l'intervallo di una moneta scende rispetto all'ultimo visto
   (il primo giro fa solo da base), si aspetta il primo regolamento al passo piu' corto e il segno del suo funding (se zero,
-  quello prima, come `ventiseiesima.eventi`); se positivo: short la moneta e long il Bitcoin **subito** (al giro orario che
-  vede l'evento, al mark; dal 23 ottobre, prova 70, research/programma7/QUATTORDICESIMA.md: +13,00% a evento contro +11,67%
-  entrando il giorno dopo) per **7 giorni dall'entrata**, se il giorno dell'evento ha volume. Senza uscita di protezione (la
-  regola non ce l'ha).
+  quello prima, come `ventiseiesima.eventi`); se positivo: short la moneta e long il Bitcoin all'apertura del giorno UTC dopo
+  (alle 00:05 al mark) per **7 giorni**, se il giorno dell'evento ha volume. Senza uscita di protezione (la regola non ce
+  l'ha).
 * Il **5%** del capitale per operazione (stesso valore sulle due gambe), al massimo **20** aperte fra le due; costi come la
   ricerca (`ventunesima.COSTO_MONETA`, `COSTO_BTC`) e il funding vero di ogni regolamento per le due gambe; il rendimento
   di un'operazione chiusa e' quello della ricerca: (Bitcoin uscita/entrata − 1) − (moneta uscita/entrata − 1) − costi +
@@ -29,7 +28,7 @@ import json
 import os
 import time
 from pathlib import Path
-from typing import Optional, Callable
+from typing import Callable
 
 from bot.portafoglio.f5 import GIORNO_MS, _chiedi_http, contratti_monete
 
@@ -157,7 +156,7 @@ class PaperEventi:
             p["fc"] = float(p["fc"]) + sum(r for t, r in self._regolamenti(p["simbolo"], f0 + 1) if f0 < t <= adesso_ms)
             p["funding_fino_ms"] = adesso_ms
 
-    def apri(self, st: dict, tipo: str, simbolo: str, giorno: int, now: float, mark: dict, uscita_ms: Optional[int] = None) -> bool:
+    def apri(self, st: dict, tipo: str, simbolo: str, giorno: int, now: float, mark: dict) -> bool:
         aperte = st.setdefault("aperte", {})
         if len(aperte) >= MAX_APERTE or simbolo not in mark or "BTCUSDT" not in mark:
             return False
@@ -170,8 +169,6 @@ class PaperEventi:
                          "fc": 0.0, "fb": 0.0, "funding_fino_ms": adesso_ms,
                          "uscita_giorno": giorno + (GIORNI_N3 if tipo == "N3" else GIORNI_E4),
                          "ore_fino_ms": (adesso_ms // ORA_MS) * ORA_MS}
-        if uscita_ms is not None:
-            aperte[ident]["uscita_ms"] = int(uscita_ms)
         print(f"[paper_eventi] aperta {ident}: short a {mark[simbolo]}, long BTC a {mark['BTCUSDT']}")
         return True
 
@@ -222,18 +219,9 @@ class PaperEventi:
                     restano.append(a)
                 continue
             if segno > 0:
-                # dal 23 ottobre (prova 70, research/programma7/QUATTORDICESIMA.md) si entra subito, non il giorno dopo:
-                # +13,00% a evento contro +11,67%; si tengono 7 giorni dall'entrata
+                st["e4_eventi"].append({"simbolo": a["simbolo"], "ms": ms, "giorno_entrata": ms // GIORNO_MS + 1})
                 print(f"[paper_eventi] evento E4 {a['simbolo']}: intervallo {a['ore']} ore, funding positivo")
-                if self._volume_del_giorno(a["simbolo"], ms // GIORNO_MS) > 0:
-                    self.apri(st, "E4", a["simbolo"], int(now // 86400), now, mark, uscita_ms=adesso_ms + GIORNI_E4 * GIORNO_MS)
         st["e4_attese"] = restano
-        # E4 entrate subito: l'uscita dopo 7 giorni dall'entrata
-        for ident, p in list((st.get("aperte") or {}).items()):
-            if p.get("uscita_ms") is not None and adesso_ms >= int(p["uscita_ms"]) and "BTCUSDT" in mark:
-                self._funding(st, now)
-                pc = mark.get(p["simbolo"], float(p["p0"]))
-                self.chiudi(st, ident, pc, mark["BTCUSDT"], "tempo" if p["simbolo"] in mark else "contratto senza prezzo", now)
         # N3: l'uscita di protezione sulle candele a 1 ora
         for ident, p in list((st.get("aperte") or {}).items()):
             if p["tipo"] != "N3":
@@ -260,7 +248,7 @@ class PaperEventi:
             return False
         self._funding(st, now)
         for ident, p in list((st.get("aperte") or {}).items()):
-            if p.get("uscita_ms") is None and int(p["uscita_giorno"]) <= giorno:
+            if int(p["uscita_giorno"]) <= giorno:
                 pc = mark.get(p["simbolo"])
                 if pc is None:               # contratto tolto: l'ultimo prezzo noto e' l'entrata (lo si dice nel motivo)
                     pc = float(p["p0"])
