@@ -4542,3 +4542,5 @@ un giorno, con le uscite di N3. 1.228 eventi in 5 anni e 9 mesi: −2,71% a even
 e scatta l'uscita. Senza uscita la tipica scende (mediana +16% per chi vende, 68% vinte) ma le esplosioni si mangiano tutto (media
 −6,6%). Capito: sui perpetui una salita enorme non è una «spinta da sgonfiare» ma spesso l'inizio di una corsa; il ritorno
 indietro c'è per le monete nuove (N3), non per quelle già quotate da tempo. Nel conto: 126 prove.
+G1 nel bot: prova a secco riuscita alle 06:53 UTC (ops 0648): universo 100 monete, 20 long e 20 short; la prima decisione vera
+alle 00:05 UTC di sabato 24 ottobre.
