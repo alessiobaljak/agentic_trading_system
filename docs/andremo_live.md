@@ -4566,3 +4566,8 @@ bot resta com'è. Nel conto: 130 prove.
 il giorno migliore più alto rendono di più la settimana dopo, Ozdamar e altri 2021): fra le 100 dal 2021 Sharpe −0,43, −15,9% l'anno;
 il verso opposto 0,25. Capito: come il momento e la dimensione (prova 49), i fattori trovati sulle cripto fino al 2019 non reggono
 sui perpetui di oggi; l'unico fattore fra monete che regge resta il funding. Nel conto: 131 prove.
+**Undicesima prova del programma 7, G9** (`programma7/UNDICESIMA.md`): comprare chi è sceso di più ieri e vendere chi è salito di
+più, ogni giorno, fra le monete 101-200, con gli ordini limite. L'inversione c'è (+29% l'anno prima dei costi), ma rifare il
+portafoglio ogni giorno fa girare 17,5 volte il capitale a settimana: spese 61% l'anno anche con il 97% degli ordini a limite (gli
+ordini che non si eseguono, sulle monete piccole, costano molto). Netto −38% l'anno. Capito: fra le monete meno scambiate chi fa da
+controparte viene davvero pagato, ma non abbastanza per i nostri costi; servirebbe molto meno giro. Nel conto: 132 prove.
