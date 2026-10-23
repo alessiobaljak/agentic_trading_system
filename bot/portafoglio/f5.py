@@ -35,6 +35,7 @@ from pathlib import Path
 from typing import Callable, Optional
 
 import numpy as np
+import pandas as pd
 import requests
 
 from research.programma6.esclusi import ESCLUSI
@@ -401,11 +402,12 @@ class PaperF5:
             return None
         giornaliere = {s: self._giornaliere(s) for s in contratti}
         uni = universo(giornaliere, contratti, lunedi_di(m))          # le 100 della settimana (per F5 m e' gia' il lunedi')
-        segnale, sigma = {}, {}
+        funding, sigma = {}, {}
         for s in uni:
             sg = sigma_30({d: v[1] for d, v in giornaliere[s].items()}, m)
             sigma[s] = sg
-            segnale[s] = -funding_7(self._funding_giorni(s, (m - 8) * GIORNO_MS), m) if np.isfinite(sg) else float("nan")
+            funding[s] = self._funding_giorni(s, (m - 8) * GIORNO_MS) if np.isfinite(sg) else None
+        segnale = self.segnali(funding, m)
         # il regolamento delle 00:00 del lunedi' fa parte del segnale e ne porta circa 0,2 di Sharpe (revisione del 23
         # ottobre, CONTROLLO_PARITA.md): se manca per piu' del 10% delle monete, Binance non l'ha ancora pubblicato e si
         # riprova dopo 30 minuti invece di decidere con un segnale monco
@@ -415,6 +417,10 @@ class PaperF5:
             return None
         pesi, lunghi, corti = pesi_banda(segnale, sigma, set(st.get("lunghi") or []), set(st.get("corti") or []))
         return pesi, lunghi, corti, len(uni)
+
+    def segnali(self, funding: dict, m: int) -> dict:
+        """Il segnale di ogni moneta dal funding per giorno di tenuta (None = senza volatilita'): per F5 e G1 −funding dei 7 giorni."""
+        return {s: (-funding_7(f, m) if f is not None else float("nan")) for s, f in funding.items()}
 
     def prova(self, m: int, now: float) -> None:
         """La prova a secco: i pesi del lunedi' di questa settimana con i dati di adesso, senza operare; serve a vedere
@@ -492,3 +498,28 @@ class PaperG1(PaperF5):
 
     def banda_di_partenza(self, m: int) -> dict:
         return {}
+
+
+def rango_centrato(valori: dict) -> dict:
+    """Il rango fra -0,5 e +0,5 dei valori finiti, parita' al rango medio (come `terza.ranghi`)."""
+    x = pd.Series({k: v for k, v in valori.items() if v is not None and np.isfinite(v)}, dtype=float)
+    if len(x) < 2:
+        return {}
+    r = x.rank(method="average")
+    return ((r - 1) / (len(x) - 1) - 0.5).to_dict()
+
+
+class PaperG11(PaperG1):
+    """G11, G1 con il funding fresco (research/programma7/TREDICESIMA.md, prova 69: Sharpe 2,05; Sharpe corretto 0,948 con il
+    conto corretto, sotto la soglia; revisione in REVISIONE_G11.md). Nel paper accanto a G1 su richiesta del proprietario (23
+    ottobre: «94,8 non la cassiamo [...] validiamo in paper come quella del 91%»), per confrontarle sugli stessi giorni. Segnale:
+    media dei ranghi di −funding dei 7 giorni e di −funding dell'ultimo giorno. Interruttore `ops/paper_g11_acceso`, stato in
+    `data/paper_g11.json` e su RTDB in `/paper_g11`."""
+    RAMO, ETICHETTA = "/paper_g11", "paper_g11"
+    INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g11_acceso"
+    FILE_DI_SERIE = RADICE / "data" / "paper_g11.json"
+
+    def segnali(self, funding: dict, m: int) -> dict:
+        r7 = rango_centrato({s: (-funding_7(f, m) if f is not None else None) for s, f in funding.items()})
+        r1 = rango_centrato({s: (-round(f.get(m - 1, 0.0), 12) if f is not None else None) for s, f in funding.items()})
+        return {s: ((r7[s] + r1[s]) / 2 if s in r7 and s in r1 else float("nan")) for s in funding}

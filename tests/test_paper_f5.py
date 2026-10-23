@@ -238,3 +238,16 @@ def test_g1_decide_ogni_giorno(tmp_path):
     st2 = p.carica()
     assert st2["ultimo_lunedi"] == m + 3 and st2["limite_variazioni"] == len(st["ordini"]["variazioni"])
     assert fb.get_rtdb("/paper_g1/ribilanciamenti/" + time.strftime("%Y-%m-%d", time.gmtime((m + 2) * 86400)))["universo"] == 30
+
+
+def test_g11_segnale_fresco_come_la_ricerca():
+    m = 20750
+    # A: funding basso sui 7 giorni e ieri; B: in mezzo; C: alto sui 7 giorni ma basso ieri
+    f = {"A": {d: -0.001 for d in range(m - 7, m)}, "B": {d: 0.0001 for d in range(m - 7, m)},
+         "C": {**{d: 0.002 for d in range(m - 7, m - 1)}, m - 1: -0.002}, "D": None}
+    p = f5.PaperG11(None, chiedi=lambda *a: None, file_stato="/tmp/non_usato.json", interruttore="/tmp/non_esiste", pausa_s=0.0)
+    s = p.segnali(f, m)
+    # ranghi di −funding_7: A +0,5, B 0, C −0,5; di −funding di ieri: A 0, B −0,5, C +0,5 -> A 0,25, B −0,25, C 0
+    assert s["A"] == pytest.approx(0.25) and s["B"] == pytest.approx(-0.25) and s["C"] == pytest.approx(0.0)
+    assert np.isnan(s["D"])
+    assert f5.PaperG1(None, chiedi=lambda *a: None).segnali(f, m)["C"] == pytest.approx(-0.010)   # G1: −funding dei 7 giorni (6 × 0,2% − 0,2%)

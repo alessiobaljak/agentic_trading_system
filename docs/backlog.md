@@ -152,6 +152,13 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P23. G11 (G1 con il funding fresco) nel paper accanto a G1 — chiesta dal proprietario e FATTA il 23 ott 2026
+**Perché:** G11 (prova 69) fa Sharpe 2,05 sul passato, Sharpe corretto 0,948 con il conto corretto (sotto 0,95); il revisore
+(`research/programma7/REVISIONE_G11.md`) dice che il vantaggio su G1 è fragile (ordini limite, 2021). Il proprietario (23 ott): «94,8
+non la cassiamo corretto ma validiamo in paper come quella del 91%?». Sì: il paper la confronta con G1 sugli stessi giorni, con i
+prezzi veri. **Cosa:** `PaperG11` in `bot/portafoglio/f5.py`, interruttore `ops/paper_g11_acceso`, RTDB `/paper_g11`, in dashboard
+accanto a G1. **Metro:** G11 contro G1 settimana per settimana, e la quota di ordini limite eseguiti (G11 ne mette di più).
+
 ### P22. G1 (F5 decisa ogni giorno) nel paper del bot — trovata e FATTA il 23 ott 2026
 **Perché:** il proprietario vuole trading di ogni giorno; G1 (prova 57, `research/programma7/PRIMA.md`) apre e chiude in media 3
 posizioni al giorno, Sharpe 1,96 sul passato (F5 settimanale 1,88), Sharpe corretto 0,94: non validata per poco. Il proprietario

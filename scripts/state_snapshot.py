@@ -108,6 +108,8 @@ def build() -> str:
     lines += sezione_paper_f5(fb)
     lines += sezione_paper_f5(fb, ramo="/paper_g1", titolo="## Paper G1 (F5 decisa ogni giorno, eseguito dal bot)",
                               interruttore="ops/paper_g1_acceso")
+    lines += sezione_paper_f5(fb, ramo="/paper_g11", titolo="## Paper G11 (G1 con il funding fresco, a confronto con G1)",
+                              interruttore="ops/paper_g11_acceso")
     lines += sezione_paper_eventi(fb)
 
     # --- ultima decisione orchestratore (RTDB) ---

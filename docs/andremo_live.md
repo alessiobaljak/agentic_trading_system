@@ -4589,3 +4589,8 @@ vantaggio di G11 su G1 c'è solo con l'esecuzione più favorevole degli ordini l
 risultato che passa per poco va sempre ricontrollato da chi non l'ha scritto; due errori su due revisioni (le parità di F5, il conto
 delle prove) li ha trovati il revisore. E le varianti di F5 vanno guardate con sospetto: il conto per gruppi non punisce la scelta
 della migliore fra varianti simili.
+**G11 nel paper accanto a G1** (23 ottobre; il proprietario: «94,8 non la cassiamo corretto ma validiamo in paper come quella del
+91%?»). Sì: non è validata sul passato (0,948), ma il paper serve proprio a confrontare le due sugli stessi giorni con i prezzi veri.
+`PaperG11` in `bot/portafoglio/f5.py` (segnale: media dei ranghi del funding dei 7 giorni e dell'ultimo giorno), interruttore
+`ops/paper_g11_acceso`, in dashboard accanto a G1 (voce P23 del backlog). Test: `tests/test_paper_f5.py`. Riavvio chiesto alla
+macchina; la prima decisione vera alle 00:05 UTC di sabato 24 ottobre, la stessa di G1.

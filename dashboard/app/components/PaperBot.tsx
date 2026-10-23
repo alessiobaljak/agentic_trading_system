@@ -5,9 +5,9 @@ import { onValue, ref } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
 
 /**
- * Il paper delle strategie nuove eseguito dal bot (22 ott 2026, backlog P16): F5 e G1 (bot/portafoglio/f5.py) e le monete
+ * Il paper delle strategie nuove eseguito dal bot (22 ott 2026, backlog P16): F5, G1 e G11 (bot/portafoglio/f5.py) e le monete
  * appena quotate con il funding al tetto (bot/portafoglio/eventi.py). Ordini simulati con i prezzi del momento, capitale
- * virtuale, nessun ordine vero. Legge in diretta /paper_f5, /paper_g1 e /paper_eventi del database del bot.
+ * virtuale, nessun ordine vero. Legge in diretta /paper_f5, /paper_g1, /paper_g11 e /paper_eventi del database del bot.
  */
 
 type StatoF5 = {
@@ -130,6 +130,9 @@ export default function PaperBot() {
         inizio="il primo cambio vero è il lunedì alle 00:05 UTC." />
       <div style={{ marginTop: 10 }} />
       <Portafoglio ramo="paper_g1" titolo="Funding con la banda, decisione ogni giorno (G1)"
+        inizio="la prima decisione vera è alle 00:05 UTC del giorno dopo." />
+      <div style={{ marginTop: 10 }} />
+      <Portafoglio ramo="paper_g11" titolo="Come G1 con il funding dell'ultimo giorno accanto (G11, a confronto con G1)"
         inizio="la prima decisione vera è alle 00:05 UTC del giorno dopo." />
 
       <div className="sotto-titolo" style={{ marginTop: 10 }}>Monete appena quotate e funding al tetto</div>

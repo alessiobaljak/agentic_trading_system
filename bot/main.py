@@ -39,7 +39,7 @@ from bot.learning.adaptation import AdaptationEngine
 from bot.learning.trade_logger import TradeLogger
 from bot.orchestrator import Orchestrator
 from bot.portafoglio.eventi import PaperEventi
-from bot.portafoglio.f5 import PaperF5, PaperG1
+from bot.portafoglio.f5 import PaperF5, PaperG1, PaperG11
 from bot.risk.circuit_breakers import CircuitBreakers
 from bot.risk import kill_switch
 from bot.risk.kill_switch import BotState
@@ -491,6 +491,8 @@ class TradingBot:
         self.paper_f5 = PaperF5(self.fb)
         # G1, F5 decisa ogni giorno (research/programma7/PRIMA.md): interruttore suo, ops/paper_g1_acceso
         self.paper_g1 = PaperG1(self.fb)
+        # G11, G1 con il funding fresco, accanto a G1 per il confronto (richiesta del proprietario del 23 ottobre)
+        self.paper_g11 = PaperG11(self.fb)
         # e il paper di N3 ed E4 (le strategie a eventi): interruttore suo, ops/paper_eventi_acceso
         self.paper_eventi = PaperEventi(self.fb)
         # stream dei trade in tempo reale: da' al paper la SEQUENZA dei prezzi, non
@@ -2623,6 +2625,10 @@ class TradingBot:
                 self.paper_g1.tick(time.time())
             except Exception as exc:  # noqa: BLE001
                 print(f"[paper_g1] errore: {exc}")
+            try:
+                self.paper_g11.tick(time.time())
+            except Exception as exc:  # noqa: BLE001
+                print(f"[paper_g11] errore: {exc}")
             try:
                 self.paper_eventi.tick(time.time())
             except Exception as exc:  # noqa: BLE001

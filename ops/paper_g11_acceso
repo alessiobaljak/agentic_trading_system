@@ -1,0 +1,4 @@
+Il paper di G11 (G1 con il funding fresco) eseguito dal bot e' acceso (bot/portafoglio/f5.py, PaperG11; docs/backlog.md P23).
+Acceso il 23 ottobre 2026 su richiesta del proprietario («94,8 non la cassiamo [...] validiamo in paper come quella del 91%»),
+accanto a G1 per il confronto sugli stessi giorni. DRY_RUN vero, nessun ordine vero.
+Per spegnerlo: cancellare questo file e riavviare il bot (ops: riavvia-bot).
