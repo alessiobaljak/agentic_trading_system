@@ -4494,3 +4494,10 @@ altcoin non è mai stato misurato, TRX arriva al 32% del lato long. Capito: chi 
 strategia; da qui ogni strategia promettente passa da un revisore separato.
 Bot riavviato alle 05:51 UTC (ops 0644) con la correzione: non decide il cambio del lunedì finché il regolamento delle 00:00 non
 è pubblicato.
+**I giorni della settimana** (23 ottobre; il proprietario: «in passato leggevo di non fare mai trading nel weekend»;
+`CALENDARIO.md`, regole scritte prima, descrittivo): nel fine settimana il volume è un quarto più basso e il Bitcoin si muove la metà.
+F5 guadagna ogni giorno, anche il sabato e la domenica (meno: +0,08% al giorno contro +0,13-0,31%); il giorno migliore è il lunedì,
+subito dopo il cambio. Fermarla nel fine settimana costerebbe circa lo 0,28% a settimana per guadagnarne lo 0,16%: non si prova.
+Lo scalping perde tutti i giorni; la rottura della prima ora americana perde il doppio nel fine settimana, quando la borsa americana
+è chiusa. Capito: il consiglio vale per chi apre e chiude spesso (meno scambi, prezzi più facili da spingere), non per una
+strategia che tiene le posizioni una settimana.
