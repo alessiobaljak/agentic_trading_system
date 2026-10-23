@@ -175,3 +175,11 @@ def test_g10_ore_cme_e_operazione():
     b.loc[h_r + 5, "low"] = 99.9                                   # torna sotto la chiusura del venerdi': obiettivo
     r = g10.operazione(b, h_c, h_r, h_r + 150, pd.Series(dtype=float))
     assert r["verso"] == -1 and r["motivo"] == "obiettivo" and abs(r["R_lordo"] - 1.0) < 1e-12
+
+
+def test_le_prove_del_programma7_entrano_nel_conto():
+    from research.programma6 import asticella as ast
+    s = ast.serie_nuove()
+    for n in ("57 G1", "58 G2", "59 G4", "60 G3", "61 F5T", "61 G1T", "62 G5", "63 G6", "63 G1+G6", "64 G7", "65 G8", "66 MAX",
+              "67 G9", "68 G10", "69 G11"):
+        assert n in s and len(s[n]) > 50, n

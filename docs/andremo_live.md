@@ -4582,3 +4582,10 @@ positivo, Sharpe corretto 0,97 sopra la soglia di 0,95, t 4,91. Riserve, scritte
 dal revisore (l'ultimo regolamento conta), quindi non è una scoperta indipendente da F5; e opera di più (5,5 entrate al giorno, spese
 10,3% l'anno), quindi dipende di più dall'ipotesi che gli ordini limite si eseguano. Prima del paper passa da un revisore separato.
 Nel conto: 134 prove.
+**La revisione di G11** (23 ottobre, `programma7/REVISIONE_G11.md`): un revisore separato ha trovato che le prove del programma 7
+non entravano nel conto dello Sharpe corretto; corretto, G11 scende da 0,97 a **0,948**, sotto la soglia (G1 da 0,94 a 0,913). E il
+vantaggio di G11 su G1 c'è solo con l'esecuzione più favorevole degli ordini limite (con il prezzo che deve andare oltre dello 0,05%:
+1,79 contro 1,785) e sta quasi tutto nel 2021 (dal 2023 1,60 contro 1,81). G11 non è validata e non entra nel paper. Capito: un
+risultato che passa per poco va sempre ricontrollato da chi non l'ha scritto; due errori su due revisioni (le parità di F5, il conto
+delle prove) li ha trovati il revisore. E le varianti di F5 vanno guardate con sospetto: il conto per gruppi non punisce la scelta
+della migliore fra varianti simili.

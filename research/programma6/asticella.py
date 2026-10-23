@@ -204,6 +204,38 @@ def serie_nuove() -> dict:
             out[n] = d["netto"] if "netto" in d else d.iloc[:, 0]
     for f in sorted((QUI / "risultati_cinquantaquattresima").glob("settimane_*.csv.gz")):
         out[f"54 {f.name[len('settimane_'):-len('.csv.gz')]}"] = pd.read_csv(f, index_col=0).iloc[:, 0]
+    out.update(serie_programma7())
+    return out
+
+
+def serie_programma7() -> dict:
+    """Le serie settimanali nette delle prove del programma 7 (revisione del 23 ottobre: mancavano dal conto). Le prove a
+    portafoglio con la loro serie; quelle a eventi con il portafoglio della prova 41 (5% a evento, al massimo 20 aperte); il
+    buco del CME con l'1% di rischio a operazione."""
+    p7 = QUI.parent / "programma7"
+    out = {}
+    for n, f in (("57 G1", "risultati_prima/settimane_G1.csv.gz"), ("58 G2", "risultati_seconda/settimane_G2.csv.gz"),
+                 ("60 G3", "risultati_quarta/settimane_G3.csv.gz"), ("61 F5T", "risultati_quinta/settimane_F5T.csv.gz"),
+                 ("61 G1T", "risultati_quinta/settimane_G1T.csv.gz"), ("63 G6", "risultati_settima/settimane_G6.csv.gz"),
+                 ("63 G1+G6", "risultati_settima/settimane_G1_G6.csv.gz"), ("66 MAX", "risultati_decima/settimane_MAX.csv.gz"),
+                 ("67 G9", "risultati_undicesima/settimane_G9.csv.gz"), ("69 G11", "risultati_tredicesima/settimane_G11.csv.gz")):
+        if (p7 / f).exists():
+            out[n] = pd.read_csv(p7 / f, index_col=0)["netto"]
+    for n, f, ora_col in (("59 G4", "risultati_terza/eventi_G4.csv", None), ("62 G5", "risultati_sesta/eventi_G5.csv", None),
+                          ("64 G7", "risultati_ottava/eventi_G7.csv", None), ("65 G8", "risultati_nona/eventi_G8.csv", "ora")):
+        if not (p7 / f).exists():
+            continue
+        d = pd.read_csv(p7 / f)
+        giorno = d["data"].map(lambda x: sc.giorno(*map(int, x.split("-")))).to_numpy()
+        ora = giorno * 24 + (d[ora_col].to_numpy() if ora_col else 0)
+        ev = pd.DataFrame({"simbolo": d["simbolo"] if "simbolo" in d else d["contratto"], "ora": ora,
+                           "uscita_h": ora + np.round(d["giorni"].to_numpy() * 24).astype(int), "r": d["r"]})
+        out[n] = qu.portafoglio(ev)["netto"]
+    f = p7 / "risultati_dodicesima" / "operazioni_G10.csv"
+    if f.exists():
+        d = pd.read_csv(f)
+        g = d["venerdi"].map(lambda x: sc.giorno(*map(int, x.split("-")))).to_numpy() + 3      # il lunedi' dopo il venerdi'
+        out["68 G10"] = pd.Series(0.01 * d["R"].to_numpy(), index=g).groupby(level=0).sum()
     return out
 
 
