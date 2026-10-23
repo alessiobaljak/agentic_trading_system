@@ -56,7 +56,11 @@ sua riga prima e il risultato dopo, con la coda delle idee). Il proprietario, 21
 decisione di portare le strategie in paper anche questa falla in autonomia senza che io ti dica nulla nel momento in cui
 pensi sia giusto»: F5 gira nel bot in paper (`bot/portafoglio/f5.py`, interruttore `ops/paper_f5_acceso`), e il
 coordinamento decide da solo quali strategie portare in paper e quando (sempre `DRY_RUN` vero, niente soldi veri), e lo
-scrive nel diario. **Delega del
+scrive nel diario. **Il proprietario, 23 ott 2026** (arrabbiato, e con ragione): «io voglio anche fare trading tutti i giorni non solo
+tenere una settimana (non te l'ho mai chiesto, anche se lo posso accettare come alternativa se è profittevole) [...] ti ho chiesto
+di fare trading tutti i giorni»: **l'obiettivo della ricerca è il trading di ogni giorno** (posizioni aperte e chiuse ogni giorno,
+con entrata, stop e obiettivo); F5 settimanale è un'alternativa accettata, non la risposta. È il **programma 7**
+(`research/programma7/`, metodo in `METODO.md`), con lo stesso registro unico. **Delega del
 proprietario (17 ott, 21:10 UTC):** il coordinamento va avanti da solo con i passi (correzioni del collaudo, apertura
 della sessione di ricerca, STOP, via libera alla validazione) senza chiedere il permesso, e lo informa; il vault no.
 

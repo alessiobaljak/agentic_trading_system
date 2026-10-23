@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 119 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 120 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -81,8 +81,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 54 | Lo scalping sul serio, su richiesta del proprietario: Z1 lo stile del canale Telegram (15 minuti, tendenza + ritracciamento, TP1/TP2/TP3 a limite, stop all'entrata dopo il TP1, 5 al giorno), Z2 ritorno alla VWAP (5 minuti), Z3 rottura della prima ora americana, Z4 la spinta del volume (1 minuto); entrate e obiettivi a ordine limite, 30 monete, 2024-2026; Z1b come Z1 senza il limite di 5 al giorno (`CINQUANTAQUATTRESIMA.md`) | 5 | Z1 5.095 operazioni in 2 anni e 9 mesi: 71% vinte e 71% almeno al TP1, ma −0,053 R a operazione (prima dei costi −0,007; vinte +0,36 R, perse −1,05 R), ogni anno negativo; Z1b 42.824, −0,052 R; Z2 −0,098 R; Z3 −0,146 R (prima dei costi +0,013, costi 0,159 R); Z4 −0,338 R; tutti p 1,00, Sharpe dei portafogli da −2,4 a −13,6, Sharpe corretto 0,00 (`RISULTATI_CINQUANTAQUATTRESIMA.md`) | no: vincere spesso non è guadagnare (il TP1 è vicino, lo stop lontano); i costi si mangiano l'unico schema positivo prima dei costi |
 | 55 | C3: un solo punteggio dalla media dei ranghi di F5 (funding), K2 (il segnale K1) e M7 (il modello), con la banda di F5 (`CINQUANTACINQUESIMA.md`) | 1 | dal 2022 Sharpe 1,88, +55,9% l'anno, discesa −41,9%, ogni anno positivo, correlazione con F5 0,76; Sharpe corretto 0,00 come scritto (lo azzerano le serie dello scalping, per tutte le candidate), 0,80 senza di loro, 0,86 con l'aggiunta del 23 ottobre all'asticella; t 4,12 (`RISULTATI_CINQUANTACINQUESIMA.md`) | no: un punteggio unico rende meno di F5 da sola (1,93) e dei tre portafogli separati (2,11) |
 | 56 | F9: F5 fra le 100 con le variazioni del lunedì a ordine limite all'apertura per un'ora, poi a mercato (`CINQUANTASEIESIMA.md`); non può diventare validata (F5 vista prima dell'aggiunta all'asticella): decide la voce P17 del bot | 1 | 90% delle 19.230 variazioni eseguite a limite, costo per unità 0,049% invece di 0,070%; Sharpe 1,99 (F5 a mercato 1,93), +58,9% l'anno, spese 3,4% invece di 4,9%, discesa −30,9%, ogni anno positivo; Sharpe corretto 0,94 con l'aggiunta (0,00 come nella sezione 3), t 4,79 (`RISULTATI_CINQUANTASEIESIMA.md`) | non validata (per regola, e comunque 0,94 sotto 0,95); **per la regola scritta prima il bot passa F5 agli ordini limite** (voce P17) |
+| 57 | **Programma 7, trading ogni giorno.** G1: F5 decisa ogni giorno alle 00:00 invece che il lunedì, con gli ordini limite (`programma7/PRIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 = **119** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 = **120** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
