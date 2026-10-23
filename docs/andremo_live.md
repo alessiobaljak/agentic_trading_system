@@ -4532,3 +4532,8 @@ non vuol più dire niente), ma per il paper la validazione non serve (delega del
 settimanale: `PaperG1` in `bot/portafoglio/f5.py`, decisione ogni giorno alle 00:05 UTC, ordini limite simulati, 10.000 dollari
 virtuali, interruttore `ops/paper_g1_acceso`, in dashboard nella scheda «Strategie nuove» (voce P22 del backlog). Test:
 `tests/test_paper_f5.py`. Riavvio del bot chiesto alla macchina; la prima decisione vera alle 00:05 UTC di sabato 24 ottobre.
+**Il tetto per moneta** (23 ottobre, prova 61, `programma7/QUINTA.md`; voce P19 trovata dal revisore): F5 e G1 con nessuna moneta
+sopra il 10% del suo lato. Peggiorano tutte e due: F5 da Sharpe 1,88 a 1,78 e discesa da −26,9% a −29,7%; G1 da 1,96 a 1,87 e da
+−28,8% a −32,6%. Per la regola scritta prima il bot **non** prende il tetto. Capito: la concentrazione di F5 è su monete calme (come
+TRX), e il peso tolto a loro va a monete più agitate: il rischio di una moneta sola che crolla c'è, ma nei dati pesa meno del rischio
+in più delle monete nervose. Nel conto: 125 prove.

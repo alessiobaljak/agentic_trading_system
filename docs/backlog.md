@@ -174,7 +174,7 @@ allora. Con lo 0,10% per le monete fuori dalle prime 50 F5 scende da 1,93 a 1,83
 lo scarto vero oggi (il libro degli ordini a ore del programma 5, `research/programma5/`, e `/fapi/v1/depth` dal bot) per fascia
 di volume e confrontarlo con lo 0,02%. **Quando:** nei prossimi giorni, è solo una misura.
 
-### P19. F5 troppo concentrata su poche monete calme — trovata il 23 ott 2026 (revisione di F5)
+### P19. F5 troppo concentrata su poche monete calme — trovata il 23 ott 2026 (revisione di F5); PROVATA il 23 ott (prova 61): il tetto del 10% peggiora Sharpe e discesa, non si mette
 **Perché:** con i pesi secondo l'inverso della volatilità TRX arriva al 32,5% del lato long ed è sopra l'8% in 111 settimane su 302
 (`research/programma6/CONTROLLO_PARITA.md`). Una moneta sola che crolla pesa troppo. **Cosa:** un tetto al peso per moneta (per
 esempio 10% del lato) come prova nuova, con la regola scritta prima e nel conto delle prove. **Quando:** dopo le prime settimane
