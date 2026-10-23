@@ -4492,3 +4492,5 @@ arrotondamento che favoriva le monete vecchie sul lato long. Corretto: **F5 vale
 Sharpe (il bot ora non decide finché non è pubblicato), gli ordini limite valgono solo se l'esecuzione è facile, lo scarto delle
 altcoin non è mai stato misurato, TRX arriva al 32% del lato long. Capito: chi controlla dev'essere diverso da chi ha trovato la
 strategia; da qui ogni strategia promettente passa da un revisore separato.
+Bot riavviato alle 05:51 UTC (ops 0644) con la correzione: non decide il cambio del lunedì finché il regolamento delle 00:00 non
+è pubblicato.
