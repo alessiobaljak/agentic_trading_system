@@ -126,3 +126,15 @@ def test_g7_eventi_e_operazione():
     c.loc[int(g[50]), "low"] = 13.5 * 0.69          # il minimo va sotto il −30%: uscita
     r = g7.operazione(c, cb, vuoto, vuoto, int(g[45]), True)
     assert r["fermata"] and abs(r["r"] - (0.7 * 0.99 - 1 - g7.vu.COSTO_MONETA - g7.vu.COSTO_BTC)) < 1e-12
+
+
+def test_g8_ora_di_entrata():
+    import pandas as pd
+    from research.programma7 import nona as g8
+    e = 20000
+    ore = np.arange(e * 24, e * 24 + 24)
+    c = pd.DataFrame({"open": 10.0, "high": 10.0, "close": 10.0}, index=ore)
+    assert g8.ora_di_entrata(c, e) == e * 24 + 21           # mai sopra l'apertura: alle 21:00
+    c.loc[e * 24 + 3, "close"] = 10.2
+    assert g8.ora_di_entrata(c, e) == e * 24 + 4             # la candela delle 03:00 chiude sopra: entrata alle 04:00
+    assert g8.ora_di_entrata(c, e + 1) is None

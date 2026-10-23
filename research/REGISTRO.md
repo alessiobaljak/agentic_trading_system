@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 129 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 130 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -89,8 +89,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 62 | G5: short contro il Bitcoin il giorno dopo una salita di almeno +30% in un giorno (monete con almeno 30 giorni di vita e 2 milioni di volume), con le uscite di N3 (`programma7/SESTA.md`) | 1 a eventi | 1.228 eventi: **−2,71% a evento** (p 0,99), mediana −15,1%, l'uscita a +30% scatta nel 51%; senza l'uscita −6,63% (mediana +16,1%, 68% vinti, ma poche esplodono); fra le 100 −1,12%, fuori −3,29%; 4 anni su 6 negativi (`programma7/RISULTATI_SESTA.md`) | no: dopo una salita enorme di un giorno, metà delle volte la moneta sale di un altro 30% |
 | 63 | G6: K2 (il segnale di K1: funding, acquisti a mercato, interesse aperto) decisa ogni giorno con gli ordini limite; e G1 + G6 a rischio uguale (`programma7/SETTIMA.md`) | 2 | G6 dal 2022 Sharpe 1,21 (K2 settimanale 1,75), +32,8% l'anno, spese 11,1%, 6,2 entrate al giorno, 2023 −20,6%; G1 + G6 1,62 (G1 da sola 1,96); Sharpe corretto 0,38 e 0,73 (`programma7/RISULTATI_SETTIMA.md`) | no: il segnale di K1 cambia troppo da un giorno all'altro, decidere ogni giorno raddoppia le spese e aggiunge rumore |
 | 64 | G7: il long contro il Bitcoin il giorno dopo una salita di almeno +30% in un giorno, sui perpetui di Gate.io delle monete senza il perpetuo su Binance (dati che l'idea non ha visto), uscita a −30% o dopo 30 giorni (`programma7/OTTAVA.md`); ipotesi nata da G5 | 1 a eventi | 541 eventi: **−6,54% a evento** (p 0,98), mediana −25,8%, vinti 21%, l'uscita a −30% scatta nel 62%; 3 anni su 4 negativi (`programma7/RISULTATI_OTTAVA.md`) | no: sulle monete piccole di Gate.io le salite enormi si sgonfiano (il contrario dei perpetui di Binance). Lo short lì non si prova: l'idea nascerebbe da questi dati, e il proprietario non fa trading su Gate.io |
+| 65 | G8: N3 con l'entrata al 7° giorno dopo la prima ora che chiude sopra l'apertura del giorno (vendere sulla forza, la lezione di G2 e G3), stessi 613 eventi (`programma7/NONA.md`); decide l'entrata di N3 nel bot | 1 a eventi | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 = **129** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 = **130** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
