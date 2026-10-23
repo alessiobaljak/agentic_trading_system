@@ -4537,3 +4537,8 @@ sopra il 10% del suo lato. Peggiorano tutte e due: F5 da Sharpe 1,88 a 1,78 e di
 −28,8% a −32,6%. Per la regola scritta prima il bot **non** prende il tetto. Capito: la concentrazione di F5 è su monete calme (come
 TRX), e il peso tolto a loro va a monete più agitate: il rischio di una moneta sola che crolla c'è, ma nei dati pesa meno del rischio
 in più delle monete nervose. Nel conto: 125 prove.
+**Sesta prova del programma 7, G5** (`programma7/SESTA.md`): vendere (contro il Bitcoin) il giorno dopo una salita di almeno +30% in
+un giorno, con le uscite di N3. 1.228 eventi in 5 anni e 9 mesi: −2,71% a evento; nella metà dei casi la moneta sale di un altro 30%
+e scatta l'uscita. Senza uscita la tipica scende (mediana +16% per chi vende, 68% vinte) ma le esplosioni si mangiano tutto (media
+−6,6%). Capito: sui perpetui una salita enorme non è una «spinta da sgonfiare» ma spesso l'inizio di una corsa; il ritorno
+indietro c'è per le monete nuove (N3), non per quelle già quotate da tempo. Nel conto: 126 prove.
