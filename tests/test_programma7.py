@@ -108,3 +108,21 @@ def test_g5_eventi():
     assert ev == [(0, int(giorni[45]) + 1)]
     vol[45, 0] = 1e6           # volume troppo basso: la prima non conta, e allora conta la seconda
     assert g5.eventi(r, vivo_da, vol, giorni) == [(0, int(giorni[50]) + 1)]
+
+
+def test_g7_eventi_e_operazione():
+    import pandas as pd
+    from research.programma7 import ottava as g7
+    g = np.arange(g7.DA - 40, g7.DA + 80)
+    o = np.full(len(g), 10.0)
+    o[45:] = 13.5                                   # tra il giorno 44 e il 45 +35%
+    c = pd.DataFrame({"open": o, "close": o, "high": o, "low": o, "volume": 1.0}, index=g)
+    assert g7.eventi(c, 10 ** 9) == [int(g[45])]
+    assert g7.eventi(c, int(g[45])) == []           # gia' su Binance all'ingresso: fuori
+    cb = pd.DataFrame({"open": 100.0, "close": 100.0, "high": 100.0, "low": 100.0, "volume": 1.0}, index=g)
+    vuoto = pd.Series(dtype=float)
+    r = g7.operazione(c, cb, vuoto, vuoto, int(g[45]), True)
+    assert not r["fermata"] and abs(r["r"] + g7.vu.COSTO_MONETA + g7.vu.COSTO_BTC) < 1e-12
+    c.loc[int(g[50]), "low"] = 13.5 * 0.69          # il minimo va sotto il −30%: uscita
+    r = g7.operazione(c, cb, vuoto, vuoto, int(g[45]), True)
+    assert r["fermata"] and abs(r["r"] - (0.7 * 0.99 - 1 - g7.vu.COSTO_MONETA - g7.vu.COSTO_BTC)) < 1e-12

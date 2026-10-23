@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 128 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 129 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -88,8 +88,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 61 | F5T e G1T: F5 e G1 con il tetto del 10% per moneta in ogni lato (voce P19, `programma7/QUINTA.md`); decide se il bot prende il tetto | 2 | F5T Sharpe 1,78 (senza 1,88), discesa −29,7% (senza −26,9%); G1T 1,87 (senza 1,96), discesa −32,6% (senza −28,8%); Sharpe corretto 0,85 e 0,90 (`programma7/RISULTATI_QUINTA.md`) | no, e **il bot non prende il tetto**: spostare peso dalle monete calme a quelle agitate aumenta la discesa invece di ridurla |
 | 62 | G5: short contro il Bitcoin il giorno dopo una salita di almeno +30% in un giorno (monete con almeno 30 giorni di vita e 2 milioni di volume), con le uscite di N3 (`programma7/SESTA.md`) | 1 a eventi | 1.228 eventi: **−2,71% a evento** (p 0,99), mediana −15,1%, l'uscita a +30% scatta nel 51%; senza l'uscita −6,63% (mediana +16,1%, 68% vinti, ma poche esplodono); fra le 100 −1,12%, fuori −3,29%; 4 anni su 6 negativi (`programma7/RISULTATI_SESTA.md`) | no: dopo una salita enorme di un giorno, metà delle volte la moneta sale di un altro 30% |
 | 63 | G6: K2 (il segnale di K1: funding, acquisti a mercato, interesse aperto) decisa ogni giorno con gli ordini limite; e G1 + G6 a rischio uguale (`programma7/SETTIMA.md`) | 2 | G6 dal 2022 Sharpe 1,21 (K2 settimanale 1,75), +32,8% l'anno, spese 11,1%, 6,2 entrate al giorno, 2023 −20,6%; G1 + G6 1,62 (G1 da sola 1,96); Sharpe corretto 0,38 e 0,73 (`programma7/RISULTATI_SETTIMA.md`) | no: il segnale di K1 cambia troppo da un giorno all'altro, decidere ogni giorno raddoppia le spese e aggiunge rumore |
+| 64 | G7: il long contro il Bitcoin il giorno dopo una salita di almeno +30% in un giorno, sui perpetui di Gate.io delle monete senza il perpetuo su Binance (dati che l'idea non ha visto), uscita a −30% o dopo 30 giorni (`programma7/OTTAVA.md`); ipotesi nata da G5 | 1 a eventi | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 = **128** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 = **129** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
@@ -202,7 +203,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    dicendo che il lato long di F5 è il più debole: era sbagliato (avevo letto i lati di C3; in F5 il long fa +42,8% l'anno e lo short
    +16,2%), quindi torna in coda; resta il dubbio di G2 (in giornata il vantaggio del funding non c'era nemmeno prima dei costi).
    ~~G4 le monete nuove dal 1° giorno~~ → prova 59.
-30. **Dopo una salita enorme, il long** (ipotesi nata guardando G5, prova 62: metà delle monete salite del 30% in un giorno sale di
+30. ~~**Dopo una salita enorme, il long**~~ → prova 64 (G7, su Gate.io). (ipotesi nata guardando G5, prova 62: metà delle monete salite del 30% in un giorno sale di
    un altro 30%; senza uscita lo short perde il 6,6% a evento). È un'idea vista sui dati, quindi si prova **solo su dati non usati**
    (le monete di Gate.io che non sono su Binance, o il 2020), con le regole scritte prima.
 28. **Il canale Telegram del proprietario** (scalping, al massimo 5 al giorno, «quasi tutte al TP1»): si verifica sui prezzi veri
