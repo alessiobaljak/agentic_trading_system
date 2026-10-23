@@ -182,5 +182,9 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 25. ~~La stagionalità del giorno della settimana fra monete~~ (Long, Zaremba e altri 2020, *Finance Research Letters*: 151 monete
    2016-2019): non si fa per ora. Il segnale cambia ogni giorno, quindi il giro è giornaliero come M3 (prova 16, bocciata per i
    costi), e il perché economico è debole (dati del 2016-2019, prima dei perpetui).
+26. **Il massimo giornaliero del mese (MAX)** fra le 100 (Ozdamar, Akdeniz e Sensoy 2021, *Financial Innovation*: fra le cripto le
+   monete con il giorno migliore più alto del mese prima rendono **di più** la settimana dopo, +3,03% a settimana fra i decili, al
+   contrario delle azioni). Probabilità bassa: è un parente del momento, che fra i perpetui dal 2021 non regge (prova 49, X1
+   Sharpe 0,05), e le monete appena salite di solito hanno il funding alto, che F5 vende. In coda, non subito.
 12. **Non si cercano le soglie migliori della banda** (20% e 40% vengono dalla prova 16, scelte prima): provarne altre sui
    dati del passato sarebbe cercare il parametro che va meglio per caso, l'errore del primo gate.
