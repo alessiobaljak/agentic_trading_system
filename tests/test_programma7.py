@@ -93,3 +93,18 @@ def test_tetto_per_moneta():
     assert np.allclose(q.con_tetto(np.full(5, 0.2)), 0.2)         # meno di 10 monete: pesi uguali
     Wt = q.applica_tetto(np.hstack([np.array([[0.5] + [0.5 / 11] * 11]), -np.array([[1 / 12] * 12])]), 0.10)
     assert abs(Wt[0, :12].sum() - 1) < 1e-12 and abs(Wt[0, 12:].sum() + 1) < 1e-12 and Wt[0, :12].max() <= 0.1 + 1e-12
+
+
+def test_g5_eventi():
+    from research.programma7 import sesta as g5
+    giorni = np.arange(g5.DA - 40, g5.DA + 40)
+    r = np.zeros((len(giorni), 2))
+    r[45, 0] = 0.35            # salita
+    r[50, 0] = 0.40            # troppo vicina alla prima: non conta
+    r[45, 1] = 0.50            # moneta troppo giovane
+    vivo_da = np.array([g5.DA - 40, g5.DA + 2])
+    vol = np.full(r.shape, 5e6)
+    ev = g5.eventi(r, vivo_da, vol, giorni)
+    assert ev == [(0, int(giorni[45]) + 1)]
+    vol[45, 0] = 1e6           # volume troppo basso: la prima non conta, e allora conta la seconda
+    assert g5.eventi(r, vivo_da, vol, giorni) == [(0, int(giorni[50]) + 1)]
