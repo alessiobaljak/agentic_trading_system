@@ -721,3 +721,22 @@ def test_asticella_aggiunta_23_perdenti_in_n_non_in_v():
     v = [1.0, -0.5, 0.3]
     assert te.sharpe_corretto(1.9, 250, 0.0, 3.0, v, 52) > te.sharpe_corretto(1.9, 250, 0.0, 3.0, v, 52, n_prove=65)
     assert te.sharpe_corretto(1.9, 250, 0.0, 3.0, v + [-13.0], 52) < te.sharpe_corretto(1.9, 250, 0.0, 3.0, v, 52, n_prove=4)
+
+
+def test_cinquantaseiesima_spese_a_limite():
+    import numpy as np
+    import pandas as pd
+    from research.programma6 import cinquantaseiesima as cs
+    from research.programma6.motore import MAKER
+    W = np.array([[0.5, -0.5], [0.5, -0.5]])
+    R = np.zeros((2, 2))
+    lunedi = np.array([100, 107])
+    ore = {"A": pd.DataFrame({"open": [10.0, 10.2], "high": [10.3, 10.4], "low": [9.9, 10.1], "close": [10.2, 10.3]},
+                             index=[2400, 2401]),
+           "B": pd.DataFrame({"open": [5.0, 4.9], "high": [5.0, 5.0], "low": [4.8, 4.8], "close": [4.9, 4.9]}, index=[2400, 2401])}
+    spese, n, lim, senza = cs.spese_a_limite(W, R, lunedi, ["A", "B"], np.array([0.0006, 0.0007]),
+                                             ore_di=lambda s: ore.get(s, pd.DataFrame()))
+    # A si compra: il minimo (9,9) va sotto l'apertura (10) -> limite; B si vende: il massimo (5,0) non va sopra 5,0 -> a
+    # mercato all'apertura dopo (4,9), il 2% contro, piu' il costo della moneta. La seconda settimana non cambia niente.
+    assert (n, lim, senza) == (2, 1, 0)
+    assert abs(spese[0] - (0.5 * MAKER + 0.5 * (0.0007 + 0.02))) < 1e-12 and spese[1] == 0.0
