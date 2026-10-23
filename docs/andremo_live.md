@@ -4557,3 +4557,8 @@ che non l'avevano vista, i perpetui di Gate.io delle monete senza perpetuo su Bi
 a evento (541 eventi, mediana −26%, solo il 21% vinte). Capito: sui perpetui di Binance metà delle salite enormi continua, sulle
 monete piccole di Gate.io quasi tutte si sgonfiano: lo stesso segnale fa cose opposte su mercati diversi, quindi non è una regola
 generale. Lo short su Gate.io non si prova (nascerebbe da questi dati, e il proprietario fa trading solo su Binance). Nel conto: 129.
+**Nona prova del programma 7, G8** (`programma7/NONA.md`, giro delle 08:17): N3 con l'entrata del 7° giorno spostata dopo la prima
+ora che chiude sopra l'apertura (vendere sulla forza, l'idea nata da G2 e G3). Sugli stessi 613 eventi rende +2,83% contro +4,29%
+di N3 all'apertura: 1,46 punti in meno, e la differenza è sicura (intervallo −2,41; −0,54). Capito: sulle monete nuove un'ora di
+forza continua per un po'; il ritorno indietro visto in G2 e G3 vale per le monete grandi, non per quelle appena quotate. N3 nel
+bot resta com'è. Nel conto: 130 prove.

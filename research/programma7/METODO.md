@@ -39,4 +39,6 @@ tenuta) resta un'alternativa accettata dal proprietario, non la risposta.
    ora che chiude oltre l'apertura il prezzo tende a tornare indietro, e lo stop al massimo o al minimo del giorno è troppo vicino:
    scatta nel 58-59% dei casi).
 4b. ~~**G4 — le monete nuove dal 1° giorno**~~ → prova 59: +3,68% a evento (p 0,0093), meno di N3 dal 7° giorno sulle stesse monete.
-4. **G4 — le monete nuove al 7° giorno e il funding al tetto con l'entrata scelta dentro la giornata** (oggi entrano a un'ora fissa).
+4. ~~**G4 — le monete nuove al 7° giorno con l'entrata scelta dentro la giornata**~~ → prova 65 (G8): vendere dopo la prima ora
+   che chiude sopra l'apertura rende +2,83% a evento contro +4,29% di N3 all'apertura: sulle monete nuove la forza dentro la
+   giornata continua. Il funding al tetto con l'entrata dentro la giornata resta da fare (pochi eventi: 62).
