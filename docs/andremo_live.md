@@ -4576,3 +4576,9 @@ torni sempre alla chiusura del venerdì del CME. In 150 fine settimana con un bu
 alla chiusura del venerdì prima di andare altrettanto lontano dall'altra parte solo nel 39% dei casi: −0,27 volte il rischio a
 operazione, già prima dei costi −0,22. Capito: i buchi si chiudono «prima o poi» perché il prezzo vaga, ma chi ci scommette con uno
 stop perde; più spesso il movimento del fine settimana continua. Nel conto: 133 prove.
+**Tredicesima prova del programma 7, G11** (`programma7/TREDICESIMA.md`, giro delle 12:22): G1 con il funding fresco (il funding
+dell'ultimo giorno accanto a quello dei 7 giorni). **Passa l'esame scritto**: Sharpe 2,05, +60% l'anno, discesa −28,5%, ogni anno
+positivo, Sharpe corretto 0,97 sopra la soglia di 0,95, t 4,91. Riserve, scritte prima: è una variante di G1 nata da un numero visto
+dal revisore (l'ultimo regolamento conta), quindi non è una scoperta indipendente da F5; e opera di più (5,5 entrate al giorno, spese
+10,3% l'anno), quindi dipende di più dall'ipotesi che gli ordini limite si eseguano. Prima del paper passa da un revisore separato.
+Nel conto: 134 prove.
