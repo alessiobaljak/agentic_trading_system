@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 132 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 133 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -92,8 +92,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 65 | G8: N3 con l'entrata al 7° giorno dopo la prima ora che chiude sopra l'apertura del giorno (vendere sulla forza, la lezione di G2 e G3), stessi 613 eventi (`programma7/NONA.md`); decide l'entrata di N3 nel bot | 1 a eventi | **+2,83% a evento** (p 0,030), metà +5,36% e +0,31%; N3 sugli stessi eventi +4,29%: **−1,46 punti** (intervallo −2,41; −0,54); entrata in media alle 06:36 (`programma7/RISULTATI_NONA.md`) | no: vendere dopo un'ora di forza rende meno; N3 nel bot resta all'apertura del 7° giorno |
 | 66 | MAX: long le monete con il giorno migliore dei 30 giorni più alto, short le più basse (il verso pubblicato da Ozdamar e altri 2021), con la banda di F5 (`programma7/DECIMA.md`) | 1 | Sharpe −0,43, −15,9% l'anno, discesa −78,1%, 4 anni su 6 negativi; correlazione con F5 −0,03; il verso opposto (solo per capire) 0,25 (`programma7/RISULTATI_DECIMA.md`) | no: il fattore pubblicato su dati fino al 2019 non regge fra i perpetui dal 2021, in nessuno dei due versi |
 | 67 | G9: l'inversione di un giorno fra le monete 101-200 (long chi è sceso di più ieri, short chi è salito di più), decisa ogni giorno con gli ordini limite (`programma7/UNDICESIMA.md`) | 1 | **prima dei costi +29,1% l'anno** (l'inversione c'è), ma il giro è di 17,5 volte il capitale a settimana: spese 61,2% l'anno anche con il 97% degli ordini a limite; netto −38,4% l'anno, Sharpe −0,91; tutto a mercato −113,7% (`programma7/RISULTATI_UNDICESIMA.md`) | no: il vantaggio c'è ma il giro lo mangia due volte |
+| 68 | G10: il «buco» del CME sul Bitcoin (fra la chiusura del venerdì e la riapertura della domenica, almeno 1%): operazione verso la chiusura del venerdì, obiettivo il prezzo del venerdì a limite, stop alla stessa distanza, al massimo una settimana (`programma7/DODICESIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 = **132** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 = **133** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 

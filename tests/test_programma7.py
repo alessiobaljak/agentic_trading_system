@@ -158,3 +158,20 @@ def test_g9_pesi_inversione():
     W = g9.pesi_inversione(ieri, U, sig)
     assert (W[0, :5] > 0).all() and (W[0, -5:] < 0).all() and (W[0, 5:20] == 0).all()
     assert abs(W[0, :5].sum() - 1) < 1e-12 and abs(W[0, -5:].sum() + 1) < 1e-12
+
+
+def test_g10_ore_cme_e_operazione():
+    from datetime import datetime, timezone
+    import pandas as pd
+    from research.programma7 import dodicesima as g10
+    # venerdi' 9 ottobre 2026 (ora legale a Chicago): chiusura 21:00 UTC, riapertura domenica 22:00 UTC
+    h_c, h_r = g10.ore_cme(datetime(2026, 10, 9, tzinfo=timezone.utc))
+    assert datetime.fromtimestamp(h_c * 3600, timezone.utc).hour == 21 and datetime.fromtimestamp(h_r * 3600, timezone.utc).hour == 22
+    h_c2, h_r2 = g10.ore_cme(datetime(2026, 1, 9, tzinfo=timezone.utc))   # inverno: 22:00 e 23:00 UTC
+    assert datetime.fromtimestamp(h_c2 * 3600, timezone.utc).hour == 22 and datetime.fromtimestamp(h_r2 * 3600, timezone.utc).hour == 23
+    ore = np.arange(h_c, h_r + 200)
+    b = pd.DataFrame({"open": 100.0, "high": 100.0, "low": 100.0, "close": 100.0}, index=ore)
+    b.loc[h_r:, ["open", "high", "low", "close"]] = 102.0          # buco del 2% in su
+    b.loc[h_r + 5, "low"] = 99.9                                   # torna sotto la chiusura del venerdi': obiettivo
+    r = g10.operazione(b, h_c, h_r, h_r + 150, pd.Series(dtype=float))
+    assert r["verso"] == -1 and r["motivo"] == "obiettivo" and abs(r["R_lordo"] - 1.0) < 1e-12
