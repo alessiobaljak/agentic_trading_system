@@ -4501,3 +4501,10 @@ subito dopo il cambio. Fermarla nel fine settimana costerebbe circa lo 0,28% a s
 Lo scalping perde tutti i giorni; la rottura della prima ora americana perde il doppio nel fine settimana, quando la borsa americana
 è chiusa. Capito: il consiglio vale per chi apre e chiude spesso (meno scambi, prezzi più facili da spingere), non per una
 strategia che tiene le posizioni una settimana.
+**Programma 7: trading ogni giorno** (23 ottobre; il proprietario: «io voglio anche fare trading tutti i giorni non solo tenere
+una settimana [...] ti ho chiesto di fare trading tutti i giorni»; `research/programma7/METODO.md`, scritto in CLAUDE.md e nel giro
+automatico). **Prima prova, G1** (`PRIMA.md`): F5 decisa ogni giorno alle 00:00 invece che il lunedì, con gli ordini limite. Opera
+ogni giorno (in media 3 entrate e 3 uscite, operazioni in 2.048 giorni su 2.100), Sharpe 1,96 contro 1,88 della versione
+settimanale, +54% l'anno, ogni anno positivo, Sharpe corretto 0,94: non validata per un soffio. Capito: decidere ogni giorno non
+toglie il vantaggio (le spese salgono dal 4,9% al 6,7% ma il segnale fresco le ripaga), però le posizioni restano aperte in media
+17,5 giorni: è un portafoglio curato ogni giorno, non trading in giornata. Nel conto: 120 prove.

@@ -30,7 +30,8 @@ tenuta) resta un'alternativa accettata dal proprietario, non la risposta.
 
 ## 4. La coda delle idee (in quest'ordine; i dettagli si fissano nel file di ogni prova, prima del calcolo)
 
-1. **G1 — F5 ogni giorno**: lo stesso segnale deciso ogni giorno alle 00:00 invece che il lunedì, con gli ordini limite.
+1. ~~**G1 — F5 ogni giorno**~~ → prova 57: opera ogni giorno (3 entrate e 3 uscite), Sharpe 1,96, corretto 0,94; ma le posizioni
+   durano in media 17,5 giorni: non è trading «in giornata».
 2. **G2 — lo short del giorno sulle monete con la leva più cara**: entrata a limite su un rimbalzo dentro la giornata, stop e
    obiettivo dalla volatilità, uscita entro la fine del giorno.
 3. **G3 — il long del giorno sulle monete con il funding più negativo**, lo specchio di G2.
