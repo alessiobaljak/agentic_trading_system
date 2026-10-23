@@ -106,6 +106,8 @@ def build() -> str:
 
     # --- il paper di F5 eseguito dal bot (bot/portafoglio/f5.py, backlog P16) ---
     lines += sezione_paper_f5(fb)
+    lines += sezione_paper_f5(fb, ramo="/paper_g1", titolo="## Paper G1 (F5 decisa ogni giorno, eseguito dal bot)",
+                              interruttore="ops/paper_g1_acceso")
     lines += sezione_paper_eventi(fb)
 
     # --- ultima decisione orchestratore (RTDB) ---
@@ -538,13 +540,15 @@ def _closed_trades_section(fb, pairs=None) -> list[str]:
     return out
 
 
-def sezione_paper_f5(fb) -> list:
-    """Le righe del paper di F5 (RTDB /paper_f5): acceso, equity, posizioni, ultimo ribilancio."""
-    st = fb.get_rtdb("/paper_f5/stato") or {}
+def sezione_paper_f5(fb, ramo: str = "/paper_f5", titolo: str = "## Paper F5 (strategie nuove, eseguito dal bot)",
+                     interruttore: str = "ops/paper_f5_acceso") -> list:
+    """Le righe di un paper di portafoglio del bot (RTDB /paper_f5, o /paper_g1 per G1): acceso, equity, posizioni, ultimo
+    ribilancio."""
+    st = fb.get_rtdb(f"{ramo}/stato") or {}
     if not isinstance(st, dict) or not st:
-        return ["## Paper F5 (strategie nuove, eseguito dal bot)", "- spento (manca `ops/paper_f5_acceso`)", ""]
-    righe = ["## Paper F5 (strategie nuove, eseguito dal bot)", f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
-    pr = fb.get_rtdb("/paper_f5/prova") or {}
+        return [titolo, f"- spento (manca `{interruttore}`)", ""]
+    righe = [titolo, f"- stato: **{st.get('stato', '—')}** ({_ts(st.get('aggiornato'))})"]
+    pr = fb.get_rtdb(f"{ramo}/prova") or {}
     if isinstance(pr, dict) and pr:
         righe.append(f"- prova a secco ({_ts(pr.get('eseguita'))}, pesi del {pr.get('lunedi')}): universo {pr.get('universo')}, "
                      f"{pr.get('long')} long, {pr.get('short')} short; pesi maggiori "
@@ -558,7 +562,7 @@ def sezione_paper_f5(fb) -> list:
             righe.append(f"- ordini limite: {st.get('limite_eseguite', 0)} eseguiti su {st.get('limite_variazioni', 0)} · "
                          f"tutto a mercato sarebbe costato ${float(st.get('costi_a_mercato_totali', 0)):,.2f} · "
                          f"in attesa del controllo dell'ora: {st.get('ordini_in_attesa', 0)}")
-        pos = fb.get_rtdb("/paper_f5/posizioni") or {}
+        pos = fb.get_rtdb(f"{ramo}/posizioni") or {}
         if isinstance(pos, dict) and pos:
             ordine = sorted(pos.items(), key=lambda kv: -abs(float(kv[1])))
             righe.append("- pesi maggiori: " + ", ".join(f"{s} {100 * float(w):+.1f}%" for s, w in ordine[:10]))

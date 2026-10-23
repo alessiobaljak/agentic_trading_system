@@ -5,9 +5,9 @@ import { onValue, ref } from 'firebase/database';
 import { getRtdb } from '../lib/firebase';
 
 /**
- * Il paper delle strategie nuove eseguito dal bot (22 ott 2026, backlog P16): F5 (bot/portafoglio/f5.py) e le monete
+ * Il paper delle strategie nuove eseguito dal bot (22 ott 2026, backlog P16): F5 e G1 (bot/portafoglio/f5.py) e le monete
  * appena quotate con il funding al tetto (bot/portafoglio/eventi.py). Ordini simulati con i prezzi del momento, capitale
- * virtuale, nessun ordine vero. Legge in diretta /paper_f5 e /paper_eventi del database del bot.
+ * virtuale, nessun ordine vero. Legge in diretta /paper_f5, /paper_g1 e /paper_eventi del database del bot.
  */
 
 type StatoF5 = {
@@ -41,39 +41,26 @@ function nome(s?: string): string {
   return (s ?? '').replace('USDT', '');
 }
 
-export default function PaperBot() {
+function Portafoglio({ ramo, titolo, inizio }: { ramo: string; titolo: string; inizio: string }) {
   const [f5, setF5] = useState<StatoF5 | null>(null);
   const [prova, setProva] = useState<ProvaF5 | null>(null);
   const [pos, setPos] = useState<Record<string, number> | null>(null);
-  const [ev, setEv] = useState<StatoEventi | null>(null);
-  const [aperte, setAperte] = useState<Record<string, Aperta> | null>(null);
-  const [chiuse, setChiuse] = useState<Record<string, Chiusa> | null>(null);
 
   useEffect(() => {
     const db = getRtdb();
     const u = [
-      onValue(ref(db, 'paper_f5/stato'), (s) => setF5(s.val())),
-      onValue(ref(db, 'paper_f5/prova'), (s) => setProva(s.val())),
-      onValue(ref(db, 'paper_f5/posizioni'), (s) => setPos(s.val())),
-      onValue(ref(db, 'paper_eventi/stato'), (s) => setEv(s.val())),
-      onValue(ref(db, 'paper_eventi/aperte'), (s) => setAperte(s.val())),
-      onValue(ref(db, 'paper_eventi/chiuse'), (s) => setChiuse(s.val())),
+      onValue(ref(db, `${ramo}/stato`), (s) => setF5(s.val())),
+      onValue(ref(db, `${ramo}/prova`), (s) => setProva(s.val())),
+      onValue(ref(db, `${ramo}/posizioni`), (s) => setPos(s.val())),
     ];
     return () => u.forEach((x) => x());
-  }, []);
+  }, [ramo]);
 
   const pesi = Object.entries(pos ?? {}).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
-  const lista_aperte = Object.values(aperte ?? {});
-  const lista_chiuse = Object.values(chiuse ?? {}).sort((a, b) => (b.uscita ?? 0) - (a.uscita ?? 0)).slice(0, 15);
 
   return (
-    <div className="panel">
-      <h2>Il paper nel bot (ordini simulati, senza soldi veri)</h2>
-      <p className="muted" style={{ margin: '0 0 8px', fontSize: 12.5 }}>
-        Le strategie nuove eseguite dal bot sulla macchina con i prezzi del momento, ognuna con 10.000 dollari virtuali.
-      </p>
-
-      <div className="sotto-titolo">Funding con la banda (F5)</div>
+    <>
+      <div className="sotto-titolo">{titolo}</div>
       {!f5 ? (
         <p className="muted" style={{ margin: '2px 0 8px', fontSize: 12.5 }}>Spento o non ancora partito.</p>
       ) : (
@@ -100,8 +87,7 @@ export default function PaperBot() {
           )}
           {f5.equity == null && prova && (
             <p className="muted" style={{ margin: '2px 0', fontSize: 12.5 }}>
-              Prova a secco ({quando(prova.eseguita)}): {prova.universo} monete, {prova.long} long, {prova.short} short; il
-              primo cambio vero è il lunedì alle 00:05 UTC.
+              Prova a secco ({quando(prova.eseguita)}): {prova.universo} monete, {prova.long} long, {prova.short} short; {inizio}
             </p>
           )}
           {pesi.length > 0 && (
@@ -111,6 +97,40 @@ export default function PaperBot() {
           )}
         </>
       )}
+    </>
+  );
+}
+
+export default function PaperBot() {
+  const [ev, setEv] = useState<StatoEventi | null>(null);
+  const [aperte, setAperte] = useState<Record<string, Aperta> | null>(null);
+  const [chiuse, setChiuse] = useState<Record<string, Chiusa> | null>(null);
+
+  useEffect(() => {
+    const db = getRtdb();
+    const u = [
+      onValue(ref(db, 'paper_eventi/stato'), (s) => setEv(s.val())),
+      onValue(ref(db, 'paper_eventi/aperte'), (s) => setAperte(s.val())),
+      onValue(ref(db, 'paper_eventi/chiuse'), (s) => setChiuse(s.val())),
+    ];
+    return () => u.forEach((x) => x());
+  }, []);
+
+  const lista_aperte = Object.values(aperte ?? {});
+  const lista_chiuse = Object.values(chiuse ?? {}).sort((a, b) => (b.uscita ?? 0) - (a.uscita ?? 0)).slice(0, 15);
+
+  return (
+    <div className="panel">
+      <h2>Il paper nel bot (ordini simulati, senza soldi veri)</h2>
+      <p className="muted" style={{ margin: '0 0 8px', fontSize: 12.5 }}>
+        Le strategie nuove eseguite dal bot sulla macchina con i prezzi del momento, ognuna con 10.000 dollari virtuali.
+      </p>
+
+      <Portafoglio ramo="paper_f5" titolo="Funding con la banda, cambio ogni lunedì (F5)"
+        inizio="il primo cambio vero è il lunedì alle 00:05 UTC." />
+      <div style={{ marginTop: 10 }} />
+      <Portafoglio ramo="paper_g1" titolo="Funding con la banda, decisione ogni giorno (G1)"
+        inizio="la prima decisione vera è alle 00:05 UTC del giorno dopo." />
 
       <div className="sotto-titolo" style={{ marginTop: 10 }}>Monete appena quotate e funding al tetto</div>
       {!ev ? (

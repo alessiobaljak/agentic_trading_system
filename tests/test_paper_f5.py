@@ -207,3 +207,34 @@ def test_senza_il_regolamento_delle_00_si_aspetta(tmp_path):
     assert p.pesi_del_lunedi(m, {}) is None
     finto.adesso_ms = m * f5.GIORNO_MS + 300_000                # pubblicato: si decide
     assert p.pesi_del_lunedi(m, {}) is not None
+
+
+def test_g1_decide_ogni_giorno(tmp_path):
+    from bot.core.firebase_client import _InMemoryStore
+    m = f5.lunedi_di(20750)
+    finto = _Finto(m)
+    fb = _InMemoryStore()
+    acceso = tmp_path / "paper_g1_acceso"
+    acceso.write_text("si")
+    p = f5.PaperG1(fb, chiedi=finto, file_stato=tmp_path / "g1.json", interruttore=acceso, pausa_s=0.0)
+    # martedi' alle 10:00, senza stato: non parte (la prima decisione si prende vicino alle 00:00), fa la prova a secco
+    now = (m + 1) * 86400.0 + 36000
+    finto.adesso_ms = int(now * 1000)
+    p.tick(now)
+    assert not (tmp_path / "g1.json").exists() and fb.get_rtdb("/paper_g1/prova")["universo"] == 30
+    assert fb.get_rtdb("/paper_f5/stato") is None                # scrive solo nel suo ramo
+    # mercoledi' alle 00:06: parte
+    p._ultimo_tentativo = 0.0
+    now = (m + 2) * 86400.0 + 360
+    finto.adesso_ms = int(now * 1000)
+    p.tick(now)
+    st = p.carica()
+    assert st["ultimo_lunedi"] == m + 2 and st["universo"] == 30 and st["ordini"]["variazioni"]
+    # giovedi' alle 00:06: decide di nuovo (prima chiude gli ordini limite di ieri)
+    p._ultimo_tentativo = 0.0
+    now = (m + 3) * 86400.0 + 360
+    finto.adesso_ms = int(now * 1000)
+    p.tick(now)
+    st2 = p.carica()
+    assert st2["ultimo_lunedi"] == m + 3 and st2["limite_variazioni"] == len(st["ordini"]["variazioni"])
+    assert fb.get_rtdb("/paper_g1/ribilanciamenti/" + time.strftime("%Y-%m-%d", time.gmtime((m + 2) * 86400)))["universo"] == 30

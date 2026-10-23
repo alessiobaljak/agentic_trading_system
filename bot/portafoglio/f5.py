@@ -188,12 +188,15 @@ def contratti_monete(info: dict) -> dict:
 
 
 class PaperF5:
-    def __init__(self, fb, chiedi: Callable = _chiedi_http, file_stato: Path = FILE_STATO,
-                 interruttore: Path = INTERRUTTORE, pausa_s: float = 0.1) -> None:
+    # dove scrive e da cosa si accende; G1 (sotto) cambia solo questi e il giorno della decisione
+    RAMO, ETICHETTA, INTERRUTTORE_DI_SERIE, FILE_DI_SERIE = "/paper_f5", "paper_f5", INTERRUTTORE, FILE_STATO
+
+    def __init__(self, fb, chiedi: Callable = _chiedi_http, file_stato: Optional[Path] = None,
+                 interruttore: Optional[Path] = None, pausa_s: float = 0.1) -> None:
         self.fb = fb
         self.chiedi = chiedi
-        self.file_stato = Path(file_stato)
-        self.interruttore = Path(interruttore)
+        self.file_stato = Path(file_stato or self.FILE_DI_SERIE)
+        self.interruttore = Path(interruttore or self.INTERRUTTORE_DI_SERIE)
         self.pausa_s = pausa_s
         self.paper_ricerca = PAPER_RICERCA
         self._ultimo_tentativo = 0.0
@@ -204,7 +207,7 @@ class PaperF5:
     # ---- stato ----
     def acceso(self) -> bool:
         # durante i test l'interruttore vero del repo non conta: il ciclo del bot nei test non deve chiamare Binance
-        if self.interruttore == INTERRUTTORE and os.environ.get("PYTEST_CURRENT_TEST"):
+        if self.interruttore == self.INTERRUTTORE_DI_SERIE and os.environ.get("PYTEST_CURRENT_TEST"):
             return False
         return self.interruttore.exists()
 
@@ -212,7 +215,7 @@ class PaperF5:
         try:
             return json.loads(self.file_stato.read_text(encoding="utf-8"))
         except Exception:  # noqa: BLE001
-            st = self.fb.get_rtdb("/paper_f5/stato_interno") if self.fb is not None else None
+            st = self.fb.get_rtdb(f"{self.RAMO}/stato_interno") if self.fb is not None else None
             return dict(st) if isinstance(st, dict) else {}
 
     def salva(self, st: dict) -> None:
@@ -221,24 +224,30 @@ class PaperF5:
         tmp.write_text(json.dumps(st, ensure_ascii=False), encoding="utf-8")
         tmp.replace(self.file_stato)
         if self.fb is not None:
-            self.fb.set_rtdb("/paper_f5/stato_interno", st)
+            self.fb.set_rtdb(f"{self.RAMO}/stato_interno", st)
 
     # ---- il giro ----
+    def giorno_di_decisione(self, giorno: int) -> int:
+        """Il giorno dell'ultima decisione dovuta: per F5 il lunedi' della settimana."""
+        return lunedi_di(giorno)
+
+    def si_puo_partire(self, now: float, m: int) -> bool:
+        """Il primo ribilancio di F5 si fa solo di lunedi' (le settimane come il paper di ricerca)."""
+        return int(now // 86400) == m
+
     def tick(self, now: float) -> None:
         if not self.acceso():
             return
         st = self.carica()
-        giorno = int(now // 86400)
-        m = lunedi_di(giorno)
+        m = self.giorno_di_decisione(int(now // 86400))
         dopo_le_5 = now >= m * 86400 + ORA_RIBILANCIO_S
         puo_provare = now - self._ultimo_tentativo >= ATTESA_DOPO_ERRORE_S
         if not st:
-            # si parte solo di lunedi' (le settimane come il paper di ricerca)
-            if giorno == m and dopo_le_5 and puo_provare:
+            if self.si_puo_partire(now, m) and dopo_le_5 and puo_provare:
                 self._ultimo_tentativo = now
                 self.ribilancia(m, now, {})
             elif self.fb is not None:
-                self.fb.set_rtdb("/paper_f5/stato", {"stato": "in attesa del primo lunedi'", "aggiornato": now})
+                self.fb.set_rtdb(f"{self.RAMO}/stato", {"stato": "in attesa del primo cambio", "aggiornato": now})
                 if not self._prova_fatta and puo_provare:
                     self._ultimo_tentativo = now
                     self.prova(m, now)
@@ -313,7 +322,7 @@ class PaperF5:
         for s, (dq, p0) in o["variazioni"].items():
             c = self._candele_mark(s, int(o["da_ms"]), int(o["fino_ms"]))
             if c is None:
-                print(f"[paper_f5] controllo degli ordini limite rimandato: candele di {s} non disponibili")
+                print(f"[{self.ETICHETTA}] controllo degli ordini limite rimandato: candele di {s} non disponibili")
                 return False
             x, preso = esito_limite(float(dq), float(p0), c, TAKER + scarto(s))
             costo += x
@@ -329,10 +338,10 @@ class PaperF5:
         self.salva(st)
         data = time.strftime("%Y-%m-%d", time.gmtime(int(o["da_ms"]) // 1000))
         if self.fb is not None:
-            self.fb.set_rtdb(f"/paper_f5/ribilanciamenti/{data}/limite", {
+            self.fb.set_rtdb(f"{self.RAMO}/ribilanciamenti/{data}/limite", {
                 "variazioni": n, "eseguite": eseguite, "costo": costo, "costo_a_mercato": float(o["costo_a_mercato"]),
                 "controllato": now})
-        print(f"[paper_f5] ordini limite del {data}: {eseguite} eseguiti su {n}, costo {costo:.2f} "
+        print(f"[{self.ETICHETTA}] ordini limite del {data}: {eseguite} eseguiti su {n}, costo {costo:.2f} "
               f"(tutto a mercato {float(o['costo_a_mercato']):.2f})")
         return True
 
@@ -344,7 +353,7 @@ class PaperF5:
         r = self.pesi_del_lunedi(m, st if st else self.banda_di_partenza(m))
         prezzi = self._prezzi_mark() if r is not None else {}
         if r is None or not prezzi:
-            print("[paper_f5] ribilancio rimandato di 30 minuti: dati di Binance non disponibili")
+            print(f"[{self.ETICHETTA}] ribilancio rimandato di 30 minuti: dati di Binance non disponibili")
             return st
         pesi, lunghi, corti, n_uni = r
         if st:
@@ -375,12 +384,12 @@ class PaperF5:
         self.salva(st)
         data = time.strftime("%Y-%m-%d", time.gmtime(m * 86400))
         if self.fb is not None:
-            self.fb.set_rtdb(f"/paper_f5/ribilanciamenti/{data}", {
+            self.fb.set_rtdb(f"{self.RAMO}/ribilanciamenti/{data}", {
                 "lunedi": data, "universo": n_uni, "long": len(lunghi), "short": len(corti), "costo": costo,
                 "costo_a_mercato": a_mercato, "ordini_limite": len(variazioni),
                 "equity_prima": equity, "equity_dopo": equity - costo, "eseguito": now})
-            self.fb.set_rtdb("/paper_f5/posizioni", {s: round(w, 6) for s, w in pesi.items()})
-        print(f"[paper_f5] ribilancio del {data}: universo {n_uni}, long {len(lunghi)}, short {len(corti)}, "
+            self.fb.set_rtdb(f"{self.RAMO}/posizioni", {s: round(w, 6) for s, w in pesi.items()})
+        print(f"[{self.ETICHETTA}] ribilancio del {data}: universo {n_uni}, long {len(lunghi)}, short {len(corti)}, "
               f"costo {costo:.2f}, equity {equity - costo:.2f}")
         self._pubblica(st, prezzi, now)
         return st
@@ -391,7 +400,7 @@ class PaperF5:
         if not contratti:
             return None
         giornaliere = {s: self._giornaliere(s) for s in contratti}
-        uni = universo(giornaliere, contratti, m)
+        uni = universo(giornaliere, contratti, lunedi_di(m))          # le 100 della settimana (per F5 m e' gia' il lunedi')
         segnale, sigma = {}, {}
         for s in uni:
             sg = sigma_30({d: v[1] for d, v in giornaliere[s].items()}, m)
@@ -402,7 +411,7 @@ class PaperF5:
         # riprova dopo 30 minuti invece di decidere con un segnale monco
         mancanti = [s for s in uni if np.isfinite(sigma[s]) and self._ultimo_regolamento.get(s, 0) < m * GIORNO_MS - 60_000]
         if len(mancanti) > 0.1 * len(uni):
-            print(f"[paper_f5] regolamento delle 00:00 non ancora pubblicato per {len(mancanti)} monete su {len(uni)}")
+            print(f"[{self.ETICHETTA}] regolamento delle 00:00 non ancora pubblicato per {len(mancanti)} monete su {len(uni)}")
             return None
         pesi, lunghi, corti = pesi_banda(segnale, sigma, set(st.get("lunghi") or []), set(st.get("corti") or []))
         return pesi, lunghi, corti, len(uni)
@@ -413,14 +422,14 @@ class PaperF5:
         r = self.pesi_del_lunedi(m, {})
         self._prova_fatta = r is not None
         if r is None or self.fb is None:
-            print("[paper_f5] prova a secco non riuscita: exchangeInfo non disponibile")
+            print(f"[{self.ETICHETTA}] prova a secco non riuscita: exchangeInfo non disponibile")
             return
         pesi, lunghi, corti, n = r
         ordine = sorted(pesi.items(), key=lambda kv: -abs(kv[1]))
-        self.fb.set_rtdb("/paper_f5/prova", {
+        self.fb.set_rtdb(f"{self.RAMO}/prova", {
             "lunedi": time.strftime("%Y-%m-%d", time.gmtime(m * 86400)), "universo": n, "long": len(lunghi),
             "short": len(corti), "pesi_maggiori": {s: round(w, 4) for s, w in ordine[:10]}, "eseguita": now})
-        print(f"[paper_f5] prova a secco: universo {n}, long {len(lunghi)}, short {len(corti)}")
+        print(f"[{self.ETICHETTA}] prova a secco: universo {n}, long {len(lunghi)}, short {len(corti)}")
 
     def _funding_regolati(self, st: dict, prezzi: dict) -> None:
         """Il funding dei regolamenti dopo l'ultimo controllo, posizione per posizione (il long paga se e' positivo)."""
@@ -453,7 +462,7 @@ class PaperF5:
             return
         e = self._equity(st, prezzi)
         pesi = st.get("pesi") or {}
-        self.fb.set_rtdb("/paper_f5/stato", {
+        self.fb.set_rtdb(f"{self.RAMO}/stato", {
             "stato": "acceso", "equity": round(e, 2), "capitale": CAPITALE, "rendimento": e / CAPITALE - 1,
             "long": sum(1 for w in pesi.values() if w > 0), "short": sum(1 for w in pesi.values() if w < 0),
             "ultimo_lunedi": time.strftime("%Y-%m-%d", time.gmtime(int(st.get("ultimo_lunedi", 0)) * 86400)),
@@ -462,4 +471,24 @@ class PaperF5:
             "limite_variazioni": int(st.get("limite_variazioni", 0)), "limite_eseguite": int(st.get("limite_eseguite", 0)),
             "ordini_in_attesa": len((st.get("ordini") or {}).get("variazioni") or {}),
             "funding_totale": round(float(st.get("funding_totale", 0.0)), 2), "aggiornato": now})
-        self.fb.set_rtdb(f"/paper_f5/giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(e, 2))
+        self.fb.set_rtdb(f"{self.RAMO}/giorni/{time.strftime('%Y-%m-%d', time.gmtime(now))}", round(e, 2))
+
+
+class PaperG1(PaperF5):
+    """G1, F5 decisa ogni giorno (research/programma7/PRIMA.md, prova 57: Sharpe 1,96, corretto 0,94; nel paper per decisione
+    del coordinamento del 23 ottobre, voce P22 del backlog). Stesse regole di F5 (le 100 della settimana, −funding dei 7 giorni,
+    banda, pesi, ordini limite) ma la decisione si prende **ogni giorno alle 00:05 UTC**. Interruttore `ops/paper_g1_acceso`,
+    stato in `data/paper_g1.json` e su RTDB in `/paper_g1`."""
+    RAMO, ETICHETTA = "/paper_g1", "paper_g1"
+    INTERRUTTORE_DI_SERIE = RADICE / "ops" / "paper_g1_acceso"
+    FILE_DI_SERIE = RADICE / "data" / "paper_g1.json"
+
+    def giorno_di_decisione(self, giorno: int) -> int:
+        return giorno
+
+    def si_puo_partire(self, now: float, m: int) -> bool:
+        # la prima decisione si prende vicino alle 00:00, come la ricerca; altrimenti si aspetta il giorno dopo
+        return now - m * 86400 < 3600
+
+    def banda_di_partenza(self, m: int) -> dict:
+        return {}

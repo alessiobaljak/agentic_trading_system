@@ -1,0 +1,3 @@
+Il paper di G1 (F5 decisa ogni giorno) eseguito dal bot e' acceso (bot/portafoglio/f5.py, PaperG1; docs/backlog.md P22).
+Acceso il 23 ottobre 2026 dal coordinamento, con la delega del proprietario del 22 ottobre sulle strategie da portare in paper.
+DRY_RUN vero, nessun ordine vero. Per spegnerlo: cancellare questo file e riavviare il bot (ops: riavvia-bot).

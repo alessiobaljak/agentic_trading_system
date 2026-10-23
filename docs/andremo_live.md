@@ -4526,3 +4526,9 @@ forte di F5): 31.338 operazioni, −0,164 R a operazione, già prima dei costi �
 con le candele da 1 ora, la prima ora che chiude oltre l'apertura del giorno non annuncia una continuazione, né al rialzo né al
 ribasso; lo stop al massimo o al minimo del giorno scatta nel 58-59% dei casi. Il vantaggio del funding non si vede in giornata da
 nessuno dei due lati: vive su più giorni (G1). Nel conto: 123 prove.
+**G1 nel paper del bot** (23 ottobre; il proprietario: «F5 giornaliera non passa per poco, 0,94 [...] potresti farla passare»):
+la regola non si cambia per far passare una strategia (è l'errore del vecchio gate: si aggiusta finché il numero esce, e il numero
+non vuol più dire niente), ma per il paper la validazione non serve (delega del 22 ottobre). G1 entra nel bot accanto a F5
+settimanale: `PaperG1` in `bot/portafoglio/f5.py`, decisione ogni giorno alle 00:05 UTC, ordini limite simulati, 10.000 dollari
+virtuali, interruttore `ops/paper_g1_acceso`, in dashboard nella scheda «Strategie nuove» (voce P22 del backlog). Test:
+`tests/test_paper_f5.py`. Riavvio del bot chiesto alla macchina; la prima decisione vera alle 00:05 UTC di sabato 24 ottobre.

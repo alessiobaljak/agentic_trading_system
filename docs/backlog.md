@@ -152,6 +152,15 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P22. G1 (F5 decisa ogni giorno) nel paper del bot — trovata e FATTA il 23 ott 2026
+**Perché:** il proprietario vuole trading di ogni giorno; G1 (prova 57, `research/programma7/PRIMA.md`) apre e chiude in media 3
+posizioni al giorno, Sharpe 1,96 sul passato (F5 settimanale 1,88), Sharpe corretto 0,94: non validata per poco. Il proprietario
+(23 ott): «potresti farla passare, qui parliamo di 0,01»: non si cambia la regola per farla passare (sarebbe l'errore del vecchio
+gate), ma per portarla nel paper non serve la validazione (delega del 22 ott: le strategie in paper le decide il coordinamento).
+**Cosa:** `PaperG1` in `bot/portafoglio/f5.py` (le regole di F5, decisione ogni giorno alle 00:05 UTC, ordini limite), interruttore
+`ops/paper_g1_acceso`, stato `data/paper_g1.json` e RTDB `/paper_g1`, in dashboard accanto a F5. **Metro:** stesso capitale
+virtuale (10.000), confronto settimana per settimana con F5 settimanale e con il calcolo della ricerca.
+
 ### P21. Il funding stimato delle ultime settimane nella ricerca — trovata il 23 ott 2026 (revisione di F5)
 **Perché:** il mese in corso non ha ancora il file mensile dell'archivio di Binance, e `seconda.pannello` riempie il funding con
 la media dei 90 giorni prima: 11.214 valori di ottobre 2026 (settimane del 28 settembre, 5 e 12 ottobre). Non gonfia F5 (senza
