@@ -4608,3 +4608,5 @@ E4 stesso: una moneta nuova con lo stesso nome di una vecchia (LIT, +27,8% conta
 alcuni eventi che la regola prende ma non sono «long affollati». Corretto, **E4 fa +11,89% a evento ma con p 0,0067: non passa più
 la sua soglia (0,005)**. Resta nel paper come informazione. Il bot ora non entra più su contratti che Binance sta chiudendo (voce P24).
 Capito: terza revisione, terzo errore trovato; e le monete tolte dal listino crollano nelle ultime ore (idea 35 in coda).
+Riavvio fatto alle 16:45 UTC (ops 0650): il bot gira con il blocco dei contratti in chiusura (commit d61e62fc), E4 entra ancora
+all'apertura del giorno dopo.
