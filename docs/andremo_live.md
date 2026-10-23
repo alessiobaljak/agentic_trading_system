@@ -4514,3 +4514,10 @@ mezzanotte. 31.363 operazioni (15 al giorno), −0,123 R a operazione, ogni anno
 vantaggio del funding è uno scivolamento che si accumula in più giorni; dentro la giornata il prezzo si muove per caso e i costi
 (0,10 R a operazione) fanno il resto. Per il trading in giornata servono movimenti grandi a operazione (gli eventi: +4-12%) o
 costi da market maker. Il long specchio non si prova (il lato long è sempre stato il più debole). Nel conto: 121 prove.
+**Correzione** (23 ottobre): nella seconda prova del programma 7 e nel motivo per non provare lo specchio long avevo scritto che il
+lato short di F5 rende +42% l'anno e il long +15%. È sbagliato: erano i numeri di C3. In F5 il lato **long** fa +42,8% l'anno e lo
+short +16,2% (`risultati_ventiquattresima/esame.json`). Il risultato di G2 non cambia; lo specchio long (G3) torna in coda.
+**Terza prova del programma 7, G4** (`programma7/TERZA.md`): le monete nuove di Binance vendute dal 1° giorno di vita invece che dal
+7°, con le stesse regole di N3: 613 eventi, +3,68% a evento, p 0,0093, passa l'esame scritto; ma sulle stesse monete N3 dal 7° giorno
+fa +4,29%. Capito: entrare prima non prende più discesa, prende più rischio (l'uscita a +30% scatta nel 47% dei casi contro il 42%);
+il 7° giorno resta il migliore dei due. Non entra nel paper accanto a N3. Nel conto: 122 prove.

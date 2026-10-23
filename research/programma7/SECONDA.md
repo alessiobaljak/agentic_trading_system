@@ -37,3 +37,10 @@ si chiude nello stesso giorno, con un'entrata decisa dal prezzo, uno stop e un o
   con l'aggiunta del 23 ottobre, soglia 0,95.
 * Si riportano: operazioni al giorno, quota vinte, vincita e perdita medie in R, uscite per motivo (stop, obiettivo, tempo), costi
   e funding in R, per anno.
+
+## Correzione (23 ottobre, dopo il calcolo)
+
+Il numero della sezione 1 sui due lati di F5 è **sbagliato**: «lato short +42% l'anno contro +15% del lato long» è la divisione
+di C3 (prova 55), non di F5. In F5 (prova 24, `risultati_ventiquattresima/esame.json`) il lato **long** fa +42,8% l'anno e lo
+**short** +16,2%. Le regole della prova non cambiano (sono quelle scritte prima) e il risultato resta quello; cambia la ragione per
+non provare lo specchio long (G3), che quindi torna in coda.
