@@ -68,3 +68,17 @@ def test_g2_operazione():
     o, h, l, cc = _candele(c)
     r = g2.operazione(o, h, l, cc, 0.0007, 0.0003)
     assert r["motivo"] == "tempo" and r["uscita_ora"] == 24 and abs(r["funding_R"] - 2 * 0.0001 * r["entrata"] / (r["stop"] - r["entrata"])) < 1e-12
+
+
+def test_g3_operazione_specchio():
+    from research.programma7 import seconda as g2
+    # lo specchio del primo caso di G2: prezzi riflessi intorno a 100
+    c = [100, 99, 101, 101, 103, 106] + [106] * 19
+    o, h, l, cc = _candele(c)
+    r = g2.operazione(o, h, l, cc, 0.0007, 0.0003, verso=1)
+    assert r["entrata"] == 101 and r["stop"] == 99 and r["motivo"] == "obiettivo"
+    assert r["R_lordo"] == (105 - 101) / 2
+    c = [100, 100.2] + [100.3] * 23
+    o, h, l, cc = _candele(c)
+    r = g2.operazione(o, h, l, cc, 0.0007, 0.0003, verso=1)
+    assert r["motivo"] == "tempo" and r["funding_R"] < 0           # il long paga il funding positivo

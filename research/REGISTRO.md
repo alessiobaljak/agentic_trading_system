@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 122 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 123 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -84,8 +84,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 57 | **Programma 7, trading ogni giorno.** G1: F5 decisa ogni giorno alle 00:00 invece che il lunedì, con gli ordini limite (`programma7/PRIMA.md`) | 1 | opera ogni giorno (3 entrate e 3 uscite al giorno in media, operazioni in 2.048 giorni su 2.100), ma una posizione dura in media 17,5 giorni; Sharpe 1,96 (a mercato 1,86; F5 settimanale 1,88), +54,0% l'anno, discesa −28,8%, spese 6,7% l'anno, ogni anno positivo (2023 +7,6%); Sharpe corretto 0,94, t 4,71 (`programma7/RISULTATI_PRIMA.md`) | non validata per un soffio (0,94); decidere ogni giorno vale quanto decidere il lunedì, non di più |
 | 58 | G2: lo short in giornata delle monete con il funding più alto (il 20% di F5): entrata quando una candela da 1 ora chiude sotto l'apertura del giorno, stop al massimo del giorno, obiettivo a 2 volte lo stop a limite, uscita alle 00:00 (`programma7/SECONDA.md`) | 1 | 31.363 operazioni in 2.064 giorni (14,9 al giorno): **−0,123 R** a operazione (prima dei costi −0,022, costi 0,103), vinte 36% (vincita media +1,55 R, perdita −1,05 R), ogni anno negativo; portafoglio Sharpe −1,64 (`programma7/RISULTATI_SECONDA.md`) | no: dentro la giornata il vantaggio del funding non c'è (negativo già prima dei costi) |
 | 59 | G4: le monete nuove di Binance short dal 1° giorno di vita contro il Bitcoin, con le regole di N3 (uscita a +30% o dopo 30 giorni) tranne il giorno d'ingresso (`programma7/TERZA.md`); variante di N3 vista | 1 a eventi | 613 eventi: **+3,68% a evento**, p 0,0093, vinti 51%, metà +6,38% e +0,99%, senza i 5 migliori +2,95%; 2026 −1,21%; sulle stesse monete N3 (dal 7° giorno) fa +4,29%, correlazione 0,38 (`programma7/RISULTATI_TERZA.md`) | passa l'esame scritto (p ≤ 0,01), ma rende meno di N3 sulle stesse monete ed è una variante di N3 vista: non entra nel paper accanto a N3 (sarebbe due volte la stessa scommessa) |
+| 60 | G3: il long in giornata delle monete con il funding più basso (il 20% del lato long di F5), entrata quando una candela da 1 ora chiude sopra l'apertura del giorno, stop al minimo del giorno, obiettivo a 2 volte lo stop a limite, uscita alle 00:00 (`programma7/QUARTA.md`); lo specchio di G2 | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 = **122** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 = **123** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
@@ -194,7 +195,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    contrario delle azioni). Probabilità bassa: è un parente del momento, che fra i perpetui dal 2021 non regge (prova 49, X1
    Sharpe 0,05), e le monete appena salite di solito hanno il funding alto, che F5 vende. In coda, non subito.
 27. **In giornata (programma 7, `programma7/METODO.md`)**: ~~G2 lo short in giornata sulla leva più cara~~ → prova 58 (no);
-   **G3 il long in giornata sulle monete con il funding più negativo** (lo specchio di G2): da fare. Il 23 ottobre l'avevo scartata
+   **G3 il long in giornata sulle monete con il funding più negativo** (lo specchio di G2) → prova 60. Il 23 ottobre l'avevo scartata
    dicendo che il lato long di F5 è il più debole: era sbagliato (avevo letto i lati di C3; in F5 il long fa +42,8% l'anno e lo short
    +16,2%), quindi torna in coda; resta il dubbio di G2 (in giornata il vantaggio del funding non c'era nemmeno prima dei costi).
    ~~G4 le monete nuove dal 1° giorno~~ → prova 59.
