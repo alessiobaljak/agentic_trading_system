@@ -4601,3 +4601,10 @@ eventi, p 0,0002, 82% vinti, ogni anno positivo; 1,33 punti più di E4 sugli ste
 intervallo −1,88; +4,59). Per la regola scritta prima il bot entrerà in E4 subito dopo l'evento, dopo il controllo del revisore.
 Capito: quando l'informazione è pubblica (Binance accorcia l'intervallo), aspettare il giorno dopo costa in media più di un punto.
 Nel conto: 135 prove.
+**La revisione di G12, e gli errori dentro E4** (23 ottobre, `programma7/REVISIONE_G12.md`): il revisore separato ha trovato che
+il miglioramento di G12 veniva da due contratti chiusi il giorno dell'evento (E4 ci «entrava» quando non si poteva più); sugli altri
+60 eventi entrare subito vale +0,11 punti, niente. Il cambio del bot è stato annullato prima del riavvio. E ha trovato tre problemi in
+E4 stesso: una moneta nuova con lo stesso nome di una vecchia (LIT, +27,8% contato per sbaglio), le due operazioni impossibili, e
+alcuni eventi che la regola prende ma non sono «long affollati». Corretto, **E4 fa +11,89% a evento ma con p 0,0067: non passa più
+la sua soglia (0,005)**. Resta nel paper come informazione. Il bot ora non entra più su contratti che Binance sta chiudendo (voce P24).
+Capito: terza revisione, terzo errore trovato; e le monete tolte dal listino crollano nelle ultime ore (idea 35 in coda).

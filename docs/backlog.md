@@ -152,6 +152,12 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P24. Niente entrate del paper su contratti in chiusura — trovata e FATTA il 23 ott 2026 (revisione di G12)
+**Perché:** due eventi di E4 erano su contratti che Binance ha tolto dal listino il giorno stesso (`research/programma7/
+REVISIONE_G12.md`): un paper che ci entra conta guadagni o perdite impossibili. **Cosa:** `f5.in_chiusura` (la data di consegna
+dei perpetui in `exchangeInfo`), usata da `bot/portafoglio/eventi.py` per N3 ed E4. **Da fare ancora:** lo stesso per F5, G1 e G11
+(una moneta della banda annunciata in chiusura va tolta prima della chiusura); per ora la ricerca le tiene fino alla rimozione.
+
 ### P23. G11 (G1 con il funding fresco) nel paper accanto a G1 — chiesta dal proprietario e FATTA il 23 ott 2026
 **Perché:** G11 (prova 69) fa Sharpe 2,05 sul passato, Sharpe corretto 0,948 con il conto corretto (sotto 0,95); il revisore
 (`research/programma7/REVISIONE_G11.md`) dice che il vantaggio su G1 è fragile (ordini limite, 2021). Il proprietario (23 ott): «94,8

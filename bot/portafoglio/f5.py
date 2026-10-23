@@ -176,6 +176,21 @@ def _chiedi_http(percorso: str, parametri: dict) -> Optional[object]:
     return None
 
 
+CONSEGNA_PERPETUO_MS = 4_133_404_800_000      # la «consegna» di serie dei perpetui (anno 2100): se e' prima, il contratto chiude
+
+
+def in_chiusura(info: dict, entro_ms: int) -> set:
+    """I perpetui che Binance ha messo in chiusura prima di ``entro_ms`` (la data di consegna di exchangeInfo e' quella della
+    rimozione). Revisione del 23 ottobre (research/programma7/QUATTORDICESIMA.md): due eventi di E4 erano su contratti chiusi
+    il giorno stesso, e un paper che ci entra conta guadagni impossibili."""
+    out = set()
+    for x in (info or {}).get("symbols", []):
+        d = int(x.get("deliveryDate") or CONSEGNA_PERPETUO_MS)
+        if x.get("contractType") == "PERPETUAL" and d < CONSEGNA_PERPETUO_MS and d <= entro_ms:
+            out.add(x["symbol"])
+    return out
+
+
 def contratti_monete(info: dict) -> dict:
     """Dai dati di exchangeInfo: {simbolo: giorno di vita} dei perpetui USDT-M in scambio che sono monete (niente indici,
     azioni, metalli: `underlyingType` COIN, niente TradFi, niente `ESCLUSI`)."""

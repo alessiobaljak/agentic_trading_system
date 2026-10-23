@@ -30,7 +30,7 @@ import time
 from pathlib import Path
 from typing import Callable
 
-from bot.portafoglio.f5 import GIORNO_MS, _chiedi_http, contratti_monete
+from bot.portafoglio.f5 import GIORNO_MS, _chiedi_http, contratti_monete, in_chiusura
 
 RADICE = Path(__file__).resolve().parents[2]
 INTERRUTTORE = RADICE / "ops" / "paper_eventi_acceso"
@@ -253,18 +253,24 @@ class PaperEventi:
                 if pc is None:               # contratto tolto: l'ultimo prezzo noto e' l'entrata (lo si dice nel motivo)
                     pc = float(p["p0"])
                 self.chiudi(st, ident, pc, mark["BTCUSDT"], "tempo" if p["simbolo"] in mark else "contratto senza prezzo", now)
+        info = self.chiedi("/fapi/v1/exchangeInfo", {}) or {}
+        # niente entrate su contratti che Binance chiude prima della fine della tenuta (non si potrebbe uscire al prezzo vero)
+        chiude_e4 = in_chiusura(info, (giorno + GIORNI_E4 + 1) * GIORNO_MS)
+        chiude_n3 = in_chiusura(info, (giorno + GIORNI_N3 + 1) * GIORNO_MS)
         restano = []
         for ev in st.get("e4_eventi") or []:
             if int(ev["giorno_entrata"]) > giorno:
                 restano.append(ev)
+            elif ev["simbolo"] in chiude_e4:
+                print(f"[paper_eventi] E4 {ev['simbolo']} saltato: il contratto chiude prima della fine della tenuta")
             elif int(ev["giorno_entrata"]) == giorno and self._volume_del_giorno(ev["simbolo"], giorno - 1) > 0:
                 self.apri(st, "E4", ev["simbolo"], giorno, now, mark)
             elif int(ev["giorno_entrata"]) < giorno:
                 print(f"[paper_eventi] E4 {ev['simbolo']} saltato: entrata del giorno {ev['giorno_entrata']} gia' passata")
         st["e4_eventi"] = restano
-        monete = contratti_monete(self.chiedi("/fapi/v1/exchangeInfo", {}) or {})
+        monete = contratti_monete(info)
         for s, g0 in sorted(monete.items()):
-            if s != "BTCUSDT" and g0 + ETA == giorno and self._volume_del_giorno(s, giorno - 1) > 0:
+            if s != "BTCUSDT" and g0 + ETA == giorno and s not in chiude_n3 and self._volume_del_giorno(s, giorno - 1) > 0:
                 self.apri(st, "N3", s, giorno, now, mark)
         st["ultimo_giorno"] = giorno
         self.salva(st)

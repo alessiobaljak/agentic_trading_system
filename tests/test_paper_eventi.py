@@ -166,3 +166,31 @@ def test_primo_passo_corto():
 def _data(giorno):
     import time
     return time.strftime("%Y%m%d", time.gmtime(giorno * 86400))
+
+
+def test_niente_entrate_su_contratti_in_chiusura(tmp_path):
+    from bot.portafoglio import f5
+    info = {"symbols": [{"symbol": "AUSDT", "contractType": "PERPETUAL", "deliveryDate": f5.CONSEGNA_PERPETUO_MS},
+                        {"symbol": "BUSDT", "contractType": "PERPETUAL", "deliveryDate": (D + 3) * GIORNO_MS},
+                        {"symbol": "CUSDT", "contractType": "PERPETUAL", "deliveryDate": (D + 60) * GIORNO_MS}]}
+    assert f5.in_chiusura(info, (D + 8) * GIORNO_MS) == {"BUSDT"}
+    assert f5.in_chiusura(info, (D + 90) * GIORNO_MS) == {"BUSDT", "CUSDT"}
+    # nel paper: una moneta nuova al 7o giorno che chiude fra 3 giorni non si apre
+    b = _Binance()
+    b.moneta("NUOVAUSDT", D - 7, 2.0)
+    vero = b.__call__
+
+    def chiedi(percorso, p):
+        r = vero(percorso, p)
+        if percorso == "/fapi/v1/exchangeInfo":
+            for x in r["symbols"]:
+                if x["symbol"] == "NUOVAUSDT":
+                    x["deliveryDate"] = (D + 3) * GIORNO_MS
+        return r
+    chiedi.adesso_ms = 0
+    p, fb = _paper(tmp_path, chiedi)
+    b.adesso_ms = int((D * 86400.0 - 3600) * 1000)
+    p.tick(D * 86400.0 - 3600)
+    b.adesso_ms = int((D * 86400.0 + 400) * 1000)
+    p.tick(D * 86400.0 + 400)
+    assert p.carica()["aperte"] == {}

@@ -94,7 +94,7 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 67 | G9: l'inversione di un giorno fra le monete 101-200 (long chi è sceso di più ieri, short chi è salito di più), decisa ogni giorno con gli ordini limite (`programma7/UNDICESIMA.md`) | 1 | **prima dei costi +29,1% l'anno** (l'inversione c'è), ma il giro è di 17,5 volte il capitale a settimana: spese 61,2% l'anno anche con il 97% degli ordini a limite; netto −38,4% l'anno, Sharpe −0,91; tutto a mercato −113,7% (`programma7/RISULTATI_UNDICESIMA.md`) | no: il vantaggio c'è ma il giro lo mangia due volte |
 | 68 | G10: il «buco» del CME sul Bitcoin (fra la chiusura del venerdì e la riapertura della domenica, almeno 1%): operazione verso la chiusura del venerdì, obiettivo il prezzo del venerdì a limite, stop alla stessa distanza, al massimo una settimana (`programma7/DODICESIMA.md`) | 1 | 150 fine settimana su 301: il buco si chiude prima dello stop solo nel **39%** dei casi (stop 60%); **−0,266 R** a operazione (prima dei costi −0,215), 5 anni su 6 negativi (`programma7/RISULTATI_DODICESIMA.md`) | no: «i buchi del CME si chiudono sempre» è falso: più spesso il prezzo continua nel verso del buco |
 | 69 | G11: G1 con il funding fresco (media dei ranghi del funding dei 7 giorni e dell'ultimo giorno), deciso ogni giorno con gli ordini limite (`programma7/TREDICESIMA.md`); variante di G1 | 1 | Sharpe 2,05 (G1 1,96), +60,2% l'anno; Sharpe corretto 0,97 con il conto di allora, **0,948 con il conto corretto** (mancavano le prove del programma 7); il vantaggio su G1 sparisce con un'esecuzione appena più difficile (1,79 contro 1,785) e sta nel 2021 (dal 2023 1,60 contro 1,81) (`programma7/RISULTATI_TREDICESIMA.md`, `programma7/REVISIONE_G11.md`) | **no** (revisione indipendente): non validata. **Nel paper del bot dal 24 ottobre accanto a G1**, su richiesta del proprietario, per il confronto sugli stessi giorni (`PaperG11`, voce P23) |
-| 70 | G12: E4 (il funding al tetto) con l'entrata all'ora dopo l'evento invece che all'apertura del giorno dopo, stessi eventi, 7 giorni (`programma7/QUATTORDICESIMA.md`); decide l'entrata di E4 nel bot | 1 a eventi | 62 eventi: **+13,00% a evento** (p 0,0002), vinti 82%, metà +7,32% e +18,67%, senza i 5 migliori +8,81%, ogni anno positivo; E4 sugli stessi eventi +11,67%: **+1,33 punti** (intervallo −1,88; +4,59) (`programma7/RISULTATI_QUATTORDICESIMA.md`) | passa l'esame; per la regola scritta prima **E4 nel bot entra all'ora dopo l'evento** (dopo il revisore separato) |
+| 70 | G12: E4 (il funding al tetto) con l'entrata all'ora dopo l'evento invece che all'apertura del giorno dopo, stessi eventi, 7 giorni (`programma7/QUATTORDICESIMA.md`); decide l'entrata di E4 nel bot | 1 a eventi | +13,00% a evento (p 0,0002), +1,33 punti su E4; ma (revisione indipendente, `programma7/REVISIONE_G12.md`) 1,22 punti vengono da due contratti chiusi il giorno dell'evento: sugli altri 60 eventi **+0,11 punti** (p 0,47) | no: il miglioramento non c'è; **il bot resta com'è** (cambio annullato prima del riavvio) |
 
 Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **135** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
@@ -130,7 +130,10 @@ decideva l'ordine fra le monete con lo stesso funding, a favore delle monete vec
 **F5 1,933 → 1,868** (ogni anno ancora positivo, discesa −31% → −26,9%), F5 a ordini limite 1,987 → 1,923, K2 1,720 → 1,745,
 F5 + M7 + K2 2,107 → 2,101; Sharpe corretto F5 0,90, F5 + M7 + K2 0,94. **Le prove del programma 7 fuori dal conto** (23 ottobre, trovato dal revisore di
 G11, `programma7/REVISIONE_G11.md`): lo Sharpe corretto delle prove 57-69 non contava le serie delle altre prove del programma 7;
-corretto (`asticella.serie_programma7`): 73 gruppi, G11 0,97 → 0,948, G1 0,94 → 0,913.
+corretto (`asticella.serie_programma7`): 73 gruppi, G11 0,97 → 0,948, G1 0,94 → 0,913. **Gli errori dentro E4** (23 ottobre, trovati dal revisore di G12,
+`programma7/REVISIONE_G12.md`): LIT (una moneta nuova con lo stesso nome, contata come accorciamento, +27,8%) e due operazioni
+impossibili su contratti già chiusi (RVV, HFT); corretto: **E4 59 eventi, +11,89% a evento, p 0,0067: non passa più la soglia di
+0,005**; resta nel paper come informazione. Il bot non entra più su contratti in chiusura.
 
 ## 2. Il paper (dal 20 ottobre 2026 per i giorni, dal 26 ottobre per le settimane)
 
@@ -225,6 +228,9 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    regolamento porta circa 0,2 di Sharpe), deciso ogni giorno come G1. Variante di G1: probabilità media, nel conto.
 33. **Il modello M7 deciso ogni giorno con gli ordini limite** (M3, la prova 16, era bocciata per le spese a mercato del 23,8%
    l'anno; con gli ordini limite e la banda di G1 le spese scendono). Calcolo lungo (cinque semi ogni 4 settimane).
+35. **Vendere i perpetui annunciati in chiusura** (la revisione di G12: due monete tolte dal listino crollano nelle ultime ore prima
+   della chiusura): short dall'annuncio di chiusura dei future fino a prima della chiusura, con tutti gli annunci (servono le date
+   degli annunci di chiusura dei future, da scaricare come in `programma6/annunci.py`). Le regole d'uscita vanno scritte prima.
 28. **Il canale Telegram del proprietario** (scalping, al massimo 5 al giorno, «quasi tutte al TP1»): si verifica sui prezzi veri
    appena il proprietario manda l'esportazione completa dei messaggi (anche i segnali persi).
 29. **Lo scalping con i dati del libro degli ordini** (voce P18 del backlog): serve lo storico al secondo, decide il proprietario.
