@@ -4552,3 +4552,8 @@ monete entrate nell'universo sono le stesse di ieri, tutte monete.
 giorno: Sharpe 1,21 contro 1,75 della versione settimanale, spese 11,1% l'anno, 2023 −20,6%; G1 + G6 1,62, meno di G1 da sola
 (1,96). Capito: il funding è un segnale lento e regge le decisioni di ogni giorno; gli acquisti a mercato e l'interesse aperto
 cambiano molto da un giorno all'altro, e decidere ogni giorno su di loro fa solo girare il capitale. Nel conto: 128 prove.
+**Ottava prova del programma 7, G7** (`programma7/OTTAVA.md`): l'ipotesi nata da G5 («le salite enormi continuano») provata su dati
+che non l'avevano vista, i perpetui di Gate.io delle monete senza perpetuo su Binance: comprare il giorno dopo un +30% perde il 6,5%
+a evento (541 eventi, mediana −26%, solo il 21% vinte). Capito: sui perpetui di Binance metà delle salite enormi continua, sulle
+monete piccole di Gate.io quasi tutte si sgonfiano: lo stesso segnale fa cose opposte su mercati diversi, quindi non è una regola
+generale. Lo short su Gate.io non si prova (nascerebbe da questi dati, e il proprietario fa trading solo su Binance). Nel conto: 129.
