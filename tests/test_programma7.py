@@ -82,3 +82,14 @@ def test_g3_operazione_specchio():
     o, h, l, cc = _candele(c)
     r = g2.operazione(o, h, l, cc, 0.0007, 0.0003, verso=1)
     assert r["motivo"] == "tempo" and r["funding_R"] < 0           # il long paga il funding positivo
+
+
+def test_tetto_per_moneta():
+    from research.programma7 import quinta as q
+    w = q.con_tetto(np.array([0.5, 0.2, 0.1] + [0.2 / 12] * 12))
+    assert abs(w.sum() - 1) < 1e-12 and w.max() <= 0.1 + 1e-12
+    # l'ordine resta: chi pesava di piu' pesa ancora almeno quanto gli altri
+    assert all(w[i] >= w[i + 1] - 1e-12 for i in range(len(w) - 1))
+    assert np.allclose(q.con_tetto(np.full(5, 0.2)), 0.2)         # meno di 10 monete: pesi uguali
+    Wt = q.applica_tetto(np.hstack([np.array([[0.5] + [0.5 / 11] * 11]), -np.array([[1 / 12] * 12])]), 0.10)
+    assert abs(Wt[0, :12].sum() - 1) < 1e-12 and abs(Wt[0, 12:].sum() + 1) < 1e-12 and Wt[0, :12].max() <= 0.1 + 1e-12
