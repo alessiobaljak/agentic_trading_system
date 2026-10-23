@@ -1,46 +1,55 @@
 {
- "dati_fino_a": "BTCUSDT-1m-2026-10-20.zip",
+ "dati_fino_a": "BTCUSDT-1m-2026-10-21.zip",
  "procedure": {
   "N-001": {
-   "trade": 2,
+   "trade": 3,
    "netto": {
-    "n": 2,
+    "n": 3,
     "media": NaN,
     "basso": NaN,
     "alto": NaN,
     "p": NaN
    },
-   "netto_doppio": -0.0836204627618527,
-   "caso_netto": -0.005337585544349477,
-   "senza_migliore": NaN,
+   "netto_doppio": 0.2168610640655695,
+   "caso_netto": -0.003647685300813782,
+   "senza_migliore": -0.0818204627618527,
    "per_moneta": {
     "AVAUSDT": {
      "trade": 1,
      "netto": -0.16443787843229282
+    },
+    "IOSTUSDT": {
+     "trade": 1,
+     "netto": 0.819624117720414
     },
     "PHAUSDT": {
      "trade": 1,
      "netto": 0.0007969529085874133
     }
    },
-   "esito": "in corso (2 trade chiusi su 400)"
+   "esito": "in corso (3 trade chiusi su 400)"
   },
   "N-002": {
-   "trade": 4,
+   "trade": 6,
    "netto": {
-    "n": 4,
-    "media": NaN,
-    "basso": NaN,
-    "alto": NaN,
-    "p": NaN
+    "n": 6,
+    "giorni": 2,
+    "media": 0.037470510349123215,
+    "basso": 0.008502864408317237,
+    "alto": 0.09540580223073516,
+    "p": 9.999000099990002e-05
    },
-   "netto_doppio": 0.006702864408317237,
-   "caso_netto": 0.00011084087216265034,
-   "senza_migliore": NaN,
+   "netto_doppio": 0.03567051034912321,
+   "caso_netto": -0.0011649671849651296,
+   "senza_migliore": 0.008502864408317237,
    "per_moneta": {
     "AAVEUSDT": {
      "trade": 1,
      "netto": -0.004693975269665838
+    },
+    "IOSTUSDT": {
+     "trade": 2,
+     "netto": 0.09540580223073516
     },
     "LITUSDT": {
      "trade": 1,
@@ -55,7 +64,7 @@
      "netto": 0.015867844522968324
     }
    },
-   "esito": "in corso (4 trade chiusi su 400)"
+   "esito": "in corso (6 trade chiusi su 400)"
   },
   "N-003": {
    "trade": 0,

@@ -99,6 +99,8 @@ Regole: `REGOLE.md`. Aggiornato a ogni passo. **Strategie valide finora: 0** (se
   **Aggiornamento del 22 ottobre (dati fino al 20 ottobre): verdetto di M-003, non passa** (416 trade chiusi, −1,96% a trade,
   intervallo −4,61; +0,69, p 0,93; a costi doppi −2,20%, il caso −0,08%). M-001c 155 su 400 (−0,73%, in corso); M-002 982 (non
   passa, p 0,28); seconda tornata: N-001 2 trade chiusi, N-002 4, N-003 0.
+  Aggiornamento del 23 ottobre (dati fino al 21 ottobre): M-001c 165 su 400 (−0,70%, in corso); M-002 1.088 (+1,09%, non passa,
+  p 0,09); M-003 433 (−1,66%, verdetto già dato: non passa); seconda tornata: N-001 3 trade chiusi, N-002 6, N-003 0.
 
 ## Fase 4 (REGOLE.md, sezione 10): il libro degli ordini
 

@@ -4544,3 +4544,7 @@ e scatta l'uscita. Senza uscita la tipica scende (mediana +16% per chi vende, 68
 indietro c'è per le monete nuove (N3), non per quelle già quotate da tempo. Nel conto: 126 prove.
 G1 nel bot: prova a secco riuscita alle 06:53 UTC (ops 0648): universo 100 monete, 20 long e 20 short; la prima decisione vera
 alle 00:05 UTC di sabato 24 ottobre.
+**Aggiornamento del 23 ottobre, mattina** (dati fino al 21 ottobre). Programma 5, prova in avanti: M-001c 165 trade su 400
+(−0,70%), M-002 +1,09% su 1.088 (non passa, p 0,09), M-003 già bocciata; seconda tornata ancora pochi trade (N-001 3, N-002 6).
+Paper di ricerca del programma 6: A1 +0,49% in due giorni; le settimane si misurano dal 26 ottobre; nessun evento N3 o E4; le
+monete entrate nell'universo sono le stesse di ieri, tutte monete.
