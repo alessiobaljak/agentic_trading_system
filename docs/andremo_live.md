@@ -4618,3 +4618,4 @@ chiusura le monete spesso salgono prima di scendere, come dopo le rimozioni a pr
 **Giro delle 20:18**: nessuna idea nuova con buona probabilità per il trading in giornata (le rimaste sono a probabilità bassa, tutte
 scritte nella coda con il perché). Fatto invece il resto della voce P24: F5, G1 e G11 nel bot tolgono dall'universo le monete che
 Binance chiude entro 8 giorni, così il paper non tiene una moneta fino a un prezzo che non esiste più. Test in `tests/test_paper_f5.py`.
+Riavvio fatto (ops 0651): il bot gira con le monete in chiusura tolte dall'universo di F5, G1 e G11.
