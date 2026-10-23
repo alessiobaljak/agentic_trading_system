@@ -196,3 +196,12 @@ def test_g12_operazione():
     r = g12.operazione(c, cb, vuoto, vuoto, 1000)
     assert abs(r - (0.10 - g12.vu.COSTO_MONETA - g12.vu.COSTO_BTC)) < 1e-12
     assert g12.operazione(c, cb, vuoto, vuoto, 1100) is None      # manca l'ora d'uscita
+
+
+def test_g13_sigle_del_titolo():
+    from research.programma7 import quindicesima as g13
+    assert g13.sigle_del_titolo("Binance Futures Will Delist 1000BTTC and YFII USDT-Margined Contracts") == ["1000BTTC", "YFII"]
+    assert g13.sigle_del_titolo("Binance Futures Will Delist USDⓈ-Margined IPUSDT and IPUSDC Perpetual Contracts (2026-06-28)") == ["IP"]
+    assert g13.sigle_del_titolo("Binance Futures Will Delist PTBUSDT and MITOUSDT USDⓈ-M Perpetual Contracts (2026-10-23)") == ["PTB", "MITO"]
+    assert g13.sigle_del_titolo("Binance Futures Will Delist Multiple USDⓈ-M Perpetual Contracts (2026-10-05)") == []
+    assert g13.sigle_del_titolo("Binance Futures Will Delist USDT-Margined ANC Perpetual Contract") == ["ANC"]

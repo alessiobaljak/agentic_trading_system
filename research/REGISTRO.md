@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 135 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 136 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -95,8 +95,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 68 | G10: il «buco» del CME sul Bitcoin (fra la chiusura del venerdì e la riapertura della domenica, almeno 1%): operazione verso la chiusura del venerdì, obiettivo il prezzo del venerdì a limite, stop alla stessa distanza, al massimo una settimana (`programma7/DODICESIMA.md`) | 1 | 150 fine settimana su 301: il buco si chiude prima dello stop solo nel **39%** dei casi (stop 60%); **−0,266 R** a operazione (prima dei costi −0,215), 5 anni su 6 negativi (`programma7/RISULTATI_DODICESIMA.md`) | no: «i buchi del CME si chiudono sempre» è falso: più spesso il prezzo continua nel verso del buco |
 | 69 | G11: G1 con il funding fresco (media dei ranghi del funding dei 7 giorni e dell'ultimo giorno), deciso ogni giorno con gli ordini limite (`programma7/TREDICESIMA.md`); variante di G1 | 1 | Sharpe 2,05 (G1 1,96), +60,2% l'anno; Sharpe corretto 0,97 con il conto di allora, **0,948 con il conto corretto** (mancavano le prove del programma 7); il vantaggio su G1 sparisce con un'esecuzione appena più difficile (1,79 contro 1,785) e sta nel 2021 (dal 2023 1,60 contro 1,81) (`programma7/RISULTATI_TREDICESIMA.md`, `programma7/REVISIONE_G11.md`) | **no** (revisione indipendente): non validata. **Nel paper del bot dal 24 ottobre accanto a G1**, su richiesta del proprietario, per il confronto sugli stessi giorni (`PaperG11`, voce P23) |
 | 70 | G12: E4 (il funding al tetto) con l'entrata all'ora dopo l'evento invece che all'apertura del giorno dopo, stessi eventi, 7 giorni (`programma7/QUATTORDICESIMA.md`); decide l'entrata di E4 nel bot | 1 a eventi | +13,00% a evento (p 0,0002), +1,33 punti su E4; ma (revisione indipendente, `programma7/REVISIONE_G12.md`) 1,22 punti vengono da due contratti chiusi il giorno dell'evento: sugli altri 60 eventi **+0,11 punti** (p 0,47) | no: il miglioramento non c'è; **il bot resta com'è** (cambio annullato prima del riavvio) |
+| 71 | G13: short contro il Bitcoin dei perpetui dall'annuncio di chiusura dei future fino a un'ora prima della chiusura, con l'uscita a +30% di N3 (`programma7/QUINDICESIMA.md`) | 1 a eventi | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **135** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = **136** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
@@ -228,7 +229,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
    regolamento porta circa 0,2 di Sharpe), deciso ogni giorno come G1. Variante di G1: probabilità media, nel conto.
 33. **Il modello M7 deciso ogni giorno con gli ordini limite** (M3, la prova 16, era bocciata per le spese a mercato del 23,8%
    l'anno; con gli ordini limite e la banda di G1 le spese scendono). Calcolo lungo (cinque semi ogni 4 settimane).
-35. **Vendere i perpetui annunciati in chiusura** (la revisione di G12: due monete tolte dal listino crollano nelle ultime ore prima
+35. ~~**Vendere i perpetui annunciati in chiusura**~~ → prova 71 (G13). (la revisione di G12: due monete tolte dal listino crollano nelle ultime ore prima
    della chiusura): short dall'annuncio di chiusura dei future fino a prima della chiusura, con tutti gli annunci (servono le date
    degli annunci di chiusura dei future, da scaricare come in `programma6/annunci.py`). Le regole d'uscita vanno scritte prima.
 28. **Il canale Telegram del proprietario** (scalping, al massimo 5 al giorno, «quasi tutte al TP1»): si verifica sui prezzi veri
