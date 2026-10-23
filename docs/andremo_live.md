@@ -4562,3 +4562,7 @@ ora che chiude sopra l'apertura (vendere sulla forza, l'idea nata da G2 e G3). S
 di N3 all'apertura: 1,46 punti in meno, e la differenza è sicura (intervallo −2,41; −0,54). Capito: sulle monete nuove un'ora di
 forza continua per un po'; il ritorno indietro visto in G2 e G3 vale per le monete grandi, non per quelle appena quotate. N3 nel
 bot resta com'è. Nel conto: 130 prove.
+**Decima prova del programma 7, MAX** (`programma7/DECIMA.md`): il fattore pubblicato «il giorno migliore del mese» (le monete con
+il giorno migliore più alto rendono di più la settimana dopo, Ozdamar e altri 2021): fra le 100 dal 2021 Sharpe −0,43, −15,9% l'anno;
+il verso opposto 0,25. Capito: come il momento e la dimensione (prova 49), i fattori trovati sulle cripto fino al 2019 non reggono
+sui perpetui di oggi; l'unico fattore fra monete che regge resta il funding. Nel conto: 131 prove.
