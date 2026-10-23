@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 131 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 132 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -91,8 +91,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 64 | G7: il long contro il Bitcoin il giorno dopo una salita di almeno +30% in un giorno, sui perpetui di Gate.io delle monete senza il perpetuo su Binance (dati che l'idea non ha visto), uscita a −30% o dopo 30 giorni (`programma7/OTTAVA.md`); ipotesi nata da G5 | 1 a eventi | 541 eventi: **−6,54% a evento** (p 0,98), mediana −25,8%, vinti 21%, l'uscita a −30% scatta nel 62%; 3 anni su 4 negativi (`programma7/RISULTATI_OTTAVA.md`) | no: sulle monete piccole di Gate.io le salite enormi si sgonfiano (il contrario dei perpetui di Binance). Lo short lì non si prova: l'idea nascerebbe da questi dati, e il proprietario non fa trading su Gate.io |
 | 65 | G8: N3 con l'entrata al 7° giorno dopo la prima ora che chiude sopra l'apertura del giorno (vendere sulla forza, la lezione di G2 e G3), stessi 613 eventi (`programma7/NONA.md`); decide l'entrata di N3 nel bot | 1 a eventi | **+2,83% a evento** (p 0,030), metà +5,36% e +0,31%; N3 sugli stessi eventi +4,29%: **−1,46 punti** (intervallo −2,41; −0,54); entrata in media alle 06:36 (`programma7/RISULTATI_NONA.md`) | no: vendere dopo un'ora di forza rende meno; N3 nel bot resta all'apertura del 7° giorno |
 | 66 | MAX: long le monete con il giorno migliore dei 30 giorni più alto, short le più basse (il verso pubblicato da Ozdamar e altri 2021), con la banda di F5 (`programma7/DECIMA.md`) | 1 | Sharpe −0,43, −15,9% l'anno, discesa −78,1%, 4 anni su 6 negativi; correlazione con F5 −0,03; il verso opposto (solo per capire) 0,25 (`programma7/RISULTATI_DECIMA.md`) | no: il fattore pubblicato su dati fino al 2019 non regge fra i perpetui dal 2021, in nessuno dei due versi |
+| 67 | G9: l'inversione di un giorno fra le monete 101-200 (long chi è sceso di più ieri, short chi è salito di più), decisa ogni giorno con gli ordini limite (`programma7/UNDICESIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 = **131** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 1 = **132** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
@@ -208,6 +209,14 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 30. ~~**Dopo una salita enorme, il long**~~ → prova 64 (G7, su Gate.io). (ipotesi nata guardando G5, prova 62: metà delle monete salite del 30% in un giorno sale di
    un altro 30%; senza uscita lo short perde il 6,6% a evento). È un'idea vista sui dati, quindi si prova **solo su dati non usati**
    (le monete di Gate.io che non sono su Binance, o il 2020), con le regole scritte prima.
+31. **G9 — l'inversione di un giorno fra le monete 101-200 con gli ordini limite** (in giornata, ogni giorno): chi fornisce
+   liquidità guadagna comprando chi è sceso e vendendo chi è salito (Nagel 2012); fra le cripto l'effetto c'è proprio nelle monete
+   meno liquide (Zaremba e altri 2021; Bianchi, Babiak e Dickerson 2022). L'idea 24 era stata scartata per i costi a mercato: con gli
+   ordini limite (prova 51: 95% eseguiti fra le 101-150) i costi scendono a un terzo. → prova 67.
+32. **F5 con il funding fresco**: il segnale dei 7 giorni più quello dell'ultimo giorno (il revisore ha trovato che l'ultimo
+   regolamento porta circa 0,2 di Sharpe), deciso ogni giorno come G1. Variante di G1: probabilità media, nel conto.
+33. **Il modello M7 deciso ogni giorno con gli ordini limite** (M3, la prova 16, era bocciata per le spese a mercato del 23,8%
+   l'anno; con gli ordini limite e la banda di G1 le spese scendono). Calcolo lungo (cinque semi ogni 4 settimane).
 28. **Il canale Telegram del proprietario** (scalping, al massimo 5 al giorno, «quasi tutte al TP1»): si verifica sui prezzi veri
    appena il proprietario manda l'esportazione completa dei messaggi (anche i segnali persi).
 29. **Lo scalping con i dati del libro degli ordini** (voce P18 del backlog): serve lo storico al secondo, decide il proprietario.

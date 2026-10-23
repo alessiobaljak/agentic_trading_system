@@ -148,3 +148,13 @@ def test_massimo_30():
     m = dm.massimo_30(r, np.array([40, 70]))
     assert m[0, 0] == 0.5 and np.isnan(m[0, 1])
     assert m[1, 0] == 0.01                                     # il 0,5 del giorno 35 e' fuori dai 30 giorni prima del 70
+
+
+def test_g9_pesi_inversione():
+    from research.programma7 import undicesima as g9
+    ieri = np.array([np.linspace(-0.1, 0.1, 25)])
+    U = np.ones((1, 25), dtype=bool)
+    sig = np.ones((1, 25))
+    W = g9.pesi_inversione(ieri, U, sig)
+    assert (W[0, :5] > 0).all() and (W[0, -5:] < 0).all() and (W[0, 5:20] == 0).all()
+    assert abs(W[0, :5].sum() - 1) < 1e-12 and abs(W[0, -5:].sum() + 1) < 1e-12
