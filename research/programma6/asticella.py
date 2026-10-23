@@ -26,6 +26,7 @@ from research.programma6 import trentaquattresima as tq
 QUI = Path(__file__).parent
 RIS = QUI / "risultati_asticella"
 MIN_COMUNI, TAGLIO, ALTRI_TAGLI = 52, 0.5, (0.3, 0.7)
+T_PERDENTI, SETTIMANE_PROGRAMMA = -3.0, 300
 
 
 def _lunedi(giorni) -> np.ndarray:
@@ -156,8 +157,17 @@ def gruppi(serie: dict, taglio: float) -> list:
     for g in sorted(set(etichette)):
         membri = [nomi[i] for i in np.flatnonzero(etichette == g)]
         media = pd.concat([serie[m] for m in membri], axis=1).mean(axis=1)
-        out.append({"membri": membri, "sharpe": sharpe(media)})
+        out.append({"membri": membri, "sharpe": sharpe(media), "settimane": int(media.notna().sum())})
     return out
+
+
+def per_v(gr: list, soli: list, escludi_perdenti: bool) -> list:
+    """Gli Sharpe dei gruppi che entrano in V. Con ``escludi_perdenti`` (ASTICELLA.md, sezione 5) i gruppi con il t dello
+    Sharpe sotto -3 restano in N ma non in V; per le prove senza serie il t si calcola sulle 300 settimane del programma."""
+    tutti = [(g["sharpe"], g["settimane"]) for g in gr] + [(sr, SETTIMANE_PROGRAMMA) for sr in soli]
+    if not escludi_perdenti:
+        return [sr for sr, _ in tutti]
+    return [sr for sr, n in tutti if sr * math.sqrt(n / 52) >= T_PERDENTI]
 
 
 def corretto_rivisto(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> dict:
@@ -168,14 +178,66 @@ def corretto_rivisto(nuove: dict, candidate: dict, taglio: float = TAGLIO) -> di
     serie.update({n: periodo(s) for n, s in nuove.items()})
     soli = [sr for _, s, sr in prove if s is None]
     gr = gruppi(serie, taglio)
-    sr_gruppi = [g["sharpe"] for g in gr] + soli
-    out = {"gruppi": len(sr_gruppi), "deviazione": float(np.std(sr_gruppi, ddof=1)), "candidate": {}}
+    sr_gruppi = per_v(gr, soli, False)
+    sr_v = per_v(gr, soli, True)
+    out = {"gruppi": len(sr_gruppi), "deviazione": float(np.std(sr_gruppi, ddof=1)),
+           "in_v_con_aggiunta": len(sr_v), "deviazione_con_aggiunta": float(np.std(sr_v, ddof=1)), "candidate": {}}
     for nome, i in candidate.items():
         membri = next((g["membri"] for g in gr if nome in g["membri"]), [nome])
         out["candidate"][nome] = {
             "corretto": te.sharpe_corretto(i["sharpe"], i["settimane"], i["asimmetria"], i["curtosi"], sr_gruppi, 52),
+            "corretto_con_aggiunta": te.sharpe_corretto(i["sharpe"], i["settimane"], i["asimmetria"], i["curtosi"], sr_v, 52,
+                                                        n_prove=len(sr_gruppi)),
             "t": i["sharpe"] * math.sqrt(i["settimane"] / 52), "gruppo": membri}
     return out
+
+
+def serie_nuove() -> dict:
+    """Le serie settimanali nette delle prove a portafoglio dalla 49 in poi (le prove fino alla 48 sono in ``le_prove``)."""
+    out = {}
+    for n, f in (("49 X1", "risultati_quarantanovesima/settimane_X1.csv.gz"), ("49 X2", "risultati_quarantanovesima/settimane_X2.csv.gz"),
+                 ("51 F7", "risultati_cinquantunesima/settimane_F7.csv.gz"), ("52 B1", "risultati_cinquantaduesima/settimane_B1.csv.gz"),
+                 ("53 F8", "risultati_cinquantatreesima/settimane_F8.csv.gz"), ("55 C3", "risultati_cinquantacinquesima/settimane_C3.csv.gz")):
+        if (QUI / f).exists():
+            d = pd.read_csv(QUI / f, index_col=0)
+            out[n] = d["netto"] if "netto" in d else d.iloc[:, 0]
+    for f in sorted((QUI / "risultati_cinquantaquattresima").glob("settimane_*.csv.gz")):
+        out[f"54 {f.name[len('settimane_'):-len('.csv.gz')]}"] = pd.read_csv(f, index_col=0).iloc[:, 0]
+    return out
+
+
+def aggiunta_23(log=print) -> dict:
+    """ASTICELLA.md, sezione 5: le candidate gia' viste e C3 con il calcolo della sezione 3 e con l'aggiunta, prove fino alla 55."""
+    e25 = json.loads((QUI / "risultati_venticinquesima" / "esame.json").read_text())
+    e28 = json.loads((QUI / "risultati_ventottesima" / "esame.json").read_text())
+    esami = {"24 F5": json.loads((QUI / "risultati_ventiquattresima" / "esame.json").read_text())["intero"],
+             "25 F5+M7": e25["F5 + M7"]["intero"], "28 K2": e28["K2"]["intero"], "28 F5+M7+K2": e28["F5 + M7 + K2"]["intero"],
+             "42 F6": json.loads((QUI / "risultati_quarantaduesima" / "esame.json").read_text())["intero"],
+             "55 C3": json.loads((QUI / "risultati_cinquantacinquesima" / "esame.json").read_text())["intero"]}
+    r = corretto_rivisto(serie_nuove(), esami)
+    gr = gruppi({**{n: periodo(s) for n, s, _ in le_prove() if s is not None}, **{n: periodo(s) for n, s in serie_nuove().items()}}, TAGLIO)
+    fuori = [{"membri": g["membri"], "sharpe": round(g["sharpe"], 2), "t": round(g["sharpe"] * math.sqrt(g["settimane"] / 52), 1)}
+             for g in gr if g["sharpe"] * math.sqrt(g["settimane"] / 52) < T_PERDENTI]
+    soli_fuori = [round(sr, 2) for _, s, sr in le_prove() if s is None and sr * math.sqrt(SETTIMANE_PROGRAMMA / 52) < T_PERDENTI]
+    r["fuori_da_v"], r["soli_fuori_da_v"] = fuori, soli_fuori
+    RIS.mkdir(exist_ok=True)
+    (RIS / "aggiunta_23.json").write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
+    righe = ["# Programma 6 — l'asticella con l'aggiunta del 23 ottobre: i risultati", "",
+             "Regola in `ASTICELLA.md`, sezione 5 (scritta prima di questo calcolo). Prove fino alla 55.", "",
+             f"* Gruppi (N): **{r['gruppi']}**; deviazione degli Sharpe dei gruppi come nella sezione 3: {r['deviazione']:.2f}; "
+             f"con l'aggiunta ({r['in_v_con_aggiunta']} gruppi in V): **{r['deviazione_con_aggiunta']:.2f}**.",
+             f"* Fuori da V (t dello Sharpe sotto −3): " + "; ".join(f"{', '.join(g['membri'])} (Sharpe {g['sharpe']:+.2f}, t {g['t']:+.1f})"
+                                                                  for g in fuori)
+             + (f"; prove senza serie: {len(soli_fuori)} (Sharpe {', '.join(f'{x:+.2f}' for x in soli_fuori)})" if soli_fuori else "") + ".", "",
+             "| Candidata | Sharpe | t dello Sharpe | Corretto (sezione 3) | Corretto con l'aggiunta |", "|---|---|---|---|---|"]
+    for n, c in r["candidate"].items():
+        righe.append(f"| {n} | {esami[n]['sharpe']:.2f} | {c['t']:.2f} | {c['corretto']:.2f} | **{c['corretto_con_aggiunta']:.2f}** |")
+    righe += ["", "Tutte queste candidate sono state viste prima della regola: per la riserva della sezione 5 nessuna diventa «validata sul "
+              "passato» per questo calcolo, qualunque sia il numero."]
+    testo = "\n".join(righe) + "\n"
+    (QUI / "RISULTATI_ASTICELLA_23.md").write_text(testo, encoding="utf-8")
+    log(testo)
+    return r
 
 
 def esegui(log=print) -> dict:

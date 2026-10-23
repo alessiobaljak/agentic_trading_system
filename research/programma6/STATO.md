@@ -62,6 +62,7 @@ del calcolo, e i suoi risultati in un file a parte. `DRY_RUN` resta vero: niente
 | 52 | B1: scommettere contro il beta, neutro al Bitcoin | `CINQUANTADUESIMA.md` | `RISULTATI_CINQUANTADUESIMA.md` | 1 | non valida: Sharpe 0,53, quasi tutto dal 2021 |
 | 53 | F8: il funding di ogni moneta rispetto alla sua storia | `CINQUANTATREESIMA.md` | `RISULTATI_CINQUANTATREESIMA.md` | 1 | non valida: Sharpe −0,28, discesa −97,6% |
 | 54 | Lo scalping sul serio: Z1 lo stile del canale (TP1/TP2/TP3, 5 al giorno), Z1b senza limite, Z2 VWAP, Z3 prima ora americana, Z4 volume | `CINQUANTAQUATTRESIMA.md` | `RISULTATI_CINQUANTAQUATTRESIMA.md` | 5 | non valide: Z1 71% al TP1 ma −0,053 R a operazione; tutti negativi |
+| 55 | C3: un solo punteggio dalla media dei ranghi di F5, K2 e M7, con la banda | `CINQUANTACINQUESIMA.md` | `RISULTATI_CINQUANTACINQUESIMA.md` | 1 | non valida: Sharpe 1,88 (F5 1,93, i tre portafogli 2,11), discesa −41,9%; Sharpe corretto 0,00 come scritto, 0,86 con l'aggiunta del 23 ottobre all'asticella |
 
 ## Il paper (dal 20 ottobre 2026)
 
@@ -255,6 +256,14 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    prima dei costi è −0,007 R: il vantaggio non c'è, i costi (0,046 R) lo rendono solo più negativo. Gli altri tre scalping
    (VWAP, prima ora americana, volume) perdono di più; l'unico positivo prima dei costi (la prima ora americana, +0,013 R) paga
    0,159 R di costi. Una percentuale di vittorie alta da sola non dice niente: conta la vincita media contro la perdita media.
+42. **Tre segnali buoni vanno tenuti separati, non fusi** (prova 55): la media dei ranghi di funding, K1 e modello in un solo
+   punteggio fa Sharpe 1,88 con una discesa del 41,9%, meno di F5 da sola (1,93, −31%) e dei tre portafogli separati a rischio
+   uguale (2,11, −30%). Fondere i segnali fa scegliere monete «buone in media» su tre misure, che non sono le migliori su nessuna;
+   tenerli separati diversifica davvero.
+43. **L'asticella si rompe con le prove che perdono di sicuro** (23 ottobre, `ASTICELLA.md` sezione 5): le cinque serie dello
+   scalping (Sharpe fino a −13,6) portavano la deviazione degli Sharpe dei gruppi da 0,62 a 2,56 e lo Sharpe corretto di ogni
+   strategia a 0,00. Il calcolo misura il massimo che darebbero prove senza vantaggio; una prova che perde con t −22 non è senza
+   vantaggio. Da qui contano in N ma non in V. Con l'aggiunta F5 0,92 e F5 + M7 + K2 0,94: ancora sotto 0,95.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

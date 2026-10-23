@@ -709,3 +709,15 @@ def test_cinquantacinquesima_punteggio():
     s = cq.punteggio(f, k, m, U)
     assert np.isnan(s[0, 1]) and np.isnan(s[0, 3])            # solo il funding, oppure il funding manca
     assert np.isfinite(s[0, 0]) and np.isfinite(s[0, 2])
+
+
+def test_asticella_aggiunta_23_perdenti_in_n_non_in_v():
+    from research.programma6 import asticella as ast
+    from research.programma6 import terza as te
+    gr = [{"sharpe": 1.0, "settimane": 300}, {"sharpe": -13.0, "settimane": 150}, {"sharpe": -0.5, "settimane": 52}]
+    assert ast.per_v(gr, [-2.0, 0.3], False) == [1.0, -13.0, -0.5, -2.0, 0.3]
+    # -13 con 150 settimane: t -22; -2,0 sulle 300 settimane del programma: t -4,8; -0,5 su 52: t -0,5 (resta)
+    assert ast.per_v(gr, [-2.0, 0.3], True) == [1.0, -0.5, 0.3]
+    v = [1.0, -0.5, 0.3]
+    assert te.sharpe_corretto(1.9, 250, 0.0, 3.0, v, 52) > te.sharpe_corretto(1.9, 250, 0.0, 3.0, v, 52, n_prove=65)
+    assert te.sharpe_corretto(1.9, 250, 0.0, 3.0, v + [-13.0], 52) < te.sharpe_corretto(1.9, 250, 0.0, 3.0, v, 52, n_prove=4)

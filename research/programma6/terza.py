@@ -310,11 +310,13 @@ def conto(Wt: np.ndarray, R: np.ndarray, F: np.ndarray, costo: np.ndarray) -> pd
 # esame (sezione 4 di TERZA.md)
 # ---------------------------------------------------------------------------
 
-def sharpe_corretto(sr_annuo: float, n: int, asim: float, curt: float, sr_prove: list, periodi: int) -> float:
-    """Deflated Sharpe Ratio (Bailey e Lopez de Prado 2014) con ``periodi`` osservazioni l'anno."""
+def sharpe_corretto(sr_annuo: float, n: int, asim: float, curt: float, sr_prove: list, periodi: int,
+                    n_prove: int | None = None) -> float:
+    """Deflated Sharpe Ratio (Bailey e Lopez de Prado 2014) con ``periodi`` osservazioni l'anno. ``n_prove``, se dato, e' N
+    (altrimenti il numero di ``sr_prove``, da cui viene sempre V)."""
     from scipy import stats
     sr = sr_annuo / math.sqrt(periodi)
-    N = max(2, len(sr_prove))
+    N = max(2, len(sr_prove) if n_prove is None else n_prove)
     var = float(np.var([x / math.sqrt(periodi) for x in sr_prove], ddof=1))
     g = 0.5772156649
     sr0 = math.sqrt(var) * ((1 - g) * stats.norm.ppf(1 - 1 / N) + g * stats.norm.ppf(1 - 1 / (N * math.e)))

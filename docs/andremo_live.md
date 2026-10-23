@@ -4460,3 +4460,14 @@ aggiornato alle 00:05), nessuna moneta al 7° giorno di vita oggi, nessun evento
 questo giro: l'unica idea di scalping con un meccanismo (i minuti intorno al regolamento del funding) è già stata provata (I-006,
 programma 5: −0,14% a operazione già prima dei costi) e con gli ordini limite non cambierebbe segno. Per lo scalping vero servono
 dati che non abbiamo (il libro degli ordini al secondo): voce P18 del backlog.
+**Cinquantacinquesima prova** (23 ottobre, mattina; `CINQUANTACINQUESIMA.md`): un solo punteggio che unisce il funding, il
+segnale K1 e il modello (media dei loro ranghi), con la banda di F5: Sharpe 1,88 dal 2022, ogni anno positivo, ma discesa −41,9%;
+F5 da sola fa 1,93 (−31%) e i tre portafogli tenuti separati 2,11 (−30%). Capito: i segnali buoni rendono di più tenuti separati
+che fusi in un punteggio (il punteggio sceglie le monete «medie» su tre misure). Nel conto: 118 prove.
+**L'asticella si era rotta, e l'ho corretta** (`ASTICELLA.md`, sezione 5, scritta prima del calcolo; `RISULTATI_ASTICELLA_23.md`):
+le cinque prove di scalping, che perdono di sicuro (Sharpe fino a −13,6), portavano lo Sharpe corretto di tutte le strategie a
+0,00, anche di F5. Il calcolo misura quanto potrebbe uscire per fortuna da prove senza vantaggio; una prova che perde con
+certezza non è «senza vantaggio» e non può essere lei il colpo di fortuna. Da qui le prove con il t sotto −3 contano nel numero
+delle prove ma non nella dispersione. Con la correzione F5 fa 0,92, F5 + M7 + K2 0,94: ancora sotto 0,95, e comunque, viste
+prima della regola, non diventano validate per questo. Capito: con l'asticella di prima, ogni prova di scalping chiesta avrebbe
+reso impossibile validare qualunque cosa; ora no, ma il verdetto sulle strategie trovate non cambia.
