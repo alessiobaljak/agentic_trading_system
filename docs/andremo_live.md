@@ -4482,3 +4482,5 @@ ordine limite simulato al prezzo mark delle 00:05, valido un'ora; dopo l'ora gua
 se il prezzo è passato oltre, altrimenti a mercato alla fine dell'ora con il movimento contro. Accanto tiene quanto sarebbe
 costato tutto a mercato, così ogni settimana si misura il risparmio vero. Test: `tests/test_paper_f5.py` (anche lo stesso conto
 della ricerca). Riavvio del bot chiesto alla macchina, prima del primo cambio di lunedì 26 ottobre.
+Riavvio fatto alle 04:49 UTC (ops 0642); il registro (ops 0643) mostra il bot ripartito con il commit be75f4c8, che contiene il
+codice nuovo, `DRY_RUN=True`, nessun errore. F5 aspetta lunedì 26 ottobre alle 00:05 UTC per il primo cambio.
