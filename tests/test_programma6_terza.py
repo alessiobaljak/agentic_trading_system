@@ -698,3 +698,14 @@ def test_cinquantaquattresima_stop_all_entrata_dopo_il_tp1():
     s, e, u, v, p0, r, rl, cr, tp1, motivo = out[0]
     assert tp1 == 1.0 and motivo == 2 and u == 3                # uscita al prezzo d'entrata, il resto in pareggio
     assert rl == pytest.approx((0.006 / 3) / 0.015)            # lordo: solo il terzo del TP1
+
+
+def test_cinquantacinquesima_punteggio():
+    from research.programma6 import cinquantacinquesima as cq
+    f = np.array([[1.0, 2.0, 3.0, np.nan]])
+    k = np.array([[3.0, np.nan, 1.0, 2.0]])
+    m = np.array([[np.nan, np.nan, 2.0, 1.0]])
+    U = np.ones((1, 4), bool)
+    s = cq.punteggio(f, k, m, U)
+    assert np.isnan(s[0, 1]) and np.isnan(s[0, 3])            # solo il funding, oppure il funding manca
+    assert np.isfinite(s[0, 0]) and np.isfinite(s[0, 2])
