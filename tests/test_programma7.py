@@ -138,3 +138,13 @@ def test_g8_ora_di_entrata():
     c.loc[e * 24 + 3, "close"] = 10.2
     assert g8.ora_di_entrata(c, e) == e * 24 + 4             # la candela delle 03:00 chiude sopra: entrata alle 04:00
     assert g8.ora_di_entrata(c, e + 1) is None
+
+
+def test_massimo_30():
+    from research.programma7 import decima as dm
+    r = np.full((60, 2), 0.01)
+    r[35, 0] = 0.5
+    r[:, 1] = np.nan
+    m = dm.massimo_30(r, np.array([40, 70]))
+    assert m[0, 0] == 0.5 and np.isnan(m[0, 1])
+    assert m[1, 0] == 0.01                                     # il 0,5 del giorno 35 e' fuori dai 30 giorni prima del 70

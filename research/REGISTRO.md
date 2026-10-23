@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 130 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 131 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -90,8 +90,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 63 | G6: K2 (il segnale di K1: funding, acquisti a mercato, interesse aperto) decisa ogni giorno con gli ordini limite; e G1 + G6 a rischio uguale (`programma7/SETTIMA.md`) | 2 | G6 dal 2022 Sharpe 1,21 (K2 settimanale 1,75), +32,8% l'anno, spese 11,1%, 6,2 entrate al giorno, 2023 −20,6%; G1 + G6 1,62 (G1 da sola 1,96); Sharpe corretto 0,38 e 0,73 (`programma7/RISULTATI_SETTIMA.md`) | no: il segnale di K1 cambia troppo da un giorno all'altro, decidere ogni giorno raddoppia le spese e aggiunge rumore |
 | 64 | G7: il long contro il Bitcoin il giorno dopo una salita di almeno +30% in un giorno, sui perpetui di Gate.io delle monete senza il perpetuo su Binance (dati che l'idea non ha visto), uscita a −30% o dopo 30 giorni (`programma7/OTTAVA.md`); ipotesi nata da G5 | 1 a eventi | 541 eventi: **−6,54% a evento** (p 0,98), mediana −25,8%, vinti 21%, l'uscita a −30% scatta nel 62%; 3 anni su 4 negativi (`programma7/RISULTATI_OTTAVA.md`) | no: sulle monete piccole di Gate.io le salite enormi si sgonfiano (il contrario dei perpetui di Binance). Lo short lì non si prova: l'idea nascerebbe da questi dati, e il proprietario non fa trading su Gate.io |
 | 65 | G8: N3 con l'entrata al 7° giorno dopo la prima ora che chiude sopra l'apertura del giorno (vendere sulla forza, la lezione di G2 e G3), stessi 613 eventi (`programma7/NONA.md`); decide l'entrata di N3 nel bot | 1 a eventi | **+2,83% a evento** (p 0,030), metà +5,36% e +0,31%; N3 sugli stessi eventi +4,29%: **−1,46 punti** (intervallo −2,41; −0,54); entrata in media alle 06:36 (`programma7/RISULTATI_NONA.md`) | no: vendere dopo un'ora di forza rende meno; N3 nel bot resta all'apertura del 7° giorno |
+| 66 | MAX: long le monete con il giorno migliore dei 30 giorni più alto, short le più basse (il verso pubblicato da Ozdamar e altri 2021), con la banda di F5 (`programma7/DECIMA.md`) | 1 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 = **130** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 = **131** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
@@ -195,7 +196,7 @@ Dettagli in `programma5/STATO.md` e `programma5/idee/`. In breve, per non rifarl
 25. ~~La stagionalità del giorno della settimana fra monete~~ (Long, Zaremba e altri 2020, *Finance Research Letters*: 151 monete
    2016-2019): non si fa per ora. Il segnale cambia ogni giorno, quindi il giro è giornaliero come M3 (prova 16, bocciata per i
    costi), e il perché economico è debole (dati del 2016-2019, prima dei perpetui).
-26. **Il massimo giornaliero del mese (MAX)** fra le 100 (Ozdamar, Akdeniz e Sensoy 2021, *Financial Innovation*: fra le cripto le
+26. ~~**Il massimo giornaliero del mese (MAX)**~~ → prova 66. fra le 100 (Ozdamar, Akdeniz e Sensoy 2021, *Financial Innovation*: fra le cripto le
    monete con il giorno migliore più alto del mese prima rendono **di più** la settimana dopo, +3,03% a settimana fra i decili, al
    contrario delle azioni). Probabilità bassa: è un parente del momento, che fra i perpetui dal 2021 non regge (prova 49, X1
    Sharpe 0,05), e le monete appena salite di solito hanno il funding alto, che F5 vende. In coda, non subito.
