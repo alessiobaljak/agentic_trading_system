@@ -46,3 +46,25 @@ anni, ultimo anno, costi doppi, trimestri, più del Bitcoin).
 La revisione arriva dopo aver visto F5 a 0,52 con il calcolo di prima. Per questo la procedura è quella pubblicata dagli autori,
 con un solo valore scelto qui (il taglio a 0,5) e i tagli 0,3 e 0,7 riportati accanto: se il verdetto cambiasse solo a uno dei
 tagli, lo si dice.
+
+## 5. Aggiunta del 23 ottobre, mattina: le prove che perdono di sicuro
+
+Scritta **dopo** aver visto il calcolo della prova 55 e **prima** di calcolare la regola qui sotto.
+
+**Cosa è successo.** Con le cinque serie dello scalping (prova 54: Sharpe dei portafogli da −2,4 a −13,6, perché pagano i costi
+su migliaia di operazioni con una regolarità quasi perfetta) la deviazione degli Sharpe dei gruppi passa da **0,62 a 2,56** e
+lo Sharpe corretto rivisto di **ogni** candidata diventa **0,00**, anche quello di F5 (0,87 senza quelle serie). Il massimo
+«per caso» con quella deviazione è uno Sharpe di circa 6: nessuna strategia vera ci arriva. Un'asticella che si può alzare a
+piacere provando idee che perdono per costruzione non misura più il rischio di aver trovato una strategia per fortuna, che è il
+suo unico scopo: il teorema su cui poggia (Bailey e López de Prado, la «False Strategy Theorem») calcola il massimo che
+danno prove **senza vantaggio**, cioè con Sharpe vero zero; una prova con il t dello Sharpe a −20 non è una prova senza
+vantaggio, è una prova che perde di sicuro, e non può essere lei il massimo fortunato.
+
+**La regola, da qui in avanti.** Un gruppo il cui t dello Sharpe (Sharpe × √(settimane/52), sulle settimane della sua serie
+media; per le prove senza serie, sulle 300 settimane del programma) è **sotto −3** (la soglia di Harvey, Liu e Zhu, dalla parte
+delle perdite) **conta in N ma non in V**. Tutto il resto resta come nella sezione 3. Si riportano sempre tutti e due i valori:
+quello della sezione 3 e quello con questa aggiunta.
+
+**Riserva, fissata qui.** La regola nasce dopo aver visto F5 (0,87), F5 + M7 + K2 (0,90) e C3 (0,80 senza le serie dello
+scalping). Per questo **non può validare le candidate già viste**: se con questa regola una di loro supera 0,95, lo si scrive,
+ma resta «non validata sul passato» e la sua prova resta il paper. La regola vale per giudicare le prove dalla 56 in poi.
