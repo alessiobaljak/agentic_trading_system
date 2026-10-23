@@ -251,3 +251,22 @@ def test_g11_segnale_fresco_come_la_ricerca():
     assert s["A"] == pytest.approx(0.25) and s["B"] == pytest.approx(-0.25) and s["C"] == pytest.approx(0.0)
     assert np.isnan(s["D"])
     assert f5.PaperG1(None, chiedi=lambda *a: None).segnali(f, m)["C"] == pytest.approx(-0.010)   # G1: −funding dei 7 giorni (6 × 0,2% − 0,2%)
+
+
+def test_monete_in_chiusura_fuori_dall_universo(tmp_path, monkeypatch):
+    m = f5.lunedi_di(20750)
+    finto = _Finto(m)
+    vero = finto.__call__
+
+    def chiedi(percorso, p):
+        r = vero(percorso, p)
+        if percorso == "/fapi/v1/exchangeInfo":
+            for x in r["symbols"]:
+                if x["symbol"] == "C29USDT":
+                    x["deliveryDate"] = (m + 3) * f5.GIORNO_MS
+        return r
+    monkeypatch.setattr(f5.time, "time", lambda: m * 86400.0 + 400)
+    finto.adesso_ms = m * f5.GIORNO_MS + 400_000
+    p = f5.PaperF5(None, chiedi=chiedi, file_stato=tmp_path / "s.json", interruttore=tmp_path / "x", pausa_s=0.0)
+    pesi, lunghi, corti, n = p.pesi_del_lunedi(m, {})
+    assert n == 29 and "C29USDT" not in pesi

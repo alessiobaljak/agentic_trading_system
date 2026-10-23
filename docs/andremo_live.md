@@ -4615,3 +4615,6 @@ fino a un'ora prima. Solo 7 eventi usabili (su 72 annunci: 32 non hanno le sigle
 non mostrano la chiusura): −13,2% a evento con l'uscita a +30% (scatta nel 57% dei casi: le salite dopo l'annuncio ci sono), +0,8%
 senza. Troppo pochi per dire qualcosa; resta in coda con i dati completi (idea 36), a probabilità bassa. Capito: dopo l'annuncio di
 chiusura le monete spesso salgono prima di scendere, come dopo le rimozioni a pronti (prova 21). Nel conto: 136 prove.
+**Giro delle 20:18**: nessuna idea nuova con buona probabilità per il trading in giornata (le rimaste sono a probabilità bassa, tutte
+scritte nella coda con il perché). Fatto invece il resto della voce P24: F5, G1 e G11 nel bot tolgono dall'universo le monete che
+Binance chiude entro 8 giorni, così il paper non tiene una moneta fino a un prezzo che non esiste più. Test in `tests/test_paper_f5.py`.

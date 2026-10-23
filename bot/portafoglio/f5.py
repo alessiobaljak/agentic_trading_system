@@ -285,7 +285,11 @@ class PaperF5:
         return {x["symbol"]: float(x["markPrice"]) for x in dati if isinstance(x, dict) and float(x.get("markPrice") or 0) > 0}
 
     def _contratti(self) -> dict:
-        return contratti_monete(self.chiedi("/fapi/v1/exchangeInfo", {}) or {})
+        info = self.chiedi("/fapi/v1/exchangeInfo", {}) or {}
+        # i contratti che Binance chiude entro 8 giorni (voce P24 del backlog): fuori dall'universo, cosi' il paper non tiene
+        # una moneta fino a un prezzo che non esiste piu'
+        self._in_chiusura = in_chiusura(info, int(time.time() * 1000) + 8 * GIORNO_MS)
+        return contratti_monete(info)
 
     def _giornaliere(self, simbolo: str) -> dict:
         k = self.chiedi("/fapi/v1/klines", {"symbol": simbolo, "interval": "1d", "limit": 40}) or []
@@ -417,6 +421,7 @@ class PaperF5:
             return None
         giornaliere = {s: self._giornaliere(s) for s in contratti}
         uni = universo(giornaliere, contratti, lunedi_di(m))          # le 100 della settimana (per F5 m e' gia' il lunedi')
+        uni = [s for s in uni if s not in getattr(self, "_in_chiusura", set())]
         funding, sigma = {}, {}
         for s in uni:
             sg = sigma_30({d: v[1] for d, v in giornaliere[s].items()}, m)
