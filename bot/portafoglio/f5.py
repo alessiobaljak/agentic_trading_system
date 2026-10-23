@@ -198,6 +198,7 @@ class PaperF5:
         self.paper_ricerca = PAPER_RICERCA
         self._ultimo_tentativo = 0.0
         self._ultimo_controllo_limite = 0.0
+        self._ultimo_regolamento: dict = {}
         self._prova_fatta = False
 
     # ---- stato ----
@@ -273,6 +274,7 @@ class PaperF5:
         for x in f:
             d = giorno_di_tenuta(int(x["fundingTime"]))
             out[d] = out.get(d, 0.0) + float(x["fundingRate"])
+            self._ultimo_regolamento[simbolo] = max(self._ultimo_regolamento.get(simbolo, 0), int(x["fundingTime"]))
         return out
 
     def _equity(self, st: dict, prezzi: dict) -> float:
@@ -395,6 +397,13 @@ class PaperF5:
             sg = sigma_30({d: v[1] for d, v in giornaliere[s].items()}, m)
             sigma[s] = sg
             segnale[s] = -funding_7(self._funding_giorni(s, (m - 8) * GIORNO_MS), m) if np.isfinite(sg) else float("nan")
+        # il regolamento delle 00:00 del lunedi' fa parte del segnale e ne porta circa 0,2 di Sharpe (revisione del 23
+        # ottobre, CONTROLLO_PARITA.md): se manca per piu' del 10% delle monete, Binance non l'ha ancora pubblicato e si
+        # riprova dopo 30 minuti invece di decidere con un segnale monco
+        mancanti = [s for s in uni if np.isfinite(sigma[s]) and self._ultimo_regolamento.get(s, 0) < m * GIORNO_MS - 60_000]
+        if len(mancanti) > 0.1 * len(uni):
+            print(f"[paper_f5] regolamento delle 00:00 non ancora pubblicato per {len(mancanti)} monete su {len(uni)}")
+            return None
         pesi, lunghi, corti = pesi_banda(segnale, sigma, set(st.get("lunghi") or []), set(st.get("corti") or []))
         return pesi, lunghi, corti, len(uni)
 

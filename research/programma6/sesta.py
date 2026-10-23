@@ -23,9 +23,13 @@ PROVE_PROGRAMMA = 26
 
 
 def funding_7(pan: dict, lunedi_idx: np.ndarray) -> np.ndarray:
-    """La somma del funding dei 7 giorni di tenuta prima di ogni lunedi' (settimane × monete)."""
+    """La somma del funding dei 7 giorni di tenuta prima di ogni lunedi' (settimane × monete).
+
+    Arrotondata a 12 decimali (23 ottobre 2026, `CONTROLLO_PARITA.md`): la differenza di due somme cumulate lascia un residuo
+    di circa 1e-17 che decideva l'ordine fra le monete con lo stesso funding (spesso quello di base), e non a caso: il residuo
+    segue il funding cumulato e l'eta' della moneta. Arrotondata, le parita' restano parita' (rango medio, come il bot)."""
     Fc = np.vstack([np.zeros((1, pan["funding"].shape[1])), np.cumsum(pan["funding"], axis=0)])
-    return Fc[lunedi_idx] - Fc[lunedi_idx - 7]
+    return np.round(Fc[lunedi_idx] - Fc[lunedi_idx - 7], 12)
 
 
 def esegui(log=print) -> dict:

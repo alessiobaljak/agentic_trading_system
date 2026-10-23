@@ -152,6 +152,25 @@ il proprietario ha saltato il Passo 6 e chiesto il Passo 7, fatto.
 
 ## 1. In lavorazione
 
+### P21. Il funding stimato delle ultime settimane nella ricerca — trovata il 23 ott 2026 (revisione di F5)
+**Perché:** il mese in corso non ha ancora il file mensile dell'archivio di Binance, e `seconda.pannello` riempie il funding con
+la media dei 90 giorni prima: 11.214 valori di ottobre 2026 (settimane del 28 settembre, 5 e 12 ottobre). Non gonfia F5 (senza
+quelle settimane Sharpe 1,95 invece di 1,93), ma non sono numeri veri e toccano anche il paper di ricerca di ogni mattina.
+**Cosa:** riempire i giorni senza file mensile con il funding vero di `/fapi/v1/fundingRate` (lo scarico giornaliero c'è già nel
+bot) e segnare nei risultati le settimane che restano stimate. **Quando:** prima della prossima prova che usa le ultime settimane.
+
+### P20. Lo scarto delle altcoin misurato, non fissato — trovata il 23 ott 2026 (revisione di F5)
+**Perché:** tutte le prove usano uno scarto fisso (0,01% BTC, ETH, SOL; 0,02% le altre) mai misurato sui libri degli ordini di
+allora. Con lo 0,10% per le monete fuori dalle prime 50 F5 scende da 1,93 a 1,83; con i costi tripli a 1,60. **Cosa:** misurare
+lo scarto vero oggi (il libro degli ordini a ore del programma 5, `research/programma5/`, e `/fapi/v1/depth` dal bot) per fascia
+di volume e confrontarlo con lo 0,02%. **Quando:** nei prossimi giorni, è solo una misura.
+
+### P19. F5 troppo concentrata su poche monete calme — trovata il 23 ott 2026 (revisione di F5)
+**Perché:** con i pesi secondo l'inverso della volatilità TRX arriva al 32,5% del lato long ed è sopra l'8% in 111 settimane su 302
+(`research/programma6/CONTROLLO_PARITA.md`). Una moneta sola che crolla pesa troppo. **Cosa:** un tetto al peso per moneta (per
+esempio 10% del lato) come prova nuova, con la regola scritta prima e nel conto delle prove. **Quando:** dopo le prime settimane
+di F5 nel bot.
+
 ### P18. I dati per lo scalping vero (il libro degli ordini al secondo) — trovata il 23 ott 2026
 **Perché:** lo scalping con le candele al minuto e gli indicatori pubblici non ha vantaggio (prova 54: cinque schemi, il migliore
 −0,05 R a operazione; quello in stile canale Telegram arriva al primo obiettivo il 71% delle volte ma perde). Chi guadagna con lo

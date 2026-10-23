@@ -269,6 +269,11 @@ mercato dopo un'ora) è eseguito nel 98% dei casi e porta i costi dal 7,7% al 5,
    limite entro un'ora, il costo per unità scende da 0,070% a 0,049%, le spese da 4,9% a 3,4% l'anno e lo Sharpe sale da 1,93 a
    1,99. Gli ordini non eseguiti (il prezzo scappa nel verso che volevamo) costano di più, ma sono pochi. Il bot passa F5 agli
    ordini limite simulati dal primo lunedì (26 ottobre).
+45. **Un revisore che non ha scritto il codice trova quello che chi l'ha scritto non vede** (23 ottobre, `CONTROLLO_PARITA.md`):
+   nessun dato futuro e nessun errore nel conto di F5, ma le parità del funding (7% delle monete ogni settimana) le decideva un
+   residuo di arrotondamento che favoriva le monete vecchie sul lato long: F5 vale 1,87, non 1,93. Le cose più fragili di F5 sono
+   l'ultimo regolamento del lunedì (0,2 di Sharpe), gli ordini limite (il vantaggio sparisce se l'esecuzione è appena più
+   difficile) e lo scarto delle altcoin mai misurato. Da qui ogni strategia promettente passa da un revisore separato.
 
 ## Dati (fuori da git, con le impronte nel repository)
 

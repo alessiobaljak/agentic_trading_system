@@ -4484,3 +4484,11 @@ costato tutto a mercato, così ogni settimana si misura il risparmio vero. Test:
 della ricerca). Riavvio del bot chiesto alla macchina, prima del primo cambio di lunedì 26 ottobre.
 Riavvio fatto alle 04:49 UTC (ops 0642); il registro (ops 0643) mostra il bot ripartito con il commit be75f4c8, che contiene il
 codice nuovo, `DRY_RUN=True`, nessun errore. F5 aspetta lunedì 26 ottobre alle 00:05 UTC per il primo cambio.
+**La revisione indipendente di F5** (23 ottobre; il proprietario: «c'è qualcosa che ci stiamo perdendo?»; `CONTROLLO_PARITA.md`):
+un revisore che non aveva scritto il codice ha ricontrollato F5 da capo. Nessun dato futuro, nessun errore nel conto, la correzione
+delle monete tolte regge. Un errore vero: le parità del funding (7% delle monete ogni settimana) le decideva un residuo di
+arrotondamento che favoriva le monete vecchie sul lato long. Corretto: **F5 vale 1,87, non 1,93**, ancora positiva ogni anno, discesa
+−26,9% invece di −31%; F5 + M7 + K2 2,10. Altri punti deboli trovati e messi nel backlog: l'ultimo regolamento del lunedì porta 0,2 di
+Sharpe (il bot ora non decide finché non è pubblicato), gli ordini limite valgono solo se l'esecuzione è facile, lo scarto delle
+altcoin non è mai stato misurato, TRX arriva al 32% del lato long. Capito: chi controlla dev'essere diverso da chi ha trovato la
+strategia; da qui ogni strategia promettente passa da un revisore separato.

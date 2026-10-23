@@ -197,3 +197,13 @@ def test_esito_limite_come_la_ricerca():
     r, _ = cs.costo_limite(100.6, 100.5, 99.8, 101.0, False, 0.0007)
     assert costo == pytest.approx(2 * 100.6 * r)
     assert f5.esito_limite(1.0, 50.0, [], 0.0007) == (pytest.approx(50 * 0.0007), False)
+
+
+def test_senza_il_regolamento_delle_00_si_aspetta(tmp_path):
+    m = f5.lunedi_di(20750)
+    finto = _Finto(m)
+    p = f5.PaperF5(None, chiedi=finto, file_stato=tmp_path / "s.json", interruttore=tmp_path / "x", pausa_s=0.0)
+    finto.adesso_ms = m * f5.GIORNO_MS - 1                      # il regolamento delle 00:00 del lunedi' non c'e' ancora
+    assert p.pesi_del_lunedi(m, {}) is None
+    finto.adesso_ms = m * f5.GIORNO_MS + 300_000                # pubblicato: si decide
+    assert p.pesi_del_lunedi(m, {}) is not None

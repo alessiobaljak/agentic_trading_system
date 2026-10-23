@@ -110,7 +110,11 @@ prima della fine dello scarico (`UNDICESIMA.md`, nota); la fuga di informazione 
 101-200 (`RISULTATI_QUATTORDICESIMA.md`, correzione); le monete tolte dal listino restano nei file con il prezzo fermo e il volume zero, e
 il loro funding era riempito con la media dei 90 giorni prima (58.403 giorni-moneta; 42 settimane-moneta nell'universo
 delle 100): corretto dalla diciottesima prova; effetto (`programma6/controllo_zombi.json`): F3 1,296 → 1,295, K1 1,269 →
-1,262, **M1 1,35 → 0,79** (il modello ad alberi è fragile).
+1,262, **M1 1,35 → 0,79** (il modello ad alberi è fragile). **Le parità del funding** (23 ottobre, trovato da un revisore indipendente,
+`programma6/CONTROLLO_PARITA.md`): il funding dei 7 giorni calcolato come differenza di somme cumulate lasciava un residuo che
+decideva l'ordine fra le monete con lo stesso funding, a favore delle monete vecchie sul lato long; arrotondato dalla prova 57:
+**F5 1,933 → 1,868** (ogni anno ancora positivo, discesa −31% → −26,9%), F5 a ordini limite 1,987 → 1,923, K2 1,720 → 1,745,
+F5 + M7 + K2 2,107 → 2,101; Sharpe corretto F5 0,90, F5 + M7 + K2 0,94.
 
 ## 2. Il paper (dal 20 ottobre 2026 per i giorni, dal 26 ottobre per le settimane)
 
