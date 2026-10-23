@@ -4594,3 +4594,4 @@ della migliore fra varianti simili.
 `PaperG11` in `bot/portafoglio/f5.py` (segnale: media dei ranghi del funding dei 7 giorni e dell'ultimo giorno), interruttore
 `ops/paper_g11_acceso`, in dashboard accanto a G1 (voce P23 del backlog). Test: `tests/test_paper_f5.py`. Riavvio chiesto alla
 macchina; la prima decisione vera alle 00:05 UTC di sabato 24 ottobre, la stessa di G1.
+Riavvio fatto alle 15:52 UTC (ops 0649): il bot gira con il codice che contiene G11 (commit 92f83102).
