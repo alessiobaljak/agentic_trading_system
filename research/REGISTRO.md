@@ -17,7 +17,7 @@ abbiamo strategie per tutte le crypto e nel momento in cui queste hanno lo stess
 
 Dettagli di ogni prova nei file indicati; il diario giorno per giorno è `docs/andremo_live.md`.
 
-## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 126 prove nel conto
+## 1. Programma 6 (dal 19 ottobre 2026): strategie su indicatori e dati di mercato, 128 prove nel conto
 
 Sharpe = rendimento diviso per quanto oscilla, all'anno. «Corretto» = lo Sharpe corretto per il numero di prove (serve
 almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
@@ -87,8 +87,9 @@ almeno 0,95). Le regole di ogni prova sono state scritte prima del calcolo.
 | 60 | G3: il long in giornata delle monete con il funding più basso (il 20% del lato long di F5), entrata quando una candela da 1 ora chiude sopra l'apertura del giorno, stop al minimo del giorno, obiettivo a 2 volte lo stop a limite, uscita alle 00:00 (`programma7/QUARTA.md`); lo specchio di G2 | 1 | 31.338 operazioni (14,9 al giorno): **−0,164 R** a operazione (prima dei costi −0,059, costi 0,108), vinte 35%, stop nel 59%, ogni anno negativo; portafoglio Sharpe −3,00 (`programma7/RISULTATI_QUARTA.md`) | no: come G2, negativo già prima dei costi |
 | 61 | F5T e G1T: F5 e G1 con il tetto del 10% per moneta in ogni lato (voce P19, `programma7/QUINTA.md`); decide se il bot prende il tetto | 2 | F5T Sharpe 1,78 (senza 1,88), discesa −29,7% (senza −26,9%); G1T 1,87 (senza 1,96), discesa −32,6% (senza −28,8%); Sharpe corretto 0,85 e 0,90 (`programma7/RISULTATI_QUINTA.md`) | no, e **il bot non prende il tetto**: spostare peso dalle monete calme a quelle agitate aumenta la discesa invece di ridurla |
 | 62 | G5: short contro il Bitcoin il giorno dopo una salita di almeno +30% in un giorno (monete con almeno 30 giorni di vita e 2 milioni di volume), con le uscite di N3 (`programma7/SESTA.md`) | 1 a eventi | 1.228 eventi: **−2,71% a evento** (p 0,99), mediana −15,1%, l'uscita a +30% scatta nel 51%; senza l'uscita −6,63% (mediana +16,1%, 68% vinti, ma poche esplodono); fra le 100 −1,12%, fuori −3,29%; 4 anni su 6 negativi (`programma7/RISULTATI_SESTA.md`) | no: dopo una salita enorme di un giorno, metà delle volte la moneta sale di un altro 30% |
+| 63 | G6: K2 (il segnale di K1: funding, acquisti a mercato, interesse aperto) decisa ogni giorno con gli ordini limite; e G1 + G6 a rischio uguale (`programma7/SETTIMA.md`) | 2 | in calcolo | — |
 
-Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 = **126** (le conferme 4, 5, 7 non contano: sono una
+Totale nel conto: 9 + 3 + 9 + 3 + 2 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 + 1 + 2 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 34 + 2 + 1 + 2 + 1 + 1 + 1 + 5 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 2 = **128** (le conferme 4, 5, 7 non contano: sono una
 regola sola su dati non usati). Controlli descrittivi (non contano): `robustezza_F2.md` (F2, F3, M1), `F2_2020.md`,
 `F3_caso.md`, `ESECUZIONE.md` (ordini limite: costi di F3 dal 7,7% al 5,3% l'anno), `CALENDARIO.md` (i giorni della settimana, 23 ottobre: F5 guadagna anche nel fine settimana, +0,16% contro lo 0,28% che costerebbe chiudere e riaprire; lo scalping perde tutti i giorni).
 
