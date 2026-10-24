@@ -178,7 +178,7 @@ def test_dividendi_aggiunti_solo_dove_mancano():
     a = azioni((date(2016, 6, 17), "dividendo", 1.0, 1.078))
     c = azioni_complete("SPY", a)
     assert date(2016, 3, 18) in set(c["data"]) and len(c) == 1 + len(DIVIDENDI_AGGIUNTI["SPY"])
-    assert azioni_complete("QQQ", a) is a
+    assert azioni_complete("JPM", a) is a
     # se Alpaca un giorno lo avesse, non si raddoppia
     b = azioni((date(2016, 3, 18), "dividendo", 1.0, 1.05))
     assert (azioni_complete("SPY", b)["data"] == date(2016, 3, 18)).sum() == 1
