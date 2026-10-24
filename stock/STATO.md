@@ -110,6 +110,11 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
   | 7 | Le 24 ore prima della banca centrale, SPY / QQQ | 0,84 / 0,89 | 0,87 / 0,92 |
   | 8 | I titoli appena tolti dall'S&P 500 | −0,27 | 0,87 |
 
+* **Le prove 9 e 10** (24 ottobre, richieste dal proprietario): **bocciate.** I giorni speciali insieme (cambio del mese + prima della
+  banca centrale), giudicati solo sul periodo chiuso, nel 2025-2026 fanno +1,5% (SPY) e +1,2% (QQQ) in 21 mesi, Sharpe 0,15 e 0,12 contro
+  1,04-1,09 del tenere (`stock/prove/P009_risultati.md`). La deriva dopo i bilanci sulle 10 di allora: −0,50% a evento rispetto allo SPY,
+  Sharpe 0,82 contro 0,94 (`P010_risultati.md`). Le date dei bilanci vengono dalla SEC (`stock/dati/bilanci.py`): si usa solo la data del
+  deposito, perché l'ora del modulo può arrivare ore dopo il comunicato.
 * **Strumenti nuovi della giornata:** le scissioni (GE, DHR, PFE: valutate come incasso al prezzo d'apertura del titolo nuovo; per PFE
   è Alpaca a non contare quella di Viatris), la frazione di azione pagata in contanti nei raggruppamenti, i cambi di nome (FB → META),
   le date dei comunicati della banca centrale con la fonte (`stock/dati/fomc.py`), le misure dello scarto e i controlli dei 34 titoli
@@ -117,7 +122,7 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 
 ## Cosa abbiamo capito il 24 ottobre
 
-* **Sul 2016-2024 nessuna delle 8 idee batte il comprare e tenere** (14 prove più l'apertura del periodo chiuso: 15 nel conto). Gli effetti
+* **Sul 2016-2024 nessuna delle 10 idee batte il comprare e tenere** (19 nel conto, comprese 2 aperture del periodo chiuso). Gli effetti
   studiati spesso ci sono ancora (prima della banca centrale +0,23% a evento, t 2,9; il cambio del mese; la notte) ma sono troppo
   rari o troppo costosi per battere un mercato salito molto. Le grandi aziende americane del 2016-2024 sono state un avversario
   durissimo: tenere le 10 più scambiate a pesi uguali ha fatto Sharpe 0,94, più dello SPY (0,87).
@@ -147,7 +152,8 @@ Fonti: [IB1] https://ibkrcampus.com/campus/ibkr-api-page/cpapi-v1/ ; [IB2] https
 ## Il prossimo passo
 
 * Il periodo chiuso si riusa per famiglie diverse (deciso il 24 ottobre, sopra).
-* La coda delle idee (`REGISTRO.md`, sezione 2): i giorni speciali insieme (I10, nata dopo aver visto le prove 6 e 7: si può giudicare
-  solo sul periodo chiuso), la deriva dopo i bilanci (I6, servono le date dei bilanci), le varianti a costi più bassi (I8, I9).
+* La coda delle idee (`REGISTRO.md`, sezione 2): restano le varianti a costi più bassi (I8, I9) e la leva nei giorni speciali (I11,
+  da proporre al proprietario). Le idee della bozza del metodo sono finite: per andare avanti servono idee nuove (vedi il messaggio al
+  proprietario del 24 ottobre).
 * Verificare il salto di NVDA del 25 maggio 2023 e il dividendo in più di QQQ del 27 dicembre 2023.
 * Misurare lo scarto nei primi e negli ultimi minuti della seduta (le idee in giornata entrano ed escono proprio lì).
