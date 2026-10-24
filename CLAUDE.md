@@ -1,5 +1,7 @@
 # Istruzioni per Claude su questo repo
 
+**RISPONDI SEMPRE IN ITALIANO al proprietario**, in ogni messaggio, anche dopo il riassunto di una conversazione lunga, anche quando i file, i log o gli strumenti sono in inglese. Il proprietario lo ha chiesto più volte (l'ultima il 24 ott 2026: «mettere nelle tue memorie e contesto di rispondermi sempre in italiano»): il 24 ottobre due risposte sono uscite in inglese per errore.
+
 Chi legge questo file sta rispondendo a una domanda arrivata da una issue di GitHub
 (la tab **Claude** della dashboard è stata tolta il 21 set 2026: il proprietario non la
 usava più). Chi scrive e' il proprietario, spesso
